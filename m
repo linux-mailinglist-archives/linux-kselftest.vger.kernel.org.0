@@ -2,150 +2,84 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BE51E471
-	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Apr 2019 16:15:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A37B4E490
+	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Apr 2019 16:21:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728335AbfD2OP0 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 29 Apr 2019 10:15:26 -0400
-Received: from conssluserg-02.nifty.com ([210.131.2.81]:62325 "EHLO
-        conssluserg-02.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725838AbfD2OP0 (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 29 Apr 2019 10:15:26 -0400
-Received: from mail-ua1-f45.google.com (mail-ua1-f45.google.com [209.85.222.45]) (authenticated)
-        by conssluserg-02.nifty.com with ESMTP id x3TEF7Xo009931;
-        Mon, 29 Apr 2019 23:15:07 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-02.nifty.com x3TEF7Xo009931
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1556547308;
-        bh=l3dZW2UIUJmt2aKGNrZq7mHyn/lDaxk1teTwUSyxmG8=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=baXvggH1PMJGSExGISfzbwfrxQ8BlpNgPgGOOIn0S6jW9HNAfVsTmUhlQwO43QKJg
-         HtyOoGD02YrB6XQ5Env+2sSyVERHIHWZDsMCevgGgkEoJcbuPRtPz08X2JpiMnBAB8
-         vTsejq5EFPG41XbhzXUBIu6/8CgrRclBIb/LVteCzLD3knrxULNAT1p++suBhy1KmX
-         vr+UaGqco+jNKt+VSpVc7tkEtAtuqvS7zMQEqE1JUp7kM9gZgtX4e5hstZfcuZHgPz
-         lix7VLIX+thkzBHQNbVeKMG/gHXuvkBmhSeqvykBIbuhyrJgCnFxDivO+A9dcFCgPO
-         3kpcaUjdjp5vg==
-X-Nifty-SrcIP: [209.85.222.45]
-Received: by mail-ua1-f45.google.com with SMTP id t15so3534441uao.5;
-        Mon, 29 Apr 2019 07:15:07 -0700 (PDT)
-X-Gm-Message-State: APjAAAXBEWQSu8KIR9hfhEGCwI/G819hSRBcGP25/8qPxVzVC1hF1fSx
-        BCSFgNR9XjqZ4r3r/5KzL81SWtW1ZkAcfGaGa20=
-X-Google-Smtp-Source: APXvYqyuORXxFnYlSapovC2R789OHwW19P1u/RHj8aGf3kcskdAsSGrH87fld1K6FivP2MOZ/OnJg++4vlgc4y6kAA4=
-X-Received: by 2002:a9f:2d99:: with SMTP id v25mr12349688uaj.25.1556547306611;
- Mon, 29 Apr 2019 07:15:06 -0700 (PDT)
-MIME-Version: 1.0
-References: <20190426190430.172543-1-joel@joelfernandes.org>
- <20190427133844.GA29366@kroah.com> <20190429132602.GA165075@google.com> <20190429135455.GA2412@kroah.com>
-In-Reply-To: <20190429135455.GA2412@kroah.com>
-From:   Masahiro Yamada <yamada.masahiro@socionext.com>
-Date:   Mon, 29 Apr 2019 23:14:30 +0900
-X-Gmail-Original-Message-ID: <CAK7LNARkGLQ_P4LSuC69QN8XPN47W5ujkDE3EauLrwnBgygsSA@mail.gmail.com>
-Message-ID: <CAK7LNARkGLQ_P4LSuC69QN8XPN47W5ujkDE3EauLrwnBgygsSA@mail.gmail.com>
-Subject: Re: [PATCH v7 resend 1/2] Provide in-kernel headers to make extending
- kernel easier
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Joel Fernandes <joel@joelfernandes.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        id S1725838AbfD2OUz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 29 Apr 2019 10:20:55 -0400
+Received: from mx1.redhat.com ([209.132.183.28]:47398 "EHLO mx1.redhat.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728263AbfD2OUy (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 29 Apr 2019 10:20:54 -0400
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mx1.redhat.com (Postfix) with ESMTPS id 53D65308621B;
+        Mon, 29 Apr 2019 14:20:44 +0000 (UTC)
+Received: from dhcp-27-174.brq.redhat.com (unknown [10.43.17.159])
+        by smtp.corp.redhat.com (Postfix) with SMTP id 653556928F;
+        Mon, 29 Apr 2019 14:20:32 +0000 (UTC)
+Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
+        oleg@redhat.com; Mon, 29 Apr 2019 16:20:43 +0200 (CEST)
+Date:   Mon, 29 Apr 2019 16:20:30 +0200
+From:   Oleg Nesterov <oleg@redhat.com>
+To:     Joel Fernandes <joel@joelfernandes.org>
+Cc:     Christian Brauner <christian@brauner.io>,
+        linux-kernel@vger.kernel.org, luto@amacapital.net,
+        rostedt@goodmis.org, dancol@google.com, sspatil@google.com,
+        jannh@google.com, surenb@google.com, timmurray@google.com,
+        Jonathan Kowalski <bl0pbl33p@gmail.com>,
+        torvalds@linux-foundation.org, kernel-team@android.com,
         Andrew Morton <akpm@linux-foundation.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        atish patra <atishp04@gmail.com>,
-        Daniel Colascione <dancol@google.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Guenter Roeck <groeck@chromium.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Karim Yaghmour <karim.yaghmour@opersys.com>,
-        Kees Cook <keescook@chromium.org>,
-        "Cc: Android Kernel" <kernel-team@android.com>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        linux-trace-devel@vger.kernel.org,
-        Manoj Rao <linux@manojrajarao.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Qais Yousef <qais.yousef@arm.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Shuah Khan <shuah@kernel.org>, Yonghong Song <yhs@fb.com>,
-        Olof Johansson <olof@lixom.net>
-Content-Type: text/plain; charset="UTF-8"
+        Arnd Bergmann <arnd@arndb.de>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Ingo Molnar <mingo@kernel.org>, Jann Horn <jann@thejh.net>,
+        linux-kselftest@vger.kernel.org, Michal Hocko <mhocko@suse.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Serge Hallyn <serge@hallyn.com>, Shuah Khan <shuah@kernel.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Tycho Andersen <tycho@tycho.ws>, viro@zeniv.linux.org.uk,
+        linux-api@vger.kernel.org
+Subject: Re: [PATCH v1 1/2] Add polling support to pidfd
+Message-ID: <20190429142030.GA17715@redhat.com>
+References: <20190425190010.46489-1-joel@joelfernandes.org>
+ <20190425222359.sqhboc4x4daznr6r@brauner.io>
+ <20190428162405.GA6757@redhat.com>
+ <20190429140245.GB233442@google.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190429140245.GB233442@google.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
+X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.42]); Mon, 29 Apr 2019 14:20:53 +0000 (UTC)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Apr 29, 2019 at 10:57 PM Greg KH <gregkh@linuxfoundation.org> wrote:
+On 04/29, Joel Fernandes wrote:
 >
-> On Mon, Apr 29, 2019 at 09:26:02AM -0400, Joel Fernandes wrote:
-> > On Sat, Apr 27, 2019 at 03:38:44PM +0200, Greg KH wrote:
-> > > On Fri, Apr 26, 2019 at 03:04:29PM -0400, Joel Fernandes (Google) wrote:
-> > > > Introduce in-kernel headers which are made available as an archive
-> > > > through proc (/proc/kheaders.tar.xz file). This archive makes it
-> > > > possible to run eBPF and other tracing programs that need to extend the
-> > > > kernel for tracing purposes without any dependency on the file system
-> > > > having headers.
-> > > >
-> > > > A github PR is sent for the corresponding BCC patch at:
-> > > > https://github.com/iovisor/bcc/pull/2312
-> > > >
-> > > > On Android and embedded systems, it is common to switch kernels but not
-> > > > have kernel headers available on the file system. Further once a
-> > > > different kernel is booted, any headers stored on the file system will
-> > > > no longer be useful. This is an issue even well known to distros.
-> > > > By storing the headers as a compressed archive within the kernel, we can
-> > > > avoid these issues that have been a hindrance for a long time.
-> > > >
-> > > > The best way to use this feature is by building it in. Several users
-> > > > have a need for this, when they switch debug kernels, they do not want to
-> > > > update the filesystem or worry about it where to store the headers on
-> > > > it. However, the feature is also buildable as a module in case the user
-> > > > desires it not being part of the kernel image. This makes it possible to
-> > > > load and unload the headers from memory on demand. A tracing program can
-> > > > load the module, do its operations, and then unload the module to save
-> > > > kernel memory. The total memory needed is 3.3MB.
-> > > >
-> > > > By having the archive available at a fixed location independent of
-> > > > filesystem dependencies and conventions, all debugging tools can
-> > > > directly refer to the fixed location for the archive, without concerning
-> > > > with where the headers on a typical filesystem which significantly
-> > > > simplifies tooling that needs kernel headers.
-> > > >
-> > > > The code to read the headers is based on /proc/config.gz code and uses
-> > > > the same technique to embed the headers.
-> > > >
-> > > > Other approaches were discussed such as having an in-memory mountable
-> > > > filesystem, but that has drawbacks such as requiring an in-kernel xz
-> > > > decompressor which we don't have today, and requiring usage of 42 MB of
-> > > > kernel memory to host the decompressed headers at anytime. Also this
-> > > > approach is simpler than such approaches.
-> > > >
-> > > > Reviewed-by: Masahiro Yamada <yamada.masahiro@socionext.com>
-> > > > Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
-> > >
-> > > Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> >
-> > Thanks for the Reviewed-by tag. I believe there are still 2 logistical things
-> > to merge this.
-> > 1. Location of the header archive:
-> > Olof and Steve did not like it to be in /proc and instead /sys seemed a better
-> > choice they are Ok with. Me and Greg were Ok with it being in /sys/kernel/.
-> > Alexei, Greg and me are Ok with either proc or Sys.
+> However, in your code above, it is avoided because we get:
 >
-> As you say, either is fine with me.
->
-> > 2. Who is going to pull this patch: This seems a matter of where the header
-> > archive resides. If it is in /sys/kernel/ then I am assuming Greg will pull
-> > it.  Masahiro has given his Reviewed-by tag, is he the one to pull it?
->
-> I can take it, but it probably should just go through the kbuild tree,
-> as that makes more sense to me.
+> Task A (poller)		Task B (exiting task being polled)
+> ------------            ----------------
+> poll() called
+> add_wait_queue()
+> 			exit_state is set to non-zero
+> read exit_state
+> remove_wait_queue()
+> 			wake_up_all()
 
+just to clarify... No, sys_poll() path doesn't do remove_wait_queue() until
+it returns to user mode, and that is why we can't race with set-exit_code +
+wake_up().
 
-I do not want to take responsibility for this.
+pidfd_poll() can race with the exiting task, miss exit_code != 0, and return
+zero. However, do_poll() won't block after that and pidfd_poll() will be called
+again.
 
+Oleg.
 
-
--- 
-Best Regards
-Masahiro Yamada
