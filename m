@@ -2,133 +2,122 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AFFFE671
-	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Apr 2019 17:30:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 453CAE7D5
+	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Apr 2019 18:33:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728761AbfD2P3m (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 29 Apr 2019 11:29:42 -0400
-Received: from mail.efficios.com ([167.114.142.138]:56952 "EHLO
-        mail.efficios.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728726AbfD2P3c (ORCPT
+        id S1728683AbfD2QdE (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 29 Apr 2019 12:33:04 -0400
+Received: from mail-pg1-f193.google.com ([209.85.215.193]:33415 "EHLO
+        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728253AbfD2QdD (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 29 Apr 2019 11:29:32 -0400
-Received: from localhost (ip6-localhost [IPv6:::1])
-        by mail.efficios.com (Postfix) with ESMTP id 3B62D1C1D62;
-        Mon, 29 Apr 2019 11:29:31 -0400 (EDT)
-Received: from mail.efficios.com ([IPv6:::1])
-        by localhost (mail02.efficios.com [IPv6:::1]) (amavisd-new, port 10032)
-        with ESMTP id p9RoDksJd3VB; Mon, 29 Apr 2019 11:29:30 -0400 (EDT)
-Received: from localhost (ip6-localhost [IPv6:::1])
-        by mail.efficios.com (Postfix) with ESMTP id 33C361C1D54;
-        Mon, 29 Apr 2019 11:29:30 -0400 (EDT)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com 33C361C1D54
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
-        s=default; t=1556551770;
-        bh=NrYmcWK1JENLQfTnm5hunjxqei0iu4gkvN0xij/GAXA=;
-        h=From:To:Date:Message-Id;
-        b=Nrpqoa9jVXgNWfRVCKKCCvEhOCrK90AxUaqSIYSpXFVO7YsPsuPC2eRQQNCEYQE06
-         Qj7WqIYjC+i+iq+gp5wofXQQqM/KrTOumJ4BTLw6vsT36woOL/CF23E0PZQK0pH+2+
-         XsntWLAuMOe7TQWKbvyV2Pk6/y/TqvB+9coebRLXkgBkrJnoDJceuMAV6FLxABm3TU
-         KjybPvnZy7WP5JgyBRTQWe3CURq9MSJ6LErNA0XVCZHwOaW8jOJpB0D8mH/NLgtccC
-         oFQDZubDD7vsErymLY4a8qW8DM1twmD72MxPBOh4keCVqJ5j3BhYos8h1UnrNE2Z07
-         sitK3YeZaEeSQ==
-X-Virus-Scanned: amavisd-new at efficios.com
-Received: from mail.efficios.com ([IPv6:::1])
-        by localhost (mail02.efficios.com [IPv6:::1]) (amavisd-new, port 10026)
-        with ESMTP id OdcJLEq7-MnB; Mon, 29 Apr 2019 11:29:30 -0400 (EDT)
-Received: from thinkos.internal.efficios.com (192-222-157-41.qc.cable.ebox.net [192.222.157.41])
-        by mail.efficios.com (Postfix) with ESMTPSA id 693791C1D2B;
-        Mon, 29 Apr 2019 11:29:28 -0400 (EDT)
-From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-To:     Shuah Khan <shuah@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-api@vger.kernel.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Paul E . McKenney" <paulmck@linux.vnet.ibm.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Dave Watson <davejwatson@fb.com>, Paul Turner <pjt@google.com>,
+        Mon, 29 Apr 2019 12:33:03 -0400
+Received: by mail-pg1-f193.google.com with SMTP id k19so5414803pgh.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 29 Apr 2019 09:33:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=joelfernandes.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=4u5KyvwOshsxhVh+dlKczng4m5MVTpApgn+4OWkgPnE=;
+        b=XpxVZxXyLJ0YimBp0vayH2zy8tcGXLzw8w3DDttrwTb+FzX8vh+3MV9hXUdXXJLDhg
+         4FqH8wLZdrEIPv1iUeyqQhuXMGdE8y4Xgl99IK6ll8hhxVzO5cKKdGEtHhdVycR5uhI3
+         n9zYslxIO+CR236lijdxnF6FS11fye40RInas=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=4u5KyvwOshsxhVh+dlKczng4m5MVTpApgn+4OWkgPnE=;
+        b=qxsoAaXlf3nXpSUovuRl/BdQB8n/FwHP+pxGzESnB4irbGihsr9mRvvo3Dht00gK5d
+         +KpnL/4NdgI0+OzxCMD+6RULIdIJZRydpzhL3IChsiWGRnFzohZsL6lKP88NhotbU+CS
+         mWDiXSLrA6LwMcTJE8lsiW7L0EI7NUfZpV7q5owqb0ezSMeRQ9QKquX1ZgDKQi2oQEkp
+         CY2IlBYMKnfsZlVtAbFggRLFGk4vbuRM+e2QduCT96OBpaCKjqzZ0zh7QKSnB1Bboxf8
+         iARrTUaE+wOkn4hqfyb4mIR77zO035GQ2cD2982ZsF5udOhygGTgXU3JOKOqX+i3NRKO
+         GKrg==
+X-Gm-Message-State: APjAAAW3xS4iVSpI3R8ZPekepecnWL/g5SVkZ1qZ1TlECDmTDE0jLvdp
+        Fem90icswsBUTRrppxDrRaCRtw==
+X-Google-Smtp-Source: APXvYqxy0NH9DfF52+UZzKWGzifwxVWMDn25CFpma6QnDRG9j+hl4+IMTmxTavl5kmPTpcUkKLTBRQ==
+X-Received: by 2002:a65:44cb:: with SMTP id g11mr407421pgs.193.1556555582666;
+        Mon, 29 Apr 2019 09:33:02 -0700 (PDT)
+Received: from localhost ([2620:15c:6:12:9c46:e0da:efbf:69cc])
+        by smtp.gmail.com with ESMTPSA id z16sm979881pfa.42.2019.04.29.09.33.00
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Mon, 29 Apr 2019 09:33:01 -0700 (PDT)
+Date:   Mon, 29 Apr 2019 12:32:59 -0400
+From:   Joel Fernandes <joel@joelfernandes.org>
+To:     Oleg Nesterov <oleg@redhat.com>
+Cc:     Christian Brauner <christian@brauner.io>,
+        linux-kernel@vger.kernel.org, luto@amacapital.net,
+        rostedt@goodmis.org, dancol@google.com, sspatil@google.com,
+        jannh@google.com, surenb@google.com, timmurray@google.com,
+        Jonathan Kowalski <bl0pbl33p@gmail.com>,
+        torvalds@linux-foundation.org, kernel-team@android.com,
         Andrew Morton <akpm@linux-foundation.org>,
-        Russell King <linux@arm.linux.org.uk>,
-        Ingo Molnar <mingo@redhat.com>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Andi Kleen <andi@firstfloor.org>, Chris Lameter <cl@linux.com>,
-        Ben Maurer <bmaurer@fb.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will.deacon@arm.com>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Joel Fernandes <joelaf@google.com>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        linux-kselftest@vger.kernel.org
-Subject: [PATCH for 5.2 12/12] rseq/selftests: add -no-integrated-as for clang
-Date:   Mon, 29 Apr 2019 11:28:03 -0400
-Message-Id: <20190429152803.7719-13-mathieu.desnoyers@efficios.com>
-X-Mailer: git-send-email 2.11.0
-In-Reply-To: <20190429152803.7719-1-mathieu.desnoyers@efficios.com>
-References: <20190429152803.7719-1-mathieu.desnoyers@efficios.com>
+        Arnd Bergmann <arnd@arndb.de>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Ingo Molnar <mingo@kernel.org>, Jann Horn <jann@thejh.net>,
+        linux-kselftest@vger.kernel.org, Michal Hocko <mhocko@suse.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Serge Hallyn <serge@hallyn.com>, Shuah Khan <shuah@kernel.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Tycho Andersen <tycho@tycho.ws>, viro@zeniv.linux.org.uk,
+        linux-api@vger.kernel.org
+Subject: Re: [PATCH v1 1/2] Add polling support to pidfd
+Message-ID: <20190429163259.GA201155@google.com>
+References: <20190425190010.46489-1-joel@joelfernandes.org>
+ <20190425222359.sqhboc4x4daznr6r@brauner.io>
+ <20190428162405.GA6757@redhat.com>
+ <20190429140245.GB233442@google.com>
+ <20190429142030.GA17715@redhat.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190429142030.GA17715@redhat.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Ongoing work for asm goto support from clang requires the
--no-integrated-as compiler flag.
+On Mon, Apr 29, 2019 at 04:20:30PM +0200, Oleg Nesterov wrote:
+> On 04/29, Joel Fernandes wrote:
+> >
+> > However, in your code above, it is avoided because we get:
+> >
+> > Task A (poller)		Task B (exiting task being polled)
+> > ------------            ----------------
+> > poll() called
+> > add_wait_queue()
+> > 			exit_state is set to non-zero
+> > read exit_state
+> > remove_wait_queue()
+> > 			wake_up_all()
+> 
+> just to clarify... No, sys_poll() path doesn't do remove_wait_queue() until
+> it returns to user mode, and that is why we can't race with set-exit_code +
+> wake_up().
 
-This compiler flag is present in the toplevel kernel Makefile,
-but is not replicated for selftests. Add it specifically for
-the rseq selftest which requires asm goto.
+I didn't follow what you mean, the removal from the waitqueue happens in
+free_poll_entry() called from poll_freewait() which happens from
+do_sys_poll() which is before the syscall returns to user mode. Could you
+explain more?
 
-Link: https://reviews.llvm.org/D56571
-Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-CC: Nick Desaulniers <ndesaulniers@google.com>
-CC: Thomas Gleixner <tglx@linutronix.de>
-CC: Joel Fernandes <joelaf@google.com>
-CC: Peter Zijlstra <peterz@infradead.org>
-CC: Catalin Marinas <catalin.marinas@arm.com>
-CC: Dave Watson <davejwatson@fb.com>
-CC: Will Deacon <will.deacon@arm.com>
-CC: Shuah Khan <shuah@kernel.org>
-CC: Andi Kleen <andi@firstfloor.org>
-CC: linux-kselftest@vger.kernel.org
-CC: "H . Peter Anvin" <hpa@zytor.com>
-CC: Chris Lameter <cl@linux.com>
-CC: Russell King <linux@arm.linux.org.uk>
-CC: Michael Kerrisk <mtk.manpages@gmail.com>
-CC: "Paul E . McKenney" <paulmck@linux.vnet.ibm.com>
-CC: Paul Turner <pjt@google.com>
-CC: Boqun Feng <boqun.feng@gmail.com>
-CC: Josh Triplett <josh@joshtriplett.org>
-CC: Steven Rostedt <rostedt@goodmis.org>
-CC: Ben Maurer <bmaurer@fb.com>
-CC: linux-api@vger.kernel.org
-CC: Andy Lutomirski <luto@amacapital.net>
-CC: Andrew Morton <akpm@linux-foundation.org>
-CC: Linus Torvalds <torvalds@linux-foundation.org>
----
- tools/testing/selftests/rseq/Makefile | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+> pidfd_poll() can race with the exiting task, miss exit_code != 0, and return
+> zero. However, do_poll() won't block after that and pidfd_poll() will be called
+> again.
 
-diff --git a/tools/testing/selftests/rseq/Makefile b/tools/testing/selftests/rseq/Makefile
-index c30c52e1d0d2..d6469535630a 100644
---- a/tools/testing/selftests/rseq/Makefile
-+++ b/tools/testing/selftests/rseq/Makefile
-@@ -1,5 +1,11 @@
- # SPDX-License-Identifier: GPL-2.0+ OR MIT
--CFLAGS += -O2 -Wall -g -I./ -I../../../../usr/include/ -L./ -Wl,-rpath=./
-+
-+ifneq ($(shell $(CC) --version 2>&1 | head -n 1 | grep clang),)
-+CLANG_FLAGS += -no-integrated-as
-+endif
-+
-+CFLAGS += -O2 -Wall -g -I./ -I../../../../usr/include/ -L./ -Wl,-rpath=./ \
-+	  $(CLANG_FLAGS)
- LDLIBS += -lpthread
- 
- # Own dependencies because we only want to build against 1st prerequisite, but
--- 
-2.11.0
+Here also I didn't follow what you mean. If exit_code is read as 0 in
+pidfd_poll(), then in do_poll() the count will be 0 and it will block in
+poll_schedule_timeout(). Right? But above you're saying it wont block.
+Also if you could show a timing diagram of this different race you're talking
+about, that will make things clear. It is a bit hard for me to picture
+otherwise.
+
+Also, I will use task_pid() for getting the pid from the task, as you suggest
+in the other thread.
+
+thanks,
+
+- Joel
 
