@@ -2,42 +2,42 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 75122E668
-	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Apr 2019 17:30:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85D74E66B
+	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Apr 2019 17:30:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728680AbfD2P30 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 29 Apr 2019 11:29:26 -0400
-Received: from mail.efficios.com ([167.114.142.138]:56778 "EHLO
+        id S1728710AbfD2P3a (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 29 Apr 2019 11:29:30 -0400
+Received: from mail.efficios.com ([167.114.142.138]:56878 "EHLO
         mail.efficios.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728487AbfD2P3Z (ORCPT
+        with ESMTP id S1728479AbfD2P31 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 29 Apr 2019 11:29:25 -0400
+        Mon, 29 Apr 2019 11:29:27 -0400
 Received: from localhost (ip6-localhost [IPv6:::1])
-        by mail.efficios.com (Postfix) with ESMTP id C3B731C1CA0;
-        Mon, 29 Apr 2019 11:29:23 -0400 (EDT)
+        by mail.efficios.com (Postfix) with ESMTP id 28F031C1CCF;
+        Mon, 29 Apr 2019 11:29:25 -0400 (EDT)
 Received: from mail.efficios.com ([IPv6:::1])
         by localhost (mail02.efficios.com [IPv6:::1]) (amavisd-new, port 10032)
-        with ESMTP id gSwrF8URqGBx; Mon, 29 Apr 2019 11:29:22 -0400 (EDT)
+        with ESMTP id LYiy8g9nm78c; Mon, 29 Apr 2019 11:29:23 -0400 (EDT)
 Received: from localhost (ip6-localhost [IPv6:::1])
-        by mail.efficios.com (Postfix) with ESMTP id B4D4D1C1C96;
-        Mon, 29 Apr 2019 11:29:22 -0400 (EDT)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com B4D4D1C1C96
+        by mail.efficios.com (Postfix) with ESMTP id DBB9B1C1CB6;
+        Mon, 29 Apr 2019 11:29:23 -0400 (EDT)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com DBB9B1C1CB6
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
-        s=default; t=1556551762;
-        bh=cXNnq1j0kA9cr1A5iluAWSztJ1ahe76hyL7RgiMcSfw=;
+        s=default; t=1556551763;
+        bh=5oUdS+icuBkuPOyTqA3X1w+UYQEJ+ghMDP1uU8+8yJU=;
         h=From:To:Date:Message-Id;
-        b=hfu+3/uen6eLkPiZB76x74VsnwcRok5NtteGddr9Czg0fPB8NUxEux3Sbr20gJcVX
-         W2kSd/Pt23ZX0ECBPALGTa+mRE+glT6WueZuCHJd3oHXSVAeEVWfN6gE6a7bgCBDjI
-         NyZVv9oUZVLX72uWiKpqY5hJXasnAagUbjKbf4uWpA2z+hnLJgXKQCgReqvfGE1VvQ
-         RwBXVwQq2+/ZRWYIpizuvQF1QKuepjAjfIrrZUS1OqVLzWWczxPwgofTOx+P9FQQIJ
-         WeONPibiaPSH+rRxEy/XHc4ZeJMnMtrB5KNa9YN4P9TRD7IrDbCTejzqPh1z8aPb+b
-         EC+zSo0xPIugg==
+        b=o5UAiBcBpXTaTH+wC8hdXhrMtwrhtTNV7WP98/PFoREClK82WNSONafB1NpLSYV3G
+         BAC/hrBXAtedQv9tYhzcFiwyhoQRoXLtZDHtRvfwRbgLwEYgLrZo+2Qir0lfcTYF68
+         o1thgyMM5f/TL5gjTNo+432LDps8sj/04743LIHEwnVWNuzEoQ1Y6KrNBw0LCRDj//
+         EtkJnwl9SQMAb4G/VbAQDbXgTZuunF3XTrLw/1L+A5HOy2TDav5J1hWA49cZVHjnqi
+         vMDnmztYznbKdttbWprulwM2IChVR9xYaZ/0pKU5ZxYT06lX9+fIkItOnC8e1tfRnm
+         SuDkREsBWR4Mg==
 X-Virus-Scanned: amavisd-new at efficios.com
 Received: from mail.efficios.com ([IPv6:::1])
         by localhost (mail02.efficios.com [IPv6:::1]) (amavisd-new, port 10026)
-        with ESMTP id VZOQL1uKnWU7; Mon, 29 Apr 2019 11:29:22 -0400 (EDT)
+        with ESMTP id vUnlW9RAs-s1; Mon, 29 Apr 2019 11:29:23 -0400 (EDT)
 Received: from thinkos.internal.efficios.com (192-222-157-41.qc.cable.ebox.net [192.222.157.41])
-        by mail.efficios.com (Postfix) with ESMTPSA id 340F41C1C86;
+        by mail.efficios.com (Postfix) with ESMTPSA id B0C921C1C93;
         Mon, 29 Apr 2019 11:29:22 -0400 (EDT)
 From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 To:     Shuah Khan <shuah@kernel.org>
@@ -63,9 +63,9 @@ Cc:     linux-kernel@vger.kernel.org, linux-api@vger.kernel.org,
         Joel Fernandes <joelaf@google.com>,
         Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
         linux-kselftest@vger.kernel.org
-Subject: [PATCH for 5.2 01/12] rseq/selftests: x86: Work-around bogus gcc-8 optimisation
-Date:   Mon, 29 Apr 2019 11:27:52 -0400
-Message-Id: <20190429152803.7719-2-mathieu.desnoyers@efficios.com>
+Subject: [PATCH for 5.2 02/12] rseq/selftests: Add __rseq_exit_point_array section for debuggers
+Date:   Mon, 29 Apr 2019 11:27:53 -0400
+Message-Id: <20190429152803.7719-3-mathieu.desnoyers@efficios.com>
 X-Mailer: git-send-email 2.11.0
 In-Reply-To: <20190429152803.7719-1-mathieu.desnoyers@efficios.com>
 References: <20190429152803.7719-1-mathieu.desnoyers@efficios.com>
@@ -74,46 +74,14 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-gcc-8 version 8.1.0, 8.2.0, and 8.3.0 generate broken assembler with asm
-goto that have a thread-local storage "m" input operand on both x86-32
-and x86-64. For instance:
+Knowing all exit points is useful to assist debuggers stepping over the
+rseq critical sections without requiring them to disassemble the content
+of the critical section to figure out the exit points.
 
-__thread int var;
-
-static int fct(void)
-{
-        asm goto (      "jmp %l[testlabel]\n\t"
-                        : : [var] "m" (var) : : testlabel);
-        return 0;
-testlabel:
-        return 1;
-}
-
-int main()
-{
-        return fct();
-}
-
-% gcc-8 -O2 -o test-asm-goto test-asm-goto.c
-/tmp/ccAdHJbe.o: In function `main':
-test-asm-goto.c:(.text.startup+0x1): undefined reference to `.L2'
-collect2: error: ld returned 1 exit status
-
-% gcc-8 -m32 -O2 -o test-asm-goto test-asm-goto.c
-/tmp/ccREsVXA.o: In function `main':
-test-asm-goto.c:(.text.startup+0x1): undefined reference to `.L2'
-collect2: error: ld returned 1 exit status
-
-Work-around this compiler bug in the rseq-x86.h header by passing the
-address of the __rseq_abi TLS as a register operand rather than using
-the "m" input operand.
-
-Link: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=90193
 Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-CC: Ingo Molnar <mingo@redhat.com>
-CC: Peter Zijlstra <peterz@infradead.org>
 CC: Thomas Gleixner <tglx@linutronix.de>
 CC: Joel Fernandes <joelaf@google.com>
+CC: Peter Zijlstra <peterz@infradead.org>
 CC: Catalin Marinas <catalin.marinas@arm.com>
 CC: Dave Watson <davejwatson@fb.com>
 CC: Will Deacon <will.deacon@arm.com>
@@ -135,455 +103,839 @@ CC: Andy Lutomirski <luto@amacapital.net>
 CC: Andrew Morton <akpm@linux-foundation.org>
 CC: Linus Torvalds <torvalds@linux-foundation.org>
 ---
- tools/testing/selftests/rseq/rseq-x86.h | 144 ++++++++++++++++----------------
- 1 file changed, 70 insertions(+), 74 deletions(-)
+ tools/testing/selftests/rseq/rseq-arm.h   | 52 +++++++++++++++++
+ tools/testing/selftests/rseq/rseq-arm64.h | 52 +++++++++++++++++
+ tools/testing/selftests/rseq/rseq-mips.h  | 53 +++++++++++++++++
+ tools/testing/selftests/rseq/rseq-ppc.h   | 66 ++++++++++++++++++++++
+ tools/testing/selftests/rseq/rseq-s390.h  | 55 ++++++++++++++++++
+ tools/testing/selftests/rseq/rseq-x86.h   | 94 +++++++++++++++++++++++++++++++
+ 6 files changed, 372 insertions(+)
 
-diff --git a/tools/testing/selftests/rseq/rseq-x86.h b/tools/testing/selftests/rseq/rseq-x86.h
-index 089410a314e9..a5341044a2f5 100644
---- a/tools/testing/selftests/rseq/rseq-x86.h
-+++ b/tools/testing/selftests/rseq/rseq-x86.h
-@@ -9,6 +9,16 @@
- 
- #define RSEQ_SIG	0x53053053
+diff --git a/tools/testing/selftests/rseq/rseq-arm.h b/tools/testing/selftests/rseq/rseq-arm.h
+index 3cea19877227..17e8d231943a 100644
+--- a/tools/testing/selftests/rseq/rseq-arm.h
++++ b/tools/testing/selftests/rseq/rseq-arm.h
+@@ -42,6 +42,19 @@ do {									\
+ 	__RSEQ_ASM_DEFINE_TABLE(0x0, 0x0, start_ip,			\
+ 				(post_commit_ip - start_ip), abort_ip)
  
 +/*
-+ * Due to a compiler optimization bug in gcc-8 with asm goto and TLS asm input
-+ * operands, we cannot use "m" input operands, and rather pass the __rseq_abi
-+ * address through a "r" input operand.
++ * Exit points of a rseq critical section consist of all instructions outside
++ * of the critical section where a critical section can either branch to or
++ * reach through the normal course of its execution. The abort IP and the
++ * post-commit IP are already part of the __rseq_table section and should not
++ * be explicitly defined as additional exit points. Knowing all exit points is
++ * useful to assist debuggers stepping over the critical section.
 + */
++#define RSEQ_ASM_DEFINE_EXIT_POINT(start_ip, exit_ip)			\
++		".pushsection __rseq_exit_point_array, \"aw\"\n\t"	\
++		".word " __rseq_str(start_ip) ", 0x0, " __rseq_str(exit_ip) ", 0x0\n\t" \
++		".popsection\n\t"
 +
-+/* Offset of cpu_id and rseq_cs fields in struct rseq. */
-+#define RSEQ_CPU_ID_OFFSET	4
-+#define RSEQ_CS_OFFSET		8
-+
- #ifdef __x86_64__
+ #define RSEQ_ASM_STORE_RSEQ_CS(label, cs_label, rseq_cs)		\
+ 		RSEQ_INJECT_ASM(1)					\
+ 		"adr r0, " __rseq_str(cs_label) "\n\t"			\
+@@ -87,6 +100,11 @@ int rseq_cmpeqv_storev(intptr_t *v, intptr_t expect, intptr_t newv, int cpu)
+ 	rseq_workaround_gcc_asm_size_guess();
+ 	__asm__ __volatile__ goto (
+ 		RSEQ_ASM_DEFINE_TABLE(1f, 2f, 4f) /* start, commit, abort */
++		RSEQ_ASM_DEFINE_EXIT_POINT(1f, %l[cmpfail])
++#ifdef RSEQ_COMPARE_TWICE
++		RSEQ_ASM_DEFINE_EXIT_POINT(1f, %l[error1])
++		RSEQ_ASM_DEFINE_EXIT_POINT(1f, %l[error2])
++#endif
+ 		/* Start rseq by storing table entry pointer into rseq_cs. */
+ 		RSEQ_ASM_STORE_RSEQ_CS(1, 3f, rseq_cs)
+ 		RSEQ_ASM_CMP_CPU_ID(cpu_id, current_cpu_id, 4f)
+@@ -149,6 +167,11 @@ int rseq_cmpnev_storeoffp_load(intptr_t *v, intptr_t expectnot,
+ 	rseq_workaround_gcc_asm_size_guess();
+ 	__asm__ __volatile__ goto (
+ 		RSEQ_ASM_DEFINE_TABLE(1f, 2f, 4f) /* start, commit, abort */
++		RSEQ_ASM_DEFINE_EXIT_POINT(1f, %l[cmpfail])
++#ifdef RSEQ_COMPARE_TWICE
++		RSEQ_ASM_DEFINE_EXIT_POINT(1f, %l[error1])
++		RSEQ_ASM_DEFINE_EXIT_POINT(1f, %l[error2])
++#endif
+ 		/* Start rseq by storing table entry pointer into rseq_cs. */
+ 		RSEQ_ASM_STORE_RSEQ_CS(1, 3f, rseq_cs)
+ 		RSEQ_ASM_CMP_CPU_ID(cpu_id, current_cpu_id, 4f)
+@@ -215,6 +238,9 @@ int rseq_addv(intptr_t *v, intptr_t count, int cpu)
+ 	rseq_workaround_gcc_asm_size_guess();
+ 	__asm__ __volatile__ goto (
+ 		RSEQ_ASM_DEFINE_TABLE(1f, 2f, 4f) /* start, commit, abort */
++#ifdef RSEQ_COMPARE_TWICE
++		RSEQ_ASM_DEFINE_EXIT_POINT(1f, %l[error1])
++#endif
+ 		/* Start rseq by storing table entry pointer into rseq_cs. */
+ 		RSEQ_ASM_STORE_RSEQ_CS(1, 3f, rseq_cs)
+ 		RSEQ_ASM_CMP_CPU_ID(cpu_id, current_cpu_id, 4f)
+@@ -267,6 +293,11 @@ int rseq_cmpeqv_trystorev_storev(intptr_t *v, intptr_t expect,
+ 	rseq_workaround_gcc_asm_size_guess();
+ 	__asm__ __volatile__ goto (
+ 		RSEQ_ASM_DEFINE_TABLE(1f, 2f, 4f) /* start, commit, abort */
++		RSEQ_ASM_DEFINE_EXIT_POINT(1f, %l[cmpfail])
++#ifdef RSEQ_COMPARE_TWICE
++		RSEQ_ASM_DEFINE_EXIT_POINT(1f, %l[error1])
++		RSEQ_ASM_DEFINE_EXIT_POINT(1f, %l[error2])
++#endif
+ 		/* Start rseq by storing table entry pointer into rseq_cs. */
+ 		RSEQ_ASM_STORE_RSEQ_CS(1, 3f, rseq_cs)
+ 		RSEQ_ASM_CMP_CPU_ID(cpu_id, current_cpu_id, 4f)
+@@ -337,6 +368,11 @@ int rseq_cmpeqv_trystorev_storev_release(intptr_t *v, intptr_t expect,
+ 	rseq_workaround_gcc_asm_size_guess();
+ 	__asm__ __volatile__ goto (
+ 		RSEQ_ASM_DEFINE_TABLE(1f, 2f, 4f) /* start, commit, abort */
++		RSEQ_ASM_DEFINE_EXIT_POINT(1f, %l[cmpfail])
++#ifdef RSEQ_COMPARE_TWICE
++		RSEQ_ASM_DEFINE_EXIT_POINT(1f, %l[error1])
++		RSEQ_ASM_DEFINE_EXIT_POINT(1f, %l[error2])
++#endif
+ 		/* Start rseq by storing table entry pointer into rseq_cs. */
+ 		RSEQ_ASM_STORE_RSEQ_CS(1, 3f, rseq_cs)
+ 		RSEQ_ASM_CMP_CPU_ID(cpu_id, current_cpu_id, 4f)
+@@ -408,6 +444,12 @@ int rseq_cmpeqv_cmpeqv_storev(intptr_t *v, intptr_t expect,
+ 	rseq_workaround_gcc_asm_size_guess();
+ 	__asm__ __volatile__ goto (
+ 		RSEQ_ASM_DEFINE_TABLE(1f, 2f, 4f) /* start, commit, abort */
++		RSEQ_ASM_DEFINE_EXIT_POINT(1f, %l[cmpfail])
++#ifdef RSEQ_COMPARE_TWICE
++		RSEQ_ASM_DEFINE_EXIT_POINT(1f, %l[error1])
++		RSEQ_ASM_DEFINE_EXIT_POINT(1f, %l[error2])
++		RSEQ_ASM_DEFINE_EXIT_POINT(1f, %l[error3])
++#endif
+ 		/* Start rseq by storing table entry pointer into rseq_cs. */
+ 		RSEQ_ASM_STORE_RSEQ_CS(1, 3f, rseq_cs)
+ 		RSEQ_ASM_CMP_CPU_ID(cpu_id, current_cpu_id, 4f)
+@@ -486,6 +528,11 @@ int rseq_cmpeqv_trymemcpy_storev(intptr_t *v, intptr_t expect,
+ 	rseq_workaround_gcc_asm_size_guess();
+ 	__asm__ __volatile__ goto (
+ 		RSEQ_ASM_DEFINE_TABLE(1f, 2f, 4f) /* start, commit, abort */
++		RSEQ_ASM_DEFINE_EXIT_POINT(1f, %l[cmpfail])
++#ifdef RSEQ_COMPARE_TWICE
++		RSEQ_ASM_DEFINE_EXIT_POINT(1f, %l[error1])
++		RSEQ_ASM_DEFINE_EXIT_POINT(1f, %l[error2])
++#endif
+ 		"str %[src], %[rseq_scratch0]\n\t"
+ 		"str %[dst], %[rseq_scratch1]\n\t"
+ 		"str %[len], %[rseq_scratch2]\n\t"
+@@ -605,6 +652,11 @@ int rseq_cmpeqv_trymemcpy_storev_release(intptr_t *v, intptr_t expect,
+ 	rseq_workaround_gcc_asm_size_guess();
+ 	__asm__ __volatile__ goto (
+ 		RSEQ_ASM_DEFINE_TABLE(1f, 2f, 4f) /* start, commit, abort */
++		RSEQ_ASM_DEFINE_EXIT_POINT(1f, %l[cmpfail])
++#ifdef RSEQ_COMPARE_TWICE
++		RSEQ_ASM_DEFINE_EXIT_POINT(1f, %l[error1])
++		RSEQ_ASM_DEFINE_EXIT_POINT(1f, %l[error2])
++#endif
+ 		"str %[src], %[rseq_scratch0]\n\t"
+ 		"str %[dst], %[rseq_scratch1]\n\t"
+ 		"str %[len], %[rseq_scratch2]\n\t"
+diff --git a/tools/testing/selftests/rseq/rseq-arm64.h b/tools/testing/selftests/rseq/rseq-arm64.h
+index 954f34671ca6..2079f71e0ca2 100644
+--- a/tools/testing/selftests/rseq/rseq-arm64.h
++++ b/tools/testing/selftests/rseq/rseq-arm64.h
+@@ -95,6 +95,19 @@ do {										\
+ 	__RSEQ_ASM_DEFINE_TABLE(label, 0x0, 0x0, start_ip,			\
+ 				(post_commit_ip - start_ip), abort_ip)
  
- #define rseq_smp_mb()	\
-@@ -51,12 +61,12 @@ do {									\
++/*
++ * Exit points of a rseq critical section consist of all instructions outside
++ * of the critical section where a critical section can either branch to or
++ * reach through the normal course of its execution. The abort IP and the
++ * post-commit IP are already part of the __rseq_table section and should not
++ * be explicitly defined as additional exit points. Knowing all exit points is
++ * useful to assist debuggers stepping over the critical section.
++ */
++#define RSEQ_ASM_DEFINE_EXIT_POINT(start_ip, exit_ip)				\
++	"	.pushsection __rseq_exit_point_array, \"aw\"\n"			\
++	"	.quad " __rseq_str(start_ip) ", " __rseq_str(exit_ip) "\n"	\
++	"	.popsection\n"
++
+ #define RSEQ_ASM_STORE_RSEQ_CS(label, cs_label, rseq_cs)			\
+ 	RSEQ_INJECT_ASM(1)							\
+ 	"	adrp	" RSEQ_ASM_TMP_REG ", " __rseq_str(cs_label) "\n"	\
+@@ -182,6 +195,11 @@ int rseq_cmpeqv_storev(intptr_t *v, intptr_t expect, intptr_t newv, int cpu)
+ 
+ 	__asm__ __volatile__ goto (
+ 		RSEQ_ASM_DEFINE_TABLE(1, 2f, 3f, 4f)
++		RSEQ_ASM_DEFINE_EXIT_POINT(2f, %l[cmpfail])
++#ifdef RSEQ_COMPARE_TWICE
++		RSEQ_ASM_DEFINE_EXIT_POINT(2f, %l[error1])
++		RSEQ_ASM_DEFINE_EXIT_POINT(2f, %l[error2])
++#endif
+ 		RSEQ_ASM_STORE_RSEQ_CS(2, 1b, rseq_cs)
+ 		RSEQ_ASM_CMP_CPU_ID(cpu_id, current_cpu_id, 4f)
+ 		RSEQ_INJECT_ASM(3)
+@@ -231,6 +249,11 @@ int rseq_cmpnev_storeoffp_load(intptr_t *v, intptr_t expectnot,
+ 
+ 	__asm__ __volatile__ goto (
+ 		RSEQ_ASM_DEFINE_TABLE(1, 2f, 3f, 4f)
++		RSEQ_ASM_DEFINE_EXIT_POINT(2f, %l[cmpfail])
++#ifdef RSEQ_COMPARE_TWICE
++		RSEQ_ASM_DEFINE_EXIT_POINT(2f, %l[error1])
++		RSEQ_ASM_DEFINE_EXIT_POINT(2f, %l[error2])
++#endif
+ 		RSEQ_ASM_STORE_RSEQ_CS(2, 1b, rseq_cs)
+ 		RSEQ_ASM_CMP_CPU_ID(cpu_id, current_cpu_id, 4f)
+ 		RSEQ_INJECT_ASM(3)
+@@ -282,6 +305,9 @@ int rseq_addv(intptr_t *v, intptr_t count, int cpu)
+ 
+ 	__asm__ __volatile__ goto (
+ 		RSEQ_ASM_DEFINE_TABLE(1, 2f, 3f, 4f)
++#ifdef RSEQ_COMPARE_TWICE
++		RSEQ_ASM_DEFINE_EXIT_POINT(2f, %l[error1])
++#endif
+ 		RSEQ_ASM_STORE_RSEQ_CS(2, 1b, rseq_cs)
+ 		RSEQ_ASM_CMP_CPU_ID(cpu_id, current_cpu_id, 4f)
+ 		RSEQ_INJECT_ASM(3)
+@@ -325,6 +351,11 @@ int rseq_cmpeqv_trystorev_storev(intptr_t *v, intptr_t expect,
+ 
+ 	__asm__ __volatile__ goto (
+ 		RSEQ_ASM_DEFINE_TABLE(1, 2f, 3f, 4f)
++		RSEQ_ASM_DEFINE_EXIT_POINT(2f, %l[cmpfail])
++#ifdef RSEQ_COMPARE_TWICE
++		RSEQ_ASM_DEFINE_EXIT_POINT(2f, %l[error1])
++		RSEQ_ASM_DEFINE_EXIT_POINT(2f, %l[error2])
++#endif
+ 		RSEQ_ASM_STORE_RSEQ_CS(2, 1b, rseq_cs)
+ 		RSEQ_ASM_CMP_CPU_ID(cpu_id, current_cpu_id, 4f)
+ 		RSEQ_INJECT_ASM(3)
+@@ -379,6 +410,11 @@ int rseq_cmpeqv_trystorev_storev_release(intptr_t *v, intptr_t expect,
+ 
+ 	__asm__ __volatile__ goto (
+ 		RSEQ_ASM_DEFINE_TABLE(1, 2f, 3f, 4f)
++		RSEQ_ASM_DEFINE_EXIT_POINT(2f, %l[cmpfail])
++#ifdef RSEQ_COMPARE_TWICE
++		RSEQ_ASM_DEFINE_EXIT_POINT(2f, %l[error1])
++		RSEQ_ASM_DEFINE_EXIT_POINT(2f, %l[error2])
++#endif
+ 		RSEQ_ASM_STORE_RSEQ_CS(2, 1b, rseq_cs)
+ 		RSEQ_ASM_CMP_CPU_ID(cpu_id, current_cpu_id, 4f)
+ 		RSEQ_INJECT_ASM(3)
+@@ -433,6 +469,12 @@ int rseq_cmpeqv_cmpeqv_storev(intptr_t *v, intptr_t expect,
+ 
+ 	__asm__ __volatile__ goto (
+ 		RSEQ_ASM_DEFINE_TABLE(1, 2f, 3f, 4f)
++		RSEQ_ASM_DEFINE_EXIT_POINT(2f, %l[cmpfail])
++#ifdef RSEQ_COMPARE_TWICE
++		RSEQ_ASM_DEFINE_EXIT_POINT(2f, %l[error1])
++		RSEQ_ASM_DEFINE_EXIT_POINT(2f, %l[error2])
++		RSEQ_ASM_DEFINE_EXIT_POINT(2f, %l[error3])
++#endif
+ 		RSEQ_ASM_STORE_RSEQ_CS(2, 1b, rseq_cs)
+ 		RSEQ_ASM_CMP_CPU_ID(cpu_id, current_cpu_id, 4f)
+ 		RSEQ_INJECT_ASM(3)
+@@ -490,6 +532,11 @@ int rseq_cmpeqv_trymemcpy_storev(intptr_t *v, intptr_t expect,
+ 
+ 	__asm__ __volatile__ goto (
+ 		RSEQ_ASM_DEFINE_TABLE(1, 2f, 3f, 4f)
++		RSEQ_ASM_DEFINE_EXIT_POINT(2f, %l[cmpfail])
++#ifdef RSEQ_COMPARE_TWICE
++		RSEQ_ASM_DEFINE_EXIT_POINT(2f, %l[error1])
++		RSEQ_ASM_DEFINE_EXIT_POINT(2f, %l[error2])
++#endif
+ 		RSEQ_ASM_STORE_RSEQ_CS(2, 1b, rseq_cs)
+ 		RSEQ_ASM_CMP_CPU_ID(cpu_id, current_cpu_id, 4f)
+ 		RSEQ_INJECT_ASM(3)
+@@ -545,6 +592,11 @@ int rseq_cmpeqv_trymemcpy_storev_release(intptr_t *v, intptr_t expect,
+ 
+ 	__asm__ __volatile__ goto (
+ 		RSEQ_ASM_DEFINE_TABLE(1, 2f, 3f, 4f)
++		RSEQ_ASM_DEFINE_EXIT_POINT(2f, %l[cmpfail])
++#ifdef RSEQ_COMPARE_TWICE
++		RSEQ_ASM_DEFINE_EXIT_POINT(2f, %l[error1])
++		RSEQ_ASM_DEFINE_EXIT_POINT(2f, %l[error2])
++#endif
+ 		RSEQ_ASM_STORE_RSEQ_CS(2, 1b, rseq_cs)
+ 		RSEQ_ASM_CMP_CPU_ID(cpu_id, current_cpu_id, 4f)
+ 		RSEQ_INJECT_ASM(3)
+diff --git a/tools/testing/selftests/rseq/rseq-mips.h b/tools/testing/selftests/rseq/rseq-mips.h
+index 7f48ecf46994..25d10ff54769 100644
+--- a/tools/testing/selftests/rseq/rseq-mips.h
++++ b/tools/testing/selftests/rseq/rseq-mips.h
+@@ -68,6 +68,20 @@ do {									\
+ 	__RSEQ_ASM_DEFINE_TABLE(0x0, 0x0, start_ip, \
+ 				(post_commit_ip - start_ip), abort_ip)
+ 
++/*
++ * Exit points of a rseq critical section consist of all instructions outside
++ * of the critical section where a critical section can either branch to or
++ * reach through the normal course of its execution. The abort IP and the
++ * post-commit IP are already part of the __rseq_table section and should not
++ * be explicitly defined as additional exit points. Knowing all exit points is
++ * useful to assist debuggers stepping over the critical section.
++ */
++#define RSEQ_ASM_DEFINE_EXIT_POINT(start_ip, exit_ip) \
++		".pushsection __rseq_exit_point_array, \"aw\"\n\t" \
++		LONG " " U32_U64_PAD(__rseq_str(start_ip)) "\n\t" \
++		LONG " " U32_U64_PAD(__rseq_str(exit_ip)) "\n\t" \
++		".popsection\n\t"
++
+ #define RSEQ_ASM_STORE_RSEQ_CS(label, cs_label, rseq_cs) \
+ 		RSEQ_INJECT_ASM(1) \
+ 		LONG_LA " $4, " __rseq_str(cs_label) "\n\t" \
+@@ -114,6 +128,11 @@ int rseq_cmpeqv_storev(intptr_t *v, intptr_t expect, intptr_t newv, int cpu)
+ 	rseq_workaround_gcc_asm_size_guess();
+ 	__asm__ __volatile__ goto (
+ 		RSEQ_ASM_DEFINE_TABLE(1f, 2f, 4f) /* start, commit, abort */
++		RSEQ_ASM_DEFINE_EXIT_POINT(1f, %l[cmpfail])
++#ifdef RSEQ_COMPARE_TWICE
++		RSEQ_ASM_DEFINE_EXIT_POINT(1f, %l[error1])
++		RSEQ_ASM_DEFINE_EXIT_POINT(1f, %l[error2])
++#endif
+ 		/* Start rseq by storing table entry pointer into rseq_cs. */
+ 		RSEQ_ASM_STORE_RSEQ_CS(1, 3f, rseq_cs)
+ 		RSEQ_ASM_CMP_CPU_ID(cpu_id, current_cpu_id, 4f)
+@@ -174,6 +193,11 @@ int rseq_cmpnev_storeoffp_load(intptr_t *v, intptr_t expectnot,
+ 	rseq_workaround_gcc_asm_size_guess();
+ 	__asm__ __volatile__ goto (
+ 		RSEQ_ASM_DEFINE_TABLE(1f, 2f, 4f) /* start, commit, abort */
++		RSEQ_ASM_DEFINE_EXIT_POINT(1f, %l[cmpfail])
++#ifdef RSEQ_COMPARE_TWICE
++		RSEQ_ASM_DEFINE_EXIT_POINT(1f, %l[error1])
++		RSEQ_ASM_DEFINE_EXIT_POINT(1f, %l[error2])
++#endif
+ 		/* Start rseq by storing table entry pointer into rseq_cs. */
+ 		RSEQ_ASM_STORE_RSEQ_CS(1, 3f, rseq_cs)
+ 		RSEQ_ASM_CMP_CPU_ID(cpu_id, current_cpu_id, 4f)
+@@ -238,6 +262,9 @@ int rseq_addv(intptr_t *v, intptr_t count, int cpu)
+ 	rseq_workaround_gcc_asm_size_guess();
+ 	__asm__ __volatile__ goto (
+ 		RSEQ_ASM_DEFINE_TABLE(1f, 2f, 4f) /* start, commit, abort */
++#ifdef RSEQ_COMPARE_TWICE
++		RSEQ_ASM_DEFINE_EXIT_POINT(1f, %l[error1])
++#endif
+ 		/* Start rseq by storing table entry pointer into rseq_cs. */
+ 		RSEQ_ASM_STORE_RSEQ_CS(1, 3f, rseq_cs)
+ 		RSEQ_ASM_CMP_CPU_ID(cpu_id, current_cpu_id, 4f)
+@@ -290,6 +317,11 @@ int rseq_cmpeqv_trystorev_storev(intptr_t *v, intptr_t expect,
+ 	rseq_workaround_gcc_asm_size_guess();
+ 	__asm__ __volatile__ goto (
+ 		RSEQ_ASM_DEFINE_TABLE(1f, 2f, 4f) /* start, commit, abort */
++		RSEQ_ASM_DEFINE_EXIT_POINT(1f, %l[cmpfail])
++#ifdef RSEQ_COMPARE_TWICE
++		RSEQ_ASM_DEFINE_EXIT_POINT(1f, %l[error1])
++		RSEQ_ASM_DEFINE_EXIT_POINT(1f, %l[error2])
++#endif
+ 		/* Start rseq by storing table entry pointer into rseq_cs. */
+ 		RSEQ_ASM_STORE_RSEQ_CS(1, 3f, rseq_cs)
+ 		RSEQ_ASM_CMP_CPU_ID(cpu_id, current_cpu_id, 4f)
+@@ -358,6 +390,11 @@ int rseq_cmpeqv_trystorev_storev_release(intptr_t *v, intptr_t expect,
+ 	rseq_workaround_gcc_asm_size_guess();
+ 	__asm__ __volatile__ goto (
+ 		RSEQ_ASM_DEFINE_TABLE(1f, 2f, 4f) /* start, commit, abort */
++		RSEQ_ASM_DEFINE_EXIT_POINT(1f, %l[cmpfail])
++#ifdef RSEQ_COMPARE_TWICE
++		RSEQ_ASM_DEFINE_EXIT_POINT(1f, %l[error1])
++		RSEQ_ASM_DEFINE_EXIT_POINT(1f, %l[error2])
++#endif
+ 		/* Start rseq by storing table entry pointer into rseq_cs. */
+ 		RSEQ_ASM_STORE_RSEQ_CS(1, 3f, rseq_cs)
+ 		RSEQ_ASM_CMP_CPU_ID(cpu_id, current_cpu_id, 4f)
+@@ -427,6 +464,12 @@ int rseq_cmpeqv_cmpeqv_storev(intptr_t *v, intptr_t expect,
+ 	rseq_workaround_gcc_asm_size_guess();
+ 	__asm__ __volatile__ goto (
+ 		RSEQ_ASM_DEFINE_TABLE(1f, 2f, 4f) /* start, commit, abort */
++		RSEQ_ASM_DEFINE_EXIT_POINT(1f, %l[cmpfail])
++#ifdef RSEQ_COMPARE_TWICE
++		RSEQ_ASM_DEFINE_EXIT_POINT(1f, %l[error1])
++		RSEQ_ASM_DEFINE_EXIT_POINT(1f, %l[error2])
++		RSEQ_ASM_DEFINE_EXIT_POINT(1f, %l[error3])
++#endif
+ 		/* Start rseq by storing table entry pointer into rseq_cs. */
+ 		RSEQ_ASM_STORE_RSEQ_CS(1, 3f, rseq_cs)
+ 		RSEQ_ASM_CMP_CPU_ID(cpu_id, current_cpu_id, 4f)
+@@ -501,6 +544,11 @@ int rseq_cmpeqv_trymemcpy_storev(intptr_t *v, intptr_t expect,
+ 	rseq_workaround_gcc_asm_size_guess();
+ 	__asm__ __volatile__ goto (
+ 		RSEQ_ASM_DEFINE_TABLE(1f, 2f, 4f) /* start, commit, abort */
++		RSEQ_ASM_DEFINE_EXIT_POINT(1f, %l[cmpfail])
++#ifdef RSEQ_COMPARE_TWICE
++		RSEQ_ASM_DEFINE_EXIT_POINT(1f, %l[error1])
++		RSEQ_ASM_DEFINE_EXIT_POINT(1f, %l[error2])
++#endif
+ 		LONG_S " %[src], %[rseq_scratch0]\n\t"
+ 		LONG_S "  %[dst], %[rseq_scratch1]\n\t"
+ 		LONG_S " %[len], %[rseq_scratch2]\n\t"
+@@ -617,6 +665,11 @@ int rseq_cmpeqv_trymemcpy_storev_release(intptr_t *v, intptr_t expect,
+ 	rseq_workaround_gcc_asm_size_guess();
+ 	__asm__ __volatile__ goto (
+ 		RSEQ_ASM_DEFINE_TABLE(1f, 2f, 4f) /* start, commit, abort */
++		RSEQ_ASM_DEFINE_EXIT_POINT(1f, %l[cmpfail])
++#ifdef RSEQ_COMPARE_TWICE
++		RSEQ_ASM_DEFINE_EXIT_POINT(1f, %l[error1])
++		RSEQ_ASM_DEFINE_EXIT_POINT(1f, %l[error2])
++#endif
+ 		LONG_S " %[src], %[rseq_scratch0]\n\t"
+ 		LONG_S " %[dst], %[rseq_scratch1]\n\t"
+ 		LONG_S " %[len], %[rseq_scratch2]\n\t"
+diff --git a/tools/testing/selftests/rseq/rseq-ppc.h b/tools/testing/selftests/rseq/rseq-ppc.h
+index 52630c9f42be..24f95649d71e 100644
+--- a/tools/testing/selftests/rseq/rseq-ppc.h
++++ b/tools/testing/selftests/rseq/rseq-ppc.h
+@@ -63,6 +63,19 @@ do {									\
+ 		"std %%r17, %[" __rseq_str(rseq_cs) "]\n\t"			\
+ 		__rseq_str(label) ":\n\t"
+ 
++/*
++ * Exit points of a rseq critical section consist of all instructions outside
++ * of the critical section where a critical section can either branch to or
++ * reach through the normal course of its execution. The abort IP and the
++ * post-commit IP are already part of the __rseq_table section and should not
++ * be explicitly defined as additional exit points. Knowing all exit points is
++ * useful to assist debuggers stepping over the critical section.
++ */
++#define RSEQ_ASM_DEFINE_EXIT_POINT(start_ip, exit_ip)			\
++		".pushsection __rseq_exit_point_array, \"aw\"\n\t"	\
++		".quad " __rseq_str(start_ip) ", " __rseq_str(exit_ip) "\n\t" \
++		".popsection\n\t"
++
+ #else /* #ifdef __PPC64__ */
+ 
+ #define STORE_WORD	"stw "
+@@ -80,6 +93,20 @@ do {									\
+ 		".long 0x0, " __rseq_str(start_ip) ", 0x0, " __rseq_str(post_commit_offset) ", 0x0, " __rseq_str(abort_ip) "\n\t" \
+ 		".popsection\n\t"
+ 
++/*
++ * Exit points of a rseq critical section consist of all instructions outside
++ * of the critical section where a critical section can either branch to or
++ * reach through the normal course of its execution. The abort IP and the
++ * post-commit IP are already part of the __rseq_table section and should not
++ * be explicitly defined as additional exit points. Knowing all exit points is
++ * useful to assist debuggers stepping over the critical section.
++ */
++#define RSEQ_ASM_DEFINE_EXIT_POINT(start_ip, exit_ip)				\
++		".pushsection __rseq_exit_point_array, \"aw\"\n\t"		\
++		/* 32-bit only supported on BE */				\
++		".long 0x0, " __rseq_str(start_ip) ", 0x0, " __rseq_str(exit_ip) "\n\t"	\
++		".popsection\n\t"
++
+ #define RSEQ_ASM_STORE_RSEQ_CS(label, cs_label, rseq_cs)			\
+ 		RSEQ_INJECT_ASM(1)						\
+ 		"lis %%r17, (" __rseq_str(cs_label) ")@ha\n\t"			\
+@@ -169,6 +196,11 @@ int rseq_cmpeqv_storev(intptr_t *v, intptr_t expect, intptr_t newv, int cpu)
+ 
+ 	__asm__ __volatile__ goto (
+ 		RSEQ_ASM_DEFINE_TABLE(3, 1f, 2f, 4f) /* start, commit, abort */
++		RSEQ_ASM_DEFINE_EXIT_POINT(1f, %l[cmpfail])
++#ifdef RSEQ_COMPARE_TWICE
++		RSEQ_ASM_DEFINE_EXIT_POINT(1f, %l[error1])
++		RSEQ_ASM_DEFINE_EXIT_POINT(1f, %l[error2])
++#endif
+ 		/* Start rseq by storing table entry pointer into rseq_cs. */
+ 		RSEQ_ASM_STORE_RSEQ_CS(1, 3b, rseq_cs)
+ 		/* cmp cpuid */
+@@ -224,6 +256,11 @@ int rseq_cmpnev_storeoffp_load(intptr_t *v, intptr_t expectnot,
+ 
+ 	__asm__ __volatile__ goto (
+ 		RSEQ_ASM_DEFINE_TABLE(3, 1f, 2f, 4f) /* start, commit, abort */
++		RSEQ_ASM_DEFINE_EXIT_POINT(1f, %l[cmpfail])
++#ifdef RSEQ_COMPARE_TWICE
++		RSEQ_ASM_DEFINE_EXIT_POINT(1f, %l[error1])
++		RSEQ_ASM_DEFINE_EXIT_POINT(1f, %l[error2])
++#endif
+ 		/* Start rseq by storing table entry pointer into rseq_cs. */
+ 		RSEQ_ASM_STORE_RSEQ_CS(1, 3b, rseq_cs)
+ 		/* cmp cpuid */
+@@ -286,6 +323,9 @@ int rseq_addv(intptr_t *v, intptr_t count, int cpu)
+ 
+ 	__asm__ __volatile__ goto (
+ 		RSEQ_ASM_DEFINE_TABLE(3, 1f, 2f, 4f) /* start, commit, abort */
++#ifdef RSEQ_COMPARE_TWICE
++		RSEQ_ASM_DEFINE_EXIT_POINT(1f, %l[error1])
++#endif
+ 		/* Start rseq by storing table entry pointer into rseq_cs. */
+ 		RSEQ_ASM_STORE_RSEQ_CS(1, 3b, rseq_cs)
+ 		/* cmp cpuid */
+@@ -337,6 +377,11 @@ int rseq_cmpeqv_trystorev_storev(intptr_t *v, intptr_t expect,
+ 
+ 	__asm__ __volatile__ goto (
+ 		RSEQ_ASM_DEFINE_TABLE(3, 1f, 2f, 4f) /* start, commit, abort */
++		RSEQ_ASM_DEFINE_EXIT_POINT(1f, %l[cmpfail])
++#ifdef RSEQ_COMPARE_TWICE
++		RSEQ_ASM_DEFINE_EXIT_POINT(1f, %l[error1])
++		RSEQ_ASM_DEFINE_EXIT_POINT(1f, %l[error2])
++#endif
+ 		/* Start rseq by storing table entry pointer into rseq_cs. */
+ 		RSEQ_ASM_STORE_RSEQ_CS(1, 3b, rseq_cs)
+ 		/* cmp cpuid */
+@@ -400,6 +445,11 @@ int rseq_cmpeqv_trystorev_storev_release(intptr_t *v, intptr_t expect,
+ 
+ 	__asm__ __volatile__ goto (
+ 		RSEQ_ASM_DEFINE_TABLE(3, 1f, 2f, 4f) /* start, commit, abort */
++		RSEQ_ASM_DEFINE_EXIT_POINT(1f, %l[cmpfail])
++#ifdef RSEQ_COMPARE_TWICE
++		RSEQ_ASM_DEFINE_EXIT_POINT(1f, %l[error1])
++		RSEQ_ASM_DEFINE_EXIT_POINT(1f, %l[error2])
++#endif
+ 		/* Start rseq by storing table entry pointer into rseq_cs. */
+ 		RSEQ_ASM_STORE_RSEQ_CS(1, 3b, rseq_cs)
+ 		/* cmp cpuid */
+@@ -465,6 +515,12 @@ int rseq_cmpeqv_cmpeqv_storev(intptr_t *v, intptr_t expect,
+ 
+ 	__asm__ __volatile__ goto (
+ 		RSEQ_ASM_DEFINE_TABLE(3, 1f, 2f, 4f) /* start, commit, abort */
++		RSEQ_ASM_DEFINE_EXIT_POINT(1f, %l[cmpfail])
++#ifdef RSEQ_COMPARE_TWICE
++		RSEQ_ASM_DEFINE_EXIT_POINT(1f, %l[error1])
++		RSEQ_ASM_DEFINE_EXIT_POINT(1f, %l[error2])
++		RSEQ_ASM_DEFINE_EXIT_POINT(1f, %l[error3])
++#endif
+ 		/* Start rseq by storing table entry pointer into rseq_cs. */
+ 		RSEQ_ASM_STORE_RSEQ_CS(1, 3b, rseq_cs)
+ 		/* cmp cpuid */
+@@ -532,6 +588,11 @@ int rseq_cmpeqv_trymemcpy_storev(intptr_t *v, intptr_t expect,
+ 
+ 	__asm__ __volatile__ goto (
+ 		RSEQ_ASM_DEFINE_TABLE(3, 1f, 2f, 4f) /* start, commit, abort */
++		RSEQ_ASM_DEFINE_EXIT_POINT(1f, %l[cmpfail])
++#ifdef RSEQ_COMPARE_TWICE
++		RSEQ_ASM_DEFINE_EXIT_POINT(1f, %l[error1])
++		RSEQ_ASM_DEFINE_EXIT_POINT(1f, %l[error2])
++#endif
+ 		/* setup for mempcy */
+ 		"mr %%r19, %[len]\n\t"
+ 		"mr %%r20, %[src]\n\t"
+@@ -601,6 +662,11 @@ int rseq_cmpeqv_trymemcpy_storev_release(intptr_t *v, intptr_t expect,
+ 
+ 	__asm__ __volatile__ goto (
+ 		RSEQ_ASM_DEFINE_TABLE(3, 1f, 2f, 4f) /* start, commit, abort */
++		RSEQ_ASM_DEFINE_EXIT_POINT(1f, %l[cmpfail])
++#ifdef RSEQ_COMPARE_TWICE
++		RSEQ_ASM_DEFINE_EXIT_POINT(1f, %l[error1])
++		RSEQ_ASM_DEFINE_EXIT_POINT(1f, %l[error2])
++#endif
+ 		/* setup for mempcy */
+ 		"mr %%r19, %[len]\n\t"
+ 		"mr %%r20, %[src]\n\t"
+diff --git a/tools/testing/selftests/rseq/rseq-s390.h b/tools/testing/selftests/rseq/rseq-s390.h
+index 1069e85258ce..b8b5b6f900af 100644
+--- a/tools/testing/selftests/rseq/rseq-s390.h
++++ b/tools/testing/selftests/rseq/rseq-s390.h
+@@ -44,6 +44,19 @@ do {									\
+ 		".quad " __rseq_str(start_ip) ", " __rseq_str(post_commit_offset) ", " __rseq_str(abort_ip) "\n\t" \
+ 		".popsection\n\t"
+ 
++/*
++ * Exit points of a rseq critical section consist of all instructions outside
++ * of the critical section where a critical section can either branch to or
++ * reach through the normal course of its execution. The abort IP and the
++ * post-commit IP are already part of the __rseq_table section and should not
++ * be explicitly defined as additional exit points. Knowing all exit points is
++ * useful to assist debuggers stepping over the critical section.
++ */
++#define RSEQ_ASM_DEFINE_EXIT_POINT(start_ip, exit_ip)			\
++		".pushsection __rseq_exit_point_array, \"aw\"\n\t"	\
++		".quad " __rseq_str(start_ip) ", " __rseq_str(exit_ip) "\n\t" \
++		".popsection\n\t"
++
+ #elif __s390__
+ 
+ #define __RSEQ_ASM_DEFINE_TABLE(label, version, flags,			\
+@@ -55,6 +68,19 @@ do {									\
+ 		".long 0x0, " __rseq_str(start_ip) ", 0x0, " __rseq_str(post_commit_offset) ", 0x0, " __rseq_str(abort_ip) "\n\t" \
+ 		".popsection\n\t"
+ 
++/*
++ * Exit points of a rseq critical section consist of all instructions outside
++ * of the critical section where a critical section can either branch to or
++ * reach through the normal course of its execution. The abort IP and the
++ * post-commit IP are already part of the __rseq_table section and should not
++ * be explicitly defined as additional exit points. Knowing all exit points is
++ * useful to assist debuggers stepping over the critical section.
++ */
++#define RSEQ_ASM_DEFINE_EXIT_POINT(start_ip, exit_ip)			\
++		".pushsection __rseq_exit_point_array, \"aw\"\n\t"	\
++		".long 0x0, " __rseq_str(start_ip) ", 0x0, " __rseq_str(exit_ip) "\n\t" \
++		".popsection\n\t"
++
+ #define LONG_L			"l"
+ #define LONG_S			"st"
+ #define LONG_LT_R		"ltr"
+@@ -102,6 +128,11 @@ int rseq_cmpeqv_storev(intptr_t *v, intptr_t expect, intptr_t newv, int cpu)
+ 
+ 	__asm__ __volatile__ goto (
+ 		RSEQ_ASM_DEFINE_TABLE(3, 1f, 2f, 4f) /* start, commit, abort */
++		RSEQ_ASM_DEFINE_EXIT_POINT(1f, %l[cmpfail])
++#ifdef RSEQ_COMPARE_TWICE
++		RSEQ_ASM_DEFINE_EXIT_POINT(1f, %l[error1])
++		RSEQ_ASM_DEFINE_EXIT_POINT(1f, %l[error2])
++#endif
+ 		/* Start rseq by storing table entry pointer into rseq_cs. */
+ 		RSEQ_ASM_STORE_RSEQ_CS(1, 3b, rseq_cs)
+ 		RSEQ_ASM_CMP_CPU_ID(cpu_id, current_cpu_id, 4f)
+@@ -160,6 +191,11 @@ int rseq_cmpnev_storeoffp_load(intptr_t *v, intptr_t expectnot,
+ 
+ 	__asm__ __volatile__ goto (
+ 		RSEQ_ASM_DEFINE_TABLE(3, 1f, 2f, 4f) /* start, commit, abort */
++		RSEQ_ASM_DEFINE_EXIT_POINT(1f, %l[cmpfail])
++#ifdef RSEQ_COMPARE_TWICE
++		RSEQ_ASM_DEFINE_EXIT_POINT(1f, %l[error1])
++		RSEQ_ASM_DEFINE_EXIT_POINT(1f, %l[error2])
++#endif
+ 		/* Start rseq by storing table entry pointer into rseq_cs. */
+ 		RSEQ_ASM_STORE_RSEQ_CS(1, 3b, rseq_cs)
+ 		RSEQ_ASM_CMP_CPU_ID(cpu_id, current_cpu_id, 4f)
+@@ -220,6 +256,9 @@ int rseq_addv(intptr_t *v, intptr_t count, int cpu)
+ 
+ 	__asm__ __volatile__ goto (
+ 		RSEQ_ASM_DEFINE_TABLE(3, 1f, 2f, 4f) /* start, commit, abort */
++#ifdef RSEQ_COMPARE_TWICE
++		RSEQ_ASM_DEFINE_EXIT_POINT(1f, %l[error1])
++#endif
+ 		/* Start rseq by storing table entry pointer into rseq_cs. */
+ 		RSEQ_ASM_STORE_RSEQ_CS(1, 3b, rseq_cs)
+ 		RSEQ_ASM_CMP_CPU_ID(cpu_id, current_cpu_id, 4f)
+@@ -268,6 +307,11 @@ int rseq_cmpeqv_trystorev_storev(intptr_t *v, intptr_t expect,
+ 
+ 	__asm__ __volatile__ goto (
+ 		RSEQ_ASM_DEFINE_TABLE(3, 1f, 2f, 4f) /* start, commit, abort */
++		RSEQ_ASM_DEFINE_EXIT_POINT(1f, %l[cmpfail])
++#ifdef RSEQ_COMPARE_TWICE
++		RSEQ_ASM_DEFINE_EXIT_POINT(1f, %l[error1])
++		RSEQ_ASM_DEFINE_EXIT_POINT(1f, %l[error2])
++#endif
+ 		/* Start rseq by storing table entry pointer into rseq_cs. */
+ 		RSEQ_ASM_STORE_RSEQ_CS(1, 3b, rseq_cs)
+ 		RSEQ_ASM_CMP_CPU_ID(cpu_id, current_cpu_id, 4f)
+@@ -339,6 +383,12 @@ int rseq_cmpeqv_cmpeqv_storev(intptr_t *v, intptr_t expect,
+ 
+ 	__asm__ __volatile__ goto (
+ 		RSEQ_ASM_DEFINE_TABLE(3, 1f, 2f, 4f) /* start, commit, abort */
++		RSEQ_ASM_DEFINE_EXIT_POINT(1f, %l[cmpfail])
++#ifdef RSEQ_COMPARE_TWICE
++		RSEQ_ASM_DEFINE_EXIT_POINT(1f, %l[error1])
++		RSEQ_ASM_DEFINE_EXIT_POINT(1f, %l[error2])
++		RSEQ_ASM_DEFINE_EXIT_POINT(1f, %l[error3])
++#endif
+ 		/* Start rseq by storing table entry pointer into rseq_cs. */
+ 		RSEQ_ASM_STORE_RSEQ_CS(1, 3b, rseq_cs)
+ 		RSEQ_ASM_CMP_CPU_ID(cpu_id, current_cpu_id, 4f)
+@@ -407,6 +457,11 @@ int rseq_cmpeqv_trymemcpy_storev(intptr_t *v, intptr_t expect,
+ 
+ 	__asm__ __volatile__ goto (
+ 		RSEQ_ASM_DEFINE_TABLE(3, 1f, 2f, 4f) /* start, commit, abort */
++		RSEQ_ASM_DEFINE_EXIT_POINT(1f, %l[cmpfail])
++#ifdef RSEQ_COMPARE_TWICE
++		RSEQ_ASM_DEFINE_EXIT_POINT(1f, %l[error1])
++		RSEQ_ASM_DEFINE_EXIT_POINT(1f, %l[error2])
++#endif
+ 		LONG_S " %[src], %[rseq_scratch0]\n\t"
+ 		LONG_S " %[dst], %[rseq_scratch1]\n\t"
+ 		LONG_S " %[len], %[rseq_scratch2]\n\t"
+diff --git a/tools/testing/selftests/rseq/rseq-x86.h b/tools/testing/selftests/rseq/rseq-x86.h
+index a5341044a2f5..0668608d3674 100644
+--- a/tools/testing/selftests/rseq/rseq-x86.h
++++ b/tools/testing/selftests/rseq/rseq-x86.h
+@@ -58,6 +58,19 @@ do {									\
+ 	__RSEQ_ASM_DEFINE_TABLE(label, 0x0, 0x0, start_ip,		\
+ 				(post_commit_ip - start_ip), abort_ip)
+ 
++/*
++ * Exit points of a rseq critical section consist of all instructions outside
++ * of the critical section where a critical section can either branch to or
++ * reach through the normal course of its execution. The abort IP and the
++ * post-commit IP are already part of the __rseq_table section and should not
++ * be explicitly defined as additional exit points. Knowing all exit points is
++ * useful to assist debuggers stepping over the critical section.
++ */
++#define RSEQ_ASM_DEFINE_EXIT_POINT(start_ip, exit_ip)			\
++		".pushsection __rseq_exit_point_array, \"aw\"\n\t"	\
++		".quad " __rseq_str(start_ip) ", " __rseq_str(exit_ip) "\n\t" \
++		".popsection\n\t"
++
  #define RSEQ_ASM_STORE_RSEQ_CS(label, cs_label, rseq_cs)		\
  		RSEQ_INJECT_ASM(1)					\
  		"leaq " __rseq_str(cs_label) "(%%rip), %%rax\n\t"	\
--		"movq %%rax, %[" __rseq_str(rseq_cs) "]\n\t"		\
-+		"movq %%rax, " __rseq_str(rseq_cs) "\n\t"		\
- 		__rseq_str(label) ":\n\t"
+@@ -93,6 +106,11 @@ int rseq_cmpeqv_storev(intptr_t *v, intptr_t expect, intptr_t newv, int cpu)
  
- #define RSEQ_ASM_CMP_CPU_ID(cpu_id, current_cpu_id, label)		\
- 		RSEQ_INJECT_ASM(2)					\
--		"cmpl %[" __rseq_str(cpu_id) "], %[" __rseq_str(current_cpu_id) "]\n\t" \
-+		"cmpl %[" __rseq_str(cpu_id) "], " __rseq_str(current_cpu_id) "\n\t" \
- 		"jnz " __rseq_str(label) "\n\t"
+ 	__asm__ __volatile__ goto (
+ 		RSEQ_ASM_DEFINE_TABLE(3, 1f, 2f, 4f) /* start, commit, abort */
++		RSEQ_ASM_DEFINE_EXIT_POINT(1f, %l[cmpfail])
++#ifdef RSEQ_COMPARE_TWICE
++		RSEQ_ASM_DEFINE_EXIT_POINT(1f, %l[error1])
++		RSEQ_ASM_DEFINE_EXIT_POINT(1f, %l[error2])
++#endif
+ 		/* Start rseq by storing table entry pointer into rseq_cs. */
+ 		RSEQ_ASM_STORE_RSEQ_CS(1, 3b, RSEQ_CS_OFFSET(%[rseq_abi]))
+ 		RSEQ_ASM_CMP_CPU_ID(cpu_id, RSEQ_CPU_ID_OFFSET(%[rseq_abi]), 4f)
+@@ -149,6 +167,11 @@ int rseq_cmpnev_storeoffp_load(intptr_t *v, intptr_t expectnot,
  
- #define RSEQ_ASM_DEFINE_ABORT(label, teardown, abort_label)		\
-@@ -84,14 +94,14 @@ int rseq_cmpeqv_storev(intptr_t *v, intptr_t expect, intptr_t newv, int cpu)
  	__asm__ __volatile__ goto (
  		RSEQ_ASM_DEFINE_TABLE(3, 1f, 2f, 4f) /* start, commit, abort */
++		RSEQ_ASM_DEFINE_EXIT_POINT(1f, %l[cmpfail])
++#ifdef RSEQ_COMPARE_TWICE
++		RSEQ_ASM_DEFINE_EXIT_POINT(1f, %l[error1])
++		RSEQ_ASM_DEFINE_EXIT_POINT(1f, %l[error2])
++#endif
  		/* Start rseq by storing table entry pointer into rseq_cs. */
--		RSEQ_ASM_STORE_RSEQ_CS(1, 3b, rseq_cs)
--		RSEQ_ASM_CMP_CPU_ID(cpu_id, current_cpu_id, 4f)
-+		RSEQ_ASM_STORE_RSEQ_CS(1, 3b, RSEQ_CS_OFFSET(%[rseq_abi]))
-+		RSEQ_ASM_CMP_CPU_ID(cpu_id, RSEQ_CPU_ID_OFFSET(%[rseq_abi]), 4f)
- 		RSEQ_INJECT_ASM(3)
- 		"cmpq %[v], %[expect]\n\t"
- 		"jnz %l[cmpfail]\n\t"
- 		RSEQ_INJECT_ASM(4)
- #ifdef RSEQ_COMPARE_TWICE
--		RSEQ_ASM_CMP_CPU_ID(cpu_id, current_cpu_id, %l[error1])
-+		RSEQ_ASM_CMP_CPU_ID(cpu_id, RSEQ_CPU_ID_OFFSET(%[rseq_abi]), %l[error1])
- 		"cmpq %[v], %[expect]\n\t"
- 		"jnz %l[error2]\n\t"
- #endif
-@@ -102,8 +112,7 @@ int rseq_cmpeqv_storev(intptr_t *v, intptr_t expect, intptr_t newv, int cpu)
- 		RSEQ_ASM_DEFINE_ABORT(4, "", abort)
- 		: /* gcc asm goto does not allow outputs */
- 		: [cpu_id]		"r" (cpu),
--		  [current_cpu_id]	"m" (__rseq_abi.cpu_id),
--		  [rseq_cs]		"m" (__rseq_abi.rseq_cs),
-+		  [rseq_abi]		"r" (&__rseq_abi),
- 		  [v]			"m" (*v),
- 		  [expect]		"r" (expect),
- 		  [newv]		"r" (newv)
-@@ -141,15 +150,15 @@ int rseq_cmpnev_storeoffp_load(intptr_t *v, intptr_t expectnot,
+ 		RSEQ_ASM_STORE_RSEQ_CS(1, 3b, RSEQ_CS_OFFSET(%[rseq_abi]))
+ 		RSEQ_ASM_CMP_CPU_ID(cpu_id, RSEQ_CPU_ID_OFFSET(%[rseq_abi]), 4f)
+@@ -207,6 +230,9 @@ int rseq_addv(intptr_t *v, intptr_t count, int cpu)
+ 
  	__asm__ __volatile__ goto (
  		RSEQ_ASM_DEFINE_TABLE(3, 1f, 2f, 4f) /* start, commit, abort */
++#ifdef RSEQ_COMPARE_TWICE
++		RSEQ_ASM_DEFINE_EXIT_POINT(1f, %l[error1])
++#endif
  		/* Start rseq by storing table entry pointer into rseq_cs. */
--		RSEQ_ASM_STORE_RSEQ_CS(1, 3b, rseq_cs)
--		RSEQ_ASM_CMP_CPU_ID(cpu_id, current_cpu_id, 4f)
-+		RSEQ_ASM_STORE_RSEQ_CS(1, 3b, RSEQ_CS_OFFSET(%[rseq_abi]))
-+		RSEQ_ASM_CMP_CPU_ID(cpu_id, RSEQ_CPU_ID_OFFSET(%[rseq_abi]), 4f)
- 		RSEQ_INJECT_ASM(3)
- 		"movq %[v], %%rbx\n\t"
- 		"cmpq %%rbx, %[expectnot]\n\t"
- 		"je %l[cmpfail]\n\t"
- 		RSEQ_INJECT_ASM(4)
- #ifdef RSEQ_COMPARE_TWICE
--		RSEQ_ASM_CMP_CPU_ID(cpu_id, current_cpu_id, %l[error1])
-+		RSEQ_ASM_CMP_CPU_ID(cpu_id, RSEQ_CPU_ID_OFFSET(%[rseq_abi]), %l[error1])
- 		"movq %[v], %%rbx\n\t"
- 		"cmpq %%rbx, %[expectnot]\n\t"
- 		"je %l[error2]\n\t"
-@@ -164,8 +173,7 @@ int rseq_cmpnev_storeoffp_load(intptr_t *v, intptr_t expectnot,
- 		RSEQ_ASM_DEFINE_ABORT(4, "", abort)
- 		: /* gcc asm goto does not allow outputs */
- 		: [cpu_id]		"r" (cpu),
--		  [current_cpu_id]	"m" (__rseq_abi.cpu_id),
--		  [rseq_cs]		"m" (__rseq_abi.rseq_cs),
-+		  [rseq_abi]		"r" (&__rseq_abi),
- 		  /* final store input */
- 		  [v]			"m" (*v),
- 		  [expectnot]		"r" (expectnot),
-@@ -200,11 +208,11 @@ int rseq_addv(intptr_t *v, intptr_t count, int cpu)
+ 		RSEQ_ASM_STORE_RSEQ_CS(1, 3b, RSEQ_CS_OFFSET(%[rseq_abi]))
+ 		RSEQ_ASM_CMP_CPU_ID(cpu_id, RSEQ_CPU_ID_OFFSET(%[rseq_abi]), 4f)
+@@ -251,6 +277,11 @@ int rseq_cmpeqv_trystorev_storev(intptr_t *v, intptr_t expect,
+ 
  	__asm__ __volatile__ goto (
  		RSEQ_ASM_DEFINE_TABLE(3, 1f, 2f, 4f) /* start, commit, abort */
++		RSEQ_ASM_DEFINE_EXIT_POINT(1f, %l[cmpfail])
++#ifdef RSEQ_COMPARE_TWICE
++		RSEQ_ASM_DEFINE_EXIT_POINT(1f, %l[error1])
++		RSEQ_ASM_DEFINE_EXIT_POINT(1f, %l[error2])
++#endif
  		/* Start rseq by storing table entry pointer into rseq_cs. */
--		RSEQ_ASM_STORE_RSEQ_CS(1, 3b, rseq_cs)
--		RSEQ_ASM_CMP_CPU_ID(cpu_id, current_cpu_id, 4f)
-+		RSEQ_ASM_STORE_RSEQ_CS(1, 3b, RSEQ_CS_OFFSET(%[rseq_abi]))
-+		RSEQ_ASM_CMP_CPU_ID(cpu_id, RSEQ_CPU_ID_OFFSET(%[rseq_abi]), 4f)
- 		RSEQ_INJECT_ASM(3)
- #ifdef RSEQ_COMPARE_TWICE
--		RSEQ_ASM_CMP_CPU_ID(cpu_id, current_cpu_id, %l[error1])
-+		RSEQ_ASM_CMP_CPU_ID(cpu_id, RSEQ_CPU_ID_OFFSET(%[rseq_abi]), %l[error1])
- #endif
- 		/* final store */
- 		"addq %[count], %[v]\n\t"
-@@ -213,8 +221,7 @@ int rseq_addv(intptr_t *v, intptr_t count, int cpu)
- 		RSEQ_ASM_DEFINE_ABORT(4, "", abort)
- 		: /* gcc asm goto does not allow outputs */
- 		: [cpu_id]		"r" (cpu),
--		  [current_cpu_id]	"m" (__rseq_abi.cpu_id),
--		  [rseq_cs]		"m" (__rseq_abi.rseq_cs),
-+		  [rseq_abi]		"r" (&__rseq_abi),
- 		  /* final store input */
- 		  [v]			"m" (*v),
- 		  [count]		"er" (count)
-@@ -245,14 +252,14 @@ int rseq_cmpeqv_trystorev_storev(intptr_t *v, intptr_t expect,
+ 		RSEQ_ASM_STORE_RSEQ_CS(1, 3b, RSEQ_CS_OFFSET(%[rseq_abi]))
+ 		RSEQ_ASM_CMP_CPU_ID(cpu_id, RSEQ_CPU_ID_OFFSET(%[rseq_abi]), 4f)
+@@ -320,6 +351,12 @@ int rseq_cmpeqv_cmpeqv_storev(intptr_t *v, intptr_t expect,
+ 
  	__asm__ __volatile__ goto (
  		RSEQ_ASM_DEFINE_TABLE(3, 1f, 2f, 4f) /* start, commit, abort */
++		RSEQ_ASM_DEFINE_EXIT_POINT(1f, %l[cmpfail])
++#ifdef RSEQ_COMPARE_TWICE
++		RSEQ_ASM_DEFINE_EXIT_POINT(1f, %l[error1])
++		RSEQ_ASM_DEFINE_EXIT_POINT(1f, %l[error2])
++		RSEQ_ASM_DEFINE_EXIT_POINT(1f, %l[error3])
++#endif
  		/* Start rseq by storing table entry pointer into rseq_cs. */
--		RSEQ_ASM_STORE_RSEQ_CS(1, 3b, rseq_cs)
--		RSEQ_ASM_CMP_CPU_ID(cpu_id, current_cpu_id, 4f)
-+		RSEQ_ASM_STORE_RSEQ_CS(1, 3b, RSEQ_CS_OFFSET(%[rseq_abi]))
-+		RSEQ_ASM_CMP_CPU_ID(cpu_id, RSEQ_CPU_ID_OFFSET(%[rseq_abi]), 4f)
- 		RSEQ_INJECT_ASM(3)
- 		"cmpq %[v], %[expect]\n\t"
- 		"jnz %l[cmpfail]\n\t"
- 		RSEQ_INJECT_ASM(4)
- #ifdef RSEQ_COMPARE_TWICE
--		RSEQ_ASM_CMP_CPU_ID(cpu_id, current_cpu_id, %l[error1])
-+		RSEQ_ASM_CMP_CPU_ID(cpu_id, RSEQ_CPU_ID_OFFSET(%[rseq_abi]), %l[error1])
- 		"cmpq %[v], %[expect]\n\t"
- 		"jnz %l[error2]\n\t"
- #endif
-@@ -266,8 +273,7 @@ int rseq_cmpeqv_trystorev_storev(intptr_t *v, intptr_t expect,
- 		RSEQ_ASM_DEFINE_ABORT(4, "", abort)
- 		: /* gcc asm goto does not allow outputs */
- 		: [cpu_id]		"r" (cpu),
--		  [current_cpu_id]	"m" (__rseq_abi.cpu_id),
--		  [rseq_cs]		"m" (__rseq_abi.rseq_cs),
-+		  [rseq_abi]		"r" (&__rseq_abi),
- 		  /* try store input */
- 		  [v2]			"m" (*v2),
- 		  [newv2]		"r" (newv2),
-@@ -315,8 +321,8 @@ int rseq_cmpeqv_cmpeqv_storev(intptr_t *v, intptr_t expect,
+ 		RSEQ_ASM_STORE_RSEQ_CS(1, 3b, RSEQ_CS_OFFSET(%[rseq_abi]))
+ 		RSEQ_ASM_CMP_CPU_ID(cpu_id, RSEQ_CPU_ID_OFFSET(%[rseq_abi]), 4f)
+@@ -386,6 +423,11 @@ int rseq_cmpeqv_trymemcpy_storev(intptr_t *v, intptr_t expect,
+ 
  	__asm__ __volatile__ goto (
  		RSEQ_ASM_DEFINE_TABLE(3, 1f, 2f, 4f) /* start, commit, abort */
- 		/* Start rseq by storing table entry pointer into rseq_cs. */
--		RSEQ_ASM_STORE_RSEQ_CS(1, 3b, rseq_cs)
--		RSEQ_ASM_CMP_CPU_ID(cpu_id, current_cpu_id, 4f)
-+		RSEQ_ASM_STORE_RSEQ_CS(1, 3b, RSEQ_CS_OFFSET(%[rseq_abi]))
-+		RSEQ_ASM_CMP_CPU_ID(cpu_id, RSEQ_CPU_ID_OFFSET(%[rseq_abi]), 4f)
- 		RSEQ_INJECT_ASM(3)
- 		"cmpq %[v], %[expect]\n\t"
- 		"jnz %l[cmpfail]\n\t"
-@@ -325,7 +331,7 @@ int rseq_cmpeqv_cmpeqv_storev(intptr_t *v, intptr_t expect,
- 		"jnz %l[cmpfail]\n\t"
- 		RSEQ_INJECT_ASM(5)
- #ifdef RSEQ_COMPARE_TWICE
--		RSEQ_ASM_CMP_CPU_ID(cpu_id, current_cpu_id, %l[error1])
-+		RSEQ_ASM_CMP_CPU_ID(cpu_id, RSEQ_CPU_ID_OFFSET(%[rseq_abi]), %l[error1])
- 		"cmpq %[v], %[expect]\n\t"
- 		"jnz %l[error2]\n\t"
- 		"cmpq %[v2], %[expect2]\n\t"
-@@ -338,8 +344,7 @@ int rseq_cmpeqv_cmpeqv_storev(intptr_t *v, intptr_t expect,
- 		RSEQ_ASM_DEFINE_ABORT(4, "", abort)
- 		: /* gcc asm goto does not allow outputs */
- 		: [cpu_id]		"r" (cpu),
--		  [current_cpu_id]	"m" (__rseq_abi.cpu_id),
--		  [rseq_cs]		"m" (__rseq_abi.rseq_cs),
-+		  [rseq_abi]		"r" (&__rseq_abi),
- 		  /* cmp2 input */
- 		  [v2]			"m" (*v2),
- 		  [expect2]		"r" (expect2),
-@@ -385,14 +390,14 @@ int rseq_cmpeqv_trymemcpy_storev(intptr_t *v, intptr_t expect,
++		RSEQ_ASM_DEFINE_EXIT_POINT(1f, %l[cmpfail])
++#ifdef RSEQ_COMPARE_TWICE
++		RSEQ_ASM_DEFINE_EXIT_POINT(1f, %l[error1])
++		RSEQ_ASM_DEFINE_EXIT_POINT(1f, %l[error2])
++#endif
+ 		"movq %[src], %[rseq_scratch0]\n\t"
  		"movq %[dst], %[rseq_scratch1]\n\t"
  		"movq %[len], %[rseq_scratch2]\n\t"
- 		/* Start rseq by storing table entry pointer into rseq_cs. */
--		RSEQ_ASM_STORE_RSEQ_CS(1, 3b, rseq_cs)
--		RSEQ_ASM_CMP_CPU_ID(cpu_id, current_cpu_id, 4f)
-+		RSEQ_ASM_STORE_RSEQ_CS(1, 3b, RSEQ_CS_OFFSET(%[rseq_abi]))
-+		RSEQ_ASM_CMP_CPU_ID(cpu_id, RSEQ_CPU_ID_OFFSET(%[rseq_abi]), 4f)
- 		RSEQ_INJECT_ASM(3)
- 		"cmpq %[v], %[expect]\n\t"
- 		"jnz 5f\n\t"
- 		RSEQ_INJECT_ASM(4)
- #ifdef RSEQ_COMPARE_TWICE
--		RSEQ_ASM_CMP_CPU_ID(cpu_id, current_cpu_id, 6f)
-+		RSEQ_ASM_CMP_CPU_ID(cpu_id, RSEQ_CPU_ID_OFFSET(%[rseq_abi]), 6f)
- 		"cmpq %[v], %[expect]\n\t"
- 		"jnz 7f\n\t"
- #endif
-@@ -440,8 +445,7 @@ int rseq_cmpeqv_trymemcpy_storev(intptr_t *v, intptr_t expect,
- #endif
- 		: /* gcc asm goto does not allow outputs */
- 		: [cpu_id]		"r" (cpu),
--		  [current_cpu_id]	"m" (__rseq_abi.cpu_id),
--		  [rseq_cs]		"m" (__rseq_abi.rseq_cs),
-+		  [rseq_abi]		"r" (&__rseq_abi),
- 		  /* final store input */
- 		  [v]			"m" (*v),
- 		  [expect]		"r" (expect),
-@@ -533,12 +537,12 @@ do {									\
+@@ -535,6 +577,19 @@ do {									\
+ 	__RSEQ_ASM_DEFINE_TABLE(label, 0x0, 0x0, start_ip,		\
+ 				(post_commit_ip - start_ip), abort_ip)
  
++/*
++ * Exit points of a rseq critical section consist of all instructions outside
++ * of the critical section where a critical section can either branch to or
++ * reach through the normal course of its execution. The abort IP and the
++ * post-commit IP are already part of the __rseq_table section and should not
++ * be explicitly defined as additional exit points. Knowing all exit points is
++ * useful to assist debuggers stepping over the critical section.
++ */
++#define RSEQ_ASM_DEFINE_EXIT_POINT(start_ip, exit_ip)			\
++		".pushsection __rseq_exit_point_array, \"aw\"\n\t"	\
++		".long " __rseq_str(start_ip) ", 0x0, " __rseq_str(exit_ip) ", 0x0\n\t" \
++		".popsection\n\t"
++
  #define RSEQ_ASM_STORE_RSEQ_CS(label, cs_label, rseq_cs)		\
  		RSEQ_INJECT_ASM(1)					\
--		"movl $" __rseq_str(cs_label) ", %[rseq_cs]\n\t"	\
-+		"movl $" __rseq_str(cs_label) ", " __rseq_str(rseq_cs) "\n\t"	\
- 		__rseq_str(label) ":\n\t"
+ 		"movl $" __rseq_str(cs_label) ", " __rseq_str(rseq_cs) "\n\t"	\
+@@ -569,6 +624,11 @@ int rseq_cmpeqv_storev(intptr_t *v, intptr_t expect, intptr_t newv, int cpu)
  
- #define RSEQ_ASM_CMP_CPU_ID(cpu_id, current_cpu_id, label)		\
- 		RSEQ_INJECT_ASM(2)					\
--		"cmpl %[" __rseq_str(cpu_id) "], %[" __rseq_str(current_cpu_id) "]\n\t" \
-+		"cmpl %[" __rseq_str(cpu_id) "], " __rseq_str(current_cpu_id) "\n\t" \
- 		"jnz " __rseq_str(label) "\n\t"
+ 	__asm__ __volatile__ goto (
+ 		RSEQ_ASM_DEFINE_TABLE(3, 1f, 2f, 4f) /* start, commit, abort */
++		RSEQ_ASM_DEFINE_EXIT_POINT(1f, %l[cmpfail])
++#ifdef RSEQ_COMPARE_TWICE
++		RSEQ_ASM_DEFINE_EXIT_POINT(1f, %l[error1])
++		RSEQ_ASM_DEFINE_EXIT_POINT(1f, %l[error2])
++#endif
+ 		/* Start rseq by storing table entry pointer into rseq_cs. */
+ 		RSEQ_ASM_STORE_RSEQ_CS(1, 3b, RSEQ_CS_OFFSET(%[rseq_abi]))
+ 		RSEQ_ASM_CMP_CPU_ID(cpu_id, RSEQ_CPU_ID_OFFSET(%[rseq_abi]), 4f)
+@@ -625,6 +685,11 @@ int rseq_cmpnev_storeoffp_load(intptr_t *v, intptr_t expectnot,
  
- #define RSEQ_ASM_DEFINE_ABORT(label, teardown, abort_label)		\
-@@ -566,14 +570,14 @@ int rseq_cmpeqv_storev(intptr_t *v, intptr_t expect, intptr_t newv, int cpu)
  	__asm__ __volatile__ goto (
  		RSEQ_ASM_DEFINE_TABLE(3, 1f, 2f, 4f) /* start, commit, abort */
++		RSEQ_ASM_DEFINE_EXIT_POINT(1f, %l[cmpfail])
++#ifdef RSEQ_COMPARE_TWICE
++		RSEQ_ASM_DEFINE_EXIT_POINT(1f, %l[error1])
++		RSEQ_ASM_DEFINE_EXIT_POINT(1f, %l[error2])
++#endif
  		/* Start rseq by storing table entry pointer into rseq_cs. */
--		RSEQ_ASM_STORE_RSEQ_CS(1, 3b, rseq_cs)
--		RSEQ_ASM_CMP_CPU_ID(cpu_id, current_cpu_id, 4f)
-+		RSEQ_ASM_STORE_RSEQ_CS(1, 3b, RSEQ_CS_OFFSET(%[rseq_abi]))
-+		RSEQ_ASM_CMP_CPU_ID(cpu_id, RSEQ_CPU_ID_OFFSET(%[rseq_abi]), 4f)
- 		RSEQ_INJECT_ASM(3)
- 		"cmpl %[v], %[expect]\n\t"
- 		"jnz %l[cmpfail]\n\t"
- 		RSEQ_INJECT_ASM(4)
- #ifdef RSEQ_COMPARE_TWICE
--		RSEQ_ASM_CMP_CPU_ID(cpu_id, current_cpu_id, %l[error1])
-+		RSEQ_ASM_CMP_CPU_ID(cpu_id, RSEQ_CPU_ID_OFFSET(%[rseq_abi]), %l[error1])
- 		"cmpl %[v], %[expect]\n\t"
- 		"jnz %l[error2]\n\t"
- #endif
-@@ -584,8 +588,7 @@ int rseq_cmpeqv_storev(intptr_t *v, intptr_t expect, intptr_t newv, int cpu)
- 		RSEQ_ASM_DEFINE_ABORT(4, "", abort)
- 		: /* gcc asm goto does not allow outputs */
- 		: [cpu_id]		"r" (cpu),
--		  [current_cpu_id]	"m" (__rseq_abi.cpu_id),
--		  [rseq_cs]		"m" (__rseq_abi.rseq_cs),
-+		  [rseq_abi]		"r" (&__rseq_abi),
- 		  [v]			"m" (*v),
- 		  [expect]		"r" (expect),
- 		  [newv]		"r" (newv)
-@@ -623,15 +626,15 @@ int rseq_cmpnev_storeoffp_load(intptr_t *v, intptr_t expectnot,
+ 		RSEQ_ASM_STORE_RSEQ_CS(1, 3b, RSEQ_CS_OFFSET(%[rseq_abi]))
+ 		RSEQ_ASM_CMP_CPU_ID(cpu_id, RSEQ_CPU_ID_OFFSET(%[rseq_abi]), 4f)
+@@ -683,6 +748,9 @@ int rseq_addv(intptr_t *v, intptr_t count, int cpu)
+ 
  	__asm__ __volatile__ goto (
  		RSEQ_ASM_DEFINE_TABLE(3, 1f, 2f, 4f) /* start, commit, abort */
++#ifdef RSEQ_COMPARE_TWICE
++		RSEQ_ASM_DEFINE_EXIT_POINT(1f, %l[error1])
++#endif
  		/* Start rseq by storing table entry pointer into rseq_cs. */
--		RSEQ_ASM_STORE_RSEQ_CS(1, 3b, rseq_cs)
--		RSEQ_ASM_CMP_CPU_ID(cpu_id, current_cpu_id, 4f)
-+		RSEQ_ASM_STORE_RSEQ_CS(1, 3b, RSEQ_CS_OFFSET(%[rseq_abi]))
-+		RSEQ_ASM_CMP_CPU_ID(cpu_id, RSEQ_CPU_ID_OFFSET(%[rseq_abi]), 4f)
- 		RSEQ_INJECT_ASM(3)
- 		"movl %[v], %%ebx\n\t"
- 		"cmpl %%ebx, %[expectnot]\n\t"
- 		"je %l[cmpfail]\n\t"
- 		RSEQ_INJECT_ASM(4)
- #ifdef RSEQ_COMPARE_TWICE
--		RSEQ_ASM_CMP_CPU_ID(cpu_id, current_cpu_id, %l[error1])
-+		RSEQ_ASM_CMP_CPU_ID(cpu_id, RSEQ_CPU_ID_OFFSET(%[rseq_abi]), %l[error1])
- 		"movl %[v], %%ebx\n\t"
- 		"cmpl %%ebx, %[expectnot]\n\t"
- 		"je %l[error2]\n\t"
-@@ -646,8 +649,7 @@ int rseq_cmpnev_storeoffp_load(intptr_t *v, intptr_t expectnot,
- 		RSEQ_ASM_DEFINE_ABORT(4, "", abort)
- 		: /* gcc asm goto does not allow outputs */
- 		: [cpu_id]		"r" (cpu),
--		  [current_cpu_id]	"m" (__rseq_abi.cpu_id),
--		  [rseq_cs]		"m" (__rseq_abi.rseq_cs),
-+		  [rseq_abi]		"r" (&__rseq_abi),
- 		  /* final store input */
- 		  [v]			"m" (*v),
- 		  [expectnot]		"r" (expectnot),
-@@ -682,11 +684,11 @@ int rseq_addv(intptr_t *v, intptr_t count, int cpu)
+ 		RSEQ_ASM_STORE_RSEQ_CS(1, 3b, RSEQ_CS_OFFSET(%[rseq_abi]))
+ 		RSEQ_ASM_CMP_CPU_ID(cpu_id, RSEQ_CPU_ID_OFFSET(%[rseq_abi]), 4f)
+@@ -727,6 +795,11 @@ int rseq_cmpeqv_trystorev_storev(intptr_t *v, intptr_t expect,
+ 
  	__asm__ __volatile__ goto (
  		RSEQ_ASM_DEFINE_TABLE(3, 1f, 2f, 4f) /* start, commit, abort */
++		RSEQ_ASM_DEFINE_EXIT_POINT(1f, %l[cmpfail])
++#ifdef RSEQ_COMPARE_TWICE
++		RSEQ_ASM_DEFINE_EXIT_POINT(1f, %l[error1])
++		RSEQ_ASM_DEFINE_EXIT_POINT(1f, %l[error2])
++#endif
  		/* Start rseq by storing table entry pointer into rseq_cs. */
--		RSEQ_ASM_STORE_RSEQ_CS(1, 3b, rseq_cs)
--		RSEQ_ASM_CMP_CPU_ID(cpu_id, current_cpu_id, 4f)
-+		RSEQ_ASM_STORE_RSEQ_CS(1, 3b, RSEQ_CS_OFFSET(%[rseq_abi]))
-+		RSEQ_ASM_CMP_CPU_ID(cpu_id, RSEQ_CPU_ID_OFFSET(%[rseq_abi]), 4f)
- 		RSEQ_INJECT_ASM(3)
- #ifdef RSEQ_COMPARE_TWICE
--		RSEQ_ASM_CMP_CPU_ID(cpu_id, current_cpu_id, %l[error1])
-+		RSEQ_ASM_CMP_CPU_ID(cpu_id, RSEQ_CPU_ID_OFFSET(%[rseq_abi]), %l[error1])
- #endif
- 		/* final store */
- 		"addl %[count], %[v]\n\t"
-@@ -695,8 +697,7 @@ int rseq_addv(intptr_t *v, intptr_t count, int cpu)
- 		RSEQ_ASM_DEFINE_ABORT(4, "", abort)
- 		: /* gcc asm goto does not allow outputs */
- 		: [cpu_id]		"r" (cpu),
--		  [current_cpu_id]	"m" (__rseq_abi.cpu_id),
--		  [rseq_cs]		"m" (__rseq_abi.rseq_cs),
-+		  [rseq_abi]		"r" (&__rseq_abi),
- 		  /* final store input */
- 		  [v]			"m" (*v),
- 		  [count]		"ir" (count)
-@@ -727,14 +728,14 @@ int rseq_cmpeqv_trystorev_storev(intptr_t *v, intptr_t expect,
+ 		RSEQ_ASM_STORE_RSEQ_CS(1, 3b, RSEQ_CS_OFFSET(%[rseq_abi]))
+ 		RSEQ_ASM_CMP_CPU_ID(cpu_id, RSEQ_CPU_ID_OFFSET(%[rseq_abi]), 4f)
+@@ -788,6 +861,11 @@ int rseq_cmpeqv_trystorev_storev_release(intptr_t *v, intptr_t expect,
+ 
  	__asm__ __volatile__ goto (
  		RSEQ_ASM_DEFINE_TABLE(3, 1f, 2f, 4f) /* start, commit, abort */
++		RSEQ_ASM_DEFINE_EXIT_POINT(1f, %l[cmpfail])
++#ifdef RSEQ_COMPARE_TWICE
++		RSEQ_ASM_DEFINE_EXIT_POINT(1f, %l[error1])
++		RSEQ_ASM_DEFINE_EXIT_POINT(1f, %l[error2])
++#endif
  		/* Start rseq by storing table entry pointer into rseq_cs. */
--		RSEQ_ASM_STORE_RSEQ_CS(1, 3b, rseq_cs)
--		RSEQ_ASM_CMP_CPU_ID(cpu_id, current_cpu_id, 4f)
-+		RSEQ_ASM_STORE_RSEQ_CS(1, 3b, RSEQ_CS_OFFSET(%[rseq_abi]))
-+		RSEQ_ASM_CMP_CPU_ID(cpu_id, RSEQ_CPU_ID_OFFSET(%[rseq_abi]), 4f)
- 		RSEQ_INJECT_ASM(3)
- 		"cmpl %[v], %[expect]\n\t"
- 		"jnz %l[cmpfail]\n\t"
- 		RSEQ_INJECT_ASM(4)
- #ifdef RSEQ_COMPARE_TWICE
--		RSEQ_ASM_CMP_CPU_ID(cpu_id, current_cpu_id, %l[error1])
-+		RSEQ_ASM_CMP_CPU_ID(cpu_id, RSEQ_CPU_ID_OFFSET(%[rseq_abi]), %l[error1])
- 		"cmpl %[v], %[expect]\n\t"
- 		"jnz %l[error2]\n\t"
- #endif
-@@ -749,8 +750,7 @@ int rseq_cmpeqv_trystorev_storev(intptr_t *v, intptr_t expect,
- 		RSEQ_ASM_DEFINE_ABORT(4, "", abort)
- 		: /* gcc asm goto does not allow outputs */
- 		: [cpu_id]		"r" (cpu),
--		  [current_cpu_id]	"m" (__rseq_abi.cpu_id),
--		  [rseq_cs]		"m" (__rseq_abi.rseq_cs),
-+		  [rseq_abi]		"r" (&__rseq_abi),
- 		  /* try store input */
- 		  [v2]			"m" (*v2),
- 		  [newv2]		"m" (newv2),
-@@ -789,15 +789,15 @@ int rseq_cmpeqv_trystorev_storev_release(intptr_t *v, intptr_t expect,
+ 		RSEQ_ASM_STORE_RSEQ_CS(1, 3b, RSEQ_CS_OFFSET(%[rseq_abi]))
+ 		RSEQ_ASM_CMP_CPU_ID(cpu_id, RSEQ_CPU_ID_OFFSET(%[rseq_abi]), 4f)
+@@ -852,6 +930,12 @@ int rseq_cmpeqv_cmpeqv_storev(intptr_t *v, intptr_t expect,
+ 
  	__asm__ __volatile__ goto (
  		RSEQ_ASM_DEFINE_TABLE(3, 1f, 2f, 4f) /* start, commit, abort */
++		RSEQ_ASM_DEFINE_EXIT_POINT(1f, %l[cmpfail])
++#ifdef RSEQ_COMPARE_TWICE
++		RSEQ_ASM_DEFINE_EXIT_POINT(1f, %l[error1])
++		RSEQ_ASM_DEFINE_EXIT_POINT(1f, %l[error2])
++		RSEQ_ASM_DEFINE_EXIT_POINT(1f, %l[error3])
++#endif
  		/* Start rseq by storing table entry pointer into rseq_cs. */
--		RSEQ_ASM_STORE_RSEQ_CS(1, 3b, rseq_cs)
--		RSEQ_ASM_CMP_CPU_ID(cpu_id, current_cpu_id, 4f)
-+		RSEQ_ASM_STORE_RSEQ_CS(1, 3b, RSEQ_CS_OFFSET(%[rseq_abi]))
-+		RSEQ_ASM_CMP_CPU_ID(cpu_id, RSEQ_CPU_ID_OFFSET(%[rseq_abi]), 4f)
- 		RSEQ_INJECT_ASM(3)
- 		"movl %[expect], %%eax\n\t"
- 		"cmpl %[v], %%eax\n\t"
- 		"jnz %l[cmpfail]\n\t"
- 		RSEQ_INJECT_ASM(4)
- #ifdef RSEQ_COMPARE_TWICE
--		RSEQ_ASM_CMP_CPU_ID(cpu_id, current_cpu_id, %l[error1])
-+		RSEQ_ASM_CMP_CPU_ID(cpu_id, RSEQ_CPU_ID_OFFSET(%[rseq_abi]), %l[error1])
- 		"movl %[expect], %%eax\n\t"
- 		"cmpl %[v], %%eax\n\t"
- 		"jnz %l[error2]\n\t"
-@@ -813,8 +813,7 @@ int rseq_cmpeqv_trystorev_storev_release(intptr_t *v, intptr_t expect,
- 		RSEQ_ASM_DEFINE_ABORT(4, "", abort)
- 		: /* gcc asm goto does not allow outputs */
- 		: [cpu_id]		"r" (cpu),
--		  [current_cpu_id]	"m" (__rseq_abi.cpu_id),
--		  [rseq_cs]		"m" (__rseq_abi.rseq_cs),
-+		  [rseq_abi]		"r" (&__rseq_abi),
- 		  /* try store input */
- 		  [v2]			"m" (*v2),
- 		  [newv2]		"r" (newv2),
-@@ -854,8 +853,8 @@ int rseq_cmpeqv_cmpeqv_storev(intptr_t *v, intptr_t expect,
+ 		RSEQ_ASM_STORE_RSEQ_CS(1, 3b, RSEQ_CS_OFFSET(%[rseq_abi]))
+ 		RSEQ_ASM_CMP_CPU_ID(cpu_id, RSEQ_CPU_ID_OFFSET(%[rseq_abi]), 4f)
+@@ -920,6 +1004,11 @@ int rseq_cmpeqv_trymemcpy_storev(intptr_t *v, intptr_t expect,
+ 
  	__asm__ __volatile__ goto (
  		RSEQ_ASM_DEFINE_TABLE(3, 1f, 2f, 4f) /* start, commit, abort */
- 		/* Start rseq by storing table entry pointer into rseq_cs. */
--		RSEQ_ASM_STORE_RSEQ_CS(1, 3b, rseq_cs)
--		RSEQ_ASM_CMP_CPU_ID(cpu_id, current_cpu_id, 4f)
-+		RSEQ_ASM_STORE_RSEQ_CS(1, 3b, RSEQ_CS_OFFSET(%[rseq_abi]))
-+		RSEQ_ASM_CMP_CPU_ID(cpu_id, RSEQ_CPU_ID_OFFSET(%[rseq_abi]), 4f)
- 		RSEQ_INJECT_ASM(3)
- 		"cmpl %[v], %[expect]\n\t"
- 		"jnz %l[cmpfail]\n\t"
-@@ -864,7 +863,7 @@ int rseq_cmpeqv_cmpeqv_storev(intptr_t *v, intptr_t expect,
- 		"jnz %l[cmpfail]\n\t"
- 		RSEQ_INJECT_ASM(5)
- #ifdef RSEQ_COMPARE_TWICE
--		RSEQ_ASM_CMP_CPU_ID(cpu_id, current_cpu_id, %l[error1])
-+		RSEQ_ASM_CMP_CPU_ID(cpu_id, RSEQ_CPU_ID_OFFSET(%[rseq_abi]), %l[error1])
- 		"cmpl %[v], %[expect]\n\t"
- 		"jnz %l[error2]\n\t"
- 		"cmpl %[expect2], %[v2]\n\t"
-@@ -878,8 +877,7 @@ int rseq_cmpeqv_cmpeqv_storev(intptr_t *v, intptr_t expect,
- 		RSEQ_ASM_DEFINE_ABORT(4, "", abort)
- 		: /* gcc asm goto does not allow outputs */
- 		: [cpu_id]		"r" (cpu),
--		  [current_cpu_id]	"m" (__rseq_abi.cpu_id),
--		  [rseq_cs]		"m" (__rseq_abi.rseq_cs),
-+		  [rseq_abi]		"r" (&__rseq_abi),
- 		  /* cmp2 input */
- 		  [v2]			"m" (*v2),
- 		  [expect2]		"r" (expect2),
-@@ -926,15 +924,15 @@ int rseq_cmpeqv_trymemcpy_storev(intptr_t *v, intptr_t expect,
++		RSEQ_ASM_DEFINE_EXIT_POINT(1f, %l[cmpfail])
++#ifdef RSEQ_COMPARE_TWICE
++		RSEQ_ASM_DEFINE_EXIT_POINT(1f, %l[error1])
++		RSEQ_ASM_DEFINE_EXIT_POINT(1f, %l[error2])
++#endif
+ 		"movl %[src], %[rseq_scratch0]\n\t"
  		"movl %[dst], %[rseq_scratch1]\n\t"
  		"movl %[len], %[rseq_scratch2]\n\t"
- 		/* Start rseq by storing table entry pointer into rseq_cs. */
--		RSEQ_ASM_STORE_RSEQ_CS(1, 3b, rseq_cs)
--		RSEQ_ASM_CMP_CPU_ID(cpu_id, current_cpu_id, 4f)
-+		RSEQ_ASM_STORE_RSEQ_CS(1, 3b, RSEQ_CS_OFFSET(%[rseq_abi]))
-+		RSEQ_ASM_CMP_CPU_ID(cpu_id, RSEQ_CPU_ID_OFFSET(%[rseq_abi]), 4f)
- 		RSEQ_INJECT_ASM(3)
- 		"movl %[expect], %%eax\n\t"
- 		"cmpl %%eax, %[v]\n\t"
- 		"jnz 5f\n\t"
- 		RSEQ_INJECT_ASM(4)
- #ifdef RSEQ_COMPARE_TWICE
--		RSEQ_ASM_CMP_CPU_ID(cpu_id, current_cpu_id, 6f)
-+		RSEQ_ASM_CMP_CPU_ID(cpu_id, RSEQ_CPU_ID_OFFSET(%[rseq_abi]), 6f)
- 		"movl %[expect], %%eax\n\t"
- 		"cmpl %%eax, %[v]\n\t"
- 		"jnz 7f\n\t"
-@@ -984,8 +982,7 @@ int rseq_cmpeqv_trymemcpy_storev(intptr_t *v, intptr_t expect,
- #endif
- 		: /* gcc asm goto does not allow outputs */
- 		: [cpu_id]		"r" (cpu),
--		  [current_cpu_id]	"m" (__rseq_abi.cpu_id),
--		  [rseq_cs]		"m" (__rseq_abi.rseq_cs),
-+		  [rseq_abi]		"r" (&__rseq_abi),
- 		  /* final store input */
- 		  [v]			"m" (*v),
- 		  [expect]		"m" (expect),
-@@ -1034,15 +1031,15 @@ int rseq_cmpeqv_trymemcpy_storev_release(intptr_t *v, intptr_t expect,
+@@ -1027,6 +1116,11 @@ int rseq_cmpeqv_trymemcpy_storev_release(intptr_t *v, intptr_t expect,
+ 
+ 	__asm__ __volatile__ goto (
+ 		RSEQ_ASM_DEFINE_TABLE(3, 1f, 2f, 4f) /* start, commit, abort */
++		RSEQ_ASM_DEFINE_EXIT_POINT(1f, %l[cmpfail])
++#ifdef RSEQ_COMPARE_TWICE
++		RSEQ_ASM_DEFINE_EXIT_POINT(1f, %l[error1])
++		RSEQ_ASM_DEFINE_EXIT_POINT(1f, %l[error2])
++#endif
+ 		"movl %[src], %[rseq_scratch0]\n\t"
  		"movl %[dst], %[rseq_scratch1]\n\t"
  		"movl %[len], %[rseq_scratch2]\n\t"
- 		/* Start rseq by storing table entry pointer into rseq_cs. */
--		RSEQ_ASM_STORE_RSEQ_CS(1, 3b, rseq_cs)
--		RSEQ_ASM_CMP_CPU_ID(cpu_id, current_cpu_id, 4f)
-+		RSEQ_ASM_STORE_RSEQ_CS(1, 3b, RSEQ_CS_OFFSET(%[rseq_abi]))
-+		RSEQ_ASM_CMP_CPU_ID(cpu_id, RSEQ_CPU_ID_OFFSET(%[rseq_abi]), 4f)
- 		RSEQ_INJECT_ASM(3)
- 		"movl %[expect], %%eax\n\t"
- 		"cmpl %%eax, %[v]\n\t"
- 		"jnz 5f\n\t"
- 		RSEQ_INJECT_ASM(4)
- #ifdef RSEQ_COMPARE_TWICE
--		RSEQ_ASM_CMP_CPU_ID(cpu_id, current_cpu_id, 6f)
-+		RSEQ_ASM_CMP_CPU_ID(cpu_id, RSEQ_CPU_ID_OFFSET(%[rseq_abi]), 6f)
- 		"movl %[expect], %%eax\n\t"
- 		"cmpl %%eax, %[v]\n\t"
- 		"jnz 7f\n\t"
-@@ -1093,8 +1090,7 @@ int rseq_cmpeqv_trymemcpy_storev_release(intptr_t *v, intptr_t expect,
- #endif
- 		: /* gcc asm goto does not allow outputs */
- 		: [cpu_id]		"r" (cpu),
--		  [current_cpu_id]	"m" (__rseq_abi.cpu_id),
--		  [rseq_cs]		"m" (__rseq_abi.rseq_cs),
-+		  [rseq_abi]		"r" (&__rseq_abi),
- 		  /* final store input */
- 		  [v]			"m" (*v),
- 		  [expect]		"m" (expect),
 -- 
 2.11.0
+
+
 
