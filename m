@@ -2,43 +2,43 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6650DE682
-	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Apr 2019 17:31:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 59DCDE67C
+	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Apr 2019 17:30:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728846AbfD2PaW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 29 Apr 2019 11:30:22 -0400
+        id S1728549AbfD2PaM (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 29 Apr 2019 11:30:12 -0400
 Received: from mail.efficios.com ([167.114.142.138]:56924 "EHLO
         mail.efficios.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728672AbfD2P31 (ORCPT
+        with ESMTP id S1728699AbfD2P33 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 29 Apr 2019 11:29:27 -0400
+        Mon, 29 Apr 2019 11:29:29 -0400
 Received: from localhost (ip6-localhost [IPv6:::1])
-        by mail.efficios.com (Postfix) with ESMTP id B80931C1CE7;
-        Mon, 29 Apr 2019 11:29:25 -0400 (EDT)
+        by mail.efficios.com (Postfix) with ESMTP id 0757E1C1D0A;
+        Mon, 29 Apr 2019 11:29:28 -0400 (EDT)
 Received: from mail.efficios.com ([IPv6:::1])
         by localhost (mail02.efficios.com [IPv6:::1]) (amavisd-new, port 10032)
-        with ESMTP id 2gPY819J-axm; Mon, 29 Apr 2019 11:29:25 -0400 (EDT)
+        with ESMTP id S035iER66EGa; Mon, 29 Apr 2019 11:29:27 -0400 (EDT)
 Received: from localhost (ip6-localhost [IPv6:::1])
-        by mail.efficios.com (Postfix) with ESMTP id 511631C1CDC;
-        Mon, 29 Apr 2019 11:29:25 -0400 (EDT)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com 511631C1CDC
+        by mail.efficios.com (Postfix) with ESMTP id 4350A1C1CF9;
+        Mon, 29 Apr 2019 11:29:27 -0400 (EDT)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com 4350A1C1CF9
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
-        s=default; t=1556551765;
-        bh=ywHZBM285Oi7ZNY1INp8Fr4OzMaiucwZoNO/gC6Rwc8=;
+        s=default; t=1556551767;
+        bh=jy4yDKrc4yriyy49NKNbIGeaZKEJiVoy7GIQXjy8eHI=;
         h=From:To:Date:Message-Id;
-        b=cFDn/eIovgRc3tS5s+n5klc3EYh/x2iot7j09siSgkU1bHG39u1Q4b6f6HHS77dWC
-         fXm6aUrBmqBtwdmw7yu+FAayOxJnnck7EjyMnUd80O1fFSbSEdgcwvEPJ8iG147wqf
-         4OuL2NppXePrK87yRQ3zOIYGDFvV36kOBFD74LD8PBakVUk7pVg07zOR9bwl5nMjHI
-         cB/l2cBax4ajTRSGrNyQoGPl4GILFDvfOXil9fAYd8wZo7tczC/cbUK8b7tUNTesuN
-         hvsjLU8kb2nmkP/eEuvvv+mOMIcF5vrHhZgvUY+VTAujx4FMmvZ3r4fePFATvuleRb
-         vOIiKtLW630gQ==
+        b=IqcNxVj5SMIS/lcqYa2p35vuIYHO9Hrsr2r3ebI4sV+I7kWUHuQ7flOhkhT9ErcW6
+         9nXSTvCAcY+lVu29tE1G1ceEqhzuPlzLWAhfr3mx5gB2FnOrfz3s5uMbNpMTVej5jy
+         2gtsUOU+1MuOxpt1YIAq8ZoNC6dnruNnsiCSE1cE84Feb94fes/nrpaUvpJfWm1h8L
+         rhUrLfLqG70AMw9SpRSQag4vXIwXD7pavQPkLtd2jE4xU1VtAtJ+wXiwHXQFsa1mP9
+         Wf3yI5C+qrTcnO7DgPxuE5GIdZadlqLgtgNx6Wut+NJAyfsTRy7GD2H1HUo5l3KSah
+         YN7X4MEw2nuCQ==
 X-Virus-Scanned: amavisd-new at efficios.com
 Received: from mail.efficios.com ([IPv6:::1])
         by localhost (mail02.efficios.com [IPv6:::1]) (amavisd-new, port 10026)
-        with ESMTP id ZjrLtblpKBDb; Mon, 29 Apr 2019 11:29:25 -0400 (EDT)
+        with ESMTP id bS8psTWBszyc; Mon, 29 Apr 2019 11:29:27 -0400 (EDT)
 Received: from thinkos.internal.efficios.com (192-222-157-41.qc.cable.ebox.net [192.222.157.41])
-        by mail.efficios.com (Postfix) with ESMTPSA id 62D531C1CC5;
-        Mon, 29 Apr 2019 11:29:24 -0400 (EDT)
+        by mail.efficios.com (Postfix) with ESMTPSA id 0F8961C1CC8;
+        Mon, 29 Apr 2019 11:29:25 -0400 (EDT)
 From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 To:     Shuah Khan <shuah@kernel.org>
 Cc:     linux-kernel@vger.kernel.org, linux-api@vger.kernel.org,
@@ -63,9 +63,9 @@ Cc:     linux-kernel@vger.kernel.org, linux-api@vger.kernel.org,
         Joel Fernandes <joelaf@google.com>,
         Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
         linux-kselftest@vger.kernel.org
-Subject: [PATCH for 5.2 05/12] rseq/selftests: s390: use jg instruction for jumps outside of the asm
-Date:   Mon, 29 Apr 2019 11:27:56 -0400
-Message-Id: <20190429152803.7719-6-mathieu.desnoyers@efficios.com>
+Subject: [PATCH for 5.2 06/12] rseq/selftests: x86: use ud1 instruction as RSEQ_SIG opcode
+Date:   Mon, 29 Apr 2019 11:27:57 -0400
+Message-Id: <20190429152803.7719-7-mathieu.desnoyers@efficios.com>
 X-Mailer: git-send-email 2.11.0
 In-Reply-To: <20190429152803.7719-1-mathieu.desnoyers@efficios.com>
 References: <20190429152803.7719-1-mathieu.desnoyers@efficios.com>
@@ -74,14 +74,19 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The branch target range of the "j" instruction is 64K, which is not
-enough for the general case.
+Use ud1 as the guard instruction for the restartable sequence abort
+handler. Its benefit compared to nopl is to trap execution if the
+program ends up trying to execute it by mistake, which makes debugging
+easier.
 
-Suggested-by: Martin Schwidefsky <schwidefsky@de.ibm.com>
+The 4-byte signature per se is unchanged (it is the instruction
+operand). Only the opcode is changed from nopl to ud1.
+
 Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Suggested-by: Peter Zijlstra <peterz@infradead.org>
+CC: Peter Zijlstra <peterz@infradead.org>
 CC: Thomas Gleixner <tglx@linutronix.de>
 CC: Joel Fernandes <joelaf@google.com>
-CC: Peter Zijlstra <peterz@infradead.org>
 CC: Catalin Marinas <catalin.marinas@arm.com>
 CC: Dave Watson <davejwatson@fb.com>
 CC: Will Deacon <will.deacon@arm.com>
@@ -103,30 +108,49 @@ CC: Andy Lutomirski <luto@amacapital.net>
 CC: Andrew Morton <akpm@linux-foundation.org>
 CC: Linus Torvalds <torvalds@linux-foundation.org>
 ---
- tools/testing/selftests/rseq/rseq-s390.h | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ tools/testing/selftests/rseq/rseq-x86.h | 15 +++++++++++----
+ 1 file changed, 11 insertions(+), 4 deletions(-)
 
-diff --git a/tools/testing/selftests/rseq/rseq-s390.h b/tools/testing/selftests/rseq/rseq-s390.h
-index fbb97815d71c..7c4f3a70b6c7 100644
---- a/tools/testing/selftests/rseq/rseq-s390.h
-+++ b/tools/testing/selftests/rseq/rseq-s390.h
-@@ -117,14 +117,14 @@ do {									\
+diff --git a/tools/testing/selftests/rseq/rseq-x86.h b/tools/testing/selftests/rseq/rseq-x86.h
+index 03095236f6fa..b2da6004fe30 100644
+--- a/tools/testing/selftests/rseq/rseq-x86.h
++++ b/tools/testing/selftests/rseq/rseq-x86.h
+@@ -7,6 +7,13 @@
+ 
+ #include <stdint.h>
+ 
++/*
++ * RSEQ_SIG is used with the following reserved undefined instructions, which
++ * trap in user-space:
++ *
++ * x86-32:    0f b9 3d 53 30 05 53      ud1    0x53053053,%edi
++ * x86-64:    0f b9 3d 53 30 05 53      ud1    0x53053053(%rip),%edi
++ */
+ #define RSEQ_SIG	0x53053053
+ 
+ /*
+@@ -88,8 +95,8 @@ do {									\
+ 
+ #define RSEQ_ASM_DEFINE_ABORT(label, teardown, abort_label)		\
+ 		".pushsection __rseq_failure, \"ax\"\n\t"		\
+-		/* Disassembler-friendly signature: nopl <sig>(%rip). */\
+-		".byte 0x0f, 0x1f, 0x05\n\t"				\
++		/* Disassembler-friendly signature: ud1 <sig>(%rip),%edi. */ \
++		".byte 0x0f, 0xb9, 0x3d\n\t"				\
  		".long " __rseq_str(RSEQ_SIG) "\n\t"			\
  		__rseq_str(label) ":\n\t"				\
  		teardown						\
--		"j %l[" __rseq_str(abort_label) "]\n\t"			\
-+		"jg %l[" __rseq_str(abort_label) "]\n\t"		\
- 		".popsection\n\t"
+@@ -609,8 +616,8 @@ do {									\
  
- #define RSEQ_ASM_DEFINE_CMPFAIL(label, teardown, cmpfail_label)		\
+ #define RSEQ_ASM_DEFINE_ABORT(label, teardown, abort_label)		\
  		".pushsection __rseq_failure, \"ax\"\n\t"		\
+-		/* Disassembler-friendly signature: nopl <sig>. */	\
+-		".byte 0x0f, 0x1f, 0x05\n\t"				\
++		/* Disassembler-friendly signature: ud1 <sig>,%edi. */	\
++		".byte 0x0f, 0xb9, 0x3d\n\t"				\
+ 		".long " __rseq_str(RSEQ_SIG) "\n\t"			\
  		__rseq_str(label) ":\n\t"				\
  		teardown						\
--		"j %l[" __rseq_str(cmpfail_label) "]\n\t"		\
-+		"jg %l[" __rseq_str(cmpfail_label) "]\n\t"		\
- 		".popsection\n\t"
- 
- static inline __attribute__((always_inline))
 -- 
 2.11.0
 
