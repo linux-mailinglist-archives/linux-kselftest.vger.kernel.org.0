@@ -2,67 +2,68 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F434EC3C
-	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Apr 2019 23:46:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 55BC8EC91
+	for <lists+linux-kselftest@lfdr.de>; Tue, 30 Apr 2019 00:12:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729364AbfD2VqL (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 29 Apr 2019 17:46:11 -0400
-Received: from mail-lj1-f193.google.com ([209.85.208.193]:36555 "EHLO
-        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729354AbfD2VqL (ORCPT
+        id S1729252AbfD2WL7 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 29 Apr 2019 18:11:59 -0400
+Received: from mail-lf1-f68.google.com ([209.85.167.68]:43075 "EHLO
+        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728105AbfD2WL7 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 29 Apr 2019 17:46:11 -0400
-Received: by mail-lj1-f193.google.com with SMTP id y8so4409996ljd.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 29 Apr 2019 14:46:10 -0700 (PDT)
+        Mon, 29 Apr 2019 18:11:59 -0400
+Received: by mail-lf1-f68.google.com with SMTP id i68so9082547lfi.10
+        for <linux-kselftest@vger.kernel.org>; Mon, 29 Apr 2019 15:11:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linux-foundation.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=wSiV79NBIztMusWk2QP2VKKhKOlea+n31l0AFUl2Bg8=;
-        b=ZMLzPqHi9lETwhRL66Ic7OfH6fw2vR3J8CHiKq3pfDQQ78NgprQyY154J6Rqvkqc7s
-         C42c14gHHilvBkmQFjpiBuapTUcRjDejOz3oZMhlsRfav1CrKiKeXa5cwy+w5bWoRtOe
-         i2ztzqxJfLNJSPQmCXpPj6ttEC4mfbjCWUHRc=
+        bh=cTkJ5qHxsD8SYnb8NRVfGGysKDzTffkMwFGKzHjAIes=;
+        b=P/hvsAFBYFuVdRyxHJQqYZPAHZlzO7DpELqDJ8wtqrIzcq7eThvNjt852fIlr3+1hp
+         vVyLfbe/O0jvxqP511QI0JfPRN9J+m8BMRz0pKGIgZRo0Qiu2YusRGP2+ndwrIJZA81T
+         qOBt9kqSGLrhz0pQMSTGYNPFKlQsei2x7M0lc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=wSiV79NBIztMusWk2QP2VKKhKOlea+n31l0AFUl2Bg8=;
-        b=CDcfdrjEiEqiVsilmSCRTznHyJ/oFCSf1FShFUaqnpJSRkb59YjUM3Np15zjqUTy+p
-         IgYZb9eHsX7Ig0xhtzw08C1L51RVxl2HhjwINdbYCUGao7u2iiR93ZeHgSqCDJ/VTZn0
-         LzFFEl9RQYEuE3qoMx9UIEjrvDaezvxIllNORXNKJDlcL1DfG6oDwfeTzq9+iJ3X4kCe
-         kMWxQ/htZ5+9zbk2pmH2gZb4SBiY8bimssGhmING7FE38xVBU8nvQD6NCuc5FB4Y3Ym6
-         BIWc3UB8LKJri2SETfmWaDb18kkD49mNxJXzJvkbyJ5hyL8HGijQDIMgNi6jEPSvwzTu
-         M5WQ==
-X-Gm-Message-State: APjAAAVZ9DDm9w27coAbsz9jLfo6vP0ppwan4Gk0DBV7qBHjSJx55L2k
-        +u0PA23fvDg2yNUvszG5xIY68Tp6oq4=
-X-Google-Smtp-Source: APXvYqywI9eR5JLtGLDimGzCHuJaiQENPBWYT2BtBrrWH49kBTLGgwpJtJzm9v6OQZB1vKAW8HzogQ==
-X-Received: by 2002:a2e:1311:: with SMTP id 17mr33366099ljt.75.1556574369430;
-        Mon, 29 Apr 2019 14:46:09 -0700 (PDT)
-Received: from mail-lj1-f177.google.com (mail-lj1-f177.google.com. [209.85.208.177])
-        by smtp.gmail.com with ESMTPSA id o3sm7595646lfn.41.2019.04.29.14.46.09
+        bh=cTkJ5qHxsD8SYnb8NRVfGGysKDzTffkMwFGKzHjAIes=;
+        b=XkKMgSy3KbgbvJabb2rv9aiQSFRXYiaJCMOgyWQO3LBOK5MRdj2k8a222LRlrqgqpp
+         4hpPsT7fKgfjq+AivbzvG2ChlCeQlvbr2W+D71bOPdfIXQN5+S/Xf4JeTCBJNl3rYCOu
+         DiSPyNa0m6HVxfZtgU8mgykcsrM9P1Z/2Q/1DhdtEk7dzKx3qlYkJag+XjXXyue2EhPl
+         JojASb3Sd2K/NRiLRDDSpPep5w0Lu1Qty3Gj56J05hzZS0l4r/IK/eufurbO0MLyAe2B
+         IpjgJELfOJXUILxIsio9+fwiMlH5YnW3vV/3U7+yXLD5q+4G8IK1etkP+lg/37xkQYzP
+         ZGCA==
+X-Gm-Message-State: APjAAAWxqw8MzhHFkGsvk1b/OZjTkkHA5ylPd4+jpSFQdzeu3fCkc9xz
+        ZTxnGLWLLz22OJeAxyN3DF5/ImZgPHc=
+X-Google-Smtp-Source: APXvYqz3i66XPssfLaamAavrN/7sJ6zb6sGbNoG+gFbPE/4riiRUMceAaDNnFmIGAjKuBi7C84wmTQ==
+X-Received: by 2002:ac2:4893:: with SMTP id x19mr120936lfc.109.1556575917124;
+        Mon, 29 Apr 2019 15:11:57 -0700 (PDT)
+Received: from mail-lf1-f41.google.com (mail-lf1-f41.google.com. [209.85.167.41])
+        by smtp.gmail.com with ESMTPSA id t206sm7596204lff.21.2019.04.29.15.11.56
         for <linux-kselftest@vger.kernel.org>
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 29 Apr 2019 14:46:09 -0700 (PDT)
-Received: by mail-lj1-f177.google.com with SMTP id s7so8101682ljh.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 29 Apr 2019 14:46:09 -0700 (PDT)
-X-Received: by 2002:a2e:9ac8:: with SMTP id p8mr30631636ljj.79.1556573932539;
- Mon, 29 Apr 2019 14:38:52 -0700 (PDT)
+        Mon, 29 Apr 2019 15:11:56 -0700 (PDT)
+Received: by mail-lf1-f41.google.com with SMTP id k18so9085668lfj.13
+        for <linux-kselftest@vger.kernel.org>; Mon, 29 Apr 2019 15:11:56 -0700 (PDT)
+X-Received: by 2002:a19:48c9:: with SMTP id v192mr32975252lfa.136.1556575607339;
+ Mon, 29 Apr 2019 15:06:47 -0700 (PDT)
 MIME-Version: 1.0
 References: <20190427100639.15074-1-nstange@suse.de> <20190427100639.15074-4-nstange@suse.de>
  <20190427102657.GF2623@hirez.programming.kicks-ass.net> <20190428133826.3e142cfd@oasis.local.home>
  <CAHk-=wh5OpheSU8Em_Q3Hg8qw_JtoijxOdPtHru6d+5K8TWM=A@mail.gmail.com>
- <20190429145250.1a5da6ed@gandalf.local.home> <CAHk-=wjm93jLtVxTX4HZs6K4k1Wqh3ujjmapqaYtcibVk_YnzQ@mail.gmail.com>
- <20190429150724.6e501d27@gandalf.local.home> <CAHk-=wgbC-wiSrdDYAh1ORF4EKmecY+MkNsJBF=BWf4W1bXXgA@mail.gmail.com>
- <20190429163043.535f4272@gandalf.local.home>
-In-Reply-To: <20190429163043.535f4272@gandalf.local.home>
+ <CAHk-=wjphmrQXMfbw9j-tTzDvJ+Uc+asMHdFa=1_1xZoYVUC=g@mail.gmail.com>
+ <CALCETrXvmZPHsfRVnW0AtyddfN-2zaCmWn+FsrF6XPTOFd_Jmw@mail.gmail.com>
+ <CAHk-=whtt4K2f0KPtG-4Pykh3FK8UBOjD8jhXCUKB5nWDj_YRA@mail.gmail.com> <CALCETrWELBCK-kqX5FCEDVUy8kCT-yVu7m_7Dtn=GCsHY0Du5A@mail.gmail.com>
+In-Reply-To: <CALCETrWELBCK-kqX5FCEDVUy8kCT-yVu7m_7Dtn=GCsHY0Du5A@mail.gmail.com>
 From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Mon, 29 Apr 2019 14:38:35 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wjGquN7-kQCoa+LHCuiVTjefkk38qwaysd4wLLtoSZhpg@mail.gmail.com>
-Message-ID: <CAHk-=wjGquN7-kQCoa+LHCuiVTjefkk38qwaysd4wLLtoSZhpg@mail.gmail.com>
+Date:   Mon, 29 Apr 2019 15:06:30 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wjAQaowLHBrXs1M5K-Nr-eVQMt0K8oyCuWxKTvP9k=qqA@mail.gmail.com>
+Message-ID: <CAHk-=wjAQaowLHBrXs1M5K-Nr-eVQMt0K8oyCuWxKTvP9k=qqA@mail.gmail.com>
 Subject: Re: [PATCH 3/4] x86/ftrace: make ftrace_int3_handler() not to skip
  fops invocation
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
+To:     Andy Lutomirski <luto@kernel.org>
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        Peter Zijlstra <peterz@infradead.org>,
         Nicolai Stange <nstange@suse.de>,
         Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
@@ -82,7 +83,6 @@ Cc:     Peter Zijlstra <peterz@infradead.org>,
         Nick Desaulniers <ndesaulniers@google.com>,
         Nayna Jain <nayna@linux.ibm.com>,
         Masahiro Yamada <yamada.masahiro@socionext.com>,
-        Andy Lutomirski <luto@kernel.org>,
         Joerg Roedel <jroedel@suse.de>,
         Linux List Kernel Mailing <linux-kernel@vger.kernel.org>,
         live-patching@vger.kernel.org,
@@ -94,34 +94,28 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Apr 29, 2019 at 1:30 PM Steven Rostedt <rostedt@goodmis.org> wrote:
+On Mon, Apr 29, 2019 at 11:57 AM Andy Lutomirski <luto@kernel.org> wrote:
+> >
+> > Otherwise you could never trust the whole sti shadow thing - and it very much is part of the architecture.
 >
-> The update from "call custom_trampoline" to "call iterator_trampoline"
-> is where we have an issue.
+> Is this documented somewhere?
 
-So it has never worked. Just tell people that they have two chocies:
+Btw, if you really don't trust the sti shadow despite it going all the
+way back to the 8086, then you could instead make the irqoff code do
 
- - you do the careful rewriting, which takes more time
+        push %gs:bp_call_return
+        push %gs:bp_call_target
+        sti
+        ret
 
- - you do it by rewriting as nop and then back, which is what
-historically has been done, and that is fast and simple, because
-there's no need to be careful.
+which just keeps interrupts explicitly disabled over the whole use of
+the percpu data.
 
-Really. I find your complaints completely incomprehensible. You've
-never rewritten call instructions atomically before, and now you
-complain about it being slightly more expensive to do it when I give
-you the code? Yes it damn well will be slightly more expensive. Deal
-with it.
+The actual "ret" instruction doesn't matter, it's not going to change
+in this model (where the code isn't dynamically generated or changed).
+So I claim that it will still be protected by the sti shadow, but when
+written that way it doesn't actually matter, and you could reschedule
+immediately after the sti (getting an interrupt there might make the
+stack frame look odd, but it doesn't really affect anything else)
 
-Btw, once again - I several months ago also gave a suggestion on how
-it could be done batch-mode by having lots of those small stubs and
-just generating them dynamically.
-
-You never wrote that code *EITHER*. It's been *months*.
-
-So now I've written the non-batch-mode code for you, and you just
-*complain* about it?
-
-I'm done with this discussion. I'm totally fed up.
-
-                 Linus
+                  Linus
