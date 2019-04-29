@@ -2,23 +2,66 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E1C06EBA6
-	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Apr 2019 22:30:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F434EC3C
+	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Apr 2019 23:46:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729316AbfD2Uat (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 29 Apr 2019 16:30:49 -0400
-Received: from mail.kernel.org ([198.145.29.99]:44326 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729252AbfD2Uas (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 29 Apr 2019 16:30:48 -0400
-Received: from gandalf.local.home (cpe-66-24-58-225.stny.res.rr.com [66.24.58.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 6EAB1215EA;
-        Mon, 29 Apr 2019 20:30:45 +0000 (UTC)
-Date:   Mon, 29 Apr 2019 16:30:43 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
+        id S1729364AbfD2VqL (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 29 Apr 2019 17:46:11 -0400
+Received: from mail-lj1-f193.google.com ([209.85.208.193]:36555 "EHLO
+        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729354AbfD2VqL (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 29 Apr 2019 17:46:11 -0400
+Received: by mail-lj1-f193.google.com with SMTP id y8so4409996ljd.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 29 Apr 2019 14:46:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=wSiV79NBIztMusWk2QP2VKKhKOlea+n31l0AFUl2Bg8=;
+        b=ZMLzPqHi9lETwhRL66Ic7OfH6fw2vR3J8CHiKq3pfDQQ78NgprQyY154J6Rqvkqc7s
+         C42c14gHHilvBkmQFjpiBuapTUcRjDejOz3oZMhlsRfav1CrKiKeXa5cwy+w5bWoRtOe
+         i2ztzqxJfLNJSPQmCXpPj6ttEC4mfbjCWUHRc=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=wSiV79NBIztMusWk2QP2VKKhKOlea+n31l0AFUl2Bg8=;
+        b=CDcfdrjEiEqiVsilmSCRTznHyJ/oFCSf1FShFUaqnpJSRkb59YjUM3Np15zjqUTy+p
+         IgYZb9eHsX7Ig0xhtzw08C1L51RVxl2HhjwINdbYCUGao7u2iiR93ZeHgSqCDJ/VTZn0
+         LzFFEl9RQYEuE3qoMx9UIEjrvDaezvxIllNORXNKJDlcL1DfG6oDwfeTzq9+iJ3X4kCe
+         kMWxQ/htZ5+9zbk2pmH2gZb4SBiY8bimssGhmING7FE38xVBU8nvQD6NCuc5FB4Y3Ym6
+         BIWc3UB8LKJri2SETfmWaDb18kkD49mNxJXzJvkbyJ5hyL8HGijQDIMgNi6jEPSvwzTu
+         M5WQ==
+X-Gm-Message-State: APjAAAVZ9DDm9w27coAbsz9jLfo6vP0ppwan4Gk0DBV7qBHjSJx55L2k
+        +u0PA23fvDg2yNUvszG5xIY68Tp6oq4=
+X-Google-Smtp-Source: APXvYqywI9eR5JLtGLDimGzCHuJaiQENPBWYT2BtBrrWH49kBTLGgwpJtJzm9v6OQZB1vKAW8HzogQ==
+X-Received: by 2002:a2e:1311:: with SMTP id 17mr33366099ljt.75.1556574369430;
+        Mon, 29 Apr 2019 14:46:09 -0700 (PDT)
+Received: from mail-lj1-f177.google.com (mail-lj1-f177.google.com. [209.85.208.177])
+        by smtp.gmail.com with ESMTPSA id o3sm7595646lfn.41.2019.04.29.14.46.09
+        for <linux-kselftest@vger.kernel.org>
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 29 Apr 2019 14:46:09 -0700 (PDT)
+Received: by mail-lj1-f177.google.com with SMTP id s7so8101682ljh.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 29 Apr 2019 14:46:09 -0700 (PDT)
+X-Received: by 2002:a2e:9ac8:: with SMTP id p8mr30631636ljj.79.1556573932539;
+ Mon, 29 Apr 2019 14:38:52 -0700 (PDT)
+MIME-Version: 1.0
+References: <20190427100639.15074-1-nstange@suse.de> <20190427100639.15074-4-nstange@suse.de>
+ <20190427102657.GF2623@hirez.programming.kicks-ass.net> <20190428133826.3e142cfd@oasis.local.home>
+ <CAHk-=wh5OpheSU8Em_Q3Hg8qw_JtoijxOdPtHru6d+5K8TWM=A@mail.gmail.com>
+ <20190429145250.1a5da6ed@gandalf.local.home> <CAHk-=wjm93jLtVxTX4HZs6K4k1Wqh3ujjmapqaYtcibVk_YnzQ@mail.gmail.com>
+ <20190429150724.6e501d27@gandalf.local.home> <CAHk-=wgbC-wiSrdDYAh1ORF4EKmecY+MkNsJBF=BWf4W1bXXgA@mail.gmail.com>
+ <20190429163043.535f4272@gandalf.local.home>
+In-Reply-To: <20190429163043.535f4272@gandalf.local.home>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Mon, 29 Apr 2019 14:38:35 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wjGquN7-kQCoa+LHCuiVTjefkk38qwaysd4wLLtoSZhpg@mail.gmail.com>
+Message-ID: <CAHk-=wjGquN7-kQCoa+LHCuiVTjefkk38qwaysd4wLLtoSZhpg@mail.gmail.com>
+Subject: Re: [PATCH 3/4] x86/ftrace: make ftrace_int3_handler() not to skip
+ fops invocation
+To:     Steven Rostedt <rostedt@goodmis.org>
 Cc:     Peter Zijlstra <peterz@infradead.org>,
         Nicolai Stange <nstange@suse.de>,
         Thomas Gleixner <tglx@linutronix.de>,
@@ -45,83 +88,40 @@ Cc:     Peter Zijlstra <peterz@infradead.org>,
         live-patching@vger.kernel.org,
         "open list:KERNEL SELFTEST FRAMEWORK" 
         <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH 3/4] x86/ftrace: make ftrace_int3_handler() not to skip
- fops invocation
-Message-ID: <20190429163043.535f4272@gandalf.local.home>
-In-Reply-To: <CAHk-=wgbC-wiSrdDYAh1ORF4EKmecY+MkNsJBF=BWf4W1bXXgA@mail.gmail.com>
-References: <20190427100639.15074-1-nstange@suse.de>
-        <20190427100639.15074-4-nstange@suse.de>
-        <20190427102657.GF2623@hirez.programming.kicks-ass.net>
-        <20190428133826.3e142cfd@oasis.local.home>
-        <CAHk-=wh5OpheSU8Em_Q3Hg8qw_JtoijxOdPtHru6d+5K8TWM=A@mail.gmail.com>
-        <20190429145250.1a5da6ed@gandalf.local.home>
-        <CAHk-=wjm93jLtVxTX4HZs6K4k1Wqh3ujjmapqaYtcibVk_YnzQ@mail.gmail.com>
-        <20190429150724.6e501d27@gandalf.local.home>
-        <CAHk-=wgbC-wiSrdDYAh1ORF4EKmecY+MkNsJBF=BWf4W1bXXgA@mail.gmail.com>
-X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, 29 Apr 2019 13:06:17 -0700
-Linus Torvalds <torvalds@linux-foundation.org> wrote:
+On Mon, Apr 29, 2019 at 1:30 PM Steven Rostedt <rostedt@goodmis.org> wrote:
+>
+> The update from "call custom_trampoline" to "call iterator_trampoline"
+> is where we have an issue.
 
-> On Mon, Apr 29, 2019 at 12:07 PM Steven Rostedt <rostedt@goodmis.org> wrote:
-> >
-> > Are you suggesting that I rewrite the code to do it one function at a
-> > time? This has always been batch mode. This is not something new. The
-> > function tracer has been around longer than the text poke code.  
-> 
-> Only do the 'call' instructions one at a time. Why would you change
-> _existing_ code?
+So it has never worked. Just tell people that they have two chocies:
 
-The function tracing is a call instruction.
+ - you do the careful rewriting, which takes more time
 
-On boot:
+ - you do it by rewriting as nop and then back, which is what
+historically has been done, and that is fast and simple, because
+there's no need to be careful.
 
-<function_X>:
-	nop
-	blah
-	blah
+Really. I find your complaints completely incomprehensible. You've
+never rewritten call instructions atomically before, and now you
+complain about it being slightly more expensive to do it when I give
+you the code? Yes it damn well will be slightly more expensive. Deal
+with it.
 
-After a callback to function tracing is called:
+Btw, once again - I several months ago also gave a suggestion on how
+it could be done batch-mode by having lots of those small stubs and
+just generating them dynamically.
 
-<function_X>
-	call custom_trampoline
-	blah
-	blah
+You never wrote that code *EITHER*. It's been *months*.
 
+So now I've written the non-batch-mode code for you, and you just
+*complain* about it?
 
-If we have two functions to that function added:
+I'm done with this discussion. I'm totally fed up.
 
-<function_X>
-	call iterator_trampoline
-	blah
-	blah
-
-The update from "call custom_trampoline" to "call iterator_trampoline"
-is where we have an issue.
-
-We could make this a special case where we do this one at a time, but
-currently the code is all the same looking at tables to determine to
-what to do. Which is one of three:
-
- 1) change nop to call function
- 2) change call function to nop
- 3) update call function to another call function
-
-#3 is where we have an issue. But if we want this to be different, we
-would need to change the code significantly, and know that we are only
-updating calls to calls. Which would take a bit of accounting to see if
-that's the change that is being made.
-
-This thread started about that #3 operation causing a call to be missed
-because we turn it into a nop while we make the transition, where in
-reality it needs to be a call to one of the two functions in the
-transition.
-
--- Steve
+                 Linus
