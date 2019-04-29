@@ -2,68 +2,24 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 55BC8EC91
-	for <lists+linux-kselftest@lfdr.de>; Tue, 30 Apr 2019 00:12:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DD95EC7D
+	for <lists+linux-kselftest@lfdr.de>; Tue, 30 Apr 2019 00:09:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729252AbfD2WL7 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 29 Apr 2019 18:11:59 -0400
-Received: from mail-lf1-f68.google.com ([209.85.167.68]:43075 "EHLO
-        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728105AbfD2WL7 (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 29 Apr 2019 18:11:59 -0400
-Received: by mail-lf1-f68.google.com with SMTP id i68so9082547lfi.10
-        for <linux-kselftest@vger.kernel.org>; Mon, 29 Apr 2019 15:11:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=cTkJ5qHxsD8SYnb8NRVfGGysKDzTffkMwFGKzHjAIes=;
-        b=P/hvsAFBYFuVdRyxHJQqYZPAHZlzO7DpELqDJ8wtqrIzcq7eThvNjt852fIlr3+1hp
-         vVyLfbe/O0jvxqP511QI0JfPRN9J+m8BMRz0pKGIgZRo0Qiu2YusRGP2+ndwrIJZA81T
-         qOBt9kqSGLrhz0pQMSTGYNPFKlQsei2x7M0lc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=cTkJ5qHxsD8SYnb8NRVfGGysKDzTffkMwFGKzHjAIes=;
-        b=XkKMgSy3KbgbvJabb2rv9aiQSFRXYiaJCMOgyWQO3LBOK5MRdj2k8a222LRlrqgqpp
-         4hpPsT7fKgfjq+AivbzvG2ChlCeQlvbr2W+D71bOPdfIXQN5+S/Xf4JeTCBJNl3rYCOu
-         DiSPyNa0m6HVxfZtgU8mgykcsrM9P1Z/2Q/1DhdtEk7dzKx3qlYkJag+XjXXyue2EhPl
-         JojASb3Sd2K/NRiLRDDSpPep5w0Lu1Qty3Gj56J05hzZS0l4r/IK/eufurbO0MLyAe2B
-         IpjgJELfOJXUILxIsio9+fwiMlH5YnW3vV/3U7+yXLD5q+4G8IK1etkP+lg/37xkQYzP
-         ZGCA==
-X-Gm-Message-State: APjAAAWxqw8MzhHFkGsvk1b/OZjTkkHA5ylPd4+jpSFQdzeu3fCkc9xz
-        ZTxnGLWLLz22OJeAxyN3DF5/ImZgPHc=
-X-Google-Smtp-Source: APXvYqz3i66XPssfLaamAavrN/7sJ6zb6sGbNoG+gFbPE/4riiRUMceAaDNnFmIGAjKuBi7C84wmTQ==
-X-Received: by 2002:ac2:4893:: with SMTP id x19mr120936lfc.109.1556575917124;
-        Mon, 29 Apr 2019 15:11:57 -0700 (PDT)
-Received: from mail-lf1-f41.google.com (mail-lf1-f41.google.com. [209.85.167.41])
-        by smtp.gmail.com with ESMTPSA id t206sm7596204lff.21.2019.04.29.15.11.56
-        for <linux-kselftest@vger.kernel.org>
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 29 Apr 2019 15:11:56 -0700 (PDT)
-Received: by mail-lf1-f41.google.com with SMTP id k18so9085668lfj.13
-        for <linux-kselftest@vger.kernel.org>; Mon, 29 Apr 2019 15:11:56 -0700 (PDT)
-X-Received: by 2002:a19:48c9:: with SMTP id v192mr32975252lfa.136.1556575607339;
- Mon, 29 Apr 2019 15:06:47 -0700 (PDT)
-MIME-Version: 1.0
-References: <20190427100639.15074-1-nstange@suse.de> <20190427100639.15074-4-nstange@suse.de>
- <20190427102657.GF2623@hirez.programming.kicks-ass.net> <20190428133826.3e142cfd@oasis.local.home>
- <CAHk-=wh5OpheSU8Em_Q3Hg8qw_JtoijxOdPtHru6d+5K8TWM=A@mail.gmail.com>
- <CAHk-=wjphmrQXMfbw9j-tTzDvJ+Uc+asMHdFa=1_1xZoYVUC=g@mail.gmail.com>
- <CALCETrXvmZPHsfRVnW0AtyddfN-2zaCmWn+FsrF6XPTOFd_Jmw@mail.gmail.com>
- <CAHk-=whtt4K2f0KPtG-4Pykh3FK8UBOjD8jhXCUKB5nWDj_YRA@mail.gmail.com> <CALCETrWELBCK-kqX5FCEDVUy8kCT-yVu7m_7Dtn=GCsHY0Du5A@mail.gmail.com>
-In-Reply-To: <CALCETrWELBCK-kqX5FCEDVUy8kCT-yVu7m_7Dtn=GCsHY0Du5A@mail.gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Mon, 29 Apr 2019 15:06:30 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wjAQaowLHBrXs1M5K-Nr-eVQMt0K8oyCuWxKTvP9k=qqA@mail.gmail.com>
-Message-ID: <CAHk-=wjAQaowLHBrXs1M5K-Nr-eVQMt0K8oyCuWxKTvP9k=qqA@mail.gmail.com>
-Subject: Re: [PATCH 3/4] x86/ftrace: make ftrace_int3_handler() not to skip
- fops invocation
-To:     Andy Lutomirski <luto@kernel.org>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        Peter Zijlstra <peterz@infradead.org>,
+        id S1729252AbfD2WHj (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 29 Apr 2019 18:07:39 -0400
+Received: from mail.kernel.org ([198.145.29.99]:58512 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729409AbfD2WHj (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 29 Apr 2019 18:07:39 -0400
+Received: from gandalf.local.home (cpe-66-24-58-225.stny.res.rr.com [66.24.58.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 70E8B2075E;
+        Mon, 29 Apr 2019 22:07:35 +0000 (UTC)
+Date:   Mon, 29 Apr 2019 18:07:33 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
         Nicolai Stange <nstange@suse.de>,
         Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
@@ -83,39 +39,123 @@ Cc:     Steven Rostedt <rostedt@goodmis.org>,
         Nick Desaulniers <ndesaulniers@google.com>,
         Nayna Jain <nayna@linux.ibm.com>,
         Masahiro Yamada <yamada.masahiro@socionext.com>,
+        Andy Lutomirski <luto@kernel.org>,
         Joerg Roedel <jroedel@suse.de>,
         Linux List Kernel Mailing <linux-kernel@vger.kernel.org>,
         live-patching@vger.kernel.org,
         "open list:KERNEL SELFTEST FRAMEWORK" 
         <linux-kselftest@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: [PATCH 3/4] x86/ftrace: make ftrace_int3_handler() not to skip
+ fops invocation
+Message-ID: <20190429180733.3f25d8b9@gandalf.local.home>
+In-Reply-To: <CAHk-=wjGquN7-kQCoa+LHCuiVTjefkk38qwaysd4wLLtoSZhpg@mail.gmail.com>
+References: <20190427100639.15074-1-nstange@suse.de>
+        <20190427100639.15074-4-nstange@suse.de>
+        <20190427102657.GF2623@hirez.programming.kicks-ass.net>
+        <20190428133826.3e142cfd@oasis.local.home>
+        <CAHk-=wh5OpheSU8Em_Q3Hg8qw_JtoijxOdPtHru6d+5K8TWM=A@mail.gmail.com>
+        <20190429145250.1a5da6ed@gandalf.local.home>
+        <CAHk-=wjm93jLtVxTX4HZs6K4k1Wqh3ujjmapqaYtcibVk_YnzQ@mail.gmail.com>
+        <20190429150724.6e501d27@gandalf.local.home>
+        <CAHk-=wgbC-wiSrdDYAh1ORF4EKmecY+MkNsJBF=BWf4W1bXXgA@mail.gmail.com>
+        <20190429163043.535f4272@gandalf.local.home>
+        <CAHk-=wjGquN7-kQCoa+LHCuiVTjefkk38qwaysd4wLLtoSZhpg@mail.gmail.com>
+X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Apr 29, 2019 at 11:57 AM Andy Lutomirski <luto@kernel.org> wrote:
+On Mon, 29 Apr 2019 14:38:35 -0700
+Linus Torvalds <torvalds@linux-foundation.org> wrote:
+
+> On Mon, Apr 29, 2019 at 1:30 PM Steven Rostedt <rostedt@goodmis.org> wrote:
 > >
-> > Otherwise you could never trust the whole sti shadow thing - and it very much is part of the architecture.
->
-> Is this documented somewhere?
+> > The update from "call custom_trampoline" to "call iterator_trampoline"
+> > is where we have an issue.  
+> 
+> So it has never worked. Just tell people that they have two chocies:
 
-Btw, if you really don't trust the sti shadow despite it going all the
-way back to the 8086, then you could instead make the irqoff code do
+The custom call to iterator translation never worked. One option is to
+always call the iterator, and just take the hit. There's another
+solution to to make permanent updates that would handle the live
+patching case, but not for the tracing case. It is more critical for
+live patching than tracing (missed traced function is not as critical
+as running buggy code unexpectedly). I could look to work on that
+instead.
 
-        push %gs:bp_call_return
-        push %gs:bp_call_target
-        sti
-        ret
+> 
+>  - you do the careful rewriting, which takes more time
 
-which just keeps interrupts explicitly disabled over the whole use of
-the percpu data.
+Which would be the method I said making the call to call a special case.
 
-The actual "ret" instruction doesn't matter, it's not going to change
-in this model (where the code isn't dynamically generated or changed).
-So I claim that it will still be protected by the sti shadow, but when
-written that way it doesn't actually matter, and you could reschedule
-immediately after the sti (getting an interrupt there might make the
-stack frame look odd, but it doesn't really affect anything else)
+> 
+>  - you do it by rewriting as nop and then back, which is what
+> historically has been done, and that is fast and simple, because
+> there's no need to be careful.
 
-                  Linus
+Except in the live kernel patching case where you just put back the
+buggy function.
+
+> 
+> Really. I find your complaints completely incomprehensible. You've
+> never rewritten call instructions atomically before, and now you
+> complain about it being slightly more expensive to do it when I give
+> you the code? Yes it damn well will be slightly more expensive. Deal
+> with it.
+
+I wasn't complaining about the expense of doing it that way. I was
+stating that it would take more time to get it right as it as it would
+require a different implementation for the call to call case.
+
+
+> 
+> Btw, once again - I several months ago also gave a suggestion on how
+> it could be done batch-mode by having lots of those small stubs and
+> just generating them dynamically.
+> 
+> You never wrote that code *EITHER*. It's been *months*.
+
+Note, I wasn't the one writing the code back then either. I posted a
+proof of concept for a similar topic (trace events) for the purpose of
+bringing back the performance lost due to the retpolines (something
+like 8% hit). Josh took the initiative to do that work, but I don't
+remember ever getting to a consensus on a solution to that. Yes you had
+given us ideas, but I remember people (like Andy) having concerns with
+it. But because it was just an optimization change, and Josh had other
+things to work on, that work just stalled.
+
+But I just found out that the function tracing code has the same issue,
+but this can cause real problems with live kernel patching. This is why
+this patch set started.
+
+> 
+> So now I've written the non-batch-mode code for you, and you just
+> *complain* about it?
+
+Because this is a different story. The trace event code is updated one
+at a time (there's patches out there to do it in batch). But this is
+not trace events. This is function tracing which only does batching.
+
+
+> 
+> I'm done with this discussion. I'm totally fed up.
+> 
+
+Note, I wasn't writing this code anyway as I didn't have the time to. I
+was helping others who took the initiative to do this work. But I guess
+they didn't have time to move it forward either.
+
+For the live kernel patching case, I'll start working on the permanent
+changes, where once a function entry is changed, it can never be put
+back. Then we wont have an issue with the live kernel patching case,
+but only for tracing. But the worse thing there is you miss tracing
+functions while an update is being made.
+
+If Nicolai has time, perhaps he can try out the method you suggest and
+see if we can move this forward.
+
+-- Steve
