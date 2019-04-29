@@ -2,138 +2,115 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D59B0D9F0
-	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Apr 2019 01:27:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1698ADD98
+	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Apr 2019 10:19:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726544AbfD1X1Y (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 28 Apr 2019 19:27:24 -0400
-Received: from mail-pl1-f193.google.com ([209.85.214.193]:39419 "EHLO
-        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726568AbfD1X1Y (ORCPT
+        id S1727584AbfD2ITt convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 29 Apr 2019 04:19:49 -0400
+Received: from Galois.linutronix.de ([146.0.238.70]:40857 "EHLO
+        Galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727531AbfD2ITt (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 28 Apr 2019 19:27:24 -0400
-Received: by mail-pl1-f193.google.com with SMTP id e92so4189515plb.6
-        for <linux-kselftest@vger.kernel.org>; Sun, 28 Apr 2019 16:27:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amacapital-net.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=LYH/XS8nnf6efHlZx0B2St65dcm+60nIA8GvtyVKA2g=;
-        b=DmRdpcQePn9pu6FxDsh1mK99BocSEh/feEMjXNQT5ibFOMXKxk7jGGikNVgPkQ/pOI
-         UGmJYe/+bLddvlC3J8DvQsu56bjSCusqMfu8ME8NvlSzxN714OngT/6dh+33YkAcZv8i
-         iM0dTbQx4WNLm2r5XvkUR/9p+AGYVJWQd1S1XltOigmfclHaDVEekiM8glCNctsFjsqe
-         EjtGySHRM/yMeakMd4wY4/K6M7MwH6uRGoUakpsQfA1l/NMDHEwrki80UgpRapYjx/2A
-         8wv773Mjddy3w1YG0r8YpnUtenCQDHKuuF0sSQvKZb4Ba5u8UD1UTfrCsbCTdunO3Zef
-         bgsQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=LYH/XS8nnf6efHlZx0B2St65dcm+60nIA8GvtyVKA2g=;
-        b=JkzTxqZNcdWSyN3C4YHtcXmm+ePeJ3O6fBagW+Fxdpu2FuYbOZNxJet2mia+u7DBFD
-         qThNtpJWgbxAd9NcfBG3M3u9r9ehGNiV8Pn2HRAIERrIb7pAZZDc3dG3qZDQ0UooGM4f
-         RnzdZ//uIz7nIcyoRgy3hJ6X3R+bBjHBa8Y3GPls/lnRx0LpJUK0tz6SKO1b9hHYRnQF
-         MLZjKPDhPettVyCi8U2JWpEAkHDXjrbMafyBi6jzjNQa4lEMIzmYM5gX5QiWmLQ5Hcb9
-         UoasdZtZCILCro0d+s0QD0ZWkxP3GNJWosOKF8G4DsZQCQGDepmBQKYusL8rfs1FfBNU
-         EbcA==
-X-Gm-Message-State: APjAAAXHpoADuFOn2+TqXpfUuSouT9PTcgRhzajWsTT+P3i0CjmkRqfl
-        PcDhogWks94fVVcgUkECtImcKw==
-X-Google-Smtp-Source: APXvYqx9Yjda2C1O0PTiHPRxwDgIBXUPJI1Ken8qeQkI2h0Dmc7D+Nw/tJ+dGR8X07wI+YtMGa9FdA==
-X-Received: by 2002:a17:902:2862:: with SMTP id e89mr60249446plb.203.1556494043721;
-        Sun, 28 Apr 2019 16:27:23 -0700 (PDT)
-Received: from ?IPv6:2601:646:c200:1ef2:68a6:ac0c:7713:add7? ([2601:646:c200:1ef2:68a6:ac0c:7713:add7])
-        by smtp.gmail.com with ESMTPSA id s21sm41771309pfm.3.2019.04.28.16.27.21
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Sun, 28 Apr 2019 16:27:22 -0700 (PDT)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (1.0)
-Subject: Re: [PATCH 1/4] x86/thread_info: introduce ->ftrace_int3_stack member
-From:   Andy Lutomirski <luto@amacapital.net>
-X-Mailer: iPhone Mail (16E227)
-In-Reply-To: <87k1fdygcx.fsf@suse.de>
-Date:   Sun, 28 Apr 2019 16:27:21 -0700
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>, x86@kernel.org,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Jiri Kosina <jikos@kernel.org>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Petr Mladek <pmladek@suse.com>,
-        Joe Lawrence <joe.lawrence@redhat.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
-        Tim Chen <tim.c.chen@linux.intel.com>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Juergen Gross <jgross@suse.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nayna Jain <nayna@linux.ibm.com>,
-        Masahiro Yamada <yamada.masahiro@socionext.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Joerg Roedel <jroedel@suse.de>, linux-kernel@vger.kernel.org,
-        live-patching@vger.kernel.org, linux-kselftest@vger.kernel.org
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <C55DED25-C60D-4731-9A6B-92BDA8771766@amacapital.net>
-References: <20190427100639.15074-1-nstange@suse.de> <20190427100639.15074-2-nstange@suse.de> <F6268634-96D3-4267-B739-6D375FAB26A8@amacapital.net> <20190428135143.09d35bb6@oasis.local.home> <87k1fdygcx.fsf@suse.de>
-To:     Nicolai Stange <nstange@suse.de>
+        Mon, 29 Apr 2019 04:19:49 -0400
+Received: from bigeasy by Galois.linutronix.de with local (Exim 4.80)
+        (envelope-from <bigeasy@linutronix.de>)
+        id 1hL1Vo-0007FQ-AA; Mon, 29 Apr 2019 10:19:44 +0200
+Date:   Mon, 29 Apr 2019 10:19:44 +0200
+From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To:     "Paul E. McKenney" <paulmck@linux.ibm.com>
+Cc:     linux-kselftest@vger.kernel.org, rcu@vger.kernel.org,
+        Josh Triplett <josh@joshtriplett.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Shuah Khan <shuah@kernel.org>
+Subject: Re: [PATCH] rcutorture: Tweak kvm options
+Message-ID: <20190429081943.gucbalncrrttxxcr@linutronix.de>
+References: <20190424073446.8577-1-bigeasy@linutronix.de>
+ <20190424103809.GM3923@linux.ibm.com>
+ <20190424183039.GA4494@linux.ibm.com>
+ <20190425194638.GA7238@linux.ibm.com>
+ <20190426105413.rajcon4vyzov446c@linutronix.de>
+ <20190426135058.GD3923@linux.ibm.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8BIT
+In-Reply-To: <20190426135058.GD3923@linux.ibm.com>
+User-Agent: NeoMutt/20180716
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+On 2019-04-26 06:50:58 [-0700], Paul E. McKenney wrote:
+> One place to look is in the summary output:
+> 
+> TREE01 ------- 17540 GPs (58.4667/s) [rcu: g130629 f0x0 ]
+> 
+> The "58.4667/s" is the number of grace periods per second.  I would be
+> surprised if CONFIG_PARAVIRT_SPINLOCKS made a noticeable difference in
+> grace-period rate (given the natural variation), but you never know.
 
-> On Apr 28, 2019, at 2:22 PM, Nicolai Stange <nstange@suse.de> wrote:
->=20
-> Steven Rostedt <rostedt@goodmis.org> writes:
->=20
->> On Sun, 28 Apr 2019 10:41:10 -0700
->> Andy Lutomirski <luto@amacapital.net> wrote:
->>=20
->>=20
->>>> Note that at any given point
->>>> in time, there can be at most four such call insn emulations pending:
->>>> namely at most one per "process", "irq", "softirq" and "nmi" context.
->>>>=20
->>>=20
->>> That=E2=80=99s quite an assumption. I think your list should also contai=
-n
->>> exception, exceptions nested inside that exception, and machine
->>> check, at the very least.  I=E2=80=99m also wondering why irq and softir=
-q are
->>> treated separately.
->=20
-> You're right, I missed the machine check case.
->=20
->=20
->> 4 has usually been the context count we choose. But I guess in theory,
->> if we get exceptions then I could potentially be more.
->=20
-> After having seen the static_call discussion, I'm in no way defending
-> this limited approach here, but out of curiosity: can the code between
-> the push onto the stack from ftrace_int3_handler() and the subsequent
-> pop from the stub actually trigger an (non-#MC) exception? There's an
-> iret inbetween, but that can fault only when returning to user space,
-> correct?
+I did four runs of the different parts of the patch:
+- 5.1-rc6
+- #1 + kvm64 CPU + some config options
+- #2 + tsc-deadline=on and so on (the whole line)
+- #3 + CONFIG_PARAVIRT_SPINLOCKS (now everything)
 
-IRET doesn=E2=80=99t do any fancy masking, so #DB, NMI and regular IRQs shou=
-ld all be possible.
+the test command was
+	tools/testing/selftests/rcutorture/bin/kvm.sh --cpus 112 --duration 60 --configs "16*TREE08" --memory 4G
 
->=20
->=20
->> As for irq vs softirq, an interrupt can preempt a softirq. Interrupts
->> are enabled while softirqs are running. When sofirqs run, softirqs are
->> disabled to prevent nested softirqs. But interrupts are enabled again,
->> and another interrupt may come in while a softirq is executing.
->>=20
->=20
-> Thanks,
->=20
-> Nicolai
->=20
->=20
-> --=20
-> SUSE Linux GmbH, GF: Felix Imend=C3=B6rffer, Jane Smithard, Graham Norton,=
+and the results:
+| HEAD is now at 085b7755808a... Linux 5.1-rc6
+| (28.5942 +27.4658 +28.0203 +27.2061 +28.0731 +26.9078 +27.8494 + 27.3392 +26.4339 +28.025 +27.4797 +27.6775 +28.0653 +28.0742 +27.9581 +28.6508)/ 16
+| 27.738775
+| 
+| HEAD is now at 36a12aa9761a... tune #1
+| (28.5761 +26.6514 +26.6989 +27.4375 +27.3442 +28.3228 +26.6353 +27.5461+28.5531 +27.7006 +27.8078 +27.9753 +27.4269 +28.0464 +27.6314 +27.8356) / 16
+| 27.6368375
+| 
+| HEAD is now at af5cd7196436... tune #2
+| (28.4867 +26.3675 +27.6364 +28.3344 +27.4153 +27.9306 +27.1703 +26.8461+27.3194 +28.5486 +27.8975 +27.4356 +28.12 +28.4397 +29.0186 +26.9328 )/ 16
+| 27.74371875
+| 
+| HEAD is now at 3701f64943f5... tune #3
+| (28.2431 +27.7831 +28.39 +28.2586 +27.7408 +27.9258 +26.6236 +26.7817+29.1178 +26.9564 +29.0525 +27.4258 +27.4931 +27.8928 +26.9308 +28.4833)/ 16
+| 27.8187
 
-> HRB 21284 (AG N=C3=BCrnberg)
+This 28.… is the number of GP/s. Based on the results in looks like
+noise to me. Also I have no idea why you have more than twice as many
+GP/s as I do.
+Different box doing:
+	tools/testing/selftests/rcutorture/bin/kvm.sh --cpus 112 --duration 60 --configs "42*TREE01" --memory 4G
+and got this:
+
+| HEAD is now at 085b7755808aa... Linux 5.1-rc6
+| (15.2878 + 15.8664 + 15.6369 + 15.6714 + 15.3667 + 16.4706 + 15.7844 +
+| 16.2119 + 15.6108 + 15.84 + 16.0003 + 16.2886 + 15.8728 + 15.5347 +
+| 15.6753 + 15.6628 + 15.8628 + 15.8158 + 15.8419 + 16.0053 + 15.7878 +
+| 16.465 + 16.2267 + 16.6881 + 16.3186 + 16.1778 + 15.7069 + 16.0178 +
+| 15.7156 + 16.0083 + 15.7181 + 15.8961 + 15.5253 + 16.1569 + 15.7692 +
+| 16.2622 + 16.2931 + 15.9531 + 15.6697 + 15.4539 + 15.6478 + 15.8047) /
+| 42
+|	~15.89452142857142857143
+|
+| HEAD is now at 3701f64943f5a... tune #3
+| ; (15.8461 + 15.8653 + 16.0392 + 15.8906 + 15.7606 + 15.6169 + 16.1425 +
+| 15.9089 + 16.2169 + 16.1694 + 16.2122 + 15.6417 + 15.8022 + 16.1178 +
+| 15.1689 + 16.1303 + 16.0181 + 16.3797 + 16.0614 + 16.2839 + 15.4583 +
+| 15.9178 + 16.0589 + 16.3428 + 15.5486 + 16.0839 + 15.9931 + 15.8417 +
+| 16.0981 + 15.8075 + 15.9925 + 15.7311 + 15.9172 + 16.1164 + 15.6303 +
+| 15.9383 + 16.0714 + 16.2786 + 15.8394 + 15.9597 + 16.0175 + 15.3908) /
+| 42
+|	~15.93586904761904761905
+
+Noise.
+
+So from RCUtorture point of view there is no improvement right? In that
+case I would suggest to drop the problematic parts…
+
+> 							Thanx, Paul
+
+Sebastian
