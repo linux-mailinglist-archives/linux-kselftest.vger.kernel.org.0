@@ -2,52 +2,52 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 39A93FA2A
-	for <lists+linux-kselftest@lfdr.de>; Tue, 30 Apr 2019 15:27:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5473CF9E7
+	for <lists+linux-kselftest@lfdr.de>; Tue, 30 Apr 2019 15:25:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727817AbfD3N11 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 30 Apr 2019 09:27:27 -0400
-Received: from mail-vk1-f201.google.com ([209.85.221.201]:35290 "EHLO
-        mail-vk1-f201.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728370AbfD3NZn (ORCPT
+        id S1728446AbfD3NZq (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 30 Apr 2019 09:25:46 -0400
+Received: from mail-qk1-f202.google.com ([209.85.222.202]:54878 "EHLO
+        mail-qk1-f202.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728302AbfD3NZq (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 30 Apr 2019 09:25:43 -0400
-Received: by mail-vk1-f201.google.com with SMTP id s139so2571349vkf.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 30 Apr 2019 06:25:42 -0700 (PDT)
+        Tue, 30 Apr 2019 09:25:46 -0400
+Received: by mail-qk1-f202.google.com with SMTP id k68so11752027qkd.21
+        for <linux-kselftest@vger.kernel.org>; Tue, 30 Apr 2019 06:25:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=4c/fu3qC3Skvw+ZZk7UHJQzalE9hfnOxHloiMgOUfYw=;
-        b=wBxzW9uz5sqQEs2k0kS4yhvkUsLQPUol5yYuscC/EhJQq88IJKN51oJN9Ma9N+F87j
-         0yaXqLxOKrSBWEzg6TAlDuogkZNA4XMbprAL12kWJ8MdNH7JIvTO8ZRXCqw/W9rKaVTK
-         0th2TjbWtiytISvyVjLE74X1hS0zo7K7eSu+m53APk0oWFg+5hHivN//aHp583NOkYkp
-         q/Xzdqo7lpDQuozd8M9soPmozGOH2C019sBJyK9gvXzEw1QU7pl845OD9URqwv3Lf0aM
-         RmLDFBkc4rSunB/Q4UnHBTaxv0r2wOX1jQXVnW4MBVL+0daNYML4EK5a4hKos8NfLzsy
-         dlFw==
+        bh=XhTfun6kQ0RRzRGxeYV1Lxl9M9fvGqRUvmzO5QW1/Iw=;
+        b=wJdQ1UGK5yN+4uNr4h/B5QAZg4CL5PwyVx/Pw0wXlRL/1oGZsU8xxjXpZhWnko4SRI
+         fd58gicIFCILzVPy4t7gpYBYkZYkBR3FmblDk49rQtqjc+3RWgZP2PESfhPKYuSabBw/
+         B0hXw+/teu1vbGfMkq/9KC8ilccnVzEvxDboYdIBbHp/DJQFCI0D5tDe+o/VISE54DyV
+         St7L+ZfiWURBvKb49SaxC44tIWiHtqDmkV/TM32oplri8v6dnEdHN+6rXyhwe32Swezt
+         x0OHZZDCsWZFgoiC74TFCi6OtAop9i/h8/+cUKSH3r+foqub7XosNX+XNvDEf+4uDkZz
+         /4Vg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=4c/fu3qC3Skvw+ZZk7UHJQzalE9hfnOxHloiMgOUfYw=;
-        b=g6659qt0zXjZvSiw8AYo4qowcE6bzcxYoKYz2XaHSCBaSDnEFSSOX/XYylaDAJY1a0
-         HNZXgeFvHFQ7ZR1+D1P+YR0SloKldt8xr6bwFbKAyVPICiz/gudpACSvGPPQk8g7RDtw
-         Tr777YvLAUYgHcqBB8U5EWHKraPyOYEKJx3m7O3ISMBP8xP6zGf7eob6QzK9S2MMmuE5
-         y3D5xHqa8k9WDEgqjXX2iJ5pTDw9RBe67fw0zBAqaID83TMXAZE7GDlOLtr/KDWGjl9b
-         P8txvnK8YPEFs6kPZrEXelRNmi469+8rQxS5vfCZZO4Tbcd2jREyhUZADNAD55c81QIP
-         euXQ==
-X-Gm-Message-State: APjAAAWkDhAqNSxJVH3YYuwU/eA3d2o/4SC/pbJGAhtPfDe1Pvk0R4o3
-        fPNuWtQMmpAAVnIIfHaRxcaURwZL4MrXvbvS
-X-Google-Smtp-Source: APXvYqx4TL4lB6fuuHN3vQZgSBJDs10/R98gvbNQDm51wxIVMnZyNgUuaizbdtdyYw1MeWbTLc+s/luHbNJTgZgZ
-X-Received: by 2002:a67:8155:: with SMTP id c82mr6290812vsd.200.1556630742131;
- Tue, 30 Apr 2019 06:25:42 -0700 (PDT)
-Date:   Tue, 30 Apr 2019 15:25:04 +0200
+        bh=XhTfun6kQ0RRzRGxeYV1Lxl9M9fvGqRUvmzO5QW1/Iw=;
+        b=iUgfy8hl3XynPXXf3xdX47XKKApMIDvUz2uKTQvsIYcxhy8fkDp3uHyF5aNauQguGE
+         v5aB1oSh++SwVqobCFpx+12RsA2E9sJOuarZUGgz613OrDvvlozc5jl/j0MBT+QA8kPW
+         rulYbqsrsdUoIUpZJGrUHuEP9nqrt91TV9xT+WipmVjpJpX5GtmBOM9X21bpqDG6Pbh1
+         6JH3A7CH4PcB4YJvAAMgLzFvH/gSb7djinEZuOsJaQRt6qML1fx6wqn/F/SZrQRReYvj
+         g7EgrKLMFbs1fh0MICex+zUuES7hfj0XNtJTHSSPwCL+Ensv6inbCGkwcx3qOCu8mQ+W
+         SUBQ==
+X-Gm-Message-State: APjAAAVOo2xEdNhMmyUnJKFf5VCDbwcgin5uI+g+/8HOHmkNZcf4v13S
+        e2wmbzUDuLbim5rriZog192/D0u9hVKAvndT
+X-Google-Smtp-Source: APXvYqznoxmsWRf0TRsMetoUzYzE4dAnT0nzUuom4UB8P1UAcmj3+/tm6hiTUWLYkHc/SM6nPM/1vvtkZ4BWAaOU
+X-Received: by 2002:a37:b683:: with SMTP id g125mr147309qkf.249.1556630745179;
+ Tue, 30 Apr 2019 06:25:45 -0700 (PDT)
+Date:   Tue, 30 Apr 2019 15:25:05 +0200
 In-Reply-To: <cover.1556630205.git.andreyknvl@google.com>
-Message-Id: <8e20df035de677029b3f970744ba2d35e2df1db3.1556630205.git.andreyknvl@google.com>
+Message-Id: <f7a89f69f95e471f161e4000d0e13f57364bc90d.1556630205.git.andreyknvl@google.com>
 Mime-Version: 1.0
 References: <cover.1556630205.git.andreyknvl@google.com>
 X-Mailer: git-send-email 2.21.0.593.g511ec345e18-goog
-Subject: [PATCH v14 08/17] mm, arm64: untag user pointers in get_vaddr_frames
+Subject: [PATCH v14 09/17] fs, arm64: untag user pointers in copy_mount_options
 From:   Andrey Konovalov <andreyknvl@google.com>
 To:     linux-arm-kernel@lists.infradead.org, linux-mm@kvack.org,
         linux-kernel@vger.kernel.org, amd-gfx@lists.freedesktop.org,
@@ -93,28 +93,32 @@ This patch is a part of a series that extends arm64 kernel ABI to allow to
 pass tagged user pointers (with the top byte set to something else other
 than 0x00) as syscall arguments.
 
-get_vaddr_frames uses provided user pointers for vma lookups, which can
-only by done with untagged pointers. Instead of locating and changing
-all callers of this function, perform untagging in it.
+In copy_mount_options a user address is being subtracted from TASK_SIZE.
+If the address is lower than TASK_SIZE, the size is calculated to not
+allow the exact_copy_from_user() call to cross TASK_SIZE boundary.
+However if the address is tagged, then the size will be calculated
+incorrectly.
+
+Untag the address before subtracting.
 
 Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
 ---
- mm/frame_vector.c | 2 ++
- 1 file changed, 2 insertions(+)
+ fs/namespace.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/mm/frame_vector.c b/mm/frame_vector.c
-index c64dca6e27c2..c431ca81dad5 100644
---- a/mm/frame_vector.c
-+++ b/mm/frame_vector.c
-@@ -46,6 +46,8 @@ int get_vaddr_frames(unsigned long start, unsigned int nr_frames,
- 	if (WARN_ON_ONCE(nr_frames > vec->nr_allocated))
- 		nr_frames = vec->nr_allocated;
+diff --git a/fs/namespace.c b/fs/namespace.c
+index c9cab307fa77..c27e5713bf04 100644
+--- a/fs/namespace.c
++++ b/fs/namespace.c
+@@ -2825,7 +2825,7 @@ void *copy_mount_options(const void __user * data)
+ 	 * the remainder of the page.
+ 	 */
+ 	/* copy_from_user cannot cross TASK_SIZE ! */
+-	size = TASK_SIZE - (unsigned long)data;
++	size = TASK_SIZE - (unsigned long)untagged_addr(data);
+ 	if (size > PAGE_SIZE)
+ 		size = PAGE_SIZE;
  
-+	start = untagged_addr(start);
-+
- 	down_read(&mm->mmap_sem);
- 	locked = 1;
- 	vma = find_vma_intersection(mm, start, start + 1);
 -- 
 2.21.0.593.g511ec345e18-goog
 
