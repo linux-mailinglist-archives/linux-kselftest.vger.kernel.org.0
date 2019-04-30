@@ -2,318 +2,162 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EA1E2FF19
-	for <lists+linux-kselftest@lfdr.de>; Tue, 30 Apr 2019 19:49:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DAA8FF28
+	for <lists+linux-kselftest@lfdr.de>; Tue, 30 Apr 2019 19:57:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726006AbfD3RtT (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 30 Apr 2019 13:49:19 -0400
-Received: from mail.kernel.org ([198.145.29.99]:54242 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725942AbfD3RtT (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 30 Apr 2019 13:49:19 -0400
-Received: from gandalf.local.home (cpe-66-24-58-225.stny.res.rr.com [66.24.58.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 4C86320835;
-        Tue, 30 Apr 2019 17:49:15 +0000 (UTC)
-Date:   Tue, 30 Apr 2019 13:49:13 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Nicolai Stange <nstange@suse.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Jiri Kosina <jikos@kernel.org>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Petr Mladek <pmladek@suse.com>,
-        Joe Lawrence <joe.lawrence@redhat.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
-        Tim Chen <tim.c.chen@linux.intel.com>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Juergen Gross <jgross@suse.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nayna Jain <nayna@linux.ibm.com>,
-        Masahiro Yamada <yamada.masahiro@socionext.com>,
-        Joerg Roedel <jroedel@suse.de>,
-        Linux List Kernel Mailing <linux-kernel@vger.kernel.org>,
-        live-patching@vger.kernel.org,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>
-Subject: [RFC][PATCH] ftrace/x86: Emulate call function while updating in
- breakpoint handler
-Message-ID: <20190430134913.4e29ce72@gandalf.local.home>
-In-Reply-To: <20190430132024.0f03f5b8@gandalf.local.home>
-References: <20190428133826.3e142cfd@oasis.local.home>
-        <CAHk-=wh5OpheSU8Em_Q3Hg8qw_JtoijxOdPtHru6d+5K8TWM=A@mail.gmail.com>
-        <CAHk-=wjphmrQXMfbw9j-tTzDvJ+Uc+asMHdFa=1_1xZoYVUC=g@mail.gmail.com>
-        <CALCETrXvmZPHsfRVnW0AtyddfN-2zaCmWn+FsrF6XPTOFd_Jmw@mail.gmail.com>
-        <CAHk-=whtt4K2f0KPtG-4Pykh3FK8UBOjD8jhXCUKB5nWDj_YRA@mail.gmail.com>
-        <CALCETrWELBCK-kqX5FCEDVUy8kCT-yVu7m_7Dtn=GCsHY0Du5A@mail.gmail.com>
-        <CAHk-=wgewK4eFhF3=0RNtk1KQjMANFH6oDE=8m=84RExn2gxhw@mail.gmail.com>
-        <CAHk-=whay7eN6+2gZjY-ybRbkbcqAmgrLwwszzHx8ws3c=S-MA@mail.gmail.com>
-        <CALCETrXzVU0Q7u1q=QFPaDr=aojjF5cjbOi9CxxXnp5GqTqsWA@mail.gmail.com>
-        <CAHk-=wg1QPz0m+7jnVcjQgkySUQLzAXE8_PZARV-vWYK27LB=w@mail.gmail.com>
-        <20190430135602.GD2589@hirez.programming.kicks-ass.net>
-        <CAHk-=wg7vUGMRHyBsLig6qiPK0i4_BK3bRrTN+HHHziUGg1P_A@mail.gmail.com>
-        <CALCETrXujRWxwkgAwB+8xja3N9H22t52AYBYM_mbrjKKZ624Eg@mail.gmail.com>
-        <20190430130359.330e895b@gandalf.local.home>
-        <20190430132024.0f03f5b8@gandalf.local.home>
-X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        id S1726115AbfD3R5U (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 30 Apr 2019 13:57:20 -0400
+Received: from mail-eopbgr810082.outbound.protection.outlook.com ([40.107.81.82]:27008
+        "EHLO NAM01-BY2-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725930AbfD3R5U (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 30 Apr 2019 13:57:20 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=amdcloud.onmicrosoft.com; s=selector1-amd-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=KGMOo9hxDN2TGCpphgofoTTq2FGSY18AP6DIbhxAE34=;
+ b=GrgU7Gzr6rD3u2XxX//FKLycBUmC2Bx7+ZJDh4UToM1Wfs1WllsVD0vpVCG/jjrlwKrhGDrlfjHAgt2aJEHIfb+4zrRker9/LdsWRbSghUkzbt7NMb2r8TfCj5Ddowg6IPwCXMufrA1317YaYcb00GpwIVeA4OQUZdPTSqZ6eb8=
+Received: from BYAPR12MB3176.namprd12.prod.outlook.com (20.179.92.82) by
+ BYAPR12MB3494.namprd12.prod.outlook.com (20.178.196.220) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.1835.15; Tue, 30 Apr 2019 17:57:12 +0000
+Received: from BYAPR12MB3176.namprd12.prod.outlook.com
+ ([fe80::9118:73f2:809c:22c7]) by BYAPR12MB3176.namprd12.prod.outlook.com
+ ([fe80::9118:73f2:809c:22c7%4]) with mapi id 15.20.1835.010; Tue, 30 Apr 2019
+ 17:57:12 +0000
+From:   "Kuehling, Felix" <Felix.Kuehling@amd.com>
+To:     Andrey Konovalov <andreyknvl@google.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "amd-gfx@lists.freedesktop.org" <amd-gfx@lists.freedesktop.org>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
+        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>
+CC:     Catalin Marinas <catalin.marinas@arm.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Will Deacon <will.deacon@arm.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Kees Cook <keescook@chromium.org>,
+        Yishai Hadas <yishaih@mellanox.com>,
+        "Kuehling@google.com" <Kuehling@google.com>,
+        "Deucher@google.com" <Deucher@google.com>,
+        "Deucher, Alexander" <Alexander.Deucher@amd.com>,
+        "Koenig@google.com" <Koenig@google.com>,
+        "Koenig, Christian" <Christian.Koenig@amd.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Jens Wiklander <jens.wiklander@linaro.org>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Kostya Serebryany <kcc@google.com>,
+        Evgeniy Stepanov <eugenis@google.com>,
+        Lee Smith <Lee.Smith@arm.com>,
+        Ramana Radhakrishnan <Ramana.Radhakrishnan@arm.com>,
+        Jacob Bramley <Jacob.Bramley@arm.com>,
+        Ruben Ayrapetyan <Ruben.Ayrapetyan@arm.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Chintan Pandya <cpandya@codeaurora.org>,
+        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
+        Dave Martin <Dave.Martin@arm.com>,
+        Kevin Brodsky <kevin.brodsky@arm.com>,
+        Szabolcs Nagy <Szabolcs.Nagy@arm.com>
+Subject: Re: [PATCH v14 12/17] drm/radeon, arm64: untag user pointers
+Thread-Topic: [PATCH v14 12/17] drm/radeon, arm64: untag user pointers
+Thread-Index: AQHU/1g/U8dIq5nkhEqd9cb6Xh0v56ZU/Y2A
+Date:   Tue, 30 Apr 2019 17:57:12 +0000
+Message-ID: <bfe5e11e-6dc4-352f-57eb-d527f965a2ef@amd.com>
+References: <cover.1556630205.git.andreyknvl@google.com>
+ <9a50ef07d927cbccd9620894bda825e551168c3d.1556630205.git.andreyknvl@google.com>
+In-Reply-To: <9a50ef07d927cbccd9620894bda825e551168c3d.1556630205.git.andreyknvl@google.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [165.204.55.251]
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
+x-clientproxiedby: YQBPR0101CA0032.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:c00::45) To BYAPR12MB3176.namprd12.prod.outlook.com
+ (2603:10b6:a03:133::18)
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=Felix.Kuehling@amd.com; 
+x-ms-exchange-messagesentrepresentingtype: 1
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: df48562d-e8cb-453d-9fd3-08d6cd95455a
+x-ms-office365-filtering-ht: Tenant
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600141)(711020)(4605104)(4618075)(2017052603328)(7193020);SRVR:BYAPR12MB3494;
+x-ms-traffictypediagnostic: BYAPR12MB3494:
+x-microsoft-antispam-prvs: <BYAPR12MB34949EFAD9F4EA1EA885C289923A0@BYAPR12MB3494.namprd12.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:7691;
+x-forefront-prvs: 00235A1EEF
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(39860400002)(376002)(366004)(396003)(136003)(346002)(199004)(189003)(6512007)(6436002)(53936002)(81156014)(81166006)(8936002)(65826007)(6506007)(36756003)(8676002)(53546011)(386003)(97736004)(7416002)(6246003)(7406005)(26005)(2501003)(5660300002)(102836004)(64126003)(76176011)(256004)(14444005)(2906002)(31696002)(2201001)(66946007)(229853002)(66446008)(64756008)(66556008)(66476007)(71190400001)(86362001)(71200400001)(73956011)(486006)(65806001)(65956001)(446003)(66066001)(11346002)(316002)(2616005)(476003)(68736007)(6486002)(31686004)(25786009)(52116002)(99286004)(54906003)(14454004)(72206003)(4326008)(478600001)(110136005)(3846002)(58126008)(305945005)(7736002)(6116002)(186003)(921003)(1121003);DIR:OUT;SFP:1101;SCL:1;SRVR:BYAPR12MB3494;H:BYAPR12MB3176.namprd12.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+received-spf: None (protection.outlook.com: amd.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: 6nnnZ/u6xr1JXr6Nj7I1N2kzpDbGKjEmjnWSIc/x56iEXiclrQpemMYVSzx5viG4KsCPgAF0cHpwmKumTrjCA77FQvvny29TUHoLoe6vqloMyRgr5LfovFuMsCigj9yb6t5569mYIwY1MmJLrLGIBbKL/uvh/mP/wW4v6EJr8BKk/YcW1lomju+jAjMKFUWcCD3boecVehoFnrYEtNsjdeoCOKUGv6zeiGvXc/1JKhPr24/4BRHjlFgqtXa0Mw7z+YsBAiWjDiNwa/gAyuDDaN2Fvat4/xLlXxhKURv/Lg13P2nyxOItAWbIYAZHVNuE6H4z2HOrUPHngLiJHQ+gwu3JHMUaTpBtGxREZa+h5EpBYnMxK0WLZsZAuLxmCERKh+/dY/YybIwK/uvAgY/6B7IXMeZs1MAk54ASCu4wb1Q=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <ABB2DFC9857E044B9516BE64C1265F1E@namprd12.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: df48562d-e8cb-453d-9fd3-08d6cd95455a
+X-MS-Exchange-CrossTenant-originalarrivaltime: 30 Apr 2019 17:57:12.1585
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR12MB3494
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-
-From: "Steven Rostedt (VMware)" <rostedt@goodmis.org>
-
-
-Nicolai Stange discovered[1] that if live kernel patching is enabled, and the
-function tracer started tracing the same function that was patched, the
-conversion of the fentry call site during the translation of going from
-calling the live kernel patch trampoline to the iterator trampoline, would
-have as slight window where it didn't call anything.
-
-As live kernel patching depends on ftrace to always call its code (to
-prevent the function being traced from being called, as it will redirect
-it). This small window would allow the old buggy function to be called, and
-this can cause undesirable results.
-
-Nicolai submitted new patches[2] but these were controversial. As this is
-similar to the static call emulation issues that came up a while ago[3],
-Linus suggested using per CPU data along with special trampolines[4] to emulate
-the calls.
-
-Linus's solution was for text poke (which was mostly what the static_call
-code did), but as ftrace has its own mechanism, it required doing its own
-thing.
-
-Having ftrace use its own per CPU data and having its own set of specialized
-trampolines solves the issue of missed calls that live kernel patching
-suffers.
-
-[1] http://lkml.kernel.org/r/20180726104029.7736-1-nstange@suse.de
-[2] http://lkml.kernel.org/r/20190427100639.15074-1-nstange@suse.de
-[3] http://lkml.kernel.org/r/3cf04e113d71c9f8e4be95fb84a510f085aa4afa.1541711457.git.jpoimboe@redhat.com
-[4] http://lkml.kernel.org/r/CAHk-=wh5OpheSU8Em_Q3Hg8qw_JtoijxOdPtHru6d+5K8TWM=A@mail.gmail.com
-
-Inspired-by: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: stable@vger.kernel.org
-Fixes: b700e7f03df5 ("livepatch: kernel: add support for live patching")
-Signed-off-by: Steven Rostedt (VMware) <rostedt@goodmis.org>
----
- arch/x86/kernel/ftrace.c | 146 ++++++++++++++++++++++++++++++++++++++-
- 1 file changed, 143 insertions(+), 3 deletions(-)
-
-diff --git a/arch/x86/kernel/ftrace.c b/arch/x86/kernel/ftrace.c
-index ef49517f6bb2..835277043348 100644
---- a/arch/x86/kernel/ftrace.c
-+++ b/arch/x86/kernel/ftrace.c
-@@ -17,6 +17,7 @@
- #include <linux/uaccess.h>
- #include <linux/ftrace.h>
- #include <linux/percpu.h>
-+#include <linux/frame.h>
- #include <linux/sched.h>
- #include <linux/slab.h>
- #include <linux/init.h>
-@@ -232,6 +233,9 @@ int ftrace_modify_call(struct dyn_ftrace *rec, unsigned long old_addr,
- 
- static unsigned long ftrace_update_func;
- 
-+/* Used within inline asm below */
-+unsigned long ftrace_update_func_call;
-+
- static int update_ftrace_func(unsigned long ip, void *new)
- {
- 	unsigned char old[MCOUNT_INSN_SIZE];
-@@ -259,6 +263,8 @@ int ftrace_update_ftrace_func(ftrace_func_t func)
- 	unsigned char *new;
- 	int ret;
- 
-+	ftrace_update_func_call = (unsigned long)func;
-+
- 	new = ftrace_call_replace(ip, (unsigned long)func);
- 	ret = update_ftrace_func(ip, new);
- 
-@@ -280,6 +286,103 @@ static nokprobe_inline int is_ftrace_caller(unsigned long ip)
- 	return 0;
- }
- 
-+/*
-+ * We need to handle the "call func1" -> "call func2" case.
-+ * Just skipping the call is not sufficient as it will be like
-+ * changing to "nop" first and then updating the call. But some
-+ * users of ftrace require calls never to be missed.
-+ *
-+ * To emulate the call while converting the call site with a breakpoint,
-+ * some trampolines are used along with per CPU buffers.
-+ * There are three trampolines for the call sites and three trampolines
-+ * for the updating of the call in ftrace trampoline. The three
-+ * trampolines are:
-+ *
-+ * 1) Interrupts are enabled when the breakpoint is hit
-+ * 2) Interrupts are disabled when the breakpoint is hit
-+ * 3) The breakpoint was hit in an NMI
-+ *
-+ * As per CPU data is used, interrupts must be disabled to prevent them
-+ * from corrupting the data. A separate NMI trampoline is used for the
-+ * NMI case. If interrupts are already disabled, then the return path
-+ * of where the breakpoint was hit (saved in the per CPU data) is pushed
-+ * on the stack and then a jump to either the ftrace_caller (which will
-+ * loop through all registered ftrace_ops handlers depending on the ip
-+ * address), or if its a ftrace trampoline call update, it will call
-+ * ftrace_update_func_call which will hold the call that should be
-+ * called.
-+ */
-+extern asmlinkage void ftrace_emulate_call_irqon(void);
-+extern asmlinkage void ftrace_emulate_call_irqoff(void);
-+extern asmlinkage void ftrace_emulate_call_nmi(void);
-+extern asmlinkage void ftrace_emulate_call_update_irqoff(void);
-+extern asmlinkage void ftrace_emulate_call_update_irqon(void);
-+extern asmlinkage void ftrace_emulate_call_update_nmi(void);
-+
-+static DEFINE_PER_CPU(void *, ftrace_bp_call_return);
-+static DEFINE_PER_CPU(void *, ftrace_bp_call_nmi_return);
-+
-+asm(
-+	".text\n"
-+
-+	/* Trampoline for function update with interrupts enabled */
-+	".global ftrace_emulate_call_irqoff\n"
-+	".type ftrace_emulate_call_irqoff, @function\n"
-+	"ftrace_emulate_call_irqoff:\n\t"
-+		"push %gs:ftrace_bp_call_return\n\t"
-+		"sti\n\t"
-+		"jmp ftrace_caller\n"
-+	".size ftrace_emulate_call_irqoff, .-ftrace_emulate_call_irqoff\n"
-+
-+	/* Trampoline for function update with interrupts disabled*/
-+	".global ftrace_emulate_call_irqon\n"
-+	".type ftrace_emulate_call_irqon, @function\n"
-+	"ftrace_emulate_call_irqon:\n\t"
-+		"push %gs:ftrace_bp_call_return\n\t"
-+		"jmp ftrace_caller\n"
-+	".size ftrace_emulate_call_irqon, .-ftrace_emulate_call_irqon\n"
-+
-+	/* Trampoline for function update in an NMI */
-+	".global ftrace_emulate_call_nmi\n"
-+	".type ftrace_emulate_call_nmi, @function\n"
-+	"ftrace_emulate_call_nmi:\n\t"
-+		"push %gs:ftrace_bp_call_nmi_return\n\t"
-+		"jmp ftrace_caller\n"
-+	".size ftrace_emulate_call_nmi, .-ftrace_emulate_call_nmi\n"
-+
-+	/* Trampoline for ftrace trampoline call update with interrupts enabled */
-+	".global ftrace_emulate_call_update_irqoff\n"
-+	".type ftrace_emulate_call_update_irqoff, @function\n"
-+	"ftrace_emulate_call_update_irqoff:\n\t"
-+		"push %gs:ftrace_bp_call_return\n\t"
-+		"sti\n\t"
-+		"jmp *ftrace_update_func_call\n"
-+	".size ftrace_emulate_call_update_irqoff, .-ftrace_emulate_call_update_irqoff\n"
-+
-+	/* Trampoline for ftrace trampoline call update with interrupts disabled */
-+	".global ftrace_emulate_call_update_irqon\n"
-+	".type ftrace_emulate_call_update_irqon, @function\n"
-+	"ftrace_emulate_call_update_irqon:\n\t"
-+		"push %gs:ftrace_bp_call_return\n\t"
-+		"jmp *ftrace_update_func_call\n"
-+	".size ftrace_emulate_call_update_irqon, .-ftrace_emulate_call_update_irqon\n"
-+
-+	/* Trampoline for ftrace trampoline call update in an NMI */
-+	".global ftrace_emulate_call_update_nmi\n"
-+	".type ftrace_emulate_call_update_nmi, @function\n"
-+	"ftrace_emulate_call_update_nmi:\n\t"
-+		"push %gs:ftrace_bp_call_nmi_return\n\t"
-+		"jmp *ftrace_update_func_call\n"
-+	".size ftrace_emulate_call_update_nmi, .-ftrace_emulate_call_update_nmi\n"
-+	".previous\n");
-+
-+STACK_FRAME_NON_STANDARD(ftrace_emulate_call_irqoff);
-+STACK_FRAME_NON_STANDARD(ftrace_emulate_call_irqon);
-+STACK_FRAME_NON_STANDARD(ftrace_emulate_call_nmi);
-+STACK_FRAME_NON_STANDARD(ftrace_emulate_call_update_irqoff);
-+STACK_FRAME_NON_STANDARD(ftrace_emulate_call_update_irqon);
-+STACK_FRAME_NON_STANDARD(ftrace_emulate_call_update_nmi);
-+
- /*
-  * A breakpoint was added to the code address we are about to
-  * modify, and this is the handle that will just skip over it.
-@@ -295,10 +398,44 @@ int ftrace_int3_handler(struct pt_regs *regs)
- 		return 0;
- 
- 	ip = regs->ip - 1;
--	if (!ftrace_location(ip) && !is_ftrace_caller(ip))
-+	if (ftrace_location(ip)) {
-+		/* A breakpoint at the beginning of the function was hit */
-+		if (in_nmi()) {
-+			/* NMIs have their own trampoline */
-+			this_cpu_write(ftrace_bp_call_nmi_return, (void *)ip + MCOUNT_INSN_SIZE);
-+			regs->ip = (unsigned long) ftrace_emulate_call_nmi;
-+			return 1;
-+		}
-+		this_cpu_write(ftrace_bp_call_return, (void *)ip + MCOUNT_INSN_SIZE);
-+		if (regs->flags & X86_EFLAGS_IF) {
-+			regs->flags &= ~X86_EFLAGS_IF;
-+			regs->ip = (unsigned long) ftrace_emulate_call_irqoff;
-+		} else {
-+			regs->ip = (unsigned long) ftrace_emulate_call_irqon;
-+		}
-+	} else if (is_ftrace_caller(ip)) {
-+		/* An ftrace trampoline is being updated */
-+		if (!ftrace_update_func_call) {
-+			/* If it's a jump, just need to skip it */
-+			regs->ip += MCOUNT_INSN_SIZE -1;
-+			return 1;
-+		}
-+		if (in_nmi()) {
-+			/* NMIs have their own trampoline */
-+			this_cpu_write(ftrace_bp_call_nmi_return, (void *)ip + MCOUNT_INSN_SIZE);
-+			regs->ip = (unsigned long) ftrace_emulate_call_update_nmi;
-+			return 1;
-+		}
-+		this_cpu_write(ftrace_bp_call_return, (void *)ip + MCOUNT_INSN_SIZE);
-+		if (regs->flags & X86_EFLAGS_IF) {
-+			regs->flags &= ~X86_EFLAGS_IF;
-+			regs->ip = (unsigned long) ftrace_emulate_call_update_irqoff;
-+		} else {
-+			regs->ip = (unsigned long) ftrace_emulate_call_update_irqon;
-+		}
-+	} else {
- 		return 0;
--
--	regs->ip += MCOUNT_INSN_SIZE - 1;
-+	}
- 
- 	return 1;
- }
-@@ -859,6 +996,8 @@ void arch_ftrace_update_trampoline(struct ftrace_ops *ops)
- 
- 	func = ftrace_ops_get_func(ops);
- 
-+	ftrace_update_func_call = (unsigned long)func;
-+
- 	/* Do a safe modify in case the trampoline is executing */
- 	new = ftrace_call_replace(ip, (unsigned long)func);
- 	ret = update_ftrace_func(ip, new);
-@@ -960,6 +1099,7 @@ static int ftrace_mod_jmp(unsigned long ip, void *func)
- {
- 	unsigned char *new;
- 
-+	ftrace_update_func_call = 0;
- 	new = ftrace_jmp_replace(ip, (unsigned long)func);
- 
- 	return update_ftrace_func(ip, new);
--- 
-2.20.1
-
+T24gMjAxOS0wNC0zMCA5OjI1IGEubS4sIEFuZHJleSBLb25vdmFsb3Ygd3JvdGU6DQo+IFtDQVVU
+SU9OOiBFeHRlcm5hbCBFbWFpbF0NCj4NCj4gVGhpcyBwYXRjaCBpcyBhIHBhcnQgb2YgYSBzZXJp
+ZXMgdGhhdCBleHRlbmRzIGFybTY0IGtlcm5lbCBBQkkgdG8gYWxsb3cgdG8NCj4gcGFzcyB0YWdn
+ZWQgdXNlciBwb2ludGVycyAod2l0aCB0aGUgdG9wIGJ5dGUgc2V0IHRvIHNvbWV0aGluZyBlbHNl
+IG90aGVyDQo+IHRoYW4gMHgwMCkgYXMgc3lzY2FsbCBhcmd1bWVudHMuDQo+DQo+IHJhZGVvbl90
+dG1fdHRfcGluX3VzZXJwdHIoKSB1c2VzIHByb3ZpZGVkIHVzZXIgcG9pbnRlcnMgZm9yIHZtYQ0K
+PiBsb29rdXBzLCB3aGljaCBjYW4gb25seSBieSBkb25lIHdpdGggdW50YWdnZWQgcG9pbnRlcnMu
+IFRoaXMgcGF0Y2gNCj4gdW50YWdzIHVzZXIgcG9pbnRlcnMgd2hlbiB0aGV5IGFyZSBiZWluZyBz
+ZXQgaW4NCj4gcmFkZW9uX3R0bV90dF9waW5fdXNlcnB0cigpLg0KPg0KPiBJbiBhbWRncHVfZ2Vt
+X3VzZXJwdHJfaW9jdGwoKSBhbiBNTVUgbm90aWZpZXIgaXMgc2V0IHVwIHdpdGggYSAodGFnZ2Vk
+KQ0KPiB1c2Vyc3BhY2UgcG9pbnRlci4gVGhlIHVudGFnZ2VkIGFkZHJlc3Mgc2hvdWxkIGJlIHVz
+ZWQgc28gdGhhdCBNTVUNCj4gbm90aWZpZXJzIGZvciB0aGUgdW50YWdnZWQgYWRkcmVzcyBnZXQg
+Y29ycmVjdGx5IG1hdGNoZWQgdXAgd2l0aCB0aGUgcmlnaHQNCj4gQk8uIFRoaXMgcGF0Y2ggdW50
+YWdzIHVzZXIgcG9pbnRlcnMgaW4gcmFkZW9uX2dlbV91c2VycHRyX2lvY3RsKCkuDQo+DQo+IFNp
+Z25lZC1vZmYtYnk6IEFuZHJleSBLb25vdmFsb3YgPGFuZHJleWtudmxAZ29vZ2xlLmNvbT4NCj4g
+LS0tDQo+ICAgZHJpdmVycy9ncHUvZHJtL3JhZGVvbi9yYWRlb25fZ2VtLmMgfCAyICsrDQo+ICAg
+ZHJpdmVycy9ncHUvZHJtL3JhZGVvbi9yYWRlb25fdHRtLmMgfCAyICstDQo+ICAgMiBmaWxlcyBj
+aGFuZ2VkLCAzIGluc2VydGlvbnMoKyksIDEgZGVsZXRpb24oLSkNCj4NCj4gZGlmZiAtLWdpdCBh
+L2RyaXZlcnMvZ3B1L2RybS9yYWRlb24vcmFkZW9uX2dlbS5jIGIvZHJpdmVycy9ncHUvZHJtL3Jh
+ZGVvbi9yYWRlb25fZ2VtLmMNCj4gaW5kZXggNDQ2MTdkZWM4MTgzLi45MGViNzhmYjVlYjIgMTAw
+NjQ0DQo+IC0tLSBhL2RyaXZlcnMvZ3B1L2RybS9yYWRlb24vcmFkZW9uX2dlbS5jDQo+ICsrKyBi
+L2RyaXZlcnMvZ3B1L2RybS9yYWRlb24vcmFkZW9uX2dlbS5jDQo+IEBAIC0yOTEsNiArMjkxLDgg
+QEAgaW50IHJhZGVvbl9nZW1fdXNlcnB0cl9pb2N0bChzdHJ1Y3QgZHJtX2RldmljZSAqZGV2LCB2
+b2lkICpkYXRhLA0KPiAgICAgICAgICB1aW50MzJfdCBoYW5kbGU7DQo+ICAgICAgICAgIGludCBy
+Ow0KPg0KPiArICAgICAgIGFyZ3MtPmFkZHIgPSB1bnRhZ2dlZF9hZGRyKGFyZ3MtPmFkZHIpOw0K
+PiArDQo+ICAgICAgICAgIGlmIChvZmZzZXRfaW5fcGFnZShhcmdzLT5hZGRyIHwgYXJncy0+c2l6
+ZSkpDQo+ICAgICAgICAgICAgICAgICAgcmV0dXJuIC1FSU5WQUw7DQo+DQo+IGRpZmYgLS1naXQg
+YS9kcml2ZXJzL2dwdS9kcm0vcmFkZW9uL3JhZGVvbl90dG0uYyBiL2RyaXZlcnMvZ3B1L2RybS9y
+YWRlb24vcmFkZW9uX3R0bS5jDQo+IGluZGV4IDk5MjBhNmZjMTFiZi4uZGNlNzIyYzQ5NGMxIDEw
+MDY0NA0KPiAtLS0gYS9kcml2ZXJzL2dwdS9kcm0vcmFkZW9uL3JhZGVvbl90dG0uYw0KPiArKysg
+Yi9kcml2ZXJzL2dwdS9kcm0vcmFkZW9uL3JhZGVvbl90dG0uYw0KPiBAQCAtNzQyLDcgKzc0Miw3
+IEBAIGludCByYWRlb25fdHRtX3R0X3NldF91c2VycHRyKHN0cnVjdCB0dG1fdHQgKnR0bSwgdWlu
+dDY0X3QgYWRkciwNCj4gICAgICAgICAgaWYgKGd0dCA9PSBOVUxMKQ0KPiAgICAgICAgICAgICAg
+ICAgIHJldHVybiAtRUlOVkFMOw0KPg0KPiAtICAgICAgIGd0dC0+dXNlcnB0ciA9IGFkZHI7DQo+
+ICsgICAgICAgZ3R0LT51c2VycHRyID0gdW50YWdnZWRfYWRkcihhZGRyKTsNCg0KRG9pbmcgdGhp
+cyBoZXJlIHNlZW1zIHVubmVjZXNzYXJ5LCBiZWNhdXNlIHlvdSBhbHJlYWR5IHVudGFnZ2VkIHRo
+ZSANCmFkZHJlc3MgaW4gdGhlIG9ubHkgY2FsbGVyIG9mIHRoaXMgZnVuY3Rpb24gaW4gcmFkZW9u
+X2dlbV91c2VycHRyX2lvY3RsLiANClRoZSBjaGFuZ2UgdGhlcmUgd2lsbCBhZmZlY3QgYm90aCB0
+aGUgdXNlcnB0ciBhbmQgTU1VIG5vdGlmaWVyIHNldHVwIGFuZCANCm1ha2VzIHN1cmUgdGhhdCBi
+b3RoIGFyZSBpbiBzeW5jLCB1c2luZyB0aGUgc2FtZSB1bnRhZ2dlZCBhZGRyZXNzLg0KDQpSZWdh
+cmRzLA0KIMKgIEZlbGl4DQoNCg0KPiAgICAgICAgICBndHQtPnVzZXJtbSA9IGN1cnJlbnQtPm1t
+Ow0KPiAgICAgICAgICBndHQtPnVzZXJmbGFncyA9IGZsYWdzOw0KPiAgICAgICAgICByZXR1cm4g
+MDsNCj4gLS0NCj4gMi4yMS4wLjU5My5nNTExZWMzNDVlMTgtZ29vZw0KPg0K
