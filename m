@@ -2,281 +2,395 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B8A2510014
-	for <lists+linux-kselftest@lfdr.de>; Tue, 30 Apr 2019 21:07:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 952021003D
+	for <lists+linux-kselftest@lfdr.de>; Tue, 30 Apr 2019 21:21:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726926AbfD3TH6 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 30 Apr 2019 15:07:58 -0400
-Received: from mail-ed1-f66.google.com ([209.85.208.66]:43654 "EHLO
-        mail-ed1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726733AbfD3TH6 (ORCPT
+        id S1726048AbfD3TVD (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 30 Apr 2019 15:21:03 -0400
+Received: from mail-ed1-f67.google.com ([209.85.208.67]:35041 "EHLO
+        mail-ed1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726024AbfD3TVD (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 30 Apr 2019 15:07:58 -0400
-Received: by mail-ed1-f66.google.com with SMTP id j20so13248955edq.10
-        for <linux-kselftest@vger.kernel.org>; Tue, 30 Apr 2019 12:07:56 -0700 (PDT)
+        Tue, 30 Apr 2019 15:21:03 -0400
+Received: by mail-ed1-f67.google.com with SMTP id y67so13325140ede.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 30 Apr 2019 12:21:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=brauner.io; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=24AjdVeorZwTFjcHq4izaVEveVUnIHNKgUQspSKXzvI=;
-        b=HRw7WojWySMAv4b8YL4a2LOaFT9fYBpKx09Bebq1ppJnm0xY9XE2+fvoFmxFyLBgvs
-         cXSHmuyuCo1DZ1DSSgtKhJwb2Q0oHBHL6n5r7g/viMBsT5Ng3qU6CMH6HM5awf844U5J
-         VnpuwRI9NyLJ3XPIvuYY5j2H7WDDrlHypMZEanmISO7U9yeqMqkRKlI1+pEEEKL+0rMT
-         4myjp6ARtxZ8stXu85b+pDGo2//UBg32SB/qdvPGooFW1RoaBhMwU1Sc5tDnrObEgc/C
-         1bAHlqDViUiO0KIVHZHi1idryUSF0YDQI7GJs2wxolSlDcRX4h2ghqqxFKj7lTJbEuup
-         CCaA==
+        bh=LCKlak7FYJZjHkPSI2bbY7nJMWKoi5EZ2NHkq7EYp70=;
+        b=dXZuiMiiQ1YMov/LL6PvqoHhbYAEkbFRRTdKzHCifnKtNK49fwX4yNeXShQCtXqBOq
+         yEQRlwiAeEJw7VuTA8jnSMvlQl2Xoc3cvXkBaOlZhRyoq28JoPA1jywWiFdjdtxmfFAR
+         RM0uhHa/Gyftu5bXDoR0R36KiYhF9Kb5ap+b9IHYd2BWafL05z3dhBw/T34+TPxV/Jr+
+         wRYvCOWsuko9wIIKhUvRCDj6p6AqrBLtb879xe5QfxEoMWA0oOP2AwXEqBkl56B94VY7
+         RVkJRfzKUJgTd8eOv00cyyC84J2r7ru7ucAdfhi147L2rrXQJkb66WRlfrHwubi2WwoX
+         IvWA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=24AjdVeorZwTFjcHq4izaVEveVUnIHNKgUQspSKXzvI=;
-        b=Ll6JLZmFwxII9D+uxVlaAFm/jmZJGwg41PI5k4VB4sPtKsKiQn0taBWGXOY1rumR3M
-         fNuGF27379mT80K3CxVlspJGkrpJT+wg7knNCXjV9IktyVDzk2aPx3rhWiM2UIR5l4e0
-         SZtNTrIy4ytZBxpWW+qawcwAOxSHDp1Q8Nef+0Ual5CKlALd1XMblM7aoHwNVl7oUkGD
-         k0K2gfutDwMeWrnVE1YHBvCTUp6EIdyM8QbQzKW/ae/qYjhjMHAR6RBQI5rm4IfM2Ihn
-         qh/sE/wl+pLTIqNZk+dUxvZgACn5rnSpkpuZ+YATJb6bMfYNwa2vRY3V7bjoFrQXgUB1
-         ku9Q==
-X-Gm-Message-State: APjAAAU1IT7iZwRuaQjuHNkP4EUTHsI9YoREndFFLTnaLhfjpu4/j8Lh
-        I7Nk+8wJVNdaRd9vm7kFrF6jyQ==
-X-Google-Smtp-Source: APXvYqzXZ50xr285y4ircRfLpCQLCoyu7pRVhllBkfGMDPkxzy45F/LNQfiCBNuBHZ3qU7yK6jaV6g==
-X-Received: by 2002:a50:ba13:: with SMTP id g19mr4363528edc.236.1556651275646;
-        Tue, 30 Apr 2019 12:07:55 -0700 (PDT)
+        bh=LCKlak7FYJZjHkPSI2bbY7nJMWKoi5EZ2NHkq7EYp70=;
+        b=nOidZMM2F7lqA1rMmYMGcdOJYBXgUY0ptf33NEUIJSEKv/Hp6SL8ThHacUMco6xFtd
+         zlsMvSneAZy8xofX2/awAUVUi+deW5YSlowx9YhfbaJJ/JE6IvoWNV4JRPvKIbUSg7Hj
+         1RgqABbs+BtLv+9aTvunOHsz/fr8FaAqKWpSV5gfMftZy9dMS+cw7SqdaHkVi2/YVqle
+         VQ9jOdTserRBBNsbeZ/GpPPbF1+n20qSiPrLiH1CQxZIHxHIcIynRaiSY8GKdhDBk5if
+         +frLsPyd9amNXjWRu/TJcGWZ4mYyo0AwgLQ/XAQbWxAkz238ivB73m11Ff9xJ08rjf0v
+         1LVA==
+X-Gm-Message-State: APjAAAWvAsFHWXIW/nW1CK2YylhIcMz9GNYeI1nr/hTIrNFwTEYHZiTn
+        V2/hZKK/HwOOK1OefAgYZ0/9Vw==
+X-Google-Smtp-Source: APXvYqwDoqoVx9/kf4i17lKyFZP6mfr/4+nawYEcxbpCJgPlhw7TcpaW3Q7lps7JmWOn03CRFGAzQw==
+X-Received: by 2002:a17:906:69d6:: with SMTP id g22mr2631702ejs.124.1556652061112;
+        Tue, 30 Apr 2019 12:21:01 -0700 (PDT)
 Received: from brauner.io ([212.91.227.56])
-        by smtp.gmail.com with ESMTPSA id p12sm4953528ejr.18.2019.04.30.12.07.53
+        by smtp.gmail.com with ESMTPSA id 44sm1386526eds.90.2019.04.30.12.20.59
         (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Tue, 30 Apr 2019 12:07:54 -0700 (PDT)
-Date:   Tue, 30 Apr 2019 21:07:53 +0200
+        Tue, 30 Apr 2019 12:21:00 -0700 (PDT)
+Date:   Tue, 30 Apr 2019 21:20:59 +0200
 From:   Christian Brauner <christian@brauner.io>
 To:     "Joel Fernandes (Google)" <joel@joelfernandes.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Andy Lutomirski <luto@amacapital.net>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Daniel Colascione <dancol@google.com>,
-        Jann Horn <jannh@google.com>,
-        Tim Murray <timmurray@google.com>,
-        Jonathan Kowalski <bl0pbl33p@gmail.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Kees Cook <keescook@chromium.org>,
-        David Howells <dhowells@redhat.com>,
-        Oleg Nesterov <oleg@redhat.com>, kernel-team@android.com,
+Cc:     linux-kernel@vger.kernel.org, Al Viro <viro@zeniv.linux.org.uk>,
         Andrew Morton <akpm@linux-foundation.org>,
+        Andy Lutomirski <luto@amacapital.net>,
         Arnd Bergmann <arnd@arndb.de>,
+        Daniel Colascione <dancol@google.com>,
+        David Howells <dhowells@redhat.com>,
         "Eric W. Biederman" <ebiederm@xmission.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Ingo Molnar <mingo@kernel.org>,
+        Ingo Molnar <mingo@kernel.org>, Jann Horn <jannh@google.com>,
+        Jonathan Kowalski <bl0pbl33p@gmail.com>,
+        Kees Cook <keescook@chromium.org>, kernel-team@android.com,
         KJ Tsanaktsidis <ktsanaktsidis@zendesk.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
         linux-kselftest@vger.kernel.org, Michal Hocko <mhocko@suse.com>,
-        Nadav Amit <namit@vmware.com>,
+        Nadav Amit <namit@vmware.com>, Oleg Nesterov <oleg@redhat.com>,
         "Peter Zijlstra (Intel)" <peterz@infradead.org>,
         Serge Hallyn <serge@hallyn.com>, Shuah Khan <shuah@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
         Thomas Gleixner <tglx@linutronix.de>,
+        Tim Murray <timmurray@google.com>,
         Tycho Andersen <tycho@tycho.ws>
-Subject: Re: [PATCH v2 1/2] Add polling support to pidfd
-Message-ID: <20190430190752.vwtq4kky6wdprm2d@brauner.io>
+Subject: Re: [PATCH v2 2/2] Add selftests for pidfd polling
+Message-ID: <20190430192057.ocevexvebfq2we3d@brauner.io>
 References: <20190430162154.61314-1-joel@joelfernandes.org>
+ <20190430162154.61314-2-joel@joelfernandes.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20190430162154.61314-1-joel@joelfernandes.org>
+In-Reply-To: <20190430162154.61314-2-joel@joelfernandes.org>
 User-Agent: NeoMutt/20180716
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Apr 30, 2019 at 12:21:53PM -0400, Joel Fernandes (Google) wrote:
-> Android low memory killer (LMK) needs to know when a process dies once
-> it is sent the kill signal. It does so by checking for the existence of
-> /proc/pid which is both racy and slow. For example, if a PID is reused
-> between when LMK sends a kill signal and checks for existence of the
-> PID, since the wrong PID is now possibly checked for existence.
+On Tue, Apr 30, 2019 at 12:21:54PM -0400, Joel Fernandes (Google) wrote:
+> Other than verifying pidfd based polling, the tests make sure that
+> wait semantics are preserved with the pidfd poll. Notably the 2 cases:
+> 1. If a thread group leader exits while threads still there, then no
+>    pidfd poll notifcation should happen.
+> 2. If a non-thread group leader does an execve, then the thread group
+>    leader is signaled to exit and is replaced with the execing thread
+>    as the new leader, however the parent is not notified in this case.
 > 
-> This patch adds polling support to pidfd. Using the polling support, LMK
-> will be able to get notified when a process exists in race-free and fast
-> way, and allows the LMK to do other things (such as by polling on other
-> fds) while awaiting the process being killed to die.
-> 
-> For notification to polling processes, we follow the same existing
-> mechanism in the kernel used when the parent of the task group is to be
-> notified of a child's death (do_notify_parent).  This is precisely when
-> the tasks waiting on a poll of pidfd are also awakened in this patch.
-> 
-> We have decided to include the waitqueue in struct pid for the following
-> reasons:
-> 1. The wait queue has to survive for the lifetime of the poll. Including
-> it in task_struct would not be option in this case because the task can
-> be reaped and destroyed before the poll returns.
-> 
-> 2. By including the struct pid for the waitqueue means that during
-> de_thread(), the new thread group leader automatically gets the new
-> waitqueue/pid even though its task_struct is different.
-> 
-> Appropriate test cases are added in the second patch to provide coverage
-> of all the cases the patch is handling.
-> 
-> Andy had a similar patch [1] in the past which was a good reference
-> however this patch tries to handle different situations properly related
-> to thread group existence, and how/where it notifies. And also solves
-> other bugs (waitqueue lifetime).  Daniel had a similar patch [2]
-> recently which this patch supercedes.
-> 
-> [1] https://lore.kernel.org/patchwork/patch/345098/
-> [2] https://lore.kernel.org/lkml/20181029175322.189042-1-dancol@google.com/
-> 
-> Cc: Andy Lutomirski <luto@amacapital.net>
-> Cc: Steven Rostedt <rostedt@goodmis.org>
-> Cc: Daniel Colascione <dancol@google.com>
-> Cc: Christian Brauner <christian@brauner.io>
-> Cc: Jann Horn <jannh@google.com>
-> Cc: Tim Murray <timmurray@google.com>
-> Cc: Jonathan Kowalski <bl0pbl33p@gmail.com>
-> Cc: Linus Torvalds <torvalds@linux-foundation.org>
-> Cc: Al Viro <viro@zeniv.linux.org.uk>
-> Cc: Kees Cook <keescook@chromium.org>
-> Cc: David Howells <dhowells@redhat.com>
-> Cc: Oleg Nesterov <oleg@redhat.com>
-> Cc: kernel-team@android.com
-> (Oleg improved the code by showing how to avoid tasklist_lock)
-> Suggested-by: Oleg Nesterov <oleg@redhat.com>
-> Co-developed-by: Daniel Colascione <dancol@google.com>
-> Signed-off-by: Daniel Colascione <dancol@google.com>
 > Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
-
-This looks good to me. Once Oleg has given his Ack/Review I'm going to
-move this into pidfd for-next and as mentioned before schedule it for
-5.3 after CLONE_PIDFD has been merged.
-
-Reviewed-by: Christian Brauner <christian@brauner.io>
-
-> 
 > ---
+>  tools/testing/selftests/pidfd/Makefile     |   2 +-
+>  tools/testing/selftests/pidfd/pidfd_test.c | 210 +++++++++++++++++++++
+>  2 files changed, 211 insertions(+), 1 deletion(-)
 > 
-> v1 -> v2:
-> * Restructure poll code to avoid tasklist_lock (Oleg)
-> * use task_pid instead of get_pid_task in notify_pidfd (Oleg)
-> * Added comments to code, commit message nits (Christian)
-> * Test case nits/improvements (Christian)
-> 
-> RFC -> v1:
-> * Based on CLONE_PIDFD patches: https://lwn.net/Articles/786244/
-> * Updated selftests.
-> * Renamed poll wake function to do_notify_pidfd.
-> * Removed depending on EXIT flags
-> * Removed POLLERR flag since semantics are controversial and
->   we don't have usecases for it right now (later we can add if there's
->   a need for it).
-> 
->  include/linux/pid.h |  3 +++
->  kernel/fork.c       | 29 +++++++++++++++++++++++++++++
->  kernel/pid.c        |  2 ++
->  kernel/signal.c     | 11 +++++++++++
->  4 files changed, 45 insertions(+)
-> 
-> diff --git a/include/linux/pid.h b/include/linux/pid.h
-> index 3c8ef5a199ca..1484db6ca8d1 100644
-> --- a/include/linux/pid.h
-> +++ b/include/linux/pid.h
-> @@ -3,6 +3,7 @@
->  #define _LINUX_PID_H
+> diff --git a/tools/testing/selftests/pidfd/Makefile b/tools/testing/selftests/pidfd/Makefile
+> index deaf8073bc06..4b31c14f273c 100644
+> --- a/tools/testing/selftests/pidfd/Makefile
+> +++ b/tools/testing/selftests/pidfd/Makefile
+> @@ -1,4 +1,4 @@
+> -CFLAGS += -g -I../../../../usr/include/
+> +CFLAGS += -g -I../../../../usr/include/ -lpthread
 >  
->  #include <linux/rculist.h>
-> +#include <linux/wait.h>
+>  TEST_GEN_PROGS := pidfd_test
 >  
->  enum pid_type
->  {
-> @@ -60,6 +61,8 @@ struct pid
->  	unsigned int level;
->  	/* lists of tasks that use this pid */
->  	struct hlist_head tasks[PIDTYPE_MAX];
-> +	/* wait queue for pidfd notifications */
-> +	wait_queue_head_t wait_pidfd;
->  	struct rcu_head rcu;
->  	struct upid numbers[1];
->  };
-> diff --git a/kernel/fork.c b/kernel/fork.c
-> index 5525837ed80e..721f8c9d2921 100644
-> --- a/kernel/fork.c
-> +++ b/kernel/fork.c
-> @@ -1685,8 +1685,37 @@ static void pidfd_show_fdinfo(struct seq_file *m, struct file *f)
->  }
->  #endif
+> diff --git a/tools/testing/selftests/pidfd/pidfd_test.c b/tools/testing/selftests/pidfd/pidfd_test.c
+> index d59378a93782..8b404ccbc4ff 100644
+> --- a/tools/testing/selftests/pidfd/pidfd_test.c
+> +++ b/tools/testing/selftests/pidfd/pidfd_test.c
+> @@ -4,18 +4,47 @@
+>  #include <errno.h>
+>  #include <fcntl.h>
+>  #include <linux/types.h>
+> +#include <pthread.h>
+>  #include <sched.h>
+>  #include <signal.h>
+>  #include <stdio.h>
+>  #include <stdlib.h>
+>  #include <string.h>
+>  #include <syscall.h>
+> +#include <sys/epoll.h>
+> +#include <sys/mman.h>
+>  #include <sys/mount.h>
+>  #include <sys/wait.h>
+> +#include <time.h>
+>  #include <unistd.h>
 >  
-> +/*
-> + * Poll support for process exit notification.
-> + */
-> +static unsigned int pidfd_poll(struct file *file, struct poll_table_struct *pts)
+>  #include "../kselftest.h"
+>  
+> +#define str(s) _str(s)
+> +#define _str(s) #s
+> +#define CHILD_THREAD_MIN_WAIT 3 /* seconds */
+> +
+> +#define MAX_EVENTS 5
+> +#ifndef __NR_pidfd_send_signal
+> +#define __NR_pidfd_send_signal 424
+> +#endif
+> +
+> +#ifndef CLONE_PIDFD
+> +#define CLONE_PIDFD 0x00001000
+> +#endif
+> +
+> +static pid_t pidfd_clone(int flags, int *pidfd, int (*fn)(void *))
 > +{
-> +	struct task_struct *task;
-> +	struct pid *pid = file->private_data;
-> +	int poll_flags = 0;
+> +	size_t stack_size = 1024;
+> +	char *stack[1024] = { 0 };
 > +
-> +	poll_wait(file, &pid->wait_pidfd, pts);
+> +#ifdef __ia64__
+> +	return __clone2(fn, stack, stack_size, flags | SIGCHLD, NULL, pidfd);
+> +#else
+> +	return clone(fn, stack + stack_size, flags | SIGCHLD, NULL, pidfd);
+> +#endif
+> +}
 > +
-> +	rcu_read_lock();
-> +	task = pid_task(pid, PIDTYPE_PID);
-> +	WARN_ON_ONCE(task && !thread_group_leader(task));
+>  static inline int sys_pidfd_send_signal(int pidfd, int sig, siginfo_t *info,
+>  					unsigned int flags)
+>  {
+> @@ -368,10 +397,191 @@ static int test_pidfd_send_signal_syscall_support(void)
+>  	return 0;
+>  }
+>  
+> +static void *test_pidfd_poll_exec_thread(void *priv)
+> +{
+> +	ksft_print_msg("Child Thread: starting. pid %d tid %d ; and sleeping\n",
+> +			getpid(), syscall(SYS_gettid));
+> +	ksft_print_msg("Child Thread: doing exec of sleep\n");
+> +
+> +	execl("/bin/sleep", "sleep", str(CHILD_THREAD_MIN_WAIT), (char *)NULL);
+> +
+> +	ksft_print_msg("Child Thread: DONE. pid %d tid %d\n",
+> +			getpid(), syscall(SYS_gettid));
+> +	return NULL;
+> +}
+> +
+> +static void poll_pidfd(const char *test_name, int pidfd)
+> +{
+> +	int c;
+> +	int epoll_fd = epoll_create1(EPOLL_CLOEXEC);
+> +	struct epoll_event event, events[MAX_EVENTS];
+> +
+> +	if (epoll_fd == -1)
+> +		ksft_exit_fail_msg("%s test: Failed to create epoll file descriptor "
+> +				   "(errno %d)\n",
+> +				   test_name, errno);
+> +
+> +	event.events = EPOLLIN;
+> +	event.data.fd = pidfd;
+> +
+> +	if (epoll_ctl(epoll_fd, EPOLL_CTL_ADD, pidfd, &event)) {
+> +		ksft_exit_fail_msg("%s test: Failed to add epoll file descriptor "
+> +				   "(errno %d)\n",
+> +				   test_name, errno);
+> +	}
+> +
+> +	c = epoll_wait(epoll_fd, events, MAX_EVENTS, 5000);
+> +	if (c != 1 || !(events[0].events & EPOLLIN))
+> +		ksft_exit_fail_msg("%s test: Unexpected epoll_wait result (c=%d, events=%x) ",
+> +				   "(errno %d)\n",
+> +				   test_name, c, events[0].events, errno);
+> +
+> +	close(epoll_fd);
+> +	return;
+
+nit: Function with void usually do not do an explicit return at the end. :)
+
+> +
+> +}
+> +
+> +static int child_poll_exec_test(void *args)
+> +{
+> +	pthread_t t1;
+> +
+> +	ksft_print_msg("Child (pidfd): starting. pid %d tid %d\n", getpid(),
+> +			syscall(SYS_gettid));
+> +	pthread_create(&t1, NULL, test_pidfd_poll_exec_thread, NULL);
+> +	/*
+> +	 * Exec in the non-leader thread will destroy the leader immediately.
+> +	 * If the wait in the parent returns too soon, the test fails.
+> +	 */
+> +	while (1)
+> +		sleep(1);
+> +}
+> +
+> +static int test_pidfd_poll_exec(int use_waitpid)
+
+Please make int use_waitpid a proper bool and make the function void as
+it's return value is never checked in main.
+
+(I know the other ones in the test file here do the same thing and I
+should switch them to void soon at some point.)
+
+> +{
+> +	int pid, pidfd = 0;
+> +	int status, ret;
+> +	pthread_t t1;
+> +	time_t prog_start = time(NULL);
+> +	const char *test_name = "pidfd_poll check for premature notification on child thread exec";
+> +
+> +	ksft_print_msg("Parent: pid: %d\n", getpid());
+> +	pid = pidfd_clone(CLONE_PIDFD, &pidfd, child_poll_exec_test);
+> +	if (pid < 0)
+> +		ksft_exit_fail_msg("%s test: pidfd_clone failed (ret %d, errno %d)\n",
+> +				   test_name, pid, errno);
+> +
+> +	ksft_print_msg("Parent: Waiting for Child (%d) to complete.\n", pid);
+> +
+> +	if (use_waitpid) {
+> +		ret = waitpid(pid, &status, 0);
+> +		if (ret == -1)
+> +			ksft_print_msg("Parent: error\n");
+> +
+> +		if (ret == pid)
+> +			ksft_print_msg("Parent: Child process waited for.\n");
+> +	} else {
+> +		poll_pidfd(test_name, pidfd);
+> +	}
+> +
+> +	time_t prog_time = time(NULL) - prog_start;
+> +
+> +	ksft_print_msg("Time waited for child: %lu\n", prog_time);
+> +
+> +	close(pidfd);
+> +
+> +	if (prog_time < CHILD_THREAD_MIN_WAIT || prog_time > CHILD_THREAD_MIN_WAIT + 2)
+
+I'm sorry, can you please either briefly explain or comment where
+this +2 comes from? Why is that the cut-off?
+
+> +		ksft_exit_fail_msg("%s test: Failed\n", test_name);
+> +	else
+> +		ksft_test_result_pass("%s test: Passed\n", test_name);
+> +}
+> +
+> +static void *test_pidfd_poll_leader_exit_thread(void *priv)
+> +{
+> +	ksft_print_msg("Child Thread: starting. pid %d tid %d ; and sleeping\n",
+> +			getpid(), syscall(SYS_gettid));
+> +	sleep(CHILD_THREAD_MIN_WAIT);
+> +	ksft_print_msg("Child Thread: DONE. pid %d tid %d\n", getpid(), syscall(SYS_gettid));
+> +	return NULL;
+> +}
+> +
+> +static time_t *child_exit_secs;
+> +static int child_poll_leader_exit_test(void *args)
+> +{
+> +	pthread_t t1, t2;
+> +
+> +	ksft_print_msg("Child: starting. pid %d tid %d\n", getpid(), syscall(SYS_gettid));
+> +	pthread_create(&t1, NULL, test_pidfd_poll_leader_exit_thread, NULL);
+> +	pthread_create(&t2, NULL, test_pidfd_poll_leader_exit_thread, NULL);
 > +
 > +	/*
-> +	 * Inform pollers only when the whole thread group exits, if thread
-> +	 * group leader exits before all other threads in the group, then
-> +	 * poll(2) should block, similar to the wait(2) family.
+> +	 * glibc exit calls exit_group syscall, so explicity call exit only
+> +	 * so that only the group leader exits, leaving the threads alone.
 > +	 */
-> +	if (!task || (task->exit_state && thread_group_empty(task)))
-> +		poll_flags = POLLIN | POLLRDNORM;
-> +	rcu_read_unlock();
-> +
-> +	return poll_flags;
+> +	*child_exit_secs = time(NULL);
+
+Why is child_exit_secs a pointer?
+
+
+> +	syscall(SYS_exit, 0);
 > +}
 > +
-> +
->  const struct file_operations pidfd_fops = {
->  	.release = pidfd_release,
-> +	.poll = pidfd_poll,
->  #ifdef CONFIG_PROC_FS
->  	.show_fdinfo = pidfd_show_fdinfo,
->  #endif
-> diff --git a/kernel/pid.c b/kernel/pid.c
-> index 20881598bdfa..5c90c239242f 100644
-> --- a/kernel/pid.c
-> +++ b/kernel/pid.c
-> @@ -214,6 +214,8 @@ struct pid *alloc_pid(struct pid_namespace *ns)
->  	for (type = 0; type < PIDTYPE_MAX; ++type)
->  		INIT_HLIST_HEAD(&pid->tasks[type]);
->  
-> +	init_waitqueue_head(&pid->wait_pidfd);
-> +
->  	upid = pid->numbers + ns->level;
->  	spin_lock_irq(&pidmap_lock);
->  	if (!(ns->pid_allocated & PIDNS_ADDING))
-> diff --git a/kernel/signal.c b/kernel/signal.c
-> index 1581140f2d99..a17fff073c3d 100644
-> --- a/kernel/signal.c
-> +++ b/kernel/signal.c
-> @@ -1800,6 +1800,14 @@ int send_sigqueue(struct sigqueue *q, struct pid *pid, enum pid_type type)
->  	return ret;
->  }
->  
-> +static void do_notify_pidfd(struct task_struct *task)
+> +static int test_pidfd_poll_leader_exit(int use_waitpid)
+
+Should be void as it's return value isn't checked at all.
+
+(I know the other ones in the test file here do the same thing and I
+should switch them to void soon at some point.)
+
 > +{
-> +	struct pid *pid;
+> +	int pid, pidfd = 0;
+> +	int status, ret;
+> +	time_t prog_start = time(NULL);
+> +	const char *test_name = "pidfd_poll check for premature notification on non-empty"
+> +				"group leader exit";
 > +
-> +	pid = task_pid(task);
-> +	wake_up_all(&pid->wait_pidfd);
+> +	child_exit_secs = mmap(NULL, sizeof *child_exit_secs, PROT_READ | PROT_WRITE,
+> +			MAP_SHARED | MAP_ANONYMOUS, -1, 0);
+> +
+> +	if (child_exit_secs == MAP_FAILED)
+> +		ksft_exit_fail_msg("%s test: mmap failed (errno %d)\n",
+> +				   test_name, errno);
+> +
+> +	ksft_print_msg("Parent: pid: %d\n", getpid());
+> +	pid = pidfd_clone(CLONE_PIDFD, &pidfd, child_poll_leader_exit_test);
+> +	if (pid < 0)
+> +		ksft_exit_fail_msg("%s test: pidfd_clone failed (ret %d, errno %d)\n",
+> +				   test_name, pid, errno);
+> +
+> +	ksft_print_msg("Parent: Waiting for Child (%d) to complete.\n", pid);
+> +
+> +	if (use_waitpid) {
+> +		ret = waitpid(pid, &status, 0);
+> +		if (ret == -1)
+> +			ksft_print_msg("Parent: error\n");
+> +	} else {
+> +		/*
+> +		 * This sleep tests for the case where if the child exits, and is in
+> +		 * EXIT_ZOMBIE, but the thread group leader is non-empty, then the poll
+> +		 * doesn't prematurely return even though there are active threads
+> +		 */
+> +		sleep(1);
+> +		poll_pidfd(test_name, pidfd);
+> +	}
+> +
+> +	if (ret == pid)
+> +		ksft_print_msg("Parent: Child process waited for.\n");
+> +
+> +	time_t since_child_exit = time(NULL) - *child_exit_secs;
+> +
+> +	ksft_print_msg("Time since child exit: %lu\n", since_child_exit);
+> +
+> +	close(pidfd);
+> +
+> +	if (since_child_exit < CHILD_THREAD_MIN_WAIT ||
+> +			since_child_exit > CHILD_THREAD_MIN_WAIT + 2)
+
+Same question as above.
+
+> +		ksft_exit_fail_msg("%s test: Failed\n", test_name);
+> +	else
+> +		ksft_test_result_pass("%s test: Passed\n", test_name);
 > +}
 > +
->  /*
->   * Let a parent know about the death of a child.
->   * For a stopped/continued status change, use do_notify_parent_cldstop instead.
-> @@ -1823,6 +1831,9 @@ bool do_notify_parent(struct task_struct *tsk, int sig)
->  	BUG_ON(!tsk->ptrace &&
->  	       (tsk->group_leader != tsk || !thread_group_empty(tsk)));
+>  int main(int argc, char **argv)
+>  {
+>  	ksft_print_header();
 >  
-> +	/* Wake up all pidfd waiters */
-> +	do_notify_pidfd(tsk);
-> +
->  	if (sig != SIGCHLD) {
->  		/*
->  		 * This is only possible if parent == real_parent.
+> +	test_pidfd_poll_exec(0);
+
+test_pidfd_poll_exec(false);
+
+> +	test_pidfd_poll_exec(1);
+
+test_pidfd_poll_exec(true);
+
+> +	test_pidfd_poll_leader_exit(0);
+
+test_pidfd_poll_leader_exit(false);
+
+> +	test_pidfd_poll_leader_exit(1);
+
+test_pidfd_poll_leader_exit(true);
+
+>  	test_pidfd_send_signal_syscall_support();
+>  	test_pidfd_send_signal_simple_success();
+>  	test_pidfd_send_signal_exited_fail();
 > -- 
 > 2.21.0.593.g511ec345e18-goog
+> 
