@@ -2,149 +2,148 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 437B5FD2B
-	for <lists+linux-kselftest@lfdr.de>; Tue, 30 Apr 2019 17:49:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A2F9FD8D
+	for <lists+linux-kselftest@lfdr.de>; Tue, 30 Apr 2019 18:11:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726244AbfD3Pt0 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 30 Apr 2019 11:49:26 -0400
-Received: from mail-pf1-f196.google.com ([209.85.210.196]:38385 "EHLO
-        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726209AbfD3PtZ (ORCPT
+        id S1726203AbfD3QLs (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 30 Apr 2019 12:11:48 -0400
+Received: from mail-lf1-f67.google.com ([209.85.167.67]:36297 "EHLO
+        mail-lf1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725942AbfD3QLr (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 30 Apr 2019 11:49:25 -0400
-Received: by mail-pf1-f196.google.com with SMTP id 10so7265788pfo.5
-        for <linux-kselftest@vger.kernel.org>; Tue, 30 Apr 2019 08:49:25 -0700 (PDT)
+        Tue, 30 Apr 2019 12:11:47 -0400
+Received: by mail-lf1-f67.google.com with SMTP id u17so11341350lfi.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 30 Apr 2019 09:11:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=ah7OC5skPsoE6RCcUpTOKboXwH/ADgkzZH3P4SrcC1Y=;
-        b=obZOjzk6FnDYA2dTzwPkHb/HsAn/gL3Be7hzAQGlgvdW0rEL+GY/aeYTLr7fUtru1F
-         DEb76d4ClMFrmM0dAcMwzKbb3H541DhXuqRkSeyYrmpVLlZWJRM2A5H6TIE8nzgn1BUB
-         8BAnZpwEtxn2OOicE1LlRcEc5v4ylz/c7fCTI=
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=I8IWSyZfLA4XVOsmM4DscMmixmVfvW4j4t9n7Z2aPEk=;
+        b=W6fmTN0+D899+DLFXEO0qv05jRrqGLHpOnj5hjbo6BgYsF8/3yQk/MgOBusQc/+nur
+         zEcvFY9Ms51BaYKVfQUT4d8XQLgPU3hFz4sUMV31rJJ+EwViTRrCjM/neFZh3KWEKiVH
+         36y5Lj+2NTIPCZFvYHm6hgeuBfzI0lc+RedSY=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=ah7OC5skPsoE6RCcUpTOKboXwH/ADgkzZH3P4SrcC1Y=;
-        b=BWbK673DgdGCZfUb0y2Z1WAlv/fCDjdFW/PvwQfVfnVL5zQR8K6+DSSkzgS+KbCK1m
-         L29MBblm1pItRZX7c8407aDZ+XI6x1GiNSsn0u9ThAiSWpiigYLW8Ztf8UmOybz5zMcn
-         c+ViMPsis1ncK5484nJF+h7UhKca5ZTnb3U2fQ3EdWpbuAh7j+ox27f7GNlJYNkPFsBU
-         2zELy5QzD3UViL3BUIChKS3YGWY2wlqqknx2urcqU8bNiblD/f0s49s27LMxXFPOcRbP
-         +1PNnzRXr5qcChMn4L7dkZHhDDrQad6Notwd0eux6nYUO8AvvZUspYjF3jh04Yx5CJ6T
-         D4OQ==
-X-Gm-Message-State: APjAAAWaPBNyocfxLylW4P4FzfK3+rbftiNBFk3Pn3hwv7k7Uqg1SdZH
-        pws/9s4Sz+0GLme30PnBXU+yVQ==
-X-Google-Smtp-Source: APXvYqyTV7uct7zm+TXCL/AlMhz+vIwHlNrqHVuIog9kEr1nZ/RnMmXN5o1PGgzF3dEsXmSMCFsU9g==
-X-Received: by 2002:a63:541d:: with SMTP id i29mr38553959pgb.174.1556639364354;
-        Tue, 30 Apr 2019 08:49:24 -0700 (PDT)
-Received: from localhost ([2620:15c:6:12:9c46:e0da:efbf:69cc])
-        by smtp.gmail.com with ESMTPSA id d38sm43687027pgd.40.2019.04.30.08.49.22
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Tue, 30 Apr 2019 08:49:23 -0700 (PDT)
-Date:   Tue, 30 Apr 2019 11:49:21 -0400
-From:   Joel Fernandes <joel@joelfernandes.org>
-To:     Oleg Nesterov <oleg@redhat.com>
-Cc:     Christian Brauner <christian@brauner.io>,
-        linux-kernel@vger.kernel.org, luto@amacapital.net,
-        rostedt@goodmis.org, dancol@google.com, sspatil@google.com,
-        jannh@google.com, surenb@google.com, timmurray@google.com,
-        Jonathan Kowalski <bl0pbl33p@gmail.com>,
-        torvalds@linux-foundation.org, kernel-team@android.com,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Ingo Molnar <mingo@kernel.org>, Jann Horn <jann@thejh.net>,
-        linux-kselftest@vger.kernel.org, Michal Hocko <mhocko@suse.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Serge Hallyn <serge@hallyn.com>, Shuah Khan <shuah@kernel.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Tycho Andersen <tycho@tycho.ws>, viro@zeniv.linux.org.uk,
-        linux-api@vger.kernel.org
-Subject: Re: [PATCH v1 1/2] Add polling support to pidfd
-Message-ID: <20190430154507.GA792@google.com>
-References: <20190425190010.46489-1-joel@joelfernandes.org>
- <20190425222359.sqhboc4x4daznr6r@brauner.io>
- <20190428162405.GA6757@redhat.com>
- <20190429140245.GB233442@google.com>
- <20190429142030.GA17715@redhat.com>
- <20190429163259.GA201155@google.com>
- <20190430115332.GB23020@redhat.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=I8IWSyZfLA4XVOsmM4DscMmixmVfvW4j4t9n7Z2aPEk=;
+        b=D5f+XUCDMa3IiIEQRi/qrmueq95lVCfoFDo7J8ueGjzyxYFohtQmjZU488SAsFrzcX
+         0KCFaJfycwT/5VH0Y5kUayfml81Tl1M9e4lc8c0ZJD84dezsSlQooA+ciAyTfTnM2hTE
+         ZNBnhm0P54/Yy4SAqfc0WJCA7OXlDIctk4JvJ2thQhJfNJRx7AZhJ4flGNdbo7vyn327
+         /oFMrnmYJfw9DoN28W/FQ7rFxKxPny04LcmGuKdCA77gv5yxEgGFrX1WKomcLlZ/IN6U
+         XbY5MvG3SW67/dpWCFMIsGRz2uVpUUzidDV0zP9Z0cCoc+J8lne0t+adPLwvUl6L3ZtC
+         1y5Q==
+X-Gm-Message-State: APjAAAXy8L8wgPzDBMb1b7bjY/LNtCYzPnL7CBHQFVaVjvRXUbYe8xy0
+        iXt54GQ5j14v0mWP+yR579O4oraJCSk=
+X-Google-Smtp-Source: APXvYqyXA4Y2Votcax0SC9ryklZykDNpU7iwHzTLoZjjT0I/p9dbEGWncwgfFO5hu7lVYsRD2WhtFA==
+X-Received: by 2002:a19:a94d:: with SMTP id s74mr21791582lfe.134.1556640703847;
+        Tue, 30 Apr 2019 09:11:43 -0700 (PDT)
+Received: from mail-lj1-f179.google.com (mail-lj1-f179.google.com. [209.85.208.179])
+        by smtp.gmail.com with ESMTPSA id c24sm919332ljj.46.2019.04.30.09.11.43
+        for <linux-kselftest@vger.kernel.org>
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 30 Apr 2019 09:11:43 -0700 (PDT)
+Received: by mail-lj1-f179.google.com with SMTP id d15so1380524ljc.7
+        for <linux-kselftest@vger.kernel.org>; Tue, 30 Apr 2019 09:11:43 -0700 (PDT)
+X-Received: by 2002:a2e:8090:: with SMTP id i16mr11128807ljg.135.1556640377738;
+ Tue, 30 Apr 2019 09:06:17 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190430115332.GB23020@redhat.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20190428133826.3e142cfd@oasis.local.home> <CAHk-=wh5OpheSU8Em_Q3Hg8qw_JtoijxOdPtHru6d+5K8TWM=A@mail.gmail.com>
+ <CAHk-=wjphmrQXMfbw9j-tTzDvJ+Uc+asMHdFa=1_1xZoYVUC=g@mail.gmail.com>
+ <CALCETrXvmZPHsfRVnW0AtyddfN-2zaCmWn+FsrF6XPTOFd_Jmw@mail.gmail.com>
+ <CAHk-=whtt4K2f0KPtG-4Pykh3FK8UBOjD8jhXCUKB5nWDj_YRA@mail.gmail.com>
+ <CALCETrWELBCK-kqX5FCEDVUy8kCT-yVu7m_7Dtn=GCsHY0Du5A@mail.gmail.com>
+ <CAHk-=wgewK4eFhF3=0RNtk1KQjMANFH6oDE=8m=84RExn2gxhw@mail.gmail.com>
+ <CAHk-=whay7eN6+2gZjY-ybRbkbcqAmgrLwwszzHx8ws3c=S-MA@mail.gmail.com>
+ <CALCETrXzVU0Q7u1q=QFPaDr=aojjF5cjbOi9CxxXnp5GqTqsWA@mail.gmail.com>
+ <CAHk-=wg1QPz0m+7jnVcjQgkySUQLzAXE8_PZARV-vWYK27LB=w@mail.gmail.com> <20190430135602.GD2589@hirez.programming.kicks-ass.net>
+In-Reply-To: <20190430135602.GD2589@hirez.programming.kicks-ass.net>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Tue, 30 Apr 2019 09:06:01 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wg7vUGMRHyBsLig6qiPK0i4_BK3bRrTN+HHHziUGg1P_A@mail.gmail.com>
+Message-ID: <CAHk-=wg7vUGMRHyBsLig6qiPK0i4_BK3bRrTN+HHHziUGg1P_A@mail.gmail.com>
+Subject: Re: [PATCH 3/4] x86/ftrace: make ftrace_int3_handler() not to skip
+ fops invocation
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Andy Lutomirski <luto@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Nicolai Stange <nstange@suse.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Jiri Kosina <jikos@kernel.org>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Petr Mladek <pmladek@suse.com>,
+        Joe Lawrence <joe.lawrence@redhat.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
+        Tim Chen <tim.c.chen@linux.intel.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Juergen Gross <jgross@suse.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nayna Jain <nayna@linux.ibm.com>,
+        Masahiro Yamada <yamada.masahiro@socionext.com>,
+        Joerg Roedel <jroedel@suse.de>,
+        Linux List Kernel Mailing <linux-kernel@vger.kernel.org>,
+        live-patching@vger.kernel.org,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Apr 30, 2019 at 01:53:33PM +0200, Oleg Nesterov wrote:
-> On 04/29, Joel Fernandes wrote:
+On Tue, Apr 30, 2019 at 6:56 AM Peter Zijlstra <peterz@infradead.org> wrote:
+>
+> On Mon, Apr 29, 2019 at 01:07:33PM -0700, Linus Torvalds wrote:
 > >
-> > On Mon, Apr 29, 2019 at 04:20:30PM +0200, Oleg Nesterov wrote:
-> > > On 04/29, Joel Fernandes wrote:
-> > > >
-> > > > However, in your code above, it is avoided because we get:
-> > > >
-> > > > Task A (poller)		Task B (exiting task being polled)
-> > > > ------------            ----------------
-> > > > poll() called
-> > > > add_wait_queue()
-> > > > 			exit_state is set to non-zero
-> > > > read exit_state
-> > > > remove_wait_queue()
-> > > > 			wake_up_all()
-> > >
-> > > just to clarify... No, sys_poll() path doesn't do remove_wait_queue() until
-> > > it returns to user mode, and that is why we can't race with set-exit_code +
-> > > wake_up().
-> >
-> > I didn't follow what you mean, the removal from the waitqueue happens in
-> > free_poll_entry() called from poll_freewait() which happens from
-> > do_sys_poll() which is before the syscall returns to user mode. Could you
-> > explain more?
-> 
-> Hmm. I do not really understand the question... Sure, do_sys_poll() does
-> poll_freewait() before sysret or even before return from syscall, but why
-> does this matter? This is the exit path, it frees the memory, does fput(),
-> etc, f_op->poll() won't be call after that.
+> > We still have that sti sysexit in the 32-bit code.
+>
+> We also have both: "STI; HLT" and "STI; MWAIT" where we rely on the STI
+> shadow.
 
-Ok, we are on the same page on this.
+I guess the good news is that in all cases we really only ever protect
+against a very unlikely race, and if the race happens it's not
+actually fatal.
 
-> > > pidfd_poll() can race with the exiting task, miss exit_code != 0, and return
-> > > zero. However, do_poll() won't block after that and pidfd_poll() will be called
-> > > again.
-> >
-> > Here also I didn't follow what you mean. If exit_code is read as 0 in
-> > pidfd_poll(), then in do_poll() the count will be 0 and it will block in
-> > poll_schedule_timeout(). Right?
-> 
-> No. Please note the pwq->triggered check and please read __pollwake().
-> 
-> But if you want to understand this you can forget about poll/select. It is
-> a bit complicated, in particular because it has to do set_current_state()
-> right  before schedule() and thus it plays games with pwq->triggered. But in
-> essence this doesn't differ too much from the plain wait_event-like code
-> (although you can also look at wait_woken/woken_wake_function).
-> 
-> If remove_wait_queue() could happem before wake_up_all() (like in your pseudo-
-> code above), then pidfd_poll() or any other ->poll() method could miss _both_
-> the condition and wakeup. But sys_poll() doesn't do this, so it is fine to miss
-> the condition and rely on wake_up_all() which ensures we won't block and the
-> next iteration must see condition == T.
+Yes, if we get an NMI and then an interrupt in between the "st;hlt" we
+might wait for the next interrupt and get a (potentially fairly
+horrible) latency issue. I guess that with maximal luck it might be a
+one-shot timer and not get re-armed, but it sounds very very very
+unlikely.
 
-Agreed. In my pseudo-code above, I meant removal from waitqueue only once we
-are not going to be blocking in poll and returning to userspace. I may have
-messed the sequence of events, but my point was to show the race I had in
-mind (missing a wake up due to adding to the waitqueue too late inside
-pidfd_poll()).  Anyway, I will repost with your suggested change and send it
-soon. Thanks for the discussions.
+Googling around, I actually find a patch from Avi Kivity from back in
+2010 for this exact issue, apparently because kvm got this case wrong
+and somebody hit it. The patch never made it upstream exactly because
+kvm could be fixed and people decided that most real hardware didn't
+have the issue in the first place.
 
-thanks,
+In the discussion I found, Peter Anvin tried to get confirmation from
+AMD engineers about this too, but I don't see any resolution.
 
- - Joel
+Realistically, I don't think you can hit the problem in practice. The
+only way to hit that incredibly small race of "one instruction, *both*
+NMI and interrupts" is to have a lot of interrupts going all at the
+same time, but that will also then solve the latency problem, so the
+very act of triggering it will also fix it.
 
+I don't see any case where it's really bad. The "sti sysexit" race is
+similar, just about latency of user space signal reporting (and
+perhaps any pending TIF_WORK_xyz flags).
+
+So maybe we don't care deeply about the sti shadow. It's a potential
+latecy problem when broken, but not a huge issue. And for the
+instruction rewriting hack, moving to "push+sti+ret" also makes a lost
+sti shadow just a "possibly odd stack frame visibility" issue rather
+than anything deeply fatal.
+
+We can probably just write it off as "some old CPU's (and a smattering
+or very rare and not relevant new ones) have potential but unlikely
+latency issues because of a historical CPU mis-design - don't do perf
+on them".
+
+                Linus
