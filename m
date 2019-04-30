@@ -2,352 +2,154 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 00772FDBA
-	for <lists+linux-kselftest@lfdr.de>; Tue, 30 Apr 2019 18:22:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 764D2FDFF
+	for <lists+linux-kselftest@lfdr.de>; Tue, 30 Apr 2019 18:34:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726431AbfD3QWX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 30 Apr 2019 12:22:23 -0400
-Received: from mail-pl1-f195.google.com ([209.85.214.195]:37369 "EHLO
-        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726048AbfD3QWX (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 30 Apr 2019 12:22:23 -0400
-Received: by mail-pl1-f195.google.com with SMTP id z8so6972831pln.4
-        for <linux-kselftest@vger.kernel.org>; Tue, 30 Apr 2019 09:22:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=+Y43YbmIOB0Qk1pxLpeQ+huaB4E29PSD97QFlwu/9zQ=;
-        b=kv2kWG3TEBOd8W/Tcco64TZP9JSGUKVbLS9QLAezRBpzlddDt4+nTS1OoitiwNCBew
-         fqJeEQVf5co62HnUNsiqmLbbO3G7ZljHGK7NJWw4MEFLoPA1NWuwJFBKtLlidx97W47j
-         hRtZDnkdmFH28/lEAjCpcdoPxLpbJKG9iPKNU=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=+Y43YbmIOB0Qk1pxLpeQ+huaB4E29PSD97QFlwu/9zQ=;
-        b=oNfsFH8ySN9ANUIN9P1XJPf9fQCJ3Ddaizj0xfu0yvyydZQNt6d+9LQopaP3ic2J7f
-         6/kXh82cdILp3YZ2yi8KmOHX07LQoujydGqDSNRLBtu8qZ0NXMspJZicx6qNXrZUZKog
-         yAUxv+ASct6QJYoQI7tSkg2D+u0YeWGYZHxKcvEWEk/aBFin2eX0f/BTS+MpQCX8ka+o
-         33SsJzsli/Sjd28v6TRGpBWgLVcC2K+Y2Um4UbPKBHJ8DO8yjvWXVFLmx4DdE+0Ad2tZ
-         2IYKVJHOVxRKV/O6EHjzEOj4I3SlE8V8qik5K6DlWtBvq8/pn82T4qGsi9EX9cEXmCuH
-         K3zQ==
-X-Gm-Message-State: APjAAAWPG8yzXdMn2tKtQNHJzqmHpKqT3xIGb8nHArFCP+BjjB9RTQi6
-        jODDjOS0wnLtmc+yv1WbaVT92w==
-X-Google-Smtp-Source: APXvYqzm+DtnEvcFa5DnTWOASdwZoi8VIfDdfZP70oXEfH+EDZ4Mn0F2/ZPYwdoZasvq9hSk66RhZg==
-X-Received: by 2002:a17:902:822:: with SMTP id 31mr69673738plk.41.1556641342684;
-        Tue, 30 Apr 2019 09:22:22 -0700 (PDT)
-Received: from joelaf.cam.corp.google.com ([2620:15c:6:12:9c46:e0da:efbf:69cc])
-        by smtp.gmail.com with ESMTPSA id y68sm2201059pfy.28.2019.04.30.09.22.19
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 30 Apr 2019 09:22:21 -0700 (PDT)
-From:   "Joel Fernandes (Google)" <joel@joelfernandes.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     "Joel Fernandes (Google)" <joel@joelfernandes.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Christian Brauner <christian@brauner.io>,
-        Daniel Colascione <dancol@google.com>,
-        David Howells <dhowells@redhat.com>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Ingo Molnar <mingo@kernel.org>, Jann Horn <jannh@google.com>,
-        Jonathan Kowalski <bl0pbl33p@gmail.com>,
-        Kees Cook <keescook@chromium.org>, kernel-team@android.com,
-        KJ Tsanaktsidis <ktsanaktsidis@zendesk.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-kselftest@vger.kernel.org, Michal Hocko <mhocko@suse.com>,
-        Nadav Amit <namit@vmware.com>, Oleg Nesterov <oleg@redhat.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Serge Hallyn <serge@hallyn.com>, Shuah Khan <shuah@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Tim Murray <timmurray@google.com>,
-        Tycho Andersen <tycho@tycho.ws>
-Subject: [PATCH v2 2/2] Add selftests for pidfd polling
-Date:   Tue, 30 Apr 2019 12:21:54 -0400
-Message-Id: <20190430162154.61314-2-joel@joelfernandes.org>
-X-Mailer: git-send-email 2.21.0.593.g511ec345e18-goog
-In-Reply-To: <20190430162154.61314-1-joel@joelfernandes.org>
-References: <20190430162154.61314-1-joel@joelfernandes.org>
+        id S1726049AbfD3QeM (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 30 Apr 2019 12:34:12 -0400
+Received: from mail.kernel.org ([198.145.29.99]:58288 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726167AbfD3QeI (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 30 Apr 2019 12:34:08 -0400
+Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 5E7B621783
+        for <linux-kselftest@vger.kernel.org>; Tue, 30 Apr 2019 16:34:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1556642046;
+        bh=+7m+vDUlDtrlaNOzQneMzscMBhl0wuy482hLt99Pw24=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=SQ3WD6JGj2rfpj1pZpQt9iBLCEw3KJUoQ0o0OruuyIpbQgwpRt1MXShYRRcRy0Usp
+         gAeC1aF/3cUrFIIdAyRkO3dlJb8Ys5+aLXJk9/34BsSDYhvXqPhUjGKyfYAxejyYl/
+         nCyI8zJ0pmp/laRF1qEXhGhS5UUwT3twrheTvF+o=
+Received: by mail-wr1-f54.google.com with SMTP id s18so21857269wrp.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 30 Apr 2019 09:34:06 -0700 (PDT)
+X-Gm-Message-State: APjAAAVsieIIh21kNdnTw8OlaSO1JpXYdePi/2mF5J+71mY4N0LhGiqg
+        O2K+lZNFx5vzIDCfFI8aZ50FOJ2y2EYAEoigK9oCcA==
+X-Google-Smtp-Source: APXvYqw/JUfSK40rBP/CjGQtWaZs/dUObYS+HMalp4FiLimIf58D0PzjA0iOWcIZ4E+bI9N8YBmphCEO5sC4OrJN4os=
+X-Received: by 2002:a5d:4b0c:: with SMTP id v12mr30170120wrq.330.1556642043097;
+ Tue, 30 Apr 2019 09:34:03 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20190428133826.3e142cfd@oasis.local.home> <CAHk-=wh5OpheSU8Em_Q3Hg8qw_JtoijxOdPtHru6d+5K8TWM=A@mail.gmail.com>
+ <CAHk-=wjphmrQXMfbw9j-tTzDvJ+Uc+asMHdFa=1_1xZoYVUC=g@mail.gmail.com>
+ <CALCETrXvmZPHsfRVnW0AtyddfN-2zaCmWn+FsrF6XPTOFd_Jmw@mail.gmail.com>
+ <CAHk-=whtt4K2f0KPtG-4Pykh3FK8UBOjD8jhXCUKB5nWDj_YRA@mail.gmail.com>
+ <CALCETrWELBCK-kqX5FCEDVUy8kCT-yVu7m_7Dtn=GCsHY0Du5A@mail.gmail.com>
+ <CAHk-=wgewK4eFhF3=0RNtk1KQjMANFH6oDE=8m=84RExn2gxhw@mail.gmail.com>
+ <CAHk-=whay7eN6+2gZjY-ybRbkbcqAmgrLwwszzHx8ws3c=S-MA@mail.gmail.com>
+ <CALCETrXzVU0Q7u1q=QFPaDr=aojjF5cjbOi9CxxXnp5GqTqsWA@mail.gmail.com>
+ <CAHk-=wg1QPz0m+7jnVcjQgkySUQLzAXE8_PZARV-vWYK27LB=w@mail.gmail.com>
+ <20190430135602.GD2589@hirez.programming.kicks-ass.net> <CAHk-=wg7vUGMRHyBsLig6qiPK0i4_BK3bRrTN+HHHziUGg1P_A@mail.gmail.com>
+In-Reply-To: <CAHk-=wg7vUGMRHyBsLig6qiPK0i4_BK3bRrTN+HHHziUGg1P_A@mail.gmail.com>
+From:   Andy Lutomirski <luto@kernel.org>
+Date:   Tue, 30 Apr 2019 09:33:51 -0700
+X-Gmail-Original-Message-ID: <CALCETrXujRWxwkgAwB+8xja3N9H22t52AYBYM_mbrjKKZ624Eg@mail.gmail.com>
+Message-ID: <CALCETrXujRWxwkgAwB+8xja3N9H22t52AYBYM_mbrjKKZ624Eg@mail.gmail.com>
+Subject: Re: [PATCH 3/4] x86/ftrace: make ftrace_int3_handler() not to skip
+ fops invocation
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Nicolai Stange <nstange@suse.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Jiri Kosina <jikos@kernel.org>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Petr Mladek <pmladek@suse.com>,
+        Joe Lawrence <joe.lawrence@redhat.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
+        Tim Chen <tim.c.chen@linux.intel.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Juergen Gross <jgross@suse.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nayna Jain <nayna@linux.ibm.com>,
+        Masahiro Yamada <yamada.masahiro@socionext.com>,
+        Joerg Roedel <jroedel@suse.de>,
+        Linux List Kernel Mailing <linux-kernel@vger.kernel.org>,
+        live-patching@vger.kernel.org,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Other than verifying pidfd based polling, the tests make sure that
-wait semantics are preserved with the pidfd poll. Notably the 2 cases:
-1. If a thread group leader exits while threads still there, then no
-   pidfd poll notifcation should happen.
-2. If a non-thread group leader does an execve, then the thread group
-   leader is signaled to exit and is replaced with the execing thread
-   as the new leader, however the parent is not notified in this case.
+On Tue, Apr 30, 2019 at 9:06 AM Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
+>
+> On Tue, Apr 30, 2019 at 6:56 AM Peter Zijlstra <peterz@infradead.org> wrote:
+> >
+>
+> Realistically, I don't think you can hit the problem in practice. The
+> only way to hit that incredibly small race of "one instruction, *both*
+> NMI and interrupts" is to have a lot of interrupts going all at the
+> same time, but that will also then solve the latency problem, so the
+> very act of triggering it will also fix it.
+>
+> I don't see any case where it's really bad. The "sti sysexit" race is
+> similar, just about latency of user space signal reporting (and
+> perhaps any pending TIF_WORK_xyz flags).
 
-Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
----
- tools/testing/selftests/pidfd/Makefile     |   2 +-
- tools/testing/selftests/pidfd/pidfd_test.c | 210 +++++++++++++++++++++
- 2 files changed, 211 insertions(+), 1 deletion(-)
+In the worst case, it actually kills the machine.  Last time I tracked
+a bug like this down, I think the issue was that we got preempted
+after the last TIF_ check, entered a VM, exited, context switched
+back, and switched to user mode without noticing that there was a
+ending KVM user return notifier.  This left us with bogus CPU state
+and the machine exploded.
 
-diff --git a/tools/testing/selftests/pidfd/Makefile b/tools/testing/selftests/pidfd/Makefile
-index deaf8073bc06..4b31c14f273c 100644
---- a/tools/testing/selftests/pidfd/Makefile
-+++ b/tools/testing/selftests/pidfd/Makefile
-@@ -1,4 +1,4 @@
--CFLAGS += -g -I../../../../usr/include/
-+CFLAGS += -g -I../../../../usr/include/ -lpthread
- 
- TEST_GEN_PROGS := pidfd_test
- 
-diff --git a/tools/testing/selftests/pidfd/pidfd_test.c b/tools/testing/selftests/pidfd/pidfd_test.c
-index d59378a93782..8b404ccbc4ff 100644
---- a/tools/testing/selftests/pidfd/pidfd_test.c
-+++ b/tools/testing/selftests/pidfd/pidfd_test.c
-@@ -4,18 +4,47 @@
- #include <errno.h>
- #include <fcntl.h>
- #include <linux/types.h>
-+#include <pthread.h>
- #include <sched.h>
- #include <signal.h>
- #include <stdio.h>
- #include <stdlib.h>
- #include <string.h>
- #include <syscall.h>
-+#include <sys/epoll.h>
-+#include <sys/mman.h>
- #include <sys/mount.h>
- #include <sys/wait.h>
-+#include <time.h>
- #include <unistd.h>
- 
- #include "../kselftest.h"
- 
-+#define str(s) _str(s)
-+#define _str(s) #s
-+#define CHILD_THREAD_MIN_WAIT 3 /* seconds */
-+
-+#define MAX_EVENTS 5
-+#ifndef __NR_pidfd_send_signal
-+#define __NR_pidfd_send_signal 424
-+#endif
-+
-+#ifndef CLONE_PIDFD
-+#define CLONE_PIDFD 0x00001000
-+#endif
-+
-+static pid_t pidfd_clone(int flags, int *pidfd, int (*fn)(void *))
-+{
-+	size_t stack_size = 1024;
-+	char *stack[1024] = { 0 };
-+
-+#ifdef __ia64__
-+	return __clone2(fn, stack, stack_size, flags | SIGCHLD, NULL, pidfd);
-+#else
-+	return clone(fn, stack + stack_size, flags | SIGCHLD, NULL, pidfd);
-+#endif
-+}
-+
- static inline int sys_pidfd_send_signal(int pidfd, int sig, siginfo_t *info,
- 					unsigned int flags)
- {
-@@ -368,10 +397,191 @@ static int test_pidfd_send_signal_syscall_support(void)
- 	return 0;
- }
- 
-+static void *test_pidfd_poll_exec_thread(void *priv)
-+{
-+	ksft_print_msg("Child Thread: starting. pid %d tid %d ; and sleeping\n",
-+			getpid(), syscall(SYS_gettid));
-+	ksft_print_msg("Child Thread: doing exec of sleep\n");
-+
-+	execl("/bin/sleep", "sleep", str(CHILD_THREAD_MIN_WAIT), (char *)NULL);
-+
-+	ksft_print_msg("Child Thread: DONE. pid %d tid %d\n",
-+			getpid(), syscall(SYS_gettid));
-+	return NULL;
-+}
-+
-+static void poll_pidfd(const char *test_name, int pidfd)
-+{
-+	int c;
-+	int epoll_fd = epoll_create1(EPOLL_CLOEXEC);
-+	struct epoll_event event, events[MAX_EVENTS];
-+
-+	if (epoll_fd == -1)
-+		ksft_exit_fail_msg("%s test: Failed to create epoll file descriptor "
-+				   "(errno %d)\n",
-+				   test_name, errno);
-+
-+	event.events = EPOLLIN;
-+	event.data.fd = pidfd;
-+
-+	if (epoll_ctl(epoll_fd, EPOLL_CTL_ADD, pidfd, &event)) {
-+		ksft_exit_fail_msg("%s test: Failed to add epoll file descriptor "
-+				   "(errno %d)\n",
-+				   test_name, errno);
-+	}
-+
-+	c = epoll_wait(epoll_fd, events, MAX_EVENTS, 5000);
-+	if (c != 1 || !(events[0].events & EPOLLIN))
-+		ksft_exit_fail_msg("%s test: Unexpected epoll_wait result (c=%d, events=%x) ",
-+				   "(errno %d)\n",
-+				   test_name, c, events[0].events, errno);
-+
-+	close(epoll_fd);
-+	return;
-+
-+}
-+
-+static int child_poll_exec_test(void *args)
-+{
-+	pthread_t t1;
-+
-+	ksft_print_msg("Child (pidfd): starting. pid %d tid %d\n", getpid(),
-+			syscall(SYS_gettid));
-+	pthread_create(&t1, NULL, test_pidfd_poll_exec_thread, NULL);
-+	/*
-+	 * Exec in the non-leader thread will destroy the leader immediately.
-+	 * If the wait in the parent returns too soon, the test fails.
-+	 */
-+	while (1)
-+		sleep(1);
-+}
-+
-+static int test_pidfd_poll_exec(int use_waitpid)
-+{
-+	int pid, pidfd = 0;
-+	int status, ret;
-+	pthread_t t1;
-+	time_t prog_start = time(NULL);
-+	const char *test_name = "pidfd_poll check for premature notification on child thread exec";
-+
-+	ksft_print_msg("Parent: pid: %d\n", getpid());
-+	pid = pidfd_clone(CLONE_PIDFD, &pidfd, child_poll_exec_test);
-+	if (pid < 0)
-+		ksft_exit_fail_msg("%s test: pidfd_clone failed (ret %d, errno %d)\n",
-+				   test_name, pid, errno);
-+
-+	ksft_print_msg("Parent: Waiting for Child (%d) to complete.\n", pid);
-+
-+	if (use_waitpid) {
-+		ret = waitpid(pid, &status, 0);
-+		if (ret == -1)
-+			ksft_print_msg("Parent: error\n");
-+
-+		if (ret == pid)
-+			ksft_print_msg("Parent: Child process waited for.\n");
-+	} else {
-+		poll_pidfd(test_name, pidfd);
-+	}
-+
-+	time_t prog_time = time(NULL) - prog_start;
-+
-+	ksft_print_msg("Time waited for child: %lu\n", prog_time);
-+
-+	close(pidfd);
-+
-+	if (prog_time < CHILD_THREAD_MIN_WAIT || prog_time > CHILD_THREAD_MIN_WAIT + 2)
-+		ksft_exit_fail_msg("%s test: Failed\n", test_name);
-+	else
-+		ksft_test_result_pass("%s test: Passed\n", test_name);
-+}
-+
-+static void *test_pidfd_poll_leader_exit_thread(void *priv)
-+{
-+	ksft_print_msg("Child Thread: starting. pid %d tid %d ; and sleeping\n",
-+			getpid(), syscall(SYS_gettid));
-+	sleep(CHILD_THREAD_MIN_WAIT);
-+	ksft_print_msg("Child Thread: DONE. pid %d tid %d\n", getpid(), syscall(SYS_gettid));
-+	return NULL;
-+}
-+
-+static time_t *child_exit_secs;
-+static int child_poll_leader_exit_test(void *args)
-+{
-+	pthread_t t1, t2;
-+
-+	ksft_print_msg("Child: starting. pid %d tid %d\n", getpid(), syscall(SYS_gettid));
-+	pthread_create(&t1, NULL, test_pidfd_poll_leader_exit_thread, NULL);
-+	pthread_create(&t2, NULL, test_pidfd_poll_leader_exit_thread, NULL);
-+
-+	/*
-+	 * glibc exit calls exit_group syscall, so explicity call exit only
-+	 * so that only the group leader exits, leaving the threads alone.
-+	 */
-+	*child_exit_secs = time(NULL);
-+	syscall(SYS_exit, 0);
-+}
-+
-+static int test_pidfd_poll_leader_exit(int use_waitpid)
-+{
-+	int pid, pidfd = 0;
-+	int status, ret;
-+	time_t prog_start = time(NULL);
-+	const char *test_name = "pidfd_poll check for premature notification on non-empty"
-+				"group leader exit";
-+
-+	child_exit_secs = mmap(NULL, sizeof *child_exit_secs, PROT_READ | PROT_WRITE,
-+			MAP_SHARED | MAP_ANONYMOUS, -1, 0);
-+
-+	if (child_exit_secs == MAP_FAILED)
-+		ksft_exit_fail_msg("%s test: mmap failed (errno %d)\n",
-+				   test_name, errno);
-+
-+	ksft_print_msg("Parent: pid: %d\n", getpid());
-+	pid = pidfd_clone(CLONE_PIDFD, &pidfd, child_poll_leader_exit_test);
-+	if (pid < 0)
-+		ksft_exit_fail_msg("%s test: pidfd_clone failed (ret %d, errno %d)\n",
-+				   test_name, pid, errno);
-+
-+	ksft_print_msg("Parent: Waiting for Child (%d) to complete.\n", pid);
-+
-+	if (use_waitpid) {
-+		ret = waitpid(pid, &status, 0);
-+		if (ret == -1)
-+			ksft_print_msg("Parent: error\n");
-+	} else {
-+		/*
-+		 * This sleep tests for the case where if the child exits, and is in
-+		 * EXIT_ZOMBIE, but the thread group leader is non-empty, then the poll
-+		 * doesn't prematurely return even though there are active threads
-+		 */
-+		sleep(1);
-+		poll_pidfd(test_name, pidfd);
-+	}
-+
-+	if (ret == pid)
-+		ksft_print_msg("Parent: Child process waited for.\n");
-+
-+	time_t since_child_exit = time(NULL) - *child_exit_secs;
-+
-+	ksft_print_msg("Time since child exit: %lu\n", since_child_exit);
-+
-+	close(pidfd);
-+
-+	if (since_child_exit < CHILD_THREAD_MIN_WAIT ||
-+			since_child_exit > CHILD_THREAD_MIN_WAIT + 2)
-+		ksft_exit_fail_msg("%s test: Failed\n", test_name);
-+	else
-+		ksft_test_result_pass("%s test: Passed\n", test_name);
-+}
-+
- int main(int argc, char **argv)
- {
- 	ksft_print_header();
- 
-+	test_pidfd_poll_exec(0);
-+	test_pidfd_poll_exec(1);
-+	test_pidfd_poll_leader_exit(0);
-+	test_pidfd_poll_leader_exit(1);
- 	test_pidfd_send_signal_syscall_support();
- 	test_pidfd_send_signal_simple_success();
- 	test_pidfd_send_signal_exited_fail();
--- 
-2.21.0.593.g511ec345e18-goog
+Linus, can I ask you to reconsider your opposition to Josh's other
+approach of just shifting the stack on int3 entry?  I agree that it's
+ugly, but the ugliness is easily manageable and fairly self-contained.
+We add a little bit of complication to the entry asm (but it's not
+like it's unprecedented -- the entry asm does all kinds of stack
+rearrangement due to IST and PTI crap already), and we add an
+int3_emulate_call(struct pt_regs *regs, unsigned long target) helper
+that has appropriate assertions that the stack is okay and emulates
+the call.  And that's it.
 
+In contrast, your approach involves multiple asm trampolines, hash
+tables, batching complications, and sti shadows.
+
+As an additional argument, with the stack-shifting approach, it runs
+on *every int3 from kernel mode*.  This means that we can do something
+like this:
+
+static bool int3_emulate_call_okay(struct pt_regs *regs)
+{
+    unsigned long available_stack = regs->sp - (unsigned long);
+    return available_stack >= sizeof(long);
+}
+
+void do_int3(...) {
+{
+  WARN_ON_ONCE(!user_mode(regs) && !int3_emulate_call_okay(regs));
+  ...;
+}
+
+static void int3_emulate_call(struct pt_regs *regs, unsigned long target)
+{
+  BUG_ON(user_mode(regs) || !int3_emulate_call_okey(regs));
+  regs->sp -= sizeof(unsigned long);
+  *(unsigned long *)regs->sp = target;
+  /* CET SHSTK fixup goes here */
+}
+
+Obviously the CET SHSTK fixup might be rather nasty, but I suspect
+it's a solvable problem.
+
+A major benefit of this is that the entry asm nastiness will get
+exercised all the time, and, if we screw it up, the warning will fire.
+This is the basic principle behind why the entry stuff *works* these
+days.  I've put a lot of effort into making sure that running kernels
+with CONFIG_DEBUG_ENTRY and running the selftests actually exercises
+the nasty cases.
+
+--Andy
