@@ -2,123 +2,79 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DD1B010169
-	for <lists+linux-kselftest@lfdr.de>; Tue, 30 Apr 2019 23:08:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DC5510208
+	for <lists+linux-kselftest@lfdr.de>; Tue, 30 Apr 2019 23:47:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726978AbfD3VIN (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 30 Apr 2019 17:08:13 -0400
-Received: from mail.kernel.org ([198.145.29.99]:52252 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726015AbfD3VIM (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 30 Apr 2019 17:08:12 -0400
-Received: from gandalf.local.home (cpe-66-24-58-225.stny.res.rr.com [66.24.58.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id C8C252087B;
-        Tue, 30 Apr 2019 21:08:09 +0000 (UTC)
-Date:   Tue, 30 Apr 2019 17:08:08 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Nicolai Stange <nstange@suse.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Jiri Kosina <jikos@kernel.org>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Petr Mladek <pmladek@suse.com>,
-        Joe Lawrence <joe.lawrence@redhat.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
-        Tim Chen <tim.c.chen@linux.intel.com>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Juergen Gross <jgross@suse.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nayna Jain <nayna@linux.ibm.com>,
-        Masahiro Yamada <yamada.masahiro@socionext.com>,
-        Joerg Roedel <jroedel@suse.de>,
-        Linux List Kernel Mailing <linux-kernel@vger.kernel.org>,
-        live-patching@vger.kernel.org,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>
-Subject: Re: [RFC][PATCH] ftrace/x86: Emulate call function while updating
- in breakpoint handler
-Message-ID: <20190430170808.1053b3e2@gandalf.local.home>
-In-Reply-To: <CAHk-=wjJ8D74+FDcXGL65Q9aB0cc7B4vr2s2rS6V4d4a3hU-1Q@mail.gmail.com>
-References: <20190428133826.3e142cfd@oasis.local.home>
-        <CALCETrXvmZPHsfRVnW0AtyddfN-2zaCmWn+FsrF6XPTOFd_Jmw@mail.gmail.com>
-        <CAHk-=whtt4K2f0KPtG-4Pykh3FK8UBOjD8jhXCUKB5nWDj_YRA@mail.gmail.com>
-        <CALCETrWELBCK-kqX5FCEDVUy8kCT-yVu7m_7Dtn=GCsHY0Du5A@mail.gmail.com>
-        <CAHk-=wgewK4eFhF3=0RNtk1KQjMANFH6oDE=8m=84RExn2gxhw@mail.gmail.com>
-        <CAHk-=whay7eN6+2gZjY-ybRbkbcqAmgrLwwszzHx8ws3c=S-MA@mail.gmail.com>
-        <CALCETrXzVU0Q7u1q=QFPaDr=aojjF5cjbOi9CxxXnp5GqTqsWA@mail.gmail.com>
-        <CAHk-=wg1QPz0m+7jnVcjQgkySUQLzAXE8_PZARV-vWYK27LB=w@mail.gmail.com>
-        <20190430135602.GD2589@hirez.programming.kicks-ass.net>
-        <CAHk-=wg7vUGMRHyBsLig6qiPK0i4_BK3bRrTN+HHHziUGg1P_A@mail.gmail.com>
-        <CALCETrXujRWxwkgAwB+8xja3N9H22t52AYBYM_mbrjKKZ624Eg@mail.gmail.com>
-        <20190430130359.330e895b@gandalf.local.home>
-        <20190430132024.0f03f5b8@gandalf.local.home>
-        <20190430134913.4e29ce72@gandalf.local.home>
-        <CAHk-=wjJ8D74+FDcXGL65Q9aB0cc7B4vr2s2rS6V4d4a3hU-1Q@mail.gmail.com>
-X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        id S1726612AbfD3Vrp (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 30 Apr 2019 17:47:45 -0400
+Received: from mail-pf1-f193.google.com ([209.85.210.193]:46481 "EHLO
+        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726048AbfD3Vro (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 30 Apr 2019 17:47:44 -0400
+Received: by mail-pf1-f193.google.com with SMTP id j11so7703589pff.13;
+        Tue, 30 Apr 2019 14:47:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=UQ0WAt2+S5P4l4hZmXG44smnn0ln0il2ppIEd919he0=;
+        b=cFDHUfLc6/URlKC4986lLy3VOh0DkMANDHhCM013EXoI3xF28VWgE85H8IL/gQLGYt
+         89BIOeOGLsFp47LS9BQX3CPOQuHSETcgZpBnZNT1xDFdjCfTP96v2v56+GEOtS9wy3GR
+         K41p5QIntznSgA+KYcfB47vHfKb60O+WsF28eQjS/1yapSi8K8SlRMnrjvcyayn0xSub
+         gzL6BgKVMi+Sgl+pu0fBHfeearI8/U97rZgnEOivc6Mw68ZqfgjOFLhEBPhNajnENeat
+         AHNaqnTe0Oewt8piQKnoMiB9CYTK4ZPVPcvxIwvU+GHzhZmG7OJQPf/T0cnp4iXlodcT
+         3I2Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=UQ0WAt2+S5P4l4hZmXG44smnn0ln0il2ppIEd919he0=;
+        b=E2t0PFTXLA50spCoRGIe1JkyY5URjXK+XoGUFqfWRnHA2iCU7I9FCgeZaNXAQkpRN2
+         MK7nL8DBpKaS7fuYB5T99o/93cakpXerUJ0ONCGApR1I6aeRJPtTjkaXQUtwfr9oabUR
+         f4AeEEmdqx+sFksJz22h4+6MdlZl/H7cNWgGkNL2MuJYF+tynnXw5WwBhPRzkxH9qdBh
+         fsRtp+GqXFMCk28pDLWXo/HIGDTh4QpKIfqy72vWiiIhA5uRLm8kwBDbYaXOkE9O+lCK
+         Gp5Gx1X130dFPqCwUW3Rjh6Vd94zD/iLT7KraJhwYdWChAgxBbSy8fX4HYbM4YjPcbog
+         JWSA==
+X-Gm-Message-State: APjAAAXBAdXcFFQTtR++sW1hV3aISbUzdpaqjq8NA1UoGaKBuV6QeuQW
+        kzXX/IpbDUBCZi1GcxrPGW9u9jCrXca8j4FMjG0=
+X-Google-Smtp-Source: APXvYqyC9q+19PZsrK2SWaciq9RKvQNg7g5Maf6WSkMcP5SCZbA5NzHt4kmlAo8A0ymH//DqiyMiieZzKrruZE4NQOY=
+X-Received: by 2002:a63:1a42:: with SMTP id a2mr27105398pgm.358.1556660864207;
+ Tue, 30 Apr 2019 14:47:44 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+References: <20190427130739.44614-1-ldir@darbyshire-bryant.me.uk>
+In-Reply-To: <20190427130739.44614-1-ldir@darbyshire-bryant.me.uk>
+From:   Cong Wang <xiyou.wangcong@gmail.com>
+Date:   Tue, 30 Apr 2019 14:47:32 -0700
+Message-ID: <CAM_iQpXnXyfLZ2+gjDufbdMrZLgtf9uKbzbUf50Xm-2Go7maVw@mail.gmail.com>
+Subject: Re: [PATCH net-next] net: sched: Introduce act_ctinfo action
+To:     "Kevin 'ldir' Darbyshire-Bryant" <ldir@darbyshire-bryant.me.uk>
+Cc:     Jamal Hadi Salim <jhs@mojatatu.com>, Jiri Pirko <jiri@resnulli.us>,
+        "David S. Miller" <davem@davemloft.net>,
+        Shuah Khan <shuah@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, 30 Apr 2019 11:33:21 -0700
-Linus Torvalds <torvalds@linux-foundation.org> wrote:
+On Sat, Apr 27, 2019 at 6:08 AM Kevin 'ldir' Darbyshire-Bryant
+<ldir@darbyshire-bryant.me.uk> wrote:
+>
+> ctinfo is a new tc filter action module.  It is designed to restore DSCPs
+> stored in conntrack marks into the ipv4/v6 diffserv field.
 
-> > +       "ftrace_emulate_call_update_irqoff:\n\t"
-> > +               "push %gs:ftrace_bp_call_return\n\t"
-> > +               "sti\n\t"
-> > +               "jmp *ftrace_update_func_call\n"  
-> 
-> .. and this should then use the "push push sti ret" model instead.
-> 
-> Plus get updated for objtool complaints.
+I think we can retrieve any information from conntrack with such
+a general name, including skb mark. So, as you already pick the
+name ctinfo, please make it general rather than just DSCP.
+You can add skb mark into your ctinfo too so that act_connmark
+can be just replaced.
 
-And unfortunately, this blows up on lockdep. Lockdep notices that the
-return from the breakpoint handler has interrupts enabled, and will not
-enable them in its shadow irqs disabled variable. But then we enabled
-them in the trampoline, without telling lockdep and we trigger
-something likes this:
+Your patch looks fine from a quick galance, please make sure
+you run checkpatch.pl to keep your coding style aligned to Linux
+kernel's, at least I don't think we accept C++ style comments.
 
-------------[ cut here ]------------
-IRQs not enabled as expected
-WARNING: CPU: 2 PID: 0 at kernel/time/tick-sched.c:979 tick_nohz_idle_enter+0x44/0x8c
-Modules linked in:
-CPU: 2 PID: 0 Comm: swapper/2 Not tainted 5.1.0-rc3-test+ #123
-Hardware name: MSI MS-7823/CSM-H87M-G43 (MS-7823), BIOS V1.6 02/22/2014
-EIP: tick_nohz_idle_enter+0x44/0x8c
-Code: f0 05 00 00 00 75 26 83 b8 c4 05 00 00 00 75 1d 80 3d 5f 0f 43 c1 00 75 14 68 72 74 16 c1 c6 05 5f 0f 43 c1 01 e8 33 d7 f8 ff <0f> 0b 58 fa e8 4e 2c 04 00 bb e0 36 6b c1 64 03 1d 28 81 56 c1 8b
-EAX: 0000001c EBX: ee769f84 ECX: 00000000 EDX: 00000006
-ESI: 00000000 EDI: 00000002 EBP: ee769f50 ESP: ee769f48
-DS: 007b ES: 007b FS: 00d8 GS: 00e0 SS: 0068 EFLAGS: 00210292
-CR0: 80050033 CR2: 00000000 CR3: 016c4000 CR4: 001406f0
-Call Trace:
- do_idle+0x2a/0x1fc
- cpu_startup_entry+0x1e/0x20
- start_secondary+0x1d3/0x1ec
- startup_32_smp+0x164/0x168
-
-
-I have to fool lockdep with the following:
-
-		if (regs->flags & X86_EFLAGS_IF) {
-			regs->flags &= ~X86_EFLAGS_IF;
-			regs->ip = (unsigned long) ftrace_emulate_call_irqoff;
-			/* Tell lockdep here we are enabling interrupts */
-			trace_hardirqs_on();
-		} else {
-			regs->ip = (unsigned long) ftrace_emulate_call_irqon;
-		}
-
--- Steve
+Thanks.
