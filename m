@@ -2,156 +2,93 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6ED9210848
-	for <lists+linux-kselftest@lfdr.de>; Wed,  1 May 2019 15:22:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EB14109DA
+	for <lists+linux-kselftest@lfdr.de>; Wed,  1 May 2019 17:13:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726224AbfEANWz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 1 May 2019 09:22:55 -0400
-Received: from mail.kernel.org ([198.145.29.99]:42174 "EHLO mail.kernel.org"
+        id S1726555AbfEAPNW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 1 May 2019 11:13:22 -0400
+Received: from mx1.redhat.com ([209.132.183.28]:35382 "EHLO mx1.redhat.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725993AbfEANWy (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 1 May 2019 09:22:54 -0400
-Received: from gandalf.local.home (cpe-66-24-58-225.stny.res.rr.com [66.24.58.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S1726515AbfEAPNW (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 1 May 2019 11:13:22 -0400
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 67D95206DF;
-        Wed,  1 May 2019 13:22:51 +0000 (UTC)
-Date:   Wed, 1 May 2019 09:22:49 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Nicolai Stange <nstange@suse.de>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
+        by mx1.redhat.com (Postfix) with ESMTPS id 1E9B53082134;
+        Wed,  1 May 2019 15:13:21 +0000 (UTC)
+Received: from dhcp-27-174.brq.redhat.com (unknown [10.43.17.159])
+        by smtp.corp.redhat.com (Postfix) with SMTP id 82881629DB;
+        Wed,  1 May 2019 15:13:15 +0000 (UTC)
+Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
+        oleg@redhat.com; Wed,  1 May 2019 17:13:19 +0200 (CEST)
+Date:   Wed, 1 May 2019 17:13:12 +0200
+From:   Oleg Nesterov <oleg@redhat.com>
+To:     "Joel Fernandes (Google)" <joel@joelfernandes.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Andy Lutomirski <luto@amacapital.net>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Daniel Colascione <dancol@google.com>,
+        Christian Brauner <christian@brauner.io>,
+        Jann Horn <jannh@google.com>,
+        Tim Murray <timmurray@google.com>,
+        Jonathan Kowalski <bl0pbl33p@gmail.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Kees Cook <keescook@chromium.org>,
+        David Howells <dhowells@redhat.com>, kernel-team@android.com,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        KJ Tsanaktsidis <ktsanaktsidis@zendesk.com>,
+        linux-kselftest@vger.kernel.org, Michal Hocko <mhocko@suse.com>,
+        Nadav Amit <namit@vmware.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Serge Hallyn <serge@hallyn.com>, Shuah Khan <shuah@kernel.org>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "the arch\/x86 maintainers" <x86@kernel.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Jiri Kosina <jikos@kernel.org>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Petr Mladek <pmladek@suse.com>,
-        Joe Lawrence <joe.lawrence@redhat.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
-        Tim Chen <tim.c.chen@linux.intel.com>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Juergen Gross <jgross@suse.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nayna Jain <nayna@linux.ibm.com>,
-        Masahiro Yamada <yamada.masahiro@socionext.com>,
-        Joerg Roedel <jroedel@suse.de>,
-        Linux List Kernel Mailing <linux-kernel@vger.kernel.org>,
-        live-patching@vger.kernel.org,
-        "open list\:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>
-Subject: Re: [RFC][PATCH v2] ftrace/x86: Emulate call function while
- updating in breakpoint handler
-Message-ID: <20190501092249.54cdbd94@gandalf.local.home>
-In-Reply-To: <87muk6vavb.fsf@suse.de>
-References: <20190428133826.3e142cfd@oasis.local.home>
-        <CALCETrXvmZPHsfRVnW0AtyddfN-2zaCmWn+FsrF6XPTOFd_Jmw@mail.gmail.com>
-        <CAHk-=whtt4K2f0KPtG-4Pykh3FK8UBOjD8jhXCUKB5nWDj_YRA@mail.gmail.com>
-        <CALCETrWELBCK-kqX5FCEDVUy8kCT-yVu7m_7Dtn=GCsHY0Du5A@mail.gmail.com>
-        <CAHk-=wgewK4eFhF3=0RNtk1KQjMANFH6oDE=8m=84RExn2gxhw@mail.gmail.com>
-        <CAHk-=whay7eN6+2gZjY-ybRbkbcqAmgrLwwszzHx8ws3c=S-MA@mail.gmail.com>
-        <CALCETrXzVU0Q7u1q=QFPaDr=aojjF5cjbOi9CxxXnp5GqTqsWA@mail.gmail.com>
-        <CAHk-=wg1QPz0m+7jnVcjQgkySUQLzAXE8_PZARV-vWYK27LB=w@mail.gmail.com>
-        <20190430135602.GD2589@hirez.programming.kicks-ass.net>
-        <CAHk-=wg7vUGMRHyBsLig6qiPK0i4_BK3bRrTN+HHHziUGg1P_A@mail.gmail.com>
-        <CALCETrXujRWxwkgAwB+8xja3N9H22t52AYBYM_mbrjKKZ624Eg@mail.gmail.com>
-        <20190430130359.330e895b@gandalf.local.home>
-        <20190430132024.0f03f5b8@gandalf.local.home>
-        <20190430134913.4e29ce72@gandalf.local.home>
-        <20190430175334.423821c0@gandalf.local.home>
-        <87muk6vavb.fsf@suse.de>
-X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        Tycho Andersen <tycho@tycho.ws>
+Subject: Re: [PATCH v2 1/2] Add polling support to pidfd
+Message-ID: <20190501151312.GA30235@redhat.com>
+References: <20190430162154.61314-1-joel@joelfernandes.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190430162154.61314-1-joel@joelfernandes.org>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
+X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.42]); Wed, 01 May 2019 15:13:21 +0000 (UTC)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, 01 May 2019 10:26:32 +0200
-Nicolai Stange <nstange@suse.de> wrote:
+On 04/30, Joel Fernandes (Google) wrote:
+>
+> +static unsigned int pidfd_poll(struct file *file, struct poll_table_struct *pts)
+> +{
+> +	struct task_struct *task;
+> +	struct pid *pid = file->private_data;
+> +	int poll_flags = 0;
+> +
+> +	poll_wait(file, &pid->wait_pidfd, pts);
+> +
+> +	rcu_read_lock();
+> +	task = pid_task(pid, PIDTYPE_PID);
+> +	WARN_ON_ONCE(task && !thread_group_leader(task));
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-> > +extern asmlinkage void ftrace_emulate_call_irqon(void);
-> > +extern asmlinkage void ftrace_emulate_call_irqoff(void);
-> > +extern asmlinkage void ftrace_emulate_call_nmi(void);
-> > +extern asmlinkage void ftrace_emulate_call_update_irqoff(void);
-> > +extern asmlinkage void ftrace_emulate_call_update_irqon(void);
-> > +extern asmlinkage void ftrace_emulate_call_update_nmi(void);
-> > +
-> > +static DEFINE_PER_CPU(void *, ftrace_bp_call_return);
-> > +static DEFINE_PER_CPU(void *, ftrace_bp_call_nmi_return);  
-> 
-> Andy mentioned #DB and #MC exceptions here:
-> https://lkml.kernel.org/r/C55DED25-C60D-4731-9A6B-92BDA8771766@amacapital.net
-> 
-> I think that #DB won't be possible, provided the trampolines below get
-> tagged as NOKPROBE (do_int3() and ftrace_int3_handler() already have
-> it).
-> 
-> It's highly theoretic, but tracing do_machine_check() could clobber
-> ftrace_bp_call_return or ftrace_bp_call_nmi_return?
+Ah, this is not right, we can race with de_thread() which changes the leader,
+in particular it does leader->exit_signal = -1 to indicate that this thread is
+no longer a group leader, but pid_task() can return the old leader.
 
-Probably shouldn't trace do_machine_check() then ;-)
+We are going to check thread_group_empty() below, it won't be true in this case,
+so this race should not make any harm.
 
-> 
-> 
-> > +#ifdef CONFIG_SMP
-> > +#ifdef CONFIG_X86_64
-> > +# define BP_CALL_RETURN		"%gs:ftrace_bp_call_return"
-> > +# define BP_CALL_NMI_RETURN	"%gs:ftrace_bp_call_nmi_return"
-> > +#else
-> > +# define BP_CALL_RETURN		"%fs:ftrace_bp_call_return"
-> > +# define BP_CALL_NMI_RETURN	"%fs:ftrace_bp_call_nmi_return"
-> > +#endif
-> > +#else /* SMP */
-> > +# define BP_CALL_RETURN		"ftrace_bp_call_return"
-> > +# define BP_CALL_NMI_RETURN	"ftrace_bp_call_nmi_return"
-> > +#endif
-> > +
-> > +/* To hold the ftrace_caller address to push on the stack */
-> > +void *ftrace_caller_func = (void *)ftrace_caller;  
-> 
-> The live patching ftrace_ops need ftrace_regs_caller.
+Just remove this WARN_ON(). We can't use has_group_leader_pid(), it can return
+false if pid_task() returns the new leader.
 
-Ah, you're right. Luckily ftrace_regs_caller is a superset of
-ftrace_caller. That is, those only needing ftrace_caller can do fine
-with ftrace_regs_caller (but not vice versa).
+Otherwise I see no problems.
 
-Easy enough to fix.
-
-> 
-> 
-> > +
-> > +asm(
-> > +	".text\n"
-> > +
-> > +	/* Trampoline for function update with interrupts enabled */
-> > +	".global ftrace_emulate_call_irqoff\n"
-> > +	".type ftrace_emulate_call_irqoff, @function\n"
-> > +	"ftrace_emulate_call_irqoff:\n\t"
-> > +		"push "BP_CALL_RETURN"\n\t"
-> > +		"push ftrace_caller_func\n"
-> > +		"sti\n\t"
-> > +		"ret\n\t"
-> > +	".size ftrace_emulate_call_irqoff, .-ftrace_emulate_call_irqoff\n"
-> > +
-> > +	/* Trampoline for function update with interrupts disabled*/
-> > +	".global ftrace_emulate_call_irqon\n"  
-> 
-> The naming is perhaps a bit confusing, i.e. "update with interrupts
-> disabled" vs. "irqon"... How about swapping irqoff<->irqon?
-
-I just used the terminology Linus used. It is confusing. Perhaps just
-call it ftrace_emulate_call (for non sti case) and
-ftrace_emulate_call_sti for the sti case. That should remove the
-confusion.
-
--- Steve
-
+Oleg.
 
