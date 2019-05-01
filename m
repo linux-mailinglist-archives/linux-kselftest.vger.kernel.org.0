@@ -2,72 +2,45 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B18D10D68
-	for <lists+linux-kselftest@lfdr.de>; Wed,  1 May 2019 21:44:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80FDB10D53
+	for <lists+linux-kselftest@lfdr.de>; Wed,  1 May 2019 21:42:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726077AbfEATop (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 1 May 2019 15:44:45 -0400
-Received: from mail-lj1-f194.google.com ([209.85.208.194]:40574 "EHLO
-        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726004AbfEATop (ORCPT
+        id S1726077AbfEATmG (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 1 May 2019 15:42:06 -0400
+Received: from bombadil.infradead.org ([198.137.202.133]:42674 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726004AbfEATmF (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 1 May 2019 15:44:45 -0400
-Received: by mail-lj1-f194.google.com with SMTP id d15so79433ljc.7
-        for <linux-kselftest@vger.kernel.org>; Wed, 01 May 2019 12:44:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=1aWTopvtcpE1sMBLog+svv/V7Oyc8azAzAFUDC8QSPA=;
-        b=g5Olcm90ZhHiM7hLghWqEsHCmJOQJKveCq93FgS32/SOMLiESIU19RmapyE9Ee9EYf
-         ViBeexnj6bwofQ4qsmRyD1ujInNeMtVrrzEmNmw9ZRifskM7p87DSr1orgBEPN8GpwJA
-         AtMCjbwPS+2qzsxmpJz+Cd9TiwHXhMCbJ9VGo=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=1aWTopvtcpE1sMBLog+svv/V7Oyc8azAzAFUDC8QSPA=;
-        b=CmysHNGUzGRmjQNgGg4PfGAccecY5hjzZubN77+Izs2gn7t/GTJM2kcom0vyY5ZeHb
-         RH5fBZQinIN1+G74qJg3FpOFuqUoXIkC3MsMPF+BV22883gJJEjeYTLxQOiriv3XbuWz
-         /Rouxq+8K33VO7Up/Yv5ud1KNZuw/hemSH9M3zQAXiWe9Y+9fvXiXP9niodTO5rcfuoh
-         gw7LtKva2ZwID4yxs7jZLGa3PRs8iiLRkKp9Vauh+5aUNYaDkoQx8/hVMhqTL5Pnpr54
-         PAFPqbY9r6PfWmeiEpYx8HOAK5b6FLiU3xPu8IhmACMJGCbVnyPZTBu55Tj3kf9vNmaK
-         7ZGQ==
-X-Gm-Message-State: APjAAAXnl1iT+cp9jg1k5fGIVXdIsope2B5PE7F38leOog3LWe4HPUIn
-        PahFlITfxDgIgcJKOZ70zz7p98whU88=
-X-Google-Smtp-Source: APXvYqyYGJqzHysFnyj79vPWQyBEEZ1j/XUViePjdZ1CoHTPlNDDKVPHRWarBFYzC9K804GpxVSoMQ==
-X-Received: by 2002:a2e:d1a:: with SMTP id 26mr11943490ljn.147.1556739883016;
-        Wed, 01 May 2019 12:44:43 -0700 (PDT)
-Received: from mail-lj1-f172.google.com (mail-lj1-f172.google.com. [209.85.208.172])
-        by smtp.gmail.com with ESMTPSA id m3sm8931255lfh.94.2019.05.01.12.44.42
-        for <linux-kselftest@vger.kernel.org>
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 01 May 2019 12:44:42 -0700 (PDT)
-Received: by mail-lj1-f172.google.com with SMTP id q10so83122ljc.6
-        for <linux-kselftest@vger.kernel.org>; Wed, 01 May 2019 12:44:42 -0700 (PDT)
-X-Received: by 2002:a05:651c:8f:: with SMTP id 15mr4971551ljq.118.1556739386764;
- Wed, 01 May 2019 12:36:26 -0700 (PDT)
-MIME-Version: 1.0
-References: <20190501113238.0ab3f9dd@gandalf.local.home> <CAHk-=wjvQxY4DvPrJ6haPgAa6b906h=MwZXO6G8OtiTGe=N7_w@mail.gmail.com>
- <20190501145200.6c095d7f@oasis.local.home> <CAHk-=wgMZJeMCW5MA25WFJZeYYWCOWr0nGaHhJ7kg+zsu5FY_A@mail.gmail.com>
- <20190501191716.GV7905@worktop.programming.kicks-ass.net>
-In-Reply-To: <20190501191716.GV7905@worktop.programming.kicks-ass.net>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Wed, 1 May 2019 12:36:10 -0700
-X-Gmail-Original-Message-ID: <CAHk-=whWOStbe8nAxuaovrmqsq_YW-rDFu1AkpgisaWMqdMibg@mail.gmail.com>
-Message-ID: <CAHk-=whWOStbe8nAxuaovrmqsq_YW-rDFu1AkpgisaWMqdMibg@mail.gmail.com>
-Subject: Re: [RFC][PATCH v3] ftrace/x86_64: Emulate call function while
- updating in breakpoint handler
-To:     Peter Zijlstra <peterz@infradead.org>
+        Wed, 1 May 2019 15:42:05 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=7oA8gHDb7woGBm64YcjtkTyUbS99LN6SL9zg9DEkjCw=; b=ozn4OG8VcRRrICVNR0eS1eU+2
+        baR6SDPRSEH135PXPPoEvbdaM5sBGAYfLLFQTpUJXys0lubT8V7DE+UleyMbVXonD4BnmUghFS18X
+        +f6vCUPCqD+6tAQViFEb93ChGc+IT1BEkBPJz+6eejTY7ghNeXBTP4DOZnfC1ytFHXQD5nd5GFJme
+        DxWaxstHlwX28VzbXhkRrjsbTnOqXQrWPtKr+vJz5I2sWkK6aGl2m4MFvKTVQEHErHTAiETMJuDx+
+        bfPAVpYsp16c7r7aeqfbiv/T9Z8jyzc9X5w3PBYo7VOrzkdWkuNFY0wb8WVYOhRPp4QAPC18sUsDC
+        dL5yKHd3Q==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
+        by bombadil.infradead.org with esmtpsa (Exim 4.90_1 #2 (Red Hat Linux))
+        id 1hLv6k-0000iv-RV; Wed, 01 May 2019 19:41:35 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 578D7984EB4; Wed,  1 May 2019 21:41:32 +0200 (CEST)
+Date:   Wed, 1 May 2019 21:41:32 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Jiri Kosina <jikos@kernel.org>
 Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
         Andy Lutomirski <luto@kernel.org>,
         Nicolai Stange <nstange@suse.de>,
         Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
         "H. Peter Anvin" <hpa@zytor.com>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
+        the arch/x86 maintainers <x86@kernel.org>,
         Josh Poimboeuf <jpoimboe@redhat.com>,
-        Jiri Kosina <jikos@kernel.org>,
         Miroslav Benes <mbenes@suse.cz>,
         Petr Mladek <pmladek@suse.com>,
         Joe Lawrence <joe.lawrence@redhat.com>,
@@ -85,20 +58,37 @@ Cc:     Steven Rostedt <rostedt@goodmis.org>,
         live-patching@vger.kernel.org,
         "open list:KERNEL SELFTEST FRAMEWORK" 
         <linux-kselftest@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: [RFC][PATCH] ftrace/x86: Emulate call function while updating in
+ breakpoint handler
+Message-ID: <20190501194132.GX7905@worktop.programming.kicks-ass.net>
+References: <CAHk-=wg7vUGMRHyBsLig6qiPK0i4_BK3bRrTN+HHHziUGg1P_A@mail.gmail.com>
+ <CALCETrXujRWxwkgAwB+8xja3N9H22t52AYBYM_mbrjKKZ624Eg@mail.gmail.com>
+ <20190430130359.330e895b@gandalf.local.home>
+ <20190430132024.0f03f5b8@gandalf.local.home>
+ <20190430134913.4e29ce72@gandalf.local.home>
+ <CAHk-=wjJ8D74+FDcXGL65Q9aB0cc7B4vr2s2rS6V4d4a3hU-1Q@mail.gmail.com>
+ <20190501131117.GW2623@hirez.programming.kicks-ass.net>
+ <CAHk-=wjCoycqdVjvWkkFnVRQS9fHEzdmiAG4uUV8B04xv7ZVwA@mail.gmail.com>
+ <20190501151330.023cc620@gandalf.local.home>
+ <nycvar.YFH.7.76.1905012132100.9803@cbobk.fhfr.pm>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <nycvar.YFH.7.76.1905012132100.9803@cbobk.fhfr.pm>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, May 1, 2019 at 12:17 PM Peter Zijlstra <peterz@infradead.org> wrote:
->
-> Something like so then?
+On Wed, May 01, 2019 at 09:33:28PM +0200, Jiri Kosina wrote:
+> On Wed, 1 May 2019, Steven Rostedt wrote:
+> 
+> > I never tested the 32 bit version of this. And we could just not
+> > implement it (I don't think there's live kernel patching for it
+> > either).
+> 
+> That's correct, there is no livepatching on x86_32 (and no plans for 
+> it). CONFIG_LIVEPATCH is not available for 32bit builds at all.
 
-Yes, that looks correct.
-
-We have those X86_EFLAGS_VM tests pretty randomly scattered around,
-and I wish there was some cleaner model for this, but I also guess
-that there's no point in worrying about the 32-bit code much.
-
-                Linus
+We still want this for static_call(), even on 32bit.
