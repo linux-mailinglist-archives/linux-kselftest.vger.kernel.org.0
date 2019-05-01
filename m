@@ -2,369 +2,699 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B0FE10A16
-	for <lists+linux-kselftest@lfdr.de>; Wed,  1 May 2019 17:33:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 86CCF10BAA
+	for <lists+linux-kselftest@lfdr.de>; Wed,  1 May 2019 19:00:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726766AbfEAPcn (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 1 May 2019 11:32:43 -0400
-Received: from mail.kernel.org ([198.145.29.99]:42220 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726586AbfEAPcn (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 1 May 2019 11:32:43 -0400
-Received: from gandalf.local.home (cpe-66-24-58-225.stny.res.rr.com [66.24.58.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id AE1B0208C3;
-        Wed,  1 May 2019 15:32:39 +0000 (UTC)
-Date:   Wed, 1 May 2019 11:32:38 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Nicolai Stange <nstange@suse.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Jiri Kosina <jikos@kernel.org>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Petr Mladek <pmladek@suse.com>,
-        Joe Lawrence <joe.lawrence@redhat.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
-        Tim Chen <tim.c.chen@linux.intel.com>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Juergen Gross <jgross@suse.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nayna Jain <nayna@linux.ibm.com>,
-        Masahiro Yamada <yamada.masahiro@socionext.com>,
-        Joerg Roedel <jroedel@suse.de>,
-        Linux List Kernel Mailing <linux-kernel@vger.kernel.org>,
-        live-patching@vger.kernel.org,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>
-Subject: [RFC][PATCH v3] ftrace/x86_64: Emulate call function while updating
- in breakpoint handler
-Message-ID: <20190501113238.0ab3f9dd@gandalf.local.home>
-X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        id S1726705AbfEARAf (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 1 May 2019 13:00:35 -0400
+Received: from mail-wr1-f48.google.com ([209.85.221.48]:36860 "EHLO
+        mail-wr1-f48.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726452AbfEARAf (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 1 May 2019 13:00:35 -0400
+Received: by mail-wr1-f48.google.com with SMTP id o4so13316473wra.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 01 May 2019 10:00:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:date:to:message-id:subject:mime-version;
+        bh=Xuk4H/KzZWNaS1cEfFnXvZROREnyMMBiw+5X9boJVPE=;
+        b=ygPp+kyGc2h3hasrryWf3RwBZShr89K1UAJ+7TyqXuX4+MlWef4pnx4BAtY8X67h6G
+         H1R9j2YrTApolnrdC98hfPgLFgtnox+bX4Z6t0yGBP46Ujr+ayzv63Y+uewrT0Grb4Lp
+         TejjCn2ObdClOw9a3yRUC9bjA9LDiMqinXtaYfrOhyMLPleYEe0Lex2M4/IyQo0pDUPT
+         ghMyiI6Soigfyt3I7Es92MsHn1QIx+R7Vmos9Erid/ySpiU9HYpz0hrHVvEiSXm22poo
+         u6riMv38j0eNI25tT/OfIw7AzziQgAP6vSTPhCjdGXXPhSwXo4OLkL4zUedxiCj4Jt5/
+         Nxpg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:date:to:message-id:subject:mime-version;
+        bh=Xuk4H/KzZWNaS1cEfFnXvZROREnyMMBiw+5X9boJVPE=;
+        b=Tr+XUsqa9Nezd1g9DIyYYdzjK5v2Tifcj3W+B+YmweXULtvSSVdNgVOQdBW7ZdxPho
+         B2abRuFAL7QJb/d3RY5xz8h6l7Y8MucDk6gW6YcWCL2zJmWkWbQhNb6oyZvKL8nhH0wb
+         gYZitS3xTTlG+SfAuToDvjOBih0e6DDzX8gmFipdIB23r/pZNDMZmF0x9hc/KVEVzvNw
+         8AaBOmGdRAp05a1F1TNLqjfZjWED318SdkQElRgqkXEvViIORicylaXrs0C3Co4sFeOQ
+         P7vV+JAQNC43VphzQj6VaRqPvNIdv7MEF3QOUiTF5BSKqYuZQpjIddy5+c7OR6U69p9P
+         B2xQ==
+X-Gm-Message-State: APjAAAVnGKDq/yxRBYDgSx5QR/38foBm5qiFtkiiXK9cxyk1zeQ5i2Xs
+        c7PUGmBcgqfQ8KS1n1fR5au28A==
+X-Google-Smtp-Source: APXvYqzIC9NDl/BINDgVUdMwAkmUAEgQQat+0rbFcpjLLRpayhcIUCjtIcI5KRhb6GrCrPTBIa8TDA==
+X-Received: by 2002:adf:eec8:: with SMTP id a8mr32472wrp.64.1556730032168;
+        Wed, 01 May 2019 10:00:32 -0700 (PDT)
+Received: from a6c5c67cda76 (ci.linaro.org. [88.99.136.175])
+        by smtp.gmail.com with ESMTPSA id c63sm8423196wma.29.2019.05.01.10.00.31
+        (version=TLS1 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
+        Wed, 01 May 2019 10:00:31 -0700 (PDT)
+From:   ci_notify@linaro.org
+X-Google-Original-From: linaro-infrastructure-errors@lists.linaro.org
+Date:   Wed, 1 May 2019 17:00:30 +0000 (UTC)
+To:     lkft-triage@lists.linaro.org, dan.rue@linaro.org,
+        anders.roxell@linaro.org, naresh.kamboju@linaro.org,
+        linux-kselftest@vger.kernel.org
+Message-ID: <2044118188.16667.1556730031409.JavaMail.jenkins@a6c5c67cda76>
+Subject: next-20190501 kselftest results
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/mixed; 
+        boundary="----=_Part_16666_276267486.1556730030821"
+X-Jenkins-Job: LKFT Notify kselftest on next
+X-Jenkins-Result: SUCCESS
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+------=_Part_16666_276267486.1556730030821
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-From: "Steven Rostedt (VMware)" <rostedt@goodmis.org>
+Summary
+------------------------------------------------------------------------
+kernel: 5.1.0-rc7
+git repo: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+git branch: master
+git commit: bf2c8035bd8b364a912a2fe67083c1c2ea836d19
+git describe: next-20190501
+Test details: https://qa-reports.linaro.org/lkft/linux-next-oe/build/next-20190501
 
-Nicolai Stange discovered[1] that if live kernel patching is enabled, and the
-function tracer started tracing the same function that was patched, the
-conversion of the fentry call site during the translation of going from
-calling the live kernel patch trampoline to the iterator trampoline, would
-have as slight window where it didn't call anything.
+Regressions (compared to build next-20190430)
+------------------------------------------------------------------------
+juno-r2 - arm64:                                                                                                      
+ kselftest:                                                                                         
+    * bpf_test_sock_addr.sh                                                                                                         
+qemu_x86_64:                                                                                                      
+ kselftest:                                                                                         
+    * bpf_test_sock_addr.sh                                                                                                         
+                                                                                         
+    * net_fib-onlink-tests.sh                                                                                                         
+x86_64:                                                                                                      
+ kselftest:                                                                                         
+    * bpf_test_sock_addr.sh                                                                                                         
+                                                                                                      
+ kselftest-vsyscall-mode-native:                                                                                         
+    * bpf_test_sock_addr.sh                                                                                                         
+                                                                                         
+    * net_fib-onlink-tests.sh                                                                                                         
+x86_64:                                                                                                      
+ kselftest:                                                                                         
+    * bpf_test_sock_addr.sh                                                                                                         
+                                                                                                      
+ kselftest-vsyscall-mode-native:                                                                                         
+    * bpf_test_sock_addr.sh                                                                                                         
+                                                                                         
+    * net_fib-onlink-tests.sh                                                                                                         
+                                                                                                          
+                                                                                                                       
+Fixes (compared to build next-20190430)                                                                   
+------------------------------------------------------------------------                                               
+qemu_arm:                                                                                                      
+ kselftest:                                                                                         
+    * bpf_test_maps                                                                                                         
+qemu_arm64:                                                                                                      
+ kselftest:                                                                                         
+    * bpf_test_maps                                                                                                         
+                                                                                         
+    * bpf_test_sockmap                                                                                                         
+qemu_x86_64:                                                                                                      
+ kselftest:                                                                                         
+    * bpf_test_select_reuseport                                                                                                         
+x15 - arm:                                                                                                      
+ kselftest:                                                                                         
+    * bpf_test_sock_addr.sh                                                                                                         
 
-As live kernel patching depends on ftrace to always call its code (to
-prevent the function being traced from being called, as it will redirect
-it). This small window would allow the old buggy function to be called, and
-this can cause undesirable results.
 
-Nicolai submitted new patches[2] but these were controversial. As this is
-similar to the static call emulation issues that came up a while ago[3],
-Linus suggested using per CPU data along with special trampolines[4] to emulate
-the calls.
+In total:
+------------------------------------------------------------------------
+Ran 1538 total tests in the following environments and test suites.
+pass 901
+fail 514
+xfail 0
+skip 123
 
-Linus's solution was for text poke (which was mostly what the static_call
-code did), but as ftrace has its own mechanism, it required doing its own
-thing.
+Environments
+--------------
+- dragonboard-410c - arm64
+- hi6220-hikey - arm64
+- i386
+- juno-r2 - arm64
+- qemu_arm
+- qemu_arm64
+- qemu_i386
+- qemu_x86_64
+- x15 - arm
+- x86_64
 
-Having ftrace use its own per CPU data and having its own set of specialized
-trampolines solves the issue of missed calls that live kernel patching
-suffers.
-
-[1] http://lkml.kernel.org/r/20180726104029.7736-1-nstange@suse.de
-[2] http://lkml.kernel.org/r/20190427100639.15074-1-nstange@suse.de
-[3] http://lkml.kernel.org/r/3cf04e113d71c9f8e4be95fb84a510f085aa4afa.1541711457.git.jpoimboe@redhat.com
-[4] http://lkml.kernel.org/r/CAHk-=wh5OpheSU8Em_Q3Hg8qw_JtoijxOdPtHru6d+5K8TWM=A@mail.gmail.com
-
-Inspired-by: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: stable@vger.kernel.org
-Fixes: b700e7f03df5 ("livepatch: kernel: add support for live patching")
-Signed-off-by: Steven Rostedt (VMware) <rostedt@goodmis.org>
----
-
-Changes since v2:
-
-  - Moved inline asm to ftrace_64.S
-  - Used PER_CPU_VAR() and TRACE_IRQS_ON macros in assembly
-  - Renamed trampolines to be a little more coherent
-  - Created assembly version of STACK_FRAME_NON_STANDARD() in asm/frame.h
-  - Call ftrace_regs_caller instead of ftrace_caller
-  - No longer support 32 bit (it crashed badly on tests, and I couldn't figure it out)
+Test Suites
+-----------
+* boot-lkft-kselftests-master-511
+* kselftest
+* boot-lkft-kselftests-vsyscall-mode-native-master-511
+* boot-lkft-kselftests-vsyscall-mode-none-master-511
+* kselftest-vsyscall-mode-native
+* kselftest-vsyscall-mode-none
 
 
- arch/x86/include/asm/frame.h |  15 ++++++
- arch/x86/kernel/ftrace.c     | 102 ++++++++++++++++++++++++++++++++++-
- arch/x86/kernel/ftrace_64.S  |  56 +++++++++++++++++++
- 3 files changed, 172 insertions(+), 1 deletion(-)
+Failures
+------------------------------------------------------------------------
 
-diff --git a/arch/x86/include/asm/frame.h b/arch/x86/include/asm/frame.h
-index 5cbce6fbb534..04892b374b93 100644
---- a/arch/x86/include/asm/frame.h
-+++ b/arch/x86/include/asm/frame.h
-@@ -42,4 +42,19 @@
- 
- #endif /* CONFIG_FRAME_POINTER */
- 
-+#ifdef __ASSEMBLY__
-+#ifdef CONFIG_STACK_VALIDATION
-+#define STACK_FRAME_NON_STANDARD(func)					\
-+.section        .discard.func_stack_frame_non_standard,"aw";		\
-+.align 8;								\
-+.type		__func_stack_frame_non_standard_##func, @object;	\
-+.size		__func_stack_frame_non_standard_##func, 8;		\
-+__func_stack_frame_non_standard_##func:					\
-+.quad		func;							\
-+.previous
-+#else /* !CONFIG_STACK_VALIDATION */
-+#define STACK_FRAME_NON_STANDARD(func)
-+#endif /* CONFIG_STACK_VALIDATION */
-+#endif /* __ASSEMBLY__ */
-+
- #endif /* _ASM_X86_FRAME_H */
-diff --git a/arch/x86/kernel/ftrace.c b/arch/x86/kernel/ftrace.c
-index ef49517f6bb2..634fc0d4fe97 100644
---- a/arch/x86/kernel/ftrace.c
-+++ b/arch/x86/kernel/ftrace.c
-@@ -232,6 +232,9 @@ int ftrace_modify_call(struct dyn_ftrace *rec, unsigned long old_addr,
- 
- static unsigned long ftrace_update_func;
- 
-+/* Used within inline asm below */
-+unsigned long ftrace_update_func_call;
-+
- static int update_ftrace_func(unsigned long ip, void *new)
- {
- 	unsigned char old[MCOUNT_INSN_SIZE];
-@@ -259,6 +262,8 @@ int ftrace_update_ftrace_func(ftrace_func_t func)
- 	unsigned char *new;
- 	int ret;
- 
-+	ftrace_update_func_call = (unsigned long)func;
-+
- 	new = ftrace_call_replace(ip, (unsigned long)func);
- 	ret = update_ftrace_func(ip, new);
- 
-@@ -280,6 +285,46 @@ static nokprobe_inline int is_ftrace_caller(unsigned long ip)
- 	return 0;
- }
- 
-+#ifdef CONFIG_X86_64
-+/*
-+ * We need to handle the "call func1" -> "call func2" case.
-+ * Just skipping the call is not sufficient as it will be like
-+ * changing to "nop" first and then updating the call. But some
-+ * users of ftrace require calls never to be missed.
-+ *
-+ * To emulate the call while converting the call site with a breakpoint,
-+ * some trampolines are used along with per CPU buffers.
-+ * There are three trampolines for the call sites and three trampolines
-+ * for the updating of the call in ftrace trampoline. The three
-+ * trampolines are:
-+ *
-+ * 1) Interrupts are enabled when the breakpoint is hit
-+ * 2) Interrupts are disabled when the breakpoint is hit
-+ * 3) The breakpoint was hit in an NMI
-+ *
-+ * As per CPU data is used, interrupts must be disabled to prevent them
-+ * from corrupting the data. A separate NMI trampoline is used for the
-+ * NMI case. If interrupts are already disabled, then the return path
-+ * of where the breakpoint was hit (saved in the per CPU data) is pushed
-+ * on the stack and then a jump to either the ftrace_caller (which will
-+ * loop through all registered ftrace_ops handlers depending on the ip
-+ * address), or if its a ftrace trampoline call update, it will call
-+ * ftrace_update_func_call which will hold the call that should be
-+ * called.
-+ */
-+extern asmlinkage void ftrace_emulate_call_sti(void);
-+extern asmlinkage void ftrace_emulate_call(void);
-+extern asmlinkage void ftrace_emulate_call_nmi(void);
-+extern asmlinkage void ftrace_emulate_call_update_sti(void);
-+extern asmlinkage void ftrace_emulate_call_update(void);
-+extern asmlinkage void ftrace_emulate_call_update_nmi(void);
-+
-+DEFINE_PER_CPU(void *, ftrace_bp_call_return);
-+DEFINE_PER_CPU(void *, ftrace_bp_call_nmi_return);
-+
-+/* To hold the ftrace_regs_caller address to push on the stack */
-+void *ftrace_caller_func = (void *)ftrace_regs_caller;
-+
- /*
-  * A breakpoint was added to the code address we are about to
-  * modify, and this is the handle that will just skip over it.
-@@ -291,6 +336,58 @@ int ftrace_int3_handler(struct pt_regs *regs)
- {
- 	unsigned long ip;
- 
-+	if (WARN_ON_ONCE(!regs))
-+		return 0;
-+
-+	ip = regs->ip - 1;
-+	if (ftrace_location(ip)) {
-+		/* A breakpoint at the beginning of the function was hit */
-+		if (in_nmi()) {
-+			/* NMIs have their own trampoline */
-+			this_cpu_write(ftrace_bp_call_nmi_return, (void *)ip + MCOUNT_INSN_SIZE);
-+			regs->ip = (unsigned long) ftrace_emulate_call_nmi;
-+			return 1;
-+		}
-+		this_cpu_write(ftrace_bp_call_return, (void *)ip + MCOUNT_INSN_SIZE);
-+		if (regs->flags & X86_EFLAGS_IF) {
-+			regs->flags &= ~X86_EFLAGS_IF;
-+			regs->ip = (unsigned long) ftrace_emulate_call_sti;
-+			/* Tell lockdep here we are enabling interrupts */
-+			lockdep_hardirqs_on(_THIS_IP_);
-+		} else {
-+			regs->ip = (unsigned long) ftrace_emulate_call;
-+		}
-+		return 1;
-+	} else if (is_ftrace_caller(ip)) {
-+		/* An ftrace trampoline is being updated */
-+		if (!ftrace_update_func_call) {
-+			/* If it's a jump, just need to skip it */
-+			regs->ip += MCOUNT_INSN_SIZE -1;
-+			return 1;
-+		}
-+		if (in_nmi()) {
-+			/* NMIs have their own trampoline */
-+			this_cpu_write(ftrace_bp_call_nmi_return, (void *)ip + MCOUNT_INSN_SIZE);
-+			regs->ip = (unsigned long) ftrace_emulate_call_update_nmi;
-+			return 1;
-+		}
-+		this_cpu_write(ftrace_bp_call_return, (void *)ip + MCOUNT_INSN_SIZE);
-+		if (regs->flags & X86_EFLAGS_IF) {
-+			regs->flags &= ~X86_EFLAGS_IF;
-+			regs->ip = (unsigned long) ftrace_emulate_call_update_sti;
-+		} else {
-+			regs->ip = (unsigned long) ftrace_emulate_call_update;
-+		}
-+		return 1;
-+	}
-+
-+	return 0;
-+}
-+#else /* !X86_64 */
-+int ftrace_int3_handler(struct pt_regs *regs)
-+{
-+	unsigned long ip;
-+
- 	if (WARN_ON_ONCE(!regs))
- 		return 0;
- 
-@@ -299,9 +396,9 @@ int ftrace_int3_handler(struct pt_regs *regs)
- 		return 0;
- 
- 	regs->ip += MCOUNT_INSN_SIZE - 1;
--
- 	return 1;
- }
-+#endif
- NOKPROBE_SYMBOL(ftrace_int3_handler);
- 
- static int ftrace_write(unsigned long ip, const char *val, int size)
-@@ -859,6 +956,8 @@ void arch_ftrace_update_trampoline(struct ftrace_ops *ops)
- 
- 	func = ftrace_ops_get_func(ops);
- 
-+	ftrace_update_func_call = (unsigned long)func;
-+
- 	/* Do a safe modify in case the trampoline is executing */
- 	new = ftrace_call_replace(ip, (unsigned long)func);
- 	ret = update_ftrace_func(ip, new);
-@@ -960,6 +1059,7 @@ static int ftrace_mod_jmp(unsigned long ip, void *func)
- {
- 	unsigned char *new;
- 
-+	ftrace_update_func_call = 0;
- 	new = ftrace_jmp_replace(ip, (unsigned long)func);
- 
- 	return update_ftrace_func(ip, new);
-diff --git a/arch/x86/kernel/ftrace_64.S b/arch/x86/kernel/ftrace_64.S
-index 75f2b36b41a6..8642e1719370 100644
---- a/arch/x86/kernel/ftrace_64.S
-+++ b/arch/x86/kernel/ftrace_64.S
-@@ -9,6 +9,9 @@
- #include <asm/export.h>
- #include <asm/nospec-branch.h>
- #include <asm/unwind_hints.h>
-+#include <asm/irqflags.h>
-+#include <asm/percpu.h>
-+#include <asm/frame.h>
- 
- 	.code64
- 	.section .entry.text, "ax"
-@@ -262,6 +265,59 @@ GLOBAL(ftrace_regs_caller_end)
- ENDPROC(ftrace_regs_caller)
- 
- 
-+/* Trampoline for function update with interrupts enabled */
-+GLOBAL(ftrace_emulate_call_sti)
-+	push PER_CPU_VAR(ftrace_bp_call_return)
-+	push ftrace_caller_func
-+	TRACE_IRQS_ON
-+	sti
-+	ret
-+ENDPROC(ftrace_emulate_call_sti)
-+
-+/* Trampoline for function update with interrupts disabled*/
-+GLOBAL(ftrace_emulate_call)
-+	push PER_CPU_VAR(ftrace_bp_call_return)
-+	push ftrace_caller_func
-+	ret
-+ENDPROC(ftrace_emulate_call)
-+
-+/* Trampoline for function update in an NMI */
-+GLOBAL(ftrace_emulate_call_nmi)
-+	push PER_CPU_VAR(ftrace_bp_call_nmi_return)
-+	push ftrace_caller_func
-+	ret
-+ENDPROC(ftrace_emulate_call_nmi)
-+
-+/* Trampoline for ftrace trampoline call update with interrupts enabled */
-+GLOBAL(ftrace_emulate_call_update_sti)
-+	push PER_CPU_VAR(ftrace_bp_call_return)
-+	push ftrace_update_func_call
-+	TRACE_IRQS_ON
-+	sti
-+	ret
-+ENDPROC(ftrace_emulate_call_update_sti)
-+
-+/* Trampoline for ftrace trampoline call update with interrupts disabled */
-+GLOBAL(ftrace_emulate_call_update)
-+	push PER_CPU_VAR(ftrace_bp_call_return)
-+	push ftrace_update_func_call
-+	ret
-+ENDPROC(ftrace_emulate_call_update)
-+
-+/* Trampoline for ftrace trampoline call update in an NMI */
-+GLOBAL(ftrace_emulate_call_update_nmi)
-+	push PER_CPU_VAR(ftrace_bp_call_nmi_return)
-+	push ftrace_update_func_call
-+	ret
-+ENDPROC(ftrace_emulate_call_update_nmi)
-+
-+STACK_FRAME_NON_STANDARD(ftrace_emulate_call_sti)
-+STACK_FRAME_NON_STANDARD(ftrace_emulate_call)
-+STACK_FRAME_NON_STANDARD(ftrace_emulate_call_nmi)
-+STACK_FRAME_NON_STANDARD(ftrace_emulate_call_update_sti)
-+STACK_FRAME_NON_STANDARD(ftrace_emulate_call_update)
-+STACK_FRAME_NON_STANDARD(ftrace_emulate_call_update_nmi)
-+
- #else /* ! CONFIG_DYNAMIC_FTRACE */
- 
- ENTRY(function_hook)
+qemu_arm:
+* kselftest/binderfs_binderfs_test
+* kselftest/bpf_get_cgroup_id_user
+* kselftest/bpf_test_flow_dissector.sh
+* kselftest/bpf_test_lirc_mode2_user
+* kselftest/bpf_test_lwt_ip_encap.sh
+* kselftest/bpf_test_lwt_seg6local.sh
+* kselftest/bpf_test_netcnt
+* kselftest/bpf_test_progs
+* kselftest/bpf_test_select_reuseport
+* kselftest/bpf_test_sock_fields
+* kselftest/bpf_test_sockmap
+* kselftest/bpf_test_sysctl
+* kselftest/bpf_test_tc_edt.sh
+* kselftest/bpf_test_tcp_check_syncookie.sh
+* kselftest/bpf_test_tcpnotify_user
+* kselftest/bpf_test_tc_tunnel.sh
+* kselftest/bpf_test_verifier
+* kselftest/cgroup_test_core
+* kselftest/cpufreq_main.sh
+* kselftest/dma-buf_udmabuf
+* kselftest/firmware_fw_run_tests.sh
+* kselftest/kvm_clear_dirty_log_test
+* kselftest/kvm_cr4_cpuid_sync_test
+* kselftest/kvm_dirty_log_test
+* kselftest/kvm_evmcs_test
+* kselftest/kvm_hyperv_cpuid
+* kselftest/kvm_platform_info_test
+* kselftest/kvm_set_sregs_test
+* kselftest/kvm_smm_test
+* kselftest/kvm_state_test
+* kselftest/kvm_sync_regs_test
+* kselftest/kvm_vmx_close_while_nested_test
+* kselftest/kvm_vmx_tsc_adjust_test
+* kselftest/lib_bitmap.sh
+* kselftest/lib_prime_numbers.sh
+* kselftest/lib_printf.sh
+* kselftest/lib_strscpy.sh
+* kselftest/livepatch_test-callbacks.sh
+* kselftest/livepatch_test-livepatch.sh
+* kselftest/livepatch_test-shadow-vars.sh
+* kselftest/membarrier_membarrier_test
+* kselftest/net_fib-onlink-tests.sh
+* kselftest/net_fib_tests.sh
+* kselftest/net_ip_defrag.sh
+* kselftest/net_msg_zerocopy.sh
+* kselftest/net_pmtu.sh
+* kselftest/net_psock_snd.sh
+* kselftest/net_reuseport_bpf_numa
+* kselftest/net_run_netsocktests
+* kselftest/net_test_vxlan_under_vrf.sh
+* kselftest/net_tls
+* kselftest/pidfd_pidfd_test
+* kselftest/proc_proc-self-map-files-002
+* kselftest/proc_proc-self-syscall
+* kselftest/pstore_pstore_tests
+* kselftest/rseq_basic_percpu_ops_test
+* kselftest/rseq_basic_test
+* kselftest/rseq_param_test
+* kselftest/rseq_param_test_benchmark
+* kselftest/rseq_param_test_compare_twice
+* kselftest/rtc_rtctest
+* kselftest/seccomp_seccomp_bpf
+* kselftest/timestamping_txtimestamp.sh
+* kselftest/tpm2_test_smoke.sh
+* kselftest/tpm2_test_space.sh
+
+qemu_i386:
+* kselftest/bpf_test_maps
+* kselftest/bpf_test_progs
+
+qemu_x86_64:
+* kselftest/binderfs_binderfs_test
+* kselftest/bpf_test_flow_dissector.sh
+* kselftest/bpf_test_lirc_mode2_user
+* kselftest/bpf_test_lwt_ip_encap.sh
+* kselftest/bpf_test_lwt_seg6local.sh
+* kselftest/bpf_test_netcnt
+* kselftest/bpf_test_progs
+* kselftest/bpf_test_sock_addr.sh
+* kselftest/bpf_test_sock_fields
+* kselftest/bpf_test_tc_edt.sh
+* kselftest/bpf_test_tc_tunnel.sh
+* kselftest/cgroup_test_core
+* kselftest/cpufreq_main.sh
+* kselftest/dma-buf_udmabuf
+* kselftest/firmware_fw_run_tests.sh
+* kselftest/kvm_clear_dirty_log_test
+* kselftest/kvm_cr4_cpuid_sync_test
+* kselftest/kvm_dirty_log_test
+* kselftest/kvm_evmcs_test
+* kselftest/kvm_hyperv_cpuid
+* kselftest/kvm_platform_info_test
+* kselftest/kvm_set_sregs_test
+* kselftest/kvm_smm_test
+* kselftest/kvm_state_test
+* kselftest/kvm_sync_regs_test
+* kselftest/kvm_vmx_close_while_nested_test
+* kselftest/kvm_vmx_tsc_adjust_test
+* kselftest/lib_bitmap.sh
+* kselftest/lib_prime_numbers.sh
+* kselftest/lib_printf.sh
+* kselftest/lib_strscpy.sh
+* kselftest/livepatch_test-callbacks.sh
+* kselftest/livepatch_test-livepatch.sh
+* kselftest/livepatch_test-shadow-vars.sh
+* kselftest/membarrier_membarrier_test
+* kselftest/net_fib-onlink-tests.sh
+* kselftest/net_ip_defrag.sh
+* kselftest/net_msg_zerocopy.sh
+* kselftest/net_pmtu.sh
+* kselftest/net_psock_snd.sh
+* kselftest/net_run_netsocktests
+* kselftest/net_test_vxlan_under_vrf.sh
+* kselftest/net_tls
+* kselftest/net_xfrm_policy.sh
+* kselftest/pstore_pstore_tests
+* kselftest/rseq_basic_percpu_ops_test
+* kselftest/rseq_basic_test
+* kselftest/rseq_param_test
+* kselftest/rseq_param_test_benchmark
+* kselftest/rseq_param_test_compare_twice
+* kselftest/rseq_run_param_test.sh
+* kselftest/rtc_rtctest
+* kselftest/seccomp_seccomp_bpf
+* kselftest/timestamping_txtimestamp.sh
+* kselftest/tpm2_test_smoke.sh
+* kselftest/tpm2_test_space.sh
+* kselftest/vm_run_vmtests
+* kselftest/x86_fsgsbase_64
+
+x15:
+* kselftest/binderfs_binderfs_test
+* kselftest/bpf_get_cgroup_id_user
+* kselftest/bpf_test_flow_dissector.sh
+* kselftest/bpf_test_lirc_mode2_user
+* kselftest/bpf_test_lwt_ip_encap.sh
+* kselftest/bpf_test_lwt_seg6local.sh
+* kselftest/bpf_test_netcnt
+* kselftest/bpf_test_progs
+* kselftest/bpf_test_select_reuseport
+* kselftest/bpf_test_sock_fields
+* kselftest/bpf_test_sockmap
+* kselftest/bpf_test_tc_edt.sh
+* kselftest/bpf_test_tcp_check_syncookie.sh
+* kselftest/bpf_test_tcpnotify_user
+* kselftest/bpf_test_tc_tunnel.sh
+* kselftest/bpf_test_verifier
+* kselftest/cgroup_test_core
+* kselftest/dma-buf_udmabuf
+* kselftest/firmware_fw_run_tests.sh
+* kselftest/kvm_clear_dirty_log_test
+* kselftest/kvm_cr4_cpuid_sync_test
+* kselftest/kvm_dirty_log_test
+* kselftest/kvm_evmcs_test
+* kselftest/kvm_hyperv_cpuid
+* kselftest/kvm_platform_info_test
+* kselftest/kvm_set_sregs_test
+* kselftest/kvm_smm_test
+* kselftest/kvm_state_test
+* kselftest/kvm_sync_regs_test
+* kselftest/kvm_vmx_close_while_nested_test
+* kselftest/kvm_vmx_tsc_adjust_test
+* kselftest/lib_bitmap.sh
+* kselftest/lib_prime_numbers.sh
+* kselftest/lib_printf.sh
+* kselftest/lib_strscpy.sh
+* kselftest/livepatch_test-callbacks.sh
+* kselftest/livepatch_test-shadow-vars.sh
+* kselftest/membarrier_membarrier_test
+* kselftest/net_fib-onlink-tests.sh
+* kselftest/net_fib_tests.sh
+* kselftest/net_ip_defrag.sh
+* kselftest/net_msg_zerocopy.sh
+* kselftest/net_pmtu.sh
+* kselftest/net_psock_snd.sh
+* kselftest/net_reuseport_bpf_numa
+* kselftest/net_run_netsocktests
+* kselftest/net_test_vxlan_under_vrf.sh
+* kselftest/net_tls
+* kselftest/pidfd_pidfd_test
+* kselftest/proc_proc-self-map-files-002
+* kselftest/proc_proc-self-syscall
+* kselftest/pstore_pstore_tests
+* kselftest/rseq_basic_percpu_ops_test
+* kselftest/rseq_basic_test
+* kselftest/rseq_param_test
+* kselftest/rseq_param_test_benchmark
+* kselftest/rseq_param_test_compare_twice
+* kselftest/rtc_rtctest
+* kselftest/seccomp_seccomp_bpf
+* kselftest/timestamping_txtimestamp.sh
+
+juno-r2:
+* kselftest/binderfs_binderfs_test
+* kselftest/bpf_test_flow_dissector.sh
+* kselftest/bpf_test_lwt_ip_encap.sh
+* kselftest/bpf_test_lwt_seg6local.sh
+* kselftest/bpf_test_netcnt
+* kselftest/bpf_test_progs
+* kselftest/bpf_test_select_reuseport
+* kselftest/bpf_test_sock_addr.sh
+* kselftest/bpf_test_sock_fields
+* kselftest/bpf_test_tc_edt.sh
+* kselftest/bpf_test_tcp_check_syncookie.sh
+* kselftest/bpf_test_tc_tunnel.sh
+* kselftest/bpf_test_verifier
+* kselftest/cgroup_test_core
+* kselftest/cpufreq_main.sh
+* kselftest/dma-buf_udmabuf
+* kselftest/firmware_fw_run_tests.sh
+* kselftest/kvm_clear_dirty_log_test
+* kselftest/kvm_cr4_cpuid_sync_test
+* kselftest/kvm_hyperv_cpuid
+* kselftest/kvm_platform_info_test
+* kselftest/kvm_set_sregs_test
+* kselftest/kvm_state_test
+* kselftest/kvm_sync_regs_test
+* kselftest/kvm_vmx_close_while_nested_test
+* kselftest/kvm_vmx_tsc_adjust_test
+* kselftest/lib_printf.sh
+* kselftest/lib_strscpy.sh
+* kselftest/livepatch_test-callbacks.sh
+* kselftest/livepatch_test-livepatch.sh
+* kselftest/livepatch_test-shadow-vars.sh
+* kselftest/membarrier_membarrier_test
+* kselftest/net_fib-onlink-tests.sh
+* kselftest/net_fib_tests.sh
+* kselftest/net_ip_defrag.sh
+* kselftest/net_msg_zerocopy.sh
+* kselftest/net_pmtu.sh
+* kselftest/net_psock_snd.sh
+* kselftest/net_run_netsocktests
+* kselftest/net_tls
+
+dragonboard-410c:
+* boot-lkft-kselftests-master-511/dragonboard-410c
+
+qemu_arm64:
+* kselftest/binderfs_binderfs_test
+* kselftest/bpf_test_flow_dissector.sh
+* kselftest/bpf_test_lirc_mode2_user
+* kselftest/bpf_test_lwt_ip_encap.sh
+* kselftest/bpf_test_lwt_seg6local.sh
+* kselftest/bpf_test_netcnt
+* kselftest/bpf_test_progs
+* kselftest/bpf_test_select_reuseport
+* kselftest/bpf_test_sock_fields
+* kselftest/bpf_test_tc_edt.sh
+* kselftest/bpf_test_tcp_check_syncookie.sh
+* kselftest/bpf_test_tc_tunnel.sh
+* kselftest/bpf_test_verifier
+* kselftest/cgroup_test_core
+* kselftest/cpufreq_main.sh
+* kselftest/dma-buf_udmabuf
+* kselftest/firmware_fw_run_tests.sh
+* kselftest/kvm_clear_dirty_log_test
+* kselftest/kvm_cr4_cpuid_sync_test
+* kselftest/kvm_dirty_log_test
+* kselftest/kvm_evmcs_test
+* kselftest/kvm_hyperv_cpuid
+* kselftest/kvm_platform_info_test
+* kselftest/kvm_set_sregs_test
+* kselftest/kvm_smm_test
+* kselftest/kvm_state_test
+* kselftest/kvm_sync_regs_test
+* kselftest/kvm_vmx_close_while_nested_test
+* kselftest/kvm_vmx_tsc_adjust_test
+* kselftest/lib_bitmap.sh
+* kselftest/lib_prime_numbers.sh
+* kselftest/lib_printf.sh
+* kselftest/lib_strscpy.sh
+* kselftest/livepatch_test-callbacks.sh
+* kselftest/livepatch_test-livepatch.sh
+* kselftest/livepatch_test-shadow-vars.sh
+* kselftest/membarrier_membarrier_test
+* kselftest/net_fib-onlink-tests.sh
+* kselftest/net_fib_tests.sh
+* kselftest/net_ip_defrag.sh
+* kselftest/net_msg_zerocopy.sh
+* kselftest/net_pmtu.sh
+* kselftest/net_psock_snd.sh
+* kselftest/net_run_netsocktests
+* kselftest/net_test_vxlan_under_vrf.sh
+* kselftest/net_tls
+* kselftest/pidfd_pidfd_test
+* kselftest/pstore_pstore_tests
+* kselftest/rseq_basic_percpu_ops_test
+* kselftest/rseq_basic_test
+* kselftest/rseq_param_test
+* kselftest/rseq_param_test_benchmark
+* kselftest/rseq_param_test_compare_twice
+* kselftest/rtc_rtctest
+* kselftest/seccomp_seccomp_bpf
+* kselftest/timestamping_txtimestamp.sh
+* kselftest/tpm2_test_smoke.sh
+* kselftest/tpm2_test_space.sh
+* kselftest/vm_run_vmtests
+
+i386:
+* kselftest/binderfs_binderfs_test
+* kselftest/bpf_get_cgroup_id_user
+* kselftest/bpf_test_flow_dissector.sh
+* kselftest/bpf_test_lirc_mode2_user
+* kselftest/bpf_test_lwt_ip_encap.sh
+* kselftest/bpf_test_lwt_seg6local.sh
+* kselftest/bpf_test_maps
+* kselftest/bpf_test_netcnt
+* kselftest/bpf_test_progs
+* kselftest/bpf_test_sock_fields
+* kselftest/bpf_test_sockmap
+* kselftest/bpf_test_tc_edt.sh
+* kselftest/bpf_test_tc_tunnel.sh
+* kselftest/cgroup_test_core
+* kselftest/dma-buf_udmabuf
+* kselftest/firmware_fw_run_tests.sh
+
+hi6220-hikey:
+* kselftest/bpf_test_flow_dissector.sh
+* kselftest/bpf_test_lwt_ip_encap.sh
+* kselftest/bpf_test_lwt_seg6local.sh
+* kselftest/bpf_test_netcnt
+* kselftest/bpf_test_progs
+* kselftest/bpf_test_select_reuseport
+* kselftest/bpf_test_sock_addr.sh
+* kselftest/bpf_test_sock_fields
+* kselftest/bpf_test_tc_edt.sh
+* kselftest/bpf_test_tcp_check_syncookie.sh
+* kselftest/bpf_test_tc_tunnel.sh
+* kselftest/bpf_test_verifier
+* kselftest/cgroup_test_core
+* kselftest/dma-buf_udmabuf
+* kselftest/firmware_fw_run_tests.sh
+* kselftest/kvm_clear_dirty_log_test
+* kselftest/kvm_cr4_cpuid_sync_test
+* kselftest/kvm_dirty_log_test
+* kselftest/kvm_evmcs_test
+* kselftest/kvm_hyperv_cpuid
+* kselftest/kvm_platform_info_test
+* kselftest/kvm_set_sregs_test
+* kselftest/kvm_smm_test
+* kselftest/kvm_state_test
+* kselftest/kvm_sync_regs_test
+* kselftest/kvm_vmx_close_while_nested_test
+* kselftest/kvm_vmx_tsc_adjust_test
+* kselftest/lib_bitmap.sh
+* kselftest/lib_prime_numbers.sh
+* kselftest/lib_printf.sh
+* kselftest/lib_strscpy.sh
+* kselftest/livepatch_test-callbacks.sh
+* kselftest/livepatch_test-livepatch.sh
+* kselftest/livepatch_test-shadow-vars.sh
+* kselftest/membarrier_membarrier_test
+* kselftest/net_fib-onlink-tests.sh
+* kselftest/net_fib_tests.sh
+* kselftest/net_ip_defrag.sh
+* kselftest/net_msg_zerocopy.sh
+* kselftest/net_pmtu.sh
+* kselftest/net_psock_snd.sh
+* kselftest/net_run_netsocktests
+* kselftest/net_test_vxlan_under_vrf.sh
+* kselftest/net_tls
+* kselftest/pidfd_pidfd_test
+* kselftest/pstore_pstore_tests
+* kselftest/rseq_basic_percpu_ops_test
+* kselftest/rseq_basic_test
+* kselftest/rseq_param_test
+* kselftest/rseq_param_test_benchmark
+* kselftest/rseq_param_test_compare_twice
+* kselftest/rtc_rtctest
+* kselftest/seccomp_seccomp_bpf
+* kselftest/timestamping_txtimestamp.sh
+
+x86:
+* kselftest-vsyscall-mode-native/binderfs_binderfs_test
+* kselftest-vsyscall-mode-native/bpf_test_flow_dissector.sh
+* kselftest-vsyscall-mode-native/bpf_test_lirc_mode2_user
+* kselftest-vsyscall-mode-native/bpf_test_lwt_ip_encap.sh
+* kselftest-vsyscall-mode-native/bpf_test_lwt_seg6local.sh
+* kselftest-vsyscall-mode-native/bpf_test_netcnt
+* kselftest-vsyscall-mode-native/bpf_test_progs
+* kselftest-vsyscall-mode-native/bpf_test_sock_addr.sh
+* kselftest-vsyscall-mode-native/bpf_test_sock_fields
+* kselftest-vsyscall-mode-native/bpf_test_sockmap
+* kselftest-vsyscall-mode-native/bpf_test_tc_edt.sh
+* kselftest-vsyscall-mode-native/bpf_test_tc_tunnel.sh
+* kselftest-vsyscall-mode-native/cgroup_test_core
+* kselftest-vsyscall-mode-native/dma-buf_udmabuf
+* kselftest-vsyscall-mode-native/firmware_fw_run_tests.sh
+* kselftest-vsyscall-mode-native/kvm_clear_dirty_log_test
+* kselftest-vsyscall-mode-native/kvm_cr4_cpuid_sync_test
+* kselftest-vsyscall-mode-native/kvm_dirty_log_test
+* kselftest-vsyscall-mode-native/kvm_evmcs_test
+* kselftest-vsyscall-mode-native/kvm_hyperv_cpuid
+* kselftest-vsyscall-mode-native/kvm_platform_info_test
+* kselftest-vsyscall-mode-native/kvm_set_sregs_test
+* kselftest-vsyscall-mode-native/kvm_smm_test
+* kselftest-vsyscall-mode-native/kvm_state_test
+* kselftest-vsyscall-mode-native/kvm_sync_regs_test
+* kselftest-vsyscall-mode-native/kvm_vmx_close_while_nested_test
+* kselftest-vsyscall-mode-native/kvm_vmx_tsc_adjust_test
+* kselftest-vsyscall-mode-native/lib_bitmap.sh
+* kselftest-vsyscall-mode-native/lib_printf.sh
+* kselftest-vsyscall-mode-native/lib_strscpy.sh
+* kselftest-vsyscall-mode-native/livepatch_test-callbacks.sh
+* kselftest-vsyscall-mode-native/livepatch_test-livepatch.sh
+* kselftest-vsyscall-mode-native/livepatch_test-shadow-vars.sh
+* kselftest-vsyscall-mode-native/membarrier_membarrier_test
+* kselftest-vsyscall-mode-native/net_fib-onlink-tests.sh
+* kselftest-vsyscall-mode-native/net_ip_defrag.sh
+* kselftest-vsyscall-mode-native/net_msg_zerocopy.sh
+* kselftest-vsyscall-mode-native/net_pmtu.sh
+* kselftest-vsyscall-mode-native/net_psock_snd.sh
+* kselftest-vsyscall-mode-native/net_test_vxlan_under_vrf.sh
+* kselftest-vsyscall-mode-native/net_xfrm_policy.sh
+* kselftest-vsyscall-mode-native/pidfd_pidfd_test
+* kselftest-vsyscall-mode-native/pstore_pstore_tests
+* kselftest-vsyscall-mode-native/rseq_basic_percpu_ops_test
+* kselftest-vsyscall-mode-native/rseq_basic_test
+* kselftest-vsyscall-mode-native/rseq_param_test
+* kselftest-vsyscall-mode-native/rseq_param_test_benchmark
+* kselftest-vsyscall-mode-native/rseq_param_test_compare_twice
+* kselftest-vsyscall-mode-native/rseq_run_param_test.sh
+* kselftest-vsyscall-mode-native/seccomp_seccomp_bpf
+* kselftest-vsyscall-mode-native/timestamping_txtimestamp.sh
+* kselftest-vsyscall-mode-native/tpm2_test_smoke.sh
+* kselftest-vsyscall-mode-native/tpm2_test_space.sh
+* kselftest-vsyscall-mode-none/binderfs_binderfs_test
+* kselftest-vsyscall-mode-none/bpf_test_flow_dissector.sh
+* kselftest-vsyscall-mode-none/bpf_test_lirc_mode2_user
+* kselftest-vsyscall-mode-none/bpf_test_lwt_ip_encap.sh
+* kselftest-vsyscall-mode-none/bpf_test_lwt_seg6local.sh
+* kselftest-vsyscall-mode-none/bpf_test_netcnt
+* kselftest-vsyscall-mode-none/bpf_test_progs
+* kselftest-vsyscall-mode-none/bpf_test_sock_fields
+* kselftest-vsyscall-mode-none/bpf_test_sockmap
+* kselftest-vsyscall-mode-none/bpf_test_tc_tunnel.sh
+* kselftest-vsyscall-mode-none/cgroup_test_core
+* kselftest-vsyscall-mode-none/dma-buf_udmabuf
+* kselftest-vsyscall-mode-none/firmware_fw_run_tests.sh
+* kselftest-vsyscall-mode-none/kvm_clear_dirty_log_test
+* kselftest-vsyscall-mode-none/kvm_cr4_cpuid_sync_test
+* kselftest-vsyscall-mode-none/kvm_dirty_log_test
+* kselftest-vsyscall-mode-none/kvm_evmcs_test
+* kselftest-vsyscall-mode-none/kvm_hyperv_cpuid
+* kselftest-vsyscall-mode-none/kvm_platform_info_test
+* kselftest-vsyscall-mode-none/kvm_set_sregs_test
+* kselftest-vsyscall-mode-none/kvm_state_test
+* kselftest-vsyscall-mode-none/kvm_sync_regs_test
+* kselftest-vsyscall-mode-none/kvm_vmx_close_while_nested_test
+* kselftest-vsyscall-mode-none/kvm_vmx_tsc_adjust_test
+* kselftest-vsyscall-mode-none/lib_bitmap.sh
+* kselftest-vsyscall-mode-none/lib_prime_numbers.sh
+* kselftest-vsyscall-mode-none/lib_printf.sh
+* kselftest-vsyscall-mode-none/lib_strscpy.sh
+* kselftest-vsyscall-mode-none/livepatch_test-callbacks.sh
+* kselftest-vsyscall-mode-none/livepatch_test-livepatch.sh
+* kselftest-vsyscall-mode-none/livepatch_test-shadow-vars.sh
+* kselftest-vsyscall-mode-none/membarrier_membarrier_test
+* kselftest-vsyscall-mode-none/net_fib-onlink-tests.sh
+* kselftest-vsyscall-mode-none/net_ip_defrag.sh
+* kselftest-vsyscall-mode-none/net_msg_zerocopy.sh
+* kselftest-vsyscall-mode-none/net_pmtu.sh
+* kselftest-vsyscall-mode-none/net_psock_snd.sh
+* kselftest-vsyscall-mode-none/net_test_vxlan_under_vrf.sh
+* kselftest-vsyscall-mode-none/net_xfrm_policy.sh
+* kselftest-vsyscall-mode-none/pidfd_pidfd_test
+* kselftest-vsyscall-mode-none/pstore_pstore_tests
+* kselftest-vsyscall-mode-none/rseq_basic_percpu_ops_test
+* kselftest-vsyscall-mode-none/rseq_basic_test
+* kselftest-vsyscall-mode-none/rseq_param_test
+* kselftest-vsyscall-mode-none/rseq_param_test_benchmark
+* kselftest-vsyscall-mode-none/rseq_param_test_compare_twice
+* kselftest-vsyscall-mode-none/rseq_run_param_test.sh
+* kselftest-vsyscall-mode-none/rtc_rtctest
+* kselftest-vsyscall-mode-none/seccomp_seccomp_bpf
+* kselftest-vsyscall-mode-none/timestamping_txtimestamp.sh
+* kselftest/binderfs_binderfs_test
+* kselftest/bpf_test_flow_dissector.sh
+* kselftest/bpf_test_lirc_mode2_user
+* kselftest/bpf_test_lwt_ip_encap.sh
+* kselftest/bpf_test_lwt_seg6local.sh
+* kselftest/bpf_test_netcnt
+* kselftest/bpf_test_progs
+* kselftest/bpf_test_sock_addr.sh
+* kselftest/bpf_test_sock_fields
+* kselftest/bpf_test_sockmap
+* kselftest/bpf_test_tc_edt.sh
+* kselftest/bpf_test_tc_tunnel.sh
+* kselftest/cgroup_test_core
+* kselftest/dma-buf_udmabuf
+* kselftest/firmware_fw_run_tests.sh
+* kselftest/kvm_clear_dirty_log_test
+* kselftest/kvm_cr4_cpuid_sync_test
+* kselftest/kvm_dirty_log_test
+* kselftest/kvm_evmcs_test
+* kselftest/kvm_hyperv_cpuid
+* kselftest/kvm_platform_info_test
+* kselftest/kvm_set_sregs_test
+* kselftest/kvm_smm_test
+* kselftest/kvm_state_test
+* kselftest/kvm_sync_regs_test
+* kselftest/kvm_vmx_close_while_nested_test
+* kselftest/kvm_vmx_tsc_adjust_test
+* kselftest/lib_bitmap.sh
+* kselftest/lib_prime_numbers.sh
+* kselftest/lib_printf.sh
+* kselftest/lib_strscpy.sh
+* kselftest/livepatch_test-callbacks.sh
+* kselftest/livepatch_test-livepatch.sh
+* kselftest/livepatch_test-shadow-vars.sh
+* kselftest/membarrier_membarrier_test
+* kselftest/net_fib-onlink-tests.sh
+* kselftest/net_ip_defrag.sh
+* kselftest/net_msg_zerocopy.sh
+* kselftest/net_pmtu.sh
+* kselftest/net_psock_snd.sh
+* kselftest/net_test_vxlan_under_vrf.sh
+* kselftest/net_xfrm_policy.sh
+* kselftest/pidfd_pidfd_test
+* kselftest/pstore_pstore_tests
+* kselftest/rseq_basic_percpu_ops_test
+* kselftest/rseq_basic_test
+* kselftest/rseq_param_test
+* kselftest/rseq_param_test_benchmark
+* kselftest/rseq_param_test_compare_twice
+* kselftest/rseq_run_param_test.sh
+* kselftest/seccomp_seccomp_bpf
+* kselftest/timestamping_txtimestamp.sh
+* kselftest/tpm2_test_smoke.sh
+* kselftest/tpm2_test_space.sh
+* kselftest/vm_run_vmtests
+* kselftest/x86_mpx-mini-test_64
+
+
+Skips
+------------------------------------------------------------------------
+No skips
+
+
 -- 
-2.20.1
-
+Linaro LKFT
+https://lkft.linaro.org
+------=_Part_16666_276267486.1556730030821--
