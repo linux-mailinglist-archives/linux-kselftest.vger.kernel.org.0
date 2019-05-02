@@ -2,102 +2,106 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D9EA312354
-	for <lists+linux-kselftest@lfdr.de>; Thu,  2 May 2019 22:26:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E23012351
+	for <lists+linux-kselftest@lfdr.de>; Thu,  2 May 2019 22:26:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726762AbfEBU0I (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 2 May 2019 16:26:08 -0400
-Received: from mail-ot1-f67.google.com ([209.85.210.67]:43170 "EHLO
-        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726326AbfEBU0H (ORCPT
+        id S1726732AbfEBU0A (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 2 May 2019 16:26:00 -0400
+Received: from mail-pg1-f195.google.com ([209.85.215.195]:35432 "EHLO
+        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726394AbfEBUZ7 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 2 May 2019 16:26:07 -0400
-Received: by mail-ot1-f67.google.com with SMTP id e108so3321220ote.10
-        for <linux-kselftest@vger.kernel.org>; Thu, 02 May 2019 13:26:07 -0700 (PDT)
+        Thu, 2 May 2019 16:25:59 -0400
+Received: by mail-pg1-f195.google.com with SMTP id h1so1581570pgs.2
+        for <linux-kselftest@vger.kernel.org>; Thu, 02 May 2019 13:25:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=UjYVT5cAdmQKUfv9t8ccIVDdyBls+aL8RkatsPsXvcs=;
-        b=S/NLBkmmg3Md+sTx08gED5HrktmpwZikr8idsPoedLBx4NGY0vsICG/2JByh1OPLMl
-         SoIkyImRxqPDEOFyC2ZMo66T4y64AzxZJe60LUPIIZ+2whbKVnm1u/h2cZWzkh0Pg7xc
-         EXNw4yJNZ9fhJbGVtdrs9Sah16nUmTboVs4KkvhykHpn/i4zj9XsNumXBLK6Ynb0YPNG
-         +tpKFc1Qf+4khDJxrAPPVZg4LS8WUK6j1vznFw5a8jr0zVqX9peLg5vYA1eBwQqixHhg
-         xvPSDH5tHp5fJ/MAFS5gSf8uCUub0+kg9vZwn+lDYmBqYVC0qg8nx8pyREf5ogAUd63R
-         E26Q==
+        d=amacapital-net.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=Io3DgdKgd9vrTCiqn1ty9ma6MeZxtY5mWHTy1rGcWSk=;
+        b=JRGEOa2M9VSTVxV8OWvGI2jo8mrtudnNCX9J67xa+uuu9xIcscAMsy5EVezgdK890M
+         nIOgUqCwrV6zdyLl4F2fSz9D+CW4kiaSbBRDoKbiLntIdStjJcd5DOlESpoSUoT/5MPe
+         nkgyGakMQHMJ/aE61Ly6IrWMINs0h7hCM/paI2GuwAm0QlSNzFZp4f2QcoTOWt6FHlFV
+         7APR1qqnbDHZ1MUyvjs0b7fMma+WF0VCNPwXglhjSf20z8ZyumgqnfJ/GYpWGMXCJvk+
+         gAHeHAAPEI+8fZHQkKIt8fYVS1YgV+pYBIvg7H29r8/cvQOPT7yOrlVvjZUfsWgQTiSH
+         B76Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=UjYVT5cAdmQKUfv9t8ccIVDdyBls+aL8RkatsPsXvcs=;
-        b=pc4J7xPpQd6s2FfBh+3wdOd9/Ob+SkSkCBCivZM01Due8FagJTerZeNLZOue5hj0oy
-         r0ElI7NEe1unv1JZBlkePGIQUrjnfqSudJqbnc5FsLTLGXKaicP7DflNUfHOrBaa3/Rb
-         5UIgGqeHq3nHtMp2n8ZulalYx/L38uxft/g1GUESHtOKIGjUX30mSgovTI8yOiywpS9R
-         IqgOKIZ+WIRqoOhSGqd69AW9BxX/XqZeIJdLvSE0bTKijEhax6PKCHOd99IJuO576l3d
-         OaYT0TNmJLre8QUcHKS8YbvAO0DBy9gSMP1uRMgVkoLDruO2mytNVtOuai7Qp/Icd/N2
-         PbYA==
-X-Gm-Message-State: APjAAAUw5qUsH1BNim3qoBwOkFf9qlFZXpCPOzMMQFrxZYmfYREVuuJ0
-        kMvNzKjclvgns8xiAVx1c20RuLmzLD6R4DrdKiQqIQ==
-X-Google-Smtp-Source: APXvYqxyYrm8zG8OMTTxqGADAYUvr/vXQpVESafN7Cz0pZWyjDkgKl1eFOtZxYdb1jr2uV1YoMkUpLh/i+1PnNqQJjM=
-X-Received: by 2002:a05:6830:204a:: with SMTP id f10mr3731908otp.83.1556828766432;
- Thu, 02 May 2019 13:26:06 -0700 (PDT)
-MIME-Version: 1.0
-References: <20190501230126.229218-1-brendanhiggins@google.com>
- <20190501230126.229218-5-brendanhiggins@google.com> <20190502110008.GC12416@kroah.com>
-In-Reply-To: <20190502110008.GC12416@kroah.com>
-From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Thu, 2 May 2019 13:25:54 -0700
-Message-ID: <CAFd5g47ssM7RQZxQsUJ86UigcF-Uz+Kwv2yvKN_gZK-TtW89bA@mail.gmail.com>
-Subject: Re: [PATCH v2 04/17] kunit: test: add kunit_stream a std::stream like logger
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Frank Rowand <frowand.list@gmail.com>,
-        Kees Cook <keescook@google.com>,
-        Kieran Bingham <kieran.bingham@ideasonboard.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Rob Herring <robh@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
-        shuah@kernel.org, devicetree <devicetree@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        kunit-dev@googlegroups.com, linux-doc@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kbuild@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-kselftest@vger.kernel.org,
-        linux-nvdimm <linux-nvdimm@lists.01.org>,
-        linux-um@lists.infradead.org,
-        Sasha Levin <Alexander.Levin@microsoft.com>,
-        "Bird, Timothy" <Tim.Bird@sony.com>,
-        Amir Goldstein <amir73il@gmail.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Daniel Vetter <daniel@ffwll.ch>, Jeff Dike <jdike@addtoit.com>,
-        Joel Stanley <joel@jms.id.au>,
-        Julia Lawall <julia.lawall@lip6.fr>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Knut Omang <knut.omang@oracle.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
+        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=Io3DgdKgd9vrTCiqn1ty9ma6MeZxtY5mWHTy1rGcWSk=;
+        b=oZX4CJ2158snVQIn7o//SoVqKnLK4+zfsdBrO8syBuJP3+DO/bNFBAoqd9axJKsItw
+         jiXWtrD3wTSFYTQY9AxEOwjt1DtEvfeZ0TePM3KnVRG2izwcqBJvQd7Z6E0ExKDLREzM
+         Olb9dEJ6ggx9jXjyQfHaAHGzPNdg41vSu5DmJBPywAipyOEoWvwMTF3dp9F8n4eBKXQy
+         8lZQHs8GrDQLwuwj/Gbl7e2/ab6jhDlBk1oFZLGkuWVs8zz2mva97GszW831eT5wpssW
+         yfxfkrvNY+uxf+AHw3SYPrBfaL1v+7mCp+JYQRYSs/LtYn4ZNU35F0uHrD1NRvKPREnN
+         3Vuw==
+X-Gm-Message-State: APjAAAXjuIcDlRDV3yfZFxtOPh3nibUcckuoOHpUoU+PCfkVfjD4Wnzz
+        XgyHT/KTGMVm/97ZMW00NLg4/Q==
+X-Google-Smtp-Source: APXvYqxTa+wO6NCzor7FpiJk3O2Yual5TrsL5e7AjO0IODWu6S5r6CX+1Mn1g9ZBaMeUizlwwZ+icw==
+X-Received: by 2002:a63:4714:: with SMTP id u20mr6090953pga.316.1556828758292;
+        Thu, 02 May 2019 13:25:58 -0700 (PDT)
+Received: from ?IPv6:2601:646:c200:1ef2:4138:7cfc:eb31:bf4a? ([2601:646:c200:1ef2:4138:7cfc:eb31:bf4a])
+        by smtp.gmail.com with ESMTPSA id j67sm38422pfc.72.2019.05.02.13.25.57
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 02 May 2019 13:25:57 -0700 (PDT)
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (1.0)
+Subject: Re: [RFC][PATCH 1/2] x86: Allow breakpoints to emulate call functions
+From:   Andy Lutomirski <luto@amacapital.net>
+X-Mailer: iPhone Mail (16E227)
+In-Reply-To: <nycvar.YFH.7.76.1905022101060.10635@cbobk.fhfr.pm>
+Date:   Thu, 2 May 2019 13:25:56 -0700
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Linux List Kernel Mailing <linux-kernel@vger.kernel.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Nicolai Stange <nstange@suse.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        the arch/x86 maintainers <x86@kernel.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Miroslav Benes <mbenes@suse.cz>,
         Petr Mladek <pmladek@suse.com>,
-        Richard Weinberger <richard@nod.at>,
-        David Rientjes <rientjes@google.com>,
-        Steven Rostedt <rostedt@goodmis.org>, wfg@linux.intel.com
-Content-Type: text/plain; charset="UTF-8"
+        Joe Lawrence <joe.lawrence@redhat.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
+        Tim Chen <tim.c.chen@linux.intel.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Juergen Gross <jgross@suse.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nayna Jain <nayna@linux.ibm.com>,
+        Masahiro Yamada <yamada.masahiro@socionext.com>,
+        Joerg Roedel <jroedel@suse.de>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, stable <stable@vger.kernel.org>
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <D87B1B37-C06B-4C81-BF82-994B03DE2BFF@amacapital.net>
+References: <20190501202830.347656894@goodmis.org> <20190501203152.397154664@goodmis.org> <20190501232412.1196ef18@oasis.local.home> <20190502162133.GX2623@hirez.programming.kicks-ass.net> <CAHk-=wijZ-MD4g3zMJ9W2r=h8LUWneiu29OWuxZEoSfAF=0bhQ@mail.gmail.com> <20190502181811.GY2623@hirez.programming.kicks-ass.net> <CAHk-=wi6A9tgw=kkPh5Ywqt687VvsVEjYXVkAnq0jpt0u0tk6g@mail.gmail.com> <nycvar.YFH.7.76.1905022101060.10635@cbobk.fhfr.pm>
+To:     Jiri Kosina <jikos@kernel.org>
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, May 2, 2019 at 4:00 AM Greg KH <gregkh@linuxfoundation.org> wrote:
->
-> On Wed, May 01, 2019 at 04:01:13PM -0700, Brendan Higgins wrote:
-> > A lot of the expectation and assertion infrastructure prints out fairly
-> > complicated test failure messages, so add a C++ style log library for
-> > for logging test results.
->
-> Ideally we would always use a standard logging format, like the
-> kselftest tests all are aiming to do.  That way the output can be easily
-> parsed by tools to see if the tests succeed/fail easily.
->
-> Any chance of having this logging framework enforcing that format as
-> well?
 
-I agree with your comment on the later patch that we should handle
-this at the wrapper script layer (KUnit tool).
+
+> On May 2, 2019, at 12:28 PM, Jiri Kosina <jikos@kernel.org> wrote:
+>=20
+>> On Thu, 2 May 2019, Linus Torvalds wrote:
+>>=20
+>> I forget: is #BP _only_ for the "int3" instruction?=20
+>=20
+> Hmm, according to 17.3.2 in vol 3 of SDM (and table 6-1 there), that=20
+> indeed seems to be the case, so we should be fine.
+
+I=E2=80=99m reasonably confident that the absurd MOV SS; INT3 sequence resul=
+ts in #BP from user mode and then #DB inside that (as opposed to vice versa)=
+, so this should be okay.
+
