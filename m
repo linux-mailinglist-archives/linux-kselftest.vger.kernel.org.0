@@ -2,96 +2,117 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C8B41100F
-	for <lists+linux-kselftest@lfdr.de>; Thu,  2 May 2019 01:05:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D71DB111D5
+	for <lists+linux-kselftest@lfdr.de>; Thu,  2 May 2019 05:24:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726601AbfEAXFI (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 1 May 2019 19:05:08 -0400
-Received: from mail-yw1-f74.google.com ([209.85.161.74]:48403 "EHLO
-        mail-yw1-f74.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726353AbfEAXFI (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 1 May 2019 19:05:08 -0400
-Received: by mail-yw1-f74.google.com with SMTP id e7so1109170ywa.15
-        for <linux-kselftest@vger.kernel.org>; Wed, 01 May 2019 16:05:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=PRLXnvg3FnToIBJTwXVR7d2TK/MHZSW5pjHfdNwtr7Q=;
-        b=K5TwnumODggM3WBroA2xjKir+Hf59I1szowVRTt0lzCy/25DKO4Auoy9KuasdBqFUu
-         UWvBOKOTmtxVhAOl4er1T2140+nu1Bz+99TiGL9+yTK//z+jqboMkU5aijHYP0BbYsOh
-         P/McaehM5toEAU772+pJGpQWNEZx5xhfrNPAJoKaW0IpWIVJaq0KjD8R8F3QXpB30i5m
-         XrT04TmEJJAw/8yrNXA4XJeGyU/uVcdsIpKRYnl9kRb2X6reSvrGJiWqLpi2xAFDwIgz
-         M+mClrFoRM5PxaczMRkZTVN0VXOBXS2l+ZY6dXc7xjKICM5LbtnpXVDT7unPYWdXqa7Y
-         wpCA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=PRLXnvg3FnToIBJTwXVR7d2TK/MHZSW5pjHfdNwtr7Q=;
-        b=q+/FrrCal8BMn9dpo9McIWGP2lNenJMvaxYhpqn73hHdUBxu8qTJBQSEHk9JZQVHfO
-         9FdhDSK/66V6ck+w77J9gbGcLipv34nCW7WXJ6iZjszuhaMbkt9GYLnhMOxNZuz5CPFR
-         glk/6quDzHOxFhR5EG9tGiTGY+kf6stihzyFRvaxAo3xIQTT3UlK9o39nH5s1Vrdt8zM
-         pOs7pfh35lwTxSZSFI7kO/krKKtxTzoyn4VWF1OqLDSc+cBcEtJOV8plOOLRGXYuNRIA
-         /z0jJH5PBt3GAHqyXdkQhtBd3eyXtDCTOGtDKgzOsbuHEKUdZwPlTTYd4+redaGtjUr0
-         8NVQ==
-X-Gm-Message-State: APjAAAWxqVaXKibzcsoLrU2pZug7m9DEllYiW5XeGXQPOKde1TyqQ+xp
-        9QA/5jGBm985HtMaxMrXmoytDwpkSMOyjloOuE6hdA==
-X-Google-Smtp-Source: APXvYqxSccXA/VUA/6JwG1W+T505ogTb6cCEY1XA3skvxQHV+dYiYJA75B70f0UwwhMZGG1vCcs3UYjo4MLfLh9fEqXVcw==
-X-Received: by 2002:a25:aa87:: with SMTP id t7mr327533ybi.419.1556751907604;
- Wed, 01 May 2019 16:05:07 -0700 (PDT)
-Date:   Wed,  1 May 2019 16:01:26 -0700
-In-Reply-To: <20190501230126.229218-1-brendanhiggins@google.com>
-Message-Id: <20190501230126.229218-18-brendanhiggins@google.com>
-Mime-Version: 1.0
-References: <20190501230126.229218-1-brendanhiggins@google.com>
-X-Mailer: git-send-email 2.21.0.593.g511ec345e18-goog
-Subject: [PATCH v2 17/17] MAINTAINERS: add proc sysctl KUnit test to PROC
- SYSCTL section
-From:   Brendan Higgins <brendanhiggins@google.com>
-To:     frowand.list@gmail.com, gregkh@linuxfoundation.org,
-        keescook@google.com, kieran.bingham@ideasonboard.com,
-        mcgrof@kernel.org, robh@kernel.org, sboyd@kernel.org,
-        shuah@kernel.org
-Cc:     devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        kunit-dev@googlegroups.com, linux-doc@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kbuild@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-nvdimm@lists.01.org, linux-um@lists.infradead.org,
-        Alexander.Levin@microsoft.com, Tim.Bird@sony.com,
-        amir73il@gmail.com, dan.carpenter@oracle.com,
-        dan.j.williams@intel.com, daniel@ffwll.ch, jdike@addtoit.com,
-        joel@jms.id.au, julia.lawall@lip6.fr, khilman@baylibre.com,
-        knut.omang@oracle.com, logang@deltatee.com, mpe@ellerman.id.au,
-        pmladek@suse.com, richard@nod.at, rientjes@google.com,
-        rostedt@goodmis.org, wfg@linux.intel.com,
-        Brendan Higgins <brendanhiggins@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        id S1726203AbfEBDYR (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 1 May 2019 23:24:17 -0400
+Received: from mail.kernel.org ([198.145.29.99]:51034 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726197AbfEBDYR (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 1 May 2019 23:24:17 -0400
+Received: from oasis.local.home (cpe-66-24-58-225.stny.res.rr.com [66.24.58.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 578FE20675;
+        Thu,  2 May 2019 03:24:14 +0000 (UTC)
+Date:   Wed, 1 May 2019 23:24:12 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Nicolai Stange <nstange@suse.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        the arch/x86 maintainers <x86@kernel.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Jiri Kosina <jikos@kernel.org>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Petr Mladek <pmladek@suse.com>,
+        Joe Lawrence <joe.lawrence@redhat.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
+        Tim Chen <tim.c.chen@linux.intel.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Juergen Gross <jgross@suse.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nayna Jain <nayna@linux.ibm.com>,
+        Masahiro Yamada <yamada.masahiro@socionext.com>,
+        Joerg Roedel <jroedel@suse.de>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, stable@vger.kernel.org
+Subject: Re: [RFC][PATCH 1/2] x86: Allow breakpoints to emulate call
+ functions
+Message-ID: <20190501232412.1196ef18@oasis.local.home>
+In-Reply-To: <20190501203152.397154664@goodmis.org>
+References: <20190501202830.347656894@goodmis.org>
+        <20190501203152.397154664@goodmis.org>
+X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add entry for the new proc sysctl KUnit test to the PROC SYSCTL section.
+On Wed, 01 May 2019 16:28:31 -0400
+Steven Rostedt <rostedt@goodmis.org> wrote:
 
-Signed-off-by: Brendan Higgins <brendanhiggins@google.com>
----
- MAINTAINERS | 1 +
- 1 file changed, 1 insertion(+)
+> diff --git a/arch/x86/entry/entry_32.S b/arch/x86/entry/entry_32.S
+> index d309f30cf7af..50bbf4035baf 100644
+> --- a/arch/x86/entry/entry_32.S
+> +++ b/arch/x86/entry/entry_32.S
+> @@ -1478,6 +1478,17 @@ ENTRY(int3)
+>  	ASM_CLAC
+>  	pushl	$-1				# mark this as an int
+>  
+> +#ifdef CONFIG_VM86
+> +	testl	$X86_EFLAGS_VM, PT_EFLAGS(%esp)
+> +	jnz	.Lfrom_usermode_no_gap
+> +#endif
+> +	testl	$SEGMENT_RPL_MASK, PT_CS(%esp)
+> +	jnz	.Lfrom_usermode_no_gap
+> +	.rept 6
+> +	pushl	5*4(%esp)
+> +	.endr
+> +.Lfrom_usermode_no_gap:
+> +
+>  	SAVE_ALL switch_stacks=1
+>  	ENCODE_FRAME_POINTER
+>  	TRACE_IRQS_OFF
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index c78ae95c56b80..23cc97332c3d7 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -12524,6 +12524,7 @@ S:	Maintained
- F:	fs/proc/proc_sysctl.c
- F:	include/linux/sysctl.h
- F:	kernel/sysctl.c
-+F:	kernel/sysctl-test.c
- F:	tools/testing/selftests/sysctl/
+This failed to work on 32 bit at all (crashed and burned badly - triple
+fault!). Looking at it I found one issue. This code is done before the
+regs are saved, and PT_EFLAGS(%esp) and PT_CS(%esp) expect %esp to
+contain them. I applied this patch against this but it didn't totally
+fix the problems. It still constantly crashes (although, with this
+update I can put in some printks to get some ideas). I haven't spent
+too much time on it, but it looks like there's an issue with the
+entry-stack that int3 switches to. I'm not sure its handling the copy
+well.
+
+-- Steve
+
+diff --git a/arch/x86/entry/entry_32.S b/arch/x86/entry/entry_32.S
+index 50bbf4035baf..4f427285e421 100644
+--- a/arch/x86/entry/entry_32.S
++++ b/arch/x86/entry/entry_32.S
+@@ -1479,10 +1479,10 @@ ENTRY(int3)
+ 	pushl	$-1				# mark this as an int
  
- PS3 NETWORK SUPPORT
--- 
-2.21.0.593.g511ec345e18-goog
-
+ #ifdef CONFIG_VM86
+-	testl	$X86_EFLAGS_VM, PT_EFLAGS(%esp)
++	testl	$X86_EFLAGS_VM, PT_EFLAGS-PT_ORIG_EAX(%esp)
+ 	jnz	.Lfrom_usermode_no_gap
+ #endif
+-	testl	$SEGMENT_RPL_MASK, PT_CS(%esp)
++	testl	$SEGMENT_RPL_MASK, PT_CS-PT_ORIG_EAX(%esp)
+ 	jnz	.Lfrom_usermode_no_gap
+ 	.rept 6
+ 	pushl	5*4(%esp)
