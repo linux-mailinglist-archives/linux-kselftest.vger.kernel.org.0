@@ -2,117 +2,76 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D71DB111D5
-	for <lists+linux-kselftest@lfdr.de>; Thu,  2 May 2019 05:24:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DADAD1179D
+	for <lists+linux-kselftest@lfdr.de>; Thu,  2 May 2019 12:51:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726203AbfEBDYR (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 1 May 2019 23:24:17 -0400
-Received: from mail.kernel.org ([198.145.29.99]:51034 "EHLO mail.kernel.org"
+        id S1726473AbfEBKu5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 2 May 2019 06:50:57 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46836 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726197AbfEBDYR (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 1 May 2019 23:24:17 -0400
-Received: from oasis.local.home (cpe-66-24-58-225.stny.res.rr.com [66.24.58.225])
+        id S1726439AbfEBKu4 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 2 May 2019 06:50:56 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 578FE20675;
-        Thu,  2 May 2019 03:24:14 +0000 (UTC)
-Date:   Wed, 1 May 2019 23:24:12 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Nicolai Stange <nstange@suse.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        the arch/x86 maintainers <x86@kernel.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Jiri Kosina <jikos@kernel.org>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Petr Mladek <pmladek@suse.com>,
-        Joe Lawrence <joe.lawrence@redhat.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
-        Tim Chen <tim.c.chen@linux.intel.com>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Juergen Gross <jgross@suse.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nayna Jain <nayna@linux.ibm.com>,
-        Masahiro Yamada <yamada.masahiro@socionext.com>,
-        Joerg Roedel <jroedel@suse.de>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>, stable@vger.kernel.org
-Subject: Re: [RFC][PATCH 1/2] x86: Allow breakpoints to emulate call
- functions
-Message-ID: <20190501232412.1196ef18@oasis.local.home>
-In-Reply-To: <20190501203152.397154664@goodmis.org>
-References: <20190501202830.347656894@goodmis.org>
-        <20190501203152.397154664@goodmis.org>
-X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        by mail.kernel.org (Postfix) with ESMTPSA id 862482075E;
+        Thu,  2 May 2019 10:50:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1556794256;
+        bh=Ayblsy3jHDm2CChtokJ923ivXLZjfyjL6uNubfrhVOA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=QXN7qfD9kVZ8X14uPJyJaEtMH+8kKfNVIsH6ibUWlQkRylnV/zLp9rQ6le2tunE78
+         SSJF7dmrJsP0QsUsoC9j31We0mjmXawkaN8LppVzAyCBUPD5b9pzAyl6ekchbNAzFq
+         btjAwtKByeIBqfun6usLtq6HFfVq7lLUJLvG54Zg=
+Date:   Thu, 2 May 2019 12:50:53 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Brendan Higgins <brendanhiggins@google.com>
+Cc:     frowand.list@gmail.com, keescook@google.com,
+        kieran.bingham@ideasonboard.com, mcgrof@kernel.org,
+        robh@kernel.org, sboyd@kernel.org, shuah@kernel.org,
+        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        kunit-dev@googlegroups.com, linux-doc@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kbuild@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-nvdimm@lists.01.org, linux-um@lists.infradead.org,
+        Alexander.Levin@microsoft.com, Tim.Bird@sony.com,
+        amir73il@gmail.com, dan.carpenter@oracle.com,
+        dan.j.williams@intel.com, daniel@ffwll.ch, jdike@addtoit.com,
+        joel@jms.id.au, julia.lawall@lip6.fr, khilman@baylibre.com,
+        knut.omang@oracle.com, logang@deltatee.com, mpe@ellerman.id.au,
+        pmladek@suse.com, richard@nod.at, rientjes@google.com,
+        rostedt@goodmis.org, wfg@linux.intel.com
+Subject: Re: [PATCH v2 00/17] kunit: introduce KUnit, the Linux kernel unit
+ testing framework
+Message-ID: <20190502105053.GA12416@kroah.com>
+References: <20190501230126.229218-1-brendanhiggins@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190501230126.229218-1-brendanhiggins@google.com>
+User-Agent: Mutt/1.11.4 (2019-03-13)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, 01 May 2019 16:28:31 -0400
-Steven Rostedt <rostedt@goodmis.org> wrote:
+On Wed, May 01, 2019 at 04:01:09PM -0700, Brendan Higgins wrote:
+> ## TLDR
+> 
+> I rebased the last patchset on 5.1-rc7 in hopes that we can get this in
+> 5.2.
 
-> diff --git a/arch/x86/entry/entry_32.S b/arch/x86/entry/entry_32.S
-> index d309f30cf7af..50bbf4035baf 100644
-> --- a/arch/x86/entry/entry_32.S
-> +++ b/arch/x86/entry/entry_32.S
-> @@ -1478,6 +1478,17 @@ ENTRY(int3)
->  	ASM_CLAC
->  	pushl	$-1				# mark this as an int
->  
-> +#ifdef CONFIG_VM86
-> +	testl	$X86_EFLAGS_VM, PT_EFLAGS(%esp)
-> +	jnz	.Lfrom_usermode_no_gap
-> +#endif
-> +	testl	$SEGMENT_RPL_MASK, PT_CS(%esp)
-> +	jnz	.Lfrom_usermode_no_gap
-> +	.rept 6
-> +	pushl	5*4(%esp)
-> +	.endr
-> +.Lfrom_usermode_no_gap:
-> +
->  	SAVE_ALL switch_stacks=1
->  	ENCODE_FRAME_POINTER
->  	TRACE_IRQS_OFF
+That might be rushing it, normally trees are already closed now for
+5.2-rc1 if 5.1-final comes out this Sunday.
 
-This failed to work on 32 bit at all (crashed and burned badly - triple
-fault!). Looking at it I found one issue. This code is done before the
-regs are saved, and PT_EFLAGS(%esp) and PT_CS(%esp) expect %esp to
-contain them. I applied this patch against this but it didn't totally
-fix the problems. It still constantly crashes (although, with this
-update I can put in some printks to get some ideas). I haven't spent
-too much time on it, but it looks like there's an issue with the
-entry-stack that int3 switches to. I'm not sure its handling the copy
-well.
+> Shuah, I think you, Greg KH, and myself talked off thread, and we agreed
+> we would merge through your tree when the time came? Am I remembering
+> correctly?
 
--- Steve
+No objection from me.
 
-diff --git a/arch/x86/entry/entry_32.S b/arch/x86/entry/entry_32.S
-index 50bbf4035baf..4f427285e421 100644
---- a/arch/x86/entry/entry_32.S
-+++ b/arch/x86/entry/entry_32.S
-@@ -1479,10 +1479,10 @@ ENTRY(int3)
- 	pushl	$-1				# mark this as an int
- 
- #ifdef CONFIG_VM86
--	testl	$X86_EFLAGS_VM, PT_EFLAGS(%esp)
-+	testl	$X86_EFLAGS_VM, PT_EFLAGS-PT_ORIG_EAX(%esp)
- 	jnz	.Lfrom_usermode_no_gap
- #endif
--	testl	$SEGMENT_RPL_MASK, PT_CS(%esp)
-+	testl	$SEGMENT_RPL_MASK, PT_CS-PT_ORIG_EAX(%esp)
- 	jnz	.Lfrom_usermode_no_gap
- 	.rept 6
- 	pushl	5*4(%esp)
+Let me go review the latest round of patches now.
+
+thanks,
+
+greg k-h
