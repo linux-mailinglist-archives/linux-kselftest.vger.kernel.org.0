@@ -2,112 +2,94 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B5ED01227F
-	for <lists+linux-kselftest@lfdr.de>; Thu,  2 May 2019 21:14:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03B7C12294
+	for <lists+linux-kselftest@lfdr.de>; Thu,  2 May 2019 21:29:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726477AbfEBTOm (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 2 May 2019 15:14:42 -0400
-Received: from mail-pg1-f193.google.com ([209.85.215.193]:44249 "EHLO
-        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726472AbfEBTOl (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 2 May 2019 15:14:41 -0400
-Received: by mail-pg1-f193.google.com with SMTP id z16so1479814pgv.11
-        for <linux-kselftest@vger.kernel.org>; Thu, 02 May 2019 12:14:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=T87TJAQEItZ/8IKuRT/VOsqnktTnyrxp/uVvFEniYMA=;
-        b=vBv6PoK0WcmYtiIfYiYRttaKU6sySuqlp2bz5MAKrEwpGt1gue3gzyHG11PiGfzpcw
-         3MNNE7KR0yeU4+4xNbx9fp+4t1kJJWsSD3Bd3y2xlf2o948io5GNWybzWlXv1qF6rMqO
-         W1SENeUpDnopBUPQi4IYCnMgIeGn5O8Gv2YK8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=T87TJAQEItZ/8IKuRT/VOsqnktTnyrxp/uVvFEniYMA=;
-        b=F9JQXeGQ8Ybv1F3WNq/GYaupphZoP9ASac2TXh+GCx65JH0i3C5AWgjt91sgA5Ctm6
-         W25Fr9RiXsIrIQdQuvkKu2QXX54HnX94KXuApRX4gt7EOB98CRMBbLUq6ve4TQ03wUX3
-         KTIMoZNJwZ8VEU3wzNlW59IbtZ3CGYhWArmzMnxY+Y0VHnqimsFtlb6FGudv5U6YWUX3
-         M7Pz1M43ZpUoLWClb3YPrLGqzzCUngcRW6iNZ2p2VKg6TZdQzRDMTYIQD0ZUf9UPeQ5S
-         d09hrEF66gatGa2ZOoT90M9OfxYhvmA9eJ7YjcSXSGTljSYzCpdfuvF9Xfghle87SfCu
-         g6vg==
-X-Gm-Message-State: APjAAAWQn74S07j/aSOGoOkI1XqZdr4+17+rE5IkR7cPtasWJILZkTX2
-        Lz6/5GqnKP3eg8HtcUj/DehlFw==
-X-Google-Smtp-Source: APXvYqzA5/HIyej28h0lLtHCsm2clDFlAORBWM0decWBelSise8oK0pTjZR+reURwiFiGKrXF2W/2w==
-X-Received: by 2002:a63:fa46:: with SMTP id g6mr5766362pgk.382.1556824480553;
-        Thu, 02 May 2019 12:14:40 -0700 (PDT)
-Received: from localhost ([2620:15c:6:12:9c46:e0da:efbf:69cc])
-        by smtp.gmail.com with ESMTPSA id z124sm48008758pfz.116.2019.05.02.12.14.38
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Thu, 02 May 2019 12:14:39 -0700 (PDT)
-Date:   Thu, 2 May 2019 15:14:37 -0400
-From:   Joel Fernandes <joel@joelfernandes.org>
-To:     Oleg Nesterov <oleg@redhat.com>
-Cc:     Christian Brauner <christian@brauner.io>,
-        linux-kernel@vger.kernel.org,
-        Andy Lutomirski <luto@amacapital.net>,
+        id S1726276AbfEBT3B (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 2 May 2019 15:29:01 -0400
+Received: from mail.kernel.org ([198.145.29.99]:36028 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725962AbfEBT3B (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 2 May 2019 15:29:01 -0400
+Received: from pobox.suse.cz (prg-ext-pat.suse.com [213.151.95.130])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 84A2F205F4;
+        Thu,  2 May 2019 19:28:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1556825340;
+        bh=4+7iWLyZHdlkEaJ9YIk2Zw2gBNmiSwpxVpWt2kUQHoA=;
+        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
+        b=T3meCuhymsjbqBV1PJ4E8RF0HMtRR78xo9UtI/BzIqosyAJrJej4ouBZOQXFy38v9
+         Xqqac2c12ESnORGAB5k92HVdaVhMRyZdR4m6ewn1XoG1Vcdy9TxLdpkYy6/fs+4emz
+         yrffJxf6fyRF0eI6jBQBaqBaNH9/JMsz7X8WC4x4=
+Date:   Thu, 2 May 2019 21:28:53 +0200 (CEST)
+From:   Jiri Kosina <jikos@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+cc:     Peter Zijlstra <peterz@infradead.org>,
         Steven Rostedt <rostedt@goodmis.org>,
-        Daniel Colascione <dancol@google.com>,
-        Jann Horn <jannh@google.com>,
-        Tim Murray <timmurray@google.com>,
-        Jonathan Kowalski <bl0pbl33p@gmail.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Kees Cook <keescook@chromium.org>,
-        David Howells <dhowells@redhat.com>, kernel-team@android.com,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linux List Kernel Mailing <linux-kernel@vger.kernel.org>,
         Ingo Molnar <mingo@kernel.org>,
-        KJ Tsanaktsidis <ktsanaktsidis@zendesk.com>,
-        linux-kselftest@vger.kernel.org, Michal Hocko <mhocko@suse.com>,
-        Nadav Amit <namit@vmware.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Serge Hallyn <serge@hallyn.com>, Shuah Khan <shuah@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Nicolai Stange <nstange@suse.de>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Tycho Andersen <tycho@tycho.ws>
-Subject: Re: [PATCH v2 1/2] Add polling support to pidfd
-Message-ID: <20190502191437.GA103213@google.com>
-References: <20190430162154.61314-1-joel@joelfernandes.org>
- <20190501151312.GA30235@redhat.com>
- <20190502151320.cvc6uc3b4bmww23k@brauner.io>
- <20190502160247.GD7323@redhat.com>
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        the arch/x86 maintainers <x86@kernel.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Petr Mladek <pmladek@suse.com>,
+        Joe Lawrence <joe.lawrence@redhat.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
+        Tim Chen <tim.c.chen@linux.intel.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Juergen Gross <jgross@suse.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nayna Jain <nayna@linux.ibm.com>,
+        Masahiro Yamada <yamada.masahiro@socionext.com>,
+        Joerg Roedel <jroedel@suse.de>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, stable <stable@vger.kernel.org>
+Subject: Re: [RFC][PATCH 1/2] x86: Allow breakpoints to emulate call
+ functions
+In-Reply-To: <CAHk-=wi6A9tgw=kkPh5Ywqt687VvsVEjYXVkAnq0jpt0u0tk6g@mail.gmail.com>
+Message-ID: <nycvar.YFH.7.76.1905022101060.10635@cbobk.fhfr.pm>
+References: <20190501202830.347656894@goodmis.org> <20190501203152.397154664@goodmis.org> <20190501232412.1196ef18@oasis.local.home> <20190502162133.GX2623@hirez.programming.kicks-ass.net> <CAHk-=wijZ-MD4g3zMJ9W2r=h8LUWneiu29OWuxZEoSfAF=0bhQ@mail.gmail.com>
+ <20190502181811.GY2623@hirez.programming.kicks-ass.net> <CAHk-=wi6A9tgw=kkPh5Ywqt687VvsVEjYXVkAnq0jpt0u0tk6g@mail.gmail.com>
+User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190502160247.GD7323@redhat.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset=US-ASCII
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, May 02, 2019 at 06:02:48PM +0200, Oleg Nesterov wrote:
-> On 05/02, Christian Brauner wrote:
-> >
-> > On Wed, May 01, 2019 at 05:13:12PM +0200, Oleg Nesterov wrote:
-> > >
-> > > Otherwise I see no problems.
-> >
-> > I'll remove the WARN_ON() check when applying this. Can I get your
-> > Acked/Review, Oleg?
+On Thu, 2 May 2019, Linus Torvalds wrote:
 
-Oh, ok. Good point about the de_thread race. Agreed with you.
+> I forget: is #BP _only_ for the "int3" instruction? 
 
-> Yes, feel free to add
-> 
-> 	Reviewed-by: Oleg Nesterov <oleg@redhat.com>
-> 
-> Hmm. Somehow I didn't read the changelog before, I just noticed
-> Suggested-by: Oleg Nesterov <oleg@redhat.com>
-> Please remove ;) Thanks Joel, I appreciate it, but it is not my idea.
+Hmm, according to 17.3.2 in vol 3 of SDM (and table 6-1 there), that 
+indeed seems to be the case, so we should be fine.
 
-Ok no problem. You have been very helpful so thank you for that!
+> But if "int3 from kernel space" _only_ happens on actual "int3"
+> instructions, then we really could just special-case that case. We'd
+> know that %cr3 has been switched, we'd know that we don't need to do
+> fsgs switching, we'd know we already have a good stack and percpu data
+> etc set up.
 
-Also thanks Christian for removing the warning and adding Oleg's Reviewed-by.
+That should indeed be doable, under the asumption that noone is doing any 
+int3 games before we've switched away from entry trampoline.
 
- - Joel
+I've briefly looked, and seems like we have proper notrace anotations for 
+stackleak_erase(), which seems to be the only C (ftrace-able) code that's 
+running on a trampoline (off-topic: where does PTI code make sure that we 
+actually map this symbol into user pagetables in case we're not doing 
+global mapping?).
+
+-- 
+Jiri Kosina
+SUSE Labs
 
