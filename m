@@ -2,85 +2,119 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C267111ABD
-	for <lists+linux-kselftest@lfdr.de>; Thu,  2 May 2019 16:04:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 86EC611C5F
+	for <lists+linux-kselftest@lfdr.de>; Thu,  2 May 2019 17:13:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726454AbfEBOEb (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 2 May 2019 10:04:31 -0400
-Received: from mail.kernel.org ([198.145.29.99]:41754 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726197AbfEBOEb (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 2 May 2019 10:04:31 -0400
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net [24.9.64.241])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id AB3F1206DF;
-        Thu,  2 May 2019 14:04:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1556805870;
-        bh=Wa7agHm7Un4ja3yaCvgGgD1ND3pUZJ7MD4aKZiRFMCM=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=yX5jTSzrUif4ca3k3xa8i9BRvwX2CoEc3LSZADtQzBQU989uyUErZwEyIeGvuAtbz
-         UMq4IZzjZwSlSfIlEfCCs4JueRJdLmpmGVu4hBGn/PniD+9zEIFE0G2oc27b7amOah
-         TyFD1OvQOYCZcqsTjmi92jjUJmi6G3VQLb2z3k/0=
-Subject: Re: [PATCH v2 00/17] kunit: introduce KUnit, the Linux kernel unit
- testing framework
-To:     Greg KH <gregkh@linuxfoundation.org>,
-        Brendan Higgins <brendanhiggins@google.com>
-Cc:     frowand.list@gmail.com, keescook@google.com,
-        kieran.bingham@ideasonboard.com, mcgrof@kernel.org,
-        robh@kernel.org, sboyd@kernel.org, devicetree@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, kunit-dev@googlegroups.com,
-        linux-doc@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-nvdimm@lists.01.org,
-        linux-um@lists.infradead.org, Alexander.Levin@microsoft.com,
-        Tim.Bird@sony.com, amir73il@gmail.com, dan.carpenter@oracle.com,
-        dan.j.williams@intel.com, daniel@ffwll.ch, jdike@addtoit.com,
-        joel@jms.id.au, julia.lawall@lip6.fr, khilman@baylibre.com,
-        knut.omang@oracle.com, logang@deltatee.com, mpe@ellerman.id.au,
-        pmladek@suse.com, richard@nod.at, rientjes@google.com,
-        rostedt@goodmis.org, wfg@linux.intel.com, shuah <shuah@kernel.org>
-References: <20190501230126.229218-1-brendanhiggins@google.com>
- <20190502105053.GA12416@kroah.com>
-From:   shuah <shuah@kernel.org>
-Message-ID: <76e84d54-6b7e-8cc1-492b-43822fc43ac4@kernel.org>
-Date:   Thu, 2 May 2019 08:04:14 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
+        id S1726514AbfEBPN0 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 2 May 2019 11:13:26 -0400
+Received: from mail-ed1-f68.google.com ([209.85.208.68]:40222 "EHLO
+        mail-ed1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726268AbfEBPNZ (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 2 May 2019 11:13:25 -0400
+Received: by mail-ed1-f68.google.com with SMTP id e56so2434188ede.7
+        for <linux-kselftest@vger.kernel.org>; Thu, 02 May 2019 08:13:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=brauner.io; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=5ttmCfNHKGzwxlnjGzyfTPAX1HPNHfiu4VdFi4O4DyQ=;
+        b=Q5+YixOwtcl+4zO8aokgXqzbO7ByEAkjAnbpMDQrK4aspKQdO1tAFLBz+ibAf4JtRP
+         MtMrpJw5pe0RFpGVfEop3W90oWWUwX5I0wk5pFmvmyJhFT+I7y4tFJinNoDX7kJTsAlm
+         fFqDhTB5HMnuI5k1jOoOv6rvphRB5LLIVVtaAk5LYH9W91mjFL1qq+AE/3j1kGPUh5WV
+         0jm4iC+W0StEUWkM1MCPma0j7kQCAWnicl5ebOnigmHSo9cj6Ci/HuMdpbN6nZXZZGdI
+         SiMtVGt2MPvc70vSMUouOo/mZ6CKZ8wcQ1cmBpm08QPkRsCmmRkYojOFbsGO5981F6Pc
+         7zng==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=5ttmCfNHKGzwxlnjGzyfTPAX1HPNHfiu4VdFi4O4DyQ=;
+        b=rJ+FUBwV4pYRmiQ4M9WlxwsTI2WiywUQLjAt9/VlJSAq4c/Oyggif2W/Dpq0LJgeGH
+         59uegkI4IbnbM4roO2IGyfLDpWZzgLxpmAkRrIUN5ztBQAJoB29/jDZTMmvXQic6e7+5
+         DWZ+6krhBXG2qCcnxRAlbS403ShlGBm0U+2mMXjoENtQUw/gMA+RzbCDtmxmS10F9qGC
+         gJglg7W7dw/gPR3WlhdhTd4sILrlJSftpcbWeE4qyI57kdvOe2nvhYzlPoj6YL032YZr
+         DwbeZl7oZVlA5B9f0zsiPAGTlPxsL5/EyQsl3k517Dvf85UeqVJlPYCfxreOXriM6F25
+         vAug==
+X-Gm-Message-State: APjAAAWaRYS5ggOX/te6KRBagplh+yks6vnfsvrvQX7fHMXlVqPne/D6
+        cYJJw4Bg612mMmfND9+r0Pn3ag==
+X-Google-Smtp-Source: APXvYqzbZnPxesYqJUHH3LTOVolsqPtEh2mVGBACgK9pOLdw3TSBtApNqX1UDZ0UjivMgf6LtqPiAg==
+X-Received: by 2002:a50:a3dc:: with SMTP id t28mr2892874edb.256.1556810003605;
+        Thu, 02 May 2019 08:13:23 -0700 (PDT)
+Received: from brauner.io ([178.19.218.101])
+        by smtp.gmail.com with ESMTPSA id o47sm65156edc.37.2019.05.02.08.13.22
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Thu, 02 May 2019 08:13:22 -0700 (PDT)
+Date:   Thu, 2 May 2019 17:13:21 +0200
+From:   Christian Brauner <christian@brauner.io>
+To:     Oleg Nesterov <oleg@redhat.com>
+Cc:     "Joel Fernandes (Google)" <joel@joelfernandes.org>,
+        linux-kernel@vger.kernel.org,
+        Andy Lutomirski <luto@amacapital.net>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Daniel Colascione <dancol@google.com>,
+        Jann Horn <jannh@google.com>,
+        Tim Murray <timmurray@google.com>,
+        Jonathan Kowalski <bl0pbl33p@gmail.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Kees Cook <keescook@chromium.org>,
+        David Howells <dhowells@redhat.com>, kernel-team@android.com,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        KJ Tsanaktsidis <ktsanaktsidis@zendesk.com>,
+        linux-kselftest@vger.kernel.org, Michal Hocko <mhocko@suse.com>,
+        Nadav Amit <namit@vmware.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Serge Hallyn <serge@hallyn.com>, Shuah Khan <shuah@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Tycho Andersen <tycho@tycho.ws>
+Subject: Re: [PATCH v2 1/2] Add polling support to pidfd
+Message-ID: <20190502151320.cvc6uc3b4bmww23k@brauner.io>
+References: <20190430162154.61314-1-joel@joelfernandes.org>
+ <20190501151312.GA30235@redhat.com>
 MIME-Version: 1.0
-In-Reply-To: <20190502105053.GA12416@kroah.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20190501151312.GA30235@redhat.com>
+User-Agent: NeoMutt/20180716
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 5/2/19 4:50 AM, Greg KH wrote:
-> On Wed, May 01, 2019 at 04:01:09PM -0700, Brendan Higgins wrote:
->> ## TLDR
->>
->> I rebased the last patchset on 5.1-rc7 in hopes that we can get this in
->> 5.2.
+On Wed, May 01, 2019 at 05:13:12PM +0200, Oleg Nesterov wrote:
+> On 04/30, Joel Fernandes (Google) wrote:
+> >
+> > +static unsigned int pidfd_poll(struct file *file, struct poll_table_struct *pts)
+> > +{
+> > +	struct task_struct *task;
+> > +	struct pid *pid = file->private_data;
+> > +	int poll_flags = 0;
+> > +
+> > +	poll_wait(file, &pid->wait_pidfd, pts);
+> > +
+> > +	rcu_read_lock();
+> > +	task = pid_task(pid, PIDTYPE_PID);
+> > +	WARN_ON_ONCE(task && !thread_group_leader(task));
+>                              ^^^^^^^^^^^^^^^^^^^^^^^^^^
 > 
-> That might be rushing it, normally trees are already closed now for
-> 5.2-rc1 if 5.1-final comes out this Sunday.
+> Ah, this is not right, we can race with de_thread() which changes the leader,
+> in particular it does leader->exit_signal = -1 to indicate that this thread is
+> no longer a group leader, but pid_task() can return the old leader.
 > 
->> Shuah, I think you, Greg KH, and myself talked off thread, and we agreed
->> we would merge through your tree when the time came? Am I remembering
->> correctly?
+> We are going to check thread_group_empty() below, it won't be true in this case,
+> so this race should not make any harm.
 > 
-> No objection from me.
+> Just remove this WARN_ON(). We can't use has_group_leader_pid(), it can return
+> false if pid_task() returns the new leader.
 > 
+> Otherwise I see no problems.
 
-Yes. I can take these through kselftest tree when the time comes.
-Agree with Greg that 5.2 might be rushing it. 5.3 would be a good
-target.
+I'll remove the WARN_ON() check when applying this. Can I get your
+Acked/Review, Oleg?
 
-thanks,
--- Shuah
-
-
-
+Christian
