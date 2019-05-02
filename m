@@ -2,152 +2,121 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 83C6A121B7
-	for <lists+linux-kselftest@lfdr.de>; Thu,  2 May 2019 20:10:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C59A3121AE
+	for <lists+linux-kselftest@lfdr.de>; Thu,  2 May 2019 20:08:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726495AbfEBSKn (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 2 May 2019 14:10:43 -0400
-Received: from mail-lf1-f67.google.com ([209.85.167.67]:41812 "EHLO
-        mail-lf1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726279AbfEBSKn (ORCPT
+        id S1726448AbfEBSIX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 2 May 2019 14:08:23 -0400
+Received: from mail-ot1-f67.google.com ([209.85.210.67]:40562 "EHLO
+        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726357AbfEBSIX (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 2 May 2019 14:10:43 -0400
-Received: by mail-lf1-f67.google.com with SMTP id d8so2569424lfb.8
-        for <linux-kselftest@vger.kernel.org>; Thu, 02 May 2019 11:10:42 -0700 (PDT)
+        Thu, 2 May 2019 14:08:23 -0400
+Received: by mail-ot1-f67.google.com with SMTP id w6so2944646otl.7
+        for <linux-kselftest@vger.kernel.org>; Thu, 02 May 2019 11:08:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
+        d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=XO+Zlh5OfgsxKPXw6nrLGh0MdRFOFwIafTJLR0kldnk=;
-        b=e6CwPUpEdJ9HB9TpIWcHmbxuXkXB0tjXiE9LQCN7gSHPP80yow7acWCfXNiqcj8IHi
-         4gl44pCGLrAB/tvwbllzaa4dl64fl7TnbOotFQ668wqUF0cSxM3+zN1q72KaCH9jZUiQ
-         fus4OOganySkp4Rhyvc2a1f3it518rB/oX8hU=
+        bh=79fGKeHlH9FAaVSR1O2RxcfKwTsSnTq5QCRHjsEaUQU=;
+        b=p6+GkF2pa0r8kIFWr3Ue5xSJ4hl91lXS3nyMKkOj5gQv9nBUeqd4BeLUxnZv1anIlK
+         lg1rsW/DG5+gG35Q6B+ZLV3xvGi60oYqbQR6qqrpeA01srJDWSHy+u56ea2PsXrn8x+q
+         dAZDe0q27TZ76u7UainpJzKpuJcdKWXXDrVVYsacHOUkrblZnv39zmUQ3mgKo/PyMxtj
+         cBGYHB2uWwE8NxbLX7q9WWmg2lFe3RBeI4j2lZBmhh5c2j8csXxGrExgKmjwwY08DAy9
+         PMxuPc1keMhPOI13z500WCy1D+qUSgNiYEXKQhnXWgZ+09G9ndEGtieagtsVwWkzEqOt
+         uIWw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=XO+Zlh5OfgsxKPXw6nrLGh0MdRFOFwIafTJLR0kldnk=;
-        b=AqfIOU4it83S7fPqivSdXoAxlUAQED15wwS5WzVdTk7kRk3S37qXy/xH/x7Eh1dXg1
-         TGk640QEshbAtFq+H3ipMK2Mg6U5Ut8kiWnje7B0BqCWIPki7GOUq38vTLCDOPT6lrTL
-         QsWzBxk6kgLzyHJEHBqxLuLhL7BrRnqATByCVRXt0+8AwtBfjI6ESn8aayZqMBMMpUrn
-         cELmwsfRr0hGN3rXyd8RE6yjrPkaXBdaoT4zXFSFtWIwmM+gcUDAPr656EkgqEXg1bLj
-         7Cb1XHYl4ud0PSgYJe8Rbw/4bq1zjklIomCg+9JMk7TBnWwkq3ZUclZ+BbshQscR6Ms7
-         u4Aw==
-X-Gm-Message-State: APjAAAUuAnktDY8wSUayqImcHZwbd8QHwRMfUel2JTTvLeraxBYUrH1A
-        MS3pFCDsyywv9kpnYENVFbo/8k2nI5Q=
-X-Google-Smtp-Source: APXvYqxpucHr3XQGA0+3YLKqkMIwFiFoWfNWoUiKuod4ckGQ3NhlJ1N60hTlhBeddf0Re5hPnlkePg==
-X-Received: by 2002:a19:cc95:: with SMTP id c143mr2720647lfg.138.1556820641057;
-        Thu, 02 May 2019 11:10:41 -0700 (PDT)
-Received: from mail-lf1-f43.google.com (mail-lf1-f43.google.com. [209.85.167.43])
-        by smtp.gmail.com with ESMTPSA id q125sm4809845ljb.76.2019.05.02.11.10.40
-        for <linux-kselftest@vger.kernel.org>
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 02 May 2019 11:10:40 -0700 (PDT)
-Received: by mail-lf1-f43.google.com with SMTP id d8so2569373lfb.8
-        for <linux-kselftest@vger.kernel.org>; Thu, 02 May 2019 11:10:40 -0700 (PDT)
-X-Received: by 2002:a19:f50e:: with SMTP id j14mr2692667lfb.11.1556820176647;
- Thu, 02 May 2019 11:02:56 -0700 (PDT)
+        bh=79fGKeHlH9FAaVSR1O2RxcfKwTsSnTq5QCRHjsEaUQU=;
+        b=QdQCUeOoVKnXZ7/PiDM4ZsHryqgbKmACNWlT89P4fi/wfyajT5CiHCh7Xi7xWGjiZa
+         qSV7q+Bh+Xg2KFKrbSoRx1kdBmbFVfQpdLCScimWOOVAB55RpVgn1RpRVdliweL3BrGw
+         SyQqLtfB2N8++llUm9HLlv7fI+UZ/3qm+1g2WIfuoI/wmqxTpc+1JWKM4nKP1FJNTx2d
+         4r9//ne++CVasYXsum1q7W0zrvWC2AzemuGdsGp7hYXDlWbSo7AMQd3QI7XHEbbBIgZ3
+         7YNVGkRz0YpTaFb2eAxhLXXBJL/oRU2ppQUmSIwN/UL+7OpnDt6c47cCtWUMfUX5ZhRV
+         ZXhQ==
+X-Gm-Message-State: APjAAAUtrE7xBkp/x7tKOq46NthUM7qBfZ9yqyN2xOKgaI43cD1Gt+CB
+        7iBLlEYO9pJJ116FmAnuqmjsJK1cDGZErOS597KpJQ==
+X-Google-Smtp-Source: APXvYqw/nI7b+z83V0GIDl0oQazXtqsfs+CMRGbHgYqDLdBGzPB7zXqfHkbXMcNZ2dozl9lGwjO1NMDSJQAOJdRu1uE=
+X-Received: by 2002:a9d:3621:: with SMTP id w30mr3409606otb.98.1556820502021;
+ Thu, 02 May 2019 11:08:22 -0700 (PDT)
 MIME-Version: 1.0
-References: <20190501202830.347656894@goodmis.org> <20190501203152.397154664@goodmis.org>
- <20190501232412.1196ef18@oasis.local.home> <20190502162133.GX2623@hirez.programming.kicks-ass.net>
-In-Reply-To: <20190502162133.GX2623@hirez.programming.kicks-ass.net>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Thu, 2 May 2019 11:02:40 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wijZ-MD4g3zMJ9W2r=h8LUWneiu29OWuxZEoSfAF=0bhQ@mail.gmail.com>
-Message-ID: <CAHk-=wijZ-MD4g3zMJ9W2r=h8LUWneiu29OWuxZEoSfAF=0bhQ@mail.gmail.com>
-Subject: Re: [RFC][PATCH 1/2] x86: Allow breakpoints to emulate call functions
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        Linux List Kernel Mailing <linux-kernel@vger.kernel.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Nicolai Stange <nstange@suse.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Jiri Kosina <jikos@kernel.org>,
-        Miroslav Benes <mbenes@suse.cz>,
+References: <20190501230126.229218-1-brendanhiggins@google.com>
+ <20190501230126.229218-13-brendanhiggins@google.com> <20190502110220.GD12416@kroah.com>
+In-Reply-To: <20190502110220.GD12416@kroah.com>
+From:   Brendan Higgins <brendanhiggins@google.com>
+Date:   Thu, 2 May 2019 11:07:57 -0700
+Message-ID: <CAFd5g47t=EdLKFCT=CnPkrM2z0nDVo24Gz4j0VxFOJbARP37Lg@mail.gmail.com>
+Subject: Re: [PATCH v2 12/17] kunit: tool: add Python wrappers for running
+ KUnit tests
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Frank Rowand <frowand.list@gmail.com>,
+        Kees Cook <keescook@google.com>,
+        Kieran Bingham <kieran.bingham@ideasonboard.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Rob Herring <robh@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
+        shuah@kernel.org, devicetree <devicetree@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        kunit-dev@googlegroups.com, linux-doc@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kbuild@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-kselftest@vger.kernel.org,
+        linux-nvdimm <linux-nvdimm@lists.01.org>,
+        linux-um@lists.infradead.org,
+        Sasha Levin <Alexander.Levin@microsoft.com>,
+        "Bird, Timothy" <Tim.Bird@sony.com>,
+        Amir Goldstein <amir73il@gmail.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Daniel Vetter <daniel@ffwll.ch>, Jeff Dike <jdike@addtoit.com>,
+        Joel Stanley <joel@jms.id.au>,
+        Julia Lawall <julia.lawall@lip6.fr>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Knut Omang <knut.omang@oracle.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
         Petr Mladek <pmladek@suse.com>,
-        Joe Lawrence <joe.lawrence@redhat.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
-        Tim Chen <tim.c.chen@linux.intel.com>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Juergen Gross <jgross@suse.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nayna Jain <nayna@linux.ibm.com>,
-        Masahiro Yamada <yamada.masahiro@socionext.com>,
-        Joerg Roedel <jroedel@suse.de>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>, stable <stable@vger.kernel.org>
+        Richard Weinberger <richard@nod.at>,
+        David Rientjes <rientjes@google.com>,
+        Steven Rostedt <rostedt@goodmis.org>, wfg@linux.intel.com,
+        Felix Guo <felixguoxiuping@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, May 2, 2019 at 9:21 AM Peter Zijlstra <peterz@infradead.org> wrote:
+On Thu, May 2, 2019 at 4:02 AM Greg KH <gregkh@linuxfoundation.org> wrote:
 >
-> TL;DR, on x86_32 kernel->kernel IRET frames are only 3 entries and do
-> not include ESP/SS, so not only wasn't regs->sp setup, if you changed it
-> it wouldn't be effective and corrupt random stack state.
+> On Wed, May 01, 2019 at 04:01:21PM -0700, Brendan Higgins wrote:
+> > From: Felix Guo <felixguoxiuping@gmail.com>
+> >
+> > The ultimate goal is to create minimal isolated test binaries; in the
+> > meantime we are using UML to provide the infrastructure to run tests, so
+> > define an abstract way to configure and run tests that allow us to
+> > change the context in which tests are built without affecting the user.
+> > This also makes pretty and dynamic error reporting, and a lot of other
+> > nice features easier.
+> >
+> > kunit_config.py:
+> >   - parse .config and Kconfig files.
+> >
+> > kunit_kernel.py: provides helper functions to:
+> >   - configure the kernel using kunitconfig.
+> >   - build the kernel with the appropriate configuration.
+> >   - provide function to invoke the kernel and stream the output back.
+> >
+> > Signed-off-by: Felix Guo <felixguoxiuping@gmail.com>
+> > Signed-off-by: Brendan Higgins <brendanhiggins@google.com>
+>
+> Ah, here's probably my answer to my previous logging format question,
+> right?  What's the chance that these wrappers output stuff in a standard
+> format that test-framework-tools can already parse?  :)
 
-Indeed, the 32-bit case for same-RPL exceptions/iret is entirely
-different, and I'd forgotten about that.
+It should be pretty easy to do. I had some patches that pack up the
+results into a serialized format for a presubmit service; it should be
+pretty straightforward to take the same logic and just change the
+output format.
 
-And honestly, this makes the 32-bit case much worse. Now the entry
-stack modifications of int3 suddenly affect not just the entry, but
-every exit too.
-
-This is _exactly_ the kind of subtle kernel entry/exit code I wanted
-us to avoid.
-
-And while your code looks kind of ok, it's subtly buggy. This sequence:
-
-+       pushl   %eax
-+       movl    %esp, %eax
-+
-+       movl    4*4(%eax), %esp         # restore (modified) regs->sp
-+
-+       /* rebuild IRET frame */
-+       pushl   3*4(%eax)               # flags
-+       pushl   2*4(%eax)               # cs
-+       pushl   1*4(%eax)               # ip
-+
-+       andl    $0x0000ffff, 4(%esp)    # clear high CS bits
-+
-+       movl    (%eax), %eax            # restore eax
-
-looks very wrong to me. When you do that "restore (modified)
-regs->sp", isn't that now resetting %esp to the point where %eax now
-points below the stack? So if we get an NMI in this sequence, that
-will overwrite the parts you are trying to copy from?
-
-Am I missing something? doesn't it need to be done something like
-
-  pushl %eax
-  pushl %ecx
-  movl 20(%esp),%eax   # possibly modified regs->sp
-  movl 16(%esp),%ecx   # flags
-  movl %ecx,-4(%eax)
-  movl 12(%esp),%ecx   # cs
-  movl %ecx,-8(%eax)
-  movl 8(%esp),%ecx   # ip
-  movl %ecx, -12(%eax)
-  movl 4(%esp),%ecx   # eax
-  movl %ecx, -16(%eax)
-  popl %ecx
-  lea -16(%eax),%esp
-  popl %eax
-
-(NOTE NOTE NOTE I might have gotten the offsets and the direction of
-the moves *completely* wrong, this is not a serious patch, it's meant
-as a "something like this" thing!!)
-
-But now I confused myself, and maybe I'm wrong.
-
-                   Linus
+Cheers
