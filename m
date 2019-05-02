@@ -2,131 +2,144 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BF22123BB
-	for <lists+linux-kselftest@lfdr.de>; Thu,  2 May 2019 22:57:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 56932123F9
+	for <lists+linux-kselftest@lfdr.de>; Thu,  2 May 2019 23:16:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726030AbfEBU5r (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 2 May 2019 16:57:47 -0400
-Received: from mail-lj1-f195.google.com ([209.85.208.195]:43264 "EHLO
-        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725962AbfEBU5r (ORCPT
+        id S1726276AbfEBVQ2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 2 May 2019 17:16:28 -0400
+Received: from mail-pg1-f196.google.com ([209.85.215.196]:36361 "EHLO
+        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725995AbfEBVQ1 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 2 May 2019 16:57:47 -0400
-Received: by mail-lj1-f195.google.com with SMTP id t1so3470825lje.10
-        for <linux-kselftest@vger.kernel.org>; Thu, 02 May 2019 13:57:46 -0700 (PDT)
+        Thu, 2 May 2019 17:16:27 -0400
+Received: by mail-pg1-f196.google.com with SMTP id 85so1633188pgc.3;
+        Thu, 02 May 2019 14:16:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=9eWa5vFKZPEJ8DW2XaC7JXAPKdGCG2IN2Y9wVvZv45s=;
-        b=Cx3zQ0UKjjMz51LsOvr1ic+6VE8tQ4HPzkevgcUly/S86/MNpxZqSG4o20EQv0So+W
-         xHmowGihlJAYSjpRF77/Gi8EjbFtkwBPUA5dnvni2jvpBKK7LKBaOoNVRF0Hc3/Mrf0r
-         AikJgVeOLVaZ2oVA0t3qkDKimhPFDbi9a26ks=
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=SXzn4PL7BS9Zk+Qjz5Z6ao7p78pnuZhgvrrpjIHBgqs=;
+        b=kCJFdJIIF969KctuD3d2wM6Ofbq6dPOZFLTH8wlGl+7+cVokVRuDwro7NOWN9ohV8k
+         ImAl50lyzEBsv7yN+yDsApIRZoLtSCfwhyzyxPvjXoEWcvwOBh4YVBGfYFjfXofVIUhG
+         4IdfwHyJltRS5sW89ee6jcilUM33Ka1rf9l/1hx/r4xvkgirrOsCcjMVyOo7fNRjZFEX
+         W57GSaPxOGJB3pNyXX+NzqVUj3/2JEPXwOjRvCBv8sNkyMt8fb6SSscfdGTffg6t6JdB
+         E1xSneePimV/qvTL3gOacgC8P6jcyMC1ik1HBxyp2Tove1HOXYfOKbo6mTy7cNVaJPvY
+         TkNA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=9eWa5vFKZPEJ8DW2XaC7JXAPKdGCG2IN2Y9wVvZv45s=;
-        b=TtvXZufYglvYe4yaGX10OH+7IPOc9GU9xr0vIT57FhTgLuhg/ouF3wPDAx5C1E7bFk
-         DHyUyqtzFlmRiQIrKNNFpxxB8pOP5JFPjs7XFGlV/NhEqH3sT9KXXJID7xbE3Bd1Loy0
-         2as1AzdUhk688vPpzzbK9KRpW2LCxMpnz+x3O1Wyhp6SBMVNZtd6mY274Q4J2VXLm+D5
-         AAdr4tZ2LlajO0vdzAj1fe3qDtcDdWGsO+8trRBeLhqIJlzTV1ECpqI0K07YzomZrpKD
-         ENNMW78ooY6SR1iU/zo6iqWPqebfXrAZ+AfgLCqrmIMipU0jmSSMdqYSK8cPC7kQ4tVs
-         0PCA==
-X-Gm-Message-State: APjAAAXVhG6WC0Y3dtDlPtX6zOBkEPZH9usfOql9TpqmaoUbGFb9L/+8
-        4VjsE6PsudzLbcm/DO1pg4Uath5TR98=
-X-Google-Smtp-Source: APXvYqxzg3kX35lxgzW/ajD/UlKJsJXc10B6+TZp6OEobPU8WEZ5E1peLhZvc4xy4kr3XHFoRDZlaw==
-X-Received: by 2002:a2e:3e18:: with SMTP id l24mr3019161lja.68.1556830665163;
-        Thu, 02 May 2019 13:57:45 -0700 (PDT)
-Received: from mail-lf1-f53.google.com (mail-lf1-f53.google.com. [209.85.167.53])
-        by smtp.gmail.com with ESMTPSA id s26sm14159ljj.52.2019.05.02.13.57.44
-        for <linux-kselftest@vger.kernel.org>
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=SXzn4PL7BS9Zk+Qjz5Z6ao7p78pnuZhgvrrpjIHBgqs=;
+        b=pcJqDcIzbpppzXFbvgI0rUcsLQ6lnBA27PfHO9JPODM+fQgYK63DOJxxWgTVdq9FWp
+         V2Azdulv3zKvkEnOEVQ/udBOpZsAdMmU+YEkQ5ObvZllNXUnrXPk4z5wo7QEPOp4nybN
+         L7d+5/1X0D05k8J4xphzTNJbcUa4edawtNYodf5pXehhJ96msYgDZWXzVbJ+n0in1CKc
+         x9YaDZsbm1w0AshA5yOMDasYnrX++vdexqLx0T7kpsp4iP+unwGfd/aj9piYTLxaWTo8
+         fC8WVrNCqFlTWQYyMpeNABlAL36Arjc/9hieexCg8SfxSV0/mFT088kBzTf22bhYPP+L
+         HsRw==
+X-Gm-Message-State: APjAAAXZTHeEI4ilZYR6xyaLTDyRV7ZS/GCwKiPFe3/dPT8uX9G468mX
+        aSo5coEv1JtmH2fZJI/vmzI=
+X-Google-Smtp-Source: APXvYqyaAKrOO8dNkOZg12O3d42lENfOgkrL7qBtR/V01hTlj71I+CQb4vEU5IP/L2A0+G0+xdSQEg==
+X-Received: by 2002:a63:5f42:: with SMTP id t63mr6174518pgb.275.1556831786717;
+        Thu, 02 May 2019 14:16:26 -0700 (PDT)
+Received: from [192.168.1.70] (c-24-6-192-50.hsd1.ca.comcast.net. [24.6.192.50])
+        by smtp.gmail.com with ESMTPSA id f63sm102173pfc.180.2019.05.02.14.16.23
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 02 May 2019 13:57:44 -0700 (PDT)
-Received: by mail-lf1-f53.google.com with SMTP id d8so2910816lfb.8
-        for <linux-kselftest@vger.kernel.org>; Thu, 02 May 2019 13:57:44 -0700 (PDT)
-X-Received: by 2002:ac2:598b:: with SMTP id w11mr3275555lfn.62.1556830185843;
- Thu, 02 May 2019 13:49:45 -0700 (PDT)
-MIME-Version: 1.0
-References: <20190501202830.347656894@goodmis.org> <20190501203152.397154664@goodmis.org>
- <20190501232412.1196ef18@oasis.local.home> <20190502162133.GX2623@hirez.programming.kicks-ass.net>
- <CAHk-=wijZ-MD4g3zMJ9W2r=h8LUWneiu29OWuxZEoSfAF=0bhQ@mail.gmail.com>
- <20190502181811.GY2623@hirez.programming.kicks-ass.net> <CAHk-=wi6A9tgw=kkPh5Ywqt687VvsVEjYXVkAnq0jpt0u0tk6g@mail.gmail.com>
- <20190502202146.GZ2623@hirez.programming.kicks-ass.net>
-In-Reply-To: <20190502202146.GZ2623@hirez.programming.kicks-ass.net>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Thu, 2 May 2019 13:49:29 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wh8bi5c_GkyjPtDAiaXaZRqtmhWs30usUvs4qK_F+c9tg@mail.gmail.com>
-Message-ID: <CAHk-=wh8bi5c_GkyjPtDAiaXaZRqtmhWs30usUvs4qK_F+c9tg@mail.gmail.com>
-Subject: Re: [RFC][PATCH 1/2] x86: Allow breakpoints to emulate call functions
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        Linux List Kernel Mailing <linux-kernel@vger.kernel.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Nicolai Stange <nstange@suse.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Jiri Kosina <jikos@kernel.org>,
-        Miroslav Benes <mbenes@suse.cz>,
+        Thu, 02 May 2019 14:16:26 -0700 (PDT)
+Subject: Re: [PATCH v2 12/17] kunit: tool: add Python wrappers for running
+ KUnit tests
+To:     Brendan Higgins <brendanhiggins@google.com>,
+        Greg KH <gregkh@linuxfoundation.org>
+Cc:     Kees Cook <keescook@google.com>,
+        Kieran Bingham <kieran.bingham@ideasonboard.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Rob Herring <robh@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
+        shuah@kernel.org, devicetree <devicetree@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        kunit-dev@googlegroups.com, linux-doc@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kbuild@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-kselftest@vger.kernel.org,
+        linux-nvdimm <linux-nvdimm@lists.01.org>,
+        linux-um@lists.infradead.org,
+        Sasha Levin <Alexander.Levin@microsoft.com>,
+        "Bird, Timothy" <Tim.Bird@sony.com>,
+        Amir Goldstein <amir73il@gmail.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Daniel Vetter <daniel@ffwll.ch>, Jeff Dike <jdike@addtoit.com>,
+        Joel Stanley <joel@jms.id.au>,
+        Julia Lawall <julia.lawall@lip6.fr>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Knut Omang <knut.omang@oracle.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
         Petr Mladek <pmladek@suse.com>,
-        Joe Lawrence <joe.lawrence@redhat.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
-        Tim Chen <tim.c.chen@linux.intel.com>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Juergen Gross <jgross@suse.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nayna Jain <nayna@linux.ibm.com>,
-        Masahiro Yamada <yamada.masahiro@socionext.com>,
-        Joerg Roedel <jroedel@suse.de>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>, stable <stable@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Richard Weinberger <richard@nod.at>,
+        David Rientjes <rientjes@google.com>,
+        Steven Rostedt <rostedt@goodmis.org>, wfg@linux.intel.com,
+        Felix Guo <felixguoxiuping@gmail.com>
+References: <20190501230126.229218-1-brendanhiggins@google.com>
+ <20190501230126.229218-13-brendanhiggins@google.com>
+ <20190502110220.GD12416@kroah.com>
+ <CAFd5g47t=EdLKFCT=CnPkrM2z0nDVo24Gz4j0VxFOJbARP37Lg@mail.gmail.com>
+From:   Frank Rowand <frowand.list@gmail.com>
+Message-ID: <a49c5088-a821-210c-66de-f422536f5b01@gmail.com>
+Date:   Thu, 2 May 2019 14:16:23 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
+MIME-Version: 1.0
+In-Reply-To: <CAFd5g47t=EdLKFCT=CnPkrM2z0nDVo24Gz4j0VxFOJbARP37Lg@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, May 2, 2019 at 1:22 PM Peter Zijlstra <peterz@infradead.org> wrote:
->
-> Something like so; it boots; but I could've made some horrible mistake
-> (again).
+On 5/2/19 11:07 AM, Brendan Higgins wrote:
+> On Thu, May 2, 2019 at 4:02 AM Greg KH <gregkh@linuxfoundation.org> wrote:
+>>
+>> On Wed, May 01, 2019 at 04:01:21PM -0700, Brendan Higgins wrote:
+>>> From: Felix Guo <felixguoxiuping@gmail.com>
+>>>
+>>> The ultimate goal is to create minimal isolated test binaries; in the
+>>> meantime we are using UML to provide the infrastructure to run tests, so
+>>> define an abstract way to configure and run tests that allow us to
+>>> change the context in which tests are built without affecting the user.
+>>> This also makes pretty and dynamic error reporting, and a lot of other
+>>> nice features easier.
+>>>
+>>> kunit_config.py:
+>>>   - parse .config and Kconfig files.
+>>>
+>>> kunit_kernel.py: provides helper functions to:
+>>>   - configure the kernel using kunitconfig.
+>>>   - build the kernel with the appropriate configuration.
+>>>   - provide function to invoke the kernel and stream the output back.
+>>>
+>>> Signed-off-by: Felix Guo <felixguoxiuping@gmail.com>
+>>> Signed-off-by: Brendan Higgins <brendanhiggins@google.com>
+>>
+>> Ah, here's probably my answer to my previous logging format question,
+>> right?  What's the chance that these wrappers output stuff in a standard
+>> format that test-framework-tools can already parse?  :)
+> 
+> It should be pretty easy to do. I had some patches that pack up the
+> results into a serialized format for a presubmit service; it should be
+> pretty straightforward to take the same logic and just change the
+> output format.
 
-This actually looks much better to me.
+When examining and trying out the previous versions of the patch I found
+the wrappers useful to provide information about how to control and use
+the tests, but I had no interest in using the scripts as they do not
+fit in with my personal environment and workflow.
 
-Maybe it's more lines (I didn't check), but it's a lot simpler in that
-now the magic of the int3 stack doesn't get exposed to anything else.
+In the previous versions of the patch, these helper scripts are optional,
+which is good for my use case.  If the helper scripts are required to
+get the data into the proper format then the scripts are not quite so
+optional, they become the expected environment.  I think the proper
+format should exist without the helper scripts.
 
-We *could* also make this kernel-mode-only do_int3() be a special
-function, and do something like
-
-        # args: pt_regs pointer (no error code for int3)
-        movl %esp,%eax
-        # allocate a bit of extra room on the stack, so that
-'kernel_int3' can move the pt_regs
-        subl $8,%esp
-        call kernel_int3
-        movl %eax,%esp
-
-and not do any stack switching magic in the asm code AT ALL. We'd do
-
-    struct pt_regs *kernel_int3(struct pt_regs *regs)
-    {
-        ..
-        return regs;
-    }
-
-and now you the rule for call emulation ends up being that you need to
-"memmove()" the ptregs up and down properly, and return the new
-pt_regs pointer.
-
-Hmm? That would simplify the asm code further, but some people might
-find it objectionable?
-
-                  Linus
+-Frank
