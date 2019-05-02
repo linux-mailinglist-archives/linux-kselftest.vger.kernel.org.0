@@ -2,152 +2,112 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0ECBD12222
-	for <lists+linux-kselftest@lfdr.de>; Thu,  2 May 2019 20:46:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5ED01227F
+	for <lists+linux-kselftest@lfdr.de>; Thu,  2 May 2019 21:14:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726407AbfEBSp4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 2 May 2019 14:45:56 -0400
-Received: from mail-oi1-f196.google.com ([209.85.167.196]:38868 "EHLO
-        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726362AbfEBSpz (ORCPT
+        id S1726477AbfEBTOm (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 2 May 2019 15:14:42 -0400
+Received: from mail-pg1-f193.google.com ([209.85.215.193]:44249 "EHLO
+        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726472AbfEBTOl (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 2 May 2019 14:45:55 -0400
-Received: by mail-oi1-f196.google.com with SMTP id t70so2553645oif.5
-        for <linux-kselftest@vger.kernel.org>; Thu, 02 May 2019 11:45:55 -0700 (PDT)
+        Thu, 2 May 2019 15:14:41 -0400
+Received: by mail-pg1-f193.google.com with SMTP id z16so1479814pgv.11
+        for <linux-kselftest@vger.kernel.org>; Thu, 02 May 2019 12:14:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=17OVt5sF62dgswwCTgJsxP7RAt3WsAf5VJ4Ut9AHOnQ=;
-        b=P9mmkEctGFviK6NgZSHwMcUWXoaX/YoeIAK9bJMcE3Lx9wj9ioBeHG7azUaTRvfMEz
-         TY2RHOx0ThWPnz2RyK/JeVea8tpHo/vQkabwSgIPQaucOPCDrRgdtpJvHIeyfXSXZIdh
-         EEpMDUWFYZWhjIh9jDc8FJvMTlSL8vQ8VfgY4koM+if0RzgjLUM+G7N96Iar9oJO2RWW
-         y2bZo1FvLirTsbvZcF5UvfSKsfdjWdxyGHNZOdT8DOFyQvGPVysWQaUTlUo3hkMnOD0e
-         RSC2W/FJE39vCVMCViynhllAgBlnR6+D6q04cTiRfgx2IG0+4k0zkzJ9Spq984jh3G9l
-         lWjw==
+        d=joelfernandes.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=T87TJAQEItZ/8IKuRT/VOsqnktTnyrxp/uVvFEniYMA=;
+        b=vBv6PoK0WcmYtiIfYiYRttaKU6sySuqlp2bz5MAKrEwpGt1gue3gzyHG11PiGfzpcw
+         3MNNE7KR0yeU4+4xNbx9fp+4t1kJJWsSD3Bd3y2xlf2o948io5GNWybzWlXv1qF6rMqO
+         W1SENeUpDnopBUPQi4IYCnMgIeGn5O8Gv2YK8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=17OVt5sF62dgswwCTgJsxP7RAt3WsAf5VJ4Ut9AHOnQ=;
-        b=AgVhUu0ETCDj4sDZksH3ZxSNWQ7nDcPfjXEuHxcyA+OE0NFMk4EFWmfTCG2LXMVPW0
-         5FGEZz75fCvNkz3TZVvgHArZWugmH1pczZEiHghqrDYUxOX3cSYUzqRe0VlDss4wFCjX
-         zQkteVhdPVJop/6qN8Odqcdrq2Csl+HzOyjyY99t/RKAL7I5M5VsvwVS+5KRrjy0EpYh
-         10ehcAKJElyjmisbhOm+W7IfvC+uWGPYwyRVKH1SYcY/H+Yss3nvBjjGh84+8rCgcrew
-         1jxpirxOmwG4jVsCsKBPlFQToGBQmn/h4zuypNA8CKmkXOuzywQdqwooHjh3yiwJEfHD
-         kQbQ==
-X-Gm-Message-State: APjAAAWRZWMvMH9nzlULh+lKS02nD+uxk1dmJI+r4Ddk6evz6jXxaHrK
-        9VnR5atyx+Lw1wzos9Ggso/LpDeYq/GUXR+taguDWw==
-X-Google-Smtp-Source: APXvYqzC6lEhFzCwba9WNGtoNJlN2/sxNxsRqKIHnQJUgSQQ4oc4XCI9kW3OGRwazcEXau+lGinuQZlka+T3d8xNOxI=
-X-Received: by 2002:aca:4586:: with SMTP id s128mr3264542oia.148.1556822754511;
- Thu, 02 May 2019 11:45:54 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=T87TJAQEItZ/8IKuRT/VOsqnktTnyrxp/uVvFEniYMA=;
+        b=F9JQXeGQ8Ybv1F3WNq/GYaupphZoP9ASac2TXh+GCx65JH0i3C5AWgjt91sgA5Ctm6
+         W25Fr9RiXsIrIQdQuvkKu2QXX54HnX94KXuApRX4gt7EOB98CRMBbLUq6ve4TQ03wUX3
+         KTIMoZNJwZ8VEU3wzNlW59IbtZ3CGYhWArmzMnxY+Y0VHnqimsFtlb6FGudv5U6YWUX3
+         M7Pz1M43ZpUoLWClb3YPrLGqzzCUngcRW6iNZ2p2VKg6TZdQzRDMTYIQD0ZUf9UPeQ5S
+         d09hrEF66gatGa2ZOoT90M9OfxYhvmA9eJ7YjcSXSGTljSYzCpdfuvF9Xfghle87SfCu
+         g6vg==
+X-Gm-Message-State: APjAAAWQn74S07j/aSOGoOkI1XqZdr4+17+rE5IkR7cPtasWJILZkTX2
+        Lz6/5GqnKP3eg8HtcUj/DehlFw==
+X-Google-Smtp-Source: APXvYqzA5/HIyej28h0lLtHCsm2clDFlAORBWM0decWBelSise8oK0pTjZR+reURwiFiGKrXF2W/2w==
+X-Received: by 2002:a63:fa46:: with SMTP id g6mr5766362pgk.382.1556824480553;
+        Thu, 02 May 2019 12:14:40 -0700 (PDT)
+Received: from localhost ([2620:15c:6:12:9c46:e0da:efbf:69cc])
+        by smtp.gmail.com with ESMTPSA id z124sm48008758pfz.116.2019.05.02.12.14.38
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Thu, 02 May 2019 12:14:39 -0700 (PDT)
+Date:   Thu, 2 May 2019 15:14:37 -0400
+From:   Joel Fernandes <joel@joelfernandes.org>
+To:     Oleg Nesterov <oleg@redhat.com>
+Cc:     Christian Brauner <christian@brauner.io>,
+        linux-kernel@vger.kernel.org,
+        Andy Lutomirski <luto@amacapital.net>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Daniel Colascione <dancol@google.com>,
+        Jann Horn <jannh@google.com>,
+        Tim Murray <timmurray@google.com>,
+        Jonathan Kowalski <bl0pbl33p@gmail.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Kees Cook <keescook@chromium.org>,
+        David Howells <dhowells@redhat.com>, kernel-team@android.com,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        KJ Tsanaktsidis <ktsanaktsidis@zendesk.com>,
+        linux-kselftest@vger.kernel.org, Michal Hocko <mhocko@suse.com>,
+        Nadav Amit <namit@vmware.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Serge Hallyn <serge@hallyn.com>, Shuah Khan <shuah@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Tycho Andersen <tycho@tycho.ws>
+Subject: Re: [PATCH v2 1/2] Add polling support to pidfd
+Message-ID: <20190502191437.GA103213@google.com>
+References: <20190430162154.61314-1-joel@joelfernandes.org>
+ <20190501151312.GA30235@redhat.com>
+ <20190502151320.cvc6uc3b4bmww23k@brauner.io>
+ <20190502160247.GD7323@redhat.com>
 MIME-Version: 1.0
-References: <20190501230126.229218-1-brendanhiggins@google.com>
- <20190501230126.229218-17-brendanhiggins@google.com> <20190502110347.GE12416@kroah.com>
- <ECADFF3FD767C149AD96A924E7EA6EAF9770A3A0@USCULXMSG01.am.sony.com>
-In-Reply-To: <ECADFF3FD767C149AD96A924E7EA6EAF9770A3A0@USCULXMSG01.am.sony.com>
-From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Thu, 2 May 2019 11:45:43 -0700
-Message-ID: <CAFd5g471Wawu6g14p0AO3aY8VPBKLA0mjHSdfR1qStFGzp3iGQ@mail.gmail.com>
-Subject: Re: [PATCH v2 16/17] kernel/sysctl-test: Add null pointer test for sysctl.c:proc_dointvec()
-To:     "Bird, Timothy" <Tim.Bird@sony.com>
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Kees Cook <keescook@google.com>,
-        Kieran Bingham <kieran.bingham@ideasonboard.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Rob Herring <robh@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
-        shuah@kernel.org, devicetree <devicetree@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        kunit-dev@googlegroups.com, linux-doc@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kbuild@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-kselftest@vger.kernel.org,
-        linux-nvdimm <linux-nvdimm@lists.01.org>,
-        linux-um@lists.infradead.org,
-        Sasha Levin <Alexander.Levin@microsoft.com>,
-        Amir Goldstein <amir73il@gmail.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Daniel Vetter <daniel@ffwll.ch>, Jeff Dike <jdike@addtoit.com>,
-        Joel Stanley <joel@jms.id.au>,
-        Julia Lawall <julia.lawall@lip6.fr>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Knut Omang <knut.omang@oracle.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Petr Mladek <pmladek@suse.com>,
-        Richard Weinberger <richard@nod.at>,
-        David Rientjes <rientjes@google.com>,
-        Steven Rostedt <rostedt@goodmis.org>, wfg@linux.intel.com,
-        Iurii Zaikin <yzaikin@google.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190502160247.GD7323@redhat.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, May 2, 2019 at 11:15 AM <Tim.Bird@sony.com> wrote:
->
->
->
-> > -----Original Message-----
-> > From: Greg KH
+On Thu, May 02, 2019 at 06:02:48PM +0200, Oleg Nesterov wrote:
+> On 05/02, Christian Brauner wrote:
 > >
-> > On Wed, May 01, 2019 at 04:01:25PM -0700, Brendan Higgins wrote:
-> > > From: Iurii Zaikin <yzaikin@google.com>
+> > On Wed, May 01, 2019 at 05:13:12PM +0200, Oleg Nesterov wrote:
 > > >
-> > > KUnit tests for initialized data behavior of proc_dointvec that is
-> > > explicitly checked in the code. Includes basic parsing tests including
-> > > int min/max overflow.
-> > >
-> > > Signed-off-by: Iurii Zaikin <yzaikin@google.com>
-> > > Signed-off-by: Brendan Higgins <brendanhiggins@google.com>
-> > > ---
-> > >  kernel/Makefile      |   2 +
-> > >  kernel/sysctl-test.c | 292
-> > +++++++++++++++++++++++++++++++++++++++++++
-> > >  lib/Kconfig.debug    |   6 +
-> > >  3 files changed, 300 insertions(+)
-> > >  create mode 100644 kernel/sysctl-test.c
-> > >
-> > > diff --git a/kernel/Makefile b/kernel/Makefile
-> > > index 6c57e78817dad..c81a8976b6a4b 100644
-> > > --- a/kernel/Makefile
-> > > +++ b/kernel/Makefile
-> > > @@ -112,6 +112,8 @@ obj-$(CONFIG_HAS_IOMEM) += iomem.o
-> > >  obj-$(CONFIG_ZONE_DEVICE) += memremap.o
-> > >  obj-$(CONFIG_RSEQ) += rseq.o
-> > >
-> > > +obj-$(CONFIG_SYSCTL_KUNIT_TEST) += sysctl-test.o
+> > > Otherwise I see no problems.
 > >
-> > You are going to have to have a "standard" naming scheme for test
-> > modules, are you going to recommend "foo-test" over "test-foo"?  If so,
-> > that's fine, we should just be consistant and document it somewhere.
-> >
-> > Personally, I'd prefer "test-foo", but that's just me, naming is hard...
->
-> My preference would be "test-foo" as well.  Just my 2 cents.
+> > I'll remove the WARN_ON() check when applying this. Can I get your
+> > Acked/Review, Oleg?
 
-I definitely agree we should be consistent. My personal bias
-(unsurprisingly) is "foo-test," but this is just because that is the
-convention I am used to in other projects I have worked on.
+Oh, ok. Good point about the de_thread race. Agreed with you.
 
-On an unbiased note, we are currently almost evenly split between the
-two conventions with *slight* preference for "foo-test": I ran the two
-following grep commands on v5.1-rc7:
+> Yes, feel free to add
+> 
+> 	Reviewed-by: Oleg Nesterov <oleg@redhat.com>
+> 
+> Hmm. Somehow I didn't read the changelog before, I just noticed
+> Suggested-by: Oleg Nesterov <oleg@redhat.com>
+> Please remove ;) Thanks Joel, I appreciate it, but it is not my idea.
 
-grep -Hrn --exclude-dir="build" -e "config [a-zA-Z_0-9]\+_TEST$" | wc -l
-grep -Hrn --exclude-dir="build" -e "config TEST_[a-zA-Z_0-9]\+" | wc -l
+Ok no problem. You have been very helpful so thank you for that!
 
-"foo-test" has 36 occurrences.
-"test-foo" has 33 occurrences.
+Also thanks Christian for removing the warning and adding Oleg's Reviewed-by.
 
-The things I am more concerned about is how this would affect file
-naming. If we have a unit test for foo.c, I think foo_test.c is more
-consistent with our namespacing conventions. The other thing, is if we
-already have a Kconfig symbol called FOO_TEST (or TEST_FOO) what
-should we name the KUnit test in this case? FOO_UNIT_TEST?
-FOO_KUNIT_TEST, like I did above?
+ - Joel
 
-Cheers
