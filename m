@@ -2,24 +2,65 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DF02E12396
-	for <lists+linux-kselftest@lfdr.de>; Thu,  2 May 2019 22:48:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BF22123BB
+	for <lists+linux-kselftest@lfdr.de>; Thu,  2 May 2019 22:57:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726209AbfEBUsZ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 2 May 2019 16:48:25 -0400
-Received: from mail.kernel.org ([198.145.29.99]:55244 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726175AbfEBUsZ (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 2 May 2019 16:48:25 -0400
-Received: from gandalf.local.home (cpe-66-24-58-225.stny.res.rr.com [66.24.58.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id E395B2081C;
-        Thu,  2 May 2019 20:48:21 +0000 (UTC)
-Date:   Thu, 2 May 2019 16:48:19 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
+        id S1726030AbfEBU5r (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 2 May 2019 16:57:47 -0400
+Received: from mail-lj1-f195.google.com ([209.85.208.195]:43264 "EHLO
+        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725962AbfEBU5r (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 2 May 2019 16:57:47 -0400
+Received: by mail-lj1-f195.google.com with SMTP id t1so3470825lje.10
+        for <linux-kselftest@vger.kernel.org>; Thu, 02 May 2019 13:57:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=9eWa5vFKZPEJ8DW2XaC7JXAPKdGCG2IN2Y9wVvZv45s=;
+        b=Cx3zQ0UKjjMz51LsOvr1ic+6VE8tQ4HPzkevgcUly/S86/MNpxZqSG4o20EQv0So+W
+         xHmowGihlJAYSjpRF77/Gi8EjbFtkwBPUA5dnvni2jvpBKK7LKBaOoNVRF0Hc3/Mrf0r
+         AikJgVeOLVaZ2oVA0t3qkDKimhPFDbi9a26ks=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=9eWa5vFKZPEJ8DW2XaC7JXAPKdGCG2IN2Y9wVvZv45s=;
+        b=TtvXZufYglvYe4yaGX10OH+7IPOc9GU9xr0vIT57FhTgLuhg/ouF3wPDAx5C1E7bFk
+         DHyUyqtzFlmRiQIrKNNFpxxB8pOP5JFPjs7XFGlV/NhEqH3sT9KXXJID7xbE3Bd1Loy0
+         2as1AzdUhk688vPpzzbK9KRpW2LCxMpnz+x3O1Wyhp6SBMVNZtd6mY274Q4J2VXLm+D5
+         AAdr4tZ2LlajO0vdzAj1fe3qDtcDdWGsO+8trRBeLhqIJlzTV1ECpqI0K07YzomZrpKD
+         ENNMW78ooY6SR1iU/zo6iqWPqebfXrAZ+AfgLCqrmIMipU0jmSSMdqYSK8cPC7kQ4tVs
+         0PCA==
+X-Gm-Message-State: APjAAAXVhG6WC0Y3dtDlPtX6zOBkEPZH9usfOql9TpqmaoUbGFb9L/+8
+        4VjsE6PsudzLbcm/DO1pg4Uath5TR98=
+X-Google-Smtp-Source: APXvYqxzg3kX35lxgzW/ajD/UlKJsJXc10B6+TZp6OEobPU8WEZ5E1peLhZvc4xy4kr3XHFoRDZlaw==
+X-Received: by 2002:a2e:3e18:: with SMTP id l24mr3019161lja.68.1556830665163;
+        Thu, 02 May 2019 13:57:45 -0700 (PDT)
+Received: from mail-lf1-f53.google.com (mail-lf1-f53.google.com. [209.85.167.53])
+        by smtp.gmail.com with ESMTPSA id s26sm14159ljj.52.2019.05.02.13.57.44
+        for <linux-kselftest@vger.kernel.org>
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 02 May 2019 13:57:44 -0700 (PDT)
+Received: by mail-lf1-f53.google.com with SMTP id d8so2910816lfb.8
+        for <linux-kselftest@vger.kernel.org>; Thu, 02 May 2019 13:57:44 -0700 (PDT)
+X-Received: by 2002:ac2:598b:: with SMTP id w11mr3275555lfn.62.1556830185843;
+ Thu, 02 May 2019 13:49:45 -0700 (PDT)
+MIME-Version: 1.0
+References: <20190501202830.347656894@goodmis.org> <20190501203152.397154664@goodmis.org>
+ <20190501232412.1196ef18@oasis.local.home> <20190502162133.GX2623@hirez.programming.kicks-ass.net>
+ <CAHk-=wijZ-MD4g3zMJ9W2r=h8LUWneiu29OWuxZEoSfAF=0bhQ@mail.gmail.com>
+ <20190502181811.GY2623@hirez.programming.kicks-ass.net> <CAHk-=wi6A9tgw=kkPh5Ywqt687VvsVEjYXVkAnq0jpt0u0tk6g@mail.gmail.com>
+ <20190502202146.GZ2623@hirez.programming.kicks-ass.net>
+In-Reply-To: <20190502202146.GZ2623@hirez.programming.kicks-ass.net>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Thu, 2 May 2019 13:49:29 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wh8bi5c_GkyjPtDAiaXaZRqtmhWs30usUvs4qK_F+c9tg@mail.gmail.com>
+Message-ID: <CAHk-=wh8bi5c_GkyjPtDAiaXaZRqtmhWs30usUvs4qK_F+c9tg@mail.gmail.com>
+Subject: Re: [RFC][PATCH 1/2] x86: Allow breakpoints to emulate call functions
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
         Linux List Kernel Mailing <linux-kernel@vger.kernel.org>,
         Ingo Molnar <mingo@kernel.org>,
         Andrew Morton <akpm@linux-foundation.org>,
@@ -46,39 +87,46 @@ Cc:     Peter Zijlstra <peterz@infradead.org>,
         Joerg Roedel <jroedel@suse.de>,
         "open list:KERNEL SELFTEST FRAMEWORK" 
         <linux-kselftest@vger.kernel.org>, stable <stable@vger.kernel.org>
-Subject: Re: [RFC][PATCH 1/2] x86: Allow breakpoints to emulate call
- functions
-Message-ID: <20190502164819.24a818a1@gandalf.local.home>
-In-Reply-To: <CAHk-=wijZ-MD4g3zMJ9W2r=h8LUWneiu29OWuxZEoSfAF=0bhQ@mail.gmail.com>
-References: <20190501202830.347656894@goodmis.org>
-        <20190501203152.397154664@goodmis.org>
-        <20190501232412.1196ef18@oasis.local.home>
-        <20190502162133.GX2623@hirez.programming.kicks-ass.net>
-        <CAHk-=wijZ-MD4g3zMJ9W2r=h8LUWneiu29OWuxZEoSfAF=0bhQ@mail.gmail.com>
-X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, 2 May 2019 11:02:40 -0700
-Linus Torvalds <torvalds@linux-foundation.org> wrote:
+On Thu, May 2, 2019 at 1:22 PM Peter Zijlstra <peterz@infradead.org> wrote:
+>
+> Something like so; it boots; but I could've made some horrible mistake
+> (again).
 
-> Indeed, the 32-bit case for same-RPL exceptions/iret is entirely
-> different, and I'd forgotten about that.
-> 
-> And honestly, this makes the 32-bit case much worse. Now the entry
-> stack modifications of int3 suddenly affect not just the entry, but
-> every exit too.
-> 
-> This is _exactly_ the kind of subtle kernel entry/exit code I wanted
-> us to avoid.
+This actually looks much better to me.
 
-I just want to point out that I never got the trampoline version
-working on i386. I didn't have the time to debug why it would crash
-when stressed.
+Maybe it's more lines (I didn't check), but it's a lot simpler in that
+now the magic of the int3 stack doesn't get exposed to anything else.
 
--- Steve
+We *could* also make this kernel-mode-only do_int3() be a special
+function, and do something like
+
+        # args: pt_regs pointer (no error code for int3)
+        movl %esp,%eax
+        # allocate a bit of extra room on the stack, so that
+'kernel_int3' can move the pt_regs
+        subl $8,%esp
+        call kernel_int3
+        movl %eax,%esp
+
+and not do any stack switching magic in the asm code AT ALL. We'd do
+
+    struct pt_regs *kernel_int3(struct pt_regs *regs)
+    {
+        ..
+        return regs;
+    }
+
+and now you the rule for call emulation ends up being that you need to
+"memmove()" the ptregs up and down properly, and return the new
+pt_regs pointer.
+
+Hmm? That would simplify the asm code further, but some people might
+find it objectionable?
+
+                  Linus
