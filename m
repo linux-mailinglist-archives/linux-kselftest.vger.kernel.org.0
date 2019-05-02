@@ -2,134 +2,152 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3766312229
-	for <lists+linux-kselftest@lfdr.de>; Thu,  2 May 2019 20:50:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0ECBD12222
+	for <lists+linux-kselftest@lfdr.de>; Thu,  2 May 2019 20:46:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726114AbfEBSux (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 2 May 2019 14:50:53 -0400
-Received: from mail-lf1-f68.google.com ([209.85.167.68]:37309 "EHLO
-        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725962AbfEBSuw (ORCPT
+        id S1726407AbfEBSp4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 2 May 2019 14:45:56 -0400
+Received: from mail-oi1-f196.google.com ([209.85.167.196]:38868 "EHLO
+        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726362AbfEBSpz (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 2 May 2019 14:50:52 -0400
-Received: by mail-lf1-f68.google.com with SMTP id h126so2668606lfh.4
-        for <linux-kselftest@vger.kernel.org>; Thu, 02 May 2019 11:50:51 -0700 (PDT)
+        Thu, 2 May 2019 14:45:55 -0400
+Received: by mail-oi1-f196.google.com with SMTP id t70so2553645oif.5
+        for <linux-kselftest@vger.kernel.org>; Thu, 02 May 2019 11:45:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
+        d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=jRZt+D8O8akEME1deiXcwDybfKiwpthrXzyaDQKQw+o=;
-        b=DOe1Odxc1gK8brv9R5zvAAh8GUyJ0YnhuXPXnXKLY6rlveLN+SrMsrIhlmdzjwzc3A
-         +gpmg7E+x+gFu/OGE9tnfORqGbP7/EJEKg5bLaODW4PNZqGswJ1xp/er7T39ChKACNGs
-         gUroHv8DdOMTYzXZZhWIDTz6VqI7ZdBhWPnGk=
+        bh=17OVt5sF62dgswwCTgJsxP7RAt3WsAf5VJ4Ut9AHOnQ=;
+        b=P9mmkEctGFviK6NgZSHwMcUWXoaX/YoeIAK9bJMcE3Lx9wj9ioBeHG7azUaTRvfMEz
+         TY2RHOx0ThWPnz2RyK/JeVea8tpHo/vQkabwSgIPQaucOPCDrRgdtpJvHIeyfXSXZIdh
+         EEpMDUWFYZWhjIh9jDc8FJvMTlSL8vQ8VfgY4koM+if0RzgjLUM+G7N96Iar9oJO2RWW
+         y2bZo1FvLirTsbvZcF5UvfSKsfdjWdxyGHNZOdT8DOFyQvGPVysWQaUTlUo3hkMnOD0e
+         RSC2W/FJE39vCVMCViynhllAgBlnR6+D6q04cTiRfgx2IG0+4k0zkzJ9Spq984jh3G9l
+         lWjw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=jRZt+D8O8akEME1deiXcwDybfKiwpthrXzyaDQKQw+o=;
-        b=L1sLRH/g3ntBpVGtC2HmXx5lalSWEtvYIGVS8p7Wu5e4pt+yvwnL0nQLA9b8WFZVmN
-         A+w7ILdQvMwnqH/3/MpcTdI9idqbx2VlPH1SHxxcMoRBoy5bShDlDdmQIcl9ZgXq+ji3
-         gRciX8OsYuY3QpJvH+4ocgOYqzEPS/XWPIR0YUwn8xDlAeIUI8ASih/8tteAtxTG5Bxq
-         weTmM3p8Eq+ACtiob3VqIOyWqPSi9IMTbzLOUSAP93aYhpyRCaBTW+f1vfA5DGf4lTrZ
-         FDzwFuh7kEPrzVlOOJrtANnfdDohtmiNxINSV37NvwsZh++bTvSD+An1ZiY/+DVN6luT
-         mZJQ==
-X-Gm-Message-State: APjAAAW4kNb4SkRmylpEzxclddqpCq2zffbqkOgLKWBpagVivpirI/qW
-        lNA5TBuQjOyXhR2JoYQJZWLloZoP9vc=
-X-Google-Smtp-Source: APXvYqyLAacuLVsTbCrgRWaU2hA2m5ccLiHC8dUl8xEaIOc6hLtq9csFJ38GYFhRD+F8PB1fROXx7A==
-X-Received: by 2002:a19:7406:: with SMTP id v6mr2853216lfe.9.1556823050482;
-        Thu, 02 May 2019 11:50:50 -0700 (PDT)
-Received: from mail-lj1-f173.google.com (mail-lj1-f173.google.com. [209.85.208.173])
-        by smtp.gmail.com with ESMTPSA id h18sm566497ljf.88.2019.05.02.11.50.49
-        for <linux-kselftest@vger.kernel.org>
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 02 May 2019 11:50:50 -0700 (PDT)
-Received: by mail-lj1-f173.google.com with SMTP id s7so3184704ljh.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 02 May 2019 11:50:49 -0700 (PDT)
-X-Received: by 2002:a2e:9a84:: with SMTP id p4mr2295002lji.22.1556822633649;
- Thu, 02 May 2019 11:43:53 -0700 (PDT)
+        bh=17OVt5sF62dgswwCTgJsxP7RAt3WsAf5VJ4Ut9AHOnQ=;
+        b=AgVhUu0ETCDj4sDZksH3ZxSNWQ7nDcPfjXEuHxcyA+OE0NFMk4EFWmfTCG2LXMVPW0
+         5FGEZz75fCvNkz3TZVvgHArZWugmH1pczZEiHghqrDYUxOX3cSYUzqRe0VlDss4wFCjX
+         zQkteVhdPVJop/6qN8Odqcdrq2Csl+HzOyjyY99t/RKAL7I5M5VsvwVS+5KRrjy0EpYh
+         10ehcAKJElyjmisbhOm+W7IfvC+uWGPYwyRVKH1SYcY/H+Yss3nvBjjGh84+8rCgcrew
+         1jxpirxOmwG4jVsCsKBPlFQToGBQmn/h4zuypNA8CKmkXOuzywQdqwooHjh3yiwJEfHD
+         kQbQ==
+X-Gm-Message-State: APjAAAWRZWMvMH9nzlULh+lKS02nD+uxk1dmJI+r4Ddk6evz6jXxaHrK
+        9VnR5atyx+Lw1wzos9Ggso/LpDeYq/GUXR+taguDWw==
+X-Google-Smtp-Source: APXvYqzC6lEhFzCwba9WNGtoNJlN2/sxNxsRqKIHnQJUgSQQ4oc4XCI9kW3OGRwazcEXau+lGinuQZlka+T3d8xNOxI=
+X-Received: by 2002:aca:4586:: with SMTP id s128mr3264542oia.148.1556822754511;
+ Thu, 02 May 2019 11:45:54 -0700 (PDT)
 MIME-Version: 1.0
-References: <20190501202830.347656894@goodmis.org> <20190501203152.397154664@goodmis.org>
- <20190501232412.1196ef18@oasis.local.home> <20190502162133.GX2623@hirez.programming.kicks-ass.net>
- <CAHk-=wijZ-MD4g3zMJ9W2r=h8LUWneiu29OWuxZEoSfAF=0bhQ@mail.gmail.com> <20190502181811.GY2623@hirez.programming.kicks-ass.net>
-In-Reply-To: <20190502181811.GY2623@hirez.programming.kicks-ass.net>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Thu, 2 May 2019 11:43:37 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wi6A9tgw=kkPh5Ywqt687VvsVEjYXVkAnq0jpt0u0tk6g@mail.gmail.com>
-Message-ID: <CAHk-=wi6A9tgw=kkPh5Ywqt687VvsVEjYXVkAnq0jpt0u0tk6g@mail.gmail.com>
-Subject: Re: [RFC][PATCH 1/2] x86: Allow breakpoints to emulate call functions
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        Linux List Kernel Mailing <linux-kernel@vger.kernel.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Nicolai Stange <nstange@suse.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Jiri Kosina <jikos@kernel.org>,
-        Miroslav Benes <mbenes@suse.cz>,
+References: <20190501230126.229218-1-brendanhiggins@google.com>
+ <20190501230126.229218-17-brendanhiggins@google.com> <20190502110347.GE12416@kroah.com>
+ <ECADFF3FD767C149AD96A924E7EA6EAF9770A3A0@USCULXMSG01.am.sony.com>
+In-Reply-To: <ECADFF3FD767C149AD96A924E7EA6EAF9770A3A0@USCULXMSG01.am.sony.com>
+From:   Brendan Higgins <brendanhiggins@google.com>
+Date:   Thu, 2 May 2019 11:45:43 -0700
+Message-ID: <CAFd5g471Wawu6g14p0AO3aY8VPBKLA0mjHSdfR1qStFGzp3iGQ@mail.gmail.com>
+Subject: Re: [PATCH v2 16/17] kernel/sysctl-test: Add null pointer test for sysctl.c:proc_dointvec()
+To:     "Bird, Timothy" <Tim.Bird@sony.com>
+Cc:     Greg KH <gregkh@linuxfoundation.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Kees Cook <keescook@google.com>,
+        Kieran Bingham <kieran.bingham@ideasonboard.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Rob Herring <robh@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
+        shuah@kernel.org, devicetree <devicetree@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        kunit-dev@googlegroups.com, linux-doc@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kbuild@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-kselftest@vger.kernel.org,
+        linux-nvdimm <linux-nvdimm@lists.01.org>,
+        linux-um@lists.infradead.org,
+        Sasha Levin <Alexander.Levin@microsoft.com>,
+        Amir Goldstein <amir73il@gmail.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Daniel Vetter <daniel@ffwll.ch>, Jeff Dike <jdike@addtoit.com>,
+        Joel Stanley <joel@jms.id.au>,
+        Julia Lawall <julia.lawall@lip6.fr>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Knut Omang <knut.omang@oracle.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
         Petr Mladek <pmladek@suse.com>,
-        Joe Lawrence <joe.lawrence@redhat.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
-        Tim Chen <tim.c.chen@linux.intel.com>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Juergen Gross <jgross@suse.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nayna Jain <nayna@linux.ibm.com>,
-        Masahiro Yamada <yamada.masahiro@socionext.com>,
-        Joerg Roedel <jroedel@suse.de>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>, stable <stable@vger.kernel.org>
+        Richard Weinberger <richard@nod.at>,
+        David Rientjes <rientjes@google.com>,
+        Steven Rostedt <rostedt@goodmis.org>, wfg@linux.intel.com,
+        Iurii Zaikin <yzaikin@google.com>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, May 2, 2019 at 11:18 AM Peter Zijlstra <peterz@infradead.org> wrote:
+On Thu, May 2, 2019 at 11:15 AM <Tim.Bird@sony.com> wrote:
 >
-> We could fix this by not using the common exit path on int3; not sure we
-> want to go there, but that is an option.
+>
+>
+> > -----Original Message-----
+> > From: Greg KH
+> >
+> > On Wed, May 01, 2019 at 04:01:25PM -0700, Brendan Higgins wrote:
+> > > From: Iurii Zaikin <yzaikin@google.com>
+> > >
+> > > KUnit tests for initialized data behavior of proc_dointvec that is
+> > > explicitly checked in the code. Includes basic parsing tests including
+> > > int min/max overflow.
+> > >
+> > > Signed-off-by: Iurii Zaikin <yzaikin@google.com>
+> > > Signed-off-by: Brendan Higgins <brendanhiggins@google.com>
+> > > ---
+> > >  kernel/Makefile      |   2 +
+> > >  kernel/sysctl-test.c | 292
+> > +++++++++++++++++++++++++++++++++++++++++++
+> > >  lib/Kconfig.debug    |   6 +
+> > >  3 files changed, 300 insertions(+)
+> > >  create mode 100644 kernel/sysctl-test.c
+> > >
+> > > diff --git a/kernel/Makefile b/kernel/Makefile
+> > > index 6c57e78817dad..c81a8976b6a4b 100644
+> > > --- a/kernel/Makefile
+> > > +++ b/kernel/Makefile
+> > > @@ -112,6 +112,8 @@ obj-$(CONFIG_HAS_IOMEM) += iomem.o
+> > >  obj-$(CONFIG_ZONE_DEVICE) += memremap.o
+> > >  obj-$(CONFIG_RSEQ) += rseq.o
+> > >
+> > > +obj-$(CONFIG_SYSCTL_KUNIT_TEST) += sysctl-test.o
+> >
+> > You are going to have to have a "standard" naming scheme for test
+> > modules, are you going to recommend "foo-test" over "test-foo"?  If so,
+> > that's fine, we should just be consistant and document it somewhere.
+> >
+> > Personally, I'd prefer "test-foo", but that's just me, naming is hard...
+>
+> My preference would be "test-foo" as well.  Just my 2 cents.
 
-I don't think it's an option in general, because *some* int3
-invocations will need all the usual error return.
+I definitely agree we should be consistent. My personal bias
+(unsurprisingly) is "foo-test," but this is just because that is the
+convention I am used to in other projects I have worked on.
 
-But I guess we could make "int3 from kernel space" special.
+On an unbiased note, we are currently almost evenly split between the
+two conventions with *slight* preference for "foo-test": I ran the two
+following grep commands on v5.1-rc7:
 
-I'm not sure how much that would help, but it might be worth looking into.
+grep -Hrn --exclude-dir="build" -e "config [a-zA-Z_0-9]\+_TEST$" | wc -l
+grep -Hrn --exclude-dir="build" -e "config TEST_[a-zA-Z_0-9]\+" | wc -l
 
-> ARGH; I knew it was too pretty :/ Yes, something like what you suggest
-> will be needed, I'll go look at that once my brain recovers a bit from
-> staring at entry code all day.
+"foo-test" has 36 occurrences.
+"test-foo" has 33 occurrences.
 
-Looks like it works based on your other email.
+The things I am more concerned about is how this would affect file
+naming. If we have a unit test for foo.c, I think foo_test.c is more
+consistent with our namespacing conventions. The other thing, is if we
+already have a Kconfig symbol called FOO_TEST (or TEST_FOO) what
+should we name the KUnit test in this case? FOO_UNIT_TEST?
+FOO_KUNIT_TEST, like I did above?
 
-What would it look like with the "int3-from-kernel is special" modification?
-
-Because *if* we can make the "kernel int3" entirely special, that
-would make the "Eww factor" much less of this whole thing.
-
-I forget: is #BP _only_ for the "int3" instruction? I know we have
-really nasty cases with #DB (int1) because of "pending exceptions
-happen on the first instruction in kernel space", and that makes it
-really really nasty to handle with all the stack switch and %cr3
-handling etc.
-
-But if "int3 from kernel space" _only_ happens on actual "int3"
-instructions, then we really could just special-case that case. We'd
-know that %cr3 has been switched, we'd know that we don't need to do
-fsgs switching, we'd know we already have a good stack and percpu data
-etc set up.
-
-So then special casing #BP would actually allow us to have a simple
-and straightforward kernel-int3-only sequence?
-
-And then having that odd stack setup special case would be *much* more
-palatable to me.
-
-               Linus
+Cheers
