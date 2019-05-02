@@ -2,149 +2,121 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 584C2121BC
-	for <lists+linux-kselftest@lfdr.de>; Thu,  2 May 2019 20:15:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CFF8D121CD
+	for <lists+linux-kselftest@lfdr.de>; Thu,  2 May 2019 20:18:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726209AbfEBSPU (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 2 May 2019 14:15:20 -0400
-Received: from mail-eopbgr710117.outbound.protection.outlook.com ([40.107.71.117]:8421
-        "EHLO NAM05-BY2-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726091AbfEBSPT (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 2 May 2019 14:15:19 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Sony.onmicrosoft.com;
- s=selector1-Sony-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Iu+qU7j1g4e0qKYY8NI+jYs8IDMeXiI9rKB2912aQxk=;
- b=RUlxFd43z0o0UbNfcJc6XxkFUNZRjbE6rDjHopszHC++6umPBCdj0bHYmEu7/iA8OAlvWwEHPLv4Yg1CRE6zRz/uncBnYwU/smDnizFcPa8KTi/iq744WUooeJBhZ48XuxmeUwYKfjzNGNs1IeBdyoq+75fOWCNe+LpZq2kMfXQ=
-Received: from DM5PR13CA0023.namprd13.prod.outlook.com (2603:10b6:3:23::33) by
- DM5PR13MB1402.namprd13.prod.outlook.com (2603:10b6:3:124::14) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.1856.9; Thu, 2 May 2019 18:15:13 +0000
-Received: from CY1NAM02FT045.eop-nam02.prod.protection.outlook.com
- (2a01:111:f400:7e45::207) by DM5PR13CA0023.outlook.office365.com
- (2603:10b6:3:23::33) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.20.1856.6 via Frontend
- Transport; Thu, 2 May 2019 18:15:13 +0000
-Authentication-Results: spf=permerror (sender IP is 160.33.194.229)
- smtp.mailfrom=sony.com; linuxfoundation.org; dkim=none (message not signed)
- header.d=none;linuxfoundation.org; dmarc=none action=none
- header.from=sony.com;
-Received-SPF: PermError (protection.outlook.com: domain of sony.com used an
- invalid SPF mechanism)
-Received: from usculsndmail02v.am.sony.com (160.33.194.229) by
- CY1NAM02FT045.mail.protection.outlook.com (10.152.75.111) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.20.1856.11 via Frontend Transport; Thu, 2 May 2019 18:15:10 +0000
-Received: from usculsndmail12v.am.sony.com (usculsndmail12v.am.sony.com [146.215.230.103])
-        by usculsndmail02v.am.sony.com (Sentrion-MTA-4.3.2/Sentrion-MTA-4.3.2) with ESMTP id x42IF8nt010260;
-        Thu, 2 May 2019 18:15:08 GMT
-Received: from USCULXHUB07V.am.sony.com (usculxhub07v.am.sony.com [146.215.231.168])
-        by usculsndmail12v.am.sony.com (Sentrion-MTA-4.3.2/Sentrion-MTA-4.3.2) with ESMTP id x42IF6Jm028842;
-        Thu, 2 May 2019 18:15:06 GMT
-Received: from USCULXMSG01.am.sony.com ([fe80::b09d:6cb6:665e:d1b5]) by
- USCULXHUB07V.am.sony.com ([146.215.231.168]) with mapi id 14.03.0439.000;
- Thu, 2 May 2019 14:15:06 -0400
-From:   <Tim.Bird@sony.com>
-To:     <gregkh@linuxfoundation.org>, <brendanhiggins@google.com>
-CC:     <frowand.list@gmail.com>, <keescook@google.com>,
-        <kieran.bingham@ideasonboard.com>, <mcgrof@kernel.org>,
-        <robh@kernel.org>, <sboyd@kernel.org>, <shuah@kernel.org>,
-        <devicetree@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
-        <kunit-dev@googlegroups.com>, <linux-doc@vger.kernel.org>,
-        <linux-fsdevel@vger.kernel.org>, <linux-kbuild@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-        <linux-nvdimm@lists.01.org>, <linux-um@lists.infradead.org>,
-        <Alexander.Levin@microsoft.com>, <amir73il@gmail.com>,
-        <dan.carpenter@oracle.com>, <dan.j.williams@intel.com>,
-        <daniel@ffwll.ch>, <jdike@addtoit.com>, <joel@jms.id.au>,
-        <julia.lawall@lip6.fr>, <khilman@baylibre.com>,
-        <knut.omang@oracle.com>, <logang@deltatee.com>,
-        <mpe@ellerman.id.au>, <pmladek@suse.com>, <richard@nod.at>,
-        <rientjes@google.com>, <rostedt@goodmis.org>,
-        <wfg@linux.intel.com>, <yzaikin@google.com>
-Subject: RE: [PATCH v2 16/17] kernel/sysctl-test: Add null pointer test for
- sysctl.c:proc_dointvec()
-Thread-Topic: [PATCH v2 16/17] kernel/sysctl-test: Add null pointer test for
- sysctl.c:proc_dointvec()
-Thread-Index: AQHVAHJbh4bzAud+AEekHmLRH8eTgKZX75eAgAA1NbA=
-Date:   Thu, 2 May 2019 18:14:53 +0000
-Message-ID: <ECADFF3FD767C149AD96A924E7EA6EAF9770A3A0@USCULXMSG01.am.sony.com>
-References: <20190501230126.229218-1-brendanhiggins@google.com>
- <20190501230126.229218-17-brendanhiggins@google.com>
- <20190502110347.GE12416@kroah.com>
-In-Reply-To: <20190502110347.GE12416@kroah.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [146.215.228.6]
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        id S1726203AbfEBSS5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 2 May 2019 14:18:57 -0400
+Received: from merlin.infradead.org ([205.233.59.134]:58240 "EHLO
+        merlin.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725962AbfEBSS4 (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 2 May 2019 14:18:56 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=merlin.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=OUOTgiwlJlyZHx9KJsKpSdKtPOxMeVL7eOFNyapCTik=; b=WsqGR+fQ18Y7cQXaFj2PBR02v
+        siV99KT4OxQS33ZTF4/KhMGLopbfOEy4qIqFqmlrCQKyXadrdliOch0gxjFo36IcvxUXyp4/I+8E0
+        Bt+/C9Rws0ye6wGr+2M0kEBR/Fh56+eO0qLl4vjM33C1+haONnTBfkkDrJtQ/yatcor+M7a489jC6
+        t1+StvXmvEK1c5zs4lIYiuKDgzytIXU9N5gBwohiHgGN0jzWcHUw2NFJ3Ix+sztlRL2UliPb7OTBa
+        0GHQP6eKghAhHNeaNvLCIChZ/r7egen0P+JCVAhtErt1P2lUDj4lDnxBjI65lESFDfb46oB+TcWnv
+        CNRUWs51Q==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=hirez.programming.kicks-ass.net)
+        by merlin.infradead.org with esmtpsa (Exim 4.90_1 #2 (Red Hat Linux))
+        id 1hMGHf-0002Df-16; Thu, 02 May 2019 18:18:15 +0000
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id D1CE12066BB8E; Thu,  2 May 2019 20:18:11 +0200 (CEST)
+Date:   Thu, 2 May 2019 20:18:11 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        Linux List Kernel Mailing <linux-kernel@vger.kernel.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Nicolai Stange <nstange@suse.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        the arch/x86 maintainers <x86@kernel.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Jiri Kosina <jikos@kernel.org>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Petr Mladek <pmladek@suse.com>,
+        Joe Lawrence <joe.lawrence@redhat.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
+        Tim Chen <tim.c.chen@linux.intel.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Juergen Gross <jgross@suse.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nayna Jain <nayna@linux.ibm.com>,
+        Masahiro Yamada <yamada.masahiro@socionext.com>,
+        Joerg Roedel <jroedel@suse.de>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, stable <stable@vger.kernel.org>
+Subject: Re: [RFC][PATCH 1/2] x86: Allow breakpoints to emulate call functions
+Message-ID: <20190502181811.GY2623@hirez.programming.kicks-ass.net>
+References: <20190501202830.347656894@goodmis.org>
+ <20190501203152.397154664@goodmis.org>
+ <20190501232412.1196ef18@oasis.local.home>
+ <20190502162133.GX2623@hirez.programming.kicks-ass.net>
+ <CAHk-=wijZ-MD4g3zMJ9W2r=h8LUWneiu29OWuxZEoSfAF=0bhQ@mail.gmail.com>
 MIME-Version: 1.0
-X-EOPAttributedMessage: 0
-X-MS-Office365-Filtering-HT: Tenant
-X-Forefront-Antispam-Report: CIP:160.33.194.229;IPV:NLI;CTRY:US;EFV:NLI;SFV:NSPM;SFS:(10019020)(1496009)(376002)(136003)(396003)(39860400002)(346002)(2980300002)(448002)(199004)(189003)(13464003)(72206003)(478600001)(47776003)(46406003)(37786003)(33656002)(97756001)(86362001)(70206006)(5660300002)(70586007)(356004)(6666004)(102836004)(186003)(426003)(11346002)(446003)(336012)(26005)(476003)(66066001)(55016002)(76176011)(7696005)(229853002)(8676002)(126002)(55846006)(85326001)(246002)(86152003)(8746002)(8936002)(486006)(50466002)(6246003)(7406005)(7416002)(4326008)(6116002)(3846002)(2906002)(110136005)(54906003)(2876002)(316002)(7736002)(305945005)(23726003)(5001870100001);DIR:OUT;SFP:1102;SCL:1;SRVR:DM5PR13MB1402;H:usculsndmail02v.am.sony.com;FPR:;SPF:PermError;LANG:en;PTR:mail.sonyusa.com,mail02.sonyusa.com;A:1;MX:1;
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: f2927ae1-d49f-4bad-60b8-08d6cf2a1ea6
-X-Microsoft-Antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600141)(711020)(4605104)(2017052603328)(7193020);SRVR:DM5PR13MB1402;
-X-MS-TrafficTypeDiagnostic: DM5PR13MB1402:
-X-Microsoft-Antispam-PRVS: <DM5PR13MB140230E0A68E41CAF530C442FD340@DM5PR13MB1402.namprd13.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:5797;
-X-Forefront-PRVS: 0025434D2D
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam-Message-Info: bU7dXAdMkBInmgFf3lbIAW/yrfjtPBT7xmHmRhPy+u/F81wqySYLneMKTgJ9uy6f0YnZlYzBIkUsJAFTKMvemgB8r0n8PpNut2dmxJyH0Tk3YniGZd66ERVNzNrefJVodv/kWUa6hgaki3mMtJp344RiOE+WDa1J6M1g8Xj9npIFmFbrKiNIqwy1kXQ1Nos1+jmUPPhdwmrCrUM652L4NDdpkYmrbJHGyo9Ki1uRlPub4F9xawbOv81NFQPbIr5jHTyV64qs0ySjS1hcXMVutCtRZYsHhbYXhA/h75upZypux1FfLor+rwCD2yUnL3L99DmemLALTzZurd+QM2IHPlRwBxUAIqwKyaM/GkcGTDxtfN/V3xavfSUHvudrqzxUZr4qoNFcRzjn8zuSDnhx4cCFFWZq6LryN47KBRJZgiU=
-X-OriginatorOrg: sony.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 May 2019 18:15:10.9314
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: f2927ae1-d49f-4bad-60b8-08d6cf2a1ea6
-X-MS-Exchange-CrossTenant-Id: 66c65d8a-9158-4521-a2d8-664963db48e4
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=66c65d8a-9158-4521-a2d8-664963db48e4;Ip=[160.33.194.229];Helo=[usculsndmail02v.am.sony.com]
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR13MB1402
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHk-=wijZ-MD4g3zMJ9W2r=h8LUWneiu29OWuxZEoSfAF=0bhQ@mail.gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-
-
-> -----Original Message-----
-> From: Greg KH=20
->=20
-> On Wed, May 01, 2019 at 04:01:25PM -0700, Brendan Higgins wrote:
-> > From: Iurii Zaikin <yzaikin@google.com>
+On Thu, May 02, 2019 at 11:02:40AM -0700, Linus Torvalds wrote:
+> On Thu, May 2, 2019 at 9:21 AM Peter Zijlstra <peterz@infradead.org> wrote:
 > >
-> > KUnit tests for initialized data behavior of proc_dointvec that is
-> > explicitly checked in the code. Includes basic parsing tests including
-> > int min/max overflow.
-> >
-> > Signed-off-by: Iurii Zaikin <yzaikin@google.com>
-> > Signed-off-by: Brendan Higgins <brendanhiggins@google.com>
-> > ---
-> >  kernel/Makefile      |   2 +
-> >  kernel/sysctl-test.c | 292
-> +++++++++++++++++++++++++++++++++++++++++++
-> >  lib/Kconfig.debug    |   6 +
-> >  3 files changed, 300 insertions(+)
-> >  create mode 100644 kernel/sysctl-test.c
-> >
-> > diff --git a/kernel/Makefile b/kernel/Makefile
-> > index 6c57e78817dad..c81a8976b6a4b 100644
-> > --- a/kernel/Makefile
-> > +++ b/kernel/Makefile
-> > @@ -112,6 +112,8 @@ obj-$(CONFIG_HAS_IOMEM) +=3D iomem.o
-> >  obj-$(CONFIG_ZONE_DEVICE) +=3D memremap.o
-> >  obj-$(CONFIG_RSEQ) +=3D rseq.o
-> >
-> > +obj-$(CONFIG_SYSCTL_KUNIT_TEST) +=3D sysctl-test.o
->=20
-> You are going to have to have a "standard" naming scheme for test
-> modules, are you going to recommend "foo-test" over "test-foo"?  If so,
-> that's fine, we should just be consistant and document it somewhere.
->=20
-> Personally, I'd prefer "test-foo", but that's just me, naming is hard...
+> > TL;DR, on x86_32 kernel->kernel IRET frames are only 3 entries and do
+> > not include ESP/SS, so not only wasn't regs->sp setup, if you changed it
+> > it wouldn't be effective and corrupt random stack state.
+> 
+> Indeed, the 32-bit case for same-RPL exceptions/iret is entirely
+> different, and I'd forgotten about that.
+> 
+> And honestly, this makes the 32-bit case much worse. Now the entry
+> stack modifications of int3 suddenly affect not just the entry, but
+> every exit too.
 
-My preference would be "test-foo" as well.  Just my 2 cents.
- -- Tim
+We could fix this by not using the common exit path on int3; not sure we
+want to go there, but that is an option.
 
+> This is _exactly_ the kind of subtle kernel entry/exit code I wanted
+> us to avoid.
+> 
+> And while your code looks kind of ok, it's subtly buggy. This sequence:
+> 
+> +       pushl   %eax
+> +       movl    %esp, %eax
+> +
+> +       movl    4*4(%eax), %esp         # restore (modified) regs->sp
+> +
+> +       /* rebuild IRET frame */
+> +       pushl   3*4(%eax)               # flags
+> +       pushl   2*4(%eax)               # cs
+> +       pushl   1*4(%eax)               # ip
+> +
+> +       andl    $0x0000ffff, 4(%esp)    # clear high CS bits
+> +
+> +       movl    (%eax), %eax            # restore eax
+> 
+> looks very wrong to me. When you do that "restore (modified)
+> regs->sp", isn't that now resetting %esp to the point where %eax now
+> points below the stack? So if we get an NMI in this sequence, that
+> will overwrite the parts you are trying to copy from?
+
+ARGH; I knew it was too pretty :/ Yes, something like what you suggest
+will be needed, I'll go look at that once my brain recovers a bit from
+staring at entry code all day.
