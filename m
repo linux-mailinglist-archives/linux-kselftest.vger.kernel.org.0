@@ -2,199 +2,148 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AFD7912DB0
-	for <lists+linux-kselftest@lfdr.de>; Fri,  3 May 2019 14:33:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9E0412EE9
+	for <lists+linux-kselftest@lfdr.de>; Fri,  3 May 2019 15:22:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727605AbfECMdx (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 3 May 2019 08:33:53 -0400
-Received: from ale.deltatee.com ([207.54.116.67]:45436 "EHLO ale.deltatee.com"
+        id S1727153AbfECNWw (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 3 May 2019 09:22:52 -0400
+Received: from mail.kernel.org ([198.145.29.99]:60828 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726047AbfECMdx (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 3 May 2019 08:33:53 -0400
-Received: from adsl-173-228-226-134.prtc.net ([173.228.226.134] helo=[172.20.29.49])
-        by ale.deltatee.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.89)
-        (envelope-from <logang@deltatee.com>)
-        id 1hMXNQ-0007dH-Hy; Fri, 03 May 2019 06:33:22 -0600
-To:     Brendan Higgins <brendanhiggins@google.com>
-Cc:     Frank Rowand <frowand.list@gmail.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Kees Cook <keescook@google.com>,
-        Kieran Bingham <kieran.bingham@ideasonboard.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Rob Herring <robh@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
-        shuah@kernel.org, devicetree <devicetree@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        kunit-dev@googlegroups.com, linux-doc@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kbuild@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-kselftest@vger.kernel.org,
-        linux-nvdimm <linux-nvdimm@lists.01.org>,
-        linux-um@lists.infradead.org,
-        Sasha Levin <Alexander.Levin@microsoft.com>,
-        "Bird, Timothy" <Tim.Bird@sony.com>,
-        Amir Goldstein <amir73il@gmail.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Daniel Vetter <daniel@ffwll.ch>, Jeff Dike <jdike@addtoit.com>,
-        Joel Stanley <joel@jms.id.au>,
-        Julia Lawall <julia.lawall@lip6.fr>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Knut Omang <knut.omang@oracle.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
+        id S1726289AbfECNWw (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 3 May 2019 09:22:52 -0400
+Received: from gandalf.local.home (cpe-66-24-58-225.stny.res.rr.com [66.24.58.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id A51BC2075E;
+        Fri,  3 May 2019 13:22:48 +0000 (UTC)
+Date:   Fri, 3 May 2019 09:22:47 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Linux List Kernel Mailing <linux-kernel@vger.kernel.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Nicolai Stange <nstange@suse.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        the arch/x86 maintainers <x86@kernel.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Jiri Kosina <jikos@kernel.org>,
+        Miroslav Benes <mbenes@suse.cz>,
         Petr Mladek <pmladek@suse.com>,
-        Richard Weinberger <richard@nod.at>,
-        David Rientjes <rientjes@google.com>,
-        Steven Rostedt <rostedt@goodmis.org>, wfg@linux.intel.com
-References: <20190501230126.229218-1-brendanhiggins@google.com>
- <20190501230126.229218-9-brendanhiggins@google.com>
- <0a605543-477a-1854-eb35-6e586606889b@deltatee.com>
- <CAFd5g47hxAd=+72xbPJbWPdZCXRXmtLpsGhUh=zc7MSwfcaGJQ@mail.gmail.com>
-From:   Logan Gunthorpe <logang@deltatee.com>
-Message-ID: <b2379db6-634a-001e-6f67-37427d8a2666@deltatee.com>
-Date:   Fri, 3 May 2019 06:33:02 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
+        Joe Lawrence <joe.lawrence@redhat.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
+        Tim Chen <tim.c.chen@linux.intel.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Juergen Gross <jgross@suse.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nayna Jain <nayna@linux.ibm.com>,
+        Masahiro Yamada <yamada.masahiro@socionext.com>,
+        Joerg Roedel <jroedel@suse.de>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, stable <stable@vger.kernel.org>
+Subject: Re: [RFC][PATCH 1/2] x86: Allow breakpoints to emulate call
+ functions
+Message-ID: <20190503092247.20cc1ff0@gandalf.local.home>
+In-Reply-To: <20190503092959.GB2623@hirez.programming.kicks-ass.net>
+References: <20190501203152.397154664@goodmis.org>
+        <20190501232412.1196ef18@oasis.local.home>
+        <20190502162133.GX2623@hirez.programming.kicks-ass.net>
+        <CAHk-=wijZ-MD4g3zMJ9W2r=h8LUWneiu29OWuxZEoSfAF=0bhQ@mail.gmail.com>
+        <20190502181811.GY2623@hirez.programming.kicks-ass.net>
+        <CAHk-=wi6A9tgw=kkPh5Ywqt687VvsVEjYXVkAnq0jpt0u0tk6g@mail.gmail.com>
+        <20190502202146.GZ2623@hirez.programming.kicks-ass.net>
+        <20190502185225.0cdfc8bc@gandalf.local.home>
+        <20190502193129.664c5b2e@gandalf.local.home>
+        <20190502195052.0af473cf@gandalf.local.home>
+        <20190503092959.GB2623@hirez.programming.kicks-ass.net>
+X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-In-Reply-To: <CAFd5g47hxAd=+72xbPJbWPdZCXRXmtLpsGhUh=zc7MSwfcaGJQ@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 173.228.226.134
-X-SA-Exim-Rcpt-To: wfg@linux.intel.com, rostedt@goodmis.org, rientjes@google.com, richard@nod.at, pmladek@suse.com, mpe@ellerman.id.au, knut.omang@oracle.com, khilman@baylibre.com, julia.lawall@lip6.fr, joel@jms.id.au, jdike@addtoit.com, daniel@ffwll.ch, dan.j.williams@intel.com, dan.carpenter@oracle.com, amir73il@gmail.com, Tim.Bird@sony.com, Alexander.Levin@microsoft.com, linux-um@lists.infradead.org, linux-nvdimm@lists.01.org, linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org, linux-fsdevel@vger.kernel.org, linux-doc@vger.kernel.org, kunit-dev@googlegroups.com, dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org, shuah@kernel.org, sboyd@kernel.org, robh@kernel.org, mcgrof@kernel.org, kieran.bingham@ideasonboard.com, keescook@google.com, gregkh@linuxfoundation.org, frowand.list@gmail.com, brendanhiggins@google.com
-X-SA-Exim-Mail-From: logang@deltatee.com
-X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on ale.deltatee.com
-X-Spam-Level: 
-X-Spam-Status: No, score=-8.9 required=5.0 tests=ALL_TRUSTED,BAYES_00,
-        GREYLIST_ISWHITE autolearn=ham autolearn_force=no version=3.4.2
-Subject: Re: [PATCH v2 08/17] kunit: test: add support for test abort
-X-SA-Exim-Version: 4.2.1 (built Tue, 02 Aug 2016 21:08:31 +0000)
-X-SA-Exim-Scanned: Yes (on ale.deltatee.com)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+On Fri, 3 May 2019 11:29:59 +0200
+Peter Zijlstra <peterz@infradead.org> wrote:
 
 
-On 2019-05-03 12:48 a.m., Brendan Higgins wrote:
-> On Thu, May 2, 2019 at 8:15 PM Logan Gunthorpe <logang@deltatee.com> wrote:
->> On 2019-05-01 5:01 p.m., Brendan Higgins wrote:
->>> +/*
->>> + * struct kunit_try_catch - provides a generic way to run code which might fail.
->>> + * @context: used to pass user data to the try and catch functions.
->>> + *
->>> + * kunit_try_catch provides a generic, architecture independent way to execute
->>> + * an arbitrary function of type kunit_try_catch_func_t which may bail out by
->>> + * calling kunit_try_catch_throw(). If kunit_try_catch_throw() is called, @try
->>> + * is stopped at the site of invocation and @catch is catch is called.
->>
->> I found some of the C++ comparisons in this series a bit distasteful but
->> wasn't going to say anything until I saw the try catch.... But looking
->> into the implementation it's just a thread that can exit early which
->> seems fine to me. Just a poor choice of name I guess...
+> OMG, WTF, ARGH... That code is fsck'ing horrible. I'd almost argue to
+> always do the INT3 thing, just to avoid games like that.
+
+Hehe, that's almost the exact same thoughts I had when seeing this
+code ;-)
+
 > 
-> Guilty as charged (I have a long history with C++, sorry). Would you
-> prefer I changed the name? I just figured that try-catch is a commonly
-> understood pattern that describes exactly what I am doing.
+> That said; for normal traps &regs->sp is indeed the previous context --
+> if it doesn't fall off the stack. Your hack detects the regular INT3
+> frame. Howver if regs->sp has been modified (int3_emulate_push, for
+> example) your detectoring comes unstuck.
 
-It is a commonly understood pattern, but I don't think it's what the
-code is doing. Try-catch cleans up an entire stack and allows each level
-of the stack to apply local cleanup. This implementation simply exits a
-thread and has none of that complexity. To me, it seems like an odd
-abstraction here as it's really just a test runner that can exit early
-(though I haven't seen the follow-up UML implementation).
+Yep. I realized the issue as well. But wanted to make sure this did
+work when sp wasn't changed.
 
-I would prefer to see this cleaned up such that the abstraction matches
-more what's going on but I don't feel that strongly about it so I'll
-leave it up to you to figure out what's best unless other reviewers have
-stronger opinions.
-
->>
->> [snip]
->>
->>> +static void __noreturn kunit_abort(struct kunit *test)
->>> +{
->>> +     kunit_set_death_test(test, true);
->>> +
->>> +     kunit_try_catch_throw(&test->try_catch);
->>> +
->>> +     /*
->>> +      * Throw could not abort from test.
->>> +      *
->>> +      * XXX: we should never reach this line! As kunit_try_catch_throw is
->>> +      * marked __noreturn.
->>> +      */
->>> +     WARN_ONCE(true, "Throw could not abort from test!\n");
->>> +}
->>> +
->>>  int kunit_init_test(struct kunit *test, const char *name)
->>>  {
->>>       spin_lock_init(&test->lock);
->>> @@ -77,6 +103,7 @@ int kunit_init_test(struct kunit *test, const char *name)
->>>       test->name = name;
->>>       test->vprintk = kunit_vprintk;
->>>       test->fail = kunit_fail;
->>> +     test->abort = kunit_abort;
->>
->> There are a number of these function pointers which seem to be pointless
->> to me as you only ever set them to one function. Just call the function
->> directly. As it is, it is an unnecessary indirection for someone reading
->> the code. If and when you have multiple implementations of the function
->> then add the pointer. Don't assume you're going to need it later on and
->> add all this maintenance burden if you never use it..
 > 
-> Ah, yes, Frank (and probably others) previously asked me to remove
-> unnecessary method pointers; I removed all the totally unused ones. As
-> for these, I don't use them in this patchset, but I use them in my
-> patchsets that will follow up this one. These in particular are
-> present so that they can be mocked out for testing.
-
-Adding indirection and function pointers solely for the purpose of
-mocking out while testing doesn't sit well with me and I don't think it
-should be a pattern that's encouraged. Adding extra complexity like this
-to a design to make it unit-testable doesn't seem like something that
-makes sense in kernel code. Especially given that indirect calls are
-more expensive in the age of spectre.
-
-Also, mocking these particular functions seems like it's an artifact of
-how you've designed the try/catch abstraction. If the abstraction was
-more around an abort-able test runner then it doesn't make sense to need
-to mock out the abort/fail functions as you will be testing overly
-generic features of something that don't seem necessary to the
-implementation.
-
->>
->> [snip]
->>
->>> +void kunit_generic_try_catch_init(struct kunit_try_catch *try_catch)
->>> +{
->>> +     try_catch->run = kunit_generic_run_try_catch;
->>> +     try_catch->throw = kunit_generic_throw;
->>> +}
->>
->> Same here. There's only one implementation of try_catch and I can't
->> really see any sensible justification for another implementation. Even
->> if there is, add the indirection when the second implementation is
->> added. This isn't C++ and we don't need to make everything a "method".
+> Now, it is rather unlikely these two code paths interact, but just to be
+> safe, something like so might be more reliable:
 > 
-> These methods are for a UML specific implementation in a follow up
-> patchset, which is needed for some features like crash recovery, death
-> tests, and removes dependence on kthreads.
 > 
-> I know this probably sounds like premature complexity. Arguably it is
-> in hindsight, but I wrote those features before I pulled out these
-> interfaces (they were actually both originally in this patchset, but I
-> dropped them to make this patchset easier to review). I can remove
-> these methods and add them back in when I actually use them in the
-> follow up patchsets if you prefer.
+> diff --git a/arch/x86/kernel/ptrace.c b/arch/x86/kernel/ptrace.c
+> index 4b8ee05dd6ad..aceaad0cc9a9 100644
+> --- a/arch/x86/kernel/ptrace.c
+> +++ b/arch/x86/kernel/ptrace.c
+> @@ -163,6 +163,9 @@ static inline bool invalid_selector(u16 value)
+>   * stack pointer we fall back to regs as stack if no previous stack
+>   * exists.
+>   *
+> + * There is a special case for INT3, there we construct a full pt_regs
+> + * environment. We can detect this case by a high bit in regs->cs
+> + *
+>   * This is valid only for kernel mode traps.
+>   */
+>  unsigned long kernel_stack_pointer(struct pt_regs *regs)
+> @@ -171,6 +174,9 @@ unsigned long kernel_stack_pointer(struct pt_regs *regs)
+>  	unsigned long sp = (unsigned long)&regs->sp;
+>  	u32 *prev_esp;
+>  
+> +	if (regs->__csh & (1 << 13)) /* test CS_FROM_INT3 */
+> +		return regs->sp;
+> +
 
-Yes, remove them now and add them back when you use them in follow-up
-patches. If reviewers find problems with the follow-up patches or have a
-better suggestion on how to do what ever it is you are doing, then you
-just have this unnecessary code and there's wasted developer time and
-review bandwidth that will need to be spent cleaning it up.
+Thanks, I was looking into doing something like this (setting a flag in
+the int3 code), but didn't have the time to see the best way to do this.
 
-Thanks,
+I'll add this version of the code and run it through my tests.
 
-Logan
+-- Steve
+
+>  	if (context == (sp & ~(THREAD_SIZE - 1)))
+>  		return sp;
+>  
+> --- a/arch/x86/entry/entry_32.S
+> +++ b/arch/x86/entry/entry_32.S
+> @@ -388,6 +388,7 @@
+>  
+>  #define CS_FROM_ENTRY_STACK	(1 << 31)
+>  #define CS_FROM_USER_CR3	(1 << 30)
+> +#define CS_FROM_INT3		(1 << 29)
+>  
+>  .macro SWITCH_TO_KERNEL_STACK
+>  
+> @@ -1515,6 +1516,9 @@ ENTRY(int3)
+>  
+>  	add	$16, 12(%esp) # point sp back at the previous context
+>  
+> +	andl	$0x0000ffff, 4(%esp)
+> +	orl	$CS_FROM_INT3, 4(%esp)
+> +
+>  	pushl	$-1				# orig_eax; mark as interrupt
+>  
+>  	SAVE_ALL
+
