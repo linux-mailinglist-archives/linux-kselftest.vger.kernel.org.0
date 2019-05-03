@@ -2,54 +2,97 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 164C41260B
-	for <lists+linux-kselftest@lfdr.de>; Fri,  3 May 2019 03:27:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 857FB12624
+	for <lists+linux-kselftest@lfdr.de>; Fri,  3 May 2019 03:45:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726645AbfECB1H (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 2 May 2019 21:27:07 -0400
-Received: from mail.kernel.org ([198.145.29.99]:37696 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726265AbfECB1G (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 2 May 2019 21:27:06 -0400
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net [24.9.64.241])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 460E42087F;
-        Fri,  3 May 2019 01:27:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1556846825;
-        bh=dAK2Yt3qD5zmHe8mgMxIoRaAMTlU3x5G2+ZN52E6vSA=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=2ZG9iWIOocrV7hcyVglaDnCJiz8k4RbmB3/LRyEHNma4V4IwEoNjKwD08ekcqRYdU
-         g2GcPdNXrVGy6v3DdWBSgrkFqmYHp///VcR62QeEanyeEDG2SEbQ9/zt8M12/Pj1yF
-         3Kzg8A3TvxXZgIHVppO615sf2GPaT+5qfLbHzp04=
-Subject: Re: [PATCH v2 07/17] kunit: test: add initial tests
-To:     Brendan Higgins <brendanhiggins@google.com>,
-        frowand.list@gmail.com, gregkh@linuxfoundation.org,
-        keescook@google.com, kieran.bingham@ideasonboard.com,
-        mcgrof@kernel.org, robh@kernel.org, sboyd@kernel.org
-Cc:     devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        id S1726557AbfECBpt (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 2 May 2019 21:45:49 -0400
+Received: from mail-pf1-f193.google.com ([209.85.210.193]:32988 "EHLO
+        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726220AbfECBpt (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 2 May 2019 21:45:49 -0400
+Received: by mail-pf1-f193.google.com with SMTP id z28so2066537pfk.0;
+        Thu, 02 May 2019 18:45:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=ZI6V/3n9+pa4S0kSap/rsqYeZseF3YXwwsnTTpOXHxI=;
+        b=IzHws9INfv0Wab3PqWryc8nXLCUGl4Ak0ErN4UWGz/oa5Q3bx6Ym7vUbFg2Dqx16VW
+         oWE14P70+9bC1kEcyxNogt4I3P4HndkNs5RErp+blOBqwXOoN+sRvrDOyunNPFAxApZ5
+         GWxjJ458WsmG94/7XtkxgO5qMOVf/y0XY4UKG2ctayvfs5F5tkmBrAfFfxXWLQNmhozQ
+         FgGdqQvM57obG+wUH3nrNRoNeYxwOGWCGFCKwlnl1UPR6OSjdtuSR+1SF1yttamHwiuF
+         tHVqZdYB3J/J9HrwSMl4npzfzK/jusV2Hy+t88avqIGeQLvbQa2sXZZ+CQyhzOUMI8Al
+         H3bg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=ZI6V/3n9+pa4S0kSap/rsqYeZseF3YXwwsnTTpOXHxI=;
+        b=NZgFkNN/0Dw3XAaRCr1kJHWDWC+wr4iJs4h0obwFbmOVzcYJOBCpouUA4vVzfIXrYC
+         arKrMj46McVL86VbbVSPpTyCBnbQv+jwRCIw3lQTIrLvfML4GpPEixOy3QmpbCNUe3f9
+         ZKmZjxAphEK4mh7lpPbW9JU6reT6lphY3uWhsEV8gCVPbGp+YwyGJT1v3Lciaar5sXCY
+         SvEvPRDrDUx9emY5fSIviO+fw3gaI6Z/o3sUL+q/hA44JjITu6srhvYCEfkvdeBKE+0x
+         LSVb0zKWEnQCZnvAJKoKjbLI9iX2DyGf3nVcgN5fTc6tljExV8BG3yI/kEUJsDUvFdz+
+         XqCA==
+X-Gm-Message-State: APjAAAXKHgHLPA8cZXZIkXA3XASSASKIiqTjOPWs5ldqr5tsTWTAkT3z
+        XAKNswy4KufAzA2ClZak+Gs=
+X-Google-Smtp-Source: APXvYqwLxZ+uFuQZMF4YJqc7fAzpwsWGuH9RLKcLO+fHr/MYoaYjH8+9zszylWu8LEhaolJS2L6VrQ==
+X-Received: by 2002:a63:5907:: with SMTP id n7mr7320611pgb.416.1556847948068;
+        Thu, 02 May 2019 18:45:48 -0700 (PDT)
+Received: from [192.168.1.70] (c-24-6-192-50.hsd1.ca.comcast.net. [24.6.192.50])
+        by smtp.gmail.com with ESMTPSA id n7sm553500pff.45.2019.05.02.18.45.45
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 02 May 2019 18:45:47 -0700 (PDT)
+Subject: Re: [PATCH v2 12/17] kunit: tool: add Python wrappers for running
+ KUnit tests
+To:     Brendan Higgins <brendanhiggins@google.com>
+Cc:     Greg KH <gregkh@linuxfoundation.org>,
+        Kees Cook <keescook@google.com>,
+        Kieran Bingham <kieran.bingham@ideasonboard.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Rob Herring <robh@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
+        shuah@kernel.org, devicetree <devicetree@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
         kunit-dev@googlegroups.com, linux-doc@vger.kernel.org,
         linux-fsdevel@vger.kernel.org, linux-kbuild@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-nvdimm@lists.01.org, linux-um@lists.infradead.org,
-        Alexander.Levin@microsoft.com, Tim.Bird@sony.com,
-        amir73il@gmail.com, dan.carpenter@oracle.com,
-        dan.j.williams@intel.com, daniel@ffwll.ch, jdike@addtoit.com,
-        joel@jms.id.au, julia.lawall@lip6.fr, khilman@baylibre.com,
-        knut.omang@oracle.com, logang@deltatee.com, mpe@ellerman.id.au,
-        pmladek@suse.com, richard@nod.at, rientjes@google.com,
-        rostedt@goodmis.org, wfg@linux.intel.com, skhan@linuxfoundation.org
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-kselftest@vger.kernel.org,
+        linux-nvdimm <linux-nvdimm@lists.01.org>,
+        linux-um@lists.infradead.org,
+        Sasha Levin <Alexander.Levin@microsoft.com>,
+        "Bird, Timothy" <Tim.Bird@sony.com>,
+        Amir Goldstein <amir73il@gmail.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Daniel Vetter <daniel@ffwll.ch>, Jeff Dike <jdike@addtoit.com>,
+        Joel Stanley <joel@jms.id.au>,
+        Julia Lawall <julia.lawall@lip6.fr>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Knut Omang <knut.omang@oracle.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Petr Mladek <pmladek@suse.com>,
+        Richard Weinberger <richard@nod.at>,
+        David Rientjes <rientjes@google.com>,
+        Steven Rostedt <rostedt@goodmis.org>, wfg@linux.intel.com,
+        Felix Guo <felixguoxiuping@gmail.com>
 References: <20190501230126.229218-1-brendanhiggins@google.com>
- <20190501230126.229218-8-brendanhiggins@google.com>
-From:   shuah <shuah@kernel.org>
-Message-ID: <d4934565-9b41-880e-3bbe-984224b50fac@kernel.org>
-Date:   Thu, 2 May 2019 19:27:02 -0600
+ <20190501230126.229218-13-brendanhiggins@google.com>
+ <20190502110220.GD12416@kroah.com>
+ <CAFd5g47t=EdLKFCT=CnPkrM2z0nDVo24Gz4j0VxFOJbARP37Lg@mail.gmail.com>
+ <a49c5088-a821-210c-66de-f422536f5b01@gmail.com>
+ <CAFd5g44iWRchQKdJYtjRtPY6e-6e0eXpKXXsx5Ooi6sWE474KA@mail.gmail.com>
+From:   Frank Rowand <frowand.list@gmail.com>
+Message-ID: <1a5f3c44-9fa9-d423-66bf-45255a90c468@gmail.com>
+Date:   Thu, 2 May 2019 18:45:44 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.6.1
 MIME-Version: 1.0
-In-Reply-To: <20190501230126.229218-8-brendanhiggins@google.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
+In-Reply-To: <CAFd5g44iWRchQKdJYtjRtPY6e-6e0eXpKXXsx5Ooi6sWE474KA@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 Sender: linux-kselftest-owner@vger.kernel.org
@@ -57,219 +100,113 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 5/1/19 5:01 PM, Brendan Higgins wrote:
-> Add a test for string stream along with a simpler example.
+On 5/2/19 4:45 PM, Brendan Higgins wrote:
+> On Thu, May 2, 2019 at 2:16 PM Frank Rowand <frowand.list@gmail.com> wrote:
+>>
+>> On 5/2/19 11:07 AM, Brendan Higgins wrote:
+>>> On Thu, May 2, 2019 at 4:02 AM Greg KH <gregkh@linuxfoundation.org> wrote:
+>>>>
+>>>> On Wed, May 01, 2019 at 04:01:21PM -0700, Brendan Higgins wrote:
+>>>>> From: Felix Guo <felixguoxiuping@gmail.com>
+>>>>>
+>>>>> The ultimate goal is to create minimal isolated test binaries; in the
+>>>>> meantime we are using UML to provide the infrastructure to run tests, so
+>>>>> define an abstract way to configure and run tests that allow us to
+>>>>> change the context in which tests are built without affecting the user.
+>>>>> This also makes pretty and dynamic error reporting, and a lot of other
+>>>>> nice features easier.
+>>>>>
+>>>>> kunit_config.py:
+>>>>>   - parse .config and Kconfig files.
+>>>>>
+>>>>> kunit_kernel.py: provides helper functions to:
+>>>>>   - configure the kernel using kunitconfig.
+>>>>>   - build the kernel with the appropriate configuration.
+>>>>>   - provide function to invoke the kernel and stream the output back.
+>>>>>
+>>>>> Signed-off-by: Felix Guo <felixguoxiuping@gmail.com>
+>>>>> Signed-off-by: Brendan Higgins <brendanhiggins@google.com>
+>>>>
+>>>> Ah, here's probably my answer to my previous logging format question,
+>>>> right?  What's the chance that these wrappers output stuff in a standard
+>>>> format that test-framework-tools can already parse?  :)
 > 
-> Signed-off-by: Brendan Higgins <brendanhiggins@google.com>
-> ---
->   kunit/Kconfig              | 12 ++++++
->   kunit/Makefile             |  4 ++
->   kunit/example-test.c       | 88 ++++++++++++++++++++++++++++++++++++++
->   kunit/string-stream-test.c | 61 ++++++++++++++++++++++++++
->   4 files changed, 165 insertions(+)
->   create mode 100644 kunit/example-test.c
->   create mode 100644 kunit/string-stream-test.c
+> To be clear, the test-framework-tools format we are talking about is
+> TAP13[1], correct?
+
+I'm not sure what the test community prefers for a format.  I'll let them
+jump in and debate that question.
+
+
 > 
-> diff --git a/kunit/Kconfig b/kunit/Kconfig
-> index 64480092b2c24..5cb500355c873 100644
-> --- a/kunit/Kconfig
-> +++ b/kunit/Kconfig
-> @@ -13,4 +13,16 @@ config KUNIT
->   	  special hardware. For more information, please see
->   	  Documentation/kunit/
->   
-> +config KUNIT_TEST
-> +	bool "KUnit test for KUnit"
-> +	depends on KUNIT
-> +	help
-> +	  Enables KUnit test to test KUnit.
-> +
-
-Please add a bit more information on what this config option
-does. Why should user care to enable it?
-
-> +config KUNIT_EXAMPLE_TEST
-> +	bool "Example test for KUnit"
-> +	depends on KUNIT
-> +	help
-> +	  Enables example KUnit test to demo features of KUnit.
-> +
-
-Same here.
-
->   endmenu
-> diff --git a/kunit/Makefile b/kunit/Makefile
-> index 6ddc622ee6b1c..60a9ea6cb4697 100644
-> --- a/kunit/Makefile
-> +++ b/kunit/Makefile
-> @@ -1,3 +1,7 @@
->   obj-$(CONFIG_KUNIT) +=			test.o \
->   					string-stream.o \
->   					kunit-stream.o
-> +
-> +obj-$(CONFIG_KUNIT_TEST) +=		string-stream-test.o
-> +
-> +obj-$(CONFIG_KUNIT_EXAMPLE_TEST) +=	example-test.o
-> diff --git a/kunit/example-test.c b/kunit/example-test.c
-> new file mode 100644
-> index 0000000000000..3947dd7c8f922
-> --- /dev/null
-> +++ b/kunit/example-test.c
-> @@ -0,0 +1,88 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Example KUnit test to show how to use KUnit.
-> + *
-> + * Copyright (C) 2019, Google LLC.
-> + * Author: Brendan Higgins <brendanhiggins@google.com>
-> + */
-> +
-> +#include <kunit/test.h>
-> +
-> +/*
-> + * This is the most fundamental element of KUnit, the test case. A test case
-> + * makes a set EXPECTATIONs and ASSERTIONs about the behavior of some code; if
-> + * any expectations or assertions are not met, the test fails; otherwise, the
-> + * test passes.
-> + *
-> + * In KUnit, a test case is just a function with the signature
-> + * `void (*)(struct kunit *)`. `struct kunit` is a context object that stores
-> + * information about the current test.
-> + */
-> +static void example_simple_test(struct kunit *test)
-> +{
-> +	/*
-> +	 * This is an EXPECTATION; it is how KUnit tests things. When you want
-> +	 * to test a piece of code, you set some expectations about what the
-> +	 * code should do. KUnit then runs the test and verifies that the code's
-> +	 * behavior matched what was expected.
-> +	 */
-> +	KUNIT_EXPECT_EQ(test, 1 + 1, 2);
-> +}
-> +
-> +/*
-> + * This is run once before each test case, see the comment on
-> + * example_test_module for more information.
-> + */
-> +static int example_test_init(struct kunit *test)
-> +{
-> +	kunit_info(test, "initializing\n");
-> +
-> +	return 0;
-> +}
-> +
-> +/*
-> + * Here we make a list of all the test cases we want to add to the test module
-> + * below.
-> + */
-> +static struct kunit_case example_test_cases[] = {
-> +	/*
-> +	 * This is a helper to create a test case object from a test case
-> +	 * function; its exact function is not important to understand how to
-> +	 * use KUnit, just know that this is how you associate test cases with a
-> +	 * test module.
-> +	 */
-> +	KUNIT_CASE(example_simple_test),
-> +	{},
-> +};
-> +
-> +/*
-> + * This defines a suite or grouping of tests.
-> + *
-> + * Test cases are defined as belonging to the suite by adding them to
-> + * `kunit_cases`.
-> + *
-> + * Often it is desirable to run some function which will set up things which
-> + * will be used by every test; this is accomplished with an `init` function
-> + * which runs before each test case is invoked. Similarly, an `exit` function
-> + * may be specified which runs after every test case and can be used to for
-> + * cleanup. For clarity, running tests in a test module would behave as follows:
-> + *
-> + * module.init(test);
-> + * module.test_case[0](test);
-> + * module.exit(test);
-> + * module.init(test);
-> + * module.test_case[1](test);
-> + * module.exit(test);
-> + * ...;
-> + */
-> +static struct kunit_module example_test_module = {
-> +	.name = "example",
-> +	.init = example_test_init,
-> +	.test_cases = example_test_cases,
-> +};
-> +
-> +/*
-> + * This registers the above test module telling KUnit that this is a suite of
-> + * tests that need to be run.
-> + */
-> +module_test(example_test_module);
-> diff --git a/kunit/string-stream-test.c b/kunit/string-stream-test.c
-> new file mode 100644
-> index 0000000000000..b2a98576797c9
-> --- /dev/null
-> +++ b/kunit/string-stream-test.c
-> @@ -0,0 +1,61 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * KUnit test for struct string_stream.
-> + *
-> + * Copyright (C) 2019, Google LLC.
-> + * Author: Brendan Higgins <brendanhiggins@google.com>
-> + */
-> +
-> +#include <linux/slab.h>
-> +#include <kunit/test.h>
-> +#include <kunit/string-stream.h>
-> +
-> +static void string_stream_test_get_string(struct kunit *test)
-> +{
-> +	struct string_stream *stream = new_string_stream();
-> +	char *output;
-> +
-> +	string_stream_add(stream, "Foo");
-> +	string_stream_add(stream, " %s", "bar");
-> +
-> +	output = string_stream_get_string(stream);
-> +	KUNIT_EXPECT_STREQ(test, output, "Foo bar");
-> +	kfree(output);
-> +	destroy_string_stream(stream);
-> +}
-> +
-> +static void string_stream_test_add_and_clear(struct kunit *test)
-> +{
-> +	struct string_stream *stream = new_string_stream();
-> +	char *output;
-> +	int i;
-> +
-> +	for (i = 0; i < 10; i++)
-> +		string_stream_add(stream, "A");
-> +
-> +	output = string_stream_get_string(stream);
-> +	KUNIT_EXPECT_STREQ(test, output, "AAAAAAAAAA");
-> +	KUNIT_EXPECT_EQ(test, stream->length, 10);
-> +	KUNIT_EXPECT_FALSE(test, string_stream_is_empty(stream));
-> +	kfree(output);
-> +
-> +	string_stream_clear(stream);
-> +
-> +	output = string_stream_get_string(stream);
-> +	KUNIT_EXPECT_STREQ(test, output, "");
-> +	KUNIT_EXPECT_TRUE(test, string_stream_is_empty(stream));
-> +	destroy_string_stream(stream);
-> +}
-> +
-> +static struct kunit_case string_stream_test_cases[] = {
-> +	KUNIT_CASE(string_stream_test_get_string),
-> +	KUNIT_CASE(string_stream_test_add_and_clear),
-> +	{}
-> +};
-> +
-> +static struct kunit_module string_stream_test_module = {
-> +	.name = "string-stream-test",
-> +	.test_cases = string_stream_test_cases
-> +};
-> +module_test(string_stream_test_module);
-> +
+> My understanding is that is what kselftest is being converted to use.
 > 
+>>>
+>>> It should be pretty easy to do. I had some patches that pack up the
+>>> results into a serialized format for a presubmit service; it should be
+>>> pretty straightforward to take the same logic and just change the
+>>> output format.
+>>
+>> When examining and trying out the previous versions of the patch I found
+>> the wrappers useful to provide information about how to control and use
+>> the tests, but I had no interest in using the scripts as they do not
+>> fit in with my personal environment and workflow.
+>>
+>> In the previous versions of the patch, these helper scripts are optional,
+>> which is good for my use case.  If the helper scripts are required to
+> 
+> They are still optional.
+> 
+>> get the data into the proper format then the scripts are not quite so
+>> optional, they become the expected environment.  I think the proper
+>> format should exist without the helper scripts.
+> 
+> That's a good point. A couple things,
+> 
+> First off, supporting TAP13, either in the kernel or the wrapper
+> script is not hard, but I don't think that is the real issue that you
+> raise.
+> 
+> If your only concern is that you will always be able to have human
+> readable KUnit results printed to the kernel log, that is a guarantee
+> I feel comfortable making. Beyond that, I think it is going to take a
+> long while before I would feel comfortable guaranteeing anything about
+> how will KUnit work, what kind of data it will want to expose, and how
+> it will be organized. I think the wrapper script provides a nice
+> facade that I can maintain, can mediate between the implementation
+> details and the user, and can mediate between the implementation
+> details and other pieces of software that might want to consume
+> results.
+> 
+> [1] https://testanything.org/tap-version-13-specification.html
 
+My concern is based on a focus on my little part of the world
+(which in _previous_ versions of the patch series was the devicetree
+unittest.c tests being converted to use the kunit infrastructure).
+If I step back and think of the entire kernel globally I may end
+up with a different conclusion - but I'm going to remain myopic
+for this email.
+
+I want the test results to be usable by me and my fellow
+developers.  I prefer that the test results be easily accessible
+(current printk() implementation means that kunit messages are
+just as accessible as the current unittest.c printk() output).
+If the printk() output needs to be filtered through a script
+to generate the actual test results then that is sub-optimal
+to me.  It is one more step added to my workflow.  And
+potentially with an embedded target a major pain to get a
+data file (the kernel log file) transferred from a target
+to my development host.
+
+I want a reported test failure to be easy to trace back to the
+point in the source where the failure is reported.  With printk()
+the search is a simple grep for the failure message.  If the
+failure message has been processed by a script, and then the
+failure reported to me in an email, then I may have to look
+at the script to reverse engineer how the original failure
+message was transformed into the message that was reported
+to me in the email.  Then I search for the point in the
+source where the failure is reported.  So a basic task has
+just become more difficult and time consuming.
+
+-Frank
