@@ -2,61 +2,62 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D7627125A6
-	for <lists+linux-kselftest@lfdr.de>; Fri,  3 May 2019 02:41:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 28814125B8
+	for <lists+linux-kselftest@lfdr.de>; Fri,  3 May 2019 02:44:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726486AbfECAlW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 2 May 2019 20:41:22 -0400
-Received: from mail-oi1-f194.google.com ([209.85.167.194]:33563 "EHLO
-        mail-oi1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726482AbfECAlV (ORCPT
+        id S1726488AbfECAoS (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 2 May 2019 20:44:18 -0400
+Received: from mail-oi1-f193.google.com ([209.85.167.193]:45952 "EHLO
+        mail-oi1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726485AbfECAoR (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 2 May 2019 20:41:21 -0400
-Received: by mail-oi1-f194.google.com with SMTP id l1so3245268oib.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 02 May 2019 17:41:21 -0700 (PDT)
+        Thu, 2 May 2019 20:44:17 -0400
+Received: by mail-oi1-f193.google.com with SMTP id t189so3148359oih.12
+        for <linux-kselftest@vger.kernel.org>; Thu, 02 May 2019 17:44:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=i/LGIUMFfkHhxCSDT3fm51UOA28cPrGRFTawiLz9qdU=;
-        b=FJIAYLW9LNf9oanARKl7TfF4hN+5D95QZaw548QJynu0CjT8BCwlpKeraO6t9YYkOs
-         GtNX3/gAG5EXPOJwbqEw8XIrwSSwlKCrob0M1UGIcbcgu72bFgtpR14EttoAsQY2aDgu
-         R3g2UNQXhcb3FGDMQxi+sYsTRkYHs3qzvEqqHMGSEtbYKM2QA4nxdIkJahuLnsBoO2+c
-         TGr8njZSgd2pD66c4pynpYDwYtRx3F05qDNXkbRYRi3lANeuXFpYdvOTMjhMHRrrhF8P
-         3i1MCfzjUMz11YJpZRIR9WsEPFVnmwGmtj8MUe4JYxQcAMMsvhz5BhNLX+0hNU5ukE4d
-         83hA==
+        bh=A2hincFuCgvv5JHuCTV0zjcSgRetC4sQsA2RxJqwbHE=;
+        b=OmqtnHqhiWeR9Oui8paJzv152rY6QABSkuQBz4HTi+7RcYfpqAMASWqQsmYpDFgDN6
+         8u4QGxIX+281+PUfSj8hi/U7tm8NJ9VAxVw6f/1fIubO5IRk2JSVgWheDKh9YqA4Wsbf
+         24sX8hJEdjs5npjlV/LbLiqkJxkPc5vfXFxPFLtHmaYVvwOT1Kl25XRCnzlFSWh2Q25H
+         cUcrTa1e6pmnoMfZEaTHDQhpE68nGq58M6J2ln/kAXPBqhupBP9xcAgry1zyiFWDMuo5
+         NRZs5NySNRdFsKgdLNe5bdoZ8f/LlUzn/ZIEd8r9DQV7aKNkXapSSaI0cJxyrsljswdm
+         UMNw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=i/LGIUMFfkHhxCSDT3fm51UOA28cPrGRFTawiLz9qdU=;
-        b=GDqsz2Fix5T/HSURJDyMjazRjCiL7ZjBlupFh6Q3a43GEurVsoOvEuQaBwrJ1fzBAN
-         UNjggmxPO+3NwaVavVC9MGieGtBTQkBLnSIZbZXjJhUHAGxqdGqjNPzGd3h3sNp3nKOO
-         G4DrMB+9SB+b0FGnXlAZQUmWaT/mJ06J8kKxhtutm+lL7jHe9mOpBsz5mjlIlte0Hulj
-         S/vdzr1qeUykcLGF0bu9UdlDu1XfZIV5GNv8n+a2jwAcdfhwSjJORCcaI2agvYu5kGp5
-         l3clNdcE3kuBrN8t4MB3gVcRHLGsrwhJ4sciKPuXKTU3ntv7AmKwsrylGngt6pBieSyl
-         Nf2g==
-X-Gm-Message-State: APjAAAVdcBxamP4d+c+FId1Zp7EQQdrSlbu8/8+Yv15lLOISb/L6ORQn
-        fekA3le8gtpDRAW0u5vUFvCVpOnRxO6P6fBBm8LQVQ==
-X-Google-Smtp-Source: APXvYqx+IeNo/M2uU5es7ZAJsOSGR6b01vZ0dEQaWTEj9cNFRVwEHLuSMfXDE/OIHXARFXXWqbF1LQIlh8BGLZyE6Eo=
-X-Received: by 2002:aca:4586:: with SMTP id s128mr4126147oia.148.1556844080319;
- Thu, 02 May 2019 17:41:20 -0700 (PDT)
+        bh=A2hincFuCgvv5JHuCTV0zjcSgRetC4sQsA2RxJqwbHE=;
+        b=LV1SA0earNudkqBH/bw0dGsuGmLt1YsKvabh8FbjsiV/bIkD0R4CbmVLt72vi8aNmY
+         CktyTRuoNVDnpOXWQ0S7DNk6QvuMao74RTNE0Xkco6jK2S8Ub0LG3VlUizGD0aSOWv76
+         GMDKExFCxeq4k776heJhUDY+3rzEQ4FWO4a5hBnvGsLlxmEPgyn9298GV5zwUoO9pALK
+         iyhkpES66HWEUYJ0F3JjfJUSjn5uurap7b1DwCC+sFEtYnbipY5CyAZQHbEwIsf2NCPQ
+         lHVrPvR2pi3qz5jCxTS9i31WmW1p+okDbLm1JtdIf+6Hxi0QOfQ0kCZ4bf4AjjNOq6YG
+         bpkA==
+X-Gm-Message-State: APjAAAWnVsHsvFGe2/uSsVzWrd0N+d6KuWghfYBTGSz+rNt/IE2TVoJh
+        vXpT9r1ujxWoxWWyAcW+M8vTb3UPQt97o/t+EDk3FA==
+X-Google-Smtp-Source: APXvYqyH7XhI3a/DkRyh575w1BCN/DsRH5SQN4U4GjnrWhviWpfRz21kNlgkWO7kwhjd2fwRpqP4aZoATeVVAm4A6kc=
+X-Received: by 2002:aca:4586:: with SMTP id s128mr4131634oia.148.1556844256812;
+ Thu, 02 May 2019 17:44:16 -0700 (PDT)
 MIME-Version: 1.0
 References: <20190501230126.229218-1-brendanhiggins@google.com>
- <20190502105053.GA12416@kroah.com> <20190502110513.GF12416@kroah.com>
-In-Reply-To: <20190502110513.GF12416@kroah.com>
+ <20190502105053.GA12416@kroah.com> <76e84d54-6b7e-8cc1-492b-43822fc43ac4@kernel.org>
+In-Reply-To: <76e84d54-6b7e-8cc1-492b-43822fc43ac4@kernel.org>
 From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Thu, 2 May 2019 17:41:08 -0700
-Message-ID: <CAFd5g46RyQ+jaV3bDejBaeca4Yv3G9ppT5JxdKqZw6PSbiSDYw@mail.gmail.com>
+Date:   Thu, 2 May 2019 17:44:05 -0700
+Message-ID: <CAFd5g47JiSXHvMEu9NovkGdG7ugMCwVO0pGwT7bC=NCghD0w-g@mail.gmail.com>
 Subject: Re: [PATCH v2 00/17] kunit: introduce KUnit, the Linux kernel unit
  testing framework
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Frank Rowand <frowand.list@gmail.com>,
+To:     shuah <shuah@kernel.org>
+Cc:     Greg KH <gregkh@linuxfoundation.org>,
+        Frank Rowand <frowand.list@gmail.com>,
         Kees Cook <keescook@google.com>,
         Kieran Bingham <kieran.bingham@ideasonboard.com>,
         Luis Chamberlain <mcgrof@kernel.org>,
         Rob Herring <robh@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
-        shuah@kernel.org, devicetree <devicetree@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
         dri-devel <dri-devel@lists.freedesktop.org>,
         kunit-dev@googlegroups.com, linux-doc@vger.kernel.org,
         linux-fsdevel@vger.kernel.org, linux-kbuild@vger.kernel.org,
@@ -86,52 +87,31 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, May 2, 2019 at 4:05 AM Greg KH <gregkh@linuxfoundation.org> wrote:
+On Thu, May 2, 2019 at 7:04 AM shuah <shuah@kernel.org> wrote:
 >
-> On Thu, May 02, 2019 at 12:50:53PM +0200, Greg KH wrote:
+> On 5/2/19 4:50 AM, Greg KH wrote:
 > > On Wed, May 01, 2019 at 04:01:09PM -0700, Brendan Higgins wrote:
-> > > ## TLDR
-> > >
-> > > I rebased the last patchset on 5.1-rc7 in hopes that we can get this in
-> > > 5.2.
+> >> ## TLDR
+> >>
+> >> I rebased the last patchset on 5.1-rc7 in hopes that we can get this in
+> >> 5.2.
 > >
 > > That might be rushing it, normally trees are already closed now for
 > > 5.2-rc1 if 5.1-final comes out this Sunday.
 > >
-> > > Shuah, I think you, Greg KH, and myself talked off thread, and we agreed
-> > > we would merge through your tree when the time came? Am I remembering
-> > > correctly?
+> >> Shuah, I think you, Greg KH, and myself talked off thread, and we agreed
+> >> we would merge through your tree when the time came? Am I remembering
+> >> correctly?
 > >
 > > No objection from me.
 > >
-> > Let me go review the latest round of patches now.
 >
-> Overall, looks good to me, and provides a framework we can build on.
-> I'm a bit annoyed at the reliance on uml at the moment, but we can work
-> on that in the future :)
+> Yes. I can take these through kselftest tree when the time comes.
 
-Eh, I mostly fixed that.
+Awesome.
 
-I removed the KUnit framework's reliance on UML i.e. the actual tests
-now run on any architecture.
+> Agree with Greg that 5.2 might be rushing it. 5.3 would be a good
+> target.
 
-The only UML dependent bit is the KUnit wrapper scripts, which could
-be made to work to support other architectures pretty trivially. The
-only limitation here is that it would be dependent on the actual
-workflow you are using.
-
-In anycase, if you are comfortable reading the results in the kernel
-logs, then there is no dependence on UML. (I should probably provide
-some documentation on that...)
-
->
-> Thanks for sticking with this, now the real work begins...
-
-I don't doubt it.
-
->
-> Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-
-Does this cover all the patches in this set?
-
-Thanks!
+Whoops. I guess I should have sent this out a bit earlier. Oh well, as
+long as we are on our way!
