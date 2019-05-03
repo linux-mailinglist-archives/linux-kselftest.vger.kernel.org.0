@@ -2,347 +2,127 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 834FE12643
-	for <lists+linux-kselftest@lfdr.de>; Fri,  3 May 2019 04:00:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A3041266A
+	for <lists+linux-kselftest@lfdr.de>; Fri,  3 May 2019 05:15:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726144AbfECCAa (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 2 May 2019 22:00:30 -0400
-Received: from mail-wr1-f47.google.com ([209.85.221.47]:36029 "EHLO
-        mail-wr1-f47.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726022AbfECCAa (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 2 May 2019 22:00:30 -0400
-Received: by mail-wr1-f47.google.com with SMTP id o4so5829083wra.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 02 May 2019 19:00:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:date:to:message-id:subject:mime-version;
-        bh=NTHb6kWNQ6VCIcyVd23v5R4e6KITAdnfmGiumrb1bfQ=;
-        b=WiRJZ4kMM8e11xm49X0b58qbqUnncf9xfeios548l5vNmIJP+s9PFThP6VaZcbRIQh
-         4bTU8AtG6/IzjuFDDTNFDQmkoae/Qz6wEUFfwMRTjIkAPVKMeTVYffws+RHfdfEiFoQr
-         w3TDSqAzD9x9nWOxRD+mbB103YBf4SsK4ArEjuBNgox88EiLmTddIx9Rs9Xb91DJms3N
-         pFIvLFGMd7R5INzJPd5P/PbjR+7YL2GaInXRPQzkMmjllElRJzjODTmkWiZGPV1VjH9L
-         RyvJlIGeHT1cQG/eJy9t2XkGe2Uw8o9vA1lWVDFrX8mMMi7wvd8+BK4rA0fnM4dNLtr9
-         4vKg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:date:to:message-id:subject:mime-version;
-        bh=NTHb6kWNQ6VCIcyVd23v5R4e6KITAdnfmGiumrb1bfQ=;
-        b=A+NVMFn7Y7G1tcyn5TXSHycJ1Db5yW+k3XPFOr753FyZcNP/okS2uPZ1wXhakwdtFk
-         xma3HpCrq6vxEyui9oTlGZF7kX+lL7IPAIatr8e/r31U07YNGUuzdfpBzMtty9uH29rk
-         Ibrxh/H7cruEKtvGlRM+sGt8kzVbVri7HPuEj9ffiJVU3Oo88fYP/wnUWFS/igs2WRly
-         PU51EB9pyMNAS2HHlUAvCi4Wo3IrDDFb88xxYJ8A/ECkwAghudU/2AAwRyNjP4acEMsl
-         KoXGjioscKOvrW9D8fRLlvLIkfP///ACddKhR8ypXN4apLJiLAk0nTK7cAbmTomLx1uo
-         k/ZQ==
-X-Gm-Message-State: APjAAAUaWdFW/tasZ+gs0st5rSAqw60+7lZpYAimT5gOYKTT8s9d8+S8
-        iv/0llr5wpkTKJKVMBlF2ok8Sg==
-X-Google-Smtp-Source: APXvYqytnpoiYII5vm4cUVD0mgGdD0sLl0sPUhSe1AqGuoy/2pBy08mvVLnS90XXiw4MB/aY/yvx6g==
-X-Received: by 2002:a05:6000:1181:: with SMTP id g1mr4783866wrx.56.1556848827325;
-        Thu, 02 May 2019 19:00:27 -0700 (PDT)
-Received: from a6c5c67cda76 (ci.linaro.org. [88.99.136.175])
-        by smtp.gmail.com with ESMTPSA id g5sm659267wrh.44.2019.05.02.19.00.26
-        (version=TLS1 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
-        Thu, 02 May 2019 19:00:26 -0700 (PDT)
-From:   ci_notify@linaro.org
-X-Google-Original-From: linaro-infrastructure-errors@lists.linaro.org
-Date:   Fri, 3 May 2019 02:00:26 +0000 (UTC)
-To:     lkft-triage@lists.linaro.org, dan.rue@linaro.org,
-        anders.roxell@linaro.org, naresh.kamboju@linaro.org,
-        linux-kselftest@vger.kernel.org
-Message-ID: <1847077412.16901.1556848826838.JavaMail.jenkins@a6c5c67cda76>
-Subject: next-20190502 kselftest results
+        id S1726413AbfECDPT (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 2 May 2019 23:15:19 -0400
+Received: from ale.deltatee.com ([207.54.116.67]:38140 "EHLO ale.deltatee.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726114AbfECDPS (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 2 May 2019 23:15:18 -0400
+Received: from adsl-173-228-226-134.prtc.net ([173.228.226.134] helo=[172.20.29.49])
+        by ale.deltatee.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.89)
+        (envelope-from <logang@deltatee.com>)
+        id 1hMOef-0006md-Tg; Thu, 02 May 2019 21:14:35 -0600
+To:     Brendan Higgins <brendanhiggins@google.com>,
+        frowand.list@gmail.com, gregkh@linuxfoundation.org,
+        keescook@google.com, kieran.bingham@ideasonboard.com,
+        mcgrof@kernel.org, robh@kernel.org, sboyd@kernel.org,
+        shuah@kernel.org
+Cc:     devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        kunit-dev@googlegroups.com, linux-doc@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kbuild@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-nvdimm@lists.01.org, linux-um@lists.infradead.org,
+        Alexander.Levin@microsoft.com, Tim.Bird@sony.com,
+        amir73il@gmail.com, dan.carpenter@oracle.com,
+        dan.j.williams@intel.com, daniel@ffwll.ch, jdike@addtoit.com,
+        joel@jms.id.au, julia.lawall@lip6.fr, khilman@baylibre.com,
+        knut.omang@oracle.com, mpe@ellerman.id.au, pmladek@suse.com,
+        richard@nod.at, rientjes@google.com, rostedt@goodmis.org,
+        wfg@linux.intel.com
+References: <20190501230126.229218-1-brendanhiggins@google.com>
+ <20190501230126.229218-9-brendanhiggins@google.com>
+From:   Logan Gunthorpe <logang@deltatee.com>
+Message-ID: <0a605543-477a-1854-eb35-6e586606889b@deltatee.com>
+Date:   Thu, 2 May 2019 21:14:08 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
 MIME-Version: 1.0
-Content-Type: multipart/mixed; 
-        boundary="----=_Part_16900_1878413545.1556848826304"
-X-Jenkins-Job: LKFT Notify kselftest on next
-X-Jenkins-Result: SUCCESS
+In-Reply-To: <20190501230126.229218-9-brendanhiggins@google.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 173.228.226.134
+X-SA-Exim-Rcpt-To: wfg@linux.intel.com, rostedt@goodmis.org, rientjes@google.com, richard@nod.at, pmladek@suse.com, mpe@ellerman.id.au, knut.omang@oracle.com, khilman@baylibre.com, julia.lawall@lip6.fr, joel@jms.id.au, jdike@addtoit.com, daniel@ffwll.ch, dan.j.williams@intel.com, dan.carpenter@oracle.com, amir73il@gmail.com, Tim.Bird@sony.com, Alexander.Levin@microsoft.com, linux-um@lists.infradead.org, linux-nvdimm@lists.01.org, linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org, linux-fsdevel@vger.kernel.org, linux-doc@vger.kernel.org, kunit-dev@googlegroups.com, dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org, shuah@kernel.org, sboyd@kernel.org, robh@kernel.org, mcgrof@kernel.org, kieran.bingham@ideasonboard.com, keescook@google.com, gregkh@linuxfoundation.org, frowand.list@gmail.com, brendanhiggins@google.com
+X-SA-Exim-Mail-From: logang@deltatee.com
+X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on ale.deltatee.com
+X-Spam-Level: 
+X-Spam-Status: No, score=-6.9 required=5.0 tests=ALL_TRUSTED,BAYES_00
+        autolearn=ham autolearn_force=no version=3.4.2
+Subject: Re: [PATCH v2 08/17] kunit: test: add support for test abort
+X-SA-Exim-Version: 4.2.1 (built Tue, 02 Aug 2016 21:08:31 +0000)
+X-SA-Exim-Scanned: Yes (on ale.deltatee.com)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-------=_Part_16900_1878413545.1556848826304
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-
-Summary
-------------------------------------------------------------------------
-kernel: 5.1.0-rc7
-git repo: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-git branch: master
-git commit: e8b243ea3b19b6f3b9fffca232a2c7b000964d6b
-git describe: next-20190502
-Test details: https://qa-reports.linaro.org/lkft/linux-next-oe/build/next-20190502
-
-Regressions (compared to build next-20190501)
-------------------------------------------------------------------------
-qemu_arm:                                                                                                      
- kselftest:                                                                                         
-    * bpf_test_maps                                                                                                         
-qemu_i386:                                                                                                      
- kselftest:                                                                                         
-    * bpf_test_tcpbpf_user                                                                                                         
-qemu_x86_64:                                                                                                      
- kselftest:                                                                                         
-    * net_fib_rule_tests.sh                                                                                                         
-x15 - arm:                                                                                                      
- kselftest:                                                                                         
-    * bpf_test_maps                                                                                                         
-                                                                                         
-    * cgroup_test_freezer                                                                                                         
-                                                                                         
-    * net_fib_rule_tests.sh                                                                                                         
-x86_64:                                                                                                      
- kselftest-vsyscall-mode-none:                                                                                         
-    * net_fib_rule_tests.sh                                                                                                         
-                                                                                                          
-                                                                                                                       
-Fixes (compared to build next-20190501)                                                                   
-------------------------------------------------------------------------                                               
-qemu_x86_64:                                                                                                      
- kselftest:                                                                                         
-    * bpf_test_sock_addr.sh                                                                                                         
-x86_64:                                                                                                      
- kselftest-vsyscall-mode-none:                                                                                         
-    * net_fib-onlink-tests.sh                                                                                                         
 
 
-In total:
-------------------------------------------------------------------------
-Ran 555 total tests in the following environments and test suites.
-pass 337
-fail 179
-xfail 0
-skip 39
+On 2019-05-01 5:01 p.m., Brendan Higgins wrote:
+> +/*
+> + * struct kunit_try_catch - provides a generic way to run code which might fail.
+> + * @context: used to pass user data to the try and catch functions.
+> + *
+> + * kunit_try_catch provides a generic, architecture independent way to execute
+> + * an arbitrary function of type kunit_try_catch_func_t which may bail out by
+> + * calling kunit_try_catch_throw(). If kunit_try_catch_throw() is called, @try
+> + * is stopped at the site of invocation and @catch is catch is called.
 
-Environments
---------------
-- dragonboard-410c - arm64
-- hi6220-hikey - arm64
-- i386
-- juno-r2 - arm64
-- qemu_arm
-- qemu_i386
-- qemu_x86_64
-- x15 - arm
-- x86_64
+I found some of the C++ comparisons in this series a bit distasteful but
+wasn't going to say anything until I saw the try catch.... But looking
+into the implementation it's just a thread that can exit early which
+seems fine to me. Just a poor choice of name I guess...
 
-Test Suites
------------
-* boot-lkft-kselftests-master-512
-* kselftest
-* boot-lkft-kselftests-vsyscall-mode-native-master-512
-* boot-lkft-kselftests-vsyscall-mode-none-master-512
-* kselftest-vsyscall-mode-none
+[snip]
 
+> +static void __noreturn kunit_abort(struct kunit *test)
+> +{
+> +	kunit_set_death_test(test, true);
+> +
+> +	kunit_try_catch_throw(&test->try_catch);
+> +
+> +	/*
+> +	 * Throw could not abort from test.
+> +	 *
+> +	 * XXX: we should never reach this line! As kunit_try_catch_throw is
+> +	 * marked __noreturn.
+> +	 */
+> +	WARN_ONCE(true, "Throw could not abort from test!\n");
+> +}
+> +
+>  int kunit_init_test(struct kunit *test, const char *name)
+>  {
+>  	spin_lock_init(&test->lock);
+> @@ -77,6 +103,7 @@ int kunit_init_test(struct kunit *test, const char *name)
+>  	test->name = name;
+>  	test->vprintk = kunit_vprintk;
+>  	test->fail = kunit_fail;
+> +	test->abort = kunit_abort;
 
-Failures
-------------------------------------------------------------------------
+There are a number of these function pointers which seem to be pointless
+to me as you only ever set them to one function. Just call the function
+directly. As it is, it is an unnecessary indirection for someone reading
+the code. If and when you have multiple implementations of the function
+then add the pointer. Don't assume you're going to need it later on and
+add all this maintenance burden if you never use it..
 
-dragonboard-410c:
+[snip]
 
-hi6220-hikey:
+> +void kunit_generic_try_catch_init(struct kunit_try_catch *try_catch)
+> +{
+> +	try_catch->run = kunit_generic_run_try_catch;
+> +	try_catch->throw = kunit_generic_throw;
+> +}
 
-juno-r2:
+Same here. There's only one implementation of try_catch and I can't
+really see any sensible justification for another implementation. Even
+if there is, add the indirection when the second implementation is
+added. This isn't C++ and we don't need to make everything a "method".
 
-qemu_i386:
-* kselftest/bpf_test_maps
-* kselftest/bpf_test_progs
-* kselftest/bpf_test_tcpbpf_user
+Thanks,
 
-qemu_x86_64:
-* kselftest/binderfs_binderfs_test
-* kselftest/bpf_test_flow_dissector.sh
-* kselftest/bpf_test_lirc_mode2_user
-* kselftest/bpf_test_lwt_ip_encap.sh
-* kselftest/bpf_test_lwt_seg6local.sh
-* kselftest/bpf_test_netcnt
-* kselftest/bpf_test_progs
-* kselftest/bpf_test_sock_fields
-* kselftest/bpf_test_tc_edt.sh
-* kselftest/bpf_test_tc_tunnel.sh
-* kselftest/cgroup_test_core
-* kselftest/cpufreq_main.sh
-* kselftest/dma-buf_udmabuf
-* kselftest/firmware_fw_run_tests.sh
-* kselftest/kvm_clear_dirty_log_test
-* kselftest/kvm_cr4_cpuid_sync_test
-* kselftest/kvm_dirty_log_test
-* kselftest/kvm_evmcs_test
-* kselftest/kvm_hyperv_cpuid
-* kselftest/kvm_platform_info_test
-* kselftest/kvm_set_sregs_test
-* kselftest/kvm_smm_test
-* kselftest/kvm_state_test
-* kselftest/kvm_sync_regs_test
-* kselftest/kvm_vmx_close_while_nested_test
-* kselftest/kvm_vmx_tsc_adjust_test
-* kselftest/lib_bitmap.sh
-* kselftest/lib_prime_numbers.sh
-* kselftest/lib_printf.sh
-* kselftest/lib_strscpy.sh
-* kselftest/livepatch_test-callbacks.sh
-* kselftest/livepatch_test-livepatch.sh
-* kselftest/livepatch_test-shadow-vars.sh
-* kselftest/membarrier_membarrier_test
-* kselftest/net_fib-onlink-tests.sh
-* kselftest/net_fib_rule_tests.sh
-* kselftest/net_ip_defrag.sh
-* kselftest/net_msg_zerocopy.sh
-* kselftest/net_pmtu.sh
-* kselftest/net_psock_snd.sh
-* kselftest/net_run_netsocktests
-* kselftest/net_test_vxlan_under_vrf.sh
-* kselftest/net_tls
-* kselftest/net_xfrm_policy.sh
-* kselftest/pstore_pstore_tests
-* kselftest/rseq_basic_percpu_ops_test
-* kselftest/rseq_basic_test
-* kselftest/rseq_param_test
-* kselftest/rseq_param_test_benchmark
-* kselftest/rseq_param_test_compare_twice
-* kselftest/rseq_run_param_test.sh
-* kselftest/rtc_rtctest
-* kselftest/seccomp_seccomp_bpf
-* kselftest/timestamping_txtimestamp.sh
-* kselftest/tpm2_test_smoke.sh
-* kselftest/vm_run_vmtests
-* kselftest/x86_fsgsbase_64
-
-x15:
-* kselftest/binderfs_binderfs_test
-* kselftest/bpf_get_cgroup_id_user
-* kselftest/bpf_test_flow_dissector.sh
-* kselftest/bpf_test_lirc_mode2_user
-* kselftest/bpf_test_lwt_ip_encap.sh
-* kselftest/bpf_test_lwt_seg6local.sh
-* kselftest/bpf_test_maps
-* kselftest/bpf_test_netcnt
-* kselftest/bpf_test_progs
-* kselftest/bpf_test_select_reuseport
-* kselftest/bpf_test_sock_fields
-* kselftest/bpf_test_sockmap
-* kselftest/bpf_test_tcp_check_syncookie.sh
-* kselftest/bpf_test_tcpnotify_user
-* kselftest/bpf_test_tc_tunnel.sh
-* kselftest/bpf_test_verifier
-* kselftest/cgroup_test_core
-* kselftest/cgroup_test_freezer
-* kselftest/dma-buf_udmabuf
-* kselftest/firmware_fw_run_tests.sh
-* kselftest/kvm_cr4_cpuid_sync_test
-* kselftest/kvm_dirty_log_test
-* kselftest/kvm_evmcs_test
-* kselftest/kvm_hyperv_cpuid
-* kselftest/kvm_platform_info_test
-* kselftest/kvm_set_sregs_test
-* kselftest/kvm_smm_test
-* kselftest/kvm_state_test
-* kselftest/kvm_sync_regs_test
-* kselftest/kvm_vmx_close_while_nested_test
-* kselftest/kvm_vmx_tsc_adjust_test
-* kselftest/lib_bitmap.sh
-* kselftest/lib_prime_numbers.sh
-* kselftest/lib_printf.sh
-* kselftest/lib_strscpy.sh
-* kselftest/livepatch_test-callbacks.sh
-* kselftest/livepatch_test-livepatch.sh
-* kselftest/livepatch_test-shadow-vars.sh
-* kselftest/membarrier_membarrier_test
-* kselftest/net_fib-onlink-tests.sh
-* kselftest/net_fib_rule_tests.sh
-* kselftest/net_fib_tests.sh
-* kselftest/net_ip_defrag.sh
-* kselftest/net_msg_zerocopy.sh
-* kselftest/net_pmtu.sh
-* kselftest/net_psock_snd.sh
-* kselftest/net_reuseport_bpf_numa
-* kselftest/net_run_netsocktests
-* kselftest/net_test_vxlan_under_vrf.sh
-* kselftest/net_tls
-* kselftest/pidfd_pidfd_test
-* kselftest/proc_proc-self-map-files-002
-* kselftest/proc_proc-self-syscall
-* kselftest/pstore_pstore_tests
-* kselftest/rseq_basic_percpu_ops_test
-* kselftest/rseq_basic_test
-* kselftest/rseq_param_test
-* kselftest/rseq_param_test_benchmark
-* kselftest/rseq_param_test_compare_twice
-* kselftest/rtc_rtctest
-* kselftest/seccomp_seccomp_bpf
-* kselftest/timestamping_txtimestamp.sh
-* kselftest/tpm2_test_smoke.sh
-* kselftest/tpm2_test_space.sh
-* kselftest/vm_run_vmtests
-
-qemu_arm:
-* kselftest/bpf_test_maps
-* kselftest/bpf_test_progs
-* kselftest/bpf_test_verifier
-
-i386:
-* kselftest/bpf_test_maps
-* kselftest/bpf_test_progs
-
-x86:
-* kselftest-vsyscall-mode-none/binderfs_binderfs_test
-* kselftest-vsyscall-mode-none/bpf_test_flow_dissector.sh
-* kselftest-vsyscall-mode-none/bpf_test_lirc_mode2_user
-* kselftest-vsyscall-mode-none/bpf_test_lwt_ip_encap.sh
-* kselftest-vsyscall-mode-none/bpf_test_lwt_seg6local.sh
-* kselftest-vsyscall-mode-none/bpf_test_netcnt
-* kselftest-vsyscall-mode-none/bpf_test_progs
-* kselftest-vsyscall-mode-none/bpf_test_sock_fields
-* kselftest-vsyscall-mode-none/bpf_test_sockmap
-* kselftest-vsyscall-mode-none/bpf_test_tc_edt.sh
-* kselftest-vsyscall-mode-none/bpf_test_tc_tunnel.sh
-* kselftest-vsyscall-mode-none/cgroup_test_core
-* kselftest-vsyscall-mode-none/dma-buf_udmabuf
-* kselftest-vsyscall-mode-none/firmware_fw_run_tests.sh
-* kselftest-vsyscall-mode-none/kvm_clear_dirty_log_test
-* kselftest-vsyscall-mode-none/kvm_cr4_cpuid_sync_test
-* kselftest-vsyscall-mode-none/kvm_dirty_log_test
-* kselftest-vsyscall-mode-none/kvm_evmcs_test
-* kselftest-vsyscall-mode-none/kvm_platform_info_test
-* kselftest-vsyscall-mode-none/kvm_set_sregs_test
-* kselftest-vsyscall-mode-none/kvm_smm_test
-* kselftest-vsyscall-mode-none/kvm_state_test
-* kselftest-vsyscall-mode-none/kvm_sync_regs_test
-* kselftest-vsyscall-mode-none/kvm_vmx_close_while_nested_test
-* kselftest-vsyscall-mode-none/lib_bitmap.sh
-* kselftest-vsyscall-mode-none/lib_prime_numbers.sh
-* kselftest-vsyscall-mode-none/lib_printf.sh
-* kselftest-vsyscall-mode-none/lib_strscpy.sh
-* kselftest-vsyscall-mode-none/livepatch_test-callbacks.sh
-* kselftest-vsyscall-mode-none/livepatch_test-livepatch.sh
-* kselftest-vsyscall-mode-none/livepatch_test-shadow-vars.sh
-* kselftest-vsyscall-mode-none/membarrier_membarrier_test
-* kselftest-vsyscall-mode-none/net_fib_rule_tests.sh
-* kselftest-vsyscall-mode-none/net_ip_defrag.sh
-* kselftest-vsyscall-mode-none/net_msg_zerocopy.sh
-* kselftest-vsyscall-mode-none/net_pmtu.sh
-* kselftest-vsyscall-mode-none/net_psock_snd.sh
-* kselftest-vsyscall-mode-none/net_test_vxlan_under_vrf.sh
-* kselftest-vsyscall-mode-none/net_xfrm_policy.sh
-* kselftest-vsyscall-mode-none/pidfd_pidfd_test
-* kselftest-vsyscall-mode-none/pstore_pstore_tests
-* kselftest-vsyscall-mode-none/rseq_basic_percpu_ops_test
-* kselftest-vsyscall-mode-none/rseq_basic_test
-* kselftest-vsyscall-mode-none/rseq_param_test
-* kselftest-vsyscall-mode-none/rseq_param_test_benchmark
-* kselftest-vsyscall-mode-none/rseq_param_test_compare_twice
-* kselftest-vsyscall-mode-none/rseq_run_param_test.sh
-* kselftest-vsyscall-mode-none/seccomp_seccomp_bpf
-* kselftest-vsyscall-mode-none/timestamping_txtimestamp.sh
-
-
-Skips
-------------------------------------------------------------------------
-No skips
-
-
--- 
-Linaro LKFT
-https://lkft.linaro.org
-------=_Part_16900_1878413545.1556848826304--
+Logan
