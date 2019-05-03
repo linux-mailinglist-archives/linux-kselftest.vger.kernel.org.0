@@ -2,191 +2,199 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 961C412B6E
-	for <lists+linux-kselftest@lfdr.de>; Fri,  3 May 2019 12:23:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AFD7912DB0
+	for <lists+linux-kselftest@lfdr.de>; Fri,  3 May 2019 14:33:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727590AbfECKXa (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 3 May 2019 06:23:30 -0400
-Received: from merlin.infradead.org ([205.233.59.134]:34640 "EHLO
-        merlin.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727328AbfECKX3 (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 3 May 2019 06:23:29 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=merlin.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=yWINozWi4B8/0b+zeQRxYewAS+koeusVmFIImsL4ACM=; b=e3Z24GLl2UD/i7MtfoO9Zn+1s
-        aOjqo4XYiaU6TA4EV7N+9AsJHT1zV27NytuQBr1YvJk6KUbqMVuYruylM99/m1WUuogmdZ/56St5b
-        4dmoglSTjnQKMD8FuO8PU2p9eqckaGA3fsfa2GL1IN6EyCVKr1vUbgck9GTdg4dvIJmje97LlunJh
-        7hYWE4A5NB1Ajh1PQ8h5bKtPEGwJ1sSQdUttdLPEm0WqLP8EnAN+3sVGhPhbHhQYu2MNod/SEGcp6
-        jp7B8sDaoNH+JOzA8oC4AmS/UUeCHQ7BX+I7txb282udOd86t/J7BaBok6Q66wPX1KuZ/83fY21o3
-        EEAvVY+cQ==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=hirez.programming.kicks-ass.net)
-        by merlin.infradead.org with esmtpsa (Exim 4.90_1 #2 (Red Hat Linux))
-        id 1hMVL9-0003jO-J4; Fri, 03 May 2019 10:22:51 +0000
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 15C5E29B65EA1; Fri,  3 May 2019 12:22:47 +0200 (CEST)
-Date:   Fri, 3 May 2019 12:22:47 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Linux List Kernel Mailing <linux-kernel@vger.kernel.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Nicolai Stange <nstange@suse.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        the arch/x86 maintainers <x86@kernel.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Jiri Kosina <jikos@kernel.org>,
-        Miroslav Benes <mbenes@suse.cz>,
+        id S1727605AbfECMdx (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 3 May 2019 08:33:53 -0400
+Received: from ale.deltatee.com ([207.54.116.67]:45436 "EHLO ale.deltatee.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726047AbfECMdx (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 3 May 2019 08:33:53 -0400
+Received: from adsl-173-228-226-134.prtc.net ([173.228.226.134] helo=[172.20.29.49])
+        by ale.deltatee.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.89)
+        (envelope-from <logang@deltatee.com>)
+        id 1hMXNQ-0007dH-Hy; Fri, 03 May 2019 06:33:22 -0600
+To:     Brendan Higgins <brendanhiggins@google.com>
+Cc:     Frank Rowand <frowand.list@gmail.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Kees Cook <keescook@google.com>,
+        Kieran Bingham <kieran.bingham@ideasonboard.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Rob Herring <robh@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
+        shuah@kernel.org, devicetree <devicetree@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        kunit-dev@googlegroups.com, linux-doc@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kbuild@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-kselftest@vger.kernel.org,
+        linux-nvdimm <linux-nvdimm@lists.01.org>,
+        linux-um@lists.infradead.org,
+        Sasha Levin <Alexander.Levin@microsoft.com>,
+        "Bird, Timothy" <Tim.Bird@sony.com>,
+        Amir Goldstein <amir73il@gmail.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Daniel Vetter <daniel@ffwll.ch>, Jeff Dike <jdike@addtoit.com>,
+        Joel Stanley <joel@jms.id.au>,
+        Julia Lawall <julia.lawall@lip6.fr>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Knut Omang <knut.omang@oracle.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
         Petr Mladek <pmladek@suse.com>,
-        Joe Lawrence <joe.lawrence@redhat.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
-        Tim Chen <tim.c.chen@linux.intel.com>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Juergen Gross <jgross@suse.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nayna Jain <nayna@linux.ibm.com>,
-        Masahiro Yamada <yamada.masahiro@socionext.com>,
-        Joerg Roedel <jroedel@suse.de>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>, stable <stable@vger.kernel.org>
-Subject: [RFC][PATCH 1.5/2] x86: Add int3_emulate_call() selftest
-Message-ID: <20190503102247.GC2623@hirez.programming.kicks-ass.net>
-References: <20190501202830.347656894@goodmis.org>
+        Richard Weinberger <richard@nod.at>,
+        David Rientjes <rientjes@google.com>,
+        Steven Rostedt <rostedt@goodmis.org>, wfg@linux.intel.com
+References: <20190501230126.229218-1-brendanhiggins@google.com>
+ <20190501230126.229218-9-brendanhiggins@google.com>
+ <0a605543-477a-1854-eb35-6e586606889b@deltatee.com>
+ <CAFd5g47hxAd=+72xbPJbWPdZCXRXmtLpsGhUh=zc7MSwfcaGJQ@mail.gmail.com>
+From:   Logan Gunthorpe <logang@deltatee.com>
+Message-ID: <b2379db6-634a-001e-6f67-37427d8a2666@deltatee.com>
+Date:   Fri, 3 May 2019 06:33:02 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190501202830.347656894@goodmis.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <CAFd5g47hxAd=+72xbPJbWPdZCXRXmtLpsGhUh=zc7MSwfcaGJQ@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 173.228.226.134
+X-SA-Exim-Rcpt-To: wfg@linux.intel.com, rostedt@goodmis.org, rientjes@google.com, richard@nod.at, pmladek@suse.com, mpe@ellerman.id.au, knut.omang@oracle.com, khilman@baylibre.com, julia.lawall@lip6.fr, joel@jms.id.au, jdike@addtoit.com, daniel@ffwll.ch, dan.j.williams@intel.com, dan.carpenter@oracle.com, amir73il@gmail.com, Tim.Bird@sony.com, Alexander.Levin@microsoft.com, linux-um@lists.infradead.org, linux-nvdimm@lists.01.org, linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org, linux-fsdevel@vger.kernel.org, linux-doc@vger.kernel.org, kunit-dev@googlegroups.com, dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org, shuah@kernel.org, sboyd@kernel.org, robh@kernel.org, mcgrof@kernel.org, kieran.bingham@ideasonboard.com, keescook@google.com, gregkh@linuxfoundation.org, frowand.list@gmail.com, brendanhiggins@google.com
+X-SA-Exim-Mail-From: logang@deltatee.com
+X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on ale.deltatee.com
+X-Spam-Level: 
+X-Spam-Status: No, score=-8.9 required=5.0 tests=ALL_TRUSTED,BAYES_00,
+        GREYLIST_ISWHITE autolearn=ham autolearn_force=no version=3.4.2
+Subject: Re: [PATCH v2 08/17] kunit: test: add support for test abort
+X-SA-Exim-Version: 4.2.1 (built Tue, 02 Aug 2016 21:08:31 +0000)
+X-SA-Exim-Scanned: Yes (on ale.deltatee.com)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
 
-Given that the entry_*.S changes for this functionality are somewhat
-tricky, make sure the paths are tested every boot, instead of on the
-rare occasion when we trip an INT3 while rewriting text.
 
-Getting the INT3 frame setup even slightly wrong will make this come
-unstuck something spectacular.
+On 2019-05-03 12:48 a.m., Brendan Higgins wrote:
+> On Thu, May 2, 2019 at 8:15 PM Logan Gunthorpe <logang@deltatee.com> wrote:
+>> On 2019-05-01 5:01 p.m., Brendan Higgins wrote:
+>>> +/*
+>>> + * struct kunit_try_catch - provides a generic way to run code which might fail.
+>>> + * @context: used to pass user data to the try and catch functions.
+>>> + *
+>>> + * kunit_try_catch provides a generic, architecture independent way to execute
+>>> + * an arbitrary function of type kunit_try_catch_func_t which may bail out by
+>>> + * calling kunit_try_catch_throw(). If kunit_try_catch_throw() is called, @try
+>>> + * is stopped at the site of invocation and @catch is catch is called.
+>>
+>> I found some of the C++ comparisons in this series a bit distasteful but
+>> wasn't going to say anything until I saw the try catch.... But looking
+>> into the implementation it's just a thread that can exit early which
+>> seems fine to me. Just a poor choice of name I guess...
+> 
+> Guilty as charged (I have a long history with C++, sorry). Would you
+> prefer I changed the name? I just figured that try-catch is a commonly
+> understood pattern that describes exactly what I am doing.
 
-Requested-by: Andy Lutomirski <luto@kernel.org>
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
----
- arch/x86/kernel/alternative.c | 81 ++++++++++++++++++++++++++++++++++++++++---
- 1 file changed, 77 insertions(+), 4 deletions(-)
+It is a commonly understood pattern, but I don't think it's what the
+code is doing. Try-catch cleans up an entire stack and allows each level
+of the stack to apply local cleanup. This implementation simply exits a
+thread and has none of that complexity. To me, it seems like an odd
+abstraction here as it's really just a test runner that can exit early
+(though I haven't seen the follow-up UML implementation).
 
-diff --git a/arch/x86/kernel/alternative.c b/arch/x86/kernel/alternative.c
-index 4db9c0d29bc1..2b853c2ab894 100644
---- a/arch/x86/kernel/alternative.c
-+++ b/arch/x86/kernel/alternative.c
-@@ -613,11 +613,83 @@ extern struct paravirt_patch_site __start_parainstructions[],
- 	__stop_parainstructions[];
- #endif	/* CONFIG_PARAVIRT */
- 
-+/*
-+ * Self-test for the INT3 based CALL emulation code.
-+ *
-+ * This exercises int3_emulate_call() to make sure INT3 pt_regs are set up
-+ * properly and that there is a stack gap between the INT3 frame and the
-+ * previous context. Without this gap doing a virtual PUSH on the interrupted
-+ * stack would corrupt the INT3 IRET frame.
-+ *
-+ * See entry_{32,64}.S for more details.
-+ */
-+static void __init int3_magic(unsigned int *ptr)
-+{
-+	*ptr = 1;
-+}
-+
-+extern __initdata unsigned long int3_selftest_ip; /* defined in asm below */
-+
-+static int __init
-+int3_exception_notify(struct notifier_block *self, unsigned long val, void *data)
-+{
-+	struct die_args *args = data;
-+	struct pt_regs *regs = args->regs;
-+
-+	if (!regs || user_mode(regs))
-+		return NOTIFY_DONE;
-+
-+	if (val != DIE_INT3)
-+		return NOTIFY_DONE;
-+
-+	if (regs->ip - INT3_INSN_SIZE != int3_selftest_ip)
-+		return NOTIFY_DONE;
-+
-+	int3_emulate_call(regs, (unsigned long)&int3_magic);
-+	return NOTIFY_STOP;
-+}
-+
-+static void __init int3_selftest(void)
-+{
-+	static __initdata struct notifier_block int3_exception_nb = {
-+		.notifier_call	= int3_exception_notify,
-+		.priority	= INT_MAX-1, /* last */
-+	};
-+	unsigned int val = 0;
-+
-+	BUG_ON(register_die_notifier(&int3_exception_nb));
-+
-+	/*
-+	 * Basically: int3_magic(&val); but really complicated :-)
-+	 *
-+	 * Stick the address of the INT3 instruction into int3_selftest_ip,
-+	 * then trigger the INT3, padded with NOPs to match a CALL instruction
-+	 * length.
-+	 */
-+	asm volatile ("1: int3; nop; nop; nop; nop\n\t"
-+		      ".pushsection .init.data,\"aw\"\n\t"
-+		      ".align " __ASM_SEL(4, 8) "\n\t"
-+		      ".type int3_selftest_ip, @object\n\t"
-+		      ".size int3_selftest_ip, " __ASM_SEL(4, 8) "\n\t"
-+		      "int3_selftest_ip:\n\t"
-+		      __ASM_SEL(.long, .quad) " 1b\n\t"
-+		      ".popsection\n\t"
-+		      : : __ASM_SEL_RAW(a, D) (&val) : "memory");
-+
-+	BUG_ON(val != 1);
-+
-+	unregister_die_notifier(&int3_exception_nb);
-+}
-+
- void __init alternative_instructions(void)
- {
--	/* The patching is not fully atomic, so try to avoid local interruptions
--	   that might execute the to be patched code.
--	   Other CPUs are not running. */
-+	int3_selftest();
-+
-+	/*
-+	 * The patching is not fully atomic, so try to avoid local
-+	 * interruptions that might execute the to be patched code.
-+	 * Other CPUs are not running.
-+	 */
- 	stop_nmi();
- 
- 	/*
-@@ -642,10 +714,11 @@ void __init alternative_instructions(void)
- 					    _text, _etext);
- 	}
- 
--	if (!uniproc_patched || num_possible_cpus() == 1)
-+	if (!uniproc_patched || num_possible_cpus() == 1) {
- 		free_init_pages("SMP alternatives",
- 				(unsigned long)__smp_locks,
- 				(unsigned long)__smp_locks_end);
-+	}
- #endif
- 
- 	apply_paravirt(__parainstructions, __parainstructions_end);
+I would prefer to see this cleaned up such that the abstraction matches
+more what's going on but I don't feel that strongly about it so I'll
+leave it up to you to figure out what's best unless other reviewers have
+stronger opinions.
+
+>>
+>> [snip]
+>>
+>>> +static void __noreturn kunit_abort(struct kunit *test)
+>>> +{
+>>> +     kunit_set_death_test(test, true);
+>>> +
+>>> +     kunit_try_catch_throw(&test->try_catch);
+>>> +
+>>> +     /*
+>>> +      * Throw could not abort from test.
+>>> +      *
+>>> +      * XXX: we should never reach this line! As kunit_try_catch_throw is
+>>> +      * marked __noreturn.
+>>> +      */
+>>> +     WARN_ONCE(true, "Throw could not abort from test!\n");
+>>> +}
+>>> +
+>>>  int kunit_init_test(struct kunit *test, const char *name)
+>>>  {
+>>>       spin_lock_init(&test->lock);
+>>> @@ -77,6 +103,7 @@ int kunit_init_test(struct kunit *test, const char *name)
+>>>       test->name = name;
+>>>       test->vprintk = kunit_vprintk;
+>>>       test->fail = kunit_fail;
+>>> +     test->abort = kunit_abort;
+>>
+>> There are a number of these function pointers which seem to be pointless
+>> to me as you only ever set them to one function. Just call the function
+>> directly. As it is, it is an unnecessary indirection for someone reading
+>> the code. If and when you have multiple implementations of the function
+>> then add the pointer. Don't assume you're going to need it later on and
+>> add all this maintenance burden if you never use it..
+> 
+> Ah, yes, Frank (and probably others) previously asked me to remove
+> unnecessary method pointers; I removed all the totally unused ones. As
+> for these, I don't use them in this patchset, but I use them in my
+> patchsets that will follow up this one. These in particular are
+> present so that they can be mocked out for testing.
+
+Adding indirection and function pointers solely for the purpose of
+mocking out while testing doesn't sit well with me and I don't think it
+should be a pattern that's encouraged. Adding extra complexity like this
+to a design to make it unit-testable doesn't seem like something that
+makes sense in kernel code. Especially given that indirect calls are
+more expensive in the age of spectre.
+
+Also, mocking these particular functions seems like it's an artifact of
+how you've designed the try/catch abstraction. If the abstraction was
+more around an abort-able test runner then it doesn't make sense to need
+to mock out the abort/fail functions as you will be testing overly
+generic features of something that don't seem necessary to the
+implementation.
+
+>>
+>> [snip]
+>>
+>>> +void kunit_generic_try_catch_init(struct kunit_try_catch *try_catch)
+>>> +{
+>>> +     try_catch->run = kunit_generic_run_try_catch;
+>>> +     try_catch->throw = kunit_generic_throw;
+>>> +}
+>>
+>> Same here. There's only one implementation of try_catch and I can't
+>> really see any sensible justification for another implementation. Even
+>> if there is, add the indirection when the second implementation is
+>> added. This isn't C++ and we don't need to make everything a "method".
+> 
+> These methods are for a UML specific implementation in a follow up
+> patchset, which is needed for some features like crash recovery, death
+> tests, and removes dependence on kthreads.
+> 
+> I know this probably sounds like premature complexity. Arguably it is
+> in hindsight, but I wrote those features before I pulled out these
+> interfaces (they were actually both originally in this patchset, but I
+> dropped them to make this patchset easier to review). I can remove
+> these methods and add them back in when I actually use them in the
+> follow up patchsets if you prefer.
+
+Yes, remove them now and add them back when you use them in follow-up
+patches. If reviewers find problems with the follow-up patches or have a
+better suggestion on how to do what ever it is you are doing, then you
+just have this unnecessary code and there's wasted developer time and
+review bandwidth that will need to be spent cleaning it up.
+
+Thanks,
+
+Logan
