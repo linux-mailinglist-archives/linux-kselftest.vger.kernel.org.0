@@ -2,110 +2,199 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4310E130E5
-	for <lists+linux-kselftest@lfdr.de>; Fri,  3 May 2019 17:08:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5247913210
+	for <lists+linux-kselftest@lfdr.de>; Fri,  3 May 2019 18:21:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727960AbfECPI3 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 3 May 2019 11:08:29 -0400
-Received: from mail-pf1-f193.google.com ([209.85.210.193]:33752 "EHLO
-        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727425AbfECPI3 (ORCPT
+        id S1726267AbfECQU7 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 3 May 2019 12:20:59 -0400
+Received: from mail-pg1-f193.google.com ([209.85.215.193]:40083 "EHLO
+        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726789AbfECQU7 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 3 May 2019 11:08:29 -0400
-Received: by mail-pf1-f193.google.com with SMTP id z28so3045761pfk.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 03 May 2019 08:08:29 -0700 (PDT)
+        Fri, 3 May 2019 12:20:59 -0400
+Received: by mail-pg1-f193.google.com with SMTP id d31so2945510pgl.7
+        for <linux-kselftest@vger.kernel.org>; Fri, 03 May 2019 09:20:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=kNTkQVNOA2OoGY05E27L56yuHsdvzUwDV9bMvSlE76A=;
-        b=MFvmRDDkIMtc9BaQDjrWPOSUDO9Jo1/wdFL+oMmuaFtd8BrX+9VVatnVk8YjQSnsoW
-         BsziOIyoxXHvWBYgvME24AJwRTKzg1v5hpxTEyKu2vSeYGAOa5tUX3uW7FhbKDdETQyb
-         5v+yKc70MV3v8Y806ihEUUkgJzSgITzNo64UQ=
+        d=amacapital-net.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=KZ7M2mWr1HgOjFYLO00FIxnzVOAK+l4FuiGi1wr1wow=;
+        b=AKvvYHpJ2edjcm0204j+PW95iowk2lDK7GCc0BA/nSaF6MDeF0AIRnHVXuk6WBOY24
+         FcaQymKNmQJ6pm2GWVojQ23VP1xtGzSP22dM3GLay0Sv1n+qpV809/ndAM30cjG3Qtcj
+         S+z06FlWFGt+qUrsK7BrZD/QgWeRQQPOQl0JH5GrW7V0zKM1bmFzlf6OsH/w7K3roSun
+         hJ7ZNZsvmswPBpD+I1pVnI1LmG33ZWGhrCx5WkmMteKy0ij31Mg+QopA8cGZ9m9GpRgV
+         qCNybIBlnqbR8jGguO7m5y/C1qwwPhDgrs0lwmsWsMdgGLFnzB643lNtdv/V/V55e+r4
+         JgCA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=kNTkQVNOA2OoGY05E27L56yuHsdvzUwDV9bMvSlE76A=;
-        b=hb4Z3dgULnJCT/hRfcHBWIR2cciQd0YOf4GOVc3Lo4VxGk86C+1QtSAACXB1fpySpr
-         IqYYxcbQk8B20s9o3du0qVZo5C1MVB7BOirpGO/yRQD8poYW7jjzzNQljc5VnWse0eIZ
-         3Aw/KzdhnuIFL2KtrboV8XO/7x+E+EgsK2EKPKiTNyyqHxchwQBQZNQ2SX+VhRgjpjiZ
-         DXmCfmNiz4wG7nSH2K0p1r9Fd0q6oWTeiCJ+F3ymUGK2x/titGrdltft9Mx8JD5ah+DS
-         K/6HFuZmqJl2ZVIeGojf87sciZmejUkMo42yewA2fqWeqT1xg3KOOOQic/vxZd+RFhGP
-         /o7w==
-X-Gm-Message-State: APjAAAVdI1x3Dpg5OqhdECDmNl9LyvYcKJPtdhzGlsc13n4tl0/yaP1b
-        v6n/Z4QUj69ETo/gSifCzdsvzw==
-X-Google-Smtp-Source: APXvYqw24XwNGkccqq09Ydr+Lfzc0vUPYmCja1k9q/7RdUIA3TyzF/y1fhaSR7qOXsBcDbXc//83LQ==
-X-Received: by 2002:a65:5c82:: with SMTP id a2mr11014324pgt.378.1556896108024;
-        Fri, 03 May 2019 08:08:28 -0700 (PDT)
-Received: from localhost ([2620:15c:6:12:9c46:e0da:efbf:69cc])
-        by smtp.gmail.com with ESMTPSA id d3sm3262715pfn.113.2019.05.03.08.08.26
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Fri, 03 May 2019 08:08:27 -0700 (PDT)
-Date:   Fri, 3 May 2019 11:08:25 -0400
-From:   Joel Fernandes <joel@joelfernandes.org>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
-        Masahiro Yamada <yamada.masahiro@socionext.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=KZ7M2mWr1HgOjFYLO00FIxnzVOAK+l4FuiGi1wr1wow=;
+        b=AVeqbPtKTDHh87XLFhcVm/vbeIf5X9NUwHohgzPP62rrAmMFRv4D5EnnFtwg9BtDFO
+         ZE/HTvnIeKfRHesCnoA9/ugPXPfizfw7ufkXIK01o68jk2hLKSRexXpyQpz0APZyQzNp
+         kAo+NjpG7i+6bxAh0pxFcpnZVO6OBAxcyu3Xl6Nh8JBtTFNDqFy4+bMlqGQuoXSLK3Nv
+         +q7OB7e92c+qEc8pFMj5xZ6aNo7Ew0zxeO/UwlxsAnmp/rwXXXwjjeF7ILtm0gJG0hjW
+         i6S9+zPxOjKlWGYsx/BZd5Zys5X0Bm2dPylYVRfUkRLoPnGNQela+ugnh0tdnXmD8PsO
+         uIVw==
+X-Gm-Message-State: APjAAAU1P4MnnWt8jUClYL2dxqLeDqDYUVHenoGp/P47jJjylCLdB5vk
+        kP0if++Idat9U+XopcRmrGZqEQ==
+X-Google-Smtp-Source: APXvYqz27PSp/BKOF8HBP5MdA5oDqaxXNQsgs6iiXXWd28RIrWLPk7vwjcnah74eFGU3dKeS0GbWjw==
+X-Received: by 2002:a63:f503:: with SMTP id w3mr11524403pgh.60.1556900457569;
+        Fri, 03 May 2019 09:20:57 -0700 (PDT)
+Received: from ?IPv6:2600:1010:b025:b35:85ec:5278:6fc6:7ef4? ([2600:1010:b025:b35:85ec:5278:6fc6:7ef4])
+        by smtp.gmail.com with ESMTPSA id x4sm3519353pfm.19.2019.05.03.09.20.56
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 03 May 2019 09:20:56 -0700 (PDT)
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (1.0)
+Subject: Re: [RFC][PATCH 1/2] x86: Allow breakpoints to emulate call functions
+From:   Andy Lutomirski <luto@amacapital.net>
+X-Mailer: iPhone Mail (16E227)
+In-Reply-To: <20190503092247.20cc1ff0@gandalf.local.home>
+Date:   Fri, 3 May 2019 09:20:55 -0700
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Linux List Kernel Mailing <linux-kernel@vger.kernel.org>,
+        Ingo Molnar <mingo@kernel.org>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        atish patra <atishp04@gmail.com>,
-        Daniel Colascione <dancol@google.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Guenter Roeck <groeck@chromium.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Karim Yaghmour <karim.yaghmour@opersys.com>,
-        Kees Cook <keescook@chromium.org>,
-        "Cc: Android Kernel" <kernel-team@android.com>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Nicolai Stange <nstange@suse.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        the arch/x86 maintainers <x86@kernel.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Jiri Kosina <jikos@kernel.org>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Petr Mladek <pmladek@suse.com>,
+        Joe Lawrence <joe.lawrence@redhat.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
+        Tim Chen <tim.c.chen@linux.intel.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Juergen Gross <jgross@suse.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nayna Jain <nayna@linux.ibm.com>,
+        Masahiro Yamada <yamada.masahiro@socionext.com>,
+        Joerg Roedel <jroedel@suse.de>,
         "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        linux-trace-devel@vger.kernel.org,
-        Manoj Rao <linux@manojrajarao.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Qais Yousef <qais.yousef@arm.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Shuah Khan <shuah@kernel.org>, Yonghong Song <yhs@fb.com>,
-        Olof Johansson <olof@lixom.net>
-Subject: Re: [PATCH v7 resend 1/2] Provide in-kernel headers to make
- extending kernel easier
-Message-ID: <20190503150825.GC253329@google.com>
-References: <20190426190430.172543-1-joel@joelfernandes.org>
- <20190427133844.GA29366@kroah.com>
- <20190429132602.GA165075@google.com>
- <20190429135455.GA2412@kroah.com>
- <CAK7LNARkGLQ_P4LSuC69QN8XPN47W5ujkDE3EauLrwnBgygsSA@mail.gmail.com>
- <20190429142425.GB29007@kroah.com>
- <20190503103315.0149ca71@gandalf.local.home>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190503103315.0149ca71@gandalf.local.home>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        <linux-kselftest@vger.kernel.org>, stable <stable@vger.kernel.org>
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <2045370D-38D8-406C-9E94-C1D483E232C9@amacapital.net>
+References: <20190501203152.397154664@goodmis.org> <20190501232412.1196ef18@oasis.local.home> <20190502162133.GX2623@hirez.programming.kicks-ass.net> <CAHk-=wijZ-MD4g3zMJ9W2r=h8LUWneiu29OWuxZEoSfAF=0bhQ@mail.gmail.com> <20190502181811.GY2623@hirez.programming.kicks-ass.net> <CAHk-=wi6A9tgw=kkPh5Ywqt687VvsVEjYXVkAnq0jpt0u0tk6g@mail.gmail.com> <20190502202146.GZ2623@hirez.programming.kicks-ass.net> <20190502185225.0cdfc8bc@gandalf.local.home> <20190502193129.664c5b2e@gandalf.local.home> <20190502195052.0af473cf@gandalf.local.home> <20190503092959.GB2623@hirez.programming.kicks-ass.net> <20190503092247.20cc1ff0@gandalf.local.home>
+To:     Steven Rostedt <rostedt@goodmis.org>
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, May 03, 2019 at 10:33:15AM -0400, Steven Rostedt wrote:
-> On Mon, 29 Apr 2019 16:24:25 +0200
-> Greg KH <gregkh@linuxfoundation.org> wrote:
-> 
-> > Hah, ok, I'll be glad to queue this up in my tree.  I'll take it now,
-> > and if people who really object to this being in /proc/ and want it in
-> > /sys/, we can add a follow-on patch before 5.2-final is out to move the
-> > file to that location.
-> 
-> I really don't think putting it in /proc now is a good idea. Let's put
-> it in /sys now. If we don't do it now and it gets into a main release,
-> then that will become the permanent location for it.
 
-I will send a patch to move it into /sys/kernel on top of this. Hope everyone
-else is also Ok with that as the location.
 
-thanks,
+> On May 3, 2019, at 6:22 AM, Steven Rostedt <rostedt@goodmis.org> wrote:
+>=20
+> On Fri, 3 May 2019 11:29:59 +0200
+> Peter Zijlstra <peterz@infradead.org> wrote:
+>=20
+>=20
+>> OMG, WTF, ARGH... That code is fsck'ing horrible. I'd almost argue to
+>> always do the INT3 thing, just to avoid games like that.
+>=20
+> Hehe, that's almost the exact same thoughts I had when seeing this
+> code ;-)
+>=20
+>>=20
+>> That said; for normal traps &regs->sp is indeed the previous context --
+>> if it doesn't fall off the stack. Your hack detects the regular INT3
+>> frame. Howver if regs->sp has been modified (int3_emulate_push, for
+>> example) your detectoring comes unstuck.
+>=20
+> Yep. I realized the issue as well. But wanted to make sure this did
+> work when sp wasn't changed.
+>=20
+>>=20
+>> Now, it is rather unlikely these two code paths interact, but just to be
+>> safe, something like so might be more reliable:
+>>=20
+>>=20
+>> diff --git a/arch/x86/kernel/ptrace.c b/arch/x86/kernel/ptrace.c
+>> index 4b8ee05dd6ad..aceaad0cc9a9 100644
+>> --- a/arch/x86/kernel/ptrace.c
+>> +++ b/arch/x86/kernel/ptrace.c
+>> @@ -163,6 +163,9 @@ static inline bool invalid_selector(u16 value)
+>>  * stack pointer we fall back to regs as stack if no previous stack
+>>  * exists.
+>>  *
+>> + * There is a special case for INT3, there we construct a full pt_regs
+>> + * environment. We can detect this case by a high bit in regs->cs
+>> + *
+>>  * This is valid only for kernel mode traps.
+>>  */
+>> unsigned long kernel_stack_pointer(struct pt_regs *regs)
+>> @@ -171,6 +174,9 @@ unsigned long kernel_stack_pointer(struct pt_regs *re=
+gs)
+>>    unsigned long sp =3D (unsigned long)&regs->sp;
+>>    u32 *prev_esp;
+>>=20
+>> +    if (regs->__csh & (1 << 13)) /* test CS_FROM_INT3 */
+>> +        return regs->sp;
+>> +
+>=20
+> Thanks, I was looking into doing something like this (setting a flag in
+> the int3 code), but didn't have the time to see the best way to do this.
+>=20
+> I'll add this version of the code and run it through my tests.
+>=20
+> -- Steve
+>=20
+>>    if (context =3D=3D (sp & ~(THREAD_SIZE - 1)))
+>>        return sp;
+>>=20
+>> --- a/arch/x86/entry/entry_32.S
+>> +++ b/arch/x86/entry/entry_32.S
+>> @@ -388,6 +388,7 @@
+>>=20
+>> #define CS_FROM_ENTRY_STACK    (1 << 31)
+>> #define CS_FROM_USER_CR3    (1 << 30)
+>> +#define CS_FROM_INT3        (1 << 29)
+>>=20
+>> .macro SWITCH_TO_KERNEL_STACK
+>>=20
+>> @@ -1515,6 +1516,9 @@ ENTRY(int3)
+>>=20
+>>    add    $16, 12(%esp) # point sp back at the previous context
+>>=20
+>> +    andl    $0x0000ffff, 4(%esp)
+>> +    orl    $CS_FROM_INT3, 4(%esp)
+>> +
+>>    pushl    $-1                # orig_eax; mark as interrupt
+>>=20
+>>    SAVE_ALL
+>=20
 
- - Joel
+So here=E2=80=99s a somewhat nutty suggestion: how about we tweak the 32-bit=
+ entry code to emulate the sane 64-bit frame, not just for int3 but always? =
+ Basically, the entry asm for entries from kernel mode would do, roughly:
+
+push $0 ;dummy for call emulation
+push %ss
+push $0 ;a dummy for ESP
+push 3*4(%esp) ;EFLAGS
+push 3*4(%esp) ;CS
+push 3*4(%esp) ;EIP
+push %rax
+lea 7*4(%esp), %rax
+mov %rax, 4*4(%esp) ;ESP
+
+And the exit asm would do a little dance to write EFLAGS, CS, and EIP to the=
+ right spot, then load ESP-3*4 into %esp and do IRET.
+
+Now the annoying kernel_stack_pointer() hack can just go away, since regs->s=
+p is always correct!
+
+I probably screwed up some arithmetic there, but it=E2=80=99s the idea that c=
+ounts :)
+
+
 
