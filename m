@@ -2,201 +2,102 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B0A613414
-	for <lists+linux-kselftest@lfdr.de>; Fri,  3 May 2019 21:39:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B744134CC
+	for <lists+linux-kselftest@lfdr.de>; Fri,  3 May 2019 23:20:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726833AbfECTjJ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 3 May 2019 15:39:09 -0400
-Received: from mail.efficios.com ([167.114.142.138]:34698 "EHLO
-        mail.efficios.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726444AbfECTjJ (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 3 May 2019 15:39:09 -0400
-Received: from localhost (ip6-localhost [IPv6:::1])
-        by mail.efficios.com (Postfix) with ESMTP id DFB931831BF;
-        Fri,  3 May 2019 15:39:06 -0400 (EDT)
-Received: from mail.efficios.com ([IPv6:::1])
-        by localhost (mail02.efficios.com [IPv6:::1]) (amavisd-new, port 10032)
-        with ESMTP id MWCyrBIOlpm2; Fri,  3 May 2019 15:39:05 -0400 (EDT)
-Received: from localhost (ip6-localhost [IPv6:::1])
-        by mail.efficios.com (Postfix) with ESMTP id AB2931831AF;
-        Fri,  3 May 2019 15:39:05 -0400 (EDT)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com AB2931831AF
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
-        s=default; t=1556912345;
-        bh=rIdjeP9dOunM2tC/0N/byMbrGcuAXBACBHAmVs+B6pg=;
-        h=From:To:Date:Message-Id;
-        b=DNaLuimxdIPOaeydsZ9AttC0tGcbmsi2dsp0IdP2pD4Pr2ufEUwZSpkS7EJmgncno
-         gGnbXO0rVklXpi8F+3Glu1OKWkX7/RRJm6EwSRLCzmnNybVH3p3xpaJp7+FphQz0sT
-         2K7Oy9jVP8tQbGROKzj7ZtdCc/Kl8kTf4FqxqX+Onmp355+1XFTspVtDbTEePqEilq
-         DrRTUyQmP7ETZR7JwcMihYziWdn5/A3QxAcuh4iUjd1l8TAuhxB9TLpITLsB10xzLQ
-         VSoQ2koEqXKYfLcfzoDlUR2N8AY96dNPIa+e1hAe9j7HHmlw41aBmHmdUCLaC1d0uh
-         c8jrSizqZolgA==
-X-Virus-Scanned: amavisd-new at efficios.com
-Received: from mail.efficios.com ([IPv6:::1])
-        by localhost (mail02.efficios.com [IPv6:::1]) (amavisd-new, port 10026)
-        with ESMTP id xzKHk0_xTFq7; Fri,  3 May 2019 15:39:05 -0400 (EDT)
-Received: from thinkos.internal.efficios.com (192-222-157-41.qc.cable.ebox.net [192.222.157.41])
-        by mail.efficios.com (Postfix) with ESMTPSA id 399601831A7;
-        Fri,  3 May 2019 15:39:05 -0400 (EDT)
-From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-To:     Shuah Khan <shuah@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-api@vger.kernel.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Paul E . McKenney" <paulmck@linux.vnet.ibm.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Dave Watson <davejwatson@fb.com>, Paul Turner <pjt@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Russell King <linux@arm.linux.org.uk>,
-        Ingo Molnar <mingo@redhat.com>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Andi Kleen <andi@firstfloor.org>, Chris Lameter <cl@linux.com>,
-        Ben Maurer <bmaurer@fb.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will.deacon@arm.com>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Joel Fernandes <joelaf@google.com>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        linux-kselftest@vger.kernel.org
-Subject: [PATCH v2 for 5.2 08/12] rseq/selftests: arm: use udf instruction for RSEQ_SIG
-Date:   Fri,  3 May 2019 15:38:58 -0400
-Message-Id: <20190503193858.9676-1-mathieu.desnoyers@efficios.com>
-X-Mailer: git-send-email 2.11.0
-In-Reply-To: <20190429152803.7719-9-mathieu.desnoyers@efficios.com>
-References: <20190429152803.7719-9-mathieu.desnoyers@efficios.com>
+        id S1726059AbfECVUJ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 3 May 2019 17:20:09 -0400
+Received: from mail-eopbgr60063.outbound.protection.outlook.com ([40.107.6.63]:58087
+        "EHLO EUR04-DB3-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726041AbfECVUJ (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 3 May 2019 17:20:09 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=darbyshire-bryant.me.uk; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=LzgIR2H5bAz0qhx87Gf9fJTfXuc0cojdqQhjPMcK1CE=;
+ b=LEzpZb1oqk1plI0gGBC0LiaAgyZI27FPRcxWTWs+jPhsdI13EbD5bsTKUMXIAQfOF4wSnV3GXGtKIWZIGQ+sj6bD7jqGnPdIO17Z6ozj+iGlqY1pCo8ZOs/vcdC/PXUotE0qSNh1qtSL7D6uQYL4wv3uutjNVczDBfQ+tWKpY8M=
+Received: from VI1PR0302MB2750.eurprd03.prod.outlook.com (10.171.105.143) by
+ VI1PR0302MB3328.eurprd03.prod.outlook.com (52.134.13.18) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.1835.14; Fri, 3 May 2019 21:20:03 +0000
+Received: from VI1PR0302MB2750.eurprd03.prod.outlook.com
+ ([fe80::b584:8ced:9d52:d88e]) by VI1PR0302MB2750.eurprd03.prod.outlook.com
+ ([fe80::b584:8ced:9d52:d88e%6]) with mapi id 15.20.1835.018; Fri, 3 May 2019
+ 21:20:03 +0000
+From:   Kevin 'ldir' Darbyshire-Bryant <ldir@darbyshire-bryant.me.uk>
+To:     Cong Wang <xiyou.wangcong@gmail.com>
+CC:     Jamal Hadi Salim <jhs@mojatatu.com>, Jiri Pirko <jiri@resnulli.us>,
+        "David S. Miller" <davem@davemloft.net>,
+        Shuah Khan <shuah@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>
+Subject: Re: [PATCH net-next] net: sched: Introduce act_ctinfo action
+Thread-Topic: [PATCH net-next] net: sched: Introduce act_ctinfo action
+Thread-Index: AQHU/PpFKlFqg3WFM0Ghoph4kvG8KqZVQqwAgASvTwA=
+Date:   Fri, 3 May 2019 21:20:03 +0000
+Message-ID: <9FB6B9CF-1767-4598-8859-C5D8A47DEC85@darbyshire-bryant.me.uk>
+References: <20190427130739.44614-1-ldir@darbyshire-bryant.me.uk>
+ <CAM_iQpXnXyfLZ2+gjDufbdMrZLgtf9uKbzbUf50Xm-2Go7maVw@mail.gmail.com>
+In-Reply-To: <CAM_iQpXnXyfLZ2+gjDufbdMrZLgtf9uKbzbUf50Xm-2Go7maVw@mail.gmail.com>
+Accept-Language: en-GB, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=ldir@darbyshire-bryant.me.uk; 
+x-ms-exchange-messagesentrepresentingtype: 1
+x-originating-ip: [193.240.142.133]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: d19309a2-092a-4f16-2b3a-08d6d00d1bbe
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(7021145)(8989299)(4534185)(7022145)(4603075)(4627221)(201702281549075)(8990200)(7048125)(7024125)(7027125)(7023125)(5600141)(711020)(4605104)(2017052603328)(7193020);SRVR:VI1PR0302MB3328;
+x-ms-traffictypediagnostic: VI1PR0302MB3328:
+x-microsoft-antispam-prvs: <VI1PR0302MB3328708E2ACDF27131C8A2D1C9350@VI1PR0302MB3328.eurprd03.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:7691;
+x-forefront-prvs: 0026334A56
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(39830400003)(366004)(376002)(396003)(346002)(136003)(51914003)(199004)(189003)(6512007)(82746002)(54906003)(229853002)(26005)(68736007)(186003)(33656002)(102836004)(14454004)(74482002)(53936002)(81156014)(66946007)(76116006)(446003)(508600001)(99286004)(316002)(91956017)(81166006)(11346002)(2616005)(64756008)(66446008)(66066001)(53546011)(305945005)(66556008)(7736002)(73956011)(8936002)(6506007)(3846002)(6116002)(66476007)(486006)(83716004)(476003)(5660300002)(2906002)(4326008)(71200400001)(71190400001)(8676002)(6916009)(86362001)(76176011)(25786009)(14444005)(256004)(36756003)(6436002)(6246003)(6486002);DIR:OUT;SFP:1101;SCL:1;SRVR:VI1PR0302MB3328;H:VI1PR0302MB2750.eurprd03.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+received-spf: None (protection.outlook.com: darbyshire-bryant.me.uk does not
+ designate permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: OijpYnPO9kgYBx4tOH2MdmlC+m3k0GqyvEQc+sIQVnqFnGL/Q1HfHlRL+RyRdJ/3mx/Y49flevFcpQ5PAZXgWZVMJEJzCASpBj0EtzqBMn+WnLRnP3eI6w9OSW7qiW3nxiwGbiLcAk7s6kFIxM15u0qss5cngIZJiBdmdUzovyVZqp9h/jmU/kD3mjI87GmoBpIXdbAejbLh/+lC5iQoiaSnC7DA1C+sTUhOXpf7zInqGUiysBL7wdhEGE/9TR00QLfE+Ebe10j0R1PvMbiJeuNa2TIpRlQKH7ELO9PRDbPpF9qTeI7YNZMa0UG6LLpg4hdZH4YPuj4/rApRlnLLgY20GdV85ik2q0pWZHdVIcAYU8zjpQjdBrdhXARy2DMtHZv07ejt1lbnA+cl9OxJTiNn2qHd5/8zBJCNjxtF+co=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <EF3125F0747CC64C86496FC152B1B705@eurprd03.prod.outlook.com>
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-OriginatorOrg: darbyshire-bryant.me.uk
+X-MS-Exchange-CrossTenant-Network-Message-Id: d19309a2-092a-4f16-2b3a-08d6d00d1bbe
+X-MS-Exchange-CrossTenant-originalarrivaltime: 03 May 2019 21:20:03.6902
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 9151708b-c553-406f-8e56-694f435154a4
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR0302MB3328
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Use udf as the guard instruction for the restartable sequence abort
-handler.
-
-Previously, the chosen signature was not a valid instruction, based
-on the assumption that it could always sit in a literal pool. However,
-there are compilation environments in which literal pools are not
-available, for instance execute-only code. Therefore, we need to
-choose a signature value that is also a valid instruction.
-
-Handle compiling with -mbig-endian on ARMv6+, which generates binaries
-with mixed code vs data endianness (little endian code, big endian
-data).
-
-Else mismatch between code endianness for the generated signatures and
-data endianness for the RSEQ_SIG parameter passed to the rseq
-registration will trigger application segmentation faults when the
-kernel try to abort rseq critical sections.
-
-Prior to ARMv6, -mbig-endian generates big-endian code and data, so
-endianness should not be reversed in that case.
-
-Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-CC: Peter Zijlstra <peterz@infradead.org>
-CC: Thomas Gleixner <tglx@linutronix.de>
-CC: Joel Fernandes <joelaf@google.com>
-CC: Catalin Marinas <catalin.marinas@arm.com>
-CC: Dave Watson <davejwatson@fb.com>
-CC: Will Deacon <will.deacon@arm.com>
-CC: Shuah Khan <shuah@kernel.org>
-CC: Andi Kleen <andi@firstfloor.org>
-CC: linux-kselftest@vger.kernel.org
-CC: "H . Peter Anvin" <hpa@zytor.com>
-CC: Chris Lameter <cl@linux.com>
-CC: Russell King <linux@arm.linux.org.uk>
-CC: Michael Kerrisk <mtk.manpages@gmail.com>
-CC: "Paul E . McKenney" <paulmck@linux.vnet.ibm.com>
-CC: Paul Turner <pjt@google.com>
-CC: Boqun Feng <boqun.feng@gmail.com>
-CC: Josh Triplett <josh@joshtriplett.org>
-CC: Steven Rostedt <rostedt@goodmis.org>
-CC: Ben Maurer <bmaurer@fb.com>
-CC: linux-api@vger.kernel.org
-CC: Andy Lutomirski <luto@amacapital.net>
-CC: Andrew Morton <akpm@linux-foundation.org>
-CC: Linus Torvalds <torvalds@linux-foundation.org>
----
-Changes since v1:
-- Fix checkpatch error and warning.
-
----
- tools/testing/selftests/rseq/rseq-arm.h | 52 +++++++++++++++++++++++++++++++--
- 1 file changed, 50 insertions(+), 2 deletions(-)
-
-diff --git a/tools/testing/selftests/rseq/rseq-arm.h b/tools/testing/selftests/rseq/rseq-arm.h
-index 5f262c54364f..84f28f147fb6 100644
---- a/tools/testing/selftests/rseq/rseq-arm.h
-+++ b/tools/testing/selftests/rseq/rseq-arm.h
-@@ -5,7 +5,54 @@
-  * (C) Copyright 2016-2018 - Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-  */
- 
--#define RSEQ_SIG	0x53053053
-+/*
-+ * RSEQ_SIG uses the udf A32 instruction with an uncommon immediate operand
-+ * value 0x5de3. This traps if user-space reaches this instruction by mistake,
-+ * and the uncommon operand ensures the kernel does not move the instruction
-+ * pointer to attacker-controlled code on rseq abort.
-+ *
-+ * The instruction pattern in the A32 instruction set is:
-+ *
-+ * e7f5def3    udf    #24035    ; 0x5de3
-+ *
-+ * This translates to the following instruction pattern in the T16 instruction
-+ * set:
-+ *
-+ * little endian:
-+ * def3        udf    #243      ; 0xf3
-+ * e7f5        b.n    <7f5>
-+ *
-+ * pre-ARMv6 big endian code:
-+ * e7f5        b.n    <7f5>
-+ * def3        udf    #243      ; 0xf3
-+ *
-+ * ARMv6+ -mbig-endian generates mixed endianness code vs data: little-endian
-+ * code and big-endian data. Ensure the RSEQ_SIG data signature matches code
-+ * endianness. Prior to ARMv6, -mbig-endian generates big-endian code and data
-+ * (which match), so there is no need to reverse the endianness of the data
-+ * representation of the signature. However, the choice between BE32 and BE8
-+ * is done by the linker, so we cannot know whether code and data endianness
-+ * will be mixed before the linker is invoked.
-+ */
-+
-+#define RSEQ_SIG_CODE	0xe7f5def3
-+
-+#ifndef __ASSEMBLER__
-+
-+#define RSEQ_SIG_DATA							\
-+	({								\
-+		int sig;						\
-+		asm volatile ("b 2f\n\t"				\
-+			      "1: .inst " __rseq_str(RSEQ_SIG_CODE) "\n\t" \
-+			      "2:\n\t"					\
-+			      "ldr %[sig], 1b\n\t"			\
-+			      : [sig] "=r" (sig));			\
-+		sig;							\
-+	})
-+
-+#define RSEQ_SIG	RSEQ_SIG_DATA
-+
-+#endif
- 
- #define rseq_smp_mb()	__asm__ __volatile__ ("dmb" ::: "memory", "cc")
- #define rseq_smp_rmb()	__asm__ __volatile__ ("dmb" ::: "memory", "cc")
-@@ -78,7 +125,8 @@ do {									\
- 		__rseq_str(table_label) ":\n\t"				\
- 		".word " __rseq_str(version) ", " __rseq_str(flags) "\n\t" \
- 		".word " __rseq_str(start_ip) ", 0x0, " __rseq_str(post_commit_offset) ", 0x0, " __rseq_str(abort_ip) ", 0x0\n\t" \
--		".word " __rseq_str(RSEQ_SIG) "\n\t"			\
-+		".arm\n\t"						\
-+		".inst " __rseq_str(RSEQ_SIG_CODE) "\n\t"		\
- 		__rseq_str(label) ":\n\t"				\
- 		teardown						\
- 		"b %l[" __rseq_str(abort_label) "]\n\t"
--- 
-2.11.0
-
+DQoNCj4gT24gMzAgQXByIDIwMTksIGF0IDIyOjQ3LCBDb25nIFdhbmcgPHhpeW91Lndhbmdjb25n
+QGdtYWlsLmNvbT4gd3JvdGU6DQo+IA0KPiBPbiBTYXQsIEFwciAyNywgMjAxOSBhdCA2OjA4IEFN
+IEtldmluICdsZGlyJyBEYXJieXNoaXJlLUJyeWFudA0KPiA8bGRpckBkYXJieXNoaXJlLWJyeWFu
+dC5tZS51az4gd3JvdGU6DQo+PiANCj4+IGN0aW5mbyBpcyBhIG5ldyB0YyBmaWx0ZXIgYWN0aW9u
+IG1vZHVsZS4gIEl0IGlzIGRlc2lnbmVkIHRvIHJlc3RvcmUgRFNDUHMNCj4+IHN0b3JlZCBpbiBj
+b25udHJhY2sgbWFya3MgaW50byB0aGUgaXB2NC92NiBkaWZmc2VydiBmaWVsZC4NCj4gDQo+IEkg
+dGhpbmsgd2UgY2FuIHJldHJpZXZlIGFueSBpbmZvcm1hdGlvbiBmcm9tIGNvbm50cmFjayB3aXRo
+IHN1Y2gNCj4gYSBnZW5lcmFsIG5hbWUsIGluY2x1ZGluZyBza2IgbWFyay4gU28sIGFzIHlvdSBh
+bHJlYWR5IHBpY2sgdGhlDQo+IG5hbWUgY3RpbmZvLCBwbGVhc2UgbWFrZSBpdCBnZW5lcmFsIHJh
+dGhlciB0aGFuIGp1c3QgRFNDUC4NCj4gWW91IGNhbiBhZGQgc2tiIG1hcmsgaW50byB5b3VyIGN0
+aW5mbyB0b28gc28gdGhhdCBhY3RfY29ubm1hcmsNCj4gY2FuIGJlIGp1c3QgcmVwbGFjZWQuDQoN
+CkhpIENvbmcsDQoNClRoYW5rcyBmb3IgdGhlIHJldmlldywgSSBoYXZlIGEgdjIgaW4gcHJvZ3Jl
+c3MgYWRkcmVzc2luZyB0aGF0IGFsb25nDQp3aXRoIGFub3RoZXIgc2lsbHkgdGhhdCBnb3QgdGhy
+b3VnaC4gIEnigJltIGFsc28gcmUtd29ya2luZyB0aGUgc3RhdHMNCnJlcG9ydGluZyB0byByZXR1
+cm4gYWN0X2N0aW5mbyBzdGF0cyBpbnN0ZWFkIG9mIHVzdXJwaW5nIHRoZSBkcm9wcGVkLA0Kb3Zl
+cmxpbWl0cyAmIGRyb3BwZWQgZmlndXJlcy4NCg0KPiANCj4gWW91ciBwYXRjaCBsb29rcyBmaW5l
+IGZyb20gYSBxdWljayBnYWxhbmNlLCBwbGVhc2UgbWFrZSBzdXJlDQo+IHlvdSBydW4gY2hlY2tw
+YXRjaC5wbCB0byBrZWVwIHlvdXIgY29kaW5nIHN0eWxlIGFsaWduZWQgdG8gTGludXgNCj4ga2Vy
+bmVsJ3MsIGF0IGxlYXN0IEkgZG9uJ3QgdGhpbmsgd2UgYWNjZXB0IEMrKyBzdHlsZSBjb21tZW50
+cy4NCg0KVGhpcyB0aW1lIEnigJlsbCByZW1lbWJlciB0byBydW4gY2hlY2twYXRjaCBiZWZvcmUg
+SSBzdWJtaXQgaW5zdGVhZCBvZg0KYWZ0ZXIgOi0pDQoNCj4gDQo+IFRoYW5rcy4NCg0KDQpDaGVl
+cnMsDQoNCktldmluIEQtQg0KDQpncGc6IDAxMkMgQUNCMiAyOEM2IEM1M0UgOTc3NSAgOTEyMyBC
+M0EyIDM4OUIgOURFMiAzMzRBDQoNCg==
