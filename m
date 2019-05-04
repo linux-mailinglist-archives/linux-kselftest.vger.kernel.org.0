@@ -2,160 +2,191 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5036713647
-	for <lists+linux-kselftest@lfdr.de>; Sat,  4 May 2019 01:41:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 641D113681
+	for <lists+linux-kselftest@lfdr.de>; Sat,  4 May 2019 02:18:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726573AbfECXlX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 3 May 2019 19:41:23 -0400
-Received: from mail-ot1-f68.google.com ([209.85.210.68]:35184 "EHLO
-        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726444AbfECXlX (ORCPT
+        id S1726529AbfEDASv (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 3 May 2019 20:18:51 -0400
+Received: from conssluserg-04.nifty.com ([210.131.2.83]:30240 "EHLO
+        conssluserg-04.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726059AbfEDASu (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 3 May 2019 19:41:23 -0400
-Received: by mail-ot1-f68.google.com with SMTP id g24so6823551otq.2
-        for <linux-kselftest@vger.kernel.org>; Fri, 03 May 2019 16:41:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=mKALN1OkcwtQhcysb+FWH3t2vFKNjrdMKVQt2ijO0Po=;
-        b=uHwVMflHMaQY3whJ1EE4nVizGRxOy/tr5WOjeZAzMUNneEi1VOxLR7ILboGXaDspKX
-         EZdcTnWDLsjH5Xuv6Dpbla+mLd+ZOej6UTDsdicbg1f2NGRfNWvT53QLlViJ91MtO47Y
-         +NMNZSv0/KOCCjGp/8Z6JcV8oAgctk1uHe5BjikYU+meECnNZzF0Xtb+m6Lql1RyQZ+f
-         6pOCAlUul4FDKtOsuwcFiCf6Z4SU4Q97jpl1Ljx2pJqKs6Ok7cLSU5UcjCBf989disYo
-         L1k/caWEqmSpv8hm8mIrQVDY6SOrZ43BcimXmBjT67ScyO4HOEunsbiGdbsaE+Lu0zj7
-         pGEA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=mKALN1OkcwtQhcysb+FWH3t2vFKNjrdMKVQt2ijO0Po=;
-        b=sxzcnrbBzUc0X5z71rGNaf5tyajPZMo9mJ0ZAjx+prW0kVElSYASYRLUfgpUUiqcZi
-         w/FhBV/54NNh8baeh5SO29cprFh4sp4F4ejV8Q9j3Ky1K7yBXRoMEgJLaOzKMT3pd+Ic
-         x2Q7pjru3LU8YntfEPmJNuNFyC6BHMpYuz9fKxfFTpCUIUTm7X926GpfiS40DHZJsfvO
-         vSZSRP3g0DJInQe1GTszgzROm+Uqm+MLYt7Z1Xqy3UIMzSp8/dMQyRmPOj4GDtaFr/iH
-         qyIE6hB/ygHMTQnB0MXomwTdYW4ekheCsW7ilJxSDe+fysu0mks9IB5bVTF4JmGNvyzJ
-         i6NA==
-X-Gm-Message-State: APjAAAXyakZbB1tHtD5xswvC5qkQ8vAJuQ2rAhJuJB5HF1zoY0azINuo
-        6X6QWB4MxRGbczNV6IicteJxArUhrILJ57n3Tgmr4w==
-X-Google-Smtp-Source: APXvYqzBloPRnX50VrJGlf0zwqZMx4kE8jlcjkF1A4MmAb/1CmwV6C22Krcs7y2A5uFCH7cqu5h7HYnPPCqLvVBMptw=
-X-Received: by 2002:a9d:5cc3:: with SMTP id r3mr8335667oti.338.1556926881968;
- Fri, 03 May 2019 16:41:21 -0700 (PDT)
+        Fri, 3 May 2019 20:18:50 -0400
+Received: from mail-ua1-f52.google.com (mail-ua1-f52.google.com [209.85.222.52]) (authenticated)
+        by conssluserg-04.nifty.com with ESMTP id x440IgwS017039;
+        Sat, 4 May 2019 09:18:43 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-04.nifty.com x440IgwS017039
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1556929123;
+        bh=c8nPhv768vX2rH2LIPU5db7QC5zJM6dP8fcOJeANzIo=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=NUD8K65gHLvJKZ6CorxTZ2gHXAsg4jk31iY2vxXdYRz129hRPJllcYEW45xFD+WkC
+         JfGn1+BvsJ3Dr6QoAN8FAnb5uQDnPUovVasiik2vtABKc7Hx/2O8+huNpWg7VFLr2J
+         7R5j8dsEaNe4rcYaHqcNybv3IVtCPxOImiQY3ZyMTNTccNrk0FBCoF/EZwh8lJxIfz
+         eqpulLbKEJyojKS7T5dKpaYp1Zl8UqhAAaSUldsTkRJaJehtQ3vW5CS9Dcy5xYbD8H
+         S4tv+ektpQ2De3kFBmcIVFfQDMTFywWiPytRB/kJ1/zZyPng1H3AUtUPtGjwzUbth7
+         ObNsKAU/9NhUQ==
+X-Nifty-SrcIP: [209.85.222.52]
+Received: by mail-ua1-f52.google.com with SMTP id s30so2634161uas.8;
+        Fri, 03 May 2019 17:18:42 -0700 (PDT)
+X-Gm-Message-State: APjAAAX9SBTA0dcVs+af1LtlHRI8kRBvcvKBfkTkjDnnD9nId6E0PcOp
+        wRarXF3CUpDznq1AgWEjWjVyalmPsIgWNyTTGg8=
+X-Google-Smtp-Source: APXvYqzaIfuRwLQ1jVGvVN1riluv4VWuN/A9RqHOltcZzkIHvIML4BRzScARIh9ssE09iflt+rGQei9iEEC96FPpInc=
+X-Received: by 2002:ab0:2bd8:: with SMTP id s24mr6910953uar.121.1556929121882;
+ Fri, 03 May 2019 17:18:41 -0700 (PDT)
 MIME-Version: 1.0
-References: <20190501230126.229218-1-brendanhiggins@google.com>
- <20190501230126.229218-17-brendanhiggins@google.com> <20190502110347.GE12416@kroah.com>
- <ECADFF3FD767C149AD96A924E7EA6EAF9770A3A0@USCULXMSG01.am.sony.com>
- <CAFd5g471Wawu6g14p0AO3aY8VPBKLA0mjHSdfR1qStFGzp3iGQ@mail.gmail.com> <20190503064241.GC20723@kroah.com>
-In-Reply-To: <20190503064241.GC20723@kroah.com>
-From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Fri, 3 May 2019 16:41:10 -0700
-Message-ID: <CAFd5g44NrKM9WQCF1xW-BWpFNsC05UAS9jt1-S+vNRuBDZVsHQ@mail.gmail.com>
-Subject: Re: [PATCH v2 16/17] kernel/sysctl-test: Add null pointer test for sysctl.c:proc_dointvec()
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     "Bird, Timothy" <Tim.Bird@sony.com>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Kees Cook <keescook@google.com>,
-        Kieran Bingham <kieran.bingham@ideasonboard.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Rob Herring <robh@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
-        shuah <shuah@kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        kunit-dev@googlegroups.com, linux-doc@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kbuild@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-kselftest@vger.kernel.org,
-        linux-nvdimm <linux-nvdimm@lists.01.org>,
-        linux-um@lists.infradead.org,
-        Sasha Levin <Alexander.Levin@microsoft.com>,
-        Amir Goldstein <amir73il@gmail.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
+References: <20190503182459.159121-1-joel@joelfernandes.org>
+In-Reply-To: <20190503182459.159121-1-joel@joelfernandes.org>
+From:   Masahiro Yamada <yamada.masahiro@socionext.com>
+Date:   Sat, 4 May 2019 09:18:06 +0900
+X-Gmail-Original-Message-ID: <CAK7LNATRTqh_OJcQaWfcYYYqyZ-c0u1prD17LDYwDh18z2V31Q@mail.gmail.com>
+Message-ID: <CAK7LNATRTqh_OJcQaWfcYYYqyZ-c0u1prD17LDYwDh18z2V31Q@mail.gmail.com>
+Subject: Re: [PATCH] kheaders: Move from proc to sysfs
+To:     "Joel Fernandes (Google)" <joel@joelfernandes.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Adrian Ratiu <adrian.ratiu@collabora.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        atish patra <atishp04@gmail.com>, bpf@vger.kernel.org,
+        Brendan Gregg <bgregg@netflix.com>,
+        Brendan Gregg <brendan.d.gregg@gmail.com>,
+        Daniel Colascione <dancol@google.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
         Dan Williams <dan.j.williams@intel.com>,
-        Daniel Vetter <daniel@ffwll.ch>, Jeff Dike <jdike@addtoit.com>,
-        Joel Stanley <joel@jms.id.au>,
-        Julia Lawall <julia.lawall@lip6.fr>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Knut Omang <knut.omang@oracle.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Petr Mladek <pmladek@suse.com>,
-        Richard Weinberger <richard@nod.at>,
-        David Rientjes <rientjes@google.com>,
-        Steven Rostedt <rostedt@goodmis.org>, wfg@linux.intel.com,
-        Iurii Zaikin <yzaikin@google.com>
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        duyuchao <yuchao.du@unisoc.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Karim Yaghmour <karim.yaghmour@opersys.com>,
+        Kees Cook <keescook@chromium.org>,
+        "Cc: Android Kernel" <kernel-team@android.com>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        linux-trace-devel@vger.kernel.org,
+        Manjo Raja Rao <linux@manojrajarao.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        =?UTF-8?Q?Micha=C5=82_Gregorczyk?= <michalgr@fb.com>,
+        Michal Gregorczyk <michalgr@live.com>,
+        Mohammad Husain <russoue@gmail.com>,
+        Olof Johansson <olof@lixom.net>,
+        Qais Yousef <qais.yousef@arm.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Srinivas Ramana <sramana@codeaurora.org>,
+        Tamir Carmeli <carmeli.tamir@gmail.com>,
+        Yonghong Song <yhs@fb.com>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-> On Thu, May 02, 2019 at 11:45:43AM -0700, Brendan Higgins wrote:
-> > On Thu, May 2, 2019 at 11:15 AM <Tim.Bird@sony.com> wrote:
-> > >
-> > >
-> > >
-> > > > -----Original Message-----
-> > > > From: Greg KH
-> > > >
-> > > > On Wed, May 01, 2019 at 04:01:25PM -0700, Brendan Higgins wrote:
-> > > > > From: Iurii Zaikin <yzaikin@google.com>
-> > > > >
-> > > > > KUnit tests for initialized data behavior of proc_dointvec that is
-> > > > > explicitly checked in the code. Includes basic parsing tests including
-> > > > > int min/max overflow.
-> > > > >
-> > > > > Signed-off-by: Iurii Zaikin <yzaikin@google.com>
-> > > > > Signed-off-by: Brendan Higgins <brendanhiggins@google.com>
-> > > > > ---
-> > > > >  kernel/Makefile      |   2 +
-> > > > >  kernel/sysctl-test.c | 292
-> > > > +++++++++++++++++++++++++++++++++++++++++++
-> > > > >  lib/Kconfig.debug    |   6 +
-> > > > >  3 files changed, 300 insertions(+)
-> > > > >  create mode 100644 kernel/sysctl-test.c
-> > > > >
-> > > > > diff --git a/kernel/Makefile b/kernel/Makefile
-> > > > > index 6c57e78817dad..c81a8976b6a4b 100644
-> > > > > --- a/kernel/Makefile
-> > > > > +++ b/kernel/Makefile
-> > > > > @@ -112,6 +112,8 @@ obj-$(CONFIG_HAS_IOMEM) += iomem.o
-> > > > >  obj-$(CONFIG_ZONE_DEVICE) += memremap.o
-> > > > >  obj-$(CONFIG_RSEQ) += rseq.o
-> > > > >
-> > > > > +obj-$(CONFIG_SYSCTL_KUNIT_TEST) += sysctl-test.o
-> > > >
-> > > > You are going to have to have a "standard" naming scheme for test
-> > > > modules, are you going to recommend "foo-test" over "test-foo"?  If so,
-> > > > that's fine, we should just be consistant and document it somewhere.
-> > > >
-> > > > Personally, I'd prefer "test-foo", but that's just me, naming is hard...
-> > >
-> > > My preference would be "test-foo" as well.  Just my 2 cents.
-> >
-> > I definitely agree we should be consistent. My personal bias
-> > (unsurprisingly) is "foo-test," but this is just because that is the
-> > convention I am used to in other projects I have worked on.
-> >
-> > On an unbiased note, we are currently almost evenly split between the
-> > two conventions with *slight* preference for "foo-test": I ran the two
-> > following grep commands on v5.1-rc7:
-> >
-> > grep -Hrn --exclude-dir="build" -e "config [a-zA-Z_0-9]\+_TEST$" | wc -l
-> > grep -Hrn --exclude-dir="build" -e "config TEST_[a-zA-Z_0-9]\+" | wc -l
-> >
-> > "foo-test" has 36 occurrences.
-> > "test-foo" has 33 occurrences.
-> >
-> > The things I am more concerned about is how this would affect file
-> > naming. If we have a unit test for foo.c, I think foo_test.c is more
-> > consistent with our namespacing conventions. The other thing, is if we
-> > already have a Kconfig symbol called FOO_TEST (or TEST_FOO) what
-> > should we name the KUnit test in this case? FOO_UNIT_TEST?
-> > FOO_KUNIT_TEST, like I did above?
+On Sat, May 4, 2019 at 3:27 AM Joel Fernandes (Google)
+<joel@joelfernandes.org> wrote:
 >
-> Ok, I can live with "foo-test", as you are right, in a directory listing
-> and config option, it makes more sense to add it as a suffix.
+> The kheaders archive consisting of the kernel headers used for compiling
+> bpf programs is in /proc. However there is concern that moving it here
+> will make it permanent. Let us move it to /sys/kernel as discussed [1].
+>
+> [1] https://lore.kernel.org/patchwork/patch/1067310/#1265969
+>
+> Suggested-by: Steven Rostedt <rostedt@goodmis.org>
+> Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
+> ---
+> This patch applies on top of the previous patch that was applied to the
+> driver tree:
+> https://lore.kernel.org/patchwork/patch/1067310/
+>
+>  kernel/kheaders.c | 40 ++++++++++++++++------------------------
 
-Cool, so just for future reference, if we already have a Kconfig
-symbol called FOO_TEST (or TEST_FOO) what should we name the KUnit
-test in this case? FOO_UNIT_TEST? FOO_KUNIT_TEST, like I did above?
+
+Please rename CONFIG_IKHEADERS_PROC.
+
+Thanks.
+
+
+
+
+>  1 file changed, 16 insertions(+), 24 deletions(-)
+>
+> diff --git a/kernel/kheaders.c b/kernel/kheaders.c
+> index 70ae6052920d..6a16f8f6898d 100644
+> --- a/kernel/kheaders.c
+> +++ b/kernel/kheaders.c
+> @@ -8,9 +8,8 @@
+>
+>  #include <linux/kernel.h>
+>  #include <linux/module.h>
+> -#include <linux/proc_fs.h>
+> +#include <linux/kobject.h>
+>  #include <linux/init.h>
+> -#include <linux/uaccess.h>
+>
+>  /*
+>   * Define kernel_headers_data and kernel_headers_data_end, within which the
+> @@ -31,39 +30,32 @@ extern char kernel_headers_data;
+>  extern char kernel_headers_data_end;
+>
+>  static ssize_t
+> -ikheaders_read_current(struct file *file, char __user *buf,
+> -                     size_t len, loff_t *offset)
+> +ikheaders_read(struct file *file,  struct kobject *kobj,
+> +              struct bin_attribute *bin_attr,
+> +              char *buf, loff_t off, size_t len)
+>  {
+> -       return simple_read_from_buffer(buf, len, offset,
+> -                                      &kernel_headers_data,
+> -                                      &kernel_headers_data_end -
+> -                                      &kernel_headers_data);
+> +       memcpy(buf, &kernel_headers_data + off, len);
+> +       return len;
+>  }
+>
+> -static const struct file_operations ikheaders_file_ops = {
+> -       .read = ikheaders_read_current,
+> -       .llseek = default_llseek,
+> +static struct bin_attribute kheaders_attr __ro_after_init = {
+> +       .attr = {
+> +               .name = "kheaders.tar.xz",
+> +               .mode = S_IRUGO,
+> +       },
+> +       .read = &ikheaders_read,
+>  };
+>
+>  static int __init ikheaders_init(void)
+>  {
+> -       struct proc_dir_entry *entry;
+> -
+> -       /* create the current headers file */
+> -       entry = proc_create("kheaders.tar.xz", S_IRUGO, NULL,
+> -                           &ikheaders_file_ops);
+> -       if (!entry)
+> -               return -ENOMEM;
+> -
+> -       proc_set_size(entry,
+> -                     &kernel_headers_data_end -
+> -                     &kernel_headers_data);
+> -       return 0;
+> +       kheaders_attr.size = (&kernel_headers_data_end -
+> +                             &kernel_headers_data);
+> +       return sysfs_create_bin_file(kernel_kobj, &kheaders_attr);
+>  }
+>
+>  static void __exit ikheaders_cleanup(void)
+>  {
+> -       remove_proc_entry("kheaders.tar.xz", NULL);
+> +       sysfs_remove_bin_file(kernel_kobj, &kheaders_attr);
+>  }
+>
+>  module_init(ikheaders_init);
+> --
+> 2.21.0.1020.gf2820cf01a-goog
+
+
+
+-- 
+Best Regards
+Masahiro Yamada
