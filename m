@@ -2,57 +2,68 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A36BF13C0B
-	for <lists+linux-kselftest@lfdr.de>; Sat,  4 May 2019 22:12:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DBDF613C14
+	for <lists+linux-kselftest@lfdr.de>; Sat,  4 May 2019 22:34:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727203AbfEDUMN (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 4 May 2019 16:12:13 -0400
-Received: from mail-pl1-f194.google.com ([209.85.214.194]:40488 "EHLO
-        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727138AbfEDUMM (ORCPT
+        id S1727423AbfEDUeR (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 4 May 2019 16:34:17 -0400
+Received: from mail-lj1-f195.google.com ([209.85.208.195]:38711 "EHLO
+        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727404AbfEDUeR (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 4 May 2019 16:12:12 -0400
-Received: by mail-pl1-f194.google.com with SMTP id b3so4351391plr.7
-        for <linux-kselftest@vger.kernel.org>; Sat, 04 May 2019 13:12:12 -0700 (PDT)
+        Sat, 4 May 2019 16:34:17 -0400
+Received: by mail-lj1-f195.google.com with SMTP id e18so7977714lja.5
+        for <linux-kselftest@vger.kernel.org>; Sat, 04 May 2019 13:34:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amacapital-net.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=NCMi/IJcY48aFW4si21DdOI0x27Xmxnd2GdXSGtj0KE=;
-        b=QuR1yzxQKn7DFRWWMR7fSBvuGvXauTjs+QWjPOOSysETTl7I7IUQZRZYJGQZEWrzXC
-         aXLuopskBKG1lhvC6mZrbZ19GZQbAXZxbgrHcEY7Ne2rv2yRv1+wyy9Aed2EFweFh6sT
-         MgUpM2KgnYL4er2RhJuziduNFgdJtQUuNY+rxGB6YYm4L5wZ1h2YrICNBMRWST/sIk1d
-         x9FS2IhTzzNlLOEXa4KJ5A+G6yffez6cK9ONx3kgBDi79QMtaQN7mE+Ead5KYOCSP/ew
-         B8BvOEnVYxCJoBIzbJDeiLf8mBt3Ri3eWcg7XWeNKx9f/9jOlgXQYd9q1O//WCtIlh13
-         V6Qg==
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=SaUefhj41Vo9ICd62i3E2YPs3qFZSdkbgRUMEL66AdI=;
+        b=YWFWemqJ0JLsacxwcohY3H1Ru+7m68bmnSG7LYrodNEBsa1vqFIe7N+Z7/ib2SOef8
+         WWNNvU+E2HH25gh9czdMXSA1W+PtOHyDLxhTntgAp0nZMXOMd6zYnlK0dQqvtzAQo8bz
+         LSBMlFzIL2Q2R5LmuSDspX30nFFTSIPoTZtwA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=NCMi/IJcY48aFW4si21DdOI0x27Xmxnd2GdXSGtj0KE=;
-        b=TKWraoaxL8Xp/PZxEI/Nzkf5xNehPRB8VJSEFLJNpzL7ANKXgWBjuJ9lZ2KFSqRmPg
-         kZmZkUsXyCsO/u1XuRZhp8tvRfvDYA2krPOnFnms9LIQ6trfvXpi00ehp0qrTAgfXoNt
-         4iUjbq8eri2rLpmtSL+u1zWSI0Ny5+LE+nAc5whbv3Xb/6sMIoVn4wi3L7vNSRZE/F9r
-         xQ0mbnnEOqJ+iQg+UBnc67U272ZO2FQ52Q2M8VfDxxDGqMm2LzbQ1z4A2KZlKDz6PHX2
-         +BaVOfUxTRykkAakG4tJiaTM9UjKk9FqfjFf7O7+/F8X4ghimYe04vK53evVgifY6rr0
-         ACAg==
-X-Gm-Message-State: APjAAAXEKD3P0HD4Guc5QCTycBIAWEAN9gkG5Q9T27rKUfaQBGpW/k76
-        5cK4O5X+cpyBf1GrjB/b2xxteQ==
-X-Google-Smtp-Source: APXvYqxkMzmtMZymSQaZOjrq9gCEfLF9um4RJzYrrParpn8NStb9c8UxiLkvDWVFYtWVnpgI8AzCFg==
-X-Received: by 2002:a17:902:e293:: with SMTP id cf19mr21832986plb.151.1557000731668;
-        Sat, 04 May 2019 13:12:11 -0700 (PDT)
-Received: from ?IPv6:2600:1010:b01f:7d2b:6939:d09e:b43f:2a80? ([2600:1010:b01f:7d2b:6939:d09e:b43f:2a80])
-        by smtp.gmail.com with ESMTPSA id c137sm8834253pfb.154.2019.05.04.13.12.10
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=SaUefhj41Vo9ICd62i3E2YPs3qFZSdkbgRUMEL66AdI=;
+        b=P0OAtMMpm42+eCY9gbqcy0Si4WmhSK9eVMIXHXhyXpMIAIjZliB+o6gK1OzbCoceWR
+         9c8wWQ67z3Q/SXZoZNd0ow1eElMRfWg9C0nlFIXPWm3pn/5gGMuq+jTwFCvfowMGwfPQ
+         fguNtBQGbgFNvWMnT7pt00UKoUCS7X4voZLVqoF0RtPAnnChZIP6rtnsBv/PBB8zDtCy
+         nzTuNWtrholh1g+onPyyJQLX+9YLpY2glGGtxb7km4VQHSdGkrYIJ8qrOZ1nr6IfAjaC
+         CbvuItUqxVkV+0bLqHB9tzeBin2diePoRl0iD53ZnwJWfHZuaPsMv3HdJ4bnij4CPsKK
+         y9vA==
+X-Gm-Message-State: APjAAAWyWQOnev2UXr9nab1xcx03gwefaeQaVU/8jjrytAJo9FRf/bSl
+        xVL85z6hYARod5UuykSrxBibXoLotoo=
+X-Google-Smtp-Source: APXvYqx2L61QL2VolKeD1LaypjwDy75LHhwyT+a5DuFO7grOvIwbu2ICjt+RgMnyvEXxX1ziYpEKSw==
+X-Received: by 2002:a2e:9703:: with SMTP id r3mr8725034lji.37.1557002055007;
+        Sat, 04 May 2019 13:34:15 -0700 (PDT)
+Received: from mail-lj1-f180.google.com (mail-lj1-f180.google.com. [209.85.208.180])
+        by smtp.gmail.com with ESMTPSA id o17sm1079118lji.23.2019.05.04.13.34.14
+        for <linux-kselftest@vger.kernel.org>
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Sat, 04 May 2019 13:12:10 -0700 (PDT)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (1.0)
+        Sat, 04 May 2019 13:34:14 -0700 (PDT)
+Received: by mail-lj1-f180.google.com with SMTP id e18so7977700lja.5
+        for <linux-kselftest@vger.kernel.org>; Sat, 04 May 2019 13:34:14 -0700 (PDT)
+X-Received: by 2002:a2e:3e0e:: with SMTP id l14mr8970707lja.125.1557001696580;
+ Sat, 04 May 2019 13:28:16 -0700 (PDT)
+MIME-Version: 1.0
+References: <20190501202830.347656894@goodmis.org> <20190501203152.397154664@goodmis.org>
+ <20190501232412.1196ef18@oasis.local.home> <20190502162133.GX2623@hirez.programming.kicks-ass.net>
+ <CAHk-=wijZ-MD4g3zMJ9W2r=h8LUWneiu29OWuxZEoSfAF=0bhQ@mail.gmail.com>
+ <20190502181811.GY2623@hirez.programming.kicks-ass.net> <CAHk-=wi6A9tgw=kkPh5Ywqt687VvsVEjYXVkAnq0jpt0u0tk6g@mail.gmail.com>
+ <20190502202146.GZ2623@hirez.programming.kicks-ass.net> <CAHk-=wh8bi5c_GkyjPtDAiaXaZRqtmhWs30usUvs4qK_F+c9tg@mail.gmail.com>
+ <20190503152405.2d741af8@gandalf.local.home> <CAHk-=wiA-WbrFrDs-kOfJZMXy4zMo9-SZfk=7B-GfmBJ866naw@mail.gmail.com>
+ <20190503184919.2b7ef242@gandalf.local.home> <CAHk-=wh2vPLvsGBi6JtmEYeqHxB5UpTzHDjY5JsWG=YR0Lypzw@mail.gmail.com>
+ <20190504001756.17fad840@oasis.local.home> <CAHk-=wiuSFbv_rELND-BLWcP0GSZ0yF=xOAEcf61GE3bU9d=yg@mail.gmail.com>
+ <CAHk-=wjGNx8xcwg=7nE_0-nLQ_d4UALHvJ8O+TurbA25n8MyNg@mail.gmail.com> <2BF1AE4B-8105-49F0-8B6A-AA3B11FD66FD@amacapital.net>
+In-Reply-To: <2BF1AE4B-8105-49F0-8B6A-AA3B11FD66FD@amacapital.net>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Sat, 4 May 2019 13:28:00 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wiwc8NDahj455iBWmYyvDDS+sN1TObFsxxS51gNbtZ9iw@mail.gmail.com>
+Message-ID: <CAHk-=wiwc8NDahj455iBWmYyvDDS+sN1TObFsxxS51gNbtZ9iw@mail.gmail.com>
 Subject: Re: [RFC][PATCH 1/2] x86: Allow breakpoints to emulate call functions
-From:   Andy Lutomirski <luto@amacapital.net>
-X-Mailer: iPhone Mail (16E227)
-In-Reply-To: <CAHk-=wjGNx8xcwg=7nE_0-nLQ_d4UALHvJ8O+TurbA25n8MyNg@mail.gmail.com>
-Date:   Sat, 4 May 2019 13:12:09 -0700
+To:     Andy Lutomirski <luto@amacapital.net>
 Cc:     Steven Rostedt <rostedt@goodmis.org>,
         Peter Zijlstra <peterz@infradead.org>,
         Linux List Kernel Mailing <linux-kernel@vger.kernel.org>,
@@ -63,7 +74,7 @@ Cc:     Steven Rostedt <rostedt@goodmis.org>,
         Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
         "H. Peter Anvin" <hpa@zytor.com>,
-        the arch/x86 maintainers <x86@kernel.org>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
         Josh Poimboeuf <jpoimboe@redhat.com>,
         Jiri Kosina <jikos@kernel.org>,
         Miroslav Benes <mbenes@suse.cz>,
@@ -81,55 +92,36 @@ Cc:     Steven Rostedt <rostedt@goodmis.org>,
         Joerg Roedel <jroedel@suse.de>,
         "open list:KERNEL SELFTEST FRAMEWORK" 
         <linux-kselftest@vger.kernel.org>, stable <stable@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-Message-Id: <2BF1AE4B-8105-49F0-8B6A-AA3B11FD66FD@amacapital.net>
-References: <20190501202830.347656894@goodmis.org> <20190501203152.397154664@goodmis.org> <20190501232412.1196ef18@oasis.local.home> <20190502162133.GX2623@hirez.programming.kicks-ass.net> <CAHk-=wijZ-MD4g3zMJ9W2r=h8LUWneiu29OWuxZEoSfAF=0bhQ@mail.gmail.com> <20190502181811.GY2623@hirez.programming.kicks-ass.net> <CAHk-=wi6A9tgw=kkPh5Ywqt687VvsVEjYXVkAnq0jpt0u0tk6g@mail.gmail.com> <20190502202146.GZ2623@hirez.programming.kicks-ass.net> <CAHk-=wh8bi5c_GkyjPtDAiaXaZRqtmhWs30usUvs4qK_F+c9tg@mail.gmail.com> <20190503152405.2d741af8@gandalf.local.home> <CAHk-=wiA-WbrFrDs-kOfJZMXy4zMo9-SZfk=7B-GfmBJ866naw@mail.gmail.com> <20190503184919.2b7ef242@gandalf.local.home> <CAHk-=wh2vPLvsGBi6JtmEYeqHxB5UpTzHDjY5JsWG=YR0Lypzw@mail.gmail.com> <20190504001756.17fad840@oasis.local.home> <CAHk-=wiuSFbv_rELND-BLWcP0GSZ0yF=xOAEcf61GE3bU9d=yg@mail.gmail.com> <CAHk-=wjGNx8xcwg=7nE_0-nLQ_d4UALHvJ8O+TurbA25n8MyNg@mail.gmail.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+On Sat, May 4, 2019 at 1:12 PM Andy Lutomirski <luto@amacapital.net> wrote:
+>
+> As an aside, is it even *possible* to get #BP from v8086 mode?  On a quic=
+k SDM read, the INT3 instruction causes #GP if VM=3D1 and IOPL<3.  And, if =
+we allow vm86() to have IOPL=3D3, we should just remove that ability. It=E2=
+=80=99s nuts.
 
+We've definitely historically allowed IOPL=3D3 with the whole "iopl()"
+system call. And yes, afaik it works together with the vm86 system
+call too. I think we copy the unsafe bits from the original eflags, so
+if you do iopl(3) followed by vm86(), you will be running in vm86 mode
+with iopl 3.
 
-> On May 4, 2019, at 11:59 AM, Linus Torvalds <torvalds@linux-foundation.org=
-> wrote:
->=20
-> On Fri, May 3, 2019 at 10:08 PM Linus Torvalds
-> <torvalds@linux-foundation.org> wrote:
->>=20
->> I'll look at it tomorrow, but I think this actually makes unnecessary cha=
-nges.
->>=20
->> In particular, I think we could keep the existing entry code almost uncha=
-nged with this whole approach.
->=20
-> So here's what I *think* should work. Note that I also removed your
-> test-case code, because it really didn't have a chance in hell of
-> working. Doing that
->=20
->        int3_emulate_call(regs, (unsigned long)&int3_magic);
->=20
-> inside of int3_exception_notify() could not possibly be valid, since
-> int3_emulate_call() returns the new pt_regs that need to be used, and
-> throwing it away is clearly wrong.
->=20
-> So you can't use a register_die_notifier() to try to intercept the
-> 'int3' error and then do it manually, it needs to be done by the
-> ftrace_int3_handler() code that actually returns the new regs, and
-> where do_kernel_int3() will then return it to the low-level handler.
+> (We should maybe consider a config option for iopl() that defaults off. W=
+e=E2=80=99ve supported ioperm() for a long, long time.)
 
-I hate register_die_notifier(), so I consider this a plus. I=E2=80=99ve occa=
-sionally considered removing the ability for the notifiers to skip normal pr=
-ocessing, because, as it stands, figuring out what actually happens in the t=
-rap handlers is almost impossible.
+It's entirely possible that nobody uses iopl() and we should make it a
+config option that defaults to off.
 
-It generally looks sane to me.
+But we've already done that with the VM86 support entirely, and I'm
+not sure modern distros even enable it.
 
-As an aside, is it even *possible* to get #BP from v8086 mode?  On a quick S=
-DM read, the INT3 instruction causes #GP if VM=3D1 and IOPL<3.  And, if we a=
-llow vm86() to have IOPL=3D3, we should just remove that ability. It=E2=80=99=
-s nuts.
+And obviously vm86 mode isn't available at all with a 64-bit kernel,
+so this is all slowly becoming more or less moot.
 
-(We should maybe consider a config option for iopl() that defaults off. We=E2=
-=80=99ve supported ioperm() for a long, long time.)=
+                  Linus
