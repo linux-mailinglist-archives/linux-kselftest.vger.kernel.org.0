@@ -2,349 +2,311 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E7BD0139CF
-	for <lists+linux-kselftest@lfdr.de>; Sat,  4 May 2019 14:36:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E2B613BE0
+	for <lists+linux-kselftest@lfdr.de>; Sat,  4 May 2019 21:05:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726846AbfEDMgy (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 4 May 2019 08:36:54 -0400
-Received: from mail-pf1-f196.google.com ([209.85.210.196]:35138 "EHLO
-        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725981AbfEDMgy (ORCPT
+        id S1726654AbfEDTFs (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 4 May 2019 15:05:48 -0400
+Received: from mail-lf1-f65.google.com ([209.85.167.65]:38465 "EHLO
+        mail-lf1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726552AbfEDTFs (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 4 May 2019 08:36:54 -0400
-Received: by mail-pf1-f196.google.com with SMTP id t87so3718661pfa.2
-        for <linux-kselftest@vger.kernel.org>; Sat, 04 May 2019 05:36:53 -0700 (PDT)
+        Sat, 4 May 2019 15:05:48 -0400
+Received: by mail-lf1-f65.google.com with SMTP id v1so6551666lfg.5
+        for <linux-kselftest@vger.kernel.org>; Sat, 04 May 2019 12:05:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=PxUJTLhuZlQHBimNsUfYE4P4yJ5RwUoFbz6XIZj2VZw=;
-        b=ivMR+lTIp0RIYya4X5ScTYARRXT2GVNc1GFdWwc/iifUvbjDvrK4zQkiN7CKLQY+16
-         N0ECbCEc9LLqCHK3aAO2LZoRRcKacoM67BsD8RncoJuEH+NPBdhNP3ZQe5kmHcUlF2PP
-         8c7E/fOaH1/UyNU/fVmgZlgXfUqNsZ1p4q4zY=
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=UPXn/suOTC4KtkcdUL+Y23TPj9fvnn464w7bphB09yc=;
+        b=BGm1JgIvnO4XjmvpkE5zlrsXU0oaY9ixUidNFsf4EYolQ1p0zn1hNJrlziX2N0nsOR
+         B38UDlHgMyzVeEBsrOKhLaspPY/ucJmctT6kYtDXOsUpvos75jtWaAA3Q6Ybjr217dM8
+         0aD7sAeIC+OooQUiWMb7P7Iz3mIs9w+GyypC4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=PxUJTLhuZlQHBimNsUfYE4P4yJ5RwUoFbz6XIZj2VZw=;
-        b=P2IWKgRdnov1BehhnLYJCxmsEBJl6zpSf5scRWFv4JBLZY6jA4h0InPg4kkAzL1EzM
-         +eEoocaIclZny1GrB/8z1K9okFvyRnNdyWcF38BkhiUoTgh/MQEnw4EKeIWghXKHysYm
-         RnuNVoe4MOjCOVj5fobZvvEd4fJVL+fmkz/RqhFOLbKY+ssaKg2EQQUMZvJSM4HenKIJ
-         fFvXw2JQnZj+I7C3Mn52lutJ7qpCvSR51bfXHpePUPSCwxts+8NP8uh63M5d+hECzsO7
-         nvnd+QSSAEvyVKwM6rRz6nu5FuG42ut9nS6noivpFY1NmCuyhG+7yX1oka72RdVt6GuZ
-         2CCQ==
-X-Gm-Message-State: APjAAAVNbPybp7fMi/w0/Vgt7ihOMElY+k+2FDtHbnYRyICgR6RB5prX
-        XX9cq2IPTX548j4EUv4JoDN2SA==
-X-Google-Smtp-Source: APXvYqxiCyYBUj8FKZq7Cr2iOIpAgXz+3AbywPnfFFS8nId+wRtznx2EXa8TT/SlGTn/TFjFri+vYA==
-X-Received: by 2002:a63:c243:: with SMTP id l3mr18175178pgg.448.1556973413050;
-        Sat, 04 May 2019 05:36:53 -0700 (PDT)
-Received: from localhost ([2620:15c:6:12:9c46:e0da:efbf:69cc])
-        by smtp.gmail.com with ESMTPSA id h189sm9544928pfc.125.2019.05.04.05.36.51
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Sat, 04 May 2019 05:36:51 -0700 (PDT)
-Date:   Sat, 4 May 2019 08:36:50 -0400
-From:   Joel Fernandes <joel@joelfernandes.org>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, Steven Rostedt <rostedt@goodmis.org>,
-        Adrian Ratiu <adrian.ratiu@collabora.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>, atishp04@gmail.com,
-        bpf@vger.kernel.org, Brendan Gregg <bgregg@netflix.com>,
-        Brendan Gregg <brendan.d.gregg@gmail.com>, dancol@google.com,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Dan Williams <dan.j.williams@intel.com>,
-        dietmar.eggemann@arm.com, duyuchao <yuchao.du@unisoc.com>,
-        Guenter Roeck <groeck@chromium.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Karim Yaghmour <karim.yaghmour@opersys.com>,
-        Kees Cook <keescook@chromium.org>, kernel-team@android.com,
-        linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-trace-devel@vger.kernel.org,
-        Manjo Raja Rao <linux@manojrajarao.com>,
-        Masahiro Yamada <yamada.masahiro@socionext.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        =?utf-8?Q?Micha=C5=82?= Gregorczyk <michalgr@fb.com>,
-        Michal Gregorczyk <michalgr@live.com>,
-        Mohammad Husain <russoue@gmail.com>,
-        Olof Johansson <olof@lixom.net>, qais.yousef@arm.com,
-        rdunlap@infradead.org, Shuah Khan <shuah@kernel.org>,
-        Srinivas Ramana <sramana@codeaurora.org>,
-        Tamir Carmeli <carmeli.tamir@gmail.com>, yhs@fb.com
-Subject: Re: [PATCH v2] kheaders: Move from proc to sysfs
-Message-ID: <20190504123650.GA229151@google.com>
-References: <20190504121213.183203-1-joel@joelfernandes.org>
- <20190504122158.GA23535@kroah.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=UPXn/suOTC4KtkcdUL+Y23TPj9fvnn464w7bphB09yc=;
+        b=iLq6cavcebAEA9IhoV2gCy1wiIjQwVV6HgHh5aHlFHVzQPl1WK49LnaoZsbDXKLG0B
+         SY/dHZ1jNuHoZMpPJQQVyZDxoJ3RDexF7VcTJC3epcwHt9gM23AAgbYGZkNczfG5/PHM
+         M5k0PQS1FoafmWKZrtoccjvaWU44DO8Pi8lgA2sWDuyWMS3BVjZuGyknAws/T4D8mlSQ
+         64uToIDRQAdAiLMElkxmx+g2MLC9nf6kcbjrc6Ldz//eae7FvZiMpmudR3CzlPvd707m
+         Yyz6XocYj7BaG24yFEAH+GLQtBYqYxlfSXqBvDxto5pdxsIoZd68kMvZ1raaq/Ka/Dpk
+         OoEA==
+X-Gm-Message-State: APjAAAWnP6PMyE/tCX/+wCn9GK81+F6qPWhJzFkcp1beLe4EphOtK0X4
+        BmyxJ13vVWaFHXL36TG5FrwRexQXvPU=
+X-Google-Smtp-Source: APXvYqxk78tSb5aaFsdOtbqfmMn4DGDsty0eJcWT+75nkaaB9QEvpfjQVKQzZ9Flj3Y39JccHpm00g==
+X-Received: by 2002:a19:6a06:: with SMTP id u6mr9016295lfu.26.1556996744775;
+        Sat, 04 May 2019 12:05:44 -0700 (PDT)
+Received: from mail-lf1-f41.google.com (mail-lf1-f41.google.com. [209.85.167.41])
+        by smtp.gmail.com with ESMTPSA id l14sm166974ljj.15.2019.05.04.12.05.44
+        for <linux-kselftest@vger.kernel.org>
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Sat, 04 May 2019 12:05:44 -0700 (PDT)
+Received: by mail-lf1-f41.google.com with SMTP id k18so6524349lfj.13
+        for <linux-kselftest@vger.kernel.org>; Sat, 04 May 2019 12:05:44 -0700 (PDT)
+X-Received: by 2002:ac2:547a:: with SMTP id e26mr8464749lfn.148.1556996397689;
+ Sat, 04 May 2019 11:59:57 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190504122158.GA23535@kroah.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20190501202830.347656894@goodmis.org> <20190501203152.397154664@goodmis.org>
+ <20190501232412.1196ef18@oasis.local.home> <20190502162133.GX2623@hirez.programming.kicks-ass.net>
+ <CAHk-=wijZ-MD4g3zMJ9W2r=h8LUWneiu29OWuxZEoSfAF=0bhQ@mail.gmail.com>
+ <20190502181811.GY2623@hirez.programming.kicks-ass.net> <CAHk-=wi6A9tgw=kkPh5Ywqt687VvsVEjYXVkAnq0jpt0u0tk6g@mail.gmail.com>
+ <20190502202146.GZ2623@hirez.programming.kicks-ass.net> <CAHk-=wh8bi5c_GkyjPtDAiaXaZRqtmhWs30usUvs4qK_F+c9tg@mail.gmail.com>
+ <20190503152405.2d741af8@gandalf.local.home> <CAHk-=wiA-WbrFrDs-kOfJZMXy4zMo9-SZfk=7B-GfmBJ866naw@mail.gmail.com>
+ <20190503184919.2b7ef242@gandalf.local.home> <CAHk-=wh2vPLvsGBi6JtmEYeqHxB5UpTzHDjY5JsWG=YR0Lypzw@mail.gmail.com>
+ <20190504001756.17fad840@oasis.local.home> <CAHk-=wiuSFbv_rELND-BLWcP0GSZ0yF=xOAEcf61GE3bU9d=yg@mail.gmail.com>
+In-Reply-To: <CAHk-=wiuSFbv_rELND-BLWcP0GSZ0yF=xOAEcf61GE3bU9d=yg@mail.gmail.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Sat, 4 May 2019 11:59:41 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wjGNx8xcwg=7nE_0-nLQ_d4UALHvJ8O+TurbA25n8MyNg@mail.gmail.com>
+Message-ID: <CAHk-=wjGNx8xcwg=7nE_0-nLQ_d4UALHvJ8O+TurbA25n8MyNg@mail.gmail.com>
+Subject: Re: [RFC][PATCH 1/2] x86: Allow breakpoints to emulate call functions
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Linux List Kernel Mailing <linux-kernel@vger.kernel.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Nicolai Stange <nstange@suse.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Jiri Kosina <jikos@kernel.org>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Petr Mladek <pmladek@suse.com>,
+        Joe Lawrence <joe.lawrence@redhat.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
+        Tim Chen <tim.c.chen@linux.intel.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Juergen Gross <jgross@suse.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nayna Jain <nayna@linux.ibm.com>,
+        Masahiro Yamada <yamada.masahiro@socionext.com>,
+        Joerg Roedel <jroedel@suse.de>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, stable <stable@vger.kernel.org>
+Content-Type: multipart/mixed; boundary="00000000000033a78605881479d1"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sat, May 04, 2019 at 02:21:58PM +0200, Greg KH wrote:
-> On Sat, May 04, 2019 at 08:12:13AM -0400, Joel Fernandes (Google) wrote:
-> > The kheaders archive consisting of the kernel headers used for compiling
-> > bpf programs is in /proc. However there is concern that moving it here
-> > will make it permanent. Let us move it to /sys/kernel as discussed [1].
-> > 
-> > [1] https://lore.kernel.org/patchwork/patch/1067310/#1265969
-> > 
-> > Suggested-by: Steven Rostedt <rostedt@goodmis.org>
-> > Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
-> > ---
-> > This patch applies on top of the previous patch that was applied to the
-> > driver tree:
-> > https://lore.kernel.org/patchwork/patch/1067310/
-> > 
-> > v1->v2: Fixed some kconfig nits (Masami).
-> > 
-> >  init/Kconfig                                | 16 ++++-----
-> >  kernel/Makefile                             |  4 +--
-> >  kernel/{gen_ikh_data.sh => gen_kheaders.sh} |  2 +-
-> >  kernel/kheaders.c                           | 40 +++++++++------------
-> >  4 files changed, 26 insertions(+), 36 deletions(-)
-> >  rename kernel/{gen_ikh_data.sh => gen_kheaders.sh} (98%)
-> > 
-> > diff --git a/init/Kconfig b/init/Kconfig
-> > index 26a364a95b57..c3661991b089 100644
-> > --- a/init/Kconfig
-> > +++ b/init/Kconfig
-> > @@ -579,15 +579,13 @@ config IKCONFIG_PROC
-> >  	  This option enables access to the kernel configuration file
-> >  	  through /proc/config.gz.
-> >  
-> > -config IKHEADERS_PROC
-> > -	tristate "Enable kernel header artifacts through /proc/kheaders.tar.xz"
-> > -	depends on PROC_FS
-> > -	help
-> > -	  This option enables access to the kernel header and other artifacts that
-> > -	  are generated during the build process. These can be used to build eBPF
-> > -	  tracing programs, or similar programs.  If you build the headers as a
-> > -	  module, a module called kheaders.ko is built which can be loaded on-demand
-> > -	  to get access to the headers.
-> > +config IKHEADERS
-> > +	tristate "Enable kernel headers through /sys/kernel/kheaders.tar.xz"
-> > +	help
-> > +	  This option enables access to the in-kernel headers that are generated during
-> > +	  the build process. These can be used to build eBPF tracing programs,
-> > +	  or similar programs.  If you build the headers as a module, a module called
-> > +	  kheaders.ko is built which can be loaded on-demand to get access to headers.
-> >  
-> >  config LOG_BUF_SHIFT
-> >  	int "Kernel log buffer size (16 => 64KB, 17 => 128KB)"
-> > diff --git a/kernel/Makefile b/kernel/Makefile
-> > index 12399614c350..b32a558fae2f 100644
-> > --- a/kernel/Makefile
-> > +++ b/kernel/Makefile
-> > @@ -70,7 +70,7 @@ obj-$(CONFIG_UTS_NS) += utsname.o
-> >  obj-$(CONFIG_USER_NS) += user_namespace.o
-> >  obj-$(CONFIG_PID_NS) += pid_namespace.o
-> >  obj-$(CONFIG_IKCONFIG) += configs.o
-> > -obj-$(CONFIG_IKHEADERS_PROC) += kheaders.o
-> > +obj-$(CONFIG_IKHEADERS) += kheaders.o
-> 
-> Good in changing the config name, I hadn't thought of that.
-> 
-> > diff --git a/kernel/gen_ikh_data.sh b/kernel/gen_kheaders.sh
-> > similarity index 98%
-> > rename from kernel/gen_ikh_data.sh
-> > rename to kernel/gen_kheaders.sh
-> 
-> Same here, nice.
+--00000000000033a78605881479d1
+Content-Type: text/plain; charset="UTF-8"
 
-Thanks.
+On Fri, May 3, 2019 at 10:08 PM Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
+>
+> I'll look at it tomorrow, but I think this actually makes unnecessary changes.
+>
+> In particular, I think we could keep the existing entry code almost unchanged with this whole approach.
 
-> > -static const struct file_operations ikheaders_file_ops = {
-> > -	.read = ikheaders_read_current,
-> > -	.llseek = default_llseek,
-> > +static struct bin_attribute kheaders_attr __ro_after_init = {
-> 
-> Minor nit, are you sure about __ro_after_init for an attribute
-> structure?  Is it even needed?
+So here's what I *think* should work. Note that I also removed your
+test-case code, because it really didn't have a chance in hell of
+working. Doing that
 
-Yes, because after init, we don't need to change it, so it makes it more
-robust to accidental overwrite. We change it on init because we have to
-calculate the size of the archive. I was following this from kernel/ksysfs.c
-actually.
+        int3_emulate_call(regs, (unsigned long)&int3_magic);
 
-I have recently encountered this mechanism in the module loader as well while
-doing an RCU patch. The module loader post init will mark the page as
-read-only and any writes to it will fault. These variables will be placed in
-a ".data.ro_after_init" or a similarly named section in the module ELF.
+inside of int3_exception_notify() could not possibly be valid, since
+int3_emulate_call() returns the new pt_regs that need to be used, and
+throwing it away is clearly wrong.
 
-> But, you should change S_IRUGO to the correct octal number, checkpatch
-> should have barfed on this change.
+So you can't use a register_die_notifier() to try to intercept the
+'int3' error and then do it manually, it needs to be done by the
+ftrace_int3_handler() code that actually returns the new regs, and
+where do_kernel_int3() will then return it to the low-level handler.
 
-fixed, below is the updated patch inline, thanks!
+End result: I haven't actually tested this code, but I've looked
+through the patch something like ten times without finding any new
+errors.
 
----8<-----------------------
+I've also tried *very* hard to make the patch minimal, with the
+exception of the comments, which I tried to make extensive for any of
+the subtle cases.
 
-From: "Joel Fernandes (Google)" <joel@joelfernandes.org>
-Subject: [PATCH v3] kheaders: Move from proc to sysfs
+But without testing, it's probably still buggy.
 
-The kheaders archive consisting of the kernel headers used for compiling
-bpf programs is in /proc. However there is concern that moving it here
-will make it permanent. Let us move it to /sys/kernel as discussed [1].
+I have to say, I finally like the end result here. Maybe it's because
+I got to make my mark and pee in the snow, but I will say that
 
-[1] https://lore.kernel.org/patchwork/patch/1067310/#1265969
+ (a) the actual entry code modifications really are minimal now
 
-Suggested-by: Steven Rostedt <rostedt@goodmis.org>
-Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
----
-This patch applies on top of the previous patch that was applied to the
-driver tree:
-https://lore.kernel.org/patchwork/patch/1067310/
+ (b) the instruction emulation really is very simple and straightforward
 
-v2->v3: Fixed sysfs file mode nit (Greg).
-v1->v2: Fixed some kconfig nits (Masami).
+ (c) yes, we play some stack tricks (and yes, we play them differently
+on x86-64 and x86-32), but the tricks are again at least
+straightforward, and we never really change the layout of any stack.
 
-Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
----
- init/Kconfig                                | 16 ++++-----
- kernel/Makefile                             |  4 +--
- kernel/{gen_ikh_data.sh => gen_kheaders.sh} |  2 +-
- kernel/kheaders.c                           | 40 +++++++++------------
- 4 files changed, 26 insertions(+), 36 deletions(-)
- rename kernel/{gen_ikh_data.sh => gen_kheaders.sh} (98%)
+So on the whole, I think this is about as good as it gets. Did I get
+all the details actually right, and it _works_? I guess we'll see.
 
-diff --git a/init/Kconfig b/init/Kconfig
-index 26a364a95b57..c3661991b089 100644
---- a/init/Kconfig
-+++ b/init/Kconfig
-@@ -579,15 +579,13 @@ config IKCONFIG_PROC
- 	  This option enables access to the kernel configuration file
- 	  through /proc/config.gz.
- 
--config IKHEADERS_PROC
--	tristate "Enable kernel header artifacts through /proc/kheaders.tar.xz"
--	depends on PROC_FS
--	help
--	  This option enables access to the kernel header and other artifacts that
--	  are generated during the build process. These can be used to build eBPF
--	  tracing programs, or similar programs.  If you build the headers as a
--	  module, a module called kheaders.ko is built which can be loaded on-demand
--	  to get access to the headers.
-+config IKHEADERS
-+	tristate "Enable kernel headers through /sys/kernel/kheaders.tar.xz"
-+	help
-+	  This option enables access to the in-kernel headers that are generated during
-+	  the build process. These can be used to build eBPF tracing programs,
-+	  or similar programs.  If you build the headers as a module, a module called
-+	  kheaders.ko is built which can be loaded on-demand to get access to headers.
- 
- config LOG_BUF_SHIFT
- 	int "Kernel log buffer size (16 => 64KB, 17 => 128KB)"
-diff --git a/kernel/Makefile b/kernel/Makefile
-index 12399614c350..b32a558fae2f 100644
---- a/kernel/Makefile
-+++ b/kernel/Makefile
-@@ -70,7 +70,7 @@ obj-$(CONFIG_UTS_NS) += utsname.o
- obj-$(CONFIG_USER_NS) += user_namespace.o
- obj-$(CONFIG_PID_NS) += pid_namespace.o
- obj-$(CONFIG_IKCONFIG) += configs.o
--obj-$(CONFIG_IKHEADERS_PROC) += kheaders.o
-+obj-$(CONFIG_IKHEADERS) += kheaders.o
- obj-$(CONFIG_SMP) += stop_machine.o
- obj-$(CONFIG_KPROBES_SANITY_TEST) += test_kprobes.o
- obj-$(CONFIG_AUDIT) += audit.o auditfilter.o
-@@ -126,7 +126,7 @@ $(obj)/config_data.gz: $(KCONFIG_CONFIG) FORCE
- $(obj)/kheaders.o: $(obj)/kheaders_data.tar.xz
- 
- quiet_cmd_genikh = CHK     $(obj)/kheaders_data.tar.xz
--cmd_genikh = $(srctree)/kernel/gen_ikh_data.sh $@
-+cmd_genikh = $(srctree)/kernel/gen_kheaders.sh $@
- $(obj)/kheaders_data.tar.xz: FORCE
- 	$(call cmd,genikh)
- 
-diff --git a/kernel/gen_ikh_data.sh b/kernel/gen_kheaders.sh
-similarity index 98%
-rename from kernel/gen_ikh_data.sh
-rename to kernel/gen_kheaders.sh
-index 591a94f7b387..581b83534587 100755
---- a/kernel/gen_ikh_data.sh
-+++ b/kernel/gen_kheaders.sh
-@@ -2,7 +2,7 @@
- # SPDX-License-Identifier: GPL-2.0
- 
- # This script generates an archive consisting of kernel headers
--# for CONFIG_IKHEADERS_PROC.
-+# for CONFIG_IKHEADERS.
- set -e
- spath="$(dirname "$(readlink -f "$0")")"
- kroot="$spath/.."
-diff --git a/kernel/kheaders.c b/kernel/kheaders.c
-index 70ae6052920d..8f69772af77b 100644
---- a/kernel/kheaders.c
-+++ b/kernel/kheaders.c
-@@ -8,9 +8,8 @@
- 
- #include <linux/kernel.h>
- #include <linux/module.h>
--#include <linux/proc_fs.h>
-+#include <linux/kobject.h>
- #include <linux/init.h>
--#include <linux/uaccess.h>
- 
- /*
-  * Define kernel_headers_data and kernel_headers_data_end, within which the
-@@ -31,39 +30,32 @@ extern char kernel_headers_data;
- extern char kernel_headers_data_end;
- 
- static ssize_t
--ikheaders_read_current(struct file *file, char __user *buf,
--		      size_t len, loff_t *offset)
-+ikheaders_read(struct file *file,  struct kobject *kobj,
-+	       struct bin_attribute *bin_attr,
-+	       char *buf, loff_t off, size_t len)
- {
--	return simple_read_from_buffer(buf, len, offset,
--				       &kernel_headers_data,
--				       &kernel_headers_data_end -
--				       &kernel_headers_data);
-+	memcpy(buf, &kernel_headers_data + off, len);
-+	return len;
- }
- 
--static const struct file_operations ikheaders_file_ops = {
--	.read = ikheaders_read_current,
--	.llseek = default_llseek,
-+static struct bin_attribute kheaders_attr __ro_after_init = {
-+	.attr = {
-+		.name = "kheaders.tar.xz",
-+		.mode = 0444,
-+	},
-+	.read = &ikheaders_read,
- };
- 
- static int __init ikheaders_init(void)
- {
--	struct proc_dir_entry *entry;
--
--	/* create the current headers file */
--	entry = proc_create("kheaders.tar.xz", S_IRUGO, NULL,
--			    &ikheaders_file_ops);
--	if (!entry)
--		return -ENOMEM;
--
--	proc_set_size(entry,
--		      &kernel_headers_data_end -
--		      &kernel_headers_data);
--	return 0;
-+	kheaders_attr.size = (&kernel_headers_data_end -
-+			      &kernel_headers_data);
-+	return sysfs_create_bin_file(kernel_kobj, &kheaders_attr);
- }
- 
- static void __exit ikheaders_cleanup(void)
- {
--	remove_proc_entry("kheaders.tar.xz", NULL);
-+	sysfs_remove_bin_file(kernel_kobj, &kheaders_attr);
- }
- 
- module_init(ikheaders_init);
--- 
-2.21.0.1020.gf2820cf01a-goog
+                 Linus
 
+--00000000000033a78605881479d1
+Content-Type: text/x-patch; charset="US-ASCII"; name="patch.diff"
+Content-Disposition: attachment; filename="patch.diff"
+Content-Transfer-Encoding: base64
+Content-ID: <f_jv9vfsff0>
+X-Attachment-Id: f_jv9vfsff0
+
+IGFyY2gveDg2L2VudHJ5L2VudHJ5XzMyLlMgICAgICAgICAgICB8ICA3ICsrKy0KIGFyY2gveDg2
+L2VudHJ5L2VudHJ5XzY0LlMgICAgICAgICAgICB8IDE0ICsrKysrKy0tCiBhcmNoL3g4Ni9pbmNs
+dWRlL2FzbS9mdHJhY2UuaCAgICAgICAgfCAgMiArLQogYXJjaC94ODYvaW5jbHVkZS9hc20vdGV4
+dC1wYXRjaGluZy5oIHwgNjIgKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrCiBh
+cmNoL3g4Ni9rZXJuZWwvZnRyYWNlLmMgICAgICAgICAgICAgfCAyOSArKysrKysrKysrKysrKy0t
+LQogYXJjaC94ODYva2VybmVsL3RyYXBzLmMgICAgICAgICAgICAgIHwgMTUgKysrKysrLS0tCiA2
+IGZpbGVzIGNoYW5nZWQsIDExNiBpbnNlcnRpb25zKCspLCAxMyBkZWxldGlvbnMoLSkKCmRpZmYg
+LS1naXQgYS9hcmNoL3g4Ni9lbnRyeS9lbnRyeV8zMi5TIGIvYXJjaC94ODYvZW50cnkvZW50cnlf
+MzIuUwppbmRleCBkMzA5ZjMwY2Y3YWYuLjEzOGFjNDMyMjIxYiAxMDA2NDQKLS0tIGEvYXJjaC94
+ODYvZW50cnkvZW50cnlfMzIuUworKysgYi9hcmNoL3g4Ni9lbnRyeS9lbnRyeV8zMi5TCkBAIC0x
+NDgzLDcgKzE0ODMsMTIgQEAgRU5UUlkoaW50MykKIAlUUkFDRV9JUlFTX09GRgogCXhvcmwJJWVk
+eCwgJWVkeAkJCSMgemVybyBlcnJvciBjb2RlCiAJbW92bAklZXNwLCAlZWF4CQkJIyBwdF9yZWdz
+IHBvaW50ZXIKLQljYWxsCWRvX2ludDMKKworCSMgbWFrZSByb29tIG9uIGtlcm5lbCBzdGFjayBm
+b3IgcHVzaCBlbXVsYXRpb24KKwkjIGRvX2tlcm5lbF9pbnQzIHJldHVybnMgcG9zc2libHkgdXBk
+YXRlZCBwdF9yZWdzCisJc3VibAkkOCwgJWVzcAorCWNhbGwJZG9fa2VybmVsX2ludDMKKwltb3Zs
+CSVlYXgsICVlc3AKIAlqbXAJcmV0X2Zyb21fZXhjZXB0aW9uCiBFTkQoaW50MykKIApkaWZmIC0t
+Z2l0IGEvYXJjaC94ODYvZW50cnkvZW50cnlfNjQuUyBiL2FyY2gveDg2L2VudHJ5L2VudHJ5XzY0
+LlMKaW5kZXggMWYwZWZkYjdiNjI5Li44MzRlYzEzOTdkYWIgMTAwNjQ0Ci0tLSBhL2FyY2gveDg2
+L2VudHJ5L2VudHJ5XzY0LlMKKysrIGIvYXJjaC94ODYvZW50cnkvZW50cnlfNjQuUwpAQCAtODc5
+LDcgKzg3OSw3IEBAIGFwaWNpbnRlcnJ1cHQgSVJRX1dPUktfVkVDVE9SCQkJaXJxX3dvcmtfaW50
+ZXJydXB0CQlzbXBfaXJxX3dvcmtfaW50ZXJydXB0CiAgKiBAcGFyYW5vaWQgPT0gMiBpcyBzcGVj
+aWFsOiB0aGUgc3R1YiB3aWxsIG5ldmVyIHN3aXRjaCBzdGFja3MuICBUaGlzIGlzIGZvcgogICog
+I0RGOiBpZiB0aGUgdGhyZWFkIHN0YWNrIGlzIHNvbWVob3cgdW51c2FibGUsIHdlJ2xsIHN0aWxs
+IGdldCBhIHVzZWZ1bCBPT1BTLgogICovCi0ubWFjcm8gaWR0ZW50cnkgc3ltIGRvX3N5bSBoYXNf
+ZXJyb3JfY29kZTpyZXEgcGFyYW5vaWQ9MCBzaGlmdF9pc3Q9LTEKKy5tYWNybyBpZHRlbnRyeSBz
+eW0gZG9fc3ltIGhhc19lcnJvcl9jb2RlOnJlcSBwYXJhbm9pZD0wIHNoaWZ0X2lzdD0tMSBjcmVh
+dGVfZ2FwPTAKIEVOVFJZKFxzeW0pCiAJVU5XSU5EX0hJTlRfSVJFVF9SRUdTIG9mZnNldD1caGFz
+X2Vycm9yX2NvZGUqOAogCkBAIC04OTksNiArODk5LDE2IEBAIEVOVFJZKFxzeW0pCiAJam56CS5M
+ZnJvbV91c2VybW9kZV9zd2l0Y2hfc3RhY2tfXEAKIAkuZW5kaWYKIAorCS5pZiBcY3JlYXRlX2dh
+cCA9PSAxCisJdGVzdGIJJDMsIENTLU9SSUdfUkFYKCVyc3ApCisJam56CS5MZnJvbV91c2VybW9k
+ZV9ub19nYXBfXEAKKwkucmVwdCA2CisJcHVzaHEJNSo4KCVyc3ApCisJLmVuZHIKKwlVTldJTkRf
+SElOVF9JUkVUX1JFR1Mgb2Zmc2V0PTgKKy5MZnJvbV91c2VybW9kZV9ub19nYXBfXEA6CisJLmVu
+ZGlmCisKIAkuaWYgXHBhcmFub2lkCiAJY2FsbAlwYXJhbm9pZF9lbnRyeQogCS5lbHNlCkBAIC0x
+MTMwLDcgKzExNDAsNyBAQCBhcGljaW50ZXJydXB0MyBIWVBFUlZfU1RJTUVSMF9WRUNUT1IgXAog
+I2VuZGlmIC8qIENPTkZJR19IWVBFUlYgKi8KIAogaWR0ZW50cnkgZGVidWcJCQlkb19kZWJ1ZwkJ
+aGFzX2Vycm9yX2NvZGU9MAlwYXJhbm9pZD0xIHNoaWZ0X2lzdD1ERUJVR19TVEFDSwotaWR0ZW50
+cnkgaW50MwkJCWRvX2ludDMJCQloYXNfZXJyb3JfY29kZT0wCitpZHRlbnRyeSBpbnQzCQkJZG9f
+aW50MwkJCWhhc19lcnJvcl9jb2RlPTAJY3JlYXRlX2dhcD0xCiBpZHRlbnRyeSBzdGFja19zZWdt
+ZW50CQlkb19zdGFja19zZWdtZW50CWhhc19lcnJvcl9jb2RlPTEKIAogI2lmZGVmIENPTkZJR19Y
+RU5fUFYKZGlmZiAtLWdpdCBhL2FyY2gveDg2L2luY2x1ZGUvYXNtL2Z0cmFjZS5oIGIvYXJjaC94
+ODYvaW5jbHVkZS9hc20vZnRyYWNlLmgKaW5kZXggY2YzNTA2MzllNzZkLi40YjMzNWFjNWFmY2Mg
+MTAwNjQ0Ci0tLSBhL2FyY2gveDg2L2luY2x1ZGUvYXNtL2Z0cmFjZS5oCisrKyBiL2FyY2gveDg2
+L2luY2x1ZGUvYXNtL2Z0cmFjZS5oCkBAIC0zNyw3ICszNyw3IEBAIHN0cnVjdCBkeW5fYXJjaF9m
+dHJhY2UgewogCS8qIE5vIGV4dHJhIGRhdGEgbmVlZGVkIGZvciB4ODYgKi8KIH07CiAKLWludCBm
+dHJhY2VfaW50M19oYW5kbGVyKHN0cnVjdCBwdF9yZWdzICpyZWdzKTsKK2ludCBmdHJhY2VfaW50
+M19oYW5kbGVyKHN0cnVjdCBwdF9yZWdzICoqcmVncyk7CiAKICNkZWZpbmUgRlRSQUNFX0dSQVBI
+X1RSQU1QX0FERFIgRlRSQUNFX0dSQVBIX0FERFIKIApkaWZmIC0tZ2l0IGEvYXJjaC94ODYvaW5j
+bHVkZS9hc20vdGV4dC1wYXRjaGluZy5oIGIvYXJjaC94ODYvaW5jbHVkZS9hc20vdGV4dC1wYXRj
+aGluZy5oCmluZGV4IGU4NWZmNjVjNDNjMy4uODdmYWQ5ZjVjMzFiIDEwMDY0NAotLS0gYS9hcmNo
+L3g4Ni9pbmNsdWRlL2FzbS90ZXh0LXBhdGNoaW5nLmgKKysrIGIvYXJjaC94ODYvaW5jbHVkZS9h
+c20vdGV4dC1wYXRjaGluZy5oCkBAIC0zOSw0ICszOSw2NiBAQCBleHRlcm4gaW50IHBva2VfaW50
+M19oYW5kbGVyKHN0cnVjdCBwdF9yZWdzICpyZWdzKTsKIGV4dGVybiB2b2lkICp0ZXh0X3Bva2Vf
+YnAodm9pZCAqYWRkciwgY29uc3Qgdm9pZCAqb3Bjb2RlLCBzaXplX3QgbGVuLCB2b2lkICpoYW5k
+bGVyKTsKIGV4dGVybiBpbnQgYWZ0ZXJfYm9vdG1lbTsKIAorc3RhdGljIGlubGluZSB2b2lkIGlu
+dDNfZW11bGF0ZV9qbXAoc3RydWN0IHB0X3JlZ3MgKnJlZ3MsIHVuc2lnbmVkIGxvbmcgaXApCit7
+CisJcmVncy0+aXAgPSBpcDsKK30KKworI2RlZmluZSBJTlQzX0lOU05fU0laRSAxCisjZGVmaW5l
+IENBTExfSU5TTl9TSVpFIDUKKworLyoKKyAqIFRoZSAzMi1iaXQga2VybmVsIGVudHJ5IGV4Y2Vw
+dGlvbiBzdGFjayBkb2VzIG5vdCBjb250YWluIHRoZSB3aG9sZQorICogJ3N0cnVjdCBwdF9yZWdz
+JywgYmVjYXVzZSB0aGUgaGFyZHdhcmUgd2lsbCBub3QgcHVzaCBzcC9zcyB3aGVuIHRoZQorICog
+cHJvdGVjdGlvbiBsZXZlbCBkb2Vzbid0IGNoYW5nZS4KKyAqCisgKiBTbyBwdXNoaW5nIGEgdmFs
+dWUgb250byB0aGUgc3RhY2sgcmVxdWlyZXMgdXMgdG8gbWFrZSByb29tIGZvciBpdCBieQorICog
+bW92aW5nIHRoZSB3aG9sZSB0cnVuY2F0ZWQgJ3B0X3JlZ3MnIGRvd24gYnkgZm91ciBieXRlcywg
+YW5kIHRoZQorICogc3RhY2sgd2UgcmV0dXJuIHRvIHdpbGwgYmUgZGlyZWN0bHkgYWZ0ZXIgaXQu
+IFRoZSBsb3dsZXZlbCB4ODYtMzIKKyAqIGVudHJ5IGNvZGUgd2lsbCBoYXZlIG1hZGUgcm9vbSBv
+biB0aGUgc3RhY2sgZm9yIHRoaXMsIHNvIHdlJ3JlIG5vdAorICogb3ZlcndyaXRpbmcgYW55dGhp
+bmcgZWxzZSB0aGVyZS4KKyAqCisgKiBPbiB4ODYtNjQsIHRoZSBleGNlcHRpb24gc3RhY2sgaXMg
+bXVjaCBzaW1wbGVyLCBhbmQgYWx3YXlzIGNvbnRhaW5zCisgKiBzcC9zcywgc28gd2UgY2FuIGp1
+c3QgdXBkYXRlIHRoZSB2YWx1ZXMgZGlyZWN0bHkuIEFnYWluLCB0aGUgZW50cnkKKyAqIGNvZGUg
+aGFzIG1hZGUgc3VyZSB0aGVyZSBpcyBhIGdhcCAobm93IGFib3ZlIHB0X3JlZ3MhKSB0aGF0IHRo
+aXMgaXMgb2suCisgKi8KK3N0YXRpYyBpbmxpbmUgc3RydWN0IHB0X3JlZ3MgKmludDNfZW11bGF0
+ZV9wdXNoKHN0cnVjdCBwdF9yZWdzICpyZWdzLCB1bnNpZ25lZCBsb25nIHZhbHVlKQoreworI2lm
+ZGVmIENPTkZJR19YODZfMzIKKyNkZWZpbmUgU0FWRURfS0VSTkVMX1JFR1NfU0laRSAob2Zmc2V0
+b2Yoc3RydWN0IHB0X3JlZ3MsIHNwKSkKKwlzdHJ1Y3QgcHRfcmVncyAqbmV3ID0gKHZvaWQgKily
+ZWdzIC0gc2l6ZW9mKGxvbmcpOworCW1lbW1vdmUobmV3LCByZWdzLCBTQVZFRF9LRVJORUxfUkVH
+U19TSVpFKTsKKworCS8qCisJICogTk9URSEgJyZuZXctPnNwJyBpcyBhY3R1YWxseSB0aGUgdG9w
+IG9mIHN0YWNrIHRoYXQgdGhhdCAnaW50MycKKwkgKiB3aWxsIHJldHVybiB0byEgU28gZGVzcGl0
+ZSB3aGF0IHRoaXMgbG9va3MgbGlrZSwgdGhpcyBkb2Vzbid0CisJICogdXBkYXRlIHRoZSBzdGFj
+ayBwb2ludGVyLCBidXQgd3JpdGluZyB0aGUgdmFsdWUgdG8gJ25ldy0+c3AnCisJICogaXMgYWN0
+dWFsbHkgd3JpdGluZyB0aGUgdmFsdWUgKnRvKiB0aGUgdG9wIG9mIHRoZSBzdGFjayBpbgorCSAq
+IHRoZSByZXR1cm5pbmcgY29udGV4dCEKKwkgKgorCSAqIFRoZSB0aGluZyB0aGF0IHVwZGF0ZXMg
+dGhlIHN0YWNrIHBvaW50ZXIgaW4gdGhlIGNvbnRleHQgd2UKKwkgKiByZXR1cm4gdG8gaXMgdGhl
+IGZhY3QgdGhhdCB3ZSBtb3ZlZCAnc3RydWN0IHB0X3JlZ3MnIGl0c2VsZiwKKwkgKiBhbmQgd2ls
+bCBiZSByZXR1cm5pbmcgdXNpbmcgdGhhdCBtb3ZlZCBzdGFjayBmcmFtZS4KKwkgKi8KKwluZXct
+PnNwID0gdmFsdWU7CisJcmV0dXJuIG5ldzsKKyNlbHNlCisJdW5zaWduZWQgbG9uZyAqc3A7CisK
+KwlyZWdzLT5zcCAtPSBzaXplb2YobG9uZyk7CisJc3AgPSAodW5zaWduZWQgbG9uZyAqKXJlZ3Mt
+PnNwOworCSpzcCA9IHZhbHVlOworCXJldHVybiByZWdzOworI2VuZGlmCit9CisKK3N0YXRpYyBp
+bmxpbmUgc3RydWN0IHB0X3JlZ3MgKmludDNfZW11bGF0ZV9jYWxsKHN0cnVjdCBwdF9yZWdzICpy
+ZWdzLCB1bnNpZ25lZCBsb25nIGZ1bmMpCit7CisJdW5zaWduZWQgbG9uZyBuZXh0X2lwID0gcmVn
+cy0+aXAgLSBJTlQzX0lOU05fU0laRSArIENBTExfSU5TTl9TSVpFOworCisJcmVncyA9IGludDNf
+ZW11bGF0ZV9wdXNoKHJlZ3MsIG5leHRfaXApOworCXJlZ3MtPmlwID0gZnVuYzsKKwlyZXR1cm4g
+cmVnczsKK30KKwogI2VuZGlmIC8qIF9BU01fWDg2X1RFWFRfUEFUQ0hJTkdfSCAqLwpkaWZmIC0t
+Z2l0IGEvYXJjaC94ODYva2VybmVsL2Z0cmFjZS5jIGIvYXJjaC94ODYva2VybmVsL2Z0cmFjZS5j
+CmluZGV4IGVmNDk1MTdmNmJiMi4uNmMyMzlmY2E5OWQwIDEwMDY0NAotLS0gYS9hcmNoL3g4Ni9r
+ZXJuZWwvZnRyYWNlLmMKKysrIGIvYXJjaC94ODYva2VybmVsL2Z0cmFjZS5jCkBAIC0yOSw2ICsy
+OSw3IEBACiAjaW5jbHVkZSA8YXNtL2twcm9iZXMuaD4KICNpbmNsdWRlIDxhc20vZnRyYWNlLmg+
+CiAjaW5jbHVkZSA8YXNtL25vcHMuaD4KKyNpbmNsdWRlIDxhc20vdGV4dC1wYXRjaGluZy5oPgog
+CiAjaWZkZWYgQ09ORklHX0RZTkFNSUNfRlRSQUNFCiAKQEAgLTIzMSw2ICsyMzIsNyBAQCBpbnQg
+ZnRyYWNlX21vZGlmeV9jYWxsKHN0cnVjdCBkeW5fZnRyYWNlICpyZWMsIHVuc2lnbmVkIGxvbmcg
+b2xkX2FkZHIsCiB9CiAKIHN0YXRpYyB1bnNpZ25lZCBsb25nIGZ0cmFjZV91cGRhdGVfZnVuYzsK
+K3N0YXRpYyB1bnNpZ25lZCBsb25nIGZ0cmFjZV91cGRhdGVfZnVuY19jYWxsOwogCiBzdGF0aWMg
+aW50IHVwZGF0ZV9mdHJhY2VfZnVuYyh1bnNpZ25lZCBsb25nIGlwLCB2b2lkICpuZXcpCiB7CkBA
+IC0yNTksNiArMjYxLDggQEAgaW50IGZ0cmFjZV91cGRhdGVfZnRyYWNlX2Z1bmMoZnRyYWNlX2Z1
+bmNfdCBmdW5jKQogCXVuc2lnbmVkIGNoYXIgKm5ldzsKIAlpbnQgcmV0OwogCisJZnRyYWNlX3Vw
+ZGF0ZV9mdW5jX2NhbGwgPSAodW5zaWduZWQgbG9uZylmdW5jOworCiAJbmV3ID0gZnRyYWNlX2Nh
+bGxfcmVwbGFjZShpcCwgKHVuc2lnbmVkIGxvbmcpZnVuYyk7CiAJcmV0ID0gdXBkYXRlX2Z0cmFj
+ZV9mdW5jKGlwLCBuZXcpOwogCkBAIC0yODcsMjAgKzI5MSwzMiBAQCBzdGF0aWMgbm9rcHJvYmVf
+aW5saW5lIGludCBpc19mdHJhY2VfY2FsbGVyKHVuc2lnbmVkIGxvbmcgaXApCiAgKiBjYWxsIHRv
+IGEgbm9wLiBXaGlsZSB0aGUgY2hhbmdlIGlzIHRha2luZyBwbGFjZSwgd2UgdHJlYXQKICAqIGl0
+IGp1c3QgbGlrZSBpdCB3YXMgYSBub3AuCiAgKi8KLWludCBmdHJhY2VfaW50M19oYW5kbGVyKHN0
+cnVjdCBwdF9yZWdzICpyZWdzKQoraW50IGZ0cmFjZV9pbnQzX2hhbmRsZXIoc3RydWN0IHB0X3Jl
+Z3MgKipwcmVncykKIHsKKwlzdHJ1Y3QgcHRfcmVncyAqcmVncyA9ICpwcmVnczsKIAl1bnNpZ25l
+ZCBsb25nIGlwOwogCiAJaWYgKFdBUk5fT05fT05DRSghcmVncykpCiAJCXJldHVybiAwOwogCi0J
+aXAgPSByZWdzLT5pcCAtIDE7Ci0JaWYgKCFmdHJhY2VfbG9jYXRpb24oaXApICYmICFpc19mdHJh
+Y2VfY2FsbGVyKGlwKSkKKwlpZiAodXNlcl9tb2RlKHJlZ3MpKQogCQlyZXR1cm4gMDsKIAotCXJl
+Z3MtPmlwICs9IE1DT1VOVF9JTlNOX1NJWkUgLSAxOworCWlwID0gcmVncy0+aXAgLSBJTlQzX0lO
+U05fU0laRTsKIAotCXJldHVybiAxOworCWlmIChmdHJhY2VfbG9jYXRpb24oaXApKSB7CisJCSpw
+cmVncyA9IGludDNfZW11bGF0ZV9jYWxsKHJlZ3MsICh1bnNpZ25lZCBsb25nKWZ0cmFjZV9yZWdz
+X2NhbGxlcik7CisJCXJldHVybiAxOworCX0gZWxzZSBpZiAoaXNfZnRyYWNlX2NhbGxlcihpcCkp
+IHsKKwkJaWYgKCFmdHJhY2VfdXBkYXRlX2Z1bmNfY2FsbCkgeworCQkJaW50M19lbXVsYXRlX2pt
+cChyZWdzLCBpcCArIENBTExfSU5TTl9TSVpFKTsKKwkJCXJldHVybiAxOworCQl9CisJCSpwcmVn
+cyA9IGludDNfZW11bGF0ZV9jYWxsKHJlZ3MsIGZ0cmFjZV91cGRhdGVfZnVuY19jYWxsKTsKKwkJ
+cmV0dXJuIDE7CisJfQorCisJcmV0dXJuIDA7CiB9CiBOT0tQUk9CRV9TWU1CT0woZnRyYWNlX2lu
+dDNfaGFuZGxlcik7CiAKQEAgLTg1OSw2ICs4NzUsOCBAQCB2b2lkIGFyY2hfZnRyYWNlX3VwZGF0
+ZV90cmFtcG9saW5lKHN0cnVjdCBmdHJhY2Vfb3BzICpvcHMpCiAKIAlmdW5jID0gZnRyYWNlX29w
+c19nZXRfZnVuYyhvcHMpOwogCisJZnRyYWNlX3VwZGF0ZV9mdW5jX2NhbGwgPSAodW5zaWduZWQg
+bG9uZylmdW5jOworCiAJLyogRG8gYSBzYWZlIG1vZGlmeSBpbiBjYXNlIHRoZSB0cmFtcG9saW5l
+IGlzIGV4ZWN1dGluZyAqLwogCW5ldyA9IGZ0cmFjZV9jYWxsX3JlcGxhY2UoaXAsICh1bnNpZ25l
+ZCBsb25nKWZ1bmMpOwogCXJldCA9IHVwZGF0ZV9mdHJhY2VfZnVuYyhpcCwgbmV3KTsKQEAgLTk2
+MCw2ICs5NzgsNyBAQCBzdGF0aWMgaW50IGZ0cmFjZV9tb2Rfam1wKHVuc2lnbmVkIGxvbmcgaXAs
+IHZvaWQgKmZ1bmMpCiB7CiAJdW5zaWduZWQgY2hhciAqbmV3OwogCisJZnRyYWNlX3VwZGF0ZV9m
+dW5jX2NhbGwgPSAwVUw7CiAJbmV3ID0gZnRyYWNlX2ptcF9yZXBsYWNlKGlwLCAodW5zaWduZWQg
+bG9uZylmdW5jKTsKIAogCXJldHVybiB1cGRhdGVfZnRyYWNlX2Z1bmMoaXAsIG5ldyk7CmRpZmYg
+LS1naXQgYS9hcmNoL3g4Ni9rZXJuZWwvdHJhcHMuYyBiL2FyY2gveDg2L2tlcm5lbC90cmFwcy5j
+CmluZGV4IGQyNmY5ZTljM2Q4My4uZTgxMWU1NWFiMDMwIDEwMDY0NAotLS0gYS9hcmNoL3g4Ni9r
+ZXJuZWwvdHJhcHMuYworKysgYi9hcmNoL3g4Ni9rZXJuZWwvdHJhcHMuYwpAQCAtNTcwLDcgKzU3
+MCw3IEBAIGRvX2dlbmVyYWxfcHJvdGVjdGlvbihzdHJ1Y3QgcHRfcmVncyAqcmVncywgbG9uZyBl
+cnJvcl9jb2RlKQogfQogTk9LUFJPQkVfU1lNQk9MKGRvX2dlbmVyYWxfcHJvdGVjdGlvbik7CiAK
+LWRvdHJhcGxpbmthZ2Ugdm9pZCBub3RyYWNlIGRvX2ludDMoc3RydWN0IHB0X3JlZ3MgKnJlZ3Ms
+IGxvbmcgZXJyb3JfY29kZSkKK2RvdHJhcGxpbmthZ2Ugc3RydWN0IHB0X3JlZ3MgKiBub3RyYWNl
+IGRvX2tlcm5lbF9pbnQzKHN0cnVjdCBwdF9yZWdzICpyZWdzLCBsb25nIGVycm9yX2NvZGUpCiB7
+CiAjaWZkZWYgQ09ORklHX0RZTkFNSUNfRlRSQUNFCiAJLyoKQEAgLTU3OCwxMSArNTc4LDExIEBA
+IGRvdHJhcGxpbmthZ2Ugdm9pZCBub3RyYWNlIGRvX2ludDMoc3RydWN0IHB0X3JlZ3MgKnJlZ3Ms
+IGxvbmcgZXJyb3JfY29kZSkKIAkgKiBTZWUgbm90ZSBieSBkZWNsYXJhdGlvbiBvZiBtb2RpZnlp
+bmdfZnRyYWNlX2NvZGUgaW4gZnRyYWNlLmMKIAkgKi8KIAlpZiAodW5saWtlbHkoYXRvbWljX3Jl
+YWQoJm1vZGlmeWluZ19mdHJhY2VfY29kZSkpICYmCi0JICAgIGZ0cmFjZV9pbnQzX2hhbmRsZXIo
+cmVncykpCi0JCXJldHVybjsKKwkgICAgZnRyYWNlX2ludDNfaGFuZGxlcigmcmVncykpCisJCXJl
+dHVybiByZWdzOwogI2VuZGlmCiAJaWYgKHBva2VfaW50M19oYW5kbGVyKHJlZ3MpKQotCQlyZXR1
+cm47CisJCXJldHVybiByZWdzOwogCiAJLyoKIAkgKiBVc2UgaXN0X2VudGVyIGRlc3BpdGUgdGhl
+IGZhY3QgdGhhdCB3ZSBkb24ndCB1c2UgYW4gSVNUIHN0YWNrLgpAQCAtNjE0LDYgKzYxNCwxMyBA
+QCBkb3RyYXBsaW5rYWdlIHZvaWQgbm90cmFjZSBkb19pbnQzKHN0cnVjdCBwdF9yZWdzICpyZWdz
+LCBsb25nIGVycm9yX2NvZGUpCiAKIGV4aXQ6CiAJaXN0X2V4aXQocmVncyk7CisJcmV0dXJuIHJl
+Z3M7Cit9CitOT0tQUk9CRV9TWU1CT0woZG9fa2VybmVsX2ludDMpOworCitkb3RyYXBsaW5rYWdl
+IHZvaWQgbm90cmFjZSBkb19pbnQzKHN0cnVjdCBwdF9yZWdzICpyZWdzLCBsb25nIGVycm9yX2Nv
+ZGUpCit7CisJV0FSTl9PTl9PTkNFKGRvX2tlcm5lbF9pbnQzKHJlZ3MsIGVycm9yX2NvZGUpICE9
+IHJlZ3MpOwogfQogTk9LUFJPQkVfU1lNQk9MKGRvX2ludDMpOwogCg==
+--00000000000033a78605881479d1--
