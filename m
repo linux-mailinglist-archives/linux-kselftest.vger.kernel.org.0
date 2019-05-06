@@ -2,118 +2,148 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F26CA15136
-	for <lists+linux-kselftest@lfdr.de>; Mon,  6 May 2019 18:27:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CDB41511D
+	for <lists+linux-kselftest@lfdr.de>; Mon,  6 May 2019 18:22:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726175AbfEFQ1u (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 6 May 2019 12:27:50 -0400
-Received: from mail-lj1-f193.google.com ([209.85.208.193]:34110 "EHLO
-        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726046AbfEFQ1u (ORCPT
+        id S1726554AbfEFQWJ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 6 May 2019 12:22:09 -0400
+Received: from mail-pg1-f194.google.com ([209.85.215.194]:36840 "EHLO
+        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726442AbfEFQWI (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 6 May 2019 12:27:50 -0400
-Received: by mail-lj1-f193.google.com with SMTP id s7so6212514ljh.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 06 May 2019 09:27:49 -0700 (PDT)
+        Mon, 6 May 2019 12:22:08 -0400
+Received: by mail-pg1-f194.google.com with SMTP id 85so6701323pgc.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 06 May 2019 09:22:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
+        d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=YVhVdCTcPM0PTipUC5cKupbZldiZWmaMJ+OXUnCYkpU=;
-        b=Uf62pHFtgllYqALvEUKMKV6I76IKCFItvVqLvjkQ3d2lCpV1XjpBx0yJQ+iFGh0+Ij
-         IF7dcBQsUWv2vieVJNPLLPfGaN2XG0Ytn2qDMwNEB3RNtdjQ3+fNKlJGrdwbxOWlqMDS
-         z9PbLEvLjajjgofELNpGz9INcqnXVrYbR8qgQ=
+        bh=40wSFiuSnxDz381aUfzuDl5Kav43yI7Ct1/keTyO3F8=;
+        b=DVotpDP1BfYOu9EIG5sO2py/kG385U8+4RKehRk0tC71Vfe/y8Dohrbwudfghmv4gC
+         V1LDKukVm8TPgSIGKPKH/+AzQnvMn07KhJn3HSkyadIn3jlSJ5ClUm6UwCAwkx5Lj2ec
+         jTZ+KF06FbPmw0HHf3CBeQEfXVzStv1Mct1AUlW1wy4NJfE7vbBjZ0bMdocNxT2oB1CS
+         9lHhKeWSjQzqoRHwiiBianLagL8GKIjs0O4OySI/oLm6QzImAzv5mMB4tTPiN7x1FtTU
+         rnBUs5QzACe456XBtVa1RIzVbxerlIOvNFz0tCOCg55SYKbtj/SOkAkOVG3enaPf58Zc
+         SNbQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=YVhVdCTcPM0PTipUC5cKupbZldiZWmaMJ+OXUnCYkpU=;
-        b=LD/HFv2e+VKuBmGj8cOTycOgQYalqE9c1pabVgYxr00XroskqlmILYCK/AkUYgzFkf
-         KBQ6G4i+wckiozeWSWqKtK8WSo/glRcNmwsyQ3AmgjUIk2I1XIY7aRz32UlUv9QI0DwJ
-         7FQem3gs97ABUe0H+a9swCoazhnVuqTVCLHkkHqFZpAiJnMIL3HnFDIof57IB6LJgvQ3
-         5dWMsY0rJgjyJLjYqPA0yvQUqGL1eJu5A6gDvOOdo/5TEc70luemjrygES7QOIobeoiu
-         qN7oFRqo64Jltt/kIAK3glGTt5VmguvgdAjp8OL0t42f30q+K5cMZmaOtgjz43mixKgy
-         5k+w==
-X-Gm-Message-State: APjAAAVqedf0SJl3cYUNNlXEljbmxKj6jTPi2/qZ9kXrxijvQI49EFY2
-        4pfBdT18+/Iop/XsiySQI8rPxua+e2A=
-X-Google-Smtp-Source: APXvYqxEB9vcffHxk9O2x5n+aDPOUCvAWfpmcqjQdnkALZXdmngZJ7erbMV/VmUomualQa7ofTlxjw==
-X-Received: by 2002:a2e:9155:: with SMTP id q21mr12660551ljg.178.1557160067923;
-        Mon, 06 May 2019 09:27:47 -0700 (PDT)
-Received: from mail-lj1-f179.google.com (mail-lj1-f179.google.com. [209.85.208.179])
-        by smtp.gmail.com with ESMTPSA id u65sm879608lja.39.2019.05.06.09.27.47
-        for <linux-kselftest@vger.kernel.org>
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 06 May 2019 09:27:47 -0700 (PDT)
-Received: by mail-lj1-f179.google.com with SMTP id m20so2415136lji.2
-        for <linux-kselftest@vger.kernel.org>; Mon, 06 May 2019 09:27:47 -0700 (PDT)
-X-Received: by 2002:a05:651c:8f:: with SMTP id 15mr13394592ljq.118.1557159592300;
- Mon, 06 May 2019 09:19:52 -0700 (PDT)
+        bh=40wSFiuSnxDz381aUfzuDl5Kav43yI7Ct1/keTyO3F8=;
+        b=D3yRiDDWl1i3EQWcCqXdY/LhKp42599YPTLKytv0BxV8C+4v1RIeBGCstcitbNoFGr
+         NG4Wl/6oPYlM4zT6OWB+/lJx0RtbFLuXVDTgMDV7gKVyyhIeHfcUBe/VIswD54xRl0Sm
+         x5NXRlxBMoGDFxnv7M3KrQCkP2wWiadoUcPjSJNnUngBi4qIU4R3hCvQ+ZZzesx4p5Pn
+         8e7i5HD+wzuUS7noNsl70zvqLiWm71LWdY7QpGDHOFqluBvfliM3hRjXwF/CRpA/JWTu
+         oRSf9r+ItjdfpaljGZ/aQmsoik9B40JMaBQOP9K9LmFc5521cnijcfyorp2vIEGUuJHf
+         QeAg==
+X-Gm-Message-State: APjAAAWJvKj+HILD3ULPE6dSFkx3F6t8rBKZs5AV6OBWzoHkB4MOC/pj
+        SFcJXfFqVeLn2wKYbk+8exOc0rrs4hCrDaNaoqKKSg==
+X-Google-Smtp-Source: APXvYqw0KbWeRobzhAngWvuw0v+iBDWRKwDC2xGNXHO8L4kdi1iOFuLP64D72WK0vtdzu/2x0qr2r6kf9SEmu6uA3nY=
+X-Received: by 2002:aa7:90ce:: with SMTP id k14mr30343128pfk.239.1557159727868;
+ Mon, 06 May 2019 09:22:07 -0700 (PDT)
 MIME-Version: 1.0
-References: <20190502181811.GY2623@hirez.programming.kicks-ass.net>
- <CAHk-=wi6A9tgw=kkPh5Ywqt687VvsVEjYXVkAnq0jpt0u0tk6g@mail.gmail.com>
- <20190502202146.GZ2623@hirez.programming.kicks-ass.net> <20190502185225.0cdfc8bc@gandalf.local.home>
- <20190502193129.664c5b2e@gandalf.local.home> <20190502195052.0af473cf@gandalf.local.home>
- <20190503092959.GB2623@hirez.programming.kicks-ass.net> <20190503092247.20cc1ff0@gandalf.local.home>
- <2045370D-38D8-406C-9E94-C1D483E232C9@amacapital.net> <CAHk-=wjrOLqBG1qe9C3T=fLN0m=78FgNOGOEL22gU=+Pw6Mu9Q@mail.gmail.com>
- <20190506081951.GJ2606@hirez.programming.kicks-ass.net> <20190506095631.6f71ad7c@gandalf.local.home>
- <CAHk-=wgw_Jmn1iJWanoSFb1QZn3mbTD_JEoMsWcWj5QPeyHZHA@mail.gmail.com>
-In-Reply-To: <CAHk-=wgw_Jmn1iJWanoSFb1QZn3mbTD_JEoMsWcWj5QPeyHZHA@mail.gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Mon, 6 May 2019 09:19:35 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wjs8hhEdLUb=rD1tZC-JzBHALpi0hQSNf=esw96Gnta6A@mail.gmail.com>
-Message-ID: <CAHk-=wjs8hhEdLUb=rD1tZC-JzBHALpi0hQSNf=esw96Gnta6A@mail.gmail.com>
-Subject: Re: [RFC][PATCH 1/2] x86: Allow breakpoints to emulate call functions
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Linux List Kernel Mailing <linux-kernel@vger.kernel.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Nicolai Stange <nstange@suse.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Jiri Kosina <jikos@kernel.org>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Petr Mladek <pmladek@suse.com>,
-        Joe Lawrence <joe.lawrence@redhat.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
-        Tim Chen <tim.c.chen@linux.intel.com>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Juergen Gross <jgross@suse.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nayna Jain <nayna@linux.ibm.com>,
-        Masahiro Yamada <yamada.masahiro@socionext.com>,
-        Joerg Roedel <jroedel@suse.de>,
+References: <cover.1556630205.git.andreyknvl@google.com> <05c0c078b8b5984af4cc3b105a58c711dcd83342.1556630205.git.andreyknvl@google.com>
+ <20190503170310.GL55449@arrakis.emea.arm.com>
+In-Reply-To: <20190503170310.GL55449@arrakis.emea.arm.com>
+From:   Andrey Konovalov <andreyknvl@google.com>
+Date:   Mon, 6 May 2019 18:21:56 +0200
+Message-ID: <CAAeHK+weVYv4Tgj8DXv0ZTFZzGEpLYsn-3wxxmQN+ZW88MXbMw@mail.gmail.com>
+Subject: Re: [PATCH v14 13/17] IB/mlx4, arm64: untag user pointers in mlx4_get_umem_mr
+To:     Catalin Marinas <catalin.marinas@arm.com>
+Cc:     Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-rdma@vger.kernel.org, linux-media@vger.kernel.org,
+        kvm@vger.kernel.org,
         "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>, stable <stable@vger.kernel.org>
+        <linux-kselftest@vger.kernel.org>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Will Deacon <will.deacon@arm.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Kees Cook <keescook@chromium.org>,
+        Yishai Hadas <yishaih@mellanox.com>, Kuehling@google.com,
+        Felix <Felix.Kuehling@amd.com>, Deucher@google.com,
+        Alexander <Alexander.Deucher@amd.com>, Koenig@google.com,
+        Christian <Christian.Koenig@amd.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Jens Wiklander <jens.wiklander@linaro.org>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Kostya Serebryany <kcc@google.com>,
+        Evgeniy Stepanov <eugenis@google.com>,
+        Lee Smith <Lee.Smith@arm.com>,
+        Ramana Radhakrishnan <Ramana.Radhakrishnan@arm.com>,
+        Jacob Bramley <Jacob.Bramley@arm.com>,
+        Ruben Ayrapetyan <Ruben.Ayrapetyan@arm.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Chintan Pandya <cpandya@codeaurora.org>,
+        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
+        Dave Martin <Dave.Martin@arm.com>,
+        Kevin Brodsky <kevin.brodsky@arm.com>,
+        Szabolcs Nagy <Szabolcs.Nagy@arm.com>,
+        Leon Romanovsky <leonro@mellanox.com>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, May 6, 2019 at 9:17 AM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
+On Fri, May 3, 2019 at 7:03 PM Catalin Marinas <catalin.marinas@arm.com> wrote:
 >
-> So what is it that doesn't actually work? I've looked at the patch
-> even more, and I can't for the life of me see how it wouldn't work.
+> On Tue, Apr 30, 2019 at 03:25:09PM +0200, Andrey Konovalov wrote:
+> > This patch is a part of a series that extends arm64 kernel ABI to allow to
+> > pass tagged user pointers (with the top byte set to something else other
+> > than 0x00) as syscall arguments.
+> >
+> > mlx4_get_umem_mr() uses provided user pointers for vma lookups, which can
+> > only by done with untagged pointers.
+> >
+> > Untag user pointers in this function.
+> >
+> > Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
+> > Reviewed-by: Leon Romanovsky <leonro@mellanox.com>
+> > ---
+> >  drivers/infiniband/hw/mlx4/mr.c | 7 ++++---
+> >  1 file changed, 4 insertions(+), 3 deletions(-)
+> >
+> > diff --git a/drivers/infiniband/hw/mlx4/mr.c b/drivers/infiniband/hw/mlx4/mr.c
+> > index 395379a480cb..9a35ed2c6a6f 100644
+> > --- a/drivers/infiniband/hw/mlx4/mr.c
+> > +++ b/drivers/infiniband/hw/mlx4/mr.c
+> > @@ -378,6 +378,7 @@ static struct ib_umem *mlx4_get_umem_mr(struct ib_udata *udata, u64 start,
+> >        * again
+> >        */
+> >       if (!ib_access_writable(access_flags)) {
+> > +             unsigned long untagged_start = untagged_addr(start);
+> >               struct vm_area_struct *vma;
+> >
+> >               down_read(&current->mm->mmap_sem);
+> > @@ -386,9 +387,9 @@ static struct ib_umem *mlx4_get_umem_mr(struct ib_udata *udata, u64 start,
+> >                * cover the memory, but for now it requires a single vma to
+> >                * entirely cover the MR to support RO mappings.
+> >                */
+> > -             vma = find_vma(current->mm, start);
+> > -             if (vma && vma->vm_end >= start + length &&
+> > -                 vma->vm_start <= start) {
+> > +             vma = find_vma(current->mm, untagged_start);
+> > +             if (vma && vma->vm_end >= untagged_start + length &&
+> > +                 vma->vm_start <= untagged_start) {
+> >                       if (vma->vm_flags & VM_WRITE)
+> >                               access_flags |= IB_ACCESS_LOCAL_WRITE;
+> >               } else {
+>
+> Discussion ongoing on the previous version of the patch but I'm more
+> inclined to do this in ib_uverbs_(re)reg_mr() on cmd.start.
 
-And I do still react to PeterZ's
+OK, I want to publish v15 sooner to fix the issue with emails
+addresses, so I'll implement this approach there for now.
 
- arch/x86/entry/entry_32.S            | 150 +++++++++++++++++++++++++++++------
 
-vs
 
- arch/x86/entry/entry_32.S            |  7 ++++++-
-
-for mine. And PeterZ's  apparently still had bugs.
-
-Yes, mine can have bugs too, but I really *have* done some basic
-testing, and with 6 lines of code, I think they are more localized.
-
-                Linus
+>
+> --
+> Catalin
