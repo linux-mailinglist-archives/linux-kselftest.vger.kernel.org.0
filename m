@@ -2,109 +2,142 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D60A14B57
-	for <lists+linux-kselftest@lfdr.de>; Mon,  6 May 2019 15:56:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A81D14B9E
+	for <lists+linux-kselftest@lfdr.de>; Mon,  6 May 2019 16:15:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725883AbfEFN4g convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 6 May 2019 09:56:36 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57964 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725853AbfEFN4g (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 6 May 2019 09:56:36 -0400
-Received: from gandalf.local.home (cpe-66-24-58-225.stny.res.rr.com [66.24.58.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 8EEB02054F;
-        Mon,  6 May 2019 13:56:32 +0000 (UTC)
-Date:   Mon, 6 May 2019 09:56:31 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Linux List Kernel Mailing <linux-kernel@vger.kernel.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Nicolai Stange <nstange@suse.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        the arch/x86 maintainers <x86@kernel.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Jiri Kosina <jikos@kernel.org>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Petr Mladek <pmladek@suse.com>,
-        Joe Lawrence <joe.lawrence@redhat.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
-        Tim Chen <tim.c.chen@linux.intel.com>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Juergen Gross <jgross@suse.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nayna Jain <nayna@linux.ibm.com>,
-        Masahiro Yamada <yamada.masahiro@socionext.com>,
-        Joerg Roedel <jroedel@suse.de>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>, stable <stable@vger.kernel.org>
-Subject: Re: [RFC][PATCH 1/2] x86: Allow breakpoints to emulate call
- functions
-Message-ID: <20190506095631.6f71ad7c@gandalf.local.home>
-In-Reply-To: <20190506081951.GJ2606@hirez.programming.kicks-ass.net>
-References: <20190502181811.GY2623@hirez.programming.kicks-ass.net>
-        <CAHk-=wi6A9tgw=kkPh5Ywqt687VvsVEjYXVkAnq0jpt0u0tk6g@mail.gmail.com>
-        <20190502202146.GZ2623@hirez.programming.kicks-ass.net>
-        <20190502185225.0cdfc8bc@gandalf.local.home>
-        <20190502193129.664c5b2e@gandalf.local.home>
-        <20190502195052.0af473cf@gandalf.local.home>
-        <20190503092959.GB2623@hirez.programming.kicks-ass.net>
-        <20190503092247.20cc1ff0@gandalf.local.home>
-        <2045370D-38D8-406C-9E94-C1D483E232C9@amacapital.net>
-        <CAHk-=wjrOLqBG1qe9C3T=fLN0m=78FgNOGOEL22gU=+Pw6Mu9Q@mail.gmail.com>
-        <20190506081951.GJ2606@hirez.programming.kicks-ass.net>
-X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        id S1726156AbfEFOPc (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 6 May 2019 10:15:32 -0400
+Received: from mail-pl1-f194.google.com ([209.85.214.194]:37632 "EHLO
+        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726046AbfEFOPc (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 6 May 2019 10:15:32 -0400
+Received: by mail-pl1-f194.google.com with SMTP id z8so6457101pln.4
+        for <linux-kselftest@vger.kernel.org>; Mon, 06 May 2019 07:15:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=OW9r981uG4q4mCEE3eviMpvcgNrP8ztSBy/V22TuEyU=;
+        b=RwIwMiF88+Wz2lyiiiRFLD0DtzmtPhSYctT7DECXSVGGsMCqqEywraKb1VVIDK0D+6
+         e05K/iAAJcE9yRHQNbEvq9ePWUxNo3jMQ16tSsOGtmWiuiuGjYTIKZn3RWyGJN1L7rxH
+         JWCib8njn+v5Gl74GjdEjnavoToExJWkPKuLN2usGUeeVQU1cj6afqv3AP+Szx9d1YbR
+         /iYb1mW4rEJXqf/1doCy1zenFphH/aiHoOYrBoxPgEK3EUfKzOGpHL63KMDfpfhEfnGD
+         SAWo20WeW5Qs/kAhFHEaSxMs4rZb4+Da05bz1k2JR3ScMW8GRukA/aJ+BvUhLbhKhimD
+         bg2g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=OW9r981uG4q4mCEE3eviMpvcgNrP8ztSBy/V22TuEyU=;
+        b=iK86HS4i1eW+Rj/0R9JtcWvoq+U0kMZWbZqj+WlEAloJYmpZKUjQa4fiS6sNE9HF+t
+         AsxudWzsqGSwUfIT0kRxjueKNySZpAYDBV288XOlEtq9Yr/RdLHuCQsylG7ujyPa6sfF
+         B9n21gxIHZvMDOV5Azeo144JpjfDIGtj/Tz5m/2mRxT031MT+fBObjORZ1+WVpEJ3Qym
+         SaSWB7V+3zdfODWiOESMKEEIzTENtdMs3Ov2u1amn2E1+sT06IyZ+1C4nnMaOGuy9VQe
+         ZBpl13d/w42A4d/f1bsmB7PXLPim1G9d78Hq9pNBEMXcQsBw3Xo7g1ucWbEDy21ajLRX
+         F2cQ==
+X-Gm-Message-State: APjAAAVnUgzmZydMJYv6FU8R2k8wE2/LZhucoWkJdW5+sOX4ZTXxqtzy
+        inThUifr0+qEuQ1sCDY1W91oPjMVLbbJ7r12kfETrQ==
+X-Google-Smtp-Source: APXvYqyWDp8mHq4mu+m9PaBcR4hr0UfLsUgs2S/OxvEKrdiWi6A7iqRf42KWhYp4nRTNFO6VlU1AYWwzebl0ku93GlI=
+X-Received: by 2002:a17:902:7783:: with SMTP id o3mr32385898pll.159.1557152131315;
+ Mon, 06 May 2019 07:15:31 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+References: <cover.1556630205.git.andreyknvl@google.com> <7d3b28689d47c0fa1b80628f248dbf78548da25f.1556630205.git.andreyknvl@google.com>
+ <20190503165646.GK55449@arrakis.emea.arm.com>
+In-Reply-To: <20190503165646.GK55449@arrakis.emea.arm.com>
+From:   Andrey Konovalov <andreyknvl@google.com>
+Date:   Mon, 6 May 2019 16:15:20 +0200
+Message-ID: <CAAeHK+yya4OR7GfSJPc59+trq3fS9Qh_1WK2hB1aoHdR0C_t8Q@mail.gmail.com>
+Subject: Re: [PATCH v14 10/17] fs, arm64: untag user pointers in fs/userfaultfd.c
+To:     Catalin Marinas <catalin.marinas@arm.com>
+Cc:     Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-rdma@vger.kernel.org, linux-media@vger.kernel.org,
+        kvm@vger.kernel.org,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Will Deacon <will.deacon@arm.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Kees Cook <keescook@chromium.org>,
+        Yishai Hadas <yishaih@mellanox.com>, Kuehling@google.com,
+        Felix <Felix.Kuehling@amd.com>, Deucher@google.com,
+        Alexander <Alexander.Deucher@amd.com>, Koenig@google.com,
+        Christian <Christian.Koenig@amd.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Jens Wiklander <jens.wiklander@linaro.org>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Kostya Serebryany <kcc@google.com>,
+        Evgeniy Stepanov <eugenis@google.com>,
+        Lee Smith <Lee.Smith@arm.com>,
+        Ramana Radhakrishnan <Ramana.Radhakrishnan@arm.com>,
+        Jacob Bramley <Jacob.Bramley@arm.com>,
+        Ruben Ayrapetyan <Ruben.Ayrapetyan@arm.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Chintan Pandya <cpandya@codeaurora.org>,
+        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
+        Dave Martin <Dave.Martin@arm.com>,
+        Kevin Brodsky <kevin.brodsky@arm.com>,
+        Szabolcs Nagy <Szabolcs.Nagy@arm.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, 6 May 2019 10:19:51 +0200
-Peter Zijlstra <peterz@infradead.org> wrote:
+On Fri, May 3, 2019 at 6:56 PM Catalin Marinas <catalin.marinas@arm.com> wrote:
+>
+> On Tue, Apr 30, 2019 at 03:25:06PM +0200, Andrey Konovalov wrote:
+> > This patch is a part of a series that extends arm64 kernel ABI to allow to
+> > pass tagged user pointers (with the top byte set to something else other
+> > than 0x00) as syscall arguments.
+> >
+> > userfaultfd_register() and userfaultfd_unregister() use provided user
+> > pointers for vma lookups, which can only by done with untagged pointers.
+> >
+> > Untag user pointers in these functions.
+> >
+> > Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
+> > ---
+> >  fs/userfaultfd.c | 5 +++++
+> >  1 file changed, 5 insertions(+)
+> >
+> > diff --git a/fs/userfaultfd.c b/fs/userfaultfd.c
+> > index f5de1e726356..fdee0db0e847 100644
+> > --- a/fs/userfaultfd.c
+> > +++ b/fs/userfaultfd.c
+> > @@ -1325,6 +1325,9 @@ static int userfaultfd_register(struct userfaultfd_ctx *ctx,
+> >               goto out;
+> >       }
+> >
+> > +     uffdio_register.range.start =
+> > +             untagged_addr(uffdio_register.range.start);
+> > +
+> >       ret = validate_range(mm, uffdio_register.range.start,
+> >                            uffdio_register.range.len);
+> >       if (ret)
+> > @@ -1514,6 +1517,8 @@ static int userfaultfd_unregister(struct userfaultfd_ctx *ctx,
+> >       if (copy_from_user(&uffdio_unregister, buf, sizeof(uffdio_unregister)))
+> >               goto out;
+> >
+> > +     uffdio_unregister.start = untagged_addr(uffdio_unregister.start);
+> > +
+> >       ret = validate_range(mm, uffdio_unregister.start,
+> >                            uffdio_unregister.len);
+> >       if (ret)
+>
+> Wouldn't it be easier to do this in validate_range()? There are a few
+> more calls in this file, though I didn't check whether a tagged address
+> would cause issues.
 
-> On Fri, May 03, 2019 at 11:57:22AM -0700, Linus Torvalds wrote:
-> > On Fri, May 3, 2019 at 9:21 AM Andy Lutomirski <luto@amacapital.net> wrote:  
-> > >
-> > > So here’s a somewhat nutty suggestion: how about we tweak the 32-bit
-> > > entry code to emulate the sane 64-bit frame, not just for int3 but
-> > > always?  
-> > 
-> > What would the code actually end up looking like? I don't necessarily
-> > object, since that kernel_stack_pointer() thing certainly looks
-> > horrible, but honestly, my suggestion to just pass in the 'struct
-> > pt_regs' and let the call emulation fix it up would have also worked,
-> > and avoided that bug (and who knows what else might be hiding).
-> > 
-> > I really think that you're now hitting all the special case magic
-> > low-level crap that I wanted to avoid.  
-> 
-> This did actually boot on first try; so there must be something horribly
-> wrong...
-> 
-> Now, I know you like that other approach; but I figured I should at
-> least show you what this one looks like. Maybe I've been staring at
-> entry_32.S too much, but I really don't dislike this.
+Yes, I think it makes more sense, will do in v15, thanks!
 
-I can test this too. I was hoping to get this in by this merge window.
-I spent 3 hours yesterday trying to get Linus's version working on
-i386 with no success. Not sure how much time Linus will have to look at
-this, as he just opened the merge window.
-
-Again, I think Peter's solution here is the more elegant one. But as
-long as we get *a* solution, I'll be happy. And my time to work on it
-has pretty much already been depleted.
-
--- Steve
+>
+> --
+> Catalin
