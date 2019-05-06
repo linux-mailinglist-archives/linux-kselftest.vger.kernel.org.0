@@ -2,242 +2,562 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9307B14356
-	for <lists+linux-kselftest@lfdr.de>; Mon,  6 May 2019 03:35:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 18A9514613
+	for <lists+linux-kselftest@lfdr.de>; Mon,  6 May 2019 10:22:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725851AbfEFBfI (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 5 May 2019 21:35:08 -0400
-Received: from mail-pf1-f194.google.com ([209.85.210.194]:34187 "EHLO
-        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725828AbfEFBfI (ORCPT
+        id S1726584AbfEFIUd (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 6 May 2019 04:20:33 -0400
+Received: from bombadil.infradead.org ([198.137.202.133]:52338 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726576AbfEFIUd (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 5 May 2019 21:35:08 -0400
-Received: by mail-pf1-f194.google.com with SMTP id b3so5872312pfd.1
-        for <linux-kselftest@vger.kernel.org>; Sun, 05 May 2019 18:35:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=1bZS6QNu3Og8dmYIBYZs/QPsWGTr16uK5TDgJ7mlBd8=;
-        b=oFoSAFGkkSQZQTESShUDzd5h4YLrcvOJdgh2qNjtweZWVbz4UktLQhSdeAspAMd9U/
-         9NJgdIdcsPyU/TTbjbkYnrhMgXTxjumbAEVOlaUk9ApBJvgVUtSIB3BOrRpc9Ku/Z4Zz
-         zpRlsjxL8HyX0+HAb4Qa9MLSm7jH8m2SJUKE4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=1bZS6QNu3Og8dmYIBYZs/QPsWGTr16uK5TDgJ7mlBd8=;
-        b=XnZ6IBrM5fTYEsjeUV6LrSZRRHD4CJI41oFB6Zz0Wm0h6wMWp+xu62ujtBb18PqPTm
-         mEfq5Cd2CVl7YWl9IjRZ/O9zdMymMcg/nhCNR2wDuiLiEOcxgnKsJ1jHbZb8W8xzdVy2
-         MBYuGs4Gy2dRZzi61fShTmtUAtdJ6oh3LfBBYVVQrSwkOWx4PCkUpmx7X8Y9HuqsfCUF
-         a7MWVfHzk+8xDZzIT+O8EmRl7JyeKvnbofSDT93qEHeT/lqgqmy9wPLK1DdiepmugOkg
-         Qco3dltop1RrOQpaF2VPGG84XGxBvGk3U96/Ev33v8W/im+470jW5kZlrR0DGvBsvzyj
-         LV7g==
-X-Gm-Message-State: APjAAAWT/w41AznN/eXREAa1Q0aUQrsKYkssWQPnuftrGpNpYIKSNcAf
-        1hfJ4X0y1xiF9pWSC3zc5cOR1g==
-X-Google-Smtp-Source: APXvYqyMqjH1rv8o1a5MG6lttWXnrtTTnVkW2pdmDmafQmbF4Z2cWekbCd1pLswsBkrlxyLONtca4g==
-X-Received: by 2002:a62:46c7:: with SMTP id o68mr30726847pfi.54.1557106507313;
-        Sun, 05 May 2019 18:35:07 -0700 (PDT)
-Received: from joelaf.cam.corp.google.com ([2620:15c:6:12:9c46:e0da:efbf:69cc])
-        by smtp.gmail.com with ESMTPSA id m131sm15649677pga.3.2019.05.05.18.35.01
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Sun, 05 May 2019 18:35:05 -0700 (PDT)
-From:   "Joel Fernandes (Google)" <joel@joelfernandes.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     "Joel Fernandes (Google)" <joel@joelfernandes.org>,
+        Mon, 6 May 2019 04:20:33 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Transfer-Encoding
+        :Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
+        Sender:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=rO18+droSvV4SZ7jW/VFNC7nFBf93zwlq1lZ3sk7NqQ=; b=jmZy1zLei096e4UT6zR3LrzhoK
+        eI/xc0Gkw4IfJvB9FvcVbEXaSMov+gvhpheNThg/OQ8Nh7M1gqi0ko05ImynkKyCXKQh3hsxgYR8W
+        Xy6BUrdrUOLGz7c02EMtxOU99CVKVuaX/FD1rObYNwYhgLQdbv+OMA7jMhIw5ucFmP91DIwhqJ1nx
+        5/jcO/CWT56LPKOZNB664jV7/aqMn4Vb9HDrq5iPoMGEzwT2kdCaDOLC+mr1MtRftDbmBkX6ec0Hw
+        3ZO/g47g07rswcbWI70MkSqgCt29heNE2vKRRApUyRLwvdVglQffW7WQYOBykH4FLWzaGo79YvzHg
+        4wHNSpoA==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=hirez.programming.kicks-ass.net)
+        by bombadil.infradead.org with esmtpsa (Exim 4.90_1 #2 (Red Hat Linux))
+        id 1hNYqm-00038k-Tp; Mon, 06 May 2019 08:19:53 +0000
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 3A38B286AB2CB; Mon,  6 May 2019 10:19:51 +0200 (CEST)
+Date:   Mon, 6 May 2019 10:19:51 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Andy Lutomirski <luto@amacapital.net>,
         Steven Rostedt <rostedt@goodmis.org>,
-        Adrian Ratiu <adrian.ratiu@collabora.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>, atishp04@gmail.com,
-        bpf@vger.kernel.org, Brendan Gregg <bgregg@netflix.com>,
-        Brendan Gregg <brendan.d.gregg@gmail.com>, dancol@google.com,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Dan Williams <dan.j.williams@intel.com>,
-        dietmar.eggemann@arm.com, duyuchao <yuchao.du@unisoc.com>,
-        gregkh@linuxfoundation.org, Guenter Roeck <groeck@chromium.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Karim Yaghmour <karim.yaghmour@opersys.com>,
-        Kees Cook <keescook@chromium.org>, kernel-team@android.com,
-        linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-trace-devel@vger.kernel.org,
-        Manjo Raja Rao <linux@manojrajarao.com>,
+        Linux List Kernel Mailing <linux-kernel@vger.kernel.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Nicolai Stange <nstange@suse.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        the arch/x86 maintainers <x86@kernel.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Jiri Kosina <jikos@kernel.org>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Petr Mladek <pmladek@suse.com>,
+        Joe Lawrence <joe.lawrence@redhat.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
+        Tim Chen <tim.c.chen@linux.intel.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Juergen Gross <jgross@suse.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nayna Jain <nayna@linux.ibm.com>,
         Masahiro Yamada <yamada.masahiro@socionext.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        =?UTF-8?q?Micha=C5=82=20Gregorczyk?= <michalgr@fb.com>,
-        Michal Gregorczyk <michalgr@live.com>,
-        Mohammad Husain <russoue@gmail.com>,
-        Olof Johansson <olof@lixom.net>, qais.yousef@arm.com,
-        rdunlap@infradead.org, Shuah Khan <shuah@kernel.org>,
-        Srinivas Ramana <sramana@codeaurora.org>,
-        Tamir Carmeli <carmeli.tamir@gmail.com>, yhs@fb.com
-Subject: [PATCH v3] kheaders: Move from proc to sysfs
-Date:   Sun,  5 May 2019 21:34:56 -0400
-Message-Id: <20190506013456.86061-1-joel@joelfernandes.org>
-X-Mailer: git-send-email 2.21.0.1020.gf2820cf01a-goog
+        Joerg Roedel <jroedel@suse.de>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, stable <stable@vger.kernel.org>
+Subject: Re: [RFC][PATCH 1/2] x86: Allow breakpoints to emulate call functions
+Message-ID: <20190506081951.GJ2606@hirez.programming.kicks-ass.net>
+References: <20190502181811.GY2623@hirez.programming.kicks-ass.net>
+ <CAHk-=wi6A9tgw=kkPh5Ywqt687VvsVEjYXVkAnq0jpt0u0tk6g@mail.gmail.com>
+ <20190502202146.GZ2623@hirez.programming.kicks-ass.net>
+ <20190502185225.0cdfc8bc@gandalf.local.home>
+ <20190502193129.664c5b2e@gandalf.local.home>
+ <20190502195052.0af473cf@gandalf.local.home>
+ <20190503092959.GB2623@hirez.programming.kicks-ass.net>
+ <20190503092247.20cc1ff0@gandalf.local.home>
+ <2045370D-38D8-406C-9E94-C1D483E232C9@amacapital.net>
+ <CAHk-=wjrOLqBG1qe9C3T=fLN0m=78FgNOGOEL22gU=+Pw6Mu9Q@mail.gmail.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAHk-=wjrOLqBG1qe9C3T=fLN0m=78FgNOGOEL22gU=+Pw6Mu9Q@mail.gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The kheaders archive consisting of the kernel headers used for compiling
-bpf programs is in /proc. However there is concern that moving it here
-will make it permanent. Let us move it to /sys/kernel as discussed [1].
+On Fri, May 03, 2019 at 11:57:22AM -0700, Linus Torvalds wrote:
+> On Fri, May 3, 2019 at 9:21 AM Andy Lutomirski <luto@amacapital.net> wrote:
+> >
+> > So here’s a somewhat nutty suggestion: how about we tweak the 32-bit
+> > entry code to emulate the sane 64-bit frame, not just for int3 but
+> > always?
+> 
+> What would the code actually end up looking like? I don't necessarily
+> object, since that kernel_stack_pointer() thing certainly looks
+> horrible, but honestly, my suggestion to just pass in the 'struct
+> pt_regs' and let the call emulation fix it up would have also worked,
+> and avoided that bug (and who knows what else might be hiding).
+> 
+> I really think that you're now hitting all the special case magic
+> low-level crap that I wanted to avoid.
 
-[1] https://lore.kernel.org/patchwork/patch/1067310/#1265969
+This did actually boot on first try; so there must be something horribly
+wrong...
 
-Suggested-by: Steven Rostedt <rostedt@goodmis.org>
-Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
+Now, I know you like that other approach; but I figured I should at
+least show you what this one looks like. Maybe I've been staring at
+entry_32.S too much, but I really don't dislike this.
+
 ---
-This patch applies on top of the previous patch that was applied to the
-driver tree:
-https://lore.kernel.org/patchwork/patch/1067310/
+ arch/x86/entry/entry_32.S            | 150 +++++++++++++++++++++++++++++------
+ arch/x86/entry/entry_64.S            |  14 +++-
+ arch/x86/include/asm/ptrace.h        |   4 -
+ arch/x86/include/asm/text-patching.h |  20 +++++
+ arch/x86/kernel/alternative.c        |  81 ++++++++++++++++++-
+ arch/x86/kernel/ptrace.c             |  29 -------
+ 6 files changed, 235 insertions(+), 63 deletions(-)
 
-v2->v3: Fixed sysfs file mode nit (Greg).
-v1->v2: Fixed some kconfig nits.
-
- init/Kconfig                                | 16 ++++-----
- kernel/Makefile                             |  4 +--
- kernel/{gen_ikh_data.sh => gen_kheaders.sh} |  2 +-
- kernel/kheaders.c                           | 40 +++++++++------------
- 4 files changed, 26 insertions(+), 36 deletions(-)
- rename kernel/{gen_ikh_data.sh => gen_kheaders.sh} (98%)
-
-diff --git a/init/Kconfig b/init/Kconfig
-index 26a364a95b57..c3661991b089 100644
---- a/init/Kconfig
-+++ b/init/Kconfig
-@@ -579,15 +579,13 @@ config IKCONFIG_PROC
- 	  This option enables access to the kernel configuration file
- 	  through /proc/config.gz.
+diff --git a/arch/x86/entry/entry_32.S b/arch/x86/entry/entry_32.S
+index 7b23431be5cb..d29cf03219c5 100644
+--- a/arch/x86/entry/entry_32.S
++++ b/arch/x86/entry/entry_32.S
+@@ -67,9 +67,20 @@
+ # define preempt_stop(clobbers)	DISABLE_INTERRUPTS(clobbers); TRACE_IRQS_OFF
+ #else
+ # define preempt_stop(clobbers)
+-# define resume_kernel		restore_all_kernel
+ #endif
  
--config IKHEADERS_PROC
--	tristate "Enable kernel header artifacts through /proc/kheaders.tar.xz"
--	depends on PROC_FS
--	help
--	  This option enables access to the kernel header and other artifacts that
--	  are generated during the build process. These can be used to build eBPF
--	  tracing programs, or similar programs.  If you build the headers as a
--	  module, a module called kheaders.ko is built which can be loaded on-demand
--	  to get access to the headers.
-+config IKHEADERS
-+	tristate "Enable kernel headers through /sys/kernel/kheaders.tar.xz"
-+	help
-+	  This option enables access to the in-kernel headers that are generated during
-+	  the build process. These can be used to build eBPF tracing programs,
-+	  or similar programs.  If you build the headers as a module, a module called
-+	  kheaders.ko is built which can be loaded on-demand to get access to headers.
++.macro RETINT_PREEMPT
++#ifdef CONFIG_PREEMPT
++	DISABLE_INTERRUPTS(CLBR_ANY)
++	cmpl	$0, PER_CPU_VAR(__preempt_count)
++	jnz	.Lend_\@
++	testl	$X86_EFLAGS_IF, PT_EFLAGS(%esp)	# interrupts off (exception path) ?
++	jz	.Lend_\@
++	call	preempt_schedule_irq
++.Lend_\@:
++#endif
++.endm
++
+ .macro TRACE_IRQS_IRET
+ #ifdef CONFIG_TRACE_IRQFLAGS
+ 	testl	$X86_EFLAGS_IF, PT_EFLAGS(%esp)     # interrupts off?
+@@ -203,8 +214,119 @@
+ .Lend_\@:
+ .endm
  
- config LOG_BUF_SHIFT
- 	int "Kernel log buffer size (16 => 64KB, 17 => 128KB)"
-diff --git a/kernel/Makefile b/kernel/Makefile
-index 12399614c350..b32a558fae2f 100644
---- a/kernel/Makefile
-+++ b/kernel/Makefile
-@@ -70,7 +70,7 @@ obj-$(CONFIG_UTS_NS) += utsname.o
- obj-$(CONFIG_USER_NS) += user_namespace.o
- obj-$(CONFIG_PID_NS) += pid_namespace.o
- obj-$(CONFIG_IKCONFIG) += configs.o
--obj-$(CONFIG_IKHEADERS_PROC) += kheaders.o
-+obj-$(CONFIG_IKHEADERS) += kheaders.o
- obj-$(CONFIG_SMP) += stop_machine.o
- obj-$(CONFIG_KPROBES_SANITY_TEST) += test_kprobes.o
- obj-$(CONFIG_AUDIT) += audit.o auditfilter.o
-@@ -126,7 +126,7 @@ $(obj)/config_data.gz: $(KCONFIG_CONFIG) FORCE
- $(obj)/kheaders.o: $(obj)/kheaders_data.tar.xz
++#define CS_FROM_ENTRY_STACK	(1 << 31)
++#define CS_FROM_USER_CR3	(1 << 30)
++#define CS_FROM_KERNEL		(1 << 29)
++
++.macro FIXUP_FRAME
++
++#ifdef CONFIG_VM86
++	testl	$X86_EFLAGS_VM, 3*4(%esp)
++	jnz	.Lfrom_usermode_no_fixup_\@
++#endif
++	testl	$SEGMENT_RPL_MASK, 2*4(%esp)
++	jnz	.Lfrom_usermode_no_fixup_\@
++
++	orl	$CS_FROM_KERNEL, 2*4(%esp)
++
++	/*
++	 * When we're here from kernel mode; the (exception) stack looks like:
++	 *
++	 * 4*4(%esp) - <previous context>
++	 * 3*4(%esp) - flags
++	 * 2*4(%esp) - cs
++	 * 1*4(%esp) - ip
++	 * 0*4(%esp) - orig_eax
++	 *
++	 * Lets build a 5 entry IRET frame after that, such that struct pt_regs
++	 * is complete and in particular regs->sp is correct. This gives us
++	 * the original 4 enties as gap:
++	 *
++	 * 10*4(%esp) - <previous context>
++	 *  9*4(%esp) - gap / flags
++	 *  8*4(%esp) - gap / cs
++	 *  7*4(%esp) - gap / ip
++	 *  6*4(%esp) - gap / orig_eax
++	 *  5*4(%esp) - ss
++	 *  4*4(%esp) - sp
++	 *  3*4(%esp) - flags
++	 *  2*4(%esp) - cs
++	 *  1*4(%esp) - ip
++	 *  0*4(%esp) - orig_eax
++	 */
++
++	pushl	%ss		# ss
++	pushl	%esp		# sp (points at ss)
++	add	$5*4, (%esp)	# point sp back at the previous context
++	pushl	5*4(%esp)	# flags
++	pushl	5*4(%esp)	# cs
++	pushl	5*4(%esp)	# ip
++	pushl	5*4(%esp)	# orig_eax
++
++.Lfrom_usermode_no_fixup_\@:
++.endm
++
++.macro IRET_FRAME
++
++	/* orig_eax is already POP'ed when we're here */
++
++	testl $CS_FROM_KERNEL, 1*4(%esp)
++	jz .Lfinished_frame_\@
++
++	pushl %eax
++
++	lea 10*4(%esp), %eax	# address of <previous context>
++	cmpl %eax, 4*4(%esp)	# if ->sp is unmodified
++	jnz .Lmodified_sp_do_fixup_\@
++
++	/*
++	 * Fast path; regs->sp wasn't modified, reuse the original IRET frame.
++	 */
++	pop %eax
++	add $6*4, %esp
++	jmp .Lfinished_frame_\@;
++
++.Lmodified_sp_do_fixup_\@:
++
++	/*
++	 * Reconstruct the 3 entry IRET frame right after the (modified)
++	 * regs->sp without lowering %esp in between, such that an NMI in the
++	 * middle doesn't scribble our stack.
++	 */
++	pushl	%ecx
++	movl	5*4(%esp), %eax		# (modified) regs->sp
++
++	movl	4*4(%esp), %ecx		# flags
++	movl	%ecx, -4(%eax)
++
++	movl	3*4(%esp), %ecx		# cs
++	andl	$0x0000ffff, %ecx
++	movl	%ecx, -8(%eax)
++
++	movl	2*4(%esp), %ecx		# ip
++	movl	%ecx, -12(%eax)
++
++	movl	1*4(%esp), %ecx		# eax
++	movl	%ecx, -16(%eax)
++
++	popl	%ecx
++	lea	-16(%eax), %esp
++	popl	%eax
++
++.Lfinished_frame_\@:
++.endm
++
+ .macro SAVE_ALL pt_regs_ax=%eax switch_stacks=0
++
+ 	cld
++	/*
++	 * The high bits of the CS dword (__csh) are used for CS_FROM_*.
++	 * Clear them in case hardware didn't do this for us.
++	 */
++	andl	$(0x0000ffff), 2*4(%esp)
++
++	FIXUP_FRAME
++
+ 	PUSH_GS
+ 	pushl	%fs
+ 	pushl	%es
+@@ -375,9 +497,6 @@
+  * switch to it before we do any copying.
+  */
  
- quiet_cmd_genikh = CHK     $(obj)/kheaders_data.tar.xz
--cmd_genikh = $(srctree)/kernel/gen_ikh_data.sh $@
-+cmd_genikh = $(srctree)/kernel/gen_kheaders.sh $@
- $(obj)/kheaders_data.tar.xz: FORCE
- 	$(call cmd,genikh)
+-#define CS_FROM_ENTRY_STACK	(1 << 31)
+-#define CS_FROM_USER_CR3	(1 << 30)
+-
+ .macro SWITCH_TO_KERNEL_STACK
  
-diff --git a/kernel/gen_ikh_data.sh b/kernel/gen_kheaders.sh
-similarity index 98%
-rename from kernel/gen_ikh_data.sh
-rename to kernel/gen_kheaders.sh
-index 591a94f7b387..581b83534587 100755
---- a/kernel/gen_ikh_data.sh
-+++ b/kernel/gen_kheaders.sh
-@@ -2,7 +2,7 @@
- # SPDX-License-Identifier: GPL-2.0
+ 	ALTERNATIVE     "", "jmp .Lend_\@", X86_FEATURE_XENPV
+@@ -391,13 +510,6 @@
+ 	 * that register for the time this macro runs
+ 	 */
  
- # This script generates an archive consisting of kernel headers
--# for CONFIG_IKHEADERS_PROC.
-+# for CONFIG_IKHEADERS.
- set -e
- spath="$(dirname "$(readlink -f "$0")")"
- kroot="$spath/.."
-diff --git a/kernel/kheaders.c b/kernel/kheaders.c
-index 70ae6052920d..8f69772af77b 100644
---- a/kernel/kheaders.c
-+++ b/kernel/kheaders.c
-@@ -8,9 +8,8 @@
+-	/*
+-	 * The high bits of the CS dword (__csh) are used for
+-	 * CS_FROM_ENTRY_STACK and CS_FROM_USER_CR3. Clear them in case
+-	 * hardware didn't do this for us.
+-	 */
+-	andl	$(0x0000ffff), PT_CS(%esp)
+-
+ 	/* Are we on the entry stack? Bail out if not! */
+ 	movl	PER_CPU_VAR(cpu_entry_area), %ecx
+ 	addl	$CPU_ENTRY_AREA_entry_stack + SIZEOF_entry_stack, %ecx
+@@ -755,7 +867,7 @@ END(ret_from_fork)
+ 	andl	$SEGMENT_RPL_MASK, %eax
+ #endif
+ 	cmpl	$USER_RPL, %eax
+-	jb	resume_kernel			# not returning to v8086 or userspace
++	jb	restore_all_kernel		# not returning to v8086 or userspace
  
- #include <linux/kernel.h>
- #include <linux/module.h>
--#include <linux/proc_fs.h>
-+#include <linux/kobject.h>
- #include <linux/init.h>
--#include <linux/uaccess.h>
+ ENTRY(resume_userspace)
+ 	DISABLE_INTERRUPTS(CLBR_ANY)
+@@ -765,18 +877,6 @@ ENTRY(resume_userspace)
+ 	jmp	restore_all
+ END(ret_from_exception)
  
+-#ifdef CONFIG_PREEMPT
+-ENTRY(resume_kernel)
+-	DISABLE_INTERRUPTS(CLBR_ANY)
+-	cmpl	$0, PER_CPU_VAR(__preempt_count)
+-	jnz	restore_all_kernel
+-	testl	$X86_EFLAGS_IF, PT_EFLAGS(%esp)	# interrupts off (exception path) ?
+-	jz	restore_all_kernel
+-	call	preempt_schedule_irq
+-	jmp	restore_all_kernel
+-END(resume_kernel)
+-#endif
+-
+ GLOBAL(__begin_SYSENTER_singlestep_region)
  /*
-  * Define kernel_headers_data and kernel_headers_data_end, within which the
-@@ -31,39 +30,32 @@ extern char kernel_headers_data;
- extern char kernel_headers_data_end;
+  * All code from here through __end_SYSENTER_singlestep_region is subject
+@@ -1019,6 +1119,7 @@ ENTRY(entry_INT80_32)
+ 	/* Restore user state */
+ 	RESTORE_REGS pop=4			# skip orig_eax/error_code
+ .Lirq_return:
++	IRET_FRAME
+ 	/*
+ 	 * ARCH_HAS_MEMBARRIER_SYNC_CORE rely on IRET core serialization
+ 	 * when returning from IPI handler and when returning from
+@@ -1027,6 +1128,7 @@ ENTRY(entry_INT80_32)
+ 	INTERRUPT_RETURN
  
- static ssize_t
--ikheaders_read_current(struct file *file, char __user *buf,
--		      size_t len, loff_t *offset)
-+ikheaders_read(struct file *file,  struct kobject *kobj,
-+	       struct bin_attribute *bin_attr,
-+	       char *buf, loff_t off, size_t len)
+ restore_all_kernel:
++	RETINT_PREEMPT
+ 	TRACE_IRQS_IRET
+ 	PARANOID_EXIT_TO_KERNEL_MODE
+ 	BUG_IF_WRONG_CR3
+diff --git a/arch/x86/entry/entry_64.S b/arch/x86/entry/entry_64.S
+index 20e45d9b4e15..268cd9affe04 100644
+--- a/arch/x86/entry/entry_64.S
++++ b/arch/x86/entry/entry_64.S
+@@ -878,7 +878,7 @@ apicinterrupt IRQ_WORK_VECTOR			irq_work_interrupt		smp_irq_work_interrupt
+  * @paranoid == 2 is special: the stub will never switch stacks.  This is for
+  * #DF: if the thread stack is somehow unusable, we'll still get a useful OOPS.
+  */
+-.macro idtentry sym do_sym has_error_code:req paranoid=0 shift_ist=-1 ist_offset=0
++.macro idtentry sym do_sym has_error_code:req paranoid=0 shift_ist=-1 ist_offset=0 create_gap=0
+ ENTRY(\sym)
+ 	UNWIND_HINT_IRET_REGS offset=\has_error_code*8
+ 
+@@ -898,6 +898,16 @@ ENTRY(\sym)
+ 	jnz	.Lfrom_usermode_switch_stack_\@
+ 	.endif
+ 
++	.if \create_gap == 1
++	testb	$3, CS-ORIG_RAX(%rsp)
++	jnz	.Lfrom_usermode_no_gap_\@
++	.rept 6
++	pushq	5*8(%rsp)
++	.endr
++	UNWIND_HINT_IRET_REGS offset=8
++.Lfrom_usermode_no_gap_\@:
++	.endif
++
+ 	.if \paranoid
+ 	call	paranoid_entry
+ 	.else
+@@ -1129,7 +1139,7 @@ apicinterrupt3 HYPERV_STIMER0_VECTOR \
+ #endif /* CONFIG_HYPERV */
+ 
+ idtentry debug			do_debug		has_error_code=0	paranoid=1 shift_ist=IST_INDEX_DB ist_offset=DB_STACK_OFFSET
+-idtentry int3			do_int3			has_error_code=0
++idtentry int3			do_int3			has_error_code=0	create_gap=1
+ idtentry stack_segment		do_stack_segment	has_error_code=1
+ 
+ #ifdef CONFIG_XEN_PV
+diff --git a/arch/x86/include/asm/ptrace.h b/arch/x86/include/asm/ptrace.h
+index 8a7fc0cca2d1..5ff42dc8b396 100644
+--- a/arch/x86/include/asm/ptrace.h
++++ b/arch/x86/include/asm/ptrace.h
+@@ -166,14 +166,10 @@ static inline bool user_64bit_mode(struct pt_regs *regs)
+ #define compat_user_stack_pointer()	current_pt_regs()->sp
+ #endif
+ 
+-#ifdef CONFIG_X86_32
+-extern unsigned long kernel_stack_pointer(struct pt_regs *regs);
+-#else
+ static inline unsigned long kernel_stack_pointer(struct pt_regs *regs)
  {
--	return simple_read_from_buffer(buf, len, offset,
--				       &kernel_headers_data,
--				       &kernel_headers_data_end -
--				       &kernel_headers_data);
-+	memcpy(buf, &kernel_headers_data + off, len);
-+	return len;
+ 	return regs->sp;
  }
+-#endif
  
--static const struct file_operations ikheaders_file_ops = {
--	.read = ikheaders_read_current,
--	.llseek = default_llseek,
-+static struct bin_attribute kheaders_attr __ro_after_init = {
-+	.attr = {
-+		.name = "kheaders.tar.xz",
-+		.mode = 0444,
-+	},
-+	.read = &ikheaders_read,
- };
+ #define GET_IP(regs) ((regs)->ip)
+ #define GET_FP(regs) ((regs)->bp)
+diff --git a/arch/x86/include/asm/text-patching.h b/arch/x86/include/asm/text-patching.h
+index c90678fd391a..6aac6abf931e 100644
+--- a/arch/x86/include/asm/text-patching.h
++++ b/arch/x86/include/asm/text-patching.h
+@@ -42,4 +42,24 @@ extern int after_bootmem;
+ extern __ro_after_init struct mm_struct *poking_mm;
+ extern __ro_after_init unsigned long poking_addr;
  
- static int __init ikheaders_init(void)
++static inline void int3_emulate_push(struct pt_regs *regs, unsigned long val)
++{
++	regs->sp -= sizeof(unsigned long);
++	*(unsigned long *)regs->sp = val;
++}
++
++static inline void int3_emulate_jmp(struct pt_regs *regs, unsigned long ip)
++{
++	regs->ip = ip;
++}
++
++#define INT3_INSN_SIZE 1
++#define CALL_INSN_SIZE 5
++
++static inline void int3_emulate_call(struct pt_regs *regs, unsigned long func)
++{
++	int3_emulate_push(regs, regs->ip - INT3_INSN_SIZE + CALL_INSN_SIZE);
++	int3_emulate_jmp(regs, func);
++}
++
+ #endif /* _ASM_X86_TEXT_PATCHING_H */
+diff --git a/arch/x86/kernel/alternative.c b/arch/x86/kernel/alternative.c
+index 4db9c0d29bc1..9519bc553d6d 100644
+--- a/arch/x86/kernel/alternative.c
++++ b/arch/x86/kernel/alternative.c
+@@ -613,11 +613,83 @@ extern struct paravirt_patch_site __start_parainstructions[],
+ 	__stop_parainstructions[];
+ #endif	/* CONFIG_PARAVIRT */
+ 
++/*
++ * Self-test for the INT3 based CALL emulation code.
++ *
++ * This exercises int3_emulate_call() to make sure INT3 pt_regs are set up
++ * properly and that there is a stack gap between the INT3 frame and the
++ * previous context. Without this gap doing a virtual PUSH on the interrupted
++ * stack would corrupt the INT3 IRET frame.
++ *
++ * See entry_{32,64}.S for more details.
++ */
++static void __init int3_magic(unsigned int *ptr)
++{
++	*ptr = 1;
++}
++
++extern __initdata unsigned long int3_selftest_ip; /* defined in asm below */
++
++static int __init
++int3_exception_notify(struct notifier_block *self, unsigned long val, void *data)
++{
++	struct die_args *args = data;
++	struct pt_regs *regs = args->regs;
++
++	if (!regs || user_mode(regs))
++		return NOTIFY_DONE;
++
++	if (val != DIE_INT3)
++		return NOTIFY_DONE;
++
++	if (regs->ip - INT3_INSN_SIZE != int3_selftest_ip)
++		return NOTIFY_DONE;
++
++	int3_emulate_call(regs, (unsigned long)&int3_magic);
++	return NOTIFY_STOP;
++}
++
++static void __init int3_selftest(void)
++{
++	static __initdata struct notifier_block int3_exception_nb = {
++		.notifier_call	= int3_exception_notify,
++		.priority	= INT_MAX-1, /* last */
++	};
++	unsigned int val = 0;
++
++	BUG_ON(register_die_notifier(&int3_exception_nb));
++
++	/*
++	 * Basically: int3_magic(&val); but really complicated :-)
++	 *
++	 * Stick the address of the INT3 instruction into int3_selftest_ip,
++	 * then trigger the INT3, padded with NOPs to match a CALL instruction
++	 * length.
++	 */
++	asm volatile ("1: int3; nop; nop; nop; nop\n\t"
++		      ".pushsection .init.data,\"aw\"\n\t"
++		      ".align " __ASM_SEL(4, 8) "\n\t"
++		      ".type int3_selftest_ip, @object\n\t"
++		      ".size int3_selftest_ip, " __ASM_SEL(4, 8) "\n\t"
++		      "int3_selftest_ip:\n\t"
++		      __ASM_SEL(.long, .quad) " 1b\n\t"
++		      ".popsection\n\t"
++		      : : __ASM_SEL_RAW(a, D) (&val) : "memory");
++
++	BUG_ON(val != 1);
++
++	unregister_die_notifier(&int3_exception_nb);
++}
++
+ void __init alternative_instructions(void)
  {
--	struct proc_dir_entry *entry;
+-	/* The patching is not fully atomic, so try to avoid local interruptions
+-	   that might execute the to be patched code.
+-	   Other CPUs are not running. */
++	int3_selftest();
++
++	/*
++	 * The patching is not fully atomic, so try to avoid local
++	 * interruptions that might execute the to be patched code.
++	 * Other CPUs are not running.
++	 */
+ 	stop_nmi();
+ 
+ 	/*
+@@ -642,10 +714,11 @@ void __init alternative_instructions(void)
+ 					    _text, _etext);
+ 	}
+ 
+-	if (!uniproc_patched || num_possible_cpus() == 1)
++	if (!uniproc_patched || num_possible_cpus() == 1) {
+ 		free_init_pages("SMP alternatives",
+ 				(unsigned long)__smp_locks,
+ 				(unsigned long)__smp_locks_end);
++	}
+ #endif
+ 
+ 	apply_paravirt(__parainstructions, __parainstructions_end);
+diff --git a/arch/x86/kernel/ptrace.c b/arch/x86/kernel/ptrace.c
+index 4b8ee05dd6ad..d13f892d2c47 100644
+--- a/arch/x86/kernel/ptrace.c
++++ b/arch/x86/kernel/ptrace.c
+@@ -153,35 +153,6 @@ static inline bool invalid_selector(u16 value)
+ 
+ #define FLAG_MASK		FLAG_MASK_32
+ 
+-/*
+- * X86_32 CPUs don't save ss and esp if the CPU is already in kernel mode
+- * when it traps.  The previous stack will be directly underneath the saved
+- * registers, and 'sp/ss' won't even have been saved. Thus the '&regs->sp'.
+- *
+- * Now, if the stack is empty, '&regs->sp' is out of range. In this
+- * case we try to take the previous stack. To always return a non-null
+- * stack pointer we fall back to regs as stack if no previous stack
+- * exists.
+- *
+- * This is valid only for kernel mode traps.
+- */
+-unsigned long kernel_stack_pointer(struct pt_regs *regs)
+-{
+-	unsigned long context = (unsigned long)regs & ~(THREAD_SIZE - 1);
+-	unsigned long sp = (unsigned long)&regs->sp;
+-	u32 *prev_esp;
 -
--	/* create the current headers file */
--	entry = proc_create("kheaders.tar.xz", S_IRUGO, NULL,
--			    &ikheaders_file_ops);
--	if (!entry)
--		return -ENOMEM;
+-	if (context == (sp & ~(THREAD_SIZE - 1)))
+-		return sp;
 -
--	proc_set_size(entry,
--		      &kernel_headers_data_end -
--		      &kernel_headers_data);
--	return 0;
-+	kheaders_attr.size = (&kernel_headers_data_end -
-+			      &kernel_headers_data);
-+	return sysfs_create_bin_file(kernel_kobj, &kheaders_attr);
- }
- 
- static void __exit ikheaders_cleanup(void)
+-	prev_esp = (u32 *)(context);
+-	if (*prev_esp)
+-		return (unsigned long)*prev_esp;
+-
+-	return (unsigned long)regs;
+-}
+-EXPORT_SYMBOL_GPL(kernel_stack_pointer);
+-
+ static unsigned long *pt_regs_access(struct pt_regs *regs, unsigned long regno)
  {
--	remove_proc_entry("kheaders.tar.xz", NULL);
-+	sysfs_remove_bin_file(kernel_kobj, &kheaders_attr);
- }
- 
- module_init(ikheaders_init);
--- 
-2.21.0.1020.gf2820cf01a-goog
+ 	BUILD_BUG_ON(offsetof(struct pt_regs, bx) != 0);
+
