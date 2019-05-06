@@ -2,133 +2,109 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6955114B3E
-	for <lists+linux-kselftest@lfdr.de>; Mon,  6 May 2019 15:53:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D60A14B57
+	for <lists+linux-kselftest@lfdr.de>; Mon,  6 May 2019 15:56:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726276AbfEFNxO (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 6 May 2019 09:53:14 -0400
-Received: from mail-pf1-f195.google.com ([209.85.210.195]:43331 "EHLO
-        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726298AbfEFNxN (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 6 May 2019 09:53:13 -0400
-Received: by mail-pf1-f195.google.com with SMTP id c6so1612465pfa.10
-        for <linux-kselftest@vger.kernel.org>; Mon, 06 May 2019 06:53:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=DfsikH3ADmgNVGOW8dVHffAJXBPBy/1Drd0IdtpjjJ8=;
-        b=kv7aGbZwowOP86IiNXKGTzv02HGdI2dS555U/AmH12LgQOZnKLK39c4sVdRuufn96A
-         qthFKSfdn7G60uj86be1sn6Yz08bEym7ZdQPS1mHAwXca2PX4G4xwzBsumjfQSNalrzf
-         yL5bwTZ9P03pKULjLPyCJCemso/1RN2dFNxsJkh8Db8dDQ4uyTu4XB2OtIwgRdUtOIbE
-         AyYkrbplUjKWiH4tJjgIH/K5mFuPdBD8NVSdZa64NURA8ieEyhpOBhaJlBUr1GIoMIGp
-         v2ptbSyS2qLsf62uamUc0COAt9buSU1YrXxFbkm18U+53rgjezb09axtZoHwZgv8hVgU
-         L1Yg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=DfsikH3ADmgNVGOW8dVHffAJXBPBy/1Drd0IdtpjjJ8=;
-        b=RrE9/kE8YL+nTL+hzcPTBDzWqx1yQhEZHhIsgvINzVBG7kV0oeVITmzBbKGxBZmOXi
-         hjAvM2I/Jki+1LiaCehQm9eZxgYc7dbfxaWxnHMyG5JKE8TdUGV2Zlmx8Tano0lxtEBv
-         7gTDRbhfwTKLXJOITv3Qh7TK2zmlR6uo0mDeuuKugSwMnfUSQnbnbW9jZU68Q/qjArK8
-         rOjjcbUtOTWLrmccbNwVMPU26jR/LU/ce+VYROzwj3BDeIICUwEXSlR0Cpovcq5qiwY/
-         gtJHj31znKL5DLPIAf4xhw6a27lwuy1E2XRqWg7sDVNFU+A3q02k4JT0WGYqeeVYl/gU
-         nUNQ==
-X-Gm-Message-State: APjAAAUJIjV/gWuR/4ZslwbMgSbsO5tNvwez6FMu17hma8Dyz7Z3TFc4
-        9x4dX3njt/Bp6aO4ojANylkC5Gjp10jv1b1CljQjag==
-X-Google-Smtp-Source: APXvYqz1fgwxD3Q1L0PJp0GBoiDCnAmVuD+UduBO6dKustad4HqnmYC98uMKFLNp2x7D5yl19BVMVIT9EGy2Pg34Ktk=
-X-Received: by 2002:aa7:9116:: with SMTP id 22mr33262822pfh.165.1557150792655;
- Mon, 06 May 2019 06:53:12 -0700 (PDT)
-MIME-Version: 1.0
-References: <cover.1556630205.git.andreyknvl@google.com> <8e20df035de677029b3f970744ba2d35e2df1db3.1556630205.git.andreyknvl@google.com>
- <20190503165113.GJ55449@arrakis.emea.arm.com>
-In-Reply-To: <20190503165113.GJ55449@arrakis.emea.arm.com>
-From:   Andrey Konovalov <andreyknvl@google.com>
-Date:   Mon, 6 May 2019 15:53:01 +0200
-Message-ID: <CAAeHK+wCyCa-5=bPNwfivP6sEODOXKE1bPjcjc2y_T4rN+-6gA@mail.gmail.com>
-Subject: Re: [PATCH v14 08/17] mm, arm64: untag user pointers in get_vaddr_frames
-To:     Catalin Marinas <catalin.marinas@arm.com>
-Cc:     Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-rdma@vger.kernel.org, linux-media@vger.kernel.org,
-        kvm@vger.kernel.org,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Will Deacon <will.deacon@arm.com>,
-        Mark Rutland <mark.rutland@arm.com>,
+        id S1725883AbfEFN4g convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 6 May 2019 09:56:36 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57964 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725853AbfEFN4g (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 6 May 2019 09:56:36 -0400
+Received: from gandalf.local.home (cpe-66-24-58-225.stny.res.rr.com [66.24.58.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 8EEB02054F;
+        Mon,  6 May 2019 13:56:32 +0000 (UTC)
+Date:   Mon, 6 May 2019 09:56:31 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Linux List Kernel Mailing <linux-kernel@vger.kernel.org>,
+        Ingo Molnar <mingo@kernel.org>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Kees Cook <keescook@chromium.org>,
-        Yishai Hadas <yishaih@mellanox.com>, Kuehling@google.com,
-        Felix <Felix.Kuehling@amd.com>, Deucher@google.com,
-        Alexander <Alexander.Deucher@amd.com>, Koenig@google.com,
-        Christian <Christian.Koenig@amd.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Jens Wiklander <jens.wiklander@linaro.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Kostya Serebryany <kcc@google.com>,
-        Evgeniy Stepanov <eugenis@google.com>,
-        Lee Smith <Lee.Smith@arm.com>,
-        Ramana Radhakrishnan <Ramana.Radhakrishnan@arm.com>,
-        Jacob Bramley <Jacob.Bramley@arm.com>,
-        Ruben Ayrapetyan <Ruben.Ayrapetyan@arm.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Chintan Pandya <cpandya@codeaurora.org>,
-        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
-        Dave Martin <Dave.Martin@arm.com>,
-        Kevin Brodsky <kevin.brodsky@arm.com>,
-        Szabolcs Nagy <Szabolcs.Nagy@arm.com>
-Content-Type: text/plain; charset="UTF-8"
+        Andy Lutomirski <luto@kernel.org>,
+        Nicolai Stange <nstange@suse.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        the arch/x86 maintainers <x86@kernel.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Jiri Kosina <jikos@kernel.org>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Petr Mladek <pmladek@suse.com>,
+        Joe Lawrence <joe.lawrence@redhat.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
+        Tim Chen <tim.c.chen@linux.intel.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Juergen Gross <jgross@suse.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nayna Jain <nayna@linux.ibm.com>,
+        Masahiro Yamada <yamada.masahiro@socionext.com>,
+        Joerg Roedel <jroedel@suse.de>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, stable <stable@vger.kernel.org>
+Subject: Re: [RFC][PATCH 1/2] x86: Allow breakpoints to emulate call
+ functions
+Message-ID: <20190506095631.6f71ad7c@gandalf.local.home>
+In-Reply-To: <20190506081951.GJ2606@hirez.programming.kicks-ass.net>
+References: <20190502181811.GY2623@hirez.programming.kicks-ass.net>
+        <CAHk-=wi6A9tgw=kkPh5Ywqt687VvsVEjYXVkAnq0jpt0u0tk6g@mail.gmail.com>
+        <20190502202146.GZ2623@hirez.programming.kicks-ass.net>
+        <20190502185225.0cdfc8bc@gandalf.local.home>
+        <20190502193129.664c5b2e@gandalf.local.home>
+        <20190502195052.0af473cf@gandalf.local.home>
+        <20190503092959.GB2623@hirez.programming.kicks-ass.net>
+        <20190503092247.20cc1ff0@gandalf.local.home>
+        <2045370D-38D8-406C-9E94-C1D483E232C9@amacapital.net>
+        <CAHk-=wjrOLqBG1qe9C3T=fLN0m=78FgNOGOEL22gU=+Pw6Mu9Q@mail.gmail.com>
+        <20190506081951.GJ2606@hirez.programming.kicks-ass.net>
+X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, May 3, 2019 at 6:51 PM Catalin Marinas <catalin.marinas@arm.com> wrote:
->
-> On Tue, Apr 30, 2019 at 03:25:04PM +0200, Andrey Konovalov wrote:
-> > This patch is a part of a series that extends arm64 kernel ABI to allow to
-> > pass tagged user pointers (with the top byte set to something else other
-> > than 0x00) as syscall arguments.
-> >
-> > get_vaddr_frames uses provided user pointers for vma lookups, which can
-> > only by done with untagged pointers. Instead of locating and changing
-> > all callers of this function, perform untagging in it.
-> >
-> > Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
-> > ---
-> >  mm/frame_vector.c | 2 ++
-> >  1 file changed, 2 insertions(+)
-> >
-> > diff --git a/mm/frame_vector.c b/mm/frame_vector.c
-> > index c64dca6e27c2..c431ca81dad5 100644
-> > --- a/mm/frame_vector.c
-> > +++ b/mm/frame_vector.c
-> > @@ -46,6 +46,8 @@ int get_vaddr_frames(unsigned long start, unsigned int nr_frames,
-> >       if (WARN_ON_ONCE(nr_frames > vec->nr_allocated))
-> >               nr_frames = vec->nr_allocated;
-> >
-> > +     start = untagged_addr(start);
-> > +
-> >       down_read(&mm->mmap_sem);
-> >       locked = 1;
-> >       vma = find_vma_intersection(mm, start, start + 1);
->
-> Is this some buffer that the user may have malloc'ed? I got lost when
-> trying to track down the provenience of this buffer.
+On Mon, 6 May 2019 10:19:51 +0200
+Peter Zijlstra <peterz@infradead.org> wrote:
 
-The caller that I found when I was looking at this:
+> On Fri, May 03, 2019 at 11:57:22AM -0700, Linus Torvalds wrote:
+> > On Fri, May 3, 2019 at 9:21 AM Andy Lutomirski <luto@amacapital.net> wrote:  
+> > >
+> > > So here’s a somewhat nutty suggestion: how about we tweak the 32-bit
+> > > entry code to emulate the sane 64-bit frame, not just for int3 but
+> > > always?  
+> > 
+> > What would the code actually end up looking like? I don't necessarily
+> > object, since that kernel_stack_pointer() thing certainly looks
+> > horrible, but honestly, my suggestion to just pass in the 'struct
+> > pt_regs' and let the call emulation fix it up would have also worked,
+> > and avoided that bug (and who knows what else might be hiding).
+> > 
+> > I really think that you're now hitting all the special case magic
+> > low-level crap that I wanted to avoid.  
+> 
+> This did actually boot on first try; so there must be something horribly
+> wrong...
+> 
+> Now, I know you like that other approach; but I figured I should at
+> least show you what this one looks like. Maybe I've been staring at
+> entry_32.S too much, but I really don't dislike this.
 
-drivers/gpu/drm/exynos/exynos_drm_g2d.c:482
-exynos_g2d_set_cmdlist_ioctl()->g2d_map_cmdlist_gem()->g2d_userptr_get_dma_addr()->get_vaddr_frames()
+I can test this too. I was hoping to get this in by this merge window.
+I spent 3 hours yesterday trying to get Linus's version working on
+i386 with no success. Not sure how much time Linus will have to look at
+this, as he just opened the merge window.
 
->
-> --
-> Catalin
+Again, I think Peter's solution here is the more elegant one. But as
+long as we get *a* solution, I'll be happy. And my time to work on it
+has pretty much already been depleted.
+
+-- Steve
