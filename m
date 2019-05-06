@@ -2,142 +2,143 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A81D14B9E
-	for <lists+linux-kselftest@lfdr.de>; Mon,  6 May 2019 16:15:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 798B314BB9
+	for <lists+linux-kselftest@lfdr.de>; Mon,  6 May 2019 16:23:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726156AbfEFOPc (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 6 May 2019 10:15:32 -0400
-Received: from mail-pl1-f194.google.com ([209.85.214.194]:37632 "EHLO
-        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726046AbfEFOPc (ORCPT
+        id S1726037AbfEFOX1 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 6 May 2019 10:23:27 -0400
+Received: from bombadil.infradead.org ([198.137.202.133]:55660 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725994AbfEFOX1 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 6 May 2019 10:15:32 -0400
-Received: by mail-pl1-f194.google.com with SMTP id z8so6457101pln.4
-        for <linux-kselftest@vger.kernel.org>; Mon, 06 May 2019 07:15:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=OW9r981uG4q4mCEE3eviMpvcgNrP8ztSBy/V22TuEyU=;
-        b=RwIwMiF88+Wz2lyiiiRFLD0DtzmtPhSYctT7DECXSVGGsMCqqEywraKb1VVIDK0D+6
-         e05K/iAAJcE9yRHQNbEvq9ePWUxNo3jMQ16tSsOGtmWiuiuGjYTIKZn3RWyGJN1L7rxH
-         JWCib8njn+v5Gl74GjdEjnavoToExJWkPKuLN2usGUeeVQU1cj6afqv3AP+Szx9d1YbR
-         /iYb1mW4rEJXqf/1doCy1zenFphH/aiHoOYrBoxPgEK3EUfKzOGpHL63KMDfpfhEfnGD
-         SAWo20WeW5Qs/kAhFHEaSxMs4rZb4+Da05bz1k2JR3ScMW8GRukA/aJ+BvUhLbhKhimD
-         bg2g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=OW9r981uG4q4mCEE3eviMpvcgNrP8ztSBy/V22TuEyU=;
-        b=iK86HS4i1eW+Rj/0R9JtcWvoq+U0kMZWbZqj+WlEAloJYmpZKUjQa4fiS6sNE9HF+t
-         AsxudWzsqGSwUfIT0kRxjueKNySZpAYDBV288XOlEtq9Yr/RdLHuCQsylG7ujyPa6sfF
-         B9n21gxIHZvMDOV5Azeo144JpjfDIGtj/Tz5m/2mRxT031MT+fBObjORZ1+WVpEJ3Qym
-         SaSWB7V+3zdfODWiOESMKEEIzTENtdMs3Ov2u1amn2E1+sT06IyZ+1C4nnMaOGuy9VQe
-         ZBpl13d/w42A4d/f1bsmB7PXLPim1G9d78Hq9pNBEMXcQsBw3Xo7g1ucWbEDy21ajLRX
-         F2cQ==
-X-Gm-Message-State: APjAAAVnUgzmZydMJYv6FU8R2k8wE2/LZhucoWkJdW5+sOX4ZTXxqtzy
-        inThUifr0+qEuQ1sCDY1W91oPjMVLbbJ7r12kfETrQ==
-X-Google-Smtp-Source: APXvYqyWDp8mHq4mu+m9PaBcR4hr0UfLsUgs2S/OxvEKrdiWi6A7iqRf42KWhYp4nRTNFO6VlU1AYWwzebl0ku93GlI=
-X-Received: by 2002:a17:902:7783:: with SMTP id o3mr32385898pll.159.1557152131315;
- Mon, 06 May 2019 07:15:31 -0700 (PDT)
-MIME-Version: 1.0
-References: <cover.1556630205.git.andreyknvl@google.com> <7d3b28689d47c0fa1b80628f248dbf78548da25f.1556630205.git.andreyknvl@google.com>
- <20190503165646.GK55449@arrakis.emea.arm.com>
-In-Reply-To: <20190503165646.GK55449@arrakis.emea.arm.com>
-From:   Andrey Konovalov <andreyknvl@google.com>
-Date:   Mon, 6 May 2019 16:15:20 +0200
-Message-ID: <CAAeHK+yya4OR7GfSJPc59+trq3fS9Qh_1WK2hB1aoHdR0C_t8Q@mail.gmail.com>
-Subject: Re: [PATCH v14 10/17] fs, arm64: untag user pointers in fs/userfaultfd.c
-To:     Catalin Marinas <catalin.marinas@arm.com>
-Cc:     Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-rdma@vger.kernel.org, linux-media@vger.kernel.org,
-        kvm@vger.kernel.org,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Will Deacon <will.deacon@arm.com>,
-        Mark Rutland <mark.rutland@arm.com>,
+        Mon, 6 May 2019 10:23:27 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=GxKuXy1+s+PeeiwubdliM/pp8/xYTCCy3OKd2YpFtsI=; b=UmZd8Do3/TQldA46xNq9LjC5o
+        ujqe1cGw3Kwuj67vT+ByS393Qd2O2pXTtZ1B4I26kZ6yV09UpFzfMEym3ETWoPvYl3TVGcyFOk5N4
+        hK9n2++qFXLdLa5cOTAUwTsSLPqbs5TX6WrYUNpH+naBZ82mAF1U8bJL8O7LXVuxLo7aru+o3jWYK
+        bFQ3YL526U2l6zTU0A6mwlX+e1Gu9OZyH80MquAzo2GtJW53iokh2Otg2gf0O3tD/g6hB4EExmiWK
+        nIgAQZLottZR3RvnuZLeW+L3Rs8ndg5qHLggBa3yxKoYxOZa51yf746AoYXylzcRuh8aCvd6AT7UH
+        IBiqAoBXw==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=hirez.programming.kicks-ass.net)
+        by bombadil.infradead.org with esmtpsa (Exim 4.90_1 #2 (Red Hat Linux))
+        id 1hNeW8-0005Ye-1s; Mon, 06 May 2019 14:22:56 +0000
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 096412029F884; Mon,  6 May 2019 16:22:54 +0200 (CEST)
+Date:   Mon, 6 May 2019 16:22:54 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Andy Lutomirski <luto@amacapital.net>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Linux List Kernel Mailing <linux-kernel@vger.kernel.org>,
+        Ingo Molnar <mingo@kernel.org>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Kees Cook <keescook@chromium.org>,
-        Yishai Hadas <yishaih@mellanox.com>, Kuehling@google.com,
-        Felix <Felix.Kuehling@amd.com>, Deucher@google.com,
-        Alexander <Alexander.Deucher@amd.com>, Koenig@google.com,
-        Christian <Christian.Koenig@amd.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Jens Wiklander <jens.wiklander@linaro.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Kostya Serebryany <kcc@google.com>,
-        Evgeniy Stepanov <eugenis@google.com>,
-        Lee Smith <Lee.Smith@arm.com>,
-        Ramana Radhakrishnan <Ramana.Radhakrishnan@arm.com>,
-        Jacob Bramley <Jacob.Bramley@arm.com>,
-        Ruben Ayrapetyan <Ruben.Ayrapetyan@arm.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Chintan Pandya <cpandya@codeaurora.org>,
-        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
-        Dave Martin <Dave.Martin@arm.com>,
-        Kevin Brodsky <kevin.brodsky@arm.com>,
-        Szabolcs Nagy <Szabolcs.Nagy@arm.com>
-Content-Type: text/plain; charset="UTF-8"
+        Andy Lutomirski <luto@kernel.org>,
+        Nicolai Stange <nstange@suse.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        the arch/x86 maintainers <x86@kernel.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Jiri Kosina <jikos@kernel.org>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Petr Mladek <pmladek@suse.com>,
+        Joe Lawrence <joe.lawrence@redhat.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
+        Tim Chen <tim.c.chen@linux.intel.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Juergen Gross <jgross@suse.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nayna Jain <nayna@linux.ibm.com>,
+        Masahiro Yamada <yamada.masahiro@socionext.com>,
+        Joerg Roedel <jroedel@suse.de>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, stable <stable@vger.kernel.org>
+Subject: Re: [RFC][PATCH 1/2] x86: Allow breakpoints to emulate call functions
+Message-ID: <20190506142254.GG2650@hirez.programming.kicks-ass.net>
+References: <CAHk-=wi6A9tgw=kkPh5Ywqt687VvsVEjYXVkAnq0jpt0u0tk6g@mail.gmail.com>
+ <20190502202146.GZ2623@hirez.programming.kicks-ass.net>
+ <20190502185225.0cdfc8bc@gandalf.local.home>
+ <20190502193129.664c5b2e@gandalf.local.home>
+ <20190502195052.0af473cf@gandalf.local.home>
+ <20190503092959.GB2623@hirez.programming.kicks-ass.net>
+ <20190503092247.20cc1ff0@gandalf.local.home>
+ <2045370D-38D8-406C-9E94-C1D483E232C9@amacapital.net>
+ <CAHk-=wjrOLqBG1qe9C3T=fLN0m=78FgNOGOEL22gU=+Pw6Mu9Q@mail.gmail.com>
+ <20190506081951.GJ2606@hirez.programming.kicks-ass.net>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190506081951.GJ2606@hirez.programming.kicks-ass.net>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, May 3, 2019 at 6:56 PM Catalin Marinas <catalin.marinas@arm.com> wrote:
->
-> On Tue, Apr 30, 2019 at 03:25:06PM +0200, Andrey Konovalov wrote:
-> > This patch is a part of a series that extends arm64 kernel ABI to allow to
-> > pass tagged user pointers (with the top byte set to something else other
-> > than 0x00) as syscall arguments.
-> >
-> > userfaultfd_register() and userfaultfd_unregister() use provided user
-> > pointers for vma lookups, which can only by done with untagged pointers.
-> >
-> > Untag user pointers in these functions.
-> >
-> > Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
-> > ---
-> >  fs/userfaultfd.c | 5 +++++
-> >  1 file changed, 5 insertions(+)
-> >
-> > diff --git a/fs/userfaultfd.c b/fs/userfaultfd.c
-> > index f5de1e726356..fdee0db0e847 100644
-> > --- a/fs/userfaultfd.c
-> > +++ b/fs/userfaultfd.c
-> > @@ -1325,6 +1325,9 @@ static int userfaultfd_register(struct userfaultfd_ctx *ctx,
-> >               goto out;
-> >       }
-> >
-> > +     uffdio_register.range.start =
-> > +             untagged_addr(uffdio_register.range.start);
-> > +
-> >       ret = validate_range(mm, uffdio_register.range.start,
-> >                            uffdio_register.range.len);
-> >       if (ret)
-> > @@ -1514,6 +1517,8 @@ static int userfaultfd_unregister(struct userfaultfd_ctx *ctx,
-> >       if (copy_from_user(&uffdio_unregister, buf, sizeof(uffdio_unregister)))
-> >               goto out;
-> >
-> > +     uffdio_unregister.start = untagged_addr(uffdio_unregister.start);
-> > +
-> >       ret = validate_range(mm, uffdio_unregister.start,
-> >                            uffdio_unregister.len);
-> >       if (ret)
->
-> Wouldn't it be easier to do this in validate_range()? There are a few
-> more calls in this file, though I didn't check whether a tagged address
-> would cause issues.
+On Mon, May 06, 2019 at 10:19:51AM +0200, Peter Zijlstra wrote:
+> +.Lfrom_usermode_no_fixup_\@:
+> +.endm
+> +
+> +.macro IRET_FRAME
+> +
+> +	/* orig_eax is already POP'ed when we're here */
+> +
+> +	testl $CS_FROM_KERNEL, 1*4(%esp)
+> +	jz .Lfinished_frame_\@
+> +
+> +	pushl %eax
+> +
 
-Yes, I think it makes more sense, will do in v15, thanks!
+From there..
 
->
-> --
-> Catalin
+> +	lea 10*4(%esp), %eax	# address of <previous context>
+> +	cmpl %eax, 4*4(%esp)	# if ->sp is unmodified
+> +	jnz .Lmodified_sp_do_fixup_\@
+> +
+> +	/*
+> +	 * Fast path; regs->sp wasn't modified, reuse the original IRET frame.
+> +	 */
+> +	pop %eax
+> +	add $6*4, %esp
+> +	jmp .Lfinished_frame_\@;
+> +
+> +.Lmodified_sp_do_fixup_\@:
+
+... until here, needs to go, it is buggy. While a clever idea, it looses
+updates to regs->ip and ->flags.
+
+> +
+> +	/*
+> +	 * Reconstruct the 3 entry IRET frame right after the (modified)
+> +	 * regs->sp without lowering %esp in between, such that an NMI in the
+> +	 * middle doesn't scribble our stack.
+> +	 */
+> +	pushl	%ecx
+> +	movl	5*4(%esp), %eax		# (modified) regs->sp
+> +
+> +	movl	4*4(%esp), %ecx		# flags
+> +	movl	%ecx, -4(%eax)
+> +
+> +	movl	3*4(%esp), %ecx		# cs
+> +	andl	$0x0000ffff, %ecx
+> +	movl	%ecx, -8(%eax)
+> +
+> +	movl	2*4(%esp), %ecx		# ip
+> +	movl	%ecx, -12(%eax)
+> +
+> +	movl	1*4(%esp), %ecx		# eax
+> +	movl	%ecx, -16(%eax)
+> +
+> +	popl	%ecx
+> +	lea	-16(%eax), %esp
+> +	popl	%eax
+> +
+> +.Lfinished_frame_\@:
+> +.endm
