@@ -2,117 +2,266 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F08B1549D
-	for <lists+linux-kselftest@lfdr.de>; Mon,  6 May 2019 21:50:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EDF2B154E4
+	for <lists+linux-kselftest@lfdr.de>; Mon,  6 May 2019 22:29:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726434AbfEFTuX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 6 May 2019 15:50:23 -0400
-Received: from mail-qk1-f195.google.com ([209.85.222.195]:41730 "EHLO
-        mail-qk1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726346AbfEFTuX (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 6 May 2019 15:50:23 -0400
-Received: by mail-qk1-f195.google.com with SMTP id g190so2982534qkf.8
-        for <linux-kselftest@vger.kernel.org>; Mon, 06 May 2019 12:50:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=ESsJ96JGC0CvnjgihpL/0kogE+VQksbbiyHqcPsgGyM=;
-        b=mAg8m7rSPAxM5D+1qNjO71dhsXUrQSGF8zaXxmrvN1W1e7B7fEhL/nFNC4QmlTH5S/
-         9FjLthJrMSnJTSlBNmAzOuj+WEEEHBw1j3jchmVO404WkT8GTT4n4WekZCWvQcvu4KOF
-         mx0V5cfxdymPVb2Ruxoza7w5KItB51NAJ5xivBL7H4fj5rRig8CXPXI75f55CKvkZyYC
-         Gs093sJb6bHKcKo1jSkGyp2Pk8c68+e+QijlfKiUVNZuBsCjguF+Uc/8jtTaC+sffP6g
-         22gO2vicgInFZL3gRZwFvB6M65AQIPZr/G+9s6iQjRuVRTS6fQK5LrCRIMT4SjvjNieX
-         MViA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=ESsJ96JGC0CvnjgihpL/0kogE+VQksbbiyHqcPsgGyM=;
-        b=KoJGrBFEZQbYzCasryIMecAZdG8UuSOohZhuX46kxRNkTXmRWZ7sseArHSbiLvZ3ri
-         osWMu+GpddYXn46ZQXVQJkhEA/VJLSl7hKU2fht03vTwrymFDuTAMxcunJfHbEEfnevR
-         07zPdhi8q5SRhXdXYna4QearKPBLyott61pYniKBd1g3+3WKcN6aUBD09dgECpYaTphG
-         Lc0XmX20ltzsSS4MkRBZ6HFnb2jETfX53rNtyj8V+uyPLiJlPjGrVeebZLFcnCO5O2UF
-         0iHfyH2IW793mgXq7ovb6RbeoMFmfNycR0RilPvNNz91S10HgsyJMWIe7aE2IMnIFcGu
-         CVqg==
-X-Gm-Message-State: APjAAAXMdYJSFSevUV63Le2Cd9EKIgtzouT7Mbw+0b++/bNdQO6BSCE1
-        l9+IITGvrJhu3g7mcjw9Bclqyw==
-X-Google-Smtp-Source: APXvYqweK3T+QR6CpnWc0KpWvE878/YztoCohPUsZDawCWkz4P9i6ckWrJvxSZLqhWTPckszjgD1bg==
-X-Received: by 2002:a05:620a:16b4:: with SMTP id s20mr10803976qkj.34.1557172222493;
-        Mon, 06 May 2019 12:50:22 -0700 (PDT)
-Received: from ziepe.ca (hlfxns017vw-156-34-49-251.dhcp-dynamic.fibreop.ns.bellaliant.net. [156.34.49.251])
-        by smtp.gmail.com with ESMTPSA id o44sm9303175qto.36.2019.05.06.12.50.21
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Mon, 06 May 2019 12:50:21 -0700 (PDT)
-Received: from jgg by mlx.ziepe.ca with local (Exim 4.90_1)
-        (envelope-from <jgg@ziepe.ca>)
-        id 1hNjcy-0007kq-Cs; Mon, 06 May 2019 16:50:20 -0300
-Date:   Mon, 6 May 2019 16:50:20 -0300
-From:   Jason Gunthorpe <jgg@ziepe.ca>
-To:     Andrey Konovalov <andreyknvl@google.com>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, amd-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, linux-rdma@vger.kernel.org,
-        linux-media@vger.kernel.org, kvm@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Will Deacon <will.deacon@arm.com>,
-        Mark Rutland <mark.rutland@arm.com>,
+        id S1726201AbfEFU3V (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 6 May 2019 16:29:21 -0400
+Received: from mail.kernel.org ([198.145.29.99]:49452 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726190AbfEFU3V (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 6 May 2019 16:29:21 -0400
+Received: from gandalf.local.home (cpe-66-24-58-225.stny.res.rr.com [66.24.58.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 6C47F20830;
+        Mon,  6 May 2019 20:29:17 +0000 (UTC)
+Date:   Mon, 6 May 2019 16:29:15 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Linux List Kernel Mailing <linux-kernel@vger.kernel.org>,
+        Ingo Molnar <mingo@kernel.org>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Kees Cook <keescook@chromium.org>,
-        Yishai Hadas <yishaih@mellanox.com>,
-        Felix Kuehling <Felix.Kuehling@amd.com>,
-        Alexander Deucher <Alexander.Deucher@amd.com>,
-        Christian Koenig <Christian.Koenig@amd.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Jens Wiklander <jens.wiklander@linaro.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Kostya Serebryany <kcc@google.com>,
-        Evgeniy Stepanov <eugenis@google.com>,
-        Lee Smith <Lee.Smith@arm.com>,
-        Ramana Radhakrishnan <Ramana.Radhakrishnan@arm.com>,
-        Jacob Bramley <Jacob.Bramley@arm.com>,
-        Ruben Ayrapetyan <Ruben.Ayrapetyan@arm.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
-        Dave Martin <Dave.Martin@arm.com>,
-        Kevin Brodsky <kevin.brodsky@arm.com>,
-        Szabolcs Nagy <Szabolcs.Nagy@arm.com>
-Subject: Re: [PATCH v15 13/17] IB, arm64: untag user pointers in
- ib_uverbs_(re)reg_mr()
-Message-ID: <20190506195020.GD6201@ziepe.ca>
-References: <cover.1557160186.git.andreyknvl@google.com>
- <66d044ab9445dcf36a96205a109458ac23f38b73.1557160186.git.andreyknvl@google.com>
+        Andy Lutomirski <luto@kernel.org>,
+        Nicolai Stange <nstange@suse.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Jiri Kosina <jikos@kernel.org>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Petr Mladek <pmladek@suse.com>,
+        Joe Lawrence <joe.lawrence@redhat.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
+        Tim Chen <tim.c.chen@linux.intel.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Juergen Gross <jgross@suse.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nayna Jain <nayna@linux.ibm.com>,
+        Masahiro Yamada <yamada.masahiro@socionext.com>,
+        Joerg Roedel <jroedel@suse.de>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, stable <stable@vger.kernel.org>
+Subject: Re: [RFC][PATCH 1/2] x86: Allow breakpoints to emulate call
+ functions
+Message-ID: <20190506162915.380993f9@gandalf.local.home>
+In-Reply-To: <CAHk-=witfFBW2O5v6g--FmqnAFsMkKNLosTFfWyaoJ7euQF8kQ@mail.gmail.com>
+References: <20190502181811.GY2623@hirez.programming.kicks-ass.net>
+        <CAHk-=wi6A9tgw=kkPh5Ywqt687VvsVEjYXVkAnq0jpt0u0tk6g@mail.gmail.com>
+        <20190502202146.GZ2623@hirez.programming.kicks-ass.net>
+        <20190502185225.0cdfc8bc@gandalf.local.home>
+        <20190502193129.664c5b2e@gandalf.local.home>
+        <20190502195052.0af473cf@gandalf.local.home>
+        <20190503092959.GB2623@hirez.programming.kicks-ass.net>
+        <20190503092247.20cc1ff0@gandalf.local.home>
+        <2045370D-38D8-406C-9E94-C1D483E232C9@amacapital.net>
+        <CAHk-=wjrOLqBG1qe9C3T=fLN0m=78FgNOGOEL22gU=+Pw6Mu9Q@mail.gmail.com>
+        <20190506081951.GJ2606@hirez.programming.kicks-ass.net>
+        <20190506095631.6f71ad7c@gandalf.local.home>
+        <CAHk-=wgw_Jmn1iJWanoSFb1QZn3mbTD_JEoMsWcWj5QPeyHZHA@mail.gmail.com>
+        <20190506130643.62c35eeb@gandalf.local.home>
+        <CAHk-=whesas+GDtHZks62wqXWXe4d_g3XJ359GX81qj=Fgs6qQ@mail.gmail.com>
+        <20190506145745.17c59596@gandalf.local.home>
+        <CAHk-=witfFBW2O5v6g--FmqnAFsMkKNLosTFfWyaoJ7euQF8kQ@mail.gmail.com>
+X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <66d044ab9445dcf36a96205a109458ac23f38b73.1557160186.git.andreyknvl@google.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, May 06, 2019 at 06:30:59PM +0200, Andrey Konovalov wrote:
-> This patch is a part of a series that extends arm64 kernel ABI to allow to
-> pass tagged user pointers (with the top byte set to something else other
-> than 0x00) as syscall arguments.
-> 
-> ib_uverbs_(re)reg_mr() use provided user pointers for vma lookups (through
-> e.g. mlx4_get_umem_mr()), which can only by done with untagged pointers.
-> 
-> Untag user pointers in these functions.
-> 
-> Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
-> ---
->  drivers/infiniband/core/uverbs_cmd.c | 4 ++++
->  1 file changed, 4 insertions(+)
+On Mon, 6 May 2019 12:46:11 -0700
+Linus Torvalds <torvalds@linux-foundation.org> wrote:
 
-I think this is OK.. We should really get it tested though.. Leon?
+> On Mon, May 6, 2019 at 11:57 AM Steven Rostedt <rostedt@goodmis.org> wrote:
+> >
+> > You should have waited another week to open that merge window ;-)  
+> 
+> Hmm. I'm looking at it while the test builds happen, and since I don't
+> see what's wrong in the low-level entry code, I'm looking at the
+> ftrace code instead.
+> 
+> What's going on here?
+> 
+>                *pregs = int3_emulate_call(regs, (unsigned
+> long)ftrace_regs_caller);
+> 
+> that line makes no sense. Why would we emulate a call to
+> ftrace_regs_caller()? That function sets up a pt_regs, and then calls
+> ftrace_stub().
 
-Jason
+Because that call to ftrace_stub is also dynamic.
+
+In entry_32.S
+
+.globl ftrace_call
+ftrace_call:
+	call	ftrace_stub
+
+
+update_ftrace_func()
+{
+  [..]
+	} else if (is_ftrace_caller(ip)) {
+		if (!ftrace_update_func_call) {
+			int3_emulate_jmp(regs, ip + CALL_INSN_SIZE);
+			return 1;
+		}
+		*pregs = int3_emulate_call(regs, ftrace_update_func_call);
+		return 1;
+	}
+
+Part of the code will change it to call the function needed directly.
+
+struct ftrace_ops my_ops {
+	.func = my_handler
+};
+
+	register_ftrace_function(&my_ops);
+
+Will change "call ftrace_stub" into "call my_handler"
+
+If you register another ftrace_ops, it will change that to
+
+	call ftrace_ops_list_func
+
+Which will iterate over all registered ftrace_ops, and depending on the
+hashs in ftrace_ops, will call the registered handler for them.
+
+
+> 
+> But we *have* pt_regs here already with the right values. Why isn't
+> this just a direct call to ftrace_stub() from within the int3 handler?
+> 
+> And the thing is, calling ftrace_regs_caller() looks wrong, because
+> that's not what happens for *real* mcount handling, which uses that
+> "create_trampoline()" to create the thing we're supposed to really
+> use?
+
+The ftrace_regs_caller() is what is called if there's two or more
+callbacks registered to a single function. For example, you have a
+function that is being lived patch (it uses the ftrace_regs_caller copy
+of the trampoline). But if you enable function tracing (which doesn't
+need a copy of regs), it will call the ftrace_regs_caller, which will
+call a ftrace_ops_list_func() which will look at the ftrace_ops (which
+is the descriptor representing registered callbacks to ftrace), and
+based on the hash value in them, will call their handler if the
+ftrace_ops hashes match the function being called.
+
+
+> 
+> Anyway, I simply don't understand the code, so I'm confused. But why
+> is the int3 emulation creating a call that doesn't seem to match what
+> the instruction that we're actually rewriting is supposed to do?
+> 
+> IOW, it looks to me like ftrace_int3_handler() is actually emulating
+> something different than what ftrace_modify_code() is actually
+> modifying the code to do!
+> 
+> Since the only caller of ftrace_modify_code() is update_ftrace_func(),
+> why is that function not just saving the target and we'd emulate the
+> call to that? Using anything else looks crazy?
+> 
+> But as mentioned, I just don't understand the ftrace logic. It looks
+> insane to me, and much more likely to be buggy than the very simple
+> entry code.
+
+
+Let's go an example. Let's say we live patched do_IRQ() and
+__migrate_task(). We would have this:
+
+live_patch_trampoline:
+   (which is a modified copy of the ftrace_regs_caller)
+	pushl	$__KERNEL_CS
+	pushl	4(%esp)
+	pushl	$0
+	pushl	%gs
+	pushl	%fs
+	pushl	%es
+	pushl	%ds
+	pushl	%eax
+	pushf
+	popl	%eax
+	movl	%eax, 8*4(%esp)
+	pushl	%ebp
+	pushl	%edi
+	pushl	%esi
+	pushl	%edx
+	pushl	%ecx
+	pushl	%ebx
+	movl	12*4(%esp), %eax
+	subl	$MCOUNT_INSN_SIZE, %eax
+	movl	15*4(%esp), %edx		/* Load parent ip (2nd parameter) */
+	movl	function_trace_op, %ecx		/* Save ftrace_pos in 3rd parameter */
+	pushl	%esp				/* Save pt_regs as 4th parameter */
+
+	call	live_kernel_patch_func
+
+	addl	$4, %esp			/* Skip pt_regs */
+	push	14*4(%esp)
+	popf
+	movl	12*4(%esp), %eax
+	movl	%eax, 14*4(%esp)
+	popl	%ebx
+	popl	%ecx
+	popl	%edx
+	popl	%esi
+	popl	%edi
+	popl	%ebp
+	popl	%eax
+	popl	%ds
+	popl	%es
+	popl	%fs
+	popl	%gs
+	lea	3*4(%esp), %esp			/* Skip orig_ax, ip and cs */
+	jmp	.Lftrace_ret
+
+
+<do_IRQ>:
+	call live_patch_trampoline
+	[..]
+
+<__migrate_task>:
+	call_live_patch_trampoline
+
+
+Now we enable function tracing on all functions that can be traced, and
+this includes do_IRQ() and __migrate_task(). Thus, we first modify that
+call to ftrace_stub in the ftrace_regs_caller to point to the
+ftrace_ops_list_func() as that will iterate over the ftrace_ops for
+live kernel patching, and the ftrace_ops for the function tracer. That
+iterator will check the hashes against the called functions, and for
+live kernel patching, it will it will call its handler if the passed in
+ip matches either do_IRQ() or __migrate_task(). It will see that the
+ftrace_ops for function tracing is set to trace all functions and just
+call its handler in that loop too.
+
+Today, when we place an int3 on those functions, we basically turn them
+into nops.
+
+<do_IRQ>:
+	<int3>(convert from call live_patch_trampoline
+	                 to call ftrace_regs_caller)
+	[..]
+
+But that int3 handler, doesn't call either the live_patch_trampoline or
+ftrace_regs_caller, which means, the live kernel patching doesn't get
+to make that function call something different. We basically, just
+disabled tracing completely for those functions during that transition.
+
+Remember that ftrace_regs_caller gets updated to not call ftrace_stub,
+but to the list iterator if there's more than one handler registered
+with ftrace (and so does ftrace_caller). By making the int3 handler
+call it, will do the iteration over all registered ftrace_ops and
+nothing will be missed.
+
+Does that help explain what's going on?
+
+-- Steve
