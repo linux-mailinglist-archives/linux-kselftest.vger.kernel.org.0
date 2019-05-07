@@ -2,105 +2,125 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id ADA5F16B88
-	for <lists+linux-kselftest@lfdr.de>; Tue,  7 May 2019 21:39:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1731B16BAB
+	for <lists+linux-kselftest@lfdr.de>; Tue,  7 May 2019 21:49:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726369AbfEGTjx (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 7 May 2019 15:39:53 -0400
-Received: from shards.monkeyblade.net ([23.128.96.9]:33512 "EHLO
-        shards.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726336AbfEGTjx (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 7 May 2019 15:39:53 -0400
-Received: from localhost (unknown [IPv6:2601:601:9f80:35cd::3d8])
-        (using TLSv1 with cipher AES256-SHA (256/256 bits))
-        (Client did not present a certificate)
-        (Authenticated sender: davem-davemloft)
-        by shards.monkeyblade.net (Postfix) with ESMTPSA id E829614B8B70B;
-        Tue,  7 May 2019 12:39:52 -0700 (PDT)
-Date:   Tue, 07 May 2019 12:39:52 -0700 (PDT)
-Message-Id: <20190507.123952.2046042425594195721.davem@davemloft.net>
-To:     ldir@darbyshire-bryant.me.uk
-Cc:     jhs@mojatatu.com, jiri@resnulli.us, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
-        shuah@kernel.org, xiyou.wangcong@gmail.com
-Subject: Re: [net-next v3] net: sched: Introduce act_ctinfo action
-From:   David Miller <davem@davemloft.net>
-In-Reply-To: <20190505131736.50496-1-ldir@darbyshire-bryant.me.uk>
-References: <20190505101523.48425-1-ldir@darbyshire-bryant.me.uk>
-        <20190505131736.50496-1-ldir@darbyshire-bryant.me.uk>
-X-Mailer: Mew version 6.8 on Emacs 26.1
-Mime-Version: 1.0
-Content-Type: Text/Plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.5.12 (shards.monkeyblade.net [149.20.54.216]); Tue, 07 May 2019 12:39:53 -0700 (PDT)
+        id S1726353AbfEGTte (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 7 May 2019 15:49:34 -0400
+Received: from mx1.redhat.com ([209.132.183.28]:57396 "EHLO mx1.redhat.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726321AbfEGTte (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 7 May 2019 15:49:34 -0400
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mx1.redhat.com (Postfix) with ESMTPS id 8FE3D3082B4D;
+        Tue,  7 May 2019 19:49:33 +0000 (UTC)
+Received: from treble (ovpn-123-166.rdu2.redhat.com [10.10.123.166])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 8E8741001DCC;
+        Tue,  7 May 2019 19:49:27 +0000 (UTC)
+Date:   Tue, 7 May 2019 14:49:25 -0500
+From:   Josh Poimboeuf <jpoimboe@redhat.com>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Ingo Molnar <mingo@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Nicolai Stange <nstange@suse.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        the arch/x86 maintainers <x86@kernel.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Petr Mladek <pmladek@suse.com>,
+        Joe Lawrence <joe.lawrence@redhat.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
+        Tim Chen <tim.c.chen@linux.intel.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Juergen Gross <jgross@suse.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nayna Jain <nayna@linux.ibm.com>,
+        Masahiro Yamada <yamada.masahiro@socionext.com>,
+        Joerg Roedel <jroedel@suse.de>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, stable <stable@vger.kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>
+Subject: Re: [RFC][PATCH 2/3] x86_64: Allow breakpoints to emulate call
+ functions
+Message-ID: <20190507194925.qndvv67rinrmbefj@treble>
+References: <20190507174227.673261270@goodmis.org>
+ <20190507174400.219947724@goodmis.org>
+ <20190507175342.fskdj2qidpao65qi@treble>
+ <20190507150153.7a5d376d@gandalf.local.home>
+ <20190507191412.n4uhoyfwagagyfwi@treble>
+ <20190507152016.77f7a3af@gandalf.local.home>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20190507152016.77f7a3af@gandalf.local.home>
+User-Agent: NeoMutt/20180716
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
+X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.45]); Tue, 07 May 2019 19:49:34 +0000 (UTC)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Kevin 'ldir' Darbyshire-Bryant <ldir@darbyshire-bryant.me.uk>
-Date: Sun, 5 May 2019 13:20:13 +0000
+On Tue, May 07, 2019 at 03:20:16PM -0400, Steven Rostedt wrote:
+> On Tue, 7 May 2019 14:14:12 -0500
+> Josh Poimboeuf <jpoimboe@redhat.com> wrote:
+> 
+> > On Tue, May 07, 2019 at 03:01:53PM -0400, Steven Rostedt wrote:
+> > > How's this?
+> > > 
+> > > -- Steve
+> > > 
+> > > From d29dc2e9e0275c9857932b80cebc01551b669efb Mon Sep 17 00:00:00 2001
+> > > From: Peter Zijlstra <peterz@infradead.org>
+> > > Date: Wed, 1 May 2019 15:11:17 +0200
+> > > Subject: [PATCH] x86_64: Allow breakpoints to emulate call functions
+> > > 
+> > > In order to allow breakpoints to emulate call functions, they need to push
+> > > the return address onto the stack. But because the breakpoint exception
+> > > frame is added to the stack when the breakpoint is hit, there's no room to
+> > > add the address onto the stack and return to the address of the emulated
+> > > called funtion.  
+> > 
+> > The 2nd sentence can probably be removed since it's technically no
+> > longer true, thanks to the previous patch.
+> > 
+> > > This helper functions are added:  
+> > 
+> > "These"
+> 
+> New version:
+> 
+>     x86_64: Allow breakpoints to emulate call functions
+>     
+>     In order to allow breakpoints to emulate call functions, they need to push
 
-> ctinfo is a new tc filter action module.  It is designed to restore
-> information contained in conntrack marks to other places.  At present it
-> can restore DSCP values to IPv4/6 diffserv fields and also copy
-> conntrack marks to skb marks.  As such the 2nd function effectively
-> replaces the existing act_connmark module
+Sorry to keep nitpicking, but "call functions" -> "function calls" would
+sound more accurate to me (in both subject and description).
 
-This needs more time for review and therefore I'm deferring this to the
-next merge window.
+Otherwise it looks good.
 
-Also:
+>     the return address onto the stack. The x86_64 int3 handler adds a small gap
+>     to allow the stack to grow some. Use this gap to add the return address to
+>     be able to emulate a call instruction at the breakpoint location.
+>     
+>     These helper functions are added:
+>     
+>       int3_emulate_jmp(): changes the location of the regs->ip to return there.
+>     
+>      (The next two are only for x86_64)
+>       int3_emulate_push(): to push the address onto the gap in the stack
+>       int3_emulate_call(): push the return address and change regs->ip
 
-> +static int tcf_ctinfo_act(struct sk_buff *skb, const struct tc_action *a,
-> +			  struct tcf_result *res)
-> +{
-> +	const struct nf_conntrack_tuple_hash *thash = NULL;
-> +	struct nf_conntrack_tuple tuple;
-> +	enum ip_conntrack_info ctinfo;
-> +	struct tcf_ctinfo *ca = to_ctinfo(a);
-> +	struct tcf_ctinfo_params *cp;
-> +	struct nf_conntrack_zone zone;
-> +	struct nf_conn *ct;
-> +	int proto, wlen;
-> +	int action;
-
-Reverse christmas tree for these local variables please.
-
-> +static int tcf_ctinfo_init(struct net *net, struct nlattr *nla,
-> +			   struct nlattr *est, struct tc_action **a,
-> +			   int ovr, int bind, bool rtnl_held,
-> +			   struct tcf_proto *tp,
-> +			   struct netlink_ext_ack *extack)
-> +{
-> +	struct tc_action_net *tn = net_generic(net, ctinfo_net_id);
-> +	struct tcf_ctinfo_params *cp_new;
-> +	struct nlattr *tb[TCA_CTINFO_MAX + 1];
-> +	struct tcf_chain *goto_ch = NULL;
-> +	struct tcf_ctinfo *ci;
-> +	struct tc_ctinfo *actparm;
-> +	struct tc_ctinfo_dscp *dscpparm;
-> +	int ret = 0, err, i;
-
-Likewise.
-
-> +static inline int tcf_ctinfo_dump(struct sk_buff *skb, struct tc_action *a,
-> +				  int bind, int ref)
-> +{
-> +	unsigned char *b = skb_tail_pointer(skb);
-> +	struct tcf_ctinfo *ci = to_ctinfo(a);
-> +	struct tcf_ctinfo_params *cp;
-> +	struct tc_ctinfo opt = {
-> +		.index   = ci->tcf_index,
-> +		.refcnt  = refcount_read(&ci->tcf_refcnt) - ref,
-> +		.bindcnt = atomic_read(&ci->tcf_bindcnt) - bind,
-> +	};
-> +	struct tcf_t t;
-> +	struct tc_ctinfo_dscp dscpparm;
-> +	struct tc_ctinfo_stats_dscp dscpstats;
-
-Likewise.
-
-Also, never use the inline keyword in foo.c files, always let the compiler
-decide.
+-- 
+Josh
