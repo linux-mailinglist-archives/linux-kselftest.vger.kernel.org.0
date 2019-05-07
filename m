@@ -2,116 +2,113 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 66E74168E7
-	for <lists+linux-kselftest@lfdr.de>; Tue,  7 May 2019 19:16:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5AB6168F3
+	for <lists+linux-kselftest@lfdr.de>; Tue,  7 May 2019 19:17:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726548AbfEGRQC (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 7 May 2019 13:16:02 -0400
-Received: from mail.kernel.org ([198.145.29.99]:35222 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726225AbfEGRQC (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 7 May 2019 13:16:02 -0400
-Received: from devnote2 (NE2965lan1.rev.em-net.ne.jp [210.141.244.193])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 96E9B2053B;
-        Tue,  7 May 2019 17:15:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1557249361;
-        bh=1tjepSiisGYS9Zw/hu0W/Biyos5/k6p+iNt0W5aPIfw=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=tbmhMejcd6UkaxE2Uc/e+c1SOvBxCdyGipmE+RR6jxCNZznKgtg3N7SWrzmejNe2S
-         bZMTe28ufQmpnn4bWqCa625z50NVnKbbuUw22wxAqslIUJirfKKoK8urWAI8RWYkkf
-         IQDEJkiufK4HEkdxeCGE4UoiFnMz/ZaM9a7soISg=
-Date:   Wed, 8 May 2019 02:15:51 +0900
-From:   Masami Hiramatsu <mhiramat@kernel.org>
-To:     Masami Hiramatsu <mhiramat@kernel.org>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Linux List Kernel Mailing <linux-kernel@vger.kernel.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Nicolai Stange <nstange@suse.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Jiri Kosina <jikos@kernel.org>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Petr Mladek <pmladek@suse.com>,
-        Joe Lawrence <joe.lawrence@redhat.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
-        Tim Chen <tim.c.chen@linux.intel.com>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Juergen Gross <jgross@suse.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nayna Jain <nayna@linux.ibm.com>,
+        id S1726896AbfEGRRl (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 7 May 2019 13:17:41 -0400
+Received: from mail-pg1-f195.google.com ([209.85.215.195]:44803 "EHLO
+        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726816AbfEGRRl (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 7 May 2019 13:17:41 -0400
+Received: by mail-pg1-f195.google.com with SMTP id z16so8618520pgv.11
+        for <linux-kselftest@vger.kernel.org>; Tue, 07 May 2019 10:17:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=joelfernandes.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=sXiQJbpi/4IGaaTOVq7540dm+WX0y+kDeTKOVgV+NMk=;
+        b=OrB1lgi2e5zENC5xyWyvWQlBbafJaPk/dhSP7eqEOwgN+g5epKpCynLaNInuOffPJW
+         Y7KfBhVuc8GkA09O1V0m+yT89l3VxpB/ZlVa9qyXaEuMndK09H1aFyf4VlsFjogHEAuA
+         EoV8tJOUg8v067Z5ptBuIe5cHUyjWDL3LjqH8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=sXiQJbpi/4IGaaTOVq7540dm+WX0y+kDeTKOVgV+NMk=;
+        b=GdQausFSbu3kqzgi1zWtXDiEDPts7OhkoMoc08ZBFUidaNWR81gfdtiyivLI+7HfP0
+         v22gOvw423zbKCDGWL7QTw4sY1HxVMkrkj2zh8keDYfx0iyA5l/94+4WK/8RXONlulTq
+         M6QZZQbZ/O+Q/gfzHTN78/nw/vW8BeriP14LZDfOllxQXf0wpSwLpwPGr2kZ4PYljr05
+         F6zd95nuXL6sChBo1WkJowmtLb3zSqSW0lwJIzNOIC2bRSyahoP600+TqMsncQKXav6t
+         CtXJnm8XH13YlDgD3AbSX8Kuckz9NQtoCzBlQxer3t/9DXSuGLP9sNpQOm7/9h2sIfIC
+         J1Tg==
+X-Gm-Message-State: APjAAAVOYaCleWNkHpHE/w/jttZ1/4liayb1xlEbjxhmcYPAFhE4e8ki
+        aQPGIMrXRzFDWtCgF36lkTPL8w==
+X-Google-Smtp-Source: APXvYqznkP0ThPErDNtnYUHloyF7dhrTadAsD2R/2MqVYWQNALgwqZGdhqOdOSCT6tsWXaWn7VHKDw==
+X-Received: by 2002:a63:1701:: with SMTP id x1mr40730723pgl.153.1557249460626;
+        Tue, 07 May 2019 10:17:40 -0700 (PDT)
+Received: from localhost ([2620:15c:6:12:9c46:e0da:efbf:69cc])
+        by smtp.gmail.com with ESMTPSA id s19sm16914559pfe.74.2019.05.07.10.17.38
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Tue, 07 May 2019 10:17:39 -0700 (PDT)
+Date:   Tue, 7 May 2019 13:17:37 -0400
+From:   Joel Fernandes <joel@joelfernandes.org>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Greg KH <gregkh@linuxfoundation.org>, linux-kernel@vger.kernel.org,
+        Adrian Ratiu <adrian.ratiu@collabora.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>, atishp04@gmail.com,
+        bpf@vger.kernel.org, Brendan Gregg <bgregg@netflix.com>,
+        Brendan Gregg <brendan.d.gregg@gmail.com>, dancol@google.com,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Dan Williams <dan.j.williams@intel.com>,
+        dietmar.eggemann@arm.com, duyuchao <yuchao.du@unisoc.com>,
+        Guenter Roeck <groeck@chromium.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Karim Yaghmour <karim.yaghmour@opersys.com>,
+        Kees Cook <keescook@chromium.org>, kernel-team@android.com,
+        linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-trace-devel@vger.kernel.org,
+        Manjo Raja Rao <linux@manojrajarao.com>,
         Masahiro Yamada <yamada.masahiro@socionext.com>,
-        Joerg Roedel <jroedel@suse.de>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>, stable <stable@vger.kernel.org>
-Subject: Re: [RFC][PATCH 1/2] x86: Allow breakpoints to emulate call
- functions
-Message-Id: <20190508021551.ca791c725cbddc2db541273f@kernel.org>
-In-Reply-To: <20190507231340.92b1b0665d1110f90929d878@kernel.org>
-References: <20190502181811.GY2623@hirez.programming.kicks-ass.net>
-        <20190502195052.0af473cf@gandalf.local.home>
-        <20190503092959.GB2623@hirez.programming.kicks-ass.net>
-        <20190503092247.20cc1ff0@gandalf.local.home>
-        <2045370D-38D8-406C-9E94-C1D483E232C9@amacapital.net>
-        <CAHk-=wjrOLqBG1qe9C3T=fLN0m=78FgNOGOEL22gU=+Pw6Mu9Q@mail.gmail.com>
-        <20190506081951.GJ2606@hirez.programming.kicks-ass.net>
-        <20190506095631.6f71ad7c@gandalf.local.home>
-        <CAHk-=wgw_Jmn1iJWanoSFb1QZn3mbTD_JEoMsWcWj5QPeyHZHA@mail.gmail.com>
-        <20190506130643.62c35eeb@gandalf.local.home>
-        <CAHk-=whesas+GDtHZks62wqXWXe4d_g3XJ359GX81qj=Fgs6qQ@mail.gmail.com>
-        <20190506145745.17c59596@gandalf.local.home>
-        <CAHk-=witfFBW2O5v6g--FmqnAFsMkKNLosTFfWyaoJ7euQF8kQ@mail.gmail.com>
-        <20190506162915.380993f9@gandalf.local.home>
-        <CAHk-=wi5KBWUOvM94aTOPnoJ5L_aQG=vgLQ4SxxZDeQD0pF2tQ@mail.gmail.com>
-        <20190506174511.2f8b696b@gandalf.local.home>
-        <20190507231340.92b1b0665d1110f90929d878@kernel.org>
-X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        =?utf-8?Q?Micha=C5=82?= Gregorczyk <michalgr@fb.com>,
+        Michal Gregorczyk <michalgr@live.com>,
+        Mohammad Husain <russoue@gmail.com>,
+        Olof Johansson <olof@lixom.net>, qais.yousef@arm.com,
+        rdunlap@infradead.org, Shuah Khan <shuah@kernel.org>,
+        Srinivas Ramana <sramana@codeaurora.org>,
+        Tamir Carmeli <carmeli.tamir@gmail.com>, yhs@fb.com
+Subject: Re: [PATCH v2] kheaders: Move from proc to sysfs
+Message-ID: <20190507171737.GA97358@google.com>
+References: <20190504121213.183203-1-joel@joelfernandes.org>
+ <20190504122158.GA23535@kroah.com>
+ <20190504123650.GA229151@google.com>
+ <20190505091030.GA25646@kroah.com>
+ <20190505132623.GA3076@localhost>
+ <20190505163145.45f77e44@oasis.local.home>
+ <20190507163824.GC89248@google.com>
+ <20190507165718.GA1241@kroah.com>
+ <20190507130333.58c95268@gandalf.local.home>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190507130333.58c95268@gandalf.local.home>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, 7 May 2019 23:13:40 +0900
-Masami Hiramatsu <mhiramat@kernel.org> wrote:
-
-> On Mon, 6 May 2019 17:45:11 -0400
-> Steven Rostedt <rostedt@goodmis.org> wrote:
+On Tue, May 07, 2019 at 01:03:33PM -0400, Steven Rostedt wrote:
+> On Tue, 7 May 2019 18:57:18 +0200
+> Greg KH <gregkh@linuxfoundation.org> wrote:
 > 
-> > If we go with Peter's patch, I can make this code much more sane, and
-> > not have to worry about having &regs->sp be at the top of the stack. I
-> > could simply, just push everything in the order of pt_regs and call the
-> > handler.
+> > > Thanks makes sense. So Greg, I submitted this properly, does it look good to
+> > > you now? Steven, I would appreciate any Acks/Reviews on the patch as well:
+> > > https://lore.kernel.org/patchwork/patch/1070199/  
+> > 
+> > Looks good to me, should get to it in a few days...
 > 
-> Hi Steve, I need to catch up with the origin of this series, but it seems
-> also good to optprobe which is doing similar trick on pt_regs. If we can
-> assume that int3 pt_regs can have a gap, optprobe can also make a gap, and
-> it can be also used for storing destination address.
+> Me too. Feel free to add
+> 
+> Acked-by: Steven Rostedt (VMware) <rostedt@goodmis.org>
+> 
+> But as for reviewing, I see nothing wrong with it, but I doubt I'll
+> find something that Greg missed in this code.
 
-Sorry, I misunderstood. I see the issue ( https://lkml.org/lkml/2019/5/1/497 )
-and solutions on the thread. If we really need to fix this trace-livepatch
-combination issue, it may be good to backport to stable trees.
-From this viewpoint, Linus's suggestion (no pt_reg changes on x86-32) seems
-to have a point.
+Thanks!
 
-BTW, even though I think Peter's patch (unifying pt_regs behavior) will also
-be good for us for more general reason (not only for fixing actual issue).
+ - Joel
 
-Thank you,
-
--- 
-Masami Hiramatsu <mhiramat@kernel.org>
