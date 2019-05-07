@@ -2,39 +2,25 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 96411162D4
-	for <lists+linux-kselftest@lfdr.de>; Tue,  7 May 2019 13:32:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7122F163B8
+	for <lists+linux-kselftest@lfdr.de>; Tue,  7 May 2019 14:27:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726400AbfEGLcQ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 7 May 2019 07:32:16 -0400
-Received: from merlin.infradead.org ([205.233.59.134]:38388 "EHLO
-        merlin.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726276AbfEGLcQ (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 7 May 2019 07:32:16 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=merlin.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=0G0Op7qzdUllIx217BDIX7hQDFmNR1hjBEmN3uH/wmM=; b=bv9hlo2+IqIluXyx1IyzYf4+2
-        XhumvYALMGJMgM81v5ZLGPqY5LRZT67zik8hBt/625x5jxWyUACHPwDUiRtMLRjyLFvSehE0YE9hA
-        WGGaAEm4Vl0gGDXvotmBnc3tECB82fSuKQ8Sex3m4R/NZ4WI2ti48nUQA8iUYzqb3GENub4IxQS9M
-        xUX1h7wMqORpAYUeAvaWgn5ss/K6KKU3WqkmIEqdjHnLl1vrosMXNaFZEhI6TOJsXytb/c3vdR6P3
-        dD4e/QeMf+TEl7i2H86GUAZAY5cVEe9letJOB7J9cES996O5TlJTAZ3VCmQ+UyU3Pmz+Q62/LWc8F
-        7dDh57edQ==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=hirez.programming.kicks-ass.net)
-        by merlin.infradead.org with esmtpsa (Exim 4.90_1 #2 (Red Hat Linux))
-        id 1hNyJB-0006Sy-Su; Tue, 07 May 2019 11:30:54 +0000
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id D03FC2063D744; Tue,  7 May 2019 13:30:50 +0200 (CEST)
-Date:   Tue, 7 May 2019 13:30:50 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     David Laight <David.Laight@ACULAB.COM>
+        id S1726435AbfEGM1V (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 7 May 2019 08:27:21 -0400
+Received: from mail.kernel.org ([198.145.29.99]:55840 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726329AbfEGM1V (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 7 May 2019 08:27:21 -0400
+Received: from gandalf.local.home (cpe-66-24-58-225.stny.res.rr.com [66.24.58.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id E807520825;
+        Tue,  7 May 2019 12:27:17 +0000 (UTC)
+Date:   Tue, 7 May 2019 08:27:16 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Peter Zijlstra <peterz@infradead.org>
 Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
         Andy Lutomirski <luto@amacapital.net>,
-        Steven Rostedt <rostedt@goodmis.org>,
         Linux List Kernel Mailing <linux-kernel@vger.kernel.org>,
         Ingo Molnar <mingo@kernel.org>,
         Andrew Morton <akpm@linux-foundation.org>,
@@ -61,50 +47,41 @@ Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
         Joerg Roedel <jroedel@suse.de>,
         "open list:KERNEL SELFTEST FRAMEWORK" 
         <linux-kselftest@vger.kernel.org>, stable <stable@vger.kernel.org>
-Subject: Re: [RFC][PATCH 1/2] x86: Allow breakpoints to emulate call functions
-Message-ID: <20190507113050.GR2606@hirez.programming.kicks-ass.net>
-References: <20190502185225.0cdfc8bc@gandalf.local.home>
- <20190502193129.664c5b2e@gandalf.local.home>
- <20190502195052.0af473cf@gandalf.local.home>
- <20190503092959.GB2623@hirez.programming.kicks-ass.net>
- <20190503092247.20cc1ff0@gandalf.local.home>
- <2045370D-38D8-406C-9E94-C1D483E232C9@amacapital.net>
- <CAHk-=wjrOLqBG1qe9C3T=fLN0m=78FgNOGOEL22gU=+Pw6Mu9Q@mail.gmail.com>
- <20190506081951.GJ2606@hirez.programming.kicks-ass.net>
- <20190507085753.GO2606@hirez.programming.kicks-ass.net>
- <b34aa38bdfe84263bc20b60761bf6005@AcuMS.aculab.com>
+Subject: Re: [RFC][PATCH 1/2] x86: Allow breakpoints to emulate call
+ functions
+Message-ID: <20190507082716.73cd5a01@gandalf.local.home>
+In-Reply-To: <20190507092731.GH2650@hirez.programming.kicks-ass.net>
+References: <20190502202146.GZ2623@hirez.programming.kicks-ass.net>
+        <20190502185225.0cdfc8bc@gandalf.local.home>
+        <20190502193129.664c5b2e@gandalf.local.home>
+        <20190502195052.0af473cf@gandalf.local.home>
+        <20190503092959.GB2623@hirez.programming.kicks-ass.net>
+        <20190503092247.20cc1ff0@gandalf.local.home>
+        <2045370D-38D8-406C-9E94-C1D483E232C9@amacapital.net>
+        <CAHk-=wjrOLqBG1qe9C3T=fLN0m=78FgNOGOEL22gU=+Pw6Mu9Q@mail.gmail.com>
+        <20190506081951.GJ2606@hirez.programming.kicks-ass.net>
+        <20190507085753.GO2606@hirez.programming.kicks-ass.net>
+        <20190507092731.GH2650@hirez.programming.kicks-ass.net>
+X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <b34aa38bdfe84263bc20b60761bf6005@AcuMS.aculab.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, May 07, 2019 at 09:18:51AM +0000, David Laight wrote:
-> From: Peter Zijlstra
-> > Sent: 07 May 2019 09:58
-> ...
-> > +	/*
-> > +	 * When we're here from kernel mode; the (exception) stack looks like:
-> > +	 *
-> > +	 * 4*4(%esp) - <previous context>
-> > +	 * 3*4(%esp) - flags
-> > +	 * 2*4(%esp) - cs
-> > +	 * 1*4(%esp) - ip
-> > +	 * 0*4(%esp) - orig_eax
+On Tue, 7 May 2019 11:27:31 +0200
+Peter Zijlstra <peterz@infradead.org> wrote:
+
+> FWIW, both these trampolines assume a kprobe will not
+> int3_emulate_{push/call}(), for both bitnesses.
 > 
-> Am I right in thinking that this is the only 'INT3' stack frame that
-> needs to be 'fiddled' with?
-> And that the 'emulate a call instruction' has verified that is the case??
-> So the %cs is always the kernel %cs.
+> But then; I'm thinking kprobes should be inspection only and not modify
+> things. So that might just be good enough.
 
-Only the INT3 thing needs 'the gap', but the far bigger change here is
-that kernel frames now have a complete pt_regs set and all sorts of
-horrible crap can go away.
+I believe there are kprobe calls that do modify things. Note, they can
+modify regs->ip. Kprobes sets the FTRACE_OPS_FL_IPMODIFY flag, thus
+they can never be put at the same location that is being live patched.
 
-For 32bit 'the gap' happens naturally when building a 5 entry frame. Yes
-it is possible to build a 5 entry frame on top of the old 3 entry one,
-but why bother...
+-- Steve
