@@ -2,121 +2,165 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E474116907
-	for <lists+linux-kselftest@lfdr.de>; Tue,  7 May 2019 19:22:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 816CF16917
+	for <lists+linux-kselftest@lfdr.de>; Tue,  7 May 2019 19:24:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726473AbfEGRWl (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 7 May 2019 13:22:41 -0400
-Received: from mail-lj1-f196.google.com ([209.85.208.196]:37477 "EHLO
-        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726406AbfEGRWk (ORCPT
+        id S1726926AbfEGRYp (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 7 May 2019 13:24:45 -0400
+Received: from outgoing-auth-1.mit.edu ([18.9.28.11]:46096 "EHLO
+        outgoing.mit.edu" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726473AbfEGRYp (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 7 May 2019 13:22:40 -0400
-Received: by mail-lj1-f196.google.com with SMTP id 132so7315917ljj.4;
-        Tue, 07 May 2019 10:22:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=6PNDzrjcpUnF2ox8n27775TY/wH+ql2a/Pdl5jrIFYE=;
-        b=USDDugBCti1omKMaJ+lePP2NJJOBT+kdaOAPkCwlDm/xFScLP7RKjwiA4OVbkYYsZ/
-         rB+Cets8kTZOPyUTpYJGf13gmuMdIiBUUEomgjZBYMULBx4mW2MUDtSxtls7yQyxm/x8
-         IIfFFtxJI7iSASALqypt4rmoNTeF92lJlKkPM/ZriDb/pe6763gpQmp430bcDrFSZ26o
-         5OKhmwk6QGhLN14rcQWGDs5vmrc/gzH3GEIrOW2WyF2KVb8j6l1R5LFP3ACxgI/lZ482
-         QkE2DO+hGaLN7KG1YZfEFY+DjuuHBGirKhCKJ3ZMHY4qhEH+I/zIASL3Uoep0lLI+vUX
-         6esA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=6PNDzrjcpUnF2ox8n27775TY/wH+ql2a/Pdl5jrIFYE=;
-        b=KKViP/R+zaePeWKhUo/nLYpB28w3yBR9AhhZgVKJ2D1nE4c5AffFO0tkm0RGhf7CFZ
-         v9EtPNE0YUi3Anukh9eiGpFxYd2vKiFiyJiE8xoiAlJoTRtLES3zrFkyCxiirOP/IB2Q
-         WeLMQ8sGp/ZSGJt2+ONhYqi3it7QdKzlfDsWWHj2Ajpc7RLmaFNMmZ9/TlESyT4Ydb9i
-         0UVaWjnc+vSLtXrW+KPscG85MLkmw7vjDg/n8Tu5BIHQ7TP2304Coxx9gZV07+gdUoC2
-         WH1k8z2RvzB5uTad2bEKQ1B6HgIowXOqDfinnpPmvToFsy4QbvU3wIpl2IAltXI1i31r
-         jr3Q==
-X-Gm-Message-State: APjAAAXLxZQR0/EAoff1LSvoa3zLZuma7trPNJSetP4knFs92+nDZ/bz
-        7/Naa5d/cxXijwRsNxkC1pBlo3i6KLioetsJGto=
-X-Google-Smtp-Source: APXvYqwSZNtebCFzz431MrdMsGtiBpuF+nfLHauiIB2m9pngsg+jgTHyuxkhtVAXHTIHSYaJBzcdpPG+xOfr+/dpSJY=
-X-Received: by 2002:a2e:5301:: with SMTP id h1mr17664822ljb.196.1557249758675;
- Tue, 07 May 2019 10:22:38 -0700 (PDT)
+        Tue, 7 May 2019 13:24:45 -0400
+Received: from callcc.thunk.org (guestnat-104-133-0-109.corp.google.com [104.133.0.109] (may be forged))
+        (authenticated bits=0)
+        (User authenticated as tytso@ATHENA.MIT.EDU)
+        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id x47HMurS031460
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 7 May 2019 13:22:59 -0400
+Received: by callcc.thunk.org (Postfix, from userid 15806)
+        id 7D6D5420024; Tue,  7 May 2019 13:22:56 -0400 (EDT)
+Date:   Tue, 7 May 2019 13:22:56 -0400
+From:   "Theodore Ts'o" <tytso@mit.edu>
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Frank Rowand <frowand.list@gmail.com>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        keescook@google.com, kieran.bingham@ideasonboard.com,
+        mcgrof@kernel.org, robh@kernel.org, sboyd@kernel.org,
+        shuah@kernel.org, devicetree@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, kunit-dev@googlegroups.com,
+        linux-doc@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-nvdimm@lists.01.org,
+        linux-um@lists.infradead.org, Alexander.Levin@microsoft.com,
+        Tim.Bird@sony.com, amir73il@gmail.com, dan.carpenter@oracle.com,
+        dan.j.williams@intel.com, daniel@ffwll.ch, jdike@addtoit.com,
+        joel@jms.id.au, julia.lawall@lip6.fr, khilman@baylibre.com,
+        knut.omang@oracle.com, logang@deltatee.com, mpe@ellerman.id.au,
+        pmladek@suse.com, richard@nod.at, rientjes@google.com,
+        rostedt@goodmis.org, wfg@linux.intel.com
+Subject: Re: [PATCH v2 00/17] kunit: introduce KUnit, the Linux kernel unit
+ testing framework
+Message-ID: <20190507172256.GB5900@mit.edu>
+Mail-Followup-To: Theodore Ts'o <tytso@mit.edu>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Brendan Higgins <brendanhiggins@google.com>, keescook@google.com,
+        kieran.bingham@ideasonboard.com, mcgrof@kernel.org, robh@kernel.org,
+        sboyd@kernel.org, shuah@kernel.org, devicetree@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, kunit-dev@googlegroups.com,
+        linux-doc@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-nvdimm@lists.01.org,
+        linux-um@lists.infradead.org, Alexander.Levin@microsoft.com,
+        Tim.Bird@sony.com, amir73il@gmail.com, dan.carpenter@oracle.com,
+        dan.j.williams@intel.com, daniel@ffwll.ch, jdike@addtoit.com,
+        joel@jms.id.au, julia.lawall@lip6.fr, khilman@baylibre.com,
+        knut.omang@oracle.com, logang@deltatee.com, mpe@ellerman.id.au,
+        pmladek@suse.com, richard@nod.at, rientjes@google.com,
+        rostedt@goodmis.org, wfg@linux.intel.com
+References: <20190501230126.229218-1-brendanhiggins@google.com>
+ <54940124-50df-16ec-1a32-ad794ee05da7@gmail.com>
+ <20190507080119.GB28121@kroah.com>
 MIME-Version: 1.0
-References: <20190502193129.664c5b2e@gandalf.local.home> <20190502195052.0af473cf@gandalf.local.home>
- <20190503092959.GB2623@hirez.programming.kicks-ass.net> <20190503092247.20cc1ff0@gandalf.local.home>
- <2045370D-38D8-406C-9E94-C1D483E232C9@amacapital.net> <CAHk-=wjrOLqBG1qe9C3T=fLN0m=78FgNOGOEL22gU=+Pw6Mu9Q@mail.gmail.com>
- <20190506081951.GJ2606@hirez.programming.kicks-ass.net> <20190507085753.GO2606@hirez.programming.kicks-ass.net>
- <20190507092731.GH2650@hirez.programming.kicks-ass.net> <20190507082716.73cd5a01@gandalf.local.home>
- <20190507124131.GO2623@hirez.programming.kicks-ass.net> <20190507085417.381d96d0@gandalf.local.home>
-In-Reply-To: <20190507085417.381d96d0@gandalf.local.home>
-From:   Masami Hiramatsu <masami.hiramatsu@gmail.com>
-Date:   Wed, 8 May 2019 02:22:26 +0900
-Message-ID: <CADyE4xHw_eikPhgsVuOwpi34vF22_i0MhVaQac0bVvKZ6hLqdw@mail.gmail.com>
-Subject: Re: [RFC][PATCH 1/2] x86: Allow breakpoints to emulate call functions
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Linux List Kernel Mailing <linux-kernel@vger.kernel.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Nicolai Stange <nstange@suse.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Jiri Kosina <jikos@kernel.org>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Petr Mladek <pmladek@suse.com>,
-        Joe Lawrence <joe.lawrence@redhat.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
-        Tim Chen <tim.c.chen@linux.intel.com>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Juergen Gross <jgross@suse.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nayna Jain <nayna@linux.ibm.com>,
-        Masahiro Yamada <yamada.masahiro@socionext.com>,
-        Joerg Roedel <jroedel@suse.de>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>, stable <stable@vger.kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190507080119.GB28121@kroah.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-2019=E5=B9=B45=E6=9C=887=E6=97=A5(=E7=81=AB) 21:54 Steven Rostedt <rostedt@=
-goodmis.org>:
->
-> On Tue, 7 May 2019 14:41:31 +0200
-> Peter Zijlstra <peterz@infradead.org> wrote:
->
-> > > Kprobes sets the FTRACE_OPS_FL_IPMODIFY flag, thus
-> > > they can never be put at the same location that is being live patched=
-.
-> >
-> > OK, so do we want to allow kprobes that also modify regs->sp ? Because
-> > then we need to change these trampolines a bit.
-> >
-> > I'd prefer not to allow kprobes this.
->
-> I believe no kprobe changes sp, because it would have had the same
-> issues we are trying to solve now. And even though we are changing
-> things to allow it, it's not a regression to keep kprobes from doing it.
+On Tue, May 07, 2019 at 10:01:19AM +0200, Greg KH wrote:
+> > My understanding is that the intent of KUnit is to avoid booting a kernel on
+> > real hardware or in a virtual machine.  That seems to be a matter of semantics
+> > to me because isn't invoking a UML Linux just running the Linux kernel in
+> > a different form of virtualization?
+> > 
+> > So I do not understand why KUnit is an improvement over kselftest.
+> > 
+> > It seems to me that KUnit is just another piece of infrastructure that I
+> > am going to have to be familiar with as a kernel developer.  More overhead,
+> > more information to stuff into my tiny little brain.
+> > 
+> > I would guess that some developers will focus on just one of the two test
+> > environments (and some will focus on both), splitting the development
+> > resources instead of pooling them on a common infrastructure.
+> > 
+> > What am I missing?
+> 
+> kselftest provides no in-kernel framework for testing kernel code
+> specifically.  That should be what kunit provides, an "easy" way to
+> write in-kernel tests for things.
+> 
+> Brendan, did I get it right?
 
-No, kprobes doesn't allow to change sp. At this moment we can't change
-"&regs->sp" since it is just a value :)
-kprobes user (e.g. function fault-injection) will change regs->ip,
-that is why kprobes sets IPMODIFY flag.
+Yes, that's basically right.  You don't *have* to use KUnit.  It's
+supposed to be a simple way to run a large number of small tests that
+for specific small components in a system.
 
-Thank you,
+For example, I currently use xfstests using KVM and GCE to test all of
+ext4.  These tests require using multiple 5 GB and 20GB virtual disks,
+and it works by mounting ext4 file systems and exercising ext4 through
+the system call interfaces, using userspace tools such as fsstress,
+fsx, fio, etc.  It requires time overhead to start the VM, create and
+allocate virtual disks, etc.  For example, to run a single 3 seconds
+xfstest (generic/001), it requires full 10 seconds to run it via
+kvm-xfstests.
 
---=20
-Masami Hiramatsu
-mailto:masami.hiramatsu@gmail.com
+KUnit is something else; it's specifically intended to allow you to
+create lightweight tests quickly and easily, and by reducing the
+effort needed to write and run unit tests, hopefully we'll have a lot
+more of them and thus improve kernel quality.
+
+As an example, I have a volunteer working on developing KUinit tests
+for ext4.  We're going to start by testing the ext4 extent status
+tree.  The source code is at fs/ext4/extent_status.c; it's
+approximately 1800 LOC.  The Kunit tests for the extent status tree
+will exercise all of the corner cases for the various extent status
+tree functions --- e.g., ext4_es_insert_delayed_block(),
+ext4_es_remove_extent(), ext4_es_cache_extent(), etc.  And it will do
+this in isolation without our needing to create a test file system or
+using a test block device.
+
+Next we'll test the ext4 block allocator, again in isolation.  To test
+the block allocator we will have to write "mock functions" which
+simulate reading allocation bitmaps from disk.  Again, this will allow
+the test writer to explicitly construct corner cases and validate that
+the block allocator works as expected without having to reverese
+engineer file system data structures which will force a particular
+code path to be executed.
+
+So this is why it's largely irrelevant to me that KUinit uses UML.  In
+fact, it's a feature.  We're not testing device drivers, or the
+scheduler, or anything else architecture-specific.  UML is not about
+virtualization.  What it's about in this context is allowing us to
+start running test code as quickly as possible.  Booting KVM takes
+about 3-4 seconds, and this includes initializing virtio_scsi and
+other device drivers.  If by using UML we can hold the amount of
+unnecessary kernel subsystem initialization down to the absolute
+minimum, and if it means that we can communicating to the test
+framework via a userspace "printf" from UML/KUnit code, as opposed to
+via a virtual serial port to KVM's virtual console, it all makes for
+lighter weight testing.
+
+Why did I go looking for a volunteer to write KUnit tests for ext4?
+Well, I have a plan to make some changes in restructing how ext4's
+write path works, in order to support things like copy-on-write, a
+more efficient delayed allocation system, etc.  This will require
+making changes to the extent status tree, and by having unit tests for
+the extent status tree, we'll be able to detect any bugs that we might
+accidentally introduce in the es tree far more quickly than if we
+didn't have those tests available.  Google has long found that having
+these sorts of unit tests is a real win for developer velocity for any
+non-trivial code module (or C++ class), even when you take into
+account the time it takes to create the unit tests.
+
+					- Ted
+
+P.S.  Many thanks to Brendan for finding such a volunteer for me; the
+person in question is a SRE from Switzerland who is interested in
+getting involved with kernel testing, and this is going to be their
+20% project.  :-)
+
