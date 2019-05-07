@@ -2,36 +2,23 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 49540163DB
-	for <lists+linux-kselftest@lfdr.de>; Tue,  7 May 2019 14:42:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9372416409
+	for <lists+linux-kselftest@lfdr.de>; Tue,  7 May 2019 14:54:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726531AbfEGMmN (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 7 May 2019 08:42:13 -0400
-Received: from merlin.infradead.org ([205.233.59.134]:38860 "EHLO
-        merlin.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726426AbfEGMmN (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 7 May 2019 08:42:13 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=merlin.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=81opB8G7Ipd0tVreem0atOppp7UchqtWU6V9nRjg3jM=; b=gYkz85TyaiCt6SSCYspfu7uf9
-        jrbc5Y4/InQcMFAT0lSX2OtfOHyC7APTtxe7YAvNjuUX2ihF5HCVIc6jH2JgTZGSaGI1e0PKeEZmt
-        XnPXmbtxl5YVqwGOFgPjLYhvKx1yPuZqmO+6TPlK+x51gIogJjQGwTE5q2MedgGWpcfx/aGUiq1S8
-        Z8ikXYv0UkkBzGkghK3nRMHvHYV+LJWXiG+YyIv06fEAuoLkx95svxUFDcbWJI2H3IMiWwEvZ3Hx+
-        NPcwK8hTflUo0JgfVKgMRLR8T03VTctYK6VVILJqOOqyUf7CTrnrDBnr/UGJKx7pREwTGjydZREIz
-        8T9xtBqXQ==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=hirez.programming.kicks-ass.net)
-        by merlin.infradead.org with esmtpsa (Exim 4.90_1 #2 (Red Hat Linux))
-        id 1hNzPa-0007Bf-CG; Tue, 07 May 2019 12:41:34 +0000
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id D30DC201E11CE; Tue,  7 May 2019 14:41:31 +0200 (CEST)
-Date:   Tue, 7 May 2019 14:41:31 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Steven Rostedt <rostedt@goodmis.org>
+        id S1726404AbfEGMyX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 7 May 2019 08:54:23 -0400
+Received: from mail.kernel.org ([198.145.29.99]:37388 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726000AbfEGMyX (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 7 May 2019 08:54:23 -0400
+Received: from gandalf.local.home (cpe-66-24-58-225.stny.res.rr.com [66.24.58.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 9914C20578;
+        Tue,  7 May 2019 12:54:19 +0000 (UTC)
+Date:   Tue, 7 May 2019 08:54:17 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Peter Zijlstra <peterz@infradead.org>
 Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
         Andy Lutomirski <luto@amacapital.net>,
         Linux List Kernel Mailing <linux-kernel@vger.kernel.org>,
@@ -61,48 +48,43 @@ Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
         "open list:KERNEL SELFTEST FRAMEWORK" 
         <linux-kselftest@vger.kernel.org>, stable <stable@vger.kernel.org>,
         Masami Hiramatsu <mhiramat@kernel.org>
-Subject: Re: [RFC][PATCH 1/2] x86: Allow breakpoints to emulate call functions
-Message-ID: <20190507124131.GO2623@hirez.programming.kicks-ass.net>
+Subject: Re: [RFC][PATCH 1/2] x86: Allow breakpoints to emulate call
+ functions
+Message-ID: <20190507085417.381d96d0@gandalf.local.home>
+In-Reply-To: <20190507124131.GO2623@hirez.programming.kicks-ass.net>
 References: <20190502193129.664c5b2e@gandalf.local.home>
- <20190502195052.0af473cf@gandalf.local.home>
- <20190503092959.GB2623@hirez.programming.kicks-ass.net>
- <20190503092247.20cc1ff0@gandalf.local.home>
- <2045370D-38D8-406C-9E94-C1D483E232C9@amacapital.net>
- <CAHk-=wjrOLqBG1qe9C3T=fLN0m=78FgNOGOEL22gU=+Pw6Mu9Q@mail.gmail.com>
- <20190506081951.GJ2606@hirez.programming.kicks-ass.net>
- <20190507085753.GO2606@hirez.programming.kicks-ass.net>
- <20190507092731.GH2650@hirez.programming.kicks-ass.net>
- <20190507082716.73cd5a01@gandalf.local.home>
+        <20190502195052.0af473cf@gandalf.local.home>
+        <20190503092959.GB2623@hirez.programming.kicks-ass.net>
+        <20190503092247.20cc1ff0@gandalf.local.home>
+        <2045370D-38D8-406C-9E94-C1D483E232C9@amacapital.net>
+        <CAHk-=wjrOLqBG1qe9C3T=fLN0m=78FgNOGOEL22gU=+Pw6Mu9Q@mail.gmail.com>
+        <20190506081951.GJ2606@hirez.programming.kicks-ass.net>
+        <20190507085753.GO2606@hirez.programming.kicks-ass.net>
+        <20190507092731.GH2650@hirez.programming.kicks-ass.net>
+        <20190507082716.73cd5a01@gandalf.local.home>
+        <20190507124131.GO2623@hirez.programming.kicks-ass.net>
+X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190507082716.73cd5a01@gandalf.local.home>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, May 07, 2019 at 08:27:16AM -0400, Steven Rostedt wrote:
-> On Tue, 7 May 2019 11:27:31 +0200
-> Peter Zijlstra <peterz@infradead.org> wrote:
+On Tue, 7 May 2019 14:41:31 +0200
+Peter Zijlstra <peterz@infradead.org> wrote:
+
+> > Kprobes sets the FTRACE_OPS_FL_IPMODIFY flag, thus
+> > they can never be put at the same location that is being live patched.  
 > 
-> > FWIW, both these trampolines assume a kprobe will not
-> > int3_emulate_{push/call}(), for both bitnesses.
-> > 
-> > But then; I'm thinking kprobes should be inspection only and not modify
-> > things. So that might just be good enough.
+> OK, so do we want to allow kprobes that also modify regs->sp ? Because
+> then we need to change these trampolines a bit.
 > 
-> I believe there are kprobe calls that do modify things. Note, they can
-> modify regs->ip. 
+> I'd prefer not to allow kprobes this.
 
-The kprobe pre_handler as used by kretprobes does, and that is indeed
-handled by the trampolines.
+I believe no kprobe changes sp, because it would have had the same
+issues we are trying to solve now. And even though we are changing
+things to allow it, it's not a regression to keep kprobes from doing it.
 
-> Kprobes sets the FTRACE_OPS_FL_IPMODIFY flag, thus
-> they can never be put at the same location that is being live patched.
-
-OK, so do we want to allow kprobes that also modify regs->sp ? Because
-then we need to change these trampolines a bit.
-
-I'd prefer not to allow kprobes this.
+-- Steve
