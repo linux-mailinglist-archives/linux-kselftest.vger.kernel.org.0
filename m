@@ -2,24 +2,24 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8480316999
-	for <lists+linux-kselftest@lfdr.de>; Tue,  7 May 2019 19:53:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 917DE169AA
+	for <lists+linux-kselftest@lfdr.de>; Tue,  7 May 2019 19:57:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726545AbfEGRxw (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 7 May 2019 13:53:52 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:34000 "EHLO mx1.redhat.com"
+        id S1726836AbfEGR5K (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 7 May 2019 13:57:10 -0400
+Received: from mx1.redhat.com ([209.132.183.28]:49604 "EHLO mx1.redhat.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726452AbfEGRxw (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 7 May 2019 13:53:52 -0400
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
+        id S1726797AbfEGR5K (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 7 May 2019 13:57:10 -0400
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id 38B66301EA86;
-        Tue,  7 May 2019 17:53:51 +0000 (UTC)
+        by mx1.redhat.com (Postfix) with ESMTPS id 3D7013001821;
+        Tue,  7 May 2019 17:57:09 +0000 (UTC)
 Received: from treble (ovpn-123-166.rdu2.redhat.com [10.10.123.166])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 3CEB2600D4;
-        Tue,  7 May 2019 17:53:45 +0000 (UTC)
-Date:   Tue, 7 May 2019 12:53:42 -0500
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 7588B60BF4;
+        Tue,  7 May 2019 17:56:58 +0000 (UTC)
+Date:   Tue, 7 May 2019 12:56:55 -0500
 From:   Josh Poimboeuf <jpoimboe@redhat.com>
 To:     Steven Rostedt <rostedt@goodmis.org>
 Cc:     linux-kernel@vger.kernel.org,
@@ -51,107 +51,73 @@ Cc:     linux-kernel@vger.kernel.org,
         "open list:KERNEL SELFTEST FRAMEWORK" 
         <linux-kselftest@vger.kernel.org>, stable <stable@vger.kernel.org>,
         Masami Hiramatsu <mhiramat@kernel.org>
-Subject: Re: [RFC][PATCH 2/3] x86_64: Allow breakpoints to emulate call
- functions
-Message-ID: <20190507175342.fskdj2qidpao65qi@treble>
+Subject: Re: [RFC][PATCH 1/3] x86_64: Add gap to int3 to allow for call
+ emulation
+Message-ID: <20190507175655.u3kcvedpfao4rchj@treble>
 References: <20190507174227.673261270@goodmis.org>
- <20190507174400.219947724@goodmis.org>
+ <20190507174400.064350937@goodmis.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20190507174400.219947724@goodmis.org>
+In-Reply-To: <20190507174400.064350937@goodmis.org>
 User-Agent: NeoMutt/20180716
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
-X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.47]); Tue, 07 May 2019 17:53:51 +0000 (UTC)
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
+X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.40]); Tue, 07 May 2019 17:57:09 +0000 (UTC)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, May 07, 2019 at 01:42:29PM -0400, Steven Rostedt wrote:
-> From: Peter Zijlstra <peterz@infradead.org>
+On Tue, May 07, 2019 at 01:42:28PM -0400, Steven Rostedt wrote:
+> From: Josh Poimboeuf <jpoimboe@redhat.com>
 > 
-> In order to allow breakpoints to emulate call functions, they need to push
-> the return address onto the stack. But because the breakpoint exception
-> frame is added to the stack when the breakpoint is hit, there's no room to
-> add the address onto the stack and return to the address of the emulated
-> called funtion.
+> To allow an int3 handler to emulate a call instruction, it must be able to
+> push a return address onto the stack. Add a gap to the stack to allow the
+> int3 handler to push the return address and change the return from int3 to
+> jump straight to the emulated called function target.
 > 
-> To handle this, copy the exception frame on entry of the breakpoint handler
-> and have leave a gap that can be used to add a return address to the stack
-> frame and return from the breakpoint to the emulated called function,
-> allowing for that called function to return back to the location after the
-> breakpoint was placed.
-
-This part is done by patch 1.
-
+> Link: http://lkml.kernel.org/r/20181130183917.hxmti5josgq4clti@treble
+> Link: http://lkml.kernel.org/r/20190502162133.GX2623@hirez.programming.kicks-ass.net
 > 
-> The helper functions were also added:
-
-No longer "also" :-)
-
->   int3_emulate_push(): to push the address onto the gap in the stack
->   int3_emulate_jmp(): changes the location of the regs->ip to return there.
->   int3_emulate_call(): push the return address and change regs->ip
+> [
+>   Note, this is needed to allow Live Kernel Patching to not miss calling a
+>   patched function when tracing is enabled. -- Steven Rostedt
+> ]
 > 
-> Cc: Andy Lutomirski <luto@kernel.org>
-> Cc: Nicolai Stange <nstange@suse.de>
-> Cc: Thomas Gleixner <tglx@linutronix.de>
-> Cc: Ingo Molnar <mingo@redhat.com>
-> Cc: Borislav Petkov <bp@alien8.de>
-> Cc: "H. Peter Anvin" <hpa@zytor.com>
-> Cc: the arch/x86 maintainers <x86@kernel.org>
-> Cc: Josh Poimboeuf <jpoimboe@redhat.com>
-> Cc: Jiri Kosina <jikos@kernel.org>
-> Cc: Miroslav Benes <mbenes@suse.cz>
-> Cc: Petr Mladek <pmladek@suse.com>
-> Cc: Joe Lawrence <joe.lawrence@redhat.com>
-> Cc: Shuah Khan <shuah@kernel.org>
-> Cc: Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>
-> Cc: Tim Chen <tim.c.chen@linux.intel.com>
-> Cc: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-> Cc: Mimi Zohar <zohar@linux.ibm.com>
-> Cc: Juergen Gross <jgross@suse.com>
-> Cc: Nick Desaulniers <ndesaulniers@google.com>
-> Cc: Nayna Jain <nayna@linux.ibm.com>
-> Cc: Masahiro Yamada <yamada.masahiro@socionext.com>
-> Cc: Joerg Roedel <jroedel@suse.de>
-> Cc: "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>
 > Cc: stable@vger.kernel.org
 > Fixes: b700e7f03df5 ("livepatch: kernel: add support for live patching")
-> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-> [ Modified to only work for x86_64 ]
+> Signed-off-by: Josh Poimboeuf <jpoimboe@redhat.com>
 > Signed-off-by: Steven Rostedt (VMware) <rostedt@goodmis.org>
 > ---
->  arch/x86/include/asm/text-patching.h | 22 ++++++++++++++++++++++
->  1 file changed, 22 insertions(+)
+>  arch/x86/entry/entry_64.S | 18 ++++++++++++++++--
+>  1 file changed, 16 insertions(+), 2 deletions(-)
 > 
-> diff --git a/arch/x86/include/asm/text-patching.h b/arch/x86/include/asm/text-patching.h
-> index e85ff65c43c3..455bf9f88233 100644
-> --- a/arch/x86/include/asm/text-patching.h
-> +++ b/arch/x86/include/asm/text-patching.h
-> @@ -39,4 +39,26 @@ extern int poke_int3_handler(struct pt_regs *regs);
->  extern void *text_poke_bp(void *addr, const void *opcode, size_t len, void *handler);
->  extern int after_bootmem;
+> diff --git a/arch/x86/entry/entry_64.S b/arch/x86/entry/entry_64.S
+> index 1f0efdb7b629..00df6b135ab1 100644
+> --- a/arch/x86/entry/entry_64.S
+> +++ b/arch/x86/entry/entry_64.S
+> @@ -879,7 +879,7 @@ apicinterrupt IRQ_WORK_VECTOR			irq_work_interrupt		smp_irq_work_interrupt
+>   * @paranoid == 2 is special: the stub will never switch stacks.  This is for
+>   * #DF: if the thread stack is somehow unusable, we'll still get a useful OOPS.
+>   */
+> -.macro idtentry sym do_sym has_error_code:req paranoid=0 shift_ist=-1
+> +.macro idtentry sym do_sym has_error_code:req paranoid=0 shift_ist=-1 create_gap=0
+>  ENTRY(\sym)
+>  	UNWIND_HINT_IRET_REGS offset=\has_error_code*8
 >  
-> +static inline void int3_emulate_jmp(struct pt_regs *regs, unsigned long ip)
-> +{
-> +	regs->ip = ip;
-> +}
-> +
-> +#define INT3_INSN_SIZE 1
-> +#define CALL_INSN_SIZE 5
-> +
-> +#ifdef CONFIG_X86_64
-> +static inline void int3_emulate_push(struct pt_regs *regs, unsigned long val)
-> +{
-> +	regs->sp -= sizeof(unsigned long);
-> +	*(unsigned long *)regs->sp = val;
-> +}
+> @@ -899,6 +899,20 @@ ENTRY(\sym)
+>  	jnz	.Lfrom_usermode_switch_stack_\@
+>  	.endif
+>  
+> +	.if \create_gap == 1
+> +	/*
+> +	 * If coming from kernel space, create a 6-word gap to allow the static
+> +	 * call #BP handler to emulate a call instruction.
 
-How this works isn't really obvious.  A comment is probably warranted to
-explain the fact that the int3 entry code reserved some space on the
-stack.
+Might as well refer to it as the int3 handler, since that's what the
+rest of the code calls it.  Also, no static calls yet :-)  So:
+
+s/static call #BP handler/int3 handler/
 
 -- 
 Josh
