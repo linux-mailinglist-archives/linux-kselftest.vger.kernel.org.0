@@ -2,39 +2,39 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 17CBE15A5E
-	for <lists+linux-kselftest@lfdr.de>; Tue,  7 May 2019 07:45:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AFA015A36
+	for <lists+linux-kselftest@lfdr.de>; Tue,  7 May 2019 07:44:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727715AbfEGFpS (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 7 May 2019 01:45:18 -0400
-Received: from mail.kernel.org ([198.145.29.99]:33176 "EHLO mail.kernel.org"
+        id S1728071AbfEGFoD (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 7 May 2019 01:44:03 -0400
+Received: from mail.kernel.org ([198.145.29.99]:33648 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729475AbfEGFmK (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 7 May 2019 01:42:10 -0400
+        id S1729638AbfEGFmp (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 7 May 2019 01:42:45 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 95F9620B7C;
-        Tue,  7 May 2019 05:42:08 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 1914B2087F;
+        Tue,  7 May 2019 05:42:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1557207729;
+        s=default; t=1557207764;
         bh=P3D94zbq9asJwEpL9jM2m7mvRPXYbmOzVN6Zns/Q08M=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=sl5ROjvp73eV5mrJpfFRbVq3fIAvPKSOqqKBNocRhEfBDxav1My04aF4726DJF63j
-         xKBv1Mt1jmlgTV10f8iX+JT0fh6C/Ad6Q1wePGKuG91tpS2ByDs9yNEApGAPFmOGi2
-         lwDcc7dm+eZjLfroldQgG04htqI/88dvj/8hP2WQ=
+        b=rvxyqfPU//+j84xPaXbNHsRDO+t4v14nRO0emHwEMJDswsy4DzJrX2RjNkU3EYDIr
+         yI+0B+n1DKQhLN1bPVF+OHdnnSBGFTzN+YueBuTqPSQKgLqkdvWWqUXpuCujygUvk9
+         QY07whXBeXazV6TsNoNrBqSvhB7blYaBjHfku+xM=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Po-Hsu Lin <po-hsu.lin@canonical.com>,
         "David S . Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
         linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.9 21/25] selftests/net: correct the return value for run_netsocktests
-Date:   Tue,  7 May 2019 01:41:18 -0400
-Message-Id: <20190507054123.32514-21-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.4 13/14] selftests/net: correct the return value for run_netsocktests
+Date:   Tue,  7 May 2019 01:42:15 -0400
+Message-Id: <20190507054218.340-13-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190507054123.32514-1-sashal@kernel.org>
-References: <20190507054123.32514-1-sashal@kernel.org>
+In-Reply-To: <20190507054218.340-1-sashal@kernel.org>
+References: <20190507054218.340-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
