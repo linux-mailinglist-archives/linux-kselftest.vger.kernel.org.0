@@ -2,90 +2,93 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 69DDF16D16
-	for <lists+linux-kselftest@lfdr.de>; Tue,  7 May 2019 23:24:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A532616DC4
+	for <lists+linux-kselftest@lfdr.de>; Wed,  8 May 2019 01:12:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727109AbfEGVYX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 7 May 2019 17:24:23 -0400
-Received: from mail.kernel.org ([198.145.29.99]:52096 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726811AbfEGVYX (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 7 May 2019 17:24:23 -0400
-Received: from gandalf.local.home (cpe-66-24-58-225.stny.res.rr.com [66.24.58.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 1E57320656;
-        Tue,  7 May 2019 21:24:20 +0000 (UTC)
-Date:   Tue, 7 May 2019 17:24:18 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Josh Poimboeuf <jpoimboe@redhat.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Linux List Kernel Mailing <linux-kernel@vger.kernel.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Nicolai Stange <nstange@suse.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        the arch/x86 maintainers <x86@kernel.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Petr Mladek <pmladek@suse.com>,
-        Joe Lawrence <joe.lawrence@redhat.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
-        Tim Chen <tim.c.chen@linux.intel.com>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Juergen Gross <jgross@suse.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nayna Jain <nayna@linux.ibm.com>,
-        Masahiro Yamada <yamada.masahiro@socionext.com>,
-        Joerg Roedel <jroedel@suse.de>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>, stable <stable@vger.kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>
-Subject: Re: [RFC][PATCH 1/2] x86: Allow breakpoints to emulate call
- functions
-Message-ID: <20190507172418.67ef6fc3@gandalf.local.home>
-In-Reply-To: <20190507172159.5t3bm3mjkwagvite@treble>
-References: <CAHk-=wjLXmOn=Cp=uOfO4gE01eN_-UcOUyrMTTw5-f_OfPO48Q@mail.gmail.com>
-        <20190506225819.11756974@oasis.local.home>
-        <CAHk-=wh4FCNBLe8OyDZt2Tr+k9JhhTsg3H8R4b55peKcf0b6eQ@mail.gmail.com>
-        <20190506232158.13c9123b@oasis.local.home>
-        <CAHk-=wi4vPg4pu6RvxQrUuBL4Vgwd2G2iaEJVVumny+cBOWMZw@mail.gmail.com>
-        <CAHk-=wg2_okyU8mpkGCUrudgfg8YmNetSD8=scNbOkN+imqZdQ@mail.gmail.com>
-        <20190507111227.1d4268d7@gandalf.local.home>
-        <CAHk-=wjYdj+vvV8uUA8eaUSxOhu=xuQxdo-dtM927j0-3hSkEw@mail.gmail.com>
-        <20190507163440.GV2606@hirez.programming.kicks-ass.net>
-        <CAHk-=wiuue37opWK5QaQ9f6twqDZuSratdP-1bK6kD9-Az5WnA@mail.gmail.com>
-        <20190507172159.5t3bm3mjkwagvite@treble>
-X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        id S1726313AbfEGXM2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 7 May 2019 19:12:28 -0400
+Received: from mail-pg1-f196.google.com ([209.85.215.196]:41561 "EHLO
+        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726091AbfEGXM2 (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 7 May 2019 19:12:28 -0400
+Received: by mail-pg1-f196.google.com with SMTP id z3so5352566pgp.8;
+        Tue, 07 May 2019 16:12:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:subject:message-id:mime-version:content-disposition
+         :content-transfer-encoding:user-agent;
+        bh=t+991fJXyuKUQQwkL0XKlpY3wv/FZAEDqC4Kot14BtA=;
+        b=DhWdNayWQ0DUYtDPLP/TGT0af+Nm0QhDBmfY67WSbKdeX1UWpHwzh/Q7P+uDYe4EcN
+         AkbuklBVS7UoRbi8wyfzD7g/mZEYeFLosQkDS26rr/aI2zw2g2dhfoT8u2ga1oq6CG3G
+         TKtXYk0EPormBR8yK1Te15uGGGT+yDZPL3+zy8kQ4K8KMjZ5omfyg6wrBfvYlgpvUA2l
+         +W4bL/vkTAUfXn8oy9/L085ZD0NbKoAViQG3CChuyI8xq/EwnTsEyd+HYcE3xN1ZMjpR
+         ArniJr6hfneg5BwNq6x3meiQFDuuLrW8rSFNL9S90XBoDKvfyppnnEj1Eqo5ICGDt2Wp
+         QhBQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:subject:message-id:mime-version
+         :content-disposition:content-transfer-encoding:user-agent;
+        bh=t+991fJXyuKUQQwkL0XKlpY3wv/FZAEDqC4Kot14BtA=;
+        b=RABut2IEtidVFgtZDUQ1uLvoFYNNmq+U9RWx/5TCy22YNCtOfNtz0lmkOpqpDaSH/z
+         qW7FI1+NUuwI/OfVKeQYHbgiRHEVkjoNX/RePDOntE+1t/VyFFFt19veoYb7EMf2peWQ
+         XLd4PImVMIUaHAY5v2AQgUI+mdXUeBRCxKEEibCMmdg6op4Ws26ZGVcc8Mg1wQ2bvfA+
+         zXO81ld5+3jMuUngB/VBMb9fwNnDVegYhHjDt0wvs7w14z61dT0E1Uao1zd6UDtlEURI
+         iDffYQNV+ajzeQhSzDToc7SmwNXDmuMVfAa5HIlu8b6ofSdchU4Zaafpahg+k/EXx87P
+         F7vA==
+X-Gm-Message-State: APjAAAXbtwg3T5Hu4qGZRvhcLeCgxWRdvfi+6tpCftj0ba3eXtOpsNuN
+        RkhgbvTN1RrfqS74U6j7RBw=
+X-Google-Smtp-Source: APXvYqxZav9qC16/BhRJT1Au4atYI1Nu0VhHUa7WgJn7qnTJqapYofDdsZAOgx99FuOgI5WHp/bxxA==
+X-Received: by 2002:a63:5c1a:: with SMTP id q26mr31172530pgb.73.1557270747924;
+        Tue, 07 May 2019 16:12:27 -0700 (PDT)
+Received: from ip-172-31-29-54.us-west-2.compute.internal (ec2-34-219-153-187.us-west-2.compute.amazonaws.com. [34.219.153.187])
+        by smtp.gmail.com with ESMTPSA id v14sm18171723pfm.95.2019.05.07.16.12.25
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 07 May 2019 16:12:26 -0700 (PDT)
+Date:   Tue, 7 May 2019 23:12:24 +0000
+From:   Alakesh Haloi <alakesh.haloi@gmail.com>
+To:     Shuah Khan <shuah@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] selftests/bpf: Fix compile warning in bpf selftest
+Message-ID: <20190507231224.GA3787@ip-172-31-29-54.us-west-2.compute.internal>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+User-Agent: Mutt/1.5.21 (2010-09-15)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, 7 May 2019 12:21:59 -0500
-Josh Poimboeuf <jpoimboe@redhat.com> wrote:
+This fixes the following compile time warning
 
-> regs->sp is *undefined* on x86-32.  We're damning our future selves to
-> have to always remember to use that darn kernel_stack_pointer() helper
-> for eternity just because of x86-32.
+flow_dissector_load.c: In function ‘detach_program’:
+flow_dissector_load.c:55:19: warning: format not a string literal and no format arguments [-Wformat-security]
+   error(1, errno, command);
+                   ^~~~~~~
+Signed-off-by: Alakesh Haloi <alakesh.haloi@gmail.com>
+---
+ tools/testing/selftests/bpf/flow_dissector_load.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-And there's been several times I forget that regs->sp can not be read
-directly. Especially most of my bug reports are for x86_64 these days.
-But when I had that seldom x86_32 one, and go debugging, I would print
-out "regs->sp" and then the system would crash. And I spend some time
-wondering why?
+diff --git a/tools/testing/selftests/bpf/flow_dissector_load.c b/tools/testing/selftests/bpf/flow_dissector_load.c
+index 77cafa66d048..7136ab9ffa73 100644
+--- a/tools/testing/selftests/bpf/flow_dissector_load.c
++++ b/tools/testing/selftests/bpf/flow_dissector_load.c
+@@ -52,7 +52,7 @@ static void detach_program(void)
+ 	sprintf(command, "rm -r %s", cfg_pin_path);
+ 	ret = system(command);
+ 	if (ret)
+-		error(1, errno, command);
++		error(1, errno, "%s", command);
+ }
+ 
+ static void parse_opts(int argc, char **argv)
+-- 
+2.17.1
 
-It's been a bane of mine for some time.
-
-
--- Steve
