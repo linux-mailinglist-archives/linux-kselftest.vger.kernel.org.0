@@ -2,109 +2,118 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CD8F017E0B
-	for <lists+linux-kselftest@lfdr.de>; Wed,  8 May 2019 18:26:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5314717E35
+	for <lists+linux-kselftest@lfdr.de>; Wed,  8 May 2019 18:37:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727708AbfEHQ0U (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 8 May 2019 12:26:20 -0400
-Received: from mail-it1-f196.google.com ([209.85.166.196]:55281 "EHLO
-        mail-it1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727618AbfEHQ0T (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 8 May 2019 12:26:19 -0400
-Received: by mail-it1-f196.google.com with SMTP id a190so5036138ite.4
-        for <linux-kselftest@vger.kernel.org>; Wed, 08 May 2019 09:26:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=75vFqUksf0tQ2CrucJLVayay02aXl+jl+xEBhfOLKh8=;
-        b=Byu4evv3/Taq0hD9gQdOBBv7eqPsD0iQj96N0oZ4q6bzkunFBjqxs7K7E+FKM8iZPH
-         3tgGSJk2srZ8UR5ZnbgDk88nKruFXnxSjKfwQcBQ8RM+8HtDiL9cg8NaPNZo4djwyESi
-         rSigA0zYLJs7uLbX+SAyeqhldjxG5qmZM7rc8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=75vFqUksf0tQ2CrucJLVayay02aXl+jl+xEBhfOLKh8=;
-        b=gv4QjjFmW05m0WJiv6sf/nISaKcUJTuPCs9Wefk45VDcwRDdF5qd88KnAcK1XrHS+i
-         +b1xpE0ivAosc3rfTF4+jvptbt/wotATB8Ubl6or8hvhOeWB3Av1yPXu+jkWgPQnxk5t
-         7crpsiOmyBoSV+GGl5qpevH1JiWWNO9rmgpHxOY7QfIw42wAkImh5l0ghROxEYb01l11
-         osqcUb3JVrVYG4mNRGhpEeTKr9XgLiRUHoQKCoN7HbPv/I7VRZnidZf537Cp4yf4yti5
-         T1HgtHInpwkDxM1Jr4lpnAUMW+6+0egY8g6j1f/VgnGMYLH2MZD8yqeOqcMIi8dD1q9J
-         SdNQ==
-X-Gm-Message-State: APjAAAXcoGlmdwqigNv8hDvr83q8j49l/GsEsOBG4EkE7jmX7rekYLxB
-        rytE6QPWXwfoBPY1JjJyDfjybg==
-X-Google-Smtp-Source: APXvYqzQoskEtmbjbTtX+OwFuML4TDWByi9RvdqJOynVcQV+gClTL5kianyjqI8MKT/DQSvYCHE8RQ==
-X-Received: by 2002:a02:2e52:: with SMTP id u18mr29934269jae.84.1557332779112;
-        Wed, 08 May 2019 09:26:19 -0700 (PDT)
-Received: from shuah-t480s.internal (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id 3sm1657304itk.1.2019.05.08.09.26.17
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 08 May 2019 09:26:18 -0700 (PDT)
-From:   Shuah Khan <skhan@linuxfoundation.org>
-To:     shuah@kernel.org
-Cc:     Shuah Khan <skhan@linuxfoundation.org>,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] selftests: fix install target to use default install path
-Date:   Wed,  8 May 2019 10:26:16 -0600
-Message-Id: <20190508162616.9393-1-skhan@linuxfoundation.org>
-X-Mailer: git-send-email 2.20.1
+        id S1727907AbfEHQhy (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 8 May 2019 12:37:54 -0400
+Received: from mail.kernel.org ([198.145.29.99]:50560 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727502AbfEHQhy (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 8 May 2019 12:37:54 -0400
+Received: from gandalf.local.home (cpe-66-24-58-225.stny.res.rr.com [66.24.58.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 4E5BB216F4;
+        Wed,  8 May 2019 16:37:50 +0000 (UTC)
+Date:   Wed, 8 May 2019 12:37:48 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Josh Poimboeuf <jpoimboe@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Linux List Kernel Mailing <linux-kernel@vger.kernel.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Nicolai Stange <nstange@suse.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Petr Mladek <pmladek@suse.com>,
+        Joe Lawrence <joe.lawrence@redhat.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
+        Tim Chen <tim.c.chen@linux.intel.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Juergen Gross <jgross@suse.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nayna Jain <nayna@linux.ibm.com>,
+        Masahiro Yamada <yamada.masahiro@socionext.com>,
+        Joerg Roedel <jroedel@suse.de>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, stable <stable@vger.kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>
+Subject: Re: [RFC][PATCH 1/2] x86: Allow breakpoints to emulate call
+ functions
+Message-ID: <20190508123748.1737b8b5@gandalf.local.home>
+In-Reply-To: <CAHk-=wg5_fwx_-ybD9TLQE4rAUqtYzO2CAmpciWTkDn3dtKMOw@mail.gmail.com>
+References: <CAHk-=wjLXmOn=Cp=uOfO4gE01eN_-UcOUyrMTTw5-f_OfPO48Q@mail.gmail.com>
+        <20190506225819.11756974@oasis.local.home>
+        <CAHk-=wh4FCNBLe8OyDZt2Tr+k9JhhTsg3H8R4b55peKcf0b6eQ@mail.gmail.com>
+        <20190506232158.13c9123b@oasis.local.home>
+        <CAHk-=wi4vPg4pu6RvxQrUuBL4Vgwd2G2iaEJVVumny+cBOWMZw@mail.gmail.com>
+        <CAHk-=wg2_okyU8mpkGCUrudgfg8YmNetSD8=scNbOkN+imqZdQ@mail.gmail.com>
+        <20190507111227.1d4268d7@gandalf.local.home>
+        <CAHk-=wjYdj+vvV8uUA8eaUSxOhu=xuQxdo-dtM927j0-3hSkEw@mail.gmail.com>
+        <20190507163440.GV2606@hirez.programming.kicks-ass.net>
+        <CAHk-=wiuue37opWK5QaQ9f6twqDZuSratdP-1bK6kD9-Az5WnA@mail.gmail.com>
+        <20190507172159.5t3bm3mjkwagvite@treble>
+        <20190507172418.67ef6fc3@gandalf.local.home>
+        <CAHk-=wg5_fwx_-ybD9TLQE4rAUqtYzO2CAmpciWTkDn3dtKMOw@mail.gmail.com>
+X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Install target fails when INSTALL_PATH is undefined. Fix install target
-to use "output_dir/install as the default install location. "output_dir"
-is either the root of selftests directory under kernel source tree or
-output directory specified by O= or KBUILD_OUTPUT.
+On Tue, 7 May 2019 21:50:52 -0700
+Linus Torvalds <torvalds@linux-foundation.org> wrote:
 
-e.g:
-make -C tools/testing/selftests install
-<installs under tools/testing/selftests/install>
+> > It's been a bane of mine for some time.  
+> 
+> Guys, I have basically a one-liner patch for your hangups.
+> 
+> It's called "rename 'sp' to 'user_sp' on x86-32".
+> 
+> Then we make the 'sp' field on x86-64 be a union, so that you can call
+> it user_sp or sp as you wish.
+> 
+> Yeah, it's really more than one line, because obviously the users will
+> need chaning, but honestly, that would be a _real_ cleanup. Make the
+> register match what it actually is.
 
-make O=/tmp/kselftest -C tools/testing/selftests install
-<installs under /tmp/kselftest/install>
+But is it? Sure, it will be a reminder that it's different for x86-32,
+but that still doesn't take away the fact that pt_regs on x86_32 is an
+anomaly! Where else do we have part of a data structure that can't be
+read because it can possibly fault? If regs is a valid pointer, one
+would think that simply reading regs->sp (or regs->user_sp) would be no
+more dangerous than reading regs->ip.
 
-export KBUILD_OUTPUT=/tmp/kselftest
-make -C tools/testing/selftests install
-<installs under /tmp/kselftest/install>
+The difference between entry_32.S from entry_64.S causes it to spill
+into C code, making the x86_64 code more difficult to deal with. Sure,
+10 to 15 years ago, all your arguments would make sense. But today, who
+uses x86_32?  Perhaps you may use it in a VM, but I asked a few
+developers when was the last time they used one, they told me 5 to 7
+years ago. I only boot x86_32 to test to make sure I didn't break it.
 
-In addition, add "all" target as dependency to "install" to build and
-install using a single command.
+Yes, your diffstat is really nice to the changes to entry_32.S, but at
+what cost? To make the x86_64 code more complex? That whole returning
+the regs in the int3 handler makes no sense on x86_64, but yet we would
+need to do it to handle x86_32. Why burden the architecture of today
+and tomorrow with the architecture of yesterday? x86_32 is becoming
+more obsolete by the day. It baffles me why we wouldn't want to contain
+its complexity in a single file then to spread it out like wildfire
+across the generic x86 code.
 
-Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
----
- tools/testing/selftests/Makefile | 10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
+The &regs->sp hack is just one more rung in the complex learning curve
+ladder of becoming a Linux kernel developer.
 
-diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-index 9f05448e5e4b..c71a63b923d4 100644
---- a/tools/testing/selftests/Makefile
-+++ b/tools/testing/selftests/Makefile
-@@ -163,11 +163,17 @@ clean_hotplug:
- run_pstore_crash:
- 	make -C pstore run_crash
- 
--INSTALL_PATH ?= install
-+# Use $BUILD as the default install root. $BUILD points to the
-+# right output location for the following cases:
-+# 1. output_dir=kernel_src
-+# 2. a separate output directory is specified using O= KBUILD_OUTPUT
-+# 3. a separate output directory is specified using KBUILD_OUTPUT
-+#
-+INSTALL_PATH ?= $(BUILD)/install
- INSTALL_PATH := $(abspath $(INSTALL_PATH))
- ALL_SCRIPT := $(INSTALL_PATH)/run_kselftest.sh
- 
--install:
-+install: all
- ifdef INSTALL_PATH
- 	@# Ask all targets to install their files
- 	mkdir -p $(INSTALL_PATH)/kselftest
--- 
-2.17.1
-
+-- Steve
