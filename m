@@ -2,152 +2,126 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 048E416F97
-	for <lists+linux-kselftest@lfdr.de>; Wed,  8 May 2019 05:44:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 886BD1701B
+	for <lists+linux-kselftest@lfdr.de>; Wed,  8 May 2019 06:30:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727065AbfEHDoc (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 7 May 2019 23:44:32 -0400
-Received: from conssluserg-04.nifty.com ([210.131.2.83]:55088 "EHLO
-        conssluserg-04.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726704AbfEHDoc (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 7 May 2019 23:44:32 -0400
-Received: from mail-vs1-f45.google.com (mail-vs1-f45.google.com [209.85.217.45]) (authenticated)
-        by conssluserg-04.nifty.com with ESMTP id x483iAfQ000467;
-        Wed, 8 May 2019 12:44:11 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-04.nifty.com x483iAfQ000467
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1557287051;
-        bh=GtYEji5+EE71+LZjKDY0sxmohdZ0g+Z5/jFvjX0CHzk=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=1ZESEjZOrbdTa5+bMjMIxX7JKfYmQ/Y+dVySrIFat/BgQw0mbSCMDzXGSvjMWFz/n
-         avfYjmfH7jmGaI5QdsMqFVxzcZu8izw/LpK1K5OCkgm8I5KWmyRvu9UHOa8gxKoDZt
-         m+aRszBtUwNrViHlN1ejn9NLZd5sBn8LipsbVhKP/EmJklWC8d0SClpntEUdswPbO0
-         uxHDUcYmEs99d3dEYaGWHtzJe4sW3DhiZbWvfKF+a3i+oGn774ldgNtYyHqsLu0LUi
-         wdmGRah9iOVXGv/gkE0XnKA1+0cx7FHv6uxS86y+Yf+qd+CK0/DwFFePzuMXVm07lT
-         NS2Z5t8WpH/UA==
-X-Nifty-SrcIP: [209.85.217.45]
-Received: by mail-vs1-f45.google.com with SMTP id g127so11777172vsd.6;
-        Tue, 07 May 2019 20:44:11 -0700 (PDT)
-X-Gm-Message-State: APjAAAUR3AuX3SmgwdBFiodM0SXGkP8nbnBJI942Jhx3gtbPtTPGtQfc
-        gQJhKeLMYD4sno69/A9o8/2bWOLvuRdWYJQxHWE=
-X-Google-Smtp-Source: APXvYqz4ub6AwdOUIv3IBI3Jv6hdIY2r3aV/UeyA9Lf21f53omFZix/UHdWvee9kuR48UmUZmxkT6DyZqggTTN2/rBA=
-X-Received: by 2002:a67:fd89:: with SMTP id k9mr7071343vsq.54.1557287050111;
- Tue, 07 May 2019 20:44:10 -0700 (PDT)
-MIME-Version: 1.0
-References: <20190506013456.86061-1-joel@joelfernandes.org>
-In-Reply-To: <20190506013456.86061-1-joel@joelfernandes.org>
-From:   Masahiro Yamada <yamada.masahiro@socionext.com>
-Date:   Wed, 8 May 2019 12:43:34 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAQesyT-vspoGKdgRqycZfhtJm5Upx2T6ij-yB5i4Nx5nw@mail.gmail.com>
-Message-ID: <CAK7LNAQesyT-vspoGKdgRqycZfhtJm5Upx2T6ij-yB5i4Nx5nw@mail.gmail.com>
-Subject: Re: [PATCH v3] kheaders: Move from proc to sysfs
-To:     "Joel Fernandes (Google)" <joel@joelfernandes.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Adrian Ratiu <adrian.ratiu@collabora.com>,
-        Alexei Starovoitov <ast@kernel.org>,
+        id S1726082AbfEHEac (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 8 May 2019 00:30:32 -0400
+Received: from mail.kernel.org ([198.145.29.99]:44768 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725825AbfEHEac (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 8 May 2019 00:30:32 -0400
+Received: from devnote2 (NE2965lan1.rev.em-net.ne.jp [210.141.244.193])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 6A07821019;
+        Wed,  8 May 2019 04:30:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1557289830;
+        bh=sgs6ytJVn9qBYplg2hYQ+XOt9DqBHh15P7mn2I3W6ac=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=NgH+vDrx//pebh1V6TMfYZeViVKqiJape+anma/JjnKItD3ZSXojjOoOUuYTSWKXR
+         +8zmAaoHcuu3391UqImrgZa8fESLt7q9yqhxXynu0zzuHRkOB41yUFB51EHNx7elpS
+         gI4w6Ui5tWAQey2rt3dz7TYq23OAaY8TXwAvkXxI=
+Date:   Wed, 8 May 2019 13:30:22 +0900
+From:   Masami Hiramatsu <mhiramat@kernel.org>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Ingo Molnar <mingo@kernel.org>,
         Andrew Morton <akpm@linux-foundation.org>,
-        atish patra <atishp04@gmail.com>, bpf@vger.kernel.org,
-        Brendan Gregg <bgregg@netflix.com>,
-        Brendan Gregg <brendan.d.gregg@gmail.com>,
-        Daniel Colascione <dancol@google.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        duyuchao <yuchao.du@unisoc.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Karim Yaghmour <karim.yaghmour@opersys.com>,
-        Kees Cook <keescook@chromium.org>,
-        "Cc: Android Kernel" <kernel-team@android.com>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        linux-trace-devel@vger.kernel.org,
-        Manjo Raja Rao <linux@manojrajarao.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        =?UTF-8?Q?Micha=C5=82_Gregorczyk?= <michalgr@fb.com>,
-        Michal Gregorczyk <michalgr@live.com>,
-        Mohammad Husain <russoue@gmail.com>,
-        Olof Johansson <olof@lixom.net>,
-        Qais Yousef <qais.yousef@arm.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Nicolai Stange <nstange@suse.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Jiri Kosina <jikos@kernel.org>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Petr Mladek <pmladek@suse.com>,
+        Joe Lawrence <joe.lawrence@redhat.com>,
         Shuah Khan <shuah@kernel.org>,
-        Srinivas Ramana <sramana@codeaurora.org>,
-        Tamir Carmeli <carmeli.tamir@gmail.com>,
-        Yonghong Song <yhs@fb.com>
-Content-Type: text/plain; charset="UTF-8"
+        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
+        Tim Chen <tim.c.chen@linux.intel.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Juergen Gross <jgross@suse.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nayna Jain <nayna@linux.ibm.com>,
+        Masahiro Yamada <yamada.masahiro@socionext.com>,
+        Joerg Roedel <jroedel@suse.de>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, stable <stable@vger.kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>
+Subject: Re: [PATCH 0/3] x86_64/ftrace: Emulate calls from int3 when
+ patching functions
+Message-Id: <20190508133022.78cd9c9b8fcb7838fc0280d0@kernel.org>
+In-Reply-To: <20190508015559.767152678@goodmis.org>
+References: <20190508015559.767152678@goodmis.org>
+X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, May 6, 2019 at 10:37 AM Joel Fernandes (Google)
-<joel@joelfernandes.org> wrote:
->
-> The kheaders archive consisting of the kernel headers used for compiling
-> bpf programs is in /proc. However there is concern that moving it here
-> will make it permanent. Let us move it to /sys/kernel as discussed [1].
->
-> [1] https://lore.kernel.org/patchwork/patch/1067310/#1265969
->
-> Suggested-by: Steven Rostedt <rostedt@goodmis.org>
-> Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
-> ---
-> This patch applies on top of the previous patch that was applied to the
-> driver tree:
-> https://lore.kernel.org/patchwork/patch/1067310/
->
-> v2->v3: Fixed sysfs file mode nit (Greg).
-> v1->v2: Fixed some kconfig nits.
->
->  init/Kconfig                                | 16 ++++-----
->  kernel/Makefile                             |  4 +--
->  kernel/{gen_ikh_data.sh => gen_kheaders.sh} |  2 +-
->  kernel/kheaders.c                           | 40 +++++++++------------
->  4 files changed, 26 insertions(+), 36 deletions(-)
->  rename kernel/{gen_ikh_data.sh => gen_kheaders.sh} (98%)
->
-> diff --git a/init/Kconfig b/init/Kconfig
-> index 26a364a95b57..c3661991b089 100644
-> --- a/init/Kconfig
-> +++ b/init/Kconfig
-> @@ -579,15 +579,13 @@ config IKCONFIG_PROC
->           This option enables access to the kernel configuration file
->           through /proc/config.gz.
->
-> -config IKHEADERS_PROC
-> -       tristate "Enable kernel header artifacts through /proc/kheaders.tar.xz"
-> -       depends on PROC_FS
-> -       help
-> -         This option enables access to the kernel header and other artifacts that
-> -         are generated during the build process. These can be used to build eBPF
-> -         tracing programs, or similar programs.  If you build the headers as a
-> -         module, a module called kheaders.ko is built which can be loaded on-demand
-> -         to get access to the headers.
-> +config IKHEADERS
-> +       tristate "Enable kernel headers through /sys/kernel/kheaders.tar.xz"
+On Tue, 07 May 2019 21:55:59 -0400
+Steven Rostedt <rostedt@goodmis.org> wrote:
 
+> 
+> [
+>   This is the non-RFC version.
+> 
+>   It went through and passed all my tests. If there's no objections
+>   I'm going to include this in my pull request. I still have patches
+>   in my INBOX that may still be included, so I need to run those through
+>   my tests as well, so a pull request wont be immediate.
+> ]
+> 
+> Nicolai Stange discovered that Live Kernel Patching can have unforseen
+> consequences if tracing is enabled when there are functions that are
+> patched. The reason being, is that Live Kernel patching is built on top
+> of ftrace, which will have the patched functions call the live kernel
+> trampoline directly, and that trampoline will modify the regs->ip address
+> to return to the patched function.
+> 
+> But in the transition between changing the call to the customized
+> trampoline, the tracing code is needed to have its handler called
+> an well, so the function fentry location must be changed from calling
+> the live kernel patching trampoline, to the ftrace_reg_caller trampoline
+> which will iterate through all the registered ftrace handlers for
+> that function.
+> 
+> During this transition, a break point is added to do the live code
+> modifications. But if that break point is hit, it just skips calling
+> any handler, and makes the call site act as a nop. For tracing, the
+> worse that can happen is that you miss a function being traced, but
+> for live kernel patching the affects are more severe, as the old buggy
+> function is now called.
+> 
+> To solve this, an int3_emulate_call() is created for x86_64 to allow
+> ftrace on x86_64 to emulate the call to ftrace_regs_caller() which will
+> make sure all the registered handlers to that function are still called.
+> And this keeps live kernel patching happy!
 
-I suggested "depends on SYSFS" twice, both in v1 and v2.
+Out of curiosity, would you have any idea to re-use these function for
+other use-case? Maybe kprobes can reuse it, but very limited use-case.
 
-https://lore.kernel.org/patchwork/patch/1069806/#1266147
-https://lore.kernel.org/patchwork/patch/1070005/#1266279
+> To mimimize the changes, and to avoid controversial patches, this
+> only changes x86_64. Due to the way x86_32 implements the regs->sp
+> the complexity of emulating calls on that platform is too much for
+> stable patches, and live kernel patching does not support x86_32 anyway.
 
+This series looks good to me.
 
+Reviewed-by: Masami Hiramatsu <mhiramat@kernel.org>
 
-> +       help
-> +         This option enables access to the in-kernel headers that are generated during
-> +         the build process. These can be used to build eBPF tracing programs,
-> +         or similar programs.  If you build the headers as a module, a module called
-> +         kheaders.ko is built which can be loaded on-demand to get access to headers.
->
->  config LOG_BUF_SHIFT
->         int "Kernel log buffer size (16 => 64KB, 17 => 128KB)"
-
+Thanks!
 
 -- 
-Best Regards
-Masahiro Yamada
+Masami Hiramatsu <mhiramat@kernel.org>
