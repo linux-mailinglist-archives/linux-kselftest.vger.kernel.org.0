@@ -2,93 +2,109 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E524017DE4
-	for <lists+linux-kselftest@lfdr.de>; Wed,  8 May 2019 18:13:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD8F017E0B
+	for <lists+linux-kselftest@lfdr.de>; Wed,  8 May 2019 18:26:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725889AbfEHQNU (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 8 May 2019 12:13:20 -0400
-Received: from mail-eopbgr00054.outbound.protection.outlook.com ([40.107.0.54]:58959
-        "EHLO EUR02-AM5-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727150AbfEHQNT (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 8 May 2019 12:13:19 -0400
+        id S1727708AbfEHQ0U (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 8 May 2019 12:26:20 -0400
+Received: from mail-it1-f196.google.com ([209.85.166.196]:55281 "EHLO
+        mail-it1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727618AbfEHQ0T (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 8 May 2019 12:26:19 -0400
+Received: by mail-it1-f196.google.com with SMTP id a190so5036138ite.4
+        for <linux-kselftest@vger.kernel.org>; Wed, 08 May 2019 09:26:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=darbyshire-bryant.me.uk; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=fRlCgllaeQFRhbw/4RWMMABHQbssZ5McwuHYWfho2V8=;
- b=M/igsZV2MCYkLooVAiZQU5gvT0Owhxw5OSqF8RTs1szzNMgPJ029JkmgcgHVl33hU16d7bl5nd11+NHqppujeXbMQVdx1vhns8AqHd4SHKUBuByUlaDF7NMAMMcHv+gW4qb7J8S8ewMmYPKVbwTTWkGituhK0TEC4ntUXOdNp3Y=
-Received: from VI1PR0302MB2750.eurprd03.prod.outlook.com (10.171.105.143) by
- VI1PR0302MB2734.eurprd03.prod.outlook.com (10.171.108.13) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.1878.20; Wed, 8 May 2019 16:12:54 +0000
-Received: from VI1PR0302MB2750.eurprd03.prod.outlook.com
- ([fe80::a096:fef7:568:7358]) by VI1PR0302MB2750.eurprd03.prod.outlook.com
- ([fe80::a096:fef7:568:7358%7]) with mapi id 15.20.1856.012; Wed, 8 May 2019
- 16:12:54 +0000
-From:   Kevin 'ldir' Darbyshire-Bryant <ldir@darbyshire-bryant.me.uk>
-To:     David Miller <davem@davemloft.net>
-CC:     Jamal Hadi Salim <jhs@mojatatu.com>,
-        "jiri@resnulli.us" <jiri@resnulli.us>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "shuah@kernel.org" <shuah@kernel.org>,
-        "xiyou.wangcong@gmail.com" <xiyou.wangcong@gmail.com>
-Subject: Re: [PATCH net-next v4] net: sched: Introduce act_ctinfo action
-Thread-Topic: [PATCH net-next v4] net: sched: Introduce act_ctinfo action
-Thread-Index: AQHVBREof9SUD1rIBEGMErsp08m2pKZgXWkAgAEKPIA=
-Date:   Wed, 8 May 2019 16:12:54 +0000
-Message-ID: <58168C49-177F-4F74-8E67-8B9CF9B23FD3@darbyshire-bryant.me.uk>
-References: <20190507.123952.2046042425594195721.davem@davemloft.net>
- <20190507201154.97646-1-ldir@darbyshire-bryant.me.uk>
- <20190507.172000.384528161562920463.davem@davemloft.net>
-In-Reply-To: <20190507.172000.384528161562920463.davem@davemloft.net>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=ldir@darbyshire-bryant.me.uk; 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-originating-ip: [2a02:c7f:1268:6500::dc83]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 5808bfce-3a59-4591-72ce-08d6d3d006fb
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(7021145)(8989299)(4534185)(7022145)(4603075)(4627221)(201702281549075)(8990200)(7048125)(7024125)(7027125)(7023125)(5600141)(711020)(4605104)(2017052603328)(7193020);SRVR:VI1PR0302MB2734;
-x-ms-traffictypediagnostic: VI1PR0302MB2734:
-x-ms-exchange-purlcount: 2
-x-microsoft-antispam-prvs: <VI1PR0302MB2734B98BC407D48F3B3A4ECEC9320@VI1PR0302MB2734.eurprd03.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:9508;
-x-forefront-prvs: 0031A0FFAF
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(366004)(396003)(136003)(376002)(39830400003)(346002)(189003)(199004)(305945005)(6246003)(229853002)(2906002)(5660300002)(6486002)(7736002)(476003)(2616005)(486006)(102836004)(36756003)(54906003)(6916009)(53936002)(6512007)(6306002)(68736007)(25786009)(6436002)(4326008)(256004)(86362001)(83716004)(186003)(71190400001)(71200400001)(4744005)(8676002)(82746002)(81166006)(81156014)(6116002)(8936002)(99286004)(64756008)(66556008)(66476007)(66446008)(316002)(508600001)(966005)(91956017)(33656002)(76176011)(53546011)(66946007)(73956011)(76116006)(6506007)(446003)(11346002)(46003)(14454004)(74482002);DIR:OUT;SFP:1101;SCL:1;SRVR:VI1PR0302MB2734;H:VI1PR0302MB2750.eurprd03.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
-received-spf: None (protection.outlook.com: darbyshire-bryant.me.uk does not
- designate permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: xVk7iubFVfyUziI1HXR7vetzWBtRx9UHtxPxTqZYzxsQdBMLg9dM5Ks9EMIvSM1AHXCkaM75Fciie6GO3hqc3iKMYkdypany75Irull3wAxnl9QQQtNlIbcZi4qCWhMRxzykAEWAeWaW6bqfX2fexHuIoTLomptx8Nxd2ipjp9Nt2OGnFQ4qiUbmdkHab6L23M4MayPT2lEZ0PFyj8untI+TRc8xWImjninow2qUdZ0UVW/9OIYTjL8tijXQPACGN2zybXIRe+9Z0bg8J9+tp03ZK9GkR4rDat4QjB5/aHi6mCxfkUOQyt8ESkbDU5Odrn4BxGAjj3aKeK0wzFPVlt8oOg4bFy2KBhcCCqGty/QzvhnVyjPgWky14RMUd/Cm1iyq0eu8Cm96A8Yv1G+yOXegmEoRDrvWhBxQCKMucwM=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <0557ECDD62803F49B6325B1C33F92D61@eurprd03.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        d=linuxfoundation.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=75vFqUksf0tQ2CrucJLVayay02aXl+jl+xEBhfOLKh8=;
+        b=Byu4evv3/Taq0hD9gQdOBBv7eqPsD0iQj96N0oZ4q6bzkunFBjqxs7K7E+FKM8iZPH
+         3tgGSJk2srZ8UR5ZnbgDk88nKruFXnxSjKfwQcBQ8RM+8HtDiL9cg8NaPNZo4djwyESi
+         rSigA0zYLJs7uLbX+SAyeqhldjxG5qmZM7rc8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=75vFqUksf0tQ2CrucJLVayay02aXl+jl+xEBhfOLKh8=;
+        b=gv4QjjFmW05m0WJiv6sf/nISaKcUJTuPCs9Wefk45VDcwRDdF5qd88KnAcK1XrHS+i
+         +b1xpE0ivAosc3rfTF4+jvptbt/wotATB8Ubl6or8hvhOeWB3Av1yPXu+jkWgPQnxk5t
+         7crpsiOmyBoSV+GGl5qpevH1JiWWNO9rmgpHxOY7QfIw42wAkImh5l0ghROxEYb01l11
+         osqcUb3JVrVYG4mNRGhpEeTKr9XgLiRUHoQKCoN7HbPv/I7VRZnidZf537Cp4yf4yti5
+         T1HgtHInpwkDxM1Jr4lpnAUMW+6+0egY8g6j1f/VgnGMYLH2MZD8yqeOqcMIi8dD1q9J
+         SdNQ==
+X-Gm-Message-State: APjAAAXcoGlmdwqigNv8hDvr83q8j49l/GsEsOBG4EkE7jmX7rekYLxB
+        rytE6QPWXwfoBPY1JjJyDfjybg==
+X-Google-Smtp-Source: APXvYqzQoskEtmbjbTtX+OwFuML4TDWByi9RvdqJOynVcQV+gClTL5kianyjqI8MKT/DQSvYCHE8RQ==
+X-Received: by 2002:a02:2e52:: with SMTP id u18mr29934269jae.84.1557332779112;
+        Wed, 08 May 2019 09:26:19 -0700 (PDT)
+Received: from shuah-t480s.internal (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
+        by smtp.gmail.com with ESMTPSA id 3sm1657304itk.1.2019.05.08.09.26.17
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 08 May 2019 09:26:18 -0700 (PDT)
+From:   Shuah Khan <skhan@linuxfoundation.org>
+To:     shuah@kernel.org
+Cc:     Shuah Khan <skhan@linuxfoundation.org>,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] selftests: fix install target to use default install path
+Date:   Wed,  8 May 2019 10:26:16 -0600
+Message-Id: <20190508162616.9393-1-skhan@linuxfoundation.org>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-X-OriginatorOrg: darbyshire-bryant.me.uk
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5808bfce-3a59-4591-72ce-08d6d3d006fb
-X-MS-Exchange-CrossTenant-originalarrivaltime: 08 May 2019 16:12:54.1853
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 9151708b-c553-406f-8e56-694f435154a4
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR0302MB2734
+Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-SGkgRGF2aWQsDQoNCj4gT24gOCBNYXkgMjAxOSwgYXQgMDE6MjAsIERhdmlkIE1pbGxlciA8ZGF2
-ZW1AZGF2ZW1sb2Z0Lm5ldD4gd3JvdGU6DQo+IA0KPiANCj4gVGhlIG5ldC1uZXh0IHRyZWUgaXMg
-Y2xvc2VkLg0KDQpBcG9sb2dpZXMsIEkgZGlkbuKAmXQgdW5kZXJzdGFuZCB3aGF0IHRoaXMgbWVh
-bnQgaW4geW91ciBwcmlvciBtZXNzYWdlLCBoYXZpbmcgcmVhZCBodHRwczovL3d3dy5rZXJuZWwu
-b3JnL2RvYy9Eb2N1bWVudGF0aW9uL25ldHdvcmtpbmcvbmV0ZGV2LUZBUS50eHQgYW5kIHNlZW4g
-aHR0cDovL3ZnZXIua2VybmVsLm9yZy9+ZGF2ZW0vbmV0LW5leHQuaHRtbCBJIG5vdyBkby4NCg0K
-PiANCj4gWW91IHdpbGwgaGF2ZSB0byBzdWJtaXQgdGhpcyBhZ2FpbiB3aGVuIHRoZSBuZXQtbmV4
-dCB0cmVlIGlzIG9wZW4NCj4gYWdhaW4uDQoNCkNhdGNoIHlvdSBvbiB0aGUgZmxpcCBzaWRlLCBp
-biAyLWlzaCB3ZWVrcyB0aW1lIDotKQ0KDQo+IA0KPiBUaGFuayB5b3UuDQoNClRoYW5rcyBmb3Ig
-eW91ciBwYXRpZW5jZS4NCg0KS2V2aW4gRC1CDQoNCmdwZzogMDEyQyBBQ0IyIDI4QzYgQzUzRSA5
-Nzc1ICA5MTIzIEIzQTIgMzg5QiA5REUyIDMzNEENCg0K
+Install target fails when INSTALL_PATH is undefined. Fix install target
+to use "output_dir/install as the default install location. "output_dir"
+is either the root of selftests directory under kernel source tree or
+output directory specified by O= or KBUILD_OUTPUT.
+
+e.g:
+make -C tools/testing/selftests install
+<installs under tools/testing/selftests/install>
+
+make O=/tmp/kselftest -C tools/testing/selftests install
+<installs under /tmp/kselftest/install>
+
+export KBUILD_OUTPUT=/tmp/kselftest
+make -C tools/testing/selftests install
+<installs under /tmp/kselftest/install>
+
+In addition, add "all" target as dependency to "install" to build and
+install using a single command.
+
+Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
+---
+ tools/testing/selftests/Makefile | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
+
+diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
+index 9f05448e5e4b..c71a63b923d4 100644
+--- a/tools/testing/selftests/Makefile
++++ b/tools/testing/selftests/Makefile
+@@ -163,11 +163,17 @@ clean_hotplug:
+ run_pstore_crash:
+ 	make -C pstore run_crash
+ 
+-INSTALL_PATH ?= install
++# Use $BUILD as the default install root. $BUILD points to the
++# right output location for the following cases:
++# 1. output_dir=kernel_src
++# 2. a separate output directory is specified using O= KBUILD_OUTPUT
++# 3. a separate output directory is specified using KBUILD_OUTPUT
++#
++INSTALL_PATH ?= $(BUILD)/install
+ INSTALL_PATH := $(abspath $(INSTALL_PATH))
+ ALL_SCRIPT := $(INSTALL_PATH)/run_kselftest.sh
+ 
+-install:
++install: all
+ ifdef INSTALL_PATH
+ 	@# Ask all targets to install their files
+ 	mkdir -p $(INSTALL_PATH)/kselftest
+-- 
+2.17.1
+
