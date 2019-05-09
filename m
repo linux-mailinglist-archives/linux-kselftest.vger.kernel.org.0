@@ -2,194 +2,106 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DAC631900B
-	for <lists+linux-kselftest@lfdr.de>; Thu,  9 May 2019 20:12:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 009ED1902D
+	for <lists+linux-kselftest@lfdr.de>; Thu,  9 May 2019 20:26:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726708AbfEISMR (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 9 May 2019 14:12:17 -0400
-Received: from mail-pf1-f194.google.com ([209.85.210.194]:35450 "EHLO
-        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726632AbfEISMR (ORCPT
+        id S1726714AbfEIS0z (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 9 May 2019 14:26:55 -0400
+Received: from bombadil.infradead.org ([198.137.202.133]:35246 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726701AbfEIS0z (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 9 May 2019 14:12:17 -0400
-Received: by mail-pf1-f194.google.com with SMTP id t87so1736577pfa.2;
-        Thu, 09 May 2019 11:12:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=Uxi0dT3bZPj5ZkTVCL1ze6BziBmMlaGGA5Ikg1U2vOM=;
-        b=NVDbC1bDsKomR5b17X9A07TUn96+Z0R3C4QHe4+4XmcpJtOfCd8CgmuLCZMfSUHc2Y
-         AZQbhyOHVN3PbnfvpXNwIyTiJEC0AnC3A31KnDgtom1X8Z0bgVekXTI3BVaR1rUMtVkc
-         mpvbZA/KClKMuTnmyJdmslHsYwuIqmD1989ZCuOTgZCEOLUbJp+Az3OuPzbniWLdhZRK
-         A4eykSViXmcMIyntll9GMv/G9FH9fbRHmzzNbY06sd7ytRr4VIvYZ01eaVqBFzNo471Q
-         13oOjpRmdvJZD1oIeJ41HPZmqYmiXnHa+CbiBBf3n0hUjCKPHXEpNrM3Np8eHuClrL/7
-         NdMg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=Uxi0dT3bZPj5ZkTVCL1ze6BziBmMlaGGA5Ikg1U2vOM=;
-        b=KWBcRuY1ZFzu4sDVv4UmjfwaKq1ypyP0wFO59su254aqLyO6sqd/qe8lg7LtaVz+DZ
-         DILQ9g6ui/wPoGC+ficqXkRo8/cZLajKc7LRcS47etHwJevyR7jZbJXZJGmjZ48gcO3P
-         IkPPTgdGpXmJkG8hm1mKuPJ3/w6i5NiFgZ4Qbfw+ugFaB8LYJbP8CuSR9NOiHp+PNo8s
-         k5XisFBfgDa/QJLLLv1TVZFAV7OFG7gvLqRqdYgjVJjI9FY2YzQZllZFpeWtAUm5i8uG
-         4rko+w0bTxlE42902DWkY6i0xMxZHzuK8dlHs/AScygUbbTTtmT45g4ixWwIE36L0KB7
-         kSDQ==
-X-Gm-Message-State: APjAAAXPCZ+B1UcrGCXT2T3mP2FLcr1s2tYqe1Y376c+ear2LYSpRPYZ
-        yzSV9gY5e1hZoLb8cS85b70=
-X-Google-Smtp-Source: APXvYqwGz4a+VK7p6ts4ffA1rbfVCYWZRJS4YjX+gCEsA57HSqJ7sXPY9ft7Z0NWCteDTJWoQXvRRA==
-X-Received: by 2002:a65:5941:: with SMTP id g1mr7554475pgu.51.1557425535979;
-        Thu, 09 May 2019 11:12:15 -0700 (PDT)
-Received: from [192.168.1.70] (c-24-6-192-50.hsd1.ca.comcast.net. [24.6.192.50])
-        by smtp.gmail.com with ESMTPSA id l68sm6532427pfb.20.2019.05.09.11.12.13
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 09 May 2019 11:12:15 -0700 (PDT)
-Subject: Re: [PATCH v2 00/17] kunit: introduce KUnit, the Linux kernel unit
- testing framework
-To:     Tim.Bird@sony.com, tytso@mit.edu, knut.omang@oracle.com
-Cc:     gregkh@linuxfoundation.org, brendanhiggins@google.com,
-        keescook@google.com, kieran.bingham@ideasonboard.com,
-        mcgrof@kernel.org, robh@kernel.org, sboyd@kernel.org,
-        shuah@kernel.org, devicetree@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, kunit-dev@googlegroups.com,
-        linux-doc@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-nvdimm@lists.01.org,
-        linux-um@lists.infradead.org, Alexander.Levin@microsoft.com,
-        amir73il@gmail.com, dan.carpenter@oracle.com,
-        dan.j.williams@intel.com, daniel@ffwll.ch, jdike@addtoit.com,
-        joel@jms.id.au, julia.lawall@lip6.fr, khilman@baylibre.com,
-        logang@deltatee.com, mpe@ellerman.id.au, pmladek@suse.com,
-        richard@nod.at, rientjes@google.com, rostedt@goodmis.org,
-        wfg@linux.intel.com
-References: <20190501230126.229218-1-brendanhiggins@google.com>
- <54940124-50df-16ec-1a32-ad794ee05da7@gmail.com>
- <20190507080119.GB28121@kroah.com>
- <a09a7e0e-9894-8c1a-34eb-fc482b1759d0@gmail.com>
- <20190509015856.GB7031@mit.edu>
- <580e092f-fa4e-eedc-9e9a-a57dd085f0a6@gmail.com>
- <20190509032017.GA29703@mit.edu>
- <7fd35df81c06f6eb319223a22e7b93f29926edb9.camel@oracle.com>
- <20190509133551.GD29703@mit.edu>
- <ECADFF3FD767C149AD96A924E7EA6EAF9770D591@USCULXMSG01.am.sony.com>
-From:   Frank Rowand <frowand.list@gmail.com>
-Message-ID: <875c546d-9713-bb59-47e4-77a1d2c69a6d@gmail.com>
-Date:   Thu, 9 May 2019 11:12:12 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
+        Thu, 9 May 2019 14:26:55 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=M+ac/UzOhEovku6TvaL3m7ed0JPo1/Dl8jj2JnZY/7E=; b=iTJ9LIl7aeRopKzTZ3VOE/mYf
+        Gvc+rqcVgiuiuD6oJoIBfLtkF/IFiFLEJUWw6tUjPF8TQYE9ri2m1SECKM835zcl43lCNC06mQv4O
+        UnU06gmyVgEJoAcmklK/KhHWR+y1uhidZOLNrFdr+Gy9NG+hzWkdVPNXbLENCMnSncVqlvrCrjr0j
+        ijYd+J5FWgqMruK6JzUY+/Dc0tfC00zOEBQeUCxNC9OGFQX9reneb8HFrDSZYa6SRVHm7bdLfrKcw
+        T635XepFYxxMJWDMdfy7RGCO2B2SgLmdxK7kXFbj/4PqQMfTZQ8vygSFpoG3kAtWn1/RAjm80f9dy
+        joEYtlD9Q==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=hirez.programming.kicks-ass.net)
+        by bombadil.infradead.org with esmtpsa (Exim 4.90_1 #2 (Red Hat Linux))
+        id 1hOnkN-0004KF-Ja; Thu, 09 May 2019 18:26:23 +0000
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 1FF2B2143093D; Thu,  9 May 2019 20:26:22 +0200 (CEST)
+Date:   Thu, 9 May 2019 20:26:22 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        linux-kernel@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Nicolai Stange <nstange@suse.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>, x86@kernel.org,
+        Jiri Kosina <jikos@kernel.org>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Petr Mladek <pmladek@suse.com>,
+        Joe Lawrence <joe.lawrence@redhat.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
+        Tim Chen <tim.c.chen@linux.intel.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Juergen Gross <jgross@suse.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nayna Jain <nayna@linux.ibm.com>,
+        Masahiro Yamada <yamada.masahiro@socionext.com>,
+        Joerg Roedel <jroedel@suse.de>, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH 2/4] x86/kprobes: Fix frame pointer annotations
+Message-ID: <20190509182622.GB2623@hirez.programming.kicks-ass.net>
+References: <20190508074901.982470324@infradead.org>
+ <20190508080612.721269814@infradead.org>
+ <20190508115416.nblx7c2kocidpytm@treble>
+ <20190508120416.GL2589@hirez.programming.kicks-ass.net>
+ <20190508124248.u5ukpbhnh4wpiccq@treble>
+ <20190508153907.GM2589@hirez.programming.kicks-ass.net>
+ <20190508184848.qerg3flv3ej3xsev@treble>
+ <20190509102030.dfa62e058f09d0d8cbdd6053@kernel.org>
+ <20190509081431.GO2589@hirez.programming.kicks-ass.net>
+ <20190509173741.pfvecznqdndihxzg@home.goodmis.org>
 MIME-Version: 1.0
-In-Reply-To: <ECADFF3FD767C149AD96A924E7EA6EAF9770D591@USCULXMSG01.am.sony.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190509173741.pfvecznqdndihxzg@home.goodmis.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 5/9/19 10:00 AM, Tim.Bird@sony.com wrote:
->> -----Original Message-----
->> From: Theodore Ts'o 
->>
-
-< massive snip >
-
-I'll reply in more detail to some other earlier messages in this thread
-later.
-
-This reply is an attempt to return to the intent of my original reply to
-patch 0 of this series.
-
-
->> Ultimately, I'm a pragmatist.  If KTF serves your needs best, good for
->> you.  If other approaches are better for other parts of the kernel,
->> let's not try to impose a strict "There Must Be Only One" religion.
->> That's already not true today, and for good reason.  There are many
->> different kinds of kernel code, and many different types of test
->> philosophies.  Trying to force all kernel testing into a single
->> Procrustean Bed is simply not productive.
+On Thu, May 09, 2019 at 01:37:42PM -0400, Steven Rostedt wrote:
+> On Thu, May 09, 2019 at 10:14:31AM +0200, Peter Zijlstra wrote:
+> > 
+> > Right; I already fixed that in my patch changing i386's pt_regs.
+> > 
+> > But what I'd love to do is something like the belwo patch, and make all
+> > the trampolines (very much including ftrace) use that. Such that we then
+> > only have 1 copy of this magic (well, 2 because x86_64 also needs an
+> > implementation of this of course).
+> > 
+> > Changing ftrace over to this would be a little more work but it can
+> > easily chain things a little to get its original context back:
+> > 
+> > ENTRY(ftrace_regs_caller)
+> > GLOBAL(ftrace_regs_func)
+> > 	push ftrace_stub
+> > 	push ftrace_regs_handler
 > 
-> Had to look up "Procrustean Bed" - great phrase.  :-)
-> 
-> I'm not of the opinion that there must only be one test framework
-> in the kernel. But we should avoid unnecessary multiplication. Every
-> person is going to have a different idea for where the line of necessity
-> is drawn.  My own opinion is that what KUnit is adding is different enough
-> from kselftest, that it's a valuable addition.  
-> 
->  -- Tim
+> Note, ftrace_stub is dynamically modified to remove any indirect calls.
 
-My first reply to patch 0 was in the context of knowing next to nothing
-about kselftest.  My level of understanding was essentially from slideware.
-(As the thread progressed, I dug a little deeper into kselftest, so now have
-a slightly better, though still fairly surface understanding of kselftest).
+Yeah, I realized that a few hours after I send this out; as you might
+have seen by the IRC chatter on this.
 
-Maybe I did not explain myself clearly enough in that reply.  I will try
-again here.
-
-Patch 0 provided a one paragraph explanation of why KUnit exists, titled
-
-   "## What's so special about unit testing?"
-
-Patch 0 also provided a statement that it is not meant to replace
-kselftest, in a paragraph titled
-
-   "## Is KUnit trying to replace other testing frameworks for the kernel?"
-
-I stated:
-
-   "My understanding is that the intent of KUnit is to avoid booting a kernel on
-   real hardware or in a virtual machine.  That seems to be a matter of semantics
-   to me because isn't invoking a UML Linux just running the Linux kernel in
-   a different form of virtualization?
-
-   So I do not understand why KUnit is an improvement over kselftest.
-
-   ...
-
-   What am I missing?"
-
-
-I was looking for a fuller, better explanation than was given in patch 0
-of how KUnit provides something that is different than what kselftest
-provides for creating unit tests for kernel code.
-
-New question "(2)":
-
-(2) If KUnit provides something unique, then the obvious follow on
-question would be: does it make sense to (a) integrate that feature into
-kselftest, (b) integrate the current kselftest in kernel test functionality
-into KUnit and convert the in kernel test portion of kselftest to use
-KUnit, or (c) KUnit and kselftest are so different that they need to
-remain separate features.
-
-*****  Please do not reply to this email with a discussion of "(2)".
-*****  Such a discussion is premature if there is not an answer
-*****  to my first question.
-
-Observation (3), rephrased:
-
-(3) I also brought up the issue that if option (c) was the answer to
-question "(2)" (instead of either option (a) or option (b)) then this
-is extra overhead for any developer or maintainer involved in different
-subsystems that use the different frameworks.  I intended this as one
-possible motivation for why my first question mattered.
-
-Ted grabbed hold of this issue and basically ignored what I intended
-to be my core question.  Nobody else has answered my core question,
-though Knut's first reply did manage to get somewhere near the
-intent of my core question.
-
-*****  Please do not reply to this email with a discussion of "(3)".
-*****  Such a discussion is premature if there is not an answer
-*****  to my first question.
-*****
-*****  Also that discussion is already occurring in this thread,
-*****  feel free to discuss it there if you want, even though I
-*****  feel such discussion is premature.
-
-I still do not have an answer to my original question.
-
--Frank
+Still, maybe we can wrap the thing in a .macro and reuse things that
+way. Because I really hate there are at least 3 (x2 for x86_64) copies
+of this around.
