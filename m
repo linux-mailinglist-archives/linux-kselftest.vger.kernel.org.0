@@ -2,135 +2,108 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4602A18330
-	for <lists+linux-kselftest@lfdr.de>; Thu,  9 May 2019 03:20:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63CF01835A
+	for <lists+linux-kselftest@lfdr.de>; Thu,  9 May 2019 03:45:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725891AbfEIBUk (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 8 May 2019 21:20:40 -0400
-Received: from mail.kernel.org ([198.145.29.99]:58304 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725778AbfEIBUk (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 8 May 2019 21:20:40 -0400
-Received: from devnote2 (NE2965lan1.rev.em-net.ne.jp [210.141.244.193])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 034DC2173E;
-        Thu,  9 May 2019 01:20:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1557364838;
-        bh=oPvPuQ74RU1mLepyoEpxjH/yNzo+8P7yFE0PP+o30Oo=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=qY45YTDqXQdybXAQAMPwVnrkEhhduuYyYkgZFawIL7jWuKNHik7uqDaNUS3XVNRj8
-         AAQqoQ2qMYdJRnT+93TWVWISLbHNk7va1yNGo0Pn8rb9yfZQqhAbAJ5krp21kfGlqw
-         +6NfvKyNEYNLW1ddu9dBVyeqRDyn61IFvUHXciZM=
-Date:   Thu, 9 May 2019 10:20:30 +0900
-From:   Masami Hiramatsu <mhiramat@kernel.org>
-To:     Josh Poimboeuf <jpoimboe@redhat.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        linux-kernel@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Nicolai Stange <nstange@suse.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>, x86@kernel.org,
-        Jiri Kosina <jikos@kernel.org>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Petr Mladek <pmladek@suse.com>,
-        Joe Lawrence <joe.lawrence@redhat.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
-        Tim Chen <tim.c.chen@linux.intel.com>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Juergen Gross <jgross@suse.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nayna Jain <nayna@linux.ibm.com>,
-        Masahiro Yamada <yamada.masahiro@socionext.com>,
-        Joerg Roedel <jroedel@suse.de>,
-        linux-kselftest@vger.kernel.org,
-        Masami Hiramatsu <mhiramat@kernel.org>
-Subject: Re: [PATCH 2/4] x86/kprobes: Fix frame pointer annotations
-Message-Id: <20190509102030.dfa62e058f09d0d8cbdd6053@kernel.org>
-In-Reply-To: <20190508184848.qerg3flv3ej3xsev@treble>
-References: <20190508074901.982470324@infradead.org>
-        <20190508080612.721269814@infradead.org>
-        <20190508115416.nblx7c2kocidpytm@treble>
-        <20190508120416.GL2589@hirez.programming.kicks-ass.net>
-        <20190508124248.u5ukpbhnh4wpiccq@treble>
-        <20190508153907.GM2589@hirez.programming.kicks-ass.net>
-        <20190508184848.qerg3flv3ej3xsev@treble>
-X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+        id S1726713AbfEIBpo (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 8 May 2019 21:45:44 -0400
+Received: from outgoing-auth-1.mit.edu ([18.9.28.11]:43465 "EHLO
+        outgoing.mit.edu" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1725832AbfEIBpo (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 8 May 2019 21:45:44 -0400
+Received: from callcc.thunk.org ([66.31.38.53])
+        (authenticated bits=0)
+        (User authenticated as tytso@ATHENA.MIT.EDU)
+        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id x491i7RW019749
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 8 May 2019 21:44:09 -0400
+Received: by callcc.thunk.org (Postfix, from userid 15806)
+        id 9759E420024; Wed,  8 May 2019 21:44:07 -0400 (EDT)
+Date:   Wed, 8 May 2019 21:44:07 -0400
+From:   "Theodore Ts'o" <tytso@mit.edu>
+To:     Frank Rowand <frowand.list@gmail.com>
+Cc:     Greg KH <gregkh@linuxfoundation.org>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        keescook@google.com, kieran.bingham@ideasonboard.com,
+        mcgrof@kernel.org, robh@kernel.org, sboyd@kernel.org,
+        shuah@kernel.org, devicetree@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, kunit-dev@googlegroups.com,
+        linux-doc@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-nvdimm@lists.01.org,
+        linux-um@lists.infradead.org, Alexander.Levin@microsoft.com,
+        Tim.Bird@sony.com, amir73il@gmail.com, dan.carpenter@oracle.com,
+        dan.j.williams@intel.com, daniel@ffwll.ch, jdike@addtoit.com,
+        joel@jms.id.au, julia.lawall@lip6.fr, khilman@baylibre.com,
+        knut.omang@oracle.com, logang@deltatee.com, mpe@ellerman.id.au,
+        pmladek@suse.com, richard@nod.at, rientjes@google.com,
+        rostedt@goodmis.org, wfg@linux.intel.com
+Subject: Re: [PATCH v2 00/17] kunit: introduce KUnit, the Linux kernel unit
+ testing framework
+Message-ID: <20190509014407.GA7031@mit.edu>
+Mail-Followup-To: Theodore Ts'o <tytso@mit.edu>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Brendan Higgins <brendanhiggins@google.com>, keescook@google.com,
+        kieran.bingham@ideasonboard.com, mcgrof@kernel.org, robh@kernel.org,
+        sboyd@kernel.org, shuah@kernel.org, devicetree@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, kunit-dev@googlegroups.com,
+        linux-doc@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-nvdimm@lists.01.org,
+        linux-um@lists.infradead.org, Alexander.Levin@microsoft.com,
+        Tim.Bird@sony.com, amir73il@gmail.com, dan.carpenter@oracle.com,
+        dan.j.williams@intel.com, daniel@ffwll.ch, jdike@addtoit.com,
+        joel@jms.id.au, julia.lawall@lip6.fr, khilman@baylibre.com,
+        knut.omang@oracle.com, logang@deltatee.com, mpe@ellerman.id.au,
+        pmladek@suse.com, richard@nod.at, rientjes@google.com,
+        rostedt@goodmis.org, wfg@linux.intel.com
+References: <20190501230126.229218-1-brendanhiggins@google.com>
+ <54940124-50df-16ec-1a32-ad794ee05da7@gmail.com>
+ <20190507080119.GB28121@kroah.com>
+ <20190507172256.GB5900@mit.edu>
+ <4d963cdc-1cbb-35a3-292c-552f865ed1f7@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <4d963cdc-1cbb-35a3-292c-552f865ed1f7@gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Josh,
-
-On Wed, 8 May 2019 13:48:48 -0500
-Josh Poimboeuf <jpoimboe@redhat.com> wrote:
-
-> On Wed, May 08, 2019 at 05:39:07PM +0200, Peter Zijlstra wrote:
-> > On Wed, May 08, 2019 at 07:42:48AM -0500, Josh Poimboeuf wrote:
-> > > On Wed, May 08, 2019 at 02:04:16PM +0200, Peter Zijlstra wrote:
-> > 
-> > > > Do the x86_64 variants also want some ORC annotation?
-> > > 
-> > > Maybe so.  Though it looks like regs->ip isn't saved.  The saved
-> > > registers might need to be tweaked.  I'll need to look into it.
-> > 
-> > What all these sites do (and maybe we should look at unifying them
-> > somehow) is turn a CALL frame (aka RET-IP) into an exception frame (aka
-> > pt_regs).
-> > 
-> > So regs->ip will be the return address (which is fixed up to be the CALL
-> > address in the handler).
+On Wed, May 08, 2019 at 05:58:49PM -0700, Frank Rowand wrote:
 > 
-> But from what I can tell, trampoline_handler() hard-codes regs->ip to
-> point to kretprobe_trampoline(), and the original return address is
-> placed in regs->sp.
+> If KUnit is added to the kernel, and a subsystem that I am submitting
+> code for has chosen to use KUnit instead of kselftest, then yes, I do
+> *have* to use KUnit if my submission needs to contain a test for the
+> code unless I want to convince the maintainer that somehow my case
+> is special and I prefer to use kselftest instead of KUnittest.
+
+That's going to be between you and the maintainer.  Today, if you want
+to submit a substantive change to xfs or ext4, you're going to be
+asked to create test for that new feature using xfstests.  It doesn't
+matter that xfstests isn't in the kernel --- if that's what is
+required by the maintainer.
+
+> > supposed to be a simple way to run a large number of small tests that
+> > for specific small components in a system.
 > 
-> Masami, is there a reason why regs->ip doesn't have the original return
-> address and regs->sp doesn't have the original SP?  I think that would
-> help the unwinder understand things.
+> kselftest also supports running a subset of tests.  That subset of tests
+> can also be a large number of small tests.  There is nothing inherent
+> in KUnit vs kselftest in this regard, as far as I am aware.
 
-Yes, for regs->ip, there is a histrical reason. Since previously, we had
-an int3 at trampoline, so the user (kretprobe) handler expects that
-regs->ip is trampoline address and ri->ret_addr is original return address.
-It is better to check the other archs, but I think it is possible to
-change the regs->ip to original return address, since no one cares such
-"fixed address". :)
+The big difference is that kselftests are driven by a C program that
+runs in userspace.  Take a look at tools/testing/selftests/filesystem/dnotify_test.c
+it has a main(int argc, char *argv) function.
 
-For the regs->sp, there are 2 reasons.
+In contrast, KUnit are fragments of C code which run in the kernel;
+not in userspace.  This allows us to test internal functions inside
+complex file system (such as the block allocator in ext4) directly.
+This makes it *fundamentally* different from kselftest.
 
-For x86-64, it's just for over-optimizing (reduce stack usage).
-I think we can make a gap for putting return address, something like
+Cheers,
 
-	"kretprobe_trampoline:\n"
-#ifdef CONFIG_X86_64
-	"	pushq %rsp\n"	/* Make a gap for return address */
-	"	pushq 0(%rsp)\n"	/* Copy original stack pointer */
-	"	pushfq\n"
-	SAVE_REGS_STRING
-	"	movq %rsp, %rdi\n"
-	"	call trampoline_handler\n"
-	/* Push the true return address to the bottom */
-	"	movq %rax, 20*8(%rsp)\n"
-	RESTORE_REGS_STRING
-	"	popfq\n"
-	"	addq $8, %rsp\n"	/* Skip original stack pointer */
-
-For i386 (x86-32), there is no other way to keep &regs->sp as
-the original stack pointer. It has to be changed with this series,
-maybe as same as x86-64.
-
-Thank you,
-
--- 
-Masami Hiramatsu <mhiramat@kernel.org>
+						- Ted
