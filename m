@@ -2,368 +2,299 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7538018B18
-	for <lists+linux-kselftest@lfdr.de>; Thu,  9 May 2019 16:01:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F0D8C18C49
+	for <lists+linux-kselftest@lfdr.de>; Thu,  9 May 2019 16:50:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726426AbfEIOBQ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 9 May 2019 10:01:16 -0400
-Received: from mail.kernel.org ([198.145.29.99]:44748 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726192AbfEIOBQ (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 9 May 2019 10:01:16 -0400
-Received: from devnote2 (NE2965lan1.rev.em-net.ne.jp [210.141.244.193])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id CA3492089E;
-        Thu,  9 May 2019 14:01:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1557410474;
-        bh=CeMS/sCd8zS33MpeYALcLP/Yqm9rGmSNsKFNL7ZikOA=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=nXxvOXjKh6V0/dPiWa8hgkLmu0/Skk6GzVerSrb3HrHtR+sq0k4Cfhi3Ifbq95m/b
-         pfGhLtaCKZ2nGUjTQjRczj6HH5/OzviuUXMUTJ9JNI1nVHs2ilpo1L4t3bzILekL7/
-         nOuTQzGuSpRgzGx2tMjHQDTRBFsiAS82DV/EuU90=
-Date:   Thu, 9 May 2019 23:01:06 +0900
-From:   Masami Hiramatsu <mhiramat@kernel.org>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Josh Poimboeuf <jpoimboe@redhat.com>, linux-kernel@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Nicolai Stange <nstange@suse.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>, x86@kernel.org,
-        Jiri Kosina <jikos@kernel.org>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Petr Mladek <pmladek@suse.com>,
-        Joe Lawrence <joe.lawrence@redhat.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
-        Tim Chen <tim.c.chen@linux.intel.com>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Juergen Gross <jgross@suse.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nayna Jain <nayna@linux.ibm.com>,
-        Masahiro Yamada <yamada.masahiro@socionext.com>,
-        Joerg Roedel <jroedel@suse.de>, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH 2/4] x86/kprobes: Fix frame pointer annotations
-Message-Id: <20190509230106.3551b08553440d125e437f66@kernel.org>
-In-Reply-To: <20190509081431.GO2589@hirez.programming.kicks-ass.net>
-References: <20190508074901.982470324@infradead.org>
-        <20190508080612.721269814@infradead.org>
-        <20190508115416.nblx7c2kocidpytm@treble>
-        <20190508120416.GL2589@hirez.programming.kicks-ass.net>
-        <20190508124248.u5ukpbhnh4wpiccq@treble>
-        <20190508153907.GM2589@hirez.programming.kicks-ass.net>
-        <20190508184848.qerg3flv3ej3xsev@treble>
-        <20190509102030.dfa62e058f09d0d8cbdd6053@kernel.org>
-        <20190509081431.GO2589@hirez.programming.kicks-ass.net>
-X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+        id S1726727AbfEIOuq (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 9 May 2019 10:50:46 -0400
+Received: from userp2130.oracle.com ([156.151.31.86]:52620 "EHLO
+        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726187AbfEIOuq (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 9 May 2019 10:50:46 -0400
+Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
+        by userp2130.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x49EcglG195701;
+        Thu, 9 May 2019 14:49:14 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=message-id : subject
+ : from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=corp-2018-07-02;
+ bh=TPuW6utPKYY5uh6xzNiMwUXqKVxe0amP9GwFWNtITsc=;
+ b=TyVinD7BXhdhg7NuHqsdjsfIhAC+BOnUs9DOUfMGhxbCEIBJGqLPwbDBjsjJHOD+UfzG
+ hOL+vUaq6Ccbs2KaqcJiwZ4nuAy1fWHolGlBCqI+R1AABnrEFjgAfQrV3gBw9irQNsjH
+ 9xY/EFWinWUkC4qAxdxa2sXhRZn42tBWJ23O/iXXn7F1tu77ek6hkTIS0wdj5mvLN/yD
+ twtzcmIi/lhX4Drp/WlZ4hfEZy1XyDl+UQoRyjQVBG7MOr3EfVOAoqw0Npo7+rU057ru
+ piXSGPrDowQ4V1Mj3bTXfp+0Yc/gPiwG9mjzoHqLcckjL7XixY9GyhU6Z285s/D4SHKB /Q== 
+Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
+        by userp2130.oracle.com with ESMTP id 2s94bgbcss-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 09 May 2019 14:49:13 +0000
+Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
+        by userp3030.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x49Em0Ge056998;
+        Thu, 9 May 2019 14:49:13 GMT
+Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
+        by userp3030.oracle.com with ESMTP id 2sagyv9kfd-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 09 May 2019 14:49:13 +0000
+Received: from abhmp0001.oracle.com (abhmp0001.oracle.com [141.146.116.7])
+        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id x49En1VI030147;
+        Thu, 9 May 2019 14:49:01 GMT
+Received: from asu (/92.220.18.196)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Thu, 09 May 2019 14:49:00 +0000
+Message-ID: <3ce70d58c41be8c907c21ec7d3450b269ede8287.camel@oracle.com>
+Subject: Re: [PATCH v2 00/17] kunit: introduce KUnit, the Linux kernel unit
+ testing framework
+From:   Knut Omang <knut.omang@oracle.com>
+To:     "Theodore Ts'o" <tytso@mit.edu>
+Cc:     Frank Rowand <frowand.list@gmail.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        keescook@google.com, kieran.bingham@ideasonboard.com,
+        mcgrof@kernel.org, robh@kernel.org, sboyd@kernel.org,
+        shuah@kernel.org, devicetree@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, kunit-dev@googlegroups.com,
+        linux-doc@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-nvdimm@lists.01.org,
+        linux-um@lists.infradead.org, Alexander.Levin@microsoft.com,
+        Tim.Bird@sony.com, amir73il@gmail.com, dan.carpenter@oracle.com,
+        dan.j.williams@intel.com, daniel@ffwll.ch, jdike@addtoit.com,
+        joel@jms.id.au, julia.lawall@lip6.fr, khilman@baylibre.com,
+        logang@deltatee.com, mpe@ellerman.id.au, pmladek@suse.com,
+        richard@nod.at, rientjes@google.com, rostedt@goodmis.org,
+        wfg@linux.intel.com
+Date:   Thu, 09 May 2019 16:48:51 +0200
+In-Reply-To: <20190509133551.GD29703@mit.edu>
+References: <20190501230126.229218-1-brendanhiggins@google.com>
+         <54940124-50df-16ec-1a32-ad794ee05da7@gmail.com>
+         <20190507080119.GB28121@kroah.com>
+         <a09a7e0e-9894-8c1a-34eb-fc482b1759d0@gmail.com>
+         <20190509015856.GB7031@mit.edu>
+         <580e092f-fa4e-eedc-9e9a-a57dd085f0a6@gmail.com>
+         <20190509032017.GA29703@mit.edu>
+         <7fd35df81c06f6eb319223a22e7b93f29926edb9.camel@oracle.com>
+         <20190509133551.GD29703@mit.edu>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.30.5 (3.30.5-1.fc29) 
+MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
+X-Proofpoint-Virus-Version: vendor=nai engine=5900 definitions=9251 signatures=668686
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
+ phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=999
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.0.1-1810050000 definitions=main-1905090086
+X-Proofpoint-Virus-Version: vendor=nai engine=5900 definitions=9251 signatures=668686
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
+ suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
+ lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1810050000
+ definitions=main-1905090086
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, 9 May 2019 10:14:31 +0200
-Peter Zijlstra <peterz@infradead.org> wrote:
-
-> On Thu, May 09, 2019 at 10:20:30AM +0900, Masami Hiramatsu wrote:
-> > Hi Josh,
-> > 
-> > On Wed, 8 May 2019 13:48:48 -0500
-> > Josh Poimboeuf <jpoimboe@redhat.com> wrote:
-> > 
-> > > On Wed, May 08, 2019 at 05:39:07PM +0200, Peter Zijlstra wrote:
-> > > > On Wed, May 08, 2019 at 07:42:48AM -0500, Josh Poimboeuf wrote:
-> > > > > On Wed, May 08, 2019 at 02:04:16PM +0200, Peter Zijlstra wrote:
-> > > > 
-> > > > > > Do the x86_64 variants also want some ORC annotation?
-> > > > > 
-> > > > > Maybe so.  Though it looks like regs->ip isn't saved.  The saved
-> > > > > registers might need to be tweaked.  I'll need to look into it.
-> > > > 
-> > > > What all these sites do (and maybe we should look at unifying them
-> > > > somehow) is turn a CALL frame (aka RET-IP) into an exception frame (aka
-> > > > pt_regs).
-> > > > 
-> > > > So regs->ip will be the return address (which is fixed up to be the CALL
-> > > > address in the handler).
-> > > 
-> > > But from what I can tell, trampoline_handler() hard-codes regs->ip to
-> > > point to kretprobe_trampoline(), and the original return address is
-> > > placed in regs->sp.
-> > > 
-> > > Masami, is there a reason why regs->ip doesn't have the original return
-> > > address and regs->sp doesn't have the original SP?  I think that would
-> > > help the unwinder understand things.
-> > 
-> > Yes, for regs->ip, there is a histrical reason. Since previously, we had
-> > an int3 at trampoline, so the user (kretprobe) handler expects that
-> > regs->ip is trampoline address and ri->ret_addr is original return address.
-> > It is better to check the other archs, but I think it is possible to
-> > change the regs->ip to original return address, since no one cares such
-> > "fixed address". :)
-> > 
-> > For the regs->sp, there are 2 reasons.
-> > 
-> > For x86-64, it's just for over-optimizing (reduce stack usage).
-> > I think we can make a gap for putting return address, something like
-> > 
-> > 	"kretprobe_trampoline:\n"
-> > #ifdef CONFIG_X86_64
-> > 	"	pushq %rsp\n"	/* Make a gap for return address */
-> > 	"	pushq 0(%rsp)\n"	/* Copy original stack pointer */
-> > 	"	pushfq\n"
-> > 	SAVE_REGS_STRING
-> > 	"	movq %rsp, %rdi\n"
-> > 	"	call trampoline_handler\n"
-> > 	/* Push the true return address to the bottom */
-> > 	"	movq %rax, 20*8(%rsp)\n"
-> > 	RESTORE_REGS_STRING
-> > 	"	popfq\n"
-> > 	"	addq $8, %rsp\n"	/* Skip original stack pointer */
-> > 
-> > For i386 (x86-32), there is no other way to keep &regs->sp as
-> > the original stack pointer. It has to be changed with this series,
-> > maybe as same as x86-64.
+On Thu, 2019-05-09 at 09:35 -0400, Theodore Ts'o wrote:
+> On Thu, May 09, 2019 at 01:52:15PM +0200, Knut Omang wrote:
+> > 1) Tests that exercises typically algorithmic or intricate, complex
+> >    code with relatively few outside dependencies, or where the dependencies 
+> >    are considered worth mocking, such as the basics of container data 
+> >    structures or page table code. If I get you right, Ted, the tests 
+> >    you refer to in this thread are such tests. I believe covering this space 
+> >    is the goal Brendan has in mind for KUnit.
 > 
-> Right; I already fixed that in my patch changing i386's pt_regs.
-
-I see it, and it is good to me. :)
-
-> But what I'd love to do is something like the belwo patch, and make all
-> the trampolines (very much including ftrace) use that. Such that we then
-> only have 1 copy of this magic (well, 2 because x86_64 also needs an
-> implementation of this of course).
-
-OK, but I will make kretprobe integrated with func-graph tracer,
-since it is inefficient that we have 2 different hidden return stack...
-
-Anyway,
-
-> Changing ftrace over to this would be a little more work but it can
-> easily chain things a little to get its original context back:
+> Yes, that's correct.  I'd also add that one of the key differences is
+> that it sounds like Frank and you are coming from the perspective of
+> testing *device drivers* where in general there aren't a lot of
+> complex code which is hardware independent.  After all, the vast
+> majority of device drivers are primarily interface code to hardware,
+> with as much as possible abstracted away to common code.  (Take, for
+> example, the model of the SCSI layer; or all of the kobject code.)
+>
+> > 2) Tests that exercises interaction between a module under test and other 
+> >    parts of the kernel, such as testing intricacies of the interaction of 
+> >    a driver or file system with the rest of the kernel, and with hardware, 
+> >    whether that is real hardware or a model/emulation. 
+> >    Using your testing needs as example again, Ted, from my shallow understanding,
+> >    you have such needs within the context of xfstests (
+> https://github.com/tytso/xfstests)
 > 
-> ENTRY(ftrace_regs_caller)
-> GLOBAL(ftrace_regs_func)
-> 	push ftrace_stub
-> 	push ftrace_regs_handler
-> 	jmp call_to_exception_trampoline
-> END(ftrace_regs_caller)
+> Well, upstream is for xfstests is git://git.kernel.org/pub/scm/fs/xfs/xfstests-dev.git
+
+Thanks for the correction!
+
+> The test framework where I can run 20 hours worth of xfstests
+> (multiple file system features enabled, multiple mount options, etc.)
+> in 3 hours of wall clock time using multiple cloud VM is something
+> called gce-xfstests.
 > 
-> typedef void (*ftrace_func_t)(unsigned long, unsigned long, struct ftrace_op *, struct pt_regs *);
+> I also have kvm-xfstests, which optimizes low test latency, where I
+> want to run a one or a small number of tests with a minimum of
+> overhead --- gce startup and shutdown is around 2 minutes, where as
+> kvm startup and shutdown is about 7 seconds.  As far as I'm concerned,
+> 7 seconds is still too slow, but that's the best I've been able to do
+> given all of the other things I want a test framework to do, including
+> archiving test results, parsing the test results so it's easy to
+> interpret, etc.  Both kvm-xfstests and gce-xfstests are located at:
 > 
-> struct ftrace_regs_stack {
-> 	ftrace_func_t func;
-> 	unsigned long parent_ip;
-> };
+> 	git://git.kernel.org/pub/scm/fs/xfs/xfstests-dev.git
 > 
-> void ftrace_regs_handler(struct pr_regs *regs)
-> {
-> 	struct ftrace_regs_stack *st = (void *)regs->sp;
-> 	ftrace_func_t func = st->func;
+> So if Frank's primary argument is "too many frameworks", it's already
+> too late.  The block layer has blktests has a seprate framework,
+> called blktests --- and yeah, it's a bit painful to launch or learn
+> how to set things up.
+
+I agree at that level - and the good thing is that there are a lot to learn 
+from looking at other people's ways - but working towards unification rather than even
+more similar, but subtly different ways I think is a good thing anyway!
+
+> That's why I added support to run blktests using gce-xfstests and
+> kvm-xfstests, so that "gce-xfstests --blktests" or "kvm-xfstests
+> --xfstests" will pluck a kernel from your build tree, and launch at
+> test appliance VM using that kernel and run the block layer tests.
 > 
-> 	regs->sp += sizeof(long); /* pop func */
+> The point is we *already* have multiple test frameworks, which are
+> optimized for testing different parts of the kernel.  And if you plan
+> to do a lot of work in these parts of the kernel, you're going to have
+> to learn how to use some other test framework other than kselftest.
+> Sorry, that's just the way it goes.
+> 
+> Of course, I'll accept trivial patches that haven't been tested using
+> xfstests --- but that's because I can trivially run the smoke test for
+> you.  Of course, if I get a lot of patches from a contributor which
+> cause test regressions, I'll treat them much like someone who
+> contribute patches which fail to build.  I'll apply pressure to the
+> contributor to actually build test, or run a ten minute kvm-xfstests
+> smoke test.  Part of the reason why I feel comfortable to do this is
+> it's really easy to run the smoke test.  There are pre-compiled test
+> appliances, and a lot of documentation:
+> 
+> https://github.com/tytso/xfstests-bld/blob/master/Documentation/kvm-quickstart.md
+> 
+> This is why I have close to zero sympathy to Frank's complaint that
+> extra test frameworks are a bad thing.  To me, that's whining.  I've
+> done a huge amount of work to meet contributors more than half-way.
+> The insistence that "There Must Be One", ala the Highlander movie, is
+> IMHO so wrong that it's not even close.  Is it really that hard to do
+> a "git pull", download a test appliance, set up a config file to tell
+> kvm-xfstests where to find your build tree, and then run "kvm-xfstests
+> --smoke" or "gce-xfstests --smoke"?  Cry me a river.
+> 
+> There are already multiple test frameworks, and if you expect to do a
+> lot of work in a particular subsystem, you'll be expected to use the
+> Maintainer's choice of tests.  Deal with it.  We do this so we can
+> scale to the number of contributors we have in our subsystem.
+> 
+> > To 1) I agree with Frank in that the problem with using UML is that you still have to
+> > relate to the complexity of a kernel run time system, while what you really want for
+> these
+> > types of tests is just to compile a couple of kernel source files in a normal user
+> land
+> > context, to allow the use of Valgrind and other user space tools on the code.
+> 
+> "Just compiling a couple of kernel source files in a normal user land"
+> is much harder than you think.  It requires writing vast numbers of
+> mocking functions --- for a file system I would have to simulate the
+> block device layer, large portions of the VFS layer, the scheduler and
+> the locking layer if I want to test locking bugs, etc., etc.  In
+> practice, UML itself is serving as mocking layer, by its mere
+> existence.  
 
-Sorry, why pop here? 
+I might not see the full picture here wrt file system testing, 
+but I do know exactly how difficult it is to do it for that ~29,000 
+lines of code Infiniband driver I was working on, since actually I did it
+with several versions of the kernel. Anyway that's probably more of a 
+topic for a talk than an email thread :-)
+
+> So when Frank says that KUnit doesn't provide any mocking
+> functions, I don't at all agree.  Using KUnit and UML makes testing
+> internal interfaces *far* simpler, especially if the comparison is
+> "just compile some kernel source files as part of a userspace test
+> program".
+> 
+> Perhaps your and Frank's experience is different --- perhaps that can
+> be explained by your past experience and interest in testing device
+> drivers as opposed to file systems.
+> 
+> The other thing I'd add is that at least for me, a really important
+> consideration is how quickly we can run tests.  I consider
+> minimization of developer friction (e.g., all you need to do is
+> running "make ; kvm-xfstests --smoke" to run tests), and maximizing
+> developer velocity to be high priority goals.  Developer velocity is
+> how quickly can you run the tests; ideally, less than 5-10 seconds.
+
+I completely agree on that one. I think a fundamental feature of any 
+framework at this level is that it should be usable as developer tests as part
+of an efficient work cycle.
+
+> And that's the other reason why I consider unit tests to be a
+> complement to integration tests.  "gce-xfstests --smoke" takes 10-15
+> minutes.  If I can have unit tests which takes 5-15 seconds for a
+> smoke test of the specific part of ext4 that I am modifying (and often
+> with much better coverage than integration tests from userspace),
+> that's at really big deal.  I can do this for e2fsprogs; but if I have
+> to launch a VM, the VM overhead pretty much eats all or most of that
+> time budget right there.
+
+This is exactly the way we work with KTF as well: 
+Change the kernel module under test, and/or the test code, 
+compile, unload/load modules and run the tests again, all within seconds.
+The overhead of rebooting one or more VMs (network tests sometimes 
+require more than one node) or even a physical system, 
+if the issue cannot be reproduced without running non-virtualized, 
+would only be necessary if the test causes an oops or other crash 
+that prevents the unload/load path.
+
+> From looking at your documentation of KTF, you are targetting the use
+> case of continuous testing.  That's a different testing scenario than
+> what I'm describing; with continuous testing, overhead measured in
+> minutes or even tens of minutes is not a big deal.  But if you are
+> trying to do real-time testing as part of your development process ---
+> *real* Test Driven Development, then test latency is a really big
+> deal.
+
+My experience is that unless one can enforce tests to be run on 
+everyone else's changes as well, one often ends up having to pursue the bugs 
+introduced by others but caught by the tests, so I believe automation and 
+unit/low level testing really should go hand in hand. This is the reason for 
+the emphasis on automation in the KTF docs, but the primary driver for me has 
+always been as a developer toolkit.
+
+> I'll grant that for people who are working on device drivers where
+> architecture dependencies are a big deal, building for an architecture
+> where you can run in a virtual environment or using test hardware is
+> going to be a better way to go.  And Brendan has said he's willing to
+> look at adapting KUnit so it can be built for use in a virtual
+> environment to accomodate your requirements.
+> 
+> As far as I'm concerned, however, I would *not* be interested in KTF
+> unless you could demonstrate to me that launching at test VM, somehow
+> getting the kernel modules copied into the VM, and running the tests
+> as kernel modules, has zero overhead compared to using UML.
+
+As you alluded to above, the development cycle time is really the crucial 
+thing here - if what you get has more value to you, then you'd be willing 
+to wait just a few more seconds for it. And IMHO the real interesting notion of 
+time is the time from saving the changes until you can verify that 
+the test either passes, or even more important: Why it failed..
+
+> Ultimately, I'm a pragmatist.  If KTF serves your needs best, good for
+> you.  If other approaches are better for other parts of the kernel,
+> let's not try to impose a strict "There Must Be Only One" religion.
+> That's already not true today, and for good reason.  There are many
+> different kinds of kernel code, and many different types of test
+> philosophies.  Trying to force all kernel testing into a single
+> Procrustean Bed is simply not productive.
+
+I definitely pragmatically prefer evolution over revolution myself, 
+no doubt about that, and I definitely appreciate this detailed view seen from the 
+filesystem side,
+
+Thanks!
+Knut
 
 > 
-> 	func(regs->ip, st->parent_ip, function_trace_op, regs);
-> }
+> Regards,
 > 
-> Hmm? I didn't look into the function_graph thing, but I imagine it can
-> be added without too much pain.
+> 						- Ted
 
-Yes, that should be good for function_graph trampoline too.
-We use very similar technic.
-
-> 
-> ---
-> --- a/arch/x86/entry/entry_32.S
-> +++ b/arch/x86/entry/entry_32.S
-> @@ -1576,3 +1576,100 @@ ENTRY(rewind_stack_do_exit)
->  	call	do_exit
->  1:	jmp 1b
->  END(rewind_stack_do_exit)
-> +
-> +/*
-> + * Transforms a CALL frame into an exception frame; IOW it pretends the CALL we
-> + * just did was in fact scribbled with an INT3.
-> + *
-> + * Use this trampoline like:
-> + *
-> + *   PUSH $func
-> + *   JMP call_to_exception_trampoline
-> + *
-> + * $func will see regs->ip point at the CALL instruction and must therefore
-> + * modify regs->ip in order to make progress (just like a normal INT3 scribbled
-> + * CALL).
-> + *
-> + * NOTE: we do not restore any of the segment registers.
-> + */
-> +ENTRY(call_to_exception_trampoline)
-> +	/*
-> +	 * On entry the stack looks like:
-> +	 *
-> +	 *   2*4(%esp) <previous context>
-> +	 *   1*4(%esp) RET-IP
-> +	 *   0*4(%esp) func
-> +	 *
-> +	 * transform this into:
-> +	 *
-> +	 *  19*4(%esp) <previous context>
-> +	 *  18*4(%esp) gap / RET-IP
-> +	 *  17*4(%esp) gap / func
-> +	 *  16*4(%esp) ss
-> +	 *  15*415*4(%esp) sp / <previous context>
-
-isn't this "&<previous context>" ?
-
-> +	 *  14*4(%esp) flags
-> +	 *  13*4(%esp) cs
-> +	 *  12*4(%esp) ip / RET-IP
-> +	 *  11*4(%esp) orig_eax
-> +	 *  10*4(%esp) gs
-> +	 *   9*4(%esp) fs
-> +	 *   8*4(%esp) es
-> +	 *   7*4(%esp) ds
-> +	 *   6*4(%esp) eax
-> +	 *   5*4(%esp) ebp
-> +	 *   4*4(%esp) edi
-> +	 *   3*4(%esp) esi
-> +	 *   2*4(%esp) edx
-> +	 *   1*4(%esp) ecx
-> +	 *   0*4(%esp) ebx
-> +	 */
-> +	pushl	%ss
-> +	pushl	%esp		# points at ss
-> +	addl	$3*4, (%esp)	#   point it at <previous context>
-> +	pushfl
-> +	pushl	%cs
-> +	pushl	5*4(%esp)	# RET-IP
-> +	subl	5, (%esp)	#   point at CALL instruction
-> +	pushl	$-1
-> +	pushl	%gs
-> +	pushl	%fs
-> +	pushl	%es
-> +	pushl	%ds
-> +	pushl	%eax
-> +	pushl	%ebp
-> +	pushl	%edi
-> +	pushl	%esi
-> +	pushl	%edx
-> +	pushl	%ecx
-> +	pushl	%ebx
-> +
-> +	ENCODE_FRAME_POINTER
-> +
-> +	movl	%esp, %eax	# 1st argument: pt_regs
-> +
-> +	movl	17*4(%esp), %ebx	# func
-> +	CALL_NOSPEC %ebx
-> +
-> +	movl	PT_OLDESP(%esp), %eax
-
-Is PT_OLDESP(%esp) "<previous context>" or "&<previous contex>"?
-
-> +
-> +	movl	PT_EIP(%esp), %ecx
-> +	movl	%ecx, -1*4(%eax)
-
-Ah, OK, so $func must set the true return address to regs->ip
-instead of returning it.
-
-> +
-> +	movl	PT_EFLAGS(%esp), %ecx
-> +	movl	%ecx, -2*4(%eax)
-> +
-> +	movl	PT_EAX(%esp), %ecx
-> +	movl	%ecx, -3*4(%eax)
-
-So, at this point, the stack becomes
-
- 18*4(%esp) RET-IP
- 17*4(%esp) eflags
- 16*4(%esp) eax
-
-Correct?
-
-> +
-> +	popl	%ebx
-> +	popl	%ecx
-> +	popl	%edx
-> +	popl	%esi
-> +	popl	%edi
-> +	popl	%ebp
-> +
-> +	lea	-3*4(%eax), %esp
-> +	popl	%eax
-> +	popfl
-> +	ret
-> +END(call_to_exception_trampoline)
-> --- a/arch/x86/kernel/kprobes/core.c
-> +++ b/arch/x86/kernel/kprobes/core.c
-> @@ -731,29 +731,8 @@ asm(
->  	".global kretprobe_trampoline\n"
->  	".type kretprobe_trampoline, @function\n"
->  	"kretprobe_trampoline:\n"
-> -	/* We don't bother saving the ss register */
-> -#ifdef CONFIG_X86_64
-> -	"	pushq %rsp\n"
-> -	"	pushfq\n"
-> -	SAVE_REGS_STRING
-> -	"	movq %rsp, %rdi\n"
-> -	"	call trampoline_handler\n"
-> -	/* Replace saved sp with true return address. */
-> -	"	movq %rax, 19*8(%rsp)\n"
-> -	RESTORE_REGS_STRING
-> -	"	popfq\n"
-> -#else
-> -	"	pushl %esp\n"
-> -	"	pushfl\n"
-> -	SAVE_REGS_STRING
-> -	"	movl %esp, %eax\n"
-> -	"	call trampoline_handler\n"
-> -	/* Replace saved sp with true return address. */
-> -	"	movl %eax, 15*4(%esp)\n"
-> -	RESTORE_REGS_STRING
-> -	"	popfl\n"
-> -#endif
-> -	"	ret\n"
-
-Here, we need a gap for storing ret-ip, because kretprobe_trampoline is
-the address which is returned from the target function. We have no 
-"ret-ip" here at this point. So something like
-
-+	"push $0\n"	/* This is a gap, will be filled with real return address*/
-
-> +	"push trampoline_handler\n"
-> +	"jmp call_to_exception_trampoline\n"
->  	".size kretprobe_trampoline, .-kretprobe_trampoline\n"
->  );
->  NOKPROBE_SYMBOL(kretprobe_trampoline);
-> @@ -791,12 +770,7 @@ static __used void *trampoline_handler(s
->  
->  	INIT_HLIST_HEAD(&empty_rp);
->  	kretprobe_hash_lock(current, &head, &flags);
-> -	/* fixup registers */
-> -	regs->cs = __KERNEL_CS;
-> -#ifdef CONFIG_X86_32
-> -	regs->cs |= get_kernel_rpl();
-> -	regs->gs = 0;
-> -#endif
-> +
->  	/* We use pt_regs->sp for return address holder. */
->  	frame_pointer = &regs->sp;
->  	regs->ip = trampoline_address;
-
-Thank you,
-
--- 
-Masami Hiramatsu <mhiramat@kernel.org>
