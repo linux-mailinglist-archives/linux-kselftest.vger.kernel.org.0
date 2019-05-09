@@ -2,156 +2,158 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3841219533
-	for <lists+linux-kselftest@lfdr.de>; Fri, 10 May 2019 00:21:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 726D119562
+	for <lists+linux-kselftest@lfdr.de>; Fri, 10 May 2019 00:47:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727053AbfEIWU6 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 9 May 2019 18:20:58 -0400
-Received: from ale.deltatee.com ([207.54.116.67]:36450 "EHLO ale.deltatee.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726219AbfEIWU6 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 9 May 2019 18:20:58 -0400
-Received: from s01061831bf6ec98c.cg.shawcable.net ([68.147.80.180] helo=[192.168.6.141])
-        by ale.deltatee.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.89)
-        (envelope-from <logang@deltatee.com>)
-        id 1hOrOj-00055b-MR; Thu, 09 May 2019 16:20:18 -0600
-To:     Theodore Ts'o <tytso@mit.edu>,
-        Frank Rowand <frowand.list@gmail.com>, Tim.Bird@sony.com,
-        knut.omang@oracle.com, gregkh@linuxfoundation.org,
-        brendanhiggins@google.com, keescook@google.com,
-        kieran.bingham@ideasonboard.com, mcgrof@kernel.org,
-        robh@kernel.org, sboyd@kernel.org, shuah@kernel.org,
-        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        kunit-dev@googlegroups.com, linux-doc@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kbuild@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-nvdimm@lists.01.org, linux-um@lists.infradead.org,
-        Alexander.Levin@microsoft.com, amir73il@gmail.com,
-        dan.carpenter@oracle.com, dan.j.williams@intel.com,
-        daniel@ffwll.ch, jdike@addtoit.com, joel@jms.id.au,
-        julia.lawall@lip6.fr, khilman@baylibre.com, mpe@ellerman.id.au,
-        pmladek@suse.com, richard@nod.at, rientjes@google.com,
-        rostedt@goodmis.org, wfg@linux.intel.com
-References: <54940124-50df-16ec-1a32-ad794ee05da7@gmail.com>
- <20190507080119.GB28121@kroah.com>
- <a09a7e0e-9894-8c1a-34eb-fc482b1759d0@gmail.com>
- <20190509015856.GB7031@mit.edu>
- <580e092f-fa4e-eedc-9e9a-a57dd085f0a6@gmail.com>
- <20190509032017.GA29703@mit.edu>
- <7fd35df81c06f6eb319223a22e7b93f29926edb9.camel@oracle.com>
- <20190509133551.GD29703@mit.edu>
- <ECADFF3FD767C149AD96A924E7EA6EAF9770D591@USCULXMSG01.am.sony.com>
- <875c546d-9713-bb59-47e4-77a1d2c69a6d@gmail.com>
- <20190509214233.GA20877@mit.edu>
-From:   Logan Gunthorpe <logang@deltatee.com>
-Message-ID: <b09ba170-229b-fde4-3e9a-e50d6ab4c1b5@deltatee.com>
-Date:   Thu, 9 May 2019 16:20:05 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
+        id S1726727AbfEIWrr (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 9 May 2019 18:47:47 -0400
+Received: from mail-pg1-f195.google.com ([209.85.215.195]:37243 "EHLO
+        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726658AbfEIWrr (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 9 May 2019 18:47:47 -0400
+Received: by mail-pg1-f195.google.com with SMTP id e6so1949056pgc.4
+        for <linux-kselftest@vger.kernel.org>; Thu, 09 May 2019 15:47:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=joelfernandes.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=vZRf/O+AYO1pjasRFrKqOyps3I4eNGFPQS8KhShdX90=;
+        b=Ye5VPeIClHIvOa3yb/Txa2nZfvUQR7hyXGf8jlN8r7iBdWzaJtSWZksEgYFQpdW+le
+         CqqejGHpFq3qNoZ6SId2I8t2xH38UIuS4VQ0klh21WPl8hWhSZnaIBHQpZQdxggBGLJb
+         zkdOrKjnmeaLHbdYu1LbpWW+AHV9M7rizlsQA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=vZRf/O+AYO1pjasRFrKqOyps3I4eNGFPQS8KhShdX90=;
+        b=pwIQnEso8+ftl422TE9NKp5NsupvdtuGI4fLEfH07FMMYJUyRB/tSYDQp4C31d55iM
+         TXmjKoBFBHoeJQjru9VFPL0aLhaKIBGEA1NgLJ78byQiLj5Aa7y3321b/dPHPuGkFcEk
+         bhb53owS2+2aBN8a73LYx3kSLOv3I2MIKA8lD7NGvAU031D9kuY2t5scjwWM7DvRIVGL
+         WuLgefMeq+HZqZOuIJUuDx9f5sRcNwfSc7Axpg7q357BXTR3HnsxQbh5Le4ZJSD97wu3
+         IS/9jgpTYbx5adI/dmyyiIkxaBWIScVgUvcx3sjwiA9aZxEFEvU0sReCbpzL34J0gj8L
+         sS2g==
+X-Gm-Message-State: APjAAAVnsiMSDUMWZw1tBlfQ4dGMqFQ5oPj2GLKos0XJW5CcEt4l2qA5
+        E6Ihfx2gCoztdq4K4zt0lbu3GA==
+X-Google-Smtp-Source: APXvYqwO0Rpd3ouiehbTSdDrhChC3UhFFIDoCyfVb2yZJbYtD/jBLOeJxKNQDgTgWjLrHtJmKc4WbA==
+X-Received: by 2002:a65:43c8:: with SMTP id n8mr8758516pgp.365.1557442066517;
+        Thu, 09 May 2019 15:47:46 -0700 (PDT)
+Received: from localhost ([2620:15c:6:12:9c46:e0da:efbf:69cc])
+        by smtp.gmail.com with ESMTPSA id h6sm8950991pfk.188.2019.05.09.15.47.44
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Thu, 09 May 2019 15:47:45 -0700 (PDT)
+Date:   Thu, 9 May 2019 18:47:43 -0400
+From:   Joel Fernandes <joel@joelfernandes.org>
+To:     Masahiro Yamada <yamada.masahiro@socionext.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Adrian Ratiu <adrian.ratiu@collabora.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        atish patra <atishp04@gmail.com>, bpf@vger.kernel.org,
+        Brendan Gregg <bgregg@netflix.com>,
+        Brendan Gregg <brendan.d.gregg@gmail.com>,
+        Daniel Colascione <dancol@google.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        duyuchao <yuchao.du@unisoc.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Karim Yaghmour <karim.yaghmour@opersys.com>,
+        Kees Cook <keescook@chromium.org>,
+        "Cc: Android Kernel" <kernel-team@android.com>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        linux-trace-devel@vger.kernel.org,
+        Manjo Raja Rao <linux@manojrajarao.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        =?utf-8?Q?Micha=C5=82?= Gregorczyk <michalgr@fb.com>,
+        Michal Gregorczyk <michalgr@live.com>,
+        Mohammad Husain <russoue@gmail.com>,
+        Olof Johansson <olof@lixom.net>,
+        Qais Yousef <qais.yousef@arm.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Srinivas Ramana <sramana@codeaurora.org>,
+        Tamir Carmeli <carmeli.tamir@gmail.com>,
+        Yonghong Song <yhs@fb.com>
+Subject: Re: [PATCH v3] kheaders: Move from proc to sysfs
+Message-ID: <20190509224743.GA29215@google.com>
+References: <20190506013456.86061-1-joel@joelfernandes.org>
+ <CAK7LNAQesyT-vspoGKdgRqycZfhtJm5Upx2T6ij-yB5i4Nx5nw@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20190509214233.GA20877@mit.edu>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 68.147.80.180
-X-SA-Exim-Rcpt-To: wfg@linux.intel.com, rostedt@goodmis.org, rientjes@google.com, richard@nod.at, pmladek@suse.com, mpe@ellerman.id.au, khilman@baylibre.com, julia.lawall@lip6.fr, joel@jms.id.au, jdike@addtoit.com, daniel@ffwll.ch, dan.j.williams@intel.com, dan.carpenter@oracle.com, amir73il@gmail.com, Alexander.Levin@microsoft.com, linux-um@lists.infradead.org, linux-nvdimm@lists.01.org, linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org, linux-fsdevel@vger.kernel.org, linux-doc@vger.kernel.org, kunit-dev@googlegroups.com, dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org, shuah@kernel.org, sboyd@kernel.org, robh@kernel.org, mcgrof@kernel.org, kieran.bingham@ideasonboard.com, keescook@google.com, brendanhiggins@google.com, gregkh@linuxfoundation.org, knut.omang@oracle.com, Tim.Bird@sony.com, frowand.list@gmail.com, tytso@mit.edu
-X-SA-Exim-Mail-From: logang@deltatee.com
-X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on ale.deltatee.com
-X-Spam-Level: 
-X-Spam-Status: No, score=-8.9 required=5.0 tests=ALL_TRUSTED,BAYES_00,
-        GREYLIST_ISWHITE autolearn=ham autolearn_force=no version=3.4.2
-Subject: Re: [PATCH v2 00/17] kunit: introduce KUnit, the Linux kernel unit
- testing framework
-X-SA-Exim-Version: 4.2.1 (built Tue, 02 Aug 2016 21:08:31 +0000)
-X-SA-Exim-Scanned: Yes (on ale.deltatee.com)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAK7LNAQesyT-vspoGKdgRqycZfhtJm5Upx2T6ij-yB5i4Nx5nw@mail.gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-
-
-On 2019-05-09 3:42 p.m., Theodore Ts'o wrote:
-> On Thu, May 09, 2019 at 11:12:12AM -0700, Frank Rowand wrote:
->>
->>     "My understanding is that the intent of KUnit is to avoid booting a kernel on
->>     real hardware or in a virtual machine.  That seems to be a matter of semantics
->>     to me because isn't invoking a UML Linux just running the Linux kernel in
->>     a different form of virtualization?
->>
->>     So I do not understand why KUnit is an improvement over kselftest.
->>
->>     ...
->>
->>     What am I missing?"
+On Wed, May 08, 2019 at 12:43:34PM +0900, Masahiro Yamada wrote:
+> On Mon, May 6, 2019 at 10:37 AM Joel Fernandes (Google)
+> <joel@joelfernandes.org> wrote:
+> >
+> > The kheaders archive consisting of the kernel headers used for compiling
+> > bpf programs is in /proc. However there is concern that moving it here
+> > will make it permanent. Let us move it to /sys/kernel as discussed [1].
+> >
+> > [1] https://lore.kernel.org/patchwork/patch/1067310/#1265969
+> >
+> > Suggested-by: Steven Rostedt <rostedt@goodmis.org>
+> > Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
+> > ---
+> > This patch applies on top of the previous patch that was applied to the
+> > driver tree:
+> > https://lore.kernel.org/patchwork/patch/1067310/
+> >
+> > v2->v3: Fixed sysfs file mode nit (Greg).
+> > v1->v2: Fixed some kconfig nits.
+> >
+> >  init/Kconfig                                | 16 ++++-----
+> >  kernel/Makefile                             |  4 +--
+> >  kernel/{gen_ikh_data.sh => gen_kheaders.sh} |  2 +-
+> >  kernel/kheaders.c                           | 40 +++++++++------------
+> >  4 files changed, 26 insertions(+), 36 deletions(-)
+> >  rename kernel/{gen_ikh_data.sh => gen_kheaders.sh} (98%)
+> >
+> > diff --git a/init/Kconfig b/init/Kconfig
+> > index 26a364a95b57..c3661991b089 100644
+> > --- a/init/Kconfig
+> > +++ b/init/Kconfig
+> > @@ -579,15 +579,13 @@ config IKCONFIG_PROC
+> >           This option enables access to the kernel configuration file
+> >           through /proc/config.gz.
+> >
+> > -config IKHEADERS_PROC
+> > -       tristate "Enable kernel header artifacts through /proc/kheaders.tar.xz"
+> > -       depends on PROC_FS
+> > -       help
+> > -         This option enables access to the kernel header and other artifacts that
+> > -         are generated during the build process. These can be used to build eBPF
+> > -         tracing programs, or similar programs.  If you build the headers as a
+> > -         module, a module called kheaders.ko is built which can be loaded on-demand
+> > -         to get access to the headers.
+> > +config IKHEADERS
+> > +       tristate "Enable kernel headers through /sys/kernel/kheaders.tar.xz"
 > 
-> One major difference: kselftest requires a userspace environment; it
-> starts systemd, requires a root file system from which you can load
-> modules, etc.  Kunit doesn't require a root file system; doesn't
-> require that you start systemd; doesn't allow you to run arbitrary
-> perl, python, bash, etc. scripts.  As such, it's much lighter weight
-> than kselftest, and will have much less overhead before you can start
-> running tests.  So it's not really the same kind of virtualization.
+> 
+> I suggested "depends on SYSFS" twice, both in v1 and v2.
+> 
+> https://lore.kernel.org/patchwork/patch/1069806/#1266147
+> https://lore.kernel.org/patchwork/patch/1070005/#1266279
 
-I largely agree with everything Ted has said in this thread, but I 
-wonder if we are conflating two different ideas that is causing an 
-impasse. From what I see, Kunit actually provides two different things:
+Sorry about missing that. I have made a note of this, and can address it in a
+later patch. There is a more pressing issue with allmodconfig regression
+times so I will look into that first. Also a vacation is taking up some of my
+time.
 
-1) An execution environment that can be run very quickly in userspace on 
-tests in the kernel source. This speeds up the tests and gives a lot of 
-benefit to developers using those tests because they can get feedback on 
-their code changes a *lot* quicker.
+Needless to say I will get to it soon and the point has been duly noted!
 
-2) A framework to write unit tests that provides a lot of the same 
-facilities as other common unit testing frameworks from userspace (ie. a 
-runner that runs a list of tests and a bunch of helpers such as 
-KUNIT_EXPECT_* to simplify test passes and failures).
+thanks,
 
-The first item from Kunit is novel and I see absolutely no overlap with 
-anything kselftest does. It's also the valuable thing I'd like to see 
-merged and grow.
-
-The second item, arguably, does have significant overlap with kselftest. 
-Whether you are running short tests in a light weight UML environment or 
-higher level tests in an heavier VM the two could be using the same 
-framework for writing or defining in-kernel tests. It *may* also be 
-valuable for some people to be able to run all the UML tests in the 
-heavy VM environment along side other higher level tests.
-
-Looking at the selftests tree in the repo, we already have similar items 
-to what Kunit is adding as I described in point (2) above. 
-kselftest_harness.h contains macros like EXPECT_* and ASSERT_* with very 
-similar intentions to the new KUNIT_EXECPT_* and KUNIT_ASSERT_* macros.
-
-However, the number of users of this harness appears to be quite small. 
-Most of the code in the selftests tree seems to be a random mismash of 
-scripts and userspace code so it's not hard to see it as something 
-completely different from the new Kunit:
-
-$ git grep --files-with-matches kselftest_harness.h *
-Documentation/dev-tools/kselftest.rst
-MAINTAINERS
-tools/testing/selftests/kselftest_harness.h
-tools/testing/selftests/net/tls.c
-tools/testing/selftests/rtc/rtctest.c
-tools/testing/selftests/seccomp/Makefile
-tools/testing/selftests/seccomp/seccomp_bpf.c
-tools/testing/selftests/uevent/Makefile
-tools/testing/selftests/uevent/uevent_filtering.c
-
-Thus, I can personally see a lot of value in integrating the kunit test 
-framework with this kselftest harness. There's only a small number of 
-users of the kselftest harness today, so one way or another it seems 
-like getting this integrated early would be a good idea. Letting Kunit 
-and Kselftests progress independently for a few years will only make 
-this worse and may become something we end up regretting.
-
-Logan
-
-
-
-
-
-
-
+ - Joel
