@@ -2,352 +2,215 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 311E6197DE
-	for <lists+linux-kselftest@lfdr.de>; Fri, 10 May 2019 06:58:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A732E197F2
+	for <lists+linux-kselftest@lfdr.de>; Fri, 10 May 2019 07:11:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727044AbfEJE6m (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 10 May 2019 00:58:42 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57488 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725927AbfEJE6m (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 10 May 2019 00:58:42 -0400
-Received: from devnote2 (NE2965lan1.rev.em-net.ne.jp [210.141.244.193])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id E015520882;
-        Fri, 10 May 2019 04:58:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1557464320;
-        bh=2+oCBqi/CKHd4OFUbukKA2gvKd467R/z47Bh0opyEK4=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=x64jEXLZ5zhsx1pvKAtGXMl9PPgz5OeeYFswfu+LnCftHsYKESZq/oIKGPN6430Vf
-         S1vnnitLc3thLOl3VNuxMKBuYJE74KqVZmCfsD8LJyKym7VVh3wjh3pMUoJNbEAt4/
-         E/AyKH8MaP4czVVmZ/2y7siM+1Et/N6YOcReDHFE=
-Date:   Fri, 10 May 2019 13:58:31 +0900
-From:   Masami Hiramatsu <mhiramat@kernel.org>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Josh Poimboeuf <jpoimboe@redhat.com>, linux-kernel@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Nicolai Stange <nstange@suse.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>, x86@kernel.org,
-        Jiri Kosina <jikos@kernel.org>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Petr Mladek <pmladek@suse.com>,
-        Joe Lawrence <joe.lawrence@redhat.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
-        Tim Chen <tim.c.chen@linux.intel.com>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Juergen Gross <jgross@suse.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nayna Jain <nayna@linux.ibm.com>,
-        Masahiro Yamada <yamada.masahiro@socionext.com>,
-        Joerg Roedel <jroedel@suse.de>, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH 2/4] x86/kprobes: Fix frame pointer annotations
-Message-Id: <20190510135831.c4ad309c68fc254f819194fc@kernel.org>
-In-Reply-To: <20190509171416.GY2623@hirez.programming.kicks-ass.net>
-References: <20190508074901.982470324@infradead.org>
-        <20190508080612.721269814@infradead.org>
-        <20190508115416.nblx7c2kocidpytm@treble>
-        <20190508120416.GL2589@hirez.programming.kicks-ass.net>
-        <20190508124248.u5ukpbhnh4wpiccq@treble>
-        <20190508153907.GM2589@hirez.programming.kicks-ass.net>
-        <20190508184848.qerg3flv3ej3xsev@treble>
-        <20190509102030.dfa62e058f09d0d8cbdd6053@kernel.org>
-        <20190509081431.GO2589@hirez.programming.kicks-ass.net>
-        <20190509230106.3551b08553440d125e437f66@kernel.org>
-        <20190509171416.GY2623@hirez.programming.kicks-ass.net>
-X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+        id S1727070AbfEJFLG (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 10 May 2019 01:11:06 -0400
+Received: from mail-pg1-f193.google.com ([209.85.215.193]:45872 "EHLO
+        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726587AbfEJFLG (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 10 May 2019 01:11:06 -0400
+Received: by mail-pg1-f193.google.com with SMTP id i21so2378268pgi.12;
+        Thu, 09 May 2019 22:11:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:from:to:references:message-id:date:user-agent:mime-version
+         :in-reply-to:content-language:content-transfer-encoding;
+        bh=OmO2i50lqlsSgaoTI7x+LU0Rb4IXRz+Mg/lkHAf6xo4=;
+        b=h6HgSBhdR2q8pjCv5pazDNeWPWcAw6Ib0Ler3cJAxdQ1lH1ZXpe051KYcwiApiirUY
+         NsyyscPa9Pb1qYp2NkCmr/yZEKpRoeDVZEqfvtvnktwfJQ8ltTb4MS9CTsMkX86Qfl6R
+         wNMMYv103G1RYhl2X50sYZLrTrycqhSAGPUKSzzQl1mTsvFbaolXHksWaGgaRYrhfI5M
+         L4lQp7rhFYpWaiSOHm1RnPbJGA0qf76yGUjq/SbXMKhbxFo+Wh9SPCsR3N1CveT2dAsB
+         rZgYm5MWhhSu3m/dcDFfb9yq3sF+ceUTxztM4doeijTYv0drvN5XpBIqj67HbbygyZXH
+         tPcg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:from:to:references:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=OmO2i50lqlsSgaoTI7x+LU0Rb4IXRz+Mg/lkHAf6xo4=;
+        b=CTwJLZM5YiwjXrqn1ZqRu0mh6c0l3WsKeMzyTuVNL5WLsoiNxYkYSKHjq8SNe6TopW
+         4H6umJ3QO+YVyVSNQSoCay+PYkCUYR5WZpoxnWzU8NIdgmF51L5Bwhy5SEhBxAya1kkj
+         7TcEl7kSAuTSBusAOvkHq2/kjm6FUhOISp2JIPmlt/NPNowxc8r2FxlGouCazNy9zA39
+         l6RJB+aATIcopTiRNgD8EmMVtI0Rpg5T5wvmtphUYe+UsuErcaOAnFL+/m0JwY5iR3Nx
+         J8BhiU+BKVHLJH000fXp/mP9t31mKB5v0w6QAQVnfWdeikIsv7EoamH/JyUiSsZkVcHc
+         CqaA==
+X-Gm-Message-State: APjAAAU3VTdCjljl8CLPREg9VVHHPd6UDtaeeESPEnpt4Uq7DNDWmZOi
+        YfFlgYQ5wALf2Rm51IheErg=
+X-Google-Smtp-Source: APXvYqxPmwGpQEcDwqNzCE5QbzmkFOAz6RNpDPlo/AiSRWJuVcPZ5PLYe5dgPDT9VD5VjyQCjG9Hrw==
+X-Received: by 2002:aa7:93ba:: with SMTP id x26mr11246068pff.238.1557465065498;
+        Thu, 09 May 2019 22:11:05 -0700 (PDT)
+Received: from [192.168.1.70] (c-24-6-192-50.hsd1.ca.comcast.net. [24.6.192.50])
+        by smtp.gmail.com with ESMTPSA id k9sm5952733pfa.180.2019.05.09.22.11.02
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 09 May 2019 22:11:04 -0700 (PDT)
+Subject: Re: [PATCH v2 00/17] kunit: introduce KUnit, the Linux kernel unit
+ testing framework
+From:   Frank Rowand <frowand.list@gmail.com>
+To:     Theodore Ts'o <tytso@mit.edu>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        keescook@google.com, kieran.bingham@ideasonboard.com,
+        mcgrof@kernel.org, robh@kernel.org, sboyd@kernel.org,
+        shuah@kernel.org, devicetree@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, kunit-dev@googlegroups.com,
+        linux-doc@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-nvdimm@lists.01.org,
+        linux-um@lists.infradead.org, Alexander.Levin@microsoft.com,
+        Tim.Bird@sony.com, amir73il@gmail.com, dan.carpenter@oracle.com,
+        dan.j.williams@intel.com, daniel@ffwll.ch, jdike@addtoit.com,
+        joel@jms.id.au, julia.lawall@lip6.fr, khilman@baylibre.com,
+        knut.omang@oracle.com, logang@deltatee.com, mpe@ellerman.id.au,
+        pmladek@suse.com, richard@nod.at, rientjes@google.com,
+        rostedt@goodmis.org, wfg@linux.intel.com
+References: <20190501230126.229218-1-brendanhiggins@google.com>
+ <54940124-50df-16ec-1a32-ad794ee05da7@gmail.com>
+ <20190507080119.GB28121@kroah.com>
+ <a09a7e0e-9894-8c1a-34eb-fc482b1759d0@gmail.com>
+ <20190509015856.GB7031@mit.edu>
+ <580e092f-fa4e-eedc-9e9a-a57dd085f0a6@gmail.com>
+Message-ID: <78e4d46e-6212-9871-51d6-dd2126f39d45@gmail.com>
+Date:   Thu, 9 May 2019 22:11:01 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
+MIME-Version: 1.0
+In-Reply-To: <580e092f-fa4e-eedc-9e9a-a57dd085f0a6@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, 9 May 2019 19:14:16 +0200
-Peter Zijlstra <peterz@infradead.org> wrote:
+Hi Ted,
 
-> On Thu, May 09, 2019 at 11:01:06PM +0900, Masami Hiramatsu wrote:
-> > On Thu, 9 May 2019 10:14:31 +0200
-> > Peter Zijlstra <peterz@infradead.org> wrote:
-> 
-> > > But what I'd love to do is something like the belwo patch, and make all
-> > > the trampolines (very much including ftrace) use that. Such that we then
-> > > only have 1 copy of this magic (well, 2 because x86_64 also needs an
-> > > implementation of this of course).
-> > 
-> > OK, but I will make kretprobe integrated with func-graph tracer,
-> > since it is inefficient that we have 2 different hidden return stack...
-> > 
-> > Anyway,
-> > 
-> > > Changing ftrace over to this would be a little more work but it can
-> > > easily chain things a little to get its original context back:
-> > > 
-> > > ENTRY(ftrace_regs_caller)
-> > > GLOBAL(ftrace_regs_func)
-> > > 	push ftrace_stub
-> > > 	push ftrace_regs_handler
-> > > 	jmp call_to_exception_trampoline
-> > > END(ftrace_regs_caller)
-> > > 
-> > > typedef void (*ftrace_func_t)(unsigned long, unsigned long, struct ftrace_op *, struct pt_regs *);
-> > > 
-> > > struct ftrace_regs_stack {
-> > > 	ftrace_func_t func;
-> > > 	unsigned long parent_ip;
-> > > };
-> > > 
-> > > void ftrace_regs_handler(struct pr_regs *regs)
-> > > {
-> > > 	struct ftrace_regs_stack *st = (void *)regs->sp;
-> > > 	ftrace_func_t func = st->func;
-> > > 
-> > > 	regs->sp += sizeof(long); /* pop func */
-> > 
-> > Sorry, why pop here? 
-> 
-> Otherwise it stays on the return stack and bad things happen. Note how
-> the below trampoline thing uses regs->sp.
-> 
-> > > 	func(regs->ip, st->parent_ip, function_trace_op, regs);
-> > > }
-> > > 
-> > > Hmm? I didn't look into the function_graph thing, but I imagine it can
-> > > be added without too much pain.
-> > 
-> > Yes, that should be good for function_graph trampoline too.
-> > We use very similar technic.
-> 
-> Ideally also the optimized kprobe trampoline, but I've not managed to
-> fully comprehend that one.
+I'll try answering this again.
 
-As you pointed in other reply, save/restore can be a macro, but
-each trampoline code is slightly different. Optprobe template has
-below parts
+The first time I was a little flippant in part of my answer because I
+thought your comments somewhat flippant.  This time I'll provide a
+more complete answer.
 
-(jumped from probed address)
-[store regs]
-[setup function arguments (pt_regs and probed address)]
-[handler call]
-[restore regs]
-[execute copied instruction]
-[jump back to probed address]
 
-Note that there is a limitation that if it is optiomized probe, user
-handler can not change regs->ip. (we can not use "ret" after executed
-a copied instruction, which must run on same stack)
+On 5/8/19 7:13 PM, Frank Rowand wrote:
+> On 5/8/19 6:58 PM, Theodore Ts'o wrote:
+>> On Wed, May 08, 2019 at 05:43:35PM -0700, Frank Rowand wrote:
 
-> 
-> > > 
-> > > ---
-> > > --- a/arch/x86/entry/entry_32.S
-> > > +++ b/arch/x86/entry/entry_32.S
-> > > @@ -1576,3 +1576,100 @@ ENTRY(rewind_stack_do_exit)
-> > >  	call	do_exit
-> > >  1:	jmp 1b
-> > >  END(rewind_stack_do_exit)
-> > > +
-> > > +/*
-> > > + * Transforms a CALL frame into an exception frame; IOW it pretends the CALL we
-> > > + * just did was in fact scribbled with an INT3.
-> > > + *
-> > > + * Use this trampoline like:
-> > > + *
-> > > + *   PUSH $func
-> > > + *   JMP call_to_exception_trampoline
-> > > + *
-> > > + * $func will see regs->ip point at the CALL instruction and must therefore
-> > > + * modify regs->ip in order to make progress (just like a normal INT3 scribbled
-> > > + * CALL).
-> > > + *
-> > > + * NOTE: we do not restore any of the segment registers.
-> > > + */
-> > > +ENTRY(call_to_exception_trampoline)
-> > > +	/*
-> > > +	 * On entry the stack looks like:
-> > > +	 *
-> > > +	 *   2*4(%esp) <previous context>
-> > > +	 *   1*4(%esp) RET-IP
-> > > +	 *   0*4(%esp) func
-> > > +	 *
-> > > +	 * transform this into:
-> > > +	 *
-> > > +	 *  19*4(%esp) <previous context>
-> > > +	 *  18*4(%esp) gap / RET-IP
-> > > +	 *  17*4(%esp) gap / func
-> > > +	 *  16*4(%esp) ss
-> > > +	 *  15*415*4(%esp) sp / <previous context>
-> > 
-> > isn't this "&<previous context>" ?
-> 
-> Yes.
-> 
-> > > +	 *  14*4(%esp) flags
-> > > +	 *  13*4(%esp) cs
-> > > +	 *  12*4(%esp) ip / RET-IP
-> > > +	 *  11*4(%esp) orig_eax
-> > > +	 *  10*4(%esp) gs
-> > > +	 *   9*4(%esp) fs
-> > > +	 *   8*4(%esp) es
-> > > +	 *   7*4(%esp) ds
-> > > +	 *   6*4(%esp) eax
-> > > +	 *   5*4(%esp) ebp
-> > > +	 *   4*4(%esp) edi
-> > > +	 *   3*4(%esp) esi
-> > > +	 *   2*4(%esp) edx
-> > > +	 *   1*4(%esp) ecx
-> > > +	 *   0*4(%esp) ebx
-> > > +	 */
-> > > +	pushl	%ss
-> > > +	pushl	%esp		# points at ss
-> > > +	addl	$3*4, (%esp)	#   point it at <previous context>
-> > > +	pushfl
-> > > +	pushl	%cs
-> > > +	pushl	5*4(%esp)	# RET-IP
-> > > +	subl	5, (%esp)	#   point at CALL instruction
-> > > +	pushl	$-1
-> > > +	pushl	%gs
-> > > +	pushl	%fs
-> > > +	pushl	%es
-> > > +	pushl	%ds
-> > > +	pushl	%eax
-> > > +	pushl	%ebp
-> > > +	pushl	%edi
-> > > +	pushl	%esi
-> > > +	pushl	%edx
-> > > +	pushl	%ecx
-> > > +	pushl	%ebx
-> > > +
-> > > +	ENCODE_FRAME_POINTER
-> > > +
-> > > +	movl	%esp, %eax	# 1st argument: pt_regs
-> > > +
-> > > +	movl	17*4(%esp), %ebx	# func
-> > > +	CALL_NOSPEC %ebx
-> > > +
-> > > +	movl	PT_OLDESP(%esp), %eax
-> > 
-> > Is PT_OLDESP(%esp) "<previous context>" or "&<previous contex>"?
-> 
-> The latter.
-> 
-> > > +
-> > > +	movl	PT_EIP(%esp), %ecx
-> > > +	movl	%ecx, -1*4(%eax)
-> > 
-> > Ah, OK, so $func must set the true return address to regs->ip
-> > instead of returning it.
-> 
-> Just so.
-> 
-> > > +
-> > > +	movl	PT_EFLAGS(%esp), %ecx
-> > > +	movl	%ecx, -2*4(%eax)
-> > > +
-> > > +	movl	PT_EAX(%esp), %ecx
-> > > +	movl	%ecx, -3*4(%eax)
-> > 
-> > So, at this point, the stack becomes
-> > 
->   3*4(%esp) &regs->sp
->   2*4(%esp) RET-IP
->   1*4(%esp) eflags
->   0*4(%esp) eax
-> 
-> > Correct?
-> 
-> Yes, relative to regs->sp, which is why we need to pop 'func', otherwise
-> it stays on the stack.
-> 
-> > > +
-> > > +	popl	%ebx
-> > > +	popl	%ecx
-> > > +	popl	%edx
-> > > +	popl	%esi
-> > > +	popl	%edi
-> > > +	popl	%ebp
-> > > +
-> > > +	lea	-3*4(%eax), %esp
-> > > +	popl	%eax
-> > > +	popfl
-> > > +	ret
-> > > +END(call_to_exception_trampoline)
-> > > --- a/arch/x86/kernel/kprobes/core.c
-> > > +++ b/arch/x86/kernel/kprobes/core.c
-> > > @@ -731,29 +731,8 @@ asm(
-> > >  	".global kretprobe_trampoline\n"
-> > >  	".type kretprobe_trampoline, @function\n"
-> > >  	"kretprobe_trampoline:\n"
-> > > -	/* We don't bother saving the ss register */
-> > > -#ifdef CONFIG_X86_64
-> > > -	"	pushq %rsp\n"
-> > > -	"	pushfq\n"
-> > > -	SAVE_REGS_STRING
-> > > -	"	movq %rsp, %rdi\n"
-> > > -	"	call trampoline_handler\n"
-> > > -	/* Replace saved sp with true return address. */
-> > > -	"	movq %rax, 19*8(%rsp)\n"
-> > > -	RESTORE_REGS_STRING
-> > > -	"	popfq\n"
-> > > -#else
-> > > -	"	pushl %esp\n"
-> > > -	"	pushfl\n"
-> > > -	SAVE_REGS_STRING
-> > > -	"	movl %esp, %eax\n"
-> > > -	"	call trampoline_handler\n"
-> > > -	/* Replace saved sp with true return address. */
-> > > -	"	movl %eax, 15*4(%esp)\n"
-> > > -	RESTORE_REGS_STRING
-> > > -	"	popfl\n"
-> > > -#endif
-> > > -	"	ret\n"
-> > 
-> > Here, we need a gap for storing ret-ip, because kretprobe_trampoline is
-> > the address which is returned from the target function. We have no 
-> > "ret-ip" here at this point. So something like
-> > 
-> > +	"push $0\n"	/* This is a gap, will be filled with real return address*/
-> 
-> The trampoline already provides a gap, trampoline_handler() will need to
-> use int3_emulate_push() if it wants to inject something on the return
-> stack.
+*****  begin context from Greg KH that you snipped  *****
 
-I guess you mean the int3 case. This trampoline is used as a return destination.
-When the target function is called, kretprobe interrupts the first instruction,
-and replace the return address with this trampoline. When a "ret" instruction
-is done, it returns to this trampoline. Thus the stack frame start with
-previous context here. As you described above,
+On 5/7/19 1:01 AM, Greg KH wrote:
 
-> > > +	 * On entry the stack looks like:
-> > > +	 *
-> > > +	 *   2*4(%esp) <previous context>
-> > > +	 *   1*4(%esp) RET-IP
-> > > +	 *   0*4(%esp) func
+<< note that I have snipped my original question above this point >>
 
-From this trampoline call, the stack looks like:
+>
+> kselftest provides no in-kernel framework for testing kernel code
+> specifically.  That should be what kunit provides, an "easy" way to
+> write in-kernel tests for things.
 
-	 *   1*4(%esp) <previous context>
-	 *   0*4(%esp) func
+*****  end   context from Greg KH that you snipped  *****
 
-So we need one more push.
+>>> kselftest provides a mechanism for in-kernel tests via modules.  For
+>>> example, see:
+>>>
+>>>   tools/testing/selftests/vm/run_vmtests invokes:
+>>>     tools/testing/selftests/vm/test_vmalloc.sh
+>>>       loads module:
+>>>         test_vmalloc
+>>>         (which is built from lib/test_vmalloc.c if CONFIG_TEST_VMALLOC)
+>>
+>> The majority of the kselftests are implemented as userspace programs.
+
+My flippant answer:
+
+> Non-argument.
+
+This time:
+
+My reply to Greg was pointing out that in-kernel tests do exist in
+kselftest.
+
+Your comment that the majority of kselftests are implemented as userspace
+programs has no bearing on whether kselftest support in-kernel tests.
+It does not counter the fact the kselftest supports in-kernel tests.
+
+
+>> You *can* run in-kernel test using modules; but there is no framework
+>> for the in-kernel code found in the test modules, which means each of
+>> the in-kernel code has to create their own in-kernel test
+>> infrastructure.
+
+The kselftest in-kernel tests follow a common pattern.  As such, there
+is a framework.
+
+This next two paragraphs you ignored entirely in your reply:
+
+> Why create an entire new subsystem (KUnit) when you can add a header
+> file (and .c code as appropriate) that outputs the proper TAP formatted
+> results from kselftest kernel test modules?
+> 
+> There are already a multitude of in kernel test modules used by
+> kselftest.  It would be good if they all used a common TAP compliant
+> mechanism to report results.
+
+
+ 
+>> That's much like saying you can use vice grips to turn a nut or
+>> bolt-head.  You *can*, but it might be that using a monkey wrench
+>> would be a much better tool that is much easier.
+>>
+>> What would you say to a wood worker objecting that a toolbox should
+>> contain a monkey wrench because he already knows how to use vise
+>> grips, and his tiny brain shouldn't be forced to learn how to use a
+>> wrench when he knows how to use a vise grip, which is a perfectly good
+>> tool?
+>>
+>> If you want to use vice grips as a hammer, screwdriver, monkey wrench,
+>> etc.  there's nothing stopping you from doing that.  But it's not fair
+>> to object to other people who might want to use better tools.
+>>
+>> The reality is that we have a lot of testing tools.  It's not just
+>> kselftests.  There is xfstests for file system code, blktests for
+>> block layer tests, etc.   We use the right tool for the right job.
+
+My flippant answer:
+
+> More specious arguments.
+
+This time:
+
+I took your answer as a straw man, and had no desire to spend time
+countering a straw man.
+
+I am not proposing using a vice grips (to use your analogy).  I
+am saying that maybe the monkey wrench already exists.
+
+My point of this whole thread has been to try to get the submitter
+to provide a better, more complete explanation of how and why KUnit 
+is a better tool.
+
+I have not yet objected to the number (and differences among) the
+many sub-system tests.  I am questioning whether there is a need
+for another _test framework_ for in-kernel testing.  If there is
+something important that KUnit provides that does not exist in
+existing frameworks then the next question would be to ask how
+to implement that important thing (improve the existing
+framework, replace the existing framework, or have two
+frameworks).  I still think it is premature to ask this
+question until we first know the answer to what unique features
+KUnit adds (and apparently until we know what the existing
+framework provides).
+
+-Frank
 
 > 
-> > > +	"push trampoline_handler\n"
-> > > +	"jmp call_to_exception_trampoline\n"
-> > >  	".size kretprobe_trampoline, .-kretprobe_trampoline\n"
-> > >  );
-> > >  NOKPROBE_SYMBOL(kretprobe_trampoline);
+> -Frank
+> 
+>>
+>> 						- Ted
+>>
+> 
+> 
 
-Thank you,
-
--- 
-Masami Hiramatsu <mhiramat@kernel.org>
