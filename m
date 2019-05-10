@@ -2,34 +2,34 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D6FD19D11
-	for <lists+linux-kselftest@lfdr.de>; Fri, 10 May 2019 14:15:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A41CA19D17
+	for <lists+linux-kselftest@lfdr.de>; Fri, 10 May 2019 14:17:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727186AbfEJMPN (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 10 May 2019 08:15:13 -0400
-Received: from bombadil.infradead.org ([198.137.202.133]:41502 "EHLO
-        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727071AbfEJMPM (ORCPT
+        id S1727196AbfEJMR5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 10 May 2019 08:17:57 -0400
+Received: from merlin.infradead.org ([205.233.59.134]:38110 "EHLO
+        merlin.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727071AbfEJMR5 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 10 May 2019 08:15:12 -0400
+        Fri, 10 May 2019 08:17:57 -0400
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Transfer-Encoding
-        :Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
-        Sender:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=Em3xUx8OU5myWSz19MVf2olcW8HqbJsKte6x2bbfO4c=; b=GgSVnXOqy6bXFxi9moLjllNQ+l
-        AQ3cemlSicRCOAD5N4AQoB5OzXTJMHMxN08gce5nHeYLmEU4jU0TNwAuLnDtQbtfogERybtgP353Q
-        iNZvH230ZQYA3Rlt6W5eMm6463sstKfBIDpE9Hbs3s4QaFtVnviRsYCkBjzEES37YpFXuK4o2iiqg
-        kHUlS4oCerEpt957g7Ukk3OsDcI9PzrtwumCFllLmw1uXVwS1+Tv0hzgOS9E/ll3VouERMDkcuA35
-        gaJ3b1Y3wCTg+peOJurHetwWu6J091tUKb1K6L5X9KLgIcf6AGUGzqtHdNHNj9wv32kaYaFZiYB80
-        Cc67HBPg==;
+        d=infradead.org; s=merlin.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=Zhu4heSzSl0zciCgHpqHGoWkGn39CgR6C2tptsMuYBM=; b=NGB6qFBt2V87eP39aFFQk44sG
+        a1MQSCehHjm4bl0/c9oF9zFoQVP5qo5An72Q+stfXEUeRP6B1tX+JW20CZDdPUSSJXvNKhvjfvAGM
+        gKxwWvJggOF/QrQllumc6FPxSjgDRLT1JeZFF+ECEKD2gfBADPwKAtRDXmsBqu8Xmj2a2nDbBe7Zw
+        C7QAPemxyDPP9US4Vb+ObnU37O2j/yZT2ZfNwpFOz7r2UBZTccJ70hCMz77IvmRmew+FvQQ7Kjiob
+        gPxPNEvdQtPXzJ6M72/5UmG5eeZ3cXboeJXR7q1CNNUKVoHNlv3TSnALh2+6C28w/yemcF/v2SZzi
+        X8RLN0Img==;
 Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=hirez.programming.kicks-ass.net)
-        by bombadil.infradead.org with esmtpsa (Exim 4.90_1 #2 (Red Hat Linux))
-        id 1hP4QJ-0004iz-7L; Fri, 10 May 2019 12:14:47 +0000
+        by merlin.infradead.org with esmtpsa (Exim 4.90_1 #2 (Red Hat Linux))
+        id 1hP4Sn-0005Xp-Rz; Fri, 10 May 2019 12:17:22 +0000
 Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 896172029F1F3; Fri, 10 May 2019 14:14:45 +0200 (CEST)
-Date:   Fri, 10 May 2019 14:14:45 +0200
+        id 544722029F1F3; Fri, 10 May 2019 14:17:20 +0200 (CEST)
+Date:   Fri, 10 May 2019 14:17:20 +0200
 From:   Peter Zijlstra <peterz@infradead.org>
 To:     Masami Hiramatsu <mhiramat@kernel.org>
 Cc:     Steven Rostedt <rostedt@goodmis.org>,
@@ -59,7 +59,7 @@ Cc:     Steven Rostedt <rostedt@goodmis.org>,
         Masahiro Yamada <yamada.masahiro@socionext.com>,
         Joerg Roedel <jroedel@suse.de>, linux-kselftest@vger.kernel.org
 Subject: Re: [PATCH 2/4] x86/kprobes: Fix frame pointer annotations
-Message-ID: <20190510121445.GS2589@hirez.programming.kicks-ass.net>
+Message-ID: <20190510121720.GT2589@hirez.programming.kicks-ass.net>
 References: <20190508115416.nblx7c2kocidpytm@treble>
  <20190508120416.GL2589@hirez.programming.kicks-ass.net>
  <20190508124248.u5ukpbhnh4wpiccq@treble>
@@ -71,9 +71,8 @@ References: <20190508115416.nblx7c2kocidpytm@treble>
  <20190509174316.pzuakeu657g3fnlm@home.goodmis.org>
  <20190510122103.5a7bc5416b7af96b27d4fab4@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
 In-Reply-To: <20190510122103.5a7bc5416b7af96b27d4fab4@kernel.org>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-kselftest-owner@vger.kernel.org
@@ -82,51 +81,12 @@ List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
 On Fri, May 10, 2019 at 12:21:03PM +0900, Masami Hiramatsu wrote:
-> On Thu, 9 May 2019 13:43:16 -0400
-> Steven Rostedt <rostedt@goodmis.org> wrote:
-> 
-> > On Thu, May 09, 2019 at 09:20:06AM -0700, Andy Lutomirski wrote:
-> > > > +END(call_to_exception_trampoline)
-> > > > --- a/arch/x86/kernel/kprobes/core.c
-> > > > +++ b/arch/x86/kernel/kprobes/core.c
-> > > > @@ -731,29 +731,8 @@ asm(
-> > > >    ".global kretprobe_trampoline\n"
-> > > >    ".type kretprobe_trampoline, @function\n"
-> > > >    "kretprobe_trampoline:\n"
-> > > > -    /* We don't bother saving the ss register */
-> > > > -#ifdef CONFIG_X86_64
-> > > > -    "    pushq %rsp\n"
-> > > > -    "    pushfq\n"
-> > > > -    SAVE_REGS_STRING
-> > > > -    "    movq %rsp, %rdi\n"
-> > > > -    "    call trampoline_handler\n"
-> > > > -    /* Replace saved sp with true return address. */
-> > > > -    "    movq %rax, 19*8(%rsp)\n"
-> > > > -    RESTORE_REGS_STRING
-> > > > -    "    popfq\n"
-> > > > -#else
-> > > > -    "    pushl %esp\n"
-> > > > -    "    pushfl\n"
-> > > > -    SAVE_REGS_STRING
-> > > > -    "    movl %esp, %eax\n"
-> > > > -    "    call trampoline_handler\n"
-> > > > -    /* Replace saved sp with true return address. */
-> > > > -    "    movl %eax, 15*4(%esp)\n"
-> > > > -    RESTORE_REGS_STRING
-> > > > -    "    popfl\n"
-> > > > -#endif
-> > > > -    "    ret\n"
-> > > > +    "push trampoline_handler\n"
-> > > > +    "jmp call_to_exception_trampoline\n"
-> > > >    ".size kretprobe_trampoline, .-kretprobe_trampoline\n"
-> > > > );
-> > > 
-> > > 
-> > > Potentially minor nit: you’re doing popfl, but you’re not doing TRACE_IRQ_whatever.  This makes me think that you should either add the tracing (ugh!) or you should maybe just skip the popfl.
-> > 
-> > 
-> > Note, kprobes (and ftrace for that matter) are not saving flags for
-> > interrupts, but because it must not modify the sign, zero and carry flags.
+> Yes, optprobe also has to save and restore the flags.
+> Above trampline is for kretprobe, which is placed at the function return, so
+> we don't have to care about flags.
 
-Uh, C ABI considers those clobbered over function calls, surely. Relying
-on those flags over a CALL would be _insane_.
+Sure, optprobe is actually special here, because it branches out at
+'random' places and does indeed need to preserve flags.
+
+But both ftrace and retprobes are at C function call boundaries.
+Preserving flags doesn't make sense.
