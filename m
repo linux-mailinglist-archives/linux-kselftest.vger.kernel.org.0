@@ -2,106 +2,145 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 34964195E3
-	for <lists+linux-kselftest@lfdr.de>; Fri, 10 May 2019 02:00:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 501B0196F0
+	for <lists+linux-kselftest@lfdr.de>; Fri, 10 May 2019 05:04:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726701AbfEJAAe (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 9 May 2019 20:00:34 -0400
-Received: from mail-pg1-f194.google.com ([209.85.215.194]:40147 "EHLO
-        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726694AbfEJAAe (ORCPT
+        id S1727048AbfEJDEq (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 9 May 2019 23:04:46 -0400
+Received: from conssluserg-03.nifty.com ([210.131.2.82]:48677 "EHLO
+        conssluserg-03.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726842AbfEJDEp (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 9 May 2019 20:00:34 -0400
-Received: by mail-pg1-f194.google.com with SMTP id d31so2027984pgl.7;
-        Thu, 09 May 2019 17:00:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to
-         :user-agent;
-        bh=dChVqTviUJZkhAEyGEloPZUsbHeVi+nAadOc17lt/xI=;
-        b=F8YiX69wMj6uWvqG2gj8rKD+5JmXiGDvRhtfdWy7mtV4/+PV9t2Gswew4nGi+VrSMw
-         VP+qiGJpDxrx17QBJQYFkLDpPg6Fdd0PceCoPIXyh1/7Rkk9G65Nc3Fmd6a6/2WrtLja
-         N53kTp0zZWxOEAw0sTOGCrvxsng/iIjvQ521OoNTKoVdjLz8zsTHW/q0IkJZTZygapzj
-         govaj2K6lqprTecx4biOocaOEUBt/DaMXbNZ0R7UKsrVf4sr8UDCkjRTv7f+ZF6hly2M
-         atatsJ0iDQ4SSC06pbmOTDDFMtU1puaTBZp84W/FVFpOiKM6NgaTl6STaSR+5FULa9I5
-         XQyA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to:user-agent;
-        bh=dChVqTviUJZkhAEyGEloPZUsbHeVi+nAadOc17lt/xI=;
-        b=LaHPBeqcmNAyt6DeRGaaH3IBkPJsH/22xbnrVNCllQ/nMUCO4UkgluGUDBVaYcITHL
-         A+bwZb1NzRUMs+4M7k/PlkpOCuA8aeBS0xKSdj6kXk95PGf79qTUOJ1NKyFNWUqF3H2v
-         MYPJXC08jRl7btl52+2tWA7rjVu7PzKHnyA1Vy8203X+JVp49tE5Pi7HdGAKcecd1lRp
-         19qzs3MEhpuKu/1GGYI4bXk827/YkWxfDxiCn4sgSQgn6nAGznz3T5p5kvq7fSRV8edJ
-         usnnjcNw++2Hx58JCq68+pIrKPnZfhbpIIA5zTGcbvBQT70gPKaGEO2bgCv5iCW7xmYC
-         M1Gg==
-X-Gm-Message-State: APjAAAVJs7qZFfdD1jjfhns1usXrySv8f1PQc3XXb7+aRyVcbWc1LSnN
-        GHJIXFF9MeI3kEokVT3xeIA=
-X-Google-Smtp-Source: APXvYqy/JgDoQjdsf4op7BILs++mEfq/winhdVwvj+maESKvfRaXlBFJOw539wdBqfKBpU78/4H/Rw==
-X-Received: by 2002:a63:1d05:: with SMTP id d5mr9280001pgd.157.1557446433356;
-        Thu, 09 May 2019 17:00:33 -0700 (PDT)
-Received: from ip-172-31-29-54.us-west-2.compute.internal (ec2-34-219-153-187.us-west-2.compute.amazonaws.com. [34.219.153.187])
-        by smtp.gmail.com with ESMTPSA id u7sm4342389pfu.157.2019.05.09.17.00.31
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 09 May 2019 17:00:32 -0700 (PDT)
-Date:   Fri, 10 May 2019 00:00:30 +0000
-From:   Alakesh Haloi <alakesh.haloi@gmail.com>
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Shuah Khan <shuah@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] selftests/bpf: Fix compile warning in bpf selftest
-Message-ID: <20190510000030.GA81841@ip-172-31-29-54.us-west-2.compute.internal>
-References: <20190507231224.GA3787@ip-172-31-29-54.us-west-2.compute.internal>
- <CAADnVQ+e6TW9cH6yDmRSG5pRHXJiZajcx_q9SoPQi1keDROh-g@mail.gmail.com>
+        Thu, 9 May 2019 23:04:45 -0400
+X-Greylist: delayed 42282 seconds by postgrey-1.27 at vger.kernel.org; Thu, 09 May 2019 23:04:43 EDT
+Received: from mail-vk1-f172.google.com (mail-vk1-f172.google.com [209.85.221.172]) (authenticated)
+        by conssluserg-03.nifty.com with ESMTP id x4A34XGX005393;
+        Fri, 10 May 2019 12:04:34 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-03.nifty.com x4A34XGX005393
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1557457474;
+        bh=DYJ0GRwyv9LQw+wYut+AKlESUHW5OcD/mZsMQ0v23g4=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=jupzuktqIfQz0vJS1GaSpRqu2LQlIojIZ6l/TI0jmjH+y1VkJRBs89e7uRAv6B1Ef
+         uHXWjQCyh3QM1FLLkbOfmNDmcIDMv3Oq/FlPK1nJiwjkiN5C9tudnBuh0F8evz5qm8
+         ZorME1HYwlKxsObBT8LwUNg5l1Fi86fQ7ffUtVkUvXf1TvrufFpYms99rIymu6dL/K
+         hIlycbAJXfNN986oEc9iUdGhQ9gZ5CSC7yKV9BeU183dZd8/MJ0EQhq+4AgJe2J6jP
+         TyF0SLqvX8D3dQhEIQDaNOjnh/QC3NF0r7D48IC/P5jvWFHuMVUbINwaFq0DbE19/a
+         SQYZWBc5p+oIQ==
+X-Nifty-SrcIP: [209.85.221.172]
+Received: by mail-vk1-f172.google.com with SMTP id r195so1138772vke.0;
+        Thu, 09 May 2019 20:04:34 -0700 (PDT)
+X-Gm-Message-State: APjAAAXPoLeBAjMKgvMs+7lHCRTpm9Hq0dTQmmpAFWkoH4tUhr5WR/3F
+        J7W+aIcHDbWUKKSwAH8vslzCIpnSnNqVTr2rDMc=
+X-Google-Smtp-Source: APXvYqy2m1+g4N+7CIk2iyVkz9i+viWE9nsO8OqKDhs3ADzAs5NWYmvIdraov4KIA0ibHwe/v+Jg8QmbzOy0PS2UyFc=
+X-Received: by 2002:a1f:d585:: with SMTP id m127mr3859437vkg.34.1557457473272;
+ Thu, 09 May 2019 20:04:33 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAADnVQ+e6TW9cH6yDmRSG5pRHXJiZajcx_q9SoPQi1keDROh-g@mail.gmail.com>
-User-Agent: Mutt/1.5.21 (2010-09-15)
+References: <20190501230126.229218-1-brendanhiggins@google.com> <20190501230126.229218-7-brendanhiggins@google.com>
+In-Reply-To: <20190501230126.229218-7-brendanhiggins@google.com>
+From:   Masahiro Yamada <yamada.masahiro@socionext.com>
+Date:   Fri, 10 May 2019 12:03:57 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAQ+SRMn8UFjW1dZv_TrL0qjD2v2S=rXgtUpiA-urr1DDA@mail.gmail.com>
+Message-ID: <CAK7LNAQ+SRMn8UFjW1dZv_TrL0qjD2v2S=rXgtUpiA-urr1DDA@mail.gmail.com>
+Subject: Re: [PATCH v2 06/17] kbuild: enable building KUnit
+To:     Brendan Higgins <brendanhiggins@google.com>
+Cc:     Frank Rowand <frowand.list@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Kees Cook <keescook@google.com>,
+        kieran.bingham@ideasonboard.com,
+        "Luis R. Rodriguez" <mcgrof@kernel.org>,
+        Rob Herring <robh@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
+        "Cc: Shuah Khan" <shuah@kernel.org>,
+        DTML <devicetree@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        kunit-dev@googlegroups.com,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        linux-fsdevel@vger.kernel.org,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, linux-nvdimm@lists.01.org,
+        linux-um@lists.infradead.org, Alexander.Levin@microsoft.com,
+        Tim Bird <Tim.Bird@sony.com>, amir73il@gmail.com,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Daniel Vetter <daniel@ffwll.ch>, Jeff Dike <jdike@addtoit.com>,
+        Joel Stanley <joel@jms.id.au>,
+        Julia Lawall <julia.lawall@lip6.fr>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Knut Omang <knut.omang@oracle.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Petr Mladek <pmladek@suse.com>,
+        Richard Weinberger <richard@nod.at>, rientjes@google.com,
+        Steven Rostedt <rostedt@goodmis.org>, wfg@linux.intel.com
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, May 09, 2019 at 01:51:54PM -0700, Alexei Starovoitov wrote:
-> On Tue, May 7, 2019 at 4:12 PM Alakesh Haloi <alakesh.haloi@gmail.com> wrote:
-> >
-> > This fixes the following compile time warning
-> >
-> > flow_dissector_load.c: In function ‘detach_program’:
-> > flow_dissector_load.c:55:19: warning: format not a string literal and no format arguments [-Wformat-security]
-> >    error(1, errno, command);
-> >                    ^~~~~~~
-> > Signed-off-by: Alakesh Haloi <alakesh.haloi@gmail.com>
-> > ---
-> >  tools/testing/selftests/bpf/flow_dissector_load.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/tools/testing/selftests/bpf/flow_dissector_load.c b/tools/testing/selftests/bpf/flow_dissector_load.c
-> > index 77cafa66d048..7136ab9ffa73 100644
-> > --- a/tools/testing/selftests/bpf/flow_dissector_load.c
-> > +++ b/tools/testing/selftests/bpf/flow_dissector_load.c
-> > @@ -52,7 +52,7 @@ static void detach_program(void)
-> >         sprintf(command, "rm -r %s", cfg_pin_path);
-> >         ret = system(command);
-> >         if (ret)
-> > -               error(1, errno, command);
-> > +               error(1, errno, "%s", command);
-> >  }
-> 
-> it was fixed month ago.
-The warning is seen in mainline. I did not try bpf tree. Looks like it
-is fixed there. 
+On Thu, May 2, 2019 at 8:03 AM Brendan Higgins
+<brendanhiggins@google.com> wrote:
+>
+> Add KUnit to root Kconfig and Makefile allowing it to actually be built.
+>
+> Signed-off-by: Brendan Higgins <brendanhiggins@google.com>
 
-Thanks
--Alakesh
+You need to make sure
+to not break git-bisect'abililty.
+
+
+With this commit, I see build error.
+
+  CC      kunit/test.o
+kunit/test.c:11:10: fatal error: os.h: No such file or directory
+ #include <os.h>
+          ^~~~~~
+compilation terminated.
+make[1]: *** [scripts/Makefile.build;279: kunit/test.o] Error 1
+make: *** [Makefile;1763: kunit/] Error 2
+
+
+
+
+
+
+
+
+> ---
+>  Kconfig  | 2 ++
+>  Makefile | 2 +-
+>  2 files changed, 3 insertions(+), 1 deletion(-)
+>
+> diff --git a/Kconfig b/Kconfig
+> index 48a80beab6853..10428501edb78 100644
+> --- a/Kconfig
+> +++ b/Kconfig
+> @@ -30,3 +30,5 @@ source "crypto/Kconfig"
+>  source "lib/Kconfig"
+>
+>  source "lib/Kconfig.debug"
+> +
+> +source "kunit/Kconfig"
+> diff --git a/Makefile b/Makefile
+> index 2b99679148dc7..77368f498d84c 100644
+> --- a/Makefile
+> +++ b/Makefile
+> @@ -969,7 +969,7 @@ endif
+>  PHONY += prepare0
+>
+>  ifeq ($(KBUILD_EXTMOD),)
+> -core-y         += kernel/ certs/ mm/ fs/ ipc/ security/ crypto/ block/
+> +core-y         += kernel/ certs/ mm/ fs/ ipc/ security/ crypto/ block/ kunit/
+>
+>  vmlinux-dirs   := $(patsubst %/,%,$(filter %/, $(init-y) $(init-m) \
+>                      $(core-y) $(core-m) $(drivers-y) $(drivers-m) \
+> --
+> 2.21.0.593.g511ec345e18-goog
+>
+
+
+-- 
+Best Regards
+Masahiro Yamada
