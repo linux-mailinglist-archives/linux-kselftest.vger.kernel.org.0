@@ -2,49 +2,55 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1392A19BA9
-	for <lists+linux-kselftest@lfdr.de>; Fri, 10 May 2019 12:31:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A10619BB3
+	for <lists+linux-kselftest@lfdr.de>; Fri, 10 May 2019 12:34:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727477AbfEJKbS (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 10 May 2019 06:31:18 -0400
-Received: from conssluserg-02.nifty.com ([210.131.2.81]:61229 "EHLO
-        conssluserg-02.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727251AbfEJKbS (ORCPT
+        id S1727457AbfEJKeE (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 10 May 2019 06:34:04 -0400
+Received: from mail-oi1-f195.google.com ([209.85.167.195]:40161 "EHLO
+        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727053AbfEJKeE (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 10 May 2019 06:31:18 -0400
-Received: from mail-vs1-f41.google.com (mail-vs1-f41.google.com [209.85.217.41]) (authenticated)
-        by conssluserg-02.nifty.com with ESMTP id x4AAV0nX025786;
-        Fri, 10 May 2019 19:31:01 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-02.nifty.com x4AAV0nX025786
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1557484261;
-        bh=3yJH+cglIjNQq6vK0eeyN++1KXd8VHZRN7FQJbPltS8=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=QtaJmXuQJy7hctD/ahVAN5XPHN224n6/gqws6nJ/VotVw6eA+8vTJU3kSagTwyS1q
-         DGlLyHog02uWurOxIIxKgcK7nayyO+bQha19Z/412N0ccdltUzKhcnlvU54r3rL2ZF
-         /7yd3DaXEV3ThV74ZGgPMcATUIr2d8phlFXtq9OT03ColTy+eKxoiuz5y1uKzLvpMZ
-         ALUOCKcCEOwtobtUg0Fk/k9pSf7fatmDB/w+cjz1n7pCZUkVL0J76Ro+TKCQTrlXnb
-         Xi83Kavt+o++04Nbfu9iLvu2nvO+HmNfTEUZUgWP/kFkOPfZVl7zyvl75HUdzL9IoH
-         xywoa2weFn44A==
-X-Nifty-SrcIP: [209.85.217.41]
-Received: by mail-vs1-f41.google.com with SMTP id d128so3311706vsc.10;
-        Fri, 10 May 2019 03:31:01 -0700 (PDT)
-X-Gm-Message-State: APjAAAXAtq4hLI7cHC/L5E2Mt7UahArg08a1UXZYvwt9dkkw4ZCcR3QR
-        XIzWfFmpO3xGvqSjUXI2sh4f1gSH31yf+4Diy3U=
-X-Google-Smtp-Source: APXvYqxQg+YuYHeAdyD+cmoEqdlV9x3SqXv2NvZ+DbME3bD71rpckfASo32QB3ghErivNtiJLmZIR4uDTrUdlUap+zw=
-X-Received: by 2002:a67:f109:: with SMTP id n9mr5064876vsk.181.1557484260150;
- Fri, 10 May 2019 03:31:00 -0700 (PDT)
+        Fri, 10 May 2019 06:34:04 -0400
+Received: by mail-oi1-f195.google.com with SMTP id r136so4158794oie.7
+        for <linux-kselftest@vger.kernel.org>; Fri, 10 May 2019 03:34:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=v5i4JvNF6NE98fRMKxmZ6W6+U1GIOfAXdGdvVU9jpjk=;
+        b=nGd+cWkGzEXpGtZkuP9oYYd4GvoVDkXbYEKFNyvJGe431T1PPUpkS/xcdVyU93/oC+
+         iOY/sgkoPSzzreHzKz9kgEHxhJHg1jJT8nh/GBB77UaWYZ2cmcii9Cf0IBR0PkuXrFU2
+         X2zcaWr/4tLTgZ0RLrGMyhMI1p7cfpR2FessPvThJmqe71Qb5xQZDjgKunaL0C5W2w2E
+         x4thQ7WxDuTbLul4U5kX4SSYFL36trckMOrHWRhsmbpzjo17LECFKM9VLEYLBlSkUN9W
+         WbwCW0njc6inKI9wGkqJbW4iWV889QBYK+bjWkcnAcu6ZIOkfieUOoCuotJ9MJZnAWKM
+         Rhpw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=v5i4JvNF6NE98fRMKxmZ6W6+U1GIOfAXdGdvVU9jpjk=;
+        b=MLPCgt+CXyz3krShJzeh2okHeEpBYeyB0SjYG+EoB2vhQJ58JtjDZmSiX2h62D5a67
+         OyfcwsnPiDMpzOXyxoLss6/yDLoBHAdbRP5t5L8QV4/wxkxV5peIMHR40ISvljwluQqV
+         ZqIOoZ3NxbFIBWf8SOzZsmnQH7DLJeDRG5A7FmVlL/xLm17fuxv9IUQbkkviZud+5EWZ
+         hYLSUi6C95VhFBXlYwoNtqHivRz6FubDiMDxkaKuctyEvH9/T8M1tY/X81xLPsyhDh/k
+         Jad8iczJadULejOOCqoY+3JLhV6rlhVtgj6a1L16yaANpc5S+y4FiTNktsXGk07Aq8Nd
+         3RAA==
+X-Gm-Message-State: APjAAAXfmCdUxkr01lxhrhtb5zpCIZgYo1vlhrB/HnE4XDNvZ5yxZWhf
+        MVCCRSzNSuI7jonrRCh1Evk741hJiQvhMBxNDvjQwQ==
+X-Google-Smtp-Source: APXvYqw3UEwomNcXxGCJaZ//T6xFRuS5gGaGa2izLjE212DrWEolETcTjMzpUq+WB1E+1p0WPdjF9j5Z9zciCUj1NAM=
+X-Received: by 2002:aca:43d5:: with SMTP id q204mr4754067oia.100.1557484443394;
+ Fri, 10 May 2019 03:34:03 -0700 (PDT)
 MIME-Version: 1.0
 References: <20190501230126.229218-1-brendanhiggins@google.com>
  <20190501230126.229218-7-brendanhiggins@google.com> <CAK7LNAQ+SRMn8UFjW1dZv_TrL0qjD2v2S=rXgtUpiA-urr1DDA@mail.gmail.com>
- <CAFd5g47BNZ0gRz4SXb37XjyXF_LyNZrSmoqDbzaaCUrTg3O7Yg@mail.gmail.com>
-In-Reply-To: <CAFd5g47BNZ0gRz4SXb37XjyXF_LyNZrSmoqDbzaaCUrTg3O7Yg@mail.gmail.com>
-From:   Masahiro Yamada <yamada.masahiro@socionext.com>
-Date:   Fri, 10 May 2019 19:30:24 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAR3DW5UxtsTNtW6mtQic8cukJwJ18=KitC2HX+jO5eo4g@mail.gmail.com>
-Message-ID: <CAK7LNAR3DW5UxtsTNtW6mtQic8cukJwJ18=KitC2HX+jO5eo4g@mail.gmail.com>
+ <CAFd5g47BNZ0gRz4SXb37XjyXF_LyNZrSmoqDbzaaCUrTg3O7Yg@mail.gmail.com> <CAK7LNAR3DW5UxtsTNtW6mtQic8cukJwJ18=KitC2HX+jO5eo4g@mail.gmail.com>
+In-Reply-To: <CAK7LNAR3DW5UxtsTNtW6mtQic8cukJwJ18=KitC2HX+jO5eo4g@mail.gmail.com>
+From:   Brendan Higgins <brendanhiggins@google.com>
+Date:   Fri, 10 May 2019 03:33:52 -0700
+Message-ID: <CAFd5g46dE78f3bx33Sv-CPNx9i8VV=v0Ezwytp8eiQU1MzWbbQ@mail.gmail.com>
 Subject: Re: [PATCH v2 06/17] kbuild: enable building KUnit
-To:     Brendan Higgins <brendanhiggins@google.com>
+To:     Masahiro Yamada <yamada.masahiro@socionext.com>
 Cc:     Frank Rowand <frowand.list@gmail.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Kees Cook <keescook@google.com>,
@@ -85,43 +91,44 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, May 10, 2019 at 7:27 PM Brendan Higgins
-<brendanhiggins@google.com> wrote:
->
-> > On Thu, May 2, 2019 at 8:03 AM Brendan Higgins
-> > <brendanhiggins@google.com> wrote:
+> On Fri, May 10, 2019 at 7:27 PM Brendan Higgins
+> <brendanhiggins@google.com> wrote:
+> >
+> > > On Thu, May 2, 2019 at 8:03 AM Brendan Higgins
+> > > <brendanhiggins@google.com> wrote:
+> > > >
+> > > > Add KUnit to root Kconfig and Makefile allowing it to actually be built.
+> > > >
+> > > > Signed-off-by: Brendan Higgins <brendanhiggins@google.com>
 > > >
-> > > Add KUnit to root Kconfig and Makefile allowing it to actually be built.
+> > > You need to make sure
+> > > to not break git-bisect'abililty.
 > > >
-> > > Signed-off-by: Brendan Higgins <brendanhiggins@google.com>
+> > >
+> > > With this commit, I see build error.
+> > >
+> > >   CC      kunit/test.o
+> > > kunit/test.c:11:10: fatal error: os.h: No such file or directory
+> > >  #include <os.h>
+> > >           ^~~~~~
+> > > compilation terminated.
+> > > make[1]: *** [scripts/Makefile.build;279: kunit/test.o] Error 1
+> > > make: *** [Makefile;1763: kunit/] Error 2
 > >
-> > You need to make sure
-> > to not break git-bisect'abililty.
+> > Nice catch! That header shouldn't even be in there.
 > >
-> >
-> > With this commit, I see build error.
-> >
-> >   CC      kunit/test.o
-> > kunit/test.c:11:10: fatal error: os.h: No such file or directory
-> >  #include <os.h>
-> >           ^~~~~~
-> > compilation terminated.
-> > make[1]: *** [scripts/Makefile.build;279: kunit/test.o] Error 1
-> > make: *** [Makefile;1763: kunit/] Error 2
+> > Sorry about that. I will have it fixed in the next revision.
 >
-> Nice catch! That header shouldn't even be in there.
 >
-> Sorry about that. I will have it fixed in the next revision.
+> BTW, I applied whole of this series
+> to my kernel.org repository.
+>
+> 0day bot started to report issues.
+> I hope several reports reached you,
+> and they are useful to fix your code.
 
+Yep, I have received several. They are very helpful.
 
-BTW, I applied whole of this series
-to my kernel.org repository.
+I greatly appreciate it.
 
-0day bot started to report issues.
-I hope several reports reached you,
-and they are useful to fix your code.
-
-
--- 
-Best Regards
-Masahiro Yamada
+Thanks!
