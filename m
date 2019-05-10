@@ -2,364 +2,111 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7086D1A031
-	for <lists+linux-kselftest@lfdr.de>; Fri, 10 May 2019 17:29:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14B091A12D
+	for <lists+linux-kselftest@lfdr.de>; Fri, 10 May 2019 18:18:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727144AbfEJP24 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 10 May 2019 11:28:56 -0400
-Received: from vmicros1.altlinux.org ([194.107.17.57]:60888 "EHLO
-        vmicros1.altlinux.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727589AbfEJP2z (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 10 May 2019 11:28:55 -0400
-Received: from mua.local.altlinux.org (mua.local.altlinux.org [192.168.1.14])
-        by vmicros1.altlinux.org (Postfix) with ESMTP id 3407D72CCD1;
-        Fri, 10 May 2019 18:28:53 +0300 (MSK)
-Received: by mua.local.altlinux.org (Postfix, from userid 508)
-        id 1942B7CCE30; Fri, 10 May 2019 18:28:52 +0300 (MSK)
-Date:   Fri, 10 May 2019 18:28:52 +0300
-From:   "Dmitry V. Levin" <ldv@altlinux.org>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Shuah Khan <shuah@kernel.org>, Oleg Nesterov <oleg@redhat.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Elvira Khabirova <lineprinter@altlinux.org>,
-        Eugene Syromyatnikov <esyr@redhat.com>,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v11 7/7] selftests/ptrace: add a test case for
- PTRACE_GET_SYSCALL_INFO
-Message-ID: <20190510152852.GG28558@altlinux.org>
-References: <20190510152640.GA28529@altlinux.org>
+        id S1727608AbfEJQSg (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 10 May 2019 12:18:36 -0400
+Received: from ale.deltatee.com ([207.54.116.67]:36628 "EHLO ale.deltatee.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727271AbfEJQSg (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 10 May 2019 12:18:36 -0400
+Received: from guinness.priv.deltatee.com ([172.16.1.162])
+        by ale.deltatee.com with esmtp (Exim 4.89)
+        (envelope-from <logang@deltatee.com>)
+        id 1hP8Dm-0006xr-3M; Fri, 10 May 2019 10:18:07 -0600
+To:     Frank Rowand <frowand.list@gmail.com>,
+        Theodore Ts'o <tytso@mit.edu>, Tim.Bird@sony.com,
+        knut.omang@oracle.com, gregkh@linuxfoundation.org,
+        brendanhiggins@google.com, keescook@google.com,
+        kieran.bingham@ideasonboard.com, mcgrof@kernel.org,
+        robh@kernel.org, sboyd@kernel.org, shuah@kernel.org,
+        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        kunit-dev@googlegroups.com, linux-doc@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kbuild@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-nvdimm@lists.01.org, linux-um@lists.infradead.org,
+        Alexander.Levin@microsoft.com, amir73il@gmail.com,
+        dan.carpenter@oracle.com, dan.j.williams@intel.com,
+        daniel@ffwll.ch, jdike@addtoit.com, joel@jms.id.au,
+        julia.lawall@lip6.fr, khilman@baylibre.com, mpe@ellerman.id.au,
+        pmladek@suse.com, richard@nod.at, rientjes@google.com,
+        rostedt@goodmis.org, wfg@linux.intel.com
+References: <a09a7e0e-9894-8c1a-34eb-fc482b1759d0@gmail.com>
+ <20190509015856.GB7031@mit.edu>
+ <580e092f-fa4e-eedc-9e9a-a57dd085f0a6@gmail.com>
+ <20190509032017.GA29703@mit.edu>
+ <7fd35df81c06f6eb319223a22e7b93f29926edb9.camel@oracle.com>
+ <20190509133551.GD29703@mit.edu>
+ <ECADFF3FD767C149AD96A924E7EA6EAF9770D591@USCULXMSG01.am.sony.com>
+ <875c546d-9713-bb59-47e4-77a1d2c69a6d@gmail.com>
+ <20190509214233.GA20877@mit.edu>
+ <b09ba170-229b-fde4-3e9a-e50d6ab4c1b5@deltatee.com>
+ <20190509233043.GC20877@mit.edu>
+ <8914afef-1e66-e6e3-f891-5855768d3018@deltatee.com>
+ <6d6e91ec-33d3-830b-4895-4d7a20ba7d45@gmail.com>
+From:   Logan Gunthorpe <logang@deltatee.com>
+Message-ID: <3faa022b-0b70-0375-aa6d-12ea83a2671f@deltatee.com>
+Date:   Fri, 10 May 2019 10:17:56 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190510152640.GA28529@altlinux.org>
+In-Reply-To: <6d6e91ec-33d3-830b-4895-4d7a20ba7d45@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-CA
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 172.16.1.162
+X-SA-Exim-Rcpt-To: wfg@linux.intel.com, rostedt@goodmis.org, rientjes@google.com, richard@nod.at, pmladek@suse.com, mpe@ellerman.id.au, khilman@baylibre.com, julia.lawall@lip6.fr, joel@jms.id.au, jdike@addtoit.com, daniel@ffwll.ch, dan.j.williams@intel.com, dan.carpenter@oracle.com, amir73il@gmail.com, Alexander.Levin@microsoft.com, linux-um@lists.infradead.org, linux-nvdimm@lists.01.org, linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org, linux-fsdevel@vger.kernel.org, linux-doc@vger.kernel.org, kunit-dev@googlegroups.com, dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org, shuah@kernel.org, sboyd@kernel.org, robh@kernel.org, mcgrof@kernel.org, kieran.bingham@ideasonboard.com, keescook@google.com, brendanhiggins@google.com, gregkh@linuxfoundation.org, knut.omang@oracle.com, Tim.Bird@sony.com, tytso@mit.edu, frowand.list@gmail.com
+X-SA-Exim-Mail-From: logang@deltatee.com
+X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on ale.deltatee.com
+X-Spam-Level: 
+X-Spam-Status: No, score=-6.9 required=5.0 tests=ALL_TRUSTED,BAYES_00
+        autolearn=ham autolearn_force=no version=3.4.2
+Subject: Re: [PATCH v2 00/17] kunit: introduce KUnit, the Linux kernel unit
+ testing framework
+X-SA-Exim-Version: 4.2.1 (built Tue, 02 Aug 2016 21:08:31 +0000)
+X-SA-Exim-Scanned: Yes (on ale.deltatee.com)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Check whether PTRACE_GET_SYSCALL_INFO semantics implemented in the kernel
-matches userspace expectations.
 
-Acked-by: Shuah Khan <shuah@kernel.org>
-Cc: Oleg Nesterov <oleg@redhat.com>
-Cc: Andy Lutomirski <luto@kernel.org>
-Cc: Elvira Khabirova <lineprinter@altlinux.org>
-Cc: Eugene Syromyatnikov <esyr@redhat.com>
-Cc: linux-kselftest@vger.kernel.org
-Signed-off-by: Dmitry V. Levin <ldv@altlinux.org>
----
 
-Notes:
-    v11: unchanged
-    v10: changed GPL-2.0-or-later to GPL-2.0+,
-         added Acked-by from https://lore.kernel.org/lkml/f2f015da-35d4-7207-cd57-e6589cd9d2c4@kernel.org/
-    v9: unchanged
-    v8: unchanged
-    v7: unchanged
-    v6: made PTRACE_GET_SYSCALL_INFO return value checks strict
-    v5: initial revision
+On 2019-05-09 11:18 p.m., Frank Rowand wrote:
 
- tools/testing/selftests/ptrace/.gitignore     |   1 +
- tools/testing/selftests/ptrace/Makefile       |   2 +-
- .../selftests/ptrace/get_syscall_info.c       | 271 ++++++++++++++++++
- 3 files changed, 273 insertions(+), 1 deletion(-)
- create mode 100644 tools/testing/selftests/ptrace/get_syscall_info.c
+> YES, kselftest has in-kernel tests.  (Excuse the shouting...)
 
-diff --git a/tools/testing/selftests/ptrace/.gitignore b/tools/testing/selftests/ptrace/.gitignore
-index b3e59d41fd82..cfcc49a7def7 100644
---- a/tools/testing/selftests/ptrace/.gitignore
-+++ b/tools/testing/selftests/ptrace/.gitignore
-@@ -1 +1,2 @@
-+get_syscall_info
- peeksiginfo
-diff --git a/tools/testing/selftests/ptrace/Makefile b/tools/testing/selftests/ptrace/Makefile
-index 8a2bc5562179..4bc550b6b845 100644
---- a/tools/testing/selftests/ptrace/Makefile
-+++ b/tools/testing/selftests/ptrace/Makefile
-@@ -1,5 +1,5 @@
- CFLAGS += -iquote../../../../include/uapi -Wall
- 
--TEST_GEN_PROGS := peeksiginfo
-+TEST_GEN_PROGS := get_syscall_info peeksiginfo
- 
- include ../lib.mk
-diff --git a/tools/testing/selftests/ptrace/get_syscall_info.c b/tools/testing/selftests/ptrace/get_syscall_info.c
-new file mode 100644
-index 000000000000..d1961c3ee72e
---- /dev/null
-+++ b/tools/testing/selftests/ptrace/get_syscall_info.c
-@@ -0,0 +1,271 @@
-+/* SPDX-License-Identifier: GPL-2.0+
-+ *
-+ * Copyright (c) 2018 Dmitry V. Levin <ldv@altlinux.org>
-+ * All rights reserved.
-+ *
-+ * Check whether PTRACE_GET_SYSCALL_INFO semantics implemented in the kernel
-+ * matches userspace expectations.
-+ */
-+
-+#include "../kselftest_harness.h"
-+#include <err.h>
-+#include <signal.h>
-+#include <asm/unistd.h>
-+#include "linux/ptrace.h"
-+
-+static int
-+kill_tracee(pid_t pid)
-+{
-+	if (!pid)
-+		return 0;
-+
-+	int saved_errno = errno;
-+
-+	int rc = kill(pid, SIGKILL);
-+
-+	errno = saved_errno;
-+	return rc;
-+}
-+
-+static long
-+sys_ptrace(int request, pid_t pid, unsigned long addr, unsigned long data)
-+{
-+	return syscall(__NR_ptrace, request, pid, addr, data);
-+}
-+
-+#define LOG_KILL_TRACEE(fmt, ...)				\
-+	do {							\
-+		kill_tracee(pid);				\
-+		TH_LOG("wait #%d: " fmt,			\
-+		       ptrace_stop, ##__VA_ARGS__);		\
-+	} while (0)
-+
-+TEST(get_syscall_info)
-+{
-+	static const unsigned long args[][7] = {
-+		/* a sequence of architecture-agnostic syscalls */
-+		{
-+			__NR_chdir,
-+			(unsigned long) "",
-+			0xbad1fed1,
-+			0xbad2fed2,
-+			0xbad3fed3,
-+			0xbad4fed4,
-+			0xbad5fed5
-+		},
-+		{
-+			__NR_gettid,
-+			0xcaf0bea0,
-+			0xcaf1bea1,
-+			0xcaf2bea2,
-+			0xcaf3bea3,
-+			0xcaf4bea4,
-+			0xcaf5bea5
-+		},
-+		{
-+			__NR_exit_group,
-+			0,
-+			0xfac1c0d1,
-+			0xfac2c0d2,
-+			0xfac3c0d3,
-+			0xfac4c0d4,
-+			0xfac5c0d5
-+		}
-+	};
-+	const unsigned long *exp_args;
-+
-+	pid_t pid = fork();
-+
-+	ASSERT_LE(0, pid) {
-+		TH_LOG("fork: %m");
-+	}
-+
-+	if (pid == 0) {
-+		/* get the pid before PTRACE_TRACEME */
-+		pid = getpid();
-+		ASSERT_EQ(0, sys_ptrace(PTRACE_TRACEME, 0, 0, 0)) {
-+			TH_LOG("PTRACE_TRACEME: %m");
-+		}
-+		ASSERT_EQ(0, kill(pid, SIGSTOP)) {
-+			/* cannot happen */
-+			TH_LOG("kill SIGSTOP: %m");
-+		}
-+		for (unsigned int i = 0; i < ARRAY_SIZE(args); ++i) {
-+			syscall(args[i][0],
-+				args[i][1], args[i][2], args[i][3],
-+				args[i][4], args[i][5], args[i][6]);
-+		}
-+		/* unreachable */
-+		_exit(1);
-+	}
-+
-+	const struct {
-+		unsigned int is_error;
-+		int rval;
-+	} *exp_param, exit_param[] = {
-+		{ 1, -ENOENT },	/* chdir */
-+		{ 0, pid }	/* gettid */
-+	};
-+
-+	unsigned int ptrace_stop;
-+
-+	for (ptrace_stop = 0; ; ++ptrace_stop) {
-+		struct ptrace_syscall_info info = {
-+			.op = 0xff	/* invalid PTRACE_SYSCALL_INFO_* op */
-+		};
-+		const size_t size = sizeof(info);
-+		const int expected_none_size =
-+			(void *) &info.entry - (void *) &info;
-+		const int expected_entry_size =
-+			(void *) &info.entry.args[6] - (void *) &info;
-+		const int expected_exit_size =
-+			(void *) (&info.exit.is_error + 1) -
-+			(void *) &info;
-+		int status;
-+		long rc;
-+
-+		ASSERT_EQ(pid, wait(&status)) {
-+			/* cannot happen */
-+			LOG_KILL_TRACEE("wait: %m");
-+		}
-+		if (WIFEXITED(status)) {
-+			pid = 0;	/* the tracee is no more */
-+			ASSERT_EQ(0, WEXITSTATUS(status));
-+			break;
-+		}
-+		ASSERT_FALSE(WIFSIGNALED(status)) {
-+			pid = 0;	/* the tracee is no more */
-+			LOG_KILL_TRACEE("unexpected signal %u",
-+					WTERMSIG(status));
-+		}
-+		ASSERT_TRUE(WIFSTOPPED(status)) {
-+			/* cannot happen */
-+			LOG_KILL_TRACEE("unexpected wait status %#x", status);
-+		}
-+
-+		switch (WSTOPSIG(status)) {
-+		case SIGSTOP:
-+			ASSERT_EQ(0, ptrace_stop) {
-+				LOG_KILL_TRACEE("unexpected signal stop");
-+			}
-+			ASSERT_EQ(0, sys_ptrace(PTRACE_SETOPTIONS, pid, 0,
-+						PTRACE_O_TRACESYSGOOD)) {
-+				LOG_KILL_TRACEE("PTRACE_SETOPTIONS: %m");
-+			}
-+			ASSERT_LT(0, (rc = sys_ptrace(PTRACE_GET_SYSCALL_INFO,
-+						      pid, size,
-+						      (unsigned long) &info))) {
-+				LOG_KILL_TRACEE("PTRACE_GET_SYSCALL_INFO: %m");
-+			}
-+			ASSERT_EQ(expected_none_size, rc) {
-+				LOG_KILL_TRACEE("signal stop mismatch");
-+			}
-+			ASSERT_EQ(PTRACE_SYSCALL_INFO_NONE, info.op) {
-+				LOG_KILL_TRACEE("signal stop mismatch");
-+			}
-+			ASSERT_TRUE(info.arch) {
-+				LOG_KILL_TRACEE("signal stop mismatch");
-+			}
-+			ASSERT_TRUE(info.instruction_pointer) {
-+				LOG_KILL_TRACEE("signal stop mismatch");
-+			}
-+			ASSERT_TRUE(info.stack_pointer) {
-+				LOG_KILL_TRACEE("signal stop mismatch");
-+			}
-+			break;
-+
-+		case SIGTRAP | 0x80:
-+			ASSERT_LT(0, (rc = sys_ptrace(PTRACE_GET_SYSCALL_INFO,
-+						      pid, size,
-+						      (unsigned long) &info))) {
-+				LOG_KILL_TRACEE("PTRACE_GET_SYSCALL_INFO: %m");
-+			}
-+			switch (ptrace_stop) {
-+			case 1: /* entering chdir */
-+			case 3: /* entering gettid */
-+			case 5: /* entering exit_group */
-+				exp_args = args[ptrace_stop / 2];
-+				ASSERT_EQ(expected_entry_size, rc) {
-+					LOG_KILL_TRACEE("entry stop mismatch");
-+				}
-+				ASSERT_EQ(PTRACE_SYSCALL_INFO_ENTRY, info.op) {
-+					LOG_KILL_TRACEE("entry stop mismatch");
-+				}
-+				ASSERT_TRUE(info.arch) {
-+					LOG_KILL_TRACEE("entry stop mismatch");
-+				}
-+				ASSERT_TRUE(info.instruction_pointer) {
-+					LOG_KILL_TRACEE("entry stop mismatch");
-+				}
-+				ASSERT_TRUE(info.stack_pointer) {
-+					LOG_KILL_TRACEE("entry stop mismatch");
-+				}
-+				ASSERT_EQ(exp_args[0], info.entry.nr) {
-+					LOG_KILL_TRACEE("entry stop mismatch");
-+				}
-+				ASSERT_EQ(exp_args[1], info.entry.args[0]) {
-+					LOG_KILL_TRACEE("entry stop mismatch");
-+				}
-+				ASSERT_EQ(exp_args[2], info.entry.args[1]) {
-+					LOG_KILL_TRACEE("entry stop mismatch");
-+				}
-+				ASSERT_EQ(exp_args[3], info.entry.args[2]) {
-+					LOG_KILL_TRACEE("entry stop mismatch");
-+				}
-+				ASSERT_EQ(exp_args[4], info.entry.args[3]) {
-+					LOG_KILL_TRACEE("entry stop mismatch");
-+				}
-+				ASSERT_EQ(exp_args[5], info.entry.args[4]) {
-+					LOG_KILL_TRACEE("entry stop mismatch");
-+				}
-+				ASSERT_EQ(exp_args[6], info.entry.args[5]) {
-+					LOG_KILL_TRACEE("entry stop mismatch");
-+				}
-+				break;
-+			case 2: /* exiting chdir */
-+			case 4: /* exiting gettid */
-+				exp_param = &exit_param[ptrace_stop / 2 - 1];
-+				ASSERT_EQ(expected_exit_size, rc) {
-+					LOG_KILL_TRACEE("exit stop mismatch");
-+				}
-+				ASSERT_EQ(PTRACE_SYSCALL_INFO_EXIT, info.op) {
-+					LOG_KILL_TRACEE("exit stop mismatch");
-+				}
-+				ASSERT_TRUE(info.arch) {
-+					LOG_KILL_TRACEE("exit stop mismatch");
-+				}
-+				ASSERT_TRUE(info.instruction_pointer) {
-+					LOG_KILL_TRACEE("exit stop mismatch");
-+				}
-+				ASSERT_TRUE(info.stack_pointer) {
-+					LOG_KILL_TRACEE("exit stop mismatch");
-+				}
-+				ASSERT_EQ(exp_param->is_error,
-+					  info.exit.is_error) {
-+					LOG_KILL_TRACEE("exit stop mismatch");
-+				}
-+				ASSERT_EQ(exp_param->rval, info.exit.rval) {
-+					LOG_KILL_TRACEE("exit stop mismatch");
-+				}
-+				break;
-+			default:
-+				LOG_KILL_TRACEE("unexpected syscall stop");
-+				abort();
-+			}
-+			break;
-+
-+		default:
-+			LOG_KILL_TRACEE("unexpected stop signal %#x",
-+					WSTOPSIG(status));
-+			abort();
-+		}
-+
-+		ASSERT_EQ(0, sys_ptrace(PTRACE_SYSCALL, pid, 0, 0)) {
-+			LOG_KILL_TRACEE("PTRACE_SYSCALL: %m");
-+		}
-+	}
-+
-+	ASSERT_EQ(ARRAY_SIZE(args) * 2, ptrace_stop);
-+}
-+
-+TEST_HARNESS_MAIN
--- 
-ldv
+Cool. From my cursory look, in my opinion, these would be greatly
+improved by converting them to the framework Brendan is proposing for Kunit.
+
+>> If they do exists, it seems like it would make sense to
+>> convert those to kunit and have Kunit tests run-able in a VM or
+>> baremetal instance.
+> 
+> They already run in a VM.
+> 
+> They already run on bare metal.
+> 
+> They already run in UML.
+
+Simply being able to run in UML is not the only thing here. Kunit
+provides the infrastructure to quickly build, run and report results for
+all the tests from userspace without needing to worry about the details
+of building and running a UML kernel, then parsing dmesg to figure out
+what tests were run or not.
+
+> This is not to say that KUnit does not make sense.  But I'm still trying
+> to get a better description of the KUnit features (and there are
+> some).
+
+So read the patches, or the documentation[1] or the LWN article[2]. It's
+pretty well described in a lot of places -- that's one of the big
+advantages of it. In contrast, few people seems to have any concept of
+what kselftests are or where they are or how to run them (I was
+surprised to find the in-kernel tests in the lib tree).
+
+Logan
+
+[1] https://google.github.io/kunit-docs/third_party/kernel/docs/
+[2] https://lwn.net/Articles/780985/
