@@ -2,105 +2,89 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6138C1A65C
-	for <lists+linux-kselftest@lfdr.de>; Sat, 11 May 2019 04:53:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8406D1A6B0
+	for <lists+linux-kselftest@lfdr.de>; Sat, 11 May 2019 06:37:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728364AbfEKCwx (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 10 May 2019 22:52:53 -0400
-Received: from mail-it1-f196.google.com ([209.85.166.196]:53451 "EHLO
-        mail-it1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728255AbfEKCwx (ORCPT
+        id S1726029AbfEKEhf (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 11 May 2019 00:37:35 -0400
+Received: from mail-pg1-f194.google.com ([209.85.215.194]:46753 "EHLO
+        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725990AbfEKEhf (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 10 May 2019 22:52:53 -0400
-Received: by mail-it1-f196.google.com with SMTP id m141so11050931ita.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 10 May 2019 19:52:52 -0700 (PDT)
+        Sat, 11 May 2019 00:37:35 -0400
+Received: by mail-pg1-f194.google.com with SMTP id t187so3944358pgb.13;
+        Fri, 10 May 2019 21:37:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Z1fNpqco5qTI/FVw/2N/OV6sdYiNRuMpuFae27tLYD8=;
-        b=AsJhlTTxTVsHXRcV+TdHM1dqT6CDreRY5gyOr73MCbYVqnHrm9AQ3YBi3KpSl2YaBY
-         AQA/RoOwihRXjLnMWyMT1lTIFCUMtWd/THzwzQ11ODv0V+hImkpFqMzlTyUA5vg4U8Lh
-         iC7LdrFa9pBC97kV1H8nDMWfrZxoKKClWlX2Y=
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=UYukucv8TKh0+v5GWyB7Tlv7mRIdfVYQX3Glv66VIQw=;
+        b=BhTadKgUSYSyuSbjvV9r4iNRI9v6kX/UK39XJ6XUzwsLKQFarLP3R2ffrIqpL/UfvY
+         LdS0aPn6WOMM197Bs4sRrdOksUTFwP3/kW4nfCPCT3X3r1/sW53fUZZZW5nuz2AtSmnG
+         zd+ScySCXp4uFNnD0Cav+h+yLjRms0Df9hs3dw0n0yrh+9YK5NUl/wtxbxlZnb6EJ2PN
+         Bqya/lBp5UU/E7r9fYR0djIHMxA4pwj4I5ggPCtHUpCUZN0HBqb5p1dQEXlIKQAsDF7Q
+         okG0HdHtFFZo3mFFCsX/ISy0vSkny7VJVb3Znro211qyro2pDwJZdtOnYeTu1L6YTsUa
+         VkNQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Z1fNpqco5qTI/FVw/2N/OV6sdYiNRuMpuFae27tLYD8=;
-        b=dz3VSzD8JEACXnGkSdLAMqPfYSZ5c6utENoQJG1JBqx/TGiRhn0cpJATyuZbHpTs9f
-         IFjWQA8HX31T6hsC/3RBYPGC+qc1qgdB7k/ruWf5EuUBX2S5px2WiUaB5D+h4MuDKT1T
-         xy9CW+UbEbumQpNWhrDVz7dSm+l5Tw21PLoYns6IFMajuVYI5ViShp9grfEOcfbSeQwn
-         9nNAYVeGKqZI+tZ+2sRrhrRYlTXSprWTFzKfllBIFu6m0b75eiIQFBF1UZCJJQlXZHVm
-         e3nvX1a7qhUgtNvcu6YS+7PBRg+BvDp/iRDxioBLdciU6iYSWbpiJSNLaXM0DksfgcIL
-         aNcw==
-X-Gm-Message-State: APjAAAVKydqavRJlSNCSkf+8aRpDU0bSF9JbYxNprHs8b7H/l1I59h9O
-        PpHvt4mQEN8NdB6j1ztboqfbBw==
-X-Google-Smtp-Source: APXvYqyMyX9jt4xcnd1qUvb3Gz1jooVogYkic/p578UGF9RMWCcUnZVoGP84Uj7fcMIrKG/QoqQHKg==
-X-Received: by 2002:a24:5258:: with SMTP id d85mr10156123itb.124.1557543172404;
-        Fri, 10 May 2019 19:52:52 -0700 (PDT)
-Received: from shuah-t480s.internal (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id s69sm2962460ios.30.2019.05.10.19.52.50
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=UYukucv8TKh0+v5GWyB7Tlv7mRIdfVYQX3Glv66VIQw=;
+        b=RIGp1GqfF+1JAwQIaZnzb7nCX2LyCkn2N3UPJwjV2PRjruCG/6px/jNotq/2rwse6v
+         qcbJV7sLvvGzkSI/FAyE8DqyM05r632f5DdajflzNUBjk1RyAo1L0gyn3eoozKrr6K4r
+         xwiCNqr8/ZutxB1byQQMR7QkBCzmkcJHiLXe71qc4eiUkNYeCUZgnWtqlZd63oenF5Eu
+         9cIraDFgL+oKNa5SbNO6Hms6yW6qtdEq27iJK9HkuTsatujNrvOV+pVd63tk4K01/vYz
+         Jy6FoX0lYPeIzl+9XfPgzR+F1OjXMUJlL2yQDnOeJ3n8lLL3zW026rf/Vj6D6v13G85A
+         SL5A==
+X-Gm-Message-State: APjAAAUCc3qrXwKmWGgf/2pIjeJ66Wcv8Ii3654C3C4UVbnh87wDOoEC
+        Z+GL9oJ/V7VYmz/hlEp2ELYeAf2Z
+X-Google-Smtp-Source: APXvYqw25vH295BAqDckkGeVfGTzE/+V28snDGJNVNL9f9vsLkAH4tpdjb1EN2gNru1RZ7tfD/49Dw==
+X-Received: by 2002:a63:ee10:: with SMTP id e16mr12005281pgi.207.1557549454123;
+        Fri, 10 May 2019 21:37:34 -0700 (PDT)
+Received: from ast-mbp ([2620:10d:c090:180::b64b])
+        by smtp.gmail.com with ESMTPSA id z66sm9656243pfz.83.2019.05.10.21.37.32
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 10 May 2019 19:52:51 -0700 (PDT)
-From:   Shuah Khan <skhan@linuxfoundation.org>
-To:     shuah@kernel.org, alexei.starovoitov@gmail.com
-Cc:     Shuah Khan <skhan@linuxfoundation.org>, daniel@iogearbox.net,
-        davem@davemloft.net, torvalds@linux-foundation.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org
-Subject: [PATCH] selftests: fix bpf build/test workflow regression when KBUILD_OUTPUT is set
-Date:   Fri, 10 May 2019 20:52:49 -0600
-Message-Id: <20190511025249.32678-1-skhan@linuxfoundation.org>
-X-Mailer: git-send-email 2.20.1
+        Fri, 10 May 2019 21:37:33 -0700 (PDT)
+Date:   Fri, 10 May 2019 21:37:31 -0700
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To:     Shuah Khan <skhan@linuxfoundation.org>
+Cc:     shuah@kernel.org, daniel@iogearbox.net, davem@davemloft.net,
+        torvalds@linux-foundation.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org
+Subject: Re: [PATCH] selftests: fix bpf build/test workflow regression when
+ KBUILD_OUTPUT is set
+Message-ID: <20190511043729.3o4enh35lrmne3kd@ast-mbp>
+References: <20190511025249.32678-1-skhan@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190511025249.32678-1-skhan@linuxfoundation.org>
+User-Agent: NeoMutt/20180223
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-commit 8ce72dc32578 ("selftests: fix headers_install circular dependency")
-broke bpf build/test workflow. When KBUILD_OUTPUT is set, bpf objects end
-up in KBUILD_OUTPUT build directory instead of in ../selftests/bpf.
+On Fri, May 10, 2019 at 08:52:49PM -0600, Shuah Khan wrote:
+> commit 8ce72dc32578 ("selftests: fix headers_install circular dependency")
+> broke bpf build/test workflow. When KBUILD_OUTPUT is set, bpf objects end
+> up in KBUILD_OUTPUT build directory instead of in ../selftests/bpf.
+> 
+> The following bpf workflow breaks when it can't find the test_verifier:
+> 
+> cd tools/testing/selftests/bpf; make; ./test_verifier;
+> 
+> Fix it to set OUTPUT only when it is undefined in lib.mk. It didn't need
+> to be set in the first place.
+> 
+> Fixes: commit 8ce72dc32578 ("selftests: fix headers_install circular dependency")
+> 
+> Reported-by: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+> Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
 
-The following bpf workflow breaks when it can't find the test_verifier:
-
-cd tools/testing/selftests/bpf; make; ./test_verifier;
-
-Fix it to set OUTPUT only when it is undefined in lib.mk. It didn't need
-to be set in the first place.
-
-Fixes: commit 8ce72dc32578 ("selftests: fix headers_install circular dependency")
-
-Reported-by: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
----
- tools/testing/selftests/lib.mk | 12 +++---------
- 1 file changed, 3 insertions(+), 9 deletions(-)
-
-diff --git a/tools/testing/selftests/lib.mk b/tools/testing/selftests/lib.mk
-index 098dd0065fb1..077337195783 100644
---- a/tools/testing/selftests/lib.mk
-+++ b/tools/testing/selftests/lib.mk
-@@ -3,15 +3,9 @@
- CC := $(CROSS_COMPILE)gcc
- 
- ifeq (0,$(MAKELEVEL))
--    ifneq ($(O),)
--	OUTPUT := $(O)
--    else
--	ifneq ($(KBUILD_OUTPUT),)
--		OUTPUT := $(KBUILD_OUTPUT)
--	else
--		OUTPUT := $(shell pwd)
--		DEFAULT_INSTALL_HDR_PATH := 1
--	endif
-+    ifeq ($(OUTPUT),)
-+	OUTPUT := $(shell pwd)
-+	DEFAULT_INSTALL_HDR_PATH := 1
-     endif
- endif
- selfdir = $(realpath $(dir $(filter %/lib.mk,$(MAKEFILE_LIST))))
--- 
-2.17.1
+'git am' couldn't apply this patch because "sha1 information is lacking",
+but the patch itself looks good.
+Acked-by: Alexei Starovoitov <ast@kernel.org>
+Thanks for the quick fix.
 
