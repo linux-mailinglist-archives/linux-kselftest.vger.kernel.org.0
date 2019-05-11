@@ -2,117 +2,128 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 214E21A824
-	for <lists+linux-kselftest@lfdr.de>; Sat, 11 May 2019 16:51:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 190ED1A85A
+	for <lists+linux-kselftest@lfdr.de>; Sat, 11 May 2019 18:17:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726319AbfEKOvf (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 11 May 2019 10:51:35 -0400
-Received: from mail-pf1-f196.google.com ([209.85.210.196]:37865 "EHLO
-        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726240AbfEKOvf (ORCPT
+        id S1726485AbfEKQRT (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 11 May 2019 12:17:19 -0400
+Received: from mail-pg1-f193.google.com ([209.85.215.193]:45990 "EHLO
+        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726623AbfEKQRT (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 11 May 2019 10:51:35 -0400
-Received: by mail-pf1-f196.google.com with SMTP id g3so4785972pfi.4
-        for <linux-kselftest@vger.kernel.org>; Sat, 11 May 2019 07:51:34 -0700 (PDT)
+        Sat, 11 May 2019 12:17:19 -0400
+Received: by mail-pg1-f193.google.com with SMTP id i21so4506583pgi.12
+        for <linux-kselftest@vger.kernel.org>; Sat, 11 May 2019 09:17:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
+        d=joelfernandes.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=UrrXDUi/gk4zCyFpyH/sUqkS9od81YeirKCBp09sQiM=;
-        b=YzjUW3KoSuX20gVLnLnNHa5BlAUXnLPUpbvBYRR4PcPZvrEyjqUnf6To98mrQKrcAT
-         I0aRhH/Wwdxp56dyfGcmfTyaD7B+SffqgnmXZHrqkg3wJ2qXRI2ct7qfec902aeFdBg5
-         GG1uXyWJt7u5cYM/IAYwQjXZpFp1uBisXZEf0=
+         :content-disposition:in-reply-to:user-agent;
+        bh=Odh+YMUmXqxxn2pUwWEKZYqwhsM/e7BZh99KpQUKonM=;
+        b=qLq/xi5VaOmk5QBHpCipGArPVi3NegYyBubZ0l23k5Meagl/axkdmV0pJLKMnaBK6x
+         719v6LAMXaMXcOXzRKnSMK9Cse4PTZxL4W79PAR6oqtFAKiPyR4GJfPIg8Xf7+4STwCO
+         7DzTlF98i4slQDIv6HVl4kUQlCuvXNgpq5WCo=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=UrrXDUi/gk4zCyFpyH/sUqkS9od81YeirKCBp09sQiM=;
-        b=Pos12IwfZNaxG1aD/PKVwUoJajE5++u2ScJWpqe4HTFapEzDE9EIJ4LPcall8/0TAg
-         yr0b3X+jDVPkw58D7Vr/8cbLhKBa9/2oUOzS5WRHH3vMsCLJcq2hU9vqXtHVi99rcN6m
-         0uy1BSeQp9vLj/132r0JxrS41Ac3IqM0e2rEjpf10ODKjpwKf1+v+6UyN/06Q9Vltc9t
-         6nYA1G85GjIm+xj1cP4WowK8FICjlQC3rH22wYqAehBSsjmNLvP4hOIqOJr4fdkEwl1Z
-         cMWhD5r3qca3EXE7cYwVupWNdQpe/rPRiROtKvU0gBSly1H7ANO4wfvmypUt2fZi6Ev+
-         edxw==
-X-Gm-Message-State: APjAAAXhler9f/oprlFpfVk4rHcx/xn16d13GE0n4Y+Ma+eDDe5QsUve
-        MTxfyLGSgbwdQyL9nlWv3ICCTg==
-X-Google-Smtp-Source: APXvYqy0QhLu6JDQzc9nFlGDfRyyfrFGNERzC9xwev8GK3TIqS+uVM3sJQPZM01Xa3zlwa2JAbqyQQ==
-X-Received: by 2002:a63:7552:: with SMTP id f18mr19889095pgn.234.1557586294462;
-        Sat, 11 May 2019 07:51:34 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id k131sm2240385pfc.107.2019.05.11.07.51.32
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=Odh+YMUmXqxxn2pUwWEKZYqwhsM/e7BZh99KpQUKonM=;
+        b=Oy4VUXHDf1qSGxvN40DfXxtFKuRPCYu77Td3vkDHkSgc1YIbM2jKnRnepC6MRHfXZ1
+         vDuWc1dt6ZRBPBn8zD2V+DTVkly55FrtyOl+9FyR6EMFnbES6pUhDnHV/ra1toEQLPCv
+         ZJQSUJoCIIRmC/foe0Moe1ZfyLqOiXec7vc8iVwZPa0OMQeQQuO0crn5Y0PNhZmyKp7U
+         e7gi/DirHn8xTNJESCMAeRp27vrIIWgH7wSnbNGj7b+k7IpWbLWnPc7RK3+//H0eGfu6
+         2ZKoWxgeG+u/IN7ZLRwFI1BBhw0kcGtZhHLcOSxnRho5ZnwBWESxTdu+iwAXJCNvp18c
+         nx1Q==
+X-Gm-Message-State: APjAAAWxNNnNPb3kh4QkunQ6W++qS2U+n1KwcW1fnLhOGkh8EGXFtYgr
+        XuerwOw9zo7bxgrPsMF5ImsXTQ==
+X-Google-Smtp-Source: APXvYqxTiJcEcmzT7eLWCLJAaF3JSIaR+WNDPlhbqHsPuJXlNFt0am0ojnsERLBSkb1Ve0uNPXHBVg==
+X-Received: by 2002:a65:62c4:: with SMTP id m4mr21634116pgv.308.1557591438309;
+        Sat, 11 May 2019 09:17:18 -0700 (PDT)
+Received: from localhost ([2620:15c:6:12:9c46:e0da:efbf:69cc])
+        by smtp.gmail.com with ESMTPSA id z187sm12253685pfb.132.2019.05.11.09.17.15
         (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Sat, 11 May 2019 07:51:33 -0700 (PDT)
-Date:   Sat, 11 May 2019 07:51:32 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     linux-kselftest@vger.kernel.org
-Cc:     lkft-triage@lists.linaro.org, dan.rue@linaro.org,
-        anders.roxell@linaro.org, naresh.kamboju@linaro.org
-Subject: Re: next-20190510 kselftest results
-Message-ID: <201905110746.D6C85E86F6@keescook>
-References: <359070592.29.1557569697898.JavaMail.jenkins@db10df53eddc>
+        Sat, 11 May 2019 09:17:16 -0700 (PDT)
+Date:   Sat, 11 May 2019 12:17:14 -0400
+From:   Joel Fernandes <joel@joelfernandes.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Masahiro Yamada <yamada.masahiro@socionext.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Adrian Ratiu <adrian.ratiu@collabora.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        atish patra <atishp04@gmail.com>, bpf@vger.kernel.org,
+        Brendan Gregg <bgregg@netflix.com>,
+        Brendan Gregg <brendan.d.gregg@gmail.com>,
+        Daniel Colascione <dancol@google.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        duyuchao <yuchao.du@unisoc.com>,
+        Guenter Roeck <groeck@chromium.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Karim Yaghmour <karim.yaghmour@opersys.com>,
+        Kees Cook <keescook@chromium.org>,
+        "Cc: Android Kernel" <kernel-team@android.com>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        linux-trace-devel@vger.kernel.org,
+        Manjo Raja Rao <linux@manojrajarao.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        =?utf-8?Q?Micha=C5=82?= Gregorczyk <michalgr@fb.com>,
+        Michal Gregorczyk <michalgr@live.com>,
+        Mohammad Husain <russoue@gmail.com>,
+        Olof Johansson <olof@lixom.net>,
+        Qais Yousef <qais.yousef@arm.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Srinivas Ramana <sramana@codeaurora.org>,
+        Tamir Carmeli <carmeli.tamir@gmail.com>,
+        Yonghong Song <yhs@fb.com>
+Subject: Re: [PATCH 3/3] kheaders: Make it depend on sysfs
+Message-ID: <20190511161714.GA179270@google.com>
+References: <20190510210243.152808-1-joel@joelfernandes.org>
+ <20190510210243.152808-4-joel@joelfernandes.org>
+ <CAK7LNATeJqmE29M=Y1Vexg8nnRdr3qUDkq1BejN7t2_106PgVg@mail.gmail.com>
+ <20190511060203.GA18650@kroah.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <359070592.29.1557569697898.JavaMail.jenkins@db10df53eddc>
+In-Reply-To: <20190511060203.GA18650@kroah.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sat, May 11, 2019 at 10:14:57AM +0000, ci_notify@linaro.org wrote:
-> Summary
-> ------------------------------------------------------------------------
-> kernel: 5.1.0
-> git repo: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-> git branch: master
-> git commit: a802303934b3bd4df6e2fc8bf2e4ebced1c37556
-> git describe: next-20190510
-> Test details: https://qa-reports.linaro.org/lkft/linux-next-oe/build/next-20190510
+On Sat, May 11, 2019 at 08:02:03AM +0200, Greg Kroah-Hartman wrote:
+> On Sat, May 11, 2019 at 09:52:04AM +0900, Masahiro Yamada wrote:
+> > On Sat, May 11, 2019 at 6:05 AM Joel Fernandes (Google)
+> > <joel@joelfernandes.org> wrote:
+> > >
+> > > The kheaders archive is exposed through SYSFS in /sys/kernel/. Make it
+> > > depend on SYSFS as it makes no sense to enable this feature without it.
+> > 
+> > 
+> > And, it also makes no sense to break the feature by 1/3,
+> > then fix it by 3/3.
+> > 
+> > 
+> > Why don't you squash this?
 > 
-> Regressions (compared to build next-20190509)
-> ------------------------------------------------------------------------
-> No regressions                                                                                                          
->                                                                                                                        
-> Fixes (compared to build next-20190509)                                                                   
-> ------------------------------------------------------------------------                                               
-> No fixes
-> 
-> In total:
-> ------------------------------------------------------------------------
-> Ran 12 total tests in the following environments and test suites.
-> pass 11
-> fail 1
-> xfail 0
-> skip 0
-> 
-> Environments
-> --------------
-> - dragonboard-410c - arm64
-> - hi6220-hikey - arm64
-> - i386
-> - juno-r2 - arm64
-> - qemu_arm
-> - qemu_arm64
-> - qemu_i386
-> - qemu_x86_64
-> - x15 - arm
-> - x86_64
-> 
-> Test Suites
-> -----------
-> * boot-lkft-kselftests-master-519
+> I agree, this belongs in patch 1/3.
 
-What counts as a "pass" for this? I looked at the x86_64 log, and there are lots of kselftest failures, but the dashboard counts it as a "pass"?
+Fine with me. The reason I split it this way is I already had posted 1/3
+recently for the driver tree [1], and I did not want to confuse Greg since he
+was in the process of picking it up [2].
 
-$ wget https://qa-reports.linaro.org/lkft/linux-next-oe/build/next-20190510/testrun/716064/log
-$ grep '^ok ' log | wc -l
-60
-$ grep '^not ok' log | grep -iv '# SKIP' | wc -l
-30
-$ grep -i '^not ok.*# SKIP' log | wc -l
-18
+Anyway, I can resend the series soon with 1/3 and 3/3 squashed unless anyone
+applying this is Ok with squashing it in their trees. thanks!
 
-60 pass, 30 fail, 18 skip
+[1] https://lore.kernel.org/patchwork/patch/1070005/
+[2] https://lore.kernel.org/patchwork/patch/1070005/#1267273
 
--- 
-Kees Cook
+thanks,
+
+ - Joel
+
