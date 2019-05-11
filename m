@@ -2,127 +2,122 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 495D21A5F3
-	for <lists+linux-kselftest@lfdr.de>; Sat, 11 May 2019 02:53:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C0D11A5F1
+	for <lists+linux-kselftest@lfdr.de>; Sat, 11 May 2019 02:53:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728349AbfEKAxL (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 10 May 2019 20:53:11 -0400
-Received: from conssluserg-06.nifty.com ([210.131.2.91]:31960 "EHLO
-        conssluserg-06.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727961AbfEKAxL (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 10 May 2019 20:53:11 -0400
-Received: from mail-vs1-f50.google.com (mail-vs1-f50.google.com [209.85.217.50]) (authenticated)
-        by conssluserg-06.nifty.com with ESMTP id x4B0qe6p032760;
-        Sat, 11 May 2019 09:52:41 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-06.nifty.com x4B0qe6p032760
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1557535961;
-        bh=iUxXS+30vplKGahUoVQhsc/083rdodKyu7vjq55D8xg=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=umIRC7/3lNRLSfK+GHljh9R3w0EjQ+AonhIXa9BSr4osEJ1qBhMgzY50aI+8ebY8u
-         L9oNE/JlHyZaHMcd4m+0yEm/5oI6h4wmSJrCCbPCcO6F9NuHKAdyqzbvVIY2k5Zfna
-         ca9coS/3yMGwaZA736aNpG0ktBbgblls2W8ptdUMGkfOK9RM3DESUXB6IPNXsx8FcL
-         6cLIBKpJx7B2GacYkS186Z1oQ7b2X3Kyns+i1GE9ZBw8huUIgJvfsFJxpyQD6mWtwX
-         8rv9pykSnmYRazTLtdNBM/Z8HlK0+Kr7FWfwHPrYo4ncv0T60fUsm0CodN3bh5sY9g
-         MN3rUi7l+Az+g==
-X-Nifty-SrcIP: [209.85.217.50]
-Received: by mail-vs1-f50.google.com with SMTP id j184so4668136vsd.11;
-        Fri, 10 May 2019 17:52:41 -0700 (PDT)
-X-Gm-Message-State: APjAAAULBF5NbSY/oTiCb/RjkNEBAhB22SJO/v3+qos7RudpzuklxxXC
-        Lhu7f7D8vgA6EXESGRF3FFMdGYNbrcSYB9DiltI=
-X-Google-Smtp-Source: APXvYqyUc+v7TtnlTZkAvl+FZ1vVEt3lE7J6HYJX7L39IUWk68P03S3ownrv/zhg9Wxx1qmb65a+wPCgt1rx7T1DAls=
-X-Received: by 2002:a67:fd89:: with SMTP id k9mr7848953vsq.54.1557535960078;
- Fri, 10 May 2019 17:52:40 -0700 (PDT)
-MIME-Version: 1.0
-References: <20190510210243.152808-1-joel@joelfernandes.org> <20190510210243.152808-4-joel@joelfernandes.org>
-In-Reply-To: <20190510210243.152808-4-joel@joelfernandes.org>
-From:   Masahiro Yamada <yamada.masahiro@socionext.com>
-Date:   Sat, 11 May 2019 09:52:04 +0900
-X-Gmail-Original-Message-ID: <CAK7LNATeJqmE29M=Y1Vexg8nnRdr3qUDkq1BejN7t2_106PgVg@mail.gmail.com>
-Message-ID: <CAK7LNATeJqmE29M=Y1Vexg8nnRdr3qUDkq1BejN7t2_106PgVg@mail.gmail.com>
-Subject: Re: [PATCH 3/3] kheaders: Make it depend on sysfs
-To:     "Joel Fernandes (Google)" <joel@joelfernandes.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Adrian Ratiu <adrian.ratiu@collabora.com>,
-        Alexei Starovoitov <ast@kernel.org>,
+        id S1728079AbfEKAxD (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 10 May 2019 20:53:03 -0400
+Received: from mail.kernel.org ([198.145.29.99]:47302 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727961AbfEKAxD (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 10 May 2019 20:53:03 -0400
+Received: from devnote2 (NE2965lan1.rev.em-net.ne.jp [210.141.244.193])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 49D3D217D7;
+        Sat, 11 May 2019 00:52:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1557535982;
+        bh=wZT6T6pxRmvr1rf3n5N69GLgbT/00pNeSBk069QWzGA=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=ynMC7nnjo4P6R7MipQQ4TY/YSN/JZPBwWVQFsM0vdH9KInM7eXWQ8lHj8NeysRgYL
+         qOllqmIVO53C9WJjSa4fCgw05JDRJUBFpuK6K3/nNvrK7gRa3pUSM0bS/MJxzj1jPn
+         cep1uc4w5Ip3pxZPHfnMH6YiPQFeKzJcfr+pH2cg=
+Date:   Sat, 11 May 2019 09:52:54 +0900
+From:   Masami Hiramatsu <mhiramat@kernel.org>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Josh Poimboeuf <jpoimboe@redhat.com>, linux-kernel@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Ingo Molnar <mingo@kernel.org>,
         Andrew Morton <akpm@linux-foundation.org>,
-        atish patra <atishp04@gmail.com>, bpf@vger.kernel.org,
-        Brendan Gregg <bgregg@netflix.com>,
-        Brendan Gregg <brendan.d.gregg@gmail.com>,
-        Daniel Colascione <dancol@google.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        duyuchao <yuchao.du@unisoc.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Karim Yaghmour <karim.yaghmour@opersys.com>,
-        Kees Cook <keescook@chromium.org>,
-        "Cc: Android Kernel" <kernel-team@android.com>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        linux-trace-devel@vger.kernel.org,
-        Manjo Raja Rao <linux@manojrajarao.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        =?UTF-8?Q?Micha=C5=82_Gregorczyk?= <michalgr@fb.com>,
-        Michal Gregorczyk <michalgr@live.com>,
-        Mohammad Husain <russoue@gmail.com>,
-        Olof Johansson <olof@lixom.net>,
-        Qais Yousef <qais.yousef@arm.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Nicolai Stange <nstange@suse.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>, x86@kernel.org,
+        Jiri Kosina <jikos@kernel.org>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Petr Mladek <pmladek@suse.com>,
+        Joe Lawrence <joe.lawrence@redhat.com>,
         Shuah Khan <shuah@kernel.org>,
-        Srinivas Ramana <sramana@codeaurora.org>,
-        Tamir Carmeli <carmeli.tamir@gmail.com>,
-        Yonghong Song <yhs@fb.com>
-Content-Type: text/plain; charset="UTF-8"
+        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
+        Tim Chen <tim.c.chen@linux.intel.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Juergen Gross <jgross@suse.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nayna Jain <nayna@linux.ibm.com>,
+        Masahiro Yamada <yamada.masahiro@socionext.com>,
+        Joerg Roedel <jroedel@suse.de>, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH 2/4] x86/kprobes: Fix frame pointer annotations
+Message-Id: <20190511095254.21d41a8db0d66669d51144cc@kernel.org>
+In-Reply-To: <20190510123131.GU2589@hirez.programming.kicks-ass.net>
+References: <20190508115416.nblx7c2kocidpytm@treble>
+        <20190508120416.GL2589@hirez.programming.kicks-ass.net>
+        <20190508124248.u5ukpbhnh4wpiccq@treble>
+        <20190508153907.GM2589@hirez.programming.kicks-ass.net>
+        <20190508184848.qerg3flv3ej3xsev@treble>
+        <20190509102030.dfa62e058f09d0d8cbdd6053@kernel.org>
+        <20190509081431.GO2589@hirez.programming.kicks-ass.net>
+        <20190509230106.3551b08553440d125e437f66@kernel.org>
+        <20190509171416.GY2623@hirez.programming.kicks-ass.net>
+        <20190510135831.c4ad309c68fc254f819194fc@kernel.org>
+        <20190510123131.GU2589@hirez.programming.kicks-ass.net>
+X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sat, May 11, 2019 at 6:05 AM Joel Fernandes (Google)
-<joel@joelfernandes.org> wrote:
->
-> The kheaders archive is exposed through SYSFS in /sys/kernel/. Make it
-> depend on SYSFS as it makes no sense to enable this feature without it.
+On Fri, 10 May 2019 14:31:31 +0200
+Peter Zijlstra <peterz@infradead.org> wrote:
 
+> On Fri, May 10, 2019 at 01:58:31PM +0900, Masami Hiramatsu wrote:
+> > On Thu, 9 May 2019 19:14:16 +0200
+> > Peter Zijlstra <peterz@infradead.org> wrote:
+> 
+> > > Ideally also the optimized kprobe trampoline, but I've not managed to
+> > > fully comprehend that one.
+> > 
+> > As you pointed in other reply, save/restore can be a macro, but
+> > each trampoline code is slightly different. Optprobe template has
+> > below parts
+> > 
+> > (jumped from probed address)
+> > [store regs]
+> > [setup function arguments (pt_regs and probed address)]
+> > [handler call]
+> > [restore regs]
+> > [execute copied instruction]
+> 
+>  instruction_s_ ?
 
-And, it also makes no sense to break the feature by 1/3,
-then fix it by 3/3.
+Yes.
 
+> 
+> The JMP to this trampoline is likely 5 bytes and could have clobbered
+> multiple instructions, we'd then have to place them all here, and
+> 
+> > [jump back to probed address]
+> 
+> jump to after whatever instructions were clobbered by the JMP.
 
-Why don't you squash this?
+Right!
 
+> > Note that there is a limitation that if it is optiomized probe, user
+> > handler can not change regs->ip. (we can not use "ret" after executed
+> > a copied instruction, which must run on same stack)
+> 
+> Changing regs->ip in this case is going to be massively dodgy indeed :-)
+> But so would changing much else; changing stack layout would also be
+> somewhat tricky.
 
+Yes, so the stack must be same after [restore regs].
 
->
-> Suggested-by: Masahiro Yamada <yamada.masahiro@socionext.com>
-> Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
-> ---
->  init/Kconfig | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/init/Kconfig b/init/Kconfig
-> index ce08adf0f637..f27138a8cf28 100644
-> --- a/init/Kconfig
-> +++ b/init/Kconfig
-> @@ -581,6 +581,7 @@ config IKCONFIG_PROC
->
->  config IKHEADERS
->         tristate "Enable kernel headers through /sys/kernel/kheaders.tar.xz"
-> +       depends on SYSFS
->         help
->           This option enables access to the in-kernel headers that are generated during
->           the build process. These can be used to build eBPF tracing programs,
-> --
-> 2.21.0.1020.gf2820cf01a-goog
->
-
+Thank you,
 
 -- 
-Best Regards
-Masahiro Yamada
+Masami Hiramatsu <mhiramat@kernel.org>
