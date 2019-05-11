@@ -2,151 +2,105 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 16B3E1A5F7
-	for <lists+linux-kselftest@lfdr.de>; Sat, 11 May 2019 02:57:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6138C1A65C
+	for <lists+linux-kselftest@lfdr.de>; Sat, 11 May 2019 04:53:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728165AbfEKA5F (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 10 May 2019 20:57:05 -0400
-Received: from mail.kernel.org ([198.145.29.99]:49294 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728079AbfEKA5F (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 10 May 2019 20:57:05 -0400
-Received: from devnote2 (NE2965lan1.rev.em-net.ne.jp [210.141.244.193])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id D9419217D7;
-        Sat, 11 May 2019 00:56:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1557536223;
-        bh=192hqAeX73EIOnp8rUHUxJQFygKBG3o6jcfAO47fW1o=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=g/mmeDe64gdo1ZjwwOmn4qMdV9rQze6g9V9u38yEXR51rNwckbO5Hq3iLvya1p2Ci
-         q6nZZTK4RLWkcnTchlYU2FnYXJKSXl3iKtUHsy3a/MC6WY/XSkXwrB6DgbHR0j0GS+
-         rQU4xloCOUyoX348bNXGo4YdpszyohKPxGAjsrtc=
-Date:   Sat, 11 May 2019 09:56:55 +0900
-From:   Masami Hiramatsu <mhiramat@kernel.org>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Josh Poimboeuf <jpoimboe@redhat.com>, linux-kernel@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Nicolai Stange <nstange@suse.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>, x86@kernel.org,
-        Jiri Kosina <jikos@kernel.org>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Petr Mladek <pmladek@suse.com>,
-        Joe Lawrence <joe.lawrence@redhat.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
-        Tim Chen <tim.c.chen@linux.intel.com>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Juergen Gross <jgross@suse.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nayna Jain <nayna@linux.ibm.com>,
-        Masahiro Yamada <yamada.masahiro@socionext.com>,
-        Joerg Roedel <jroedel@suse.de>, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH 2/4] x86/kprobes: Fix frame pointer annotations
-Message-Id: <20190511095655.405147cde331cd1da539d0e8@kernel.org>
-In-Reply-To: <20190510124054.GV2589@hirez.programming.kicks-ass.net>
-References: <20190508115416.nblx7c2kocidpytm@treble>
-        <20190508120416.GL2589@hirez.programming.kicks-ass.net>
-        <20190508124248.u5ukpbhnh4wpiccq@treble>
-        <20190508153907.GM2589@hirez.programming.kicks-ass.net>
-        <20190508184848.qerg3flv3ej3xsev@treble>
-        <20190509102030.dfa62e058f09d0d8cbdd6053@kernel.org>
-        <20190509081431.GO2589@hirez.programming.kicks-ass.net>
-        <20190509230106.3551b08553440d125e437f66@kernel.org>
-        <20190509171416.GY2623@hirez.programming.kicks-ass.net>
-        <20190510135831.c4ad309c68fc254f819194fc@kernel.org>
-        <20190510124054.GV2589@hirez.programming.kicks-ass.net>
-X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+        id S1728364AbfEKCwx (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 10 May 2019 22:52:53 -0400
+Received: from mail-it1-f196.google.com ([209.85.166.196]:53451 "EHLO
+        mail-it1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728255AbfEKCwx (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 10 May 2019 22:52:53 -0400
+Received: by mail-it1-f196.google.com with SMTP id m141so11050931ita.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 10 May 2019 19:52:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Z1fNpqco5qTI/FVw/2N/OV6sdYiNRuMpuFae27tLYD8=;
+        b=AsJhlTTxTVsHXRcV+TdHM1dqT6CDreRY5gyOr73MCbYVqnHrm9AQ3YBi3KpSl2YaBY
+         AQA/RoOwihRXjLnMWyMT1lTIFCUMtWd/THzwzQ11ODv0V+hImkpFqMzlTyUA5vg4U8Lh
+         iC7LdrFa9pBC97kV1H8nDMWfrZxoKKClWlX2Y=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Z1fNpqco5qTI/FVw/2N/OV6sdYiNRuMpuFae27tLYD8=;
+        b=dz3VSzD8JEACXnGkSdLAMqPfYSZ5c6utENoQJG1JBqx/TGiRhn0cpJATyuZbHpTs9f
+         IFjWQA8HX31T6hsC/3RBYPGC+qc1qgdB7k/ruWf5EuUBX2S5px2WiUaB5D+h4MuDKT1T
+         xy9CW+UbEbumQpNWhrDVz7dSm+l5Tw21PLoYns6IFMajuVYI5ViShp9grfEOcfbSeQwn
+         9nNAYVeGKqZI+tZ+2sRrhrRYlTXSprWTFzKfllBIFu6m0b75eiIQFBF1UZCJJQlXZHVm
+         e3nvX1a7qhUgtNvcu6YS+7PBRg+BvDp/iRDxioBLdciU6iYSWbpiJSNLaXM0DksfgcIL
+         aNcw==
+X-Gm-Message-State: APjAAAVKydqavRJlSNCSkf+8aRpDU0bSF9JbYxNprHs8b7H/l1I59h9O
+        PpHvt4mQEN8NdB6j1ztboqfbBw==
+X-Google-Smtp-Source: APXvYqyMyX9jt4xcnd1qUvb3Gz1jooVogYkic/p578UGF9RMWCcUnZVoGP84Uj7fcMIrKG/QoqQHKg==
+X-Received: by 2002:a24:5258:: with SMTP id d85mr10156123itb.124.1557543172404;
+        Fri, 10 May 2019 19:52:52 -0700 (PDT)
+Received: from shuah-t480s.internal (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
+        by smtp.gmail.com with ESMTPSA id s69sm2962460ios.30.2019.05.10.19.52.50
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 10 May 2019 19:52:51 -0700 (PDT)
+From:   Shuah Khan <skhan@linuxfoundation.org>
+To:     shuah@kernel.org, alexei.starovoitov@gmail.com
+Cc:     Shuah Khan <skhan@linuxfoundation.org>, daniel@iogearbox.net,
+        davem@davemloft.net, torvalds@linux-foundation.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org
+Subject: [PATCH] selftests: fix bpf build/test workflow regression when KBUILD_OUTPUT is set
+Date:   Fri, 10 May 2019 20:52:49 -0600
+Message-Id: <20190511025249.32678-1-skhan@linuxfoundation.org>
+X-Mailer: git-send-email 2.20.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, 10 May 2019 14:40:54 +0200
-Peter Zijlstra <peterz@infradead.org> wrote:
+commit 8ce72dc32578 ("selftests: fix headers_install circular dependency")
+broke bpf build/test workflow. When KBUILD_OUTPUT is set, bpf objects end
+up in KBUILD_OUTPUT build directory instead of in ../selftests/bpf.
 
-> On Fri, May 10, 2019 at 01:58:31PM +0900, Masami Hiramatsu wrote:
-> > On Thu, 9 May 2019 19:14:16 +0200
-> > Peter Zijlstra <peterz@infradead.org> wrote:
-> > > > > --- a/arch/x86/kernel/kprobes/core.c
-> > > > > +++ b/arch/x86/kernel/kprobes/core.c
-> > > > > @@ -731,29 +731,8 @@ asm(
-> > > > >  	".global kretprobe_trampoline\n"
-> > > > >  	".type kretprobe_trampoline, @function\n"
-> > > > >  	"kretprobe_trampoline:\n"
-> 
-> > > > Here, we need a gap for storing ret-ip, because kretprobe_trampoline is
-> > > > the address which is returned from the target function. We have no 
-> > > > "ret-ip" here at this point. So something like
-> > > > 
-> > > > +	"push $0\n"	/* This is a gap, will be filled with real return address*/
-> > > 
-> > > The trampoline already provides a gap, trampoline_handler() will need to
-> > > use int3_emulate_push() if it wants to inject something on the return
-> > > stack.
-> > 
-> > I guess you mean the int3 case. This trampoline is used as a return destination.
-> 
-> > When the target function is called, kretprobe interrupts the first instruction,
-> > and replace the return address with this trampoline. When a "ret" instruction
-> > is done, it returns to this trampoline. Thus the stack frame start with
-> > previous context here. As you described above,
-> 
-> I would prefer to change that to inject an extra return address, instead
-> of replacing it. With the new exception stuff we can actually do that.
-> 
-> So on entry we then go from:
-> 
-> 	<previous context>
-> 	RET-IP
-> 
-> to
-> 
-> 	<previous context>
-> 	RET-IP
-> 	return-trampoline
-> 
-> So when the function returns, it falls into the trampoline instead.
+The following bpf workflow breaks when it can't find the test_verifier:
 
-Is that really possible? On x86-64, most parameters are passed by registers,
-but x86-32 (and x86-64 in rare case) some parameters can be passed by stack.
-If we change the stack layout in the function prologue, the code in
-function body can not access those parameters on stack.
+cd tools/testing/selftests/bpf; make; ./test_verifier;
 
-Thank you,
+Fix it to set OUTPUT only when it is undefined in lib.mk. It didn't need
+to be set in the first place.
 
-> 
-> > > > > +	 * On entry the stack looks like:
-> > > > > +	 *
-> > > > > +	 *   2*4(%esp) <previous context>
-> > > > > +	 *   1*4(%esp) RET-IP
-> > > > > +	 *   0*4(%esp) func
-> > 
-> > From this trampoline call, the stack looks like:
-> > 
-> > 	 *   1*4(%esp) <previous context>
-> > 	 *   0*4(%esp) func
-> > 
-> > So we need one more push.
-> 
-> And then the stack looks just right at this point.
-> 
-> > > > > +	"push trampoline_handler\n"
-> > > > > +	"jmp call_to_exception_trampoline\n"
-> > > > >  	".size kretprobe_trampoline, .-kretprobe_trampoline\n"
-> > > > >  );
-> > > > >  NOKPROBE_SYMBOL(kretprobe_trampoline);
+Fixes: commit 8ce72dc32578 ("selftests: fix headers_install circular dependency")
 
+Reported-by: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
+---
+ tools/testing/selftests/lib.mk | 12 +++---------
+ 1 file changed, 3 insertions(+), 9 deletions(-)
 
+diff --git a/tools/testing/selftests/lib.mk b/tools/testing/selftests/lib.mk
+index 098dd0065fb1..077337195783 100644
+--- a/tools/testing/selftests/lib.mk
++++ b/tools/testing/selftests/lib.mk
+@@ -3,15 +3,9 @@
+ CC := $(CROSS_COMPILE)gcc
+ 
+ ifeq (0,$(MAKELEVEL))
+-    ifneq ($(O),)
+-	OUTPUT := $(O)
+-    else
+-	ifneq ($(KBUILD_OUTPUT),)
+-		OUTPUT := $(KBUILD_OUTPUT)
+-	else
+-		OUTPUT := $(shell pwd)
+-		DEFAULT_INSTALL_HDR_PATH := 1
+-	endif
++    ifeq ($(OUTPUT),)
++	OUTPUT := $(shell pwd)
++	DEFAULT_INSTALL_HDR_PATH := 1
+     endif
+ endif
+ selfdir = $(realpath $(dir $(filter %/lib.mk,$(MAKEFILE_LIST))))
 -- 
-Masami Hiramatsu <mhiramat@kernel.org>
+2.17.1
+
