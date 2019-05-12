@@ -2,59 +2,61 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 53CFE1AA3B
-	for <lists+linux-kselftest@lfdr.de>; Sun, 12 May 2019 06:13:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B0EC1AA7B
+	for <lists+linux-kselftest@lfdr.de>; Sun, 12 May 2019 06:44:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725934AbfELENN (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 12 May 2019 00:13:13 -0400
-Received: from mail-io1-f65.google.com ([209.85.166.65]:41122 "EHLO
+        id S1725913AbfELEot (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 12 May 2019 00:44:49 -0400
+Received: from mail-io1-f65.google.com ([209.85.166.65]:36180 "EHLO
         mail-io1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725440AbfELENN (ORCPT
+        with ESMTP id S1725897AbfELEot (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 12 May 2019 00:13:13 -0400
-Received: by mail-io1-f65.google.com with SMTP id a17so7533458iot.8;
-        Sat, 11 May 2019 21:13:13 -0700 (PDT)
+        Sun, 12 May 2019 00:44:49 -0400
+Received: by mail-io1-f65.google.com with SMTP id e19so7574500iob.3;
+        Sat, 11 May 2019 21:44:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=fSYRW6EihL7Ktm8gIvRh8QznEhcOtxZGm5DrS5LcSqE=;
-        b=Li5bV64fgZXD35fWlJGgxhDJYKB+XhIXiJmsTqjCpffjjcyzMYTaInfRU1aSiKAhMj
-         nSsjcd1geDTlqY2VYlCKkhLGA8tzSn19V4Kt1I4OU1s76C7U9CqNbt7H7qCPmuYfX4RE
-         7ZXULc/kQcbE8D6MiPEI/VEH+eY/ijhuootZQzNscRJdI0Kv44f1fGchA7XUUc5QoLOI
-         wrMSmVzRatm8qmx6wvW481NqNDKD38YsBVOXkTpWMILLuPFX7oOFMxn8NaTaFQMXXYRP
-         p1WRkzV0UZg2/k0K/jQaVtGuBO827osckVrOu1LG1ZF29GtP978as5DpZl7NxwAITGcz
-         wlYg==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=zrHaTsnyO7X3lAG2Au5Uox0L6Yni+OkaJRXpY0skhfE=;
+        b=o0K4NHK1nlb721IvpP/v+EUPJBLrleV+3CVJWBapOqpriGzi71m8NfLSHF8myIOYPO
+         eNKV/7CAYtHvAM1mr2FSDtLJxrMFMb3jjRu2J7bow3CW574BDp4j59bDfMXVI+bkuPVG
+         xnWKQmXk5CdqLpg1grKQACoT731gv0W2xtXVIPMcD/4DeUn5KtFLyKnoH1yS4Sx6DvFt
+         N0CcxF8MwvHWw+Go29LOX4zi9Owhg6zE6BnJOUS8fZgWTPeC41pV3FbnOp949bIZCNJO
+         j61BY/dHxaVUpAXB434Q7BAp1Ko8Sny/0//4LOASek54xrKBp9+a3gkuNpqP4JIFwHrN
+         uaBA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=fSYRW6EihL7Ktm8gIvRh8QznEhcOtxZGm5DrS5LcSqE=;
-        b=aUAvh0SFoPSFwFy5Wn0XnxMdWhkIWAk0OYxtCRQIoJn/uOZAT6N1hyheUwjeBjMQ3G
-         INwI/ZNm8VVEf6BKVSb7FIz5q72PQwOmkDnCzhWdo/AHarujBmqvAUgquRc8QXGFXoRj
-         DO7hcyTlaKlLNDHGHugPJ0YphwS7wNCL8bE/lLpQuQg138NoQ2Rx22uGPYoHBuTg5Hma
-         tu9JozKlwX3qyjuyXo2EX+KdSug7PO5Vs28Dk/gqyhzXmYd1KKH2JxTqf/+eZEckC3Un
-         8x6P7cgwCVT91RbDmTLK3X7o2qaszZ5BWLA9ZymisK1XbjOYKK8vY1zS200ul1dgJD2A
-         kryg==
-X-Gm-Message-State: APjAAAW/pb1qYlBegprYCpWTAoHAPfYVw1AcxwY1kXh47rj4ctrM4DdR
-        Dv09AoMbrDdMx9rJBCJUc6U=
-X-Google-Smtp-Source: APXvYqzvFWn5MsXBuEOCw7n+mmg2x8HjUeiNd9/NuY1A/cW25q6DIu/4mJuOMrF/CFvhXd+bn3jXzg==
-X-Received: by 2002:a5d:91c7:: with SMTP id k7mr11535785ior.237.1557634392780;
-        Sat, 11 May 2019 21:13:12 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=zrHaTsnyO7X3lAG2Au5Uox0L6Yni+OkaJRXpY0skhfE=;
+        b=fjhI3jUu76sXbeM+kWq2vQ8TrXtoOSsKCGLX0t6GPGTYBqcwUHl4tK3CdNoxf2Zwsr
+         Dmz+UtygJ3yq3A/vZ/PcVT1a6eop8OK1NCVV3XbxyuZpzDpd45FT3Khb8U8hf6jA1dV1
+         8scx3+SPpDgABAHAYBsDeALFr3BkaOGfeWKX7vg1Jsd59ZPY8zphGYKNP1dg4OBlsRYB
+         h8a3Kxf5FWQvDHJJoO6UQeXpejGP+2zopU11PSOsSTBscjKALyxT1pmgFhX5twr3u/fS
+         ZBvlLJDQzhfUKNwSHQtn0UgpXlPQ3VvQ0vhmbrQ9p1A0I96n+kq/35EY1AxXqCCtt37j
+         tjpw==
+X-Gm-Message-State: APjAAAXne71ij/NyzCmPMgDlcxIA3b6Ksic3wLu7IMNuAuLdLgA1MEtB
+        43XaG4Muw7V3DAlUx6NOpS9Hd82NlJmNww==
+X-Google-Smtp-Source: APXvYqyaP9IUOfuGcpYWiahhnCbCyp6mdD6ZYcHgDuEIZZQVLxZEwMgObC7LOAFPyAVRr/m1Kptidg==
+X-Received: by 2002:a05:6602:1d6:: with SMTP id w22mr3217966iot.215.1557636288819;
+        Sat, 11 May 2019 21:44:48 -0700 (PDT)
 Received: from localhost.localdomain (c-73-243-191-173.hsd1.co.comcast.net. [73.243.191.173])
-        by smtp.gmail.com with ESMTPSA id r62sm704401ita.37.2019.05.11.21.13.10
+        by smtp.gmail.com with ESMTPSA id f20sm3434642ioh.4.2019.05.11.21.44.47
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Sat, 11 May 2019 21:13:11 -0700 (PDT)
+        Sat, 11 May 2019 21:44:48 -0700 (PDT)
 From:   Kelsey Skunberg <skunberg.kelsey@gmail.com>
 To:     shuah@kernel.org, pbonzini@redhat.com, rkrcmar@redhat.com,
         linux-kselftest@vger.kernel.org, kvm@vger.kernel.org,
         linux-kernel@vger.kernel.org, skhan@linuxfoundation.org,
         linux-kernel-mentees@lists.linuxfoundation.org
 Cc:     Kelsey Skunberg <skunberg.kelsey@gmail.com>
-Subject: [PATCH] selftests: kvm: Add files generated when compiled to .gitignore
-Date:   Sat, 11 May 2019 22:12:35 -0600
-Message-Id: <20190512041235.29840-1-skunberg.kelsey@gmail.com>
+Subject: [PATCH v2] selftests: kvm: Add files generated when compiled to .gitignore
+Date:   Sat, 11 May 2019 22:44:34 -0600
+Message-Id: <20190512044434.32627-1-skunberg.kelsey@gmail.com>
 X-Mailer: git-send-email 2.20.1
+In-Reply-To: <5d60e7126803e9a11b51618e65966ba047eff7df>
+References: <5d60e7126803e9a11b51618e65966ba047eff7df>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
@@ -65,24 +67,30 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 The following files are generated in /selftests/kvm/ after compiling and
 should be added to /selftests/kvm/.gitignore:
 
-	- /x86_64/hyperv_cpuid
+        - /x86_64/hyperv_cpuid
 	- /x86_64/smm_test
+	- /clear_dirty_log_test
 
 Signed-off-by: Kelsey Skunberg <skunberg.kelsey@gmail.com>
 ---
- tools/testing/selftests/kvm/.gitignore | 2 ++
- 1 file changed, 2 insertions(+)
+Changes since v1:
+        - Included /clear_dirty_log_test to .gitignore
+        - Updated commit log to reflect file added
+
+ tools/testing/selftests/kvm/.gitignore | 3 +++
+ 1 file changed, 3 insertions(+)
 
 diff --git a/tools/testing/selftests/kvm/.gitignore b/tools/testing/selftests/kvm/.gitignore
-index 2689d1ea6d7a..81e9cb775ab8 100644
+index 2689d1ea6d7a..391a19231618 100644
 --- a/tools/testing/selftests/kvm/.gitignore
 +++ b/tools/testing/selftests/kvm/.gitignore
-@@ -6,4 +6,6 @@
+@@ -6,4 +6,7 @@
  /x86_64/vmx_close_while_nested_test
  /x86_64/vmx_tsc_adjust_test
  /x86_64/state_test
 +/x86_64/hyperv_cpuid
 +/x86_64/smm_test
++/clear_dirty_log_test
  /dirty_log_test
 --
 2.20.1
