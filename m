@@ -2,99 +2,91 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C5881A8CF
-	for <lists+linux-kselftest@lfdr.de>; Sat, 11 May 2019 19:35:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 424B81AA2E
+	for <lists+linux-kselftest@lfdr.de>; Sun, 12 May 2019 05:50:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726295AbfEKRfq (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 11 May 2019 13:35:46 -0400
-Received: from outgoing-auth-1.mit.edu ([18.9.28.11]:50198 "EHLO
-        outgoing.mit.edu" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1725879AbfEKRfp (ORCPT
+        id S1726260AbfELDul (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 11 May 2019 23:50:41 -0400
+Received: from mail-it1-f194.google.com ([209.85.166.194]:54393 "EHLO
+        mail-it1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726124AbfELDuk (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 11 May 2019 13:35:45 -0400
-Received: from callcc.thunk.org (rrcs-67-53-55-100.west.biz.rr.com [67.53.55.100])
-        (authenticated bits=0)
-        (User authenticated as tytso@ATHENA.MIT.EDU)
-        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id x4BHXkiw001051
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sat, 11 May 2019 13:33:50 -0400
-Received: by callcc.thunk.org (Postfix, from userid 15806)
-        id DFD64420024; Sat, 11 May 2019 13:33:44 -0400 (EDT)
-Date:   Sat, 11 May 2019 13:33:44 -0400
-From:   "Theodore Ts'o" <tytso@mit.edu>
-To:     Frank Rowand <frowand.list@gmail.com>
-Cc:     Tim.Bird@sony.com, knut.omang@oracle.com,
-        gregkh@linuxfoundation.org, brendanhiggins@google.com,
-        keescook@google.com, kieran.bingham@ideasonboard.com,
-        mcgrof@kernel.org, robh@kernel.org, sboyd@kernel.org,
-        shuah@kernel.org, devicetree@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, kunit-dev@googlegroups.com,
-        linux-doc@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-nvdimm@lists.01.org,
-        linux-um@lists.infradead.org, Alexander.Levin@microsoft.com,
-        amir73il@gmail.com, dan.carpenter@oracle.com,
-        dan.j.williams@intel.com, daniel@ffwll.ch, jdike@addtoit.com,
-        joel@jms.id.au, julia.lawall@lip6.fr, khilman@baylibre.com,
-        logang@deltatee.com, mpe@ellerman.id.au, pmladek@suse.com,
-        richard@nod.at, rientjes@google.com, rostedt@goodmis.org,
-        wfg@linux.intel.com
-Subject: Re: [PATCH v2 00/17] kunit: introduce KUnit, the Linux kernel unit
- testing framework
-Message-ID: <20190511173344.GA8507@mit.edu>
-Mail-Followup-To: Theodore Ts'o <tytso@mit.edu>,
-        Frank Rowand <frowand.list@gmail.com>, Tim.Bird@sony.com,
-        knut.omang@oracle.com, gregkh@linuxfoundation.org,
-        brendanhiggins@google.com, keescook@google.com,
-        kieran.bingham@ideasonboard.com, mcgrof@kernel.org, robh@kernel.org,
-        sboyd@kernel.org, shuah@kernel.org, devicetree@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, kunit-dev@googlegroups.com,
-        linux-doc@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-nvdimm@lists.01.org,
-        linux-um@lists.infradead.org, Alexander.Levin@microsoft.com,
-        amir73il@gmail.com, dan.carpenter@oracle.com,
-        dan.j.williams@intel.com, daniel@ffwll.ch, jdike@addtoit.com,
-        joel@jms.id.au, julia.lawall@lip6.fr, khilman@baylibre.com,
-        logang@deltatee.com, mpe@ellerman.id.au, pmladek@suse.com,
-        richard@nod.at, rientjes@google.com, rostedt@goodmis.org,
-        wfg@linux.intel.com
-References: <a09a7e0e-9894-8c1a-34eb-fc482b1759d0@gmail.com>
- <20190509015856.GB7031@mit.edu>
- <580e092f-fa4e-eedc-9e9a-a57dd085f0a6@gmail.com>
- <20190509032017.GA29703@mit.edu>
- <7fd35df81c06f6eb319223a22e7b93f29926edb9.camel@oracle.com>
- <20190509133551.GD29703@mit.edu>
- <ECADFF3FD767C149AD96A924E7EA6EAF9770D591@USCULXMSG01.am.sony.com>
- <875c546d-9713-bb59-47e4-77a1d2c69a6d@gmail.com>
- <20190509214233.GA20877@mit.edu>
- <80c72e64-2665-bd51-f78c-97f50f9a53ba@gmail.com>
+        Sat, 11 May 2019 23:50:40 -0400
+Received: by mail-it1-f194.google.com with SMTP id a190so15384028ite.4;
+        Sat, 11 May 2019 20:50:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=KOEOI6gIRHaf5FORd84rjIs4AdvD824fbBk5i+JcVC4=;
+        b=sp/d354XUziiUlWOFirNHHht+x2j4uJyHrHkiJTJu8duyD4CJ4hl+tBgzolY4WdYUF
+         FcN3Y3QiUHGNEO92Q2ivtn0quwPpEBkMtSvjeYlWzGZnnv1N9AvTQcZKg6SknS01X4dx
+         Zv3BH6yW12uflvYmJhS7YkA/tv0uMq3yb1pu06m7RnYq0KER7eRia2dQQw8QzUr/j22t
+         ugsphAV7bCJQm2Qb32Sth8zgpPI6hvBYiNBCPzppTlN3tIP65VdGvjt+cw59ndSZ5yrT
+         2SE2CnteyZD5tU32mLVZjH52PJU2xcSk6fhVtGDRAap3w1FmeqwVH+NY6TtgfcPIVaFG
+         JZDA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=KOEOI6gIRHaf5FORd84rjIs4AdvD824fbBk5i+JcVC4=;
+        b=JzEhZ/alnmzg9UV/EcWIwAayH2pNc4tJ5yqELWnTaya0HwE1YKn6Jq7wZkV+1CN5UN
+         9aBGEv51gVyFN/Lpa5QPmt8HEdpfCXBSQ5cOCfM+EH/axw3khhgBOpN+05urJ+GQImi8
+         4wGFLkIUmm+IshglGkKMVkrEOT0KSQ6oh+CN6ApMU3bNCc+6jiVQgOF1kuxEyAxAor91
+         vwlJL0cDEmFh2rXFjqrBSytuwVqBUMPxxj+uEoW5c/nLejGvhXd1TKPWgiPzmxJA4yrr
+         f1m51g65SuYLmUCovdYho20Fu+0hAFKMp/6TjcPWkTl4A+XdJU2bXL9EOt58W8TefWI+
+         646w==
+X-Gm-Message-State: APjAAAV2ykV4fJ8p925Z9nBaXrlTCa6cmRIfYEYNn50J6PDNVp0y0ehx
+        jxA7icrA/xK48lxiKq1EHuY=
+X-Google-Smtp-Source: APXvYqxtTdajmXEk7zEWki12uocFR3Eg8/Dsh5oU+jKO+JRTGnIwUcHTfehdKW27tlPY6Wv0Xkf4mw==
+X-Received: by 2002:a24:3f85:: with SMTP id d127mr13281932ita.38.1557633039846;
+        Sat, 11 May 2019 20:50:39 -0700 (PDT)
+Received: from localhost.localdomain (c-73-243-191-173.hsd1.co.comcast.net. [73.243.191.173])
+        by smtp.gmail.com with ESMTPSA id k76sm4248746ita.6.2019.05.11.20.50.37
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Sat, 11 May 2019 20:50:38 -0700 (PDT)
+From:   Kelsey Skunberg <skunberg.kelsey@gmail.com>
+To:     shuah@kernel.org, ast@kernel.org, daniel@iogearbox.net,
+        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
+        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     skhan@linuxfoundation.org,
+        linux-kernel-mentees@lists.linuxfoundation.org,
+        Kelsey Skunberg <skunberg.kelsey@gmail.com>
+Subject: [PATCH] selftests: bpf: Add files generated when compiled to .gitignore
+Date:   Sat, 11 May 2019 21:50:09 -0600
+Message-Id: <20190512035009.25451-1-skunberg.kelsey@gmail.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <80c72e64-2665-bd51-f78c-97f50f9a53ba@gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, May 10, 2019 at 02:12:40PM -0700, Frank Rowand wrote:
-> However, the reply is incorrect.  Kselftest in-kernel tests (which
-> is the context here) can be configured as built in instead of as
-> a module, and built in a UML kernel.  The UML kernel can boot,
-> running the in-kernel tests before UML attempts to invoke the
-> init process.
+The following files are generated when /selftests/bpf/ is compiled and
+should be added to .gitignore:
 
-Um, Citation needed?
+	- libbpf.pc
+	- libbpf.so.0
+	- libbpf.so.0.0.3
 
-I don't see any evidence for this in the kselftest documentation, nor
-do I see any evidence of this in the kselftest Makefiles.
+Signed-off-by: Kelsey Skunberg <skunberg.kelsey@gmail.com>
+---
+ tools/testing/selftests/bpf/.gitignore | 3 +++
+ 1 file changed, 3 insertions(+)
 
-There exists test modules in the kernel that run before the init
-scripts run --- but that's not strictly speaking part of kselftests,
-and do not have any kind of infrastructure.  As noted, the
-kselftests_harness header file fundamentally assumes that you are
-running test code in userspace.
+diff --git a/tools/testing/selftests/bpf/.gitignore b/tools/testing/selftests/bpf/.gitignore
+index 41e8a689aa77..ceb11f98fe4f 100644
+--- a/tools/testing/selftests/bpf/.gitignore
++++ b/tools/testing/selftests/bpf/.gitignore
+@@ -32,3 +32,6 @@ test_tcpnotify_user
+ test_libbpf
+ test_tcp_check_syncookie_user
+ alu32
++libbpf.pc
++libbpf.so.0
++libbpf.so.0.0.3
+--
+2.20.1
 
-				- Ted
