@@ -2,108 +2,92 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 34DDD1AB12
-	for <lists+linux-kselftest@lfdr.de>; Sun, 12 May 2019 09:35:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 21EB81AC04
+	for <lists+linux-kselftest@lfdr.de>; Sun, 12 May 2019 14:24:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726287AbfELHec (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 12 May 2019 03:34:32 -0400
-Received: from mail-io1-f67.google.com ([209.85.166.67]:33257 "EHLO
-        mail-io1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725934AbfELHec (ORCPT
+        id S1726477AbfELMYw (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 12 May 2019 08:24:52 -0400
+Received: from conssluserg-02.nifty.com ([210.131.2.81]:49744 "EHLO
+        conssluserg-02.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726100AbfELMYw (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 12 May 2019 03:34:32 -0400
-Received: by mail-io1-f67.google.com with SMTP id z4so7708815iol.0;
-        Sun, 12 May 2019 00:34:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=yjV02L2Lg3a4KlZGcmCrXQyj1lmIeRP5Nl2cbSpRQtQ=;
-        b=ec7zXk/3kB5xKZFXO7ghYMObJD2vDhiie5L6wEyXGc5DPQ7HrdDFgNO7dAczlOhZgp
-         RknzyV0qdWHtXChfP7UxdEYrOhFaDnw38F2lsg2nU9Bt5ijzEUOK0q8EDlnLLKW+A9iQ
-         JTF7fd5p33kEff5F1C6JkcifgRglY2GXHuBSkOwBLHe6Px6od3/hd4aeZfbMeK8pk/Lz
-         a2kTXrHCC5ht0s5qKYsQ4i4KcaddBWvngjb40oiQ2tZSJT2P/FlPVxivfBk7o79VZVn5
-         QWsCfiDbKSJcnoN9r3ifkzA8CndClrNCF4L8y26/+HVue72bJJMyV51y3mTTGkj4n90w
-         nEZA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=yjV02L2Lg3a4KlZGcmCrXQyj1lmIeRP5Nl2cbSpRQtQ=;
-        b=T2stuB9JhmsLD79sLA+OgiEVi6Werq8b9IA9AULRFBWrifIVViYdmpa+DxwU5BV8bw
-         rcbYrPQhLoabBRovFroawe0TTwniASUm6mu9+mMY2rTDwv/HMAw4ZdmXfK9PoOvIkd0a
-         LbyovrH+68BHdMc/6m6vM1PP/GQam28DHkQQf1NkfTuGOpjFN1q1SSTOANJz8j/HRHDX
-         2y2YizyiTBq1QYgP76MGK1qqhWgOZyGNNk+st2ntmn9g0MOznn4tdc+V43nLqtwWhcsl
-         eIja0930/Pn0tqTXt8ggNRPTkZxKWaJR/MuOUswM/wtkLJFMuKSth1Pe2VgUuVProXvF
-         oqRQ==
-X-Gm-Message-State: APjAAAUoeW7oq7+EIIJDFJu9e8t6i6X9Nra3sm9E2VVam57AmguzZwRx
-        I7skOsp4UPpvte6zXdqDdfc=
-X-Google-Smtp-Source: APXvYqyPZFH7bWLi/IU+f0IdofbSTKGIKNbMTby9HJW92Dh1CNAI3XYselYUqh8yG0gtiOVWp6+xmA==
-X-Received: by 2002:a5e:9518:: with SMTP id r24mr12103223ioj.218.1557646471624;
-        Sun, 12 May 2019 00:34:31 -0700 (PDT)
-Received: from asus (c-73-243-191-173.hsd1.co.comcast.net. [73.243.191.173])
-        by smtp.gmail.com with ESMTPSA id y62sm4833926ita.15.2019.05.12.00.34.30
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Sun, 12 May 2019 00:34:30 -0700 (PDT)
-Date:   Sun, 12 May 2019 01:34:29 -0600
-From:   Kelsey Skunberg <skunberg.kelsey@gmail.com>
-To:     Stanislav Fomichev <sdf@fomichev.me>
-Cc:     shuah@kernel.org, ast@kernel.org, daniel@iogearbox.net,
-        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        skhan@linuxfoundation.org,
-        linux-kernel-mentees@lists.linuxfoundation.org
-Subject: Re: [PATCH] selftests: bpf: Add files generated when compiled to
- .gitignore
-Message-ID: <20190512073427.GA10811@asus>
-References: <20190512035009.25451-1-skunberg.kelsey@gmail.com>
- <20190512062907.GL1247@mini-arch>
+        Sun, 12 May 2019 08:24:52 -0400
+Received: from mail-vs1-f48.google.com (mail-vs1-f48.google.com [209.85.217.48]) (authenticated)
+        by conssluserg-02.nifty.com with ESMTP id x4CCORKO014335;
+        Sun, 12 May 2019 21:24:27 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-02.nifty.com x4CCORKO014335
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1557663868;
+        bh=1O7gRxONL8iHqOmucP758iaO2XNRJv2cBvbJJ8bnol8=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=ODe8Af0MHyy7TvQ9Cxhu/PCI59RLGHLrrZi+5yp7018BSF9HKtc/Dqk3MfCc6Gxkz
+         qB+m0QmUm3c9+kiOrE2d7kFjcoPqhlcPkd6038G8AS6Ejz6hFBY/xd3V/dlAv07xB/
+         NJspI9ygx8Ky5nP30eSun7Y0RlQF3ldixt4bgL7NACkYggXTvcQ+pEQYB8WTXez9yy
+         YPIOAJZ6p+PV10bwgnkUDExJmfkE5TM5gPG0+iyt1o3y9m7dcly7ihMGLIiIANL2Qm
+         BQokkSf/CWeOCJ0WIuJWC4Sv2ZyK5NxEvyZittxDXqNrtYcVwC22MD0ZpqpjdnO22F
+         xaYNYYlU7qrRw==
+X-Nifty-SrcIP: [209.85.217.48]
+Received: by mail-vs1-f48.google.com with SMTP id c76so6373642vsd.3;
+        Sun, 12 May 2019 05:24:27 -0700 (PDT)
+X-Gm-Message-State: APjAAAX+0uSmnyWi76Y8cQrUUWqbkaxdHJTG/9m7L1Qmaw1bRjLxJs4P
+        zR9jv90GZ/jGW0O4u/afT6tcw3qG1ywWauSIviM=
+X-Google-Smtp-Source: APXvYqz2//FsMfDkqbOJU9yqd80At7R7tO37xWUwTT6n77c+ZlwpROGiJTlhH4454rDGqZOzZMg/+TrVY8nZiKkSVyQ=
+X-Received: by 2002:a67:f443:: with SMTP id r3mr10983744vsn.179.1557663866522;
+ Sun, 12 May 2019 05:24:26 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190512062907.GL1247@mini-arch>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20190508191341.GA17963@redhat.com>
+In-Reply-To: <20190508191341.GA17963@redhat.com>
+From:   Masahiro Yamada <yamada.masahiro@socionext.com>
+Date:   Sun, 12 May 2019 21:23:50 +0900
+X-Gmail-Original-Message-ID: <CAK7LNASJr8CSWo-yE-YBq085Y=k+x8X-gQopJLRkxTueP4LGmw@mail.gmail.com>
+Message-ID: <CAK7LNASJr8CSWo-yE-YBq085Y=k+x8X-gQopJLRkxTueP4LGmw@mail.gmail.com>
+Subject: Re: Build-time tests?
+To:     Joe Lawrence <joe.lawrence@redhat.com>
+Cc:     "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sat, May 11, 2019 at 11:29:07PM -0700, Stanislav Fomichev wrote:
-> On 05/11, Kelsey Skunberg wrote:
-> > The following files are generated when /selftests/bpf/ is compiled and
-> > should be added to .gitignore:
-> > 
-> > 	- libbpf.pc
-> > 	- libbpf.so.0
-> > 	- libbpf.so.0.0.3
-> > 
-> > Signed-off-by: Kelsey Skunberg <skunberg.kelsey@gmail.com>
-> > ---
-> >  tools/testing/selftests/bpf/.gitignore | 3 +++
-> >  1 file changed, 3 insertions(+)
-> > 
-> > diff --git a/tools/testing/selftests/bpf/.gitignore b/tools/testing/selftests/bpf/.gitignore
-> > index 41e8a689aa77..ceb11f98fe4f 100644
-> > --- a/tools/testing/selftests/bpf/.gitignore
-> > +++ b/tools/testing/selftests/bpf/.gitignore
-> > @@ -32,3 +32,6 @@ test_tcpnotify_user
-> >  test_libbpf
-> >  test_tcp_check_syncookie_user
-> >  alu32
-> > +libbpf.pc
-> 
-> [..]
-> > +libbpf.so.0
-> > +libbpf.so.0.0.3
-> How about libbpf.so.* so we don't have to update it on every release?
+On Thu, May 9, 2019 at 4:30 AM Joe Lawrence <joe.lawrence@redhat.com> wrote:
 >
+> Hello kbuild, kselftest,
+>
+> I've been working on a patchset which adds an additional build script to
+> the toolchain when compiling livepatches.  There are a few kernel
+> section features in which this script does not yet support, but can
+> detect and abort when it encounters.  To test this detection, I've
+> written a small set of kernel modules that require such sections.
+>
+> A few questions:
+>
+> Is build-testing out of scope for kernel selftests?  For expediency,
+> it was really easy to spin out new lib/livepatch kernel modules.
+>
+> Does kbuild support the notion of expected failure?  In this case, the
+> build script returns a non-zero error and the build stops.
 
-That seems logical. Updated in v2. I appreciate the feedback!
 
-Cheers,
-Kelsey
+If I understood correctly, your are asking about kselftest,
+maintained by Shuah Khan.
 
-> > --
-> > 2.20.1
-> > 
+(Unfortunately), makefiles under tools/ adopted completely
+different build system, and it is out of scope of kbuild.
+
+
+> Am I trying to fit a square peg in a round hole?  I could easily keep
+> these build tests in a private branch, but could they exist in a
+> different format somewhere else in the tree?
+>
+> Suggestions welcome,
+>
+> -- Joe
+
+
+
+-- 
+Best Regards
+Masahiro Yamada
