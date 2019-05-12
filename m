@@ -2,92 +2,59 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 21EB81AC04
-	for <lists+linux-kselftest@lfdr.de>; Sun, 12 May 2019 14:24:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E351B1AE64
+	for <lists+linux-kselftest@lfdr.de>; Mon, 13 May 2019 01:24:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726477AbfELMYw (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 12 May 2019 08:24:52 -0400
-Received: from conssluserg-02.nifty.com ([210.131.2.81]:49744 "EHLO
-        conssluserg-02.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726100AbfELMYw (ORCPT
+        id S1727000AbfELXX6 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 12 May 2019 19:23:58 -0400
+Received: from www62.your-server.de ([213.133.104.62]:59530 "EHLO
+        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726967AbfELXX6 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 12 May 2019 08:24:52 -0400
-Received: from mail-vs1-f48.google.com (mail-vs1-f48.google.com [209.85.217.48]) (authenticated)
-        by conssluserg-02.nifty.com with ESMTP id x4CCORKO014335;
-        Sun, 12 May 2019 21:24:27 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-02.nifty.com x4CCORKO014335
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1557663868;
-        bh=1O7gRxONL8iHqOmucP758iaO2XNRJv2cBvbJJ8bnol8=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=ODe8Af0MHyy7TvQ9Cxhu/PCI59RLGHLrrZi+5yp7018BSF9HKtc/Dqk3MfCc6Gxkz
-         qB+m0QmUm3c9+kiOrE2d7kFjcoPqhlcPkd6038G8AS6Ejz6hFBY/xd3V/dlAv07xB/
-         NJspI9ygx8Ky5nP30eSun7Y0RlQF3ldixt4bgL7NACkYggXTvcQ+pEQYB8WTXez9yy
-         YPIOAJZ6p+PV10bwgnkUDExJmfkE5TM5gPG0+iyt1o3y9m7dcly7ihMGLIiIANL2Qm
-         BQokkSf/CWeOCJ0WIuJWC4Sv2ZyK5NxEvyZittxDXqNrtYcVwC22MD0ZpqpjdnO22F
-         xaYNYYlU7qrRw==
-X-Nifty-SrcIP: [209.85.217.48]
-Received: by mail-vs1-f48.google.com with SMTP id c76so6373642vsd.3;
-        Sun, 12 May 2019 05:24:27 -0700 (PDT)
-X-Gm-Message-State: APjAAAX+0uSmnyWi76Y8cQrUUWqbkaxdHJTG/9m7L1Qmaw1bRjLxJs4P
-        zR9jv90GZ/jGW0O4u/afT6tcw3qG1ywWauSIviM=
-X-Google-Smtp-Source: APXvYqz2//FsMfDkqbOJU9yqd80At7R7tO37xWUwTT6n77c+ZlwpROGiJTlhH4454rDGqZOzZMg/+TrVY8nZiKkSVyQ=
-X-Received: by 2002:a67:f443:: with SMTP id r3mr10983744vsn.179.1557663866522;
- Sun, 12 May 2019 05:24:26 -0700 (PDT)
+        Sun, 12 May 2019 19:23:58 -0400
+Received: from [78.46.172.2] (helo=sslproxy05.your-server.de)
+        by www62.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
+        (Exim 4.89_1)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1hPxov-0003z0-Da; Mon, 13 May 2019 01:23:53 +0200
+Received: from [178.199.41.31] (helo=linux.home)
+        by sslproxy05.your-server.de with esmtpsa (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384:256)
+        (Exim 4.89)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1hPxov-000Vwp-7G; Mon, 13 May 2019 01:23:53 +0200
+Subject: Re: [PATCH v2] selftests: bpf: Add files generated after build to
+ .gitignore
+To:     Kelsey Skunberg <skunberg.kelsey@gmail.com>, shuah@kernel.org,
+        ast@kernel.org, kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
+        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        skhan@linuxfoundation.org,
+        linux-kernel-mentees@lists.linuxfoundation.org
+References: <20190512072918.10736-1-skunberg.kelsey@gmail.com>
+From:   Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <d6097853-70e1-b42c-b332-c08da6942efb@iogearbox.net>
+Date:   Mon, 13 May 2019 01:23:52 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
+ Thunderbird/52.3.0
 MIME-Version: 1.0
-References: <20190508191341.GA17963@redhat.com>
-In-Reply-To: <20190508191341.GA17963@redhat.com>
-From:   Masahiro Yamada <yamada.masahiro@socionext.com>
-Date:   Sun, 12 May 2019 21:23:50 +0900
-X-Gmail-Original-Message-ID: <CAK7LNASJr8CSWo-yE-YBq085Y=k+x8X-gQopJLRkxTueP4LGmw@mail.gmail.com>
-Message-ID: <CAK7LNASJr8CSWo-yE-YBq085Y=k+x8X-gQopJLRkxTueP4LGmw@mail.gmail.com>
-Subject: Re: Build-time tests?
-To:     Joe Lawrence <joe.lawrence@redhat.com>
-Cc:     "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20190512072918.10736-1-skunberg.kelsey@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.100.3/25447/Sun May 12 09:56:54 2019)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, May 9, 2019 at 4:30 AM Joe Lawrence <joe.lawrence@redhat.com> wrote:
->
-> Hello kbuild, kselftest,
->
-> I've been working on a patchset which adds an additional build script to
-> the toolchain when compiling livepatches.  There are a few kernel
-> section features in which this script does not yet support, but can
-> detect and abort when it encounters.  To test this detection, I've
-> written a small set of kernel modules that require such sections.
->
-> A few questions:
->
-> Is build-testing out of scope for kernel selftests?  For expediency,
-> it was really easy to spin out new lib/livepatch kernel modules.
->
-> Does kbuild support the notion of expected failure?  In this case, the
-> build script returns a non-zero error and the build stops.
+On 05/12/2019 09:29 AM, Kelsey Skunberg wrote:
+> The following files are generated after building /selftests/bpf/ and
+> should be added to .gitignore:
+> 
+> 	- libbpf.pc
+> 	- libbpf.so.*
+> 
+> Signed-off-by: Kelsey Skunberg <skunberg.kelsey@gmail.com>
 
-
-If I understood correctly, your are asking about kselftest,
-maintained by Shuah Khan.
-
-(Unfortunately), makefiles under tools/ adopted completely
-different build system, and it is out of scope of kbuild.
-
-
-> Am I trying to fit a square peg in a round hole?  I could easily keep
-> these build tests in a private branch, but could they exist in a
-> different format somewhere else in the tree?
->
-> Suggestions welcome,
->
-> -- Joe
-
-
-
--- 
-Best Regards
-Masahiro Yamada
+Applied, thanks.
