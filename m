@@ -2,78 +2,137 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 83FC81B7AB
-	for <lists+linux-kselftest@lfdr.de>; Mon, 13 May 2019 16:03:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19EB81B8E2
+	for <lists+linux-kselftest@lfdr.de>; Mon, 13 May 2019 16:45:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730062AbfEMODG (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 13 May 2019 10:03:06 -0400
-Received: from mga02.intel.com ([134.134.136.20]:32847 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727918AbfEMODG (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 13 May 2019 10:03:06 -0400
-X-Amp-Result: UNSCANNABLE
-X-Amp-File-Uploaded: False
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga101.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 13 May 2019 07:03:05 -0700
-X-ExtLoop1: 1
-Received: from sjchrist-coffee.jf.intel.com (HELO linux.intel.com) ([10.54.74.36])
-  by orsmga003.jf.intel.com with ESMTP; 13 May 2019 07:03:05 -0700
-Date:   Mon, 13 May 2019 07:03:05 -0700
-From:   Sean Christopherson <sean.j.christopherson@intel.com>
-To:     Kelsey Skunberg <skunberg.kelsey@gmail.com>
-Cc:     shuah@kernel.org, pbonzini@redhat.com, rkrcmar@redhat.com,
-        linux-kselftest@vger.kernel.org, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, skhan@linuxfoundation.org,
-        linux-kernel-mentees@lists.linuxfoundation.org
-Subject: Re: [PATCH v2] selftests: kvm: Add files generated when compiled to
- .gitignore
-Message-ID: <20190513140305.GA28561@linux.intel.com>
-References: <5d60e7126803e9a11b51618e65966ba047eff7df>
- <20190512044434.32627-1-skunberg.kelsey@gmail.com>
+        id S1728954AbfEMOo6 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 13 May 2019 10:44:58 -0400
+Received: from mail-ed1-f66.google.com ([209.85.208.66]:38663 "EHLO
+        mail-ed1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727771AbfEMOo6 (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 13 May 2019 10:44:58 -0400
+Received: by mail-ed1-f66.google.com with SMTP id w11so17923658edl.5
+        for <linux-kselftest@vger.kernel.org>; Mon, 13 May 2019 07:44:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ffwll.ch; s=google;
+        h=sender:date:from:to:subject:message-id:mail-followup-to:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=oa11tgFM6isQYlc2/lSr8+dtL7dz0FGS2ImXszdei94=;
+        b=lkK1jfdXRSWG4EOPXpNEsgoMZb8lUzm2FfYavTsrFBTY7w3Z4FVJ9cp/fBcnbUD9bK
+         Frxw45KRQigXleUJaVccMl3gMpsrT0DKhj92T3OICo7PFH1ZWYiDKuhrJn4Bo6DXp0gB
+         BN+9OOpk6LCzBYskBvabimkY7bAvWM5tFDS84=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:date:from:to:subject:message-id
+         :mail-followup-to:references:mime-version:content-disposition
+         :in-reply-to:user-agent;
+        bh=oa11tgFM6isQYlc2/lSr8+dtL7dz0FGS2ImXszdei94=;
+        b=GqmrUfAA8nqLWLmWYjVNpbh+5qKrQ4b0KdR8ydrXrAEG2bDAgHbZJ1VHzi24Tk1rrn
+         qdr1BvrbV0EOJstNOywxUuCZCh9pDFhMFWqhYborQ8MDHa6Ir9B09XGTUedbk6Q+HmoF
+         iLnIAGPAQLy4020zPvFTq5PURT4h+fNa58NAaYYoWr8lwHKcCyw88kxxybsbonDI5kAW
+         O3aa20DjJ4jy1+LFyrVHZ6codp6Tavu7QjkLu8yRxIUOyMS8exbyKvQ2yj1bGnY7Ycds
+         ICWWTQ278QvYBaVVH+m1/G/CUNKCi5ALd/SQJcCyGMm7Fe21Anroh3CZUaRtGuyjKpXX
+         eHEA==
+X-Gm-Message-State: APjAAAUpMHNnTu5u6HUrWJTzxTfe4sLNmTkKEHszDeaWHdc0uQOSR6Z+
+        Tap7eEUbmx1Mo2mwCjA1JYovpA==
+X-Google-Smtp-Source: APXvYqzazE/ARkr3DfLFYQv2UcXLE6AXccxEO07VmSzGlXapLczjo2jaDfA5V6TtDA06sVwBcw/rGw==
+X-Received: by 2002:a17:906:18b1:: with SMTP id c17mr22862891ejf.196.1557758696660;
+        Mon, 13 May 2019 07:44:56 -0700 (PDT)
+Received: from phenom.ffwll.local ([2a02:168:569e:0:3106:d637:d723:e855])
+        by smtp.gmail.com with ESMTPSA id ox15sm1844293ejb.52.2019.05.13.07.44.54
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Mon, 13 May 2019 07:44:55 -0700 (PDT)
+Date:   Mon, 13 May 2019 16:44:51 +0200
+From:   Daniel Vetter <daniel@ffwll.ch>
+To:     Theodore Ts'o <tytso@mit.edu>,
+        Frank Rowand <frowand.list@gmail.com>, Tim.Bird@sony.com,
+        knut.omang@oracle.com, gregkh@linuxfoundation.org,
+        brendanhiggins@google.com, keescook@google.com,
+        kieran.bingham@ideasonboard.com, mcgrof@kernel.org,
+        robh@kernel.org, sboyd@kernel.org, shuah@kernel.org,
+        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        kunit-dev@googlegroups.com, linux-doc@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kbuild@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-nvdimm@lists.01.org, linux-um@lists.infradead.org,
+        Alexander.Levin@microsoft.com, amir73il@gmail.com,
+        dan.carpenter@oracle.com, dan.j.williams@intel.com,
+        daniel@ffwll.ch, jdike@addtoit.com, joel@jms.id.au,
+        julia.lawall@lip6.fr, khilman@baylibre.com, logang@deltatee.com,
+        mpe@ellerman.id.au, pmladek@suse.com, richard@nod.at,
+        rientjes@google.com, rostedt@goodmis.org, wfg@linux.intel.com
+Subject: Re: [PATCH v2 00/17] kunit: introduce KUnit, the Linux kernel unit
+ testing framework
+Message-ID: <20190513144451.GQ17751@phenom.ffwll.local>
+Mail-Followup-To: Theodore Ts'o <tytso@mit.edu>,
+        Frank Rowand <frowand.list@gmail.com>, Tim.Bird@sony.com,
+        knut.omang@oracle.com, gregkh@linuxfoundation.org,
+        brendanhiggins@google.com, keescook@google.com,
+        kieran.bingham@ideasonboard.com, mcgrof@kernel.org, robh@kernel.org,
+        sboyd@kernel.org, shuah@kernel.org, devicetree@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, kunit-dev@googlegroups.com,
+        linux-doc@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-nvdimm@lists.01.org,
+        linux-um@lists.infradead.org, Alexander.Levin@microsoft.com,
+        amir73il@gmail.com, dan.carpenter@oracle.com,
+        dan.j.williams@intel.com, jdike@addtoit.com, joel@jms.id.au,
+        julia.lawall@lip6.fr, khilman@baylibre.com, logang@deltatee.com,
+        mpe@ellerman.id.au, pmladek@suse.com, richard@nod.at,
+        rientjes@google.com, rostedt@goodmis.org, wfg@linux.intel.com
+References: <20190509015856.GB7031@mit.edu>
+ <580e092f-fa4e-eedc-9e9a-a57dd085f0a6@gmail.com>
+ <20190509032017.GA29703@mit.edu>
+ <7fd35df81c06f6eb319223a22e7b93f29926edb9.camel@oracle.com>
+ <20190509133551.GD29703@mit.edu>
+ <ECADFF3FD767C149AD96A924E7EA6EAF9770D591@USCULXMSG01.am.sony.com>
+ <875c546d-9713-bb59-47e4-77a1d2c69a6d@gmail.com>
+ <20190509214233.GA20877@mit.edu>
+ <80c72e64-2665-bd51-f78c-97f50f9a53ba@gmail.com>
+ <20190511173344.GA8507@mit.edu>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190512044434.32627-1-skunberg.kelsey@gmail.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
+In-Reply-To: <20190511173344.GA8507@mit.edu>
+X-Operating-System: Linux phenom 4.14.0-3-amd64 
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sat, May 11, 2019 at 10:44:34PM -0600, Kelsey Skunberg wrote:
-> The following files are generated in /selftests/kvm/ after compiling and
-> should be added to /selftests/kvm/.gitignore:
+On Sat, May 11, 2019 at 01:33:44PM -0400, Theodore Ts'o wrote:
+> On Fri, May 10, 2019 at 02:12:40PM -0700, Frank Rowand wrote:
+> > However, the reply is incorrect.  Kselftest in-kernel tests (which
+> > is the context here) can be configured as built in instead of as
+> > a module, and built in a UML kernel.  The UML kernel can boot,
+> > running the in-kernel tests before UML attempts to invoke the
+> > init process.
 > 
->         - /x86_64/hyperv_cpuid
-> 	- /x86_64/smm_test
-> 	- /clear_dirty_log_test
+> Um, Citation needed?
 > 
-> Signed-off-by: Kelsey Skunberg <skunberg.kelsey@gmail.com>
-> ---
+> I don't see any evidence for this in the kselftest documentation, nor
+> do I see any evidence of this in the kselftest Makefiles.
+> 
+> There exists test modules in the kernel that run before the init
+> scripts run --- but that's not strictly speaking part of kselftests,
+> and do not have any kind of infrastructure.  As noted, the
+> kselftests_harness header file fundamentally assumes that you are
+> running test code in userspace.
 
-An equivalent patch has already been queued.
+Yeah I really like the "no userspace required at all" design of kunit,
+while still collecting results in a well-defined way (unless the current
+self-test that just run when you load the module, with maybe some
+kselftest ad-hoc wrapper around to collect the results).
 
-https://patchwork.kernel.org/patch/10931115/
-
-> Changes since v1:
->         - Included /clear_dirty_log_test to .gitignore
->         - Updated commit log to reflect file added
-> 
->  tools/testing/selftests/kvm/.gitignore | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/tools/testing/selftests/kvm/.gitignore b/tools/testing/selftests/kvm/.gitignore
-> index 2689d1ea6d7a..391a19231618 100644
-> --- a/tools/testing/selftests/kvm/.gitignore
-> +++ b/tools/testing/selftests/kvm/.gitignore
-> @@ -6,4 +6,7 @@
->  /x86_64/vmx_close_while_nested_test
->  /x86_64/vmx_tsc_adjust_test
->  /x86_64/state_test
-> +/x86_64/hyperv_cpuid
-> +/x86_64/smm_test
-> +/clear_dirty_log_test
->  /dirty_log_test
-> --
-> 2.20.1
-> 
+What I want to do long-term is to run these kernel unit tests as part of
+the build-testing, most likely in gitlab (sooner or later, for drm.git
+only ofc). So that people get their pull requests (and patch series, we
+have some ideas to tie this into patchwork) automatically tested for this
+super basic stuff.
+-Daniel
+-- 
+Daniel Vetter
+Software Engineer, Intel Corporation
+http://blog.ffwll.ch
