@@ -2,52 +2,53 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6654A1E4F0
-	for <lists+linux-kselftest@lfdr.de>; Wed, 15 May 2019 00:20:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7E8C1E4DE
+	for <lists+linux-kselftest@lfdr.de>; Wed, 15 May 2019 00:20:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727054AbfENWTo (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 14 May 2019 18:19:44 -0400
-Received: from mail-pl1-f201.google.com ([209.85.214.201]:42564 "EHLO
-        mail-pl1-f201.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727042AbfENWTo (ORCPT
+        id S1727081AbfENWTt (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 14 May 2019 18:19:49 -0400
+Received: from mail-pg1-f202.google.com ([209.85.215.202]:35688 "EHLO
+        mail-pg1-f202.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727077AbfENWTt (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 14 May 2019 18:19:44 -0400
-Received: by mail-pl1-f201.google.com with SMTP id b69so434202plb.9
-        for <linux-kselftest@vger.kernel.org>; Tue, 14 May 2019 15:19:43 -0700 (PDT)
+        Tue, 14 May 2019 18:19:49 -0400
+Received: by mail-pg1-f202.google.com with SMTP id d22so442009pgg.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 14 May 2019 15:19:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=Lws/EEgAna63rQ3vCEL1Uuu3Iu+1ZPUf+T+yTIZZ48c=;
-        b=e/AVxKLY/BTIPy4M0b2OmdVg9I3Cjf+83tQc/8RUiKrxRYVCGqg3Zl0SrlluXiU/O/
-         pwRWVuewqkQb+4jm3lDA+uWqqZl/5Qp2jsoqkSh7txRje8sBKgc2T24cBCYyPIDbL3Td
-         2vOT6mtX7FAkvYixgfpQMuOXbD+WsLVTxJRWRjPcIHwh7xhhVzaUINCrENO+6zqHBIXX
-         1IbAD9CKmDlwv5PLKIqbnItGhE3IuhWhKpDPTriVbhNQOEnRRWM36VOw1YpDb6jyrZ4J
-         jLuqmwKAU9M8W3HAZbA4spHc+Ryxcow/wAF3N76tVz5jJtszzJCzEVPYaTO2Oq9+4bCM
-         GX3w==
+        bh=NNCnVCTAATMxlDMarLLJ67yqDDVFt+vwrBh9wh5mNVQ=;
+        b=quTKkalkkcdvAmo8Q5W/BySUzf8yCwwTH5YR563mPWxNUSE5MultuJds8qTnGLUd9G
+         GJOMcET4Wz5Z093noXRAIdno9qE82hEKyL9OWEEEeZgvMsgKsoo6ySFkGuc/6WqHcU0M
+         Hpl+SDxyqgLaiTUqKbcRAQtyOX/1f7cvhIRr9mCHA88MjEoBBMBrKFxLj+V+PJU2icQz
+         YZVy0jog5dz9kph3TsyRuJuDu4mNIMZwKmuJy8P56loFGJEgPnUHKRTVucDlKHqh0GsE
+         xE/dwKEOx3hf4rdD0KCrCmTo1nwHhw2rMCTcX3tA2M9n443niRuAWkZ8t1kGad/emCxN
+         xZ2A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=Lws/EEgAna63rQ3vCEL1Uuu3Iu+1ZPUf+T+yTIZZ48c=;
-        b=qc3oGUCip9DSYTqIdTR/fuBIqOFinEsMsbolyNnA7n03Y5+itO/RYhfDel2eQmDn52
-         qMYAWg8OPWInGmXnNgI+LmffSkyYpC/X7mn0YBypBGbg//sRVyI7j5NTNkj2DplC+NuX
-         RpDWwkWFg/PGXORYBAsoBPUvsNMJksXXjYz0TaEujmKj/63q0c+mFEsyAvRkkjhUPI4P
-         g7Gi4lNc8PD4Qi1PPsP0Ho4ibfLVuCjHi6p3JMNJ2mjjGqMlmN8cnktbMWVC423TkNZ4
-         lMJbrGHh5zvYnwr8TVYzmREZQ64D0Hnhk5WQpZAUyho7KLzVKd8x3vtiCpugCetQCa6n
-         FOTA==
-X-Gm-Message-State: APjAAAVKI2N18HdlDo43ic1z1AOuOEL/JbBDKlKnO2McFqzEoIzKdbiQ
-        zwtirLCutRXyQpfgWlUa2X9ETbnaMSQ3w+hZv4Xkhg==
-X-Google-Smtp-Source: APXvYqyZO5hIVWx6sj5d5P+JfXAMjq8I7SEzOnNldWvrtI+QS/XQfLFxsuITIB0YkKXfskRKbkqe8bGObCnzw53RKnA6Hg==
-X-Received: by 2002:a63:1a42:: with SMTP id a2mr39736396pgm.358.1557872383130;
- Tue, 14 May 2019 15:19:43 -0700 (PDT)
-Date:   Tue, 14 May 2019 15:17:10 -0700
+        bh=NNCnVCTAATMxlDMarLLJ67yqDDVFt+vwrBh9wh5mNVQ=;
+        b=jin5Nav3i2Whpml86in3u/XyPDJCgfeHGi5ioashGkntg3QTCdt5SQ8YiHk5AoRRoK
+         9oYRVfW18niFmj7uJW1RZ4FYzRFzNSUwFOEv0dGU0vlyt97pZLzC93v2m8Ash2QInnEl
+         2pw0YsH6KKxMaP8Y6H23ACoJ1ptJYuftjt2p9v/2DuJ3FxGcpjr5W3pM1aLdvwtW9t0e
+         p57igJ+j7LLPq6tEj7OHgPxDSN8X0aH/9B+Q3gJVdvPV4FnlizZO7yOAxBMu4As9i/xz
+         z8sZRfgEwNsu5viM34JkqHsetRs9MPbb/4H0hf6hUyf/yqrF0nz/GbTjEQVPEq0YQhz0
+         osZA==
+X-Gm-Message-State: APjAAAUYXsdDgOqy+0lrFXStCYc3L0BvdkZodXwA7Jv69HmwE0Tc9p2g
+        LEZMxJCB+w6Su7tN4U1oTDD0+Ma/gXN+YU2LI1bRLg==
+X-Google-Smtp-Source: APXvYqxo6OjC5cnI7G46g6hiP/P8iTXGx7hD0/zp0LMpsykXkRPUvVhudAT1yu9PqFgJEj2J/jGAQAQ3/X7UkXFAG8BMDA==
+X-Received: by 2002:a63:6988:: with SMTP id e130mr40887298pgc.150.1557872385659;
+ Tue, 14 May 2019 15:19:45 -0700 (PDT)
+Date:   Tue, 14 May 2019 15:17:11 -0700
 In-Reply-To: <20190514221711.248228-1-brendanhiggins@google.com>
-Message-Id: <20190514221711.248228-18-brendanhiggins@google.com>
+Message-Id: <20190514221711.248228-19-brendanhiggins@google.com>
 Mime-Version: 1.0
 References: <20190514221711.248228-1-brendanhiggins@google.com>
 X-Mailer: git-send-email 2.21.0.1020.gf2820cf01a-goog
-Subject: [PATCH v4 17/18] kernel/sysctl-test: Add null pointer test for sysctl.c:proc_dointvec()
+Subject: [PATCH v4 18/18] MAINTAINERS: add proc sysctl KUnit test to PROC
+ SYSCTL section
 From:   Brendan Higgins <brendanhiggins@google.com>
 To:     frowand.list@gmail.com, gregkh@linuxfoundation.org,
         jpoimboe@redhat.com, keescook@google.com,
@@ -65,360 +66,34 @@ Cc:     devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
         khilman@baylibre.com, knut.omang@oracle.com, logang@deltatee.com,
         mpe@ellerman.id.au, pmladek@suse.com, rdunlap@infradead.org,
         richard@nod.at, rientjes@google.com, rostedt@goodmis.org,
-        wfg@linux.intel.com, Iurii Zaikin <yzaikin@google.com>,
-        Brendan Higgins <brendanhiggins@google.com>
+        wfg@linux.intel.com, Brendan Higgins <brendanhiggins@google.com>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Iurii Zaikin <yzaikin@google.com>
+Add entry for the new proc sysctl KUnit test to the PROC SYSCTL section.
 
-KUnit tests for initialized data behavior of proc_dointvec that is
-explicitly checked in the code. Includes basic parsing tests including
-int min/max overflow.
-
-Signed-off-by: Iurii Zaikin <yzaikin@google.com>
 Signed-off-by: Brendan Higgins <brendanhiggins@google.com>
 Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Reviewed-by: Logan Gunthorpe <logang@deltatee.com>
 ---
- kernel/Makefile      |   2 +
- kernel/sysctl-test.c | 293 +++++++++++++++++++++++++++++++++++++++++++
- lib/Kconfig.debug    |   6 +
- 3 files changed, 301 insertions(+)
- create mode 100644 kernel/sysctl-test.c
+ MAINTAINERS | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/kernel/Makefile b/kernel/Makefile
-index 6c57e78817dad..c81a8976b6a4b 100644
---- a/kernel/Makefile
-+++ b/kernel/Makefile
-@@ -112,6 +112,8 @@ obj-$(CONFIG_HAS_IOMEM) += iomem.o
- obj-$(CONFIG_ZONE_DEVICE) += memremap.o
- obj-$(CONFIG_RSEQ) += rseq.o
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 8a91887c8d541..2e539647589fd 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -12526,6 +12526,7 @@ S:	Maintained
+ F:	fs/proc/proc_sysctl.c
+ F:	include/linux/sysctl.h
+ F:	kernel/sysctl.c
++F:	kernel/sysctl-test.c
+ F:	tools/testing/selftests/sysctl/
  
-+obj-$(CONFIG_SYSCTL_KUNIT_TEST) += sysctl-test.o
-+
- obj-$(CONFIG_GCC_PLUGIN_STACKLEAK) += stackleak.o
- KASAN_SANITIZE_stackleak.o := n
- KCOV_INSTRUMENT_stackleak.o := n
-diff --git a/kernel/sysctl-test.c b/kernel/sysctl-test.c
-new file mode 100644
-index 0000000000000..fe0f2bae66085
---- /dev/null
-+++ b/kernel/sysctl-test.c
-@@ -0,0 +1,293 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * KUnit test of proc sysctl.
-+ */
-+
-+#include <kunit/test.h>
-+#include <linux/printk.h>
-+#include <linux/sysctl.h>
-+#include <linux/uaccess.h>
-+
-+static int i_zero;
-+static int i_one_hundred = 100;
-+
-+struct test_sysctl_data {
-+	int int_0001;
-+	int int_0002;
-+	int int_0003[4];
-+
-+	unsigned int uint_0001;
-+
-+	char string_0001[65];
-+};
-+
-+static struct test_sysctl_data test_data = {
-+	.int_0001 = 60,
-+	.int_0002 = 1,
-+
-+	.int_0003[0] = 0,
-+	.int_0003[1] = 1,
-+	.int_0003[2] = 2,
-+	.int_0003[3] = 3,
-+
-+	.uint_0001 = 314,
-+
-+	.string_0001 = "(none)",
-+};
-+
-+static void sysctl_test_dointvec_null_tbl_data(struct kunit *test)
-+{
-+	struct ctl_table table = {
-+		.procname = "foo",
-+		.data		= NULL,
-+		.maxlen		= sizeof(int),
-+		.mode		= 0644,
-+		.proc_handler	= proc_dointvec,
-+		.extra1		= &i_zero,
-+		.extra2         = &i_one_hundred,
-+	};
-+	void  *buffer = kunit_kzalloc(test, sizeof(int), GFP_USER);
-+	size_t len;
-+	loff_t pos;
-+
-+	len = 1234;
-+	KUNIT_EXPECT_EQ(test, 0, proc_dointvec(&table, 0, buffer, &len, &pos));
-+	KUNIT_EXPECT_EQ(test, 0, len);
-+	len = 1234;
-+	KUNIT_EXPECT_EQ(test, 0, proc_dointvec(&table, 1, buffer, &len, &pos));
-+	KUNIT_EXPECT_EQ(test, 0, len);
-+}
-+
-+static void sysctl_test_dointvec_table_maxlen_unset(struct kunit *test)
-+{
-+	struct ctl_table table = {
-+		.procname = "foo",
-+		.data		= &test_data.int_0001,
-+		.maxlen		= 0,
-+		.mode		= 0644,
-+		.proc_handler	= proc_dointvec,
-+		.extra1		= &i_zero,
-+		.extra2         = &i_one_hundred,
-+	};
-+	void  *buffer = kunit_kzalloc(test, sizeof(int), GFP_USER);
-+	size_t len;
-+	loff_t pos;
-+
-+	len = 1234;
-+	KUNIT_EXPECT_EQ(test, 0, proc_dointvec(&table, 0, buffer, &len, &pos));
-+	KUNIT_EXPECT_EQ(test, 0, len);
-+	len = 1234;
-+	KUNIT_EXPECT_EQ(test, 0, proc_dointvec(&table, 1, buffer, &len, &pos));
-+	KUNIT_EXPECT_EQ(test, 0, len);
-+}
-+
-+static void sysctl_test_dointvec_table_len_is_zero(struct kunit *test)
-+{
-+	struct ctl_table table = {
-+		.procname = "foo",
-+		.data		= &test_data.int_0001,
-+		.maxlen		= sizeof(int),
-+		.mode		= 0644,
-+		.proc_handler	= proc_dointvec,
-+		.extra1		= &i_zero,
-+		.extra2         = &i_one_hundred,
-+	};
-+	void  *buffer = kunit_kzalloc(test, sizeof(int), GFP_USER);
-+	size_t len;
-+	loff_t pos;
-+
-+	len = 0;
-+	KUNIT_EXPECT_EQ(test, 0, proc_dointvec(&table, 0, buffer, &len, &pos));
-+	KUNIT_EXPECT_EQ(test, 0, len);
-+	KUNIT_EXPECT_EQ(test, 0, proc_dointvec(&table, 1, buffer, &len, &pos));
-+	KUNIT_EXPECT_EQ(test, 0, len);
-+}
-+
-+static void sysctl_test_dointvec_table_read_but_position_set(struct kunit *test)
-+{
-+	struct ctl_table table = {
-+		.procname = "foo",
-+		.data		= &test_data.int_0001,
-+		.maxlen		= sizeof(int),
-+		.mode		= 0644,
-+		.proc_handler	= proc_dointvec,
-+		.extra1		= &i_zero,
-+		.extra2         = &i_one_hundred,
-+	};
-+	void  *buffer = kunit_kzalloc(test, sizeof(int), GFP_USER);
-+	size_t len;
-+	loff_t pos;
-+
-+	len = 1234;
-+	pos = 1;
-+	KUNIT_EXPECT_EQ(test, 0, proc_dointvec(&table, 0, buffer, &len, &pos));
-+	KUNIT_EXPECT_EQ(test, 0, len);
-+}
-+
-+static void sysctl_test_dointvec_happy_single_positive(struct kunit *test)
-+{
-+	struct ctl_table table = {
-+		.procname = "foo",
-+		.data		= &test_data.int_0001,
-+		.maxlen		= sizeof(int),
-+		.mode		= 0644,
-+		.proc_handler	= proc_dointvec,
-+		.extra1		= &i_zero,
-+		.extra2         = &i_one_hundred,
-+	};
-+	char input[] = "9";
-+	size_t len = sizeof(input) - 1;
-+	loff_t pos = 0;
-+
-+	table.data = kunit_kzalloc(test, sizeof(int), GFP_USER);
-+	KUNIT_EXPECT_EQ(test, 0, proc_dointvec(&table, 1, input, &len, &pos));
-+	KUNIT_EXPECT_EQ(test, sizeof(input) - 1, len);
-+	KUNIT_EXPECT_EQ(test, sizeof(input) - 1, pos);
-+	KUNIT_EXPECT_EQ(test, 9, *(int *)table.data);
-+}
-+
-+static void sysctl_test_dointvec_happy_single_negative(struct kunit *test)
-+{
-+	struct ctl_table table = {
-+		.procname = "foo",
-+		.data		= &test_data.int_0001,
-+		.maxlen		= sizeof(int),
-+		.mode		= 0644,
-+		.proc_handler	= proc_dointvec,
-+		.extra1		= &i_zero,
-+		.extra2         = &i_one_hundred,
-+	};
-+	char input[] = "-9";
-+	size_t len = sizeof(input) - 1;
-+	loff_t pos = 0;
-+
-+	table.data = kunit_kzalloc(test, sizeof(int), GFP_USER);
-+	KUNIT_EXPECT_EQ(test, 0, proc_dointvec(&table, 1, input, &len, &pos));
-+	KUNIT_EXPECT_EQ(test, sizeof(input) - 1, len);
-+	KUNIT_EXPECT_EQ(test, sizeof(input) - 1, pos);
-+	KUNIT_EXPECT_EQ(test, -9, *(int *)table.data);
-+}
-+
-+static void sysctl_test_dointvec_single_less_int_min(struct kunit *test)
-+{
-+	struct ctl_table table = {
-+		.procname = "foo",
-+		.data		= &test_data.int_0001,
-+		.maxlen		= sizeof(int),
-+		.mode		= 0644,
-+		.proc_handler	= proc_dointvec,
-+		.extra1		= &i_zero,
-+		.extra2         = &i_one_hundred,
-+	};
-+	char input[32];
-+	size_t len = sizeof(input) - 1;
-+	loff_t pos = 0;
-+	unsigned long abs_of_less_than_min = (unsigned long)INT_MAX
-+					     - (INT_MAX + INT_MIN) + 1;
-+
-+	KUNIT_EXPECT_LT(test,
-+			snprintf(input, sizeof(input), "-%lu",
-+				 abs_of_less_than_min),
-+			sizeof(input));
-+
-+	table.data = kunit_kzalloc(test, sizeof(int), GFP_USER);
-+	KUNIT_EXPECT_EQ(test, -EINVAL,
-+			proc_dointvec(&table, 1, input, &len, &pos));
-+	KUNIT_EXPECT_EQ(test, sizeof(input) - 1, len);
-+	KUNIT_EXPECT_EQ(test, 0, *(int *)table.data);
-+}
-+
-+static void sysctl_test_dointvec_single_greater_int_max(struct kunit *test)
-+{
-+	struct ctl_table table = {
-+		.procname = "foo",
-+		.data		= &test_data.int_0001,
-+		.maxlen		= sizeof(int),
-+		.mode		= 0644,
-+		.proc_handler	= proc_dointvec,
-+		.extra1		= &i_zero,
-+		.extra2         = &i_one_hundred,
-+	};
-+	char input[32];
-+	size_t len = sizeof(input) - 1;
-+	loff_t pos = 0;
-+	unsigned long greater_than_max = (unsigned long)INT_MAX + 1;
-+
-+	KUNIT_EXPECT_GT(test, greater_than_max, INT_MAX);
-+	KUNIT_EXPECT_LT(test, snprintf(input, sizeof(input), "%lu",
-+				       greater_than_max),
-+			sizeof(input));
-+	table.data = kunit_kzalloc(test, sizeof(int), GFP_USER);
-+	KUNIT_EXPECT_EQ(test, -EINVAL,
-+			proc_dointvec(&table, 1, input, &len, &pos));
-+	KUNIT_EXPECT_EQ(test, sizeof(input) - 1, len);
-+	KUNIT_EXPECT_EQ(test, 0, *(int *)table.data);
-+}
-+
-+static int sysctl_test_init(struct kunit *test)
-+{
-+	return 0;
-+}
-+
-+/*
-+ * This is run once after each test case, see the comment on example_test_module
-+ * for more information.
-+ */
-+static void sysctl_test_exit(struct kunit *test)
-+{
-+}
-+
-+/*
-+ * Here we make a list of all the test cases we want to add to the test module
-+ * below.
-+ */
-+static struct kunit_case sysctl_test_cases[] = {
-+	/*
-+	 * This is a helper to create a test case object from a test case
-+	 * function; its exact function is not important to understand how to
-+	 * use KUnit, just know that this is how you associate test cases with a
-+	 * test module.
-+	 */
-+	KUNIT_CASE(sysctl_test_dointvec_null_tbl_data),
-+	KUNIT_CASE(sysctl_test_dointvec_table_maxlen_unset),
-+	KUNIT_CASE(sysctl_test_dointvec_table_len_is_zero),
-+	KUNIT_CASE(sysctl_test_dointvec_table_read_but_position_set),
-+	KUNIT_CASE(sysctl_test_dointvec_happy_single_positive),
-+	KUNIT_CASE(sysctl_test_dointvec_happy_single_negative),
-+	KUNIT_CASE(sysctl_test_dointvec_single_less_int_min),
-+	KUNIT_CASE(sysctl_test_dointvec_single_greater_int_max),
-+	{},
-+};
-+
-+/*
-+ * This defines a suite or grouping of tests.
-+ *
-+ * Test cases are defined as belonging to the suite by adding them to
-+ * `test_cases`.
-+ *
-+ * Often it is desirable to run some function which will set up things which
-+ * will be used by every test; this is accomplished with an `init` function
-+ * which runs before each test case is invoked. Similarly, an `exit` function
-+ * may be specified which runs after every test case and can be used to for
-+ * cleanup. For clarity, running tests in a test module would behave as follows:
-+ *
-+ * module.init(test);
-+ * module.test_case[0](test);
-+ * module.exit(test);
-+ * module.init(test);
-+ * module.test_case[1](test);
-+ * module.exit(test);
-+ * ...;
-+ */
-+static struct kunit_module sysctl_test_module = {
-+	.name = "sysctl_test",
-+	.init = sysctl_test_init,
-+	.exit = sysctl_test_exit,
-+	.test_cases = sysctl_test_cases,
-+};
-+
-+/*
-+ * This registers the above test module telling KUnit that this is a suite of
-+ * tests that need to be run.
-+ */
-+module_test(sysctl_test_module);
-diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-index d5a4a4036d2f8..772af4ec70111 100644
---- a/lib/Kconfig.debug
-+++ b/lib/Kconfig.debug
-@@ -1908,6 +1908,12 @@ config TEST_SYSCTL
- 
- 	  If unsure, say N.
- 
-+config SYSCTL_KUNIT_TEST
-+	bool "KUnit test for sysctl"
-+	depends on KUNIT
-+	help
-+	  Enables KUnit sysctl test.
-+
- config TEST_UDELAY
- 	tristate "udelay test driver"
- 	help
+ PS3 NETWORK SUPPORT
 -- 
 2.21.0.1020.gf2820cf01a-goog
 
