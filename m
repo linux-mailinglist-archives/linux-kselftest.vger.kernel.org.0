@@ -2,89 +2,111 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F28E81C97C
-	for <lists+linux-kselftest@lfdr.de>; Tue, 14 May 2019 15:34:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52E471CB9C
+	for <lists+linux-kselftest@lfdr.de>; Tue, 14 May 2019 17:16:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726180AbfENNe1 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 14 May 2019 09:34:27 -0400
-Received: from ms.lwn.net ([45.79.88.28]:44280 "EHLO ms.lwn.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725854AbfENNe0 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 14 May 2019 09:34:26 -0400
-Received: from lwn.net (localhost [127.0.0.1])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ms.lwn.net (Postfix) with ESMTPSA id D706B740;
-        Tue, 14 May 2019 13:34:23 +0000 (UTC)
-Date:   Tue, 14 May 2019 07:34:22 -0600
-From:   Jonathan Corbet <corbet@lwn.net>
-To:     Brendan Higgins <brendanhiggins@google.com>
-Cc:     frowand.list@gmail.com, gregkh@linuxfoundation.org,
-        keescook@google.com, kieran.bingham@ideasonboard.com,
-        mcgrof@kernel.org, robh@kernel.org, sboyd@kernel.org,
-        shuah@kernel.org, tytso@mit.edu, yamada.masahiro@socionext.com,
-        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        kunit-dev@googlegroups.com, linux-doc@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kbuild@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-nvdimm@lists.01.org, linux-um@lists.infradead.org,
-        Alexander.Levin@microsoft.com, Tim.Bird@sony.com,
-        amir73il@gmail.com, dan.carpenter@oracle.com,
-        dan.j.williams@intel.com, daniel@ffwll.ch, jdike@addtoit.com,
-        joel@jms.id.au, julia.lawall@lip6.fr, khilman@baylibre.com,
-        knut.omang@oracle.com, logang@deltatee.com, mpe@ellerman.id.au,
-        pmladek@suse.com, rdunlap@infradead.org, richard@nod.at,
-        rientjes@google.com, rostedt@goodmis.org, wfg@linux.intel.com,
-        Felix Guo <felixguoxiuping@gmail.com>
-Subject: Re: [PATCH v3 15/18] Documentation: kunit: add documentation for
- KUnit
-Message-ID: <20190514073422.4287267c@lwn.net>
-In-Reply-To: <20190514054251.186196-16-brendanhiggins@google.com>
-References: <20190514054251.186196-1-brendanhiggins@google.com>
-        <20190514054251.186196-16-brendanhiggins@google.com>
-Organization: LWN.net
+        id S1725980AbfENPQs (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 14 May 2019 11:16:48 -0400
+Received: from mail-wr1-f67.google.com ([209.85.221.67]:38663 "EHLO
+        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725901AbfENPQs (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 14 May 2019 11:16:48 -0400
+Received: by mail-wr1-f67.google.com with SMTP id v11so1837878wru.5
+        for <linux-kselftest@vger.kernel.org>; Tue, 14 May 2019 08:16:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=brauner.io; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=ldoasDQ7UppVRifjaSRw3DpwTvd/jIO8STWlnJPAxfE=;
+        b=NCuQ5Dx09mZmmtzR1xCLl1TJ1ZNRcWelTVn+oju+wnaLyYL57pGcqbSf7uqmQ27/U/
+         5C/BnuK8H8cKtgNxm4+qMSgZGu5zC/Ty4xgBLY54/Bax9I596zMvA2KcYHFsjgMWKCnM
+         VCr8aK+l/CQmDm4t0z6sG4/3SPJKapBhU03Nu5g3CNGu7EH0Uf/FXjQUrJPkxx0JMYmg
+         F22T146IzA5zKetOzh2IVhJsE4wK//Kc19vlMAyfYMbOK0HxTshJ6lXBvXu5FgXVzT//
+         qfTWUMIf3MRB34wG3t+rO8zACW7VpxaHFrTTPo3OS2wbYrwSkXALxZtRVt1314LhtseC
+         +V9A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=ldoasDQ7UppVRifjaSRw3DpwTvd/jIO8STWlnJPAxfE=;
+        b=IdT4Sis+6hraOKQ37l5DqcERXxSUeCeXZrCuwzvyQaLGAf/h06brToIzT309zLQj/k
+         ElRJd4YfVv32v1zfdgXu/skTP3FmyIvY+So6cUfgukrTX8Mk2KMT3cVrqWDqoWCbY/f3
+         FglBRcpNPEy1ysxmN2kAhEN6r5bMRxfzfu4I417ha7RzcM05O+HuDifEEwrV+0wcDIHA
+         K+sTR28ZwdDXkvEn3GklFZjhmbGKLJKnQRvE1OI+Ew/ay+GAtb+ngowl7/Dz+9IalE3P
+         kPCtseIl3zMZw501kMginSUY2GcEy68ZMrLA7UpP/ns60PQu8qlcHD3/EAmYprdb/PvJ
+         LPuA==
+X-Gm-Message-State: APjAAAURqKa4f1+SSuSfQPau/y3ZcrRQaswGOc4ZyH9Tt6nL/q+lxzRo
+        nVfyy1MOvZc+DYpXwg/QGxtY+A==
+X-Google-Smtp-Source: APXvYqxIfmglfSdFhF5NGPO1mepeasVBqjYZcAsJqS+2XU0UT5lyfQrgwd3nc3CRa0ONcFJ/HM4hTA==
+X-Received: by 2002:a5d:6750:: with SMTP id l16mr14648596wrw.274.1557847006476;
+        Tue, 14 May 2019 08:16:46 -0700 (PDT)
+Received: from brauner.io ([81.92.17.132])
+        by smtp.gmail.com with ESMTPSA id i25sm5169501wmb.46.2019.05.14.08.16.43
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Tue, 14 May 2019 08:16:45 -0700 (PDT)
+Date:   Tue, 14 May 2019 17:16:42 +0200
+From:   Christian Brauner <christian@brauner.io>
+To:     Oleg Nesterov <oleg@redhat.com>,
+        "Joel Fernandes (Google)" <joel@joelfernandes.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Andy Lutomirski <luto@amacapital.net>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Daniel Colascione <dancol@google.com>,
+        Jann Horn <jannh@google.com>,
+        Tim Murray <timmurray@google.com>,
+        Jonathan Kowalski <bl0pbl33p@gmail.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Kees Cook <keescook@chromium.org>,
+        David Howells <dhowells@redhat.com>, kernel-team@android.com,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        KJ Tsanaktsidis <ktsanaktsidis@zendesk.com>,
+        linux-kselftest@vger.kernel.org, Michal Hocko <mhocko@suse.com>,
+        Nadav Amit <namit@vmware.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Serge Hallyn <serge@hallyn.com>, Shuah Khan <shuah@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Tycho Andersen <tycho@tycho.ws>
+Subject: Re: [PATCH v2 1/2] Add polling support to pidfd
+Message-ID: <20190514151605.7aadxh6owlk42bwr@brauner.io>
+References: <20190430162154.61314-1-joel@joelfernandes.org>
+ <20190501151312.GA30235@redhat.com>
+ <20190502151320.cvc6uc3b4bmww23k@brauner.io>
+ <20190502160247.GD7323@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20190502160247.GD7323@redhat.com>
+User-Agent: NeoMutt/20180716
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, 13 May 2019 22:42:49 -0700
-Brendan Higgins <brendanhiggins@google.com> wrote:
-
-> Add documentation for KUnit, the Linux kernel unit testing framework.
-> - Add intro and usage guide for KUnit
-> - Add API reference
+On Thu, May 02, 2019 at 06:02:48PM +0200, Oleg Nesterov wrote:
+> On 05/02, Christian Brauner wrote:
+> >
+> > On Wed, May 01, 2019 at 05:13:12PM +0200, Oleg Nesterov wrote:
+> > >
+> > > Otherwise I see no problems.
+> >
+> > I'll remove the WARN_ON() check when applying this. Can I get your
+> > Acked/Review, Oleg?
 > 
-> Signed-off-by: Felix Guo <felixguoxiuping@gmail.com>
-> Signed-off-by: Brendan Higgins <brendanhiggins@google.com>
-> Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Reviewed-by: Logan Gunthorpe <logang@deltatee.com>
-> ---
-> Changes Since Last Revision:
->  - Addressed reference to incorrect number of sections, as per Randy's
->    comment.
->  - Make section underlines same length as the section title, as per
->    Randy's comments.
-> ---
->  Documentation/index.rst           |   1 +
->  Documentation/kunit/api/index.rst |  16 +
->  Documentation/kunit/api/test.rst  |  14 +
->  Documentation/kunit/faq.rst       |  62 ++++
->  Documentation/kunit/index.rst     |  79 ++++
->  Documentation/kunit/start.rst     | 180 ++++++++++
->  Documentation/kunit/usage.rst     | 575 ++++++++++++++++++++++++++++++
+> Yes, feel free to add
+> 
+> 	Reviewed-by: Oleg Nesterov <oleg@redhat.com>
 
-Certainly it's great to see all this documentation coming with this
-feature!
+Applied to 
 
-Naturally, though, I have one request: I'd rather not see this at the top
-level, which is more than crowded enough as it is.  Can this material
-please go into the development tools book, alongside the kselftest
-documentation?
+https://git.kernel.org/pub/scm/linux/kernel/git/brauner/linux.git/log/?h=for-next
 
-Thanks,
+and targeted for the 5.3 merge window.
 
-jon
+Thank you all!
+Christian
