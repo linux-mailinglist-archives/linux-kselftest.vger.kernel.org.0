@@ -2,98 +2,97 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C7E8C1E4DE
-	for <lists+linux-kselftest@lfdr.de>; Wed, 15 May 2019 00:20:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1B661E542
+	for <lists+linux-kselftest@lfdr.de>; Wed, 15 May 2019 00:42:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727081AbfENWTt (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 14 May 2019 18:19:49 -0400
-Received: from mail-pg1-f202.google.com ([209.85.215.202]:35688 "EHLO
-        mail-pg1-f202.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727077AbfENWTt (ORCPT
+        id S1726348AbfENWmZ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 14 May 2019 18:42:25 -0400
+Received: from mail-it1-f194.google.com ([209.85.166.194]:52657 "EHLO
+        mail-it1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726325AbfENWmZ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 14 May 2019 18:19:49 -0400
-Received: by mail-pg1-f202.google.com with SMTP id d22so442009pgg.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 14 May 2019 15:19:48 -0700 (PDT)
+        Tue, 14 May 2019 18:42:25 -0400
+Received: by mail-it1-f194.google.com with SMTP id q65so24535itg.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 14 May 2019 15:42:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=NNCnVCTAATMxlDMarLLJ67yqDDVFt+vwrBh9wh5mNVQ=;
-        b=quTKkalkkcdvAmo8Q5W/BySUzf8yCwwTH5YR563mPWxNUSE5MultuJds8qTnGLUd9G
-         GJOMcET4Wz5Z093noXRAIdno9qE82hEKyL9OWEEEeZgvMsgKsoo6ySFkGuc/6WqHcU0M
-         Hpl+SDxyqgLaiTUqKbcRAQtyOX/1f7cvhIRr9mCHA88MjEoBBMBrKFxLj+V+PJU2icQz
-         YZVy0jog5dz9kph3TsyRuJuDu4mNIMZwKmuJy8P56loFGJEgPnUHKRTVucDlKHqh0GsE
-         xE/dwKEOx3hf4rdD0KCrCmTo1nwHhw2rMCTcX3tA2M9n443niRuAWkZ8t1kGad/emCxN
-         xZ2A==
+        d=linuxfoundation.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=J/+UqoVyOLSQ0y8e5yE4txVnGHYAUO/Sws7YS3mRmnI=;
+        b=cZl74vcnzPif//MhMVWyBs4L+OD+iNvZ9PMrJIAd8U6gbRh78KDyX4Ie6vEssxk3qW
+         6RnVzdW5rufKwjHPvOu3iE6v4+P5P5nTfBUEoMZ4Xmn3kBzhJ2wz289Sq4IDi5s5ObU0
+         N9B21WD5Dse36ePurthR+gIP6Xuf9Gj+rHnME=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=NNCnVCTAATMxlDMarLLJ67yqDDVFt+vwrBh9wh5mNVQ=;
-        b=jin5Nav3i2Whpml86in3u/XyPDJCgfeHGi5ioashGkntg3QTCdt5SQ8YiHk5AoRRoK
-         9oYRVfW18niFmj7uJW1RZ4FYzRFzNSUwFOEv0dGU0vlyt97pZLzC93v2m8Ash2QInnEl
-         2pw0YsH6KKxMaP8Y6H23ACoJ1ptJYuftjt2p9v/2DuJ3FxGcpjr5W3pM1aLdvwtW9t0e
-         p57igJ+j7LLPq6tEj7OHgPxDSN8X0aH/9B+Q3gJVdvPV4FnlizZO7yOAxBMu4As9i/xz
-         z8sZRfgEwNsu5viM34JkqHsetRs9MPbb/4H0hf6hUyf/yqrF0nz/GbTjEQVPEq0YQhz0
-         osZA==
-X-Gm-Message-State: APjAAAUYXsdDgOqy+0lrFXStCYc3L0BvdkZodXwA7Jv69HmwE0Tc9p2g
-        LEZMxJCB+w6Su7tN4U1oTDD0+Ma/gXN+YU2LI1bRLg==
-X-Google-Smtp-Source: APXvYqxo6OjC5cnI7G46g6hiP/P8iTXGx7hD0/zp0LMpsykXkRPUvVhudAT1yu9PqFgJEj2J/jGAQAQ3/X7UkXFAG8BMDA==
-X-Received: by 2002:a63:6988:: with SMTP id e130mr40887298pgc.150.1557872385659;
- Tue, 14 May 2019 15:19:45 -0700 (PDT)
-Date:   Tue, 14 May 2019 15:17:11 -0700
-In-Reply-To: <20190514221711.248228-1-brendanhiggins@google.com>
-Message-Id: <20190514221711.248228-19-brendanhiggins@google.com>
-Mime-Version: 1.0
-References: <20190514221711.248228-1-brendanhiggins@google.com>
-X-Mailer: git-send-email 2.21.0.1020.gf2820cf01a-goog
-Subject: [PATCH v4 18/18] MAINTAINERS: add proc sysctl KUnit test to PROC
- SYSCTL section
-From:   Brendan Higgins <brendanhiggins@google.com>
-To:     frowand.list@gmail.com, gregkh@linuxfoundation.org,
-        jpoimboe@redhat.com, keescook@google.com,
-        kieran.bingham@ideasonboard.com, mcgrof@kernel.org,
-        peterz@infradead.org, robh@kernel.org, sboyd@kernel.org,
-        shuah@kernel.org, tytso@mit.edu, yamada.masahiro@socionext.com
-Cc:     devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        kunit-dev@googlegroups.com, linux-doc@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kbuild@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-nvdimm@lists.01.org, linux-um@lists.infradead.org,
-        Alexander.Levin@microsoft.com, Tim.Bird@sony.com,
-        amir73il@gmail.com, dan.carpenter@oracle.com, daniel@ffwll.ch,
-        jdike@addtoit.com, joel@jms.id.au, julia.lawall@lip6.fr,
-        khilman@baylibre.com, knut.omang@oracle.com, logang@deltatee.com,
-        mpe@ellerman.id.au, pmladek@suse.com, rdunlap@infradead.org,
-        richard@nod.at, rientjes@google.com, rostedt@goodmis.org,
-        wfg@linux.intel.com, Brendan Higgins <brendanhiggins@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=J/+UqoVyOLSQ0y8e5yE4txVnGHYAUO/Sws7YS3mRmnI=;
+        b=JPgAw1z+0q06kukzpxfE6wPl/B74LpcdqM6zq+mXTY+7yDZM8HzJAscaNoIqDVjM1n
+         2xd5n4+InfmIwvMLkDc9+5I0/SkwO+GrAoo2zeKN1Xg6fRNsG42oyIrLWcoJMM4SdErX
+         l6dzQsOkmx5vF3WMjoW/V3/gOnx06q152OGU2jL6Bbm48PIY9W+kv5oUNklUHlU8X6A/
+         7ZGdDUhTgh1nQF23yPryq0cGpKncXMiaAyhmRJytgHKzIduh6pMfurx1A2KdFJ/AL3F0
+         CQVmMphH2Oe1TwCzlVvo1O9k/jqRgGLbZbNQ0wzNt57IRP7+a9EWamTEkJyXrMmGdzX+
+         At3g==
+X-Gm-Message-State: APjAAAV8dU3Kv0emNjODr3Q47O1s4yKttzEVIWjiX2Fc3mqOHLbMeMlW
+        7+o1xQDvC1V+tnaJhHnCHjojjQ==
+X-Google-Smtp-Source: APXvYqxHEpysOT+P5y8GAeYLfwQvzn2kRXUmfcK22Ut1cMilZdKlx1zEvZd6eCAoEiOsSheerXzRUw==
+X-Received: by 2002:a02:694f:: with SMTP id e76mr25889586jac.111.1557873744534;
+        Tue, 14 May 2019 15:42:24 -0700 (PDT)
+Received: from shuah-t480s.internal (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
+        by smtp.gmail.com with ESMTPSA id u134sm213608itb.32.2019.05.14.15.42.23
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 14 May 2019 15:42:23 -0700 (PDT)
+From:   Shuah Khan <skhan@linuxfoundation.org>
+To:     shuah@kernel.org
+Cc:     Shuah Khan <skhan@linuxfoundation.org>,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] selftests: avoid KBUILD_OUTPUT dir cluttering with selftest objects
+Date:   Tue, 14 May 2019 16:42:22 -0600
+Message-Id: <20190514224222.31310-1-skhan@linuxfoundation.org>
+X-Mailer: git-send-email 2.20.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add entry for the new proc sysctl KUnit test to the PROC SYSCTL section.
+Running "make kselftest" or building selftests when KBUILD_OUTPUT
+is set, will create selftest objects in the KBUILD_OUTPUT directory.
+This could be undesirable especially when user didn't intend to
+relocate selftest objects.
 
-Signed-off-by: Brendan Higgins <brendanhiggins@google.com>
-Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Reviewed-by: Logan Gunthorpe <logang@deltatee.com>
+Use KBUILD_OUTPUT/kselftest to create selftest objects instead of
+cluttering the main directory.
+
+Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
 ---
- MAINTAINERS | 1 +
- 1 file changed, 1 insertion(+)
+ tools/testing/selftests/Makefile | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 8a91887c8d541..2e539647589fd 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -12526,6 +12526,7 @@ S:	Maintained
- F:	fs/proc/proc_sysctl.c
- F:	include/linux/sysctl.h
- F:	kernel/sysctl.c
-+F:	kernel/sysctl-test.c
- F:	tools/testing/selftests/sysctl/
+diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
+index c71a63b923d4..9781ca79794a 100644
+--- a/tools/testing/selftests/Makefile
++++ b/tools/testing/selftests/Makefile
+@@ -71,6 +71,9 @@ override LDFLAGS =
+ override MAKEFLAGS =
+ endif
  
- PS3 NETWORK SUPPORT
++# Append kselftest to KBUILD_OUTPUT to avoid cluttering
++# KBUILD_OUTPUT with selftest objects and headers installed
++# by selftests Makefile or lib.mk.
+ ifneq ($(KBUILD_SRC),)
+ override LDFLAGS =
+ endif
+@@ -79,7 +82,7 @@ ifneq ($(O),)
+ 	BUILD := $(O)
+ else
+ 	ifneq ($(KBUILD_OUTPUT),)
+-		BUILD := $(KBUILD_OUTPUT)
++		BUILD := $(KBUILD_OUTPUT)/kselftest
+ 	else
+ 		BUILD := $(shell pwd)
+ 		DEFAULT_INSTALL_HDR_PATH := 1
 -- 
-2.21.0.1020.gf2820cf01a-goog
+2.17.1
 
