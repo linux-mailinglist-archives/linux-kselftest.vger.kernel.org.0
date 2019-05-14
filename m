@@ -2,177 +2,100 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E3BC1C829
-	for <lists+linux-kselftest@lfdr.de>; Tue, 14 May 2019 14:05:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E8131C954
+	for <lists+linux-kselftest@lfdr.de>; Tue, 14 May 2019 15:23:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726494AbfENMFT (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 14 May 2019 08:05:19 -0400
-Received: from mail-io1-f67.google.com ([209.85.166.67]:37720 "EHLO
-        mail-io1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726462AbfENMFT (ORCPT
+        id S1726259AbfENNXA (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 14 May 2019 09:23:00 -0400
+Received: from mail-wr1-f67.google.com ([209.85.221.67]:39696 "EHLO
+        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725854AbfENNW7 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 14 May 2019 08:05:19 -0400
-Received: by mail-io1-f67.google.com with SMTP id u2so11666751ioc.4
-        for <linux-kselftest@vger.kernel.org>; Tue, 14 May 2019 05:05:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=3cCt7Fv9PrSN+POfdDA9BhvmV9/m6Z9B8cT0V9l7bcU=;
-        b=a7BcpiAa3cXS6NukeVFgCH7xf3ARmd8J6e/ULZ0a8xqTBwTNaq+N8QguChZh3uzW7f
-         kWHSY7qQUZbeMlUwXYdXunYt1ZQd2SKBDUTXd3jKW+KmrJ1DqqIRVtLYOVb1f+tEQL2N
-         W7DqiSEqrT+k9VDAEFt9iTN+c6I6bW1EG18JM=
+        Tue, 14 May 2019 09:22:59 -0400
+Received: by mail-wr1-f67.google.com with SMTP id w8so16773165wrl.6
+        for <linux-kselftest@vger.kernel.org>; Tue, 14 May 2019 06:22:58 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=3cCt7Fv9PrSN+POfdDA9BhvmV9/m6Z9B8cT0V9l7bcU=;
-        b=S8IxfbmNjVybZoPS4wH/hElw57tx8KZ4uVhwPQN0G5Lva6Av28uur+EVR1aNY0FiE0
-         nkYUhnVpi4ua2Fl80tNirij4dPTKSHKQ+SeAm24VrPSc9fP5vhn70GncVBG1zyBtLUBE
-         ONqWkjt4dXR1293Sa4m+oiWTenXgpU/51uEYgsEapLWLDXuaYP0g6kQAYrxgfnxn+yrs
-         jpUJytTxeLyIuPfKLxJ3Bsw2dErvJ64WFDE5ReYGAA6dhsBSsolyM4AKU3xrpkx3UOB9
-         cvTHyBol7iRFLUtFxSwipEFgNPB+Ll9/eaeJk+77J3S2x8yKX0/YGC/3iTZNN6z+ZceY
-         V4HQ==
-X-Gm-Message-State: APjAAAUPEWFqFE/mKbBaXT0ejQxCrlE3lJ9FMa0HCSNwOO3isJHhzAcM
-        f93N8K8YSyhD3nT+NlPb0KE4+8JZlB1eAnMPEeOD3g==
-X-Google-Smtp-Source: APXvYqyhBqCsjjVPPpuo20Er/14b4Noh22uMAdPO6o3WUMvHLuILgjBTMJK3Dh0BqwvOEYcjDaa/KDS4xlT8iYcmIUQ=
-X-Received: by 2002:a6b:b654:: with SMTP id g81mr3614153iof.34.1557835518050;
- Tue, 14 May 2019 05:05:18 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version;
+        bh=uFHSJsNByyay2Kmq9r271hEwxa2SlTHGMXGEWSzHBMI=;
+        b=LT6jhn4NVsvJgJOKUeWbgElLWT1a6e6SjS/MkD49HC73L3kNQ10xnicaZPn6UeuKqM
+         /OwtDU3VHe4KW0cqDb88cjMB40lBAPulUOe1/M7RCCFzEMgQlcGrElyv4cO8F2ZdBD/U
+         iIW2MW843ye9aVdumMg2JKlOH0xzhDY0EzeIkDk1stPpiMqjzoWdMFSiCofjqBe+rmcn
+         QLNDwptskjTBWpKLjP6HLyadsxfsemQl5sq+GciFHv9pCRzVwOpEnt0BYQR1WggrcxDn
+         +UA88JI0SxDXKzXG2I3k3YAEt8LSxMpeptHdHDLPagi5Yh9t2RXJReG+tB95FLFDN6R+
+         +KNQ==
+X-Gm-Message-State: APjAAAWC0PFZESpLnsOCbAEw9Zf8p+LwoFZ3zAFd7EF/caKQ1f6kvJSX
+        1XmJzIxT3afzIIkQG2ADvRx6vw==
+X-Google-Smtp-Source: APXvYqzLA7DdgWaapFTZmwqb7mHH3YTIXbyeudVVfoFPH8Bo3tN3uBaZw6hz9LJ9L3lpSlUDwHsiVA==
+X-Received: by 2002:adf:ce90:: with SMTP id r16mr22028791wrn.156.1557840177629;
+        Tue, 14 May 2019 06:22:57 -0700 (PDT)
+Received: from vitty.brq.redhat.com (nat-pool-brq-t.redhat.com. [213.175.37.10])
+        by smtp.gmail.com with ESMTPSA id s22sm4289095wmh.45.2019.05.14.06.22.56
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Tue, 14 May 2019 06:22:56 -0700 (PDT)
+From:   Vitaly Kuznetsov <vkuznets@redhat.com>
+To:     Dan Carpenter <dan.carpenter@oracle.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Radim =?utf-8?B?S3LEjW3DocWZ?= <rkrcmar@redhat.com>,
+        Shuah Khan <shuah@kernel.org>, kvm@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, kernel-janitors@vger.kernel.org
+Subject: Re: [PATCH] KVM: selftests: Fix a condition in test_hv_cpuid()
+In-Reply-To: <20190514103451.GA1694@mwanda>
+References: <20190514103451.GA1694@mwanda>
+Date:   Tue, 14 May 2019 09:22:56 -0400
+Message-ID: <87lfz9npan.fsf@vitty.brq.redhat.com>
 MIME-Version: 1.0
-References: <580e092f-fa4e-eedc-9e9a-a57dd085f0a6@gmail.com>
- <20190509032017.GA29703@mit.edu> <7fd35df81c06f6eb319223a22e7b93f29926edb9.camel@oracle.com>
- <20190509133551.GD29703@mit.edu> <ECADFF3FD767C149AD96A924E7EA6EAF9770D591@USCULXMSG01.am.sony.com>
- <875c546d-9713-bb59-47e4-77a1d2c69a6d@gmail.com> <20190509214233.GA20877@mit.edu>
- <80c72e64-2665-bd51-f78c-97f50f9a53ba@gmail.com> <20190511173344.GA8507@mit.edu>
- <20190513144451.GQ17751@phenom.ffwll.local> <20190514060433.GA181462@google.com>
-In-Reply-To: <20190514060433.GA181462@google.com>
-From:   Daniel Vetter <daniel@ffwll.ch>
-Date:   Tue, 14 May 2019 14:05:05 +0200
-Message-ID: <CAKMK7uHqtSF_sazJTbFL+xmQJRk4iwukCKZHoDHhsKkLXk=ECQ@mail.gmail.com>
-Subject: Re: [PATCH v2 00/17] kunit: introduce KUnit, the Linux kernel unit
- testing framework
-To:     Brendan Higgins <brendanhiggins@google.com>
-Cc:     "Theodore Ts'o" <tytso@mit.edu>,
-        Frank Rowand <frowand.list@gmail.com>, Tim.Bird@sony.com,
-        Knut Omang <knut.omang@oracle.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Kees Cook <keescook@google.com>,
-        Kieran Bingham <kieran.bingham@ideasonboard.com>,
-        "Luis R. Rodriguez" <mcgrof@kernel.org>,
-        Rob Herring <robh@kernel.org>, sboyd@kernel.org,
-        Shuah Khan <shuah@kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        kunit-dev@googlegroups.com,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        linux-fsdevel@vger.kernel.org, linux-kbuild@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>, linux-nvdimm@lists.01.org,
-        linux-um@lists.infradead.org,
-        Sasha Levin <Alexander.Levin@microsoft.com>,
-        Amir Goldstein <amir73il@gmail.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Dan Williams <dan.j.williams@intel.com>, jdike@addtoit.com,
-        Joel Stanley <joel@jms.id.au>,
-        Julia Lawall <julia.lawall@lip6.fr>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Petr Mladek <pmladek@suse.com>,
-        Richard Weinberger <richard@nod.at>,
-        David Rientjes <rientjes@google.com>,
-        Steven Rostedt <rostedt@goodmis.org>, wfg@linux.intel.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, May 14, 2019 at 8:04 AM Brendan Higgins
-<brendanhiggins@google.com> wrote:
->
-> On Mon, May 13, 2019 at 04:44:51PM +0200, Daniel Vetter wrote:
-> > On Sat, May 11, 2019 at 01:33:44PM -0400, Theodore Ts'o wrote:
-> > > On Fri, May 10, 2019 at 02:12:40PM -0700, Frank Rowand wrote:
-> > > > However, the reply is incorrect.  Kselftest in-kernel tests (which
-> > > > is the context here) can be configured as built in instead of as
-> > > > a module, and built in a UML kernel.  The UML kernel can boot,
-> > > > running the in-kernel tests before UML attempts to invoke the
-> > > > init process.
-> > >
-> > > Um, Citation needed?
-> > >
-> > > I don't see any evidence for this in the kselftest documentation, nor
-> > > do I see any evidence of this in the kselftest Makefiles.
-> > >
-> > > There exists test modules in the kernel that run before the init
-> > > scripts run --- but that's not strictly speaking part of kselftests,
-> > > and do not have any kind of infrastructure.  As noted, the
-> > > kselftests_harness header file fundamentally assumes that you are
-> > > running test code in userspace.
-> >
-> > Yeah I really like the "no userspace required at all" design of kunit,
-> > while still collecting results in a well-defined way (unless the current
-> > self-test that just run when you load the module, with maybe some
-> > kselftest ad-hoc wrapper around to collect the results).
-> >
-> > What I want to do long-term is to run these kernel unit tests as part of
-> > the build-testing, most likely in gitlab (sooner or later, for drm.git
->
-> Totally! This is part of the reason I have been insisting on a minimum
-> of UML compatibility for all unit tests. If you can suffiently constrain
-> the environment that is required for tests to run in, it makes it much
-> easier not only for a human to run your tests, but it also makes it a
-> lot easier for an automated service to be able to run your tests.
->
-> I actually have a prototype presubmit already working on my
-> "stable/non-upstream" branch. You can checkout what presubmit results
-> look like here[1][2].
+Dan Carpenter <dan.carpenter@oracle.com> writes:
 
-ug gerrit :-)
-
-> > only ofc). So that people get their pull requests (and patch series, we
-> > have some ideas to tie this into patchwork) automatically tested for this
+> The code is trying to check that all the padding is zeroed out and it
+> does this:
 >
-> Might that be Snowpatch[3]? I talked to Russell, the creator of Snowpatch,
-> and he seemed pretty open to collaboration.
+>     entry->padding[0] == entry->padding[1] == entry->padding[2] == 0
 >
-> Before I heard about Snowpatch, I had an intern write a translation
-> layer that made Prow (the presubmit service that I used in the prototype
-> above) work with LKML[4].
-
-There's about 3-4 forks/clones of patchwork. snowpatch is one, we have
-a different one on freedesktop.org. It's a bit a mess :-/
-
-> I am not married to either approach, but I think between the two of
-> them, most of the initial legwork has been done to make presubmit on
-> LKML a reality.
-
-We do have presubmit CI working already with our freedesktop.org
-patchwork. The missing glue is just tying that into gitlab CI somehow
-(since we want to unify build testing more and make it easier for
-contributors to adjust things).
--Daniel
-
-> > super basic stuff.
+> Assume everything is zeroed correctly, then the first comparison is
+> true, the next comparison is false and false is equal to zero so the
+> overall condition is true.  This bug doesn't affect run time very
+> badly, but the code should instead just check that all three paddings
+> are zero individually.
 >
-> I am really excited to hear back on what you think!
+> Also the error message was copy and pasted from an earlier error and it
+> wasn't correct.
 >
-> Cheers!
+> Fixes: 7edcb7343327 ("KVM: selftests: Add hyperv_cpuid test")
+> Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+> ---
+>  tools/testing/selftests/kvm/x86_64/hyperv_cpuid.c | 5 ++---
+>  1 file changed, 2 insertions(+), 3 deletions(-)
 >
-> [1] https://kunit-review.googlesource.com/c/linux/+/1509/10#message-7bfa40efb132e15c8388755c273837559911425c
-> [2] https://kunit-review.googlesource.com/c/linux/+/1509/10#message-a6784496eafff442ac98fb068bf1a0f36ee73509
-> [3] https://developer.ibm.com/open/projects/snowpatch/
-> [4] https://kunit.googlesource.com/prow-lkml/
-> _______________________________________________
-> dri-devel mailing list
-> dri-devel@lists.freedesktop.org
-> https://lists.freedesktop.org/mailman/listinfo/dri-devel
+> diff --git a/tools/testing/selftests/kvm/x86_64/hyperv_cpuid.c b/tools/testing/selftests/kvm/x86_64/hyperv_cpuid.c
+> index 9a21e912097c..63b9fc3fdfbe 100644
+> --- a/tools/testing/selftests/kvm/x86_64/hyperv_cpuid.c
+> +++ b/tools/testing/selftests/kvm/x86_64/hyperv_cpuid.c
+> @@ -58,9 +58,8 @@ static void test_hv_cpuid(struct kvm_cpuid2
+> *hv_cpuid_entries,
 
+we also seem to check for 'entry->index == 0' twice here.
 
+>  		TEST_ASSERT(entry->flags == 0,
+>  			    ".flags field should be zero");
+>  
+> -		TEST_ASSERT(entry->padding[0] == entry->padding[1]
+> -			    == entry->padding[2] == 0,
+> -			    ".index field should be zero");
+> +		TEST_ASSERT(!entry->padding[0] && !entry->padding[1] &&
+> +			    !entry->padding[2], "padding should be zero");
+>  
+>  		/*
+>  		 * If needed for debug:
+
+Reviewed-by: Vitaly Kuznetsov <vkuznets@redhat.com>
 
 -- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-+41 (0) 79 365 57 48 - http://blog.ffwll.ch
+Vitaly
