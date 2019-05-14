@@ -2,97 +2,106 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D1B661E542
-	for <lists+linux-kselftest@lfdr.de>; Wed, 15 May 2019 00:42:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F3BA91E57F
+	for <lists+linux-kselftest@lfdr.de>; Wed, 15 May 2019 01:19:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726348AbfENWmZ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 14 May 2019 18:42:25 -0400
-Received: from mail-it1-f194.google.com ([209.85.166.194]:52657 "EHLO
-        mail-it1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726325AbfENWmZ (ORCPT
+        id S1726652AbfENXTK (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 14 May 2019 19:19:10 -0400
+Received: from mail-pl1-f195.google.com ([209.85.214.195]:43646 "EHLO
+        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726339AbfENXTJ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 14 May 2019 18:42:25 -0400
-Received: by mail-it1-f194.google.com with SMTP id q65so24535itg.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 14 May 2019 15:42:24 -0700 (PDT)
+        Tue, 14 May 2019 19:19:09 -0400
+Received: by mail-pl1-f195.google.com with SMTP id n8so327311plp.10
+        for <linux-kselftest@vger.kernel.org>; Tue, 14 May 2019 16:19:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=J/+UqoVyOLSQ0y8e5yE4txVnGHYAUO/Sws7YS3mRmnI=;
-        b=cZl74vcnzPif//MhMVWyBs4L+OD+iNvZ9PMrJIAd8U6gbRh78KDyX4Ie6vEssxk3qW
-         6RnVzdW5rufKwjHPvOu3iE6v4+P5P5nTfBUEoMZ4Xmn3kBzhJ2wz289Sq4IDi5s5ObU0
-         N9B21WD5Dse36ePurthR+gIP6Xuf9Gj+rHnME=
+        d=google.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=65cWsglVoepzFlykZ42+abk0YI6VmpB8isURvrndfio=;
+        b=Bg39hYCrdxq9ZvR+2i/HlXSRaq6orpc1oOB8WF33oCVFV3rNh0CexWyS1Z8QPqlm8F
+         634lbyY40ksqDjssWKmNVtGI+1F3APRXwSAL0XqoS1nJrYkqeYOkCUNp8JWFWm6ZNg2N
+         3YnG2RckdXyh7Hd/JvDkJlfyEQP3VpBJF0SPvweC+YvdIQjG/OVFu00sC5S5PmUtedb0
+         57OXt1xXLQFMEhV58WldO2KsTL77idwyKmIM1odUUjPKE4+37YyS67kBXQTSZPy0lER0
+         iehTg4wcOiUIvCRTLfByhOie4AbWZpgc/tuXOmP4dOA/iaDvGuiNcBG7UtbS06g67YaV
+         pQVw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=J/+UqoVyOLSQ0y8e5yE4txVnGHYAUO/Sws7YS3mRmnI=;
-        b=JPgAw1z+0q06kukzpxfE6wPl/B74LpcdqM6zq+mXTY+7yDZM8HzJAscaNoIqDVjM1n
-         2xd5n4+InfmIwvMLkDc9+5I0/SkwO+GrAoo2zeKN1Xg6fRNsG42oyIrLWcoJMM4SdErX
-         l6dzQsOkmx5vF3WMjoW/V3/gOnx06q152OGU2jL6Bbm48PIY9W+kv5oUNklUHlU8X6A/
-         7ZGdDUhTgh1nQF23yPryq0cGpKncXMiaAyhmRJytgHKzIduh6pMfurx1A2KdFJ/AL3F0
-         CQVmMphH2Oe1TwCzlVvo1O9k/jqRgGLbZbNQ0wzNt57IRP7+a9EWamTEkJyXrMmGdzX+
-         At3g==
-X-Gm-Message-State: APjAAAV8dU3Kv0emNjODr3Q47O1s4yKttzEVIWjiX2Fc3mqOHLbMeMlW
-        7+o1xQDvC1V+tnaJhHnCHjojjQ==
-X-Google-Smtp-Source: APXvYqxHEpysOT+P5y8GAeYLfwQvzn2kRXUmfcK22Ut1cMilZdKlx1zEvZd6eCAoEiOsSheerXzRUw==
-X-Received: by 2002:a02:694f:: with SMTP id e76mr25889586jac.111.1557873744534;
-        Tue, 14 May 2019 15:42:24 -0700 (PDT)
-Received: from shuah-t480s.internal (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id u134sm213608itb.32.2019.05.14.15.42.23
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 14 May 2019 15:42:23 -0700 (PDT)
-From:   Shuah Khan <skhan@linuxfoundation.org>
-To:     shuah@kernel.org
-Cc:     Shuah Khan <skhan@linuxfoundation.org>,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] selftests: avoid KBUILD_OUTPUT dir cluttering with selftest objects
-Date:   Tue, 14 May 2019 16:42:22 -0600
-Message-Id: <20190514224222.31310-1-skhan@linuxfoundation.org>
-X-Mailer: git-send-email 2.20.1
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=65cWsglVoepzFlykZ42+abk0YI6VmpB8isURvrndfio=;
+        b=bHvSOuhURecAxT/N7Mh5kClt51MP0Bx7LsrPa4E9xZoml3hbYZYfMxFscB1HSk8pl1
+         BgR85iABEqSp2wj6RZcZRFqe/9ZXy2PndnZ3guNM7Jt+b40ounaBZQt5jocRwq23q74K
+         zgR13hz27vQmr92TnL8Yfepg11wMc4z7+sotWBJcO+VvhCWIbRWYquFTrTLpN6hNPx9M
+         KEi64wEfHCsVSoEy78irvxjEhM9I/MiKKkAuDVQS2eRQus72MZC9pqMKnzM9WOtVJitu
+         szexdoYGppY2JpEQRJoidXZ3KeODvEmT8e6EcCQvTgO8mXxJQp4xhIsmFF9yyOlon5hF
+         akqQ==
+X-Gm-Message-State: APjAAAWfDbopPkmqqMn2P+JyhoeJGdT63ZlzWKcNNvyJvYlgLbORWn31
+        kWuSuPUHWWb/pzPmTDZpdV+GMA==
+X-Google-Smtp-Source: APXvYqwRc6VN5ebH7uglXTpSRZvZHWA1IEE/QiHsPmobJB2SKK6EBwf8uUbYe/O8Vc0yLOYiPNp2/w==
+X-Received: by 2002:a17:902:5998:: with SMTP id p24mr23416476pli.9.1557875948193;
+        Tue, 14 May 2019 16:19:08 -0700 (PDT)
+Received: from google.com ([2620:15c:2cd:2:d714:29b4:a56b:b23b])
+        by smtp.gmail.com with ESMTPSA id p64sm253565pfp.72.2019.05.14.16.19.06
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Tue, 14 May 2019 16:19:07 -0700 (PDT)
+Date:   Tue, 14 May 2019 16:19:02 -0700
+From:   Brendan Higgins <brendanhiggins@google.com>
+To:     Jonathan Corbet <corbet@lwn.net>
+Cc:     frowand.list@gmail.com, gregkh@linuxfoundation.org,
+        keescook@google.com, kieran.bingham@ideasonboard.com,
+        mcgrof@kernel.org, robh@kernel.org, sboyd@kernel.org,
+        shuah@kernel.org, tytso@mit.edu, yamada.masahiro@socionext.com,
+        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        kunit-dev@googlegroups.com, linux-doc@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kbuild@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-nvdimm@lists.01.org, linux-um@lists.infradead.org,
+        Alexander.Levin@microsoft.com, Tim.Bird@sony.com,
+        amir73il@gmail.com, dan.carpenter@oracle.com,
+        dan.j.williams@intel.com, daniel@ffwll.ch, jdike@addtoit.com,
+        joel@jms.id.au, julia.lawall@lip6.fr, khilman@baylibre.com,
+        knut.omang@oracle.com, logang@deltatee.com, mpe@ellerman.id.au,
+        pmladek@suse.com, rdunlap@infradead.org, richard@nod.at,
+        rientjes@google.com, rostedt@goodmis.org, wfg@linux.intel.com,
+        Felix Guo <felixguoxiuping@gmail.com>
+Subject: Re: [PATCH v3 15/18] Documentation: kunit: add documentation for
+ KUnit
+Message-ID: <20190514231902.GA12893@google.com>
+References: <20190514054251.186196-1-brendanhiggins@google.com>
+ <20190514054251.186196-16-brendanhiggins@google.com>
+ <20190514073422.4287267c@lwn.net>
+ <20190514180810.GA109557@google.com>
+ <20190514121623.0314bf07@lwn.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190514121623.0314bf07@lwn.net>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Running "make kselftest" or building selftests when KBUILD_OUTPUT
-is set, will create selftest objects in the KBUILD_OUTPUT directory.
-This could be undesirable especially when user didn't intend to
-relocate selftest objects.
+On Tue, May 14, 2019 at 12:16:23PM -0600, Jonathan Corbet wrote:
+> On Tue, 14 May 2019 11:08:10 -0700
+> Brendan Higgins <brendanhiggins@google.com> wrote:
+> 
+> > > Naturally, though, I have one request: I'd rather not see this at the top
+> > > level, which is more than crowded enough as it is.  Can this material
+> > > please go into the development tools book, alongside the kselftest
+> > > documentation?
 
-Use KBUILD_OUTPUT/kselftest to create selftest objects instead of
-cluttering the main directory.
+Hmmm...probably premature to bring this up, but Documentation/dev-tools/
+is kind of thrown together.
 
-Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
----
- tools/testing/selftests/Makefile | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+It would be nice to provide a coherent overview, maybe provide some
+basic grouping as well.
 
-diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-index c71a63b923d4..9781ca79794a 100644
---- a/tools/testing/selftests/Makefile
-+++ b/tools/testing/selftests/Makefile
-@@ -71,6 +71,9 @@ override LDFLAGS =
- override MAKEFLAGS =
- endif
- 
-+# Append kselftest to KBUILD_OUTPUT to avoid cluttering
-+# KBUILD_OUTPUT with selftest objects and headers installed
-+# by selftests Makefile or lib.mk.
- ifneq ($(KBUILD_SRC),)
- override LDFLAGS =
- endif
-@@ -79,7 +82,7 @@ ifneq ($(O),)
- 	BUILD := $(O)
- else
- 	ifneq ($(KBUILD_OUTPUT),)
--		BUILD := $(KBUILD_OUTPUT)
-+		BUILD := $(KBUILD_OUTPUT)/kselftest
- 	else
- 		BUILD := $(shell pwd)
- 		DEFAULT_INSTALL_HDR_PATH := 1
--- 
-2.17.1
+It would be nice if there was kind of a gentle introduction to the
+tools, which ones you should be looking at, when, why, etc.
 
+> > Oh yeah, that seems like the obvious home for this in hindsight. Sorry
+> > about that. Will fix in next revision!
+> 
+> No need to apologize - I have to say the same thing to everybody :)
