@@ -2,238 +2,106 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CA6221D0E6
-	for <lists+linux-kselftest@lfdr.de>; Tue, 14 May 2019 22:54:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72C6E1E420
+	for <lists+linux-kselftest@lfdr.de>; Tue, 14 May 2019 23:49:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726429AbfENUyT (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 14 May 2019 16:54:19 -0400
-Received: from mail-pg1-f194.google.com ([209.85.215.194]:36556 "EHLO
-        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726400AbfENUyS (ORCPT
+        id S1726180AbfENVtt (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 14 May 2019 17:49:49 -0400
+Received: from mail-yw1-f67.google.com ([209.85.161.67]:45317 "EHLO
+        mail-yw1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726134AbfENVtt (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 14 May 2019 16:54:18 -0400
-Received: by mail-pg1-f194.google.com with SMTP id a3so168219pgb.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 14 May 2019 13:54:18 -0700 (PDT)
+        Tue, 14 May 2019 17:49:49 -0400
+Received: by mail-yw1-f67.google.com with SMTP id w18so365818ywa.12
+        for <linux-kselftest@vger.kernel.org>; Tue, 14 May 2019 14:49:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to
-         :user-agent;
-        bh=XygOuwoFm7gzQhhUOvWTZyqOBt7ptJW7nbpWmuwFcVs=;
-        b=g4qKFaFE7Yh7H28KycQARZrVqeKj92RMFbA+a72bVGE1wixE+szHEVqZsfsCy/c0sr
-         gvMzBI+cl1YducKsOuGaRhPvvo8n9HH5M0xOHiViD5KfsMxdIS9cpguok8JG7ChAcHGU
-         RDtXuaLArDabdyJmiJY2aa5NeS+f1bjEcUhBO2Nz+HSP3Ovqxtt5GPMBfcfs+VgkRthb
-         iHpOF/lPVIIEEAHwrrk7Ay8SQKzd0mL+GynkKMuKDNpOieChw+I5hnv++0884h7Mmiym
-         YC6Zi5Hm6rVagGpO5c910E3PjbiUk/DNb9WUv3huqAImMMW6T6uHIgzQDEXt/Q47cqIt
-         jnTw==
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=R+9TCAe1fMVTMqx0AuhLQptuUwnNa+S9Uw1MBQQeqXQ=;
+        b=FYPqHhHphXNHBBgx+uM0Ba+cRfG4HYqaeZXEqRFzNjSuQVvKnp0CmHQM2PzIFyPTHu
+         RcEZSb/k7H6Svl7m/MDuBLWx9uRgLMDVQE0oVFJosMytGISr0qVSCYaswqKQ+fr6r8FJ
+         ZDmR7nBbj5i2ps0u8NqH/E9F7aI2PR5YdNyubCpRhYViZIvO8+Yhb2ZRDDi3dkCCy4sv
+         ng1GUcivwZ4NwtEtKXyPZzAYIECYDzRwAGR3AmRyX5YY77NCKRZmvnNQV+IMnONtXltw
+         KmRQZ6UpWN5cpmUD4Rdt9weFO/XC6pjm9zE2ERfpmt7mvh8P7pNo5YaW1WGbGUII6xbt
+         fgig==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to:user-agent;
-        bh=XygOuwoFm7gzQhhUOvWTZyqOBt7ptJW7nbpWmuwFcVs=;
-        b=FvaaA9id3e8T40WnxEiIJ7UTxZACTcmVdy6tZNx4nzpC2ErF2bNXyD4nqY/5NnQbbc
-         NblGNTXXQNaycn+3z3+dvNRv+bReEoiEF5Skd8yDJ/7/277e/BOtUDzFLoYFFuJsi2Qi
-         nE7d2lXvNp9GuvkvAekN41iS8uC9+9WpWyH1qBS6RCwCO6eXI8BGdqJyJLmIP9JU9Wxw
-         cuRtkhLX2+Qg1YCkD1feRLkv8ytId+k85fC3lj31XdwxiDWGiTMYNyWwotOAxxCYpruO
-         b8H3LpilDf06v1948KqGUD2jnqI77JdkL1AIftQ3inoVI1IxnCZS+JIjAbDjRqjdr81u
-         kv+Q==
-X-Gm-Message-State: APjAAAUMJYbAomBndgmPLIlxDdGU4vdcKcCTH8a2KO0ASppKperMLJmu
-        sPyJtjyvNq2035lFWzys3DsK0Q==
-X-Google-Smtp-Source: APXvYqwd+Jkh7md+hSBxZPhzl0i1uY2dXHZTreHilHxyWOiiHKFUut9EjRbN0xnr1SmnWhFYXdyBgA==
-X-Received: by 2002:a63:2943:: with SMTP id p64mr40698957pgp.151.1557867257289;
-        Tue, 14 May 2019 13:54:17 -0700 (PDT)
-Received: from google.com ([2620:15c:2cd:2:d714:29b4:a56b:b23b])
-        by smtp.gmail.com with ESMTPSA id j184sm2017pge.83.2019.05.14.13.54.15
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Tue, 14 May 2019 13:54:16 -0700 (PDT)
-Date:   Tue, 14 May 2019 13:54:09 -0700
-From:   Brendan Higgins <brendanhiggins@google.com>
-To:     Frank Rowand <frowand.list@gmail.com>
-Cc:     Logan Gunthorpe <logang@deltatee.com>,
-        Theodore Ts'o <tytso@mit.edu>, Tim.Bird@sony.com,
-        knut.omang@oracle.com, gregkh@linuxfoundation.org,
-        keescook@google.com, kieran.bingham@ideasonboard.com,
-        mcgrof@kernel.org, robh@kernel.org, sboyd@kernel.org,
-        shuah@kernel.org, devicetree@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, kunit-dev@googlegroups.com,
-        linux-doc@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-nvdimm@lists.01.org,
-        linux-um@lists.infradead.org, Alexander.Levin@microsoft.com,
-        amir73il@gmail.com, dan.carpenter@oracle.com, daniel@ffwll.ch,
-        jdike@addtoit.com, joel@jms.id.au, julia.lawall@lip6.fr,
-        khilman@baylibre.com, mpe@ellerman.id.au, pmladek@suse.com,
-        richard@nod.at, rientjes@google.com, rostedt@goodmis.org,
-        wfg@linux.intel.com
-Subject: Re: [PATCH v2 00/17] kunit: introduce KUnit, the Linux kernel unit
- testing framework
-Message-ID: <20190514205409.GA154649@google.com>
-References: <20190509015856.GB7031@mit.edu>
- <580e092f-fa4e-eedc-9e9a-a57dd085f0a6@gmail.com>
- <20190509032017.GA29703@mit.edu>
- <7fd35df81c06f6eb319223a22e7b93f29926edb9.camel@oracle.com>
- <20190509133551.GD29703@mit.edu>
- <ECADFF3FD767C149AD96A924E7EA6EAF9770D591@USCULXMSG01.am.sony.com>
- <875c546d-9713-bb59-47e4-77a1d2c69a6d@gmail.com>
- <20190509214233.GA20877@mit.edu>
- <b09ba170-229b-fde4-3e9a-e50d6ab4c1b5@deltatee.com>
- <2aed675e-0408-c812-3e1a-b90710c528f2@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=R+9TCAe1fMVTMqx0AuhLQptuUwnNa+S9Uw1MBQQeqXQ=;
+        b=qqsP3Tp20q31ry/dMMbR6q99N9rEFwLeBXW4dUxg2V2kYDbrVSzNrrET/7b0LT44GL
+         9u1Ctaz+32ncZX/Q5nlqrXowZd1mfc5R+ZeyMOeWencSKeWMb5JpmGovsQOppHsLPuWh
+         h0jwgtmDK7YHxZMZWIWT/sI+MXpreDbMbMRbTl8wxxFFVYMwh5nG/7Vve5j02QOj/ak8
+         SkLWVUwD2m1BZGdldGDybMvQt6ia/6CHVXPtQlHBBWy72VfJEpPQaoYWGQO96i3wKfvU
+         ilzfxUUlSY/fMQZY88PM2PQgu0LGHz0QiSbQnKRcwlHDOwDHaC/9nLta8Ex5Vvg3VOHm
+         KHkw==
+X-Gm-Message-State: APjAAAWYzmChZEaXhgXTJ7LEYOlqlTO0vbu5WAMynb63OvxM5BMdKjxK
+        IOSM5kQr5PL+KA+CJgw2hTcnM5+5idSycPk4hbwz1JeeRRk=
+X-Google-Smtp-Source: APXvYqzJFBhFZddQC/Ou5a+IcTVdcrf/2uPjpAPPcWKtzo3ZvnoN4ivLE/N/oJGjEWFhls6JxYUbb+jA/fld4CeSDQQ=
+X-Received: by 2002:a0d:e785:: with SMTP id q127mr18949682ywe.204.1557870588545;
+ Tue, 14 May 2019 14:49:48 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <2aed675e-0408-c812-3e1a-b90710c528f2@gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <359070592.29.1557569697898.JavaMail.jenkins@db10df53eddc>
+ <201905110746.D6C85E86F6@keescook> <CADYN=9+nwM4Kw-PWHHDpQ5hpf=N5N8Ewy=h7Y2RTyO5Kwak88A@mail.gmail.com>
+ <201905140843.B972AA13B6@keescook>
+In-Reply-To: <201905140843.B972AA13B6@keescook>
+From:   Anders Roxell <anders.roxell@linaro.org>
+Date:   Tue, 14 May 2019 23:49:37 +0200
+Message-ID: <CADYN=9KaDW8vYC7FancbcRcDc4pfMozXqoGQGB3V=RxgQZBK4w@mail.gmail.com>
+Subject: Re: next-20190510 kselftest results
+To:     Kees Cook <keescook@chromium.org>
+Cc:     "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, lkft-triage@lists.linaro.org,
+        Dan Rue <dan.rue@linaro.org>,
+        Naresh Kamboju <naresh.kamboju@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, May 10, 2019 at 02:52:59PM -0700, Frank Rowand wrote:
+On Tue, 14 May 2019 at 17:46, Kees Cook <keescook@chromium.org> wrote:
+>
+> On Tue, May 14, 2019 at 05:28:45PM +0200, Anders Roxell wrote:
+> > On Sat, 11 May 2019 at 16:51, Kees Cook <keescook@chromium.org> wrote:
+> > > > Test Suites
+> > > > -----------
+> > > > * boot-lkft-kselftests-master-519
+> > >
+> > > What counts as a "pass" for this? I looked at the x86_64 log, and there are lots of kselftest failures, but the dashboard counts it as a "pass"?
+> >
+> > The boot is passed when the auto-login-action in suite 'lava' is passed [1].
+> >
+> > There's is two issues:
+> > 1. We had a way that changed the run_kselftest.sh file in order to
+> > skip tests that hanged (that results in no test output from the run)
+> > various boards. Since the new change to kselftest, the patch to
+> > run_kselftest.sh got added that breaks our way to skip the tests and
+> > kernel hangs.
 
-Sorry, I forgot to get back to this thread.
+aha, right that's awesome.
+So its only scripts that we have to skip now then.
 
-> On 5/9/19 3:20 PM, Logan Gunthorpe wrote:
-> > 
-> > 
-> > On 2019-05-09 3:42 p.m., Theodore Ts'o wrote:
-> >> On Thu, May 09, 2019 at 11:12:12AM -0700, Frank Rowand wrote:
-> >>>
-> >>>     "My understanding is that the intent of KUnit is to avoid booting a kernel on
-> >>>     real hardware or in a virtual machine.  That seems to be a matter of semantics
-> >>>     to me because isn't invoking a UML Linux just running the Linux kernel in
-> >>>     a different form of virtualization?
-> >>>
-> >>>     So I do not understand why KUnit is an improvement over kselftest.
-> >>>
-> >>>     ...
-> >>> 
-> >>> What am I missing?"
-> >> 
-> >> One major difference: kselftest requires a userspace environment;
-> >> it starts systemd, requires a root file system from which you can
-> >> load modules, etc.  Kunit doesn't require a root file system;
-> >> doesn't require that you start systemd; doesn't allow you to run
-> >> arbitrary perl, python, bash, etc. scripts.  As such, it's much
-> >> lighter weight than kselftest, and will have much less overhead
-> >> before you can start running tests.  So it's not really the same
-> >> kind of virtualization.
-> 
-> I'm back to reply to this subthread, after a delay, as promised.
-> 
-> 
-> > I largely agree with everything Ted has said in this thread, but I
-> > wonder if we are conflating two different ideas that is causing an
-> > impasse. From what I see, Kunit actually provides two different
-> > things:
-> 
-> > 1) An execution environment that can be run very quickly in userspace
-> > on tests in the kernel source. This speeds up the tests and gives a
-> > lot of benefit to developers using those tests because they can get
-> > feedback on their code changes a *lot* quicker.
-> 
-> kselftest in-kernel tests provide exactly the same when the tests are
-> configured as "built-in" code instead of as modules.
-> 
-> 
-> > 2) A framework to write unit tests that provides a lot of the same
-> > facilities as other common unit testing frameworks from userspace
-> > (ie. a runner that runs a list of tests and a bunch of helpers such
-> > as KUNIT_EXPECT_* to simplify test passes and failures).
-> 
-> > The first item from Kunit is novel and I see absolutely no overlap
-> > with anything kselftest does. It's also the valuable thing I'd like
-> > to see merged and grow.
-> 
-> The first item exists in kselftest.
-> 
-> 
-> > The second item, arguably, does have significant overlap with
-> > kselftest. Whether you are running short tests in a light weight UML
-> > environment or higher level tests in an heavier VM the two could be
-> > using the same framework for writing or defining in-kernel tests. It
-> > *may* also be valuable for some people to be able to run all the UML
-> > tests in the heavy VM environment along side other higher level
-> > tests.
-> > 
-> > Looking at the selftests tree in the repo, we already have similar
-> > items to what Kunit is adding as I described in point (2) above.
-> > kselftest_harness.h contains macros like EXPECT_* and ASSERT_* with
-> > very similar intentions to the new KUNIT_EXECPT_* and KUNIT_ASSERT_*
-> > macros.
-> 
-> I might be wrong here because I have not dug deeply enough into the
-> code!!!  Does this framework apply to the userspace tests, the
-> in-kernel tests, or both?  My "not having dug enough GUESS" is that
-> these are for the user space tests (although if so, they could be
-> extended for in-kernel use also).
-> 
-> So I think this one maybe does not have an overlap between KUnit
-> and kselftest.
+>
+> There's a fix in -next that adds an "alarm" check now so no tests should ever hang for more than 30 seconds now:
+> https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git/commit/?id=a745f7af3cbd04b9c9c9e803429e1c20775b538d
+>
+> > 2. The way we parse the output doesn't match the new output format.
+> >
+> > We will turn off the "next-* kselftest restults" until we have
+> > resolved this issue.
+>
+> I'd prefer to keep the tests running -- they're still valuable logs to
+> have. I was just curious about the specific reporting. As long as the
+> issue is known, that's fine. No need to disable it entirely. :)
 
-You are right, Frank: the EXPECT_* and ASSERT_* in kselftest_harness.h
-is for userspace only. kselftest_harness.h provides it's own main method
-for running the tests[1]. It also makes assumptions around having access
-to this main method[2].
+We will still run the tests on next, the plan is just to stop sending
+reports until we have the parsing fixed.
 
-There actually isn't that much infrastructure that that I can reuse
-there. I can't even reuse the API definitions because they only pass the
-context object (for me it is struct kunit, for them it is their fixture)
-that they use to their test cases.
+Cheers,
+Anders
 
-> > However, the number of users of this harness appears to be quite
-> > small. Most of the code in the selftests tree seems to be a random
-> > mismash of scripts and userspace code so it's not hard to see it as
-> > something completely different from the new Kunit:
-> > $ git grep --files-with-matches kselftest_harness.h *
-> > Documentation/dev-tools/kselftest.rst
-> > MAINTAINERS
-> > tools/testing/selftests/kselftest_harness.h
-> > tools/testing/selftests/net/tls.c
-> > tools/testing/selftests/rtc/rtctest.c
-> > tools/testing/selftests/seccomp/Makefile
-> > tools/testing/selftests/seccomp/seccomp_bpf.c
-> > tools/testing/selftests/uevent/Makefile
-> > tools/testing/selftests/uevent/uevent_filtering.c
-> 
-> 
-> > Thus, I can personally see a lot of value in integrating the kunit
-> > test framework with this kselftest harness. There's only a small
-> > number of users of the kselftest harness today, so one way or another
-> > it seems like getting this integrated early would be a good idea.
-> > Letting Kunit and Kselftests progress independently for a few years
-> > will only make this worse and may become something we end up
-> > regretting.
-> 
-> Yes, this I agree with.
-
-I think I agree with this point. I cannot see any reason not to have
-KUnit tests able to be run from the kselftest harness.
-
-Conceptually, I think we are mostly in agreement that kselftest and
-KUnit are distinct things. Like Shuah said, kselftest is a black box
-regression test framework, KUnit is a white box unit testing framework.
-So making kselftest the only interface to use KUnit would be a mistake
-in my opinion (and I think others on this thread would agree).
-
-That being said, when you go to run kselftest, I think there is an
-expectation that you run all your tests. Or at least that kselftest
-should make that possible. From my experience, usually when someone
-wants to run all the end-to-end tests, *they really just want to run all
-the tests*. This would imply that all your KUnit tests get run too.
-
-Another added benefit of making it possible for the kselftest harness to
-run KUnit tests would be that it would somewhat guarantee that the
-interfaces between the two would remain compatible meaning that test
-automation tools like CI and presubmit systems are more likely to be
-easy to integrate in each and less likely to break for either.
-
-Would anyone object if I explore this in a follow-up patchset? I have an
-idea of how I might start, but I think it would be easiest to explore in
-it's own patchset. I don't expect it to be a trivial amount of work.
-
-Cheers!
-
-[1] https://elixir.bootlin.com/linux/v5.1.2/source/tools/testing/selftests/kselftest_harness.h#L329
-[2] https://elixir.bootlin.com/linux/v5.1.2/source/tools/testing/selftests/kselftest_harness.h#L681
+>
+> --
+> Kees Cook
