@@ -2,205 +2,238 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 097EA1CF21
-	for <lists+linux-kselftest@lfdr.de>; Tue, 14 May 2019 20:36:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA6221D0E6
+	for <lists+linux-kselftest@lfdr.de>; Tue, 14 May 2019 22:54:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727489AbfENSg1 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 14 May 2019 14:36:27 -0400
-Received: from mail-pg1-f195.google.com ([209.85.215.195]:45961 "EHLO
-        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727397AbfENSg1 (ORCPT
+        id S1726429AbfENUyT (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 14 May 2019 16:54:19 -0400
+Received: from mail-pg1-f194.google.com ([209.85.215.194]:36556 "EHLO
+        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726400AbfENUyS (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 14 May 2019 14:36:27 -0400
-Received: by mail-pg1-f195.google.com with SMTP id i21so9027901pgi.12
-        for <linux-kselftest@vger.kernel.org>; Tue, 14 May 2019 11:36:26 -0700 (PDT)
+        Tue, 14 May 2019 16:54:18 -0400
+Received: by mail-pg1-f194.google.com with SMTP id a3so168219pgb.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 14 May 2019 13:54:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=kgrCvI66v1eNqCFIEetHipPbY2Pg16O5TtUnu8MLeKU=;
-        b=gUDKqjEsr8Qv/Y/RdIi8Q0i7FwdadH/D5if9+lYhE9eNQ7LD2B70LCDjDacGxm/FVd
-         7kNk5FVNgjwADCYAgcq7jDXk1GJDmyZ0Kh9Gx1ZgwB42ZvxUY0Ix0Sc6YTHp4jc2OTit
-         wIpv9ZoVwEXLXTtC0OYc2rhNj0FLGzUxHwUjYJgkKxJYgKIgxENPIfowWiBpTDqrDXJR
-         aV5ZOSNgafVxar7tXD+7n837g3sPSNo8qbLCnklS6BGK4TPE6mpuNgU2xapU2LGoeVW3
-         VHuSjX0KcDsjpdugWjGvtUgdMmqQOHw13R3aNbCEwTZebS+H4VHnLozq+d5p3UypFj6x
-         1Rrw==
+         :content-disposition:content-transfer-encoding:in-reply-to
+         :user-agent;
+        bh=XygOuwoFm7gzQhhUOvWTZyqOBt7ptJW7nbpWmuwFcVs=;
+        b=g4qKFaFE7Yh7H28KycQARZrVqeKj92RMFbA+a72bVGE1wixE+szHEVqZsfsCy/c0sr
+         gvMzBI+cl1YducKsOuGaRhPvvo8n9HH5M0xOHiViD5KfsMxdIS9cpguok8JG7ChAcHGU
+         RDtXuaLArDabdyJmiJY2aa5NeS+f1bjEcUhBO2Nz+HSP3Ovqxtt5GPMBfcfs+VgkRthb
+         iHpOF/lPVIIEEAHwrrk7Ay8SQKzd0mL+GynkKMuKDNpOieChw+I5hnv++0884h7Mmiym
+         YC6Zi5Hm6rVagGpO5c910E3PjbiUk/DNb9WUv3huqAImMMW6T6uHIgzQDEXt/Q47cqIt
+         jnTw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=kgrCvI66v1eNqCFIEetHipPbY2Pg16O5TtUnu8MLeKU=;
-        b=PUOxvsKlyt8pIzOkYw5dHrk5euy0XpydHUjlL1R1F/0xg56jGciagNiHeQIEEl+kL1
-         DO9WpBKCGZjDeX7l6J4B3rvdUXKt/rFULCCw2v5QCxr57vIw5yQXY2H7zt9r3x4YrNIt
-         tRauk+AdiSovg2PrIBcQXQvkAsoX4xo4byQqH+5hO6+sIPou/pR2NZj1yMJChdrdsdYI
-         tvTHSX9ETJOAVlw44TZZ9QMKuEbnE5lolgndkaOTp/7VHQBcX35oqJcJN9tDFMeVrAEo
-         wuowbVU7AeUOfFAgxG6KsldrRfMX1oXSGD6hFDLLcjwB3m+uEkgnB6GRL/5tF7DPGNGE
-         /mqQ==
-X-Gm-Message-State: APjAAAV0s8TrMlbeXnp/p+aUwy4d7gr05RPF9wypYxEECCwXpFkfv6DB
-        bPJKcxoyDRnw0dibjjXIMW0cJA==
-X-Google-Smtp-Source: APXvYqxx/zB3rhnaNxCnfVL/D4G9BC9H3ZRHO1zmfqf3pl1LMALbOUIKd0jSHjCRuQTB7Pn9vuxzCg==
-X-Received: by 2002:a62:e205:: with SMTP id a5mr4433129pfi.40.1557858985424;
-        Tue, 14 May 2019 11:36:25 -0700 (PDT)
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to:user-agent;
+        bh=XygOuwoFm7gzQhhUOvWTZyqOBt7ptJW7nbpWmuwFcVs=;
+        b=FvaaA9id3e8T40WnxEiIJ7UTxZACTcmVdy6tZNx4nzpC2ErF2bNXyD4nqY/5NnQbbc
+         NblGNTXXQNaycn+3z3+dvNRv+bReEoiEF5Skd8yDJ/7/277e/BOtUDzFLoYFFuJsi2Qi
+         nE7d2lXvNp9GuvkvAekN41iS8uC9+9WpWyH1qBS6RCwCO6eXI8BGdqJyJLmIP9JU9Wxw
+         cuRtkhLX2+Qg1YCkD1feRLkv8ytId+k85fC3lj31XdwxiDWGiTMYNyWwotOAxxCYpruO
+         b8H3LpilDf06v1948KqGUD2jnqI77JdkL1AIftQ3inoVI1IxnCZS+JIjAbDjRqjdr81u
+         kv+Q==
+X-Gm-Message-State: APjAAAUMJYbAomBndgmPLIlxDdGU4vdcKcCTH8a2KO0ASppKperMLJmu
+        sPyJtjyvNq2035lFWzys3DsK0Q==
+X-Google-Smtp-Source: APXvYqwd+Jkh7md+hSBxZPhzl0i1uY2dXHZTreHilHxyWOiiHKFUut9EjRbN0xnr1SmnWhFYXdyBgA==
+X-Received: by 2002:a63:2943:: with SMTP id p64mr40698957pgp.151.1557867257289;
+        Tue, 14 May 2019 13:54:17 -0700 (PDT)
 Received: from google.com ([2620:15c:2cd:2:d714:29b4:a56b:b23b])
-        by smtp.gmail.com with ESMTPSA id u6sm10940875pfa.1.2019.05.14.11.36.23
+        by smtp.gmail.com with ESMTPSA id j184sm2017pge.83.2019.05.14.13.54.15
         (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Tue, 14 May 2019 11:36:24 -0700 (PDT)
-Date:   Tue, 14 May 2019 11:36:18 -0700
+        Tue, 14 May 2019 13:54:16 -0700 (PDT)
+Date:   Tue, 14 May 2019 13:54:09 -0700
 From:   Brendan Higgins <brendanhiggins@google.com>
-To:     Daniel Vetter <daniel@ffwll.ch>
-Cc:     Theodore Ts'o <tytso@mit.edu>,
-        Frank Rowand <frowand.list@gmail.com>, Tim.Bird@sony.com,
-        Knut Omang <knut.omang@oracle.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Kees Cook <keescook@google.com>,
-        Kieran Bingham <kieran.bingham@ideasonboard.com>,
-        "Luis R. Rodriguez" <mcgrof@kernel.org>,
-        Rob Herring <robh@kernel.org>, sboyd@kernel.org,
-        Shuah Khan <shuah@kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        kunit-dev@googlegroups.com,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        linux-fsdevel@vger.kernel.org, linux-kbuild@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>, linux-nvdimm@lists.01.org,
-        linux-um@lists.infradead.org,
-        Sasha Levin <Alexander.Levin@microsoft.com>,
-        Amir Goldstein <amir73il@gmail.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Dan Williams <dan.j.williams@intel.com>, jdike@addtoit.com,
-        Joel Stanley <joel@jms.id.au>,
-        Julia Lawall <julia.lawall@lip6.fr>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Petr Mladek <pmladek@suse.com>,
-        Richard Weinberger <richard@nod.at>,
-        David Rientjes <rientjes@google.com>,
-        Steven Rostedt <rostedt@goodmis.org>, wfg@linux.intel.com
+To:     Frank Rowand <frowand.list@gmail.com>
+Cc:     Logan Gunthorpe <logang@deltatee.com>,
+        Theodore Ts'o <tytso@mit.edu>, Tim.Bird@sony.com,
+        knut.omang@oracle.com, gregkh@linuxfoundation.org,
+        keescook@google.com, kieran.bingham@ideasonboard.com,
+        mcgrof@kernel.org, robh@kernel.org, sboyd@kernel.org,
+        shuah@kernel.org, devicetree@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, kunit-dev@googlegroups.com,
+        linux-doc@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-nvdimm@lists.01.org,
+        linux-um@lists.infradead.org, Alexander.Levin@microsoft.com,
+        amir73il@gmail.com, dan.carpenter@oracle.com, daniel@ffwll.ch,
+        jdike@addtoit.com, joel@jms.id.au, julia.lawall@lip6.fr,
+        khilman@baylibre.com, mpe@ellerman.id.au, pmladek@suse.com,
+        richard@nod.at, rientjes@google.com, rostedt@goodmis.org,
+        wfg@linux.intel.com
 Subject: Re: [PATCH v2 00/17] kunit: introduce KUnit, the Linux kernel unit
  testing framework
-Message-ID: <20190514183618.GC109557@google.com>
-References: <7fd35df81c06f6eb319223a22e7b93f29926edb9.camel@oracle.com>
+Message-ID: <20190514205409.GA154649@google.com>
+References: <20190509015856.GB7031@mit.edu>
+ <580e092f-fa4e-eedc-9e9a-a57dd085f0a6@gmail.com>
+ <20190509032017.GA29703@mit.edu>
+ <7fd35df81c06f6eb319223a22e7b93f29926edb9.camel@oracle.com>
  <20190509133551.GD29703@mit.edu>
  <ECADFF3FD767C149AD96A924E7EA6EAF9770D591@USCULXMSG01.am.sony.com>
  <875c546d-9713-bb59-47e4-77a1d2c69a6d@gmail.com>
  <20190509214233.GA20877@mit.edu>
- <80c72e64-2665-bd51-f78c-97f50f9a53ba@gmail.com>
- <20190511173344.GA8507@mit.edu>
- <20190513144451.GQ17751@phenom.ffwll.local>
- <20190514060433.GA181462@google.com>
- <CAKMK7uHqtSF_sazJTbFL+xmQJRk4iwukCKZHoDHhsKkLXk=ECQ@mail.gmail.com>
+ <b09ba170-229b-fde4-3e9a-e50d6ab4c1b5@deltatee.com>
+ <2aed675e-0408-c812-3e1a-b90710c528f2@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <CAKMK7uHqtSF_sazJTbFL+xmQJRk4iwukCKZHoDHhsKkLXk=ECQ@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <2aed675e-0408-c812-3e1a-b90710c528f2@gmail.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, May 14, 2019 at 02:05:05PM +0200, Daniel Vetter wrote:
-> On Tue, May 14, 2019 at 8:04 AM Brendan Higgins
-> <brendanhiggins@google.com> wrote:
-> >
-> > On Mon, May 13, 2019 at 04:44:51PM +0200, Daniel Vetter wrote:
-> > > On Sat, May 11, 2019 at 01:33:44PM -0400, Theodore Ts'o wrote:
-> > > > On Fri, May 10, 2019 at 02:12:40PM -0700, Frank Rowand wrote:
-> > > > > However, the reply is incorrect.  Kselftest in-kernel tests (which
-> > > > > is the context here) can be configured as built in instead of as
-> > > > > a module, and built in a UML kernel.  The UML kernel can boot,
-> > > > > running the in-kernel tests before UML attempts to invoke the
-> > > > > init process.
-> > > >
-> > > > Um, Citation needed?
-> > > >
-> > > > I don't see any evidence for this in the kselftest documentation, nor
-> > > > do I see any evidence of this in the kselftest Makefiles.
-> > > >
-> > > > There exists test modules in the kernel that run before the init
-> > > > scripts run --- but that's not strictly speaking part of kselftests,
-> > > > and do not have any kind of infrastructure.  As noted, the
-> > > > kselftests_harness header file fundamentally assumes that you are
-> > > > running test code in userspace.
-> > >
-> > > Yeah I really like the "no userspace required at all" design of kunit,
-> > > while still collecting results in a well-defined way (unless the current
-> > > self-test that just run when you load the module, with maybe some
-> > > kselftest ad-hoc wrapper around to collect the results).
-> > >
-> > > What I want to do long-term is to run these kernel unit tests as part of
-> > > the build-testing, most likely in gitlab (sooner or later, for drm.git
-> >
-> > Totally! This is part of the reason I have been insisting on a minimum
-> > of UML compatibility for all unit tests. If you can suffiently constrain
-> > the environment that is required for tests to run in, it makes it much
-> > easier not only for a human to run your tests, but it also makes it a
-> > lot easier for an automated service to be able to run your tests.
-> >
-> > I actually have a prototype presubmit already working on my
-> > "stable/non-upstream" branch. You can checkout what presubmit results
-> > look like here[1][2].
+On Fri, May 10, 2019 at 02:52:59PM -0700, Frank Rowand wrote:
+
+Sorry, I forgot to get back to this thread.
+
+> On 5/9/19 3:20 PM, Logan Gunthorpe wrote:
+> > 
+> > 
+> > On 2019-05-09 3:42 p.m., Theodore Ts'o wrote:
+> >> On Thu, May 09, 2019 at 11:12:12AM -0700, Frank Rowand wrote:
+> >>>
+> >>>     "My understanding is that the intent of KUnit is to avoid booting a kernel on
+> >>>     real hardware or in a virtual machine.  That seems to be a matter of semantics
+> >>>     to me because isn't invoking a UML Linux just running the Linux kernel in
+> >>>     a different form of virtualization?
+> >>>
+> >>>     So I do not understand why KUnit is an improvement over kselftest.
+> >>>
+> >>>     ...
+> >>> 
+> >>> What am I missing?"
+> >> 
+> >> One major difference: kselftest requires a userspace environment;
+> >> it starts systemd, requires a root file system from which you can
+> >> load modules, etc.  Kunit doesn't require a root file system;
+> >> doesn't require that you start systemd; doesn't allow you to run
+> >> arbitrary perl, python, bash, etc. scripts.  As such, it's much
+> >> lighter weight than kselftest, and will have much less overhead
+> >> before you can start running tests.  So it's not really the same
+> >> kind of virtualization.
 > 
-> ug gerrit :-)
-
-Yeah, yeah, I know, but it is a lot easier for me to get a project set
-up here using Gerrit, when we already use that for a lot of other
-projects.
-
-Also, Gerrit has gotten a lot better over the last two years or so. Two
-years ago, I wouldn't touch it with a ten foot pole. It's not so bad
-anymore, at least if you are used to using a web UI to review code.
-
-> > > only ofc). So that people get their pull requests (and patch series, we
-> > > have some ideas to tie this into patchwork) automatically tested for this
-> >
-> > Might that be Snowpatch[3]? I talked to Russell, the creator of Snowpatch,
-> > and he seemed pretty open to collaboration.
-> >
-> > Before I heard about Snowpatch, I had an intern write a translation
-> > layer that made Prow (the presubmit service that I used in the prototype
-> > above) work with LKML[4].
+> I'm back to reply to this subthread, after a delay, as promised.
 > 
-> There's about 3-4 forks/clones of patchwork. snowpatch is one, we have
-> a different one on freedesktop.org. It's a bit a mess :-/
-
-Oh, I didn't realize that. I found your patchwork instance here[5], but
-do you have a place where I can see the changes you have added to
-support presubmit?
-
-> > I am not married to either approach, but I think between the two of
-> > them, most of the initial legwork has been done to make presubmit on
-> > LKML a reality.
 > 
-> We do have presubmit CI working already with our freedesktop.org
-> patchwork. The missing glue is just tying that into gitlab CI somehow
-> (since we want to unify build testing more and make it easier for
-> contributors to adjust things).
+> > I largely agree with everything Ted has said in this thread, but I
+> > wonder if we are conflating two different ideas that is causing an
+> > impasse. From what I see, Kunit actually provides two different
+> > things:
+> 
+> > 1) An execution environment that can be run very quickly in userspace
+> > on tests in the kernel source. This speeds up the tests and gives a
+> > lot of benefit to developers using those tests because they can get
+> > feedback on their code changes a *lot* quicker.
+> 
+> kselftest in-kernel tests provide exactly the same when the tests are
+> configured as "built-in" code instead of as modules.
+> 
+> 
+> > 2) A framework to write unit tests that provides a lot of the same
+> > facilities as other common unit testing frameworks from userspace
+> > (ie. a runner that runs a list of tests and a bunch of helpers such
+> > as KUNIT_EXPECT_* to simplify test passes and failures).
+> 
+> > The first item from Kunit is novel and I see absolutely no overlap
+> > with anything kselftest does. It's also the valuable thing I'd like
+> > to see merged and grow.
+> 
+> The first item exists in kselftest.
+> 
+> 
+> > The second item, arguably, does have significant overlap with
+> > kselftest. Whether you are running short tests in a light weight UML
+> > environment or higher level tests in an heavier VM the two could be
+> > using the same framework for writing or defining in-kernel tests. It
+> > *may* also be valuable for some people to be able to run all the UML
+> > tests in the heavy VM environment along side other higher level
+> > tests.
+> > 
+> > Looking at the selftests tree in the repo, we already have similar
+> > items to what Kunit is adding as I described in point (2) above.
+> > kselftest_harness.h contains macros like EXPECT_* and ASSERT_* with
+> > very similar intentions to the new KUNIT_EXECPT_* and KUNIT_ASSERT_*
+> > macros.
+> 
+> I might be wrong here because I have not dug deeply enough into the
+> code!!!  Does this framework apply to the userspace tests, the
+> in-kernel tests, or both?  My "not having dug enough GUESS" is that
+> these are for the user space tests (although if so, they could be
+> extended for in-kernel use also).
+> 
+> So I think this one maybe does not have an overlap between KUnit
+> and kselftest.
 
-I checked out a couple of your projects on your patchwork instance: AMD
-X.Org drivers, DRI devel, and Wayland. I saw the tab you added for
-tests, but none of them actually had any test results. Can you point me
-at one that does?
+You are right, Frank: the EXPECT_* and ASSERT_* in kselftest_harness.h
+is for userspace only. kselftest_harness.h provides it's own main method
+for running the tests[1]. It also makes assumptions around having access
+to this main method[2].
+
+There actually isn't that much infrastructure that that I can reuse
+there. I can't even reuse the API definitions because they only pass the
+context object (for me it is struct kunit, for them it is their fixture)
+that they use to their test cases.
+
+> > However, the number of users of this harness appears to be quite
+> > small. Most of the code in the selftests tree seems to be a random
+> > mismash of scripts and userspace code so it's not hard to see it as
+> > something completely different from the new Kunit:
+> > $ git grep --files-with-matches kselftest_harness.h *
+> > Documentation/dev-tools/kselftest.rst
+> > MAINTAINERS
+> > tools/testing/selftests/kselftest_harness.h
+> > tools/testing/selftests/net/tls.c
+> > tools/testing/selftests/rtc/rtctest.c
+> > tools/testing/selftests/seccomp/Makefile
+> > tools/testing/selftests/seccomp/seccomp_bpf.c
+> > tools/testing/selftests/uevent/Makefile
+> > tools/testing/selftests/uevent/uevent_filtering.c
+> 
+> 
+> > Thus, I can personally see a lot of value in integrating the kunit
+> > test framework with this kselftest harness. There's only a small
+> > number of users of the kselftest harness today, so one way or another
+> > it seems like getting this integrated early would be a good idea.
+> > Letting Kunit and Kselftests progress independently for a few years
+> > will only make this worse and may become something we end up
+> > regretting.
+> 
+> Yes, this I agree with.
+
+I think I agree with this point. I cannot see any reason not to have
+KUnit tests able to be run from the kselftest harness.
+
+Conceptually, I think we are mostly in agreement that kselftest and
+KUnit are distinct things. Like Shuah said, kselftest is a black box
+regression test framework, KUnit is a white box unit testing framework.
+So making kselftest the only interface to use KUnit would be a mistake
+in my opinion (and I think others on this thread would agree).
+
+That being said, when you go to run kselftest, I think there is an
+expectation that you run all your tests. Or at least that kselftest
+should make that possible. From my experience, usually when someone
+wants to run all the end-to-end tests, *they really just want to run all
+the tests*. This would imply that all your KUnit tests get run too.
+
+Another added benefit of making it possible for the kselftest harness to
+run KUnit tests would be that it would somewhat guarantee that the
+interfaces between the two would remain compatible meaning that test
+automation tools like CI and presubmit systems are more likely to be
+easy to integrate in each and less likely to break for either.
+
+Would anyone object if I explore this in a follow-up patchset? I have an
+idea of how I might start, but I think it would be easiest to explore in
+it's own patchset. I don't expect it to be a trivial amount of work.
 
 Cheers!
 
-[5] https://patchwork.freedesktop.org/
-
-> > > super basic stuff.
-> >
-> > I am really excited to hear back on what you think!
-> >
-> > Cheers!
-> >
-> > [1] https://kunit-review.googlesource.com/c/linux/+/1509/10#message-7bfa40efb132e15c8388755c273837559911425c
-> > [2] https://kunit-review.googlesource.com/c/linux/+/1509/10#message-a6784496eafff442ac98fb068bf1a0f36ee73509
-> > [3] https://developer.ibm.com/open/projects/snowpatch/
-> > [4] https://kunit.googlesource.com/prow-lkml/
-> > _______________________________________________
-> > dri-devel mailing list
-> > dri-devel@lists.freedesktop.org
-> > https://lists.freedesktop.org/mailman/listinfo/dri-devel
-
+[1] https://elixir.bootlin.com/linux/v5.1.2/source/tools/testing/selftests/kselftest_harness.h#L329
+[2] https://elixir.bootlin.com/linux/v5.1.2/source/tools/testing/selftests/kselftest_harness.h#L681
