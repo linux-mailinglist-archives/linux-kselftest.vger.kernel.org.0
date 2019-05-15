@@ -2,62 +2,63 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 33D3F1F5DE
-	for <lists+linux-kselftest@lfdr.de>; Wed, 15 May 2019 15:48:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AB291F5E2
+	for <lists+linux-kselftest@lfdr.de>; Wed, 15 May 2019 15:48:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727992AbfEONsa (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 15 May 2019 09:48:30 -0400
-Received: from mail-wm1-f65.google.com ([209.85.128.65]:50679 "EHLO
-        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727967AbfEONs3 (ORCPT
+        id S1728126AbfEONse (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 15 May 2019 09:48:34 -0400
+Received: from mail-wr1-f68.google.com ([209.85.221.68]:46181 "EHLO
+        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728055AbfEONse (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 15 May 2019 09:48:29 -0400
-Received: by mail-wm1-f65.google.com with SMTP id f204so131521wme.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 15 May 2019 06:48:28 -0700 (PDT)
+        Wed, 15 May 2019 09:48:34 -0400
+Received: by mail-wr1-f68.google.com with SMTP id r7so2736797wrr.13
+        for <linux-kselftest@vger.kernel.org>; Wed, 15 May 2019 06:48:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=kinvolk.io; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=/4wFlx6HQLwkFDpRpijpjb+LCC4DqiZp6fdw5d4Bn0s=;
-        b=D9xP2BubzEPMEBtp4A/REzzwHzsxPmnZZGeY2xY/f1+7/kcqWbosB7HhgK4rfNY63G
-         rKonLvKxUHvdwCOEopEm/AVUNntJh2b6OOJzQgr4da6zbmppPX8HlkfDYipmSNtOAqWE
-         3HIdf2UETubgofhYaek5zlB3hweliaucMnXKk=
+        bh=C8C9qQrgN+nbsH+pjHzl6tlp7Nc6h5TeMF/8muSLzN0=;
+        b=bb0wfX8/WrYuGLUAmDRcNpnd3bhxH6w7/sgCZ8Drhn8KHryZFCL75wztrn3JWWAnVM
+         R0QfBsa9kVPuPPY8Fl3RqZexz2P73kISAhhEJg2Zjo9RldS3sYnWT3YAgPUYR6zk1OcB
+         73vtRKTT1JAauCFk9RwePECbqyDWlwQzdCSck=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=/4wFlx6HQLwkFDpRpijpjb+LCC4DqiZp6fdw5d4Bn0s=;
-        b=W8uVf0t1xEMudNCtpSuFfj3MZoKgSjsdjRiDzP/0u6EmhJdo2dAcxvZi31R+4HQpkH
-         EYKt4bCdLVa3Y8r6UtvP01HL9BaUJ+UkIffEvxQ1QfOVlOANvxIiXrPlsfI6oXi3Idxy
-         SgX2uHT/XjU6KCigDqZt0p1qWKWLaTHLChLfkPm4XKuaXpcPs3YTv3lO2BGL1xcockmu
-         bZWwgkI9VnMEWgvkJRlStG64pT7RtUX6SqvDHQiunzxGHfePbGaIIS1fIrTiDEpH4t8h
-         YG1YWUbFDeI34HAx+SZZCkkGymyaSmqu8C4kDMJe0KktkxehEQAs+ILBqsKkgzSsnEXA
-         0luA==
-X-Gm-Message-State: APjAAAXGn3/Qasen0a7IG8mWQDlODVk+5YQhNtKNX01oNd/bmgwdYRUz
-        x1LUlp0mZ/3T2IXFdP4ILo5HSA==
-X-Google-Smtp-Source: APXvYqwpuCIcSe7tEpjLLIyvs2sBphmsdGB5DWnT0DsJKq+gtI+0iDk2r07JPa/i5V9zFjAc1hfA9A==
-X-Received: by 2002:a1c:1f0d:: with SMTP id f13mr3449718wmf.74.1557928107896;
-        Wed, 15 May 2019 06:48:27 -0700 (PDT)
+        bh=C8C9qQrgN+nbsH+pjHzl6tlp7Nc6h5TeMF/8muSLzN0=;
+        b=XZ8TzedKXWMtIJL2enZpGAtRFyrVOd7+fof/94giVffTi1g3Umzvy7DlLfLP0Ba9dv
+         feLMGoU+qP2Kdx1xorM4ukTxqpVSeKsCdNzCoVwSvquAPegtkGCeMnMqvcQqEKjyvUMg
+         0RMw7Te26QUfZFf56q/NNT+h5lxohfOmEHE4+iSmBskNStp5YDnv2sa8qjypSwd7yrTD
+         N/KcpBTMDwQCNhgtvzBJKJC+Rr5S9jgdgAw3bc+IwggFgGreV6GvSxKxTWOnGwPIvgKj
+         m6R10DbiJEEwuKsQFSwUcZer9EL7lBauu2ZqHXw5wSOhSzr1ImYLs431R/CcYVhtvrkM
+         Pt3w==
+X-Gm-Message-State: APjAAAWSIPXQEZATA3KVbXspDnZTcouOJcMAiOseWbOi22YB8db+fKPU
+        j+dCrnwsZK4pLl0tVAhh6xH3Cg==
+X-Google-Smtp-Source: APXvYqw5wECdzlZCofc+dCbXApCTq0fMDCETyET6YAJzK0hcDDptniDy4A+BRGyfphuaB3WidJzFwQ==
+X-Received: by 2002:adf:cc8d:: with SMTP id p13mr13698244wrj.114.1557928112220;
+        Wed, 15 May 2019 06:48:32 -0700 (PDT)
 Received: from localhost.localdomain (ip5f5aea35.dynamic.kabel-deutschland.de. [95.90.234.53])
-        by smtp.gmail.com with ESMTPSA id v5sm4498506wra.83.2019.05.15.06.48.26
+        by smtp.gmail.com with ESMTPSA id v5sm4498506wra.83.2019.05.15.06.48.31
         (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Wed, 15 May 2019 06:48:27 -0700 (PDT)
+        Wed, 15 May 2019 06:48:31 -0700 (PDT)
 From:   Krzesimir Nowak <krzesimir@kinvolk.io>
 To:     bpf@vger.kernel.org
 Cc:     iago@kinvolk.io, alban@kinvolk.io,
         Krzesimir Nowak <krzesimir@kinvolk.io>,
+        Jakub Kicinski <jakub.kicinski@netronome.com>,
         Shuah Khan <shuah@kernel.org>,
         Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Martin KaFai Lau <kafai@fb.com>,
         Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
         Andrey Ignatov <rdna@fb.com>,
-        Jakub Kicinski <jakub.kicinski@netronome.com>,
+        Jiong Wang <jiong.wang@netronome.com>,
         linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH bpf v1 2/3] selftests/bpf: Print a message when tester could not run a program
-Date:   Wed, 15 May 2019 15:47:27 +0200
-Message-Id: <20190515134731.12611-3-krzesimir@kinvolk.io>
+Subject: [PATCH bpf v1 3/3] selftests/bpf: Avoid a clobbering of errno
+Date:   Wed, 15 May 2019 15:47:28 +0200
+Message-Id: <20190515134731.12611-4-krzesimir@kinvolk.io>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20190515134731.12611-1-krzesimir@kinvolk.io>
 References: <20190515134731.12611-1-krzesimir@kinvolk.io>
@@ -68,47 +69,40 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This prints a message when the error is about program type being not
-supported by the test runner or because of permissions problem. This
-is to see if the program we expected to run was actually executed.
+Save errno right after bpf_prog_test_run returns, so we later check
+the error code actually set by bpf_prog_test_run, not by some libcap
+function.
 
-The messages are open-coded because strerror(ENOTSUPP) returns
-"Unknown error 524".
-
+Cc: Jakub Kicinski <jakub.kicinski@netronome.com>
+Fixes: 5a8d5209ac022 ("selftests: bpf: add trivial JSET tests")
 Signed-off-by: Krzesimir Nowak <krzesimir@kinvolk.io>
 ---
- tools/testing/selftests/bpf/test_verifier.c | 17 +++++++++++++----
- 1 file changed, 13 insertions(+), 4 deletions(-)
+ tools/testing/selftests/bpf/test_verifier.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
 diff --git a/tools/testing/selftests/bpf/test_verifier.c b/tools/testing/selftests/bpf/test_verifier.c
-index ccd896b98cac..bf0da03f593b 100644
+index bf0da03f593b..514e17246396 100644
 --- a/tools/testing/selftests/bpf/test_verifier.c
 +++ b/tools/testing/selftests/bpf/test_verifier.c
-@@ -825,11 +825,20 @@ static int do_prog_test_run(int fd_prog, bool unpriv, uint32_t expected_val,
+@@ -818,15 +818,17 @@ static int do_prog_test_run(int fd_prog, bool unpriv, uint32_t expected_val,
+ 	__u32 size_tmp = sizeof(tmp);
+ 	uint32_t retval;
+ 	int err;
++	int saved_errno;
+ 
+ 	if (unpriv)
+ 		set_admin(true);
+ 	err = bpf_prog_test_run(fd_prog, 1, data, size_data,
  				tmp, &size_tmp, &retval, NULL);
++	saved_errno = errno;
  	if (unpriv)
  		set_admin(false);
--	if (err && errno != 524/*ENOTSUPP*/ && errno != EPERM) {
--		printf("Unexpected bpf_prog_test_run error ");
--		return err;
-+	if (err) {
-+		switch (errno) {
-+		case 524/*ENOTSUPP*/:
-+			printf("Did not run the program (not supported) ");
-+			return 0;
-+		case EPERM:
-+			printf("Did not run the program (no permission) ");
-+			return 0;
-+		default:
-+			printf("Unexpected bpf_prog_test_run error ");
-+			return err;
-+		}
- 	}
--	if (!err && retval != expected_val &&
-+	if (retval != expected_val &&
- 	    expected_val != POINTER_VALUE) {
- 		printf("FAIL retval %d != %d ", retval, expected_val);
- 		return 1;
+ 	if (err) {
+-		switch (errno) {
++		switch (saved_errno) {
+ 		case 524/*ENOTSUPP*/:
+ 			printf("Did not run the program (not supported) ");
+ 			return 0;
 -- 
 2.20.1
 
