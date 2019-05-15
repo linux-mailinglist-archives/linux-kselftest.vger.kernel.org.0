@@ -2,132 +2,93 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B9801E7B1
-	for <lists+linux-kselftest@lfdr.de>; Wed, 15 May 2019 06:30:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC7A81E867
+	for <lists+linux-kselftest@lfdr.de>; Wed, 15 May 2019 08:44:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726684AbfEOEaq (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 15 May 2019 00:30:46 -0400
-Received: from outgoing-auth-1.mit.edu ([18.9.28.11]:47192 "EHLO
-        outgoing.mit.edu" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1725941AbfEOEaq (ORCPT
+        id S1725941AbfEOGoW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 15 May 2019 02:44:22 -0400
+Received: from mail-pl1-f193.google.com ([209.85.214.193]:37111 "EHLO
+        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725876AbfEOGoV (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 15 May 2019 00:30:46 -0400
-Received: from callcc.thunk.org (168-215-239-3.static.ctl.one [168.215.239.3] (may be forged))
-        (authenticated bits=0)
-        (User authenticated as tytso@ATHENA.MIT.EDU)
-        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id x4F4SdqA023241
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 15 May 2019 00:28:43 -0400
-Received: by callcc.thunk.org (Postfix, from userid 15806)
-        id 8480F420024; Wed, 15 May 2019 00:28:38 -0400 (EDT)
-Date:   Wed, 15 May 2019 00:28:38 -0400
-From:   "Theodore Ts'o" <tytso@mit.edu>
-To:     Frank Rowand <frowand.list@gmail.com>
-Cc:     Tim.Bird@sony.com, knut.omang@oracle.com,
-        gregkh@linuxfoundation.org, brendanhiggins@google.com,
-        keescook@google.com, kieran.bingham@ideasonboard.com,
-        mcgrof@kernel.org, robh@kernel.org, sboyd@kernel.org,
-        shuah@kernel.org, devicetree@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, kunit-dev@googlegroups.com,
-        linux-doc@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-nvdimm@lists.01.org,
-        linux-um@lists.infradead.org, Alexander.Levin@microsoft.com,
-        amir73il@gmail.com, dan.carpenter@oracle.com,
-        dan.j.williams@intel.com, daniel@ffwll.ch, jdike@addtoit.com,
-        joel@jms.id.au, julia.lawall@lip6.fr, khilman@baylibre.com,
-        logang@deltatee.com, mpe@ellerman.id.au, pmladek@suse.com,
-        richard@nod.at, rientjes@google.com, rostedt@goodmis.org,
-        wfg@linux.intel.com
-Subject: Re: [PATCH v2 00/17] kunit: introduce KUnit, the Linux kernel unit
- testing framework
-Message-ID: <20190515042838.GA26954@mit.edu>
-Mail-Followup-To: Theodore Ts'o <tytso@mit.edu>,
-        Frank Rowand <frowand.list@gmail.com>, Tim.Bird@sony.com,
-        knut.omang@oracle.com, gregkh@linuxfoundation.org,
-        brendanhiggins@google.com, keescook@google.com,
-        kieran.bingham@ideasonboard.com, mcgrof@kernel.org, robh@kernel.org,
-        sboyd@kernel.org, shuah@kernel.org, devicetree@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, kunit-dev@googlegroups.com,
-        linux-doc@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-nvdimm@lists.01.org,
-        linux-um@lists.infradead.org, Alexander.Levin@microsoft.com,
-        amir73il@gmail.com, dan.carpenter@oracle.com,
-        dan.j.williams@intel.com, daniel@ffwll.ch, jdike@addtoit.com,
-        joel@jms.id.au, julia.lawall@lip6.fr, khilman@baylibre.com,
-        logang@deltatee.com, mpe@ellerman.id.au, pmladek@suse.com,
-        richard@nod.at, rientjes@google.com, rostedt@goodmis.org,
-        wfg@linux.intel.com
-References: <580e092f-fa4e-eedc-9e9a-a57dd085f0a6@gmail.com>
- <20190509032017.GA29703@mit.edu>
- <7fd35df81c06f6eb319223a22e7b93f29926edb9.camel@oracle.com>
- <20190509133551.GD29703@mit.edu>
- <ECADFF3FD767C149AD96A924E7EA6EAF9770D591@USCULXMSG01.am.sony.com>
- <875c546d-9713-bb59-47e4-77a1d2c69a6d@gmail.com>
- <20190509214233.GA20877@mit.edu>
- <80c72e64-2665-bd51-f78c-97f50f9a53ba@gmail.com>
- <20190511173344.GA8507@mit.edu>
- <a305c732-9953-8724-b4a4-25aa50c89365@gmail.com>
+        Wed, 15 May 2019 02:44:21 -0400
+Received: by mail-pl1-f193.google.com with SMTP id p15so846444pll.4
+        for <linux-kselftest@vger.kernel.org>; Tue, 14 May 2019 23:44:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rajagiritech-edu-in.20150623.gappssmtp.com; s=20150623;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ZdohzeVgbbKHEv1a2YghmfxHtlO8ojKInm2nc2fqSSY=;
+        b=ZQsLpqrplJtjoMLOoc0l17JwFYvv6aqTNTRukNM+fypvmCZkF7YCRm+bsiagitQLHA
+         CaWoiXAW6FE1bQMzrymKfJUMvD4zDDes6Dh8re/iQMFRFE8Tali/B56G6iDrZ2ys3EIY
+         +PBIj46HwlRtQEZFEnjitSNPAWgwmpQ95i7mcpzxt1sNnKtlRdNBZoNWXAd0lmOhjezi
+         1Hxu6myv4rMJePJRz/6TDuqZl7y0uJxunvxbaTYxWu+S/CxQhBvO5xnL7C60lSMom6SB
+         hpZ2uwt5izTpha4XnTXlf11FA0ceAHldst6/3vsYQuvQxpFveDJRuFGrtQuPnvdF2Wwd
+         z+aQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ZdohzeVgbbKHEv1a2YghmfxHtlO8ojKInm2nc2fqSSY=;
+        b=Gq5U2foYNCnfG8oWONeCVaNSG8Uiz2A/Bs/Jx5QelXTC33R0ng7sPiwP3h2C/XOBKi
+         V7cZuut9c91wtymPyfPOFND2GYvujweFBa2CRKaDxH4j5WYKIriDyLfEW0/0xi5sps+f
+         g1+GDkpAGt9J+RfN+VOM/xWqTnq66x1euOT71kNPa74ZQImsPyVQr1TMl+h0UFOYLdeW
+         dNI8uN7L1696Vx4bHk/9xMlIxN7DI5JIg0jwAGc2ML7p9B8agrY55hhkoBONcAqZpXby
+         XUSPplHU8SG4/V4tDmQ0KLONVkv7Zn/Q8Q83oZKVMkkrsTe8e/6JLcVPnvTJQVGYgR41
+         ANHg==
+X-Gm-Message-State: APjAAAXlydwsAvjaY7wr9ghwkCnhqom60mNzCfxrp6m+aMWu+jMl1ltB
+        cixS5E36nr2+fUCKrERpU9oj4Q==
+X-Google-Smtp-Source: APXvYqw4Iv9Upcf4ZVB3I6Bn93najHUPFoo6jO+ve/0QzP33b8Cawc+JcdY30jXV8D9WZAq1Z7AQIA==
+X-Received: by 2002:a17:902:2884:: with SMTP id f4mr14396889plb.230.1557902661254;
+        Tue, 14 May 2019 23:44:21 -0700 (PDT)
+Received: from localhost.localdomain ([122.174.240.7])
+        by smtp.gmail.com with ESMTPSA id e5sm2180868pgh.35.2019.05.14.23.44.18
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 14 May 2019 23:44:20 -0700 (PDT)
+From:   Jeffrin Jose T <jeffrin@rajagiritech.edu.in>
+To:     pablo@netfilter.org
+Cc:     fw@strlen.de, shuah@kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, netfilter-devel@vger.kernel.org,
+        Jeffrin Jose T <jeffrin@rajagiritech.edu.in>
+Subject: [PATCH v2] selftests: netfilter: missing error check when setting up veth interface
+Date:   Wed, 15 May 2019 12:14:04 +0530
+Message-Id: <20190515064405.3981-1-jeffrin@rajagiritech.edu.in>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <a305c732-9953-8724-b4a4-25aa50c89365@gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, May 14, 2019 at 05:26:47PM -0700, Frank Rowand wrote:
-> On 5/11/19 10:33 AM, Theodore Ts'o wrote:
-> > On Fri, May 10, 2019 at 02:12:40PM -0700, Frank Rowand wrote:
-> >> However, the reply is incorrect.  Kselftest in-kernel tests (which
-> >> is the context here) can be configured as built in instead of as
-> >> a module, and built in a UML kernel.  The UML kernel can boot,
-> >> running the in-kernel tests before UML attempts to invoke the
-> >> init process.
-> > 
-> > Um, Citation needed?
-> 
-> The paragraph that you quoted tells you exactly how to run a kselftest
-> in-kernel test in a UML kernel.  Just to what that paragraph says.
+A test for  the basic NAT functionality uses ip command which
+needs veth device.There is a condition where the kernel support
+for veth is not compiled into the kernel and the test script
+breaks.This patch contains code for reasonable error display
+and correct code exit.
 
-I didn't quote a paragraph.  But I'll quote from it now:
+Signed-off-by: Jeffrin Jose T <jeffrin@rajagiritech.edu.in>
+---
+ tools/testing/selftests/netfilter/nft_nat.sh | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-  $ make -C tools/testing/selftests run_tests
+diff --git a/tools/testing/selftests/netfilter/nft_nat.sh b/tools/testing/selftests/netfilter/nft_nat.sh
+index 8ec76681605c..f25f72a75cf3 100755
+--- a/tools/testing/selftests/netfilter/nft_nat.sh
++++ b/tools/testing/selftests/netfilter/nft_nat.sh
+@@ -23,7 +23,11 @@ ip netns add ns0
+ ip netns add ns1
+ ip netns add ns2
+ 
+-ip link add veth0 netns ns0 type veth peer name eth0 netns ns1
++ip link add veth0 netns ns0 type veth peer name eth0 netns ns1 > /dev/null 2>&1
++if [ $? -ne 0 ];then
++    echo "SKIP: No virtual ethernet pair device support in kernel"
++    exit $ksft_skip
++fi
+ ip link add veth1 netns ns0 type veth peer name eth0 netns ns2
+ 
+ ip -net ns0 link set lo up
+-- 
+2.20.1
 
-This runs the kselftest harness, *in userspace*.  That means you have
-to have a root file system, and it's run after init has started, by
-default.  You asserted that kselftests allows you to run modules
-before init has started.  There is absolutely zero, cero, nada, zilch
-mentions of any of anything like that in Documentation/dev-tools/kselftests.rst
-
-> > There exists test modules in the kernel that run before the init
-> > scripts run --- but that's not strictly speaking part of kselftests,
-> > and do not have any kind of infrastructure.  As noted, the
-> > kselftests_harness header file fundamentally assumes that you are
-> > running test code in userspace.
-> 
-> You are ignoring the kselftest in-kernel tests.
-
-I'm talking specifically about what you have been *claiming* to be
-kselftest in-kernel tests above.  And I'm asserting they are really
-not kselftests.  They are just ad hoc tests that are run in kernel
-space, which, when compiled as modules, can be loaded by a kselftest
-shell script.  You can certainly hook in these ad hoc in-kernel tests
-via kselftests --- but then they aren't run before init starts,
-because kselftests is inherently a userspace-driven system.
-
-If you build these tests (many of which existed before kselftests was
-merged) into the kernel such that they are run before init starts,
-without the kselftest harness, then they are not kselftests, by
-definition.  Both in how they are run, and since many of these
-in-kernel tests predate the introduction of kselftests --- in some
-cases, by many years.
-
-> We are talking in circles.  I'm done with this thread.
-
-Yes, that sounds like it would be best.
-
-						- Ted
