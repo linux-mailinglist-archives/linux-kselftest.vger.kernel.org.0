@@ -2,169 +2,270 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E48E206AD
-	for <lists+linux-kselftest@lfdr.de>; Thu, 16 May 2019 14:08:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4ECAE2078B
+	for <lists+linux-kselftest@lfdr.de>; Thu, 16 May 2019 15:03:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727294AbfEPMIJ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 16 May 2019 08:08:09 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:53258 "EHLO mx1.redhat.com"
+        id S1727507AbfEPNDN (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 16 May 2019 09:03:13 -0400
+Received: from mx1.redhat.com ([209.132.183.28]:49036 "EHLO mx1.redhat.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726878AbfEPMII (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 16 May 2019 08:08:08 -0400
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
+        id S1727469AbfEPNDN (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 16 May 2019 09:03:13 -0400
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id 2BEF73B718;
-        Thu, 16 May 2019 12:08:08 +0000 (UTC)
-Received: from [10.36.117.217] (ovpn-117-217.ams2.redhat.com [10.36.117.217])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 8F82D5D6A9;
-        Thu, 16 May 2019 12:08:04 +0000 (UTC)
-Subject: Re: [RFC PATCH 2/4] KVM: selftests: Align memory region addresses to
- 1M on s390x
-To:     Thomas Huth <thuth@redhat.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>, kvm@vger.kernel.org
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        =?UTF-8?B?UmFkaW0gS3LEjW3DocWZ?= <rkrcmar@redhat.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Andrew Jones <drjones@redhat.com>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-s390@vger.kernel.org
-References: <20190516111253.4494-1-thuth@redhat.com>
- <20190516111253.4494-3-thuth@redhat.com>
- <d9c383ef-6f4b-4f51-b627-7565a67005d3@redhat.com>
- <395e1b02-09b7-9420-33e1-a3abb36282f0@redhat.com>
-From:   David Hildenbrand <david@redhat.com>
-Openpgp: preference=signencrypt
-Autocrypt: addr=david@redhat.com; prefer-encrypt=mutual; keydata=
- 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
- SE+xAvmumFBY
-Organization: Red Hat GmbH
-Message-ID: <d6f7e093-0b8d-c121-ffe5-9f54bc2a1119@redhat.com>
-Date:   Thu, 16 May 2019 14:08:03 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
+        by mx1.redhat.com (Postfix) with ESMTPS id C285030B4AD0;
+        Thu, 16 May 2019 13:03:12 +0000 (UTC)
+Received: from thuth.com (ovpn-116-68.ams2.redhat.com [10.36.116.68])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 9EF1860BE5;
+        Thu, 16 May 2019 13:03:00 +0000 (UTC)
+From:   Thomas Huth <thuth@redhat.com>
+To:     =?UTF-8?q?Radim=20Kr=C4=8Dm=C3=A1=C5=99?= <rkrcmar@redhat.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        linux-kselftest@vger.kernel.org, kvm@vger.kernel.org
+Cc:     Shuah Khan <shuah@kernel.org>, Andrew Jones <drjones@redhat.com>,
+        Peter Xu <peterx@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] KVM: selftests: Compile code with warnings enabled
+Date:   Thu, 16 May 2019 15:02:57 +0200
+Message-Id: <20190516130257.29445-1-thuth@redhat.com>
 MIME-Version: 1.0
-In-Reply-To: <395e1b02-09b7-9420-33e1-a3abb36282f0@redhat.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
-X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.30]); Thu, 16 May 2019 12:08:08 +0000 (UTC)
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
+X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.49]); Thu, 16 May 2019 13:03:12 +0000 (UTC)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 16.05.19 13:59, Thomas Huth wrote:
-> On 16/05/2019 13.30, David Hildenbrand wrote:
->> On 16.05.19 13:12, Thomas Huth wrote:
->>> On s390x, there is a constraint that memory regions have to be aligned
->>> to 1M (or running the VM will fail). Introduce a new "alignment" variable
->>> in the vm_userspace_mem_region_add() function which now can be used for
->>> both, huge page and s390x alignment requirements.
->>>
->>> Signed-off-by: Thomas Huth <thuth@redhat.com>
->>> ---
->>>  tools/testing/selftests/kvm/lib/kvm_util.c | 21 +++++++++++++++++-----
->>>  1 file changed, 16 insertions(+), 5 deletions(-)
->>>
->>> diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
->>> index 8d63ccb93e10..64a0da6efe3d 100644
->>> --- a/tools/testing/selftests/kvm/lib/kvm_util.c
->>> +++ b/tools/testing/selftests/kvm/lib/kvm_util.c
->>> @@ -559,6 +559,7 @@ void vm_userspace_mem_region_add(struct kvm_vm *vm,
->>>  	unsigned long pmem_size = 0;
->>>  	struct userspace_mem_region *region;
->>>  	size_t huge_page_size = KVM_UTIL_PGS_PER_HUGEPG * vm->page_size;
->>> +	size_t alignment;
->>>  
->>>  	TEST_ASSERT((guest_paddr % vm->page_size) == 0, "Guest physical "
->>>  		"address not on a page boundary.\n"
->>> @@ -608,9 +609,20 @@ void vm_userspace_mem_region_add(struct kvm_vm *vm,
->>>  	TEST_ASSERT(region != NULL, "Insufficient Memory");
->>>  	region->mmap_size = npages * vm->page_size;
->>>  
->>> -	/* Enough memory to align up to a huge page. */
->>> +#ifdef __s390x__
->>> +	/* On s390x, the host address must be aligned to 1M (due to PGSTEs) */
->>> +	alignment = 0x100000;
->>
->> This corresponds to huge_page_size, maybe you can exploit this fact here.
->>
->> Something like
->>
->> alignment = 1;
->>
->> /* On s390x, the host address must always be aligned to the THP size */
->> #ifndef __s390x__
->> if (src_type == VM_MEM_SRC_ANONYMOUS_THP)
->> #endif
->> 	alignment = huge_page_size;
->>
->> Maybe in a nicer fashion. Not sure.
-> 
-> Hmm, but if I've got your explanation on IRC right, it's rather a
-> coincidence that the huge page size matches the alignment requirements
-> for KVM memslots, isn't it? So I think the code would look rather
-> confusing if I'd try to shorten it this way...?
+So far the KVM selftests are compiled without any compiler warnings
+enabled. That's quite bad, since we miss a lot of possible bugs this
+way. Let's enable at least "-Wall" and some other useful warning flags
+now.
 
-Well, it's not really a coincidence. We have to share page tables
-between the gmap and the user space process. One huge page corresponds
-to the pages covered by a page table. So the page table "size" dictates
-the alignment of both things.
+Signed-off-by: Thomas Huth <thuth@redhat.com>
+---
+ This patch fixes most of the warnings in the x86 code already - but
+ for some warnings, I was not quite sure (e.g. about the need for the
+ kvm_get_supported_cpuid_entry(1) in some tests), so I did not touch
+ that code yet. I also did not check aarch64 yet. I'd be glad if
+ someone who knows these parts of the code could have a look at the
+ warnings there.
 
-But this is just nit picking here, do it the way you prefer, just wanted
-to point it out :)
+ tools/testing/selftests/kvm/Makefile                        | 4 +++-
+ tools/testing/selftests/kvm/dirty_log_test.c                | 6 +++++-
+ tools/testing/selftests/kvm/lib/kvm_util.c                  | 3 ---
+ tools/testing/selftests/kvm/lib/x86_64/processor.c          | 4 +---
+ tools/testing/selftests/kvm/x86_64/cr4_cpuid_sync_test.c    | 1 +
+ tools/testing/selftests/kvm/x86_64/platform_info_test.c     | 1 -
+ tools/testing/selftests/kvm/x86_64/smm_test.c               | 3 +--
+ .../selftests/kvm/x86_64/vmx_close_while_nested_test.c      | 5 +----
+ tools/testing/selftests/kvm/x86_64/vmx_tsc_adjust_test.c    | 5 ++---
+ 9 files changed, 14 insertions(+), 18 deletions(-)
 
-> 
->  Thomas
-> 
-
-
+diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftests/kvm/Makefile
+index f8588cca2bef..93f344bb96af 100644
+--- a/tools/testing/selftests/kvm/Makefile
++++ b/tools/testing/selftests/kvm/Makefile
+@@ -32,7 +32,9 @@ LIBKVM += $(LIBKVM_$(UNAME_M))
+ INSTALL_HDR_PATH = $(top_srcdir)/usr
+ LINUX_HDR_PATH = $(INSTALL_HDR_PATH)/include/
+ LINUX_TOOL_INCLUDE = $(top_srcdir)/tools/include
+-CFLAGS += -O2 -g -std=gnu99 -fno-stack-protector -fno-PIE -I$(LINUX_TOOL_INCLUDE) -I$(LINUX_HDR_PATH) -Iinclude -I$(<D) -Iinclude/$(UNAME_M) -I..
++CFLAGS += -Wall -Wstrict-prototypes -Wuninitialized -O2 -g -std=gnu99 \
++	-fno-stack-protector -fno-PIE -I$(LINUX_TOOL_INCLUDE) \
++	-I$(LINUX_HDR_PATH) -Iinclude -I$(<D) -Iinclude/$(UNAME_M) -I..
+ 
+ no-pie-option := $(call try-run, echo 'int main() { return 0; }' | \
+         $(CC) -Werror $(KBUILD_CPPFLAGS) $(CC_OPTION_CFLAGS) -no-pie -x c - -o "$$TMP", -no-pie)
+diff --git a/tools/testing/selftests/kvm/dirty_log_test.c b/tools/testing/selftests/kvm/dirty_log_test.c
+index 93f99c6b7d79..0b9f197a783e 100644
+--- a/tools/testing/selftests/kvm/dirty_log_test.c
++++ b/tools/testing/selftests/kvm/dirty_log_test.c
+@@ -131,6 +131,7 @@ static void *vcpu_worker(void *data)
+ 	while (!READ_ONCE(host_quit)) {
+ 		/* Let the guest dirty the random pages */
+ 		ret = _vcpu_run(vm, VCPU_ID);
++		TEST_ASSERT(ret == 0, "vcpu_run failed: %d\n", ret);
+ 		if (get_ucall(vm, VCPU_ID, &uc) == UCALL_SYNC) {
+ 			pages_count += TEST_PAGES_PER_LOOP;
+ 			generate_random_array(guest_array, TEST_PAGES_PER_LOOP);
+@@ -426,8 +427,11 @@ int main(int argc, char *argv[])
+ 	unsigned long interval = TEST_HOST_LOOP_INTERVAL;
+ 	bool mode_selected = false;
+ 	uint64_t phys_offset = 0;
+-	unsigned int mode, host_ipa_limit;
++	unsigned int mode;
+ 	int opt, i;
++#ifdef __aarch64__
++	unsigned int host_ipa_limit;
++#endif
+ 
+ #ifdef USE_CLEAR_DIRTY_LOG
+ 	if (!kvm_check_cap(KVM_CAP_MANUAL_DIRTY_LOG_PROTECT)) {
+diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
+index 4ca96b228e46..e2528a3894cf 100644
+--- a/tools/testing/selftests/kvm/lib/kvm_util.c
++++ b/tools/testing/selftests/kvm/lib/kvm_util.c
+@@ -135,7 +135,6 @@ struct kvm_vm *_vm_create(enum vm_guest_mode mode, uint64_t phy_pages,
+ 			  int perm, unsigned long type)
+ {
+ 	struct kvm_vm *vm;
+-	int kvm_fd;
+ 
+ 	vm = calloc(1, sizeof(*vm));
+ 	TEST_ASSERT(vm != NULL, "Insufficient Memory");
+@@ -556,7 +555,6 @@ void vm_userspace_mem_region_add(struct kvm_vm *vm,
+ 	uint32_t flags)
+ {
+ 	int ret;
+-	unsigned long pmem_size = 0;
+ 	struct userspace_mem_region *region;
+ 	size_t huge_page_size = KVM_UTIL_PGS_PER_HUGEPG * vm->page_size;
+ 
+@@ -1302,7 +1300,6 @@ void vcpu_sregs_set(struct kvm_vm *vm, uint32_t vcpuid, struct kvm_sregs *sregs)
+ int _vcpu_sregs_set(struct kvm_vm *vm, uint32_t vcpuid, struct kvm_sregs *sregs)
+ {
+ 	struct vcpu *vcpu = vcpu_find(vm, vcpuid);
+-	int ret;
+ 
+ 	TEST_ASSERT(vcpu != NULL, "vcpu not found, vcpuid: %u", vcpuid);
+ 
+diff --git a/tools/testing/selftests/kvm/lib/x86_64/processor.c b/tools/testing/selftests/kvm/lib/x86_64/processor.c
+index dc7fae9fa424..21f3040d90cb 100644
+--- a/tools/testing/selftests/kvm/lib/x86_64/processor.c
++++ b/tools/testing/selftests/kvm/lib/x86_64/processor.c
+@@ -229,8 +229,6 @@ void sregs_dump(FILE *stream, struct kvm_sregs *sregs,
+ 
+ void virt_pgd_alloc(struct kvm_vm *vm, uint32_t pgd_memslot)
+ {
+-	int rc;
+-
+ 	TEST_ASSERT(vm->mode == VM_MODE_P52V48_4K, "Attempt to use "
+ 		"unknown or unsupported guest mode, mode: 0x%x", vm->mode);
+ 
+@@ -549,7 +547,6 @@ vm_paddr_t addr_gva2gpa(struct kvm_vm *vm, vm_vaddr_t gva)
+ 	struct pageDirectoryPointerEntry *pdpe;
+ 	struct pageDirectoryEntry *pde;
+ 	struct pageTableEntry *pte;
+-	void *hva;
+ 
+ 	TEST_ASSERT(vm->mode == VM_MODE_P52V48_4K, "Attempt to use "
+ 		"unknown or unsupported guest mode, mode: 0x%x", vm->mode);
+@@ -582,6 +579,7 @@ vm_paddr_t addr_gva2gpa(struct kvm_vm *vm, vm_vaddr_t gva)
+ unmapped_gva:
+ 	TEST_ASSERT(false, "No mapping for vm virtual address, "
+ 		    "gva: 0x%lx", gva);
++	exit(EXIT_FAILURE);
+ }
+ 
+ static void kvm_setup_gdt(struct kvm_vm *vm, struct kvm_dtable *dt, int gdt_memslot,
+diff --git a/tools/testing/selftests/kvm/x86_64/cr4_cpuid_sync_test.c b/tools/testing/selftests/kvm/x86_64/cr4_cpuid_sync_test.c
+index 7c2c4d4055a8..63cc9c3f5ab6 100644
+--- a/tools/testing/selftests/kvm/x86_64/cr4_cpuid_sync_test.c
++++ b/tools/testing/selftests/kvm/x86_64/cr4_cpuid_sync_test.c
+@@ -87,6 +87,7 @@ int main(int argc, char *argv[])
+ 	while (1) {
+ 		rc = _vcpu_run(vm, VCPU_ID);
+ 
++		TEST_ASSERT(rc == 0, "vcpu_run failed: %d\n", rc);
+ 		TEST_ASSERT(run->exit_reason == KVM_EXIT_IO,
+ 			    "Unexpected exit reason: %u (%s),\n",
+ 			    run->exit_reason,
+diff --git a/tools/testing/selftests/kvm/x86_64/platform_info_test.c b/tools/testing/selftests/kvm/x86_64/platform_info_test.c
+index eb3e7a838cb4..40050e44ec0a 100644
+--- a/tools/testing/selftests/kvm/x86_64/platform_info_test.c
++++ b/tools/testing/selftests/kvm/x86_64/platform_info_test.c
+@@ -81,7 +81,6 @@ static void test_msr_platform_info_disabled(struct kvm_vm *vm)
+ int main(int argc, char *argv[])
+ {
+ 	struct kvm_vm *vm;
+-	struct kvm_run *state;
+ 	int rv;
+ 	uint64_t msr_platform_info;
+ 
+diff --git a/tools/testing/selftests/kvm/x86_64/smm_test.c b/tools/testing/selftests/kvm/x86_64/smm_test.c
+index fb8086964d83..4daf520bada1 100644
+--- a/tools/testing/selftests/kvm/x86_64/smm_test.c
++++ b/tools/testing/selftests/kvm/x86_64/smm_test.c
+@@ -87,7 +87,6 @@ void guest_code(struct vmx_pages *vmx_pages)
+ 
+ int main(int argc, char *argv[])
+ {
+-	struct vmx_pages *vmx_pages = NULL;
+ 	vm_vaddr_t vmx_pages_gva = 0;
+ 
+ 	struct kvm_regs regs;
+@@ -115,7 +114,7 @@ int main(int argc, char *argv[])
+ 	vcpu_set_msr(vm, VCPU_ID, MSR_IA32_SMBASE, SMRAM_GPA);
+ 
+ 	if (kvm_check_cap(KVM_CAP_NESTED_STATE)) {
+-		vmx_pages = vcpu_alloc_vmx(vm, &vmx_pages_gva);
++		vcpu_alloc_vmx(vm, &vmx_pages_gva);
+ 		vcpu_args_set(vm, VCPU_ID, 1, vmx_pages_gva);
+ 	} else {
+ 		printf("will skip SMM test with VMX enabled\n");
+diff --git a/tools/testing/selftests/kvm/x86_64/vmx_close_while_nested_test.c b/tools/testing/selftests/kvm/x86_64/vmx_close_while_nested_test.c
+index 6edec6fd790b..97182b47b10c 100644
+--- a/tools/testing/selftests/kvm/x86_64/vmx_close_while_nested_test.c
++++ b/tools/testing/selftests/kvm/x86_64/vmx_close_while_nested_test.c
+@@ -39,8 +39,6 @@ static void l1_guest_code(struct vmx_pages *vmx_pages)
+ {
+ #define L2_GUEST_STACK_SIZE 64
+ 	unsigned long l2_guest_stack[L2_GUEST_STACK_SIZE];
+-	uint32_t control;
+-	uintptr_t save_cr3;
+ 
+ 	GUEST_ASSERT(prepare_for_vmx_operation(vmx_pages));
+ 	GUEST_ASSERT(load_vmcs(vmx_pages));
+@@ -55,7 +53,6 @@ static void l1_guest_code(struct vmx_pages *vmx_pages)
+ 
+ int main(int argc, char *argv[])
+ {
+-	struct vmx_pages *vmx_pages;
+ 	vm_vaddr_t vmx_pages_gva;
+ 	struct kvm_cpuid_entry2 *entry = kvm_get_supported_cpuid_entry(1);
+ 
+@@ -68,7 +65,7 @@ int main(int argc, char *argv[])
+ 	vcpu_set_cpuid(vm, VCPU_ID, kvm_get_supported_cpuid());
+ 
+ 	/* Allocate VMX pages and shared descriptors (vmx_pages). */
+-	vmx_pages = vcpu_alloc_vmx(vm, &vmx_pages_gva);
++	vcpu_alloc_vmx(vm, &vmx_pages_gva);
+ 	vcpu_args_set(vm, VCPU_ID, 1, vmx_pages_gva);
+ 
+ 	for (;;) {
+diff --git a/tools/testing/selftests/kvm/x86_64/vmx_tsc_adjust_test.c b/tools/testing/selftests/kvm/x86_64/vmx_tsc_adjust_test.c
+index 18fa64db0d7a..6d37a3173956 100644
+--- a/tools/testing/selftests/kvm/x86_64/vmx_tsc_adjust_test.c
++++ b/tools/testing/selftests/kvm/x86_64/vmx_tsc_adjust_test.c
+@@ -121,7 +121,7 @@ static void l1_guest_code(struct vmx_pages *vmx_pages)
+ 	GUEST_DONE();
+ }
+ 
+-void report(int64_t val)
++static void report(int64_t val)
+ {
+ 	printf("IA32_TSC_ADJUST is %ld (%lld * TSC_ADJUST_VALUE + %lld).\n",
+ 	       val, val / TSC_ADJUST_VALUE, val % TSC_ADJUST_VALUE);
+@@ -129,7 +129,6 @@ void report(int64_t val)
+ 
+ int main(int argc, char *argv[])
+ {
+-	struct vmx_pages *vmx_pages;
+ 	vm_vaddr_t vmx_pages_gva;
+ 	struct kvm_cpuid_entry2 *entry = kvm_get_supported_cpuid_entry(1);
+ 
+@@ -142,7 +141,7 @@ int main(int argc, char *argv[])
+ 	vcpu_set_cpuid(vm, VCPU_ID, kvm_get_supported_cpuid());
+ 
+ 	/* Allocate VMX pages and shared descriptors (vmx_pages). */
+-	vmx_pages = vcpu_alloc_vmx(vm, &vmx_pages_gva);
++	vcpu_alloc_vmx(vm, &vmx_pages_gva);
+ 	vcpu_args_set(vm, VCPU_ID, 1, vmx_pages_gva);
+ 
+ 	for (;;) {
 -- 
+2.21.0
 
-Thanks,
-
-David / dhildenb
