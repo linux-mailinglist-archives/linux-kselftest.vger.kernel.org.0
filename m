@@ -2,55 +2,54 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BA4820CD7
-	for <lists+linux-kselftest@lfdr.de>; Thu, 16 May 2019 18:21:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7535520D79
+	for <lists+linux-kselftest@lfdr.de>; Thu, 16 May 2019 18:55:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726546AbfEPQVq (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 16 May 2019 12:21:46 -0400
-Received: from mail-lj1-f194.google.com ([209.85.208.194]:35420 "EHLO
-        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726440AbfEPQVq (ORCPT
+        id S1727258AbfEPQyy (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 16 May 2019 12:54:54 -0400
+Received: from mail-qk1-f196.google.com ([209.85.222.196]:40808 "EHLO
+        mail-qk1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727206AbfEPQyy (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 16 May 2019 12:21:46 -0400
-Received: by mail-lj1-f194.google.com with SMTP id h11so2303858ljb.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 16 May 2019 09:21:45 -0700 (PDT)
+        Thu, 16 May 2019 12:54:54 -0400
+Received: by mail-qk1-f196.google.com with SMTP id q197so2694244qke.7
+        for <linux-kselftest@vger.kernel.org>; Thu, 16 May 2019 09:54:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kinvolk.io; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=2e5Do/kWandKX1Zbza7sapR2anoZAP3eXmyFdlVoIKA=;
-        b=ArCqLQ+mQc4Jf+7VG1OdMWx31L6sOXF2Y4z/qL7fxHo0l/XOMLxlZhFvmSO9hV7WSy
-         6RJy27G0BLy0i2xPqrJIdetwNB9Q4Spb89sBui0GkTfheyp1uV6bp0C+WzQPpw197YmW
-         Dt+Sg/qBSz6e625LoIace3EjYmevysKHUexhc=
+        d=netronome-com.20150623.gappssmtp.com; s=20150623;
+        h=date:from:to:cc:subject:message-id:in-reply-to:references
+         :organization:mime-version:content-transfer-encoding;
+        bh=RSXji2gu6PTmCCcGE3ApJyZXicrhpNir4c6ptrlMBZw=;
+        b=w8X3UASCEUM3vJvJ4NqGiATkR0s8WmNbhjJJSUDD4HQ5v2XUQijD5IJAoCIwFIhnIj
+         yNJkhZYd7EOu7n7SoaVlYcXwxxjQKwyi/SFjLgKx66liMvMlrocYvplC/NEHCFvtfN1k
+         Lhu4GdtukplsBg9cVyo/2p/lF/duxEKZhUOyrWibtP6yVb/v7XY3D179ye4XGcdRUpvw
+         VBtXRW73769UYS9SMc3eo16qzfMNhEBSNnpV/FNMxkacKLujZ4mbEiM4GLZfmWc/0mh6
+         8V2onWzspsxdE4pGSB/44M+XrNRnL3RHDWgg+m1CIMruHaQFLlgAPhErMXplm+cg6ZnC
+         pT+A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=2e5Do/kWandKX1Zbza7sapR2anoZAP3eXmyFdlVoIKA=;
-        b=GIHmM6cPg3e3CnYQifJW60UGR7ARQBURvCuMq2jCKF09F17ynxHxB3x4MpsRbsrIxO
-         pKy99PYhulBfugYEvtW3rbNJRzMxDaPhLd+78YaSoMqsvGfpxGg4LjrqF//Y67ebuEXc
-         8p6vwN0YPDlTmfYEbZ7BF1UgkygmzzE4In72gTuxhMNwC/sjHIg/Cva/iGezcZt3Ge9h
-         QY1F+5BG5TAbiThEDhWZNbwn8+MV5T+u20/bUF/az2BVlxzk0aVF33pyNgdf6BdhjfSS
-         +QjWKlPjcoaEVPqaxY3ty6N1zreDsiGf4eh/sSYuzfoOd55sAoPs9ZIfBavTYAp/BPOw
-         ekvw==
-X-Gm-Message-State: APjAAAWBGADwYcvL3Lfrk5xmqaAZg8DqXFewNfhMOJ8t1fc0kwuAGDoT
-        cRCuNULyPv2AYJRpXS5DQn90DsrWSc8XnKk9/4Jg/A==
-X-Google-Smtp-Source: APXvYqyqHiyH4AeBft1evepIQq8xBjLJiWFn//O/FH36CylnD2Em3MeZL1D22OC+4X2lB0bbci0VypEz679vdXG/w5Q=
-X-Received: by 2002:a2e:88ce:: with SMTP id a14mr18017256ljk.122.1558023704266;
- Thu, 16 May 2019 09:21:44 -0700 (PDT)
-MIME-Version: 1.0
-References: <20190515134731.12611-1-krzesimir@kinvolk.io> <20190515134731.12611-3-krzesimir@kinvolk.io>
- <20190515144537.57f559e7@cakuba.netronome.com> <CAGGp+cGN+YYVjJee5ba84HstSrHGurBvwmKmzNsFRvb344Df3A@mail.gmail.com>
- <20190516085035.3cdb0ae6@cakuba.netronome.com>
-In-Reply-To: <20190516085035.3cdb0ae6@cakuba.netronome.com>
-From:   Krzesimir Nowak <krzesimir@kinvolk.io>
-Date:   Thu, 16 May 2019 18:21:32 +0200
-Message-ID: <CAGGp+cEFxzbH-8vnSAK3sZkM-u3WN4HGnkYvhFwBp85yVtD7Xg@mail.gmail.com>
-Subject: Re: [PATCH bpf v1 2/3] selftests/bpf: Print a message when tester
- could not run a program
-To:     Jakub Kicinski <jakub.kicinski@netronome.com>
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
+         :references:organization:mime-version:content-transfer-encoding;
+        bh=RSXji2gu6PTmCCcGE3ApJyZXicrhpNir4c6ptrlMBZw=;
+        b=HyDhqUkaMGF8ej/V7FOFt5nZBLqnV20bQ4+I09VC1ENisF2DkEbHCQLUoHbV89zbRe
+         GPIDS/OEPmu6kjV+9THGosNmBJND4Ke6RXfUh1L5nbPtG4Du+1dhiVRYMNujiMngOb6w
+         q2a/ya5ryo4SeGKBuyyxYl9G9X7aTKDIpcaCSqRLRhDnfzQJQqobFDjrmWG3NDdfSFRQ
+         ECNkjnmWDSDH3Tt8UuITbjxgQ2fNPHXcFmZapePRsj09prjEsGKNER7Sw31j1vFF4zik
+         ZYN1vBdSFiqX8n3BW62jx6vurwQf6Ny5F7jtykh85OZjYbM7scQ4n0zL4lHvvxk+EPhK
+         i8zA==
+X-Gm-Message-State: APjAAAWltMk53ilGumJYyHBRqNWiUydE4d+ysjtaONPesSx8D6JG7aqP
+        +sTULl/FVZpLNvj0V3dgA0GhQw==
+X-Google-Smtp-Source: APXvYqzFFPIoAoCXHLuAi3qkHjprBS7BtRM/qvWx3GdjcQWNy0cAs5xxZ7wEPTSo5KalHZN4PMzVWQ==
+X-Received: by 2002:a05:620a:144c:: with SMTP id i12mr12814987qkl.243.1558025693089;
+        Thu, 16 May 2019 09:54:53 -0700 (PDT)
+Received: from cakuba.netronome.com ([66.60.152.14])
+        by smtp.gmail.com with ESMTPSA id 91sm2696400qte.38.2019.05.16.09.54.51
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Thu, 16 May 2019 09:54:52 -0700 (PDT)
+Date:   Thu, 16 May 2019 09:54:26 -0700
+From:   Jakub Kicinski <jakub.kicinski@netronome.com>
+To:     Krzesimir Nowak <krzesimir@kinvolk.io>
 Cc:     bpf@vger.kernel.org,
-        =?UTF-8?Q?Iago_L=C3=B3pez_Galeiras?= <iago@kinvolk.io>,
+        Iago =?UTF-8?B?TMOzcGV6?= Galeiras <iago@kinvolk.io>,
         "Alban Crequy (Kinvolk)" <alban@kinvolk.io>,
         Shuah Khan <shuah@kernel.org>,
         Alexei Starovoitov <ast@kernel.org>,
@@ -58,61 +57,89 @@ Cc:     bpf@vger.kernel.org,
         Martin KaFai Lau <kafai@fb.com>,
         Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
         Andrey Ignatov <rdna@fb.com>, linux-kselftest@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ogerlitz@mellanox.com
+Subject: Re: [PATCH bpf v1 2/3] selftests/bpf: Print a message when tester
+ could not run a program
+Message-ID: <20190516095426.2e0d838f@cakuba.netronome.com>
+In-Reply-To: <CAGGp+cEFxzbH-8vnSAK3sZkM-u3WN4HGnkYvhFwBp85yVtD7Xg@mail.gmail.com>
+References: <20190515134731.12611-1-krzesimir@kinvolk.io>
+        <20190515134731.12611-3-krzesimir@kinvolk.io>
+        <20190515144537.57f559e7@cakuba.netronome.com>
+        <CAGGp+cGN+YYVjJee5ba84HstSrHGurBvwmKmzNsFRvb344Df3A@mail.gmail.com>
+        <20190516085035.3cdb0ae6@cakuba.netronome.com>
+        <CAGGp+cEFxzbH-8vnSAK3sZkM-u3WN4HGnkYvhFwBp85yVtD7Xg@mail.gmail.com>
+Organization: Netronome Systems, Ltd.
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, May 16, 2019 at 5:51 PM Jakub Kicinski
-<jakub.kicinski@netronome.com> wrote:
->
-> On Thu, 16 May 2019 11:29:39 +0200, Krzesimir Nowak wrote:
-> > > > diff --git a/tools/testing/selftests/bpf/test_verifier.c b/tools/te=
-sting/selftests/bpf/test_verifier.c
-> > > > index ccd896b98cac..bf0da03f593b 100644
-> > > > --- a/tools/testing/selftests/bpf/test_verifier.c
-> > > > +++ b/tools/testing/selftests/bpf/test_verifier.c
-> > > > @@ -825,11 +825,20 @@ static int do_prog_test_run(int fd_prog, bool=
- unpriv, uint32_t expected_val,
-> > > >                               tmp, &size_tmp, &retval, NULL);
-> > > >       if (unpriv)
-> > > >               set_admin(false);
-> > > > -     if (err && errno !=3D 524/*ENOTSUPP*/ && errno !=3D EPERM) {
-> > > > -             printf("Unexpected bpf_prog_test_run error ");
-> > > > -             return err;
-> > > > +     if (err) {
-> > > > +             switch (errno) {
-> > > > +             case 524/*ENOTSUPP*/:
-> > > > +                     printf("Did not run the program (not supporte=
-d) ");
-> > > > +                     return 0;
-> > > > +             case EPERM:
-> > > > +                     printf("Did not run the program (no permissio=
-n) ");
-> > > > +                     return 0;
+On Thu, 16 May 2019 18:21:32 +0200, Krzesimir Nowak wrote:
+> On Thu, May 16, 2019 at 5:51 PM Jakub Kicinski wrote:
+> > On Thu, 16 May 2019 11:29:39 +0200, Krzesimir Nowak wrote:  
+> > > > > diff --git a/tools/testing/selftests/bpf/test_verifier.c b/tools/testing/selftests/bpf/test_verifier.c
+> > > > > index ccd896b98cac..bf0da03f593b 100644
+> > > > > --- a/tools/testing/selftests/bpf/test_verifier.c
+> > > > > +++ b/tools/testing/selftests/bpf/test_verifier.c
+> > > > > @@ -825,11 +825,20 @@ static int do_prog_test_run(int fd_prog, bool unpriv, uint32_t expected_val,
+> > > > >                               tmp, &size_tmp, &retval, NULL);
+> > > > >       if (unpriv)
+> > > > >               set_admin(false);
+> > > > > -     if (err && errno != 524/*ENOTSUPP*/ && errno != EPERM) {
+> > > > > -             printf("Unexpected bpf_prog_test_run error ");
+> > > > > -             return err;
+> > > > > +     if (err) {
+> > > > > +             switch (errno) {
+> > > > > +             case 524/*ENOTSUPP*/:
+> > > > > +                     printf("Did not run the program (not supported) ");
+> > > > > +                     return 0;
+> > > > > +             case EPERM:
+> > > > > +                     printf("Did not run the program (no permission) ");
+> > > > > +                     return 0;  
+> > > >
+> > > > Perhaps use strerror(errno)?  
 > > >
-> > > Perhaps use strerror(errno)?
+> > > As I said in the commit message, I open-coded those messages because
+> > > strerror for ENOTSUPP returns "Unknown error 524".  
 > >
-> > As I said in the commit message, I open-coded those messages because
-> > strerror for ENOTSUPP returns "Unknown error 524".
->
-> Ah, sorry, missed that.  I wonder if that's something worth addressing
-> in libc, since the BPF subsystem uses ENOTSUPP a lot.
+> > Ah, sorry, missed that.  I wonder if that's something worth addressing
+> > in libc, since the BPF subsystem uses ENOTSUPP a lot.  
+> 
+> The "not supported" errno situation seems to be a mess. There is an
+> ENOTSUP define in libc. ENOTSUP is usually defined to be EOPNOTSUPP
+> (taken from kernel), which in turn seems to have a different value
+> (95) than kernel's ENOTSUPP (524). Adding ENOTSUPP (with two Ps) to
+> libc would only add to the confusion. So it's kind of meh and I guess
+> people just moved on with workarounds.
 
-The "not supported" errno situation seems to be a mess. There is an
-ENOTSUP define in libc. ENOTSUP is usually defined to be EOPNOTSUPP
-(taken from kernel), which in turn seems to have a different value
-(95) than kernel's ENOTSUPP (524). Adding ENOTSUPP (with two Ps) to
-libc would only add to the confusion. So it's kind of meh and I guess
-people just moved on with workarounds.
+Yes, ENOTSUP is never used in the kernel, but it's a mess.
 
---=20
-Kinvolk GmbH | Adalbertstr.6a, 10999 Berlin | tel: +491755589364
-Gesch=C3=A4ftsf=C3=BChrer/Directors: Alban Crequy, Chris K=C3=BChl, Iago L=
-=C3=B3pez Galeiras
-Registergericht/Court of registration: Amtsgericht Charlottenburg
-Registernummer/Registration number: HRB 171414 B
-Ust-ID-Nummer/VAT ID number: DE302207000
+This commit a while ago said ENOTSUPP is from NFS:
+
+commit 423b3aecf29085a52530d4f9167c56a84b081042
+Author: Or Gerlitz <ogerlitz@mellanox.com>
+Date:   Thu Feb 23 12:02:41 2017 +0200
+
+    net/mlx4: Change ENOTSUPP to EOPNOTSUPP
+    
+    As ENOTSUPP is specific to NFS, change the return error value to
+    EOPNOTSUPP in various places in the mlx4 driver.
+    
+    Signed-off-by: Or Gerlitz <ogerlitz@mellanox.com>
+    Suggested-by: Yotam Gigi <yotamg@mellanox.com>
+    Reviewed-by: Matan Barak <matanb@mellanox.com>
+    Signed-off-by: Tariq Toukan <tariqt@mellanox.com>
+    Signed-off-by: David S. Miller <davem@davemloft.net>
+
+But it's spreading throughout the kernel like a wildfire, I counted 1364
+in my tree :/  Some are in tools/, but still.  My understanding was that
+system calls should never return values above 512, but I'm probably
+wrong about that.
+
+Given the popularity, and the fact its an ABI at this point, we
+probably have no choice but to add it to libc, but to be clear IMO it's
+not a blocker for your patches.
