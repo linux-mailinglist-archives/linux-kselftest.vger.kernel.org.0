@@ -2,92 +2,78 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 43B1720EC2
-	for <lists+linux-kselftest@lfdr.de>; Thu, 16 May 2019 20:36:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B89820EDD
+	for <lists+linux-kselftest@lfdr.de>; Thu, 16 May 2019 20:43:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727247AbfEPSgi (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 16 May 2019 14:36:38 -0400
-Received: from mail-lf1-f67.google.com ([209.85.167.67]:44226 "EHLO
-        mail-lf1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727158AbfEPSgi (ORCPT
+        id S1727411AbfEPSnR (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 16 May 2019 14:43:17 -0400
+Received: from mail-lj1-f194.google.com ([209.85.208.194]:37014 "EHLO
+        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726546AbfEPSnQ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 16 May 2019 14:36:38 -0400
-Received: by mail-lf1-f67.google.com with SMTP id n134so3387900lfn.11;
-        Thu, 16 May 2019 11:36:36 -0700 (PDT)
+        Thu, 16 May 2019 14:43:16 -0400
+Received: by mail-lj1-f194.google.com with SMTP id h19so4054600ljj.4;
+        Thu, 16 May 2019 11:43:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=f+vfzW6eP2qMMPDF3Oo8GSsL6qZua9aEVyyeHZO1Mw8=;
-        b=fm/ptDLwjlO59tFgKllZKSA0FayNW9Q+veAeUCykX2YQDQ9XZ4j4JdZ3fNignQj+QC
-         t4IHzyz1daMp+WXIAX0EhQWWmn5J+nr6DKKxy8vBRkkirPIDehmDn8rbM+2IBBP5ovBu
-         GhbEAJOwG2SdvWA//gHdpI4BZSHEbP8a1bXFwsLFGL5BXmYRJmmH9Roi5OPdMsJzbd3d
-         jdGXab7V3VHiac5D3MAq1MGN7mTrMeiDnjkdvGFCPNqVNtJzPTzs0i4EU9sQvyr44Axf
-         ph1qen3SPNRyMZ5oysZUPzH7ftbOicoV4JdMjaNh4vXuRB2cLzVNZ07a3n9zdz0p05af
-         FcEg==
+        bh=unVG59VzBSYO4iOVXWL7fSEnwAhYhvevqAGHSVFtITs=;
+        b=JzXCeX1bZ1ONHAEBSxYaRxUvqfPdgB39LOqzBGggD1p4Y7zZFtKKJoFFiDoun3nS3c
+         1V3qUE/ds+HnbVRGYOWzTArmY9yvKrCT1q4aSK27OJLN1MtvREOrKrj/PjiGyc+xZ09/
+         sGsMWCWtB/6kdzX/1kTY5K5vHLpMRa3qWUtkpb7290pgZF+Ehn93gzVtH1G1GBhfUko8
+         0tXIhenPwkO6Oa4FK7Qzu08vuZ6AlKSXTO5igrr/8nA7/W2sF4Gk6qmwyrPpOqR4JIvZ
+         RwAFK8PmfXQWHLs/C33C1JIL9MAQCrpu6kGpcZPDFb0wgv3y1uEXLGybFFRYF890hX5U
+         wbGw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=f+vfzW6eP2qMMPDF3Oo8GSsL6qZua9aEVyyeHZO1Mw8=;
-        b=B0vGAQ/TxpcYKxpO/IXnwt0F3BrHvCYjGIo+fMUu9RWdMthRq+QTTbGSDyc0Tp3vb0
-         iFYvySzZeNUHVQ81aNZVwWXi2bixIC2tnjGcPlErdgrZyNhl9OJrr3S+JsO8pkwTtPVa
-         AhsiW9pBPSFgGYah2FYZvUVYiuitSEUnf0MCfGNXWBIxhaHQ/imU1qCmw2IHpynJ5y75
-         jdgBWJS1olHVI5LTtev77Y9I8/QI3gjyeLam+siw6eAmu5x/y3E4CyB4EKoX5v4em6ql
-         v+ylx0Fh6pBRKU5zJlq299Ouk5DXbmJMldfWzvRDXcs0dkdzE1pjMDIglsr9vjs7v5Lk
-         U6jA==
-X-Gm-Message-State: APjAAAVCNFLkbz4AV8qymv7eIw3qG9JPkWZgBk7BSxsipDR7jIw1QaKP
-        S9t2PtYlAUOI5DNFaqbaJaP8zrWqMqyABzreA51S5g==
-X-Google-Smtp-Source: APXvYqzOL2Ln7N6+03KL1lTz+KXMuislOZ8LsZ09CmjkM0dECOItTLmmhIeTwXzn11gbIlxPjN5U7UXUDSwQjsgnfzU=
-X-Received: by 2002:a19:8:: with SMTP id 8mr24736850lfa.125.1558031796007;
- Thu, 16 May 2019 11:36:36 -0700 (PDT)
+        bh=unVG59VzBSYO4iOVXWL7fSEnwAhYhvevqAGHSVFtITs=;
+        b=g6JbNr9rSQoJL4nSbkwXUvNQGxNa6SxutRi+cU0DexETnDLw74j4mJQfop3d4NbrFK
+         F3o01pSizuqb89CzxkT7Q/krkTuYz9bwOKJM5teZxnVaU+4ILBw1IMBqZevv0MQHmAMp
+         IE+NXOjqLfSKOGJC0rW23gds/iTtiri8yubV2T+YLO2vgpA30nVCUnNpKnRJtLuZ/CJ9
+         P36NpFYYmybgeRAYCo32LDw5oXvgfO71Z5LQ6wA29ob5A3M1M/plV9agboXnFhpAxbMF
+         WOFutqCxI7TMFqo7/XtwWEkpX9oX2lYJz6EvxwNspxH/gd4sSWJ1MvbOptWaUuc3L/xI
+         CPVw==
+X-Gm-Message-State: APjAAAVsLMdKmZtOn3JX491s4JzzJgPAsk1wtYMvQtXsGC45DPFnFvSm
+        nM+y74lxfa1ol8YZPRoQWF6/W8j9zhQczAOQ9d4=
+X-Google-Smtp-Source: APXvYqxBDW9EwLKEM/loJ6ILDsGQzYnaLEazK9HiGiufleeEQCm+KRHOQSULmCZ4eO6rpb5lcU85bhL9Y8KiDYPaGX4=
+X-Received: by 2002:a2e:9f44:: with SMTP id v4mr3078676ljk.85.1558032194378;
+ Thu, 16 May 2019 11:43:14 -0700 (PDT)
 MIME-Version: 1.0
-References: <20190511025249.32678-1-skhan@linuxfoundation.org> <20190511043729.3o4enh35lrmne3kd@ast-mbp>
-In-Reply-To: <20190511043729.3o4enh35lrmne3kd@ast-mbp>
+References: <20190516112105.12887-1-mrostecki@opensuse.org>
+In-Reply-To: <20190516112105.12887-1-mrostecki@opensuse.org>
 From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Thu, 16 May 2019 11:36:24 -0700
-Message-ID: <CAADnVQK2eyFdEULS6z-M1R77d-AKe5sACKCHxHShJFOqhqy0rw@mail.gmail.com>
-Subject: Re: [PATCH] selftests: fix bpf build/test workflow regression when
- KBUILD_OUTPUT is set
-To:     Shuah Khan <skhan@linuxfoundation.org>
-Cc:     Shuah Khan <shuah@kernel.org>,
+Date:   Thu, 16 May 2019 11:43:03 -0700
+Message-ID: <CAADnVQLFrZyjbFb6o0YezLyqGBKcsiT=jVGfwDaupGLvgLp31A@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 0/2] Move bpf_printk to bpf_helpers.h
+To:     Michal Rostecki <mrostecki@opensuse.org>
+Cc:     Shuah Khan <shuah@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
         "David S. Miller" <davem@davemloft.net>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
+        Jakub Kicinski <jakub.kicinski@netronome.com>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Jiong Wang <jiong.wang@netronome.com>,
+        Mathieu Xhonneux <m.xhonneux@gmail.com>,
         "open list:KERNEL SELFTEST FRAMEWORK" 
         <linux-kselftest@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
         Network Development <netdev@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>
+        bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
+        Xdp <xdp-newbies@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, May 10, 2019 at 9:37 PM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
+On Thu, May 16, 2019 at 4:21 AM Michal Rostecki <mrostecki@opensuse.org> wrote:
 >
-> On Fri, May 10, 2019 at 08:52:49PM -0600, Shuah Khan wrote:
-> > commit 8ce72dc32578 ("selftests: fix headers_install circular dependency")
-> > broke bpf build/test workflow. When KBUILD_OUTPUT is set, bpf objects end
-> > up in KBUILD_OUTPUT build directory instead of in ../selftests/bpf.
-> >
-> > The following bpf workflow breaks when it can't find the test_verifier:
-> >
-> > cd tools/testing/selftests/bpf; make; ./test_verifier;
-> >
-> > Fix it to set OUTPUT only when it is undefined in lib.mk. It didn't need
-> > to be set in the first place.
-> >
-> > Fixes: commit 8ce72dc32578 ("selftests: fix headers_install circular dependency")
-> >
-> > Reported-by: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-> > Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
->
-> 'git am' couldn't apply this patch because "sha1 information is lacking",
-> but the patch itself looks good.
-> Acked-by: Alexei Starovoitov <ast@kernel.org>
-> Thanks for the quick fix.
+> This series of patches move the commonly used bpf_printk macro to
+> bpf_helpers.h which is already included in all BPF programs which
+> defined that macro on their own.
 
-Ping! What is the status of the fix?
+makes sense, but it needs to wait until bpf-next reopens.
