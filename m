@@ -2,109 +2,96 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CC8123B85
-	for <lists+linux-kselftest@lfdr.de>; Mon, 20 May 2019 17:05:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 383EF23BDA
+	for <lists+linux-kselftest@lfdr.de>; Mon, 20 May 2019 17:19:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387762AbfETPFP (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 20 May 2019 11:05:15 -0400
-Received: from sauhun.de ([88.99.104.3]:51558 "EHLO pokefinder.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730766AbfETPFP (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 20 May 2019 11:05:15 -0400
-Received: from localhost (p54B333DA.dip0.t-ipconnect.de [84.179.51.218])
-        by pokefinder.org (Postfix) with ESMTPSA id 3853E2C2761;
-        Mon, 20 May 2019 17:05:11 +0200 (CEST)
-Date:   Mon, 20 May 2019 17:05:10 +0200
-From:   Wolfram Sang <wsa@the-dreams.de>
-To:     Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
-Cc:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        Mauro Carvalho Chehab <mchehab@infradead.org>,
-        linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        x86@kernel.org, linux-acpi@vger.kernel.org,
-        linux-edac@vger.kernel.org, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-arm-msm@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, xen-devel@lists.xenproject.org,
-        platform-driver-x86@vger.kernel.org, devel@driverdev.osuosl.org,
-        kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
-        devel@acpica.org, linux-mm@kvack.org,
-        linux-security-module@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH 10/10] docs: fix broken documentation links
-Message-ID: <20190520150510.GA2606@kunai>
-References: <cover.1558362030.git.mchehab+samsung@kernel.org>
- <4fd1182b4a41feb2447c7ccde4d7f0a6b3c92686.1558362030.git.mchehab+samsung@kernel.org>
+        id S2388831AbfETPTA (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 20 May 2019 11:19:00 -0400
+Received: from mail-it1-f194.google.com ([209.85.166.194]:39813 "EHLO
+        mail-it1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2387864AbfETPTA (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 20 May 2019 11:19:00 -0400
+Received: by mail-it1-f194.google.com with SMTP id 9so23707610itf.4
+        for <linux-kselftest@vger.kernel.org>; Mon, 20 May 2019 08:18:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=8bDPOW4T9PERtlCKjJ2lAbrC2Btl/gUnBtJeF4+SdEo=;
+        b=M2FGtec4qwOQA9nWt3yNJamKQbZ6wWHEdQ7BldBsOi2SLF2pp3o3HgjfWthzjXcrkt
+         1Hs+/DfFdQxqw0ItBC68YwvtUHfxSDPNMNLezriKfz417YqyxPA0xE315PCzAR3zfJwq
+         sD4QG6ggCau9zHe06mjOfQ/XeYTExSpjEdqb9EfyT8q9xhCfiXdOI7D/5lD6jYqoWhyC
+         KCI0lBwpSXxLHBGlYkTxZ182lmZPVwPKZjKhBCHRAF5RLHL/2mIcGf0eGvTbEPMZTbFy
+         lRnLGTe/ufItgUvJSnsswcjufkJZChaO2cCIaWAhfiTpiBkCBx5/xWGe0JLXpAVpwW/L
+         XZBw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=8bDPOW4T9PERtlCKjJ2lAbrC2Btl/gUnBtJeF4+SdEo=;
+        b=LSJiDtsLnL5ybzDgwkP0t/TKCqQvB4IAK67m49yvoFYD4Vi8ahfXUCDyMUvt6AJKPL
+         8eQ3EPKOSjuY/xeElvs3yB72e4DmpNy1mzQqAsUlFeByXjVCIB1HBpfwePKlnHJMKcnN
+         DA/wcUgnhgNv7ZybmwndIAuE1lBlO8de0hRz8msT1NK7owMNxmUqGNNxmHyAeJcXFtcI
+         Cy3uOL9VuG110EEu7hYaPWpcbTRFlnCm2L3qZqug+fVqQkSGXKcoEk/FFeYESyZCZiNh
+         dIaKG1zn7LL30tZWKyHHVoW+AmN0HpEdlwICn4UUN6Uyyy6VOqR+1rp6X/23A0zyt5V3
+         HPaA==
+X-Gm-Message-State: APjAAAXsJtYTHDSDFGrzSut4OyZf3d9lXzfhK1wYODhf8v/AYmIVdV9R
+        0bra0STZ6+EbVgtTw/Y2EfuaP/24QXU=
+X-Google-Smtp-Source: APXvYqxPeWPsR3qi08xbeYLoNXEOxhRXLPb6AbDnMWGKPpAWkaPEec6V+TrN28W/Fq0LTraaojid4w==
+X-Received: by 2002:a05:660c:107:: with SMTP id w7mr11276557itj.59.1558365539219;
+        Mon, 20 May 2019 08:18:59 -0700 (PDT)
+Received: from localhost (c-75-72-120-115.hsd1.mn.comcast.net. [75.72.120.115])
+        by smtp.gmail.com with ESMTPSA id s8sm5513436iot.55.2019.05.20.08.18.58
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Mon, 20 May 2019 08:18:58 -0700 (PDT)
+From:   Dan Rue <dan.rue@linaro.org>
+To:     dan.rue@linaro.org
+Cc:     linux-kselftest@vger.kernel.org,
+        Masahiro Yamada <yamada.masahiro@socionext.com>,
+        Michal Marek <michal.lkml@markovi.net>,
+        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] kbuild: teach kselftest-merge to find nested config files
+Date:   Mon, 20 May 2019 10:16:14 -0500
+Message-Id: <20190520151614.19188-1-dan.rue@linaro.org>
+X-Mailer: git-send-email 2.21.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="6c2NcOVqGQ03X4Wi"
-Content-Disposition: inline
-In-Reply-To: <4fd1182b4a41feb2447c7ccde4d7f0a6b3c92686.1558362030.git.mchehab+samsung@kernel.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+Current implementation of kselftest-merge only finds config files that
+are one level deep using `$(srctree)/tools/testing/selftests/*/config`.
 
---6c2NcOVqGQ03X4Wi
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Often, config files are added in nested directories, and do not get
+picked up by kselftest-merge.
 
-On Mon, May 20, 2019 at 11:47:39AM -0300, Mauro Carvalho Chehab wrote:
-> Mostly due to x86 and acpi conversion, several documentation
-> links are still pointing to the old file. Fix them.
->=20
-> Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
+Use `find` to catch all config files under
+`$(srctree)/tools/testing/selftests` instead.
 
-Thanks, didn't notice that.
+Signed-off-by: Dan Rue <dan.rue@linaro.org>
+---
+ Makefile | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
->  Documentation/i2c/instantiating-devices          |  2 +-
+diff --git a/Makefile b/Makefile
+index a45f84a7e811..e99e7f9484af 100644
+--- a/Makefile
++++ b/Makefile
+@@ -1228,9 +1228,8 @@ kselftest-clean:
+ PHONY += kselftest-merge
+ kselftest-merge:
+ 	$(if $(wildcard $(objtree)/.config),, $(error No .config exists, config your kernel first!))
+-	$(Q)$(CONFIG_SHELL) $(srctree)/scripts/kconfig/merge_config.sh \
+-		-m $(objtree)/.config \
+-		$(srctree)/tools/testing/selftests/*/config
++	$(Q)find $(srctree)/tools/testing/selftests -name config | \
++		xargs $(srctree)/scripts/kconfig/merge_config.sh -m $(objtree)/.config
+ 	+$(Q)$(MAKE) -f $(srctree)/Makefile olddefconfig
+ 
+ # ---------------------------------------------------------------------------
+-- 
+2.21.0
 
-=2E..
-
-> diff --git a/Documentation/i2c/instantiating-devices b/Documentation/i2c/=
-instantiating-devices
-> index 0d85ac1935b7..5a3e2f331e8c 100644
-> --- a/Documentation/i2c/instantiating-devices
-> +++ b/Documentation/i2c/instantiating-devices
-> @@ -85,7 +85,7 @@ Method 1c: Declare the I2C devices via ACPI
->  -------------------------------------------
-> =20
->  ACPI can also describe I2C devices. There is special documentation for t=
-his
-> -which is currently located at Documentation/acpi/enumeration.txt.
-> +which is currently located at Documentation/firmware-guide/acpi/enumerat=
-ion.rst.
-> =20
-> =20
->  Method 2: Instantiate the devices explicitly
-
-For this I2C part:
-
-Reviewed-by: Wolfram Sang <wsa@the-dreams.de>
-
-
---6c2NcOVqGQ03X4Wi
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAlziwiIACgkQFA3kzBSg
-Kbb/+hAArOEJ2RcuEqvOP7Ge80J7VxtEVTCR0sWRFg/7cpRGLnwf1qLSAUlfAJYj
-fUhZ9ANfeB4Y4ZltOPwJ34KNtZy/kYzYyoy/WgiNfJUrf+s7auOF+dMXRvBe8VyX
-v/pHpAMzTf8rtNkaESOahPExL1lgrI2dShZa3Mxofm2eb3Kam0OJRr6Cvj7mA/Rq
-PHq1QUlG+Y3hZdvAHjQ6GN6wr+pNnhqeSSAd3BZg5MZQpPRiaK+C4tPkqOD/TNwX
-9+iPJTMPhWsdei4UO1POHGCOclFatxkPOQm9JjsTD1h1lEJK7Afs1cTCd0crwpzW
-nQuj+MSjKTqcOwQ4hF1x6PwlbJm4Hq/+r6b50UsnQYai6pt7Khp9OISmYTxPQhgI
-8aXZbjsMB3k9ebYulULGdF0f3p/IPoqneTUf3yi5OxNbhJ8eyNcQ4l35MP9hEyYb
-H/9a/G4GXP7CLyCtKd53OtNeE1tTF4zGKIhe7v9OInHolA3gLx1R1rxiBeQB+XyA
-NO/4FdEIZ1QWAyl7m1aWBtYpar2uvFyEhZWG3sVhZYsA9dQNBfgzFSu60wus7hy4
-D9FxYijaEnHZvPivrTwfcp8ittAvsIrM3xANcOhWXEU6eC6w0KX15QiiyPQUbssL
-H3fPVUBxQlwicyY98Dvh7eJmnD1WEsMcDmDI5RqrAxhdD/bxbN0=
-=b4+p
------END PGP SIGNATURE-----
-
---6c2NcOVqGQ03X4Wi--
