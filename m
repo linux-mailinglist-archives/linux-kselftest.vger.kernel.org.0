@@ -2,76 +2,62 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 92F6222A29
-	for <lists+linux-kselftest@lfdr.de>; Mon, 20 May 2019 05:02:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13AA922A4D
+	for <lists+linux-kselftest@lfdr.de>; Mon, 20 May 2019 05:14:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730162AbfETDCE (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 19 May 2019 23:02:04 -0400
-Received: from out30-131.freemail.mail.aliyun.com ([115.124.30.131]:38541 "EHLO
-        out30-131.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725959AbfETDCA (ORCPT
+        id S1728473AbfETDOs (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 19 May 2019 23:14:48 -0400
+Received: from out30-56.freemail.mail.aliyun.com ([115.124.30.56]:58066 "EHLO
+        out30-56.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728435AbfETDOs (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 19 May 2019 23:02:00 -0400
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R391e4;CH=green;DM=||false|;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e07486;MF=alex.shi@linux.alibaba.com;NM=1;PH=DS;RN=9;SR=0;TI=SMTPD_---0TSB-E6b_1558321317;
-Received: from localhost(mailfrom:alex.shi@linux.alibaba.com fp:SMTPD_---0TSB-E6b_1558321317)
+        Sun, 19 May 2019 23:14:48 -0400
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R211e4;CH=green;DM=||false|;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e07487;MF=alex.shi@linux.alibaba.com;NM=1;PH=DS;RN=8;SR=0;TI=SMTPD_---0TSB-HBq_1558322084;
+Received: from Alexs-MacBook-Pro.local(mailfrom:alex.shi@linux.alibaba.com fp:SMTPD_---0TSB-HBq_1558322084)
           by smtp.aliyun-inc.com(127.0.0.1);
-          Mon, 20 May 2019 11:01:57 +0800
+          Mon, 20 May 2019 11:14:44 +0800
+Subject: Re: [PATCH 1/3] kselftest/cgroup: fix unexcepted testing failure on
+ test_memcontrol
+To:     Roman Gushchin <guro@fb.com>
+Cc:     Shuah Khan <shuah@kernel.org>, Tejun Heo <tj@kernel.org>,
+        Mike Rapoport <rppt@linux.vnet.ibm.com>,
+        Jay Kamat <jgkamat@fb.com>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        cgroups@vger.kernel.org
+References: <20190515090704.56929-1-alex.shi@linux.alibaba.com>
+ <20190517172930.GA5525@tower.DHCP.thefacebook.com>
 From:   Alex Shi <alex.shi@linux.alibaba.com>
-To:     cgroups@vger.kernel.org
-Cc:     Alex Shi <alex.shi@linux.alibaba.com>,
-        Shuah Khan <shuah@kernel.org>, Tejun Heo <tj@kernel.org>,
-        Roman Gushchin <guro@fb.com>, Claudio Zumbo <claudioz@fb.com>,
-        Claudio <claudiozumbo@gmail.com>,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 3/3] kselftest/cgroup: fix incorrect test_core skip
-Date:   Mon, 20 May 2019 11:01:40 +0800
-Message-Id: <20190520030140.203605-4-alex.shi@linux.alibaba.com>
-X-Mailer: git-send-email 2.19.1.856.g8858448bb
-In-Reply-To: <20190520030140.203605-1-alex.shi@linux.alibaba.com>
-References: <20190520030140.203605-1-alex.shi@linux.alibaba.com>
+Message-ID: <b2cb203e-e073-b077-94aa-6b6f432b8003@linux.alibaba.com>
+Date:   Mon, 20 May 2019 11:14:44 +0800
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.14; rv:60.0)
+ Gecko/20100101 Thunderbird/60.6.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20190517172930.GA5525@tower.DHCP.thefacebook.com>
+Content-Type: text/plain; charset=windows-1252
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The test_core will skip the
-test_cgcore_no_internal_process_constraint_on_threads test case if the
-'cpu' controller missing in root's subtree_control. In fact we need to
-set the 'cpu' in subtree_control, to make the testing meaningful.
 
-./test_core
-...
-ok 4 # skip test_cgcore_no_internal_process_constraint_on_threads
-...
+> Hi Alex!
+> 
+> Sorry for the late reply, somehow I missed your e-mails.
+> 
+> The patchset looks good to me, except a typo in subjects/commit logs:
+> you probably meant "unexpected failures".
+> 
+> Please, fix and feel free to use:
+> Reviewed-by: Roman Gushchin <guro@fb.com>
+> for the series.
+> 
 
-Signed-off-by: Alex Shi <alex.shi@linux.alibaba.com>
-Cc: Shuah Khan <shuah@kernel.org>
-Cc: Tejun Heo <tj@kernel.org>
-Cc: Roman Gushchin <guro@fb.com>
-Cc: Claudio Zumbo <claudioz@fb.com>
-Cc: Claudio <claudiozumbo@gmail.com>
-Cc: linux-kselftest@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-Reviewed-by: Roman Gushchin <guro@fb.com>
----
- tools/testing/selftests/cgroup/test_core.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Thanks Roman!
 
-diff --git a/tools/testing/selftests/cgroup/test_core.c b/tools/testing/selftests/cgroup/test_core.c
-index b1a570d7c557..2ffc3e07d98d 100644
---- a/tools/testing/selftests/cgroup/test_core.c
-+++ b/tools/testing/selftests/cgroup/test_core.c
-@@ -198,7 +198,7 @@ static int test_cgcore_no_internal_process_constraint_on_threads(const char *roo
- 	char *parent = NULL, *child = NULL;
- 
- 	if (cg_read_strstr(root, "cgroup.controllers", "cpu") ||
--	    cg_read_strstr(root, "cgroup.subtree_control", "cpu")) {
-+	    cg_write(root, "cgroup.subtree_control", "+cpu")) {
- 		ret = KSFT_SKIP;
- 		goto cleanup;
- 	}
--- 
-2.19.1.856.g8858448bb
+BTW, do you know other test cases for cgroup2 function or performance?
 
+Thanks
+Alex
