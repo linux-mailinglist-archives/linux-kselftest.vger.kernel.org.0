@@ -2,54 +2,59 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EEDE723210
-	for <lists+linux-kselftest@lfdr.de>; Mon, 20 May 2019 13:16:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 16DA923227
+	for <lists+linux-kselftest@lfdr.de>; Mon, 20 May 2019 13:19:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732571AbfETLQ1 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 20 May 2019 07:16:27 -0400
-Received: from mail-wr1-f67.google.com ([209.85.221.67]:33818 "EHLO
+        id S1732627AbfETLTo (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 20 May 2019 07:19:44 -0400
+Received: from mail-wr1-f67.google.com ([209.85.221.67]:44275 "EHLO
         mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732568AbfETLQ0 (ORCPT
+        with ESMTP id S1732628AbfETLTo (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 20 May 2019 07:16:26 -0400
-Received: by mail-wr1-f67.google.com with SMTP id f8so7736155wrt.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 20 May 2019 04:16:26 -0700 (PDT)
+        Mon, 20 May 2019 07:19:44 -0400
+Received: by mail-wr1-f67.google.com with SMTP id w13so3391812wru.11
+        for <linux-kselftest@vger.kernel.org>; Mon, 20 May 2019 04:19:43 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=ZxAda8y+Lw5w6X737KJdEPUh+wkc1U8IjaEMWE3lVAU=;
-        b=j3HFui2p6Vrak55xYxSilBiYiCBHvKnKma29WLIi7R6B/+nb/oPe4z4w0XgnjlRn/t
-         UGDNnb5kXW7ofQoecxGQRlN+I6neyjgskEeSrNeKA9K1gNA9GGqh6DN6IFVxEH0ayFKV
-         Kvv+jGW4SFGzObFOVwmCQoHtgtn0sZWTa+fVBdBSvIbKzcy3iKQ0rSckYP/jB11muZn4
-         thim5EVKIiiaPkkM0ql8SYYbdQm/xT1LgAhhIZgCA6XKdX0jhRoeBubTNcbrnRWjzu0y
-         5HJBwdNxt5XwtXAAjaF0rRMPMAVVzDYgEOyV9qqclW1YqiKXCJ3lVt5GFuIh+VhrX/Oq
-         pzWg==
-X-Gm-Message-State: APjAAAURIIe9griulOQ42+4IaGKWYYoLb/kIxWavuVq3pSS04sEcpqcu
-        0YGqHkgZxtV8JKde5hmMQUMu8Q==
-X-Google-Smtp-Source: APXvYqxKv0sQ2iquFAoDIXnp3sduGK6TezmZvrJwiMji2N1+QfUnBhmOkknC6pCZTEflbhnzO3ZTiQ==
-X-Received: by 2002:adf:dc04:: with SMTP id t4mr41535607wri.126.1558350985398;
-        Mon, 20 May 2019 04:16:25 -0700 (PDT)
+        bh=Dv4xQ5o29BgVYSDlJ1uUjFnM/clLTrGgwxfVO3It7Oo=;
+        b=ZVM7/m7xLE7avCh7/QvS5L6ta96paqsdKtqqXKE0wuqE2QtEQ+7VisYLvHU8IIB8po
+         MbE1SlsppHF2iRHcg63aqfcIYwHZwjUREwnU2eDTz8cLZeG9JfuE/oXYJTnG32Lurllc
+         c8eBk3tmcGirncmpYUcW2LB1mk2hU4fcLrlmpDWprkA5GgsPd7Et0F67ro5l1Jr9rL5a
+         ZwqFDBHSDwJpHjgPbVIeIMwQ8G83GPGYm/RrexwcEcfqXj0NRau3vFLagsOMjRrK+CiQ
+         LAPO5dF+DPPefZks031uqZCy82s6SBLpiKqmtJ3am4nJ4F+D4NzhWiLXipQg+GXTi0OH
+         VhLg==
+X-Gm-Message-State: APjAAAVlc2nHf8hl4KymLfHcMb9fFAOfdXD/4oidDxNsSCvS5tSJbXf4
+        Z1Bsq8ExXjheWEZOB9gYy1F3pA==
+X-Google-Smtp-Source: APXvYqywQm13oky/RrY0xgHmzm/UUdeA3s/nxbMShVeJInIgkMS5/aQ9uuNWbjiaTAAgsw4wi2C6MA==
+X-Received: by 2002:adf:e2c7:: with SMTP id d7mr9125915wrj.272.1558351182718;
+        Mon, 20 May 2019 04:19:42 -0700 (PDT)
 Received: from ?IPv6:2001:b07:6468:f312:ac04:eef9:b257:b844? ([2001:b07:6468:f312:ac04:eef9:b257:b844])
-        by smtp.gmail.com with ESMTPSA id 91sm25337283wrs.43.2019.05.20.04.16.24
+        by smtp.gmail.com with ESMTPSA id a128sm15609394wma.23.2019.05.20.04.19.41
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 20 May 2019 04:16:24 -0700 (PDT)
-Subject: Re: [PATCH] KVM: selftests: Remove duplicated TEST_ASSERT in
- hyperv_cpuid.c
+        Mon, 20 May 2019 04:19:41 -0700 (PDT)
+Subject: Re: [RFC PATCH 4/4] KVM: selftests: Add the sync_regs test for s390x
 To:     Thomas Huth <thuth@redhat.com>,
-        =?UTF-8?B?UmFkaW0gS3LEjW3DocWZ?= <rkrcmar@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>
-Cc:     Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20190520105511.12471-1-thuth@redhat.com>
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>, kvm@vger.kernel.org
+Cc:     =?UTF-8?B?UmFkaW0gS3LEjW3DocWZ?= <rkrcmar@redhat.com>,
+        Shuah Khan <shuah@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Andrew Jones <drjones@redhat.com>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-s390@vger.kernel.org
+References: <20190516111253.4494-1-thuth@redhat.com>
+ <20190516111253.4494-5-thuth@redhat.com>
 From:   Paolo Bonzini <pbonzini@redhat.com>
-Message-ID: <8402b29a-6be4-b123-eb14-80b3fa8d8080@redhat.com>
-Date:   Mon, 20 May 2019 13:16:23 +0200
+Message-ID: <3e462f1d-c9c0-ac26-ed59-182fbbf60340@redhat.com>
+Date:   Mon, 20 May 2019 13:19:40 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.6.1
 MIME-Version: 1.0
-In-Reply-To: <20190520105511.12471-1-thuth@redhat.com>
+In-Reply-To: <20190516111253.4494-5-thuth@redhat.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -58,37 +63,22 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 20/05/19 12:55, Thomas Huth wrote:
-> The check for entry->index == 0 is done twice. One time should
-> be sufficient.
-> 
-> Suggested-by: Vitaly Kuznetsov <vkuznets@redhat.com>
-> Signed-off-by: Thomas Huth <thuth@redhat.com>
-> ---
->  Vitaly already noticed this in his review to the "Fix a condition
->  in test_hv_cpuid()" patch a couple of days ago, but so far I haven't
->  seen any patch yet on the list that fixes this ... if I missed it
->  instead, please simply ignore this patch.
-> 
->  tools/testing/selftests/kvm/x86_64/hyperv_cpuid.c | 3 ---
->  1 file changed, 3 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/kvm/x86_64/hyperv_cpuid.c b/tools/testing/selftests/kvm/x86_64/hyperv_cpuid.c
-> index 9a21e912097c..8bdf1e7da6cc 100644
-> --- a/tools/testing/selftests/kvm/x86_64/hyperv_cpuid.c
-> +++ b/tools/testing/selftests/kvm/x86_64/hyperv_cpuid.c
-> @@ -52,9 +52,6 @@ static void test_hv_cpuid(struct kvm_cpuid2 *hv_cpuid_entries,
->  		TEST_ASSERT(entry->index == 0,
->  			    ".index field should be zero");
->  
-> -		TEST_ASSERT(entry->index == 0,
-> -			    ".index field should be zero");
-> -
->  		TEST_ASSERT(entry->flags == 0,
->  			    ".flags field should be zero");
->  
-> 
+On 16/05/19 13:12, Thomas Huth wrote:
+> +#define VCPU_ID 5
+> +
+> +static void guest_code(void)
+> +{
+> +	for (;;) {
+> +		asm volatile ("diag 0,0,0x501");
+> +		asm volatile ("ahi 11,1");
+> +	}
 
-Queued, thanks.
+I'd like this to use something like
+
+	register u32 stage = 0 asm("11");
+	...
+	stage++
+
+instead (yes, it should be fixed in x86 too).
 
 Paolo
