@@ -2,222 +2,203 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B8E92532F
-	for <lists+linux-kselftest@lfdr.de>; Tue, 21 May 2019 17:00:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7DFE25511
+	for <lists+linux-kselftest@lfdr.de>; Tue, 21 May 2019 18:11:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728674AbfEUPAO (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 21 May 2019 11:00:14 -0400
-Received: from zeniv.linux.org.uk ([195.92.253.2]:34486 "EHLO
-        ZenIV.linux.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727969AbfEUPAN (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 21 May 2019 11:00:13 -0400
-Received: from viro by ZenIV.linux.org.uk with local (Exim 4.92 #3 (Red Hat Linux))
-        id 1hT6FK-0007FT-IR; Tue, 21 May 2019 15:00:06 +0000
-Date:   Tue, 21 May 2019 16:00:06 +0100
-From:   Al Viro <viro@zeniv.linux.org.uk>
-To:     Christian Brauner <christian@brauner.io>
-Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-api@vger.kernel.org, jannh@google.com, fweimer@redhat.com,
-        oleg@redhat.com, tglx@linutronix.de, torvalds@linux-foundation.org,
-        arnd@arndb.de, shuah@kernel.org, dhowells@redhat.com,
-        tkjos@android.com, ldv@altlinux.org, miklos@szeredi.hu,
-        linux-alpha@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-xtensa@linux-xtensa.org, linux-arch@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, x86@kernel.org
-Subject: Re: [PATCH 1/2] open: add close_range()
-Message-ID: <20190521150006.GJ17978@ZenIV.linux.org.uk>
-References: <20190521113448.20654-1-christian@brauner.io>
+        id S1727925AbfEUQL4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 21 May 2019 12:11:56 -0400
+Received: from usa-sjc-mx-foss1.foss.arm.com ([217.140.101.70]:38088 "EHLO
+        foss.arm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727932AbfEUQL4 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 21 May 2019 12:11:56 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.72.51.249])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 54C71374;
+        Tue, 21 May 2019 09:11:55 -0700 (PDT)
+Received: from [10.1.196.72] (e119884-lin.cambridge.arm.com [10.1.196.72])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A65E63F718;
+        Tue, 21 May 2019 09:11:54 -0700 (PDT)
+Subject: Re: [PATCH v2 5/5] kselftest: Extend vDSO selftest to clock_getres
+From:   Vincenzo Frascino <vincenzo.frascino@arm.com>
+To:     Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org
+References: <20190416161434.32691-1-vincenzo.frascino@arm.com>
+ <20190416161434.32691-6-vincenzo.frascino@arm.com>
+Message-ID: <f07e07b0-4e53-96c8-ebe2-a0f5528fa329@arm.com>
+Date:   Tue, 21 May 2019 17:11:53 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190521113448.20654-1-christian@brauner.io>
-User-Agent: Mutt/1.11.3 (2019-02-01)
+In-Reply-To: <20190416161434.32691-6-vincenzo.frascino@arm.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, May 21, 2019 at 01:34:47PM +0200, Christian Brauner wrote:
+Hi Shuah,
 
-> This adds the close_range() syscall. It allows to efficiently close a range
-> of file descriptors up to all file descriptors of a calling task.
-> 
-> The syscall came up in a recent discussion around the new mount API and
-> making new file descriptor types cloexec by default. During this
-> discussion, Al suggested the close_range() syscall (cf. [1]). Note, a
-> syscall in this manner has been requested by various people over time.
-> 
-> First, it helps to close all file descriptors of an exec()ing task. This
-> can be done safely via (quoting Al's example from [1] verbatim):
-> 
->         /* that exec is sensitive */
->         unshare(CLONE_FILES);
->         /* we don't want anything past stderr here */
->         close_range(3, ~0U);
->         execve(....);
-> 
-> The code snippet above is one way of working around the problem that file
-> descriptors are not cloexec by default. This is aggravated by the fact that
-> we can't just switch them over without massively regressing userspace. For
-> a whole class of programs having an in-kernel method of closing all file
-> descriptors is very helpful (e.g. demons, service managers, programming
-> language standard libraries, container managers etc.).
-> (Please note, unshare(CLONE_FILES) should only be needed if the calling
->  task is multi-threaded and shares the file descriptor table with another
->  thread in which case two threads could race with one thread allocating
->  file descriptors and the other one closing them via close_range(). For the
->  general case close_range() before the execve() is sufficient.)
-> 
-> Second, it allows userspace to avoid implementing closing all file
-> descriptors by parsing through /proc/<pid>/fd/* and calling close() on each
-> file descriptor. From looking at various large(ish) userspace code bases
-> this or similar patterns are very common in:
-> - service managers (cf. [4])
-> - libcs (cf. [6])
-> - container runtimes (cf. [5])
-> - programming language runtimes/standard libraries
->   - Python (cf. [2])
->   - Rust (cf. [7], [8])
-> As Dmitry pointed out there's even a long-standing glibc bug about missing
-> kernel support for this task (cf. [3]).
-> In addition, the syscall will also work for tasks that do not have procfs
-> mounted and on kernels that do not have procfs support compiled in. In such
-> situations the only way to make sure that all file descriptors are closed
-> is to call close() on each file descriptor up to UINT_MAX or RLIMIT_NOFILE,
-> OPEN_MAX trickery (cf. comment [8] on Rust).
-> 
-> The performance is striking. For good measure, comparing the following
-> simple close_all_fds() userspace implementation that is essentially just
-> glibc's version in [6]:
-> 
-> static int close_all_fds(void)
-> {
->         DIR *dir;
->         struct dirent *direntp;
-> 
->         dir = opendir("/proc/self/fd");
->         if (!dir)
->                 return -1;
-> 
->         while ((direntp = readdir(dir))) {
->                 int fd;
->                 if (strcmp(direntp->d_name, ".") == 0)
->                         continue;
->                 if (strcmp(direntp->d_name, "..") == 0)
->                         continue;
->                 fd = atoi(direntp->d_name);
->                 if (fd == 0 || fd == 1 || fd == 2)
->                         continue;
->                 close(fd);
->         }
-> 
->         closedir(dir); /* cannot fail */
->         return 0;
-> }
-> 
-> to close_range() yields:
-> 1. closing 4 open files:
->    - close_all_fds(): ~280 us
->    - close_range():    ~24 us
-> 
-> 2. closing 1000 open files:
->    - close_all_fds(): ~5000 us
->    - close_range():   ~800 us
-> 
-> close_range() is designed to allow for some flexibility. Specifically, it
-> does not simply always close all open file descriptors of a task. Instead,
-> callers can specify an upper bound.
-> This is e.g. useful for scenarios where specific file descriptors are
-> created with well-known numbers that are supposed to be excluded from
-> getting closed.
-> For extra paranoia close_range() comes with a flags argument. This can e.g.
-> be used to implement extension. Once can imagine userspace wanting to stop
-> at the first error instead of ignoring errors under certain circumstances.
-> There might be other valid ideas in the future. In any case, a flag
-> argument doesn't hurt and keeps us on the safe side.
-> 
-> >From an implementation side this is kept rather dumb. It saw some input
-> from David and Jann but all nonsense is obviously my own!
-> - Errors to close file descriptors are currently ignored. (Could be changed
->   by setting a flag in the future if needed.)
-> - __close_range() is a rather simplistic wrapper around __close_fd().
->   My reasoning behind this is based on the nature of how __close_fd() needs
->   to release an fd. But maybe I misunderstood specifics:
->   We take the files_lock and rcu-dereference the fdtable of the calling
->   task, we find the entry in the fdtable, get the file and need to release
->   files_lock before calling filp_close().
->   In the meantime the fdtable might have been altered so we can't just
->   retake the spinlock and keep the old rcu-reference of the fdtable
->   around. Instead we need to grab a fresh reference to the fdtable.
->   If my reasoning is correct then there's really no point in fancyfying
->   __close_range(): We just need to rcu-dereference the fdtable of the
->   calling task once to cap the max_fd value correctly and then go on
->   calling __close_fd() in a loop.
+I did not see this patch in 5.2-rc1 and I was wondering if there is anything I
+can do to help with upstraming it.
 
-> +/**
-> + * __close_range() - Close all file descriptors in a given range.
+Please let me know.
+
+Thanks,
+Vincenzo
+
+On 16/04/2019 17:14, Vincenzo Frascino wrote:
+> The current version of the multiarch vDSO selftest verifies only
+> gettimeofday.
+> 
+> Extend the vDSO selftest to clock_getres, to verify that the
+> syscall and the vDSO library function return the same information.
+> 
+> The extension has been used to verify the hrtimer_resoltion fix.
+> 
+> Cc: Shuah Khan <shuah@kernel.org>
+> Signed-off-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
+> ---
+>  tools/testing/selftests/vDSO/Makefile         |   2 +
+>  .../selftests/vDSO/vdso_clock_getres.c        | 108 ++++++++++++++++++
+>  2 files changed, 110 insertions(+)
+>  create mode 100644 tools/testing/selftests/vDSO/vdso_clock_getres.c
+> 
+> diff --git a/tools/testing/selftests/vDSO/Makefile b/tools/testing/selftests/vDSO/Makefile
+> index 9e03d61f52fd..d5c5bfdf1ac1 100644
+> --- a/tools/testing/selftests/vDSO/Makefile
+> +++ b/tools/testing/selftests/vDSO/Makefile
+> @@ -5,6 +5,7 @@ uname_M := $(shell uname -m 2>/dev/null || echo not)
+>  ARCH ?= $(shell echo $(uname_M) | sed -e s/i.86/x86/ -e s/x86_64/x86/)
+>  
+>  TEST_GEN_PROGS := $(OUTPUT)/vdso_test
+> +TEST_GEN_PROGS += $(OUTPUT)/vdso_clock_getres
+>  ifeq ($(ARCH),x86)
+>  TEST_GEN_PROGS += $(OUTPUT)/vdso_standalone_test_x86
+>  endif
+> @@ -18,6 +19,7 @@ endif
+>  
+>  all: $(TEST_GEN_PROGS)
+>  $(OUTPUT)/vdso_test: parse_vdso.c vdso_test.c
+> +$(OUTPUT)/vdso_clock_getres: vdso_clock_getres.c
+>  $(OUTPUT)/vdso_standalone_test_x86: vdso_standalone_test_x86.c parse_vdso.c
+>  	$(CC) $(CFLAGS) $(CFLAGS_vdso_standalone_test_x86) \
+>  		vdso_standalone_test_x86.c parse_vdso.c \
+> diff --git a/tools/testing/selftests/vDSO/vdso_clock_getres.c b/tools/testing/selftests/vDSO/vdso_clock_getres.c
+> new file mode 100644
+> index 000000000000..b1b9652972eb
+> --- /dev/null
+> +++ b/tools/testing/selftests/vDSO/vdso_clock_getres.c
+> @@ -0,0 +1,108 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * vdso_clock_getres.c: Sample code to test clock_getres.
+> + * Copyright (c) 2019 Arm Ltd.
 > + *
-> + * @fd:     starting file descriptor to close
-> + * @max_fd: last file descriptor to close
+> + * Compile with:
+> + * gcc -std=gnu99 vdso_clock_getres.c
 > + *
-> + * This closes a range of file descriptors. All file descriptors
-> + * from @fd up to and including @max_fd are closed.
+> + * Tested on ARM, ARM64, MIPS32, x86 (32-bit and 64-bit),
+> + * Power (32-bit and 64-bit), S390x (32-bit and 64-bit).
+> + * Might work on other architectures.
 > + */
-> +int __close_range(struct files_struct *files, unsigned fd, unsigned max_fd)
+> +
+> +#define _GNU_SOURCE
+> +#include <elf.h>
+> +#include <err.h>
+> +#include <fcntl.h>
+> +#include <stdint.h>
+> +#include <stdio.h>
+> +#include <stdlib.h>
+> +#include <time.h>
+> +#include <sys/auxv.h>
+> +#include <sys/mman.h>
+> +#include <sys/time.h>
+> +#include <unistd.h>
+> +#include <sys/syscall.h>
+> +
+> +#include "../kselftest.h"
+> +
+> +static long syscall_clock_getres(clockid_t _clkid, struct timespec *_ts)
 > +{
-> +	unsigned int cur_max;
+> +	long ret;
 > +
-> +	if (fd > max_fd)
-> +		return -EINVAL;
+> +	ret = syscall(SYS_clock_getres, _clkid, _ts);
 > +
-> +	rcu_read_lock();
-> +	cur_max = files_fdtable(files)->max_fds;
-> +	rcu_read_unlock();
+> +	return ret;
+> +}
 > +
-> +	/* cap to last valid index into fdtable */
-> +	if (max_fd >= cur_max)
-> +		max_fd = cur_max - 1;
+> +const char *vdso_clock_name[12] = {
+> +	"CLOCK_REALTIME",
+> +	"CLOCK_MONOTONIC",
+> +	"CLOCK_PROCESS_CPUTIME_ID",
+> +	"CLOCK_THREAD_CPUTIME_ID",
+> +	"CLOCK_MONOTONIC_RAW",
+> +	"CLOCK_REALTIME_COARSE",
+> +	"CLOCK_MONOTONIC_COARSE",
+> +	"CLOCK_BOOTTIME",
+> +	"CLOCK_REALTIME_ALARM",
+> +	"CLOCK_BOOTTIME_ALARM",
+> +	"CLOCK_SGI_CYCLE",
+> +	"CLOCK_TAI",
+> +};
 > +
-> +	while (fd <= max_fd)
-> +		__close_fd(files, fd++);
+> +/*
+> + * Macro to call clock_getres in vdso and by system call
+> + * with different values for clock_id.
+> + */
+> +#define vdso_test_clock(clock_id)				\
+> +do {								\
+> +	struct timespec x, y;					\
+> +	printf("clock_id: %s", vdso_clock_name[clock_id]);	\
+> +	clock_getres(clock_id, &x);				\
+> +	syscall_clock_getres(clock_id, &y);			\
+> +	if ((x.tv_sec != y.tv_sec) || (x.tv_sec != y.tv_sec)) {	\
+> +		printf(" [FAIL]\n");				\
+> +		return KSFT_SKIP;				\
+> +	} else {						\
+> +		printf(" [PASS]\n");				\
+> +	}							\
+> +} while (0)
+> +
+> +int main(int argc, char **argv)
+> +{
+> +
+> +#if _POSIX_TIMERS > 0
+> +
+> +#ifdef CLOCK_REALTIME
+> +	vdso_test_clock(CLOCK_REALTIME);
+> +#endif
+> +
+> +#ifdef CLOCK_BOOTTIME
+> +	vdso_test_clock(CLOCK_BOOTTIME);
+> +#endif
+> +
+> +#ifdef CLOCK_TAI
+> +	vdso_test_clock(CLOCK_TAI);
+> +#endif
+> +
+> +#ifdef CLOCK_REALTIME_COARSE
+> +	vdso_test_clock(CLOCK_REALTIME_COARSE);
+> +#endif
+> +
+> +#ifdef CLOCK_MONOTONIC
+> +	vdso_test_clock(CLOCK_MONOTONIC);
+> +#endif
+> +
+> +#ifdef CLOCK_MONOTONIC_RAW
+> +	vdso_test_clock(CLOCK_MONOTONIC_RAW);
+> +#endif
+> +
+> +#ifdef CLOCK_MONOTONIC_COARSE
+> +	vdso_test_clock(CLOCK_MONOTONIC_COARSE);
+> +#endif
+> +
+> +#endif
 > +
 > +	return 0;
 > +}
+> 
 
-Umm...  That's going to be very painful if you dup2() something to MAX_INT and
-then run that; roughly 2G iterations of bouncing ->file_lock up and down,
-without anything that would yield CPU in process.
-
-If anything, I would suggest something like
-
-	fd = *start_fd;
-	grab the lock
-        fdt = files_fdtable(files);
-more:
-	look for the next eviction candidate in ->open_fds, starting at fd
-	if there's none up to max_fd
-		drop the lock
-		return NULL
-	*start_fd = fd + 1;
-	if the fscker is really opened and not just reserved
-		rcu_assign_pointer(fdt->fd[fd], NULL);
-		__put_unused_fd(files, fd);
-		drop the lock
-		return the file we'd got
-	if (unlikely(need_resched()))
-		drop lock
-		cond_resched();
-		grab lock
-		fdt = files_fdtable(files);
-	goto more;
-
-with the main loop being basically
-	while ((file = pick_next(files, &start_fd, max_fd)) != NULL)
-		filp_close(file, files);
-
-
+-- 
+Regards,
+Vincenzo
