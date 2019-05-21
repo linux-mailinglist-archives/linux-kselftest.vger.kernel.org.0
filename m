@@ -2,25 +2,52 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EBE8024FCE
-	for <lists+linux-kselftest@lfdr.de>; Tue, 21 May 2019 15:10:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D0D124FEB
+	for <lists+linux-kselftest@lfdr.de>; Tue, 21 May 2019 15:18:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728194AbfEUNKs (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 21 May 2019 09:10:48 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:36728 "EHLO mx1.redhat.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726900AbfEUNKs (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 21 May 2019 09:10:48 -0400
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id A31313086231;
-        Tue, 21 May 2019 13:10:24 +0000 (UTC)
-Received: from oldenburg2.str.redhat.com (dhcp-192-219.str.redhat.com [10.33.192.219])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 52692665F4;
-        Tue, 21 May 2019 13:10:13 +0000 (UTC)
-From:   Florian Weimer <fweimer@redhat.com>
-To:     Christian Brauner <christian@brauner.io>
+        id S1728142AbfEUNS4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 21 May 2019 09:18:56 -0400
+Received: from mail-wm1-f67.google.com ([209.85.128.67]:39010 "EHLO
+        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728057AbfEUNSz (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 21 May 2019 09:18:55 -0400
+Received: by mail-wm1-f67.google.com with SMTP id n25so1044005wmk.4
+        for <linux-kselftest@vger.kernel.org>; Tue, 21 May 2019 06:18:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=brauner.io; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=m/t4nh9Qn5eHvWriEo2lAzUTm+cejgZEB4hMcOrCq4Y=;
+        b=Qzja+tqWdJKwhlDJv7ZeHS1krNqDAM++eYcwAp+RKkbv8p1KDPWxxZhzOpavU0EOHV
+         kYWbjNPEjkxc3aEKZdrk9785qJNa6FxJtfkDGm1FLt3j0bk9/8YvawePnukWGCyjpFii
+         0DMW2p0x+5xPdVsJRuiSOe+/dtlaOGa52u2fWdq9QaNK4Tve8leR5ZqhEKAiqjWW0X06
+         oTZk1e1uxbJPDBZIKsNtQKeWDeRpwtxnoV5XKv/I6zW+K9rGYAZZ7B8YjZBRwD4kYhWa
+         WgDiIxwS5iY9PCvzQxN+w34XvRhk0st2I0ChEGvAZh7Cr4yOtxIXjdk5keUvD29dcq/r
+         WLUA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=m/t4nh9Qn5eHvWriEo2lAzUTm+cejgZEB4hMcOrCq4Y=;
+        b=cNIVMkL4Q2epvwsfPx4WhK5KbNNCLNkuwR6jUbUYLaY6OWYNzBlQfjE6iBiSe2NISI
+         9kWIOg2ySuiSg71vKmti2o/FDF1uT9d6DwjNKqYGYJsIb8FiI7asU39GZWBzZCklouqv
+         zCZ0csaucCs3zIIDiVzEhngj8fr3c55IHXbM9wqtBun2mPTy6z+EM4nbtvu7TnpWy/6f
+         Q2RLRJogYfqTtJaAjnvwCYq75ffuwn4/9iML7Q39o3IAKpuopFi0iUF2dKSErRhD+pRY
+         31mhbwJdaGiM+QWrPzwsdai51oCg4dzE5dDHZB1Y31MQXZAASCk10saOffkPYNBzyAt6
+         KUng==
+X-Gm-Message-State: APjAAAVFAtrtHQp8PQcVA5PaCGlvFiSZrwM+oWoBPHnFReG3LLi+uwXm
+        rKfPr+7/Ge75a3pHnpbTu0OqtBnOx9W+7Q==
+X-Google-Smtp-Source: APXvYqyfKPZSJeUKKvR/WsITTIjBfoMQuzQ5Xtre6YfbYN0C4pHfHkECFwZ8Y50hJAsIDs/Jg3fbyg==
+X-Received: by 2002:a1c:9c8c:: with SMTP id f134mr3258598wme.95.1558444734225;
+        Tue, 21 May 2019 06:18:54 -0700 (PDT)
+Received: from brauner.io (p548C9938.dip0.t-ipconnect.de. [84.140.153.56])
+        by smtp.gmail.com with ESMTPSA id n4sm2071899wmk.24.2019.05.21.06.18.52
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Tue, 21 May 2019 06:18:53 -0700 (PDT)
+Date:   Tue, 21 May 2019 15:18:50 +0200
+From:   Christian Brauner <christian@brauner.io>
+To:     Florian Weimer <fweimer@redhat.com>
 Cc:     viro@zeniv.linux.org.uk, linux-kernel@vger.kernel.org,
         linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
         jannh@google.com, oleg@redhat.com, tglx@linutronix.de,
@@ -35,55 +62,66 @@ Cc:     viro@zeniv.linux.org.uk, linux-kernel@vger.kernel.org,
         linux-arch@vger.kernel.org, linux-kselftest@vger.kernel.org,
         x86@kernel.org
 Subject: Re: [PATCH 1/2] open: add close_range()
+Message-ID: <20190521131849.2mguu5sszhbxhvgu@brauner.io>
 References: <20190521113448.20654-1-christian@brauner.io>
-        <87tvdoau12.fsf@oldenburg2.str.redhat.com>
-        <20190521130438.q3u4wvve7p6md6cm@brauner.io>
-Date:   Tue, 21 May 2019 15:10:11 +0200
-In-Reply-To: <20190521130438.q3u4wvve7p6md6cm@brauner.io> (Christian Brauner's
-        message of "Tue, 21 May 2019 15:04:39 +0200")
-Message-ID: <87h89o9cng.fsf@oldenburg2.str.redhat.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+ <87tvdoau12.fsf@oldenburg2.str.redhat.com>
+ <20190521130438.q3u4wvve7p6md6cm@brauner.io>
+ <87h89o9cng.fsf@oldenburg2.str.redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
-X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.42]); Tue, 21 May 2019 13:10:47 +0000 (UTC)
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <87h89o9cng.fsf@oldenburg2.str.redhat.com>
+User-Agent: NeoMutt/20180716
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-* Christian Brauner:
+On Tue, May 21, 2019 at 03:10:11PM +0200, Florian Weimer wrote:
+> * Christian Brauner:
+> 
+> >> Solaris has an fdwalk function:
+> >> 
+> >>   <https://docs.oracle.com/cd/E88353_01/html/E37843/closefrom-3c.html>
+> >> 
+> >> So a different way to implement this would expose a nextfd system call
+> >
+> > Meh. If nextfd() then I would like it to be able to:
+> > - get the nextfd(fd) >= fd
+> > - get highest open fd e.g. nextfd(-1)
+> 
+> The highest open descriptor isn't istering for fdwalk because nextfd
+> would just fail.
+> 
+> > But then I wonder if nextfd() needs to be a syscall and isn't just
+> > either:
+> > fcntl(fd, F_GET_NEXT)?
+> > or
+> > prctl(PR_GET_NEXT)?
+> 
+> I think the fcntl route is a bit iffy because you might need it to get
+> the *first* valid descriptor.
 
->> Solaris has an fdwalk function:
->> 
->>   <https://docs.oracle.com/cd/E88353_01/html/E37843/closefrom-3c.html>
->> 
->> So a different way to implement this would expose a nextfd system call
->
-> Meh. If nextfd() then I would like it to be able to:
-> - get the nextfd(fd) >= fd
-> - get highest open fd e.g. nextfd(-1)
+Oh, how would that be difficult? Maybe I'm missing context.
+Couldn't you just do
 
-The highest open descriptor isn't istering for fdwalk because nextfd
-would just fail.
+fcntl(0, F_GET_NEXT)
 
-> But then I wonder if nextfd() needs to be a syscall and isn't just
-> either:
-> fcntl(fd, F_GET_NEXT)?
-> or
-> prctl(PR_GET_NEXT)?
+> 
+> >> to userspace, so that we can use that to implement both fdwalk and
+> >> closefrom.  But maybe fdwalk is just too obscure, given the existence of
+> >> /proc.
+> >
+> > Yeah we probably don't need fdwalk.
+> 
+> Agreed.  Just wanted to bring it up for completeness.  I certainly don't
+> want to derail the implementation of close_range.
 
-I think the fcntl route is a bit iffy because you might need it to get
-the *first* valid descriptor.
+No, that's perfectly fine. I mean, you clearly need this and are one of
+the major stakeholders. For example, Rust (probably also Python) will
+call down into libc and not use the syscall directly. They kinda do this
+with getfdtable<sm> rn already.
+So what you say makes sense for libc has some relevance for the other
+tools as well.
 
->> to userspace, so that we can use that to implement both fdwalk and
->> closefrom.  But maybe fdwalk is just too obscure, given the existence of
->> /proc.
->
-> Yeah we probably don't need fdwalk.
-
-Agreed.  Just wanted to bring it up for completeness.  I certainly don't
-want to derail the implementation of close_range.
-
-Thanks,
-Florian
+Christian
