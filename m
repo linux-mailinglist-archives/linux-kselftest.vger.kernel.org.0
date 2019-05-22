@@ -2,117 +2,74 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 43B8F25F1F
-	for <lists+linux-kselftest@lfdr.de>; Wed, 22 May 2019 10:12:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D37B25FBD
+	for <lists+linux-kselftest@lfdr.de>; Wed, 22 May 2019 10:44:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728653AbfEVIMX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 22 May 2019 04:12:23 -0400
-Received: from mail-lf1-f67.google.com ([209.85.167.67]:39033 "EHLO
-        mail-lf1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728602AbfEVIMX (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 22 May 2019 04:12:23 -0400
-Received: by mail-lf1-f67.google.com with SMTP id f1so972121lfl.6
-        for <linux-kselftest@vger.kernel.org>; Wed, 22 May 2019 01:12:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=brauner.io; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=NinRxNHyDYbCj8IbjH00ChDPuWJUmzxEB5UBBCZfvuk=;
-        b=FQpPrYcaQxCAFGTYiUsPu0qLO+TyOcW7gshxdKkzEdBEoeF7zfGLnQVrcgcr4gKCeX
-         LJ4YXrL36Z8UOIkkUcBOLv8jo3+1wy2Zrr1Gv+mEl7u90rBwnDVcVlXzHgwabis+F7I/
-         dlJlteIhWCGDFh11b+aiyTTGML6DsZQmYr7FjOpjo+237NiSY/93FSEYu5SmcuC+kMHi
-         w+QbDlfq/QnsLdgPfA6Jf+xdMdism6B4eELfwRuNPZvO4gmtKOqxk/k31Xt7g6ek0i6A
-         6O4E/le0sudnktBxl+9AFEIeQt8N5n9ZAVs90K2h9eXQLV3Rz/8qfSLtahw9cvbBcJ3h
-         1JTg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=NinRxNHyDYbCj8IbjH00ChDPuWJUmzxEB5UBBCZfvuk=;
-        b=QDgMM3BOQSIU5Z8qn1ZESs7F7sKbyW3UyCe5ygg7jBlnI0NGei6rhcXFrgIew2yvGm
-         9YOD1k9PhTMnliXeo82DQOBv6f13OUlyIq29puRqRlhf0D3e1iU4SSlKpvorA6HebmK6
-         R8046uYdtNylSCd0nzmapYw6QzkV26P1131Cx+YaA9LKVvjStPpv5bEPfXdP9M4Ya57G
-         NcOC2hZiANpI1fQD21dGCYUMYobkjBZTlfdjlOVghjx2H6EMAyKd3qU3fbPDrVLUFWHG
-         TDK7FeFS3wJReat2xlB9bwtMd/Td+0pTWHJqVat46lMgdimxuaDHRnNusa1KtaVQA23d
-         2b3w==
-X-Gm-Message-State: APjAAAVUBiugl13ppLfFMp2E5xBDVJHzUGmawOH91YNmKbPU4CsE10az
-        WHtCwma4nP5QyaBq2iee6jmBWY2SSEy/aODCB9pGSg==
-X-Google-Smtp-Source: APXvYqx7pLLI28SrC6KCXMaRxdNQfwff8OtpKLPW6FHDJY0UodmrushWU4y7kAd+10dOgbbxHnK3LHfXY1UCm8GAhHE=
-X-Received: by 2002:a05:6512:1c1:: with SMTP id f1mr4469627lfp.125.1558512742198;
- Wed, 22 May 2019 01:12:22 -0700 (PDT)
+        id S1728693AbfEVIoV (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 22 May 2019 04:44:21 -0400
+Received: from mx1.redhat.com ([209.132.183.28]:47566 "EHLO mx1.redhat.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727946AbfEVIoV (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 22 May 2019 04:44:21 -0400
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mx1.redhat.com (Postfix) with ESMTPS id 0DCDC3082E42;
+        Wed, 22 May 2019 08:44:21 +0000 (UTC)
+Received: from kamzik.brq.redhat.com (ovpn-204-233.brq.redhat.com [10.40.204.233])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 33C00600C6;
+        Wed, 22 May 2019 08:44:14 +0000 (UTC)
+Date:   Wed, 22 May 2019 10:44:09 +0200
+From:   Andrew Jones <drjones@redhat.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Thomas Huth <thuth@redhat.com>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>, kvm@vger.kernel.org,
+        Radim =?utf-8?B?S3LEjW3DocWZ?= <rkrcmar@redhat.com>,
+        Shuah Khan <shuah@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-s390@vger.kernel.org
+Subject: Re: [RFC PATCH 0/4] KVM selftests for s390x
+Message-ID: <20190522084409.qz5hs7lqj65qg6x5@kamzik.brq.redhat.com>
+References: <20190516111253.4494-1-thuth@redhat.com>
+ <b412e591-3983-ebef-510b-43f9b7be4147@redhat.com>
+ <9423ba89-b10e-5e6e-3cc8-8088f3088233@redhat.com>
+ <4d94124e-00f6-aa65-3a4a-bd8910480329@redhat.com>
 MIME-Version: 1.0
-References: <20190521150006.GJ17978@ZenIV.linux.org.uk> <20190521113448.20654-1-christian@brauner.io>
- <28114.1558456227@warthog.procyon.org.uk> <20190521164141.rbehqnghiej3gfua@brauner.io>
- <CAHk-=wgtHm4t71oKbykE=awiVv2H2wCy8yH0L_FsyhHQ5OSO+Q@mail.gmail.com>
-In-Reply-To: <CAHk-=wgtHm4t71oKbykE=awiVv2H2wCy8yH0L_FsyhHQ5OSO+Q@mail.gmail.com>
-From:   Christian Brauner <christian@brauner.io>
-Date:   Wed, 22 May 2019 10:12:11 +0200
-Message-ID: <CAHrFyr4NV_5Z7TRSXTaurd4KCTLiHqKb47dN=bdY46HiL9ZY3Q@mail.gmail.com>
-Subject: Re: [PATCH 1/2] open: add close_range()
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     David Howells <dhowells@redhat.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Linux List Kernel Mailing <linux-kernel@vger.kernel.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        Linux API <linux-api@vger.kernel.org>,
-        Jann Horn <jannh@google.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        Oleg Nesterov <oleg@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Arnd Bergmann <arnd@arndb.de>, Shuah Khan <shuah@kernel.org>,
-        Todd Kjos <tkjos@android.com>,
-        "Dmitry V. Levin" <ldv@altlinux.org>,
-        Miklos Szeredi <miklos@szeredi.hu>,
-        alpha <linux-alpha@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-ia64@vger.kernel.org,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        linux-mips@vger.kernel.org,
-        Parisc List <linux-parisc@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        Linux-sh list <linux-sh@vger.kernel.org>,
-        sparclinux <sparclinux@vger.kernel.org>,
-        linux-xtensa@linux-xtensa.org,
-        linux-arch <linux-arch@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        "the arch/x86 maintainers" <x86@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <4d94124e-00f6-aa65-3a4a-bd8910480329@redhat.com>
+User-Agent: NeoMutt/20180716
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
+X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.46]); Wed, 22 May 2019 08:44:21 +0000 (UTC)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, May 21, 2019 at 10:23 PM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
->
-> On Tue, May 21, 2019 at 9:41 AM Christian Brauner <christian@brauner.io> wrote:
-> >
-> > Yeah, you mentioned this before. I do like being able to specify an
-> > upper bound to have the ability to place fds strategically after said
-> > upper bound.
->
-> I suspect that's the case.
->
-> And if somebody really wants to just close everything and uses a large
-> upper bound, we can - if we really want to - just compare the upper
-> bound to the file table size, and do an optimized case for that. We do
-> that upper bound comparison anyway to limit the size of the walk, so
-> *if* it's a big deal, that case could then do the whole "shrink
-> fdtable" case too.
+On Mon, May 20, 2019 at 01:43:06PM +0200, Paolo Bonzini wrote:
+> On 20/05/19 13:30, Thomas Huth wrote:
+> >> No objections at all, though it would be like to have ucall plumbed in
+> >> from the beginning.
+> > I'm still looking at the ucall interface ... what I don't quite get yet
+> > is the question why the ucall_type there is selectable during runtime?
+> > 
+> > Are there plans to have test that could either use UCALL_PIO or
+> > UCALL_MMIO? If not, what about moving ucall_init() and ucall() to
+> > architecture specific code in tools/testing/selftests/kvm/lib/aarch64/
+> > and tools/testing/selftests/kvm/lib/x86_64 instead, and to remove the
+> > ucall_type stuff again (so that x86 is hard-wired to PIO and aarch64
+> > is hard-wired to MMIO)? ... then I could add a DIAG-based ucall
+> > on s390x more easily, I think.
+> 
+> Yes, that would work.  I think Andrew wanted the flexibility to use MMIO
+> on x86, but it's not really necessary to have it.
 
-Makes sense.
+If the flexibility isn't necessary, then I agree that it'll be nicer to
+put the ucall_init() in arch setup code, avoiding the need to remember
+it in each unit test.
 
->
-> But I don't believe it's worth optimizing for unless somebody really
-> has a load where that is shown to be a big deal.   Just do the silly
-> and simple loop, and add a cond_resched() in the loop, like
-> close_files() does for the "we have a _lot_ of files open" case.
-
-Ok. I will resend a v1 later with the cond_resched() logic you and Al
-suggested added.
-
-Thanks!
-Christian
+Thanks,
+drew
