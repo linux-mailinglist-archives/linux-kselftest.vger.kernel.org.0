@@ -2,270 +2,259 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8561527179
-	for <lists+linux-kselftest@lfdr.de>; Wed, 22 May 2019 23:17:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54640271C1
+	for <lists+linux-kselftest@lfdr.de>; Wed, 22 May 2019 23:39:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730209AbfEVVRL (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 22 May 2019 17:17:11 -0400
-Received: from mail-ua1-f66.google.com ([209.85.222.66]:38842 "EHLO
-        mail-ua1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729891AbfEVVRL (ORCPT
+        id S1730399AbfEVVjC (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 22 May 2019 17:39:02 -0400
+Received: from mail-oi1-f195.google.com ([209.85.167.195]:43873 "EHLO
+        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729898AbfEVVjC (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 22 May 2019 17:17:11 -0400
-Received: by mail-ua1-f66.google.com with SMTP id r19so1416048uap.5
-        for <linux-kselftest@vger.kernel.org>; Wed, 22 May 2019 14:17:10 -0700 (PDT)
+        Wed, 22 May 2019 17:39:02 -0400
+Received: by mail-oi1-f195.google.com with SMTP id t187so2785839oie.10
+        for <linux-kselftest@vger.kernel.org>; Wed, 22 May 2019 14:39:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=4dHniiz5Iec+zX/39XStbUXbmPxCKmuaK7gygHepfyc=;
-        b=BozsRedf7hxOrPEwc14/5gYKjPtcuYPfCzdL5Qh8eptxMopndG6sl6KK8l1wx0gHcO
-         fX9KUGo72jJQy2d1m1wZ3No1Qi2uQpl1cB2uKNXeTTE0y7bVHQRp3jZ8gNy6f12oUbuZ
-         9pqndA18D5HuCzEP7FakfNMcFjkFYSW5Qf6tTdWeb6YU5HYx7NFV4gOPaqZKnmwkQ5VN
-         K2fCVmPCADr0j8VP+wLoOUFpEpW6WISMm8/ajD25DfdGIBy1SiKGnwF+/Lt+nHE51rtB
-         vS7fbs1gYfPlwpTBaswd0RKzwzIK+7d4NhNx6dxPb1W6jd5YUGLoFQyi73p/mW3CKcJq
-         v2ig==
+        bh=X8iUa3mR7n1QUqI0vPloid9MGvfKcIGgUfFxnULZ5+U=;
+        b=GDelsoqQolX8vZ500TJnYRTrvx7UvzJ51bjddO3LDssDGEV/KLjn45OPSK1LoHb+pt
+         vMc4fO10d8rFO9cUXhUOasQS1z00mtA/aaww0itHgEjxtv6/EtX/A5C4yrS8r08gyITU
+         TA04J0efipr8o8Xl0BPEGjp/KEY0bIEgjzBYUxRrb7zqAvNHGycq9491MnB/928cEorF
+         vcRKUxoGSumKvZMwAn4LVEhN0I/8thaBrCFiTKXFw9vQen81eDnsqy70p43bZYFnR6bP
+         AEdEBccKUY3heoXvT17IcKdkpcaihfJ0EloODJeeR+bHCXp13wWqqLlXuKmTMbFs7kR8
+         kJzg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=4dHniiz5Iec+zX/39XStbUXbmPxCKmuaK7gygHepfyc=;
-        b=ZxfYUPNKOtGy0rsthvdsoAssOBKOQ5w7yjRObW66y5zrUwUEsm7GEnTFHYAtrFPDmS
-         6uWRwy9CtnwasuxjSWOBXh0rMa8f/X2HiRr4S4aMabm5OWgO3aTgS2udtVDaWnGQoxnO
-         N7TRY+1k6oOUwIXLYBgx69U+oueFHi7zUvR4J8z0+niGfdpbsq1nUuaSU/SEXImrX1+R
-         ZBPcQPVzO/N7LWmSxf4ccUliJ+ke/M0TTAz33TMskNYVrRNYXz0o985LzYqPEBT5bFCd
-         QWOjzw4NCJ8qDuS0ZnJdpfmDVx4e9DHUbqGzXfhy24Nbh301kgddats3vPRDCgL1rriP
-         ViiQ==
-X-Gm-Message-State: APjAAAXct642uhBDI6jKjENX9vijlBIeTkL3CFDfQ3ZtRDS0OCuVZDjt
-        STysw8N3Fpy6tkiVX8mekGzcKbzRQDklAOpgtxK6Zg==
-X-Google-Smtp-Source: APXvYqxH4+lXdvKeAKR6IcV6qRcWyD41x0RLMgowdC0uvePb1uyY7QqZdIceH4zhHD2Gn25pj1INm9uTZm6L2qnPIh8=
-X-Received: by 2002:ab0:115a:: with SMTP id g26mr16507991uac.84.1558559829704;
- Wed, 22 May 2019 14:17:09 -0700 (PDT)
+        bh=X8iUa3mR7n1QUqI0vPloid9MGvfKcIGgUfFxnULZ5+U=;
+        b=eyktC2vigwuCmPalGzTlumnIyERdA1WohONUF3z0EHXVbMw6Lr0K+31Mbq04LuzCUd
+         qIMoAx4AcYn2qHI4zTUcYG9Clk9ktkIDmyOKGpTwqOGvclCLIyqJZBn9VeQ9z2W49eKm
+         pNfRjZkA7YNP0j4ADMACbWYge8CzJgoWri63hu1swbR5yq+8V/5um8pr67F8hiivtSgX
+         YojPxXDHFvaEW9DXq8uX3cnslJe76sQo8MnkHw/QUKNh+WyCoXgy+d6lvf6BRIVuCUR7
+         nZ2QfgWqIePGHh/Qyhy/L1u/OJXc1hZ7jOXRI9MY+BSmOdyXU54h2GegLASQUqmBfFh0
+         mJ3w==
+X-Gm-Message-State: APjAAAVXtUNmnbzOg5AV9aKSyxThwN+mZuu+1IDxIYNfqBh58QlzoOP7
+        fOlqm49UbFcz3bl/kehMCT6Hzo5lQ9QUFYtHCNdnZg==
+X-Google-Smtp-Source: APXvYqwhyT9IyVUG9lkFu5kWtgvlKVPb/Q03tyBe4vbXVaiSv8N9Jry7yPQvyfivwOs/aXwiHN39BhvkHSSieLsYpPE=
+X-Received: by 2002:aca:55d6:: with SMTP id j205mr565451oib.137.1558561141083;
+ Wed, 22 May 2019 14:39:01 -0700 (PDT)
 MIME-Version: 1.0
-References: <cover.1557160186.git.andreyknvl@google.com> <00eb4c63fefc054e2c8d626e8fedfca11d7c2600.1557160186.git.andreyknvl@google.com>
- <20190522114910.emlckebwzv2qz42i@mbp>
-In-Reply-To: <20190522114910.emlckebwzv2qz42i@mbp>
-From:   Evgenii Stepanov <eugenis@google.com>
-Date:   Wed, 22 May 2019 14:16:57 -0700
-Message-ID: <CAFKCwrjyP+x0JJy=qpBFsp4pub3He6UkvU0qnf1UOKt6W1LPRQ@mail.gmail.com>
-Subject: Re: [PATCH v15 05/17] arms64: untag user pointers passed to memory syscalls
-To:     Catalin Marinas <catalin.marinas@arm.com>
-Cc:     Andrey Konovalov <andreyknvl@google.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-rdma@vger.kernel.org, linux-media@vger.kernel.org,
-        kvm@vger.kernel.org,
+References: <20190509133551.GD29703@mit.edu> <ECADFF3FD767C149AD96A924E7EA6EAF9770D591@USCULXMSG01.am.sony.com>
+ <875c546d-9713-bb59-47e4-77a1d2c69a6d@gmail.com> <20190509214233.GA20877@mit.edu>
+ <80c72e64-2665-bd51-f78c-97f50f9a53ba@gmail.com> <20190511173344.GA8507@mit.edu>
+ <20190513144451.GQ17751@phenom.ffwll.local> <20190514060433.GA181462@google.com>
+ <CAKMK7uHqtSF_sazJTbFL+xmQJRk4iwukCKZHoDHhsKkLXk=ECQ@mail.gmail.com>
+ <20190514183618.GC109557@google.com> <20190515074141.GY17751@phenom.ffwll.local>
+In-Reply-To: <20190515074141.GY17751@phenom.ffwll.local>
+From:   Brendan Higgins <brendanhiggins@google.com>
+Date:   Wed, 22 May 2019 14:38:48 -0700
+Message-ID: <CAFd5g476Hc+6jL5sV=VJamXCbqGebwHqqN9N9RppQYMCoo052Q@mail.gmail.com>
+Subject: Re: [PATCH v2 00/17] kunit: introduce KUnit, the Linux kernel unit
+ testing framework
+To:     Brendan Higgins <brendanhiggins@google.com>,
+        "Theodore Ts'o" <tytso@mit.edu>,
+        Frank Rowand <frowand.list@gmail.com>,
+        "Bird, Timothy" <Tim.Bird@sony.com>,
+        Knut Omang <knut.omang@oracle.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Kees Cook <keescook@google.com>,
+        Kieran Bingham <kieran.bingham@ideasonboard.com>,
+        "Luis R. Rodriguez" <mcgrof@kernel.org>,
+        Rob Herring <robh@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
+        Shuah Khan <shuah@kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        kunit-dev@googlegroups.com,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        linux-fsdevel@vger.kernel.org,
+        linux-kbuild <linux-kbuild@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         "open list:KERNEL SELFTEST FRAMEWORK" 
         <linux-kselftest@vger.kernel.org>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Will Deacon <will.deacon@arm.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Kees Cook <keescook@chromium.org>,
-        Yishai Hadas <yishaih@mellanox.com>,
-        Felix Kuehling <Felix.Kuehling@amd.com>,
-        Alexander Deucher <Alexander.Deucher@amd.com>,
-        Christian Koenig <Christian.Koenig@amd.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Jens Wiklander <jens.wiklander@linaro.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Kostya Serebryany <kcc@google.com>,
-        Lee Smith <Lee.Smith@arm.com>,
-        Ramana Radhakrishnan <Ramana.Radhakrishnan@arm.com>,
-        Jacob Bramley <Jacob.Bramley@arm.com>,
-        Ruben Ayrapetyan <Ruben.Ayrapetyan@arm.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
-        Dave Martin <Dave.Martin@arm.com>,
-        Kevin Brodsky <kevin.brodsky@arm.com>,
-        Szabolcs Nagy <Szabolcs.Nagy@arm.com>
+        linux-nvdimm <linux-nvdimm@lists.01.org>,
+        linux-um@lists.infradead.org,
+        Sasha Levin <Alexander.Levin@microsoft.com>,
+        Amir Goldstein <amir73il@gmail.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Jeff Dike <jdike@addtoit.com>, Joel Stanley <joel@jms.id.au>,
+        Julia Lawall <julia.lawall@lip6.fr>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Petr Mladek <pmladek@suse.com>,
+        Richard Weinberger <richard@nod.at>,
+        David Rientjes <rientjes@google.com>,
+        Steven Rostedt <rostedt@goodmis.org>, wfg@linux.intel.com,
+        Bjorn Helgaas <bhelgaas@google.com>
+Cc:     Daniel Vetter <daniel@ffwll.ch>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, May 22, 2019 at 4:49 AM Catalin Marinas <catalin.marinas@arm.com> wrote:
++Bjorn Helgaas
+
+On Wed, May 15, 2019 at 12:41 AM Daniel Vetter <daniel@ffwll.ch> wrote:
 >
-> On Mon, May 06, 2019 at 06:30:51PM +0200, Andrey Konovalov wrote:
-> > This patch is a part of a series that extends arm64 kernel ABI to allow to
-> > pass tagged user pointers (with the top byte set to something else other
-> > than 0x00) as syscall arguments.
+> On Tue, May 14, 2019 at 11:36:18AM -0700, Brendan Higgins wrote:
+> > On Tue, May 14, 2019 at 02:05:05PM +0200, Daniel Vetter wrote:
+> > > On Tue, May 14, 2019 at 8:04 AM Brendan Higgins
+> > > <brendanhiggins@google.com> wrote:
+> > > >
+> > > > On Mon, May 13, 2019 at 04:44:51PM +0200, Daniel Vetter wrote:
+> > > > > On Sat, May 11, 2019 at 01:33:44PM -0400, Theodore Ts'o wrote:
+> > > > > > On Fri, May 10, 2019 at 02:12:40PM -0700, Frank Rowand wrote:
+> > > > > > > However, the reply is incorrect.  Kselftest in-kernel tests (which
+> > > > > > > is the context here) can be configured as built in instead of as
+> > > > > > > a module, and built in a UML kernel.  The UML kernel can boot,
+> > > > > > > running the in-kernel tests before UML attempts to invoke the
+> > > > > > > init process.
+> > > > > >
+> > > > > > Um, Citation needed?
+> > > > > >
+> > > > > > I don't see any evidence for this in the kselftest documentation, nor
+> > > > > > do I see any evidence of this in the kselftest Makefiles.
+> > > > > >
+> > > > > > There exists test modules in the kernel that run before the init
+> > > > > > scripts run --- but that's not strictly speaking part of kselftests,
+> > > > > > and do not have any kind of infrastructure.  As noted, the
+> > > > > > kselftests_harness header file fundamentally assumes that you are
+> > > > > > running test code in userspace.
+> > > > >
+> > > > > Yeah I really like the "no userspace required at all" design of kunit,
+> > > > > while still collecting results in a well-defined way (unless the current
+> > > > > self-test that just run when you load the module, with maybe some
+> > > > > kselftest ad-hoc wrapper around to collect the results).
+> > > > >
+> > > > > What I want to do long-term is to run these kernel unit tests as part of
+> > > > > the build-testing, most likely in gitlab (sooner or later, for drm.git
+> > > >
+> > > > Totally! This is part of the reason I have been insisting on a minimum
+> > > > of UML compatibility for all unit tests. If you can suffiently constrain
+> > > > the environment that is required for tests to run in, it makes it much
+> > > > easier not only for a human to run your tests, but it also makes it a
+> > > > lot easier for an automated service to be able to run your tests.
+> > > >
+> > > > I actually have a prototype presubmit already working on my
+> > > > "stable/non-upstream" branch. You can checkout what presubmit results
+> > > > look like here[1][2].
+> > >
+> > > ug gerrit :-)
 > >
-> > This patch allows tagged pointers to be passed to the following memory
-> > syscalls: brk, get_mempolicy, madvise, mbind, mincore, mlock, mlock2,
-> > mmap, mmap_pgoff, mprotect, mremap, msync, munlock, munmap,
-> > remap_file_pages, shmat and shmdt.
+> > Yeah, yeah, I know, but it is a lot easier for me to get a project set
+> > up here using Gerrit, when we already use that for a lot of other
+> > projects.
 > >
-> > This is done by untagging pointers passed to these syscalls in the
-> > prologues of their handlers.
+> > Also, Gerrit has gotten a lot better over the last two years or so. Two
+> > years ago, I wouldn't touch it with a ten foot pole. It's not so bad
+> > anymore, at least if you are used to using a web UI to review code.
 >
-> I'll go through them one by one to see if we can tighten the expected
-> ABI while having the MTE in mind.
->
-> > diff --git a/arch/arm64/kernel/sys.c b/arch/arm64/kernel/sys.c
-> > index b44065fb1616..933bb9f3d6ec 100644
-> > --- a/arch/arm64/kernel/sys.c
-> > +++ b/arch/arm64/kernel/sys.c
-> > @@ -35,10 +35,33 @@ SYSCALL_DEFINE6(mmap, unsigned long, addr, unsigned long, len,
-> >  {
-> >       if (offset_in_page(off) != 0)
-> >               return -EINVAL;
-> > -
-> > +     addr = untagged_addr(addr);
-> >       return ksys_mmap_pgoff(addr, len, prot, flags, fd, off >> PAGE_SHIFT);
-> >  }
->
-> If user passes a tagged pointer to mmap() and the address is honoured
-> (or MAP_FIXED is given), what is the expected return pointer? Does it
-> need to be tagged with the value from the hint?
+> I was somewhat joking, I'm just not used to gerrit ... And seems to indeed
+> be a lot more polished than last time I looked at it seriously.
 
-For HWASan the most convenient would be to use the tag from the hint.
-But since in the TBI (not MTE) mode the kernel has no idea what
-meaning userspace assigns to pointer tags, perhaps it should not try
-to guess, and should return raw (zero-tagged) address instead.
+I mean, it is still not perfect, but I think it has finally gotten to
+the point where I prefer it over reviewing by email for high context
+patches where you don't expect a lot of deep discussion.
 
-> With MTE, we may want to use this as a request for the default colour of
-> the mapped pages (still under discussion).
+Still not great for patches where you want to have a lot of discussion.
 
-I like this - and in that case it would make sense to return the
-pointer that can be immediately dereferenced without crashing the
-process, i.e. with the matching tag.
+> > > > > only ofc). So that people get their pull requests (and patch series, we
+> > > > > have some ideas to tie this into patchwork) automatically tested for this
+> > > >
+> > > > Might that be Snowpatch[3]? I talked to Russell, the creator of Snowpatch,
+> > > > and he seemed pretty open to collaboration.
+> > > >
+> > > > Before I heard about Snowpatch, I had an intern write a translation
+> > > > layer that made Prow (the presubmit service that I used in the prototype
+> > > > above) work with LKML[4].
+> > >
+> > > There's about 3-4 forks/clones of patchwork. snowpatch is one, we have
+> > > a different one on freedesktop.org. It's a bit a mess :-/
 
-> > +SYSCALL_DEFINE6(arm64_mmap_pgoff, unsigned long, addr, unsigned long, len,
-> > +             unsigned long, prot, unsigned long, flags,
-> > +             unsigned long, fd, unsigned long, pgoff)
-> > +{
-> > +     addr = untagged_addr(addr);
-> > +     return ksys_mmap_pgoff(addr, len, prot, flags, fd, pgoff);
-> > +}
+I think Snowpatch is an ozlabs project; at least the maintainer works at IBM.
+
+Patchwork originally was a ozlabs project, right?
+
+Has any discussion taken place trying to consolidate some of the forks?
+
+Presubmit clearly seems like a feature that a number of people want.
+
+> > Oh, I didn't realize that. I found your patchwork instance here[5], but
+> > do you have a place where I can see the changes you have added to
+> > support presubmit?
 >
-> We don't have __NR_mmap_pgoff on arm64.
+> Ok here's a few links. Aside from the usual patch view we've also added a
+> series view:
 >
-> > +SYSCALL_DEFINE5(arm64_mremap, unsigned long, addr, unsigned long, old_len,
-> > +             unsigned long, new_len, unsigned long, flags,
-> > +             unsigned long, new_addr)
-> > +{
-> > +     addr = untagged_addr(addr);
-> > +     new_addr = untagged_addr(new_addr);
-> > +     return ksys_mremap(addr, old_len, new_len, flags, new_addr);
-> > +}
+> https://patchwork.freedesktop.org/project/intel-gfx/series/?ordering=-last_updated
 >
-> Similar comment as for mmap(), do we want the tag from new_addr to be
-> preserved? In addition, should we check that the two tags are identical
-> or mremap() should become a way to repaint a memory region?
+> This ties the patches + cover letter together, and it even (tries to at
+> least) track revisions. Here's an example which is currently at revision
+> 9:
 >
-> > +SYSCALL_DEFINE2(arm64_munmap, unsigned long, addr, size_t, len)
-> > +{
-> > +     addr = untagged_addr(addr);
-> > +     return ksys_munmap(addr, len);
-> > +}
+> https://patchwork.freedesktop.org/series/57232/
+
+Oooh, nice! That looks awesome! Looks like you have a number of presubmits too.
+
+> Below the patch list for each revision we also have the test result list.
+> If you click on the grey bar it'll expand with the summary from CI, the
+> "See full logs" is link to the full results from our CI. This is driven
+> with some REST api from our jenkins.
 >
-> This looks fine.
+> Patchwork also sends out mails for these results.
+
+Nice! There are obviously a lot of other bots on various kernel
+mailing lists. Do you think people would object to sending presubmit
+results to the mailing lists by default?
+
+> Source is on gitlab: https://gitlab.freedesktop.org/patchwork-fdo
+
+Err, looks like you forked from the ozlab's repo a good while ago.
+
+Still, this all looks great!
+
+> > > > I am not married to either approach, but I think between the two of
+> > > > them, most of the initial legwork has been done to make presubmit on
+> > > > LKML a reality.
+> > >
+> > > We do have presubmit CI working already with our freedesktop.org
+> > > patchwork. The missing glue is just tying that into gitlab CI somehow
+> > > (since we want to unify build testing more and make it easier for
+> > > contributors to adjust things).
+> >
+> > I checked out a couple of your projects on your patchwork instance: AMD
+> > X.Org drivers, DRI devel, and Wayland. I saw the tab you added for
+> > tests, but none of them actually had any test results. Can you point me
+> > at one that does?
 >
-> > +SYSCALL_DEFINE1(arm64_brk, unsigned long, brk)
-> > +{
-> > +     brk = untagged_addr(brk);
-> > +     return ksys_brk(brk);
-> > +}
+> Atm we use the CI stuff only on intel-gfx, with the our gpu CI farm, see
+> links above.
 >
-> I wonder whether brk() should simply not accept tags, and should not
-> return them (similar to the prctl(PR_SET_MM) discussion). We could
-> document this in the ABI requirements.
+> Cheers, Daniel
 >
-> > +SYSCALL_DEFINE5(arm64_get_mempolicy, int __user *, policy,
-> > +             unsigned long __user *, nmask, unsigned long, maxnode,
-> > +             unsigned long, addr, unsigned long, flags)
-> > +{
-> > +     addr = untagged_addr(addr);
-> > +     return ksys_get_mempolicy(policy, nmask, maxnode, addr, flags);
-> > +}
-> > +
-> > +SYSCALL_DEFINE3(arm64_madvise, unsigned long, start,
-> > +             size_t, len_in, int, behavior)
-> > +{
-> > +     start = untagged_addr(start);
-> > +     return ksys_madvise(start, len_in, behavior);
-> > +}
-> > +
-> > +SYSCALL_DEFINE6(arm64_mbind, unsigned long, start, unsigned long, len,
-> > +             unsigned long, mode, const unsigned long __user *, nmask,
-> > +             unsigned long, maxnode, unsigned int, flags)
-> > +{
-> > +     start = untagged_addr(start);
-> > +     return ksys_mbind(start, len, mode, nmask, maxnode, flags);
-> > +}
-> > +
-> > +SYSCALL_DEFINE2(arm64_mlock, unsigned long, start, size_t, len)
-> > +{
-> > +     start = untagged_addr(start);
-> > +     return ksys_mlock(start, len, VM_LOCKED);
-> > +}
-> > +
-> > +SYSCALL_DEFINE2(arm64_mlock2, unsigned long, start, size_t, len)
-> > +{
-> > +     start = untagged_addr(start);
-> > +     return ksys_mlock(start, len, VM_LOCKED);
-> > +}
-> > +
-> > +SYSCALL_DEFINE2(arm64_munlock, unsigned long, start, size_t, len)
-> > +{
-> > +     start = untagged_addr(start);
-> > +     return ksys_munlock(start, len);
-> > +}
-> > +
-> > +SYSCALL_DEFINE3(arm64_mprotect, unsigned long, start, size_t, len,
-> > +             unsigned long, prot)
-> > +{
-> > +     start = untagged_addr(start);
-> > +     return ksys_mprotect_pkey(start, len, prot, -1);
-> > +}
-> > +
-> > +SYSCALL_DEFINE3(arm64_msync, unsigned long, start, size_t, len, int, flags)
-> > +{
-> > +     start = untagged_addr(start);
-> > +     return ksys_msync(start, len, flags);
-> > +}
-> > +
-> > +SYSCALL_DEFINE3(arm64_mincore, unsigned long, start, size_t, len,
-> > +             unsigned char __user *, vec)
-> > +{
-> > +     start = untagged_addr(start);
-> > +     return ksys_mincore(start, len, vec);
-> > +}
->
-> These look fine.
->
-> > +SYSCALL_DEFINE5(arm64_remap_file_pages, unsigned long, start,
-> > +             unsigned long, size, unsigned long, prot,
-> > +             unsigned long, pgoff, unsigned long, flags)
-> > +{
-> > +     start = untagged_addr(start);
-> > +     return ksys_remap_file_pages(start, size, prot, pgoff, flags);
-> > +}
->
-> While this has been deprecated for some time, I presume user space still
-> invokes it?
->
-> > +SYSCALL_DEFINE3(arm64_shmat, int, shmid, char __user *, shmaddr, int, shmflg)
-> > +{
-> > +     shmaddr = untagged_addr(shmaddr);
-> > +     return ksys_shmat(shmid, shmaddr, shmflg);
-> > +}
-> > +
-> > +SYSCALL_DEFINE1(arm64_shmdt, char __user *, shmaddr)
-> > +{
-> > +     shmaddr = untagged_addr(shmaddr);
-> > +     return ksys_shmdt(shmaddr);
-> > +}
->
-> Do we actually want to allow shared tagged memory? Who's going to tag
-> it? If not, we can document it as not supported.
->
-> --
-> Catalin
+> >
+> > Cheers!
+> >
+> > [5] https://patchwork.freedesktop.org/
+> >
+> > > > > super basic stuff.
+> > > >
+> > > > I am really excited to hear back on what you think!
+> > > >
+> > > > Cheers!
+> > > >
+> > > > [1] https://kunit-review.googlesource.com/c/linux/+/1509/10#message-7bfa40efb132e15c8388755c273837559911425c
+> > > > [2] https://kunit-review.googlesource.com/c/linux/+/1509/10#message-a6784496eafff442ac98fb068bf1a0f36ee73509
+> > > > [3] https://developer.ibm.com/open/projects/snowpatch/
+> > > > [4] https://kunit.googlesource.com/prow-lkml/
+> > > > _______________________________________________
+> > > > dri-devel mailing list
+> > > > dri-devel@lists.freedesktop.org
+> > > > https://lists.freedesktop.org/mailman/listinfo/dri-devel
+
+Cheers!
