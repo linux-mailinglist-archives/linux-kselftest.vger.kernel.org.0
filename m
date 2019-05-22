@@ -2,125 +2,79 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2627426585
-	for <lists+linux-kselftest@lfdr.de>; Wed, 22 May 2019 16:16:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DEAE4265BA
+	for <lists+linux-kselftest@lfdr.de>; Wed, 22 May 2019 16:30:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728638AbfEVOQW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 22 May 2019 10:16:22 -0400
-Received: from foss.arm.com ([217.140.101.70]:52330 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727284AbfEVOQV (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 22 May 2019 10:16:21 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.72.51.249])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E408280D;
-        Wed, 22 May 2019 07:16:20 -0700 (PDT)
-Received: from arrakis.emea.arm.com (arrakis.cambridge.arm.com [10.1.196.78])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 57C233F718;
-        Wed, 22 May 2019 07:16:15 -0700 (PDT)
-Date:   Wed, 22 May 2019 15:16:12 +0100
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     Andrey Konovalov <andreyknvl@google.com>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, amd-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, linux-rdma@vger.kernel.org,
-        linux-media@vger.kernel.org, kvm@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Will Deacon <will.deacon@arm.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Kees Cook <keescook@chromium.org>,
-        Yishai Hadas <yishaih@mellanox.com>,
-        Felix Kuehling <Felix.Kuehling@amd.com>,
-        Alexander Deucher <Alexander.Deucher@amd.com>,
-        Christian Koenig <Christian.Koenig@amd.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Jens Wiklander <jens.wiklander@linaro.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Kostya Serebryany <kcc@google.com>,
-        Evgeniy Stepanov <eugenis@google.com>,
-        Lee Smith <Lee.Smith@arm.com>,
-        Ramana Radhakrishnan <Ramana.Radhakrishnan@arm.com>,
-        Jacob Bramley <Jacob.Bramley@arm.com>,
-        Ruben Ayrapetyan <Ruben.Ayrapetyan@arm.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
-        Dave Martin <Dave.Martin@arm.com>,
-        Kevin Brodsky <kevin.brodsky@arm.com>,
-        Szabolcs Nagy <Szabolcs.Nagy@arm.com>
-Subject: Re: [PATCH v15 17/17] selftests, arm64: add a selftest for passing
- tagged pointers to kernel
-Message-ID: <20190522141612.GA28122@arrakis.emea.arm.com>
-References: <cover.1557160186.git.andreyknvl@google.com>
- <e31d9364eb0c2eba8ce246a558422e811d82d21b.1557160186.git.andreyknvl@google.com>
+        id S1729081AbfEVOaa (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 22 May 2019 10:30:30 -0400
+Received: from mail-pl1-f194.google.com ([209.85.214.194]:41583 "EHLO
+        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728660AbfEVOaa (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 22 May 2019 10:30:30 -0400
+Received: by mail-pl1-f194.google.com with SMTP id f12so1167375plt.8
+        for <linux-kselftest@vger.kernel.org>; Wed, 22 May 2019 07:30:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rajagiritech-edu-in.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=0m0QjYyjO2xHrKzFzTehhWEPphtJIzzFFRYPzTW3DMQ=;
+        b=T2kYxw6M4VFwvrSg9HRUF2uPooKZ2Dk6AmNuLHygKvbtjUp1C79ABGleU4NpWQgtG+
+         xyNerFhZb1XMy6mw5lQzehrEE7/NBqYQPzUt9jvyTeLj9vsYw3pAry+y23L3yjfCjhDJ
+         yoMBcgsNSAsgypmbF99mRLSytz+s/UDYzeuQUPzFC6WTuCtGRKRYUgQx6yvSE/FxlWH2
+         pqRUDuI5S4wSMke309nhIOWTIHwzEzKiKdSXZRidURLm26VHEBEOC1iIc3U2gexz0ynG
+         vOxHFexpwwsDmgzyeSI00gmNJ0WAnYhTVwEa0K2+6EZjiULYXI9ZcdenQdTGsT3HwctH
+         k3Pw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=0m0QjYyjO2xHrKzFzTehhWEPphtJIzzFFRYPzTW3DMQ=;
+        b=CWGuPwXUt9rmou0Revcw1YarPk70AH0Mu6kYK1/SWQZFc/JZ6Fht0Aez3fWs2YqV85
+         FBt73d3HWlUoi48pDCRT9wuUFLCcuMzhMo08cq3eTQRaYzCli/iP7J825di2Iog6BPw4
+         dbY9Rvq2RVwa+nYkacqAUHXB7NBUWQNMUZe4aPrQnnUHoMpLyIDdCeqWm6HiGG09iMwJ
+         GXDthGBYwe0d/jrBoMWb5ZdWJzcW2gZCFsL6W/jPcZYEtlhK/QJgy6vqnUyX7gDj1woU
+         BDAl36aoATuHdqiRP0zmkDFNW3NsWdufIAftooMDAJ7iqQnV8S9Jv8N3P1slioMkFTsk
+         NxAg==
+X-Gm-Message-State: APjAAAXsPdTflyxz/FaxlUGXlsHk8U6v046RISt/sgJotUNEfD7smDpV
+        aBLfPxFXP8GO/jIpc0jR+K0RJJ9GCkm6t2WdYwZaag==
+X-Google-Smtp-Source: APXvYqxvo1fFJOMp10yWhcwkQF+EVwPZOIUCu4QXMKCMejzytyZV3guibp+FcWp+LRDJRt9vDpZ3/2/a9GARbq9GNuo=
+X-Received: by 2002:a17:902:3103:: with SMTP id w3mr15769604plb.187.1558535429532;
+ Wed, 22 May 2019 07:30:29 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <e31d9364eb0c2eba8ce246a558422e811d82d21b.1557160186.git.andreyknvl@google.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20190515064405.3981-1-jeffrin@rajagiritech.edu.in> <20190521181125.anqj32v3gcwjxs3z@salvia>
+In-Reply-To: <20190521181125.anqj32v3gcwjxs3z@salvia>
+From:   Jeffrin Thalakkottoor <jeffrin@rajagiritech.edu.in>
+Date:   Wed, 22 May 2019 19:59:53 +0530
+Message-ID: <CAG=yYwkAUzGZWdVpcjRScARyOyO9KaTCL_7LUxaav5os+6rsEA@mail.gmail.com>
+Subject: Re: [PATCH v2] selftests: netfilter: missing error check when setting
+ up veth interface
+To:     Pablo Neira Ayuso <pablo@netfilter.org>
+Cc:     Florian Westphal <fw@strlen.de>, Shuah Khan <shuah@kernel.org>,
+        linux-kselftest@vger.kernel.org,
+        lkml <linux-kernel@vger.kernel.org>,
+        netfilter-devel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, May 06, 2019 at 06:31:03PM +0200, Andrey Konovalov wrote:
-> This patch is a part of a series that extends arm64 kernel ABI to allow to
-> pass tagged user pointers (with the top byte set to something else other
-> than 0x00) as syscall arguments.
-> 
-> This patch adds a simple test, that calls the uname syscall with a
-> tagged user pointer as an argument. Without the kernel accepting tagged
-> user pointers the test fails with EFAULT.
+Thanks to all !
 
-That's probably sufficient for a simple example. Something we could add
-to Documentation maybe is a small library that can be LD_PRELOAD'ed so
-that you can run a lot more tests like LTP.
+On Tue, May 21, 2019 at 11:41 PM Pablo Neira Ayuso <pablo@netfilter.org> wrote:
+>
+> On Wed, May 15, 2019 at 12:14:04PM +0530, Jeffrin Jose T wrote:
+> > A test for  the basic NAT functionality uses ip command which
+> > needs veth device.There is a condition where the kernel support
+> > for veth is not compiled into the kernel and the test script
+> > breaks.This patch contains code for reasonable error display
+> > and correct code exit.
+>
+> Applied, thanks.
 
-We could add this to selftests but I think it's too glibc specific.
 
---------------------8<------------------------------------
-#include <stdlib.h>
 
-#define TAG_SHIFT	(56)
-#define TAG_MASK	(0xffUL << TAG_SHIFT)
-
-void *__libc_malloc(size_t size);
-void __libc_free(void *ptr);
-void *__libc_realloc(void *ptr, size_t size);
-void *__libc_calloc(size_t nmemb, size_t size);
-
-static void *tag_ptr(void *ptr)
-{
-	unsigned long tag = rand() & 0xff;
-	if (!ptr)
-		return ptr;
-	return (void *)((unsigned long)ptr | (tag << TAG_SHIFT));
-}
-
-static void *untag_ptr(void *ptr)
-{
-	return (void *)((unsigned long)ptr & ~TAG_MASK);
-}
-
-void *malloc(size_t size)
-{
-	return tag_ptr(__libc_malloc(size));
-}
-
-void free(void *ptr)
-{
-	__libc_free(untag_ptr(ptr));
-}
-
-void *realloc(void *ptr, size_t size)
-{
-	return tag_ptr(__libc_realloc(untag_ptr(ptr), size));
-}
-
-void *calloc(size_t nmemb, size_t size)
-{
-	return tag_ptr(__libc_calloc(nmemb, size));
-}
+-- 
+software engineer
+rajagiri school of engineering and technology
