@@ -2,39 +2,39 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F40092706A
-	for <lists+linux-kselftest@lfdr.de>; Wed, 22 May 2019 22:04:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA77A26FA9
+	for <lists+linux-kselftest@lfdr.de>; Wed, 22 May 2019 21:59:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731488AbfEVUDt (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 22 May 2019 16:03:49 -0400
-Received: from mail.kernel.org ([198.145.29.99]:42168 "EHLO mail.kernel.org"
+        id S1731036AbfEVTXy (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 22 May 2019 15:23:54 -0400
+Received: from mail.kernel.org ([198.145.29.99]:44842 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729981AbfEVTVg (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 22 May 2019 15:21:36 -0400
+        id S1731029AbfEVTXy (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 22 May 2019 15:23:54 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id B56F7217D4;
-        Wed, 22 May 2019 19:21:34 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 97230217D7;
+        Wed, 22 May 2019 19:23:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1558552895;
-        bh=jkEcnpy9mNbigsKjXTwK3nssgT04hHxd61lee7Q3BnM=;
+        s=default; t=1558553033;
+        bh=r4EtqetRWJlSKq7Cu5r6i4y2EfulVoRIH/P+h7Ui8AA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=VhUYqW9LOpJCm9nekoarSUXOToTl5wyYgwvcd38+PAUxm7JnM+SuloclRLgAl4sJo
-         lkRA5J/i2Jphw+sBEBektSuIrGuw0+cNJVvBnxuFeOakVGu4aASSghY9QAZOJlNBX4
-         fNlqF4fkfYxLvAhZN26rGrrggSswcUIEJAbBuSSE=
+        b=F6H7KdtNM0H51+cUncoONca2L2VYVFzbqrxBL6D2jFQl2OnYIAUubjUHe8iOPUTiQ
+         uq50/DKOraqBD1SHhf6vcxvd3rg+KSGPHuxinCUeUoSjlTc3J6H3caGrhkQ5NMK30I
+         L8cDefOPObxuyLMbnNrOepkL80GOFUyLRrOoCvQ0=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Yonghong Song <yhs@fb.com>, Alexei Starovoitov <ast@kernel.org>,
         Sasha Levin <sashal@kernel.org>,
         linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
         bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.1 015/375] selftests/bpf: set RLIMIT_MEMLOCK properly for test_libbpf_open.c
-Date:   Wed, 22 May 2019 15:15:15 -0400
-Message-Id: <20190522192115.22666-15-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.0 011/317] selftests/bpf: set RLIMIT_MEMLOCK properly for test_libbpf_open.c
+Date:   Wed, 22 May 2019 15:18:32 -0400
+Message-Id: <20190522192338.23715-11-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190522192115.22666-1-sashal@kernel.org>
-References: <20190522192115.22666-1-sashal@kernel.org>
+In-Reply-To: <20190522192338.23715-1-sashal@kernel.org>
+References: <20190522192338.23715-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -69,7 +69,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 2 insertions(+)
 
 diff --git a/tools/testing/selftests/bpf/test_libbpf_open.c b/tools/testing/selftests/bpf/test_libbpf_open.c
-index 65cbd30704b5a..9e9db202d218a 100644
+index 8fcd1c076add0..cbd55f5f8d598 100644
 --- a/tools/testing/selftests/bpf/test_libbpf_open.c
 +++ b/tools/testing/selftests/bpf/test_libbpf_open.c
 @@ -11,6 +11,8 @@ static const char *__doc__ =
