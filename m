@@ -2,74 +2,84 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D37B25FBD
-	for <lists+linux-kselftest@lfdr.de>; Wed, 22 May 2019 10:44:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E65F26079
+	for <lists+linux-kselftest@lfdr.de>; Wed, 22 May 2019 11:28:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728693AbfEVIoV (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 22 May 2019 04:44:21 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:47566 "EHLO mx1.redhat.com"
+        id S1728608AbfEVJ2U (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 22 May 2019 05:28:20 -0400
+Received: from foss.arm.com ([217.140.101.70]:45786 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727946AbfEVIoV (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 22 May 2019 04:44:21 -0400
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id 0DCDC3082E42;
-        Wed, 22 May 2019 08:44:21 +0000 (UTC)
-Received: from kamzik.brq.redhat.com (ovpn-204-233.brq.redhat.com [10.40.204.233])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 33C00600C6;
-        Wed, 22 May 2019 08:44:14 +0000 (UTC)
-Date:   Wed, 22 May 2019 10:44:09 +0200
-From:   Andrew Jones <drjones@redhat.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Thomas Huth <thuth@redhat.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>, kvm@vger.kernel.org,
-        Radim =?utf-8?B?S3LEjW3DocWZ?= <rkrcmar@redhat.com>,
-        Shuah Khan <shuah@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-s390@vger.kernel.org
-Subject: Re: [RFC PATCH 0/4] KVM selftests for s390x
-Message-ID: <20190522084409.qz5hs7lqj65qg6x5@kamzik.brq.redhat.com>
-References: <20190516111253.4494-1-thuth@redhat.com>
- <b412e591-3983-ebef-510b-43f9b7be4147@redhat.com>
- <9423ba89-b10e-5e6e-3cc8-8088f3088233@redhat.com>
- <4d94124e-00f6-aa65-3a4a-bd8910480329@redhat.com>
+        id S1728536AbfEVJ2U (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 22 May 2019 05:28:20 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.72.51.249])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CC67E341;
+        Wed, 22 May 2019 02:28:19 -0700 (PDT)
+Received: from [10.1.196.72] (e119884-lin.cambridge.arm.com [10.1.196.72])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0BCE93F575;
+        Wed, 22 May 2019 02:28:18 -0700 (PDT)
+Subject: Re: [PATCH v2 5/5] kselftest: Extend vDSO selftest to clock_getres
+To:     shuah <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
+        Will Deacon <will.deacon@arm.com>
+References: <20190416161434.32691-1-vincenzo.frascino@arm.com>
+ <20190416161434.32691-6-vincenzo.frascino@arm.com>
+ <f07e07b0-4e53-96c8-ebe2-a0f5528fa329@arm.com>
+ <252b011e-974a-2f3b-2cc3-0892d1c4a3c0@kernel.org>
+ <759f59b2-2cb3-130b-fb30-89e3fb92af33@kernel.org>
+From:   Vincenzo Frascino <vincenzo.frascino@arm.com>
+Message-ID: <33d0f306-cc39-306b-3349-21fe69ec07d0@arm.com>
+Date:   Wed, 22 May 2019 10:28:17 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <4d94124e-00f6-aa65-3a4a-bd8910480329@redhat.com>
-User-Agent: NeoMutt/20180716
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
-X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.46]); Wed, 22 May 2019 08:44:21 +0000 (UTC)
+In-Reply-To: <759f59b2-2cb3-130b-fb30-89e3fb92af33@kernel.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, May 20, 2019 at 01:43:06PM +0200, Paolo Bonzini wrote:
-> On 20/05/19 13:30, Thomas Huth wrote:
-> >> No objections at all, though it would be like to have ucall plumbed in
-> >> from the beginning.
-> > I'm still looking at the ucall interface ... what I don't quite get yet
-> > is the question why the ucall_type there is selectable during runtime?
-> > 
-> > Are there plans to have test that could either use UCALL_PIO or
-> > UCALL_MMIO? If not, what about moving ucall_init() and ucall() to
-> > architecture specific code in tools/testing/selftests/kvm/lib/aarch64/
-> > and tools/testing/selftests/kvm/lib/x86_64 instead, and to remove the
-> > ucall_type stuff again (so that x86 is hard-wired to PIO and aarch64
-> > is hard-wired to MMIO)? ... then I could add a DIAG-based ucall
-> > on s390x more easily, I think.
+Hi Shuah,
+
+On 21/05/2019 18:33, shuah wrote:
+> On 5/21/19 10:24 AM, shuah wrote:
+>> On 5/21/19 10:11 AM, Vincenzo Frascino wrote:
+>>> Hi Shuah,
+>>>
+>>> I did not see this patch in 5.2-rc1 and I was wondering if there is 
+>>> anything I
+>>> can do to help with upstraming it.
+>>>
+>>
+>> Thanks for the ping.
+>>
+>> Sorry about this. I saw that this part of a series and thought it
+>> depends on other patches and should go through another tree.
+>>
+>> Totally missed that Will suggested that I take it though selftests.
+>>
+>> My bad. I will get this in - I hope there are no dependencies with other
+>> trees.
+>>
+>> thanks,
+>> -- Shuah
+>>
+>>
 > 
-> Yes, that would work.  I think Andrew wanted the flexibility to use MMIO
-> on x86, but it's not really necessary to have it.
+> Can you take a look at the macro in this patch. It has checkpatch
+> warn:
+> 
+> WARNING: Macros with flow control statements should be avoided
+> 
+> 
 
-If the flexibility isn't necessary, then I agree that it'll be nicer to
-put the ucall_init() in arch setup code, avoiding the need to remember
-it in each unit test.
+Ok, I will fix this in v3.
 
-Thanks,
-drew
+> thanks,
+> -- Shuah
+> 
+
+-- 
+Regards,
+Vincenzo
