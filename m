@@ -2,22 +2,22 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 065292633D
-	for <lists+linux-kselftest@lfdr.de>; Wed, 22 May 2019 13:51:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2907C2634B
+	for <lists+linux-kselftest@lfdr.de>; Wed, 22 May 2019 13:57:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728794AbfEVLvs (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 22 May 2019 07:51:48 -0400
-Received: from usa-sjc-mx-foss1.foss.arm.com ([217.140.101.70]:48742 "EHLO
+        id S1728584AbfEVL5C (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 22 May 2019 07:57:02 -0400
+Received: from usa-sjc-mx-foss1.foss.arm.com ([217.140.101.70]:48864 "EHLO
         foss.arm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727464AbfEVLvs (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 22 May 2019 07:51:48 -0400
+        id S1727464AbfEVL5C (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 22 May 2019 07:57:02 -0400
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.72.51.249])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 73C4E80D;
-        Wed, 22 May 2019 04:51:47 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D9F0680D;
+        Wed, 22 May 2019 04:57:01 -0700 (PDT)
 Received: from mbp (usa-sjc-mx-foss1.foss.arm.com [217.140.101.70])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A731F3F575;
-        Wed, 22 May 2019 04:51:41 -0700 (PDT)
-Date:   Wed, 22 May 2019 12:51:39 +0100
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D80033F575;
+        Wed, 22 May 2019 04:56:55 -0700 (PDT)
+Date:   Wed, 22 May 2019 12:56:53 +0100
 From:   Catalin Marinas <catalin.marinas@arm.com>
 To:     Andrey Konovalov <andreyknvl@google.com>
 Cc:     linux-arm-kernel@lists.infradead.org, linux-mm@kvack.org,
@@ -51,28 +51,31 @@ Cc:     linux-arm-kernel@lists.infradead.org, linux-mm@kvack.org,
         Dave Martin <Dave.Martin@arm.com>,
         Kevin Brodsky <kevin.brodsky@arm.com>,
         Szabolcs Nagy <Szabolcs.Nagy@arm.com>
-Subject: Re: [PATCH v15 06/17] mm: untag user pointers in do_pages_move
-Message-ID: <20190522115138.52ew2totjd6i4aaq@mbp>
+Subject: Re: [PATCH v15 07/17] mm, arm64: untag user pointers in mm/gup.c
+Message-ID: <20190522115652.nf2r5j6xydywmccw@mbp>
 References: <cover.1557160186.git.andreyknvl@google.com>
- <474b3c113edae1f2fa679dc7237ec070ff4efb70.1557160186.git.andreyknvl@google.com>
+ <d234cd71774f35229bdfc0a793c34d6712b73093.1557160186.git.andreyknvl@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <474b3c113edae1f2fa679dc7237ec070ff4efb70.1557160186.git.andreyknvl@google.com>
+In-Reply-To: <d234cd71774f35229bdfc0a793c34d6712b73093.1557160186.git.andreyknvl@google.com>
 User-Agent: NeoMutt/20170113 (1.7.2)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, May 06, 2019 at 06:30:52PM +0200, Andrey Konovalov wrote:
+On Mon, May 06, 2019 at 06:30:53PM +0200, Andrey Konovalov wrote:
 > This patch is a part of a series that extends arm64 kernel ABI to allow to
 > pass tagged user pointers (with the top byte set to something else other
 > than 0x00) as syscall arguments.
 > 
-> do_pages_move() is used in the implementation of the move_pages syscall.
+> mm/gup.c provides a kernel interface that accepts user addresses and
+> manipulates user pages directly (for example get_user_pages, that is used
+> by the futex syscall). Since a user can provided tagged addresses, we need
+> to handle this case.
 > 
-> Untag user pointers in this function.
+> Add untagging to gup.c functions that use user addresses for vma lookups.
 > 
 > Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
 
