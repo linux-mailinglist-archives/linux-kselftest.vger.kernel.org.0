@@ -2,235 +2,273 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AC3C26329
-	for <lists+linux-kselftest@lfdr.de>; Wed, 22 May 2019 13:49:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DECAF26332
+	for <lists+linux-kselftest@lfdr.de>; Wed, 22 May 2019 13:50:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728971AbfEVLtU (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 22 May 2019 07:49:20 -0400
-Received: from foss.arm.com ([217.140.101.70]:48626 "EHLO foss.arm.com"
+        id S1728450AbfEVLuU (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 22 May 2019 07:50:20 -0400
+Received: from pegase1.c-s.fr ([93.17.236.30]:18942 "EHLO pegase1.c-s.fr"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727464AbfEVLtU (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 22 May 2019 07:49:20 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.72.51.249])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7DC8180D;
-        Wed, 22 May 2019 04:49:19 -0700 (PDT)
-Received: from mbp (usa-sjc-mx-foss1.foss.arm.com [217.140.101.70])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id AE7643F575;
-        Wed, 22 May 2019 04:49:13 -0700 (PDT)
-Date:   Wed, 22 May 2019 12:49:10 +0100
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     Andrey Konovalov <andreyknvl@google.com>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, amd-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, linux-rdma@vger.kernel.org,
-        linux-media@vger.kernel.org, kvm@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Will Deacon <will.deacon@arm.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Kees Cook <keescook@chromium.org>,
-        Yishai Hadas <yishaih@mellanox.com>,
-        Felix Kuehling <Felix.Kuehling@amd.com>,
-        Alexander Deucher <Alexander.Deucher@amd.com>,
-        Christian Koenig <Christian.Koenig@amd.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Jens Wiklander <jens.wiklander@linaro.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Kostya Serebryany <kcc@google.com>,
-        Evgeniy Stepanov <eugenis@google.com>,
-        Lee Smith <Lee.Smith@arm.com>,
-        Ramana Radhakrishnan <Ramana.Radhakrishnan@arm.com>,
-        Jacob Bramley <Jacob.Bramley@arm.com>,
-        Ruben Ayrapetyan <Ruben.Ayrapetyan@arm.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
-        Dave Martin <Dave.Martin@arm.com>,
-        Kevin Brodsky <kevin.brodsky@arm.com>,
-        Szabolcs Nagy <Szabolcs.Nagy@arm.com>
-Subject: Re: [PATCH v15 05/17] arms64: untag user pointers passed to memory
- syscalls
-Message-ID: <20190522114910.emlckebwzv2qz42i@mbp>
-References: <cover.1557160186.git.andreyknvl@google.com>
- <00eb4c63fefc054e2c8d626e8fedfca11d7c2600.1557160186.git.andreyknvl@google.com>
+        id S1727464AbfEVLuU (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 22 May 2019 07:50:20 -0400
+Received: from localhost (mailhub1-int [192.168.12.234])
+        by localhost (Postfix) with ESMTP id 4589tJ4yVNz9v0fR;
+        Wed, 22 May 2019 13:50:16 +0200 (CEST)
+Authentication-Results: localhost; dkim=pass
+        reason="1024-bit key; insecure key"
+        header.d=c-s.fr header.i=@c-s.fr header.b=POXkwPJv; dkim-adsp=pass;
+        dkim-atps=neutral
+X-Virus-Scanned: Debian amavisd-new at c-s.fr
+Received: from pegase1.c-s.fr ([192.168.12.234])
+        by localhost (pegase1.c-s.fr [192.168.12.234]) (amavisd-new, port 10024)
+        with ESMTP id V94w9JZLf8FZ; Wed, 22 May 2019 13:50:16 +0200 (CEST)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+        by pegase1.c-s.fr (Postfix) with ESMTP id 4589tJ3hd9z9v0fQ;
+        Wed, 22 May 2019 13:50:16 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=c-s.fr; s=mail;
+        t=1558525816; bh=v7mSv9ZultjO77hfD5xE57INGaAyhzhE/RNKEdmCEnY=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=POXkwPJvrZMMAl4KHfYk+/3xhHCe5cXX/yQJse+zdWqbVwvnT9lGVShGA9wBEFrld
+         p6fRLRYjvdqiGUaNPRLXGMBTlEnwL3XGZgrPpMHY8i8AOVS/Ww6MNQwDwx7PqetY7/
+         ExcgF1De4OuUfZau36hSm3PnzJ+NrXIfm3w+bP90=
+Received: from localhost (localhost [127.0.0.1])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id D25B38B83C;
+        Wed, 22 May 2019 13:50:17 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+        with ESMTP id ozEKrGxkZ0tD; Wed, 22 May 2019 13:50:17 +0200 (CEST)
+Received: from PO15451 (po15451.idsi0.si.c-s.fr [172.25.231.1])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 884888B83A;
+        Wed, 22 May 2019 13:50:17 +0200 (CEST)
+Subject: Re: [PATCH v3 3/3] kselftest: Extend vDSO selftest to clock_getres
+To:     Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        linux-arch@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-s390@vger.kernel.org, linux-kselftest@vger.kernel.org
+Cc:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Martin Schwidefsky <schwidefsky@de.ibm.com>,
+        Heiko Carstens <heiko.carstens@de.ibm.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Arnd Bergmann <arnd@arndb.de>
+References: <20190522110722.28094-1-vincenzo.frascino@arm.com>
+ <20190522110722.28094-4-vincenzo.frascino@arm.com>
+From:   Christophe Leroy <christophe.leroy@c-s.fr>
+Message-ID: <3a6d9b99-0026-6743-9e73-4880f3cd6b1c@c-s.fr>
+Date:   Wed, 22 May 2019 13:50:17 +0200
+User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <00eb4c63fefc054e2c8d626e8fedfca11d7c2600.1557160186.git.andreyknvl@google.com>
-User-Agent: NeoMutt/20170113 (1.7.2)
+In-Reply-To: <20190522110722.28094-4-vincenzo.frascino@arm.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: fr
+Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, May 06, 2019 at 06:30:51PM +0200, Andrey Konovalov wrote:
-> This patch is a part of a series that extends arm64 kernel ABI to allow to
-> pass tagged user pointers (with the top byte set to something else other
-> than 0x00) as syscall arguments.
+
+
+Le 22/05/2019 à 13:07, Vincenzo Frascino a écrit :
+> The current version of the multiarch vDSO selftest verifies only
+> gettimeofday.
 > 
-> This patch allows tagged pointers to be passed to the following memory
-> syscalls: brk, get_mempolicy, madvise, mbind, mincore, mlock, mlock2,
-> mmap, mmap_pgoff, mprotect, mremap, msync, munlock, munmap,
-> remap_file_pages, shmat and shmdt.
+> Extend the vDSO selftest to clock_getres, to verify that the
+> syscall and the vDSO library function return the same information.
 > 
-> This is done by untagging pointers passed to these syscalls in the
-> prologues of their handlers.
-
-I'll go through them one by one to see if we can tighten the expected
-ABI while having the MTE in mind.
-
-> diff --git a/arch/arm64/kernel/sys.c b/arch/arm64/kernel/sys.c
-> index b44065fb1616..933bb9f3d6ec 100644
-> --- a/arch/arm64/kernel/sys.c
-> +++ b/arch/arm64/kernel/sys.c
-> @@ -35,10 +35,33 @@ SYSCALL_DEFINE6(mmap, unsigned long, addr, unsigned long, len,
->  {
->  	if (offset_in_page(off) != 0)
->  		return -EINVAL;
-> -
-> +	addr = untagged_addr(addr);
->  	return ksys_mmap_pgoff(addr, len, prot, flags, fd, off >> PAGE_SHIFT);
->  }
-
-If user passes a tagged pointer to mmap() and the address is honoured
-(or MAP_FIXED is given), what is the expected return pointer? Does it
-need to be tagged with the value from the hint?
-
-With MTE, we may want to use this as a request for the default colour of
-the mapped pages (still under discussion).
-
-> +SYSCALL_DEFINE6(arm64_mmap_pgoff, unsigned long, addr, unsigned long, len,
-> +		unsigned long, prot, unsigned long, flags,
-> +		unsigned long, fd, unsigned long, pgoff)
+> The extension has been used to verify the hrtimer_resoltion fix.
+> 
+> Cc: Shuah Khan <shuah@kernel.org>
+> Signed-off-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
+> ---
+> 
+> Note: This patch is independent from the others in this series, hence it
+> can be merged singularly by the kselftest maintainers.
+> 
+>   tools/testing/selftests/vDSO/Makefile         |   2 +
+>   .../selftests/vDSO/vdso_clock_getres.c        | 137 ++++++++++++++++++
+>   2 files changed, 139 insertions(+)
+>   create mode 100644 tools/testing/selftests/vDSO/vdso_clock_getres.c
+> 
+> diff --git a/tools/testing/selftests/vDSO/Makefile b/tools/testing/selftests/vDSO/Makefile
+> index 9e03d61f52fd..d5c5bfdf1ac1 100644
+> --- a/tools/testing/selftests/vDSO/Makefile
+> +++ b/tools/testing/selftests/vDSO/Makefile
+> @@ -5,6 +5,7 @@ uname_M := $(shell uname -m 2>/dev/null || echo not)
+>   ARCH ?= $(shell echo $(uname_M) | sed -e s/i.86/x86/ -e s/x86_64/x86/)
+>   
+>   TEST_GEN_PROGS := $(OUTPUT)/vdso_test
+> +TEST_GEN_PROGS += $(OUTPUT)/vdso_clock_getres
+>   ifeq ($(ARCH),x86)
+>   TEST_GEN_PROGS += $(OUTPUT)/vdso_standalone_test_x86
+>   endif
+> @@ -18,6 +19,7 @@ endif
+>   
+>   all: $(TEST_GEN_PROGS)
+>   $(OUTPUT)/vdso_test: parse_vdso.c vdso_test.c
+> +$(OUTPUT)/vdso_clock_getres: vdso_clock_getres.c
+>   $(OUTPUT)/vdso_standalone_test_x86: vdso_standalone_test_x86.c parse_vdso.c
+>   	$(CC) $(CFLAGS) $(CFLAGS_vdso_standalone_test_x86) \
+>   		vdso_standalone_test_x86.c parse_vdso.c \
+> diff --git a/tools/testing/selftests/vDSO/vdso_clock_getres.c b/tools/testing/selftests/vDSO/vdso_clock_getres.c
+> new file mode 100644
+> index 000000000000..341a9bc34ffc
+> --- /dev/null
+> +++ b/tools/testing/selftests/vDSO/vdso_clock_getres.c
+> @@ -0,0 +1,137 @@
+> +// SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note
+> +/*
+> + * vdso_clock_getres.c: Sample code to test clock_getres.
+> + * Copyright (c) 2019 Arm Ltd.
+> + *
+> + * Compile with:
+> + * gcc -std=gnu99 vdso_clock_getres.c
+> + *
+> + * Tested on ARM, ARM64, MIPS32, x86 (32-bit and 64-bit),
+> + * Power (32-bit and 64-bit), S390x (32-bit and 64-bit).
+> + * Might work on other architectures.
+> + */
+> +
+> +#define _GNU_SOURCE
+> +#include <elf.h>
+> +#include <err.h>
+> +#include <fcntl.h>
+> +#include <stdint.h>
+> +#include <stdio.h>
+> +#include <stdlib.h>
+> +#include <time.h>
+> +#include <sys/auxv.h>
+> +#include <sys/mman.h>
+> +#include <sys/time.h>
+> +#include <unistd.h>
+> +#include <sys/syscall.h>
+> +
+> +#include "../kselftest.h"
+> +
+> +static long syscall_clock_getres(clockid_t _clkid, struct timespec *_ts)
 > +{
-> +	addr = untagged_addr(addr);
-> +	return ksys_mmap_pgoff(addr, len, prot, flags, fd, pgoff);
-> +}
-
-We don't have __NR_mmap_pgoff on arm64.
-
-> +SYSCALL_DEFINE5(arm64_mremap, unsigned long, addr, unsigned long, old_len,
-> +		unsigned long, new_len, unsigned long, flags,
-> +		unsigned long, new_addr)
-> +{
-> +	addr = untagged_addr(addr);
-> +	new_addr = untagged_addr(new_addr);
-> +	return ksys_mremap(addr, old_len, new_len, flags, new_addr);
-> +}
-
-Similar comment as for mmap(), do we want the tag from new_addr to be
-preserved? In addition, should we check that the two tags are identical
-or mremap() should become a way to repaint a memory region?
-
-> +SYSCALL_DEFINE2(arm64_munmap, unsigned long, addr, size_t, len)
-> +{
-> +	addr = untagged_addr(addr);
-> +	return ksys_munmap(addr, len);
-> +}
-
-This looks fine.
-
-> +SYSCALL_DEFINE1(arm64_brk, unsigned long, brk)
-> +{
-> +	brk = untagged_addr(brk);
-> +	return ksys_brk(brk);
-> +}
-
-I wonder whether brk() should simply not accept tags, and should not
-return them (similar to the prctl(PR_SET_MM) discussion). We could
-document this in the ABI requirements.
-
-> +SYSCALL_DEFINE5(arm64_get_mempolicy, int __user *, policy,
-> +		unsigned long __user *, nmask, unsigned long, maxnode,
-> +		unsigned long, addr, unsigned long, flags)
-> +{
-> +	addr = untagged_addr(addr);
-> +	return ksys_get_mempolicy(policy, nmask, maxnode, addr, flags);
+> +	long ret;
+> +
+> +	ret = syscall(SYS_clock_getres, _clkid, _ts);
+> +
+> +	return ret;
 > +}
 > +
-> +SYSCALL_DEFINE3(arm64_madvise, unsigned long, start,
-> +		size_t, len_in, int, behavior)
+> +const char *vdso_clock_name[12] = {
+> +	"CLOCK_REALTIME",
+> +	"CLOCK_MONOTONIC",
+> +	"CLOCK_PROCESS_CPUTIME_ID",
+> +	"CLOCK_THREAD_CPUTIME_ID",
+> +	"CLOCK_MONOTONIC_RAW",
+> +	"CLOCK_REALTIME_COARSE",
+> +	"CLOCK_MONOTONIC_COARSE",
+> +	"CLOCK_BOOTTIME",
+> +	"CLOCK_REALTIME_ALARM",
+> +	"CLOCK_BOOTTIME_ALARM",
+> +	"CLOCK_SGI_CYCLE",
+> +	"CLOCK_TAI",
+> +};
+> +
+> +/*
+> + * This function calls clock_getres in vdso and by system call
+> + * with different values for clock_id.
+> + *
+> + * Example of output:
+> + *
+> + * clock_id: CLOCK_REALTIME [PASS]
+> + * clock_id: CLOCK_BOOTTIME [PASS]
+> + * clock_id: CLOCK_TAI [PASS]
+> + * clock_id: CLOCK_REALTIME_COARSE [PASS]
+> + * clock_id: CLOCK_MONOTONIC [PASS]
+> + * clock_id: CLOCK_MONOTONIC_RAW [PASS]
+> + * clock_id: CLOCK_MONOTONIC_COARSE [PASS]
+> + */
+> +static inline int vdso_test_clock(unsigned int clock_id)
 > +{
-> +	start = untagged_addr(start);
-> +	return ksys_madvise(start, len_in, behavior);
+> +	struct timespec x, y;
+> +
+> +	printf("clock_id: %s", vdso_clock_name[clock_id]);
+> +	clock_getres(clock_id, &x);
+> +	syscall_clock_getres(clock_id, &y);
+> +
+> +	if ((x.tv_sec != y.tv_sec) || (x.tv_sec != y.tv_sec)) {
+> +		printf(" [FAIL]\n");
+> +		return KSFT_FAIL;
+> +	}
+> +
+> +	printf(" [PASS]\n");
+> +	return 0;
 > +}
 > +
-> +SYSCALL_DEFINE6(arm64_mbind, unsigned long, start, unsigned long, len,
-> +		unsigned long, mode, const unsigned long __user *, nmask,
-> +		unsigned long, maxnode, unsigned int, flags)
+> +int main(int argc, char **argv)
 > +{
-> +	start = untagged_addr(start);
-> +	return ksys_mbind(start, len, mode, nmask, maxnode, flags);
-> +}
+> +	int ret;
 > +
-> +SYSCALL_DEFINE2(arm64_mlock, unsigned long, start, size_t, len)
-> +{
-> +	start = untagged_addr(start);
-> +	return ksys_mlock(start, len, VM_LOCKED);
-> +}
+> +#if _POSIX_TIMERS > 0
 > +
-> +SYSCALL_DEFINE2(arm64_mlock2, unsigned long, start, size_t, len)
-> +{
-> +	start = untagged_addr(start);
-> +	return ksys_mlock(start, len, VM_LOCKED);
-> +}
-> +
-> +SYSCALL_DEFINE2(arm64_munlock, unsigned long, start, size_t, len)
-> +{
-> +	start = untagged_addr(start);
-> +	return ksys_munlock(start, len);
-> +}
-> +
-> +SYSCALL_DEFINE3(arm64_mprotect, unsigned long, start, size_t, len,
-> +		unsigned long, prot)
-> +{
-> +	start = untagged_addr(start);
-> +	return ksys_mprotect_pkey(start, len, prot, -1);
-> +}
-> +
-> +SYSCALL_DEFINE3(arm64_msync, unsigned long, start, size_t, len, int, flags)
-> +{
-> +	start = untagged_addr(start);
-> +	return ksys_msync(start, len, flags);
-> +}
-> +
-> +SYSCALL_DEFINE3(arm64_mincore, unsigned long, start, size_t, len,
-> +		unsigned char __user *, vec)
-> +{
-> +	start = untagged_addr(start);
-> +	return ksys_mincore(start, len, vec);
-> +}
+> +#ifdef CLOCK_REALTIME
 
-These look fine.
+Why do you need that #ifdef and all the ones below ?
 
-> +SYSCALL_DEFINE5(arm64_remap_file_pages, unsigned long, start,
-> +		unsigned long, size, unsigned long, prot,
-> +		unsigned long, pgoff, unsigned long, flags)
-> +{
-> +	start = untagged_addr(start);
-> +	return ksys_remap_file_pages(start, size, prot, pgoff, flags);
-> +}
+CLOCK_REALTIME (and others) is defined in include/uapi/linux/time.h, so 
+it should be there when you build the test, shouldn't it ?
 
-While this has been deprecated for some time, I presume user space still
-invokes it?
+> +	ret = vdso_test_clock(CLOCK_REALTIME);
+> +	if (ret)
+> +		goto out;
 
-> +SYSCALL_DEFINE3(arm64_shmat, int, shmid, char __user *, shmaddr, int, shmflg)
-> +{
-> +	shmaddr = untagged_addr(shmaddr);
-> +	return ksys_shmat(shmid, shmaddr, shmflg);
-> +}
+Why that goto ? Nothing is done at out, so a 'return ret' would be 
+better I think.
+
+And do we really want to stop at first failure ? Wouldn't it be better 
+to run all the tests regardless ?
+
+Christophe
+
+> +#endif
 > +
-> +SYSCALL_DEFINE1(arm64_shmdt, char __user *, shmaddr)
-> +{
-> +	shmaddr = untagged_addr(shmaddr);
-> +	return ksys_shmdt(shmaddr);
+> +#ifdef CLOCK_BOOTTIME
+> +	ret = vdso_test_clock(CLOCK_BOOTTIME);
+> +	if (ret)
+> +		goto out;
+> +#endif
+> +
+> +#ifdef CLOCK_TAI
+> +	ret = vdso_test_clock(CLOCK_TAI);
+> +	if (ret)
+> +		goto out;
+> +#endif
+> +
+> +#ifdef CLOCK_REALTIME_COARSE
+> +	ret = vdso_test_clock(CLOCK_REALTIME_COARSE);
+> +	if (ret)
+> +		goto out;
+> +#endif
+> +
+> +#ifdef CLOCK_MONOTONIC
+> +	ret = vdso_test_clock(CLOCK_MONOTONIC);
+> +	if (ret)
+> +		goto out;
+> +#endif
+> +
+> +#ifdef CLOCK_MONOTONIC_RAW
+> +	ret = vdso_test_clock(CLOCK_MONOTONIC_RAW);
+> +	if (ret)
+> +		goto out;
+> +#endif
+> +
+> +#ifdef CLOCK_MONOTONIC_COARSE
+> +	ret = vdso_test_clock(CLOCK_MONOTONIC_COARSE);
+> +	if (ret)
+> +		goto out;
+> +#endif
+> +
+> +#endif
+> +
+> +out:
+> +	return ret;
 > +}
-
-Do we actually want to allow shared tagged memory? Who's going to tag
-it? If not, we can document it as not supported.
-
--- 
-Catalin
+> 
