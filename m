@@ -2,174 +2,152 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EDB39272B5
-	for <lists+linux-kselftest@lfdr.de>; Thu, 23 May 2019 01:09:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80FA727335
+	for <lists+linux-kselftest@lfdr.de>; Thu, 23 May 2019 02:21:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728027AbfEVXJq (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 22 May 2019 19:09:46 -0400
-Received: from mail-lj1-f195.google.com ([209.85.208.195]:34709 "EHLO
-        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726553AbfEVXJq (ORCPT
+        id S1727809AbfEWAUz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 22 May 2019 20:20:55 -0400
+Received: from mail-qt1-f196.google.com ([209.85.160.196]:46395 "EHLO
+        mail-qt1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727634AbfEWAUz (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 22 May 2019 19:09:46 -0400
-Received: by mail-lj1-f195.google.com with SMTP id j24so3662783ljg.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 22 May 2019 16:09:44 -0700 (PDT)
+        Wed, 22 May 2019 20:20:55 -0400
+Received: by mail-qt1-f196.google.com with SMTP id z19so1850853qtz.13
+        for <linux-kselftest@vger.kernel.org>; Wed, 22 May 2019 17:20:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Zo0ta7cFHgMRhNj415CGcWxBRhsPIdMQaFfQkNGZDyg=;
-        b=igi2ZowCRR3eZ9/0nTV8cXZJb9K3GEJ6nM7xrdpCgyuIedU5DlpD8BYtYq2g7fhIK6
-         FMPk+pIR3l66HCoBcqnR8RLDUlNVKBoDdSOOKbybJMa8cIyuAzuBD0XVwoayLR91TP1S
-         Or9Vm+AM1MqvKUg9+c3gOd7GP47AnzQE07FfPqL0gIQFQsaz6/Wtl6TltaTcvzbkWmzx
-         nUHyczH55lHnf4QLfD7YMKsWm2P4/KbXTCsRnYy/LgXeL0UQ2MOisKGH9I79sJSp7fTc
-         mCIju+QQoBZwdM0ZHmLkXpay4k0e/6JiSlhqZI0PrF8znz18Mpt9AP9bfE2L3yEv2l8R
-         69MQ==
+        d=ziepe.ca; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=kja4wR6FLtasYFQS1xUbhik8iG88bHuMFvf2ArrK0nw=;
+        b=b1PxbkXji6rxJkxXzX+E8hmtsDc4EAG6spndGBpqTY6Mtd1Z82qmKG7IFdzEDWmzKK
+         cpfPgmFkndIKUtDn3lZmf4ZAYcKRjit4YkqMU72A44nfyHayfu0+OGxh9SgysS/YRAv2
+         RDEnuh2qly9nvvswbClZIbFXuZCzwJj2KYSwWCU/YgJUugR9fRVuJUTKIe2+8zLwiPOj
+         anBDeIuRaK3lpaZn56KojfHXM/H6EWmNRZuecl/6erGrJ5dc4+VdWT4yxUQf8Rpv9nUY
+         hRDkUmUo3tTzvQuC1Vf8iYC9BBrTle8EWAWahcABrO+2gaF43DLowx5aiqsiUBpSVZlJ
+         7EAg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Zo0ta7cFHgMRhNj415CGcWxBRhsPIdMQaFfQkNGZDyg=;
-        b=lz2FIjhs3tFnso2AwOp7G1duWKkVQx2m6bvg32MkKBPu+oRaWyLQ8a/B8db5TPkx9z
-         UNDY4xbmQ4bEqjYNr9GRhVC1bTuiHzFYVvscRHpnPSbJ6LNYJXQ+LUp+LbVplxf2I3Qd
-         UNFf31NipsS5yqnl6ZFV4JDpJDCaosDvNknGSuNKcmEr2HBWk4FUX41aWPmccnGhY2vw
-         It3UppHcQwW9Mkq0Fu7zyOMOSgoTvd+EVxXo3PJPtw5/tUK5l84atl3nq2VvS4WipiIB
-         dvjSGxiIYrj1X4uw6JQnTAE6lRFKHR/Qi8LMxQ7u/GI8BK4vWGdfQN/JaRKC+6fTI/r2
-         HhEA==
-X-Gm-Message-State: APjAAAW3/95qunYIAcVcoJsmZx7r/SiEaS9DEZoAnFXtuuG4rm+jRQWm
-        QWdixeR4lr3DVhiV6msA1zvCCpwpogkU7jsKED8d2Q==
-X-Google-Smtp-Source: APXvYqyzdpKdhtViUHlA5ZulCPuE1mR7dT316mPXUNWFyB1kZFy9VtMEAzPhqeN7WBqyKU4f463JOkqzDuNZUlPEoK8=
-X-Received: by 2002:a2e:885a:: with SMTP id z26mr2119940ljj.35.1558566583161;
- Wed, 22 May 2019 16:09:43 -0700 (PDT)
-MIME-Version: 1.0
-References: <cover.1557160186.git.andreyknvl@google.com> <20190517144931.GA56186@arrakis.emea.arm.com>
- <CAFKCwrj6JEtp4BzhqO178LFJepmepoMx=G+YdC8sqZ3bcBp3EQ@mail.gmail.com>
- <20190521182932.sm4vxweuwo5ermyd@mbp> <201905211633.6C0BF0C2@keescook>
- <20190522101110.m2stmpaj7seezveq@mbp> <CAJgzZoosKBwqXRyA6fb8QQSZXFqfHqe9qO9je5TogHhzuoGXJQ@mail.gmail.com>
- <20190522163527.rnnc6t4tll7tk5zw@mbp> <201905221316.865581CF@keescook> <CAFKCwrjOjdJAbcABp3qxwyYy+hgfyQirvmqGkDSJVJe5pSz0Uw@mail.gmail.com>
-In-Reply-To: <CAFKCwrjOjdJAbcABp3qxwyYy+hgfyQirvmqGkDSJVJe5pSz0Uw@mail.gmail.com>
-From:   enh <enh@google.com>
-Date:   Wed, 22 May 2019 16:09:31 -0700
-Message-ID: <CAJgzZorUPzrXu0ysDdKwnqdvgWZJ9tqRjF-9_5CU_UV+c0bRCA@mail.gmail.com>
-Subject: Re: [PATCH v15 00/17] arm64: untag user pointers passed to the kernel
-To:     Evgenii Stepanov <eugenis@google.com>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        Khalid Aziz <khalid.aziz@oracle.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-rdma@vger.kernel.org, linux-media@vger.kernel.org,
-        kvm@vger.kernel.org,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=kja4wR6FLtasYFQS1xUbhik8iG88bHuMFvf2ArrK0nw=;
+        b=CJJK92Y5IA6txwHQ8orzUHqtBpzhyZT0VrPMUyo//4OXqDQFpkTXQltyaKdi3i7dMX
+         pKJNUMOrUk42GdZ/fZXyCos4DQDRpPSU9Xg+PkprO2HbHS99ApWj66RhdW2jt6/3BIxe
+         g36kKf5EFIGBpCUFdEQO8vonvknYChvTWoKt30N0HsWXh9tIahD97eF3RlD6k1wP02qp
+         eAPuCkk50S1K2ibqggeoJZzgrV9aUxdfksFnbbqWbnNoqJyGJVgacShJOXSgWC7WRkWV
+         EEjz8Z4sn+7wjJ8esL7xpLXZaRrfExz9puDUDpNmZfysyBXGgdo/Ow6jBuz8KexSefro
+         P9jA==
+X-Gm-Message-State: APjAAAUldpJm+xre03wuY2pSUn5QkweXPMcWFr3R6FH9Tjl5RTl2Y6HM
+        k1LzE1s5EV9qoi6vjcJRpr6Hmw==
+X-Google-Smtp-Source: APXvYqwzvo9H/aW7qSfx2OQVIHnUtdd1Cyzpi6J44RNo2JLbDhDXh7kfDH2OJy33sD2sQGXynL6VQQ==
+X-Received: by 2002:ac8:f71:: with SMTP id l46mr70609860qtk.321.1558570854263;
+        Wed, 22 May 2019 17:20:54 -0700 (PDT)
+Received: from ziepe.ca (hlfxns017vw-156-34-49-251.dhcp-dynamic.fibreop.ns.bellaliant.net. [156.34.49.251])
+        by smtp.gmail.com with ESMTPSA id t30sm15637238qtc.80.2019.05.22.17.20.53
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Wed, 22 May 2019 17:20:53 -0700 (PDT)
+Received: from jgg by mlx.ziepe.ca with local (Exim 4.90_1)
+        (envelope-from <jgg@ziepe.ca>)
+        id 1hTbTZ-0001Zh-03; Wed, 22 May 2019 21:20:53 -0300
+Date:   Wed, 22 May 2019 21:20:52 -0300
+From:   Jason Gunthorpe <jgg@ziepe.ca>
+To:     Dave Martin <Dave.Martin@arm.com>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Mark Rutland <mark.rutland@arm.com>, kvm@vger.kernel.org,
+        Szabolcs Nagy <Szabolcs.Nagy@arm.com>,
         Will Deacon <will.deacon@arm.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
+        dri-devel@lists.freedesktop.org, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org,
+        Felix Kuehling <Felix.Kuehling@amd.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Jacob Bramley <Jacob.Bramley@arm.com>,
+        Leon Romanovsky <leon@kernel.org>, linux-rdma@vger.kernel.org,
+        amd-gfx@lists.freedesktop.org, Dmitry Vyukov <dvyukov@google.com>,
+        Evgeniy Stepanov <eugenis@google.com>,
+        linux-media@vger.kernel.org, Kevin Brodsky <kevin.brodsky@arm.com>,
+        Kees Cook <keescook@chromium.org>,
+        Ruben Ayrapetyan <Ruben.Ayrapetyan@arm.com>,
+        Andrey Konovalov <andreyknvl@google.com>,
+        Ramana Radhakrishnan <Ramana.Radhakrishnan@arm.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        Kostya Serebryany <kcc@google.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Yishai Hadas <yishaih@mellanox.com>,
-        Felix Kuehling <Felix.Kuehling@amd.com>,
-        Alexander Deucher <Alexander.Deucher@amd.com>,
-        Christian Koenig <Christian.Koenig@amd.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-kernel@vger.kernel.org,
         Jens Wiklander <jens.wiklander@linaro.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Kostya Serebryany <kcc@google.com>,
         Lee Smith <Lee.Smith@arm.com>,
-        Ramana Radhakrishnan <Ramana.Radhakrishnan@arm.com>,
-        Jacob Bramley <Jacob.Bramley@arm.com>,
-        Ruben Ayrapetyan <Ruben.Ayrapetyan@arm.com>,
+        Alexander Deucher <Alexander.Deucher@amd.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
         Robin Murphy <robin.murphy@arm.com>,
-        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
-        Dave Martin <Dave.Martin@arm.com>,
-        Kevin Brodsky <kevin.brodsky@arm.com>,
-        Szabolcs Nagy <Szabolcs.Nagy@arm.com>
-Content-Type: text/plain; charset="UTF-8"
+        Christian Koenig <Christian.Koenig@amd.com>,
+        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>
+Subject: Re: [PATCH v15 00/17] arm64: untag user pointers passed to the kernel
+Message-ID: <20190523002052.GF15389@ziepe.ca>
+References: <cover.1557160186.git.andreyknvl@google.com>
+ <20190517144931.GA56186@arrakis.emea.arm.com>
+ <20190521184856.GC2922@ziepe.ca>
+ <20190522134925.GV28398@e103592.cambridge.arm.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190522134925.GV28398@e103592.cambridge.arm.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, May 22, 2019 at 4:03 PM Evgenii Stepanov <eugenis@google.com> wrote:
->
-> On Wed, May 22, 2019 at 1:47 PM Kees Cook <keescook@chromium.org> wrote:
-> >
-> > On Wed, May 22, 2019 at 05:35:27PM +0100, Catalin Marinas wrote:
-> > > The two hard requirements I have for supporting any new hardware feature
-> > > in Linux are (1) a single kernel image binary continues to run on old
-> > > hardware while making use of the new feature if available and (2) old
-> > > user space continues to run on new hardware while new user space can
-> > > take advantage of the new feature.
-> >
-> > Agreed! And I think the series meets these requirements, yes?
-> >
-> > > For MTE, we just can't enable it by default since there are applications
-> > > who use the top byte of a pointer and expect it to be ignored rather
-> > > than failing with a mismatched tag. Just think of a hwasan compiled
-> > > binary where TBI is expected to work and you try to run it with MTE
-> > > turned on.
-> >
-> > Ah! Okay, here's the use-case I wasn't thinking of: the concern is TBI
-> > conflicting with MTE. And anything that starts using TBI suddenly can't
-> > run in the future because it's being interpreted as MTE bits? (Is that
-> > the ABI concern? I feel like we got into the weeds about ioctl()s and
-> > one-off bugs...)
-> >
-> > So there needs to be some way to let the kernel know which of three
-> > things it should be doing:
-> > 1- leaving userspace addresses as-is (present)
-> > 2- wiping the top bits before using (this series)
-> > 3- wiping the top bits for most things, but retaining them for MTE as
-> >    needed (the future)
-> >
-> > I expect MTE to be the "default" in the future. Once a system's libc has
-> > grown support for it, everything will be trying to use MTE. TBI will be
-> > the special case (but TBI is effectively a prerequisite).
-> >
-> > AFAICT, the only difference I see between 2 and 3 will be the tag handling
-> > in usercopy (all other places will continue to ignore the top bits). Is
-> > that accurate?
-> >
-> > Is "1" a per-process state we want to keep? (I assume not, but rather it
-> > is available via no TBI/MTE CONFIG or a boot-time option, if at all?)
-> >
-> > To choose between "2" and "3", it seems we need a per-process flag to
-> > opt into TBI (and out of MTE). For userspace, how would a future binary
-> > choose TBI over MTE? If it's a library issue, we can't use an ELF bit,
-> > since the choice may be "late" after ELF load (this implies the need
-> > for a prctl().) If it's binary-only ("built with HWKASan") then an ELF
-> > bit seems sufficient. And without the marking, I'd expect the kernel to
-> > enforce MTE when there are high bits.
-> >
-> > > I would also expect the C library or dynamic loader to check for the
-> > > presence of a HWCAP_MTE bit before starting to tag memory allocations,
-> > > otherwise it would get SIGILL on the first MTE instruction it tries to
-> > > execute.
-> >
-> > I've got the same question as Elliot: aren't MTE instructions just NOP
-> > to older CPUs? I.e. if the CPU (or kernel) don't support it, it just
-> > gets entirely ignored: checking is only needed to satisfy curiosity
-> > or behavioral expectations.
->
-> MTE instructions are not NOP. Most of them have side effects (changing
-> register values, zeroing memory).
+On Wed, May 22, 2019 at 02:49:28PM +0100, Dave Martin wrote:
+> On Tue, May 21, 2019 at 03:48:56PM -0300, Jason Gunthorpe wrote:
+> > On Fri, May 17, 2019 at 03:49:31PM +0100, Catalin Marinas wrote:
+> > 
+> > > The tagged pointers (whether hwasan or MTE) should ideally be a
+> > > transparent feature for the application writer but I don't think we can
+> > > solve it entirely and make it seamless for the multitude of ioctls().
+> > > I'd say you only opt in to such feature if you know what you are doing
+> > > and the user code takes care of specific cases like ioctl(), hence the
+> > > prctl() proposal even for the hwasan.
+> > 
+> > I'm not sure such a dire view is warrented.. 
+> > 
+> > The ioctl situation is not so bad, other than a few special cases,
+> > most drivers just take a 'void __user *' and pass it as an argument to
+> > some function that accepts a 'void __user *'. sparse et al verify
+> > this. 
+> > 
+> > As long as the core functions do the right thing the drivers will be
+> > OK.
+> > 
+> > The only place things get dicy is if someone casts to unsigned long
+> > (ie for vma work) but I think that reflects that our driver facing
+> > APIs for VMAs are compatible with static analysis (ie I have no
+> > earthly idea why get_user_pages() accepts an unsigned long), not that
+> > this is too hard.
+> 
+> If multiple people will care about this, perhaps we should try to
+> annotate types more explicitly in SYSCALL_DEFINEx() and ABI data
+> structures.
+> 
+> For example, we could have a couple of mutually exclusive modifiers
+> 
+> T __object *
+> T __vaddr * (or U __vaddr)
+> 
+> In the first case the pointer points to an object (in the C sense)
+> that the call may dereference but not use for any other purpose.
 
-no, i meant "they're encoded in a space that was previously no-ops, so
-running on MTE code on old hardware doesn't cause SIGILL".
+How would you use these two differently?
 
-> This only matters for stack tagging, though. Heap tagging is a runtime
-> decision in the allocator.
->
-> If an image needs to run on old hardware, it will have to do heap tagging only.
->
-> > To me, the conflict seems to be using TBI in the face of expecting MTE to
-> > be the default state of the future. (But the internal changes needed
-> > for TBI -- this series -- is a prereq for MTE.)
-> >
-> > --
-> > Kees Cook
+So far the kernel has worked that __user should tag any pointer that
+is from userspace and then you can't do anything with it until you
+transform it into a kernel something
+
+> to tell static analysers the real type of pointers smuggled through
+> UAPI disguised as other types (*cough* KVM, etc.)
+
+Yes, that would help alot, we often have to pass pointers through a
+u64 in the uAPI, and there is no static checker support to make sure
+they are run through the u64_to_user_ptr() helper.
+
+Jason
