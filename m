@@ -2,100 +2,96 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 61B2128B52
-	for <lists+linux-kselftest@lfdr.de>; Thu, 23 May 2019 22:11:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB8CD28C10
+	for <lists+linux-kselftest@lfdr.de>; Thu, 23 May 2019 23:07:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387523AbfEWULT (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 23 May 2019 16:11:19 -0400
-Received: from usa-sjc-mx-foss1.foss.arm.com ([217.140.101.70]:55844 "EHLO
-        foss.arm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726451AbfEWULT (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 23 May 2019 16:11:19 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.72.51.249])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1A48EA78;
-        Thu, 23 May 2019 13:11:19 -0700 (PDT)
-Received: from mbp (usa-sjc-mx-foss1.foss.arm.com [217.140.101.70])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id BBB143F690;
-        Thu, 23 May 2019 13:11:12 -0700 (PDT)
-Date:   Thu, 23 May 2019 21:11:05 +0100
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     Khalid Aziz <khalid.aziz@oracle.com>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Evgenii Stepanov <eugenis@google.com>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-rdma@vger.kernel.org, linux-media@vger.kernel.org,
-        kvm@vger.kernel.org,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Will Deacon <will.deacon@arm.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Yishai Hadas <yishaih@mellanox.com>,
-        Felix Kuehling <Felix.Kuehling@amd.com>,
-        Alexander Deucher <Alexander.Deucher@amd.com>,
-        Christian Koenig <Christian.Koenig@amd.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Jens Wiklander <jens.wiklander@linaro.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Kostya Serebryany <kcc@google.com>,
-        Lee Smith <Lee.Smith@arm.com>,
-        Ramana Radhakrishnan <Ramana.Radhakrishnan@arm.com>,
-        Jacob Bramley <Jacob.Bramley@arm.com>,
-        Ruben Ayrapetyan <Ruben.Ayrapetyan@arm.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
-        Dave Martin <Dave.Martin@arm.com>,
-        Kevin Brodsky <kevin.brodsky@arm.com>,
-        Szabolcs Nagy <Szabolcs.Nagy@arm.com>,
-        Elliott Hughes <enh@google.com>
-Subject: Re: [PATCH v15 00/17] arm64: untag user pointers passed to the kernel
-Message-ID: <20190523201105.oifkksus4rzcwqt4@mbp>
-References: <cover.1557160186.git.andreyknvl@google.com>
- <20190517144931.GA56186@arrakis.emea.arm.com>
- <CAFKCwrj6JEtp4BzhqO178LFJepmepoMx=G+YdC8sqZ3bcBp3EQ@mail.gmail.com>
- <20190521182932.sm4vxweuwo5ermyd@mbp>
- <201905211633.6C0BF0C2@keescook>
- <6049844a-65f5-f513-5b58-7141588fef2b@oracle.com>
+        id S1731671AbfEWVHV (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 23 May 2019 17:07:21 -0400
+Received: from mail-pf1-f174.google.com ([209.85.210.174]:33036 "EHLO
+        mail-pf1-f174.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726222AbfEWVHU (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 23 May 2019 17:07:20 -0400
+Received: by mail-pf1-f174.google.com with SMTP id z28so3938749pfk.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 23 May 2019 14:07:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rajagiritech-edu-in.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ZTioGuKOgNO6SwugnrEDEktz7xGxS3YWSFmCmowDiZ8=;
+        b=IxyjS7QI/iWlVolD7qMxHAsrVnEz6vYW71ld0uA+5lDEvFXgNW5y/+Hovb10dtf0fk
+         Pg6Q1W5Z978oA4Q50rBxaWG9aZoy1bha2AtsABYeJSCXvM8bvkBZe/H7yebqDH4tZPmb
+         e3KCf7zt3QR2PwmHVAlWsefxzk/UkrygDd1Uaw5e8miN15gBHL6N1BLt2cSjBeE8pV9v
+         0yEEQxhqQpHE+4rX9vVQHwlzDvEily5DxK5axwiUyupU/tLG3xoW/cechfBnsByTQiuO
+         mLRIdBQbbuT12JKswtN7ln/DniAJ2Wb+AFrXu6zhCVMik0qJAZtehXqlyAZ0Ssage/4R
+         /RDg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ZTioGuKOgNO6SwugnrEDEktz7xGxS3YWSFmCmowDiZ8=;
+        b=tGsbo/zXz90PIH2Lvp4fxaZH7upTpG+SK+UUBCN5lmWy/9houBUT9PkCQLQ/0FwOwW
+         9KI5zXvsCkE+WUdN5iE4t7wunn6mdAIEnfS+XZBb7nq4H3WgKJ3TH6kgYfkDAL6xhGME
+         NwDEx7XAXwCMfoVrWJtaW6RFKq/kxF/emxUzVDQj4tIDSzGGqciGSiB7PUaxls3qhEJd
+         zHmxY8YReIjsIVwFXcIrbXq7YucVcxiWBbgaEXVqZ8p2uDyKte7mFyA0P6KA5ZEBQrp/
+         mz2VDJOxsNWnCso9mlJMYAWKVuF74s3a6HvcsV+lnY/jNxiFbu9Jp74/m1rrIS2LfGvi
+         lNCg==
+X-Gm-Message-State: APjAAAVdeCx1b3ClhIA6TgdmZH0Vq229amrngHZY/kO7hxF/nFpMceRc
+        5Uv00zKC0bQZAYfK8qvn6oNElJGzeNUNJ1tdeV87pA==
+X-Google-Smtp-Source: APXvYqzuzYiOYVO1qbzCh4Aabm6AuxyJ016kEM0zJSXu1CU6EAU3utELN2tXg74h76qjcEGbSDT5iAY80582D/hn8Oc=
+X-Received: by 2002:a63:550c:: with SMTP id j12mr5619579pgb.450.1558645640095;
+ Thu, 23 May 2019 14:07:20 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <6049844a-65f5-f513-5b58-7141588fef2b@oracle.com>
-User-Agent: NeoMutt/20170113 (1.7.2)
+References: <CAG=yYwk+g28_dnOcN--w-PLbGtA2oM5tq14W4X5bBjdurnF2iA@mail.gmail.com>
+ <20190523174739.GY3274@piout.net>
+In-Reply-To: <20190523174739.GY3274@piout.net>
+From:   Jeffrin Thalakkottoor <jeffrin@rajagiritech.edu.in>
+Date:   Fri, 24 May 2019 02:36:42 +0530
+Message-ID: <CAG=yYwmrE30nROqn63oAkXN9BCqfmo4T7+QPN-H3mSGG9dLU4A@mail.gmail.com>
+Subject: Re: about selftests/rtc test related stuff
+To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc:     a.zummo@towertech.it, Shuah Khan <shuah@kernel.org>,
+        linux-rtc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        lkml <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Khalid,
+On Thu, May 23, 2019 at 11:17 PM Alexandre Belloni
+<alexandre.belloni@bootlin.com> wrote:
+> Your user probably doesn't have access to the rtc device file.
+anyway thanks related
+Following is the result with sudo....
+------------------------x--------------------------------------x----------------------------
+$sudo ./rtctest
+[sudo] password for jeffrin:
+[==========] Running 7 tests from 2 test cases.
+[ RUN      ] rtc.date_read
+rtctest.c:49:rtc.date_read:Current RTC date/time is 23/05/2019 20:49:49.
+[       OK ] rtc.date_read
+[ RUN      ] rtc.uie_read
+[       OK ] rtc.uie_read
+[ RUN      ] rtc.uie_select
+[       OK ] rtc.uie_select
+[ RUN      ] rtc.alarm_alm_set
+rtctest.c:137:rtc.alarm_alm_set:Alarm time now set to 20:49:58.
+rtctest.c:156:rtc.alarm_alm_set:data: 1a0
+[       OK ] rtc.alarm_alm_set
+[ RUN      ] rtc.alarm_wkalm_set
+rtctest.c:195:rtc.alarm_wkalm_set:Alarm time now set to 23/05/2019 20:50:01.
+[       OK ] rtc.alarm_wkalm_set
+[ RUN      ] rtc.alarm_alm_set_minute
+rtctest.c:239:rtc.alarm_alm_set_minute:Alarm time now set to 20:51:00.
+Alarm clock
+$rtctest.c:258:rtc.alarm_alm_set_minute:data: 1a0
 
-On Thu, May 23, 2019 at 11:51:40AM -0600, Khalid Aziz wrote:
-> On 5/21/19 6:04 PM, Kees Cook wrote:
-> > As an aside: I think Sparc ADI support in Linux actually side-stepped
-> > this[1] (i.e. chose "solution 1"): "All addresses passed to kernel must
-> > be non-ADI tagged addresses." (And sadly, "Kernel does not enable ADI
-> > for kernel code.") I think this was a mistake we should not repeat for
-> > arm64 (we do seem to be at least in agreement about this, I think).
-> > 
-> > [1] https://lore.kernel.org/patchwork/patch/654481/
-> 
-> That is a very early version of the sparc ADI patch. Support for tagged
-> addresses in syscalls was added in later versions and is in the patch
-> that is in the kernel.
+$
 
-I tried to figure out but I'm not familiar with the sparc port. How did
-you solve the tagged address going into various syscall implementations
-in the kernel (e.g. sys_write)? Is the tag removed on kernel entry or it
-ends up deeper in the core code?
+------------------------x--------------------------------------x----------------------------
 
-Thanks.
 
 -- 
-Catalin
+software engineer
+rajagiri school of engineering and technology
