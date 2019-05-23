@@ -2,374 +2,202 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D853228C24
-	for <lists+linux-kselftest@lfdr.de>; Thu, 23 May 2019 23:09:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 442A828C57
+	for <lists+linux-kselftest@lfdr.de>; Thu, 23 May 2019 23:31:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388258AbfEWVJV (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 23 May 2019 17:09:21 -0400
-Received: from mail-pg1-f177.google.com ([209.85.215.177]:39098 "EHLO
-        mail-pg1-f177.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388238AbfEWVJS (ORCPT
+        id S2387937AbfEWVbU (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 23 May 2019 17:31:20 -0400
+Received: from mail-pf1-f194.google.com ([209.85.210.194]:36306 "EHLO
+        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2387917AbfEWVbT (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 23 May 2019 17:09:18 -0400
-Received: by mail-pg1-f177.google.com with SMTP id w22so3760589pgi.6
-        for <linux-kselftest@vger.kernel.org>; Thu, 23 May 2019 14:09:18 -0700 (PDT)
+        Thu, 23 May 2019 17:31:19 -0400
+Received: by mail-pf1-f194.google.com with SMTP id v80so3966280pfa.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 23 May 2019 14:31:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=appneta.com; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=SPWxLhLzjbcSJowkJYGTCbYUr1bDlyQ2z2VYymjpXdc=;
-        b=LIzuQYIymhL4BYQ7NXL17oiKjJYJ6LSj5XTF9omLaTOTP5ITMuDiyETQelGrFRTYCC
-         ZIkq0Td0lNyaoUx3Z5LO2dbyA8AUhcX8B9xlHfG26fl50HdaVL8wvqU7/Kx7GcgAVjHo
-         3Kr76/Csstl8wF9wcwHqNMX9OJ5JGJCGOKPTc=
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=RooTx4nZ0Zm8m1fxzq6UPxwDmwN2R9frxfJHiTxcRUE=;
+        b=SXshT/JWt4/VxFaxzUCPBis/uU7CKJhnvqILKuBvKuHgZM/0X3lQPlS9BrcA9GPwgN
+         mNP52DBHjW70HoXLGw3kCTAML6GHF8r2zv6T7pohAbgiWS2GBzlP+CcIwmEuaO+qZxq4
+         C2Jko0HEb2Ra0I9vlZLyIy+YOud56hz3nr/kE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=SPWxLhLzjbcSJowkJYGTCbYUr1bDlyQ2z2VYymjpXdc=;
-        b=atAIR772KOOpjut4NH4lWyyAHUyPbi/x2ZGfsdtYU2/rPl/2zI6fUlSZFYopJFz1VF
-         V+Z5Sz9gcfo0xzZAtaLoimuM8T5dHIcgrbhfxKEKCoKqbgLIOpoHsW7WsMSRx5Vqy3OR
-         8LnhztHsh5Eoo+9gXj7eLiQMHc9ZTOP36XQHe/Fv2Mvbcg0AqsSGDhUel0RLh9yMH84W
-         IpcHxe6w7qn4zLiaz+0ej6APn2LFWozP15+aHKGAR2E/NAlPeqdo1XHNePJLLOsM8mgm
-         2fcqarvUdtqMuB7s1U+d7uHd+ah38DouPBf83CAivgFf9dcrlvnBTDBl58yWaeVAw7Uu
-         /LQQ==
-X-Gm-Message-State: APjAAAUcTRWRc3fQzqYU7uT6Yb2xoY+g/tB3vXTcPmn3IiK7mgbx7u1J
-        YRtGOE6tGowmEZ8d7THINPMjgA==
-X-Google-Smtp-Source: APXvYqyv/H/LE0IdZ5dA9QUiXGDqKw8CMr2yhtC8EeJRZLaWNM9khpAEKcsp666JxO3Q2EEDeik7IQ==
-X-Received: by 2002:a17:90a:c588:: with SMTP id l8mr4336027pjt.59.1558645757359;
-        Thu, 23 May 2019 14:09:17 -0700 (PDT)
-Received: from localhost.localdomain (S010620c9d00fc332.vf.shawcable.net. [70.71.167.160])
-        by smtp.googlemail.com with ESMTPSA id y17sm333481pfn.79.2019.05.23.14.09.15
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 23 May 2019 14:09:16 -0700 (PDT)
-From:   Fred Klassen <fklassen@appneta.com>
-To:     "David S. Miller" <davem@davemloft.net>,
-        Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Willem de Bruijn <willemb@google.com>
-Cc:     Fred Klassen <fklassen@appneta.com>
-Subject: [PATCH net 4/4] net/udpgso_bench_tx: audit error queue
-Date:   Thu, 23 May 2019 14:06:51 -0700
-Message-Id: <20190523210651.80902-5-fklassen@appneta.com>
-X-Mailer: git-send-email 2.11.0
-In-Reply-To: <20190523210651.80902-1-fklassen@appneta.com>
-References: <20190523210651.80902-1-fklassen@appneta.com>
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=RooTx4nZ0Zm8m1fxzq6UPxwDmwN2R9frxfJHiTxcRUE=;
+        b=q9T5gC5BXwDIXwIt57KnLaP69gcJ5L7iWo02n7hwPV2u4Ues5zEWbnC6oLfjyq8fl1
+         9kHQp/6te0Bt4H7HBKQ9E0LjtJ+v/4xzSnEp3ZBijmIGzE8WwfkIxyC5lbLf4EiFoLc3
+         tAalary7Zt5jjpdtI9kWHU9e8F9t9Jk5mr+Er6mnaRcd4aW15FLx6MkRE5l6fijQOClB
+         vPjq752lnCmZZwqEcdB8iTp3zV0nZDVpKHr6UG0VOQKz1+aWkbMatqzuB3SuDXlhG4ej
+         fPHTOeT7go/6YMwMLPNvphOfkyklhvyeLJDm/06RUiVMpnF1V2YOrc9yF7qUXYrHLNag
+         dTnQ==
+X-Gm-Message-State: APjAAAVoPdEiEM/ccIBc4ElBeo6Hz691/YHJuDo3/a2VMh/emS+FKauV
+        kkMisC+COyftdLn5HuAKQmkFDQ==
+X-Google-Smtp-Source: APXvYqw6NOt/dAzFGypTG6hDOH9RhK81m8D3qkjrLvBMN1nJLO77YhSc++d1DOA7/Z/CI2DiFH6JYA==
+X-Received: by 2002:a63:2226:: with SMTP id i38mr5980879pgi.403.1558647079048;
+        Thu, 23 May 2019 14:31:19 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id f186sm406654pfb.5.2019.05.23.14.31.17
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Thu, 23 May 2019 14:31:17 -0700 (PDT)
+Date:   Thu, 23 May 2019 14:31:16 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Catalin Marinas <catalin.marinas@arm.com>
+Cc:     enh <enh@google.com>, Evgenii Stepanov <eugenis@google.com>,
+        Andrey Konovalov <andreyknvl@google.com>,
+        Khalid Aziz <khalid.aziz@oracle.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-rdma@vger.kernel.org, linux-media@vger.kernel.org,
+        kvm@vger.kernel.org,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Will Deacon <will.deacon@arm.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Yishai Hadas <yishaih@mellanox.com>,
+        Felix Kuehling <Felix.Kuehling@amd.com>,
+        Alexander Deucher <Alexander.Deucher@amd.com>,
+        Christian Koenig <Christian.Koenig@amd.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Jens Wiklander <jens.wiklander@linaro.org>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Kostya Serebryany <kcc@google.com>,
+        Lee Smith <Lee.Smith@arm.com>,
+        Ramana Radhakrishnan <Ramana.Radhakrishnan@arm.com>,
+        Jacob Bramley <Jacob.Bramley@arm.com>,
+        Ruben Ayrapetyan <Ruben.Ayrapetyan@arm.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
+        Dave Martin <Dave.Martin@arm.com>,
+        Kevin Brodsky <kevin.brodsky@arm.com>,
+        Szabolcs Nagy <Szabolcs.Nagy@arm.com>
+Subject: Re: [PATCH v15 00/17] arm64: untag user pointers passed to the kernel
+Message-ID: <201905231327.77CA8D0A36@keescook>
+References: <CAFKCwrj6JEtp4BzhqO178LFJepmepoMx=G+YdC8sqZ3bcBp3EQ@mail.gmail.com>
+ <20190521182932.sm4vxweuwo5ermyd@mbp>
+ <201905211633.6C0BF0C2@keescook>
+ <20190522101110.m2stmpaj7seezveq@mbp>
+ <CAJgzZoosKBwqXRyA6fb8QQSZXFqfHqe9qO9je5TogHhzuoGXJQ@mail.gmail.com>
+ <20190522163527.rnnc6t4tll7tk5zw@mbp>
+ <201905221316.865581CF@keescook>
+ <20190523144449.waam2mkyzhjpqpur@mbp>
+ <201905230917.DEE7A75EF0@keescook>
+ <20190523174345.6sv3kcipkvlwfmox@mbp>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190523174345.6sv3kcipkvlwfmox@mbp>
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This enhancement adds the '-a' option, which will count all CMSG
-messages on the error queue and print a summary report.
+On Thu, May 23, 2019 at 06:43:46PM +0100, Catalin Marinas wrote:
+> On Thu, May 23, 2019 at 09:38:19AM -0700, Kees Cook wrote:
+> > What on this front would you be comfortable with? Given it's a new
+> > feature isn't it sufficient to have a CONFIG (and/or boot option)?
+> 
+> I'd rather avoid re-building kernels. A boot option would do, unless we
+> see value in a per-process (inherited) personality or prctl. The
 
-Fixes: 3a687bef148d ("selftests: udp gso benchmark")
+I think I've convinced myself that the normal<->TBI ABI control should
+be a boot parameter. More below...
 
-Example:
+> > What about testing tools that intentionally insert high bits for syscalls
+> > and are _expecting_ them to fail? It seems the TBI series will break them?
+> > In that case, do we need to opt into TBI as well?
+> 
+> If there are such tools, then we may need a per-process control. It's
+> basically an ABI change.
 
-    # ./udpgso_bench_tx -4uT -a -l5 -S 1472 -D 172.16.120.189
-    udp tx:    492 MB/s     8354 calls/s   8354 msg/s
-    udp tx:    477 MB/s     8106 calls/s   8106 msg/s
-    udp tx:    488 MB/s     8288 calls/s   8288 msg/s
-    udp tx:    882 MB/s    14975 calls/s  14975 msg/s
-    Summary over 5.000 seconds ...
-    sum udp tx:    696 MB/s      57696 calls (11539/s)  57696 msgs (11539/s)
-    Tx Timestamps: received:     57696   errors: 0
+syzkaller already attempts to randomly inject non-canonical and
+0xFFFF....FFFF addresses for user pointers in syscalls in an effort to
+find bugs like CVE-2017-5123 where waitid() via unchecked put_user() was
+able to write directly to kernel memory[1].
 
-This can be useful in tracking loss of messages when under load. For example,
-adding the '-z' option results in loss of TX timestamp messages:
+It seems that using TBI by default and not allowing a switch back to
+"normal" ABI without a reboot actually means that userspace cannot inject
+kernel pointers into syscalls any more, since they'll get universally
+stripped now. Is my understanding correct, here? i.e. exploiting
+CVE-2017-5123 would be impossible under TBI?
 
-    # ./udpgso_bench_tx -4ucT -a -l5 -S 1472 -D 172.16.120.189 -p 3239 -z
-    udp tx:    490 MB/s     8325 calls/s   8325 msg/s
-    udp tx:    500 MB/s     8492 calls/s   8492 msg/s
-    udp tx:    883 MB/s    14985 calls/s  14985 msg/s
-    udp tx:    756 MB/s    12823 calls/s  12823 msg/s
-    Summary over 5.000 seconds ...
-    sum udp tx:    657 MB/s      54429 calls (10885/s)  54429 msgs (10885/s)
-    Tx Timestamps: received:     34046   errors: 0
-    Zerocopy acks: received:     54422   errors: 0
+If so, then I think we should commit to the TBI ABI and have a boot
+flag to disable it, but NOT have a process flag, as that would allow
+attackers to bypass the masking. The only flag should be "TBI or MTE".
 
-Fixes: 3a687bef148d ("selftests: udp gso benchmark")
-Signed-off-by: Fred Klassen <fklassen@appneta.com>
----
- tools/testing/selftests/net/udpgso_bench_tx.c | 152 +++++++++++++++++++-------
- 1 file changed, 113 insertions(+), 39 deletions(-)
+If so, can I get top byte masking for other architectures too? Like,
+just to strip high bits off userspace addresses? ;)
 
-diff --git a/tools/testing/selftests/net/udpgso_bench_tx.c b/tools/testing/selftests/net/udpgso_bench_tx.c
-index 56e0d890b066..9924342a0b03 100644
---- a/tools/testing/selftests/net/udpgso_bench_tx.c
-+++ b/tools/testing/selftests/net/udpgso_bench_tx.c
-@@ -62,10 +62,19 @@ static bool	cfg_tcp;
- static uint32_t	cfg_tx_ts = SOF_TIMESTAMPING_TX_SOFTWARE;
- static bool	cfg_tx_tstamp;
- static uint32_t	cfg_tos;
-+static bool	cfg_audit;
- static bool	cfg_verbose;
- static bool	cfg_zerocopy;
- static int	cfg_msg_nr;
- static uint16_t	cfg_gso_size;
-+static unsigned long total_num_msgs;
-+static unsigned long total_num_sends;
-+static unsigned long stat_tx_ts;
-+static unsigned long stat_tx_ts_errors;
-+static unsigned long tstart;
-+static unsigned long tend;
-+static unsigned long stat_zcopies;
-+static unsigned long stat_zcopy_errors;
- 
- static socklen_t cfg_alen;
- static struct sockaddr_storage cfg_dst_addr;
-@@ -137,8 +146,11 @@ static void flush_cmsg(struct cmsghdr *cmsg)
- 			struct my_scm_timestamping *tss;
- 
- 			tss = (struct my_scm_timestamping *)CMSG_DATA(cmsg);
--			fprintf(stderr, "tx timestamp = %lu.%09lu\n",
--				tss->ts[i].tv_sec, tss->ts[i].tv_nsec);
-+			if (tss->ts[i].tv_sec == 0)
-+				stat_tx_ts_errors++;
-+			if (cfg_verbose)
-+				fprintf(stderr, "tx timestamp = %lu.%09lu\n",
-+					tss->ts[i].tv_sec, tss->ts[i].tv_nsec);
- 		} else {
- 			error(1, 0,
- 			      "unknown SOL_SOCKET cmsg type=%u level=%u\n",
-@@ -157,41 +169,52 @@ static void flush_cmsg(struct cmsghdr *cmsg)
- 			switch (err->ee_origin) {
- 			case SO_EE_ORIGIN_TIMESTAMPING:
- 				// Got a TX timestamp from error queue
--				fprintf(stderr,
--					"got SO_EE_ORIGIN_TIMESTAMPING\n");
-+				stat_tx_ts++;
-+				if (cfg_verbose)
-+					fprintf(stderr,
-+						"got SO_EE_ORIGIN_TIMESTAMPING\n");
- 				break;
- 			case SO_EE_ORIGIN_ICMP:
- 			case SO_EE_ORIGIN_ICMP6:
--				fprintf(stderr,
--					"received ICMP error: type=%u, code=%u\n",
--					err->ee_type, err->ee_code);
-+				if (cfg_verbose)
-+					fprintf(stderr,
-+						"received ICMP error: type=%u, code=%u\n",
-+						err->ee_type, err->ee_code);
- 				break;
- 			case SO_EE_ORIGIN_ZEROCOPY:
- 			{
- 				__u32 lo = err->ee_info;
- 				__u32 hi = err->ee_data;
- 
--				if (hi == lo - 1)
-+				if (hi == lo - 1) {
- 					// TX was aborted
--					fprintf(stderr,
--						"Zerocopy TX aborted: lo=%u hi=%u\n",
--						lo, hi);
--				if (hi == lo)
-+					stat_zcopy_errors++;
-+					if (cfg_verbose)
-+						fprintf(stderr,
-+							"Zerocopy TX aborted: lo=%u hi=%u\n",
-+							lo, hi);
-+				} else if (hi == lo) {
- 					// single ID acknowledged
--					fprintf(stderr,
--						"Zerocopy TX ack ID: %u\n",
--						lo);
--				else
-+					stat_zcopies++;
-+					if (cfg_verbose)
-+						fprintf(stderr,
-+							"Zerocopy TX ack ID: %u\n",
-+							lo);
-+				} else {
- 					// range of IDs acknowledged
--					fprintf(stderr,
--						"Zerocopy TX ack %u IDs %u to %u\n",
--						hi - lo + 1, lo, hi);
-+					stat_zcopies += hi - lo + 1;
-+					if (cfg_verbose)
-+						fprintf(stderr,
-+							"Zerocopy TX ack %u IDs %u to %u\n",
-+							hi - lo + 1, lo, hi);
-+				}
- 				break;
- 			}
- 			case SO_EE_ORIGIN_LOCAL:
--				fprintf(stderr,
--					"received packet with local origin: %u\n",
--					err->ee_origin);
-+				if (cfg_verbose)
-+					fprintf(stderr,
-+						"received packet with local origin: %u\n",
-+						err->ee_origin);
- 				break;
- 			default:
- 				error(0, 1,
-@@ -236,7 +259,7 @@ static void flush_errqueue_recv(int fd)
- 		if (ret == -1)
- 			error(1, errno, "errqueue");
- 		msg.msg_flags = 0;
--		if (cfg_verbose) {
-+		if (cfg_audit || cfg_verbose) {
- 			for (cmsg = CMSG_FIRSTHDR(&msg);
- 					cmsg;
- 					cmsg = CMSG_NXTHDR(&msg, cmsg))
-@@ -245,19 +268,21 @@ static void flush_errqueue_recv(int fd)
- 	}
- }
- 
--static void flush_errqueue(int fd)
-+static void flush_errqueue(int fd, const bool do_poll)
- {
--	if (cfg_poll) {
-+	if (do_poll) {
- 		struct pollfd fds = { 0 };
- 		int ret;
- 
- 		fds.fd = fd;
- 		fds.events = POLLERR;
--		ret = poll(&fds, 1, 1000);
--		if (ret == 0)
--			error(1, 0, "poll timeout");
--		else if (ret < 0)
-+		ret = poll(&fds, 1, 500);
-+		if (ret == 0) {
-+			if (cfg_verbose)
-+				fprintf(stderr, "poll timeout\n");
-+		} else if (ret < 0) {
- 			error(1, errno, "poll");
-+		}
- 	}
- 
- 	flush_errqueue_recv(fd);
-@@ -458,7 +483,7 @@ static int send_udp_segment(int fd, char *data)
- static void usage(const char *filepath)
- {
- 	error(1, 0,
--	      "Usage: %s [-46cmHPtTuvz] [-C cpu] [-D dst ip] [-l secs] [-M messagenr] [-p port] [-q tos] [-s sendsize] [-S gsosize]",
-+	      "Usage: %s [-46acmHPtTuvz] [-C cpu] [-D dst ip] [-l secs] [-M messagenr] [-p port] [-q tos] [-s sendsize] [-S gsosize]",
- 	      filepath);
- }
- 
-@@ -467,7 +492,7 @@ static void parse_opts(int argc, char **argv)
- 	int max_len, hdrlen;
- 	int c;
- 
--	while ((c = getopt(argc, argv, "46cC:D:Hl:mM:p:s:q:PS:tTuvz")) != -1) {
-+	while ((c = getopt(argc, argv, "46acC:D:Hl:mM:p:s:q:PS:tTuvz")) != -1) {
- 		switch (c) {
- 		case '4':
- 			if (cfg_family != PF_UNSPEC)
-@@ -481,6 +506,9 @@ static void parse_opts(int argc, char **argv)
- 			cfg_family = PF_INET6;
- 			cfg_alen = sizeof(struct sockaddr_in6);
- 			break;
-+		case 'a':
-+			cfg_audit = true;
-+			break;
- 		case 'c':
- 			cfg_cache_trash = true;
- 			break;
-@@ -599,6 +627,51 @@ static void set_tx_timestamping(int fd)
- 		error(1, errno, "setsockopt tx timestamping");
- }
- 
-+static void print_final_report(unsigned long num_msgs, unsigned long num_sends)
-+{
-+	unsigned long tdelta;
-+
-+	tdelta = tend - tstart;
-+	if (!tdelta)
-+		return;
-+
-+	fprintf(stderr, "Summary over %lu.%03lu seconds ...\n", tdelta / 1000,
-+		tdelta % 1000);
-+	fprintf(stderr,
-+		"sum %s tx: %6lu MB/s %10lu calls (%lu/s) %10lu msgs (%lu/s)\n",
-+		cfg_tcp ? "tcp" : "udp",
-+		((num_msgs * cfg_payload_len) >> 10) / tdelta,
-+		num_sends, num_sends * 1000 / tdelta,
-+		num_msgs, num_msgs * 1000 / tdelta);
-+	if (cfg_tx_tstamp)
-+		fprintf(stderr,
-+			"Tx Timestamps: received: %9lu   errors: %lu\n",
-+			stat_tx_ts, stat_tx_ts_errors);
-+
-+	if (cfg_zerocopy)
-+		fprintf(stderr,
-+			"Zerocopy acks: received: %9lu   errors: %lu\n",
-+			stat_zcopies, stat_zcopy_errors);
-+}
-+
-+static void print_report(unsigned long num_msgs, unsigned long num_sends,
-+			 const bool final)
-+{
-+	if (!final)
-+		fprintf(stderr,
-+			"%s tx: %6lu MB/s %8lu calls/s %6lu msg/s\n",
-+			cfg_tcp ? "tcp" : "udp",
-+			(num_msgs * cfg_payload_len) >> 20,
-+			num_sends, num_msgs);
-+
-+	if (cfg_audit) {
-+		total_num_msgs += num_msgs;
-+		total_num_sends += num_sends;
-+		if (final)
-+			print_final_report(total_num_msgs, total_num_sends);
-+	}
-+}
-+
- int main(int argc, char **argv)
- {
- 	unsigned long num_msgs, num_sends;
-@@ -640,6 +713,8 @@ int main(int argc, char **argv)
- 	num_msgs = 0;
- 	num_sends = 0;
- 	tnow = gettimeofday_ms();
-+	tstart = tnow;
-+	tend = tnow;
- 	tstop = tnow + cfg_runtime_ms;
- 	treport = tnow + 1000;
- 
-@@ -654,19 +729,15 @@ int main(int argc, char **argv)
- 		else
- 			num_sends += send_udp(fd, buf[i]);
- 		num_msgs++;
--		if ((cfg_zerocopy && (num_msgs & 0xF) == 0) || cfg_tx_tstamp)
--			flush_errqueue(fd);
-+		if (cfg_tx_tstamp || (cfg_zerocopy && (num_msgs & 0xF) == 0))
-+			flush_errqueue(fd, cfg_poll);
- 
- 		if (cfg_msg_nr && num_msgs >= cfg_msg_nr)
- 			break;
- 
- 		tnow = gettimeofday_ms();
- 		if (tnow > treport) {
--			fprintf(stderr,
--				"%s tx: %6lu MB/s %8lu calls/s %6lu msg/s\n",
--				cfg_tcp ? "tcp" : "udp",
--				(num_msgs * cfg_payload_len) >> 20,
--				num_sends, num_msgs);
-+			print_report(num_msgs, num_sends, false);
- 			num_msgs = 0;
- 			num_sends = 0;
- 			treport = tnow + 1000;
-@@ -679,10 +750,13 @@ int main(int argc, char **argv)
- 	} while (!interrupted && (cfg_runtime_ms == -1 || tnow < tstop));
- 
- 	if (cfg_zerocopy || cfg_tx_tstamp)
--		flush_errqueue(fd);
-+		flush_errqueue(fd, true);
- 
- 	if (close(fd))
- 		error(1, errno, "close");
- 
-+	tend = tnow;
-+	print_report(num_msgs, num_sends, true);
-+
- 	return 0;
- }
+(Oh, in looking I see this is implemented with sign-extension... why
+not just a mask? So it'll either be valid userspace address or forced
+into the non-canonical range?)
+
+[1] https://salls.github.io/Linux-Kernel-CVE-2017-5123/
+
+> > Alright, the tl;dr appears to be:
+> > - you want more assurances that we can find __user stripping in the
+> >   kernel more easily. (But this seems like a parallel problem.)
+> 
+> Yes, and that we found all (most) cases now. The reason I don't see it
+> as a parallel problem is that, as maintainer, I promise an ABI to user
+> and I'd rather stick to it. I don't want, for example, ncurses to stop
+> working because of some ioctl() rejecting tagged pointers.
+
+But this is what I don't understand: it would need to be ncurses _using
+TBI_, that would stop working (having started to work before, but then
+regress due to a newly added one-off bug). Regular ncurses will be fine
+because it's not using TBI. So The Golden Rule isn't violated, and by
+definition, it's a specific regression caused by some bug (since TBI
+would have had to have worked _before_ in the situation to be considered
+a regression now). Which describes the normal path for kernel
+development... add feature, find corner cases where it doesn't work,
+fix them, encounter new regressions, fix those, repeat forever.
+
+> If it's just the occasional one-off bug I'm fine to deal with it. But
+> no-one convinced me yet that this is the case.
+
+You believe there still to be some systemic cases that haven't been
+found yet? And even if so -- isn't it better to work on that
+incrementally?
+
+> As for the generic driver code (filesystems or other subsystems),
+> without some clear direction for developers, together with static
+> checking/sparse, on how user pointers are cast to longs (one example),
+> it would become my responsibility to identify and fix them up with any
+> kernel release. This series is not providing such guidance, just adding
+> untagged_addr() in some places that we think matter.
+
+What about adding a nice bit of .rst documentation that describes the
+situation and shows how to use untagged_addr(). This is the kind of
+kernel-wide change that "everyone" needs to know about, and shouldn't
+be the arch maintainer's sole responsibility to fix.
+
+> > - we might need to opt in to TBI with a prctl()
+> 
+> Yes, although still up for discussion.
+
+I think I've talked myself out of it. I say boot param only! :)
+
+
+So what do you say to these next steps:
+
+- change untagged_addr() to use a static branch that is controlled with
+  a boot parameter.
+- add, say, Documentation/core-api/user-addresses.rst to describe
+  proper care and handling of user space pointers with untagged_addr(),
+  with examples based on all the cases seen so far in this series.
+- continue work to improve static analysis.
+
+Thanks for wading through this with me! :)
+
 -- 
-2.11.0
-
+Kees Cook
