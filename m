@@ -2,152 +2,191 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 80FA727335
-	for <lists+linux-kselftest@lfdr.de>; Thu, 23 May 2019 02:21:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E72627434
+	for <lists+linux-kselftest@lfdr.de>; Thu, 23 May 2019 04:01:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727809AbfEWAUz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 22 May 2019 20:20:55 -0400
-Received: from mail-qt1-f196.google.com ([209.85.160.196]:46395 "EHLO
-        mail-qt1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727634AbfEWAUz (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 22 May 2019 20:20:55 -0400
-Received: by mail-qt1-f196.google.com with SMTP id z19so1850853qtz.13
-        for <linux-kselftest@vger.kernel.org>; Wed, 22 May 2019 17:20:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=kja4wR6FLtasYFQS1xUbhik8iG88bHuMFvf2ArrK0nw=;
-        b=b1PxbkXji6rxJkxXzX+E8hmtsDc4EAG6spndGBpqTY6Mtd1Z82qmKG7IFdzEDWmzKK
-         cpfPgmFkndIKUtDn3lZmf4ZAYcKRjit4YkqMU72A44nfyHayfu0+OGxh9SgysS/YRAv2
-         RDEnuh2qly9nvvswbClZIbFXuZCzwJj2KYSwWCU/YgJUugR9fRVuJUTKIe2+8zLwiPOj
-         anBDeIuRaK3lpaZn56KojfHXM/H6EWmNRZuecl/6erGrJ5dc4+VdWT4yxUQf8Rpv9nUY
-         hRDkUmUo3tTzvQuC1Vf8iYC9BBrTle8EWAWahcABrO+2gaF43DLowx5aiqsiUBpSVZlJ
-         7EAg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=kja4wR6FLtasYFQS1xUbhik8iG88bHuMFvf2ArrK0nw=;
-        b=CJJK92Y5IA6txwHQ8orzUHqtBpzhyZT0VrPMUyo//4OXqDQFpkTXQltyaKdi3i7dMX
-         pKJNUMOrUk42GdZ/fZXyCos4DQDRpPSU9Xg+PkprO2HbHS99ApWj66RhdW2jt6/3BIxe
-         g36kKf5EFIGBpCUFdEQO8vonvknYChvTWoKt30N0HsWXh9tIahD97eF3RlD6k1wP02qp
-         eAPuCkk50S1K2ibqggeoJZzgrV9aUxdfksFnbbqWbnNoqJyGJVgacShJOXSgWC7WRkWV
-         EEjz8Z4sn+7wjJ8esL7xpLXZaRrfExz9puDUDpNmZfysyBXGgdo/Ow6jBuz8KexSefro
-         P9jA==
-X-Gm-Message-State: APjAAAUldpJm+xre03wuY2pSUn5QkweXPMcWFr3R6FH9Tjl5RTl2Y6HM
-        k1LzE1s5EV9qoi6vjcJRpr6Hmw==
-X-Google-Smtp-Source: APXvYqwzvo9H/aW7qSfx2OQVIHnUtdd1Cyzpi6J44RNo2JLbDhDXh7kfDH2OJy33sD2sQGXynL6VQQ==
-X-Received: by 2002:ac8:f71:: with SMTP id l46mr70609860qtk.321.1558570854263;
-        Wed, 22 May 2019 17:20:54 -0700 (PDT)
-Received: from ziepe.ca (hlfxns017vw-156-34-49-251.dhcp-dynamic.fibreop.ns.bellaliant.net. [156.34.49.251])
-        by smtp.gmail.com with ESMTPSA id t30sm15637238qtc.80.2019.05.22.17.20.53
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Wed, 22 May 2019 17:20:53 -0700 (PDT)
-Received: from jgg by mlx.ziepe.ca with local (Exim 4.90_1)
-        (envelope-from <jgg@ziepe.ca>)
-        id 1hTbTZ-0001Zh-03; Wed, 22 May 2019 21:20:53 -0300
-Date:   Wed, 22 May 2019 21:20:52 -0300
-From:   Jason Gunthorpe <jgg@ziepe.ca>
-To:     Dave Martin <Dave.Martin@arm.com>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Mark Rutland <mark.rutland@arm.com>, kvm@vger.kernel.org,
-        Szabolcs Nagy <Szabolcs.Nagy@arm.com>,
-        Will Deacon <will.deacon@arm.com>,
-        dri-devel@lists.freedesktop.org, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org,
-        Felix Kuehling <Felix.Kuehling@amd.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Jacob Bramley <Jacob.Bramley@arm.com>,
-        Leon Romanovsky <leon@kernel.org>, linux-rdma@vger.kernel.org,
-        amd-gfx@lists.freedesktop.org, Dmitry Vyukov <dvyukov@google.com>,
-        Evgeniy Stepanov <eugenis@google.com>,
-        linux-media@vger.kernel.org, Kevin Brodsky <kevin.brodsky@arm.com>,
-        Kees Cook <keescook@chromium.org>,
-        Ruben Ayrapetyan <Ruben.Ayrapetyan@arm.com>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        Ramana Radhakrishnan <Ramana.Radhakrishnan@arm.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Kostya Serebryany <kcc@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Yishai Hadas <yishaih@mellanox.com>,
-        linux-kernel@vger.kernel.org,
-        Jens Wiklander <jens.wiklander@linaro.org>,
-        Lee Smith <Lee.Smith@arm.com>,
-        Alexander Deucher <Alexander.Deucher@amd.com>,
+        id S1729654AbfEWCA5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 22 May 2019 22:00:57 -0400
+Received: from mx1.mailbox.org ([80.241.60.212]:47140 "EHLO mx1.mailbox.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727691AbfEWCA5 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 22 May 2019 22:00:57 -0400
+Received: from smtp2.mailbox.org (smtp2.mailbox.org [IPv6:2001:67c:2050:105:465:1:2:0])
+        (using TLSv1.2 with cipher ECDHE-RSA-CHACHA20-POLY1305 (256/256 bits))
+        (No client certificate requested)
+        by mx1.mailbox.org (Postfix) with ESMTPS id 6311252105;
+        Thu, 23 May 2019 04:00:53 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at heinlein-support.de
+Received: from smtp2.mailbox.org ([80.241.60.241])
+        by spamfilter05.heinlein-hosting.de (spamfilter05.heinlein-hosting.de [80.241.56.123]) (amavisd-new, port 10030)
+        with ESMTP id IywjhBoiZwGj; Thu, 23 May 2019 04:00:27 +0200 (CEST)
+Date:   Thu, 23 May 2019 12:00:09 +1000
+From:   Aleksa Sarai <cyphar@cyphar.com>
+To:     Andy Lutomirski <luto@kernel.org>
+Cc:     Al Viro <viro@zeniv.linux.org.uk>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J. Bruce Fields" <bfields@fieldses.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        David Howells <dhowells@redhat.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Christian Brauner <christian@brauner.io>,
+        Eric Biederman <ebiederm@xmission.com>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Christian Koenig <Christian.Koenig@amd.com>,
-        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>
-Subject: Re: [PATCH v15 00/17] arm64: untag user pointers passed to the kernel
-Message-ID: <20190523002052.GF15389@ziepe.ca>
-References: <cover.1557160186.git.andreyknvl@google.com>
- <20190517144931.GA56186@arrakis.emea.arm.com>
- <20190521184856.GC2922@ziepe.ca>
- <20190522134925.GV28398@e103592.cambridge.arm.com>
+        Alexei Starovoitov <ast@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Jann Horn <jannh@google.com>, Tycho Andersen <tycho@tycho.ws>,
+        David Drysdale <drysdale@google.com>,
+        Chanho Min <chanho.min@lge.com>,
+        Oleg Nesterov <oleg@redhat.com>, Aleksa Sarai <asarai@suse.de>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Linux Containers <containers@lists.linux-foundation.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Linux FS Devel <linux-fsdevel@vger.kernel.org>,
+        Linux API <linux-api@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>
+Subject: Re: [PATCH RFC v8 01/10] namei: obey trailing magic-link DAC
+ permissions
+Message-ID: <20190523020009.mi25uziu2b3whf4l@yavin>
+References: <20190520133305.11925-1-cyphar@cyphar.com>
+ <20190520133305.11925-2-cyphar@cyphar.com>
+ <CALCETrVCwe49q5mu=f6jTYNSgosQSjjY5chukMPo6eZtQGqo5g@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="mqlbmyoyuxzxnuxp"
 Content-Disposition: inline
-In-Reply-To: <20190522134925.GV28398@e103592.cambridge.arm.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <CALCETrVCwe49q5mu=f6jTYNSgosQSjjY5chukMPo6eZtQGqo5g@mail.gmail.com>
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, May 22, 2019 at 02:49:28PM +0100, Dave Martin wrote:
-> On Tue, May 21, 2019 at 03:48:56PM -0300, Jason Gunthorpe wrote:
-> > On Fri, May 17, 2019 at 03:49:31PM +0100, Catalin Marinas wrote:
-> > 
-> > > The tagged pointers (whether hwasan or MTE) should ideally be a
-> > > transparent feature for the application writer but I don't think we can
-> > > solve it entirely and make it seamless for the multitude of ioctls().
-> > > I'd say you only opt in to such feature if you know what you are doing
-> > > and the user code takes care of specific cases like ioctl(), hence the
-> > > prctl() proposal even for the hwasan.
-> > 
-> > I'm not sure such a dire view is warrented.. 
-> > 
-> > The ioctl situation is not so bad, other than a few special cases,
-> > most drivers just take a 'void __user *' and pass it as an argument to
-> > some function that accepts a 'void __user *'. sparse et al verify
-> > this. 
-> > 
-> > As long as the core functions do the right thing the drivers will be
-> > OK.
-> > 
-> > The only place things get dicy is if someone casts to unsigned long
-> > (ie for vma work) but I think that reflects that our driver facing
-> > APIs for VMAs are compatible with static analysis (ie I have no
-> > earthly idea why get_user_pages() accepts an unsigned long), not that
-> > this is too hard.
-> 
-> If multiple people will care about this, perhaps we should try to
-> annotate types more explicitly in SYSCALL_DEFINEx() and ABI data
-> structures.
-> 
-> For example, we could have a couple of mutually exclusive modifiers
-> 
-> T __object *
-> T __vaddr * (or U __vaddr)
-> 
-> In the first case the pointer points to an object (in the C sense)
-> that the call may dereference but not use for any other purpose.
 
-How would you use these two differently?
+--mqlbmyoyuxzxnuxp
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-So far the kernel has worked that __user should tag any pointer that
-is from userspace and then you can't do anything with it until you
-transform it into a kernel something
+On 2019-05-22, Andy Lutomirski <luto@kernel.org> wrote:
+> On Mon, May 20, 2019 at 6:34 AM Aleksa Sarai <cyphar@cyphar.com> wrote:
+> > One final exception is given, which is that non-O_PATH file descriptors
+> > are given re-open rights equivalent to the permissions available at
+> > open-time. This allows for O_RDONLY file descriptors to be re-opened
+> > O_RDWR as long as the user had MAY_WRITE access at the time of opening
+> > the O_RDONLY descriptor. This is necessary to avoid breaking userspace
+> > (some of the kernel's own selftests depended on this "feature").
+>=20
+> Can you clarify this exception a bit?  I'd like to make sure it's not
+> such a huge exception that it invalidates the whole point of the
+> patch.
 
-> to tell static analysers the real type of pointers smuggled through
-> UAPI disguised as other types (*cough* KVM, etc.)
+Sure. This exception applies to regular file opens, and the idea is that
+the user had permissions to open the file O_RDWR originally (even if
+they opened it O_RDONLY) so re-opening it O_RDWR later should not be an
+issue (they could've just opened it O_RDWR in the first place). These
+permissions still get masked by nd->opath_mask, so opening a magic-link
+or including an O_PATH doesn't increase the permission set.
 
-Yes, that would help alot, we often have to pass pointers through a
-u64 in the uAPI, and there is no static checker support to make sure
-they are run through the u64_to_user_ptr() helper.
+This does mean that an O_RDONLY open (if the user could've done an
+O_RDWR and still done the open) results in an FMODE_PATH_WRITE. To be
+honest, I'm still on the fence whether this is a great idea or not (and
+I'd prefer to not include it). Though, I don't think it invalidates the
+patch though, since the attack scenario of a read-only file being
+re-opened later as read-write is still blocked.
 
-Jason
+The main reason for including it is the concern that there is some
+program from 1993 running in a basement somewhere that depends on this
+that we don't know about. Though, as a counter-example, I have run this
+patchset (without this exception) on my laptop for a few days without
+any visible issues.
+
+> If you open a file for execute, by actually exec()ing it or by using
+> something like the proposed O_MAYEXEC, and you have inode_permission
+> to write, do you still end up with FMODE_PATH_WRITE? The code looks
+> like it does, and this seems like it might be a mistake.
+
+I'm not sure about the execve(2) example -- after all, you don't get an
+fd from execve(2) and /proc/self/exe still has a mode a+rx.
+
+I'm also not sure what the semantics of a hypothetical O_MAYEXEC would
+be -- but we'd probably want to discuss re-opening semantics when it
+gets included. I would argue that since O_MAYEXEC would likely be merged
+after this, no userspace code would depend on this mis-feature and we
+could decide to not include FMODE_EXECv2 in the handling of additional
+permissions.
+
+As an aside, I did originally implement RESOLVE_UPGRADE_NOEXEC (and the
+corresponding FMODE_PATH_EXEC handling). It worked for the most part,
+though execveat(AT_EMPTY_PATH) would need some additional changes to do
+the may_open_magiclink() checks and I decided against including it here
+until we had an O_MAYEXEC.
+
+> Is there any way for user code to read out these new file mode bits?
+
+There is, but it's not exactly trivial. You could check the mode of
+/proc/self/fd and then compare it to the acc_mode of the "flags"
+/proc/self/fdinfo. The bits present in /proc/self/fd but not in acc_mode
+are the FMODE_PATH_* bits.
+
+However, this is quite an ugly way of doing it. I see two options to
+make it easier:
+
+ 1. We can add additional information to fdinfo so it includes that
+    FMODE_PATH_* bits to indicate how the fd can be upgraded.
+
+ 2. Previously, only the u bits of the fd mode were used to represent the
+    open flags. We could add the FMODE_PATH_* permissions to the g bits
+    and change how the permission check in trailing_symlink() operates.
+
+    The really neat thing here is that we could then know for sure which
+    fmode bits are set during name lookup of a magic-link rather than
+    assuming they're all FMODE_PATH_* bits.
+
+    In addition, userspace that depends on checking the u bits of an fd
+    mode would continue to work (though I'm not aware of any userspace
+    code that does depend on this).
+
+Option 2 seems nicer to me in some respects, but it has the additional
+cost of making the permission check less obvious (it's no longer an
+"inode_permission" and is instead something different with a weird new
+set of semantics). Then again, the modes of magic-links weren't obeyed
+in the first place so I'd argue these semantics are entirely up for us
+to decide.
+
+> What are actual examples of uses for this exception?  Breaking
+> selftests is not, in and of itself, a huge problem.
+
+Not as far as I know. All of the re-opening users I know of do re-opens
+of O_PATH or are re-opening with the same (or fewer) privileges. I also
+ran this for a few days on my laptop without this exception, and didn't
+have any visible issues.
+
+--=20
+Aleksa Sarai
+Senior Software Engineer (Containers)
+SUSE Linux GmbH
+<https://www.cyphar.com/>
+
+--mqlbmyoyuxzxnuxp
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEb6Gz4/mhjNy+aiz1Snvnv3Dem58FAlzl/qUACgkQSnvnv3De
+m5/O+RAA3pdApPb48XJD4ExYCVJOdzKgy9Tfayj+cr3F5V3uVAGmdpXpXSsQHlT7
+wi+V5W6qsycYQPdn+JzKbVHwNaAlmsKNIowUDQ7NMykj+JjfPFPBWmbt1PVe9qej
+z9Q5WSFI3wefQGmQrP8VCKvnAo9WrYpe4ns/76SDEf2wHZD29QrK6ODPK83XJ/E4
+3BOets8Bp+pfM5jko9rRGS5jhvnNNd1zu5NMu4folvCC8AjmwvGBpJomrjSJKeGo
+zevcwNtMtp6ZPQiuCJQDDG7op4o21Fm+daifODOorh/wrrgp39AVTcNnHZrVVUnR
+ac03BeIzK7Y6TjQSRMn5cBfgeB8RrDxtzAtRSyEWGCkmvM9es9+eOEjn6f1dYF96
+sN75Kp1MAsPpLV5cmKSHCrPzRepKYm2vZJWrFE0igwj476z9y+Nx4DJR3iVbjaNS
+oFk4LtujWazXWzUKB7/a/s7IBwjsV6XZqKmbGthlOaEQniBEYyq+KboyHmODZj0n
+7TZnqJW1eXxYbRIEoagCjYwOF+F8m/ViGL4rSIkIgTqZ40+PTXL4372ikSo5TTCj
+6RMH7+NGZMMllmuy6p3/2jZgwZJexnky+G4TsRYH5O0AhcwvLjn0efg7w/zncl+6
+gQkl4hnn30STItTrQD5EfjRoowVNTp4BiPlKu8nmIwZEPB9Rjq0=
+=zmQ7
+-----END PGP SIGNATURE-----
+
+--mqlbmyoyuxzxnuxp--
