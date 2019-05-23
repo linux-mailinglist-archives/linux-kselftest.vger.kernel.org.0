@@ -2,23 +2,23 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F386228CFE
-	for <lists+linux-kselftest@lfdr.de>; Fri, 24 May 2019 00:31:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B4C928D20
+	for <lists+linux-kselftest@lfdr.de>; Fri, 24 May 2019 00:32:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388573AbfEWWbQ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 23 May 2019 18:31:16 -0400
-Received: from ale.deltatee.com ([207.54.116.67]:60086 "EHLO ale.deltatee.com"
+        id S2388696AbfEWWbq (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 23 May 2019 18:31:46 -0400
+Received: from ale.deltatee.com ([207.54.116.67]:59940 "EHLO ale.deltatee.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2388558AbfEWWbQ (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 23 May 2019 18:31:16 -0400
+        id S2387616AbfEWWbL (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 23 May 2019 18:31:11 -0400
 Received: from cgy1-donard.priv.deltatee.com ([172.16.1.31])
         by ale.deltatee.com with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.89)
         (envelope-from <gunthorp@deltatee.com>)
-        id 1hTwEs-00062L-Eu; Thu, 23 May 2019 16:31:13 -0600
+        id 1hTwEs-00062N-Eu; Thu, 23 May 2019 16:31:08 -0600
 Received: from gunthorp by cgy1-donard.priv.deltatee.com with local (Exim 4.89)
         (envelope-from <gunthorp@deltatee.com>)
-        id 1hTwEp-0001S0-GI; Thu, 23 May 2019 16:31:03 -0600
+        id 1hTwEp-0001S2-Nu; Thu, 23 May 2019 16:31:03 -0600
 From:   Logan Gunthorpe <logang@deltatee.com>
 To:     linux-kernel@vger.kernel.org, linux-ntb@googlegroups.com,
         linux-pci@vger.kernel.org, iommu@lists.linux-foundation.org,
@@ -30,9 +30,11 @@ Cc:     Bjorn Helgaas <bhelgaas@google.com>,
         Serge Semin <fancer.lancer@gmail.com>,
         Eric Pilmore <epilmore@gigaio.com>,
         Logan Gunthorpe <logang@deltatee.com>
-Date:   Thu, 23 May 2019 16:30:50 -0600
-Message-Id: <20190523223100.5526-1-logang@deltatee.com>
+Date:   Thu, 23 May 2019 16:30:51 -0600
+Message-Id: <20190523223100.5526-2-logang@deltatee.com>
 X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20190523223100.5526-1-logang@deltatee.com>
+References: <20190523223100.5526-1-logang@deltatee.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 172.16.1.31
@@ -43,7 +45,7 @@ X-Spam-Level:
 X-Spam-Status: No, score=-8.7 required=5.0 tests=ALL_TRUSTED,BAYES_00,
         GREYLIST_ISWHITE,MYRULES_NO_TEXT autolearn=ham autolearn_force=no
         version=3.4.2
-Subject: [PATCH v5 00/10]  Support using MSI interrupts in ntb_transport
+Subject: [PATCH v5 01/10] PCI/MSI: Support allocating virtual MSI interrupts
 X-SA-Exim-Version: 4.2.1 (built Tue, 02 Aug 2016 21:08:31 +0000)
 X-SA-Exim-Scanned: Yes (on ale.deltatee.com)
 Sender: linux-kselftest-owner@vger.kernel.org
@@ -51,159 +53,254 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This is another resend as there has been no feedback since v4.
-Seems Jon has been MIA this past cycle so hopefully he appears on the
-list soon.
+For NTB devices, we want to be able to trigger MSI interrupts
+through a memory window. In these cases we may want to use
+more interrupts than the NTB PCI device has available in its MSI-X
+table.
 
-I've addressed the feedback so far and rebased on the latest kernel
-and would like this to be considered for merging this cycle.
+We allow for this by creating a new 'virtual' interrupt. These
+interrupts are allocated as usual but are not programmed into the
+MSI-X table (as there may not be space for them).
 
-The only outstanding issue I know of is that it still will not work
-with IDT hardware, but ntb_transport doesn't work with IDT hardware
-and there is still no sensible common infrastructure to support
-ntb_peer_mw_set_trans(). Thus, I decline to consider that complication
-in this patchset. However, I'll be happy to review work that adds this
-feature in the future.
+The MSI address and data will then handled through an NTB MSI library
+introduced later in this series.
 
-Also, as the port number and resource index stuff is a bit complicated,
-I made a quick out of tree test fixture to ensure it's correct[1]. As
-an excerise I also wrote some test code[2] using the upcomming KUnit
-feature.
+Signed-off-by: Logan Gunthorpe <logang@deltatee.com>
+Acked-by: Bjorn Helgaas <bhelgaas@google.com>
+---
+ drivers/pci/msi.c   | 54 +++++++++++++++++++++++++++++++++++++--------
+ include/linux/msi.h |  8 +++++++
+ include/linux/pci.h |  9 ++++++++
+ 3 files changed, 62 insertions(+), 9 deletions(-)
 
-Logan
-
-[1] https://repl.it/repls/ExcitingPresentFile
-[2] https://github.com/sbates130272/linux-p2pmem/commits/ntb_kunit
-
---
-
-Changes in v5:
-
-* Rebased onto v5.2-rc1 (plus the patches in ntb-next)
-
---
-
-Changes in v4:
-
-* Rebased onto v5.1-rc6 (No changes)
-
-* Numerous grammar and spelling mistakes spotted by Bjorn
-
---
-
-Changes in v3:
-
-* Rebased onto v5.1-rc1 (Dropped the first two patches as they have
-  been merged, and cleaned up some minor conflicts in the PCI tree)
-
-* Added a new patch (#3) to calculate logical port numbers that
-  are port numbers from 0 to (number of ports - 1). This is
-  then used in ntb_peer_resource_idx() to fix the issues brought
-  up by Serge.
-
-* Fixed missing __iomem and iowrite calls (as noticed by Serge)
-
-* Added patch 10 which describes ntb_msi_test in the documentation
-  file (as requested by Serge)
-
-* A couple other minor nits and documentation fixes
-
---
-
-Changes in v2:
-
-* Cleaned up the changes in intel_irq_remapping.c to make them
-  less confusing and add a comment. (Per discussion with Jacob and
-  Joerg)
-
-* Fixed a nit from Bjorn and collected his Ack
-
-* Added a Kconfig dependancy on CONFIG_PCI_MSI for CONFIG_NTB_MSI
-  as the Kbuild robot hit a random config that didn't build
-  without it.
-
-* Worked in a callback for when the MSI descriptor changes so that
-  the clients can resend the new address and data values to the peer.
-  On my test system this was never necessary, but there may be
-  other platforms where this can occur. I tested this by hacking
-  in a path to rewrite the MSI descriptor when I change the cpu
-  affinity of an IRQ. There's a bit of uncertainty over the latency
-  of the change, but without hardware this can acctually occur on
-  we can't test this. This was the result of a discussion with Dave.
-
---
-
-This patch series adds optional support for using MSI interrupts instead
-of NTB doorbells in ntb_transport. This is desirable seeing doorbells on
-current hardware are quite slow and therefore switching to MSI interrupts
-provides a significant performance gain. On switchtec hardware, a simple
-apples-to-apples comparison shows ntb_netdev/iperf numbers going from
-3.88Gb/s to 14.1Gb/s when switching to MSI interrupts.
-
-To do this, a couple changes are required outside of the NTB tree:
-
-1) The IOMMU must know to accept MSI requests from aliased bused numbers
-seeing NTB hardware typically sends proxied request IDs through
-additional requester IDs. The first patch in this series adds support
-for the Intel IOMMU. A quirk to add these aliases for switchtec hardware
-was already accepted. See commit ad281ecf1c7d ("PCI: Add DMA alias quirk
-for Microsemi Switchtec NTB") for a description of NTB proxy IDs and why
-this is necessary.
-
-2) NTB transport (and other clients) may often need more MSI interrupts
-than the NTB hardware actually advertises support for. However, seeing
-these interrupts will not be triggered by the hardware but through an
-NTB memory window, the hardware does not actually need support or need
-to know about them. Therefore we add the concept of Virtual MSI
-interrupts which are allocated just like any other MSI interrupt but
-are not programmed into the hardware's MSI table. This is done in
-Patch 2 and then made use of in Patch 3.
-
-The remaining patches in this series add a library for dealing with MSI
-interrupts, a test client and finally support in ntb_transport.
-
-The series is based off of v5.1-rc6 plus the patches in ntb-next.
-A git repo is available here:
-
-https://github.com/sbates130272/linux-p2pmem/ ntb_transport_msi_v4
-
-Thanks,
-
-Logan
-
---
-
-Logan Gunthorpe (10):
-  PCI/MSI: Support allocating virtual MSI interrupts
-  PCI/switchtec: Add module parameter to request more interrupts
-  NTB: Introduce helper functions to calculate logical port number
-  NTB: Introduce functions to calculate multi-port resource index
-  NTB: Rename ntb.c to support multiple source files in the module
-  NTB: Introduce MSI library
-  NTB: Introduce NTB MSI Test Client
-  NTB: Add ntb_msi_test support to ntb_test
-  NTB: Add MSI interrupt support to ntb_transport
-  NTB: Describe the ntb_msi_test client in the documentation.
-
- Documentation/ntb.txt                   |  27 ++
- drivers/ntb/Kconfig                     |  11 +
- drivers/ntb/Makefile                    |   3 +
- drivers/ntb/{ntb.c => core.c}           |   0
- drivers/ntb/msi.c                       | 415 +++++++++++++++++++++++
- drivers/ntb/ntb_transport.c             | 169 ++++++++-
- drivers/ntb/test/Kconfig                |   9 +
- drivers/ntb/test/Makefile               |   1 +
- drivers/ntb/test/ntb_msi_test.c         | 433 ++++++++++++++++++++++++
- drivers/pci/msi.c                       |  54 ++-
- drivers/pci/switch/switchtec.c          |  12 +-
- include/linux/msi.h                     |   8 +
- include/linux/ntb.h                     | 196 ++++++++++-
- include/linux/pci.h                     |   9 +
- tools/testing/selftests/ntb/ntb_test.sh |  54 ++-
- 15 files changed, 1386 insertions(+), 15 deletions(-)
- rename drivers/ntb/{ntb.c => core.c} (100%)
- create mode 100644 drivers/ntb/msi.c
- create mode 100644 drivers/ntb/test/ntb_msi_test.c
-
---
+diff --git a/drivers/pci/msi.c b/drivers/pci/msi.c
+index 73986825d221..668bc16ef4d1 100644
+--- a/drivers/pci/msi.c
++++ b/drivers/pci/msi.c
+@@ -192,6 +192,9 @@ static void msi_mask_irq(struct msi_desc *desc, u32 mask, u32 flag)
+ 
+ static void __iomem *pci_msix_desc_addr(struct msi_desc *desc)
+ {
++	if (desc->msi_attrib.is_virtual)
++		return NULL;
++
+ 	return desc->mask_base +
+ 		desc->msi_attrib.entry_nr * PCI_MSIX_ENTRY_SIZE;
+ }
+@@ -206,14 +209,19 @@ static void __iomem *pci_msix_desc_addr(struct msi_desc *desc)
+ u32 __pci_msix_desc_mask_irq(struct msi_desc *desc, u32 flag)
+ {
+ 	u32 mask_bits = desc->masked;
++	void __iomem *desc_addr;
+ 
+ 	if (pci_msi_ignore_mask)
+ 		return 0;
++	desc_addr = pci_msix_desc_addr(desc);
++	if (!desc_addr)
++		return 0;
+ 
+ 	mask_bits &= ~PCI_MSIX_ENTRY_CTRL_MASKBIT;
+ 	if (flag)
+ 		mask_bits |= PCI_MSIX_ENTRY_CTRL_MASKBIT;
+-	writel(mask_bits, pci_msix_desc_addr(desc) + PCI_MSIX_ENTRY_VECTOR_CTRL);
++
++	writel(mask_bits, desc_addr + PCI_MSIX_ENTRY_VECTOR_CTRL);
+ 
+ 	return mask_bits;
+ }
+@@ -273,6 +281,11 @@ void __pci_read_msi_msg(struct msi_desc *entry, struct msi_msg *msg)
+ 	if (entry->msi_attrib.is_msix) {
+ 		void __iomem *base = pci_msix_desc_addr(entry);
+ 
++		if (!base) {
++			WARN_ON(1);
++			return;
++		}
++
+ 		msg->address_lo = readl(base + PCI_MSIX_ENTRY_LOWER_ADDR);
+ 		msg->address_hi = readl(base + PCI_MSIX_ENTRY_UPPER_ADDR);
+ 		msg->data = readl(base + PCI_MSIX_ENTRY_DATA);
+@@ -303,6 +316,9 @@ void __pci_write_msi_msg(struct msi_desc *entry, struct msi_msg *msg)
+ 	} else if (entry->msi_attrib.is_msix) {
+ 		void __iomem *base = pci_msix_desc_addr(entry);
+ 
++		if (!base)
++			goto skip;
++
+ 		writel(msg->address_lo, base + PCI_MSIX_ENTRY_LOWER_ADDR);
+ 		writel(msg->address_hi, base + PCI_MSIX_ENTRY_UPPER_ADDR);
+ 		writel(msg->data, base + PCI_MSIX_ENTRY_DATA);
+@@ -327,7 +343,13 @@ void __pci_write_msi_msg(struct msi_desc *entry, struct msi_msg *msg)
+ 					      msg->data);
+ 		}
+ 	}
++
++skip:
+ 	entry->msg = *msg;
++
++	if (entry->write_msi_msg)
++		entry->write_msi_msg(entry, entry->write_msi_msg_data);
++
+ }
+ 
+ void pci_write_msi_msg(unsigned int irq, struct msi_msg *msg)
+@@ -550,6 +572,7 @@ msi_setup_entry(struct pci_dev *dev, int nvec, struct irq_affinity *affd)
+ 
+ 	entry->msi_attrib.is_msix	= 0;
+ 	entry->msi_attrib.is_64		= !!(control & PCI_MSI_FLAGS_64BIT);
++	entry->msi_attrib.is_virtual    = 0;
+ 	entry->msi_attrib.entry_nr	= 0;
+ 	entry->msi_attrib.maskbit	= !!(control & PCI_MSI_FLAGS_MASKBIT);
+ 	entry->msi_attrib.default_irq	= dev->irq;	/* Save IOAPIC IRQ */
+@@ -674,6 +697,7 @@ static int msix_setup_entries(struct pci_dev *dev, void __iomem *base,
+ 	struct irq_affinity_desc *curmsk, *masks = NULL;
+ 	struct msi_desc *entry;
+ 	int ret, i;
++	int vec_count = pci_msix_vec_count(dev);
+ 
+ 	if (affd)
+ 		masks = irq_create_affinity_masks(nvec, affd);
+@@ -696,6 +720,10 @@ static int msix_setup_entries(struct pci_dev *dev, void __iomem *base,
+ 			entry->msi_attrib.entry_nr = entries[i].entry;
+ 		else
+ 			entry->msi_attrib.entry_nr = i;
++
++		entry->msi_attrib.is_virtual =
++			entry->msi_attrib.entry_nr >= vec_count;
++
+ 		entry->msi_attrib.default_irq	= dev->irq;
+ 		entry->mask_base		= base;
+ 
+@@ -714,12 +742,19 @@ static void msix_program_entries(struct pci_dev *dev,
+ {
+ 	struct msi_desc *entry;
+ 	int i = 0;
++	void __iomem *desc_addr;
+ 
+ 	for_each_pci_msi_entry(entry, dev) {
+ 		if (entries)
+ 			entries[i++].vector = entry->irq;
+-		entry->masked = readl(pci_msix_desc_addr(entry) +
+-				PCI_MSIX_ENTRY_VECTOR_CTRL);
++
++		desc_addr = pci_msix_desc_addr(entry);
++		if (desc_addr)
++			entry->masked = readl(desc_addr +
++					      PCI_MSIX_ENTRY_VECTOR_CTRL);
++		else
++			entry->masked = 0;
++
+ 		msix_mask_irq(entry, 1);
+ 	}
+ }
+@@ -932,7 +967,7 @@ int pci_msix_vec_count(struct pci_dev *dev)
+ EXPORT_SYMBOL(pci_msix_vec_count);
+ 
+ static int __pci_enable_msix(struct pci_dev *dev, struct msix_entry *entries,
+-			     int nvec, struct irq_affinity *affd)
++			     int nvec, struct irq_affinity *affd, int flags)
+ {
+ 	int nr_entries;
+ 	int i, j;
+@@ -943,7 +978,7 @@ static int __pci_enable_msix(struct pci_dev *dev, struct msix_entry *entries,
+ 	nr_entries = pci_msix_vec_count(dev);
+ 	if (nr_entries < 0)
+ 		return nr_entries;
+-	if (nvec > nr_entries)
++	if (nvec > nr_entries && !(flags & PCI_IRQ_VIRTUAL))
+ 		return nr_entries;
+ 
+ 	if (entries) {
+@@ -1079,7 +1114,8 @@ EXPORT_SYMBOL(pci_enable_msi);
+ 
+ static int __pci_enable_msix_range(struct pci_dev *dev,
+ 				   struct msix_entry *entries, int minvec,
+-				   int maxvec, struct irq_affinity *affd)
++				   int maxvec, struct irq_affinity *affd,
++				   int flags)
+ {
+ 	int rc, nvec = maxvec;
+ 
+@@ -1096,7 +1132,7 @@ static int __pci_enable_msix_range(struct pci_dev *dev,
+ 				return -ENOSPC;
+ 		}
+ 
+-		rc = __pci_enable_msix(dev, entries, nvec, affd);
++		rc = __pci_enable_msix(dev, entries, nvec, affd, flags);
+ 		if (rc == 0)
+ 			return nvec;
+ 
+@@ -1127,7 +1163,7 @@ static int __pci_enable_msix_range(struct pci_dev *dev,
+ int pci_enable_msix_range(struct pci_dev *dev, struct msix_entry *entries,
+ 		int minvec, int maxvec)
+ {
+-	return __pci_enable_msix_range(dev, entries, minvec, maxvec, NULL);
++	return __pci_enable_msix_range(dev, entries, minvec, maxvec, NULL, 0);
+ }
+ EXPORT_SYMBOL(pci_enable_msix_range);
+ 
+@@ -1167,7 +1203,7 @@ int pci_alloc_irq_vectors_affinity(struct pci_dev *dev, unsigned int min_vecs,
+ 
+ 	if (flags & PCI_IRQ_MSIX) {
+ 		msix_vecs = __pci_enable_msix_range(dev, NULL, min_vecs,
+-						    max_vecs, affd);
++						    max_vecs, affd, flags);
+ 		if (msix_vecs > 0)
+ 			return msix_vecs;
+ 	}
+diff --git a/include/linux/msi.h b/include/linux/msi.h
+index 7e9b81c3b50d..c278ae8760df 100644
+--- a/include/linux/msi.h
++++ b/include/linux/msi.h
+@@ -56,6 +56,10 @@ struct fsl_mc_msi_desc {
+  * @msg:	The last set MSI message cached for reuse
+  * @affinity:	Optional pointer to a cpu affinity mask for this descriptor
+  *
++ * @write_msi_msg:	Callback that may be called when the MSI message
++ *			address or data changes
++ * @write_msi_msg_data:	Data parameter for the callback.
++ *
+  * @masked:	[PCI MSI/X] Mask bits
+  * @is_msix:	[PCI MSI/X] True if MSI-X
+  * @multiple:	[PCI MSI/X] log2 num of messages allocated
+@@ -78,6 +82,9 @@ struct msi_desc {
+ 	struct msi_msg			msg;
+ 	struct irq_affinity_desc	*affinity;
+ 
++	void (*write_msi_msg)(struct msi_desc *entry, void *data);
++	void *write_msi_msg_data;
++
+ 	union {
+ 		/* PCI MSI/X specific data */
+ 		struct {
+@@ -88,6 +95,7 @@ struct msi_desc {
+ 				u8	multi_cap	: 3;
+ 				u8	maskbit		: 1;
+ 				u8	is_64		: 1;
++				u8	is_virtual	: 1;
+ 				u16	entry_nr;
+ 				unsigned default_irq;
+ 			} msi_attrib;
+diff --git a/include/linux/pci.h b/include/linux/pci.h
+index 77448215ef5b..c482aaa8e970 100644
+--- a/include/linux/pci.h
++++ b/include/linux/pci.h
+@@ -1355,6 +1355,15 @@ int pci_set_vga_state(struct pci_dev *pdev, bool decode,
+ #define PCI_IRQ_MSI		(1 << 1) /* Allow MSI interrupts */
+ #define PCI_IRQ_MSIX		(1 << 2) /* Allow MSI-X interrupts */
+ #define PCI_IRQ_AFFINITY	(1 << 3) /* Auto-assign affinity */
++
++/*
++ * Virtual interrupts allow for more interrupts to be allocated
++ * than the device has interrupts for. These are not programmed
++ * into the device's MSI-X table and must be handled by some
++ * other driver means.
++ */
++#define PCI_IRQ_VIRTUAL		(1 << 4)
++
+ #define PCI_IRQ_ALL_TYPES \
+ 	(PCI_IRQ_LEGACY | PCI_IRQ_MSI | PCI_IRQ_MSIX)
+ 
+-- 
 2.20.1
+
