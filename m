@@ -2,96 +2,165 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 31A6327973
-	for <lists+linux-kselftest@lfdr.de>; Thu, 23 May 2019 11:41:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 014F5279B0
+	for <lists+linux-kselftest@lfdr.de>; Thu, 23 May 2019 11:50:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726299AbfEWJlG (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 23 May 2019 05:41:06 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:39916 "EHLO mx1.redhat.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726230AbfEWJlG (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 23 May 2019 05:41:06 -0400
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id 187FB3086228;
-        Thu, 23 May 2019 09:41:06 +0000 (UTC)
-Received: from kamzik.brq.redhat.com (unknown [10.43.2.160])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 9DDF21802F;
-        Thu, 23 May 2019 09:41:04 +0000 (UTC)
-Date:   Thu, 23 May 2019 11:41:02 +0200
-From:   Andrew Jones <drjones@redhat.com>
-To:     Thomas Huth <thuth@redhat.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Radim =?utf-8?B?S3LEjW3DocWZ?= <rkrcmar@redhat.com>,
-        kvm@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] KVM: selftests: Wrap vcpu_nested_state_get/set functions
- with x86 guard
-Message-ID: <20190523094102.cn2xpnofhl2fltcc@kamzik.brq.redhat.com>
-References: <20190523093114.18182-1-thuth@redhat.com>
+        id S1729976AbfEWJu2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 23 May 2019 05:50:28 -0400
+Received: from new1-smtp.messagingengine.com ([66.111.4.221]:53565 "EHLO
+        new1-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1729966AbfEWJu2 (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 23 May 2019 05:50:28 -0400
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 8CD313597E;
+        Thu, 23 May 2019 05:50:25 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute6.internal (MEProxy); Thu, 23 May 2019 05:50:25 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-transfer-encoding:content-type
+        :date:from:message-id:mime-version:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=cSudYt
+        J5zztz5jsNkMgzWScv4iDncmtyA0S8L/aqOOw=; b=nrlpuG1VvG3K2xefeb9smA
+        wbtbo4T1p1Tu+ffDIK2Eo1vep8a/2wX9JjVDAaRVWFQxaS5WePCCl57OBkuWCbMN
+        OLgBxX/entWbsmVkwqITNpmXr3AOuouBdJfJ02Sao7guBCj2UmpgI5ETBm3ZJkYl
+        6kp+MBXIdkO+v0cv5iBE8ljaZQ0RHwOh97AZj//MxnVh9eCbpaQtDoOgE//5jGUf
+        k4uijs7wZRKsdpcLwcTOAKO37XoEPkm4sFkSlRWGWqN3gchtoew/4w8LBSzu4i0V
+        7kKazi1rsZnvL4DKJQWJDqhT3y4zGfnLwGOsjzWfFTM4pFlW0X79k0l8pSzmVvAA
+        ==
+X-ME-Sender: <xms:3GzmXBoyXdTTrahpm7GjEci0WQQco20fF1RUF3Zecp_SHpTHRg1Jaw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduuddruddugedgvdduucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucenucfjughrpefuvffhfffkgggtgfesthekredttd
+    dtlfenucfhrhhomhepoehgrhgvghhkhheslhhinhhugihfohhunhgurghtihhonhdrohhr
+    gheqnecukfhppeekfedrkeeirdekledruddtjeenucfrrghrrghmpehmrghilhhfrhhomh
+    epghhrvghgsehkrhhorghhrdgtohhmnecuvehluhhsthgvrhfuihiivgeptd
+X-ME-Proxy: <xmx:3GzmXPTnyt8LQp8P8o5vDRP2EDwJyJjPOR0PJKhSH8jg7nBXPvK6iA>
+    <xmx:3GzmXIpxnJ2QB4S6jpTS1y_VE6D1AyjvSAygPXvelMF6o00p1yCIBQ>
+    <xmx:3GzmXKxsRWSm543njrVyGSTVFGB5KHkvFvGgsSq7DD-mqEhGzY8QGw>
+    <xmx:4WzmXPDADh3c9T2Crk9bfrtmfphb82wKWBDb54KDiRTrnjI9JG4N2A>
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        by mail.messagingengine.com (Postfix) with ESMTPA id 49B17380083;
+        Thu, 23 May 2019 05:50:20 -0400 (EDT)
+Subject: FAILED: patch "[PATCH] x86_64: Allow breakpoints to emulate call instructions" failed to apply to 4.9-stable tree
+To:     peterz@infradead.org, bigeasy@linutronix.de, bp@alien8.de,
+        hpa@zytor.com, jgross@suse.com, jikos@kernel.org,
+        joe.lawrence@redhat.com, jpoimboe@redhat.com, jroedel@suse.de,
+        konrad.wilk@oracle.com, linux-kselftest@vger.kernel.org,
+        luto@kernel.org, mbenes@suse.cz, mhiramat@kernel.org,
+        mingo@redhat.com, nayna@linux.ibm.com, ndesaulniers@google.com,
+        nstange@suse.de, pmladek@suse.com, rostedt@goodmis.org,
+        shuah@kernel.org, tglx@linutronix.de, tim.c.chen@linux.intel.com,
+        x86@kernel.org, yamada.masahiro@socionext.com, zohar@linux.ibm.com
+Cc:     <stable@vger.kernel.org>
+From:   <gregkh@linuxfoundation.org>
+Date:   Thu, 23 May 2019 11:50:18 +0200
+Message-ID: <15586050184156@kroah.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190523093114.18182-1-thuth@redhat.com>
-User-Agent: NeoMutt/20180716
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
-X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.42]); Thu, 23 May 2019 09:41:06 +0000 (UTC)
+Content-Type: text/plain; charset=ANSI_X3.4-1968
+Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, May 23, 2019 at 11:31:14AM +0200, Thomas Huth wrote:
-> struct kvm_nested_state is only available on x86 so far. To be able
-> to compile the code on other architectures as well, we need to wrap
-> the related code with #ifdefs.
-> 
-> Signed-off-by: Thomas Huth <thuth@redhat.com>
-> ---
->  tools/testing/selftests/kvm/include/kvm_util.h | 2 ++
->  tools/testing/selftests/kvm/lib/kvm_util.c     | 2 ++
->  2 files changed, 4 insertions(+)
-> 
-> diff --git a/tools/testing/selftests/kvm/include/kvm_util.h b/tools/testing/selftests/kvm/include/kvm_util.h
-> index 8c6b9619797d..a5a4b28f14d8 100644
-> --- a/tools/testing/selftests/kvm/include/kvm_util.h
-> +++ b/tools/testing/selftests/kvm/include/kvm_util.h
-> @@ -118,10 +118,12 @@ void vcpu_events_get(struct kvm_vm *vm, uint32_t vcpuid,
->  		     struct kvm_vcpu_events *events);
->  void vcpu_events_set(struct kvm_vm *vm, uint32_t vcpuid,
->  		     struct kvm_vcpu_events *events);
-> +#ifdef __x86_64__
->  void vcpu_nested_state_get(struct kvm_vm *vm, uint32_t vcpuid,
->  			   struct kvm_nested_state *state);
->  int vcpu_nested_state_set(struct kvm_vm *vm, uint32_t vcpuid,
->  			  struct kvm_nested_state *state, bool ignore_error);
-> +#endif
->  
->  const char *exit_reason_str(unsigned int exit_reason);
->  
-> diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
-> index cf62de377310..633b22df46a4 100644
-> --- a/tools/testing/selftests/kvm/lib/kvm_util.c
-> +++ b/tools/testing/selftests/kvm/lib/kvm_util.c
-> @@ -1248,6 +1248,7 @@ void vcpu_events_set(struct kvm_vm *vm, uint32_t vcpuid,
->  		ret, errno);
->  }
->  
-> +#ifdef __x86_64__
->  void vcpu_nested_state_get(struct kvm_vm *vm, uint32_t vcpuid,
->  			   struct kvm_nested_state *state)
->  {
-> @@ -1279,6 +1280,7 @@ int vcpu_nested_state_set(struct kvm_vm *vm, uint32_t vcpuid,
->  
->  	return ret;
->  }
-> +#endif
->  
->  /*
->   * VM VCPU System Regs Get
-> -- 
-> 2.21.0
->
 
-Reviewed-by: Andrew Jones <drjones@redhat.com>
+The patch below does not apply to the 4.9-stable tree.
+If someone wants it applied there, or to any other stable or longterm
+tree, then please email the backport, including the original git commit
+id to <stable@vger.kernel.org>.
+
+thanks,
+
+greg k-h
+
+------------------ original commit in Linus's tree ------------------
+
+From 4b33dadf37666c0860b88f9e52a16d07bf6d0b03 Mon Sep 17 00:00:00 2001
+From: Peter Zijlstra <peterz@infradead.org>
+Date: Wed, 1 May 2019 15:11:17 +0200
+Subject: [PATCH] x86_64: Allow breakpoints to emulate call instructions
+
+In order to allow breakpoints to emulate call instructions, they need to push
+the return address onto the stack. The x86_64 int3 handler adds a small gap
+to allow the stack to grow some. Use this gap to add the return address to
+be able to emulate a call instruction at the breakpoint location.
+
+These helper functions are added:
+
+  int3_emulate_jmp(): changes the location of the regs->ip to return there.
+
+ (The next two are only for x86_64)
+  int3_emulate_push(): to push the address onto the gap in the stack
+  int3_emulate_call(): push the return address and change regs->ip
+
+Cc: Andy Lutomirski <luto@kernel.org>
+Cc: Nicolai Stange <nstange@suse.de>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: Borislav Petkov <bp@alien8.de>
+Cc: "H. Peter Anvin" <hpa@zytor.com>
+Cc: the arch/x86 maintainers <x86@kernel.org>
+Cc: Josh Poimboeuf <jpoimboe@redhat.com>
+Cc: Jiri Kosina <jikos@kernel.org>
+Cc: Miroslav Benes <mbenes@suse.cz>
+Cc: Petr Mladek <pmladek@suse.com>
+Cc: Joe Lawrence <joe.lawrence@redhat.com>
+Cc: Shuah Khan <shuah@kernel.org>
+Cc: Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>
+Cc: Tim Chen <tim.c.chen@linux.intel.com>
+Cc: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc: Mimi Zohar <zohar@linux.ibm.com>
+Cc: Juergen Gross <jgross@suse.com>
+Cc: Nick Desaulniers <ndesaulniers@google.com>
+Cc: Nayna Jain <nayna@linux.ibm.com>
+Cc: Masahiro Yamada <yamada.masahiro@socionext.com>
+Cc: Joerg Roedel <jroedel@suse.de>
+Cc: "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>
+Cc: stable@vger.kernel.org
+Fixes: b700e7f03df5 ("livepatch: kernel: add support for live patching")
+Tested-by: Nicolai Stange <nstange@suse.de>
+Reviewed-by: Nicolai Stange <nstange@suse.de>
+Reviewed-by: Masami Hiramatsu <mhiramat@kernel.org>
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+[ Modified to only work for x86_64 and added comment to int3_emulate_push() ]
+Signed-off-by: Steven Rostedt (VMware) <rostedt@goodmis.org>
+
+diff --git a/arch/x86/include/asm/text-patching.h b/arch/x86/include/asm/text-patching.h
+index e85ff65c43c3..05861cc08787 100644
+--- a/arch/x86/include/asm/text-patching.h
++++ b/arch/x86/include/asm/text-patching.h
+@@ -39,4 +39,32 @@ extern int poke_int3_handler(struct pt_regs *regs);
+ extern void *text_poke_bp(void *addr, const void *opcode, size_t len, void *handler);
+ extern int after_bootmem;
+ 
++static inline void int3_emulate_jmp(struct pt_regs *regs, unsigned long ip)
++{
++	regs->ip = ip;
++}
++
++#define INT3_INSN_SIZE 1
++#define CALL_INSN_SIZE 5
++
++#ifdef CONFIG_X86_64
++static inline void int3_emulate_push(struct pt_regs *regs, unsigned long val)
++{
++	/*
++	 * The int3 handler in entry_64.S adds a gap between the
++	 * stack where the break point happened, and the saving of
++	 * pt_regs. We can extend the original stack because of
++	 * this gap. See the idtentry macro's create_gap option.
++	 */
++	regs->sp -= sizeof(unsigned long);
++	*(unsigned long *)regs->sp = val;
++}
++
++static inline void int3_emulate_call(struct pt_regs *regs, unsigned long func)
++{
++	int3_emulate_push(regs, regs->ip - INT3_INSN_SIZE + CALL_INSN_SIZE);
++	int3_emulate_jmp(regs, func);
++}
++#endif
++
+ #endif /* _ASM_X86_TEXT_PATCHING_H */
+
