@@ -2,111 +2,108 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C65EE2846E
-	for <lists+linux-kselftest@lfdr.de>; Thu, 23 May 2019 19:00:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BDE6C284C3
+	for <lists+linux-kselftest@lfdr.de>; Thu, 23 May 2019 19:20:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731181AbfEWRAh (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 23 May 2019 13:00:37 -0400
-Received: from usa-sjc-mx-foss1.foss.arm.com ([217.140.101.70]:51018 "EHLO
-        foss.arm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730918AbfEWRAg (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 23 May 2019 13:00:36 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.72.51.249])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3B21C374;
-        Thu, 23 May 2019 10:00:36 -0700 (PDT)
-Received: from mbp (usa-sjc-mx-foss1.foss.arm.com [217.140.101.70])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id DF1633F5AF;
-        Thu, 23 May 2019 10:00:29 -0700 (PDT)
-Date:   Thu, 23 May 2019 18:00:27 +0100
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     enh <enh@google.com>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Evgenii Stepanov <eugenis@google.com>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        Khalid Aziz <khalid.aziz@oracle.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-rdma@vger.kernel.org, linux-media@vger.kernel.org,
-        kvm@vger.kernel.org,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Will Deacon <will.deacon@arm.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Yishai Hadas <yishaih@mellanox.com>,
-        Felix Kuehling <Felix.Kuehling@amd.com>,
-        Alexander Deucher <Alexander.Deucher@amd.com>,
-        Christian Koenig <Christian.Koenig@amd.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Jens Wiklander <jens.wiklander@linaro.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Kostya Serebryany <kcc@google.com>,
-        Lee Smith <Lee.Smith@arm.com>,
-        Ramana Radhakrishnan <Ramana.Radhakrishnan@arm.com>,
-        Jacob Bramley <Jacob.Bramley@arm.com>,
-        Ruben Ayrapetyan <Ruben.Ayrapetyan@arm.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
-        Dave Martin <Dave.Martin@arm.com>,
-        Kevin Brodsky <kevin.brodsky@arm.com>,
-        Szabolcs Nagy <Szabolcs.Nagy@arm.com>
-Subject: Re: [PATCH v15 00/17] arm64: untag user pointers passed to the kernel
-Message-ID: <20190523170026.nso2me5qnrrjbrdr@mbp>
-References: <20190517144931.GA56186@arrakis.emea.arm.com>
- <CAFKCwrj6JEtp4BzhqO178LFJepmepoMx=G+YdC8sqZ3bcBp3EQ@mail.gmail.com>
- <20190521182932.sm4vxweuwo5ermyd@mbp>
- <201905211633.6C0BF0C2@keescook>
- <20190522101110.m2stmpaj7seezveq@mbp>
- <CAJgzZoosKBwqXRyA6fb8QQSZXFqfHqe9qO9je5TogHhzuoGXJQ@mail.gmail.com>
- <20190522163527.rnnc6t4tll7tk5zw@mbp>
- <201905221316.865581CF@keescook>
- <20190523144449.waam2mkyzhjpqpur@mbp>
- <CAJgzZoqX--Kd9=Kjpnfz-5cjVJ=TdsXM5dJM_EjLFKniVbny2w@mail.gmail.com>
+        id S1731121AbfEWRUM (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 23 May 2019 13:20:12 -0400
+Received: from mx1.redhat.com ([209.132.183.28]:39304 "EHLO mx1.redhat.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1731106AbfEWRUM (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 23 May 2019 13:20:12 -0400
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mx1.redhat.com (Postfix) with ESMTPS id 597C46EF;
+        Thu, 23 May 2019 17:20:12 +0000 (UTC)
+Received: from kamzik.brq.redhat.com (unknown [10.43.2.160])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 9C145100200D;
+        Thu, 23 May 2019 17:20:06 +0000 (UTC)
+Date:   Thu, 23 May 2019 19:20:04 +0200
+From:   Andrew Jones <drjones@redhat.com>
+To:     Thomas Huth <thuth@redhat.com>
+Cc:     Christian Borntraeger <borntraeger@de.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>, kvm@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Radim =?utf-8?B?S3LEjW3DocWZ?= <rkrcmar@redhat.com>,
+        Shuah Khan <shuah@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-s390@vger.kernel.org
+Subject: Re: [PATCH 4/9] KVM: selftests: Introduce a VM_MODE_DEFAULT macro
+ for the default bits
+Message-ID: <20190523172004.yeo5wtugofoh5mid@kamzik.brq.redhat.com>
+References: <20190523164309.13345-1-thuth@redhat.com>
+ <20190523164309.13345-5-thuth@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAJgzZoqX--Kd9=Kjpnfz-5cjVJ=TdsXM5dJM_EjLFKniVbny2w@mail.gmail.com>
-User-Agent: NeoMutt/20170113 (1.7.2)
+In-Reply-To: <20190523164309.13345-5-thuth@redhat.com>
+User-Agent: NeoMutt/20180716
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
+X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.29]); Thu, 23 May 2019 17:20:12 +0000 (UTC)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, May 23, 2019 at 08:44:12AM -0700, enh wrote:
-> On Thu, May 23, 2019 at 7:45 AM Catalin Marinas <catalin.marinas@arm.com> wrote:
-> > On Wed, May 22, 2019 at 01:47:36PM -0700, Kees Cook wrote:
-> > > For userspace, how would a future binary choose TBI over MTE? If it's
-> > > a library issue, we can't use an ELF bit, since the choice may be
-> > > "late" after ELF load (this implies the need for a prctl().) If it's
-> > > binary-only ("built with HWKASan") then an ELF bit seems sufficient.
-> > > And without the marking, I'd expect the kernel to enforce MTE when
-> > > there are high bits.
-> >
-> > The current plan is that a future binary issues a prctl(), after
-> > checking the HWCAP_MTE bit (as I replied to Elliot, the MTE instructions
-> > are not in the current NOP space). I'd expect this to be done by the
-> > libc or dynamic loader under the assumption that the binaries it loads
-> > do _not_ use the top pointer byte for anything else.
+On Thu, May 23, 2019 at 06:43:04PM +0200, Thomas Huth wrote:
+> This will be required later for tests like the kvm_create_max_vcpus
+> test that do not use the vm_create_default() function.
 > 
-> yeah, it sounds like to support hwasan and MTE, the dynamic linker
-> will need to not use either itself.
+> Signed-off-by: Thomas Huth <thuth@redhat.com>
+> ---
+>  tools/testing/selftests/kvm/include/kvm_util.h      | 6 ++++++
+>  tools/testing/selftests/kvm/lib/aarch64/processor.c | 2 +-
+>  tools/testing/selftests/kvm/lib/x86_64/processor.c  | 2 +-
+>  3 files changed, 8 insertions(+), 2 deletions(-)
 > 
-> > With hwasan compiled objects this gets more confusing (any ELF note
-> > to identify them?).
-> 
-> no, at the moment code that wants to know checks for the presence of
-> __hwasan_init. (and bionic doesn't actually look at any ELF notes
-> right now.) but we can always add something if we need to.
+> diff --git a/tools/testing/selftests/kvm/include/kvm_util.h b/tools/testing/selftests/kvm/include/kvm_util.h
+> index b8bf961074fe..b6eb6471e6b2 100644
+> --- a/tools/testing/selftests/kvm/include/kvm_util.h
+> +++ b/tools/testing/selftests/kvm/include/kvm_util.h
+> @@ -43,6 +43,12 @@ enum vm_guest_mode {
+>  	NUM_VM_MODES,
+>  };
+>  
+> +#ifdef __aarch64__
+> +#define VM_MODE_DEFAULT VM_MODE_P40V48_4K
+> +#else
+> +#define VM_MODE_DEFAULT VM_MODE_P52V48_4K
+> +#endif
+> +
+>  #define vm_guest_mode_string(m) vm_guest_mode_string[m]
+>  extern const char * const vm_guest_mode_string[];
+>  
+> diff --git a/tools/testing/selftests/kvm/lib/aarch64/processor.c b/tools/testing/selftests/kvm/lib/aarch64/processor.c
+> index fa6cd340137c..596ccaf09cb6 100644
+> --- a/tools/testing/selftests/kvm/lib/aarch64/processor.c
+> +++ b/tools/testing/selftests/kvm/lib/aarch64/processor.c
+> @@ -226,7 +226,7 @@ struct kvm_vm *vm_create_default(uint32_t vcpuid, uint64_t extra_mem_pages,
+>  	uint64_t extra_pg_pages = (extra_mem_pages / ptrs_per_4k_pte) * 2;
+>  	struct kvm_vm *vm;
+>  
+> -	vm = vm_create(VM_MODE_P40V48_4K, DEFAULT_GUEST_PHY_PAGES + extra_pg_pages, O_RDWR);
+> +	vm = vm_create(VM_MODE_DEFAULT, DEFAULT_GUEST_PHY_PAGES + extra_pg_pages, O_RDWR);
+>  
+>  	kvm_vm_elf_load(vm, program_invocation_name, 0, 0);
+>  	vm_vcpu_add_default(vm, vcpuid, guest_code);
+> diff --git a/tools/testing/selftests/kvm/lib/x86_64/processor.c b/tools/testing/selftests/kvm/lib/x86_64/processor.c
+> index dc7fae9fa424..bb38bbcefac5 100644
+> --- a/tools/testing/selftests/kvm/lib/x86_64/processor.c
+> +++ b/tools/testing/selftests/kvm/lib/x86_64/processor.c
+> @@ -823,7 +823,7 @@ struct kvm_vm *vm_create_default(uint32_t vcpuid, uint64_t extra_mem_pages,
+>  	uint64_t extra_pg_pages = extra_mem_pages / 512 * 2;
+>  
+>  	/* Create VM */
+> -	vm = vm_create(VM_MODE_P52V48_4K,
+> +	vm = vm_create(VM_MODE_DEFAULT,
+>  		       DEFAULT_GUEST_PHY_PAGES + extra_pg_pages,
+>  		       O_RDWR);
+>  
+> -- 
+> 2.21.0
+>
 
-It's a userspace decision to make. In the kernel, we are proposing that
-bionic calls a prctl() to enable MTE explicitly. It could first check
-for the presence of __hwasan_init.
-
--- 
-Catalin
+Reviewed-by: Andrew Jones <drjones@redhat.com>
