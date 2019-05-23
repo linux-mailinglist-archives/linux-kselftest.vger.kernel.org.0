@@ -2,27 +2,27 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 948F828A9E
-	for <lists+linux-kselftest@lfdr.de>; Thu, 23 May 2019 21:58:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A2D0F28A48
+	for <lists+linux-kselftest@lfdr.de>; Thu, 23 May 2019 21:57:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388637AbfEWTRL (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 23 May 2019 15:17:11 -0400
-Received: from mail.kernel.org ([198.145.29.99]:52172 "EHLO mail.kernel.org"
+        id S2388262AbfEWTLr (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 23 May 2019 15:11:47 -0400
+Received: from mail.kernel.org ([198.145.29.99]:45228 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2389350AbfEWTRL (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 23 May 2019 15:17:11 -0400
+        id S2388255AbfEWTLq (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 23 May 2019 15:11:46 -0400
 Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 2651221841;
-        Thu, 23 May 2019 19:17:09 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 720FF2184B;
+        Thu, 23 May 2019 19:11:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1558639029;
-        bh=J/HiSsi27gS71Cj7gPNJ1TPUgfiSW0KYnB1TkbGJu1E=;
+        s=default; t=1558638704;
+        bh=nWNaN2wnvTy5mQwGsxG4bSeirIXE/TpY6aau8ZKjlpU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Cw8o96rwb4fThHyJCJ7nQHNiEXr/2Leh0wGWcH+jE23WfpnLC7FIEuJcS3kSfgq93
-         ALtURZMj1i4nW6hMHCkzr7A8KLZ3T9JEqSFET5br/9pG+Oqo/53/+IJ9eilSQXo/Fp
-         jHyIquKyh6d+Ch6B6GGvx6nCHY0VTFRZZH4VBfV4=
+        b=UMi0w5+PWWAmRawBH2zYlTdWgDcjaPSY0U3VB1M0X8vH4PrnOS+g5ZU3n+Sxl97ws
+         l/zQxDDM8GrXhiisk0Bl5kWT7xY+eRtEvdoICCT9HfO/SiR/TjykruIU5aHl/S/Pyl
+         bkOrZRKkwKfncEl6jPoTy2i/wIWCxmXt2e3Ufq1w=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -52,12 +52,12 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Masami Hiramatsu <mhiramat@kernel.org>,
         "Peter Zijlstra (Intel)" <peterz@infradead.org>,
         "Steven Rostedt (VMware)" <rostedt@goodmis.org>
-Subject: [PATCH 4.19 053/114] ftrace/x86_64: Emulate call function while updating in breakpoint handler
+Subject: [PATCH 4.14 34/77] ftrace/x86_64: Emulate call function while updating in breakpoint handler
 Date:   Thu, 23 May 2019 21:05:52 +0200
-Message-Id: <20190523181736.471330000@linuxfoundation.org>
+Message-Id: <20190523181724.937933016@linuxfoundation.org>
 X-Mailer: git-send-email 2.21.0
-In-Reply-To: <20190523181731.372074275@linuxfoundation.org>
-References: <20190523181731.372074275@linuxfoundation.org>
+In-Reply-To: <20190523181719.982121681@linuxfoundation.org>
+References: <20190523181719.982121681@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -138,15 +138,15 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
 --- a/arch/x86/kernel/ftrace.c
 +++ b/arch/x86/kernel/ftrace.c
-@@ -29,6 +29,7 @@
- #include <asm/kprobes.h>
+@@ -30,6 +30,7 @@
+ #include <asm/sections.h>
  #include <asm/ftrace.h>
  #include <asm/nops.h>
 +#include <asm/text-patching.h>
  
  #ifdef CONFIG_DYNAMIC_FTRACE
  
-@@ -228,6 +229,7 @@ int ftrace_modify_call(struct dyn_ftrace
+@@ -229,6 +230,7 @@ int ftrace_modify_call(struct dyn_ftrace
  }
  
  static unsigned long ftrace_update_func;
@@ -154,7 +154,7 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
  
  static int update_ftrace_func(unsigned long ip, void *new)
  {
-@@ -256,6 +258,8 @@ int ftrace_update_ftrace_func(ftrace_fun
+@@ -257,6 +259,8 @@ int ftrace_update_ftrace_func(ftrace_fun
  	unsigned char *new;
  	int ret;
  
@@ -163,7 +163,7 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
  	new = ftrace_call_replace(ip, (unsigned long)func);
  	ret = update_ftrace_func(ip, new);
  
-@@ -291,13 +295,28 @@ int ftrace_int3_handler(struct pt_regs *
+@@ -292,13 +296,28 @@ int ftrace_int3_handler(struct pt_regs *
  	if (WARN_ON_ONCE(!regs))
  		return 0;
  
@@ -197,7 +197,7 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
  }
  
  static int ftrace_write(unsigned long ip, const char *val, int size)
-@@ -868,6 +887,8 @@ void arch_ftrace_update_trampoline(struc
+@@ -869,6 +888,8 @@ void arch_ftrace_update_trampoline(struc
  
  	func = ftrace_ops_get_func(ops);
  
@@ -206,7 +206,7 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
  	/* Do a safe modify in case the trampoline is executing */
  	new = ftrace_call_replace(ip, (unsigned long)func);
  	ret = update_ftrace_func(ip, new);
-@@ -964,6 +985,7 @@ static int ftrace_mod_jmp(unsigned long
+@@ -965,6 +986,7 @@ static int ftrace_mod_jmp(unsigned long
  {
  	unsigned char *new;
  
