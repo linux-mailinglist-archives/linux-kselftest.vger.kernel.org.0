@@ -2,225 +2,140 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B26E1279BA
-	for <lists+linux-kselftest@lfdr.de>; Thu, 23 May 2019 11:52:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3810927AF5
+	for <lists+linux-kselftest@lfdr.de>; Thu, 23 May 2019 12:43:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730260AbfEWJwE (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 23 May 2019 05:52:04 -0400
-Received: from new1-smtp.messagingengine.com ([66.111.4.221]:57039 "EHLO
-        new1-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727440AbfEWJwD (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 23 May 2019 05:52:03 -0400
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
-        by mailnew.nyi.internal (Postfix) with ESMTP id B929333FE5;
-        Thu, 23 May 2019 05:52:02 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute6.internal (MEProxy); Thu, 23 May 2019 05:52:02 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-transfer-encoding:content-type
-        :date:from:message-id:mime-version:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=/f7l4d
-        W4uPe0FFGpfbwtGatZXvBS3MWDai3BFIrv7J4=; b=VMAWQX9gA96jQh6HoqBZMR
-        qmsFxTLhNcywgFfChuKbSEhBFqgbSLn80sOYF3ZXIsYGkY8rEgqt8TVkiIWI/Mpy
-        37bbQsZ3ee5QRi/V8/e3Q66GQqxz4v8JgGDALf1kDHMF99hM/hzvgqLUKiBuZsYs
-        ubR/Ff/+AyWB28mEvS4aEQ1UYJh6e4eKRu2soGn8m/ZkkdXE8I3alINwHJGEpmRh
-        wysyYigsZYAT1KKLAii4Xq2NUBbxlv+ii5TcgmNzqlTWRwP8pjhLl0kSVC8wz3QN
-        IUDO3eUGEHsxFC6HeNqdmcinRyUIUrq7HErOyEEfldw0JknsIZxhgkDvsjH/EZyA
-        ==
-X-ME-Sender: <xms:QW3mXBYKHSn7T_t-WrXJOhoigr59j5W_IWXUh0SaVd1jB9tljwvx9Q>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduuddruddugedgvddvucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucenucfjughrpefuvffhfffkgggtgfesthekredttd
-    dtlfenucfhrhhomhepoehgrhgvghhkhheslhhinhhugihfohhunhgurghtihhonhdrohhr
-    gheqnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucfkphepkeefrdekiedrkeelrd
-    dutdejnecurfgrrhgrmhepmhgrihhlfhhrohhmpehgrhgvgheskhhrohgrhhdrtghomhen
-    ucevlhhushhtvghrufhiiigvpedu
-X-ME-Proxy: <xmx:QW3mXB1F9qWZ9GF9kvpRs6wbm91sygH6NFcruZrXoEwuMR4V8YwKgQ>
-    <xmx:QW3mXDjJRRf8GsGA08coA-njZ0ABKSHgq4ngbWoxhKusdq38O5FX-w>
-    <xmx:QW3mXFYQCjOJfZyk9Lb7xXn0ClWlSAEObyrB1iMUruRtAj86axSQZw>
-    <xmx:Qm3mXHunnde2H_1Jegyj5JKULoa6Wlm1NoWf2UssqNlb1JilJeh2UQ>
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        by mail.messagingengine.com (Postfix) with ESMTPA id 24B37380073;
-        Thu, 23 May 2019 05:52:01 -0400 (EDT)
-Subject: FAILED: patch "[PATCH] ftrace/x86_64: Emulate call function while updating in" failed to apply to 4.4-stable tree
-To:     peterz@infradead.org, bigeasy@linutronix.de, bp@alien8.de,
-        hpa@zytor.com, jgross@suse.com, jikos@kernel.org,
-        joe.lawrence@redhat.com, jpoimboe@redhat.com, jroedel@suse.de,
-        konrad.wilk@oracle.com, linux-kselftest@vger.kernel.org,
-        luto@kernel.org, mbenes@suse.cz, mhiramat@kernel.org,
-        mingo@redhat.com, nayna@linux.ibm.com, ndesaulniers@google.com,
-        nstange@suse.de, pmladek@suse.com, rostedt@goodmis.org,
-        shuah@kernel.org, tglx@linutronix.de, tim.c.chen@linux.intel.com,
-        x86@kernel.org, yamada.masahiro@socionext.com, zohar@linux.ibm.com
-Cc:     <stable@vger.kernel.org>
-From:   <gregkh@linuxfoundation.org>
-Date:   Thu, 23 May 2019 11:51:59 +0200
-Message-ID: <1558605119211209@kroah.com>
+        id S1729902AbfEWKnG (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 23 May 2019 06:43:06 -0400
+Received: from foss.arm.com ([217.140.101.70]:43642 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727434AbfEWKnG (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 23 May 2019 06:43:06 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.72.51.249])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 84A77341;
+        Thu, 23 May 2019 03:43:05 -0700 (PDT)
+Received: from e103592.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.72.51.249])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C9A023F718;
+        Thu, 23 May 2019 03:42:59 -0700 (PDT)
+Date:   Thu, 23 May 2019 11:42:57 +0100
+From:   Dave Martin <Dave.Martin@arm.com>
+To:     Jason Gunthorpe <jgg@ziepe.ca>
+Cc:     Mark Rutland <mark.rutland@arm.com>, kvm@vger.kernel.org,
+        Christian Koenig <Christian.Koenig@amd.com>,
+        Szabolcs Nagy <Szabolcs.Nagy@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will.deacon@arm.com>,
+        dri-devel@lists.freedesktop.org, linux-mm@kvack.org,
+        Lee Smith <Lee.Smith@arm.com>, linux-kselftest@vger.kernel.org,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Jacob Bramley <Jacob.Bramley@arm.com>,
+        Leon Romanovsky <leon@kernel.org>, linux-rdma@vger.kernel.org,
+        amd-gfx@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org,
+        Evgeniy Stepanov <eugenis@google.com>,
+        linux-media@vger.kernel.org, Kees Cook <keescook@chromium.org>,
+        Ruben Ayrapetyan <Ruben.Ayrapetyan@arm.com>,
+        Andrey Konovalov <andreyknvl@google.com>,
+        Kevin Brodsky <kevin.brodsky@arm.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Kostya Serebryany <kcc@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felix Kuehling <Felix.Kuehling@amd.com>,
+        linux-kernel@vger.kernel.org,
+        Jens Wiklander <jens.wiklander@linaro.org>,
+        Ramana Radhakrishnan <Ramana.Radhakrishnan@arm.com>,
+        Alexander Deucher <Alexander.Deucher@amd.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Yishai Hadas <yishaih@mellanox.com>,
+        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>
+Subject: Re: [PATCH v15 00/17] arm64: untag user pointers passed to the kernel
+Message-ID: <20190523104256.GX28398@e103592.cambridge.arm.com>
+References: <cover.1557160186.git.andreyknvl@google.com>
+ <20190517144931.GA56186@arrakis.emea.arm.com>
+ <20190521184856.GC2922@ziepe.ca>
+ <20190522134925.GV28398@e103592.cambridge.arm.com>
+ <20190523002052.GF15389@ziepe.ca>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=ANSI_X3.4-1968
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190523002052.GF15389@ziepe.ca>
+User-Agent: Mutt/1.5.23 (2014-03-12)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+On Wed, May 22, 2019 at 09:20:52PM -0300, Jason Gunthorpe wrote:
+> On Wed, May 22, 2019 at 02:49:28PM +0100, Dave Martin wrote:
+> > On Tue, May 21, 2019 at 03:48:56PM -0300, Jason Gunthorpe wrote:
+> > > On Fri, May 17, 2019 at 03:49:31PM +0100, Catalin Marinas wrote:
+> > > 
+> > > > The tagged pointers (whether hwasan or MTE) should ideally be a
+> > > > transparent feature for the application writer but I don't think we can
+> > > > solve it entirely and make it seamless for the multitude of ioctls().
+> > > > I'd say you only opt in to such feature if you know what you are doing
+> > > > and the user code takes care of specific cases like ioctl(), hence the
+> > > > prctl() proposal even for the hwasan.
+> > > 
+> > > I'm not sure such a dire view is warrented.. 
+> > > 
+> > > The ioctl situation is not so bad, other than a few special cases,
+> > > most drivers just take a 'void __user *' and pass it as an argument to
+> > > some function that accepts a 'void __user *'. sparse et al verify
+> > > this. 
+> > > 
+> > > As long as the core functions do the right thing the drivers will be
+> > > OK.
+> > > 
+> > > The only place things get dicy is if someone casts to unsigned long
+> > > (ie for vma work) but I think that reflects that our driver facing
+> > > APIs for VMAs are compatible with static analysis (ie I have no
+> > > earthly idea why get_user_pages() accepts an unsigned long), not that
+> > > this is too hard.
+> > 
+> > If multiple people will care about this, perhaps we should try to
+> > annotate types more explicitly in SYSCALL_DEFINEx() and ABI data
+> > structures.
+> > 
+> > For example, we could have a couple of mutually exclusive modifiers
+> > 
+> > T __object *
+> > T __vaddr * (or U __vaddr)
+> > 
+> > In the first case the pointer points to an object (in the C sense)
+> > that the call may dereference but not use for any other purpose.
+> 
+> How would you use these two differently?
+> 
+> So far the kernel has worked that __user should tag any pointer that
+> is from userspace and then you can't do anything with it until you
+> transform it into a kernel something
 
-The patch below does not apply to the 4.4-stable tree.
-If someone wants it applied there, or to any other stable or longterm
-tree, then please email the backport, including the original git commit
-id to <stable@vger.kernel.org>.
+Ultimately it would be good to disallow casting __object pointers execpt
+to compatible __object pointer types, and to make get_user etc. demand
+__object.
 
-thanks,
+__vaddr pointers / addresses would be freely castable, but not to
+__object and so would not be dereferenceable even indirectly.
 
-greg k-h
+Or that's the general idea.  Figuring out a sane set of rules that we
+could actually check / enforce would require a bit of work.
 
------------------- original commit in Linus's tree ------------------
+(Whether the __vaddr base type is a pointer or an integer type is
+probably moot, due to the restrictions we would place on the use of
+these anyway.)
 
-From 9e298e8604088a600d8100a111a532a9d342af09 Mon Sep 17 00:00:00 2001
-From: Peter Zijlstra <peterz@infradead.org>
-Date: Wed, 1 May 2019 15:11:17 +0200
-Subject: [PATCH] ftrace/x86_64: Emulate call function while updating in
- breakpoint handler
+> > to tell static analysers the real type of pointers smuggled through
+> > UAPI disguised as other types (*cough* KVM, etc.)
+> 
+> Yes, that would help alot, we often have to pass pointers through a
+> u64 in the uAPI, and there is no static checker support to make sure
+> they are run through the u64_to_user_ptr() helper.
 
-Nicolai Stange discovered[1] that if live kernel patching is enabled, and the
-function tracer started tracing the same function that was patched, the
-conversion of the fentry call site during the translation of going from
-calling the live kernel patch trampoline to the iterator trampoline, would
-have as slight window where it didn't call anything.
+Agreed.
 
-As live kernel patching depends on ftrace to always call its code (to
-prevent the function being traced from being called, as it will redirect
-it). This small window would allow the old buggy function to be called, and
-this can cause undesirable results.
-
-Nicolai submitted new patches[2] but these were controversial. As this is
-similar to the static call emulation issues that came up a while ago[3].
-But after some debate[4][5] adding a gap in the stack when entering the
-breakpoint handler allows for pushing the return address onto the stack to
-easily emulate a call.
-
-[1] http://lkml.kernel.org/r/20180726104029.7736-1-nstange@suse.de
-[2] http://lkml.kernel.org/r/20190427100639.15074-1-nstange@suse.de
-[3] http://lkml.kernel.org/r/3cf04e113d71c9f8e4be95fb84a510f085aa4afa.1541711457.git.jpoimboe@redhat.com
-[4] http://lkml.kernel.org/r/CAHk-=wh5OpheSU8Em_Q3Hg8qw_JtoijxOdPtHru6d+5K8TWM=A@mail.gmail.com
-[5] http://lkml.kernel.org/r/CAHk-=wjvQxY4DvPrJ6haPgAa6b906h=MwZXO6G8OtiTGe=N7_w@mail.gmail.com
-
-[
-  Live kernel patching is not implemented on x86_32, thus the emulate
-  calls are only for x86_64.
-]
-
-Cc: Andy Lutomirski <luto@kernel.org>
-Cc: Nicolai Stange <nstange@suse.de>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Borislav Petkov <bp@alien8.de>
-Cc: "H. Peter Anvin" <hpa@zytor.com>
-Cc: the arch/x86 maintainers <x86@kernel.org>
-Cc: Josh Poimboeuf <jpoimboe@redhat.com>
-Cc: Jiri Kosina <jikos@kernel.org>
-Cc: Miroslav Benes <mbenes@suse.cz>
-Cc: Petr Mladek <pmladek@suse.com>
-Cc: Joe Lawrence <joe.lawrence@redhat.com>
-Cc: Shuah Khan <shuah@kernel.org>
-Cc: Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>
-Cc: Tim Chen <tim.c.chen@linux.intel.com>
-Cc: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc: Mimi Zohar <zohar@linux.ibm.com>
-Cc: Juergen Gross <jgross@suse.com>
-Cc: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Nayna Jain <nayna@linux.ibm.com>
-Cc: Masahiro Yamada <yamada.masahiro@socionext.com>
-Cc: Joerg Roedel <jroedel@suse.de>
-Cc: "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>
-Cc: stable@vger.kernel.org
-Fixes: b700e7f03df5 ("livepatch: kernel: add support for live patching")
-Tested-by: Nicolai Stange <nstange@suse.de>
-Reviewed-by: Nicolai Stange <nstange@suse.de>
-Reviewed-by: Masami Hiramatsu <mhiramat@kernel.org>
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-[ Changed to only implement emulated calls for x86_64 ]
-Signed-off-by: Steven Rostedt (VMware) <rostedt@goodmis.org>
-
-diff --git a/arch/x86/kernel/ftrace.c b/arch/x86/kernel/ftrace.c
-index ef49517f6bb2..bd553b3af22e 100644
---- a/arch/x86/kernel/ftrace.c
-+++ b/arch/x86/kernel/ftrace.c
-@@ -29,6 +29,7 @@
- #include <asm/kprobes.h>
- #include <asm/ftrace.h>
- #include <asm/nops.h>
-+#include <asm/text-patching.h>
- 
- #ifdef CONFIG_DYNAMIC_FTRACE
- 
-@@ -231,6 +232,7 @@ int ftrace_modify_call(struct dyn_ftrace *rec, unsigned long old_addr,
- }
- 
- static unsigned long ftrace_update_func;
-+static unsigned long ftrace_update_func_call;
- 
- static int update_ftrace_func(unsigned long ip, void *new)
- {
-@@ -259,6 +261,8 @@ int ftrace_update_ftrace_func(ftrace_func_t func)
- 	unsigned char *new;
- 	int ret;
- 
-+	ftrace_update_func_call = (unsigned long)func;
-+
- 	new = ftrace_call_replace(ip, (unsigned long)func);
- 	ret = update_ftrace_func(ip, new);
- 
-@@ -294,13 +298,28 @@ int ftrace_int3_handler(struct pt_regs *regs)
- 	if (WARN_ON_ONCE(!regs))
- 		return 0;
- 
--	ip = regs->ip - 1;
--	if (!ftrace_location(ip) && !is_ftrace_caller(ip))
--		return 0;
-+	ip = regs->ip - INT3_INSN_SIZE;
- 
--	regs->ip += MCOUNT_INSN_SIZE - 1;
-+#ifdef CONFIG_X86_64
-+	if (ftrace_location(ip)) {
-+		int3_emulate_call(regs, (unsigned long)ftrace_regs_caller);
-+		return 1;
-+	} else if (is_ftrace_caller(ip)) {
-+		if (!ftrace_update_func_call) {
-+			int3_emulate_jmp(regs, ip + CALL_INSN_SIZE);
-+			return 1;
-+		}
-+		int3_emulate_call(regs, ftrace_update_func_call);
-+		return 1;
-+	}
-+#else
-+	if (ftrace_location(ip) || is_ftrace_caller(ip)) {
-+		int3_emulate_jmp(regs, ip + CALL_INSN_SIZE);
-+		return 1;
-+	}
-+#endif
- 
--	return 1;
-+	return 0;
- }
- NOKPROBE_SYMBOL(ftrace_int3_handler);
- 
-@@ -859,6 +878,8 @@ void arch_ftrace_update_trampoline(struct ftrace_ops *ops)
- 
- 	func = ftrace_ops_get_func(ops);
- 
-+	ftrace_update_func_call = (unsigned long)func;
-+
- 	/* Do a safe modify in case the trampoline is executing */
- 	new = ftrace_call_replace(ip, (unsigned long)func);
- 	ret = update_ftrace_func(ip, new);
-@@ -960,6 +981,7 @@ static int ftrace_mod_jmp(unsigned long ip, void *func)
- {
- 	unsigned char *new;
- 
-+	ftrace_update_func_call = 0UL;
- 	new = ftrace_jmp_replace(ip, (unsigned long)func);
- 
- 	return update_ftrace_func(ip, new);
-
+Cheers
+---Dave
