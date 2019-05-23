@@ -2,23 +2,23 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B275B28423
-	for <lists+linux-kselftest@lfdr.de>; Thu, 23 May 2019 18:44:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FCD228410
+	for <lists+linux-kselftest@lfdr.de>; Thu, 23 May 2019 18:43:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731374AbfEWQnl (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 23 May 2019 12:43:41 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:44748 "EHLO mx1.redhat.com"
+        id S1731575AbfEWQnp (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 23 May 2019 12:43:45 -0400
+Received: from mx1.redhat.com ([209.132.183.28]:48996 "EHLO mx1.redhat.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731529AbfEWQnk (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 23 May 2019 12:43:40 -0400
+        id S1731037AbfEWQno (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 23 May 2019 12:43:44 -0400
 Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id D01C77CBA0;
-        Thu, 23 May 2019 16:43:39 +0000 (UTC)
+        by mx1.redhat.com (Postfix) with ESMTPS id B6643317916E;
+        Thu, 23 May 2019 16:43:43 +0000 (UTC)
 Received: from thuth.com (ovpn-116-94.ams2.redhat.com [10.36.116.94])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 731D3648B9;
-        Thu, 23 May 2019 16:43:37 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 260FC6090E;
+        Thu, 23 May 2019 16:43:39 +0000 (UTC)
 From:   Thomas Huth <thuth@redhat.com>
 To:     Christian Borntraeger <borntraeger@de.ibm.com>,
         Janosch Frank <frankja@linux.ibm.com>, kvm@vger.kernel.org
@@ -30,217 +30,125 @@ Cc:     Paolo Bonzini <pbonzini@redhat.com>,
         Andrew Jones <drjones@redhat.com>,
         linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
         linux-s390@vger.kernel.org
-Subject: [PATCH 7/9] KVM: selftests: Add the sync_regs test for s390x
-Date:   Thu, 23 May 2019 18:43:07 +0200
-Message-Id: <20190523164309.13345-8-thuth@redhat.com>
+Subject: [PATCH 8/9] KVM: s390: Do not report unusabled IDs via KVM_CAP_MAX_VCPU_ID
+Date:   Thu, 23 May 2019 18:43:08 +0200
+Message-Id: <20190523164309.13345-9-thuth@redhat.com>
 In-Reply-To: <20190523164309.13345-1-thuth@redhat.com>
 References: <20190523164309.13345-1-thuth@redhat.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
-X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.26]); Thu, 23 May 2019 16:43:39 +0000 (UTC)
+X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.41]); Thu, 23 May 2019 16:43:43 +0000 (UTC)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The test is an adaption of the same test for x86. Note that there
-are some differences in the way how s390x deals with the kvm_valid_regs
-in struct kvm_run, so some of the tests had to be removed. Also this
-test is not using the ucall() interface on s390x yet (which would need
-some work to be usable on s390x), so it simply drops out of the VM with
-a diag 0x501 breakpoint instead.
+KVM_CAP_MAX_VCPU_ID is currently always reporting KVM_MAX_VCPU_ID on all
+architectures. However, on s390x, the amount of usable CPUs is determined
+during runtime - it is depending on the features of the machine the code
+is running on. Since we are using the vcpu_id as an index into the SCA
+structures that are defined by the hardware (see e.g. the sca_add_vcpu()
+function), it is not only the amount of CPUs that is limited by the hard-
+ware, but also the range of IDs that we can use.
+Thus KVM_CAP_MAX_VCPU_ID must be determined during runtime on s390x, too.
+So the handling of KVM_CAP_MAX_VCPU_ID has to be moved from the common
+code into the architecture specific code, and on s390x we have to return
+the same value here as for KVM_CAP_MAX_VCPUS.
+This problem has been discovered with the kvm_create_max_vcpus selftest.
+With this change applied, the selftest now passes on s390x, too.
 
 Signed-off-by: Thomas Huth <thuth@redhat.com>
 ---
- MAINTAINERS                                   |   1 +
- tools/testing/selftests/kvm/Makefile          |   2 +
- .../selftests/kvm/s390x/sync_regs_test.c      | 151 ++++++++++++++++++
- 3 files changed, 154 insertions(+)
- create mode 100644 tools/testing/selftests/kvm/s390x/sync_regs_test.c
+ arch/mips/kvm/mips.c       | 3 +++
+ arch/powerpc/kvm/powerpc.c | 3 +++
+ arch/s390/kvm/kvm-s390.c   | 1 +
+ arch/x86/kvm/x86.c         | 3 +++
+ virt/kvm/arm/arm.c         | 3 +++
+ virt/kvm/kvm_main.c        | 2 --
+ 6 files changed, 13 insertions(+), 2 deletions(-)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index c05aa32dfbbe..fe41e2e1767a 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -8663,6 +8663,7 @@ F:	arch/s390/include/asm/gmap.h
- F:	arch/s390/include/asm/kvm*
- F:	arch/s390/kvm/
- F:	arch/s390/mm/gmap.c
-+F:	tools/testing/selftests/kvm/s390x/
- F:	tools/testing/selftests/kvm/*/s390x/
- 
- KERNEL VIRTUAL MACHINE FOR X86 (KVM/x86)
-diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftests/kvm/Makefile
-index 8495670ad107..d8beb990c8f4 100644
---- a/tools/testing/selftests/kvm/Makefile
-+++ b/tools/testing/selftests/kvm/Makefile
-@@ -29,6 +29,8 @@ TEST_GEN_PROGS_x86_64 += clear_dirty_log_test
- TEST_GEN_PROGS_aarch64 += dirty_log_test
- TEST_GEN_PROGS_aarch64 += clear_dirty_log_test
- 
-+TEST_GEN_PROGS_s390x += s390x/sync_regs_test
-+
- TEST_GEN_PROGS += $(TEST_GEN_PROGS_$(UNAME_M))
- LIBKVM += $(LIBKVM_$(UNAME_M))
- 
-diff --git a/tools/testing/selftests/kvm/s390x/sync_regs_test.c b/tools/testing/selftests/kvm/s390x/sync_regs_test.c
-new file mode 100644
-index 000000000000..e85ff0d69548
---- /dev/null
-+++ b/tools/testing/selftests/kvm/s390x/sync_regs_test.c
-@@ -0,0 +1,151 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Test for s390x KVM_CAP_SYNC_REGS
-+ *
-+ * Based on the same test for x86:
-+ * Copyright (C) 2018, Google LLC.
-+ *
-+ * Adaptions for s390x:
-+ * Copyright (C) 2019, Red Hat, Inc.
-+ *
-+ * Test expected behavior of the KVM_CAP_SYNC_REGS functionality.
-+ */
-+
-+#define _GNU_SOURCE /* for program_invocation_short_name */
-+#include <fcntl.h>
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <string.h>
-+#include <sys/ioctl.h>
-+
-+#include "test_util.h"
-+#include "kvm_util.h"
-+
-+#define VCPU_ID 5
-+
-+static void guest_code(void)
-+{
-+	for (;;) {
-+		asm volatile ("diag 0,0,0x501");
-+		asm volatile ("ahi 11,1");
-+	}
-+}
-+
-+#define REG_COMPARE(reg) \
-+	TEST_ASSERT(left->reg == right->reg, \
-+		    "Register " #reg \
-+		    " values did not match: 0x%llx, 0x%llx\n", \
-+		    left->reg, right->reg)
-+
-+static void compare_regs(struct kvm_regs *left, struct kvm_sync_regs *right)
-+{
-+	int i;
-+
-+	for (i = 0; i < 16; i++)
-+		REG_COMPARE(gprs[i]);
-+}
-+
-+static void compare_sregs(struct kvm_sregs *left, struct kvm_sync_regs *right)
-+{
-+	int i;
-+
-+	for (i = 0; i < 16; i++)
-+		REG_COMPARE(acrs[i]);
-+
-+	for (i = 0; i < 16; i++)
-+		REG_COMPARE(crs[i]);
-+}
-+
-+#undef REG_COMPARE
-+
-+#define TEST_SYNC_FIELDS   (KVM_SYNC_GPRS|KVM_SYNC_ACRS|KVM_SYNC_CRS)
-+#define INVALID_SYNC_FIELD 0x80000000
-+
-+int main(int argc, char *argv[])
-+{
-+	struct kvm_vm *vm;
-+	struct kvm_run *run;
-+	struct kvm_regs regs;
-+	struct kvm_sregs sregs;
-+	int rv, cap;
-+
-+	/* Tell stdout not to buffer its content */
-+	setbuf(stdout, NULL);
-+
-+	cap = kvm_check_cap(KVM_CAP_SYNC_REGS);
-+	if (!cap) {
-+		fprintf(stderr, "CAP_SYNC_REGS not supported, skipping test\n");
-+		exit(KSFT_SKIP);
-+	}
-+
-+	/* Create VM */
-+	vm = vm_create_default(VCPU_ID, 0, guest_code);
-+
-+	run = vcpu_state(vm, VCPU_ID);
-+
-+	/* Request and verify all valid register sets. */
-+	run->kvm_valid_regs = TEST_SYNC_FIELDS;
-+	rv = _vcpu_run(vm, VCPU_ID);
-+	TEST_ASSERT(rv == 0, "vcpu_run failed: %d\n", rv);
-+	TEST_ASSERT(run->exit_reason == KVM_EXIT_S390_SIEIC,
-+		    "Unexpected exit reason: %u (%s)\n",
-+		    run->exit_reason,
-+		    exit_reason_str(run->exit_reason));
-+	TEST_ASSERT(run->s390_sieic.icptcode == 4 &&
-+		    (run->s390_sieic.ipa >> 8) == 0x83 &&
-+		    (run->s390_sieic.ipb >> 16) == 0x501,
-+		    "Unexpected interception code: ic=%u, ipa=0x%x, ipb=0x%x\n",
-+		    run->s390_sieic.icptcode, run->s390_sieic.ipa,
-+		    run->s390_sieic.ipb);
-+
-+	vcpu_regs_get(vm, VCPU_ID, &regs);
-+	compare_regs(&regs, &run->s.regs);
-+
-+	vcpu_sregs_get(vm, VCPU_ID, &sregs);
-+	compare_sregs(&sregs, &run->s.regs);
-+
-+	/* Set and verify various register values */
-+	run->s.regs.gprs[11] = 0xBAD1DEA;
-+	run->s.regs.acrs[0] = 1 << 11;
-+
-+	run->kvm_valid_regs = TEST_SYNC_FIELDS;
-+	run->kvm_dirty_regs = KVM_SYNC_GPRS | KVM_SYNC_ACRS;
-+	rv = _vcpu_run(vm, VCPU_ID);
-+	TEST_ASSERT(rv == 0, "vcpu_run failed: %d\n", rv);
-+	TEST_ASSERT(run->exit_reason == KVM_EXIT_S390_SIEIC,
-+		    "Unexpected exit reason: %u (%s)\n",
-+		    run->exit_reason,
-+		    exit_reason_str(run->exit_reason));
-+	TEST_ASSERT(run->s.regs.gprs[11] == 0xBAD1DEA + 1,
-+		    "r11 sync regs value incorrect 0x%llx.",
-+		    run->s.regs.gprs[11]);
-+	TEST_ASSERT(run->s.regs.acrs[0]  == 1 << 11,
-+		    "acr0 sync regs value incorrect 0x%llx.",
-+		    run->s.regs.acrs[0]);
-+
-+	vcpu_regs_get(vm, VCPU_ID, &regs);
-+	compare_regs(&regs, &run->s.regs);
-+
-+	vcpu_sregs_get(vm, VCPU_ID, &sregs);
-+	compare_sregs(&sregs, &run->s.regs);
-+
-+	/* Clear kvm_dirty_regs bits, verify new s.regs values are
-+	 * overwritten with existing guest values.
-+	 */
-+	run->kvm_valid_regs = TEST_SYNC_FIELDS;
-+	run->kvm_dirty_regs = 0;
-+	run->s.regs.gprs[11] = 0xDEADBEEF;
-+	rv = _vcpu_run(vm, VCPU_ID);
-+	TEST_ASSERT(rv == 0, "vcpu_run failed: %d\n", rv);
-+	TEST_ASSERT(run->exit_reason == KVM_EXIT_S390_SIEIC,
-+		    "Unexpected exit reason: %u (%s)\n",
-+		    run->exit_reason,
-+		    exit_reason_str(run->exit_reason));
-+	TEST_ASSERT(run->s.regs.gprs[11] != 0xDEADBEEF,
-+		    "r11 sync regs value incorrect 0x%llx.",
-+		    run->s.regs.gprs[11]);
-+
-+	kvm_vm_free(vm);
-+
-+	return 0;
-+}
+diff --git a/arch/mips/kvm/mips.c b/arch/mips/kvm/mips.c
+index 6d0517ac18e5..0369f26ab96d 100644
+--- a/arch/mips/kvm/mips.c
++++ b/arch/mips/kvm/mips.c
+@@ -1122,6 +1122,9 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm, long ext)
+ 	case KVM_CAP_MAX_VCPUS:
+ 		r = KVM_MAX_VCPUS;
+ 		break;
++	case KVM_CAP_MAX_VCPU_ID:
++		r = KVM_MAX_VCPU_ID;
++		break;
+ 	case KVM_CAP_MIPS_FPU:
+ 		/* We don't handle systems with inconsistent cpu_has_fpu */
+ 		r = !!raw_cpu_has_fpu;
+diff --git a/arch/powerpc/kvm/powerpc.c b/arch/powerpc/kvm/powerpc.c
+index 3393b166817a..aa3a678711be 100644
+--- a/arch/powerpc/kvm/powerpc.c
++++ b/arch/powerpc/kvm/powerpc.c
+@@ -657,6 +657,9 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm, long ext)
+ 	case KVM_CAP_MAX_VCPUS:
+ 		r = KVM_MAX_VCPUS;
+ 		break;
++	case KVM_CAP_MAX_VCPU_ID:
++		r = KVM_MAX_VCPU_ID;
++		break;
+ #ifdef CONFIG_PPC_BOOK3S_64
+ 	case KVM_CAP_PPC_GET_SMMU_INFO:
+ 		r = 1;
+diff --git a/arch/s390/kvm/kvm-s390.c b/arch/s390/kvm/kvm-s390.c
+index 8d6d75db8de6..871d2e99b156 100644
+--- a/arch/s390/kvm/kvm-s390.c
++++ b/arch/s390/kvm/kvm-s390.c
+@@ -539,6 +539,7 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm, long ext)
+ 		break;
+ 	case KVM_CAP_NR_VCPUS:
+ 	case KVM_CAP_MAX_VCPUS:
++	case KVM_CAP_MAX_VCPU_ID:
+ 		r = KVM_S390_BSCA_CPU_SLOTS;
+ 		if (!kvm_s390_use_sca_entries())
+ 			r = KVM_MAX_VCPUS;
+diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+index 536b78c4af6e..09a07d6a154e 100644
+--- a/arch/x86/kvm/x86.c
++++ b/arch/x86/kvm/x86.c
+@@ -3122,6 +3122,9 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm, long ext)
+ 	case KVM_CAP_MAX_VCPUS:
+ 		r = KVM_MAX_VCPUS;
+ 		break;
++	case KVM_CAP_MAX_VCPU_ID:
++		r = KVM_MAX_VCPU_ID;
++		break;
+ 	case KVM_CAP_PV_MMU:	/* obsolete */
+ 		r = 0;
+ 		break;
+diff --git a/virt/kvm/arm/arm.c b/virt/kvm/arm/arm.c
+index 90cedebaeb94..7eeebe5e9da2 100644
+--- a/virt/kvm/arm/arm.c
++++ b/virt/kvm/arm/arm.c
+@@ -224,6 +224,9 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm, long ext)
+ 	case KVM_CAP_MAX_VCPUS:
+ 		r = KVM_MAX_VCPUS;
+ 		break;
++	case KVM_CAP_MAX_VCPU_ID:
++		r = KVM_MAX_VCPU_ID;
++		break;
+ 	case KVM_CAP_MSI_DEVID:
+ 		if (!kvm)
+ 			r = -EINVAL;
+diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+index f0d13d9d125d..c09259dd6286 100644
+--- a/virt/kvm/kvm_main.c
++++ b/virt/kvm/kvm_main.c
+@@ -3146,8 +3146,6 @@ static long kvm_vm_ioctl_check_extension_generic(struct kvm *kvm, long arg)
+ 	case KVM_CAP_MULTI_ADDRESS_SPACE:
+ 		return KVM_ADDRESS_SPACE_NUM;
+ #endif
+-	case KVM_CAP_MAX_VCPU_ID:
+-		return KVM_MAX_VCPU_ID;
+ 	case KVM_CAP_NR_MEMSLOTS:
+ 		return KVM_USER_MEM_SLOTS;
+ 	default:
 -- 
 2.21.0
 
