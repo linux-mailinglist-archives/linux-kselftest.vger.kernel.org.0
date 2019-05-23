@@ -2,287 +2,101 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B8F3281C3
-	for <lists+linux-kselftest@lfdr.de>; Thu, 23 May 2019 17:49:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6397F28380
+	for <lists+linux-kselftest@lfdr.de>; Thu, 23 May 2019 18:27:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731048AbfEWPtR (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 23 May 2019 11:49:17 -0400
-Received: from mail-it1-f195.google.com ([209.85.166.195]:39809 "EHLO
-        mail-it1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731177AbfEWPtO (ORCPT
+        id S1731061AbfEWQ1d (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 23 May 2019 12:27:33 -0400
+Received: from www62.your-server.de ([213.133.104.62]:49426 "EHLO
+        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730752AbfEWQ1d (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 23 May 2019 11:49:14 -0400
-Received: by mail-it1-f195.google.com with SMTP id 9so9242791itf.4
-        for <linux-kselftest@vger.kernel.org>; Thu, 23 May 2019 08:49:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=brauner.io; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=Z5ctpIu+jWXTv/YFXK0h4ORrsvPLOawXchITh96/44s=;
-        b=LmDqunokL2kjMrDmv8k3gLYKoM+RLixq6vguLoqH6ppc5OE2j6g/sY/IRwa/T+C0lr
-         MzhTsdRi1nPEx9ntLAlE+TIJAMjWkklvTV4NijoxXlid+DHygGOIWSTqHkZnznJMFfeP
-         woDcMT587TMgQJWCpoFjPXDaTxIjTBX17qmqOUGVWRXnl0B30Lu03+FkoeVqO7OJvCOe
-         6c1p8lxR7QzK3IVGGBHWO0z88XD+S1W9KkFTpROeb06FbFjBD6yrA4WamZ4UtOoN6tJk
-         f05IXhmT+6d1ozkBEwzS/GJUPFRCEV+QIkQwz+TdoaVCt4UW8b+fkgNlvMeA8ioJ5g/s
-         GwPQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=Z5ctpIu+jWXTv/YFXK0h4ORrsvPLOawXchITh96/44s=;
-        b=dGzOWEr4/LKg2xdGQAD8xsXT8Gqxk/lYo0aWMvPsKRCR8AGk7IgyyTim5PCafl/9/7
-         2vfxvQww3PqqswJ8lQftsAhCDABAdPG9DP11doSGyPhsLPOC+a8kg/lirmD1fer344n+
-         gIqiH6U6JXmi5a9aCwxY3klmKLXGhL8Y+BhguYc489x8tM0brxJaC99Jy9d2roGJcKsH
-         nPU+mKzsITOSUZzA/8uO/XG+IYLPtq4YzgnxYdGXO1kK1L4b4kckSbPY2/ibDkEch4zt
-         oHFFbiT5wHbkVSHTwdl5u7UZzs2+gdNzAiG0c8Opg+bjSDxdQSjcQGE5FpoUcwrBvIU0
-         bs/A==
-X-Gm-Message-State: APjAAAV8B27IzhLuL9bAV3nCxZlms4yxkJlKyG/qa5drjk2ATG+VP/Qu
-        diLT5Of/o4p6DhIPShJek0Spkg==
-X-Google-Smtp-Source: APXvYqxC9q/gfvF4noEmnKzYohqXHRREb6iPacdieXuLb/sEjezVXXt1D/3GJTGuntWPZltO3Gx05A==
-X-Received: by 2002:a05:6638:617:: with SMTP id g23mr11397158jar.118.1558626553338;
-        Thu, 23 May 2019 08:49:13 -0700 (PDT)
-Received: from localhost.localdomain ([172.56.12.187])
-        by smtp.gmail.com with ESMTPSA id v1sm9124939iob.56.2019.05.23.08.49.05
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 23 May 2019 08:49:12 -0700 (PDT)
-From:   Christian Brauner <christian@brauner.io>
-To:     viro@zeniv.linux.org.uk, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
-        torvalds@linux-foundation.org, fweimer@redhat.com
-Cc:     jannh@google.com, oleg@redhat.com, tglx@linutronix.de,
-        arnd@arndb.de, shuah@kernel.org, dhowells@redhat.com,
-        tkjos@android.com, ldv@altlinux.org, miklos@szeredi.hu,
-        linux-alpha@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-xtensa@linux-xtensa.org, linux-arch@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, x86@kernel.org,
-        Christian Brauner <christian@brauner.io>
-Subject: [PATCH v2 2/2] tests: add close_range() tests
-Date:   Thu, 23 May 2019 17:47:47 +0200
-Message-Id: <20190523154747.15162-3-christian@brauner.io>
-X-Mailer: git-send-email 2.21.0
-In-Reply-To: <20190523154747.15162-1-christian@brauner.io>
-References: <20190523154747.15162-1-christian@brauner.io>
+        Thu, 23 May 2019 12:27:33 -0400
+Received: from [78.46.172.2] (helo=sslproxy05.your-server.de)
+        by www62.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
+        (Exim 4.89_1)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1hTqBA-0006CQ-CS; Thu, 23 May 2019 18:02:52 +0200
+Received: from [178.197.249.12] (helo=linux.home)
+        by sslproxy05.your-server.de with esmtpsa (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384:256)
+        (Exim 4.89)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1hTqBA-000Mgq-4p; Thu, 23 May 2019 18:02:52 +0200
+Subject: Re: [PATCH bpf v1 1/3] selftests/bpf: Test correctness of narrow
+ 32bit read on 64bit field
+To:     Krzesimir Nowak <krzesimir@kinvolk.io>, bpf@vger.kernel.org
+Cc:     iago@kinvolk.io, alban@kinvolk.io, Shuah Khan <shuah@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        Andrey Ignatov <rdna@fb.com>,
+        Jiong Wang <jiong.wang@netronome.com>,
+        Jakub Kicinski <jakub.kicinski@netronome.com>,
+        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20190515134731.12611-1-krzesimir@kinvolk.io>
+ <20190515134731.12611-2-krzesimir@kinvolk.io>
+From:   Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <c28c3cea-a8e0-fbd8-6113-bbb4cece0178@iogearbox.net>
+Date:   Thu, 23 May 2019 18:02:51 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
+ Thunderbird/52.3.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20190515134731.12611-2-krzesimir@kinvolk.io>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.100.3/25458/Thu May 23 09:58:32 2019)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This adds basic tests for the new close_range() syscall.
-- test that no invalid flags can be passed
-- test that a range of file descriptors is correctly closed
-- test that a range of file descriptors is correctly closed if there there
-  are already closed file descriptors in the range
-- test that max_fd is correctly capped to the current fdtable maximum
+On 05/15/2019 03:47 PM, Krzesimir Nowak wrote:
+> Test the correctness of the 32bit narrow reads by reading both halves
+> of the 64 bit field and doing a binary or on them to see if we get the
+> original value.
+> 
+> This isn't really tested - the program is not being run, because
+> BPF_PROG_TYPE_PERF_EVENT is not supported by bpf_test_run_prog.
 
-Signed-off-by: Christian Brauner <christian@brauner.io>
-Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: Jann Horn <jannh@google.com>
-Cc: David Howells <dhowells@redhat.com>
-Cc: Dmitry V. Levin <ldv@altlinux.org>
-Cc: Oleg Nesterov <oleg@redhat.com>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Florian Weimer <fweimer@redhat.com>
-Cc: linux-api@vger.kernel.org
----
-v1: unchanged
-v2:
-- Christian Brauner <christian@brauner.io>:
-  - verify that close_range() correctly closes a single file descriptor
----
- tools/testing/selftests/Makefile              |   1 +
- tools/testing/selftests/core/.gitignore       |   1 +
- tools/testing/selftests/core/Makefile         |   6 +
- .../testing/selftests/core/close_range_test.c | 142 ++++++++++++++++++
- 4 files changed, 150 insertions(+)
- create mode 100644 tools/testing/selftests/core/.gitignore
- create mode 100644 tools/testing/selftests/core/Makefile
- create mode 100644 tools/testing/selftests/core/close_range_test.c
+One option could be to add actual support for BPF_PROG_TYPE_PERF_EVENT to
+test_verifier where the program gets actually triggered, and the result
+stored in a map value that the test case reads out for checking the result
+against the expected one. Recently added something similar for LRU maps in
+the test suite, that shouldn't be too complex.
 
-diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-index 9781ca79794a..06e57fabbff9 100644
---- a/tools/testing/selftests/Makefile
-+++ b/tools/testing/selftests/Makefile
-@@ -4,6 +4,7 @@ TARGETS += bpf
- TARGETS += breakpoints
- TARGETS += capabilities
- TARGETS += cgroup
-+TARGETS += core
- TARGETS += cpufreq
- TARGETS += cpu-hotplug
- TARGETS += drivers/dma-buf
-diff --git a/tools/testing/selftests/core/.gitignore b/tools/testing/selftests/core/.gitignore
-new file mode 100644
-index 000000000000..6e6712ce5817
---- /dev/null
-+++ b/tools/testing/selftests/core/.gitignore
-@@ -0,0 +1 @@
-+close_range_test
-diff --git a/tools/testing/selftests/core/Makefile b/tools/testing/selftests/core/Makefile
-new file mode 100644
-index 000000000000..de3ae68aa345
---- /dev/null
-+++ b/tools/testing/selftests/core/Makefile
-@@ -0,0 +1,6 @@
-+CFLAGS += -g -I../../../../usr/include/ -I../../../../include
-+
-+TEST_GEN_PROGS := close_range_test
-+
-+include ../lib.mk
-+
-diff --git a/tools/testing/selftests/core/close_range_test.c b/tools/testing/selftests/core/close_range_test.c
-new file mode 100644
-index 000000000000..d6e6079d3d53
---- /dev/null
-+++ b/tools/testing/selftests/core/close_range_test.c
-@@ -0,0 +1,142 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#define _GNU_SOURCE
-+#include <errno.h>
-+#include <fcntl.h>
-+#include <linux/kernel.h>
-+#include <limits.h>
-+#include <stdbool.h>
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <string.h>
-+#include <syscall.h>
-+#include <unistd.h>
-+
-+#include "../kselftest.h"
-+
-+static inline int sys_close_range(unsigned int fd, unsigned int max_fd,
-+				  unsigned int flags)
-+{
-+	return syscall(__NR_close_range, fd, max_fd, flags);
-+}
-+
-+#ifndef ARRAY_SIZE
-+#define ARRAY_SIZE(x) (sizeof(x) / sizeof((x)[0]))
-+#endif
-+
-+int main(int argc, char **argv)
-+{
-+	const char *test_name = "close_range";
-+	int i, ret;
-+	int open_fds[101];
-+	int fd_max, fd_mid, fd_min;
-+
-+	ksft_set_plan(9);
-+
-+	for (i = 0; i < ARRAY_SIZE(open_fds); i++) {
-+		int fd;
-+
-+		fd = open("/dev/null", O_RDONLY | O_CLOEXEC);
-+		if (fd < 0) {
-+			if (errno == ENOENT)
-+				ksft_exit_skip(
-+					"%s test: skipping test since /dev/null does not exist\n",
-+					test_name);
-+
-+			ksft_exit_fail_msg(
-+				"%s test: %s - failed to open /dev/null\n",
-+				strerror(errno), test_name);
-+		}
-+
-+		open_fds[i] = fd;
-+	}
-+
-+	fd_min = open_fds[0];
-+	fd_max = open_fds[99];
-+
-+	ret = sys_close_range(fd_min, fd_max, 1);
-+	if (!ret)
-+		ksft_exit_fail_msg(
-+			"%s test: managed to pass invalid flag value\n",
-+			test_name);
-+	ksft_test_result_pass("do not allow invalid flag values for close_range()\n");
-+
-+	fd_mid = open_fds[50];
-+	ret = sys_close_range(fd_min, fd_mid, 0);
-+	if (ret < 0)
-+		ksft_exit_fail_msg(
-+			"%s test: Failed to close range of file descriptors from %d to %d\n",
-+			test_name, fd_min, fd_mid);
-+	ksft_test_result_pass("close_range() from %d to %d\n", fd_min, fd_mid);
-+
-+	for (i = 0; i <= 50; i++) {
-+		ret = fcntl(open_fds[i], F_GETFL);
-+		if (ret >= 0)
-+			ksft_exit_fail_msg(
-+				"%s test: Failed to close range of file descriptors from %d to %d\n",
-+				test_name, fd_min, fd_mid);
-+	}
-+	ksft_test_result_pass("fcntl() verify closed range from %d to %d\n", fd_min, fd_mid);
-+
-+	/* create a couple of gaps */
-+	close(57);
-+	close(78);
-+	close(81);
-+	close(82);
-+	close(84);
-+	close(90);
-+
-+	fd_mid = open_fds[51];
-+	/* Choose slightly lower limit and leave some fds for a later test */
-+	fd_max = open_fds[92];
-+	ret = sys_close_range(fd_mid, fd_max, 0);
-+	if (ret < 0)
-+		ksft_exit_fail_msg(
-+			"%s test: Failed to close range of file descriptors from 51 to 100\n",
-+			test_name);
-+	ksft_test_result_pass("close_range() from %d to %d\n", fd_mid, fd_max);
-+
-+	for (i = 51; i <= 92; i++) {
-+		ret = fcntl(open_fds[i], F_GETFL);
-+		if (ret >= 0)
-+			ksft_exit_fail_msg(
-+				"%s test: Failed to close range of file descriptors from 51 to 100\n",
-+				test_name);
-+	}
-+	ksft_test_result_pass("fcntl() verify closed range from %d to %d\n", fd_mid, fd_max);
-+
-+	fd_mid = open_fds[93];
-+	fd_max = open_fds[99];
-+	/* test that the kernel caps and still closes all fds */
-+	ret = sys_close_range(fd_mid, UINT_MAX, 0);
-+	if (ret < 0)
-+		ksft_exit_fail_msg(
-+			"%s test: Failed to close range of file descriptors from 51 to 100\n",
-+			test_name);
-+	ksft_test_result_pass("close_range() from %d to %d\n", fd_mid, fd_max);
-+
-+	for (i = 93; i < 100; i++) {
-+		ret = fcntl(open_fds[i], F_GETFL);
-+		if (ret >= 0)
-+			ksft_exit_fail_msg(
-+				"%s test: Failed to close range of file descriptors from 51 to 100\n",
-+				test_name);
-+	}
-+	ksft_test_result_pass("fcntl() verify closed range from %d to %d\n", fd_mid, fd_max);
-+
-+	ret = sys_close_range(open_fds[100], open_fds[100], 0);
-+	if (ret < 0)
-+		ksft_exit_fail_msg(
-+			"%s test: Failed to close single file descriptor\n",
-+			test_name);
-+	ksft_test_result_pass("close_range() closed single file descriptor\n");
-+
-+	ret = fcntl(open_fds[100], F_GETFL);
-+	if (ret >= 0)
-+		ksft_exit_fail_msg(
-+			"%s test: Failed to close single file descriptor\n",
-+			test_name);
-+	ksft_test_result_pass("fcntl() verify closed single file descriptor\n");
-+
-+	return ksft_exit_pass();
-+}
--- 
-2.21.0
+Thanks,
+Daniel
+
+> Signed-off-by: Krzesimir Nowak <krzesimir@kinvolk.io>
+> ---
+>  tools/testing/selftests/bpf/verifier/var_off.c | 15 +++++++++++++++
+>  1 file changed, 15 insertions(+)
+> 
+> diff --git a/tools/testing/selftests/bpf/verifier/var_off.c b/tools/testing/selftests/bpf/verifier/var_off.c
+> index 8504ac937809..2668819dcc85 100644
+> --- a/tools/testing/selftests/bpf/verifier/var_off.c
+> +++ b/tools/testing/selftests/bpf/verifier/var_off.c
+> @@ -246,3 +246,18 @@
+>  	.result = ACCEPT,
+>  	.prog_type = BPF_PROG_TYPE_LWT_IN,
+>  },
+> +{
+> +	"32bit loads of a 64bit field (both least and most significant words)",
+> +	.insns = {
+> +	BPF_LDX_MEM(BPF_W, BPF_REG_4, BPF_REG_1, offsetof(struct bpf_perf_event_data, sample_period)),
+> +	BPF_LDX_MEM(BPF_W, BPF_REG_5, BPF_REG_1, offsetof(struct bpf_perf_event_data, sample_period) + 4),
+> +	BPF_LDX_MEM(BPF_DW, BPF_REG_6, BPF_REG_1, offsetof(struct bpf_perf_event_data, sample_period)),
+> +	BPF_ALU64_IMM(BPF_LSH, BPF_REG_4, 32),
+> +	BPF_ALU64_REG(BPF_OR, BPF_REG_4, BPF_REG_5),
+> +	BPF_ALU64_REG(BPF_XOR, BPF_REG_4, BPF_REG_6),
+> +	BPF_MOV64_REG(BPF_REG_0, BPF_REG_4),
+> +	BPF_EXIT_INSN(),
+> +	},
+> +	.result = ACCEPT,
+> +	.prog_type = BPF_PROG_TYPE_PERF_EVENT,
+> +},
+> 
 
