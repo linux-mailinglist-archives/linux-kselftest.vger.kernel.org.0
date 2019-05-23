@@ -2,25 +2,26 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CA7628092
-	for <lists+linux-kselftest@lfdr.de>; Thu, 23 May 2019 17:08:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E28928110
+	for <lists+linux-kselftest@lfdr.de>; Thu, 23 May 2019 17:21:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730792AbfEWPI1 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 23 May 2019 11:08:27 -0400
-Received: from foss.arm.com ([217.140.101.70]:48564 "EHLO foss.arm.com"
+        id S1730950AbfEWPVd (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 23 May 2019 11:21:33 -0400
+Received: from foss.arm.com ([217.140.101.70]:48894 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730672AbfEWPI1 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 23 May 2019 11:08:27 -0400
+        id S1730947AbfEWPVc (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 23 May 2019 11:21:32 -0400
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.72.51.249])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C7E5C80D;
-        Thu, 23 May 2019 08:08:26 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5555380D;
+        Thu, 23 May 2019 08:21:32 -0700 (PDT)
 Received: from mbp (usa-sjc-mx-foss1.foss.arm.com [217.140.101.70])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B63863F690;
-        Thu, 23 May 2019 08:08:20 -0700 (PDT)
-Date:   Thu, 23 May 2019 16:08:14 +0100
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3D6CE3F690;
+        Thu, 23 May 2019 08:21:26 -0700 (PDT)
+Date:   Thu, 23 May 2019 16:21:19 +0100
 From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     enh <enh@google.com>, Evgenii Stepanov <eugenis@google.com>,
+To:     enh <enh@google.com>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Evgenii Stepanov <eugenis@google.com>,
         Andrey Konovalov <andreyknvl@google.com>,
         Khalid Aziz <khalid.aziz@oracle.com>,
         Linux ARM <linux-arm-kernel@lists.infradead.org>,
@@ -56,7 +57,7 @@ Cc:     enh <enh@google.com>, Evgenii Stepanov <eugenis@google.com>,
         Kevin Brodsky <kevin.brodsky@arm.com>,
         Szabolcs Nagy <Szabolcs.Nagy@arm.com>
 Subject: Re: [PATCH v15 00/17] arm64: untag user pointers passed to the kernel
-Message-ID: <20190523150813.x4btg5zxa4gl5o4q@mbp>
+Message-ID: <20190523152118.t22z37mpqfwjjtkw@mbp>
 References: <cover.1557160186.git.andreyknvl@google.com>
  <20190517144931.GA56186@arrakis.emea.arm.com>
  <CAFKCwrj6JEtp4BzhqO178LFJepmepoMx=G+YdC8sqZ3bcBp3EQ@mail.gmail.com>
@@ -64,31 +65,34 @@ References: <cover.1557160186.git.andreyknvl@google.com>
  <201905211633.6C0BF0C2@keescook>
  <20190522101110.m2stmpaj7seezveq@mbp>
  <CAJgzZoosKBwqXRyA6fb8QQSZXFqfHqe9qO9je5TogHhzuoGXJQ@mail.gmail.com>
- <201905221157.A9BAB1F296@keescook>
+ <20190522163527.rnnc6t4tll7tk5zw@mbp>
+ <CAJgzZooc+wXBBXenm62n2zR8TVrv-y1pXMmHSdxeaNYhFLSzBA@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <201905221157.A9BAB1F296@keescook>
+In-Reply-To: <CAJgzZooc+wXBBXenm62n2zR8TVrv-y1pXMmHSdxeaNYhFLSzBA@mail.gmail.com>
 User-Agent: NeoMutt/20170113 (1.7.2)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, May 22, 2019 at 12:21:27PM -0700, Kees Cook wrote:
-> If a process wants to not tag, that's also up to the allocator where
-> it can decide not to ask the kernel, and just not tag. Nothing breaks in
-> userspace if a process is NOT tagging and untagged_addr() exists or is
-> missing. This, I think, is the core way this doesn't trip over the
-> golden rule: an old system image will run fine (because it's not
-> tagging). A *new* system may encounter bugs with tagging because it's a
-> new feature: this is The Way Of Things. But we don't break old userspace
-> because old userspace isn't using tags.
+On Wed, May 22, 2019 at 09:58:22AM -0700, enh wrote:
+> i was questioning the argument about the ioctl issues, and saying that
+> from my perspective, untagging bugs are not really any different than
+> any other kind of kernel bug.
 
-With this series and hwasan binaries, at some point in the future they
-will be considered "old userspace" and they do use pointer tags which
-expect to be ignored by both the hardware and the kernel. MTE breaks
-this assumption.
+Once this series gets in, they are indeed just kernel bugs. What I want
+is an easier way to identify them, ideally before they trigger in the
+field.
+
+> i still don't see how this isn't just a regular testing/CI issue, the
+> same as any other kind of kernel bug. it's already the case that i can
+> get a bad kernel...
+
+The testing would have a smaller code coverage in terms of drivers,
+filesystems than something like a static checker (though one does not
+exclude the other).
 
 -- 
 Catalin
