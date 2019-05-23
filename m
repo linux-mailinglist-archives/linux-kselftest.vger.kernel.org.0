@@ -2,225 +2,133 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 736742817E
-	for <lists+linux-kselftest@lfdr.de>; Thu, 23 May 2019 17:44:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DFA6F281A7
+	for <lists+linux-kselftest@lfdr.de>; Thu, 23 May 2019 17:49:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730790AbfEWPo3 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 23 May 2019 11:44:29 -0400
-Received: from mail-lj1-f193.google.com ([209.85.208.193]:38653 "EHLO
-        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731042AbfEWPo2 (ORCPT
+        id S1730893AbfEWPs6 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 23 May 2019 11:48:58 -0400
+Received: from mail-it1-f195.google.com ([209.85.166.195]:51555 "EHLO
+        mail-it1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731064AbfEWPs6 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 23 May 2019 11:44:28 -0400
-Received: by mail-lj1-f193.google.com with SMTP id 14so5937384ljj.5
-        for <linux-kselftest@vger.kernel.org>; Thu, 23 May 2019 08:44:26 -0700 (PDT)
+        Thu, 23 May 2019 11:48:58 -0400
+Received: by mail-it1-f195.google.com with SMTP id m3so10548362itl.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 23 May 2019 08:48:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=/wji4Ea/4BKbtz1pB+NomkucTVNmeP5sWS4Z09Qoh/0=;
-        b=aFH35CN6oPRsy0HINPVyUyCLmmZ1q+W5tanGOLFB9ZDOu6iaE0T6Zf2p50/YpwHsbr
-         48EE1NUmchXldef87VmFcBOfomkIHiEfKDLilaRqMK87cFmewn3SJqhTI1TRHWczozD4
-         oXQnG40alYiwUIlV5zhAeNCFOXlq3pqE0BbnZ0FvRVuwBWMRV9wfu1H9fYBPCAdnSv5U
-         HVNKv9dUz6r+VmwUQYwzrC3kRsKz62p+YOIjrLW4bC1aoOEaVaZZBPmIi8QCc4AHmXYb
-         1tLTls+6tcRQac2V8FPQbYxeEAGXeJISVC1rVB3y4LA5KetGIABPN8JvrlKNXRYKDzkN
-         FlXA==
+        d=brauner.io; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=qdhvyBV5eCUYlrhtprSXvsuKWr+yBvkV1a8SbE6AS60=;
+        b=PHFjvm23caZGYr4uiNYmJAibVBzXG/G68GWrR3KEL+4ubMa1yG52PY5KbD5HgQ94DS
+         UYyKxymb5fEjGeKdBKbPovN4lf1X37+9FR6/IKpeONALi6Pb6Ba6dCiyKGGLwyh/Thfo
+         TBBGEFZCAqITH+9ysPxJvr8e5RDKlYMuQAQ4Vb/7fDfahu0Q9wvBEskpiiSkZAzXwDg0
+         HO3ghqNF44h7BZNoCoOH48Br+sXnnPudMYWxblMnUowckCT/7+BYIAVlMi8aQoMmK9+g
+         efMaCVYPokznZ4LdQiFStyRq1hGeIabBZ6GksyGUTQGFowjocl7wKgtLYpmWvu2C2iki
+         T5Vw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=/wji4Ea/4BKbtz1pB+NomkucTVNmeP5sWS4Z09Qoh/0=;
-        b=GncILXrE/4OrXnXV7ZtEj+6k5YlAF8SAENYHeTMmrojngCNOy6IFm+vbr4q9VIgaZy
-         CL5qRD56DHa5O6RPWbu0q/5G7mx5B9BUDGFUA2Mz1JbjxN3/LFkzEJr/FUmDJgT+5O2i
-         0hvhb1NvNHVRcOYqWdgMSYuglLLk4S3Nrj3dBIEw6090tutlY+NbFXCLFR/qj3uhdvA2
-         udyocGOyHpZBKrw0c5eQC8xs+yypefegwRp1Q8sr9vnhzGYqqUby491N8wK3Hp7rHD6c
-         vf18uaXyJHqABmMFO1rlZEq3zLvYA0rygAoUWlmptO/3mrSeRztQ12to02VfdZaPQHOC
-         o8KA==
-X-Gm-Message-State: APjAAAUkSqzAqzBudnk+tu4OcjmGqySJqmlEitQ3rLpSMMMkbXtsJPSp
-        q9JPVNn4sUH5Fwf+l8ZdVFgFxxu15OoLijL/kSEqXA==
-X-Google-Smtp-Source: APXvYqzhSDjrNWAy5KyNhMUlv7cjkwlGbRwsa6Uqsf4zqqYvI69PmEIAwS9JjP+IZnW+JBpTZSKDycdIF2QLVLgBgoM=
-X-Received: by 2002:a2e:9d4e:: with SMTP id y14mr23518941ljj.199.1558626264355;
- Thu, 23 May 2019 08:44:24 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=qdhvyBV5eCUYlrhtprSXvsuKWr+yBvkV1a8SbE6AS60=;
+        b=jWGjKo3TzO6U0qp1DyzuvubpJxUMp7ilWnokdr5qzCFZxy+Zrw2N42u03AyiT60XlB
+         UT04igbVhFmzCedPzyjbBWF9H8SiIMkx8gpG/6+87DGapQ70lkVORtdlz9s9VC0gmhuC
+         aBpSxMCwWui+fiAAwYnEENWFqEDdsvsg17jKloOZPMgKemI2wdSodBJukm3Gio8T7X+Y
+         1QaTV0EXg9pOEZFXga58+UoU2EdLCEFCjhXgjs3Irk0h56hZ780kjMwB72dpsMSTyOTg
+         5/0uhy8rJSG7CWpQC4/Uwe9J4EIFRAEq+yXE0gQd8XsV393qPFJLh/wEeX2ByeNqZrPH
+         /2fw==
+X-Gm-Message-State: APjAAAXOW/6YRk8edeGfSQRBsNtXSICbeTiSVh6VD/HRK6gtjfwjEPCO
+        ehH1pm76KqitJRhYRLh9PfqG4w==
+X-Google-Smtp-Source: APXvYqys6QK/iakUDj+Sh+Ogl2zyh29ySOoi4FUzRp4yc77NrnF9Vcc9AkfEItA9paeABX2UyF+z5Q==
+X-Received: by 2002:a24:6212:: with SMTP id d18mr13266189itc.2.1558626537435;
+        Thu, 23 May 2019 08:48:57 -0700 (PDT)
+Received: from localhost.localdomain ([172.56.12.187])
+        by smtp.gmail.com with ESMTPSA id v1sm9124939iob.56.2019.05.23.08.48.49
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 23 May 2019 08:48:56 -0700 (PDT)
+From:   Christian Brauner <christian@brauner.io>
+To:     viro@zeniv.linux.org.uk, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
+        torvalds@linux-foundation.org, fweimer@redhat.com
+Cc:     jannh@google.com, oleg@redhat.com, tglx@linutronix.de,
+        arnd@arndb.de, shuah@kernel.org, dhowells@redhat.com,
+        tkjos@android.com, ldv@altlinux.org, miklos@szeredi.hu,
+        linux-alpha@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-xtensa@linux-xtensa.org, linux-arch@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, x86@kernel.org,
+        Christian Brauner <christian@brauner.io>
+Subject: [PATCH v2 0/2] close_range()
+Date:   Thu, 23 May 2019 17:47:45 +0200
+Message-Id: <20190523154747.15162-1-christian@brauner.io>
+X-Mailer: git-send-email 2.21.0
 MIME-Version: 1.0
-References: <cover.1557160186.git.andreyknvl@google.com> <20190517144931.GA56186@arrakis.emea.arm.com>
- <CAFKCwrj6JEtp4BzhqO178LFJepmepoMx=G+YdC8sqZ3bcBp3EQ@mail.gmail.com>
- <20190521182932.sm4vxweuwo5ermyd@mbp> <201905211633.6C0BF0C2@keescook>
- <20190522101110.m2stmpaj7seezveq@mbp> <CAJgzZoosKBwqXRyA6fb8QQSZXFqfHqe9qO9je5TogHhzuoGXJQ@mail.gmail.com>
- <20190522163527.rnnc6t4tll7tk5zw@mbp> <201905221316.865581CF@keescook> <20190523144449.waam2mkyzhjpqpur@mbp>
-In-Reply-To: <20190523144449.waam2mkyzhjpqpur@mbp>
-From:   enh <enh@google.com>
-Date:   Thu, 23 May 2019 08:44:12 -0700
-Message-ID: <CAJgzZoqX--Kd9=Kjpnfz-5cjVJ=TdsXM5dJM_EjLFKniVbny2w@mail.gmail.com>
-Subject: Re: [PATCH v15 00/17] arm64: untag user pointers passed to the kernel
-To:     Catalin Marinas <catalin.marinas@arm.com>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Evgenii Stepanov <eugenis@google.com>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        Khalid Aziz <khalid.aziz@oracle.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-rdma@vger.kernel.org, linux-media@vger.kernel.org,
-        kvm@vger.kernel.org,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Will Deacon <will.deacon@arm.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Yishai Hadas <yishaih@mellanox.com>,
-        Felix Kuehling <Felix.Kuehling@amd.com>,
-        Alexander Deucher <Alexander.Deucher@amd.com>,
-        Christian Koenig <Christian.Koenig@amd.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Jens Wiklander <jens.wiklander@linaro.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Kostya Serebryany <kcc@google.com>,
-        Lee Smith <Lee.Smith@arm.com>,
-        Ramana Radhakrishnan <Ramana.Radhakrishnan@arm.com>,
-        Jacob Bramley <Jacob.Bramley@arm.com>,
-        Ruben Ayrapetyan <Ruben.Ayrapetyan@arm.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
-        Dave Martin <Dave.Martin@arm.com>,
-        Kevin Brodsky <kevin.brodsky@arm.com>,
-        Szabolcs Nagy <Szabolcs.Nagy@arm.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, May 23, 2019 at 7:45 AM Catalin Marinas <catalin.marinas@arm.com> wrote:
->
-> On Wed, May 22, 2019 at 01:47:36PM -0700, Kees Cook wrote:
-> > On Wed, May 22, 2019 at 05:35:27PM +0100, Catalin Marinas wrote:
-> > > The two hard requirements I have for supporting any new hardware feature
-> > > in Linux are (1) a single kernel image binary continues to run on old
-> > > hardware while making use of the new feature if available and (2) old
-> > > user space continues to run on new hardware while new user space can
-> > > take advantage of the new feature.
-> >
-> > Agreed! And I think the series meets these requirements, yes?
->
-> Yes. I mentioned this just to make sure people don't expect different
-> kernel builds for different hardware features.
->
-> There is also the obvious requirement which I didn't mention: new user
-> space continues to run on new/subsequent kernel versions. That's one of
-> the points of contention for this series (ignoring MTE) with the
-> maintainers having to guarantee this without much effort. IOW, do the
-> 500K+ new lines in a subsequent kernel version break any user space out
-> there? I'm only talking about the relaxed TBI ABI. Are the usual LTP,
-> syskaller sufficient? Better static analysis would definitely help.
->
-> > > For MTE, we just can't enable it by default since there are applications
-> > > who use the top byte of a pointer and expect it to be ignored rather
-> > > than failing with a mismatched tag. Just think of a hwasan compiled
-> > > binary where TBI is expected to work and you try to run it with MTE
-> > > turned on.
-> >
-> > Ah! Okay, here's the use-case I wasn't thinking of: the concern is TBI
-> > conflicting with MTE. And anything that starts using TBI suddenly can't
-> > run in the future because it's being interpreted as MTE bits? (Is that
-> > the ABI concern?
->
-> That's another aspect to figure out when we add the MTE support. I don't
-> think we'd be able to do this without an explicit opt-in by the user.
->
-> Or, if we ever want MTE to be turned on by default (i.e. tag checking),
-> even if everything is tagged with 0, we have to disallow TBI for user
-> and this includes hwasan. There were a small number of programs using
-> the TBI (I think some JavaScript compilers tried this). But now we are
-> bringing in the hwasan support and this can be a large user base. Shall
-> we add an ELF note for such binaries that use TBI/hwasan?
->
-> This series is still required for MTE but we may decide not to relax the
-> ABI blindly, therefore the opt-in (prctl) or personality idea.
->
-> > I feel like we got into the weeds about ioctl()s and one-off bugs...)
->
-> This needs solving as well. Most driver developers won't know why
-> untagged_addr() is needed unless we have more rigorous types or type
-> annotations and a tool to check them (we should probably revive the old
-> sparse thread).
->
-> > So there needs to be some way to let the kernel know which of three
-> > things it should be doing:
-> > 1- leaving userspace addresses as-is (present)
-> > 2- wiping the top bits before using (this series)
->
-> (I'd say tolerating rather than wiping since get_user still uses the tag
-> in the current series)
->
-> The current series does not allow any choice between 1 and 2, the
-> default ABI basically becomes option 2.
->
-> > 3- wiping the top bits for most things, but retaining them for MTE as
-> >    needed (the future)
->
-> 2 and 3 are not entirely compatible as a tagged pointer may be checked
-> against the memory colour by the hardware. So you can't have hwasan
-> binary with MTE enabled.
->
-> > I expect MTE to be the "default" in the future. Once a system's libc has
-> > grown support for it, everything will be trying to use MTE. TBI will be
-> > the special case (but TBI is effectively a prerequisite).
->
-> The kernel handling of tagged pointers is indeed a prerequisite. The ABI
-> distinction between the above 2 and 3 needs to be solved.
->
-> > AFAICT, the only difference I see between 2 and 3 will be the tag handling
-> > in usercopy (all other places will continue to ignore the top bits). Is
-> > that accurate?
->
-> Yes, mostly (for the kernel). If MTE is enabled by default for a hwasan
-> binary, it will SEGFAULT (either in user space or in kernel uaccess).
-> How does the kernel choose between 2 and 3?
->
-> > Is "1" a per-process state we want to keep? (I assume not, but rather it
-> > is available via no TBI/MTE CONFIG or a boot-time option, if at all?)
->
-> Possibly, though not necessarily per process. For testing or if
-> something goes wrong during boot, a command line option with a static
-> label would do. The AT_FLAGS bit needs to be checked by user space. My
-> preference would be per-process.
->
-> > To choose between "2" and "3", it seems we need a per-process flag to
-> > opt into TBI (and out of MTE).
->
-> Or leave option 2 the default and get it to opt in to MTE.
->
-> > For userspace, how would a future binary choose TBI over MTE? If it's
-> > a library issue, we can't use an ELF bit, since the choice may be
-> > "late" after ELF load (this implies the need for a prctl().) If it's
-> > binary-only ("built with HWKASan") then an ELF bit seems sufficient.
-> > And without the marking, I'd expect the kernel to enforce MTE when
-> > there are high bits.
->
-> The current plan is that a future binary issues a prctl(), after
-> checking the HWCAP_MTE bit (as I replied to Elliot, the MTE instructions
-> are not in the current NOP space). I'd expect this to be done by the
-> libc or dynamic loader under the assumption that the binaries it loads
-> do _not_ use the top pointer byte for anything else.
+Hey,
 
-yeah, it sounds like to support hwasan and MTE, the dynamic linker
-will need to not use either itself.
+This is v2 of this patchset.
 
-> With hwasan
-> compiled objects this gets more confusing (any ELF note to identify
-> them?).
+In accordance with some comments There's a cond_resched() added to the
+close loop similar to what is done for close_files().
+A common helper pick_file() for __close_fd() and __close_range() has
+been split out. This allows to only make a cond_resched() call when
+filp_close() has been called similar to what is done in close_files().
+Maybe that's not worth it. Jann mentioned that cond_resched() looks
+rather cheap.
+So it maybe that we could simply do:
 
-no, at the moment code that wants to know checks for the presence of
-__hwasan_init. (and bionic doesn't actually look at any ELF notes
-right now.) but we can always add something if we need to.
+while (fd <= max_fd) {
+       __close(files, fd++);
+       cond_resched();
+}
 
-> (there is also the risk of existing applications using TBI already but
-> I'm not aware of any still using this feature other than hwasan)
->
-> --
-> Catalin
+I also added a missing test for close_range(fd, fd, 0).
+
+Thanks!
+Christian
+
+Christian Brauner (2):
+  open: add close_range()
+  tests: add close_range() tests
+
+ arch/alpha/kernel/syscalls/syscall.tbl        |   1 +
+ arch/arm/tools/syscall.tbl                    |   1 +
+ arch/arm64/include/asm/unistd32.h             |   2 +
+ arch/ia64/kernel/syscalls/syscall.tbl         |   1 +
+ arch/m68k/kernel/syscalls/syscall.tbl         |   1 +
+ arch/microblaze/kernel/syscalls/syscall.tbl   |   1 +
+ arch/mips/kernel/syscalls/syscall_n32.tbl     |   1 +
+ arch/mips/kernel/syscalls/syscall_n64.tbl     |   1 +
+ arch/mips/kernel/syscalls/syscall_o32.tbl     |   1 +
+ arch/parisc/kernel/syscalls/syscall.tbl       |   1 +
+ arch/powerpc/kernel/syscalls/syscall.tbl      |   1 +
+ arch/s390/kernel/syscalls/syscall.tbl         |   1 +
+ arch/sh/kernel/syscalls/syscall.tbl           |   1 +
+ arch/sparc/kernel/syscalls/syscall.tbl        |   1 +
+ arch/x86/entry/syscalls/syscall_32.tbl        |   1 +
+ arch/x86/entry/syscalls/syscall_64.tbl        |   1 +
+ arch/xtensa/kernel/syscalls/syscall.tbl       |   1 +
+ fs/file.c                                     |  62 +++++++-
+ fs/open.c                                     |  20 +++
+ include/linux/fdtable.h                       |   2 +
+ include/linux/syscalls.h                      |   2 +
+ include/uapi/asm-generic/unistd.h             |   4 +-
+ tools/testing/selftests/Makefile              |   1 +
+ tools/testing/selftests/core/.gitignore       |   1 +
+ tools/testing/selftests/core/Makefile         |   6 +
+ .../testing/selftests/core/close_range_test.c | 142 ++++++++++++++++++
+ 26 files changed, 249 insertions(+), 9 deletions(-)
+ create mode 100644 tools/testing/selftests/core/.gitignore
+ create mode 100644 tools/testing/selftests/core/Makefile
+ create mode 100644 tools/testing/selftests/core/close_range_test.c
+
+-- 
+2.21.0
+
