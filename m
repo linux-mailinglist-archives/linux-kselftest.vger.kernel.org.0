@@ -2,119 +2,164 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AF24828C80
-	for <lists+linux-kselftest@lfdr.de>; Thu, 23 May 2019 23:40:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5486728C89
+	for <lists+linux-kselftest@lfdr.de>; Thu, 23 May 2019 23:43:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388136AbfEWVkO (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 23 May 2019 17:40:14 -0400
-Received: from mail-ed1-f65.google.com ([209.85.208.65]:36724 "EHLO
-        mail-ed1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388209AbfEWVkO (ORCPT
+        id S2388246AbfEWVnh (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 23 May 2019 17:43:37 -0400
+Received: from aserp2130.oracle.com ([141.146.126.79]:53272 "EHLO
+        aserp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2387709AbfEWVnh (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 23 May 2019 17:40:14 -0400
-Received: by mail-ed1-f65.google.com with SMTP id a8so11246779edx.3;
-        Thu, 23 May 2019 14:40:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=7sFc7ThnmJhmVClW066IBr+ugXYu56ow2YaUneJliW0=;
-        b=tq/Xl4TibAUmg94VVJF+gOJisGDmKCiLyMJc14nMfPZXdAJk7ERCF8P96Ymgh0G9ju
-         zXfESZcUOdHw0qbjIn8kgfN9S4+lvq5/vMKpP6M82gr6SHBkrTgVUQhs0QNEMIxwxe8N
-         2j+eWa81owMg/n74R5C77rAc9jQb6LWfVby6ACsv9lcAtfUHnwFDS3A+9/jRCEIoveRY
-         MfMW9uZxa7+GykS8GsasAk04ID42oxnsUV7kuhdCFAvu9mRHLy9Haubsy3sMrzW5eDjP
-         OfKwdv4B+UW0LmdQBDxtKEzrgqb5I0+T4I8zqmypqL+X0WktI7lX4nAPz9rsFv2G3q6u
-         IP7w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=7sFc7ThnmJhmVClW066IBr+ugXYu56ow2YaUneJliW0=;
-        b=Q9pQfLxHZIaxU3VmFV1UIyRDA23AIyPz7tcMEwRZ0NU6l37CRpn4+M1bmct6PWBVAR
-         k+7qRKI9NkFiNQGNRg7t+TaARJsNgOOX504Z/z4srf1ms9IRbdP6iHpsBvxSJAzVj4T0
-         9fyZm505/j+xNcjr/3OWwmpgiRi9Rd5Er/3IHnQLfZXHJpET4oyHh80Z8Zemz1/bw+TC
-         PeEVpyTAioaA6ylU3Yw3uk9IfFXnNYR7C+O+0+tL3eFJlYmcptdpDwoTlcZ9vWBOnx/r
-         EdvLUeZYiBBVKC1f+KWx2+LXOMFbTep4iZ29WgWH2uuFGcWYz6HiCg9iVfmZhOuUjjPS
-         afBQ==
-X-Gm-Message-State: APjAAAWaMwRhNeB6Dg8BclYGm2eICRjlt0xYTXPMbcnkz6Nva8d1FUMC
-        Rt0Cxd+9xij1n67//Oik85UQXwe9ZKgGhW+JEkQ=
-X-Google-Smtp-Source: APXvYqw8tJGqA5c5wGFLyYEPWR/Y+2qo9DCjgzJefGelQCRumPO9B4e5aArLC4cN0khqMzdogT8yU2UsLQPAfJH85tg=
-X-Received: by 2002:a17:906:699:: with SMTP id u25mr41633599ejb.245.1558647612145;
- Thu, 23 May 2019 14:40:12 -0700 (PDT)
-MIME-Version: 1.0
-References: <20190523210651.80902-1-fklassen@appneta.com> <20190523210651.80902-2-fklassen@appneta.com>
-In-Reply-To: <20190523210651.80902-2-fklassen@appneta.com>
-From:   Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-Date:   Thu, 23 May 2019 17:39:36 -0400
-Message-ID: <CAF=yD-Jf95De=z_nx9WFkGDa6+nRUqM_1PqGkjwaFPzOe+PfXg@mail.gmail.com>
-Subject: Re: [PATCH net 1/4] net/udp_gso: Allow TX timestamp with UDP GSO
-To:     Fred Klassen <fklassen@appneta.com>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
+        Thu, 23 May 2019 17:43:37 -0400
+Received: from pps.filterd (aserp2130.oracle.com [127.0.0.1])
+        by aserp2130.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x4NLYrP6194020;
+        Thu, 23 May 2019 21:42:41 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=subject : to : cc :
+ references : from : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=corp-2018-07-02;
+ bh=fChv2jZysnH0YR2y5rlBhLoHF4XJSOv5yE7IjBMa6MI=;
+ b=i5j6lJ3z4Hf6Mwe1uFCyW+Dx0BGc6CLgnMT05UhOAfwtXEFuubZ+5cv8bNXRQH8SGgIo
+ 3OyLnYWAZcw9X87yhv0YScSmwlfD77yg0wTvg1PD2uhxSUM5Gy8pVikHFeRo6px2TaaX
+ 1T5zqOZo/S3v8s0hewcbGZ3eIMfGRoZXC5u4QclbQcN+yRHCnMRvFytz7HBe/xVcQAjJ
+ q7QGNHrFLf5im7IlibITLPPps1G2JhmeRisj45eynyh1gJCP32P+yM8kZMYnSTS9vT+Y
+ qf/xCuv9cZn8I8m8yv46kQ4CowM5trlHuA6dN6lqyIZI05Jf3nu9oHXNSoc9l5912SdM mQ== 
+Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
+        by aserp2130.oracle.com with ESMTP id 2smsk5n8d7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 23 May 2019 21:42:41 +0000
+Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
+        by aserp3030.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x4NLfaot156717;
+        Thu, 23 May 2019 21:42:41 GMT
+Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
+        by aserp3030.oracle.com with ESMTP id 2smsgtgmuy-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 23 May 2019 21:42:41 +0000
+Received: from abhmp0003.oracle.com (abhmp0003.oracle.com [141.146.116.9])
+        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id x4NLgaOB031829;
+        Thu, 23 May 2019 21:42:37 GMT
+Received: from [192.168.1.16] (/24.9.64.241)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Thu, 23 May 2019 21:42:36 +0000
+Subject: Re: [PATCH v15 00/17] arm64: untag user pointers passed to the kernel
+To:     Catalin Marinas <catalin.marinas@arm.com>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Evgenii Stepanov <eugenis@google.com>,
+        Andrey Konovalov <andreyknvl@google.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
         LKML <linux-kernel@vger.kernel.org>,
-        linux-kselftest@vger.kernel.org,
-        Willem de Bruijn <willemb@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-rdma@vger.kernel.org, linux-media@vger.kernel.org,
+        kvm@vger.kernel.org,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Will Deacon <will.deacon@arm.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Yishai Hadas <yishaih@mellanox.com>,
+        Felix Kuehling <Felix.Kuehling@amd.com>,
+        Alexander Deucher <Alexander.Deucher@amd.com>,
+        Christian Koenig <Christian.Koenig@amd.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Jens Wiklander <jens.wiklander@linaro.org>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Kostya Serebryany <kcc@google.com>,
+        Lee Smith <Lee.Smith@arm.com>,
+        Ramana Radhakrishnan <Ramana.Radhakrishnan@arm.com>,
+        Jacob Bramley <Jacob.Bramley@arm.com>,
+        Ruben Ayrapetyan <Ruben.Ayrapetyan@arm.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
+        Dave Martin <Dave.Martin@arm.com>,
+        Kevin Brodsky <kevin.brodsky@arm.com>,
+        Szabolcs Nagy <Szabolcs.Nagy@arm.com>,
+        Elliott Hughes <enh@google.com>
+References: <cover.1557160186.git.andreyknvl@google.com>
+ <20190517144931.GA56186@arrakis.emea.arm.com>
+ <CAFKCwrj6JEtp4BzhqO178LFJepmepoMx=G+YdC8sqZ3bcBp3EQ@mail.gmail.com>
+ <20190521182932.sm4vxweuwo5ermyd@mbp> <201905211633.6C0BF0C2@keescook>
+ <6049844a-65f5-f513-5b58-7141588fef2b@oracle.com>
+ <20190523201105.oifkksus4rzcwqt4@mbp>
+From:   Khalid Aziz <khalid.aziz@oracle.com>
+Organization: Oracle Corp
+Message-ID: <047e3b90-d73e-0ca8-869c-d03b7580e644@oracle.com>
+Date:   Thu, 23 May 2019 15:42:33 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
+MIME-Version: 1.0
+In-Reply-To: <20190523201105.oifkksus4rzcwqt4@mbp>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: quoted-printable
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9266 signatures=668687
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
+ phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=999
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.0.1-1810050000 definitions=main-1905230138
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9266 signatures=668687
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
+ suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
+ lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1810050000
+ definitions=main-1905230138
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, May 23, 2019 at 5:09 PM Fred Klassen <fklassen@appneta.com> wrote:
->
-> Fixes an issue where TX Timestamps are not arriving on the error queue
-> when UDP_SEGMENT CMSG type is combined with CMSG type SO_TIMESTAMPING.
-> This can be illustrated with an updated updgso_bench_tx program which
-> includes the '-T' option to test for this condition.
->
->     ./udpgso_bench_tx -4ucTPv -S 1472 -l2 -D 172.16.120.18
->     poll timeout
->     udp tx:      0 MB/s        1 calls/s      1 msg/s
->
-> The "poll timeout" message above indicates that TX timestamp never
-> arrived.
->
-> It also appears that other TX CMSG types cause similar issues, for
-> example trying to set SOL_IP/IP_TOS.
->
->     ./udpgso_bench_tx -4ucPv -S 1472 -q 182 -l2 -D 172.16.120.18
->     poll timeout
->     udp tx:      0 MB/s        1 calls/s      1 msg/s
->
-> This patch preserves tx_flags for the first UDP GSO segment. This
-> mirrors the stack's behaviour for IPv4 fragments.
->
-> Fixes: ee80d1ebe5ba ("udp: add udp gso")
-> Signed-off-by: Fred Klassen <fklassen@appneta.com>
-> ---
->  net/ipv4/udp_offload.c | 4 ++++
->  1 file changed, 4 insertions(+)
->
-> diff --git a/net/ipv4/udp_offload.c b/net/ipv4/udp_offload.c
-> index 065334b41d57..33de347695ae 100644
-> --- a/net/ipv4/udp_offload.c
-> +++ b/net/ipv4/udp_offload.c
-> @@ -228,6 +228,10 @@ struct sk_buff *__udp_gso_segment(struct sk_buff *gso_skb,
->         seg = segs;
->         uh = udp_hdr(seg);
->
-> +       /* preserve TX timestamp and zero-copy info for first segment */
-> +       skb_shinfo(seg)->tskey = skb_shinfo(gso_skb)->tskey;
-> +       skb_shinfo(seg)->tx_flags = skb_shinfo(gso_skb)->tx_flags;
-> +
+On 5/23/19 2:11 PM, Catalin Marinas wrote:
+> Hi Khalid,
+>=20
+> On Thu, May 23, 2019 at 11:51:40AM -0600, Khalid Aziz wrote:
+>> On 5/21/19 6:04 PM, Kees Cook wrote:
+>>> As an aside: I think Sparc ADI support in Linux actually side-stepped=
 
-Thanks for the report.
+>>> this[1] (i.e. chose "solution 1"): "All addresses passed to kernel mu=
+st
+>>> be non-ADI tagged addresses." (And sadly, "Kernel does not enable ADI=
 
-Zerocopy notification reference count is managed in skb_segment. That
-should work.
+>>> for kernel code.") I think this was a mistake we should not repeat fo=
+r
+>>> arm64 (we do seem to be at least in agreement about this, I think).
+>>>
+>>> [1] https://lore.kernel.org/patchwork/patch/654481/
+>>
+>> That is a very early version of the sparc ADI patch. Support for tagge=
+d
+>> addresses in syscalls was added in later versions and is in the patch
+>> that is in the kernel.
+>=20
+> I tried to figure out but I'm not familiar with the sparc port. How did=
 
-Support for timestamping with the new GSO feature is indeed an
-oversight. The solution is similar to how TCP associates the timestamp
-with the right segment in tcp_gso_tstamp.
+> you solve the tagged address going into various syscall implementations=
 
-Only, I think we want to transfer the timestamp request to the last
-datagram, not the first. For send timestamp, the final byte leaving
-the host is usually more interesting.
+> in the kernel (e.g. sys_write)? Is the tag removed on kernel entry or i=
+t
+> ends up deeper in the core code?
+
+Tag is not removed from the user addresses. Kernel passes tagged
+addresses to copy_from_user and copy_to_user. MMU checks the tag
+embedded in the address when kernel accesses userspace addresses. This
+maintains the ADI integrity even when userspace attempts to access any
+userspace addresses through system calls.
+
+On sparc, access_ok() is defined as:
+
+#define access_ok(addr, size) __access_ok((unsigned long)(addr), size)
+#define __access_ok(addr, size) (__user_ok((addr) & get_fs().seg, (size))=
+)
+#define __user_ok(addr, size) ({ (void)(size); (addr) < STACK_TOP; })
+
+STACK_TOP for M7 processor (which is the first sparc processor to
+support ADI) is 0xfff8000000000000UL. Tagged addresses pass the
+access_ok() check fine. Any tag mismatches that happen during kernel
+access to userspace addresses are handled by do_mcd_err().
+
+--
+Khalid
+
