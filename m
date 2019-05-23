@@ -2,150 +2,123 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D744284A0
-	for <lists+linux-kselftest@lfdr.de>; Thu, 23 May 2019 19:14:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EB6A2845F
+	for <lists+linux-kselftest@lfdr.de>; Thu, 23 May 2019 18:57:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731142AbfEWROB (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 23 May 2019 13:14:01 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:56550 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1731138AbfEWROB (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 23 May 2019 13:14:01 -0400
-Received: from pps.filterd (m0044010.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x4NGjY12015831;
-        Thu, 23 May 2019 09:51:41 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : references : in-reply-to : content-type : content-id
- : content-transfer-encoding : mime-version; s=facebook;
- bh=tO72be5dkTfIBrFIHCx5/fmWZPSTEXtAW1gzuX1OJGs=;
- b=oLgS+NZywjwV4vhTdT51r3BqrISrhV97fitW/wGiJtBiG6HJE+uT07kUc37jKIK0ur1f
- JcR7ywJOyyaNBJMn1hKiAPcwNQQac1A26LImZoZUKJqQdCuVJODzvXXCmW0OJpr/rBnQ
- UUpktTzu9Gd0qxwTgOsOwfEFEQsNRp7JVwI= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 2snxsv0538-2
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Thu, 23 May 2019 09:51:41 -0700
-Received: from ash-exhub204.TheFacebook.com (2620:10d:c0a8:83::4) by
- ash-exhub204.TheFacebook.com (2620:10d:c0a8:83::4) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1713.5; Thu, 23 May 2019 09:51:38 -0700
-Received: from NAM01-SN1-obe.outbound.protection.outlook.com (100.104.31.183)
- by o365-in.thefacebook.com (100.104.36.100) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.1713.5
- via Frontend Transport; Thu, 23 May 2019 09:51:38 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.onmicrosoft.com;
- s=selector1-fb-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=tO72be5dkTfIBrFIHCx5/fmWZPSTEXtAW1gzuX1OJGs=;
- b=hQ+PeJ7Jfii6AcTCTYN8CwUN/pGgkmq2kA4SlipuUb+oMKDKGBbCQzEgn3+tYtS9ssJyGKAANMNmHn/lOZaSXmLg9r1po1HNkv03nOAWRTp+iWu34SgEawlgaANrhQ14oxyn3CUQikuJ6kNZzbd1f3oR3An7aL3XRu/pVUTkFnY=
-Received: from BYAPR15MB3384.namprd15.prod.outlook.com (20.179.59.17) by
- BYAPR15MB2629.namprd15.prod.outlook.com (20.179.156.22) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.1922.16; Thu, 23 May 2019 16:51:20 +0000
-Received: from BYAPR15MB3384.namprd15.prod.outlook.com
- ([fe80::956e:28a4:f18d:b698]) by BYAPR15MB3384.namprd15.prod.outlook.com
- ([fe80::956e:28a4:f18d:b698%3]) with mapi id 15.20.1900.020; Thu, 23 May 2019
- 16:51:20 +0000
-From:   Yonghong Song <yhs@fb.com>
-To:     Michal Rostecki <mrostecki@opensuse.org>
-CC:     Shuah Khan <shuah@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        "Daniel Borkmann" <daniel@iogearbox.net>,
-        Martin Lau <kafai@fb.com>, Song Liu <songliubraving@fb.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        "Jakub Kicinski" <jakub.kicinski@netronome.com>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        "open list:BPF (Safe dynamic programs and tools)" 
-        <netdev@vger.kernel.org>,
-        "open list:BPF (Safe dynamic programs and tools)" 
-        <bpf@vger.kernel.org>, open list <linux-kernel@vger.kernel.org>,
-        "open list:XDP (eXpress Data Path)" <xdp-newbies@vger.kernel.org>
-Subject: Re: [PATCH bpf-next v2 RESEND 0/2] Move bpf_printk to bpf_helpers.h
-Thread-Topic: [PATCH bpf-next v2 RESEND 0/2] Move bpf_printk to bpf_helpers.h
-Thread-Index: AQHVEWZ9tKZLQB45uky5/KKE/VBBiKZ47KwA
-Date:   Thu, 23 May 2019 16:51:20 +0000
-Message-ID: <4642ca96-22ab-ad61-a6a1-1d2ef7239cb8@fb.com>
-References: <20190523125355.18437-1-mrostecki@opensuse.org>
-In-Reply-To: <20190523125355.18437-1-mrostecki@opensuse.org>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-clientproxiedby: MWHPR22CA0021.namprd22.prod.outlook.com
- (2603:10b6:300:ef::31) To BYAPR15MB3384.namprd15.prod.outlook.com
- (2603:10b6:a03:10e::17)
-x-ms-exchange-messagesentrepresentingtype: 1
-x-originating-ip: [2620:10d:c090:200::d011]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 05c4d72b-7041-4e4a-59d5-08d6df9ee15c
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600141)(711020)(4605104)(2017052603328)(7193020);SRVR:BYAPR15MB2629;
-x-ms-traffictypediagnostic: BYAPR15MB2629:
-x-microsoft-antispam-prvs: <BYAPR15MB26290CAF1D766E076074FC31D3010@BYAPR15MB2629.namprd15.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:4303;
-x-forefront-prvs: 00462943DE
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(376002)(396003)(136003)(346002)(366004)(39860400002)(199004)(189003)(81156014)(81166006)(52116002)(86362001)(102836004)(36756003)(8676002)(386003)(6506007)(14454004)(99286004)(25786009)(71190400001)(71200400001)(478600001)(2906002)(229853002)(305945005)(46003)(7736002)(5660300002)(54906003)(31696002)(76176011)(53546011)(186003)(316002)(68736007)(446003)(11346002)(2616005)(476003)(486006)(53936002)(7416002)(256004)(8936002)(66556008)(64756008)(66446008)(6916009)(6512007)(6246003)(66946007)(66476007)(31686004)(73956011)(6116002)(6436002)(6486002)(4326008);DIR:OUT;SFP:1102;SCL:1;SRVR:BYAPR15MB2629;H:BYAPR15MB3384.namprd15.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
-received-spf: None (protection.outlook.com: fb.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: +Zq4turRfNZQX0W7axyVBgUhzhxgdXftvnYCC/4EHawTCPQOBxx4Qx227Ml4hMjFXC3iyT1yvn4WHVO/Oc6U1ZKNvsPkdbg2Ex1vJjfzg2Mr/XMo5ZH3iJLyq7/B+/sR1lGMx+87zQwyoNhyLcCV1UHuIlr5tDAuQqAFtklKIDgDVnXBpH9lXF0v7L+pfmhHZ4l8EFxqGZ2Mes9l/HqF5I4x65MEewWnqamGWp+PuFOVapoAPdNx42pYsHMI2XSZibmrchNwclAR6jNhWYJbqOvFtH1/M6/252gvpfAcOleyIzufhF6vBw/mqZfYaLm0aQ7Z5XO8ZdNX9eSfnDqgLvbNeYdDQynrRZlvy8fyelaoOmhU5BY3x4yiqHI6ePau6/La7TZQBjJ2TEQ9odPSOyRcdg3FXpjCKjUajAQz9gA=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <BD6A272AAD7B7F488C08810609D42B8E@namprd15.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        id S1731319AbfEWQ5X (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 23 May 2019 12:57:23 -0400
+Received: from foss.arm.com ([217.140.101.70]:50904 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1730899AbfEWQ5W (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 23 May 2019 12:57:22 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.72.51.249])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0774C374;
+        Thu, 23 May 2019 09:57:22 -0700 (PDT)
+Received: from mbp (usa-sjc-mx-foss1.foss.arm.com [217.140.101.70])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1B06C3F5AF;
+        Thu, 23 May 2019 09:57:15 -0700 (PDT)
+Date:   Thu, 23 May 2019 17:57:09 +0100
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Dave Martin <Dave.Martin@arm.com>
+Cc:     Jason Gunthorpe <jgg@ziepe.ca>,
+        Mark Rutland <mark.rutland@arm.com>, kvm@vger.kernel.org,
+        Christian Koenig <Christian.Koenig@amd.com>,
+        Szabolcs Nagy <Szabolcs.Nagy@arm.com>,
+        Will Deacon <will.deacon@arm.com>,
+        dri-devel@lists.freedesktop.org, linux-mm@kvack.org,
+        Lee Smith <Lee.Smith@arm.com>, linux-kselftest@vger.kernel.org,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Jacob Bramley <Jacob.Bramley@arm.com>,
+        Leon Romanovsky <leon@kernel.org>, linux-rdma@vger.kernel.org,
+        amd-gfx@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org,
+        Evgeniy Stepanov <eugenis@google.com>,
+        linux-media@vger.kernel.org, Kees Cook <keescook@chromium.org>,
+        Ruben Ayrapetyan <Ruben.Ayrapetyan@arm.com>,
+        Andrey Konovalov <andreyknvl@google.com>,
+        Kevin Brodsky <kevin.brodsky@arm.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Kostya Serebryany <kcc@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felix Kuehling <Felix.Kuehling@amd.com>,
+        linux-kernel@vger.kernel.org,
+        Jens Wiklander <jens.wiklander@linaro.org>,
+        Ramana Radhakrishnan <Ramana.Radhakrishnan@arm.com>,
+        Alexander Deucher <Alexander.Deucher@amd.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Yishai Hadas <yishaih@mellanox.com>,
+        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>
+Subject: Re: [PATCH v15 00/17] arm64: untag user pointers passed to the kernel
+Message-ID: <20190523165708.q6ru7xg45aqfjzpr@mbp>
+References: <cover.1557160186.git.andreyknvl@google.com>
+ <20190517144931.GA56186@arrakis.emea.arm.com>
+ <20190521184856.GC2922@ziepe.ca>
+ <20190522134925.GV28398@e103592.cambridge.arm.com>
+ <20190523002052.GF15389@ziepe.ca>
+ <20190523104256.GX28398@e103592.cambridge.arm.com>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-Network-Message-Id: 05c4d72b-7041-4e4a-59d5-08d6df9ee15c
-X-MS-Exchange-CrossTenant-originalarrivaltime: 23 May 2019 16:51:20.1274
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR15MB2629
-X-OriginatorOrg: fb.com
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-05-23_13:,,
- signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 priorityscore=1501
- malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
- clxscore=1011 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1810050000 definitions=main-1905230114
-X-FB-Internal: deliver
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190523104256.GX28398@e103592.cambridge.arm.com>
+User-Agent: NeoMutt/20170113 (1.7.2)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-DQoNCk9uIDUvMjMvMTkgNTo1MyBBTSwgTWljaGFsIFJvc3RlY2tpIHdyb3RlOg0KPiBUaGlzIHNl
-cmllcyBvZiBwYXRjaGVzIG1vdmUgdGhlIGNvbW1vbmx5IHVzZWQgYnBmX3ByaW50ayBtYWNybyB0
-bw0KPiBicGZfaGVscGVycy5oIHdoaWNoIGlzIGFscmVhZHkgaW5jbHVkZWQgaW4gYWxsIEJQRiBw
-cm9ncmFtcyB3aGljaA0KPiBkZWZpbmVkIHRoYXQgbWFjcm8gb24gdGhlaXIgb3duLg0KPiANCj4g
-djEtPnYyOg0KPiAtIElmIEhCTV9ERUJVRyBpcyBub3QgZGVmaW5lZCBpbiBoYm0gc2FtcGxlLCB1
-bmRlZmluZSBicGZfcHJpbnRrIGFuZCBzZXQNCj4gICAgYW4gZW1wdHkgbWFjcm8gZm9yIGl0Lg0K
-PiANCj4gTWljaGFsIFJvc3RlY2tpICgyKToNCj4gICAgc2VsZnRlc3RzOiBicGY6IE1vdmUgYnBm
-X3ByaW50ayB0byBicGZfaGVscGVycy5oDQo+ICAgIHNhbXBsZXM6IGJwZjogRG8gbm90IGRlZmlu
-ZSBicGZfcHJpbnRrIG1hY3JvDQo+IA0KPiAgIHNhbXBsZXMvYnBmL2hibV9rZXJuLmggICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgIHwgMTEgKystLS0tLS0tLS0NCj4gICBzYW1wbGVzL2Jw
-Zi90Y3BfYmFzZXJ0dF9rZXJuLmMgICAgICAgICAgICAgICAgICAgICAgICB8ICA3IC0tLS0tLS0N
-Cj4gICBzYW1wbGVzL2JwZi90Y3BfYnVmc19rZXJuLmMgICAgICAgICAgICAgICAgICAgICAgICAg
-ICB8ICA3IC0tLS0tLS0NCj4gICBzYW1wbGVzL2JwZi90Y3BfY2xhbXBfa2Vybi5jICAgICAgICAg
-ICAgICAgICAgICAgICAgICB8ICA3IC0tLS0tLS0NCj4gICBzYW1wbGVzL2JwZi90Y3BfY29uZ19r
-ZXJuLmMgICAgICAgICAgICAgICAgICAgICAgICAgICB8ICA3IC0tLS0tLS0NCj4gICBzYW1wbGVz
-L2JwZi90Y3BfaXdfa2Vybi5jICAgICAgICAgICAgICAgICAgICAgICAgICAgICB8ICA3IC0tLS0t
-LS0NCj4gICBzYW1wbGVzL2JwZi90Y3BfcnduZF9rZXJuLmMgICAgICAgICAgICAgICAgICAgICAg
-ICAgICB8ICA3IC0tLS0tLS0NCj4gICBzYW1wbGVzL2JwZi90Y3Bfc3lucnRvX2tlcm4uYyAgICAg
-ICAgICAgICAgICAgICAgICAgICB8ICA3IC0tLS0tLS0NCj4gICBzYW1wbGVzL2JwZi90Y3BfdG9z
-X3JlZmxlY3Rfa2Vybi5jICAgICAgICAgICAgICAgICAgICB8ICA3IC0tLS0tLS0NCj4gICBzYW1w
-bGVzL2JwZi94ZHBfc2FtcGxlX3BrdHNfa2Vybi5jICAgICAgICAgICAgICAgICAgICB8ICA3IC0t
-LS0tLS0NCj4gICB0b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9icGYvYnBmX2hlbHBlcnMuaCAgICAg
-ICAgICAgICB8ICA4ICsrKysrKysrDQo+ICAgLi4uL3Rlc3Rpbmcvc2VsZnRlc3RzL2JwZi9wcm9n
-cy9zb2NrbWFwX3BhcnNlX3Byb2cuYyAgfCAgNyAtLS0tLS0tDQo+ICAgLi4uL3NlbGZ0ZXN0cy9i
-cGYvcHJvZ3Mvc29ja21hcF90Y3BfbXNnX3Byb2cuYyAgICAgICAgfCAgNyAtLS0tLS0tDQo+ICAg
-Li4uL3NlbGZ0ZXN0cy9icGYvcHJvZ3Mvc29ja21hcF92ZXJkaWN0X3Byb2cuYyAgICAgICAgfCAg
-NyAtLS0tLS0tDQo+ICAgLi4uL3Rlc3Rpbmcvc2VsZnRlc3RzL2JwZi9wcm9ncy90ZXN0X2x3dF9z
-ZWc2bG9jYWwuYyAgfCAgNyAtLS0tLS0tDQo+ICAgdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMvYnBm
-L3Byb2dzL3Rlc3RfeGRwX25vaW5saW5lLmMgfCAgNyAtLS0tLS0tDQo+ICAgdG9vbHMvdGVzdGlu
-Zy9zZWxmdGVzdHMvYnBmL3Rlc3Rfc29ja21hcF9rZXJuLmggICAgICAgfCAgNyAtLS0tLS0tDQo+
-ICAgMTcgZmlsZXMgY2hhbmdlZCwgMTAgaW5zZXJ0aW9ucygrKSwgMTE0IGRlbGV0aW9ucygtKQ0K
-DQpBY2sgZm9yIHRoZSB3aG9sZSBzZXJpZXMuDQpBY2tlZC1ieTogWW9uZ2hvbmcgU29uZyA8eWhz
-QGZiLmNvbT4NCg==
+On Thu, May 23, 2019 at 11:42:57AM +0100, Dave P Martin wrote:
+> On Wed, May 22, 2019 at 09:20:52PM -0300, Jason Gunthorpe wrote:
+> > On Wed, May 22, 2019 at 02:49:28PM +0100, Dave Martin wrote:
+> > > If multiple people will care about this, perhaps we should try to
+> > > annotate types more explicitly in SYSCALL_DEFINEx() and ABI data
+> > > structures.
+> > > 
+> > > For example, we could have a couple of mutually exclusive modifiers
+> > > 
+> > > T __object *
+> > > T __vaddr * (or U __vaddr)
+> > > 
+> > > In the first case the pointer points to an object (in the C sense)
+> > > that the call may dereference but not use for any other purpose.
+> > 
+> > How would you use these two differently?
+> > 
+> > So far the kernel has worked that __user should tag any pointer that
+> > is from userspace and then you can't do anything with it until you
+> > transform it into a kernel something
+> 
+> Ultimately it would be good to disallow casting __object pointers execpt
+> to compatible __object pointer types, and to make get_user etc. demand
+> __object.
+> 
+> __vaddr pointers / addresses would be freely castable, but not to
+> __object and so would not be dereferenceable even indirectly.
+
+I think it gets too complicated and there are ambiguous cases that we
+may not be able to distinguish. For example copy_from_user() may be used
+to copy a user data structure into the kernel, hence __object would
+work, while the same function may be used to copy opaque data to a file,
+so __vaddr may be a better option (unless I misunderstood your
+proposal).
+
+We currently have T __user * and I think it's a good starting point. The
+prior attempt [1] was shut down because it was just hiding the cast
+using __force. We'd need to work through those cases again and rather
+start changing the function prototypes to avoid unnecessary casting in
+the callers (e.g. get_user_pages(void __user *) or come up with a new
+type) while changing the explicit casting to a macro where it needs to
+be obvious that we are converting a user pointer, potentially typed
+(tagged), to an untyped address range. We may need a user_ptr_to_ulong()
+macro or similar (it seems that we have a u64_to_user_ptr, wasn't aware
+of it).
+
+It may actually not be far from what you suggested but I'd keep the
+current T __user * to denote possible dereference.
+
+[1] https://lore.kernel.org/lkml/5d54526e5ff2e5ad63d0dfdd9ab17cf359afa4f2.1535629099.git.andreyknvl@google.com/
+
+-- 
+Catalin
