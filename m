@@ -2,23 +2,23 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1976E28D22
-	for <lists+linux-kselftest@lfdr.de>; Fri, 24 May 2019 00:32:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 86B3E28D0B
+	for <lists+linux-kselftest@lfdr.de>; Fri, 24 May 2019 00:32:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388510AbfEWWbq (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 23 May 2019 18:31:46 -0400
-Received: from ale.deltatee.com ([207.54.116.67]:59942 "EHLO ale.deltatee.com"
+        id S2388516AbfEWWbM (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 23 May 2019 18:31:12 -0400
+Received: from ale.deltatee.com ([207.54.116.67]:59978 "EHLO ale.deltatee.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2388481AbfEWWbL (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 23 May 2019 18:31:11 -0400
+        id S2388509AbfEWWbM (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 23 May 2019 18:31:12 -0400
 Received: from cgy1-donard.priv.deltatee.com ([172.16.1.31])
         by ale.deltatee.com with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.89)
         (envelope-from <gunthorp@deltatee.com>)
-        id 1hTwEs-00062P-Ev; Thu, 23 May 2019 16:31:09 -0600
+        id 1hTwEs-00062Q-Eu; Thu, 23 May 2019 16:31:10 -0600
 Received: from gunthorp by cgy1-donard.priv.deltatee.com with local (Exim 4.89)
         (envelope-from <gunthorp@deltatee.com>)
-        id 1hTwEp-0001S8-Tc; Thu, 23 May 2019 16:31:03 -0600
+        id 1hTwEq-0001SB-0u; Thu, 23 May 2019 16:31:04 -0600
 From:   Logan Gunthorpe <logang@deltatee.com>
 To:     linux-kernel@vger.kernel.org, linux-ntb@googlegroups.com,
         linux-pci@vger.kernel.org, iommu@lists.linux-foundation.org,
@@ -30,8 +30,8 @@ Cc:     Bjorn Helgaas <bhelgaas@google.com>,
         Serge Semin <fancer.lancer@gmail.com>,
         Eric Pilmore <epilmore@gigaio.com>,
         Logan Gunthorpe <logang@deltatee.com>
-Date:   Thu, 23 May 2019 16:30:53 -0600
-Message-Id: <20190523223100.5526-4-logang@deltatee.com>
+Date:   Thu, 23 May 2019 16:30:54 -0600
+Message-Id: <20190523223100.5526-5-logang@deltatee.com>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20190523223100.5526-1-logang@deltatee.com>
 References: <20190523223100.5526-1-logang@deltatee.com>
@@ -45,7 +45,7 @@ X-Spam-Level:
 X-Spam-Status: No, score=-8.7 required=5.0 tests=ALL_TRUSTED,BAYES_00,
         GREYLIST_ISWHITE,MYRULES_NO_TEXT autolearn=ham autolearn_force=no
         version=3.4.2
-Subject: [PATCH v5 03/10] NTB: Introduce helper functions to calculate logical port number
+Subject: [PATCH v5 04/10] NTB: Introduce functions to calculate multi-port resource index
 X-SA-Exim-Version: 4.2.1 (built Tue, 02 Aug 2016 21:08:31 +0000)
 X-SA-Exim-Scanned: Yes (on ale.deltatee.com)
 Sender: linux-kselftest-owner@vger.kernel.org
@@ -53,106 +53,106 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This patch introduces the "Logical Port Number" which is similar to the
-"Port Number" in that it enumerates the ports in the system.
+When using multi-ports each port uses resources (dbs, msgs, mws, etc)
+on every other port. Creating a mapping for these resources such that
+each port has a corresponding resource on every other port is a bit
+tricky.
 
-The original (or Physical) "Port Number" can be any number used by the
-hardware to uniquely identify a port in the system. The "Logical Port
-Number" enumerates all ports in the system from 0 to the number of
-ports minus one.
+Introduce the ntb_peer_resource_idx() function for this purpose.
+It returns the peer resource number that will correspond with the
+local peer index on the remote peer.
 
-For example a system with 5 ports might have the following port numbers
-which would be enumerated thusly:
-
-Port Number:           1  2  5  7  116
-Logical Port Number:   0  1  2  3  4
-
-The logical port number is useful when calculating which resources
-to use for which peers. So we thus define two helper functions:
-ntb_logical_port_number() and ntb_peer_logical_port_number() which
-provide the "Logical Port Number" for the local port and any peer
-respectively.
+Also, introduce ntb_peer_highest_mw_idx() which will use
+ntb_peer_resource_idx() but return the MW index starting with the
+highest index and working down.
 
 Signed-off-by: Logan Gunthorpe <logang@deltatee.com>
 Cc: Jon Mason <jdmason@kudzu.us>
 Cc: Dave Jiang <dave.jiang@intel.com>
 Cc: Allen Hubbe <allenbh@gmail.com>
-Cc: Serge Semin <fancer.lancer@gmail.com>
 ---
- include/linux/ntb.h | 53 ++++++++++++++++++++++++++++++++++++++++++++-
- 1 file changed, 52 insertions(+), 1 deletion(-)
+ include/linux/ntb.h | 70 +++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 70 insertions(+)
 
 diff --git a/include/linux/ntb.h b/include/linux/ntb.h
-index 56a92e3ae3ae..91cf492b16a0 100644
+index 91cf492b16a0..66552830544b 100644
 --- a/include/linux/ntb.h
 +++ b/include/linux/ntb.h
-@@ -616,7 +616,6 @@ static inline int ntb_port_number(struct ntb_dev *ntb)
- 
- 	return ntb->ops->port_number(ntb);
- }
--
- /**
-  * ntb_peer_port_count() - get the number of peer device ports
-  * @ntb:	NTB device context.
-@@ -653,6 +652,58 @@ static inline int ntb_peer_port_number(struct ntb_dev *ntb, int pidx)
- 	return ntb->ops->peer_port_number(ntb, pidx);
+@@ -1557,4 +1557,74 @@ static inline int ntb_peer_msg_write(struct ntb_dev *ntb, int pidx, int midx,
+ 	return ntb->ops->peer_msg_write(ntb, pidx, midx, msg);
  }
  
 +/**
-+ * ntb_logical_port_number() - get the logical port number of the local port
-+ * @ntb:	NTB device context.
-+ *
-+ * The Logical Port Number is defined to be a unique number for each
-+ * port starting from zero through to the number of ports minus one.
-+ * This is in contrast to the Port Number where each port can be assigned
-+ * any unique physical number by the hardware.
-+ *
-+ * The logical port number is useful for calculating the resource indexes
-+ * used by peers.
-+ *
-+ * Return: the logical port number or negative value indicating an error
-+ */
-+static inline int ntb_logical_port_number(struct ntb_dev *ntb)
-+{
-+	int lport = ntb_port_number(ntb);
-+	int pidx;
-+
-+	if (lport < 0)
-+		return lport;
-+
-+	for (pidx = 0; pidx < ntb_peer_port_count(ntb); pidx++)
-+		if (lport <= ntb_peer_port_number(ntb, pidx))
-+			return pidx;
-+
-+	return pidx;
-+}
-+
-+/**
-+ * ntb_peer_logical_port_number() - get the logical peer port by given index
++ * ntb_peer_resource_idx() - get a resource index for a given peer idx
 + * @ntb:	NTB device context.
 + * @pidx:	Peer port index.
 + *
-+ * The Logical Port Number is defined to be a unique number for each
-+ * port starting from zero through to the number of ports minus one.
-+ * This is in contrast to the Port Number where each port can be assigned
-+ * any unique physical number by the hardware.
++ * When constructing a graph of peers, each remote peer must use a different
++ * resource index (mw, doorbell, etc) to communicate with each other
++ * peer.
 + *
-+ * The logical port number is useful for calculating the resource indexes
-+ * used by peers.
++ * In a two peer system, this function should always return 0 such that
++ * resource 0 points to the remote peer on both ports.
 + *
-+ * Return: the peer's logical port number or negative value indicating an error
++ * In a 5 peer system, this function will return the following matrix
++ *
++ * pidx \ port    0    1    2    3    4
++ * 0              0    0    1    2    3
++ * 1              0    1    1    2    3
++ * 2              0    1    2    2    3
++ * 3              0    1    2    3    3
++ *
++ * For example, if this function is used to program peer's memory
++ * windows, port 0 will program MW 0 on all it's peers to point to itself.
++ * port 1 will program MW 0 in port 0 to point to itself and MW 1 on all
++ * other ports. etc.
++ *
++ * For the legacy two host case, ntb_port_number() and ntb_peer_port_number()
++ * both return zero and therefore this function will always return zero.
++ * So MW 0 on each host would be programmed to point to the other host.
++ *
++ * Return: the resource index to use for that peer.
 + */
-+static inline int ntb_peer_logical_port_number(struct ntb_dev *ntb, int pidx)
++static inline int ntb_peer_resource_idx(struct ntb_dev *ntb, int pidx)
 +{
-+	if (ntb_peer_port_number(ntb, pidx) < ntb_port_number(ntb))
-+		return pidx;
++	int local_port, peer_port;
++
++	if (pidx >= ntb_peer_port_count(ntb))
++		return -EINVAL;
++
++	local_port = ntb_logical_port_number(ntb);
++	peer_port = ntb_peer_logical_port_number(ntb, pidx);
++
++	if (peer_port < local_port)
++		return local_port - 1;
 +	else
-+		return pidx + 1;
++		return local_port;
 +}
 +
- /**
-  * ntb_peer_port_idx() - get the peer device port index by given port number
-  * @ntb:	NTB device context.
++/**
++ * ntb_peer_highest_mw_idx() - get a memory window index for a given peer idx
++ *	using the highest index memory windows first
++ *
++ * @ntb:	NTB device context.
++ * @pidx:	Peer port index.
++ *
++ * Like ntb_peer_resource_idx(), except it returns indexes starting with
++ * last memory window index.
++ *
++ * Return: the resource index to use for that peer.
++ */
++static inline int ntb_peer_highest_mw_idx(struct ntb_dev *ntb, int pidx)
++{
++	int ret;
++
++	ret = ntb_peer_resource_idx(ntb, pidx);
++	if (ret < 0)
++		return ret;
++
++	return ntb_mw_count(ntb, pidx) - ret - 1;
++}
++
+ #endif
 -- 
 2.20.1
 
