@@ -2,130 +2,57 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E5AA229C62
-	for <lists+linux-kselftest@lfdr.de>; Fri, 24 May 2019 18:34:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9913229CAA
+	for <lists+linux-kselftest@lfdr.de>; Fri, 24 May 2019 19:04:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390448AbfEXQe5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 24 May 2019 12:34:57 -0400
-Received: from mail-pg1-f195.google.com ([209.85.215.195]:36372 "EHLO
-        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2390021AbfEXQe4 (ORCPT
+        id S1726184AbfEXREq (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 24 May 2019 13:04:46 -0400
+Received: from relay6-d.mail.gandi.net ([217.70.183.198]:59553 "EHLO
+        relay6-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725886AbfEXREq (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 24 May 2019 12:34:56 -0400
-Received: by mail-pg1-f195.google.com with SMTP id a3so5345196pgb.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 24 May 2019 09:34:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=appneta.com; s=google;
-        h=mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=jMjLROklthN+O3Df8yt9TlHidscQVhl/xhe8VKBhLw0=;
-        b=RTj7+3ho4OVZTP8Zx35lNiConf8t4mXw1wlWc21/pod0vTNlY8j/MoTM0eGPSLppM8
-         sRyavB6yAVpbZgB5HE7IGIRsBTgCs3ES4GnUhWYZCLSSRaWgr4T1k1akNZEbyenwNpap
-         KmziuotEvNKVL9Agwn8XZS8+K+40oh3/C2Teo=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=jMjLROklthN+O3Df8yt9TlHidscQVhl/xhe8VKBhLw0=;
-        b=QTUeSsCyJr1E0L/bhsT38S/ZTgwWXn6vr+B2GMER2C5lqQYh9qCeTj661m2ke0qbzd
-         StZ5eLtt9ipli/SD9z/TUYuQAlEBsHPo0NYrnjJt/bWFBIUTcwluFhhqZv0k2TGj+1yG
-         wfYMnWO/TWLOHHA7ctOt6YVq81ecfRSdzpldt84BZxrkXNo6+otfG+QHmozeEXhllGMr
-         INXnR8p8Bbjt/jLNZIk4hpvyjGYm6Zo7mzKsspuGSMKfuSgG4uGIe1lQQmnhsnRcDgV+
-         lsWFlNx3hWIq6GxO0YQ34cYTV1XUf8lbwFyYVOIRHh2sx5XgSssIJt6xdDf1aDYGUDVd
-         Ravw==
-X-Gm-Message-State: APjAAAVdTniyMcFeFtvQ8DgG3cUjxJvgBPYaU+05k02eLw1YCrZtrFW+
-        9lZbwTGjSX9BPUwvvdgfkIyIbT3IjSl9/O6d
-X-Google-Smtp-Source: APXvYqyx2N/q7mx3gGOoUYMl3j9OfFC00BbVqsItAFzefwBvP16+2eS7FZ9WPkOnQwkTuBN0z2WxYQ==
-X-Received: by 2002:a17:90a:d16:: with SMTP id t22mr10712067pja.130.1558715695943;
-        Fri, 24 May 2019 09:34:55 -0700 (PDT)
-Received: from jltm109.jaalam.net (vancouver-a.appneta.com. [209.139.228.33])
-        by smtp.gmail.com with ESMTPSA id l65sm4818808pfb.7.2019.05.24.09.34.54
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 24 May 2019 09:34:55 -0700 (PDT)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.8\))
-Subject: Re: [PATCH net 1/4] net/udp_gso: Allow TX timestamp with UDP GSO
-From:   Fred Klassen <fklassen@appneta.com>
-In-Reply-To: <CAF=yD-LtAKpND601LQrC1+=iF6spSUXVdUapcsbJdv5FYa=5Jg@mail.gmail.com>
-Date:   Fri, 24 May 2019 09:34:54 -0700
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-kselftest@vger.kernel.org,
-        Willem de Bruijn <willemb@google.com>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <AFC1ECC8-BFAC-4718-B0C9-97CC4BD1F397@appneta.com>
-References: <20190523210651.80902-1-fklassen@appneta.com>
- <20190523210651.80902-2-fklassen@appneta.com>
- <CAF=yD-Jf95De=z_nx9WFkGDa6+nRUqM_1PqGkjwaFPzOe+PfXg@mail.gmail.com>
- <AE8E0772-7256-4B9C-A990-96930E834AEE@appneta.com>
- <CAF=yD-LtAKpND601LQrC1+=iF6spSUXVdUapcsbJdv5FYa=5Jg@mail.gmail.com>
-To:     Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-X-Mailer: Apple Mail (2.3445.104.8)
+        Fri, 24 May 2019 13:04:46 -0400
+X-Originating-IP: 90.66.53.80
+Received: from localhost (lfbn-1-3034-80.w90-66.abo.wanadoo.fr [90.66.53.80])
+        (Authenticated sender: alexandre.belloni@bootlin.com)
+        by relay6-d.mail.gandi.net (Postfix) with ESMTPSA id CDCFCC0007;
+        Fri, 24 May 2019 17:04:42 +0000 (UTC)
+Date:   Fri, 24 May 2019 19:04:42 +0200
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     Jeffrin Thalakkottoor <jeffrin@rajagiritech.edu.in>
+Cc:     a.zummo@towertech.it, Shuah Khan <shuah@kernel.org>,
+        linux-rtc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        lkml <linux-kernel@vger.kernel.org>
+Subject: Re: about selftests/rtc test related stuff
+Message-ID: <20190524170442.GE3274@piout.net>
+References: <CAG=yYwk+g28_dnOcN--w-PLbGtA2oM5tq14W4X5bBjdurnF2iA@mail.gmail.com>
+ <20190523174739.GY3274@piout.net>
+ <CAG=yYwmrE30nROqn63oAkXN9BCqfmo4T7+QPN-H3mSGG9dLU4A@mail.gmail.com>
+ <20190523225219.GZ3274@piout.net>
+ <CAG=yYwkhy5wTRywr5QUmGVQOED3EGQC8jFSCSj---TJfoyEhpw@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAG=yYwkhy5wTRywr5QUmGVQOED3EGQC8jFSCSj---TJfoyEhpw@mail.gmail.com>
+User-Agent: Mutt/1.11.4 (2019-03-13)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-> Interesting. TCP timestamping takes the opposite choice and does
-> timestamp the last byte in the sendmsg request.
->=20
+On 24/05/2019 19:23:57+0530, Jeffrin Thalakkottoor wrote:
+> On Fri, May 24, 2019 at 4:22 AM Alexandre Belloni
+> <alexandre.belloni@bootlin.com> wrote:
+> > I just sent a fix for that timeout issue.
+> 
+> anyway thanks related to that
+> shall i  send a selftest fix that bail out in the test program  if the
+> user does not have root privileges ?
+> 
 
-I have a difficult time with the philosophy of TX timestamping the last
-segment. The actual timestamp occurs just before the last segment
-is sent. This is neither the start  nor the end of a GSO packet, which
-to me seems somewhat arbitrary. It is even more arbitrary when using
-software TX tiimestamping. These are timestamps represent the
-time that the packet is queued onto the NIC=E2=80=99s buffer, not actual
-time leaving the wire. Queuing to a ring buffer is usually much faster
-than wire rates. Therefore, say the timestamp of the last 1500 byte=20
-segment of a 64K GSO packet may in reality be representing a time
-about half way through the burst.
+No, it bails out just fine.
 
-Since the timestamp of a TX packet occurs just before any data is sent,
-I have found it most valuable to timestamp just before the first byte of=20=
-
-the packet or burst. Conversely, I find it most valuable to get an RX
-timestamp  after the last byte arrives.
-
-> It sounds like it depends on the workload. Perhaps this then needs to
-> be configurable with an SOF_.. flag.
->=20
-
-It would be interesting if a practical case can be made for timestamping
-the last segment. In my mind, I don=E2=80=99t see how that would be =
-valuable.
-
-> Another option would be to return a timestamp for every segment. But
-> they would all return the same tskey. And it causes different behavior
-> with and without hardware offload.
-
-When it comes to RX packets, getting per-packet (or per segment)
-timestamps is invaluable. They represent actual wire times. However
-my previous research into TX timestamping has led me to conclude
-that there is no practical value when timestamping every packet of=20
-a back-to-back burst.
-
-When using software TX timestamping, The inter-packet timestamps
-are typically much faster than line rate. Whereas you may be sending
-on a GigE link, you may measure 20Gbps. At higher rates, I have found
-that the overhead of per-packet software timestamping can produce
-gaps in packets.
-
-When using hardware timestamping, I think you will find that nearly all
-adapters only allow one timestamp at a time. Therefore only one
-packet in a burst would get timestamped. There are exceptions, for
-example I am playing with a 100G Mellanox adapter that has
-per-packet TX timestamping. However, I suspect that when I am
-done testing, all I will see is timestamps that are representing wire
-rate (e.g. 123nsec per 1500 byte packet).
-
-Beyond testing the accuracy of a NIC=E2=80=99s timestamping =
-capabilities, I
-see very little value in doing per-segment timestamping.
-
-
+-- 
+Alexandre Belloni, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
