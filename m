@@ -2,41 +2,41 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 74CE1297EB
-	for <lists+linux-kselftest@lfdr.de>; Fri, 24 May 2019 14:18:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 448162980D
+	for <lists+linux-kselftest@lfdr.de>; Fri, 24 May 2019 14:29:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391508AbfEXMRw (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 24 May 2019 08:17:52 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:57246 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2391501AbfEXMRv (ORCPT
+        id S2391395AbfEXM3x (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 24 May 2019 08:29:53 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:52330 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S2391489AbfEXM3x (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 24 May 2019 08:17:51 -0400
-Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x4OCDf0E141234
-        for <linux-kselftest@vger.kernel.org>; Fri, 24 May 2019 08:17:51 -0400
-Received: from e06smtp01.uk.ibm.com (e06smtp01.uk.ibm.com [195.75.94.97])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 2spekbnm40-1
+        Fri, 24 May 2019 08:29:53 -0400
+Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x4OCJwo3091621
+        for <linux-kselftest@vger.kernel.org>; Fri, 24 May 2019 08:29:51 -0400
+Received: from e06smtp07.uk.ibm.com (e06smtp07.uk.ibm.com [195.75.94.103])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 2spfqgjqsc-1
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-kselftest@vger.kernel.org>; Fri, 24 May 2019 08:17:51 -0400
+        for <linux-kselftest@vger.kernel.org>; Fri, 24 May 2019 08:29:51 -0400
 Received: from localhost
-        by e06smtp01.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        by e06smtp07.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
         for <linux-kselftest@vger.kernel.org> from <borntraeger@de.ibm.com>;
-        Fri, 24 May 2019 13:17:48 +0100
-Received: from b06cxnps4076.portsmouth.uk.ibm.com (9.149.109.198)
-        by e06smtp01.uk.ibm.com (192.168.101.131) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        Fri, 24 May 2019 13:29:49 +0100
+Received: from b06cxnps4075.portsmouth.uk.ibm.com (9.149.109.197)
+        by e06smtp07.uk.ibm.com (192.168.101.137) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
         (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Fri, 24 May 2019 13:17:43 +0100
+        Fri, 24 May 2019 13:29:45 +0100
 Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
-        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x4OCHgB052625540
+        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x4OCTi1r50397408
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 24 May 2019 12:17:42 GMT
+        Fri, 24 May 2019 12:29:44 GMT
 Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 539815205A;
-        Fri, 24 May 2019 12:17:42 +0000 (GMT)
+        by IMSVA (Postfix) with ESMTP id 85B3452051;
+        Fri, 24 May 2019 12:29:44 +0000 (GMT)
 Received: from oc7455500831.ibm.com (unknown [9.145.172.211])
-        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id D00CD52052;
-        Fri, 24 May 2019 12:17:41 +0000 (GMT)
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id F253E5204E;
+        Fri, 24 May 2019 12:29:43 +0000 (GMT)
 From:   Christian Borntraeger <borntraeger@de.ibm.com>
 To:     Thomas Huth <thuth@redhat.com>,
         Janosch Frank <frankja@linux.ibm.com>, kvm@vger.kernel.org
@@ -50,6 +50,7 @@ Cc:     Paolo Bonzini <pbonzini@redhat.com>,
         linux-s390@vger.kernel.org
 References: <20190523164309.13345-1-thuth@redhat.com>
  <0ad63449-c329-f38d-b879-6e427e6a8656@de.ibm.com>
+ <e6f953be-00af-756e-4c0a-649294efbd91@de.ibm.com>
 Openpgp: preference=signencrypt
 Autocrypt: addr=borntraeger@de.ibm.com; prefer-encrypt=mutual; keydata=
  mQINBE6cPPgBEAC2VpALY0UJjGmgAmavkL/iAdqul2/F9ONz42K6NrwmT+SI9CylKHIX+fdf
@@ -94,26 +95,26 @@ Autocrypt: addr=borntraeger@de.ibm.com; prefer-encrypt=mutual; keydata=
  RGIN40QWFVlZvkKIEkzlzqpAyGaRLhXJPv/6tpoQaCQQoSAc5Z9kM/wEd9e2zMeojcWjUXgg
  oWj8A/wY4UXExGBu+UCzzP/6sQRpBiPFgmqPTytrDo/gsUGqjOudLiHQcMU+uunULYQxVghC
  syiRa+UVlsKmx1hsEg==
-Date:   Fri, 24 May 2019 14:17:41 +0200
+Date:   Fri, 24 May 2019 14:29:43 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.6.1
 MIME-Version: 1.0
-In-Reply-To: <0ad63449-c329-f38d-b879-6e427e6a8656@de.ibm.com>
+In-Reply-To: <e6f953be-00af-756e-4c0a-649294efbd91@de.ibm.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 X-TM-AS-GCONF: 00
-x-cbid: 19052412-4275-0000-0000-000003381DE1
+x-cbid: 19052412-0028-0000-0000-000003710425
 X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 19052412-4276-0000-0000-00003847BD63
-Message-Id: <e6f953be-00af-756e-4c0a-649294efbd91@de.ibm.com>
+x-cbparentid: 19052412-0029-0000-0000-00002430BA05
+Message-Id: <411d4ad9-b43e-d3ae-1b66-65888c894caa@de.ibm.com>
 Subject: Re:  [PATCH v1 0/9] KVM selftests for s390x
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-05-24_05:,,
  signatures=0
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
  malwarescore=0 suspectscore=2 phishscore=0 bulkscore=0 spamscore=0
  clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=699 adultscore=0 classifier=spam adjust=0 reason=mlx
+ mlxlogscore=951 adultscore=0 classifier=spam adjust=0 reason=mlx
  scancount=1 engine=8.0.1-1810050000 definitions=main-1905240084
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
@@ -122,14 +123,51 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 
 
-On 24.05.19 13:11, Christian Borntraeger wrote:
-> I do get
+On 24.05.19 14:17, Christian Borntraeger wrote:
 > 
-> [10400.440298] kvm-s390: failed to commit memory region
-> [10400.508723] kvm-s390: failed to commit memory region
 > 
-> when running the tests. Will have a look.
+> On 24.05.19 13:11, Christian Borntraeger wrote:
+>> I do get
+>>
+>> [10400.440298] kvm-s390: failed to commit memory region
+>> [10400.508723] kvm-s390: failed to commit memory region
+>>
+>> when running the tests. Will have a look.
+> 
+> It comes from kvm_vm_free. This calls KVM_SET_USER_MEMORY_REGION with size 0,
+> which the s390 code does not like.
+> 
 
-It comes from kvm_vm_free. This calls KVM_SET_USER_MEMORY_REGION with size 0,
-which the s390 code does not like.
+The doc says about  KVM_SET_USER_MEMORY_REGION:
+
+This ioctl allows the user to create or modify a guest physical memory
+slot.  When changing an existing slot, it may be moved in the guest
+physical memory space, or its flags may be modified.  --> It may not be
+resized. <----
+
+$ strace -f -e trace=ioctl tools/testing/selftests/kvm/s390x/sync_regs_test 
+ioctl(3, KVM_CHECK_EXTENSION, KVM_CAP_SYNC_REGS) = 1
+ioctl(4, KVM_CHECK_EXTENSION, KVM_CAP_IMMEDIATE_EXIT) = 1
+ioctl(3, KVM_CREATE_VM, 0)              = 4
+ioctl(4, KVM_SET_USER_MEMORY_REGION, {slot=0, flags=0, guest_phys_addr=0, memory_size=2097152, userspace_addr=0x3ffac500000}) = 0
+ioctl(4, KVM_CREATE_VCPU, 5)            = 7
+ioctl(8, KVM_GET_VCPU_MMAP_SIZE, 0)     = 4096
+ioctl(8, KVM_GET_VCPU_MMAP_SIZE, 0)     = 4096
+ioctl(7, KVM_GET_SREGS, 0x3ffef0fdb90)  = 0
+ioctl(7, KVM_SET_SREGS, 0x3ffef0fdb90)  = 0
+ioctl(7, KVM_GET_REGS, 0x3ffef0fdcf8)   = 0
+ioctl(7, KVM_SET_REGS, 0x3ffef0fdcf8)   = 0
+ioctl(7, KVM_GET_SREGS, 0x3ffef0fdd78)  = 0
+ioctl(7, KVM_SET_SREGS, 0x3ffef0fdd78)  = 0
+ioctl(7, KVM_RUN, 0)                    = 0
+ioctl(7, KVM_GET_REGS, 0x3ffef0fdf90)   = 0
+ioctl(7, KVM_GET_SREGS, 0x3ffef0fe010)  = 0
+ioctl(7, KVM_RUN, 0)                    = 0
+ioctl(7, KVM_GET_REGS, 0x3ffef0fdf90)   = 0
+ioctl(7, KVM_GET_SREGS, 0x3ffef0fe010)  = 0
+ioctl(7, KVM_RUN, 0)                    = 0
+ioctl(4, KVM_SET_USER_MEMORY_REGION, {slot=0, flags=0, guest_phys_addr=0, memory_size=0, userspace_addr=0x3ffac500000}) = 0
++++ exited with 0 +++
+
+So the testcase is wrong? (I think the s390 code is also not fully correct will double check)
 
