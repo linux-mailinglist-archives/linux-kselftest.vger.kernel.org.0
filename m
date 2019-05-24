@@ -2,154 +2,112 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1461329F19
-	for <lists+linux-kselftest@lfdr.de>; Fri, 24 May 2019 21:30:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B8F992A019
+	for <lists+linux-kselftest@lfdr.de>; Fri, 24 May 2019 22:49:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727344AbfEXTaJ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 24 May 2019 15:30:09 -0400
-Received: from mail-ed1-f67.google.com ([209.85.208.67]:46671 "EHLO
-        mail-ed1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727115AbfEXTaJ (ORCPT
+        id S2404193AbfEXUtm (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 24 May 2019 16:49:42 -0400
+Received: from mail-lj1-f195.google.com ([209.85.208.195]:36853 "EHLO
+        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2404182AbfEXUtl (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 24 May 2019 15:30:09 -0400
-Received: by mail-ed1-f67.google.com with SMTP id f37so15715042edb.13;
-        Fri, 24 May 2019 12:30:07 -0700 (PDT)
+        Fri, 24 May 2019 16:49:41 -0400
+Received: by mail-lj1-f195.google.com with SMTP id z1so4327960ljb.3;
+        Fri, 24 May 2019 13:49:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=bevgnpwWp43eLyKYVX1neQ0UpZhiFx6WSxipgBSsKRk=;
-        b=Omm51I/HC8uqeMOORrTprPgd8EI0GEG2/vdjRflGw6kD4ao+xJC++uyCNJChLeTp7/
-         diqPKe29SGQhAYwnjtB5W1SVme/jv2KbE4Kx5hqEYDQRWo1gG6Eyzguv4X+8vshr/OiK
-         CSFPo+j5TsK9FGba/4m6xMj76y3/NRFNYq+FsOza6sL2gfD2r+6DM9fkkMV/KzFw8tpb
-         80aQGS2QAltLMofWker9rQY+PLNZh1mGtqm4hpuVJsVZdAOpH37I5sxrXkhYDaUUyoEy
-         NsXJbyV0TE4q8dIpWOgnePyDfOAOAeLbYZm/ceLzOekPUO1cRVhKsm5000Egk1nd9V9v
-         rpoA==
+         :cc;
+        bh=VhdT2Uy3Pi6rfMZvbQxZ0OsYh/yykRYbEqsyaHR8QXw=;
+        b=COq1Qwldga6qm3NHELwVkj4YtfxbMalPMy+X/x1ci3lZmksF7YOH0oBtRhxmSMpRPm
+         76d69IC6iVHUG1kUE3dNdYX85VdTLQwrxmoAHtWgU1qjH58cQWQtVODsBC6HhVUOy2A7
+         J91dQdJ5GPzdpc7/49JCkRVJDYLeq2EsFjCotWlDIgKGHIhLo0/ZGt5mNi6Q1nXj6VQ8
+         VJOmQyFTMwnFQhK9le/Ept7NaW2YxFQTnr7eBmmskdnxmf7Wl6O6pTazLsC9jyHzECeU
+         hIw4Q0yv63wrkTTEKIdntzMpXd28nCQAzmwKpPpxtVzRXbTe+q6q9iDh67H2ntMlE1RM
+         iIaw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=bevgnpwWp43eLyKYVX1neQ0UpZhiFx6WSxipgBSsKRk=;
-        b=DEHslOi5EmzB0S3/wq4Dn0D3zVPahxUllkbNTA1pyQY5fFDt4qOFoVidLX8lejHeqr
-         jXsz3CCyYsbpWdDRwoINZ6k9OISzi+/yNPiCR2HLanE/V9SLBmPzGWnmporQqAYCFiTT
-         71PITVOARfqlUWbuS9HBZVLMUYuHk06sNU0AQF7xAUhS97G0Yj5y4LPgGoOiPCfNTpBp
-         j0LcakPC+neM2NJW6djs3y2Uyx4WbVmYqIX5w/0SnqLzMUa7mlKb3Vd1ALmHCCJJwidq
-         aG0Ck1XOqQw4ZfvKUw6vU+nHumDUuFo8E7m6XaeitLhJsGjWCcR31oUax0yF1x9AaE9U
-         S+WA==
-X-Gm-Message-State: APjAAAXOK0jKUCfmQPPm5YyiveG31+OlW8/N59racpQqzEzDkefBu486
-        kvFy4tIAxFcKp4L1uNIy7LlOinn1+uoIGMsmPjI=
-X-Google-Smtp-Source: APXvYqyS2Gr9Ox8h2x39qvakn/evhg5BERIyfc6ZfJWEkcvPeJmxxQycHb293J3FqUvkicWp3WNJTIyNkiHpZ5tELEo=
-X-Received: by 2002:aa7:ca54:: with SMTP id j20mr105844637edt.23.1558726206280;
- Fri, 24 May 2019 12:30:06 -0700 (PDT)
+         :message-id:subject:to:cc;
+        bh=VhdT2Uy3Pi6rfMZvbQxZ0OsYh/yykRYbEqsyaHR8QXw=;
+        b=jt/H/pOwcNIhaMcT5YolWzGtXJCl8q2vcbHigerXfow5Qy7ZDN9KAqmR6BDf4/uGKD
+         9/iQlTdAHR9Qt6I1fd3pRTpeidhJ9INn4q49dckMvp3pG8C8bgIjDYowzJgc0Cx0CvST
+         Wl4GOx+Bi+YQ5pbjfuDzzPpchZ7/8/tmfcD1eUV1IaBF1nUv0D6Yjd1d8mEgrq8sJnO4
+         cND+ulJHimCy2tp1DC1uZy8ucP5HsfPbmoonLYJAIonciOwiqWGjI+RJgFWVD6CWRo79
+         D9A5az2cqSKQ2p3VQIIE1rjEJlKXECCiVr9g3nKQTr1EEaNkv6dQwH5mjSub1iVeDmt8
+         cQbw==
+X-Gm-Message-State: APjAAAV1l+K66yUyYl+ioE/5O3+7mEGL4JnVvfPh3gGYUoSZ3UnBmZ/F
+        A6uChP1a6M+47lcGWzsf2a3bBnEsGjZKX4Ef9Fg=
+X-Google-Smtp-Source: APXvYqy2UI/rZfZDvCke9BTAdI57OyrfDA2hvmMsq1QhIxpqi/JV9Ex2oV/fsS9k3ekCpzrzVLBvDGQaY1eTz2e6A1E=
+X-Received: by 2002:a2e:9d09:: with SMTP id t9mr21035214lji.151.1558730979076;
+ Fri, 24 May 2019 13:49:39 -0700 (PDT)
 MIME-Version: 1.0
-References: <20190523210651.80902-1-fklassen@appneta.com> <20190523210651.80902-2-fklassen@appneta.com>
- <CAF=yD-Jf95De=z_nx9WFkGDa6+nRUqM_1PqGkjwaFPzOe+PfXg@mail.gmail.com>
- <AE8E0772-7256-4B9C-A990-96930E834AEE@appneta.com> <CAF=yD-LtAKpND601LQrC1+=iF6spSUXVdUapcsbJdv5FYa=5Jg@mail.gmail.com>
- <AFC1ECC8-BFAC-4718-B0C9-97CC4BD1F397@appneta.com>
-In-Reply-To: <AFC1ECC8-BFAC-4718-B0C9-97CC4BD1F397@appneta.com>
-From:   Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-Date:   Fri, 24 May 2019 15:29:29 -0400
-Message-ID: <CAF=yD-Le-eTadOi7PL8WFEQCG=yLqb5gvKiks+s5Akeq8TenBQ@mail.gmail.com>
-Subject: Re: [PATCH net 1/4] net/udp_gso: Allow TX timestamp with UDP GSO
-To:     Fred Klassen <fklassen@appneta.com>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+References: <20190523125355.18437-1-mrostecki@opensuse.org> <4642ca96-22ab-ad61-a6a1-1d2ef7239cb8@fb.com>
+In-Reply-To: <4642ca96-22ab-ad61-a6a1-1d2ef7239cb8@fb.com>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Fri, 24 May 2019 13:49:26 -0700
+Message-ID: <CAADnVQKYiv2ZMTLcJ6ZAoSA8u7+GZe+o-00qidefuNPa7KsbbA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2 RESEND 0/2] Move bpf_printk to bpf_helpers.h
+To:     Yonghong Song <yhs@fb.com>
+Cc:     Michal Rostecki <mrostecki@opensuse.org>,
         Shuah Khan <shuah@kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-kselftest@vger.kernel.org,
-        Willem de Bruijn <willemb@google.com>
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin Lau <kafai@fb.com>, Song Liu <songliubraving@fb.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <jakub.kicinski@netronome.com>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        "open list:BPF (Safe dynamic programs and tools)" 
+        <netdev@vger.kernel.org>,
+        "open list:BPF (Safe dynamic programs and tools)" 
+        <bpf@vger.kernel.org>, open list <linux-kernel@vger.kernel.org>,
+        "open list:XDP (eXpress Data Path)" <xdp-newbies@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, May 24, 2019 at 12:34 PM Fred Klassen <fklassen@appneta.com> wrote:
+On Thu, May 23, 2019 at 9:52 AM Yonghong Song <yhs@fb.com> wrote:
 >
-> > Interesting. TCP timestamping takes the opposite choice and does
-> > timestamp the last byte in the sendmsg request.
+>
+>
+> On 5/23/19 5:53 AM, Michal Rostecki wrote:
+> > This series of patches move the commonly used bpf_printk macro to
+> > bpf_helpers.h which is already included in all BPF programs which
+> > defined that macro on their own.
 > >
->
-> I have a difficult time with the philosophy of TX timestamping the last
-> segment. The actual timestamp occurs just before the last segment
-> is sent. This is neither the start  nor the end of a GSO packet, which
-> to me seems somewhat arbitrary. It is even more arbitrary when using
-> software TX tiimestamping. These are timestamps represent the
-> time that the packet is queued onto the NIC=E2=80=99s buffer, not actual
-> time leaving the wire.
-
-It is the last moment that a timestamp can be generated for the last
-byte, I don't see how that is "neither the start nor the end of a GSO
-packet".
-
-> Queuing to a ring buffer is usually much faster
-> than wire rates. Therefore, say the timestamp of the last 1500 byte
-> segment of a 64K GSO packet may in reality be representing a time
-> about half way through the burst.
->
-> Since the timestamp of a TX packet occurs just before any data is sent,
-> I have found it most valuable to timestamp just before the first byte of
-> the packet or burst. Conversely, I find it most valuable to get an RX
-> timestamp  after the last byte arrives.
->
-> > It sounds like it depends on the workload. Perhaps this then needs to
-> > be configurable with an SOF_.. flag.
+> > v1->v2:
+> > - If HBM_DEBUG is not defined in hbm sample, undefine bpf_printk and set
+> >    an empty macro for it.
 > >
+> > Michal Rostecki (2):
+> >    selftests: bpf: Move bpf_printk to bpf_helpers.h
+> >    samples: bpf: Do not define bpf_printk macro
+> >
+> >   samples/bpf/hbm_kern.h                                | 11 ++---------
+> >   samples/bpf/tcp_basertt_kern.c                        |  7 -------
+> >   samples/bpf/tcp_bufs_kern.c                           |  7 -------
+> >   samples/bpf/tcp_clamp_kern.c                          |  7 -------
+> >   samples/bpf/tcp_cong_kern.c                           |  7 -------
+> >   samples/bpf/tcp_iw_kern.c                             |  7 -------
+> >   samples/bpf/tcp_rwnd_kern.c                           |  7 -------
+> >   samples/bpf/tcp_synrto_kern.c                         |  7 -------
+> >   samples/bpf/tcp_tos_reflect_kern.c                    |  7 -------
+> >   samples/bpf/xdp_sample_pkts_kern.c                    |  7 -------
+> >   tools/testing/selftests/bpf/bpf_helpers.h             |  8 ++++++++
+> >   .../testing/selftests/bpf/progs/sockmap_parse_prog.c  |  7 -------
+> >   .../selftests/bpf/progs/sockmap_tcp_msg_prog.c        |  7 -------
+> >   .../selftests/bpf/progs/sockmap_verdict_prog.c        |  7 -------
+> >   .../testing/selftests/bpf/progs/test_lwt_seg6local.c  |  7 -------
+> >   tools/testing/selftests/bpf/progs/test_xdp_noinline.c |  7 -------
+> >   tools/testing/selftests/bpf/test_sockmap_kern.h       |  7 -------
+> >   17 files changed, 10 insertions(+), 114 deletions(-)
 >
-> It would be interesting if a practical case can be made for timestamping
-> the last segment. In my mind, I don=E2=80=99t see how that would be valua=
-ble.
+> Ack for the whole series.
+> Acked-by: Yonghong Song <yhs@fb.com>
 
-It depends whether you are interested in measuring network latency or
-host transmit path latency.
-
-For the latter, knowing the time from the start of the sendmsg call to
-the moment the last byte hits the wire is most relevant. Or in absence
-of (well defined) hardware support, the last byte being queued to the
-device is the next best thing.
-
-It would make sense for this software implementation to follow
-established hardware behavior. But as far as I know, the exact time a
-hardware timestamp is taken is not consistent across devices, either.
-
-For fine grained timestamped data, perhaps GSO is simply not a good
-mechanism. That said, it still has to queue a timestamp if requested.
-
-> > Another option would be to return a timestamp for every segment. But
-> > they would all return the same tskey. And it causes different behavior
-> > with and without hardware offload.
->
-> When it comes to RX packets, getting per-packet (or per segment)
-> timestamps is invaluable. They represent actual wire times. However
-> my previous research into TX timestamping has led me to conclude
-> that there is no practical value when timestamping every packet of
-> a back-to-back burst.
->
-> When using software TX timestamping, The inter-packet timestamps
-> are typically much faster than line rate. Whereas you may be sending
-> on a GigE link, you may measure 20Gbps. At higher rates, I have found
-> that the overhead of per-packet software timestamping can produce
-> gaps in packets.
->
-> When using hardware timestamping, I think you will find that nearly all
-> adapters only allow one timestamp at a time. Therefore only one
-> packet in a burst would get timestamped.
-
-Can you elaborate? When the host queues N packets all with hardware
-timestamps requested, all N completions will have a timestamp? Or is
-that not guaranteed?
-
-> There are exceptions, for
-> example I am playing with a 100G Mellanox adapter that has
-> per-packet TX timestamping. However, I suspect that when I am
-> done testing, all I will see is timestamps that are representing wire
-> rate (e.g. 123nsec per 1500 byte packet).
->
-> Beyond testing the accuracy of a NIC=E2=80=99s timestamping capabilities,=
- I
-> see very little value in doing per-segment timestamping.
-
-Ack. Great detailed argument, thanks.
+Applied. Thanks
