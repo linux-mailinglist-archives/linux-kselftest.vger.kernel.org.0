@@ -2,95 +2,90 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0344C28EE0
-	for <lists+linux-kselftest@lfdr.de>; Fri, 24 May 2019 03:39:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DBD628EE3
+	for <lists+linux-kselftest@lfdr.de>; Fri, 24 May 2019 03:42:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387948AbfEXBis (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 23 May 2019 21:38:48 -0400
-Received: from mail-pg1-f194.google.com ([209.85.215.194]:43858 "EHLO
-        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727773AbfEXBis (ORCPT
+        id S1727670AbfEXBmP (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 23 May 2019 21:42:15 -0400
+Received: from mail-pf1-f196.google.com ([209.85.210.196]:33433 "EHLO
+        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726769AbfEXBmP (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 23 May 2019 21:38:48 -0400
-Received: by mail-pg1-f194.google.com with SMTP id f25so4076274pgv.10
-        for <linux-kselftest@vger.kernel.org>; Thu, 23 May 2019 18:38:47 -0700 (PDT)
+        Thu, 23 May 2019 21:42:15 -0400
+Received: by mail-pf1-f196.google.com with SMTP id z28so4294041pfk.0;
+        Thu, 23 May 2019 18:42:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=appneta.com; s=google;
-        h=mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=fIG1/oNez6GVfieaNVvRGqClWbB80a7VpaI4ZVWlUTY=;
-        b=kGOO7QJjYShPVPBvs/ZZX4VQ4eRHKxuNroC1T1gSIH+LURunL1GYc8S5KkMJ4304nt
-         D0vjJP1zY0itozAzVofvfnp6vwc37FxbJCWVEjzCPHkvqiNeBjdFsXbkJdDIa+f/G+o7
-         l2A9DZTeNt5XJA8Qxui7ybi7g1aIi80biu8DQ=
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition
+         :content-transfer-encoding:user-agent;
+        bh=GIKdNduKB3cDAE2dm+EnnEet/BY9m5K+nVF4UGBUIzY=;
+        b=SrbIe5ALj0T0rXOgWK8xxlmeLBd3tZKpMoDRD1MIrw7os+m+mbIsgfBTr3ydd7t6rv
+         b9L9r3EUuGNp8mDETqyABbq4NN5+lwXM6UMnzwoefSHzdE5DSTDh2fnfSKVmoB3zczyl
+         NTyPSlt6B6SnS0zaw80X2cUXGnf/3Hie56NguDegWGeIK7Dn+1oBhY4IsTkBCkPP7JSt
+         UQTDNk2TaT2hIeUoCIDxEL4E/55YK2i0uJgGIwDhIqjS7Cb0SWJ8YRyOKpFHVpjy7jmi
+         7tr1+DbY0T+I25OxStiG0TVsB0QyB+xzM9qGHfQq5Ef5BZk84fVJCqwKsTJijvy1aTuj
+         0Bgg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=fIG1/oNez6GVfieaNVvRGqClWbB80a7VpaI4ZVWlUTY=;
-        b=K8VHfl9BJ2KlKqNYPxvoxHa7LhBqfzHHatGwETnuPAdeCCzFGOQOwVLzsPOvqHZxqq
-         C3CHzwPKXMC7xc3juAWUHDI173lo0gN+Ac+g4qb160Fr0R4yoCVEDFdyCRw5dpqgAG/k
-         Wtj6qL3SEMtleglEQhRmHoi5/ZXIOAeLK+FRxb+t/1tGtZ4I5Ag63poHxj3Z8akHUGDk
-         BEP8ejfBB2DPNBP7ZinEdlISQvZ7x/6Emb1+O5/WSYLSLnfuaf+IF+PxcEMiBnxGD9fr
-         M5laI/KQZ2/imgOBdQ+x0sGpXXpY7pNtXk9ZN2zLuL1cxvgGRePszimKRCyTfqUUHvLR
-         tr/Q==
-X-Gm-Message-State: APjAAAW3CzyDNs0n30ZwN16Btlk5LAFO3zCOhIS5fk4+Cj7zT/+IimdT
-        Csb5UE02E6GWSTrX9y9bKrYJDw==
-X-Google-Smtp-Source: APXvYqxbCF0d1RN2Gw85wpBkrv/MWoagSl5+oFwhvvoDBMmfB9ADuQlYwD4bfak3BfVpG5B/MM3VLA==
-X-Received: by 2002:a63:d016:: with SMTP id z22mr102922046pgf.116.1558661926884;
-        Thu, 23 May 2019 18:38:46 -0700 (PDT)
-Received: from [10.0.1.19] (S010620c9d00fc332.vf.shawcable.net. [70.71.167.160])
-        by smtp.gmail.com with ESMTPSA id f36sm524732pgb.76.2019.05.23.18.38.45
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 23 May 2019 18:38:46 -0700 (PDT)
-Content-Type: text/plain;
-        charset=us-ascii
-Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.8\))
-Subject: Re: [PATCH net 1/4] net/udp_gso: Allow TX timestamp with UDP GSO
-From:   Fred Klassen <fklassen@appneta.com>
-In-Reply-To: <CAF=yD-Jf95De=z_nx9WFkGDa6+nRUqM_1PqGkjwaFPzOe+PfXg@mail.gmail.com>
-Date:   Thu, 23 May 2019 18:38:44 -0700
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-kselftest@vger.kernel.org,
-        Willem de Bruijn <willemb@google.com>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <AE8E0772-7256-4B9C-A990-96930E834AEE@appneta.com>
-References: <20190523210651.80902-1-fklassen@appneta.com>
- <20190523210651.80902-2-fklassen@appneta.com>
- <CAF=yD-Jf95De=z_nx9WFkGDa6+nRUqM_1PqGkjwaFPzOe+PfXg@mail.gmail.com>
-To:     Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-X-Mailer: Apple Mail (2.3445.104.8)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition:content-transfer-encoding:user-agent;
+        bh=GIKdNduKB3cDAE2dm+EnnEet/BY9m5K+nVF4UGBUIzY=;
+        b=sVsNNVCaPWGXTz++B62uYRbE69SozurJ2K2Scts/V17F3w6owaiDIU8ucNm9xM2UaI
+         jnZNCzP02tjyIsnoBiCYcX7MOeYdhEDbA0Ln6CofIarKaZbGe2hHvcw0LtUcn9zKe32t
+         ie8AFuDy63J1jLX3ZIgt2H6NggvF0dF7iAo88tqdtT6xr+r/x3vW1GMON7/j8dutasUG
+         ycqX51QcBoj7BTaNthNsz1HS0DjYgAb6aMCuf1pYJiUIHbgSMacBSHkUPGufmbuGUxRi
+         FuHXyAIa/W+Uf23MvIHkPjJWyaZ5imOFWERU9YCyY0Zuw0YE5YOBl85+cg4mni9c2qa+
+         34Xw==
+X-Gm-Message-State: APjAAAX/jj3bPsdlL/a8JhKcBVhzxujtbRuDPdwmIScM1sfrqVm4UDb0
+        9KqLhLo/WFskaMQWJ9G0JgE=
+X-Google-Smtp-Source: APXvYqwWsCeFhr278bXfVFecU1vB7o7KNJSLs+CqU6IF8yOqkwTqxOXtgkUuNQPjJQ0cpcMjhA0R4g==
+X-Received: by 2002:a17:90a:2322:: with SMTP id f31mr6098781pje.9.1558662134164;
+        Thu, 23 May 2019 18:42:14 -0700 (PDT)
+Received: from ip-172-31-44-144.us-west-2.compute.internal (ec2-54-186-128-88.us-west-2.compute.amazonaws.com. [54.186.128.88])
+        by smtp.gmail.com with ESMTPSA id s137sm682801pfc.119.2019.05.23.18.42.12
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Thu, 23 May 2019 18:42:12 -0700 (PDT)
+Date:   Fri, 24 May 2019 01:42:11 +0000
+From:   Alakesh Haloi <alakesh.haloi@gmail.com>
+To:     Shuah Khan <shuah@kernel.org>
+Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] selftests: add missing include linux/sockios
+Message-ID: <20190524014211.GA78399@ip-172-31-44-144.us-west-2.compute.internal>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-> Thanks for the report.
->=20
-> Zerocopy notification reference count is managed in skb_segment. That
-> should work.
->=20
-> Support for timestamping with the new GSO feature is indeed an
-> oversight. The solution is similar to how TCP associates the timestamp
-> with the right segment in tcp_gso_tstamp.
->=20
-> Only, I think we want to transfer the timestamp request to the last
-> datagram, not the first. For send timestamp, the final byte leaving
-> the host is usually more interesting.
+Including <linux/sockios.h> fixes the following compiler warning
 
-TX Timestamping the last packet of a datagram is something that would
-work poorly for our application. We need to measure the time it takes
-for the first bit that is sent until the first bit of the last packet is =
-received.
-Timestaming the last packet of a burst seems somewhat random to me
-and would not be useful. Essentially we would be timestamping a=20
-random byte in a UDP GSO buffer.
+timestamping.c: In function ‘printpacket’:
+timestamping.c:261:19: error: ‘SIOCGSTAMP’ undeclared (first use in this function); did you mean ‘SIOCGSTAMPNS’?
+   if (ioctl(sock, SIOCGSTAMP, &tv))
+                   ^~~~~~~~~~
+                   SIOCGSTAMPNS
 
-I believe there is a precedence for timestamping the first packet. With
-IPv4 packets, the first packet is timestamped and the remaining =
-fragments
-are not.=
+Signed-off-by: Alakesh Haloi <alakesh.haloi@gmail.com>
+---
+ tools/testing/selftests/networking/timestamping/timestamping.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/tools/testing/selftests/networking/timestamping/timestamping.c b/tools/testing/selftests/networking/timestamping/timestamping.c
+index 5cdfd743447b..62f03bcc9432 100644
+--- a/tools/testing/selftests/networking/timestamping/timestamping.c
++++ b/tools/testing/selftests/networking/timestamping/timestamping.c
+@@ -44,6 +44,7 @@
+ #include <asm/types.h>
+ #include <linux/net_tstamp.h>
+ #include <linux/errqueue.h>
++#include <linux/sockios.h>
+ 
+ #ifndef SO_TIMESTAMPING
+ # define SO_TIMESTAMPING         37
+-- 
+2.17.1
+
