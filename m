@@ -2,154 +2,100 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 44CD528FE5
-	for <lists+linux-kselftest@lfdr.de>; Fri, 24 May 2019 06:23:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91ADB2902D
+	for <lists+linux-kselftest@lfdr.de>; Fri, 24 May 2019 06:54:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727134AbfEXEXY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 24 May 2019 00:23:24 -0400
-Received: from mail-ua1-f65.google.com ([209.85.222.65]:46829 "EHLO
-        mail-ua1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725828AbfEXEXY (ORCPT
+        id S1726308AbfEXEyP (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 24 May 2019 00:54:15 -0400
+Received: from mail-ed1-f66.google.com ([209.85.208.66]:46591 "EHLO
+        mail-ed1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726115AbfEXEyP (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 24 May 2019 00:23:24 -0400
-Received: by mail-ua1-f65.google.com with SMTP id a95so3023207uaa.13
-        for <linux-kselftest@vger.kernel.org>; Thu, 23 May 2019 21:23:23 -0700 (PDT)
+        Fri, 24 May 2019 00:54:15 -0400
+Received: by mail-ed1-f66.google.com with SMTP id f37so12391067edb.13;
+        Thu, 23 May 2019 21:54:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
+        d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=xAYnRWw3Tu8/93j9I1Decyj4SiwalEXjnp8HjDGWVMk=;
-        b=WnRK49CElZNooeneU/rmiXD4MNL+NGJ+1q+LoLrd8r1BWPG0vFLLn5srrzAwJdtZCr
-         YNvRiKrpydE8yY/WwhILnly3Zvune3jCfbXw7GsuMvu4P+dyMtapEbIZ2jkKw+bAAaZT
-         /NstjIQP+l4nVYqupG3KK3t/H/Zt2rSh8UshTl0ZeyMDpnbmZlbVjVV+q+S0iwZ4uNET
-         wEULW4QLu8xXLGSpfqZElCLKOXZT2Zp/eFOfWYxNKR73Qs1kFKXoJK7Lexkh9qJC8nqp
-         yZ2rrh8i3toWpfjsayQpALHrdDwRoiqV6AXbdW6lkKZym6fAr2YHiokI7QWgzJYQeySd
-         EWQQ==
+        bh=uG3LPpXz6HczhaN7aWRgjWXEjlUyPFH9Q9Ci4mtls4c=;
+        b=RhchpjZOyc6YOPzzhLiPo8uzy5QDshjjbVUAl/1r0pHwDCT81ap/4dXT5pjxUt8lNA
+         obCEhe35IXr1YlvBHPxqrVNPu8XGZ0xNB+ml51goaUAgnvBwIp09n4jwJ6VyvTjlu0pZ
+         6XUkcty1O/OhNMrJaQayoBeScyevQA0ZGRTFaiAZpJRoaY39VU2uBDN8NGG+i3cvK87N
+         /tsNbnvGjGlhrXjKG7ck5PkM8v/+1CCC8LPr4FPAYSPh0r43IjdPY66x9wpp5xmfRvht
+         mhyS1QBWOgnrv7aM2HAmhfi4RZbpLhEKn8y8lb/rLPM4S4DTFffZpt1FezySNME4RHCs
+         9biw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=xAYnRWw3Tu8/93j9I1Decyj4SiwalEXjnp8HjDGWVMk=;
-        b=eqzo8bu7IsJkIahdLJzZ7S3RdcU8c/FK7/Q800+6Tls9XtxRlQok4a1a28Jq6xB43L
-         YvaxBuKX+1hZ+kDCfbsn+fg2ToIyXJE7I3++TvGjuZLKzQR46EGW6PaANad/tFv55dIY
-         908L5fFkUTUZd02Fc0DBf6yHwVVcqLU5jq8y4gJxlPYK6zRI3Y5biw4WKiJHDaxa5Yt1
-         JvpxsayTlAKTsJoomlXtKdhH9zwrmEare1RTT3qWJUSuIgkv9QwIX39yZiX0N23LpW/k
-         nNNoMHytYIZ+cB6KnuiDsbkTtYv6u5llXXuW+50oapMM7xYuVxnf/j4FWXEcY5JzaHw2
-         GZaw==
-X-Gm-Message-State: APjAAAXc9AuaWQiFpkRYbMZBKDnvA2UKq/BiFqoKg3Yr3N1iJgbW8iVo
-        gpDJ2PpdQhoZzQ4ZhQ8ZY9e2rkHSKTTV1vVVJPjlHQ==
-X-Google-Smtp-Source: APXvYqx5Zm1ZYEN7Vn9AdcFTjSw8M3oFO3UV+ZriQQ1V2wP6o6e1yzY7Ig//CYIK3KGeMPCh4oSMGn+kEBJ+ngdeAaM=
-X-Received: by 2002:ab0:3109:: with SMTP id e9mr449008ual.66.1558671802883;
- Thu, 23 May 2019 21:23:22 -0700 (PDT)
+        bh=uG3LPpXz6HczhaN7aWRgjWXEjlUyPFH9Q9Ci4mtls4c=;
+        b=d/EG75l/gNmdfB3QvjeSSx38STsuf1tHFF1QXPjyi9/+gSrliCLgwe330rcXe99Crt
+         OY7I9s5iSRCGgbqdA5L4XY9lZFz8GToU4M6dIiXJ2Sw7ORVEbfkGw6fl5r/IewHp0h2l
+         VmBu7sAknuh08NXab05/HkcnmGHrQmgRxUmEWnlWDQGtBZSh07Iw8NrVQJef5QIiTO5G
+         u/TdiujHYQeJ8aVngM6mcGspNu9oh3U4cAY5UxEzTlUqEMcCfsIRhOVEuOSrzbuhsMFx
+         8UCswlySdoeD6bTjJLwJLolHxBdJ3Y8lnimcS55VXJ+vBa1DpI5QvTTOBfjFMZ2cPILb
+         8mWw==
+X-Gm-Message-State: APjAAAWsIDDKjwnNg6U8/CF09ngsH9Dpn1Bz0KepX1egMWBH30tU8TsY
+        Xq49vSmRoNtt1tjlNsQKXCwURTukAaDsNDohxPKrlw==
+X-Google-Smtp-Source: APXvYqyVFquGjXhN70UMr779J+DpaHvuoyJcT5E5q7SCuYrvqDrm5fabMf10dubNfnA1j7pgstupffbjFBuG45z+GV8=
+X-Received: by 2002:a50:f5d0:: with SMTP id x16mr100271128edm.287.1558673653525;
+ Thu, 23 May 2019 21:54:13 -0700 (PDT)
 MIME-Version: 1.0
-References: <cover.1557160186.git.andreyknvl@google.com> <00eb4c63fefc054e2c8d626e8fedfca11d7c2600.1557160186.git.andreyknvl@google.com>
- <20190522114910.emlckebwzv2qz42i@mbp> <CAFKCwrjyP+x0JJy=qpBFsp4pub3He6UkvU0qnf1UOKt6W1LPRQ@mail.gmail.com>
- <20190523090427.GA44383@arrakis.emea.arm.com>
-In-Reply-To: <20190523090427.GA44383@arrakis.emea.arm.com>
-From:   Evgenii Stepanov <eugenis@google.com>
-Date:   Thu, 23 May 2019 21:23:13 -0700
-Message-ID: <CAFKCwrgk0+yR48Z5nhuZG5f7g==vRb4u+CS-4FS0mM7Eriavgw@mail.gmail.com>
-Subject: Re: [PATCH v15 05/17] arms64: untag user pointers passed to memory syscalls
-To:     Catalin Marinas <catalin.marinas@arm.com>
-Cc:     Andrey Konovalov <andreyknvl@google.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
+References: <20190523210651.80902-1-fklassen@appneta.com> <20190523210651.80902-2-fklassen@appneta.com>
+ <CAF=yD-Jf95De=z_nx9WFkGDa6+nRUqM_1PqGkjwaFPzOe+PfXg@mail.gmail.com> <AE8E0772-7256-4B9C-A990-96930E834AEE@appneta.com>
+In-Reply-To: <AE8E0772-7256-4B9C-A990-96930E834AEE@appneta.com>
+From:   Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+Date:   Fri, 24 May 2019 00:53:37 -0400
+Message-ID: <CAF=yD-LtAKpND601LQrC1+=iF6spSUXVdUapcsbJdv5FYa=5Jg@mail.gmail.com>
+Subject: Re: [PATCH net 1/4] net/udp_gso: Allow TX timestamp with UDP GSO
+To:     Fred Klassen <fklassen@appneta.com>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
         LKML <linux-kernel@vger.kernel.org>,
-        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-rdma@vger.kernel.org, linux-media@vger.kernel.org,
-        kvm@vger.kernel.org,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Will Deacon <will.deacon@arm.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Kees Cook <keescook@chromium.org>,
-        Yishai Hadas <yishaih@mellanox.com>,
-        Felix Kuehling <Felix.Kuehling@amd.com>,
-        Alexander Deucher <Alexander.Deucher@amd.com>,
-        Christian Koenig <Christian.Koenig@amd.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Jens Wiklander <jens.wiklander@linaro.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Kostya Serebryany <kcc@google.com>,
-        Lee Smith <Lee.Smith@arm.com>,
-        Ramana Radhakrishnan <Ramana.Radhakrishnan@arm.com>,
-        Jacob Bramley <Jacob.Bramley@arm.com>,
-        Ruben Ayrapetyan <Ruben.Ayrapetyan@arm.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
-        Dave Martin <Dave.Martin@arm.com>,
-        Kevin Brodsky <kevin.brodsky@arm.com>,
-        Szabolcs Nagy <Szabolcs.Nagy@arm.com>
+        linux-kselftest@vger.kernel.org,
+        Willem de Bruijn <willemb@google.com>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, May 23, 2019 at 2:04 AM Catalin Marinas <catalin.marinas@arm.com> wrote:
+On Thu, May 23, 2019 at 9:38 PM Fred Klassen <fklassen@appneta.com> wrote:
 >
-> On Wed, May 22, 2019 at 02:16:57PM -0700, Evgenii Stepanov wrote:
-> > On Wed, May 22, 2019 at 4:49 AM Catalin Marinas <catalin.marinas@arm.com> wrote:
-> > > On Mon, May 06, 2019 at 06:30:51PM +0200, Andrey Konovalov wrote:
-> > > > This patch is a part of a series that extends arm64 kernel ABI to allow to
-> > > > pass tagged user pointers (with the top byte set to something else other
-> > > > than 0x00) as syscall arguments.
-> > > >
-> > > > This patch allows tagged pointers to be passed to the following memory
-> > > > syscalls: brk, get_mempolicy, madvise, mbind, mincore, mlock, mlock2,
-> > > > mmap, mmap_pgoff, mprotect, mremap, msync, munlock, munmap,
-> > > > remap_file_pages, shmat and shmdt.
-> > > >
-> > > > This is done by untagging pointers passed to these syscalls in the
-> > > > prologues of their handlers.
-> > >
-> > > I'll go through them one by one to see if we can tighten the expected
-> > > ABI while having the MTE in mind.
-> > >
-> > > > diff --git a/arch/arm64/kernel/sys.c b/arch/arm64/kernel/sys.c
-> > > > index b44065fb1616..933bb9f3d6ec 100644
-> > > > --- a/arch/arm64/kernel/sys.c
-> > > > +++ b/arch/arm64/kernel/sys.c
-> > > > @@ -35,10 +35,33 @@ SYSCALL_DEFINE6(mmap, unsigned long, addr, unsigned long, len,
-> > > >  {
-> > > >       if (offset_in_page(off) != 0)
-> > > >               return -EINVAL;
-> > > > -
-> > > > +     addr = untagged_addr(addr);
-> > > >       return ksys_mmap_pgoff(addr, len, prot, flags, fd, off >> PAGE_SHIFT);
-> > > >  }
-> > >
-> > > If user passes a tagged pointer to mmap() and the address is honoured
-> > > (or MAP_FIXED is given), what is the expected return pointer? Does it
-> > > need to be tagged with the value from the hint?
+> > Thanks for the report.
 > >
-> > For HWASan the most convenient would be to use the tag from the hint.
-> > But since in the TBI (not MTE) mode the kernel has no idea what
-> > meaning userspace assigns to pointer tags, perhaps it should not try
-> > to guess, and should return raw (zero-tagged) address instead.
->
-> Then, just to relax the ABI for hwasan, shall we simply disallow tagged
-> pointers on mmap() arguments? We can leave them in for
-> mremap(old_address), madvise().
-
-I think this would be fine. We should allow tagged in pointers in
-mprotect though.
-
-> > > With MTE, we may want to use this as a request for the default colour of
-> > > the mapped pages (still under discussion).
+> > Zerocopy notification reference count is managed in skb_segment. That
+> > should work.
 > >
-> > I like this - and in that case it would make sense to return the
-> > pointer that can be immediately dereferenced without crashing the
-> > process, i.e. with the matching tag.
+> > Support for timestamping with the new GSO feature is indeed an
+> > oversight. The solution is similar to how TCP associates the timestamp
+> > with the right segment in tcp_gso_tstamp.
+> >
+> > Only, I think we want to transfer the timestamp request to the last
+> > datagram, not the first. For send timestamp, the final byte leaving
+> > the host is usually more interesting.
 >
-> This came up from the Android investigation work where large memory
-> allocations (using mmap) could be more efficiently pre-tagged by the
-> kernel on page fault. Not sure about the implementation details yet.
+> TX Timestamping the last packet of a datagram is something that would
+> work poorly for our application. We need to measure the time it takes
+> for the first bit that is sent until the first bit of the last packet is received.
+> Timestaming the last packet of a burst seems somewhat random to me
+> and would not be useful. Essentially we would be timestamping a
+> random byte in a UDP GSO buffer.
 >
-> --
-> Catalin
+> I believe there is a precedence for timestamping the first packet. With
+> IPv4 packets, the first packet is timestamped and the remaining fragments
+> are not.
+
+Interesting. TCP timestamping takes the opposite choice and does
+timestamp the last byte in the sendmsg request.
+
+It sounds like it depends on the workload. Perhaps this then needs to
+be configurable with an SOF_.. flag.
+
+Another option would be to return a timestamp for every segment. But
+they would all return the same tskey. And it causes different behavior
+with and without hardware offload.
