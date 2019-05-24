@@ -2,90 +2,103 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DBD628EE3
-	for <lists+linux-kselftest@lfdr.de>; Fri, 24 May 2019 03:42:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9145928EFF
+	for <lists+linux-kselftest@lfdr.de>; Fri, 24 May 2019 04:10:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727670AbfEXBmP (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 23 May 2019 21:42:15 -0400
-Received: from mail-pf1-f196.google.com ([209.85.210.196]:33433 "EHLO
-        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726769AbfEXBmP (ORCPT
+        id S1731730AbfEXCKJ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 23 May 2019 22:10:09 -0400
+Received: from mail-pg1-f194.google.com ([209.85.215.194]:42492 "EHLO
+        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731726AbfEXCKI (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 23 May 2019 21:42:15 -0400
-Received: by mail-pf1-f196.google.com with SMTP id z28so4294041pfk.0;
-        Thu, 23 May 2019 18:42:14 -0700 (PDT)
+        Thu, 23 May 2019 22:10:08 -0400
+Received: by mail-pg1-f194.google.com with SMTP id 33so1159018pgv.9
+        for <linux-kselftest@vger.kernel.org>; Thu, 23 May 2019 19:10:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:mime-version:content-disposition
-         :content-transfer-encoding:user-agent;
-        bh=GIKdNduKB3cDAE2dm+EnnEet/BY9m5K+nVF4UGBUIzY=;
-        b=SrbIe5ALj0T0rXOgWK8xxlmeLBd3tZKpMoDRD1MIrw7os+m+mbIsgfBTr3ydd7t6rv
-         b9L9r3EUuGNp8mDETqyABbq4NN5+lwXM6UMnzwoefSHzdE5DSTDh2fnfSKVmoB3zczyl
-         NTyPSlt6B6SnS0zaw80X2cUXGnf/3Hie56NguDegWGeIK7Dn+1oBhY4IsTkBCkPP7JSt
-         UQTDNk2TaT2hIeUoCIDxEL4E/55YK2i0uJgGIwDhIqjS7Cb0SWJ8YRyOKpFHVpjy7jmi
-         7tr1+DbY0T+I25OxStiG0TVsB0QyB+xzM9qGHfQq5Ef5BZk84fVJCqwKsTJijvy1aTuj
-         0Bgg==
+        d=appneta.com; s=google;
+        h=mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=r8aR7hYQG+ubgZWmIyHO8z2MgnIQ/QsQT2Ue4fje7os=;
+        b=rF/c4EZ8c3QOZMdL+RJCZhR79P0PB+UO/3P9pS47gYj6fG0TNXB9sIyNUYrxLSYbbE
+         Vqf74VN+TN/R1V5tWM0jX3W/4fJOy37GCogiOKVydMill6Qotfiut3jywy58ReSv0Yl6
+         tdn8gTiMRDrMoStFUJM6JGjBCgY43E9vrv62o=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition:content-transfer-encoding:user-agent;
-        bh=GIKdNduKB3cDAE2dm+EnnEet/BY9m5K+nVF4UGBUIzY=;
-        b=sVsNNVCaPWGXTz++B62uYRbE69SozurJ2K2Scts/V17F3w6owaiDIU8ucNm9xM2UaI
-         jnZNCzP02tjyIsnoBiCYcX7MOeYdhEDbA0Ln6CofIarKaZbGe2hHvcw0LtUcn9zKe32t
-         ie8AFuDy63J1jLX3ZIgt2H6NggvF0dF7iAo88tqdtT6xr+r/x3vW1GMON7/j8dutasUG
-         ycqX51QcBoj7BTaNthNsz1HS0DjYgAb6aMCuf1pYJiUIHbgSMacBSHkUPGufmbuGUxRi
-         FuHXyAIa/W+Uf23MvIHkPjJWyaZ5imOFWERU9YCyY0Zuw0YE5YOBl85+cg4mni9c2qa+
-         34Xw==
-X-Gm-Message-State: APjAAAX/jj3bPsdlL/a8JhKcBVhzxujtbRuDPdwmIScM1sfrqVm4UDb0
-        9KqLhLo/WFskaMQWJ9G0JgE=
-X-Google-Smtp-Source: APXvYqwWsCeFhr278bXfVFecU1vB7o7KNJSLs+CqU6IF8yOqkwTqxOXtgkUuNQPjJQ0cpcMjhA0R4g==
-X-Received: by 2002:a17:90a:2322:: with SMTP id f31mr6098781pje.9.1558662134164;
-        Thu, 23 May 2019 18:42:14 -0700 (PDT)
-Received: from ip-172-31-44-144.us-west-2.compute.internal (ec2-54-186-128-88.us-west-2.compute.amazonaws.com. [54.186.128.88])
-        by smtp.gmail.com with ESMTPSA id s137sm682801pfc.119.2019.05.23.18.42.12
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Thu, 23 May 2019 18:42:12 -0700 (PDT)
-Date:   Fri, 24 May 2019 01:42:11 +0000
-From:   Alakesh Haloi <alakesh.haloi@gmail.com>
-To:     Shuah Khan <shuah@kernel.org>
-Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] selftests: add missing include linux/sockios
-Message-ID: <20190524014211.GA78399@ip-172-31-44-144.us-west-2.compute.internal>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-User-Agent: Mutt/1.9.4 (2018-02-28)
+        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=r8aR7hYQG+ubgZWmIyHO8z2MgnIQ/QsQT2Ue4fje7os=;
+        b=Skc6sBaP0jIkjSKB2VLLVJkiWIPWnj5TVHq6AfqEQKZ27MHqCsLmKM/+NrDOH3D2mM
+         W6rUf9tFSuDXd0zW/FK1UFbT8SdkVa6Ea9TxTZYKoyb/weciV/D7rwImO9ibMb2plSvT
+         OIK+E8hdiz+lA2hS9lUspEJgsL/ExQbTxbQHT3bwKKxy1j1IKY9in8Abhv/6GyNmC7rw
+         55IdJCJa+vz9JaD2FsIl2KX/f0jrdT5plDD4J01esm9BADw2qbAHU4UiQ3pCcLlH0G8U
+         SMRVNZaOVcIl0rh6qwraID5n6TlHEuHoa2gAOSw9Xn6zlxcDhmXRTSMKlDm6m+XNQ9Jt
+         zChg==
+X-Gm-Message-State: APjAAAV2RuP+USAEchkCLcRsRIORou4FTfKgbz/Ku93elYTEbPROoSJc
+        eJmcT69VG+ICIJmIAjY8CDypJQ==
+X-Google-Smtp-Source: APXvYqzpLMGgRoPIpMdu2vTVvILTyJ/GmRZUoOY2DKkOgL3PRqdmfMmZtuVofLdgdW3OqFBzbbJFUA==
+X-Received: by 2002:a63:b1d:: with SMTP id 29mr102378028pgl.103.1558663807475;
+        Thu, 23 May 2019 19:10:07 -0700 (PDT)
+Received: from [10.0.1.19] (S010620c9d00fc332.vf.shawcable.net. [70.71.167.160])
+        by smtp.gmail.com with ESMTPSA id m11sm537865pjv.21.2019.05.23.19.10.05
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 23 May 2019 19:10:06 -0700 (PDT)
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.8\))
+Subject: Re: [PATCH net 2/4] net/udpgso_bench_tx: options to exercise TX CMSG
+From:   Fred Klassen <fklassen@appneta.com>
+In-Reply-To: <CAF=yD-JBf6k7VLa6FQowuD5xDFbq5cB4ScTi7kb1hieQFDKnbg@mail.gmail.com>
+Date:   Thu, 23 May 2019 19:10:05 -0700
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-kselftest@vger.kernel.org,
+        Willem de Bruijn <willemb@google.com>
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <5061E2A7-EF7A-4C3C-9819-34AA8DE2CD0F@appneta.com>
+References: <20190523210651.80902-1-fklassen@appneta.com>
+ <20190523210651.80902-3-fklassen@appneta.com>
+ <CAF=yD-JBf6k7VLa6FQowuD5xDFbq5cB4ScTi7kb1hieQFDKnbg@mail.gmail.com>
+To:     Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+X-Mailer: Apple Mail (2.3445.104.8)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Including <linux/sockios.h> fixes the following compiler warning
+>=20
+> To ensure that we do not regress, when adding options, please consider
+> (just a general suggestion, not a strong request for this patch set)
+> updating the kselftest to run a variant of the test with the new code
+> coverage. In this case, make the code pass/fail instead of only user
+> interpretable and add variants to udpgso.sh.
 
-timestamping.c: In function ‘printpacket’:
-timestamping.c:261:19: error: ‘SIOCGSTAMP’ undeclared (first use in this function); did you mean ‘SIOCGSTAMPNS’?
-   if (ioctl(sock, SIOCGSTAMP, &tv))
-                   ^~~~~~~~~~
-                   SIOCGSTAMPNS
+I had a look at how kselftest works, and I absolutely want to see this
+work with these changes. I=E2=80=99ll investigate and implement in v2 =
+patch.
 
-Signed-off-by: Alakesh Haloi <alakesh.haloi@gmail.com>
----
- tools/testing/selftests/networking/timestamping/timestamping.c | 1 +
- 1 file changed, 1 insertion(+)
+I will most likely do a 5 second test. This seems to be sufficient to =
+get
+meaningful results
 
-diff --git a/tools/testing/selftests/networking/timestamping/timestamping.c b/tools/testing/selftests/networking/timestamping/timestamping.c
-index 5cdfd743447b..62f03bcc9432 100644
---- a/tools/testing/selftests/networking/timestamping/timestamping.c
-+++ b/tools/testing/selftests/networking/timestamping/timestamping.c
-@@ -44,6 +44,7 @@
- #include <asm/types.h>
- #include <linux/net_tstamp.h>
- #include <linux/errqueue.h>
-+#include <linux/sockios.h>
- 
- #ifndef SO_TIMESTAMPING
- # define SO_TIMESTAMPING         37
--- 
-2.17.1
+> can use more precise CMSG_SPACE based on worst case expectations, like
+> in udp_sendmmsg
+>=20
+>> +       char buf[1500];
+>=20
+> no need for payload
+>=20
+>> +static void flush_errqueue(int fd)
+>> +{
+>> +       if (cfg_poll) {
+>> +               struct pollfd fds =3D { 0 };
+>> +               int ret;
+>> +
+>> +               fds.fd =3D fd;
+>> +               fds.events =3D POLLERR;
+>=20
+> no need to pass POLLERR, it is always returned in revents.
 
