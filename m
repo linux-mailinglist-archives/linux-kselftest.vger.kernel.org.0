@@ -2,112 +2,154 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CDBA29F05
-	for <lists+linux-kselftest@lfdr.de>; Fri, 24 May 2019 21:24:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1461329F19
+	for <lists+linux-kselftest@lfdr.de>; Fri, 24 May 2019 21:30:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732018AbfEXTY1 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 24 May 2019 15:24:27 -0400
-Received: from mail-wm1-f65.google.com ([209.85.128.65]:36081 "EHLO
-        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730009AbfEXTY1 (ORCPT
+        id S1727344AbfEXTaJ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 24 May 2019 15:30:09 -0400
+Received: from mail-ed1-f67.google.com ([209.85.208.67]:46671 "EHLO
+        mail-ed1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727115AbfEXTaJ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 24 May 2019 15:24:27 -0400
-Received: by mail-wm1-f65.google.com with SMTP id v22so3006519wml.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 24 May 2019 12:24:25 -0700 (PDT)
+        Fri, 24 May 2019 15:30:09 -0400
+Received: by mail-ed1-f67.google.com with SMTP id f37so15715042edb.13;
+        Fri, 24 May 2019 12:30:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=bevgnpwWp43eLyKYVX1neQ0UpZhiFx6WSxipgBSsKRk=;
+        b=Omm51I/HC8uqeMOORrTprPgd8EI0GEG2/vdjRflGw6kD4ao+xJC++uyCNJChLeTp7/
+         diqPKe29SGQhAYwnjtB5W1SVme/jv2KbE4Kx5hqEYDQRWo1gG6Eyzguv4X+8vshr/OiK
+         CSFPo+j5TsK9FGba/4m6xMj76y3/NRFNYq+FsOza6sL2gfD2r+6DM9fkkMV/KzFw8tpb
+         80aQGS2QAltLMofWker9rQY+PLNZh1mGtqm4hpuVJsVZdAOpH37I5sxrXkhYDaUUyoEy
+         NsXJbyV0TE4q8dIpWOgnePyDfOAOAeLbYZm/ceLzOekPUO1cRVhKsm5000Egk1nd9V9v
+         rpoA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=yvn6Z+8CNLO1tsaW5/zxMotanzz8ExB5H3ow81Rb1J8=;
-        b=qRYsxMG9FrOLT8U6+AK++/2g7ksw8Dfs5bGi0wIBbJSlyRlD1T2vINHiXuTFgtKg1J
-         DnwjRFRuJ/6guZIcaQqGdTmzzWgOVXAiiKs+pmrsxdqvWyS4nkD3A5524SP/dXrU2gEU
-         fdRqiR+BiSi/AAP8oxzTNidNU4nci10pJp9xrcUPPQtFg2BXejHYffTzcQXPd0/HhS9a
-         HHhY3G/ioEMIhg7TLZa8LJqvVYmRpghatKg7eABWRakXZPU38TCdW10f9XAsTTsw0qLh
-         KUV9PmsDg4HgAdjaFS36BIL/nMm50Itx92em6CFEgox0Mas41Zb/8RLnHmWd+3lVXibV
-         pv+A==
-X-Gm-Message-State: APjAAAUC4uUM/vPrNslCzk7x/zPH3hvlxlrFWQHwOM/HCwFYTdQx4x/h
-        zheGbbw8BQUyDa3yIq4CVoDaoDcoTZ0=
-X-Google-Smtp-Source: APXvYqzfqL+E+LxIXGZhopDTwiNLeQSCRmfercctqPmlnf0LEtgtnNgAywaKzY5YC3KvCOvA4KPUcQ==
-X-Received: by 2002:a7b:c344:: with SMTP id l4mr18350497wmj.25.1558725865276;
-        Fri, 24 May 2019 12:24:25 -0700 (PDT)
-Received: from [192.168.10.150] ([93.56.166.5])
-        by smtp.gmail.com with ESMTPSA id 74sm3410408wma.7.2019.05.24.12.24.24
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 24 May 2019 12:24:24 -0700 (PDT)
-Subject: Re: [PATCH] KVM: selftests: Wrap vcpu_nested_state_get/set functions
- with x86 guard
-To:     Thomas Huth <thuth@redhat.com>,
-        =?UTF-8?B?UmFkaW0gS3LEjW3DocWZ?= <rkrcmar@redhat.com>,
-        Andrew Jones <drjones@redhat.com>, kvm@vger.kernel.org
-Cc:     Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20190523093114.18182-1-thuth@redhat.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-Message-ID: <1cb9f031-3483-b721-2e74-b12664b705ec@redhat.com>
-Date:   Fri, 24 May 2019 21:24:24 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=bevgnpwWp43eLyKYVX1neQ0UpZhiFx6WSxipgBSsKRk=;
+        b=DEHslOi5EmzB0S3/wq4Dn0D3zVPahxUllkbNTA1pyQY5fFDt4qOFoVidLX8lejHeqr
+         jXsz3CCyYsbpWdDRwoINZ6k9OISzi+/yNPiCR2HLanE/V9SLBmPzGWnmporQqAYCFiTT
+         71PITVOARfqlUWbuS9HBZVLMUYuHk06sNU0AQF7xAUhS97G0Yj5y4LPgGoOiPCfNTpBp
+         j0LcakPC+neM2NJW6djs3y2Uyx4WbVmYqIX5w/0SnqLzMUa7mlKb3Vd1ALmHCCJJwidq
+         aG0Ck1XOqQw4ZfvKUw6vU+nHumDUuFo8E7m6XaeitLhJsGjWCcR31oUax0yF1x9AaE9U
+         S+WA==
+X-Gm-Message-State: APjAAAXOK0jKUCfmQPPm5YyiveG31+OlW8/N59racpQqzEzDkefBu486
+        kvFy4tIAxFcKp4L1uNIy7LlOinn1+uoIGMsmPjI=
+X-Google-Smtp-Source: APXvYqyS2Gr9Ox8h2x39qvakn/evhg5BERIyfc6ZfJWEkcvPeJmxxQycHb293J3FqUvkicWp3WNJTIyNkiHpZ5tELEo=
+X-Received: by 2002:aa7:ca54:: with SMTP id j20mr105844637edt.23.1558726206280;
+ Fri, 24 May 2019 12:30:06 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20190523093114.18182-1-thuth@redhat.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <20190523210651.80902-1-fklassen@appneta.com> <20190523210651.80902-2-fklassen@appneta.com>
+ <CAF=yD-Jf95De=z_nx9WFkGDa6+nRUqM_1PqGkjwaFPzOe+PfXg@mail.gmail.com>
+ <AE8E0772-7256-4B9C-A990-96930E834AEE@appneta.com> <CAF=yD-LtAKpND601LQrC1+=iF6spSUXVdUapcsbJdv5FYa=5Jg@mail.gmail.com>
+ <AFC1ECC8-BFAC-4718-B0C9-97CC4BD1F397@appneta.com>
+In-Reply-To: <AFC1ECC8-BFAC-4718-B0C9-97CC4BD1F397@appneta.com>
+From:   Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+Date:   Fri, 24 May 2019 15:29:29 -0400
+Message-ID: <CAF=yD-Le-eTadOi7PL8WFEQCG=yLqb5gvKiks+s5Akeq8TenBQ@mail.gmail.com>
+Subject: Re: [PATCH net 1/4] net/udp_gso: Allow TX timestamp with UDP GSO
+To:     Fred Klassen <fklassen@appneta.com>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-kselftest@vger.kernel.org,
+        Willem de Bruijn <willemb@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 23/05/19 11:31, Thomas Huth wrote:
-> struct kvm_nested_state is only available on x86 so far. To be able
-> to compile the code on other architectures as well, we need to wrap
-> the related code with #ifdefs.
-> 
-> Signed-off-by: Thomas Huth <thuth@redhat.com>
-> ---
->  tools/testing/selftests/kvm/include/kvm_util.h | 2 ++
->  tools/testing/selftests/kvm/lib/kvm_util.c     | 2 ++
->  2 files changed, 4 insertions(+)
-> 
-> diff --git a/tools/testing/selftests/kvm/include/kvm_util.h b/tools/testing/selftests/kvm/include/kvm_util.h
-> index 8c6b9619797d..a5a4b28f14d8 100644
-> --- a/tools/testing/selftests/kvm/include/kvm_util.h
-> +++ b/tools/testing/selftests/kvm/include/kvm_util.h
-> @@ -118,10 +118,12 @@ void vcpu_events_get(struct kvm_vm *vm, uint32_t vcpuid,
->  		     struct kvm_vcpu_events *events);
->  void vcpu_events_set(struct kvm_vm *vm, uint32_t vcpuid,
->  		     struct kvm_vcpu_events *events);
-> +#ifdef __x86_64__
->  void vcpu_nested_state_get(struct kvm_vm *vm, uint32_t vcpuid,
->  			   struct kvm_nested_state *state);
->  int vcpu_nested_state_set(struct kvm_vm *vm, uint32_t vcpuid,
->  			  struct kvm_nested_state *state, bool ignore_error);
-> +#endif
->  
->  const char *exit_reason_str(unsigned int exit_reason);
->  
-> diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
-> index cf62de377310..633b22df46a4 100644
-> --- a/tools/testing/selftests/kvm/lib/kvm_util.c
-> +++ b/tools/testing/selftests/kvm/lib/kvm_util.c
-> @@ -1248,6 +1248,7 @@ void vcpu_events_set(struct kvm_vm *vm, uint32_t vcpuid,
->  		ret, errno);
->  }
->  
-> +#ifdef __x86_64__
->  void vcpu_nested_state_get(struct kvm_vm *vm, uint32_t vcpuid,
->  			   struct kvm_nested_state *state)
->  {
-> @@ -1279,6 +1280,7 @@ int vcpu_nested_state_set(struct kvm_vm *vm, uint32_t vcpuid,
->  
->  	return ret;
->  }
-> +#endif
->  
->  /*
->   * VM VCPU System Regs Get
-> 
+On Fri, May 24, 2019 at 12:34 PM Fred Klassen <fklassen@appneta.com> wrote:
+>
+> > Interesting. TCP timestamping takes the opposite choice and does
+> > timestamp the last byte in the sendmsg request.
+> >
+>
+> I have a difficult time with the philosophy of TX timestamping the last
+> segment. The actual timestamp occurs just before the last segment
+> is sent. This is neither the start  nor the end of a GSO packet, which
+> to me seems somewhat arbitrary. It is even more arbitrary when using
+> software TX tiimestamping. These are timestamps represent the
+> time that the packet is queued onto the NIC=E2=80=99s buffer, not actual
+> time leaving the wire.
 
-Queued, thanks.
+It is the last moment that a timestamp can be generated for the last
+byte, I don't see how that is "neither the start nor the end of a GSO
+packet".
 
-Paolo
+> Queuing to a ring buffer is usually much faster
+> than wire rates. Therefore, say the timestamp of the last 1500 byte
+> segment of a 64K GSO packet may in reality be representing a time
+> about half way through the burst.
+>
+> Since the timestamp of a TX packet occurs just before any data is sent,
+> I have found it most valuable to timestamp just before the first byte of
+> the packet or burst. Conversely, I find it most valuable to get an RX
+> timestamp  after the last byte arrives.
+>
+> > It sounds like it depends on the workload. Perhaps this then needs to
+> > be configurable with an SOF_.. flag.
+> >
+>
+> It would be interesting if a practical case can be made for timestamping
+> the last segment. In my mind, I don=E2=80=99t see how that would be valua=
+ble.
+
+It depends whether you are interested in measuring network latency or
+host transmit path latency.
+
+For the latter, knowing the time from the start of the sendmsg call to
+the moment the last byte hits the wire is most relevant. Or in absence
+of (well defined) hardware support, the last byte being queued to the
+device is the next best thing.
+
+It would make sense for this software implementation to follow
+established hardware behavior. But as far as I know, the exact time a
+hardware timestamp is taken is not consistent across devices, either.
+
+For fine grained timestamped data, perhaps GSO is simply not a good
+mechanism. That said, it still has to queue a timestamp if requested.
+
+> > Another option would be to return a timestamp for every segment. But
+> > they would all return the same tskey. And it causes different behavior
+> > with and without hardware offload.
+>
+> When it comes to RX packets, getting per-packet (or per segment)
+> timestamps is invaluable. They represent actual wire times. However
+> my previous research into TX timestamping has led me to conclude
+> that there is no practical value when timestamping every packet of
+> a back-to-back burst.
+>
+> When using software TX timestamping, The inter-packet timestamps
+> are typically much faster than line rate. Whereas you may be sending
+> on a GigE link, you may measure 20Gbps. At higher rates, I have found
+> that the overhead of per-packet software timestamping can produce
+> gaps in packets.
+>
+> When using hardware timestamping, I think you will find that nearly all
+> adapters only allow one timestamp at a time. Therefore only one
+> packet in a burst would get timestamped.
+
+Can you elaborate? When the host queues N packets all with hardware
+timestamps requested, all N completions will have a timestamp? Or is
+that not guaranteed?
+
+> There are exceptions, for
+> example I am playing with a 100G Mellanox adapter that has
+> per-packet TX timestamping. However, I suspect that when I am
+> done testing, all I will see is timestamps that are representing wire
+> rate (e.g. 123nsec per 1500 byte packet).
+>
+> Beyond testing the accuracy of a NIC=E2=80=99s timestamping capabilities,=
+ I
+> see very little value in doing per-segment timestamping.
+
+Ack. Great detailed argument, thanks.
