@@ -2,188 +2,222 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E36CB296AD
-	for <lists+linux-kselftest@lfdr.de>; Fri, 24 May 2019 13:11:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08D7E29700
+	for <lists+linux-kselftest@lfdr.de>; Fri, 24 May 2019 13:21:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390935AbfEXLLL (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 24 May 2019 07:11:11 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:51348 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S2390760AbfEXLLK (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 24 May 2019 07:11:10 -0400
-Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x4OB2i68051257
-        for <linux-kselftest@vger.kernel.org>; Fri, 24 May 2019 07:11:09 -0400
-Received: from e06smtp02.uk.ibm.com (e06smtp02.uk.ibm.com [195.75.94.98])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 2spe3gv4jm-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-kselftest@vger.kernel.org>; Fri, 24 May 2019 07:11:09 -0400
-Received: from localhost
-        by e06smtp02.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-kselftest@vger.kernel.org> from <borntraeger@de.ibm.com>;
-        Fri, 24 May 2019 12:11:07 +0100
-Received: from b06cxnps3075.portsmouth.uk.ibm.com (9.149.109.195)
-        by e06smtp02.uk.ibm.com (192.168.101.132) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Fri, 24 May 2019 12:11:03 +0100
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
-        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x4OBB29o54329538
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 24 May 2019 11:11:02 GMT
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A0ADBA405C;
-        Fri, 24 May 2019 11:11:02 +0000 (GMT)
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 41CA2A405B;
-        Fri, 24 May 2019 11:11:02 +0000 (GMT)
-Received: from oc7455500831.ibm.com (unknown [9.152.224.26])
-        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Fri, 24 May 2019 11:11:02 +0000 (GMT)
-To:     Thomas Huth <thuth@redhat.com>,
-        Janosch Frank <frankja@linux.ibm.com>, kvm@vger.kernel.org
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        =?UTF-8?B?UmFkaW0gS3LEjW3DocWZ?= <rkrcmar@redhat.com>,
-        Shuah Khan <shuah@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Andrew Jones <drjones@redhat.com>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-s390@vger.kernel.org
-References: <20190523164309.13345-1-thuth@redhat.com>
-From:   Christian Borntraeger <borntraeger@de.ibm.com>
-Openpgp: preference=signencrypt
-Autocrypt: addr=borntraeger@de.ibm.com; prefer-encrypt=mutual; keydata=
- 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
- syiRa+UVlsKmx1hsEg==
-Date:   Fri, 24 May 2019 13:11:02 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
+        id S2390777AbfEXLUb (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 24 May 2019 07:20:31 -0400
+Received: from usa-sjc-mx-foss1.foss.arm.com ([217.140.101.70]:40630 "EHLO
+        foss.arm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2390535AbfEXLUa (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 24 May 2019 07:20:30 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.72.51.249])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C89F4374;
+        Fri, 24 May 2019 04:20:29 -0700 (PDT)
+Received: from mbp (usa-sjc-mx-foss1.foss.arm.com [217.140.101.70])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B166B3F703;
+        Fri, 24 May 2019 04:20:23 -0700 (PDT)
+Date:   Fri, 24 May 2019 12:20:20 +0100
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     enh <enh@google.com>, Evgenii Stepanov <eugenis@google.com>,
+        Andrey Konovalov <andreyknvl@google.com>,
+        Khalid Aziz <khalid.aziz@oracle.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-rdma@vger.kernel.org, linux-media@vger.kernel.org,
+        kvm@vger.kernel.org,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Will Deacon <will.deacon@arm.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Yishai Hadas <yishaih@mellanox.com>,
+        Felix Kuehling <Felix.Kuehling@amd.com>,
+        Alexander Deucher <Alexander.Deucher@amd.com>,
+        Christian Koenig <Christian.Koenig@amd.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Jens Wiklander <jens.wiklander@linaro.org>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Kostya Serebryany <kcc@google.com>,
+        Lee Smith <Lee.Smith@arm.com>,
+        Ramana Radhakrishnan <Ramana.Radhakrishnan@arm.com>,
+        Jacob Bramley <Jacob.Bramley@arm.com>,
+        Ruben Ayrapetyan <Ruben.Ayrapetyan@arm.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
+        Dave Martin <Dave.Martin@arm.com>,
+        Kevin Brodsky <kevin.brodsky@arm.com>,
+        Szabolcs Nagy <Szabolcs.Nagy@arm.com>
+Subject: Re: [PATCH v15 00/17] arm64: untag user pointers passed to the kernel
+Message-ID: <20190524112020.xcio5jrx6kzmrdnz@mbp>
+References: <20190521182932.sm4vxweuwo5ermyd@mbp>
+ <201905211633.6C0BF0C2@keescook>
+ <20190522101110.m2stmpaj7seezveq@mbp>
+ <CAJgzZoosKBwqXRyA6fb8QQSZXFqfHqe9qO9je5TogHhzuoGXJQ@mail.gmail.com>
+ <20190522163527.rnnc6t4tll7tk5zw@mbp>
+ <201905221316.865581CF@keescook>
+ <20190523144449.waam2mkyzhjpqpur@mbp>
+ <201905230917.DEE7A75EF0@keescook>
+ <20190523174345.6sv3kcipkvlwfmox@mbp>
+ <201905231327.77CA8D0A36@keescook>
 MIME-Version: 1.0
-In-Reply-To: <20190523164309.13345-1-thuth@redhat.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-x-cbid: 19052411-0008-0000-0000-000002E9F535
-X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 19052411-0009-0000-0000-00002256B786
-Message-Id: <0ad63449-c329-f38d-b879-6e427e6a8656@de.ibm.com>
-Subject: Re:  [PATCH v1 0/9] KVM selftests for s390x
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-05-24_05:,,
- signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
- clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1810050000 definitions=main-1905240076
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <201905231327.77CA8D0A36@keescook>
+User-Agent: NeoMutt/20170113 (1.7.2)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-I do get
+On Thu, May 23, 2019 at 02:31:16PM -0700, Kees Cook wrote:
+> On Thu, May 23, 2019 at 06:43:46PM +0100, Catalin Marinas wrote:
+> > On Thu, May 23, 2019 at 09:38:19AM -0700, Kees Cook wrote:
+> > > What about testing tools that intentionally insert high bits for syscalls
+> > > and are _expecting_ them to fail? It seems the TBI series will break them?
+> > > In that case, do we need to opt into TBI as well?
+> > 
+> > If there are such tools, then we may need a per-process control. It's
+> > basically an ABI change.
+> 
+> syzkaller already attempts to randomly inject non-canonical and
+> 0xFFFF....FFFF addresses for user pointers in syscalls in an effort to
+> find bugs like CVE-2017-5123 where waitid() via unchecked put_user() was
+> able to write directly to kernel memory[1].
+> 
+> It seems that using TBI by default and not allowing a switch back to
+> "normal" ABI without a reboot actually means that userspace cannot inject
+> kernel pointers into syscalls any more, since they'll get universally
+> stripped now. Is my understanding correct, here? i.e. exploiting
+> CVE-2017-5123 would be impossible under TBI?
 
-[10400.440298] kvm-s390: failed to commit memory region
-[10400.508723] kvm-s390: failed to commit memory region
+Unless the kernel is also using TBI (khwasan), in which case masking out
+the top byte wouldn't help. Anyway, as per this discussion, we want the
+tagged pointer to remain intact all the way to put_user(), so nothing
+gets masked out. I don't think this would have helped with the waitid()
+bug.
 
-when running the tests. Will have a look.
+> If so, then I think we should commit to the TBI ABI and have a boot
+> flag to disable it, but NOT have a process flag, as that would allow
+> attackers to bypass the masking. The only flag should be "TBI or MTE".
+> 
+> If so, can I get top byte masking for other architectures too? Like,
+> just to strip high bits off userspace addresses? ;)
 
-On 23.05.19 18:43, Thomas Huth wrote:
-> This patch series enables the KVM selftests for s390x. As a first
-> test, the sync_regs from x86 has been adapted to s390x, and after
-> a fix for KVM_CAP_MAX_VCPU_ID on s390x, the kvm_create_max_vcpus
-> is now enabled here, too.
-> 
-> Please note that the ucall() interface is not used yet - since
-> s390x neither has PIO nor MMIO, this needs some more work first
-> before it becomes usable (we likely should use a DIAG hypercall
-> here, which is what the sync_reg test is currently using, too...
-> I started working on that topic, but did not finish that work
-> yet, so I decided to not include it yet).
-> 
-> RFC -> v1:
->  - Rebase, needed to add the first patch for vcpu_nested_state_get/set
->  - Added patch to introduce VM_MODE_DEFAULT macro
->  - Improved/cleaned up the code in processor.c
->  - Added patch to fix KVM_CAP_MAX_VCPU_ID on s390x
->  - Added patch to enable the kvm_create_max_vcpus on s390x and aarch64
-> 
-> Andrew Jones (1):
->   kvm: selftests: aarch64: fix default vm mode
-> 
-> Thomas Huth (8):
->   KVM: selftests: Wrap vcpu_nested_state_get/set functions with x86
->     guard
->   KVM: selftests: Guard struct kvm_vcpu_events with
->     __KVM_HAVE_VCPU_EVENTS
->   KVM: selftests: Introduce a VM_MODE_DEFAULT macro for the default bits
->   KVM: selftests: Align memory region addresses to 1M on s390x
->   KVM: selftests: Add processor code for s390x
->   KVM: selftests: Add the sync_regs test for s390x
->   KVM: s390: Do not report unusabled IDs via KVM_CAP_MAX_VCPU_ID
->   KVM: selftests: Move kvm_create_max_vcpus test to generic code
-> 
->  MAINTAINERS                                   |   2 +
->  arch/mips/kvm/mips.c                          |   3 +
->  arch/powerpc/kvm/powerpc.c                    |   3 +
->  arch/s390/kvm/kvm-s390.c                      |   1 +
->  arch/x86/kvm/x86.c                            |   3 +
->  tools/testing/selftests/kvm/Makefile          |   7 +-
->  .../testing/selftests/kvm/include/kvm_util.h  |  10 +
->  .../selftests/kvm/include/s390x/processor.h   |  22 ++
->  .../kvm/{x86_64 => }/kvm_create_max_vcpus.c   |   3 +-
->  .../selftests/kvm/lib/aarch64/processor.c     |   2 +-
->  tools/testing/selftests/kvm/lib/kvm_util.c    |  25 +-
->  .../selftests/kvm/lib/s390x/processor.c       | 286 ++++++++++++++++++
->  .../selftests/kvm/lib/x86_64/processor.c      |   2 +-
->  .../selftests/kvm/s390x/sync_regs_test.c      | 151 +++++++++
->  virt/kvm/arm/arm.c                            |   3 +
->  virt/kvm/kvm_main.c                           |   2 -
->  16 files changed, 514 insertions(+), 11 deletions(-)
->  create mode 100644 tools/testing/selftests/kvm/include/s390x/processor.h
->  rename tools/testing/selftests/kvm/{x86_64 => }/kvm_create_max_vcpus.c (93%)
->  create mode 100644 tools/testing/selftests/kvm/lib/s390x/processor.c
->  create mode 100644 tools/testing/selftests/kvm/s390x/sync_regs_test.c
-> 
+But you didn't like my option 2 shim proposal which strips the tag on
+kernel entry because it lowers the value of MTE ;).
 
+> (Oh, in looking I see this is implemented with sign-extension... why
+> not just a mask? So it'll either be valid userspace address or forced
+> into the non-canonical range?)
+
+The TTBR0/1 selection on memory accesses is done based on bit 63 if TBI
+is disabled and bit 55 when enabled. Sign-extension allows us to use the
+same macro for both user and kernel tagged pointers. With MTE tag 0
+would be match-all for TTBR0 and 0xff for TTBR1 (so that we don't modify
+the virtual address space of the kernel; I need to check the latest spec
+to be sure). Note that the VA space for both user and kernel is limited
+to 52-bit architecturally so, on access, bits 55..52 must be the same, 0
+or 1, otherwise you get a fault.
+
+Since the syzkaller tests would also need to set bits 55-52 (actually 48
+for kernel addresses, we haven't merged the 52-bit kernel VA patches
+yet) to hit a valid kernel address, I don't think ignoring the top byte
+makes much difference to the expected failure scenario.
+
+> > > Alright, the tl;dr appears to be:
+> > > - you want more assurances that we can find __user stripping in the
+> > >   kernel more easily. (But this seems like a parallel problem.)
+> > 
+> > Yes, and that we found all (most) cases now. The reason I don't see it
+> > as a parallel problem is that, as maintainer, I promise an ABI to user
+> > and I'd rather stick to it. I don't want, for example, ncurses to stop
+> > working because of some ioctl() rejecting tagged pointers.
+> 
+> But this is what I don't understand: it would need to be ncurses _using
+> TBI_, that would stop working (having started to work before, but then
+> regress due to a newly added one-off bug). Regular ncurses will be fine
+> because it's not using TBI. So The Golden Rule isn't violated,
+
+Once we introduced TBI and the libc starts tagging heap allocations,
+this becomes the new "regular" user space behaviour (i.e. using TBI). So
+a new bug would break the golden rule. It could also be an old bug that
+went unnoticed (i.e. you changed the graphics card and its driver gets
+confused by tagged pointers coming from user-space).
+
+> and by definition, it's a specific regression caused by some bug
+> (since TBI would have had to have worked _before_ in the situation to
+> be considered a regression now). Which describes the normal path for
+> kernel development... add feature, find corner cases where it doesn't
+> work, fix them, encounter new regressions, fix those, repeat forever.
+> 
+> > If it's just the occasional one-off bug I'm fine to deal with it. But
+> > no-one convinced me yet that this is the case.
+> 
+> You believe there still to be some systemic cases that haven't been
+> found yet? And even if so -- isn't it better to work on that
+> incrementally?
+
+I want some way to systematically identify potential issues (sparse?).
+Since problems are most likely in drivers, I don't have all devices to
+check and not all users have the knowledge to track down why something
+failed.
+
+I think we can do this incrementally as long the TBI ABI is not the
+default. Even better if we made it per process.
+
+> > As for the generic driver code (filesystems or other subsystems),
+> > without some clear direction for developers, together with static
+> > checking/sparse, on how user pointers are cast to longs (one example),
+> > it would become my responsibility to identify and fix them up with any
+> > kernel release. This series is not providing such guidance, just adding
+> > untagged_addr() in some places that we think matter.
+> 
+> What about adding a nice bit of .rst documentation that describes the
+> situation and shows how to use untagged_addr(). This is the kind of
+> kernel-wide change that "everyone" needs to know about, and shouldn't
+> be the arch maintainer's sole responsibility to fix.
+
+This works (if people read it) but we also need to be more prescriptive
+in how casting is done and how we differentiate between a pointer for
+dereference (T __user *) and address space management (usually unsigned
+long). On top of that, we'd get sparse to check for such conversions and
+maybe even checkpatch for some low-hanging fruit.
+
+> > > - we might need to opt in to TBI with a prctl()
+> > 
+> > Yes, although still up for discussion.
+> 
+> I think I've talked myself out of it. I say boot param only! :)
+
+I hope I talked you in again ;). I don't see TBI as improving kernel
+security.
+
+> So what do you say to these next steps:
+> 
+> - change untagged_addr() to use a static branch that is controlled with
+>   a boot parameter.
+
+access_ok() as well.
+
+> - add, say, Documentation/core-api/user-addresses.rst to describe
+>   proper care and handling of user space pointers with untagged_addr(),
+>   with examples based on all the cases seen so far in this series.
+
+We have u64_to_user_ptr(). What about the reverse? And maybe changing
+get_user_pages() to take void __user *.
+
+> - continue work to improve static analysis.
+
+Andrew Murray in the ARM kernel team started revisiting the old sparse
+threads, let's see how it goes.
+
+-- 
+Catalin
