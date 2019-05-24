@@ -2,137 +2,287 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7427729660
-	for <lists+linux-kselftest@lfdr.de>; Fri, 24 May 2019 12:54:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3333296C6
+	for <lists+linux-kselftest@lfdr.de>; Fri, 24 May 2019 13:12:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390729AbfEXKyM (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 24 May 2019 06:54:12 -0400
-Received: from mail-it1-f195.google.com ([209.85.166.195]:38660 "EHLO
+        id S2391039AbfEXLL0 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 24 May 2019 07:11:26 -0400
+Received: from mail-it1-f195.google.com ([209.85.166.195]:34870 "EHLO
         mail-it1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2390459AbfEXKyM (ORCPT
+        with ESMTP id S2391016AbfEXLL0 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 24 May 2019 06:54:12 -0400
-Received: by mail-it1-f195.google.com with SMTP id i63so13139834ita.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 24 May 2019 03:54:11 -0700 (PDT)
+        Fri, 24 May 2019 07:11:26 -0400
+Received: by mail-it1-f195.google.com with SMTP id u186so13250326ith.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 24 May 2019 04:11:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=brauner.io; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=CfQCPeLhxIRZNFUFprUfxjdraaUe3oFHAGmuDz7teoQ=;
-        b=Em430Lcwry47jSvpo2CX3tGth2isfe0jStpDuxS7CMmLdA3d0PXEVPlYO1LA5R1mzt
-         HY4rafqjGQJavFGnE3XaT/sGBtGX54ySCbaX7DVDZMmxBcy/N79r+hv4lU4j2oA3k9uH
-         3qZj79cuHnNGNu2oYXdLcTSXDzUD2I8KQ+AfcVybt1p+pDbSSV/BxOdIjemHzveC4b7q
-         duRReG8ScM5eer/3Afm7cUzTfGgmoE34PFQheJOvRIbKuqLqZGUfkiFLLL9ErcrO39tc
-         F/9MwQeUr7EmYtaiFsYdYlVOLNriujpFjX0na3vmEkcAGEzSA9rJkFtPpvRuu71lHiOs
-         lhuQ==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=nuilRgGUYviZJo16cdF7vgoam1Y3XVG2+yfRV0kCp44=;
+        b=R+t/15ExfNAlDmS3T8/nYVgxjZsPbXAkCbY/B3M2JMRsaFaURV0Zvwo0dvOoA8j1Hm
+         pYCK1zBbhCgnKR+XhqVnk7+ApqJfnA2u7suNZ83jbrV4R6vPW6qeJf7gbtLWsp8NPh5C
+         7QGuX9muWb4qK2c7arcSFCR/ETv8/zM12NWPgcweja2NzxE0Nb6gWV3ACS2uOuwyElHV
+         mivWTrs4gdGOskQm1ccR4N4oruKpjx/ClJz9t2u6Li4RA51pbfSX1I+7TFfDNr/PD8QU
+         BbPiZbClYmIgJVXnBXzJUBI/f+bo1JTfUguXL47Z1WJ3MaS6fvhxARml1t5MsSBiA5gB
+         mG/A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=CfQCPeLhxIRZNFUFprUfxjdraaUe3oFHAGmuDz7teoQ=;
-        b=aoItpzXXAxaxbiL8cGJMA2ABWcd3cFwVFyI7T7nTWj9Jom7akk8GRdVKY4U2ldHCJ3
-         JSwfiaCGvIJFJscE0B3jURzwHjZ3IfiMjz4E2ov+vTQAxNeWtCTzta3KnP2ku81hI35/
-         1mDhAoMOIdjzuHvJ7+5IcFDwrYAlxDlQvJ6zwo3P1lggDzg6wR8RRVJeos40bI7raTfb
-         zdGOoEsvpoGhunB8pb42CufVXUdlfzZOBRlJoIJXXT/gL3zQxuDKZPLdHh0gmwbP0bP7
-         TUCG5mkf8CYdvhbRyaWZl79+RBrED/81u5GNFflzhMzi4QjK0Q61ecgmF9Yyamw+zm/K
-         bI8A==
-X-Gm-Message-State: APjAAAXc8W0fZSr/BTz1JOo6fJCa3LxQdthTYynDmh8Wa0Vpch8ezB3l
-        GAeEdroIlDO4Z6d9/JzW2r8pWg==
-X-Google-Smtp-Source: APXvYqzek4vSIIuFlylSllnN9c1fb45hmMMLlcQcM2y40ZIswZUPrKTiVfMzOtV1j/enrZtL4iFGng==
-X-Received: by 2002:a24:4043:: with SMTP id n64mr17805822ita.25.1558695251429;
-        Fri, 24 May 2019 03:54:11 -0700 (PDT)
-Received: from brauner.io ([172.56.12.37])
-        by smtp.gmail.com with ESMTPSA id f14sm955704itb.31.2019.05.24.03.54.02
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Fri, 24 May 2019 03:54:10 -0700 (PDT)
-Date:   Fri, 24 May 2019 12:54:00 +0200
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=nuilRgGUYviZJo16cdF7vgoam1Y3XVG2+yfRV0kCp44=;
+        b=YsmrpVk70jwYEPSKVMI3ubqmMeuLqeT8egUeZ3DdzN8SI3oxoY3OWXFF0OCZaaKkeG
+         Q6I009oR54vKscyPRVRT7YtZ0Mv1ugOZrHtAtFw2oR+QKOYCXIIb30NAL7fEIMEb1YL3
+         hLQdW+YrFNMr9Y8osCTPDms2KaQ2obbS1VZjhQgI1RGM9TayZs0wbfweuWyykmeZAgC5
+         dLgZSKAgKBb7y5RR/PfGd46nsQT5e7y7vCk4WdXhasNh1nb3prulY0RvdE0lIkePgnqf
+         DlHryAre3gR6DHiPSugrMkp8gDyJcWPMqnwrplsoFSUYhjCAxcUYUIC323tciA49YCPP
+         hCEQ==
+X-Gm-Message-State: APjAAAUnklSXtEP1FIyq4AccvmJesclgHa2JaGERF6obocBd2sBbKdv4
+        d5rkXzxRPAyHVON1wA+U7v9DWg==
+X-Google-Smtp-Source: APXvYqxBWUfU8Pv7v2XH7gr4LqA1seYEni45lAXHr6lzqG9t83zM0qgC2zZvMzAwxI3Sa3ujZjPIVg==
+X-Received: by 2002:a24:7c97:: with SMTP id a145mr12709178itd.117.1558696284466;
+        Fri, 24 May 2019 04:11:24 -0700 (PDT)
+Received: from localhost.localdomain ([172.56.12.37])
+        by smtp.gmail.com with ESMTPSA id y194sm1024771itb.34.2019.05.24.04.11.19
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 24 May 2019 04:11:23 -0700 (PDT)
 From:   Christian Brauner <christian@brauner.io>
-To:     jannh@google.com, oleg@redhat.com, viro@zeniv.linux.org.uk,
-        torvalds@linux-foundation.org, arnd@arndb.de
-Cc:     akpm@linux-foundation.org, cyphar@cyphar.com, dhowells@redhat.com,
-        ebiederm@xmission.com, elena.reshetova@intel.com,
-        keescook@chromium.org, luto@amacapital.net, luto@kernel.org,
-        tglx@linutronix.de, linux-alpha@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-xtensa@linux-xtensa.org,
-        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, joel@joelfernandes.org,
-        dancol@google.com, serge@hallyn.com, surenb@google.com,
-        kernel-team@android.com
-Subject: Re: [PATCH v3 1/2] pid: add pidfd_open()
-Message-ID: <20190524105358.dfnelxhxodkvwbcn@brauner.io>
-References: <20190520155630.21684-1-christian@brauner.io>
- <20190521143220.crb2zyvdov3fl4g7@brauner.io>
+To:     viro@zeniv.linux.org.uk, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, torvalds@linux-foundation.org,
+        fweimer@redhat.com
+Cc:     jannh@google.com, oleg@redhat.com, tglx@linutronix.de,
+        arnd@arndb.de, shuah@kernel.org, dhowells@redhat.com,
+        tkjos@android.com, ldv@altlinux.org, miklos@szeredi.hu,
+        Christian Brauner <christian@brauner.io>,
+        linux-api@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: [PATCH v3 3/3] tests: add close_range() tests
+Date:   Fri, 24 May 2019 13:10:47 +0200
+Message-Id: <20190524111047.6892-4-christian@brauner.io>
+X-Mailer: git-send-email 2.21.0
+In-Reply-To: <20190524111047.6892-1-christian@brauner.io>
+References: <20190524111047.6892-1-christian@brauner.io>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20190521143220.crb2zyvdov3fl4g7@brauner.io>
-User-Agent: NeoMutt/20180716
+Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, May 21, 2019 at 04:32:20PM +0200, Christian Brauner wrote:
-> On Mon, May 20, 2019 at 05:56:29PM +0200, Christian Brauner wrote:
-> > This adds the pidfd_open() syscall. It allows a caller to retrieve pollable
-> > pidfds for a process which did not get created via CLONE_PIDFD, i.e. for a
-> > process that is created via traditional fork()/clone() calls that is only
-> > referenced by a PID:
-> > 
-> > int pidfd = pidfd_open(1234, 0);
-> > ret = pidfd_send_signal(pidfd, SIGSTOP, NULL, 0);
-> > 
-> > With the introduction of pidfds through CLONE_PIDFD it is possible to
-> > created pidfds at process creation time.
-> > However, a lot of processes get created with traditional PID-based calls
-> > such as fork() or clone() (without CLONE_PIDFD). For these processes a
-> > caller can currently not create a pollable pidfd. This is a problem for
-> > Android's low memory killer (LMK) and service managers such as systemd.
-> > Both are examples of tools that want to make use of pidfds to get reliable
-> > notification of process exit for non-parents (pidfd polling) and race-free
-> > signal sending (pidfd_send_signal()). They intend to switch to this API for
-> > process supervision/management as soon as possible. Having no way to get
-> > pollable pidfds from PID-only processes is one of the biggest blockers for
-> > them in adopting this api. With pidfd_open() making it possible to retrieve
-> > pidfds for PID-based processes we enable them to adopt this api.
-> > 
-> > In line with Arnd's recent changes to consolidate syscall numbers across
-> > architectures, I have added the pidfd_open() syscall to all architectures
-> > at the same time.
-> > 
-> > Signed-off-by: Christian Brauner <christian@brauner.io>
-> > Reviewed-by: Oleg Nesterov <oleg@redhat.com>
-> 
-> This now also carries a Reviewed-by from David.
-> 
-> > Acked-by: Arnd Bergmann <arnd@arndb.de>
-> > Cc: "Eric W. Biederman" <ebiederm@xmission.com>
-> > Cc: Kees Cook <keescook@chromium.org>
-> > Cc: Joel Fernandes (Google) <joel@joelfernandes.org>
-> > Cc: Thomas Gleixner <tglx@linutronix.de>
-> > Cc: Jann Horn <jannh@google.com>
-> > Cc: David Howells <dhowells@redhat.com>
-> > Cc: Andy Lutomirsky <luto@kernel.org>
-> > Cc: Andrew Morton <akpm@linux-foundation.org>
-> > Cc: Aleksa Sarai <cyphar@cyphar.com>
-> > Cc: Linus Torvalds <torvalds@linux-foundation.org>
-> > Cc: Al Viro <viro@zeniv.linux.org.uk>
-> > Cc: linux-api@vger.kernel.org
-> 
-> I've moved pidfd_open() into my for-next branch together with Joel's
-> pidfd polling changes. Everything is based on v5.2-rc1.
-> 
-> The chosen syscall number for now is 434. David is going to send out
-> another pile of mount api related syscalls. I'll coordinate with him
-> accordingly prior to the 5.3 merge window.
+This adds basic tests for the new close_range() syscall.
+- test that no invalid flags can be passed
+- test that a range of file descriptors is correctly closed
+- test that a range of file descriptors is correctly closed if there there
+  are already closed file descriptors in the range
+- test that max_fd is correctly capped to the current fdtable maximum
 
-After talking to Arnd, I split the syscall addition and the per-arch
-wiring-up of pidfd_open() into two patches. There are no functional
-changes and everything is still sitting in for-next.
+Signed-off-by: Christian Brauner <christian@brauner.io>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Jann Horn <jannh@google.com>
+Cc: David Howells <dhowells@redhat.com>
+Cc: Dmitry V. Levin <ldv@altlinux.org>
+Cc: Oleg Nesterov <oleg@redhat.com>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Florian Weimer <fweimer@redhat.com>
+Cc: Shuah Khan <shuah@kernel.org>
+Cc: linux-api@vger.kernel.org
+Cc: linux-kselftest@vger.kernel.org
+---
+v1: unchanged
+v2:
+- Christian Brauner <christian@brauner.io>:
+  - verify that close_range() correctly closes a single file descriptor
+v3:
+- Christian Brauner <christian@brauner.io>:
+  - add missing Cc for Shuah
+  - add missing Cc for linux-kselftest
+---
+ tools/testing/selftests/Makefile              |   1 +
+ tools/testing/selftests/core/.gitignore       |   1 +
+ tools/testing/selftests/core/Makefile         |   6 +
+ .../testing/selftests/core/close_range_test.c | 142 ++++++++++++++++++
+ 4 files changed, 150 insertions(+)
+ create mode 100644 tools/testing/selftests/core/.gitignore
+ create mode 100644 tools/testing/selftests/core/Makefile
+ create mode 100644 tools/testing/selftests/core/close_range_test.c
 
-Thanks!
-Christian
+diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
+index 9781ca79794a..06e57fabbff9 100644
+--- a/tools/testing/selftests/Makefile
++++ b/tools/testing/selftests/Makefile
+@@ -4,6 +4,7 @@ TARGETS += bpf
+ TARGETS += breakpoints
+ TARGETS += capabilities
+ TARGETS += cgroup
++TARGETS += core
+ TARGETS += cpufreq
+ TARGETS += cpu-hotplug
+ TARGETS += drivers/dma-buf
+diff --git a/tools/testing/selftests/core/.gitignore b/tools/testing/selftests/core/.gitignore
+new file mode 100644
+index 000000000000..6e6712ce5817
+--- /dev/null
++++ b/tools/testing/selftests/core/.gitignore
+@@ -0,0 +1 @@
++close_range_test
+diff --git a/tools/testing/selftests/core/Makefile b/tools/testing/selftests/core/Makefile
+new file mode 100644
+index 000000000000..de3ae68aa345
+--- /dev/null
++++ b/tools/testing/selftests/core/Makefile
+@@ -0,0 +1,6 @@
++CFLAGS += -g -I../../../../usr/include/ -I../../../../include
++
++TEST_GEN_PROGS := close_range_test
++
++include ../lib.mk
++
+diff --git a/tools/testing/selftests/core/close_range_test.c b/tools/testing/selftests/core/close_range_test.c
+new file mode 100644
+index 000000000000..d6e6079d3d53
+--- /dev/null
++++ b/tools/testing/selftests/core/close_range_test.c
+@@ -0,0 +1,142 @@
++// SPDX-License-Identifier: GPL-2.0
++
++#define _GNU_SOURCE
++#include <errno.h>
++#include <fcntl.h>
++#include <linux/kernel.h>
++#include <limits.h>
++#include <stdbool.h>
++#include <stdio.h>
++#include <stdlib.h>
++#include <string.h>
++#include <syscall.h>
++#include <unistd.h>
++
++#include "../kselftest.h"
++
++static inline int sys_close_range(unsigned int fd, unsigned int max_fd,
++				  unsigned int flags)
++{
++	return syscall(__NR_close_range, fd, max_fd, flags);
++}
++
++#ifndef ARRAY_SIZE
++#define ARRAY_SIZE(x) (sizeof(x) / sizeof((x)[0]))
++#endif
++
++int main(int argc, char **argv)
++{
++	const char *test_name = "close_range";
++	int i, ret;
++	int open_fds[101];
++	int fd_max, fd_mid, fd_min;
++
++	ksft_set_plan(9);
++
++	for (i = 0; i < ARRAY_SIZE(open_fds); i++) {
++		int fd;
++
++		fd = open("/dev/null", O_RDONLY | O_CLOEXEC);
++		if (fd < 0) {
++			if (errno == ENOENT)
++				ksft_exit_skip(
++					"%s test: skipping test since /dev/null does not exist\n",
++					test_name);
++
++			ksft_exit_fail_msg(
++				"%s test: %s - failed to open /dev/null\n",
++				strerror(errno), test_name);
++		}
++
++		open_fds[i] = fd;
++	}
++
++	fd_min = open_fds[0];
++	fd_max = open_fds[99];
++
++	ret = sys_close_range(fd_min, fd_max, 1);
++	if (!ret)
++		ksft_exit_fail_msg(
++			"%s test: managed to pass invalid flag value\n",
++			test_name);
++	ksft_test_result_pass("do not allow invalid flag values for close_range()\n");
++
++	fd_mid = open_fds[50];
++	ret = sys_close_range(fd_min, fd_mid, 0);
++	if (ret < 0)
++		ksft_exit_fail_msg(
++			"%s test: Failed to close range of file descriptors from %d to %d\n",
++			test_name, fd_min, fd_mid);
++	ksft_test_result_pass("close_range() from %d to %d\n", fd_min, fd_mid);
++
++	for (i = 0; i <= 50; i++) {
++		ret = fcntl(open_fds[i], F_GETFL);
++		if (ret >= 0)
++			ksft_exit_fail_msg(
++				"%s test: Failed to close range of file descriptors from %d to %d\n",
++				test_name, fd_min, fd_mid);
++	}
++	ksft_test_result_pass("fcntl() verify closed range from %d to %d\n", fd_min, fd_mid);
++
++	/* create a couple of gaps */
++	close(57);
++	close(78);
++	close(81);
++	close(82);
++	close(84);
++	close(90);
++
++	fd_mid = open_fds[51];
++	/* Choose slightly lower limit and leave some fds for a later test */
++	fd_max = open_fds[92];
++	ret = sys_close_range(fd_mid, fd_max, 0);
++	if (ret < 0)
++		ksft_exit_fail_msg(
++			"%s test: Failed to close range of file descriptors from 51 to 100\n",
++			test_name);
++	ksft_test_result_pass("close_range() from %d to %d\n", fd_mid, fd_max);
++
++	for (i = 51; i <= 92; i++) {
++		ret = fcntl(open_fds[i], F_GETFL);
++		if (ret >= 0)
++			ksft_exit_fail_msg(
++				"%s test: Failed to close range of file descriptors from 51 to 100\n",
++				test_name);
++	}
++	ksft_test_result_pass("fcntl() verify closed range from %d to %d\n", fd_mid, fd_max);
++
++	fd_mid = open_fds[93];
++	fd_max = open_fds[99];
++	/* test that the kernel caps and still closes all fds */
++	ret = sys_close_range(fd_mid, UINT_MAX, 0);
++	if (ret < 0)
++		ksft_exit_fail_msg(
++			"%s test: Failed to close range of file descriptors from 51 to 100\n",
++			test_name);
++	ksft_test_result_pass("close_range() from %d to %d\n", fd_mid, fd_max);
++
++	for (i = 93; i < 100; i++) {
++		ret = fcntl(open_fds[i], F_GETFL);
++		if (ret >= 0)
++			ksft_exit_fail_msg(
++				"%s test: Failed to close range of file descriptors from 51 to 100\n",
++				test_name);
++	}
++	ksft_test_result_pass("fcntl() verify closed range from %d to %d\n", fd_mid, fd_max);
++
++	ret = sys_close_range(open_fds[100], open_fds[100], 0);
++	if (ret < 0)
++		ksft_exit_fail_msg(
++			"%s test: Failed to close single file descriptor\n",
++			test_name);
++	ksft_test_result_pass("close_range() closed single file descriptor\n");
++
++	ret = fcntl(open_fds[100], F_GETFL);
++	if (ret >= 0)
++		ksft_exit_fail_msg(
++			"%s test: Failed to close single file descriptor\n",
++			test_name);
++	ksft_test_result_pass("fcntl() verify closed single file descriptor\n");
++
++	return ksft_exit_pass();
++}
+-- 
+2.21.0
+
