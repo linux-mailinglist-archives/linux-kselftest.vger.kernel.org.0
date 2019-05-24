@@ -2,86 +2,94 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FBB228DD9
-	for <lists+linux-kselftest@lfdr.de>; Fri, 24 May 2019 01:32:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4484528E5A
+	for <lists+linux-kselftest@lfdr.de>; Fri, 24 May 2019 02:30:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388404AbfEWXci (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 23 May 2019 19:32:38 -0400
-Received: from mail.kernel.org ([198.145.29.99]:49806 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2387693AbfEWXch (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 23 May 2019 19:32:37 -0400
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net [24.9.64.241])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id A5A752133D;
-        Thu, 23 May 2019 23:32:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1558654356;
-        bh=+JimfnIpUnSEIOM6CLyzapNUCy/6hiOiN5D8CMQg81c=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=kWJqIeGNO5wQh3sWxJ7Dxs6DOEvsb3gqTrFkUFVAGCz6OgmJZ9cxcGo3Yo5wOcpI9
-         3T23ckG+CPhAmhwkbXHy+izIxJMSE68O176FBBwUjVowkkSn7hHP2wbUiE7enuZOKj
-         YB6rU9mH7lJelPJ4CeSpkypQqR1G9J66YLnO62q8=
-Subject: Re: [PATCH 0/2] kselftest: fix rtctest timeout
-To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Jeffrin Thalakkottoor <jeffrin@rajagiritech.edu.in>,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-rtc@vger.kernel.org, shuah <shuah@kernel.org>
-References: <20190523224223.11054-1-alexandre.belloni@bootlin.com>
- <9c94c2b7-153d-ef75-c474-9bae49d6a039@kernel.org>
-From:   shuah <shuah@kernel.org>
-Message-ID: <3846d273-7b8e-8bb8-a3d4-04fd382d8324@kernel.org>
-Date:   Thu, 23 May 2019 17:32:35 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
+        id S2387582AbfEXAan (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 23 May 2019 20:30:43 -0400
+Received: from mail-pg1-f194.google.com ([209.85.215.194]:43480 "EHLO
+        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731488AbfEXAam (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 23 May 2019 20:30:42 -0400
+Received: by mail-pg1-f194.google.com with SMTP id f25so3989513pgv.10;
+        Thu, 23 May 2019 17:30:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition
+         :content-transfer-encoding:user-agent;
+        bh=XZsqJgkcCKygTlVoU/wFBCrr+8eotqrBwsnc4F7PYoY=;
+        b=BY++Z5xBgwJMBsNDSgyb/nDiqbsQpBpBaAGWMK/dtyX6ST0HuululL8lFKpX+ApBMd
+         PG4j2HomNxN4U10INIuR7hIzfzRaVWeGqR05sXXpTb4GUSDWFOdGGW03FslMblIybUVG
+         49nTQDBPDDG/rt7YLLk5LWn/LWbDSZKgH8nUDXUEnlOV4gmZvVvZI5gyuzBX3j+5aB0M
+         mdqWkzOEgmcxVav2JYt2ALUU3UaxHmLjPkckQGZPm545eVMLWCDRfNUA0CbTXEcZPaBC
+         xRrEYFxaXmavKAB9sxcM4V69yUfmznDozhE6KO3IuphJZ88pcqwRsm4eulzkpva0TEPe
+         ZleA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition:content-transfer-encoding:user-agent;
+        bh=XZsqJgkcCKygTlVoU/wFBCrr+8eotqrBwsnc4F7PYoY=;
+        b=Gn9B7aDkAoo1HFYIgMi1xwDQDEBsEErDQyfKmh4lvKMCAacIJfx80J3AOMBbfURpyn
+         sJ0FEoyzqkW+Mqcu8sbZIXQMfA5UxiLDrcg46W99+o1L0KX/7bTY8WBdcJe0hyQQpUQf
+         i9R6ArbTZy8Bw7mOwOMy9iYCTsrgZomx00VVgw/aO0oYOv9aQF25rXujihVRNQvIgNQ9
+         8DSjpKZO4pu/jkj5IoFS+AZFsfgkN6H3/tS+S1kWJAabpxSfiT81uoB6cU6UZB1gt3d+
+         4s/gOPOJMoV0ZjjFFBu5nSL72icrr3E95678rFtJ6JIvaKh/ZtNc7U6zyYuJzBK2qaBq
+         pB2g==
+X-Gm-Message-State: APjAAAVR4nhWvYsUudIPx8GvvyiBd3jeJh0Iyd8e5ukww0vHZ/u6dkko
+        HVmZ8Bhw+uXS8f0o3sE8CbI=
+X-Google-Smtp-Source: APXvYqxdX3g4INyo5kJ6LXrrSnnDu7DWa3DIgP83m/ktPBR+Bo3gIUCa+bzgvEr9EgKGj3j0VLh0Ig==
+X-Received: by 2002:a17:90a:a608:: with SMTP id c8mr5298255pjq.37.1558657841393;
+        Thu, 23 May 2019 17:30:41 -0700 (PDT)
+Received: from ip-172-31-44-144.us-west-2.compute.internal (ec2-54-186-128-88.us-west-2.compute.amazonaws.com. [54.186.128.88])
+        by smtp.gmail.com with ESMTPSA id w12sm457394pgp.51.2019.05.23.17.30.39
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Thu, 23 May 2019 17:30:40 -0700 (PDT)
+Date:   Fri, 24 May 2019 00:30:38 +0000
+From:   Alakesh Haloi <alakesh.haloi@gmail.com>
+To:     Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        Stanislav Fomichev <sdf@google.com>
+Cc:     linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] selftests: bpf: fix compiler warning
+Message-ID: <20190524003038.GA69487@ip-172-31-44-144.us-west-2.compute.internal>
 MIME-Version: 1.0
-In-Reply-To: <9c94c2b7-153d-ef75-c474-9bae49d6a039@kernel.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 5/23/19 4:57 PM, shuah wrote:
-> On 5/23/19 4:42 PM, Alexandre Belloni wrote:
->> Hi,
->>
->> Commit a745f7af3cbd ("selftests/harness: Add 30 second timeout per
->> test") wrongly assumed that no individual test would run for more than
->> 30 seconds and this silently broke rtctest.
->>
->> Please consider the following patches as fixes for v5.2 to avoid having
->> any non working release.
->>
->> Thanks,
->>
->> Alexandre Belloni (2):
->>    selftests/harness: Allow test to configure timeout
->>    selftests: rtc: rtctest: specify timeouts
->>
->>   tools/testing/selftests/kselftest_harness.h | 17 ++++++++++++-----
->>   tools/testing/selftests/rtc/rtctest.c       |  6 +++---
->>   2 files changed, 15 insertions(+), 8 deletions(-)
->>
-> 
-> Thanks for fixing them quickly.
-> 
-> I will pull these in. I have one more fix from Kees already queued
-> up.
-> 
-> Jeffrin! Would you like to test these to see if they work for you
-> and send Tested-by tag.
-> 
-> I don't see 1/2 in my Inbox. I have Kees's reply to it. Odd.
-> 
+Add missing header file following compiler warning
 
-It showed up late. I have 1/2 in my Inbox now. Must have taken a scenic
-route. :)
+prog_tests/flow_dissector.c: In function ‘tx_tap’:
+prog_tests/flow_dissector.c:175:9: warning: implicit declaration of function ‘writev’; did you mean ‘write’? [-Wimplicit-function-declaration]
+  return writev(fd, iov, ARRAY_SIZE(iov));
+         ^~~~~~
+         write
 
-thanks,
--- Shuah
+Signed-off-by: Alakesh Haloi <alakesh.haloi@gmail.com>
+---
+ tools/testing/selftests/bpf/prog_tests/flow_dissector.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/tools/testing/selftests/bpf/prog_tests/flow_dissector.c b/tools/testing/selftests/bpf/prog_tests/flow_dissector.c
+index fbd1d88a6095..c938283ac232 100644
+--- a/tools/testing/selftests/bpf/prog_tests/flow_dissector.c
++++ b/tools/testing/selftests/bpf/prog_tests/flow_dissector.c
+@@ -3,6 +3,7 @@
+ #include <error.h>
+ #include <linux/if.h>
+ #include <linux/if_tun.h>
++#include <sys/uio.h>
+ 
+ #define CHECK_FLOW_KEYS(desc, got, expected)				\
+ 	CHECK_ATTR(memcmp(&got, &expected, sizeof(got)) != 0,		\
+-- 
+2.17.1
 
