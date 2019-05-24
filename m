@@ -2,100 +2,91 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AB45329040
-	for <lists+linux-kselftest@lfdr.de>; Fri, 24 May 2019 07:02:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9970329200
+	for <lists+linux-kselftest@lfdr.de>; Fri, 24 May 2019 09:44:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731853AbfEXFC6 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 24 May 2019 01:02:58 -0400
-Received: from mail-ed1-f66.google.com ([209.85.208.66]:38944 "EHLO
-        mail-ed1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726156AbfEXFC6 (ORCPT
+        id S2389086AbfEXHoM (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 24 May 2019 03:44:12 -0400
+Received: from mail-qk1-f196.google.com ([209.85.222.196]:47089 "EHLO
+        mail-qk1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388911AbfEXHoL (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 24 May 2019 01:02:58 -0400
-Received: by mail-ed1-f66.google.com with SMTP id e24so12487189edq.6;
-        Thu, 23 May 2019 22:02:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=cKIZDHhM23UDx19n3GdofpP2QbyBXWvdFRSPtj7m9HE=;
-        b=oRa09WzYVDPLaZ5iPjcgR/bdIyyuzBl/O6xLgj1mU3su+ZBKB6CTACAztrwNZRHF/z
-         zacN60isAAh630eywgOtMVB/pSfUCxtSzA/9F3IrWGJd9rwpVzB0TdEwG4H4Y1RR18LO
-         MFvS0kFs4D2zRrX60Y84cF6DxY6mtyc6+cYaCjdn8hL38av9jkWagvo3EkVcXVZppKyr
-         MydepX+75ROuH7POzzS+CziyKp9ObYCStkZqFSY1b7YTaqk1Ah8aYbPtWOSnsA28i/H8
-         F0Byu4s7Ntw1fzM2lO8xZZDnJ8pcw3fIoteLVoiKsrrJAqW3ZV6ds0r5EjeF4YNzz5Vi
-         llBw==
+        Fri, 24 May 2019 03:44:11 -0400
+Received: by mail-qk1-f196.google.com with SMTP id a132so6005115qkb.13;
+        Fri, 24 May 2019 00:44:10 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=cKIZDHhM23UDx19n3GdofpP2QbyBXWvdFRSPtj7m9HE=;
-        b=Ishs46iAlERNRe+EfI9+eV/YlJ4fIfZvtjbvEXyJPINfGh8mbE7/Pxd/krg2xro4EY
-         021B2IMavKtROkFNZZwy/xVHvpHefXryt0N7A38s1KdDQiExsQv2v6tV4w3v8Vh3t98O
-         FzpyNMknFbPfG3+K/S/OotThhZQLKq+AbKRFdIhlTYqKKCbMphLh58K1oWB0zcyNDNqs
-         8xzLjqlj6SR5I8/Qunpt2AwJgddiKw3bIlDVvgy9xVPTs7bwskKPcdRbvHxXMalRHcRI
-         Jgark2GF1+4Jx3jEMCvANoUO0kqskHMRsv+H0aw9WcumBQIROI7kutpCK0pQlKbWf/6r
-         XqcQ==
-X-Gm-Message-State: APjAAAVJeizy3h442ngtT68kYmcPfKpWPd72FgAP34EtVvQn0fNbFrRY
-        u9Eb9/GaHxMnFQ+0Z2reiE+R+S5Txf1W/zilSjY=
-X-Google-Smtp-Source: APXvYqyA2P6rJ5Rpgaw8f2+M2ICv1VNxQnaI17Q7cCTaCC06j3aE+a5kT2N0nDt4xBozCWvy5ZXtss4pe/5LVrwSnxo=
-X-Received: by 2002:a50:f5d0:: with SMTP id x16mr100304375edm.287.1558674176088;
- Thu, 23 May 2019 22:02:56 -0700 (PDT)
+         :message-id:subject:to:cc;
+        bh=k2hM4uRH+xcF6VZw3zZp57FHF0UiIEpfXR9WFJl84UE=;
+        b=PYXq1Idzv0Di7KLMknzWpNB+eY+yAOjbVLGoI5HUbfbPvDLGbeqCylQHAYwjvuSa0e
+         IkMKSeoe3IR3aNnjCBw+MHwc5WWQdgsseuj/aC59yOVLI4d0Twksyz4v5wc494lIhagG
+         tI6f8JhIFaoCJFSmJxKQFc1dQ+AEZABwqBiQEMUXnGdfiMTZB2Gs3uPZ3vGAsGa/AdF7
+         LCIl7WMuGS5y0Bo6e8XQO/aJiEDa/nlQqrbspcGRQGNzl23DvPUNFRrB+4NRjwo/OfAB
+         atqkh0iKBC0EFrVTNrQ50gbR+7yV90h01bA/rQNSKkLlx5BjivcZnCzdDU1XcWXk/L1l
+         WKfA==
+X-Gm-Message-State: APjAAAXwfXByxZKYfWiMo9NPVH0LPLmzUDK7pZnqtwgzF0APfN1TY0OJ
+        4eLsFdXsvJQkA4Q8mb4D3BVwKXzWUO3mq3l/+tQ=
+X-Google-Smtp-Source: APXvYqy/WqyRL4BlbMWLM5GdeDgLkBJI6XwCNcVvXGonN+2oV2dtTQWrObje5U17OKbtEn0pWH9nlYsDR25/fOWgBDY=
+X-Received: by 2002:ac8:2433:: with SMTP id c48mr70119188qtc.18.1558683849757;
+ Fri, 24 May 2019 00:44:09 -0700 (PDT)
 MIME-Version: 1.0
-References: <20190523210651.80902-1-fklassen@appneta.com> <20190523210651.80902-5-fklassen@appneta.com>
- <CAF=yD-KBNLr5KY-YQ1KMmZGCpYNefSJKaJkZNOwd8nRiedpQtA@mail.gmail.com> <D68C643B-C6A4-4EC5-8E4F-368BDE03760B@appneta.com>
-In-Reply-To: <D68C643B-C6A4-4EC5-8E4F-368BDE03760B@appneta.com>
-From:   Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-Date:   Fri, 24 May 2019 01:02:20 -0400
-Message-ID: <CAF=yD-JGxrAbv0Cxcn1O20mXY28J1PnpWsHRqcRPO97advm10A@mail.gmail.com>
-Subject: Re: [PATCH net 4/4] net/udpgso_bench_tx: audit error queue
-To:     Fred Klassen <fklassen@appneta.com>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+References: <20190522155259.11174-1-christian@brauner.io> <67e4458a-9cc4-d1aa-608c-73ebe9e2f7a3@yandex-team.ru>
+ <20190523163345.q5ynd2ytk7nxcvqf@brauner.io>
+In-Reply-To: <20190523163345.q5ynd2ytk7nxcvqf@brauner.io>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Fri, 24 May 2019 09:43:53 +0200
+Message-ID: <CAK8P3a26uvqmExJZsezhB+cp2ADM0Ai9jVUKWOFM6kg848bCKg@mail.gmail.com>
+Subject: Re: [PATCH v1 1/2] open: add close_range()
+To:     Christian Brauner <christian@brauner.io>
+Cc:     Konstantin Khlebnikov <khlebnikov@yandex-team.ru>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux FS-devel Mailing List <linux-fsdevel@vger.kernel.org>,
+        Linux API <linux-api@vger.kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Florian Weimer <fweimer@redhat.com>,
+        Jann Horn <jannh@google.com>, Oleg Nesterov <oleg@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
         Shuah Khan <shuah@kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-kselftest@vger.kernel.org,
-        Willem de Bruijn <willemb@google.com>
+        David Howells <dhowells@redhat.com>,
+        Todd Kjos <tkjos@android.com>,
+        "Dmitry V. Levin" <ldv@altlinux.org>,
+        Miklos Szeredi <miklos@szeredi.hu>,
+        alpha <linux-alpha@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-ia64@vger.kernel.org,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        linux-mips@vger.kernel.org,
+        Parisc List <linux-parisc@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        linux-s390 <linux-s390@vger.kernel.org>,
+        Linux-sh list <linux-sh@vger.kernel.org>,
+        sparclinux <sparclinux@vger.kernel.org>,
+        linux-xtensa@linux-xtensa.org,
+        linux-arch <linux-arch@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        "the arch/x86 maintainers" <x86@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, May 23, 2019 at 9:27 PM Fred Klassen <fklassen@appneta.com> wrote:
->
-> Willem, this is only my 2nd patch, and my last one was a one liner.
-> I=E2=80=99ll try to work through this, but let me know if I am doing a ro=
-okie
-> mistake (learning curve and all).
-
-Not at all. The fix makes perfect sense.
-
-The test patches 2 and 4 are not fixes, so are better suited to to
-net-next. Perhaps the changes to the test can also be more concise,
-just the minimal changes needed to demonstrate the bug and fix.
-
-> >>                        tss =3D (struct my_scm_timestamping *)CMSG_DATA=
-(cmsg);
-> >> -                       fprintf(stderr, "tx timestamp =3D %lu.%09lu\n"=
-,
-> >> -                               tss->ts[i].tv_sec, tss->ts[i].tv_nsec)=
-;
-> >> +                       if (tss->ts[i].tv_sec =3D=3D 0)
-> >> +                               stat_tx_ts_errors++;
-> >> +                       if (cfg_verbose)
-> >> +                               fprintf(stderr, "tx timestamp =3D %lu.=
-%09lu\n",
-> >> +                                       tss->ts[i].tv_sec, tss->ts[i].=
-tv_nsec);
+On Thu, May 23, 2019 at 6:33 PM Christian Brauner <christian@brauner.io> wrote:
+> On Thu, May 23, 2019 at 07:22:17PM +0300, Konstantin Khlebnikov wrote:
+> > On 22.05.2019 18:52, Christian Brauner wrote:> This adds the close_range() syscall. It allows to efficiently close a range
+> > >   22 files changed, 100 insertions(+), 9 deletions(-)
+> > >
 > >
-> > changes unrelated to this feature?
+> > It would be better to split arch/ wiring into separate patch for better readability.
 >
-> I=E2=80=99ll remove. Do you think that I should pull out any messages rel=
-ated
-> to =E2=80=9Ccfg_verbose=E2=80=9D?
+> Ok. You mean only do x86 - seems to be the standard - and then move the
+> others into a separate patch? Doesn't seem worth to have a patch
+> per-arch, I'd think.
 
-This change did not seem relevant to the main feature of the patch.
+I think I would prefer the first patch to just add the call without wiring it up
+anywhere, and a second patch do add it on all architectures including x86.
+
+     Arnd
