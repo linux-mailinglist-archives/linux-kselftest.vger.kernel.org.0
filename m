@@ -2,161 +2,154 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4870328F77
-	for <lists+linux-kselftest@lfdr.de>; Fri, 24 May 2019 05:12:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44CD528FE5
+	for <lists+linux-kselftest@lfdr.de>; Fri, 24 May 2019 06:23:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388735AbfEXDL7 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 23 May 2019 23:11:59 -0400
-Received: from mx2.mailbox.org ([80.241.60.215]:19540 "EHLO mx2.mailbox.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2387559AbfEXDL7 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 23 May 2019 23:11:59 -0400
-Received: from smtp2.mailbox.org (smtp2.mailbox.org [80.241.60.241])
-        (using TLSv1.2 with cipher ECDHE-RSA-CHACHA20-POLY1305 (256/256 bits))
-        (No client certificate requested)
-        by mx2.mailbox.org (Postfix) with ESMTPS id 1335AA015B;
-        Fri, 24 May 2019 05:11:54 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at heinlein-support.de
-Received: from smtp2.mailbox.org ([80.241.60.241])
-        by spamfilter04.heinlein-hosting.de (spamfilter04.heinlein-hosting.de [80.241.56.122]) (amavisd-new, port 10030)
-        with ESMTP id SZgroZg2fFsB; Fri, 24 May 2019 05:11:27 +0200 (CEST)
-Date:   Fri, 24 May 2019 13:11:09 +1000
-From:   Aleksa Sarai <cyphar@cyphar.com>
-To:     Andy Lutomirski <luto@kernel.org>
-Cc:     Al Viro <viro@zeniv.linux.org.uk>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J. Bruce Fields" <bfields@fieldses.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        David Howells <dhowells@redhat.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Christian Brauner <christian@brauner.io>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Jann Horn <jannh@google.com>, Tycho Andersen <tycho@tycho.ws>,
-        David Drysdale <drysdale@google.com>,
-        Chanho Min <chanho.min@lge.com>,
-        Oleg Nesterov <oleg@redhat.com>, Aleksa Sarai <asarai@suse.de>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Linux Containers <containers@lists.linux-foundation.org>,
+        id S1727134AbfEXEXY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 24 May 2019 00:23:24 -0400
+Received: from mail-ua1-f65.google.com ([209.85.222.65]:46829 "EHLO
+        mail-ua1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725828AbfEXEXY (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 24 May 2019 00:23:24 -0400
+Received: by mail-ua1-f65.google.com with SMTP id a95so3023207uaa.13
+        for <linux-kselftest@vger.kernel.org>; Thu, 23 May 2019 21:23:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=xAYnRWw3Tu8/93j9I1Decyj4SiwalEXjnp8HjDGWVMk=;
+        b=WnRK49CElZNooeneU/rmiXD4MNL+NGJ+1q+LoLrd8r1BWPG0vFLLn5srrzAwJdtZCr
+         YNvRiKrpydE8yY/WwhILnly3Zvune3jCfbXw7GsuMvu4P+dyMtapEbIZ2jkKw+bAAaZT
+         /NstjIQP+l4nVYqupG3KK3t/H/Zt2rSh8UshTl0ZeyMDpnbmZlbVjVV+q+S0iwZ4uNET
+         wEULW4QLu8xXLGSpfqZElCLKOXZT2Zp/eFOfWYxNKR73Qs1kFKXoJK7Lexkh9qJC8nqp
+         yZ2rrh8i3toWpfjsayQpALHrdDwRoiqV6AXbdW6lkKZym6fAr2YHiokI7QWgzJYQeySd
+         EWQQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=xAYnRWw3Tu8/93j9I1Decyj4SiwalEXjnp8HjDGWVMk=;
+        b=eqzo8bu7IsJkIahdLJzZ7S3RdcU8c/FK7/Q800+6Tls9XtxRlQok4a1a28Jq6xB43L
+         YvaxBuKX+1hZ+kDCfbsn+fg2ToIyXJE7I3++TvGjuZLKzQR46EGW6PaANad/tFv55dIY
+         908L5fFkUTUZd02Fc0DBf6yHwVVcqLU5jq8y4gJxlPYK6zRI3Y5biw4WKiJHDaxa5Yt1
+         JvpxsayTlAKTsJoomlXtKdhH9zwrmEare1RTT3qWJUSuIgkv9QwIX39yZiX0N23LpW/k
+         nNNoMHytYIZ+cB6KnuiDsbkTtYv6u5llXXuW+50oapMM7xYuVxnf/j4FWXEcY5JzaHw2
+         GZaw==
+X-Gm-Message-State: APjAAAXc9AuaWQiFpkRYbMZBKDnvA2UKq/BiFqoKg3Yr3N1iJgbW8iVo
+        gpDJ2PpdQhoZzQ4ZhQ8ZY9e2rkHSKTTV1vVVJPjlHQ==
+X-Google-Smtp-Source: APXvYqx5Zm1ZYEN7Vn9AdcFTjSw8M3oFO3UV+ZriQQ1V2wP6o6e1yzY7Ig//CYIK3KGeMPCh4oSMGn+kEBJ+ngdeAaM=
+X-Received: by 2002:ab0:3109:: with SMTP id e9mr449008ual.66.1558671802883;
+ Thu, 23 May 2019 21:23:22 -0700 (PDT)
+MIME-Version: 1.0
+References: <cover.1557160186.git.andreyknvl@google.com> <00eb4c63fefc054e2c8d626e8fedfca11d7c2600.1557160186.git.andreyknvl@google.com>
+ <20190522114910.emlckebwzv2qz42i@mbp> <CAFKCwrjyP+x0JJy=qpBFsp4pub3He6UkvU0qnf1UOKt6W1LPRQ@mail.gmail.com>
+ <20190523090427.GA44383@arrakis.emea.arm.com>
+In-Reply-To: <20190523090427.GA44383@arrakis.emea.arm.com>
+From:   Evgenii Stepanov <eugenis@google.com>
+Date:   Thu, 23 May 2019 21:23:13 -0700
+Message-ID: <CAFKCwrgk0+yR48Z5nhuZG5f7g==vRb4u+CS-4FS0mM7Eriavgw@mail.gmail.com>
+Subject: Re: [PATCH v15 05/17] arms64: untag user pointers passed to memory syscalls
+To:     Catalin Marinas <catalin.marinas@arm.com>
+Cc:     Andrey Konovalov <andreyknvl@google.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-rdma@vger.kernel.org, linux-media@vger.kernel.org,
+        kvm@vger.kernel.org,
         "open list:KERNEL SELFTEST FRAMEWORK" 
         <linux-kselftest@vger.kernel.org>,
-        Linux FS Devel <linux-fsdevel@vger.kernel.org>,
-        Linux API <linux-api@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>
-Subject: Re: [PATCH RFC v8 01/10] namei: obey trailing magic-link DAC
- permissions
-Message-ID: <20190524031109.v24r6typyug2rlto@yavin>
-References: <20190520133305.11925-1-cyphar@cyphar.com>
- <20190520133305.11925-2-cyphar@cyphar.com>
- <CALCETrVCwe49q5mu=f6jTYNSgosQSjjY5chukMPo6eZtQGqo5g@mail.gmail.com>
- <20190523020009.mi25uziu2b3whf4l@yavin>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="r6xfnzimry42j3mt"
-Content-Disposition: inline
-In-Reply-To: <20190523020009.mi25uziu2b3whf4l@yavin>
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Will Deacon <will.deacon@arm.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Kees Cook <keescook@chromium.org>,
+        Yishai Hadas <yishaih@mellanox.com>,
+        Felix Kuehling <Felix.Kuehling@amd.com>,
+        Alexander Deucher <Alexander.Deucher@amd.com>,
+        Christian Koenig <Christian.Koenig@amd.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Jens Wiklander <jens.wiklander@linaro.org>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Kostya Serebryany <kcc@google.com>,
+        Lee Smith <Lee.Smith@arm.com>,
+        Ramana Radhakrishnan <Ramana.Radhakrishnan@arm.com>,
+        Jacob Bramley <Jacob.Bramley@arm.com>,
+        Ruben Ayrapetyan <Ruben.Ayrapetyan@arm.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
+        Dave Martin <Dave.Martin@arm.com>,
+        Kevin Brodsky <kevin.brodsky@arm.com>,
+        Szabolcs Nagy <Szabolcs.Nagy@arm.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+On Thu, May 23, 2019 at 2:04 AM Catalin Marinas <catalin.marinas@arm.com> wrote:
+>
+> On Wed, May 22, 2019 at 02:16:57PM -0700, Evgenii Stepanov wrote:
+> > On Wed, May 22, 2019 at 4:49 AM Catalin Marinas <catalin.marinas@arm.com> wrote:
+> > > On Mon, May 06, 2019 at 06:30:51PM +0200, Andrey Konovalov wrote:
+> > > > This patch is a part of a series that extends arm64 kernel ABI to allow to
+> > > > pass tagged user pointers (with the top byte set to something else other
+> > > > than 0x00) as syscall arguments.
+> > > >
+> > > > This patch allows tagged pointers to be passed to the following memory
+> > > > syscalls: brk, get_mempolicy, madvise, mbind, mincore, mlock, mlock2,
+> > > > mmap, mmap_pgoff, mprotect, mremap, msync, munlock, munmap,
+> > > > remap_file_pages, shmat and shmdt.
+> > > >
+> > > > This is done by untagging pointers passed to these syscalls in the
+> > > > prologues of their handlers.
+> > >
+> > > I'll go through them one by one to see if we can tighten the expected
+> > > ABI while having the MTE in mind.
+> > >
+> > > > diff --git a/arch/arm64/kernel/sys.c b/arch/arm64/kernel/sys.c
+> > > > index b44065fb1616..933bb9f3d6ec 100644
+> > > > --- a/arch/arm64/kernel/sys.c
+> > > > +++ b/arch/arm64/kernel/sys.c
+> > > > @@ -35,10 +35,33 @@ SYSCALL_DEFINE6(mmap, unsigned long, addr, unsigned long, len,
+> > > >  {
+> > > >       if (offset_in_page(off) != 0)
+> > > >               return -EINVAL;
+> > > > -
+> > > > +     addr = untagged_addr(addr);
+> > > >       return ksys_mmap_pgoff(addr, len, prot, flags, fd, off >> PAGE_SHIFT);
+> > > >  }
+> > >
+> > > If user passes a tagged pointer to mmap() and the address is honoured
+> > > (or MAP_FIXED is given), what is the expected return pointer? Does it
+> > > need to be tagged with the value from the hint?
+> >
+> > For HWASan the most convenient would be to use the tag from the hint.
+> > But since in the TBI (not MTE) mode the kernel has no idea what
+> > meaning userspace assigns to pointer tags, perhaps it should not try
+> > to guess, and should return raw (zero-tagged) address instead.
+>
+> Then, just to relax the ABI for hwasan, shall we simply disallow tagged
+> pointers on mmap() arguments? We can leave them in for
+> mremap(old_address), madvise().
 
---r6xfnzimry42j3mt
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I think this would be fine. We should allow tagged in pointers in
+mprotect though.
 
-On 2019-05-23, Aleksa Sarai <cyphar@cyphar.com> wrote:
-> On 2019-05-22, Andy Lutomirski <luto@kernel.org> wrote:
-> > What are actual examples of uses for this exception?  Breaking
-> > selftests is not, in and of itself, a huge problem.
->=20
-> Not as far as I know. All of the re-opening users I know of do re-opens
-> of O_PATH or are re-opening with the same (or fewer) privileges. I also
-> ran this for a few days on my laptop without this exception, and didn't
-> have any visible issues.
-
-I have modified the patch to WARN_ON(may_open_magiclink() =3D=3D -EACCES).
-
-So far (in the past day on my openSUSE machines) I have only seen two
-programs which have hit this case: kbd[1]'s "loadkeys" and "kbd_mode"
-binaries. In addition to there not being any user-visible errors -- they
-actually handle permission errors gracefully!
-
-  static int
-  open_a_console(const char *fnam)
-  {
-  	int fd;
-
-  	/*
-  	 * For ioctl purposes we only need some fd and permissions
-  	 * do not matter. But setfont:activatemap() does a write.
-  	 */
-  	fd =3D open(fnam, O_RDWR);
-  	if (fd < 0)
-  		fd =3D open(fnam, O_WRONLY);
-  	if (fd < 0)
-  		fd =3D open(fnam, O_RDONLY);
-  	if (fd < 0)
-  		return -1;
-  	return fd;
-  }
-
-The above gets called with "/proc/self/fd/0" as an argument (as well as
-other console candidates like "/dev/console"). And setfont:activatemap()
-actually does handle read-only fds:
-
-  static void
-  send_escseq(int fd, const char *seq, int n)
-  {
-  	if (write(fd, seq, n) !=3D n) /* maybe fd is read-only */
-  		printf("%s", seq);
-  }
-
-  void activatemap(int fd)
-  {
-  	send_escseq(fd, "\033(K", 3);
-  }
-
-So, thus far, not only have I not seen anything go wrong -- the only
-program which actually hits this case handles the error gracefully.
-Obviously we got lucky here, but the lack of any users of this
-mis-feature leads me to have some hope that we can block it without
-anyone noticing.
-
-But I emphatically do not want to break userspace here (except for
-attackers, obviously).
-
-[1]: http://git.altlinux.org/people/legion/packages/kbd.git
-
---=20
-Aleksa Sarai
-Senior Software Engineer (Containers)
-SUSE Linux GmbH
-<https://www.cyphar.com/>
-
---r6xfnzimry42j3mt
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEb6Gz4/mhjNy+aiz1Snvnv3Dem58FAlznYMwACgkQSnvnv3De
-m5/UlRAAovI52jrpVsYCg4NsE4FyF6D0yGqaH+nTC1yXRTFIQOX0gWiYDa0U/BAQ
-cJNYiSNBV8HHy4s0N5h1MFu6FDKmWhNS5a8A58HUMXlJQ/6/RpT2NnleB6MBfi02
-E91mqGiVxU4wEthnb44GhUhTmbSoo4JwrdI7AfhvOiKTEziXcf7HcF2VUMMySdD+
-WTC48upAO2G2oYUowAWydF4//I6y7LL4mFPO0RhWCxUqFQmapC3ujka1xvkE46zQ
-4R8ZIlKhnBk3SuE5B77urbIAr4gnQt7U6dZVvQACl/bpBBR8UPkj19okJ4yfjr77
-x2q5Wq8MJB4sYTcjeAml1GNV3f+3v39OwDxiP9HF/j0oergsbKO/Lx0+B3S63TEk
-Hz3KhZRfC8/YpeTTGy60l/3Wqb+kONRvl8J1H47C/JS26MVQUs9nym/Iq6PX+cRf
-V2usCjxwVE1vrZAbpxUMAuifgTmkjf3n2NAURpFTKMX/druhDFxol6ZsuB4/0Ti4
-EseHO5B2wVxkydDzR/9cmj6y29HUge+Y3fAeKa3zvtShYwhKqHg4DYx8CsoFVBfK
-ACLPMT6ymdJ/uz/xBy6wzT88vmDJZ4XC/vlAeAUTXZdd//s2CUu3fSaJs1FfKHr/
-marW2Z16cmWWkyzZiWZlekLhKRxG3BmpD7bI5Wcxw2YKwPYl8IQ=
-=eLDb
------END PGP SIGNATURE-----
-
---r6xfnzimry42j3mt--
+> > > With MTE, we may want to use this as a request for the default colour of
+> > > the mapped pages (still under discussion).
+> >
+> > I like this - and in that case it would make sense to return the
+> > pointer that can be immediately dereferenced without crashing the
+> > process, i.e. with the matching tag.
+>
+> This came up from the Android investigation work where large memory
+> allocations (using mmap) could be more efficiently pre-tagged by the
+> kernel on page fault. Not sure about the implementation details yet.
+>
+> --
+> Catalin
