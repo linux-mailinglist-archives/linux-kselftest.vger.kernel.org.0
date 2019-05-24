@@ -2,72 +2,136 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 65F3229973
-	for <lists+linux-kselftest@lfdr.de>; Fri, 24 May 2019 15:54:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00EE0299BC
+	for <lists+linux-kselftest@lfdr.de>; Fri, 24 May 2019 16:06:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2403874AbfEXNyf (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 24 May 2019 09:54:35 -0400
-Received: from mail-pg1-f178.google.com ([209.85.215.178]:40119 "EHLO
-        mail-pg1-f178.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2391553AbfEXNyf (ORCPT
+        id S2403843AbfEXOGe (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 24 May 2019 10:06:34 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:39038 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S2403926AbfEXOGe (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 24 May 2019 09:54:35 -0400
-Received: by mail-pg1-f178.google.com with SMTP id d30so5114746pgm.7
-        for <linux-kselftest@vger.kernel.org>; Fri, 24 May 2019 06:54:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rajagiritech-edu-in.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=bnF7U0OApTQ5OcSla4k5LdCywdVaBBXmZsl+OyX6YdE=;
-        b=0eOCD8Wh3erP0VxN9fq3F7XuUh8W3Q60OmYILVuvW753q5AxM+6DRIb0YINh9lqqSZ
-         whyTwJCXtg4FPN7K1vCjg45vnem232BnXAzq0gvx12FSI/kP1ckZqbtnJdOTjgCaQ7LV
-         PBFnNxQJsCKBN/XZN+keD0DA3Sgm0NqRjtdQJr4mhxnuP7C8VaKA5ZTkN9yNkSm7BSed
-         sE7PEfzDm2Imv1AYigGnVVAtnkWTakZvi5NbwAINHfE0VEd4lWsa6WaQOyHG2oR1dFtJ
-         Qdw+QrwerT07zGuIL1IZ5BQtJyptPUecxV4J2bot8c0iWuOto5+L8Tm0U0FaIfCpGeYu
-         ZTAQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=bnF7U0OApTQ5OcSla4k5LdCywdVaBBXmZsl+OyX6YdE=;
-        b=PpdFu9ONRxULjn6TF1s7XrGA7BqJew59Vnc467b+tabJgalX9RdBt3X0o7X4idzfzq
-         iVtv1GHevMRE/tjLeM+mmzJRp0oiC98vrIGVWL5GtrKVVWqjYqeRtTSGewSzx/DkA4Tf
-         PrRew468djsfu6N6Xtak+p5jTHe1KKGSa6lHA8Xp/iU+W/JUj8kA4LosyQF5QUUwxgo6
-         0sjzJTiSW8e9puc3faweR/zVqUiN3IMzodEs0fu6YRUOWP/9H6X3ES3qTpC+EDtp0RDw
-         MeCv0i7TGcaBz9ArIewgwbEzjDZqJuurkmTM/yo8EZuxCKaBkf9tRex79mxatd6JFvi2
-         qg2Q==
-X-Gm-Message-State: APjAAAUOMOC8REExZKqNT5T+KH15TaJBK5dS8v9ihbNNxG5pFz+zx27L
-        BkA2di/WyEIcHEpBi27eL+KsM3sSabSRjS9gt1H7aQ==
-X-Google-Smtp-Source: APXvYqx0JufzY7qqejCL5Au4eE2SMC+Vt2RJArfZZMC+qiftz+e+44oYLdJZvtpW9XfyWZJ/UOpJHaIdOq+dZP+gRL4=
-X-Received: by 2002:a63:d4c:: with SMTP id 12mr92953826pgn.30.1558706074731;
- Fri, 24 May 2019 06:54:34 -0700 (PDT)
+        Fri, 24 May 2019 10:06:34 -0400
+Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x4OE2aEh122395
+        for <linux-kselftest@vger.kernel.org>; Fri, 24 May 2019 10:06:33 -0400
+Received: from e06smtp05.uk.ibm.com (e06smtp05.uk.ibm.com [195.75.94.101])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 2spf7j0nbn-1
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-kselftest@vger.kernel.org>; Fri, 24 May 2019 10:06:32 -0400
+Received: from localhost
+        by e06smtp05.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-kselftest@vger.kernel.org> from <borntraeger@de.ibm.com>;
+        Fri, 24 May 2019 15:06:29 +0100
+Received: from b06cxnps4076.portsmouth.uk.ibm.com (9.149.109.198)
+        by e06smtp05.uk.ibm.com (192.168.101.135) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
+        Fri, 24 May 2019 15:06:25 +0100
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
+        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x4OE6O5437683430
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 24 May 2019 14:06:24 GMT
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 9F2D6A4060;
+        Fri, 24 May 2019 14:06:24 +0000 (GMT)
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 89287A4066;
+        Fri, 24 May 2019 14:06:24 +0000 (GMT)
+Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
+        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
+        Fri, 24 May 2019 14:06:24 +0000 (GMT)
+Received: by tuxmaker.boeblingen.de.ibm.com (Postfix, from userid 25651)
+        id 42969E0268; Fri, 24 May 2019 16:06:24 +0200 (CEST)
+From:   Christian Borntraeger <borntraeger@de.ibm.com>
+To:     Janosch Frank <frankja@linux.vnet.ibm.com>
+Cc:     KVM <kvm@vger.kernel.org>, Cornelia Huck <cohuck@redhat.com>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        =?UTF-8?q?Radim=20Kr=C4=8Dm=C3=A1=C5=99?= <rkrcmar@redhat.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Andrew Jones <drjones@redhat.com>,
+        linux-kselftest@vger.kernel.org,
+        linux-s390 <linux-s390@vger.kernel.org>
+Subject: [PATCH] KVM: s390: fix memory slot handling for KVM_SET_USER_MEMORY_REGION
+Date:   Fri, 24 May 2019 16:06:23 +0200
+X-Mailer: git-send-email 2.21.0
 MIME-Version: 1.0
-References: <CAG=yYwk+g28_dnOcN--w-PLbGtA2oM5tq14W4X5bBjdurnF2iA@mail.gmail.com>
- <20190523174739.GY3274@piout.net> <CAG=yYwmrE30nROqn63oAkXN9BCqfmo4T7+QPN-H3mSGG9dLU4A@mail.gmail.com>
- <20190523225219.GZ3274@piout.net>
-In-Reply-To: <20190523225219.GZ3274@piout.net>
-From:   Jeffrin Thalakkottoor <jeffrin@rajagiritech.edu.in>
-Date:   Fri, 24 May 2019 19:23:57 +0530
-Message-ID: <CAG=yYwkhy5wTRywr5QUmGVQOED3EGQC8jFSCSj---TJfoyEhpw@mail.gmail.com>
-Subject: Re: about selftests/rtc test related stuff
-To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     a.zummo@towertech.it, Shuah Khan <shuah@kernel.org>,
-        linux-rtc@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        lkml <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+x-cbid: 19052414-0020-0000-0000-00000340081F
+X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
+x-cbparentid: 19052414-0021-0000-0000-00002192F7F1
+Message-Id: <20190524140623.104033-1-borntraeger@de.ibm.com>
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-05-24_06:,,
+ signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
+ clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
+ mlxlogscore=615 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.0.1-1810050000 definitions=main-1905240095
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, May 24, 2019 at 4:22 AM Alexandre Belloni
-<alexandre.belloni@bootlin.com> wrote:
-> I just sent a fix for that timeout issue.
+kselftests exposed a problem in the s390 handling for memory slots.
+Right now we only do proper memory slot handling for creation of new
+memory slots. Neither MOVE, nor DELETION are handled properly. Let us
+implement those.
 
-anyway thanks related to that
-shall i  send a selftest fix that bail out in the test program  if the
-user does not have root privileges ?
+Signed-off-by: Christian Borntraeger <borntraeger@de.ibm.com>
+---
+ arch/s390/kvm/kvm-s390.c | 35 +++++++++++++++++++++--------------
+ 1 file changed, 21 insertions(+), 14 deletions(-)
 
+diff --git a/arch/s390/kvm/kvm-s390.c b/arch/s390/kvm/kvm-s390.c
+index 871d2e99b156..6ec0685ab2c7 100644
+--- a/arch/s390/kvm/kvm-s390.c
++++ b/arch/s390/kvm/kvm-s390.c
+@@ -4525,21 +4525,28 @@ void kvm_arch_commit_memory_region(struct kvm *kvm,
+ 				const struct kvm_memory_slot *new,
+ 				enum kvm_mr_change change)
+ {
+-	int rc;
++	int rc = 0;
+ 
+-	/* If the basics of the memslot do not change, we do not want
+-	 * to update the gmap. Every update causes several unnecessary
+-	 * segment translation exceptions. This is usually handled just
+-	 * fine by the normal fault handler + gmap, but it will also
+-	 * cause faults on the prefix page of running guest CPUs.
+-	 */
+-	if (old->userspace_addr == mem->userspace_addr &&
+-	    old->base_gfn * PAGE_SIZE == mem->guest_phys_addr &&
+-	    old->npages * PAGE_SIZE == mem->memory_size)
+-		return;
+-
+-	rc = gmap_map_segment(kvm->arch.gmap, mem->userspace_addr,
+-		mem->guest_phys_addr, mem->memory_size);
++	switch (change) {
++	case KVM_MR_DELETE:
++		rc = gmap_unmap_segment(kvm->arch.gmap, old->base_gfn * PAGE_SIZE,
++					old->npages * PAGE_SIZE);
++		break;
++	case KVM_MR_MOVE:
++		rc = gmap_unmap_segment(kvm->arch.gmap, old->base_gfn * PAGE_SIZE,
++					old->npages * PAGE_SIZE);
++		if (rc)
++			break;
++		/* FALLTHROUGH */
++	case KVM_MR_CREATE:
++		rc = gmap_map_segment(kvm->arch.gmap, mem->userspace_addr,
++				      mem->guest_phys_addr, mem->memory_size);
++		break;
++	case KVM_MR_FLAGS_ONLY:
++		break;
++	default:
++		WARN(1, "Unknown KVM MR CHANGE: %d\n", change);
++	}
+ 	if (rc)
+ 		pr_warn("failed to commit memory region\n");
+ 	return;
 -- 
-software engineer
-rajagiri school of engineering and technology
+2.21.0
+
