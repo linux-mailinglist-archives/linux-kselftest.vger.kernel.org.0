@@ -2,37 +2,39 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DD93929DD7
-	for <lists+linux-kselftest@lfdr.de>; Fri, 24 May 2019 20:16:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6185029DE9
+	for <lists+linux-kselftest@lfdr.de>; Fri, 24 May 2019 20:18:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727157AbfEXSQ4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 24 May 2019 14:16:56 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:57132 "EHLO mx1.redhat.com"
+        id S1732020AbfEXSRw (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 24 May 2019 14:17:52 -0400
+Received: from mx1.redhat.com ([209.132.183.28]:40232 "EHLO mx1.redhat.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726071AbfEXSQz (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 24 May 2019 14:16:55 -0400
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
+        id S1732122AbfEXSRu (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 24 May 2019 14:17:50 -0400
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id 97BFFC057E9F;
-        Fri, 24 May 2019 18:16:55 +0000 (UTC)
+        by mx1.redhat.com (Postfix) with ESMTPS id B54CB308219F;
+        Fri, 24 May 2019 18:17:50 +0000 (UTC)
 Received: from thuth.remote.csb (ovpn-116-18.ams2.redhat.com [10.36.116.18])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 35B167D672;
-        Fri, 24 May 2019 18:16:47 +0000 (UTC)
-Subject: Re: [PATCH] KVM: selftests: enable pgste option for the linker on
- s390
+        by smtp.corp.redhat.com (Postfix) with ESMTP id B0B645C207;
+        Fri, 24 May 2019 18:17:44 +0000 (UTC)
+Subject: Re: [PATCH 5/9] KVM: selftests: Align memory region addresses to 1M
+ on s390x
 To:     Christian Borntraeger <borntraeger@de.ibm.com>,
-        Janosch Frank <frankja@linux.vnet.ibm.com>
-Cc:     KVM <kvm@vger.kernel.org>, Cornelia Huck <cohuck@redhat.com>,
-        David Hildenbrand <david@redhat.com>,
+        Andrew Jones <drjones@redhat.com>
+Cc:     Janosch Frank <frankja@linux.ibm.com>, kvm@vger.kernel.org,
         Paolo Bonzini <pbonzini@redhat.com>,
         =?UTF-8?B?UmFkaW0gS3LEjW3DocWZ?= <rkrcmar@redhat.com>,
         Shuah Khan <shuah@kernel.org>,
-        Andrew Jones <drjones@redhat.com>,
-        linux-kselftest@vger.kernel.org,
-        linux-s390 <linux-s390@vger.kernel.org>
+        David Hildenbrand <david@redhat.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-s390@vger.kernel.org
 References: <20190523164309.13345-1-thuth@redhat.com>
- <20190524103301.87017-1-borntraeger@de.ibm.com>
+ <20190523164309.13345-6-thuth@redhat.com>
+ <20190523174028.3giefzff3l5eclki@kamzik.brq.redhat.com>
+ <7919d65e-d814-9e68-4df0-d12f43f0b984@de.ibm.com>
 From:   Thomas Huth <thuth@redhat.com>
 Openpgp: preference=signencrypt
 Autocrypt: addr=thuth@redhat.com; keydata=
@@ -78,30 +80,76 @@ Autocrypt: addr=thuth@redhat.com; keydata=
  rCELuGwT9hsYkUPjVd4lfylN3mzEc6iAv/wwjsc0DRTSQCpXT3v2ymTAsRKrVaEZLibTXaf+
  WslxWek3xNYRiqwwWAJuL652eAlxUgQ5ZS+fXBRTiQpJ+F26I/2lccScRd9G5w==
 Organization: Red Hat
-Message-ID: <798bd397-d44f-0076-3f87-ea0214ceb614@redhat.com>
-Date:   Fri, 24 May 2019 20:16:46 +0200
+Message-ID: <54f10713-002b-515c-e40f-5e64996b8f6f@redhat.com>
+Date:   Fri, 24 May 2019 20:17:43 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.6.1
 MIME-Version: 1.0
-In-Reply-To: <20190524103301.87017-1-borntraeger@de.ibm.com>
+In-Reply-To: <7919d65e-d814-9e68-4df0-d12f43f0b984@de.ibm.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
-X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.32]); Fri, 24 May 2019 18:16:55 +0000 (UTC)
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
+X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.47]); Fri, 24 May 2019 18:17:50 +0000 (UTC)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 24/05/2019 12.33, Christian Borntraeger wrote:
-> To avoid testcase failures we need to enable the pgstes. This can be
-> done with /proc/sys/vm/allocate_pgste or with a linker option that
-> creates an  S390_PGSTE program header.
+On 24/05/2019 10.29, Christian Borntraeger wrote:
+> 
+> 
+> On 23.05.19 19:40, Andrew Jones wrote:
+>> On Thu, May 23, 2019 at 06:43:05PM +0200, Thomas Huth wrote:
+>>> On s390x, there is a constraint that memory regions have to be aligned
+>>> to 1M (or running the VM will fail). Introduce a new "alignment" variable
+>>> in the vm_userspace_mem_region_add() function which now can be used for
+>>> both, huge page and s390x alignment requirements.
+>>>
+>>> Signed-off-by: Thomas Huth <thuth@redhat.com>
+>>> ---
+>>>  tools/testing/selftests/kvm/lib/kvm_util.c | 21 ++++++++++++++++-----
+>>>  1 file changed, 16 insertions(+), 5 deletions(-)
+>>>
+>>> diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
+>>> index 08edb8436c47..656df9d5cd4d 100644
+>>> --- a/tools/testing/selftests/kvm/lib/kvm_util.c
+>>> +++ b/tools/testing/selftests/kvm/lib/kvm_util.c
+>>> @@ -559,6 +559,7 @@ void vm_userspace_mem_region_add(struct kvm_vm *vm,
+>>>  	unsigned long pmem_size = 0;
+>>>  	struct userspace_mem_region *region;
+>>>  	size_t huge_page_size = KVM_UTIL_PGS_PER_HUGEPG * vm->page_size;
+>>> +	size_t alignment;
+>>>  
+>>>  	TEST_ASSERT((guest_paddr % vm->page_size) == 0, "Guest physical "
+>>>  		"address not on a page boundary.\n"
+>>> @@ -608,9 +609,20 @@ void vm_userspace_mem_region_add(struct kvm_vm *vm,
+>>>  	TEST_ASSERT(region != NULL, "Insufficient Memory");
+>>>  	region->mmap_size = npages * vm->page_size;
+>>>  
+>>> -	/* Enough memory to align up to a huge page. */
+>>> +#ifdef __s390x__
+>>> +	/* On s390x, the host address must be aligned to 1M (due to PGSTEs) */
+>>> +	alignment = 0x100000;
+>>> +#else
+>>> +	alignment = 1;
+>>> +#endif
+>>> +
+>>>  	if (src_type == VM_MEM_SRC_ANONYMOUS_THP)
+>>> -		region->mmap_size += huge_page_size;
+>>> +		alignment = huge_page_size;
+>>
+>> I guess s390x won't ever support VM_MEM_SRC_ANONYMOUS_THP? If it does,
+>> then we need 'alignment = max(huge_page_size, alignment)'. Actually
+>> that might be a nice way to write this anyway for future-proofing.
+> 
+> I can do 
+> -		alignment = huge_page_size;
+> +		alignment = max(huge_page_size, alignment);
+> 
+> when applying.
 
-Oh, right, I initially enabled it on my LPAR via "sysctl
-vm.allocate_pgste=1" when I started working on the selftests and then
-completely forgot about this... The linker option is certainly the
-better way to do this, thanks for the patch!
+Yes, please, that's certainly cleaner this way.
 
-Reviewed-by: Thomas Huth <thuth@redhat.com>
+ Thanks,
+  Thomas
