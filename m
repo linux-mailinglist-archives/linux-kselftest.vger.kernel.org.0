@@ -2,53 +2,53 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BB7D2A703
-	for <lists+linux-kselftest@lfdr.de>; Sat, 25 May 2019 22:46:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D53502A707
+	for <lists+linux-kselftest@lfdr.de>; Sat, 25 May 2019 22:47:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727286AbfEYUqJ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 25 May 2019 16:46:09 -0400
-Received: from mail-pg1-f196.google.com ([209.85.215.196]:41180 "EHLO
-        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727274AbfEYUqJ (ORCPT
+        id S1727392AbfEYUrv (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 25 May 2019 16:47:51 -0400
+Received: from mail-pl1-f193.google.com ([209.85.214.193]:39144 "EHLO
+        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727183AbfEYUru (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 25 May 2019 16:46:09 -0400
-Received: by mail-pg1-f196.google.com with SMTP id z3so2296470pgp.8
-        for <linux-kselftest@vger.kernel.org>; Sat, 25 May 2019 13:46:09 -0700 (PDT)
+        Sat, 25 May 2019 16:47:50 -0400
+Received: by mail-pl1-f193.google.com with SMTP id g9so5505602plm.6
+        for <linux-kselftest@vger.kernel.org>; Sat, 25 May 2019 13:47:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=appneta.com; s=google;
         h=mime-version:subject:from:in-reply-to:date:cc
          :content-transfer-encoding:message-id:references:to;
-        bh=qo8JrOOZqi12jkLNvRxgMvVScnv0tXvVQTmMYH0OKSE=;
-        b=thWHGLVr4cU7dJKLdMWPO72IcwgIUO6hCDtvYPNJxvRmFABU5gDC/mRGcgxLAmjdFO
-         Oh0yt+kdymYu11rdgIzECutsKWeYt5hzZggVnh7yjPN3iKgtTUaDX71jipxAXNjnZwdU
-         9zm0rBy9oCa+p5uezRtBcDS0eb+z8ywJ1Cy3c=
+        bh=XsXZTRyeWuLP6fK4F6hmWWRDqlIpu+fyRzG4Gw4fJtI=;
+        b=LVMTPHC1vfnF/E6bbu+1zdXCceZS+5L0Kj75tIu2UUWMsT3K4u6ktGLSgRV0TpFgmF
+         QwHGGEOoqB39Fb7KUZucVLUx+j29aZy1V4UCJPw+GVLwytFlZj2hOTDBGoJUJg+LwI5u
+         eyzq8IPI4d20mVUNvKrNDqGVJH/kvSB5tYj94=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
          :content-transfer-encoding:message-id:references:to;
-        bh=qo8JrOOZqi12jkLNvRxgMvVScnv0tXvVQTmMYH0OKSE=;
-        b=uDt3M0Gr4BfbC6h9I3Al3VdDSTW35xrQ4C7Kws92E2TYTn7Mmi44OZB7MgIot9RXCh
-         U8SgvKydZdqmX6XejUkMbm4MQYmacBR64tO87CZ6aqU7QrZ4zbhGw3TBgquJzAVAkwiO
-         /XIDI5Jvv5393CJpbMSoygKwYi2bcAzhntl7Go0J9DpUiag6fTu/a5ajg13ClLgpuh3t
-         O7sWXD7SQZtElq+rwccovk1HVjZvyQkh3bb6OdbLkSaqRvt/89aHAoNGhWjW0FqxtS+z
-         /ggi+Z28/bUwferWXzyaLnbze1my+wZrYoUKKYGNxa+CPNZFc05dyU686yewRuUh5N0K
-         Ik2w==
-X-Gm-Message-State: APjAAAWle19RPYVN4+ojat+6fcH2EYTo6XOhafdK68+tlj5R4ULMhui1
-        NBMbyqrooPsGvScqObTH79ybMQ==
-X-Google-Smtp-Source: APXvYqzPaHFWQxMwohp9Yc0Omohint92w9s29CVWXD2wQWQNWaD5UzsOvqltGy2QkyvJLRqj3EN7KA==
-X-Received: by 2002:a62:5653:: with SMTP id k80mr121841807pfb.144.1558817168926;
-        Sat, 25 May 2019 13:46:08 -0700 (PDT)
+        bh=XsXZTRyeWuLP6fK4F6hmWWRDqlIpu+fyRzG4Gw4fJtI=;
+        b=iJ2pgq6O3599nt4mIVOId8oNo+XruJKitDDUlvC1fg1pBwAfDeg1r8+LaEY30oDNN5
+         D/5zrbi+9cPIK7X3KYPM9d5y8wGOBsM3PWIwf/618mcs/UXj5TfdzFCXTs0DKBY+YOF7
+         gq71NFDmBnnL3ozb1dd4IR56bYxa7b0jjaagBGpJQbRkscOUpGh1tOVE547v/2KOY3zd
+         vo0z6i5l/8jJM5bpNU3RSgZnGBHGd+0Mqs3ChrEigybhyHHbELCqyMkGiYxbkCNRxz60
+         mU/F3mRdPnk3UrOW4RLtCRKJYBGkBIOTisEUh0D1AP2UOEXlhletLZ0NVtan7+Wn5JLn
+         aTWQ==
+X-Gm-Message-State: APjAAAX1m6ssq2LJSpLTRHz8E0fxBPKbqfrUhEDWKyPhnuJL7MiTz9h2
+        o5hP9siZht26YFdxapYeDkiG0Q==
+X-Google-Smtp-Source: APXvYqw1rCjCeyK7XfWkj/GJIF7Vs7nWGODe+/juQ5iWPQxsPh/lhql/IToSXn005IZ436+zJKgV8g==
+X-Received: by 2002:a17:902:29e6:: with SMTP id h93mr7617984plb.297.1558817270305;
+        Sat, 25 May 2019 13:47:50 -0700 (PDT)
 Received: from [10.0.1.19] (S010620c9d00fc332.vf.shawcable.net. [70.71.167.160])
-        by smtp.gmail.com with ESMTPSA id p16sm6510085pff.35.2019.05.25.13.46.07
+        by smtp.gmail.com with ESMTPSA id i3sm5393413pju.15.2019.05.25.13.47.49
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Sat, 25 May 2019 13:46:08 -0700 (PDT)
+        Sat, 25 May 2019 13:47:49 -0700 (PDT)
 Content-Type: text/plain;
-        charset=utf-8
+        charset=us-ascii
 Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.11\))
 Subject: Re: [PATCH net 1/4] net/udp_gso: Allow TX timestamp with UDP GSO
 From:   Fred Klassen <fklassen@appneta.com>
-In-Reply-To: <CAF=yD-Jf95De=z_nx9WFkGDa6+nRUqM_1PqGkjwaFPzOe+PfXg@mail.gmail.com>
-Date:   Sat, 25 May 2019 13:46:07 -0700
+In-Reply-To: <CAF=yD-+4g-HjmCnDWaVfdsyruePXqYeUDJgnffz9ro+rgNGv1g@mail.gmail.com>
+Date:   Sat, 25 May 2019 13:47:47 -0700
 Cc:     "David S. Miller" <davem@davemloft.net>,
         Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>,
         Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
@@ -58,10 +58,10 @@ Cc:     "David S. Miller" <davem@davemloft.net>,
         linux-kselftest@vger.kernel.org,
         Willem de Bruijn <willemb@google.com>
 Content-Transfer-Encoding: quoted-printable
-Message-Id: <7FB4B2F6-A7F3-4565-8D53-CF0E5A3EEFA4@appneta.com>
+Message-Id: <4B6F9771-011B-4BEC-8454-4D324856DDF6@appneta.com>
 References: <20190523210651.80902-1-fklassen@appneta.com>
  <20190523210651.80902-2-fklassen@appneta.com>
- <CAF=yD-Jf95De=z_nx9WFkGDa6+nRUqM_1PqGkjwaFPzOe+PfXg@mail.gmail.com>
+ <CAF=yD-+4g-HjmCnDWaVfdsyruePXqYeUDJgnffz9ro+rgNGv1g@mail.gmail.com>
 To:     Willem de Bruijn <willemdebruijn.kernel@gmail.com>
 X-Mailer: Apple Mail (2.3445.104.11)
 Sender: linux-kselftest-owner@vger.kernel.org
@@ -71,15 +71,14 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 
 
-> On May 23, 2019, at 2:39 PM, Willem de Bruijn =
-<willemdebruijn.kernel@gmail.com> wrote:
-> Zerocopy notification reference count is managed in skb_segment. That
-> should work.
+> On May 23, 2019, at 2:59 PM, Willem de Bruijn =
+<willemdebruijn.kernel@gmail.com> wrote:what exactly is the issue with =
+IP_TOS?
 >=20
+> If I understand correctly, the issue here is that the new 'P' option
+> that polls on the error queue times out. This is unrelated to
+> specifying TOS bits? Without zerocopy or timestamps, no message is
+> expected on the error queue.
 
-I=E2=80=99m trying to understand the context of reference counting in =
-skb_segment. I assume that
-there is an opportunity to optimize the count of outstanding zerocopy =
-buffers, but I=20
-can=E2=80=99t see it. Please clarify.
-
+Please disregard last message. I think I was chasing a non-issue with
+TOS bits. I will remove all references to TOS.=
