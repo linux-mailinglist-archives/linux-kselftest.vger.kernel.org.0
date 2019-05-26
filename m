@@ -2,52 +2,92 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 01FA12AB21
-	for <lists+linux-kselftest@lfdr.de>; Sun, 26 May 2019 18:26:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4457C2AC1B
+	for <lists+linux-kselftest@lfdr.de>; Sun, 26 May 2019 22:27:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727924AbfEZQ0h (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 26 May 2019 12:26:37 -0400
-Received: from sonic309-54.consmr.mail.ne1.yahoo.com ([66.163.184.180]:34905
-        "EHLO sonic309-54.consmr.mail.ne1.yahoo.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727912AbfEZQ0h (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 26 May 2019 12:26:37 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1558887996; bh=QFQXNGn0FJohU3l97Cng3z90qjIEAqAKmbCVyMu/adQ=; h=Date:From:Reply-To:Subject:References:From:Subject; b=dPxX9K6wyusdiZ8b2EHYQcw9LTS5EbOoGKrleTUVn6wIYIssoDK1CPoo5SMRY95KjPTftpMPZFQtjktOcUpX1Dq87UpyE8L9HuXFYa7imHNDp9Pqbahus7jFFqiI4DiKNb8se8u6nx70t7KfUHUiB8qkdb0ecscuOOndLuLamfizBlsWTbcEzyWHmbrBlCULogrfx8F3AbvCZ7L6Jryw/3sJA7rI7ur6RNIxUXjzYiNLnxFGs+CuTI6wMRVnBZpZ0DWOrUX5pyMYl7HTagQpNGW2G9D97DB3eKKLhwVqHnvEiFEwK3pF45u/dd6UdNbZBFe60L0KyRCS32dOC6lUyA==
-X-YMail-OSG: _tFzpswVM1kH2pRlNm2GGCXuZ6Zt_16HE8WgSYbuF7er4CQdmxFy6VQHfSbKaWR
- ZGVyTxWcPHk.pKuzfz39mFeVXfkj6WzojFmF0Pmo9vmH9c_oqtXbzt8B5L8w5LqlgSQRIr0FhP1f
- uCDUB252pzehnSHNYQd3_HFt3vaRWO8Iz5P0Bl6Lkkqts4tyH13ldHqEelaMsMK6gsOwq9t7vpVH
- QZlwJ_SHqsbDlGq6rC8jJxdRjC1sK6_e_xu715Fcyk0dQv_scyKRpyliMvbZdd_Oyw5roM9QJbHd
- rBmYwF54IUCr2jRYVxMeA5ERj71edEbIhkiIhQDh1OxKFHm6Pp478L9qHaE45PqASKptdp0k7s3p
- z.xnLlXRWNTTWRRs73r2PXygoQ4vZtrEOZQ7pAY.yUjeFOidfZaHAeTAJFs8Z8EdmTk3qMRhm_Be
- EPWgtf3of4VDXQh3yQm3Aqc8uR33WSWRGPmz8_DFWoievhoQi_m6NFQkA9lHmh5wLSu26lpyVYEz
- BL_pnjBvF__CGXBP3ZBAtD.dGE5zy22px54ZrbYP5q.DO0cNfwVGvMsfcPZoxm1_nN7d9rA95kDB
- NNV2LkfwKl3EuhTBrLdz40zNpBX_pbNELQu2YT0wQOErvsp8yoehD5U3tGkzoFgkC2UWDzAUeRmR
- QkAU4taDfV8YJSFZpnC3aJGUCJ6nDuG9.seMS7.ww22fuO_n0JXY4uuqcnJOnryyL3kK_F0n2vV1
- kOb6AFMm5s5tCkJNKxl3Bo3xsdYgOhmr62OsjcbiCvgqct5XMWFU7NheHx1I1XS9R4UyLk5qPO5v
- UN2fRFgsMdb.BUlb3eo2qyEIFmfmNzy9eg86je2rqmiZijgPLDjvHE4KRac4cgRR1sfcOKYUkYyx
- YedDv_qMmk1Wok2avqJWUFvCKpEyg08QW1LJ8pz5iuWWSm_cXX2PpgslJF1licBgbD9aPsrbWoVU
- xjib53SAXGVVhxdMc6kq19Ni24g9kU.VjWTcHbLJh1DkM80dr.mbk4KrP81o6c._NyF8cUBiR6qe
- kv_oiOpbggT98SI_UegzUPf6LGtdaNBrkcgbjkape4h_O8vMx4Ry6VzaxegPfTHHIq9PXQv12w1X
- 9MUxnDvJPe2X3u65RZWMUJ4HtHESTX2mXhQNpBKrNF6PinOP.twh9JT1sEe5C412pW7gjA.VWGxk
- 7SXQJ9tsPRVyvxafwZKEposar6jn7bbbO9LkSN5cC_H90yewCB1b1gXDBXlcRWM8a3S1AV28-
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic309.consmr.mail.ne1.yahoo.com with HTTP; Sun, 26 May 2019 16:26:36 +0000
-Date:   Sun, 26 May 2019 16:24:34 +0000 (UTC)
-From:   Major Dennis Hornbeck <cd68@labourza.online>
-Reply-To: Major Dennis Hornbeck <hornbeckmajordennis637@gmail.com>
-Message-ID: <1055307886.7818108.1558887874541@mail.yahoo.com>
-Subject: 
+        id S1726063AbfEZU1r (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 26 May 2019 16:27:47 -0400
+Received: from port70.net ([81.7.13.123]:59088 "EHLO port70.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725616AbfEZU1q (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Sun, 26 May 2019 16:27:46 -0400
+X-Greylist: delayed 420 seconds by postgrey-1.27 at vger.kernel.org; Sun, 26 May 2019 16:27:44 EDT
+Received: by port70.net (Postfix, from userid 1002)
+        id 64F7EABEC0BA; Sun, 26 May 2019 22:20:42 +0200 (CEST)
+Date:   Sun, 26 May 2019 22:20:42 +0200
+From:   Szabolcs Nagy <nsz@port70.net>
+To:     Christian Brauner <christian@brauner.io>
+Cc:     viro@zeniv.linux.org.uk, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
+        torvalds@linux-foundation.org, fweimer@redhat.com,
+        jannh@google.com, oleg@redhat.com, tglx@linutronix.de,
+        arnd@arndb.de, shuah@kernel.org, dhowells@redhat.com,
+        tkjos@android.com, ldv@altlinux.org, miklos@szeredi.hu,
+        linux-alpha@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-xtensa@linux-xtensa.org, linux-arch@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, x86@kernel.org
+Subject: Re: [PATCH v2 1/2] open: add close_range()
+Message-ID: <20190526202041.GO16415@port70.net>
+References: <20190523154747.15162-1-christian@brauner.io>
+ <20190523154747.15162-2-christian@brauner.io>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-References: <1055307886.7818108.1558887874541.ref@mail.yahoo.com>
-X-Mailer: WebService/1.1.13634 YahooMailBasic Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.103 Safari/537.36
-To:     unlisted-recipients:; (no To-header on input)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190523154747.15162-2-christian@brauner.io>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-I am in the military unit here in Afghanistan, we have some amount of funds that we want to move out of the country. My partners and I need a good partner someone we can trust. It is risk free and legal. Reply to this email: hornbeckmajordennis637@gmail.com
+* Christian Brauner <christian@brauner.io> [2019-05-23 17:47:46 +0200]:
+> This adds the close_range() syscall. It allows to efficiently close a range
+> of file descriptors up to all file descriptors of a calling task.
+> 
+> The syscall came up in a recent discussion around the new mount API and
+> making new file descriptor types cloexec by default. During this
+> discussion, Al suggested the close_range() syscall (cf. [1]). Note, a
+> syscall in this manner has been requested by various people over time.
+> 
+> First, it helps to close all file descriptors of an exec()ing task. This
+> can be done safely via (quoting Al's example from [1] verbatim):
+> 
+>         /* that exec is sensitive */
+>         unshare(CLONE_FILES);
+>         /* we don't want anything past stderr here */
+>         close_range(3, ~0U);
+>         execve(....);
 
-Regards,
-Major Dennis Hornbeck.
+this does not work in a hosted c implementation unless the libc
+guarantees not to use libc internal fds (e.g. in execve).
+(the libc cannot easily abstract fds, so the syscall abi layer
+fd semantics is necessarily visible to user code.)
+
+i think this is a new constraint for userspace runtimes.
+(not entirely unreasonable though)
+
+> The code snippet above is one way of working around the problem that file
+> descriptors are not cloexec by default. This is aggravated by the fact that
+> we can't just switch them over without massively regressing userspace. For
+> a whole class of programs having an in-kernel method of closing all file
+> descriptors is very helpful (e.g. demons, service managers, programming
+> language standard libraries, container managers etc.).
+
+was cloexec_range(a,b) considered?
+
+> (Please note, unshare(CLONE_FILES) should only be needed if the calling
+>  task is multi-threaded and shares the file descriptor table with another
+>  thread in which case two threads could race with one thread allocating
+>  file descriptors and the other one closing them via close_range(). For the
+>  general case close_range() before the execve() is sufficient.)
+
+assuming there is no unblocked signal handler that may open fds.
+
+a syscall that tramples on fds not owned by the caller is ugly
+(not generally safe to use and may break things if it gets used),
+i don't have a better solution for fd leaks or missing cloexec,
+but i think it needs more analysis how it can be used.
