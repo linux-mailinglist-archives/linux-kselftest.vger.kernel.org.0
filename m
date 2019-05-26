@@ -2,107 +2,52 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8898F2AA6D
-	for <lists+linux-kselftest@lfdr.de>; Sun, 26 May 2019 17:35:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01FA12AB21
+	for <lists+linux-kselftest@lfdr.de>; Sun, 26 May 2019 18:26:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727901AbfEZPfv (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 26 May 2019 11:35:51 -0400
-Received: from mail-pl1-f194.google.com ([209.85.214.194]:38422 "EHLO
-        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726636AbfEZPfv (ORCPT
+        id S1727924AbfEZQ0h (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 26 May 2019 12:26:37 -0400
+Received: from sonic309-54.consmr.mail.ne1.yahoo.com ([66.163.184.180]:34905
+        "EHLO sonic309-54.consmr.mail.ne1.yahoo.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727912AbfEZQ0h (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 26 May 2019 11:35:51 -0400
-Received: by mail-pl1-f194.google.com with SMTP id f97so6050166plb.5
-        for <linux-kselftest@vger.kernel.org>; Sun, 26 May 2019 08:35:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=appneta.com; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=0l7QFOq9rpOhcfdcebxs2xSgloj45bF1H4poSZVVNXU=;
-        b=fqBXmSi5i7K6JXD15jMSMBLJMxPKC3oMoCeeErPhCrD52WoGCKhw9TAw513pXSev1F
-         +N1RK50nt7uAQTZikeAi59ZVuec9Ea6SUO/0V8G2lc9wE66o6gNb913uyM0gmgrUpBZW
-         0GgmwXMxXUQ+opscuQCcwRZMYQGZ/dCfaW9pk=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=0l7QFOq9rpOhcfdcebxs2xSgloj45bF1H4poSZVVNXU=;
-        b=CYAybnjBweBt2bIVWh6McghA9l1czdKufOrWau7zRC5FlAcvYKRFUAq+3pvAQjleVg
-         0NYlbTd2ZKB+qc0s9cYI6hKjf7BIOiRoWfR3sxbWFJo89n3AjZ+MsdLARfZZ7a7tucoA
-         IW+7NEAjghlrLKcuOX6cK2v3WAfJ2SKVQDl5w7FRwRlebxFIMfVsZnxx8K4Ey3hHPsSn
-         M6sWsamWHxTec2vUXPPJH53b0+sA+UzorCDVbCPVaBpDVt3mV1I7bownuhX3nJrw4q8a
-         l/zgd5KgCzm6ZXK2VW/g/jgiMS4NUWqqBsxNp+giznknyVDDV42ZJeTwwzTZt6AL6Kvm
-         Iy7A==
-X-Gm-Message-State: APjAAAXDd9XdNGZXhk01QdQ3EvgkHVZkOgcLkSiLizz52GoqGz4tJJr9
-        q1k7N750dtuaUW+XzbFJc3Gk4A==
-X-Google-Smtp-Source: APXvYqzZL52EThif+oVPOrW5FnO/OwTkSeTsr1RTnmUwagyhIU9kunR8h/ekeCWlGniwHWnqabpKHg==
-X-Received: by 2002:a17:902:201:: with SMTP id 1mr76787907plc.263.1558884950639;
-        Sun, 26 May 2019 08:35:50 -0700 (PDT)
-Received: from localhost.localdomain (S010620c9d00fc332.vf.shawcable.net. [70.71.167.160])
-        by smtp.googlemail.com with ESMTPSA id y25sm10523637pfp.182.2019.05.26.08.35.49
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Sun, 26 May 2019 08:35:49 -0700 (PDT)
-From:   Fred Klassen <fklassen@appneta.com>
-To:     "David S. Miller" <davem@davemloft.net>,
-        Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Willem de Bruijn <willemb@google.com>
-Cc:     Fred Klassen <fklassen@appneta.com>
-Subject: [PATCH net v2 1/1] net/udp_gso: Allow TX timestamp with UDP GSO
-Date:   Sun, 26 May 2019 08:33:57 -0700
-Message-Id: <20190526153357.82293-2-fklassen@appneta.com>
-X-Mailer: git-send-email 2.11.0
-In-Reply-To: <20190526153357.82293-1-fklassen@appneta.com>
-References: <20190526153357.82293-1-fklassen@appneta.com>
+        Sun, 26 May 2019 12:26:37 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1558887996; bh=QFQXNGn0FJohU3l97Cng3z90qjIEAqAKmbCVyMu/adQ=; h=Date:From:Reply-To:Subject:References:From:Subject; b=dPxX9K6wyusdiZ8b2EHYQcw9LTS5EbOoGKrleTUVn6wIYIssoDK1CPoo5SMRY95KjPTftpMPZFQtjktOcUpX1Dq87UpyE8L9HuXFYa7imHNDp9Pqbahus7jFFqiI4DiKNb8se8u6nx70t7KfUHUiB8qkdb0ecscuOOndLuLamfizBlsWTbcEzyWHmbrBlCULogrfx8F3AbvCZ7L6Jryw/3sJA7rI7ur6RNIxUXjzYiNLnxFGs+CuTI6wMRVnBZpZ0DWOrUX5pyMYl7HTagQpNGW2G9D97DB3eKKLhwVqHnvEiFEwK3pF45u/dd6UdNbZBFe60L0KyRCS32dOC6lUyA==
+X-YMail-OSG: _tFzpswVM1kH2pRlNm2GGCXuZ6Zt_16HE8WgSYbuF7er4CQdmxFy6VQHfSbKaWR
+ ZGVyTxWcPHk.pKuzfz39mFeVXfkj6WzojFmF0Pmo9vmH9c_oqtXbzt8B5L8w5LqlgSQRIr0FhP1f
+ uCDUB252pzehnSHNYQd3_HFt3vaRWO8Iz5P0Bl6Lkkqts4tyH13ldHqEelaMsMK6gsOwq9t7vpVH
+ QZlwJ_SHqsbDlGq6rC8jJxdRjC1sK6_e_xu715Fcyk0dQv_scyKRpyliMvbZdd_Oyw5roM9QJbHd
+ rBmYwF54IUCr2jRYVxMeA5ERj71edEbIhkiIhQDh1OxKFHm6Pp478L9qHaE45PqASKptdp0k7s3p
+ z.xnLlXRWNTTWRRs73r2PXygoQ4vZtrEOZQ7pAY.yUjeFOidfZaHAeTAJFs8Z8EdmTk3qMRhm_Be
+ EPWgtf3of4VDXQh3yQm3Aqc8uR33WSWRGPmz8_DFWoievhoQi_m6NFQkA9lHmh5wLSu26lpyVYEz
+ BL_pnjBvF__CGXBP3ZBAtD.dGE5zy22px54ZrbYP5q.DO0cNfwVGvMsfcPZoxm1_nN7d9rA95kDB
+ NNV2LkfwKl3EuhTBrLdz40zNpBX_pbNELQu2YT0wQOErvsp8yoehD5U3tGkzoFgkC2UWDzAUeRmR
+ QkAU4taDfV8YJSFZpnC3aJGUCJ6nDuG9.seMS7.ww22fuO_n0JXY4uuqcnJOnryyL3kK_F0n2vV1
+ kOb6AFMm5s5tCkJNKxl3Bo3xsdYgOhmr62OsjcbiCvgqct5XMWFU7NheHx1I1XS9R4UyLk5qPO5v
+ UN2fRFgsMdb.BUlb3eo2qyEIFmfmNzy9eg86je2rqmiZijgPLDjvHE4KRac4cgRR1sfcOKYUkYyx
+ YedDv_qMmk1Wok2avqJWUFvCKpEyg08QW1LJ8pz5iuWWSm_cXX2PpgslJF1licBgbD9aPsrbWoVU
+ xjib53SAXGVVhxdMc6kq19Ni24g9kU.VjWTcHbLJh1DkM80dr.mbk4KrP81o6c._NyF8cUBiR6qe
+ kv_oiOpbggT98SI_UegzUPf6LGtdaNBrkcgbjkape4h_O8vMx4Ry6VzaxegPfTHHIq9PXQv12w1X
+ 9MUxnDvJPe2X3u65RZWMUJ4HtHESTX2mXhQNpBKrNF6PinOP.twh9JT1sEe5C412pW7gjA.VWGxk
+ 7SXQJ9tsPRVyvxafwZKEposar6jn7bbbO9LkSN5cC_H90yewCB1b1gXDBXlcRWM8a3S1AV28-
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic309.consmr.mail.ne1.yahoo.com with HTTP; Sun, 26 May 2019 16:26:36 +0000
+Date:   Sun, 26 May 2019 16:24:34 +0000 (UTC)
+From:   Major Dennis Hornbeck <cd68@labourza.online>
+Reply-To: Major Dennis Hornbeck <hornbeckmajordennis637@gmail.com>
+Message-ID: <1055307886.7818108.1558887874541@mail.yahoo.com>
+Subject: 
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+References: <1055307886.7818108.1558887874541.ref@mail.yahoo.com>
+X-Mailer: WebService/1.1.13634 YahooMailBasic Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.103 Safari/537.36
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Fixes an issue where TX Timestamps are not arriving on the error queue
-when UDP_SEGMENT CMSG type is combined with CMSG type SO_TIMESTAMPING.
-This can be illustrated with an updated updgso_bench_tx program which
-includes the '-T' option to test for this condition.
+I am in the military unit here in Afghanistan, we have some amount of funds that we want to move out of the country. My partners and I need a good partner someone we can trust. It is risk free and legal. Reply to this email: hornbeckmajordennis637@gmail.com
 
-    ./udpgso_bench_tx -4ucTPv -S 1472 -l2 -D 172.16.120.18
-    poll timeout
-    udp tx:      0 MB/s        1 calls/s      1 msg/s
-
-The "poll timeout" message above indicates that TX timestamp never
-arrived.
-
-It also appears that other TX CMSG types cause similar issues, for
-example trying to set SOL_IP/IP_TOS.
-
-    ./udpgso_bench_tx -4ucPv -S 1472 -q 182 -l2 -D 172.16.120.18
-    poll timeout
-    udp tx:      0 MB/s        1 calls/s      1 msg/s
-
-This patch preserves tx_flags for the first UDP GSO segment. This
-mirrors the stack's behaviour for IPv4 fragments.
-
-Fixes: ee80d1ebe5ba ("udp: add udp gso")
-Signed-off-by: Fred Klassen <fklassen@appneta.com>
----
- net/ipv4/udp_offload.c | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/net/ipv4/udp_offload.c b/net/ipv4/udp_offload.c
-index 065334b41d57..33de347695ae 100644
---- a/net/ipv4/udp_offload.c
-+++ b/net/ipv4/udp_offload.c
-@@ -228,6 +228,10 @@ struct sk_buff *__udp_gso_segment(struct sk_buff *gso_skb,
- 	seg = segs;
- 	uh = udp_hdr(seg);
- 
-+	/* preserve TX timestamp and zero-copy info for first segment */
-+	skb_shinfo(seg)->tskey = skb_shinfo(gso_skb)->tskey;
-+	skb_shinfo(seg)->tx_flags = skb_shinfo(gso_skb)->tx_flags;
-+
- 	/* compute checksum adjustment based on old length versus new */
- 	newlen = htons(sizeof(*uh) + mss);
- 	check = csum16_add(csum16_sub(uh->check, uh->len), newlen);
--- 
-2.11.0
-
+Regards,
+Major Dennis Hornbeck.
