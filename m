@@ -2,92 +2,199 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4457C2AC1B
-	for <lists+linux-kselftest@lfdr.de>; Sun, 26 May 2019 22:27:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D8232ACCA
+	for <lists+linux-kselftest@lfdr.de>; Mon, 27 May 2019 03:31:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726063AbfEZU1r (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 26 May 2019 16:27:47 -0400
-Received: from port70.net ([81.7.13.123]:59088 "EHLO port70.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725616AbfEZU1q (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 26 May 2019 16:27:46 -0400
-X-Greylist: delayed 420 seconds by postgrey-1.27 at vger.kernel.org; Sun, 26 May 2019 16:27:44 EDT
-Received: by port70.net (Postfix, from userid 1002)
-        id 64F7EABEC0BA; Sun, 26 May 2019 22:20:42 +0200 (CEST)
-Date:   Sun, 26 May 2019 22:20:42 +0200
-From:   Szabolcs Nagy <nsz@port70.net>
-To:     Christian Brauner <christian@brauner.io>
-Cc:     viro@zeniv.linux.org.uk, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
-        torvalds@linux-foundation.org, fweimer@redhat.com,
-        jannh@google.com, oleg@redhat.com, tglx@linutronix.de,
-        arnd@arndb.de, shuah@kernel.org, dhowells@redhat.com,
-        tkjos@android.com, ldv@altlinux.org, miklos@szeredi.hu,
-        linux-alpha@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-xtensa@linux-xtensa.org, linux-arch@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, x86@kernel.org
-Subject: Re: [PATCH v2 1/2] open: add close_range()
-Message-ID: <20190526202041.GO16415@port70.net>
-References: <20190523154747.15162-1-christian@brauner.io>
- <20190523154747.15162-2-christian@brauner.io>
+        id S1725864AbfE0Bbf (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 26 May 2019 21:31:35 -0400
+Received: from mail-ed1-f68.google.com ([209.85.208.68]:45074 "EHLO
+        mail-ed1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725859AbfE0Bbf (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Sun, 26 May 2019 21:31:35 -0400
+Received: by mail-ed1-f68.google.com with SMTP id g57so9355415edc.12;
+        Sun, 26 May 2019 18:31:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=DqMpY7GvF0ff0IzEGf6ToH+IeTipvCs7U+egaBCK/0c=;
+        b=jIQe8dcq6hfjJasd7rpnQmT1ghPyu3p/8Su5QFmV4goM9hV+Nn7vuFkZ93vME+osiI
+         KOQzACMGTs/oKFdNCQg/orA8VfHbNIc3YEGAiiG1PxMJMxU4gnzzebC2naOO4TMw3mnn
+         GAr1sXbdu+qBeR1BF+PoCyreAi57GUdetoXpt2z/EpPcF5XKs+aYZ3ct2dr97kWtuxNL
+         CeSwWoygSE4djLX/Ealr8p6k0zYXJrFjrmMmwYHMpVCDG6m29PysaLnnDEHp+h+ZTox4
+         fQftEjcYWi9dQjQHtee30se68O1CwK9hCWWFF/A0glQLgiz5s8Ft+iF9LDhbgsrqryJ2
+         No9Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=DqMpY7GvF0ff0IzEGf6ToH+IeTipvCs7U+egaBCK/0c=;
+        b=Xqi5Zq4EwWvNxJ6BdDKPSRZAiahZytYFRJYSpbRq1CQgIaI5XubGBnbiPxj8rtfYls
+         m3Xu3+gR88wFC1ZDAti+dGabJNeTrq394RkbacCmOMrqGHXMs3IJ6BI3T3pjtiQyRWDU
+         8nCy4dXgtvPVghHbUTMYol7xpKv1EGeGqXXILXDhHbF+FlBcTB+xDQ1HLFVY8peTm0z/
+         NhV0tmqFCCuQFI8wvo8Rs3fxj5vnJVQmddOY1FPJrv+Uuzec5GbZN/KNSVMPvzdDP8S+
+         CZeGEKUMx08VZNgMBXs7CXdbinPQ9OxrGbyzP1qTjwOWhT/6twbVFpWHmFaaOAfjMy/G
+         OW7w==
+X-Gm-Message-State: APjAAAXISmem5T+S2nehu1YgGd1vaYcqeE7E59finRvqOzhxRKRFW4wr
+        8axCnRorUnTAY4uUjZZdVxkVLor0jpPh4uvlv2M=
+X-Google-Smtp-Source: APXvYqzIR1bAlrXqNU0Qu+lZ2SeGwcZMWRL3HkpFUZ5zOOOC8LaMk9YkapkJQTZ0XrImuiLusC3f53Wp5NeldX9gxuQ=
+X-Received: by 2002:a17:906:aacb:: with SMTP id kt11mr80719301ejb.246.1558920692905;
+ Sun, 26 May 2019 18:31:32 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190523154747.15162-2-christian@brauner.io>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20190523210651.80902-1-fklassen@appneta.com> <20190523210651.80902-2-fklassen@appneta.com>
+ <CAF=yD-Jf95De=z_nx9WFkGDa6+nRUqM_1PqGkjwaFPzOe+PfXg@mail.gmail.com>
+ <AE8E0772-7256-4B9C-A990-96930E834AEE@appneta.com> <CAF=yD-LtAKpND601LQrC1+=iF6spSUXVdUapcsbJdv5FYa=5Jg@mail.gmail.com>
+ <AFC1ECC8-BFAC-4718-B0C9-97CC4BD1F397@appneta.com> <CAF=yD-Le-eTadOi7PL8WFEQCG=yLqb5gvKiks+s5Akeq8TenBQ@mail.gmail.com>
+ <90E3853F-107D-45BA-93DC-D0BE8AC6FCBB@appneta.com> <CA+FuTScNr9Srsn9QFBSj=oT4TnMh1QuOZ2h40g=joNjSwccqMg@mail.gmail.com>
+ <4032C02B-EA43-4540-8283-8466CDD0B8D2@appneta.com>
+In-Reply-To: <4032C02B-EA43-4540-8283-8466CDD0B8D2@appneta.com>
+From:   Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+Date:   Sun, 26 May 2019 20:30:56 -0500
+Message-ID: <CAF=yD-KTJGYY-yf=+zwa8SyrCNAfZjqjomJ=B=yFcs+juDeShA@mail.gmail.com>
+Subject: Re: [PATCH net 1/4] net/udp_gso: Allow TX timestamp with UDP GSO
+To:     Fred Klassen <fklassen@appneta.com>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-* Christian Brauner <christian@brauner.io> [2019-05-23 17:47:46 +0200]:
-> This adds the close_range() syscall. It allows to efficiently close a range
-> of file descriptors up to all file descriptors of a calling task.
-> 
-> The syscall came up in a recent discussion around the new mount API and
-> making new file descriptor types cloexec by default. During this
-> discussion, Al suggested the close_range() syscall (cf. [1]). Note, a
-> syscall in this manner has been requested by various people over time.
-> 
-> First, it helps to close all file descriptors of an exec()ing task. This
-> can be done safely via (quoting Al's example from [1] verbatim):
-> 
->         /* that exec is sensitive */
->         unshare(CLONE_FILES);
->         /* we don't want anything past stderr here */
->         close_range(3, ~0U);
->         execve(....);
+On Sat, May 25, 2019 at 1:47 PM Fred Klassen <fklassen@appneta.com> wrote:
+>
+>
+>
+> > On May 25, 2019, at 8:20 AM, Willem de Bruijn <willemdebruijn.kernel@gm=
+ail.com> wrote:
+> >
+> > On Fri, May 24, 2019 at 6:01 PM Fred Klassen <fklassen@appneta.com> wro=
+te:
+> >>
+> >>
+> >>
+> >>> On May 24, 2019, at 12:29 PM, Willem de Bruijn <willemdebruijn.kernel=
+@gmail.com> wrote:
+> >>>
+> >>> It is the last moment that a timestamp can be generated for the last
+> >>> byte, I don't see how that is "neither the start nor the end of a GSO
+> >>> packet=E2=80=9D.
+> >>
+> >> My misunderstanding. I thought TCP did last segment timestamping, not
+> >> last byte. In that case, your statements make sense.
+> >>
+> >>>> It would be interesting if a practical case can be made for timestam=
+ping
+> >>>> the last segment. In my mind, I don=E2=80=99t see how that would be =
+valuable.
+> >>>
+> >>> It depends whether you are interested in measuring network latency or
+> >>> host transmit path latency.
+> >>>
+> >>> For the latter, knowing the time from the start of the sendmsg call t=
+o
+> >>> the moment the last byte hits the wire is most relevant. Or in absenc=
+e
+> >>> of (well defined) hardware support, the last byte being queued to the
+> >>> device is the next best thing.
+> >
+> > Sounds to me like both cases have a legitimate use case, and we want
+> > to support both.
+> >
+> > Implementation constraints are that storage for this timestamp
+> > information is scarce and we cannot add new cold cacheline accesses in
+> > the datapath.
+> >
+> > The simplest approach would be to unconditionally timestamp both the
+> > first and last segment. With the same ID. Not terribly elegant. But it
+> > works.
+> >
+> > If conditional, tx_flags has only one bit left. I think we can harvest
+> > some, as not all defined bits are in use at the same stages in the
+> > datapath, but that is not a trivial change. Some might also better be
+> > set in the skb, instead of skb_shinfo. Which would also avoids
+> > touching that cacheline. We could possibly repurpose bits from u32
+> > tskey.
+> >
+> > All that can come later. Initially, unless we can come up with
+> > something more elegant, I would suggest that UDP follows the rule
+> > established by TCP and timestamps the last byte. And we add an
+> > explicit SOF_TIMESTAMPING_OPT_FIRSTBYTE that is initially only
+> > supported for UDP, sets a new SKBTX_TX_FB_TSTAMP bit in
+> > __sock_tx_timestamp and is interpreted in __udp_gso_segment.
+> >
+>
+> I don=E2=80=99t see how to practically TX timestamp the last byte of any =
+packet
+> (UDP GSO or otherwise). The best we could do is timestamp the last
+> segment,  or rather the time that the last segment is queued. Let me
+> attempt to explain.
+>
+> First let=E2=80=99s look at software TX timestamps which are for are gene=
+rated
+> by skb_tx_timestamp() in nearly every network driver=E2=80=99s xmit routi=
+ne. It
+> states:
+>
+> =E2=80=94=E2=80=94=E2=80=94=E2=80=94=E2=80=94=E2=80=94=E2=80=94=E2=80=94=
+=E2=80=94=E2=80=94 cut =E2=80=94=E2=80=94=E2=80=94=E2=80=94=E2=80=94=E2=80=
+=94=E2=80=94=E2=80=94=E2=80=94=E2=80=94=E2=80=94=E2=80=94
+>  * Ethernet MAC Drivers should call this function in their hard_xmit()
+>  * function immediately before giving the sk_buff to the MAC hardware.
+> =E2=80=94=E2=80=94=E2=80=94=E2=80=94=E2=80=94=E2=80=94=E2=80=94=E2=80=94=
+=E2=80=94=E2=80=94 cut =E2=80=94=E2=80=94=E2=80=94=E2=80=94=E2=80=94=E2=80=
+=94=E2=80=94=E2=80=94=E2=80=94=E2=80=94=E2=80=94=E2=80=94
+>
+> That means that the sk_buff will get timestamped just before rather
+> than just after it is sent. To truly capture the timestamp of the last
+> byte, this routine routine would have to be called a second time, right
+> after sending to MAC hardware. Then the user program would have
+> sort out the 2 timestamps. My guess is that this isn=E2=80=99t something =
+that
+> NIC vendors would be willing to implement in their drivers.
+>
+> So, the best we can do is timestamp is just before the last segment.
+> Suppose UDP GSO sends 3000 bytes to a 1500 byte MTU adapter.
+> If we set SKBTX_HW_TSTAMP flag on the last segment, the timestamp
+> occurs half way through the burst. But it may not be exactly half way
+> because the segments may get queued much faster than wire rate.
+> Therefore the time between segment 1 and segment 2 may be much
+> much smaller than their spacing on the wire. I would not find this
+> useful.
 
-this does not work in a hosted c implementation unless the libc
-guarantees not to use libc internal fds (e.g. in execve).
-(the libc cannot easily abstract fds, so the syscall abi layer
-fd semantics is necessarily visible to user code.)
+For measuring host queueing latency, a timestamp at the existing
+skb_tx_timestamp() for the last segment is perfectly informative.
 
-i think this is a new constraint for userspace runtimes.
-(not entirely unreasonable though)
+> I propose that we stick with the method used for IP fragments, which
+> is timestamping just before the first byte is sent.
 
-> The code snippet above is one way of working around the problem that file
-> descriptors are not cloexec by default. This is aggravated by the fact that
-> we can't just switch them over without massively regressing userspace. For
-> a whole class of programs having an in-kernel method of closing all file
-> descriptors is very helpful (e.g. demons, service managers, programming
-> language standard libraries, container managers etc.).
+I understand that this addresses your workload. It simply ignores the
+other identified earlier in this thread.
 
-was cloexec_range(a,b) considered?
+> Put another way, I
+> propose that we start the clock in an automobile race just before the
+> front of the first car crosses the start line rather than when the front
+> of the last car crosses the start line.
+>
+> TX timestamping in hardware has even more limitations. For the most
+> part, we can only do one timestamp per packet or burst.  If we requested
+> a timestamp of only the last segment of a packet, we would have work
+> backwards to calculate the start time of the packet, but that would
+> only be be a best guess. For extremely time sensitive applications
+> (such as the one we develop), this would not be practical.
 
-> (Please note, unshare(CLONE_FILES) should only be needed if the calling
->  task is multi-threaded and shares the file descriptor table with another
->  thread in which case two threads could race with one thread allocating
->  file descriptors and the other one closing them via close_range(). For the
->  general case close_range() before the execve() is sufficient.)
+Note that for any particularly sensitive measurements, a segment can
+always be sent separately.
 
-assuming there is no unblocked signal handler that may open fds.
-
-a syscall that tramples on fds not owned by the caller is ugly
-(not generally safe to use and may break things if it gets used),
-i don't have a better solution for fd leaks or missing cloexec,
-but i think it needs more analysis how it can be used.
+> We could still consider setting a flag that would allow the timestamping
+> the last segment rather than the first. However since we cannot
+> truly measure the timestamp of the last byte, I would question the value
+> in doing so.
+>
