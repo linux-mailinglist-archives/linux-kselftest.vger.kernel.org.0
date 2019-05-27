@@ -2,93 +2,326 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9974C2B841
-	for <lists+linux-kselftest@lfdr.de>; Mon, 27 May 2019 17:19:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 21A912BBBC
+	for <lists+linux-kselftest@lfdr.de>; Mon, 27 May 2019 23:30:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726202AbfE0PTO (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 27 May 2019 11:19:14 -0400
-Received: from mail-pg1-f193.google.com ([209.85.215.193]:39178 "EHLO
-        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726645AbfE0PTD (ORCPT
+        id S1726905AbfE0VaQ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 27 May 2019 17:30:16 -0400
+Received: from mail-pf1-f196.google.com ([209.85.210.196]:46437 "EHLO
+        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726837AbfE0VaQ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 27 May 2019 11:19:03 -0400
-Received: by mail-pg1-f193.google.com with SMTP id w22so9270921pgi.6;
-        Mon, 27 May 2019 08:19:02 -0700 (PDT)
+        Mon, 27 May 2019 17:30:16 -0400
+Received: by mail-pf1-f196.google.com with SMTP id y11so5296488pfm.13
+        for <linux-kselftest@vger.kernel.org>; Mon, 27 May 2019 14:30:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:subject:message-id:mime-version:content-disposition
-         :content-transfer-encoding:user-agent;
-        bh=wKRYLSYKzE2k4jFHpZmRlCn5LnNbsStdg5D8PnYwlpE=;
-        b=q7Xd8Lebsp1l3HocpLrwjIl0tM4rnRkL6po/MBApZ5k16ZVpXwa4aXsP2VNvOuIuXC
-         Je4JosdBHlyx8uMt4k0yidbWD72peNmSMiPm4ioIz7N3PqL2WyXC6FdfhfzpNsoELPOi
-         rdwNK8SSP0FYy2TMNgByTWF2eOkEeRYpCuTuvQi1llZE/XWNVqi2piTU6d3ySUaozZQI
-         2phU5bXOWeGHfHexudFhebBo5tMjRtaVpjsH7kQSNI/U5n2IVU6+/kriyR2M2qnFRYdw
-         y0qXo387I9QuTRjr0s4eQkSkYkCBCffEdn7iXisSGENViN37J+bJB2FuHkMrP1gT4U96
-         v/PA==
+        d=appneta.com; s=google;
+        h=mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=zNngeK9yJtL4OMcJcnUljk+BohYrdR732P1fa4qFReg=;
+        b=hNS7mTMiHAcToRuZy/CqRVTAjlwwAdqaObVfvktLzLqIis8X1bgee8RPgyKCFK1dDP
+         rodPjPc4JQ1dkSuFZaRxRe/9tCMg25t4Jfm3oXTUNhtzFj3s+7zhQG3RGjZZFWvSVWH+
+         6rzHf1EdzdzeC8xfw+lWH9bESnRiX1dw1EnzQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:subject:message-id:mime-version
-         :content-disposition:content-transfer-encoding:user-agent;
-        bh=wKRYLSYKzE2k4jFHpZmRlCn5LnNbsStdg5D8PnYwlpE=;
-        b=RJk9070P9764wT5R6f23J9cyT/k4sAtkCyGJFMlACfogUoQVr5tSQ43v2y01duSW+Z
-         HMwaif20dIhT7lYEeG89LDCCWd2n6T4ZscehOE3/BzbQ8IQSvDxjaseKIicaWOlvXxuI
-         sNdOm+gt7h0ibbTUNP0eHd/6gvjHCjdnEKH1WdHE6dTVWwgFF6eOfHksR2EFE42x2exx
-         j1fou4k4dhEnBVl/21nmKV3Aa9Mf4n0+5OLgrfPbF58qeYdLk9g+nF5gUDohOB95wee/
-         /9ZaU2wOsJ92HZnXBPmUWeVcg7Xzk9M1A9pq6fO0wgzEfSZc/Vyil/406AIpk90HLze6
-         GVYA==
-X-Gm-Message-State: APjAAAUdRZSP/GloaIKjJtiUBxZKdiCJ0Fnb18u5D+8HGZG3ut1e8JJ+
-        FS459EaY4hrWqbqqEXP/GSeEOrLP
-X-Google-Smtp-Source: APXvYqxMehS8QCzhcyqJ0WLGpmftug/4/G3fWnhju+fhqevVuE4AIJsX7qwJq+1QrO00UWRwmm2wMw==
-X-Received: by 2002:a17:90b:14e:: with SMTP id em14mr32106670pjb.19.1558970341885;
-        Mon, 27 May 2019 08:19:01 -0700 (PDT)
-Received: from ip-172-31-44-144.us-west-2.compute.internal (ec2-54-186-128-88.us-west-2.compute.amazonaws.com. [54.186.128.88])
-        by smtp.gmail.com with ESMTPSA id f20sm93168pgf.59.2019.05.27.08.19.00
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Mon, 27 May 2019 08:19:00 -0700 (PDT)
-Date:   Mon, 27 May 2019 15:18:59 +0000
-From:   Alakesh Haloi <alakesh.haloi@gmail.com>
-To:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Peter Xu <peterx@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mike Rapoport <rppt@linux.vnet.ibm.com>,
-        Shuah Khan <shuah@kernel.org>
-Subject: [PATCH] userfaultfd: selftest: fix compiler warning
-Message-ID: <20190527151859.GA3217@ip-172-31-44-144.us-west-2.compute.internal>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-User-Agent: Mutt/1.9.4 (2018-02-28)
+        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=zNngeK9yJtL4OMcJcnUljk+BohYrdR732P1fa4qFReg=;
+        b=lK6DGvZxzOra1ootiLB3Q8TXFW0/Ue7vXrMIHh1harSsICMDSa82HqyWHnDZIu/ejt
+         llOxl4i3F9ZApGJaVO4LZmqIAK4zvQKVHKxLlW1PTOPbP569hJZbDmnnoBFfDeou0hXv
+         3IQgi8fWCUMX+9At6NbGVqVOZbCzqW0+DaSMXgEGSRQz2uCYsgktnBn9bEf+YJLolVNr
+         Lb9FaYrduAYlEXdtYN+Z4U1tgWTnLMApQ/Qubs1kjlmxYREkYGp1+Arq38q79Y1HfUJx
+         BnYofVH51sA55P8Y+7yO2QTg+L5iAdQmGV7fo31y64PVNIe5QqjBFY5f6FzVZd5sHDwy
+         sFUg==
+X-Gm-Message-State: APjAAAXZ7oWY5ISC77Y5ZKjDSM99RfmsEHSbZFHnKt6ENLMU8nmOAMUW
+        d41MWH2K2CX9JdTDM6cV85Gn0g==
+X-Google-Smtp-Source: APXvYqwtzk+/sYeL90Z+i4CKBSqOo//cfnFDZj2leAaAZ9G0Qq1WwUkYjNrFp3MOrZea4/Ynp+22+Q==
+X-Received: by 2002:a63:184d:: with SMTP id 13mr8006876pgy.346.1558992615169;
+        Mon, 27 May 2019 14:30:15 -0700 (PDT)
+Received: from jltm109.jaalam.net (vancouver-a.appneta.com. [209.139.228.33])
+        by smtp.gmail.com with ESMTPSA id g8sm356875pjp.17.2019.05.27.14.30.13
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 27 May 2019 14:30:14 -0700 (PDT)
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.11\))
+Subject: Re: [PATCH net 4/4] net/udpgso_bench_tx: audit error queue
+From:   Fred Klassen <fklassen@appneta.com>
+In-Reply-To: <CAF=yD-KBNLr5KY-YQ1KMmZGCpYNefSJKaJkZNOwd8nRiedpQtA@mail.gmail.com>
+Date:   Mon, 27 May 2019 14:30:11 -0700
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-kselftest@vger.kernel.org,
+        Willem de Bruijn <willemb@google.com>
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <879E5DA6-3A4F-4CE1-9DA5-480EE30109DE@appneta.com>
+References: <20190523210651.80902-1-fklassen@appneta.com>
+ <20190523210651.80902-5-fklassen@appneta.com>
+ <CAF=yD-KBNLr5KY-YQ1KMmZGCpYNefSJKaJkZNOwd8nRiedpQtA@mail.gmail.com>
+To:     Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+X-Mailer: Apple Mail (2.3445.104.11)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Fixes following compiler warning
+Willem,
 
-userfaultfd.c: In function ‘usage’:
-userfaultfd.c:126:2: warning: format not a string literal and no format
-	arguments [-Wformat-security]
-  fprintf(stderr, examples);
+Thanks for spending so much time with me on this patch. I=E2=80=99m =
+pretty
+new to this, so I know I am making lots of mistakes. I have been
+working on a v2 of the selftests in net-next, but want to review the
+layout of the report before I submit (see below).
 
-Signed-off-by: Alakesh Haloi <alakesh.haloi@gmail.com>
----
- tools/testing/selftests/vm/userfaultfd.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Also, I my v2 fix in net is still up for debate. In its current state, =
+it
+meets my application=E2=80=99s requirements, but may not meet all of =
+yours.
+I am still open to suggestions, but so far I don=E2=80=99t have an =
+alternate
+solution that doesn=E2=80=99t break what I need working.
 
-diff --git a/tools/testing/selftests/vm/userfaultfd.c b/tools/testing/selftests/vm/userfaultfd.c
-index 5d1db824f73a..b3e6497b080c 100644
---- a/tools/testing/selftests/vm/userfaultfd.c
-+++ b/tools/testing/selftests/vm/userfaultfd.c
-@@ -123,7 +123,7 @@ static void usage(void)
- 	fprintf(stderr, "Supported <test type>: anon, hugetlb, "
- 		"hugetlb_shared, shmem\n\n");
- 	fprintf(stderr, "Examples:\n\n");
--	fprintf(stderr, examples);
-+	fprintf(stderr, "%s", examples);
- 	exit(1);
- }
- 
--- 
-2.17.1
+I also have a question about submitting a fix in net and a related
+enhancement in net-next. I feel I should be referencing the fix
+in net in my net-next commit, but I don=E2=80=99t know how it should be
+done. Any suggestions?   =20
 
+> On May 23, 2019, at 2:56 PM, Willem de Bruijn =
+<willemdebruijn.kernel@gmail.com> wrote:
+>>=20
+>> Example:
+>>=20
+>>    # ./udpgso_bench_tx -4uT -a -l5 -S 1472 -D 172.16.120.189
+>>    udp tx:    492 MB/s     8354 calls/s   8354 msg/s
+>>    udp tx:    477 MB/s     8106 calls/s   8106 msg/s
+>>    udp tx:    488 MB/s     8288 calls/s   8288 msg/s
+>>    udp tx:    882 MB/s    14975 calls/s  14975 msg/s
+>>    Summary over 5.000 seconds ...
+>>    sum udp tx:    696 MB/s      57696 calls (11539/s)  57696 msgs =
+(11539/s)
+>>    Tx Timestamps: received:     57696   errors: 0
+>>=20
+>> This can be useful in tracking loss of messages when under load. For =
+example,
+>> adding the '-z' option results in loss of TX timestamp messages:
+>>=20
+>>    # ./udpgso_bench_tx -4ucT -a -l5 -S 1472 -D 172.16.120.189 -p 3239 =
+-z
+>>    udp tx:    490 MB/s     8325 calls/s   8325 msg/s
+>>    udp tx:    500 MB/s     8492 calls/s   8492 msg/s
+>>    udp tx:    883 MB/s    14985 calls/s  14985 msg/s
+>>    udp tx:    756 MB/s    12823 calls/s  12823 msg/s
+>>    Summary over 5.000 seconds ...
+>>    sum udp tx:    657 MB/s      54429 calls (10885/s)  54429 msgs =
+(10885/s)
+>>    Tx Timestamps: received:     34046   errors: 0
+>>    Zerocopy acks: received:     54422   errors: 0
+>=20
+> This would probably also be more useful as regression test if it is in
+> the form of a pass/fail test: if timestamps are requested and total
+> count is zero, then the feature is broken and the process should exit
+> with an error.
+
+I have it set up as a pass/fail test. Below is a sample output of the
+test, including a failure on IPv6 TCP Zerocopy audit (a failure that may
+lead to a memory leak). I wanted to review the report with you before
+I push up the v2 patch into net-next.
+
+Are these extra tests what you were expecting? Is it OK that it =
+doesn=E2=80=99t
+flow well? Also, there is a failure about every 3rd time I run it,
+indicating that some TX or Zerocopy messages are lost. Is that OK?=20
+
+ipv4
+tcp
+tcp rx:  11665 MB/s   189014 calls/s
+tcp tx:  11665 MB/s   197859 calls/s 197859 msg/s
+tcp rx:  11706 MB/s   190749 calls/s
+tcp tx:  11706 MB/s   198545 calls/s 198545 msg/s
+tcp tx:  11653 MB/s   197645 calls/s 197645 msg/s
+tcp rx:  11653 MB/s   189292 calls/s
+tcp zerocopy
+tcp rx:   6658 MB/s   111849 calls/s
+tcp tx:   6658 MB/s   112940 calls/s 112940 msg/s
+tcp tx:   6824 MB/s   115742 calls/s 115742 msg/s
+tcp rx:   6824 MB/s   115711 calls/s
+tcp rx:   6865 MB/s   116402 calls/s
+tcp tx:   6865 MB/s   116440 calls/s 116440 msg/s
+tcp zerocopy audit
+tcp tx:   6646 MB/s   112729 calls/s 112729 msg/s
+tcp rx:   6646 MB/s   111445 calls/s
+tcp rx:   6672 MB/s   112833 calls/s
+tcp tx:   6672 MB/s   113164 calls/s 113164 msg/s
+tcp tx:   6624 MB/s   112355 calls/s 112355 msg/s
+tcp rx:   6624 MB/s   110877 calls/s
+Summary over 4.000 seconds...
+sum tcp tx:   6813 MB/s     451402 calls (112850/s)     451402 msgs =
+(112850/s)
+Zerocopy acks:              451402 received                 0 errors
+udp
+udp rx:    914 MB/s   651407 calls/s
+udp tx:    925 MB/s   659274 calls/s  15697 msg/s
+udp rx:    919 MB/s   654859 calls/s
+udp tx:    919 MB/s   654864 calls/s  15592 msg/s
+udp rx:    914 MB/s   651668 calls/s
+udp tx:    914 MB/s   651630 calls/s  15515 msg/s
+udp rx:    918 MB/s   654642 calls/s
+udp gso
+udp rx:   2271 MB/s  1618319 calls/s
+udp tx:   2515 MB/s    42658 calls/s  42658 msg/s
+udp rx:   2337 MB/s  1665280 calls/s
+udp tx:   2551 MB/s    43276 calls/s  43276 msg/s
+udp rx:   2338 MB/s  1665792 calls/s
+udp tx:   2557 MB/s    43384 calls/s  43384 msg/s
+udp rx:   2339 MB/s  1666560 calls/s
+udp gso zerocopy
+udp rx:   1725 MB/s  1229087 calls/s
+udp tx:   1840 MB/s    31219 calls/s  31219 msg/s
+udp rx:   1850 MB/s  1318460 calls/s
+udp tx:   1850 MB/s    31388 calls/s  31388 msg/s
+udp rx:   1845 MB/s  1314428 calls/s
+udp tx:   1845 MB/s    31299 calls/s  31299 msg/s
+udp gso timestamp
+udp rx:   2286 MB/s  1628928 calls/s
+udp tx:   2446 MB/s    41499 calls/s  41499 msg/s
+udp rx:   2354 MB/s  1677312 calls/s
+udp tx:   2473 MB/s    41952 calls/s  41952 msg/s
+udp rx:   2342 MB/s  1668864 calls/s
+udp tx:   2471 MB/s    41925 calls/s  41925 msg/s
+udp rx:   2333 MB/s  1662464 calls/s
+udp gso zerocopy audit
+udp rx:   1787 MB/s  1273481 calls/s
+udp tx:   1832 MB/s    31082 calls/s  31082 msg/s
+udp rx:   1881 MB/s  1340476 calls/s
+udp tx:   1881 MB/s    31916 calls/s  31916 msg/s
+udp rx:   1880 MB/s  1339880 calls/s
+udp tx:   1881 MB/s    31904 calls/s  31904 msg/s
+udp rx:   1881 MB/s  1340010 calls/s
+Summary over 4.000 seconds...
+sum udp tx:   1912 MB/s     126694 calls (31673/s)     126694 msgs =
+(31673/s)
+Zerocopy acks:              126694 received                 0 errors
+udp gso timestamp audit
+udp rx:   2259 MB/s  1609327 calls/s
+udp tx:   2410 MB/s    40879 calls/s  40879 msg/s
+udp rx:   2346 MB/s  1671168 calls/s
+udp tx:   2446 MB/s    41491 calls/s  41491 msg/s
+udp rx:   2358 MB/s  1680128 calls/s
+udp tx:   2448 MB/s    41522 calls/s  41522 msg/s
+udp rx:   2356 MB/s  1678848 calls/s
+Summary over 4.000 seconds...
+sum udp tx:   2494 MB/s     165276 calls (41319/s)     165276 msgs =
+(41319/s)
+Tx Timestamps:              165276 received                 0 errors
+udp gso zerocopy timestamp audit
+udp rx:   1658 MB/s  1181647 calls/s
+udp tx:   1678 MB/s    28466 calls/s  28466 msg/s
+udp rx:   1718 MB/s  1224010 calls/s
+udp tx:   1718 MB/s    29146 calls/s  29146 msg/s
+udp rx:   1718 MB/s  1224086 calls/s
+udp tx:   1718 MB/s    29144 calls/s  29144 msg/s
+udp rx:   1717 MB/s  1223464 calls/s
+Summary over 4.000 seconds...
+sum udp tx:   1747 MB/s     115771 calls (28942/s)     115771 msgs =
+(28942/s)
+Tx Timestamps:              115771 received                 0 errors
+Zerocopy acks:              115771 received                 0 errors
+ipv6
+tcp
+tcp tx:  11470 MB/s   194547 calls/s 194547 msg/s
+tcp rx:  11470 MB/s   188442 calls/s
+tcp tx:  11803 MB/s   200193 calls/s 200193 msg/s
+tcp rx:  11803 MB/s   194526 calls/s
+tcp tx:  11832 MB/s   200681 calls/s 200681 msg/s
+tcp rx:  11832 MB/s   194459 calls/s
+tcp zerocopy
+tcp rx:   7482 MB/s    80176 calls/s
+tcp tx:   7482 MB/s   126908 calls/s 126908 msg/s
+tcp rx:   6641 MB/s   112609 calls/s
+tcp tx:   6641 MB/s   112649 calls/s 112649 msg/s
+tcp tx:   6584 MB/s   111683 calls/s 111683 msg/s
+tcp rx:   6584 MB/s   111617 calls/s
+tcp zerocopy audit
+tcp tx:   6719 MB/s   113968 calls/s 113968 msg/s
+tcp rx:   6719 MB/s   113893 calls/s
+tcp rx:   6772 MB/s   114831 calls/s
+tcp tx:   6772 MB/s   114872 calls/s 114872 msg/s
+tcp tx:   6793 MB/s   115226 calls/s 115226 msg/s
+tcp rx:   7075 MB/s   116595 calls/s
+Summary over 4.000 seconds...
+sum tcp tx:   6921 MB/s     458580 calls (114645/s)     458580 msgs =
+(114645/s)
+./udpgso_bench_tx: Unexpected number of Zerocopy completions:    458580 =
+expected    458578 received
+udp
+udp rx:    833 MB/s   607639 calls/s
+udp tx:    851 MB/s   621264 calls/s  14448 msg/s
+udp rx:    860 MB/s   627246 calls/s
+udp tx:    860 MB/s   627284 calls/s  14588 msg/s
+udp rx:    862 MB/s   628718 calls/s
+udp tx:    861 MB/s   628574 calls/s  14618 msg/s
+udp rx:    863 MB/s   630058 calls/s
+udp gso
+udp rx:   2310 MB/s  1683314 calls/s
+udp tx:   2472 MB/s    41931 calls/s  41931 msg/s
+udp rx:   2343 MB/s  1708032 calls/s
+udp tx:   2493 MB/s    42298 calls/s  42298 msg/s
+udp rx:   2322 MB/s  1692160 calls/s
+udp tx:   2496 MB/s    42347 calls/s  42347 msg/s
+udp gso zerocopy
+udp rx:   1752 MB/s  1278423 calls/s
+udp tx:   1778 MB/s    30162 calls/s  30162 msg/s
+udp rx:   1804 MB/s  1316058 calls/s
+udp tx:   1804 MB/s    30605 calls/s  30605 msg/s
+udp rx:   1807 MB/s  1318120 calls/s
+udp tx:   1808 MB/s    30681 calls/s  30681 msg/s
+udp rx:   1730 MB/s  1261819 calls/s
+udp gso timestamp
+udp rx:   2296 MB/s  1673728 calls/s
+udp tx:   2375 MB/s    40284 calls/s  40284 msg/s
+udp rx:   2334 MB/s  1701632 calls/s
+udp tx:   2377 MB/s    40319 calls/s  40319 msg/s
+udp rx:   2335 MB/s  1702093 calls/s
+udp tx:   2377 MB/s    40319 calls/s  40319 msg/s
+udp rx:   2336 MB/s  1702656 calls/s
+udp gso zerocopy audit
+udp rx:   1717 MB/s  1252554 calls/s
+udp tx:   1759 MB/s    29839 calls/s  29839 msg/s
+udp rx:   1811 MB/s  1321003 calls/s
+udp tx:   1811 MB/s    30722 calls/s  30722 msg/s
+udp rx:   1811 MB/s  1320917 calls/s
+udp tx:   1811 MB/s    30719 calls/s  30719 msg/s
+udp rx:   1810 MB/s  1320606 calls/s
+Summary over 4.000 seconds...
+sum udp tx:   1839 MB/s     121868 calls (30467/s)     121868 msgs =
+(30467/s)
+Zerocopy acks:              121868 received                 0 errors
+udp gso timestamp audit
+udp rx:   2231 MB/s  1626112 calls/s
+udp tx:   2337 MB/s    39646 calls/s  39646 msg/s
+udp rx:   2292 MB/s  1670400 calls/s
+udp tx:   2365 MB/s    40122 calls/s  40122 msg/s
+udp rx:   2287 MB/s  1666816 calls/s
+udp tx:   2363 MB/s    40084 calls/s  40084 msg/s
+udp rx:   2288 MB/s  1667840 calls/s
+Summary over 4.000 seconds...
+sum udp tx:   2412 MB/s     159818 calls (39954/s)     159818 msgs =
+(39954/s)
+Tx Timestamps:              159818 received                 0 errors
+udp gso zerocopy timestamp audit
+udp rx:   1592 MB/s  1161479 calls/s
+udp tx:   1624 MB/s    27560 calls/s  27560 msg/s
+udp rx:   1657 MB/s  1208472 calls/s
+udp tx:   1656 MB/s    28103 calls/s  28103 msg/s
+udp rx:   1653 MB/s  1206064 calls/s
+udp tx:   1653 MB/s    28047 calls/s  28047 msg/s
+udp rx:   1648 MB/s  1202151 calls/s
+Summary over 4.000 seconds...
+sum udp tx:   1683 MB/s     111556 calls (27889/s)     111556 msgs =
+(27889/s)
+Tx Timestamps:              111556 received                 0 errors
+Zerocopy acks:              111556 received                 0 errors=
