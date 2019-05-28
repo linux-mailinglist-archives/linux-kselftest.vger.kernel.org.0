@@ -2,149 +2,154 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F06DD2CD15
-	for <lists+linux-kselftest@lfdr.de>; Tue, 28 May 2019 19:05:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37FEE2CD24
+	for <lists+linux-kselftest@lfdr.de>; Tue, 28 May 2019 19:07:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726600AbfE1RFm (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 28 May 2019 13:05:42 -0400
-Received: from usa-sjc-mx-foss1.foss.arm.com ([217.140.101.70]:33266 "EHLO
-        foss.arm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726515AbfE1RFm (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 28 May 2019 13:05:42 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.72.51.249])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 74093341;
-        Tue, 28 May 2019 10:05:41 -0700 (PDT)
-Received: from [10.1.196.72] (e119884-lin.cambridge.arm.com [10.1.196.72])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5C6A43F59C;
-        Tue, 28 May 2019 10:05:39 -0700 (PDT)
-Subject: Re: [PATCH v4 3/3] kselftest: Extend vDSO selftest to clock_getres
-To:     Christophe Leroy <christophe.leroy@c-s.fr>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Shuah Khan <shuah@kernel.org>,
-        Heiko Carstens <heiko.carstens@de.ibm.com>,
-        Martin Schwidefsky <schwidefsky@de.ibm.com>,
-        Paul Mackerras <paulus@samba.org>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        linux-kselftest@vger.kernel.org, linux-s390@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-arch@vger.kernel.org,
-        Michael Ellerman <mpe@ellerman.id.au>
-References: <20190523112116.19233-1-vincenzo.frascino@arm.com>
- <20190523112116.19233-4-vincenzo.frascino@arm.com>
- <87lfyrp0d2.fsf@concordia.ellerman.id.au>
- <afb7395f-43e9-c304-2db2-349e6727b687@arm.com>
- <20190528190132.Horde.a454OBLbW8Q4Xvx6vYRfSA1@messagerie.si.c-s.fr>
-From:   Vincenzo Frascino <vincenzo.frascino@arm.com>
-Message-ID: <bc9a8567-500f-46d4-8574-2148dbf478b5@arm.com>
-Date:   Tue, 28 May 2019 18:05:37 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
+        id S1727089AbfE1RHl (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 28 May 2019 13:07:41 -0400
+Received: from mail-ed1-f65.google.com ([209.85.208.65]:38669 "EHLO
+        mail-ed1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726526AbfE1RHk (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 28 May 2019 13:07:40 -0400
+Received: by mail-ed1-f65.google.com with SMTP id g13so3028946edu.5;
+        Tue, 28 May 2019 10:07:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=EawqU93wBmalRygPCmmYPRgZMHIPT8D1mdZZr6KiEKY=;
+        b=nhj2Vx1i0Sq8qyT/sIo07FZj3Z1C0bHaXH8QQIO0r2l6a92zBMRGnH3udmM9AuuEGV
+         /6rWaqxv5AWQ97tj+Nhfk5gvq0RbZtbnM/fEWG/mlifCiCMIVQYSe90V6lsVWl5A5Zga
+         iNKXrdfoSAWlmrnoxyXFJ4wtFY5B8p6YHrodvdBAfucW78a5iS55F6Uh8XyrwRoJSwAR
+         yEQsroh2LNFH6Ui8TtgT8H/1NIqL7yohBdmt5TYmKG78+0jp24jMw4NuSKOnZX5AICdV
+         KPzMugPhWPfU11qoomKOvXFmPw+8hYpsXtFjXd3l30jmAuHx09ixxCsyQKIuH8seILT1
+         Q2XA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=EawqU93wBmalRygPCmmYPRgZMHIPT8D1mdZZr6KiEKY=;
+        b=KDEXT54tUBZGSnmYF3KR8g9vH9vqF1ARvCfNxY6u03pRVwsXuerBh+zg4zTgs4uCfb
+         N7/SL2+L6sJ5FUMmrUd0LTTl4o9/4qLtDWZbFxkyDNMqJCTjGNF9ajQkXK9SYvNcI9D8
+         31Ej/v5fkQbE4uX8mgSojiZJC7GUga3x9qREGL4ahwoCA5sGPrzBHWmwPHy+HsDOU9Aw
+         o7VWlmWmW0CC+UyQGWb928gwwdYNF2cNLjVcW8afNc1lnPyq0flRa5AOnyCCedOpEfnN
+         VT4RhBni7L1Eujbh037GpYXAXpBITUQRnYazjHIWHCBEOAYBvdWZH0tHw4plPW4rNh6j
+         ff5w==
+X-Gm-Message-State: APjAAAV3bxjDRMsxpfiWY17DfGr7XHBbD3cuRBF0obwJ9RICHLmGBdw/
+        c8bfLjq3Sf/xM6jHx3mMbEyYq7DILOdTu4RQBW8=
+X-Google-Smtp-Source: APXvYqzMu93c7mxwnEgvrMgl6w83ROBii/WctkX9znMwVCaRLXkjfVvgtxzLp/rsbkbxTJ59wo+X1JwxvkdpkAzA58o=
+X-Received: by 2002:a17:906:aacb:: with SMTP id kt11mr89438361ejb.246.1559063258733;
+ Tue, 28 May 2019 10:07:38 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20190528190132.Horde.a454OBLbW8Q4Xvx6vYRfSA1@messagerie.si.c-s.fr>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+References: <20190523210651.80902-1-fklassen@appneta.com> <20190523210651.80902-5-fklassen@appneta.com>
+ <CAF=yD-KBNLr5KY-YQ1KMmZGCpYNefSJKaJkZNOwd8nRiedpQtA@mail.gmail.com>
+ <879E5DA6-3A4F-4CE1-9DA5-480EE30109DE@appneta.com> <CAF=yD-LQT7=4vvMwMa96_SFuUd5GywMoae7hGi9n6rQeuhhxuQ@mail.gmail.com>
+ <5BB184F2-6C20-416B-B2AF-A678400CFE3E@appneta.com> <CAF=yD-+6CRyqL6Fq5y2zpw5nnDitYC7G1c2JAVHZTjyw68DYJg@mail.gmail.com>
+ <903DEC70-845B-4C4B-911D-2F203C191C27@appneta.com> <CAF=yD-Le0XKCfyDBvHmBRVqkwn1D6ZoG=12gss5T62VcN5+1_w@mail.gmail.com>
+ <9811659B-6D5A-4C4F-9CF8-735E9CA6DE4E@appneta.com>
+In-Reply-To: <9811659B-6D5A-4C4F-9CF8-735E9CA6DE4E@appneta.com>
+From:   Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+Date:   Tue, 28 May 2019 13:07:02 -0400
+Message-ID: <CAF=yD-KcX-zCgZFVVVMU7JFy+gJwRpUoViA_mWdM4QtHNr685g@mail.gmail.com>
+Subject: Re: [PATCH net 4/4] net/udpgso_bench_tx: audit error queue
+To:     Fred Klassen <fklassen@appneta.com>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-kselftest@vger.kernel.org,
+        Willem de Bruijn <willemb@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Christophe,
+On Tue, May 28, 2019 at 12:57 PM Fred Klassen <fklassen@appneta.com> wrote:
+>
+>
+>
+> > On May 28, 2019, at 8:08 AM, Willem de Bruijn <willemdebruijn.kernel@gm=
+ail.com> wrote:
+> >
+>
+> I will push up latest patches soon.
+>
+> I did some testing and discovered that only TCP audit tests failed. They
+> failed much less often when enabling poll.  Once in about 20 runs
+> still failed. Therefore I commented out the TCP audit tests.
 
-On 28/05/2019 18:01, Christophe Leroy wrote:
-> Vincenzo Frascino <vincenzo.frascino@arm.com> a écrit :
-> 
->> Hi Michael,
->>
->> thank you for your reply.
->>
->> On 28/05/2019 07:19, Michael Ellerman wrote:
->>> Vincenzo Frascino <vincenzo.frascino@arm.com> writes:
->>>
->>>> The current version of the multiarch vDSO selftest verifies only
->>>> gettimeofday.
->>>>
->>>> Extend the vDSO selftest to clock_getres, to verify that the
->>>> syscall and the vDSO library function return the same information.
->>>>
->>>> The extension has been used to verify the hrtimer_resoltion fix.
->>>
->>> This is passing for me even without patch 1 applied, shouldn't it fail
->>> without the fix? What am I missing?
->>>
->>
->> This is correct, because during the refactoring process I missed an "n" :)
->>
->> if·((x.tv_sec·!=·y.tv_sec)·||·(x.tv_sec·!=·y.tv_sec))
->>
->> Should be:
->>
->> if·((x.tv_sec·!=·y.tv_sec)·||·(x.tv_nsec·!=·y.tv_nsec))
-> 
-> Maybe you'd better use timercmp() from sys/time.h
-> 
+Sounds good, thanks.
 
-timercmp() takes "struct timeval" not "struct timespec".
+> You may be interested that I reduced test lengths from 4 to 3 seconds,
+> but I am still getting 3 reports per test. I picked up the extra report b=
+y
+> changing 'if (tnow > treport)=E2=80=99 to 'if (tnow >=3D treport)=E2=80=
+=99
 
-> Christophe
-> 
->>
->> My mistake, I am going to fix the test and re-post v5 of this set.
->>
->> Without my patch if you pass "highres=off" to the kernel (as a command line
->> parameter) it leads to a broken implementation of clock_getres since  
->> the value
->> of CLOCK_REALTIME_RES does not change at runtime.
->>
->> Expected result (with highres=off):
->>
->> # uname -r
->> 5.2.0-rc2
->> # ./vdso_clock_getres
->> clock_id: CLOCK_REALTIME [FAIL]
->> clock_id: CLOCK_BOOTTIME [PASS]
->> clock_id: CLOCK_TAI [PASS]
->> clock_id: CLOCK_REALTIME_COARSE [PASS]
->> clock_id: CLOCK_MONOTONIC [FAIL]
->> clock_id: CLOCK_MONOTONIC_RAW [PASS]
->> clock_id: CLOCK_MONOTONIC_COARSE [PASS]
->>
->> The reason of this behavior is that the only clocks supported by getres on
->> powerpc are CLOCK_REALTIME and CLOCK_MONOTONIC, the rest on the clocks use
->> always syscalls.
->>
->>> # uname -r
->>> 5.2.0-rc2-gcc-8.2.0
->>>
->>> # ./vdso_clock_getres
->>> clock_id: CLOCK_REALTIME [PASS]
->>> clock_id: CLOCK_BOOTTIME [PASS]
->>> clock_id: CLOCK_TAI [PASS]
->>> clock_id: CLOCK_REALTIME_COARSE [PASS]
->>> clock_id: CLOCK_MONOTONIC [PASS]
->>> clock_id: CLOCK_MONOTONIC_RAW [PASS]
->>> clock_id: CLOCK_MONOTONIC_COARSE [PASS]
->>>
->>> cheers
->>>
->>>> Cc: Shuah Khan <shuah@kernel.org>
->>>> Signed-off-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
->>>> ---
->>>>
->>>> Note: This patch is independent from the others in this series, hence it
->>>> can be merged singularly by the kselftest maintainers.
->>>>
->>>>  tools/testing/selftests/vDSO/Makefile         |   2 +
->>>>  .../selftests/vDSO/vdso_clock_getres.c        | 124 ++++++++++++++++++
->>>>  2 files changed, 126 insertions(+)
->>>>  create mode 100644 tools/testing/selftests/vDSO/vdso_clock_getres.c
->>
->> --
->> Regards,
->> Vincenzo
-> 
-> 
+Nice!
 
--- 
-Regards,
-Vincenzo
+> > The only issue specific to GSO is that xmit_more can forego this
+> > doorbell until the last segment. We want to complicate this logic with
+> > a special case based on tx_flags. A process that cares should either
+> > not use GSO, or the timestamp should be associated with the last
+> > segment as I've been arguing so far.
+>
+> This is the area I was thinking of looking into. I=E2=80=99m not sure it =
+will work
+> or that it will be too messy. It may be worth a little bit of digging to
+> see if there is anything there. That will be down the road a bu
+
+Sorry, I meant  we [do not (!)] want to complicate this logic. And
+definitely don't want to read skb_shinfo where that cacheline isn't
+accessed already.
+
+Given xmit_more, do you still find the first segment the right one to
+move the timestamp tx_flags to in __udp_gso_segment?
+
+>
+> >>
+> >> I=E2=80=99ll get back to you when I have tested this more thoroughly. =
+Early results
+> >> suggest that adding the -P poll() option has fixed it without any appr=
+eciable
+> >> performance hit. I=E2=80=99ll share raw results with you, and we can m=
+ake a final
+> >> decision together.
+> >
+> > In the main loop? It still is peculiar that notifications appear to go
+> > missing unless the process blocks waiting for them. Nothing in
+> > sock_zerocopy_callback or the queueing onto the error queue should
+> > cause drops, as far as I know.
+> >
+>
+> Now that I know the issue is only in TCP, I can speculate that all bytes =
+are
+> being reported, but done with fewer messages. It may warrant some
+> investigation in case there is some kind of bug.
+
+This would definitely still be a bug and should not happen. We have
+quite a bit of experience with TCP zerocopy and I have not run into
+this in practice, so I do think that it is somehow a test artifact.
+
+> > Indeed. Ideally even run all tests, but return error if any failed,
+> > like this recent patch
+> >
+> >  selftests/bpf: fail test_tunnel.sh if subtests fail
+> >  https://patchwork.ozlabs.org/patch/1105221/
+> >
+> > but that may be a lot of code churn and better left to a separate patch=
+.
+>
+> I like it. I have it coded up, and it seems to work well. I=E2=80=99ll ma=
+ke a
+> separate commit in the patch set so we can yank it out if you feel
+> it is too much
+
+Great. Yes, it sounds like an independent improvement, in which case
+it is easier to review as a separate patch. If you already have it, by
+all means send it as part of the larger patchset.
