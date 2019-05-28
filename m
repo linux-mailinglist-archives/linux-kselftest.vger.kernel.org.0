@@ -2,111 +2,81 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A4C0D2BE9E
-	for <lists+linux-kselftest@lfdr.de>; Tue, 28 May 2019 07:34:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A35872BF2C
+	for <lists+linux-kselftest@lfdr.de>; Tue, 28 May 2019 08:19:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726810AbfE1FeG (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 28 May 2019 01:34:06 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:39806 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1725904AbfE1FeF (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 28 May 2019 01:34:05 -0400
-Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x4S5RdVP017186
-        for <linux-kselftest@vger.kernel.org>; Tue, 28 May 2019 01:34:04 -0400
-Received: from e06smtp02.uk.ibm.com (e06smtp02.uk.ibm.com [195.75.94.98])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 2srxuy0cds-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-kselftest@vger.kernel.org>; Tue, 28 May 2019 01:34:03 -0400
-Received: from localhost
-        by e06smtp02.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-kselftest@vger.kernel.org> from <rppt@linux.ibm.com>;
-        Tue, 28 May 2019 06:34:02 +0100
-Received: from b06cxnps3075.portsmouth.uk.ibm.com (9.149.109.195)
-        by e06smtp02.uk.ibm.com (192.168.101.132) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Tue, 28 May 2019 06:33:59 +0100
-Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
-        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x4S5Xwa963176916
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 28 May 2019 05:33:58 GMT
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 150A511C070;
-        Tue, 28 May 2019 05:33:58 +0000 (GMT)
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 7345F11C077;
-        Tue, 28 May 2019 05:33:57 +0000 (GMT)
-Received: from rapoport-lnx (unknown [9.148.8.53])
-        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
-        Tue, 28 May 2019 05:33:57 +0000 (GMT)
-Date:   Tue, 28 May 2019 08:33:55 +0300
-From:   Mike Rapoport <rppt@linux.ibm.com>
-To:     Alakesh Haloi <alakesh.haloi@gmail.com>
-Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Peter Xu <peterx@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mike Rapoport <rppt@linux.vnet.ibm.com>,
-        Shuah Khan <shuah@kernel.org>
-Subject: Re: [PATCH] userfaultfd: selftest: fix compiler warning
-References: <20190527151859.GA3217@ip-172-31-44-144.us-west-2.compute.internal>
+        id S1726693AbfE1GT0 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 28 May 2019 02:19:26 -0400
+Received: from bilbo.ozlabs.org ([203.11.71.1]:57471 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726657AbfE1GT0 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 28 May 2019 02:19:26 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 45CkFj2vzbz9s00;
+        Tue, 28 May 2019 16:19:21 +1000 (AEST)
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        linux-arch@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-s390@vger.kernel.org, linux-kselftest@vger.kernel.org
+Cc:     vincenzo.frascino@arm.com,
+        Christophe Leroy <christophe.leroy@c-s.fr>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Martin Schwidefsky <schwidefsky@de.ibm.com>,
+        Heiko Carstens <heiko.carstens@de.ibm.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Arnd Bergmann <arnd@arndb.de>
+Subject: Re: [PATCH v4 3/3] kselftest: Extend vDSO selftest to clock_getres
+In-Reply-To: <20190523112116.19233-4-vincenzo.frascino@arm.com>
+References: <20190523112116.19233-1-vincenzo.frascino@arm.com> <20190523112116.19233-4-vincenzo.frascino@arm.com>
+Date:   Tue, 28 May 2019 16:19:21 +1000
+Message-ID: <87lfyrp0d2.fsf@concordia.ellerman.id.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20190527151859.GA3217@ip-172-31-44-144.us-west-2.compute.internal>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-TM-AS-GCONF: 00
-x-cbid: 19052805-0008-0000-0000-000002EB13DF
-X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 19052805-0009-0000-0000-00002257DEF8
-Message-Id: <20190528053355.GB5055@rapoport-lnx>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-05-28_02:,,
- signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
- clxscore=1011 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1810050000 definitions=main-1905280038
+Content-Type: text/plain
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, May 27, 2019 at 03:18:59PM +0000, Alakesh Haloi wrote:
-> Fixes following compiler warning
-> 
-> userfaultfd.c: In function ‘usage’:
-> userfaultfd.c:126:2: warning: format not a string literal and no format
-> 	arguments [-Wformat-security]
->   fprintf(stderr, examples);
-> 
-> Signed-off-by: Alakesh Haloi <alakesh.haloi@gmail.com>
+Vincenzo Frascino <vincenzo.frascino@arm.com> writes:
 
-Reviewed-by: Mike Rapoport <rppt@linux.ibm.com>
+> The current version of the multiarch vDSO selftest verifies only
+> gettimeofday.
+>
+> Extend the vDSO selftest to clock_getres, to verify that the
+> syscall and the vDSO library function return the same information.
+>
+> The extension has been used to verify the hrtimer_resoltion fix.
 
+This is passing for me even without patch 1 applied, shouldn't it fail
+without the fix? What am I missing?
+
+# uname -r
+5.2.0-rc2-gcc-8.2.0
+
+# ./vdso_clock_getres
+clock_id: CLOCK_REALTIME [PASS]
+clock_id: CLOCK_BOOTTIME [PASS]
+clock_id: CLOCK_TAI [PASS]
+clock_id: CLOCK_REALTIME_COARSE [PASS]
+clock_id: CLOCK_MONOTONIC [PASS]
+clock_id: CLOCK_MONOTONIC_RAW [PASS]
+clock_id: CLOCK_MONOTONIC_COARSE [PASS]
+
+cheers
+
+> Cc: Shuah Khan <shuah@kernel.org>
+> Signed-off-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
 > ---
->  tools/testing/selftests/vm/userfaultfd.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/tools/testing/selftests/vm/userfaultfd.c b/tools/testing/selftests/vm/userfaultfd.c
-> index 5d1db824f73a..b3e6497b080c 100644
-> --- a/tools/testing/selftests/vm/userfaultfd.c
-> +++ b/tools/testing/selftests/vm/userfaultfd.c
-> @@ -123,7 +123,7 @@ static void usage(void)
->  	fprintf(stderr, "Supported <test type>: anon, hugetlb, "
->  		"hugetlb_shared, shmem\n\n");
->  	fprintf(stderr, "Examples:\n\n");
-> -	fprintf(stderr, examples);
-> +	fprintf(stderr, "%s", examples);
->  	exit(1);
->  }
-> 
-> -- 
-> 2.17.1
-> 
-
--- 
-Sincerely yours,
-Mike.
-
+>
+> Note: This patch is independent from the others in this series, hence it
+> can be merged singularly by the kselftest maintainers.
+>
+>  tools/testing/selftests/vDSO/Makefile         |   2 +
+>  .../selftests/vDSO/vdso_clock_getres.c        | 124 ++++++++++++++++++
+>  2 files changed, 126 insertions(+)
+>  create mode 100644 tools/testing/selftests/vDSO/vdso_clock_getres.c
