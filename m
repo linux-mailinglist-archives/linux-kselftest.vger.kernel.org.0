@@ -2,96 +2,125 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BB8C2CF1A
-	for <lists+linux-kselftest@lfdr.de>; Tue, 28 May 2019 21:02:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E89552CFA9
+	for <lists+linux-kselftest@lfdr.de>; Tue, 28 May 2019 21:40:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727454AbfE1TCY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 28 May 2019 15:02:24 -0400
-Received: from mail-pf1-f196.google.com ([209.85.210.196]:44550 "EHLO
+        id S1727003AbfE1Tk4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 28 May 2019 15:40:56 -0400
+Received: from mail-pf1-f196.google.com ([209.85.210.196]:42043 "EHLO
         mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727418AbfE1TCX (ORCPT
+        with ESMTP id S1726802AbfE1Tk4 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 28 May 2019 15:02:23 -0400
-Received: by mail-pf1-f196.google.com with SMTP id g9so12036332pfo.11;
-        Tue, 28 May 2019 12:02:22 -0700 (PDT)
+        Tue, 28 May 2019 15:40:56 -0400
+Received: by mail-pf1-f196.google.com with SMTP id r22so9233413pfh.9;
+        Tue, 28 May 2019 12:40:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:mime-version:content-disposition
-         :content-transfer-encoding:user-agent;
-        bh=ZBw/tQUR3N++vfWCWRHOlyMoJfJVoXaITb7wqbYIEwU=;
-        b=SDOtLbxOfqFOsS3tfWf/NPMQ9agnoEnzEmJwhDansmY94g8VfpV+K/aK98EF0FGzOB
-         QRm5N4O9EYRfrQ054SLOZWXH0nFk2FN0ccKjRlfXwzyikmBGApI+BPcXEm9a4pfzWAm8
-         bY10bMLwoMQbG/scodaCfipQxzoWAWNMNmN7v0dqRtPzqvQ0kvA/e6MUKGF0iYgNmwHi
-         FTLhnW6VZyFouBCBr1oEt5eEX2ToFmH1hyDIT1VB7gXYC1ubI2tDzFtw4wl9sWqGDSF+
-         OWrkyyhkW5xkv8ei+mwLRNn8oooU985YF5oDGV/bSatVdgNq/47+R3q61lq4rlEHtCH9
-         A9/w==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to
+         :user-agent;
+        bh=93NiWg88plww3BEzYyn0ICvR5hG8lZfHE/HYRcLE7m8=;
+        b=uPvok+oSTNyhB8lNqKartxqkRHCvLIVBjUAU/WAo1chSRW/lAL/BhXriszd23uypGv
+         LJL6lOqwCBI0M5yd3oVt1fitkvExyvZsF/XXSQXZO3EqSqSSRmHkVfAyu6usLmOzpFt0
+         /X00PXHarOpSuBzi8Rvg94s/lmKQNjgheEHMuxepkoxoXm2nRe40bUdwi9f1rTm6MRWA
+         AKtvqdZLhKH6iRWAJafmYmhb3qmu2IsA+af/SLQoWpqc1aqvKhsQQaj29stpxQnTb/1x
+         LVD4wotFH+F4t0PX/FHFO8HYimz3TXTt6C7w+2xtmG7I8y37DgaoMS34HG/xMYPBpvvr
+         B1wA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition:content-transfer-encoding:user-agent;
-        bh=ZBw/tQUR3N++vfWCWRHOlyMoJfJVoXaITb7wqbYIEwU=;
-        b=FtEdkp+u73PEfx9QeYUSn85egtAvBM6iAgUZF9kahvjYJlqMdwgdAKD3XHEYgyVxTP
-         L22SJN3WzLIEfLvnU6QtC4FWRGI2OWSbdI+0jS9JLXjB84dchykvagUO/0WRkBhlE+Z4
-         iR+I8c2x+JrMWms7VafAYfrj5m0I1e+ZTzIh0G7ENZGZW3Xosi8TenqNbfMByW6tEmN0
-         Ns3Ix7KXVTW/Zvm2oTs/VUxxM3eRQOE3FcgFEHPiPKvCp8cTaFnFFYg5MV07w8NWI5ys
-         64ZPdq+q0Hq8tAq8z6vCzzTHG9o9uva+3fIdrF6eBg+QI6WobiVHPx9AcbmJFy84U86X
-         IWfw==
-X-Gm-Message-State: APjAAAUK4zWHHG7hdulPet872YoCG9u/55Lphl6a9xWYKWZnObjzRG5H
-        aJ5DXfN44YdDU5m5Ufs30ksoxqgTToc=
-X-Google-Smtp-Source: APXvYqxAa+2eW4sDFyzdz7rQk/+G3nl/DKbvFLVCpB/Y6eqzAcCw/hbo/pUs+DOywsXNrTY3o5r0NQ==
-X-Received: by 2002:a63:6bc3:: with SMTP id g186mr122564882pgc.21.1559070141977;
-        Tue, 28 May 2019 12:02:21 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to:user-agent;
+        bh=93NiWg88plww3BEzYyn0ICvR5hG8lZfHE/HYRcLE7m8=;
+        b=OptsLzT+w/qBvF3pHvkReFdZHUOBiPgbcik9hV875q62hiHadTQ68eThLUUfUCaeUo
+         AYZcilmcHj0oSNrM/Qv7qbOwPyfYGRtoSvlFazDvProMT6oN3R/3TUHLQiaZmrPH8glW
+         jlGhYJ+XwOT4MQiwkRBA4C/Y18ZrDpB7ADLY+x1zOZ2Y4o2neGaJ6rQkgdkzHSCkMv+1
+         cS5WSz0aPyLxdq7oBfNlGVYMhg6QSClGwY7NXPhVaiLxUPTpo1wTmMnBH2aoeMAMgVUp
+         WRZOaYWZEa8cB2b9YGAfUbBCQDhawdZC3I0UtBAZTU5noDKLEVUpaaimlvrQUI9br0Xv
+         HWSA==
+X-Gm-Message-State: APjAAAUN/SheOcpOBtSSPPYX3OKbzIQytxz/LqNPN8Z4mehAKgXGoxQJ
+        wrjZhptzvK6GeDrefR8/pDM=
+X-Google-Smtp-Source: APXvYqwtgsrbCEG18fVm8Gokp3KisI3vELC3eMLPrjdBKmLgj/BK318YYXTdUiZvuDF4qitzAzXdtw==
+X-Received: by 2002:a63:e616:: with SMTP id g22mr69232791pgh.61.1559072455122;
+        Tue, 28 May 2019 12:40:55 -0700 (PDT)
 Received: from ip-172-31-44-144.us-west-2.compute.internal (ec2-54-186-128-88.us-west-2.compute.amazonaws.com. [54.186.128.88])
-        by smtp.gmail.com with ESMTPSA id 124sm16374430pfe.124.2019.05.28.12.02.19
+        by smtp.gmail.com with ESMTPSA id u20sm16266834pfm.145.2019.05.28.12.40.52
         (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Tue, 28 May 2019 12:02:20 -0700 (PDT)
-Date:   Tue, 28 May 2019 19:02:18 +0000
+        Tue, 28 May 2019 12:40:53 -0700 (PDT)
+Date:   Tue, 28 May 2019 19:40:51 +0000
 From:   Alakesh Haloi <alakesh.haloi@gmail.com>
-To:     linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Shuah Khan <shuah@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
+To:     Song Liu <liu.song.a23@gmail.com>
+Cc:     Daniel Borkmann <daniel@iogearbox.net>,
         Martin KaFai Lau <kafai@fb.com>,
         Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        Stanislav Fomichev <sdf@google.com>
-Subject: [PATCH bpf v2] selftests: bpf: fix compiler warning
-Message-ID: <20190528190218.GA6950@ip-172-31-44-144.us-west-2.compute.internal>
+        Stanislav Fomichev <sdf@google.com>,
+        linux-kselftest@vger.kernel.org,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] selftests: bpf: fix compiler warning
+Message-ID: <20190528194051.GA7103@ip-172-31-44-144.us-west-2.compute.internal>
+References: <20190524003038.GA69487@ip-172-31-44-144.us-west-2.compute.internal>
+ <CAPhsuW7H=w_UMyu5Q5p5+MGogkQ7+7X7sS=vJTiR=+JJy0KuTg@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAPhsuW7H=w_UMyu5Q5p5+MGogkQ7+7X7sS=vJTiR=+JJy0KuTg@mail.gmail.com>
 User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add missing header file following compiler warning
+On Tue, May 28, 2019 at 09:45:14AM -0700, Song Liu wrote:
+> On Thu, May 23, 2019 at 5:31 PM Alakesh Haloi <alakesh.haloi@gmail.com> wrote:
+> >
+> > Add missing header file following compiler warning
+> >
+> > prog_tests/flow_dissector.c: In function ‘tx_tap’:
+> > prog_tests/flow_dissector.c:175:9: warning: implicit declaration of function ‘writev’; did you mean ‘write’? [-Wimplicit-function-declaration]
+> >   return writev(fd, iov, ARRAY_SIZE(iov));
+> >          ^~~~~~
+> >          write
+> >
+> > Signed-off-by: Alakesh Haloi <alakesh.haloi@gmail.com>
+> 
+> The patch looks good. Please add a "Fixes" tag, so the fix
+> can be back ported properly.
+> 
+> Also, please specify which tree the patch should be applied
+> with [PATCH bpf] or [PATCH bpf-next].
+> 
+> Thanks,
+> Song
+> 
 
-prog_tests/flow_dissector.c: In function ‘tx_tap’:
-prog_tests/flow_dissector.c:175:9: warning: implicit declaration of function ‘writev’; did you mean ‘write’? [-Wimplicit-function-declaration]
-  return writev(fd, iov, ARRAY_SIZE(iov));
-         ^~~~~~
-         write
+Thanks for reviewing the patch. My apologies for not following the
+rules. I have sent an updated patch after adding Fixes: tag and
+modifying the subject to reflect that it is for bpf tree.
+The updated patch is here https://lkml.org/lkml/2019/5/28/904
 
-Fixes: 0905beec9f52 ("selftests/bpf: run flow dissector tests in skb-less mode")
-Signed-off-by: Alakesh Haloi <alakesh.haloi@gmail.com>
----
- tools/testing/selftests/bpf/prog_tests/flow_dissector.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/tools/testing/selftests/bpf/prog_tests/flow_dissector.c b/tools/testing/selftests/bpf/prog_tests/flow_dissector.c
-index fbd1d88a6095..c938283ac232 100644
---- a/tools/testing/selftests/bpf/prog_tests/flow_dissector.c
-+++ b/tools/testing/selftests/bpf/prog_tests/flow_dissector.c
-@@ -3,6 +3,7 @@
- #include <error.h>
- #include <linux/if.h>
- #include <linux/if_tun.h>
-+#include <sys/uio.h>
- 
- #define CHECK_FLOW_KEYS(desc, got, expected)				\
- 	CHECK_ATTR(memcmp(&got, &expected, sizeof(got)) != 0,		\
--- 
-2.17.1
-
+Thanks
+Alakesh
+> 
+> 
+> 
+> > ---
+> >  tools/testing/selftests/bpf/prog_tests/flow_dissector.c | 1 +
+> >  1 file changed, 1 insertion(+)
+> >
+> > diff --git a/tools/testing/selftests/bpf/prog_tests/flow_dissector.c b/tools/testing/selftests/bpf/prog_tests/flow_dissector.c
+> > index fbd1d88a6095..c938283ac232 100644
+> > --- a/tools/testing/selftests/bpf/prog_tests/flow_dissector.c
+> > +++ b/tools/testing/selftests/bpf/prog_tests/flow_dissector.c
+> > @@ -3,6 +3,7 @@
+> >  #include <error.h>
+> >  #include <linux/if.h>
+> >  #include <linux/if_tun.h>
+> > +#include <sys/uio.h>
+> >
+> >  #define CHECK_FLOW_KEYS(desc, got, expected)                           \
+> >         CHECK_ATTR(memcmp(&got, &expected, sizeof(got)) != 0,           \
+> > --
+> > 2.17.1
+> >
