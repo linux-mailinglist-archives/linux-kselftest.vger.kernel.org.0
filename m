@@ -2,112 +2,112 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BE922CC1E
-	for <lists+linux-kselftest@lfdr.de>; Tue, 28 May 2019 18:34:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4F3B2CC5E
+	for <lists+linux-kselftest@lfdr.de>; Tue, 28 May 2019 18:45:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726668AbfE1QeJ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 28 May 2019 12:34:09 -0400
-Received: from usa-sjc-mx-foss1.foss.arm.com ([217.140.101.70]:60968 "EHLO
-        foss.arm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726600AbfE1QeJ (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 28 May 2019 12:34:09 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.72.51.249])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D37F1341;
-        Tue, 28 May 2019 09:34:08 -0700 (PDT)
-Received: from arrakis.emea.arm.com (arrakis.cambridge.arm.com [10.1.196.78])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2754A3F59C;
-        Tue, 28 May 2019 09:34:03 -0700 (PDT)
-Date:   Tue, 28 May 2019 17:34:00 +0100
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     Dave Martin <Dave.Martin@arm.com>
-Cc:     Andrew Murray <andrew.murray@arm.com>,
-        Mark Rutland <mark.rutland@arm.com>, kvm@vger.kernel.org,
-        Christian Koenig <Christian.Koenig@amd.com>,
-        Szabolcs Nagy <Szabolcs.Nagy@arm.com>,
-        Will Deacon <will.deacon@arm.com>,
-        dri-devel@lists.freedesktop.org, linux-mm@kvack.org,
-        Lee Smith <Lee.Smith@arm.com>, linux-kselftest@vger.kernel.org,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Jacob Bramley <Jacob.Bramley@arm.com>,
-        Leon Romanovsky <leon@kernel.org>, linux-rdma@vger.kernel.org,
-        amd-gfx@lists.freedesktop.org,
-        linux-arm-kernel@lists.infradead.org,
-        Evgeniy Stepanov <eugenis@google.com>,
-        linux-media@vger.kernel.org, Kees Cook <keescook@chromium.org>,
-        Ruben Ayrapetyan <Ruben.Ayrapetyan@arm.com>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        Kevin Brodsky <kevin.brodsky@arm.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Kostya Serebryany <kcc@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felix Kuehling <Felix.Kuehling@amd.com>,
-        linux-kernel@vger.kernel.org,
-        Jens Wiklander <jens.wiklander@linaro.org>,
-        Ramana Radhakrishnan <Ramana.Radhakrishnan@arm.com>,
-        Alexander Deucher <Alexander.Deucher@amd.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Yishai Hadas <yishaih@mellanox.com>,
-        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>
-Subject: Re: [PATCH v15 05/17] arms64: untag user pointers passed to memory
- syscalls
-Message-ID: <20190528163400.GE32006@arrakis.emea.arm.com>
-References: <cover.1557160186.git.andreyknvl@google.com>
- <00eb4c63fefc054e2c8d626e8fedfca11d7c2600.1557160186.git.andreyknvl@google.com>
- <20190527143719.GA59948@MBP.local>
- <20190528145411.GA709@e119886-lin.cambridge.arm.com>
- <20190528154057.GD32006@arrakis.emea.arm.com>
- <20190528155644.GD28398@e103592.cambridge.arm.com>
+        id S1727090AbfE1Qp0 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 28 May 2019 12:45:26 -0400
+Received: from mail-qk1-f196.google.com ([209.85.222.196]:44519 "EHLO
+        mail-qk1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726371AbfE1Qp0 (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 28 May 2019 12:45:26 -0400
+Received: by mail-qk1-f196.google.com with SMTP id w187so13375278qkb.11;
+        Tue, 28 May 2019 09:45:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=PFmaYpz+7586n8fgFzVofvO6konpWOrSa5dCBt2QReQ=;
+        b=anrNjBRsknHzWPik+xWHWpC52AhNn4Rm17SGUku1No9v1MdLTVVQff/jGHtbgyaFcZ
+         podY2XyhqOCFaXvyIYt3b9GidZFmCrUWmr9z2iT82xm/riYk4C9Lsn7cOw6C7MLcc354
+         /Qou5L1D8DfnkaxFOPD84RioSEwIVubPgBerMzl7MWT8fMYGAjtPA0HoSo6znBDp1U47
+         CkqxVrMob3azCegSEjZo5HjErJXQslG7YY/GvYs64/lAks8pKiupHqFYUAVOXA+NQmge
+         g+8FFc6Eu0MS7B9DkClx73FNHQvCy6Afv9WPQN1EckuEi9WLX9gs9WtTFcjXKZi65eeM
+         UZTw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=PFmaYpz+7586n8fgFzVofvO6konpWOrSa5dCBt2QReQ=;
+        b=mEmcCUAnQrndJYj9gucHbhjPDMaTyD43pQ+CUTh3vkLv26s0sc9Q6p7EiTDkYBzxPB
+         udqIibC7qtEFumNSeNOYydX4VFqGAnBafB9oxsJY46ll8npCL+BVRLXnFhV9H4eDtrgH
+         lCv/zpLyLlD+AdaVmfTOnubglqGO0DKcnwl4vjqgQYPm6Z/btl14ZK8hRvS5gkPDkRLy
+         wtNH/O4zsg/oxd6ynszRBGYS1ic8hVpPYsu754sP55F3WOWO564QYDlUZLqN09LxsDB8
+         gZRwWUBKSobf2bH6zlbm/Ir7T2zaaPYotTM8qSiB5bj0cdPl00GfRFg2tjoe6MH/dCD1
+         IYDA==
+X-Gm-Message-State: APjAAAVQG6Fon+70dRiEQeQmF4yaH5etpfm1hleX8CmLB9FEiTqvJBM3
+        9/lkHD1hTmrcwqYqhSX9Ln/6GvurzqKGtrOBAOw=
+X-Google-Smtp-Source: APXvYqwxnAJXnfzy3oJ7sLlXZqQixsfQ+YZO+6KnyeoazRF9rZ1t5e8A0gFtHjIbg3A1bXf4IjD1rHcMcfCt89SykjQ=
+X-Received: by 2002:ae9:ee0b:: with SMTP id i11mr12264495qkg.96.1559061925163;
+ Tue, 28 May 2019 09:45:25 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190528155644.GD28398@e103592.cambridge.arm.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20190524003038.GA69487@ip-172-31-44-144.us-west-2.compute.internal>
+In-Reply-To: <20190524003038.GA69487@ip-172-31-44-144.us-west-2.compute.internal>
+From:   Song Liu <liu.song.a23@gmail.com>
+Date:   Tue, 28 May 2019 09:45:14 -0700
+Message-ID: <CAPhsuW7H=w_UMyu5Q5p5+MGogkQ7+7X7sS=vJTiR=+JJy0KuTg@mail.gmail.com>
+Subject: Re: [PATCH] selftests: bpf: fix compiler warning
+To:     Alakesh Haloi <alakesh.haloi@gmail.com>
+Cc:     Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        Stanislav Fomichev <sdf@google.com>,
+        linux-kselftest@vger.kernel.org,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, May 28, 2019 at 04:56:45PM +0100, Dave P Martin wrote:
-> On Tue, May 28, 2019 at 04:40:58PM +0100, Catalin Marinas wrote:
-> 
-> [...]
-> 
-> > My thoughts on allowing tags (quick look):
-> >
-> > brk - no
-> 
-> [...]
-> 
-> > mlock, mlock2, munlock - yes
-> > mmap - no (we may change this with MTE but not for TBI)
-> 
-> [...]
-> 
-> > mprotect - yes
-> 
-> I haven't following this discussion closely... what's the rationale for
-> the inconsistencies here (feel free to refer me back to the discussion
-> if it's elsewhere).
+On Thu, May 23, 2019 at 5:31 PM Alakesh Haloi <alakesh.haloi@gmail.com> wro=
+te:
+>
+> Add missing header file following compiler warning
+>
+> prog_tests/flow_dissector.c: In function =E2=80=98tx_tap=E2=80=99:
+> prog_tests/flow_dissector.c:175:9: warning: implicit declaration of funct=
+ion =E2=80=98writev=E2=80=99; did you mean =E2=80=98write=E2=80=99? [-Wimpl=
+icit-function-declaration]
+>   return writev(fd, iov, ARRAY_SIZE(iov));
+>          ^~~~~~
+>          write
+>
+> Signed-off-by: Alakesh Haloi <alakesh.haloi@gmail.com>
 
-_My_ rationale (feel free to disagree) is that mmap() by default would
-not return a tagged address (ignoring MTE for now). If it gets passed a
-tagged address or a "tagged NULL" (for lack of a better name) we don't
-have clear semantics of whether the returned address should be tagged in
-this ABI relaxation. I'd rather reserve this specific behaviour if we
-overload the non-zero tag meaning of mmap() for MTE. Similar reasoning
-for mremap(), at least on the new_address argument (not entirely sure
-about old_address).
+The patch looks good. Please add a "Fixes" tag, so the fix
+can be back ported properly.
 
-munmap() should probably follow the mmap() rules.
+Also, please specify which tree the patch should be applied
+with [PATCH bpf] or [PATCH bpf-next].
 
-As for brk(), I don't see why the user would need to pass a tagged
-address, we can't associate any meaning to this tag.
+Thanks,
+Song
 
-For the rest, since it's likely such addresses would have been tagged by
-malloc() in user space, we should allow tagged pointers.
 
--- 
-Catalin
+
+
+> ---
+>  tools/testing/selftests/bpf/prog_tests/flow_dissector.c | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/tools/testing/selftests/bpf/prog_tests/flow_dissector.c b/to=
+ols/testing/selftests/bpf/prog_tests/flow_dissector.c
+> index fbd1d88a6095..c938283ac232 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/flow_dissector.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/flow_dissector.c
+> @@ -3,6 +3,7 @@
+>  #include <error.h>
+>  #include <linux/if.h>
+>  #include <linux/if_tun.h>
+> +#include <sys/uio.h>
+>
+>  #define CHECK_FLOW_KEYS(desc, got, expected)                           \
+>         CHECK_ATTR(memcmp(&got, &expected, sizeof(got)) !=3D 0,          =
+ \
+> --
+> 2.17.1
+>
