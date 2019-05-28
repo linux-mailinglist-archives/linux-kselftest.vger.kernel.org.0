@@ -2,217 +2,88 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FE7A2C621
-	for <lists+linux-kselftest@lfdr.de>; Tue, 28 May 2019 14:05:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9CE02C64A
+	for <lists+linux-kselftest@lfdr.de>; Tue, 28 May 2019 14:18:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727040AbfE1MFH (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 28 May 2019 08:05:07 -0400
-Received: from usa-sjc-mx-foss1.foss.arm.com ([217.140.101.70]:56234 "EHLO
-        foss.arm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726620AbfE1MFH (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 28 May 2019 08:05:07 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.72.51.249])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 26FEB341;
-        Tue, 28 May 2019 05:05:07 -0700 (PDT)
-Received: from e119884-lin.cambridge.arm.com (e119884-lin.cambridge.arm.com [10.1.196.72])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id BF33A3F59C;
-        Tue, 28 May 2019 05:05:04 -0700 (PDT)
-From:   Vincenzo Frascino <vincenzo.frascino@arm.com>
-To:     linux-arch@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-s390@vger.kernel.org, linux-kselftest@vger.kernel.org
-Cc:     vincenzo.frascino@arm.com,
-        Christophe Leroy <christophe.leroy@c-s.fr>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Martin Schwidefsky <schwidefsky@de.ibm.com>,
-        Heiko Carstens <heiko.carstens@de.ibm.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Arnd Bergmann <arnd@arndb.de>
-Subject: [PATCH v5 3/3] kselftest: Extend vDSO selftest to clock_getres
-Date:   Tue, 28 May 2019 13:04:46 +0100
-Message-Id: <20190528120446.48911-4-vincenzo.frascino@arm.com>
-X-Mailer: git-send-email 2.21.0
-In-Reply-To: <20190528120446.48911-1-vincenzo.frascino@arm.com>
-References: <20190528120446.48911-1-vincenzo.frascino@arm.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        id S1726824AbfE1MSY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 28 May 2019 08:18:24 -0400
+Received: from mail-wr1-f66.google.com ([209.85.221.66]:34724 "EHLO
+        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726728AbfE1MSY (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 28 May 2019 08:18:24 -0400
+Received: by mail-wr1-f66.google.com with SMTP id f8so20011910wrt.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 28 May 2019 05:18:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id;
+        bh=StOKsWACByKGqHzXp4FwgPPs4TBih3Hh4Otp9dEioXQ=;
+        b=cISi5D/BDT6QEd3pB7cEByl5UMKich5g0dhMV5zp+S1wRvW/9/hXT5QU+C7GlvJ57B
+         xWDvf24PPceOpiPr7cRaSVU/q+oape2q8uZWOqpGEuo/R8KjGgdOwyBIaq/3kLzrKGGQ
+         whNzHxCKgpw3k9Bh7KWqFXFTuqDxAXd4+SWB3g8dCSuqhSOwtrGWVPzkV+7cEGDk/ZZx
+         Qf5A4jM5i2czqnw+/DcXANeWnegExr2C3sL3q8YXaaIYTnXTT3jJkIB4iQSlHqYbgJW5
+         JyXosmF0woChkEomP+Xq/caATuzuSHa/K9EglxCdWdUK/tA62Nl0RV+nmX3u1KqzRy1f
+         2ABA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=StOKsWACByKGqHzXp4FwgPPs4TBih3Hh4Otp9dEioXQ=;
+        b=SFuF68fJiP2Q1rmHprHD6p7bwrAapD0AAYHVioDyR85dBwinflmH04WGtPeqe7bQ7T
+         l+6LNWZY5PgctiCS6VSkeaFj1BX5kJgzoqgL42QTbrTrNsVWZx2gWxEj3Cg4sPC8ehiP
+         rRPbjamqjD4brKeOiDRMMxfUgFZM5wyGHAud35uTDIdoXLpGnp6C2N4NRZG4Rs7YJG24
+         lGwvr7FWSwCduyKEoZ/NKXE8LV/Bkp7oObn9MwZaLnhHGmnnlTemDDVZplJSGYSZDheM
+         nERQph7XRVG9Gv7OVNgjgmKSMcjrfREiJUypDR6O4j7FLSqJ57aLubW6fPWZP83kVcAC
+         SuJw==
+X-Gm-Message-State: APjAAAWbxFWeOqm6xpZa5qId30Afh2RwvEOc0NnESGXhc9O3CcqOEF8r
+        Xu2NigGpWOfq9Y6yqM75RjW3Bluuvr1JPw==
+X-Google-Smtp-Source: APXvYqw4D2nRhr/GsOd9BVIb+ZRg2p/b0ikisyJ/0WIX5FS1GpmYbiNUYamB1tw39uHeQqUu2AYMoQ==
+X-Received: by 2002:adf:cd8c:: with SMTP id q12mr4775760wrj.103.1559045902189;
+        Tue, 28 May 2019 05:18:22 -0700 (PDT)
+Received: from hackbox2.linaro.org ([81.128.185.34])
+        by smtp.gmail.com with ESMTPSA id f65sm2969853wmg.45.2019.05.28.05.18.21
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 28 May 2019 05:18:21 -0700 (PDT)
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+To:     linux-kselftest@vger.kernel.org
+Cc:     urezki@gmail.com, shuah@kernel.org, keescook@chromium.org,
+        willy@infradead.org, mhocko@suse.com,
+        oleksiy.avramchenko@sonymobile.com, linux-kernel@vger.kernel.org,
+        Naresh Kamboju <naresh.kamboju@linaro.org>
+Subject: [PATCH] selftests: vm: install test_vmalloc.sh for run_vmtests
+Date:   Tue, 28 May 2019 13:18:09 +0100
+Message-Id: <20190528121809.29389-1-naresh.kamboju@linaro.org>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The current version of the multiarch vDSO selftest verifies only
-gettimeofday.
+Add test_vmalloc.sh to TEST_FILES to make sure it gets installed for
+run_vmtests.
 
-Extend the vDSO selftest to clock_getres, to verify that the
-syscall and the vDSO library function return the same information.
+Fixed below error:
+./run_vmtests: line 217: ./test_vmalloc.sh: No such file or directory
 
-The extension has been used to verify the hrtimer_resoltion fix.
+Tested with: make TARGETS=vm install INSTALL_PATH=$PWD/x
 
-Cc: Shuah Khan <shuah@kernel.org>
-Signed-off-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
+Signed-off-by: Naresh Kamboju <naresh.kamboju@linaro.org>
 ---
+ tools/testing/selftests/vm/Makefile | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Note: This patch is independent from the others in this series, hence it
-can be merged singularly by the kselftest maintainers.
-
- tools/testing/selftests/vDSO/Makefile         |   2 +
- .../selftests/vDSO/vdso_clock_getres.c        | 124 ++++++++++++++++++
- 2 files changed, 126 insertions(+)
- create mode 100644 tools/testing/selftests/vDSO/vdso_clock_getres.c
-
-diff --git a/tools/testing/selftests/vDSO/Makefile b/tools/testing/selftests/vDSO/Makefile
-index 9e03d61f52fd..d5c5bfdf1ac1 100644
---- a/tools/testing/selftests/vDSO/Makefile
-+++ b/tools/testing/selftests/vDSO/Makefile
-@@ -5,6 +5,7 @@ uname_M := $(shell uname -m 2>/dev/null || echo not)
- ARCH ?= $(shell echo $(uname_M) | sed -e s/i.86/x86/ -e s/x86_64/x86/)
+diff --git a/tools/testing/selftests/vm/Makefile b/tools/testing/selftests/vm/Makefile
+index e13eb6cc8901..05306c58ff9f 100644
+--- a/tools/testing/selftests/vm/Makefile
++++ b/tools/testing/selftests/vm/Makefile
+@@ -25,6 +25,8 @@ TEST_GEN_FILES += virtual_address_range
  
- TEST_GEN_PROGS := $(OUTPUT)/vdso_test
-+TEST_GEN_PROGS += $(OUTPUT)/vdso_clock_getres
- ifeq ($(ARCH),x86)
- TEST_GEN_PROGS += $(OUTPUT)/vdso_standalone_test_x86
- endif
-@@ -18,6 +19,7 @@ endif
+ TEST_PROGS := run_vmtests
  
- all: $(TEST_GEN_PROGS)
- $(OUTPUT)/vdso_test: parse_vdso.c vdso_test.c
-+$(OUTPUT)/vdso_clock_getres: vdso_clock_getres.c
- $(OUTPUT)/vdso_standalone_test_x86: vdso_standalone_test_x86.c parse_vdso.c
- 	$(CC) $(CFLAGS) $(CFLAGS_vdso_standalone_test_x86) \
- 		vdso_standalone_test_x86.c parse_vdso.c \
-diff --git a/tools/testing/selftests/vDSO/vdso_clock_getres.c b/tools/testing/selftests/vDSO/vdso_clock_getres.c
-new file mode 100644
-index 000000000000..15dcee16ff72
---- /dev/null
-+++ b/tools/testing/selftests/vDSO/vdso_clock_getres.c
-@@ -0,0 +1,124 @@
-+// SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note
-+/*
-+ * vdso_clock_getres.c: Sample code to test clock_getres.
-+ * Copyright (c) 2019 Arm Ltd.
-+ *
-+ * Compile with:
-+ * gcc -std=gnu99 vdso_clock_getres.c
-+ *
-+ * Tested on ARM, ARM64, MIPS32, x86 (32-bit and 64-bit),
-+ * Power (32-bit and 64-bit), S390x (32-bit and 64-bit).
-+ * Might work on other architectures.
-+ */
++TEST_FILES := test_vmalloc.sh
 +
-+#define _GNU_SOURCE
-+#include <elf.h>
-+#include <err.h>
-+#include <fcntl.h>
-+#include <stdint.h>
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <time.h>
-+#include <sys/auxv.h>
-+#include <sys/mman.h>
-+#include <sys/time.h>
-+#include <unistd.h>
-+#include <sys/syscall.h>
-+
-+#include "../kselftest.h"
-+
-+static long syscall_clock_getres(clockid_t _clkid, struct timespec *_ts)
-+{
-+	long ret;
-+
-+	ret = syscall(SYS_clock_getres, _clkid, _ts);
-+
-+	return ret;
-+}
-+
-+const char *vdso_clock_name[12] = {
-+	"CLOCK_REALTIME",
-+	"CLOCK_MONOTONIC",
-+	"CLOCK_PROCESS_CPUTIME_ID",
-+	"CLOCK_THREAD_CPUTIME_ID",
-+	"CLOCK_MONOTONIC_RAW",
-+	"CLOCK_REALTIME_COARSE",
-+	"CLOCK_MONOTONIC_COARSE",
-+	"CLOCK_BOOTTIME",
-+	"CLOCK_REALTIME_ALARM",
-+	"CLOCK_BOOTTIME_ALARM",
-+	"CLOCK_SGI_CYCLE",
-+	"CLOCK_TAI",
-+};
-+
-+/*
-+ * This function calls clock_getres in vdso and by system call
-+ * with different values for clock_id.
-+ *
-+ * Example of output:
-+ *
-+ * clock_id: CLOCK_REALTIME [PASS]
-+ * clock_id: CLOCK_BOOTTIME [PASS]
-+ * clock_id: CLOCK_TAI [PASS]
-+ * clock_id: CLOCK_REALTIME_COARSE [PASS]
-+ * clock_id: CLOCK_MONOTONIC [PASS]
-+ * clock_id: CLOCK_MONOTONIC_RAW [PASS]
-+ * clock_id: CLOCK_MONOTONIC_COARSE [PASS]
-+ */
-+static inline int vdso_test_clock(unsigned int clock_id)
-+{
-+	struct timespec x, y;
-+
-+	printf("clock_id: %s", vdso_clock_name[clock_id]);
-+	clock_getres(clock_id, &x);
-+	syscall_clock_getres(clock_id, &y);
-+
-+	if ((x.tv_sec != y.tv_sec) || (x.tv_nsec != y.tv_nsec)) {
-+		printf(" [FAIL]\n");
-+		return KSFT_FAIL;
-+	}
-+
-+	printf(" [PASS]\n");
-+	return KSFT_PASS;
-+}
-+
-+int main(int argc, char **argv)
-+{
-+	int ret;
-+
-+#if _POSIX_TIMERS > 0
-+
-+#ifdef CLOCK_REALTIME
-+	ret = vdso_test_clock(CLOCK_REALTIME);
-+#endif
-+
-+#ifdef CLOCK_BOOTTIME
-+	ret += vdso_test_clock(CLOCK_BOOTTIME);
-+#endif
-+
-+#ifdef CLOCK_TAI
-+	ret += vdso_test_clock(CLOCK_TAI);
-+#endif
-+
-+#ifdef CLOCK_REALTIME_COARSE
-+	ret += vdso_test_clock(CLOCK_REALTIME_COARSE);
-+#endif
-+
-+#ifdef CLOCK_MONOTONIC
-+	ret += vdso_test_clock(CLOCK_MONOTONIC);
-+#endif
-+
-+#ifdef CLOCK_MONOTONIC_RAW
-+	ret += vdso_test_clock(CLOCK_MONOTONIC_RAW);
-+#endif
-+
-+#ifdef CLOCK_MONOTONIC_COARSE
-+	ret += vdso_test_clock(CLOCK_MONOTONIC_COARSE);
-+#endif
-+
-+#endif
-+	if (ret > 0)
-+		return KSFT_FAIL;
-+
-+	return KSFT_PASS;
-+}
+ KSFT_KHDR_INSTALL := 1
+ include ../lib.mk
+ 
 -- 
-2.21.0
+2.17.1
 
