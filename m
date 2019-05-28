@@ -2,176 +2,96 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D6C582CEE2
-	for <lists+linux-kselftest@lfdr.de>; Tue, 28 May 2019 20:47:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BB8C2CF1A
+	for <lists+linux-kselftest@lfdr.de>; Tue, 28 May 2019 21:02:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726453AbfE1Src (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 28 May 2019 14:47:32 -0400
-Received: from mail-pf1-f179.google.com ([209.85.210.179]:33193 "EHLO
-        mail-pf1-f179.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728199AbfE1SrZ (ORCPT
+        id S1727454AbfE1TCY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 28 May 2019 15:02:24 -0400
+Received: from mail-pf1-f196.google.com ([209.85.210.196]:44550 "EHLO
+        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727418AbfE1TCX (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 28 May 2019 14:47:25 -0400
-Received: by mail-pf1-f179.google.com with SMTP id z28so12028247pfk.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 28 May 2019 11:47:25 -0700 (PDT)
+        Tue, 28 May 2019 15:02:23 -0400
+Received: by mail-pf1-f196.google.com with SMTP id g9so12036332pfo.11;
+        Tue, 28 May 2019 12:02:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=appneta.com; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=GEQ1n/oEBDlyMtci6j+nHwcG1xlJk5jGvn6FttMMa9I=;
-        b=nHz6brCdXv1SBf9KOaNq4ai8ItEU7CXjscWf/3mCEp9Or8drqkwYVLi3XGHxegLHs7
-         PaQMR6YE4AcPTwMGpxM0fqHz/LABU8osUQ0+t1eYJ/OiOqhjkpk40sdQrqwMHJUuXamr
-         DEwARfif1xO0sT52llKEg7onOa/HooMFn0z2Q=
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition
+         :content-transfer-encoding:user-agent;
+        bh=ZBw/tQUR3N++vfWCWRHOlyMoJfJVoXaITb7wqbYIEwU=;
+        b=SDOtLbxOfqFOsS3tfWf/NPMQ9agnoEnzEmJwhDansmY94g8VfpV+K/aK98EF0FGzOB
+         QRm5N4O9EYRfrQ054SLOZWXH0nFk2FN0ccKjRlfXwzyikmBGApI+BPcXEm9a4pfzWAm8
+         bY10bMLwoMQbG/scodaCfipQxzoWAWNMNmN7v0dqRtPzqvQ0kvA/e6MUKGF0iYgNmwHi
+         FTLhnW6VZyFouBCBr1oEt5eEX2ToFmH1hyDIT1VB7gXYC1ubI2tDzFtw4wl9sWqGDSF+
+         OWrkyyhkW5xkv8ei+mwLRNn8oooU985YF5oDGV/bSatVdgNq/47+R3q61lq4rlEHtCH9
+         A9/w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=GEQ1n/oEBDlyMtci6j+nHwcG1xlJk5jGvn6FttMMa9I=;
-        b=cT5QsJf2jg13dfkN25L6qtDZL+sf2zxfWlPpFE+LDMW4CkLL22DZjE5ikL2B15nIAm
-         yi1TZ4AzY4u0QVw5wMv4FUB/HJikTsQysMBR7J873CbJ1sQO7UrFuLs01LSDxlYy01iQ
-         4rVvVUs9vuavG7Qht0DJ4c/jaIQyREixa4mOX6RwJJr5CRCx6/V+l+VgisOvk0wGXnZP
-         agvQZACazDwKchHDsCoSsYICsV6hMedRHbjfTbTPxt5K8GxEojJl/moLNUTGEnk5mdH2
-         0QAFOXdCHhIOv6gx75GnPO4MMq6buBbbdEBWE8wW/cS7hm0a2iKZzvhzgOr8e2mcaBMK
-         aAgA==
-X-Gm-Message-State: APjAAAVzoWEOT6wxh1Do5CXL5Z8kuY8U3KRuuRGq4FNwIVpLYdXulIkb
-        ZNpY4XPXBHVbL9KAMyYQdlgtdQ==
-X-Google-Smtp-Source: APXvYqwpEQ4jyPsyWGKKc/+WwpmgAnxiutsae8V7JtWRZWdcxcAezFCLp8r5bP3IT9KQQQVPleqdOw==
-X-Received: by 2002:a17:90a:21ce:: with SMTP id q72mr7372750pjc.3.1559069244681;
-        Tue, 28 May 2019 11:47:24 -0700 (PDT)
-Received: from linux-net-fred.jaalam.net ([2001:4958:15a0:24:5054:ff:fecb:7a95])
-        by smtp.googlemail.com with ESMTPSA id m6sm3323766pjl.18.2019.05.28.11.47.23
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 28 May 2019 11:47:24 -0700 (PDT)
-From:   Fred Klassen <fklassen@appneta.com>
-To:     "David S. Miller" <davem@davemloft.net>,
-        Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Willem de Bruijn <willemb@google.com>
-Cc:     Fred Klassen <fklassen@appneta.com>
-Subject: [PATCH net-next v2 3/3] net/udpgso_bench.sh test fails on error
-Date:   Tue, 28 May 2019 11:47:08 -0700
-Message-Id: <20190528184708.16516-4-fklassen@appneta.com>
-X-Mailer: git-send-email 2.11.0
-In-Reply-To: <20190528184708.16516-1-fklassen@appneta.com>
-References: <20190528184708.16516-1-fklassen@appneta.com>
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition:content-transfer-encoding:user-agent;
+        bh=ZBw/tQUR3N++vfWCWRHOlyMoJfJVoXaITb7wqbYIEwU=;
+        b=FtEdkp+u73PEfx9QeYUSn85egtAvBM6iAgUZF9kahvjYJlqMdwgdAKD3XHEYgyVxTP
+         L22SJN3WzLIEfLvnU6QtC4FWRGI2OWSbdI+0jS9JLXjB84dchykvagUO/0WRkBhlE+Z4
+         iR+I8c2x+JrMWms7VafAYfrj5m0I1e+ZTzIh0G7ENZGZW3Xosi8TenqNbfMByW6tEmN0
+         Ns3Ix7KXVTW/Zvm2oTs/VUxxM3eRQOE3FcgFEHPiPKvCp8cTaFnFFYg5MV07w8NWI5ys
+         64ZPdq+q0Hq8tAq8z6vCzzTHG9o9uva+3fIdrF6eBg+QI6WobiVHPx9AcbmJFy84U86X
+         IWfw==
+X-Gm-Message-State: APjAAAUK4zWHHG7hdulPet872YoCG9u/55Lphl6a9xWYKWZnObjzRG5H
+        aJ5DXfN44YdDU5m5Ufs30ksoxqgTToc=
+X-Google-Smtp-Source: APXvYqxAa+2eW4sDFyzdz7rQk/+G3nl/DKbvFLVCpB/Y6eqzAcCw/hbo/pUs+DOywsXNrTY3o5r0NQ==
+X-Received: by 2002:a63:6bc3:: with SMTP id g186mr122564882pgc.21.1559070141977;
+        Tue, 28 May 2019 12:02:21 -0700 (PDT)
+Received: from ip-172-31-44-144.us-west-2.compute.internal (ec2-54-186-128-88.us-west-2.compute.amazonaws.com. [54.186.128.88])
+        by smtp.gmail.com with ESMTPSA id 124sm16374430pfe.124.2019.05.28.12.02.19
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Tue, 28 May 2019 12:02:20 -0700 (PDT)
+Date:   Tue, 28 May 2019 19:02:18 +0000
+From:   Alakesh Haloi <alakesh.haloi@gmail.com>
+To:     linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Shuah Khan <shuah@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        Stanislav Fomichev <sdf@google.com>
+Subject: [PATCH bpf v2] selftests: bpf: fix compiler warning
+Message-ID: <20190528190218.GA6950@ip-172-31-44-144.us-west-2.compute.internal>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Ensure that failure on any individual test results in an overall
-failure of the test script.
+Add missing header file following compiler warning
 
-Signed-off-by: Fred Klassen <fklassen@appneta.com>
+prog_tests/flow_dissector.c: In function ‘tx_tap’:
+prog_tests/flow_dissector.c:175:9: warning: implicit declaration of function ‘writev’; did you mean ‘write’? [-Wimplicit-function-declaration]
+  return writev(fd, iov, ARRAY_SIZE(iov));
+         ^~~~~~
+         write
+
+Fixes: 0905beec9f52 ("selftests/bpf: run flow dissector tests in skb-less mode")
+Signed-off-by: Alakesh Haloi <alakesh.haloi@gmail.com>
 ---
- tools/testing/selftests/net/udpgso_bench.sh | 33 +++++++++++++++++++++++++++++
- 1 file changed, 33 insertions(+)
+ tools/testing/selftests/bpf/prog_tests/flow_dissector.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/tools/testing/selftests/net/udpgso_bench.sh b/tools/testing/selftests/net/udpgso_bench.sh
-index 89c7de97b832..3a8543b14d3f 100755
---- a/tools/testing/selftests/net/udpgso_bench.sh
-+++ b/tools/testing/selftests/net/udpgso_bench.sh
-@@ -3,6 +3,10 @@
- #
- # Run a series of udpgso benchmarks
+diff --git a/tools/testing/selftests/bpf/prog_tests/flow_dissector.c b/tools/testing/selftests/bpf/prog_tests/flow_dissector.c
+index fbd1d88a6095..c938283ac232 100644
+--- a/tools/testing/selftests/bpf/prog_tests/flow_dissector.c
++++ b/tools/testing/selftests/bpf/prog_tests/flow_dissector.c
+@@ -3,6 +3,7 @@
+ #include <error.h>
+ #include <linux/if.h>
+ #include <linux/if_tun.h>
++#include <sys/uio.h>
  
-+GREEN='\033[0;92m'
-+RED='\033[0;31m'
-+NC='\033[0m' # No Color
-+
- wake_children() {
- 	local -r jobs="$(jobs -p)"
- 
-@@ -29,59 +33,88 @@ run_in_netns() {
- 
- run_udp() {
- 	local -r args=$@
-+	local errors=0
- 
- 	echo "udp"
- 	run_in_netns ${args}
-+	errors=$(( $errors + $? ))
- 
- 	echo "udp gso"
- 	run_in_netns ${args} -S 0
-+	errors=$(( $errors + $? ))
- 
- 	echo "udp gso zerocopy"
- 	run_in_netns ${args} -S 0 -z
-+	errors=$(( $errors + $? ))
- 
- 	echo "udp gso timestamp"
- 	run_in_netns ${args} -S 0 -T
-+	errors=$(( $errors + $? ))
- 
- 	echo "udp gso zerocopy audit"
- 	run_in_netns ${args} -S 0 -z -a
-+	errors=$(( $errors + $? ))
- 
- 	echo "udp gso timestamp audit"
- 	run_in_netns ${args} -S 0 -T -a
-+	errors=$(( $errors + $? ))
- 
- 	echo "udp gso zerocopy timestamp audit"
- 	run_in_netns ${args} -S 0 -T -z -a
-+	errors=$(( $errors + $? ))
-+
-+	return $errors
- }
- 
- run_tcp() {
- 	local -r args=$@
-+	local errors=0
- 
- 	echo "tcp"
- 	run_in_netns ${args} -t
-+	errors=$(( $errors + $? ))
- 
- 	echo "tcp zerocopy"
- 	run_in_netns ${args} -t -z
-+	errors=$(( $errors + $? ))
- 
- 	# excluding for now because test fails intermittently
- 	#echo "tcp zerocopy audit"
- 	#run_in_netns ${args} -t -z -P -a
-+	#errors=$(( $errors + $? ))
-+
-+	return $errors
- }
- 
- run_all() {
- 	local -r core_args="-l 3"
- 	local -r ipv4_args="${core_args} -4 -D 127.0.0.1"
- 	local -r ipv6_args="${core_args} -6 -D ::1"
-+	local errors=0
- 
- 	echo "ipv4"
- 	run_tcp "${ipv4_args}"
-+	errors=$(( $errors + $? ))
- 	run_udp "${ipv4_args}"
-+	errors=$(( $errors + $? ))
- 
- 	echo "ipv6"
- 	run_tcp "${ipv4_args}"
-+	errors=$(( $errors + $? ))
- 	run_udp "${ipv6_args}"
-+	errors=$(( $errors + $? ))
-+
-+	return $errors
- }
- 
- if [[ $# -eq 0 ]]; then
- 	run_all
-+	if [ $? -ne 0 ]; then
-+		echo -e "$(basename $0): ${RED}FAIL${NC}"
-+		exit 1
-+	fi
-+
-+	echo -e "$(basename $0): ${GREEN}PASS${NC}"
- elif [[ $1 == "__subprocess" ]]; then
- 	shift
- 	run_one $@
+ #define CHECK_FLOW_KEYS(desc, got, expected)				\
+ 	CHECK_ATTR(memcmp(&got, &expected, sizeof(got)) != 0,		\
 -- 
-2.11.0
+2.17.1
 
