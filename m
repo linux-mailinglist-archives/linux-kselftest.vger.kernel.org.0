@@ -2,88 +2,86 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D9CE02C64A
-	for <lists+linux-kselftest@lfdr.de>; Tue, 28 May 2019 14:18:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C4922C70D
+	for <lists+linux-kselftest@lfdr.de>; Tue, 28 May 2019 14:54:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726824AbfE1MSY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 28 May 2019 08:18:24 -0400
-Received: from mail-wr1-f66.google.com ([209.85.221.66]:34724 "EHLO
-        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726728AbfE1MSY (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 28 May 2019 08:18:24 -0400
-Received: by mail-wr1-f66.google.com with SMTP id f8so20011910wrt.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 28 May 2019 05:18:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id;
-        bh=StOKsWACByKGqHzXp4FwgPPs4TBih3Hh4Otp9dEioXQ=;
-        b=cISi5D/BDT6QEd3pB7cEByl5UMKich5g0dhMV5zp+S1wRvW/9/hXT5QU+C7GlvJ57B
-         xWDvf24PPceOpiPr7cRaSVU/q+oape2q8uZWOqpGEuo/R8KjGgdOwyBIaq/3kLzrKGGQ
-         whNzHxCKgpw3k9Bh7KWqFXFTuqDxAXd4+SWB3g8dCSuqhSOwtrGWVPzkV+7cEGDk/ZZx
-         Qf5A4jM5i2czqnw+/DcXANeWnegExr2C3sL3q8YXaaIYTnXTT3jJkIB4iQSlHqYbgJW5
-         JyXosmF0woChkEomP+Xq/caATuzuSHa/K9EglxCdWdUK/tA62Nl0RV+nmX3u1KqzRy1f
-         2ABA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=StOKsWACByKGqHzXp4FwgPPs4TBih3Hh4Otp9dEioXQ=;
-        b=SFuF68fJiP2Q1rmHprHD6p7bwrAapD0AAYHVioDyR85dBwinflmH04WGtPeqe7bQ7T
-         l+6LNWZY5PgctiCS6VSkeaFj1BX5kJgzoqgL42QTbrTrNsVWZx2gWxEj3Cg4sPC8ehiP
-         rRPbjamqjD4brKeOiDRMMxfUgFZM5wyGHAud35uTDIdoXLpGnp6C2N4NRZG4Rs7YJG24
-         lGwvr7FWSwCduyKEoZ/NKXE8LV/Bkp7oObn9MwZaLnhHGmnnlTemDDVZplJSGYSZDheM
-         nERQph7XRVG9Gv7OVNgjgmKSMcjrfREiJUypDR6O4j7FLSqJ57aLubW6fPWZP83kVcAC
-         SuJw==
-X-Gm-Message-State: APjAAAWbxFWeOqm6xpZa5qId30Afh2RwvEOc0NnESGXhc9O3CcqOEF8r
-        Xu2NigGpWOfq9Y6yqM75RjW3Bluuvr1JPw==
-X-Google-Smtp-Source: APXvYqw4D2nRhr/GsOd9BVIb+ZRg2p/b0ikisyJ/0WIX5FS1GpmYbiNUYamB1tw39uHeQqUu2AYMoQ==
-X-Received: by 2002:adf:cd8c:: with SMTP id q12mr4775760wrj.103.1559045902189;
-        Tue, 28 May 2019 05:18:22 -0700 (PDT)
-Received: from hackbox2.linaro.org ([81.128.185.34])
-        by smtp.gmail.com with ESMTPSA id f65sm2969853wmg.45.2019.05.28.05.18.21
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 28 May 2019 05:18:21 -0700 (PDT)
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-To:     linux-kselftest@vger.kernel.org
-Cc:     urezki@gmail.com, shuah@kernel.org, keescook@chromium.org,
-        willy@infradead.org, mhocko@suse.com,
-        oleksiy.avramchenko@sonymobile.com, linux-kernel@vger.kernel.org,
-        Naresh Kamboju <naresh.kamboju@linaro.org>
-Subject: [PATCH] selftests: vm: install test_vmalloc.sh for run_vmtests
-Date:   Tue, 28 May 2019 13:18:09 +0100
-Message-Id: <20190528121809.29389-1-naresh.kamboju@linaro.org>
-X-Mailer: git-send-email 2.17.1
+        id S1727104AbfE1Mxt (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 28 May 2019 08:53:49 -0400
+Received: from mx1.redhat.com ([209.132.183.28]:54224 "EHLO mx1.redhat.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726620AbfE1Mxt (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 28 May 2019 08:53:49 -0400
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mx1.redhat.com (Postfix) with ESMTPS id 84CE8A3B6C;
+        Tue, 28 May 2019 12:53:49 +0000 (UTC)
+Received: from gondolin (dhcp-192-222.str.redhat.com [10.33.192.222])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 85B2B1972C;
+        Tue, 28 May 2019 12:53:47 +0000 (UTC)
+Date:   Tue, 28 May 2019 14:53:44 +0200
+From:   Cornelia Huck <cohuck@redhat.com>
+To:     Christian Borntraeger <borntraeger@de.ibm.com>
+Cc:     Janosch Frank <frankja@linux.ibm.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Radim =?UTF-8?B?S3LEjW3DocWZ?= <rkrcmar@redhat.com>,
+        Thomas Huth <thuth@redhat.com>, kvm@vger.kernel.org,
+        Shuah Khan <shuah@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Andrew Jones <drjones@redhat.com>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-s390@vger.kernel.org
+Subject: Re:  [PATCH 8/9] KVM: s390: Do not report unusabled IDs via
+ KVM_CAP_MAX_VCPU_ID
+Message-ID: <20190528145344.42fe6bc5.cohuck@redhat.com>
+In-Reply-To: <1deb73ac-9589-89cb-9a9b-f9957584733e@de.ibm.com>
+References: <20190523164309.13345-1-thuth@redhat.com>
+        <20190523164309.13345-9-thuth@redhat.com>
+        <1deb73ac-9589-89cb-9a9b-f9957584733e@de.ibm.com>
+Organization: Red Hat GmbH
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
+X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.30]); Tue, 28 May 2019 12:53:49 +0000 (UTC)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add test_vmalloc.sh to TEST_FILES to make sure it gets installed for
-run_vmtests.
+On Tue, 28 May 2019 13:00:30 +0200
+Christian Borntraeger <borntraeger@de.ibm.com> wrote:
 
-Fixed below error:
-./run_vmtests: line 217: ./test_vmalloc.sh: No such file or directory
+> Paolo, Radim,
+> 
+> would you consider this patch (or the full series) as 5.2 material or 5.3 material?
 
-Tested with: make TARGETS=vm install INSTALL_PATH=$PWD/x
+FWIW, I'd consider this patch 5.2 material, as we're currently relaying
+wrong values to userspace.
 
-Signed-off-by: Naresh Kamboju <naresh.kamboju@linaro.org>
----
- tools/testing/selftests/vm/Makefile | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/tools/testing/selftests/vm/Makefile b/tools/testing/selftests/vm/Makefile
-index e13eb6cc8901..05306c58ff9f 100644
---- a/tools/testing/selftests/vm/Makefile
-+++ b/tools/testing/selftests/vm/Makefile
-@@ -25,6 +25,8 @@ TEST_GEN_FILES += virtual_address_range
- 
- TEST_PROGS := run_vmtests
- 
-+TEST_FILES := test_vmalloc.sh
-+
- KSFT_KHDR_INSTALL := 1
- include ../lib.mk
- 
--- 
-2.17.1
-
+> 
+> 
+> On 23.05.19 18:43, Thomas Huth wrote:
+> > KVM_CAP_MAX_VCPU_ID is currently always reporting KVM_MAX_VCPU_ID on all
+> > architectures. However, on s390x, the amount of usable CPUs is determined
+> > during runtime - it is depending on the features of the machine the code
+> > is running on. Since we are using the vcpu_id as an index into the SCA
+> > structures that are defined by the hardware (see e.g. the sca_add_vcpu()
+> > function), it is not only the amount of CPUs that is limited by the hard-
+> > ware, but also the range of IDs that we can use.
+> > Thus KVM_CAP_MAX_VCPU_ID must be determined during runtime on s390x, too.
+> > So the handling of KVM_CAP_MAX_VCPU_ID has to be moved from the common
+> > code into the architecture specific code, and on s390x we have to return
+> > the same value here as for KVM_CAP_MAX_VCPUS.
+> > This problem has been discovered with the kvm_create_max_vcpus selftest.
+> > With this change applied, the selftest now passes on s390x, too.
+> > 
+> > Signed-off-by: Thomas Huth <thuth@redhat.com>
+> > ---
+> >  arch/mips/kvm/mips.c       | 3 +++
+> >  arch/powerpc/kvm/powerpc.c | 3 +++
+> >  arch/s390/kvm/kvm-s390.c   | 1 +
+> >  arch/x86/kvm/x86.c         | 3 +++
+> >  virt/kvm/arm/arm.c         | 3 +++
+> >  virt/kvm/kvm_main.c        | 2 --
+> >  6 files changed, 13 insertions(+), 2 deletions(-)
