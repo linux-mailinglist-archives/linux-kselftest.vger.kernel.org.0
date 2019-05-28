@@ -2,104 +2,70 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1436B2CE27
-	for <lists+linux-kselftest@lfdr.de>; Tue, 28 May 2019 20:03:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FD192CED6
+	for <lists+linux-kselftest@lfdr.de>; Tue, 28 May 2019 20:44:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727270AbfE1SDG (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 28 May 2019 14:03:06 -0400
-Received: from mail-lf1-f65.google.com ([209.85.167.65]:39155 "EHLO
-        mail-lf1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726576AbfE1SDG (ORCPT
+        id S1727041AbfE1Son (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 28 May 2019 14:44:43 -0400
+Received: from mail-pl1-f182.google.com ([209.85.214.182]:36888 "EHLO
+        mail-pl1-f182.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726813AbfE1Son (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 28 May 2019 14:03:06 -0400
-Received: by mail-lf1-f65.google.com with SMTP id f1so15305865lfl.6;
-        Tue, 28 May 2019 11:03:05 -0700 (PDT)
+        Tue, 28 May 2019 14:44:43 -0400
+Received: by mail-pl1-f182.google.com with SMTP id p15so8711359pll.4
+        for <linux-kselftest@vger.kernel.org>; Tue, 28 May 2019 11:44:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:date:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=wfGXrN4EQ5suIjo/YRXyzyfXioxjZfnHxqzJZSsYcQ0=;
-        b=COeg1GNYb9LEdxwJHJOB0zvMn0apyp+YCV73tVNcFrSnuolMa4SG59OVTMLBH0eucI
-         sHjlc9MUF7rT5yXo6iIl1tqMdGxrokqMlfuXpifi7kz+bfgJMiwp+XnFDzaw1wBfktOM
-         6udam2tBLuW7M9KGHhBy7+5tPwhpW3W7D6CG8CGk5vS7gG3ymvlB7ZKTuMgh6TOdsYAD
-         2S7yimcjQYIFNkRpJJFThZ0xz7zXX19/n5IrlHSCYrHaJGmOI8HftK4TSd6Gonv7kLBI
-         MrJLGAjB8Ic2t8xDfgAt7xG3/3ABgsR4kdwqwGexDfj6nN+wi1suOLAzlWnhBmSncC22
-         HMyA==
+        d=appneta.com; s=google;
+        h=from:to:cc:subject:date:message-id;
+        bh=DFjPQf88/WEdwbAZuIhMdfy4wl7j7rHm9z/e0KQ/ick=;
+        b=M7uebHrMZD2HFYCwXvvZYPGRo6TZmmPcaT61c1V+suPKNemNiMOv3XkQNEEEpt6Chc
+         eJmV8ECUTE/nN2/z+7ayAwjyab9hS2gqTwmwbAAsHRBRLncIXHaj69WqAnInVSjftf9k
+         Fdw+bSlBm5idQeiAkvrhLLc3PHUusTXgewlqE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:date:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=wfGXrN4EQ5suIjo/YRXyzyfXioxjZfnHxqzJZSsYcQ0=;
-        b=by4roPtIhAPWptmme7hP9sFKqWlKgS/podYFFPC9SwW73sPrwhvRZseX1kpOksk6Cc
-         yPtPz9TnuXMW/K8V1unXlA/3Uu47nIrFpXOOzbNlhje1sdsBJz1Cm3f59dSXpyULvVH9
-         TQi1l9lmycU5Yn2weLqIYD/8KEQMmLKs6yBdt7lpCDLEPy6XgSQSt+vB1kJWFS4SCeTl
-         IsE/3lrHSMVfA00wZSnDMisCdoQh4igFQw4J4Ad2dNa8A519aI0hTVL2Mh01Hv3ftJsX
-         7Pf4NFXoOXnax8GNVA71yhCxTmj3x4Tmf+GHnKj5PpMK0kYP9W7UzyBD4BXCUScCBvPS
-         JTAg==
-X-Gm-Message-State: APjAAAU/qmd+WSyXx3rcNLZQadU2xlrCPyaG6r99oiJ9BsovZg62Mh7g
-        cFnsseFUoA/x6J4tqYWOOAE=
-X-Google-Smtp-Source: APXvYqwdhl+n24uT5uwqOJG8J15RrNkuRRWcfucy3b/03fihY7juOf7oWPnTKlykra5mOVZHyfTOrA==
-X-Received: by 2002:ac2:528f:: with SMTP id q15mr45362716lfm.37.1559066584506;
-        Tue, 28 May 2019 11:03:04 -0700 (PDT)
-Received: from pc636 ([37.139.158.167])
-        by smtp.gmail.com with ESMTPSA id f20sm3108341ljj.96.2019.05.28.11.03.02
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Tue, 28 May 2019 11:03:03 -0700 (PDT)
-From:   Uladzislau Rezki <urezki@gmail.com>
-X-Google-Original-From: Uladzislau Rezki <urezki@pc636>
-Date:   Tue, 28 May 2019 20:02:56 +0200
-To:     Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc:     linux-kselftest@vger.kernel.org, urezki@gmail.com,
-        shuah@kernel.org, keescook@chromium.org, willy@infradead.org,
-        mhocko@suse.com, oleksiy.avramchenko@sonymobile.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] selftests: vm: install test_vmalloc.sh for run_vmtests
-Message-ID: <20190528180256.vwp23xoz7fow6huu@pc636>
-References: <20190528121809.29389-1-naresh.kamboju@linaro.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190528121809.29389-1-naresh.kamboju@linaro.org>
-User-Agent: NeoMutt/20170113 (1.7.2)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=DFjPQf88/WEdwbAZuIhMdfy4wl7j7rHm9z/e0KQ/ick=;
+        b=lETjSKgEmO1RJAlEZptAycSPYugM4wQov82Re40BHrmn5zffBF+VHKx7qttr+dL666
+         l9WYTUUJ6hE+d89QFvPfQhttK5sW5xw3bynXit9OlvnABIHiT1RHVnmDkk7y7G3FYdI/
+         h32BPEOZpxZRDw2+TXn2C1s2fNPLGBiJtUBPPQkBEFcEkWCmhmxasp0WayDsn5eaeZ6D
+         NRBzGvhA//G7+ZLCehYAu3cuENcIBJP02dM1O/O+qxDU2qz6scfDBYVbK6IpO4VvkK2Q
+         QXOa418UlrRzUX6B27Uegmi/GbZs1gZlrtnuTRxpw2wWyN4lQ+Bi+anMAk0hIy4WyUMO
+         R/Pw==
+X-Gm-Message-State: APjAAAU57gFMlVRoBtoN0K2G5T+9nzq5lzw7aiZorVLDl7lVWe08qDLc
+        vEV/ac1li5JW6FfOMSrA1ZfIRQ==
+X-Google-Smtp-Source: APXvYqwK8CwFA8GFX8OZgMGUz/uu9etWgEoQtN2jsuFurBEAh1VqlXKuwiXif0AXzRc+yEI1bFtYaw==
+X-Received: by 2002:a17:902:8209:: with SMTP id x9mr9499883pln.327.1559069082854;
+        Tue, 28 May 2019 11:44:42 -0700 (PDT)
+Received: from linux-net-fred.jaalam.net ([2001:4958:15a0:24:5054:ff:fecb:7a95])
+        by smtp.googlemail.com with ESMTPSA id j72sm3534085pje.12.2019.05.28.11.44.41
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 28 May 2019 11:44:42 -0700 (PDT)
+From:   Fred Klassen <fklassen@appneta.com>
+To:     "David S. Miller" <davem@davemloft.net>,
+        Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Willem de Bruijn <willemb@google.com>
+Cc:     Fred Klassen <fklassen@appneta.com>
+Subject: [PATCH net-next v3 0/1] Allow TX timestamp with UDP GSO
+Date:   Tue, 28 May 2019 11:44:14 -0700
+Message-Id: <20190528184415.16020-1-fklassen@appneta.com>
+X-Mailer: git-send-email 2.11.0
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, May 28, 2019 at 01:18:09PM +0100, Naresh Kamboju wrote:
-> Add test_vmalloc.sh to TEST_FILES to make sure it gets installed for
-> run_vmtests.
-> 
-> Fixed below error:
-> ./run_vmtests: line 217: ./test_vmalloc.sh: No such file or directory
-> 
-> Tested with: make TARGETS=vm install INSTALL_PATH=$PWD/x
-> 
-> Signed-off-by: Naresh Kamboju <naresh.kamboju@linaro.org>
-> ---
->  tools/testing/selftests/vm/Makefile | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/tools/testing/selftests/vm/Makefile b/tools/testing/selftests/vm/Makefile
-> index e13eb6cc8901..05306c58ff9f 100644
-> --- a/tools/testing/selftests/vm/Makefile
-> +++ b/tools/testing/selftests/vm/Makefile
-> @@ -25,6 +25,8 @@ TEST_GEN_FILES += virtual_address_range
->  
->  TEST_PROGS := run_vmtests
->  
-> +TEST_FILES := test_vmalloc.sh
-> +
->  KSFT_KHDR_INSTALL := 1
->  include ../lib.mk
->  
-> -- 
-> 2.17.1
-> 
-I missed that point during integrating with selftests.
-Anyway the patch looks good to me.
+Fixes an issue where TX Timestamps are not arriving on the error queue
+when UDP_SEGMENT CMSG type is combined with CMSG type SO_TIMESTAMPING.
 
-Thank you for fixing it!
+Fred Klassen (1):
+  net/udp_gso: Allow TX timestamp with UDP GSO
 
---
-Vlad Rezki
+ net/ipv4/udp_offload.c | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+-- 
+2.11.0
+
