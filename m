@@ -2,112 +2,171 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D4F3B2CC5E
-	for <lists+linux-kselftest@lfdr.de>; Tue, 28 May 2019 18:45:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D640D2CCC0
+	for <lists+linux-kselftest@lfdr.de>; Tue, 28 May 2019 18:57:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727090AbfE1Qp0 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 28 May 2019 12:45:26 -0400
-Received: from mail-qk1-f196.google.com ([209.85.222.196]:44519 "EHLO
-        mail-qk1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726371AbfE1Qp0 (ORCPT
+        id S1727137AbfE1Q5i (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 28 May 2019 12:57:38 -0400
+Received: from mail-pg1-f193.google.com ([209.85.215.193]:46232 "EHLO
+        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726982AbfE1Q5i (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 28 May 2019 12:45:26 -0400
-Received: by mail-qk1-f196.google.com with SMTP id w187so13375278qkb.11;
-        Tue, 28 May 2019 09:45:25 -0700 (PDT)
+        Tue, 28 May 2019 12:57:38 -0400
+Received: by mail-pg1-f193.google.com with SMTP id v9so4945655pgr.13
+        for <linux-kselftest@vger.kernel.org>; Tue, 28 May 2019 09:57:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=PFmaYpz+7586n8fgFzVofvO6konpWOrSa5dCBt2QReQ=;
-        b=anrNjBRsknHzWPik+xWHWpC52AhNn4Rm17SGUku1No9v1MdLTVVQff/jGHtbgyaFcZ
-         podY2XyhqOCFaXvyIYt3b9GidZFmCrUWmr9z2iT82xm/riYk4C9Lsn7cOw6C7MLcc354
-         /Qou5L1D8DfnkaxFOPD84RioSEwIVubPgBerMzl7MWT8fMYGAjtPA0HoSo6znBDp1U47
-         CkqxVrMob3azCegSEjZo5HjErJXQslG7YY/GvYs64/lAks8pKiupHqFYUAVOXA+NQmge
-         g+8FFc6Eu0MS7B9DkClx73FNHQvCy6Afv9WPQN1EckuEi9WLX9gs9WtTFcjXKZi65eeM
-         UZTw==
+        d=appneta.com; s=google;
+        h=mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=lFicemnrxZJjOmAogTHnQIM2MtSG5wRpTZojge/oE6s=;
+        b=UUNfmVG+dl4dsV8GCJXdvUnq74HpLPc5cl3YuUVk4GPLntZVTxPBjZfWYIkjiOzwvi
+         zs5qeIrC1fIXH1W7PYyqTjICOngvh34WOuANDVsZgYdU9IuYMoqzEeoEEKXYIVMaV5Ui
+         f99nhgBOAcoT4Pge69hhdYt4kivvKfZ78Qnoo=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=PFmaYpz+7586n8fgFzVofvO6konpWOrSa5dCBt2QReQ=;
-        b=mEmcCUAnQrndJYj9gucHbhjPDMaTyD43pQ+CUTh3vkLv26s0sc9Q6p7EiTDkYBzxPB
-         udqIibC7qtEFumNSeNOYydX4VFqGAnBafB9oxsJY46ll8npCL+BVRLXnFhV9H4eDtrgH
-         lCv/zpLyLlD+AdaVmfTOnubglqGO0DKcnwl4vjqgQYPm6Z/btl14ZK8hRvS5gkPDkRLy
-         wtNH/O4zsg/oxd6ynszRBGYS1ic8hVpPYsu754sP55F3WOWO564QYDlUZLqN09LxsDB8
-         gZRwWUBKSobf2bH6zlbm/Ir7T2zaaPYotTM8qSiB5bj0cdPl00GfRFg2tjoe6MH/dCD1
-         IYDA==
-X-Gm-Message-State: APjAAAVQG6Fon+70dRiEQeQmF4yaH5etpfm1hleX8CmLB9FEiTqvJBM3
-        9/lkHD1hTmrcwqYqhSX9Ln/6GvurzqKGtrOBAOw=
-X-Google-Smtp-Source: APXvYqwxnAJXnfzy3oJ7sLlXZqQixsfQ+YZO+6KnyeoazRF9rZ1t5e8A0gFtHjIbg3A1bXf4IjD1rHcMcfCt89SykjQ=
-X-Received: by 2002:ae9:ee0b:: with SMTP id i11mr12264495qkg.96.1559061925163;
- Tue, 28 May 2019 09:45:25 -0700 (PDT)
-MIME-Version: 1.0
-References: <20190524003038.GA69487@ip-172-31-44-144.us-west-2.compute.internal>
-In-Reply-To: <20190524003038.GA69487@ip-172-31-44-144.us-west-2.compute.internal>
-From:   Song Liu <liu.song.a23@gmail.com>
-Date:   Tue, 28 May 2019 09:45:14 -0700
-Message-ID: <CAPhsuW7H=w_UMyu5Q5p5+MGogkQ7+7X7sS=vJTiR=+JJy0KuTg@mail.gmail.com>
-Subject: Re: [PATCH] selftests: bpf: fix compiler warning
-To:     Alakesh Haloi <alakesh.haloi@gmail.com>
-Cc:     Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        Stanislav Fomichev <sdf@google.com>,
+        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
+         :content-transfer-encoding:message-id:references:to;
+        bh=lFicemnrxZJjOmAogTHnQIM2MtSG5wRpTZojge/oE6s=;
+        b=WJPx7wnkjdPANJKSxECeYGBYzgoirzY5WNkuH2O+HDmoh5PLnO/A9MICsY0DSzJOv7
+         SlffIrnGuAZ6I6CEErYjZkWWW+8bK1+CIoIZ2u/pnd5LLlL/cDoRGhLQE03k+eoUSwNm
+         f0FB+E9lNoSgOZ9h76zWvvf+Jo5zAiOmt4p/RJsgD/3DtolrpB1N03NsGvpjb996kK55
+         AsSj+ljC45P1y6Y2YOltDFDQrfzS/eQcAMzSkTCp2jBDt+vNc94Ca42ks27WDoTj3knN
+         vXVcZQa4NbAVqUTBRuKVQop6Aw8pGV0xd2T86G3NfPG1IKtG3LTLA93/Ql9AzXoKJEPX
+         0ydw==
+X-Gm-Message-State: APjAAAWtD0WTwAcN3c6y1vlwgASMr/bfu1n6lu4A7Su0ymUoVCwnCbcZ
+        HlTXOxBVZhMTZZxLO3vCGhKDeE5GAcw=
+X-Google-Smtp-Source: APXvYqx5jjVcgp8A0NWp+9txe3Qup8abnAwaoeeODau1vlVKM4m9vzUFxHigDyzUk6yBCJxrG4Y9mA==
+X-Received: by 2002:a62:4dc5:: with SMTP id a188mr93983392pfb.8.1559062657044;
+        Tue, 28 May 2019 09:57:37 -0700 (PDT)
+Received: from jltm109.jaalam.net (vancouver-a.appneta.com. [209.139.228.33])
+        by smtp.gmail.com with ESMTPSA id t5sm10996695pgh.46.2019.05.28.09.57.35
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 28 May 2019 09:57:36 -0700 (PDT)
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.11\))
+Subject: Re: [PATCH net 4/4] net/udpgso_bench_tx: audit error queue
+From:   Fred Klassen <fklassen@appneta.com>
+In-Reply-To: <CAF=yD-Le0XKCfyDBvHmBRVqkwn1D6ZoG=12gss5T62VcN5+1_w@mail.gmail.com>
+Date:   Tue, 28 May 2019 09:57:35 -0700
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
         linux-kselftest@vger.kernel.org,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Willem de Bruijn <willemb@google.com>
 Content-Transfer-Encoding: quoted-printable
+Message-Id: <9811659B-6D5A-4C4F-9CF8-735E9CA6DE4E@appneta.com>
+References: <20190523210651.80902-1-fklassen@appneta.com>
+ <20190523210651.80902-5-fklassen@appneta.com>
+ <CAF=yD-KBNLr5KY-YQ1KMmZGCpYNefSJKaJkZNOwd8nRiedpQtA@mail.gmail.com>
+ <879E5DA6-3A4F-4CE1-9DA5-480EE30109DE@appneta.com>
+ <CAF=yD-LQT7=4vvMwMa96_SFuUd5GywMoae7hGi9n6rQeuhhxuQ@mail.gmail.com>
+ <5BB184F2-6C20-416B-B2AF-A678400CFE3E@appneta.com>
+ <CAF=yD-+6CRyqL6Fq5y2zpw5nnDitYC7G1c2JAVHZTjyw68DYJg@mail.gmail.com>
+ <903DEC70-845B-4C4B-911D-2F203C191C27@appneta.com>
+ <CAF=yD-Le0XKCfyDBvHmBRVqkwn1D6ZoG=12gss5T62VcN5+1_w@mail.gmail.com>
+To:     Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+X-Mailer: Apple Mail (2.3445.104.11)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, May 23, 2019 at 5:31 PM Alakesh Haloi <alakesh.haloi@gmail.com> wro=
-te:
->
-> Add missing header file following compiler warning
->
-> prog_tests/flow_dissector.c: In function =E2=80=98tx_tap=E2=80=99:
-> prog_tests/flow_dissector.c:175:9: warning: implicit declaration of funct=
-ion =E2=80=98writev=E2=80=99; did you mean =E2=80=98write=E2=80=99? [-Wimpl=
-icit-function-declaration]
->   return writev(fd, iov, ARRAY_SIZE(iov));
->          ^~~~~~
->          write
->
-> Signed-off-by: Alakesh Haloi <alakesh.haloi@gmail.com>
-
-The patch looks good. Please add a "Fixes" tag, so the fix
-can be back ported properly.
-
-Also, please specify which tree the patch should be applied
-with [PATCH bpf] or [PATCH bpf-next].
-
-Thanks,
-Song
 
 
+> On May 28, 2019, at 8:08 AM, Willem de Bruijn =
+<willemdebruijn.kernel@gmail.com> wrote:
+>=20
+
+I will push up latest patches soon.
+
+I did some testing and discovered that only TCP audit tests failed. They
+failed much less often when enabling poll.  Once in about 20 runs
+still failed. Therefore I commented out the TCP audit tests.
+
+As for the other tests, this is what I got with poll() disabled=E2=80=A6
+
+udp gso zerocopy timestamp audit
+udp rx:   1611 MB/s  1148129 calls/s
+udp tx:   1659 MB/s    28146 calls/s  28146 msg/s
+udp rx:   1686 MB/s  1201494 calls/s
+udp tx:   1685 MB/s    28579 calls/s  28579 msg/s
+udp rx:   1685 MB/s  1200402 calls/s
+udp tx:   1683 MB/s    28552 calls/s  28552 msg/s
+Summary over 3.000 seconds...
+sum udp tx:   1716 MB/s      85277 calls (28425/s)      85277 msgs =
+(28425/s)
+Tx Timestamps:               85277 received                 0 errors
+Zerocopy acks:               85277 received                 0 errors
+
+Here you see that with poll() enabled, it is a bit slower, so I don=E2=80=99=
+t have it
+enabled in udpgso_bench.sh =E2=80=A6
+
+udp gso zerocopy timestamp audit
+udp rx:   1591 MB/s  1133945 calls/s
+udp tx:   1613 MB/s    27358 calls/s  27358 msg/s
+udp rx:   1644 MB/s  1171674 calls/s
+udp tx:   1643 MB/s    27869 calls/s  27869 msg/s
+udp rx:   1643 MB/s  1170666 calls/s
+udp tx:   1641 MB/s    27845 calls/s  27845 msg/s
+Summary over 3.000 seconds...
+sum udp tx:   1671 MB/s      83072 calls (27690/s)      83072 msgs =
+(27690/s)
+Tx Timestamps:               83072 received                 0 errors
+Zerocopy acks:               83072 received                 0 errors
 
 
-> ---
->  tools/testing/selftests/bpf/prog_tests/flow_dissector.c | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/tools/testing/selftests/bpf/prog_tests/flow_dissector.c b/to=
-ols/testing/selftests/bpf/prog_tests/flow_dissector.c
-> index fbd1d88a6095..c938283ac232 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/flow_dissector.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/flow_dissector.c
-> @@ -3,6 +3,7 @@
->  #include <error.h>
->  #include <linux/if.h>
->  #include <linux/if_tun.h>
-> +#include <sys/uio.h>
->
->  #define CHECK_FLOW_KEYS(desc, got, expected)                           \
->         CHECK_ATTR(memcmp(&got, &expected, sizeof(got)) !=3D 0,          =
- \
-> --
-> 2.17.1
->
+You may be interested that I reduced test lengths from 4 to 3 seconds,
+but I am still getting 3 reports per test. I picked up the extra report =
+by
+changing 'if (tnow > treport)=E2=80=99 to 'if (tnow >=3D treport)=E2=80=99=
+
+
+> The only issue specific to GSO is that xmit_more can forego this
+> doorbell until the last segment. We want to complicate this logic with
+> a special case based on tx_flags. A process that cares should either
+> not use GSO, or the timestamp should be associated with the last
+> segment as I've been arguing so far.
+
+This is the area I was thinking of looking into. I=E2=80=99m not sure it =
+will work
+or that it will be too messy. It may be worth a little bit of digging to
+see if there is anything there. That will be down the road a bu
+
+>>=20
+>> I=E2=80=99ll get back to you when I have tested this more thoroughly. =
+Early results
+>> suggest that adding the -P poll() option has fixed it without any =
+appreciable
+>> performance hit. I=E2=80=99ll share raw results with you, and we can =
+make a final
+>> decision together.
+>=20
+> In the main loop? It still is peculiar that notifications appear to go
+> missing unless the process blocks waiting for them. Nothing in
+> sock_zerocopy_callback or the queueing onto the error queue should
+> cause drops, as far as I know.
+>=20
+
+Now that I know the issue is only in TCP, I can speculate that all bytes =
+are
+being reported, but done with fewer messages. It may warrant some
+investigation in case there is some kind of bug.
+
+> Indeed. Ideally even run all tests, but return error if any failed,
+> like this recent patch
+>=20
+>  selftests/bpf: fail test_tunnel.sh if subtests fail
+>  https://patchwork.ozlabs.org/patch/1105221/
+>=20
+> but that may be a lot of code churn and better left to a separate =
+patch.
+
+I like it. I have it coded up, and it seems to work well. I=E2=80=99ll =
+make a
+separate commit in the patch set so we can yank it out if you feel
+it is too much=
