@@ -2,24 +2,24 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B2962CAC3
-	for <lists+linux-kselftest@lfdr.de>; Tue, 28 May 2019 17:56:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BE922CC1E
+	for <lists+linux-kselftest@lfdr.de>; Tue, 28 May 2019 18:34:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726362AbfE1P4y (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 28 May 2019 11:56:54 -0400
-Received: from foss.arm.com ([217.140.101.70]:59854 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726313AbfE1P4y (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 28 May 2019 11:56:54 -0400
+        id S1726668AbfE1QeJ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 28 May 2019 12:34:09 -0400
+Received: from usa-sjc-mx-foss1.foss.arm.com ([217.140.101.70]:60968 "EHLO
+        foss.arm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726600AbfE1QeJ (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 28 May 2019 12:34:09 -0400
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.72.51.249])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8540E341;
-        Tue, 28 May 2019 08:56:53 -0700 (PDT)
-Received: from e103592.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.72.51.249])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C9F273F59C;
-        Tue, 28 May 2019 08:56:47 -0700 (PDT)
-Date:   Tue, 28 May 2019 16:56:45 +0100
-From:   Dave Martin <Dave.Martin@arm.com>
-To:     Catalin Marinas <catalin.marinas@arm.com>
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D37F1341;
+        Tue, 28 May 2019 09:34:08 -0700 (PDT)
+Received: from arrakis.emea.arm.com (arrakis.cambridge.arm.com [10.1.196.78])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2754A3F59C;
+        Tue, 28 May 2019 09:34:03 -0700 (PDT)
+Date:   Tue, 28 May 2019 17:34:00 +0100
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Dave Martin <Dave.Martin@arm.com>
 Cc:     Andrew Murray <andrew.murray@arm.com>,
         Mark Rutland <mark.rutland@arm.com>, kvm@vger.kernel.org,
         Christian Koenig <Christian.Koenig@amd.com>,
@@ -53,42 +53,61 @@ Cc:     Andrew Murray <andrew.murray@arm.com>,
         Luc Van Oostenryck <luc.vanoostenryck@gmail.com>
 Subject: Re: [PATCH v15 05/17] arms64: untag user pointers passed to memory
  syscalls
-Message-ID: <20190528155644.GD28398@e103592.cambridge.arm.com>
+Message-ID: <20190528163400.GE32006@arrakis.emea.arm.com>
 References: <cover.1557160186.git.andreyknvl@google.com>
  <00eb4c63fefc054e2c8d626e8fedfca11d7c2600.1557160186.git.andreyknvl@google.com>
  <20190527143719.GA59948@MBP.local>
  <20190528145411.GA709@e119886-lin.cambridge.arm.com>
  <20190528154057.GD32006@arrakis.emea.arm.com>
+ <20190528155644.GD28398@e103592.cambridge.arm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190528154057.GD32006@arrakis.emea.arm.com>
-User-Agent: Mutt/1.5.23 (2014-03-12)
+In-Reply-To: <20190528155644.GD28398@e103592.cambridge.arm.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, May 28, 2019 at 04:40:58PM +0100, Catalin Marinas wrote:
+On Tue, May 28, 2019 at 04:56:45PM +0100, Dave P Martin wrote:
+> On Tue, May 28, 2019 at 04:40:58PM +0100, Catalin Marinas wrote:
+> 
+> [...]
+> 
+> > My thoughts on allowing tags (quick look):
+> >
+> > brk - no
+> 
+> [...]
+> 
+> > mlock, mlock2, munlock - yes
+> > mmap - no (we may change this with MTE but not for TBI)
+> 
+> [...]
+> 
+> > mprotect - yes
+> 
+> I haven't following this discussion closely... what's the rationale for
+> the inconsistencies here (feel free to refer me back to the discussion
+> if it's elsewhere).
 
-[...]
+_My_ rationale (feel free to disagree) is that mmap() by default would
+not return a tagged address (ignoring MTE for now). If it gets passed a
+tagged address or a "tagged NULL" (for lack of a better name) we don't
+have clear semantics of whether the returned address should be tagged in
+this ABI relaxation. I'd rather reserve this specific behaviour if we
+overload the non-zero tag meaning of mmap() for MTE. Similar reasoning
+for mremap(), at least on the new_address argument (not entirely sure
+about old_address).
 
-> My thoughts on allowing tags (quick look):
->
-> brk - no
+munmap() should probably follow the mmap() rules.
 
-[...]
+As for brk(), I don't see why the user would need to pass a tagged
+address, we can't associate any meaning to this tag.
 
-> mlock, mlock2, munlock - yes
-> mmap - no (we may change this with MTE but not for TBI)
+For the rest, since it's likely such addresses would have been tagged by
+malloc() in user space, we should allow tagged pointers.
 
-[...]
-
-> mprotect - yes
-
-I haven't following this discussion closely... what's the rationale for
-the inconsistencies here (feel free to refer me back to the discussion
-if it's elsewhere).
-
-Cheers
----Dave
+-- 
+Catalin
