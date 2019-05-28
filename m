@@ -2,52 +2,52 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 537E92D013
-	for <lists+linux-kselftest@lfdr.de>; Tue, 28 May 2019 22:09:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20D6D2D015
+	for <lists+linux-kselftest@lfdr.de>; Tue, 28 May 2019 22:09:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727853AbfE1UIy (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 28 May 2019 16:08:54 -0400
-Received: from mail-ed1-f67.google.com ([209.85.208.67]:33515 "EHLO
-        mail-ed1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727397AbfE1UIx (ORCPT
+        id S1726994AbfE1UJq (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 28 May 2019 16:09:46 -0400
+Received: from mail-ed1-f44.google.com ([209.85.208.44]:45360 "EHLO
+        mail-ed1-f44.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726988AbfE1UJq (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 28 May 2019 16:08:53 -0400
-Received: by mail-ed1-f67.google.com with SMTP id n17so33641789edb.0;
-        Tue, 28 May 2019 13:08:52 -0700 (PDT)
+        Tue, 28 May 2019 16:09:46 -0400
+Received: by mail-ed1-f44.google.com with SMTP id g57so18751971edc.12;
+        Tue, 28 May 2019 13:09:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=SjF+86A9m1M+atbxSEPSNy8KPYRNpeEGdkrJdSTr8nM=;
-        b=f9wEmtxZnE47Uuv6AxtP9cM51UkErZL54zvMMy/BUmx+BxkEECBzxnQ9VXon4pjTpt
-         enHDRUsGhxu3L0di0HLsKzlwSiW47f/Qn9Ps4fTPJwM9CFOpw7cDwJlkdSIkdgR9Oanv
-         id6CD8Q/NlroocPbiiL6GTM9CrdodOMcK9hfEZHRwW91JwKwVH0X/6O5vZ+2bS0xU82b
-         bTzJhuzXDiRf/SmFTdP52W5aqNSTvYBPwJeHaIvQdc6VXDairEVLxHe1VDJR8XRi1Ot+
-         R5gE1QB92O7xMjQYYsdAbaOfC/YCoHtjYR2HyH9IS+Z/1m+B9r4/QPNSwWD+v+OBJGHP
-         NkoQ==
+        bh=lfHCjXdAucK32QgcRHWRo0qGiwkfsWt0JaYloVUGZf8=;
+        b=aMrOykYI9DVuCfBXVLxQVyW1/LvVXswL14cMijeWdx6z6rYgK4R+gUCF8m4QGXl3GC
+         PH2AX2SanfnRTvIcsED/auiDa8GgMJWc1HPb/GzwSeHbf9XbWEJJjCdMCBbhd1tHU5l6
+         oWFtcAnz/UppSHrWFQkMPoclKzVxPe+xPXfICEFPMTT0/zmhf+7vuCsYPO+p5HOp1DTg
+         bVPKFGkYERvF62gaAVv03CueyoCR16ooiBIHG3Cv1ZNsyogwMRLWuXvvxiaXIKEwyn2A
+         wbxe/Cf6WieOJeKpWugbNZ2uuahlrgBUrxYHBYBBqrr6S0K4TBIwbocYz2kpt6Q9pSgw
+         5gUw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=SjF+86A9m1M+atbxSEPSNy8KPYRNpeEGdkrJdSTr8nM=;
-        b=uabwGqVDQgmyukaJYvlBCDeBH1yo9t5lORtr6eUEhlCr9Jri/AE+ypysh8Mp2LM1IZ
-         qyulz+8SieHKqpZirqMLDxSfSkhiZOh1FEYBBrm8FCGQcdLcf02Z1tLwRwJwFl0bGzh6
-         dvbhDK9FnPCR4o55FJzZeKsgC3X/NzokbkpAptlqe5HG6K4V35C2quApqU2IMq7tDuFz
-         TojhKc3hir1RwKxJRWaEy9s8Gj+QatIicFXUaIcdsnuH+BSU56ucljoxCFK1QnRgeKTq
-         eRtM2zSdfC/HfKKMHo1U2Nt95n24B3W1MEWsXUQ8j/h2El3hnSNnyBAyxcI6ZwZVws5v
-         i3QA==
-X-Gm-Message-State: APjAAAVxW+5gBjuKNIBMl0Efe6pHa7JJ5VjqLuA0G+/HbvMDVpUaGGqy
-        sjVnN6g/4qeq652ihaCXA9AdRW34d1ghuYaLL4qmHA==
-X-Google-Smtp-Source: APXvYqy0WKb0Az9r06UWh1hsp9ZV8w6Gbh2+DCruvVFCH5k2vjl8gXFNRb1YNE33ezp7hciA/zW572alocjbYaWGhv8=
-X-Received: by 2002:a17:906:c82e:: with SMTP id dd14mr42804911ejb.133.1559074132185;
- Tue, 28 May 2019 13:08:52 -0700 (PDT)
+        bh=lfHCjXdAucK32QgcRHWRo0qGiwkfsWt0JaYloVUGZf8=;
+        b=NnPPU/f0afTgF1k7SvjtyAMUNqq0zdTCQznuf7KngD6Os0b845fvyVlSBiAx6rpeHd
+         HtnEKNh9dKOefOqBvY7xy23OvWcHXYJhGXW3IEq3N7qGNWlP1VQVtOzrsoaD9c+JiZkf
+         Nher+UkzaLBKKsg/FPsOz1M3FL5rYuVkg2z0dQ9kQ1q1ivJfEFejCR0OUV8QyTMbR9Va
+         i7XyZf/5+ctFUA0x2FUbt5cErf/yqvIUtS4M21/fXyIW4hakRB0oZJEriAAaxgvaFzfo
+         a/sHRUkWMKt20g51yf62RUwgVrV1rSacP+zNoIk+i3m5rEaVXenfGTzDHJVcDkfhTFi8
+         HTGA==
+X-Gm-Message-State: APjAAAVC/h2+NjjXwiLwCDMKg5ifh/XEtn8myDZ5JFoy6Bp1e76nCcxh
+        jGgZiO6k4ArZB/1rH89JxRUPDi1rGIxI24j+Hkw=
+X-Google-Smtp-Source: APXvYqzEOeZWC9L1vOMmqxVgoI1B8bDBS/QAi758qW8Lu/Q0XsVo+3caRyPLEpsaQ9+8ScyzX8Wa1c4SeLkbV4L9qVg=
+X-Received: by 2002:a17:907:397:: with SMTP id ss23mr6839098ejb.226.1559074184038;
+ Tue, 28 May 2019 13:09:44 -0700 (PDT)
 MIME-Version: 1.0
-References: <20190528184708.16516-1-fklassen@appneta.com> <20190528184708.16516-4-fklassen@appneta.com>
-In-Reply-To: <20190528184708.16516-4-fklassen@appneta.com>
+References: <20190528184708.16516-1-fklassen@appneta.com> <20190528184708.16516-3-fklassen@appneta.com>
+In-Reply-To: <20190528184708.16516-3-fklassen@appneta.com>
 From:   Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-Date:   Tue, 28 May 2019 16:08:16 -0400
-Message-ID: <CAF=yD-KVUo5ZM4wivh0iwucfRxf2wp3WtMLce2jj497uOg-LOA@mail.gmail.com>
-Subject: Re: [PATCH net-next v2 3/3] net/udpgso_bench.sh test fails on error
+Date:   Tue, 28 May 2019 16:09:07 -0400
+Message-ID: <CAF=yD-KozDxhwf1Arkbz5X_dYfZ5M40xr9hcxKGDRmeg1BOE=Q@mail.gmail.com>
+Subject: Re: [PATCH net-next v2 2/3] net/udpgso_bench.sh add UDP GSO audit tests
 To:     Fred Klassen <fklassen@appneta.com>
 Cc:     "David S. Miller" <davem@davemloft.net>,
         Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>,
@@ -63,13 +63,36 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, May 28, 2019 at 3:26 PM Fred Klassen <fklassen@appneta.com> wrote:
+On Tue, May 28, 2019 at 3:24 PM Fred Klassen <fklassen@appneta.com> wrote:
 >
-> Ensure that failure on any individual test results in an overall
-> failure of the test script.
+> Audit tests count the total number of messages sent and compares
+> with total number of CMSG received on error queue. Example:
+>
+>     udp gso zerocopy timestamp audit
+>     udp rx:   1599 MB/s  1166414 calls/s
+>     udp tx:   1615 MB/s    27395 calls/s  27395 msg/s
+>     udp rx:   1634 MB/s  1192261 calls/s
+>     udp tx:   1633 MB/s    27699 calls/s  27699 msg/s
+>     udp rx:   1633 MB/s  1191358 calls/s
+>     udp tx:   1631 MB/s    27678 calls/s  27678 msg/s
+>     Summary over 4.000 seconds...
+>     sum udp tx:   1665 MB/s      82772 calls (27590/s)      82772 msgs (27590/s)
+>     Tx Timestamps:               82772 received                 0 errors
+>     Zerocopy acks:               82772 received                 0 errors
+>
+> Errors are thrown if CMSG count does not equal send count,
+> example:
+>
+>     Summary over 4.000 seconds...
+>     sum tcp tx:   7451 MB/s     493706 calls (123426/s)     493706 msgs (123426/s)
+>     ./udpgso_bench_tx: Unexpected number of Zerocopy completions:    493706 expected    493704 received
+>
+> Also reduce individual test time from 4 to 3 seconds so that
+> overall test time does not increase significantly.
 >
 > Signed-off-by: Fred Klassen <fklassen@appneta.com>
 
 Acked-by: Willem de Bruijn <willemb@google.com>
 
-Thanks Fred.
+If respinning the series, please add a comment about adding -P to the
+tcp zerocopy test.
