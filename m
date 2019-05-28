@@ -2,114 +2,112 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E47E32C882
-	for <lists+linux-kselftest@lfdr.de>; Tue, 28 May 2019 16:14:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9F2E2C949
+	for <lists+linux-kselftest@lfdr.de>; Tue, 28 May 2019 16:54:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726797AbfE1OO7 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 28 May 2019 10:14:59 -0400
-Received: from mail-pf1-f193.google.com ([209.85.210.193]:40960 "EHLO
-        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726773AbfE1OO6 (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 28 May 2019 10:14:58 -0400
-Received: by mail-pf1-f193.google.com with SMTP id q17so6728485pfq.8
-        for <linux-kselftest@vger.kernel.org>; Tue, 28 May 2019 07:14:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=uILrnXKlYf2xjYbSzuRjxVZ/GKBRZG6iBlNh5FVzNqg=;
-        b=tL4iRhDxBHlVQ+tyr45nAjSTrWm4FGkpU9/gqgAOrFY5B7cJ7oOHLY740uFY6v9Apt
-         FqrRnmxExj3iQTQYzs/PenqdbelZVqX7ImfSm34SI3kUWnaFv2Pd1vXHqDLGJYPgxvw8
-         7KLV8hWWHlsDJ/UwTZYLqE3rqDzmSrpBL95BUyqXducEuzu32sr8cYoLi6lrm/VHbu19
-         kGodX0/6n5OKGvwKCkqnvqlMkPVgQ7D246As7ltK/sqPD0kwVjhXWCNgzf39x95m1k16
-         0eXP9QfKOUXReSvTh9f0l8fCYrSWQokxzY+jcITzAkXcdghBa76eI6mVVXYUH34oj3Ib
-         qnwQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=uILrnXKlYf2xjYbSzuRjxVZ/GKBRZG6iBlNh5FVzNqg=;
-        b=RinzmQqFE0LlY0HWn3gA72k5xhBh3pCyV9KKZR6gjHJkjAb088z/9K26HSNKfWqMAL
-         jjNJG6AmnZ0TTM3aCoAjgWDfdZZCIjjL8nA1p4e0d/ZsT2nsI1FK0l8OvFWCrOrUl9dE
-         8ZKX2fb3ZNUwJM00+4kjX0CHIe4QhcOc74ohd9e3mk+sEBA106Wx+cCRUAD4fzcKoy4t
-         WQItV/mWouBxLUz7k/4nAA1QwwZCA1C5jbSNOnQRUqt6lBZnONB4G2jQNGSkLa6AnBVA
-         BS2GaUC4mb+TsauMpeCLNcGPXv2v39bb8s6p/LlfEhrHIr/8ty52ZtSJA7FxohXgjSuK
-         szaQ==
-X-Gm-Message-State: APjAAAXprdpRb1HOv0R+kmy2IGY+VxP91NYcWnSW4wrEGpTuYgFVa0De
-        //15eyAiOjIZ7yzCcuLpnPFyQ1BPm0R/mZ2mpa4MxA==
-X-Google-Smtp-Source: APXvYqyOX9PeZsCaqURSrIEWPGIBd1WFVQ7exVP3S114miK0Cy+gUD/uDqW5wGxUjPG0aHqJLJFWW3mMb6YG8JIQdRk=
-X-Received: by 2002:a65:64d9:: with SMTP id t25mr132418776pgv.130.1559052897854;
- Tue, 28 May 2019 07:14:57 -0700 (PDT)
-MIME-Version: 1.0
-References: <cover.1557160186.git.andreyknvl@google.com> <20190517144931.GA56186@arrakis.emea.arm.com>
- <CAFKCwrj6JEtp4BzhqO178LFJepmepoMx=G+YdC8sqZ3bcBp3EQ@mail.gmail.com>
- <20190521182932.sm4vxweuwo5ermyd@mbp> <201905211633.6C0BF0C2@keescook>
- <6049844a-65f5-f513-5b58-7141588fef2b@oracle.com> <20190523201105.oifkksus4rzcwqt4@mbp>
- <ffe58af3-7c70-d559-69f6-1f6ebcb0fec6@oracle.com> <20190524101139.36yre4af22bkvatx@mbp>
- <c6dd53d8-142b-3d8d-6a40-d21c5ee9d272@oracle.com>
-In-Reply-To: <c6dd53d8-142b-3d8d-6a40-d21c5ee9d272@oracle.com>
-From:   Andrey Konovalov <andreyknvl@google.com>
-Date:   Tue, 28 May 2019 16:14:45 +0200
-Message-ID: <CAAeHK+yAUsZWhp6xPAbWewX5Nbw+-G3svUyPmhXu5MVeEDKYvA@mail.gmail.com>
-Subject: Re: [PATCH v15 00/17] arm64: untag user pointers passed to the kernel
-To:     Catalin Marinas <catalin.marinas@arm.com>,
-        Kees Cook <keescook@chromium.org>
-Cc:     Evgenii Stepanov <eugenis@google.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-rdma@vger.kernel.org, linux-media@vger.kernel.org,
-        kvm@vger.kernel.org,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        id S1726453AbfE1OyP (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 28 May 2019 10:54:15 -0400
+Received: from usa-sjc-mx-foss1.foss.arm.com ([217.140.101.70]:58716 "EHLO
+        foss.arm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726371AbfE1OyO (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 28 May 2019 10:54:14 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.72.51.249])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id F18CC80D;
+        Tue, 28 May 2019 07:54:13 -0700 (PDT)
+Received: from localhost (unknown [10.37.6.20])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 689083F5AF;
+        Tue, 28 May 2019 07:54:13 -0700 (PDT)
+Date:   Tue, 28 May 2019 15:54:11 +0100
+From:   Andrew Murray <andrew.murray@arm.com>
+To:     Catalin Marinas <catalin.marinas@arm.com>
+Cc:     Andrey Konovalov <andreyknvl@google.com>,
+        Mark Rutland <mark.rutland@arm.com>, kvm@vger.kernel.org,
+        Szabolcs Nagy <Szabolcs.Nagy@arm.com>,
         Will Deacon <will.deacon@arm.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
+        dri-devel@lists.freedesktop.org, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org,
+        Felix Kuehling <Felix.Kuehling@amd.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Jacob Bramley <Jacob.Bramley@arm.com>,
+        Leon Romanovsky <leon@kernel.org>, linux-rdma@vger.kernel.org,
+        amd-gfx@lists.freedesktop.org, Dmitry Vyukov <dvyukov@google.com>,
+        Dave Martin <Dave.Martin@arm.com>,
+        Evgeniy Stepanov <eugenis@google.com>,
+        linux-media@vger.kernel.org, Kevin Brodsky <kevin.brodsky@arm.com>,
+        Kees Cook <keescook@chromium.org>,
+        Ruben Ayrapetyan <Ruben.Ayrapetyan@arm.com>,
+        Ramana Radhakrishnan <Ramana.Radhakrishnan@arm.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        Kostya Serebryany <kcc@google.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Yishai Hadas <yishaih@mellanox.com>,
-        Felix Kuehling <Felix.Kuehling@amd.com>,
-        Alexander Deucher <Alexander.Deucher@amd.com>,
-        Christian Koenig <Christian.Koenig@amd.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-kernel@vger.kernel.org,
         Jens Wiklander <jens.wiklander@linaro.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Kostya Serebryany <kcc@google.com>,
         Lee Smith <Lee.Smith@arm.com>,
-        Ramana Radhakrishnan <Ramana.Radhakrishnan@arm.com>,
-        Jacob Bramley <Jacob.Bramley@arm.com>,
-        Ruben Ayrapetyan <Ruben.Ayrapetyan@arm.com>,
+        Alexander Deucher <Alexander.Deucher@amd.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
         Robin Murphy <robin.murphy@arm.com>,
-        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
-        Dave Martin <Dave.Martin@arm.com>,
-        Kevin Brodsky <kevin.brodsky@arm.com>,
-        Szabolcs Nagy <Szabolcs.Nagy@arm.com>,
-        Elliott Hughes <enh@google.com>,
-        Khalid Aziz <khalid.aziz@oracle.com>
-Content-Type: text/plain; charset="UTF-8"
+        Christian Koenig <Christian.Koenig@amd.com>,
+        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>
+Subject: Re: [PATCH v15 05/17] arms64: untag user pointers passed to memory
+ syscalls
+Message-ID: <20190528145411.GA709@e119886-lin.cambridge.arm.com>
+References: <cover.1557160186.git.andreyknvl@google.com>
+ <00eb4c63fefc054e2c8d626e8fedfca11d7c2600.1557160186.git.andreyknvl@google.com>
+ <20190527143719.GA59948@MBP.local>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190527143719.GA59948@MBP.local>
+User-Agent: Mutt/1.10.1+81 (426a6c1) (2018-08-26)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Thanks for a lot of valuable input! I've read through all the replies
-and got somewhat lost. What are the changes I need to do to this
-series?
+On Mon, May 27, 2019 at 03:37:20PM +0100, Catalin Marinas wrote:
+> On Mon, May 06, 2019 at 06:30:51PM +0200, Andrey Konovalov wrote:
+> > This patch is a part of a series that extends arm64 kernel ABI to allow to
+> > pass tagged user pointers (with the top byte set to something else other
+> > than 0x00) as syscall arguments.
+> > 
+> > This patch allows tagged pointers to be passed to the following memory
+> > syscalls: brk, get_mempolicy, madvise, mbind, mincore, mlock, mlock2,
+> > mmap, mmap_pgoff, mprotect, mremap, msync, munlock, munmap,
+> > remap_file_pages, shmat and shmdt.
+> > 
+> > This is done by untagging pointers passed to these syscalls in the
+> > prologues of their handlers.
+> > 
+> > Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
+> 
+> Actually, I don't think any of these wrappers get called (have you
+> tested this patch?). Following commit 4378a7d4be30 ("arm64: implement
+> syscall wrappers"), I think we have other macro names for overriding the
+> sys_* ones.
 
-1. Should I move untagging for memory syscalls back to the generic
-code so other arches would make use of it as well, or should I keep
-the arm64 specific memory syscalls wrappers and address the comments
-on that patch?
+What is the value in adding these wrappers?
 
-2. Should I make untagging opt-in and controlled by a command line argument?
+The untagged_addr macro is defined for all in linux/mm.h and these patches
+already use untagged_addr in generic code. Thus adding a few more
+untagged_addr in the generic syscall handlers (which turn to a nop for most)
+is surely better than adding wrappers?
 
-3. Should I "add Documentation/core-api/user-addresses.rst to describe
-proper care and handling of user space pointers with untagged_addr(),
-with examples based on all the cases seen so far in this series"?
-Which examples specifically should it cover?
+Even if other architectures implement untagged_addr in the future it would
+be more consistent if they untagged in the same places and thus not adding
+these wrappers enforces that.
 
-Is there something else?
+Thanks,
+
+Andrew Murray
+
+> 
+> -- 
+> Catalin
+> 
+> _______________________________________________
+> linux-arm-kernel mailing list
+> linux-arm-kernel@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
