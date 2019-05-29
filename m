@@ -2,166 +2,145 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B5FB72E099
-	for <lists+linux-kselftest@lfdr.de>; Wed, 29 May 2019 17:10:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65C4F2E0DB
+	for <lists+linux-kselftest@lfdr.de>; Wed, 29 May 2019 17:18:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726522AbfE2PKF (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 29 May 2019 11:10:05 -0400
-Received: from mail-pg1-f194.google.com ([209.85.215.194]:46105 "EHLO
-        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726546AbfE2PKF (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 29 May 2019 11:10:05 -0400
-Received: by mail-pg1-f194.google.com with SMTP id v9so56028pgr.13
-        for <linux-kselftest@vger.kernel.org>; Wed, 29 May 2019 08:10:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amacapital-net.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=3NHqlVoLnqt1FPrdV3/ouU8QWVDF9XpBsDFRA3M9mXw=;
-        b=l+25soU2r8L+HSnZwz7EAeGteROjLCaBLCfS46AdyKGmDYKRETwB+6CGZChZimiUfP
-         ngVccUx/aZUDVBs0m8Q6cnbIeBz+Ja6u69OL2s7TVX30cdjUYRMMccUhgfG1CYKw78w+
-         V1GIr0ftPCaKGc4AmHhHWk3Zogl1mCnO9ptqHVKKToXX415UW1dMo35OeNYX06d1JgZD
-         xhdFQfY5MumAWyV4kWY8VLCPmPdGF+cKN9nOJ3CM5JcUSf8XUJaAk+xc7Mfifq2VAu+u
-         D30p/HP8SCPBwTglWYYKym7xOMHHs9DhBLdqzjV3ph0mfKCf4upZUCDb0df1YbQF2S8d
-         aO0w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=3NHqlVoLnqt1FPrdV3/ouU8QWVDF9XpBsDFRA3M9mXw=;
-        b=PHq3uZiFCFh3vM28tDp/tmqpJPBAKPHntsNbYv1xks44XBMlcn/QKGBQPsSgbnpxAm
-         /FBcwY7aoaqWFvED6+u8DearKasXnMx1ylmH1vnsH+bCL3dgCggghvPmLrZxWPUPMeQz
-         cG5nxMrePDLWRC+H9A1xTDXuPqvWYlvVReDT4QXvp4aSQ/M9h8geERQDfPOSf99vwyDz
-         KnRquz0oBNci+n+8Vi11nwzrhB4wdmCPG53JBgYofCNj8Kl/O66ioeLbtLq6zg8nlKcS
-         0p8A379JnqRkAxSO5jyOo6tyVt6vwJjaqBk5vwWfbl1KgXOkS1cBjhlL2aXDk7uKQ7kR
-         pncA==
-X-Gm-Message-State: APjAAAWw75hHM5L42y2BEZ5kMNacYxKos8m59hLPOeP4mz2ZvHGS8Xw7
-        vucnUa8POy4qKdJuTRVUU4Sx2rIrXIA=
-X-Google-Smtp-Source: APXvYqxm6x95Oz3ytQOQ6KJ6h+yMYOZG9THlrGBNRRjjiDeEhH7rSiaxnIXU6uXMK+p7Io1TQQBNsQ==
-X-Received: by 2002:a62:1ec1:: with SMTP id e184mr83655828pfe.185.1559142604091;
-        Wed, 29 May 2019 08:10:04 -0700 (PDT)
-Received: from ?IPv6:2600:100f:b10c:ace6:b862:4204:5f4a:fe22? ([2600:100f:b10c:ace6:b862:4204:5f4a:fe22])
-        by smtp.gmail.com with ESMTPSA id f38sm14162147pgm.85.2019.05.29.08.10.02
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 29 May 2019 08:10:02 -0700 (PDT)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (1.0)
-Subject: Re: [PATCH RFC v8 01/10] namei: obey trailing magic-link DAC permissions
-From:   Andy Lutomirski <luto@amacapital.net>
-X-Mailer: iPhone Mail (16E227)
-In-Reply-To: <20190524031109.v24r6typyug2rlto@yavin>
-Date:   Wed, 29 May 2019 08:10:00 -0700
-Cc:     Andy Lutomirski <luto@kernel.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J. Bruce Fields" <bfields@fieldses.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        David Howells <dhowells@redhat.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Christian Brauner <christian@brauner.io>,
-        Eric Biederman <ebiederm@xmission.com>,
+        id S1726069AbfE2PSt (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 29 May 2019 11:18:49 -0400
+Received: from usa-sjc-mx-foss1.foss.arm.com ([217.140.101.70]:48042 "EHLO
+        foss.arm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725936AbfE2PSt (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 29 May 2019 11:18:49 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.72.51.249])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 95CC8341;
+        Wed, 29 May 2019 08:18:48 -0700 (PDT)
+Received: from e103592.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.72.51.249])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D9C163F5AF;
+        Wed, 29 May 2019 08:18:42 -0700 (PDT)
+Date:   Wed, 29 May 2019 16:18:40 +0100
+From:   Dave Martin <Dave.Martin@arm.com>
+To:     Catalin Marinas <catalin.marinas@arm.com>
+Cc:     Mark Rutland <mark.rutland@arm.com>, kvm@vger.kernel.org,
+        Christian Koenig <Christian.Koenig@amd.com>,
+        Szabolcs Nagy <Szabolcs.Nagy@arm.com>,
+        Will Deacon <will.deacon@arm.com>,
+        dri-devel@lists.freedesktop.org, linux-mm@kvack.org,
+        Lee Smith <Lee.Smith@arm.com>, linux-kselftest@vger.kernel.org,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Jacob Bramley <Jacob.Bramley@arm.com>,
+        Leon Romanovsky <leon@kernel.org>, linux-rdma@vger.kernel.org,
+        amd-gfx@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org,
+        Evgeniy Stepanov <eugenis@google.com>,
+        linux-media@vger.kernel.org, Kees Cook <keescook@chromium.org>,
+        Ruben Ayrapetyan <Ruben.Ayrapetyan@arm.com>,
+        Andrey Konovalov <andreyknvl@google.com>,
+        Kevin Brodsky <kevin.brodsky@arm.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Kostya Serebryany <kcc@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Yishai Hadas <yishaih@mellanox.com>,
+        linux-kernel@vger.kernel.org,
+        Jens Wiklander <jens.wiklander@linaro.org>,
+        Ramana Radhakrishnan <Ramana.Radhakrishnan@arm.com>,
+        Alexander Deucher <Alexander.Deucher@amd.com>,
+        Andrew Murray <andrew.murray@arm.com>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Jann Horn <jannh@google.com>, Tycho Andersen <tycho@tycho.ws>,
-        David Drysdale <drysdale@google.com>,
-        Chanho Min <chanho.min@lge.com>,
-        Oleg Nesterov <oleg@redhat.com>, Aleksa Sarai <asarai@suse.de>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Linux Containers <containers@lists.linux-foundation.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Linux FS Devel <linux-fsdevel@vger.kernel.org>,
-        Linux API <linux-api@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <9712F80E-1016-4DB7-996D-B423E07A1C1F@amacapital.net>
-References: <20190520133305.11925-1-cyphar@cyphar.com> <20190520133305.11925-2-cyphar@cyphar.com> <CALCETrVCwe49q5mu=f6jTYNSgosQSjjY5chukMPo6eZtQGqo5g@mail.gmail.com> <20190523020009.mi25uziu2b3whf4l@yavin> <20190524031109.v24r6typyug2rlto@yavin>
-To:     Aleksa Sarai <cyphar@cyphar.com>
+        Robin Murphy <robin.murphy@arm.com>,
+        Felix Kuehling <Felix.Kuehling@amd.com>,
+        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>
+Subject: Re: [PATCH v15 05/17] arms64: untag user pointers passed to memory
+ syscalls
+Message-ID: <20190529151839.GF28398@e103592.cambridge.arm.com>
+References: <cover.1557160186.git.andreyknvl@google.com>
+ <00eb4c63fefc054e2c8d626e8fedfca11d7c2600.1557160186.git.andreyknvl@google.com>
+ <20190527143719.GA59948@MBP.local>
+ <20190528145411.GA709@e119886-lin.cambridge.arm.com>
+ <20190528154057.GD32006@arrakis.emea.arm.com>
+ <20190528155644.GD28398@e103592.cambridge.arm.com>
+ <20190528163400.GE32006@arrakis.emea.arm.com>
+ <20190529124224.GE28398@e103592.cambridge.arm.com>
+ <20190529132341.27t3knoxpb7t7y3g@mbp>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190529132341.27t3knoxpb7t7y3g@mbp>
+User-Agent: Mutt/1.5.23 (2014-03-12)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+On Wed, May 29, 2019 at 02:23:42PM +0100, Catalin Marinas wrote:
+> On Wed, May 29, 2019 at 01:42:25PM +0100, Dave P Martin wrote:
+> > On Tue, May 28, 2019 at 05:34:00PM +0100, Catalin Marinas wrote:
+> > > On Tue, May 28, 2019 at 04:56:45PM +0100, Dave P Martin wrote:
+> > > > On Tue, May 28, 2019 at 04:40:58PM +0100, Catalin Marinas wrote:
+> > > > 
+> > > > [...]
+> > > > 
+> > > > > My thoughts on allowing tags (quick look):
+> > > > >
+> > > > > brk - no
+> > > > 
+> > > > [...]
+> > > > 
+> > > > > mlock, mlock2, munlock - yes
+> > > > > mmap - no (we may change this with MTE but not for TBI)
+> > > > 
+> > > > [...]
+> > > > 
+> > > > > mprotect - yes
+> > > > 
+> > > > I haven't following this discussion closely... what's the rationale for
+> > > > the inconsistencies here (feel free to refer me back to the discussion
+> > > > if it's elsewhere).
+> > > 
+> > > _My_ rationale (feel free to disagree) is that mmap() by default would
+> > > not return a tagged address (ignoring MTE for now). If it gets passed a
+> > > tagged address or a "tagged NULL" (for lack of a better name) we don't
+> > > have clear semantics of whether the returned address should be tagged in
+> > > this ABI relaxation. I'd rather reserve this specific behaviour if we
+> > > overload the non-zero tag meaning of mmap() for MTE. Similar reasoning
+> > > for mremap(), at least on the new_address argument (not entirely sure
+> > > about old_address).
+> > > 
+> > > munmap() should probably follow the mmap() rules.
+> > > 
+> > > As for brk(), I don't see why the user would need to pass a tagged
+> > > address, we can't associate any meaning to this tag.
+> > > 
+> > > For the rest, since it's likely such addresses would have been tagged by
+> > > malloc() in user space, we should allow tagged pointers.
+> > 
+> > Those arguments seem reasonable.  We should try to capture this
+> > somewhere when documenting the ABI.
+> > 
+> > To be clear, I'm not sure that we should guarantee anywhere that a
+> > tagged pointer is rejected: rather the behaviour should probably be
+> > left unspecified.  Then we can tidy it up incrementally.
+> > 
+> > (The behaviour is unspecified today, in any case.)
+> 
+> What is specified (or rather de-facto ABI) today is that passing a user
+> address above TASK_SIZE (e.g. non-zero top byte) would fail in most
+> cases. If we relax this with the TBI we may end up with some de-facto
 
+I may be being too picky, but "would fail in most cases" sounds like
+"unspecified" ?
 
-> On May 23, 2019, at 8:11 PM, Aleksa Sarai <cyphar@cyphar.com> wrote:
->=20
->> On 2019-05-23, Aleksa Sarai <cyphar@cyphar.com> wrote:
->>> On 2019-05-22, Andy Lutomirski <luto@kernel.org> wrote:
->>> What are actual examples of uses for this exception?  Breaking
->>> selftests is not, in and of itself, a huge problem.
->>=20
->> Not as far as I know. All of the re-opening users I know of do re-opens
->> of O_PATH or are re-opening with the same (or fewer) privileges. I also
->> ran this for a few days on my laptop without this exception, and didn't
->> have any visible issues.
->=20
-> I have modified the patch to WARN_ON(may_open_magiclink() =3D=3D -EACCES).=
+> ABI before we actually get MTE hardware. Tightening it afterwards may be
+> slightly more problematic, although MTE needs to be an explicit opt-in.
+> 
+> IOW, I wouldn't want to unnecessarily relax the ABI if we don't need to.
 
->=20
-> So far (in the past day on my openSUSE machines) I have only seen two
-> programs which have hit this case: kbd[1]'s "loadkeys" and "kbd_mode"
-> binaries. In addition to there not being any user-visible errors -- they
-> actually handle permission errors gracefully!
->=20
->  static int
->  open_a_console(const char *fnam)
->  {
->      int fd;
->=20
->      /*
->       * For ioctl purposes we only need some fd and permissions
->       * do not matter. But setfont:activatemap() does a write.
->       */
->      fd =3D open(fnam, O_RDWR);
->      if (fd < 0)
->          fd =3D open(fnam, O_WRONLY);
->      if (fd < 0)
->          fd =3D open(fnam, O_RDONLY);
->      if (fd < 0)
->          return -1;
->      return fd;
->  }
->=20
-> The above gets called with "/proc/self/fd/0" as an argument (as well as
-> other console candidates like "/dev/console"). And setfont:activatemap()
-> actually does handle read-only fds:
->=20
->  static void
->  send_escseq(int fd, const char *seq, int n)
->  {
->      if (write(fd, seq, n) !=3D n) /* maybe fd is read-only */
->          printf("%s", seq);
->  }
->=20
->  void activatemap(int fd)
->  {
->      send_escseq(fd, "\033(K", 3);
->  }
->=20
-> So, thus far, not only have I not seen anything go wrong -- the only
-> program which actually hits this case handles the error gracefully.
-> Obviously we got lucky here, but the lack of any users of this
-> mis-feature leads me to have some hope that we can block it without
-> anyone noticing.
->=20
-> But I emphatically do not want to break userspace here (except for
-> attackers, obviously).
+So long we don't block foreseeable future developments unnecessarily
+either -- I agree there's a balance to be struck.
 
-Hmm. This will break any script that does echo foo >/dev/stdin too.
+I guess this can be reviewed when we have nailed down the details a bit
+further.
 
-Just to throw an idea out there, what if the open were allowed if the file m=
-ode is sufficient or if the magic link target is openable with the correct m=
-ode without magic?  In other words, first check as in your code but without t=
-he exception and, if that check fails, then walk the same path that d_path w=
-ould return and see if it would work as a normal open?  Of course, that seco=
-nd attempt would need to disable magic links to avoid recursing.  I=E2=80=99=
-m not sure I love this idea...
-
-Otherwise, I imagine we can live with the exception, especially if the new o=
-pen API turns it off by default.
+Cheers
+---Dave
