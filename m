@@ -2,125 +2,107 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A9AE30283
-	for <lists+linux-kselftest@lfdr.de>; Thu, 30 May 2019 21:00:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7517B302B1
+	for <lists+linux-kselftest@lfdr.de>; Thu, 30 May 2019 21:17:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726372AbfE3TAo (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 30 May 2019 15:00:44 -0400
-Received: from mail-it1-f193.google.com ([209.85.166.193]:37831 "EHLO
-        mail-it1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726308AbfE3TAo (ORCPT
+        id S1726308AbfE3TR6 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 30 May 2019 15:17:58 -0400
+Received: from mail-ed1-f66.google.com ([209.85.208.66]:39431 "EHLO
+        mail-ed1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726031AbfE3TR6 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 30 May 2019 15:00:44 -0400
-Received: by mail-it1-f193.google.com with SMTP id s16so11177405ita.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 30 May 2019 12:00:44 -0700 (PDT)
+        Thu, 30 May 2019 15:17:58 -0400
+Received: by mail-ed1-f66.google.com with SMTP id e24so10641035edq.6;
+        Thu, 30 May 2019 12:17:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=g0Bpz5g3wFYP+gFqu/rKlcFZijNC01hWKfryp13lVZg=;
-        b=Ky6dub8QT52Rk0/nNqKV5C0hm/w/refBURtacKKAHngq2xoZ7WwVxHRdeC64kDIFdZ
-         iquNVWvagd8VLvpGxnwIuugblubUXipLgChUYQn06i62bdbrWXM7Jq3kDNBMVE5qJvNP
-         dF/U/SUceJpCYhXyAejmqRczACmE6f+Wx5S15Jl30pJUkLqFuh9iYUMLMDOeohZCw5kX
-         e0ugIo2TT2lql+JHsJ/9c9WFHic9OcpLCqLjt2cAW7KAEaYXgBKnpxCCCSXJeivoE7g9
-         +6LLI7mRZF7WLo3E5q5xz3XHZEo63zFta0tlRxmuiGhEjd5YiJ7T1TyzrwReBAOyLCsV
-         VRpw==
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=HW3dpChuW0VqGcfns2DNgGB3hG0bQH+HsGf5JJist6Q=;
+        b=k7y11l3yE6l+5m9EKPBTcgr75u9xJfKMrVZqGAKoywOieq5CwPApyPzRtBxP/zCWJz
+         +1MuZjhbUqyRijNeUlnFnhOJGTO3DbsupMjmB7vpG3RjmQSU1suuiE8l9tXX+dPh2VEy
+         44xACzctJky8I9ejqQueeZZ8lUwJGJDgqcFEkqkca78PC/wXNeIRf3mLlH503odX2mUn
+         iViCbLgN5ohGOSGEqpbHx48/XUSMG47AG0nVQG1ELh8iCr5rm3LIbhlZr9aTG687Zi2Q
+         kHlQ0xebIyYf6nuH9xzKtRn8Ozj5zU2HWv36Udf/75s2CTGUEIqaKKLVKZFku8QhZNs9
+         vKww==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=g0Bpz5g3wFYP+gFqu/rKlcFZijNC01hWKfryp13lVZg=;
-        b=b9wdr5Jdfsxu+J2tvIo39lS1KgEGruwAFsQTnUYY5vou/J66at19lhKn9a06rz8xIL
-         m/Is5ZMoKjR12Je/TWxQNjGGlA6cFxUiFhF8SlcrXTGN6aev12Ip+ffOBJudIPHvmUi1
-         MFemjUD4oEIXk/4lzPtTy7FazJq8d0Y3gGbFz7nVCTPCDDdhaEOxIRw6LWfAHq+7vIJb
-         SrI8c4pJUBcpfsVKIhlJIBS97RlinTQsFyjcX6x2z1PyUIH6aeL82JPjfnb1mEYzshpN
-         t0wbykUam1IeyWuXPWMYgZvkA4BAr3U4g7HHH4suTTDLhj/3M8z4V1jmsy0jS4pjvFoa
-         BN0w==
-X-Gm-Message-State: APjAAAXvPHx2H42tMyS4UjiopEj6634tHxaIZW/oTuarPsVdk1p0YycA
-        z0Wp/2XsIJk6/nTBIAKhWM9XbQ==
-X-Google-Smtp-Source: APXvYqyKXl2q2RSNBQnP6EwLTaHXV0/ufh3qXiNoV187B71OoVq7DmrXop5Gem4wTHVd/C4cxsGYMw==
-X-Received: by 2002:a24:c8c2:: with SMTP id w185mr3850842itf.149.1559242843573;
-        Thu, 30 May 2019 12:00:43 -0700 (PDT)
-Received: from localhost (c-75-72-120-115.hsd1.mn.comcast.net. [75.72.120.115])
-        by smtp.gmail.com with ESMTPSA id x20sm1146240ioa.40.2019.05.30.12.00.42
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Thu, 30 May 2019 12:00:42 -0700 (PDT)
-Date:   Thu, 30 May 2019 14:00:41 -0500
-From:   Dan Rue <dan.rue@linaro.org>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     linux-kselftest@vger.kernel.org,
-        Masahiro Yamada <yamada.masahiro@socionext.com>,
-        Michal Marek <michal.lkml@markovi.net>,
-        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] kbuild: teach kselftest-merge to find nested config files
-Message-ID: <20190530190041.m6535ihflbgr2q3m@xps.therub.org>
-References: <20190520151614.19188-1-dan.rue@linaro.org>
- <20190520175641.GA14339@kroah.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=HW3dpChuW0VqGcfns2DNgGB3hG0bQH+HsGf5JJist6Q=;
+        b=F0d7xIhBGK0Re1noOhepsXG5nPDPjbFsDq/pZSdqO6AKy7R/0euYP6tSOf/MgihdHP
+         5S7GDYhW7yO//88wHysUPp7XPDTVQ2MPugn4M8BUFxfa7vN7NkNiRoFp+g7tFewB33OV
+         vS5oDmkjDbml8fvB/xHIbCMw/LMJVJE8HSPZ2JC/XVOcw+NxaUiScR/4uRZ1vOQ8ftwU
+         y2VvDQtNKmy2ylIELkDTbRefTbnCS/+nITH+nCNI25Zlp+QRCyBIWPs3hPEFaVsB3bOF
+         LviPxddWzuYd9fwnIBMyrRA5qMWrlyszfb/hGSaW8KEDOeU7DIUPiS91A4Xtk7MKXtc7
+         UbBg==
+X-Gm-Message-State: APjAAAVhArCrR8ugpJJ9m9P6Rs9UfW04cyh+FAJM7UI1aGdIcTCX9j0Y
+        ny95HaQC6QwrIGsB4Dd68JJf7FD0GZMgMboeiW4=
+X-Google-Smtp-Source: APXvYqwg8TgkuFLjdNp+D3qZoIhiEoCt9bRsOWm4dKWBGf8sr4f2GHLv9t+Z77guXkDhUJJSCkvmJvt4nEb9+9IIC20=
+X-Received: by 2002:a17:906:2acf:: with SMTP id m15mr5191784eje.31.1559243876891;
+ Thu, 30 May 2019 12:17:56 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190520175641.GA14339@kroah.com>
-User-Agent: NeoMutt/20180716
+References: <20190528184415.16020-1-fklassen@appneta.com> <20190528184415.16020-2-fklassen@appneta.com>
+ <CAF=yD-JvNFdWCBJ6w1_XWSHu1CDiG_QimrUT8ZCxw=U+OVvBMA@mail.gmail.com> <8A1636C9-7476-43B2-BAE0-B03675B3920E@appneta.com>
+In-Reply-To: <8A1636C9-7476-43B2-BAE0-B03675B3920E@appneta.com>
+From:   Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+Date:   Thu, 30 May 2019 15:17:20 -0400
+Message-ID: <CAF=yD-JW1ZA-LA6iJ0X83UMJxmNLh7VfmUK7B=7LbYMY--wO6w@mail.gmail.com>
+Subject: Re: [PATCH net-next v3 1/1] net/udp_gso: Allow TX timestamp with UDP GSO
+To:     Fred Klassen <fklassen@appneta.com>
+Cc:     Network Development <netdev@vger.kernel.org>,
+        linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, May 20, 2019 at 07:56:41PM +0200, Greg KH wrote:
-> On Mon, May 20, 2019 at 10:16:14AM -0500, Dan Rue wrote:
-> > Current implementation of kselftest-merge only finds config files that
-> > are one level deep using `$(srctree)/tools/testing/selftests/*/config`.
-> > 
-> > Often, config files are added in nested directories, and do not get
-> > picked up by kselftest-merge.
-> > 
-> > Use `find` to catch all config files under
-> > `$(srctree)/tools/testing/selftests` instead.
-> > 
-> > Signed-off-by: Dan Rue <dan.rue@linaro.org>
-> > ---
-> >  Makefile | 5 ++---
-> >  1 file changed, 2 insertions(+), 3 deletions(-)
-> 
-> To be more specific here, the binderfs test is not catching the config
-> entry, so it would be nice to get this into the stable trees as well :)
-> 
-> > diff --git a/Makefile b/Makefile
-> > index a45f84a7e811..e99e7f9484af 100644
-> > --- a/Makefile
-> > +++ b/Makefile
-> > @@ -1228,9 +1228,8 @@ kselftest-clean:
-> >  PHONY += kselftest-merge
-> >  kselftest-merge:
-> >  	$(if $(wildcard $(objtree)/.config),, $(error No .config exists, config your kernel first!))
-> > -	$(Q)$(CONFIG_SHELL) $(srctree)/scripts/kconfig/merge_config.sh \
-> > -		-m $(objtree)/.config \
-> > -		$(srctree)/tools/testing/selftests/*/config
-> > +	$(Q)find $(srctree)/tools/testing/selftests -name config | \
-> > +		xargs $(srctree)/scripts/kconfig/merge_config.sh -m $(objtree)/.config
-> >  	+$(Q)$(MAKE) -f $(srctree)/Makefile olddefconfig
-> >  
-> >  # ---------------------------------------------------------------------------
-> 
-> is find run with $(Q)?  It isn't with other instances in the Makefile.
+> > Asked elsewhere, but best answered here: given that xmit_more delays
+> > delivery to the NIC until the last segment in a train, is the first
+> > segment in your opinion still the best to attach the timestamp request
+> > to?
+> >
+> > To reiterate, we do not want to need a follow-up patch to disable
+> > xmit_more when timestamps are requested.
+> >
+>
+> I think it would be worthwhile. I was playing with this patch =E2=80=A6
+>
+> +               /* software TX timeststamps are sent immediately */
+> +               if (tsflags & SKBTX_SW_TSTAMP)
+> +                       seg->xmit_more =3D 0;
+>
+> =E2=80=A6 which attempts to address this issue. I believe that the patch
+> should be applied for software timestamps only.
 
-I'm not entirely sure all the ways that $(Q) is used (it looks like it
-just gets set to @), but if i run 'KBUILD_VERBOSE=1 make
-kselftest-merge' I do see the find command printed before running:
+Disagree, sorry.
 
-    find ./tools/testing/selftests -name config | \
-          xargs ./scripts/kconfig/merge_config.sh -m ./.config
+Timestamped packets should take the same path as non-timestamped, so
+that sampled timestamps are representative of the overall workload.
 
-I noticed find used inconsistently (sometimes with @, sometimes with
-$(Q), sometimes with neither), so I picked the usage that seemed most
-correct to me.
+Moreover, due to how xmit_more works, applying the timestamp request
+to the last segment will give you exactly the behavior that you are
+looking for (bar requeue events): a timestamp before the NIC starts
+working on any byte in the request. And that approach will be useful
+for measuring host latency as well, unlike timestamping the first
+segment.
 
-Dan
+Timestamping the first, then arguing that it is not useful as is and
+requires more changes is the wrong path imho.
 
-> 
-> thanks,
-> 
-> greg k-h
+Perhaps it is easiest to just not split off a segment from the GSO
+train when timestamp that independently. That works today.
 
--- 
-Linaro - Kernel Validation
+> However when
+> I applied in net-next I got the following compile error, which suggests
+> there is more investigation needed, and therefore requires a separate
+> patch.
+>
+> net/ipv4/udp_offload.c: In function =E2=80=98__udp_gso_segment=E2=80=99:
+> net/ipv4/udp_offload.c:251:7: error: =E2=80=98struct sk_buff=E2=80=99 has=
+ no member named =E2=80=98xmit_more=E2=80=99
+>     seg->xmit_more =3D 0;
+
+Yes, this has been moved to a percpu variable.
