@@ -2,26 +2,25 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 47A1331227
-	for <lists+linux-kselftest@lfdr.de>; Fri, 31 May 2019 18:20:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF31731234
+	for <lists+linux-kselftest@lfdr.de>; Fri, 31 May 2019 18:22:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726860AbfEaQUE (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 31 May 2019 12:20:04 -0400
-Received: from usa-sjc-mx-foss1.foss.arm.com ([217.140.101.70]:54014 "EHLO
-        foss.arm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726531AbfEaQUE (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 31 May 2019 12:20:04 -0400
+        id S1726713AbfEaQWP (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 31 May 2019 12:22:15 -0400
+Received: from foss.arm.com ([217.140.101.70]:54096 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726649AbfEaQWP (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 31 May 2019 12:22:15 -0400
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.72.51.249])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9E486341;
-        Fri, 31 May 2019 09:20:03 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 72A16341;
+        Fri, 31 May 2019 09:22:14 -0700 (PDT)
 Received: from arrakis.emea.arm.com (arrakis.cambridge.arm.com [10.1.196.78])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B67CE3F59C;
-        Fri, 31 May 2019 09:19:57 -0700 (PDT)
-Date:   Fri, 31 May 2019 17:19:55 +0100
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D9D693F59C;
+        Fri, 31 May 2019 09:22:08 -0700 (PDT)
+Date:   Fri, 31 May 2019 17:22:06 +0100
 From:   Catalin Marinas <catalin.marinas@arm.com>
 To:     Andrey Konovalov <andreyknvl@google.com>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Evgenii Stepanov <eugenis@google.com>,
+Cc:     Vincenzo Frascino <vincenzo.frascino@arm.com>,
         Linux ARM <linux-arm-kernel@lists.infradead.org>,
         Linux Memory Management List <linux-mm@kvack.org>,
         LKML <linux-kernel@vger.kernel.org>,
@@ -30,11 +29,11 @@ Cc:     Kees Cook <keescook@chromium.org>,
         kvm@vger.kernel.org,
         "open list:KERNEL SELFTEST FRAMEWORK" 
         <linux-kselftest@vger.kernel.org>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
         Will Deacon <will.deacon@arm.com>,
         Mark Rutland <mark.rutland@arm.com>,
         Andrew Morton <akpm@linux-foundation.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Kees Cook <keescook@chromium.org>,
         Yishai Hadas <yishaih@mellanox.com>,
         Felix Kuehling <Felix.Kuehling@amd.com>,
         Alexander Deucher <Alexander.Deucher@amd.com>,
@@ -45,6 +44,7 @@ Cc:     Kees Cook <keescook@chromium.org>,
         Leon Romanovsky <leon@kernel.org>,
         Dmitry Vyukov <dvyukov@google.com>,
         Kostya Serebryany <kcc@google.com>,
+        Evgeniy Stepanov <eugenis@google.com>,
         Lee Smith <Lee.Smith@arm.com>,
         Ramana Radhakrishnan <Ramana.Radhakrishnan@arm.com>,
         Jacob Bramley <Jacob.Bramley@arm.com>,
@@ -53,68 +53,44 @@ Cc:     Kees Cook <keescook@chromium.org>,
         Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
         Dave Martin <Dave.Martin@arm.com>,
         Kevin Brodsky <kevin.brodsky@arm.com>,
-        Szabolcs Nagy <Szabolcs.Nagy@arm.com>,
-        Elliott Hughes <enh@google.com>,
-        Khalid Aziz <khalid.aziz@oracle.com>
-Subject: Re: [PATCH v15 00/17] arm64: untag user pointers passed to the kernel
-Message-ID: <20190531161954.GA3568@arrakis.emea.arm.com>
-References: <20190521182932.sm4vxweuwo5ermyd@mbp>
- <201905211633.6C0BF0C2@keescook>
- <6049844a-65f5-f513-5b58-7141588fef2b@oracle.com>
- <20190523201105.oifkksus4rzcwqt4@mbp>
- <ffe58af3-7c70-d559-69f6-1f6ebcb0fec6@oracle.com>
- <20190524101139.36yre4af22bkvatx@mbp>
- <c6dd53d8-142b-3d8d-6a40-d21c5ee9d272@oracle.com>
- <CAAeHK+yAUsZWhp6xPAbWewX5Nbw+-G3svUyPmhXu5MVeEDKYvA@mail.gmail.com>
- <20190530171540.GD35418@arrakis.emea.arm.com>
- <CAAeHK+y34+SNz3Vf+_378bOxrPaj_3GaLCeC2Y2rHAczuaSz1A@mail.gmail.com>
+        Szabolcs Nagy <Szabolcs.Nagy@arm.com>
+Subject: Re: [PATCH v15 17/17] selftests, arm64: add a selftest for passing
+ tagged pointers to kernel
+Message-ID: <20190531162206.GB3568@arrakis.emea.arm.com>
+References: <cover.1557160186.git.andreyknvl@google.com>
+ <e31d9364eb0c2eba8ce246a558422e811d82d21b.1557160186.git.andreyknvl@google.com>
+ <20190522141612.GA28122@arrakis.emea.arm.com>
+ <CAAeHK+wUerHQOV2PuaTwTxcCucZHZodLwg48228SB+ymxEqT2A@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAAeHK+y34+SNz3Vf+_378bOxrPaj_3GaLCeC2Y2rHAczuaSz1A@mail.gmail.com>
+In-Reply-To: <CAAeHK+wUerHQOV2PuaTwTxcCucZHZodLwg48228SB+ymxEqT2A@mail.gmail.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, May 31, 2019 at 04:29:10PM +0200, Andrey Konovalov wrote:
-> On Thu, May 30, 2019 at 7:15 PM Catalin Marinas <catalin.marinas@arm.com> wrote:
-> > On Tue, May 28, 2019 at 04:14:45PM +0200, Andrey Konovalov wrote:
-> > > Thanks for a lot of valuable input! I've read through all the replies
-> > > and got somewhat lost. What are the changes I need to do to this
-> > > series?
+On Fri, May 31, 2019 at 04:21:48PM +0200, Andrey Konovalov wrote:
+> On Wed, May 22, 2019 at 4:16 PM Catalin Marinas <catalin.marinas@arm.com> wrote:
+> > On Mon, May 06, 2019 at 06:31:03PM +0200, Andrey Konovalov wrote:
+> > > This patch is a part of a series that extends arm64 kernel ABI to allow to
+> > > pass tagged user pointers (with the top byte set to something else other
+> > > than 0x00) as syscall arguments.
 > > >
-> > > 1. Should I move untagging for memory syscalls back to the generic
-> > > code so other arches would make use of it as well, or should I keep
-> > > the arm64 specific memory syscalls wrappers and address the comments
-> > > on that patch?
+> > > This patch adds a simple test, that calls the uname syscall with a
+> > > tagged user pointer as an argument. Without the kernel accepting tagged
+> > > user pointers the test fails with EFAULT.
 > >
-> > Keep them generic again but make sure we get agreement with Khalid on
-> > the actual ABI implications for sparc.
+> > That's probably sufficient for a simple example. Something we could add
+> > to Documentation maybe is a small library that can be LD_PRELOAD'ed so
+> > that you can run a lot more tests like LTP.
 > 
-> OK, will do. I find it hard to understand what the ABI implications
-> are. I'll post the next version without untagging in brk, mmap,
-> munmap, mremap (for new_address), mmap_pgoff, remap_file_pages, shmat
-> and shmdt.
+> Should I add this into this series, or should this go into Vincenzo's patchset?
 
-It's more about not relaxing the ABI to accept non-zero top-byte unless
-we have a use-case for it. For mmap() etc., I don't think that's needed
-but if you think otherwise, please raise it.
-
-> > > 2. Should I make untagging opt-in and controlled by a command line argument?
-> >
-> > Opt-in, yes, but per task rather than kernel command line option.
-> > prctl() is a possibility of opting in.
-> 
-> OK. Should I store a flag somewhere in task_struct? Should it be
-> inheritable on clone?
-
-A TIF flag would do but I'd say leave it out for now (default opted in)
-until we figure out the best way to do this (can be a patch on top of
-this series).
-
-Thanks.
+If you can tweak the selftest Makefile to build a library and force it
+with LD_PRELOAD, you can keep it with this patch. It would be easier to
+extend to other syscall tests, signal handling etc.
 
 -- 
 Catalin
