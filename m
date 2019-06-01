@@ -2,125 +2,126 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E13E9312B3
-	for <lists+linux-kselftest@lfdr.de>; Fri, 31 May 2019 18:46:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C533331B03
+	for <lists+linux-kselftest@lfdr.de>; Sat,  1 Jun 2019 11:38:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726942AbfEaQqP (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 31 May 2019 12:46:15 -0400
-Received: from usa-sjc-mx-foss1.foss.arm.com ([217.140.101.70]:54506 "EHLO
+        id S1726634AbfFAJih (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 1 Jun 2019 05:38:37 -0400
+Received: from usa-sjc-mx-foss1.foss.arm.com ([217.140.101.70]:33072 "EHLO
         foss.arm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726652AbfEaQqP (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 31 May 2019 12:46:15 -0400
+        id S1726109AbfFAJig (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Sat, 1 Jun 2019 05:38:36 -0400
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.72.51.249])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2DFE0A78;
-        Fri, 31 May 2019 09:46:14 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0B916341;
+        Sat,  1 Jun 2019 02:38:36 -0700 (PDT)
 Received: from arrakis.emea.arm.com (arrakis.cambridge.arm.com [10.1.196.78])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 48A043F59C;
-        Fri, 31 May 2019 09:46:08 -0700 (PDT)
-Date:   Fri, 31 May 2019 17:46:05 +0100
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E630B3F5AF;
+        Sat,  1 Jun 2019 02:38:32 -0700 (PDT)
+Date:   Sat, 1 Jun 2019 10:38:30 +0100
 From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     Andrey Konovalov <andreyknvl@google.com>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Evgenii Stepanov <eugenis@google.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-rdma@vger.kernel.org, linux-media@vger.kernel.org,
-        kvm@vger.kernel.org,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Will Deacon <will.deacon@arm.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Yishai Hadas <yishaih@mellanox.com>,
-        Felix Kuehling <Felix.Kuehling@amd.com>,
-        Alexander Deucher <Alexander.Deucher@amd.com>,
-        Christian Koenig <Christian.Koenig@amd.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Jens Wiklander <jens.wiklander@linaro.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Kostya Serebryany <kcc@google.com>,
-        Lee Smith <Lee.Smith@arm.com>,
-        Ramana Radhakrishnan <Ramana.Radhakrishnan@arm.com>,
-        Jacob Bramley <Jacob.Bramley@arm.com>,
-        Ruben Ayrapetyan <Ruben.Ayrapetyan@arm.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
-        Dave Martin <Dave.Martin@arm.com>,
-        Kevin Brodsky <kevin.brodsky@arm.com>,
-        Szabolcs Nagy <Szabolcs.Nagy@arm.com>,
-        Elliott Hughes <enh@google.com>,
-        Khalid Aziz <khalid.aziz@oracle.com>
-Subject: Re: [PATCH v15 00/17] arm64: untag user pointers passed to the kernel
-Message-ID: <20190531164605.GC3568@arrakis.emea.arm.com>
-References: <6049844a-65f5-f513-5b58-7141588fef2b@oracle.com>
- <20190523201105.oifkksus4rzcwqt4@mbp>
- <ffe58af3-7c70-d559-69f6-1f6ebcb0fec6@oracle.com>
- <20190524101139.36yre4af22bkvatx@mbp>
- <c6dd53d8-142b-3d8d-6a40-d21c5ee9d272@oracle.com>
- <CAAeHK+yAUsZWhp6xPAbWewX5Nbw+-G3svUyPmhXu5MVeEDKYvA@mail.gmail.com>
- <20190530171540.GD35418@arrakis.emea.arm.com>
- <CAAeHK+y34+SNz3Vf+_378bOxrPaj_3GaLCeC2Y2rHAczuaSz1A@mail.gmail.com>
- <20190531161954.GA3568@arrakis.emea.arm.com>
- <CAAeHK+zRDD7ZPPUA9cpwHOdgTRrJLWAby8Wg9oPgmhqMpHwvFw@mail.gmail.com>
+To:     Vincenzo Frascino <vincenzo.frascino@arm.com>
+Cc:     linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, Will Deacon <will.deacon@arm.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Russell King <linux@armlinux.org.uk>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Paul Burton <paul.burton@mips.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Mark Salyzyn <salyzyn@android.com>,
+        Peter Collingbourne <pcc@google.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Dmitry Safonov <0x7f454c46@gmail.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Huw Davies <huw@codeweavers.com>
+Subject: Re: [PATCH v6 15/19] arm64: Add vDSO compat support
+Message-ID: <20190601093830.GA13589@arrakis.emea.arm.com>
+References: <20190530141531.43462-1-vincenzo.frascino@arm.com>
+ <20190530141531.43462-16-vincenzo.frascino@arm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAAeHK+zRDD7ZPPUA9cpwHOdgTRrJLWAby8Wg9oPgmhqMpHwvFw@mail.gmail.com>
+In-Reply-To: <20190530141531.43462-16-vincenzo.frascino@arm.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, May 31, 2019 at 06:24:06PM +0200, Andrey Konovalov wrote:
-> On Fri, May 31, 2019 at 6:20 PM Catalin Marinas <catalin.marinas@arm.com> wrote:
-> > On Fri, May 31, 2019 at 04:29:10PM +0200, Andrey Konovalov wrote:
-> > > On Thu, May 30, 2019 at 7:15 PM Catalin Marinas <catalin.marinas@arm.com> wrote:
-> > > > On Tue, May 28, 2019 at 04:14:45PM +0200, Andrey Konovalov wrote:
-> > > > > Thanks for a lot of valuable input! I've read through all the replies
-> > > > > and got somewhat lost. What are the changes I need to do to this
-> > > > > series?
-> > > > >
-> > > > > 1. Should I move untagging for memory syscalls back to the generic
-> > > > > code so other arches would make use of it as well, or should I keep
-> > > > > the arm64 specific memory syscalls wrappers and address the comments
-> > > > > on that patch?
-> > > >
-> > > > Keep them generic again but make sure we get agreement with Khalid on
-> > > > the actual ABI implications for sparc.
-> > >
-> > > OK, will do. I find it hard to understand what the ABI implications
-> > > are. I'll post the next version without untagging in brk, mmap,
-> > > munmap, mremap (for new_address), mmap_pgoff, remap_file_pages, shmat
-> > > and shmdt.
-> >
-> > It's more about not relaxing the ABI to accept non-zero top-byte unless
-> > we have a use-case for it. For mmap() etc., I don't think that's needed
-> > but if you think otherwise, please raise it.
-> >
-> > > > > 2. Should I make untagging opt-in and controlled by a command line argument?
-> > > >
-> > > > Opt-in, yes, but per task rather than kernel command line option.
-> > > > prctl() is a possibility of opting in.
-> > >
-> > > OK. Should I store a flag somewhere in task_struct? Should it be
-> > > inheritable on clone?
-> >
-> > A TIF flag would do but I'd say leave it out for now (default opted in)
-> > until we figure out the best way to do this (can be a patch on top of
-> > this series).
+On Thu, May 30, 2019 at 03:15:27PM +0100, Vincenzo Frascino wrote:
+> Add vDSO compat support to the arm64 building system.
 > 
-> You mean leave the whole opt-in/prctl part out? So the only change
-> would be to move untagging for memory syscalls into generic code?
+> Cc: Catalin Marinas <catalin.marinas@arm.com>
+> Cc: Will Deacon <will.deacon@arm.com>
+> Signed-off-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
+> ---
+>  arch/arm64/Kconfig         |  1 +
+>  arch/arm64/Makefile        | 23 +++++++++++++++++++++--
+>  arch/arm64/kernel/Makefile |  6 +++++-
+>  3 files changed, 27 insertions(+), 3 deletions(-)
+> 
+> diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+> index 952c9f8cf3b8..3e1d4f8347f4 100644
+> --- a/arch/arm64/Kconfig
+> +++ b/arch/arm64/Kconfig
+> @@ -108,6 +108,7 @@ config ARM64
+>  	select GENERIC_STRNLEN_USER
+>  	select GENERIC_TIME_VSYSCALL
+>  	select GENERIC_GETTIMEOFDAY
+> +	select GENERIC_COMPAT_VDSO if !CPU_BIG_ENDIAN
 
-Yes (or just wait until next week to see if the discussion settles
-down).
+This select needs to also depend on COMPAT (or rather be selected from
+the COMPAT menuconfig), otherwise, trying to build this series with 64K
+pages where COMPAT is disabled, I get:
+
+  VDSOC_GTD   arch/arm64/kernel/vdso32/vgettimeofday.o
+  VDSOA   arch/arm64/kernel/vdso32/sigreturn.o
+arch/arm64/kernel/vdso32/sigreturn.S: Assembler messages:
+arch/arm64/kernel/vdso32/sigreturn.S:25: Error: expected #constant
+arch/arm64/kernel/vdso32/sigreturn.S:35: Error: expected #constant
+arch/arm64/kernel/vdso32/sigreturn.S:46: Error: expected #constant
+arch/arm64/kernel/vdso32/sigreturn.S:56: Error: expected #constant
+arch/arm64/kernel/vdso32/sigreturn.S:28: Error: undefined symbol __NR_compat_sigreturn used as an immediate value
+arch/arm64/kernel/vdso32/sigreturn.S:38: Error: undefined symbol __NR_compat_rt_sigreturn used as an immediate value
+make[2]: *** [arch/arm64/kernel/vdso32/Makefile:154: arch/arm64/kernel/vdso32/sigreturn.o] Error 1
+make[2]: *** Waiting for unfinished jobs....
+In file included from lib/vdso/gettimeofday.c:25:0,
+                 from <command-line>:0:
+arch/arm64/include/asm/vdso/compat_gettimeofday.h: In function 'gettimeofday_fallback':
+arch/arm64/include/asm/vdso/compat_gettimeofday.h:22:31: error: '__NR_compat_gettimeofday' undeclared (first use in this function); did you mean '__NR_gettimeofday'?
+  register long nr asm("r7") = __NR_compat_gettimeofday;
+                               ^~~~~~~~~~~~~~~~~~~~~~~~
+                               __NR_gettimeofday
+arch/arm64/include/asm/vdso/compat_gettimeofday.h:22:31: note: each undeclared identifier is reported only once for each function it appears in
+arch/arm64/include/asm/vdso/compat_gettimeofday.h: In function 'clock_gettime_fallback':
+arch/arm64/include/asm/vdso/compat_gettimeofday.h:40:31: error: '__NR_compat_clock_gettime64' undeclared (first use in this function); did you mean '__NR_clock_gettime'?
+  register long nr asm("r7") = __NR_compat_clock_gettime64;
+                               ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+                               __NR_clock_gettime
+arch/arm64/include/asm/vdso/compat_gettimeofday.h: In function 'clock_getres_fallback':
+arch/arm64/include/asm/vdso/compat_gettimeofday.h:58:31: error: '__NR_compat_clock_getres_time64' undeclared (first use in this function); did you mean '__NR_clock_gettime'?
+  register long nr asm("r7") = __NR_compat_clock_getres_time64;
+                               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                               __NR_clock_gettime
+arch/arm64/kernel/vdso32/vgettimeofday.c: In function '__vdso_clock_gettime':
+arch/arm64/kernel/vdso32/vgettimeofday.c:15:17: error: 'TASK_SIZE_32' undeclared (first use in this function); did you mean 'TASK_SIZE_64'?
+  if ((u32)ts >= TASK_SIZE_32)
+                 ^~~~~~~~~~~~
+                 TASK_SIZE_64
+arch/arm64/kernel/vdso32/vgettimeofday.c: In function '__vdso_clock_gettime64':
+arch/arm64/kernel/vdso32/vgettimeofday.c:25:17: error: 'TASK_SIZE_32' undeclared (first use in this function); did you mean 'TASK_SIZE_64'?
+  if ((u32)ts >= TASK_SIZE_32)
+                 ^~~~~~~~~~~~
+                 TASK_SIZE_64
+arch/arm64/kernel/vdso32/vgettimeofday.c: In function '__vdso_clock_getres':
+arch/arm64/kernel/vdso32/vgettimeofday.c:41:18: error: 'TASK_SIZE_32' undeclared (first use in this function); did you mean 'TASK_SIZE_64'?
+  if ((u32)res >= TASK_SIZE_32)
+                  ^~~~~~~~~~~~
+                  TASK_SIZE_64
+make[2]: *** [arch/arm64/kernel/vdso32/Makefile:152: arch/arm64/kernel/vdso32/vgettimeofday.o] Error 1
+make[1]: *** [arch/arm64/Makefile:182: vdso_prepare] Error 2
+make: *** [Makefile:179: sub-make] Error 2
 
 -- 
 Catalin
