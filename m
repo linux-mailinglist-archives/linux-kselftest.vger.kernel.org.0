@@ -2,146 +2,104 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B833133608
-	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Jun 2019 19:06:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F2D4333612
+	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Jun 2019 19:07:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728212AbfFCRG1 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 3 Jun 2019 13:06:27 -0400
-Received: from mail-pf1-f196.google.com ([209.85.210.196]:45224 "EHLO
-        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728175AbfFCRG0 (ORCPT
+        id S1728300AbfFCRHw (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 3 Jun 2019 13:07:52 -0400
+Received: from mail-qt1-f194.google.com ([209.85.160.194]:39222 "EHLO
+        mail-qt1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726502AbfFCRHw (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 3 Jun 2019 13:06:26 -0400
-Received: by mail-pf1-f196.google.com with SMTP id s11so10953767pfm.12
-        for <linux-kselftest@vger.kernel.org>; Mon, 03 Jun 2019 10:06:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=HYJoR/zfyv70Em+OIILglCe3XWuiH6p+K727C24pDAs=;
-        b=XymoGc7JWCRKHtM+wd/9hGi9VWGsUM72Lwa90KnvQJ358uEmtUgcHoKdtU9g/YH4UJ
-         5u34zZdjU4FRJazo1vFuW3Ni1y1DNZVh/alS1ECRtC3BF7TZUH+GUyZUoEV1ZTcu35tt
-         nObul5i9lrx30r8a/e6JYyssLeymB2ctqES0N7//YxV4uMKqEsaUeN3+PzxtLJVdrwsh
-         Z/k985v/01dgnrGjVh59cUp9Nom/0K7l3TgAT4n5WZQPD1vgp3vkfuUimZ+Xh+PsD+fW
-         QdzcgoJaWOtWSqcWc9IK1QohrHJZ7wW5wsfUIytyUhIb0Cs9PUborvrLgVelRcAz9JGB
-         usaQ==
+        Mon, 3 Jun 2019 13:07:52 -0400
+Received: by mail-qt1-f194.google.com with SMTP id i34so10264720qta.6;
+        Mon, 03 Jun 2019 10:07:51 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=HYJoR/zfyv70Em+OIILglCe3XWuiH6p+K727C24pDAs=;
-        b=KJN8QkhZcNwAWkd6YenAqllIGI/SaGgO3WDHIiTk0j4/S9DxJcN3BHKIby/Ls8tFpM
-         m32xdCWP0y4a37w1A5VfcJmQE+cw+XdApMLHQbUXfJ2zcukR1KV8ah4psXDcgU0lmoGk
-         0Y6Zv1cbbOuqjSkBPLcI2GxW4qyjtJso5SSKy8/dAC9cHAiN1OvBs6zKJ+CMa340cqap
-         yeOakujLF5nxt01UTdTeCUu81W2xFRm43FbCMAz+4evfSCZDpZaOWCoxWOFiXuRdLQL/
-         q9W6SL9TBe+8Kee0JO4Iay5yIJiP14yl6ZaRkmD8ODdnS75LPWxfJ9dmkKahqUo/NMOq
-         51Mw==
-X-Gm-Message-State: APjAAAXrUvhWnIbxfeZghiKPOHBAmL/MLz4iMrY03323CEk9f9eqAKXP
-        a+I6MTYCegtCTj3Lc640yT2jDeAMwwqRkls/jAGZrg==
-X-Google-Smtp-Source: APXvYqzVD08oLbUBv5TB7pQev79oUx9XvjbFqir2kEseCZEnF7+ERZIlVyBSOpSgKKJ3rEYpDIEwDIElz1nyAoYLJGY=
-X-Received: by 2002:a17:90a:2488:: with SMTP id i8mr23649149pje.123.1559581585869;
- Mon, 03 Jun 2019 10:06:25 -0700 (PDT)
+        bh=Aj0cpcxQ2O6hFlX37bf2kO1xsusmBejE3Ar/NHpEoV4=;
+        b=PrKCX00Qc7nd2X6YD1cxY0AuHzxAzf61VRgq4ZgBcdhJv0NSHaoIqArXe8WVsnbp5P
+         7fvj0wFK0gQMQ0ninVbQ2FvtYtezTEcQzLLMNfl+Y42qT76Q6Xfj00fDWhCglcgw+RHZ
+         TABntafcN6GaDbYpnxFFfsEo7ONdm0kGGs2SQ9ATry8RW4HVLS+pV2ARCTX6r4maLoyz
+         hlbUIS1sbFHqHTKrYBzadTW8FAAWmZXRQVDYd3kYUStScEn+zQz6vJ6atne21+2/nKiJ
+         fUslK9Xnk7MUs6m/KD6xgK/drc+MJZynZkc13kZ3vjIQUxMd53P/3Kk5xL4HUi/8b7zb
+         FSjg==
+X-Gm-Message-State: APjAAAUoyVvCHfmot5SutjaKdLjC55Tad7vnK7y9ekF7Ngz0FrxNv6FA
+        kU4WJ4fkVwSrn8pIvmW1knp+uqpnp3+VXcO56tU=
+X-Google-Smtp-Source: APXvYqwbJWvGlfk068cQnPCsOnTMnS+38b2uW4yx7NPKeQr+nVfqv4x5tnNHu/1skd7GPUOm+SPgjUJEz0LsR7r4j08=
+X-Received: by 2002:ac8:2433:: with SMTP id c48mr23290784qtc.18.1559581671050;
+ Mon, 03 Jun 2019 10:07:51 -0700 (PDT)
 MIME-Version: 1.0
-References: <cover.1559580831.git.andreyknvl@google.com> <097bc300a5c6554ca6fd1886421bb2e0adb03420.1559580831.git.andreyknvl@google.com>
- <8ff5b0ff-849a-1e0b-18da-ccb5be85dd2b@oracle.com>
-In-Reply-To: <8ff5b0ff-849a-1e0b-18da-ccb5be85dd2b@oracle.com>
-From:   Andrey Konovalov <andreyknvl@google.com>
-Date:   Mon, 3 Jun 2019 19:06:14 +0200
-Message-ID: <CAAeHK+xX2538e674Pz25unkdFPCO_SH0pFwFu=8+DS7RzfYnLQ@mail.gmail.com>
-Subject: Re: [PATCH v16 01/16] uaccess: add untagged_addr definition for other arches
-To:     Khalid Aziz <khalid.aziz@oracle.com>
-Cc:     Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-rdma@vger.kernel.org, linux-media@vger.kernel.org,
-        kvm@vger.kernel.org,
+References: <20190530141531.43462-1-vincenzo.frascino@arm.com>
+ <20190530141531.43462-18-vincenzo.frascino@arm.com> <CAK8P3a29QXCP8nw7po06GeYEGvJ_y2GxjAvswFk3=Y6YCjbdDg@mail.gmail.com>
+ <200c39f5-3bff-cacb-57c9-e11c57df70f5@android.com>
+In-Reply-To: <200c39f5-3bff-cacb-57c9-e11c57df70f5@android.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Mon, 3 Jun 2019 19:07:34 +0200
+Message-ID: <CAK8P3a24SFh1eeYpkU1xWL4_2j5_7ieejwuBZW1m3G6biKSK4g@mail.gmail.com>
+Subject: Re: [PATCH v6 17/19] mips: Add support for generic vDSO
+To:     Mark Salyzyn <salyzyn@android.com>
+Cc:     Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-mips@vger.kernel.org,
         "open list:KERNEL SELFTEST FRAMEWORK" 
         <linux-kselftest@vger.kernel.org>,
         Catalin Marinas <catalin.marinas@arm.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
         Will Deacon <will.deacon@arm.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Kees Cook <keescook@chromium.org>,
-        Yishai Hadas <yishaih@mellanox.com>,
-        Felix Kuehling <Felix.Kuehling@amd.com>,
-        Alexander Deucher <Alexander.Deucher@amd.com>,
-        Christian Koenig <Christian.Koenig@amd.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Jens Wiklander <jens.wiklander@linaro.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
-        Dave Martin <Dave.Martin@arm.com>, enh <enh@google.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Christoph Hellwig <hch@infradead.org>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Kostya Serebryany <kcc@google.com>,
-        Evgeniy Stepanov <eugenis@google.com>,
-        Lee Smith <Lee.Smith@arm.com>,
-        Ramana Radhakrishnan <Ramana.Radhakrishnan@arm.com>,
-        Jacob Bramley <Jacob.Bramley@arm.com>,
-        Ruben Ayrapetyan <Ruben.Ayrapetyan@arm.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Kevin Brodsky <kevin.brodsky@arm.com>,
-        Szabolcs Nagy <Szabolcs.Nagy@arm.com>
+        Russell King <linux@armlinux.org.uk>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Paul Burton <paul.burton@mips.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Collingbourne <pcc@google.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Dmitry Safonov <0x7f454c46@gmail.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Huw Davies <huw@codeweavers.com>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Jun 3, 2019 at 7:04 PM Khalid Aziz <khalid.aziz@oracle.com> wrote:
+On Mon, Jun 3, 2019 at 4:54 PM Mark Salyzyn <salyzyn@android.com> wrote:
+> On 05/31/2019 01:34 AM, Arnd Bergmann wrote:
+> > On Thu, May 30, 2019 at 4:16 PM Vincenzo Frascino
+> > <vincenzo.frascino@arm.com> wrote:
+> >
+> >> --- a/arch/mips/vdso/vdso.lds.S
+> >> +++ b/arch/mips/vdso/vdso.lds.S
+> >> @@ -99,6 +99,10 @@ VERSION
+> >>          global:
+> >>                  __vdso_clock_gettime;
+> >>                  __vdso_gettimeofday;
+> >> +               __vdso_clock_getres;
+> >> +#if _MIPS_SIM != _MIPS_SIM_ABI64
+> >> +               __vdso_clock_gettime64;
+> >> +#endif
+> >>   #endif
+> >>          local: *;
+> >>          };
+> > Same comment as for the corresponding arm change: I'd leave the ABI
+> > changes to a separate patch, and probably not add __vdso_clock_getres
+> > at all.
 >
-> On 6/3/19 10:55 AM, Andrey Konovalov wrote:
-> > To allow arm64 syscalls to accept tagged pointers from userspace, we must
-> > untag them when they are passed to the kernel. Since untagging is done in
-> > generic parts of the kernel, the untagged_addr macro needs to be defined
-> > for all architectures.
-> >
-> > Define it as a noop for architectures other than arm64.
-> >
-> > Acked-by: Catalin Marinas <catalin.marinas@arm.com>
-> > Reviewed-by: Khalid Aziz <khalid.aziz@oracle.com>
-> > Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
-> > ---
-> >  include/linux/mm.h | 4 ++++
-> >  1 file changed, 4 insertions(+)
-> >
-> > diff --git a/include/linux/mm.h b/include/linux/mm.h
-> > index 0e8834ac32b7..949d43e9c0b6 100644
-> > --- a/include/linux/mm.h
-> > +++ b/include/linux/mm.h
-> > @@ -99,6 +99,10 @@ extern int mmap_rnd_compat_bits __read_mostly;
-> >  #include <asm/pgtable.h>
-> >  #include <asm/processor.h>
-> >
-> > +#ifndef untagged_addr
-> > +#define untagged_addr(addr) (addr)
-> > +#endif
-> > +
-> >  #ifndef __pa_symbol
-> >  #define __pa_symbol(x)  __pa(RELOC_HIDE((unsigned long)(x), 0))
-> >  #endif
-> >
->
-> Andrey,
->
-> This patch has now become part of the other patch series Chris Hellwig
-> has sent out -
-> <https://lore.kernel.org/lkml/20190601074959.14036-1-hch@lst.de/>. Can
-> you coordinate with that patch series?
+> Removing this would break ABI (would it really, it just replaces the
+> syscall ... so it is more of a user space expectation)? already present
+> in arm64 before this series.
 
-Hi!
+What I meant is that we should only keep clock_getres() in the vdso
+for architectures that already have it, to keep the ABI unchanged,
+but not add it to new ones.
 
-Yes, I've seen it. How should I coordinate? Rebase this series on top
-of that one?
+At the moment, arm64, nds32, ppc, riscv and s390 have clock_getres,
+while arm, mips, sparc, and x86 don't.
 
-Thanks!
+Also: on 32-bit architectures with 64-bit time_t, the series only adds
+clock_gettime()., not clock_getres(), so user space should stop
+assuming it's there.
 
->
-> --
-> Khalid
->
+        Arnd
