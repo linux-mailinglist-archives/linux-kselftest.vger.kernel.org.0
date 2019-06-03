@@ -2,52 +2,52 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A23B33576
-	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Jun 2019 18:56:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E402A3357D
+	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Jun 2019 18:56:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729691AbfFCQ4J (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 3 Jun 2019 12:56:09 -0400
-Received: from mail-vk1-f201.google.com ([209.85.221.201]:49849 "EHLO
-        mail-vk1-f201.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729687AbfFCQ4H (ORCPT
+        id S1728440AbfFCQ4P (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 3 Jun 2019 12:56:15 -0400
+Received: from mail-oi1-f201.google.com ([209.85.167.201]:49278 "EHLO
+        mail-oi1-f201.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729700AbfFCQ4K (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 3 Jun 2019 12:56:07 -0400
-Received: by mail-vk1-f201.google.com with SMTP id i138so6767067vke.16
-        for <linux-kselftest@vger.kernel.org>; Mon, 03 Jun 2019 09:56:07 -0700 (PDT)
+        Mon, 3 Jun 2019 12:56:10 -0400
+Received: by mail-oi1-f201.google.com with SMTP id a126so2222847oif.16
+        for <linux-kselftest@vger.kernel.org>; Mon, 03 Jun 2019 09:56:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=Y8tRh8UuVncP1ncRA8ZfIPgOhX9+nAfsBu2vnbYNOEE=;
-        b=eFK1jtlEFrS3m2V50O3J5bSuSe+f8SF2oOEJcYGOiFDh2Xi4MGaW9nDUncCGVcGUyN
-         tYL5ptbIsLBKOxSfh5JEibNl8mgQflxa8qzQZCZGbKOMu+ue4btTZbmvk6Kxh+WcG+Wv
-         fn/kF4y9wQfMzaBiS9+LkicOpt8tKnLL/K7iTnBUbTxgKs5dHlS/ncUSuv8GobYsG6Cu
-         6qM+L38/9FABz5BxD3BPgItX9XL5QdXg0jsVIbHzcM5qVU0wJRygy73ep5mkhIvjeckb
-         fTT0sIEfasP+T2Y6+uUP2P0imGCc2+QNF2QVC0kVT6BdFDtQ0zPTYlADXVtguKUh5EC4
-         AB9A==
+        bh=UdKHGBZnbXnYOdacGwXVLbo2mp7I3OpbNnEy2rn9dE0=;
+        b=aMwQlO/uqKNquhxQCaOybakc925QpZfJO8wh15xEZQIyCg72vlDGXrUg/ROAuoQDUD
+         yCBHc/elg2gmmBaFllCt7o9fko/cMYEXNqMBN5Ib8jP974H6cgrFWFCLBOtmTziaRGQQ
+         SwI/Xt1vXIDm1HuVmNbFHcArxU2bsmwx6xs/PbNEoDywCtOeBm47QoZ+wae08e7pzq/K
+         a7mRKG2GqnFCVji4AY+94HQ5eVsYgsMp8E/PA4r/OPS0psFqvjDQbyz4YEbR/PgBj2Aq
+         436HnabGuSm3Rvtg2LN9VhA8Rs2mRcn4xgL77EZC0LMuRu0EvZQAUUg9zFkbP9a8AWHr
+         YN2w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=Y8tRh8UuVncP1ncRA8ZfIPgOhX9+nAfsBu2vnbYNOEE=;
-        b=djCL69e397rW8HbG9tDjM7SYXFYifJUt7ee5KyY0+O6dFUbEYM3kJrnsOWs/+crYgD
-         qZk3uG3naUvkoZ5xldxXFNrlHTYGq74AdDW16hv34158M/ZvoVyu9VBQuUnJD7oj//aO
-         V8HI9IKTorsMQ89P2zHGRz6uM3Q5zwYSKVSCKQdEfLuOmbGDSuHJIK4YIXupcFNHeK8x
-         AXAdIE8+xZIyEMkiND0AKWGq9LJE+Gu3WOq2ahFStUPxLdD4XJ9rO/ik/s2QNmizeJ5R
-         WhXBzauivN3MeMK3guzDuTi1/0H91zpNawVCz4bb+Kdwc4B9tfgYw7cMWjA+SrBkTsLV
-         OADQ==
-X-Gm-Message-State: APjAAAWI/3nJXlVJcgMWSrVFW7FErnO84EZ5H2X/ddElhoCsBJTGCYs4
-        Ld3XHpboWGBWksBenvCUasQYyyKxIuCzz/bY
-X-Google-Smtp-Source: APXvYqzz/ntPC10OZ0frdLABrSNi7hvZ/ytx4Ex3aaENCq428cafLYJMM+5BmbKZZkSR6QrCbMGhJA3iBNJvNJC5
-X-Received: by 2002:a9f:25c6:: with SMTP id 64mr157298uaf.36.1559580966349;
- Mon, 03 Jun 2019 09:56:06 -0700 (PDT)
-Date:   Mon,  3 Jun 2019 18:55:15 +0200
+        bh=UdKHGBZnbXnYOdacGwXVLbo2mp7I3OpbNnEy2rn9dE0=;
+        b=kCbU+hjwmjv5DAi/Mrktc4ozo1StoV+M+pnOxj6zQVHSRl1R002W2WepWIJ99Uzxw2
+         NZV8b8XoGdGJtbWkpyOXdGZxK0Efkg/6Ose47Ot9QJvS5NqguqGYH2FY+A4TPruHaGP9
+         ONl2WuExLBozMyI6QLDI5BwHcfFh4czFWv8H+du/ysOeLWFs1uIG2XMpFUu1bzA4He8z
+         Ae29OBwMJ3saZf08k/vZgcu/NIoSJ20Pv41VAl1Fi0/+c00/kxBtIrz6CPJkXRVudh3o
+         M/mAmjWD/O+eF3pnLeiRzuKyqr/43PqFjEcASrC7XCqyaQHILZoF2s1254TmRJ23gQpl
+         DyDg==
+X-Gm-Message-State: APjAAAWmR5sfD3qcv0SUXX7+hg1wyWxWaaKBp1IHIcEL45duPorE7FGZ
+        SkUwvweKvZW1Br1gRl+zGCzYVA2Nfhuf5FBl
+X-Google-Smtp-Source: APXvYqxMjN/4yHR2ThXEEFJeDuxNxY18SC+MmNXgYJ7rlNGji/L0sGyo9f6aEs2c6lSgFUC7mMKDb3c6mMlyiMDt
+X-Received: by 2002:a9d:4109:: with SMTP id o9mr1768838ote.353.1559580969728;
+ Mon, 03 Jun 2019 09:56:09 -0700 (PDT)
+Date:   Mon,  3 Jun 2019 18:55:16 +0200
 In-Reply-To: <cover.1559580831.git.andreyknvl@google.com>
-Message-Id: <31821f3538ddacb7e57e0248e86a3d28f9789d2f.1559580831.git.andreyknvl@google.com>
+Message-Id: <dc3f3092abbc0d48e51b2e2a2ca8f4c4f69fa0f4.1559580831.git.andreyknvl@google.com>
 Mime-Version: 1.0
 References: <cover.1559580831.git.andreyknvl@google.com>
 X-Mailer: git-send-email 2.22.0.rc1.311.g5d7573a151-goog
-Subject: [PATCH v16 13/16] media/v4l2-core, arm64: untag user pointers in videobuf_dma_contig_user_get
+Subject: [PATCH v16 14/16] tee, arm64: untag user pointers in tee_shm_register
 From:   Andrey Konovalov <andreyknvl@google.com>
 To:     linux-arm-kernel@lists.infradead.org, linux-mm@kvack.org,
         linux-kernel@vger.kernel.org, amd-gfx@lists.freedesktop.org,
@@ -84,8 +84,7 @@ Cc:     Catalin Marinas <catalin.marinas@arm.com>,
         Robin Murphy <robin.murphy@arm.com>,
         Kevin Brodsky <kevin.brodsky@arm.com>,
         Szabolcs Nagy <Szabolcs.Nagy@arm.com>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
+        Andrey Konovalov <andreyknvl@google.com>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
@@ -96,56 +95,29 @@ This patch is a part of a series that extends arm64 kernel ABI to allow to
 pass tagged user pointers (with the top byte set to something else other
 than 0x00) as syscall arguments.
 
-videobuf_dma_contig_user_get() uses provided user pointers for vma
-lookups, which can only by done with untagged pointers.
+tee_shm_register()->optee_shm_unregister()->check_mem_type() uses provided
+user pointers for vma lookups (via __check_mem_type()), which can only by
+done with untagged pointers.
 
-Untag the pointers in this function.
+Untag user pointers in this function.
 
-Acked-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
 Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
 ---
- drivers/media/v4l2-core/videobuf-dma-contig.c | 9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
+ drivers/tee/tee_shm.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/media/v4l2-core/videobuf-dma-contig.c b/drivers/media/v4l2-core/videobuf-dma-contig.c
-index e1bf50df4c70..8a1ddd146b17 100644
---- a/drivers/media/v4l2-core/videobuf-dma-contig.c
-+++ b/drivers/media/v4l2-core/videobuf-dma-contig.c
-@@ -160,6 +160,7 @@ static void videobuf_dma_contig_user_put(struct videobuf_dma_contig_memory *mem)
- static int videobuf_dma_contig_user_get(struct videobuf_dma_contig_memory *mem,
- 					struct videobuf_buffer *vb)
- {
-+	unsigned long untagged_baddr = untagged_addr(vb->baddr);
- 	struct mm_struct *mm = current->mm;
- 	struct vm_area_struct *vma;
- 	unsigned long prev_pfn, this_pfn;
-@@ -167,22 +168,22 @@ static int videobuf_dma_contig_user_get(struct videobuf_dma_contig_memory *mem,
- 	unsigned int offset;
- 	int ret;
- 
--	offset = vb->baddr & ~PAGE_MASK;
-+	offset = untagged_baddr & ~PAGE_MASK;
- 	mem->size = PAGE_ALIGN(vb->size + offset);
- 	ret = -EINVAL;
- 
- 	down_read(&mm->mmap_sem);
- 
--	vma = find_vma(mm, vb->baddr);
-+	vma = find_vma(mm, untagged_baddr);
- 	if (!vma)
- 		goto out_up;
- 
--	if ((vb->baddr + mem->size) > vma->vm_end)
-+	if ((untagged_baddr + mem->size) > vma->vm_end)
- 		goto out_up;
- 
- 	pages_done = 0;
- 	prev_pfn = 0; /* kill warning */
--	user_address = vb->baddr;
-+	user_address = untagged_baddr;
- 
- 	while (pages_done < (mem->size >> PAGE_SHIFT)) {
- 		ret = follow_pfn(vma, user_address, &this_pfn);
+diff --git a/drivers/tee/tee_shm.c b/drivers/tee/tee_shm.c
+index 49fd7312e2aa..96945f4cefb8 100644
+--- a/drivers/tee/tee_shm.c
++++ b/drivers/tee/tee_shm.c
+@@ -263,6 +263,7 @@ struct tee_shm *tee_shm_register(struct tee_context *ctx, unsigned long addr,
+ 	shm->teedev = teedev;
+ 	shm->ctx = ctx;
+ 	shm->id = -1;
++	addr = untagged_addr(addr);
+ 	start = rounddown(addr, PAGE_SIZE);
+ 	shm->offset = addr - start;
+ 	shm->size = length;
 -- 
 2.22.0.rc1.311.g5d7573a151-goog
 
