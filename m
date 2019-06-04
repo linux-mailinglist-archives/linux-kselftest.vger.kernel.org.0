@@ -2,48 +2,48 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 63B1F34C95
-	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Jun 2019 17:49:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3473634E79
+	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Jun 2019 19:12:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728002AbfFDPtT (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 4 Jun 2019 11:49:19 -0400
-Received: from mail-lj1-f196.google.com ([209.85.208.196]:38587 "EHLO
-        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728030AbfFDPtS (ORCPT
+        id S1728023AbfFDRLQ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 4 Jun 2019 13:11:16 -0400
+Received: from mail-lj1-f180.google.com ([209.85.208.180]:33789 "EHLO
+        mail-lj1-f180.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726532AbfFDRLP (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 4 Jun 2019 11:49:18 -0400
-Received: by mail-lj1-f196.google.com with SMTP id o13so20179398lji.5
-        for <linux-kselftest@vger.kernel.org>; Tue, 04 Jun 2019 08:49:15 -0700 (PDT)
+        Tue, 4 Jun 2019 13:11:15 -0400
+Received: by mail-lj1-f180.google.com with SMTP id v29so9169269ljv.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 04 Jun 2019 10:11:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=mime-version:from:date:message-id:subject:to:cc;
-        bh=nHNUhyyhYgUDTnhIgl8sUKgANmsUTVdE1Nd/zOsazY0=;
-        b=DUwBhqcw0BolsLiqlOoJTLn4eb7CUMHRkHVO4QY/D6+Y8sXaau96RQ3PEdHXHmAdJs
-         OOCz4gvbMt61zmKeTBIZkfU/Cfw1Gt3PSkshWgqLuLW8GgaSRs8JiXJfPJKeDYDZAfvT
-         B7piEbWvRTOQzC7EiJHUgZlVJm9sorc8YXXIFNJrQLU81e+F7rXjoSJMyb1OXFdkFl75
-         dW41DoxjfMNAkDtEbGqlKKTR9X/yFWOR0T23OA3F3+/RR5qhoR4xNMrkKcUUz2dTMQ95
-         VjQvVIPKswqlGYUULKWLcZ0B+UrG/PWh0zlsn2rvD9DzMQp2MohfT0CktCqOQofhbiyL
-         WiNg==
+        bh=z3Rm1IpMxofWBAs0dWcXcdCgdxSDOtcPS5QrxRItya8=;
+        b=Ilq8tkn7CHCeMmx2zlpnGUQ4icdjoRy50AQkTW2KEUtInTdwtO/4QTncqLJX3WGx7X
+         ZR68AkKcQwMMUyc0XcoWPkASa7HiH9H7qdGIBF2STjPE4jNJtIiKInpAJx4wAvNYiqFl
+         /qyW9mHs9tH8r77bqWbmxL4QTycEWUwXZsunjkokCRHw4kBHGxI4oc0lYxQILQZhKzZY
+         wyBt/Vc/+Fr4hIU+ihbmZla9aMxBQjBiAF2KV+TiL4DjKIsar1FYt4p3Km8d9lHan2e2
+         TpElPa0kkSw+B7msXbgvmldv+I82mjLs7x5lO4wo6TY5ON/tIWFHQN81VeV6FUaX8EdH
+         QpUw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=nHNUhyyhYgUDTnhIgl8sUKgANmsUTVdE1Nd/zOsazY0=;
-        b=Cx/ej12g6MroDZiJiwTSc3HzOKip4BbBs4TAi4apy3TBBExh/PXwj/F7qeJOW9QhHA
-         NIT57lXJtbErtlHAziq1wFYEJ5Ii+RkQOT3mAAXSIbPMEYeIjpdsgj2vw1Utu/HGioFe
-         35G+UBzyp5k7g29z6kuKtrHDpgf0Z/s1qHXxDsVt50FPACCA2UhVNvNtlzqaBn2vNGxO
-         Q6ei2NP/YEpL+N6N0f3prg1XAFM+dGO5KhkuuJ7MSvB4RpF/TGeOz+lTq4wQf1loJVZi
-         SSdv3chiIm4qia1tlT6mpW3gz+j2Pt4pCqq5fs4gSck7jQe7FYaxC04suYl0x/3RwHCe
-         y/vA==
-X-Gm-Message-State: APjAAAUHjVfZpgSktWQyl6f0g20TdWpsYemHEPdY/UIj10T0/HEnGSkC
-        KibKBNGDK8BDcgjFY5qhZc85IcNpqHyD5qlR6/sd7w==
-X-Google-Smtp-Source: APXvYqz/6DBwAEgL3eDu2dDyrmiEnM6gDjdIKBpLH8c0rcyaudJRj7/VbD+M7XCpKnhgKm1J4WWZeD5Xr0b6gT6xpC4=
-X-Received: by 2002:a2e:90d1:: with SMTP id o17mr17599943ljg.187.1559663354159;
- Tue, 04 Jun 2019 08:49:14 -0700 (PDT)
+        bh=z3Rm1IpMxofWBAs0dWcXcdCgdxSDOtcPS5QrxRItya8=;
+        b=HjQZQygNKIPfiTAeHPMVY7an0NIcKRnLq3aJwIfk6Qd/re2LoSHqfeOmXVDjAiyz9B
+         6Wat3xenytRPJRa7B7hd/jmb1b0JMOWAhb3/3uMC++mHmTj1dLOdL/xlub1MT3h9UIoV
+         HSmOr3N78OYhmWuIP24afNljz4C1HoC4OCSYbmDOIdSnOjTOQ+/uaTXPXAGAgPoWOkF/
+         ffISzDK+w6ZbKJ9zg+9i7RAhPitEPb1pU/MRB8kRPApEHCWE+Sgj+YGNG5Binrgxy1XA
+         hHtZ1a1IweeK+3+jTURgkxfQshX6mCpUfAP+0goiqOK6mxUcLCcEjwl3oduoIQ7UgKfS
+         slgg==
+X-Gm-Message-State: APjAAAUVrCTF+V05rvfctIdU1ujgNqAd8hj19MGZk3k2HwaMKPkKkrR+
+        fJ3LRHHMMLfWbAtKfjJrv14EnBgl+GbIVAHslKn/VQ==
+X-Google-Smtp-Source: APXvYqz3uJSusB3UbNUsaNLHM20Sus+F+y35y3psENaO4fi/JFE9wq98I1WJfiLXNe+UU/4X0M15BMgOM/hLnGnZiGs=
+X-Received: by 2002:a2e:90d1:: with SMTP id o17mr17835634ljg.187.1559668272703;
+ Tue, 04 Jun 2019 10:11:12 -0700 (PDT)
 MIME-Version: 1.0
 From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Tue, 4 Jun 2019 21:19:03 +0530
-Message-ID: <CA+G9fYt9kmOez73UUwT_iWKN8j+j7eD=GQX1-qrUnnYGqPuNpw@mail.gmail.com>
-Subject: bpf: test_btf : kernel Oops: 207 : PC is at memcpy+0xc0/0x330
+Date:   Tue, 4 Jun 2019 22:41:01 +0530
+Message-ID: <CA+G9fYu1qT44USvLGed=K2F=x8NAh8sgosw5KrS=THhLsrcxtw@mail.gmail.com>
+Subject: BUG: kernel NULL pointer dereference, address: 00000000: memcpy+0x1d/0x30
 To:     Netdev <netdev@vger.kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Stanislav Fomichev <sdf@google.com>,
@@ -52,7 +52,6 @@ To:     Netdev <netdev@vger.kernel.org>,
 Cc:     lkft-triage@lists.linaro.org,
         "open list:KERNEL SELFTEST FRAMEWORK" 
         <linux-kselftest@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
         Linux-Next Mailing List <linux-next@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
@@ -60,273 +59,154 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-while running kernel selftest bpf: test_btf the following kernel oops
-detected on beaglebone x15 board.
-Linux version 5.2.0-rc3-next-20190604
+While running selftest bpf: test_maps the kernel BUG found on i386 kernel
+running on x86_64 machine Linux version 5.2.0-rc3-next-20190604
 
-Full test log link can be found below [1]
+Full test log can be found in the below link [1]
 
-bpf: test_btf_ #
-
-# BTF GET_INFO test[3] (Large bpf_btf_info) OK
-GET_INFO: test[3]_(Large #
-# BTF GET_INFO test[4] (BTF ID) OK
-GET_INFO: test[4]_(BTF #
-[  341.144885] 8<--- cut here ---
-[  341.148164] Unable to handle kernel NULL pointer dereference at
-virtual address 00000000
-[  341.156443] pgd = b0902156
-[  341.159294] [00000000] *pgd=9655e003, *pmd=ff918003
-[  341.164229] Internal error: Oops: 207 [#1] SMP ARM
-[  341.169052] Modules linked in: tun sha1_generic sha1_arm_neon
-sha1_arm algif_hash af_alg snd_soc_simple_card
-snd_soc_simple_card_utils snd_soc_core ac97_bus snd_pcm_dmaengine
-snd_pcm snd_timer snd soundcore fuse
-[  341.187962] CPU: 0 PID: 6773 Comm: test_sockmap Not tainted
+# helper_fill_hashmap(261)FAILfailed to create hashmap err Cannot
+allocate memory, flags 0x0
+to: create_hashmap #
+# Fork 1024 tasks to 'test_update_delete'
+1024: tasks_to #
+# Fork 1024 tasks to 'test_update_delete'
+1024: tasks_to #
+# Fork 100 tasks to 'test_hashmap'
+100: tasks_to #
+# Fork 100 tasks to 'test_hashmap_percpu'
+100: tasks_to #
+# Fork 100 tasks to 'test_hashmap_sizes'
+[   93.249753] BUG: kernel NULL pointer dereference, address: 00000000
+[   93.256586] #PF: supervisor read access in kernel mode
+[   93.261714] #PF: error_code(0x0000) - not-present page
+[   93.266846] *pde = 00000000
+[   93.269722] Oops: 0000 [#1] SMP
+[   93.272859] CPU: 0 PID: 4354 Comm: test_sockmap Not tainted
 5.2.0-rc3-next-20190604 #1
-[  341.195923] Hardware name: Generic DRA74X (Flattened Device Tree)
-[  341.202058] PC is at memcpy+0xc0/0x330
-[  341.205836] LR is at bpf_msg_push_data+0x70c/0x728
-[  341.210654] pc : [<c12da820>]    lr : [<c10ea4a4>]    psr: 800b0013
-[  341.216957] sp : e99ad6cc  ip : 00000002  fp : e99ad83c
-[  341.222212] r10: d1bdc000  r9 : 00000001  r8 : 00000000
-[  341.227467] r7 : cd1de000  r6 : 00000000  r5 : d1bdc000  r4 : 00000000
-[  341.234032] r3 : 00000000  r2 : 80000000  r1 : 00000000  r0 : cd1de000
-[  341.240597] Flags: Nzcv  IRQs on  FIQs on  Mode SVC_32  ISA ARM  Segment user
-[  341.247771] Control: 30c5387d  Table: 91b19880  DAC: fffffffd
-[  341.253553] Process test_sockmap (pid: 6773, stack limit = 0x3ad4028c)
-[  341.260118] Stack: (0xe99ad6cc to 0xe99ae000)
-[  341.264502] d6c0:                            cd1de000 00000000
-c10ea4a4 00000000 00000000
-[  341.272725] d6e0: 00000000 00000000 00000000 00000000 00000000
-00000000 ea2759a0 00000001
-[  341.280948] d700: 00000000 00000000 00000000 00000000 00000000
-00000000 00000000 00000000
-[  341.289171] d720: 00000000 00000000 00000000 00000000 00000000
-00000000 00000000 00000000
-[  341.297394] d740: 00000000 00000000 00000000 00000000 00000000
-00000000 e99ad78c d03f0580
-[  341.305615] d760: 00000004 d03f0000 00000007 000003a9 00000000
-00000000 00000000 00000000
-[  341.313836] d780: 00000000 00000000 00000000 00000000 d03f0000
-c0581f6c 00000060 c1e09fd0
-[  341.322060] d7a0: e99ad85c e99ad7b0 c04c1d1c 00000000 c06c3638
-c1dc19b8 e99ad7ec d03f0540
-[  341.330283] d7c0: 00000002 d03f0000 00000007 000003a9 00000001
-d03f0560 d03f0000 e3444ce4
-[  341.338506] d7e0: 00000060 c1e09fd0 e99ad8a4 e99ad7f8 cbc66e00
-e99ad8a8 c1419868 c059b69c
-[  341.346730] d800: 00000000 00000000 e99ad824 e99ad818 c04e3b7c
-f006b240 e99ad8b8 c1419868
-[  341.354954] d820: c10e9d98 00000000 00000000 c0581ddc e99ad894
-e99ad840 c0581f6c c10e9da4
-[  341.363175] d840: 00000000 00000000 00000000 00000000 00000000
-00000000 f5388145 290412b8
-[  341.371399] d860: c2432908 00000000 f08d7937 c1e08488 f006b028
-00000011 c11cd828 f006b000
-[  341.379620] d880: e99ad9e4 c1fc9e37 e99ad934 e99ad898 c0584910
-c0581e48 00000000 00000000
-[  341.387841] d8a0: 00000005 00000004 00000003 00000002 00000001
-00000000 cbc66ee8 00000000
-[  341.396063] d8c0: d1bdc000 00000000 00000000 00000000 00000000
-00000000 00000000 00000000
-[  341.404286] d8e0: 00000000 00000000 d1bdc000 00000000 cbc66ee0
-00000000 00000007 00000006
-[  341.412509] d900: 00000010 c1fc9e37 e99ad8b8 00000000 cf380840
-c10fdef4 c11cd828 9fdbe7c7
-[  341.420732] d920: d1bdc000 d1bdc000 e99ad984 e99ad938 c10fdf18
-c05848d0 00000000 00000000
-[  341.428954] d940: c10fde14 c0459978 e99ad97c e99ad958 c056165c
-e7bdd400 000001ff d1bdc000
-[  341.437178] d960: e7bdd400 00000011 cf380840 00000000 e99ad9e4
-c1fc9e37 e99ad9cc e99ad988
-[  341.445407] d980: c11cd828 c10fde20 c11cda3c 00000000 00000000
-e99ad9a0 00000000 00000000
-[  341.453631] d9a0: 00000001 e7bdd400 cf380840 eb6d1030 c1e08488
-00000000 00000003 c1fc9e37
-[  341.461855] d9c0: e99adcac e99ad9d0 c11cdb60 c11cd518 00000000
-00000000 c11cd90c e8577024
-[  341.470078] d9e0: 00000020 00000001 00000000 00000000 00000001
-00000001 00000000 00000001
-[  341.478300] da00: 00000000 00000000 00000000 00000000 eb6d1030
-00000000 00000001 00000000
-[  341.486522] da20: 00000000 00000000 00000000 00000000 00000000
-00000000 00000000 00000000
-[  341.494742] da40: 00000000 00000000 00000000 00000000 00000000
-00000000 00000000 00000000
-[  341.502965] da60: 00000000 00000000 00000000 00000000 00000000
-00000000 00000000 00000000
-[  341.511184] da80: 00000000 00000000 00000000 00000000 00000000
-00000000 00000000 00000000
-[  341.519406] daa0: 00000000 00000000 00000000 00000000 00000000
-00000087 00000001 d03f0500
-[  341.527628] dac0: d03f0000 c1e47f04 00000000 c1e09fd0 e99adb8c
-e99adae0 c04c1d1c c04c10d0
-[  341.535850] dae0: 00000000 00000000 00000000 00000000 00000000
-00000000 00000000 00000078
-[  341.544074] db00: d03f04f0 00000087 00000000 00000000 c2432908
-c2638640 00000087 d03f0500
-[  341.552296] db20: c1e08488 c2418b30 406293ec 295bca2f 00000000
-00000000 00000000 00000000
-[  341.560517] db40: 00000000 00000000 d03f04f0 00000078 e99adb84
-e99adb60 c040e488 00000087
-[  341.568741] db60: 00000001 d03f0500 d03f0000 c1e47f04 00000000
-c1e09fd0 e99adc34 e99adb88
-[  341.576961] db80: c04c1d1c c04c10d0 ffffe000 c1fcaf30 c069cddc
-c1e47f04 e99adbbc e99adba8
-[  341.585182] dba0: c04c19e0 c04c1864 d03f04f0 00000087 00000000
-00000000 c2432908 c2638640
-[  341.593405] dbc0: 00000087 d03f0500 c1e08488 c2418b30 406293ec
-295bca2f e99adc24 e99adbe8
-[  341.601628] dbe0: c04fe13c c05615d4 00000001 00000000 c069cddc
-e99adc54 e99adc2c e99adc08
-[  341.609851] dc00: c040e488 c040ce94 c1e08488 00000000 ffffe000
-c1fcaf30 c069cddc c1e47f04
-[  341.618073] dc20: e99adc64 e99adc30 d03f0000 c04fe13c ffffe000
-c1fcaf30 c069cddc c1e47f04
-[  341.626294] dc40: e99adc64 e99adc50 c04c19e0 c04c1864 c1dc1000
-c04fe13c e99adc8c e99adc68
-[  341.634517] dc60: c056165c c04c18d8 c1e47e40 400b0013 00000001
-e99adce0 c069cddc 9fdbe7c7
-[  341.642738] dc80: e99adccc cf380840 c11cd90c e776d400 eb6d1030
-00000010 00000001 c1938660
-[  341.650959] dca0: e99adcf4 e99adcb0 c119c98c c11cd918 00000000
-e3444a98 e99add14 e99adcd0
-[  341.659180] dcc0: c069ce08 c069cd10 5cf61726 c119c908 c10933a0
-00000000 00000000 c06b7624
-[  341.667403] dce0: 00000001 c1938660 e99add14 e99adcf8 c1093390
-c119c914 00000000 e3444a98
-[  341.675624] dd00: e7cd5110 c1e08488 e99add2c e99add18 c10933d8
-c1093368 00000000 0000026d
-[  341.683846] dd20: e99add64 e99add30 c06b7694 c10933ac e99add38
-00000000 00000000 00000000
-[  341.692067] dd40: c1e08488 9fdbe7c7 e7bdc800 e99adda0 d3b2fcc0
-00000018 e99add9c e99add68
-[  341.700289] dd60: c06b8a04 c06b7630 e99ade60 00000000 00000000
-c1e08488 d3b2fcc0 c06b7624
-[  341.708510] dd80: e68598c0 00000000 00000001 e99adf20 e99addfc
-e99adda0 c06b9214 c06b897c
-[  341.716731] dda0: 00000001 00000001 00000000 e68598c0 00000000
-00000000 00000000 00000000
-[  341.724953] ddc0: 00000000 00000000 00000000 9fdbe7c7 00000000
-c06b9240 e99adea0 00000001
-[  341.733176] dde0: 00000000 00000010 00000000 00000001 e99ade14
-e99ade00 c06b9270 c06b91a4
-[  341.741398] de00: 00000000 c06b7624 e99ade34 e99ade18 c06b761c
-c06b924c 00000000 e99adea0
-[  341.749621] de20: 00000001 d3b2fcc0 e99ade9c e99ade38 c06b7ff0
-c06b75dc 00000000 c067a2dc
-[  341.757842] de40: 00000001 c1e08488 00000000 c06b75d0 00000000
-e9949a00 00000010 00000000
-[  341.766065] de60: 00000011 00000000 e99adf1c 9fdbe7c7 00020000
-c1e08488 e99adf18 00000010
-[  341.774285] de80: 00000000 e9949a00 e99adf20 e68598c0 e99adef4
-e99adea0 c06b8238 c06b7edc
-[  341.782507] dea0: 00000001 00000001 00000000 e68598c0 00000010
-00000000 e99adf20 00000000
-[  341.790729] dec0: 00000000 00000000 d03f0000 9fdbe7c7 c1e08488
-c1e08488 e9949a00 fffff000
-[  341.798952] dee0: 00000fff 00000001 e99adf5c e99adef8 c067ac74
-c06b8198 00000001 00000000
-[  341.807174] df00: e776d420 00000000 00000000 00000000 e68598c0
-e9949a00 00000010 00000000
-[  341.815397] df20: 00000000 00000000 c1e08488 9fdbe7c7 00000001
-c1e08488 00000001 00000000
-[  341.823618] df40: 00000000 c04011c4 0000001e 00000001 e99adfa4
-e99adf60 c067c2a4 c067aaa4
-[  341.831841] df60: fffff000 00000fff e99adfac e99adf78 c1dc1000
-9fdbe7c7 e99adfac bef7ca44
-[  341.840063] df80: 00000001 00000200 000000bb c04011c4 e99ac000
-000000bb 00000000 e99adfa8
-[  341.848285] dfa0: c0401000 c067c1b8 bef7ca44 00000001 0000001a
-0000001e 00000000 00000001
-[  341.856508] dfc0: bef7ca44 00000001 00000200 000000bb 00000001
-0000001e 0000001a 00000010
-[  341.864729] dfe0: 00045034 bef7c884 000137c0 b6e76d7c 200b0010
-0000001a 00000000 00000000
-[  341.872948] Backtrace:
-[  341.875425] [<c10e9d98>] (bpf_msg_push_data) from [<c0581f6c>]
-(___bpf_prog_run+0x130/0x1bbc)
-[  341.883999]  r10:c0581ddc r9:00000000 r8:00000000 r7:c10e9d98
-r6:c1419868 r5:e99ad8b8
-[  341.891869]  r4:f006b240
-[  341.894426] [<c0581e3c>] (___bpf_prog_run) from [<c0584910>]
-(__bpf_prog_run32+0x4c/0x68)
-[  341.902649]  r10:c1fc9e37 r9:e99ad9e4 r8:f006b000 r7:c11cd828
-r6:00000011 r5:f006b028
-[  341.910520]  r4:c1e08488
-[  341.913079] [<c05848c4>] (__bpf_prog_run32) from [<c10fdf18>]
-(sk_psock_msg_verdict+0x104/0x354)
-[  341.921909]  r4:d1bdc000
-[  341.924470] [<c10fde14>] (sk_psock_msg_verdict) from [<c11cd828>]
-(tcp_bpf_send_verdict+0x31c/0x400)
-[  341.933654]  r10:c1fc9e37 r9:e99ad9e4 r8:00000000 r7:cf380840
-r6:00000011 r5:e7bdd400
-[  341.941524]  r4:d1bdc000
-[  341.944083] [<c11cd50c>] (tcp_bpf_send_verdict) from [<c11cdb60>]
-(tcp_bpf_sendpage+0x254/0x3c4)
-[  341.952914]  r10:c1fc9e37 r9:00000003 r8:00000000 r7:c1e08488
-r6:eb6d1030 r5:cf380840
-[  341.960784]  r4:e7bdd400
-[  341.963343] [<c11cd90c>] (tcp_bpf_sendpage) from [<c119c98c>]
-(inet_sendpage+0x84/0x294)
-[  341.971480]  r10:c1938660 r9:00000001 r8:00000010 r7:eb6d1030
-r6:e776d400 r5:c11cd90c
-[  341.979350]  r4:cf380840
-[  341.981906] [<c119c908>] (inet_sendpage) from [<c1093390>]
-(kernel_sendpage+0x34/0x44)
-[  341.989868]  r10:c1938660 r9:00000001 r8:c06b7624 r7:00000000
-r6:00000000 r5:c10933a0
-[  341.997738]  r4:c119c908
-[  342.000290] [<c109335c>] (kernel_sendpage) from [<c10933d8>]
-(sock_sendpage+0x38/0x40)
-[  342.008248]  r4:c1e08488
-[  342.010805] [<c10933a0>] (sock_sendpage) from [<c06b7694>]
-(pipe_to_sendpage+0x70/0xa4)
-[  342.018856] [<c06b7624>] (pipe_to_sendpage) from [<c06b8a04>]
-(__splice_from_pipe+0x94/0x1cc)
-[  342.027424]  r7:00000018 r6:d3b2fcc0 r5:e99adda0 r4:e7bdc800
-[  342.033122] [<c06b8970>] (__splice_from_pipe) from [<c06b9214>]
-(splice_from_pipe+0x7c/0xa8)
-[  342.041605]  r10:e99adf20 r9:00000001 r8:00000000 r7:e68598c0
-r6:c06b7624 r5:d3b2fcc0
-[  342.049475]  r4:c1e08488
-[  342.052032] [<c06b9198>] (splice_from_pipe) from [<c06b9270>]
-(generic_splice_sendpage+0x30/0x38)
-[  342.060953]  r10:00000001 r9:00000000 r8:00000010 r7:00000000
-r6:00000001 r5:e99adea0
-[  342.068822]  r4:c06b9240
-[  342.071377] [<c06b9240>] (generic_splice_sendpage) from
-[<c06b761c>] (direct_splice_actor+0x4c/0x54)
-[  342.080562] [<c06b75d0>] (direct_splice_actor) from [<c06b7ff0>]
-(splice_direct_to_actor+0x120/0x2bc)
-[  342.089827]  r4:d3b2fcc0
-[  342.092383] [<c06b7ed0>] (splice_direct_to_actor) from [<c06b8238>]
-(do_splice_direct+0xac/0xe4)
-[  342.101218]  r10:e68598c0 r9:e99adf20 r8:e9949a00 r7:00000000
-r6:00000010 r5:e99adf18
-[  342.109088]  r4:c1e08488
-[  342.111645] [<c06b818c>] (do_splice_direct) from [<c067ac74>]
-(do_sendfile+0x1dc/0x420)
-[  342.119693]  r8:00000001 r7:00000fff r6:fffff000 r5:e9949a00 r4:c1e08488
-[  342.126436] [<c067aa98>] (do_sendfile) from [<c067c2a4>]
-(sys_sendfile+0xf8/0x11c)
-[  342.134048]  r10:00000001 r9:0000001e r8:c04011c4 r7:00000000
-r6:00000000 r5:00000001
-[  342.141917]  r4:c1e08488
-[  342.144475] [<c067c1ac>] (sys_sendfile) from [<c0401000>]
-(ret_fast_syscall+0x0/0x28)
-[  342.152346] Exception stack(0xe99adfa8 to 0xe99adff0)
-[  342.157428] dfa0:                   bef7ca44 00000001 0000001a
-0000001e 00000000 00000001
-[  342.165650] dfc0: bef7ca44 00000001 00000200 000000bb 00000001
-0000001e 0000001a 00000010
-[  342.173870] dfe0: 00045034 bef7c884 000137c0 b6e76d7c
-[  342.178951]  r10:000000bb r9:e99ac000 r8:c04011c4 r7:000000bb
-r6:00000200 r5:00000001
-[  342.186822]  r4:bef7ca44
-[  342.189377] Code: e4808004 e480e004 e8bd01e0 e1b02f82 (14d13001)
-[  342.195755] ---[ end trace d2353d98cf59813b ]---
+[   93.280763] Hardware name: Supermicro SYS-5019S-ML/X11SSH-F, BIOS
+2.0b 07/27/2017
+[   93.288235] EIP: memcpy+0x1d/0x30
+[   93.291547] Code: 59 58 eb 85 90 90 90 90 90 90 90 90 90 3e 8d 74
+26 00 55 89 e5 57 56 89 c7 53 89 d6 89 cb c1 e9 02 f3 a5 89 d9 83 e1
+03 74 02 <f3> a4 5b 5e 5f 5d c3 8d b6 00 00 00 00 8d bf 00 00 00 00 3e
+8d 74
+[   93.310291] EAX: e2ca9000 EBX: 00000001 ECX: 00000001 EDX: 00000000
+[   93.316548] ESI: 00000000 EDI: e2ca9000 EBP: e3d8799c ESP: e3d87990
+[   93.322806] DS: 007b ES: 007b FS: 00d8 GS: 00e0 SS: 0068 EFLAGS: 00010202
+[   93.329582] CR0: 80050033 CR2: 00000000 CR3: 20d21000 CR4: 003406d0
+[   93.335841] DR0: 00000000 DR1: 00000000 DR2: 00000000 DR3: 00000000
+[   93.342097] DR6: fffe0ff0 DR7: 00000400
+[   93.345929] Call Trace:
+[   93.348391]  bpf_msg_push_data+0x635/0x660
+[   93.352492]  ___bpf_prog_run+0xa0d/0x15a0
+[   93.356529]  ? __lock_acquire+0x1fe/0x1360
+[   93.360626]  __bpf_prog_run32+0x4b/0x70
+[   93.364461]  ? sk_psock_msg_verdict+0x5/0x290
+[   93.368842]  sk_psock_msg_verdict+0xad/0x290
+[   93.373105]  ? sk_psock_msg_verdict+0xad/0x290
+[   93.377543]  ? lockdep_hardirqs_on+0xec/0x1a0
+[   93.381896]  ? __local_bh_enable_ip+0x78/0xf0
+[   93.386255]  tcp_bpf_send_verdict+0x29c/0x3b0
+[   93.390615]  tcp_bpf_sendpage+0x233/0x3d0
+[   93.394629]  ? __lock_acquire+0x1fe/0x1360
+[   93.398754]  ? __lock_acquire+0x1fe/0x1360
+[   93.402850]  ? lock_release+0x8b/0x280
+[   93.406593]  ? find_get_entry+0x136/0x300
+[   93.410599]  ? touch_atime+0x34/0xd0
+[   93.414177]  ? copy_page_to_iter+0x245/0x400
+[   93.418441]  ? lockdep_hardirqs_on+0xec/0x1a0
+[   93.422793]  ? tcp_bpf_send_verdict+0x3b0/0x3b0
+[   93.427325]  inet_sendpage+0x53/0x1f0
+[   93.430981]  ? inet_recvmsg+0x1e0/0x1e0
+[   93.434812]  ? kernel_sendpage+0x40/0x40
+[   93.438728]  kernel_sendpage+0x1e/0x40
+[   93.442474]  sock_sendpage+0x24/0x30
+[   93.446054]  pipe_to_sendpage+0x59/0xa0
+[   93.449894]  ? direct_splice_actor+0x40/0x40
+[   93.454166]  __splice_from_pipe+0xde/0x1c0
+[   93.458264]  ? direct_splice_actor+0x40/0x40
+[   93.462535]  ? direct_splice_actor+0x40/0x40
+[   93.466801]  splice_from_pipe+0x59/0x80
+[   93.470641]  ? splice_from_pipe+0x80/0x80
+[   93.474652]  ? generic_splice_sendpage+0x20/0x20
+[   93.479262]  generic_splice_sendpage+0x18/0x20
+[   93.483701]  ? direct_splice_actor+0x40/0x40
+[   93.487971]  direct_splice_actor+0x2d/0x40
+[   93.492065]  splice_direct_to_actor+0x127/0x240
+[   93.496597]  ? generic_pipe_buf_nosteal+0x10/0x10
+[   93.501302]  do_splice_direct+0x7e/0xc0
+[   93.505134]  do_sendfile+0x20d/0x3e0
+[   93.508739]  sys_sendfile+0xac/0xd0
+[   93.512232]  ? lock_release+0x8b/0x280
+[   93.515984]  do_fast_syscall_32+0x8e/0x320
+[   93.520084]  entry_SYSENTER_32+0x70/0xc8
+[   93.524009] EIP: 0xb7f9d7a1
+[   93.526807] Code: 8b 98 60 cd ff ff 85 d2 89 c8 74 02 89 0a 5b 5d
+c3 8b 04 24 c3 8b 14 24 c3 8b 1c 24 c3 8b 3c 24 c3 51 52 55 89 e5 0f
+34 cd 80 <5d> 5a 59 c3 90 90 90 90 8d 76 00 58 b8 77 00 00 00 cd 80 90
+8d 76
+[   93.545542] EAX: ffffffda EBX: 0000001a ECX: 0000001e EDX: 00000000
+[   93.551799] ESI: 00000001 EDI: 0000001a EBP: 00000001 ESP: bfa67a64
+[   93.558057] DS: 007b ES: 007b FS: 0000 GS: 0033 SS: 007b EFLAGS: 00000206
+[   93.564836] Modules linked in: tun algif_hash af_alg
+x86_pkg_temp_thermal fuse
+[   93.572082] CR2: 0000000000000000
+[   93.575411] ---[ end trace c106584042e12a8d ]---
+[   93.580046] EIP: memcpy+0x1d/0x30
+[   93.583355] Code: 59 58 eb 85 90 90 90 90 90 90 90 90 90 3e 8d 74
+26 00 55 89 e5 57 56 89 c7 53 89 d6 89 cb c1 e9 02 f3 a5 89 d9 83 e1
+03 74 02 <f3> a4 5b 5e 5f 5d c3 8d b6 00 00 00 00 8d bf 00 00 00 00 3e
+8d 74
+[   93.602092] EAX: e2ca9000 EBX: 00000001 ECX: 00000001 EDX: 00000000
+[   93.608349] ESI: 00000000 EDI: e2ca9000 EBP: e3d8799c ESP: d967e49c
+[   93.614607] DS: 007b ES: 007b FS: 00d8 GS: 00e0 SS: 0068 EFLAGS: 00010202
+[   93.621408] CR0: 80050033 CR2: 00000000 CR3: 20d21000 CR4: 003406d0
+[   93.627694] DR0: 00000000 DR1: 00000000 DR2: 00000000 DR3: 00000000
+[   93.633951] DR6: fffe0ff0 DR7: 00000400
+[   93.637783] BUG: sleeping function called from invalid context at
+/usr/src/kernel/include/linux/percpu-rwsem.h:34
+[   93.648035] in_atomic(): 1, irqs_disabled(): 1, pid: 4354, name: test_sockmap
+[   93.655156] INFO: lockdep is turned off.
+[   93.659074] irq event stamp: 1538
+[   93.662408] hardirqs last  enabled at (1537): [<d902cadf>]
+_raw_spin_unlock_irqrestore+0x2f/0x50
+[   93.671200] hardirqs last disabled at (1538): [<d840182c>]
+trace_hardirqs_off_thunk+0xc/0x10
+[   93.679624] softirqs last  enabled at (1532): [<d8d1b849>]
+lock_sock_nested+0x39/0x90
+[   93.687465] softirqs last disabled at (1530): [<d8d1b83f>]
+lock_sock_nested+0x2f/0x90
+[   93.695284] CPU: 0 PID: 4354 Comm: test_sockmap Tainted: G      D
+        5.2.0-rc3-next-20190604 #1
+[   93.704573] Hardware name: Supermicro SYS-5019S-ML/X11SSH-F, BIOS
+2.0b 07/27/2017
+[   93.712043] Call Trace:
+[   93.714490]  dump_stack+0x66/0x96
+[   93.717800]  ___might_sleep+0x13e/0x230
+[   93.721629]  __might_sleep+0x33/0x80
+[   93.725200]  exit_signals+0x2a/0x200
+[   93.728771]  do_exit+0x8e/0xbb0
+[   93.731910]  ? do_fast_syscall_32+0x8e/0x320
+[   93.736182]  rewind_stack_do_exit+0x11/0x13
+[   93.740356] EIP: 0xb7f9d7a1
+[   93.743150] Code: 8b 98 60 cd ff ff 85 d2 89 c8 74 02 89 0a 5b 5d
+c3 8b 04 24 c3 8b 14 24 c3 8b 1c 24 c3 8b 3c 24 c3 51 52 55 89 e5 0f
+34 cd 80 <5d> 5a 59 c3 90 90 90 90 8d 76 00 58 b8 77 00 00 00 cd 80 90
+8d 76
+[   93.761887] EAX: ffffffda EBX: 0000001a ECX: 0000001e EDX: 00000000
+[   93.768142] ESI: 00000001 EDI: 0000001a EBP: 00000001 ESP: bfa67a64
+[   93.774406] DS: 007b ES: 007b FS: 0000 GS: 0033 SS: 007b EFLAGS: 00000206
+
+100: tasks_to [   93.781266] note: test_sockmap[4354] exited with
+preempt_count 2
+#
+# Fork 100 tasks to 'test_hashmap_walk'
+100: tasks_to #
+# helper_fill_hashmap(261)FAILfailed to create hashmap err Cannot
+allocate memory, flags 0x0
 
 
-[1] https://qa-reports.linaro.org/lkft/linux-next-oe/build/next-20190604/testrun/760426/log
+[1] https://lkft.validation.linaro.org/scheduler/job/760391#L13640
+
+Best regards
+Naresh Kamboju
