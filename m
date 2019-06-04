@@ -2,54 +2,55 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FB6C34664
-	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Jun 2019 14:18:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CC8E346A5
+	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Jun 2019 14:27:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727409AbfFDMSb (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 4 Jun 2019 08:18:31 -0400
-Received: from mail-pf1-f194.google.com ([209.85.210.194]:39086 "EHLO
-        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727358AbfFDMSb (ORCPT
+        id S1727805AbfFDM1R (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 4 Jun 2019 08:27:17 -0400
+Received: from mail-qt1-f196.google.com ([209.85.160.196]:39891 "EHLO
+        mail-qt1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727709AbfFDM1R (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 4 Jun 2019 08:18:31 -0400
-Received: by mail-pf1-f194.google.com with SMTP id j2so12581275pfe.6
-        for <linux-kselftest@vger.kernel.org>; Tue, 04 Jun 2019 05:18:30 -0700 (PDT)
+        Tue, 4 Jun 2019 08:27:17 -0400
+Received: by mail-qt1-f196.google.com with SMTP id i34so30401qta.6
+        for <linux-kselftest@vger.kernel.org>; Tue, 04 Jun 2019 05:27:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=izP2xVkH+lJ1XiJaz25EL/2sjI5XZqFKPi8rAth3/y8=;
-        b=anXrne3zDdmEVildSzDwGKYMdshtpWiEi/bSjfUgHwDoCg62X8GEgJ1oLKPrpJDBTp
-         sCO27Nd8vGOH1LG/aPfklMvFylAFcLd0duV9qTE0Uw2bgUkgehc21vjcK8KjtBKBSIeh
-         hbrrSVL1q8qPT28KLxALn+5w5v0FjrGnKuEQGLgwne0GhOjJGw91IA05Yw5AYbDH2v2V
-         eAfpEy7jnKgsdj8ID/iHcGjtOrlCN+u9PocCqqNSQrn/Xx8uaOQ0ef5ELA37nbSJameE
-         4YvdhcrfbGwQSFgLEIgyOhrMQbK4CtUaCUAqm4fpOOKP+JqNZLGloD+rwiN3Vuf1ojqO
-         poUA==
+        d=ziepe.ca; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=wnsJg5IBUcpd0uvGih9L7zWjhXAHb1EJO0yOEExZSzo=;
+        b=dcNC7UmtypwgYv25SVviVAOUG7URTCQh95rjKD+gc1HkGG0jrMjWKvaHqgOqnkLXCe
+         CmoljchytuIVIDVbprMz3tL0S5wF3BfmVPwpXMEcKwEKuopvqQDwmPbpLySBrTe+5P0P
+         +zjXSkVABYGjw15OrEI3UNK6X3hEEYJ5lmU4VodgY1OGgetHeu4xf6gu/Drrr5PoUFZD
+         NGszqORq933qFqUy4wxVOf9PkDJzNBd6Vt6SxvMrx9KcQhBJruI+UAnsanyndNgyFsW8
+         SfJHC+U7tiqZ4PP8CoYnZCXFGYoMymsmvspjQbzELX76TfLMwbqeFyJLFyTuqJIB4Dhp
+         ZF+A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=izP2xVkH+lJ1XiJaz25EL/2sjI5XZqFKPi8rAth3/y8=;
-        b=hvohxmnT0IVlUcZWX/twbyx/sjerXgXumZ4k9YshtrNTCjaPQgpDJVAPAaus3L/M4S
-         1RAYDtHABFEZH+mUXMlqwUdC+wAgbLqWypL8vYoUo6MWMrEayEt3q4lEKqVOjmIwZFxl
-         GuWjmyCkXrmUQvPmUQS7hvVgOaY1ytq/YLhXdHCqYBWenA6Ez6tmbIAVabI4ugQAxYU0
-         F21Y/IHrj/L8NceEYhduNUX4twJg3zL1VggrnGxU8emUGaI/6CmGl7GK8nY2Z/PYUpb/
-         FTJYkA0cWtE33wRsFM820dBx6yaSxNIzC7JWW64U/TB6fCkrihDz06KHJ5ZZvuiS8BTs
-         UwxA==
-X-Gm-Message-State: APjAAAVmRGB9AN00YuKnCofEJJRwbn6zIHSJ5qEwg7bxUVtIMFIFIpCw
-        HCp4rM6Uv06M437Ao7akxhwqezuvTVRjuhcZjc1oEw==
-X-Google-Smtp-Source: APXvYqz1BnXRogJ38HsJg+YXXm2v0kW8wf81Q7/M4AVfD5zoRhp7qhUtn8D86raEkRJz58lLKdDFOynhTkL7EDkBRUg=
-X-Received: by 2002:a63:1919:: with SMTP id z25mr35448936pgl.440.1559650710127;
- Tue, 04 Jun 2019 05:18:30 -0700 (PDT)
-MIME-Version: 1.0
-References: <cover.1559580831.git.andreyknvl@google.com> <c829f93b19ad6af1b13be8935ce29baa8e58518f.1559580831.git.andreyknvl@google.com>
- <20190603174619.GC11474@ziepe.ca>
-In-Reply-To: <20190603174619.GC11474@ziepe.ca>
-From:   Andrey Konovalov <andreyknvl@google.com>
-Date:   Tue, 4 Jun 2019 14:18:19 +0200
-Message-ID: <CAAeHK+xy-dx4dLDLLj9dRzRNSVG9H5nDPPnjpYF38qKZNNCh_g@mail.gmail.com>
-Subject: Re: [PATCH v16 12/16] IB, arm64: untag user pointers in ib_uverbs_(re)reg_mr()
-To:     Jason Gunthorpe <jgg@ziepe.ca>
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=wnsJg5IBUcpd0uvGih9L7zWjhXAHb1EJO0yOEExZSzo=;
+        b=AImgJ081BLv0lcdCZRDyfDsKWTLmc6MhVkFiDSWXxlGlefCSo4HU6HSi5c5lgaAMx/
+         o9iypTBFnoZ5izgVxxKxog2uia510cPRA1Jy3mGxcP5JhRkHh+NygyjLCaevTe96o9aX
+         ZV8HQUKOe1UNFozxABvXLPCODELkybKe0Xc7kUio66DA9EGlxOT1mdkaTsjVQJS8XsiV
+         9+QsNKqzwN4WXqIXm4g7nxgDU2s2Kf1tOUyGexaLD/Xh31KbWdjDswuOGGPA4syeSQjn
+         M+zp1LUFspF9tnr75qY5ReMiKbHkQ4FyMZg6T4c3OcObU865oe7CmyNcIirPCB0GYV/M
+         uj9Q==
+X-Gm-Message-State: APjAAAWnVmeUgi/uNfGcXsgVZE9wnyaOEB5PKW9t3OchHyS0v6KPZ45K
+        t25XVH9AWzdoe7ku8zZz6BX4NQ==
+X-Google-Smtp-Source: APXvYqyQKZsajkt/gWb5hfUpWdj5TzMt6KfoFh/bz/W6aTLwqi1dm4Rk21CH5MrcGrt3uoh1Lu64hg==
+X-Received: by 2002:aed:3a87:: with SMTP id o7mr27583430qte.310.1559651236150;
+        Tue, 04 Jun 2019 05:27:16 -0700 (PDT)
+Received: from ziepe.ca (hlfxns017vw-156-34-55-100.dhcp-dynamic.fibreop.ns.bellaliant.net. [156.34.55.100])
+        by smtp.gmail.com with ESMTPSA id c18sm4454633qkm.78.2019.06.04.05.27.15
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Tue, 04 Jun 2019 05:27:15 -0700 (PDT)
+Received: from jgg by mlx.ziepe.ca with local (Exim 4.90_1)
+        (envelope-from <jgg@ziepe.ca>)
+        id 1hY8X4-000416-LN; Tue, 04 Jun 2019 09:27:14 -0300
+Date:   Tue, 4 Jun 2019 09:27:14 -0300
+From:   Jason Gunthorpe <jgg@ziepe.ca>
+To:     Andrey Konovalov <andreyknvl@google.com>
 Cc:     Linux ARM <linux-arm-kernel@lists.infradead.org>,
         Linux Memory Management List <linux-mm@kvack.org>,
         LKML <linux-kernel@vger.kernel.org>,
@@ -87,128 +88,67 @@ Cc:     Linux ARM <linux-arm-kernel@lists.infradead.org>,
         Robin Murphy <robin.murphy@arm.com>,
         Kevin Brodsky <kevin.brodsky@arm.com>,
         Szabolcs Nagy <Szabolcs.Nagy@arm.com>
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: [PATCH v16 12/16] IB, arm64: untag user pointers in
+ ib_uverbs_(re)reg_mr()
+Message-ID: <20190604122714.GA15385@ziepe.ca>
+References: <cover.1559580831.git.andreyknvl@google.com>
+ <c829f93b19ad6af1b13be8935ce29baa8e58518f.1559580831.git.andreyknvl@google.com>
+ <20190603174619.GC11474@ziepe.ca>
+ <CAAeHK+xy-dx4dLDLLj9dRzRNSVG9H5nDPPnjpYF38qKZNNCh_g@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAAeHK+xy-dx4dLDLLj9dRzRNSVG9H5nDPPnjpYF38qKZNNCh_g@mail.gmail.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Jun 3, 2019 at 7:46 PM Jason Gunthorpe <jgg@ziepe.ca> wrote:
->
-> On Mon, Jun 03, 2019 at 06:55:14PM +0200, Andrey Konovalov wrote:
-> > This patch is a part of a series that extends arm64 kernel ABI to allow to
-> > pass tagged user pointers (with the top byte set to something else other
-> > than 0x00) as syscall arguments.
+On Tue, Jun 04, 2019 at 02:18:19PM +0200, Andrey Konovalov wrote:
+> On Mon, Jun 3, 2019 at 7:46 PM Jason Gunthorpe <jgg@ziepe.ca> wrote:
 > >
-> > ib_uverbs_(re)reg_mr() use provided user pointers for vma lookups (through
-> > e.g. mlx4_get_umem_mr()), which can only by done with untagged pointers.
+> > On Mon, Jun 03, 2019 at 06:55:14PM +0200, Andrey Konovalov wrote:
+> > > This patch is a part of a series that extends arm64 kernel ABI to allow to
+> > > pass tagged user pointers (with the top byte set to something else other
+> > > than 0x00) as syscall arguments.
+> > >
+> > > ib_uverbs_(re)reg_mr() use provided user pointers for vma lookups (through
+> > > e.g. mlx4_get_umem_mr()), which can only by done with untagged pointers.
+> > >
+> > > Untag user pointers in these functions.
+> > >
+> > > Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
+> > >  drivers/infiniband/core/uverbs_cmd.c | 4 ++++
+> > >  1 file changed, 4 insertions(+)
+> > >
+> > > diff --git a/drivers/infiniband/core/uverbs_cmd.c b/drivers/infiniband/core/uverbs_cmd.c
+> > > index 5a3a1780ceea..f88ee733e617 100644
+> > > +++ b/drivers/infiniband/core/uverbs_cmd.c
+> > > @@ -709,6 +709,8 @@ static int ib_uverbs_reg_mr(struct uverbs_attr_bundle *attrs)
+> > >       if (ret)
+> > >               return ret;
+> > >
+> > > +     cmd.start = untagged_addr(cmd.start);
+> > > +
+> > >       if ((cmd.start & ~PAGE_MASK) != (cmd.hca_va & ~PAGE_MASK))
+> > >               return -EINVAL;
 > >
-> > Untag user pointers in these functions.
+> > I feel like we shouldn't thave to do this here, surely the cmd.start
+> > should flow unmodified to get_user_pages, and gup should untag it?
 > >
-> > Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
-> >  drivers/infiniband/core/uverbs_cmd.c | 4 ++++
-> >  1 file changed, 4 insertions(+)
-> >
-> > diff --git a/drivers/infiniband/core/uverbs_cmd.c b/drivers/infiniband/core/uverbs_cmd.c
-> > index 5a3a1780ceea..f88ee733e617 100644
-> > +++ b/drivers/infiniband/core/uverbs_cmd.c
-> > @@ -709,6 +709,8 @@ static int ib_uverbs_reg_mr(struct uverbs_attr_bundle *attrs)
-> >       if (ret)
-> >               return ret;
-> >
-> > +     cmd.start = untagged_addr(cmd.start);
-> > +
-> >       if ((cmd.start & ~PAGE_MASK) != (cmd.hca_va & ~PAGE_MASK))
-> >               return -EINVAL;
->
-> I feel like we shouldn't thave to do this here, surely the cmd.start
-> should flow unmodified to get_user_pages, and gup should untag it?
->
-> ie, this sort of direction for the IB code (this would be a giant
-> patch, so I didn't have time to write it all, but I think it is much
-> saner):
+> > ie, this sort of direction for the IB code (this would be a giant
+> > patch, so I didn't have time to write it all, but I think it is much
+> > saner):
+> 
+> Hi Jason,
+> 
+> ib_uverbs_reg_mr() passes cmd.start to mlx4_get_umem_mr(), which calls
+> find_vma(), which only accepts untagged addresses. Could you explain
+> how your patch helps?
 
-Hi Jason,
+That mlx4 is just a 'weird duck', it is not the normal flow, and I
+don't think the core code should be making special consideration for
+it.
 
-ib_uverbs_reg_mr() passes cmd.start to mlx4_get_umem_mr(), which calls
-find_vma(), which only accepts untagged addresses. Could you explain
-how your patch helps?
-
-Thanks!
-
->
-> diff --git a/drivers/infiniband/core/umem.c b/drivers/infiniband/core/umem.c
-> index 54628ef879f0ce..7b3b736c87c253 100644
-> --- a/drivers/infiniband/core/umem.c
-> +++ b/drivers/infiniband/core/umem.c
-> @@ -193,7 +193,7 @@ EXPORT_SYMBOL(ib_umem_find_best_pgsz);
->   * @access: IB_ACCESS_xxx flags for memory being pinned
->   * @dmasync: flush in-flight DMA when the memory region is written
->   */
-> -struct ib_umem *ib_umem_get(struct ib_udata *udata, unsigned long addr,
-> +struct ib_umem *ib_umem_get(struct ib_udata *udata, void __user *addr,
->                             size_t size, int access, int dmasync)
->  {
->         struct ib_ucontext *context;
-> @@ -201,7 +201,7 @@ struct ib_umem *ib_umem_get(struct ib_udata *udata, unsigned long addr,
->         struct page **page_list;
->         unsigned long lock_limit;
->         unsigned long new_pinned;
-> -       unsigned long cur_base;
-> +       void __user *cur_base;
->         struct mm_struct *mm;
->         unsigned long npages;
->         int ret;
-> diff --git a/drivers/infiniband/core/uverbs_cmd.c b/drivers/infiniband/core/uverbs_cmd.c
-> index 5a3a1780ceea4d..94389e7f12371f 100644
-> --- a/drivers/infiniband/core/uverbs_cmd.c
-> +++ b/drivers/infiniband/core/uverbs_cmd.c
-> @@ -735,7 +735,8 @@ static int ib_uverbs_reg_mr(struct uverbs_attr_bundle *attrs)
->                 }
->         }
->
-> -       mr = pd->device->ops.reg_user_mr(pd, cmd.start, cmd.length, cmd.hca_va,
-> +       mr = pd->device->ops.reg_user_mr(pd, u64_to_user_ptr(cmd.start),
-> +                                        cmd.length, cmd.hca_va,
->                                          cmd.access_flags,
->                                          &attrs->driver_udata);
->         if (IS_ERR(mr)) {
-> diff --git a/drivers/infiniband/hw/mlx5/mr.c b/drivers/infiniband/hw/mlx5/mr.c
-> index 4d033796dcfcc2..bddbb952082fc5 100644
-> --- a/drivers/infiniband/hw/mlx5/mr.c
-> +++ b/drivers/infiniband/hw/mlx5/mr.c
-> @@ -786,7 +786,7 @@ static int mr_cache_max_order(struct mlx5_ib_dev *dev)
->  }
->
->  static int mr_umem_get(struct mlx5_ib_dev *dev, struct ib_udata *udata,
-> -                      u64 start, u64 length, int access_flags,
-> +                      void __user *start, u64 length, int access_flags,
->                        struct ib_umem **umem, int *npages, int *page_shift,
->                        int *ncont, int *order)
->  {
-> @@ -1262,8 +1262,8 @@ struct ib_mr *mlx5_ib_reg_dm_mr(struct ib_pd *pd, struct ib_dm *dm,
->                                  attr->access_flags, mode);
->  }
->
-> -struct ib_mr *mlx5_ib_reg_user_mr(struct ib_pd *pd, u64 start, u64 length,
-> -                                 u64 virt_addr, int access_flags,
-> +struct ib_mr *mlx5_ib_reg_user_mr(struct ib_pd *pd, void __user *start,
-> +                                 u64 length, u64 virt_addr, int access_flags,
->                                   struct ib_udata *udata)
->  {
->         struct mlx5_ib_dev *dev = to_mdev(pd->device);
-> diff --git a/include/rdma/ib_verbs.h b/include/rdma/ib_verbs.h
-> index ec6446864b08e9..b3c8eaaa35c760 100644
-> --- a/include/rdma/ib_verbs.h
-> +++ b/include/rdma/ib_verbs.h
-> @@ -2464,8 +2464,8 @@ struct ib_device_ops {
->         struct ib_mr *(*reg_user_mr)(struct ib_pd *pd, u64 start, u64 length,
->                                      u64 virt_addr, int mr_access_flags,
->                                      struct ib_udata *udata);
-> -       int (*rereg_user_mr)(struct ib_mr *mr, int flags, u64 start, u64 length,
-> -                            u64 virt_addr, int mr_access_flags,
-> +       int (*rereg_user_mr)(struct ib_mr *mr, int flags, void __user *start,
-> +                            u64 length, u64 virt_addr, int mr_access_flags,
->                              struct ib_pd *pd, struct ib_udata *udata);
->         int (*dereg_mr)(struct ib_mr *mr, struct ib_udata *udata);
->         struct ib_mr *(*alloc_mr)(struct ib_pd *pd, enum ib_mr_type mr_type,
+Jason
