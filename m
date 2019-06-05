@@ -2,88 +2,160 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A42E359FE
-	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Jun 2019 11:56:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E394D35F4A
+	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Jun 2019 16:32:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727029AbfFEJ4k (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 5 Jun 2019 05:56:40 -0400
-Received: from mail-lj1-f180.google.com ([209.85.208.180]:33499 "EHLO
-        mail-lj1-f180.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726988AbfFEJ4j (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 5 Jun 2019 05:56:39 -0400
-Received: by mail-lj1-f180.google.com with SMTP id v29so11279883ljv.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 05 Jun 2019 02:56:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=aTpgLOLiOcdUseee8sGCuUVr8+ArZkun+6MaGgEufC8=;
-        b=xYcIR3XRYyaHaraWVu3zdo2mKco43ufVFoy+mPt8RfbdAleN3jO/ctNr+7eRIHGQi/
-         wRpa+L3/6L4t1W79cAyYZQ1iky5uU+cC1yT7/nfYSVjbaxocW0PVoz6Fv9AW+dCt2aMv
-         Ampk9dRzdgf7PGveMId9ZlwTO0of3LcOIFhc2zOVC0LMn0X9sunpCPt3kK4JQ5+k+xPX
-         8ucoO+ut5voMT6ZKJuYgHAA7PhUC5nF0oEgarKytBoPastbd2PTqhUc68I9mgzEIfp0I
-         2CZRuvkbwkgrsuG/SJDQ8dBx58HxDd0Sszq7REXxi3M9SRvH8Fs5U8HJEPTmklYQ7K+h
-         gMFw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=aTpgLOLiOcdUseee8sGCuUVr8+ArZkun+6MaGgEufC8=;
-        b=LdybF9IcSh/9HgRuumhU/BR7o21oR5s7zstQO1IeZUJz0+Da3TC0eRURQITLbKam1m
-         Dso+uou4zRh2yVnoGkxw/4IIvCdSbHCy4mA3kuayCJJJbJwxTNxqta2sVCcZ+gjyg5v0
-         szenp2XjJkuGbA4LMMxywMdJE1qb8Obj+sTFE6z4tzDlSP/D1b4dOHJgnl5mlL4KkdF1
-         2NP80mNCvqmS8/g8JvQ+MxgFtDOC3X14f6fVIC0bZOmbNFWPHuXC8/5INbaymG5x31yu
-         pnIAmVm5cEDjyHkDawRx+tPm9Yry8FbwXy4giFDLjFKZgL4y3pZ+VnZtoKnw9d7YoBF7
-         ha9Q==
-X-Gm-Message-State: APjAAAUw6hwv57B2O/q8v/Qk7Nl5BUhrvaJQ52/+nYmNlUvtBko3j+Y6
-        md1Z/G/Z6ph4C3vhi7YmcWcRGtIo/B5AscFIzNliiw==
-X-Google-Smtp-Source: APXvYqwnWF5l3td0n7SMWT3OVQ35nHkAIuh7b6vyqeeLI2XK8i46f9Yz0Qu8nSqskWQfhfDgC8spm6+/DFSkJFI6178=
-X-Received: by 2002:a2e:2b11:: with SMTP id q17mr20580986lje.23.1559728597600;
- Wed, 05 Jun 2019 02:56:37 -0700 (PDT)
-MIME-Version: 1.0
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Wed, 5 Jun 2019 15:26:26 +0530
-Message-ID: <CA+G9fYtTcV9Xa65COdNfA9O+BvZV64fWBvdaamRLZphWEn7FXA@mail.gmail.com>
-Subject: selftests: bpf: test_sock_fields: Error: in_bpf_create_map_xattr(sk_pkt_out_cnt)Invalid
-To:     ast@kernel.org, kafai@fb.com, Yonghong Song <yhs@fb.com>,
-        Daniel Borkmann <daniel@iogearbox.net>
-Cc:     Netdev <netdev@vger.kernel.org>,
+        id S1728334AbfFEOcW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 5 Jun 2019 10:32:22 -0400
+Received: from foss.arm.com ([217.140.101.70]:32776 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728314AbfFEOcV (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 5 Jun 2019 10:32:21 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.72.51.249])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 054BC374;
+        Wed,  5 Jun 2019 07:32:21 -0700 (PDT)
+Received: from [10.37.12.195] (unknown [10.37.12.195])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9C1F23F246;
+        Wed,  5 Jun 2019 07:32:17 -0700 (PDT)
+Subject: Re: [PATCH v6 00/19] Unify vDSOs across more architectures
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     linux-arch <linux-arch@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-mips@vger.kernel.org,
         "open list:KERNEL SELFTEST FRAMEWORK" 
         <linux-kselftest@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        lkft-triage@lists.linaro.org
-Content-Type: text/plain; charset="UTF-8"
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will.deacon@arm.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Paul Burton <paul.burton@mips.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Mark Salyzyn <salyzyn@android.com>,
+        Peter Collingbourne <pcc@google.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Dmitry Safonov <0x7f454c46@gmail.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Huw Davies <huw@codeweavers.com>
+References: <20190530141531.43462-1-vincenzo.frascino@arm.com>
+ <CAK8P3a11DE0sXteZoaP_N=mDhx3tXitGKddn1ogtFqJBYO-SCA@mail.gmail.com>
+ <d96667d5-e43b-d33a-fbd0-5acfb4904316@arm.com>
+ <CAK8P3a3nxd7F5zLyD1SVarKjjKC0qvMEN8wP6R7zHY9HKdoe0w@mail.gmail.com>
+From:   Vincenzo Frascino <vincenzo.frascino@arm.com>
+Message-ID: <ea965b5e-9be8-02e9-5dc0-ebbb330bcc2c@arm.com>
+Date:   Wed, 5 Jun 2019 15:32:53 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
+MIME-Version: 1.0
+In-Reply-To: <CAK8P3a3nxd7F5zLyD1SVarKjjKC0qvMEN8wP6R7zHY9HKdoe0w@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Do you see this failure at your end?
-Our environment is build on host and install them on target device and
-run on Device under test (DUT).
+On 6/4/19 1:12 PM, Arnd Bergmann wrote:
+> On Tue, Jun 4, 2019 at 2:05 PM Vincenzo Frascino
+> <vincenzo.frascino@arm.com> wrote:
+>> On 31/05/2019 09:46, Arnd Bergmann wrote:
+>>> On Thu, May 30, 2019 at 4:15 PM Vincenzo Frascino
+>>> <vincenzo.frascino@arm.com> wrote:
+>>> One open question I touched in my review is whether we want to
+>>> have a vdso version of clock_getres() in all architectures or not.
+>>> I'd prefer to leave it out because there is very little advantage to
+>>> it over the system call (the results don't change at runtime and
+>>> can easily be cached by libc if performance ever matters), and
+>>> it takes up a small amount of memory for the implementation.
+>>>
+>>
+>> I thought about it and I ended up with what proposed in this patchset mainly for
+>> symmetry across all the architectures since in the end they use the same common
+>> code.
+>>
+>> It seems also that there is some performance impact (i.e.):
+>>
+>> clock-getres-monotonic:    libc(system call): 296 nsec/call
+>> clock-getres-monotonic:    libc(vdso): 5 nsec/call
+>>
+>>
+>> I agree with you though when you say that caching it in the libc is a
+>> possibility to overcome the performance impact.
+> 
+> It's clear that the vdso version is much faster, my point was that
+> I could not think of any use case that cared about it being fast.
+> 
 
-Did i miss any kernel config fragments ?
+I do not know of any use case that cares, my point was that since we need to
+implement it in the generic library for some architectures, for symmetry we can
+extend it to all the architectures that support the generic vdso library.
 
-bpf: test_sock_fields_ #
-# libbpf Error in bpf_create_map_xattr(sk_pkt_out_cnt)Invalid
-argument(22). Retrying without BTF.
-Error: in_bpf_create_map_xattr(sk_pkt_out_cnt)Invalid #
-# libbpf failed to create map (name 'sk_pkt_out_cnt') Invalid argument
-failed: to_create #
-# libbpf failed to load object 'test_sock_fields_kern.o'
-failed: to_load #
-# main(439)FAILbpf_prog_load_xattr() err-22
-err-22: _ #
-[FAIL] 22 selftests bpf test_sock_fields
-selftests: bpf_test_sock_fields [FAIL]
+> If there is a good reason for it, I also don't mind adding a
+> clock_getres_time64() vdso version everywhere.
 
-Full test log,
-https://qa-reports.linaro.org/lkft/linux-next-oe/build/next-20190605/testrun/761646/log
+Totally agree on this.
 
-Config:
-http://snapshots.linaro.org/openembedded/lkft/lkft/sumo/intel-corei7-64/lkft/linux-next/536/config
+> 
+>>> We shouldn't just need it for consistency because all callers
+>>> would require implementing a fallback to the system call
+>>> anyway, to deal with old kernels.
+>>>
+>>
+>> A way to address this issue would be to use versioning, which seems supported in
+>> the vdso library (i.e. arch/x86/entry/vdso/vdso32/vdso32.lds.S).
+>>
+>> For example for x86 (vdso32) we would have something like:
+>>
+>> VERSION
+>> {
+>>         LINUX_5.3 (being optimistic here :) ) {
+>>         global:
+>>                 __vdso_clock_getres;
+>>                 __vdso_clock_gettime64;
+>>         };
+>>         LINUX_2.6 {
+>>         global:
+>>                 __vdso_clock_gettime;
+>>                 __vdso_gettimeofday;
+>>                 __vdso_time;
+>>         };
+>>
+>>         LINUX_2.5 {
+>>         global:
+>>                 __kernel_vsyscall;
+>>                 __kernel_sigreturn;
+>>                 __kernel_rt_sigreturn;
+>>         local: *;
+>>         };
+>> }
+>>
+>> What do you think? Would this be a viable solution?
+> 
+> I actually never understood the point of symbol versioning
+> in the vdso. What does that gain us? Note that there are
+> no conflicting symbol names between the versions, and
+> that nothing enforces the kernel headers to match the
+> symbol version used when linking.
+>
 
-Test results for comparison,
-https://qa-reports.linaro.org/lkft/linux-next-oe/tests/kselftest/bpf_test_sock_fields
+My understanding, based on [1] and [2] is that the version defines the minimum
+kernel version from when a specific symbols is exposed and whenever this symbol
+is requested from the vDSO the correct version needs to be specified.
+Every "new" library, dealing with an "old" kernel, compliant with the exposed
+ABI should implement the vDSO calls in this way and provide a fallback if the
+vDSO function is not present (i.e. [3]).
 
-Best regards
-Naresh Kamboju
+[1] Documentation/ABI/stable/vdso
+[2] tools/testing/selftests/vDSO/parse_vdso.c
+[3]
+https://github.com/lattera/glibc/blob/master/sysdeps/unix/sysv/linux/aarch64/gettimeofday.c
+
+
+>       Arnd
+> 
+
+-- 
+Regards,
+Vincenzo
