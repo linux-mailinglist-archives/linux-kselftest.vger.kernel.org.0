@@ -2,290 +2,274 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D5A773692E
-	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Jun 2019 03:30:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5931037BBF
+	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Jun 2019 20:02:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726593AbfFFBaX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 5 Jun 2019 21:30:23 -0400
-Received: from mail-wr1-f67.google.com ([209.85.221.67]:36308 "EHLO
-        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726605AbfFFBaW (ORCPT
+        id S1728796AbfFFSCc (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 6 Jun 2019 14:02:32 -0400
+Received: from mail.efficios.com ([167.114.142.138]:45028 "EHLO
+        mail.efficios.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727559AbfFFSCc (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 5 Jun 2019 21:30:22 -0400
-Received: by mail-wr1-f67.google.com with SMTP id n4so630582wrs.3
-        for <linux-kselftest@vger.kernel.org>; Wed, 05 Jun 2019 18:30:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ZpGCO041Tg4SdQTzukwjDvK5uvTmFYR2PFl3r1dL9b8=;
-        b=ejvHIsk4euV0ppc0epTzvVzKP6ja3YamlfuEnsYOlwGiRDpcKsu5blj9KswKc1lmHk
-         FlHNai9oKCPDuqXa7TJVSlPeiKK3R0r+zHaoc0/vO+KgoYHspMWlx28mglyIxvgpaPHe
-         hzizJY3TdPzpNMvRO3GLuNa2Z3bBIyLELT3tU3Ha3njuSlNB+l7YFoEZJGWDICks22rP
-         Qed1+wFLqO11s+sVV1ovH/1qQeWozeg+0PR8715Yw5GgkDw0trU7l6zXsnXOhVJDNEMj
-         aMz3quLWYhYCfEO9JKtWdOPTQc+vfT1SWWx3gQh089h7Li6omjAeHLZGPGCeWfbJrYgP
-         eqUA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ZpGCO041Tg4SdQTzukwjDvK5uvTmFYR2PFl3r1dL9b8=;
-        b=PNy7EwJOtBB70W+2rxn7Vk/GS43yB0d0WWe1t06V2/Q8ppJDILR/yu9YO/QakV9JRV
-         lLSllQJk8bO4PWuW24VJiccFnyqdbT77S1SsMPxlsg/ggMrO48KhNbfDIzF1zkBYZfae
-         MYz8DxpxXeEOJ1tBPiKgx9h4TGR/pHzPxJ1OgXojcVaN45FY0iNhxZ+Uebr/i5wbdaX8
-         69BT+wmMjJVxb0eL94m0f8qsjrXzzAbdLFHaYvq4OxqP4h8dOzG9qBOPPpqd8u5kAcrc
-         XwL/Te5vAEGqDz+BHyL8njW7rJECm7OiAk+MbcEgGKmIxZC8WC09faz4qkIaqfcJJQhx
-         mxKQ==
-X-Gm-Message-State: APjAAAWaRX/5+G2VjXHuzyKtsObY5LNUf6L2jELuGHT73AdQXbDS1IEn
-        Q6BNDde1LSuBv7gJcsvREGw3s0a2dA+PXZdVtKsw
-X-Google-Smtp-Source: APXvYqwxpKa2J21eVqy9vuAUqWSndFyq+8Hj5f1fxZf/oyQGr75L3YoqW8zROuipuK2Zrr7VCYmxZRrq/mq2BI+GwQw=
-X-Received: by 2002:adf:e352:: with SMTP id n18mr4855529wrj.82.1559784619871;
- Wed, 05 Jun 2019 18:30:19 -0700 (PDT)
+        Thu, 6 Jun 2019 14:02:32 -0400
+Received: from localhost (ip6-localhost [IPv6:::1])
+        by mail.efficios.com (Postfix) with ESMTP id B3BDC242834;
+        Thu,  6 Jun 2019 14:02:30 -0400 (EDT)
+Received: from mail.efficios.com ([IPv6:::1])
+        by localhost (mail02.efficios.com [IPv6:::1]) (amavisd-new, port 10032)
+        with ESMTP id hdAWPYAsPizK; Thu,  6 Jun 2019 14:02:29 -0400 (EDT)
+Received: from localhost (ip6-localhost [IPv6:::1])
+        by mail.efficios.com (Postfix) with ESMTP id C9C7C242829;
+        Thu,  6 Jun 2019 14:02:29 -0400 (EDT)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com C9C7C242829
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
+        s=default; t=1559844149;
+        bh=vdoUni7TtB4T+sY7n7rv0ImmEBFxotDrIUJTIkh7Mhk=;
+        h=Date:From:To:Message-ID:MIME-Version;
+        b=g6ABHGiJnJ5X9tr3URBXcnTB3lYzGxF3UfgTIZXOc+svJNX8VCg+9GdkMslJNmVxX
+         T2kZSyW755/dGqXDZ7rPqKkKXPTSj2yo/5Fvp4eysdTVreH9UZP24V9Y6CrWiszfJZ
+         K/nQjCRSkwxYhbNFWPjNqGnCDwrZ0Tzggq8ESWxz4sEWRQ09Q2oQ8wbWdTy5GMBN/p
+         ohklr0it5+O4x0XacTT/lcU8CB5tyIy+f1EFfsrq0+CGrrd6wxlLMNjlpkmvyHUyO8
+         LmHO6YUsg3pVsEG+W4Y45tBM4RsBYlbpil887CAl9r68asoc6rbSq6qvR6AL6WVEhH
+         XMB4peqYdpqnA==
+X-Virus-Scanned: amavisd-new at efficios.com
+Received: from mail.efficios.com ([IPv6:::1])
+        by localhost (mail02.efficios.com [IPv6:::1]) (amavisd-new, port 10026)
+        with ESMTP id o2TYGXsURVSJ; Thu,  6 Jun 2019 14:02:29 -0400 (EDT)
+Received: from mail02.efficios.com (mail02.efficios.com [167.114.142.138])
+        by mail.efficios.com (Postfix) with ESMTP id A85F6242819;
+        Thu,  6 Jun 2019 14:02:29 -0400 (EDT)
+Date:   Thu, 6 Jun 2019 14:02:29 -0400 (EDT)
+From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+To:     Will Deacon <will.deacon@arm.com>,
+        Russell King <linux@arm.linux.org.uk>
+Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-api <linux-api@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Paul E . McKenney" <paulmck@linux.vnet.ibm.com>,
+        Boqun Feng <boqun.feng@gmail.com>, shuah <shuah@kernel.org>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Dave Watson <davejwatson@fb.com>, Paul Turner <pjt@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Andi Kleen <andi@firstfloor.org>,
+        Chris Lameter <cl@linux.com>, Ben Maurer <bmaurer@fb.com>,
+        rostedt <rostedt@goodmis.org>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Joel Fernandes <joelaf@google.com>,
+        linux-kselftest <linux-kselftest@vger.kernel.org>,
+        linux-arm-kernel@lists.infradead.org
+Message-ID: <1975020343.35751.1559844149532.JavaMail.zimbra@efficios.com>
+In-Reply-To: <20190503193858.9676-1-mathieu.desnoyers@efficios.com>
+References: <20190429152803.7719-9-mathieu.desnoyers@efficios.com> <20190503193858.9676-1-mathieu.desnoyers@efficios.com>
+Subject: Re: [PATCH v2 for 5.2 08/12] rseq/selftests: arm: use udf
+ instruction for RSEQ_SIG
 MIME-Version: 1.0
-References: <20190514221711.248228-1-brendanhiggins@google.com>
- <20190514221711.248228-18-brendanhiggins@google.com> <20190517182254.548EA20815@mail.kernel.org>
-In-Reply-To: <20190517182254.548EA20815@mail.kernel.org>
-From:   Iurii Zaikin <yzaikin@google.com>
-Date:   Wed, 5 Jun 2019 18:29:42 -0700
-Message-ID: <CAAXuY3p4qhKVsSpQ44_kQeGDMfg7OuFLgFyxhcFWS3yf-5A_7g@mail.gmail.com>
-Subject: Re: [PATCH v4 17/18] kernel/sysctl-test: Add null pointer test for sysctl.c:proc_dointvec()
-To:     Stephen Boyd <sboyd@kernel.org>
-Cc:     Brendan Higgins <brendanhiggins@google.com>,
-        frowand.list@gmail.com, gregkh@linuxfoundation.org,
-        jpoimboe@redhat.com, keescook@google.com,
-        kieran.bingham@ideasonboard.com, mcgrof@kernel.org,
-        peterz@infradead.org, robh@kernel.org, shuah@kernel.org,
-        tytso@mit.edu, yamada.masahiro@socionext.com,
-        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        kunit-dev@googlegroups.com, linux-doc@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kbuild@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-nvdimm@lists.01.org, linux-um@lists.infradead.org,
-        Alexander.Levin@microsoft.com, Tim.Bird@sony.com,
-        amir73il@gmail.com, dan.carpenter@oracle.com, daniel@ffwll.ch,
-        jdike@addtoit.com, joel@jms.id.au, julia.lawall@lip6.fr,
-        khilman@baylibre.com, knut.omang@oracle.com, logang@deltatee.com,
-        mpe@ellerman.id.au, pmladek@suse.com, rdunlap@infradead.org,
-        richard@nod.at, rientjes@google.com, rostedt@goodmis.org,
-        wfg@linux.intel.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [167.114.142.138]
+X-Mailer: Zimbra 8.8.12_GA_3803 (ZimbraWebClient - FF67 (Linux)/8.8.12_GA_3794)
+Thread-Topic: rseq/selftests: arm: use udf instruction for RSEQ_SIG
+Thread-Index: YcGezvm7ivFdjjSZdlA+YYoxUnlhzQ==
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, May 17, 2019 at 11:22 AM Stephen Boyd <sboyd@kernel.org> wrote:
->
-> Quoting Brendan Higgins (2019-05-14 15:17:10)
-> > diff --git a/kernel/sysctl-test.c b/kernel/sysctl-test.c
-> > new file mode 100644
-> > index 0000000000000..fe0f2bae66085
-> > --- /dev/null
-> > +++ b/kernel/sysctl-test.c
-> > @@ -0,0 +1,293 @@
-> > +// SPDX-License-Identifier: GPL-2.0
-> > +/*
-> > + * KUnit test of proc sysctl.
-> > + */
-> > +
-> > +#include <kunit/test.h>
-> > +#include <linux/printk.h>
->
-> Is this include used?
-  Deleted.
->
-> > +#include <linux/sysctl.h>
-> > +#include <linux/uaccess.h>
->
-> Is this include used?
-Deleted.
->
-> > +
-> > +
-> > +static void sysctl_test_dointvec_happy_single_negative(struct kunit *test)
-> > +{
-> > +       struct ctl_table table = {
-> > +               .procname = "foo",
-> > +               .data           = &test_data.int_0001,
-> > +               .maxlen         = sizeof(int),
-> > +               .mode           = 0644,
-> > +               .proc_handler   = proc_dointvec,
-> > +               .extra1         = &i_zero,
-> > +               .extra2         = &i_one_hundred,
-> > +       };
-> > +       char input[] = "-9";
-> > +       size_t len = sizeof(input) - 1;
-> > +       loff_t pos = 0;
-> > +
-> > +       table.data = kunit_kzalloc(test, sizeof(int), GFP_USER);
-> > +       KUNIT_EXPECT_EQ(test, 0, proc_dointvec(&table, 1, input, &len, &pos));
-> > +       KUNIT_EXPECT_EQ(test, sizeof(input) - 1, len);
-> > +       KUNIT_EXPECT_EQ(test, sizeof(input) - 1, pos);
-> > +       KUNIT_EXPECT_EQ(test, -9, *(int *)table.data);
->
-> Is the casting necessary? Or can the macro do a type coercion of the
-> second parameter based on the first type?
- Data field is defined as void* so I believe casting is necessary to
-dereference it as a pointer to an array of ints. I don't think the
-macro should do any type coercion that == operator wouldn't do.
- I did change the cast to make it more clear that it's a pointer to an
-array of ints being dereferenced.
->
-> > +}
-> > +
-> > +static void sysctl_test_dointvec_single_less_int_min(struct kunit *test)
-> > +{
-> > +       struct ctl_table table = {
-> > +               .procname = "foo",
-> > +               .data           = &test_data.int_0001,
-> > +               .maxlen         = sizeof(int),
-> > +               .mode           = 0644,
-> > +               .proc_handler   = proc_dointvec,
-> > +               .extra1         = &i_zero,
-> > +               .extra2         = &i_one_hundred,
-> > +       };
-> > +       char input[32];
-> > +       size_t len = sizeof(input) - 1;
-> > +       loff_t pos = 0;
-> > +       unsigned long abs_of_less_than_min = (unsigned long)INT_MAX
-> > +                                            - (INT_MAX + INT_MIN) + 1;
-> > +
-> > +       KUNIT_EXPECT_LT(test,
-> > +                       snprintf(input, sizeof(input), "-%lu",
-> > +                                abs_of_less_than_min),
-> > +                       sizeof(input));
-> > +
-> > +       table.data = kunit_kzalloc(test, sizeof(int), GFP_USER);
-> > +       KUNIT_EXPECT_EQ(test, -EINVAL,
-> > +                       proc_dointvec(&table, 1, input, &len, &pos));
-> > +       KUNIT_EXPECT_EQ(test, sizeof(input) - 1, len);
-> > +       KUNIT_EXPECT_EQ(test, 0, *(int *)table.data);
-> > +}
-> > +
-> > +static void sysctl_test_dointvec_single_greater_int_max(struct kunit *test)
-> > +{
-> > +       struct ctl_table table = {
-> > +               .procname = "foo",
-> > +               .data           = &test_data.int_0001,
-> > +               .maxlen         = sizeof(int),
-> > +               .mode           = 0644,
-> > +               .proc_handler   = proc_dointvec,
-> > +               .extra1         = &i_zero,
-> > +               .extra2         = &i_one_hundred,
-> > +       };
-> > +       char input[32];
-> > +       size_t len = sizeof(input) - 1;
-> > +       loff_t pos = 0;
-> > +       unsigned long greater_than_max = (unsigned long)INT_MAX + 1;
-> > +
-> > +       KUNIT_EXPECT_GT(test, greater_than_max, INT_MAX);
-> > +       KUNIT_EXPECT_LT(test, snprintf(input, sizeof(input), "%lu",
-> > +                                      greater_than_max),
-> > +                       sizeof(input));
-> > +       table.data = kunit_kzalloc(test, sizeof(int), GFP_USER);
-> > +       KUNIT_EXPECT_EQ(test, -EINVAL,
-> > +                       proc_dointvec(&table, 1, input, &len, &pos));
-> > +       KUNIT_EXPECT_EQ(test, sizeof(input) - 1, len);
-> > +       KUNIT_EXPECT_EQ(test, 0, *(int *)table.data);
-> > +}
-> > +
-> > +static int sysctl_test_init(struct kunit *test)
-> > +{
-> > +       return 0;
-> > +}
-> > +
-> > +/*
-> > + * This is run once after each test case, see the comment on example_test_module
-> > + * for more information.
-> > + */
-> > +static void sysctl_test_exit(struct kunit *test)
-> > +{
-> > +}
-> Can the above two be omitted? If they can be empty sometimes it would be
-> nice to avoid the extra symbols and code by letting them be assigned to
-> NULL in the kunit_module.
- Deleted.
->
-> > +
-> > +/*
-> > + * Here we make a list of all the test cases we want to add to the test module
-> > + * below.
-> > + */
-> > +static struct kunit_case sysctl_test_cases[] = {
-> > +       /*
-> > +        * This is a helper to create a test case object from a test case
-> > +        * function; its exact function is not important to understand how to
-> > +        * use KUnit, just know that this is how you associate test cases with a
-> > +        * test module.
-> > +        */
-> > +       KUNIT_CASE(sysctl_test_dointvec_null_tbl_data),
-> > +       KUNIT_CASE(sysctl_test_dointvec_table_maxlen_unset),
-> > +       KUNIT_CASE(sysctl_test_dointvec_table_len_is_zero),
-> > +       KUNIT_CASE(sysctl_test_dointvec_table_read_but_position_set),
-> > +       KUNIT_CASE(sysctl_test_dointvec_happy_single_positive),
-> > +       KUNIT_CASE(sysctl_test_dointvec_happy_single_negative),
-> > +       KUNIT_CASE(sysctl_test_dointvec_single_less_int_min),
-> > +       KUNIT_CASE(sysctl_test_dointvec_single_greater_int_max),
-> > +       {},
-> > +};
-> > +
-> > +/*
-> > + * This defines a suite or grouping of tests.
-> > + *
-> > + * Test cases are defined as belonging to the suite by adding them to
-> > + * `test_cases`.
-> > + *
-> > + * Often it is desirable to run some function which will set up things which
-> > + * will be used by every test; this is accomplished with an `init` function
-> > + * which runs before each test case is invoked. Similarly, an `exit` function
-> > + * may be specified which runs after every test case and can be used to for
-> > + * cleanup. For clarity, running tests in a test module would behave as follows:
-> > + *
-> > + * module.init(test);
-> > + * module.test_case[0](test);
-> > + * module.exit(test);
-> > + * module.init(test);
-> > + * module.test_case[1](test);
-> > + * module.exit(test);
-> > + * ...;
->
-> This comment (and the one above for "this is a helper") looks generic
-> and should probably only be in some documentation somewhere and not for
-> a sysctl test?
->
-Deleted.
-> > + */
-> > +static struct kunit_module sysctl_test_module = {
-> > +       .name = "sysctl_test",
-> > +       .init = sysctl_test_init,
-> > +       .exit = sysctl_test_exit,
-> > +       .test_cases = sysctl_test_cases,
-> > +};
-> > +
-> > +/*
-> > + * This registers the above test module telling KUnit that this is a suite of
-> > + * tests that need to be run.
-> > + */
->
-> Same comment about generic comment.
->
-Deleted.
-> > +module_test(sysctl_test_module);
-> > diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-> > index d5a4a4036d2f8..772af4ec70111 100644
-> > --- a/lib/Kconfig.debug
-> > +++ b/lib/Kconfig.debug
-> > @@ -1908,6 +1908,12 @@ config TEST_SYSCTL
-> >
-> >           If unsure, say N.
-> >
-> > +config SYSCTL_KUNIT_TEST
-> > +       bool "KUnit test for sysctl"
->
-> Why not tristate?
->
-I don't believe KUnit as a module is currently supported.
-> > +       depends on KUNIT
-> > +       help
-> > +         Enables KUnit sysctl test.
-> > +
+----- On May 3, 2019, at 3:38 PM, Mathieu Desnoyers mathieu.desnoyers@efficios.com wrote:
+
+> Use udf as the guard instruction for the restartable sequence abort
+> handler.
+> 
+> Previously, the chosen signature was not a valid instruction, based
+> on the assumption that it could always sit in a literal pool. However,
+> there are compilation environments in which literal pools are not
+> available, for instance execute-only code. Therefore, we need to
+> choose a signature value that is also a valid instruction.
+> 
+> Handle compiling with -mbig-endian on ARMv6+, which generates binaries
+> with mixed code vs data endianness (little endian code, big endian
+> data).
+> 
+> Else mismatch between code endianness for the generated signatures and
+> data endianness for the RSEQ_SIG parameter passed to the rseq
+> registration will trigger application segmentation faults when the
+> kernel try to abort rseq critical sections.
+> 
+> Prior to ARMv6, -mbig-endian generates big-endian code and data, so
+> endianness should not be reversed in that case.
+
+And of course it cannot be that easy. This breaks when building in
+thumb mode (-mthumb). Output from librseq arm32 build [1] (code similar
+to what is found in the rseq selftests):
+
+  CC       rseq.lo
+/tmp/ccu6Jw1b.s: Assembler messages:
+/tmp/ccu6Jw1b.s:297: Error: cannot determine Thumb instruction size. Use .inst.n/.inst.w instead
+/tmp/ccu6Jw1b.s:490: Error: cannot determine Thumb instruction size. Use .inst.n/.inst.w instead
+Makefile:460: recipe for target 'rseq.lo' failed
+
+This appears to be caused by a missing .arm directive in RSEQ_SIG_DATA.
+Fixing with:
+
+-               asm volatile ("b 2f\n\t"                                \
++               asm volatile (".arm\n\t"                                \
++                             "b 2f\n\t"                                \
+
+gets the build to go further, but breaks at:
+
+  CC       basic_percpu_ops_test.o
+/tmp/ccpHOMHZ.s: Assembler messages:
+/tmp/ccpHOMHZ.s:148: Error: misaligned branch destination
+/tmp/ccpHOMHZ.s:956: Error: misaligned branch destination
+Makefile:378: recipe for target 'basic_percpu_ops_test.o' failed
+
+I suspect it's caused by the change from:
+
+-               ".word " __rseq_str(RSEQ_SIG) "\n\t"                    \
+
+to
+
++               ".arm\n\t"                                              \
++               ".inst " __rseq_str(RSEQ_SIG_CODE) "\n\t"               \
+
+which changes the mode from thumb to arm for the rest of the
+inline asm within __RSEQ_ASM_DEFINE_ABORT. Better yet, there appears
+to be no way to save the arm/thumb state and restore it afterwards.
+
+I'm really starting to wonder if we should go our of our way to try
+to get this signature to be a valid instruction on arm32. Perhaps
+we should consider going back to use ".word" on arm32 so it ensures
+it uses data endianness (which matches the parameter received by the
+sys_rseq system call), let objdump and friends print it as a literal
+pool (which it is), and just choose an instruction which has little
+chances to appear for the cases we care about between ARM32 BE, LE
+and THUMB. Perhaps a 32-bit palindrome ? Bonus points if this is a
+trap instruction in common configurations for odd-cases-debugging
+purposes.
+
+Thoughts ?
+
+Thanks,
+
+Mathieu
+
+[1] https://github.com/compudj/librseq
+
+
+> 
+> Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+> CC: Peter Zijlstra <peterz@infradead.org>
+> CC: Thomas Gleixner <tglx@linutronix.de>
+> CC: Joel Fernandes <joelaf@google.com>
+> CC: Catalin Marinas <catalin.marinas@arm.com>
+> CC: Dave Watson <davejwatson@fb.com>
+> CC: Will Deacon <will.deacon@arm.com>
+> CC: Shuah Khan <shuah@kernel.org>
+> CC: Andi Kleen <andi@firstfloor.org>
+> CC: linux-kselftest@vger.kernel.org
+> CC: "H . Peter Anvin" <hpa@zytor.com>
+> CC: Chris Lameter <cl@linux.com>
+> CC: Russell King <linux@arm.linux.org.uk>
+> CC: Michael Kerrisk <mtk.manpages@gmail.com>
+> CC: "Paul E . McKenney" <paulmck@linux.vnet.ibm.com>
+> CC: Paul Turner <pjt@google.com>
+> CC: Boqun Feng <boqun.feng@gmail.com>
+> CC: Josh Triplett <josh@joshtriplett.org>
+> CC: Steven Rostedt <rostedt@goodmis.org>
+> CC: Ben Maurer <bmaurer@fb.com>
+> CC: linux-api@vger.kernel.org
+> CC: Andy Lutomirski <luto@amacapital.net>
+> CC: Andrew Morton <akpm@linux-foundation.org>
+> CC: Linus Torvalds <torvalds@linux-foundation.org>
+> ---
+> Changes since v1:
+> - Fix checkpatch error and warning.
+> 
+> ---
+> tools/testing/selftests/rseq/rseq-arm.h | 52 +++++++++++++++++++++++++++++++--
+> 1 file changed, 50 insertions(+), 2 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/rseq/rseq-arm.h
+> b/tools/testing/selftests/rseq/rseq-arm.h
+> index 5f262c54364f..84f28f147fb6 100644
+> --- a/tools/testing/selftests/rseq/rseq-arm.h
+> +++ b/tools/testing/selftests/rseq/rseq-arm.h
+> @@ -5,7 +5,54 @@
+>  * (C) Copyright 2016-2018 - Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+>  */
+> 
+> -#define RSEQ_SIG	0x53053053
+> +/*
+> + * RSEQ_SIG uses the udf A32 instruction with an uncommon immediate operand
+> + * value 0x5de3. This traps if user-space reaches this instruction by mistake,
+> + * and the uncommon operand ensures the kernel does not move the instruction
+> + * pointer to attacker-controlled code on rseq abort.
+> + *
+> + * The instruction pattern in the A32 instruction set is:
+> + *
+> + * e7f5def3    udf    #24035    ; 0x5de3
+> + *
+> + * This translates to the following instruction pattern in the T16 instruction
+> + * set:
+> + *
+> + * little endian:
+> + * def3        udf    #243      ; 0xf3
+> + * e7f5        b.n    <7f5>
+> + *
+> + * pre-ARMv6 big endian code:
+> + * e7f5        b.n    <7f5>
+> + * def3        udf    #243      ; 0xf3
+> + *
+> + * ARMv6+ -mbig-endian generates mixed endianness code vs data: little-endian
+> + * code and big-endian data. Ensure the RSEQ_SIG data signature matches code
+> + * endianness. Prior to ARMv6, -mbig-endian generates big-endian code and data
+> + * (which match), so there is no need to reverse the endianness of the data
+> + * representation of the signature. However, the choice between BE32 and BE8
+> + * is done by the linker, so we cannot know whether code and data endianness
+> + * will be mixed before the linker is invoked.
+> + */
+> +
+> +#define RSEQ_SIG_CODE	0xe7f5def3
+> +
+> +#ifndef __ASSEMBLER__
+> +
+> +#define RSEQ_SIG_DATA							\
+> +	({								\
+> +		int sig;						\
+> +		asm volatile ("b 2f\n\t"				\
+> +			      "1: .inst " __rseq_str(RSEQ_SIG_CODE) "\n\t" \
+> +			      "2:\n\t"					\
+> +			      "ldr %[sig], 1b\n\t"			\
+> +			      : [sig] "=r" (sig));			\
+> +		sig;							\
+> +	})
+> +
+> +#define RSEQ_SIG	RSEQ_SIG_DATA
+> +
+> +#endif
+> 
+> #define rseq_smp_mb()	__asm__ __volatile__ ("dmb" ::: "memory", "cc")
+> #define rseq_smp_rmb()	__asm__ __volatile__ ("dmb" ::: "memory", "cc")
+> @@ -78,7 +125,8 @@ do {									\
+> 		__rseq_str(table_label) ":\n\t"				\
+> 		".word " __rseq_str(version) ", " __rseq_str(flags) "\n\t" \
+> 		".word " __rseq_str(start_ip) ", 0x0, " __rseq_str(post_commit_offset) ", 0x0, "
+> 		__rseq_str(abort_ip) ", 0x0\n\t" \
+> -		".word " __rseq_str(RSEQ_SIG) "\n\t"			\
+> +		".arm\n\t"						\
+> +		".inst " __rseq_str(RSEQ_SIG_CODE) "\n\t"		\
+> 		__rseq_str(label) ":\n\t"				\
+> 		teardown						\
+> 		"b %l[" __rseq_str(abort_label) "]\n\t"
+> --
+> 2.11.0
+
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
