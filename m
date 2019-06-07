@@ -2,145 +2,108 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EB7B394E0
-	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Jun 2019 20:55:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04E9939522
+	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Jun 2019 21:00:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732282AbfFGSzl (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 7 Jun 2019 14:55:41 -0400
-Received: from bombadil.infradead.org ([198.137.202.133]:42352 "EHLO
-        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732083AbfFGSyk (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 7 Jun 2019 14:54:40 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=Sender:Content-Transfer-Encoding:
-        MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:
-        Reply-To:Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=9BFa2w9dMfs23jOauwpVzpiJfCyUvRSxJugmmRhg1+Y=; b=Y15WIe1h7RPtXfVg22IaFG2tXE
-        jj21RoR5ji9hW/5iHiNsUij9LVME21L0rqVFtBCDMlpjSRfhysh/yuHiSOyw4pueOTm4CLPYm2Jqz
-        7zNqjECImbRU6kQQb0vgexgHrsc//KTxsEdJgN/PnScnipxBPkVKNL0DfIBSl5IjWEUU4/pN1aHkp
-        IQ6M3/cSEYcvDAviucCr3n7cKcQp+HQrHtPU4DdqvAWQ0iU+4CJAP48DAuSF8fweXu6SA0pkQTO9X
-        kaZsKnt9RvfnmKZewOVk9HvV+hY407Ql4vOSl/TzV+uc1EkVTECFepaldWMDUX68NBWWtpGdvH42L
-        tfdlZLnA==;
-Received: from [179.181.119.115] (helo=bombadil.infradead.org)
-        by bombadil.infradead.org with esmtpsa (Exim 4.92 #3 (Red Hat Linux))
-        id 1hZK0d-0005sn-O1; Fri, 07 Jun 2019 18:54:39 +0000
-Received: from mchehab by bombadil.infradead.org with local (Exim 4.92)
-        (envelope-from <mchehab@bombadil.infradead.org>)
-        id 1hZK0b-0007FS-J9; Fri, 07 Jun 2019 15:54:37 -0300
-From:   Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
-To:     Linux Doc Mailing List <linux-doc@vger.kernel.org>
-Cc:     Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@infradead.org>,
-        linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>, x86@kernel.org,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Shuah Khan <shuah@kernel.org>, linuxppc-dev@lists.ozlabs.org,
-        linux-kselftest@vger.kernel.org
-Subject: [PATCH v3 15/20] docs: move protection-keys.rst to the core-api book
-Date:   Fri,  7 Jun 2019 15:54:31 -0300
-Message-Id: <4948a096397bb86cebf489b8ac4f623797257fe7.1559933665.git.mchehab+samsung@kernel.org>
-X-Mailer: git-send-email 2.21.0
-In-Reply-To: <ff457774d46d96e8fe56b45409aba39d87a8672a.1559933665.git.mchehab+samsung@kernel.org>
-References: <ff457774d46d96e8fe56b45409aba39d87a8672a.1559933665.git.mchehab+samsung@kernel.org>
+        id S1729873AbfFGTAt (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 7 Jun 2019 15:00:49 -0400
+Received: from mail.kernel.org ([198.145.29.99]:59054 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728595AbfFGTAs (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 7 Jun 2019 15:00:48 -0400
+Received: from kernel.org (unknown [104.132.0.74])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id C3E7A20868;
+        Fri,  7 Jun 2019 19:00:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1559934047;
+        bh=SaF9wNj2glMXJrUlhGfPV51XspfvGCl4GV+n5wOltIk=;
+        h=In-Reply-To:References:To:From:Subject:Cc:Date:From;
+        b=pOa773KinCbWZNwUdN0H2jdZol+fGp2XY6GywMUyTl3QZS5pW9hFAAcg/RQpuePFb
+         6lPWUUf3AvmyqHdMay0eDupbNJ7WbuBfNXwJ4jnDfqEl3Pw+6YKFdZVlrZIY2LFVvc
+         bfbI2V1LcTAYX/HU3jn8XFwP21qj/1NllQ+0AO60=
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <CAAXuY3p4qhKVsSpQ44_kQeGDMfg7OuFLgFyxhcFWS3yf-5A_7g@mail.gmail.com>
+References: <20190514221711.248228-1-brendanhiggins@google.com> <20190514221711.248228-18-brendanhiggins@google.com> <20190517182254.548EA20815@mail.kernel.org> <CAAXuY3p4qhKVsSpQ44_kQeGDMfg7OuFLgFyxhcFWS3yf-5A_7g@mail.gmail.com>
+To:     Iurii Zaikin <yzaikin@google.com>
+From:   Stephen Boyd <sboyd@kernel.org>
+Subject: Re: [PATCH v4 17/18] kernel/sysctl-test: Add null pointer test for sysctl.c:proc_dointvec()
+Cc:     Brendan Higgins <brendanhiggins@google.com>,
+        frowand.list@gmail.com, gregkh@linuxfoundation.org,
+        jpoimboe@redhat.com, keescook@google.com,
+        kieran.bingham@ideasonboard.com, mcgrof@kernel.org,
+        peterz@infradead.org, robh@kernel.org, shuah@kernel.org,
+        tytso@mit.edu, yamada.masahiro@socionext.com,
+        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        kunit-dev@googlegroups.com, linux-doc@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kbuild@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-nvdimm@lists.01.org, linux-um@lists.infradead.org,
+        Alexander.Levin@microsoft.com, Tim.Bird@sony.com,
+        amir73il@gmail.com, dan.carpenter@oracle.com, daniel@ffwll.ch,
+        jdike@addtoit.com, joel@jms.id.au, julia.lawall@lip6.fr,
+        khilman@baylibre.com, knut.omang@oracle.com, logang@deltatee.com,
+        mpe@ellerman.id.au, pmladek@suse.com, rdunlap@infradead.org,
+        richard@nod.at, rientjes@google.com, rostedt@goodmis.org,
+        wfg@linux.intel.com
+User-Agent: alot/0.8.1
+Date:   Fri, 07 Jun 2019 12:00:47 -0700
+Message-Id: <20190607190047.C3E7A20868@mail.kernel.org>
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This document is used by multiple architectures:
+Quoting Iurii Zaikin (2019-06-05 18:29:42)
+> On Fri, May 17, 2019 at 11:22 AM Stephen Boyd <sboyd@kernel.org> wrote:
+> >
+> > Quoting Brendan Higgins (2019-05-14 15:17:10)
+> > > diff --git a/kernel/sysctl-test.c b/kernel/sysctl-test.c
+> > > new file mode 100644
+> > > index 0000000000000..fe0f2bae66085
+> > > --- /dev/null
+> > > +++ b/kernel/sysctl-test.c
+> > > +
+> > > +
+> > > +static void sysctl_test_dointvec_happy_single_negative(struct kunit =
+*test)
+> > > +{
+> > > +       struct ctl_table table =3D {
+> > > +               .procname =3D "foo",
+> > > +               .data           =3D &test_data.int_0001,
+> > > +               .maxlen         =3D sizeof(int),
+> > > +               .mode           =3D 0644,
+> > > +               .proc_handler   =3D proc_dointvec,
+> > > +               .extra1         =3D &i_zero,
+> > > +               .extra2         =3D &i_one_hundred,
+> > > +       };
+> > > +       char input[] =3D "-9";
+> > > +       size_t len =3D sizeof(input) - 1;
+> > > +       loff_t pos =3D 0;
+> > > +
+> > > +       table.data =3D kunit_kzalloc(test, sizeof(int), GFP_USER);
+> > > +       KUNIT_EXPECT_EQ(test, 0, proc_dointvec(&table, 1, input, &len=
+, &pos));
+> > > +       KUNIT_EXPECT_EQ(test, sizeof(input) - 1, len);
+> > > +       KUNIT_EXPECT_EQ(test, sizeof(input) - 1, pos);
+> > > +       KUNIT_EXPECT_EQ(test, -9, *(int *)table.data);
+> >
+> > Is the casting necessary? Or can the macro do a type coercion of the
+> > second parameter based on the first type?
+>  Data field is defined as void* so I believe casting is necessary to
+> dereference it as a pointer to an array of ints. I don't think the
+> macro should do any type coercion that =3D=3D operator wouldn't do.
+>  I did change the cast to make it more clear that it's a pointer to an
+> array of ints being dereferenced.
 
-	$ echo $(git grep -l  pkey_mprotect arch|cut -d'/' -f 2|sort|uniq)
-	alpha arm arm64 ia64 m68k microblaze mips parisc powerpc s390 sh sparc x86 xtensa
-
-So, let's move it to the core book and adjust the links to it
-accordingly.
-
-Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
----
- Documentation/core-api/index.rst                    | 1 +
- Documentation/{x86 => core-api}/protection-keys.rst | 0
- Documentation/x86/index.rst                         | 1 -
- arch/powerpc/Kconfig                                | 2 +-
- arch/x86/Kconfig                                    | 2 +-
- tools/testing/selftests/x86/protection_keys.c       | 2 +-
- 6 files changed, 4 insertions(+), 4 deletions(-)
- rename Documentation/{x86 => core-api}/protection-keys.rst (100%)
-
-diff --git a/Documentation/core-api/index.rst b/Documentation/core-api/index.rst
-index ee1bb8983a88..2466a4c51031 100644
---- a/Documentation/core-api/index.rst
-+++ b/Documentation/core-api/index.rst
-@@ -34,6 +34,7 @@ Core utilities
-    timekeeping
-    boot-time-mm
-    memory-hotplug
-+   protection-keys
- 
- 
- Interfaces for kernel debugging
-diff --git a/Documentation/x86/protection-keys.rst b/Documentation/core-api/protection-keys.rst
-similarity index 100%
-rename from Documentation/x86/protection-keys.rst
-rename to Documentation/core-api/protection-keys.rst
-diff --git a/Documentation/x86/index.rst b/Documentation/x86/index.rst
-index ae36fc5fc649..f2de1b2d3ac7 100644
---- a/Documentation/x86/index.rst
-+++ b/Documentation/x86/index.rst
-@@ -19,7 +19,6 @@ x86-specific Documentation
-    tlb
-    mtrr
-    pat
--   protection-keys
-    intel_mpx
-    amd-memory-encryption
-    pti
-diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
-index 8c1c636308c8..3b795a0cab62 100644
---- a/arch/powerpc/Kconfig
-+++ b/arch/powerpc/Kconfig
-@@ -898,7 +898,7 @@ config PPC_MEM_KEYS
- 	  page-based protections, but without requiring modification of the
- 	  page tables when an application changes protection domains.
- 
--	  For details, see Documentation/vm/protection-keys.rst
-+	  For details, see Documentation/core-api/protection-keys.rst
- 
- 	  If unsure, say y.
- 
-diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-index 2bbbd4d1ba31..d87d53fcd261 100644
---- a/arch/x86/Kconfig
-+++ b/arch/x86/Kconfig
-@@ -1911,7 +1911,7 @@ config X86_INTEL_MEMORY_PROTECTION_KEYS
- 	  page-based protections, but without requiring modification of the
- 	  page tables when an application changes protection domains.
- 
--	  For details, see Documentation/x86/protection-keys.txt
-+	  For details, see Documentation/core-api/protection-keys.rst
- 
- 	  If unsure, say y.
- 
-diff --git a/tools/testing/selftests/x86/protection_keys.c b/tools/testing/selftests/x86/protection_keys.c
-index 5d546dcdbc80..480995bceefa 100644
---- a/tools/testing/selftests/x86/protection_keys.c
-+++ b/tools/testing/selftests/x86/protection_keys.c
-@@ -1,6 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0
- /*
-- * Tests x86 Memory Protection Keys (see Documentation/x86/protection-keys.txt)
-+ * Tests x86 Memory Protection Keys (see Documentation/core-api/protection-keys.rst)
-  *
-  * There are examples in here of:
-  *  * how to set protection keys on memory
--- 
-2.21.0
+Ok, I still wonder if we should make KUNIT_EXPECT_EQ check the types on
+both sides and cause a build warning/error if the types aren't the same.
+This would be similar to our min/max macros that complain about
+mismatched types in the comparisons. Then if a test developer needs to
+convert one type or the other they could do so with a
+KUNIT_EXPECT_EQ_T() macro that lists the types to coerce both sides to
+explicitly.
 
