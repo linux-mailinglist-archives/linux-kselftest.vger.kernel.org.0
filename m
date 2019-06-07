@@ -2,126 +2,145 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 819D0383C2
-	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Jun 2019 07:34:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EB7B394E0
+	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Jun 2019 20:55:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726613AbfFGFdu (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 7 Jun 2019 01:33:50 -0400
-Received: from mail-it1-f193.google.com ([209.85.166.193]:37197 "EHLO
-        mail-it1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726324AbfFGFdu (ORCPT
+        id S1732282AbfFGSzl (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 7 Jun 2019 14:55:41 -0400
+Received: from bombadil.infradead.org ([198.137.202.133]:42352 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732083AbfFGSyk (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 7 Jun 2019 01:33:50 -0400
-Received: by mail-it1-f193.google.com with SMTP id x22so952843itl.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 06 Jun 2019 22:33:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=I1Ohgac363EioDxzXpyXf7UN1ZgVyShBjggu94kceQ8=;
-        b=k/GR7joJNJJ6Ve9R/aFsDJRsptZAid18wqkAKiXzRB6NlE5r0KsuMRDWBQiDjQE71p
-         daD8j4DSrVfI6HVAkD5vCpZj39PQaq9fApbZACjRC0RDDKZIBpn7/PLmAhGU1uSNjV36
-         ZPpnk1tioX9M+1EYWJoeTvWylBd+vbf5sKkC6jEafyQKFEFkOanMnEF7whEz4Nqwt4hG
-         bE4l9bBTG0ogocOQzuioUmmPSF5w+Ho92/o1cceuVe444tHP69yQxu8DSewMXHLCqg4l
-         Ja6TZAP9vQDDI+y+jUJx9i8y337VPVjbLYX5aoIkmB6O4W9ByhkvQ0wvmaFU4t1VIu/d
-         h8DQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=I1Ohgac363EioDxzXpyXf7UN1ZgVyShBjggu94kceQ8=;
-        b=NyoTstelOKV9KGboJjCAVAO7K+GZa/VeDqQX0yoOKI7LOAcuYIHH1y4EreUrqmSHyR
-         jcojhWUy49MBCV7je2JA2LixShC4XVznPZViqSoor4DN4lqKZMKKiCWRS4bCH4xheUPP
-         LUQSl3pmYA14YbN2CFKE2bUSHf8u1ow8TxHFp+oxpeTslB0XToKvRetB4C9SKjVpfeZF
-         iTswIsAjEuqssaaQsRqWShhSTGYK4jJS7siz/MJ/G+QWWD1gJl6U6vQtsjk4ji6J+5gc
-         cY7LRRhHhFJ9GIXAsY1lX1kkAs0gYiAZcyUBKnTL8s1Xm6If9+oN7pEZ4+bqsM6dNXtQ
-         NCVg==
-X-Gm-Message-State: APjAAAUKEApL2qbB5OZ9RH+bqWPijBOrvVGzErFl8lLrG9E09IspIeXR
-        69kC2VSZoJt+ulKICapm0A8t1FIuKaexoLPNqtBT7A==
-X-Google-Smtp-Source: APXvYqzO76FNbL4lc2mT5nAI8664+vPAEC2qxggUSScGxp/b2eT89TkEwyH+hzeEqr8qRCV6LZQ9VkHcX6jY2/9nElY=
-X-Received: by 2002:a05:660c:752:: with SMTP id a18mr2789419itl.63.1559885629583;
- Thu, 06 Jun 2019 22:33:49 -0700 (PDT)
+        Fri, 7 Jun 2019 14:54:40 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=Sender:Content-Transfer-Encoding:
+        MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:
+        Reply-To:Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=9BFa2w9dMfs23jOauwpVzpiJfCyUvRSxJugmmRhg1+Y=; b=Y15WIe1h7RPtXfVg22IaFG2tXE
+        jj21RoR5ji9hW/5iHiNsUij9LVME21L0rqVFtBCDMlpjSRfhysh/yuHiSOyw4pueOTm4CLPYm2Jqz
+        7zNqjECImbRU6kQQb0vgexgHrsc//KTxsEdJgN/PnScnipxBPkVKNL0DfIBSl5IjWEUU4/pN1aHkp
+        IQ6M3/cSEYcvDAviucCr3n7cKcQp+HQrHtPU4DdqvAWQ0iU+4CJAP48DAuSF8fweXu6SA0pkQTO9X
+        kaZsKnt9RvfnmKZewOVk9HvV+hY407Ql4vOSl/TzV+uc1EkVTECFepaldWMDUX68NBWWtpGdvH42L
+        tfdlZLnA==;
+Received: from [179.181.119.115] (helo=bombadil.infradead.org)
+        by bombadil.infradead.org with esmtpsa (Exim 4.92 #3 (Red Hat Linux))
+        id 1hZK0d-0005sn-O1; Fri, 07 Jun 2019 18:54:39 +0000
+Received: from mchehab by bombadil.infradead.org with local (Exim 4.92)
+        (envelope-from <mchehab@bombadil.infradead.org>)
+        id 1hZK0b-0007FS-J9; Fri, 07 Jun 2019 15:54:37 -0300
+From:   Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
+To:     Linux Doc Mailing List <linux-doc@vger.kernel.org>
+Cc:     Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@infradead.org>,
+        linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>, x86@kernel.org,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Shuah Khan <shuah@kernel.org>, linuxppc-dev@lists.ozlabs.org,
+        linux-kselftest@vger.kernel.org
+Subject: [PATCH v3 15/20] docs: move protection-keys.rst to the core-api book
+Date:   Fri,  7 Jun 2019 15:54:31 -0300
+Message-Id: <4948a096397bb86cebf489b8ac4f623797257fe7.1559933665.git.mchehab+samsung@kernel.org>
+X-Mailer: git-send-email 2.21.0
+In-Reply-To: <ff457774d46d96e8fe56b45409aba39d87a8672a.1559933665.git.mchehab+samsung@kernel.org>
+References: <ff457774d46d96e8fe56b45409aba39d87a8672a.1559933665.git.mchehab+samsung@kernel.org>
 MIME-Version: 1.0
-References: <cover.1559580831.git.andreyknvl@google.com> <dc3f3092abbc0d48e51b2e2a2ca8f4c4f69fa0f4.1559580831.git.andreyknvl@google.com>
-In-Reply-To: <dc3f3092abbc0d48e51b2e2a2ca8f4c4f69fa0f4.1559580831.git.andreyknvl@google.com>
-From:   Jens Wiklander <jens.wiklander@linaro.org>
-Date:   Fri, 7 Jun 2019 07:33:38 +0200
-Message-ID: <CAHUa44E+g3YTcja+7qgx+iABVd48DbrMMOm0sbyMwf0U6F5NPw@mail.gmail.com>
-Subject: Re: [PATCH v16 14/16] tee, arm64: untag user pointers in tee_shm_register
-To:     Andrey Konovalov <andreyknvl@google.com>
-Cc:     Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-mm@kvack.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-rdma@vger.kernel.org, linux-media@vger.kernel.org,
-        kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Will Deacon <will.deacon@arm.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Kees Cook <keescook@chromium.org>,
-        Yishai Hadas <yishaih@mellanox.com>,
-        Felix Kuehling <Felix.Kuehling@amd.com>,
-        Alexander Deucher <Alexander.Deucher@amd.com>,
-        Christian Koenig <Christian.Koenig@amd.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
-        Dave Martin <Dave.Martin@arm.com>,
-        Khalid Aziz <khalid.aziz@oracle.com>, enh <enh@google.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Christoph Hellwig <hch@infradead.org>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Kostya Serebryany <kcc@google.com>,
-        Evgeniy Stepanov <eugenis@google.com>,
-        Lee Smith <Lee.Smith@arm.com>,
-        Ramana Radhakrishnan <Ramana.Radhakrishnan@arm.com>,
-        Jacob Bramley <Jacob.Bramley@arm.com>,
-        Ruben Ayrapetyan <Ruben.Ayrapetyan@arm.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Kevin Brodsky <kevin.brodsky@arm.com>,
-        Szabolcs Nagy <Szabolcs.Nagy@arm.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Jun 3, 2019 at 6:56 PM Andrey Konovalov <andreyknvl@google.com> wrote:
->
-> This patch is a part of a series that extends arm64 kernel ABI to allow to
-> pass tagged user pointers (with the top byte set to something else other
-> than 0x00) as syscall arguments.
->
-> tee_shm_register()->optee_shm_unregister()->check_mem_type() uses provided
-> user pointers for vma lookups (via __check_mem_type()), which can only by
-> done with untagged pointers.
->
-> Untag user pointers in this function.
->
-> Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
+This document is used by multiple architectures:
 
-Acked-by: Jens Wiklander <jens.wiklander@linaro.org>
+	$ echo $(git grep -l  pkey_mprotect arch|cut -d'/' -f 2|sort|uniq)
+	alpha arm arm64 ia64 m68k microblaze mips parisc powerpc s390 sh sparc x86 xtensa
 
-> ---
->  drivers/tee/tee_shm.c | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/drivers/tee/tee_shm.c b/drivers/tee/tee_shm.c
-> index 49fd7312e2aa..96945f4cefb8 100644
-> --- a/drivers/tee/tee_shm.c
-> +++ b/drivers/tee/tee_shm.c
-> @@ -263,6 +263,7 @@ struct tee_shm *tee_shm_register(struct tee_context *ctx, unsigned long addr,
->         shm->teedev = teedev;
->         shm->ctx = ctx;
->         shm->id = -1;
-> +       addr = untagged_addr(addr);
->         start = rounddown(addr, PAGE_SIZE);
->         shm->offset = addr - start;
->         shm->size = length;
-> --
-> 2.22.0.rc1.311.g5d7573a151-goog
->
+So, let's move it to the core book and adjust the links to it
+accordingly.
+
+Signed-off-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
+---
+ Documentation/core-api/index.rst                    | 1 +
+ Documentation/{x86 => core-api}/protection-keys.rst | 0
+ Documentation/x86/index.rst                         | 1 -
+ arch/powerpc/Kconfig                                | 2 +-
+ arch/x86/Kconfig                                    | 2 +-
+ tools/testing/selftests/x86/protection_keys.c       | 2 +-
+ 6 files changed, 4 insertions(+), 4 deletions(-)
+ rename Documentation/{x86 => core-api}/protection-keys.rst (100%)
+
+diff --git a/Documentation/core-api/index.rst b/Documentation/core-api/index.rst
+index ee1bb8983a88..2466a4c51031 100644
+--- a/Documentation/core-api/index.rst
++++ b/Documentation/core-api/index.rst
+@@ -34,6 +34,7 @@ Core utilities
+    timekeeping
+    boot-time-mm
+    memory-hotplug
++   protection-keys
+ 
+ 
+ Interfaces for kernel debugging
+diff --git a/Documentation/x86/protection-keys.rst b/Documentation/core-api/protection-keys.rst
+similarity index 100%
+rename from Documentation/x86/protection-keys.rst
+rename to Documentation/core-api/protection-keys.rst
+diff --git a/Documentation/x86/index.rst b/Documentation/x86/index.rst
+index ae36fc5fc649..f2de1b2d3ac7 100644
+--- a/Documentation/x86/index.rst
++++ b/Documentation/x86/index.rst
+@@ -19,7 +19,6 @@ x86-specific Documentation
+    tlb
+    mtrr
+    pat
+-   protection-keys
+    intel_mpx
+    amd-memory-encryption
+    pti
+diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
+index 8c1c636308c8..3b795a0cab62 100644
+--- a/arch/powerpc/Kconfig
++++ b/arch/powerpc/Kconfig
+@@ -898,7 +898,7 @@ config PPC_MEM_KEYS
+ 	  page-based protections, but without requiring modification of the
+ 	  page tables when an application changes protection domains.
+ 
+-	  For details, see Documentation/vm/protection-keys.rst
++	  For details, see Documentation/core-api/protection-keys.rst
+ 
+ 	  If unsure, say y.
+ 
+diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+index 2bbbd4d1ba31..d87d53fcd261 100644
+--- a/arch/x86/Kconfig
++++ b/arch/x86/Kconfig
+@@ -1911,7 +1911,7 @@ config X86_INTEL_MEMORY_PROTECTION_KEYS
+ 	  page-based protections, but without requiring modification of the
+ 	  page tables when an application changes protection domains.
+ 
+-	  For details, see Documentation/x86/protection-keys.txt
++	  For details, see Documentation/core-api/protection-keys.rst
+ 
+ 	  If unsure, say y.
+ 
+diff --git a/tools/testing/selftests/x86/protection_keys.c b/tools/testing/selftests/x86/protection_keys.c
+index 5d546dcdbc80..480995bceefa 100644
+--- a/tools/testing/selftests/x86/protection_keys.c
++++ b/tools/testing/selftests/x86/protection_keys.c
+@@ -1,6 +1,6 @@
+ // SPDX-License-Identifier: GPL-2.0
+ /*
+- * Tests x86 Memory Protection Keys (see Documentation/x86/protection-keys.txt)
++ * Tests x86 Memory Protection Keys (see Documentation/core-api/protection-keys.rst)
+  *
+  * There are examples in here of:
+  *  * how to set protection keys on memory
+-- 
+2.21.0
+
