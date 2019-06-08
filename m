@@ -2,27 +2,27 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 547E839F3D
-	for <lists+linux-kselftest@lfdr.de>; Sat,  8 Jun 2019 13:55:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BE0639E13
+	for <lists+linux-kselftest@lfdr.de>; Sat,  8 Jun 2019 13:46:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727351AbfFHLkL (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 8 Jun 2019 07:40:11 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57262 "EHLO mail.kernel.org"
+        id S1728093AbfFHLnE (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 8 Jun 2019 07:43:04 -0400
+Received: from mail.kernel.org ([198.145.29.99]:60290 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727345AbfFHLkK (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 8 Jun 2019 07:40:10 -0400
+        id S1727947AbfFHLnD (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Sat, 8 Jun 2019 07:43:03 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 7F854208C0;
-        Sat,  8 Jun 2019 11:40:09 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id ED4E3214AF;
+        Sat,  8 Jun 2019 11:43:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1559994010;
-        bh=nL92TG70cXsYXBQ99uvL+djO8fntoJgurhs0EDAxih4=;
+        s=default; t=1559994182;
+        bh=C+6URup4x6WWyXK1GXWSoHnLonUHCD8kJjjmj9A+3h4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=l9oVGC47S1/PgjPEhpxu4avRDaqh5lgCyxCWEmZZJz3UEBMvYZB7POeOuxB3YKUY+
-         emFHJWKG86iIeaijvHsylWXII/crP1jJ73x1gFjFOQQFmoZ1xdPi3FmvuVGpCjeCQV
-         oCC9nCFk4zJJWi6DKjb6u/rTw9gYOCtpHj2SWQQE=
+        b=leZLAEMBteJyAmFJBPS/tDSvlBmSmIzgsVQD2Ih/nFRbVtK340uVatx2yrPGAzUUl
+         Th65OF3LOFaoYhzvG1wK3KNUotiqs5/+h1EZXgDY7/lV1w4u17Us77Aqr1n4lBdDDg
+         3sPUlai2XK9faZjc4mjHqy7MGNeY11IgAS+c+UNw=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Jeffrin Jose T <jeffrin@rajagiritech.edu.in>,
@@ -30,12 +30,12 @@ Cc:     Jeffrin Jose T <jeffrin@rajagiritech.edu.in>,
         Pablo Neira Ayuso <pablo@netfilter.org>,
         Sasha Levin <sashal@kernel.org>,
         linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.1 14/70] selftests: netfilter: missing error check when setting up veth interface
-Date:   Sat,  8 Jun 2019 07:38:53 -0400
-Message-Id: <20190608113950.8033-14-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 07/49] selftests: netfilter: missing error check when setting up veth interface
+Date:   Sat,  8 Jun 2019 07:41:48 -0400
+Message-Id: <20190608114232.8731-7-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190608113950.8033-1-sashal@kernel.org>
-References: <20190608113950.8033-1-sashal@kernel.org>
+In-Reply-To: <20190608114232.8731-1-sashal@kernel.org>
+References: <20190608114232.8731-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -63,7 +63,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 5 insertions(+), 1 deletion(-)
 
 diff --git a/tools/testing/selftests/netfilter/nft_nat.sh b/tools/testing/selftests/netfilter/nft_nat.sh
-index 3194007cf8d1..a59c5fd4e987 100755
+index 8ec76681605c..f25f72a75cf3 100755
 --- a/tools/testing/selftests/netfilter/nft_nat.sh
 +++ b/tools/testing/selftests/netfilter/nft_nat.sh
 @@ -23,7 +23,11 @@ ip netns add ns0
