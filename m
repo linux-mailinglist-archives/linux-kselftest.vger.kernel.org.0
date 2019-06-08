@@ -2,154 +2,140 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EDFEC3988D
-	for <lists+linux-kselftest@lfdr.de>; Sat,  8 Jun 2019 00:23:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BC9A39A15
+	for <lists+linux-kselftest@lfdr.de>; Sat,  8 Jun 2019 04:11:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731147AbfFGWXG (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 7 Jun 2019 18:23:06 -0400
-Received: from mail-pl1-f196.google.com ([209.85.214.196]:42017 "EHLO
-        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729796AbfFGWXF (ORCPT
+        id S1730233AbfFHCLJ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 7 Jun 2019 22:11:09 -0400
+Received: from mail-it1-f179.google.com ([209.85.166.179]:51257 "EHLO
+        mail-it1-f179.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730230AbfFHCLI (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 7 Jun 2019 18:23:05 -0400
-Received: by mail-pl1-f196.google.com with SMTP id go2so1318239plb.9
-        for <linux-kselftest@vger.kernel.org>; Fri, 07 Jun 2019 15:23:05 -0700 (PDT)
+        Fri, 7 Jun 2019 22:11:08 -0400
+Received: by mail-it1-f179.google.com with SMTP id m3so5549000itl.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 07 Jun 2019 19:11:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=OscIWC1H8BYVUTSTRMLtHcpa3RbQBWs93JhulNsk+jk=;
-        b=kdR49OFNsFx7GSx/8YCa4OAXnuGm9wR3mA3FGM2j9z9kYOvNzqrt6gDMUmNTCF4V83
-         UuY0GuaC7cU7suXulXpVOn5N4HicehNGLM2Gv1N1iXUCkOIxaL4tP0q7CFg3Zr0ELRoH
-         c1K2fAfx/OZnoqY6EocLtP4K2Gyk7fJHcbAd5+nbSwsumoNC9uZdy1ZbqRPl2ZGb2KR0
-         5790YANxN6yo4XDpToutn8HtDWJ9qc4x2RtxrkIe4yf2ys4A7CKPGFlNlR6vaeXcDbDI
-         eCRkI67w15jEuFPGTFzQI8EIXARxKyvN1+GR9F9Qoev+vDDjbBqEj+ZoKNPmKxLF0J5U
-         DgLQ==
+        d=linuxfoundation.org; s=google;
+        h=to:cc:from:subject:message-id:date:user-agent:mime-version
+         :content-language;
+        bh=SvnI0124RQyG3mZdpITe2RKpNEsDCUsmCfQu//JUzcY=;
+        b=X09+drmRRIGFjuEz2GoZ5RiiSac8xIMyegzJZbLbA4yEx6SaI+WwsWCNvrkboqmVO5
+         /3OKP6FqiuR27MeClWl3Hnlp9d8sGh+bYsQvvFD8ZWBAGrq/SIq74L4BZc5rVua/GBE2
+         X2wo7BqzVQtAuLSgvtG91e0xPHf+yZs/xHARM=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=OscIWC1H8BYVUTSTRMLtHcpa3RbQBWs93JhulNsk+jk=;
-        b=jlyMkD6ZjxndEH4JDhQaUY19Qsa5DL+dOsNnVJtmhN/LQCxSrFM/gd9yjoX4mxNBlI
-         g8MQU5qZjGHNxLVv8fhJamuGv4WYLmV6cyR07tapV+8FRZ8I8b2SKeXIfYffJWIHYD/2
-         0FNR4tkiyT3ZHS9tgdEu+hapfzVV1BpWqpzq7qrfzLG0GthE11J9c0XlT/Y5AfjCl39X
-         eLtMRvwVpElU+N3A+6/84BK+u2BLdUIvmw8SXLLHSRRngxjfxmQIFgoXSDwdFJkM99qU
-         L9VRppmbOfcuacfGT8n5BY3iZXunGcjKyNTuVg9alXze4nne7q+jLojXUKGpppk5g1xJ
-         g64Q==
-X-Gm-Message-State: APjAAAUw35m2DiVQPd2nV64WzohQ4KMILSkq3ZtkThZ8ejD4+FLFUkwM
-        m/ekji89/HyQG/cLwfRbH8kXgN0B6zJ3kO73NKIouQ==
-X-Google-Smtp-Source: APXvYqxqRVfuyQEdyfJNNkPVX/y1rXYgnEMZVKj/CtJa0Fm8bihW1BebEYmymKIH0C8/tAoxb6DpKUorgA1wvW4QAXM=
-X-Received: by 2002:a17:902:624:: with SMTP id 33mr59045206plg.325.1559946184199;
- Fri, 07 Jun 2019 15:23:04 -0700 (PDT)
-MIME-Version: 1.0
-References: <20190514221711.248228-1-brendanhiggins@google.com>
- <20190514221711.248228-18-brendanhiggins@google.com> <20190517182254.548EA20815@mail.kernel.org>
- <CAAXuY3p4qhKVsSpQ44_kQeGDMfg7OuFLgFyxhcFWS3yf-5A_7g@mail.gmail.com> <20190607190047.C3E7A20868@mail.kernel.org>
-In-Reply-To: <20190607190047.C3E7A20868@mail.kernel.org>
-From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Fri, 7 Jun 2019 15:22:53 -0700
-Message-ID: <CAFd5g475eUKnpNM3kDe_9PboCyZ=aanPeV2gTuzuJXRp-xbsWg@mail.gmail.com>
-Subject: Re: [PATCH v4 17/18] kernel/sysctl-test: Add null pointer test for sysctl.c:proc_dointvec()
-To:     Stephen Boyd <sboyd@kernel.org>
-Cc:     Iurii Zaikin <yzaikin@google.com>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Kees Cook <keescook@google.com>,
-        Kieran Bingham <kieran.bingham@ideasonboard.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Rob Herring <robh@kernel.org>, shuah <shuah@kernel.org>,
-        "Theodore Ts'o" <tytso@mit.edu>,
-        Masahiro Yamada <yamada.masahiro@socionext.com>,
-        devicetree <devicetree@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        kunit-dev@googlegroups.com,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        linux-fsdevel@vger.kernel.org,
-        linux-kbuild <linux-kbuild@vger.kernel.org>,
+        h=x-gm-message-state:to:cc:from:subject:message-id:date:user-agent
+         :mime-version:content-language;
+        bh=SvnI0124RQyG3mZdpITe2RKpNEsDCUsmCfQu//JUzcY=;
+        b=OP4OqCfGU0yBGWBtUA4wiLV8esK46fHZ2MuyfvP8oPMtnzgAcvV9sTZOHgRF9j6kSl
+         78o8RbPxNqtQjmQTC35bQjIJP1CyHL901Jpl6CHfiphU5pBz/bDGSlPUWduWL+IXdylU
+         mYLF/mi9xc9hHoJfvOKwSFmV3xhxtr3eIuECSNbGW3FJXTuQ8RkV6dizwPJZkqUSbMQ9
+         8z1a5iFjttbVS8NebvmT8U0M3WDcf9eh790MayhXzJuO+zPQETrLeAz5VC1ZKGQg7gal
+         cqs6BnToK08oNY7tYCDuKGBlkZuubzzNh/n51changaNq9FZgk/Rzh8cyCRZBup/QAO+
+         4yJg==
+X-Gm-Message-State: APjAAAUtwJeoXc0h/yxJaArBEkABZmdm7f8wnJukPfxde2DeSa5Xs0YZ
+        isZ6qfpuFVWBCHqc0K+E9Vw7huzl4fU=
+X-Google-Smtp-Source: APXvYqyvNxcDeEsIA5sWyry2m2CfkiS2/C5q6ZoBbN4kth6uYuymFdU5J9mFZl1P9fa7C82Zrr2Cww==
+X-Received: by 2002:a24:d147:: with SMTP id w68mr6591208itg.176.1559959867659;
+        Fri, 07 Jun 2019 19:11:07 -0700 (PDT)
+Received: from [10.11.17.215] ([97.107.68.205])
+        by smtp.gmail.com with ESMTPSA id z202sm1979011itb.2.2019.06.07.19.11.06
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 07 Jun 2019 19:11:06 -0700 (PDT)
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     skhan@linuxfoundation.org,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        linux-nvdimm <linux-nvdimm@lists.01.org>,
-        linux-um@lists.infradead.org,
-        Sasha Levin <Alexander.Levin@microsoft.com>,
-        "Bird, Timothy" <Tim.Bird@sony.com>,
-        Amir Goldstein <amir73il@gmail.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Daniel Vetter <daniel@ffwll.ch>, Jeff Dike <jdike@addtoit.com>,
-        Joel Stanley <joel@jms.id.au>,
-        Julia Lawall <julia.lawall@lip6.fr>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Knut Omang <knut.omang@oracle.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Petr Mladek <pmladek@suse.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Richard Weinberger <richard@nod.at>,
-        David Rientjes <rientjes@google.com>,
-        Steven Rostedt <rostedt@goodmis.org>, wfg@linux.intel.com
-Content-Type: text/plain; charset="UTF-8"
+        <linux-kselftest@vger.kernel.org>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Subject: [GIT PULL] Kselftest second fixes update for Linux 5.2-rc4
+Message-ID: <f97f7947-db3b-07dd-157d-78ab9840a4dc@linuxfoundation.org>
+Date:   Fri, 7 Jun 2019 20:11:05 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
+MIME-Version: 1.0
+Content-Type: multipart/mixed;
+ boundary="------------C8926D04930EEB99C63E8D8F"
+Content-Language: en-US
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Jun 7, 2019 at 12:00 PM Stephen Boyd <sboyd@kernel.org> wrote:
->
-> Quoting Iurii Zaikin (2019-06-05 18:29:42)
-> > On Fri, May 17, 2019 at 11:22 AM Stephen Boyd <sboyd@kernel.org> wrote:
-> > >
-> > > Quoting Brendan Higgins (2019-05-14 15:17:10)
-> > > > diff --git a/kernel/sysctl-test.c b/kernel/sysctl-test.c
-> > > > new file mode 100644
-> > > > index 0000000000000..fe0f2bae66085
-> > > > --- /dev/null
-> > > > +++ b/kernel/sysctl-test.c
-> > > > +
-> > > > +
-> > > > +static void sysctl_test_dointvec_happy_single_negative(struct kunit *test)
-> > > > +{
-> > > > +       struct ctl_table table = {
-> > > > +               .procname = "foo",
-> > > > +               .data           = &test_data.int_0001,
-> > > > +               .maxlen         = sizeof(int),
-> > > > +               .mode           = 0644,
-> > > > +               .proc_handler   = proc_dointvec,
-> > > > +               .extra1         = &i_zero,
-> > > > +               .extra2         = &i_one_hundred,
-> > > > +       };
-> > > > +       char input[] = "-9";
-> > > > +       size_t len = sizeof(input) - 1;
-> > > > +       loff_t pos = 0;
-> > > > +
-> > > > +       table.data = kunit_kzalloc(test, sizeof(int), GFP_USER);
-> > > > +       KUNIT_EXPECT_EQ(test, 0, proc_dointvec(&table, 1, input, &len, &pos));
-> > > > +       KUNIT_EXPECT_EQ(test, sizeof(input) - 1, len);
-> > > > +       KUNIT_EXPECT_EQ(test, sizeof(input) - 1, pos);
-> > > > +       KUNIT_EXPECT_EQ(test, -9, *(int *)table.data);
-> > >
-> > > Is the casting necessary? Or can the macro do a type coercion of the
-> > > second parameter based on the first type?
-> >  Data field is defined as void* so I believe casting is necessary to
-> > dereference it as a pointer to an array of ints. I don't think the
-> > macro should do any type coercion that == operator wouldn't do.
-> >  I did change the cast to make it more clear that it's a pointer to an
-> > array of ints being dereferenced.
->
-> Ok, I still wonder if we should make KUNIT_EXPECT_EQ check the types on
-> both sides and cause a build warning/error if the types aren't the same.
-> This would be similar to our min/max macros that complain about
-> mismatched types in the comparisons. Then if a test developer needs to
-> convert one type or the other they could do so with a
-> KUNIT_EXPECT_EQ_T() macro that lists the types to coerce both sides to
-> explicitly.
+This is a multi-part message in MIME format.
+--------------C8926D04930EEB99C63E8D8F
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Good point. I would definitely like to do this, for me it is only a
-question of how difficult it would be to make all that happen.
+Hi Linus,
 
-We will investigate and report back on it.
+Please pull the following second Kselftest fixes update for
+Linux 5.2 rc4.
 
-Thanks for the suggestion! It's a really good idea!
+This Kselftest second fixes update for Linux 5.2-rc4 consists of a
+single fix for vm test build failure regression when it is built by
+itself.
 
-Cheers
+I found this while I was sanity checking the first fixes update for
+Linux 5.2. Would like to get this into rc4.
+
+diff is attached.
+
+thanks,
+-- Shuah
+
+
+----------------------------------------------------------------
+The following changes since commit bc2cce3f2ebcae02aa4bb29e3436bf75ee674c32:
+
+   selftests: vm: install test_vmalloc.sh for run_vmtests (2019-05-30 
+08:32:57 -0600)
+
+are available in the Git repository at:
+
+   git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest 
+tags/linux-kselftest-5.2-rc4-2
+
+for you to fetch changes up to e2e88325f4bcaea51f454723971f7b5ee0e1aa80:
+
+   selftests: vm: Fix test build failure when built by itself 
+(2019-06-05 16:05:40 -0600)
+
+----------------------------------------------------------------
+linux-kselftest-5.2-rc4-2
+
+This Kselftest second fixes update for Linux 5.2-rc4 consists of a single
+fix for vm test build failure regression when it is built by itself.
+
+----------------------------------------------------------------
+Shuah Khan (1):
+       selftests: vm: Fix test build failure when built by itself
+
+  tools/testing/selftests/vm/Makefile | 4 ----
+  1 file changed, 4 deletions(-)
+----------------------------------------------------------------
+
+--------------C8926D04930EEB99C63E8D8F
+Content-Type: text/x-patch;
+ name="linux-kselftest-5.2-rc4-2.diff"
+Content-Transfer-Encoding: 7bit
+Content-Disposition: attachment;
+ filename="linux-kselftest-5.2-rc4-2.diff"
+
+diff --git a/tools/testing/selftests/vm/Makefile b/tools/testing/selftests/vm/Makefile
+index 05306c58ff9f..9534dc2bc929 100644
+--- a/tools/testing/selftests/vm/Makefile
++++ b/tools/testing/selftests/vm/Makefile
+@@ -1,10 +1,6 @@
+ # SPDX-License-Identifier: GPL-2.0
+ # Makefile for vm selftests
+ 
+-ifndef OUTPUT
+-  OUTPUT := $(shell pwd)
+-endif
+-
+ CFLAGS = -Wall -I ../../../../usr/include $(EXTRA_CFLAGS)
+ LDLIBS = -lrt
+ TEST_GEN_FILES = compaction_test
+
+--------------C8926D04930EEB99C63E8D8F--
