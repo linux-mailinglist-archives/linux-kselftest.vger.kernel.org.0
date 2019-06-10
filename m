@@ -2,92 +2,112 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 92C203A473
-	for <lists+linux-kselftest@lfdr.de>; Sun,  9 Jun 2019 11:19:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48DDF3B23E
+	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Jun 2019 11:35:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727946AbfFIJTn (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 9 Jun 2019 05:19:43 -0400
-Received: from mail-lf1-f65.google.com ([209.85.167.65]:46659 "EHLO
-        mail-lf1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727864AbfFIJTm (ORCPT
+        id S2388817AbfFJJfN (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 10 Jun 2019 05:35:13 -0400
+Received: from mail.codeweavers.com ([50.203.203.244]:57668 "EHLO
+        mail.codeweavers.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388033AbfFJJfM (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 9 Jun 2019 05:19:42 -0400
-Received: by mail-lf1-f65.google.com with SMTP id z15so1892132lfh.13;
-        Sun, 09 Jun 2019 02:19:41 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=tm1kUkU8K0xP+6qbFcyeQd6hDSnbqz5Xinvig3WgCVk=;
-        b=tgmF/+F8MayA//Guy9XStbdA6BocwtPRn5ozoX8XchLUePohMIpuYrxOUaxST54EQl
-         6nqCBmmXX0iUzBFsf0j/NPwOEgo42RcY8cOPuwfXzWsbV3xXxgyOPQNiJYrdk+/ZlFBl
-         OLi3ImGC7QD5B0xANqAX606a1VNMeqTok4ENK9Sj17HgZibK/wvr/oIuMd3/sQWF5FgS
-         dSEUskRgqXbFboQ9fC9a9z+cMX7PlCsaSQNzM5FnivT9hmaz9gXTTvzwSGyOBgbvw07M
-         OsVzZpJcJr7+1knhoK0c/xuG26CavyeqcdIHy+YNCK4qkac9HolfFUdVIz3hNyNfM54C
-         WXdg==
-X-Gm-Message-State: APjAAAU77NaJf99SeYyMoD7EKt3zF55NQyYZzCee0kYyVQ+xIkHz/KSa
-        F6mMFGkCxZvx19chKsVFFc/YUX8rNGQfI7ATU4k=
-X-Google-Smtp-Source: APXvYqxnnYV8kl5R90oD40qadn5h+TZeP7RkBZTi+rdt/dFdy/gyUH8r8MQ2aYrIT1EQJA6MQAqc14471W+iVtoVwcY=
-X-Received: by 2002:ac2:546a:: with SMTP id e10mr31848175lfn.75.1560071980695;
- Sun, 09 Jun 2019 02:19:40 -0700 (PDT)
-MIME-Version: 1.0
-References: <ff457774d46d96e8fe56b45409aba39d87a8672a.1559933665.git.mchehab+samsung@kernel.org>
- <4948a096397bb86cebf489b8ac4f623797257fe7.1559933665.git.mchehab+samsung@kernel.org>
-In-Reply-To: <4948a096397bb86cebf489b8ac4f623797257fe7.1559933665.git.mchehab+samsung@kernel.org>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Sun, 9 Jun 2019 11:19:28 +0200
-Message-ID: <CAMuHMdVnBP-CJ5S0+D_H4RedkHV5m8m8wGXy-PRzaFk0JWdW8Q@mail.gmail.com>
-Subject: Re: [PATCH v3 15/20] docs: move protection-keys.rst to the core-api book
-To:     Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
-Cc:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        Mauro Carvalho Chehab <mchehab@infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
+        Mon, 10 Jun 2019 05:35:12 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=codeweavers.com; s=6377696661; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=hvHEIsUHuFBpJysJSAh/TndXcB04oV4yePbtGuMBdHk=; b=ieSZLelSnKpjvNpvH2LPvshAf
+        nDwm8iPPnsYNiFhs+BE5xIvXfmbYFHGIXXrH9fKXziYzO79y92u/Tbl/b0xHbZRw3KBWCC4dRA0do
+        EK1YEYI5aUENNJlKGRA06BN33Vt+P+IJaLy8gJK1SBhS+F3ZahSFihKjyxiK2g3wlJj7M=;
+Received: from merlot.physics.ox.ac.uk ([163.1.241.98] helo=merlot)
+        by mail.codeweavers.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.89)
+        (envelope-from <huw@codeweavers.com>)
+        id 1haGbQ-0003aw-G6; Mon, 10 Jun 2019 04:28:33 -0500
+Received: from daviesh by merlot with local (Exim 4.90_1)
+        (envelope-from <huw@codeweavers.com>)
+        id 1haGam-00039Z-E5; Mon, 10 Jun 2019 10:27:52 +0100
+Date:   Mon, 10 Jun 2019 10:27:52 +0100
+From:   Huw Davies <huw@codeweavers.com>
+To:     Vincenzo Frascino <vincenzo.frascino@arm.com>
+Cc:     linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will.deacon@arm.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Russell King <linux@armlinux.org.uk>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Paul Burton <paul.burton@mips.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
+        Mark Salyzyn <salyzyn@android.com>,
+        Peter Collingbourne <pcc@google.com>,
         Shuah Khan <shuah@kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Dmitry Safonov <0x7f454c46@gmail.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>
+Subject: Re: [PATCH v6 01/19] kernel: Standardize vdso_datapage
+Message-ID: <20190610092751.GA11076@merlot.physics.ox.ac.uk>
+References: <20190530141531.43462-1-vincenzo.frascino@arm.com>
+ <20190530141531.43462-2-vincenzo.frascino@arm.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190530141531.43462-2-vincenzo.frascino@arm.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Spam-Score: -106.0
+X-Spam-Report: Spam detection software, running on the system "mail.codeweavers.com",
+ has NOT identified this incoming email as spam.  The original
+ message has been attached to this so you can view it or label
+ similar future email.  If you have any questions, see
+ the administrator of that system for details.
+ Content preview:  On Thu, May 30, 2019 at 03:15:13PM +0100, Vincenzo Frascino
+    wrote: > --- /dev/null > +++ b/include/vdso/datapage.h > @@ -0,0 +1,91 @@
+    > +/* SPDX-License-Identifier: GPL-2.0 */ > +#ifndef __VDSO_DATAPA [...] 
+ Content analysis details:   (-106.0 points, 5.0 required)
+  pts rule name              description
+ ---- ---------------------- --------------------------------------------------
+ -100 USER_IN_WHITELIST      From: address is in the user's white-list
+ -6.0 ALL_TRUSTED            Passed through trusted hosts only via SMTP
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Mauro,
+On Thu, May 30, 2019 at 03:15:13PM +0100, Vincenzo Frascino wrote:
+> --- /dev/null
+> +++ b/include/vdso/datapage.h
+> @@ -0,0 +1,91 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +#ifndef __VDSO_DATAPAGE_H
+> +#define __VDSO_DATAPAGE_H
+> +
+> +#ifdef __KERNEL__
+> +
+> +#ifndef __ASSEMBLY__
+> +
+> +#include <linux/bits.h>
+> +#include <linux/time.h>
+> +#include <linux/types.h>
+> +
+> +#define VDSO_BASES	(CLOCK_TAI + 1)
+> +#define VDSO_HRES	(BIT(CLOCK_REALTIME)		| \
+> +			 BIT(CLOCK_MONOTONIC)		| \
+> +			 BIT(CLOCK_BOOTTIME)		| \
+> +			 BIT(CLOCK_TAI))
+> +#define VDSO_COARSE	(BIT(CLOCK_REALTIME_COARSE)	| \
+> +			 BIT(CLOCK_MONOTONIC_COARSE))
+> +#define VDSO_RAW	(BIT(CLOCK_MONOTONIC_RAW))
+> +
+> +#define CS_HRES_COARSE	0
+> +#define CS_RAW		1
 
-On Fri, Jun 7, 2019 at 9:38 PM Mauro Carvalho Chehab
-<mchehab+samsung@kernel.org> wrote:
-> This document is used by multiple architectures:
+CS_HRES_COARSE seems like a confusing name choice to me.  What you
+really mean is not RAW.
 
-Indeed it is...
+How about CS_ADJ to indicate that its updated by adjtime?
+CS_XTIME might be another option.
 
->
->         $ echo $(git grep -l  pkey_mprotect arch|cut -d'/' -f 2|sort|uniq)
->         alpha arm arm64 ia64 m68k microblaze mips parisc powerpc s390 sh sparc x86 xtensa
-
-... but not because we now have a unified space for new syscall numbers ;-)
-
-$ git grep -w ARCH_HAS_PKEYS -- "*Kconf*"
-arch/powerpc/Kconfig:   select ARCH_HAS_PKEYS
-arch/x86/Kconfig:       select ARCH_HAS_PKEYS
-mm/Kconfig:config ARCH_HAS_PKEYS
-
-I.e. limited to x86 and powerpc.
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Huw.
