@@ -2,134 +2,113 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DB5653D01D
-	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Jun 2019 17:02:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A05513D089
+	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Jun 2019 17:16:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391356AbfFKPBb (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 11 Jun 2019 11:01:31 -0400
-Received: from foss.arm.com ([217.140.110.172]:35474 "EHLO foss.arm.com"
+        id S2388333AbfFKPQV (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 11 Jun 2019 11:16:21 -0400
+Received: from mail.kernel.org ([198.145.29.99]:53958 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2389125AbfFKPBa (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 11 Jun 2019 11:01:30 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id AFDBE346;
-        Tue, 11 Jun 2019 08:01:29 -0700 (PDT)
-Received: from arrakis.emea.arm.com (arrakis.cambridge.arm.com [10.1.196.78])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 103473F246;
-        Tue, 11 Jun 2019 08:01:24 -0700 (PDT)
-Date:   Tue, 11 Jun 2019 16:01:22 +0100
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     Andrey Konovalov <andreyknvl@google.com>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, amd-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, linux-rdma@vger.kernel.org,
-        linux-media@vger.kernel.org, kvm@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Will Deacon <will.deacon@arm.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Kees Cook <keescook@chromium.org>,
-        Yishai Hadas <yishaih@mellanox.com>,
-        Felix Kuehling <Felix.Kuehling@amd.com>,
-        Alexander Deucher <Alexander.Deucher@amd.com>,
-        Christian Koenig <Christian.Koenig@amd.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Jens Wiklander <jens.wiklander@linaro.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
-        Dave Martin <Dave.Martin@arm.com>,
-        Khalid Aziz <khalid.aziz@oracle.com>, enh <enh@google.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Christoph Hellwig <hch@infradead.org>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Kostya Serebryany <kcc@google.com>,
-        Evgeniy Stepanov <eugenis@google.com>,
-        Lee Smith <Lee.Smith@arm.com>,
-        Ramana Radhakrishnan <Ramana.Radhakrishnan@arm.com>,
-        Jacob Bramley <Jacob.Bramley@arm.com>,
-        Ruben Ayrapetyan <Ruben.Ayrapetyan@arm.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Kevin Brodsky <kevin.brodsky@arm.com>,
-        Szabolcs Nagy <Szabolcs.Nagy@arm.com>
-Subject: Re: [PATCH v16 16/16] selftests, arm64: add a selftest for passing
- tagged pointers to kernel
-Message-ID: <20190611150122.GB63588@arrakis.emea.arm.com>
-References: <cover.1559580831.git.andreyknvl@google.com>
- <9e1b5998a28f82b16076fc85ab4f88af5381cf74.1559580831.git.andreyknvl@google.com>
+        id S2388207AbfFKPQV (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 11 Jun 2019 11:16:21 -0400
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net [24.9.64.241])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id BFC6B212F5;
+        Tue, 11 Jun 2019 15:16:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1560266180;
+        bh=1GoqjMQCSIR/LFTMRdP+oLpnGDIr4QXhcVX9NdWejlg=;
+        h=Subject:To:References:From:Cc:Date:In-Reply-To:From;
+        b=qmd6qHtfWZMYjYDIr44YaA/eI661LACLuMVZ6u9TqqW6gwVCtNsq6+l4KJ/uh9T+4
+         vI/mZuU81JiYGNf/tiocUx94I2EGhvtJRoXIFzcDJo7hXqaYxp4etJxEm3480YhiIb
+         xwEp98iYsP7nwku6xvv73ihBnKGxVntpFyQMvZ0c=
+Subject: Re: kselftest build broken?
+To:     Dmitry Vyukov <dvyukov@google.com>, linux-kselftest@vger.kernel.org
+References: <CACT4Y+Z4naaxx4N2B2t1hn4A99dfk=6yTY2yAZM=aJ05VCPLFQ@mail.gmail.com>
+From:   shuah <shuah@kernel.org>
+Cc:     shuah <shuah@kernel.org>
+Message-ID: <54bc80f8-71aa-1c04-5908-01923247832e@kernel.org>
+Date:   Tue, 11 Jun 2019 09:16:07 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <9e1b5998a28f82b16076fc85ab4f88af5381cf74.1559580831.git.andreyknvl@google.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <CACT4Y+Z4naaxx4N2B2t1hn4A99dfk=6yTY2yAZM=aJ05VCPLFQ@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Jun 03, 2019 at 06:55:18PM +0200, Andrey Konovalov wrote:
-> This patch is a part of a series that extends arm64 kernel ABI to allow to
-> pass tagged user pointers (with the top byte set to something else other
-> than 0x00) as syscall arguments.
+Hi Dmitry,
+
+On 6/11/19 4:30 AM, Dmitry Vyukov wrote:
+> Hi,
 > 
-> This patch adds a simple test, that calls the uname syscall with a
-> tagged user pointer as an argument. Without the kernel accepting tagged
-> user pointers the test fails with EFAULT.
+> I've tried to build kselftests for several years now, but I always
+> find the build broken. Which makes me wonder if the instructions are
+> broken or something. I follow the instructions in
+> Documentation/dev-tools/kselftest.rst and start with "make -C
+> tools/testing/selftests". Here is the errors I get on the upstream
+> commit 16d72dd4891fecc1e1bf7ca193bb7d5b9804c038:
+> > error: unable to create target: 'No available targets are compatible
+> with triple "bpf"'
+> 1 error generated.
+> Makefile:259: recipe for target 'elfdep' failed
+> Makefile:156: recipe for target 'all' failed
+> Makefile:106: recipe for target
+> '/linux/tools/testing/selftests/bpf/libbpf.a' failed
+> test_execve.c:4:10: fatal error: cap-ng.h: No such file or directory
+
+These errors are due to missing dependencies. You will need
+
+libmount-dev
+libcap-ng-dev
+libelf-dev
+
+for bpf to build and also clang
+
+> ../lib.mk:138: recipe for target
+> '/linux/tools/testing/selftests/capabilities/test_execve' failed
+> gpio-mockup-chardev.c:20:10: fatal error: libmount.h: No such file or directory > <builtin>: recipe for target 'gpio-mockup-chardev' failed
+> fuse_mnt.c:17:10: fatal error: fuse.h: No such file or directory
+
+libfuse-dev is missing.
+
+> ../lib.mk:138: recipe for target
+> '/linux/tools/testing/selftests/memfd/fuse_mnt' failed
+> collect2: error: ld returned 1 exit status
+> ../lib.mk:138: recipe for target
+> '/linux/tools/testing/selftests/mqueue/mq_open_tests' failed
+
+Needs libpopt-dev
+
+> reuseport_bpf_numa.c:24:10: fatal error: numa.h: No such file or directory
+
+Needs libnuma-dev
+
+> ../lib.mk:138: recipe for target
+> '/linux/tools/testing/selftests/net/reuseport_bpf_numa' failed
+> mlock-random-test.c:8:10: fatal error: sys/capability.h: No such file
+> or directory > ../lib.mk:138: recipe for target
+> '/linux/tools/testing/selftests/vm/mlock-random-test' failed
 > 
-> Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
+> Here is full log:
+> 
+> https://gist.githubusercontent.com/dvyukov/47430636e160f297b657df5ba2efa82b/raw/7babc4db228b88f341a376c15e8bc9c4c3b02160/gistfile1.txt
+> 
+> I have libelf-dev installed. Do I need to install something else? Or
+> run some other command?
 
-BTW, you could add
+ii  libelf-dev:amd 0.170-0.4ubu amd64        libelf1 development 
+libraries and
+ii  libelf1:amd64  0.170-0.4ubu amd64        library to read and write 
+ELF fil
 
-Co-developed-by: Catalin Marinas <catalin.marinas@arm.com>
 
-since I wrote the malloc() etc. hooks.
-
-
-> +static void *tag_ptr(void *ptr)
-> +{
-> +	unsigned long tag = rand() & 0xff;
-> +	if (!ptr)
-> +		return ptr;
-> +	return (void *)((unsigned long)ptr | (tag << TAG_SHIFT));
-> +}
-
-With the prctl() option, this function becomes (if you have a better
-idea, fine by me):
-
-----------8<---------------
-#include <stdlib.h>
-#include <sys/prctl.h>
-
-#define TAG_SHIFT	(56)
-#define TAG_MASK	(0xffUL << TAG_SHIFT)
-
-#define PR_SET_TAGGED_ADDR_CTRL		55
-#define PR_GET_TAGGED_ADDR_CTRL		56
-# define PR_TAGGED_ADDR_ENABLE		(1UL << 0)
-
-void *__libc_malloc(size_t size);
-void __libc_free(void *ptr);
-void *__libc_realloc(void *ptr, size_t size);
-void *__libc_calloc(size_t nmemb, size_t size);
-
-static void *tag_ptr(void *ptr)
-{
-	static int tagged_addr_err = 1;
-	unsigned long tag = 0;
-
-	if (tagged_addr_err == 1)
-		tagged_addr_err = prctl(PR_SET_TAGGED_ADDR_CTRL,
-					PR_TAGGED_ADDR_ENABLE, 0, 0, 0);
-
-	if (!ptr)
-		return ptr;
-	if (!tagged_addr_err)
-		tag = rand() & 0xff;
-
-	return (void *)((unsigned long)ptr | (tag << TAG_SHIFT));
-}
-
--- 
-Catalin
+All of the above built for me on Linux 5.2-rc4. Try installing all of
+these and let me know if you still see problems.
+thanks,
+-- Shuah
