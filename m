@@ -2,18 +2,18 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D284E3CB59
-	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Jun 2019 14:26:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F9C03CB5D
+	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Jun 2019 14:26:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390593AbfFKM0m (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 11 Jun 2019 08:26:42 -0400
-Received: from mx2.suse.de ([195.135.220.15]:48288 "EHLO mx1.suse.de"
+        id S2390678AbfFKM0n (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 11 Jun 2019 08:26:43 -0400
+Received: from mx2.suse.de ([195.135.220.15]:48292 "EHLO mx1.suse.de"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S2390598AbfFKM0h (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        id S2390595AbfFKM0h (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
         Tue, 11 Jun 2019 08:26:37 -0400
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id DFF84B025;
+        by mx1.suse.de (Postfix) with ESMTP id EF9E1B02F;
         Tue, 11 Jun 2019 12:26:35 +0000 (UTC)
 From:   Takashi Iwai <tiwai@suse.de>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
@@ -21,9 +21,9 @@ Cc:     Luis Chamberlain <mcgrof@kernel.org>,
         Shuah Khan <shuah@kernel.org>,
         "Rafael J . Wysocki" <rafael@kernel.org>,
         linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: [PATCH v2.5 1/3] firmware: Factor out the paged buffer handling code
-Date:   Tue, 11 Jun 2019 14:26:24 +0200
-Message-Id: <20190611122626.28059-2-tiwai@suse.de>
+Subject: [PATCH v2.5 2/3] firmware: Add support for loading compressed files
+Date:   Tue, 11 Jun 2019 14:26:25 +0200
+Message-Id: <20190611122626.28059-3-tiwai@suse.de>
 X-Mailer: git-send-email 2.16.4
 In-Reply-To: <20190611122626.28059-1-tiwai@suse.de>
 References: <20190611122626.28059-1-tiwai@suse.de>
@@ -32,185 +32,324 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This is merely a preparation for the upcoming compressed firmware
-support and no functional changes.  It moves the code to handle the
-paged buffer allocation and mapping out of fallback.c into the main
-code, so that they can be used commonly.
+This patch adds the support for loading compressed firmware files.
+The primary motivation is to reduce the storage size; e.g. currently
+the files in /lib/firmware on my machine counts up to 419MB, while
+they can be reduced to 130MB by file compression.
+
+The patch introduces a new kconfig option CONFIG_FW_LOADER_COMPRESS.
+Even with this option set, the firmware loader still tries to load the
+original firmware file as-is at first, but then falls back to the file
+with ".xz" extension when it's not found, and the decompressed file
+content is returned to the caller of request_firmware().  So, no
+change is needed for the rest.
+
+Currently only XZ format is supported.  A caveat is that the kernel XZ
+helper code supports only CRC32 (or none) integrity check type, so
+you'll have to compress the files via xz -C crc32 option.
+
+Since we can't determine the expanded size immediately from an XZ
+file, the patch re-uses the paged buffer that was used for the
+user-mode fallback; it puts the decompressed content page, which are
+vmapped at the end.  The paged buffer code is conditionally built with
+a new Kconfig that is selected automatically.
 
 Signed-off-by: Takashi Iwai <tiwai@suse.de>
 ---
- drivers/base/firmware_loader/fallback.c | 61 ++++-----------------------------
- drivers/base/firmware_loader/firmware.h |  4 +++
- drivers/base/firmware_loader/main.c     | 52 ++++++++++++++++++++++++++++
- 3 files changed, 63 insertions(+), 54 deletions(-)
+v1->v2.5: Slight code refactoring, no functional changes
 
-diff --git a/drivers/base/firmware_loader/fallback.c b/drivers/base/firmware_loader/fallback.c
-index b5cd96fd0e77..80b20f6c494f 100644
---- a/drivers/base/firmware_loader/fallback.c
-+++ b/drivers/base/firmware_loader/fallback.c
-@@ -219,25 +219,6 @@ static ssize_t firmware_loading_show(struct device *dev,
- 	return sprintf(buf, "%d\n", loading);
- }
+ drivers/base/firmware_loader/Kconfig    |  18 ++++
+ drivers/base/firmware_loader/firmware.h |   8 +-
+ drivers/base/firmware_loader/main.c     | 147 ++++++++++++++++++++++++++++++--
+ 3 files changed, 161 insertions(+), 12 deletions(-)
+
+diff --git a/drivers/base/firmware_loader/Kconfig b/drivers/base/firmware_loader/Kconfig
+index 38f2da6f5c2b..3f9e274e2ed3 100644
+--- a/drivers/base/firmware_loader/Kconfig
++++ b/drivers/base/firmware_loader/Kconfig
+@@ -26,6 +26,9 @@ config FW_LOADER
  
--/* one pages buffer should be mapped/unmapped only once */
--static int map_fw_priv_pages(struct fw_priv *fw_priv)
--{
--	if (!fw_priv->pages)
--		return 0;
--
--	vunmap(fw_priv->data);
--	fw_priv->data = vmap(fw_priv->pages, fw_priv->nr_pages, 0,
--			     PAGE_KERNEL_RO);
--	if (!fw_priv->data)
--		return -ENOMEM;
--
--	/* page table is no longer needed after mapping, let's free */
--	kvfree(fw_priv->pages);
--	fw_priv->pages = NULL;
--
--	return 0;
--}
--
- /**
-  * firmware_loading_store() - set value in the 'loading' control file
-  * @dev: device pointer
-@@ -283,7 +264,7 @@ static ssize_t firmware_loading_store(struct device *dev,
- 			 * see the mapped 'buf->data' once the loading
- 			 * is completed.
- 			 * */
--			rc = map_fw_priv_pages(fw_priv);
-+			rc = fw_map_paged_buf(fw_priv);
- 			if (rc)
- 				dev_err(dev, "%s: map pages failed\n",
- 					__func__);
-@@ -388,41 +369,13 @@ static ssize_t firmware_data_read(struct file *filp, struct kobject *kobj,
+ if FW_LOADER
  
- static int fw_realloc_pages(struct fw_sysfs *fw_sysfs, int min_size)
- {
--	struct fw_priv *fw_priv= fw_sysfs->fw_priv;
--	int pages_needed = PAGE_ALIGN(min_size) >> PAGE_SHIFT;
--
--	/* If the array of pages is too small, grow it... */
--	if (fw_priv->page_array_size < pages_needed) {
--		int new_array_size = max(pages_needed,
--					 fw_priv->page_array_size * 2);
--		struct page **new_pages;
-+	int err;
++config FW_LOADER_PAGED_BUF
++	bool
++
+ config EXTRA_FIRMWARE
+ 	string "Build named firmware blobs into the kernel binary"
+ 	help
+@@ -67,6 +70,7 @@ config EXTRA_FIRMWARE_DIR
  
--		new_pages = kvmalloc_array(new_array_size, sizeof(void *),
--					   GFP_KERNEL);
--		if (!new_pages) {
--			fw_load_abort(fw_sysfs);
--			return -ENOMEM;
--		}
--		memcpy(new_pages, fw_priv->pages,
--		       fw_priv->page_array_size * sizeof(void *));
--		memset(&new_pages[fw_priv->page_array_size], 0, sizeof(void *) *
--		       (new_array_size - fw_priv->page_array_size));
--		kvfree(fw_priv->pages);
--		fw_priv->pages = new_pages;
--		fw_priv->page_array_size = new_array_size;
--	}
--
--	while (fw_priv->nr_pages < pages_needed) {
--		fw_priv->pages[fw_priv->nr_pages] =
--			alloc_page(GFP_KERNEL | __GFP_HIGHMEM);
--
--		if (!fw_priv->pages[fw_priv->nr_pages]) {
--			fw_load_abort(fw_sysfs);
--			return -ENOMEM;
--		}
--		fw_priv->nr_pages++;
--	}
--	return 0;
-+	err = fw_grow_paged_buf(fw_sysfs->fw_priv,
-+				PAGE_ALIGN(min_size) >> PAGE_SHIFT);
-+	if (err)
-+		fw_load_abort(fw_sysfs);
-+	return err;
- }
+ config FW_LOADER_USER_HELPER
+ 	bool "Enable the firmware sysfs fallback mechanism"
++	select FW_LOADER_PAGED_BUF
+ 	help
+ 	  This option enables a sysfs loading facility to enable firmware
+ 	  loading to the kernel through userspace as a fallback mechanism
+@@ -151,5 +155,19 @@ config FW_LOADER_USER_HELPER_FALLBACK
  
- /**
+ 	  If you are unsure about this, say N here.
+ 
++config FW_LOADER_COMPRESS
++	bool "Enable compressed firmware support"
++	select FW_LOADER_PAGED_BUF
++	select XZ_DEC
++	help
++	  This option enables the support for loading compressed firmware
++	  files. The caller of firmware API receives the decompressed file
++	  content. The compressed file is loaded as a fallback, only after
++	  loading the raw file failed at first.
++
++	  Currently only XZ-compressed files are supported, and they have to
++	  be compressed with either none or crc32 integrity check type (pass
++	  "-C crc32" option to xz command).
++
+ endif # FW_LOADER
+ endmenu
 diff --git a/drivers/base/firmware_loader/firmware.h b/drivers/base/firmware_loader/firmware.h
-index d20d4e7f9e71..35f4e58b2d98 100644
+index 35f4e58b2d98..7048a41973ed 100644
 --- a/drivers/base/firmware_loader/firmware.h
 +++ b/drivers/base/firmware_loader/firmware.h
-@@ -135,8 +135,12 @@ int assign_fw(struct firmware *fw, struct device *device,
- 
- #ifdef CONFIG_FW_LOADER_USER_HELPER
- void fw_free_paged_buf(struct fw_priv *fw_priv);
-+int fw_grow_paged_buf(struct fw_priv *fw_priv, int pages_needed);
-+int fw_map_paged_buf(struct fw_priv *fw_priv);
- #else
- static inline void fw_free_paged_buf(struct fw_priv *fw_priv) {}
-+int fw_grow_paged_buf(struct fw_priv *fw_priv, int pages_needed) { return -ENXIO; }
-+int fw_map_paged_buf(struct fw_priv *fw_priv) { return -ENXIO; }
+@@ -64,12 +64,14 @@ struct fw_priv {
+ 	void *data;
+ 	size_t size;
+ 	size_t allocated_size;
+-#ifdef CONFIG_FW_LOADER_USER_HELPER
++#ifdef CONFIG_FW_LOADER_PAGED_BUF
+ 	bool is_paged_buf;
+-	bool need_uevent;
+ 	struct page **pages;
+ 	int nr_pages;
+ 	int page_array_size;
++#endif
++#ifdef CONFIG_FW_LOADER_USER_HELPER
++	bool need_uevent;
+ 	struct list_head pending_list;
  #endif
+ 	const char *fw_name;
+@@ -133,7 +135,7 @@ static inline void fw_state_done(struct fw_priv *fw_priv)
+ int assign_fw(struct firmware *fw, struct device *device,
+ 	      enum fw_opt opt_flags);
  
- #endif /* __FIRMWARE_LOADER_H */
+-#ifdef CONFIG_FW_LOADER_USER_HELPER
++#ifdef CONFIG_FW_LOADER_PAGED_BUF
+ void fw_free_paged_buf(struct fw_priv *fw_priv);
+ int fw_grow_paged_buf(struct fw_priv *fw_priv, int pages_needed);
+ int fw_map_paged_buf(struct fw_priv *fw_priv);
 diff --git a/drivers/base/firmware_loader/main.c b/drivers/base/firmware_loader/main.c
-index 2e74a1b73dae..7e12732f4705 100644
+index 7e12732f4705..bf44c79beae9 100644
 --- a/drivers/base/firmware_loader/main.c
 +++ b/drivers/base/firmware_loader/main.c
-@@ -281,6 +281,58 @@ void fw_free_paged_buf(struct fw_priv *fw_priv)
- 	fw_priv->page_array_size = 0;
- 	fw_priv->nr_pages = 0;
+@@ -33,6 +33,7 @@
+ #include <linux/syscore_ops.h>
+ #include <linux/reboot.h>
+ #include <linux/security.h>
++#include <linux/xz.h>
+ 
+ #include <generated/utsrelease.h>
+ 
+@@ -266,7 +267,7 @@ static void free_fw_priv(struct fw_priv *fw_priv)
+ 		spin_unlock(&fwc->lock);
  }
-+
-+int fw_grow_paged_buf(struct fw_priv *fw_priv, int pages_needed)
-+{
-+	/* If the array of pages is too small, grow it */
-+	if (fw_priv->page_array_size < pages_needed) {
-+		int new_array_size = max(pages_needed,
-+					 fw_priv->page_array_size * 2);
-+		struct page **new_pages;
-+
-+		new_pages = kvmalloc_array(new_array_size, sizeof(void *),
-+					   GFP_KERNEL);
-+		if (!new_pages)
-+			return -ENOMEM;
-+		memcpy(new_pages, fw_priv->pages,
-+		       fw_priv->page_array_size * sizeof(void *));
-+		memset(&new_pages[fw_priv->page_array_size], 0, sizeof(void *) *
-+		       (new_array_size - fw_priv->page_array_size));
-+		kvfree(fw_priv->pages);
-+		fw_priv->pages = new_pages;
-+		fw_priv->page_array_size = new_array_size;
-+	}
-+
-+	while (fw_priv->nr_pages < pages_needed) {
-+		fw_priv->pages[fw_priv->nr_pages] =
-+			alloc_page(GFP_KERNEL | __GFP_HIGHMEM);
-+
-+		if (!fw_priv->pages[fw_priv->nr_pages])
-+			return -ENOMEM;
-+		fw_priv->nr_pages++;
-+	}
-+
-+	return 0;
-+}
-+
-+int fw_map_paged_buf(struct fw_priv *fw_priv)
-+{
-+	/* one pages buffer should be mapped/unmapped only once */
-+	if (!fw_priv->pages)
-+		return 0;
-+
-+	vunmap(fw_priv->data);
-+	fw_priv->data = vmap(fw_priv->pages, fw_priv->nr_pages, 0,
-+			     PAGE_KERNEL_RO);
-+	if (!fw_priv->data)
-+		return -ENOMEM;
-+
-+	/* page table is no longer needed after mapping, let's free */
-+	kvfree(fw_priv->pages);
-+	fw_priv->pages = NULL;
-+
-+	return 0;
-+}
+ 
+-#ifdef CONFIG_FW_LOADER_USER_HELPER
++#ifdef CONFIG_FW_LOADER_PAGED_BUF
+ void fw_free_paged_buf(struct fw_priv *fw_priv)
+ {
+ 	int i;
+@@ -335,6 +336,105 @@ int fw_map_paged_buf(struct fw_priv *fw_priv)
+ }
  #endif
  
++/*
++ * XZ-compressed firmware support
++ */
++#ifdef CONFIG_FW_LOADER_COMPRESS
++/* show an error and return the standard error code */
++static int fw_decompress_xz_error(struct device *dev, enum xz_ret xz_ret)
++{
++	if (xz_ret != XZ_STREAM_END) {
++		dev_warn(dev, "xz decompression failed (xz_ret=%d)\n", xz_ret);
++		return xz_ret == XZ_MEM_ERROR ? -ENOMEM : -EINVAL;
++	}
++	return 0;
++}
++
++/* single-shot decompression onto the pre-allocated buffer */
++static int fw_decompress_xz_single(struct device *dev, struct fw_priv *fw_priv,
++				   size_t in_size, const void *in_buffer)
++{
++	struct xz_dec *xz_dec;
++	struct xz_buf xz_buf;
++	enum xz_ret xz_ret;
++
++	xz_dec = xz_dec_init(XZ_SINGLE, (u32)-1);
++	if (!xz_dec)
++		return -ENOMEM;
++
++	xz_buf.in_size = in_size;
++	xz_buf.in = in_buffer;
++	xz_buf.in_pos = 0;
++	xz_buf.out_size = fw_priv->allocated_size;
++	xz_buf.out = fw_priv->data;
++	xz_buf.out_pos = 0;
++
++	xz_ret = xz_dec_run(xz_dec, &xz_buf);
++	xz_dec_end(xz_dec);
++
++	fw_priv->size = xz_buf.out_pos;
++	return fw_decompress_xz_error(dev, xz_ret);
++}
++
++/* decompression on paged buffer and map it */
++static int fw_decompress_xz_pages(struct device *dev, struct fw_priv *fw_priv,
++				  size_t in_size, const void *in_buffer)
++{
++	struct xz_dec *xz_dec;
++	struct xz_buf xz_buf;
++	enum xz_ret xz_ret;
++	struct page *page;
++	int err = 0;
++
++	xz_dec = xz_dec_init(XZ_DYNALLOC, (u32)-1);
++	if (!xz_dec)
++		return -ENOMEM;
++
++	xz_buf.in_size = in_size;
++	xz_buf.in = in_buffer;
++	xz_buf.in_pos = 0;
++
++	fw_priv->is_paged_buf = true;
++	fw_priv->size = 0;
++	do {
++		if (fw_grow_paged_buf(fw_priv, fw_priv->nr_pages + 1)) {
++			err = -ENOMEM;
++			goto out;
++		}
++
++		/* decompress onto the new allocated page */
++		page = fw_priv->pages[fw_priv->nr_pages - 1];
++		xz_buf.out = kmap(page);
++		xz_buf.out_pos = 0;
++		xz_buf.out_size = PAGE_SIZE;
++		xz_ret = xz_dec_run(xz_dec, &xz_buf);
++		kunmap(page);
++		fw_priv->size += xz_buf.out_pos;
++		/* partial decompression means either end or error */
++		if (xz_buf.out_pos != PAGE_SIZE)
++			break;
++	} while (xz_ret == XZ_OK);
++
++	err = fw_decompress_xz_error(dev, xz_ret);
++	if (!err)
++		err = fw_map_paged_buf(fw_priv);
++
++ out:
++	xz_dec_end(xz_dec);
++	return err;
++}
++
++static int fw_decompress_xz(struct device *dev, struct fw_priv *fw_priv,
++			    size_t in_size, const void *in_buffer)
++{
++	/* if the buffer is pre-allocated, we can perform in single-shot mode */
++	if (fw_priv->data)
++		return fw_decompress_xz_single(dev, fw_priv, in_size, in_buffer);
++	else
++		return fw_decompress_xz_pages(dev, fw_priv, in_size, in_buffer);
++}
++#endif /* CONFIG_FW_LOADER_COMPRESS */
++
  /* direct firmware loading support */
+ static char fw_path_para[256];
+ static const char * const fw_path[] = {
+@@ -354,7 +454,12 @@ module_param_string(path, fw_path_para, sizeof(fw_path_para), 0644);
+ MODULE_PARM_DESC(path, "customized firmware image search path with a higher priority than default path");
+ 
+ static int
+-fw_get_filesystem_firmware(struct device *device, struct fw_priv *fw_priv)
++fw_get_filesystem_firmware(struct device *device, struct fw_priv *fw_priv,
++			   const char *suffix,
++			   int (*decompress)(struct device *dev,
++					     struct fw_priv *fw_priv,
++					     size_t in_size,
++					     const void *in_buffer))
+ {
+ 	loff_t size;
+ 	int i, len;
+@@ -362,9 +467,11 @@ fw_get_filesystem_firmware(struct device *device, struct fw_priv *fw_priv)
+ 	char *path;
+ 	enum kernel_read_file_id id = READING_FIRMWARE;
+ 	size_t msize = INT_MAX;
++	void *buffer = NULL;
+ 
+ 	/* Already populated data member means we're loading into a buffer */
+-	if (fw_priv->data) {
++	if (!decompress && fw_priv->data) {
++		buffer = fw_priv->data;
+ 		id = READING_FIRMWARE_PREALLOC_BUFFER;
+ 		msize = fw_priv->allocated_size;
+ 	}
+@@ -378,15 +485,15 @@ fw_get_filesystem_firmware(struct device *device, struct fw_priv *fw_priv)
+ 		if (!fw_path[i][0])
+ 			continue;
+ 
+-		len = snprintf(path, PATH_MAX, "%s/%s",
+-			       fw_path[i], fw_priv->fw_name);
++		len = snprintf(path, PATH_MAX, "%s/%s%s",
++			       fw_path[i], fw_priv->fw_name, suffix);
+ 		if (len >= PATH_MAX) {
+ 			rc = -ENAMETOOLONG;
+ 			break;
+ 		}
+ 
+ 		fw_priv->size = 0;
+-		rc = kernel_read_file_from_path(path, &fw_priv->data, &size,
++		rc = kernel_read_file_from_path(path, &buffer, &size,
+ 						msize, id);
+ 		if (rc) {
+ 			if (rc != -ENOENT)
+@@ -397,8 +504,24 @@ fw_get_filesystem_firmware(struct device *device, struct fw_priv *fw_priv)
+ 					 path);
+ 			continue;
+ 		}
+-		dev_dbg(device, "direct-loading %s\n", fw_priv->fw_name);
+-		fw_priv->size = size;
++		if (decompress) {
++			dev_dbg(device, "f/w decompressing %s\n",
++				fw_priv->fw_name);
++			rc = decompress(device, fw_priv, size, buffer);
++			/* discard the superfluous original content */
++			vfree(buffer);
++			buffer = NULL;
++			if (rc) {
++				fw_free_paged_buf(fw_priv);
++				continue;
++			}
++		} else {
++			dev_dbg(device, "direct-loading %s\n",
++				fw_priv->fw_name);
++			if (!fw_priv->data)
++				fw_priv->data = buffer;
++			fw_priv->size = size;
++		}
+ 		fw_state_done(fw_priv);
+ 		break;
+ 	}
+@@ -645,7 +768,13 @@ _request_firmware(const struct firmware **firmware_p, const char *name,
+ 	if (ret <= 0) /* error or already assigned */
+ 		goto out;
+ 
+-	ret = fw_get_filesystem_firmware(device, fw->priv);
++	ret = fw_get_filesystem_firmware(device, fw->priv, "", NULL);
++#ifdef CONFIG_FW_LOADER_COMPRESS
++	if (ret == -ENOENT)
++		ret = fw_get_filesystem_firmware(device, fw->priv, ".xz",
++						 fw_decompress_xz);
++#endif
++
+ 	if (ret) {
+ 		if (!(opt_flags & FW_OPT_NO_WARN))
+ 			dev_warn(device,
 -- 
 2.16.4
 
