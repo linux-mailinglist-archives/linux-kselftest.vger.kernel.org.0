@@ -2,113 +2,122 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A05513D089
-	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Jun 2019 17:16:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 721F33D0F0
+	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Jun 2019 17:35:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388333AbfFKPQV (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 11 Jun 2019 11:16:21 -0400
-Received: from mail.kernel.org ([198.145.29.99]:53958 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2388207AbfFKPQV (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 11 Jun 2019 11:16:21 -0400
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net [24.9.64.241])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id BFC6B212F5;
-        Tue, 11 Jun 2019 15:16:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1560266180;
-        bh=1GoqjMQCSIR/LFTMRdP+oLpnGDIr4QXhcVX9NdWejlg=;
-        h=Subject:To:References:From:Cc:Date:In-Reply-To:From;
-        b=qmd6qHtfWZMYjYDIr44YaA/eI661LACLuMVZ6u9TqqW6gwVCtNsq6+l4KJ/uh9T+4
-         vI/mZuU81JiYGNf/tiocUx94I2EGhvtJRoXIFzcDJo7hXqaYxp4etJxEm3480YhiIb
-         xwEp98iYsP7nwku6xvv73ihBnKGxVntpFyQMvZ0c=
-Subject: Re: kselftest build broken?
-To:     Dmitry Vyukov <dvyukov@google.com>, linux-kselftest@vger.kernel.org
-References: <CACT4Y+Z4naaxx4N2B2t1hn4A99dfk=6yTY2yAZM=aJ05VCPLFQ@mail.gmail.com>
-From:   shuah <shuah@kernel.org>
-Cc:     shuah <shuah@kernel.org>
-Message-ID: <54bc80f8-71aa-1c04-5908-01923247832e@kernel.org>
-Date:   Tue, 11 Jun 2019 09:16:07 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
+        id S2405043AbfFKPfo (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 11 Jun 2019 11:35:44 -0400
+Received: from mail-pf1-f195.google.com ([209.85.210.195]:37313 "EHLO
+        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2405047AbfFKPfn (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 11 Jun 2019 11:35:43 -0400
+Received: by mail-pf1-f195.google.com with SMTP id 19so6830921pfa.4
+        for <linux-kselftest@vger.kernel.org>; Tue, 11 Jun 2019 08:35:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=8h42m3mke7DA8ejB89qFnTkC5cX+aLshhHC5jTwYOa4=;
+        b=sLMq+bA6sOUYAuoQSdZze7aS/o01HRJh37fgBzOaTlULVRlgN1Pzky0WnEt9ggPhRi
+         JH1qa8PI3fUsxopnA8vxXjk80emL0gwgHoi/kN+wCfZhW7CtGG3mN+/yxVY59EUBa1rS
+         M4cxQ83xr93VSRZJzwzbUXprtAi+dT3meCk3L8KOZ/xZDFb/kZqFJzv63133Zz0lw9er
+         v1LYil8+krDw44YMHLuvpYAB34RsEpHwQbuoHBJWYMzgMu6DfV6usjm0aFv9/2YjnuNW
+         tz3JzLRCLMzdWSO9grr5tL4TPlHUr6KXqW3Th206n5IMIeoSFDjvZhgTeHCUKYHlgpUu
+         bTiw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=8h42m3mke7DA8ejB89qFnTkC5cX+aLshhHC5jTwYOa4=;
+        b=gnKqTo/JMDgtEWIR7VsCA+Zpi5w6m9mdtosGUBbKuCyiFhTPBiEmhcH2QfwsX+DZ8Q
+         umKW+wnFTXNFTBypA1q9IgW7baLX77SlNUscJ5dlMSoBriJgLhwkscedSJrX8QRnmQ+v
+         occk33t1g83WS1F/ksgTe03jrZLZEnr1dbWZYIxTTYsXSu6krhwpPp/HhXcYX20QofDZ
+         rulBXZsLxcXnToi5AEIox4dCcWcJTmZx5PpGnQvXcdC7Ro0sO6jBukxZi7OAGiVFE2mz
+         Y0vgdedIVDTcAH7ddTeRe+hjpEjVlpSG1pF+iJ8hJe7cwiTI3Eipg8T+Pc1JN/Ln8neL
+         UXCg==
+X-Gm-Message-State: APjAAAXE8cC25FCw1rXPjEFmDOCmTezu3kycEzjXJM3WRSB7g40VRCxy
+        yoqlyjyZzQabfjkDWab/3YuWWdLn3FjnPYjLSFwREA==
+X-Google-Smtp-Source: APXvYqwVttVVtet3fqIi0VnES8Ilb/p6V60nSXc7x8WFpoZ7Ynv9ahn+wWxWGukqfJnR2JBKBovfx92r2kGjPnyP20Q=
+X-Received: by 2002:a63:1919:: with SMTP id z25mr21205093pgl.440.1560267342622;
+ Tue, 11 Jun 2019 08:35:42 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <CACT4Y+Z4naaxx4N2B2t1hn4A99dfk=6yTY2yAZM=aJ05VCPLFQ@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <cover.1559580831.git.andreyknvl@google.com> <045a94326401693e015bf80c444a4d946a5c68ed.1559580831.git.andreyknvl@google.com>
+ <20190610142824.GB10165@c02tf0j2hf1t.cambridge.arm.com>
+In-Reply-To: <20190610142824.GB10165@c02tf0j2hf1t.cambridge.arm.com>
+From:   Andrey Konovalov <andreyknvl@google.com>
+Date:   Tue, 11 Jun 2019 17:35:31 +0200
+Message-ID: <CAAeHK+zBDB6i+iEw+TJY14gZeccvWeOBEaU+otn1F+jzDLaRpA@mail.gmail.com>
+Subject: Re: [PATCH v16 05/16] arm64: untag user pointers passed to memory syscalls
+To:     Catalin Marinas <catalin.marinas@arm.com>
+Cc:     Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-rdma@vger.kernel.org, linux-media@vger.kernel.org,
+        kvm@vger.kernel.org,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Will Deacon <will.deacon@arm.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Kees Cook <keescook@chromium.org>,
+        Yishai Hadas <yishaih@mellanox.com>,
+        Felix Kuehling <Felix.Kuehling@amd.com>,
+        Alexander Deucher <Alexander.Deucher@amd.com>,
+        Christian Koenig <Christian.Koenig@amd.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Jens Wiklander <jens.wiklander@linaro.org>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
+        Dave Martin <Dave.Martin@arm.com>,
+        Khalid Aziz <khalid.aziz@oracle.com>, enh <enh@google.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Christoph Hellwig <hch@infradead.org>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Kostya Serebryany <kcc@google.com>,
+        Evgeniy Stepanov <eugenis@google.com>,
+        Lee Smith <Lee.Smith@arm.com>,
+        Ramana Radhakrishnan <Ramana.Radhakrishnan@arm.com>,
+        Jacob Bramley <Jacob.Bramley@arm.com>,
+        Ruben Ayrapetyan <Ruben.Ayrapetyan@arm.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Kevin Brodsky <kevin.brodsky@arm.com>,
+        Szabolcs Nagy <Szabolcs.Nagy@arm.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Dmitry,
+On Mon, Jun 10, 2019 at 4:28 PM Catalin Marinas <catalin.marinas@arm.com> wrote:
+>
+> On Mon, Jun 03, 2019 at 06:55:07PM +0200, Andrey Konovalov wrote:
+> > This patch is a part of a series that extends arm64 kernel ABI to allow to
+> > pass tagged user pointers (with the top byte set to something else other
+> > than 0x00) as syscall arguments.
+> >
+> > This patch allows tagged pointers to be passed to the following memory
+> > syscalls: get_mempolicy, madvise, mbind, mincore, mlock, mlock2, mprotect,
+> > mremap, msync, munlock.
+> >
+> > Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
+>
+> I would add in the commit log (and possibly in the code with a comment)
+> that mremap() and mmap() do not currently accept tagged hint addresses.
+> Architectures may interpret the hint tag as a background colour for the
+> corresponding vma. With this:
 
-On 6/11/19 4:30 AM, Dmitry Vyukov wrote:
-> Hi,
-> 
-> I've tried to build kselftests for several years now, but I always
-> find the build broken. Which makes me wonder if the instructions are
-> broken or something. I follow the instructions in
-> Documentation/dev-tools/kselftest.rst and start with "make -C
-> tools/testing/selftests". Here is the errors I get on the upstream
-> commit 16d72dd4891fecc1e1bf7ca193bb7d5b9804c038:
-> > error: unable to create target: 'No available targets are compatible
-> with triple "bpf"'
-> 1 error generated.
-> Makefile:259: recipe for target 'elfdep' failed
-> Makefile:156: recipe for target 'all' failed
-> Makefile:106: recipe for target
-> '/linux/tools/testing/selftests/bpf/libbpf.a' failed
-> test_execve.c:4:10: fatal error: cap-ng.h: No such file or directory
+I'll change the commit log. Where do you you think I should put this
+comment? Before mmap and mremap definitions in mm/?
 
-These errors are due to missing dependencies. You will need
+Thanks!
 
-libmount-dev
-libcap-ng-dev
-libelf-dev
-
-for bpf to build and also clang
-
-> ../lib.mk:138: recipe for target
-> '/linux/tools/testing/selftests/capabilities/test_execve' failed
-> gpio-mockup-chardev.c:20:10: fatal error: libmount.h: No such file or directory > <builtin>: recipe for target 'gpio-mockup-chardev' failed
-> fuse_mnt.c:17:10: fatal error: fuse.h: No such file or directory
-
-libfuse-dev is missing.
-
-> ../lib.mk:138: recipe for target
-> '/linux/tools/testing/selftests/memfd/fuse_mnt' failed
-> collect2: error: ld returned 1 exit status
-> ../lib.mk:138: recipe for target
-> '/linux/tools/testing/selftests/mqueue/mq_open_tests' failed
-
-Needs libpopt-dev
-
-> reuseport_bpf_numa.c:24:10: fatal error: numa.h: No such file or directory
-
-Needs libnuma-dev
-
-> ../lib.mk:138: recipe for target
-> '/linux/tools/testing/selftests/net/reuseport_bpf_numa' failed
-> mlock-random-test.c:8:10: fatal error: sys/capability.h: No such file
-> or directory > ../lib.mk:138: recipe for target
-> '/linux/tools/testing/selftests/vm/mlock-random-test' failed
-> 
-> Here is full log:
-> 
-> https://gist.githubusercontent.com/dvyukov/47430636e160f297b657df5ba2efa82b/raw/7babc4db228b88f341a376c15e8bc9c4c3b02160/gistfile1.txt
-> 
-> I have libelf-dev installed. Do I need to install something else? Or
-> run some other command?
-
-ii  libelf-dev:amd 0.170-0.4ubu amd64        libelf1 development 
-libraries and
-ii  libelf1:amd64  0.170-0.4ubu amd64        library to read and write 
-ELF fil
-
-
-All of the above built for me on Linux 5.2-rc4. Try installing all of
-these and let me know if you still see problems.
-thanks,
--- Shuah
+>
+> Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
+>
+> --
+> Catalin
