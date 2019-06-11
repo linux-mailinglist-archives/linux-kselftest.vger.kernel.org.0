@@ -2,232 +2,154 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AA8583CB5E
-	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Jun 2019 14:26:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC0043CEF2
+	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Jun 2019 16:38:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390673AbfFKM0n (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 11 Jun 2019 08:26:43 -0400
-Received: from mx2.suse.de ([195.135.220.15]:48298 "EHLO mx1.suse.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S2390603AbfFKM0h (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 11 Jun 2019 08:26:37 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id 06CE1B030;
-        Tue, 11 Jun 2019 12:26:36 +0000 (UTC)
-From:   Takashi Iwai <tiwai@suse.de>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Luis Chamberlain <mcgrof@kernel.org>,
-        Shuah Khan <shuah@kernel.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: [PATCH v2.5 3/3] selftests: firmware: Add compressed firmware tests
-Date:   Tue, 11 Jun 2019 14:26:26 +0200
-Message-Id: <20190611122626.28059-4-tiwai@suse.de>
-X-Mailer: git-send-email 2.16.4
-In-Reply-To: <20190611122626.28059-1-tiwai@suse.de>
-References: <20190611122626.28059-1-tiwai@suse.de>
+        id S2391259AbfFKOih (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 11 Jun 2019 10:38:37 -0400
+Received: from mail-pl1-f195.google.com ([209.85.214.195]:35757 "EHLO
+        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2391203AbfFKOig (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 11 Jun 2019 10:38:36 -0400
+Received: by mail-pl1-f195.google.com with SMTP id p1so5223895plo.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 11 Jun 2019 07:38:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=+Bb9evtnnpvJpDG7+k/xfmfwlxE7BAZZaECd7yQ/bgY=;
+        b=vFVLFZFyIF01TbjN+xeeME15qV8KkCRDccJHkbwPJnzYqntxAPPejl4UucLg68kkqb
+         BaObH7iQP83sFpaN8IH2/Yu4t4nwUDbwn3rb15fIHqVU7geywA3LRxp1p4GflSM3qTjJ
+         iWM19kJHA7FmF25W9uFiY1kMJbcO4WOESGJU61YywCA+i6Ylfs/3WF6YNj5xaMoYJ89L
+         XqlvBDrbDKlYUJNKkeiCJcKNhxFQvdK51GyYrA4cNM42eSbHTJc/2qrnnTIYWyQugg14
+         drUy2FSlkxzvJpoh5mj5M9w5F5osUe6J99CThZKFzYA/JvReekTQOE0mCFzBedDfUO6l
+         PqJQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=+Bb9evtnnpvJpDG7+k/xfmfwlxE7BAZZaECd7yQ/bgY=;
+        b=jka1n467d/BxTBjfOo4owVmLspd8h4J2EWDhOMZrAZke+MfhmFFQcW1ip7I+OmlNkp
+         Upbdn6zAeaPTJM5tB0sLh6j3gN9MIIumeU0Asxv/zvsaL7/lEAJifAwUMMZnQLlmX+KD
+         3zxaz6SoXw2kkoPW8OCXbppkgC0Iy0pADVEayb81PMnRqDhkKnNYerLLo6df4p/OHyOq
+         VW/3OgzVSYlvg7egpYD0xGnQnmZBP/Tr8ayM76rYjN9SuFrNLFNHVOsUhjieAUxfyQFE
+         kMt+Q9MOeeEisKPl496vB4TmiuuJyfQ881vtLEdPm9e6vL5B4AAb/eJzPnFJv/23qovh
+         SXGA==
+X-Gm-Message-State: APjAAAWZlHO9+hsl1wEKfzz7X6Y1PLcw+SqdCqSB86gnP1avhHsrohue
+        2Hk+2UrFaLu8GSgB/R729p10ur5ciPcb0Y8nowlZnA==
+X-Google-Smtp-Source: APXvYqyIzOH5zo/01pYiY/WLl0OLwpsCvaKKuk+vDciT43wSxP3iXzYy6GsWF4y5D8CeYcDREH0+OmLOdYtg4cNrux0=
+X-Received: by 2002:a17:902:1566:: with SMTP id b35mr78131643plh.147.1560263915764;
+ Tue, 11 Jun 2019 07:38:35 -0700 (PDT)
+MIME-Version: 1.0
+References: <cover.1559580831.git.andreyknvl@google.com> <51f44a12c4e81c9edea8dcd268f820f5d1fad87c.1559580831.git.andreyknvl@google.com>
+ <201906072101.58C919E@keescook>
+In-Reply-To: <201906072101.58C919E@keescook>
+From:   Andrey Konovalov <andreyknvl@google.com>
+Date:   Tue, 11 Jun 2019 16:38:24 +0200
+Message-ID: <CAAeHK+y8CH4P3vheUDCEnPAuO-2L6mc-sz6wMA_hT=wC1Cy3KQ@mail.gmail.com>
+Subject: Re: [PATCH v16 08/16] fs, arm64: untag user pointers in copy_mount_options
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-rdma@vger.kernel.org, linux-media@vger.kernel.org,
+        kvm@vger.kernel.org,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Will Deacon <will.deacon@arm.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Yishai Hadas <yishaih@mellanox.com>,
+        Felix Kuehling <Felix.Kuehling@amd.com>,
+        Alexander Deucher <Alexander.Deucher@amd.com>,
+        Christian Koenig <Christian.Koenig@amd.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Jens Wiklander <jens.wiklander@linaro.org>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
+        Dave Martin <Dave.Martin@arm.com>,
+        Khalid Aziz <khalid.aziz@oracle.com>, enh <enh@google.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Christoph Hellwig <hch@infradead.org>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Kostya Serebryany <kcc@google.com>,
+        Evgeniy Stepanov <eugenis@google.com>,
+        Lee Smith <Lee.Smith@arm.com>,
+        Ramana Radhakrishnan <Ramana.Radhakrishnan@arm.com>,
+        Jacob Bramley <Jacob.Bramley@arm.com>,
+        Ruben Ayrapetyan <Ruben.Ayrapetyan@arm.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Kevin Brodsky <kevin.brodsky@arm.com>,
+        Szabolcs Nagy <Szabolcs.Nagy@arm.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This patch adds the test cases for checking compressed firmware load.
-Two more cases are added to fw_filesystem.sh:
-- Both a plain file and an xz file are present, and load the former
-- Only an xz file is present, and load without '.xz' suffix
+On Sat, Jun 8, 2019 at 6:02 AM Kees Cook <keescook@chromium.org> wrote:
+>
+> On Mon, Jun 03, 2019 at 06:55:10PM +0200, Andrey Konovalov wrote:
+> > This patch is a part of a series that extends arm64 kernel ABI to allow to
+> > pass tagged user pointers (with the top byte set to something else other
+> > than 0x00) as syscall arguments.
+> >
+> > In copy_mount_options a user address is being subtracted from TASK_SIZE.
+> > If the address is lower than TASK_SIZE, the size is calculated to not
+> > allow the exact_copy_from_user() call to cross TASK_SIZE boundary.
+> > However if the address is tagged, then the size will be calculated
+> > incorrectly.
+> >
+> > Untag the address before subtracting.
+> >
+> > Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
+> > Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
+>
+> One thing I just noticed in the commit titles... "arm64" is in the
+> prefix, but these are arch-indep areas. Should the ", arm64" be left
+> out?
+>
+> I would expect, instead:
+>
+>         fs/namespace: untag user pointers in copy_mount_options
 
-The tests are enabled only when CONFIG_FW_LOADER_COMPRESS is enabled
-and xz program is installed.
+Hm, I've added the arm64 tag in all of the patches because they are
+related to changes in arm64 kernel ABI. I can remove it from all the
+patches that only touch common code if you think that it makes sense.
 
-Signed-off-by: Takashi Iwai <tiwai@suse.de>
----
- tools/testing/selftests/firmware/fw_filesystem.sh | 73 +++++++++++++++++++----
- tools/testing/selftests/firmware/fw_lib.sh        |  7 +++
- tools/testing/selftests/firmware/fw_run_tests.sh  |  1 +
- 3 files changed, 71 insertions(+), 10 deletions(-)
+Thanks!
 
-diff --git a/tools/testing/selftests/firmware/fw_filesystem.sh b/tools/testing/selftests/firmware/fw_filesystem.sh
-index a4320c4b44dc..f901076aa2ea 100755
---- a/tools/testing/selftests/firmware/fw_filesystem.sh
-+++ b/tools/testing/selftests/firmware/fw_filesystem.sh
-@@ -153,13 +153,18 @@ config_set_read_fw_idx()
- 
- read_firmwares()
- {
-+	if [ "$1" = "xzonly" ]; then
-+		fwfile="${FW}-orig"
-+	else
-+		fwfile="$FW"
-+	fi
- 	for i in $(seq 0 3); do
- 		config_set_read_fw_idx $i
- 		# Verify the contents are what we expect.
- 		# -Z required for now -- check for yourself, md5sum
- 		# on $FW and DIR/read_firmware will yield the same. Even
- 		# cmp agrees, so something is off.
--		if ! diff -q -Z "$FW" $DIR/read_firmware 2>/dev/null ; then
-+		if ! diff -q -Z "$fwfile" $DIR/read_firmware 2>/dev/null ; then
- 			echo "request #$i: firmware was not loaded" >&2
- 			exit 1
- 		fi
-@@ -246,17 +251,17 @@ test_request_firmware_nowait_custom_nofile()
- 
- test_batched_request_firmware()
- {
--	echo -n "Batched request_firmware() try #$1: "
-+	echo -n "Batched request_firmware() $2 try #$1: "
- 	config_reset
- 	config_trigger_sync
--	read_firmwares
-+	read_firmwares $2
- 	release_all_firmware
- 	echo "OK"
- }
- 
- test_batched_request_firmware_direct()
- {
--	echo -n "Batched request_firmware_direct() try #$1: "
-+	echo -n "Batched request_firmware_direct() $2 try #$1: "
- 	config_reset
- 	config_set_sync_direct
- 	config_trigger_sync
-@@ -266,7 +271,7 @@ test_batched_request_firmware_direct()
- 
- test_request_firmware_nowait_uevent()
- {
--	echo -n "Batched request_firmware_nowait(uevent=true) try #$1: "
-+	echo -n "Batched request_firmware_nowait(uevent=true) $2 try #$1: "
- 	config_reset
- 	config_trigger_async
- 	release_all_firmware
-@@ -275,11 +280,16 @@ test_request_firmware_nowait_uevent()
- 
- test_request_firmware_nowait_custom()
- {
--	echo -n "Batched request_firmware_nowait(uevent=false) try #$1: "
-+	echo -n "Batched request_firmware_nowait(uevent=false) $2 try #$1: "
- 	config_reset
- 	config_unset_uevent
- 	RANDOM_FILE_PATH=$(setup_random_file)
- 	RANDOM_FILE="$(basename $RANDOM_FILE_PATH)"
-+	if [ "$2" = "both" ]; then
-+		xz -9 -C crc32 -k $RANDOM_FILE_PATH
-+	elif [ "$2" = "xzonly" ]; then
-+		xz -9 -C crc32 $RANDOM_FILE_PATH
-+	fi
- 	config_set_name $RANDOM_FILE
- 	config_trigger_async
- 	release_all_firmware
-@@ -294,19 +304,19 @@ test_config_present
- echo
- echo "Testing with the file present..."
- for i in $(seq 1 5); do
--	test_batched_request_firmware $i
-+	test_batched_request_firmware $i normal
- done
- 
- for i in $(seq 1 5); do
--	test_batched_request_firmware_direct $i
-+	test_batched_request_firmware_direct $i normal
- done
- 
- for i in $(seq 1 5); do
--	test_request_firmware_nowait_uevent $i
-+	test_request_firmware_nowait_uevent $i normal
- done
- 
- for i in $(seq 1 5); do
--	test_request_firmware_nowait_custom $i
-+	test_request_firmware_nowait_custom $i normal
- done
- 
- # Test for file not found, errors are expected, the failure would be
-@@ -329,4 +339,47 @@ for i in $(seq 1 5); do
- 	test_request_firmware_nowait_custom_nofile $i
- done
- 
-+test "$HAS_FW_LOADER_COMPRESS" != "yes" && exit 0
-+
-+# test with both files present
-+xz -9 -C crc32 -k $FW
-+config_set_name $NAME
-+echo
-+echo "Testing with both plain and xz files present..."
-+for i in $(seq 1 5); do
-+	test_batched_request_firmware $i both
-+done
-+
-+for i in $(seq 1 5); do
-+	test_batched_request_firmware_direct $i both
-+done
-+
-+for i in $(seq 1 5); do
-+	test_request_firmware_nowait_uevent $i both
-+done
-+
-+for i in $(seq 1 5); do
-+	test_request_firmware_nowait_custom $i both
-+done
-+
-+# test with only xz file present
-+mv "$FW" "${FW}-orig"
-+echo
-+echo "Testing with only xz file present..."
-+for i in $(seq 1 5); do
-+	test_batched_request_firmware $i xzonly
-+done
-+
-+for i in $(seq 1 5); do
-+	test_batched_request_firmware_direct $i xzonly
-+done
-+
-+for i in $(seq 1 5); do
-+	test_request_firmware_nowait_uevent $i xzonly
-+done
-+
-+for i in $(seq 1 5); do
-+	test_request_firmware_nowait_custom $i xzonly
-+done
-+
- exit 0
-diff --git a/tools/testing/selftests/firmware/fw_lib.sh b/tools/testing/selftests/firmware/fw_lib.sh
-index 1cbb12e284a6..f236cc295450 100755
---- a/tools/testing/selftests/firmware/fw_lib.sh
-+++ b/tools/testing/selftests/firmware/fw_lib.sh
-@@ -50,6 +50,7 @@ check_setup()
- {
- 	HAS_FW_LOADER_USER_HELPER="$(kconfig_has CONFIG_FW_LOADER_USER_HELPER=y)"
- 	HAS_FW_LOADER_USER_HELPER_FALLBACK="$(kconfig_has CONFIG_FW_LOADER_USER_HELPER_FALLBACK=y)"
-+	HAS_FW_LOADER_COMPRESS="$(kconfig_has CONFIG_FW_LOADER_COMPRESS=y)"
- 	PROC_FW_IGNORE_SYSFS_FALLBACK="0"
- 	PROC_FW_FORCE_SYSFS_FALLBACK="0"
- 
-@@ -84,6 +85,12 @@ check_setup()
- 	fi
- 
- 	OLD_FWPATH="$(cat /sys/module/firmware_class/parameters/path)"
-+
-+	if [ "$HAS_FW_LOADER_COMPRESS" = "yes" ]; then
-+		if ! which xz 2> /dev/null > /dev/null; then
-+			HAS_FW_LOADER_COMPRESS=""
-+		fi
-+	fi
- }
- 
- verify_reqs()
-diff --git a/tools/testing/selftests/firmware/fw_run_tests.sh b/tools/testing/selftests/firmware/fw_run_tests.sh
-index cffdd4eb0a57..8e14d555c197 100755
---- a/tools/testing/selftests/firmware/fw_run_tests.sh
-+++ b/tools/testing/selftests/firmware/fw_run_tests.sh
-@@ -11,6 +11,7 @@ source $TEST_DIR/fw_lib.sh
- 
- export HAS_FW_LOADER_USER_HELPER=""
- export HAS_FW_LOADER_USER_HELPER_FALLBACK=""
-+export HAS_FW_LOADER_COMPRESS=""
- 
- run_tests()
- {
--- 
-2.16.4
-
+>
+> Reviewed-by: Kees Cook <keescook@chromium.org>
+>
+> -Kees
+>
+> > ---
+> >  fs/namespace.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/fs/namespace.c b/fs/namespace.c
+> > index b26778bdc236..2e85712a19ed 100644
+> > --- a/fs/namespace.c
+> > +++ b/fs/namespace.c
+> > @@ -2993,7 +2993,7 @@ void *copy_mount_options(const void __user * data)
+> >        * the remainder of the page.
+> >        */
+> >       /* copy_from_user cannot cross TASK_SIZE ! */
+> > -     size = TASK_SIZE - (unsigned long)data;
+> > +     size = TASK_SIZE - (unsigned long)untagged_addr(data);
+> >       if (size > PAGE_SIZE)
+> >               size = PAGE_SIZE;
+> >
+> > --
+> > 2.22.0.rc1.311.g5d7573a151-goog
+> >
+>
+> --
+> Kees Cook
