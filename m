@@ -2,109 +2,95 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A4B8F3BF2E
-	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Jun 2019 00:08:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B53A33C8FC
+	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Jun 2019 12:30:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390088AbfFJWIO (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 10 Jun 2019 18:08:14 -0400
-Received: from mail.kernel.org ([198.145.29.99]:34976 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2390036AbfFJWIO (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 10 Jun 2019 18:08:14 -0400
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net [24.9.64.241])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 317032082E;
-        Mon, 10 Jun 2019 22:08:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1560204493;
-        bh=e8XjUFtZMStDPYS3FRKtj43AwF2CGKnQQ24s2uVvYvo=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=BIlELQVmQiXsINDdVkW14pOS9K8s3Gx2mingJ1IaepHxagdpMTpD4ZzyEKsLXADQu
-         LDDLzvbv2yQR2aXp8ujaMwhG5b7sVH+1JVNw3f8Wr643gACxp2ikFsJnG7lIjoeKQt
-         enV0L8Nd0qyRS4RKerZLlzNTADXiWwd0A8vbWeho=
-Subject: Re: [PATCH v16 16/16] selftests, arm64: add a selftest for passing
- tagged pointers to kernel
-To:     Kees Cook <keescook@chromium.org>,
-        Andrey Konovalov <andreyknvl@google.com>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, amd-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, linux-rdma@vger.kernel.org,
-        linux-media@vger.kernel.org, kvm@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Will Deacon <will.deacon@arm.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Yishai Hadas <yishaih@mellanox.com>,
-        Felix Kuehling <Felix.Kuehling@amd.com>,
-        Alexander Deucher <Alexander.Deucher@amd.com>,
-        Christian Koenig <Christian.Koenig@amd.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Jens Wiklander <jens.wiklander@linaro.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
-        Dave Martin <Dave.Martin@arm.com>,
-        Khalid Aziz <khalid.aziz@oracle.com>, enh <enh@google.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Christoph Hellwig <hch@infradead.org>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Kostya Serebryany <kcc@google.com>,
-        Evgeniy Stepanov <eugenis@google.com>,
-        Lee Smith <Lee.Smith@arm.com>,
-        Ramana Radhakrishnan <Ramana.Radhakrishnan@arm.com>,
-        Jacob Bramley <Jacob.Bramley@arm.com>,
-        Ruben Ayrapetyan <Ruben.Ayrapetyan@arm.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Kevin Brodsky <kevin.brodsky@arm.com>,
-        Szabolcs Nagy <Szabolcs.Nagy@arm.com>, shuah <shuah@kernel.org>
-References: <cover.1559580831.git.andreyknvl@google.com>
- <9e1b5998a28f82b16076fc85ab4f88af5381cf74.1559580831.git.andreyknvl@google.com>
- <201906072055.7DFED7B@keescook>
-From:   shuah <shuah@kernel.org>
-Message-ID: <2bc277f8-e67e-30e0-5824-8184c2b03237@kernel.org>
-Date:   Mon, 10 Jun 2019 16:08:10 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
+        id S1727919AbfFKKay (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 11 Jun 2019 06:30:54 -0400
+Received: from mail-it1-f169.google.com ([209.85.166.169]:55354 "EHLO
+        mail-it1-f169.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727390AbfFKKay (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 11 Jun 2019 06:30:54 -0400
+Received: by mail-it1-f169.google.com with SMTP id i21so3977654ita.5
+        for <linux-kselftest@vger.kernel.org>; Tue, 11 Jun 2019 03:30:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=wqV28W+k6Y5J5PTchHnXNKYR2DeyBwGb+Z0TkQBdK9s=;
+        b=LZMHerGyaHA0BlQ6Jf192bW/drTNszGg94TvCqBxKon2JPwB/AaoHvI/QK1xT+XAnC
+         u2Rgt2IvpsPV7MRR0wwcI5PdFGqAsXjWcNulaxMLaam1BNZ2whA/RTMdGaFEvrYzlxgc
+         fAkPgFPwsibaahkXo1tZ9ybNvqKAzkxo2lbbcRVKupntns53irArcHS6q/dRLWBzGZ+b
+         LZlUeTRio1M66aJN7BTv97WS0M72iAPUyiXnSFdiZs5d1i0k/VfhOZD19Ym7b3ltnbnb
+         M0xYVGOBDvmj0Sc46rhHuAIg2Q39IoNXoNLwa2nhSDwZz/jDCMJA0IGSJPaMjhOiSz0w
+         iDnw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=wqV28W+k6Y5J5PTchHnXNKYR2DeyBwGb+Z0TkQBdK9s=;
+        b=NRVmHaHxRv7ZSknHB10mR+hIrt0Uw13SXctSEO0vc4GA9P+2U8OfOargQxzz2uLe6r
+         EpMQAZylVgyQbCCQFbxHEoKZrpfTaxAH/GHDiK7yJFjoUxEOa+ZFMeGP6em30GLTdOsC
+         sYVV5Oy+xcwa/Q5glXKcd+c4hiq1i3TxqqxnxDnijq1/xvx/UVScwcOxnlxk8votC+3P
+         dn+ekAt/xHCpgf5seX9u5kpxwcl25jzQ7B1SN76Jpru96IBOHqxFoQZDCSQkK+Iwe14p
+         hVLU/7fbpUVker575iI8GpR9O0uFZUoavmgeKobbN3mXx+0hYRnW87ETBEQBZJXaYN4y
+         YeeA==
+X-Gm-Message-State: APjAAAXGYkH/+5gPYtgVU/0Rs7nawZnMma90LBsskfUgBl8phx+zMpoX
+        rn5tatM/aJS5M6zK08IycLxbuCEDxVMT5VgIbUfuSjBBBhCDXQ==
+X-Google-Smtp-Source: APXvYqwTYaT/b1M8OeYDnu3M+eRa/gbDYp8Tedn6sawAce128+14dURmtFKRap/ib2SSl70fK3VLagoG/AW1qY0ZJ0A=
+X-Received: by 2002:a24:1d01:: with SMTP id 1mr12078524itj.83.1560249053408;
+ Tue, 11 Jun 2019 03:30:53 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <201906072055.7DFED7B@keescook>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+From:   Dmitry Vyukov <dvyukov@google.com>
+Date:   Tue, 11 Jun 2019 12:30:42 +0200
+Message-ID: <CACT4Y+Z4naaxx4N2B2t1hn4A99dfk=6yTY2yAZM=aJ05VCPLFQ@mail.gmail.com>
+Subject: kselftest build broken?
+To:     Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 6/7/19 9:56 PM, Kees Cook wrote:
-> On Mon, Jun 03, 2019 at 06:55:18PM +0200, Andrey Konovalov wrote:
->> This patch is a part of a series that extends arm64 kernel ABI to allow to
->> pass tagged user pointers (with the top byte set to something else other
->> than 0x00) as syscall arguments.
->>
->> This patch adds a simple test, that calls the uname syscall with a
->> tagged user pointer as an argument. Without the kernel accepting tagged
->> user pointers the test fails with EFAULT.
->>
->> Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
-> 
-> I'm adding Shuah to CC in case she has some suggestions about the new
-> selftest.
+Hi,
 
-Thanks Kees.
+I've tried to build kselftests for several years now, but I always
+find the build broken. Which makes me wonder if the instructions are
+broken or something. I follow the instructions in
+Documentation/dev-tools/kselftest.rst and start with "make -C
+tools/testing/selftests". Here is the errors I get on the upstream
+commit 16d72dd4891fecc1e1bf7ca193bb7d5b9804c038:
 
-> 
-> Reviewed-by: Kees Cook <keescook@chromium.org>
-> 
-> -Kees
-> 
+error: unable to create target: 'No available targets are compatible
+with triple "bpf"'
+1 error generated.
+Makefile:259: recipe for target 'elfdep' failed
+Makefile:156: recipe for target 'all' failed
+Makefile:106: recipe for target
+'/linux/tools/testing/selftests/bpf/libbpf.a' failed
+test_execve.c:4:10: fatal error: cap-ng.h: No such file or directory
+../lib.mk:138: recipe for target
+'/linux/tools/testing/selftests/capabilities/test_execve' failed
+gpio-mockup-chardev.c:20:10: fatal error: libmount.h: No such file or directory
+<builtin>: recipe for target 'gpio-mockup-chardev' failed
+fuse_mnt.c:17:10: fatal error: fuse.h: No such file or directory
+../lib.mk:138: recipe for target
+'/linux/tools/testing/selftests/memfd/fuse_mnt' failed
+collect2: error: ld returned 1 exit status
+../lib.mk:138: recipe for target
+'/linux/tools/testing/selftests/mqueue/mq_open_tests' failed
+reuseport_bpf_numa.c:24:10: fatal error: numa.h: No such file or directory
+../lib.mk:138: recipe for target
+'/linux/tools/testing/selftests/net/reuseport_bpf_numa' failed
+mlock-random-test.c:8:10: fatal error: sys/capability.h: No such file
+or directory
+../lib.mk:138: recipe for target
+'/linux/tools/testing/selftests/vm/mlock-random-test' failed
 
-Looks good to me.
+Here is full log:
 
-Acked-by: Shuah Khan <skhan@linuxfoundation.org>
+https://gist.githubusercontent.com/dvyukov/47430636e160f297b657df5ba2efa82b/raw/7babc4db228b88f341a376c15e8bc9c4c3b02160/gistfile1.txt
 
-thanks,
--- Shuah
+I have libelf-dev installed. Do I need to install something else? Or
+run some other command?
+
+Thanks
