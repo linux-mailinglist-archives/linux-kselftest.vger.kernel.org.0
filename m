@@ -2,142 +2,177 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EC1A3D5D4
-	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Jun 2019 20:50:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA7DB3D694
+	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Jun 2019 21:20:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2392090AbfFKSuT (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 11 Jun 2019 14:50:19 -0400
-Received: from mail.kernel.org ([198.145.29.99]:33122 "EHLO mail.kernel.org"
+        id S2405348AbfFKTUr (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 11 Jun 2019 15:20:47 -0400
+Received: from mail.kernel.org ([198.145.29.99]:47980 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2389470AbfFKSuT (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 11 Jun 2019 14:50:19 -0400
-Received: from kernel.org (unknown [104.132.0.74])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S2404789AbfFKTUr (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 11 Jun 2019 15:20:47 -0400
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net [24.9.64.241])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 2E1C021744;
-        Tue, 11 Jun 2019 18:50:18 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 9C4D22173C;
+        Tue, 11 Jun 2019 19:20:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1560279018;
-        bh=KSPugbVcFVjo2LRDUR30DOGlfU301RbHfc51FMakphQ=;
-        h=In-Reply-To:References:To:From:Cc:Subject:Date:From;
-        b=eUcQmeuoyqCS292prTem1gEJTNrE/i4/3mRNGwiqnO3Tx9yQumA1yteW7iEE4JN1g
-         eh2ADC167gKmUCTbEgDbjScSG5xLnIHWi5uWk5SVDUlKT9arAGeIY6q58Nsi/mtoWM
-         Sissolu8Hy/cpsaYhChLTjhjFekH7GFD9BeulHFI=
-Content-Type: text/plain; charset="utf-8"
+        s=default; t=1560280846;
+        bh=Te0HUbWNRYnh5j1SYpfIv81oMyhEScqWC6Jk+r1Z2HQ=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=CX3rK3Vutn3LIWV4Q+Dz0mEvp70FLRlBGXZCJrf8DzNABAY/TSVAwUSDKOAXCDW7q
+         KycH1eTk4EZMvBlaXkwu4RyNxKZEstsxsnkV5lKmwx1I0DaU9KJBjoyVn2fAqgTIvr
+         lx9zTycLW/iYKYnv7khgFVn5/bC2xmCSsHq9xLIg=
+Subject: Re: kselftest build broken?
+To:     Dmitry Vyukov <dvyukov@google.com>
+Cc:     linux-kselftest@vger.kernel.org, shuah <shuah@kernel.org>
+References: <CACT4Y+Z4naaxx4N2B2t1hn4A99dfk=6yTY2yAZM=aJ05VCPLFQ@mail.gmail.com>
+ <54bc80f8-71aa-1c04-5908-01923247832e@kernel.org>
+ <CACT4Y+YUBw=t3CkbLeKLFAeAbzVZXoG09HARR+nsOTW4gkdLOw@mail.gmail.com>
+From:   shuah <shuah@kernel.org>
+Message-ID: <6d5e0484-4dbc-d122-1ae4-9cce44c2d668@kernel.org>
+Date:   Tue, 11 Jun 2019 13:20:45 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20190611175830.GA236872@google.com>
-References: <20190514221711.248228-1-brendanhiggins@google.com> <20190514221711.248228-18-brendanhiggins@google.com> <20190517182254.548EA20815@mail.kernel.org> <CAAXuY3p4qhKVsSpQ44_kQeGDMfg7OuFLgFyxhcFWS3yf-5A_7g@mail.gmail.com> <20190607190047.C3E7A20868@mail.kernel.org> <20190611175830.GA236872@google.com>
-To:     Brendan Higgins <brendanhiggins@google.com>
-From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     Iurii Zaikin <yzaikin@google.com>, frowand.list@gmail.com,
-        gregkh@linuxfoundation.org, jpoimboe@redhat.com,
-        keescook@google.com, kieran.bingham@ideasonboard.com,
-        mcgrof@kernel.org, peterz@infradead.org, robh@kernel.org,
-        shuah@kernel.org, tytso@mit.edu, yamada.masahiro@socionext.com,
-        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        kunit-dev@googlegroups.com, linux-doc@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kbuild@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-nvdimm@lists.01.org, linux-um@lists.infradead.org,
-        Alexander.Levin@microsoft.com, Tim.Bird@sony.com,
-        amir73il@gmail.com, dan.carpenter@oracle.com, daniel@ffwll.ch,
-        jdike@addtoit.com, joel@jms.id.au, julia.lawall@lip6.fr,
-        khilman@baylibre.com, knut.omang@oracle.com, logang@deltatee.com,
-        mpe@ellerman.id.au, pmladek@suse.com, rdunlap@infradead.org,
-        richard@nod.at, rientjes@google.com, rostedt@goodmis.org,
-        wfg@linux.intel.com
-Subject: Re: [PATCH v4 17/18] kernel/sysctl-test: Add null pointer test for sysctl.c:proc_dointvec()
-User-Agent: alot/0.8.1
-Date:   Tue, 11 Jun 2019 11:50:17 -0700
-Message-Id: <20190611185018.2E1C021744@mail.kernel.org>
+In-Reply-To: <CACT4Y+YUBw=t3CkbLeKLFAeAbzVZXoG09HARR+nsOTW4gkdLOw@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Quoting Brendan Higgins (2019-06-11 10:58:30)
-> On Fri, Jun 07, 2019 at 12:00:47PM -0700, Stephen Boyd wrote:
-> > Quoting Iurii Zaikin (2019-06-05 18:29:42)
-> > > On Fri, May 17, 2019 at 11:22 AM Stephen Boyd <sboyd@kernel.org> wrot=
-e:
-> > > >
-> > > > Quoting Brendan Higgins (2019-05-14 15:17:10)
-> > > > > diff --git a/kernel/sysctl-test.c b/kernel/sysctl-test.c
-> > > > > new file mode 100644
-> > > > > index 0000000000000..fe0f2bae66085
-> > > > > --- /dev/null
-> > > > > +++ b/kernel/sysctl-test.c
-> > > > > +
-> > > > > +
-> > > > > +static void sysctl_test_dointvec_happy_single_negative(struct ku=
-nit *test)
-> > > > > +{
-> > > > > +       struct ctl_table table =3D {
-> > > > > +               .procname =3D "foo",
-> > > > > +               .data           =3D &test_data.int_0001,
-> > > > > +               .maxlen         =3D sizeof(int),
-> > > > > +               .mode           =3D 0644,
-> > > > > +               .proc_handler   =3D proc_dointvec,
-> > > > > +               .extra1         =3D &i_zero,
-> > > > > +               .extra2         =3D &i_one_hundred,
-> > > > > +       };
-> > > > > +       char input[] =3D "-9";
-> > > > > +       size_t len =3D sizeof(input) - 1;
-> > > > > +       loff_t pos =3D 0;
-> > > > > +
-> > > > > +       table.data =3D kunit_kzalloc(test, sizeof(int), GFP_USER);
-> > > > > +       KUNIT_EXPECT_EQ(test, 0, proc_dointvec(&table, 1, input, =
-&len, &pos));
-> > > > > +       KUNIT_EXPECT_EQ(test, sizeof(input) - 1, len);
-> > > > > +       KUNIT_EXPECT_EQ(test, sizeof(input) - 1, pos);
-> > > > > +       KUNIT_EXPECT_EQ(test, -9, *(int *)table.data);
-> > > >
-> > > > Is the casting necessary? Or can the macro do a type coercion of the
-> > > > second parameter based on the first type?
-> > >  Data field is defined as void* so I believe casting is necessary to
-> > > dereference it as a pointer to an array of ints. I don't think the
-> > > macro should do any type coercion that =3D=3D operator wouldn't do.
-> > >  I did change the cast to make it more clear that it's a pointer to an
-> > > array of ints being dereferenced.
-> >=20
-> > Ok, I still wonder if we should make KUNIT_EXPECT_EQ check the types on
-> > both sides and cause a build warning/error if the types aren't the same.
-> > This would be similar to our min/max macros that complain about
-> > mismatched types in the comparisons. Then if a test developer needs to
-> > convert one type or the other they could do so with a
-> > KUNIT_EXPECT_EQ_T() macro that lists the types to coerce both sides to
-> > explicitly.
->=20
-> Do you think it would be better to do a phony compare similar to how
-> min/max used to work prior to 4.17, or to use the new __typecheck(...)
-> macro? This might seem like a dumb question (and maybe it is), but Iurii
-> and I thought the former created an error message that was a bit easier
-> to understand, whereas __typecheck is obviously superior in terms of
-> code reuse.
->=20
-> This is what we are thinking right now; if you don't have any complaints
-> I will squash it into the relevant commits on the next revision:
+On 6/11/19 10:03 AM, Dmitry Vyukov wrote:
+> On Tue, Jun 11, 2019 at 5:16 PM shuah <shuah@kernel.org> wrote:
+>>
+>> Hi Dmitry,
+>>
+>> On 6/11/19 4:30 AM, Dmitry Vyukov wrote:
+>>> Hi,
+>>>
+>>> I've tried to build kselftests for several years now, but I always
+>>> find the build broken. Which makes me wonder if the instructions are
+>>> broken or something. I follow the instructions in
+>>> Documentation/dev-tools/kselftest.rst and start with "make -C
+>>> tools/testing/selftests". Here is the errors I get on the upstream
+>>> commit 16d72dd4891fecc1e1bf7ca193bb7d5b9804c038:
+>>>> error: unable to create target: 'No available targets are compatible
+>>> with triple "bpf"'
+>>> 1 error generated.
+>>> Makefile:259: recipe for target 'elfdep' failed
+>>> Makefile:156: recipe for target 'all' failed
+>>> Makefile:106: recipe for target
+>>> '/linux/tools/testing/selftests/bpf/libbpf.a' failed
+>>> test_execve.c:4:10: fatal error: cap-ng.h: No such file or directory
+>>
+>> These errors are due to missing dependencies. You will need
+>>
+>> libmount-dev
+>> libcap-ng-dev
+>> libelf-dev
+>>
+>> for bpf to build and also clang
+>>
+>>> ../lib.mk:138: recipe for target
+>>> '/linux/tools/testing/selftests/capabilities/test_execve' failed
+>>> gpio-mockup-chardev.c:20:10: fatal error: libmount.h: No such file or directory > <builtin>: recipe for target 'gpio-mockup-chardev' failed
+>>> fuse_mnt.c:17:10: fatal error: fuse.h: No such file or directory
+>>
+>> libfuse-dev is missing.
+>>
+>>> ../lib.mk:138: recipe for target
+>>> '/linux/tools/testing/selftests/memfd/fuse_mnt' failed
+>>> collect2: error: ld returned 1 exit status
+>>> ../lib.mk:138: recipe for target
+>>> '/linux/tools/testing/selftests/mqueue/mq_open_tests' failed
+>>
+>> Needs libpopt-dev
+>>
+>>> reuseport_bpf_numa.c:24:10: fatal error: numa.h: No such file or directory
+>>
+>> Needs libnuma-dev
+>>
+>>> ../lib.mk:138: recipe for target
+>>> '/linux/tools/testing/selftests/net/reuseport_bpf_numa' failed
+>>> mlock-random-test.c:8:10: fatal error: sys/capability.h: No such file
+>>> or directory > ../lib.mk:138: recipe for target
+>>> '/linux/tools/testing/selftests/vm/mlock-random-test' failed
+>>>
+>>> Here is full log:
+>>>
+>>> https://gist.githubusercontent.com/dvyukov/47430636e160f297b657df5ba2efa82b/raw/7babc4db228b88f341a376c15e8bc9c4c3b02160/gistfile1.txt
+>>>
+>>> I have libelf-dev installed. Do I need to install something else? Or
+>>> run some other command?
+>>
+>> ii  libelf-dev:amd 0.170-0.4ubu amd64        libelf1 development
+>> libraries and
+>> ii  libelf1:amd64  0.170-0.4ubu amd64        library to read and write
+>> ELF fil
+>>
+>>
+>> All of the above built for me on Linux 5.2-rc4. Try installing all of
+>> these and let me know if you still see problems.
+> 
+> 
+> Hi Shuah,
+> 
+> Thanks for quick reply!
+> 
+> I've installed these: libmount-dev libcap-ng-dev libfuse-dev
+> libpopt-dev libnuma-dev.
+> libelf-dev I already had. And for clang I switched to distro-provided one.
+> 
+> This reduced number of errors, but I still see some:
+> 
+> clang: error: unable to execute command: Broken pipe
+> clang: error: clang frontend command failed due to signal (use -v to
+> see invocation)
+> Makefile:259: recipe for target 'elfdep' failed
+> Makefile:156: recipe for target 'all' failed
+> Makefile:106: recipe for target
+> '/linux/tools/testing/selftests/bpf/libbpf.a' failed
 
-Can you provide the difference in error messages and describe that in
-the commit text? The commit message is where you "sell" the patch, so
-being able to compare the tradeoff of having another macro to do type
-comparisons vs. reusing the one that's there in kernel.h would be useful
-to allay concerns that we're duplicating logic for better error
-messages.
+Getting bpf compile to work take a few steps. If I remember correctly,
+You will need llvm as well. Here is what I have on my system:
 
-Honestly, I'd prefer we just use the macros that we've developed in
-kernel.h to do comparisons here so that we can get code reuse, but more
-importantly so that we don't trip over problems that caused those macros
-to be created in the first place. If the error message is bad, perhaps
-that can be fixed with some sort of compiler directive to make the error
-message a little more useful, i.e. compiletime_warning() thrown into
-__typecheck() or something.
+ii  libllvm6.0:amd 1:6.0-1ubunt amd64        Modular compiler and 
+toolchain te
+ii  llvm           1:6.0-41~exp amd64        Low-Level Virtual Machine 
+(LLVM)
+ii  llvm-6.0       1:6.0-1ubunt amd64        Modular compiler and 
+toolchain te
+ii  llvm-6.0-dev   1:6.0-1ubunt amd64        Modular compiler and 
+toolchain te
+un  llvm-6.0-doc   <none>       <none>       (no description available)
+ii  llvm-6.0-runti 1:6.0-1ubunt amd64        Modular compiler and 
+toolchain te
+ii  llvm-runtime   1:6.0-41~exp amd64        Low-Level Virtual Machine 
+(LLVM),
 
-> ---
-> From: Iurii Zaikin <yzaikin@google.com>
->=20
-> Adds a warning message when comparing values of different types similar
-> to what min() / max() macros do.
->=20
-> Signed-off-by: Iurii Zaikin <yzaikin@google.com>
+> timestamping.c:249:19: error: ‘SIOCGSTAMP’ undeclared (first use in
+> this function); did you mean ‘SIOCGSTAMPNS’?
+> ../../lib.mk:138: recipe for target
+> '/linux/tools/testing/selftests/networking/timestamping/timestamping'
+> failed
+> mlock-random-test.c:8:10: fatal error: sys/capability.h: No such file
+> or directory
+
+Do you have libcap-dev installed?
+
+ii  libcap-dev:amd 1:2.25-1.2   amd64        POSIX 1003.1e capabilities 
+(devel
+ii  libcap-ng-dev  0.7.7-3.1    amd64        Development and header 
+files for
+ii  libcap-ng0:amd 0.7.7-3.1    amd64        An alternate POSIX 
+capabilities l
+ii  libcap2:amd64  1:2.25-1.2   amd64        POSIX 1003.1e capabilities 
+(libra
+ii  libcap2-bin    1:2.25-1.2   amd64        POSIX 1003.1e capabilities 
+(utili
+un  libcap2-dev    <none>       <none>       (no description available)
+
+thanks,
+-- Shuah
