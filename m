@@ -2,109 +2,115 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C3C0042B76
-	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Jun 2019 17:57:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BFA442B92
+	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Jun 2019 17:59:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732023AbfFLP5D (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 12 Jun 2019 11:57:03 -0400
-Received: from foss.arm.com ([217.140.110.172]:56164 "EHLO foss.arm.com"
+        id S2440369AbfFLP7h (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 12 Jun 2019 11:59:37 -0400
+Received: from mx1.redhat.com ([209.132.183.28]:58036 "EHLO mx1.redhat.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731972AbfFLP5D (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 12 Jun 2019 11:57:03 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8F334337;
-        Wed, 12 Jun 2019 08:57:02 -0700 (PDT)
-Received: from C02TF0J2HF1T.local (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B245D3F73C;
-        Wed, 12 Jun 2019 08:56:58 -0700 (PDT)
-Date:   Wed, 12 Jun 2019 16:56:52 +0100
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     Vincenzo Frascino <vincenzo.frascino@arm.com>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
-        linux-mm@kvack.org, linux-arch@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        id S2436987AbfFLP7g (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 12 Jun 2019 11:59:36 -0400
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mx1.redhat.com (Postfix) with ESMTPS id B96E4223882;
+        Wed, 12 Jun 2019 15:59:17 +0000 (UTC)
+Received: from [10.36.116.67] (ovpn-116-67.ams2.redhat.com [10.36.116.67])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 7B463183FD;
+        Wed, 12 Jun 2019 15:59:01 +0000 (UTC)
+Subject: Re: [PATCH v17 14/15] vfio/type1, arm64: untag user pointers in
+ vaddr_get_pfn
+To:     Andrey Konovalov <andreyknvl@google.com>,
+        linux-arm-kernel@lists.infradead.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, amd-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, linux-rdma@vger.kernel.org,
+        linux-media@vger.kernel.org, kvm@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
         Will Deacon <will.deacon@arm.com>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>
-Subject: Re: [PATCH v4 2/2] arm64: Relax
- Documentation/arm64/tagged-pointers.txt
-Message-ID: <20190612155651.GM28951@C02TF0J2HF1T.local>
+        Mark Rutland <mark.rutland@arm.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Kees Cook <keescook@chromium.org>,
+        Yishai Hadas <yishaih@mellanox.com>,
+        Felix Kuehling <Felix.Kuehling@amd.com>,
+        Alexander Deucher <Alexander.Deucher@amd.com>,
+        Christian Koenig <Christian.Koenig@amd.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Jens Wiklander <jens.wiklander@linaro.org>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
+        Dave Martin <Dave.Martin@arm.com>,
+        Khalid Aziz <khalid.aziz@oracle.com>, enh <enh@google.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Christoph Hellwig <hch@infradead.org>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Kostya Serebryany <kcc@google.com>,
+        Evgeniy Stepanov <eugenis@google.com>,
+        Lee Smith <Lee.Smith@arm.com>,
+        Ramana Radhakrishnan <Ramana.Radhakrishnan@arm.com>,
+        Jacob Bramley <Jacob.Bramley@arm.com>,
+        Ruben Ayrapetyan <Ruben.Ayrapetyan@arm.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Kevin Brodsky <kevin.brodsky@arm.com>,
+        Szabolcs Nagy <Szabolcs.Nagy@arm.com>
 References: <cover.1560339705.git.andreyknvl@google.com>
- <20190612142111.28161-1-vincenzo.frascino@arm.com>
- <20190612142111.28161-3-vincenzo.frascino@arm.com>
+ <e86d8cd6bd0ade9cce6304594bcaf0c8e7f788b0.1560339705.git.andreyknvl@google.com>
+From:   Auger Eric <eric.auger@redhat.com>
+Message-ID: <ac482b04-94b1-ab29-97cc-3232fc44b3d1@redhat.com>
+Date:   Wed, 12 Jun 2019 17:58:59 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.4.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190612142111.28161-3-vincenzo.frascino@arm.com>
-User-Agent: Mutt/1.11.2 (2019-01-07)
+In-Reply-To: <e86d8cd6bd0ade9cce6304594bcaf0c8e7f788b0.1560339705.git.andreyknvl@google.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
+X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.39]); Wed, 12 Jun 2019 15:59:28 +0000 (UTC)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-A couple of minor nits below.
+Hi Andrey,
 
-On Wed, Jun 12, 2019 at 03:21:11PM +0100, Vincenzo Frascino wrote:
-> --- a/Documentation/arm64/tagged-pointers.txt
-> +++ b/Documentation/arm64/tagged-pointers.txt
-> @@ -18,7 +18,8 @@ Passing tagged addresses to the kernel
->  --------------------------------------
->  
->  All interpretation of userspace memory addresses by the kernel assumes
-> -an address tag of 0x00.
-> +an address tag of 0x00, unless the userspace opts-in the ARM64 Tagged
-> +Address ABI via the PR_SET_TAGGED_ADDR_CTRL prctl().
->  
->  This includes, but is not limited to, addresses found in:
->  
-> @@ -31,18 +32,23 @@ This includes, but is not limited to, addresses found in:
->   - the frame pointer (x29) and frame records, e.g. when interpreting
->     them to generate a backtrace or call graph.
->  
-> -Using non-zero address tags in any of these locations may result in an
-> -error code being returned, a (fatal) signal being raised, or other modes
-> -of failure.
-> +Using non-zero address tags in any of these locations when the
-> +userspace application did not opt-in to the ARM64 Tagged Address ABI,
+On 6/12/19 1:43 PM, Andrey Konovalov wrote:
+> This patch is a part of a series that extends arm64 kernel ABI to allow to
+> pass tagged user pointers (with the top byte set to something else other
+> than 0x00) as syscall arguments.
+> 
+> vaddr_get_pfn() uses provided user pointers for vma lookups, which can
+> only by done with untagged pointers.
+> 
+> Untag user pointers in this function.
+> 
+> Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
+> Reviewed-by: Kees Cook <keescook@chromium.org>
+> Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
+Reviewed-by: Eric Auger <eric.auger@redhat.com>
 
-Nitpick: drop the comma after "ABI," since a predicate follows.
+Thanks
 
-> +may result in an error code being returned, a (fatal) signal being raised,
-> +or other modes of failure.
+Eric
+> ---
+>  drivers/vfio/vfio_iommu_type1.c | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/drivers/vfio/vfio_iommu_type1.c b/drivers/vfio/vfio_iommu_type1.c
+> index 3ddc375e7063..528e39a1c2dd 100644
+> --- a/drivers/vfio/vfio_iommu_type1.c
+> +++ b/drivers/vfio/vfio_iommu_type1.c
+> @@ -384,6 +384,8 @@ static int vaddr_get_pfn(struct mm_struct *mm, unsigned long vaddr,
 >  
-> -For these reasons, passing non-zero address tags to the kernel via
-> -system calls is forbidden, and using a non-zero address tag for sp is
-> -strongly discouraged.
-> +For these reasons, when the userspace application did not opt-in, passing
-> +non-zero address tags to the kernel via system calls is forbidden, and using
-> +a non-zero address tag for sp is strongly discouraged.
+>  	down_read(&mm->mmap_sem);
 >  
->  Programs maintaining a frame pointer and frame records that use non-zero
->  address tags may suffer impaired or inaccurate debug and profiling
->  visibility.
->  
-> +A definition of the meaning of ARM64 Tagged Address ABI and of the
-> +guarantees that the ABI provides when the userspace opts-in via prctl()
-> +can be found in: Documentation/arm64/tagged-address-abi.txt.
+> +	vaddr = untagged_addr(vaddr);
 > +
+>  	vma = find_vma_intersection(mm, vaddr, vaddr + 1);
 >  
->  Preserving tags
->  ---------------
-> @@ -57,6 +63,9 @@ be preserved.
->  The architecture prevents the use of a tagged PC, so the upper byte will
->  be set to a sign-extension of bit 55 on exception return.
->  
-> +This behaviours are preserved even when the the userspace opts-in the ARM64
-
-"These" ... "opts in to"
-
-> +Tagged Address ABI via the PR_SET_TAGGED_ADDR_CTRL prctl().
-> +
->  
->  Other considerations
->  --------------------
-> -- 
-> 2.21.0
-
--- 
-Catalin
+>  	if (vma && vma->vm_flags & VM_PFNMAP) {
+> 
