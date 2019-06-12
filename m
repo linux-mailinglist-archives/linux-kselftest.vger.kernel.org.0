@@ -2,54 +2,55 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CD02F42386
-	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Jun 2019 13:09:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CA00423AA
+	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Jun 2019 13:13:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2408972AbfFLLIs (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 12 Jun 2019 07:08:48 -0400
-Received: from mail-pf1-f196.google.com ([209.85.210.196]:45630 "EHLO
-        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2408952AbfFLLIr (ORCPT
+        id S2438247AbfFLLNV (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 12 Jun 2019 07:13:21 -0400
+Received: from mail-pg1-f195.google.com ([209.85.215.195]:43990 "EHLO
+        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2438232AbfFLLNU (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 12 Jun 2019 07:08:47 -0400
-Received: by mail-pf1-f196.google.com with SMTP id s11so9444158pfm.12
-        for <linux-kselftest@vger.kernel.org>; Wed, 12 Jun 2019 04:08:47 -0700 (PDT)
+        Wed, 12 Jun 2019 07:13:20 -0400
+Received: by mail-pg1-f195.google.com with SMTP id f25so8750845pgv.10
+        for <linux-kselftest@vger.kernel.org>; Wed, 12 Jun 2019 04:13:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=w620wCIkG8GXS/KYH0IDoZ7ej5kJ3WmWx8LtN+LbTUQ=;
-        b=VggNUJ7a0brq2Ev6nAJQqO2O72gohucw8zeY5YtHck9VQOLSeh4HE1gegC/6IXwwZQ
-         yGU57RiXcKZXz6rEKzU45Xf6W2ce+VRfcbyLnBuDiGAB0WY+oQBhpKyfWyvJoxfZX9DP
-         yh5EZsvMAI815IqL/1YdyEKkghoO2fuJKDAzd5Q9y/OjjRwPS+GPbIwNDHqKiLuIYdn3
-         FS/k/NQyAktrRCCDybeyESanVpXbjmTwdROU2U/U+lx1nc+kfxYxbzF+ximhp+/PoGPk
-         LddaTqB/qiSjwgqbl0KdSRDedqW9qTDDWoaJfcFucWGR/PYqdZ87SzwkAPpr4TVyN7Wo
-         N3Qg==
+        bh=CPH48pl3zgEAvx1ZV8NCaa+NrirZ7d55m0K/3ZW0DB4=;
+        b=Wa+GrRiixuq08ZJy7YLBy/hw4N6KCGD4D0JGPHXeAhrhP7aYFGu2wrFVi/4U57v07h
+         gabUfJpQMd/ZxixypJh6LG438zDMAFuaLmx1zNosW/bNS5e9DE+bfIpQfyXphO/5R37q
+         J4BK+9faydCecf+zFNicytUzZ+34IwX2nZrUTbQwSG0d5Mwjsh+M/iy5iKaSTm2HU1Vc
+         APJmA3gO7zhEVXs30R27Red8E5MuIvjfWVaZNPU7/jpeOCWo81HFfgpvxUE+snFq9nK5
+         AQ9h1nAmh3KAeta7IGYJp8hdQcsOoF6BnZ35/+mA9Y0+45iTzl1SsN8NtN8M46KVCGVs
+         tN2Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=w620wCIkG8GXS/KYH0IDoZ7ej5kJ3WmWx8LtN+LbTUQ=;
-        b=rt9T6FCy6I9Pve0KLOfOjqu8k75VXkWJ6Ex/7yEsI/at55akCicrHhmTtUJAHQRsL3
-         YP6Xuw5T+1M9kPYrPRMhB9g2SK0d/JPSBo0HGRr55A6jD2aKnKNYQTiGVV2ePvNyJKzK
-         rzYMii4hcRI3ESLWdraEe8jLHNrLewS6pzSsktELr9uuy6bYMTZawvYcO9kkba1Xbo3V
-         RwZYP9F9mexR8SAKQ5NzsurxyQMFyO4QCOQrDGFxSH3MJqpwD/kobvFLnWlcZCXXJvED
-         G9+GKa8Uo1pX8qTnrxZwGUQbzdBq2xdhnkEurIAusUrGzFu7MM9J5pTpeiXTTDPadxyQ
-         HIMA==
-X-Gm-Message-State: APjAAAW4vPF/2cS+1k3zUeLFtqa8Krl2MhRfleyFI9TxzW0/X6chOg1f
-        IOJwnyb4XACisd8GVavnLOAgmD5hCo9GMEbXxTfb2w==
-X-Google-Smtp-Source: APXvYqxvUwlKkJ1D0n5ZAgi1aKr005PngCLgks22Vr4JdWsBWlki9wY2M2Qsc1xcmNb71INK9Pq98aEQaKS4b6HnOls=
-X-Received: by 2002:aa7:97bb:: with SMTP id d27mr18449962pfq.93.1560337726555;
- Wed, 12 Jun 2019 04:08:46 -0700 (PDT)
+        bh=CPH48pl3zgEAvx1ZV8NCaa+NrirZ7d55m0K/3ZW0DB4=;
+        b=Kpgwqt32rx4LQUaBUF+/FmIY9sDRFIr7EVTxq0WrCIxDiRw/5QIOPO7r2cR/vwStZK
+         pqk3IZ0HRK1fnza017ByBcWJZ6FFRssnKwN5X5EH+0dMNsDD2JHEC93SSObtYKCGVD1e
+         S6UmzU6MrPu6v/RxaUDeHXqcxkES8XreJ95HJ1YCBhaOAXCxGnczb/CMfWe3fyV/HPds
+         KoPWybHHslgJ+fenOOgDNhEnHwVmp9jHc+9P+siSf+uKLZrDpUgEE8xauINnR4nUAYOD
+         T4uzbRiNmxa+T+xtvJCAqxOr8mb0vr9GvBtRxQ5P/Kz9J4DmbAAoGMcfbJm3LmK4sQnv
+         5W0A==
+X-Gm-Message-State: APjAAAUMGtj4lj/V5gUiPZq9GXPAoTiD89JOdoRm93sLJf6BarTK/DK4
+        tZUDnkF8b6rKhbmJKoNCDtrzhGeDxVEHu2lHMJfChw==
+X-Google-Smtp-Source: APXvYqwzlagi41UpMXh0yb3QZZS2gyEag7Dm2eoj6v2jESPsCD8f1MNuoUw/t7+/hDiqSvkq5q/rQO7JKsp+xiDho38=
+X-Received: by 2002:a65:5845:: with SMTP id s5mr25017064pgr.286.1560337999517;
+ Wed, 12 Jun 2019 04:13:19 -0700 (PDT)
 MIME-Version: 1.0
-References: <cover.1559580831.git.andreyknvl@google.com> <e410843d00a4ecd7e525a7a949e605ffc6c394c4.1559580831.git.andreyknvl@google.com>
- <d0dffcf8-d7bf-a7b4-5766-3a6f87437851@oracle.com>
-In-Reply-To: <d0dffcf8-d7bf-a7b4-5766-3a6f87437851@oracle.com>
+References: <cover.1559580831.git.andreyknvl@google.com> <045a94326401693e015bf80c444a4d946a5c68ed.1559580831.git.andreyknvl@google.com>
+ <20190610142824.GB10165@c02tf0j2hf1t.cambridge.arm.com> <CAAeHK+zBDB6i+iEw+TJY14gZeccvWeOBEaU+otn1F+jzDLaRpA@mail.gmail.com>
+ <20190611174448.exg2zycfqf4a2vea@mbp>
+In-Reply-To: <20190611174448.exg2zycfqf4a2vea@mbp>
 From:   Andrey Konovalov <andreyknvl@google.com>
-Date:   Wed, 12 Jun 2019 13:08:35 +0200
-Message-ID: <CAAeHK+yTmU9Vz0OB4b7bcgjU3W1v6NFxgpiy4tud7j0AHXkwtw@mail.gmail.com>
-Subject: Re: [PATCH v16 04/16] mm: untag user pointers in do_pages_move
-To:     Khalid Aziz <khalid.aziz@oracle.com>
+Date:   Wed, 12 Jun 2019 13:13:08 +0200
+Message-ID: <CAAeHK+wkA8PskRrdfJ7MMr+je+x71WW3yDgWajxPRPwPBRNVfA@mail.gmail.com>
+Subject: Re: [PATCH v16 05/16] arm64: untag user pointers passed to memory syscalls
+To:     Catalin Marinas <catalin.marinas@arm.com>
 Cc:     Linux ARM <linux-arm-kernel@lists.infradead.org>,
         Linux Memory Management List <linux-mm@kvack.org>,
         LKML <linux-kernel@vger.kernel.org>,
@@ -58,7 +59,6 @@ Cc:     Linux ARM <linux-arm-kernel@lists.infradead.org>,
         kvm@vger.kernel.org,
         "open list:KERNEL SELFTEST FRAMEWORK" 
         <linux-kselftest@vger.kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
         Vincenzo Frascino <vincenzo.frascino@arm.com>,
         Will Deacon <will.deacon@arm.com>,
         Mark Rutland <mark.rutland@arm.com>,
@@ -74,7 +74,8 @@ Cc:     Linux ARM <linux-arm-kernel@lists.infradead.org>,
         Alex Williamson <alex.williamson@redhat.com>,
         Leon Romanovsky <leon@kernel.org>,
         Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
-        Dave Martin <Dave.Martin@arm.com>, enh <enh@google.com>,
+        Dave Martin <Dave.Martin@arm.com>,
+        Khalid Aziz <khalid.aziz@oracle.com>, enh <enh@google.com>,
         Jason Gunthorpe <jgg@ziepe.ca>,
         Christoph Hellwig <hch@infradead.org>,
         Dmitry Vyukov <dvyukov@google.com>,
@@ -93,39 +94,35 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Jun 11, 2019 at 10:18 PM Khalid Aziz <khalid.aziz@oracle.com> wrote:
+On Tue, Jun 11, 2019 at 7:45 PM Catalin Marinas <catalin.marinas@arm.com> wrote:
 >
-> On 6/3/19 10:55 AM, Andrey Konovalov wrote:
-> > This patch is a part of a series that extends arm64 kernel ABI to allow to
-> > pass tagged user pointers (with the top byte set to something else other
-> > than 0x00) as syscall arguments.
+> On Tue, Jun 11, 2019 at 05:35:31PM +0200, Andrey Konovalov wrote:
+> > On Mon, Jun 10, 2019 at 4:28 PM Catalin Marinas <catalin.marinas@arm.com> wrote:
+> > > On Mon, Jun 03, 2019 at 06:55:07PM +0200, Andrey Konovalov wrote:
+> > > > This patch is a part of a series that extends arm64 kernel ABI to allow to
+> > > > pass tagged user pointers (with the top byte set to something else other
+> > > > than 0x00) as syscall arguments.
+> > > >
+> > > > This patch allows tagged pointers to be passed to the following memory
+> > > > syscalls: get_mempolicy, madvise, mbind, mincore, mlock, mlock2, mprotect,
+> > > > mremap, msync, munlock.
+> > > >
+> > > > Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
+> > >
+> > > I would add in the commit log (and possibly in the code with a comment)
+> > > that mremap() and mmap() do not currently accept tagged hint addresses.
+> > > Architectures may interpret the hint tag as a background colour for the
+> > > corresponding vma. With this:
 > >
-> > do_pages_move() is used in the implementation of the move_pages syscall.
-> >
-> > Untag user pointers in this function.
-> >
-> > Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
-> > Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
-> > ---
-> >  mm/migrate.c | 1 +
-> >  1 file changed, 1 insertion(+)
-> >
-> > diff --git a/mm/migrate.c b/mm/migrate.c
-> > index f2ecc2855a12..3930bb6fa656 100644
-> > --- a/mm/migrate.c
-> > +++ b/mm/migrate.c
-> > @@ -1617,6 +1617,7 @@ static int do_pages_move(struct mm_struct *mm, nodemask_t task_nodes,
-> >               if (get_user(node, nodes + i))
-> >                       goto out_flush;
-> >               addr = (unsigned long)p;
-> > +             addr = untagged_addr(addr);
+> > I'll change the commit log. Where do you you think I should put this
+> > comment? Before mmap and mremap definitions in mm/?
 >
-> Why not just "addr = (unsigned long)untagged_addr(p);"
+> On arm64 we use our own sys_mmap(). I'd say just add a comment on the
+> generic mremap() just before the untagged_addr() along the lines that
+> new_address is not untagged for preserving similar behaviour to mmap().
 
-Will do in the next version. I think I'll also merge this commit into
-the "untag user pointers passed to memory syscalls" one.
+Will do in v17, thanks!
 
 >
 > --
-> Khalid
->
+> Catalin
