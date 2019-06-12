@@ -2,194 +2,95 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 946FE3DBCB
-	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Jun 2019 22:29:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF3C341C86
+	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Jun 2019 08:48:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2406320AbfFKU3N (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 11 Jun 2019 16:29:13 -0400
-Received: from mail-pg1-f193.google.com ([209.85.215.193]:45630 "EHLO
-        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2406182AbfFKU3N (ORCPT
+        id S1727409AbfFLGsE (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 12 Jun 2019 02:48:04 -0400
+Received: from youngberry.canonical.com ([91.189.89.112]:39926 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726645AbfFLGsE (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 11 Jun 2019 16:29:13 -0400
-Received: by mail-pg1-f193.google.com with SMTP id w34so7575022pga.12
-        for <linux-kselftest@vger.kernel.org>; Tue, 11 Jun 2019 13:29:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=dhnwSrdCPnvzoEVfuuVGqE83p7TnkQ5Modn2BNCoQD0=;
-        b=Pp0Hq+hd8QA6syECahlCWtYv82jhOxBm0sr+fZ9Dkk8nXtHe7nrSiSj+V8u0FaITQ7
-         84fXuzNXkrhzDQgkHPp26EjnsIzrDKXg48+xvOTrPv1gFdJxgRLOvcs0dwgoU2BGvzqE
-         Liz3+gL3rcT7wqBUJosubNY4aHZAru2eeUFG6CtPZ2mbKIzTjquHFKUIQcWXvVk4hMLI
-         7UB1amIr3aRGarnBUHse/35CwxBlRRF3qifo7BnhaOJV61RWbVqr0wA4GIowlDaA6gfT
-         pWINRb5VwbD/mtNfms9GrZfwha/4G8tSCCTtYnHFhjTrLaOGAdTroClIT1QeFCWuqloy
-         NJbA==
+        Wed, 12 Jun 2019 02:48:04 -0400
+Received: from mail-pl1-f199.google.com ([209.85.214.199])
+        by youngberry.canonical.com with esmtps (TLS1.0:RSA_AES_128_CBC_SHA1:16)
+        (Exim 4.76)
+        (envelope-from <po-hsu.lin@canonical.com>)
+        id 1hax3C-0000VY-3g
+        for linux-kselftest@vger.kernel.org; Wed, 12 Jun 2019 06:48:02 +0000
+Received: by mail-pl1-f199.google.com with SMTP id d19so9274324pls.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 11 Jun 2019 23:48:02 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=dhnwSrdCPnvzoEVfuuVGqE83p7TnkQ5Modn2BNCoQD0=;
-        b=r5dP43xcF2H0mSsajux7h0x8X0I9MoP9Tq5Yz/ac9BeI61B2jmcZ4kZaNr5i6+Jahe
-         ppPM9FP1Pm3Hr2UJ5AnpNDRQbuWwx2SVkvTvTxFWP2iEXTEjG9uZA4JbZraxjZG2YJU7
-         PEMmmDuQcdR24Ixqvlci6geDkX3dhEC+HApfWBX50rH/d8tJTDEjbTfkbjNO4oz8Bvl5
-         N62f7vqtChhJPh23A0vXWdPb2+gQ0vK6LgDebBk3vbKswM1kyN6BiSvS0KltKZzTh1wE
-         hR2nC07bSkRFEYVQr4Pq7XV2ASJstPkoXUcJ9urgszSGxq4/DXO2k/f9K4I1JnMIOLFM
-         HepQ==
-X-Gm-Message-State: APjAAAVq6ZLpPuWj8BRzOZMihyvuAmTnb16QKT7hnDRPhZzKBzJj/1pC
-        4UuBDEQkyh5qZ83p7if2jKpWW6xO3cwDCeTHmJlY9A==
-X-Google-Smtp-Source: APXvYqycBtJ32qbIn8pTyxMIAID5Xv7JTruAR7oTyIED4r622bu9rIlLgVdk0eekxjLa2OE4wVYL1Pw8y64Cqw0kRwU=
-X-Received: by 2002:a17:90a:2e89:: with SMTP id r9mr28553830pjd.117.1560284952085;
- Tue, 11 Jun 2019 13:29:12 -0700 (PDT)
-MIME-Version: 1.0
-References: <20190514221711.248228-1-brendanhiggins@google.com>
- <20190514221711.248228-18-brendanhiggins@google.com> <20190517182254.548EA20815@mail.kernel.org>
- <CAAXuY3p4qhKVsSpQ44_kQeGDMfg7OuFLgFyxhcFWS3yf-5A_7g@mail.gmail.com>
- <20190607190047.C3E7A20868@mail.kernel.org> <20190611175830.GA236872@google.com>
- <20190611185018.2E1C021744@mail.kernel.org>
-In-Reply-To: <20190611185018.2E1C021744@mail.kernel.org>
-From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Tue, 11 Jun 2019 13:29:01 -0700
-Message-ID: <CAFd5g47dmcHOCX41cr2v9Kaj3xa_5-PoqUPX_1=AoQLUG90NkQ@mail.gmail.com>
-Subject: Re: [PATCH v4 17/18] kernel/sysctl-test: Add null pointer test for sysctl.c:proc_dointvec()
-To:     Stephen Boyd <sboyd@kernel.org>
-Cc:     Iurii Zaikin <yzaikin@google.com>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Kees Cook <keescook@google.com>,
-        Kieran Bingham <kieran.bingham@ideasonboard.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Rob Herring <robh@kernel.org>, shuah <shuah@kernel.org>,
-        "Theodore Ts'o" <tytso@mit.edu>,
-        Masahiro Yamada <yamada.masahiro@socionext.com>,
-        devicetree <devicetree@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        kunit-dev@googlegroups.com,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        linux-fsdevel@vger.kernel.org,
-        linux-kbuild <linux-kbuild@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        linux-nvdimm <linux-nvdimm@lists.01.org>,
-        linux-um@lists.infradead.org,
-        Sasha Levin <Alexander.Levin@microsoft.com>,
-        "Bird, Timothy" <Tim.Bird@sony.com>,
-        Amir Goldstein <amir73il@gmail.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Daniel Vetter <daniel@ffwll.ch>, Jeff Dike <jdike@addtoit.com>,
-        Joel Stanley <joel@jms.id.au>,
-        Julia Lawall <julia.lawall@lip6.fr>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Knut Omang <knut.omang@oracle.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Petr Mladek <pmladek@suse.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Richard Weinberger <richard@nod.at>,
-        David Rientjes <rientjes@google.com>,
-        Steven Rostedt <rostedt@goodmis.org>, wfg@linux.intel.com
-Content-Type: text/plain; charset="UTF-8"
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=iQGtsCBn1c5Cv/4lGqwB4bSu8wIK/ZdJUuePfHlu3Os=;
+        b=WI7Z3C0569LK8AIKrdo3y8bqfG+oGBkgOOHHGJmL0i0TMoiwmjyUmQo4KIByzPSmP2
+         TCZ29cY5ZurdzgPZPiVMnG8+pnvAYcr4mIzM4E5dGkt6jBEfnpjlhxjG0BPkh8xQ1Lgr
+         wutvJQiOr8py+9ZZzqaMObMMUhfmRbmPH2qomSqTf7Y5GkKrSXlfVGeuXwhWrxymKz2h
+         fCjkh3NpQ+MwgMjlp6XzmZwpTSJaXCY75OfiHMdTBLEE6SJjfy/2kczPorKMNkSWueXS
+         uIPU+RrnGYhVnvrmysNSIxNAxTA7/8YEYsxFajSZXwHuNxKNL2rSwsHlrP6WU3uHacLc
+         fokw==
+X-Gm-Message-State: APjAAAXfuIom34IituETEtlihy7GcYEqYCKdwRXTXV8YgJkgv7PS8yVc
+        0cfSriGSlgnJaAnbAbRjGmw2QHlMglEphKqXOWWhnvIIydiAMM5K+9rM8qtbN9NEKhNaNtLXfcK
+        9PbvfCSkZDwtysbg5Pi502jmok8WiLMk9A34Zaa/v0TFK
+X-Received: by 2002:a17:902:2926:: with SMTP id g35mr34534389plb.269.1560322080596;
+        Tue, 11 Jun 2019 23:48:00 -0700 (PDT)
+X-Google-Smtp-Source: APXvYqydXTegqwqULkVpf/E0LtN7OvqKB1CDRD/xCDPTfnA0oYlo/soUUvOX7voWPt0GmlHRFF0Cpg==
+X-Received: by 2002:a17:902:2926:: with SMTP id g35mr34534368plb.269.1560322080271;
+        Tue, 11 Jun 2019 23:48:00 -0700 (PDT)
+Received: from Leggiero.taipei.internal (61-220-137-37.HINET-IP.hinet.net. [61.220.137.37])
+        by smtp.gmail.com with ESMTPSA id p68sm9888878pfb.80.2019.06.11.23.47.58
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Tue, 11 Jun 2019 23:47:59 -0700 (PDT)
+From:   Po-Hsu Lin <po-hsu.lin@canonical.com>
+To:     davem@davemloft.net, shuah@kernel.org
+Cc:     netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] selftests/net: skip psock_tpacket test if KALLSYMS was not enabled
+Date:   Wed, 12 Jun 2019 14:47:52 +0800
+Message-Id: <20190612064752.6701-1-po-hsu.lin@canonical.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Jun 11, 2019 at 11:50 AM Stephen Boyd <sboyd@kernel.org> wrote:
->
-> Quoting Brendan Higgins (2019-06-11 10:58:30)
-> > On Fri, Jun 07, 2019 at 12:00:47PM -0700, Stephen Boyd wrote:
-> > > Quoting Iurii Zaikin (2019-06-05 18:29:42)
-> > > > On Fri, May 17, 2019 at 11:22 AM Stephen Boyd <sboyd@kernel.org> wrote:
-> > > > >
-> > > > > Quoting Brendan Higgins (2019-05-14 15:17:10)
-> > > > > > diff --git a/kernel/sysctl-test.c b/kernel/sysctl-test.c
-> > > > > > new file mode 100644
-> > > > > > index 0000000000000..fe0f2bae66085
-> > > > > > --- /dev/null
-> > > > > > +++ b/kernel/sysctl-test.c
-> > > > > > +
-> > > > > > +
-> > > > > > +static void sysctl_test_dointvec_happy_single_negative(struct kunit *test)
-> > > > > > +{
-> > > > > > +       struct ctl_table table = {
-> > > > > > +               .procname = "foo",
-> > > > > > +               .data           = &test_data.int_0001,
-> > > > > > +               .maxlen         = sizeof(int),
-> > > > > > +               .mode           = 0644,
-> > > > > > +               .proc_handler   = proc_dointvec,
-> > > > > > +               .extra1         = &i_zero,
-> > > > > > +               .extra2         = &i_one_hundred,
-> > > > > > +       };
-> > > > > > +       char input[] = "-9";
-> > > > > > +       size_t len = sizeof(input) - 1;
-> > > > > > +       loff_t pos = 0;
-> > > > > > +
-> > > > > > +       table.data = kunit_kzalloc(test, sizeof(int), GFP_USER);
-> > > > > > +       KUNIT_EXPECT_EQ(test, 0, proc_dointvec(&table, 1, input, &len, &pos));
-> > > > > > +       KUNIT_EXPECT_EQ(test, sizeof(input) - 1, len);
-> > > > > > +       KUNIT_EXPECT_EQ(test, sizeof(input) - 1, pos);
-> > > > > > +       KUNIT_EXPECT_EQ(test, -9, *(int *)table.data);
-> > > > >
-> > > > > Is the casting necessary? Or can the macro do a type coercion of the
-> > > > > second parameter based on the first type?
-> > > >  Data field is defined as void* so I believe casting is necessary to
-> > > > dereference it as a pointer to an array of ints. I don't think the
-> > > > macro should do any type coercion that == operator wouldn't do.
-> > > >  I did change the cast to make it more clear that it's a pointer to an
-> > > > array of ints being dereferenced.
-> > >
-> > > Ok, I still wonder if we should make KUNIT_EXPECT_EQ check the types on
-> > > both sides and cause a build warning/error if the types aren't the same.
-> > > This would be similar to our min/max macros that complain about
-> > > mismatched types in the comparisons. Then if a test developer needs to
-> > > convert one type or the other they could do so with a
-> > > KUNIT_EXPECT_EQ_T() macro that lists the types to coerce both sides to
-> > > explicitly.
-> >
-> > Do you think it would be better to do a phony compare similar to how
-> > min/max used to work prior to 4.17, or to use the new __typecheck(...)
-> > macro? This might seem like a dumb question (and maybe it is), but Iurii
-> > and I thought the former created an error message that was a bit easier
-> > to understand, whereas __typecheck is obviously superior in terms of
-> > code reuse.
-> >
-> > This is what we are thinking right now; if you don't have any complaints
-> > I will squash it into the relevant commits on the next revision:
->
-> Can you provide the difference in error messages and describe that in
-> the commit text? The commit message is where you "sell" the patch, so
-> being able to compare the tradeoff of having another macro to do type
-> comparisons vs. reusing the one that's there in kernel.h would be useful
-> to allay concerns that we're duplicating logic for better error
-> messages.
+The psock_tpacket test will need to access /proc/kallsyms, this would
+require the kernel config CONFIG_KALLSYMS to be enabled first.
 
-Oh sorry, I didn't think too hard about the commit message since I
-figured it would get split up and squashed into the existing commits.
-I just wanted to get it out sooner to discuss this before I post the
-next revision (probably later this week).
+Check the file existence to determine if we can run this test.
 
-> Honestly, I'd prefer we just use the macros that we've developed in
-> kernel.h to do comparisons here so that we can get code reuse, but more
-> importantly so that we don't trip over problems that caused those macros
-> to be created in the first place. If the error message is bad, perhaps
-> that can be fixed with some sort of compiler directive to make the error
-> message a little more useful, i.e. compiletime_warning() thrown into
-> __typecheck() or something.
+Signed-off-by: Po-Hsu Lin <po-hsu.lin@canonical.com>
+---
+ tools/testing/selftests/net/run_afpackettests | 14 +++++++++-----
+ 1 file changed, 9 insertions(+), 5 deletions(-)
 
-That's a good point. I have no qualms sticking with __typecheck(...)
-for now; if we later feel that it is causing problems, we can always
-fix it later by supplying our own warning in the manner you suggest.
+diff --git a/tools/testing/selftests/net/run_afpackettests b/tools/testing/selftests/net/run_afpackettests
+index ea5938e..8b42e8b 100755
+--- a/tools/testing/selftests/net/run_afpackettests
++++ b/tools/testing/selftests/net/run_afpackettests
+@@ -21,12 +21,16 @@ fi
+ echo "--------------------"
+ echo "running psock_tpacket test"
+ echo "--------------------"
+-./in_netns.sh ./psock_tpacket
+-if [ $? -ne 0 ]; then
+-	echo "[FAIL]"
+-	ret=1
++if [ -f /proc/kallsyms ]; then
++	./in_netns.sh ./psock_tpacket
++	if [ $? -ne 0 ]; then
++		echo "[FAIL]"
++		ret=1
++	else
++		echo "[PASS]"
++	fi
+ else
+-	echo "[PASS]"
++	echo "[SKIP] CONFIG_KALLSYMS not enabled"
+ fi
+ 
+ echo "--------------------"
+-- 
+2.7.4
 
-Iurii, do you have any additional thoughts on this?
-
->
-> > ---
-> > From: Iurii Zaikin <yzaikin@google.com>
-> >
-> > Adds a warning message when comparing values of different types similar
-> > to what min() / max() macros do.
-> >
-> > Signed-off-by: Iurii Zaikin <yzaikin@google.com>
