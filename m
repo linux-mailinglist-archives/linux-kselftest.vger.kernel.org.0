@@ -2,157 +2,126 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 84E4D420E2
-	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Jun 2019 11:33:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D40564216B
+	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Jun 2019 11:52:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2437364AbfFLJcT (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 12 Jun 2019 05:32:19 -0400
-Received: from foss.arm.com ([217.140.110.172]:48494 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2436605AbfFLJcT (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 12 Jun 2019 05:32:19 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0C99828;
-        Wed, 12 Jun 2019 02:32:18 -0700 (PDT)
-Received: from c02tf0j2hf1t.cambridge.arm.com (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C6AAD3F246;
-        Wed, 12 Jun 2019 02:32:04 -0700 (PDT)
-Date:   Wed, 12 Jun 2019 10:32:00 +0100
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     Vincenzo Frascino <vincenzo.frascino@arm.com>
-Cc:     Andrey Konovalov <andreyknvl@google.com>,
-        Mark Rutland <mark.rutland@arm.com>, kvm@vger.kernel.org,
-        Szabolcs Nagy <Szabolcs.Nagy@arm.com>,
-        Will Deacon <will.deacon@arm.com>,
-        dri-devel@lists.freedesktop.org, linux-mm@kvack.org,
-        Khalid Aziz <khalid.aziz@oracle.com>,
-        linux-kselftest@vger.kernel.org,
-        Felix Kuehling <Felix.Kuehling@amd.com>,
-        Jacob Bramley <Jacob.Bramley@arm.com>,
-        Leon Romanovsky <leon@kernel.org>, linux-rdma@vger.kernel.org,
-        amd-gfx@lists.freedesktop.org,
-        Christoph Hellwig <hch@infradead.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Dave Martin <Dave.Martin@arm.com>,
-        Evgeniy Stepanov <eugenis@google.com>,
-        linux-media@vger.kernel.org, Kevin Brodsky <kevin.brodsky@arm.com>,
-        Kees Cook <keescook@chromium.org>,
-        Ruben Ayrapetyan <Ruben.Ayrapetyan@arm.com>,
-        Ramana Radhakrishnan <Ramana.Radhakrishnan@arm.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Kostya Serebryany <kcc@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Yishai Hadas <yishaih@mellanox.com>,
-        linux-kernel@vger.kernel.org,
-        Jens Wiklander <jens.wiklander@linaro.org>,
-        Lee Smith <Lee.Smith@arm.com>,
-        Alexander Deucher <Alexander.Deucher@amd.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        enh <enh@google.com>, Robin Murphy <robin.murphy@arm.com>,
-        Christian Koenig <Christian.Koenig@amd.com>,
-        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>
-Subject: Re: [PATCH v16 02/16] arm64: untag user pointers in access_ok and
- __uaccess_mask_ptr
-Message-ID: <20190612093158.GG10165@c02tf0j2hf1t.cambridge.arm.com>
-References: <cover.1559580831.git.andreyknvl@google.com>
- <4327b260fb17c4776a1e3c844f388e4948cfb747.1559580831.git.andreyknvl@google.com>
- <20190610175326.GC25803@arrakis.emea.arm.com>
- <20190611145720.GA63588@arrakis.emea.arm.com>
- <d3dc2b1f-e8c9-c60d-f648-0bc9b08f20e4@arm.com>
+        id S2437698AbfFLJwf (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 12 Jun 2019 05:52:35 -0400
+Received: from aserp2130.oracle.com ([141.146.126.79]:45746 "EHLO
+        aserp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2437415AbfFLJwf (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 12 Jun 2019 05:52:35 -0400
+Received: from pps.filterd (aserp2130.oracle.com [127.0.0.1])
+        by aserp2130.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x5C9moqK019223;
+        Wed, 12 Jun 2019 09:52:32 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : mime-version : content-type; s=corp-2018-07-02;
+ bh=STg2Q8ZuP7oBqkte3BSzEJpgTKkKhODjX0seniz7kug=;
+ b=0P+QvAkabB6QwtJcg4f71T41CGmDnrVHZDvmmTvR/Ud2Xe/jgwqcSXD182ot7Y9b2Pxf
+ dnbSA+i0FKNGxrgLmzwYBTilBiInzBEyGfOmmv8DMmNpz4XzDSYkJ3HB+2zXMaKjpAKN
+ SuPSTzyewRaG7RuhzQ9fY3AnpstTrqkmlH4WPvUYu/yKaq3nJ0CI0LfulTfAsXU7O+i0
+ OcomSS4pNB08AURqm2TsPraY7By96a8xlV5e1ySCxb/a3X+BQxxEBP2xVNZ23ISWuwjR
+ SDfRSNVsvsrsMhyrul8qLmZjTS179nNu2ej4QLmyhqwjG24aBHQSsKVBlGh4vkMm1Dqk xw== 
+Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
+        by aserp2130.oracle.com with ESMTP id 2t02hetgfc-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 12 Jun 2019 09:52:32 +0000
+Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
+        by aserp3030.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x5C9ot7r080153;
+        Wed, 12 Jun 2019 09:52:32 GMT
+Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
+        by aserp3030.oracle.com with ESMTP id 2t04hyue4a-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 12 Jun 2019 09:52:32 +0000
+Received: from abhmp0007.oracle.com (abhmp0007.oracle.com [141.146.116.13])
+        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id x5C9qVZY009746;
+        Wed, 12 Jun 2019 09:52:31 GMT
+Received: from mwanda (/41.57.98.10)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Wed, 12 Jun 2019 02:52:31 -0700
+Date:   Wed, 12 Jun 2019 12:52:25 +0300
+From:   Dan Carpenter <dan.carpenter@oracle.com>
+To:     joel@joelfernandes.org
+Cc:     linux-kselftest@vger.kernel.org
+Subject: [bug report] pidfd: add polling selftests
+Message-ID: <20190612095225.GA14303@mwanda>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <d3dc2b1f-e8c9-c60d-f648-0bc9b08f20e4@arm.com>
-User-Agent: Mutt/1.11.2 (2019-01-07)
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9285 signatures=668687
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=1 malwarescore=0
+ phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=885
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.0.1-1810050000 definitions=main-1906120067
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9285 signatures=668687
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
+ suspectscore=1 phishscore=0 bulkscore=0 spamscore=0 clxscore=1011
+ lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=926 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1810050000
+ definitions=main-1906120068
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Vincenzo,
+Hello Joel Fernandes (Google),
 
-On Tue, Jun 11, 2019 at 06:09:10PM +0100, Vincenzo Frascino wrote:
-> > diff --git a/arch/arm64/kernel/process.c b/arch/arm64/kernel/process.c
-> > index 3767fb21a5b8..69d0be1fc708 100644
-> > --- a/arch/arm64/kernel/process.c
-> > +++ b/arch/arm64/kernel/process.c
-> > @@ -30,6 +30,7 @@
-> >  #include <linux/kernel.h>
-> >  #include <linux/mm.h>
-> >  #include <linux/stddef.h>
-> > +#include <linux/sysctl.h>
-> >  #include <linux/unistd.h>
-> >  #include <linux/user.h>
-> >  #include <linux/delay.h>
-> > @@ -323,6 +324,7 @@ void flush_thread(void)
-> >  	fpsimd_flush_thread();
-> >  	tls_thread_flush();
-> >  	flush_ptrace_hw_breakpoint(current);
-> > +	clear_thread_flag(TIF_TAGGED_ADDR);
-> 
-> Nit: in line we the other functions in thread_flush we could have something like
-> "tagged_addr_thread_flush", maybe inlined.
+The patch 233ad92edbea: "pidfd: add polling selftests" from Apr 30,
+2019, leads to the following static checker warning:
 
-The other functions do a lot more than clearing a TIF flag, so they
-deserved their own place. We could do this when adding MTE support. I
-think we also need to check what other TIF flags we may inadvertently
-pass on execve(), maybe have a mask clearing.
+	./tools/testing/selftests/pidfd/pidfd_test.c:522 test_pidfd_poll_leader_exit()
+	error: uninitialized symbol 'ret'.
 
-> > diff --git a/include/uapi/linux/prctl.h b/include/uapi/linux/prctl.h
-> > index 094bb03b9cc2..2e927b3e9d6c 100644
-> > --- a/include/uapi/linux/prctl.h
-> > +++ b/include/uapi/linux/prctl.h
-> > @@ -229,4 +229,9 @@ struct prctl_mm_map {
-> >  # define PR_PAC_APDBKEY			(1UL << 3)
-> >  # define PR_PAC_APGAKEY			(1UL << 4)
-> >  
-> > +/* Tagged user address controls for arm64 */
-> > +#define PR_SET_TAGGED_ADDR_CTRL		55
-> > +#define PR_GET_TAGGED_ADDR_CTRL		56
-> > +# define PR_TAGGED_ADDR_ENABLE		(1UL << 0)
-> > +
-> >  #endif /* _LINUX_PRCTL_H */
-> > diff --git a/kernel/sys.c b/kernel/sys.c
-> > index 2969304c29fe..ec48396b4943 100644
-> > --- a/kernel/sys.c
-> > +++ b/kernel/sys.c
-> > @@ -124,6 +124,12 @@
-> >  #ifndef PAC_RESET_KEYS
-> >  # define PAC_RESET_KEYS(a, b)	(-EINVAL)
-> >  #endif
-> > +#ifndef SET_TAGGED_ADDR_CTRL
-> > +# define SET_TAGGED_ADDR_CTRL(a)	(-EINVAL)
-> > +#endif
-> > +#ifndef GET_TAGGED_ADDR_CTRL
-> > +# define GET_TAGGED_ADDR_CTRL()		(-EINVAL)
-> > +#endif
-> >  
-> >  /*
-> >   * this is where the system-wide overflow UID and GID are defined, for
-> > @@ -2492,6 +2498,16 @@ SYSCALL_DEFINE5(prctl, int, option, unsigned long, arg2, unsigned long, arg3,
-> >  			return -EINVAL;
-> >  		error = PAC_RESET_KEYS(me, arg2);
-> >  		break;
-> > +	case PR_SET_TAGGED_ADDR_CTRL:
-> > +		if (arg3 || arg4 || arg5)
-> > +			return -EINVAL;
-> > +		error = SET_TAGGED_ADDR_CTRL(arg2);
-> > +		break;
-> > +	case PR_GET_TAGGED_ADDR_CTRL:
-> > +		if (arg2 || arg3 || arg4 || arg5)
-> > +			return -EINVAL;
-> > +		error = GET_TAGGED_ADDR_CTRL();
-> > +		break;
-> 
-> Why do we need two prctl here? We could have only one and use arg2 as set/get
-> and arg3 as a parameter. What do you think?
+./tools/testing/selftests/pidfd/pidfd_test.c
+   485  static void test_pidfd_poll_leader_exit(int use_waitpid)
+   486  {
+   487          int pid, pidfd = 0;
+   488          int status, ret;
+   489          time_t prog_start = time(NULL);
+   490          const char *test_name = "pidfd_poll check for premature notification on non-empty"
+   491                                  "group leader exit";
+   492  
+   493          child_exit_secs = mmap(NULL, sizeof *child_exit_secs, PROT_READ | PROT_WRITE,
+   494                          MAP_SHARED | MAP_ANONYMOUS, -1, 0);
+   495  
+   496          if (child_exit_secs == MAP_FAILED)
+   497                  ksft_exit_fail_msg("%s test: mmap failed (errno %d)\n",
+   498                                     test_name, errno);
+   499  
+   500          ksft_print_msg("Parent: pid: %d\n", getpid());
+   501          pid = pidfd_clone(CLONE_PIDFD, &pidfd, child_poll_leader_exit_test);
+   502          if (pid < 0)
+   503                  ksft_exit_fail_msg("%s test: pidfd_clone failed (ret %d, errno %d)\n",
+   504                                     test_name, pid, errno);
+   505  
+   506          ksft_print_msg("Parent: Waiting for Child (%d) to complete.\n", pid);
+   507  
+   508          if (use_waitpid) {
+   509                  ret = waitpid(pid, &status, 0);
+   510                  if (ret == -1)
+   511                          ksft_print_msg("Parent: error\n");
+   512          } else {
+   513                  /*
+   514                   * This sleep tests for the case where if the child exits, and is in
+   515                   * EXIT_ZOMBIE, but the thread group leader is non-empty, then the poll
+   516                   * doesn't prematurely return even though there are active threads
+   517                   */
+   518                  sleep(1);
+   519                  poll_pidfd(test_name, pidfd);
 
-This follows the other PR_* options, e.g. PR_SET_VL/GET_VL,
-PR_*_FP_MODE. We will use other bits in arg2, for example to set the
-precise vs imprecise MTE trapping.
+"ret" is not initialized on this path.
 
--- 
-Catalin
+   520          }
+   521  
+   522          if (ret == pid)
+                    ^^^
+   523                  ksft_print_msg("Parent: Child process waited for.\n");
+   524  
+   525          time_t since_child_exit = time(NULL) - *child_exit_secs;
+   526  
+   527          ksft_print_msg("Time since child exit: %lu\n", since_child_exit);
+
+regards,
+dan carpenter
