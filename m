@@ -2,22 +2,22 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D420422B5
-	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Jun 2019 12:40:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C08B7422E1
+	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Jun 2019 12:46:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2437060AbfFLKjU (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 12 Jun 2019 06:39:20 -0400
-Received: from foss.arm.com ([217.140.110.172]:49826 "EHLO foss.arm.com"
+        id S2403978AbfFLKpq (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 12 Jun 2019 06:45:46 -0400
+Received: from foss.arm.com ([217.140.110.172]:50006 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2437055AbfFLKjU (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 12 Jun 2019 06:39:20 -0400
+        id S1727111AbfFLKpq (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 12 Jun 2019 06:45:46 -0400
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 29FDA28;
-        Wed, 12 Jun 2019 03:39:19 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8B34A28;
+        Wed, 12 Jun 2019 03:45:45 -0700 (PDT)
 Received: from C02TF0J2HF1T.local (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0039F3F246;
-        Wed, 12 Jun 2019 03:40:38 -0700 (PDT)
-Date:   Wed, 12 Jun 2019 11:38:49 +0100
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C9D343F246;
+        Wed, 12 Jun 2019 03:47:05 -0700 (PDT)
+Date:   Wed, 12 Jun 2019 11:45:17 +0100
 From:   Catalin Marinas <catalin.marinas@arm.com>
 To:     Andrey Konovalov <andreyknvl@google.com>
 Cc:     linux-arm-kernel@lists.infradead.org, linux-mm@kvack.org,
@@ -54,30 +54,30 @@ Cc:     linux-arm-kernel@lists.infradead.org, linux-mm@kvack.org,
         Robin Murphy <robin.murphy@arm.com>,
         Kevin Brodsky <kevin.brodsky@arm.com>,
         Szabolcs Nagy <Szabolcs.Nagy@arm.com>
-Subject: Re: [PATCH v16 15/16] vfio/type1, arm64: untag user pointers in
- vaddr_get_pfn
-Message-ID: <20190612103848.GA28951@C02TF0J2HF1T.local>
+Subject: Re: [PATCH v16 09/16] fs, arm64: untag user pointers in
+ fs/userfaultfd.c
+Message-ID: <20190612104517.GB28951@C02TF0J2HF1T.local>
 References: <cover.1559580831.git.andreyknvl@google.com>
- <c529e1eeea7700beff197c4456da6a882ce2efb7.1559580831.git.andreyknvl@google.com>
+ <7d6fef00d7daf647b5069101da8cf5a202da75b0.1559580831.git.andreyknvl@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <c529e1eeea7700beff197c4456da6a882ce2efb7.1559580831.git.andreyknvl@google.com>
+In-Reply-To: <7d6fef00d7daf647b5069101da8cf5a202da75b0.1559580831.git.andreyknvl@google.com>
 User-Agent: Mutt/1.11.2 (2019-01-07)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Jun 03, 2019 at 06:55:17PM +0200, Andrey Konovalov wrote:
+On Mon, Jun 03, 2019 at 06:55:11PM +0200, Andrey Konovalov wrote:
 > This patch is a part of a series that extends arm64 kernel ABI to allow to
 > pass tagged user pointers (with the top byte set to something else other
 > than 0x00) as syscall arguments.
 > 
-> vaddr_get_pfn() uses provided user pointers for vma lookups, which can
+> userfaultfd code use provided user pointers for vma lookups, which can
 > only by done with untagged pointers.
 > 
-> Untag user pointers in this function.
+> Untag user pointers in validate_range().
 > 
 > Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
 
