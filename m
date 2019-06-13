@@ -2,133 +2,135 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E9E4E43848
-	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Jun 2019 17:05:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 250C743AA8
+	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Jun 2019 17:23:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732468AbfFMPEv (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 13 Jun 2019 11:04:51 -0400
-Received: from mail-lf1-f65.google.com ([209.85.167.65]:45101 "EHLO
-        mail-lf1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732691AbfFMPEu (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 13 Jun 2019 11:04:50 -0400
-Received: by mail-lf1-f65.google.com with SMTP id u10so15336620lfm.12
-        for <linux-kselftest@vger.kernel.org>; Thu, 13 Jun 2019 08:04:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=lM5eV6H9krpQM793Z93walf0ECkvm+NtnWXHC21XgcY=;
-        b=FB0GEVRIf3TSf13XTG8UuZfrxNyqcUkwuwzACXx5vXWJLzQbbRZJRSraOaawV6hWAk
-         PrvPCzQwD69fuYgREIvWfwD5blUYsv33M/gcO15LkJ/lqFcHw9moqgdowV+jqotXnEfn
-         /tT4evYxWgTEJAwmah3jHTv7lSPseKFUhVVwLTzvq2JG6m5luv20zZruhEGljSE9IllH
-         MZeshq7wJyDxiNLSBc4OPA+Slgz8wHTZZwlcvqEQAs6f1F0Vm06Dmt0gah0KeX9kt975
-         adqmm20Zh7jCKKx6KONjW8MYNyiIsUmRzSMuvIqWblkLUB2pc22NRdJHTivh+WGEIePo
-         eE4g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=lM5eV6H9krpQM793Z93walf0ECkvm+NtnWXHC21XgcY=;
-        b=AYHJswhdIj9svc1jxZ+Qf442pf0ori7rHMFXDIL4hGLZu+5xudDa2sURLejDkebSjp
-         CHcDaII7QvpkLi6cyqIJoJM4HHBQ00rxUIn0UrmBW17tQ4ywhwl44X0aRgYCuqGgYlVm
-         IoZrCQ/8sxMwLqQM0SmvzmpuA2OBj2erFgjVTck2n6W78iaQ3w3G9bjUylu/GKHSmulF
-         vuNTbKC5ghYjKA+tktyEBjesU1Y9YyiRLFKtV5KE+0xK0bCxEA+U+5trbPIa9Zk8lPYM
-         nk23PLai57SOeOm430B6z48kHplrRv2etb5W+raPepd0e75IV0A/fw05yhXEkJO5Bdwa
-         3aPQ==
-X-Gm-Message-State: APjAAAUyvWhza7AQBYoBSlL3oOU/l0RMlyO+4C1+sdw6PQITllYtdi2o
-        sUiZ+GwO3X19741XfdDEK5GDiji8VmIBPuQwFvMzMA==
-X-Google-Smtp-Source: APXvYqybQbDcn72zwd1ASfQqXYh2p+e3c167nAPxg3H8OBumH6+DA/96vYJpatM4+a6rhY0KvvTM0B1yUq8B9CSFZNs=
-X-Received: by 2002:a19:750b:: with SMTP id y11mr7601809lfe.16.1560437894098;
- Thu, 13 Jun 2019 07:58:14 -0700 (PDT)
+        id S1732184AbfFMPWx (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 13 Jun 2019 11:22:53 -0400
+Received: from foss.arm.com ([217.140.110.172]:42400 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1731965AbfFMPWx (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 13 Jun 2019 11:22:53 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 765F6367;
+        Thu, 13 Jun 2019 08:22:52 -0700 (PDT)
+Received: from [10.1.196.72] (e119884-lin.cambridge.arm.com [10.1.196.72])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 7915C3F718;
+        Thu, 13 Jun 2019 08:22:50 -0700 (PDT)
+Subject: Re: [PATCH v4 3/3] kselftest: Extend vDSO selftest to clock_getres
+From:   Vincenzo Frascino <vincenzo.frascino@arm.com>
+To:     Michael Ellerman <mpe@ellerman.id.au>, linux-arch@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Cc:     Christophe Leroy <christophe.leroy@c-s.fr>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Martin Schwidefsky <schwidefsky@de.ibm.com>,
+        Heiko Carstens <heiko.carstens@de.ibm.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Arnd Bergmann <arnd@arndb.de>
+References: <20190523112116.19233-1-vincenzo.frascino@arm.com>
+ <20190523112116.19233-4-vincenzo.frascino@arm.com>
+ <87lfyrp0d2.fsf@concordia.ellerman.id.au>
+ <afb7395f-43e9-c304-2db2-349e6727b687@arm.com>
+Message-ID: <5262a024-7af1-4792-ec74-4cb5f2b0e76c@arm.com>
+Date:   Thu, 13 Jun 2019 16:22:49 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
 MIME-Version: 1.0
-References: <CACT4Y+Z4naaxx4N2B2t1hn4A99dfk=6yTY2yAZM=aJ05VCPLFQ@mail.gmail.com>
- <54bc80f8-71aa-1c04-5908-01923247832e@kernel.org> <CACT4Y+YUBw=t3CkbLeKLFAeAbzVZXoG09HARR+nsOTW4gkdLOw@mail.gmail.com>
- <6d5e0484-4dbc-d122-1ae4-9cce44c2d668@kernel.org> <CACT4Y+aE841JzvEVFmAevgmBO0eOssz0MFydWiuoAp18nr=_DA@mail.gmail.com>
- <CACT4Y+abfa9xVg+3S_tgpOA3cZ2bexe51d0FEZyBCGn0M-6DiA@mail.gmail.com>
- <CACT4Y+aiDUV4_JrvKct98mKvPwEQXSZFXae3qweSmotpzCAGTw@mail.gmail.com>
- <CACT4Y+a8zK7st7LUTkD=AaUBZGsn5hqLt5NXHHvJ0dg1Jds6Nw@mail.gmail.com>
- <CACT4Y+YKf3BFi-9J7Ag0yPtEWYrsPZXY1qUw21yRkNYu51wBWg@mail.gmail.com>
- <CACT4Y+bfz2F-p4xODb_=rU0+F-FJCC66MJW7q9DXd0UHoUfgwg@mail.gmail.com>
- <1e2cc74d-a6c2-0a73-ede5-c72df28e96b2@kernel.org> <CACT4Y+a203xykAHckhtMQ7ov-wNJ-YeuMg=o7qk=H9TQ756jcg@mail.gmail.com>
- <37e5e069-076d-9833-9eab-51c507fbbe2f@kernel.org> <CAEUSe791S6ODPZq4gcfbY=5kZ98ss2qNm0ks-oo0XLwFjsO=ag@mail.gmail.com>
- <CACT4Y+Z9073CozbR800E7p9EdVsfGJ471i0_pF4GftQkY7S90Q@mail.gmail.com>
-In-Reply-To: <CACT4Y+Z9073CozbR800E7p9EdVsfGJ471i0_pF4GftQkY7S90Q@mail.gmail.com>
-From:   =?UTF-8?B?RGFuaWVsIETDrWF6?= <daniel.diaz@linaro.org>
-Date:   Thu, 13 Jun 2019 09:58:02 -0500
-Message-ID: <CAEUSe7_VSPceBnaK39Mc0jkkqM356MTOO8pnS1T9aP_1J1wnkQ@mail.gmail.com>
-Subject: Re: kselftest build broken?
-To:     Dmitry Vyukov <dvyukov@google.com>
-Cc:     shuah <shuah@kernel.org>,
-        Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Anders Roxell <anders.roxell@linaro.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <afb7395f-43e9-c304-2db2-349e6727b687@arm.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hello!
+Hi Michael,
 
-On Thu, 13 Jun 2019 at 09:22, Dmitry Vyukov <dvyukov@google.com> wrote:
-> On Wed, Jun 12, 2019 at 11:13 PM Daniel D=C3=ADaz <daniel.diaz@linaro.org=
-> wrote:
-> > Maybe a precheck() on the tests in order to ensure that the needed
-> > binaries are around?
->
-> Hi Daniel,
-> The Automated Testing effort:
-> https://elinux.org/Automated_Testing
-> is working on a standard for test metadata description which will
-> capture required configs, hardware, runtime-dependencies, etc. I am
-> not sure what's the current progress, though.
+I wanted to check with you if you had time to have a look at my new version (v5)
+of the patches with the fixed test, and if they are ready to be merged or if
+there is anything else I can do.
 
-We just had the monthly call one hour ago. You should join our next
-call! Details are in the Wiki link you shared.
+Thanks and Regards,
+Vincenzo
 
-
-> Documenting or doing a precheck is a useful first step. But ultimately
-> this needs to be in machine-readable meta-data. So that it's possible
-> to, say, enable as much tests as possible on a CI, rather then simply
-> skip tests. A skipped test is better then a falsely failed test, but
-> it still does not give any test coverage.
-
-I agree. We discussed some of this in an impromptu microsummit at
-Linaro Connect BKK19 a few months back, i.e. a way to encapsulate
-tests and tests' definitions. Tim Bird is leading that effort; the
-minutes of today's call will be sent to the mailing list, so keep an
-eye on his update!
-
-
-> > [...] we, as part of LKFT [1], run Kselftests with
-> > Linux 4.4, 4.9, 4.14, 4.19, 5.1, Linus' mainline, and linux-next, on
-> > arm, aarch64, x86, and x86-64, *very* often: Our test counter recently
-> > exceeded 5 million!
-
-I was wrong by an order of magnitude: It's currently at 51.7 million tests.
-
-> > We do not build our kernels with KASAN, though, so our test runs don't
-> > exhibit that bug.
->
-> But you are aware of KASAN, right? Do you have any plans to use it?
-
-Not at the moment. We are redesigning our entire build and test
-infrastructure, and this is something that we are considering for our
-next iteration.
-
-> If you are interested I can go into more details as we do lots of this
-> on syzbot. Besides catching more bugs there is also an interesting
-> possibility of systematically testing all error paths.
-
-Definitely join us on the Automated Testing monthly call; next one is
-July 11th. There are efforts on several fronts on testing the kernel,
-and we all are eager to contribute to improving the kernel test
-infrastructure.
-
-Greetings!
-
-Daniel D=C3=ADaz
-daniel.diaz@linaro.org
+On 28/05/2019 12:57, Vincenzo Frascino wrote:
+> Hi Michael,
+> 
+> thank you for your reply.
+> 
+> On 28/05/2019 07:19, Michael Ellerman wrote:
+>> Vincenzo Frascino <vincenzo.frascino@arm.com> writes:
+>>
+>>> The current version of the multiarch vDSO selftest verifies only
+>>> gettimeofday.
+>>>
+>>> Extend the vDSO selftest to clock_getres, to verify that the
+>>> syscall and the vDSO library function return the same information.
+>>>
+>>> The extension has been used to verify the hrtimer_resoltion fix.
+>>
+>> This is passing for me even without patch 1 applied, shouldn't it fail
+>> without the fix? What am I missing?
+>>
+> 
+> This is correct, because during the refactoring process I missed an "n" :)
+> 
+> if·((x.tv_sec·!=·y.tv_sec)·||·(x.tv_sec·!=·y.tv_sec))
+> 
+> Should be:
+> 
+> if·((x.tv_sec·!=·y.tv_sec)·||·(x.tv_nsec·!=·y.tv_nsec))
+> 
+> My mistake, I am going to fix the test and re-post v5 of this set.
+> 
+> Without my patch if you pass "highres=off" to the kernel (as a command line
+> parameter) it leads to a broken implementation of clock_getres since the value
+> of CLOCK_REALTIME_RES does not change at runtime.
+> 
+> Expected result (with highres=off):
+> 
+> # uname -r
+> 5.2.0-rc2
+> # ./vdso_clock_getres
+> clock_id: CLOCK_REALTIME [FAIL]
+> clock_id: CLOCK_BOOTTIME [PASS]
+> clock_id: CLOCK_TAI [PASS]
+> clock_id: CLOCK_REALTIME_COARSE [PASS]
+> clock_id: CLOCK_MONOTONIC [FAIL]
+> clock_id: CLOCK_MONOTONIC_RAW [PASS]
+> clock_id: CLOCK_MONOTONIC_COARSE [PASS]
+> 
+> The reason of this behavior is that the only clocks supported by getres on
+> powerpc are CLOCK_REALTIME and CLOCK_MONOTONIC, the rest on the clocks use
+> always syscalls.
+> 
+>> # uname -r
+>> 5.2.0-rc2-gcc-8.2.0
+>>
+>> # ./vdso_clock_getres
+>> clock_id: CLOCK_REALTIME [PASS]
+>> clock_id: CLOCK_BOOTTIME [PASS]
+>> clock_id: CLOCK_TAI [PASS]
+>> clock_id: CLOCK_REALTIME_COARSE [PASS]
+>> clock_id: CLOCK_MONOTONIC [PASS]
+>> clock_id: CLOCK_MONOTONIC_RAW [PASS]
+>> clock_id: CLOCK_MONOTONIC_COARSE [PASS]
+>>
+>> cheers
+>>
+>>> Cc: Shuah Khan <shuah@kernel.org>
+>>> Signed-off-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
+>>> ---
+>>>
+>>> Note: This patch is independent from the others in this series, hence it
+>>> can be merged singularly by the kselftest maintainers.
+>>>
+>>>  tools/testing/selftests/vDSO/Makefile         |   2 +
+>>>  .../selftests/vDSO/vdso_clock_getres.c        | 124 ++++++++++++++++++
+>>>  2 files changed, 126 insertions(+)
+>>>  create mode 100644 tools/testing/selftests/vDSO/vdso_clock_getres.c
+> 
