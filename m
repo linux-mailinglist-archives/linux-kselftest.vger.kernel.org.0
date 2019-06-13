@@ -2,235 +2,170 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B27E43981
-	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Jun 2019 17:14:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C4E4438AB
+	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Jun 2019 17:07:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732357AbfFMPON (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 13 Jun 2019 11:14:13 -0400
-Received: from mail-yw1-f65.google.com ([209.85.161.65]:43622 "EHLO
-        mail-yw1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732256AbfFMNaS (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 13 Jun 2019 09:30:18 -0400
-Received: by mail-yw1-f65.google.com with SMTP id t2so8319598ywe.10
-        for <linux-kselftest@vger.kernel.org>; Thu, 13 Jun 2019 06:30:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kudzu-us.20150623.gappssmtp.com; s=20150623;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=gpC/BcbJqZm/b199OKanFtWwuFNfn3Nh4TAP7OeO2NA=;
-        b=BXofh382FGQ6XKPL2MfgAofF8BQm+/tgz4ml76l/iJkrG2E/+Dn2CcsfgfbiuEU3tj
-         RuZDqTsDzm6ObH1XEtafWfBUf0me0bv7ELlRK/EDgBLTTgGPCN72PLbTY5I64v8joDPd
-         vxEGj4K1laNQ4h//KZVXnpwBplBXDchGCJsiGY/LoSNyOPFsqamliqkc/auc6LnvDP6z
-         NdYHf9KnTMvUsC+0FFJCOuLumZOWQWWFFm7EjGvUO1RF3FRQHmeF81IER2zJvyqqJvVa
-         tYxikwp4VS73sfIlUIcSULdSIFQqhVNuqn4zfVaeOca9Eh6qh4k1yBfMCKcYh7/N9fdC
-         cPzQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=gpC/BcbJqZm/b199OKanFtWwuFNfn3Nh4TAP7OeO2NA=;
-        b=bywO+qrCtzpoZiYyMGFUwP3YmCBbJ9eu0m1SZCvXSpECyJDJpiMrwvfmjLo/9v6lJ1
-         L1MhUFmj4M3GXIsqvA7TrSuUnrOU0tPu8+Mttf49N7+ekWDU13H2xRXLPKGDf19WlUwH
-         WT2GMmNFxRiAGpO5pJMLBZkxKL/Nl5Rq0Qrx+Sz4iR58aEtolM50DdFUItzUm6dOh75M
-         xpSRrlkrKLb2yNPhaKKofrHD1StiS5CBiBMOzYejyoeutCzGaVJlzDGAojw69ky7rWIX
-         OspBKXB9MKSqvOj68nVhBguVVZmg+L2D917FlMyLHSg37zDe9fwXnNEpQLdz1a/0qrmw
-         HVVA==
-X-Gm-Message-State: APjAAAWuiH95lJMxbPN2LLFU7nIM2lAhkD0FflpS0mRKPgoFqof9RlxL
-        rE7H3k8IeF4bfRJGy8qrFd6OQ5ZjWRHcRq0x
-X-Google-Smtp-Source: APXvYqxTssA/J+9V16+D44hORYBVXWzyfYlD4b0eRTXEkb7pd189qJsIUW5hoWZ7PNVmk1rzS/3Kzg==
-X-Received: by 2002:a0d:ea10:: with SMTP id t16mr32493125ywe.221.1560432617677;
-        Thu, 13 Jun 2019 06:30:17 -0700 (PDT)
-Received: from kudzu.us (76-230-155-4.lightspeed.rlghnc.sbcglobal.net. [76.230.155.4])
-        by smtp.gmail.com with ESMTPSA id p12sm742658ywg.72.2019.06.13.06.30.16
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Thu, 13 Jun 2019 06:30:17 -0700 (PDT)
-Date:   Thu, 13 Jun 2019 09:30:15 -0400
-From:   Jon Mason <jdmason@kudzu.us>
-To:     Logan Gunthorpe <logang@deltatee.com>
-Cc:     linux-kernel@vger.kernel.org, linux-ntb@googlegroups.com,
-        linux-pci@vger.kernel.org, iommu@lists.linux-foundation.org,
-        linux-kselftest@vger.kernel.org, Joerg Roedel <joro@8bytes.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Allen Hubbe <allenbh@gmail.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Eric Pilmore <epilmore@gigaio.com>
-Subject: Re: [PATCH v5 00/10]  Support using MSI interrupts in ntb_transport
-Message-ID: <20190613133014.GE1572@kudzu.us>
-References: <20190523223100.5526-1-logang@deltatee.com>
+        id S1732404AbfFMPHA (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 13 Jun 2019 11:07:00 -0400
+Received: from foss.arm.com ([217.140.110.172]:40650 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1732396AbfFMODQ (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 13 Jun 2019 10:03:16 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 852BC3EF;
+        Thu, 13 Jun 2019 07:03:15 -0700 (PDT)
+Received: from [10.1.196.72] (e119884-lin.cambridge.arm.com [10.1.196.72])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1320D3F718;
+        Thu, 13 Jun 2019 07:03:13 -0700 (PDT)
+Subject: Re: [PATCH v4 1/2] arm64: Define
+ Documentation/arm64/tagged-address-abi.txt
+To:     Szabolcs Nagy <Szabolcs.Nagy@arm.com>,
+        Catalin Marinas <Catalin.Marinas@arm.com>
+Cc:     nd <nd@arm.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Will Deacon <Will.Deacon@arm.com>,
+        Andrey Konovalov <andreyknvl@google.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>
+References: <cover.1560339705.git.andreyknvl@google.com>
+ <20190612142111.28161-1-vincenzo.frascino@arm.com>
+ <20190612142111.28161-2-vincenzo.frascino@arm.com>
+ <a90da586-8ff6-4bed-d940-9306d517a18c@arm.com>
+ <20190613092054.GO28951@C02TF0J2HF1T.local>
+ <dee7f192-d0f0-558e-3007-eba805c6f2da@arm.com>
+ <6ebbda37-5dd9-d0d5-d9cb-286c7a5b7f8e@arm.com>
+ <8e3c9537-de10-0d0d-f5bb-c33bde92443f@arm.com>
+From:   Vincenzo Frascino <vincenzo.frascino@arm.com>
+Message-ID: <5963d144-be9b-78d8-9130-ef92bc66b1fd@arm.com>
+Date:   Thu, 13 Jun 2019 15:03:12 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190523223100.5526-1-logang@deltatee.com>
-User-Agent: Mutt/1.11.4 (2019-03-13)
+In-Reply-To: <8e3c9537-de10-0d0d-f5bb-c33bde92443f@arm.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, May 23, 2019 at 04:30:50PM -0600, Logan Gunthorpe wrote:
-> This is another resend as there has been no feedback since v4.
-> Seems Jon has been MIA this past cycle so hopefully he appears on the
-> list soon.
-> 
-> I've addressed the feedback so far and rebased on the latest kernel
-> and would like this to be considered for merging this cycle.
-> 
-> The only outstanding issue I know of is that it still will not work
-> with IDT hardware, but ntb_transport doesn't work with IDT hardware
-> and there is still no sensible common infrastructure to support
-> ntb_peer_mw_set_trans(). Thus, I decline to consider that complication
-> in this patchset. However, I'll be happy to review work that adds this
-> feature in the future.
-> 
-> Also, as the port number and resource index stuff is a bit complicated,
-> I made a quick out of tree test fixture to ensure it's correct[1]. As
-> an excerise I also wrote some test code[2] using the upcomming KUnit
-> feature.
 
-Sorry for the delay.  The patch is now in the ntb-next branch.  We've
-missed window for 5.2, but it will be in the 5.3 pull request (barring
-last minute comments).
+On 13/06/2019 13:28, Szabolcs Nagy wrote:
+> On 13/06/2019 12:16, Vincenzo Frascino wrote:
+>> Hi Szabolcs,
+>>
+>> thank you for your review.
+>>
+>> On 13/06/2019 11:14, Szabolcs Nagy wrote:
+>>> On 13/06/2019 10:20, Catalin Marinas wrote:
+>>>> Hi Szabolcs,
+>>>>
+>>>> On Wed, Jun 12, 2019 at 05:30:34PM +0100, Szabolcs Nagy wrote:
+>>>>> On 12/06/2019 15:21, Vincenzo Frascino wrote:
+>>>>>> +2. ARM64 Tagged Address ABI
+>>>>>> +---------------------------
+>>>>>> +
+>>>>>> +From the kernel syscall interface prospective, we define, for the purposes
+>>>>>                                      ^^^^^^^^^^^
+>>>>> perspective
+>>>>>
+>>>>>> +of this document, a "valid tagged pointer" as a pointer that either it has
+>>>>>> +a zero value set in the top byte or it has a non-zero value, it is in memory
+>>>>>> +ranges privately owned by a userspace process and it is obtained in one of
+>>>>>> +the following ways:
+>>>>>> +  - mmap() done by the process itself, where either:
+>>>>>> +    * flags = MAP_PRIVATE | MAP_ANONYMOUS
+>>>>>> +    * flags = MAP_PRIVATE and the file descriptor refers to a regular
+>>>>>> +      file or "/dev/zero"
+>>>>>
+>>>>> this does not make it clear if MAP_FIXED or other flags are valid
+>>>>> (there are many map flags i don't know, but at least fixed should work
+>>>>> and stack/growsdown. i'd expect anything that's not incompatible with
+>>>>> private|anon to work).
+>>>>
+>>>> Just to clarify, this document tries to define the memory ranges from
+>>>> where tagged addresses can be passed into the kernel in the context
+>>>> of TBI only (not MTE); that is for hwasan support. FIXED or GROWSDOWN
+>>>> should not affect this.
+>>>
+>>> yes, so either the text should list MAP_* flags that don't affect
+>>> the pointer tagging semantics or specify private|anon mapping
+>>> with different wording.
+>>>
+>>
+>> Good point. Could you please propose a wording that would be suitable for this case?
+> 
+> i don't know all the MAP_ magic, but i think it's enough to change
+> the "flags =" to
+> 
+> * flags have MAP_PRIVATE and MAP_ANONYMOUS set or
+> * flags have MAP_PRIVATE set and the file descriptor refers to...
+> 
+> 
 
-Thanks,
-Jon
+Fine by me.  I will add it the next iterations.
 
+>>>>>> +  - a mapping below sbrk(0) done by the process itself
+>>>>>
+>>>>> doesn't the mmap rule cover this?
+>>>>
+>>>> IIUC it doesn't cover it as that's memory mapped by the kernel
+>>>> automatically on access vs a pointer returned by mmap(). The statement
+>>>> above talks about how the address is obtained by the user.
+>>>
+>>> ok i read 'mapping below sbrk' as an mmap (possibly MAP_FIXED)
+>>> that happens to be below the heap area.
+>>>
+>>> i think "below sbrk(0)" is not the best term to use: there
+>>> may be address range below the heap area that can be mmapped
+>>> and thus below sbrk(0) and sbrk is a posix api not a linux
+>>> syscall, the libc can implement it with mmap or whatever.
+>>>
+>>> i'm not sure what the right term for 'heap area' is
+>>> (the address range between syscall(__NR_brk,0) at
+>>> program startup and its current value?)
+>>>
+>>
+>> I used sbrk(0) with the meaning of "end of the process's data segment" not
+>> implying that this is a syscall, but just as a useful way to identify the mapping.
+>> I agree that it is a posix function implemented by libc but when it is used with
+>> 0 finds the current location of the program break, which can be changed by brk()
+>> and depending on the new address passed to this syscall can have the effect of
+>> allocating or deallocating memory.
+>>
+>> Will changing sbrk(0) with "end of the process's data segment" make it more clear?
 > 
-> Logan
+> i don't understand what's the relevance of the *end*
+> of the data segment.
 > 
-> [1] https://repl.it/repls/ExcitingPresentFile
-> [2] https://github.com/sbates130272/linux-p2pmem/commits/ntb_kunit
+> i'd expect the text to say something about the address
+> range of the data segment.
 > 
-> --
+> i can do
 > 
-> Changes in v5:
+> mmap((void*)65536, 65536, PROT_READ|PROT_WRITE, MAP_FIXED|MAP_SHARED|MAP_ANON, -1, 0);
 > 
-> * Rebased onto v5.2-rc1 (plus the patches in ntb-next)
-> 
-> --
-> 
-> Changes in v4:
-> 
-> * Rebased onto v5.1-rc6 (No changes)
-> 
-> * Numerous grammar and spelling mistakes spotted by Bjorn
-> 
-> --
-> 
-> Changes in v3:
-> 
-> * Rebased onto v5.1-rc1 (Dropped the first two patches as they have
->   been merged, and cleaned up some minor conflicts in the PCI tree)
-> 
-> * Added a new patch (#3) to calculate logical port numbers that
->   are port numbers from 0 to (number of ports - 1). This is
->   then used in ntb_peer_resource_idx() to fix the issues brought
->   up by Serge.
-> 
-> * Fixed missing __iomem and iowrite calls (as noticed by Serge)
-> 
-> * Added patch 10 which describes ntb_msi_test in the documentation
->   file (as requested by Serge)
-> 
-> * A couple other minor nits and documentation fixes
-> 
-> --
-> 
-> Changes in v2:
-> 
-> * Cleaned up the changes in intel_irq_remapping.c to make them
->   less confusing and add a comment. (Per discussion with Jacob and
->   Joerg)
-> 
-> * Fixed a nit from Bjorn and collected his Ack
-> 
-> * Added a Kconfig dependancy on CONFIG_PCI_MSI for CONFIG_NTB_MSI
->   as the Kbuild robot hit a random config that didn't build
->   without it.
-> 
-> * Worked in a callback for when the MSI descriptor changes so that
->   the clients can resend the new address and data values to the peer.
->   On my test system this was never necessary, but there may be
->   other platforms where this can occur. I tested this by hacking
->   in a path to rewrite the MSI descriptor when I change the cpu
->   affinity of an IRQ. There's a bit of uncertainty over the latency
->   of the change, but without hardware this can acctually occur on
->   we can't test this. This was the result of a discussion with Dave.
-> 
-> --
-> 
-> This patch series adds optional support for using MSI interrupts instead
-> of NTB doorbells in ntb_transport. This is desirable seeing doorbells on
-> current hardware are quite slow and therefore switching to MSI interrupts
-> provides a significant performance gain. On switchtec hardware, a simple
-> apples-to-apples comparison shows ntb_netdev/iperf numbers going from
-> 3.88Gb/s to 14.1Gb/s when switching to MSI interrupts.
-> 
-> To do this, a couple changes are required outside of the NTB tree:
-> 
-> 1) The IOMMU must know to accept MSI requests from aliased bused numbers
-> seeing NTB hardware typically sends proxied request IDs through
-> additional requester IDs. The first patch in this series adds support
-> for the Intel IOMMU. A quirk to add these aliases for switchtec hardware
-> was already accepted. See commit ad281ecf1c7d ("PCI: Add DMA alias quirk
-> for Microsemi Switchtec NTB") for a description of NTB proxy IDs and why
-> this is necessary.
-> 
-> 2) NTB transport (and other clients) may often need more MSI interrupts
-> than the NTB hardware actually advertises support for. However, seeing
-> these interrupts will not be triggered by the hardware but through an
-> NTB memory window, the hardware does not actually need support or need
-> to know about them. Therefore we add the concept of Virtual MSI
-> interrupts which are allocated just like any other MSI interrupt but
-> are not programmed into the hardware's MSI table. This is done in
-> Patch 2 and then made use of in Patch 3.
-> 
-> The remaining patches in this series add a library for dealing with MSI
-> interrupts, a test client and finally support in ntb_transport.
-> 
-> The series is based off of v5.1-rc6 plus the patches in ntb-next.
-> A git repo is available here:
-> 
-> https://github.com/sbates130272/linux-p2pmem/ ntb_transport_msi_v4
-> 
-> Thanks,
-> 
-> Logan
-> 
-> --
-> 
-> Logan Gunthorpe (10):
->   PCI/MSI: Support allocating virtual MSI interrupts
->   PCI/switchtec: Add module parameter to request more interrupts
->   NTB: Introduce helper functions to calculate logical port number
->   NTB: Introduce functions to calculate multi-port resource index
->   NTB: Rename ntb.c to support multiple source files in the module
->   NTB: Introduce MSI library
->   NTB: Introduce NTB MSI Test Client
->   NTB: Add ntb_msi_test support to ntb_test
->   NTB: Add MSI interrupt support to ntb_transport
->   NTB: Describe the ntb_msi_test client in the documentation.
-> 
->  Documentation/ntb.txt                   |  27 ++
->  drivers/ntb/Kconfig                     |  11 +
->  drivers/ntb/Makefile                    |   3 +
->  drivers/ntb/{ntb.c => core.c}           |   0
->  drivers/ntb/msi.c                       | 415 +++++++++++++++++++++++
->  drivers/ntb/ntb_transport.c             | 169 ++++++++-
->  drivers/ntb/test/Kconfig                |   9 +
->  drivers/ntb/test/Makefile               |   1 +
->  drivers/ntb/test/ntb_msi_test.c         | 433 ++++++++++++++++++++++++
->  drivers/pci/msi.c                       |  54 ++-
->  drivers/pci/switch/switchtec.c          |  12 +-
->  include/linux/msi.h                     |   8 +
->  include/linux/ntb.h                     | 196 ++++++++++-
->  include/linux/pci.h                     |   9 +
->  tools/testing/selftests/ntb/ntb_test.sh |  54 ++-
->  15 files changed, 1386 insertions(+), 15 deletions(-)
->  rename drivers/ntb/{ntb.c => core.c} (100%)
->  create mode 100644 drivers/ntb/msi.c
->  create mode 100644 drivers/ntb/test/ntb_msi_test.c
-> 
-> --
-> 2.20.1
+> and it will be below the end of the data segment.
+>
+
+As far as I understand the data segment "lives" below the program break, hence
+it is a way of describing the range from which the user can obtain a valid
+tagged pointer.
+
+Said that, I am not really sure on how do you want me to document this (my aim
+is for this to be clear to the userspace developers). Could you please propose
+something?
+
+>>
+>> I will add what you are suggesting about the heap area.
+>>
+
+-- 
+Regards,
+Vincenzo
