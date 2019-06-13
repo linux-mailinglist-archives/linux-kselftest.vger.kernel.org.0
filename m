@@ -2,124 +2,140 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 735A4441AB
-	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Jun 2019 18:16:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA6B94449F
+	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Jun 2019 18:38:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387534AbfFMQQF (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 13 Jun 2019 12:16:05 -0400
-Received: from foss.arm.com ([217.140.110.172]:44920 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731160AbfFMQQF (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 13 Jun 2019 12:16:05 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 12AAE367;
-        Thu, 13 Jun 2019 09:16:04 -0700 (PDT)
-Received: from [10.1.196.72] (e119884-lin.cambridge.arm.com [10.1.196.72])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id CB5643F694;
-        Thu, 13 Jun 2019 09:15:58 -0700 (PDT)
-Subject: Re: [PATCH v17 03/15] arm64: Introduce prctl() options to control the
- tagged user addresses ABI
-To:     Catalin Marinas <catalin.marinas@arm.com>
-Cc:     Dave Martin <Dave.Martin@arm.com>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        linux-arm-kernel@lists.infradead.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, amd-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, linux-rdma@vger.kernel.org,
-        linux-media@vger.kernel.org, kvm@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Mark Rutland <mark.rutland@arm.com>,
-        Szabolcs Nagy <Szabolcs.Nagy@arm.com>,
-        Will Deacon <will.deacon@arm.com>,
-        Kostya Serebryany <kcc@google.com>,
-        Khalid Aziz <khalid.aziz@oracle.com>,
-        Felix Kuehling <Felix.Kuehling@amd.com>,
-        Jacob Bramley <Jacob.Bramley@arm.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Evgeniy Stepanov <eugenis@google.com>,
-        Kevin Brodsky <kevin.brodsky@arm.com>,
-        Kees Cook <keescook@chromium.org>,
-        Ruben Ayrapetyan <Ruben.Ayrapetyan@arm.com>,
-        Ramana Radhakrishnan <Ramana.Radhakrishnan@arm.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Yishai Hadas <yishaih@mellanox.com>,
-        Jens Wiklander <jens.wiklander@linaro.org>,
-        Lee Smith <Lee.Smith@arm.com>,
-        Alexander Deucher <Alexander.Deucher@amd.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        enh <enh@google.com>, Robin Murphy <robin.murphy@arm.com>,
-        Christian Koenig <Christian.Koenig@amd.com>,
-        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>
-References: <cover.1560339705.git.andreyknvl@google.com>
- <a7a2933bea5fe57e504891b7eec7e9432e5e1c1a.1560339705.git.andreyknvl@google.com>
- <20190613111659.GX28398@e103592.cambridge.arm.com>
- <20190613153505.GU28951@C02TF0J2HF1T.local>
- <99cc257d-5e99-922a-fbe7-3bbaf3621e38@arm.com>
- <20190613155754.GX28951@C02TF0J2HF1T.local>
-From:   Vincenzo Frascino <vincenzo.frascino@arm.com>
-Message-ID: <e481dbf9-880e-c77e-5200-1dbc35be7a48@arm.com>
-Date:   Thu, 13 Jun 2019 17:15:57 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.6.1
+        id S1727192AbfFMQiH (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 13 Jun 2019 12:38:07 -0400
+Received: from mail-io1-f66.google.com ([209.85.166.66]:42084 "EHLO
+        mail-io1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2392677AbfFMQhw (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 13 Jun 2019 12:37:52 -0400
+Received: by mail-io1-f66.google.com with SMTP id u19so18334930ior.9
+        for <linux-kselftest@vger.kernel.org>; Thu, 13 Jun 2019 09:37:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=Ia+UkKgK3wIMJUQg36mIwLiCXpVYOtzZdI1K2jTMm+U=;
+        b=CxtDkJLFtbujeuZkbhiK8NEOpPiO+LjAcw45ZjY6JHPbVzp1q6g9FEeJCvMQY5npsG
+         9+T6I/T+YAjF8A7lfJ39/IazuRfTc/0j5/FkWUkHqAWAmwzIHZn/E+XlSgrozOmra0a3
+         tQZqICcjpkNJthdQgmPujPT7misD/UaBNAB3db272JFepD5SkDo+GxajMZx7E8alHh6w
+         Qq7RywpHJtSjGLdKZgZFhR3Tmt+YscoyLBROO7M5Bbng/8V4Frpv0M64JR37TxvwGqjk
+         RvA+D9CWOIvru1+7VB/8q0rJoUV4oTMpToKpYM+ASk6ivQ6xnujZFny/hXLQ9c/XzE3O
+         tDeg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=Ia+UkKgK3wIMJUQg36mIwLiCXpVYOtzZdI1K2jTMm+U=;
+        b=B4+MrMsH9PnVIuGpmg785lI5gqC1kXawPOI3NzClUx5JlIKt3GVD+3+jyWcjGffCCN
+         mTwzUIWy1kZng+Qq7cfcmuQsZW6Govma1r2GKR1eXHw+4NqxjhL6LYQxqDcgA5XPxthI
+         0bOK5oiNTXZBVoMmcp0cJyhf1U70tcZzLLtiJtG8uvOihrxmdhruJJsGM3oBtQFVGsHV
+         ncARj5CTEFxAuBYzn0eelsD6CqtsZtu2vAnfhCxByrGhVyAAqVcpzD0kmncNIn9NEBXC
+         KKFzUenljTe+14H3a5QPIj5OnhqqSN9VIglYLfNH2roipjDNHvoJJX5R517R147hd8Y5
+         MONg==
+X-Gm-Message-State: APjAAAXtM1tI8xHa7WXnLR2q/d4PESK2BFQUAxOYVHAWGCqHcWpmO/Qg
+        pNsKdxTNSRK7+A4jtKNza6XWYlkwQbEMjpt/E1wHt5XU9zI=
+X-Google-Smtp-Source: APXvYqz+Ukohsrl6mAoFjTo3YW6iM0rQ6d/ZkMzj33WO7IO7YwegRkY4TxBCZ7hrywBGSf8f7bKXe5FONWzZfriuyp8=
+X-Received: by 2002:a02:a90a:: with SMTP id n10mr46425709jam.61.1560443870686;
+ Thu, 13 Jun 2019 09:37:50 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20190613155754.GX28951@C02TF0J2HF1T.local>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <CACT4Y+Z4naaxx4N2B2t1hn4A99dfk=6yTY2yAZM=aJ05VCPLFQ@mail.gmail.com>
+ <54bc80f8-71aa-1c04-5908-01923247832e@kernel.org> <CACT4Y+YUBw=t3CkbLeKLFAeAbzVZXoG09HARR+nsOTW4gkdLOw@mail.gmail.com>
+ <6d5e0484-4dbc-d122-1ae4-9cce44c2d668@kernel.org> <CACT4Y+aE841JzvEVFmAevgmBO0eOssz0MFydWiuoAp18nr=_DA@mail.gmail.com>
+ <CACT4Y+abfa9xVg+3S_tgpOA3cZ2bexe51d0FEZyBCGn0M-6DiA@mail.gmail.com>
+ <CACT4Y+aiDUV4_JrvKct98mKvPwEQXSZFXae3qweSmotpzCAGTw@mail.gmail.com>
+ <CACT4Y+a8zK7st7LUTkD=AaUBZGsn5hqLt5NXHHvJ0dg1Jds6Nw@mail.gmail.com>
+ <CACT4Y+YKf3BFi-9J7Ag0yPtEWYrsPZXY1qUw21yRkNYu51wBWg@mail.gmail.com>
+ <CACT4Y+bfz2F-p4xODb_=rU0+F-FJCC66MJW7q9DXd0UHoUfgwg@mail.gmail.com>
+ <1e2cc74d-a6c2-0a73-ede5-c72df28e96b2@kernel.org> <CACT4Y+a203xykAHckhtMQ7ov-wNJ-YeuMg=o7qk=H9TQ756jcg@mail.gmail.com>
+ <37e5e069-076d-9833-9eab-51c507fbbe2f@kernel.org> <CAEUSe791S6ODPZq4gcfbY=5kZ98ss2qNm0ks-oo0XLwFjsO=ag@mail.gmail.com>
+ <CACT4Y+Z9073CozbR800E7p9EdVsfGJ471i0_pF4GftQkY7S90Q@mail.gmail.com> <CAEUSe7_VSPceBnaK39Mc0jkkqM356MTOO8pnS1T9aP_1J1wnkQ@mail.gmail.com>
+In-Reply-To: <CAEUSe7_VSPceBnaK39Mc0jkkqM356MTOO8pnS1T9aP_1J1wnkQ@mail.gmail.com>
+From:   Dmitry Vyukov <dvyukov@google.com>
+Date:   Thu, 13 Jun 2019 18:37:39 +0200
+Message-ID: <CACT4Y+ZwbiiHSj+HKKoiagR5XF1j1LzvzGZCfzj5JYvuqHT0CQ@mail.gmail.com>
+Subject: Re: kselftest build broken?
+To:     =?UTF-8?B?RGFuaWVsIETDrWF6?= <daniel.diaz@linaro.org>
+Cc:     shuah <shuah@kernel.org>,
+        Naresh Kamboju <naresh.kamboju@linaro.org>,
+        Anders Roxell <anders.roxell@linaro.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+On Thu, Jun 13, 2019 at 4:58 PM Daniel D=C3=ADaz <daniel.diaz@linaro.org> w=
+rote:
+>
+> Hello!
+>
+> On Thu, 13 Jun 2019 at 09:22, Dmitry Vyukov <dvyukov@google.com> wrote:
+> > On Wed, Jun 12, 2019 at 11:13 PM Daniel D=C3=ADaz <daniel.diaz@linaro.o=
+rg> wrote:
+> > > Maybe a precheck() on the tests in order to ensure that the needed
+> > > binaries are around?
+> >
+> > Hi Daniel,
+> > The Automated Testing effort:
+> > https://elinux.org/Automated_Testing
+> > is working on a standard for test metadata description which will
+> > capture required configs, hardware, runtime-dependencies, etc. I am
+> > not sure what's the current progress, though.
+>
+> We just had the monthly call one hour ago. You should join our next
+> call! Details are in the Wiki link you shared.
+>
+>
+> > Documenting or doing a precheck is a useful first step. But ultimately
+> > this needs to be in machine-readable meta-data. So that it's possible
+> > to, say, enable as much tests as possible on a CI, rather then simply
+> > skip tests. A skipped test is better then a falsely failed test, but
+> > it still does not give any test coverage.
+>
+> I agree. We discussed some of this in an impromptu microsummit at
+> Linaro Connect BKK19 a few months back, i.e. a way to encapsulate
+> tests and tests' definitions. Tim Bird is leading that effort; the
+> minutes of today's call will be sent to the mailing list, so keep an
+> eye on his update!
+>
+>
+> > > [...] we, as part of LKFT [1], run Kselftests with
+> > > Linux 4.4, 4.9, 4.14, 4.19, 5.1, Linus' mainline, and linux-next, on
+> > > arm, aarch64, x86, and x86-64, *very* often: Our test counter recentl=
+y
+> > > exceeded 5 million!
+>
+> I was wrong by an order of magnitude: It's currently at 51.7 million test=
+s.
 
-On 13/06/2019 16:57, Catalin Marinas wrote:
-> On Thu, Jun 13, 2019 at 04:45:54PM +0100, Vincenzo Frascino wrote:
->> On 13/06/2019 16:35, Catalin Marinas wrote:
->>> On Thu, Jun 13, 2019 at 12:16:59PM +0100, Dave P Martin wrote:
->>>> On Wed, Jun 12, 2019 at 01:43:20PM +0200, Andrey Konovalov wrote:
->>>>> +
->>>>> +/*
->>>>> + * Control the relaxed ABI allowing tagged user addresses into the kernel.
->>>>> + */
->>>>> +static unsigned int tagged_addr_prctl_allowed = 1;
->>>>> +
->>>>> +long set_tagged_addr_ctrl(unsigned long arg)
->>>>> +{
->>>>> +	if (!tagged_addr_prctl_allowed)
->>>>> +		return -EINVAL;
->>>>
->>>> So, tagging can actually be locked on by having a process enable it and
->>>> then some possibly unrelated process clearing tagged_addr_prctl_allowed.
->>>> That feels a bit weird.
->>>
->>> The problem is that if you disable the ABI globally, lots of
->>> applications would crash. This sysctl is meant as a way to disable the
->>> opt-in to the TBI ABI. Another option would be a kernel command line
->>> option (I'm not keen on a Kconfig option).
->>
->> Why you are not keen on a Kconfig option?
-> 
-> Because I don't want to rebuild the kernel/reboot just to be able to
-> test how user space handles the ABI opt-in. I'm ok with a Kconfig option
-> to disable this globally in addition to a run-time option (if actually
-> needed, I'm not sure).
-> 
-There might be scenarios (i.e. embedded) in which this is not needed, hence
-having a config option (maybe Y by default) that removes from the kernel the
-whole feature would be good, obviously in conjunction with the run-time option.
+w00t!
 
-Based on my previous review, if we move out the code from process.c in its own
-independent file when the Kconfig option is turned off we could remove the
-entire object from the kernel (this would remove the sysctl and let still the
-prctl return -EINVAL).
+> > > We do not build our kernels with KASAN, though, so our test runs don'=
+t
+> > > exhibit that bug.
+> >
+> > But you are aware of KASAN, right? Do you have any plans to use it?
+>
+> Not at the moment. We are redesigning our entire build and test
+> infrastructure, and this is something that we are considering for our
+> next iteration.
+>
+> > If you are interested I can go into more details as we do lots of this
+> > on syzbot. Besides catching more bugs there is also an interesting
+> > possibility of systematically testing all error paths.
+>
+> Definitely join us on the Automated Testing monthly call; next one is
+> July 11th. There are efforts on several fronts on testing the kernel,
+> and we all are eager to contribute to improving the kernel test
+> infrastructure.
 
-These changes though could be done successively with a separate patch set, if
-the Kconfig is meant to be Y by default.
 
--- 
-Regards,
-Vincenzo
+Thanks, I will try to join the August one. Jul 11 I will be on a conference=
+.
