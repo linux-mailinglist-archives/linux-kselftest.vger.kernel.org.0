@@ -2,88 +2,107 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 00AE043D15
-	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Jun 2019 17:39:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41DA543D66
+	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Jun 2019 17:42:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732645AbfFMPjY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 13 Jun 2019 11:39:24 -0400
-Received: from foss.arm.com ([217.140.110.172]:43218 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731932AbfFMPjX (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 13 Jun 2019 11:39:23 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CBCF43EF;
-        Thu, 13 Jun 2019 08:39:22 -0700 (PDT)
-Received: from C02TF0J2HF1T.local (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id EDD3E3F718;
-        Thu, 13 Jun 2019 08:39:16 -0700 (PDT)
-Date:   Thu, 13 Jun 2019 16:39:07 +0100
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     Dave Martin <Dave.Martin@arm.com>
-Cc:     linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
-        Szabolcs Nagy <szabolcs.nagy@arm.com>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        Will Deacon <will.deacon@arm.com>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        linux-kselftest@vger.kernel.org,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v4 1/2] arm64: Define
- Documentation/arm64/tagged-address-abi.txt
-Message-ID: <20190613153906.GV28951@C02TF0J2HF1T.local>
-References: <cover.1560339705.git.andreyknvl@google.com>
- <20190612142111.28161-1-vincenzo.frascino@arm.com>
- <20190612142111.28161-2-vincenzo.frascino@arm.com>
- <20190612153538.GL28951@C02TF0J2HF1T.local>
- <141c740a-94c2-2243-b6d1-b44ffee43791@arm.com>
- <20190613113731.GY28398@e103592.cambridge.arm.com>
- <20190613122821.GS28951@C02TF0J2HF1T.local>
- <20190613132342.GZ28398@e103592.cambridge.arm.com>
+        id S1733086AbfFMPl4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 13 Jun 2019 11:41:56 -0400
+Received: from mail-pf1-f195.google.com ([209.85.210.195]:33586 "EHLO
+        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2387453AbfFMPlz (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 13 Jun 2019 11:41:55 -0400
+Received: by mail-pf1-f195.google.com with SMTP id x15so12116431pfq.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 13 Jun 2019 08:41:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=fomichev-me.20150623.gappssmtp.com; s=20150623;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to
+         :user-agent;
+        bh=mWJyZbm7F3Ahz/ql/XF8euQ1ksW5Cu4zLDVBU8U4GDo=;
+        b=o6aVXpjqvNPmGOyOlXbaR8Zo2sjLjrACsvivGycW9GMFCBZxRG+Giv9O1YysXycFpR
+         36efE76JYm0/qUZIYkJ8E/5xHl/zIQDBAxcZFm7df4gRFn92NVCHGd7RMoUe4jCeKYdg
+         ah6tzVeUt1temIghkERv5YTXkb3gJlcKj9AquTF0HfKWqYh9/ZYXYCAC8ZNWZ8z7XZa0
+         xY8CvRkfk8wTNYTCECshfLGPOJccuAvmQ2fwGbYINT4izbMXhOJ646s5DgeMB20iLzzT
+         fKeVbj9TYL//xAu2cpuoxoQzHwqQTI9DB/FIt7Ensd9XV/FEnVK5ZJJF6EcP9EKnT8z0
+         JuDQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to:user-agent;
+        bh=mWJyZbm7F3Ahz/ql/XF8euQ1ksW5Cu4zLDVBU8U4GDo=;
+        b=mo9i+10YaEhKTjqmORA0rgZewfuOEwI0qn0qDSbkMuU4BzPXn6la1FC+Old124XR4o
+         tIqekddPYA8OFwop51Sbc8LfLNn4U48h7oaI6OIVji5oV/k7L5kBP6+69X0PFMsOytXa
+         fSOPDCT+LRbgn7VPzGdBbL3AOuraKZ+Cj70a3Zo66n1MQKaUk+xqN1mCdNly2ADmD2pj
+         /Wqyxl517BEK4+hK72r5IV6HQjYCFfxtbP7n1mn8OH16BZhbfrtg6UYSwuS3eDwol+cQ
+         21t8RyKg235BhZKnSz2NBmfClSztHi6Rs3f6NWvvVsN7ldbyGXn5mhwLIgKUKWT4mW5F
+         CBNA==
+X-Gm-Message-State: APjAAAXoHekrMOtyoEvUsSLY1tHSO4LPtWmBrNZMSYydf3V1VHWHkeRm
+        0zKCSGt3nGGU86Mfe2oXBpw3mg==
+X-Google-Smtp-Source: APXvYqz665NIJnk8Z4SVgLXBrXMXtYkxyBLHoq/yncNrUZ0q/8CMlIVoc2MY1UgABSwK3TkEspaEgw==
+X-Received: by 2002:a17:90b:d8b:: with SMTP id bg11mr6287697pjb.30.1560440514297;
+        Thu, 13 Jun 2019 08:41:54 -0700 (PDT)
+Received: from localhost ([2601:646:8f00:18d9:d0fa:7a4b:764f:de48])
+        by smtp.gmail.com with ESMTPSA id x6sm111580pfx.17.2019.06.13.08.41.53
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Thu, 13 Jun 2019 08:41:53 -0700 (PDT)
+Date:   Thu, 13 Jun 2019 08:41:52 -0700
+From:   Stanislav Fomichev <sdf@fomichev.me>
+To:     Arthur Fabre <afabre@cloudflare.com>
+Cc:     Shuah Khan <shuah@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] bpf: selftests: Fix warning in flow_dissector
+Message-ID: <20190613154152.GA9636@mini-arch>
+References: <20190613112709.7215-1-afabre@cloudflare.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20190613132342.GZ28398@e103592.cambridge.arm.com>
-User-Agent: Mutt/1.11.2 (2019-01-07)
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20190613112709.7215-1-afabre@cloudflare.com>
+User-Agent: Mutt/1.12.0 (2019-05-25)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Jun 13, 2019 at 02:23:43PM +0100, Dave P Martin wrote:
-> On Thu, Jun 13, 2019 at 01:28:21PM +0100, Catalin Marinas wrote:
-> > On Thu, Jun 13, 2019 at 12:37:32PM +0100, Dave P Martin wrote:
-> > > On Thu, Jun 13, 2019 at 11:15:34AM +0100, Vincenzo Frascino wrote:
-> > > > On 12/06/2019 16:35, Catalin Marinas wrote:
-> > > > > On Wed, Jun 12, 2019 at 03:21:10PM +0100, Vincenzo Frascino wrote:
-> > > > >> +  - PR_GET_TAGGED_ADDR_CTRL: can be used to check the status of the Tagged
-> > > > >> +                             Address ABI.
-> > [...]
-> > > Is there a canonical way to detect whether this whole API/ABI is
-> > > available?  (i.e., try to call this prctl / check for an HWCAP bit,
-> > > etc.)
-> > 
-> > The canonical way is a prctl() call. HWCAP doesn't make sense since it's
-> > not a hardware feature. If you really want a different way of detecting
-> > this (which I don't think it's worth), we can reinstate the AT_FLAGS
-> > bit.
+On 06/13, Arthur Fabre wrote:
+> Building the userspace part of the flow_dissector resulted in:
 > 
-> Sure, I think this probably makes sense -- I'm still getting my around
-> which parts of the design are directly related to MTE and which aren't.
+> prog_tests/flow_dissector.c: In function ‘tx_tap’:
+> prog_tests/flow_dissector.c:176:9: warning: implicit declaration
+> of function ‘writev’; did you mean ‘write’? [-Wimplicit-function-declaration]
+>   return writev(fd, iov, ARRAY_SIZE(iov));
+>          ^~~~~~
+>          write
 > 
-> I was a bit concerned about the interaction between
-> PR_SET_TAGGED_ADDR_CTRL and the sysctl: the caller might conclude that
-> this API is unavailable when actually tagged addresses are stuck on.
-> 
-> I'm not sure whether this matters, but it's a bit weird.
-> 
-> One option would be to change the semantics, so that the sysctl just
-> forbids turning tagging from off to on.  Alternatively, we could return
-> a different error code to distinguish this case.
+> Include <sys/uio.h> to fix this.
+Wasn't it fixed already?
 
-This is the intention, just to forbid turning tagging on. We could
-return -EPERM instead, though my original intent was to simply pretend
-that the prctl does not exist like in an older kernel version.
+See
+https://lore.kernel.org/netdev/20190528190218.GA6950@ip-172-31-44-144.us-west-2.compute.internal/
 
--- 
-Catalin
+> Signed-off-by: Arthur Fabre <afabre@cloudflare.com>
+> ---
+>  tools/testing/selftests/bpf/prog_tests/flow_dissector.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/tools/testing/selftests/bpf/prog_tests/flow_dissector.c b/tools/testing/selftests/bpf/prog_tests/flow_dissector.c
+> index fbd1d88a6095..c938283ac232 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/flow_dissector.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/flow_dissector.c
+> @@ -3,6 +3,7 @@
+>  #include <error.h>
+>  #include <linux/if.h>
+>  #include <linux/if_tun.h>
+> +#include <sys/uio.h>
+>  
+>  #define CHECK_FLOW_KEYS(desc, got, expected)				\
+>  	CHECK_ATTR(memcmp(&got, &expected, sizeof(got)) != 0,		\
+> -- 
+> 2.20.1
+> 
