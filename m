@@ -2,161 +2,152 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1197F43EFB
-	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Jun 2019 17:54:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6072D43E39
+	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Jun 2019 17:48:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731579AbfFMPyM (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 13 Jun 2019 11:54:12 -0400
-Received: from mail-lf1-f68.google.com ([209.85.167.68]:33606 "EHLO
-        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731577AbfFMIze (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 13 Jun 2019 04:55:34 -0400
-Received: by mail-lf1-f68.google.com with SMTP id y17so14455498lfe.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 13 Jun 2019 01:55:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=oNyuLZ3F1bzaSW1koPHqyfFUd0fSRVPfMMwQfg+V81o=;
-        b=LuZH0T6LZOMfFAn5Mqr/VDoSVFPwQAS4wijjxz/JKLLQjRDPvlC4TU7KR1OiQIUm+w
-         7HmTOtPDE5CtlxIjIB0YApkq9PfEMq934UtIu98yN4+hSEVLnCdGPp7hCrX8VFk6LT70
-         ZAfOA+pn47/JYmXECDZY4WM2feCEfylqNNgR26nq9R8n+blioc5FJaVLL4eJuQK6hQ5U
-         j9PB/Hbpj7uWorSBjFKBT0Kz0Wj7QlBYGPUnSoBk9R9ayKbLFBJB31mWdzAM8/g7AAh/
-         5Fa/dKtUxtVlXSubypXMBdCPwQMD1m+uaKCdjNp6/HslnZOieYyur3KCjVN2jeyZm/Uy
-         GpxA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=oNyuLZ3F1bzaSW1koPHqyfFUd0fSRVPfMMwQfg+V81o=;
-        b=U8E8UEQrIvF5jcjNjVVqJFVijAbnpt804w9TPISvlSS1/4GDh57/IyXvA7m43KPlKi
-         oHlr4znabhtXFaSnIhiULIco0PP8LzPDMZF6BV6QzBmwjzFKX6KbjM/zc4IlhUH+GuMK
-         Dij/3FEafwjFHKELIFRLoJbmTtydMTVuPnuO8aGf9m6VjTC7pRoMzH/o2DD8Bc8YWmDj
-         ig/ExynWRwW+SNO5BdC+dO8fnhcbKPLrvby0J9EkTHOe/8fGBKovJV2WsNEF2Wwme3Q0
-         FJqK8t8bjlVrukpkNyMQvq4eCO7EFXLx4kHDcJySCSoH+cmRsD0NGgSjLrCZp9v0cjZl
-         zlbw==
-X-Gm-Message-State: APjAAAVXczc5YSSNelTmAxdzEl4RNUObNV3/6vVc3AdL+9E/eBul6WeD
-        LEctvrK3Av1O+T+KT4P38di8igv/oyOMSLZCN1Ni+g==
-X-Google-Smtp-Source: APXvYqxHxZeoI8y9NSIiggX0Bqcu/+nwOlyRycm9HNjCf6J7pZRMPHYqV6pY48zI52VlheP7hHVA1u2PDaJKRXJ3Yn8=
-X-Received: by 2002:a19:671c:: with SMTP id b28mr44063506lfc.164.1560416131678;
- Thu, 13 Jun 2019 01:55:31 -0700 (PDT)
+        id S1726658AbfFMPsX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 13 Jun 2019 11:48:23 -0400
+Received: from foss.arm.com ([217.140.110.172]:36862 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1731740AbfFMJVH (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 13 Jun 2019 05:21:07 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4E080367;
+        Thu, 13 Jun 2019 02:21:06 -0700 (PDT)
+Received: from C02TF0J2HF1T.local (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 999743F694;
+        Thu, 13 Jun 2019 02:21:02 -0700 (PDT)
+Date:   Thu, 13 Jun 2019 10:20:59 +0100
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Szabolcs Nagy <Szabolcs.Nagy@arm.com>
+Cc:     Vincenzo Frascino <Vincenzo.Frascino@arm.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        nd <nd@arm.com>, Will Deacon <Will.Deacon@arm.com>,
+        Andrey Konovalov <andreyknvl@google.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>
+Subject: Re: [PATCH v4 1/2] arm64: Define
+ Documentation/arm64/tagged-address-abi.txt
+Message-ID: <20190613092054.GO28951@C02TF0J2HF1T.local>
+References: <cover.1560339705.git.andreyknvl@google.com>
+ <20190612142111.28161-1-vincenzo.frascino@arm.com>
+ <20190612142111.28161-2-vincenzo.frascino@arm.com>
+ <a90da586-8ff6-4bed-d940-9306d517a18c@arm.com>
 MIME-Version: 1.0
-References: <CACT4Y+Z4naaxx4N2B2t1hn4A99dfk=6yTY2yAZM=aJ05VCPLFQ@mail.gmail.com>
- <54bc80f8-71aa-1c04-5908-01923247832e@kernel.org> <CACT4Y+YUBw=t3CkbLeKLFAeAbzVZXoG09HARR+nsOTW4gkdLOw@mail.gmail.com>
- <6d5e0484-4dbc-d122-1ae4-9cce44c2d668@kernel.org> <CACT4Y+aE841JzvEVFmAevgmBO0eOssz0MFydWiuoAp18nr=_DA@mail.gmail.com>
- <CACT4Y+abfa9xVg+3S_tgpOA3cZ2bexe51d0FEZyBCGn0M-6DiA@mail.gmail.com>
- <CACT4Y+aiDUV4_JrvKct98mKvPwEQXSZFXae3qweSmotpzCAGTw@mail.gmail.com>
- <CACT4Y+a8zK7st7LUTkD=AaUBZGsn5hqLt5NXHHvJ0dg1Jds6Nw@mail.gmail.com>
- <CACT4Y+YKf3BFi-9J7Ag0yPtEWYrsPZXY1qUw21yRkNYu51wBWg@mail.gmail.com>
- <CACT4Y+bfz2F-p4xODb_=rU0+F-FJCC66MJW7q9DXd0UHoUfgwg@mail.gmail.com>
- <1e2cc74d-a6c2-0a73-ede5-c72df28e96b2@kernel.org> <CACT4Y+a203xykAHckhtMQ7ov-wNJ-YeuMg=o7qk=H9TQ756jcg@mail.gmail.com>
- <37e5e069-076d-9833-9eab-51c507fbbe2f@kernel.org> <CAEUSe791S6ODPZq4gcfbY=5kZ98ss2qNm0ks-oo0XLwFjsO=ag@mail.gmail.com>
-In-Reply-To: <CAEUSe791S6ODPZq4gcfbY=5kZ98ss2qNm0ks-oo0XLwFjsO=ag@mail.gmail.com>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Thu, 13 Jun 2019 14:25:20 +0530
-Message-ID: <CA+G9fYs0AEMV2LC12kvBHLEgzoFh9Q9+7kRVUJV2BzFRnKJapQ@mail.gmail.com>
-Subject: Re: kselftest build broken?
-To:     Dmitry Vyukov <dvyukov@google.com>, shuah <shuah@kernel.org>,
-        =?UTF-8?B?RGFuaWVsIETDrWF6?= <daniel.diaz@linaro.org>
-Cc:     Anders Roxell <anders.roxell@linaro.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <a90da586-8ff6-4bed-d940-9306d517a18c@arm.com>
+User-Agent: Mutt/1.11.2 (2019-01-07)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, 13 Jun 2019 at 02:43, Daniel D=C3=ADaz <daniel.diaz@linaro.org> wro=
-te:
->
-> Hello!
->
-> On Wed, 12 Jun 2019 at 14:32, shuah <shuah@kernel.org> wrote:
-> > On 6/12/19 12:29 PM, Dmitry Vyukov wrote:
-> [...]
-> > > 1. You suggested to install a bunch of packages. That helped to some
-> > > degree. Is there a way to figure out what packages one needs to
-> > > install to build the tests other than asking you?
-> >
-> > I have to go through discovery at times when new tests get added. I
-> > consider this a part of being a open source developer figuring out
-> > dependencies for compiling and running. I don't have a magic answer
-> > for you and there is no way to make sure all dependencies will be
-> > documented.
->
-> This is something we, as users of Kselftests, would very much like to
-> see improved. We also go by trial-and-error finding out what is
-> missing, but keeping up with the new tests or subsystems is often
-> difficult and tend to remain broken (in usage) for some time, until we
-> have the resources to look into that and fix it. The config fragments
-> is an excellent example of how the test developers and the framework
-> complement each other to make things work. Even documenting
-> dependencies would go a long way, as a starting point, but I do
-> believe that the test writers should do that and not the users go
-> figure out what all is needed to run their tests.
->
-> Maybe a precheck() on the tests in order to ensure that the needed
-> binaries are around?
->
-> For what it's worth, this is the list of run-time dependencies package
-> for OpenEmbedded: bash bc ethtool fuse-utils iproute2 iproute2-tc
-> iputils-ping iputils-ping6 ncurses perl sudo python3-argparse
-> python3-datetime python3-json python3-pprint python3-subprocess
-> util-linux-uuidgen cpupower glibc-utils. We are probably missing a
-> few.
->
-> [...]
-> > > 10. Do you know if anybody is running kselftests? Running as in
-> > > running continuously, noticing new failures, reporting these failures=
-,
-> > > keeping them green, etc.
-> > > I am asking because one of the tests triggers a use-after-free and I
-> > > checked it was the same 3+ months ago. And I have some vague memories
-> > > of trying to run kselftests 3 or so years ago, and there was a bunch
-> > > of use-after-free's as well.
-> >
-> > Yes Linaro test rings run them and kernel developers do. I am cc'ing
-> > Naresh and Anders to help with tips on how they run tests in their
-> > environment. They have several test systems that they install tests
-> > and run tests routine on all stable releases.
-> >
-> > Naresh and Anders! Can you share your process for running kselftest
-> > in Linaro test farm. Thanks in advance.
->
-> They're both in time zones where it's better to be sleeping at the
-> moment, so I'll let them chime in with more info tomorrow (their
-> time). I can share that we, as part of LKFT [1], run Kselftests with
-> Linux 4.4, 4.9, 4.14, 4.19, 5.1, Linus' mainline, and linux-next, on
-> arm, aarch64, x86, and x86-64, *very* often: Our test counter recently
-> exceeded 5 million! You can see today's mainline results of Kselftests
-> [2] and all tests therein.
+Hi Szabolcs,
 
-Thanks Daniel.
+On Wed, Jun 12, 2019 at 05:30:34PM +0100, Szabolcs Nagy wrote:
+> On 12/06/2019 15:21, Vincenzo Frascino wrote:
+> > +2. ARM64 Tagged Address ABI
+> > +---------------------------
+> > +
+> > +From the kernel syscall interface prospective, we define, for the purposes
+>                                      ^^^^^^^^^^^
+> perspective
+> 
+> > +of this document, a "valid tagged pointer" as a pointer that either it has
+> > +a zero value set in the top byte or it has a non-zero value, it is in memory
+> > +ranges privately owned by a userspace process and it is obtained in one of
+> > +the following ways:
+> > +  - mmap() done by the process itself, where either:
+> > +    * flags = MAP_PRIVATE | MAP_ANONYMOUS
+> > +    * flags = MAP_PRIVATE and the file descriptor refers to a regular
+> > +      file or "/dev/zero"
+> 
+> this does not make it clear if MAP_FIXED or other flags are valid
+> (there are many map flags i don't know, but at least fixed should work
+> and stack/growsdown. i'd expect anything that's not incompatible with
+> private|anon to work).
 
-In the recent past we have found kernel oops, bugs and warnings while
-running kselftest suite on our environment. It is worth running them in CI.
-Linaro 's test farm have been reporting these issues to kernel sub-system
-maintainers and test authors and they have investigated and fixed.
+Just to clarify, this document tries to define the memory ranges from
+where tagged addresses can be passed into the kernel in the context
+of TBI only (not MTE); that is for hwasan support. FIXED or GROWSDOWN
+should not affect this.
 
-The test cases which are known to fail due to missing dependency
-it could be Kconfig or userland packages. There is one more case
-we see failures when running latest test cases on older kernel
-branches. We have marked them as known failures XFAIL [3].
-qa reports will parse actual results and applies xfails as blue in color.
+> > +  - a mapping below sbrk(0) done by the process itself
+> 
+> doesn't the mmap rule cover this?
 
-Best regards
-Naresh Kamboju
+IIUC it doesn't cover it as that's memory mapped by the kernel
+automatically on access vs a pointer returned by mmap(). The statement
+above talks about how the address is obtained by the user.
 
->
-> Daniel D=C3=ADaz
-> daniel.diaz@linaro.org
->
-> [1] https://lkft.linaro.org/
-> [2] https://qa-reports.linaro.org/lkft/linux-mainline-oe/build/v5.2-rc4-2=
-0-gaa7235483a83/#!?details=3D175
+> > +  - any memory mapped by the kernel in the process's address space during
+> > +    creation and following the restrictions presented above (i.e. data, bss,
+> > +    stack).
+> 
+> OK.
+> 
+> Can a null pointer have a tag?
+> (in case NULL is valid to pass to a syscall)
 
-[3] https://github.com/Linaro/qa-reports-known-issues/blob/master/kselftest=
-s-production.yaml
+Good point. I don't think it can. We may change this for MTE where we
+give a hint tag but no hint address, however, this document only covers
+TBI for now.
+
+> > +The ARM64 Tagged Address ABI is an opt-in feature, and an application can
+> > +control it using the following prctl()s:
+> > +  - PR_SET_TAGGED_ADDR_CTRL: can be used to enable the Tagged Address ABI.
+> > +  - PR_GET_TAGGED_ADDR_CTRL: can be used to check the status of the Tagged
+> > +                             Address ABI.
+> > +
+> > +As a consequence of invoking PR_SET_TAGGED_ADDR_CTRL prctl() by an applications,
+> > +the ABI guarantees the following behaviours:
+> > +
+> > +  - Every current or newly introduced syscall can accept any valid tagged
+> > +    pointers.
+> > +
+> > +  - If a non valid tagged pointer is passed to a syscall then the behaviour
+> > +    is undefined.
+> > +
+> > +  - Every valid tagged pointer is expected to work as an untagged one.
+> > +
+> > +  - The kernel preserves any valid tagged pointers and returns them to the
+> > +    userspace unchanged in all the cases except the ones documented in the
+> > +    "Preserving tags" paragraph of tagged-pointers.txt.
+> 
+> OK.
+> 
+> i guess pointers of another process are not "valid tagged pointers"
+> for the current one, so e.g. in ptrace the ptracer has to clear the
+> tags before PEEK etc.
+
+Another good point. Are there any pros/cons here or use-cases? When we
+add MTE support, should we handle this differently?
+
+> > +A definition of the meaning of tagged pointers on arm64 can be found in:
+> > +Documentation/arm64/tagged-pointers.txt.
+> > +
+> > +3. ARM64 Tagged Address ABI Exceptions
+> > +--------------------------------------
+> > +
+> > +The behaviours described in paragraph 2, with particular reference to the
+> > +acceptance by the syscalls of any valid tagged pointer are not applicable
+> > +to the following cases:
+> > +  - mmap() addr parameter.
+> > +  - mremap() new_address parameter.
+> > +  - prctl_set_mm() struct prctl_map fields.
+> > +  - prctl_set_mm_map() struct prctl_map fields.
+> 
+> i don't understand the exception: does it mean that passing a tagged
+> address to these syscalls is undefined?
+
+I'd say it's as undefined as it is right now without these patches. We
+may be able to explain this better in the document.
+
+-- 
+Catalin
