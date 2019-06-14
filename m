@@ -2,80 +2,88 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AADA469B9
-	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Jun 2019 22:35:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 089EC46BB2
+	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Jun 2019 23:17:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727367AbfFNUaM (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 14 Jun 2019 16:30:12 -0400
-Received: from mail.kernel.org ([198.145.29.99]:52914 "EHLO mail.kernel.org"
+        id S1726353AbfFNVRL (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 14 Jun 2019 17:17:11 -0400
+Received: from mail.kernel.org ([198.145.29.99]:60176 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726133AbfFNUaL (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 14 Jun 2019 16:30:11 -0400
-Received: from sasha-vm.mshome.net (unknown [131.107.159.134])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        id S1726349AbfFNVRL (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 14 Jun 2019 17:17:11 -0400
+Received: from localhost (unknown [131.107.159.134])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 20F8F2184E;
-        Fri, 14 Jun 2019 20:30:11 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 7CEBA2184B;
+        Fri, 14 Jun 2019 21:17:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1560544211;
-        bh=y8FjzOdyTg0muEdxU886G2sk4rKHSaiJe14dSNsxpeI=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KP+7zcDgC0dPo4VcF7enAKv4WkWa9TIPpBpC3i3ze84RivNToYdHCYYUT4RyEwnfr
-         M7G2qk6M6W8xIjIeuEom7pBCbxABLtWGonlyHgWSX5arWM7eDynCPMjzF36P7dY3D0
-         aO/1wN/Xdt0bbMkjp3JbpGLDex4oOOMvnYuTve58=
+        s=default; t=1560547030;
+        bh=3qZBnSeXO8K4oYa3/N25KQYrBFfoH3IDbPh/Ayhnk1s=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=wSQKJ/fpvZ2VNMj+Ci4k6VkUSRmnCwxH0B3QSi4pAXHaafCyjkLk5Ay1FlTE8nu4t
+         G9JhtzPQKgDEUCIAmnZTe5zgfu4bvGevKrkwx5eb89dokUpJIBwpcuH1xlDk/nCpvt
+         xMI4C4u1OBkryDfNx63vmnnkfSFUTeuK+DAqJlh4=
+Date:   Fri, 14 Jun 2019 17:17:10 -0400
 From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Sasha Levin <sashal@kernel.org>,
-        linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 20/39] selftests: vm: install test_vmalloc.sh for run_vmtests
-Date:   Fri, 14 Jun 2019 16:29:25 -0400
-Message-Id: <20190614202946.27385-20-sashal@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190614202946.27385-1-sashal@kernel.org>
-References: <20190614202946.27385-1-sashal@kernel.org>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     Michael Kelley <mikelley@microsoft.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will.deacon@arm.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Russell King <linux@armlinux.org.uk>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Paul Burton <paul.burton@mips.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Mark Salyzyn <salyzyn@android.com>,
+        Peter Collingbourne <pcc@google.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Dmitry Safonov <0x7f454c46@gmail.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Huw Davies <huw@codeweavers.com>
+Subject: Re: [PATCH v6 18/19] x86: Add support for generic vDSO
+Message-ID: <20190614211710.GQ1513@sasha-vm>
+References: <20190530141531.43462-1-vincenzo.frascino@arm.com>
+ <20190530141531.43462-19-vincenzo.frascino@arm.com>
+ <BYAPR21MB1221D54FCEC97509EEF7395CD7180@BYAPR21MB1221.namprd21.prod.outlook.com>
+ <alpine.DEB.2.21.1906141313150.1722@nanos.tec.linutronix.de>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <alpine.DEB.2.21.1906141313150.1722@nanos.tec.linutronix.de>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Naresh Kamboju <naresh.kamboju@linaro.org>
+On Fri, Jun 14, 2019 at 01:15:23PM +0200, Thomas Gleixner wrote:
+>On Thu, 30 May 2019, Michael Kelley wrote:
+>> Vincenzo -- these changes for Hyper-V are a subset of a larger patch set
+>> I have that moves all of the Hyper-V clock/timer code into a separate
+>> clocksource driver in drivers/clocksource, with an include file in
+>> includes/clocksource.  That new include file should be able to work
+>> instead of your new mshyperv-tsc.h.  It also has the benefit of being
+>> ISA neutral, so it will work with my in-progress patch set to support
+>> Linux on Hyper-V on ARM64.  See https://lkml.org/lkml/2019/5/27/231
+>> for the new clocksource driver patch set.
+>
+>Grrr. That's queued in hyperv-next for whatever reasons.
 
-[ Upstream commit bc2cce3f2ebcae02aa4bb29e3436bf75ee674c32 ]
+I queue up our future pull requests there to give them some soaking in
+-next.
 
-Add test_vmalloc.sh to TEST_FILES to make sure it gets installed for
-run_vmtests.
+>Sasha, can you please provide me the branch to pull from so I can have a
+>common base for all the various changes floating around?
 
-Fixed below error:
-./run_vmtests: line 217: ./test_vmalloc.sh: No such file or directory
+I'll send you a unified pull request for these changes.
 
-Tested with: make TARGETS=vm install INSTALL_PATH=$PWD/x
-
-Signed-off-by: Naresh Kamboju <naresh.kamboju@linaro.org>
-Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- tools/testing/selftests/vm/Makefile | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/tools/testing/selftests/vm/Makefile b/tools/testing/selftests/vm/Makefile
-index dc68340a6a96..2cf3dc49bd03 100644
---- a/tools/testing/selftests/vm/Makefile
-+++ b/tools/testing/selftests/vm/Makefile
-@@ -24,6 +24,8 @@ TEST_GEN_FILES += virtual_address_range
- 
- TEST_PROGS := run_vmtests
- 
-+TEST_FILES := test_vmalloc.sh
-+
- KSFT_KHDR_INSTALL := 1
- include ../lib.mk
- 
--- 
-2.20.1
-
+--
+Thanks,
+Sasha
