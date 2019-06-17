@@ -2,93 +2,71 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D649B484AD
-	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Jun 2019 15:57:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 86AB24850C
+	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Jun 2019 16:15:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727670AbfFQN4q (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 17 Jun 2019 09:56:46 -0400
-Received: from foss.arm.com ([217.140.110.172]:50924 "EHLO foss.arm.com"
+        id S1728153AbfFQOOi (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 17 Jun 2019 10:14:38 -0400
+Received: from mail.kernel.org ([198.145.29.99]:47984 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725906AbfFQN4p (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 17 Jun 2019 09:56:45 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BCD2D28;
-        Mon, 17 Jun 2019 06:56:44 -0700 (PDT)
-Received: from arrakis.emea.arm.com (arrakis.cambridge.arm.com [10.1.196.78])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1625E3F246;
-        Mon, 17 Jun 2019 06:56:39 -0700 (PDT)
-Date:   Mon, 17 Jun 2019 14:56:37 +0100
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     Andrey Konovalov <andreyknvl@google.com>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, amd-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, linux-rdma@vger.kernel.org,
-        linux-media@vger.kernel.org, kvm@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Will Deacon <will.deacon@arm.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Kees Cook <keescook@chromium.org>,
-        Yishai Hadas <yishaih@mellanox.com>,
-        Felix Kuehling <Felix.Kuehling@amd.com>,
-        Alexander Deucher <Alexander.Deucher@amd.com>,
-        Christian Koenig <Christian.Koenig@amd.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Jens Wiklander <jens.wiklander@linaro.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
-        Dave Martin <Dave.Martin@arm.com>,
-        Khalid Aziz <khalid.aziz@oracle.com>, enh <enh@google.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Christoph Hellwig <hch@infradead.org>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Kostya Serebryany <kcc@google.com>,
-        Evgeniy Stepanov <eugenis@google.com>,
-        Lee Smith <Lee.Smith@arm.com>,
-        Ramana Radhakrishnan <Ramana.Radhakrishnan@arm.com>,
-        Jacob Bramley <Jacob.Bramley@arm.com>,
-        Ruben Ayrapetyan <Ruben.Ayrapetyan@arm.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Kevin Brodsky <kevin.brodsky@arm.com>,
-        Szabolcs Nagy <Szabolcs.Nagy@arm.com>
-Subject: Re: [PATCH v17 03/15] arm64: Introduce prctl() options to control
- the tagged user addresses ABI
-Message-ID: <20190617135636.GC1367@arrakis.emea.arm.com>
-References: <cover.1560339705.git.andreyknvl@google.com>
- <a7a2933bea5fe57e504891b7eec7e9432e5e1c1a.1560339705.git.andreyknvl@google.com>
+        id S1727690AbfFQOOh (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 17 Jun 2019 10:14:37 -0400
+Received: from localhost (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id C0D812084B;
+        Mon, 17 Jun 2019 14:14:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1560780877;
+        bh=GN7MGLfcIBYwDeKmz6MmS+SeGiI8qBeWfj6svyY2hXE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=UNbFxms5HtNYD91rETHxuPNW0ku/3nrP9cWeW/kzkg4C5vs1mf59GQ5I0b1CmNfDm
+         T03LY67SnEGQoXaNnp6YpcY42GAcccO8IF3SWsdfFjFCIBeAEu7wZ3YfGhptFat+J5
+         9qXTwBAZXalHtMkzHSbR4dHkbyXoCYHVffa2H9TM=
+Date:   Mon, 17 Jun 2019 10:14:35 -0400
+From:   Sasha Levin <sashal@kernel.org>
+To:     "Eric W. Biederman" <ebiederm@xmission.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>, avagin@gmail.com,
+        linux- stable <stable@vger.kernel.org>,
+        lkft-triage@lists.linaro.org,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Naresh Kamboju <naresh.kamboju@linaro.org>
+Subject: Re: stable-rc: ptrace: peeksiginfo failed on 4.19, 4.14, 4.9 and 4.4
+Message-ID: <20190617141435.GB2226@sasha-vm>
+References: <CA+G9fYsFL5AH6dkdN2Qd6UP=wdiXRDR_ioQFPSCq=uUBcmtHXw@mail.gmail.com>
+ <87lfy0pd63.fsf@xmission.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Disposition: inline
-In-Reply-To: <a7a2933bea5fe57e504891b7eec7e9432e5e1c1a.1560339705.git.andreyknvl@google.com>
+In-Reply-To: <87lfy0pd63.fsf@xmission.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Jun 12, 2019 at 01:43:20PM +0200, Andrey Konovalov wrote:
-> From: Catalin Marinas <catalin.marinas@arm.com>
-> 
-> It is not desirable to relax the ABI to allow tagged user addresses into
-> the kernel indiscriminately. This patch introduces a prctl() interface
-> for enabling or disabling the tagged ABI with a global sysctl control
-> for preventing applications from enabling the relaxed ABI (meant for
-> testing user-space prctl() return error checking without reconfiguring
-> the kernel). The ABI properties are inherited by threads of the same
-> application and fork()'ed children but cleared on execve().
-> 
-> The PR_SET_TAGGED_ADDR_CTRL will be expanded in the future to handle
-> MTE-specific settings like imprecise vs precise exceptions.
-> 
-> Signed-off-by: Catalin Marinas <catalin.marinas@arm.com>
+On Mon, Jun 17, 2019 at 08:13:56AM -0500, Eric W. Biederman wrote:
+>Naresh Kamboju <naresh.kamboju@linaro.org> writes:
+>
+>> selftests: ptrace: peeksiginfo failed on x86_64, i386, arm64 and arm.
+>> FAILED on stable rc branches 4.19, 4.14, 4.9 and 4.4.
+>> PASS on mainline, next and 5.1 stable rc branch.
+>
+>Greg.
+>
+>Looking in my email it appears 4.19, 4.14, 4.9, and 4.4 patches are
+>missing the "found=1" line from the original change.   This explains
+>the test failure.
 
-A question for the user-space folk: if an application opts in to this
-ABI, would you want the sigcontext.fault_address and/or siginfo.si_addr
-to contain the tag? We currently clear it early in the arm64 entry.S but
-we could find a way to pass it down if needed.
+That's an interesting one.
 
--- 
-Catalin
+Thanks for the report Naresh and the quick analysis Eric.
+
+>Can you handle this?
+
+I've fixed it up in the queue, thank you!
+
+--
+Thanks,
+Sasha
