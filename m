@@ -2,186 +2,149 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 68FFB486E4
-	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Jun 2019 17:23:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9181B48966
+	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Jun 2019 18:56:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726331AbfFQPXV (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 17 Jun 2019 11:23:21 -0400
-Received: from mail.efficios.com ([167.114.142.138]:49246 "EHLO
-        mail.efficios.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726731AbfFQPXV (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 17 Jun 2019 11:23:21 -0400
-Received: from localhost (ip6-localhost [IPv6:::1])
-        by mail.efficios.com (Postfix) with ESMTP id 826181D3299;
-        Mon, 17 Jun 2019 11:23:19 -0400 (EDT)
-Received: from mail.efficios.com ([IPv6:::1])
-        by localhost (mail02.efficios.com [IPv6:::1]) (amavisd-new, port 10032)
-        with ESMTP id ngNwKsoUCGaa; Mon, 17 Jun 2019 11:23:19 -0400 (EDT)
-Received: from localhost (ip6-localhost [IPv6:::1])
-        by mail.efficios.com (Postfix) with ESMTP id EE5031D3296;
-        Mon, 17 Jun 2019 11:23:18 -0400 (EDT)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com EE5031D3296
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
-        s=default; t=1560784999;
-        bh=f6zEYKJAJi61hi21J79TEKs+00z096e7T6EdDgLZ27Q=;
-        h=From:To:Date:Message-Id;
-        b=XUfSTY7iw/fxGCimF720oI0UhmPxVmZr0fed4jAc6D0gpqwoyfmz/Cwdohyvv/Hm2
-         y6PMBYLiVQ8f/wDBthKLFyVvTG8sbCkTX9TBdZEaTT992gFU3Di082S30pv6t2wXJi
-         umbT3GGplzzGAxcu5tCOM0tw0waBdnivsaWvyIhSisWysalMqcYYMvOg6f+ndVje5q
-         VrWzzpTooBDGyo7nrHsXcIDlNeqgo7xQaRFKCZ1Q5ftx7cbXsDoUb34kR3Esax76OI
-         I3RF37qUbredmBKubaVKwjbIp0bF0aiL7gDknaLY9IPWqMKxjJu1SJg0gW9aSBa7SZ
-         hkIPnRV2GTO0g==
-X-Virus-Scanned: amavisd-new at efficios.com
-Received: from mail.efficios.com ([IPv6:::1])
-        by localhost (mail02.efficios.com [IPv6:::1]) (amavisd-new, port 10026)
-        with ESMTP id NWfrek6MexdY; Mon, 17 Jun 2019 11:23:18 -0400 (EDT)
-Received: from thinkos.internal.efficios.com (192-222-181-218.qc.cable.ebox.net [192.222.181.218])
-        by mail.efficios.com (Postfix) with ESMTPSA id 61ADB1D3291;
-        Mon, 17 Jun 2019 11:23:18 -0400 (EDT)
-From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-To:     Shuah Khan <shuah@kernel.org>, Will Deacon <will.deacon@arm.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Joel Fernandes <joelaf@google.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Dave Watson <davejwatson@fb.com>,
-        Andi Kleen <andi@firstfloor.org>,
-        linux-kselftest@vger.kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Chris Lameter <cl@linux.com>,
-        Russell King <linux@arm.linux.org.uk>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        "Paul E . McKenney" <paulmck@linux.vnet.ibm.com>,
-        Paul Turner <pjt@google.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Maurer <bmaurer@fb.com>, linux-api@vger.kernel.org,
-        Andy Lutomirski <luto@amacapital.net>,
+        id S1726962AbfFQQ4o (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 17 Jun 2019 12:56:44 -0400
+Received: from mail-eopbgr140045.outbound.protection.outlook.com ([40.107.14.45]:43901
+        "EHLO EUR01-VE1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726005AbfFQQ4n (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 17 Jun 2019 12:56:43 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=armh.onmicrosoft.com;
+ s=selector2-armh-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=/NluDOww/9QtED5RypDgBZ8QjDmwGLivZAqJWjCsam0=;
+ b=mTC4ddt/iuoTJOn9P7MI1uGLYpakoEe+cfGYzfVX2kaRn80xUBtMsWUS49GjE4YWG7n5GWxqX7lZ47Akttx2hI1kJSCYe3XopCJA/NpArAkJtzv3wRERFkqNWWpgTe2kFHV7E7lFfpn22YEpvOO0jitq9eKfD35/FS4xqtPxGOE=
+Received: from AM5PR0801MB1763.eurprd08.prod.outlook.com (10.169.247.17) by
+ AM5PR0801MB1699.eurprd08.prod.outlook.com (10.169.247.11) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.1987.11; Mon, 17 Jun 2019 16:56:39 +0000
+Received: from AM5PR0801MB1763.eurprd08.prod.outlook.com
+ ([fe80::9987:96a6:6dd9:f4a2]) by AM5PR0801MB1763.eurprd08.prod.outlook.com
+ ([fe80::9987:96a6:6dd9:f4a2%4]) with mapi id 15.20.1987.014; Mon, 17 Jun 2019
+ 16:56:39 +0000
+From:   Szabolcs Nagy <Szabolcs.Nagy@arm.com>
+To:     Catalin Marinas <Catalin.Marinas@arm.com>,
+        Andrey Konovalov <andreyknvl@google.com>
+CC:     nd <nd@arm.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "amd-gfx@lists.freedesktop.org" <amd-gfx@lists.freedesktop.org>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
+        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        Vincenzo Frascino <Vincenzo.Frascino@arm.com>,
+        Will Deacon <Will.Deacon@arm.com>,
+        Mark Rutland <Mark.Rutland@arm.com>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Carlos O'Donell <carlos@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>
-Subject: [RFC PATCH 1/1] Revert "rseq/selftests: arm: use udf instruction for RSEQ_SIG"
-Date:   Mon, 17 Jun 2019 17:23:04 +0200
-Message-Id: <20190617152304.23371-1-mathieu.desnoyers@efficios.com>
-X-Mailer: git-send-email 2.11.0
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Kees Cook <keescook@chromium.org>,
+        Yishai Hadas <yishaih@mellanox.com>,
+        Felix Kuehling <Felix.Kuehling@amd.com>,
+        Alexander Deucher <Alexander.Deucher@amd.com>,
+        Christian Koenig <Christian.Koenig@amd.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Jens Wiklander <jens.wiklander@linaro.org>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
+        Dave P Martin <Dave.Martin@arm.com>,
+        Khalid Aziz <khalid.aziz@oracle.com>, enh <enh@google.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Christoph Hellwig <hch@infradead.org>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Kostya Serebryany <kcc@google.com>,
+        Evgeniy Stepanov <eugenis@google.com>,
+        Lee Smith <Lee.Smith@arm.com>,
+        Ramana Radhakrishnan <Ramana.Radhakrishnan@arm.com>,
+        Jacob Bramley <Jacob.Bramley@arm.com>,
+        Ruben Ayrapetyan <Ruben.Ayrapetyan@arm.com>,
+        Robin Murphy <Robin.Murphy@arm.com>,
+        Kevin Brodsky <Kevin.Brodsky@arm.com>
+Subject: Re: [PATCH v17 03/15] arm64: Introduce prctl() options to control the
+ tagged user addresses ABI
+Thread-Topic: [PATCH v17 03/15] arm64: Introduce prctl() options to control
+ the tagged user addresses ABI
+Thread-Index: AQHVIRQaew9kvIS1Ckaj+pLQDxCqx6af5s2AgAAyS4A=
+Date:   Mon, 17 Jun 2019 16:56:38 +0000
+Message-ID: <fdf49115-2167-af8b-6078-48ac571f5aed@arm.com>
+References: <cover.1560339705.git.andreyknvl@google.com>
+ <a7a2933bea5fe57e504891b7eec7e9432e5e1c1a.1560339705.git.andreyknvl@google.com>
+ <20190617135636.GC1367@arrakis.emea.arm.com>
+In-Reply-To: <20190617135636.GC1367@arrakis.emea.arm.com>
+Accept-Language: en-GB, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux aarch64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
+x-originating-ip: [217.140.106.49]
+x-clientproxiedby: LO2P265CA0333.GBRP265.PROD.OUTLOOK.COM
+ (2603:10a6:600:a4::33) To AM5PR0801MB1763.eurprd08.prod.outlook.com
+ (2603:10a6:203:3b::17)
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=Szabolcs.Nagy@arm.com; 
+x-ms-exchange-messagesentrepresentingtype: 1
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 815c0a5d-ca3a-4da2-0285-08d6f344c3b1
+x-ms-office365-filtering-ht: Tenant
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(5600148)(711020)(4605104)(1401327)(4618075)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(2017052603328)(7193020);SRVR:AM5PR0801MB1699;
+x-ms-traffictypediagnostic: AM5PR0801MB1699:
+nodisclaimer: True
+x-microsoft-antispam-prvs: <AM5PR0801MB16991563AA1F4801EE00DD29EDEB0@AM5PR0801MB1699.eurprd08.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:9508;
+x-forefront-prvs: 0071BFA85B
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(39860400002)(366004)(136003)(376002)(396003)(346002)(199004)(189003)(14454004)(8936002)(305945005)(7736002)(6512007)(54906003)(36756003)(110136005)(3846002)(2906002)(64126003)(65826007)(6436002)(81166006)(7416002)(6486002)(8676002)(476003)(229853002)(486006)(446003)(71190400001)(71200400001)(11346002)(2616005)(6116002)(68736007)(44832011)(31686004)(25786009)(4326008)(81156014)(66556008)(66476007)(6246003)(66446008)(64756008)(256004)(66946007)(316002)(58126008)(31696002)(72206003)(478600001)(99286004)(102836004)(53546011)(6506007)(386003)(186003)(26005)(5660300002)(76176011)(52116002)(73956011)(86362001)(66066001)(65956001)(65806001)(53936002);DIR:OUT;SFP:1101;SCL:1;SRVR:AM5PR0801MB1699;H:AM5PR0801MB1763.eurprd08.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+received-spf: None (protection.outlook.com: arm.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: m1NHKP05ubT3GY4iHJWeLbp6cbl4CcWI0TTV1gGwSxDxMxdWYegH9gGiumLcaEXSoGIjNK67JSY4bNtoglFctVNIg6O2TyNBMqDA+0rehgsICCbSytwvDcn2g5/ql0+Sn0u6q3GwJrqtx1L0be2KFdVe1nRwglzLdlubEdZ5SIAGwHSdheTrRVEpOZLqabc8QUrJ77fhsGeW8wb6tDwdPZXrdE5J8BLZO2KYmI/DnOzU4JA/1NILAnERVbAt6HO6whub6o97OC/261TFA7+pb4EdJtvdvT6lkFZeE9ThtsDGxbx3E08YiPHxErosfDOSfs8IxTqCKPkVMZZM1kyqu3qbl+pvRvYiT88C8Jt+bIYmIrv0GA5dHasKmdpoIeo4MNrT1BqZQdaP+m3F86V+LbzQBShcAa/1bXD5fTGmyPc=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <6EB5105BE008A9488F6CD71841425FF5@eurprd08.prod.outlook.com>
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-OriginatorOrg: arm.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 815c0a5d-ca3a-4da2-0285-08d6f344c3b1
+X-MS-Exchange-CrossTenant-originalarrivaltime: 17 Jun 2019 16:56:38.9960
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: f34e5979-57d9-4aaa-ad4d-b122a662184d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: Szabolcs.Nagy@arm.com
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM5PR0801MB1699
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This reverts commit 2b845d4b4acd9422bbb668989db8dc36dfc8f438.
-
-That commit introduces build issues for programs compiled in Thumb mode.
-Rather than try to be clever and emit a valid trap instruction on arm32,
-which requires special care about big/little endian handling on that
-architecture, just emit plain data. Data in the instruction stream is
-technically expected on arm32: this is how literal pools are
-implemented. Reverting to the prior behavior does exactly that.
-
-Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-CC: Peter Zijlstra <peterz@infradead.org>
-CC: Thomas Gleixner <tglx@linutronix.de>
-CC: Joel Fernandes <joelaf@google.com>
-CC: Catalin Marinas <catalin.marinas@arm.com>
-CC: Dave Watson <davejwatson@fb.com>
-CC: Will Deacon <will.deacon@arm.com>
-CC: Shuah Khan <shuah@kernel.org>
-CC: Andi Kleen <andi@firstfloor.org>
-CC: linux-kselftest@vger.kernel.org
-CC: "H . Peter Anvin" <hpa@zytor.com>
-CC: Chris Lameter <cl@linux.com>
-CC: Russell King <linux@arm.linux.org.uk>
-CC: Michael Kerrisk <mtk.manpages@gmail.com>
-CC: "Paul E . McKenney" <paulmck@linux.vnet.ibm.com>
-CC: Paul Turner <pjt@google.com>
-CC: Boqun Feng <boqun.feng@gmail.com>
-CC: Josh Triplett <josh@joshtriplett.org>
-CC: Steven Rostedt <rostedt@goodmis.org>
-CC: Ben Maurer <bmaurer@fb.com>
-CC: linux-api@vger.kernel.org
-CC: Andy Lutomirski <luto@amacapital.net>
-CC: Andrew Morton <akpm@linux-foundation.org>
-CC: Linus Torvalds <torvalds@linux-foundation.org>
-CC: Carlos O'Donell <carlos@redhat.com>
-CC: Florian Weimer <fweimer@redhat.com>
----
- tools/testing/selftests/rseq/rseq-arm.h | 52 ++-------------------------------
- 1 file changed, 2 insertions(+), 50 deletions(-)
-
-diff --git a/tools/testing/selftests/rseq/rseq-arm.h b/tools/testing/selftests/rseq/rseq-arm.h
-index 84f28f147fb6..5f262c54364f 100644
---- a/tools/testing/selftests/rseq/rseq-arm.h
-+++ b/tools/testing/selftests/rseq/rseq-arm.h
-@@ -5,54 +5,7 @@
-  * (C) Copyright 2016-2018 - Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-  */
- 
--/*
-- * RSEQ_SIG uses the udf A32 instruction with an uncommon immediate operand
-- * value 0x5de3. This traps if user-space reaches this instruction by mistake,
-- * and the uncommon operand ensures the kernel does not move the instruction
-- * pointer to attacker-controlled code on rseq abort.
-- *
-- * The instruction pattern in the A32 instruction set is:
-- *
-- * e7f5def3    udf    #24035    ; 0x5de3
-- *
-- * This translates to the following instruction pattern in the T16 instruction
-- * set:
-- *
-- * little endian:
-- * def3        udf    #243      ; 0xf3
-- * e7f5        b.n    <7f5>
-- *
-- * pre-ARMv6 big endian code:
-- * e7f5        b.n    <7f5>
-- * def3        udf    #243      ; 0xf3
-- *
-- * ARMv6+ -mbig-endian generates mixed endianness code vs data: little-endian
-- * code and big-endian data. Ensure the RSEQ_SIG data signature matches code
-- * endianness. Prior to ARMv6, -mbig-endian generates big-endian code and data
-- * (which match), so there is no need to reverse the endianness of the data
-- * representation of the signature. However, the choice between BE32 and BE8
-- * is done by the linker, so we cannot know whether code and data endianness
-- * will be mixed before the linker is invoked.
-- */
--
--#define RSEQ_SIG_CODE	0xe7f5def3
--
--#ifndef __ASSEMBLER__
--
--#define RSEQ_SIG_DATA							\
--	({								\
--		int sig;						\
--		asm volatile ("b 2f\n\t"				\
--			      "1: .inst " __rseq_str(RSEQ_SIG_CODE) "\n\t" \
--			      "2:\n\t"					\
--			      "ldr %[sig], 1b\n\t"			\
--			      : [sig] "=r" (sig));			\
--		sig;							\
--	})
--
--#define RSEQ_SIG	RSEQ_SIG_DATA
--
--#endif
-+#define RSEQ_SIG	0x53053053
- 
- #define rseq_smp_mb()	__asm__ __volatile__ ("dmb" ::: "memory", "cc")
- #define rseq_smp_rmb()	__asm__ __volatile__ ("dmb" ::: "memory", "cc")
-@@ -125,8 +78,7 @@ do {									\
- 		__rseq_str(table_label) ":\n\t"				\
- 		".word " __rseq_str(version) ", " __rseq_str(flags) "\n\t" \
- 		".word " __rseq_str(start_ip) ", 0x0, " __rseq_str(post_commit_offset) ", 0x0, " __rseq_str(abort_ip) ", 0x0\n\t" \
--		".arm\n\t"						\
--		".inst " __rseq_str(RSEQ_SIG_CODE) "\n\t"		\
-+		".word " __rseq_str(RSEQ_SIG) "\n\t"			\
- 		__rseq_str(label) ":\n\t"				\
- 		teardown						\
- 		"b %l[" __rseq_str(abort_label) "]\n\t"
--- 
-2.11.0
-
+T24gMTcvMDYvMjAxOSAxNDo1NiwgQ2F0YWxpbiBNYXJpbmFzIHdyb3RlOg0KPiBPbiBXZWQsIEp1
+biAxMiwgMjAxOSBhdCAwMTo0MzoyMFBNICswMjAwLCBBbmRyZXkgS29ub3ZhbG92IHdyb3RlOg0K
+Pj4gRnJvbTogQ2F0YWxpbiBNYXJpbmFzIDxjYXRhbGluLm1hcmluYXNAYXJtLmNvbT4NCj4+DQo+
+PiBJdCBpcyBub3QgZGVzaXJhYmxlIHRvIHJlbGF4IHRoZSBBQkkgdG8gYWxsb3cgdGFnZ2VkIHVz
+ZXIgYWRkcmVzc2VzIGludG8NCj4+IHRoZSBrZXJuZWwgaW5kaXNjcmltaW5hdGVseS4gVGhpcyBw
+YXRjaCBpbnRyb2R1Y2VzIGEgcHJjdGwoKSBpbnRlcmZhY2UNCj4+IGZvciBlbmFibGluZyBvciBk
+aXNhYmxpbmcgdGhlIHRhZ2dlZCBBQkkgd2l0aCBhIGdsb2JhbCBzeXNjdGwgY29udHJvbA0KPj4g
+Zm9yIHByZXZlbnRpbmcgYXBwbGljYXRpb25zIGZyb20gZW5hYmxpbmcgdGhlIHJlbGF4ZWQgQUJJ
+IChtZWFudCBmb3INCj4+IHRlc3RpbmcgdXNlci1zcGFjZSBwcmN0bCgpIHJldHVybiBlcnJvciBj
+aGVja2luZyB3aXRob3V0IHJlY29uZmlndXJpbmcNCj4+IHRoZSBrZXJuZWwpLiBUaGUgQUJJIHBy
+b3BlcnRpZXMgYXJlIGluaGVyaXRlZCBieSB0aHJlYWRzIG9mIHRoZSBzYW1lDQo+PiBhcHBsaWNh
+dGlvbiBhbmQgZm9yaygpJ2VkIGNoaWxkcmVuIGJ1dCBjbGVhcmVkIG9uIGV4ZWN2ZSgpLg0KPj4N
+Cj4+IFRoZSBQUl9TRVRfVEFHR0VEX0FERFJfQ1RSTCB3aWxsIGJlIGV4cGFuZGVkIGluIHRoZSBm
+dXR1cmUgdG8gaGFuZGxlDQo+PiBNVEUtc3BlY2lmaWMgc2V0dGluZ3MgbGlrZSBpbXByZWNpc2Ug
+dnMgcHJlY2lzZSBleGNlcHRpb25zLg0KPj4NCj4+IFNpZ25lZC1vZmYtYnk6IENhdGFsaW4gTWFy
+aW5hcyA8Y2F0YWxpbi5tYXJpbmFzQGFybS5jb20+DQo+IA0KPiBBIHF1ZXN0aW9uIGZvciB0aGUg
+dXNlci1zcGFjZSBmb2xrOiBpZiBhbiBhcHBsaWNhdGlvbiBvcHRzIGluIHRvIHRoaXMNCj4gQUJJ
+LCB3b3VsZCB5b3Ugd2FudCB0aGUgc2lnY29udGV4dC5mYXVsdF9hZGRyZXNzIGFuZC9vciBzaWdp
+bmZvLnNpX2FkZHINCj4gdG8gY29udGFpbiB0aGUgdGFnPyBXZSBjdXJyZW50bHkgY2xlYXIgaXQg
+ZWFybHkgaW4gdGhlIGFybTY0IGVudHJ5LlMgYnV0DQo+IHdlIGNvdWxkIGZpbmQgYSB3YXkgdG8g
+cGFzcyBpdCBkb3duIGlmIG5lZWRlZC4NCg0KdG8gbWUgaXQgbWFrZXMgc2Vuc2UgdG8ga2VlcCB0
+aGUgdGFnIGluIHNpX2FkZHIgLyBmYXVsdF9hZGRyZXNzLg0KDQpidXQgaSBkb24ndCBrbm93IGlu
+IGRldGFpbCBob3cgdGhvc2UgZmllbGRzIGFyZSB1c2VkIGN1cnJlbnRseS4NCg0Ka2VlcGluZyB0
+aGUgdGFnIGlzIGNlcnRhaW5seSB1c2VmdWwgZm9yIE1URSB0byBkZWJ1ZyB3cm9uZyB0YWcNCmZh
+aWx1cmVzIHVubGVzcyB0aGVyZSBpcyBhIHNlcGFyYXRlIG1lY2hhbmlzbSBmb3IgdGhhdC4NCg0K
