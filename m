@@ -2,54 +2,52 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F2CD047831
-	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Jun 2019 04:30:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ABC1A47BEE
+	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Jun 2019 10:15:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727507AbfFQCaa (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 16 Jun 2019 22:30:30 -0400
-Received: from mail-lf1-f68.google.com ([209.85.167.68]:46589 "EHLO
-        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727441AbfFQCaa (ORCPT
+        id S1727394AbfFQIPu (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 17 Jun 2019 04:15:50 -0400
+Received: from mail-lf1-f67.google.com ([209.85.167.67]:46998 "EHLO
+        mail-lf1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727323AbfFQIPq (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 16 Jun 2019 22:30:30 -0400
-Received: by mail-lf1-f68.google.com with SMTP id z15so5285114lfh.13
-        for <linux-kselftest@vger.kernel.org>; Sun, 16 Jun 2019 19:30:28 -0700 (PDT)
+        Mon, 17 Jun 2019 04:15:46 -0400
+Received: by mail-lf1-f67.google.com with SMTP id z15so5789342lfh.13
+        for <linux-kselftest@vger.kernel.org>; Mon, 17 Jun 2019 01:15:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=mime-version:from:date:message-id:subject:to:cc;
-        bh=DGmSRiaozDL/dTempqHSPFFhsp5hMg0xq639rw6BjeY=;
-        b=HQwUO17hmToC7W5MJWHwjEL3kKgwSpD9H94bMlM/Ta41otpJp+QAnmEbS3xNNMVyN9
-         9z5rFGH7Vflg30fxYnokeMOG8wGGM7bxoS5sgNeSPRXHkxQ59ME3/CbJjSX4iVsgIuV8
-         lZg7Fs7A+3bVyzWbqBP/oQQYUA2OHZeniUqWhaUKskMm3GUw/1kgzltMpQLiR0N2X6T3
-         rSbtCWiw+m+AOG7pQz6D2X8IzJS8V9aKFi1PKuwSrKMdHKDhotsdup4n1JaZfdFB64em
-         SNxuPeBBUA69FmE6YwOGW0qfSxYXv0qJjrCWiC7jz7sF8Jr4NEdBKG6Lz9doH5YaljeJ
-         gaBg==
+        bh=ISvoq3+E231xgZNYDcOvysydNx1/W6JTFl0n7wdsdXI=;
+        b=ZOtAuzcBiPy8sZiGvKxzKSX+qeQlH2Y1m2S3iyyz1jJIpk9+LYlngBGC0rUZ5I8cdc
+         bShxfNHMpLwZq3IGZiIM8ncZ9TFhxJ2Mra+dT/FL/LeEzwFARKu+Ef8vh+InHBRYMGtD
+         52rDegfzOwyWgYc5lHhAaUkCJ1gX5IRvv+8drvesRYmH4SJa4vrWokLlGJj7ZlfTl/T4
+         Lqoy5i7/XhGpGMqjFBQ0YcQEtPSHX9QocNRX/9vCo336nL7sk+B/DQU34VZd3Y5F14Qy
+         NBslVl53ep8bPNtyixSRAwa+UeHw1NNBIw3NHWPQes15BqzqLgsTewl8Dc+Ybq8sFxr2
+         hIdQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=DGmSRiaozDL/dTempqHSPFFhsp5hMg0xq639rw6BjeY=;
-        b=nHcTDSRmEWCT8a61z4afiEw3LY/U3WE0jJh5/iaS8MSStY1sN2EkSlK0T+up1kztF+
-         ul8gnit6dnaa0jx6eVoJc4Yo6kp4dtd4KTPgsgqpVbwaY3CyP8jUKy22baEsRt5JzOz+
-         pwpOjZX8m73T5PcUHhdmJtlPmSi+/wLlbY+sAZMvWa4GJ7S+LeKVqhMoYoClL18PHZ7L
-         N88frxynG+uiDkh2g2QV1Zn1SKF29PfyCN5GZoUmaPwcYrTxbzpclMK3AL0N3TtChACr
-         1btNbK1Sh0HxVmPjD1nr0iogUOjg7lWM3jtbNEYL6Ml44slmBY4RIzsM4ajENEllUML/
-         GXnQ==
-X-Gm-Message-State: APjAAAXnmTAAXOa3gcfS4hD7ma9N7oIcvYfmpFpjVJNABWl06AYAtTrJ
-        aWj597rzHtX0o2jUOA4MhR9b7n2RZpWHUj1dNcDGvw==
-X-Google-Smtp-Source: APXvYqwFlpSmLZPWiJg2WPhlYlFtfj/+EcdKnMcnlOd66/vAgtevltcMhNg0YOTqz2tnYdteWzStXhs7/XBbhRqm7vQ=
-X-Received: by 2002:ac2:482d:: with SMTP id 13mr10070457lft.132.1560738627381;
- Sun, 16 Jun 2019 19:30:27 -0700 (PDT)
+        bh=ISvoq3+E231xgZNYDcOvysydNx1/W6JTFl0n7wdsdXI=;
+        b=H6UDMokl0Wcu+7UBj2P2T4HFh0erdB5KJOJSelAhsWye0JbC/+YG13Qe/fHVY9Szag
+         6vCiPdFUzQ+U6KGqNJ8xRHs7qy66ODiZTTX5bJif2om26ezUgrsOWrVn9DYSu3mSDju2
+         gmc13zxJDOIYIzcPm5uHxWaMl5zPpommZbUYnezF7cgSkM+scmsKf6SVFcS7f9nWtYUE
+         zocVPUrFiyqGg73vXn6vakAeSQpXlkgmMRhH+gEl1iHKmZadh/SDq/xVr/KJ1jDtVLKM
+         jzLbrT62gLz7K2UqFGg1YJrGu1MPRYIQAb5JjnhPYcv/MDhjEvETCQXPkVvoIiYBle4J
+         vs8w==
+X-Gm-Message-State: APjAAAXso50YKSIzLQynuBfq7WURL1jHFOVIqE816KM7NXhDirtbzOXx
+        NYT5ucKWQZrGIVfeGCu33oWu0AIZE9HNzDy6FFX96A==
+X-Google-Smtp-Source: APXvYqxWua19+hSUVQ6C+AsovORGeOGCcB+tB474a5UOunGTM5LyKrbLX7rEkOyiNu0nvEBRlbTDwCNI1pC+wu+lG24=
+X-Received: by 2002:a05:6512:51c:: with SMTP id o28mr38430162lfb.67.1560759344233;
+ Mon, 17 Jun 2019 01:15:44 -0700 (PDT)
 MIME-Version: 1.0
 From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Mon, 17 Jun 2019 08:00:00 +0530
-Message-ID: <CA+G9fYsr_YW7PSoP+ew60TfNOj885y6j-e2weuWBuU1ccKcAAg@mail.gmail.com>
-Subject: kernel/workqueue.c:3030 __flush_work+0x2c2/0x2d0
-To:     Netdev <netdev@vger.kernel.org>,
-        linux- stable <stable@vger.kernel.org>
-Cc:     open list <linux-kernel@vger.kernel.org>,
-        "David S. Miller" <davem@davemloft.net>, sgarzare@redhat.com,
-        Daniel Borkmann <daniel@iogearbox.net>, kafai@fb.com,
-        jakub@cloudflare.com, lkft-triage@lists.linaro.org,
+Date:   Mon, 17 Jun 2019 13:45:32 +0530
+Message-ID: <CA+G9fYsFL5AH6dkdN2Qd6UP=wdiXRDR_ioQFPSCq=uUBcmtHXw@mail.gmail.com>
+Subject: stable-rc: ptrace: peeksiginfo failed on 4.19, 4.14, 4.9 and 4.4
+To:     ebiederm@xmission.com, avagin@gmail.com
+Cc:     linux- stable <stable@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        lkft-triage@lists.linaro.org,
         "open list:KERNEL SELFTEST FRAMEWORK" 
         <linux-kselftest@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
@@ -58,151 +56,67 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Kernel warning while running kernel selftest bpf test_sockmap test case on
-x86_64 and arm64.
-The kernel warning log pops up continuously.
+selftests: ptrace: peeksiginfo failed on x86_64, i386, arm64 and arm.
+FAILED on stable rc branches 4.19, 4.14, 4.9 and 4.4.
+PASS on mainline, next and 5.1 stable rc branch.
 
-Linux version 5.1.10-rc2
+Test output:
+------------------
+cd /opt/kselftests/mainline/ptrace
+./peeksiginfo
+Error (peeksiginfo.c:143): Only 0 signals were read
 
-Steps to reproduce:
-Boot stable rc 5.1.10-rc2 kernel on x86_64 or arm64
-cd selftests/bpf
-./test_sockmap
+The git bisect show that below commit caused this test to fail.
 
-[   37.600406] WARNING: CPU: 3 PID: 57 at
-/usr/src/kernel/kernel/workqueue.c:3030 __flush_work+0x2c2/0x2d0
-[   37.610034] Modules linked in: x86_pkg_temp_thermal fuse
-[   37.615371] CPU: 3 PID: 57 Comm: kworker/3:1 Not tainted 5.1.10-rc2 #1
-[   37.615454] WARNING: CPU: 0 PID: 5 at
-/usr/src/kernel/kernel/workqueue.c:3030 __flush_work+0x2c2/0x2d0
-[   37.621892] Hardware name: Supermicro SYS-5019S-ML/X11SSH-F, BIOS
-2.0b 07/27/2017
-[   37.621895] Workqueue: events sk_psock_destroy_deferred
-[   37.631183] Modules linked in: x86_pkg_temp_thermal fuse
-[   37.638654] RIP: 0010:__flush_work+0x2c2/0x2d0
-[   37.638655] Code: c6 00 31 c0 e9 71 ff ff ff 41 8b 0c 24 49 8b 54
-24 08 83 e1 08 49 0f ba 2c 24 03 80 c9 f0 e9 d2 fe ff ff 0f 0b e9 50
-ff ff ff <0f> 0b 31 c0 e9 47 ff ff ff e8 90 9d fd ff 0f 1f 44 00 00 55
-31 f6
-[   37.643879] CPU: 0 PID: 5 Comm: kworker/0:0 Not tainted 5.1.10-rc2 #1
-[   37.643880] Hardware name: Supermicro SYS-5019S-ML/X11SSH-F, BIOS
-2.0b 07/27/2017
-[   37.649183] RSP: 0018:ffffb038c1a23ca0 EFLAGS: 00010246
-[   37.653630] Workqueue: events sk_psock_destroy_deferred
-[   37.672375] RAX: 0000000000000000 RBX: ffff9e73d9492068 RCX: 0000000000000006
-[   37.672376] RDX: 0000000000000006 RSI: 0000000000000001 RDI: ffff9e73d9492068
-[   37.678805] RIP: 0010:__flush_work+0x2c2/0x2d0
-[   37.678807] Code: c6 00 31 c0 e9 71 ff ff ff 41 8b 0c 24 49 8b 54
-24 08 83 e1 08 49 0f ba 2c 24 03 80 c9 f0 e9 d2 fe ff ff 0f 0b e9 50
-ff ff ff <0f> 0b 31 c0 e9 47 ff ff ff e8 90 9d fd ff 0f 1f 44 00 00 55
-31 f6
-[   37.686274] RBP: ffffb038c1a23d68 R08: 0000000000000000 R09: 0000000000000000
-[   37.686275] R10: 0000000000000000 R11: 0000000000000000 R12: ffff9e73d9492068
-[   37.691494] RSP: 0018:ffffb038c18fbca0 EFLAGS: 00010246
-[   37.696720] R13: 0000000000000001 R14: ffffb038c1a23d98 R15: ffffffff9a490d40
-[   37.696721] FS:  0000000000000000(0000) GS:ffff9e73dfb80000(0000)
-knlGS:0000000000000000
-[   37.703851] RAX: 0000000000000000 RBX: ffff9e73d9490868 RCX: 0000000000000006
-[   37.703852] RDX: 0000000000000006 RSI: 0000000000000001 RDI: ffff9e73d9490868
-[   37.710976] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[   37.710977] CR2: 00007f38680ca8a0 CR3: 00000002ee614006 CR4: 00000000003606e0
-[   37.715419] RBP: ffffb038c18fbd68 R08: 0000000000000000 R09: 0000000000000000
-[   37.715420] R10: 0000000000000000 R11: 0000000000000000 R12: ffff9e73d9490868
-[   37.734156] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-[   37.734157] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-[   37.741282] R13: 0000000000000001 R14: ffffb038c18fbd98 R15: ffffffff9a490d40
-[   37.741283] FS:  0000000000000000(0000) GS:ffff9e73dfa00000(0000)
-knlGS:0000000000000000
-[   37.748405] Call Trace:
-[   37.748410]  ? work_busy+0xc0/0xc0
-[   37.753621] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[   37.753622] CR2: 00007f38680c9788 CR3: 000000045454a004 CR4: 00000000003606f0
-[   37.760746]  ? mark_held_locks+0x4d/0x80
-[   37.768823] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-[   37.768824] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-[   37.775946]  ? __cancel_work_timer+0x11a/0x1d0
-[   37.783071] Call Trace:
-[   37.783075]  ? work_busy+0xc0/0xc0
-[   37.788808]  ? cancel_delayed_work_sync+0x13/0x20
-[   37.788810]  ? lockdep_hardirqs_on+0xf6/0x190
-[   37.795934]  ? mark_held_locks+0x4d/0x80
-[   37.803055]  ? __cancel_work_timer+0x11a/0x1d0
-[   37.803057]  ? work_busy+0xc0/0xc0
-[   37.810179]  ? __cancel_work_timer+0x11a/0x1d0
-[   37.817303]  __cancel_work_timer+0x134/0x1d0
-[   37.824453]  ? cancel_delayed_work_sync+0x13/0x20
-[   37.824455]  ? lockdep_hardirqs_on+0xf6/0x190
-[   37.831579]  cancel_delayed_work_sync+0x13/0x20
-[   37.839654]  ? __cancel_work_timer+0x11a/0x1d0
-[   37.839657]  ? work_busy+0xc0/0xc0
-[   37.842100]  strp_done+0x1c/0x50
-[   37.845497]  __cancel_work_timer+0x134/0x1d0
-[   37.851242]  sk_psock_destroy_deferred+0x34/0x1c0
-[   37.858372]  cancel_delayed_work_sync+0x13/0x20
-[   37.862292]  process_one_work+0x281/0x610
-[   37.869415]  strp_done+0x1c/0x50
-[   37.876540]  worker_thread+0x3c/0x3f0
-[   37.880975]  sk_psock_destroy_deferred+0x34/0x1c0
-[   37.883419]  ? __kthread_parkme+0x61/0x90
-[   37.886819]  process_one_work+0x281/0x610
-[   37.891514]  kthread+0x12c/0x150
-[   37.895868]  worker_thread+0x3c/0x3f0
-[   37.899783]  ? process_one_work+0x610/0x610
-[   37.904221]  kthread+0x12c/0x150
-[   37.907615]  ? kthread_park+0x90/0x90
-[   37.907618]  ret_from_fork+0x3a/0x50
-[   37.912052]  ? process_one_work+0x610/0x610
-[   37.916355] irq event stamp: 57860
-[   37.921058]  ? kthread_park+0x90/0x90
-[   37.921060]  ret_from_fork+0x3a/0x50
-[   37.925407] hardirqs last  enabled at (57859): [<ffffffff9a4949ba>]
-__cancel_work_timer+0x11a/0x1d0
-[   37.925409] hardirqs last disabled at (57860): [<ffffffff9a401bab>]
-trace_hardirqs_off_thunk+0x1a/0x1c
-[   37.929944] irq event stamp: 47474
-[   37.934378] softirqs last  enabled at (57812): [<ffffffff9add14d5>]
-release_sock+0x85/0xb0
-[   37.934379] softirqs last disabled at (57810): [<ffffffff9add140a>]
-__release_sock+0xda/0x120
-[   37.937773] hardirqs last  enabled at (47473): [<ffffffff9a4949ba>]
-__cancel_work_timer+0x11a/0x1d0
-[   37.937775] hardirqs last disabled at (47474): [<ffffffff9a401bab>]
-trace_hardirqs_off_thunk+0x1a/0x1c
-[   37.940998] ---[ end trace ae349dc9a55c8bc8 ]---
-[   37.941056] WARNING: CPU: 3 PID: 57 at
-/usr/src/kernel/kernel/workqueue.c:3030 __flush_work+0x2c2/0x2d0
-[   37.945263] softirqs last  enabled at (47440): [<ffffffff9add14d5>]
-release_sock+0x85/0xb0
-[   37.945264] softirqs last disabled at (47438): [<ffffffff9add140a>]
-__release_sock+0xda/0x120
-[   37.949968] Modules linked in: x86_pkg_temp_thermal fuse
-[   37.954493] ---[ end trace ae349dc9a55c8bc9 ]---
-[   37.954522] WARNING: CPU: 0 PID: 5 at
-/usr/src/kernel/kernel/workqueue.c:3030 __flush_work+0x2c2/0x2d0
-[...]
+ git bisect bad
+5b6b0eac235ef1f915f24eda6d501a754022cbf0 is the first bad commit
+commit 5b6b0eac235ef1f915f24eda6d501a754022cbf0
+Author: Eric W. Biederman <ebiederm@xmission.com>
+Date:   Tue May 28 18:46:37 2019 -0500
 
-metadata:
-  git branch: linux-5.1.y
-  git repo: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
-  git commit: b7eabc3862b8717f2bcc47f3f3830ec575423c8c
-  git describe: v5.1.9-157-gb7eabc3862b8
-  make_kernelversion: 5.1.10-rc2
-  kernel-config:
-http://snapshots.linaro.org/openembedded/lkft/lkft/sumo/intel-corei7-64/lkft/linux-stable-rc-5.1/33/config
-  kernel-defconfig:
-http://snapshots.linaro.org/openembedded/lkft/lkft/sumo/intel-corei7-64/lkft/linux-stable-rc-5.1/33/defconfig
-  build-url: https://ci.linaro.org/job/openembedded-lkft-linux-stable-rc-5.1/DISTRO=lkft,MACHINE=intel-corei7-64,label=docker-lkft/33/
-  build-location:
-http://snapshots.linaro.org/openembedded/lkft/lkft/sumo/intel-corei7-64/lkft/linux-stable-rc-5.1/33
-  toolchain: x86_64-linaro-linux 7.%
-  series: lkft
-  email-notification: ''
-  kselftest__url: https://www.kernel.org/pub/linux/kernel/v5.x/linux-5.1.tar.xz
-  kselftest__version: '5.1'
-  kselftest__revision: '5.1'
+    signal/ptrace: Don't leak unitialized kernel memory with PTRACE_PEEK_SIGINFO
 
-Full test log,
-https://lkft.validation.linaro.org/scheduler/job/775857#L1114
+    commit f6e2aa91a46d2bc79fce9b93a988dbe7655c90c0 upstream.
+
+    Recently syzbot in conjunction with KMSAN reported that
+    ptrace_peek_siginfo can copy an uninitialized siginfo to userspace.
+    Inspecting ptrace_peek_siginfo confirms this.
+
+    The problem is that off when initialized from args.off can be
+    initialized to a negaive value.  At which point the "if (off >= 0)"
+    test to see if off became negative fails because off started off
+    negative.
+
+    Prevent the core problem by adding a variable found that is only true
+    if a siginfo is found and copied to a temporary in preparation for
+    being copied to userspace.
+
+    Prevent args.off from being truncated when being assigned to off by
+    testing that off is <= the maximum possible value of off.  Convert off
+    to an unsigned long so that we should not have to truncate args.off,
+    we have well defined overflow behavior so if we add another check we
+    won't risk fighting undefined compiler behavior, and so that we have a
+    type whose maximum value is easy to test for.
+
+    Cc: Andrei Vagin <avagin@gmail.com>
+    Cc: stable@vger.kernel.org
+    Reported-by: syzbot+0d602a1b0d8c95bdf299@syzkaller.appspotmail.com
+    Fixes: 84c751bd4aeb ("ptrace: add ability to retrieve signals
+without removing from a queue (v4)")
+    Signed-off-by: "Eric W. Biederman" <ebiederm@xmission.com>
+    Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+
+:040000 040000 ff9f3109f210274d0b87851d226c35e7305ce44a
+b36de2c855fe2a0b332f145f0966dc1a0304d4bd M kernel
+
+Test case link,
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/tools/testing/selftests/ptrace/peeksiginfo.c#n143
+
+Test output log link,
+https://lkft.validation.linaro.org/scheduler/job/777223#L1084
+
+Test results comparison on different branches,
+https://qa-reports.linaro.org/_/comparetest/?project=22&project=6&project=58&project=135&project=40&project=23&project=167&suite=kselftest&test=ptrace_peeksiginfo
 
 Best regards
 Naresh Kamboju
