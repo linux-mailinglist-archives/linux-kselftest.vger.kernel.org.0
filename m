@@ -2,81 +2,75 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 82B7C4915F
-	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Jun 2019 22:30:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B73E49383
+	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Jun 2019 23:31:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727384AbfFQUaP (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 17 Jun 2019 16:30:15 -0400
-Received: from mail-ed1-f67.google.com ([209.85.208.67]:38601 "EHLO
-        mail-ed1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726023AbfFQUaP (ORCPT
+        id S1728930AbfFQV2h (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 17 Jun 2019 17:28:37 -0400
+Received: from st43p00im-zteg10071901.me.com ([17.58.63.169]:58259 "EHLO
+        st43p00im-zteg10071901.me.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1730252AbfFQV2h (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 17 Jun 2019 16:30:15 -0400
-Received: by mail-ed1-f67.google.com with SMTP id r12so15841927edo.5;
-        Mon, 17 Jun 2019 13:30:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=/6miJAsvlKZ+NTF37mtgfecOjC+L4l+FZ/tO8y72hcY=;
-        b=j+LfTk1cJSVWMXglHnydK2FvbU2cs3ZZ8ZDSuyEvKqfv3CBK3TyXIRfwe5Fykwtsd0
-         1iNdJXf52TqlRtAgjvFI+LuNFTOzl4LT2O2iiBi43TMbJdZSDZtYzcUl6raTSPJeqHIK
-         tA1aI9ApRivKBRg+oEwNAuAwRj3ndD45f1WYGRNOUvJslo6Soh6AwR0PZtLMBvuvT2F0
-         mqmkjF/01cEshq+ANLhA2uR3pjGrXpHzKDrY6tORIN8C8NfN/2mtq1R6JMMmVCevKhlK
-         bxvae19fagM9rFMRvnPaNuK3GCQT8j7rFeaaXrstfLiCsTt7Bs8wx24d7ygEBCSB9JtH
-         8gFg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=/6miJAsvlKZ+NTF37mtgfecOjC+L4l+FZ/tO8y72hcY=;
-        b=qll6wtRxCxEz8wkFaJXFv9Lpxx4v9lDAWl/lEHsifzHPgPOmTU/zt7095/bjMYLPVi
-         /huPyZlpTtw9XdjcwKHHQ82sZ9LvZ41yhQPyfjrKpukco0KUGyGGzQNXZ+izkoEyKucZ
-         gmPnoJTnvmAEBbtFNcpEfQkdwVFF8+X83MfYN3T3KAo/x32JUJUhhKJWQVDKAJqFVKH9
-         AkzPWUf57TCc6dsTT5tpYakv34rOgx8lNqnBcy3fIN8CTj2yS9+W38/HT6wZbpDa73XD
-         D/UR47xVYUsLgX+2WuPCdff8EEUZkuX+SH9XDgb8lYVgxY2QXklrjYmpDcD6zJKqNMs3
-         JdEQ==
-X-Gm-Message-State: APjAAAUO/pZ3M1bgGNk/VPlPstznxov4b3RaI+r9ucdWpKmF8kTkuKUS
-        w2HiZOt9Fj/abbbwYZbyO2MIvzaaRKO516iOhgE=
-X-Google-Smtp-Source: APXvYqww7nWizr0FGtjHx8XNgx3Yo2U7sZtEVkvbXpDZvrVllwR5sexNhXcxX8QvfYgLauxPY9yAkyRBDwpJMkOzvIk=
-X-Received: by 2002:a50:b3fd:: with SMTP id t58mr68393204edd.31.1560803413120;
- Mon, 17 Jun 2019 13:30:13 -0700 (PDT)
-MIME-Version: 1.0
-References: <20190617190837.13186-1-fklassen@appneta.com>
-In-Reply-To: <20190617190837.13186-1-fklassen@appneta.com>
-From:   Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-Date:   Mon, 17 Jun 2019 16:29:37 -0400
-Message-ID: <CAF=yD-KQ1dxmNbR8-xoiNTfwHXzO-wQRpz+0ZFN9o36+UE_e6A@mail.gmail.com>
-Subject: Re: [PATCH net-next v3 0/3] UDP GSO audit tests
-To:     Fred Klassen <fklassen@appneta.com>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Network Development <netdev@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-kselftest@vger.kernel.org,
-        Willem de Bruijn <willemb@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        Mon, 17 Jun 2019 17:28:37 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=me.com; s=04042017;
+        t=1560806916; bh=VgVvgLo7/NN7awKYf4il937sjMZlqMUPOlss7/oCmfQ=;
+        h=From:Content-Type:Mime-Version:Subject:Message-Id:Date:To;
+        b=ekfJbdkbUjunD9VTKtiKnER3Ai7pR5WcMmvWkW0Q4V+dzG5AQZjCK0oJ4WBRY+v5V
+         c2fNv6M8xoY2bOi6sIkzr1mqgIzUJzwOsVewyXfLMS7dA6roe+2gkX0gQrF6EJe3Zf
+         KDHi0WP8LoSSC28mXqD2xjYqgL5sc/g+NkNTI2vrw4xjJymYSQoiEaevZG40fnlO28
+         QITWuvIxuqQugtLsxS/MbvAbBHh+lug1T8y2qOglXzYgp4+D1o7DhKY8vn9hAf3qjw
+         dX5Z3b6LsAUdJEzfGaFumXgFIt+P9kr9jhsN/R7eTEsOELbTQhM46/ck5u26DcrMqA
+         9LF6OBBXGWj3A==
+Received: from [172.20.98.6] (unknown [89.246.150.90])
+        by st43p00im-zteg10071901.me.com (Postfix) with ESMTPSA id C5064D8120F
+        for <linux-kselftest@vger.kernel.org>; Mon, 17 Jun 2019 21:28:35 +0000 (UTC)
+From:   Christian Clauss <cclauss@me.com>
+Content-Type: text/plain;
+        charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.11\))
+Subject: Fixing Python 3 syntax errors in tpm2_tests.py
+Message-Id: <B021B4EF-903E-4EA2-9B2B-0B0301D28DE7@me.com>
+Date:   Mon, 17 Jun 2019 23:28:34 +0200
+To:     linux-kselftest@vger.kernel.org
+X-Mailer: Apple Mail (2.3445.104.11)
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-06-17_08:,,
+ signatures=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=1 malwarescore=0
+ phishscore=0 bulkscore=0 spamscore=0 clxscore=1015 mlxscore=0
+ mlxlogscore=712 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.0.1-1812120000 definitions=main-1906170187
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Jun 17, 2019 at 3:09 PM Fred Klassen <fklassen@appneta.com> wrote:
->
-> Updates to UDP GSO selftests ot optionally stress test CMSG
-> subsytem, and report the reliability and performance of both
-> TX Timestamping and ZEROCOPY messages.
->
-> Fred Klassen (3):
->   net/udpgso_bench_tx: options to exercise TX CMSG
->   net/udpgso_bench.sh add UDP GSO audit tests
->   net/udpgso_bench.sh test fails on error
->
->  tools/testing/selftests/net/udpgso_bench.sh   |  52 ++++-
->  tools/testing/selftests/net/udpgso_bench_tx.c | 291 ++++++++++++++++++++++++--
->  2 files changed, 327 insertions(+), 16 deletions(-)
->
-> --
+Hello,
 
-For the series:
+    As my very first contribution to the Linux Kernel, I would like to =
+fix six Python 3 syntax errors in the file =
+./tools/testing/selftests/tpm2/tpm2_tests.py
 
-Acked-by: Willem de Bruijn <willemb@google.com>
+    All six of these errors are of the same form: except ProtocolError, =
+e:  To fix the syntax errors, I propose to change the comma (,) to =
+=E2=80=9Cas=E2=80=9D like:  except ProtocolError as e:
+
+    These changes are important because the current form is compatible =
+with Python 2 but is a syntax error in Python 3.  The proposed form is =
+compatible with both Python 2 and Python3.  This conversion is required =
+because Python 2 will reach its end of life in less than 200 days.
+
+    The kernel contains at least five other files where I am able to =
+detect Python 3 syntax errors but after studying in detail the process =
+of making kernel modification, I believe that it is best to start with =
+tpm2_tests.py because the changes are straightforward and =
+uncontroversial =E2=80=94 all issues are of the same form, and I can =
+detect no other issues (such as undefined names) to fix in that file.
+
+   If I succeed in getting the modifications to tpm2_tests.py through =
+the review process then I can try the remaining files in turn.
+
+   I would be interested to know if this is a worthwhile effort.  Is =
+there already another initiative to resolve these issue before yearend?
+
+   Thanks for any advise that you can provide, Chris Clauss=
