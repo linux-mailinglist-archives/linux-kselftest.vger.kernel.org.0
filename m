@@ -2,149 +2,156 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B22B48387
-	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Jun 2019 15:08:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9ED94484B6
+	for <lists+linux-kselftest@lfdr.de>; Mon, 17 Jun 2019 15:58:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728028AbfFQNHu (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 17 Jun 2019 09:07:50 -0400
-Received: from mail-lf1-f47.google.com ([209.85.167.47]:46979 "EHLO
-        mail-lf1-f47.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728015AbfFQNHt (ORCPT
+        id S1725995AbfFQN6O (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 17 Jun 2019 09:58:14 -0400
+Received: from out01.mta.xmission.com ([166.70.13.231]:59959 "EHLO
+        out01.mta.xmission.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725906AbfFQN6N (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 17 Jun 2019 09:07:49 -0400
-Received: by mail-lf1-f47.google.com with SMTP id z15so6419814lfh.13
-        for <linux-kselftest@vger.kernel.org>; Mon, 17 Jun 2019 06:07:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=9QomE5HxJLHYA0cczhFwTWQ/i7i5MtKnbZGvWTXLvdY=;
-        b=Q/8SFCnre/j6rPGk+ytZQUGZhP0Zo8WOrGDVd+R7tRJXn7qzBBcwlnqPxIlMpuDlb4
-         mvjBUfmO84UkTcdaJASKiIJiyzG41MgcDsKbyR3mjjVmKqtFA0Ta7CYborlc8ABn8nFA
-         hz0zejQ7kMiXe3gMsYyhdqSGKIj7XDCLMrNoHGzEg61XRn6/7QUyvcd6K8u7NXwd9y4s
-         Ia0Urpm8Tl0pLKqUic6uPzYcrqYAXoFE0sn5gXMzPUoielQ0a1MgLFu+bM2QNQEd0WnW
-         MEy+Ei73X7kjuAWdH+bDdI14Dmf4P9pspcJ07/SdWczjPavgkfuS8UfkgueKlhn8JXE7
-         XkOQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=9QomE5HxJLHYA0cczhFwTWQ/i7i5MtKnbZGvWTXLvdY=;
-        b=SgvPdxYkvdh0bONlcgQ5/jujzQIs/DvE3Rrii8WGexOxttTKVh8AV19aSEvMjz3KL6
-         rv3BBVfJRP+tSIvTxPT333gcwa6nNRHzSvXxF2C991Yc07/e0SO7OK2jnhFzAJDGY1Ee
-         CZGQ+bXwH8uxdtVjz+R2nQx2pIRopxwk56QkGpYYDkwVwfo8G143GGtAZ4Y2WKLTRbxb
-         ohl3qcrSRUA9vcbF7SvnXtuyD9HQA/PyLV+pjJPmuvup6ccNp7CU/I0Bhb5TonX0AHNj
-         Mfa4+E5o40ZSNmYM8w34l4ZlleGDWNlc5JQ5+iGHgRhbHjYP5z2q5eIAigspKObEcuXN
-         LFHg==
-X-Gm-Message-State: APjAAAXE61gCL+bzKQIkyhy9TlciOluoyH2hNHMpVHE/Yw1LdZd7ppH+
-        wR59rsUM7PiQy6ltVNkFJ7vAnmCjwcW2r/tHl6xqoA==
-X-Google-Smtp-Source: APXvYqwrtOvgo6/Fr3B//hfm86kWLu2/xtPMvEVGK46twASJ9SFVxrQzPIeb4y1wCklq7XNDxrYO3AADr9hBUgjkdvw=
-X-Received: by 2002:a05:6512:51c:: with SMTP id o28mr39197814lfb.67.1560776866720;
- Mon, 17 Jun 2019 06:07:46 -0700 (PDT)
+        Mon, 17 Jun 2019 09:58:13 -0400
+X-Greylist: delayed 2632 seconds by postgrey-1.27 at vger.kernel.org; Mon, 17 Jun 2019 09:58:12 EDT
+Received: from in01.mta.xmission.com ([166.70.13.51])
+        by out01.mta.xmission.com with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.87)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1hcrSl-0007yz-J5; Mon, 17 Jun 2019 07:14:19 -0600
+Received: from ip72-206-97-68.om.om.cox.net ([72.206.97.68] helo=x220.xmission.com)
+        by in01.mta.xmission.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.87)
+        (envelope-from <ebiederm@xmission.com>)
+        id 1hcrSk-0001FO-Gv; Mon, 17 Jun 2019 07:14:19 -0600
+From:   ebiederm@xmission.com (Eric W. Biederman)
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     avagin@gmail.com, linux- stable <stable@vger.kernel.org>,
+        lkft-triage@lists.linaro.org,
+        "open list\:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Naresh Kamboju <naresh.kamboju@linaro.org>
+References: <CA+G9fYsFL5AH6dkdN2Qd6UP=wdiXRDR_ioQFPSCq=uUBcmtHXw@mail.gmail.com>
+Date:   Mon, 17 Jun 2019 08:13:56 -0500
+In-Reply-To: <CA+G9fYsFL5AH6dkdN2Qd6UP=wdiXRDR_ioQFPSCq=uUBcmtHXw@mail.gmail.com>
+        (Naresh Kamboju's message of "Mon, 17 Jun 2019 13:45:32 +0530")
+Message-ID: <87lfy0pd63.fsf@xmission.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/25.1 (gnu/linux)
 MIME-Version: 1.0
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Mon, 17 Jun 2019 18:37:35 +0530
-Message-ID: <CA+G9fYt1pTgZriRB9tj==3dPqtvMXVtKKDnd4qh00aMW2H-now@mail.gmail.com>
-Subject: BUG: kernel NULL pointer dereference, address: 00000000
-To:     Netdev <netdev@vger.kernel.org>, bpf@vger.kernel.org,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>
-Cc:     Daniel Borkmann <daniel@iogearbox.net>,
-        Stanislav Fomichev <sdf@google.com>,
-        Yonghong Song <yhs@fb.com>, alan.maguire@oracle.com,
-        alexei.starovoitov@gmail.com, edumazet@google.com,
-        john.fastabend@gmail.com, kuznet@ms2.inr.ac.ru,
-        yoshfuji@linux-ipv6.org, ast@kernel.org, kafai@fb.com,
-        Song Liu <songliubraving@fb.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
+X-XM-SPF: eid=1hcrSk-0001FO-Gv;;;mid=<87lfy0pd63.fsf@xmission.com>;;;hst=in01.mta.xmission.com;;;ip=72.206.97.68;;;frm=ebiederm@xmission.com;;;spf=neutral
+X-XM-AID: U2FsdGVkX19zUOHX1EtF3RkCCzZZMbH5Xciw+14zHdQ=
+X-SA-Exim-Connect-IP: 72.206.97.68
+X-SA-Exim-Mail-From: ebiederm@xmission.com
+X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on sa07.xmission.com
+X-Spam-Level: *
+X-Spam-Status: No, score=1.7 required=8.0 tests=ALL_TRUSTED,BAYES_50,
+        DCC_CHECK_NEGATIVE,LotsOfNums_01,T_TM2_M_HEADER_IN_MSG,XMSubLong
+        autolearn=disabled version=3.4.2
+X-Spam-Report: * -1.0 ALL_TRUSTED Passed through trusted hosts only via SMTP
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        *  0.7 XMSubLong Long Subject
+        *  0.0 T_TM2_M_HEADER_IN_MSG BODY: No description available.
+        *  1.2 LotsOfNums_01 BODY: Lots of long strings of numbers
+        * -0.0 DCC_CHECK_NEGATIVE Not listed in DCC
+        *      [sa07 1397; Body=1 Fuz1=1 Fuz2=1]
+X-Spam-DCC: XMission; sa07 1397; Body=1 Fuz1=1 Fuz2=1 
+X-Spam-Combo: *;Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+X-Spam-Relay-Country: 
+X-Spam-Timing: total 546 ms - load_scoreonly_sql: 0.06 (0.0%),
+        signal_user_changed: 2.6 (0.5%), b_tie_ro: 1.76 (0.3%), parse: 1.37
+        (0.3%), extract_message_metadata: 35 (6.3%), get_uri_detail_list: 5
+        (0.9%), tests_pri_-1000: 47 (8.6%), tests_pri_-950: 1.37 (0.3%),
+        tests_pri_-900: 1.14 (0.2%), tests_pri_-90: 30 (5.4%), check_bayes: 28
+        (5.1%), b_tokenize: 9 (1.7%), b_tok_get_all: 10 (1.9%), b_comp_prob:
+        2.8 (0.5%), b_tok_touch_all: 3.4 (0.6%), b_finish: 0.57 (0.1%),
+        tests_pri_0: 413 (75.5%), check_dkim_signature: 0.71 (0.1%),
+        check_dkim_adsp: 2.5 (0.5%), poll_dns_idle: 0.54 (0.1%), tests_pri_10:
+        2.4 (0.4%), tests_pri_500: 10 (1.8%), rewrite_mail: 0.00 (0.0%)
+Subject: Re: stable-rc: ptrace: peeksiginfo failed on 4.19, 4.14, 4.9 and 4.4
+X-Spam-Flag: No
+X-SA-Exim-Version: 4.2.1 (built Thu, 05 May 2016 13:38:54 -0600)
+X-SA-Exim-Scanned: Yes (on in01.mta.xmission.com)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-While running selftest bpf: test_sockmap the kernel BUG found on i386 and arm
-kernel running on Linux version 5.2.0-rc5-next-20190617
+Naresh Kamboju <naresh.kamboju@linaro.org> writes:
 
-steps to reproduce,
- cd /opt/kselftests/default-in-kernel/bpf
- ./test_sockmap
+> selftests: ptrace: peeksiginfo failed on x86_64, i386, arm64 and arm.
+> FAILED on stable rc branches 4.19, 4.14, 4.9 and 4.4.
+> PASS on mainline, next and 5.1 stable rc branch.
 
-[   33.666964] BUG: kernel NULL pointer dereference, address: 00000000
-[   33.673246] #PF: supervisor read access in kernel mode
-[   33.678392] #PF: error_code(0x0000) - not-present page
-[   33.683539] *pde = 00000000
-[   33.686435] Oops: 0000 [#1] SMP
-[   33.689593] CPU: 1 PID: 619 Comm: test_sockmap Not tainted
-5.2.0-rc5-next-20190617 #1
-[   33.697431] Hardware name: Supermicro SYS-5019S-ML/X11SSH-F, BIOS
-2.0b 07/27/2017
-[   33.704914] EIP: memcpy+0x1d/0x30
-[   33.708240] Code: 59 58 eb 85 90 90 90 90 90 90 90 90 90 3e 8d 74
-26 00 55 89 e5 57 56 89 c7 53 89 d6 89 cb c1 e9 02 f3 a5 89 d9 83 e1
-03 74 02 <f3> a4 5b 5e 5f 5d c3 8d b6 00 00 00 00 8d bf 00 00 00 00 3e
-8d 74
-[   33.726985] EAX: f1faf000 EBX: 00000001 ECX: 00000001 EDX: 00000000
-[   33.733249] ESI: 00000000 EDI: f1faf000 EBP: f2e6d99c ESP: f2e6d990
-[   33.739505] DS: 007b ES: 007b FS: 00d8 GS: 00e0 SS: 0068 EFLAGS: 00010202
-[   33.746283] CR0: 80050033 CR2: 00000000 CR3: 31fae000 CR4: 003406d0
-[   33.752542] DR0: 00000000 DR1: 00000000 DR2: 00000000 DR3: 00000000
-[   33.758807] DR6: fffe0ff0 DR7: 00000400
-[   33.762638] Call Trace:
-[   33.765084]  bpf_msg_push_data+0x635/0x660
-[   33.769183]  ? _raw_spin_unlock_irqrestore+0x2f/0x50
-[   33.774150]  ? lockdep_hardirqs_on+0xec/0x1a0
-[   33.778512]  ___bpf_prog_run+0xa0d/0x15a0
-[   33.782523]  ? __lock_acquire+0x1fe/0x1ec0
-[   33.786621]  __bpf_prog_run32+0x4b/0x70
-[   33.790462]  ? sk_psock_msg_verdict+0x5/0x290
-[   33.794819]  sk_psock_msg_verdict+0xad/0x290
-[   33.799091]  ? sk_psock_msg_verdict+0xad/0x290
-[   33.803537]  ? lockdep_hardirqs_on+0xec/0x1a0
-[   33.807887]  ? __local_bh_enable_ip+0x78/0xf0
-[   33.812238]  tcp_bpf_send_verdict+0x29c/0x3b0
-[   33.816590]  tcp_bpf_sendpage+0x233/0x3d0
-[   33.820603]  ? __lock_acquire+0x1fe/0x1ec0
-[   33.824703]  ? __lock_acquire+0x1fe/0x1ec0
-[   33.828801]  ? find_held_lock+0x27/0xa0
-[   33.832640]  ? lock_release+0x92/0x290
-[   33.836392]  ? find_get_entry+0x136/0x300
-[   33.840397]  ? touch_atime+0x34/0xd0
-[   33.843978]  ? copy_page_to_iter+0x245/0x400
-[   33.848248]  ? lockdep_hardirqs_on+0xec/0x1a0
-[   33.852600]  ? tcp_bpf_send_verdict+0x3b0/0x3b0
-[   33.857132]  inet_sendpage+0x53/0x1f0
-[   33.860789]  ? inet_recvmsg+0x1e0/0x1e0
-[   33.864620]  ? kernel_sendpage+0x40/0x40
-[   33.868536]  kernel_sendpage+0x1e/0x40
-[   33.872282]  sock_sendpage+0x24/0x30
-[   33.875861]  pipe_to_sendpage+0x59/0xa0
-[   33.879692]  ? direct_splice_actor+0x40/0x40
-[   33.883962]  __splice_from_pipe+0xde/0x1c0
-[   33.888055]  ? direct_splice_actor+0x40/0x40
-[   33.892342]  ? direct_splice_actor+0x40/0x40
-[   33.896635]  splice_from_pipe+0x59/0x80
-[   33.900466]  ? splice_from_pipe+0x80/0x80
-[   33.904469]  ? generic_splice_sendpage+0x20/0x20
-[   33.909080]  generic_splice_sendpage+0x18/0x20
-[   33.913516]  ? direct_splice_actor+0x40/0x40
-[   33.917782]  direct_splice_actor+0x2d/0x40
-[   33.921880]  splice_direct_to_actor+0x127/0x240
-[   33.926403]  ? generic_pipe_buf_nosteal+0x10/0x10
-[   33.931105]  do_splice_direct+0x7e/0xc0
-[   33.934944]  do_sendfile+0x20d/0x3e0
-[   33.938522]  sys_sendfile+0xac/0xd0
-[   33.942015]  do_fast_syscall_32+0x8e/0x320
-[   33.946114]  entry_SYSENTER_32+0x70/0xc8
-[   33.950039] EIP: 0xb7fa67a1
-[   33.952830] Code: 8b 98 60 cd ff ff 85 d2 89 c8 74 02 89 0a 5b 5d
-c3 8b 04 24 c3 8b 14 24 c3 8b 1c 24 c3 8b 3c 24 c3 51 52 55 89 e5 0f
-34 cd 80 <5d> 5a 59 c3 90 90 90 90 8d 76 00 58 b8 77 00 00 00 cd 80 90
-8d 76
-[   33.971567] EAX: ffffffda EBX: 00000018 ECX: 0000001c EDX: 00000000
-[   33.977823] ESI: 00000001 EDI: 00000018 EBP: 00000001 ESP: bfcaa6d4
-[   33.984083] DS: 007b ES: 007b FS: 0000 GS: 0033 SS: 007b EFLAGS: 00000206
-[   33.990869] Modules linked in: x86_pkg_temp_thermal fuse
-[   33.996181] CR2: 0000000000000000
-[   33.999500] ---[ end trace 0ef7a1496c65bde8 ]---
+Greg.
 
-- Naresh
+Looking in my email it appears 4.19, 4.14, 4.9, and 4.4 patches are
+missing the "found=1" line from the original change.   This explains
+the test failure.
+
+Can you handle this?
+
+Thanks,
+Eric
+
+
+> Test output:
+> ------------------
+> cd /opt/kselftests/mainline/ptrace
+> ./peeksiginfo
+> Error (peeksiginfo.c:143): Only 0 signals were read
+>
+> The git bisect show that below commit caused this test to fail.
+>
+>  git bisect bad
+> 5b6b0eac235ef1f915f24eda6d501a754022cbf0 is the first bad commit
+> commit 5b6b0eac235ef1f915f24eda6d501a754022cbf0
+> Author: Eric W. Biederman <ebiederm@xmission.com>
+> Date:   Tue May 28 18:46:37 2019 -0500
+>
+>     signal/ptrace: Don't leak unitialized kernel memory with PTRACE_PEEK_SIGINFO
+>
+>     commit f6e2aa91a46d2bc79fce9b93a988dbe7655c90c0 upstream.
+>
+>     Recently syzbot in conjunction with KMSAN reported that
+>     ptrace_peek_siginfo can copy an uninitialized siginfo to userspace.
+>     Inspecting ptrace_peek_siginfo confirms this.
+>
+>     The problem is that off when initialized from args.off can be
+>     initialized to a negaive value.  At which point the "if (off >= 0)"
+>     test to see if off became negative fails because off started off
+>     negative.
+>
+>     Prevent the core problem by adding a variable found that is only true
+>     if a siginfo is found and copied to a temporary in preparation for
+>     being copied to userspace.
+>
+>     Prevent args.off from being truncated when being assigned to off by
+>     testing that off is <= the maximum possible value of off.  Convert off
+>     to an unsigned long so that we should not have to truncate args.off,
+>     we have well defined overflow behavior so if we add another check we
+>     won't risk fighting undefined compiler behavior, and so that we have a
+>     type whose maximum value is easy to test for.
+>
+>     Cc: Andrei Vagin <avagin@gmail.com>
+>     Cc: stable@vger.kernel.org
+>     Reported-by: syzbot+0d602a1b0d8c95bdf299@syzkaller.appspotmail.com
+>     Fixes: 84c751bd4aeb ("ptrace: add ability to retrieve signals
+> without removing from a queue (v4)")
+>     Signed-off-by: "Eric W. Biederman" <ebiederm@xmission.com>
+>     Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+>
+> :040000 040000 ff9f3109f210274d0b87851d226c35e7305ce44a
+> b36de2c855fe2a0b332f145f0966dc1a0304d4bd M kernel
+>
+> Test case link,
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/tools/testing/selftests/ptrace/peeksiginfo.c#n143
+>
+> Test output log link,
+> https://lkft.validation.linaro.org/scheduler/job/777223#L1084
+>
+> Test results comparison on different branches,
+> https://qa-reports.linaro.org/_/comparetest/?project=22&project=6&project=58&project=135&project=40&project=23&project=167&suite=kselftest&test=ptrace_peeksiginfo
+>
+> Best regards
+> Naresh Kamboju
