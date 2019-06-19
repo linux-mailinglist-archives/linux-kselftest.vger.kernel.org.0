@@ -2,47 +2,47 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EE94B4C1FF
-	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Jun 2019 22:02:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A3EA4C212
+	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Jun 2019 22:06:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726244AbfFSUCZ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 19 Jun 2019 16:02:25 -0400
-Received: from aserp2120.oracle.com ([141.146.126.78]:36286 "EHLO
-        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726143AbfFSUCY (ORCPT
+        id S1726379AbfFSUGS (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 19 Jun 2019 16:06:18 -0400
+Received: from userp2130.oracle.com ([156.151.31.86]:34034 "EHLO
+        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726143AbfFSUGR (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 19 Jun 2019 16:02:24 -0400
-Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
-        by aserp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x5JJxCMh013084;
-        Wed, 19 Jun 2019 20:01:33 GMT
+        Wed, 19 Jun 2019 16:06:17 -0400
+Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
+        by userp2130.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x5JK3j9u107770;
+        Wed, 19 Jun 2019 20:05:27 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=subject : to : cc :
  references : from : message-id : date : mime-version : in-reply-to :
  content-type : content-transfer-encoding; s=corp-2018-07-02;
- bh=Vroyiiy2apNH9g1WQULlt3tAhqXh3qFzkC0thjbI/tY=;
- b=tQKRrCMRIZFf76xHdG+OcQRJVCixkQdbl3HfJkhqJ6zQ5Fq71mORMALE81hvlqMU5cq2
- K4F8SUycLHKVrHTiluUHLfebVsFtIV4u7NZst1BEEOGeJtKDYGfPNuGNBzsiq/6/sG1m
- oHmWEWnqBcx8EHxc8VsLy1BXGGOzd4qHtZgUM3+RorIGLB7LeM8SEKQOzG7hpzi3tUIX
- cBqz1T+7bPFIBDeruJWhgHUJUNTS7jmoeogb9Jt64Fnvc0VzloFKzLKS2q+3tVxVQSnx
- bLlYN2Mg5EBeENllw30HSTJNHEAnYlsgKqvHUrkE60SZa/hI/hGzXCuuUFok8MhRdXuP yg== 
-Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by aserp2120.oracle.com with ESMTP id 2t7809ddd7-1
+ bh=T5/3kAdAeR6zFBROUWJvfOGR6wpTe6uJBD03+FJjR7Q=;
+ b=JfZGTb/9vsPuTMYS8TLwO4D8maqLtaN37PWBviJWNWHwVHs6MQchbjnbIgEyT7QH5fPr
+ RQaEqPDd4BLrljBr3UdRftu3+JLtrIljjKd9fnV8AG4CN4o7VCmxFBu3Cl8nvesNwCWz
+ WIX9fL7RM27yvN1yXBV2ffc84cSXssCtprnFBx9JT9Dxvzwcw9BbBpKWzQE6w959cX3m
+ 0wLk2hF0v2PhKsE/QLpTHqn5AFlUdUziXjHErCwZzqKM7mXOXE9LWChgFdAX1ktGhG2H
+ kWc5j8nTubxy0mEzTZ/LFPGY/UPGDf6lLKUj2qzGz2XAU0UI7iXrVbiRGgfjIjj0yqPG dg== 
+Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
+        by userp2130.oracle.com with ESMTP id 2t7809dft1-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 19 Jun 2019 20:01:33 +0000
-Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x5JK0U82055051;
-        Wed, 19 Jun 2019 20:01:32 GMT
-Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
-        by aserp3020.oracle.com with ESMTP id 2t77yp1s13-1
+        Wed, 19 Jun 2019 20:05:27 +0000
+Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
+        by aserp3030.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x5JK5FSV002705;
+        Wed, 19 Jun 2019 20:05:26 GMT
+Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
+        by aserp3030.oracle.com with ESMTP id 2t7rdwu63d-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 19 Jun 2019 20:01:32 +0000
-Received: from abhmp0014.oracle.com (abhmp0014.oracle.com [141.146.116.20])
-        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id x5JK1P5e025354;
-        Wed, 19 Jun 2019 20:01:25 GMT
+        Wed, 19 Jun 2019 20:05:26 +0000
+Received: from abhmp0008.oracle.com (abhmp0008.oracle.com [141.146.116.14])
+        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id x5JK5NFI017703;
+        Wed, 19 Jun 2019 20:05:23 GMT
 Received: from [10.65.164.174] (/10.65.164.174)
         by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Wed, 19 Jun 2019 13:01:25 -0700
-Subject: Re: [PATCH v17 07/15] fs, arm64: untag user pointers in
- copy_mount_options
+        with ESMTP ; Wed, 19 Jun 2019 13:05:23 -0700
+Subject: Re: [PATCH v17 12/15] media/v4l2-core, arm64: untag user pointers in
+ videobuf_dma_contig_user_get
 To:     Andrey Konovalov <andreyknvl@google.com>,
         linux-arm-kernel@lists.infradead.org, linux-mm@kvack.org,
         linux-kernel@vger.kernel.org, amd-gfx@lists.freedesktop.org,
@@ -77,17 +77,18 @@ Cc:     Catalin Marinas <catalin.marinas@arm.com>,
         Ruben Ayrapetyan <Ruben.Ayrapetyan@arm.com>,
         Robin Murphy <robin.murphy@arm.com>,
         Kevin Brodsky <kevin.brodsky@arm.com>,
-        Szabolcs Nagy <Szabolcs.Nagy@arm.com>
+        Szabolcs Nagy <Szabolcs.Nagy@arm.com>,
+        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
 References: <cover.1560339705.git.andreyknvl@google.com>
- <4ed871e14cc265a519c6ba8660a1827844371791.1560339705.git.andreyknvl@google.com>
+ <7fbcdbe16a2bd99e92eb4541248469738d89a122.1560339705.git.andreyknvl@google.com>
 From:   Khalid Aziz <khalid.aziz@oracle.com>
 Organization: Oracle Corp
-Message-ID: <14e49054-01dc-dab5-40cc-71434ea3852a@oracle.com>
-Date:   Wed, 19 Jun 2019 14:01:22 -0600
+Message-ID: <5ea75db0-20e9-7423-8670-967eedd56440@oracle.com>
+Date:   Wed, 19 Jun 2019 14:05:20 -0600
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.7.0
 MIME-Version: 1.0
-In-Reply-To: <4ed871e14cc265a519c6ba8660a1827844371791.1560339705.git.andreyknvl@google.com>
+In-Reply-To: <7fbcdbe16a2bd99e92eb4541248469738d89a122.1560339705.git.andreyknvl@google.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: quoted-printable
@@ -95,13 +96,13 @@ X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9293 signatures=6
 X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
  phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=999
  adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.0.1-1810050000 definitions=main-1906190164
+ engine=8.0.1-1810050000 definitions=main-1906190165
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9293 signatures=668687
 X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
- suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
+ suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1011
  lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1810050000
- definitions=main-1906190164
+ definitions=main-1906190165
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
@@ -114,43 +115,69 @@ On 6/12/19 5:43 AM, Andrey Konovalov wrote:
 r
 > than 0x00) as syscall arguments.
 >=20
-> In copy_mount_options a user address is being subtracted from TASK_SIZE=
-=2E
-> If the address is lower than TASK_SIZE, the size is calculated to not
-> allow the exact_copy_from_user() call to cross TASK_SIZE boundary.
-> However if the address is tagged, then the size will be calculated
-> incorrectly.
+> videobuf_dma_contig_user_get() uses provided user pointers for vma
+> lookups, which can only by done with untagged pointers.
 >=20
-> Untag the address before subtracting.
+> Untag the pointers in this function.
 >=20
 > Reviewed-by: Kees Cook <keescook@chromium.org>
-> Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
+> Acked-by: Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
 > Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
 > ---
 
-Please update commit log to make it not arm64 specific since this change
-affects other architectures as well. Other than that,
+Patch looks good, but commit log should be updated to not be specific to
+arm64.
 
 Reviewed-by: Khalid Aziz <khalid.aziz@oracle.com>
 
 
->  fs/namespace.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->=20
-> diff --git a/fs/namespace.c b/fs/namespace.c
-> index b26778bdc236..2e85712a19ed 100644
-> --- a/fs/namespace.c
-> +++ b/fs/namespace.c
-> @@ -2993,7 +2993,7 @@ void *copy_mount_options(const void __user * data=
-)
->  	 * the remainder of the page.
->  	 */
->  	/* copy_from_user cannot cross TASK_SIZE ! */
-> -	size =3D TASK_SIZE - (unsigned long)data;
-> +	size =3D TASK_SIZE - (unsigned long)untagged_addr(data);
->  	if (size > PAGE_SIZE)
->  		size =3D PAGE_SIZE;
+
+>  drivers/media/v4l2-core/videobuf-dma-contig.c | 9 +++++----
+>  1 file changed, 5 insertions(+), 4 deletions(-)
+> exact_copy_from_user
+> diff --git a/drivers/media/v4l2-core/videobuf-dma-contig.c b/drivers/me=
+dia/v4l2-core/videobuf-dma-contig.c
+> index e1bf50df4c70..8a1ddd146b17 100644
+> --- a/drivers/media/v4l2-core/videobuf-dma-contig.c
+> +++ b/drivers/media/v4l2-core/videobuf-dma-contig.c
+> @@ -160,6 +160,7 @@ static void videobuf_dma_contig_user_put(struct vid=
+eobuf_dma_contig_memory *mem)
+>  static int videobuf_dma_contig_user_get(struct videobuf_dma_contig_mem=
+ory *mem,
+>  					struct videobuf_buffer *vb)
+>  {
+> +	unsigned long untagged_baddr =3D untagged_addr(vb->baddr);
+>  	struct mm_struct *mm =3D current->mm;
+>  	struct vm_area_struct *vma;
+>  	unsigned long prev_pfn, this_pfn;
+> @@ -167,22 +168,22 @@ static int videobuf_dma_contig_user_get(struct vi=
+deobuf_dma_contig_memory *mem,
+>  	unsigned int offset;
+>  	int ret;
 > =20
+> -	offset =3D vb->baddr & ~PAGE_MASK;
+> +	offset =3D untagged_baddr & ~PAGE_MASK;
+>  	mem->size =3D PAGE_ALIGN(vb->size + offset);
+>  	ret =3D -EINVAL;
+> =20
+>  	down_read(&mm->mmap_sem);
+> =20
+> -	vma =3D find_vma(mm, vb->baddr);
+> +	vma =3D find_vma(mm, untagged_baddr);
+>  	if (!vma)
+>  		goto out_up;
+> =20
+> -	if ((vb->baddr + mem->size) > vma->vm_end)
+> +	if ((untagged_baddr + mem->size) > vma->vm_end)
+>  		goto out_up;
+> =20
+>  	pages_done =3D 0;
+>  	prev_pfn =3D 0; /* kill warning */
+> -	user_address =3D vb->baddr;
+> +	user_address =3D untagged_baddr;
+> =20
+>  	while (pages_done < (mem->size >> PAGE_SHIFT)) {
+>  		ret =3D follow_pfn(vma, user_address, &this_pfn);
 >=20
 
 
