@@ -2,89 +2,63 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E936A4D3B7
-	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Jun 2019 18:28:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2DDF4DCE4
+	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Jun 2019 23:40:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726686AbfFTQ15 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 20 Jun 2019 12:27:57 -0400
-Received: from foss.arm.com ([217.140.110.172]:47646 "EHLO foss.arm.com"
+        id S1726151AbfFTVk2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 20 Jun 2019 17:40:28 -0400
+Received: from mga18.intel.com ([134.134.136.126]:34693 "EHLO mga18.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726675AbfFTQ15 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 20 Jun 2019 12:27:57 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 497012B;
-        Thu, 20 Jun 2019 09:27:56 -0700 (PDT)
-Received: from donnerap.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E69803F246;
-        Thu, 20 Jun 2019 09:27:53 -0700 (PDT)
-Date:   Thu, 20 Jun 2019 17:27:46 +0100
-From:   Andre Przywara <andre.przywara@arm.com>
-To:     Vincenzo Frascino <vincenzo.frascino@arm.com>
-Cc:     linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Huw Davies <huw@codeweavers.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Will Deacon <will.deacon@arm.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Mark Salyzyn <salyzyn@android.com>,
-        Paul Burton <paul.burton@mips.com>,
-        Dmitry Safonov <0x7f454c46@gmail.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Collingbourne <pcc@google.com>
-Subject: Re: [PATCH v6 00/19] Unify vDSOs across more architectures
-Message-ID: <20190620172746.7f92cb14@donnerap.cambridge.arm.com>
-In-Reply-To: <20190530141531.43462-1-vincenzo.frascino@arm.com>
-References: <20190530141531.43462-1-vincenzo.frascino@arm.com>
-Organization: ARM
-X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; aarch64-unknown-linux-gnu)
+        id S1726034AbfFTVk2 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 20 Jun 2019 17:40:28 -0400
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga106.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 20 Jun 2019 14:40:26 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.63,398,1557212400"; 
+   d="scan'208";a="168639077"
+Received: from mudigirx-mobl1.gar.corp.intel.com (HELO localhost) ([10.252.61.12])
+  by FMSMGA003.fm.intel.com with ESMTP; 20 Jun 2019 14:40:24 -0700
+Date:   Fri, 21 Jun 2019 00:40:22 +0300
+From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+To:     Daniel =?iso-8859-1?Q?D=EDaz?= <daniel.diaz@linaro.org>
+Cc:     shuah@kernel.org, linux-kselftest@vger.kernel.org,
+        Petr Vorel <petr.vorel@gmail.com>,
+        Joey Pabalinas <joeypabalinas@gmail.com>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] selftests/tpm2: Install run-time Python modules
+Message-ID: <20190620214022.GA20474@linux.intel.com>
+References: <20190620131822.28944-1-daniel.diaz@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20190620131822.28944-1-daniel.diaz@linaro.org>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, 30 May 2019 15:15:12 +0100
-Vincenzo Frascino <vincenzo.frascino@arm.com> wrote:
+On Thu, Jun 20, 2019 at 08:18:19AM -0500, Daniel Díaz wrote:
+> When ordinarily running the tests, upon `make install', the
+> following error is encountered:
+>   ImportError: No module named tpm2_tests
+> because the Python files are not installed at the moment.
+> 
+> Fix this by adding both Python modules as accompanying
+> TEST_FILES in the Makefile.
+> 
+> Signed-off-by: Daniel Díaz <daniel.diaz@linaro.org>
 
-Hi,
+Reviewed-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
 
-> vDSO (virtual dynamic shared object) is a mechanism that the Linux
-> kernel provides as an alternative to system calls to reduce where
-> possible the costs in terms of cycles.
-> [ ... ]
-> The porting has been benchmarked and the performance results are
-> provided as part of this cover letter.
+Question the kselftests maintainers: can I take this to [1] and
+include to my 5.3 PR?
 
-I can't reveal the absolute numbers here, but vdsotest-bench gives me
-quite some performance gain on my board here ("time needed on v6" divided
-by "time needed on 5.2-rc1", so smaller percentages are better):
-clock-gettime-monotonic:	23 %
-clock-gettime-monotonic-raw:	30 %
-clock-gettime-tai:		 5 %
-clock-getres-tai:		 5 %
-clock-gettime-boottime:		 5 %
-clock-getres-boottime:		 5 %
-clock-gettime-realtime:		25 %
-gettimeofday:			26 % 
-The other numbers stayed the same or differed by just 1 ns, which seems to
-be within the margin of error, as repeated runs on the same kernel suggest.
-The 5% numbers are of course those were we went from a syscall-only to the
-newly added arm64 VDSO implementation, but even the other calls improved
-by a factor of 3 or more.
+[1] git://git.infradead.org/users/jjs/linux-tpmdd.git
 
-Sounds like a strong indicator that this is a good thing to have.
-
-Not sure if "running some benchmark a couple of times on a single machine"
-qualifies for this, but I guess it means:
-
-Tested-by: Andre Przywara <andre.przywara@arm.com>
-
-Cheers,
-Andre.
+/Jarkko
