@@ -2,40 +2,58 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B8C174C460
-	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Jun 2019 02:15:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD1254C4DA
+	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Jun 2019 03:18:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730773AbfFTAP2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 19 Jun 2019 20:15:28 -0400
-Received: from mail.kernel.org ([198.145.29.99]:56078 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726479AbfFTAP2 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 19 Jun 2019 20:15:28 -0400
-Received: from kernel.org (unknown [104.132.0.74])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 93426218BE;
-        Thu, 20 Jun 2019 00:15:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1560989726;
-        bh=Cyw3CS4Us7cHDynulRLePwpLSsuY8ho08g4vXgTjDFM=;
-        h=In-Reply-To:References:To:From:Subject:Cc:Date:From;
-        b=uxkDxyYpF7laGQMQdbheNapqj0FQjS0o/hFsG69mDV7yMnicTh9sX+q1GYO8mfbwg
-         E1z69sHUGBcQdsi2WlYDYbSc4B2+s17Nz6qJQoCAMJgUsjAbryk7FV2ai2kP081uXc
-         0hRlrWl2NbES9/L1UjKNP/E97FgjeS8RMgUcodoM=
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20190617082613.109131-2-brendanhiggins@google.com>
-References: <20190617082613.109131-1-brendanhiggins@google.com> <20190617082613.109131-2-brendanhiggins@google.com>
+        id S1731111AbfFTBR4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 19 Jun 2019 21:17:56 -0400
+Received: from mail-pg1-f196.google.com ([209.85.215.196]:37262 "EHLO
+        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726211AbfFTBR4 (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 19 Jun 2019 21:17:56 -0400
+Received: by mail-pg1-f196.google.com with SMTP id 145so632654pgh.4;
+        Wed, 19 Jun 2019 18:17:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=sQXeyT1HOJUOTqXAfF30wa5tl07vfC8Ho8QPiu+AUmU=;
+        b=dz6cdwV/r75OnNKrL4gx8ZRnk9eJQrLc/XBVO5bKEiireDO4wNHpYHyldvXT0EiuWu
+         ppu0kJyuD01pJK/yY9Sc0cQhFYNiWllaL1gpz4dsQcDPbgsuvQg1xo52piKPAn76gKBC
+         08KBlwLQD/7WXZP9lcR2CJZtKaIFgJp0o4DAqo0v7DD0wD/oC8Z+0svZ/DpC5eB0IaQR
+         532N8xHNVBADse1U1xTBdS0Hj/MtV1ZUgC2nk9tHgitGiz/gXQTMK9tavkBvV+CTU0q2
+         k2Jn4dRSzsT8pQkXYEQbifzzrrxW+LHoOuvERF7zWX2TOhYnTCG3Sx2neEgKQvOSr3rn
+         D3RA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=sQXeyT1HOJUOTqXAfF30wa5tl07vfC8Ho8QPiu+AUmU=;
+        b=kTITNNveMmy2IVphqXImq2/VN9y2LMycOe7FoJum4y631pXEoUYA6a1/oXolGduszb
+         GkBquoscQATNfDcGX96NCoLMkdFRjoiRfY89zRE/M9fwYoizYDwbVzJVKoRt3cFhpp7t
+         cR9KAMXTZaS4pL2JCAVGVKJRcMxOTDmpJwBwAoV6m9DiDtdH2Q5D1qWVUHdNMbjtK0iJ
+         uYftcst826TUSm3iu70EsTvemZOddkPBbVr8vHI+j7Dp4v+o0fNzIfUVpwhwmkqfRCOO
+         MKFAaPz6dH2MLGGsGe1UCtv3buSJhe2tOCXn+wXKPH10jz0F2mAqO1jGlpHWgm+kFE8K
+         kHXA==
+X-Gm-Message-State: APjAAAXCDOc8lPXmF1eDe/fahHamtkQ8IPCN/vSw1PURrKbH1ZLafrCd
+        M1fzB4nGQuUOCzGRHy+k64E=
+X-Google-Smtp-Source: APXvYqzdMj4/FazAQbDL48xqo25QTSXAVT2QkZe8UL8Q+0fAHJYZrYbIiEtG6+Jk3rLvO3Ba2D4w/A==
+X-Received: by 2002:a63:5a1f:: with SMTP id o31mr10331504pgb.254.1560993475116;
+        Wed, 19 Jun 2019 18:17:55 -0700 (PDT)
+Received: from [192.168.1.70] (c-24-6-192-50.hsd1.ca.comcast.net. [24.6.192.50])
+        by smtp.gmail.com with ESMTPSA id l68sm3115863pjb.8.2019.06.19.18.17.52
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 19 Jun 2019 18:17:54 -0700 (PDT)
+Subject: Re: [PATCH v5 00/18] kunit: introduce KUnit, the Linux kernel unit
+ testing framework
 To:     Brendan Higgins <brendanhiggins@google.com>,
-        frowand.list@gmail.com, gregkh@linuxfoundation.org,
-        jpoimboe@redhat.com, keescook@google.com,
-        kieran.bingham@ideasonboard.com, mcgrof@kernel.org,
-        peterz@infradead.org, robh@kernel.org, shuah@kernel.org,
-        tytso@mit.edu, yamada.masahiro@socionext.com
-From:   Stephen Boyd <sboyd@kernel.org>
-Subject: Re: [PATCH v5 01/18] kunit: test: add KUnit test runner core
+        gregkh@linuxfoundation.org, jpoimboe@redhat.com,
+        keescook@google.com, kieran.bingham@ideasonboard.com,
+        mcgrof@kernel.org, peterz@infradead.org, robh@kernel.org,
+        sboyd@kernel.org, shuah@kernel.org, tytso@mit.edu,
+        yamada.masahiro@socionext.com
 Cc:     devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
         kunit-dev@googlegroups.com, linux-doc@vger.kernel.org,
         linux-fsdevel@vger.kernel.org, linux-kbuild@vger.kernel.org,
@@ -47,184 +65,220 @@ Cc:     devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
         khilman@baylibre.com, knut.omang@oracle.com, logang@deltatee.com,
         mpe@ellerman.id.au, pmladek@suse.com, rdunlap@infradead.org,
         richard@nod.at, rientjes@google.com, rostedt@goodmis.org,
-        wfg@linux.intel.com, Brendan Higgins <brendanhiggins@google.com>
-User-Agent: alot/0.8.1
-Date:   Wed, 19 Jun 2019 17:15:25 -0700
-Message-Id: <20190620001526.93426218BE@mail.kernel.org>
+        wfg@linux.intel.com
+References: <20190617082613.109131-1-brendanhiggins@google.com>
+From:   Frank Rowand <frowand.list@gmail.com>
+Message-ID: <10feac3e-7621-65e5-fbf0-9c63fcbe09c9@gmail.com>
+Date:   Wed, 19 Jun 2019 18:17:51 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
+MIME-Version: 1.0
+In-Reply-To: <20190617082613.109131-1-brendanhiggins@google.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Quoting Brendan Higgins (2019-06-17 01:25:56)
-> diff --git a/kunit/test.c b/kunit/test.c
-> new file mode 100644
-> index 0000000000000..d05d254f1521f
-> --- /dev/null
-> +++ b/kunit/test.c
-> @@ -0,0 +1,210 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Base unit test (KUnit) API.
-> + *
-> + * Copyright (C) 2019, Google LLC.
-> + * Author: Brendan Higgins <brendanhiggins@google.com>
-> + */
-> +
-> +#include <linux/sched/debug.h>
-> +#include <kunit/test.h>
-> +
-> +static bool kunit_get_success(struct kunit *test)
-> +{
-> +       unsigned long flags;
-> +       bool success;
-> +
-> +       spin_lock_irqsave(&test->lock, flags);
-> +       success =3D test->success;
-> +       spin_unlock_irqrestore(&test->lock, flags);
+Hi Brendan,
 
-I still don't understand the locking scheme in this code. Is the
-intention to make getter and setter APIs that are "safe" by adding in a
-spinlock that is held around getting and setting various members in the
-kunit structure?
+I am only responding to this because you asked me to in the v4 thread.
 
-In what situation is there more than one thread reading or writing the
-kunit struct? Isn't it only a single process that is going to be
-operating on this structure? And why do we need to disable irqs? Are we
-expecting to be modifying the unit tests from irq contexts?
+Thank you for evaluating my comments in the v4 thread and asking me to
+comment on v5
 
-> +
-> +       return success;
-> +}
-> +
-> +static void kunit_set_success(struct kunit *test, bool success)
-> +{
-> +       unsigned long flags;
-> +
-> +       spin_lock_irqsave(&test->lock, flags);
-> +       test->success =3D success;
-> +       spin_unlock_irqrestore(&test->lock, flags);
-> +}
-> +
-> +static int kunit_vprintk_emit(int level, const char *fmt, va_list args)
-> +{
-> +       return vprintk_emit(0, level, NULL, 0, fmt, args);
-> +}
-> +
-> +static int kunit_printk_emit(int level, const char *fmt, ...)
-> +{
-> +       va_list args;
-> +       int ret;
-> +
-> +       va_start(args, fmt);
-> +       ret =3D kunit_vprintk_emit(level, fmt, args);
-> +       va_end(args);
-> +
-> +       return ret;
-> +}
-> +
-> +static void kunit_vprintk(const struct kunit *test,
-> +                         const char *level,
-> +                         struct va_format *vaf)
-> +{
-> +       kunit_printk_emit(level[1] - '0', "\t# %s: %pV", test->name, vaf);
-> +}
-> +
-> +static bool kunit_has_printed_tap_version;
+On 6/17/19 1:25 AM, Brendan Higgins wrote:
+> ## TL;DR
+> 
+> A not so quick follow-up to Stephen's suggestions on PATCH v4. Nothing
+> that really changes any functionality or usage with the minor exception
+> of a couple public functions that Stephen asked me to rename.
+> Nevertheless, a good deal of clean up and fixes. See changes below.
+> 
+> As for our current status, right now we got Reviewed-bys on all patches
+> except:
+> 
+> - [PATCH v5 08/18] objtool: add kunit_try_catch_throw to the noreturn
+>   list
+> 
+> However, it would probably be good to get reviews/acks from the
+> subsystem maintainers on:
+> 
+> - [PATCH v5 06/18] kbuild: enable building KUnit
+> - [PATCH v5 08/18] objtool: add kunit_try_catch_throw to the noreturn
+>   list
+> - [PATCH v5 15/18] Documentation: kunit: add documentation for KUnit
+> - [PATCH v5 17/18] kernel/sysctl-test: Add null pointer test for
+>   sysctl.c:proc_dointvec()
+> - [PATCH v5 18/18] MAINTAINERS: add proc sysctl KUnit test to PROC
+>   SYSCTL section
+> 
+> Other than that, I think we should be good to go.
+> 
+> One last thing, I updated the background to include my thoughts on KUnit
+> vs. in kernel testing with kselftest in the background sections as
+> suggested by Frank in the discussion on PATCH v2.
+> 
+> ## Background
+> 
+> This patch set proposes KUnit, a lightweight unit testing and mocking
+> framework for the Linux kernel.
+> 
+> Unlike Autotest and kselftest, KUnit is a true unit testing framework;
+> it does not require installing the kernel on a test machine or in a VM
+> (however, KUnit still allows you to run tests on test machines or in VMs
+> if you want[1]) and does not require tests to be written in userspace
+> running on a host kernel. Additionally, KUnit is fast: From invocation
+> to completion KUnit can run several dozen tests in under a second.
+> Currently, the entire KUnit test suite for KUnit runs in under a second
+> from the initial invocation (build time excluded).
+> 
+> KUnit is heavily inspired by JUnit, Python's unittest.mock, and
+> Googletest/Googlemock for C++. KUnit provides facilities for defining
+> unit test cases, grouping related test cases into test suites, providing
+> common infrastructure for running tests, mocking, spying, and much more.
+> 
 
-Can you please move this into function local scope in the function
-below?
+I looked only at this section, as was specifically requested:
 
-> +
-> +static void kunit_print_tap_version(void)
-> +{
-> +       if (!kunit_has_printed_tap_version) {
-> +               kunit_printk_emit(LOGLEVEL_INFO, "TAP version 14\n");
-> +               kunit_has_printed_tap_version =3D true;
-> +       }
-> +}
-> +
-[...]
-> +
-> +static bool kunit_module_has_succeeded(struct kunit_module *module)
-> +{
-> +       const struct kunit_case *test_case;
-> +       bool success =3D true;
-> +
-> +       for (test_case =3D module->test_cases; test_case->run_case; test_=
-case++)
-> +               if (!test_case->success) {
-> +                       success =3D false;
-> +                       break;
+> ### But wait! Doesn't kselftest support in kernel testing?!
+> 
+> In a previous version of this patchset Frank pointed out that kselftest
+> already supports writing a test that resides in the kernel using the
+> test module feature[2]. LWN did a really great summary on this
+> discussion here[3].
+> 
+> Kselftest has a feature that allows a test module to be loaded into a
+> kernel using the kselftest framework; this does allow someone to write
+> tests against kernel code not directly exposed to userland; however, it
+> does not provide much of a framework around how to structure the tests.
+> The kselftest test module feature just provides a header which has a
+> standardized way of reporting test failures, 
 
-Why not 'return false'?
 
-> +               }
-> +
-> +       return success;
+> and then provides
+> infrastructure to load and run the tests using the kselftest test
+> harness.
 
-And 'return true'?
+The in-kernel tests can also be invoked at boot time if they are
+configured (Kconfig) as in-kernel instead of as modules.  I did not
+check how many of the tests have tri-state configuration to allow
+this, but the few that I looked at did.
 
-> +}
-> +
-> +static size_t kunit_module_counter =3D 1;
-> +
-> +static void kunit_print_subtest_end(struct kunit_module *module)
-> +{
-> +       kunit_print_ok_not_ok(false,
-> +                             kunit_module_has_succeeded(module),
-> +                             kunit_module_counter++,
-> +                             module->name);
-> +}
-> +
-> +static void kunit_print_test_case_ok_not_ok(struct kunit_case *test_case,
-> +                                           size_t test_number)
-> +{
-> +       kunit_print_ok_not_ok(true,
-> +                             test_case->success,
-> +                             test_number,
-> +                             test_case->name);
-> +}
-> +
-> +void kunit_init_test(struct kunit *test, const char *name)
-> +{
-> +       spin_lock_init(&test->lock);
-> +       test->name =3D name;
-> +       test->success =3D true;
-> +}
-> +
-> +/*
-> + * Performs all logic to run a test case.
-> + */
-> +static void kunit_run_case(struct kunit_module *module,
-> +                          struct kunit_case *test_case)
-> +{
-> +       struct kunit test;
-> +       int ret =3D 0;
-> +
-> +       kunit_init_test(&test, test_case->name);
-> +
-> +       if (module->init) {
-> +               ret =3D module->init(&test);
-> +               if (ret) {
-> +                       kunit_err(&test, "failed to initialize: %d\n", re=
-t);
-> +                       kunit_set_success(&test, false);
-> +                       return;
-> +               }
-> +       }
-> +
-> +       if (!ret)
-> +               test_case->run_case(&test);
+> 
+> The kselftest test module does not seem to be opinionated at all in
+> regards to how tests are structured, how they check for failures, how
+> tests are organized. Even in the method it provides for reporting
+> failures is pretty simple; it doesn't have any more advanced failure
+> reporting or logging features. Given what's there, I think it is fair to
+> say that it is not actually a framework, but a feature that makes it
+> possible for someone to do some checks in kernel space.
 
-Do we need this if condition? ret can only be set to non-zero above but
-then we'll exit the function early so it seems unnecessary. Given that,
-ret should probably be moved into the module->init path.
+I would call that description a little dismissive.  The set of in-kernel
+tests that I looked like followed a common pattern and reported results
+in a uniform manner.
 
-> +
-> +       if (module->exit)
-> +               module->exit(&test);
-> +
-> +       test_case->success =3D kunit_get_success(&test);
-> +}
-> +
+> 
+> Furthermore, kselftest test module has very few users. I checked for all
+> the tests that use it using the following grep command:
+> 
+> grep -Hrn -e 'kselftest_module\.h'
+> 
+> and only got three results: lib/test_strscpy.c, lib/test_printf.c, and
+> lib/test_bitmap.c.
+
+You missed many tests.  I listed much more than that in the v4 thread, and
+someone else also listed more in the v4 thread.
+
+
+> 
+> So despite kselftest test module's existence, there really is no feature
+> overlap between kselftest and KUnit, save one: that you can use either
+> to write an in-kernel test, but this is a very small feature in
+> comparison to everything that KUnit allows you to do. KUnit is a full
+> x-unit style unit testing framework, whereas kselftest looks a lot more
+> like an end-to-end/functional testing framework, with a feature that
+> makes it possible to write in-kernel tests.
+
+The description does not give enough credit to what is in kselftest.
+
+It does not matter whether KUnit provides additional things, relative
+to kselftest.  The point I was making is that there appears to be
+_some_ overlap between kselftest and KUnit, and if there is overlap
+then it is worth considering whether the overlap can be unified instead
+of duplicated.
+
+I don't have a dog in this fight and the discussion in the v4 thread
+went way off track.  Thus I am not going to get sucked back into a
+pointless debate in this thread.
+
+Thanks for adding this section to address the issue.
+
+-Frank
+
+
+> 
+> ### What's so special about unit testing?
+> 
+> A unit test is supposed to test a single unit of code in isolation,
+> hence the name. There should be no dependencies outside the control of
+> the test; this means no external dependencies, which makes tests orders
+> of magnitudes faster. Likewise, since there are no external dependencies,
+> there are no hoops to jump through to run the tests. Additionally, this
+> makes unit tests deterministic: a failing unit test always indicates a
+> problem. Finally, because unit tests necessarily have finer granularity,
+> they are able to test all code paths easily solving the classic problem
+> of difficulty in exercising error handling code.
+> 
+> ### Is KUnit trying to replace other testing frameworks for the kernel?
+> 
+> No. Most existing tests for the Linux kernel are end-to-end tests, which
+> have their place. A well tested system has lots of unit tests, a
+> reasonable number of integration tests, and some end-to-end tests. KUnit
+> is just trying to address the unit test space which is currently not
+> being addressed.
+> 
+> ### More information on KUnit
+> 
+> There is a bunch of documentation near the end of this patch set that
+> describes how to use KUnit and best practices for writing unit tests.
+> For convenience I am hosting the compiled docs here[4].
+> 
+> Additionally for convenience, I have applied these patches to a
+> branch[5]. The repo may be cloned with:
+> git clone https://kunit.googlesource.com/linux
+> This patchset is on the kunit/rfc/v5.2-rc4/v5 branch.
+> 
+> ## Changes Since Last Version
+> 
+> Aside from a couple public function renames, there isn't really anything
+> in here that changes any functionality.
+> 
+> - Went through and fixed a couple of anti-patterns suggested by Stephen
+>   Boyd. Things like:
+>   - Dropping an else clause at the end of a function.
+>   - Dropping the comma on the closing sentinel, `{}`, of a list.
+> - Inlines a bunch of functions in the test case running logic in patch
+>   01/18 to make it more readable as suggested by Stephen Boyd
+> - Found and fixed bug in resource deallocation logic in patch 02/18. Bug
+>   was discovered as a result of making a change suggested by Stephen
+>   Boyd. This does not substantially change how any of the code works
+>   conceptually.
+> - Renamed new_string_stream() to alloc_string_stream() as suggested by
+>   Stephen Boyd.
+> - Made string-stream a KUnit managed object - based on a suggestion made
+>   by Stephen Boyd.
+> - Renamed kunit_new_stream() to alloc_kunit_stream() as suggested by
+>   Stephen Boyd.
+> - Removed the ability to set log level after allocating a kunit_stream,
+>   as suggested by Stephen Boyd.
+> 
+> [1] https://google.github.io/kunit-docs/third_party/kernel/docs/usage.html#kunit-on-non-uml-architectures
+> [2] https://www.kernel.org/doc/html/latest/dev-tools/kselftest.html#test-module
+> [3] https://lwn.net/Articles/790235/
+> [4] https://google.github.io/kunit-docs/third_party/kernel/docs/
+> [5] https://kunit.googlesource.com/linux/+/kunit/rfc/v5.2-rc4/v5
+> 
+
