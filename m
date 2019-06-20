@@ -2,75 +2,91 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D43154CA0E
-	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Jun 2019 10:55:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C93B44CE85
+	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Jun 2019 15:19:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730596AbfFTIzy (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 20 Jun 2019 04:55:54 -0400
-Received: from foss.arm.com ([217.140.110.172]:54528 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726168AbfFTIzy (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 20 Jun 2019 04:55:54 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BE31D344;
-        Thu, 20 Jun 2019 01:55:53 -0700 (PDT)
-Received: from [10.1.196.72] (e119884-lin.cambridge.arm.com [10.1.196.72])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 670B43F246;
-        Thu, 20 Jun 2019 01:55:51 -0700 (PDT)
-Subject: Re: [PATCH v6 00/19] Unify vDSOs across more architectures
-To:     Shijith Thotton <sthotton@marvell.com>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will.deacon@arm.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Russell King <linux@armlinux.org.uk>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Paul Burton <paul.burton@mips.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Mark Salyzyn <salyzyn@android.com>,
-        Peter Collingbourne <pcc@google.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Dmitry Safonov <0x7f454c46@gmail.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Huw Davies <huw@codeweavers.com>
-References: <20190530141531.43462-1-vincenzo.frascino@arm.com>
- <7baf295a-0cc6-1a0a-7e4e-ed33598a2242@marvell.com>
-From:   Vincenzo Frascino <vincenzo.frascino@arm.com>
-Message-ID: <eccdb6ec-3703-a22d-e6c0-4be31304e385@arm.com>
-Date:   Thu, 20 Jun 2019 09:55:50 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
+        id S1731743AbfFTNTz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 20 Jun 2019 09:19:55 -0400
+Received: from mail-oi1-f193.google.com ([209.85.167.193]:46504 "EHLO
+        mail-oi1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731953AbfFTNTz (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 20 Jun 2019 09:19:55 -0400
+Received: by mail-oi1-f193.google.com with SMTP id 65so2081325oid.13
+        for <linux-kselftest@vger.kernel.org>; Thu, 20 Jun 2019 06:19:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=1IDImd+SyL7qusfZ7LEqZyeCM5Jqrmah1crodqgym2o=;
+        b=Z77iLpOXmS+LuG22+Pytd77vIOhESlIw9v0v/o6wz3WFxUVyZVuXJyx4weKeiAaHLC
+         ICyqNfMfDaMIR6ayB8jyTxh7WaXJguH7MAKdKF5UvpkAZpzjDSudYBycegmdv+cu3y15
+         GJfnWza79menUVnjzVj/C188QZVNtvPmC6BkufiJg4QDBfrgLETYgTboXga0ksf6Bg0E
+         mgqxLmAc+KD2Hbfv9VTXfG5MrxmYg+pZk4V6eZnGbPIEzp2SgIAXb6JEo3IdYTIKxYw/
+         9heW8RVFfJ52e0uQ8KD/L8xbVktXc9+p8AmFlk7oON8FotA+3R0q1CsjGObin7blMxo6
+         osdQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=1IDImd+SyL7qusfZ7LEqZyeCM5Jqrmah1crodqgym2o=;
+        b=BrDhwwkx5PxwpBsMyOJa7WvDLOy5x4q6AVvTk7XHfjJa0LzUJSBKsctK8oqqmsHkhX
+         WiSuPkZcvtJC5c29QVy6aiX16tMucLguzz/bwOVkyhow1TfX2mb0dhdTM3OwhT6Zx3uq
+         sBptS02egGM/3tLeYA7WG8fedUNI5LX9sI9j5zcOiE0qKR2wu6Jj3waKU15v9TDPY+GS
+         Mf9aekgUH3ZqVtD8gFHERMMeMF4Kb9SjuxxvgJ9/FKTrJYeDtkqdcEFCGgPcaLb+lZv7
+         3mL28/w7+NOTLVUinAhJKk/XG0iUxzm1O4qxnK5Lie2pMSwT6zSIo1JflXMsngBfNKIJ
+         rxMg==
+X-Gm-Message-State: APjAAAW4A3vlJ09EJnDegCkK+qnKWvEOnDPILYC7fNF2Yl5zXBvc6wKq
+        f4Ik8d3ynpjZIbtmc1YuBHVd9Q==
+X-Google-Smtp-Source: APXvYqyRboXu4SbkOVXdL7maf5yqjeeaiBdvJH/64vyWK0jWSoHwuU7EkLw3RE1uOYLsi2ZI6ZrlCQ==
+X-Received: by 2002:aca:4b42:: with SMTP id y63mr6256321oia.168.1561036794590;
+        Thu, 20 Jun 2019 06:19:54 -0700 (PDT)
+Received: from alago.cortijodelrio.net (CableLink-189-218-29-147.Hosts.InterCable.net. [189.218.29.147])
+        by smtp.googlemail.com with ESMTPSA id t6sm7878945otk.36.2019.06.20.06.19.53
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Thu, 20 Jun 2019 06:19:53 -0700 (PDT)
+From:   =?UTF-8?q?Daniel=20D=C3=ADaz?= <daniel.diaz@linaro.org>
+To:     shuah@kernel.org
+Cc:     linux-kselftest@vger.kernel.org,
+        =?UTF-8?q?Daniel=20D=C3=ADaz?= <daniel.diaz@linaro.org>,
+        Petr Vorel <petr.vorel@gmail.com>,
+        Joey Pabalinas <joeypabalinas@gmail.com>,
+        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH] selftests/tpm2: Install run-time Python modules
+Date:   Thu, 20 Jun 2019 08:18:19 -0500
+Message-Id: <20190620131822.28944-1-daniel.diaz@linaro.org>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-In-Reply-To: <7baf295a-0cc6-1a0a-7e4e-ed33598a2242@marvell.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Shijith,
+When ordinarily running the tests, upon `make install', the
+following error is encountered:
+  ImportError: No module named tpm2_tests
+because the Python files are not installed at the moment.
 
-...
+Fix this by adding both Python modules as accompanying
+TEST_FILES in the Makefile.
 
-> Observed good improvement for some APIs with the patch.
-> 
+Signed-off-by: Daniel Díaz <daniel.diaz@linaro.org>
+---
+ tools/testing/selftests/tpm2/Makefile | 1 +
+ 1 file changed, 1 insertion(+)
 
-Looks good. Thanks for testing the set, I will add your tag to my patches.
-
-> Tested-by: Shijith Thotton <sthotton@marvell.com>
-> 
-> Thanks,
-> Shijith
-> 
-
+diff --git a/tools/testing/selftests/tpm2/Makefile b/tools/testing/selftests/tpm2/Makefile
+index 9dd848427a7b..bf401f725eef 100644
+--- a/tools/testing/selftests/tpm2/Makefile
++++ b/tools/testing/selftests/tpm2/Makefile
+@@ -2,3 +2,4 @@
+ include ../lib.mk
+ 
+ TEST_PROGS := test_smoke.sh test_space.sh
++TEST_FILES := tpm2.py tpm2_tests.py
 -- 
-Regards,
-Vincenzo
+2.20.1
+
