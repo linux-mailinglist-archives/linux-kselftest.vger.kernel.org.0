@@ -2,91 +2,89 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C93B44CE85
-	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Jun 2019 15:19:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E936A4D3B7
+	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Jun 2019 18:28:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731743AbfFTNTz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 20 Jun 2019 09:19:55 -0400
-Received: from mail-oi1-f193.google.com ([209.85.167.193]:46504 "EHLO
-        mail-oi1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731953AbfFTNTz (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 20 Jun 2019 09:19:55 -0400
-Received: by mail-oi1-f193.google.com with SMTP id 65so2081325oid.13
-        for <linux-kselftest@vger.kernel.org>; Thu, 20 Jun 2019 06:19:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=1IDImd+SyL7qusfZ7LEqZyeCM5Jqrmah1crodqgym2o=;
-        b=Z77iLpOXmS+LuG22+Pytd77vIOhESlIw9v0v/o6wz3WFxUVyZVuXJyx4weKeiAaHLC
-         ICyqNfMfDaMIR6ayB8jyTxh7WaXJguH7MAKdKF5UvpkAZpzjDSudYBycegmdv+cu3y15
-         GJfnWza79menUVnjzVj/C188QZVNtvPmC6BkufiJg4QDBfrgLETYgTboXga0ksf6Bg0E
-         mgqxLmAc+KD2Hbfv9VTXfG5MrxmYg+pZk4V6eZnGbPIEzp2SgIAXb6JEo3IdYTIKxYw/
-         9heW8RVFfJ52e0uQ8KD/L8xbVktXc9+p8AmFlk7oON8FotA+3R0q1CsjGObin7blMxo6
-         osdQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=1IDImd+SyL7qusfZ7LEqZyeCM5Jqrmah1crodqgym2o=;
-        b=BrDhwwkx5PxwpBsMyOJa7WvDLOy5x4q6AVvTk7XHfjJa0LzUJSBKsctK8oqqmsHkhX
-         WiSuPkZcvtJC5c29QVy6aiX16tMucLguzz/bwOVkyhow1TfX2mb0dhdTM3OwhT6Zx3uq
-         sBptS02egGM/3tLeYA7WG8fedUNI5LX9sI9j5zcOiE0qKR2wu6Jj3waKU15v9TDPY+GS
-         Mf9aekgUH3ZqVtD8gFHERMMeMF4Kb9SjuxxvgJ9/FKTrJYeDtkqdcEFCGgPcaLb+lZv7
-         3mL28/w7+NOTLVUinAhJKk/XG0iUxzm1O4qxnK5Lie2pMSwT6zSIo1JflXMsngBfNKIJ
-         rxMg==
-X-Gm-Message-State: APjAAAW4A3vlJ09EJnDegCkK+qnKWvEOnDPILYC7fNF2Yl5zXBvc6wKq
-        f4Ik8d3ynpjZIbtmc1YuBHVd9Q==
-X-Google-Smtp-Source: APXvYqyRboXu4SbkOVXdL7maf5yqjeeaiBdvJH/64vyWK0jWSoHwuU7EkLw3RE1uOYLsi2ZI6ZrlCQ==
-X-Received: by 2002:aca:4b42:: with SMTP id y63mr6256321oia.168.1561036794590;
-        Thu, 20 Jun 2019 06:19:54 -0700 (PDT)
-Received: from alago.cortijodelrio.net (CableLink-189-218-29-147.Hosts.InterCable.net. [189.218.29.147])
-        by smtp.googlemail.com with ESMTPSA id t6sm7878945otk.36.2019.06.20.06.19.53
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Thu, 20 Jun 2019 06:19:53 -0700 (PDT)
-From:   =?UTF-8?q?Daniel=20D=C3=ADaz?= <daniel.diaz@linaro.org>
-To:     shuah@kernel.org
-Cc:     linux-kselftest@vger.kernel.org,
-        =?UTF-8?q?Daniel=20D=C3=ADaz?= <daniel.diaz@linaro.org>,
-        Petr Vorel <petr.vorel@gmail.com>,
-        Joey Pabalinas <joeypabalinas@gmail.com>,
-        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH] selftests/tpm2: Install run-time Python modules
-Date:   Thu, 20 Jun 2019 08:18:19 -0500
-Message-Id: <20190620131822.28944-1-daniel.diaz@linaro.org>
-X-Mailer: git-send-email 2.20.1
+        id S1726686AbfFTQ15 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 20 Jun 2019 12:27:57 -0400
+Received: from foss.arm.com ([217.140.110.172]:47646 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726675AbfFTQ15 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 20 Jun 2019 12:27:57 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 497012B;
+        Thu, 20 Jun 2019 09:27:56 -0700 (PDT)
+Received: from donnerap.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E69803F246;
+        Thu, 20 Jun 2019 09:27:53 -0700 (PDT)
+Date:   Thu, 20 Jun 2019 17:27:46 +0100
+From:   Andre Przywara <andre.przywara@arm.com>
+To:     Vincenzo Frascino <vincenzo.frascino@arm.com>
+Cc:     linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Huw Davies <huw@codeweavers.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Will Deacon <will.deacon@arm.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Mark Salyzyn <salyzyn@android.com>,
+        Paul Burton <paul.burton@mips.com>,
+        Dmitry Safonov <0x7f454c46@gmail.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Collingbourne <pcc@google.com>
+Subject: Re: [PATCH v6 00/19] Unify vDSOs across more architectures
+Message-ID: <20190620172746.7f92cb14@donnerap.cambridge.arm.com>
+In-Reply-To: <20190530141531.43462-1-vincenzo.frascino@arm.com>
+References: <20190530141531.43462-1-vincenzo.frascino@arm.com>
+Organization: ARM
+X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; aarch64-unknown-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-When ordinarily running the tests, upon `make install', the
-following error is encountered:
-  ImportError: No module named tpm2_tests
-because the Python files are not installed at the moment.
+On Thu, 30 May 2019 15:15:12 +0100
+Vincenzo Frascino <vincenzo.frascino@arm.com> wrote:
 
-Fix this by adding both Python modules as accompanying
-TEST_FILES in the Makefile.
+Hi,
 
-Signed-off-by: Daniel Díaz <daniel.diaz@linaro.org>
----
- tools/testing/selftests/tpm2/Makefile | 1 +
- 1 file changed, 1 insertion(+)
+> vDSO (virtual dynamic shared object) is a mechanism that the Linux
+> kernel provides as an alternative to system calls to reduce where
+> possible the costs in terms of cycles.
+> [ ... ]
+> The porting has been benchmarked and the performance results are
+> provided as part of this cover letter.
 
-diff --git a/tools/testing/selftests/tpm2/Makefile b/tools/testing/selftests/tpm2/Makefile
-index 9dd848427a7b..bf401f725eef 100644
---- a/tools/testing/selftests/tpm2/Makefile
-+++ b/tools/testing/selftests/tpm2/Makefile
-@@ -2,3 +2,4 @@
- include ../lib.mk
- 
- TEST_PROGS := test_smoke.sh test_space.sh
-+TEST_FILES := tpm2.py tpm2_tests.py
--- 
-2.20.1
+I can't reveal the absolute numbers here, but vdsotest-bench gives me
+quite some performance gain on my board here ("time needed on v6" divided
+by "time needed on 5.2-rc1", so smaller percentages are better):
+clock-gettime-monotonic:	23 %
+clock-gettime-monotonic-raw:	30 %
+clock-gettime-tai:		 5 %
+clock-getres-tai:		 5 %
+clock-gettime-boottime:		 5 %
+clock-getres-boottime:		 5 %
+clock-gettime-realtime:		25 %
+gettimeofday:			26 % 
+The other numbers stayed the same or differed by just 1 ns, which seems to
+be within the margin of error, as repeated runs on the same kernel suggest.
+The 5% numbers are of course those were we went from a syscall-only to the
+newly added arm64 VDSO implementation, but even the other calls improved
+by a factor of 3 or more.
 
+Sounds like a strong indicator that this is a good thing to have.
+
+Not sure if "running some benchmark a couple of times on a single machine"
+qualifies for this, but I guess it means:
+
+Tested-by: Andre Przywara <andre.przywara@arm.com>
+
+Cheers,
+Andre.
