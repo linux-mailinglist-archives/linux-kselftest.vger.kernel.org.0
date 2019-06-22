@@ -2,232 +2,135 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DB484F2F2
-	for <lists+linux-kselftest@lfdr.de>; Sat, 22 Jun 2019 02:59:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AB0E4F649
+	for <lists+linux-kselftest@lfdr.de>; Sat, 22 Jun 2019 16:46:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726058AbfFVA7r (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 21 Jun 2019 20:59:47 -0400
-Received: from mail-pf1-f196.google.com ([209.85.210.196]:41862 "EHLO
-        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726052AbfFVA7r (ORCPT
+        id S1726286AbfFVOqy (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 22 Jun 2019 10:46:54 -0400
+Received: from Galois.linutronix.de ([146.0.238.70]:57888 "EHLO
+        Galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726138AbfFVOqy (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 21 Jun 2019 20:59:47 -0400
-Received: by mail-pf1-f196.google.com with SMTP id m30so4399618pff.8
-        for <linux-kselftest@vger.kernel.org>; Fri, 21 Jun 2019 17:59:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=pn4/IgcE/a3A9HRsf8YysVQmDOFkLMRirlv4eJOCAEY=;
-        b=r0d0D49hNJck2jmBOZ7hKq1EyIQm5VIsrCLXNfWA/zqw7JUB/PFT9/TEg3f9m8Exka
-         4OB4CLnAA+t7ZyRfMqNWActJqwB4eElCzw9OwOGul12RrF6Xah0/adQB3rDPYCiKwGSb
-         1cQfwLiJupuJHVE6kDeqU7eCLKZrrozRyUdaq1BAJ5w/IyIufGa6roBqLtZxSQ3wQLl8
-         cBD+npmSvsH7CB96WJOcXSzHxVdpszLog3BtkM+9yhp75ZfrhE2bcktgSWTAXvuCSrTY
-         kUvb5BfS0a52N4OmjgywAeDaICRhfTcMxYZ0cxZGqUP9umwcIynczzP5GVJDJnjw5aRm
-         2oGQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=pn4/IgcE/a3A9HRsf8YysVQmDOFkLMRirlv4eJOCAEY=;
-        b=PWeEE2qg2nKxswHmU1pR8zQ2nDP69zD5CQLijrKc8pnDbqnz/zbsW+6wrIPnOtNtkG
-         Qa6ZHQvZT/aFOz4MO3p5UQhW88PO+9HdZPKMej7Jv9q2G/i8gpjOG6z1WwHto3qv6gNz
-         ebEmzHDJSPZEb3OMGh61taPT/mUki3cqjneBywC2Oot1veL3yDw8MEv6zFTAAEGWrHVb
-         FX52J5E91mjQ1nIO/+tBZzCLvbAPexv3iJBJg57nOswteVcexC6VUXW9MvUG4EVicljk
-         tlr0k9+nXJ3p6UIT88QsB/nlrn38zKOfLTsUOPuGjMi8yjDcg2w/IhrEguhbV5TBbueX
-         bgCA==
-X-Gm-Message-State: APjAAAUylhPCEE8BiVtqAlEbXK/KeiqI44QK1idEVj2Nz/7a227iObIf
-        mgSkz1oCPD0OZHnbhP+1bw6St7JnU5Ie39AitkDtAw==
-X-Google-Smtp-Source: APXvYqwOxize9xmrZ2ApT7No74w3onQmjRsjgozaiDJFMKpG33Vqht+PxeXD1e0v4vbFE+q+E/bORwyHwGlVO6g99RY=
-X-Received: by 2002:a17:90a:9382:: with SMTP id q2mr10190000pjo.131.1561164883594;
- Fri, 21 Jun 2019 17:54:43 -0700 (PDT)
-MIME-Version: 1.0
-References: <20190617082613.109131-1-brendanhiggins@google.com>
- <10feac3e-7621-65e5-fbf0-9c63fcbe09c9@gmail.com> <69809117-dcda-160a-ee0a-d1d3b4c5cd8a@kernel.org>
- <20190621181342.GA17166@mit.edu> <6f3f5184-d14e-1b46-17f1-391ee67e699c@kernel.org>
-In-Reply-To: <6f3f5184-d14e-1b46-17f1-391ee67e699c@kernel.org>
-From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Fri, 21 Jun 2019 17:54:31 -0700
-Message-ID: <CAFd5g46W1u+6JKLW0WX9uicK5utvJe9tvq4YBsCkghuo0rCmng@mail.gmail.com>
-Subject: Re: [PATCH v5 00/18] kunit: introduce KUnit, the Linux kernel unit
- testing framework
-To:     shuah <shuah@kernel.org>
-Cc:     "Theodore Ts'o" <tytso@mit.edu>,
-        Frank Rowand <frowand.list@gmail.com>,
+        Sat, 22 Jun 2019 10:46:54 -0400
+Received: from p5b06daab.dip0.t-ipconnect.de ([91.6.218.171] helo=nanos)
+        by Galois.linutronix.de with esmtpsa (TLS1.2:DHE_RSA_AES_256_CBC_SHA256:256)
+        (Exim 4.80)
+        (envelope-from <tglx@linutronix.de>)
+        id 1hehHh-00084j-Nz; Sat, 22 Jun 2019 16:46:30 +0200
+Date:   Sat, 22 Jun 2019 16:46:28 +0200 (CEST)
+From:   Thomas Gleixner <tglx@linutronix.de>
+To:     Sasha Levin <sashal@kernel.org>
+cc:     Michael Kelley <mikelley@microsoft.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will.deacon@arm.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Russell King <linux@armlinux.org.uk>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Paul Burton <paul.burton@mips.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Mark Salyzyn <salyzyn@android.com>,
+        Peter Collingbourne <pcc@google.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Dmitry Safonov <0x7f454c46@gmail.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Huw Davies <huw@codeweavers.com>, linux-hyperv@vger.kernel.org,
         Greg KH <gregkh@linuxfoundation.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Kees Cook <keescook@google.com>,
-        Kieran Bingham <kieran.bingham@ideasonboard.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Rob Herring <robh@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
-        Masahiro Yamada <yamada.masahiro@socionext.com>,
-        devicetree <devicetree@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        kunit-dev@googlegroups.com,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        linux-fsdevel@vger.kernel.org,
-        linux-kbuild <linux-kbuild@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        linux-nvdimm <linux-nvdimm@lists.01.org>,
-        linux-um@lists.infradead.org,
-        Sasha Levin <Alexander.Levin@microsoft.com>,
-        "Bird, Timothy" <Tim.Bird@sony.com>,
-        Amir Goldstein <amir73il@gmail.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Daniel Vetter <daniel@ffwll.ch>, Jeff Dike <jdike@addtoit.com>,
-        Joel Stanley <joel@jms.id.au>,
-        Julia Lawall <julia.lawall@lip6.fr>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Knut Omang <knut.omang@oracle.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Petr Mladek <pmladek@suse.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Richard Weinberger <richard@nod.at>,
-        David Rientjes <rientjes@google.com>,
-        Steven Rostedt <rostedt@goodmis.org>, wfg@linux.intel.com
-Content-Type: text/plain; charset="UTF-8"
+        Stephen Rothwell <sfr@canb.auug.org.au>
+Subject: Re: [PATCH v6 18/19] x86: Add support for generic vDSO
+In-Reply-To: <20190614211710.GQ1513@sasha-vm>
+Message-ID: <alpine.DEB.2.21.1906221542270.5503@nanos.tec.linutronix.de>
+References: <20190530141531.43462-1-vincenzo.frascino@arm.com> <20190530141531.43462-19-vincenzo.frascino@arm.com> <BYAPR21MB1221D54FCEC97509EEF7395CD7180@BYAPR21MB1221.namprd21.prod.outlook.com> <alpine.DEB.2.21.1906141313150.1722@nanos.tec.linutronix.de>
+ <20190614211710.GQ1513@sasha-vm>
+User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+X-Linutronix-Spam-Score: -1.0
+X-Linutronix-Spam-Level: -
+X-Linutronix-Spam-Status: No , -1.0 points, 5.0 required,  ALL_TRUSTED=-1,SHORTCIRCUIT=-0.0001
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Jun 21, 2019 at 12:21 PM shuah <shuah@kernel.org> wrote:
->
-> On 6/21/19 12:13 PM, Theodore Ts'o wrote:
-> > On Fri, Jun 21, 2019 at 08:59:48AM -0600, shuah wrote:
-> >>>> ### But wait! Doesn't kselftest support in kernel testing?!
-> >>>>
-> >>>> ....
-> >>
-> >> I think I commented on this before. I agree with the statement that
-> >> there is no overlap between Kselftest and KUnit. I would like see this
-> >> removed. Kselftest module support supports use-cases KUnit won't be able
-> >> to. I can build an kernel with Kselftest test modules and use it in the
-> >> filed to load and run tests if I need to debug a problem and get data
-> >> from a system. I can't do that with KUnit.
+On Fri, 14 Jun 2019, Sasha Levin wrote:
+> On Fri, Jun 14, 2019 at 01:15:23PM +0200, Thomas Gleixner wrote:
+> > On Thu, 30 May 2019, Michael Kelley wrote:
+> > > Vincenzo -- these changes for Hyper-V are a subset of a larger patch set
+> > > I have that moves all of the Hyper-V clock/timer code into a separate
+> > > clocksource driver in drivers/clocksource, with an include file in
+> > > includes/clocksource.  That new include file should be able to work
+> > > instead of your new mshyperv-tsc.h.  It also has the benefit of being
+> > > ISA neutral, so it will work with my in-progress patch set to support
+> > > Linux on Hyper-V on ARM64.  See https://lkml.org/lkml/2019/5/27/231
+> > > for the new clocksource driver patch set.
+> > 
+> > Grrr. That's queued in hyperv-next for whatever reasons.
+> 
+> I queue up our future pull requests there to give them some soaking in
+> -next.
 
-Sure, I think this point has been brought up a number of times before.
-Maybe I didn't write this section well because, like Frank said, it
-comes across as being critical of the Kselftest module support; that
-wasn't my intention. I was speaking from the perspective that
-Kselftest module support is just a feature of Kselftest, and not a
-full framework like KUnit is (obviously Kselftest itself *is* a
-framework, but a very small part of it is not).
+What? You queue completely unreviewed stuff which touches two other
+subsystems to let it soak in next?
 
-It was obvious to me what Kselftest module support was intended for,
-and it is not intended to cover the use case that KUnit is targeting.
+> > Sasha, can you please provide me the branch to pull from so I can have a
+> > common base for all the various changes floating around?
+> 
+> I'll send you a unified pull request for these changes.
 
-> >> In my mind, I am not viewing this as which is better. Kselftest and
-> >> KUnit both have their place in the kernel development process. It isn't
-> >> productive and/or necessary to comparing Kselftest and KUnit without a
-> >> good understanding of the problem spaces for each of these.
+Which has not materialized yet.
 
-Again, I didn't mean to draw a comparison of which is better than the
-other. I was just trying to point out that Kselftest module support
-doesn't make sense as a stand alone unit testing framework, or really
-a framework of any kind, despite how it might actually be used.
+TBH, I'm pretty grumpy about those clocksource changes. Here is the
+diffstat:
 
-> >> I would strongly recommend not making reference to Kselftest and talk
-> >> about what KUnit offers.
+ MAINTAINERS                          |    2 
+ arch/x86/entry/vdso/vclock_gettime.c |    1 
+ arch/x86/entry/vdso/vma.c            |    2 
+ arch/x86/hyperv/hv_init.c            |   91 ---------
+ arch/x86/include/asm/hyperv-tlfs.h   |    6 
+ arch/x86/include/asm/mshyperv.h      |   81 +-------
+ arch/x86/kernel/cpu/mshyperv.c       |    2 
+ arch/x86/kvm/x86.c                   |    1 
+ drivers/clocksource/Makefile         |    1 
+ drivers/clocksource/hyperv_timer.c   |  322 +++++++++++++++++++++++++++++++++++
+ drivers/hv/Kconfig                   |    3 
+ drivers/hv/hv.c                      |  156 ----------------
+ drivers/hv/hv_util.c                 |    1 
+ drivers/hv/hyperv_vmbus.h            |    3 
+ drivers/hv/vmbus_drv.c               |   42 ++--
+ include/clocksource/hyperv_timer.h   |  105 +++++++++++
 
-I can see your point. It seems that both you and Frank seem to think
-that I drew a comparison between Kselftest and KUnit, which was
-unintended. I probably should have spent more time editing this
-section, but I can see the point of drawing the comparison itself
-might invite this confusion.
+While the world and some more people have been CC'ed on those patches,
+neither the clocksource nor the x86 maintainer have been.
 
-> > Shuah,
-> >
-> > Just to recall the history, this section of the FAQ was added to rebut
-> > the ***very*** strong statements that Frank made that there was
-> > overlap between Kselftest and Kunit, and that having too many ways for
-> > kernel developers to do the identical thing was harmful (he said it
-> > was too much of a burden on a kernel developer) --- and this was an
-> > argument for not including Kunit in the upstream kernel.
+When I gave Vincenzo the advise to base his code on that hyper-v branch, I
+expected that I find the related patches in my mail backlog. No, they have
+not been there because I was not on CC.
 
-I don't think he was actually advocating that we don't include KUnit,
-maybe playing devil's advocate; nevertheless, at the end, Frank seemed
-to agree that there were valuable things that KUnit offered. I thought
-he just wanted to make the point that I hadn't made the distinction
-sufficiently clear in the cover letter, and other reviewers might get
-confused in the future as well.
+Folks, please stop chosing Cc lists as you like. We have well established
+rules for that. And please stop queueing random unreviewed patches in
+next. Next is not a playground for not ready and unreviewed stuff. No, the
+hyper-v inbreed Reviewed-by is not sufficient for anything x86 and
+clocksource related.
 
-Additionally, it does look like people were trying to use Kselftest
-module support to cover some things which really were trying to be
-unit tests. I know this isn't really intended - everything looks like
-a nail when you only have a hammer, which I think Frank was pointing
-out furthers the above confusion.
+After chasing and looking at those patches, which have horrible subject
+lines and changelogs btw, I was not able to judge quickly whether that
+stuff is self contained or not. So no, I fixed up the fallout and rebased
+Vincenzos VDSO stuff on mainline w/o those hyperv changes simply because if
+they are not self contained they will break bisection badly.
 
-In anycase, it sounds like I have, if anything, only made the
-discussion even more confusing by adding this section; sorry about
-that.
+I'm going to push out the VDSO series later today. That will nicely break
+in combination with the hyper-next branch. Stephen, please drop that and do
+not try to handle the fallout. That stuff needs to go through the proper
+channels or at least be acked/reviewed by the relevant maintainers. So the
+hyper-v folks can rebase themself and post it proper.
 
-> > If we're past that objection, then perhaps this section can be
-> > dropped, but there's a very good reason why it was there.  I wouldn't
-> > Brendan to be accused of ignoring feedback from those who reviewed his
-> > patches.   :-)
-> >
->
-> Agreed. I understand that this FAQ probably was needed at one time and
-> Brendan added it to address the concerns.
+Yours grumpy,
 
-I don't want to speak for Frank, but I don't think it was an objection
-to KUnit itself, but rather an objection to not sufficiently
-addressing the point about how they differ.
-
-> I think at some point we do need to have a document that outlines when
-> to KUnit and when to use Kselftest modules. I think one concern people
-> have is that if KUnit is perceived as a  replacement for Ksefltest
-> module, Kselftest module will be ignored leaving users without the
-> ability to build and run with Kselftest modules and load them on a need
-> basis to gather data on a systems that aren't dedicated strictly for
-> testing.
-
-I absolutely agree! I posed a suggestion here[1], which after I just
-now searched for a link, I realize for some reason it didn't seem like
-it reached a number of the mailing lists that I sent it to, so I
-should probably resend it.
-
-Anyway, a summary of what I suggested: We should start off by better
-organizing Documentation/dev-tools/ and create a landing page that
-groups the dev-tools by function according to what person is likely to
-use them and for what. Eventually and specifically for Kselftest and
-KUnit, I would like to have a testing guide for the kernel that
-explains what testing procedure should look like and what to use and
-when.
-
-> I am trying to move the conversation forward from KUnit vs. Kselftest
-> modules discussion to which problem areas each one addresses keeping
-> in mind that it is not about which is better. Kselftest and KUnit both
-> have their place in the kernel development process. We just have to be
-> clear on usage as we write tests for each.
-
-I think that is the right long term approach. I think a good place to
-start, like I suggested above, is cleaning up
-Documentation/dev-tools/, but I think that belongs in a (probably
-several) follow-up patchset.
-
-Frank, I believe your objection was mostly related to how KUnit is
-presented specifically in the cover letter, and doesn't necessarily
-deal with the intended use case. So I don't think that doing this,
-especially doing this later, really addresses your concern. I don't
-want to belabor the issue, but I would also rather not put words in
-your mouth, what are your thoughts on the above?
-
-I think my main concern moving forward on this point is that I am not
-sure that I can address the debate that this section covers in a way
-that is both sufficiently concise for a cover letter, but also doesn't
-invite more potential confusion. My inclination at this point is to
-drop it since I think the set of reviewers for this patchset has at
-this point become fixed, and it seems that it will likely cause more
-confusion rather than reduce it; also, I don't really think this will
-be an issue for end users, especially once we have proper
-documentation in place. Alternatively, I guess I could maybe address
-the point elsewhere and refer to it in the cover letter? Or maybe just
-put it at the end of the cover letter?
-
-[1] https://www.mail-archive.com/kgdb-bugreport@lists.sourceforge.net/msg05059.html
+	tglx
