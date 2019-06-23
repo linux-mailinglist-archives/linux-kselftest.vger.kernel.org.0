@@ -2,65 +2,76 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EFF74F6F2
-	for <lists+linux-kselftest@lfdr.de>; Sat, 22 Jun 2019 18:29:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91DE04FC80
+	for <lists+linux-kselftest@lfdr.de>; Sun, 23 Jun 2019 17:52:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726410AbfFVQ3G (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 22 Jun 2019 12:29:06 -0400
-Received: from sonic301-3.consmr.mail.bf2.yahoo.com ([74.6.129.42]:40749 "EHLO
-        sonic301-3.consmr.mail.bf2.yahoo.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726368AbfFVQ2u (ORCPT
+        id S1726663AbfFWPwc (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 23 Jun 2019 11:52:32 -0400
+Received: from mail-pl1-f193.google.com ([209.85.214.193]:46170 "EHLO
+        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726399AbfFWPwc (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 22 Jun 2019 12:28:50 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1561220929; bh=3fXYToOZXvh5MOJ1JSawYDThjnynC/Ekt2gucIg6zZg=; h=Date:From:Reply-To:Subject:From:Subject; b=FwrBLUl7u665XwQeVPTq5hUQ4Ptv5qPcwgE0MfCyAxPjQW66W+sBKlTITy95Xiak8M/9mL3k87XvuhuNYmdzjOXFqAsXXJ7ZeR0tr0xQhaR4qpp9+I79zHB4JVXDeOtUnrv/ni1DEn3m49tSMIml9+1SbDvUcui/xLYzcB7mOtvlwJJC6bBkcbOwJW8drH7WnSKYQVlUvO9PRg8+IWYABo4m/HoTrmg3JSd7+tfq1bmdsTjreC9G6uwJClVG1p8XyGEOijmNqXv9Ivunj8UzUvxVldTIg/taTAKdSlSG3i+xbnz28LKLpxSK2+M63p52Vf+hNJ0OycyVj1TkO+H8OQ==
-X-YMail-OSG: BClZlNgVM1mJa1pSUAMlnjmDwJQUKDn0osVKNVIeZ6AC0JZQ8NzrV_.P2vPToBw
- lk4l1yMYy0P1wu9iKWHPF1vwWtED.NCcY6jE.jXdELnZdUngnDzcX.f1Ik7TcPjN._6dUftCNvSG
- 0ilPDIIh6JKut3rld3EDzfXqVTEprJFL10dLfXEmdNXy8_9HzWnLN9Uxxh6FWr8nj4DbExyF48M8
- b8CzHn8AtWzh0fDjJqMRXb5UR1L1fHF.mq4wk_41bl8VHLLREhO8D9AiMB_Iou.TvP.xektI4Uzf
- lBotEg54S8nbe5a5a2eamKaLSiD6XaCIzSQkrGwkgk9qzk7J4361PG1C2lAWhSULJjGYH.uKi9SH
- 8omXh8MvwuZmVU7umqXbA4eIFWV8ruRR3qRFWtA.2B0Eer.D49EbNovsAu.wRPm8yYyL6YMdaoys
- 3vYAkjype1yPgR0gHAH3zObnNPMrtMzQfsTzcaha59dNYsVWPRo5EvcFgAIKXVIUqnKnooWuODru
- O4SgrdrM8PGEZGs5dJS.h.dJB3gwQ.0I1wf1Q_CLgJhbPMrumaMiWl3ifhN9G_CCxrGhRPRltqdB
- RyAvAXGENXKEJswzM.sYWHkLQyblOWaGX5TLKzeDGaJCZVu7CtZvQ0aNcyWtqrf4SAtE7MK9SqUH
- 7phABBxeBrGdyDkvdUQOX_EPh25.Hb3SncDKllMEIHjvEdwbQcMGmqMEDVCI8Jh0nfgpjh259ODl
- q.bGW_sz63_QvjPWXygjUQ4RzfXiei1bHIkvbkPAHc04dS.Qr8LP1Jyxp2QD0wtNtJgo5RScK99X
- P5NPqcNAR8eez8YgXpk3cKLQCR9JSylhL6QyUVACODhQSLMO_l73eEDpWzNQUeEQLrEwA53TFUO9
- BXx4lR26gADp4OeWMANR3pTNDn8J7Oc5G1l.tF8AqVFtdsoB5vgCdw0tzoX9_22cJzNNteihaN9H
- ktOSXaCeUY26x9DWNkYi7HTOCc9F4vHnioRwelB9Lv.KGDeGPUJBBPmfcn0xXC8MB2YTlUFeVHzN
- FJsHhvFz9eJx.VwEAdhJs3DHW6xmbj9a_RSOf.BoLPiAvMAdoBe_1sVY8nFOqhuBwpkbj17TOzIW
- ts0JEWafkyantIFw8kEnIr0AHDEAK4aB1fgOVS8TQpbEaj2tB4pKHPa4OOjXszQAPBozr7PYVj2f
- 6AcwHFYhcmsrFfliX20p43dgFMRY8GMXgvUWeegBAeAuOTxCoUC9WvAdL
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic301.consmr.mail.bf2.yahoo.com with HTTP; Sat, 22 Jun 2019 16:28:49 +0000
-Date:   Sat, 22 Jun 2019 16:28:46 +0000 (UTC)
-From:   "Miss.Fatima Yusuf" <fatimayusuf5@outlook.fr>
-Reply-To: miss.fmayusuf11@gmail.com
-Message-ID: <270302503.296556.1561220926635@mail.yahoo.com>
-Subject: From:Miss: Fatima Yusuf.
+        Sun, 23 Jun 2019 11:52:32 -0400
+Received: by mail-pl1-f193.google.com with SMTP id e5so5447049pls.13;
+        Sun, 23 Jun 2019 08:52:32 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=O30R5IepqsX9VW9UMy1gWcvt3pvWZfQRhZyo7WcC+Ws=;
+        b=L/tTFSSpw07xcJb+VfO58wQcJubYvfTwZQ3kqJ4W+P4HQAIXJGK7mDohuVq9qGwC/l
+         2oL5Z0AyOIQ3JEix0PYgyyMkh/GNxhtwHgzjqTJTg3Fxynj2eWtwgaXhM3tCP6/ToA+w
+         FLai+Hj+TtG2NtY0CKlGmRR97JZxreyW7OfHCWGndwycR00LSwLG9j0EL6aTdYzN4aa6
+         xGLHgQR3z/mZF6DTQ0jvjA/HRJkHeEULxth1mMC5lQitUpP1yjW4uC+xPASW6vHxoo08
+         f/d4A66EjslRpIxnwRlN3zMFJUM2GFDjSzGMJALQOWkvjA4ZzUvudEUV8c9Q5rwVXkQn
+         Eujg==
+X-Gm-Message-State: APjAAAWOfqhhf+6bNaZWgv+AhZUOcb2o4SGpsdnUSUjyvr8jUyHrJEL/
+        pHY/aabPhxyCAyxYEutkWF4=
+X-Google-Smtp-Source: APXvYqzEheaakgyT/FA8+Ar1pHqTgDrpSpjY4hSyiy1ogM+X7fv6dTZShWXl3KwQf017ytTZjCQBvw==
+X-Received: by 2002:a17:902:9a91:: with SMTP id w17mr46166834plp.126.1561305152092;
+        Sun, 23 Jun 2019 08:52:32 -0700 (PDT)
+Received: from localhost.localdomain (broadband-188-32-48-208.ip.moscow.rt.ru. [188.32.48.208])
+        by smtp.googlemail.com with ESMTPSA id c18sm9167081pfc.180.2019.06.23.08.52.26
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Sun, 23 Jun 2019 08:52:31 -0700 (PDT)
+From:   Denis Efremov <efremov@linux.com>
+To:     Simon Guo <wei.guo.simon@gmail.com>
+Cc:     Denis Efremov <efremov@linux.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] selftests/powerpc: ppc_asm.h: typo in the header guard
+Date:   Sun, 23 Jun 2019 18:52:00 +0300
+Message-Id: <20190623155200.2147-1-efremov@linux.com>
+X-Mailer: git-send-email 2.21.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-To:     unlisted-recipients:; (no To-header on input)
+Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+The guard macro __PPC_ASM_H in the header ppc_asm.h
+doesn't match the #ifndef macro _PPC_ASM_H. The patch
+makes them the same.
 
+Signed-off-by: Denis Efremov <efremov@linux.com>
+---
+ tools/testing/selftests/powerpc/stringloops/asm/ppc_asm.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-From:Miss: Fatima Yusuf.
+diff --git a/tools/testing/selftests/powerpc/stringloops/asm/ppc_asm.h b/tools/testing/selftests/powerpc/stringloops/asm/ppc_asm.h
+index d2c0a911f55e..2b488b78c4f2 100644
+--- a/tools/testing/selftests/powerpc/stringloops/asm/ppc_asm.h
++++ b/tools/testing/selftests/powerpc/stringloops/asm/ppc_asm.h
+@@ -1,6 +1,6 @@
+ /* SPDX-License-Identifier: GPL-2.0 */
+ #ifndef _PPC_ASM_H
+-#define __PPC_ASM_H
++#define _PPC_ASM_H
+ #include <ppc-asm.h>
+ 
+ #ifndef r1
+-- 
+2.21.0
 
-For sure this mail would definitely come to you as a surprise, but do take your good time to go through it, My name is Ms. Fatima Yusuf,i am from Ivory Coast.
-
-I lost my parents a year and couple of months ago. My father was a serving director of the Agro-exporting board until his death. He was assassinated by his business partners.Before his death, he made a deposit of US$9.7 Million Dollars here in Cote d'ivoire which was for the purchase of cocoa processing machine and development of another factory before his untimely death.
-
-Being that this part of the world experiences political and crises time without number, there is no guarantee of lives and properties. I cannot invest this money here any long, despite the fact it had been my late father's industrial plans.
-
-I want you to do me a favor to receive this funds into your country or any safer place as the beneficiary, I have plans to invest this money in continuation with the investment vision of my late father, but not in this place again rather in your country. I have the vision of going into real estate and industrial production or any profitable business venture.
-
-I will be ready to compensate you with 20% of the total Amount, now all my hope is banked on you and i really wants to invest this money in your country, where there is stability of Government, political and economic welfare.
-
-My greatest worry now is how to move out of this country because my uncle is threatening to kill me as he killed my father,Please do not let anybody hear about this, it is between me and you alone because of my security reason.
-
-I am waiting to hear from you.
-Yours Sincerely,
-Miss.Fatima Yusuf.
