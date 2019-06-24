@@ -2,52 +2,52 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D92DC50E5B
-	for <lists+linux-kselftest@lfdr.de>; Mon, 24 Jun 2019 16:34:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 001A450E53
+	for <lists+linux-kselftest@lfdr.de>; Mon, 24 Jun 2019 16:34:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728557AbfFXOeg (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 24 Jun 2019 10:34:36 -0400
-Received: from mail-vs1-f73.google.com ([209.85.217.73]:35901 "EHLO
-        mail-vs1-f73.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729371AbfFXOdg (ORCPT
+        id S1729490AbfFXOdj (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 24 Jun 2019 10:33:39 -0400
+Received: from mail-vk1-f202.google.com ([209.85.221.202]:53111 "EHLO
+        mail-vk1-f202.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729428AbfFXOdj (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 24 Jun 2019 10:33:36 -0400
-Received: by mail-vs1-f73.google.com with SMTP id j77so3936416vsd.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 24 Jun 2019 07:33:35 -0700 (PDT)
+        Mon, 24 Jun 2019 10:33:39 -0400
+Received: by mail-vk1-f202.google.com with SMTP id l186so6452761vke.19
+        for <linux-kselftest@vger.kernel.org>; Mon, 24 Jun 2019 07:33:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=28kCgmnVQJn+BZTUIaDgZIVH/xo2y2bOHrwsQUj+YbM=;
-        b=ABmMcgz7AotklEeh4aKRTIHhpGJQax1zmT5GPHXjwooqibRCX0X83G+wpDe15X0SRe
-         HXe9A2NvGDpBCmPVnJWVtQfrGpLCbLOl8a7QKidgVQZS583p/fioInBWA7fnqQUcPu7U
-         DvrTBHAjvD9bvEv4FtgsxMoYukH2FWhUY0cxk16hnaOXVOPeSCjP81uMpB44OL/S9lPI
-         aBpKDHVXZkog9XLBmaqt8fwsR9QWzkmPDHX6Y9oJS6A6dF2fyXmif514CVj9w8GAfMxh
-         0cWaNfDCDK5rhCagjFyHYvWusLBZwBz8roAGGf8iO/F/Oiq2iyr+j9wwDpgGJziFwszL
-         TQvQ==
+        bh=BJsyngqG/QyGrxCP5QV1VgvY/ZIDb46yXFdUWUYcJjE=;
+        b=tMmuoJLkJJRlr97nWuw9yp1dhBnjJgJJVctCCMOkVQAwVufIWjtRSJ98DeVWMAUpL7
+         c/DDMKTfXjJ3AunXbS9PbtesoR3v6FwAquf/mPo2ipW5m7uKq3mz622OTJgF//P41VeY
+         uBPVky3FH88ifuyXm9IjyMmdhNWu2I8INL87p4oZ1vAogbY0BRq3PmSNaYTl1n/7bnrO
+         Lc9PPi+EV8QQhe4FjeigOim3EKL5tCU2OhJP5k8d+H2v0cMsX/+SwQBn01vR1S+aYe8q
+         kmK501SZalx1YaFY0Y1ChZDATvY9Cs1dirj078l2AUk0ox9yU2Ud6XA8n+4rc4SVim6s
+         D61A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=28kCgmnVQJn+BZTUIaDgZIVH/xo2y2bOHrwsQUj+YbM=;
-        b=Sn2fKOpPMXWoV+0iODt+DCyYujNTCdRfPEzJ7jjh/sBnoSkwxQf2u0Jzt+pAjPLO3X
-         g2ILt7kwiN6xDKnSU4SmYqaRzURZ/XV5x02kOReuMzxyAnA4rJOvkxB0Vo7U+/ZArXVF
-         2dBqCkoDSrYWjjyQqKtSqfnwmNZAg6wjroEH9f3soPN6yx3jeP+O7bubhKGnSSqkWQbE
-         0FuRxWecJwiRMoVUmM2JvaeRn02Ny8TkPn7jMGHaslJ9aQHjnFBof7F0WCTGGFdQDDwN
-         7IqpvoDuhHAE5RbyxMedlrapKG00H/JRO55kWWiWeEWoyKiDaUOqUeRi804Zj4s8zaT6
-         16tw==
-X-Gm-Message-State: APjAAAVq9ZtR7U8dZHcXy3EI5iNfnerBxDpezsDLdyLSXTXJuLz3tsFE
-        b6Pb2qixSdrWp1huBG8MpqjTxP6K3+38yhdX
-X-Google-Smtp-Source: APXvYqxFRRLv3BUPtPxjHGRaBJrhiwF+VRuSavZL/k035Tv2azTfOuV+FpSvTW5kRizXDXNW3SNuKikp21TfCtFX
-X-Received: by 2002:a1f:9748:: with SMTP id z69mr4561739vkd.25.1561386814933;
- Mon, 24 Jun 2019 07:33:34 -0700 (PDT)
-Date:   Mon, 24 Jun 2019 16:32:54 +0200
+        bh=BJsyngqG/QyGrxCP5QV1VgvY/ZIDb46yXFdUWUYcJjE=;
+        b=Lv3i5I8K1ND5JReINKoVo2RpSywq8oMGErxi3NtK1gnTUoxPuoQh1ZAJEyTzCGJN74
+         i0MKMugxdqI8bx84SMnMY+1cKTTOggOB334kUAlwauDn+PPy6JAcUDgeaQtqGoRAO3Ti
+         qY9tSnSvFDDkj83zzhRsYWh5x1F4MDDzqCuu2n7d/RUteDjo84HHSuHXRUBh64Zt0ldp
+         tRVOdDjXwYLktyAZT4zQZn/iWi1laUlV4Um+lgwEHB+/kowgMb0QkHmpj5DPdsLAp0E9
+         TzGA+29OGlHhRdZRZYE43mD1+esc3RviJnMYRafwHVNYMSu+DcHCKw6soixJTDAZeBE4
+         tNXQ==
+X-Gm-Message-State: APjAAAUBaIlNqnx7CLrejNlEht9ReYqNekE9agDr32l0YmOxz9Qp3qIM
+        yS4VF0T+UbZrLAb8XP1zW9Rbh95F1eidvoX+
+X-Google-Smtp-Source: APXvYqxgB5X/aCbKs9hmuZWtlXYS7x7msb4DLFufqsMoO6mME7B8su644ppdcEygFH1GnaKdKATNFxnkdsXw3C2U
+X-Received: by 2002:ab0:7782:: with SMTP id x2mr22851192uar.140.1561386818133;
+ Mon, 24 Jun 2019 07:33:38 -0700 (PDT)
+Date:   Mon, 24 Jun 2019 16:32:55 +0200
 In-Reply-To: <cover.1561386715.git.andreyknvl@google.com>
-Message-Id: <1d036fc5bec4be059ee7f4f42bf7417dc44651dd.1561386715.git.andreyknvl@google.com>
+Message-Id: <61d800c35a4f391218fbca6f05ec458557d8d097.1561386715.git.andreyknvl@google.com>
 Mime-Version: 1.0
 References: <cover.1561386715.git.andreyknvl@google.com>
 X-Mailer: git-send-email 2.22.0.410.gd8fdbe21b5-goog
-Subject: [PATCH v18 09/15] drm/amdgpu: untag user pointers
+Subject: [PATCH v18 10/15] drm/radeon: untag user pointers in radeon_gem_userptr_ioctl
 From:   Andrey Konovalov <andreyknvl@google.com>
 To:     linux-arm-kernel@lists.infradead.org, linux-mm@kvack.org,
         linux-kernel@vger.kernel.org, amd-gfx@lists.freedesktop.org,
@@ -95,41 +95,27 @@ This patch is a part of a series that extends kernel ABI to allow to pass
 tagged user pointers (with the top byte set to something else other than
 0x00) as syscall arguments.
 
-In amdgpu_gem_userptr_ioctl() and amdgpu_amdkfd_gpuvm.c/init_user_pages()
-an MMU notifier is set up with a (tagged) userspace pointer. The untagged
-address should be used so that MMU notifiers for the untagged address get
-correctly matched up with the right BO. This patch untag user pointers in
-amdgpu_gem_userptr_ioctl() for the GEM case and in amdgpu_amdkfd_gpuvm_
-alloc_memory_of_gpu() for the KFD case. This also makes sure that an
-untagged pointer is passed to amdgpu_ttm_tt_get_user_pages(), which uses
-it for vma lookups.
+In radeon_gem_userptr_ioctl() an MMU notifier is set up with a (tagged)
+userspace pointer. The untagged address should be used so that MMU
+notifiers for the untagged address get correctly matched up with the right
+BO. This funcation also calls radeon_ttm_tt_pin_userptr(), which uses
+provided user pointers for vma lookups, which can only by done with
+untagged pointers.
+
+This patch untags user pointers in radeon_gem_userptr_ioctl().
 
 Suggested-by: Felix Kuehling <Felix.Kuehling@amd.com>
 Acked-by: Felix Kuehling <Felix.Kuehling@amd.com>
 Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
 ---
- drivers/gpu/drm/amd/amdgpu/amdgpu_amdkfd_gpuvm.c | 2 +-
- drivers/gpu/drm/amd/amdgpu/amdgpu_gem.c          | 2 ++
- 2 files changed, 3 insertions(+), 1 deletion(-)
+ drivers/gpu/drm/radeon/radeon_gem.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_amdkfd_gpuvm.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_amdkfd_gpuvm.c
-index a6e5184d436c..5d476e9bbc43 100644
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_amdkfd_gpuvm.c
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_amdkfd_gpuvm.c
-@@ -1108,7 +1108,7 @@ int amdgpu_amdkfd_gpuvm_alloc_memory_of_gpu(
- 		alloc_flags = 0;
- 		if (!offset || !*offset)
- 			return -EINVAL;
--		user_addr = *offset;
-+		user_addr = untagged_addr(*offset);
- 	} else if (flags & ALLOC_MEM_FLAGS_DOORBELL) {
- 		domain = AMDGPU_GEM_DOMAIN_GTT;
- 		alloc_domain = AMDGPU_GEM_DOMAIN_CPU;
-diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_gem.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_gem.c
-index d4fcf5475464..e91df1407618 100644
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_gem.c
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_gem.c
-@@ -287,6 +287,8 @@ int amdgpu_gem_userptr_ioctl(struct drm_device *dev, void *data,
+diff --git a/drivers/gpu/drm/radeon/radeon_gem.c b/drivers/gpu/drm/radeon/radeon_gem.c
+index 44617dec8183..90eb78fb5eb2 100644
+--- a/drivers/gpu/drm/radeon/radeon_gem.c
++++ b/drivers/gpu/drm/radeon/radeon_gem.c
+@@ -291,6 +291,8 @@ int radeon_gem_userptr_ioctl(struct drm_device *dev, void *data,
  	uint32_t handle;
  	int r;
  
