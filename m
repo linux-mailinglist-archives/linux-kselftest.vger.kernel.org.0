@@ -2,47 +2,47 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A568650F77
-	for <lists+linux-kselftest@lfdr.de>; Mon, 24 Jun 2019 17:01:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6C3650F81
+	for <lists+linux-kselftest@lfdr.de>; Mon, 24 Jun 2019 17:02:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730169AbfFXPBm (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 24 Jun 2019 11:01:42 -0400
-Received: from mail-pl1-f196.google.com ([209.85.214.196]:37964 "EHLO
-        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729679AbfFXPBm (ORCPT
+        id S1727866AbfFXPCY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 24 Jun 2019 11:02:24 -0400
+Received: from mail-pl1-f193.google.com ([209.85.214.193]:37558 "EHLO
+        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726984AbfFXPCW (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 24 Jun 2019 11:01:42 -0400
-Received: by mail-pl1-f196.google.com with SMTP id g4so7021072plb.5
-        for <linux-kselftest@vger.kernel.org>; Mon, 24 Jun 2019 08:01:41 -0700 (PDT)
+        Mon, 24 Jun 2019 11:02:22 -0400
+Received: by mail-pl1-f193.google.com with SMTP id bh12so7033895plb.4
+        for <linux-kselftest@vger.kernel.org>; Mon, 24 Jun 2019 08:02:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=BLg06i/VCl1+ARgBePt6UCtgCE6yMoeYz0XGu/hbFeo=;
-        b=MwA/LDiusqfNWsTB2DaatzITy3M650ma8hf3fWZJJgZo0sU5+WHRov34/AgR5khfdn
-         43QWHZ5AnOHm74CPfDOEecH6k3NeL2D42ht4vodc0QKm4kkProj+2T//kWp6iTgN3F0V
-         SMoSonCHMQtZbalEg27bzapOmKXhEcFOVUU3I=
+        bh=GtAdqPjW6ZZZnXrgGtz9dHnmmTnu4keB507Xrm18218=;
+        b=ChnBbYYcZq0gQP/sJ3UOuMWBE4sFOJb179x3KxiYoIf9mz01hnbxknC2HoJWZ+GnKo
+         I/gVcZavG+bqjHfCSPjI903PM2pF2P+rKnbbNQBP7YiqUkuVedhF+Zt+0nrsisSgO62h
+         w1puy7E9AYi+Gooou5JDhG3yaU4cjhKpyOEpU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=BLg06i/VCl1+ARgBePt6UCtgCE6yMoeYz0XGu/hbFeo=;
-        b=NkzQvPYnkVgcj3DysX/HNtdqPflo/Iza186DnFW/dstYA8e0C6Z4ievx/4vAjer2At
-         0mhRRwucyg/vTVCcJiOHbohiG5RdeBl2oaQwluIBK+4PASbtBCczkfKq62o5bLJhom4N
-         rVsBRrvYpX807xAdAr+6HJw5YwltIKHulkxBAwY3k2FlbLsvBN8zVcdrnRFgIUl+WsEA
-         c3Leq3AfsiXfSXAuByg6zuKlUOMIajdj3ZHl6BCFEJQgTWEO0GKc6LjqsDvtBtCs+iBk
-         7qDtHxs5QjBZNxOWWBfC1FfY2zxMjzOUQo1mjlq5gmaqJaJ/BSKlzVox/3v/eXAEICZf
-         8mgw==
-X-Gm-Message-State: APjAAAWoLuyma0y0+inWiykgDl70XZxnsH5JCHXdrcHdcFBj9rysycG0
-        m/HC9qEgNfvVgn0LZ9gU5zAj2g==
-X-Google-Smtp-Source: APXvYqxWnwPjr90pgAz811Ip1hR0DU+KY/u+1S7JOfCxDoc+41R5+q814qY7q3l7dWsEUazPv/NQog==
-X-Received: by 2002:a17:902:ac88:: with SMTP id h8mr71103307plr.12.1561388501191;
-        Mon, 24 Jun 2019 08:01:41 -0700 (PDT)
+        bh=GtAdqPjW6ZZZnXrgGtz9dHnmmTnu4keB507Xrm18218=;
+        b=jvOL1wblljGWdG8Ps+2hE5FSRCMJj8Quuy5lzRlNzyuyRTJTxbVYfcX2L5qDQaaYQB
+         m/WcuMArjE58k5MUl+sta+AbU9wRpuVi5K1Qqi/lPVVWI148Mw7nNfT2YZy6/clruDw5
+         t0UOsRtGjgXRLdktU/SNvn6qB1R0vngtCHXLbH0KDvFrysmyMJywWJU9Vm5XK9uMSNaP
+         /NP3tt38IYo6P62viscLGU1oFKAyR6p9s9Nde2tYvgaTMBfGktVhY+sx97BelagsSq38
+         zC+POjC2K2ILkpmT9SYnoYgmo7z9Dkh15HLh1SgWOzWSsLjrQrRRoQNEHj0/xnKmoVH7
+         i4Bg==
+X-Gm-Message-State: APjAAAWgeT54OhOYicsBIBQzKT75oN57uLr8sBq6eyaskJggiicQakvT
+        cJPYvLQIvNoCWCRV1/xVtzO1lA==
+X-Google-Smtp-Source: APXvYqw9zabTal+i8jDaBfZR0QmoB7d+QTrClEOLwXBQMsgoLsFLEgEQhYNwi/8CLPRMNc9iVSjF6A==
+X-Received: by 2002:a17:902:7687:: with SMTP id m7mr67127539pll.310.1561388541281;
+        Mon, 24 Jun 2019 08:02:21 -0700 (PDT)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id k2sm10325517pjl.23.2019.06.24.08.01.40
+        by smtp.gmail.com with ESMTPSA id e189sm5063967pfh.50.2019.06.24.08.02.20
         (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Mon, 24 Jun 2019 08:01:40 -0700 (PDT)
-Date:   Mon, 24 Jun 2019 08:01:39 -0700
+        Mon, 24 Jun 2019 08:02:20 -0700 (PDT)
+Date:   Mon, 24 Jun 2019 08:02:19 -0700
 From:   Kees Cook <keescook@chromium.org>
 To:     Andrey Konovalov <andreyknvl@google.com>
 Cc:     linux-arm-kernel@lists.infradead.org, linux-mm@kvack.org,
@@ -79,65 +79,123 @@ Cc:     linux-arm-kernel@lists.infradead.org, linux-mm@kvack.org,
         Robin Murphy <robin.murphy@arm.com>,
         Kevin Brodsky <kevin.brodsky@arm.com>,
         Szabolcs Nagy <Szabolcs.Nagy@arm.com>
-Subject: Re: [PATCH v18 11/15] IB/mlx4: untag user pointers in
- mlx4_get_umem_mr
-Message-ID: <201906240801.BE42EB3AA@keescook>
+Subject: Re: [PATCH v18 15/15] selftests, arm64: add a selftest for passing
+ tagged pointers to kernel
+Message-ID: <201906240802.29EB80F@keescook>
 References: <cover.1561386715.git.andreyknvl@google.com>
- <ea0ff94ef2b8af12ea6c222c5ebd970e0849b6dd.1561386715.git.andreyknvl@google.com>
+ <0999c80cd639b78ae27c0674069d552833227564.1561386715.git.andreyknvl@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ea0ff94ef2b8af12ea6c222c5ebd970e0849b6dd.1561386715.git.andreyknvl@google.com>
+In-Reply-To: <0999c80cd639b78ae27c0674069d552833227564.1561386715.git.andreyknvl@google.com>
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Jun 24, 2019 at 04:32:56PM +0200, Andrey Konovalov wrote:
+On Mon, Jun 24, 2019 at 04:33:00PM +0200, Andrey Konovalov wrote:
 > This patch is a part of a series that extends kernel ABI to allow to pass
 > tagged user pointers (with the top byte set to something else other than
 > 0x00) as syscall arguments.
 > 
-> mlx4_get_umem_mr() uses provided user pointers for vma lookups, which can
-> only by done with untagged pointers.
-> 
-> Untag user pointers in this function.
+> This patch adds a simple test, that calls the uname syscall with a
+> tagged user pointer as an argument. Without the kernel accepting tagged
+> user pointers the test fails with EFAULT.
 > 
 > Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
 
-Reviewed-by: Kees Cook <keescook@chromium.org>
+Acked-by: Kees Cook <keescook@chromium.org>
 
 -Kees
 
 > ---
->  drivers/infiniband/hw/mlx4/mr.c | 7 ++++---
->  1 file changed, 4 insertions(+), 3 deletions(-)
+>  tools/testing/selftests/arm64/.gitignore      |  1 +
+>  tools/testing/selftests/arm64/Makefile        | 11 +++++++
+>  .../testing/selftests/arm64/run_tags_test.sh  | 12 ++++++++
+>  tools/testing/selftests/arm64/tags_test.c     | 29 +++++++++++++++++++
+>  4 files changed, 53 insertions(+)
+>  create mode 100644 tools/testing/selftests/arm64/.gitignore
+>  create mode 100644 tools/testing/selftests/arm64/Makefile
+>  create mode 100755 tools/testing/selftests/arm64/run_tags_test.sh
+>  create mode 100644 tools/testing/selftests/arm64/tags_test.c
 > 
-> diff --git a/drivers/infiniband/hw/mlx4/mr.c b/drivers/infiniband/hw/mlx4/mr.c
-> index 355205a28544..13d9f917f249 100644
-> --- a/drivers/infiniband/hw/mlx4/mr.c
-> +++ b/drivers/infiniband/hw/mlx4/mr.c
-> @@ -378,6 +378,7 @@ static struct ib_umem *mlx4_get_umem_mr(struct ib_udata *udata, u64 start,
->  	 * again
->  	 */
->  	if (!ib_access_writable(access_flags)) {
-> +		unsigned long untagged_start = untagged_addr(start);
->  		struct vm_area_struct *vma;
->  
->  		down_read(&current->mm->mmap_sem);
-> @@ -386,9 +387,9 @@ static struct ib_umem *mlx4_get_umem_mr(struct ib_udata *udata, u64 start,
->  		 * cover the memory, but for now it requires a single vma to
->  		 * entirely cover the MR to support RO mappings.
->  		 */
-> -		vma = find_vma(current->mm, start);
-> -		if (vma && vma->vm_end >= start + length &&
-> -		    vma->vm_start <= start) {
-> +		vma = find_vma(current->mm, untagged_start);
-> +		if (vma && vma->vm_end >= untagged_start + length &&
-> +		    vma->vm_start <= untagged_start) {
->  			if (vma->vm_flags & VM_WRITE)
->  				access_flags |= IB_ACCESS_LOCAL_WRITE;
->  		} else {
+> diff --git a/tools/testing/selftests/arm64/.gitignore b/tools/testing/selftests/arm64/.gitignore
+> new file mode 100644
+> index 000000000000..e8fae8d61ed6
+> --- /dev/null
+> +++ b/tools/testing/selftests/arm64/.gitignore
+> @@ -0,0 +1 @@
+> +tags_test
+> diff --git a/tools/testing/selftests/arm64/Makefile b/tools/testing/selftests/arm64/Makefile
+> new file mode 100644
+> index 000000000000..a61b2e743e99
+> --- /dev/null
+> +++ b/tools/testing/selftests/arm64/Makefile
+> @@ -0,0 +1,11 @@
+> +# SPDX-License-Identifier: GPL-2.0
+> +
+> +# ARCH can be overridden by the user for cross compiling
+> +ARCH ?= $(shell uname -m 2>/dev/null || echo not)
+> +
+> +ifneq (,$(filter $(ARCH),aarch64 arm64))
+> +TEST_GEN_PROGS := tags_test
+> +TEST_PROGS := run_tags_test.sh
+> +endif
+> +
+> +include ../lib.mk
+> diff --git a/tools/testing/selftests/arm64/run_tags_test.sh b/tools/testing/selftests/arm64/run_tags_test.sh
+> new file mode 100755
+> index 000000000000..745f11379930
+> --- /dev/null
+> +++ b/tools/testing/selftests/arm64/run_tags_test.sh
+> @@ -0,0 +1,12 @@
+> +#!/bin/sh
+> +# SPDX-License-Identifier: GPL-2.0
+> +
+> +echo "--------------------"
+> +echo "running tags test"
+> +echo "--------------------"
+> +./tags_test
+> +if [ $? -ne 0 ]; then
+> +	echo "[FAIL]"
+> +else
+> +	echo "[PASS]"
+> +fi
+> diff --git a/tools/testing/selftests/arm64/tags_test.c b/tools/testing/selftests/arm64/tags_test.c
+> new file mode 100644
+> index 000000000000..22a1b266e373
+> --- /dev/null
+> +++ b/tools/testing/selftests/arm64/tags_test.c
+> @@ -0,0 +1,29 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +
+> +#include <stdio.h>
+> +#include <stdlib.h>
+> +#include <unistd.h>
+> +#include <stdint.h>
+> +#include <sys/prctl.h>
+> +#include <sys/utsname.h>
+> +
+> +#define SHIFT_TAG(tag)		((uint64_t)(tag) << 56)
+> +#define SET_TAG(ptr, tag)	(((uint64_t)(ptr) & ~SHIFT_TAG(0xff)) | \
+> +					SHIFT_TAG(tag))
+> +
+> +int main(void)
+> +{
+> +	static int tbi_enabled = 0;
+> +	struct utsname *ptr, *tagged_ptr;
+> +	int err;
+> +
+> +	if (prctl(PR_SET_TAGGED_ADDR_CTRL, PR_TAGGED_ADDR_ENABLE, 0, 0, 0) == 0)
+> +		tbi_enabled = 1;
+> +	ptr = (struct utsname *)malloc(sizeof(*ptr));
+> +	if (tbi_enabled)
+> +		tagged_ptr = (struct utsname *)SET_TAG(ptr, 0x42);
+> +	err = uname(tagged_ptr);
+> +	free(ptr);
+> +
+> +	return err;
+> +}
 > -- 
 > 2.22.0.410.gd8fdbe21b5-goog
 > 
