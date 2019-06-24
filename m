@@ -2,22 +2,22 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E14C519B4
-	for <lists+linux-kselftest@lfdr.de>; Mon, 24 Jun 2019 19:38:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52427519C0
+	for <lists+linux-kselftest@lfdr.de>; Mon, 24 Jun 2019 19:40:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731643AbfFXRiO (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 24 Jun 2019 13:38:14 -0400
-Received: from foss.arm.com ([217.140.110.172]:55710 "EHLO foss.arm.com"
+        id S1731631AbfFXRkX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 24 Jun 2019 13:40:23 -0400
+Received: from foss.arm.com ([217.140.110.172]:55820 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728762AbfFXRiN (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 24 Jun 2019 13:38:13 -0400
+        id S1727945AbfFXRkX (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 24 Jun 2019 13:40:23 -0400
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 25282C0A;
-        Mon, 24 Jun 2019 10:38:13 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 67044C0A;
+        Mon, 24 Jun 2019 10:40:22 -0700 (PDT)
 Received: from arrakis.emea.arm.com (arrakis.cambridge.arm.com [10.1.196.78])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 7895D3F718;
-        Mon, 24 Jun 2019 10:38:08 -0700 (PDT)
-Date:   Mon, 24 Jun 2019 18:38:06 +0100
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B95AE3F718;
+        Mon, 24 Jun 2019 10:40:17 -0700 (PDT)
+Date:   Mon, 24 Jun 2019 18:40:15 +0100
 From:   Catalin Marinas <catalin.marinas@arm.com>
 To:     Andrey Konovalov <andreyknvl@google.com>
 Cc:     linux-arm-kernel@lists.infradead.org, linux-mm@kvack.org,
@@ -54,50 +54,39 @@ Cc:     linux-arm-kernel@lists.infradead.org, linux-mm@kvack.org,
         Robin Murphy <robin.murphy@arm.com>,
         Kevin Brodsky <kevin.brodsky@arm.com>,
         Szabolcs Nagy <Szabolcs.Nagy@arm.com>
-Subject: Re: [PATCH v18 15/15] selftests, arm64: add a selftest for passing
- tagged pointers to kernel
-Message-ID: <20190624173805.GK29120@arrakis.emea.arm.com>
+Subject: Re: [PATCH v18 11/15] IB/mlx4: untag user pointers in
+ mlx4_get_umem_mr
+Message-ID: <20190624174015.GL29120@arrakis.emea.arm.com>
 References: <cover.1561386715.git.andreyknvl@google.com>
- <0999c80cd639b78ae27c0674069d552833227564.1561386715.git.andreyknvl@google.com>
+ <ea0ff94ef2b8af12ea6c222c5ebd970e0849b6dd.1561386715.git.andreyknvl@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <0999c80cd639b78ae27c0674069d552833227564.1561386715.git.andreyknvl@google.com>
+In-Reply-To: <ea0ff94ef2b8af12ea6c222c5ebd970e0849b6dd.1561386715.git.andreyknvl@google.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Jun 24, 2019 at 04:33:00PM +0200, Andrey Konovalov wrote:
-> --- /dev/null
-> +++ b/tools/testing/selftests/arm64/tags_test.c
-> @@ -0,0 +1,29 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +
-> +#include <stdio.h>
-> +#include <stdlib.h>
-> +#include <unistd.h>
-> +#include <stdint.h>
-> +#include <sys/prctl.h>
-> +#include <sys/utsname.h>
-> +
-> +#define SHIFT_TAG(tag)		((uint64_t)(tag) << 56)
-> +#define SET_TAG(ptr, tag)	(((uint64_t)(ptr) & ~SHIFT_TAG(0xff)) | \
-> +					SHIFT_TAG(tag))
-> +
-> +int main(void)
-> +{
-> +	static int tbi_enabled = 0;
-> +	struct utsname *ptr, *tagged_ptr;
-> +	int err;
-> +
-> +	if (prctl(PR_SET_TAGGED_ADDR_CTRL, PR_TAGGED_ADDR_ENABLE, 0, 0, 0) == 0)
-> +		tbi_enabled = 1;
+On Mon, Jun 24, 2019 at 04:32:56PM +0200, Andrey Konovalov wrote:
+> This patch is a part of a series that extends kernel ABI to allow to pass
+> tagged user pointers (with the top byte set to something else other than
+> 0x00) as syscall arguments.
+> 
+> mlx4_get_umem_mr() uses provided user pointers for vma lookups, which can
+> only by done with untagged pointers.
+> 
+> Untag user pointers in this function.
+> 
+> Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
+> ---
+>  drivers/infiniband/hw/mlx4/mr.c | 7 ++++---
+>  1 file changed, 4 insertions(+), 3 deletions(-)
 
-Nitpick: with the latest prctl() patch, you can skip the last three
-arguments as they are ignored.
+Acked-by: Catalin Marinas <catalin.marinas@arm.com>
 
-Either way:
+This patch also needs an ack from the infiniband maintainers (Jason).
 
-Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
+-- 
+Catalin
