@@ -2,186 +2,115 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 604CD55AD3
-	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Jun 2019 00:14:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D26EB55B0B
+	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Jun 2019 00:25:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726514AbfFYWO6 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 25 Jun 2019 18:14:58 -0400
-Received: from mail-pg1-f195.google.com ([209.85.215.195]:36146 "EHLO
-        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726464AbfFYWO6 (ORCPT
+        id S1726307AbfFYWYy (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 25 Jun 2019 18:24:54 -0400
+Received: from Galois.linutronix.de ([193.142.43.55]:44570 "EHLO
+        Galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726274AbfFYWYx (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 25 Jun 2019 18:14:58 -0400
-Received: by mail-pg1-f195.google.com with SMTP id c13so130529pgg.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 25 Jun 2019 15:14:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=3T/u7V091HbAklhSEBy2pvLlCGAKMdVNlTSclQyRnpc=;
-        b=ZoosysAkLc7RgErWxK5FnvM9RfcOs6mWm5WOqtPjUqxIqHpReyhsVFvslRzLoV3q6k
-         miAcaLs/6/zELponnm9xpGa9FZgG6JHCtwbwwbsHrYPAVLPTXKnsAGZekzo/1E+v3r7q
-         MAyz+XT8oIYL+RBKU6gcMfBPkx0i9G9kx5C+icFSHWtjKBEQssSIkQPmyDMJkhDb/APn
-         rRRqx5pehUt6wHDwbMbahfsOf2X1S8Q3jv4bjOdkgKsJGdYPvje9VOWjIuTF7Q/SCVfF
-         wDn/9hiMVLqSYlkj9TG58JxRLAwgxPn7xvEpgJy0gDIbJSP6wZCqkWFGLqYmeLIB06YQ
-         qR2w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=3T/u7V091HbAklhSEBy2pvLlCGAKMdVNlTSclQyRnpc=;
-        b=tVL1xP/kAlmgGRp9Orl9k9143B/ChGhVoXsW4rFyDsbrt2P3x3oxj6C7Gg2VEY6dlR
-         ZM8948Abzzy8E8AhN79mbXRMRrXd3VK5jDWGnJ0hSU3kgxObib+pEIGntVvvtzb9azlY
-         6X+kyoLhJJ9gmoe6pl7WuVHWx6Qnyf4bmF8nhaAtIoX3E5SwfrtK9V2ra4h22I4R4wFb
-         85967FTkG4kdHZZiK7Gb0kCGMMBbmfSo33XAe4UuxOdoD6JS9BTL0rfMoPyC4OqyXA2u
-         tlUDPiBbPgYqzubje0LLKRAniiJ/D3ZJXJIhA+XwcCMBFTFarDFEuY0LOJ2aVsphlQHT
-         fKBw==
-X-Gm-Message-State: APjAAAXpT4kb9qqlrtSYxQR5cX7RwM3vEmB7VCCgep/rHEtxSIV8Qtq6
-        3VE386cq1MPXWY3yVAed710vPFrrejDF/5mpezxm/Q==
-X-Google-Smtp-Source: APXvYqzlEoDZX+cOnuipK7PjmAMWm3uFqbtUZEXyCZSNz1gEBa4cWncDmW9O+QuwSqz4K1dG1pGT/q+vccTvIeTjlVo=
-X-Received: by 2002:a63:1459:: with SMTP id 25mr40704314pgu.201.1561500896729;
- Tue, 25 Jun 2019 15:14:56 -0700 (PDT)
-MIME-Version: 1.0
-References: <20190617082613.109131-1-brendanhiggins@google.com>
- <20190617082613.109131-2-brendanhiggins@google.com> <20190620001526.93426218BE@mail.kernel.org>
- <CAFd5g46Jhxsz6_VXHEVYvTeDRwwzgKpr=aUWLL5b3S4kUukb8g@mail.gmail.com> <20190625214427.GN19023@42.do-not-panic.com>
-In-Reply-To: <20190625214427.GN19023@42.do-not-panic.com>
-From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Tue, 25 Jun 2019 15:14:45 -0700
-Message-ID: <CAFd5g47OABqN127cPKqoCOA_Wr9w=LFh_0XkF7LXu2iY9sFkSw@mail.gmail.com>
-Subject: Re: [PATCH v5 01/18] kunit: test: add KUnit test runner core
-To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     Stephen Boyd <sboyd@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Kees Cook <keescook@google.com>,
-        Kieran Bingham <kieran.bingham@ideasonboard.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Rob Herring <robh@kernel.org>, shuah <shuah@kernel.org>,
-        "Theodore Ts'o" <tytso@mit.edu>,
-        Masahiro Yamada <yamada.masahiro@socionext.com>,
-        devicetree <devicetree@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        kunit-dev@googlegroups.com,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        linux-fsdevel@vger.kernel.org,
-        linux-kbuild <linux-kbuild@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Tue, 25 Jun 2019 18:24:53 -0400
+Received: from p5b06daab.dip0.t-ipconnect.de ([91.6.218.171] helo=nanos)
+        by Galois.linutronix.de with esmtpsa (TLS1.2:DHE_RSA_AES_256_CBC_SHA256:256)
+        (Exim 4.80)
+        (envelope-from <tglx@linutronix.de>)
+        id 1hftrr-00020M-H0; Wed, 26 Jun 2019 00:24:47 +0200
+Date:   Wed, 26 Jun 2019 00:24:46 +0200 (CEST)
+From:   Thomas Gleixner <tglx@linutronix.de>
+To:     Andy Lutomirski <luto@kernel.org>
+cc:     Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        LAK <linux-arm-kernel@lists.infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>, linux-mips@vger.kernel.org,
         "open list:KERNEL SELFTEST FRAMEWORK" 
         <linux-kselftest@vger.kernel.org>,
-        linux-nvdimm <linux-nvdimm@lists.01.org>,
-        linux-um@lists.infradead.org,
-        Sasha Levin <Alexander.Levin@microsoft.com>,
-        "Bird, Timothy" <Tim.Bird@sony.com>,
-        Amir Goldstein <amir73il@gmail.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Daniel Vetter <daniel@ffwll.ch>, Jeff Dike <jdike@addtoit.com>,
-        Joel Stanley <joel@jms.id.au>,
-        Julia Lawall <julia.lawall@lip6.fr>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Knut Omang <knut.omang@oracle.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Petr Mladek <pmladek@suse.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Richard Weinberger <richard@nod.at>,
-        David Rientjes <rientjes@google.com>,
-        Steven Rostedt <rostedt@goodmis.org>, wfg@linux.intel.com
-Content-Type: text/plain; charset="UTF-8"
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will.deacon@arm.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Russell King <linux@armlinux.org.uk>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Paul Burton <paul.burton@mips.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Mark Salyzyn <salyzyn@android.com>,
+        Peter Collingbourne <pcc@google.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Dmitry Safonov <0x7f454c46@gmail.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Huw Davies <huw@codeweavers.com>,
+        Shijith Thotton <sthotton@marvell.com>,
+        Andre Przywara <andre.przywara@arm.com>,
+        Peter Zijlstra <peterz@infradead.org>
+Subject: Re: [PATCH 1/3] lib/vdso: Delay mask application in do_hres()
+In-Reply-To: <CALCETrWE3zYN-6h0RkMV9j5kSkSWbJ-nQnjhH=md=ybSR0eZ9Q@mail.gmail.com>
+Message-ID: <alpine.DEB.2.21.1906260009260.32342@nanos.tec.linutronix.de>
+References: <20190624133607.GI29497@fuggles.cambridge.arm.com> <20190625161804.38713-1-vincenzo.frascino@arm.com> <alpine.DEB.2.21.1906251851350.32342@nanos.tec.linutronix.de> <alpine.DEB.2.21.1906252024350.32342@nanos.tec.linutronix.de>
+ <CALCETrWE3zYN-6h0RkMV9j5kSkSWbJ-nQnjhH=md=ybSR0eZ9Q@mail.gmail.com>
+User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+X-Linutronix-Spam-Score: -1.0
+X-Linutronix-Spam-Level: -
+X-Linutronix-Spam-Status: No , -1.0 points, 5.0 required,  ALL_TRUSTED=-1,SHORTCIRCUIT=-0.0001
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Jun 25, 2019 at 2:44 PM Luis Chamberlain <mcgrof@kernel.org> wrote:
->
-> On Tue, Jun 25, 2019 at 01:28:25PM -0700, Brendan Higgins wrote:
-> > On Wed, Jun 19, 2019 at 5:15 PM Stephen Boyd <sboyd@kernel.org> wrote:
+On Tue, 25 Jun 2019, Andy Lutomirski wrote:
+> On Tue, Jun 25, 2019 at 11:27 AM Thomas Gleixner <tglx@linutronix.de> wrote:
+> >
+> > On Tue, 25 Jun 2019, Thomas Gleixner wrote:
+> >
+> > > On Tue, 25 Jun 2019, Vincenzo Frascino wrote:
 > > >
-> > > Quoting Brendan Higgins (2019-06-17 01:25:56)
-> > > > diff --git a/kunit/test.c b/kunit/test.c
-> > > > new file mode 100644
-> > > > index 0000000000000..d05d254f1521f
-> > > > --- /dev/null
-> > > > +++ b/kunit/test.c
-> > > > @@ -0,0 +1,210 @@
-> > > > +// SPDX-License-Identifier: GPL-2.0
-> > > > +/*
-> > > > + * Base unit test (KUnit) API.
-> > > > + *
-> > > > + * Copyright (C) 2019, Google LLC.
-> > > > + * Author: Brendan Higgins <brendanhiggins@google.com>
-> > > > + */
-> > > > +
-> > > > +#include <linux/sched/debug.h>
-> > > > +#include <kunit/test.h>
-> > > > +
-> > > > +static bool kunit_get_success(struct kunit *test)
-> > > > +{
-> > > > +       unsigned long flags;
-> > > > +       bool success;
-> > > > +
-> > > > +       spin_lock_irqsave(&test->lock, flags);
-> > > > +       success = test->success;
-> > > > +       spin_unlock_irqrestore(&test->lock, flags);
+> > > CC+ Andy
 > > >
-> > > I still don't understand the locking scheme in this code. Is the
-> > > intention to make getter and setter APIs that are "safe" by adding in a
-> > > spinlock that is held around getting and setting various members in the
-> > > kunit structure?
+> > > > do_hres() in the vDSO generic library masks the hw counter value
+> > > > immediately after reading it.
+> > > >
+> > > > Postpone the mask application after checking if the syscall fallback is
+> > > > enabled, in order to be able to detect a possible fallback for the
+> > > > architectures that have masks smaller than ULLONG_MAX.
+> > >
+> > > Right. This only worked on x86 because the mask is there ULLONG_MAX for all
+> > > VDSO capable clocksources, i.e. that ever worked just by chance.
+> > >
+> > > As we talked about that already yesterday, I tested this on a couple of
+> > > machines and as expected the outcome is uarch dependent. Minimal deviations
+> > > to both sides and some machines do not show any change at all. I doubt it's
+> > > possible to come up with a solution which makes all uarchs go faster
+> > > magically.
+> > >
+> > > Though, thinking about it, we could remove the mask operation completely on
+> > > X86. /me runs tests
 > >
-> > Yes, your understanding is correct. It is possible for a user to write
-> > a test such that certain elements may be updated in different threads;
-> > this would most likely happen in the case where someone wants to make
-> > an assertion or an expectation in a thread created by a piece of code
-> > under test. Although this should generally be avoided, it is possible,
-> > and there are occasionally good reasons to do so, so it is
-> > functionality that we should support.
+> > Unsurprisingly the results vary. Two uarchs do not care, but they did not
+> > care about moving the mask either. The other two gain performance and the
+> > last one falls back to the state before moving the mask. So in general it
+> > looks like a worthwhile optimization.
 > >
-> > Do you think I should add a comment to this effect?
-> >
-> > > In what situation is there more than one thread reading or writing the
-> > > kunit struct? Isn't it only a single process that is going to be
-> >
-> > As I said above, it is possible that the code under test may spawn a
-> > new thread that may make an expectation or an assertion. It is not a
-> > super common use case, but it is possible.
->
-> I wonder if it is worth to have then different types of tests based on
-> locking requirements. One with no locking, since it seems you imply
-> most tests would fall under this category, then locking, and another
-> with IRQ context.
->
-> If no locking is done at all for all tests which do not require locking,
-> is there any gains at run time? I'm sure it might be minimum but
-> curious.
+> 
+> At one point, I contemplated a different approach: have the "get the
+> counter" routine return 0 and then do if (unlikely(cycles <= last))
+> goto fallback.  This will remove one branch from the hot path.  I got
+> dubious results when I tried benchmarking it, probably because the
+> branch in question was always correctly predicted.
 
-Yeah, I don't think it is worth it.
+Just tried and it's the same thing. One drops, one does not care and one
+gains. Did not test the other two as they are asleep already. There is no
+universal cure for this I fear. I even tried a uarch optimized build a few
+days ago which came out worse than the generic one...
 
-I don't think we need to be squeezing every ounce of performance out
-of unit tests, since they are inherently a cost and are not intended
-to be run in a production deployed kernel as part of normal production
-usage.
+The issue in that code path is the fencing of the TSC read. That seems to
+screw up every uarch in a different way.
 
-> > > operating on this structure? And why do we need to disable irqs? Are we
-> > > expecting to be modifying the unit tests from irq contexts?
-> >
-> > There are instances where someone may want to test a driver which has
-> > an interrupt handler in it. I actually have (not the greatest) example
-> > here. Now in these cases, I expect someone to use a mock irqchip or
-> > some other fake mechanism to trigger the interrupt handler and not
-> > actual hardware; technically speaking in this case, it is not going to
-> > be accessed from a "real" irq context; however, the code under test
-> > should think that it is in an irq context; given that, I figured it is
-> > best to just treat it as a real irq context. Does that make sense?
->
-> Since its a new architecture and since you seem to imply most tests
-> don't require locking or even IRQs disabled, I think its worth to
-> consider the impact of adding such extreme locking requirements for
-> an initial ramp up.
+If you have no objections I'll queue this change (moving the mask) along
+with the other two ARM64 ones to unbreak the fallback path for these errata
+inflicted machines.
 
-Fair enough, I can see the point of not wanting to use irq disabled
-until we get someone complaining about it, but I think making it
-thread safe is reasonable. It means there is one less thing to confuse
-a KUnit user and the only penalty paid is some very minor performance.
+Thanks,
+
+	tglx
+
