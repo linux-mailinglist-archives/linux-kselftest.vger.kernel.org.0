@@ -2,109 +2,128 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B126B5588D
-	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Jun 2019 22:15:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA5D8558CB
+	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Jun 2019 22:28:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726628AbfFYUPe (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 25 Jun 2019 16:15:34 -0400
-Received: from mail.kernel.org ([198.145.29.99]:44062 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726414AbfFYUPd (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 25 Jun 2019 16:15:33 -0400
-Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 1420E21670
-        for <linux-kselftest@vger.kernel.org>; Tue, 25 Jun 2019 20:15:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1561493732;
-        bh=Non/zwPybF2AGuhmjwFgxmMCpYW8ogfnhbNrhDKk/vc=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=lLPnssPRCinSZhMedXFl4IX9MsXTNhVSxFwL4KFntKi0pXjqZtp295xgMzrg8LGbO
-         mOUGpRdpbB/L63NxLJu57zUIKU8V40nkRaOVFZ6w0Dr1RtDyGNFekX200zDZun+Q1n
-         hwMQ4fQRt/bJqYXOD6mBo2LKulD7skPGobAZzDmU=
-Received: by mail-wr1-f47.google.com with SMTP id k11so84659wrl.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 25 Jun 2019 13:15:32 -0700 (PDT)
-X-Gm-Message-State: APjAAAVG+Qrom32iUMPPFrB32UA33PMbZod1Ucr2L20npE7or3C4G9k/
-        MJN3wRXlFqQ+r698Z5rLwDCBbd9pp8w8wm02ElwTQQ==
-X-Google-Smtp-Source: APXvYqyhHtmITJg1+Pl3hirpl0QwbJ++nvN6wGzhM8y02SUtgxU8TIY6h1kuPsgr5idu476pi12gfJv0CJukh1rt4Oc=
-X-Received: by 2002:adf:cc85:: with SMTP id p5mr17560wrj.47.1561493730555;
- Tue, 25 Jun 2019 13:15:30 -0700 (PDT)
+        id S1726706AbfFYU14 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 25 Jun 2019 16:27:56 -0400
+Received: from mail-lj1-f175.google.com ([209.85.208.175]:35732 "EHLO
+        mail-lj1-f175.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726274AbfFYU14 (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 25 Jun 2019 16:27:56 -0400
+Received: by mail-lj1-f175.google.com with SMTP id x25so17609174ljh.2;
+        Tue, 25 Jun 2019 13:27:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=oRmYeVOh7NfY6hKbB5eNWP52w4vJxcXS9GCkFHd3G74=;
+        b=eVeBnR+XAL2j5u3GGVsg3yWUIGA7z+jVikp+Bs7gMu1/yELD3OcstPMxguwV1tVjUI
+         ECS6brRWHFnW+o/AKFNIFVvrAf9herve2aaUwPXanEsGEp5Wf7BuWmT2PiFJzlSZo/3F
+         BI3NL9Akq09pK9GVK7uOugYJZ1fN57wvBf8A/850IhI+ZeE2z5NFL4Qc54Y/RB51ZdEb
+         WM9M0qiOriFpM+Gvxa0QatwFUkcY7Ho04nHAN7rEfmyoerS6pw3eto6ZF1e9apHwzFJo
+         ZXLjm/MkGvvaKkyOfEqfNnFqDx2VqLgQJcB4d1LUqsjVzb3aifJFB+//RgI1Ks0ioQWj
+         Ffsg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=oRmYeVOh7NfY6hKbB5eNWP52w4vJxcXS9GCkFHd3G74=;
+        b=H8vb8O3GtUY5nkbTcnsv4OvIafOZ4wZMS0Vuts4K9Yz9aKH/556/MR85ygAqWf2iQP
+         q10EHI4yBWB8II+5Q0gFZhNHXerJ3S5ZZ7pGzqfJW/09YDbndKg7BLkUQSLS1/zEdQug
+         kCTUas928QWk5gzyZBlXMe4ijLo8vKJwq5IjSPz8Vi9oZ0ntnimcVkAFYmw0hO0T5IXp
+         Vr4dQkA3Y/48F6qbKBQAx/ofO39lTZ2jFx/Q+5NFMKSx0ZHJYbUmLJqsRqNqKAhkDNG9
+         e0c9P7DMa0pjldaaS2LhZ+ywuvA6V1lp4wUb5ArKWz9f3TEmEZkICGD2pN8V6mvomKMM
+         N8gg==
+X-Gm-Message-State: APjAAAUPKHtedOF2FuhMff/BpkIYspp8RGg3s8J76HeWpREhtYLph0cY
+        Xo92TuQfqbr/8HuIsPbmQGV9VeVYD5yussrJXUo=
+X-Google-Smtp-Source: APXvYqyPbC29JdNWnZqiP3xde3zVIFnuhIOwlmPXNm+MesPHdP6UZWYfygK3ni7PqzwYZ8irnFTkkjFxUp3S1X4VZxo=
+X-Received: by 2002:a2e:9dca:: with SMTP id x10mr273099ljj.17.1561494472994;
+ Tue, 25 Jun 2019 13:27:52 -0700 (PDT)
 MIME-Version: 1.0
-References: <20190624133607.GI29497@fuggles.cambridge.arm.com>
- <20190625161804.38713-1-vincenzo.frascino@arm.com> <alpine.DEB.2.21.1906251851350.32342@nanos.tec.linutronix.de>
- <alpine.DEB.2.21.1906252024350.32342@nanos.tec.linutronix.de>
-In-Reply-To: <alpine.DEB.2.21.1906252024350.32342@nanos.tec.linutronix.de>
-From:   Andy Lutomirski <luto@kernel.org>
-Date:   Tue, 25 Jun 2019 13:15:19 -0700
-X-Gmail-Original-Message-ID: <CALCETrWE3zYN-6h0RkMV9j5kSkSWbJ-nQnjhH=md=ybSR0eZ9Q@mail.gmail.com>
-Message-ID: <CALCETrWE3zYN-6h0RkMV9j5kSkSWbJ-nQnjhH=md=ybSR0eZ9Q@mail.gmail.com>
-Subject: Re: [PATCH 1/3] lib/vdso: Delay mask application in do_hres()
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        LAK <linux-arm-kernel@lists.infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>, linux-mips@vger.kernel.org,
+References: <CA+G9fYsMcdHmKY66CNhsrizO-gErkOQCkTcBSyOHLpOs+8g5=g@mail.gmail.com>
+ <CAEf4BzbTD8G_zKkj-S3MOeG5Hq3_2zz3bGoXhQtpt0beG8nWJA@mail.gmail.com>
+ <20190621161752.d7d7n4m5q67uivys@xps.therub.org> <CAEf4BzaSoKA5H5rN=w+OAtUz4bD30-VOjjjY+Qv9tTAnhMweiA@mail.gmail.com>
+ <20190624195336.nubi7n2np5vfjutr@xps.therub.org> <CAADnVQKZycXgSw6C0qa7g0y=W3xRhM_4Rqcj7ZzL=rGh_n4mgA@mail.gmail.com>
+ <20190625153159.5utnn36dgku5545n@xps.therub.org>
+In-Reply-To: <20190625153159.5utnn36dgku5545n@xps.therub.org>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Tue, 25 Jun 2019 13:27:41 -0700
+Message-ID: <CAADnVQLoSc=PsKj=KdCsqMLfHO-sP_Bijgy63zROos6Cy=k+dw@mail.gmail.com>
+Subject: Re: selftests: bpf: test_libbpf.sh failed at file test_l4lb.o
+To:     Dan Rue <dan.rue@linaro.org>
+Cc:     Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        Naresh Kamboju <naresh.kamboju@linaro.org>,
         "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will.deacon@arm.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Russell King <linux@armlinux.org.uk>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Paul Burton <paul.burton@mips.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Mark Salyzyn <salyzyn@android.com>,
-        Peter Collingbourne <pcc@google.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Dmitry Safonov <0x7f454c46@gmail.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Huw Davies <huw@codeweavers.com>,
-        Shijith Thotton <sthotton@marvell.com>,
-        Andre Przywara <andre.przywara@arm.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>
+        <linux-kselftest@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        Netdev <netdev@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Xdp <xdp-newbies@vger.kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Alexei Starovoitov <ast@kernel.org>, Martin Lau <kafai@fb.com>,
+        Yonghong Song <yhs@fb.com>,
+        john fastabend <john.fastabend@gmail.com>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Jakub Kicinski <jakub.kicinski@netronome.com>,
+        Shuah Khan <shuah@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Jun 25, 2019 at 11:27 AM Thomas Gleixner <tglx@linutronix.de> wrote:
+On Tue, Jun 25, 2019 at 8:32 AM Dan Rue <dan.rue@linaro.org> wrote:
 >
-> On Tue, 25 Jun 2019, Thomas Gleixner wrote:
->
-> > On Tue, 25 Jun 2019, Vincenzo Frascino wrote:
-> >
-> > CC+ Andy
-> >
-> > > do_hres() in the vDSO generic library masks the hw counter value
-> > > immediately after reading it.
+> On Mon, Jun 24, 2019 at 12:58:15PM -0700, Alexei Starovoitov wrote:
+> > On Mon, Jun 24, 2019 at 12:53 PM Dan Rue <dan.rue@linaro.org> wrote:
 > > >
-> > > Postpone the mask application after checking if the syscall fallback is
-> > > enabled, in order to be able to detect a possible fallback for the
-> > > architectures that have masks smaller than ULLONG_MAX.
+> > > I would say if it's not possible to check at runtime, and it requires
+> > > clang 9.0, that this test should not be enabled by default.
 > >
-> > Right. This only worked on x86 because the mask is there ULLONG_MAX for all
-> > VDSO capable clocksources, i.e. that ever worked just by chance.
-> >
-> > As we talked about that already yesterday, I tested this on a couple of
-> > machines and as expected the outcome is uarch dependent. Minimal deviations
-> > to both sides and some machines do not show any change at all. I doubt it's
-> > possible to come up with a solution which makes all uarchs go faster
-> > magically.
-> >
-> > Though, thinking about it, we could remove the mask operation completely on
-> > X86. /me runs tests
+> > The latest clang is the requirement.
+> > If environment has old clang or no clang at all these tests will be failing.
 >
-> Unsurprisingly the results vary. Two uarchs do not care, but they did not
-> care about moving the mask either. The other two gain performance and the
-> last one falls back to the state before moving the mask. So in general it
-> looks like a worthwhile optimization.
+> Hi Alexei!
 >
+> I'm not certain if I'm interpreting you as you intended, but it sounds
+> like you're telling me that if the test build environment does not use
+> 'latest clang' (i guess latest as of today?), that these tests will
+> fail, and that is how it is going to be. If I have that wrong, please
+> correct me and disregard the rest of my message.
+>
+> Please understand where we are coming from. We (and many others) run
+> thousands of tests from a lot of test frameworks, and so our environment
+> often has mutually exclusive requirements when it comes to things like
+> toolchain selection.
+>
+> We believe, strongly, that a test should not emit a "fail" for a missing
+> requirement. Fail is a serious thing, and should be reserved for an
+> actual issue that needs to be investigated, reported, and fixed.
+>
+> This is how we treat test failures - we investigate, report, and fix
+> them when possible. When they're not real failures, we waste our time
+> (and yours, in this case).
+>
+> By adding the tests to TEST_GEN_PROGS, you're adding them to the general
+> test set that those of us running test farms try to run continuously
+> across a wide range of hardware environments and kernel branches.
 
-At one point, I contemplated a different approach: have the "get the
-counter" routine return 0 and then do if (unlikely(cycles <= last))
-goto fallback.  This will remove one branch from the hot path.  I got
-dubious results when I tried benchmarking it, probably because the
-branch in question was always correctly predicted.
+you run the latest selftests/bpf on the latest kernel, right?
+If not than selftests/bpf is not for your setup.
+
+In the past people argued that selftests/bpf should check
+features of the kernel and skip when features are not found.
+My answer to that was always the same: such changes to selftests
+for older kernels need to live out of tree.
+selftests/bpf are one to one to the latest kernel.
+Often kernel commit X will break selftests and they're fixed
+in the commit X+1.
+clang, pahole, bpftool, iproute2 provide those features for the kernel.
+In other words new kernel features rely on new clang and
+other tools and selftests are testing those latest kernel features.
+Without new clang many new features cannot be tested exhaustively.
+datasec and btf are just few examples.
+Hence if your test farm cannot install the latest clang, pahole, etc then
+I recommend not to run selftest/bpf.
