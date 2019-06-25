@@ -2,52 +2,51 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 99B6855BDF
-	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Jun 2019 01:03:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B31CE55BF3
+	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Jun 2019 01:03:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726420AbfFYXC5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 25 Jun 2019 19:02:57 -0400
-Received: from mail-pg1-f194.google.com ([209.85.215.194]:42763 "EHLO
-        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725782AbfFYXC4 (ORCPT
+        id S1726425AbfFYXDu (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 25 Jun 2019 19:03:50 -0400
+Received: from mail-pl1-f196.google.com ([209.85.214.196]:33866 "EHLO
+        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725782AbfFYXDt (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 25 Jun 2019 19:02:56 -0400
-Received: by mail-pg1-f194.google.com with SMTP id k13so165620pgq.9;
-        Tue, 25 Jun 2019 16:02:56 -0700 (PDT)
+        Tue, 25 Jun 2019 19:03:49 -0400
+Received: by mail-pl1-f196.google.com with SMTP id i2so264298plt.1;
+        Tue, 25 Jun 2019 16:03:49 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=IAVXlfOigyJbEa5HhE6BwBcpEncScOxFXJXYNv1k45k=;
-        b=fkL5OZuDVWkej5ZG4VatI21hHWlzGJXK0Si9AQAW9zoGDwMiyZEPuYRirz3Q0aByJu
-         9VSHMOkGBUWW+0XoBoEXFmw+r8dtWGNTMbrgcKs5Y6TE4ftvqTFwaaqA+U2WFhJQIFlw
-         4KKH74x4Ywbb000a83LtPoyMHZ5lCRuW/S7lvrp3MQNb3camzLJIdH0ezPRKVp/yWlMv
-         3/Q1tmNtE2UScpSpGJSN7CWBf4L/z22TrszMAenhqm81+BrbizGlhy6Mq2867Dogh+6s
-         QTfxli/sBvaR+SMxqvkCI0RltTgT8RpA3KvJKAQJ31dHl2que9hlT0apwrDNqHfDlHEN
-         pogA==
-X-Gm-Message-State: APjAAAUEy5rjIl2ApPQlP2hKVqp/KAyOmZgVXhTaR1V8Qxen5rTjMWmm
-        DtEyG+GK0eMtcjV02R/Fmj4=
-X-Google-Smtp-Source: APXvYqzZBw/dqZhBTNHNMDfHye5/2eZRaAS1PSupftYRQhWIaCqeSFUapN9xTbqyZVwDxqRVbGqHHQ==
-X-Received: by 2002:a17:90a:ac13:: with SMTP id o19mr354796pjq.143.1561503775428;
-        Tue, 25 Jun 2019 16:02:55 -0700 (PDT)
+        bh=K5ErWoFi/JRH3gFgmKoboUdo26AiFjxGcMAHhZYf05o=;
+        b=G3+PFVxz/Ueu9IpY307Sscrf8TByxdIljL5dy6ohg3ye5EyQUzKMZHr6KWd0KMGfs+
+         Qe5kmTvH6CwF8ocTmAQ1VhNDDqX10TOOMnLgTQPM/ArJlpmjHFBzZmiEcqg1wgDyvMp3
+         IG9JAcIcFkC6epjYXSy/3qtNdwbs5/1Xs+dJ3M7t/rzgO5qwk7my4jZAlQ9b2tA9WSeE
+         Gfy8ha+bUCQ89d0ha+suoYU3FmC1hAVwzMQR10F1Vpzk9K6LO2Ujx2q2pzV9a1ce9z6R
+         hy7oLNUMIAZcxo42/S/8TDGLTNkOn/CZ7SvUgfLW1j3HO+MUnuB5PP0NqSy3mwQltZOb
+         M7/A==
+X-Gm-Message-State: APjAAAWtfKGR6p+32lpYOjoZHqzhoLbhxJa2nEgbTHFN3wRYw9RH7N6H
+        ZAOmeYpK+y5YFa2zSRgr7gE=
+X-Google-Smtp-Source: APXvYqz0M1IYGUwmvhT0NQpAoWP4ae2xshnXaqUSrqM3bOHQ06wFfedsHIaIBAncXtAoSDKV5lQq7Q==
+X-Received: by 2002:a17:902:467:: with SMTP id 94mr1238634ple.131.1561503828687;
+        Tue, 25 Jun 2019 16:03:48 -0700 (PDT)
 Received: from 42.do-not-panic.com (42.do-not-panic.com. [157.230.128.187])
-        by smtp.gmail.com with ESMTPSA id r1sm92074pji.15.2019.06.25.16.02.53
+        by smtp.gmail.com with ESMTPSA id 10sm9969046pfb.30.2019.06.25.16.03.47
         (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Tue, 25 Jun 2019 16:02:54 -0700 (PDT)
+        Tue, 25 Jun 2019 16:03:47 -0700 (PDT)
 Received: by 42.do-not-panic.com (Postfix, from userid 1000)
-        id 64827401EB; Tue, 25 Jun 2019 23:02:53 +0000 (UTC)
-Date:   Tue, 25 Jun 2019 23:02:53 +0000
+        id BAAA5401EB; Tue, 25 Jun 2019 23:03:46 +0000 (UTC)
+Date:   Tue, 25 Jun 2019 23:03:46 +0000
 From:   Luis Chamberlain <mcgrof@kernel.org>
 To:     Brendan Higgins <brendanhiggins@google.com>
-Cc:     Stephen Boyd <sboyd@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
+Cc:     Frank Rowand <frowand.list@gmail.com>,
         Greg KH <gregkh@linuxfoundation.org>,
         Josh Poimboeuf <jpoimboe@redhat.com>,
         Kees Cook <keescook@google.com>,
         Kieran Bingham <kieran.bingham@ideasonboard.com>,
         Peter Zijlstra <peterz@infradead.org>,
-        Rob Herring <robh@kernel.org>, shuah <shuah@kernel.org>,
-        Theodore Ts'o <tytso@mit.edu>,
+        Rob Herring <robh@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
+        shuah <shuah@kernel.org>, Theodore Ts'o <tytso@mit.edu>,
         Masahiro Yamada <yamada.masahiro@socionext.com>,
         devicetree <devicetree@vger.kernel.org>,
         dri-devel <dri-devel@lists.freedesktop.org>,
@@ -76,52 +75,46 @@ Cc:     Stephen Boyd <sboyd@kernel.org>,
         Richard Weinberger <richard@nod.at>,
         David Rientjes <rientjes@google.com>,
         Steven Rostedt <rostedt@goodmis.org>, wfg@linux.intel.com
-Subject: Re: [PATCH v5 01/18] kunit: test: add KUnit test runner core
-Message-ID: <20190625230253.GQ19023@42.do-not-panic.com>
+Subject: Re: [PATCH v5 06/18] kbuild: enable building KUnit
+Message-ID: <20190625230346.GR19023@42.do-not-panic.com>
 References: <20190617082613.109131-1-brendanhiggins@google.com>
- <20190617082613.109131-2-brendanhiggins@google.com>
- <20190620001526.93426218BE@mail.kernel.org>
- <CAFd5g46Jhxsz6_VXHEVYvTeDRwwzgKpr=aUWLL5b3S4kUukb8g@mail.gmail.com>
- <20190625214427.GN19023@42.do-not-panic.com>
- <CAFd5g47OABqN127cPKqoCOA_Wr9w=LFh_0XkF7LXu2iY9sFkSw@mail.gmail.com>
+ <20190617082613.109131-7-brendanhiggins@google.com>
+ <20190625221318.GO19023@42.do-not-panic.com>
+ <CAFd5g448rYqr3PHg0cfoddr70nktkWXcRfJoZHmuPJjTW53YYg@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAFd5g47OABqN127cPKqoCOA_Wr9w=LFh_0XkF7LXu2iY9sFkSw@mail.gmail.com>
+In-Reply-To: <CAFd5g448rYqr3PHg0cfoddr70nktkWXcRfJoZHmuPJjTW53YYg@mail.gmail.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Jun 25, 2019 at 03:14:45PM -0700, Brendan Higgins wrote:
-> On Tue, Jun 25, 2019 at 2:44 PM Luis Chamberlain <mcgrof@kernel.org> wrote:
-> > Since its a new architecture and since you seem to imply most tests
-> > don't require locking or even IRQs disabled, I think its worth to
-> > consider the impact of adding such extreme locking requirements for
-> > an initial ramp up.
+On Tue, Jun 25, 2019 at 03:41:29PM -0700, Brendan Higgins wrote:
+> On Tue, Jun 25, 2019 at 3:13 PM Luis Chamberlain <mcgrof@kernel.org> wrote:
+> >
+> > On Mon, Jun 17, 2019 at 01:26:01AM -0700, Brendan Higgins wrote:
+> > > diff --git a/Kconfig b/Kconfig
+> > > index 48a80beab6853..10428501edb78 100644
+> > > --- a/Kconfig
+> > > +++ b/Kconfig
+> > > @@ -30,3 +30,5 @@ source "crypto/Kconfig"
+> > >  source "lib/Kconfig"
+> > >
+> > >  source "lib/Kconfig.debug"
+> > > +
+> > > +source "kunit/Kconfig"
+> >
+> > This patch would break compilation as kunit/Kconfig is not introduced. This
+> > would would also break bisectability on this commit. This change should
+> > either be folded in to the next patch, or just be a separate patch after
+> > the next one.
 > 
-> Fair enough, I can see the point of not wanting to use irq disabled
-> until we get someone complaining about it, but I think making it
-> thread safe is reasonable. It means there is one less thing to confuse
-> a KUnit user and the only penalty paid is some very minor performance.
+> Maybe my brain isn't working right now, but I am pretty darn sure that
+> I introduce kunit/Kconfig in the very first patch of this series.
+> Quoting from the change summary from the first commit:
 
-One reason I'm really excited about kunit is speed... so by all means I
-think we're at a good point to analyze performance optimizationsm if
-they do make sense.
-
-While on the topic of parallization, what about support for running
-different test cases in parallel? Or at the very least different kunit
-modules in parallel.  Few questions come up based on this prospect:
-
-  * Why not support parallelism from the start?
-  * Are you opposed to eventually having this added? For instance, there is
-    enough code on lib/test_kmod.c for batching tons of kthreads each
-    one running its own thing for testing purposes which could be used
-    as template.
-  * If we eventually *did* support it:
-    - Would logs be skewed?
-    - Could we have a way to query: give me log for only kunit module
-      named "foo"?
+Indeed, my mistake, thanks!
 
   Luis
