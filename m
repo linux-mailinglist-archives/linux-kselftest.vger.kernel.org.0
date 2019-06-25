@@ -2,133 +2,75 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 20FE75537B
-	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Jun 2019 17:33:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6E915544E
+	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Jun 2019 18:18:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728831AbfFYPdn (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 25 Jun 2019 11:33:43 -0400
-Received: from foss.arm.com ([217.140.110.172]:44174 "EHLO foss.arm.com"
+        id S1726696AbfFYQSf (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 25 Jun 2019 12:18:35 -0400
+Received: from foss.arm.com ([217.140.110.172]:44760 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728273AbfFYPdn (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 25 Jun 2019 11:33:43 -0400
+        id S1726420AbfFYQSf (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 25 Jun 2019 12:18:35 -0400
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2AF882B;
-        Tue, 25 Jun 2019 08:33:42 -0700 (PDT)
-Received: from e103592.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 738EB3F718;
-        Tue, 25 Jun 2019 08:33:39 -0700 (PDT)
-Date:   Tue, 25 Jun 2019 16:33:37 +0100
-From:   Dave Martin <Dave.Martin@arm.com>
-To:     Vincenzo Frascino <vincenzo.frascino@arm.com>
-Cc:     linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 916D1360;
+        Tue, 25 Jun 2019 09:18:34 -0700 (PDT)
+Received: from e119884-lin.cambridge.arm.com (e119884-lin.cambridge.arm.com [10.1.196.72])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id F12313F718;
+        Tue, 25 Jun 2019 09:18:31 -0700 (PDT)
+From:   Vincenzo Frascino <vincenzo.frascino@arm.com>
+To:     linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
-        Andre Przywara <andre.przywara@arm.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Huw Davies <huw@codeweavers.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Will Deacon <will.deacon@arm.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Mark Salyzyn <salyzyn@android.com>,
-        Paul Burton <paul.burton@mips.com>,
-        Dmitry Safonov <0x7f454c46@gmail.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Shijith Thotton <sthotton@marvell.com>,
-        Peter Collingbourne <pcc@google.com>
-Subject: Re: [PATCH v7 04/25] arm64: Substitute gettimeofday with C
- implementation
-Message-ID: <20190625153336.GZ2790@e103592.cambridge.arm.com>
-References: <20190621095252.32307-1-vincenzo.frascino@arm.com>
- <20190621095252.32307-5-vincenzo.frascino@arm.com>
+        linux-kselftest@vger.kernel.org
+Cc:     catalin.marinas@arm.com, will.deacon@arm.com, arnd@arndb.de,
+        linux@armlinux.org.uk, ralf@linux-mips.org, paul.burton@mips.com,
+        daniel.lezcano@linaro.org, tglx@linutronix.de, salyzyn@android.com,
+        pcc@google.com, shuah@kernel.org, 0x7f454c46@gmail.com,
+        linux@rasmusvillemoes.dk, huw@codeweavers.com,
+        sthotton@marvell.com, andre.przywara@arm.com
+Subject: [PATCH 1/3] lib/vdso: Delay mask application in do_hres()
+Date:   Tue, 25 Jun 2019 17:18:02 +0100
+Message-Id: <20190625161804.38713-1-vincenzo.frascino@arm.com>
+X-Mailer: git-send-email 2.22.0
+In-Reply-To: <20190624133607.GI29497@fuggles.cambridge.arm.com>
+References: <20190624133607.GI29497@fuggles.cambridge.arm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190621095252.32307-5-vincenzo.frascino@arm.com>
-User-Agent: Mutt/1.5.23 (2014-03-12)
+Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Jun 21, 2019 at 10:52:31AM +0100, Vincenzo Frascino wrote:
-> To take advantage of the commonly defined vdso interface for
-> gettimeofday the architectural code requires an adaptation.
-> 
-> Re-implement the gettimeofday vdso in C in order to use lib/vdso.
-> 
-> With the new implementation arm64 gains support for CLOCK_BOOTTIME
-> and CLOCK_TAI.
-> 
-> Cc: Catalin Marinas <catalin.marinas@arm.com>
-> Cc: Will Deacon <will.deacon@arm.com>
-> Signed-off-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
-> Tested-by: Shijith Thotton <sthotton@marvell.com>
-> Tested-by: Andre Przywara <andre.przywara@arm.com>
+do_hres() in the vDSO generic library masks the hw counter value
+immediately after reading it.
 
-[...]
+Postpone the mask application after checking if the syscall fallback is
+enabled, in order to be able to detect a possible fallback for the
+architectures that have masks smaller than ULLONG_MAX.
 
-> diff --git a/arch/arm64/include/asm/vdso/gettimeofday.h b/arch/arm64/include/asm/vdso/gettimeofday.h
-> new file mode 100644
-> index 000000000000..bc3cb6738051
-> --- /dev/null
-> +++ b/arch/arm64/include/asm/vdso/gettimeofday.h
-> @@ -0,0 +1,86 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +/*
-> + * Copyright (C) 2018 ARM Limited
-> + */
-> +#ifndef __ASM_VDSO_GETTIMEOFDAY_H
-> +#define __ASM_VDSO_GETTIMEOFDAY_H
-> +
-> +#ifndef __ASSEMBLY__
-> +
-> +#include <asm/unistd.h>
-> +#include <uapi/linux/time.h>
-> +
-> +#define VDSO_HAS_CLOCK_GETRES		1
-> +
-> +static __always_inline int gettimeofday_fallback(
-> +					struct __kernel_old_timeval *_tv,
-> +					struct timezone *_tz)
+Signed-off-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
+---
+ lib/vdso/gettimeofday.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Out of interest, does this need to be __always_inline?
+diff --git a/lib/vdso/gettimeofday.c b/lib/vdso/gettimeofday.c
+index ef28cc5d7bff..ee1221ba1d32 100644
+--- a/lib/vdso/gettimeofday.c
++++ b/lib/vdso/gettimeofday.c
+@@ -35,12 +35,12 @@ static int do_hres(const struct vdso_data *vd, clockid_t clk,
+ 
+ 	do {
+ 		seq = vdso_read_begin(vd);
+-		cycles = __arch_get_hw_counter(vd->clock_mode) &
+-			vd->mask;
++		cycles = __arch_get_hw_counter(vd->clock_mode);
+ 		ns = vdso_ts->nsec;
+ 		last = vd->cycle_last;
+ 		if (unlikely((s64)cycles < 0))
+ 			return clock_gettime_fallback(clk, ts);
++		cycles &= vd->mask;
+ 		if (cycles > last)
+ 			ns += (cycles - last) * vd->mult;
+ 		ns >>= vd->shift;
+-- 
+2.22.0
 
-> +{
-> +	register struct timezone *tz asm("x1") = _tz;
-> +	register struct __kernel_old_timeval *tv asm("x0") = _tv;
-> +	register long ret asm ("x0");
-> +	register long nr asm("x8") = __NR_gettimeofday;
-> +
-> +	asm volatile(
-> +	"       svc #0\n"
-
-Can inlining of this function result in non-trivial expressions being
-substituted for _tz or _tv?
-
-A function call can clobber register asm vars that are assigned to the
-caller-save registers or that the PCS uses for function arguments, and
-the situations where this can happen are poorly defined AFAICT.  There's
-also no reliable way to detect at build time whether the compiler has
-done this, and no robust way to stop if happening.
-
-(IMHO the compiler is wrong to do this, but it's been that way for ever,
-and I think I saw GCC 9 show this behaviour recently when I was
-investigating something related.)
-
-
-To be safe, it's better to put this out of line, or remove the reg asm()
-specifiers, mark x0-x18 and lr as clobbered here (so that the compiler
-doesn't map arguments to them), and put movs in the asm to move things
-into the right registers.  The syscall number can be passed with an "i"
-constraint.  (And yes, this sucks.)
-
-If the code this is inlined in is simple enough though, we can be fairly
-confident of getting away with it.
-
-[...]
-
-Cheers
----Dave
