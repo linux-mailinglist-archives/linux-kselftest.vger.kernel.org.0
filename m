@@ -2,289 +2,126 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D41A5511E
-	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Jun 2019 16:09:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 77EE055375
+	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Jun 2019 17:32:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727603AbfFYOI4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 25 Jun 2019 10:08:56 -0400
-Received: from mail.efficios.com ([167.114.142.138]:39880 "EHLO
-        mail.efficios.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726532AbfFYOI4 (ORCPT
+        id S1732403AbfFYPcC (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 25 Jun 2019 11:32:02 -0400
+Received: from mail-io1-f53.google.com ([209.85.166.53]:41229 "EHLO
+        mail-io1-f53.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732383AbfFYPcC (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 25 Jun 2019 10:08:56 -0400
-Received: from localhost (ip6-localhost [IPv6:::1])
-        by mail.efficios.com (Postfix) with ESMTP id E19D525BF95;
-        Tue, 25 Jun 2019 10:08:53 -0400 (EDT)
-Received: from mail.efficios.com ([IPv6:::1])
-        by localhost (mail02.efficios.com [IPv6:::1]) (amavisd-new, port 10032)
-        with ESMTP id QyG8j99SOcIq; Tue, 25 Jun 2019 10:08:53 -0400 (EDT)
-Received: from localhost (ip6-localhost [IPv6:::1])
-        by mail.efficios.com (Postfix) with ESMTP id 1327B25BF8C;
-        Tue, 25 Jun 2019 10:08:53 -0400 (EDT)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com 1327B25BF8C
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
-        s=default; t=1561471733;
-        bh=ZqtVnpig7t9YimfV4x1WLgCndeFnHjjcXNpTezLm3iY=;
-        h=Date:From:To:Message-ID:MIME-Version;
-        b=ikKpGFU7YciA3AINVWgB2B9+MmY7CrT/hs5z3j3oxwWAEKK2S1SmZPgPsklqhU/sZ
-         dVbCuHoeEemHI9rmi4u4fF2nBpb6d3g8CeifBMFFc5wSA2EkpBGZolMpd98gv4FgFR
-         OmSwoA1fzXFHXSW6KFX64T1cb/lePK1RyhQE8nvkEqduP7H40pR5Q7xFn4DdA2rV0H
-         ttFSsRciSrYDFHdjI3NpyoziASkSwoqT2a7fWZHbryF9WPXe9bHFnPZyNz8s56HtCj
-         1gE4FxU5B9vFc4yM5DWf9c/4PckPwnaG5uCJ4+YOw2pbhTU12A2Es0lsQcj+ElGfsb
-         C0L8HejwhA4fQ==
-X-Virus-Scanned: amavisd-new at efficios.com
-Received: from mail.efficios.com ([IPv6:::1])
-        by localhost (mail02.efficios.com [IPv6:::1]) (amavisd-new, port 10026)
-        with ESMTP id 9SYqnRt07nsl; Tue, 25 Jun 2019 10:08:52 -0400 (EDT)
-Received: from mail02.efficios.com (mail02.efficios.com [167.114.142.138])
-        by mail.efficios.com (Postfix) with ESMTP id E1BDC25BF85;
-        Tue, 25 Jun 2019 10:08:52 -0400 (EDT)
-Date:   Tue, 25 Jun 2019 10:08:52 -0400 (EDT)
-From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-To:     Will Deacon <will.deacon@arm.com>
-Cc:     shuah <shuah@kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Joel Fernandes <joelaf@google.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Dave Watson <davejwatson@fb.com>,
-        Andi Kleen <andi@firstfloor.org>,
-        linux-kselftest <linux-kselftest@vger.kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>, Chris Lameter <cl@linux.com>,
-        Russell King <linux@arm.linux.org.uk>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        "Paul E . McKenney" <paulmck@linux.vnet.ibm.com>,
-        Paul Turner <pjt@google.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Josh Triplett <josh@joshtriplett.org>,
-        rostedt <rostedt@goodmis.org>, Ben Maurer <bmaurer@fb.com>,
-        linux-api <linux-api@vger.kernel.org>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        carlos <carlos@redhat.com>, Florian Weimer <fweimer@redhat.com>
-Message-ID: <795143697.722.1561471732756.JavaMail.zimbra@efficios.com>
-In-Reply-To: <20190625091507.GA13263@fuggles.cambridge.arm.com>
-References: <20190617152304.23371-1-mathieu.desnoyers@efficios.com> <20190624172429.GA11133@fuggles.cambridge.arm.com> <1620037196.377.1561400426591.JavaMail.zimbra@efficios.com> <20190625091507.GA13263@fuggles.cambridge.arm.com>
-Subject: Re: [RFC PATCH 1/1] Revert "rseq/selftests: arm: use udf
- instruction for RSEQ_SIG"
+        Tue, 25 Jun 2019 11:32:02 -0400
+Received: by mail-io1-f53.google.com with SMTP id w25so468863ioc.8
+        for <linux-kselftest@vger.kernel.org>; Tue, 25 Jun 2019 08:32:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=pl6j18xP2teXBCXiFz1+ekHc82RO1v4dtHxUKcwmnSI=;
+        b=xYnG3hJyz4khT/uJKxphyWjZQFQ//q3hlVe230M5KEJnEbld76vZxH0dhqV8TKmWJo
+         8zg7zuJTixxzeq6fETCF+7hxbRsPwcKAEkCZab4RmBRlN5IMuVc3B4C7pXw2hM4IWaoE
+         +viBxP25ebZesMJgXEzosY21FqBH7jtJfUlmzSk9Xqaf1KVqMPvFeGw9qYdI1FAyqUaT
+         zo13+vCCbXRgCJrm0BskV1m1GDyXrPUMogAFwWyI+mpp5Lh2zh74nwwVqsWMctY04xV2
+         VGsgpcQXYd/nJHwJT/YRiRjkz9nda3bfc/nAg3kYnlZZYJDQVbNjlIO8uYcb4Ckl6opv
+         hz6Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=pl6j18xP2teXBCXiFz1+ekHc82RO1v4dtHxUKcwmnSI=;
+        b=raBtDWM4VqccXCRtZsqngf3NL7JPZl2VcjUsma2VxC2a0nSTLLXO8b1qEhwRwdhwXw
+         +pttkl63g4O3xQ6mjL5CYlAdttHP9mkqyKlq9XWpHoeGJ6UVR6v6NCR3PIaKD3k0C2DC
+         jWJKGKLXjsJz2UdVd51SgS0zggkJ2bKSzOY2Myb67j6aqqZP/rk8ecXHgjNbUj0ZSWcM
+         Z4T3NzuRxHO65M1OLPXn/Lia+DDKQeNwFa/KlqQBuBz3qwqAyrb7ocayTAdkMW2PY2qJ
+         LFtRhklOQ29x/F2d/Bq7nYhUvAK7YROeArCk13xpwq7+mSeK+DwsRm2Ccsg164CqOrfk
+         GQYw==
+X-Gm-Message-State: APjAAAXP5ksif5DgHvMuSjPh+wrdy0kMWyPqBPrApk8gl/J8dCRvSytv
+        QfORnYln9MzcDKdUpnoWALRNZA==
+X-Google-Smtp-Source: APXvYqyYSRUYb1ugPr+PA2M18DdrwhkX5IV3FjKk+sfHRCpVUDQ/fPnQ7D2WX3PZI8HQcUgp3KoyyA==
+X-Received: by 2002:a02:bb05:: with SMTP id y5mr25232740jan.93.1561476721092;
+        Tue, 25 Jun 2019 08:32:01 -0700 (PDT)
+Received: from localhost (c-75-72-120-115.hsd1.mn.comcast.net. [75.72.120.115])
+        by smtp.gmail.com with ESMTPSA id c2sm11755771iok.53.2019.06.25.08.32.00
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Tue, 25 Jun 2019 08:32:00 -0700 (PDT)
+Date:   Tue, 25 Jun 2019 10:31:59 -0500
+From:   Dan Rue <dan.rue@linaro.org>
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        Naresh Kamboju <naresh.kamboju@linaro.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        Netdev <netdev@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Xdp <xdp-newbies@vger.kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Alexei Starovoitov <ast@kernel.org>, Martin Lau <kafai@fb.com>,
+        Yonghong Song <yhs@fb.com>,
+        john fastabend <john.fastabend@gmail.com>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Jakub Kicinski <jakub.kicinski@netronome.com>,
+        Shuah Khan <shuah@kernel.org>
+Subject: Re: selftests: bpf: test_libbpf.sh failed at file test_l4lb.o
+Message-ID: <20190625153159.5utnn36dgku5545n@xps.therub.org>
+References: <CA+G9fYsMcdHmKY66CNhsrizO-gErkOQCkTcBSyOHLpOs+8g5=g@mail.gmail.com>
+ <CAEf4BzbTD8G_zKkj-S3MOeG5Hq3_2zz3bGoXhQtpt0beG8nWJA@mail.gmail.com>
+ <20190621161752.d7d7n4m5q67uivys@xps.therub.org>
+ <CAEf4BzaSoKA5H5rN=w+OAtUz4bD30-VOjjjY+Qv9tTAnhMweiA@mail.gmail.com>
+ <20190624195336.nubi7n2np5vfjutr@xps.therub.org>
+ <CAADnVQKZycXgSw6C0qa7g0y=W3xRhM_4Rqcj7ZzL=rGh_n4mgA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [167.114.142.138]
-X-Mailer: Zimbra 8.8.12_GA_3803 (ZimbraWebClient - FF67 (Linux)/8.8.12_GA_3794)
-Thread-Topic: Revert "rseq/selftests: arm: use udf instruction for RSEQ_SIG"
-Thread-Index: hgYsmTALHNxnmFiVR4MEQT9OBpRJPA==
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAADnVQKZycXgSw6C0qa7g0y=W3xRhM_4Rqcj7ZzL=rGh_n4mgA@mail.gmail.com>
+User-Agent: NeoMutt/20180716
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
------ On Jun 25, 2019, at 5:15 AM, Will Deacon will.deacon@arm.com wrote:
-
-> On Mon, Jun 24, 2019 at 02:20:26PM -0400, Mathieu Desnoyers wrote:
->> ----- On Jun 24, 2019, at 1:24 PM, Will Deacon will.deacon@arm.com wrote:
->> 
->> > On Mon, Jun 17, 2019 at 05:23:04PM +0200, Mathieu Desnoyers wrote:
->> >> This reverts commit 2b845d4b4acd9422bbb668989db8dc36dfc8f438.
->> >> 
->> >> That commit introduces build issues for programs compiled in Thumb mode.
->> >> Rather than try to be clever and emit a valid trap instruction on arm32,
->> >> which requires special care about big/little endian handling on that
->> >> architecture, just emit plain data. Data in the instruction stream is
->> >> technically expected on arm32: this is how literal pools are
->> >> implemented. Reverting to the prior behavior does exactly that.
->> >> 
->> >> Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
->> >> CC: Peter Zijlstra <peterz@infradead.org>
->> >> CC: Thomas Gleixner <tglx@linutronix.de>
->> >> CC: Joel Fernandes <joelaf@google.com>
->> >> CC: Catalin Marinas <catalin.marinas@arm.com>
->> >> CC: Dave Watson <davejwatson@fb.com>
->> >> CC: Will Deacon <will.deacon@arm.com>
->> >> CC: Shuah Khan <shuah@kernel.org>
->> >> CC: Andi Kleen <andi@firstfloor.org>
->> >> CC: linux-kselftest@vger.kernel.org
->> >> CC: "H . Peter Anvin" <hpa@zytor.com>
->> >> CC: Chris Lameter <cl@linux.com>
->> >> CC: Russell King <linux@arm.linux.org.uk>
->> >> CC: Michael Kerrisk <mtk.manpages@gmail.com>
->> >> CC: "Paul E . McKenney" <paulmck@linux.vnet.ibm.com>
->> >> CC: Paul Turner <pjt@google.com>
->> >> CC: Boqun Feng <boqun.feng@gmail.com>
->> >> CC: Josh Triplett <josh@joshtriplett.org>
->> >> CC: Steven Rostedt <rostedt@goodmis.org>
->> >> CC: Ben Maurer <bmaurer@fb.com>
->> >> CC: linux-api@vger.kernel.org
->> >> CC: Andy Lutomirski <luto@amacapital.net>
->> >> CC: Andrew Morton <akpm@linux-foundation.org>
->> >> CC: Linus Torvalds <torvalds@linux-foundation.org>
->> >> CC: Carlos O'Donell <carlos@redhat.com>
->> >> CC: Florian Weimer <fweimer@redhat.com>
->> >> ---
->> >>  tools/testing/selftests/rseq/rseq-arm.h | 52 ++-------------------------------
->> >>  1 file changed, 2 insertions(+), 50 deletions(-)
->> >> 
->> >> diff --git a/tools/testing/selftests/rseq/rseq-arm.h
->> >> b/tools/testing/selftests/rseq/rseq-arm.h
->> >> index 84f28f147fb6..5f262c54364f 100644
->> >> --- a/tools/testing/selftests/rseq/rseq-arm.h
->> >> +++ b/tools/testing/selftests/rseq/rseq-arm.h
->> >> @@ -5,54 +5,7 @@
->> >>   * (C) Copyright 2016-2018 - Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
->> >>   */
->> >>  
->> >> -/*
->> >> - * RSEQ_SIG uses the udf A32 instruction with an uncommon immediate operand
->> >> - * value 0x5de3. This traps if user-space reaches this instruction by mistake,
->> >> - * and the uncommon operand ensures the kernel does not move the instruction
->> >> - * pointer to attacker-controlled code on rseq abort.
->> >> - *
->> >> - * The instruction pattern in the A32 instruction set is:
->> >> - *
->> >> - * e7f5def3    udf    #24035    ; 0x5de3
->> >> - *
->> >> - * This translates to the following instruction pattern in the T16 instruction
->> >> - * set:
->> >> - *
->> >> - * little endian:
->> >> - * def3        udf    #243      ; 0xf3
->> >> - * e7f5        b.n    <7f5>
->> >> - *
->> >> - * pre-ARMv6 big endian code:
->> >> - * e7f5        b.n    <7f5>
->> >> - * def3        udf    #243      ; 0xf3
->> >> - *
->> >> - * ARMv6+ -mbig-endian generates mixed endianness code vs data: little-endian
->> >> - * code and big-endian data. Ensure the RSEQ_SIG data signature matches code
->> >> - * endianness. Prior to ARMv6, -mbig-endian generates big-endian code and data
->> >> - * (which match), so there is no need to reverse the endianness of the data
->> >> - * representation of the signature. However, the choice between BE32 and BE8
->> >> - * is done by the linker, so we cannot know whether code and data endianness
->> >> - * will be mixed before the linker is invoked.
->> >> - */
->> >> -
->> >> -#define RSEQ_SIG_CODE	0xe7f5def3
->> >> -
->> >> -#ifndef __ASSEMBLER__
->> >> -
->> >> -#define RSEQ_SIG_DATA							\
->> >> -	({								\
->> >> -		int sig;						\
->> >> -		asm volatile ("b 2f\n\t"				\
->> >> -			      "1: .inst " __rseq_str(RSEQ_SIG_CODE) "\n\t" \
->> >> -			      "2:\n\t"					\
->> >> -			      "ldr %[sig], 1b\n\t"			\
->> >> -			      : [sig] "=r" (sig));			\
->> >> -		sig;							\
->> >> -	})
->> >> -
->> >> -#define RSEQ_SIG	RSEQ_SIG_DATA
->> >> -
->> >> -#endif
->> >> +#define RSEQ_SIG	0x53053053
->> > 
->> > I don't get why you're reverting back to this old signature value, when the
->> > one we came up with will work well when interpreted as an instruction in the
->> > *vast* majority of scenarios that people care about (A32/T32 little-endian).
->> > I think you might be under-estimating just how dead things like BE32 really
->> > are.
->> 
->> My issue is that the current .instr approach is broken for programs or functions
->> built in Thumb mode, and I received no feedback on the solutions I proposed for
->> those issues, which led me to propose a patch reverting to a simple .word.
+On Mon, Jun 24, 2019 at 12:58:15PM -0700, Alexei Starovoitov wrote:
+> On Mon, Jun 24, 2019 at 12:53 PM Dan Rue <dan.rue@linaro.org> wrote:
+> >
+> > I would say if it's not possible to check at runtime, and it requires
+> > clang 9.0, that this test should not be enabled by default.
 > 
-> I understand why you're moving from .inst to .word, but I don't understand
-> why that necessitates a change in the value. Why not .word 0xe7f5def3 ? You
-> could also flip the bytes around in case of big-endian, which would keep the
-> instruction coding clean for BE8.
+> The latest clang is the requirement.
+> If environment has old clang or no clang at all these tests will be failing.
 
-As long as we state and document that this should not be expected to generate
-valid instructions on big endian prior to ARMv6, I'm OK with that approach, e.g.:
+Hi Alexei!
 
-/*
- * - ARM little endian
- *
- * RSEQ_SIG uses the udf A32 instruction with an uncommon immediate operand
- * value 0x5de3. This traps if user-space reaches this instruction by mistake,
- * and the uncommon operand ensures the kernel does not move the instruction
- * pointer to attacker-controlled code on rseq abort.
- *
- * The instruction pattern in the A32 instruction set is:
- *
- * e7f5def3    udf    #24035    ; 0x5de3
- *
- * This translates to the following instruction pattern in the T16 instruction
- * set:
- *
- * little endian:
- * def3        udf    #243      ; 0xf3
- * e7f5        b.n    <7f5>
- *
- * - ARMv6+ big endian:
- *
- * ARMv6+ -mbig-endian generates mixed endianness code vs data: little-endian
- * code and big-endian data. The data value of the signature needs to have its
- * byte order reversed to generate the trap instruction:
- *
- * Data: 0xf3def5e7
- *
- * Translates to this A32 instruction pattern:
- *
- * e7f5def3    udf    #24035    ; 0x5de3
- *
- * Translates to this T16 instruction pattern:
- *
- * def3        udf    #243      ; 0xf3
- * e7f5        b.n    <7f5>
- *
- * - Prior to ARMv6 big endian:
- *
- * Prior to ARMv6, -mbig-endian generates big-endian code and data (which match),
- * so the endianness of the data representation of the signature should not be
- * reversed. However, the choice between BE32 and BE8 is done by the linker,
- * so we cannot know whether code and data endianness will be mixed before the
- * linker is invoked. So rather than try to play tricks with the linker, the rseq
- * signature is simply data (not a trap instruction) prior to ARMv6 on big endian.
- * This is why the signature is expressed as data (.word) rather than as instruction
- * (.inst) in assembler.
- */
+I'm not certain if I'm interpreting you as you intended, but it sounds
+like you're telling me that if the test build environment does not use
+'latest clang' (i guess latest as of today?), that these tests will
+fail, and that is how it is going to be. If I have that wrong, please
+correct me and disregard the rest of my message.
 
-#ifdef __ARMEB__
-#define RSEQ_SIG    0xf3def5e7      /* udf    #24035    ; 0x5de3 (ARMv6+) */
-#else
-#define RSEQ_SIG    0xe7f5def3      /* udf    #24035    ; 0x5de3 */
-#endif
+Please understand where we are coming from. We (and many others) run
+thousands of tests from a lot of test frameworks, and so our environment
+often has mutually exclusive requirements when it comes to things like
+toolchain selection.
 
-> 
->> > That said, when you ran into .inst.n/.inst.w issues, did you try something
->> > along the lines of the WASM() macro we use in arch/arm/, which adds the ".w"
->> > suffix when targetting Thumb?
->> 
->> AFAIU, the WASM macros depend on CONFIG_THUMB2_KERNEL, which may be fine within
->> the kernel, but for user-space things are a bit more complex.
->> 
->> A compile-unit can be compiled as thumb, which will set a compiler define
->> which we could use to detect thumb mode. However, unfortunately, a single
->> function can also be compiled with an attribute selecting thumb mode, which
->> AFAIU does not influence the preprocessor defines.
-> 
-> Thanks, I hadn't considered that case. I don't know the right way to handle
-> that in the toolchain, so using .word is probably the best bet in the
-> absence of any better suggestions from the tools folks.
+We believe, strongly, that a test should not emit a "fail" for a missing
+requirement. Fail is a serious thing, and should be reserved for an
+actual issue that needs to be investigated, reported, and fixed.
 
-Emitting a no-op within an excluded section, and using the size of that no-op
-to restore the original mode is the best way I found, but I find it rather
-tricky and bug-prone, so I would rather prefer the .word approach.
+This is how we treat test failures - we investigate, report, and fix
+them when possible. When they're not real failures, we waste our time
+(and yours, in this case).
 
-Thoughts ?
+By adding the tests to TEST_GEN_PROGS, you're adding them to the general
+test set that those of us running test farms try to run continuously
+across a wide range of hardware environments and kernel branches.
+
+My suggestion is that if you do not want us running them, don't add them
+to TEST_GEN_PROGS. I thought the suggestion of testing for adequate
+clang support and adding them conditionally at build-time was an idea
+worth consideration.
 
 Thanks,
-
-Mathieu
+Dan
 
 -- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+Linaro - Kernel Validation
