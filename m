@@ -2,119 +2,105 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B31CE55BF3
-	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Jun 2019 01:03:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C466B55C35
+	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Jun 2019 01:22:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726425AbfFYXDu (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 25 Jun 2019 19:03:50 -0400
-Received: from mail-pl1-f196.google.com ([209.85.214.196]:33866 "EHLO
-        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725782AbfFYXDt (ORCPT
+        id S1726369AbfFYXWx (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 25 Jun 2019 19:22:53 -0400
+Received: from mail-pf1-f193.google.com ([209.85.210.193]:36523 "EHLO
+        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725782AbfFYXWx (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 25 Jun 2019 19:03:49 -0400
-Received: by mail-pl1-f196.google.com with SMTP id i2so264298plt.1;
-        Tue, 25 Jun 2019 16:03:49 -0700 (PDT)
+        Tue, 25 Jun 2019 19:22:53 -0400
+Received: by mail-pf1-f193.google.com with SMTP id r7so216699pfl.3;
+        Tue, 25 Jun 2019 16:22:52 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=K5ErWoFi/JRH3gFgmKoboUdo26AiFjxGcMAHhZYf05o=;
-        b=G3+PFVxz/Ueu9IpY307Sscrf8TByxdIljL5dy6ohg3ye5EyQUzKMZHr6KWd0KMGfs+
-         Qe5kmTvH6CwF8ocTmAQ1VhNDDqX10TOOMnLgTQPM/ArJlpmjHFBzZmiEcqg1wgDyvMp3
-         IG9JAcIcFkC6epjYXSy/3qtNdwbs5/1Xs+dJ3M7t/rzgO5qwk7my4jZAlQ9b2tA9WSeE
-         Gfy8ha+bUCQ89d0ha+suoYU3FmC1hAVwzMQR10F1Vpzk9K6LO2Ujx2q2pzV9a1ce9z6R
-         hy7oLNUMIAZcxo42/S/8TDGLTNkOn/CZ7SvUgfLW1j3HO+MUnuB5PP0NqSy3mwQltZOb
-         M7/A==
-X-Gm-Message-State: APjAAAWtfKGR6p+32lpYOjoZHqzhoLbhxJa2nEgbTHFN3wRYw9RH7N6H
-        ZAOmeYpK+y5YFa2zSRgr7gE=
-X-Google-Smtp-Source: APXvYqz0M1IYGUwmvhT0NQpAoWP4ae2xshnXaqUSrqM3bOHQ06wFfedsHIaIBAncXtAoSDKV5lQq7Q==
-X-Received: by 2002:a17:902:467:: with SMTP id 94mr1238634ple.131.1561503828687;
-        Tue, 25 Jun 2019 16:03:48 -0700 (PDT)
+        bh=fn8uhj8tc3U3pScoaEkKu7HBQ+Qs1BqmjB6lHJFC6hE=;
+        b=m21X8L4JfBVK3LOmkUWD8c1wzYFdY22z0TGAnQm0WEj1YIm9AjsQWzFiVB77mdEcDm
+         x2TfoPYwJBs2jmqjd23rOOPzWiaa8MVb81eEfZ8nYYp+mez9jTOYq6pwyzZuT07MWqyt
+         XPZi4ClBC9BwsCKDX08p9vb9VJur4ns8sflUNixn0BT1ETSMDL8oumXOqEtIw0K25cjM
+         EGNQbkttpPr/qJilrP5+QQM3xeVNAsfM9x4S1WkmSQUhYtxEs3/3IaNNX8lR5m8LmrQr
+         eAQ4LF32+vlkWqIT7vmQKeeCAnfkYcjSLyI+lf39+LcVAr9xHimmV3S91DwqWPp9gExe
+         930g==
+X-Gm-Message-State: APjAAAVkiHkTqMJPXpPtjYhrY5FI85VRjpNWiNkgbGKERD7cuGKkjRIp
+        CnHEFuEYfhkI8HCrHfddt40=
+X-Google-Smtp-Source: APXvYqw6Otr6YJTjtY/OOBjSfZ7I1hNT7sLUZRcJRcDWNwR1ZNzZuSus00kEpYiN835NFFYZuHxFdA==
+X-Received: by 2002:a63:8f09:: with SMTP id n9mr40832306pgd.249.1561504971968;
+        Tue, 25 Jun 2019 16:22:51 -0700 (PDT)
 Received: from 42.do-not-panic.com (42.do-not-panic.com. [157.230.128.187])
-        by smtp.gmail.com with ESMTPSA id 10sm9969046pfb.30.2019.06.25.16.03.47
+        by smtp.gmail.com with ESMTPSA id 5sm15215827pfh.109.2019.06.25.16.22.50
         (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Tue, 25 Jun 2019 16:03:47 -0700 (PDT)
+        Tue, 25 Jun 2019 16:22:50 -0700 (PDT)
 Received: by 42.do-not-panic.com (Postfix, from userid 1000)
-        id BAAA5401EB; Tue, 25 Jun 2019 23:03:46 +0000 (UTC)
-Date:   Tue, 25 Jun 2019 23:03:46 +0000
+        id D058A401EB; Tue, 25 Jun 2019 23:22:49 +0000 (UTC)
+Date:   Tue, 25 Jun 2019 23:22:49 +0000
 From:   Luis Chamberlain <mcgrof@kernel.org>
 To:     Brendan Higgins <brendanhiggins@google.com>
-Cc:     Frank Rowand <frowand.list@gmail.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Kees Cook <keescook@google.com>,
-        Kieran Bingham <kieran.bingham@ideasonboard.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Rob Herring <robh@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
-        shuah <shuah@kernel.org>, Theodore Ts'o <tytso@mit.edu>,
-        Masahiro Yamada <yamada.masahiro@socionext.com>,
-        devicetree <devicetree@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        kunit-dev@googlegroups.com,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        linux-fsdevel@vger.kernel.org,
-        linux-kbuild <linux-kbuild@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        linux-nvdimm <linux-nvdimm@lists.01.org>,
-        linux-um@lists.infradead.org,
-        Sasha Levin <Alexander.Levin@microsoft.com>,
-        "Bird, Timothy" <Tim.Bird@sony.com>,
-        Amir Goldstein <amir73il@gmail.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Daniel Vetter <daniel@ffwll.ch>, Jeff Dike <jdike@addtoit.com>,
-        Joel Stanley <joel@jms.id.au>,
-        Julia Lawall <julia.lawall@lip6.fr>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Knut Omang <knut.omang@oracle.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Petr Mladek <pmladek@suse.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Richard Weinberger <richard@nod.at>,
-        David Rientjes <rientjes@google.com>,
-        Steven Rostedt <rostedt@goodmis.org>, wfg@linux.intel.com
-Subject: Re: [PATCH v5 06/18] kbuild: enable building KUnit
-Message-ID: <20190625230346.GR19023@42.do-not-panic.com>
+Cc:     frowand.list@gmail.com, gregkh@linuxfoundation.org,
+        jpoimboe@redhat.com, keescook@google.com,
+        kieran.bingham@ideasonboard.com, peterz@infradead.org,
+        robh@kernel.org, sboyd@kernel.org, shuah@kernel.org, tytso@mit.edu,
+        yamada.masahiro@socionext.com, devicetree@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, kunit-dev@googlegroups.com,
+        linux-doc@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-nvdimm@lists.01.org,
+        linux-um@lists.infradead.org, Alexander.Levin@microsoft.com,
+        Tim.Bird@sony.com, amir73il@gmail.com, dan.carpenter@oracle.com,
+        daniel@ffwll.ch, jdike@addtoit.com, joel@jms.id.au,
+        julia.lawall@lip6.fr, khilman@baylibre.com, knut.omang@oracle.com,
+        logang@deltatee.com, mpe@ellerman.id.au, pmladek@suse.com,
+        rdunlap@infradead.org, richard@nod.at, rientjes@google.com,
+        rostedt@goodmis.org, wfg@linux.intel.com
+Subject: Re: [PATCH v5 07/18] kunit: test: add initial tests
+Message-ID: <20190625232249.GS19023@42.do-not-panic.com>
 References: <20190617082613.109131-1-brendanhiggins@google.com>
- <20190617082613.109131-7-brendanhiggins@google.com>
- <20190625221318.GO19023@42.do-not-panic.com>
- <CAFd5g448rYqr3PHg0cfoddr70nktkWXcRfJoZHmuPJjTW53YYg@mail.gmail.com>
+ <20190617082613.109131-8-brendanhiggins@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAFd5g448rYqr3PHg0cfoddr70nktkWXcRfJoZHmuPJjTW53YYg@mail.gmail.com>
+In-Reply-To: <20190617082613.109131-8-brendanhiggins@google.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Jun 25, 2019 at 03:41:29PM -0700, Brendan Higgins wrote:
-> On Tue, Jun 25, 2019 at 3:13 PM Luis Chamberlain <mcgrof@kernel.org> wrote:
-> >
-> > On Mon, Jun 17, 2019 at 01:26:01AM -0700, Brendan Higgins wrote:
-> > > diff --git a/Kconfig b/Kconfig
-> > > index 48a80beab6853..10428501edb78 100644
-> > > --- a/Kconfig
-> > > +++ b/Kconfig
-> > > @@ -30,3 +30,5 @@ source "crypto/Kconfig"
-> > >  source "lib/Kconfig"
-> > >
-> > >  source "lib/Kconfig.debug"
-> > > +
-> > > +source "kunit/Kconfig"
-> >
-> > This patch would break compilation as kunit/Kconfig is not introduced. This
-> > would would also break bisectability on this commit. This change should
-> > either be folded in to the next patch, or just be a separate patch after
-> > the next one.
-> 
-> Maybe my brain isn't working right now, but I am pretty darn sure that
-> I introduce kunit/Kconfig in the very first patch of this series.
-> Quoting from the change summary from the first commit:
+On Mon, Jun 17, 2019 at 01:26:02AM -0700, Brendan Higgins wrote:
+> diff --git a/kunit/example-test.c b/kunit/example-test.c
+> new file mode 100644
+> index 0000000000000..f44b8ece488bb
+> --- /dev/null
+> +++ b/kunit/example-test.c
 
-Indeed, my mistake, thanks!
+<-- snip -->
+
+> +/*
+> + * This defines a suite or grouping of tests.
+> + *
+> + * Test cases are defined as belonging to the suite by adding them to
+> + * `kunit_cases`.
+> + *
+> + * Often it is desirable to run some function which will set up things which
+> + * will be used by every test; this is accomplished with an `init` function
+> + * which runs before each test case is invoked. Similarly, an `exit` function
+> + * may be specified which runs after every test case and can be used to for
+> + * cleanup. For clarity, running tests in a test module would behave as follows:
+> + *
+
+To be clear this is not the kernel module init, but rather the kunit
+module init. I think using kmodule would make this clearer to a reader.
+
+> + * module.init(test);
+> + * module.test_case[0](test);
+> + * module.exit(test);
+> + * module.init(test);
+> + * module.test_case[1](test);
+> + * module.exit(test);
+> + * ...;
+> + */
 
   Luis
