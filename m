@@ -2,128 +2,301 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CA5D8558CB
-	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Jun 2019 22:28:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B601558D0
+	for <lists+linux-kselftest@lfdr.de>; Tue, 25 Jun 2019 22:28:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726706AbfFYU14 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 25 Jun 2019 16:27:56 -0400
-Received: from mail-lj1-f175.google.com ([209.85.208.175]:35732 "EHLO
-        mail-lj1-f175.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726274AbfFYU14 (ORCPT
+        id S1726422AbfFYU2l (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 25 Jun 2019 16:28:41 -0400
+Received: from mail-pf1-f194.google.com ([209.85.210.194]:32770 "EHLO
+        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726955AbfFYU2h (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 25 Jun 2019 16:27:56 -0400
-Received: by mail-lj1-f175.google.com with SMTP id x25so17609174ljh.2;
-        Tue, 25 Jun 2019 13:27:53 -0700 (PDT)
+        Tue, 25 Jun 2019 16:28:37 -0400
+Received: by mail-pf1-f194.google.com with SMTP id x15so21099pfq.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 25 Jun 2019 13:28:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
+        d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=oRmYeVOh7NfY6hKbB5eNWP52w4vJxcXS9GCkFHd3G74=;
-        b=eVeBnR+XAL2j5u3GGVsg3yWUIGA7z+jVikp+Bs7gMu1/yELD3OcstPMxguwV1tVjUI
-         ECS6brRWHFnW+o/AKFNIFVvrAf9herve2aaUwPXanEsGEp5Wf7BuWmT2PiFJzlSZo/3F
-         BI3NL9Akq09pK9GVK7uOugYJZ1fN57wvBf8A/850IhI+ZeE2z5NFL4Qc54Y/RB51ZdEb
-         WM9M0qiOriFpM+Gvxa0QatwFUkcY7Ho04nHAN7rEfmyoerS6pw3eto6ZF1e9apHwzFJo
-         ZXLjm/MkGvvaKkyOfEqfNnFqDx2VqLgQJcB4d1LUqsjVzb3aifJFB+//RgI1Ks0ioQWj
-         Ffsg==
+        bh=qq39ykktkvFBpmzRtbgM4tstWpOedFNE8kr26lh/InM=;
+        b=ni94OwioZx/gzf2szVloCDZTFFpJCo2YKSFZ2X9qr6bxYnBeEpnnagfszyXnnz51L8
+         DkJXaethFUsoHnz8KOQVG2ZSAlP6R4YiehiVV+cY7fw97Xus3XNQzLPLdgQULmgYaWnL
+         GEAS55DRith5+cQIVd4nDD9PnOpK5SEC0mcAjXyMYNE83XKQ2Jfbx9GzYoD6pnR9q88y
+         VjAnVY+gy9KsY/4+Tbda/+4DRlDyvSks4s9chgBxuZrKHnC3t/s2Oqm9eCfJpWO+nPcJ
+         ixgXgEVA9P9D5QKdeUq3VIirHZ16lxLB0iDdlrfqM9fruDTYYR+l+8zODcodp3flRnlv
+         dArA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=oRmYeVOh7NfY6hKbB5eNWP52w4vJxcXS9GCkFHd3G74=;
-        b=H8vb8O3GtUY5nkbTcnsv4OvIafOZ4wZMS0Vuts4K9Yz9aKH/556/MR85ygAqWf2iQP
-         q10EHI4yBWB8II+5Q0gFZhNHXerJ3S5ZZ7pGzqfJW/09YDbndKg7BLkUQSLS1/zEdQug
-         kCTUas928QWk5gzyZBlXMe4ijLo8vKJwq5IjSPz8Vi9oZ0ntnimcVkAFYmw0hO0T5IXp
-         Vr4dQkA3Y/48F6qbKBQAx/ofO39lTZ2jFx/Q+5NFMKSx0ZHJYbUmLJqsRqNqKAhkDNG9
-         e0c9P7DMa0pjldaaS2LhZ+ywuvA6V1lp4wUb5ArKWz9f3TEmEZkICGD2pN8V6mvomKMM
-         N8gg==
-X-Gm-Message-State: APjAAAUPKHtedOF2FuhMff/BpkIYspp8RGg3s8J76HeWpREhtYLph0cY
-        Xo92TuQfqbr/8HuIsPbmQGV9VeVYD5yussrJXUo=
-X-Google-Smtp-Source: APXvYqyPbC29JdNWnZqiP3xde3zVIFnuhIOwlmPXNm+MesPHdP6UZWYfygK3ni7PqzwYZ8irnFTkkjFxUp3S1X4VZxo=
-X-Received: by 2002:a2e:9dca:: with SMTP id x10mr273099ljj.17.1561494472994;
- Tue, 25 Jun 2019 13:27:52 -0700 (PDT)
+        bh=qq39ykktkvFBpmzRtbgM4tstWpOedFNE8kr26lh/InM=;
+        b=aWLkqG2WglHFWP+wv0lpHF4hMrZbU1CAwvj1Eo4kNSdMLUD6XpY8/JQwySQmdzEa4u
+         dvm3n9rtISnKPZ2Glez3BmQbyamAieTq9/A7LDLXrN78sl3z+V8eUSL0CnSnX1Bkj6qs
+         ikt3W2BMzKjgKvAE+Z7uY6ijXxp0sOU6LejMpFR60s8mFHNea5F2qlPf1A5958XXxL65
+         jThv0gKWMDqAySQsLww9Ehgw6AnOIf3LXFHUzrIFB7V4Bly+tgmMx5aZF2yCFDAx7QfD
+         38Tu23fVig6zWsQsF0E8P7H9Y36uN0kRBIkBn8LEMS152IH0prDHk1lwFnVg7Rv5uy2C
+         /Tjg==
+X-Gm-Message-State: APjAAAUSM4zIth6jJtETUoyWPM32b5FgRPvQCNanLRh0onbMOiulFIoR
+        10gqKXcxNUYV61nEuoPJ3vkVHjI0tZr43TZzxvsWgw==
+X-Google-Smtp-Source: APXvYqzvk20XXdVFtm6zl0X1nrjaH0TttItfcdP9iwaQ+JKQIeNhKF1pa7VSVvlXNPpMAUzP/tv1oR2JBEXuSnWnLw4=
+X-Received: by 2002:a17:90b:f0e:: with SMTP id br14mr754020pjb.117.1561494516332;
+ Tue, 25 Jun 2019 13:28:36 -0700 (PDT)
 MIME-Version: 1.0
-References: <CA+G9fYsMcdHmKY66CNhsrizO-gErkOQCkTcBSyOHLpOs+8g5=g@mail.gmail.com>
- <CAEf4BzbTD8G_zKkj-S3MOeG5Hq3_2zz3bGoXhQtpt0beG8nWJA@mail.gmail.com>
- <20190621161752.d7d7n4m5q67uivys@xps.therub.org> <CAEf4BzaSoKA5H5rN=w+OAtUz4bD30-VOjjjY+Qv9tTAnhMweiA@mail.gmail.com>
- <20190624195336.nubi7n2np5vfjutr@xps.therub.org> <CAADnVQKZycXgSw6C0qa7g0y=W3xRhM_4Rqcj7ZzL=rGh_n4mgA@mail.gmail.com>
- <20190625153159.5utnn36dgku5545n@xps.therub.org>
-In-Reply-To: <20190625153159.5utnn36dgku5545n@xps.therub.org>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Tue, 25 Jun 2019 13:27:41 -0700
-Message-ID: <CAADnVQLoSc=PsKj=KdCsqMLfHO-sP_Bijgy63zROos6Cy=k+dw@mail.gmail.com>
-Subject: Re: selftests: bpf: test_libbpf.sh failed at file test_l4lb.o
-To:     Dan Rue <dan.rue@linaro.org>
-Cc:     Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        Naresh Kamboju <naresh.kamboju@linaro.org>,
+References: <20190617082613.109131-1-brendanhiggins@google.com>
+ <20190617082613.109131-2-brendanhiggins@google.com> <20190620001526.93426218BE@mail.kernel.org>
+In-Reply-To: <20190620001526.93426218BE@mail.kernel.org>
+From:   Brendan Higgins <brendanhiggins@google.com>
+Date:   Tue, 25 Jun 2019 13:28:25 -0700
+Message-ID: <CAFd5g46Jhxsz6_VXHEVYvTeDRwwzgKpr=aUWLL5b3S4kUukb8g@mail.gmail.com>
+Subject: Re: [PATCH v5 01/18] kunit: test: add KUnit test runner core
+To:     Stephen Boyd <sboyd@kernel.org>
+Cc:     Frank Rowand <frowand.list@gmail.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Kees Cook <keescook@google.com>,
+        Kieran Bingham <kieran.bingham@ideasonboard.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Rob Herring <robh@kernel.org>, shuah <shuah@kernel.org>,
+        "Theodore Ts'o" <tytso@mit.edu>,
+        Masahiro Yamada <yamada.masahiro@socionext.com>,
+        devicetree <devicetree@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        kunit-dev@googlegroups.com,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        linux-fsdevel@vger.kernel.org,
+        linux-kbuild <linux-kbuild@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        Netdev <netdev@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Xdp <xdp-newbies@vger.kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <ast@kernel.org>, Martin Lau <kafai@fb.com>,
-        Yonghong Song <yhs@fb.com>,
-        john fastabend <john.fastabend@gmail.com>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Jakub Kicinski <jakub.kicinski@netronome.com>,
-        Shuah Khan <shuah@kernel.org>
+        <linux-kselftest@vger.kernel.org>,
+        linux-nvdimm <linux-nvdimm@lists.01.org>,
+        linux-um@lists.infradead.org,
+        Sasha Levin <Alexander.Levin@microsoft.com>,
+        "Bird, Timothy" <Tim.Bird@sony.com>,
+        Amir Goldstein <amir73il@gmail.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Daniel Vetter <daniel@ffwll.ch>, Jeff Dike <jdike@addtoit.com>,
+        Joel Stanley <joel@jms.id.au>,
+        Julia Lawall <julia.lawall@lip6.fr>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Knut Omang <knut.omang@oracle.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Petr Mladek <pmladek@suse.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Richard Weinberger <richard@nod.at>,
+        David Rientjes <rientjes@google.com>,
+        Steven Rostedt <rostedt@goodmis.org>, wfg@linux.intel.com
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Jun 25, 2019 at 8:32 AM Dan Rue <dan.rue@linaro.org> wrote:
+On Wed, Jun 19, 2019 at 5:15 PM Stephen Boyd <sboyd@kernel.org> wrote:
 >
-> On Mon, Jun 24, 2019 at 12:58:15PM -0700, Alexei Starovoitov wrote:
-> > On Mon, Jun 24, 2019 at 12:53 PM Dan Rue <dan.rue@linaro.org> wrote:
-> > >
-> > > I would say if it's not possible to check at runtime, and it requires
-> > > clang 9.0, that this test should not be enabled by default.
-> >
-> > The latest clang is the requirement.
-> > If environment has old clang or no clang at all these tests will be failing.
+> Quoting Brendan Higgins (2019-06-17 01:25:56)
+> > diff --git a/kunit/test.c b/kunit/test.c
+> > new file mode 100644
+> > index 0000000000000..d05d254f1521f
+> > --- /dev/null
+> > +++ b/kunit/test.c
+> > @@ -0,0 +1,210 @@
+> > +// SPDX-License-Identifier: GPL-2.0
+> > +/*
+> > + * Base unit test (KUnit) API.
+> > + *
+> > + * Copyright (C) 2019, Google LLC.
+> > + * Author: Brendan Higgins <brendanhiggins@google.com>
+> > + */
+> > +
+> > +#include <linux/sched/debug.h>
+> > +#include <kunit/test.h>
+> > +
+> > +static bool kunit_get_success(struct kunit *test)
+> > +{
+> > +       unsigned long flags;
+> > +       bool success;
+> > +
+> > +       spin_lock_irqsave(&test->lock, flags);
+> > +       success = test->success;
+> > +       spin_unlock_irqrestore(&test->lock, flags);
 >
-> Hi Alexei!
->
-> I'm not certain if I'm interpreting you as you intended, but it sounds
-> like you're telling me that if the test build environment does not use
-> 'latest clang' (i guess latest as of today?), that these tests will
-> fail, and that is how it is going to be. If I have that wrong, please
-> correct me and disregard the rest of my message.
->
-> Please understand where we are coming from. We (and many others) run
-> thousands of tests from a lot of test frameworks, and so our environment
-> often has mutually exclusive requirements when it comes to things like
-> toolchain selection.
->
-> We believe, strongly, that a test should not emit a "fail" for a missing
-> requirement. Fail is a serious thing, and should be reserved for an
-> actual issue that needs to be investigated, reported, and fixed.
->
-> This is how we treat test failures - we investigate, report, and fix
-> them when possible. When they're not real failures, we waste our time
-> (and yours, in this case).
->
-> By adding the tests to TEST_GEN_PROGS, you're adding them to the general
-> test set that those of us running test farms try to run continuously
-> across a wide range of hardware environments and kernel branches.
+> I still don't understand the locking scheme in this code. Is the
+> intention to make getter and setter APIs that are "safe" by adding in a
+> spinlock that is held around getting and setting various members in the
+> kunit structure?
 
-you run the latest selftests/bpf on the latest kernel, right?
-If not than selftests/bpf is not for your setup.
+Yes, your understanding is correct. It is possible for a user to write
+a test such that certain elements may be updated in different threads;
+this would most likely happen in the case where someone wants to make
+an assertion or an expectation in a thread created by a piece of code
+under test. Although this should generally be avoided, it is possible,
+and there are occasionally good reasons to do so, so it is
+functionality that we should support.
 
-In the past people argued that selftests/bpf should check
-features of the kernel and skip when features are not found.
-My answer to that was always the same: such changes to selftests
-for older kernels need to live out of tree.
-selftests/bpf are one to one to the latest kernel.
-Often kernel commit X will break selftests and they're fixed
-in the commit X+1.
-clang, pahole, bpftool, iproute2 provide those features for the kernel.
-In other words new kernel features rely on new clang and
-other tools and selftests are testing those latest kernel features.
-Without new clang many new features cannot be tested exhaustively.
-datasec and btf are just few examples.
-Hence if your test farm cannot install the latest clang, pahole, etc then
-I recommend not to run selftest/bpf.
+Do you think I should add a comment to this effect?
+
+> In what situation is there more than one thread reading or writing the
+> kunit struct? Isn't it only a single process that is going to be
+
+As I said above, it is possible that the code under test may spawn a
+new thread that may make an expectation or an assertion. It is not a
+super common use case, but it is possible.
+
+> operating on this structure? And why do we need to disable irqs? Are we
+> expecting to be modifying the unit tests from irq contexts?
+
+There are instances where someone may want to test a driver which has
+an interrupt handler in it. I actually have (not the greatest) example
+here. Now in these cases, I expect someone to use a mock irqchip or
+some other fake mechanism to trigger the interrupt handler and not
+actual hardware; technically speaking in this case, it is not going to
+be accessed from a "real" irq context; however, the code under test
+should think that it is in an irq context; given that, I figured it is
+best to just treat it as a real irq context. Does that make sense?
+
+> > +
+> > +       return success;
+> > +}
+> > +
+> > +static void kunit_set_success(struct kunit *test, bool success)
+> > +{
+> > +       unsigned long flags;
+> > +
+> > +       spin_lock_irqsave(&test->lock, flags);
+> > +       test->success = success;
+> > +       spin_unlock_irqrestore(&test->lock, flags);
+> > +}
+> > +
+> > +static int kunit_vprintk_emit(int level, const char *fmt, va_list args)
+> > +{
+> > +       return vprintk_emit(0, level, NULL, 0, fmt, args);
+> > +}
+> > +
+> > +static int kunit_printk_emit(int level, const char *fmt, ...)
+> > +{
+> > +       va_list args;
+> > +       int ret;
+> > +
+> > +       va_start(args, fmt);
+> > +       ret = kunit_vprintk_emit(level, fmt, args);
+> > +       va_end(args);
+> > +
+> > +       return ret;
+> > +}
+> > +
+> > +static void kunit_vprintk(const struct kunit *test,
+> > +                         const char *level,
+> > +                         struct va_format *vaf)
+> > +{
+> > +       kunit_printk_emit(level[1] - '0', "\t# %s: %pV", test->name, vaf);
+> > +}
+> > +
+> > +static bool kunit_has_printed_tap_version;
+>
+> Can you please move this into function local scope in the function
+> below?
+
+Sure, that makes sense.
+
+> > +
+> > +static void kunit_print_tap_version(void)
+> > +{
+> > +       if (!kunit_has_printed_tap_version) {
+> > +               kunit_printk_emit(LOGLEVEL_INFO, "TAP version 14\n");
+> > +               kunit_has_printed_tap_version = true;
+> > +       }
+> > +}
+> > +
+> [...]
+> > +
+> > +static bool kunit_module_has_succeeded(struct kunit_module *module)
+> > +{
+> > +       const struct kunit_case *test_case;
+> > +       bool success = true;
+> > +
+> > +       for (test_case = module->test_cases; test_case->run_case; test_case++)
+> > +               if (!test_case->success) {
+> > +                       success = false;
+> > +                       break;
+>
+> Why not 'return false'?
+
+Also a good point. Will fix.
+
+> > +               }
+> > +
+> > +       return success;
+>
+> And 'return true'?
+
+Will fix.
+
+> > +}
+> > +
+> > +static size_t kunit_module_counter = 1;
+> > +
+> > +static void kunit_print_subtest_end(struct kunit_module *module)
+> > +{
+> > +       kunit_print_ok_not_ok(false,
+> > +                             kunit_module_has_succeeded(module),
+> > +                             kunit_module_counter++,
+> > +                             module->name);
+> > +}
+> > +
+> > +static void kunit_print_test_case_ok_not_ok(struct kunit_case *test_case,
+> > +                                           size_t test_number)
+> > +{
+> > +       kunit_print_ok_not_ok(true,
+> > +                             test_case->success,
+> > +                             test_number,
+> > +                             test_case->name);
+> > +}
+> > +
+> > +void kunit_init_test(struct kunit *test, const char *name)
+> > +{
+> > +       spin_lock_init(&test->lock);
+> > +       test->name = name;
+> > +       test->success = true;
+> > +}
+> > +
+> > +/*
+> > + * Performs all logic to run a test case.
+> > + */
+> > +static void kunit_run_case(struct kunit_module *module,
+> > +                          struct kunit_case *test_case)
+> > +{
+> > +       struct kunit test;
+> > +       int ret = 0;
+> > +
+> > +       kunit_init_test(&test, test_case->name);
+> > +
+> > +       if (module->init) {
+> > +               ret = module->init(&test);
+> > +               if (ret) {
+> > +                       kunit_err(&test, "failed to initialize: %d\n", ret);
+> > +                       kunit_set_success(&test, false);
+> > +                       return;
+> > +               }
+> > +       }
+> > +
+> > +       if (!ret)
+> > +               test_case->run_case(&test);
+>
+> Do we need this if condition? ret can only be set to non-zero above but
+> then we'll exit the function early so it seems unnecessary. Given that,
+> ret should probably be moved into the module->init path.
+
+Whoops. Sorry, another instance of how it evolved over time and I
+forgot why I did the check. Will fix.
+
+> > +
+> > +       if (module->exit)
+> > +               module->exit(&test);
+> > +
+> > +       test_case->success = kunit_get_success(&test);
+> > +}
+> > +
+
+Thanks!
