@@ -2,115 +2,139 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D26EB55B0B
-	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Jun 2019 00:25:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5546C55B3B
+	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Jun 2019 00:33:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726307AbfFYWYy (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 25 Jun 2019 18:24:54 -0400
-Received: from Galois.linutronix.de ([193.142.43.55]:44570 "EHLO
-        Galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726274AbfFYWYx (ORCPT
+        id S1726385AbfFYWdQ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 25 Jun 2019 18:33:16 -0400
+Received: from mail-pg1-f196.google.com ([209.85.215.196]:43390 "EHLO
+        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725914AbfFYWdQ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 25 Jun 2019 18:24:53 -0400
-Received: from p5b06daab.dip0.t-ipconnect.de ([91.6.218.171] helo=nanos)
-        by Galois.linutronix.de with esmtpsa (TLS1.2:DHE_RSA_AES_256_CBC_SHA256:256)
-        (Exim 4.80)
-        (envelope-from <tglx@linutronix.de>)
-        id 1hftrr-00020M-H0; Wed, 26 Jun 2019 00:24:47 +0200
-Date:   Wed, 26 Jun 2019 00:24:46 +0200 (CEST)
-From:   Thomas Gleixner <tglx@linutronix.de>
-To:     Andy Lutomirski <luto@kernel.org>
-cc:     Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        LAK <linux-arm-kernel@lists.infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>, linux-mips@vger.kernel.org,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will.deacon@arm.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Russell King <linux@armlinux.org.uk>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Paul Burton <paul.burton@mips.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Mark Salyzyn <salyzyn@android.com>,
-        Peter Collingbourne <pcc@google.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Dmitry Safonov <0x7f454c46@gmail.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Huw Davies <huw@codeweavers.com>,
-        Shijith Thotton <sthotton@marvell.com>,
-        Andre Przywara <andre.przywara@arm.com>,
-        Peter Zijlstra <peterz@infradead.org>
-Subject: Re: [PATCH 1/3] lib/vdso: Delay mask application in do_hres()
-In-Reply-To: <CALCETrWE3zYN-6h0RkMV9j5kSkSWbJ-nQnjhH=md=ybSR0eZ9Q@mail.gmail.com>
-Message-ID: <alpine.DEB.2.21.1906260009260.32342@nanos.tec.linutronix.de>
-References: <20190624133607.GI29497@fuggles.cambridge.arm.com> <20190625161804.38713-1-vincenzo.frascino@arm.com> <alpine.DEB.2.21.1906251851350.32342@nanos.tec.linutronix.de> <alpine.DEB.2.21.1906252024350.32342@nanos.tec.linutronix.de>
- <CALCETrWE3zYN-6h0RkMV9j5kSkSWbJ-nQnjhH=md=ybSR0eZ9Q@mail.gmail.com>
-User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+        Tue, 25 Jun 2019 18:33:16 -0400
+Received: by mail-pg1-f196.google.com with SMTP id f25so133340pgv.10;
+        Tue, 25 Jun 2019 15:33:15 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=TnzcHfb/rGR5D/vErJu8w17aFeeUcfwDXLuZxpFdgZc=;
+        b=rNVLR2LDpP8KAQuszWLfab1CJ9gXccbXmSDxzPyAeTL3JIPvljZWiiRYzz/i6H743/
+         TxnaB1vUVgTE+fcI5I4L5yXaetDkjWBc4fa7QZzjtDkX37hbEVE+Mv8wxt+1YPPhZ7iw
+         qrPQ/U5PNWOziks8EzD7jGwqK/S1DlixOuiEBasaPh9bRvvMAJJhFzjvJInkpFjuwqFQ
+         PzHITMs8V1MgjLPkwQsEfJVqojTjDLQfScJvbiXdErj/zv5BA3ECvLcNR7etZMU0zaLA
+         ebSl4H2FueURFNZnqnj5/CmerH8Mywg1MRbyEjDe43xPAS8vNYBx7LAuWX79drGCazPF
+         zdPQ==
+X-Gm-Message-State: APjAAAVNqmYSdo4AzoRGu7VqCyayqtHpfhhKjEQgWUQiX73Y78zNNfah
+        F+W+Hhe0i9GS11WR3P5MJAE=
+X-Google-Smtp-Source: APXvYqz8tePzVjq6qydlXc6fHsQtBqVBfz39DV20JLDT6sqkzfdOgtSxbEsBu2vrr4nNjRf5f7IpUg==
+X-Received: by 2002:a17:90a:e397:: with SMTP id b23mr267009pjz.140.1561501994728;
+        Tue, 25 Jun 2019 15:33:14 -0700 (PDT)
+Received: from 42.do-not-panic.com (42.do-not-panic.com. [157.230.128.187])
+        by smtp.gmail.com with ESMTPSA id p67sm23643298pfg.124.2019.06.25.15.33.13
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Tue, 25 Jun 2019 15:33:13 -0700 (PDT)
+Received: by 42.do-not-panic.com (Postfix, from userid 1000)
+        id CD044401EB; Tue, 25 Jun 2019 22:33:12 +0000 (UTC)
+Date:   Tue, 25 Jun 2019 22:33:12 +0000
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Brendan Higgins <brendanhiggins@google.com>
+Cc:     frowand.list@gmail.com, gregkh@linuxfoundation.org,
+        jpoimboe@redhat.com, keescook@google.com,
+        kieran.bingham@ideasonboard.com, peterz@infradead.org,
+        robh@kernel.org, sboyd@kernel.org, shuah@kernel.org, tytso@mit.edu,
+        yamada.masahiro@socionext.com, devicetree@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, kunit-dev@googlegroups.com,
+        linux-doc@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-nvdimm@lists.01.org,
+        linux-um@lists.infradead.org, Alexander.Levin@microsoft.com,
+        Tim.Bird@sony.com, amir73il@gmail.com, dan.carpenter@oracle.com,
+        daniel@ffwll.ch, jdike@addtoit.com, joel@jms.id.au,
+        julia.lawall@lip6.fr, khilman@baylibre.com, knut.omang@oracle.com,
+        logang@deltatee.com, mpe@ellerman.id.au, pmladek@suse.com,
+        rdunlap@infradead.org, richard@nod.at, rientjes@google.com,
+        rostedt@goodmis.org, wfg@linux.intel.com
+Subject: Re: [PATCH v5 01/18] kunit: test: add KUnit test runner core
+Message-ID: <20190625223312.GP19023@42.do-not-panic.com>
+References: <20190617082613.109131-1-brendanhiggins@google.com>
+ <20190617082613.109131-2-brendanhiggins@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Linutronix-Spam-Score: -1.0
-X-Linutronix-Spam-Level: -
-X-Linutronix-Spam-Status: No , -1.0 points, 5.0 required,  ALL_TRUSTED=-1,SHORTCIRCUIT=-0.0001
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190617082613.109131-2-brendanhiggins@google.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, 25 Jun 2019, Andy Lutomirski wrote:
-> On Tue, Jun 25, 2019 at 11:27 AM Thomas Gleixner <tglx@linutronix.de> wrote:
-> >
-> > On Tue, 25 Jun 2019, Thomas Gleixner wrote:
-> >
-> > > On Tue, 25 Jun 2019, Vincenzo Frascino wrote:
-> > >
-> > > CC+ Andy
-> > >
-> > > > do_hres() in the vDSO generic library masks the hw counter value
-> > > > immediately after reading it.
-> > > >
-> > > > Postpone the mask application after checking if the syscall fallback is
-> > > > enabled, in order to be able to detect a possible fallback for the
-> > > > architectures that have masks smaller than ULLONG_MAX.
-> > >
-> > > Right. This only worked on x86 because the mask is there ULLONG_MAX for all
-> > > VDSO capable clocksources, i.e. that ever worked just by chance.
-> > >
-> > > As we talked about that already yesterday, I tested this on a couple of
-> > > machines and as expected the outcome is uarch dependent. Minimal deviations
-> > > to both sides and some machines do not show any change at all. I doubt it's
-> > > possible to come up with a solution which makes all uarchs go faster
-> > > magically.
-> > >
-> > > Though, thinking about it, we could remove the mask operation completely on
-> > > X86. /me runs tests
-> >
-> > Unsurprisingly the results vary. Two uarchs do not care, but they did not
-> > care about moving the mask either. The other two gain performance and the
-> > last one falls back to the state before moving the mask. So in general it
-> > looks like a worthwhile optimization.
-> >
-> 
-> At one point, I contemplated a different approach: have the "get the
-> counter" routine return 0 and then do if (unlikely(cycles <= last))
-> goto fallback.  This will remove one branch from the hot path.  I got
-> dubious results when I tried benchmarking it, probably because the
-> branch in question was always correctly predicted.
+On Mon, Jun 17, 2019 at 01:25:56AM -0700, Brendan Higgins wrote:
+> +/**
+> + * module_test() - used to register a &struct kunit_module with KUnit.
+> + * @module: a statically allocated &struct kunit_module.
+> + *
+> + * Registers @module with the test framework. See &struct kunit_module for more
+> + * information.
+> + */
+> +#define module_test(module) \
+> +		static int module_kunit_init##module(void) \
+> +		{ \
+> +			return kunit_run_tests(&module); \
+> +		} \
+> +		late_initcall(module_kunit_init##module)
 
-Just tried and it's the same thing. One drops, one does not care and one
-gains. Did not test the other two as they are asleep already. There is no
-universal cure for this I fear. I even tried a uarch optimized build a few
-days ago which came out worse than the generic one...
+Becuase late_initcall() is used, if these modules are built-in, this
+would preclude the ability to test things prior to this part of the
+kernel under UML or whatever architecture runs the tests. So, this
+limits the scope of testing. Small detail but the scope whould be
+documented.
 
-The issue in that code path is the fencing of the TSC read. That seems to
-screw up every uarch in a different way.
+> +static void kunit_print_tap_version(void)
+> +{
+> +	if (!kunit_has_printed_tap_version) {
+> +		kunit_printk_emit(LOGLEVEL_INFO, "TAP version 14\n");
 
-If you have no objections I'll queue this change (moving the mask) along
-with the other two ARM64 ones to unbreak the fallback path for these errata
-inflicted machines.
+What is this TAP thing? Why should we care what version it is on?
+Why are we printing this?
 
-Thanks,
+> +		kunit_has_printed_tap_version = true;
+> +	}
+> +}
+> +
+> +static size_t kunit_test_cases_len(struct kunit_case *test_cases)
+> +{
+> +	struct kunit_case *test_case;
+> +	size_t len = 0;
+> +
+> +	for (test_case = test_cases; test_case->run_case; test_case++)
 
-	tglx
+If we make the last test case NULL, we'd just check for test_case here,
+and save ourselves an extra few bytes per test module. Any reason why
+the last test case cannot be NULL?
 
+> +void kunit_init_test(struct kunit *test, const char *name)
+> +{
+> +	spin_lock_init(&test->lock);
+> +	test->name = name;
+> +	test->success = true;
+> +}
+> +
+> +/*
+> + * Performs all logic to run a test case.
+> + */
+> +static void kunit_run_case(struct kunit_module *module,
+> +			   struct kunit_case *test_case)
+> +{
+> +	struct kunit test;
+> +	int ret = 0;
+> +
+> +	kunit_init_test(&test, test_case->name);
+> +
+> +	if (module->init) {
+> +		ret = module->init(&test);
+
+I believe if we used struct kunit_module *kmodule it would be much
+clearer who's init this is.
+
+  Luis
