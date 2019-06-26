@@ -2,156 +2,410 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F4F457028
-	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Jun 2019 20:00:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6247557131
+	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Jun 2019 21:01:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726526AbfFZSAV (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 26 Jun 2019 14:00:21 -0400
-Received: from mail.kernel.org ([198.145.29.99]:50920 "EHLO mail.kernel.org"
+        id S1726643AbfFZTBM (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 26 Jun 2019 15:01:12 -0400
+Received: from foss.arm.com ([217.140.110.172]:39258 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726042AbfFZSAV (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 26 Jun 2019 14:00:21 -0400
-Received: from willie-the-truck (236.31.169.217.in-addr.arpa [217.169.31.236])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id F091421743;
-        Wed, 26 Jun 2019 18:00:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1561572020;
-        bh=2PbofuwurM+ISBZum6zAmb0DbBhn5nmO6RtvICX+oNk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=VNMCqAjmSm9l09A4yBzOXHlXjlBaOnorMK7lzF3w2kmIHYW3h8tdm4clg87l5WOCJ
-         1T7oVm4JjXy56Xqx0xrwMCEQiOk1QjWupMdgAkM2oPV4tkK48k4Xbh5AilQT9fsAii
-         M9MfdEALYkf/x2XzNUCr9dDJdYgoMOWaJ5iFRSso=
-Date:   Wed, 26 Jun 2019 19:00:13 +0100
-From:   Will Deacon <will@kernel.org>
-To:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc:     Will Deacon <will.deacon@arm.com>, shuah <shuah@kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Joel Fernandes <joelaf@google.com>,
+        id S1726104AbfFZTBM (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 26 Jun 2019 15:01:12 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4D1C0360;
+        Wed, 26 Jun 2019 12:01:10 -0700 (PDT)
+Received: from [192.168.1.18] (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5B7403F718;
+        Wed, 26 Jun 2019 12:01:07 -0700 (PDT)
+Subject: Re: [PATCH v7 04/25] arm64: Substitute gettimeofday with C
+ implementation
+To:     Dave Martin <Dave.Martin@arm.com>
+Cc:     linux-arch@vger.kernel.org, Shijith Thotton <sthotton@marvell.com>,
+        Peter Collingbourne <pcc@google.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Huw Davies <huw@codeweavers.com>,
+        Andre Przywara <andre.przywara@arm.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Will Deacon <will.deacon@arm.com>,
+        linux-kernel@vger.kernel.org, Ralf Baechle <ralf@linux-mips.org>,
+        linux-mips@vger.kernel.org, Paul Burton <paul.burton@mips.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        linux-kselftest@vger.kernel.org,
         Catalin Marinas <catalin.marinas@arm.com>,
-        Dave Watson <davejwatson@fb.com>,
-        Andi Kleen <andi@firstfloor.org>,
-        linux-kselftest <linux-kselftest@vger.kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>, Chris Lameter <cl@linux.com>,
-        Russell King <linux@arm.linux.org.uk>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        "Paul E . McKenney" <paulmck@linux.vnet.ibm.com>,
-        Paul Turner <pjt@google.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Josh Triplett <josh@joshtriplett.org>,
-        rostedt <rostedt@goodmis.org>, Ben Maurer <bmaurer@fb.com>,
-        linux-api <linux-api@vger.kernel.org>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        carlos <carlos@redhat.com>, Florian Weimer <fweimer@redhat.com>
-Subject: Re: [RFC PATCH 1/1] Revert "rseq/selftests: arm: use udf instruction
- for RSEQ_SIG"
-Message-ID: <20190626180012.q6deohrtzwpbhqky@willie-the-truck>
-References: <20190617152304.23371-1-mathieu.desnoyers@efficios.com>
- <20190624172429.GA11133@fuggles.cambridge.arm.com>
- <1620037196.377.1561400426591.JavaMail.zimbra@efficios.com>
- <20190625091507.GA13263@fuggles.cambridge.arm.com>
- <795143697.722.1561471732756.JavaMail.zimbra@efficios.com>
+        Russell King <linux@armlinux.org.uk>,
+        Dmitry Safonov <0x7f454c46@gmail.com>,
+        Mark Salyzyn <salyzyn@android.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-arm-kernel@lists.infradead.org
+References: <20190621095252.32307-1-vincenzo.frascino@arm.com>
+ <20190621095252.32307-5-vincenzo.frascino@arm.com>
+ <20190625153336.GZ2790@e103592.cambridge.arm.com>
+ <f5ac379a-731d-0662-2f5b-bd046e3bd1c5@arm.com>
+ <20190626161413.GA2790@e103592.cambridge.arm.com>
+From:   Vincenzo Frascino <vincenzo.frascino@arm.com>
+Message-ID: <19ebd45a-b666-d7de-fd9e-2b72e18892d9@arm.com>
+Date:   Wed, 26 Jun 2019 20:01:58 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <795143697.722.1561471732756.JavaMail.zimbra@efficios.com>
-User-Agent: NeoMutt/20170113 (1.7.2)
+In-Reply-To: <20190626161413.GA2790@e103592.cambridge.arm.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Jun 25, 2019 at 10:08:52AM -0400, Mathieu Desnoyers wrote:
-> ----- On Jun 25, 2019, at 5:15 AM, Will Deacon will.deacon@arm.com wrote:
-> > On Mon, Jun 24, 2019 at 02:20:26PM -0400, Mathieu Desnoyers wrote:
-> >> ----- On Jun 24, 2019, at 1:24 PM, Will Deacon will.deacon@arm.com wrote:
-> >> > On Mon, Jun 17, 2019 at 05:23:04PM +0200, Mathieu Desnoyers wrote:
-> >> >> -#define RSEQ_SIG_CODE	0xe7f5def3
-> >> >> -
-> >> >> -#ifndef __ASSEMBLER__
-> >> >> -
-> >> >> -#define RSEQ_SIG_DATA							\
-> >> >> -	({								\
-> >> >> -		int sig;						\
-> >> >> -		asm volatile ("b 2f\n\t"				\
-> >> >> -			      "1: .inst " __rseq_str(RSEQ_SIG_CODE) "\n\t" \
-> >> >> -			      "2:\n\t"					\
-> >> >> -			      "ldr %[sig], 1b\n\t"			\
-> >> >> -			      : [sig] "=r" (sig));			\
-> >> >> -		sig;							\
-> >> >> -	})
-> >> >> -
-> >> >> -#define RSEQ_SIG	RSEQ_SIG_DATA
-> >> >> -
-> >> >> -#endif
-> >> >> +#define RSEQ_SIG	0x53053053
-> >> > 
-> >> > I don't get why you're reverting back to this old signature value, when the
-> >> > one we came up with will work well when interpreted as an instruction in the
-> >> > *vast* majority of scenarios that people care about (A32/T32 little-endian).
-> >> > I think you might be under-estimating just how dead things like BE32 really
-> >> > are.
-> >> 
-> >> My issue is that the current .instr approach is broken for programs or functions
-> >> built in Thumb mode, and I received no feedback on the solutions I proposed for
-> >> those issues, which led me to propose a patch reverting to a simple .word.
-> > 
-> > I understand why you're moving from .inst to .word, but I don't understand
-> > why that necessitates a change in the value. Why not .word 0xe7f5def3 ? You
-> > could also flip the bytes around in case of big-endian, which would keep the
-> > instruction coding clean for BE8.
+Hi Dave,
+
+thank you for the quick turn around.
+
+On 6/26/19 5:14 PM, Dave Martin wrote:
+> On Wed, Jun 26, 2019 at 02:27:59PM +0100, Vincenzo Frascino wrote:
+>> Hi Dave,
+>>
+>> On 25/06/2019 16:33, Dave Martin wrote:
+>>> On Fri, Jun 21, 2019 at 10:52:31AM +0100, Vincenzo Frascino wrote:
+>>>> To take advantage of the commonly defined vdso interface for
+>>>> gettimeofday the architectural code requires an adaptation.
+>>>>
+>>>> Re-implement the gettimeofday vdso in C in order to use lib/vdso.
+>>>>
+>>>> With the new implementation arm64 gains support for CLOCK_BOOTTIME
+>>>> and CLOCK_TAI.
+>>>>
+>>>> Cc: Catalin Marinas <catalin.marinas@arm.com>
+>>>> Cc: Will Deacon <will.deacon@arm.com>
+>>>> Signed-off-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
+>>>> Tested-by: Shijith Thotton <sthotton@marvell.com>
+>>>> Tested-by: Andre Przywara <andre.przywara@arm.com>
+>>>
+>>> [...]
+>>>
+>>>> diff --git a/arch/arm64/include/asm/vdso/gettimeofday.h b/arch/arm64/include/asm/vdso/gettimeofday.h
+>>>> new file mode 100644
+>>>> index 000000000000..bc3cb6738051
+>>>> --- /dev/null
+>>>> +++ b/arch/arm64/include/asm/vdso/gettimeofday.h
+>>>> @@ -0,0 +1,86 @@
+>>>> +/* SPDX-License-Identifier: GPL-2.0 */
+>>>> +/*
+>>>> + * Copyright (C) 2018 ARM Limited
+>>>> + */
+>>>> +#ifndef __ASM_VDSO_GETTIMEOFDAY_H
+>>>> +#define __ASM_VDSO_GETTIMEOFDAY_H
+>>>> +
+>>>> +#ifndef __ASSEMBLY__
+>>>> +
+>>>> +#include <asm/unistd.h>
+>>>> +#include <uapi/linux/time.h>
+>>>> +
+>>>> +#define VDSO_HAS_CLOCK_GETRES		1
+>>>> +
+>>>> +static __always_inline int gettimeofday_fallback(
+>>>> +					struct __kernel_old_timeval *_tv,
+>>>> +					struct timezone *_tz)
+>>>
+>>> Out of interest, does this need to be __always_inline?
+>>>
+>>
+>> It is a design choice. Philosophically, I prefer to control and reduce the scope
+>> of the decisions the compiler has to make in order to not have surprises.
+>>
+>>>> +{
+>>>> +	register struct timezone *tz asm("x1") = _tz;
+>>>> +	register struct __kernel_old_timeval *tv asm("x0") = _tv;
+>>>> +	register long ret asm ("x0");
+>>>> +	register long nr asm("x8") = __NR_gettimeofday;
+>>>> +
+>>>> +	asm volatile(
+>>>> +	"       svc #0\n"
+>>>
+>>> Can inlining of this function result in non-trivial expressions being
+>>> substituted for _tz or _tv?
+>>>
+>>> A function call can clobber register asm vars that are assigned to the
+>>> caller-save registers or that the PCS uses for function arguments, and
+>>> the situations where this can happen are poorly defined AFAICT.  There's
+>>> also no reliable way to detect at build time whether the compiler has
+>>> done this, and no robust way to stop if happening.
+>>>
+>>> (IMHO the compiler is wrong to do this, but it's been that way for ever,
+>>> and I think I saw GCC 9 show this behaviour recently when I was
+>>> investigating something related.)
+>>>
+>>>
+>>> To be safe, it's better to put this out of line, or remove the reg asm()
+>>> specifiers, mark x0-x18 and lr as clobbered here (so that the compiler
+>>> doesn't map arguments to them), and put movs in the asm to move things
+>>> into the right registers.  The syscall number can be passed with an "i"
+>>> constraint.  (And yes, this sucks.)
+>>>
+>>> If the code this is inlined in is simple enough though, we can be fairly
+>>> confident of getting away with it.
+>>>
+>>
+>> I took very seriously what you are mentioning here because I think
+>> that robustness of the code comes before than everything especially
+>> in the kernel and I carried on some experiments to try to verify if
+>> in this case is safe to assume that the compiler is doing the right
+>> thing.
+>>
+>> Based on my investigation and on previous observations of the
+>> generation of the vDSO library, I can conclude that the approach
+>> seems safe due to the fact that the usage of this code is very
+>> limited, the code itself is simple enough and that gcc would inline
+>> this code anyway based on the current compilation options.
 > 
-> As long as we state and document that this should not be expected to generate
-> valid instructions on big endian prior to ARMv6, I'm OK with that approach, e.g.:
+> I'd caution about "seems safe".  A lot of subtly wrong code not only
+> seems safe, but _is_ safe in its original context, in practice.  Add
+> some code to the vdso over time though, or tweak the compilation options
+> at some point in the future, or use a different compiler, and things
+> could still go wrong.
 > 
-> /*
->  * - ARM little endian
->  *
->  * RSEQ_SIG uses the udf A32 instruction with an uncommon immediate operand
->  * value 0x5de3. This traps if user-space reaches this instruction by mistake,
->  * and the uncommon operand ensures the kernel does not move the instruction
->  * pointer to attacker-controlled code on rseq abort.
->  *
->  * The instruction pattern in the A32 instruction set is:
->  *
->  * e7f5def3    udf    #24035    ; 0x5de3
->  *
->  * This translates to the following instruction pattern in the T16 instruction
->  * set:
->  *
->  * little endian:
->  * def3        udf    #243      ; 0xf3
->  * e7f5        b.n    <7f5>
->  *
->  * - ARMv6+ big endian:
+> (Further comments below.)
+> 
 
-Maybe mention "(BE8)" here...
+Allow me to provide a clarification on "seems safe" vs "is safe": my approach
+"seems safe" because I am providing empirical evidence to support my thesis, but
+I guess we both know that there is no simple way to prove in one way or another
+that the problem has a complete solution.
+The proposed problem involves suppositions on potential future code additions
+and changes of behavior of the compiler that I can't either control or prevent.
+In other words, I can comment and propose solutions only based on the current
+status of the things, and it is what my analysis targets, not on what will
+happen in future.
 
->  *
->  * ARMv6+ -mbig-endian generates mixed endianness code vs data: little-endian
->  * code and big-endian data. The data value of the signature needs to have its
->  * byte order reversed to generate the trap instruction:
->  *
->  * Data: 0xf3def5e7
->  *
->  * Translates to this A32 instruction pattern:
->  *
->  * e7f5def3    udf    #24035    ; 0x5de3
->  *
->  * Translates to this T16 instruction pattern:
->  *
->  * def3        udf    #243      ; 0xf3
->  * e7f5        b.n    <7f5>
->  *
->  * - Prior to ARMv6 big endian:
+I will reply point by point below.
 
-... and "(BE32)" here.
+>> The experiment that I did was to define some self-contained code that
+>> tries to mimic what you are describing and compile it with 3
+>> different versions of gcc (6.4, 8.1 and 8.3) and in all the tree
+>> cases the behavior seems correct.
+>>
+>> Code:
+>> =====
+>>
+>> typedef int ssize_t;
+>> typedef int size_t;
+>>
+>> static int my_strlen(const char *s)
+>> {
+>> 	int i = 0;
+>>
+>> 	while (s[i] == '\0')
+>> 		i++;
+>>
+>> 	return i;
+>> }
+>>
+>> static inline ssize_t my_syscall(int fd, const void *buf, size_t count)
+>> {
+>> 	register ssize_t arg1 asm ("x0") = fd;
+>> 	register const void *arg2 asm ("x1") = buf;
+>> 	register size_t arg3 asm ("x2") = count;
+>>
+>> 	__asm__ volatile (
+>> 		"mov x8, #64\n"
+>> 		"svc #0\n"
+>> 		: "=&r" (arg1)
+>> 		: "r" (arg2), "r" (arg3)
+>> 		: "x8"
+>>         );
+>>
+>>         return arg1;
+>> }
+>>
+>> void sys_caller(const char *s)
+>> {
+>> 	my_syscall(1, s, my_strlen(s));
+>> }
+>>
+>>
+>> GCC 8.3.0:
+>> ==========
+>>
+>> main.8.3.0.o:     file format elf64-littleaarch64
+>>
+>>
+>> Disassembly of section .text:
+>>
+>> 0000000000000000 <sys_caller>:
+>>    0:	39400001 	ldrb	w1, [x0]
+>>    4:	35000161 	cbnz	w1, 30 <sys_caller+0x30>
+>>    8:	d2800023 	mov	x3, #0x1                   	// #1
+>>    c:	d1000404 	sub	x4, x0, #0x1
+>>   10:	2a0303e2 	mov	w2, w3
+>>   14:	91000463 	add	x3, x3, #0x1
+>>   18:	38636881 	ldrb	w1, [x4, x3]
+>>   1c:	34ffffa1 	cbz	w1, 10 <sys_caller+0x10>
+>>   20:	aa0003e1 	mov	x1, x0
+>>   24:	d2800808 	mov	x8, #0x40                  	// #64
+>>   28:	d4000001 	svc	#0x0
+>>   2c:	d65f03c0 	ret
+>>   30:	52800002 	mov	w2, #0x0                   	// #0
+>>   34:	17fffffb 	b	20 <sys_caller+0x20>
+>>
+>>
+>> GCC 8.1.0:
+>> ==========
+>>
+>> main.8.1.0.o:     file format elf64-littleaarch64
+>>
+>>
+>> Disassembly of section .text:
+>>
+>> 0000000000000000 <sys_caller>:
+>>    0:	39400001 	ldrb	w1, [x0]
+>>    4:	35000161 	cbnz	w1, 30 <sys_caller+0x30>
+>>    8:	d2800023 	mov	x3, #0x1                   	// #1
+>>    c:	d1000404 	sub	x4, x0, #0x1
+>>   10:	2a0303e2 	mov	w2, w3
+>>   14:	91000463 	add	x3, x3, #0x1
+>>   18:	38636881 	ldrb	w1, [x4, x3]
+>>   1c:	34ffffa1 	cbz	w1, 10 <sys_caller+0x10>
+>>   20:	aa0003e1 	mov	x1, x0
+>>   24:	d2800808 	mov	x8, #0x40                  	// #64
+>>   28:	d4000001 	svc	#0x0
+>>   2c:	d65f03c0 	ret
+>>   30:	52800002 	mov	w2, #0x0                   	// #0
+>>   34:	17fffffb 	b	20 <sys_caller+0x20>
+>>
+>>
+>>
+>> GCC 6.4.0:
+>> ==========
+>>
+>> main.6.4.0.o:     file format elf64-littleaarch64
+>>
+>>
+>> Disassembly of section .text:
+>>
+>> 0000000000000000 <sys_caller>:
+>>    0:	39400001 	ldrb	w1, [x0]
+>>    4:	35000161 	cbnz	w1, 30 <sys_caller+0x30>
+>>    8:	d2800023 	mov	x3, #0x1                   	// #1
+>>    c:	d1000404 	sub	x4, x0, #0x1
+>>   10:	2a0303e2 	mov	w2, w3
+>>   14:	91000463 	add	x3, x3, #0x1
+>>   18:	38636881 	ldrb	w1, [x4, x3]
+>>   1c:	34ffffa1 	cbz	w1, 10 <sys_caller+0x10>
+>>   20:	aa0003e1 	mov	x1, x0
+>>   24:	d2800808 	mov	x8, #0x40                  	// #64
+>>   28:	d4000001 	svc	#0x0
+>>   2c:	d65f03c0 	ret
+>>   30:	52800002 	mov	w2, #0x0                   	// #0
+>>   34:	17fffffb 	b	20 <sys_caller+0x20>
+> 
+> Thanks for having a go at this.  If the compiler can show the
+> problematic behaviour, it looks like your could could probably trigger
+> it, and as you observe, it doesn't trigger.
+> 
+> I am sure I have seen it in the past, but today I am struggling
+> to tickle the compiler in the right way.  My original reproducer may
+> have involved LTO, but either way I don't still have it :(
+>
 
-With that, this looks fine to me.
+vDSO library is a shared object not compiled with LTO as far as I can see, hence
+if this involved LTO should not applicable in this case.
 
-Will
+
+> 
+> The classic example of this (triggered directly and not due to inlining)
+> would be something like:
+> 
+> int bar(int, int);
+> 
+> void foo(int x, int y)
+> {
+> 	register int x_ asm("r0") = x;
+> 	register int y_ asm("r1") = bar(x, y);
+> 
+> 	asm volatile (
+> 		"svc	#0"
+> 		:: "r" (x_), "r" (y_)
+> 		: "memory"
+> 	);
+> }
+> 
+> ->
+> 
+> 0000000000000000 <foo>:
+>    0:   a9bf7bfd        stp     x29, x30, [sp, #-16]!
+>    4:   910003fd        mov     x29, sp
+>    8:   94000000        bl      0 <bar>
+>    c:   2a0003e1        mov     w1, w0
+>   10:   d4000001        svc     #0x0
+>   14:   a8c17bfd        ldp     x29, x30, [sp], #16
+>   18:   d65f03c0        ret
+>
+
+Contextualized to what my vdso fallback functions do, this should not be a
+concern because in no case a function result is directly set to a variable
+declared as register.
+
+Since the vdso fallback functions serve a very specific and limited purpose, I
+do not expect that that code is going to change much in future.
+
+The only thing that can happen is something similar to what I wrote in my
+example, which as I empirically proved does not trigger the problematic behavior.
+
+> 
+> The gcc documentation is vague and ambiguous about precisely whan this
+> can happen and about how to avoid it.
+> 
+
+On this I agree, it is not very clear, but this seems more something to raise
+with the gcc folks in order to have a more "explicit" description that leaves no
+room to the interpretation.
+
+...
+
+> 
+> However, the workaround is cheap, and to avoid the chance of subtle
+> intermittent code gen bugs it may be worth it:
+> 
+> void foo(int x, int y)
+> {
+> 	asm volatile (
+> 		"mov	x0, %0\n\t"
+> 		"mov	x1, %1\n\t"
+> 		"svc	#0"
+> 		:: "r" (x), "r" (bar(x, y))
+> 		: "r0", "r1", "memory"
+> 	);
+> }
+> 
+> ->
+> 
+> 0000000000000000 <foo>:
+>    0:   a9be7bfd        stp     x29, x30, [sp, #-32]!
+>    4:   910003fd        mov     x29, sp
+>    8:   f9000bf3        str     x19, [sp, #16]
+>    c:   2a0003f3        mov     w19, w0
+>   10:   94000000        bl      0 <bar>
+>   14:   2a0003e2        mov     w2, w0
+>   18:   aa1303e0        mov     x0, x19
+>   1c:   aa0203e1        mov     x1, x2
+>   20:   d4000001        svc     #0x0
+>   24:   f9400bf3        ldr     x19, [sp, #16]
+>   28:   a8c27bfd        ldp     x29, x30, [sp], #32
+>   2c:   d65f03c0        ret
+> 
+> 
+> What do you think?
+>
+
+The solution seems ok, thanks for providing it, but IMHO I think we should find
+a workaround for something that is broken, which, unless I am missing something
+major, this seems not the case.
+
+> Cheers
+> ---Dave
+> 
+
+-- 
+Regards,
+Vincenzo
