@@ -2,111 +2,92 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F2FF1563F7
-	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Jun 2019 10:03:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EFEE5659E
+	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Jun 2019 11:25:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726247AbfFZIDI (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 26 Jun 2019 04:03:08 -0400
-Received: from mail-pg1-f193.google.com ([209.85.215.193]:41856 "EHLO
-        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726077AbfFZIDI (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 26 Jun 2019 04:03:08 -0400
-Received: by mail-pg1-f193.google.com with SMTP id y72so824362pgd.8
-        for <linux-kselftest@vger.kernel.org>; Wed, 26 Jun 2019 01:03:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=nwcdyZlVJNYhzqAX8drYdwwlincSCC0RlYdtVUa7uAU=;
-        b=IkHW2/q5zYf/AiFOwOUn62sZGCukGK93pV5qaXaFIqAD6rVurvvvVguZ0CQNqSK004
-         PUW6XYRD1tpIvu/H8uK2xdNaMWkc3s+ZreXHoEsItZgP1H729MJ8nowT1aehVpl1AnJq
-         rAPmVbRpyeOR+0aKXV1iywesPypOO3F4fwUcKnHNHDKkSlnXU9KrB33bQAymKu7tZx6G
-         yt/Ix8apmwB+zPUY0f7g7GrCvvhKCA2B8FFf68JI9BW8d/snEU6oOmLqSE4EOwMnXWLP
-         uFddQ1SWm8yfpnKxzglfseoQZZbmazxOSGTrgVrxfJIOk1+YhP4zhoDMctTsB330F1Sn
-         /4dA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=nwcdyZlVJNYhzqAX8drYdwwlincSCC0RlYdtVUa7uAU=;
-        b=VtauMR37i8jxA7o7PHssQSNhuEs4knG00vkhFKuMB2/X/+xIBm78tCXwjtsaAQBciD
-         LyAX9sCEcTPkGACYoWR2YndpXLG5zH0J8TzYTm+mRPUvYoC1ENBWNbu7jfigTyTwNKeR
-         HFu2lzQuEC7RPQm70a8sztW8i5/pBBLUS9o4EC3JWqSrNwhh5q/CwcOWaNJeF+hzES7e
-         R5sHG/Y4IlGqVe3toABCTR02qEwOrLu5X/mcVkfgnSkWrBZZlKjrmJNQnIgwS4aLbAUD
-         c9h4Er4o3b+xHD70afZBFYL3Vcecgf7VujnJsyNVQCmPxpcC8zdAdHA/MVmz6ZMfb8G9
-         u+Ew==
-X-Gm-Message-State: APjAAAXSjhEH3qTcoyi/mAjccx3YWaTC+SQFBoV2nClRqd4FWR0FHiDY
-        07rTzs8krJpVKFond/VhSPbcp9qbp1FspV/nn0jUwQ==
-X-Google-Smtp-Source: APXvYqzSvFzyXqC4mv+sYfABQnmt0YNMhvFTkgdzLZZeovItyFY3wThgA7+iWx0YSEf5WS6vtdXjsfVxGyJkZN8WaD8=
-X-Received: by 2002:a17:90a:9382:: with SMTP id q2mr3140021pjo.131.1561536186861;
- Wed, 26 Jun 2019 01:03:06 -0700 (PDT)
+        id S1726708AbfFZJZ0 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 26 Jun 2019 05:25:26 -0400
+Received: from foss.arm.com ([217.140.110.172]:57258 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725379AbfFZJZ0 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 26 Jun 2019 05:25:26 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 818432B;
+        Wed, 26 Jun 2019 02:25:25 -0700 (PDT)
+Received: from [10.1.196.72] (e119884-lin.cambridge.arm.com [10.1.196.72])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 55EE03F718;
+        Wed, 26 Jun 2019 02:25:22 -0700 (PDT)
+Subject: Re: [PATCH 1/3] lib/vdso: Delay mask application in do_hres()
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     linux-arch@vger.kernel.org,
+        LAK <linux-arm-kernel@lists.infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>, linux-mips@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, catalin.marinas@arm.com,
+        Will Deacon <will.deacon@arm.com>,
+        Arnd Bergmann <arnd@arndb.de>, linux@armlinux.org.uk,
+        Ralf Baechle <ralf@linux-mips.org>, paul.burton@mips.com,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        salyzyn@android.com, pcc@google.com, shuah@kernel.org,
+        0x7f454c46@gmail.com, linux@rasmusvillemoes.dk,
+        huw@codeweavers.com, sthotton@marvell.com, andre.przywara@arm.com,
+        Andy Lutomirski <luto@kernel.org>
+References: <20190624133607.GI29497@fuggles.cambridge.arm.com>
+ <20190625161804.38713-1-vincenzo.frascino@arm.com>
+ <alpine.DEB.2.21.1906251851350.32342@nanos.tec.linutronix.de>
+ <alpine.DEB.2.21.1906260832470.32342@nanos.tec.linutronix.de>
+From:   Vincenzo Frascino <vincenzo.frascino@arm.com>
+Message-ID: <4ff43de4-fe51-eed4-a155-31a05edf2f11@arm.com>
+Date:   Wed, 26 Jun 2019 10:25:20 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 MIME-Version: 1.0
-References: <20190617082613.109131-1-brendanhiggins@google.com>
- <20190617082613.109131-14-brendanhiggins@google.com> <20190626000150.GT19023@42.do-not-panic.com>
-In-Reply-To: <20190626000150.GT19023@42.do-not-panic.com>
-From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Wed, 26 Jun 2019 01:02:55 -0700
-Message-ID: <CAFd5g44kkepB2hZcpYL-NB5ZHYE5tP7W-0yducGCX7Khd9gd9w@mail.gmail.com>
-Subject: Re: [PATCH v5 13/18] kunit: tool: add Python wrappers for running
- KUnit tests
-To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     Frank Rowand <frowand.list@gmail.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Kees Cook <keescook@google.com>,
-        Kieran Bingham <kieran.bingham@ideasonboard.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Rob Herring <robh@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
-        shuah <shuah@kernel.org>, "Theodore Ts'o" <tytso@mit.edu>,
-        Masahiro Yamada <yamada.masahiro@socionext.com>,
-        devicetree <devicetree@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        kunit-dev@googlegroups.com,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        linux-fsdevel@vger.kernel.org,
-        linux-kbuild <linux-kbuild@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        linux-nvdimm <linux-nvdimm@lists.01.org>,
-        linux-um@lists.infradead.org,
-        Sasha Levin <Alexander.Levin@microsoft.com>,
-        "Bird, Timothy" <Tim.Bird@sony.com>,
-        Amir Goldstein <amir73il@gmail.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Daniel Vetter <daniel@ffwll.ch>, Jeff Dike <jdike@addtoit.com>,
-        Joel Stanley <joel@jms.id.au>,
-        Julia Lawall <julia.lawall@lip6.fr>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Knut Omang <knut.omang@oracle.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Petr Mladek <pmladek@suse.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Richard Weinberger <richard@nod.at>,
-        David Rientjes <rientjes@google.com>,
-        Steven Rostedt <rostedt@goodmis.org>, wfg@linux.intel.com,
-        Felix Guo <felixguoxiuping@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <alpine.DEB.2.21.1906260832470.32342@nanos.tec.linutronix.de>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Jun 25, 2019 at 5:01 PM Luis Chamberlain <mcgrof@kernel.org> wrote:
->
-> On Mon, Jun 17, 2019 at 01:26:08AM -0700, Brendan Higgins wrote:
-> >  create mode 100644 tools/testing/kunit/test_data/test_is_test_passed-all_passed.log
-> >  create mode 100644 tools/testing/kunit/test_data/test_is_test_passed-crash.log
-> >  create mode 100644 tools/testing/kunit/test_data/test_is_test_passed-failure.log
-> >  create mode 100644 tools/testing/kunit/test_data/test_is_test_passed-no_tests_run.log
-> >  create mode 100644 tools/testing/kunit/test_data/test_output_isolated_correctly.log
-> >  create mode 100644 tools/testing/kunit/test_data/test_read_from_file.kconfig
->
-> Why are these being added upstream? The commit log does not explain
-> this.
+Hi Thomas,
 
-Oh sorry, those are for testing purposes. I thought that was clear
-from being in the test_data directory. I will reference it in the
-commit log in the next revision.
+On 26/06/2019 07:38, Thomas Gleixner wrote:
+> On Tue, 25 Jun 2019, Thomas Gleixner wrote:
+>> On Tue, 25 Jun 2019, Vincenzo Frascino wrote:
+>>> do_hres() in the vDSO generic library masks the hw counter value
+>>> immediately after reading it.
+>>>
+>>> Postpone the mask application after checking if the syscall fallback is
+>>> enabled, in order to be able to detect a possible fallback for the
+>>> architectures that have masks smaller than ULLONG_MAX.
+>>
+>> Right. This only worked on x86 because the mask is there ULLONG_MAX for all
+>> VDSO capable clocksources, i.e. that ever worked just by chance.
+> 
+> But it's actually worse than that:
+> 
+>>> +		cycles &= vd->mask;
+>>>  		if (cycles > last)
+>>>  			ns += (cycles - last) * vd->mult;
+>>>  		ns >>= vd->shift;
+> 
+> This is broken for any clocksource which can legitimately wrap around. The
+> core timekeeping does the right thing:
+> 
+>      		 (cycles - last) & mask
+> 
+> That makes sure that a wraparound is correctly handled. With the above the
+> wrap around would be ignored due to
+> 
+>      	    if (cycles > last)
+> 
+
+You are right. Thanks for spotting it.
+
+
+...
+
+-- 
+Regards,
+Vincenzo
