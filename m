@@ -2,155 +2,156 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 777AB56FF9
-	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Jun 2019 19:51:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F4F457028
+	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Jun 2019 20:00:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726739AbfFZRvm (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 26 Jun 2019 13:51:42 -0400
-Received: from userp2120.oracle.com ([156.151.31.85]:44468 "EHLO
-        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726718AbfFZRvm (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 26 Jun 2019 13:51:42 -0400
-Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
-        by userp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x5QHd3BJ070052;
-        Wed, 26 Jun 2019 17:50:48 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=subject : to : cc :
- references : from : message-id : date : mime-version : in-reply-to :
- content-type : content-transfer-encoding; s=corp-2018-07-02;
- bh=pJtn37VVzLHGgxTNqg1ZlS6RKLrOq382izwrBCZb3DI=;
- b=EcEEEMWgDEbMDuMxTOR2oYeCSXUOQKHZ4+B/a0CiekDLmP8Z1U885QaSBhgXo+/oVJZ3
- SGbnV6cXs+U0YG4HT3njZ/iUUzFIuHHOFK70cZEOdOGApbgKUYX3eCJLdfQ3dKwGSNIl
- owHPVd1m79tjE2KLbk7nGdMWhkLr/F3ZBkkDI9hHrhy/y/e6IptZoUUgS8HTk7grA8Ud
- Bf4hJAICEUZKsbR/1JYmjjWhp4n+uI1QfmV/GKfsvqZ6rJZc12bBVgqeF5v8xkJ16pFz
- 7wdP2Bakv0UvCbjPcmfUTGeqmf+Xk2K6+wWohnQ4b4rai+Y/+koOAVyMxoOJaa/ojH8K NA== 
-Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by userp2120.oracle.com with ESMTP id 2t9cyqks50-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 26 Jun 2019 17:50:48 +0000
-Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x5QHolV1005117;
-        Wed, 26 Jun 2019 17:50:47 GMT
-Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
-        by aserp3020.oracle.com with ESMTP id 2t9p6uwkss-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 26 Jun 2019 17:50:47 +0000
-Received: from abhmp0005.oracle.com (abhmp0005.oracle.com [141.146.116.11])
-        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id x5QHofTs013200;
-        Wed, 26 Jun 2019 17:50:42 GMT
-Received: from [10.65.138.107] (/10.65.138.107)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Wed, 26 Jun 2019 10:50:41 -0700
-Subject: Re: [PATCH v18 10/15] drm/radeon: untag user pointers in
- radeon_gem_userptr_ioctl
-To:     Andrey Konovalov <andreyknvl@google.com>,
-        linux-arm-kernel@lists.infradead.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, amd-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, linux-rdma@vger.kernel.org,
-        linux-media@vger.kernel.org, kvm@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Will Deacon <will.deacon@arm.com>,
-        Mark Rutland <mark.rutland@arm.com>,
+        id S1726526AbfFZSAV (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 26 Jun 2019 14:00:21 -0400
+Received: from mail.kernel.org ([198.145.29.99]:50920 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726042AbfFZSAV (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 26 Jun 2019 14:00:21 -0400
+Received: from willie-the-truck (236.31.169.217.in-addr.arpa [217.169.31.236])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id F091421743;
+        Wed, 26 Jun 2019 18:00:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1561572020;
+        bh=2PbofuwurM+ISBZum6zAmb0DbBhn5nmO6RtvICX+oNk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=VNMCqAjmSm9l09A4yBzOXHlXjlBaOnorMK7lzF3w2kmIHYW3h8tdm4clg87l5WOCJ
+         1T7oVm4JjXy56Xqx0xrwMCEQiOk1QjWupMdgAkM2oPV4tkK48k4Xbh5AilQT9fsAii
+         M9MfdEALYkf/x2XzNUCr9dDJdYgoMOWaJ5iFRSso=
+Date:   Wed, 26 Jun 2019 19:00:13 +0100
+From:   Will Deacon <will@kernel.org>
+To:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc:     Will Deacon <will.deacon@arm.com>, shuah <shuah@kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Joel Fernandes <joelaf@google.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Dave Watson <davejwatson@fb.com>,
+        Andi Kleen <andi@firstfloor.org>,
+        linux-kselftest <linux-kselftest@vger.kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>, Chris Lameter <cl@linux.com>,
+        Russell King <linux@arm.linux.org.uk>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        "Paul E . McKenney" <paulmck@linux.vnet.ibm.com>,
+        Paul Turner <pjt@google.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Josh Triplett <josh@joshtriplett.org>,
+        rostedt <rostedt@goodmis.org>, Ben Maurer <bmaurer@fb.com>,
+        linux-api <linux-api@vger.kernel.org>,
+        Andy Lutomirski <luto@amacapital.net>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Kees Cook <keescook@chromium.org>,
-        Yishai Hadas <yishaih@mellanox.com>,
-        Felix Kuehling <Felix.Kuehling@amd.com>,
-        Alexander Deucher <Alexander.Deucher@amd.com>,
-        Christian Koenig <Christian.Koenig@amd.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Jens Wiklander <jens.wiklander@linaro.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
-        Dave Martin <Dave.Martin@arm.com>, enh <enh@google.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Christoph Hellwig <hch@infradead.org>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Kostya Serebryany <kcc@google.com>,
-        Evgeniy Stepanov <eugenis@google.com>,
-        Lee Smith <Lee.Smith@arm.com>,
-        Ramana Radhakrishnan <Ramana.Radhakrishnan@arm.com>,
-        Jacob Bramley <Jacob.Bramley@arm.com>,
-        Ruben Ayrapetyan <Ruben.Ayrapetyan@arm.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Kevin Brodsky <kevin.brodsky@arm.com>,
-        Szabolcs Nagy <Szabolcs.Nagy@arm.com>
-References: <cover.1561386715.git.andreyknvl@google.com>
- <61d800c35a4f391218fbca6f05ec458557d8d097.1561386715.git.andreyknvl@google.com>
-From:   Khalid Aziz <khalid.aziz@oracle.com>
-Organization: Oracle Corp
-Message-ID: <28554e21-04b8-2461-e576-5abe0b53cd59@oracle.com>
-Date:   Wed, 26 Jun 2019 11:50:39 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        carlos <carlos@redhat.com>, Florian Weimer <fweimer@redhat.com>
+Subject: Re: [RFC PATCH 1/1] Revert "rseq/selftests: arm: use udf instruction
+ for RSEQ_SIG"
+Message-ID: <20190626180012.q6deohrtzwpbhqky@willie-the-truck>
+References: <20190617152304.23371-1-mathieu.desnoyers@efficios.com>
+ <20190624172429.GA11133@fuggles.cambridge.arm.com>
+ <1620037196.377.1561400426591.JavaMail.zimbra@efficios.com>
+ <20190625091507.GA13263@fuggles.cambridge.arm.com>
+ <795143697.722.1561471732756.JavaMail.zimbra@efficios.com>
 MIME-Version: 1.0
-In-Reply-To: <61d800c35a4f391218fbca6f05ec458557d8d097.1561386715.git.andreyknvl@google.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: quoted-printable
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9300 signatures=668687
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
- phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=999
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.0.1-1810050000 definitions=main-1906260208
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9300 signatures=668687
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
- suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
- lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1810050000
- definitions=main-1906260208
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <795143697.722.1561471732756.JavaMail.zimbra@efficios.com>
+User-Agent: NeoMutt/20170113 (1.7.2)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 6/24/19 8:32 AM, Andrey Konovalov wrote:
-> This patch is a part of a series that extends kernel ABI to allow to pa=
-ss
-> tagged user pointers (with the top byte set to something else other tha=
-n
-> 0x00) as syscall arguments.
->=20
-> In radeon_gem_userptr_ioctl() an MMU notifier is set up with a (tagged)=
+On Tue, Jun 25, 2019 at 10:08:52AM -0400, Mathieu Desnoyers wrote:
+> ----- On Jun 25, 2019, at 5:15 AM, Will Deacon will.deacon@arm.com wrote:
+> > On Mon, Jun 24, 2019 at 02:20:26PM -0400, Mathieu Desnoyers wrote:
+> >> ----- On Jun 24, 2019, at 1:24 PM, Will Deacon will.deacon@arm.com wrote:
+> >> > On Mon, Jun 17, 2019 at 05:23:04PM +0200, Mathieu Desnoyers wrote:
+> >> >> -#define RSEQ_SIG_CODE	0xe7f5def3
+> >> >> -
+> >> >> -#ifndef __ASSEMBLER__
+> >> >> -
+> >> >> -#define RSEQ_SIG_DATA							\
+> >> >> -	({								\
+> >> >> -		int sig;						\
+> >> >> -		asm volatile ("b 2f\n\t"				\
+> >> >> -			      "1: .inst " __rseq_str(RSEQ_SIG_CODE) "\n\t" \
+> >> >> -			      "2:\n\t"					\
+> >> >> -			      "ldr %[sig], 1b\n\t"			\
+> >> >> -			      : [sig] "=r" (sig));			\
+> >> >> -		sig;							\
+> >> >> -	})
+> >> >> -
+> >> >> -#define RSEQ_SIG	RSEQ_SIG_DATA
+> >> >> -
+> >> >> -#endif
+> >> >> +#define RSEQ_SIG	0x53053053
+> >> > 
+> >> > I don't get why you're reverting back to this old signature value, when the
+> >> > one we came up with will work well when interpreted as an instruction in the
+> >> > *vast* majority of scenarios that people care about (A32/T32 little-endian).
+> >> > I think you might be under-estimating just how dead things like BE32 really
+> >> > are.
+> >> 
+> >> My issue is that the current .instr approach is broken for programs or functions
+> >> built in Thumb mode, and I received no feedback on the solutions I proposed for
+> >> those issues, which led me to propose a patch reverting to a simple .word.
+> > 
+> > I understand why you're moving from .inst to .word, but I don't understand
+> > why that necessitates a change in the value. Why not .word 0xe7f5def3 ? You
+> > could also flip the bytes around in case of big-endian, which would keep the
+> > instruction coding clean for BE8.
+> 
+> As long as we state and document that this should not be expected to generate
+> valid instructions on big endian prior to ARMv6, I'm OK with that approach, e.g.:
+> 
+> /*
+>  * - ARM little endian
+>  *
+>  * RSEQ_SIG uses the udf A32 instruction with an uncommon immediate operand
+>  * value 0x5de3. This traps if user-space reaches this instruction by mistake,
+>  * and the uncommon operand ensures the kernel does not move the instruction
+>  * pointer to attacker-controlled code on rseq abort.
+>  *
+>  * The instruction pattern in the A32 instruction set is:
+>  *
+>  * e7f5def3    udf    #24035    ; 0x5de3
+>  *
+>  * This translates to the following instruction pattern in the T16 instruction
+>  * set:
+>  *
+>  * little endian:
+>  * def3        udf    #243      ; 0xf3
+>  * e7f5        b.n    <7f5>
+>  *
+>  * - ARMv6+ big endian:
 
-> userspace pointer. The untagged address should be used so that MMU
-> notifiers for the untagged address get correctly matched up with the ri=
-ght
-> BO. This funcation also calls radeon_ttm_tt_pin_userptr(), which uses
-> provided user pointers for vma lookups, which can only by done with
-> untagged pointers.
->=20
-> This patch untags user pointers in radeon_gem_userptr_ioctl().
->=20
-> Suggested-by: Felix Kuehling <Felix.Kuehling@amd.com>
-> Acked-by: Felix Kuehling <Felix.Kuehling@amd.com>
-> Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
-> ---
+Maybe mention "(BE8)" here...
 
-Reviewed-by: Khalid Aziz <khalid.aziz@oracle.com>
+>  *
+>  * ARMv6+ -mbig-endian generates mixed endianness code vs data: little-endian
+>  * code and big-endian data. The data value of the signature needs to have its
+>  * byte order reversed to generate the trap instruction:
+>  *
+>  * Data: 0xf3def5e7
+>  *
+>  * Translates to this A32 instruction pattern:
+>  *
+>  * e7f5def3    udf    #24035    ; 0x5de3
+>  *
+>  * Translates to this T16 instruction pattern:
+>  *
+>  * def3        udf    #243      ; 0xf3
+>  * e7f5        b.n    <7f5>
+>  *
+>  * - Prior to ARMv6 big endian:
 
+... and "(BE32)" here.
 
->  drivers/gpu/drm/radeon/radeon_gem.c | 2 ++
->  1 file changed, 2 insertions(+)
->=20
-> diff --git a/drivers/gpu/drm/radeon/radeon_gem.c b/drivers/gpu/drm/rade=
-on/radeon_gem.c
-> index 44617dec8183..90eb78fb5eb2 100644
-> --- a/drivers/gpu/drm/radeon/radeon_gem.c
-> +++ b/drivers/gpu/drm/radeon/radeon_gem.c
-> @@ -291,6 +291,8 @@ int radeon_gem_userptr_ioctl(struct drm_device *dev=
-, void *data,
->  	uint32_t handle;
->  	int r;
-> =20
-> +	args->addr =3D untagged_addr(args->addr);
-> +
->  	if (offset_in_page(args->addr | args->size))
->  		return -EINVAL;
-> =20
->=20
+With that, this looks fine to me.
 
-
+Will
