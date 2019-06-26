@@ -2,410 +2,240 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6247557131
-	for <lists+linux-kselftest@lfdr.de>; Wed, 26 Jun 2019 21:01:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DEE757408
+	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Jun 2019 00:02:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726643AbfFZTBM (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 26 Jun 2019 15:01:12 -0400
-Received: from foss.arm.com ([217.140.110.172]:39258 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726104AbfFZTBM (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 26 Jun 2019 15:01:12 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4D1C0360;
-        Wed, 26 Jun 2019 12:01:10 -0700 (PDT)
-Received: from [192.168.1.18] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5B7403F718;
-        Wed, 26 Jun 2019 12:01:07 -0700 (PDT)
-Subject: Re: [PATCH v7 04/25] arm64: Substitute gettimeofday with C
- implementation
-To:     Dave Martin <Dave.Martin@arm.com>
-Cc:     linux-arch@vger.kernel.org, Shijith Thotton <sthotton@marvell.com>,
-        Peter Collingbourne <pcc@google.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Huw Davies <huw@codeweavers.com>,
-        Andre Przywara <andre.przywara@arm.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Will Deacon <will.deacon@arm.com>,
-        linux-kernel@vger.kernel.org, Ralf Baechle <ralf@linux-mips.org>,
-        linux-mips@vger.kernel.org, Paul Burton <paul.burton@mips.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        linux-kselftest@vger.kernel.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Dmitry Safonov <0x7f454c46@gmail.com>,
-        Mark Salyzyn <salyzyn@android.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-arm-kernel@lists.infradead.org
-References: <20190621095252.32307-1-vincenzo.frascino@arm.com>
- <20190621095252.32307-5-vincenzo.frascino@arm.com>
- <20190625153336.GZ2790@e103592.cambridge.arm.com>
- <f5ac379a-731d-0662-2f5b-bd046e3bd1c5@arm.com>
- <20190626161413.GA2790@e103592.cambridge.arm.com>
-From:   Vincenzo Frascino <vincenzo.frascino@arm.com>
-Message-ID: <19ebd45a-b666-d7de-fd9e-2b72e18892d9@arm.com>
-Date:   Wed, 26 Jun 2019 20:01:58 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
+        id S1726514AbfFZWCI (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 26 Jun 2019 18:02:08 -0400
+Received: from mail-pl1-f194.google.com ([209.85.214.194]:45322 "EHLO
+        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726239AbfFZWCI (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 26 Jun 2019 18:02:08 -0400
+Received: by mail-pl1-f194.google.com with SMTP id bi6so64257plb.12;
+        Wed, 26 Jun 2019 15:02:07 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=pncFvuTLXYoGgXNL3R5Dcm7FSED9aawZhvXRFRAEX+A=;
+        b=qlEgw395ghPvC+yDS3vsPVTH7HWypVC1lFGRLN7WDUaWm0ZCKVx4zxOtnpjrcfDg2S
+         BYA1yUeYqyjHUcuJHMaBr8LfpqCWdzmos3L8GuqxqL+9BuMNvZ3VbyWZhqBZmOGOHTEK
+         Hg85NspCe260MK0NcLGpCvNdTKr/9p3ud9HaVBuEFHIh4hFD8kwhs2AEGr07R4ONKrlV
+         j1O3jj46gYNFH+knqiBITQnUL+rUwzUYJ21BcBBZmXK8O5ECvDDt1RA4FcOFFpOuG0jo
+         E8/Bi5EB899dSgWabgp4ZOG93QF3YlSpYGctc6bXgFyyc2qNyA+2otWbJN1/+Wy933sN
+         kBpg==
+X-Gm-Message-State: APjAAAUZz+A+7DNjhbAfy+txgmv+SBg5fESLp7BvePfbZaX9UrFO799U
+        gqMWMFxryYae0+0G38yJiDE=
+X-Google-Smtp-Source: APXvYqz2bPP4PqTF9BuVt2O9juLFvMSSMYKeoVt6+esjv4Dsli0F9B+q17JOFwfl4ENv66EipVz4ng==
+X-Received: by 2002:a17:902:a517:: with SMTP id s23mr381726plq.306.1561586526522;
+        Wed, 26 Jun 2019 15:02:06 -0700 (PDT)
+Received: from 42.do-not-panic.com (42.do-not-panic.com. [157.230.128.187])
+        by smtp.gmail.com with ESMTPSA id t13sm3933781pjo.13.2019.06.26.15.02.04
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Wed, 26 Jun 2019 15:02:05 -0700 (PDT)
+Received: by 42.do-not-panic.com (Postfix, from userid 1000)
+        id 67612401D0; Wed, 26 Jun 2019 22:02:04 +0000 (UTC)
+Date:   Wed, 26 Jun 2019 22:02:04 +0000
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Brendan Higgins <brendanhiggins@google.com>
+Cc:     Stephen Boyd <sboyd@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Kees Cook <keescook@google.com>,
+        Kieran Bingham <kieran.bingham@ideasonboard.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Rob Herring <robh@kernel.org>, shuah <shuah@kernel.org>,
+        Theodore Ts'o <tytso@mit.edu>,
+        Masahiro Yamada <yamada.masahiro@socionext.com>,
+        devicetree <devicetree@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        kunit-dev@googlegroups.com,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        linux-fsdevel@vger.kernel.org,
+        linux-kbuild <linux-kbuild@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        linux-nvdimm <linux-nvdimm@lists.01.org>,
+        linux-um@lists.infradead.org,
+        Sasha Levin <Alexander.Levin@microsoft.com>,
+        "Bird, Timothy" <Tim.Bird@sony.com>,
+        Amir Goldstein <amir73il@gmail.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Daniel Vetter <daniel@ffwll.ch>, Jeff Dike <jdike@addtoit.com>,
+        Joel Stanley <joel@jms.id.au>,
+        Julia Lawall <julia.lawall@lip6.fr>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Knut Omang <knut.omang@oracle.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Petr Mladek <pmladek@suse.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Richard Weinberger <richard@nod.at>,
+        David Rientjes <rientjes@google.com>,
+        Steven Rostedt <rostedt@goodmis.org>, wfg@linux.intel.com
+Subject: Re: [PATCH v5 01/18] kunit: test: add KUnit test runner core
+Message-ID: <20190626220204.GZ19023@42.do-not-panic.com>
+References: <20190617082613.109131-1-brendanhiggins@google.com>
+ <20190617082613.109131-2-brendanhiggins@google.com>
+ <20190620001526.93426218BE@mail.kernel.org>
+ <CAFd5g46Jhxsz6_VXHEVYvTeDRwwzgKpr=aUWLL5b3S4kUukb8g@mail.gmail.com>
+ <20190625214427.GN19023@42.do-not-panic.com>
+ <CAFd5g47OABqN127cPKqoCOA_Wr9w=LFh_0XkF7LXu2iY9sFkSw@mail.gmail.com>
+ <20190625230253.GQ19023@42.do-not-panic.com>
+ <CAFd5g45fSdpytudDyD3Yo1ti=kU_JJ6S9yz53_L=pnZTjQFU9A@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20190626161413.GA2790@e103592.cambridge.arm.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAFd5g45fSdpytudDyD3Yo1ti=kU_JJ6S9yz53_L=pnZTjQFU9A@mail.gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Dave,
+On Tue, Jun 25, 2019 at 11:41:47PM -0700, Brendan Higgins wrote:
+> On Tue, Jun 25, 2019 at 4:02 PM Luis Chamberlain <mcgrof@kernel.org> wrote:
+> >
+> > On Tue, Jun 25, 2019 at 03:14:45PM -0700, Brendan Higgins wrote:
+> > > On Tue, Jun 25, 2019 at 2:44 PM Luis Chamberlain <mcgrof@kernel.org> wrote:
+> > > > Since its a new architecture and since you seem to imply most tests
+> > > > don't require locking or even IRQs disabled, I think its worth to
+> > > > consider the impact of adding such extreme locking requirements for
+> > > > an initial ramp up.
+> > >
+> > > Fair enough, I can see the point of not wanting to use irq disabled
+> > > until we get someone complaining about it, but I think making it
+> > > thread safe is reasonable. It means there is one less thing to confuse
+> > > a KUnit user and the only penalty paid is some very minor performance.
+> >
+> > One reason I'm really excited about kunit is speed... so by all means I
+> > think we're at a good point to analyze performance optimizationsm if
+> > they do make sense.
+> 
+> Yeah, but I think there are much lower hanging fruit than this (as you
+> point out below). I am all for making/keeping KUnit super fast, but I
+> also don't want to waste time with premature optimizations and I think
+> having thread safe expectations and non-thread safe expectations hurts
+> usability.
+> 
+> Still, I am on board with making this a mutex instead of a spinlock for now.
+> 
+> > While on the topic of parallization, what about support for running
+> > different test cases in parallel? Or at the very least different kunit
+> > modules in parallel.  Few questions come up based on this prospect:
+> >
+> >   * Why not support parallelism from the start?
+> 
+> Just because it is more work and there isn't much to gain from it right now.
+> 
+> Some numbers:
+> I currently have a collection of 86 test cases in the branch that this
+> patchset is from.
 
-thank you for the quick turn around.
+Impressive, imagine 86 tests and kunit is not even *merged yet*.
 
-On 6/26/19 5:14 PM, Dave Martin wrote:
-> On Wed, Jun 26, 2019 at 02:27:59PM +0100, Vincenzo Frascino wrote:
->> Hi Dave,
->>
->> On 25/06/2019 16:33, Dave Martin wrote:
->>> On Fri, Jun 21, 2019 at 10:52:31AM +0100, Vincenzo Frascino wrote:
->>>> To take advantage of the commonly defined vdso interface for
->>>> gettimeofday the architectural code requires an adaptation.
->>>>
->>>> Re-implement the gettimeofday vdso in C in order to use lib/vdso.
->>>>
->>>> With the new implementation arm64 gains support for CLOCK_BOOTTIME
->>>> and CLOCK_TAI.
->>>>
->>>> Cc: Catalin Marinas <catalin.marinas@arm.com>
->>>> Cc: Will Deacon <will.deacon@arm.com>
->>>> Signed-off-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
->>>> Tested-by: Shijith Thotton <sthotton@marvell.com>
->>>> Tested-by: Andre Przywara <andre.przywara@arm.com>
->>>
->>> [...]
->>>
->>>> diff --git a/arch/arm64/include/asm/vdso/gettimeofday.h b/arch/arm64/include/asm/vdso/gettimeofday.h
->>>> new file mode 100644
->>>> index 000000000000..bc3cb6738051
->>>> --- /dev/null
->>>> +++ b/arch/arm64/include/asm/vdso/gettimeofday.h
->>>> @@ -0,0 +1,86 @@
->>>> +/* SPDX-License-Identifier: GPL-2.0 */
->>>> +/*
->>>> + * Copyright (C) 2018 ARM Limited
->>>> + */
->>>> +#ifndef __ASM_VDSO_GETTIMEOFDAY_H
->>>> +#define __ASM_VDSO_GETTIMEOFDAY_H
->>>> +
->>>> +#ifndef __ASSEMBLY__
->>>> +
->>>> +#include <asm/unistd.h>
->>>> +#include <uapi/linux/time.h>
->>>> +
->>>> +#define VDSO_HAS_CLOCK_GETRES		1
->>>> +
->>>> +static __always_inline int gettimeofday_fallback(
->>>> +					struct __kernel_old_timeval *_tv,
->>>> +					struct timezone *_tz)
->>>
->>> Out of interest, does this need to be __always_inline?
->>>
->>
->> It is a design choice. Philosophically, I prefer to control and reduce the scope
->> of the decisions the compiler has to make in order to not have surprises.
->>
->>>> +{
->>>> +	register struct timezone *tz asm("x1") = _tz;
->>>> +	register struct __kernel_old_timeval *tv asm("x0") = _tv;
->>>> +	register long ret asm ("x0");
->>>> +	register long nr asm("x8") = __NR_gettimeofday;
->>>> +
->>>> +	asm volatile(
->>>> +	"       svc #0\n"
->>>
->>> Can inlining of this function result in non-trivial expressions being
->>> substituted for _tz or _tv?
->>>
->>> A function call can clobber register asm vars that are assigned to the
->>> caller-save registers or that the PCS uses for function arguments, and
->>> the situations where this can happen are poorly defined AFAICT.  There's
->>> also no reliable way to detect at build time whether the compiler has
->>> done this, and no robust way to stop if happening.
->>>
->>> (IMHO the compiler is wrong to do this, but it's been that way for ever,
->>> and I think I saw GCC 9 show this behaviour recently when I was
->>> investigating something related.)
->>>
->>>
->>> To be safe, it's better to put this out of line, or remove the reg asm()
->>> specifiers, mark x0-x18 and lr as clobbered here (so that the compiler
->>> doesn't map arguments to them), and put movs in the asm to move things
->>> into the right registers.  The syscall number can be passed with an "i"
->>> constraint.  (And yes, this sucks.)
->>>
->>> If the code this is inlined in is simple enough though, we can be fairly
->>> confident of getting away with it.
->>>
->>
->> I took very seriously what you are mentioning here because I think
->> that robustness of the code comes before than everything especially
->> in the kernel and I carried on some experiments to try to verify if
->> in this case is safe to assume that the compiler is doing the right
->> thing.
->>
->> Based on my investigation and on previous observations of the
->> generation of the vDSO library, I can conclude that the approach
->> seems safe due to the fact that the usage of this code is very
->> limited, the code itself is simple enough and that gcc would inline
->> this code anyway based on the current compilation options.
-> 
-> I'd caution about "seems safe".  A lot of subtly wrong code not only
-> seems safe, but _is_ safe in its original context, in practice.  Add
-> some code to the vdso over time though, or tweak the compilation options
-> at some point in the future, or use a different compiler, and things
-> could still go wrong.
-> 
-> (Further comments below.)
-> 
+> I turned on PRINTK_TIME and looked at the first
+> KUnit output and the last. On UML, start time was 0.090000, and end
+> time was 0.090000. Looks like sched_clock is not very good on UML.
 
-Allow me to provide a clarification on "seems safe" vs "is safe": my approach
-"seems safe" because I am providing empirical evidence to support my thesis, but
-I guess we both know that there is no simple way to prove in one way or another
-that the problem has a complete solution.
-The proposed problem involves suppositions on potential future code additions
-and changes of behavior of the compiler that I can't either control or prevent.
-In other words, I can comment and propose solutions only based on the current
-status of the things, and it is what my analysis targets, not on what will
-happen in future.
+Since you have a python thing that kicks tests, what if you just run
+time on it?
 
-I will reply point by point below.
+> Still it seems quite likely that all of these tests run around 0.01
+> seconds or less on UML: I ran KUnit with only 2 test cases enabled
+> three times and got an average runtime of 1.55867 seconds with a
+> standard deviation of 0.0346747. I then ran it another three times
+> with all test cases enabled and got an average runtime of 1.535
+> seconds with a standard deviation of 0.0150997. The second average is
+> less, but that doesn't really mean anything because it is well within
+> one standard deviation with a very small sample size. Nevertheless, we
+> can conclude that the actual runtime of those 84 test cases is most
+> likely within one standard deviation, so on the order of 0.01 seconds.
+> 
+> On x86 running on QEMU, first message from KUnit was printed at
+> 0.194251 and the last KUnit message was printed at 0.340915, meaning
+> that all 86 test cases ran in about 0.146664 seconds.
 
->> The experiment that I did was to define some self-contained code that
->> tries to mimic what you are describing and compile it with 3
->> different versions of gcc (6.4, 8.1 and 8.3) and in all the tree
->> cases the behavior seems correct.
->>
->> Code:
->> =====
->>
->> typedef int ssize_t;
->> typedef int size_t;
->>
->> static int my_strlen(const char *s)
->> {
->> 	int i = 0;
->>
->> 	while (s[i] == '\0')
->> 		i++;
->>
->> 	return i;
->> }
->>
->> static inline ssize_t my_syscall(int fd, const void *buf, size_t count)
->> {
->> 	register ssize_t arg1 asm ("x0") = fd;
->> 	register const void *arg2 asm ("x1") = buf;
->> 	register size_t arg3 asm ("x2") = count;
->>
->> 	__asm__ volatile (
->> 		"mov x8, #64\n"
->> 		"svc #0\n"
->> 		: "=&r" (arg1)
->> 		: "r" (arg2), "r" (arg3)
->> 		: "x8"
->>         );
->>
->>         return arg1;
->> }
->>
->> void sys_caller(const char *s)
->> {
->> 	my_syscall(1, s, my_strlen(s));
->> }
->>
->>
->> GCC 8.3.0:
->> ==========
->>
->> main.8.3.0.o:     file format elf64-littleaarch64
->>
->>
->> Disassembly of section .text:
->>
->> 0000000000000000 <sys_caller>:
->>    0:	39400001 	ldrb	w1, [x0]
->>    4:	35000161 	cbnz	w1, 30 <sys_caller+0x30>
->>    8:	d2800023 	mov	x3, #0x1                   	// #1
->>    c:	d1000404 	sub	x4, x0, #0x1
->>   10:	2a0303e2 	mov	w2, w3
->>   14:	91000463 	add	x3, x3, #0x1
->>   18:	38636881 	ldrb	w1, [x4, x3]
->>   1c:	34ffffa1 	cbz	w1, 10 <sys_caller+0x10>
->>   20:	aa0003e1 	mov	x1, x0
->>   24:	d2800808 	mov	x8, #0x40                  	// #64
->>   28:	d4000001 	svc	#0x0
->>   2c:	d65f03c0 	ret
->>   30:	52800002 	mov	w2, #0x0                   	// #0
->>   34:	17fffffb 	b	20 <sys_caller+0x20>
->>
->>
->> GCC 8.1.0:
->> ==========
->>
->> main.8.1.0.o:     file format elf64-littleaarch64
->>
->>
->> Disassembly of section .text:
->>
->> 0000000000000000 <sys_caller>:
->>    0:	39400001 	ldrb	w1, [x0]
->>    4:	35000161 	cbnz	w1, 30 <sys_caller+0x30>
->>    8:	d2800023 	mov	x3, #0x1                   	// #1
->>    c:	d1000404 	sub	x4, x0, #0x1
->>   10:	2a0303e2 	mov	w2, w3
->>   14:	91000463 	add	x3, x3, #0x1
->>   18:	38636881 	ldrb	w1, [x4, x3]
->>   1c:	34ffffa1 	cbz	w1, 10 <sys_caller+0x10>
->>   20:	aa0003e1 	mov	x1, x0
->>   24:	d2800808 	mov	x8, #0x40                  	// #64
->>   28:	d4000001 	svc	#0x0
->>   2c:	d65f03c0 	ret
->>   30:	52800002 	mov	w2, #0x0                   	// #0
->>   34:	17fffffb 	b	20 <sys_caller+0x20>
->>
->>
->>
->> GCC 6.4.0:
->> ==========
->>
->> main.6.4.0.o:     file format elf64-littleaarch64
->>
->>
->> Disassembly of section .text:
->>
->> 0000000000000000 <sys_caller>:
->>    0:	39400001 	ldrb	w1, [x0]
->>    4:	35000161 	cbnz	w1, 30 <sys_caller+0x30>
->>    8:	d2800023 	mov	x3, #0x1                   	// #1
->>    c:	d1000404 	sub	x4, x0, #0x1
->>   10:	2a0303e2 	mov	w2, w3
->>   14:	91000463 	add	x3, x3, #0x1
->>   18:	38636881 	ldrb	w1, [x4, x3]
->>   1c:	34ffffa1 	cbz	w1, 10 <sys_caller+0x10>
->>   20:	aa0003e1 	mov	x1, x0
->>   24:	d2800808 	mov	x8, #0x40                  	// #64
->>   28:	d4000001 	svc	#0x0
->>   2c:	d65f03c0 	ret
->>   30:	52800002 	mov	w2, #0x0                   	// #0
->>   34:	17fffffb 	b	20 <sys_caller+0x20>
-> 
-> Thanks for having a go at this.  If the compiler can show the
-> problematic behaviour, it looks like your could could probably trigger
-> it, and as you observe, it doesn't trigger.
-> 
-> I am sure I have seen it in the past, but today I am struggling
-> to tickle the compiler in the right way.  My original reproducer may
-> have involved LTO, but either way I don't still have it :(
->
+Pretty impressive numbers. But can you blame me for expressing the
+desire to possibly being able to do better? I am not saying -- let's
+definitely have parallelism in place *now*. Just wanted to hear out
+tangibles of why we *don't* want it now.
 
-vDSO library is a shared object not compiled with LTO as far as I can see, hence
-if this involved LTO should not applicable in this case.
+And.. also, since we are reviewing now, try to target so that the code
+can later likely get a face lift to support parallelism without
+requiring much changes.
 
+> In any case, running KUnit tests in parallel is definitely something I
+> plan on adding it eventually, but it just doesn't really seem worth it
+> right now.
 
-> 
-> The classic example of this (triggered directly and not due to inlining)
-> would be something like:
-> 
-> int bar(int, int);
-> 
-> void foo(int x, int y)
-> {
-> 	register int x_ asm("r0") = x;
-> 	register int y_ asm("r1") = bar(x, y);
-> 
-> 	asm volatile (
-> 		"svc	#0"
-> 		:: "r" (x_), "r" (y_)
-> 		: "memory"
-> 	);
-> }
-> 
-> ->
-> 
-> 0000000000000000 <foo>:
->    0:   a9bf7bfd        stp     x29, x30, [sp, #-16]!
->    4:   910003fd        mov     x29, sp
->    8:   94000000        bl      0 <bar>
->    c:   2a0003e1        mov     w1, w0
->   10:   d4000001        svc     #0x0
->   14:   a8c17bfd        ldp     x29, x30, [sp], #16
->   18:   d65f03c0        ret
->
+Makes sense!
 
-Contextualized to what my vdso fallback functions do, this should not be a
-concern because in no case a function result is directly set to a variable
-declared as register.
+> I find the incremental build time of the kernel to
+> typically be between 3 and 30 seconds, and a clean build to be between
+> 30 seconds to several minutes, depending on the number of available
+> cores, so I don't think most users would even notice the amount of
+> runtime contributed by the actual unit tests until we start getting
+> into the 1000s of test cases. I don't suspect it will become an issue
+> until we get into the 10,000s of test cases. I think we are a pretty
+> long way off from that.
 
-Since the vdso fallback functions serve a very specific and limited purpose, I
-do not expect that that code is going to change much in future.
+All makes sense, and agreed based on the numbers you are providing.
+Thanks for the details!
 
-The only thing that can happen is something similar to what I wrote in my
-example, which as I empirically proved does not trigger the problematic behavior.
+> >   * Are you opposed to eventually having this added? For instance, there is
+> >     enough code on lib/test_kmod.c for batching tons of kthreads each
+> >     one running its own thing for testing purposes which could be used
+> >     as template.
+> 
+> I am not opposed to adding it eventually at all. I actually plan on
+> doing so, just not in this patchset. There are a lot of additional
+> features, improvements, and sugar that I really want to add, so much
+> so that most of it doesn't belong in this patchset; I just think this
+> is one of those things that belongs in a follow up. I tried to boil
+> down this patchset to as small as I could while still being useful;
+> this is basically an MVP. Maybe after this patchset gets merged I
+> should post a list of things I have ready for review, or would like to
+> work on, and people can comment on what things they want to see next.
 
-> 
-> The gcc documentation is vague and ambiguous about precisely whan this
-> can happen and about how to avoid it.
-> 
+Groovy.
 
-On this I agree, it is not very clear, but this seems more something to raise
-with the gcc folks in order to have a more "explicit" description that leaves no
-room to the interpretation.
+> >   * If we eventually *did* support it:
+> >     - Would logs be skewed?
+> 
+> Probably, before I went with the TAP approach, I was tagging each
+> message with the test case it came from and I could have parsed it and
+> assembled a coherent view of the logs using that; now that I am using
+> TAP conforming output, that won't work. I haven't really thought too
+> hard about how to address it, but there are ways. For the UML users, I
+> am planning on adding a feature to guarantee hermeticity between tests
+> running in different modules by adding a feature that allows a single
+> kernel to be built with all tests included, and then determine which
+> tests get run by passing in command line arguments or something. This
+> way you can get the isolation from running tests in separate
+> environments without increasing the build cost. We could also use this
+> method to achieve parallelism by dispatching multiple kernels at once.
 
-...
+Indeed. Or... wait for it... containers... There tools for these sorts
+of things already. And I'm evaluating such prospects now for some other
+tests I care for.
 
-> 
-> However, the workaround is cheap, and to avoid the chance of subtle
-> intermittent code gen bugs it may be worth it:
-> 
-> void foo(int x, int y)
-> {
-> 	asm volatile (
-> 		"mov	x0, %0\n\t"
-> 		"mov	x1, %1\n\t"
-> 		"svc	#0"
-> 		:: "r" (x), "r" (bar(x, y))
-> 		: "r0", "r1", "memory"
-> 	);
-> }
-> 
-> ->
-> 
-> 0000000000000000 <foo>:
->    0:   a9be7bfd        stp     x29, x30, [sp, #-32]!
->    4:   910003fd        mov     x29, sp
->    8:   f9000bf3        str     x19, [sp, #16]
->    c:   2a0003f3        mov     w19, w0
->   10:   94000000        bl      0 <bar>
->   14:   2a0003e2        mov     w2, w0
->   18:   aa1303e0        mov     x0, x19
->   1c:   aa0203e1        mov     x1, x2
->   20:   d4000001        svc     #0x0
->   24:   f9400bf3        ldr     x19, [sp, #16]
->   28:   a8c27bfd        ldp     x29, x30, [sp], #32
->   2c:   d65f03c0        ret
-> 
-> 
-> What do you think?
->
+> That only works for UML, but I imagine you could do something similar
+> for users running tests under qemu.
 
-The solution seems ok, thanks for providing it, but IMHO I think we should find
-a workaround for something that is broken, which, unless I am missing something
-major, this seems not the case.
+Or containers.
 
-> Cheers
-> ---Dave
+> >     - Could we have a way to query: give me log for only kunit module
+> >       named "foo"?
 > 
+> Yeah, I think that would make sense as part of the hermeticity thing I
+> mentioned above.
+> 
+> Hope that seems reasonable!
 
--- 
-Regards,
-Vincenzo
+All groovy. Thanks for the details!
+
+  Luis
