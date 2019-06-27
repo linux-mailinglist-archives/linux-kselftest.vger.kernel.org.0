@@ -2,67 +2,64 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C25165753B
-	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Jun 2019 02:05:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75B9E57577
+	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Jun 2019 02:23:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726669AbfF0AF2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 26 Jun 2019 20:05:28 -0400
-Received: from mail-pf1-f194.google.com ([209.85.210.194]:45545 "EHLO
-        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726489AbfF0AF1 (ORCPT
+        id S1726728AbfF0AXZ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 26 Jun 2019 20:23:25 -0400
+Received: from mail-pl1-f194.google.com ([209.85.214.194]:38706 "EHLO
+        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726489AbfF0AXZ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 26 Jun 2019 20:05:27 -0400
-Received: by mail-pf1-f194.google.com with SMTP id r1so245055pfq.12
-        for <linux-kselftest@vger.kernel.org>; Wed, 26 Jun 2019 17:05:26 -0700 (PDT)
+        Wed, 26 Jun 2019 20:23:25 -0400
+Received: by mail-pl1-f194.google.com with SMTP id g4so246632plb.5
+        for <linux-kselftest@vger.kernel.org>; Wed, 26 Jun 2019 17:23:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=KKZ1R9QgEMrkGcZ9YLvKRKzkpMRTcKXcwCOxP+teR7M=;
-        b=L8/gCEeRIbIoy4dFbDu3aEhSPRF7rPfAvmRCx3ItHECNXHr8HCgKjM5mXTC9wUyNb+
-         nrwS1zeX/UJfOPKYmEwGKVHcruUS1znp6TN5vQdfI6b+Y9H9BFcsfEseAINmMZxhStlc
-         TWZydfC6tN4zj88A97CBxhrzFDd0ti0kMTr/cu0YxAbGMXlEHBEdlOAi6SMiewszVXs4
-         tjHCgRLCojzI+WbS+S1y0aA/Xq96zu61RfJ8CIwkL7VdAC9ftOckX4/U6suQeLl1pxPk
-         S14J2HjbLRLV7EnZm9hwujt2kW8WGbocpgogTslAlxCeXfFnyXJuzl1ibcVD4NJR7iWw
-         Fh1w==
+        bh=c34/FfI7PALcZVh0MK4YlFiWvnY7m44Qb8oCZcTiVbU=;
+        b=a1r7b0eQqi65SnqqxyoyNoD4dz3PJJz11oTPJDYx1ctiFPDiwwrUHcLazOdtvx2h+b
+         BJ557GOrC/erbl4AklySqzJS15SQHRCyi1pl5V+Ls9UzeK+ybM4aUzx/S+y9D7ra9gXL
+         ud7lUYI/Zqb2M3pihkmgYamKJ46DHL/UUeQ91qNrgnYGOngk+Ky+30mJQ2BAC1N4CLmf
+         9YUjsBmnOgUwCj1x8uLgqFqywqoB2YH5RUIgldau68pKxTutIfleZKg6l9x3MWTSKJaB
+         ouNqg9FBjBvdFyIKXW5If/Gp0dxolKfdIn0hpcE+lOOFMC9WXHkJlNZBl9+xdWTdckpr
+         zuaA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=KKZ1R9QgEMrkGcZ9YLvKRKzkpMRTcKXcwCOxP+teR7M=;
-        b=obCDBQhgfln6s8IUUeZl5aGfyWERDOjvS6uIDkfUZbJYSHA+elg9MLwl9z+10RUbn2
-         QjG+70SO9GrK32gFmRw0vGrMpZrltUqP/ak0kHKcBPo4X2+PrfzHmDulmwkUfuMnKIdB
-         euuoKASJgUg1JQOA3ztFoTU8lSZapgRiiMeOZs9/iqDzYI3Ahb9W+PqzqI/nZLpg7HJb
-         ZVz5q6gAnZ7mfhgzyJz++PNomdguD6xErJaW/fTPGbz/O3SsOz0czsWBDO84scfRxg8a
-         aDNm/CQiZikRiN312mjppKWLjX19wgTADpsuWvJ+6xVXeyHQDeDfLq//4nMDwPYSrWGM
-         hyrw==
-X-Gm-Message-State: APjAAAUHZOI4RORuY5PLDfyPMWLXxUSKiPXUcjbWDZec/O8BZE8NWklT
-        BlN3Ooa5qKpzELCVDiyfH8jagowU6ADTcuSlKlKgDQ==
-X-Google-Smtp-Source: APXvYqw0luNcANHXyMUiFoyyUu0AVErgnzQun0+KNERaAUHA3h78Phk03thaTOrgTG//zK4/DgIcpxo61LJZY0ft9FY=
-X-Received: by 2002:a63:b919:: with SMTP id z25mr654931pge.201.1561593925659;
- Wed, 26 Jun 2019 17:05:25 -0700 (PDT)
+        bh=c34/FfI7PALcZVh0MK4YlFiWvnY7m44Qb8oCZcTiVbU=;
+        b=s2AaLrAlzNM0URuUOGFPX6lx7AR4608R4xRJBitv2oJUoEvroJX6qpKgjZpaII+Fmo
+         rbL5moTH0ub6wLR0RRbnUFpeC+2QOOXnK8h47+ey9wNCF+fvaGvJkqO3w9pKw8cXtjS0
+         K4Q3rqa9hLeahhfSAEa0Vd4X0yKjt9dMT60Vs9tmwrSjd5CbAnTEJpwHK/EAkg0OfC1j
+         uPO19G5pyD4ZBBRM5W6FOHOhlks57uTv4QMaNqx/mxe+PqIie1fbcnplduFSZZdkYJ75
+         hGs4iva9h5lP+rUYzW77jPQ21m5fJcTtN7o14yJvAoa5xxYmsN9gscNMjCMXvkA47VBv
+         +Zrg==
+X-Gm-Message-State: APjAAAUgx6z6vQgRJljETu1zTf/yObIIEa/gMFz7ttflp/I3EsXt1+PB
+        DEXQGRPaGdmXKeTTZTjgDuG25vxx2RS5PqAiOdktbQ==
+X-Google-Smtp-Source: APXvYqz8ozeAzYHPHzqs1rNqRCdggL5+4sDGi+NHmPQJCmuSKDQDwiM3UtGQ8HWyljDXcSyRIYd62W6XpQAlC3xYRPM=
+X-Received: by 2002:a17:902:29e6:: with SMTP id h93mr950785plb.297.1561595003889;
+ Wed, 26 Jun 2019 17:23:23 -0700 (PDT)
 MIME-Version: 1.0
 References: <20190617082613.109131-1-brendanhiggins@google.com>
- <20190617082613.109131-2-brendanhiggins@google.com> <20190620001526.93426218BE@mail.kernel.org>
- <CAFd5g46Jhxsz6_VXHEVYvTeDRwwzgKpr=aUWLL5b3S4kUukb8g@mail.gmail.com>
- <20190625214427.GN19023@42.do-not-panic.com> <CAFd5g47OABqN127cPKqoCOA_Wr9w=LFh_0XkF7LXu2iY9sFkSw@mail.gmail.com>
- <20190625230253.GQ19023@42.do-not-panic.com> <CAFd5g45fSdpytudDyD3Yo1ti=kU_JJ6S9yz53_L=pnZTjQFU9A@mail.gmail.com>
- <20190626220204.GZ19023@42.do-not-panic.com>
-In-Reply-To: <20190626220204.GZ19023@42.do-not-panic.com>
+ <20190617082613.109131-14-brendanhiggins@google.com> <20190626000150.GT19023@42.do-not-panic.com>
+ <CAFd5g44kkepB2hZcpYL-NB5ZHYE5tP7W-0yducGCX7Khd9gd9w@mail.gmail.com> <20190626220350.GA19023@42.do-not-panic.com>
+In-Reply-To: <20190626220350.GA19023@42.do-not-panic.com>
 From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Wed, 26 Jun 2019 17:05:13 -0700
-Message-ID: <CAFd5g46yp3B6SB9OZRoum8-CDA-BW_En7BGz5WH8qFRx1d=8iA@mail.gmail.com>
-Subject: Re: [PATCH v5 01/18] kunit: test: add KUnit test runner core
+Date:   Wed, 26 Jun 2019 17:23:12 -0700
+Message-ID: <CAFd5g44ZbVCM3rksF44z_diiejS+Xc+qcXm120L+t+FHwuGyrA@mail.gmail.com>
+Subject: Re: [PATCH v5 13/18] kunit: tool: add Python wrappers for running
+ KUnit tests
 To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     Stephen Boyd <sboyd@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
+Cc:     Frank Rowand <frowand.list@gmail.com>,
         Greg KH <gregkh@linuxfoundation.org>,
         Josh Poimboeuf <jpoimboe@redhat.com>,
         Kees Cook <keescook@google.com>,
         Kieran Bingham <kieran.bingham@ideasonboard.com>,
         Peter Zijlstra <peterz@infradead.org>,
-        Rob Herring <robh@kernel.org>, shuah <shuah@kernel.org>,
-        "Theodore Ts'o" <tytso@mit.edu>,
+        Rob Herring <robh@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
+        shuah <shuah@kernel.org>, "Theodore Ts'o" <tytso@mit.edu>,
         Masahiro Yamada <yamada.masahiro@socionext.com>,
         devicetree <devicetree@vger.kernel.org>,
         dri-devel <dri-devel@lists.freedesktop.org>,
@@ -90,196 +87,48 @@ Cc:     Stephen Boyd <sboyd@kernel.org>,
         Randy Dunlap <rdunlap@infradead.org>,
         Richard Weinberger <richard@nod.at>,
         David Rientjes <rientjes@google.com>,
-        Steven Rostedt <rostedt@goodmis.org>, wfg@linux.intel.com
+        Steven Rostedt <rostedt@goodmis.org>, wfg@linux.intel.com,
+        Felix Guo <felixguoxiuping@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Jun 26, 2019 at 3:02 PM Luis Chamberlain <mcgrof@kernel.org> wrote:
+On Wed, Jun 26, 2019 at 3:03 PM Luis Chamberlain <mcgrof@kernel.org> wrote:
 >
-> On Tue, Jun 25, 2019 at 11:41:47PM -0700, Brendan Higgins wrote:
-> > On Tue, Jun 25, 2019 at 4:02 PM Luis Chamberlain <mcgrof@kernel.org> wrote:
+> On Wed, Jun 26, 2019 at 01:02:55AM -0700, Brendan Higgins wrote:
+> > On Tue, Jun 25, 2019 at 5:01 PM Luis Chamberlain <mcgrof@kernel.org> wrote:
 > > >
-> > > On Tue, Jun 25, 2019 at 03:14:45PM -0700, Brendan Higgins wrote:
-> > > > On Tue, Jun 25, 2019 at 2:44 PM Luis Chamberlain <mcgrof@kernel.org> wrote:
-> > > > > Since its a new architecture and since you seem to imply most tests
-> > > > > don't require locking or even IRQs disabled, I think its worth to
-> > > > > consider the impact of adding such extreme locking requirements for
-> > > > > an initial ramp up.
-> > > >
-> > > > Fair enough, I can see the point of not wanting to use irq disabled
-> > > > until we get someone complaining about it, but I think making it
-> > > > thread safe is reasonable. It means there is one less thing to confuse
-> > > > a KUnit user and the only penalty paid is some very minor performance.
+> > > On Mon, Jun 17, 2019 at 01:26:08AM -0700, Brendan Higgins wrote:
+> > > >  create mode 100644 tools/testing/kunit/test_data/test_is_test_passed-all_passed.log
+> > > >  create mode 100644 tools/testing/kunit/test_data/test_is_test_passed-crash.log
+> > > >  create mode 100644 tools/testing/kunit/test_data/test_is_test_passed-failure.log
+> > > >  create mode 100644 tools/testing/kunit/test_data/test_is_test_passed-no_tests_run.log
+> > > >  create mode 100644 tools/testing/kunit/test_data/test_output_isolated_correctly.log
+> > > >  create mode 100644 tools/testing/kunit/test_data/test_read_from_file.kconfig
 > > >
-> > > One reason I'm really excited about kunit is speed... so by all means I
-> > > think we're at a good point to analyze performance optimizationsm if
-> > > they do make sense.
+> > > Why are these being added upstream? The commit log does not explain
+> > > this.
 > >
-> > Yeah, but I think there are much lower hanging fruit than this (as you
-> > point out below). I am all for making/keeping KUnit super fast, but I
-> > also don't want to waste time with premature optimizations and I think
-> > having thread safe expectations and non-thread safe expectations hurts
-> > usability.
-> >
-> > Still, I am on board with making this a mutex instead of a spinlock for now.
-> >
-> > > While on the topic of parallization, what about support for running
-> > > different test cases in parallel? Or at the very least different kunit
-> > > modules in parallel.  Few questions come up based on this prospect:
-> > >
-> > >   * Why not support parallelism from the start?
-> >
-> > Just because it is more work and there isn't much to gain from it right now.
-> >
-> > Some numbers:
-> > I currently have a collection of 86 test cases in the branch that this
-> > patchset is from.
+> > Oh sorry, those are for testing purposes. I thought that was clear
+> > from being in the test_data directory. I will reference it in the
+> > commit log in the next revision.
 >
-> Impressive, imagine 86 tests and kunit is not even *merged yet*.
+> Still, I don't get it. They seem to be results from a prior run. Why do
+> we need them for testing purposes?
 
-Full disclaimer, about half of them are KUnit tests for KUnit - to
-make sure KUnit works, so I don't know if you consider that cheating.
+Those logs are the raw output from UML with KUnit installed. They are
+for testing kunit_tool, the Python scripts added in this commit. One
+of the things that kunit_tool does is parses the results output by
+UML, extracts the KUnit data, and presents it in a user friendly
+manner.
 
-> > I turned on PRINTK_TIME and looked at the first
-> > KUnit output and the last. On UML, start time was 0.090000, and end
-> > time was 0.090000. Looks like sched_clock is not very good on UML.
->
-> Since you have a python thing that kicks tests, what if you just run
-> time on it?
+I added these logs so I could test that kunit_tool parses certain
+kinds of output correctly. For example, I want to know that it parses
+a test failure correctly and includes the appropriate context. So I
+have a log from a unit test that failed, and I have a test (a Python
+test that is also in this commit) that tests whether kunit_tool can
+parse the log correctly.
 
-That's what I did on the this following paragraph (I just couldn't
-time the tests by themselves in this case):
-
-> > Still it seems quite likely that all of these tests run around 0.01
-> > seconds or less on UML: I ran KUnit with only 2 test cases enabled
-> > three times and got an average runtime of 1.55867 seconds with a
-> > standard deviation of 0.0346747. I then ran it another three times
-> > with all test cases enabled and got an average runtime of 1.535
-> > seconds with a standard deviation of 0.0150997. The second average is
-> > less, but that doesn't really mean anything because it is well within
-> > one standard deviation with a very small sample size. Nevertheless, we
-> > can conclude that the actual runtime of those 84 test cases is most
-> > likely within one standard deviation, so on the order of 0.01 seconds.
-> >
-> > On x86 running on QEMU, first message from KUnit was printed at
-> > 0.194251 and the last KUnit message was printed at 0.340915, meaning
-> > that all 86 test cases ran in about 0.146664 seconds.
->
-> Pretty impressive numbers. But can you blame me for expressing the
-> desire to possibly being able to do better? I am not saying -- let's
-> definitely have parallelism in place *now*. Just wanted to hear out
-> tangibles of why we *don't* want it now.
-
-I agree, faster is almost always better in these types of things, and
-certainly is in this case.
-
-In fairness to you, I also short sold the speed of KUnit in the cover
-letter. I was too lazy to do this complete of an analysis back when I
-wrote it (even if I did a complete timing like this, I would have to
-put a bunch of asterisks since it wouldn't include the time to "boot"
-the kernel or to build it, which vastly outstrip the speed of
-individual test cases). And given the original numbers, I think
-speeding things up would probably seem more urgent. So no, I really
-cannot blame you.
-
-Sorry if it came across that I was frustrated or impatient, but I am
-actually glad you asked because I now have this public email where I
-did the full analysis of how fast KUnit really is which I can refer to
-in the future.
-
-> And.. also, since we are reviewing now, try to target so that the code
-> can later likely get a face lift to support parallelism without
-> requiring much changes.
-
-Also fair.
-
-> > In any case, running KUnit tests in parallel is definitely something I
-> > plan on adding it eventually, but it just doesn't really seem worth it
-> > right now.
->
-> Makes sense!
->
-> > I find the incremental build time of the kernel to
-> > typically be between 3 and 30 seconds, and a clean build to be between
-> > 30 seconds to several minutes, depending on the number of available
-> > cores, so I don't think most users would even notice the amount of
-> > runtime contributed by the actual unit tests until we start getting
-> > into the 1000s of test cases. I don't suspect it will become an issue
-> > until we get into the 10,000s of test cases. I think we are a pretty
-> > long way off from that.
->
-> All makes sense, and agreed based on the numbers you are providing.
-> Thanks for the details!
->
-> > >   * Are you opposed to eventually having this added? For instance, there is
-> > >     enough code on lib/test_kmod.c for batching tons of kthreads each
-> > >     one running its own thing for testing purposes which could be used
-> > >     as template.
-> >
-> > I am not opposed to adding it eventually at all. I actually plan on
-> > doing so, just not in this patchset. There are a lot of additional
-> > features, improvements, and sugar that I really want to add, so much
-> > so that most of it doesn't belong in this patchset; I just think this
-> > is one of those things that belongs in a follow up. I tried to boil
-> > down this patchset to as small as I could while still being useful;
-> > this is basically an MVP. Maybe after this patchset gets merged I
-> > should post a list of things I have ready for review, or would like to
-> > work on, and people can comment on what things they want to see next.
->
-> Groovy.
-
-Cool, I will do that then!
-
-> > >   * If we eventually *did* support it:
-> > >     - Would logs be skewed?
-> >
-> > Probably, before I went with the TAP approach, I was tagging each
-> > message with the test case it came from and I could have parsed it and
-> > assembled a coherent view of the logs using that; now that I am using
-> > TAP conforming output, that won't work. I haven't really thought too
-> > hard about how to address it, but there are ways. For the UML users, I
-> > am planning on adding a feature to guarantee hermeticity between tests
-> > running in different modules by adding a feature that allows a single
-> > kernel to be built with all tests included, and then determine which
-> > tests get run by passing in command line arguments or something. This
-> > way you can get the isolation from running tests in separate
-> > environments without increasing the build cost. We could also use this
-> > method to achieve parallelism by dispatching multiple kernels at once.
->
-> Indeed. Or... wait for it... containers... There tools for these sorts
-> of things already. And I'm evaluating such prospects now for some other
-> tests I care for.
-
-Containers could definitely be useful in the long run. I have a long
-term goal to build and run just parts of the kernel as I have
-mentioned to you, and doing so in a totally hermetic environment could
-provide a lot of value; in this case I would probably only want a
-chroot, but if I want to deploy tests to run on different machines
-containers could be very useful.
-
-Actually, on the topic of containers for running tests, the presubmit
-system I have set up for KUnit uses containers for deploying KUnit on
-servers for testing[1]. Actually, I have some experimental patches to
-make it work with LKML instead of Gerrit, but I am not sure whether it
-makes more sense to go that route, with one of the many patchworks
-clones that support presubmit, or something else.
-
-> > That only works for UML, but I imagine you could do something similar
-> > for users running tests under qemu.
->
-> Or containers.
->
-> > >     - Could we have a way to query: give me log for only kunit module
-> > >       named "foo"?
-> >
-> > Yeah, I think that would make sense as part of the hermeticity thing I
-> > mentioned above.
-> >
-> > Hope that seems reasonable!
->
-> All groovy. Thanks for the details!
-
-[1] https://kunit-review.googlesource.com/c/linux/+/1809/2#message-c243e1c9086d9432d2dcabc67a42a977b8a020ff
+Does that make sense?
