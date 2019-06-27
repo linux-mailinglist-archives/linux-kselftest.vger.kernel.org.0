@@ -2,40 +2,40 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B785657848
-	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Jun 2019 02:52:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B8E06577C7
+	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Jun 2019 02:49:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727315AbfF0Adp (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 26 Jun 2019 20:33:45 -0400
-Received: from mail.kernel.org ([198.145.29.99]:37682 "EHLO mail.kernel.org"
+        id S1727306AbfF0Ah4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 26 Jun 2019 20:37:56 -0400
+Received: from mail.kernel.org ([198.145.29.99]:42316 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726906AbfF0Ado (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 26 Jun 2019 20:33:44 -0400
+        id S1728712AbfF0Ahx (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 26 Jun 2019 20:37:53 -0400
 Received: from sasha-vm.mshome.net (unknown [107.242.116.147])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 6958920659;
-        Thu, 27 Jun 2019 00:33:41 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 0C20F217F9;
+        Thu, 27 Jun 2019 00:37:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1561595623;
-        bh=u7QqRGXpxqS0z/U4t34C5o/WpIMl8knMCDPRxkx9ZnE=;
+        s=default; t=1561595872;
+        bh=gyBTngWHtRDO9vpVZZ8b+0cr76f93Uf0igsoq7QNkXo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=wuIhrrDhKrhvBMdUlDwTFrfTuJUtFCbJaT/owYhWBkCRYMWa0Fgn3VjdyJwPwnr1Z
-         cMypKIBppnSSf1bD4WH6skh+yId7hiV4yOH7T+OqTnILJSyg6sjNhyd0eGuNicuHER
-         sQrguyCOZczAw5D1kxV+mipisuR7J1okc7uTm99I=
+        b=Dx13BFS9UpOkOdwpKMncIv+BvN79lCH20iR1m/TaFwZy6KW5dGqIcbgMbn+LqWOYK
+         U+aG1fyiMq5Go/6LwZCqwAEApBruVSUKqW57bOzGhImBN6xLV/WvY7p/EgEb373lTA
+         5D/N2Fm8mzv4xHdKd+6vZd192ocVzADL1mSUwoh4=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>,
+Cc:     Jonathan Lemon <jonathan.lemon@gmail.com>,
+        Martin KaFai Lau <kafai@fb.com>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Sasha Levin <sashal@kernel.org>,
-        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.1 58/95] bpf: fix div64 overflow tests to properly detect errors
-Date:   Wed, 26 Jun 2019 20:29:43 -0400
-Message-Id: <20190627003021.19867-58-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.19 31/60] bpf: lpm_trie: check left child of last leftmost node for NULL
+Date:   Wed, 26 Jun 2019 20:35:46 -0400
+Message-Id: <20190627003616.20767-31-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190627003021.19867-1-sashal@kernel.org>
-References: <20190627003021.19867-1-sashal@kernel.org>
+In-Reply-To: <20190627003616.20767-1-sashal@kernel.org>
+References: <20190627003616.20767-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -45,53 +45,131 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>
+From: Jonathan Lemon <jonathan.lemon@gmail.com>
 
-[ Upstream commit 3e0682695199bad51dd898fe064d1564637ff77a ]
+[ Upstream commit da2577fdd0932ea4eefe73903f1130ee366767d2 ]
 
-If the result of the division is LLONG_MIN, current tests do not detect
-the error since the return value is truncated to a 32-bit value and ends
-up being 0.
+If the leftmost parent node of the tree has does not have a child
+on the left side, then trie_get_next_key (and bpftool map dump) will
+not look at the child on the right.  This leads to the traversal
+missing elements.
 
-Signed-off-by: Naveen N. Rao <naveen.n.rao@linux.vnet.ibm.com>
+Lookup is not affected.
+
+Update selftest to handle this case.
+
+Reproducer:
+
+ bpftool map create /sys/fs/bpf/lpm type lpm_trie key 6 \
+     value 1 entries 256 name test_lpm flags 1
+ bpftool map update pinned /sys/fs/bpf/lpm key  8 0 0 0  0   0 value 1
+ bpftool map update pinned /sys/fs/bpf/lpm key 16 0 0 0  0 128 value 2
+ bpftool map dump   pinned /sys/fs/bpf/lpm
+
+Returns only 1 element. (2 expected)
+
+Fixes: b471f2f1de8b ("bpf: implement MAP_GET_NEXT_KEY command for LPM_TRIE")
+Signed-off-by: Jonathan Lemon <jonathan.lemon@gmail.com>
+Acked-by: Martin KaFai Lau <kafai@fb.com>
 Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- .../testing/selftests/bpf/verifier/div_overflow.c  | 14 ++++++++++----
- 1 file changed, 10 insertions(+), 4 deletions(-)
+ kernel/bpf/lpm_trie.c                      |  9 +++--
+ tools/testing/selftests/bpf/test_lpm_map.c | 41 ++++++++++++++++++++--
+ 2 files changed, 45 insertions(+), 5 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/verifier/div_overflow.c b/tools/testing/selftests/bpf/verifier/div_overflow.c
-index bd3f38dbe796..acab4f00819f 100644
---- a/tools/testing/selftests/bpf/verifier/div_overflow.c
-+++ b/tools/testing/selftests/bpf/verifier/div_overflow.c
-@@ -29,8 +29,11 @@
- 	"DIV64 overflow, check 1",
- 	.insns = {
- 	BPF_MOV64_IMM(BPF_REG_1, -1),
--	BPF_LD_IMM64(BPF_REG_0, LLONG_MIN),
--	BPF_ALU64_REG(BPF_DIV, BPF_REG_0, BPF_REG_1),
-+	BPF_LD_IMM64(BPF_REG_2, LLONG_MIN),
-+	BPF_ALU64_REG(BPF_DIV, BPF_REG_2, BPF_REG_1),
-+	BPF_MOV32_IMM(BPF_REG_0, 0),
-+	BPF_JMP_REG(BPF_JEQ, BPF_REG_0, BPF_REG_2, 1),
-+	BPF_MOV32_IMM(BPF_REG_0, 1),
- 	BPF_EXIT_INSN(),
- 	},
- 	.prog_type = BPF_PROG_TYPE_SCHED_CLS,
-@@ -40,8 +43,11 @@
- {
- 	"DIV64 overflow, check 2",
- 	.insns = {
--	BPF_LD_IMM64(BPF_REG_0, LLONG_MIN),
--	BPF_ALU64_IMM(BPF_DIV, BPF_REG_0, -1),
-+	BPF_LD_IMM64(BPF_REG_1, LLONG_MIN),
-+	BPF_ALU64_IMM(BPF_DIV, BPF_REG_1, -1),
-+	BPF_MOV32_IMM(BPF_REG_0, 0),
-+	BPF_JMP_REG(BPF_JEQ, BPF_REG_0, BPF_REG_1, 1),
-+	BPF_MOV32_IMM(BPF_REG_0, 1),
- 	BPF_EXIT_INSN(),
- 	},
- 	.prog_type = BPF_PROG_TYPE_SCHED_CLS,
+diff --git a/kernel/bpf/lpm_trie.c b/kernel/bpf/lpm_trie.c
+index 4f3138e6ecb2..1a8b208f6c55 100644
+--- a/kernel/bpf/lpm_trie.c
++++ b/kernel/bpf/lpm_trie.c
+@@ -676,9 +676,14 @@ static int trie_get_next_key(struct bpf_map *map, void *_key, void *_next_key)
+ 	 * have exact two children, so this function will never return NULL.
+ 	 */
+ 	for (node = search_root; node;) {
+-		if (!(node->flags & LPM_TREE_NODE_FLAG_IM))
++		if (node->flags & LPM_TREE_NODE_FLAG_IM) {
++			node = rcu_dereference(node->child[0]);
++		} else {
+ 			next_node = node;
+-		node = rcu_dereference(node->child[0]);
++			node = rcu_dereference(node->child[0]);
++			if (!node)
++				node = rcu_dereference(next_node->child[1]);
++		}
+ 	}
+ do_copy:
+ 	next_key->prefixlen = next_node->prefixlen;
+diff --git a/tools/testing/selftests/bpf/test_lpm_map.c b/tools/testing/selftests/bpf/test_lpm_map.c
+index 02d7c871862a..006be3963977 100644
+--- a/tools/testing/selftests/bpf/test_lpm_map.c
++++ b/tools/testing/selftests/bpf/test_lpm_map.c
+@@ -573,13 +573,13 @@ static void test_lpm_get_next_key(void)
+ 
+ 	/* add one more element (total two) */
+ 	key_p->prefixlen = 24;
+-	inet_pton(AF_INET, "192.168.0.0", key_p->data);
++	inet_pton(AF_INET, "192.168.128.0", key_p->data);
+ 	assert(bpf_map_update_elem(map_fd, key_p, &value, 0) == 0);
+ 
+ 	memset(key_p, 0, key_size);
+ 	assert(bpf_map_get_next_key(map_fd, NULL, key_p) == 0);
+ 	assert(key_p->prefixlen == 24 && key_p->data[0] == 192 &&
+-	       key_p->data[1] == 168 && key_p->data[2] == 0);
++	       key_p->data[1] == 168 && key_p->data[2] == 128);
+ 
+ 	memset(next_key_p, 0, key_size);
+ 	assert(bpf_map_get_next_key(map_fd, key_p, next_key_p) == 0);
+@@ -592,7 +592,7 @@ static void test_lpm_get_next_key(void)
+ 
+ 	/* Add one more element (total three) */
+ 	key_p->prefixlen = 24;
+-	inet_pton(AF_INET, "192.168.128.0", key_p->data);
++	inet_pton(AF_INET, "192.168.0.0", key_p->data);
+ 	assert(bpf_map_update_elem(map_fd, key_p, &value, 0) == 0);
+ 
+ 	memset(key_p, 0, key_size);
+@@ -643,6 +643,41 @@ static void test_lpm_get_next_key(void)
+ 	assert(bpf_map_get_next_key(map_fd, key_p, next_key_p) == -1 &&
+ 	       errno == ENOENT);
+ 
++	/* Add one more element (total five) */
++	key_p->prefixlen = 28;
++	inet_pton(AF_INET, "192.168.1.128", key_p->data);
++	assert(bpf_map_update_elem(map_fd, key_p, &value, 0) == 0);
++
++	memset(key_p, 0, key_size);
++	assert(bpf_map_get_next_key(map_fd, NULL, key_p) == 0);
++	assert(key_p->prefixlen == 24 && key_p->data[0] == 192 &&
++	       key_p->data[1] == 168 && key_p->data[2] == 0);
++
++	memset(next_key_p, 0, key_size);
++	assert(bpf_map_get_next_key(map_fd, key_p, next_key_p) == 0);
++	assert(next_key_p->prefixlen == 28 && next_key_p->data[0] == 192 &&
++	       next_key_p->data[1] == 168 && next_key_p->data[2] == 1 &&
++	       next_key_p->data[3] == 128);
++
++	memcpy(key_p, next_key_p, key_size);
++	assert(bpf_map_get_next_key(map_fd, key_p, next_key_p) == 0);
++	assert(next_key_p->prefixlen == 24 && next_key_p->data[0] == 192 &&
++	       next_key_p->data[1] == 168 && next_key_p->data[2] == 1);
++
++	memcpy(key_p, next_key_p, key_size);
++	assert(bpf_map_get_next_key(map_fd, key_p, next_key_p) == 0);
++	assert(next_key_p->prefixlen == 24 && next_key_p->data[0] == 192 &&
++	       next_key_p->data[1] == 168 && next_key_p->data[2] == 128);
++
++	memcpy(key_p, next_key_p, key_size);
++	assert(bpf_map_get_next_key(map_fd, key_p, next_key_p) == 0);
++	assert(next_key_p->prefixlen == 16 && next_key_p->data[0] == 192 &&
++	       next_key_p->data[1] == 168);
++
++	memcpy(key_p, next_key_p, key_size);
++	assert(bpf_map_get_next_key(map_fd, key_p, next_key_p) == -1 &&
++	       errno == ENOENT);
++
+ 	/* no exact matching key should return the first one in post order */
+ 	key_p->prefixlen = 22;
+ 	inet_pton(AF_INET, "192.168.1.0", key_p->data);
 -- 
 2.20.1
 
