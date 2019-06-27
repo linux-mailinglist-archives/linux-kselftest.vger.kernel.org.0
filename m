@@ -2,276 +2,476 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0649B57BBD
-	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Jun 2019 08:10:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BF5057FD6
+	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Jun 2019 12:02:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726416AbfF0GKd (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 27 Jun 2019 02:10:33 -0400
-Received: from mail-pl1-f193.google.com ([209.85.214.193]:39235 "EHLO
-        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725770AbfF0GKc (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 27 Jun 2019 02:10:32 -0400
-Received: by mail-pl1-f193.google.com with SMTP id b7so679005pls.6;
-        Wed, 26 Jun 2019 23:10:31 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=ZwcXPCGwZbn09o1uwc7hniPSeMrN6eJpmY4d6Wfxi5c=;
-        b=nJUgXmKQ0n/tCSTXSwTOf323Ng7Vbr8non3mik66azIBefrY1hqPJ+fUw+0vF+W567
-         Sbx3FqnthpQkLTYeqMaPlT9pcZgWb9K8gNefyjYZe6Q9YMfR/smySJvyY2XfXynGxBSD
-         m/OBPEDLQg8o+rKByuBjvs8suB8HJ/ORwAbgHh771iUNV/GPQCTNNXYad005uKvyIQbJ
-         R6rUs3GXBa/r38GotkXo3nqsP+CHlwZgejmhEO3yIN5wYmTe7woPDafzo9zB0Mh7zG2r
-         2H2Kr4YxgQSD6CBZCarufQ3kWHT6gGp7aeF1nImzZ6BBjjH4FTQatMHOYXqctJwL67ky
-         nYng==
-X-Gm-Message-State: APjAAAV+kc7BHr4DW0XZTeWYCEBqZtl1G0r7lngNZt84ifZ2u/IdWc2I
-        9lGAJRVThAFm5Tq17TA2bAw=
-X-Google-Smtp-Source: APXvYqwfDFSlOkWhmFZzzgQYetrDxzZaKzvd9ZX5n/88iknHRTMqvTXQfyQDDioGRxixBQmy4Bo+mg==
-X-Received: by 2002:a17:902:8489:: with SMTP id c9mr2593873plo.327.1561615831154;
-        Wed, 26 Jun 2019 23:10:31 -0700 (PDT)
-Received: from 42.do-not-panic.com ([157.230.128.187])
-        by smtp.gmail.com with ESMTPSA id u21sm1323644pfm.70.2019.06.26.23.10.27
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Wed, 26 Jun 2019 23:10:27 -0700 (PDT)
-Received: by 42.do-not-panic.com (Postfix, from userid 1000)
-        id 7944140256; Thu, 27 Jun 2019 06:10:21 +0000 (UTC)
-Date:   Thu, 27 Jun 2019 06:10:21 +0000
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Iurii Zaikin <yzaikin@google.com>, linux-api@vger.kernel.org,
-        "Michael Kerrisk (man-pages)" <mtk.manpages@gmail.com>
-Cc:     Brendan Higgins <brendanhiggins@google.com>,
-        frowand.list@gmail.com, gregkh@linuxfoundation.org,
-        jpoimboe@redhat.com, Kees Cook <keescook@google.com>,
-        kieran.bingham@ideasonboard.com, peterz@infradead.org,
-        robh@kernel.org, Stephen Boyd <sboyd@kernel.org>, shuah@kernel.org,
-        tytso@mit.edu, yamada.masahiro@socionext.com,
-        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        kunit-dev@googlegroups.com, linux-doc@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kbuild@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-nvdimm@lists.01.org, linux-um@lists.infradead.org,
-        Alexander.Levin@microsoft.com, Tim.Bird@sony.com,
-        amir73il@gmail.com, dan.carpenter@oracle.com,
-        Daniel Vetter <daniel@ffwll.ch>, jdike@addtoit.com,
-        joel@jms.id.au, julia.lawall@lip6.fr, khilman@baylibre.com,
-        knut.omang@oracle.com, logang@deltatee.com, mpe@ellerman.id.au,
-        pmladek@suse.com, rdunlap@infradead.org, richard@nod.at,
-        David Rientjes <rientjes@google.com>, rostedt@goodmis.org,
-        wfg@linux.intel.com
-Subject: Re: [PATCH v5 17/18] kernel/sysctl-test: Add null pointer test for
- sysctl.c:proc_dointvec()
-Message-ID: <20190627061021.GE19023@42.do-not-panic.com>
-References: <20190617082613.109131-1-brendanhiggins@google.com>
- <20190617082613.109131-18-brendanhiggins@google.com>
- <20190626021744.GU19023@42.do-not-panic.com>
- <CAAXuY3p+kVhjQ4LYtzormqVcH2vKu1abc_K9Z0XY=JX=bp8NcQ@mail.gmail.com>
+        id S1726500AbfF0KB5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 27 Jun 2019 06:01:57 -0400
+Received: from foss.arm.com ([217.140.110.172]:50654 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726292AbfF0KB5 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 27 Jun 2019 06:01:57 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C86992B;
+        Thu, 27 Jun 2019 03:01:55 -0700 (PDT)
+Received: from e103592.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1F8E63F718;
+        Thu, 27 Jun 2019 03:01:53 -0700 (PDT)
+Date:   Thu, 27 Jun 2019 11:01:51 +0100
+From:   Dave Martin <Dave.Martin@arm.com>
+To:     Vincenzo Frascino <vincenzo.frascino@arm.com>
+Cc:     linux-arch@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Mark Salyzyn <salyzyn@android.com>,
+        Huw Davies <huw@codeweavers.com>,
+        Andre Przywara <andre.przywara@arm.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Will Deacon <will.deacon@arm.com>,
+        linux-kernel@vger.kernel.org, Ralf Baechle <ralf@linux-mips.org>,
+        linux-mips@vger.kernel.org, Paul Burton <paul.burton@mips.com>,
+        linux-kselftest@vger.kernel.org,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Russell King <linux@armlinux.org.uk>,
+        Dmitry Safonov <0x7f454c46@gmail.com>,
+        Shijith Thotton <sthotton@marvell.com>,
+        Peter Collingbourne <pcc@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v7 04/25] arm64: Substitute gettimeofday with C
+ implementation
+Message-ID: <20190627100150.GC2790@e103592.cambridge.arm.com>
+References: <20190621095252.32307-1-vincenzo.frascino@arm.com>
+ <20190621095252.32307-5-vincenzo.frascino@arm.com>
+ <20190625153336.GZ2790@e103592.cambridge.arm.com>
+ <f5ac379a-731d-0662-2f5b-bd046e3bd1c5@arm.com>
+ <20190626161413.GA2790@e103592.cambridge.arm.com>
+ <19ebd45a-b666-d7de-fd9e-2b72e18892d9@arm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAAXuY3p+kVhjQ4LYtzormqVcH2vKu1abc_K9Z0XY=JX=bp8NcQ@mail.gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <19ebd45a-b666-d7de-fd9e-2b72e18892d9@arm.com>
+User-Agent: Mutt/1.5.23 (2014-03-12)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Jun 26, 2019 at 09:07:43PM -0700, Iurii Zaikin wrote:
-> On Tue, Jun 25, 2019 at 7:17 PM Luis Chamberlain <mcgrof@kernel.org> wrote:
-> > > +static void sysctl_test_dointvec_table_maxlen_unset(struct kunit *test)
-> > > +{
-> > > +     struct ctl_table table = {
-> > > +             .procname = "foo",
-> > > +             .data           = &test_data.int_0001,
-> > > +             .maxlen         = 0,
-> > > +             .mode           = 0644,
-> > > +             .proc_handler   = proc_dointvec,
-> > > +             .extra1         = &i_zero,
-> > > +             .extra2         = &i_one_hundred,
-> > > +     };
-> > > +     void  *buffer = kunit_kzalloc(test, sizeof(int), GFP_USER);
-> > > +     size_t len;
-> > > +     loff_t pos;
-> > > +
-> > > +     len = 1234;
-> > > +     KUNIT_EXPECT_EQ(test, 0, proc_dointvec(&table, 0, buffer, &len, &pos));
-> > > +     KUNIT_EXPECT_EQ(test, (size_t)0, len);
-> > > +     len = 1234;
-> > > +     KUNIT_EXPECT_EQ(test, 0, proc_dointvec(&table, 1, buffer, &len, &pos));
-> > > +     KUNIT_EXPECT_EQ(test, (size_t)0, len);
-> > > +}
+On Wed, Jun 26, 2019 at 08:01:58PM +0100, Vincenzo Frascino wrote:
+
+[...]
+
+> On 6/26/19 5:14 PM, Dave Martin wrote:
+> > On Wed, Jun 26, 2019 at 02:27:59PM +0100, Vincenzo Frascino wrote:
+> >> Hi Dave,
+> >>
+> >> On 25/06/2019 16:33, Dave Martin wrote:
+> >>> On Fri, Jun 21, 2019 at 10:52:31AM +0100, Vincenzo Frascino wrote:
+> >>>> To take advantage of the commonly defined vdso interface for
+> >>>> gettimeofday the architectural code requires an adaptation.
+> >>>>
+> >>>> Re-implement the gettimeofday vdso in C in order to use lib/vdso.
+> >>>>
+> >>>> With the new implementation arm64 gains support for CLOCK_BOOTTIME
+> >>>> and CLOCK_TAI.
+> >>>>
+> >>>> Cc: Catalin Marinas <catalin.marinas@arm.com>
+> >>>> Cc: Will Deacon <will.deacon@arm.com>
+> >>>> Signed-off-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
+> >>>> Tested-by: Shijith Thotton <sthotton@marvell.com>
+> >>>> Tested-by: Andre Przywara <andre.przywara@arm.com>
+> >>>
+> >>> [...]
+> >>>
+> >>>> diff --git a/arch/arm64/include/asm/vdso/gettimeofday.h b/arch/arm64/include/asm/vdso/gettimeofday.h
+> >>>> new file mode 100644
+> >>>> index 000000000000..bc3cb6738051
+> >>>> --- /dev/null
+> >>>> +++ b/arch/arm64/include/asm/vdso/gettimeofday.h
+> >>>> @@ -0,0 +1,86 @@
+> >>>> +/* SPDX-License-Identifier: GPL-2.0 */
+> >>>> +/*
+> >>>> + * Copyright (C) 2018 ARM Limited
+> >>>> + */
+> >>>> +#ifndef __ASM_VDSO_GETTIMEOFDAY_H
+> >>>> +#define __ASM_VDSO_GETTIMEOFDAY_H
+> >>>> +
+> >>>> +#ifndef __ASSEMBLY__
+> >>>> +
+> >>>> +#include <asm/unistd.h>
+> >>>> +#include <uapi/linux/time.h>
+> >>>> +
+> >>>> +#define VDSO_HAS_CLOCK_GETRES		1
+> >>>> +
+> >>>> +static __always_inline int gettimeofday_fallback(
+> >>>> +					struct __kernel_old_timeval *_tv,
+> >>>> +					struct timezone *_tz)
+> >>>
+> >>> Out of interest, does this need to be __always_inline?
+> >>>
+> >>
+> >> It is a design choice. Philosophically, I prefer to control and reduce the scope
+> >> of the decisions the compiler has to make in order to not have surprises.
+> >>
+> >>>> +{
+> >>>> +	register struct timezone *tz asm("x1") = _tz;
+> >>>> +	register struct __kernel_old_timeval *tv asm("x0") = _tv;
+> >>>> +	register long ret asm ("x0");
+> >>>> +	register long nr asm("x8") = __NR_gettimeofday;
+> >>>> +
+> >>>> +	asm volatile(
+> >>>> +	"       svc #0\n"
+> >>>
+> >>> Can inlining of this function result in non-trivial expressions being
+> >>> substituted for _tz or _tv?
+> >>>
+> >>> A function call can clobber register asm vars that are assigned to the
+> >>> caller-save registers or that the PCS uses for function arguments, and
+> >>> the situations where this can happen are poorly defined AFAICT.  There's
+> >>> also no reliable way to detect at build time whether the compiler has
+> >>> done this, and no robust way to stop if happening.
+> >>>
+> >>> (IMHO the compiler is wrong to do this, but it's been that way for ever,
+> >>> and I think I saw GCC 9 show this behaviour recently when I was
+> >>> investigating something related.)
+> >>>
+> >>>
+> >>> To be safe, it's better to put this out of line, or remove the reg asm()
+> >>> specifiers, mark x0-x18 and lr as clobbered here (so that the compiler
+> >>> doesn't map arguments to them), and put movs in the asm to move things
+> >>> into the right registers.  The syscall number can be passed with an "i"
+> >>> constraint.  (And yes, this sucks.)
+> >>>
+> >>> If the code this is inlined in is simple enough though, we can be fairly
+> >>> confident of getting away with it.
+> >>>
+> >>
+> >> I took very seriously what you are mentioning here because I think
+> >> that robustness of the code comes before than everything especially
+> >> in the kernel and I carried on some experiments to try to verify if
+> >> in this case is safe to assume that the compiler is doing the right
+> >> thing.
+> >>
+> >> Based on my investigation and on previous observations of the
+> >> generation of the vDSO library, I can conclude that the approach
+> >> seems safe due to the fact that the usage of this code is very
+> >> limited, the code itself is simple enough and that gcc would inline
+> >> this code anyway based on the current compilation options.
+> > 
+> > I'd caution about "seems safe".  A lot of subtly wrong code not only
+> > seems safe, but _is_ safe in its original context, in practice.  Add
+> > some code to the vdso over time though, or tweak the compilation options
+> > at some point in the future, or use a different compiler, and things
+> > could still go wrong.
+> > 
+> > (Further comments below.)
+> > 
+> 
+> Allow me to provide a clarification on "seems safe" vs "is safe": my approach
+> "seems safe" because I am providing empirical evidence to support my thesis, but
+> I guess we both know that there is no simple way to prove in one way or another
+> that the problem has a complete solution.
+> The proposed problem involves suppositions on potential future code additions
+> and changes of behavior of the compiler that I can't either control or prevent.
+> In other words, I can comment and propose solutions only based on the current
+> status of the things, and it is what my analysis targets, not on what will
+> happen in future.
+> 
+> I will reply point by point below.
+> 
+> >> The experiment that I did was to define some self-contained code that
+> >> tries to mimic what you are describing and compile it with 3
+> >> different versions of gcc (6.4, 8.1 and 8.3) and in all the tree
+> >> cases the behavior seems correct.
+> >>
+> >> Code:
+> >> =====
+> >>
+> >> typedef int ssize_t;
+> >> typedef int size_t;
+> >>
+> >> static int my_strlen(const char *s)
+> >> {
+> >> 	int i = 0;
+> >>
+> >> 	while (s[i] == '\0')
+> >> 		i++;
+> >>
+> >> 	return i;
+> >> }
+> >>
+> >> static inline ssize_t my_syscall(int fd, const void *buf, size_t count)
+> >> {
+> >> 	register ssize_t arg1 asm ("x0") = fd;
+> >> 	register const void *arg2 asm ("x1") = buf;
+> >> 	register size_t arg3 asm ("x2") = count;
+> >>
+> >> 	__asm__ volatile (
+> >> 		"mov x8, #64\n"
+> >> 		"svc #0\n"
+> >> 		: "=&r" (arg1)
+> >> 		: "r" (arg2), "r" (arg3)
+> >> 		: "x8"
+> >>         );
+> >>
+> >>         return arg1;
+> >> }
+> >>
+> >> void sys_caller(const char *s)
+> >> {
+> >> 	my_syscall(1, s, my_strlen(s));
+> >> }
+> >>
+> >>
+> >> GCC 8.3.0:
+> >> ==========
+> >>
+> >> main.8.3.0.o:     file format elf64-littleaarch64
+> >>
+> >>
+> >> Disassembly of section .text:
+> >>
+> >> 0000000000000000 <sys_caller>:
+> >>    0:	39400001 	ldrb	w1, [x0]
+> >>    4:	35000161 	cbnz	w1, 30 <sys_caller+0x30>
+> >>    8:	d2800023 	mov	x3, #0x1                   	// #1
+> >>    c:	d1000404 	sub	x4, x0, #0x1
+> >>   10:	2a0303e2 	mov	w2, w3
+> >>   14:	91000463 	add	x3, x3, #0x1
+> >>   18:	38636881 	ldrb	w1, [x4, x3]
+> >>   1c:	34ffffa1 	cbz	w1, 10 <sys_caller+0x10>
+> >>   20:	aa0003e1 	mov	x1, x0
+> >>   24:	d2800808 	mov	x8, #0x40                  	// #64
+> >>   28:	d4000001 	svc	#0x0
+> >>   2c:	d65f03c0 	ret
+> >>   30:	52800002 	mov	w2, #0x0                   	// #0
+> >>   34:	17fffffb 	b	20 <sys_caller+0x20>
+> >>
+> >>
+> >> GCC 8.1.0:
+> >> ==========
+> >>
+> >> main.8.1.0.o:     file format elf64-littleaarch64
+> >>
+> >>
+> >> Disassembly of section .text:
+> >>
+> >> 0000000000000000 <sys_caller>:
+> >>    0:	39400001 	ldrb	w1, [x0]
+> >>    4:	35000161 	cbnz	w1, 30 <sys_caller+0x30>
+> >>    8:	d2800023 	mov	x3, #0x1                   	// #1
+> >>    c:	d1000404 	sub	x4, x0, #0x1
+> >>   10:	2a0303e2 	mov	w2, w3
+> >>   14:	91000463 	add	x3, x3, #0x1
+> >>   18:	38636881 	ldrb	w1, [x4, x3]
+> >>   1c:	34ffffa1 	cbz	w1, 10 <sys_caller+0x10>
+> >>   20:	aa0003e1 	mov	x1, x0
+> >>   24:	d2800808 	mov	x8, #0x40                  	// #64
+> >>   28:	d4000001 	svc	#0x0
+> >>   2c:	d65f03c0 	ret
+> >>   30:	52800002 	mov	w2, #0x0                   	// #0
+> >>   34:	17fffffb 	b	20 <sys_caller+0x20>
+> >>
+> >>
+> >>
+> >> GCC 6.4.0:
+> >> ==========
+> >>
+> >> main.6.4.0.o:     file format elf64-littleaarch64
+> >>
+> >>
+> >> Disassembly of section .text:
+> >>
+> >> 0000000000000000 <sys_caller>:
+> >>    0:	39400001 	ldrb	w1, [x0]
+> >>    4:	35000161 	cbnz	w1, 30 <sys_caller+0x30>
+> >>    8:	d2800023 	mov	x3, #0x1                   	// #1
+> >>    c:	d1000404 	sub	x4, x0, #0x1
+> >>   10:	2a0303e2 	mov	w2, w3
+> >>   14:	91000463 	add	x3, x3, #0x1
+> >>   18:	38636881 	ldrb	w1, [x4, x3]
+> >>   1c:	34ffffa1 	cbz	w1, 10 <sys_caller+0x10>
+> >>   20:	aa0003e1 	mov	x1, x0
+> >>   24:	d2800808 	mov	x8, #0x40                  	// #64
+> >>   28:	d4000001 	svc	#0x0
+> >>   2c:	d65f03c0 	ret
+> >>   30:	52800002 	mov	w2, #0x0                   	// #0
+> >>   34:	17fffffb 	b	20 <sys_caller+0x20>
+> > 
+> > Thanks for having a go at this.  If the compiler can show the
+> > problematic behaviour, it looks like your could could probably trigger
+> > it, and as you observe, it doesn't trigger.
+> > 
+> > I am sure I have seen it in the past, but today I am struggling
+> > to tickle the compiler in the right way.  My original reproducer may
+> > have involved LTO, but either way I don't still have it :(
 > >
-> > In a way this is also testing for general kernel API changes. This is and the
-> > last one were good examples. So this is not just testing functionality
-> > here. There is no wrong or write answer if 0 or -EINVAL was returned
-> > other than the fact that we have been doing this for years.
+> 
+> vDSO library is a shared object not compiled with LTO as far as I can
+> see, hence if this involved LTO should not applicable in this case.
+
+That turned to be a spurious hypothesis on my part -- LTO isn't the
+smoking gun.  (See below.)
+
+> > The classic example of this (triggered directly and not due to inlining)
+> > would be something like:
+> > 
+> > int bar(int, int);
+> > 
+> > void foo(int x, int y)
+> > {
+> > 	register int x_ asm("r0") = x;
+> > 	register int y_ asm("r1") = bar(x, y);
+> > 
+> > 	asm volatile (
+> > 		"svc	#0"
+> > 		:: "r" (x_), "r" (y_)
+> > 		: "memory"
+> > 	);
+> > }
+> > 
+> > ->
+> > 
+> > 0000000000000000 <foo>:
+> >    0:   a9bf7bfd        stp     x29, x30, [sp, #-16]!
+> >    4:   910003fd        mov     x29, sp
+> >    8:   94000000        bl      0 <bar>
+> >    c:   2a0003e1        mov     w1, w0
+> >   10:   d4000001        svc     #0x0
+> >   14:   a8c17bfd        ldp     x29, x30, [sp], #16
+> >   18:   d65f03c0        ret
 > >
-> > Its a perhaps small but important difference for some of these tests.  I
-> > *do* think its worth clarifying through documentation which ones are
-> > testing for API consistency Vs proper correctness.
->
-> You make a good point that the test codifies the existing behavior of
-> the function in lieu of formal documentation.  However, the test cases
-> were derived from examining the source code of the function under test
-> and attempting to cover all branches. The assertions were added only
-> for the values that appeared to be set deliberately in the
-> implementation. And it makes sense to me to test that the code does
-> exactly what the implementation author intended.
-
-I'm not arguing against adding them. I'm suggesting that it is different
-to test for API than for correctness of intended functionality, and
-it would be wise to make it clear which test cases are for API and which
-for correctness.
-
-This will come up later for other kunit tests and it would be great
-to set precendent so that other kunit tests can follow similar
-practices to ensure its clear what is API realted Vs correctness of
-intended functionality.
-
-In fact, I'm not yet sure if its possible to test public kernel API to
-userspace with kunit, but if it is possible... well, that could make
-linux-api folks happy as they could enable us to codify interpreation of
-what is expected into kunit test cases, and we'd ensure that the
-codified interpretation is not only documented in man pages but also
-through formal kunit test cases.
-
-A regression in linux-api then could be formalized through a proper
-kunit tests case. And if an API evolves, it would force developers to
-update the respective kunit which codifies that contract.
-
-> > > +static void sysctl_test_dointvec_single_less_int_min(struct kunit *test)
-> > > +{
-> > > +     struct ctl_table table = {
-> > > +             .procname = "foo",
-> > > +             .data           = &test_data.int_0001,
-> > > +             .maxlen         = sizeof(int),
-> > > +             .mode           = 0644,
-> > > +             .proc_handler   = proc_dointvec,
-> > > +             .extra1         = &i_zero,
-> > > +             .extra2         = &i_one_hundred,
-> > > +     };
-> > > +     char input[32];
-> > > +     size_t len = sizeof(input) - 1;
-> > > +     loff_t pos = 0;
-> > > +     unsigned long abs_of_less_than_min = (unsigned long)INT_MAX
-> > > +                                          - (INT_MAX + INT_MIN) + 1;
-> > > +
-> > > +     KUNIT_EXPECT_LT(test,
-> > > +                     (size_t)snprintf(input, sizeof(input), "-%lu",
-> > > +                                      abs_of_less_than_min),
-> > > +                     sizeof(input));
-> > > +
-> > > +     table.data = kunit_kzalloc(test, sizeof(int), GFP_USER);
-> > > +     KUNIT_EXPECT_EQ(test, -EINVAL,
-> > > +                     proc_dointvec(&table, 1, input, &len, &pos));
-> > > +     KUNIT_EXPECT_EQ(test, sizeof(input) - 1, len);
-> > > +     KUNIT_EXPECT_EQ(test, 0, ((int *)table.data)[0]);
-> > > +}
+> 
+> Contextualized to what my vdso fallback functions do, this should not be a
+> concern because in no case a function result is directly set to a variable
+> declared as register.
+> 
+> Since the vdso fallback functions serve a very specific and limited purpose, I
+> do not expect that that code is going to change much in future.
+> 
+> The only thing that can happen is something similar to what I wrote in my
+> example, which as I empirically proved does not trigger the problematic behavior.
+> 
+> > 
+> > The gcc documentation is vague and ambiguous about precisely whan this
+> > can happen and about how to avoid it.
+> > 
+> 
+> On this I agree, it is not very clear, but this seems more something to raise
+> with the gcc folks in order to have a more "explicit" description that leaves no
+> room to the interpretation.
+> 
+> ...
+> 
+> > 
+> > However, the workaround is cheap, and to avoid the chance of subtle
+> > intermittent code gen bugs it may be worth it:
+> > 
+> > void foo(int x, int y)
+> > {
+> > 	asm volatile (
+> > 		"mov	x0, %0\n\t"
+> > 		"mov	x1, %1\n\t"
+> > 		"svc	#0"
+> > 		:: "r" (x), "r" (bar(x, y))
+> > 		: "r0", "r1", "memory"
+> > 	);
+> > }
+> > 
+> > ->
+> > 
+> > 0000000000000000 <foo>:
+> >    0:   a9be7bfd        stp     x29, x30, [sp, #-32]!
+> >    4:   910003fd        mov     x29, sp
+> >    8:   f9000bf3        str     x19, [sp, #16]
+> >    c:   2a0003f3        mov     w19, w0
+> >   10:   94000000        bl      0 <bar>
+> >   14:   2a0003e2        mov     w2, w0
+> >   18:   aa1303e0        mov     x0, x19
+> >   1c:   aa0203e1        mov     x1, x2
+> >   20:   d4000001        svc     #0x0
+> >   24:   f9400bf3        ldr     x19, [sp, #16]
+> >   28:   a8c27bfd        ldp     x29, x30, [sp], #32
+> >   2c:   d65f03c0        ret
+> > 
+> > 
+> > What do you think?
 > >
-> > API test.
-> >
-> Not sure why.
+> 
+> The solution seems ok, thanks for providing it, but IMHO I think we
+> should find a workaround for something that is broken, which, unless
+> I am missing something major, this seems not the case.
 
-Because you are codifying that we *definitely* return -EINVAL on
-overlow. Some parts of the kernel return -ERANGE for overflows for
-instance.
+So, after a bit of further experimentation, I found that I could trigger
+it with implicit function calls on an older compiler.  I couldn't show
+it with explicit function calls (as in your example).
 
-It would be a generic test for overflow if it would just test
-for any error.
+With the following code, inlining if an expression that causes an
+implicit call to a libgcc helper can trigger this issue, but I had to
+try an older compiler:
 
-It is a fine and good test to keep. All these tests are good to keep.
+int foo(int x, int y)
+{
+	register int res asm("r0");
+	register const int x_ asm("r0") = x;
+	register const int y_ asm("r1") = y;
 
-> I believe there has been a real bug with int overflow in
-> proc_dointvec.
-> Covering it with test seems like a good idea.
+	asm volatile (
+		"svc	#0"
+		: "=r" (res)
+		: "r" (x_), "r" (y_)
+		: "memory"
+	);
 
-Oh definitely.
+	return res;
+}
 
-> > > +static void sysctl_test_dointvec_single_greater_int_max(struct kunit *test)
-> > > +{
-> > > +     struct ctl_table table = {
-> > > +             .procname = "foo",
-> > > +             .data           = &test_data.int_0001,
-> > > +             .maxlen         = sizeof(int),
-> > > +             .mode           = 0644,
-> > > +             .proc_handler   = proc_dointvec,
-> > > +             .extra1         = &i_zero,
-> > > +             .extra2         = &i_one_hundred,
-> > > +     };
-> > > +     char input[32];
-> > > +     size_t len = sizeof(input) - 1;
-> > > +     loff_t pos = 0;
-> > > +     unsigned long greater_than_max = (unsigned long)INT_MAX + 1;
-> > > +
-> > > +     KUNIT_EXPECT_GT(test, greater_than_max, (unsigned long)INT_MAX);
-> > > +     KUNIT_EXPECT_LT(test, (size_t)snprintf(input, sizeof(input), "%lu",
-> > > +                                            greater_than_max),
-> > > +                     sizeof(input));
-> > > +     table.data = kunit_kzalloc(test, sizeof(int), GFP_USER);
-> > > +     KUNIT_EXPECT_EQ(test, -EINVAL,
-> > > +                     proc_dointvec(&table, 1, input, &len, &pos));
-> > > +     KUNIT_EXPECT_EQ(test, sizeof(input) - 1, len);
-> > > +     KUNIT_EXPECT_EQ(test, 0, ((int *)table.data)[0]);
-> > > +}
-> > > +
-> >
-> > API test.
-> >
-> > > +static struct kunit_case sysctl_test_cases[] = {
-> > > +     KUNIT_CASE(sysctl_test_dointvec_null_tbl_data),
-> > > +     KUNIT_CASE(sysctl_test_dointvec_table_maxlen_unset),
-> > > +     KUNIT_CASE(sysctl_test_dointvec_table_len_is_zero),
-> > > +     KUNIT_CASE(sysctl_test_dointvec_table_read_but_position_set),
-> > > +     KUNIT_CASE(sysctl_test_dointvec_happy_single_positive),
-> > > +     KUNIT_CASE(sysctl_test_dointvec_happy_single_negative),
-> > > +     KUNIT_CASE(sysctl_test_dointvec_single_less_int_min),
-> > > +     KUNIT_CASE(sysctl_test_dointvec_single_greater_int_max),
-> > > +     {}
-> > > +};
-> >
-> > Oh all are API tests.. perhaps then just rename then
-> > sysctl_test_cases to sysctl_api_test_cases.
-> >
-> > Would be good to add at least *two* other tests cases for this
-> > example, one which does a valid read and one which does a valid write.
-> Added valid reads. There already are 2 valid writes.
+int bar(int x, int y)
+{
+	return foo(x, x / y);
+}
 
-Thanks.
+-> (arm-linux-gnueabihf-gcc 9.1 -O2)
 
-> > If that is done either we add another kunit test module for correctness
-> > or just extend the above and use prefix / postfixes on the functions
-> > to distinguish between API / correctness somehow.
-> >
-> > > +
-> > > +static struct kunit_module sysctl_test_module = {
-> > > +     .name = "sysctl_test",
-> > > +     .test_cases = sysctl_test_cases,
-> > > +};
-> > > +
-> > > +module_test(sysctl_test_module);
-> > > diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-> > > index cbdfae3798965..389b8986f5b77 100644
-> > > --- a/lib/Kconfig.debug
-> > > +++ b/lib/Kconfig.debug
-> > > @@ -1939,6 +1939,16 @@ config TEST_SYSCTL
-> > >
-> > >         If unsure, say N.
-> > >
-> > > +config SYSCTL_KUNIT_TEST
-> > > +     bool "KUnit test for sysctl"
-> > > +     depends on KUNIT
-> > > +     help
-> > > +       This builds the proc sysctl unit test, which runs on boot. For more
-> > > +       information on KUnit and unit tests in general please refer to the
-> > > +       KUnit documentation in Documentation/dev-tools/kunit/.
-> >
-> > A little more description here would help. It is testing for API and
-> > hopefully also correctness (if extended with those two examples I
-> > mentioned).
-> >
-> Added "Tests the API contract and implementation correctness of sysctl."
+00000000 <foo>:
+   0:   df00            svc     0
+   2:   4770            bx      lr
 
-Yes, much clearer, thanks!
+00000004 <bar>:
+   4:   b510            push    {r4, lr}
+   6:   4604            mov     r4, r0
+   8:   f7ff fffe       bl      0 <__aeabi_idiv>
+   c:   4601            mov     r1, r0
+   e:   4620            mov     r0, r4
+  10:   df00            svc     0
+  12:   bd10            pop     {r4, pc}
 
-  Luis
+-> (arm-linux-gnueabihf-gcc 5.1 -O2)
 
+00000000 <foo>:
+   0:   df00            svc     0
+   2:   4770            bx      lr
+
+00000004 <bar>:
+   4:   b508            push    {r3, lr}
+   6:   f7ff fffe       bl      0 <__aeabi_idiv>
+   a:   4601            mov     r1, r0
+   c:   df00            svc     0
+   e:   bd08            pop     {r3, pc}
+
+I was struggling to find a way to emit an implicit function call for
+AArch64, except for 128-bit divide, which would complicate things since
+uint128_t doesn't fit in a single register anyway.
+
+Maybe this was considered a bug and fixed sometime after GCC 5, but I
+think the GCC documentation is still quite unclear on the semantics of
+register asm vars that alias call-clobbered registers in the PCS.
+
+If we can get a promise out of the GCC folks that this will not happen
+with any future compiler, then maybe we could just require a new enough
+compiler to be used.
+
+Then of course there is clang.
+
+Cheers
+---Dave
