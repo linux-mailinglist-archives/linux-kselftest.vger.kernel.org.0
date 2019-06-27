@@ -2,148 +2,101 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B8D17589A7
-	for <lists+linux-kselftest@lfdr.de>; Thu, 27 Jun 2019 20:16:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D713658E91
+	for <lists+linux-kselftest@lfdr.de>; Fri, 28 Jun 2019 01:34:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726785AbfF0SQi (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 27 Jun 2019 14:16:38 -0400
-Received: from mail.kernel.org ([198.145.29.99]:47568 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726508AbfF0SQi (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 27 Jun 2019 14:16:38 -0400
-Received: from kernel.org (unknown [104.132.0.74])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 5EA752064A;
-        Thu, 27 Jun 2019 18:16:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1561659396;
-        bh=2oWUiLUFI+CqOolaOKVa4jJ21rR9UR/fuLhE4nLYjdw=;
-        h=In-Reply-To:References:To:From:Subject:Cc:Date:From;
-        b=zM1PuCQOlI4msEkFixz730kc8/zFbvwJnRkqkjMyx+3IZ/8lQrJkX5bjK8+tcjTpD
-         9YTsqw4mLY9MvEtPAy8WslYPIgMqfSsLuNDFSuTYyeTtiNsbbEN2c2e7JVMq1S+AoJ
-         JJirWvQWTUXBy4OsdUUrOSg+eULRykDPesnCIHuI=
-Content-Type: text/plain; charset="utf-8"
+        id S1726579AbfF0XeY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 27 Jun 2019 19:34:24 -0400
+Received: from mail-io1-f65.google.com ([209.85.166.65]:38309 "EHLO
+        mail-io1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726514AbfF0XeY (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 27 Jun 2019 19:34:24 -0400
+Received: by mail-io1-f65.google.com with SMTP id j6so8612566ioa.5
+        for <linux-kselftest@vger.kernel.org>; Thu, 27 Jun 2019 16:34:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=l89hBvZrEHLPxhxyxMlfDGOIe5uXPNhT8ICPgxlxf2E=;
+        b=LaEBtdw97EYwVjhQ2He+QVwcePOM+u4DJj74JjBzsoEmaYokSHAj68OTsYT1baTKfn
+         0CpDvbNi+OFuNBVzKms0fRzzPcUbOQPoKyCTOXBKfdq9EjiNpTBFupVWEeGRNzo40xcq
+         BQTtO2ZMq69zkSGlhefUHt3X8816bflaE3pSQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=l89hBvZrEHLPxhxyxMlfDGOIe5uXPNhT8ICPgxlxf2E=;
+        b=OLg7fZE/RmbH3anUkTSFZgY3omnjF6FauwsFD7qzl4Rv9UKbjkMGSALKfdhR8awf5X
+         nzzSZsBd6oEdrOujEPizAy11j73AkY0rZIdyOb++UadORnkiV8fl67M9df9LyOTJ0o19
+         E9Jd2pHvpOQu+XnjEAZzaLAAzOSq/kZZytTG9QPjOQCWm/6jY22I+HMupAxwlcL2O2MW
+         fJKjeoEHHqtoYbuVOoU9MhVT0to316GzxBLXTfO56WPtrhT4boPlJvthwTuucaTJtX7t
+         qCIkuJOQYg9303OW/yM1YsYJ2GJnDYykd6qbyAPIMh0BcrlOASB1LHJKQ8cpRrK2Kcl9
+         TEmw==
+X-Gm-Message-State: APjAAAUJcpk9gAcbsSkB/7fW0NdGoB6Ro0h/WXZUdZWdZJkSw+wuNlXL
+        iOSZS3EcqZCDwF0UdZhZ9wv0jA==
+X-Google-Smtp-Source: APXvYqwj4rkWd8isFJNVQVTJ3enNTztWl/NXzCy6FgXuC6/2rhi87XUFdhvu6dzltHCuykaP0MNqJA==
+X-Received: by 2002:a5d:885a:: with SMTP id t26mr3561199ios.218.1561678463873;
+        Thu, 27 Jun 2019 16:34:23 -0700 (PDT)
+Received: from shuah-t480s.internal (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
+        by smtp.gmail.com with ESMTPSA id i23sm538506ioj.24.2019.06.27.16.34.22
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Thu, 27 Jun 2019 16:34:23 -0700 (PDT)
+From:   Shuah Khan <skhan@linuxfoundation.org>
+To:     shuah@kernel.org, allison@lohutok.net, gregkh@linuxfoundation.org,
+        alexios.zavras@intel.com, tglx@linutronix.de
+Cc:     Shuah Khan <skhan@linuxfoundation.org>,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] selftests: timestamping: Fix SIOCGSTAMP undeclared build failure
+Date:   Thu, 27 Jun 2019 17:34:21 -0600
+Message-Id: <20190627233421.30340-1-skhan@linuxfoundation.org>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <CAFd5g46zHAupdUh3wDuqPJti2M+_=oje_5weFe7AVLQfkDDM6A@mail.gmail.com>
-References: <20190617082613.109131-1-brendanhiggins@google.com> <20190617082613.109131-2-brendanhiggins@google.com> <20190620001526.93426218BE@mail.kernel.org> <CAFd5g46Jhxsz6_VXHEVYvTeDRwwzgKpr=aUWLL5b3S4kUukb8g@mail.gmail.com> <20190626034100.B238520883@mail.kernel.org> <CAFd5g46zHAupdUh3wDuqPJti2M+_=oje_5weFe7AVLQfkDDM6A@mail.gmail.com>
-To:     Brendan Higgins <brendanhiggins@google.com>
-From:   Stephen Boyd <sboyd@kernel.org>
-Subject: Re: [PATCH v5 01/18] kunit: test: add KUnit test runner core
-Cc:     Frank Rowand <frowand.list@gmail.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Kees Cook <keescook@google.com>,
-        Kieran Bingham <kieran.bingham@ideasonboard.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Rob Herring <robh@kernel.org>, shuah <shuah@kernel.org>,
-        Theodore Ts'o <tytso@mit.edu>,
-        Masahiro Yamada <yamada.masahiro@socionext.com>,
-        devicetree <devicetree@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        kunit-dev@googlegroups.com,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        linux-fsdevel@vger.kernel.org,
-        linux-kbuild <linux-kbuild@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        linux-nvdimm <linux-nvdimm@lists.01.org>,
-        linux-um@lists.infradead.org,
-        Sasha Levin <Alexander.Levin@microsoft.com>,
-        "Bird, Timothy" <Tim.Bird@sony.com>,
-        Amir Goldstein <amir73il@gmail.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Daniel Vetter <daniel@ffwll.ch>, Jeff Dike <jdike@addtoit.com>,
-        Joel Stanley <joel@jms.id.au>,
-        Julia Lawall <julia.lawall@lip6.fr>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Knut Omang <knut.omang@oracle.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Petr Mladek <pmladek@suse.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Richard Weinberger <richard@nod.at>,
-        David Rientjes <rientjes@google.com>,
-        Steven Rostedt <rostedt@goodmis.org>, wfg@linux.intel.com
-User-Agent: alot/0.8.1
-Date:   Thu, 27 Jun 2019 11:16:35 -0700
-Message-Id: <20190627181636.5EA752064A@mail.kernel.org>
+Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Quoting Brendan Higgins (2019-06-26 16:00:40)
-> On Tue, Jun 25, 2019 at 8:41 PM Stephen Boyd <sboyd@kernel.org> wrote:
->=20
-> > scenario like below, but where it is a problem. There could be three
-> > CPUs, or even one CPU and three threads if you want to describe the
-> > extra thread scenario.
-> >
-> > Here's my scenario where it isn't needed:
-> >
-> >     CPU0                                      CPU1
-> >     ----                                      ----
-> >     kunit_run_test(&test)
-> >                                               test_case_func()
-> >                                                 ....
-> >                                               [mock hardirq]
-> >                                                 kunit_set_success(&test)
-> >                                               [hardirq ends]
-> >                                                 ...
-> >                                                 complete(&test_done)
-> >       wait_for_completion(&test_done)
-> >       kunit_get_success(&test)
-> >
-> > We don't need to care about having locking here because success or
-> > failure only happens in one place and it's synchronized with the
-> > completion.
->=20
-> Here is the scenario I am concerned about:
->=20
-> CPU0                      CPU1                       CPU2
-> ----                      ----                       ----
-> kunit_run_test(&test)
->                           test_case_func()
->                             ....
->                             schedule_work(foo_func)
->                           [mock hardirq]             foo_func()
->                             ...                        ...
->                             kunit_set_success(false)   kunit_set_success(=
-false)
->                           [hardirq ends]               ...
->                             ...
->                             complete(&test_done)
->   wait_for_completion(...)
->   kunit_get_success(&test)
->=20
-> In my scenario, since both CPU1 and CPU2 update the success status of
-> the test simultaneously, even though they are setting it to the same
-> value. If my understanding is correct, this could result in a
-> write-tear on some architectures in some circumstances. I suppose we
-> could just make it an atomic boolean, but I figured locking is also
-> fine, and generally preferred.
+Add missing linux/sockios.h include to fix the following SIOCGSTAMP
+undeclared build error. In addition, remove the local defines for
+SIOCGSTAMPNS and SIOCSHWTSTAMP and pick them up from linux/sockios.h.
 
-This is what we have WRITE_ONCE() and READ_ONCE() for. Maybe you could
-just use that in the getter and setters and remove the lock if it isn't
-used for anything else.
+timestamping.c:249:19: error: SIOCGSTAMP undeclared
+   if (ioctl(sock, SIOCGSTAMP, &tv))
 
-It may also be a good idea to have a kunit_fail_test() API that fails
-the test passed in with a WRITE_ONCE(false). Otherwise, the test is
-assumed successful and it isn't even possible for a test to change the
-state from failure to success due to a logical error because the API
-isn't available. Then we don't really need to have a generic
-kunit_set_success() function at all. We could have a kunit_test_failed()
-function too that replaces the kunit_get_success() function. That would
-read better in an if condition.
+Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
+---
+ .../selftests/networking/timestamping/timestamping.c     | 9 +--------
+ 1 file changed, 1 insertion(+), 8 deletions(-)
 
->=20
-> Also, to be clear, I am onboard with dropping then IRQ stuff for now.
-> I am fine moving to a mutex for the time being.
->=20
-
-Ok.
+diff --git a/tools/testing/selftests/networking/timestamping/timestamping.c b/tools/testing/selftests/networking/timestamping/timestamping.c
+index 0fbed67bf4f6..aca3491174a1 100644
+--- a/tools/testing/selftests/networking/timestamping/timestamping.c
++++ b/tools/testing/selftests/networking/timestamping/timestamping.c
+@@ -32,6 +32,7 @@
+ #include <asm/types.h>
+ #include <linux/net_tstamp.h>
+ #include <linux/errqueue.h>
++#include <linux/sockios.h>
+ 
+ #ifndef SO_TIMESTAMPING
+ # define SO_TIMESTAMPING         37
+@@ -42,14 +43,6 @@
+ # define SO_TIMESTAMPNS 35
+ #endif
+ 
+-#ifndef SIOCGSTAMPNS
+-# define SIOCGSTAMPNS 0x8907
+-#endif
+-
+-#ifndef SIOCSHWTSTAMP
+-# define SIOCSHWTSTAMP 0x89b0
+-#endif
+-
+ static void usage(const char *error)
+ {
+ 	if (error)
+-- 
+2.17.1
 
