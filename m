@@ -2,101 +2,65 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D713658E91
-	for <lists+linux-kselftest@lfdr.de>; Fri, 28 Jun 2019 01:34:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D819B59243
+	for <lists+linux-kselftest@lfdr.de>; Fri, 28 Jun 2019 06:04:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726579AbfF0XeY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 27 Jun 2019 19:34:24 -0400
-Received: from mail-io1-f65.google.com ([209.85.166.65]:38309 "EHLO
-        mail-io1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726514AbfF0XeY (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 27 Jun 2019 19:34:24 -0400
-Received: by mail-io1-f65.google.com with SMTP id j6so8612566ioa.5
-        for <linux-kselftest@vger.kernel.org>; Thu, 27 Jun 2019 16:34:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=l89hBvZrEHLPxhxyxMlfDGOIe5uXPNhT8ICPgxlxf2E=;
-        b=LaEBtdw97EYwVjhQ2He+QVwcePOM+u4DJj74JjBzsoEmaYokSHAj68OTsYT1baTKfn
-         0CpDvbNi+OFuNBVzKms0fRzzPcUbOQPoKyCTOXBKfdq9EjiNpTBFupVWEeGRNzo40xcq
-         BQTtO2ZMq69zkSGlhefUHt3X8816bflaE3pSQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=l89hBvZrEHLPxhxyxMlfDGOIe5uXPNhT8ICPgxlxf2E=;
-        b=OLg7fZE/RmbH3anUkTSFZgY3omnjF6FauwsFD7qzl4Rv9UKbjkMGSALKfdhR8awf5X
-         nzzSZsBd6oEdrOujEPizAy11j73AkY0rZIdyOb++UadORnkiV8fl67M9df9LyOTJ0o19
-         E9Jd2pHvpOQu+XnjEAZzaLAAzOSq/kZZytTG9QPjOQCWm/6jY22I+HMupAxwlcL2O2MW
-         fJKjeoEHHqtoYbuVOoU9MhVT0to316GzxBLXTfO56WPtrhT4boPlJvthwTuucaTJtX7t
-         qCIkuJOQYg9303OW/yM1YsYJ2GJnDYykd6qbyAPIMh0BcrlOASB1LHJKQ8cpRrK2Kcl9
-         TEmw==
-X-Gm-Message-State: APjAAAUJcpk9gAcbsSkB/7fW0NdGoB6Ro0h/WXZUdZWdZJkSw+wuNlXL
-        iOSZS3EcqZCDwF0UdZhZ9wv0jA==
-X-Google-Smtp-Source: APXvYqwj4rkWd8isFJNVQVTJ3enNTztWl/NXzCy6FgXuC6/2rhi87XUFdhvu6dzltHCuykaP0MNqJA==
-X-Received: by 2002:a5d:885a:: with SMTP id t26mr3561199ios.218.1561678463873;
-        Thu, 27 Jun 2019 16:34:23 -0700 (PDT)
-Received: from shuah-t480s.internal (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id i23sm538506ioj.24.2019.06.27.16.34.22
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Thu, 27 Jun 2019 16:34:23 -0700 (PDT)
-From:   Shuah Khan <skhan@linuxfoundation.org>
-To:     shuah@kernel.org, allison@lohutok.net, gregkh@linuxfoundation.org,
-        alexios.zavras@intel.com, tglx@linutronix.de
-Cc:     Shuah Khan <skhan@linuxfoundation.org>,
+        id S1727080AbfF1EEk (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 28 Jun 2019 00:04:40 -0400
+Received: from ozlabs.org ([203.11.71.1]:37067 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725792AbfF1EEk (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 28 Jun 2019 00:04:40 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 45Zjnx6mG3z9s7h;
+        Fri, 28 Jun 2019 14:04:37 +1000 (AEST)
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     Denis Efremov <efremov@linux.com>,
+        Simon Guo <wei.guo.simon@gmail.com>
+Cc:     Denis Efremov <efremov@linux.com>, Shuah Khan <shuah@kernel.org>,
         linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] selftests: timestamping: Fix SIOCGSTAMP undeclared build failure
-Date:   Thu, 27 Jun 2019 17:34:21 -0600
-Message-Id: <20190627233421.30340-1-skhan@linuxfoundation.org>
-X-Mailer: git-send-email 2.20.1
+Subject: Re: [PATCH] selftests/powerpc: ppc_asm.h: typo in the header guard
+In-Reply-To: <20190623155200.2147-1-efremov@linux.com>
+References: <20190623155200.2147-1-efremov@linux.com>
+Date:   Fri, 28 Jun 2019 14:04:37 +1000
+Message-ID: <87ef3es6cq.fsf@concordia.ellerman.id.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add missing linux/sockios.h include to fix the following SIOCGSTAMP
-undeclared build error. In addition, remove the local defines for
-SIOCGSTAMPNS and SIOCSHWTSTAMP and pick them up from linux/sockios.h.
+Denis Efremov <efremov@linux.com> writes:
+> The guard macro __PPC_ASM_H in the header ppc_asm.h
+> doesn't match the #ifndef macro _PPC_ASM_H. The patch
+> makes them the same.
+>
+> Signed-off-by: Denis Efremov <efremov@linux.com>
+> ---
+>  tools/testing/selftests/powerpc/stringloops/asm/ppc_asm.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-timestamping.c:249:19: error: SIOCGSTAMP undeclared
-   if (ioctl(sock, SIOCGSTAMP, &tv))
+I'll merge this.
 
-Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
----
- .../selftests/networking/timestamping/timestamping.c     | 9 +--------
- 1 file changed, 1 insertion(+), 8 deletions(-)
+Please include linuxppc-dev on powerpc selftest patches.
 
-diff --git a/tools/testing/selftests/networking/timestamping/timestamping.c b/tools/testing/selftests/networking/timestamping/timestamping.c
-index 0fbed67bf4f6..aca3491174a1 100644
---- a/tools/testing/selftests/networking/timestamping/timestamping.c
-+++ b/tools/testing/selftests/networking/timestamping/timestamping.c
-@@ -32,6 +32,7 @@
- #include <asm/types.h>
- #include <linux/net_tstamp.h>
- #include <linux/errqueue.h>
-+#include <linux/sockios.h>
- 
- #ifndef SO_TIMESTAMPING
- # define SO_TIMESTAMPING         37
-@@ -42,14 +43,6 @@
- # define SO_TIMESTAMPNS 35
- #endif
- 
--#ifndef SIOCGSTAMPNS
--# define SIOCGSTAMPNS 0x8907
--#endif
--
--#ifndef SIOCSHWTSTAMP
--# define SIOCSHWTSTAMP 0x89b0
--#endif
--
- static void usage(const char *error)
- {
- 	if (error)
--- 
-2.17.1
+cheers
 
+> diff --git a/tools/testing/selftests/powerpc/stringloops/asm/ppc_asm.h b/tools/testing/selftests/powerpc/stringloops/asm/ppc_asm.h
+> index d2c0a911f55e..2b488b78c4f2 100644
+> --- a/tools/testing/selftests/powerpc/stringloops/asm/ppc_asm.h
+> +++ b/tools/testing/selftests/powerpc/stringloops/asm/ppc_asm.h
+> @@ -1,6 +1,6 @@
+>  /* SPDX-License-Identifier: GPL-2.0 */
+>  #ifndef _PPC_ASM_H
+> -#define __PPC_ASM_H
+> +#define _PPC_ASM_H
+>  #include <ppc-asm.h>
+>  
+>  #ifndef r1
+> -- 
+> 2.21.0
