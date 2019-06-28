@@ -2,177 +2,80 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0379E595BE
-	for <lists+linux-kselftest@lfdr.de>; Fri, 28 Jun 2019 10:09:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CB9E59899
+	for <lists+linux-kselftest@lfdr.de>; Fri, 28 Jun 2019 12:41:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726605AbfF1IJ5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 28 Jun 2019 04:09:57 -0400
-Received: from mail-pf1-f193.google.com ([209.85.210.193]:45548 "EHLO
-        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726574AbfF1IJ4 (ORCPT
+        id S1726502AbfF1Kly (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 28 Jun 2019 06:41:54 -0400
+Received: from mail-wr1-f67.google.com ([209.85.221.67]:35835 "EHLO
+        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726514AbfF1Kly (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 28 Jun 2019 04:09:56 -0400
-Received: by mail-pf1-f193.google.com with SMTP id r1so2564188pfq.12
-        for <linux-kselftest@vger.kernel.org>; Fri, 28 Jun 2019 01:09:56 -0700 (PDT)
+        Fri, 28 Jun 2019 06:41:54 -0400
+Received: by mail-wr1-f67.google.com with SMTP id f15so5784351wrp.2
+        for <linux-kselftest@vger.kernel.org>; Fri, 28 Jun 2019 03:41:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=yibP/Iv6ps2Lbs4MfioQUnaQ1X0MZgCBiZaerRAAUs0=;
-        b=e5kLlPi61UOlg3aWbm3hyHJ6zEvPrbJg4WaMTgr5J7N6beCFHbvMVMWvXm34zFIMK6
-         sy+TCthgNvl6QKdGAvF199JWgLSzY0riL7Qema9Z8eQSMrEVD7QmDgObmKA9VnGm6jQk
-         Qk9Vw4tG1NS/Rsaor+MwqJJtzbW9NLCCg64qdKIwo/lqdLjqjD0HoEJZR2UkGwIQNQU7
-         B8LVi8olEdiEG1gQQPAGB3QH7tntl/R65/A9R5rItsLpolqg+IRJEp1Du/WH5LqoOfL3
-         I3l8I0kuDspWHSG/V5vI+q5UJh9nND3VlxUlk753w0GhWsuvm1nMSIm2VqKl1wq8mbGo
-         9uhw==
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id;
+        bh=fn4SHUReevfi7LGNbp5/ZkuKJ+VkXuPKGZp9iPHBRQM=;
+        b=FcVGYRR7L2QIhyB2lwKvcYoAwdEZDdkz2dYGOGl9QJJ0ctqjC9CJ1NECXQauijgNJC
+         gsIx6qLOunnFDj1aF3VW/2AeIRIEgwooWkCrf7oBEP8OZ677GZqJlEFx5PgSMj/WqHiv
+         4yJf0fA26OgX3xlz45arEnpuf+Mg+5TDXv09y3Fcp5OKRoF4EKpxF7pc+/PHxdftHAYZ
+         zpYhdtBcHpZI04t9Y6nPUAatQYA+8YtDnG6Bu8LEefRtuMIsp4d8hjuDTTNF8lylo3YK
+         TxVuPxoml6kyZo5T4JSTcDUhztUt8ciXSYZ0ZHPaP8zX0d3u5HA4rJCo95yekxcjPWJ3
+         HqIg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=yibP/Iv6ps2Lbs4MfioQUnaQ1X0MZgCBiZaerRAAUs0=;
-        b=dvbRgf34cCZ5ZwJ8nGVIzp5jDvdIFHJE+/XssKQUNTVzdx2B0FDYIvV2v2yDSiayxl
-         Y4fphBtrxkIJKOFtMVssRheWBDpkDEptvGPkOQ6seS2aUS8KT0W/26XhTJR5gEgXG9Ot
-         uW9b+ObpV1k4p+a0ZmAIA0RjKmLaASBT/vT++nZztYA9c3PtgB4o/iXltB5FSt/KAFzy
-         x2mEQeVUp5GRhhrS2XS/Zxmao80sY1v3WzwFE3fq7eRHaSmdb3pTt3DF0ELcX3AQVfZs
-         mbG3qQMLbtJNh8Bg3xpXj4vBvGMwiiaDtjBMM1/c7/OTSAzMMNtQxhN1K/cXrzSgbbKD
-         8j4w==
-X-Gm-Message-State: APjAAAV59o6/kJGd+EwuNIi4WQv5v409TAtTEM448hNugQw3048nMeIr
-        Bxd9u3+5l4b646umSsFfq39j+kTWJPwMDj0nSSew0g==
-X-Google-Smtp-Source: APXvYqwa5Gi43WdeQYYulM3cScojWTt0/MI+kDN9NbNdt1CeW4jxKTFR3Algm98Jmh+XvwAADJqdAi9a1c1dDVA05Ew=
-X-Received: by 2002:a17:90a:be0d:: with SMTP id a13mr11033056pjs.84.1561709395368;
- Fri, 28 Jun 2019 01:09:55 -0700 (PDT)
-MIME-Version: 1.0
-References: <20190617082613.109131-1-brendanhiggins@google.com>
- <20190617082613.109131-2-brendanhiggins@google.com> <20190620001526.93426218BE@mail.kernel.org>
- <CAFd5g46Jhxsz6_VXHEVYvTeDRwwzgKpr=aUWLL5b3S4kUukb8g@mail.gmail.com>
- <20190626034100.B238520883@mail.kernel.org> <CAFd5g46zHAupdUh3wDuqPJti2M+_=oje_5weFe7AVLQfkDDM6A@mail.gmail.com>
- <20190627181636.5EA752064A@mail.kernel.org>
-In-Reply-To: <20190627181636.5EA752064A@mail.kernel.org>
-From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Fri, 28 Jun 2019 01:09:44 -0700
-Message-ID: <CAFd5g44V3ZLNazUOgOo2sFR3zzbNnTkH4e9uxGX4iHi7G73Mzw@mail.gmail.com>
-Subject: Re: [PATCH v5 01/18] kunit: test: add KUnit test runner core
-To:     Stephen Boyd <sboyd@kernel.org>
-Cc:     Frank Rowand <frowand.list@gmail.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Kees Cook <keescook@google.com>,
-        Kieran Bingham <kieran.bingham@ideasonboard.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Rob Herring <robh@kernel.org>, shuah <shuah@kernel.org>,
-        "Theodore Ts'o" <tytso@mit.edu>,
-        Masahiro Yamada <yamada.masahiro@socionext.com>,
-        devicetree <devicetree@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        kunit-dev@googlegroups.com,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        linux-fsdevel@vger.kernel.org,
-        linux-kbuild <linux-kbuild@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        linux-nvdimm <linux-nvdimm@lists.01.org>,
-        linux-um@lists.infradead.org,
-        Sasha Levin <Alexander.Levin@microsoft.com>,
-        "Bird, Timothy" <Tim.Bird@sony.com>,
-        Amir Goldstein <amir73il@gmail.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Daniel Vetter <daniel@ffwll.ch>, Jeff Dike <jdike@addtoit.com>,
-        Joel Stanley <joel@jms.id.au>,
-        Julia Lawall <julia.lawall@lip6.fr>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Knut Omang <knut.omang@oracle.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Petr Mladek <pmladek@suse.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Richard Weinberger <richard@nod.at>,
-        David Rientjes <rientjes@google.com>,
-        Steven Rostedt <rostedt@goodmis.org>, wfg@linux.intel.com
-Content-Type: text/plain; charset="UTF-8"
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=fn4SHUReevfi7LGNbp5/ZkuKJ+VkXuPKGZp9iPHBRQM=;
+        b=e/ShHNgrnsncJVtxEdZYjCRNLc8EY+xJxPWTAm/pCazH+VrNUYiGBqJVaxTXuG1FSy
+         1Rg3AwsrX4G155PeVWKLcOeOy+JUmyNySDRcDK8500TVzAYohufcio8no7L1LBJfc8Hr
+         U8RNUPAfSURStomOwnfSonBygWlekbRyZNPeeWNjgxBawDz5CxqgOdyd6bRQwY7vWpev
+         mQdz5KUBl/VAsiOeAno+RVO/bMpeu2frwGQbb4Ja+ESR4gRUv+R3ux6lEwwz2BunAl+O
+         6osCISc5lO70NqCZx0i1yaqGKNUX8g3FHZ/iNd65zR2U0MSsk+teJGmkkSvo+ZV8vhbV
+         rT2w==
+X-Gm-Message-State: APjAAAVAXca5+LsSILMNNnKxC0NH/axSwRlPsKblBdZmUblY59NSCMU3
+        soJehlA9pfiZeKjHlIN0iBJajQ==
+X-Google-Smtp-Source: APXvYqxU+O7Rz4jovQdk7zfCc7KuhQRK+1MN9MQ4NsrOWxTF9ULwMVt/VH0FS/xYrs2HcD4jWM4JvA==
+X-Received: by 2002:adf:ec49:: with SMTP id w9mr6913488wrn.303.1561718512837;
+        Fri, 28 Jun 2019 03:41:52 -0700 (PDT)
+Received: from hackbox2.linaro.org ([81.128.185.34])
+        by smtp.gmail.com with ESMTPSA id y184sm1610627wmg.14.2019.06.28.03.41.51
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Fri, 28 Jun 2019 03:41:51 -0700 (PDT)
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+To:     skhan@linuxfoundation.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     murphyt7@tcd.ie, kraxel@redhat.com, daniel.vetter@ffwll.ch,
+        laurent.pinchart@ideasonboard.com, tomeu.vizoso@collabora.com,
+        airlied@linux.ie, shuah@kernel.org,
+        Naresh Kamboju <naresh.kamboju@linaro.org>
+Subject: [PATCH] selftests: dma-buf: Adding kernel config fragment CONFIG_UDMABUF=y
+Date:   Fri, 28 Jun 2019 11:41:48 +0100
+Message-Id: <20190628104148.5314-1-naresh.kamboju@linaro.org>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Jun 27, 2019 at 11:16 AM Stephen Boyd <sboyd@kernel.org> wrote:
->
-> Quoting Brendan Higgins (2019-06-26 16:00:40)
-> > On Tue, Jun 25, 2019 at 8:41 PM Stephen Boyd <sboyd@kernel.org> wrote:
-> >
-> > > scenario like below, but where it is a problem. There could be three
-> > > CPUs, or even one CPU and three threads if you want to describe the
-> > > extra thread scenario.
-> > >
-> > > Here's my scenario where it isn't needed:
-> > >
-> > >     CPU0                                      CPU1
-> > >     ----                                      ----
-> > >     kunit_run_test(&test)
-> > >                                               test_case_func()
-> > >                                                 ....
-> > >                                               [mock hardirq]
-> > >                                                 kunit_set_success(&test)
-> > >                                               [hardirq ends]
-> > >                                                 ...
-> > >                                                 complete(&test_done)
-> > >       wait_for_completion(&test_done)
-> > >       kunit_get_success(&test)
-> > >
-> > > We don't need to care about having locking here because success or
-> > > failure only happens in one place and it's synchronized with the
-> > > completion.
-> >
-> > Here is the scenario I am concerned about:
-> >
-> > CPU0                      CPU1                       CPU2
-> > ----                      ----                       ----
-> > kunit_run_test(&test)
-> >                           test_case_func()
-> >                             ....
-> >                             schedule_work(foo_func)
-> >                           [mock hardirq]             foo_func()
-> >                             ...                        ...
-> >                             kunit_set_success(false)   kunit_set_success(false)
-> >                           [hardirq ends]               ...
-> >                             ...
-> >                             complete(&test_done)
-> >   wait_for_completion(...)
-> >   kunit_get_success(&test)
-> >
-> > In my scenario, since both CPU1 and CPU2 update the success status of
-> > the test simultaneously, even though they are setting it to the same
-> > value. If my understanding is correct, this could result in a
-> > write-tear on some architectures in some circumstances. I suppose we
-> > could just make it an atomic boolean, but I figured locking is also
-> > fine, and generally preferred.
->
-> This is what we have WRITE_ONCE() and READ_ONCE() for. Maybe you could
-> just use that in the getter and setters and remove the lock if it isn't
-> used for anything else.
->
-> It may also be a good idea to have a kunit_fail_test() API that fails
-> the test passed in with a WRITE_ONCE(false). Otherwise, the test is
-> assumed successful and it isn't even possible for a test to change the
-> state from failure to success due to a logical error because the API
-> isn't available. Then we don't really need to have a generic
-> kunit_set_success() function at all. We could have a kunit_test_failed()
-> function too that replaces the kunit_get_success() function. That would
-> read better in an if condition.
+The test case drivers/dma-buf/udmabuf need this kernel config enabled
 
-You know what, I think you are right.
+CONFIG_UDMABUF=y
 
-Sorry, for not realizing this earlier, I think you mentioned something
-along these lines a long time ago.
+Signed-off-by: Naresh Kamboju <naresh.kamboju@linaro.org>
+---
+ tools/testing/selftests/drivers/dma-buf/config | 1 +
+ 1 file changed, 1 insertion(+)
+ create mode 100644 tools/testing/selftests/drivers/dma-buf/config
 
-Thanks for your patience!
+diff --git a/tools/testing/selftests/drivers/dma-buf/config b/tools/testing/selftests/drivers/dma-buf/config
+new file mode 100644
+index 000000000000..d708515cff1b
+--- /dev/null
++++ b/tools/testing/selftests/drivers/dma-buf/config
+@@ -0,0 +1 @@
++CONFIG_UDMABUF=y
+-- 
+2.17.1
 
-> >
-> > Also, to be clear, I am onboard with dropping then IRQ stuff for now.
-> > I am fine moving to a mutex for the time being.
-> >
->
-> Ok.
-
-Thanks!
