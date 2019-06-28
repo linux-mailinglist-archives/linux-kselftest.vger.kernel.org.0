@@ -2,65 +2,308 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D819B59243
-	for <lists+linux-kselftest@lfdr.de>; Fri, 28 Jun 2019 06:04:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19E315957D
+	for <lists+linux-kselftest@lfdr.de>; Fri, 28 Jun 2019 10:02:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727080AbfF1EEk (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 28 Jun 2019 00:04:40 -0400
-Received: from ozlabs.org ([203.11.71.1]:37067 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725792AbfF1EEk (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 28 Jun 2019 00:04:40 -0400
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 45Zjnx6mG3z9s7h;
-        Fri, 28 Jun 2019 14:04:37 +1000 (AEST)
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     Denis Efremov <efremov@linux.com>,
-        Simon Guo <wei.guo.simon@gmail.com>
-Cc:     Denis Efremov <efremov@linux.com>, Shuah Khan <shuah@kernel.org>,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] selftests/powerpc: ppc_asm.h: typo in the header guard
-In-Reply-To: <20190623155200.2147-1-efremov@linux.com>
-References: <20190623155200.2147-1-efremov@linux.com>
-Date:   Fri, 28 Jun 2019 14:04:37 +1000
-Message-ID: <87ef3es6cq.fsf@concordia.ellerman.id.au>
+        id S1726667AbfF1ICH (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 28 Jun 2019 04:02:07 -0400
+Received: from mail-pl1-f193.google.com ([209.85.214.193]:41909 "EHLO
+        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726484AbfF1ICG (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 28 Jun 2019 04:02:06 -0400
+Received: by mail-pl1-f193.google.com with SMTP id m7so2783996pls.8
+        for <linux-kselftest@vger.kernel.org>; Fri, 28 Jun 2019 01:02:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=WZq6BCzx2oAYKBXZwpH6LRexuDJ0/444+0e0Mc/hDbY=;
+        b=Rd9lRP9zAd/kbl3ZE7qYqE71uAPpqI08y9O8Z8POPjewUXfV5BkcxB5GlkY7Lz2EvR
+         L0vi5OB036U4FKFCgIDZv8F3y6lztLOxmk0kwy/NUBPaZkq+ECaVF1Jt2lfubLgAj49H
+         Uk6C/xmHOoJyYfOl2AD99Cc4Ji0bJcI5iEK/IOzTvY7wn8alGsOUKlv4FIhRP3sRGF55
+         fIMKwrwTaQtuY+hOsydah24wbl/mQVSW6sltZZBybHwghcYUR14MnHCnTHXmgdqPSQtw
+         agAI8RdzSUB0Onytip3sOEuouLaTLd1x4D+UiNdsy+ktLsNeIwWlm9Q+91kPa3V5g02W
+         Z4fA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=WZq6BCzx2oAYKBXZwpH6LRexuDJ0/444+0e0Mc/hDbY=;
+        b=gumrtI7LxjG0Ed6PWGZ7d2ibYoWGW7mEYdjabARN6wVl2ePD0psLjeLus9jqlW05jR
+         uuftOqNE66jQhO+lR2wz6/dmvsytPUT8oOMsyWpNuLlyAg8bgQdupGfPniENTT1D03WL
+         7RVQyb737sqWLr/5mrmi7zMNKbr6z03TQ72wwSD2I6o2Wt7gpMOx7y4P1imzY8V1IEhl
+         4iQXi6fbF6TgA+Ltp4d7mn7cvOZbo3r/Um9ZNl84HeZznVPpVA9QkPL6jUS3jI+I1o0k
+         q9ysVW5IvN3j70EUv80E6hGQaJIJxCagboCBSoiqLRc1BDiuS5HI8gEbfmRqqCkokL0L
+         TPVg==
+X-Gm-Message-State: APjAAAWF0c9tynMNoeR2KTaAs/2TUUwxNuM4SXamSMZjZ0I1Rivud03u
+        VWSc17+PnJfzKR/mjzEWcF72K9KnZRJBZERwDdT0hA==
+X-Google-Smtp-Source: APXvYqwmEZtlGKAjiLJWvizo9Zwmik6FWTQ62cPvtwGWDViEZL1wVsPAEfk8YLKeNB7mUaMkZVTde4hFd59dR/Vcw90=
+X-Received: by 2002:a17:902:2006:: with SMTP id n6mr10173684pla.232.1561708925220;
+ Fri, 28 Jun 2019 01:02:05 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
+References: <20190617082613.109131-1-brendanhiggins@google.com>
+ <20190617082613.109131-18-brendanhiggins@google.com> <20190626021744.GU19023@42.do-not-panic.com>
+ <CAAXuY3p+kVhjQ4LYtzormqVcH2vKu1abc_K9Z0XY=JX=bp8NcQ@mail.gmail.com> <20190627061021.GE19023@42.do-not-panic.com>
+In-Reply-To: <20190627061021.GE19023@42.do-not-panic.com>
+From:   Brendan Higgins <brendanhiggins@google.com>
+Date:   Fri, 28 Jun 2019 01:01:54 -0700
+Message-ID: <CAFd5g45VJ9yfuESUc=E0ydJyN+mk1b1kyHSCYvO2x9KPC7+3GQ@mail.gmail.com>
+Subject: Re: [PATCH v5 17/18] kernel/sysctl-test: Add null pointer test for sysctl.c:proc_dointvec()
+To:     Luis Chamberlain <mcgrof@kernel.org>
+Cc:     Iurii Zaikin <yzaikin@google.com>, linux-api@vger.kernel.org,
+        "Michael Kerrisk (man-pages)" <mtk.manpages@gmail.com>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Kees Cook <keescook@google.com>,
+        Kieran Bingham <kieran.bingham@ideasonboard.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Rob Herring <robh@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
+        shuah <shuah@kernel.org>, "Theodore Ts'o" <tytso@mit.edu>,
+        Masahiro Yamada <yamada.masahiro@socionext.com>,
+        devicetree <devicetree@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        kunit-dev@googlegroups.com,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        linux-fsdevel@vger.kernel.org,
+        linux-kbuild <linux-kbuild@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        linux-nvdimm <linux-nvdimm@lists.01.org>,
+        linux-um@lists.infradead.org,
+        Sasha Levin <Alexander.Levin@microsoft.com>,
+        "Bird, Timothy" <Tim.Bird@sony.com>,
+        Amir Goldstein <amir73il@gmail.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Daniel Vetter <daniel@ffwll.ch>, Jeff Dike <jdike@addtoit.com>,
+        Joel Stanley <joel@jms.id.au>,
+        Julia Lawall <julia.lawall@lip6.fr>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Knut Omang <knut.omang@oracle.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Petr Mladek <pmladek@suse.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Richard Weinberger <richard@nod.at>,
+        David Rientjes <rientjes@google.com>,
+        Steven Rostedt <rostedt@goodmis.org>, wfg@linux.intel.com
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Denis Efremov <efremov@linux.com> writes:
-> The guard macro __PPC_ASM_H in the header ppc_asm.h
-> doesn't match the #ifndef macro _PPC_ASM_H. The patch
-> makes them the same.
+On Wed, Jun 26, 2019 at 11:10 PM Luis Chamberlain <mcgrof@kernel.org> wrote:
 >
-> Signed-off-by: Denis Efremov <efremov@linux.com>
-> ---
->  tools/testing/selftests/powerpc/stringloops/asm/ppc_asm.h | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> On Wed, Jun 26, 2019 at 09:07:43PM -0700, Iurii Zaikin wrote:
+> > On Tue, Jun 25, 2019 at 7:17 PM Luis Chamberlain <mcgrof@kernel.org> wrote:
+> > > > +static void sysctl_test_dointvec_table_maxlen_unset(struct kunit *test)
+> > > > +{
+> > > > +     struct ctl_table table = {
+> > > > +             .procname = "foo",
+> > > > +             .data           = &test_data.int_0001,
+> > > > +             .maxlen         = 0,
+> > > > +             .mode           = 0644,
+> > > > +             .proc_handler   = proc_dointvec,
+> > > > +             .extra1         = &i_zero,
+> > > > +             .extra2         = &i_one_hundred,
+> > > > +     };
+> > > > +     void  *buffer = kunit_kzalloc(test, sizeof(int), GFP_USER);
+> > > > +     size_t len;
+> > > > +     loff_t pos;
+> > > > +
+> > > > +     len = 1234;
+> > > > +     KUNIT_EXPECT_EQ(test, 0, proc_dointvec(&table, 0, buffer, &len, &pos));
+> > > > +     KUNIT_EXPECT_EQ(test, (size_t)0, len);
+> > > > +     len = 1234;
+> > > > +     KUNIT_EXPECT_EQ(test, 0, proc_dointvec(&table, 1, buffer, &len, &pos));
+> > > > +     KUNIT_EXPECT_EQ(test, (size_t)0, len);
+> > > > +}
+> > >
+> > > In a way this is also testing for general kernel API changes. This is and the
+> > > last one were good examples. So this is not just testing functionality
+> > > here. There is no wrong or write answer if 0 or -EINVAL was returned
+> > > other than the fact that we have been doing this for years.
+> > >
+> > > Its a perhaps small but important difference for some of these tests.  I
+> > > *do* think its worth clarifying through documentation which ones are
+> > > testing for API consistency Vs proper correctness.
+> >
+> > You make a good point that the test codifies the existing behavior of
+> > the function in lieu of formal documentation.  However, the test cases
+> > were derived from examining the source code of the function under test
+> > and attempting to cover all branches. The assertions were added only
+> > for the values that appeared to be set deliberately in the
+> > implementation. And it makes sense to me to test that the code does
+> > exactly what the implementation author intended.
+>
+> I'm not arguing against adding them. I'm suggesting that it is different
+> to test for API than for correctness of intended functionality, and
+> it would be wise to make it clear which test cases are for API and which
+> for correctness.
 
-I'll merge this.
+I see later on that some of the API stuff you are talking about is
+public APIs from the standpoint of user (outside of LInux) visible. To
+be clear, is that what you mean by public APIs throughout, or would
+you distinguish between correctness tests, internal API tests, and
+external API tests?
 
-Please include linuxppc-dev on powerpc selftest patches.
+> This will come up later for other kunit tests and it would be great
+> to set precendent so that other kunit tests can follow similar
+> practices to ensure its clear what is API realted Vs correctness of
+> intended functionality.
+>
+> In fact, I'm not yet sure if its possible to test public kernel API to
+> userspace with kunit, but if it is possible... well, that could make
+> linux-api folks happy as they could enable us to codify interpreation of
+> what is expected into kunit test cases, and we'd ensure that the
+> codified interpretation is not only documented in man pages but also
+> through formal kunit test cases.
+>
+> A regression in linux-api then could be formalized through a proper
+> kunit tests case. And if an API evolves, it would force developers to
+> update the respective kunit which codifies that contract.
 
-cheers
+Yep, I think that is long term hope. Some of the file system interface
+stuff that requires a filesystem to be mounted somewhere might get a
+little weird/difficult, but I suspect we should be able to do it
+eventually. I mean it's all just C code right? Should mostly boil down
+to someone figuring out how to do it the first time.
 
-> diff --git a/tools/testing/selftests/powerpc/stringloops/asm/ppc_asm.h b/tools/testing/selftests/powerpc/stringloops/asm/ppc_asm.h
-> index d2c0a911f55e..2b488b78c4f2 100644
-> --- a/tools/testing/selftests/powerpc/stringloops/asm/ppc_asm.h
-> +++ b/tools/testing/selftests/powerpc/stringloops/asm/ppc_asm.h
-> @@ -1,6 +1,6 @@
->  /* SPDX-License-Identifier: GPL-2.0 */
->  #ifndef _PPC_ASM_H
-> -#define __PPC_ASM_H
-> +#define _PPC_ASM_H
->  #include <ppc-asm.h>
->  
->  #ifndef r1
-> -- 
-> 2.21.0
+> > > > +static void sysctl_test_dointvec_single_less_int_min(struct kunit *test)
+> > > > +{
+> > > > +     struct ctl_table table = {
+> > > > +             .procname = "foo",
+> > > > +             .data           = &test_data.int_0001,
+> > > > +             .maxlen         = sizeof(int),
+> > > > +             .mode           = 0644,
+> > > > +             .proc_handler   = proc_dointvec,
+> > > > +             .extra1         = &i_zero,
+> > > > +             .extra2         = &i_one_hundred,
+> > > > +     };
+> > > > +     char input[32];
+> > > > +     size_t len = sizeof(input) - 1;
+> > > > +     loff_t pos = 0;
+> > > > +     unsigned long abs_of_less_than_min = (unsigned long)INT_MAX
+> > > > +                                          - (INT_MAX + INT_MIN) + 1;
+> > > > +
+> > > > +     KUNIT_EXPECT_LT(test,
+> > > > +                     (size_t)snprintf(input, sizeof(input), "-%lu",
+> > > > +                                      abs_of_less_than_min),
+> > > > +                     sizeof(input));
+> > > > +
+> > > > +     table.data = kunit_kzalloc(test, sizeof(int), GFP_USER);
+> > > > +     KUNIT_EXPECT_EQ(test, -EINVAL,
+> > > > +                     proc_dointvec(&table, 1, input, &len, &pos));
+> > > > +     KUNIT_EXPECT_EQ(test, sizeof(input) - 1, len);
+> > > > +     KUNIT_EXPECT_EQ(test, 0, ((int *)table.data)[0]);
+> > > > +}
+> > >
+> > > API test.
+> > >
+> > Not sure why.
+>
+> Because you are codifying that we *definitely* return -EINVAL on
+> overlow. Some parts of the kernel return -ERANGE for overflows for
+> instance.
+>
+> It would be a generic test for overflow if it would just test
+> for any error.
+>
+> It is a fine and good test to keep. All these tests are good to keep.
+>
+> > I believe there has been a real bug with int overflow in
+> > proc_dointvec.
+> > Covering it with test seems like a good idea.
+>
+> Oh definitely.
+>
+> > > > +static void sysctl_test_dointvec_single_greater_int_max(struct kunit *test)
+> > > > +{
+> > > > +     struct ctl_table table = {
+> > > > +             .procname = "foo",
+> > > > +             .data           = &test_data.int_0001,
+> > > > +             .maxlen         = sizeof(int),
+> > > > +             .mode           = 0644,
+> > > > +             .proc_handler   = proc_dointvec,
+> > > > +             .extra1         = &i_zero,
+> > > > +             .extra2         = &i_one_hundred,
+> > > > +     };
+> > > > +     char input[32];
+> > > > +     size_t len = sizeof(input) - 1;
+> > > > +     loff_t pos = 0;
+> > > > +     unsigned long greater_than_max = (unsigned long)INT_MAX + 1;
+> > > > +
+> > > > +     KUNIT_EXPECT_GT(test, greater_than_max, (unsigned long)INT_MAX);
+> > > > +     KUNIT_EXPECT_LT(test, (size_t)snprintf(input, sizeof(input), "%lu",
+> > > > +                                            greater_than_max),
+> > > > +                     sizeof(input));
+> > > > +     table.data = kunit_kzalloc(test, sizeof(int), GFP_USER);
+> > > > +     KUNIT_EXPECT_EQ(test, -EINVAL,
+> > > > +                     proc_dointvec(&table, 1, input, &len, &pos));
+> > > > +     KUNIT_EXPECT_EQ(test, sizeof(input) - 1, len);
+> > > > +     KUNIT_EXPECT_EQ(test, 0, ((int *)table.data)[0]);
+> > > > +}
+> > > > +
+> > >
+> > > API test.
+> > >
+> > > > +static struct kunit_case sysctl_test_cases[] = {
+> > > > +     KUNIT_CASE(sysctl_test_dointvec_null_tbl_data),
+> > > > +     KUNIT_CASE(sysctl_test_dointvec_table_maxlen_unset),
+> > > > +     KUNIT_CASE(sysctl_test_dointvec_table_len_is_zero),
+> > > > +     KUNIT_CASE(sysctl_test_dointvec_table_read_but_position_set),
+> > > > +     KUNIT_CASE(sysctl_test_dointvec_happy_single_positive),
+> > > > +     KUNIT_CASE(sysctl_test_dointvec_happy_single_negative),
+> > > > +     KUNIT_CASE(sysctl_test_dointvec_single_less_int_min),
+> > > > +     KUNIT_CASE(sysctl_test_dointvec_single_greater_int_max),
+> > > > +     {}
+> > > > +};
+> > >
+> > > Oh all are API tests.. perhaps then just rename then
+> > > sysctl_test_cases to sysctl_api_test_cases.
+> > >
+> > > Would be good to add at least *two* other tests cases for this
+> > > example, one which does a valid read and one which does a valid write.
+> > Added valid reads. There already are 2 valid writes.
+>
+> Thanks.
+>
+> > > If that is done either we add another kunit test module for correctness
+> > > or just extend the above and use prefix / postfixes on the functions
+> > > to distinguish between API / correctness somehow.
+> > >
+> > > > +
+> > > > +static struct kunit_module sysctl_test_module = {
+> > > > +     .name = "sysctl_test",
+> > > > +     .test_cases = sysctl_test_cases,
+> > > > +};
+> > > > +
+> > > > +module_test(sysctl_test_module);
+> > > > diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+> > > > index cbdfae3798965..389b8986f5b77 100644
+> > > > --- a/lib/Kconfig.debug
+> > > > +++ b/lib/Kconfig.debug
+> > > > @@ -1939,6 +1939,16 @@ config TEST_SYSCTL
+> > > >
+> > > >         If unsure, say N.
+> > > >
+> > > > +config SYSCTL_KUNIT_TEST
+> > > > +     bool "KUnit test for sysctl"
+> > > > +     depends on KUNIT
+> > > > +     help
+> > > > +       This builds the proc sysctl unit test, which runs on boot. For more
+> > > > +       information on KUnit and unit tests in general please refer to the
+> > > > +       KUnit documentation in Documentation/dev-tools/kunit/.
+> > >
+> > > A little more description here would help. It is testing for API and
+> > > hopefully also correctness (if extended with those two examples I
+> > > mentioned).
+> > >
+> > Added "Tests the API contract and implementation correctness of sysctl."
+>
+> Yes, much clearer, thanks!
+
+Cheers!
