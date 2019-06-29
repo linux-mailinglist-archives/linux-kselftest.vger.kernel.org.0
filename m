@@ -2,158 +2,190 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 361105A953
-	for <lists+linux-kselftest@lfdr.de>; Sat, 29 Jun 2019 08:57:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D9605A968
+	for <lists+linux-kselftest@lfdr.de>; Sat, 29 Jun 2019 09:16:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726787AbfF2G5f (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 29 Jun 2019 02:57:35 -0400
-Received: from foss.arm.com ([217.140.110.172]:60628 "EHLO foss.arm.com"
+        id S1726835AbfF2HQj (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 29 Jun 2019 03:16:39 -0400
+Received: from foss.arm.com ([217.140.110.172]:60776 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726156AbfF2G5f (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 29 Jun 2019 02:57:35 -0400
+        id S1726527AbfF2HQj (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Sat, 29 Jun 2019 03:16:39 -0400
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2D3C928;
-        Fri, 28 Jun 2019 23:57:34 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D18B228;
+        Sat, 29 Jun 2019 00:16:38 -0700 (PDT)
 Received: from [192.168.1.18] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2026F3F246;
-        Fri, 28 Jun 2019 23:59:20 -0700 (PDT)
-Subject: Re: [PATCH v7 04/25] arm64: Substitute gettimeofday with C
- implementation
-To:     Sylwester Nawrocki <s.nawrocki@samsung.com>
-Cc:     Marek Szyprowski <m.szyprowski@samsung.com>,
-        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
-        Andre Przywara <andre.przywara@arm.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Huw Davies <huw@codeweavers.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Will Deacon <will.deacon@arm.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Mark Salyzyn <salyzyn@android.com>,
-        Paul Burton <paul.burton@mips.com>,
-        Dmitry Safonov <0x7f454c46@gmail.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Shijith Thotton <sthotton@marvell.com>,
-        Peter Collingbourne <pcc@google.com>
-References: <20190621095252.32307-1-vincenzo.frascino@arm.com>
- <20190621095252.32307-5-vincenzo.frascino@arm.com>
- <CGME20190628130921eucas1p239935b0771032c331911eacc1a69dd2e@eucas1p2.samsung.com>
- <1fd47b0d-f77f-8d07-c039-6ac9072834fc@samsung.com>
- <27386d82-2906-b541-f71d-3c61f5099bdf@arm.com>
- <530cd07e-0da7-1d83-be4e-b14813029424@samsung.com>
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E66EA3F246;
+        Sat, 29 Jun 2019 00:18:27 -0700 (PDT)
+Subject: Re: [RFC] arm64: Detecting tagged addresses
+To:     Andrew Murray <andrew.murray@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>
+Cc:     Andrey Konovalov <andreyknvl@google.com>,
+        linux-arm-kernel@lists.infradead.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        smatch@vger.kernel.org
+References: <20190619121619.GV20984@e119886-lin.cambridge.arm.com>
+ <20190626174502.GH29672@arrakis.emea.arm.com>
+ <20190627131834.GE34530@e119886-lin.cambridge.arm.com>
 From:   Vincenzo Frascino <vincenzo.frascino@arm.com>
-Message-ID: <06c264a8-8778-18b1-1094-4281a4a2abc9@arm.com>
-Date:   Sat, 29 Jun 2019 07:58:22 +0100
+Message-ID: <0887dbcd-0b38-9f58-c2b7-d0b2dabf58cb@arm.com>
+Date:   Sat, 29 Jun 2019 08:17:28 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.7.1
 MIME-Version: 1.0
-In-Reply-To: <530cd07e-0da7-1d83-be4e-b14813029424@samsung.com>
+In-Reply-To: <20190627131834.GE34530@e119886-lin.cambridge.arm.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Sylwester,
++ Dan and smatch@vger.kernel.org
 
-thank you for the quick turn around to my email.
+Hi Andrew,
 
-On 6/28/19 5:50 PM, Sylwester Nawrocki wrote:
-> Hi Vincenzo,
-> 
-> On 6/28/19 16:32, Vincenzo Frascino wrote:
->> On 6/28/19 2:09 PM, Marek Szyprowski wrote:
->>> On 2019-06-21 11:52, Vincenzo Frascino wrote:
->>>> To take advantage of the commonly defined vdso interface for
->>>> gettimeofday the architectural code requires an adaptation.
->>>>
->>>> Re-implement the gettimeofday vdso in C in order to use lib/vdso.
->>>>
->>>> With the new implementation arm64 gains support for CLOCK_BOOTTIME
->>>> and CLOCK_TAI.
->>>>
->>>> Cc: Catalin Marinas <catalin.marinas@arm.com>
->>>> Cc: Will Deacon <will.deacon@arm.com>
->>>> Signed-off-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
->>>> Tested-by: Shijith Thotton <sthotton@marvell.com>
->>>> Tested-by: Andre Przywara <andre.przywara@arm.com>
->>>> Signed-off-by: Catalin Marinas <catalin.marinas@arm.com>
->>>
->>> This patch causes serious regression on Samsung Exynos5433 SoC based 
->>> TM2(e) boards. The time in userspace is always set to begin of the epoch:
->>>
->>> # date 062813152019
->>> Fri Jun 28 13:15:00 UTC 2019
->>> # date
->>> Thu Jan  1 00:00:00 UTC 1970
->>> # date
->>> Thu Jan  1 00:00:00 UTC 1970
->>>
->>> I've noticed that since the patch landed in Linux next-20190625 and 
->>> bisect indeed pointed to this patch.
->>>
->> Thank you for reporting this, seems that the next that you posted is missing
->> some fixes for arm64.
+I am adding Dan to this thread since he is the smatch maintainer, and the
+smatch@vger.kernel.org list.
+
+@Dan and @smatch@vger.kernel.org: a reference to the beginning of this thread
+can be found at [1].
+
+[1] https://lkml.org/lkml/2019/6/19/376
+
+On 6/27/19 2:18 PM, Andrew Murray wrote:
+> On Wed, Jun 26, 2019 at 06:45:03PM +0100, Catalin Marinas wrote:
+>> Hi Andrew,
 >>
->> Could you please try the tree below?
+>> Cc'ing Luc (sparse maintainer) who's been involved in the past
+>> discussions around static checking of user pointers:
 >>
->> git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git timers/vdso
+>> https://lore.kernel.org/linux-arm-kernel/20180905190316.a34yycthgbamx2t3@ltop.local/
 >>
->> Let us know if the functionality is restored. Otherwise the issue will require
->> further investigation.
->  
-> Marek is already out for holidays, I gave your tree a try but kernel from 
-> that branch was failing to boot on TM2(e).  
+>> So I think the difference here from the previous approach is that we
+>> explicitly mark functions that cannot take tagged addresses (like
+>> find_vma()) and identify the callers.
 > 
-> Then I have cherry-picked 5 patches from the branch that seemed to 
-> be missing in next-20190628:
+> Indeed.
 > 
-> 28028f3174cf1 (HEAD) MAINTAINERS: Fix Andy's surname and the directory entries of VDSO
-> ec8f8e4bf2206 arm64: vdso: Fix compilation with clang older than 8
-> 721882ebb5729 arm64: compat: Fix __arch_get_hw_counter() implementation
-> 7027fea977a3d arm64: Fix __arch_get_hw_counter() implementation
-> 10b305853fe22 lib/vdso: Make delta calculation work correctly
-> 48568d8c7f479 (tag: next-20190628, linux-next/master) Add linux-next specific files for 20190628
 > 
-> With those 5 additional patches on top of next-20190628 the problem
-> is not observed any more. date, ping, etc. seems to be working well.
+>>
+>> More comments below:
+>>
+>> On Wed, Jun 19, 2019 at 01:16:20PM +0100, Andrew Murray wrote:
+>>> The proposed introduction of a relaxed ARM64 ABI [1] will allow tagged memory
+>>> addresses to be passed through the user-kernel syscall ABI boundary. Tagged
+>>> memory addresses are those which contain a non-zero top byte (the hardware
+>>> has always ignored this top byte due to TCR_EL1.TBI0) and may be useful
+>>> for features such as HWASan.
+>>>
+>>> To permit this relaxation a proposed patchset [2] strips the top byte (tag)
+>>> from user provided memory addresses prior to use in kernel functions which
+>>> require untagged addresses (for example comparasion/arithmetic of addresses).
+>>> The author of this patchset relied on a variety of techniques [2] (such as
+>>> grep, BUG_ON, sparse etc) to identify as many instances of possible where
+>>> tags need to be stipped.
+>>>
+>>> To support this effort and to catch future regressions (e.g. in new syscalls
+>>> or ioctls), I've devised an additional approach for detecting the use of
+>>> tagged addresses in functions that do not want them. This approach makes
+>>> use of Smatch [3] and is outlined in this RFC. Due to the ability of Smatch
+>>> to do flow analysis I believe we can annotate the kernel in fewer places
+>>> than a similar approach in sparse.
+>>>
+>>> I'm keen for feedback on the likely usefulness of this approach.
+>>>
+>>> We first add some new annotations that are exclusively consumed by Smatch:
+>>>
+>>> --- a/include/linux/compiler_types.h
+>>> +++ b/include/linux/compiler_types.h
+>>> @@ -19,6 +19,7 @@
+>>>  # define __cond_lock(x,c)      ((c) ? ({ __acquire(x); 1; }) : 0)
+>>>  # define __percpu      __attribute__((noderef, address_space(3)))
+>>>  # define __rcu         __attribute__((noderef, address_space(4)))
+>>> +# define __untagged    __attribute__((address_space(5)))
+>>>  # define __private     __attribute__((noderef))
+>>>  extern void __chk_user_ptr(const volatile void __user *);
+>>>  extern void __chk_io_ptr(const volatile void __iomem *);
+>> [...]
+>>> --- a/mm/mmap.c
+>>> +++ b/mm/mmap.c
+>>> @@ -2224,7 +2224,7 @@ get_unmapped_area(struct file *file, unsigned long addr, unsigned long len,
+>>>  EXPORT_SYMBOL(get_unmapped_area);
+>>>  
+>>>  /* Look up the first VMA which satisfies  addr < vm_end,  NULL if none. */
+>>> -struct vm_area_struct *find_vma(struct mm_struct *mm, unsigned long addr)
+>>> +struct vm_area_struct *find_vma(struct mm_struct *mm, unsigned long __untagged addr)
+>>>  {
+>>>         struct rb_node *rb_node;
+>>>         struct vm_area_struct *vma;
+>> [...]
+>>> This can be further improved - the problem here is that for a given function,
+>>> e.g. find_vma we look for callers where *any* of the parameters
+>>> passed to find_vma are tagged addresses from userspace - i.e. not *just*
+>>> the annotated parameter. This is also true for find_vma's callers' callers'.
+>>> This results in the call tree having false positives.
+>>>
+>>> It *is* possible to track parameters (e.g. find_vma arg 1 comes from arg 3 of
+>>> do_pages_stat_array etc), but this is limited as if functions modify the
+>>> data then the tracking is stopped (however this can be fixed).
+>> [...]
+>>> An example of a false positve is do_mlock. We untag the address and pass that
+>>> to apply_vma_lock_flags - however we also pass a length - because the length
+>>> came from userspace and could have the top bits set - it's flagged. However
+>>> with improved parameter tracking we can remove this false positive and similar.
+>>
+>> Could we track only the conversions from __user * that eventually end up
+>> as __untagged? (I'm not familiar with smatch, so not sure what it can
+>> do).
 > 
-> # date
-> Fri Jun 28 16:39:22 UTC 2019
-> #
-> # systemctl stop systemd-timesyncd
-> #  
-> # date 062818392019
-> Fri Jun 28 18:39:00 UTC 2019
-> # date
-> Fri Jun 28 18:39:01 UTC 2019
-> # 
-> # date 062818432019; date
-> Fri Jun 28 18:43:00 UTC 2019
-> Fri Jun 28 18:43:00 UTC 2019
-> # date
-> Fri Jun 28 18:43:04 UTC 2019
->
-
-This seems ok, thanks for spending some time to test our patches against your board.
-
-If I may, I would like to ask to you one favor, could you please keep an eye on
-next and once those patches are merged repeat the test?
-
-I want just to make sure that the regression does not reappear.
-
-Have a nice weekend.
-
-> --
-> Regards,
-> Sylwester
+> I assume you mean 'that eventually end up as an argument annotated __untagged'?
 > 
+> The warnings smatch currently produce relate to only the conversions you
+> mention - however further work is needed in smatch to improve the scripts that
+> retrospectively provide call traces (without false positives).
+> 
+> 
+>> We could assume that an unsigned long argument to a syscall is
+>> default __untagged, unless explicitly marked as __tagged. For example,
+>> sys_munmap() is allowed to take a tagged address.
+> 
+> I'll give this some further thought.
+> 
+> 
+>>
+>>> Prior to smatch I attempted a similar approach with sparse - however it seemed
+>>> necessary to propogate the __untagged annotation in every function up the call tree,
+>>> and resulted in adding the __untagged annotation to functions that would never
+>>> get near user provided data. This leads to a littering of __untagged all over the
+>>> kernel which doesn't seem appealing.
+>>
+>> Indeed. We attempted this last year (see the above thread).
+>>
+>>> Smatch is more capable, however it almost
+>>> certainly won't pick up 100% of issues due to the difficulity of making flow
+>>> analysis understand everything a compiler can.
+>>>
+>>> Is it likely to be acceptable to use the __untagged annotation in user-path
+>>> functions that require untagged addresses across the kernel?
+>>
+>> If it helps with identifying missing untagged_addr() calls, I would say
+>> yes (as long as we keep them to a minimum).
+> 
+> Thanks for the feedback.
+> 
+> Andrew Murray
+> 
+>>
+>>> [1] https://lkml.org/lkml/2019/6/13/534
+>>> [2] https://patchwork.kernel.org/cover/10989517/
+>>> [3] http://smatch.sourceforge.net/
+>>
+>> -- 
+>> Catalin
 
 -- 
 Regards,
