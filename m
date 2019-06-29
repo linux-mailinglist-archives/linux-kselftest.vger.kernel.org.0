@@ -2,197 +2,403 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 29B255A65E
-	for <lists+linux-kselftest@lfdr.de>; Fri, 28 Jun 2019 23:37:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DA025A934
+	for <lists+linux-kselftest@lfdr.de>; Sat, 29 Jun 2019 07:58:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726772AbfF1Vhf (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 28 Jun 2019 17:37:35 -0400
-Received: from mail-pl1-f194.google.com ([209.85.214.194]:34405 "EHLO
-        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725783AbfF1Vhe (ORCPT
+        id S1726156AbfF2F6W (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 29 Jun 2019 01:58:22 -0400
+Received: from mail-pl1-f196.google.com ([209.85.214.196]:35867 "EHLO
+        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726708AbfF2F6W (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 28 Jun 2019 17:37:34 -0400
-Received: by mail-pl1-f194.google.com with SMTP id i2so3949722plt.1;
-        Fri, 28 Jun 2019 14:37:34 -0700 (PDT)
+        Sat, 29 Jun 2019 01:58:22 -0400
+Received: by mail-pl1-f196.google.com with SMTP id k8so4416673plt.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 28 Jun 2019 22:58:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cs.washington.edu; s=goo201206;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=KrEprMkFXe/No24Hn/x/PXNIoQCM6XIqjLi+nLjSkxE=;
+        b=Wmgc+Q9dqbyfL0OyJL4d7h18KSWO5/t6Mi9bQlZ07E4Y7IQ9QzfLJSTYNBpodUyPqN
+         HGWv5fxSlXLnd/FfGgDYZ4Ni5GTRjLlh1Iumi6zxdiTGbZhZBIq6Cnm/2stAHtgFltdm
+         3hDOFM+Y9IFHF51Tvb3h1dkpMqG0cy+hBZWCo=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=JgAuNdeYgPOaJAXJWPitQxb9O77ltQQoo3H5OkHlS/c=;
-        b=W86MRcxAJItkgXU1P+HfAJjX07YuDT/2EuPIvaTR3j2MhsGyMwaS0H6CirI+ZihPXQ
-         Rw9m/FSLLqbr+3BxsQGXD6Rh7uiIwQkRap2tvV38M2seKlycVAjBrkaFs8xOCgAEhlgR
-         RCz+w/+EfsTWjav2xZjZxTnxQ3KkBmrrcuKIPtkelRFLMXMxMZbCfrdlEr8yn5H+E6MD
-         Q9FOz04k+RVYoJynZSKDtaLKoM5LnrgnJGjYpLJCWrWC621eJ6eUF+bbD5n9JFzIEo3M
-         l2PiACCLzfWOqBf+h8w73uxLJY+ujnvZ8J38SB/ZTLhl3mnwPb0JsTdaYgpeeDNC+P1Y
-         bJNw==
-X-Gm-Message-State: APjAAAUwSq/44dHOh8Z1frsVpK2h4PhfHOOSADoAEsklNkpd7UQb6Fym
-        XlCfdqTeLzZx0nORh6MPm5E=
-X-Google-Smtp-Source: APXvYqy5ELfDL2fyyn/y9lJ8x6ZZyU+/eE48fR92CyznGhgcBuNDCxdNuVcUesc0a2YsMUSVisIbkg==
-X-Received: by 2002:a17:902:a60d:: with SMTP id u13mr6000172plq.144.1561757853454;
-        Fri, 28 Jun 2019 14:37:33 -0700 (PDT)
-Received: from 42.do-not-panic.com (42.do-not-panic.com. [157.230.128.187])
-        by smtp.gmail.com with ESMTPSA id b15sm3215119pfi.141.2019.06.28.14.37.31
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=KrEprMkFXe/No24Hn/x/PXNIoQCM6XIqjLi+nLjSkxE=;
+        b=UpmhHpndkEIk4yA2XWRBzPOqnyuEQbn7L3AaOvunyucJjTfN3rKdfK8LbYUI/huifq
+         SLcMCjQ4Db801ga2NAPDdLbD4idUU9Jx9AIwVPXeqRwJ0BeqsrDQ673Qy1m9bg9Q7viY
+         HDKnmLv1jgkQxE1BaRy7yHPdbA2wT4teus/AnioyzCrLFuzyjKfflD4qt2o38LdbdcD9
+         4JcV/F9DQ+Ss0BPMkixFjYCAUqbMHEaNexkFmWYrNKPQ4GcMm6PWUdoSyQsD/ISSGI6F
+         WcfBXDmvABHdBfpUj5aK3QPWNy6mZcMhff7aVVJ3O6bWqyqR+8v72ytMYDRT4taU5ul4
+         wmyw==
+X-Gm-Message-State: APjAAAUNDbOfcWChdhL6BtAITH9b/U8ybR8qKw/vzISBQaz/89MDBHqi
+        tT51vAic9CoGKmYYKRUaRVnuGw==
+X-Google-Smtp-Source: APXvYqzT6SU+vzGzeK1vMy1Q7YkD+QgvpjhtOfOe9fUDqkUROyHTX+TT5bjr8ZxKuYlw9TeUYytsug==
+X-Received: by 2002:a17:902:44a4:: with SMTP id l33mr15864557pld.174.1561787901307;
+        Fri, 28 Jun 2019 22:58:21 -0700 (PDT)
+Received: from ryzen.cs.washington.edu ([2607:4000:200:11:717c:64f7:ecd0:38c2])
+        by smtp.gmail.com with ESMTPSA id r3sm3272243pgp.51.2019.06.28.22.58.20
         (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Fri, 28 Jun 2019 14:37:32 -0700 (PDT)
-Received: by 42.do-not-panic.com (Postfix, from userid 1000)
-        id 8049D402AC; Fri, 28 Jun 2019 21:37:31 +0000 (UTC)
-Date:   Fri, 28 Jun 2019 21:37:31 +0000
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Brendan Higgins <brendanhiggins@google.com>,
-        Dominik Brodowski <linux@dominikbrodowski.net>
-Cc:     Iurii Zaikin <yzaikin@google.com>, linux-api@vger.kernel.org,
-        "Michael Kerrisk (man-pages)" <mtk.manpages@gmail.com>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Kees Cook <keescook@google.com>,
-        Kieran Bingham <kieran.bingham@ideasonboard.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Rob Herring <robh@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
-        shuah <shuah@kernel.org>, Theodore Ts'o <tytso@mit.edu>,
-        Masahiro Yamada <yamada.masahiro@socionext.com>,
-        devicetree <devicetree@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        kunit-dev@googlegroups.com,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        linux-fsdevel@vger.kernel.org,
-        linux-kbuild <linux-kbuild@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        linux-nvdimm <linux-nvdimm@lists.01.org>,
-        linux-um@lists.infradead.org,
-        Sasha Levin <Alexander.Levin@microsoft.com>,
-        "Bird, Timothy" <Tim.Bird@sony.com>,
-        Amir Goldstein <amir73il@gmail.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Daniel Vetter <daniel@ffwll.ch>, Jeff Dike <jdike@addtoit.com>,
-        Joel Stanley <joel@jms.id.au>,
-        Julia Lawall <julia.lawall@lip6.fr>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Knut Omang <knut.omang@oracle.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Petr Mladek <pmladek@suse.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Richard Weinberger <richard@nod.at>,
-        David Rientjes <rientjes@google.com>,
-        Steven Rostedt <rostedt@goodmis.org>, wfg@linux.intel.com
-Subject: Re: [PATCH v5 17/18] kernel/sysctl-test: Add null pointer test for
- sysctl.c:proc_dointvec()
-Message-ID: <20190628213731.GJ19023@42.do-not-panic.com>
-References: <20190617082613.109131-1-brendanhiggins@google.com>
- <20190617082613.109131-18-brendanhiggins@google.com>
- <20190626021744.GU19023@42.do-not-panic.com>
- <CAAXuY3p+kVhjQ4LYtzormqVcH2vKu1abc_K9Z0XY=JX=bp8NcQ@mail.gmail.com>
- <20190627061021.GE19023@42.do-not-panic.com>
- <CAFd5g45VJ9yfuESUc=E0ydJyN+mk1b1kyHSCYvO2x9KPC7+3GQ@mail.gmail.com>
+        Fri, 28 Jun 2019 22:58:20 -0700 (PDT)
+From:   Luke Nelson <lukenels@cs.washington.edu>
+X-Google-Original-From: Luke Nelson <luke.r.nels@gmail.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Luke Nelson <luke.r.nels@gmail.com>, Xi Wang <xi.wang@gmail.com>,
+        Wang YanQing <udknight@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>, x86@kernel.org,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Jakub Kicinski <jakub.kicinski@netronome.com>,
+        Jiong Wang <jiong.wang@netronome.com>,
+        =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn.topel@gmail.com>,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: [PATCH bpf 1/3] bpf, x32: Fix bug with ALU64 {LSH,RSH,ARSH} BPF_X shift by 0
+Date:   Fri, 28 Jun 2019 22:57:49 -0700
+Message-Id: <20190629055759.28365-1-luke.r.nels@gmail.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAFd5g45VJ9yfuESUc=E0ydJyN+mk1b1kyHSCYvO2x9KPC7+3GQ@mail.gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Jun 28, 2019 at 01:01:54AM -0700, Brendan Higgins wrote:
-> On Wed, Jun 26, 2019 at 11:10 PM Luis Chamberlain <mcgrof@kernel.org> wrote:
-> >
-> > On Wed, Jun 26, 2019 at 09:07:43PM -0700, Iurii Zaikin wrote:
-> > > On Tue, Jun 25, 2019 at 7:17 PM Luis Chamberlain <mcgrof@kernel.org> wrote:
-> > > > > +static void sysctl_test_dointvec_table_maxlen_unset(struct kunit *test)
-> > > > > +{
-> > > > > +     struct ctl_table table = {
-> > > > > +             .procname = "foo",
-> > > > > +             .data           = &test_data.int_0001,
-> > > > > +             .maxlen         = 0,
-> > > > > +             .mode           = 0644,
-> > > > > +             .proc_handler   = proc_dointvec,
-> > > > > +             .extra1         = &i_zero,
-> > > > > +             .extra2         = &i_one_hundred,
-> > > > > +     };
-> > > > > +     void  *buffer = kunit_kzalloc(test, sizeof(int), GFP_USER);
-> > > > > +     size_t len;
-> > > > > +     loff_t pos;
-> > > > > +
-> > > > > +     len = 1234;
-> > > > > +     KUNIT_EXPECT_EQ(test, 0, proc_dointvec(&table, 0, buffer, &len, &pos));
-> > > > > +     KUNIT_EXPECT_EQ(test, (size_t)0, len);
-> > > > > +     len = 1234;
-> > > > > +     KUNIT_EXPECT_EQ(test, 0, proc_dointvec(&table, 1, buffer, &len, &pos));
-> > > > > +     KUNIT_EXPECT_EQ(test, (size_t)0, len);
-> > > > > +}
-> > > >
-> > > > In a way this is also testing for general kernel API changes. This is and the
-> > > > last one were good examples. So this is not just testing functionality
-> > > > here. There is no wrong or write answer if 0 or -EINVAL was returned
-> > > > other than the fact that we have been doing this for years.
-> > > >
-> > > > Its a perhaps small but important difference for some of these tests.  I
-> > > > *do* think its worth clarifying through documentation which ones are
-> > > > testing for API consistency Vs proper correctness.
-> > >
-> > > You make a good point that the test codifies the existing behavior of
-> > > the function in lieu of formal documentation.  However, the test cases
-> > > were derived from examining the source code of the function under test
-> > > and attempting to cover all branches. The assertions were added only
-> > > for the values that appeared to be set deliberately in the
-> > > implementation. And it makes sense to me to test that the code does
-> > > exactly what the implementation author intended.
-> >
-> > I'm not arguing against adding them. I'm suggesting that it is different
-> > to test for API than for correctness of intended functionality, and
-> > it would be wise to make it clear which test cases are for API and which
-> > for correctness.
-> 
-> I see later on that some of the API stuff you are talking about is
-> public APIs from the standpoint of user (outside of LInux) visible.
+The current x32 BPF JIT for shift operations is not correct when the
+shift amount in a register is 0. The expected behavior is a no-op, whereas
+the current implementation changes bits in the destination register.
 
-Right, UAPI.
+The following example demonstrates the bug. The expected result of this
+program is 1, but the current JITed code returns 2.
 
-> To
-> be clear, is that what you mean by public APIs throughout, or would
-> you distinguish between correctness tests, internal API tests, and
-> external API tests?
+  r0 = 1
+  r1 = 1
+  r2 = 0
+  r1 <<= r2
+  if r1 == 1 goto end
+  r0 = 2
+end:
+  exit
 
-I would definitely recommend distingishing between all of these.
-Kernel API (or just call it API), UAPI, and correctness.
+The bug is caused by an incorrect assumption by the JIT that a shift by
+32 clear the register. On x32 however, shifts use the lower 5 bits of
+the source, making a shift by 32 equivalent to a shift by 0.
 
-> > This will come up later for other kunit tests and it would be great
-> > to set precendent so that other kunit tests can follow similar
-> > practices to ensure its clear what is API realted Vs correctness of
-> > intended functionality.
-> >
-> > In fact, I'm not yet sure if its possible to test public kernel API to
-> > userspace with kunit, but if it is possible... well, that could make
-> > linux-api folks happy as they could enable us to codify interpreation of
-> > what is expected into kunit test cases, and we'd ensure that the
-> > codified interpretation is not only documented in man pages but also
-> > through formal kunit test cases.
-> >
-> > A regression in linux-api then could be formalized through a proper
-> > kunit tests case. And if an API evolves, it would force developers to
-> > update the respective kunit which codifies that contract.
-> 
-> Yep, I think that is long term hope. Some of the file system interface
-> stuff that requires a filesystem to be mounted somewhere might get a
-> little weird/difficult, but I suspect we should be able to do it
-> eventually. I mean it's all just C code right? Should mostly boil down
-> to someone figuring out how to do it the first time.
+This patch fixes the bug using double-precision shifts, which also
+simplifies the code.
 
-There used to be hacks in the kernel the call syscalls in a few places.
-This was cleaned up and addressed via Dominik Brodowski's series last
-year in March:
+Fixes: 03f5781be2c7 ("bpf, x86_32: add eBPF JIT compiler for ia32")
+Co-developed-by: Xi Wang <xi.wang@gmail.com>
+Signed-off-by: Xi Wang <xi.wang@gmail.com>
+Signed-off-by: Luke Nelson <luke.r.nels@gmail.com>
+---
+ arch/x86/net/bpf_jit_comp32.c | 221 ++++------------------------------
+ 1 file changed, 23 insertions(+), 198 deletions(-)
 
-http://lkml.kernel.org/r/20180325162527.GA17492@light.dominikbrodowski.net
+diff --git a/arch/x86/net/bpf_jit_comp32.c b/arch/x86/net/bpf_jit_comp32.c
+index b29e82f190c7..f34ef513f4f9 100644
+--- a/arch/x86/net/bpf_jit_comp32.c
++++ b/arch/x86/net/bpf_jit_comp32.c
+@@ -724,9 +724,6 @@ static inline void emit_ia32_lsh_r64(const u8 dst[], const u8 src[],
+ {
+ 	u8 *prog = *pprog;
+ 	int cnt = 0;
+-	static int jmp_label1 = -1;
+-	static int jmp_label2 = -1;
+-	static int jmp_label3 = -1;
+ 	u8 dreg_lo = dstk ? IA32_EAX : dst_lo;
+ 	u8 dreg_hi = dstk ? IA32_EDX : dst_hi;
+ 
+@@ -745,79 +742,23 @@ static inline void emit_ia32_lsh_r64(const u8 dst[], const u8 src[],
+ 		/* mov ecx,src_lo */
+ 		EMIT2(0x8B, add_2reg(0xC0, src_lo, IA32_ECX));
+ 
+-	/* cmp ecx,32 */
+-	EMIT3(0x83, add_1reg(0xF8, IA32_ECX), 32);
+-	/* Jumps when >= 32 */
+-	if (is_imm8(jmp_label(jmp_label1, 2)))
+-		EMIT2(IA32_JAE, jmp_label(jmp_label1, 2));
+-	else
+-		EMIT2_off32(0x0F, IA32_JAE + 0x10, jmp_label(jmp_label1, 6));
+-
+-	/* < 32 */
+-	/* shl dreg_hi,cl */
+-	EMIT2(0xD3, add_1reg(0xE0, dreg_hi));
+-	/* mov ebx,dreg_lo */
+-	EMIT2(0x8B, add_2reg(0xC0, dreg_lo, IA32_EBX));
++	/* shld dreg_hi,dreg_lo,cl */
++	EMIT3(0x0F, 0xA5, add_2reg(0xC0, dreg_hi, dreg_lo));
+ 	/* shl dreg_lo,cl */
+ 	EMIT2(0xD3, add_1reg(0xE0, dreg_lo));
+ 
+-	/* IA32_ECX = -IA32_ECX + 32 */
+-	/* neg ecx */
+-	EMIT2(0xF7, add_1reg(0xD8, IA32_ECX));
+-	/* add ecx,32 */
+-	EMIT3(0x83, add_1reg(0xC0, IA32_ECX), 32);
+-
+-	/* shr ebx,cl */
+-	EMIT2(0xD3, add_1reg(0xE8, IA32_EBX));
+-	/* or dreg_hi,ebx */
+-	EMIT2(0x09, add_2reg(0xC0, dreg_hi, IA32_EBX));
+-
+-	/* goto out; */
+-	if (is_imm8(jmp_label(jmp_label3, 2)))
+-		EMIT2(0xEB, jmp_label(jmp_label3, 2));
+-	else
+-		EMIT1_off32(0xE9, jmp_label(jmp_label3, 5));
+-
+-	/* >= 32 */
+-	if (jmp_label1 == -1)
+-		jmp_label1 = cnt;
++	/* if ecx >= 32, mov dreg_lo into dreg_hi and clear dreg_lo */
+ 
+-	/* cmp ecx,64 */
+-	EMIT3(0x83, add_1reg(0xF8, IA32_ECX), 64);
+-	/* Jumps when >= 64 */
+-	if (is_imm8(jmp_label(jmp_label2, 2)))
+-		EMIT2(IA32_JAE, jmp_label(jmp_label2, 2));
+-	else
+-		EMIT2_off32(0x0F, IA32_JAE + 0x10, jmp_label(jmp_label2, 6));
++	/* cmp ecx,32 */
++	EMIT3(0x83, add_1reg(0xF8, IA32_ECX), 32);
++	/* skip the next two instructions (4 bytes) when < 32 */
++	EMIT2(IA32_JB, 4);
+ 
+-	/* >= 32 && < 64 */
+-	/* sub ecx,32 */
+-	EMIT3(0x83, add_1reg(0xE8, IA32_ECX), 32);
+-	/* shl dreg_lo,cl */
+-	EMIT2(0xD3, add_1reg(0xE0, dreg_lo));
+ 	/* mov dreg_hi,dreg_lo */
+ 	EMIT2(0x89, add_2reg(0xC0, dreg_hi, dreg_lo));
+-
+ 	/* xor dreg_lo,dreg_lo */
+ 	EMIT2(0x33, add_2reg(0xC0, dreg_lo, dreg_lo));
+ 
+-	/* goto out; */
+-	if (is_imm8(jmp_label(jmp_label3, 2)))
+-		EMIT2(0xEB, jmp_label(jmp_label3, 2));
+-	else
+-		EMIT1_off32(0xE9, jmp_label(jmp_label3, 5));
+-
+-	/* >= 64 */
+-	if (jmp_label2 == -1)
+-		jmp_label2 = cnt;
+-	/* xor dreg_lo,dreg_lo */
+-	EMIT2(0x33, add_2reg(0xC0, dreg_lo, dreg_lo));
+-	/* xor dreg_hi,dreg_hi */
+-	EMIT2(0x33, add_2reg(0xC0, dreg_hi, dreg_hi));
+-
+-	if (jmp_label3 == -1)
+-		jmp_label3 = cnt;
+-
+ 	if (dstk) {
+ 		/* mov dword ptr [ebp+off],dreg_lo */
+ 		EMIT3(0x89, add_2reg(0x40, IA32_EBP, dreg_lo),
+@@ -836,9 +777,6 @@ static inline void emit_ia32_arsh_r64(const u8 dst[], const u8 src[],
+ {
+ 	u8 *prog = *pprog;
+ 	int cnt = 0;
+-	static int jmp_label1 = -1;
+-	static int jmp_label2 = -1;
+-	static int jmp_label3 = -1;
+ 	u8 dreg_lo = dstk ? IA32_EAX : dst_lo;
+ 	u8 dreg_hi = dstk ? IA32_EDX : dst_hi;
+ 
+@@ -857,78 +795,22 @@ static inline void emit_ia32_arsh_r64(const u8 dst[], const u8 src[],
+ 		/* mov ecx,src_lo */
+ 		EMIT2(0x8B, add_2reg(0xC0, src_lo, IA32_ECX));
+ 
+-	/* cmp ecx,32 */
+-	EMIT3(0x83, add_1reg(0xF8, IA32_ECX), 32);
+-	/* Jumps when >= 32 */
+-	if (is_imm8(jmp_label(jmp_label1, 2)))
+-		EMIT2(IA32_JAE, jmp_label(jmp_label1, 2));
+-	else
+-		EMIT2_off32(0x0F, IA32_JAE + 0x10, jmp_label(jmp_label1, 6));
+-
+-	/* < 32 */
+-	/* lshr dreg_lo,cl */
+-	EMIT2(0xD3, add_1reg(0xE8, dreg_lo));
+-	/* mov ebx,dreg_hi */
+-	EMIT2(0x8B, add_2reg(0xC0, dreg_hi, IA32_EBX));
+-	/* ashr dreg_hi,cl */
++	/* shrd dreg_lo,dreg_hi,cl */
++	EMIT3(0x0F, 0xAD, add_2reg(0xC0, dreg_lo, dreg_hi));
++	/* sar dreg_hi,cl */
+ 	EMIT2(0xD3, add_1reg(0xF8, dreg_hi));
+ 
+-	/* IA32_ECX = -IA32_ECX + 32 */
+-	/* neg ecx */
+-	EMIT2(0xF7, add_1reg(0xD8, IA32_ECX));
+-	/* add ecx,32 */
+-	EMIT3(0x83, add_1reg(0xC0, IA32_ECX), 32);
+-
+-	/* shl ebx,cl */
+-	EMIT2(0xD3, add_1reg(0xE0, IA32_EBX));
+-	/* or dreg_lo,ebx */
+-	EMIT2(0x09, add_2reg(0xC0, dreg_lo, IA32_EBX));
+-
+-	/* goto out; */
+-	if (is_imm8(jmp_label(jmp_label3, 2)))
+-		EMIT2(0xEB, jmp_label(jmp_label3, 2));
+-	else
+-		EMIT1_off32(0xE9, jmp_label(jmp_label3, 5));
+-
+-	/* >= 32 */
+-	if (jmp_label1 == -1)
+-		jmp_label1 = cnt;
++	/* if ecx >= 32, mov dreg_hi to dreg_lo and set/clear dreg_hi depending on sign */
+ 
+-	/* cmp ecx,64 */
+-	EMIT3(0x83, add_1reg(0xF8, IA32_ECX), 64);
+-	/* Jumps when >= 64 */
+-	if (is_imm8(jmp_label(jmp_label2, 2)))
+-		EMIT2(IA32_JAE, jmp_label(jmp_label2, 2));
+-	else
+-		EMIT2_off32(0x0F, IA32_JAE + 0x10, jmp_label(jmp_label2, 6));
++	/* cmp ecx,32 */
++	EMIT3(0x83, add_1reg(0xF8, IA32_ECX), 32);
++	/* skip the next two instructions (5 bytes) when < 32 */
++	EMIT2(IA32_JB, 5);
+ 
+-	/* >= 32 && < 64 */
+-	/* sub ecx,32 */
+-	EMIT3(0x83, add_1reg(0xE8, IA32_ECX), 32);
+-	/* ashr dreg_hi,cl */
+-	EMIT2(0xD3, add_1reg(0xF8, dreg_hi));
+ 	/* mov dreg_lo,dreg_hi */
+ 	EMIT2(0x89, add_2reg(0xC0, dreg_lo, dreg_hi));
+-
+-	/* ashr dreg_hi,imm8 */
+-	EMIT3(0xC1, add_1reg(0xF8, dreg_hi), 31);
+-
+-	/* goto out; */
+-	if (is_imm8(jmp_label(jmp_label3, 2)))
+-		EMIT2(0xEB, jmp_label(jmp_label3, 2));
+-	else
+-		EMIT1_off32(0xE9, jmp_label(jmp_label3, 5));
+-
+-	/* >= 64 */
+-	if (jmp_label2 == -1)
+-		jmp_label2 = cnt;
+-	/* ashr dreg_hi,imm8 */
++	/* sar dreg_hi,31 */
+ 	EMIT3(0xC1, add_1reg(0xF8, dreg_hi), 31);
+-	/* mov dreg_lo,dreg_hi */
+-	EMIT2(0x89, add_2reg(0xC0, dreg_lo, dreg_hi));
+-
+-	if (jmp_label3 == -1)
+-		jmp_label3 = cnt;
+ 
+ 	if (dstk) {
+ 		/* mov dword ptr [ebp+off],dreg_lo */
+@@ -948,9 +830,6 @@ static inline void emit_ia32_rsh_r64(const u8 dst[], const u8 src[], bool dstk,
+ {
+ 	u8 *prog = *pprog;
+ 	int cnt = 0;
+-	static int jmp_label1 = -1;
+-	static int jmp_label2 = -1;
+-	static int jmp_label3 = -1;
+ 	u8 dreg_lo = dstk ? IA32_EAX : dst_lo;
+ 	u8 dreg_hi = dstk ? IA32_EDX : dst_hi;
+ 
+@@ -969,77 +848,23 @@ static inline void emit_ia32_rsh_r64(const u8 dst[], const u8 src[], bool dstk,
+ 		/* mov ecx,src_lo */
+ 		EMIT2(0x8B, add_2reg(0xC0, src_lo, IA32_ECX));
+ 
+-	/* cmp ecx,32 */
+-	EMIT3(0x83, add_1reg(0xF8, IA32_ECX), 32);
+-	/* Jumps when >= 32 */
+-	if (is_imm8(jmp_label(jmp_label1, 2)))
+-		EMIT2(IA32_JAE, jmp_label(jmp_label1, 2));
+-	else
+-		EMIT2_off32(0x0F, IA32_JAE + 0x10, jmp_label(jmp_label1, 6));
+-
+-	/* < 32 */
+-	/* lshr dreg_lo,cl */
+-	EMIT2(0xD3, add_1reg(0xE8, dreg_lo));
+-	/* mov ebx,dreg_hi */
+-	EMIT2(0x8B, add_2reg(0xC0, dreg_hi, IA32_EBX));
++	/* shrd dreg_lo,dreg_hi,cl */
++	EMIT3(0x0F, 0xAD, add_2reg(0xC0, dreg_lo, dreg_hi));
+ 	/* shr dreg_hi,cl */
+ 	EMIT2(0xD3, add_1reg(0xE8, dreg_hi));
+ 
+-	/* IA32_ECX = -IA32_ECX + 32 */
+-	/* neg ecx */
+-	EMIT2(0xF7, add_1reg(0xD8, IA32_ECX));
+-	/* add ecx,32 */
+-	EMIT3(0x83, add_1reg(0xC0, IA32_ECX), 32);
+-
+-	/* shl ebx,cl */
+-	EMIT2(0xD3, add_1reg(0xE0, IA32_EBX));
+-	/* or dreg_lo,ebx */
+-	EMIT2(0x09, add_2reg(0xC0, dreg_lo, IA32_EBX));
++	/* if ecx >= 32, mov dreg_hi to dreg_lo and clear dreg_hi */
+ 
+-	/* goto out; */
+-	if (is_imm8(jmp_label(jmp_label3, 2)))
+-		EMIT2(0xEB, jmp_label(jmp_label3, 2));
+-	else
+-		EMIT1_off32(0xE9, jmp_label(jmp_label3, 5));
+-
+-	/* >= 32 */
+-	if (jmp_label1 == -1)
+-		jmp_label1 = cnt;
+-	/* cmp ecx,64 */
+-	EMIT3(0x83, add_1reg(0xF8, IA32_ECX), 64);
+-	/* Jumps when >= 64 */
+-	if (is_imm8(jmp_label(jmp_label2, 2)))
+-		EMIT2(IA32_JAE, jmp_label(jmp_label2, 2));
+-	else
+-		EMIT2_off32(0x0F, IA32_JAE + 0x10, jmp_label(jmp_label2, 6));
++	/* cmp ecx,32 */
++	EMIT3(0x83, add_1reg(0xF8, IA32_ECX), 32);
++	/* skip the next two instructions (4 bytes) when < 32 */
++	EMIT2(IA32_JB, 4);
+ 
+-	/* >= 32 && < 64 */
+-	/* sub ecx,32 */
+-	EMIT3(0x83, add_1reg(0xE8, IA32_ECX), 32);
+-	/* shr dreg_hi,cl */
+-	EMIT2(0xD3, add_1reg(0xE8, dreg_hi));
+ 	/* mov dreg_lo,dreg_hi */
+ 	EMIT2(0x89, add_2reg(0xC0, dreg_lo, dreg_hi));
+ 	/* xor dreg_hi,dreg_hi */
+ 	EMIT2(0x33, add_2reg(0xC0, dreg_hi, dreg_hi));
+ 
+-	/* goto out; */
+-	if (is_imm8(jmp_label(jmp_label3, 2)))
+-		EMIT2(0xEB, jmp_label(jmp_label3, 2));
+-	else
+-		EMIT1_off32(0xE9, jmp_label(jmp_label3, 5));
+-
+-	/* >= 64 */
+-	if (jmp_label2 == -1)
+-		jmp_label2 = cnt;
+-	/* xor dreg_lo,dreg_lo */
+-	EMIT2(0x33, add_2reg(0xC0, dreg_lo, dreg_lo));
+-	/* xor dreg_hi,dreg_hi */
+-	EMIT2(0x33, add_2reg(0xC0, dreg_hi, dreg_hi));
+-
+-	if (jmp_label3 == -1)
+-		jmp_label3 = cnt;
+-
+ 	if (dstk) {
+ 		/* mov dword ptr [ebp+off],dreg_lo */
+ 		EMIT3(0x89, add_2reg(0x40, IA32_EBP, dreg_lo),
+-- 
+2.20.1
 
-An example commit: d300b610812f3 ("kernel: use kernel_wait4() instead of
-sys_wait4()").
-
-So it would seem the work is done, and you'd just have to use the
-respective exposed kernel_syscallname() calls, or add some if you
-want to test a specific syscall in kernel space.
-
-  Luis
