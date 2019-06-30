@@ -2,191 +2,226 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D9605A968
-	for <lists+linux-kselftest@lfdr.de>; Sat, 29 Jun 2019 09:16:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F31765B012
+	for <lists+linux-kselftest@lfdr.de>; Sun, 30 Jun 2019 15:56:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726835AbfF2HQj (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 29 Jun 2019 03:16:39 -0400
-Received: from foss.arm.com ([217.140.110.172]:60776 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726527AbfF2HQj (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 29 Jun 2019 03:16:39 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D18B228;
-        Sat, 29 Jun 2019 00:16:38 -0700 (PDT)
-Received: from [192.168.1.18] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E66EA3F246;
-        Sat, 29 Jun 2019 00:18:27 -0700 (PDT)
-Subject: Re: [RFC] arm64: Detecting tagged addresses
-To:     Andrew Murray <andrew.murray@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>
-Cc:     Andrey Konovalov <andreyknvl@google.com>,
-        linux-arm-kernel@lists.infradead.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        smatch@vger.kernel.org
-References: <20190619121619.GV20984@e119886-lin.cambridge.arm.com>
- <20190626174502.GH29672@arrakis.emea.arm.com>
- <20190627131834.GE34530@e119886-lin.cambridge.arm.com>
-From:   Vincenzo Frascino <vincenzo.frascino@arm.com>
-Message-ID: <0887dbcd-0b38-9f58-c2b7-d0b2dabf58cb@arm.com>
-Date:   Sat, 29 Jun 2019 08:17:28 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.1
-MIME-Version: 1.0
-In-Reply-To: <20190627131834.GE34530@e119886-lin.cambridge.arm.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+        id S1726666AbfF3N4W (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 30 Jun 2019 09:56:22 -0400
+Received: from mail.efficios.com ([167.114.142.138]:47286 "EHLO
+        mail.efficios.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726572AbfF3N4W (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Sun, 30 Jun 2019 09:56:22 -0400
+Received: from localhost (ip6-localhost [IPv6:::1])
+        by mail.efficios.com (Postfix) with ESMTP id 9D98D1DC8D2;
+        Sun, 30 Jun 2019 09:56:20 -0400 (EDT)
+Received: from mail.efficios.com ([IPv6:::1])
+        by localhost (mail02.efficios.com [IPv6:::1]) (amavisd-new, port 10032)
+        with ESMTP id hHCHQ9r57UpQ; Sun, 30 Jun 2019 09:56:19 -0400 (EDT)
+Received: from localhost (ip6-localhost [IPv6:::1])
+        by mail.efficios.com (Postfix) with ESMTP id F0F881DC8CF;
+        Sun, 30 Jun 2019 09:56:18 -0400 (EDT)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com F0F881DC8CF
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
+        s=default; t=1561902979;
+        bh=65L2CNq5WZOT+2A+0zQqpZoJ5Q/KBOL7YfC9clNLSqs=;
+        h=From:To:Date:Message-Id;
+        b=drrx+ZwOGpdW26n/YZVI2EwtSsc/yJqd2w3VarTR79Z3n3P3gyos1izrn/jvVBoC5
+         IVJHV8xpE9iAccB+9HIe9Tbdxq2RfQgzCNlarlnlu4LXE1q1x3oNW2iMO/qVaznjQ5
+         sOrI+nibcUq35950cOOu6ezfcrQBVoKXUhQ6JY1kQ0rQmU6m+JJDyKG8qyQ9SPbQXI
+         QvSvPR2Z6i1M6wbbXrNOM6mN3CqpvM3BXIvrv0LqluJIqTT9EA7gxaCSajLzMwFfVL
+         9q2g+0LsutNeiqle3OHCZftTHbwCgi/iMXSJO/f4nmydWmveGRVFKusEAOzuDTs3/v
+         L1e0jK1daSX6g==
+X-Virus-Scanned: amavisd-new at efficios.com
+Received: from mail.efficios.com ([IPv6:::1])
+        by localhost (mail02.efficios.com [IPv6:::1]) (amavisd-new, port 10026)
+        with ESMTP id JuOgG-88Jtph; Sun, 30 Jun 2019 09:56:18 -0400 (EDT)
+Received: from thinkos.etherlink (unknown [192.222.236.144])
+        by mail.efficios.com (Postfix) with ESMTPSA id 7EE1E1DC8C9;
+        Sun, 30 Jun 2019 09:56:18 -0400 (EDT)
+From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+To:     Shuah Khan <shuah@kernel.org>, Will Deacon <will.deacon@arm.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Joel Fernandes <joelaf@google.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Dave Watson <davejwatson@fb.com>,
+        Andi Kleen <andi@firstfloor.org>,
+        linux-kselftest@vger.kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Chris Lameter <cl@linux.com>,
+        Russell King <linux@arm.linux.org.uk>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        "Paul E . McKenney" <paulmck@linux.vnet.ibm.com>,
+        Paul Turner <pjt@google.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Maurer <bmaurer@fb.com>, linux-api@vger.kernel.org,
+        Andy Lutomirski <luto@amacapital.net>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Carlos O'Donell <carlos@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>
+Subject: [PATCH for 5.2] rseq/selftests: Fix Thumb mode build failure on arm32
+Date:   Sun, 30 Jun 2019 09:56:13 -0400
+Message-Id: <20190630135613.19897-1-mathieu.desnoyers@efficios.com>
+X-Mailer: git-send-email 2.11.0
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-+ Dan and smatch@vger.kernel.org
+Using ".arm .inst" for the arm signature introduces build issues for
+programs compiled in Thumb mode because the assembler stays in the
+arm mode for the rest of the inline assembly. Revert to using a ".word"
+to express the signature as data instead.
 
-Hi Andrew,
+The choice of signature is a valid trap instruction on arm32 little
+endian, where both code and data are little endian.
 
-I am adding Dan to this thread since he is the smatch maintainer, and the
-smatch@vger.kernel.org list.
+ARMv6+ big endian (BE8) generates mixed endianness code vs data:
+little-endian code and big-endian data. The data value of the signature
+needs to have its byte order reversed to generate the trap instruction.
 
-@Dan and @smatch@vger.kernel.org: a reference to the beginning of this thread
-can be found at [1].
+Prior to ARMv6, -mbig-endian generates big-endian code and data
+(which match), so the endianness of the data representation of the
+signature should not be reversed. However, the choice between BE32
+and BE8 is done by the linker, so we cannot know whether code and
+data endianness will be mixed before the linker is invoked. So rather
+than try to play tricks with the linker, the rseq signature is simply
+data (not a trap instruction) prior to ARMv6 on big endian. This is
+why the signature is expressed as data (.word) rather than as
+instruction (.inst) in assembler.
 
-[1] https://lkml.org/lkml/2019/6/19/376
+Because a ".word" is used to emit the signature, it will be interpreted
+as a literal pool by a disassembler, not as an actual instruction.
+Considering that the signature is not meant to be executed except in
+scenarios where the program execution is completely bogus, this should
+not be an issue.
 
-On 6/27/19 2:18 PM, Andrew Murray wrote:
-> On Wed, Jun 26, 2019 at 06:45:03PM +0100, Catalin Marinas wrote:
->> Hi Andrew,
->>
->> Cc'ing Luc (sparse maintainer) who's been involved in the past
->> discussions around static checking of user pointers:
->>
->> https://lore.kernel.org/linux-arm-kernel/20180905190316.a34yycthgbamx2t3@ltop.local/
->>
->> So I think the difference here from the previous approach is that we
->> explicitly mark functions that cannot take tagged addresses (like
->> find_vma()) and identify the callers.
-> 
-> Indeed.
-> 
-> 
->>
->> More comments below:
->>
->> On Wed, Jun 19, 2019 at 01:16:20PM +0100, Andrew Murray wrote:
->>> The proposed introduction of a relaxed ARM64 ABI [1] will allow tagged memory
->>> addresses to be passed through the user-kernel syscall ABI boundary. Tagged
->>> memory addresses are those which contain a non-zero top byte (the hardware
->>> has always ignored this top byte due to TCR_EL1.TBI0) and may be useful
->>> for features such as HWASan.
->>>
->>> To permit this relaxation a proposed patchset [2] strips the top byte (tag)
->>> from user provided memory addresses prior to use in kernel functions which
->>> require untagged addresses (for example comparasion/arithmetic of addresses).
->>> The author of this patchset relied on a variety of techniques [2] (such as
->>> grep, BUG_ON, sparse etc) to identify as many instances of possible where
->>> tags need to be stipped.
->>>
->>> To support this effort and to catch future regressions (e.g. in new syscalls
->>> or ioctls), I've devised an additional approach for detecting the use of
->>> tagged addresses in functions that do not want them. This approach makes
->>> use of Smatch [3] and is outlined in this RFC. Due to the ability of Smatch
->>> to do flow analysis I believe we can annotate the kernel in fewer places
->>> than a similar approach in sparse.
->>>
->>> I'm keen for feedback on the likely usefulness of this approach.
->>>
->>> We first add some new annotations that are exclusively consumed by Smatch:
->>>
->>> --- a/include/linux/compiler_types.h
->>> +++ b/include/linux/compiler_types.h
->>> @@ -19,6 +19,7 @@
->>>  # define __cond_lock(x,c)      ((c) ? ({ __acquire(x); 1; }) : 0)
->>>  # define __percpu      __attribute__((noderef, address_space(3)))
->>>  # define __rcu         __attribute__((noderef, address_space(4)))
->>> +# define __untagged    __attribute__((address_space(5)))
->>>  # define __private     __attribute__((noderef))
->>>  extern void __chk_user_ptr(const volatile void __user *);
->>>  extern void __chk_io_ptr(const volatile void __iomem *);
->> [...]
->>> --- a/mm/mmap.c
->>> +++ b/mm/mmap.c
->>> @@ -2224,7 +2224,7 @@ get_unmapped_area(struct file *file, unsigned long addr, unsigned long len,
->>>  EXPORT_SYMBOL(get_unmapped_area);
->>>  
->>>  /* Look up the first VMA which satisfies  addr < vm_end,  NULL if none. */
->>> -struct vm_area_struct *find_vma(struct mm_struct *mm, unsigned long addr)
->>> +struct vm_area_struct *find_vma(struct mm_struct *mm, unsigned long __untagged addr)
->>>  {
->>>         struct rb_node *rb_node;
->>>         struct vm_area_struct *vma;
->> [...]
->>> This can be further improved - the problem here is that for a given function,
->>> e.g. find_vma we look for callers where *any* of the parameters
->>> passed to find_vma are tagged addresses from userspace - i.e. not *just*
->>> the annotated parameter. This is also true for find_vma's callers' callers'.
->>> This results in the call tree having false positives.
->>>
->>> It *is* possible to track parameters (e.g. find_vma arg 1 comes from arg 3 of
->>> do_pages_stat_array etc), but this is limited as if functions modify the
->>> data then the tracking is stopped (however this can be fixed).
->> [...]
->>> An example of a false positve is do_mlock. We untag the address and pass that
->>> to apply_vma_lock_flags - however we also pass a length - because the length
->>> came from userspace and could have the top bits set - it's flagged. However
->>> with improved parameter tracking we can remove this false positive and similar.
->>
->> Could we track only the conversions from __user * that eventually end up
->> as __untagged? (I'm not familiar with smatch, so not sure what it can
->> do).
-> 
-> I assume you mean 'that eventually end up as an argument annotated __untagged'?
-> 
-> The warnings smatch currently produce relate to only the conversions you
-> mention - however further work is needed in smatch to improve the scripts that
-> retrospectively provide call traces (without false positives).
-> 
-> 
->> We could assume that an unsigned long argument to a syscall is
->> default __untagged, unless explicitly marked as __tagged. For example,
->> sys_munmap() is allowed to take a tagged address.
-> 
-> I'll give this some further thought.
-> 
-> 
->>
->>> Prior to smatch I attempted a similar approach with sparse - however it seemed
->>> necessary to propogate the __untagged annotation in every function up the call tree,
->>> and resulted in adding the __untagged annotation to functions that would never
->>> get near user provided data. This leads to a littering of __untagged all over the
->>> kernel which doesn't seem appealing.
->>
->> Indeed. We attempted this last year (see the above thread).
->>
->>> Smatch is more capable, however it almost
->>> certainly won't pick up 100% of issues due to the difficulity of making flow
->>> analysis understand everything a compiler can.
->>>
->>> Is it likely to be acceptable to use the __untagged annotation in user-path
->>> functions that require untagged addresses across the kernel?
->>
->> If it helps with identifying missing untagged_addr() calls, I would say
->> yes (as long as we keep them to a minimum).
-> 
-> Thanks for the feedback.
-> 
-> Andrew Murray
-> 
->>
->>> [1] https://lkml.org/lkml/2019/6/13/534
->>> [2] https://patchwork.kernel.org/cover/10989517/
->>> [3] http://smatch.sourceforge.net/
->>
->> -- 
->> Catalin
+Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Acked-by: Will Deacon <will.deacon@arm.com>
+CC: Peter Zijlstra <peterz@infradead.org>
+CC: Thomas Gleixner <tglx@linutronix.de>
+CC: Joel Fernandes <joelaf@google.com>
+CC: Catalin Marinas <catalin.marinas@arm.com>
+CC: Dave Watson <davejwatson@fb.com>
+CC: Will Deacon <will.deacon@arm.com>
+CC: Shuah Khan <shuah@kernel.org>
+CC: Andi Kleen <andi@firstfloor.org>
+CC: linux-kselftest@vger.kernel.org
+CC: "H . Peter Anvin" <hpa@zytor.com>
+CC: Chris Lameter <cl@linux.com>
+CC: Russell King <linux@arm.linux.org.uk>
+CC: Michael Kerrisk <mtk.manpages@gmail.com>
+CC: "Paul E . McKenney" <paulmck@linux.vnet.ibm.com>
+CC: Paul Turner <pjt@google.com>
+CC: Boqun Feng <boqun.feng@gmail.com>
+CC: Josh Triplett <josh@joshtriplett.org>
+CC: Steven Rostedt <rostedt@goodmis.org>
+CC: Ben Maurer <bmaurer@fb.com>
+CC: linux-api@vger.kernel.org
+CC: Andy Lutomirski <luto@amacapital.net>
+CC: Andrew Morton <akpm@linux-foundation.org>
+CC: Linus Torvalds <torvalds@linux-foundation.org>
+CC: Carlos O'Donell <carlos@redhat.com>
+CC: Florian Weimer <fweimer@redhat.com>
+---
+ tools/testing/selftests/rseq/rseq-arm.h | 61 ++++++++++++++++++---------------
+ 1 file changed, 33 insertions(+), 28 deletions(-)
 
+diff --git a/tools/testing/selftests/rseq/rseq-arm.h b/tools/testing/selftests/rseq/rseq-arm.h
+index 84f28f147fb6..5943c816c07c 100644
+--- a/tools/testing/selftests/rseq/rseq-arm.h
++++ b/tools/testing/selftests/rseq/rseq-arm.h
+@@ -6,6 +6,8 @@
+  */
+ 
+ /*
++ * - ARM little endian
++ *
+  * RSEQ_SIG uses the udf A32 instruction with an uncommon immediate operand
+  * value 0x5de3. This traps if user-space reaches this instruction by mistake,
+  * and the uncommon operand ensures the kernel does not move the instruction
+@@ -22,36 +24,40 @@
+  * def3        udf    #243      ; 0xf3
+  * e7f5        b.n    <7f5>
+  *
+- * pre-ARMv6 big endian code:
+- * e7f5        b.n    <7f5>
+- * def3        udf    #243      ; 0xf3
++ * - ARMv6+ big endian (BE8):
+  *
+  * ARMv6+ -mbig-endian generates mixed endianness code vs data: little-endian
+- * code and big-endian data. Ensure the RSEQ_SIG data signature matches code
+- * endianness. Prior to ARMv6, -mbig-endian generates big-endian code and data
+- * (which match), so there is no need to reverse the endianness of the data
+- * representation of the signature. However, the choice between BE32 and BE8
+- * is done by the linker, so we cannot know whether code and data endianness
+- * will be mixed before the linker is invoked.
++ * code and big-endian data. The data value of the signature needs to have its
++ * byte order reversed to generate the trap instruction:
++ *
++ * Data: 0xf3def5e7
++ *
++ * Translates to this A32 instruction pattern:
++ *
++ * e7f5def3    udf    #24035    ; 0x5de3
++ *
++ * Translates to this T16 instruction pattern:
++ *
++ * def3        udf    #243      ; 0xf3
++ * e7f5        b.n    <7f5>
++ *
++ * - Prior to ARMv6 big endian (BE32):
++ *
++ * Prior to ARMv6, -mbig-endian generates big-endian code and data
++ * (which match), so the endianness of the data representation of the
++ * signature should not be reversed. However, the choice between BE32
++ * and BE8 is done by the linker, so we cannot know whether code and
++ * data endianness will be mixed before the linker is invoked. So rather
++ * than try to play tricks with the linker, the rseq signature is simply
++ * data (not a trap instruction) prior to ARMv6 on big endian. This is
++ * why the signature is expressed as data (.word) rather than as
++ * instruction (.inst) in assembler.
+  */
+ 
+-#define RSEQ_SIG_CODE	0xe7f5def3
+-
+-#ifndef __ASSEMBLER__
+-
+-#define RSEQ_SIG_DATA							\
+-	({								\
+-		int sig;						\
+-		asm volatile ("b 2f\n\t"				\
+-			      "1: .inst " __rseq_str(RSEQ_SIG_CODE) "\n\t" \
+-			      "2:\n\t"					\
+-			      "ldr %[sig], 1b\n\t"			\
+-			      : [sig] "=r" (sig));			\
+-		sig;							\
+-	})
+-
+-#define RSEQ_SIG	RSEQ_SIG_DATA
+-
++#ifdef __ARMEB__
++#define RSEQ_SIG    0xf3def5e7      /* udf    #24035    ; 0x5de3 (ARMv6+) */
++#else
++#define RSEQ_SIG    0xe7f5def3      /* udf    #24035    ; 0x5de3 */
+ #endif
+ 
+ #define rseq_smp_mb()	__asm__ __volatile__ ("dmb" ::: "memory", "cc")
+@@ -125,8 +131,7 @@ do {									\
+ 		__rseq_str(table_label) ":\n\t"				\
+ 		".word " __rseq_str(version) ", " __rseq_str(flags) "\n\t" \
+ 		".word " __rseq_str(start_ip) ", 0x0, " __rseq_str(post_commit_offset) ", 0x0, " __rseq_str(abort_ip) ", 0x0\n\t" \
+-		".arm\n\t"						\
+-		".inst " __rseq_str(RSEQ_SIG_CODE) "\n\t"		\
++		".word " __rseq_str(RSEQ_SIG) "\n\t"			\
+ 		__rseq_str(label) ":\n\t"				\
+ 		teardown						\
+ 		"b %l[" __rseq_str(abort_label) "]\n\t"
 -- 
-Regards,
-Vincenzo
+2.11.0
+
