@@ -2,115 +2,130 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C410E5C944
-	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Jul 2019 08:24:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7CF95CE9A
+	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Jul 2019 13:40:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725835AbfGBGYL (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 2 Jul 2019 02:24:11 -0400
-Received: from youngberry.canonical.com ([91.189.89.112]:43361 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725812AbfGBGYK (ORCPT
+        id S1726960AbfGBLkf (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 2 Jul 2019 07:40:35 -0400
+Received: from mail-qk1-f195.google.com ([209.85.222.195]:39699 "EHLO
+        mail-qk1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725858AbfGBLke (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 2 Jul 2019 02:24:10 -0400
-Received: from mail-pl1-f198.google.com ([209.85.214.198])
-        by youngberry.canonical.com with esmtps (TLS1.0:RSA_AES_128_CBC_SHA1:16)
-        (Exim 4.76)
-        (envelope-from <po-hsu.lin@canonical.com>)
-        id 1hiCD2-0001z3-Cn
-        for linux-kselftest@vger.kernel.org; Tue, 02 Jul 2019 06:24:08 +0000
-Received: by mail-pl1-f198.google.com with SMTP id 59so8496673plb.14
-        for <linux-kselftest@vger.kernel.org>; Mon, 01 Jul 2019 23:24:08 -0700 (PDT)
+        Tue, 2 Jul 2019 07:40:34 -0400
+Received: by mail-qk1-f195.google.com with SMTP id i125so13623965qkd.6
+        for <linux-kselftest@vger.kernel.org>; Tue, 02 Jul 2019 04:40:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=joelfernandes.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=d76+rBrIQU/StBU8cagTKv7l2BvLzcU1f3o2NLAUyms=;
+        b=cIGkhZFvDLliFso7QWmxHW9042AROXayE+sWsH7mIqA3lSlte5wY0A033Gz4nKLlWx
+         Hx/pl/r4pbHt2T0oVdSIEyu+Uma9Ug1HqKRsH/azxx+VTcRyh3KHihu+Q0LQ/kvDocKL
+         LueRxh2AwkA+lsRP4c7rTZD6VWZrhUYM4U1/w=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=yDzSSlzz68xbYUEa8P0cxC2ju66W5gHLv670zzKjJew=;
-        b=fFDfRT4yA1qa6+0X/ZORyqeaKAeiOYWd8N0CR+W/BGgMi8SpIA7hf8huG84y+10XMs
-         FO05Ou+K3mLAdp0MweSAD9a0u0AnVY4AqGW2QeJ+V4MnHrCxK9ZGLtKNN4r1PZc2FTgX
-         aKhy+xkfTjaGaLt8YxsokqvZQXJY9DVFwShd/m8x7Pxu+AmY5OY1+mVGhm41GzXyToWy
-         n7XXU8laeh9b6vJakA1eCvG6MkCcA28LIMwEN8Ua8eABUed2I7CJ+RA3AEyyiEEF1HAb
-         Q3pk3MNG8pTky6XPtxlWrFEQ3Ah7MvxuYEUr1MXZENaWDUAY5nLYKbF6kgCasOrnlQkM
-         5lSA==
-X-Gm-Message-State: APjAAAXvPfrdUyAsjbgeav+jllVNrg2v12p5tPbktILRbHaQNa0h2boo
-        ehoEzdqmNmjpnTw08ZTRpAetJ0ULrxcbnDWFrgg1sSXGd5iQfBljxcMsOjHwjSUgNz49vdVL1nC
-        DuOkpMAqmnq7ULJZg88MVniPd4IUijNVSjcvzh5XgMGyW
-X-Received: by 2002:a63:6fc9:: with SMTP id k192mr15683734pgc.20.1562048647066;
-        Mon, 01 Jul 2019 23:24:07 -0700 (PDT)
-X-Google-Smtp-Source: APXvYqwUpzq2O1mJvjQuO/WoeUFhiR35393YmkG+4pab7PCu9wdkXJehbwSHHo5dvrDOFonRuGu1Ew==
-X-Received: by 2002:a63:6fc9:: with SMTP id k192mr15683711pgc.20.1562048646698;
-        Mon, 01 Jul 2019 23:24:06 -0700 (PDT)
-Received: from Leggiero.taipei.internal (61-220-137-37.HINET-IP.hinet.net. [61.220.137.37])
-        by smtp.gmail.com with ESMTPSA id l68sm2569488pjb.8.2019.07.01.23.24.05
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Mon, 01 Jul 2019 23:24:06 -0700 (PDT)
-From:   Po-Hsu Lin <po-hsu.lin@canonical.com>
-To:     rostedt@goodmis.org, mingo@redhat.com, shuah@kernel.org,
-        linux-kselftest@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org
-Subject: [PATCH] selftests/ftrace: skip ftrace test if FTRACE was not enabled
-Date:   Tue,  2 Jul 2019 14:23:58 +0800
-Message-Id: <20190702062358.7330-1-po-hsu.lin@canonical.com>
-X-Mailer: git-send-email 2.17.1
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=d76+rBrIQU/StBU8cagTKv7l2BvLzcU1f3o2NLAUyms=;
+        b=NmhJgD+suJRE7qoTqjxF+EgAG9MUtQXveroR8ByeJWfl9bvldwYF5DdQB82I36W7CG
+         RwqqNvKyscsdAB5rEHPAmZzZB4A7dnIOb5sv8I+J/Aifvzm/AH8FOZBKeIPrMWf1LIkZ
+         YQCX49lazp9Ki4Mg0+WJ+bl7r8Q8A4jxxzaoRYh5k+KN6m+8TFui82EoJnt0oBtVqE+s
+         0bzmHTKLMCv7mH9R0GmPjj3HJV6l1gAJ6IOraCjKwce77eoo40pq8DkOUPy6Um5G5XWb
+         yXRweN2WSH++FD85fGrE0Brso5C5Tn/BHBkmHT6M0VexHYQGv/vG3zCAxGYbT4dAbGBs
+         blZw==
+X-Gm-Message-State: APjAAAVrnKUvdbYMqDLu9sC8+rNDfg4VsHqRbrOsrqHzO9N20lT9k1Ob
+        PpLeWgEsq+tzVfy1lAmoTemgKtxz9Y8=
+X-Google-Smtp-Source: APXvYqy6oDQ53DK9Bb+d0Z5bMhOn790lQmOVX5Wgnb6SgVmP7KjBq+ACmgSlzcTevyjdX/7RwcE8vQ==
+X-Received: by 2002:a37:b843:: with SMTP id i64mr24028603qkf.77.1562067632950;
+        Tue, 02 Jul 2019 04:40:32 -0700 (PDT)
+Received: from localhost (c-73-216-90-110.hsd1.va.comcast.net. [73.216.90.110])
+        by smtp.gmail.com with ESMTPSA id s44sm7882269qtc.8.2019.07.02.04.40.31
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Tue, 02 Jul 2019 04:40:32 -0700 (PDT)
+Date:   Tue, 2 Jul 2019 11:40:30 +0000
+From:   Joel Fernandes <joel@joelfernandes.org>
+To:     "Paul E. McKenney" <paulmck@linux.ibm.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Josh Triplett <josh@joshtriplett.org>, kernel-team@android.com,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        linux-kselftest@vger.kernel.org,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        rcu@vger.kernel.org,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Shuah Khan <shuah@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>
+Subject: Re: [RFC 1/3] rcu: Expedite the rcu quiescent state reporting if
+ help needed
+Message-ID: <20190702114030.GA5429@localhost>
+References: <20190701040415.219001-1-joel@joelfernandes.org>
+ <20190702034730.GI26519@linux.ibm.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190702034730.GI26519@linux.ibm.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The ftrace test will need to have CONFIG_FTRACE enabled to make the
-ftrace directory available.
+On Mon, Jul 01, 2019 at 08:47:30PM -0700, Paul E. McKenney wrote:
+> On Mon, Jul 01, 2019 at 12:04:13AM -0400, Joel Fernandes (Google) wrote:
+> > The t->rcu_read_unlock_special union's need_qs bit can be set by the
+> > scheduler tick (in rcu_flavor_sched_clock_irq) to indicate that help is
+> > needed from the rcu_read_unlock path. When this help arrives however, we
+> > can do better to speed up the quiescent state reporting which if
+> > rcu_read_unlock_special::need_qs is set might be quite urgent. Make use
+> > of this information in deciding when to do heavy-weight softirq raising
+> > where possible.
+> > 
+> > Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
+> 
+> Cute thought, but I am going to have to pass on this one.  The reason
+> is that by the time that ->rcu_read_unlock_special.b.need_qs gets set,
+> the grace period is already one full second old.  At that point, the
+> extra tick of waiting is down in the noise.
+> 
+> Right now, we do the extra work if we really are blocking an expedited
+> grace period (the first two lines of the original condition) or we are
+> running on a nohz_full CPU (which might never execute a scheduling clock
+> tick, thus potentially delaying forever).  And expedited grace periods
+> are supposed to complete in tens or maybe hundreds of microseconds,
+> assuming the RCU readers are being cooperative, which is a whole
+> different level of urgent.
 
-Add an additional check to skip this test if the CONFIG_FTRACE was not
-enabled.
+Makes sense, I agree the patch may not be that helpful right now. I mixed up
+the different levels or urgencies. No problem dropping it.
 
-This will be helpful to avoid a false-positive test result when testing
-it directly with the following commad against a kernel that does not
-have CONFIG_FTRACE enabled:
-    make -C tools/testing/selftests TARGETS=ftrace run_tests
+> 
+> Nevertheless, thank you for looking into this!
 
-The test result on an Ubuntu KVM kernel will be changed from:
-    selftests: ftrace: ftracetest
-    ========================================
-    Error: No ftrace directory found
-    not ok 1..1 selftests: ftrace: ftracetest [FAIL]
-To:
-    selftests: ftrace: ftracetest
-    ========================================
-    CONFIG_FTRACE was not enabled, test skipped.
-    not ok 1..1 selftests: ftrace: ftracetest [SKIP]
+My pleasure! Will keep them coming.
 
-Signed-off-by: Po-Hsu Lin <po-hsu.lin@canonical.com>
----
- tools/testing/selftests/ftrace/ftracetest | 11 ++++++++++-
- 1 file changed, 10 insertions(+), 1 deletion(-)
+ - Joel
 
-diff --git a/tools/testing/selftests/ftrace/ftracetest b/tools/testing/selftests/ftrace/ftracetest
-index 6d5e9e8..6c8322e 100755
---- a/tools/testing/selftests/ftrace/ftracetest
-+++ b/tools/testing/selftests/ftrace/ftracetest
-@@ -7,6 +7,9 @@
- #  Written by Masami Hiramatsu <masami.hiramatsu.pt@hitachi.com>
- #
- 
-+# Kselftest framework requirement - SKIP code is 4.
-+ksft_skip=4
-+
- usage() { # errno [message]
- [ ! -z "$2" ] && echo $2
- echo "Usage: ftracetest [options] [testcase(s)] [testcase-directory(s)]"
-@@ -139,7 +142,13 @@ parse_opts $*
- 
- # Verify parameters
- if [ -z "$TRACING_DIR" -o ! -d "$TRACING_DIR" ]; then
--  errexit "No ftrace directory found"
-+  ftrace_enabled=`grep "^CONFIG_FTRACE=y" /lib/modules/$(uname -r)/build/.config`
-+  if [ -z "$ftrace_enabled" ]; then
-+    echo "CONFIG_FTRACE was not enabled, test skipped."
-+    exit $ksft_skip
-+  else
-+    errexit "No ftrace directory found"
-+  fi
- fi
- 
- # Preparing logs
--- 
-2.7.4
-
+> 
+> 							Thanx, Paul
+> 
+> > ---
+> >  kernel/rcu/tree_plugin.h | 3 ++-
+> >  1 file changed, 2 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/kernel/rcu/tree_plugin.h b/kernel/rcu/tree_plugin.h
+> > index c588ef98efd3..bff6410fac06 100644
+> > --- a/kernel/rcu/tree_plugin.h
+> > +++ b/kernel/rcu/tree_plugin.h
+> > @@ -622,7 +622,8 @@ static void rcu_read_unlock_special(struct task_struct *t)
+> >  		t->rcu_read_unlock_special.b.exp_hint = false;
+> >  		exp = (t->rcu_blocked_node && t->rcu_blocked_node->exp_tasks) ||
+> >  		      (rdp->grpmask & rnp->expmask) ||
+> > -		      tick_nohz_full_cpu(rdp->cpu);
+> > +		      tick_nohz_full_cpu(rdp->cpu)  ||
+> > +		      t->rcu_read_unlock_special.b.need_qs;
+> >  		// Need to defer quiescent state until everything is enabled.
+> >  		if (irqs_were_disabled && use_softirq &&
+> >  		    (in_interrupt() ||
+> > -- 
+> > 2.22.0.410.gd8fdbe21b5-goog
+> > 
+> 
