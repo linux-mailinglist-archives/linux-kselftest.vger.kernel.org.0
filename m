@@ -2,137 +2,105 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C1215D5B1
-	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Jul 2019 19:53:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D0F3E5D69E
+	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Jul 2019 21:09:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726686AbfGBRxD (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 2 Jul 2019 13:53:03 -0400
-Received: from mail-pf1-f196.google.com ([209.85.210.196]:41884 "EHLO
-        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726621AbfGBRxD (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 2 Jul 2019 13:53:03 -0400
-Received: by mail-pf1-f196.google.com with SMTP id m30so8615032pff.8
-        for <linux-kselftest@vger.kernel.org>; Tue, 02 Jul 2019 10:53:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=cUzLBUlR97uqGXzOFylb6nkkxBtyYZ1OhN+qvdTrCD0=;
-        b=roBJOIwXGuFOf1wltfxmsClcFxlkrjzp9+21T7P87pZ44BH/GjP/X/NuZ8mK2FoMzO
-         XotmCr6d6KsdJATAIIUbq5Oy4zR4Azgkp4HhOE4XiupuZAs2/ZBggUQTxGqGQNrNXKUR
-         RK1F2iELvIHqPezIMEexxn9HQjKb0Q7OjYsSgJwmHDUbD4xwBf6WQFlfeS4XFqE89Pff
-         n78AWxKci0ljIJl3H7X5khQxePoPu8jM9jZ95VMb0Zsz46NlIICQ2qPhYIcCIBC8U20Z
-         P1PLSOLwoWTdUhh3getWGZNkHFehqyZ7w/vmIfDcbd6OQGJv5O6KIgY9x4cjlJKaYt87
-         yyiQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=cUzLBUlR97uqGXzOFylb6nkkxBtyYZ1OhN+qvdTrCD0=;
-        b=hjOlHnBSqMQlXDVXelqVGrJDBFFL7j/RXM/UfQ/BcUYc7K0+I3lZg2Zrfqw2k3vIOh
-         quAU2kaXAplnfxsKb7cqe759dgXrRzZaCrPe/UpBfb7Mt6kLEWhEb5VXJsHJke3iZoyB
-         6sViFIXZrb1AfUkc//iXToVvWQtuqGpfjXb4ycsquci0u1/rYLQqnzXh5mMCr8+RYDTh
-         GeOlOvFaa1woW3nXiqYXXt7g49N7oIEXu+4Wal6cqMvGA83LpkTdDtlffIYUHdCYsXCQ
-         qFGIGA/+UxsVjzQ4IetPAHXDNqyI0Th88an3qgfVPN3UqaKMYT+dYq6c3eFYN0Lf+GXn
-         JwKg==
-X-Gm-Message-State: APjAAAUOoIHC6iE1kwdcnSLz4sRqT/9gICo5n3NlLY1gsiSiyw9oRLSL
-        5cWZkYxABlCBASFRN09SJcrH2/KULasA5rLT+ayAaQ==
-X-Google-Smtp-Source: APXvYqw1QIOarVsPwN3Ymzn8KxtORstMAVkiFcCA6YNhVqWiDT/WJraRMIndv08KnJT+5qaDY4tAvp9OnwXy65WsZqM=
-X-Received: by 2002:a63:205f:: with SMTP id r31mr23471478pgm.159.1562089981635;
- Tue, 02 Jul 2019 10:53:01 -0700 (PDT)
+        id S1727049AbfGBTJe (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 2 Jul 2019 15:09:34 -0400
+Received: from mail.kernel.org ([198.145.29.99]:60416 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725851AbfGBTJe (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 2 Jul 2019 15:09:34 -0400
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net [24.9.64.241])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 327F12186A;
+        Tue,  2 Jul 2019 19:09:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1562094573;
+        bh=nr1JDauPPw6n4HbH8C5QJYLHrSVRETyq2qq+DRyk/18=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=M7xxS/Xs1oZSK7+skm+JDSozo3HkKEh2OpOC83I0XyRiUzS/36YkxixJUwcQIw0x8
+         zMTvk98TQ/c52uA2bABO5LJcO7ADsihQBCNEx/Mw3NuqJIKdlSEJ9dL8wzl2iNubnX
+         /wHD69u9WkdZ+d0S7wWWYZwQxxw15hBWVxgHlwO4=
+Subject: Re: [PATCHv2] selftests/net: skip psock_tpacket test if KALLSYMS was
+ not enabled
+To:     Po-Hsu Lin <po-hsu.lin@canonical.com>, davem@davemloft.net,
+        linux-kselftest@vger.kernel.org
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        shuah <shuah@kernel.org>
+References: <20190701044031.19451-1-po-hsu.lin@canonical.com>
+From:   shuah <shuah@kernel.org>
+Message-ID: <8b39caac-0278-93a9-230f-0c9d83657526@kernel.org>
+Date:   Tue, 2 Jul 2019 13:09:32 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.1
 MIME-Version: 1.0
-References: <20190617082613.109131-1-brendanhiggins@google.com>
- <20190617082613.109131-8-brendanhiggins@google.com> <20190625232249.GS19023@42.do-not-panic.com>
- <CAFd5g46mnd=a0OqFCx0hOHX+DxW+5yA2LXH5Q0gEg8yUZK=4FA@mail.gmail.com>
-In-Reply-To: <CAFd5g46mnd=a0OqFCx0hOHX+DxW+5yA2LXH5Q0gEg8yUZK=4FA@mail.gmail.com>
-From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Tue, 2 Jul 2019 10:52:50 -0700
-Message-ID: <CAFd5g46=7OQDREdLDTiMgVWq-Xj2zfOw8cRhPJEihSbO89MDyA@mail.gmail.com>
-Subject: Re: [PATCH v5 07/18] kunit: test: add initial tests
-To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     Frank Rowand <frowand.list@gmail.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Kees Cook <keescook@google.com>,
-        Kieran Bingham <kieran.bingham@ideasonboard.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Rob Herring <robh@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
-        shuah <shuah@kernel.org>, "Theodore Ts'o" <tytso@mit.edu>,
-        Masahiro Yamada <yamada.masahiro@socionext.com>,
-        devicetree <devicetree@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        kunit-dev@googlegroups.com,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        linux-fsdevel@vger.kernel.org,
-        linux-kbuild <linux-kbuild@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        linux-nvdimm <linux-nvdimm@lists.01.org>,
-        linux-um@lists.infradead.org,
-        Sasha Levin <Alexander.Levin@microsoft.com>,
-        "Bird, Timothy" <Tim.Bird@sony.com>,
-        Amir Goldstein <amir73il@gmail.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Daniel Vetter <daniel@ffwll.ch>, Jeff Dike <jdike@addtoit.com>,
-        Joel Stanley <joel@jms.id.au>,
-        Julia Lawall <julia.lawall@lip6.fr>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Knut Omang <knut.omang@oracle.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Petr Mladek <pmladek@suse.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Richard Weinberger <richard@nod.at>,
-        David Rientjes <rientjes@google.com>,
-        Steven Rostedt <rostedt@goodmis.org>, wfg@linux.intel.com
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20190701044031.19451-1-po-hsu.lin@canonical.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Jun 26, 2019 at 12:53 AM Brendan Higgins
-<brendanhiggins@google.com> wrote:
->
-> On Tue, Jun 25, 2019 at 4:22 PM Luis Chamberlain <mcgrof@kernel.org> wrote:
-> >
-> > On Mon, Jun 17, 2019 at 01:26:02AM -0700, Brendan Higgins wrote:
-> > > diff --git a/kunit/example-test.c b/kunit/example-test.c
-> > > new file mode 100644
-> > > index 0000000000000..f44b8ece488bb
-> > > --- /dev/null
-> > > +++ b/kunit/example-test.c
-> >
-> > <-- snip -->
-> >
-> > > +/*
-> > > + * This defines a suite or grouping of tests.
-> > > + *
-> > > + * Test cases are defined as belonging to the suite by adding them to
-> > > + * `kunit_cases`.
-> > > + *
-> > > + * Often it is desirable to run some function which will set up things which
-> > > + * will be used by every test; this is accomplished with an `init` function
-> > > + * which runs before each test case is invoked. Similarly, an `exit` function
-> > > + * may be specified which runs after every test case and can be used to for
-> > > + * cleanup. For clarity, running tests in a test module would behave as follows:
-> > > + *
-> >
-> > To be clear this is not the kernel module init, but rather the kunit
-> > module init. I think using kmodule would make this clearer to a reader.
->
-> Seems reasonable. Will fix in next revision.
->
-> > > + * module.init(test);
-> > > + * module.test_case[0](test);
-> > > + * module.exit(test);
-> > > + * module.init(test);
-> > > + * module.test_case[1](test);
-> > > + * module.exit(test);
-> > > + * ...;
-> > > + */
+On 6/30/19 10:40 PM, Po-Hsu Lin wrote:
+> The psock_tpacket test will need to access /proc/kallsyms, this would
+> require the kernel config CONFIG_KALLSYMS to be enabled first.
+> 
+> Apart from adding CONFIG_KALLSYMS to the net/config file here, check the
+> file existence to determine if we can run this test will be helpful to
+> avoid a false-positive test result when testing it directly with the
+> following commad against a kernel that have CONFIG_KALLSYMS disabled:
+>      make -C tools/testing/selftests TARGETS=net run_tests
+> 
+> Signed-off-by: Po-Hsu Lin <po-hsu.lin@canonical.com>
+> ---
+>   tools/testing/selftests/net/config            |  1 +
+>   tools/testing/selftests/net/run_afpackettests | 14 +++++++++-----
+>   2 files changed, 10 insertions(+), 5 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/net/config b/tools/testing/selftests/net/config
+> index 4740404..3dea2cb 100644
+> --- a/tools/testing/selftests/net/config
+> +++ b/tools/testing/selftests/net/config
+> @@ -25,3 +25,4 @@ CONFIG_NF_TABLES_IPV6=y
+>   CONFIG_NF_TABLES_IPV4=y
+>   CONFIG_NFT_CHAIN_NAT_IPV6=m
+>   CONFIG_NFT_CHAIN_NAT_IPV4=m
+> +CONFIG_KALLSYMS=y
+> diff --git a/tools/testing/selftests/net/run_afpackettests b/tools/testing/selftests/net/run_afpackettests
+> index ea5938e..8b42e8b 100755
+> --- a/tools/testing/selftests/net/run_afpackettests
+> +++ b/tools/testing/selftests/net/run_afpackettests
+> @@ -21,12 +21,16 @@ fi
+>   echo "--------------------"
+>   echo "running psock_tpacket test"
+>   echo "--------------------"
+> -./in_netns.sh ./psock_tpacket
+> -if [ $? -ne 0 ]; then
+> -	echo "[FAIL]"
+> -	ret=1
+> +if [ -f /proc/kallsyms ]; then
+> +	./in_netns.sh ./psock_tpacket
+> +	if [ $? -ne 0 ]; then
+> +		echo "[FAIL]"
+> +		ret=1
+> +	else
+> +		echo "[PASS]"
+> +	fi
+>   else
+> -	echo "[PASS]"
+> +	echo "[SKIP] CONFIG_KALLSYMS not enabled"
+>   fi
+>   
+>   echo "--------------------"
+> 
 
-Do you think it might be clearer yet to rename `struct kunit_module
-*module;` to `struct kunit_suite *suite;`?
+Looks good to me. Thanks for the patch.
+
+Acked-by: Shuah Khan <skhan@linuxfoundation.org>
+
+thanks,
+-- Shuah
