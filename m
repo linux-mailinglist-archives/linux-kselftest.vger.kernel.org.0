@@ -2,135 +2,115 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 73CBE5C7F1
-	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Jul 2019 05:47:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C410E5C944
+	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Jul 2019 08:24:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726803AbfGBDrh (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 1 Jul 2019 23:47:37 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:53066 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726768AbfGBDrh (ORCPT
+        id S1725835AbfGBGYL (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 2 Jul 2019 02:24:11 -0400
+Received: from youngberry.canonical.com ([91.189.89.112]:43361 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725812AbfGBGYK (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 1 Jul 2019 23:47:37 -0400
-Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x623kUcD076836
-        for <linux-kselftest@vger.kernel.org>; Mon, 1 Jul 2019 23:47:36 -0400
-Received: from e13.ny.us.ibm.com (e13.ny.us.ibm.com [129.33.205.203])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 2tfxgqt6x1-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-kselftest@vger.kernel.org>; Mon, 01 Jul 2019 23:47:35 -0400
-Received: from localhost
-        by e13.ny.us.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-kselftest@vger.kernel.org> from <paulmck@linux.vnet.ibm.com>;
-        Tue, 2 Jul 2019 04:47:35 +0100
-Received: from b01cxnp23032.gho.pok.ibm.com (9.57.198.27)
-        by e13.ny.us.ibm.com (146.89.104.200) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Tue, 2 Jul 2019 04:47:31 +0100
-Received: from b01ledav003.gho.pok.ibm.com (b01ledav003.gho.pok.ibm.com [9.57.199.108])
-        by b01cxnp23032.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x623lUXt54460762
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 2 Jul 2019 03:47:30 GMT
-Received: from b01ledav003.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 72336B2067;
-        Tue,  2 Jul 2019 03:47:30 +0000 (GMT)
-Received: from b01ledav003.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 51694B2065;
-        Tue,  2 Jul 2019 03:47:30 +0000 (GMT)
-Received: from paulmck-ThinkPad-W541 (unknown [9.85.179.41])
-        by b01ledav003.gho.pok.ibm.com (Postfix) with ESMTP;
-        Tue,  2 Jul 2019 03:47:30 +0000 (GMT)
-Received: by paulmck-ThinkPad-W541 (Postfix, from userid 1000)
-        id 1F3C216C3620; Mon,  1 Jul 2019 20:47:30 -0700 (PDT)
-Date:   Mon, 1 Jul 2019 20:47:30 -0700
-From:   "Paul E. McKenney" <paulmck@linux.ibm.com>
-To:     "Joel Fernandes (Google)" <joel@joelfernandes.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Josh Triplett <josh@joshtriplett.org>, kernel-team@android.com,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        linux-kselftest@vger.kernel.org,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        rcu@vger.kernel.org,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Shuah Khan <shuah@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>
-Subject: Re: [RFC 1/3] rcu: Expedite the rcu quiescent state reporting if
- help needed
-Reply-To: paulmck@linux.ibm.com
-References: <20190701040415.219001-1-joel@joelfernandes.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190701040415.219001-1-joel@joelfernandes.org>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-TM-AS-GCONF: 00
-x-cbid: 19070203-0064-0000-0000-000003F5F3B2
-X-IBM-SpamModules-Scores: 
-X-IBM-SpamModules-Versions: BY=3.00011363; HX=3.00000242; KW=3.00000007;
- PH=3.00000004; SC=3.00000286; SDB=6.01226195; UDB=6.00645517; IPR=6.01007407;
- MB=3.00027546; MTD=3.00000008; XFM=3.00000015; UTC=2019-07-02 03:47:35
-X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 19070203-0065-0000-0000-00003E1B39A1
-Message-Id: <20190702034730.GI26519@linux.ibm.com>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-07-02_02:,,
- signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
- clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1810050000 definitions=main-1907020040
+        Tue, 2 Jul 2019 02:24:10 -0400
+Received: from mail-pl1-f198.google.com ([209.85.214.198])
+        by youngberry.canonical.com with esmtps (TLS1.0:RSA_AES_128_CBC_SHA1:16)
+        (Exim 4.76)
+        (envelope-from <po-hsu.lin@canonical.com>)
+        id 1hiCD2-0001z3-Cn
+        for linux-kselftest@vger.kernel.org; Tue, 02 Jul 2019 06:24:08 +0000
+Received: by mail-pl1-f198.google.com with SMTP id 59so8496673plb.14
+        for <linux-kselftest@vger.kernel.org>; Mon, 01 Jul 2019 23:24:08 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=yDzSSlzz68xbYUEa8P0cxC2ju66W5gHLv670zzKjJew=;
+        b=fFDfRT4yA1qa6+0X/ZORyqeaKAeiOYWd8N0CR+W/BGgMi8SpIA7hf8huG84y+10XMs
+         FO05Ou+K3mLAdp0MweSAD9a0u0AnVY4AqGW2QeJ+V4MnHrCxK9ZGLtKNN4r1PZc2FTgX
+         aKhy+xkfTjaGaLt8YxsokqvZQXJY9DVFwShd/m8x7Pxu+AmY5OY1+mVGhm41GzXyToWy
+         n7XXU8laeh9b6vJakA1eCvG6MkCcA28LIMwEN8Ua8eABUed2I7CJ+RA3AEyyiEEF1HAb
+         Q3pk3MNG8pTky6XPtxlWrFEQ3Ah7MvxuYEUr1MXZENaWDUAY5nLYKbF6kgCasOrnlQkM
+         5lSA==
+X-Gm-Message-State: APjAAAXvPfrdUyAsjbgeav+jllVNrg2v12p5tPbktILRbHaQNa0h2boo
+        ehoEzdqmNmjpnTw08ZTRpAetJ0ULrxcbnDWFrgg1sSXGd5iQfBljxcMsOjHwjSUgNz49vdVL1nC
+        DuOkpMAqmnq7ULJZg88MVniPd4IUijNVSjcvzh5XgMGyW
+X-Received: by 2002:a63:6fc9:: with SMTP id k192mr15683734pgc.20.1562048647066;
+        Mon, 01 Jul 2019 23:24:07 -0700 (PDT)
+X-Google-Smtp-Source: APXvYqwUpzq2O1mJvjQuO/WoeUFhiR35393YmkG+4pab7PCu9wdkXJehbwSHHo5dvrDOFonRuGu1Ew==
+X-Received: by 2002:a63:6fc9:: with SMTP id k192mr15683711pgc.20.1562048646698;
+        Mon, 01 Jul 2019 23:24:06 -0700 (PDT)
+Received: from Leggiero.taipei.internal (61-220-137-37.HINET-IP.hinet.net. [61.220.137.37])
+        by smtp.gmail.com with ESMTPSA id l68sm2569488pjb.8.2019.07.01.23.24.05
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Mon, 01 Jul 2019 23:24:06 -0700 (PDT)
+From:   Po-Hsu Lin <po-hsu.lin@canonical.com>
+To:     rostedt@goodmis.org, mingo@redhat.com, shuah@kernel.org,
+        linux-kselftest@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org
+Subject: [PATCH] selftests/ftrace: skip ftrace test if FTRACE was not enabled
+Date:   Tue,  2 Jul 2019 14:23:58 +0800
+Message-Id: <20190702062358.7330-1-po-hsu.lin@canonical.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Jul 01, 2019 at 12:04:13AM -0400, Joel Fernandes (Google) wrote:
-> The t->rcu_read_unlock_special union's need_qs bit can be set by the
-> scheduler tick (in rcu_flavor_sched_clock_irq) to indicate that help is
-> needed from the rcu_read_unlock path. When this help arrives however, we
-> can do better to speed up the quiescent state reporting which if
-> rcu_read_unlock_special::need_qs is set might be quite urgent. Make use
-> of this information in deciding when to do heavy-weight softirq raising
-> where possible.
-> 
-> Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
+The ftrace test will need to have CONFIG_FTRACE enabled to make the
+ftrace directory available.
 
-Cute thought, but I am going to have to pass on this one.  The reason
-is that by the time that ->rcu_read_unlock_special.b.need_qs gets set,
-the grace period is already one full second old.  At that point, the
-extra tick of waiting is down in the noise.
+Add an additional check to skip this test if the CONFIG_FTRACE was not
+enabled.
 
-Right now, we do the extra work if we really are blocking an expedited
-grace period (the first two lines of the original condition) or we are
-running on a nohz_full CPU (which might never execute a scheduling clock
-tick, thus potentially delaying forever).  And expedited grace periods
-are supposed to complete in tens or maybe hundreds of microseconds,
-assuming the RCU readers are being cooperative, which is a whole
-different level of urgent.
+This will be helpful to avoid a false-positive test result when testing
+it directly with the following commad against a kernel that does not
+have CONFIG_FTRACE enabled:
+    make -C tools/testing/selftests TARGETS=ftrace run_tests
 
-Nevertheless, thank you for looking into this!
+The test result on an Ubuntu KVM kernel will be changed from:
+    selftests: ftrace: ftracetest
+    ========================================
+    Error: No ftrace directory found
+    not ok 1..1 selftests: ftrace: ftracetest [FAIL]
+To:
+    selftests: ftrace: ftracetest
+    ========================================
+    CONFIG_FTRACE was not enabled, test skipped.
+    not ok 1..1 selftests: ftrace: ftracetest [SKIP]
 
-							Thanx, Paul
+Signed-off-by: Po-Hsu Lin <po-hsu.lin@canonical.com>
+---
+ tools/testing/selftests/ftrace/ftracetest | 11 ++++++++++-
+ 1 file changed, 10 insertions(+), 1 deletion(-)
 
-> ---
->  kernel/rcu/tree_plugin.h | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/kernel/rcu/tree_plugin.h b/kernel/rcu/tree_plugin.h
-> index c588ef98efd3..bff6410fac06 100644
-> --- a/kernel/rcu/tree_plugin.h
-> +++ b/kernel/rcu/tree_plugin.h
-> @@ -622,7 +622,8 @@ static void rcu_read_unlock_special(struct task_struct *t)
->  		t->rcu_read_unlock_special.b.exp_hint = false;
->  		exp = (t->rcu_blocked_node && t->rcu_blocked_node->exp_tasks) ||
->  		      (rdp->grpmask & rnp->expmask) ||
-> -		      tick_nohz_full_cpu(rdp->cpu);
-> +		      tick_nohz_full_cpu(rdp->cpu)  ||
-> +		      t->rcu_read_unlock_special.b.need_qs;
->  		// Need to defer quiescent state until everything is enabled.
->  		if (irqs_were_disabled && use_softirq &&
->  		    (in_interrupt() ||
-> -- 
-> 2.22.0.410.gd8fdbe21b5-goog
-> 
+diff --git a/tools/testing/selftests/ftrace/ftracetest b/tools/testing/selftests/ftrace/ftracetest
+index 6d5e9e8..6c8322e 100755
+--- a/tools/testing/selftests/ftrace/ftracetest
++++ b/tools/testing/selftests/ftrace/ftracetest
+@@ -7,6 +7,9 @@
+ #  Written by Masami Hiramatsu <masami.hiramatsu.pt@hitachi.com>
+ #
+ 
++# Kselftest framework requirement - SKIP code is 4.
++ksft_skip=4
++
+ usage() { # errno [message]
+ [ ! -z "$2" ] && echo $2
+ echo "Usage: ftracetest [options] [testcase(s)] [testcase-directory(s)]"
+@@ -139,7 +142,13 @@ parse_opts $*
+ 
+ # Verify parameters
+ if [ -z "$TRACING_DIR" -o ! -d "$TRACING_DIR" ]; then
+-  errexit "No ftrace directory found"
++  ftrace_enabled=`grep "^CONFIG_FTRACE=y" /lib/modules/$(uname -r)/build/.config`
++  if [ -z "$ftrace_enabled" ]; then
++    echo "CONFIG_FTRACE was not enabled, test skipped."
++    exit $ksft_skip
++  else
++    errexit "No ftrace directory found"
++  fi
+ fi
+ 
+ # Preparing logs
+-- 
+2.7.4
 
