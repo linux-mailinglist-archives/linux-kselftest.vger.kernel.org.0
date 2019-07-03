@@ -2,140 +2,243 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 00F275ECB1
-	for <lists+linux-kselftest@lfdr.de>; Wed,  3 Jul 2019 21:19:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80DDA5EFB5
+	for <lists+linux-kselftest@lfdr.de>; Thu,  4 Jul 2019 01:41:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726973AbfGCTTo (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 3 Jul 2019 15:19:44 -0400
-Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:40234 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726550AbfGCTTo (ORCPT
+        id S1727429AbfGCXlE (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 3 Jul 2019 19:41:04 -0400
+Received: from mail-pg1-f195.google.com ([209.85.215.195]:34980 "EHLO
+        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727395AbfGCXlE (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 3 Jul 2019 15:19:44 -0400
-Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x63JFvE4028407;
-        Wed, 3 Jul 2019 12:18:52 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : references : in-reply-to : content-type : content-id
- : content-transfer-encoding : mime-version; s=facebook;
- bh=H3t8rEOqLID0vLpGQm044hmrh6JXygY2OxYPHO7+jSE=;
- b=RVKgYP6DrhF3Op5ZxUIOATLM+wmUeBDENn1xFlLqPGZYsByfDUvUIA270JQkwDcF04j0
- Ab8dTwiOaqmlughJ6QXYkCYkGNWj+TTeLmz2H/VvfTbHqH6IqsyqObVNsdgd1fOf3jNO
- XDH+kQHQvZIacIIJOir+JvLBZwiGHy3OBTo= 
-Received: from mail.thefacebook.com (mailout.thefacebook.com [199.201.64.23])
-        by mx0a-00082601.pphosted.com with ESMTP id 2tgx97s3uf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
-        Wed, 03 Jul 2019 12:18:52 -0700
-Received: from prn-hub03.TheFacebook.com (2620:10d:c081:35::127) by
- prn-hub06.TheFacebook.com (2620:10d:c081:35::130) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.1.1713.5; Wed, 3 Jul 2019 12:18:51 -0700
-Received: from NAM01-BY2-obe.outbound.protection.outlook.com (192.168.54.28)
- by o365-in.thefacebook.com (192.168.16.27) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.1.1713.5
- via Frontend Transport; Wed, 3 Jul 2019 12:18:50 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.onmicrosoft.com;
- s=selector1-fb-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=H3t8rEOqLID0vLpGQm044hmrh6JXygY2OxYPHO7+jSE=;
- b=OEy29Bs16XVGwjscRCFLU+JV5aTRnRWsktaGWjv7OIku+MnFQSyirIyUNqotGrPX2v9gBTo3VOOTApqauQEZcT0JzqCs0RxmtDiI0oqwRFZ2WQHfMvme97+RguvntJ94gTeYzAv2NR8PaHMXHVsVcXmShOsS8Yk1rmKfygDjx08=
-Received: from BN8PR15MB2626.namprd15.prod.outlook.com (20.179.137.220) by
- BN8PR15MB2882.namprd15.prod.outlook.com (20.178.219.12) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2052.16; Wed, 3 Jul 2019 19:18:49 +0000
-Received: from BN8PR15MB2626.namprd15.prod.outlook.com
- ([fe80::a169:14b9:5076:a1ff]) by BN8PR15MB2626.namprd15.prod.outlook.com
- ([fe80::a169:14b9:5076:a1ff%7]) with mapi id 15.20.2032.019; Wed, 3 Jul 2019
- 19:18:49 +0000
-From:   Roman Gushchin <guro@fb.com>
-To:     YueHaibing <yuehaibing@huawei.com>
-CC:     "shuah@kernel.org" <shuah@kernel.org>,
-        "tj@kernel.org" <tj@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH -next] kselftests: cgroup: remove duplicated include from
- test_freezer.c
-Thread-Topic: [PATCH -next] kselftests: cgroup: remove duplicated include from
- test_freezer.c
-Thread-Index: AQHVMNfnTHdDLm3deUmt1uz4w2/kL6a5RpIA
-Date:   Wed, 3 Jul 2019 19:18:49 +0000
-Message-ID: <20190703191844.GA19618@tower.DHCP.thefacebook.com>
-References: <20190702131233.7064-1-yuehaibing@huawei.com>
-In-Reply-To: <20190702131233.7064-1-yuehaibing@huawei.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-clientproxiedby: CO2PR18CA0044.namprd18.prod.outlook.com
- (2603:10b6:104:2::12) To BN8PR15MB2626.namprd15.prod.outlook.com
- (2603:10b6:408:c7::28)
-x-ms-exchange-messagesentrepresentingtype: 1
-x-originating-ip: [2620:10d:c090:200::2:f7fd]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 8fd65e53-ea08-45f3-d8c3-08d6ffeb46bb
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(2017052603328)(7193020);SRVR:BN8PR15MB2882;
-x-ms-traffictypediagnostic: BN8PR15MB2882:
-x-microsoft-antispam-prvs: <BN8PR15MB2882D91E8258294E7EFEDC55BEFB0@BN8PR15MB2882.namprd15.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:549;
-x-forefront-prvs: 00872B689F
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(376002)(346002)(136003)(396003)(39860400002)(366004)(189003)(199004)(25786009)(14444005)(86362001)(256004)(4326008)(68736007)(7736002)(1076003)(305945005)(8936002)(76176011)(71200400001)(71190400001)(6916009)(386003)(81156014)(81166006)(8676002)(6506007)(52116002)(102836004)(99286004)(2906002)(6436002)(9686003)(6512007)(73956011)(46003)(53936002)(6486002)(6246003)(229853002)(54906003)(6116002)(33656002)(478600001)(64756008)(476003)(66476007)(66556008)(316002)(446003)(66946007)(5660300002)(11346002)(14454004)(4744005)(66446008)(186003)(486006);DIR:OUT;SFP:1102;SCL:1;SRVR:BN8PR15MB2882;H:BN8PR15MB2626.namprd15.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
-received-spf: None (protection.outlook.com: fb.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: ni6BDsTGZR5coQhg9XX6F7Fs012Oo53QSCbc9nwP4u8Qn2ERfK+BD9TGzO5Qm0Pz9q98BZXoSHZNy/O4pWxRToUf4gvyPTebZUflyi3ccA8Hta368KywtvEWq+izyUIheQaC/ZeC2MDXNgcHvntrS203J1fKZi9Tx/Hzylp5ge1iHEaG3mAb5Lrrp6hJHdOZan5tchbEtSY8VREFZ84TavLR5eGtapw/5dd9DOT3YtS2cfJ45lQzw2JN4CsGYVvpzjm8Qn6Bgax/EiYcRErlLdJLFNgPVVun09FkxvCxcdlD+XEJyZ6wASKQai4TV1M4v4CpdX+1j9j6St/LPYUl2WeagSjNF5ef0RCsPmrnwaf1mayqEoW3wHFNqpqRZJFTVoOZBSo1O54ODm7lgJ8RFQINTX7zcWYCPQ5NjUh/byM=
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <99F121E8FC63584A9CEFF0980DB55D6E@namprd15.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
+        Wed, 3 Jul 2019 19:41:04 -0400
+Received: by mail-pg1-f195.google.com with SMTP id s27so1984028pgl.2
+        for <linux-kselftest@vger.kernel.org>; Wed, 03 Jul 2019 16:41:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=cVKYoZ7M1neTWMWNkSfarm1kLLkAZh2a4u3Pqo3SzOU=;
+        b=OWhUfNT+x+l9tKNcHcOr8kuP2qdhGyE+B0e411zUg/nxqHy1v3vbklBPjWBIPWd1+X
+         lw5aHflM74n2xt/OAAiQhlNPGrSQVQRa+4MjJybCNy2xt94ieU8axV/bh19o4WGfWzwW
+         bc7SeBseK2dfjfJAMouw6pY81wBVOyVQijUmOr6rIyxetCcz2tD+r9Vrdt1IxtPYRepK
+         Nbi/7inGd9MhBPjN3BDpD4xzbLxIX311D6atZ8neX7oEcRDtH4k/c+3mNfaUqCqIHwqh
+         gffewpeSSQuFiFnvGzd3H0SEAPr2VegAZ8NlEv0Yl6KNzakq7kQ12TioJjvvu6bdkP5c
+         sjAA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=cVKYoZ7M1neTWMWNkSfarm1kLLkAZh2a4u3Pqo3SzOU=;
+        b=s+WcFAlEPGgDdeCa8jYTQY8XOO+ITxUd4CdGoyl0JXi+MLtgBpx4IktbLwNSSv/1F1
+         I3Xpkdk2M7iAuaDQyNLpjTsFc096dFTbH9XTM84HqcPC6h3nC3nNLJ4ujZy/i6d0yogh
+         IK2GbdvuZSjVGcNaBtORy/dGl1esP4H2c9K0hcZu6Yj8Fomqu5/grz7Us5z1Ryd5HGMD
+         vXcGTW7Ggdq361RegrNCHn6PHIcSiWIoxZMcsmNgu8/4wAhbgowt1TlDaRcyS34zkiZd
+         MQJ+q1AB0T3sBS89YuEHbt3ZGXQAIPCvdIYx7AClugVwVK0Wjl5LWc73iYqrOG0UdSsX
+         Y10w==
+X-Gm-Message-State: APjAAAUpottZ4x/gXlduvIw2eISpa1b/xMuQMAJcJhgL9spGy3Isb3Ma
+        shFsqX3RVdyKZ1Sljk8CCAgnEHFJ+/9h8xCCu7GuuA==
+X-Google-Smtp-Source: APXvYqwXB8g3qJfj0dB5mvs+S7ESPDvYCMhtPXvQDa6QHJcnwrHQejsvEjyf5gqWIAbwtcABAn5rOnSpZi2/GaX3pAc=
+X-Received: by 2002:a63:b919:: with SMTP id z25mr39509300pge.201.1562197262480;
+ Wed, 03 Jul 2019 16:41:02 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8fd65e53-ea08-45f3-d8c3-08d6ffeb46bb
-X-MS-Exchange-CrossTenant-originalarrivaltime: 03 Jul 2019 19:18:49.3614
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: guro@fb.com
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN8PR15MB2882
-X-OriginatorOrg: fb.com
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-07-03_04:,,
- signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 priorityscore=1501
- malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
- clxscore=1011 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1810050000 definitions=main-1907030235
-X-FB-Internal: deliver
+References: <20190617082613.109131-1-brendanhiggins@google.com>
+ <10feac3e-7621-65e5-fbf0-9c63fcbe09c9@gmail.com> <69809117-dcda-160a-ee0a-d1d3b4c5cd8a@kernel.org>
+ <20190621181342.GA17166@mit.edu> <6f3f5184-d14e-1b46-17f1-391ee67e699c@kernel.org>
+ <CAFd5g46W1u+6JKLW0WX9uicK5utvJe9tvq4YBsCkghuo0rCmng@mail.gmail.com>
+In-Reply-To: <CAFd5g46W1u+6JKLW0WX9uicK5utvJe9tvq4YBsCkghuo0rCmng@mail.gmail.com>
+From:   Brendan Higgins <brendanhiggins@google.com>
+Date:   Wed, 3 Jul 2019 16:40:50 -0700
+Message-ID: <CAFd5g4515jAOzEtiZfXP0d6YUgOxOZCknw0Nd-2wsY=mPFdGqg@mail.gmail.com>
+Subject: Re: [PATCH v5 00/18] kunit: introduce KUnit, the Linux kernel unit
+ testing framework
+To:     shuah <shuah@kernel.org>
+Cc:     "Theodore Ts'o" <tytso@mit.edu>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Kees Cook <keescook@google.com>,
+        Kieran Bingham <kieran.bingham@ideasonboard.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Rob Herring <robh@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
+        Masahiro Yamada <yamada.masahiro@socionext.com>,
+        devicetree <devicetree@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        kunit-dev@googlegroups.com,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        linux-fsdevel@vger.kernel.org,
+        linux-kbuild <linux-kbuild@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        linux-nvdimm <linux-nvdimm@lists.01.org>,
+        linux-um@lists.infradead.org,
+        Sasha Levin <Alexander.Levin@microsoft.com>,
+        "Bird, Timothy" <Tim.Bird@sony.com>,
+        Amir Goldstein <amir73il@gmail.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Daniel Vetter <daniel@ffwll.ch>, Jeff Dike <jdike@addtoit.com>,
+        Joel Stanley <joel@jms.id.au>,
+        Julia Lawall <julia.lawall@lip6.fr>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Knut Omang <knut.omang@oracle.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Petr Mladek <pmladek@suse.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Richard Weinberger <richard@nod.at>,
+        David Rientjes <rientjes@google.com>,
+        Steven Rostedt <rostedt@goodmis.org>, wfg@linux.intel.com
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Jul 02, 2019 at 09:12:33PM +0800, YueHaibing wrote:
-> Remove duplicated include.
->=20
-> Signed-off-by: YueHaibing <yuehaibing@huawei.com>
+On Fri, Jun 21, 2019 at 5:54 PM Brendan Higgins
+<brendanhiggins@google.com> wrote:
+>
+> On Fri, Jun 21, 2019 at 12:21 PM shuah <shuah@kernel.org> wrote:
+> >
+> > On 6/21/19 12:13 PM, Theodore Ts'o wrote:
+> > > On Fri, Jun 21, 2019 at 08:59:48AM -0600, shuah wrote:
+> > >>>> ### But wait! Doesn't kselftest support in kernel testing?!
+> > >>>>
+> > >>>> ....
+> > >>
+> > >> I think I commented on this before. I agree with the statement that
+> > >> there is no overlap between Kselftest and KUnit. I would like see this
+> > >> removed. Kselftest module support supports use-cases KUnit won't be able
+> > >> to. I can build an kernel with Kselftest test modules and use it in the
+> > >> filed to load and run tests if I need to debug a problem and get data
+> > >> from a system. I can't do that with KUnit.
+>
+> Sure, I think this point has been brought up a number of times before.
+> Maybe I didn't write this section well because, like Frank said, it
+> comes across as being critical of the Kselftest module support; that
+> wasn't my intention. I was speaking from the perspective that
+> Kselftest module support is just a feature of Kselftest, and not a
+> full framework like KUnit is (obviously Kselftest itself *is* a
+> framework, but a very small part of it is not).
+>
+> It was obvious to me what Kselftest module support was intended for,
+> and it is not intended to cover the use case that KUnit is targeting.
+>
+> > >> In my mind, I am not viewing this as which is better. Kselftest and
+> > >> KUnit both have their place in the kernel development process. It isn't
+> > >> productive and/or necessary to comparing Kselftest and KUnit without a
+> > >> good understanding of the problem spaces for each of these.
+>
+> Again, I didn't mean to draw a comparison of which is better than the
+> other. I was just trying to point out that Kselftest module support
+> doesn't make sense as a stand alone unit testing framework, or really
+> a framework of any kind, despite how it might actually be used.
+>
+> > >> I would strongly recommend not making reference to Kselftest and talk
+> > >> about what KUnit offers.
+>
+> I can see your point. It seems that both you and Frank seem to think
+> that I drew a comparison between Kselftest and KUnit, which was
+> unintended. I probably should have spent more time editing this
+> section, but I can see the point of drawing the comparison itself
+> might invite this confusion.
+>
+> > > Shuah,
+> > >
+> > > Just to recall the history, this section of the FAQ was added to rebut
+> > > the ***very*** strong statements that Frank made that there was
+> > > overlap between Kselftest and Kunit, and that having too many ways for
+> > > kernel developers to do the identical thing was harmful (he said it
+> > > was too much of a burden on a kernel developer) --- and this was an
+> > > argument for not including Kunit in the upstream kernel.
+>
+> I don't think he was actually advocating that we don't include KUnit,
+> maybe playing devil's advocate; nevertheless, at the end, Frank seemed
+> to agree that there were valuable things that KUnit offered. I thought
+> he just wanted to make the point that I hadn't made the distinction
+> sufficiently clear in the cover letter, and other reviewers might get
+> confused in the future as well.
+>
+> Additionally, it does look like people were trying to use Kselftest
+> module support to cover some things which really were trying to be
+> unit tests. I know this isn't really intended - everything looks like
+> a nail when you only have a hammer, which I think Frank was pointing
+> out furthers the above confusion.
+>
+> In anycase, it sounds like I have, if anything, only made the
+> discussion even more confusing by adding this section; sorry about
+> that.
+>
+> > > If we're past that objection, then perhaps this section can be
+> > > dropped, but there's a very good reason why it was there.  I wouldn't
+> > > Brendan to be accused of ignoring feedback from those who reviewed his
+> > > patches.   :-)
+> > >
+> >
+> > Agreed. I understand that this FAQ probably was needed at one time and
+> > Brendan added it to address the concerns.
+>
+> I don't want to speak for Frank, but I don't think it was an objection
+> to KUnit itself, but rather an objection to not sufficiently
+> addressing the point about how they differ.
+>
+> > I think at some point we do need to have a document that outlines when
+> > to KUnit and when to use Kselftest modules. I think one concern people
+> > have is that if KUnit is perceived as a  replacement for Ksefltest
+> > module, Kselftest module will be ignored leaving users without the
+> > ability to build and run with Kselftest modules and load them on a need
+> > basis to gather data on a systems that aren't dedicated strictly for
+> > testing.
+>
+> I absolutely agree! I posed a suggestion here[1], which after I just
+> now searched for a link, I realize for some reason it didn't seem like
+> it reached a number of the mailing lists that I sent it to, so I
+> should probably resend it.
+>
+> Anyway, a summary of what I suggested: We should start off by better
+> organizing Documentation/dev-tools/ and create a landing page that
+> groups the dev-tools by function according to what person is likely to
+> use them and for what. Eventually and specifically for Kselftest and
+> KUnit, I would like to have a testing guide for the kernel that
+> explains what testing procedure should look like and what to use and
+> when.
+>
+> > I am trying to move the conversation forward from KUnit vs. Kselftest
+> > modules discussion to which problem areas each one addresses keeping
+> > in mind that it is not about which is better. Kselftest and KUnit both
+> > have their place in the kernel development process. We just have to be
+> > clear on usage as we write tests for each.
+>
+> I think that is the right long term approach. I think a good place to
+> start, like I suggested above, is cleaning up
+> Documentation/dev-tools/, but I think that belongs in a (probably
+> several) follow-up patchset.
+>
+> Frank, I believe your objection was mostly related to how KUnit is
+> presented specifically in the cover letter, and doesn't necessarily
+> deal with the intended use case. So I don't think that doing this,
+> especially doing this later, really addresses your concern. I don't
+> want to belabor the issue, but I would also rather not put words in
+> your mouth, what are your thoughts on the above?
+>
+> I think my main concern moving forward on this point is that I am not
+> sure that I can address the debate that this section covers in a way
+> that is both sufficiently concise for a cover letter, but also doesn't
+> invite more potential confusion. My inclination at this point is to
+> drop it since I think the set of reviewers for this patchset has at
+> this point become fixed, and it seems that it will likely cause more
+> confusion rather than reduce it; also, I don't really think this will
 
-Acked-by: Roman Gushchin <guro@fb.com>
+Since no one has objected to dropping the "### But wait! Doesn't
+kselftest support in kernel testing?!" section in the past almost two
+weeks, I am just going to continue on without it.
 
-Thanks!
+Cheers
 
-> ---
->  tools/testing/selftests/cgroup/test_freezer.c | 1 -
->  1 file changed, 1 deletion(-)
->=20
-> diff --git a/tools/testing/selftests/cgroup/test_freezer.c b/tools/testin=
-g/selftests/cgroup/test_freezer.c
-> index 2bfddb6..8219a30 100644
-> --- a/tools/testing/selftests/cgroup/test_freezer.c
-> +++ b/tools/testing/selftests/cgroup/test_freezer.c
-> @@ -11,7 +11,6 @@
->  #include <stdlib.h>
->  #include <sys/inotify.h>
->  #include <string.h>
-> -#include <sys/types.h>
->  #include <sys/wait.h>
-> =20
->  #include "../kselftest.h"
-> --=20
-> 2.7.4
->=20
->=20
+> be an issue for end users, especially once we have proper
+> documentation in place. Alternatively, I guess I could maybe address
+> the point elsewhere and refer to it in the cover letter? Or maybe just
+> put it at the end of the cover letter?
+>
+> [1] https://www.mail-archive.com/kgdb-bugreport@lists.sourceforge.net/msg05059.html
