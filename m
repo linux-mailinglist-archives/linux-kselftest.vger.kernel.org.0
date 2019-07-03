@@ -2,159 +2,163 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9016C5D905
-	for <lists+linux-kselftest@lfdr.de>; Wed,  3 Jul 2019 02:33:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 95D085D8BD
+	for <lists+linux-kselftest@lfdr.de>; Wed,  3 Jul 2019 02:28:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727308AbfGCAdO (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 2 Jul 2019 20:33:14 -0400
-Received: from youngberry.canonical.com ([91.189.89.112]:39293 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727078AbfGCAdN (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 2 Jul 2019 20:33:13 -0400
-Received: from 1.general.cking.uk.vpn ([10.172.193.212])
-        by youngberry.canonical.com with esmtpsa (TLS1.0:RSA_AES_128_CBC_SHA1:16)
-        (Exim 4.76)
-        (envelope-from <colin.king@canonical.com>)
-        id 1hiRbc-0004Lu-2V; Tue, 02 Jul 2019 22:50:32 +0000
-Subject: Re: [PATCH][next] selftests/x86: fix spelling mistake "FAILT" ->
- "FAIL"
-To:     shuah <shuah@kernel.org>, Andy Lutomirski <luto@kernel.org>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>, kernel-janitors@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>
-References: <20190701130431.13391-1-colin.king@canonical.com>
- <CALCETrVo0rJVxsYvo=abDfFCZHBuCiB0coSBXoDeP_emSZgESg@mail.gmail.com>
- <6e5a9bed-4f7f-4851-0421-2b440ff1f584@kernel.org>
- <9ba791d5-0d67-9834-90e9-e1dca307d386@kernel.org>
- <0031e09b-e309-3976-09b1-dc8d10365aee@canonical.com>
- <aec8c4b5-a82a-74c0-f60f-869786e4a2fa@kernel.org>
-From:   Colin Ian King <colin.king@canonical.com>
-Openpgp: preference=signencrypt
-Autocrypt: addr=colin.king@canonical.com; prefer-encrypt=mutual; keydata=
- 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
-Message-ID: <4a82a57a-9f36-d525-6271-4da01bfd5241@canonical.com>
-Date:   Tue, 2 Jul 2019 23:50:31 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
-MIME-Version: 1.0
-In-Reply-To: <aec8c4b5-a82a-74c0-f60f-869786e4a2fa@kernel.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+        id S1727205AbfGCA2F (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 2 Jul 2019 20:28:05 -0400
+Received: from mail.kernel.org ([198.145.29.99]:37592 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726291AbfGCA2F (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 2 Jul 2019 20:28:05 -0400
+Received: from devnote2 (NE2965lan1.rev.em-net.ne.jp [210.141.244.193])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 655FE219BE;
+        Wed,  3 Jul 2019 00:11:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1562112712;
+        bh=pPxcb0LDsgQA0SUglccwz7TppfnSPAMhkWwUGPg2n/U=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=i3OgV8IoDaCpBBFL4wfhTmqEmtyTbGAjNPUyQsefF5sUYp/p2urm59EVpDNvfU0hf
+         P5wWdvdoehBE4sUVrqsQKWu3MUGz4xk+f2cM4OSq5b6JOHsHcJnUgIr1WGGmuLnlE6
+         mGtWW9nT/7F0F1Nn6YiNZFmqkbUCIKPVghmxf6NY=
+Date:   Wed, 3 Jul 2019 09:11:47 +0900
+From:   Masami Hiramatsu <mhiramat@kernel.org>
+To:     shuah <shuah@kernel.org>
+Cc:     Po-Hsu Lin <po-hsu.lin@canonical.com>, rostedt@goodmis.org,
+        mingo@redhat.com, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] selftests/ftrace: skip ftrace test if FTRACE was not
+ enabled
+Message-Id: <20190703091147.064029248fed5066ea5e5d2b@kernel.org>
+In-Reply-To: <4a44dd22-be88-ce5b-5c9b-6a3759b6c2eb@kernel.org>
+References: <20190702062358.7330-1-po-hsu.lin@canonical.com>
+        <4a44dd22-be88-ce5b-5c9b-6a3759b6c2eb@kernel.org>
+X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 02/07/2019 23:48, shuah wrote:
-> On 7/2/19 4:42 PM, Colin Ian King wrote:
->> On 02/07/2019 20:25, shuah wrote:
->>> On 7/2/19 8:22 AM, shuah wrote:
->>>> On 7/1/19 11:48 AM, Andy Lutomirski wrote:
->>>>> On Mon, Jul 1, 2019 at 6:04 AM Colin King <colin.king@canonical.com>
->>>>> wrote:
->>>>>>
->>>>>> From: Colin Ian King <colin.king@canonical.com>
->>>>>>
->>>>>> There is an spelling mistake in an a test error message. Fix it.
->>>>>>
->>>>>> Signed-off-by: Colin Ian King <colin.king@canonical.com>
->>>>>> ---
->>>>>>    tools/testing/selftests/x86/test_vsyscall.c | 2 +-
->>>>>>    1 file changed, 1 insertion(+), 1 deletion(-)
->>>>>>
->>>>>> diff --git a/tools/testing/selftests/x86/test_vsyscall.c
->>>>>> b/tools/testing/selftests/x86/test_vsyscall.c
->>>>>> index 4602326b8f5b..a4f4d4cf22c3 100644
->>>>>> --- a/tools/testing/selftests/x86/test_vsyscall.c
->>>>>> +++ b/tools/testing/selftests/x86/test_vsyscall.c
->>>>>> @@ -451,7 +451,7 @@ static int test_vsys_x(void)
->>>>>>                   printf("[OK]\tExecuting the vsyscall page failed:
->>>>>> #PF(0x%lx)\n",
->>>>>>                          segv_err);
->>>>>>           } else {
->>>>>> -               printf("[FAILT]\tExecution failed with the wrong
->>>>>> error: #PF(0x%lx)\n",
->>>>>> +               printf("[FAIL]\tExecution failed with the wrong
->>>>>> error: #PF(0x%lx)\n",
->>>>>>                          segv_err);
->>>>>>                   return 1;
->>>>>>           }
->>>>>> -- 
->>>>>> 2.20.1
->>>>>>
->>>>>
->>>>> Acked-by: Andy Lutomirski <luto@kernel.org>
->>>>>
->>>>
->>>> Thanks Andy!
->>>>
->>>> I will queue this up for 5.3
->>>>
->>>> -- Shuah
->>>>
->>>
->>> Hi Colin,
->>>
->>> Checkpatch warning on this. Probably failed on the original patch.
->>> Could you please fix the checkpatch warn, and send v2.
->>
->> If I split the line, I get another checkpatch warning:
->>
->> "WARNING: quoted string split across lines"
->>
->> Either way checkpatch emits a warning. The convention is to not break
->> literal strings, and the line is only a few chars over the 80 char
->> boundary, so the V1 of the patch is the way it should be IMHO.
->>
-> 
-> As such this existed before your patch. I will apply v1.
+Hi Po-Hsu Lin,
 
-Cool, thanks Shuah.
+On Tue, 2 Jul 2019 13:22:26 -0600
+shuah <shuah@kernel.org> wrote:
+
+> Hi Po-Hsu Lin,
+> 
+> On 7/2/19 12:23 AM, Po-Hsu Lin wrote:
+> > The ftrace test will need to have CONFIG_FTRACE enabled to make the
+> > ftrace directory available.
+> > 
+> > Add an additional check to skip this test if the CONFIG_FTRACE was not
+> > enabled.
+
+Sorry, NAK for config check.
+
+> > 
+> > This will be helpful to avoid a false-positive test result when testing
+> > it directly with the following commad against a kernel that does not
+> > have CONFIG_FTRACE enabled:
+
+Would you know tools/testing/selftests/ftrace/config (and other config files
+in each tests) ?
+
+Since each selftest depends specific configurations, those configs are
+written in config file, and tester must enable it using 
+"scripts/kconfig/merge_config.sh".
+
+We can not check the kernel config in some cases, e.g. distro kernel,
+cross-build kernel, remote build kernel etc. Also, the .config file
+can be a config file for another kernel build.
+
+So please take care of your kernel configuration. If you find any test
+failed even if you enable configs in config file under that test, please
+report it, since that is a bug.
+
+
+Thank you,
+
+> >      make -C tools/testing/selftests TARGETS=ftrace run_tests
+> > 
+> > The test result on an Ubuntu KVM kernel will be changed from:
+> >      selftests: ftrace: ftracetest
+> >      ========================================
+> >      Error: No ftrace directory found
+> >      not ok 1..1 selftests: ftrace: ftracetest [FAIL]
+> > To:
+> 
+> Thanks for the patch.
+> 
+> Check patch fails with the above To:
+> 
+> WARNING: Use a single space after To:
+> #107:
+> To:
+> 
+> ERROR: Unrecognized email address: ''
+> #107:
+> To:
+> 
+> total: 1 errors, 1 warnings, 23 lines checked
+> 
+> 
+> Please fix and send v2.
+> 
+> >      selftests: ftrace: ftracetest
+> >      ========================================
+> >      CONFIG_FTRACE was not enabled, test skipped.
+> >      not ok 1..1 selftests: ftrace: ftracetest [SKIP]
+> > 
+> > Signed-off-by: Po-Hsu Lin <po-hsu.lin@canonical.com>
+> > ---
+> >   tools/testing/selftests/ftrace/ftracetest | 11 ++++++++++-
+> >   1 file changed, 10 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/tools/testing/selftests/ftrace/ftracetest b/tools/testing/selftests/ftrace/ftracetest
+> > index 6d5e9e8..6c8322e 100755
+> > --- a/tools/testing/selftests/ftrace/ftracetest
+> > +++ b/tools/testing/selftests/ftrace/ftracetest
+> > @@ -7,6 +7,9 @@
+> >   #  Written by Masami Hiramatsu <masami.hiramatsu.pt@hitachi.com>
+> >   #
+> 
+> Hmm. You havem't cc'ed Masami on this. Adding Masami.
+> 
+> I would think Masami should be on the Signed-off-by as well,
+> since he is the author.
+> 
+> >   
+> > +# Kselftest framework requirement - SKIP code is 4.
+> > +ksft_skip=4
+> > +
+> >   usage() { # errno [message]
+> >   [ ! -z "$2" ] && echo $2
+> >   echo "Usage: ftracetest [options] [testcase(s)] [testcase-directory(s)]"
+> > @@ -139,7 +142,13 @@ parse_opts $*
+> >   
+> >   # Verify parameters
+> >   if [ -z "$TRACING_DIR" -o ! -d "$TRACING_DIR" ]; then
+> > -  errexit "No ftrace directory found"
+> > +  ftrace_enabled=`grep "^CONFIG_FTRACE=y" /lib/modules/$(uname -r)/build/.config`
+> > +  if [ -z "$ftrace_enabled" ]; then
+> > +    echo "CONFIG_FTRACE was not enabled, test skipped."
+> > +    exit $ksft_skip
+> > +  else
+> > +    errexit "No ftrace directory found"
+> > +  fi
+> >   fi
+> >   
+> >   # Preparing logs
+> > 
 > 
 > thanks,
 > -- Shuah
 
+
+-- 
+Masami Hiramatsu <mhiramat@kernel.org>
