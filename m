@@ -2,92 +2,163 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F2BC05E15E
-	for <lists+linux-kselftest@lfdr.de>; Wed,  3 Jul 2019 11:50:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B97D25E93F
+	for <lists+linux-kselftest@lfdr.de>; Wed,  3 Jul 2019 18:36:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726605AbfGCJuD (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 3 Jul 2019 05:50:03 -0400
-Received: from www62.your-server.de ([213.133.104.62]:51416 "EHLO
-        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726434AbfGCJuD (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 3 Jul 2019 05:50:03 -0400
-Received: from [88.198.220.130] (helo=sslproxy01.your-server.de)
-        by www62.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
-        (Exim 4.89_1)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1hibtd-0006bp-Bc; Wed, 03 Jul 2019 11:49:49 +0200
-Received: from [2a02:1205:5054:6d70:b45c:ec96:516a:e956] (helo=linux.home)
-        by sslproxy01.your-server.de with esmtpsa (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384:256)
-        (Exim 4.89)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1hibtd-0000Zx-1y; Wed, 03 Jul 2019 11:49:49 +0200
-Subject: Re: [PATCH bpf 1/3] bpf, x32: Fix bug with ALU64 {LSH,RSH,ARSH} BPF_X
- shift by 0
-To:     Luke Nelson <lukenels@cs.washington.edu>,
-        linux-kernel@vger.kernel.org
-Cc:     Luke Nelson <luke.r.nels@gmail.com>, Xi Wang <xi.wang@gmail.com>,
-        Wang YanQing <udknight@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>, x86@kernel.org,
-        Alexei Starovoitov <ast@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Jakub Kicinski <jakub.kicinski@netronome.com>,
-        Jiong Wang <jiong.wang@netronome.com>,
-        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@gmail.com>,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-References: <20190629055759.28365-1-luke.r.nels@gmail.com>
-From:   Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <5c2080f4-532e-d239-13b1-4a5a620f6c33@iogearbox.net>
-Date:   Wed, 3 Jul 2019 11:49:47 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
- Thunderbird/52.3.0
-MIME-Version: 1.0
-In-Reply-To: <20190629055759.28365-1-luke.r.nels@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.100.3/25499/Wed Jul  3 10:03:10 2019)
+        id S1726550AbfGCQgO (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 3 Jul 2019 12:36:14 -0400
+Received: from foss.arm.com ([217.140.110.172]:52388 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725933AbfGCQgO (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 3 Jul 2019 12:36:14 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4D702344;
+        Wed,  3 Jul 2019 09:36:13 -0700 (PDT)
+Received: from e120937-lin.cambridge.arm.com (e120937-lin.cambridge.arm.com [10.1.197.50])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 7F2F23F718;
+        Wed,  3 Jul 2019 09:36:12 -0700 (PDT)
+From:   Cristian Marussi <cristian.marussi@arm.com>
+To:     linux-kselftest@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, shuah@kernel.org
+Cc:     dave.martin@arm.com, andreyknvl@google.com
+Subject: [PATCH v2 00/10] Add arm64/signal initial kselftest support
+Date:   Wed,  3 Jul 2019 17:35:22 +0100
+Message-Id: <20190703163532.7485-1-cristian.marussi@arm.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 06/29/2019 07:57 AM, Luke Nelson wrote:
-> The current x32 BPF JIT for shift operations is not correct when the
-> shift amount in a register is 0. The expected behavior is a no-op, whereas
-> the current implementation changes bits in the destination register.
-> 
-> The following example demonstrates the bug. The expected result of this
-> program is 1, but the current JITed code returns 2.
-> 
->   r0 = 1
->   r1 = 1
->   r2 = 0
->   r1 <<= r2
->   if r1 == 1 goto end
->   r0 = 2
-> end:
->   exit
-> 
-> The bug is caused by an incorrect assumption by the JIT that a shift by
-> 32 clear the register. On x32 however, shifts use the lower 5 bits of
-> the source, making a shift by 32 equivalent to a shift by 0.
-> 
-> This patch fixes the bug using double-precision shifts, which also
-> simplifies the code.
-> 
-> Fixes: 03f5781be2c7 ("bpf, x86_32: add eBPF JIT compiler for ia32")
-> Co-developed-by: Xi Wang <xi.wang@gmail.com>
-> Signed-off-by: Xi Wang <xi.wang@gmail.com>
-> Signed-off-by: Luke Nelson <luke.r.nels@gmail.com>
+Hi
 
-Series applied, thanks!
+this patchset aims to add the initial arch-specific arm64 support to
+kselftest starting with signals-related test-cases.
+A common internal test-case layout is proposed which then it is
+anyway wired-up to the toplevel kselftest Makefile, so that it
+should be possible at the end to run it on an arm64 target in the
+usual way with KSFT.
+
+~/linux# make TARGETS=arm64 kselftest
+
+New KSFT arm64 testcases live inside tools/testing/selftests/arm64 grouped by
+family inside subdirectories: arm64/signal is the first family proposed with
+this series. arm64/signal tests can be run via KSFT or standalone.
+
+Thanks
+
+Cristian
+
+
+Notes:
+-----
+- further details in the included READMEs
+
+- more tests still to be written (current strategy is going through the related
+  Kernel signal-handling code and write a test for each possible and sensible code-path)
+
+- a bit of overlap around KSFT arm64/ Makefiles is expected with this recently
+  proposed patch-series:
+  http://lists.infradead.org/pipermail/linux-arm-kernel/2019-June/659432.html
+
+
+Changes:
+--------
+
+ v1-->v2:
+- rebased on 5.2-rc7
+- various makefile's cleanups
+- mixed READMEs fixes
+- fixed test_arm64_signals.sh runner script
+- cleaned up assembly code in signal.S
+- improved get_current_context() logic
+- fixed SAFE_WRITE()
+- common support code splitted into more chunks, each one introduced when
+  needed by some new testcases
+- fixed some headers validation routines in testcases.c
+- removed some still broken/immature tests:
+  + fake_sigreturn_misaligned
+  + fake_sigreturn_overflow_reserved
+  + mangle_pc_invalid
+  + mangle_sp_misaligned
+- fixed some other testcases:
+  + mangle_pstate_ssbs_regs: better checks of SSBS bit when feature unsupported
+  + mangle_pstate_invalid_compat_toggle: name fix
+  + mangle_pstate_invalid_mode_el[1-3]: precautionary zeroing PSTATE.MODE
+  + fake_sigreturn_bad_magic, fake_sigreturn_bad_size,
+    fake_sigreturn_bad_size_for_magic0:
+    - accounting for available space...dropping extra when needed
+    - keeping alignent
+- new testcases on FPSMID context:
+  + fake_sigreturn_missing_fpsimd
+  + fake_sigreturn_duplicated_fpsimd
+
+
+Cristian Marussi (10):
+  kselftest: arm64: introduce new boilerplate code
+  kselftest: arm64: adds first test and common utils
+  kselftest: arm64: mangle_pstate_invalid_daif_bits
+  kselftest: arm64: mangle_pstate_invalid_mode_el
+  kselftest: arm64: mangle_pstate_ssbs_regs
+  kselftest: arm64: fake_sigreturn_bad_magic
+  kselftest: arm64: fake_sigreturn_bad_size_for_magic0
+  kselftest: arm64: fake_sigreturn_missing_fpsimd
+  kselftest: arm64: fake_sigreturn_duplicated_fpsimd
+  kselftest: arm64: fake_sigreturn_bad_size
+
+ tools/testing/selftests/Makefile              |   1 +
+ tools/testing/selftests/arm64/Makefile        |  51 +++
+ tools/testing/selftests/arm64/README          |  43 +++
+ .../testing/selftests/arm64/signal/.gitignore |   5 +
+ tools/testing/selftests/arm64/signal/Makefile |  86 +++++
+ tools/testing/selftests/arm64/signal/README   |  59 ++++
+ .../testing/selftests/arm64/signal/signals.S  |  64 ++++
+ .../arm64/signal/test_arm64_signals.sh        |  55 +++
+ .../selftests/arm64/signal/test_signals.c     |  26 ++
+ .../selftests/arm64/signal/test_signals.h     | 141 ++++++++
+ .../arm64/signal/test_signals_utils.c         | 331 ++++++++++++++++++
+ .../arm64/signal/test_signals_utils.h         |  31 ++
+ .../arm64/signal/testcases/.gitignore         |  11 +
+ .../testcases/fake_sigreturn_bad_magic.c      |  63 ++++
+ .../testcases/fake_sigreturn_bad_size.c       |  85 +++++
+ .../fake_sigreturn_bad_size_for_magic0.c      |  57 +++
+ .../fake_sigreturn_duplicated_fpsimd.c        |  62 ++++
+ .../testcases/fake_sigreturn_missing_fpsimd.c |  44 +++
+ .../mangle_pstate_invalid_compat_toggle.c     |  25 ++
+ .../mangle_pstate_invalid_daif_bits.c         |  28 ++
+ .../mangle_pstate_invalid_mode_el1.c          |  29 ++
+ .../mangle_pstate_invalid_mode_el2.c          |  29 ++
+ .../mangle_pstate_invalid_mode_el3.c          |  29 ++
+ .../testcases/mangle_pstate_ssbs_regs.c       |  56 +++
+ .../arm64/signal/testcases/testcases.c        | 150 ++++++++
+ .../arm64/signal/testcases/testcases.h        |  83 +++++
+ 26 files changed, 1644 insertions(+)
+ create mode 100644 tools/testing/selftests/arm64/Makefile
+ create mode 100644 tools/testing/selftests/arm64/README
+ create mode 100644 tools/testing/selftests/arm64/signal/.gitignore
+ create mode 100644 tools/testing/selftests/arm64/signal/Makefile
+ create mode 100644 tools/testing/selftests/arm64/signal/README
+ create mode 100644 tools/testing/selftests/arm64/signal/signals.S
+ create mode 100755 tools/testing/selftests/arm64/signal/test_arm64_signals.sh
+ create mode 100644 tools/testing/selftests/arm64/signal/test_signals.c
+ create mode 100644 tools/testing/selftests/arm64/signal/test_signals.h
+ create mode 100644 tools/testing/selftests/arm64/signal/test_signals_utils.c
+ create mode 100644 tools/testing/selftests/arm64/signal/test_signals_utils.h
+ create mode 100644 tools/testing/selftests/arm64/signal/testcases/.gitignore
+ create mode 100644 tools/testing/selftests/arm64/signal/testcases/fake_sigreturn_bad_magic.c
+ create mode 100644 tools/testing/selftests/arm64/signal/testcases/fake_sigreturn_bad_size.c
+ create mode 100644 tools/testing/selftests/arm64/signal/testcases/fake_sigreturn_bad_size_for_magic0.c
+ create mode 100644 tools/testing/selftests/arm64/signal/testcases/fake_sigreturn_duplicated_fpsimd.c
+ create mode 100644 tools/testing/selftests/arm64/signal/testcases/fake_sigreturn_missing_fpsimd.c
+ create mode 100644 tools/testing/selftests/arm64/signal/testcases/mangle_pstate_invalid_compat_toggle.c
+ create mode 100644 tools/testing/selftests/arm64/signal/testcases/mangle_pstate_invalid_daif_bits.c
+ create mode 100644 tools/testing/selftests/arm64/signal/testcases/mangle_pstate_invalid_mode_el1.c
+ create mode 100644 tools/testing/selftests/arm64/signal/testcases/mangle_pstate_invalid_mode_el2.c
+ create mode 100644 tools/testing/selftests/arm64/signal/testcases/mangle_pstate_invalid_mode_el3.c
+ create mode 100644 tools/testing/selftests/arm64/signal/testcases/mangle_pstate_ssbs_regs.c
+ create mode 100644 tools/testing/selftests/arm64/signal/testcases/testcases.c
+ create mode 100644 tools/testing/selftests/arm64/signal/testcases/testcases.h
+
+-- 
+2.17.1
+
