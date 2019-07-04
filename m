@@ -2,99 +2,195 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F0075F0A9
-	for <lists+linux-kselftest@lfdr.de>; Thu,  4 Jul 2019 02:39:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 464D45F7C6
+	for <lists+linux-kselftest@lfdr.de>; Thu,  4 Jul 2019 14:16:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727464AbfGDAix (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 3 Jul 2019 20:38:53 -0400
-Received: from mail-qt1-f201.google.com ([209.85.160.201]:54437 "EHLO
-        mail-qt1-f201.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727574AbfGDAix (ORCPT
+        id S1727615AbfGDMPU (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 4 Jul 2019 08:15:20 -0400
+Received: from youngberry.canonical.com ([91.189.89.112]:41744 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727741AbfGDMPT (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 3 Jul 2019 20:38:53 -0400
-Received: by mail-qt1-f201.google.com with SMTP id r57so5216613qtj.21
-        for <linux-kselftest@vger.kernel.org>; Wed, 03 Jul 2019 17:38:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=oxYjFRyxX3NROXm+Ygmt9JHCAGAtVhFnOyo3OkZfbDU=;
-        b=pFv5mcrDyGgL+dq8XXN+UzV3D859ZKLMwvBZx8cL1G+iv8Gu3Bpp+0tDy7y+eqJdN+
-         Sys/jfOMPIa4Kk480wXC0YSxIJr4WY5NEmKFAbtIyqHPCEL2shC1RGkkrmviAIc9PnSu
-         TXCypRWrWJGDNfUhMWaPu525sXypB8WEC829GXbeLutNsc9f/WyFCZgbd+YcS+3Bt/27
-         ++SN32pVuSx2WX6MEAkXAXS9tJC649L452kf9cFUTF1O3tHvajHrkRSjikLGaYLmS0ab
-         9IJofwcEo1fJd6pCPer9SdnXJXIqGF+iHoAffclBGB8yGVB4sDN+f0jHKqqeZ/ia1nBq
-         8yIw==
+        Thu, 4 Jul 2019 08:15:19 -0400
+Received: from mail-wr1-f69.google.com ([209.85.221.69])
+        by youngberry.canonical.com with esmtps (TLS1.0:RSA_AES_128_CBC_SHA1:16)
+        (Exim 4.76)
+        (envelope-from <po-hsu.lin@canonical.com>)
+        id 1hj0dc-0001hq-3T
+        for linux-kselftest@vger.kernel.org; Thu, 04 Jul 2019 12:14:56 +0000
+Received: by mail-wr1-f69.google.com with SMTP id p13so2357082wru.17
+        for <linux-kselftest@vger.kernel.org>; Thu, 04 Jul 2019 05:14:56 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=oxYjFRyxX3NROXm+Ygmt9JHCAGAtVhFnOyo3OkZfbDU=;
-        b=ihM0sdUgbgeEqbsyRa5CJrslXPXfVH/sULn5NhkihUpcDWVPvRqNqPU4GXxdCk4rxY
-         lfDH0W9bn+Bhos8WynOzOobGPvjx79UAnxGimf/EBwSEAv0bmWNHcbWksGLYu0XHuLDt
-         W8+2ihcVPCft1STQ0PwrHJ4ZrCz+75GoqNSsfL6VcwvDtE4aPZB8Rp/UGXNvf7Kq6LSd
-         VL3+j6xUkncxEef/Te5OwbYx2eYkV16QMgype0afcWx81IHNC/E2QOMib940pZsmjiUm
-         OdX1b+ielM8bdRJvvDFm6wInUPOZmPKzwd/gGqcbItLUCyr+/9La63GFruz5dSeyiOSm
-         ZVTg==
-X-Gm-Message-State: APjAAAVGD49N4TBZxoIzJVxF0n9LbQx/iqsTGJoHCk+oCLsVtrkIH6OO
-        iYIIazwNvQAWBlIOAp/pczXzA535C0DWr16VBZhAXA==
-X-Google-Smtp-Source: APXvYqzWy4FbKHHWYOuv608ZWRy81huPhVNFArtBSw25v8dz2nkh4QA//OrB7jPx5C158BeXlhqK6QKVWRPtFRELD79Swg==
-X-Received: by 2002:ac8:1a3c:: with SMTP id v57mr32832048qtj.339.1562200731869;
- Wed, 03 Jul 2019 17:38:51 -0700 (PDT)
-Date:   Wed,  3 Jul 2019 17:36:15 -0700
-In-Reply-To: <20190704003615.204860-1-brendanhiggins@google.com>
-Message-Id: <20190704003615.204860-19-brendanhiggins@google.com>
-Mime-Version: 1.0
-References: <20190704003615.204860-1-brendanhiggins@google.com>
-X-Mailer: git-send-email 2.22.0.410.gd8fdbe21b5-goog
-Subject: [PATCH v6 18/18] MAINTAINERS: add proc sysctl KUnit test to PROC
- SYSCTL section
-From:   Brendan Higgins <brendanhiggins@google.com>
-To:     frowand.list@gmail.com, gregkh@linuxfoundation.org,
-        jpoimboe@redhat.com, keescook@google.com,
-        kieran.bingham@ideasonboard.com, mcgrof@kernel.org,
-        peterz@infradead.org, robh@kernel.org, sboyd@kernel.org,
-        shuah@kernel.org, tytso@mit.edu, yamada.masahiro@socionext.com
-Cc:     devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        kunit-dev@googlegroups.com, linux-doc@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kbuild@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-nvdimm@lists.01.org, linux-um@lists.infradead.org,
-        Alexander.Levin@microsoft.com, Tim.Bird@sony.com,
-        amir73il@gmail.com, dan.carpenter@oracle.com, daniel@ffwll.ch,
-        jdike@addtoit.com, joel@jms.id.au, julia.lawall@lip6.fr,
-        khilman@baylibre.com, knut.omang@oracle.com, logang@deltatee.com,
-        mpe@ellerman.id.au, pmladek@suse.com, rdunlap@infradead.org,
-        richard@nod.at, rientjes@google.com, rostedt@goodmis.org,
-        wfg@linux.intel.com, Brendan Higgins <brendanhiggins@google.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=CZ17bZ+LXx4n8vNZTmDIWxMdFlyXwsk5RUf0bS977CM=;
+        b=SyVUd6D4EM2DX4vjDMA9tcaUj8WcQ5jaFD9RFrx3QtVGFCeafolpSOMwrO+tRn1Mkw
+         KSWQ7sGf6rSJqe7eUg9t6+xgoe0+bHFAwum4PzQYQNL1cKsLA2PEzJw7KiqSaW4d2ZbR
+         JltNpz+ie3Ic6hLCdE2cGH2woaVqKQJ+MNboDpyCDFmE3Db/KNrKJaalDl2fq0eWWRjJ
+         gosY8ZAKnXzFsdykmhgSnzQiQNfsHCn4tANnBayaElWOtWRitDU5B+pKWRoDWOvuq7EM
+         zgq54YkfzcvcrSVsVoFDtpra5W4rQLxkm0qx0NZJC1O+qBTmoabh4GKgJF2u2qzH1n0p
+         j+xw==
+X-Gm-Message-State: APjAAAX7LpPNxWRSIG26LURCeCUkK0k07m3EesSyl/Ols/tKD4rMGFXF
+        OCfnsISvdNbvgJgt7n1qO2maXqvLgsAMP2bPx1hI7e4F1o5HdQITOcUnTicXIudi94K/ckVNQi7
+        xtBJVYkUtd/UpmRzRvOe7sknLTWleYihL4Sz/BnTfwejkTZV9nB6niwDqlL0O
+X-Received: by 2002:a7b:c0d0:: with SMTP id s16mr12784521wmh.141.1562242495769;
+        Thu, 04 Jul 2019 05:14:55 -0700 (PDT)
+X-Google-Smtp-Source: APXvYqzr9KvQewn+s3Th0jDrKNYrXcqI2Rjwqqcxd1Q4ngnxYl05qDeiBNbrM6WbfZXW4O9eKeA6LARlvTTIuUHJRdI=
+X-Received: by 2002:a7b:c0d0:: with SMTP id s16mr12784503wmh.141.1562242495442;
+ Thu, 04 Jul 2019 05:14:55 -0700 (PDT)
+MIME-Version: 1.0
+References: <20190702062358.7330-1-po-hsu.lin@canonical.com>
+ <4a44dd22-be88-ce5b-5c9b-6a3759b6c2eb@kernel.org> <20190703091147.064029248fed5066ea5e5d2b@kernel.org>
+In-Reply-To: <20190703091147.064029248fed5066ea5e5d2b@kernel.org>
+From:   Po-Hsu Lin <po-hsu.lin@canonical.com>
+Date:   Thu, 4 Jul 2019 20:14:44 +0800
+Message-ID: <CAMy_GT9nyu-NZJ0SUr19GZZ7Jap_8KHAQ_nSd7kTSw2vovyomg@mail.gmail.com>
+Subject: Re: [PATCH] selftests/ftrace: skip ftrace test if FTRACE was not enabled
+To:     Masami Hiramatsu <mhiramat@kernel.org>
+Cc:     shuah <shuah@kernel.org>, rostedt@goodmis.org, mingo@redhat.com,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add entry for the new proc sysctl KUnit test to the PROC SYSCTL section.
+Hello,
+Thanks all for your feedback!
 
-Signed-off-by: Brendan Higgins <brendanhiggins@google.com>
-Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Reviewed-by: Logan Gunthorpe <logang@deltatee.com>
-Acked-by: Luis Chamberlain <mcgrof@kernel.org>
----
- MAINTAINERS | 1 +
- 1 file changed, 1 insertion(+)
+On Wed, Jul 3, 2019 at 8:11 AM Masami Hiramatsu <mhiramat@kernel.org> wrote:
+>
+> Hi Po-Hsu Lin,
+>
+> On Tue, 2 Jul 2019 13:22:26 -0600
+> shuah <shuah@kernel.org> wrote:
+>
+> > Hi Po-Hsu Lin,
+> >
+> > On 7/2/19 12:23 AM, Po-Hsu Lin wrote:
+> > > The ftrace test will need to have CONFIG_FTRACE enabled to make the
+> > > ftrace directory available.
+> > >
+> > > Add an additional check to skip this test if the CONFIG_FTRACE was not
+> > > enabled.
+>
+> Sorry, NAK for config check.
+>
+> > >
+> > > This will be helpful to avoid a false-positive test result when testing
+> > > it directly with the following commad against a kernel that does not
+> > > have CONFIG_FTRACE enabled:
+>
+> Would you know tools/testing/selftests/ftrace/config (and other config files
+> in each tests) ?
+>
+> Since each selftest depends specific configurations, those configs are
+> written in config file, and tester must enable it using
+> "scripts/kconfig/merge_config.sh".
+>
+> We can not check the kernel config in some cases, e.g. distro kernel,
+> cross-build kernel, remote build kernel etc. Also, the .config file
+> can be a config file for another kernel build.
+>
+> So please take care of your kernel configuration. If you find any test
+> failed even if you enable configs in config file under that test, please
+> report it, since that is a bug.
+>
+Yes I'm aware the config file.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 856a7c4f7dcf2..7b4dcae2526c6 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -12727,6 +12727,7 @@ S:	Maintained
- F:	fs/proc/proc_sysctl.c
- F:	include/linux/sysctl.h
- F:	kernel/sysctl.c
-+F:	kernel/sysctl-test.c
- F:	tools/testing/selftests/sysctl/
- 
- PS3 NETWORK SUPPORT
--- 
-2.22.0.410.gd8fdbe21b5-goog
+People can still run a test directly without enabling corresponding
+configs, so I think it's better to skip it if possible, directory
+checking proposed by Steven looks better for this.
 
+And thank you the explanation about the possible issue for a config check.
+
+>
+> Thank you,
+>
+> > >      make -C tools/testing/selftests TARGETS=ftrace run_tests
+> > >
+> > > The test result on an Ubuntu KVM kernel will be changed from:
+> > >      selftests: ftrace: ftracetest
+> > >      ========================================
+> > >      Error: No ftrace directory found
+> > >      not ok 1..1 selftests: ftrace: ftracetest [FAIL]
+> > > To:
+> >
+> > Thanks for the patch.
+> >
+> > Check patch fails with the above To:
+> >
+> > WARNING: Use a single space after To:
+> > #107:
+> > To:
+> >
+> > ERROR: Unrecognized email address: ''
+> > #107:
+> > To:
+> >
+> > total: 1 errors, 1 warnings, 23 lines checked
+> >
+
+This is an interesting error here,
+it looks like this checkpatch.pl script cannot identify the "To:" is
+actually located inside the commit message.
+I have to change this into something else to avoid this error.
+
+
+> >
+> > Please fix and send v2.
+> >
+> > >      selftests: ftrace: ftracetest
+> > >      ========================================
+> > >      CONFIG_FTRACE was not enabled, test skipped.
+> > >      not ok 1..1 selftests: ftrace: ftracetest [SKIP]
+> > >
+> > > Signed-off-by: Po-Hsu Lin <po-hsu.lin@canonical.com>
+> > > ---
+> > >   tools/testing/selftests/ftrace/ftracetest | 11 ++++++++++-
+> > >   1 file changed, 10 insertions(+), 1 deletion(-)
+> > >
+> > > diff --git a/tools/testing/selftests/ftrace/ftracetest b/tools/testing/selftests/ftrace/ftracetest
+> > > index 6d5e9e8..6c8322e 100755
+> > > --- a/tools/testing/selftests/ftrace/ftracetest
+> > > +++ b/tools/testing/selftests/ftrace/ftracetest
+> > > @@ -7,6 +7,9 @@
+> > >   #  Written by Masami Hiramatsu <masami.hiramatsu.pt@hitachi.com>
+> > >   #
+> >
+> > Hmm. You havem't cc'ed Masami on this. Adding Masami.
+> >
+> > I would think Masami should be on the Signed-off-by as well,
+> > since he is the author.
+> >
+> > >
+> > > +# Kselftest framework requirement - SKIP code is 4.
+> > > +ksft_skip=4
+> > > +
+> > >   usage() { # errno [message]
+> > >   [ ! -z "$2" ] && echo $2
+> > >   echo "Usage: ftracetest [options] [testcase(s)] [testcase-directory(s)]"
+> > > @@ -139,7 +142,13 @@ parse_opts $*
+> > >
+> > >   # Verify parameters
+> > >   if [ -z "$TRACING_DIR" -o ! -d "$TRACING_DIR" ]; then
+> > > -  errexit "No ftrace directory found"
+> > > +  ftrace_enabled=`grep "^CONFIG_FTRACE=y" /lib/modules/$(uname -r)/build/.config`
+> > > +  if [ -z "$ftrace_enabled" ]; then
+> > > +    echo "CONFIG_FTRACE was not enabled, test skipped."
+> > > +    exit $ksft_skip
+> > > +  else
+> > > +    errexit "No ftrace directory found"
+> > > +  fi
+> > >   fi
+> > >
+> > >   # Preparing logs
+> > >
+> >
+> > thanks,
+> > -- Shuah
+>
+>
+> --
+> Masami Hiramatsu <mhiramat@kernel.org>
