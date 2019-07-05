@@ -2,195 +2,138 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 464D45F7C6
-	for <lists+linux-kselftest@lfdr.de>; Thu,  4 Jul 2019 14:16:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 703D260C1C
+	for <lists+linux-kselftest@lfdr.de>; Fri,  5 Jul 2019 22:15:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727615AbfGDMPU (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 4 Jul 2019 08:15:20 -0400
-Received: from youngberry.canonical.com ([91.189.89.112]:41744 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727741AbfGDMPT (ORCPT
+        id S1727609AbfGEUPJ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 5 Jul 2019 16:15:09 -0400
+Received: from mail-pl1-f195.google.com ([209.85.214.195]:41268 "EHLO
+        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725813AbfGEUPI (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 4 Jul 2019 08:15:19 -0400
-Received: from mail-wr1-f69.google.com ([209.85.221.69])
-        by youngberry.canonical.com with esmtps (TLS1.0:RSA_AES_128_CBC_SHA1:16)
-        (Exim 4.76)
-        (envelope-from <po-hsu.lin@canonical.com>)
-        id 1hj0dc-0001hq-3T
-        for linux-kselftest@vger.kernel.org; Thu, 04 Jul 2019 12:14:56 +0000
-Received: by mail-wr1-f69.google.com with SMTP id p13so2357082wru.17
-        for <linux-kselftest@vger.kernel.org>; Thu, 04 Jul 2019 05:14:56 -0700 (PDT)
+        Fri, 5 Jul 2019 16:15:08 -0400
+Received: by mail-pl1-f195.google.com with SMTP id m9so1390585pls.8;
+        Fri, 05 Jul 2019 13:15:08 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=CZ17bZ+LXx4n8vNZTmDIWxMdFlyXwsk5RUf0bS977CM=;
-        b=SyVUd6D4EM2DX4vjDMA9tcaUj8WcQ5jaFD9RFrx3QtVGFCeafolpSOMwrO+tRn1Mkw
-         KSWQ7sGf6rSJqe7eUg9t6+xgoe0+bHFAwum4PzQYQNL1cKsLA2PEzJw7KiqSaW4d2ZbR
-         JltNpz+ie3Ic6hLCdE2cGH2woaVqKQJ+MNboDpyCDFmE3Db/KNrKJaalDl2fq0eWWRjJ
-         gosY8ZAKnXzFsdykmhgSnzQiQNfsHCn4tANnBayaElWOtWRitDU5B+pKWRoDWOvuq7EM
-         zgq54YkfzcvcrSVsVoFDtpra5W4rQLxkm0qx0NZJC1O+qBTmoabh4GKgJF2u2qzH1n0p
-         j+xw==
-X-Gm-Message-State: APjAAAX7LpPNxWRSIG26LURCeCUkK0k07m3EesSyl/Ols/tKD4rMGFXF
-        OCfnsISvdNbvgJgt7n1qO2maXqvLgsAMP2bPx1hI7e4F1o5HdQITOcUnTicXIudi94K/ckVNQi7
-        xtBJVYkUtd/UpmRzRvOe7sknLTWleYihL4Sz/BnTfwejkTZV9nB6niwDqlL0O
-X-Received: by 2002:a7b:c0d0:: with SMTP id s16mr12784521wmh.141.1562242495769;
-        Thu, 04 Jul 2019 05:14:55 -0700 (PDT)
-X-Google-Smtp-Source: APXvYqzr9KvQewn+s3Th0jDrKNYrXcqI2Rjwqqcxd1Q4ngnxYl05qDeiBNbrM6WbfZXW4O9eKeA6LARlvTTIuUHJRdI=
-X-Received: by 2002:a7b:c0d0:: with SMTP id s16mr12784503wmh.141.1562242495442;
- Thu, 04 Jul 2019 05:14:55 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=dg5Yvvp7NUrUvKeik0ledTLe2yGcHUO+ZrIPV2huI9Y=;
+        b=OzdFfcxvGnOCcXkAWwlO88u1j0z3dwlju31oMxPQLPOZ+n3HTlc9/3RNiBVymt6WjZ
+         E343Nc2AfX2XFDO0jS9FCIZ10WFbDmirMIW3xQiN+CUgP9a+SrhuQtiVZBGwxI1D45B8
+         fZE+T8B5M6sithJT8ew/njhUS8QtiiDj8fN5/Z9yzYi4hmW85MSXtuBeA/p17sOChy2i
+         J3x8p4Q9SxWXaljLVBxGJvnYev9uWFYlZ6dkPfIyFEs82mzDRkF+7mD7r1kTz1uzkpm+
+         +G6z6sekGN1SDwlRrQEt1ypneM2enRmEsGH4GjfMpmNL2IiH3hOTvZFxOUxVlMwmFVI8
+         x6KQ==
+X-Gm-Message-State: APjAAAViU5T0hbMXOxOVKtAMjnBdAZLdeqzQKDB7QB91U+rw5HUSwln5
+        acNpqtSsq9tDZb6AmtdPw3Q=
+X-Google-Smtp-Source: APXvYqzH7c1mrZ0zttAPULzlg8jVTTmmhx/hVeHeJnG9PaMmHS0LdOn+bNDKbdY4NLyOIl1o3kOldA==
+X-Received: by 2002:a17:902:2865:: with SMTP id e92mr7552625plb.264.1562357707679;
+        Fri, 05 Jul 2019 13:15:07 -0700 (PDT)
+Received: from 42.do-not-panic.com (42.do-not-panic.com. [157.230.128.187])
+        by smtp.gmail.com with ESMTPSA id 10sm17424980pfb.30.2019.07.05.13.15.06
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Fri, 05 Jul 2019 13:15:06 -0700 (PDT)
+Received: by 42.do-not-panic.com (Postfix, from userid 1000)
+        id C552E40190; Fri,  5 Jul 2019 20:15:05 +0000 (UTC)
+Date:   Fri, 5 Jul 2019 20:15:05 +0000
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Brendan Higgins <brendanhiggins@google.com>
+Cc:     frowand.list@gmail.com, gregkh@linuxfoundation.org,
+        jpoimboe@redhat.com, keescook@google.com,
+        kieran.bingham@ideasonboard.com, peterz@infradead.org,
+        robh@kernel.org, sboyd@kernel.org, shuah@kernel.org, tytso@mit.edu,
+        yamada.masahiro@socionext.com, devicetree@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, kunit-dev@googlegroups.com,
+        linux-doc@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-nvdimm@lists.01.org,
+        linux-um@lists.infradead.org, Alexander.Levin@microsoft.com,
+        Tim.Bird@sony.com, amir73il@gmail.com, dan.carpenter@oracle.com,
+        daniel@ffwll.ch, jdike@addtoit.com, joel@jms.id.au,
+        julia.lawall@lip6.fr, khilman@baylibre.com, knut.omang@oracle.com,
+        logang@deltatee.com, mpe@ellerman.id.au, pmladek@suse.com,
+        rdunlap@infradead.org, richard@nod.at, rientjes@google.com,
+        rostedt@goodmis.org, wfg@linux.intel.com
+Subject: Re: [PATCH v6 01/18] kunit: test: add KUnit test runner core
+Message-ID: <20190705201505.GA19023@42.do-not-panic.com>
+References: <20190704003615.204860-1-brendanhiggins@google.com>
+ <20190704003615.204860-2-brendanhiggins@google.com>
 MIME-Version: 1.0
-References: <20190702062358.7330-1-po-hsu.lin@canonical.com>
- <4a44dd22-be88-ce5b-5c9b-6a3759b6c2eb@kernel.org> <20190703091147.064029248fed5066ea5e5d2b@kernel.org>
-In-Reply-To: <20190703091147.064029248fed5066ea5e5d2b@kernel.org>
-From:   Po-Hsu Lin <po-hsu.lin@canonical.com>
-Date:   Thu, 4 Jul 2019 20:14:44 +0800
-Message-ID: <CAMy_GT9nyu-NZJ0SUr19GZZ7Jap_8KHAQ_nSd7kTSw2vovyomg@mail.gmail.com>
-Subject: Re: [PATCH] selftests/ftrace: skip ftrace test if FTRACE was not enabled
-To:     Masami Hiramatsu <mhiramat@kernel.org>
-Cc:     shuah <shuah@kernel.org>, rostedt@goodmis.org, mingo@redhat.com,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190704003615.204860-2-brendanhiggins@google.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hello,
-Thanks all for your feedback!
+On Wed, Jul 03, 2019 at 05:35:58PM -0700, Brendan Higgins wrote:
+> Add core facilities for defining unit tests; this provides a common way
+> to define test cases, functions that execute code which is under test
+> and determine whether the code under test behaves as expected; this also
+> provides a way to group together related test cases in test suites (here
+> we call them test_modules).
+> 
+> Just define test cases and how to execute them for now; setting
+> expectations on code will be defined later.
+> 
+> Signed-off-by: Brendan Higgins <brendanhiggins@google.com>
+> Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Reviewed-by: Logan Gunthorpe <logang@deltatee.com>
 
-On Wed, Jul 3, 2019 at 8:11 AM Masami Hiramatsu <mhiramat@kernel.org> wrote:
->
-> Hi Po-Hsu Lin,
->
-> On Tue, 2 Jul 2019 13:22:26 -0600
-> shuah <shuah@kernel.org> wrote:
->
-> > Hi Po-Hsu Lin,
-> >
-> > On 7/2/19 12:23 AM, Po-Hsu Lin wrote:
-> > > The ftrace test will need to have CONFIG_FTRACE enabled to make the
-> > > ftrace directory available.
-> > >
-> > > Add an additional check to skip this test if the CONFIG_FTRACE was not
-> > > enabled.
->
-> Sorry, NAK for config check.
->
-> > >
-> > > This will be helpful to avoid a false-positive test result when testing
-> > > it directly with the following commad against a kernel that does not
-> > > have CONFIG_FTRACE enabled:
->
-> Would you know tools/testing/selftests/ftrace/config (and other config files
-> in each tests) ?
->
-> Since each selftest depends specific configurations, those configs are
-> written in config file, and tester must enable it using
-> "scripts/kconfig/merge_config.sh".
->
-> We can not check the kernel config in some cases, e.g. distro kernel,
-> cross-build kernel, remote build kernel etc. Also, the .config file
-> can be a config file for another kernel build.
->
-> So please take care of your kernel configuration. If you find any test
-> failed even if you enable configs in config file under that test, please
-> report it, since that is a bug.
->
-Yes I'm aware the config file.
+Reviewed-by: Luis Chamberlain <mcgrof@kernel.org>
 
-People can still run a test directly without enabling corresponding
-configs, so I think it's better to skip it if possible, directory
-checking proposed by Steven looks better for this.
+But a nitpick below, I think that can be fixed later with a follow up
+patch.
 
-And thank you the explanation about the possible issue for a config check.
+> +/**
+> + * struct kunit - represents a running instance of a test.
+> + * @priv: for user to store arbitrary data. Commonly used to pass data created
+> + * in the init function (see &struct kunit_suite).
+> + *
+> + * Used to store information about the current context under which the test is
+> + * running. Most of this data is private and should only be accessed indirectly
+> + * via public functions; the one exception is @priv which can be used by the
+> + * test writer to store arbitrary data.
+> + *
+> + * A brief note on locking:
+> + *
+> + * First off, we need to lock because in certain cases a user may want to use an
+> + * expectation in a thread other than the thread that the test case is running
+> + * in.
 
->
-> Thank you,
->
-> > >      make -C tools/testing/selftests TARGETS=ftrace run_tests
-> > >
-> > > The test result on an Ubuntu KVM kernel will be changed from:
-> > >      selftests: ftrace: ftracetest
-> > >      ========================================
-> > >      Error: No ftrace directory found
-> > >      not ok 1..1 selftests: ftrace: ftracetest [FAIL]
-> > > To:
-> >
-> > Thanks for the patch.
-> >
-> > Check patch fails with the above To:
-> >
-> > WARNING: Use a single space after To:
-> > #107:
-> > To:
-> >
-> > ERROR: Unrecognized email address: ''
-> > #107:
-> > To:
-> >
-> > total: 1 errors, 1 warnings, 23 lines checked
-> >
+This as a prefix to the struct without a lock seems odd. It would be
+clearer I think if you'd explain here what locking mechanism we decided
+to use and why it suffices today.
 
-This is an interesting error here,
-it looks like this checkpatch.pl script cannot identify the "To:" is
-actually located inside the commit message.
-I have to change this into something else to avoid this error.
+> +/**
+> + * suite_test() - used to register a &struct kunit_suite with KUnit.
+
+You mean kunit_test_suite()?
+
+> + * @suite: a statically allocated &struct kunit_suite.
+> + *
+> + * Registers @suite with the test framework. See &struct kunit_suite for more
+> + * information.
+> + *
+> + * NOTE: Currently KUnit tests are all run as late_initcalls; this means that
+> + * they cannot test anything where tests must run at a different init phase. One
+> + * significant restriction resulting from this is that KUnit cannot reliably
+> + * test anything that is initialize in the late_init phase.
+                            initialize prior to the late init phase.
 
 
-> >
-> > Please fix and send v2.
-> >
-> > >      selftests: ftrace: ftracetest
-> > >      ========================================
-> > >      CONFIG_FTRACE was not enabled, test skipped.
-> > >      not ok 1..1 selftests: ftrace: ftracetest [SKIP]
-> > >
-> > > Signed-off-by: Po-Hsu Lin <po-hsu.lin@canonical.com>
-> > > ---
-> > >   tools/testing/selftests/ftrace/ftracetest | 11 ++++++++++-
-> > >   1 file changed, 10 insertions(+), 1 deletion(-)
-> > >
-> > > diff --git a/tools/testing/selftests/ftrace/ftracetest b/tools/testing/selftests/ftrace/ftracetest
-> > > index 6d5e9e8..6c8322e 100755
-> > > --- a/tools/testing/selftests/ftrace/ftracetest
-> > > +++ b/tools/testing/selftests/ftrace/ftracetest
-> > > @@ -7,6 +7,9 @@
-> > >   #  Written by Masami Hiramatsu <masami.hiramatsu.pt@hitachi.com>
-> > >   #
-> >
-> > Hmm. You havem't cc'ed Masami on this. Adding Masami.
-> >
-> > I would think Masami should be on the Signed-off-by as well,
-> > since he is the author.
-> >
-> > >
-> > > +# Kselftest framework requirement - SKIP code is 4.
-> > > +ksft_skip=4
-> > > +
-> > >   usage() { # errno [message]
-> > >   [ ! -z "$2" ] && echo $2
-> > >   echo "Usage: ftracetest [options] [testcase(s)] [testcase-directory(s)]"
-> > > @@ -139,7 +142,13 @@ parse_opts $*
-> > >
-> > >   # Verify parameters
-> > >   if [ -z "$TRACING_DIR" -o ! -d "$TRACING_DIR" ]; then
-> > > -  errexit "No ftrace directory found"
-> > > +  ftrace_enabled=`grep "^CONFIG_FTRACE=y" /lib/modules/$(uname -r)/build/.config`
-> > > +  if [ -z "$ftrace_enabled" ]; then
-> > > +    echo "CONFIG_FTRACE was not enabled, test skipped."
-> > > +    exit $ksft_skip
-> > > +  else
-> > > +    errexit "No ftrace directory found"
-> > > +  fi
-> > >   fi
-> > >
-> > >   # Preparing logs
-> > >
-> >
-> > thanks,
-> > -- Shuah
->
->
-> --
-> Masami Hiramatsu <mhiramat@kernel.org>
+That is, this is useless to test things running early.
+
+> + *
+> + * TODO(brendanhiggins@google.com): Don't run all KUnit tests as late_initcalls.
+> + * I have some future work planned to dispatch all KUnit tests from the same
+> + * place, and at the very least to do so after everything else is definitely
+> + * initialized.
+
+TODOs are odd to be adding to documentation, this is just not common
+place practice. The NOTE should suffice for you.
+
+  Luis
