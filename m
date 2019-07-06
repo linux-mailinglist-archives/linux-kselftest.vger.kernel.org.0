@@ -2,242 +2,290 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9742F60E97
-	for <lists+linux-kselftest@lfdr.de>; Sat,  6 Jul 2019 05:09:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 453876113C
+	for <lists+linux-kselftest@lfdr.de>; Sat,  6 Jul 2019 16:58:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725957AbfGFDJs (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 5 Jul 2019 23:09:48 -0400
-Received: from condef-02.nifty.com ([202.248.20.67]:33775 "EHLO
-        condef-02.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725917AbfGFDJs (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 5 Jul 2019 23:09:48 -0400
-Received: from conuserg-09.nifty.com ([10.126.8.72])by condef-02.nifty.com with ESMTP id x66384Yg017144
-        for <linux-kselftest@vger.kernel.org>; Sat, 6 Jul 2019 12:08:04 +0900
-Received: from grover.flets-west.jp (softbank126026094249.bbtec.net [126.26.94.249]) (authenticated)
-        by conuserg-09.nifty.com with ESMTP id x6637E3N030660;
-        Sat, 6 Jul 2019 12:07:15 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-09.nifty.com x6637E3N030660
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1562382436;
-        bh=DqMeEpsYLg2FNqTNDCaAigGm7/V+QKqBZZKT+giJbgg=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=kJnvv7BatHzNkfx4kfoKaFfSjB+Fu9Ax2s8IbKQtg2vu/HTFAzBzq8NGCBizAQJ/z
-         qSULExu8ajajVh3uqkJH/e2MgR80ZFwY8FtbWRO6nIHYgnsbXX9nY056Qhxohqd8Ix
-         7YynWU+HM9FZR3FiChRzDr8UcOQHBa7zwDxgPjmOhjXH+UCKLuAbtHeZYVSbodcg6r
-         VunG+Tu0+talczuN/CdDgDQoVvGX2Q+mfB6q1Gkk0yBrVjqbhHAD4XKZ19oZR7BryA
-         I/9zBwAKh2oIGP0XFetJew2+HOAkMHiLJdqLVzwMuvm4mZZDFl1ChDE1L/5h7GUJt7
-         fxHya3EpK3Tpg==
-X-Nifty-SrcIP: [126.26.94.249]
-From:   Masahiro Yamada <yamada.masahiro@socionext.com>
-To:     linux-kbuild@vger.kernel.org
-Cc:     Sam Ravnborg <sam@ravnborg.org>,
-        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
-        Masahiro Yamada <yamada.masahiro@socionext.com>,
-        Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
-        Kieran Bingham <kbingham@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        linux-kselftest@vger.kernel.org,
-        Jan Kiszka <jan.kiszka@siemens.com>
-Subject: [PATCH 2/3] kbuild: replace KBUILD_SRCTREE with boolean building_out_of_srctree
-Date:   Sat,  6 Jul 2019 12:07:12 +0900
-Message-Id: <20190706030713.6221-2-yamada.masahiro@socionext.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20190706030713.6221-1-yamada.masahiro@socionext.com>
-References: <20190706030713.6221-1-yamada.masahiro@socionext.com>
+        id S1726922AbfGFO6i (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 6 Jul 2019 10:58:38 -0400
+Received: from mx1.mailbox.org ([80.241.60.212]:35970 "EHLO mx1.mailbox.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726267AbfGFO6i (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Sat, 6 Jul 2019 10:58:38 -0400
+Received: from smtp1.mailbox.org (smtp1.mailbox.org [80.241.60.240])
+        (using TLSv1.2 with cipher ECDHE-RSA-CHACHA20-POLY1305 (256/256 bits))
+        (No client certificate requested)
+        by mx1.mailbox.org (Postfix) with ESMTPS id 36F465009C;
+        Sat,  6 Jul 2019 16:58:32 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at heinlein-support.de
+Received: from smtp1.mailbox.org ([80.241.60.240])
+        by spamfilter05.heinlein-hosting.de (spamfilter05.heinlein-hosting.de [80.241.56.123]) (amavisd-new, port 10030)
+        with ESMTP id e8t0RRy-h50z; Sat,  6 Jul 2019 16:58:20 +0200 (CEST)
+From:   Aleksa Sarai <cyphar@cyphar.com>
+To:     Al Viro <viro@zeniv.linux.org.uk>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J. Bruce Fields" <bfields@fieldses.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        David Howells <dhowells@redhat.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>
+Cc:     Aleksa Sarai <cyphar@cyphar.com>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Jann Horn <jannh@google.com>,
+        Christian Brauner <christian@brauner.io>,
+        David Drysdale <drysdale@google.com>,
+        Tycho Andersen <tycho@tycho.ws>,
+        Kees Cook <keescook@chromium.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        containers@lists.linux-foundation.org,
+        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Chanho Min <chanho.min@lge.com>,
+        Oleg Nesterov <oleg@redhat.com>, Aleksa Sarai <asarai@suse.de>,
+        linux-alpha@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        linux-xtensa@linux-xtensa.org, sparclinux@vger.kernel.org
+Subject: [PATCH v9 00/10] namei: openat2(2) path resolution restrictions
+Date:   Sun,  7 Jul 2019 00:57:27 +1000
+Message-Id: <20190706145737.5299-1-cyphar@cyphar.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Commit 25b146c5b8ce ("kbuild: allow Kbuild to start from any directory")
-deprecated KBUILD_SRCTREE.
+Patch changelog:
+  v9:
+    * Replace resolveat(2) with openat2(2). [Linus]
+    * Output a warning to dmesg if may_open_magiclink() is violated.
+    * Add an openat2(O_CREAT) testcase.
+  v8:
+    * Default to O_CLOEXEC to match other new fd-creation syscalls
+      (users can always disable O_CLOEXEC afterwards). [Christian]
+    * Implement magic-link restrictions based on their mode. This is
+      done through a series of masks and is designed to avoid breaking
+      users -- most users don't have chained O_PATH fd re-opens.
+    * Add O_EMPTYPATH which allows for fd re-opening without needing
+      procfs. This would help some users of fd re-opening, and with the
+      changes to magic-link permissions we now have the right semantics
+      for such a flag.
+    * Add selftests for resolveat(2), O_EMPTYPATH, and the magic-link
+      mode semantics.
+  v7:
+    * Remove execveat(2) support for these flags since it might
+      result in some pretty hairy security issues with setuid binaries.
+      There are other avenues we can go down to solve the issues with
+      CVE-2019-5736. [Jann]
+    * Reserve an additional bit in resolveat(2) for the eXecute access
+      mode if we end up implementing it.
+  v6:
+    * Drop O_* flags API to the new LOOKUP_ path scoping bits and
+      instead introduce resolveat(2) as an alternative method of
+      obtaining an O_PATH. The justification for this is included in
+      patch 6 (though switching back to O_* flags is trivial).
+  v5:
+    * In response to CVE-2019-5736 (one of the vectors showed that
+      open(2)+fexec(3) cannot be used to scope binfmt_script's implicit
+      open_exec()), AT_* flags have been re-added and are now piped
+      through to binfmt_script (and other binfmt_* that use open_exec)
+      but are only supported for execveat(2) for now.
+  v4:
+    * Remove AT_* flag reservations, as they require more discussion.
+    * Switch to path_is_under() over __d_path() for breakout checking.
+    * Make O_XDEV no longer block openat("/tmp", "/", O_XDEV) -- dirfd
+      is now ignored for absolute paths to match other flags.
+    * Improve the dirfd_path_init() refactor and move it to a separate
+      commit.
+    * Remove reference to Linux-capsicum.
+    * Switch "proclink" name to magic-link.
+  v3: [resend]
+  v2:
+    * Made ".." resolution with AT_THIS_ROOT and AT_BENEATH safe(r) with
+      some semi-aggressive __d_path checking (see patch 3).
+    * Disallowed "proclinks" with AT_THIS_ROOT and AT_BENEATH, in the
+      hopes they can be re-enabled once safe.
+    * Removed the selftests as they will be reimplemented as xfstests.
+    * Removed stat(2) support, since you can already get it through
+      O_PATH and fstatat(2).
 
-It is only used in tools/testing/selftest/ to distinguish out-of-tree
-build. Replace it with a new boolean flag, building_out_of_srctree.
+The need for some sort of control over VFS's path resolution (to avoid
+malicious paths resulting in inadvertent breakouts) has been a very
+long-standing desire of many userspace applications. This patchset is a
+revival of Al Viro's old AT_NO_JUMPS[1,2] patchset (which was a variant
+of David Drysdale's O_BENEATH patchset[3] which was a spin-off of the
+Capsicum project[4]) with a few additions and changes made based on the
+previous discussion within [5] as well as others I felt were useful.
 
-I also replaced the conditional ($(srctree),.) because the next commit
-will allow an absolute path for $(srctree) even when building in the
-source tree.
+In line with the conclusions of the original discussion of AT_NO_JUMPS,
+the flag has been split up into separate flags. However, instead of
+being an openat(2) flag it is provided through a new syscall openat2(2)
+which provides an alternative way to get an O_PATH file descriptor (the
+reasoning for doing this is included in patch 6). The following new
+LOOKUP_ flags are added:
 
-Signed-off-by: Masahiro Yamada <yamada.masahiro@socionext.com>
----
+  * LOOKUP_XDEV blocks all mountpoint crossings (upwards, downwards, or
+    through absolute links). Absolute pathnames alone in openat(2) do
+    not trigger this.
 
- Makefile                         | 19 ++++++++-----------
- scripts/Makefile.build           |  2 +-
- scripts/Makefile.host            |  2 +-
- scripts/Makefile.lib             |  2 +-
- scripts/Makefile.modbuiltin      |  2 +-
- scripts/gdb/linux/Makefile       |  2 +-
- tools/testing/selftests/Makefile |  2 +-
- tools/testing/selftests/lib.mk   |  4 ++--
- 8 files changed, 16 insertions(+), 19 deletions(-)
+  * LOOKUP_NO_MAGICLINKS blocks resolution through /proc/$pid/fd-style
+    links. This is done by blocking the usage of nd_jump_link() during
+    resolution in a filesystem. The term "magic-links" is used to match
+    with the only reference to these links in Documentation/, but I'm
+    happy to change the name.
 
-diff --git a/Makefile b/Makefile
-index a5615edf2196..534a5dc796b1 100644
---- a/Makefile
-+++ b/Makefile
-@@ -228,9 +228,12 @@ ifeq ("$(origin M)", "command line")
-   KBUILD_EXTMOD := $(M)
- endif
- 
-+export KBUILD_CHECKSRC KBUILD_EXTMOD
-+
- ifeq ($(abs_srctree),$(abs_objtree))
-         # building in the source tree
-         srctree := .
-+	building_out_of_srctree :=
- else
-         ifeq ($(abs_srctree)/,$(dir $(abs_objtree)))
-                 # building in a subdirectory of the source tree
-@@ -238,19 +241,13 @@ else
-         else
-                 srctree := $(abs_srctree)
-         endif
--
--	# TODO:
--	# KBUILD_SRC is only used to distinguish in-tree/out-of-tree build.
--	# Replace it with $(srctree) or something.
--	KBUILD_SRC := $(abs_srctree)
-+	building_out_of_srctree := 1
- endif
- 
--export KBUILD_CHECKSRC KBUILD_EXTMOD KBUILD_SRC
--
- objtree		:= .
- VPATH		:= $(srctree)
- 
--export srctree objtree VPATH
-+export building_out_of_srctree srctree objtree VPATH
- 
- # To make sure we do not include .config for any of the *config targets
- # catch them early, and hand them over to scripts/kconfig/Makefile
-@@ -453,7 +450,7 @@ USERINCLUDE    := \
- LINUXINCLUDE    := \
- 		-I$(srctree)/arch/$(SRCARCH)/include \
- 		-I$(objtree)/arch/$(SRCARCH)/include/generated \
--		$(if $(filter .,$(srctree)),,-I$(srctree)/include) \
-+		$(if $(building_out_of_srctree),-I$(srctree)/include) \
- 		-I$(objtree)/include \
- 		$(USERINCLUDE)
- 
-@@ -509,7 +506,7 @@ PHONY += outputmakefile
- # At the same time when output Makefile generated, generate .gitignore to
- # ignore whole output directory
- outputmakefile:
--ifneq ($(srctree),.)
-+ifdef building_out_of_srctree
- 	$(Q)ln -fsn $(srctree) source
- 	$(Q)$(CONFIG_SHELL) $(srctree)/scripts/mkmakefile $(srctree)
- 	$(Q)test -e .gitignore || \
-@@ -1093,7 +1090,7 @@ PHONY += prepare archprepare prepare1 prepare3
- # and if so do:
- # 1) Check that make has not been executed in the kernel src $(srctree)
- prepare3: include/config/kernel.release
--ifneq ($(srctree),.)
-+ifdef building_out_of_srctree
- 	@$(kecho) '  Using $(srctree) as source for kernel'
- 	$(Q)if [ -f $(srctree)/.config -o \
- 		 -d $(srctree)/include/config -o \
-diff --git a/scripts/Makefile.build b/scripts/Makefile.build
-index 341fca59d28f..1086caaac786 100644
---- a/scripts/Makefile.build
-+++ b/scripts/Makefile.build
-@@ -509,7 +509,7 @@ existing-targets := $(wildcard $(sort $(targets)))
- 
- -include $(foreach f,$(existing-targets),$(dir $(f)).$(notdir $(f)).cmd)
- 
--ifneq ($(srctree),.)
-+ifdef building_out_of_srctree
- # Create directories for object files if they do not exist
- obj-dirs := $(sort $(obj) $(patsubst %/,%, $(dir $(targets))))
- # If targets exist, their directories apparently exist. Skip mkdir.
-diff --git a/scripts/Makefile.host b/scripts/Makefile.host
-index b6a54bdf0965..fcf0213e6ac8 100644
---- a/scripts/Makefile.host
-+++ b/scripts/Makefile.host
-@@ -69,7 +69,7 @@ _hostcxx_flags = $(KBUILD_HOSTCXXFLAGS) $(HOST_EXTRACXXFLAGS) \
- 
- # $(objtree)/$(obj) for including generated headers from checkin source files
- ifeq ($(KBUILD_EXTMOD),)
--ifneq ($(srctree),.)
-+ifdef building_out_of_srctree
- _hostc_flags   += -I $(objtree)/$(obj)
- _hostcxx_flags += -I $(objtree)/$(obj)
- endif
-diff --git a/scripts/Makefile.lib b/scripts/Makefile.lib
-index 4d006923763c..f835a40ebae5 100644
---- a/scripts/Makefile.lib
-+++ b/scripts/Makefile.lib
-@@ -148,7 +148,7 @@ endif
- # $(srctree)/$(src) for including checkin headers from generated source files
- # $(objtree)/$(obj) for including generated headers from checkin source files
- ifeq ($(KBUILD_EXTMOD),)
--ifneq ($(srctree),.)
-+ifdef building_out_of_srctree
- _c_flags   += -I $(srctree)/$(src) -I $(objtree)/$(obj)
- _a_flags   += -I $(srctree)/$(src) -I $(objtree)/$(obj)
- _cpp_flags += -I $(srctree)/$(src) -I $(objtree)/$(obj)
-diff --git a/scripts/Makefile.modbuiltin b/scripts/Makefile.modbuiltin
-index 12ac300fe51b..7d4711b88656 100644
---- a/scripts/Makefile.modbuiltin
-+++ b/scripts/Makefile.modbuiltin
-@@ -15,7 +15,7 @@ include include/config/tristate.conf
- 
- include scripts/Kbuild.include
- 
--ifneq ($(srctree),.)
-+ifdef building_out_of_srctree
- # Create output directory if not already present
- _dummy := $(shell [ -d $(obj) ] || mkdir -p $(obj))
- endif
-diff --git a/scripts/gdb/linux/Makefile b/scripts/gdb/linux/Makefile
-index 9fd3d8ed731a..124755087510 100644
---- a/scripts/gdb/linux/Makefile
-+++ b/scripts/gdb/linux/Makefile
-@@ -1,6 +1,6 @@
- # SPDX-License-Identifier: GPL-2.0
- 
--ifneq ($(srctree),.)
-+ifdef building_out_of_srctree
- 
- symlinks := $(patsubst $(srctree)/$(src)/%,%,$(wildcard $(srctree)/$(src)/*.py))
- 
-diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-index 9781ca79794a..25b43a8c2b15 100644
---- a/tools/testing/selftests/Makefile
-+++ b/tools/testing/selftests/Makefile
-@@ -74,7 +74,7 @@ endif
- # Append kselftest to KBUILD_OUTPUT to avoid cluttering
- # KBUILD_OUTPUT with selftest objects and headers installed
- # by selftests Makefile or lib.mk.
--ifneq ($(KBUILD_SRC),)
-+ifdef building_out_of_srctree
- override LDFLAGS =
- endif
- 
-diff --git a/tools/testing/selftests/lib.mk b/tools/testing/selftests/lib.mk
-index 077337195783..1c8a1963d03f 100644
---- a/tools/testing/selftests/lib.mk
-+++ b/tools/testing/selftests/lib.mk
-@@ -70,7 +70,7 @@ define RUN_TESTS
- endef
- 
- run_tests: all
--ifneq ($(KBUILD_SRC),)
-+ifdef building_out_of_srctree
- 	@if [ "X$(TEST_PROGS) $(TEST_PROGS_EXTENDED) $(TEST_FILES)" != "X" ]; then
- 		@rsync -aq $(TEST_PROGS) $(TEST_PROGS_EXTENDED) $(TEST_FILES) $(OUTPUT)
- 	fi
-@@ -125,7 +125,7 @@ clean:
- # When make O= with kselftest target from main level
- # the following aren't defined.
- #
--ifneq ($(KBUILD_SRC),)
-+ifdef building_out_of_srctree
- LINK.c = $(CC) $(CFLAGS) $(CPPFLAGS) $(LDFLAGS) $(TARGET_ARCH)
- COMPILE.S = $(CC) $(ASFLAGS) $(CPPFLAGS) $(TARGET_ARCH) -c
- LINK.S = $(CC) $(ASFLAGS) $(CPPFLAGS) $(LDFLAGS) $(TARGET_ARCH)
+    It should be noted that this is different to the scope of
+    ~LOOKUP_FOLLOW in that it applies to all path components. However,
+	you can do openat2(NO_FOLLOW|NO_MAGICLINKS) on a magic-link and it
+	will *not* fail (assuming that no parent component was a
+	magic-link), and you will have an fd for the magic-link.
+
+  * LOOKUP_BENEATH disallows escapes to outside the starting dirfd's
+    tree, using techniques such as ".." or absolute links. Absolute
+    paths in openat(2) are also disallowed. Conceptually this flag is to
+    ensure you "stay below" a certain point in the filesystem tree --
+    but this requires some additional to protect against various races
+    that would allow escape using "..".
+
+    Currently LOOKUP_BENEATH implies LOOKUP_NO_MAGICLINKS, because it
+    can trivially beam you around the filesystem (breaking the
+    protection). In future, there might be similar safety checks done as
+	in LOOKUP_IN_ROOT, but that requires more discussion.
+
+In addition, two new flags are added that expand on the above ideas:
+
+  * LOOKUP_NO_SYMLINKS does what it says on the tin. No symlink
+    resolution is allowed at all, including magic-links. Just as with
+    LOOKUP_NO_MAGICLINKS this can still be used with NOFOLLOW to open an
+    fd for the symlink as long as no parent path had a symlink
+    component.
+
+  * LOOKUP_IN_ROOT is an extension of LOOKUP_BENEATH that, rather than
+    blocking attempts to move past the root, forces all such movements
+    to be scoped to the starting point. This provides chroot(2)-like
+    protection but without the cost of a chroot(2) for each filesystem
+    operation, as well as being safe against race attacks that chroot(2)
+    is not.
+
+    If a race is detected (as with LOOKUP_BENEATH) then an error is
+    generated, and similar to LOOKUP_BENEATH it is not permitted to cross
+    magic-links with LOOKUP_IN_ROOT.
+
+    The primary need for this is from container runtimes, which
+    currently need to do symlink scoping in userspace[6] when opening
+    paths in a potentially malicious container. There is a long list of
+    CVEs that could have bene mitigated by having O_THISROOT (such as
+    CVE-2017-1002101, CVE-2017-1002102, CVE-2018-15664, and
+    CVE-2019-5736, just to name a few).
+
+And further, several semantics of file descriptor "re-opening" are now
+changed to prevent attacks like CVE-2019-5736 by restricting how
+magic-links can be resolved (based on their mode). This required some
+other changes to the semantics of the modes of O_PATH file descriptor's
+associated /proc/self/fd magic-links. openat2(2) has the ability to
+further restrict re-opening of its own O_PATH fds, so that users can
+make even better use of this feature.
+
+Finally, O_EMPTYPATH was added so that users can do /proc/self/fd-style
+re-opening without depending on procfs. The new restricted semantics for
+magic-links are applied here too.
+
+In order to make all of the above more usable, I'm working on
+libpathrs[7] which is a C-friendly library for safe path resolution. It
+features a userspace-emulated backend if the kernel doesn't support
+openat2(2). Hopefully we can get userspace to switch to using it, and
+thus get openat2(2) support for free once it's ready.
+
+Cc: Al Viro <viro@zeniv.linux.org.uk>
+Cc: Eric Biederman <ebiederm@xmission.com>
+Cc: Andy Lutomirski <luto@kernel.org>
+Cc: David Howells <dhowells@redhat.com>
+Cc: Jann Horn <jannh@google.com>
+Cc: Christian Brauner <christian@brauner.io>
+Cc: David Drysdale <drysdale@google.com>
+Cc: Tycho Andersen <tycho@tycho.ws>
+Cc: Kees Cook <keescook@chromium.org>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: <containers@lists.linux-foundation.org>
+Cc: <linux-fsdevel@vger.kernel.org>
+Cc: <linux-api@vger.kernel.org>
+
+[1]: https://lwn.net/Articles/721443/
+[2]: https://lore.kernel.org/patchwork/patch/784221/
+[3]: https://lwn.net/Articles/619151/
+[4]: https://lwn.net/Articles/603929/
+[5]: https://lwn.net/Articles/723057/
+[6]: https://github.com/cyphar/filepath-securejoin
+[7]: https://github.com/openSUSE/libpathrs
+
+Aleksa Sarai (10):
+  namei: obey trailing magic-link DAC permissions
+  procfs: switch magic-link modes to be more sane
+  open: O_EMPTYPATH: procfs-less file descriptor re-opening
+  namei: split out nd->dfd handling to dirfd_path_init
+  namei: O_BENEATH-style path resolution flags
+  namei: LOOKUP_IN_ROOT: chroot-like path resolution
+  namei: aggressively check for nd->root escape on ".." resolution
+  open: openat2(2) syscall
+  kselftest: save-and-restore errno to allow for %m formatting
+  selftests: add openat2(2) selftests
+
+ arch/alpha/kernel/syscalls/syscall.tbl        |   1 +
+ arch/arm/tools/syscall.tbl                    |   1 +
+ arch/arm64/include/asm/unistd.h               |   2 +-
+ arch/arm64/include/asm/unistd32.h             |   2 +
+ arch/ia64/kernel/syscalls/syscall.tbl         |   1 +
+ arch/m68k/kernel/syscalls/syscall.tbl         |   1 +
+ arch/microblaze/kernel/syscalls/syscall.tbl   |   1 +
+ arch/mips/kernel/syscalls/syscall_n32.tbl     |   1 +
+ arch/mips/kernel/syscalls/syscall_n64.tbl     |   1 +
+ arch/mips/kernel/syscalls/syscall_o32.tbl     |   1 +
+ arch/parisc/kernel/syscalls/syscall.tbl       |   1 +
+ arch/powerpc/kernel/syscalls/syscall.tbl      |   1 +
+ arch/s390/kernel/syscalls/syscall.tbl         |   1 +
+ arch/sh/kernel/syscalls/syscall.tbl           |   1 +
+ arch/sparc/kernel/syscalls/syscall.tbl        |   1 +
+ arch/x86/entry/syscalls/syscall_32.tbl        |   1 +
+ arch/x86/entry/syscalls/syscall_64.tbl        |   1 +
+ arch/xtensa/kernel/syscalls/syscall.tbl       |   1 +
+ fs/fcntl.c                                    |   2 +-
+ fs/internal.h                                 |   1 +
+ fs/namei.c                                    | 333 ++++++++++++---
+ fs/open.c                                     | 140 +++++--
+ fs/proc/base.c                                |  20 +-
+ fs/proc/fd.c                                  |  23 +-
+ fs/proc/namespaces.c                          |   2 +-
+ include/linux/fcntl.h                         |  17 +-
+ include/linux/fs.h                            |   8 +-
+ include/linux/namei.h                         |   8 +
+ include/linux/syscalls.h                      |  14 +-
+ include/uapi/asm-generic/fcntl.h              |   5 +
+ include/uapi/asm-generic/unistd.h             |   5 +-
+ include/uapi/linux/fcntl.h                    |  38 ++
+ tools/testing/selftests/Makefile              |   1 +
+ tools/testing/selftests/kselftest.h           |  15 +
+ tools/testing/selftests/memfd/memfd_test.c    |   7 +-
+ tools/testing/selftests/openat2/.gitignore    |   1 +
+ tools/testing/selftests/openat2/Makefile      |  12 +
+ tools/testing/selftests/openat2/helpers.c     | 162 +++++++
+ tools/testing/selftests/openat2/helpers.h     | 114 +++++
+ .../testing/selftests/openat2/linkmode_test.c | 325 ++++++++++++++
+ .../selftests/openat2/rename_attack_test.c    | 124 ++++++
+ .../testing/selftests/openat2/resolve_test.c  | 395 ++++++++++++++++++
+ 42 files changed, 1667 insertions(+), 125 deletions(-)
+ create mode 100644 tools/testing/selftests/openat2/.gitignore
+ create mode 100644 tools/testing/selftests/openat2/Makefile
+ create mode 100644 tools/testing/selftests/openat2/helpers.c
+ create mode 100644 tools/testing/selftests/openat2/helpers.h
+ create mode 100644 tools/testing/selftests/openat2/linkmode_test.c
+ create mode 100644 tools/testing/selftests/openat2/rename_attack_test.c
+ create mode 100644 tools/testing/selftests/openat2/resolve_test.c
+
 -- 
-2.17.1
+2.22.0
 
