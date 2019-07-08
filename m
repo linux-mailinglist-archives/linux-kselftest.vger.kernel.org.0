@@ -2,172 +2,109 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 78A4B627F8
-	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Jul 2019 20:08:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 142C262807
+	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Jul 2019 20:10:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731086AbfGHSIk (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 8 Jul 2019 14:08:40 -0400
-Received: from mail-pf1-f194.google.com ([209.85.210.194]:34011 "EHLO
-        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727576AbfGHSIk (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 8 Jul 2019 14:08:40 -0400
-Received: by mail-pf1-f194.google.com with SMTP id b13so3377158pfo.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 08 Jul 2019 11:08:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=pl4l3gaXCZ0Civm5i1pNfvFYe/9qjH5f6pxejgr6AT8=;
-        b=SmOjZWgQtja4PiBSvkc/DsaRuuY8KuEdsMMIKFu//v+ppa1NV5GwqJ4JU08u4uuqXU
-         KBGOdoVwwU+z3nPB5Yc7Nj2ei2N1Y2sszCQi7aydqX+v1bs0R5WVY9VfrLuAxD0X22yO
-         et4/wVXqTEuA8XKb8I+GG2Cy0aB5wgbYiiI9zkmmG0P1bXmqCbs0GEYAywdf8m69uDNv
-         i3LNyALK0qO5EHrEqLLK7h1Y4PRr0CfVpj56uFuOU19A9ib63eiTFseAJoBv3geF+XdI
-         Ex1jzjCOgerKv5XAy3Zhbk2qyoHk/ecWgRcxMQ7auZjG3EZDzZIqKZ+9SL7kyLXtMMIf
-         MRgA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=pl4l3gaXCZ0Civm5i1pNfvFYe/9qjH5f6pxejgr6AT8=;
-        b=DLGEkqPOoNPGzuSKoEN1eOaCuQ3u/PaqOH9WtNckXwStw9h+JyYTvLLPgYGXBHW1WH
-         VE1ZrzrCmV4dx8iHwQ2WoH8jT2Vw+VwIxe4aQTYp11n/F+wAVqwt5pg18xzEu7vDaO0s
-         2bqmu/JVY0kmEu+BBJxD6BdRp+2MWpgOuVjNGeoyPSANzsXKQCa6VitEXlyK2PSh6yK0
-         Z0TY6zmlOLY5za7E7SWwBQVLwEwGCF6kAXUEJ3mYAW+CXN1wpB4AiomD/6Gkq+SiPX25
-         Yfc4xJdTU2NsIUPel3Axr3hEGYQtxm5OfTHvjdCLE1CeY2s65dCveM82IAnaPC3RTPWJ
-         iFVw==
-X-Gm-Message-State: APjAAAVzxPgcIxOgYgGsMLsPAyTtAsfpAkuXLCH8nsv4YDIxsVBXZwaZ
-        hW5KFRGXqOlqPcw6vmnw2bpfaPipEGiMII4yx5nwzQ==
-X-Google-Smtp-Source: APXvYqwoLoh11AGLeVf5uSZhLWgN1V0Lf0IPFYJElvqds2Mjg+FKGEtSZZdm1FCZKhiAeE2kYC6jZBxFraVmnG074HI=
-X-Received: by 2002:a63:b919:: with SMTP id z25mr25337810pge.201.1562609318390;
- Mon, 08 Jul 2019 11:08:38 -0700 (PDT)
-MIME-Version: 1.0
-References: <20190704003615.204860-1-brendanhiggins@google.com>
- <20190704003615.204860-2-brendanhiggins@google.com> <20190705201505.GA19023@42.do-not-panic.com>
-In-Reply-To: <20190705201505.GA19023@42.do-not-panic.com>
-From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Mon, 8 Jul 2019 11:08:27 -0700
-Message-ID: <CAFd5g45cF9rYc8YupnCgd=7xz_yW+_TMp_L+cSFUBW7d9njnVQ@mail.gmail.com>
-Subject: Re: [PATCH v6 01/18] kunit: test: add KUnit test runner core
-To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     Frank Rowand <frowand.list@gmail.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Kees Cook <keescook@google.com>,
-        Kieran Bingham <kieran.bingham@ideasonboard.com>,
+        id S2391332AbfGHSKc (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 8 Jul 2019 14:10:32 -0400
+Received: from mail.kernel.org ([198.145.29.99]:60554 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2391014AbfGHSKc (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 8 Jul 2019 14:10:32 -0400
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net [24.9.64.241])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 3FDEB21852;
+        Mon,  8 Jul 2019 18:10:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1562609430;
+        bh=j+rSbs+kGaqx8COBQc4tpdvoQbep4jlHqdDyLALm1mA=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=mFLm/RZJKV25ZjQjegx8Me/MS6n3tt5zsoZRyGpRp1nSFDPr1wJ7+s332MS8A8wV6
+         uOcBaKDmaW0WMydmDdcZ55c1EGWgqF8l82/ZeGaZoSgjuFTbg4oFvz/mZ8JJqddnyi
+         SWCtQJfoNRWl0a3bj5YNnAJnBRnmgzJ0enxE23v4=
+Subject: Re: [PATCH for 5.2] rseq/selftests: Fix Thumb mode build failure on
+ arm32
+To:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Will Deacon <will.deacon@arm.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        stable <stable@vger.kernel.org>
+Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
         Peter Zijlstra <peterz@infradead.org>,
-        Rob Herring <robh@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
-        shuah <shuah@kernel.org>, "Theodore Ts'o" <tytso@mit.edu>,
-        Masahiro Yamada <yamada.masahiro@socionext.com>,
-        devicetree <devicetree@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        kunit-dev@googlegroups.com,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        linux-fsdevel@vger.kernel.org,
-        linux-kbuild <linux-kbuild@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        linux-nvdimm <linux-nvdimm@lists.01.org>,
-        linux-um@lists.infradead.org,
-        Sasha Levin <Alexander.Levin@microsoft.com>,
-        "Bird, Timothy" <Tim.Bird@sony.com>,
-        Amir Goldstein <amir73il@gmail.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Daniel Vetter <daniel@ffwll.ch>, Jeff Dike <jdike@addtoit.com>,
-        Joel Stanley <joel@jms.id.au>,
-        Julia Lawall <julia.lawall@lip6.fr>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Knut Omang <knut.omang@oracle.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Petr Mladek <pmladek@suse.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Richard Weinberger <richard@nod.at>,
-        David Rientjes <rientjes@google.com>,
-        Steven Rostedt <rostedt@goodmis.org>, wfg@linux.intel.com
-Content-Type: text/plain; charset="UTF-8"
+        Thomas Gleixner <tglx@linutronix.de>,
+        Joel Fernandes <joelaf@google.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Dave Watson <davejwatson@fb.com>,
+        Andi Kleen <andi@firstfloor.org>,
+        linux-kselftest <linux-kselftest@vger.kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>, Chris Lameter <cl@linux.com>,
+        Russell King <linux@arm.linux.org.uk>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        "Paul E . McKenney" <paulmck@linux.vnet.ibm.com>,
+        Paul Turner <pjt@google.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Josh Triplett <josh@joshtriplett.org>,
+        rostedt <rostedt@goodmis.org>, Ben Maurer <bmaurer@fb.com>,
+        linux-api <linux-api@vger.kernel.org>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        carlos <carlos@redhat.com>, Florian Weimer <fweimer@redhat.com>,
+        shuah <shuah@kernel.org>
+References: <20190630135613.19897-1-mathieu.desnoyers@efficios.com>
+ <1154710388.12906.1562608719838.JavaMail.zimbra@efficios.com>
+From:   shuah <shuah@kernel.org>
+Message-ID: <bd970db6-e230-007c-8645-88866e6b3faf@kernel.org>
+Date:   Mon, 8 Jul 2019 12:10:18 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
+MIME-Version: 1.0
+In-Reply-To: <1154710388.12906.1562608719838.JavaMail.zimbra@efficios.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Jul 5, 2019 at 1:15 PM Luis Chamberlain <mcgrof@kernel.org> wrote:
->
-> On Wed, Jul 03, 2019 at 05:35:58PM -0700, Brendan Higgins wrote:
-> > Add core facilities for defining unit tests; this provides a common way
-> > to define test cases, functions that execute code which is under test
-> > and determine whether the code under test behaves as expected; this also
-> > provides a way to group together related test cases in test suites (here
-> > we call them test_modules).
-> >
-> > Just define test cases and how to execute them for now; setting
-> > expectations on code will be defined later.
-> >
-> > Signed-off-by: Brendan Higgins <brendanhiggins@google.com>
-> > Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > Reviewed-by: Logan Gunthorpe <logang@deltatee.com>
->
-> Reviewed-by: Luis Chamberlain <mcgrof@kernel.org>
->
-> But a nitpick below, I think that can be fixed later with a follow up
-> patch.
->
-> > +/**
-> > + * struct kunit - represents a running instance of a test.
-> > + * @priv: for user to store arbitrary data. Commonly used to pass data created
-> > + * in the init function (see &struct kunit_suite).
-> > + *
-> > + * Used to store information about the current context under which the test is
-> > + * running. Most of this data is private and should only be accessed indirectly
-> > + * via public functions; the one exception is @priv which can be used by the
-> > + * test writer to store arbitrary data.
-> > + *
-> > + * A brief note on locking:
-> > + *
-> > + * First off, we need to lock because in certain cases a user may want to use an
-> > + * expectation in a thread other than the thread that the test case is running
-> > + * in.
->
-> This as a prefix to the struct without a lock seems odd. It would be
-> clearer I think if you'd explain here what locking mechanism we decided
-> to use and why it suffices today.
+On 7/8/19 11:58 AM, Mathieu Desnoyers wrote:
+> ----- On Jun 30, 2019, at 9:56 AM, Mathieu Desnoyers mathieu.desnoyers@efficios.com wrote:
+> 
+>> Using ".arm .inst" for the arm signature introduces build issues for
+>> programs compiled in Thumb mode because the assembler stays in the
+>> arm mode for the rest of the inline assembly. Revert to using a ".word"
+>> to express the signature as data instead.
+>>
+>> The choice of signature is a valid trap instruction on arm32 little
+>> endian, where both code and data are little endian.
+>>
+>> ARMv6+ big endian (BE8) generates mixed endianness code vs data:
+>> little-endian code and big-endian data. The data value of the signature
+>> needs to have its byte order reversed to generate the trap instruction.
+>>
+>> Prior to ARMv6, -mbig-endian generates big-endian code and data
+>> (which match), so the endianness of the data representation of the
+>> signature should not be reversed. However, the choice between BE32
+>> and BE8 is done by the linker, so we cannot know whether code and
+>> data endianness will be mixed before the linker is invoked. So rather
+>> than try to play tricks with the linker, the rseq signature is simply
+>> data (not a trap instruction) prior to ARMv6 on big endian. This is
+>> why the signature is expressed as data (.word) rather than as
+>> instruction (.inst) in assembler.
+>>
+>> Because a ".word" is used to emit the signature, it will be interpreted
+>> as a literal pool by a disassembler, not as an actual instruction.
+>> Considering that the signature is not meant to be executed except in
+>> scenarios where the program execution is completely bogus, this should
+>> not be an issue.
+> 
+> Now that 5.2 is out before this patch has been merged, can we please
+> integrate this patch through the kernel selftests or ARM tree so it
+> can be merged into the stable 5.2 branch ?
+> 
 
-Whoops, sorry this should have been in the next patch. Will fix.
+I will apply it to selftests and send it for 5.3-rc1 and mark it for
+stable.
 
-> > +/**
-> > + * suite_test() - used to register a &struct kunit_suite with KUnit.
->
-> You mean kunit_test_suite()?
-
-Yep, sorry about that. Will fix.
-
-> > + * @suite: a statically allocated &struct kunit_suite.
-> > + *
-> > + * Registers @suite with the test framework. See &struct kunit_suite for more
-> > + * information.
-> > + *
-> > + * NOTE: Currently KUnit tests are all run as late_initcalls; this means that
-> > + * they cannot test anything where tests must run at a different init phase. One
-> > + * significant restriction resulting from this is that KUnit cannot reliably
-> > + * test anything that is initialize in the late_init phase.
->                             initialize prior to the late init phase.
->
->
-> That is, this is useless to test things running early.
-
-Yeah, I can add that phrasing in.
-
-> > + *
-> > + * TODO(brendanhiggins@google.com): Don't run all KUnit tests as late_initcalls.
-> > + * I have some future work planned to dispatch all KUnit tests from the same
-> > + * place, and at the very least to do so after everything else is definitely
-> > + * initialized.
->
-> TODOs are odd to be adding to documentation, this is just not common
-> place practice. The NOTE should suffice for you.
-
-Because it is a kernel doc? Would you usually make a separate
-non-kernel doc comment for a TODO? I guess that makes sense.
-
-Thanks!
+thanks,
+-- Shuah
