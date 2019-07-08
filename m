@@ -2,252 +2,172 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EB28627CF
-	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Jul 2019 19:58:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78A4B627F8
+	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Jul 2019 20:08:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388388AbfGHR6n (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 8 Jul 2019 13:58:43 -0400
-Received: from mail.efficios.com ([167.114.142.138]:44812 "EHLO
-        mail.efficios.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729052AbfGHR6n (ORCPT
+        id S1731086AbfGHSIk (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 8 Jul 2019 14:08:40 -0400
+Received: from mail-pf1-f194.google.com ([209.85.210.194]:34011 "EHLO
+        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727576AbfGHSIk (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 8 Jul 2019 13:58:43 -0400
-Received: from localhost (ip6-localhost [IPv6:::1])
-        by mail.efficios.com (Postfix) with ESMTP id E2F3E1E4982;
-        Mon,  8 Jul 2019 13:58:40 -0400 (EDT)
-Received: from mail.efficios.com ([IPv6:::1])
-        by localhost (mail02.efficios.com [IPv6:::1]) (amavisd-new, port 10032)
-        with ESMTP id AxF7lMw-k6VW; Mon,  8 Jul 2019 13:58:40 -0400 (EDT)
-Received: from localhost (ip6-localhost [IPv6:::1])
-        by mail.efficios.com (Postfix) with ESMTP id 03F681E497C;
-        Mon,  8 Jul 2019 13:58:40 -0400 (EDT)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com 03F681E497C
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
-        s=default; t=1562608720;
-        bh=eVbj5EgC4aodGosLMrOlAGQcE4mS2LxA0FIfp4QhI9o=;
-        h=Date:From:To:Message-ID:MIME-Version;
-        b=mgfYD5guP/YAzMM6CSsMKGM5v01AIHcSxIK9HBu0wWlJGINzyhHuchUG/MCLlw0z6
-         fQ+wHE7hAV79SXIevXGFuqjP100XpQPkl9bPECj8+HDPieKOwBieStWsQu17sFxTTU
-         OEO4EUq/pKAqd4pkx6i3s6pVB5gbq912F4aCSId1LGC1cPUEO7OvKeJqc9dAHdfpfH
-         hnmMZtk4ytawyFhM3Ch1+xtww0q1PK1K8Tsi0BYKuSA5efayxDQBYLM9hePvkEQdBT
-         dWjzWlolafoSm63gcHMTbUrlLPS8gCoGHMiFFifOIFtGIhAa2u5yezCyemLljlg/Ha
-         m8ERbZoTorfrQ==
-X-Virus-Scanned: amavisd-new at efficios.com
-Received: from mail.efficios.com ([IPv6:::1])
-        by localhost (mail02.efficios.com [IPv6:::1]) (amavisd-new, port 10026)
-        with ESMTP id w5nRf0b1Ye3n; Mon,  8 Jul 2019 13:58:39 -0400 (EDT)
-Received: from mail02.efficios.com (mail02.efficios.com [167.114.142.138])
-        by mail.efficios.com (Postfix) with ESMTP id D2E651E4968;
-        Mon,  8 Jul 2019 13:58:39 -0400 (EDT)
-Date:   Mon, 8 Jul 2019 13:58:39 -0400 (EDT)
-From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-To:     shuah <shuah@kernel.org>, Will Deacon <will.deacon@arm.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        stable <stable@vger.kernel.org>
-Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Joel Fernandes <joelaf@google.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Dave Watson <davejwatson@fb.com>,
-        Andi Kleen <andi@firstfloor.org>,
-        linux-kselftest <linux-kselftest@vger.kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>, Chris Lameter <cl@linux.com>,
-        Russell King <linux@arm.linux.org.uk>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        "Paul E . McKenney" <paulmck@linux.vnet.ibm.com>,
-        Paul Turner <pjt@google.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Josh Triplett <josh@joshtriplett.org>,
-        rostedt <rostedt@goodmis.org>, Ben Maurer <bmaurer@fb.com>,
-        linux-api <linux-api@vger.kernel.org>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        carlos <carlos@redhat.com>, Florian Weimer <fweimer@redhat.com>
-Message-ID: <1154710388.12906.1562608719838.JavaMail.zimbra@efficios.com>
-In-Reply-To: <20190630135613.19897-1-mathieu.desnoyers@efficios.com>
-References: <20190630135613.19897-1-mathieu.desnoyers@efficios.com>
-Subject: Re: [PATCH for 5.2] rseq/selftests: Fix Thumb mode build failure on
- arm32
+        Mon, 8 Jul 2019 14:08:40 -0400
+Received: by mail-pf1-f194.google.com with SMTP id b13so3377158pfo.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 08 Jul 2019 11:08:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=pl4l3gaXCZ0Civm5i1pNfvFYe/9qjH5f6pxejgr6AT8=;
+        b=SmOjZWgQtja4PiBSvkc/DsaRuuY8KuEdsMMIKFu//v+ppa1NV5GwqJ4JU08u4uuqXU
+         KBGOdoVwwU+z3nPB5Yc7Nj2ei2N1Y2sszCQi7aydqX+v1bs0R5WVY9VfrLuAxD0X22yO
+         et4/wVXqTEuA8XKb8I+GG2Cy0aB5wgbYiiI9zkmmG0P1bXmqCbs0GEYAywdf8m69uDNv
+         i3LNyALK0qO5EHrEqLLK7h1Y4PRr0CfVpj56uFuOU19A9ib63eiTFseAJoBv3geF+XdI
+         Ex1jzjCOgerKv5XAy3Zhbk2qyoHk/ecWgRcxMQ7auZjG3EZDzZIqKZ+9SL7kyLXtMMIf
+         MRgA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=pl4l3gaXCZ0Civm5i1pNfvFYe/9qjH5f6pxejgr6AT8=;
+        b=DLGEkqPOoNPGzuSKoEN1eOaCuQ3u/PaqOH9WtNckXwStw9h+JyYTvLLPgYGXBHW1WH
+         VE1ZrzrCmV4dx8iHwQ2WoH8jT2Vw+VwIxe4aQTYp11n/F+wAVqwt5pg18xzEu7vDaO0s
+         2bqmu/JVY0kmEu+BBJxD6BdRp+2MWpgOuVjNGeoyPSANzsXKQCa6VitEXlyK2PSh6yK0
+         Z0TY6zmlOLY5za7E7SWwBQVLwEwGCF6kAXUEJ3mYAW+CXN1wpB4AiomD/6Gkq+SiPX25
+         Yfc4xJdTU2NsIUPel3Axr3hEGYQtxm5OfTHvjdCLE1CeY2s65dCveM82IAnaPC3RTPWJ
+         iFVw==
+X-Gm-Message-State: APjAAAVzxPgcIxOgYgGsMLsPAyTtAsfpAkuXLCH8nsv4YDIxsVBXZwaZ
+        hW5KFRGXqOlqPcw6vmnw2bpfaPipEGiMII4yx5nwzQ==
+X-Google-Smtp-Source: APXvYqwoLoh11AGLeVf5uSZhLWgN1V0Lf0IPFYJElvqds2Mjg+FKGEtSZZdm1FCZKhiAeE2kYC6jZBxFraVmnG074HI=
+X-Received: by 2002:a63:b919:: with SMTP id z25mr25337810pge.201.1562609318390;
+ Mon, 08 Jul 2019 11:08:38 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [167.114.142.138]
-X-Mailer: Zimbra 8.8.12_GA_3807 (ZimbraWebClient - FF67 (Linux)/8.8.12_GA_3809)
-Thread-Topic: rseq/selftests: Fix Thumb mode build failure on arm32
-Thread-Index: gfeEiAR/gdsgXdx91k7boM6lmAv4lw==
+References: <20190704003615.204860-1-brendanhiggins@google.com>
+ <20190704003615.204860-2-brendanhiggins@google.com> <20190705201505.GA19023@42.do-not-panic.com>
+In-Reply-To: <20190705201505.GA19023@42.do-not-panic.com>
+From:   Brendan Higgins <brendanhiggins@google.com>
+Date:   Mon, 8 Jul 2019 11:08:27 -0700
+Message-ID: <CAFd5g45cF9rYc8YupnCgd=7xz_yW+_TMp_L+cSFUBW7d9njnVQ@mail.gmail.com>
+Subject: Re: [PATCH v6 01/18] kunit: test: add KUnit test runner core
+To:     Luis Chamberlain <mcgrof@kernel.org>
+Cc:     Frank Rowand <frowand.list@gmail.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Kees Cook <keescook@google.com>,
+        Kieran Bingham <kieran.bingham@ideasonboard.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Rob Herring <robh@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
+        shuah <shuah@kernel.org>, "Theodore Ts'o" <tytso@mit.edu>,
+        Masahiro Yamada <yamada.masahiro@socionext.com>,
+        devicetree <devicetree@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        kunit-dev@googlegroups.com,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        linux-fsdevel@vger.kernel.org,
+        linux-kbuild <linux-kbuild@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        linux-nvdimm <linux-nvdimm@lists.01.org>,
+        linux-um@lists.infradead.org,
+        Sasha Levin <Alexander.Levin@microsoft.com>,
+        "Bird, Timothy" <Tim.Bird@sony.com>,
+        Amir Goldstein <amir73il@gmail.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Daniel Vetter <daniel@ffwll.ch>, Jeff Dike <jdike@addtoit.com>,
+        Joel Stanley <joel@jms.id.au>,
+        Julia Lawall <julia.lawall@lip6.fr>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Knut Omang <knut.omang@oracle.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Petr Mladek <pmladek@suse.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Richard Weinberger <richard@nod.at>,
+        David Rientjes <rientjes@google.com>,
+        Steven Rostedt <rostedt@goodmis.org>, wfg@linux.intel.com
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
------ On Jun 30, 2019, at 9:56 AM, Mathieu Desnoyers mathieu.desnoyers@efficios.com wrote:
+On Fri, Jul 5, 2019 at 1:15 PM Luis Chamberlain <mcgrof@kernel.org> wrote:
+>
+> On Wed, Jul 03, 2019 at 05:35:58PM -0700, Brendan Higgins wrote:
+> > Add core facilities for defining unit tests; this provides a common way
+> > to define test cases, functions that execute code which is under test
+> > and determine whether the code under test behaves as expected; this also
+> > provides a way to group together related test cases in test suites (here
+> > we call them test_modules).
+> >
+> > Just define test cases and how to execute them for now; setting
+> > expectations on code will be defined later.
+> >
+> > Signed-off-by: Brendan Higgins <brendanhiggins@google.com>
+> > Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > Reviewed-by: Logan Gunthorpe <logang@deltatee.com>
+>
+> Reviewed-by: Luis Chamberlain <mcgrof@kernel.org>
+>
+> But a nitpick below, I think that can be fixed later with a follow up
+> patch.
+>
+> > +/**
+> > + * struct kunit - represents a running instance of a test.
+> > + * @priv: for user to store arbitrary data. Commonly used to pass data created
+> > + * in the init function (see &struct kunit_suite).
+> > + *
+> > + * Used to store information about the current context under which the test is
+> > + * running. Most of this data is private and should only be accessed indirectly
+> > + * via public functions; the one exception is @priv which can be used by the
+> > + * test writer to store arbitrary data.
+> > + *
+> > + * A brief note on locking:
+> > + *
+> > + * First off, we need to lock because in certain cases a user may want to use an
+> > + * expectation in a thread other than the thread that the test case is running
+> > + * in.
+>
+> This as a prefix to the struct without a lock seems odd. It would be
+> clearer I think if you'd explain here what locking mechanism we decided
+> to use and why it suffices today.
 
-> Using ".arm .inst" for the arm signature introduces build issues for
-> programs compiled in Thumb mode because the assembler stays in the
-> arm mode for the rest of the inline assembly. Revert to using a ".word"
-> to express the signature as data instead.
-> 
-> The choice of signature is a valid trap instruction on arm32 little
-> endian, where both code and data are little endian.
-> 
-> ARMv6+ big endian (BE8) generates mixed endianness code vs data:
-> little-endian code and big-endian data. The data value of the signature
-> needs to have its byte order reversed to generate the trap instruction.
-> 
-> Prior to ARMv6, -mbig-endian generates big-endian code and data
-> (which match), so the endianness of the data representation of the
-> signature should not be reversed. However, the choice between BE32
-> and BE8 is done by the linker, so we cannot know whether code and
-> data endianness will be mixed before the linker is invoked. So rather
-> than try to play tricks with the linker, the rseq signature is simply
-> data (not a trap instruction) prior to ARMv6 on big endian. This is
-> why the signature is expressed as data (.word) rather than as
-> instruction (.inst) in assembler.
-> 
-> Because a ".word" is used to emit the signature, it will be interpreted
-> as a literal pool by a disassembler, not as an actual instruction.
-> Considering that the signature is not meant to be executed except in
-> scenarios where the program execution is completely bogus, this should
-> not be an issue.
+Whoops, sorry this should have been in the next patch. Will fix.
 
-Now that 5.2 is out before this patch has been merged, can we please
-integrate this patch through the kernel selftests or ARM tree so it
-can be merged into the stable 5.2 branch ?
+> > +/**
+> > + * suite_test() - used to register a &struct kunit_suite with KUnit.
+>
+> You mean kunit_test_suite()?
 
-Thanks
+Yep, sorry about that. Will fix.
 
-Mathieu
+> > + * @suite: a statically allocated &struct kunit_suite.
+> > + *
+> > + * Registers @suite with the test framework. See &struct kunit_suite for more
+> > + * information.
+> > + *
+> > + * NOTE: Currently KUnit tests are all run as late_initcalls; this means that
+> > + * they cannot test anything where tests must run at a different init phase. One
+> > + * significant restriction resulting from this is that KUnit cannot reliably
+> > + * test anything that is initialize in the late_init phase.
+>                             initialize prior to the late init phase.
+>
+>
+> That is, this is useless to test things running early.
 
+Yeah, I can add that phrasing in.
 
-> 
-> Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-> Acked-by: Will Deacon <will.deacon@arm.com>
-> CC: Peter Zijlstra <peterz@infradead.org>
-> CC: Thomas Gleixner <tglx@linutronix.de>
-> CC: Joel Fernandes <joelaf@google.com>
-> CC: Catalin Marinas <catalin.marinas@arm.com>
-> CC: Dave Watson <davejwatson@fb.com>
-> CC: Will Deacon <will.deacon@arm.com>
-> CC: Shuah Khan <shuah@kernel.org>
-> CC: Andi Kleen <andi@firstfloor.org>
-> CC: linux-kselftest@vger.kernel.org
-> CC: "H . Peter Anvin" <hpa@zytor.com>
-> CC: Chris Lameter <cl@linux.com>
-> CC: Russell King <linux@arm.linux.org.uk>
-> CC: Michael Kerrisk <mtk.manpages@gmail.com>
-> CC: "Paul E . McKenney" <paulmck@linux.vnet.ibm.com>
-> CC: Paul Turner <pjt@google.com>
-> CC: Boqun Feng <boqun.feng@gmail.com>
-> CC: Josh Triplett <josh@joshtriplett.org>
-> CC: Steven Rostedt <rostedt@goodmis.org>
-> CC: Ben Maurer <bmaurer@fb.com>
-> CC: linux-api@vger.kernel.org
-> CC: Andy Lutomirski <luto@amacapital.net>
-> CC: Andrew Morton <akpm@linux-foundation.org>
-> CC: Linus Torvalds <torvalds@linux-foundation.org>
-> CC: Carlos O'Donell <carlos@redhat.com>
-> CC: Florian Weimer <fweimer@redhat.com>
-> ---
-> tools/testing/selftests/rseq/rseq-arm.h | 61 ++++++++++++++++++---------------
-> 1 file changed, 33 insertions(+), 28 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/rseq/rseq-arm.h
-> b/tools/testing/selftests/rseq/rseq-arm.h
-> index 84f28f147fb6..5943c816c07c 100644
-> --- a/tools/testing/selftests/rseq/rseq-arm.h
-> +++ b/tools/testing/selftests/rseq/rseq-arm.h
-> @@ -6,6 +6,8 @@
->  */
-> 
-> /*
-> + * - ARM little endian
-> + *
->  * RSEQ_SIG uses the udf A32 instruction with an uncommon immediate operand
->  * value 0x5de3. This traps if user-space reaches this instruction by mistake,
->  * and the uncommon operand ensures the kernel does not move the instruction
-> @@ -22,36 +24,40 @@
->  * def3        udf    #243      ; 0xf3
->  * e7f5        b.n    <7f5>
->  *
-> - * pre-ARMv6 big endian code:
-> - * e7f5        b.n    <7f5>
-> - * def3        udf    #243      ; 0xf3
-> + * - ARMv6+ big endian (BE8):
->  *
->  * ARMv6+ -mbig-endian generates mixed endianness code vs data: little-endian
-> - * code and big-endian data. Ensure the RSEQ_SIG data signature matches code
-> - * endianness. Prior to ARMv6, -mbig-endian generates big-endian code and data
-> - * (which match), so there is no need to reverse the endianness of the data
-> - * representation of the signature. However, the choice between BE32 and BE8
-> - * is done by the linker, so we cannot know whether code and data endianness
-> - * will be mixed before the linker is invoked.
-> + * code and big-endian data. The data value of the signature needs to have its
-> + * byte order reversed to generate the trap instruction:
-> + *
-> + * Data: 0xf3def5e7
-> + *
-> + * Translates to this A32 instruction pattern:
-> + *
-> + * e7f5def3    udf    #24035    ; 0x5de3
-> + *
-> + * Translates to this T16 instruction pattern:
-> + *
-> + * def3        udf    #243      ; 0xf3
-> + * e7f5        b.n    <7f5>
-> + *
-> + * - Prior to ARMv6 big endian (BE32):
-> + *
-> + * Prior to ARMv6, -mbig-endian generates big-endian code and data
-> + * (which match), so the endianness of the data representation of the
-> + * signature should not be reversed. However, the choice between BE32
-> + * and BE8 is done by the linker, so we cannot know whether code and
-> + * data endianness will be mixed before the linker is invoked. So rather
-> + * than try to play tricks with the linker, the rseq signature is simply
-> + * data (not a trap instruction) prior to ARMv6 on big endian. This is
-> + * why the signature is expressed as data (.word) rather than as
-> + * instruction (.inst) in assembler.
->  */
-> 
-> -#define RSEQ_SIG_CODE	0xe7f5def3
-> -
-> -#ifndef __ASSEMBLER__
-> -
-> -#define RSEQ_SIG_DATA							\
-> -	({								\
-> -		int sig;						\
-> -		asm volatile ("b 2f\n\t"				\
-> -			      "1: .inst " __rseq_str(RSEQ_SIG_CODE) "\n\t" \
-> -			      "2:\n\t"					\
-> -			      "ldr %[sig], 1b\n\t"			\
-> -			      : [sig] "=r" (sig));			\
-> -		sig;							\
-> -	})
-> -
-> -#define RSEQ_SIG	RSEQ_SIG_DATA
-> -
-> +#ifdef __ARMEB__
-> +#define RSEQ_SIG    0xf3def5e7      /* udf    #24035    ; 0x5de3 (ARMv6+) */
-> +#else
-> +#define RSEQ_SIG    0xe7f5def3      /* udf    #24035    ; 0x5de3 */
-> #endif
-> 
-> #define rseq_smp_mb()	__asm__ __volatile__ ("dmb" ::: "memory", "cc")
-> @@ -125,8 +131,7 @@ do {									\
-> 		__rseq_str(table_label) ":\n\t"				\
-> 		".word " __rseq_str(version) ", " __rseq_str(flags) "\n\t" \
-> 		".word " __rseq_str(start_ip) ", 0x0, " __rseq_str(post_commit_offset) ", 0x0, "
-> 		__rseq_str(abort_ip) ", 0x0\n\t" \
-> -		".arm\n\t"						\
-> -		".inst " __rseq_str(RSEQ_SIG_CODE) "\n\t"		\
-> +		".word " __rseq_str(RSEQ_SIG) "\n\t"			\
-> 		__rseq_str(label) ":\n\t"				\
-> 		teardown						\
-> 		"b %l[" __rseq_str(abort_label) "]\n\t"
-> --
-> 2.11.0
+> > + *
+> > + * TODO(brendanhiggins@google.com): Don't run all KUnit tests as late_initcalls.
+> > + * I have some future work planned to dispatch all KUnit tests from the same
+> > + * place, and at the very least to do so after everything else is definitely
+> > + * initialized.
+>
+> TODOs are odd to be adding to documentation, this is just not common
+> place practice. The NOTE should suffice for you.
 
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+Because it is a kernel doc? Would you usually make a separate
+non-kernel doc comment for a TODO? I guess that makes sense.
+
+Thanks!
