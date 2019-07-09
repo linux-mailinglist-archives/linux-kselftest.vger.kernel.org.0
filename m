@@ -2,118 +2,157 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6497862CB5
-	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Jul 2019 01:35:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF9D863071
+	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Jul 2019 08:32:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725886AbfGHXfB (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 8 Jul 2019 19:35:01 -0400
-Received: from mail-wr1-f68.google.com ([209.85.221.68]:36574 "EHLO
-        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725937AbfGHXe6 (ORCPT
+        id S1726058AbfGIGcm (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 9 Jul 2019 02:32:42 -0400
+Received: from mail-yb1-f202.google.com ([209.85.219.202]:39635 "EHLO
+        mail-yb1-f202.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726046AbfGIGcm (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 8 Jul 2019 19:34:58 -0400
-Received: by mail-wr1-f68.google.com with SMTP id n4so18956741wrs.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 08 Jul 2019 16:34:57 -0700 (PDT)
+        Tue, 9 Jul 2019 02:32:42 -0400
+Received: by mail-yb1-f202.google.com with SMTP id 199so11420406ybe.6
+        for <linux-kselftest@vger.kernel.org>; Mon, 08 Jul 2019 23:32:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=+0bgA4UqbyynY1WKuo34XLnfT2RL8oF6dGSsO++vmwI=;
-        b=Vvu+7XyZ+bf18JzhxWs9WUla5B97kN6JNUGK09wQnbC1To+ikzJLjWemzYQ4bSdXem
-         Lb4Ujrcwm/h5eSGI7UR+HmJu9labaWTTr2uGAMIQle4ZAoZT+/Rr04O/5fXMa+UDK/dI
-         PiWmvqDOuBeRwnaNj0eFrE7zYpPFf5ZW5v1/snESkLUrZhzUeLNH4C7U1TAT94jY3ioz
-         eEbjqFsIRgjTDidMp1LOdKzZIEzJRV4P4q40BE/P564YjPoiVk+St3f2/qGgJ0XbufeM
-         E4LGboUMF+nD44IlGbVNDieKQG3KCLdUF/egpt+dZ1xlDy4X/3SK1jXeVQiIZHm6dFjh
-         zhQA==
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=ccEO1tkkeH8HT1/mhIGVUKFl/9lAslI495fANVrqi9k=;
+        b=e2JKyD27N2epGYfKgaRHgJrtns9MYtHULutiWECP0zFRJv3jgMPgvU/mgzt7m2CruN
+         qyDh4tO7vEMXIwz5uC90ZiqlsOp6jxtaX8TLEstg/mB6t2n5nc3E1nANny//4ZuViIuT
+         Q3ccwNzcmvwEgQPy45ljMduIsRcMZ+yyArZsE7tNVMmyeTDybeKjOVOQs49sE+w8xRgU
+         l6IbFINnO1SRMJvZ1e6x0/QcQs5GYjWItk2Tf6QcJnNv92P+Yml808NgCvyRAieR+7tt
+         vVHGQ59GH0W9PqLAZQXcyb1ZKKpl+uFrILyK+81ZrKs3HHFsWjaaDhu+6fgoH9G5s9wC
+         jETQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=+0bgA4UqbyynY1WKuo34XLnfT2RL8oF6dGSsO++vmwI=;
-        b=UTQSV7+Y8m9sCVRs7Qk322tcoPFdGBLe/LL8gdlN+oiuJPxGOWn1Ild97LMP8bMSSQ
-         OoWKSPlO0/MBkbulm9kZgnSxfs75eKePLAE7tRr+Jk7QdMb1U8tqsiRGh9L/+ZRFYL0S
-         NnHjzlajmjZqEs8kZgFxAF7piq5btNPtvGknHISQtU2dvh7SVvg7XQMt0VKuN7mrStC8
-         /TW/T6d6l1y67gjVt9hof3JlWSTB0P7qjqzgYmQcdeyevS8LYmKtIXXE6st8N+SUFWsP
-         TOWHsfGIEmvUv4yn+Vqj+Sp6fc0h9qgX5UiIZ2/fgcWfPVXfEDghs8D4+pnS8qO/k1rt
-         IaQg==
-X-Gm-Message-State: APjAAAW/YdwPkap5aoemCC5ScLByq8zEXKCHJKmsRuvVjgawN+bzgTer
-        ypWalzh9EZF+I+S7qVUI2dLaRKODCom+1KgyKMvo
-X-Google-Smtp-Source: APXvYqy2agX+h3NF02X+WujT1yk9yb+IABwJhy8IpnbR3/useLGvEwjfJj5ObeDsKZRewf4wva8AmF6fHX7xEyn/0ZQ=
-X-Received: by 2002:a5d:4ec1:: with SMTP id s1mr19532947wrv.19.1562628896307;
- Mon, 08 Jul 2019 16:34:56 -0700 (PDT)
-MIME-Version: 1.0
-References: <20190704003615.204860-1-brendanhiggins@google.com>
- <20190704003615.204860-19-brendanhiggins@google.com> <20190705204810.GE19023@42.do-not-panic.com>
- <CAFd5g44j7ECQorYLnDQadAaj+yBki98kFjmjejn+3W4eHtqGDA@mail.gmail.com> <CAAXuY3q1==RvAiw+gw5kfFJmjdR9JEUnnxou4Sv0POd88aD41w@mail.gmail.com>
-In-Reply-To: <CAAXuY3q1==RvAiw+gw5kfFJmjdR9JEUnnxou4Sv0POd88aD41w@mail.gmail.com>
-From:   Iurii Zaikin <yzaikin@google.com>
-Date:   Mon, 8 Jul 2019 16:34:20 -0700
-Message-ID: <CAAXuY3ov7s28BQ0VxzkfAHR6NZiBq-YfnJ_510VN22DMhEyCBg@mail.gmail.com>
-Subject: Re: [PATCH v6 18/18] MAINTAINERS: add proc sysctl KUnit test to PROC
- SYSCTL section
-To:     Brendan Higgins <brendanhiggins@google.com>
-Cc:     Luis Chamberlain <mcgrof@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Kees Cook <keescook@google.com>,
-        Kieran Bingham <kieran.bingham@ideasonboard.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Rob Herring <robh@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
-        shuah <shuah@kernel.org>, "Theodore Ts'o" <tytso@mit.edu>,
-        Masahiro Yamada <yamada.masahiro@socionext.com>,
-        devicetree <devicetree@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        kunit-dev@googlegroups.com,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        linux-fsdevel@vger.kernel.org,
-        linux-kbuild <linux-kbuild@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        linux-nvdimm <linux-nvdimm@lists.01.org>,
-        linux-um@lists.infradead.org,
-        Sasha Levin <Alexander.Levin@microsoft.com>,
-        "Bird, Timothy" <Tim.Bird@sony.com>,
-        Amir Goldstein <amir73il@gmail.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Daniel Vetter <daniel@ffwll.ch>, Jeff Dike <jdike@addtoit.com>,
-        Joel Stanley <joel@jms.id.au>,
-        Julia Lawall <julia.lawall@lip6.fr>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Knut Omang <knut.omang@oracle.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Petr Mladek <pmladek@suse.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Richard Weinberger <richard@nod.at>,
-        David Rientjes <rientjes@google.com>,
-        Steven Rostedt <rostedt@goodmis.org>, wfg@linux.intel.com
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=ccEO1tkkeH8HT1/mhIGVUKFl/9lAslI495fANVrqi9k=;
+        b=ehPADDKl8qHRWtpqUJk3MhD120exACsV0xyyS0BVuFtcgDIUfdQ8yFJtwZspAD3WKk
+         XBeicO/7T9CD4xNSzk7dZ+hMNOkJ39dTPKaGy/USlMFsOpXtg2GiE3fdGtXrxMLw5Vtk
+         84ykrXBy6wWKo1mwBjudW2S5zMpo6/atRdysAA5plrBVGZy8QYGUysb6i2AXWdMVgm+/
+         in+s/5LQe6rPbAxkUHSCiQu4zW4htMyZQRYeFEFFxKMyRTIdS4t8a8/Wl4PVRFs2Btgu
+         R0z7w9rTT2fnGM19VWfGq4fYn+IiPGJBWfVPAa6ExJDOkwmav78tAvu/QryVAYcLS0u+
+         /ILQ==
+X-Gm-Message-State: APjAAAU274NnUsGsavA0j0PiK3ehZpSGC+kwMACk9E+VyFvuAm7kmVn9
+        3goU+WJqmBXIrDz+IaMI/xIUuwlgDpVXjFXF8F8e9Q==
+X-Google-Smtp-Source: APXvYqxTCUgwXCc9biuo/mRL1pSgsNPvKrcZOBY5oaano9+5jCyWavrpS1UTvqWVKgVXm3lya3N2nYit0+zc7OI5xI8uZg==
+X-Received: by 2002:a81:710a:: with SMTP id m10mr13083743ywc.277.1562653960705;
+ Mon, 08 Jul 2019 23:32:40 -0700 (PDT)
+Date:   Mon,  8 Jul 2019 23:30:05 -0700
+Message-Id: <20190709063023.251446-1-brendanhiggins@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.22.0.410.gd8fdbe21b5-goog
+Subject: [PATCH v7 00/18] kunit: introduce KUnit, the Linux kernel unit
+ testing framework
+From:   Brendan Higgins <brendanhiggins@google.com>
+To:     frowand.list@gmail.com, gregkh@linuxfoundation.org,
+        jpoimboe@redhat.com, keescook@google.com,
+        kieran.bingham@ideasonboard.com, mcgrof@kernel.org,
+        peterz@infradead.org, robh@kernel.org, sboyd@kernel.org,
+        shuah@kernel.org, tytso@mit.edu, yamada.masahiro@socionext.com
+Cc:     devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        kunit-dev@googlegroups.com, linux-doc@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kbuild@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-nvdimm@lists.01.org, linux-um@lists.infradead.org,
+        Alexander.Levin@microsoft.com, Tim.Bird@sony.com,
+        amir73il@gmail.com, dan.carpenter@oracle.com, daniel@ffwll.ch,
+        jdike@addtoit.com, joel@jms.id.au, julia.lawall@lip6.fr,
+        khilman@baylibre.com, knut.omang@oracle.com, logang@deltatee.com,
+        mpe@ellerman.id.au, pmladek@suse.com, rdunlap@infradead.org,
+        richard@nod.at, rientjes@google.com, rostedt@goodmis.org,
+        wfg@linux.intel.com, Brendan Higgins <brendanhiggins@google.com>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Iurii Zaikin <yzaikin@google.com>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-> On Mon, Jul 8, 2019 at 4:16 PM Brendan Higgins <brendanhiggins@google.com> wrote:
->>
->> CC'ing Iurii Zaikin
->>
->> On Fri, Jul 5, 2019 at 1:48 PM Luis Chamberlain <mcgrof@kernel.org> wrote:
->> >
->> > On Wed, Jul 03, 2019 at 05:36:15PM -0700, Brendan Higgins wrote:
->> > > Add entry for the new proc sysctl KUnit test to the PROC SYSCTL section.
->> > >
->> > > Signed-off-by: Brendan Higgins <brendanhiggins@google.com>
->> > > Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
->> > > Reviewed-by: Logan Gunthorpe <logang@deltatee.com>
->> > > Acked-by: Luis Chamberlain <mcgrof@kernel.org>
->> >
->> > Come to think of it, I'd welcome Iurii to be added as a maintainer,
->> > with the hope Iurii would be up to review only the kunit changes. Of
->> > course if Iurii would be up to also help review future proc changes,
->> > even better. 3 pair of eyeballs is better than 2 pairs.
->>
->> What do you think, Iurii?
+## TL;DR
 
-I'm in.
+This is a pretty straightforward follow-up to Luis' comments on PATCH
+v6: There is nothing that changes any functionality or usage.
+
+As for our current status, we only need reviews/acks on the following
+patches:
+
+- [PATCH v7 06/18] kbuild: enable building KUnit
+  - Need a review or ack from Masahiro Yamada or Michal Marek
+- [PATCH v7 08/18] objtool: add kunit_try_catch_throw to the noreturn
+  list
+  - Need a review or ack from Josh Poimboeuf or Peter Zijlstra
+
+Other than that, I think we should be good to go.
+
+## Background
+
+This patch set proposes KUnit, a lightweight unit testing and mocking
+framework for the Linux kernel.
+
+Unlike Autotest and kselftest, KUnit is a true unit testing framework;
+it does not require installing the kernel on a test machine or in a VM
+(however, KUnit still allows you to run tests on test machines or in VMs
+if you want[1]) and does not require tests to be written in userspace
+running on a host kernel. Additionally, KUnit is fast: From invocation
+to completion KUnit can run several dozen tests in about a second.
+Currently, the entire KUnit test suite for KUnit runs in under a second
+from the initial invocation (build time excluded).
+
+KUnit is heavily inspired by JUnit, Python's unittest.mock, and
+Googletest/Googlemock for C++. KUnit provides facilities for defining
+unit test cases, grouping related test cases into test suites, providing
+common infrastructure for running tests, mocking, spying, and much more.
+
+### What's so special about unit testing?
+
+A unit test is supposed to test a single unit of code in isolation,
+hence the name. There should be no dependencies outside the control of
+the test; this means no external dependencies, which makes tests orders
+of magnitudes faster. Likewise, since there are no external dependencies,
+there are no hoops to jump through to run the tests. Additionally, this
+makes unit tests deterministic: a failing unit test always indicates a
+problem. Finally, because unit tests necessarily have finer granularity,
+they are able to test all code paths easily solving the classic problem
+of difficulty in exercising error handling code.
+
+### Is KUnit trying to replace other testing frameworks for the kernel?
+
+No. Most existing tests for the Linux kernel are end-to-end tests, which
+have their place. A well tested system has lots of unit tests, a
+reasonable number of integration tests, and some end-to-end tests. KUnit
+is just trying to address the unit test space which is currently not
+being addressed.
+
+### More information on KUnit
+
+There is a bunch of documentation near the end of this patch set that
+describes how to use KUnit and best practices for writing unit tests.
+For convenience I am hosting the compiled docs here[2].
+
+Additionally for convenience, I have applied these patches to a
+branch[3]. The repo may be cloned with:
+git clone https://kunit.googlesource.com/linux
+This patchset is on the kunit/rfc/v5.2/v7 branch.
+
+## Changes Since Last Version
+
+Aside from renaming `struct kunit_module` to `struct kunit_suite`, there
+isn't really anything in here that changes any functionality:
+
+- Rebased on v5.2
+- Added Iurii as a maintainer for PROC SYSCTL, as suggested by Luis.
+- Removed some references to spinlock that I failed to remove in the
+  previous version, as pointed out by Luis.
+- Cleaned up some comments, as suggested by Luis.
+
+[1] https://google.github.io/kunit-docs/third_party/kernel/docs/usage.html#kunit-on-non-uml-architectures
+[2] https://google.github.io/kunit-docs/third_party/kernel/docs/
+[3] https://kunit.googlesource.com/linux/+/kunit/rfc/v5.2/v7
+
+-- 
+2.22.0.410.gd8fdbe21b5-goog
+
