@@ -2,59 +2,35 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 00E686311B
-	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Jul 2019 08:36:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 016DB6383C
+	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Jul 2019 16:53:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727102AbfGIGfk (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 9 Jul 2019 02:35:40 -0400
-Received: from mail-vk1-f201.google.com ([209.85.221.201]:49178 "EHLO
-        mail-vk1-f201.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727120AbfGIGfi (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 9 Jul 2019 02:35:38 -0400
-Received: by mail-vk1-f201.google.com with SMTP id o202so7468730vko.16
-        for <linux-kselftest@vger.kernel.org>; Mon, 08 Jul 2019 23:35:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=LDQmGV1sXKMjUeOhPKTnD5bP1+GpH11oHwNBh3L4XLs=;
-        b=mtI4pp7LQ+cFZTh7ol2m1CVrFBewx1Tr/aWCfVl2aenkSg1IeUTYlk6HdJcDVl9V3V
-         qVnZm5/t/x2Gb6ReZi2m8DZTmZwO2iCuHQhftas4io72KmTBubu7P5AHRRuPzTtzbHUk
-         vDhVlpDpGXMhYDhnt//uJxs2dzo45RkBUi1IjbK6/9WPuyRnq7YWsBQp/82+MaG5On/B
-         bp2850T8S0Sa0vYFLBGRkb7fOdx7Rw8cRDFhVg0SOdCTFhey727SPz2DbRtsbn4Alddl
-         22XhrfmGEwv1NUR9lNPXJPkGMxadaTLFT1pkHIKy2X+DGjvjaEp4IaeI0b46n7FB7Z0j
-         kXrA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=LDQmGV1sXKMjUeOhPKTnD5bP1+GpH11oHwNBh3L4XLs=;
-        b=t2NkAaEK6lAJhk0QtHleqei+WwkT2SI3p0P/nEypYQne2sO6Qrx/i3lgpr0A9kVIr6
-         iU2kdqAiKhrDlq28Ok8sRz9WPolVOxretQAosV5BPLzimXhmAfeQvArJ2S8oA/UEyxhC
-         HMY2aT+mzzrMQ7FkUcOWOHbo4ITRGfv6QbWzhS5L7rJgbnFpny/fk/4q76sQLfOJATgW
-         1ZEHbI6rse5MwnKHbkEllpGVbD71ylKrdwIILl8Thx/hZjLVl/DEweOErNStUjMSC6aq
-         FwxmcGzgZg8bPGGQQnKjjyRxg4P9LoOOGq3YE/7dnzzjXvzwCjxD4s0Z5J5hsfxG/aUx
-         Z3pg==
-X-Gm-Message-State: APjAAAV9UVCf6nSfAeGPb+9JFPBUQv29u8q3Hak/ofXY1B/r9TqRxGbz
-        uY0hemiSf1CSyx3fddZwSmA6fNORDP215E67khpCGQ==
-X-Google-Smtp-Source: APXvYqyW1g9KdJQPX3pyGwybskRq1kFabR+QXx1JMZJMEoqi+vbrQt4/L8S6b2Fnm4tYbGfikHj5lP0KQVa29yIOSMpklA==
-X-Received: by 2002:a1f:6045:: with SMTP id u66mr3906864vkb.54.1562654137349;
- Mon, 08 Jul 2019 23:35:37 -0700 (PDT)
-Date:   Mon,  8 Jul 2019 23:30:23 -0700
-In-Reply-To: <20190709063023.251446-1-brendanhiggins@google.com>
-Message-Id: <20190709063023.251446-19-brendanhiggins@google.com>
-Mime-Version: 1.0
-References: <20190709063023.251446-1-brendanhiggins@google.com>
-X-Mailer: git-send-email 2.22.0.410.gd8fdbe21b5-goog
-Subject: [PATCH v7 18/18] MAINTAINERS: add proc sysctl KUnit test to PROC
- SYSCTL section
-From:   Brendan Higgins <brendanhiggins@google.com>
-To:     frowand.list@gmail.com, gregkh@linuxfoundation.org,
+        id S1726623AbfGIOxl (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 9 Jul 2019 10:53:41 -0400
+Received: from mail.kernel.org ([198.145.29.99]:43944 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726115AbfGIOxl (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 9 Jul 2019 10:53:41 -0400
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net [24.9.64.241])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 6644F214AF;
+        Tue,  9 Jul 2019 14:53:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1562684020;
+        bh=Mv7YTLIc+jI3uCRwSd1DAeik4HQLm9P9oMcVwz2d2dk=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=XgulwaGpIAZUTMHGK6H52VD3EGXSfaZA2VLPhCuPHVQN4Ql3qcJzAtWEmAruTZN6F
+         CiqOnOuc9sTH4GW5+VhzHiNXC2Jpq24ah0VHZEIGAOqDliCu4Fwf44hiQwbpQ/Q/If
+         Xl4Y5OinAOMyTTsR/xSt2diAONVrq1cwoJa/TeF8=
+Subject: Re: [PATCH v7 16/18] MAINTAINERS: add entry for KUnit the unit
+ testing framework
+To:     Brendan Higgins <brendanhiggins@google.com>,
+        frowand.list@gmail.com, gregkh@linuxfoundation.org,
         jpoimboe@redhat.com, keescook@google.com,
         kieran.bingham@ideasonboard.com, mcgrof@kernel.org,
         peterz@infradead.org, robh@kernel.org, sboyd@kernel.org,
-        shuah@kernel.org, tytso@mit.edu, yamada.masahiro@socionext.com
+        tytso@mit.edu, yamada.masahiro@socionext.com
 Cc:     devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
         kunit-dev@googlegroups.com, linux-doc@vger.kernel.org,
         linux-fsdevel@vger.kernel.org, linux-kbuild@vger.kernel.org,
@@ -66,45 +42,63 @@ Cc:     devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
         khilman@baylibre.com, knut.omang@oracle.com, logang@deltatee.com,
         mpe@ellerman.id.au, pmladek@suse.com, rdunlap@infradead.org,
         richard@nod.at, rientjes@google.com, rostedt@goodmis.org,
-        wfg@linux.intel.com, Brendan Higgins <brendanhiggins@google.com>,
-        Iurii Zaikin <yzaikin@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        wfg@linux.intel.com, shuah <shuah@kernel.org>
+References: <20190709063023.251446-1-brendanhiggins@google.com>
+ <20190709063023.251446-17-brendanhiggins@google.com>
+From:   shuah <shuah@kernel.org>
+Message-ID: <7cc417dd-036f-7dc1-6814-b1fdac810f03@kernel.org>
+Date:   Tue, 9 Jul 2019 08:53:19 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
+MIME-Version: 1.0
+In-Reply-To: <20190709063023.251446-17-brendanhiggins@google.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add entry for the new proc sysctl KUnit test to the PROC SYSCTL section,
-and add Iurii as a maintainer.
+On 7/9/19 12:30 AM, Brendan Higgins wrote:
+> Add myself as maintainer of KUnit, the Linux kernel's unit testing
+> framework.
+> 
+> Signed-off-by: Brendan Higgins <brendanhiggins@google.com>
+> Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Reviewed-by: Logan Gunthorpe <logang@deltatee.com>
+> ---
+>   MAINTAINERS | 11 +++++++++++
+>   1 file changed, 11 insertions(+)
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 677ef41cb012c..48d04d180a988 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -8599,6 +8599,17 @@ S:	Maintained
+>   F:	tools/testing/selftests/
+>   F:	Documentation/dev-tools/kselftest*
+>   
+> +KERNEL UNIT TESTING FRAMEWORK (KUnit)
+> +M:	Brendan Higgins <brendanhiggins@google.com>
+> +L:	linux-kselftest@vger.kernel.org
+> +L:	kunit-dev@googlegroups.com
+> +W:	https://google.github.io/kunit-docs/third_party/kernel/docs/
+> +S:	Maintained
+> +F:	Documentation/dev-tools/kunit/
+> +F:	include/kunit/
+> +F:	kunit/
+> +F:	tools/testing/kunit/
+> +
+>   KERNEL USERMODE HELPER
+>   M:	Luis Chamberlain <mcgrof@kernel.org>
+>   L:	linux-kernel@vger.kernel.org
+> 
 
-Signed-off-by: Brendan Higgins <brendanhiggins@google.com>
-Cc: Iurii Zaikin <yzaikin@google.com>
-Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Reviewed-by: Logan Gunthorpe <logang@deltatee.com>
-Acked-by: Luis Chamberlain <mcgrof@kernel.org>
----
- MAINTAINERS | 2 ++
- 1 file changed, 2 insertions(+)
+Thanks Brendan.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 48d04d180a988..f8204c75114da 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -12721,12 +12721,14 @@ F:	Documentation/filesystems/proc.txt
- PROC SYSCTL
- M:	Luis Chamberlain <mcgrof@kernel.org>
- M:	Kees Cook <keescook@chromium.org>
-+M:	Iurii Zaikin <yzaikin@google.com>
- L:	linux-kernel@vger.kernel.org
- L:	linux-fsdevel@vger.kernel.org
- S:	Maintained
- F:	fs/proc/proc_sysctl.c
- F:	include/linux/sysctl.h
- F:	kernel/sysctl.c
-+F:	kernel/sysctl-test.c
- F:	tools/testing/selftests/sysctl/
- 
- PS3 NETWORK SUPPORT
--- 
-2.22.0.410.gd8fdbe21b5-goog
+I am good with this. I can take KUnit patches through kselftest
+with your Ack.
 
+thanks,
+-- Shuah
