@@ -2,163 +2,126 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CFD1F63FD7
-	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Jul 2019 06:13:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 181C963FC6
+	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Jul 2019 06:03:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726151AbfGJENF (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 10 Jul 2019 00:13:05 -0400
-Received: from condef-07.nifty.com ([202.248.20.72]:43623 "EHLO
-        condef-07.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725844AbfGJENE (ORCPT
+        id S1726112AbfGJEDJ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 10 Jul 2019 00:03:09 -0400
+Received: from mail-wr1-f68.google.com ([209.85.221.68]:38053 "EHLO
+        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725791AbfGJEDJ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 10 Jul 2019 00:13:04 -0400
-X-Greylist: delayed 534 seconds by postgrey-1.27 at vger.kernel.org; Wed, 10 Jul 2019 00:13:02 EDT
-Received: from conssluserg-05.nifty.com ([10.126.8.84])by condef-07.nifty.com with ESMTP id x6A40P7N029415
-        for <linux-kselftest@vger.kernel.org>; Wed, 10 Jul 2019 13:00:25 +0900
-Received: from mail-vs1-f43.google.com (mail-vs1-f43.google.com [209.85.217.43]) (authenticated)
-        by conssluserg-05.nifty.com with ESMTP id x6A407t3006697;
-        Wed, 10 Jul 2019 13:00:08 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-05.nifty.com x6A407t3006697
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1562731208;
-        bh=KknRHaSkhBMpTs1BmzD59wJGTvSH88jZgscNwiE3MlQ=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=Zcv8Y/m8P8X292YdVCGzvjt8eh3zKthkL/tKU8hgl0+kZFK/TCidt2YnUJeXwRY2C
-         53gnnvfR1V5a/tZ3oft3dU87Wv/na0I6Cs7CUbLYQQ/tTgfsks7h1YrnLQlPvFedYE
-         CUXVrkPfqD5VgYstJJ7CydXBopsxsIxYrwFsxgwx6d60uk5NaU0HmmUFrWcRa0Ma+X
-         JP4vrMHlCl+oWvWoNYTtWzS8BRJaI99Vvewq8PDOryzMVp2NXYrBOU+OgPSCXtaQVR
-         iBpoKf4mR5G2BIwMVbOsyg7IXjsTJdhgiZepcEUeuFghjpTnMBJ19Lf/0+rRb7AENC
-         me1vWrlscZvww==
-X-Nifty-SrcIP: [209.85.217.43]
-Received: by mail-vs1-f43.google.com with SMTP id m8so625105vsj.0;
-        Tue, 09 Jul 2019 21:00:08 -0700 (PDT)
-X-Gm-Message-State: APjAAAUOzUg7dewpDpaEaEwdms+J+YjUAAAn+8Q5wRx/H0vBF2T/33CF
-        O4/8l42f2KO7ypeZySrTpPfE7/o10ZbDtcOBLrA=
-X-Google-Smtp-Source: APXvYqzEJesQV2n3K1HZLU8Wx1IHWCC1QIw58D6BP7vlVU/X0PRT9+zSoni+Ubl8ut/dwkZUzYEjYnFrduUZ0sj9y38=
-X-Received: by 2002:a67:f495:: with SMTP id o21mr16708917vsn.54.1562731207027;
- Tue, 09 Jul 2019 21:00:07 -0700 (PDT)
+        Wed, 10 Jul 2019 00:03:09 -0400
+Received: by mail-wr1-f68.google.com with SMTP id g17so933351wrr.5
+        for <linux-kselftest@vger.kernel.org>; Tue, 09 Jul 2019 21:03:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=E/+8WA5YVt9o68tf7IxaP2AKZIs3izvlH0APT6Mt07Q=;
+        b=K1qh7HcwzDZLVDAhRFo1UMOBKQLz3oQjDqRwz2jFT38WMwz/Hl+vBRVpz6PZ8eyy3Y
+         dTAmu29NVGAwAZMWL0pe9v9Be598VLNvCEXNI4Hmi9hk8iVCmDpiCn3DzAX+ya48+l5E
+         agWdvXAgbkGVdffOYWAEPWEA5Tt1dpEYgqARMkGUm9CBA9Z7CDJCzkt8K2r4smVHL7vu
+         IxMt0gyE+LkrWBBgHX7+Dm2eM7WrA3nvP7LdaYR5P8bZpqvhbzthPdfj/epTNYwzA56p
+         AOfetMta9CkyUC4Q9MJQDe4yMoicmVktguXRf/xx872evRk4ahBKSIB/SR+PNbG029Rw
+         4ZUg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=E/+8WA5YVt9o68tf7IxaP2AKZIs3izvlH0APT6Mt07Q=;
+        b=VHki5sYcQ8lHc1FbbKTVucx2Sqp2nBVq/TySMJy2W+27qpN7T3dnQY02PxCr7wA6IZ
+         EMRFjRsJ2ugzAJtGfquhrxEHU3rC7KoufzwF8n85+C6E1CJc1htQG24J7zA0yfyXAXoo
+         rlcsGENuFTR2msrGlrhtcGSYfg+iIW9u4C4BTkajR5qoEhHxA28mACgZsYms9bAh8utI
+         UPvKt2qiwuY/DLxRk4zxSqh7ioXhZ8a8QCi0BWSPYhFIpaYOmpMQcZ1f/mteprm8qJfT
+         Ze9heVuPxlD9AH31avs0kR+HawaTmULtPPqW7PLOFpQC6TKL6aSbl+C0eqH2K3KxAgMx
+         PWfg==
+X-Gm-Message-State: APjAAAU36rC2TKxlZgf7c8x07l/9tum0F5YWhC02gXYp2UYE6SsAYUrj
+        EYQcAC827CwpocGoK+Z2+gi0izyjF5lYg4VUj62nJA==
+X-Google-Smtp-Source: APXvYqzPOdmo7LUjjtBVy+Eam/jLKZXcN/T+ttk0oWQFmX0MgxeRc22swD1KsBEGZUN6nDxG/pwDPT36kLteJxt49zQ=
+X-Received: by 2002:a05:6000:145:: with SMTP id r5mr9063316wrx.208.1562731387533;
+ Tue, 09 Jul 2019 21:03:07 -0700 (PDT)
 MIME-Version: 1.0
-References: <20190709063023.251446-1-brendanhiggins@google.com> <20190709063023.251446-7-brendanhiggins@google.com>
-In-Reply-To: <20190709063023.251446-7-brendanhiggins@google.com>
-From:   Masahiro Yamada <yamada.masahiro@socionext.com>
-Date:   Wed, 10 Jul 2019 12:59:30 +0900
-X-Gmail-Original-Message-ID: <CAK7LNATx30AhZ51xozde=nO06-8UzuC0M9nfZXrqkyfmEFdu5w@mail.gmail.com>
-Message-ID: <CAK7LNATx30AhZ51xozde=nO06-8UzuC0M9nfZXrqkyfmEFdu5w@mail.gmail.com>
-Subject: Re: [PATCH v7 06/18] kbuild: enable building KUnit
-To:     Brendan Higgins <brendanhiggins@google.com>
-Cc:     Frank Rowand <frowand.list@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Kees Cook <keescook@google.com>,
-        Kieran Bingham <kieran.bingham@ideasonboard.com>,
-        "Luis R. Rodriguez" <mcgrof@kernel.org>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Rob Herring <robh@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
-        "Cc: Shuah Khan" <shuah@kernel.org>,
-        "Theodore Ts'o" <tytso@mit.edu>, DTML <devicetree@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        kunit-dev@googlegroups.com,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        linux-fsdevel@vger.kernel.org,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        linux-nvdimm <linux-nvdimm@lists.01.org>,
-        linux-um@lists.infradead.org,
-        Sasha Levin <Alexander.Levin@microsoft.com>,
-        Tim Bird <Tim.Bird@sony.com>,
-        Amir Goldstein <amir73il@gmail.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Daniel Vetter <daniel@ffwll.ch>, Jeff Dike <jdike@addtoit.com>,
-        Joel Stanley <joel@jms.id.au>,
-        Julia Lawall <julia.lawall@lip6.fr>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Knut Omang <knut.omang@oracle.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Petr Mladek <pmladek@suse.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Richard Weinberger <richard@nod.at>,
-        David Rientjes <rientjes@google.com>,
-        Steven Rostedt <rostedt@goodmis.org>, wfg@linux.intel.com,
-        Michal Marek <michal.lkml@markovi.net>
+References: <20190621095252.32307-1-vincenzo.frascino@arm.com> <20190621095252.32307-11-vincenzo.frascino@arm.com>
+In-Reply-To: <20190621095252.32307-11-vincenzo.frascino@arm.com>
+From:   John Stultz <john.stultz@linaro.org>
+Date:   Tue, 9 Jul 2019 21:02:54 -0700
+Message-ID: <CALAqxLXxE5B+vVLj7NcW8S05nhDQ+XSKVn=_MNDci667JDFEhA@mail.gmail.com>
+Subject: Re: [PATCH v7 10/25] arm64: compat: Add vDSO
+To:     Vincenzo Frascino <vincenzo.frascino@arm.com>
+Cc:     linux-arch@vger.kernel.org,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        lkml <linux-kernel@vger.kernel.org>, linux-mips@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
+        Andre Przywara <andre.przywara@arm.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Huw Davies <huw@codeweavers.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Will Deacon <will.deacon@arm.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Mark Salyzyn <salyzyn@android.com>,
+        Paul Burton <paul.burton@mips.com>,
+        Dmitry Safonov <0x7f454c46@gmail.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Shijith Thotton <sthotton@marvell.com>,
+        Peter Collingbourne <pcc@google.com>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Jul 9, 2019 at 3:34 PM Brendan Higgins
-<brendanhiggins@google.com> wrote:
+On Fri, Jun 21, 2019 at 3:18 AM Vincenzo Frascino
+<vincenzo.frascino@arm.com> wrote:
 >
-> KUnit is a new unit testing framework for the kernel and when used is
-> built into the kernel as a part of it. Add KUnit to the root Kconfig and
-> Makefile to allow it to be actually built.
+> Provide the arm64 compat (AArch32) vDSO in kernel/vdso32 in a similar
+> way to what happens in kernel/vdso.
 >
-> Signed-off-by: Brendan Higgins <brendanhiggins@google.com>
-> Cc: Masahiro Yamada <yamada.masahiro@socionext.com>
-> Cc: Michal Marek <michal.lkml@markovi.net>
-> Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Reviewed-by: Logan Gunthorpe <logang@deltatee.com>
-> ---
->  Kconfig  | 2 ++
->  Makefile | 2 +-
->  2 files changed, 3 insertions(+), 1 deletion(-)
+> The compat vDSO leverages on an adaptation of the arm architecture code
+> with few changes:
+>  - Use of lib/vdso for gettimeofday
+>  - Implementation of syscall based fallback
+>  - Introduction of clock_getres for the compat library
+>  - Implementation of trampolines
+>  - Implementation of elf note
 >
-> diff --git a/Kconfig b/Kconfig
-> index 48a80beab6853..10428501edb78 100644
-> --- a/Kconfig
-> +++ b/Kconfig
-> @@ -30,3 +30,5 @@ source "crypto/Kconfig"
->  source "lib/Kconfig"
+> To build the compat vDSO a 32 bit compiler is required and needs to be
+> specified via CONFIG_CROSS_COMPILE_COMPAT_VDSO.
 >
->  source "lib/Kconfig.debug"
-> +
-> +source "kunit/Kconfig"
-> diff --git a/Makefile b/Makefile
-> index 3e4868a6498b2..60cf4f0813e0d 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -991,7 +991,7 @@ endif
->  PHONY += prepare0
->
->  ifeq ($(KBUILD_EXTMOD),)
-> -core-y         += kernel/ certs/ mm/ fs/ ipc/ security/ crypto/ block/
-> +core-y         += kernel/ certs/ mm/ fs/ ipc/ security/ crypto/ block/ kunit/
->
->  vmlinux-dirs   := $(patsubst %/,%,$(filter %/, $(init-y) $(init-m) \
->                      $(core-y) $(core-m) $(drivers-y) $(drivers-m) \
-> --
-> 2.22.0.410.gd8fdbe21b5-goog
 
+Hey Vincenzo!
+  Congrats on getting this work merged, I know its been a long effort
+over a number of years!
 
-This is so trivial, and do not need to get ack from me.
+Though unfortunately, it seems the arm64 vdso code that just landed is
+breaking AOSP for me.
 
-Just a nit.
+I see a lot of the following errors:
+01-01 01:22:14.097   755   755 F libc    : Fatal signal 11 (SIGSEGV),
+code 1 (SEGV_MAPERR), fault addr 0x3cf2c96c in tid 755 (cameraserver),
+pid 755 (cameraserver)
+01-01 01:22:14.112   759   759 F libc    : Fatal signal 11 (SIGSEGV),
+code 1 (SEGV_MAPERR), fault addr 0x3cf2c96c in tid 759
+(android.hardwar), pid 759 (android.hardwar)
+01-01 01:22:14.120   756   756 F libc    : Fatal signal 11 (SIGSEGV),
+code 1 (SEGV_MAPERR), fault addr 0x3cf2c96c in tid 756 (drmserver),
+pid 756 (drmserver)
 
+Which go away if I revert the vdso merge that went in via tip/timers.
 
-When CONFIG_KUNIT is disable, is there any point in descending into kunit/ ?
+I tried to bisect things down a bit, but as some later fixes are
+required (at one point, date was returning the start epoch and never
+increasing), this hasn't worked too well. But I'm guessing since I
+see: "CROSS_COMPILE_COMPAT not defined or empty, the compat vDSO will
+not be built", and the system is half working, I'm guessing this is an
+issue with just the 32bit code failing.  While I can try to sort out
+the proper CROSS_COMPILE_COMPAT in my build environment, I assume
+userland shouldn't be crashing if that value isn't set.
 
-core-$(CONFIG_KUNIT) += kunit/
+Any chance this issue has already been raised?
 
-... might be useful to skip kunit/ entirely.
-
-If you look at the top-level Makefile, some entries are doing this:
-
-
-init-y          := init/
-drivers-y       := drivers/ sound/
-drivers-$(CONFIG_SAMPLES) += samples/
-drivers-$(CONFIG_KERNEL_HEADER_TEST) += include/
-net-y           := net/
-libs-y          := lib/
-core-y          := usr/
-
-
-
-
-
---
-Best Regards
-Masahiro Yamada
+thanks
+-john
