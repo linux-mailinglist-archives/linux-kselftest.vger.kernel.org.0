@@ -2,190 +2,99 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A99464804
-	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Jul 2019 16:16:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08D06649EF
+	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Jul 2019 17:44:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727938AbfGJOQT (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 10 Jul 2019 10:16:19 -0400
-Received: from mail-pf1-f196.google.com ([209.85.210.196]:32853 "EHLO
-        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727932AbfGJOQN (ORCPT
+        id S1728021AbfGJPo5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 10 Jul 2019 11:44:57 -0400
+Received: from mail-wm1-f68.google.com ([209.85.128.68]:52369 "EHLO
+        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727779AbfGJPo4 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 10 Jul 2019 10:16:13 -0400
-Received: by mail-pf1-f196.google.com with SMTP id g2so1189844pfq.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 10 Jul 2019 07:16:12 -0700 (PDT)
+        Wed, 10 Jul 2019 11:44:56 -0400
+Received: by mail-wm1-f68.google.com with SMTP id s3so2812976wms.2
+        for <linux-kselftest@vger.kernel.org>; Wed, 10 Jul 2019 08:44:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=Yg+Fia+4TffgvjfVtZaMrwTvAUof2HACdCWfE9Adz90=;
-        b=puPKxWZQb+LZdgernOXSGHoCjjFfNqhgNCQgR3EAJVuYHTxPi0MWhE1gMoTZzoxDtL
-         JPgeBqpXoNCnj35nK/tB1FCJMvJg2YoHOxNlJ0Vchnf+Zhz2VlASaorgKKmUkgTvSIJf
-         8FW/bsoH46dLIF8XeGGCXT64TEZRMHpQZe0+E=
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=NtOOR2nEu//DGOMUejq+6mfdm7EgmWFyTPqFW/hZNEg=;
+        b=DY67Qqzg8l5sGMLitlWOUm/qzQ2NhqQ9Db12bmwsYd4wnB6rushO8O/ab2p8CxPx0A
+         1WsSAHX8Z84rQ/xQUHoU5CmUje5IAYvZH0mYD1OhVkH3AeegsnCBhCoeCACxKoyZxe5H
+         9S7xCeV+scTCi+NWNYdfV6JzV/ALBwtiFqdGKbxIkeguyVuk/obU+WoexQo4hGkjO6+6
+         0Fr1hgGDjgjCLdlv+LcmtrtSGqrW9oQfc3X48T193n2XMAqFhMRVRETjEynSPHk/tvxT
+         aMv2O4k4gFAhmL/ivOMGxt1DGbmppZeL0jGqtM2tnK9tLwU4MpDB8m1LL1YSAbWx5231
+         EnEg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=Yg+Fia+4TffgvjfVtZaMrwTvAUof2HACdCWfE9Adz90=;
-        b=Rc7Gdng1AtZHZQWn91n1t+zKzWRgVZce0OjfOLPDqeBPNPfALQTvmHbZtjjE3di8RI
-         yPSil7du6hW8FS7L45FalBMyNrPdjBc35xRk/hJF4mmy8NIkJ+yYNLQoVjiuiaqhcWin
-         oO8jRj9pPEhyNwnIR9wnSiY1GMeC4kur/28AaT4qUcGPmq3LxPA+UKoabx13xEHMIR3+
-         xo7bcLB2gQvVb08bI9wyDyk/8P+Uj4nSrs401kdVLIQN495gSEzi/ypAAwhwPzso9rk3
-         FjLdewhHHd941UgDLFW0YwOf3E/avC51AmAefGrjHHh5AxBZq+1QggAWolkYFR8litu2
-         uSHQ==
-X-Gm-Message-State: APjAAAUJUQ+uftoCJhrs3TvQbXOwwAC/HW9So2QM5L49T0XRsVsaDnfL
-        /5IWs+SYLQAWSvyotfVVSdU=
-X-Google-Smtp-Source: APXvYqxireE36SRG7vQaha91GKI62TdGTjOZ+qzVeiQZzoJfKbV6cQyUm55T8TcIjbBj3K5Tt9zuKQ==
-X-Received: by 2002:a17:90a:290b:: with SMTP id g11mr7342173pjd.122.1562768172230;
-        Wed, 10 Jul 2019 07:16:12 -0700 (PDT)
-Received: from joelaf.cam.corp.google.com ([2620:15c:6:12:9c46:e0da:efbf:69cc])
-        by smtp.gmail.com with ESMTPSA id l124sm2589249pgl.54.2019.07.10.07.16.08
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Wed, 10 Jul 2019 07:16:11 -0700 (PDT)
-From:   "Joel Fernandes (Google)" <joel@joelfernandes.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     "Joel Fernandes (Google)" <joel@joelfernandes.org>,
-        Adrian Ratiu <adrian.ratiu@collabora.com>,
-        Alexei Starovoitov <ast@kernel.org>, bpf@vger.kernel.org,
-        Brendan Gregg <brendan.d.gregg@gmail.com>, connoro@google.com,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        duyuchao <yuchao.du@unisoc.com>, Ingo Molnar <mingo@redhat.com>,
-        jeffv@google.com, Karim Yaghmour <karim.yaghmour@opersys.com>,
-        kernel-team@android.com, linux-kselftest@vger.kernel.org,
-        Manali Shukla <manalishukla14@gmail.com>,
-        Manjo Raja Rao <linux@manojrajarao.com>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Matt Mullins <mmullins@fb.com>,
-        Michal Gregorczyk <michalgr@fb.com>,
-        Michal Gregorczyk <michalgr@live.com>,
-        Mohammad Husain <russoue@gmail.com>, namhyung@google.com,
-        namhyung@kernel.org, netdev@vger.kernel.org,
-        paul.chaignon@gmail.com, primiano@google.com,
-        Qais Yousef <qais.yousef@arm.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Song Liu <songliubraving@fb.com>,
-        Srinivas Ramana <sramana@codeaurora.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Tamir Carmeli <carmeli.tamir@gmail.com>,
-        Yonghong Song <yhs@fb.com>
-Subject: [PATCH RFC 4/4] selftests/bpf: Add test for ftrace-based BPF attach/detach
-Date:   Wed, 10 Jul 2019 10:15:48 -0400
-Message-Id: <20190710141548.132193-5-joel@joelfernandes.org>
-X-Mailer: git-send-email 2.22.0.410.gd8fdbe21b5-goog
-In-Reply-To: <20190710141548.132193-1-joel@joelfernandes.org>
-References: <20190710141548.132193-1-joel@joelfernandes.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=NtOOR2nEu//DGOMUejq+6mfdm7EgmWFyTPqFW/hZNEg=;
+        b=CooMh+OHG/soQOH6DcH4B3tBDR3yxfEiLX7NWnZyTgvNL2CzfrpZ53kEIl/mV24WRs
+         pQkN7lO0IO8tB/dk1my5zyW2B0tUv2TRQ9ZpWZyoLBmEUFReXXwMEdQwq5cGBTLyD18S
+         sVNnDI6Va7hXqVK6eL7xDu/fA5K4sJD76/ownnCWRMpd2UHeVMKubSLrz8c/apWsSqmA
+         8trGLnVl8siSKP0ll8JPD0gy8jnLX+pePavIl6VknXs8oLPOBeBSX5xznTsBXKsbiKsy
+         lJX+n8EfJWqgqoir+kg3rbDsVE0CC9vMoaNOtZ0wTSS4d+fP5zCnfXXjoKJSe/eSCzby
+         UJkQ==
+X-Gm-Message-State: APjAAAUroXPOnKUD7RSjMNksl3o8R7mRSw6kp51dxtM17jz2woHktfJH
+        vklMwYheWNP10pihFSxl+JpNIwPW1ZxyzsFGhKMtoQ==
+X-Google-Smtp-Source: APXvYqxWuFYdRc3oezY5CyAazr9+mnSggdhSKTQQUlfs/r4ufXqeKNR1JiskvJeNZu0AbFrkKC6ypVSymVpP5xMNcCk=
+X-Received: by 2002:a1c:d10c:: with SMTP id i12mr5991172wmg.152.1562773494692;
+ Wed, 10 Jul 2019 08:44:54 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20190621095252.32307-11-vincenzo.frascino@arm.com> <20190710140119.23417-1-vincenzo.frascino@arm.com>
+In-Reply-To: <20190710140119.23417-1-vincenzo.frascino@arm.com>
+From:   John Stultz <john.stultz@linaro.org>
+Date:   Wed, 10 Jul 2019 08:44:43 -0700
+Message-ID: <CALAqxLVnf_hyxxmx72F360PbJUTZowuD3wJx0nJ=dCTyW+w-Tw@mail.gmail.com>
+Subject: Re: [PATCH v2] arm64: vdso: Fix ABI regression in compat vdso
+To:     Vincenzo Frascino <vincenzo.frascino@arm.com>
+Cc:     linux-arch@vger.kernel.org,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        lkml <linux-kernel@vger.kernel.org>, linux-mips@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will.deacon@arm.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Russell King - ARM Linux <linux@armlinux.org.uk>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Paul Burton <paul.burton@mips.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Mark Salyzyn <salyzyn@android.com>,
+        Peter Collingbourne <pcc@google.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Dmitry Safonov <0x7f454c46@gmail.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Huw Davies <huw@codeweavers.com>,
+        Shijith Thotton <sthotton@marvell.com>,
+        Andre Przywara <andre.przywara@arm.com>,
+        Andy Lutomirski <luto@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Here we add support for testing the attach and detach of a BPF program
-to a tracepoint through tracefs.
+On Wed, Jul 10, 2019 at 7:01 AM Vincenzo Frascino
+<vincenzo.frascino@arm.com> wrote:
+>
+> Prior to the introduction of Unified vDSO support and compat layer for
+> vDSO on arm64, AT_SYSINFO_EHDR was not defined for compat tasks.
+> In the current implementation, AT_SYSINFO_EHDR is defined even if the
+> compat vdso layer is not built and this causes a regression in the
+> expected behavior of the ABI.
+>
+> Restore the ABI behavior making sure that AT_SYSINFO_EHDR for compat
+> tasks is defined only when CONFIG_COMPAT_VDSO is enabled.
+>
+> Reported-by: John Stultz <john.stultz@linaro.org>
+> Signed-off-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
 
-Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
----
- .../raw_tp_writable_test_ftrace_run.c         | 89 +++++++++++++++++++
- 1 file changed, 89 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/raw_tp_writable_test_ftrace_run.c
+This seems to solve it for me!
+Thanks so much for the quick turnaround on a fix. I really appreciate it!
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/raw_tp_writable_test_ftrace_run.c b/tools/testing/selftests/bpf/prog_tests/raw_tp_writable_test_ftrace_run.c
-new file mode 100644
-index 000000000000..7b42e3a69b71
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/raw_tp_writable_test_ftrace_run.c
-@@ -0,0 +1,89 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include <test_progs.h>
-+#include <linux/nbd.h>
-+
-+void test_raw_tp_writable_test_ftrace_run(void)
-+{
-+	__u32 duration = 0;
-+	char error[4096];
-+	int ret;
-+
-+	const struct bpf_insn trace_program[] = {
-+		BPF_LDX_MEM(BPF_DW, BPF_REG_6, BPF_REG_1, 0),
-+		BPF_LDX_MEM(BPF_W, BPF_REG_0, BPF_REG_6, 0),
-+		BPF_MOV64_IMM(BPF_REG_0, 42),
-+		BPF_STX_MEM(BPF_W, BPF_REG_6, BPF_REG_0, 0),
-+		BPF_EXIT_INSN(),
-+	};
-+
-+	struct bpf_load_program_attr load_attr = {
-+		.prog_type = BPF_PROG_TYPE_RAW_TRACEPOINT_WRITABLE,
-+		.license = "GPL v2",
-+		.insns = trace_program,
-+		.insns_cnt = sizeof(trace_program) / sizeof(struct bpf_insn),
-+		.log_level = 2,
-+	};
-+
-+	int bpf_fd = bpf_load_program_xattr(&load_attr, error, sizeof(error));
-+
-+	if (CHECK(bpf_fd < 0, "bpf_raw_tracepoint_writable loaded",
-+		  "failed: %d errno %d\n", bpf_fd, errno))
-+		return;
-+
-+	const struct bpf_insn skb_program[] = {
-+		BPF_MOV64_IMM(BPF_REG_0, 0),
-+		BPF_EXIT_INSN(),
-+	};
-+
-+	struct bpf_load_program_attr skb_load_attr = {
-+		.prog_type = BPF_PROG_TYPE_SOCKET_FILTER,
-+		.license = "GPL v2",
-+		.insns = skb_program,
-+		.insns_cnt = sizeof(skb_program) / sizeof(struct bpf_insn),
-+	};
-+
-+	int filter_fd =
-+		bpf_load_program_xattr(&skb_load_attr, error, sizeof(error));
-+	if (CHECK(filter_fd < 0, "test_program_loaded", "failed: %d errno %d\n",
-+		  filter_fd, errno))
-+		goto out_bpffd;
-+
-+	ret = bpf_raw_tracepoint_ftrace_attach("bpf_test_run",
-+					       "bpf_test_finish",
-+					       bpf_fd);
-+	if (CHECK(ret < 0, "bpf_raw_tracepoint_ftrace_attach",
-+		  "failed: %d errno %d\n", ret, errno))
-+		goto out_filterfd;
-+
-+	char test_skb[128] = {
-+		0,
-+	};
-+
-+	__u32 prog_ret;
-+	int err = bpf_prog_test_run(filter_fd, 1, test_skb, sizeof(test_skb), 0,
-+				    0, &prog_ret, 0);
-+	CHECK(err != 42, "test_run",
-+	      "tracepoint did not modify return value\n");
-+	CHECK(prog_ret != 0, "test_run_ret",
-+	      "socket_filter did not return 0\n");
-+
-+	ret = bpf_raw_tracepoint_ftrace_detach("bpf_test_run",
-+					       "bpf_test_finish",
-+					       bpf_fd);
-+	if (CHECK(ret < 0, "bpf_raw_tracepoint_ftrace_detach",
-+		  "failed: %d errno %d\n", ret, errno))
-+		goto out_filterfd;
-+
-+	err = bpf_prog_test_run(filter_fd, 1, test_skb, sizeof(test_skb), 0, 0,
-+				&prog_ret, 0);
-+	CHECK(err != 0, "test_run_notrace",
-+	      "test_run failed with %d errno %d\n", err, errno);
-+	CHECK(prog_ret != 0, "test_run_ret_notrace",
-+	      "socket_filter did not return 0\n");
-+
-+out_filterfd:
-+	close(filter_fd);
-+out_bpffd:
-+	close(bpf_fd);
-+}
--- 
-2.22.0.410.gd8fdbe21b5-goog
+Tested-by: John Stultz <john.stultz@linaro.org>
 
+thanks
+-john
