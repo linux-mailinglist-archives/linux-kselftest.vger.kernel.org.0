@@ -2,96 +2,99 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CC60B652D8
-	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Jul 2019 10:10:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 790BE653D0
+	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Jul 2019 11:31:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727929AbfGKIKV (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 11 Jul 2019 04:10:21 -0400
-Received: from mail-pf1-f196.google.com ([209.85.210.196]:36215 "EHLO
-        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727829AbfGKIKV (ORCPT
+        id S1727940AbfGKJb6 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 11 Jul 2019 05:31:58 -0400
+Received: from mail-wr1-f67.google.com ([209.85.221.67]:41026 "EHLO
+        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726088AbfGKJb6 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 11 Jul 2019 04:10:21 -0400
-Received: by mail-pf1-f196.google.com with SMTP id r7so2386118pfl.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 11 Jul 2019 01:10:21 -0700 (PDT)
+        Thu, 11 Jul 2019 05:31:58 -0400
+Received: by mail-wr1-f67.google.com with SMTP id c2so2289640wrm.8;
+        Thu, 11 Jul 2019 02:31:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=nigauri-org.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=AJ7vYCdAPuLCapGRPSaARhnlaV4Ty17w22yZ+g3QAz4=;
-        b=op8KyGONrSDXlvwCBwG3YIhe2wB8O/Dx8Ab+bYBOigybwZNM8zILaZq+1qvlRIbT76
-         OdcWqx7WW8ObCxZiJwlccFrCIaTQaNAJYUX9EwEvsMkl60JkEFqjkIerEMeW86Rzn58Q
-         d/OrTTFPVTHnDilI7LmYdJ0XOXbOqPmGxuaZfyJkCcs+2B0Iusxj1zClK4c1CAhpzvsc
-         /vHc+k6Xaqlwh9jJIuFQOKnF9o9PG9S95WdAzgWtPgwp0efldUxovLaVJOuQSIJqKcI9
-         2mntv6yHvR37/RswRb48wU2ZdZ06IDKhsjB91VuSGZY8Wi0p/MsnPKjdgfmnx/PfGkq1
-         KrMA==
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id;
+        bh=l4bEEAxzGIGnFBD/3jElNFp34ehWwPy0iGMb60Ja/qM=;
+        b=LGEXirOw0aMcPgnorDYhAX95/V+nn+qMQkpvwFvcG/FKF+nsqfqBtq+YBr9sTW7cs+
+         bicPHQ2DJeSeAt6FDWRizzeeEA0VSBSdFMdFN+GDwcL1yoln61rRciCl6pqBOlYWjOGD
+         x1jm8zjeksPQFNvU0SzDa78BuYHqjMKZ8FUaj+IzVIWNN76JyIgFR/cAf4m7KpdCD2HX
+         aeFCy8aUdVcvd/S+QZURH1POYFXsDHEF+8cxBT0ZBUZJXNNCJvDh5Q06q7cMUrKeRkyX
+         0eVVCePqlrXqanKMOhDOuQf4ZQ5tRCUBsavFILtljXTueQGq3oA+0TsS2UkuXe4e7bVg
+         oTEQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=AJ7vYCdAPuLCapGRPSaARhnlaV4Ty17w22yZ+g3QAz4=;
-        b=VowLWl10o4geLGtPvwltDpIP2o02XRfrJy1DJcr5wQsyEGAEpujm9u+oU7JSLytTpi
-         P4ebijpR+HisFwEU46tc8VXePlai34x3bV8tLDt9MxntYZPt/+Zle3Yt3gX5yegbWOzo
-         zXN2IZk+Rtjlfp2knyg+0AjatDeyj/s2bd4VykCdkODLNCDBndDvNV/QPvXhyFHvD4Tg
-         ZDGStZRi+q3Src+Qv3VntnnIKi55NLcZN0zrHlHSlkPdy3XSfiG5qM2tYCOPT9NMHAXK
-         3XrKVAQPlT/5u33tpbI3+cudUek59O8EGTS44PLFlnzjzwVMEMKw8EXraDyyk+3Ggsvi
-         CSvA==
-X-Gm-Message-State: APjAAAX7vWRhOu/Z/JfMsPg4srHhP4SxmdKFpZ21N+tDACCTVNsPmXVn
-        P2pVUBPf9IBvRVfykdMVo/e0XrI=
-X-Google-Smtp-Source: APXvYqy9MZTz7x+oLIATNCrzKZt5Q0GQ7hHswID3EYNoMiJJwCr6qKpmfNST6s0KSqxdgk9gREgRsg==
-X-Received: by 2002:a63:4554:: with SMTP id u20mr3109942pgk.406.1562832620455;
-        Thu, 11 Jul 2019 01:10:20 -0700 (PDT)
-Received: from chimu.flets-east.jp ([2405:6581:5360:1800:b0a6:d3a0:2355:6c2b])
-        by smtp.gmail.com with ESMTPSA id h21sm4959042pgg.75.2019.07.11.01.10.18
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Thu, 11 Jul 2019 01:10:19 -0700 (PDT)
-From:   Nobuhiro Iwamatsu <iwamatsu@nigauri.org>
-To:     linux-kselftest@vger.kernel.org
-Cc:     Kees Cook <keescook@chromium.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Nobuhiro Iwamatsu <iwamatsu@nigauri.org>
-Subject: [PATCH] selftests: breakpoints: Fix compile error with arun_test()
-Date:   Thu, 11 Jul 2019 17:10:09 +0900
-Message-Id: <20190711081009.31808-1-iwamatsu@nigauri.org>
-X-Mailer: git-send-email 2.20.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=l4bEEAxzGIGnFBD/3jElNFp34ehWwPy0iGMb60Ja/qM=;
+        b=F3H350j8dZdyREHovHQ6zb4iU67gsi2H8IqmhouhtajueAP+dTlPQJu9ZnyYMETNEb
+         spoqk0zacQdqRGockF8NNTCWhyUQ3FrKajML0CcIdPUlt9reqU956Qa9/BOdlGmCCb+9
+         BL+GpYvxQG83ZIyaVW+Uq7029xMDIosx9uDSQ8ln5ttPBJZA6WFnu4Dmu6ciiTM0vPPY
+         zEwTc+bzIOVY4unw+IV0EZYKuMn58pB+cxuW0K4fPWsfUpux8hWcx6sqv1u6cpairX6C
+         gngge1arf++FjFjGOZ1HFQPNpzYVKWec1FrAthFFvg4bKNPJTQey6pHuhM4rOAI5brIB
+         4cOQ==
+X-Gm-Message-State: APjAAAVKSSWjpGF5WKBuBRwW/UKLUrPUiJRde9nGQ/Ia9SVLZRuPqyDX
+        eNnFWISnomEbU82isgJuiavQ+X44b6I=
+X-Google-Smtp-Source: APXvYqz0OXD69emcOGH46hrtIm+cwY/xRJ7bJg/E0Xtb/ywPVDEIQWoLL7zGB5vyW+suzm7/ZgNwZw==
+X-Received: by 2002:adf:db0b:: with SMTP id s11mr3967901wri.7.1562837515183;
+        Thu, 11 Jul 2019 02:31:55 -0700 (PDT)
+Received: from gmail.com (net-5-95-187-49.cust.vodafonedsl.it. [5.95.187.49])
+        by smtp.gmail.com with ESMTPSA id r123sm5074455wme.7.2019.07.11.02.31.54
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 11 Jul 2019 02:31:54 -0700 (PDT)
+From:   Paolo Pisati <p.pisati@gmail.com>
+To:     --in-reply-to= <20190710231439.GD32439@tassilo.jf.intel.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Shuah Khan <shuah@kernel.org>,
+        Jakub Kicinski <jakub.kicinski@netronome.com>,
+        Jiong Wang <jiong.wang@netronome.com>
+Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 0/2] Fold checksum at the end of bpf_csum_diff and fix
+Date:   Thu, 11 Jul 2019 11:31:51 +0200
+Message-Id: <1562837513-745-1-git-send-email-p.pisati@gmail.com>
+X-Mailer: git-send-email 2.7.4
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-By undefined run_test(), compile of breakpoint_test_arm64.c fails.
-This changes arun_test to run_test.
+From: Paolo Pisati <paolo.pisati@canonical.com>
 
-----
-reakpoint_test_arm64.c: In function 'main':
-breakpoint_test_arm64.c:217:14: warning: implicit declaration of function
-    'run_test'; did you mean 'arun_test'? [-Wimplicit-function-declaration]
-     result = run_test(size, MIN(size, 8), wr, wp);
-              ^~~~~~~~
-              arun_test
-----
+After applying patch 0001, all checksum implementations i could test (x86-64, arm64 and
+arm), now agree on the return value.
 
-Fixes: 5821ba969511 ("selftests: Add test plan API to kselftest.h and adjust callers")
-Signed-off-by: Nobuhiro Iwamatsu <iwamatsu@nigauri.org>
----
- tools/testing/selftests/breakpoints/breakpoint_test_arm64.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Patch 0002 fix the expected return value for test #13: i did the calculation manually,
+and it correspond.
 
-diff --git a/tools/testing/selftests/breakpoints/breakpoint_test_arm64.c b/tools/testing/selftests/breakpoints/breakpoint_test_arm64.c
-index 58ed5eeab709..ad41ea69001b 100644
---- a/tools/testing/selftests/breakpoints/breakpoint_test_arm64.c
-+++ b/tools/testing/selftests/breakpoints/breakpoint_test_arm64.c
-@@ -109,7 +109,7 @@ static bool set_watchpoint(pid_t pid, int size, int wp)
- 	return false;
- }
- 
--static bool arun_test(int wr_size, int wp_size, int wr, int wp)
-+static bool run_test(int wr_size, int wp_size, int wr, int wp)
- {
- 	int status;
- 	siginfo_t siginfo;
+Unfortunately, after applying patch 0001, other test cases now fail in
+test_verifier:
+
+$ sudo ./tools/testing/selftests/bpf/test_verifier
+...
+#417/p helper access to variable memory: size = 0 allowed on NULL (ARG_PTR_TO_MEM_OR_NULL) FAIL retval 65535 != 0 
+#419/p helper access to variable memory: size = 0 allowed on != NULL stack pointer (ARG_PTR_TO_MEM_OR_NULL) FAIL retval 65535 != 0 
+#423/p helper access to variable memory: size possible = 0 allowed on != NULL packet pointer (ARG_PTR_TO_MEM_OR_NULL) FAIL retval 65535 != 0 
+...
+Summary: 1500 PASSED, 0 SKIPPED, 3 FAILED
+
+And there are probably other fallouts in other selftests - someone familiar
+should take a look before applying these patches.
+
+Paolo Pisati (2):
+  bpf: bpf_csum_diff: fold the checksum before returning the
+    value
+  bpf, selftest: fix checksum value for test #13
+
+ net/core/filter.c                                   | 2 +-
+ tools/testing/selftests/bpf/verifier/array_access.c | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
 -- 
-2.20.1
+2.17.1
 
