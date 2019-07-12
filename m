@@ -2,109 +2,152 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 34353668BE
-	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Jul 2019 10:19:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 33F6E66B39
+	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Jul 2019 12:58:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726880AbfGLISt (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 12 Jul 2019 04:18:49 -0400
-Received: from mail-qt1-f202.google.com ([209.85.160.202]:44905 "EHLO
-        mail-qt1-f202.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727102AbfGLISn (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 12 Jul 2019 04:18:43 -0400
-Received: by mail-qt1-f202.google.com with SMTP id x10so6304671qti.11
-        for <linux-kselftest@vger.kernel.org>; Fri, 12 Jul 2019 01:18:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=LDQmGV1sXKMjUeOhPKTnD5bP1+GpH11oHwNBh3L4XLs=;
-        b=ajMvr06ssanFu9RH2ulwsIFgwcP3l/5lqWEJ4esAE7iplXyXRdoSrlII6lIzkciV9c
-         8fS3nAoGa/HEi4KQyyTUBP5BR7yF3M+y9W97hSaSVNMs7BQDT5O+1ViXKXfznttmHdA4
-         kZj77gRl1AQhpyhVrBktIROAMxvXbx6avdgvMOr4xBoGYGhyUIqfYD/dLpvgaPFXSOWO
-         xbcNYLSdxlgrhAxlcEUApm2APOEsny1ZyIbfB8sr4BAZx09pOkCoMJnlgMX+1V3SASYs
-         BSMIHfLGoKRYl/0WYsLgnjKM0J6KWHxKs/rp+Dqs7J9PUiYp83sE3bi0Q56vLyTXyarh
-         dgxg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=LDQmGV1sXKMjUeOhPKTnD5bP1+GpH11oHwNBh3L4XLs=;
-        b=gGj4gFoqAA3CBQvCICJVqvbqOG7JisghynPGEKuF0ymW6LwJPWEZl3MDEUYQVfx/Vy
-         myj5H6CnmxpKM2GeFbVlPYDy2thOn86rmECsiThrAxWpdQHOzINUiGKyKur8JRQonkCH
-         DMBGsPlZqh6gZaRhq6h8tpzB+9/q9bbsmpUI01Pg4IAOb9vgfZCaAjQG+AUvQJcuKoYM
-         zIe/PXNQLVQx2Vssee8Hsysk+9CeKsRjhQh1OVJxYHUEUqtPl1HuKOqK6xTvL8eHyZhe
-         q5vGyDh3KK1tr0UhjPcAXBmeHtTQIQ5zBwbnmO7ImZBeX/asvmhHeJ92KXpcs1GUS2n8
-         zYlA==
-X-Gm-Message-State: APjAAAWPpLI3VNdzoVnrRhJQpwaqRDrG9yYE6XcVsLenFw1PiPG5M3Wr
-        lOBFExjY/gFk2S55Ttdcg+zq6pdVb5RFQQqHdIU+EA==
-X-Google-Smtp-Source: APXvYqzC+SZLS5J+4fhjs10zmFF3ZVskrEEqUdAP/3LUu2LLwXYMIIoYM0ZhbtGFlpH7G417ya7cYZF2uvns6Cyv43rpDw==
-X-Received: by 2002:a37:9a8b:: with SMTP id c133mr4814616qke.261.1562919522167;
- Fri, 12 Jul 2019 01:18:42 -0700 (PDT)
-Date:   Fri, 12 Jul 2019 01:17:44 -0700
-In-Reply-To: <20190712081744.87097-1-brendanhiggins@google.com>
-Message-Id: <20190712081744.87097-19-brendanhiggins@google.com>
-Mime-Version: 1.0
-References: <20190712081744.87097-1-brendanhiggins@google.com>
-X-Mailer: git-send-email 2.22.0.410.gd8fdbe21b5-goog
-Subject: [PATCH v9 18/18] MAINTAINERS: add proc sysctl KUnit test to PROC
- SYSCTL section
-From:   Brendan Higgins <brendanhiggins@google.com>
-To:     frowand.list@gmail.com, gregkh@linuxfoundation.org,
-        jpoimboe@redhat.com, keescook@google.com,
-        kieran.bingham@ideasonboard.com, mcgrof@kernel.org,
-        peterz@infradead.org, robh@kernel.org, sboyd@kernel.org,
-        shuah@kernel.org, tytso@mit.edu, yamada.masahiro@socionext.com
-Cc:     devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        kunit-dev@googlegroups.com, linux-doc@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kbuild@vger.kernel.org,
+        id S1726967AbfGLK6N (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 12 Jul 2019 06:58:13 -0400
+Received: from mx1.mailbox.org ([80.241.60.212]:42972 "EHLO mx1.mailbox.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726050AbfGLK6N (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 12 Jul 2019 06:58:13 -0400
+Received: from smtp1.mailbox.org (smtp1.mailbox.org [80.241.60.240])
+        (using TLSv1.2 with cipher ECDHE-RSA-CHACHA20-POLY1305 (256/256 bits))
+        (No client certificate requested)
+        by mx1.mailbox.org (Postfix) with ESMTPS id 648AF5427E;
+        Fri, 12 Jul 2019 12:58:07 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at heinlein-support.de
+Received: from smtp1.mailbox.org ([80.241.60.240])
+        by spamfilter01.heinlein-hosting.de (spamfilter01.heinlein-hosting.de [80.241.56.115]) (amavisd-new, port 10030)
+        with ESMTP id la_RnxBryad0; Fri, 12 Jul 2019 12:57:56 +0200 (CEST)
+Date:   Fri, 12 Jul 2019 20:57:45 +1000
+From:   Aleksa Sarai <cyphar@cyphar.com>
+To:     Al Viro <viro@zeniv.linux.org.uk>
+Cc:     Jeff Layton <jlayton@kernel.org>,
+        "J. Bruce Fields" <bfields@fieldses.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        David Howells <dhowells@redhat.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Christian Brauner <christian@brauner.io>,
+        David Drysdale <drysdale@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Jann Horn <jannh@google.com>, Tycho Andersen <tycho@tycho.ws>,
+        Chanho Min <chanho.min@lge.com>,
+        Oleg Nesterov <oleg@redhat.com>, Aleksa Sarai <asarai@suse.de>,
+        containers@lists.linux-foundation.org, linux-alpha@vger.kernel.org,
+        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-ia64@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-nvdimm@lists.01.org, linux-um@lists.infradead.org,
-        Alexander.Levin@microsoft.com, Tim.Bird@sony.com,
-        amir73il@gmail.com, dan.carpenter@oracle.com, daniel@ffwll.ch,
-        jdike@addtoit.com, joel@jms.id.au, julia.lawall@lip6.fr,
-        khilman@baylibre.com, knut.omang@oracle.com, logang@deltatee.com,
-        mpe@ellerman.id.au, pmladek@suse.com, rdunlap@infradead.org,
-        richard@nod.at, rientjes@google.com, rostedt@goodmis.org,
-        wfg@linux.intel.com, Brendan Higgins <brendanhiggins@google.com>,
-        Iurii Zaikin <yzaikin@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        linux-xtensa@linux-xtensa.org, sparclinux@vger.kernel.org
+Subject: Re: [PATCH v9 05/10] namei: O_BENEATH-style path resolution flags
+Message-ID: <20190712105745.nruaftgeat6irhzr@yavin>
+References: <20190706145737.5299-1-cyphar@cyphar.com>
+ <20190706145737.5299-6-cyphar@cyphar.com>
+ <20190712043341.GI17978@ZenIV.linux.org.uk>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="f3oogwkmh2sysq6o"
+Content-Disposition: inline
+In-Reply-To: <20190712043341.GI17978@ZenIV.linux.org.uk>
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add entry for the new proc sysctl KUnit test to the PROC SYSCTL section,
-and add Iurii as a maintainer.
 
-Signed-off-by: Brendan Higgins <brendanhiggins@google.com>
-Cc: Iurii Zaikin <yzaikin@google.com>
-Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Reviewed-by: Logan Gunthorpe <logang@deltatee.com>
-Acked-by: Luis Chamberlain <mcgrof@kernel.org>
----
- MAINTAINERS | 2 ++
- 1 file changed, 2 insertions(+)
+--f3oogwkmh2sysq6o
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 48d04d180a988..f8204c75114da 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -12721,12 +12721,14 @@ F:	Documentation/filesystems/proc.txt
- PROC SYSCTL
- M:	Luis Chamberlain <mcgrof@kernel.org>
- M:	Kees Cook <keescook@chromium.org>
-+M:	Iurii Zaikin <yzaikin@google.com>
- L:	linux-kernel@vger.kernel.org
- L:	linux-fsdevel@vger.kernel.org
- S:	Maintained
- F:	fs/proc/proc_sysctl.c
- F:	include/linux/sysctl.h
- F:	kernel/sysctl.c
-+F:	kernel/sysctl-test.c
- F:	tools/testing/selftests/sysctl/
- 
- PS3 NETWORK SUPPORT
--- 
-2.22.0.410.gd8fdbe21b5-goog
+On 2019-07-12, Al Viro <viro@zeniv.linux.org.uk> wrote:
+> On Sun, Jul 07, 2019 at 12:57:32AM +1000, Aleksa Sarai wrote:
+> > @@ -1442,8 +1464,11 @@ static int follow_dotdot_rcu(struct nameidata *n=
+d)
+> >  	struct inode *inode =3D nd->inode;
+> > =20
+> >  	while (1) {
+> > -		if (path_equal(&nd->path, &nd->root))
+> > +		if (path_equal(&nd->path, &nd->root)) {
+> > +			if (unlikely(nd->flags & LOOKUP_BENEATH))
+> > +				return -EXDEV;
+>=20
+> > @@ -1468,6 +1493,8 @@ static int follow_dotdot_rcu(struct nameidata *nd)
+> >  				return -ECHILD;
+> >  			if (&mparent->mnt =3D=3D nd->path.mnt)
+> >  				break;
+> > +			if (unlikely(nd->flags & LOOKUP_XDEV))
+> > +				return -EXDEV;
+> >  			/* we know that mountpoint was pinned */
+> >  			nd->path.dentry =3D mountpoint;
+> >  			nd->path.mnt =3D &mparent->mnt;
+> > @@ -1482,6 +1509,8 @@ static int follow_dotdot_rcu(struct nameidata *nd)
+> >  			return -ECHILD;
+> >  		if (!mounted)
+> >  			break;
+> > +		if (unlikely(nd->flags & LOOKUP_XDEV))
+> > +			return -EXDEV;
+>=20
+> Are you sure these failure exits in follow_dotdot_rcu() won't give
+> suprious hard errors?
 
+I could switch to -ECHILD for the *_rcu() checks if you'd prefer that.
+Though, I'd have (probably naively) thought that you'd have already
+gotten -ECHILD from the seqlock checks if there was a race during ".."
+handling.
+
+> > +	if (unlikely(nd->flags & LOOKUP_BENEATH)) {
+> > +		error =3D dirfd_path_init(nd);
+> > +		if (unlikely(error))
+> > +			return ERR_PTR(error);
+> > +		nd->root =3D nd->path;
+> > +		if (!(nd->flags & LOOKUP_RCU))
+> > +			path_get(&nd->root);
+> > +	}
+> >  	if (*s =3D=3D '/') {
+> >  		if (likely(!nd->root.mnt))
+> >  			set_root(nd);
+> > @@ -2350,9 +2400,11 @@ static const char *path_init(struct nameidata *n=
+d, unsigned flags)
+> >  			s =3D ERR_PTR(error);
+> >  		return s;
+> >  	}
+> > -	error =3D dirfd_path_init(nd);
+> > -	if (unlikely(error))
+> > -		return ERR_PTR(error);
+> > +	if (likely(!nd->path.mnt)) {
+>=20
+> Is that a weird way of saying "if we hadn't already called dirfd_path_ini=
+t()"?
+
+Yes. I did it to be more consistent with the other "have we got the
+root" checks elsewhere. Is there another way you'd prefer I do it?
+
+--=20
+Aleksa Sarai
+Senior Software Engineer (Containers)
+SUSE Linux GmbH
+<https://www.cyphar.com/>
+
+--f3oogwkmh2sysq6o
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQSxZm6dtfE8gxLLfYqdlLljIbnQEgUCXShnpgAKCRCdlLljIbnQ
+EgLTAP4nuVmi0292tyCAkB4Di0UUtazb2EsZPgKq9s2vRoyuFAD/UKONDBSK3VN9
+06Id1xrmV0JIYJSqOIdF2oJIncJ8ZwI=
+=5hbR
+-----END PGP SIGNATURE-----
+
+--f3oogwkmh2sysq6o--
