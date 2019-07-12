@@ -2,115 +2,133 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B34DE66286
-	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Jul 2019 01:50:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 013BE66573
+	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Jul 2019 06:15:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728757AbfGKXup (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 11 Jul 2019 19:50:45 -0400
-Received: from mail-qt1-f196.google.com ([209.85.160.196]:45757 "EHLO
-        mail-qt1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728532AbfGKXuo (ORCPT
+        id S1728265AbfGLEPg (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 12 Jul 2019 00:15:36 -0400
+Received: from zeniv.linux.org.uk ([195.92.253.2]:60074 "EHLO
+        ZenIV.linux.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727061AbfGLEPg (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 11 Jul 2019 19:50:44 -0400
-Received: by mail-qt1-f196.google.com with SMTP id x22so1415314qtp.12;
-        Thu, 11 Jul 2019 16:50:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=wuTNjs1AJzVSPfomxhglY+rjhXorfZWV3dSJ2jI2rn8=;
-        b=lHNjCuU//O0PYvZcPHyNlgDrIP/JmdlwJkCURyOzv2OTxDzyJ5F9OV+LxvO1YgNcTd
-         3badbLyWNUwSh/hhUC12gInEmr9Az7jKuOSEhOn7IqECEFnfXc4JM1WfAwQnLh8MJL4n
-         SZ8QQ09G4hEI0DmHcXjFAfQEiMpEDmBsXcbjb/bzM7JLVxFD1FmR2pV27sIT58nkpW5H
-         Fi6oSphodQTJK/sJ7oFnFp5HSsLlYI5cdGw9pIbmqzR5qBEtbohHoq8IlYgpfK8LnO/8
-         ZFU8DUicggdmlWtcF3oCOz4Ebjv/m9NBB8Aysg0kOsLkr1L8QVUcrrmqY18WY/2JDdvl
-         PVNA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=wuTNjs1AJzVSPfomxhglY+rjhXorfZWV3dSJ2jI2rn8=;
-        b=V8q53Yql8cOg+8gk5+ppmG343Ns3oZh/U5EIQq5pk2oDf+lSWZkXP0eUmj189wWhma
-         8B5em/ROhji2htFbel4DFxIROS1WqEoPT0zy4A6HNDHKgEY4hfAI2XWTtRgIoE8WrU9p
-         /svIKoPoPej2Fwkzl1o9DNrS+uVvfOmWH3231pcCHzSb3cXTNyMOdFpJO0nT6VEm+xvB
-         f7R76R7r8ZBkn9ze62OgCN6J9mMAlXQ/jBu9pdvjdaRVWRMr1ZfVu3zU9lPpXTGNwMYF
-         H0Se9JmFfgcelT2+nGQ8azAvUvFd1I6Q7OwDJP+jhWiGdREj22gUnCUfwbFtHDHtqNKb
-         Jk6g==
-X-Gm-Message-State: APjAAAX0S4327S9hOdPhemzDVyTeTYS/7a2SMGqD7x3ctXtXTmbiQq0h
-        nQw+hkhRL9PToC4GPDyvMot/9mTMtcB+F8XcydM=
-X-Google-Smtp-Source: APXvYqxi5uC3T9mdtDBKrfzoMfUO2bPhfXojvxDD1+S09q+TEBQcHeoRdC3Rji4gs+Y+3hL1bahWQt+YEvRtNbQD8Y0=
-X-Received: by 2002:ac8:2d56:: with SMTP id o22mr3917172qta.171.1562889043498;
- Thu, 11 Jul 2019 16:50:43 -0700 (PDT)
-MIME-Version: 1.0
-References: <1562837513-745-1-git-send-email-p.pisati@gmail.com>
-In-Reply-To: <1562837513-745-1-git-send-email-p.pisati@gmail.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Thu, 11 Jul 2019 16:50:32 -0700
-Message-ID: <CAEf4BzbGLmuZ48vFUCrDW6VC7_YrkW_0NpgpgXNQEzF_dEqgnA@mail.gmail.com>
-Subject: Re: [PATCH 0/2] Fold checksum at the end of bpf_csum_diff and fix
-To:     Paolo Pisati <p.pisati@gmail.com>
-Cc:     "--in-reply-to=" <20190710231439.GD32439@tassilo.jf.intel.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        "David S . Miller" <davem@davemloft.net>,
+        Fri, 12 Jul 2019 00:15:36 -0400
+Received: from viro by ZenIV.linux.org.uk with local (Exim 4.92 #3 (Red Hat Linux))
+        id 1hlmxT-000330-0Q; Fri, 12 Jul 2019 04:14:55 +0000
+Date:   Fri, 12 Jul 2019 05:14:54 +0100
+From:   Al Viro <viro@zeniv.linux.org.uk>
+To:     Aleksa Sarai <cyphar@cyphar.com>
+Cc:     Jeff Layton <jlayton@kernel.org>,
+        "J. Bruce Fields" <bfields@fieldses.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        David Howells <dhowells@redhat.com>,
         Shuah Khan <shuah@kernel.org>,
-        Jakub Kicinski <jakub.kicinski@netronome.com>,
-        Jiong Wang <jiong.wang@netronome.com>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Christian Brauner <christian@brauner.io>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Jann Horn <jannh@google.com>, Tycho Andersen <tycho@tycho.ws>,
+        David Drysdale <drysdale@google.com>,
+        Chanho Min <chanho.min@lge.com>,
+        Oleg Nesterov <oleg@redhat.com>, Aleksa Sarai <asarai@suse.de>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        containers@lists.linux-foundation.org, linux-alpha@vger.kernel.org,
+        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-ia64@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        linux-xtensa@linux-xtensa.org, sparclinux@vger.kernel.org
+Subject: Re: [PATCH v9 01/10] namei: obey trailing magic-link DAC permissions
+Message-ID: <20190712041454.GG17978@ZenIV.linux.org.uk>
+References: <20190706145737.5299-1-cyphar@cyphar.com>
+ <20190706145737.5299-2-cyphar@cyphar.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190706145737.5299-2-cyphar@cyphar.com>
+User-Agent: Mutt/1.11.3 (2019-02-01)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Jul 11, 2019 at 2:32 AM Paolo Pisati <p.pisati@gmail.com> wrote:
->
-> From: Paolo Pisati <paolo.pisati@canonical.com>
->
-> After applying patch 0001, all checksum implementations i could test (x86-64, arm64 and
-> arm), now agree on the return value.
->
-> Patch 0002 fix the expected return value for test #13: i did the calculation manually,
-> and it correspond.
->
-> Unfortunately, after applying patch 0001, other test cases now fail in
-> test_verifier:
->
-> $ sudo ./tools/testing/selftests/bpf/test_verifier
-> ...
-> #417/p helper access to variable memory: size = 0 allowed on NULL (ARG_PTR_TO_MEM_OR_NULL) FAIL retval 65535 != 0
-> #419/p helper access to variable memory: size = 0 allowed on != NULL stack pointer (ARG_PTR_TO_MEM_OR_NULL) FAIL retval 65535 != 0
-> #423/p helper access to variable memory: size possible = 0 allowed on != NULL packet pointer (ARG_PTR_TO_MEM_OR_NULL) FAIL retval 65535 != 0
+On Sun, Jul 07, 2019 at 12:57:28AM +1000, Aleksa Sarai wrote:
 
-I'm not entirely sure this fix is correct, given these failures, to be honest.
+> @@ -514,7 +516,14 @@ static void set_nameidata(struct nameidata *p, int dfd, struct filename *name)
+>  	p->stack = p->internal;
+>  	p->dfd = dfd;
+>  	p->name = name;
+> -	p->total_link_count = old ? old->total_link_count : 0;
+> +	p->total_link_count = 0;
+> +	p->acc_mode = 0;
+> +	p->opath_mask = FMODE_PATH_READ | FMODE_PATH_WRITE;
+> +	if (old) {
+> +		p->total_link_count = old->total_link_count;
+> +		p->acc_mode = old->acc_mode;
+> +		p->opath_mask = old->opath_mask;
+> +	}
 
-Let's wait for someone who understands intended semantics for
-bpf_csum_diff, before changing returned value so drastically.
+Huh?  Could somebody explain why traversals of NFS4 referrals should inherit
+->acc_mode and ->opath_mask?
 
-But in any case, fixes for these test failures should be in your patch
-series as well.
+>  static __always_inline
+> -const char *get_link(struct nameidata *nd)
+> +const char *get_link(struct nameidata *nd, bool trailing)
+>  {
+>  	struct saved *last = nd->stack + nd->depth - 1;
+>  	struct dentry *dentry = last->link.dentry;
+> @@ -1081,6 +1134,44 @@ const char *get_link(struct nameidata *nd)
+>  		} else {
+>  			res = get(dentry, inode, &last->done);
+>  		}
+> +		/* If we just jumped it was because of a magic-link. */
+> +		if (unlikely(nd->flags & LOOKUP_JUMPED)) {
 
+That's not quite guaranteed (it is possible to bind a symlink on top
+of a regular file, and you will get LOOKUP_JUMPED on the entry into
+trailing_symlink() when looking the result up).  Moreover, why bother
+with LOOKUP_JUMPED here?  See that
+	nd->last_type = LAST_BIND;
+several lines prior?  That's precisely to be able to recognize those
+suckers.
 
-> ...
-> Summary: 1500 PASSED, 0 SKIPPED, 3 FAILED
->
-> And there are probably other fallouts in other selftests - someone familiar
-> should take a look before applying these patches.
->
-> Paolo Pisati (2):
->   bpf: bpf_csum_diff: fold the checksum before returning the
->     value
->   bpf, selftest: fix checksum value for test #13
->
->  net/core/filter.c                                   | 2 +-
->  tools/testing/selftests/bpf/verifier/array_access.c | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
->
-> --
-> 2.17.1
->
+And _that_ would've avoided another piece of ugliness - your LOOKUP_JUMPED
+kludge forces you to handle that cra^Wsclero^Wvaluable security hardening
+in get_link(), instead of trailing_symlink() where you apparently want
+it to be.  Simply because nd_jump_root() done later in get_link() will set
+LOOKUP_JUMPED for absolute symlinks, confusing your test.
+
+Moreover, I'm not sure that trailing_symlink() is the right place for
+that either - I would be rather tempted to fold do_o_path() into
+path_openat(), inline path_lookupat() there (as in
+        s = path_init(nd, flags);
+
+        while (!(error = link_path_walk(s, nd))
+                && ((error = lookup_last(nd)) > 0)) {
+                s = trailing_symlink(nd);
+        }
+        if (!error)
+                error = complete_walk(nd);
+        if (!error && nd->flags & LOOKUP_DIRECTORY)
+                if (!d_can_lookup(nd->path.dentry))
+                        error = -ENOTDIR;
+        if (!error) {
+                audit_inode(nd->name, nd->path.dentry, 0);
+                error = vfs_open(&nd->path, file);
+        }
+        terminate_walk(nd);
+- we don't need LOOKUP_DOWN there) and then we only care about the
+two callers of trailing_symlink() that are in path_openat().  Which
+is where you have your ->acc_mode and ->opath_mask without the need
+to dump them into nameidata.  Or to bring that mess into the
+things like stat(2) et.al. - it simply doesn't belong there.
+
+In any case, this "bool trailing" is completely wrong; whether that
+check belongs in trailing_symlink() or (some of) its callers, putting
+it into get_link() is a mistake, forced by kludgy check for procfs-style
+symlinks.
