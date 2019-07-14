@@ -2,162 +2,82 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 42DF767F4F
-	for <lists+linux-kselftest@lfdr.de>; Sun, 14 Jul 2019 16:33:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9C3F67F5C
+	for <lists+linux-kselftest@lfdr.de>; Sun, 14 Jul 2019 16:37:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728370AbfGNOdK (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 14 Jul 2019 10:33:10 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:48282 "EHLO mx1.redhat.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728146AbfGNOdJ (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 14 Jul 2019 10:33:09 -0400
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id 41C70308FC5F;
-        Sun, 14 Jul 2019 14:33:09 +0000 (UTC)
-Received: from redhat.com (ovpn-120-38.rdu2.redhat.com [10.10.120.38])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 94D0B1001B2F;
-        Sun, 14 Jul 2019 14:33:08 +0000 (UTC)
-Date:   Sun, 14 Jul 2019 10:33:06 -0400
-From:   Joe Lawrence <joe.lawrence@redhat.com>
-To:     live-patching@vger.kernel.org, linux-kselftest@vger.kernel.org
-Cc:     shuah@kernel.org
-Subject: Re: [PATCH] selftests/livepatch: add test skip handling
-Message-ID: <20190714143306.GA29501@redhat.com>
-References: <20190714142829.29458-1-joe.lawrence@redhat.com>
+        id S1728509AbfGNOgz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 14 Jul 2019 10:36:55 -0400
+Received: from zeniv.linux.org.uk ([195.92.253.2]:42092 "EHLO
+        ZenIV.linux.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728146AbfGNOgy (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Sun, 14 Jul 2019 10:36:54 -0400
+Received: from viro by ZenIV.linux.org.uk with local (Exim 4.92 #3 (Red Hat Linux))
+        id 1hmfbz-00010j-Kc; Sun, 14 Jul 2019 14:36:23 +0000
+Date:   Sun, 14 Jul 2019 15:36:23 +0100
+From:   Al Viro <viro@zeniv.linux.org.uk>
+To:     Aleksa Sarai <cyphar@cyphar.com>
+Cc:     Jeff Layton <jlayton@kernel.org>,
+        "J. Bruce Fields" <bfields@fieldses.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        David Howells <dhowells@redhat.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Christian Brauner <christian@brauner.io>,
+        David Drysdale <drysdale@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Jann Horn <jannh@google.com>, Tycho Andersen <tycho@tycho.ws>,
+        Chanho Min <chanho.min@lge.com>,
+        Oleg Nesterov <oleg@redhat.com>, Aleksa Sarai <asarai@suse.de>,
+        containers@lists.linux-foundation.org, linux-alpha@vger.kernel.org,
+        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-ia64@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        linux-xtensa@linux-xtensa.org, sparclinux@vger.kernel.org
+Subject: Re: [PATCH v9 05/10] namei: O_BENEATH-style path resolution flags
+Message-ID: <20190714143623.GR17978@ZenIV.linux.org.uk>
+References: <20190706145737.5299-1-cyphar@cyphar.com>
+ <20190706145737.5299-6-cyphar@cyphar.com>
+ <20190712043341.GI17978@ZenIV.linux.org.uk>
+ <20190712105745.nruaftgeat6irhzr@yavin>
+ <20190712123924.GK17978@ZenIV.linux.org.uk>
+ <20190712125552.GL17978@ZenIV.linux.org.uk>
+ <20190712132553.GN17978@ZenIV.linux.org.uk>
+ <20190712150026.GO17978@ZenIV.linux.org.uk>
+ <20190713024153.GA3817@ZenIV.linux.org.uk>
+ <20190714070029.m53etvm3y4etidxt@yavin>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190714142829.29458-1-joe.lawrence@redhat.com>
-User-Agent: Mutt/1.12.0 (2019-05-25)
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
-X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.43]); Sun, 14 Jul 2019 14:33:09 +0000 (UTC)
+In-Reply-To: <20190714070029.m53etvm3y4etidxt@yavin>
+User-Agent: Mutt/1.11.3 (2019-02-01)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sun, Jul 14, 2019 at 10:28:29AM -0400, Joe Lawrence wrote:
-> Before running a livpeatch self-test, first verify that we've built and
-> installed the livepatch self-test kernel modules by running a 'modprobe
-> --dry-run'.  This should catch a few environment issues, including
-> !CONFIG_LIVEPATCH and !CONFIG_TEST_LIVEPATCH.  In these cases, exit
-> gracefully with test-skip status rather than test-fail status.
-> 
-> Reported-by: Jiri Benc <jbenc@redhat.com>
-> Suggested-by: Shuah Khan <shuah@kernel.org>
-> Signed-off-by: Joe Lawrence <joe.lawrence@redhat.com>
-> ---
->  tools/testing/selftests/livepatch/functions.sh | 18 ++++++++++++++++++
->  .../selftests/livepatch/test-callbacks.sh      |  5 +++++
->  .../selftests/livepatch/test-livepatch.sh      |  3 +++
->  .../selftests/livepatch/test-shadow-vars.sh    |  2 ++
->  4 files changed, 28 insertions(+)
-> 
-> diff --git a/tools/testing/selftests/livepatch/functions.sh b/tools/testing/selftests/livepatch/functions.sh
-> index 30195449c63c..92d6cfb49365 100644
-> --- a/tools/testing/selftests/livepatch/functions.sh
-> +++ b/tools/testing/selftests/livepatch/functions.sh
-> @@ -13,6 +13,14 @@ function log() {
->  	echo "$1" > /dev/kmsg
->  }
->  
-> +# skip(msg) - testing can't proceed
-> +#	msg - explanation
-> +function skip() {
-> +	log "SKIP: $1"
-> +	echo "SKIP: $1" >&2
-> +	exit 4
-> +}
-> +
->  # die(msg) - game over, man
->  #	msg - dying words
->  function die() {
-> @@ -43,6 +51,16 @@ function loop_until() {
->  	done
->  }
->  
-> +function assert_mod() {
-> +	local mod="$1"
-> +
-> +	if ! modprobe --dry-run "$mod" &>/dev/null ; then
-> +		skip "Failed modprobe --dry-run of module: $mod"
-> +	fi
-> +
-> +	return 1
-> +}
-> +
->  function is_livepatch_mod() {
->  	local mod="$1"
->  
-> diff --git a/tools/testing/selftests/livepatch/test-callbacks.sh b/tools/testing/selftests/livepatch/test-callbacks.sh
-> index e97a9dcb73c7..87a407cee7fd 100755
-> --- a/tools/testing/selftests/livepatch/test-callbacks.sh
-> +++ b/tools/testing/selftests/livepatch/test-callbacks.sh
-> @@ -9,6 +9,11 @@ MOD_LIVEPATCH2=test_klp_callbacks_demo2
->  MOD_TARGET=test_klp_callbacks_mod
->  MOD_TARGET_BUSY=test_klp_callbacks_busy
->  
-> +assert_mod $MOD_LIVEPATCH
-> +assert_mod $MOD_LIVEPATCH2
-> +assert_mod $MOD_TARGET
-> +assert_mod $MOD_TARGET_BUSY
-> +
->  set_dynamic_debug
->  
->  
-> diff --git a/tools/testing/selftests/livepatch/test-livepatch.sh b/tools/testing/selftests/livepatch/test-livepatch.sh
-> index f05268aea859..8d3b75ceeeff 100755
-> --- a/tools/testing/selftests/livepatch/test-livepatch.sh
-> +++ b/tools/testing/selftests/livepatch/test-livepatch.sh
-> @@ -7,6 +7,9 @@
->  MOD_LIVEPATCH=test_klp_livepatch
->  MOD_REPLACE=test_klp_atomic_replace
->  
-> +assert_mod $MOD_LIVEPATCH
-> +assert_mod $MOD_REPLACE
-> +
->  set_dynamic_debug
->  
->  
-> diff --git a/tools/testing/selftests/livepatch/test-shadow-vars.sh b/tools/testing/selftests/livepatch/test-shadow-vars.sh
-> index 04a37831e204..1ab09bc50363 100755
-> --- a/tools/testing/selftests/livepatch/test-shadow-vars.sh
-> +++ b/tools/testing/selftests/livepatch/test-shadow-vars.sh
-> @@ -6,6 +6,8 @@
->  
->  MOD_TEST=test_klp_shadow_vars
->  
-> +assert_mod $MOD_TEST
-> +
->  set_dynamic_debug
->  
->  
-> -- 
-> 2.21.0
-> 
+On Sun, Jul 14, 2019 at 05:00:29PM +1000, Aleksa Sarai wrote:
 
-Testing:
+> The basic property being guaranteed by LOOKUP_IN_ROOT is that it will
+> not result in resolution of a path component which was not inside the
+> root of the dirfd tree at some point during resolution (and that all
+> absolute symlink and ".." resolution will be done relative to the
+> dirfd). This may smell slightly of chroot(2), because unfortunately it
+> is a similar concept -- the reason for this is to allow for a more
+> efficient way to safely resolve paths inside a rootfs than spawning a
+> separate process to then pass back the fd to the caller.
 
-Here's the output if modprobe --dry-run doesn't like the modules (not
-built, etc.):
-
-  TAP version 13
-  selftests: livepatch: test-livepatch.sh
-  ========================================
-  SKIP: Failed modprobe --dry-run of module: test_klp_livepatch
-  not ok 1..1 selftests: livepatch: test-livepatch.sh [SKIP]
-  selftests: livepatch: test-callbacks.sh
-  ========================================
-  SKIP: Failed modprobe --dry-run of module: test_klp_callbacks_demo
-  not ok 1..2 selftests: livepatch: test-callbacks.sh [SKIP]
-  selftests: livepatch: test-shadow-vars.sh
-  ========================================
-  SKIP: Failed modprobe --dry-run of module: test_klp_shadow_vars
-  not ok 1..3 selftests: livepatch: test-shadow-vars.sh [SKIP]
-
-We could fold assert_mod() into __load_mod() if folks perfer.  I
-don't have strong opinion either way.
-
--- Joe
+IDGI...  If attacker can modify your subtree, you have already lost -
+after all, they can make anything appear inside that tree just before
+your syscall is made and bring it back out immediately afterwards.
+And if they can't, what is the race you are trying to protect against?
+Confused...
