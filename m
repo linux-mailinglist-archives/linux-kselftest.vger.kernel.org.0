@@ -2,84 +2,145 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B40168ED2
-	for <lists+linux-kselftest@lfdr.de>; Mon, 15 Jul 2019 16:10:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78915694EA
+	for <lists+linux-kselftest@lfdr.de>; Mon, 15 Jul 2019 16:54:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387972AbfGOOKB (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 15 Jul 2019 10:10:01 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:57802 "EHLO mx1.redhat.com"
+        id S2390986AbfGOO1X (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 15 Jul 2019 10:27:23 -0400
+Received: from mail.kernel.org ([198.145.29.99]:36600 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2388845AbfGOOKA (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 15 Jul 2019 10:10:00 -0400
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        id S2389203AbfGOO1W (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 15 Jul 2019 10:27:22 -0400
+Received: from sasha-vm.mshome.net (unknown [73.61.17.35])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id E974530C543C;
-        Mon, 15 Jul 2019 14:09:59 +0000 (UTC)
-Received: from [10.18.17.153] (dhcp-17-153.bos.redhat.com [10.18.17.153])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 7C15A60C91;
-        Mon, 15 Jul 2019 14:09:59 +0000 (UTC)
-Subject: Re: [PATCH] selftests/livepatch: add test skip handling
-To:     Kamalesh Babulal <kamalesh@linux.vnet.ibm.com>,
-        live-patching@vger.kernel.org, linux-kselftest@vger.kernel.org
-Cc:     shuah@kernel.org
-References: <20190714142829.29458-1-joe.lawrence@redhat.com>
- <9de46fed-785c-d5c4-8a76-205674bd0912@linux.vnet.ibm.com>
-From:   Joe Lawrence <joe.lawrence@redhat.com>
-Message-ID: <b675ce40-40c8-69aa-0767-dc1af9fc7797@redhat.com>
-Date:   Mon, 15 Jul 2019 10:09:58 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+        by mail.kernel.org (Postfix) with ESMTPSA id 8096D217D8;
+        Mon, 15 Jul 2019 14:27:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1563200841;
+        bh=72bF+IOx0j2z62Z8rTgnIAQCuDAKIbJw7oNt9/aWOc4=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=qmFRbGn4U+lZc8cyZymuF9z7JDdvNqzgIfpqbYH3nwc1tkHJFM2Cr+XsXmomhIJ90
+         ab5SuDmsdXmZ5x4yT15BXcAO9D7f60+UlwuKccLaH0FZQtLXGPAxo+pzqYuwZVKiWX
+         6N6PntFA8J8J/EFcEGyjZKJgmr+H14KUClcYUsAA=
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Jiri Benc <jbenc@redhat.com>, Yonghong Song <yhs@fb.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Sasha Levin <sashal@kernel.org>,
+        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, clang-built-linux@googlegroups.com
+Subject: [PATCH AUTOSEL 4.19 142/158] selftests: bpf: fix inlines in test_lwt_seg6local
+Date:   Mon, 15 Jul 2019 10:17:53 -0400
+Message-Id: <20190715141809.8445-142-sashal@kernel.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20190715141809.8445-1-sashal@kernel.org>
+References: <20190715141809.8445-1-sashal@kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <9de46fed-785c-d5c4-8a76-205674bd0912@linux.vnet.ibm.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
-X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.46]); Mon, 15 Jul 2019 14:10:00 +0000 (UTC)
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 7/15/19 2:50 AM, Kamalesh Babulal wrote:
-> On 7/14/19 7:58 PM, Joe Lawrence wrote:
->> Before running a livpeatch self-test, first verify that we've built and
->> installed the livepatch self-test kernel modules by running a 'modprobe
->> --dry-run'.  This should catch a few environment issues, including
->> !CONFIG_LIVEPATCH and !CONFIG_TEST_LIVEPATCH.  In these cases, exit
->> gracefully with test-skip status rather than test-fail status.
->>
->> Reported-by: Jiri Benc <jbenc@redhat.com>
->> Suggested-by: Shuah Khan <shuah@kernel.org>
->> Signed-off-by: Joe Lawrence <joe.lawrence@redhat.com>
-> 
-> Reviewed-by: Kamalesh Babulal <kamalesh@linux.vnet.ibm.com>
-> 
-> [...]
->>
->> +function assert_mod() {
->> +	local mod="$1"
->> +
->> +	if ! modprobe --dry-run "$mod" &>/dev/null ; then
-> 
-> Just a preference comment, shorter version 'modprobe -q -n'
-> can be used here.
-> 
+From: Jiri Benc <jbenc@redhat.com>
 
-Hi Kamalesh,
+[ Upstream commit 11aca65ec4db09527d3e9b6b41a0615b7da4386b ]
 
-Re: command line options: my preference has been to use the long form 
-command switches inside scripts as they are more likely to be self 
-documenting than their short counterparts.  e.g. I could have guessed 
-that -q is --quiet, but not that -n is --dry-run.
+Selftests are reporting this failure in test_lwt_seg6local.sh:
 
-Re: --quiet vs. command redirection: Another detail I don't have a 
-strong opinion about.  I guess I very slightly prefer the redirect so I 
-don't have to research various modprobe versions to determine if --quiet 
-is universally supported (it probably is).
++ ip netns exec ns2 ip -6 route add fb00::6 encap bpf in obj test_lwt_seg6local.o sec encap_srh dev veth2
+Error fetching program/map!
+Failed to parse eBPF program: Operation not permitted
 
-In both cases, I'll defer to whatever reviewers think is more 
-readable/conventional for the self-tests.
+The problem is __attribute__((always_inline)) alone is not enough to prevent
+clang from inserting those functions in .text. In that case, .text is not
+marked as relocateable.
 
--- Joe
+See the output of objdump -h test_lwt_seg6local.o:
+
+Idx Name          Size      VMA               LMA               File off  Algn
+  0 .text         00003530  0000000000000000  0000000000000000  00000040  2**3
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+
+This causes the iproute bpf loader to fail in bpf_fetch_prog_sec:
+bpf_has_call_data returns true but bpf_fetch_prog_relo fails as there's no
+relocateable .text section in the file.
+
+To fix this, convert to 'static __always_inline'.
+
+v2: Use 'static __always_inline' instead of 'static inline
+    __attribute__((always_inline))'
+
+Fixes: c99a84eac026 ("selftests/bpf: test for seg6local End.BPF action")
+Signed-off-by: Jiri Benc <jbenc@redhat.com>
+Acked-by: Yonghong Song <yhs@fb.com>
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ tools/testing/selftests/bpf/test_lwt_seg6local.c | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/tools/testing/selftests/bpf/test_lwt_seg6local.c b/tools/testing/selftests/bpf/test_lwt_seg6local.c
+index 0575751bc1bc..e2f6ed0a583d 100644
+--- a/tools/testing/selftests/bpf/test_lwt_seg6local.c
++++ b/tools/testing/selftests/bpf/test_lwt_seg6local.c
+@@ -61,7 +61,7 @@ struct sr6_tlv_t {
+ 	unsigned char value[0];
+ } BPF_PACKET_HEADER;
+ 
+-__attribute__((always_inline)) struct ip6_srh_t *get_srh(struct __sk_buff *skb)
++static __always_inline struct ip6_srh_t *get_srh(struct __sk_buff *skb)
+ {
+ 	void *cursor, *data_end;
+ 	struct ip6_srh_t *srh;
+@@ -95,7 +95,7 @@ __attribute__((always_inline)) struct ip6_srh_t *get_srh(struct __sk_buff *skb)
+ 	return srh;
+ }
+ 
+-__attribute__((always_inline))
++static __always_inline
+ int update_tlv_pad(struct __sk_buff *skb, uint32_t new_pad,
+ 		   uint32_t old_pad, uint32_t pad_off)
+ {
+@@ -125,7 +125,7 @@ int update_tlv_pad(struct __sk_buff *skb, uint32_t new_pad,
+ 	return 0;
+ }
+ 
+-__attribute__((always_inline))
++static __always_inline
+ int is_valid_tlv_boundary(struct __sk_buff *skb, struct ip6_srh_t *srh,
+ 			  uint32_t *tlv_off, uint32_t *pad_size,
+ 			  uint32_t *pad_off)
+@@ -184,7 +184,7 @@ int is_valid_tlv_boundary(struct __sk_buff *skb, struct ip6_srh_t *srh,
+ 	return 0;
+ }
+ 
+-__attribute__((always_inline))
++static __always_inline
+ int add_tlv(struct __sk_buff *skb, struct ip6_srh_t *srh, uint32_t tlv_off,
+ 	    struct sr6_tlv_t *itlv, uint8_t tlv_size)
+ {
+@@ -228,7 +228,7 @@ int add_tlv(struct __sk_buff *skb, struct ip6_srh_t *srh, uint32_t tlv_off,
+ 	return update_tlv_pad(skb, new_pad, pad_size, pad_off);
+ }
+ 
+-__attribute__((always_inline))
++static __always_inline
+ int delete_tlv(struct __sk_buff *skb, struct ip6_srh_t *srh,
+ 	       uint32_t tlv_off)
+ {
+@@ -266,7 +266,7 @@ int delete_tlv(struct __sk_buff *skb, struct ip6_srh_t *srh,
+ 	return update_tlv_pad(skb, new_pad, pad_size, pad_off);
+ }
+ 
+-__attribute__((always_inline))
++static __always_inline
+ int has_egr_tlv(struct __sk_buff *skb, struct ip6_srh_t *srh)
+ {
+ 	int tlv_offset = sizeof(struct ip6_t) + sizeof(struct ip6_srh_t) +
+-- 
+2.20.1
+
