@@ -2,27 +2,27 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 78915694EA
-	for <lists+linux-kselftest@lfdr.de>; Mon, 15 Jul 2019 16:54:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 10B13695C8
+	for <lists+linux-kselftest@lfdr.de>; Mon, 15 Jul 2019 17:00:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390986AbfGOO1X (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 15 Jul 2019 10:27:23 -0400
-Received: from mail.kernel.org ([198.145.29.99]:36600 "EHLO mail.kernel.org"
+        id S2389222AbfGOOQD (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 15 Jul 2019 10:16:03 -0400
+Received: from mail.kernel.org ([198.145.29.99]:32788 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2389203AbfGOO1W (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 15 Jul 2019 10:27:22 -0400
+        id S2388728AbfGOOQD (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 15 Jul 2019 10:16:03 -0400
 Received: from sasha-vm.mshome.net (unknown [73.61.17.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 8096D217D8;
-        Mon, 15 Jul 2019 14:27:18 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 5E033212F5;
+        Mon, 15 Jul 2019 14:15:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1563200841;
-        bh=72bF+IOx0j2z62Z8rTgnIAQCuDAKIbJw7oNt9/aWOc4=;
+        s=default; t=1563200162;
+        bh=cNuXwgW7cfsVapYE8pTdKebxsF8N8vLFuZqgQkmSg4g=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qmFRbGn4U+lZc8cyZymuF9z7JDdvNqzgIfpqbYH3nwc1tkHJFM2Cr+XsXmomhIJ90
-         ab5SuDmsdXmZ5x4yT15BXcAO9D7f60+UlwuKccLaH0FZQtLXGPAxo+pzqYuwZVKiWX
-         6N6PntFA8J8J/EFcEGyjZKJgmr+H14KUClcYUsAA=
+        b=ByKSyNMJgmIIT0v+PICtoMOx8Nc8eChmSirQ9q5W1zuWhP1kjjHccuRn2rOrwP7fd
+         5z+FmPPSMvphcH+UXkHHS2JFvFhhfumsvEZmA1aH0GDihXVj/AhBV5CPBMHEdxRQo2
+         7i90bq9fzeUXZ7cfL/m1RhshDvZq92y/WJgFAqoM=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Jiri Benc <jbenc@redhat.com>, Yonghong Song <yhs@fb.com>,
@@ -30,12 +30,12 @@ Cc:     Jiri Benc <jbenc@redhat.com>, Yonghong Song <yhs@fb.com>,
         Sasha Levin <sashal@kernel.org>,
         linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
         bpf@vger.kernel.org, clang-built-linux@googlegroups.com
-Subject: [PATCH AUTOSEL 4.19 142/158] selftests: bpf: fix inlines in test_lwt_seg6local
-Date:   Mon, 15 Jul 2019 10:17:53 -0400
-Message-Id: <20190715141809.8445-142-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.1 198/219] selftests: bpf: fix inlines in test_lwt_seg6local
+Date:   Mon, 15 Jul 2019 10:03:19 -0400
+Message-Id: <20190715140341.6443-198-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190715141809.8445-1-sashal@kernel.org>
-References: <20190715141809.8445-1-sashal@kernel.org>
+In-Reply-To: <20190715140341.6443-1-sashal@kernel.org>
+References: <20190715140341.6443-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -80,13 +80,13 @@ Acked-by: Yonghong Song <yhs@fb.com>
 Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/testing/selftests/bpf/test_lwt_seg6local.c | 12 ++++++------
+ .../testing/selftests/bpf/progs/test_lwt_seg6local.c | 12 ++++++------
  1 file changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/test_lwt_seg6local.c b/tools/testing/selftests/bpf/test_lwt_seg6local.c
+diff --git a/tools/testing/selftests/bpf/progs/test_lwt_seg6local.c b/tools/testing/selftests/bpf/progs/test_lwt_seg6local.c
 index 0575751bc1bc..e2f6ed0a583d 100644
---- a/tools/testing/selftests/bpf/test_lwt_seg6local.c
-+++ b/tools/testing/selftests/bpf/test_lwt_seg6local.c
+--- a/tools/testing/selftests/bpf/progs/test_lwt_seg6local.c
++++ b/tools/testing/selftests/bpf/progs/test_lwt_seg6local.c
 @@ -61,7 +61,7 @@ struct sr6_tlv_t {
  	unsigned char value[0];
  } BPF_PACKET_HEADER;
