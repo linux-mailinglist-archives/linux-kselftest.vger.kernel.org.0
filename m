@@ -2,152 +2,142 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 773FD6AF5E
-	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Jul 2019 20:56:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3B936B0A8
+	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Jul 2019 22:55:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388510AbfGPS4H (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 16 Jul 2019 14:56:07 -0400
-Received: from mail-pf1-f196.google.com ([209.85.210.196]:37256 "EHLO
-        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388498AbfGPS4H (ORCPT
+        id S1731273AbfGPUzC (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 16 Jul 2019 16:55:02 -0400
+Received: from mail-pl1-f193.google.com ([209.85.214.193]:35020 "EHLO
+        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728575AbfGPUzC (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 16 Jul 2019 14:56:07 -0400
-Received: by mail-pf1-f196.google.com with SMTP id 19so9548299pfa.4
-        for <linux-kselftest@vger.kernel.org>; Tue, 16 Jul 2019 11:56:06 -0700 (PDT)
+        Tue, 16 Jul 2019 16:55:02 -0400
+Received: by mail-pl1-f193.google.com with SMTP id w24so10730671plp.2;
+        Tue, 16 Jul 2019 13:55:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ZybekRt/woJPUqImfzbAl3ncwjUgoXdjZVOXaEHk8I8=;
-        b=j9eLSBzu7vGeOp+9v4PjjMY8Y60gIHirQjt/95JgwPIeMch+f2SZ4m2BcsmqzLNPnA
-         y6mKbUvfRgB58Dd24aP06L/LHkjitHNk2jtHnbwOvIcJMeUwKyAY7Zj3rZzVz85nZG+R
-         H6nYqq0HtuMcKgj4ph8KvSOJ57XFS8xQJyN4O9EfZBueGH2zgw2CSiJKxHwffHaRiCZU
-         F2ZM5rxXlitmIEXm2ndwKKQaLdsI3EeFpaR3+KwtG2rjkMO/QifOGpG1dhcUu5Cz8T3g
-         tXwTsXzmF1fc22PaEHeit7cbJ2ZXrz0nkagsUOfmTF+46/GQqdl6HnMMZCq90oDQiUGy
-         RAXQ==
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=JyDP2xrY1+vm6sbAE05lGR3/BE8oRL7Tl3eVMst2SbI=;
+        b=Heifp6lPgv05YjnXAE6GeXjzI1GGrmbh6WZginvD1pu6jIKYv7O1u4o8f9ZLo7O43J
+         GWwLegDY3aS6djFvijJkap3lbDOJimy431xQPA/7pF8mRgtYIf8yJJ5kSHFmHqGFMD9x
+         INh3r+mOdj9UsKQ7ufiIpwx5n6odOWCAhM3QyoKrloRRCmePIUR2wDQiYiyoatidc2+j
+         wlSO+pEClBKL6XEp9ULmFfpEXkIz6Q5fKGjZsKJmZnhgj3X7gib9JGp8I+VYCRb28aFt
+         s+SNVfKZW/od80ZoYlLDxP3/p2N4mvQyK1DdeS/Z6TYiE0bX5vfj7dH0cM4Xm0fMMSLb
+         Wjnw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ZybekRt/woJPUqImfzbAl3ncwjUgoXdjZVOXaEHk8I8=;
-        b=ty2ATWAXcVyLagrEyLcCgbyXZI0rmZ4k5TURgmiKToFlQQHcVwc+a4lQqVA7M1Lxpi
-         BqB3xvR7HkOFgYHlcqEY/p9p/5nuaV9zzz6C5Rfuclx7g3mamtZLq8trVtTe9omWyTNq
-         A6ps4N/Cg78+upgwtZDCLeiGQn9IH0evqN85bK8GQhGNE6Q334b5hhEowzM78viPW3jz
-         NUddqRk0J60z3YJs6tAyGp8ZpNkT6bZ+dCUlaqbqWCApY58h+Q6suK0CmCIJZ9rqUqWJ
-         uwgQBWPoLbQKt8j05gAI9lrS4q4etDz1K8lGovA5MdrSyBJL4Kde+uqE39dsX53/wRt/
-         SpTg==
-X-Gm-Message-State: APjAAAW/WZ2j5guwxcPSDRL9zjZCFlGbGORlCMIw6hMHPAOgzE/6YKAX
-        G0q1n4nR/OlaXTOiewfHnDFOVi8onR1iAniVKE3bfA==
-X-Google-Smtp-Source: APXvYqwkl9ifterOK2ove6KXh9jZEcTxm4XlxkMBt5KD+9P3zl/wFtgkQs2T9gGivENnFOevPZS3P3oa9+3ivqemHYQ=
-X-Received: by 2002:a63:205f:: with SMTP id r31mr35946123pgm.159.1563303365863;
- Tue, 16 Jul 2019 11:56:05 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=JyDP2xrY1+vm6sbAE05lGR3/BE8oRL7Tl3eVMst2SbI=;
+        b=BOGlP2EzSN1OhPZ1/c6MXg+B5NXdKi/2/3HIWJSx5OMWIjx8z+WVAa7k5vkYN5gjp+
+         FoX9+UvosesXzByBBMJ0irRJmPDCnNJ6bKGmcDAtnnWT7HF9mP754RrZfE9rJ3rdBt0M
+         TJhcPZc+5Kjfgq9w2OIxRR21msaLvetkxadFWnMNTV0sIsPsxkMulfjBVxW0o+PMFAOn
+         IUsslIp782k7IjmJ9ZMuL0EE1HFgX+6o/o2d3qjGxCLobgimH4xAFKCJwhWUDu8w8R7/
+         E5Z9q20BjwHnSwKOEtsv2WzqEVxV4wahU4lVkrXxJxSCbmiu8342KuKt53FJmiy19H73
+         yLKw==
+X-Gm-Message-State: APjAAAUaRk1YD1qFzEDcOy8yt7qSOM4M7huyk2REsfcW6ZXan6mPm0AY
+        Dph8aUAeLhM2YjEJJXydlB4=
+X-Google-Smtp-Source: APXvYqzhq/GJvJ6rmN/or6wgrI2tKcjSDWXXI6SiYB/Y6tgHmyzGbm7M/E5KZ5ezy8gEDEWjVLMooQ==
+X-Received: by 2002:a17:902:724a:: with SMTP id c10mr35809877pll.298.1563310501294;
+        Tue, 16 Jul 2019 13:55:01 -0700 (PDT)
+Received: from ast-mbp.dhcp.thefacebook.com ([2620:10d:c090:200::c7d4])
+        by smtp.gmail.com with ESMTPSA id 4sm26151120pfc.92.2019.07.16.13.54.58
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 16 Jul 2019 13:55:00 -0700 (PDT)
+Date:   Tue, 16 Jul 2019 13:54:57 -0700
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To:     "Joel Fernandes (Google)" <joel@joelfernandes.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Adrian Ratiu <adrian.ratiu@collabora.com>,
+        Alexei Starovoitov <ast@kernel.org>, bpf@vger.kernel.org,
+        Brendan Gregg <brendan.d.gregg@gmail.com>, connoro@google.com,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        duyuchao <yuchao.du@unisoc.com>, Ingo Molnar <mingo@redhat.com>,
+        jeffv@google.com, Karim Yaghmour <karim.yaghmour@opersys.com>,
+        kernel-team@android.com, linux-kselftest@vger.kernel.org,
+        Manali Shukla <manalishukla14@gmail.com>,
+        Manjo Raja Rao <linux@manojrajarao.com>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Matt Mullins <mmullins@fb.com>,
+        Michal Gregorczyk <michalgr@fb.com>,
+        Michal Gregorczyk <michalgr@live.com>,
+        Mohammad Husain <russoue@gmail.com>, namhyung@google.com,
+        namhyung@kernel.org, netdev@vger.kernel.org,
+        paul.chaignon@gmail.com, primiano@google.com,
+        Qais Yousef <qais.yousef@arm.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Song Liu <songliubraving@fb.com>,
+        Srinivas Ramana <sramana@codeaurora.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Tamir Carmeli <carmeli.tamir@gmail.com>,
+        Yonghong Song <yhs@fb.com>
+Subject: Re: [PATCH RFC 0/4] Add support to directly attach BPF program to
+ ftrace
+Message-ID: <20190716205455.iimn3pqpvsc3k4ry@ast-mbp.dhcp.thefacebook.com>
+References: <20190710141548.132193-1-joel@joelfernandes.org>
 MIME-Version: 1.0
-References: <20190712081744.87097-1-brendanhiggins@google.com>
- <20190712081744.87097-4-brendanhiggins@google.com> <20190715204356.4E3F92145D@mail.kernel.org>
- <CAFd5g47481sRaez=yEJN4_ghiXZbxayk1Y04tAZpuzPLsmnhKg@mail.gmail.com>
- <20190715220407.0030420665@mail.kernel.org> <CAFd5g44bE0F=wq_fOAnxFTtoOyx1dUshhDAkKWr5hX9ipJ4Sxw@mail.gmail.com>
- <CAFd5g47y4vDB2P=EsGN8305LGeQPCTveNs-Jd5-=6K-XKY==CA@mail.gmail.com> <20190716153400.5CB182054F@mail.kernel.org>
-In-Reply-To: <20190716153400.5CB182054F@mail.kernel.org>
-From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Tue, 16 Jul 2019 11:55:54 -0700
-Message-ID: <CAFd5g47Nawp7V8=hetgBQWzWqmEyAz1GtWWwMrb9k=CCR33inQ@mail.gmail.com>
-Subject: Re: [PATCH v9 03/18] kunit: test: add string_stream a std::stream
- like string builder
-To:     Stephen Boyd <sboyd@kernel.org>
-Cc:     Frank Rowand <frowand.list@gmail.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Kees Cook <keescook@google.com>,
-        Kieran Bingham <kieran.bingham@ideasonboard.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Rob Herring <robh@kernel.org>, shuah <shuah@kernel.org>,
-        "Theodore Ts'o" <tytso@mit.edu>,
-        Masahiro Yamada <yamada.masahiro@socionext.com>,
-        devicetree <devicetree@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        kunit-dev@googlegroups.com,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        linux-fsdevel@vger.kernel.org,
-        linux-kbuild <linux-kbuild@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        linux-nvdimm <linux-nvdimm@lists.01.org>,
-        linux-um@lists.infradead.org,
-        Sasha Levin <Alexander.Levin@microsoft.com>,
-        "Bird, Timothy" <Tim.Bird@sony.com>,
-        Amir Goldstein <amir73il@gmail.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Daniel Vetter <daniel@ffwll.ch>, Jeff Dike <jdike@addtoit.com>,
-        Joel Stanley <joel@jms.id.au>,
-        Julia Lawall <julia.lawall@lip6.fr>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Knut Omang <knut.omang@oracle.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Petr Mladek <pmladek@suse.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Richard Weinberger <richard@nod.at>,
-        David Rientjes <rientjes@google.com>,
-        Steven Rostedt <rostedt@goodmis.org>, wfg@linux.intel.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190710141548.132193-1-joel@joelfernandes.org>
+User-Agent: NeoMutt/20180223
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Jul 16, 2019 at 8:34 AM Stephen Boyd <sboyd@kernel.org> wrote:
->
-> Quoting Brendan Higgins (2019-07-15 15:43:20)
-> > On Mon, Jul 15, 2019 at 3:11 PM Brendan Higgins
-> > <brendanhiggins@google.com> wrote:
-> > >
-> > > On Mon, Jul 15, 2019 at 3:04 PM Stephen Boyd <sboyd@kernel.org> wrote:
-> > > >
-> > > > Quoting Brendan Higgins (2019-07-15 14:11:50)
-> > > > > On Mon, Jul 15, 2019 at 1:43 PM Stephen Boyd <sboyd@kernel.org> wrote:
-> > > > > >
-> > > > > > I also wonder if it would be better to just have a big slop buffer of a
-> > > > > > 4K page or something so that we almost never have to allocate anything
-> > > > > > with a string_stream and we can just rely on a reader consuming data
-> > > > > > while writers are writing. That might work out better, but I don't quite
-> > > > > > understand the use case for the string stream.
-> > > > >
-> > > > > That makes sense, but might that also waste memory since we will
-> > > > > almost never need that much memory?
-> > > >
-> > > > Why do we care? These are unit tests.
-> > >
-> > > Agreed.
-> > >
-> > > > Having allocations in here makes
-> > > > things more complicated, whereas it would be simpler to have a pointer
-> > > > and a spinlock operating on a chunk of memory that gets flushed out
-> > > > periodically.
-> > >
-> > > I am not so sure. I have to have the logic to allocate memory in some
-> > > case no matter what (what if I need more memory that my preallocated
-> > > chuck?). I think it is simpler to always request an allocation than to
-> > > only sometimes request an allocation.
-> >
-> > Another even simpler alternative might be to just allocate memory
-> > using kunit_kmalloc as we need it and just let the kunit_resource code
-> > handle cleaning it all up when the test case finishes.
->
-> Sure, sounds like a nice way to avoid duplicating similar logic to
-> maintain a list of things to free later.
+On Wed, Jul 10, 2019 at 10:15:44AM -0400, Joel Fernandes (Google) wrote:
+> Hi,
 
-I think I will go that route for now.
+why are you cc-ing the whole world for this patch set?
+I'll reply to all as well, but I suspect a bunch of folks consider it spam.
+Please read Documentation/bpf/bpf_devel_QA.rst
 
-> >
-> > What do you think?
->
-> If you go the allocation route then you'll need to have the flags to
-> know what context you're in to allocate appropriately. Does that mean
-> all the string operations will now take GFP flags?
+Also, I think, netdev@vger rejects emails with 80+ characters in cc as spam,
+so I'm not sure this set reached public mailing lists.
 
-We could set the GFP flags in the constructor, store them in a field,
-and then just reuse them.
+> These patches make it possible to attach BPF programs directly to tracepoints
+> using ftrace (/sys/kernel/debug/tracing) without needing the process doing the
+> attach to be alive. This has the following benefits:
+> 
+> 1. Simplified Security: In Android, we have finer-grained security controls to
+> specific ftrace trace events using SELinux labels. We control precisely who is
+> allowed to enable an ftrace event already. By adding a node to ftrace for
+> attaching BPF programs, we can use the same mechanism to further control who is
+> allowed to attach to a trace event.
+> 
+> 2. Process lifetime: In Android we are adding usecases where a tracing program
+> needs to be attached all the time to a tracepoint, for the full life time of
+> the system. Such as to gather statistics where there no need for a detach for
+> the full system lifetime. With perf or bpf(2)'s BPF_RAW_TRACEPOINT_OPEN, this
+> means keeping a process alive all the time.  However, in Android our BPF loader
+> currently (for hardeneded security) involves just starting a process at boot
+> time, doing the BPF program loading, and then pinning them to /sys/fs/bpf.  We
+> don't keep this process alive all the time. It is more suitable to do a
+> one-shot attach of the program using ftrace and not need to have a process
+> alive all the time anymore for this. Such process also needs elevated
+> privileges since tracepoint program loading currently requires CAP_SYS_ADMIN
+> anyway so by design Android's bpfloader runs once at init and exits.
+> 
+> This series add a new bpf file to /sys/kernel/debug/tracing/events/X/Y/bpf
+> The following commands can be written into it:
+> attach:<fd>     Attaches BPF prog fd to tracepoint
+> detach:<fd>     Detaches BPF prog fd to tracepoint
 
-Thanks!
+Looks like, to detach a program the user needs to read a text file,
+parse bpf prog id from text into binary. Then call fd_from_id bpf syscall,
+get a binary FD, convert it back to text and write as a text back into this file.
+I think this is just a single example why text based apis are not accepted
+in bpf anymore.
+
+Through the patch set you call it ftrace. As far as I can see, this set
+has zero overlap with ftrace. There is no ftrace-bpf connection here at all
+that we discussed in the past Steven. It's all quite confusing.
+
+I suggest android to solve sticky raw_tracepoint problem with user space deamon.
+The reasons, you point out why user daemon cannot be used, sound weak to me.
+Another acceptable solution would be to introduce pinning of raw_tp objects.
+bpf progs and maps can be pinned in bpffs already. Pinning raw_tp would
+be natural extension.
+
