@@ -2,138 +2,155 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 288D36BCB6
-	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Jul 2019 15:01:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 084FD6BD38
+	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Jul 2019 15:37:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726273AbfGQNBX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 17 Jul 2019 09:01:23 -0400
-Received: from mail-pf1-f196.google.com ([209.85.210.196]:36340 "EHLO
-        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725936AbfGQNBW (ORCPT
+        id S1727726AbfGQNhB (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 17 Jul 2019 09:37:01 -0400
+Received: from mail-pg1-f196.google.com ([209.85.215.196]:38844 "EHLO
+        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727932AbfGQNgu (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 17 Jul 2019 09:01:22 -0400
-Received: by mail-pf1-f196.google.com with SMTP id r7so10820341pfl.3
-        for <linux-kselftest@vger.kernel.org>; Wed, 17 Jul 2019 06:01:22 -0700 (PDT)
+        Wed, 17 Jul 2019 09:36:50 -0400
+Received: by mail-pg1-f196.google.com with SMTP id f5so2354690pgu.5
+        for <linux-kselftest@vger.kernel.org>; Wed, 17 Jul 2019 06:36:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=/2kZjQOSWU81kHquRCCTS3R2h91VV4bpIT1uTfaQV5o=;
-        b=af1ZzoQSHrqVDDWQrA4VASz5++0JDUGwmcQd31ADjyOhdWK/pICy2eNdyY7iNr5pqV
-         NaPEcXn/twlQE6dChS+rDBe/c9Qno+5OAYnYvg80MvabLRJQ6EOwm2cMF7rJS05j9kSd
-         oZwEH7sW7elIJT6hLNlXxYjzbIuI+PrKdwaWQ=
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=upJur9hX33jRa5ZDAABYWCcVNIU4OKrA323sUj0kiJ0=;
+        b=jU/Zat9i+mrs8cSnCYXrBiEONUz0WXxyKyOECIIPiTvG8WEhtGZGjK61290IX8o36U
+         OrHTHQ7Woyg/qn3+sukX8RWKFmT/Ab3vSFlM0FM2BRuiucJNWXV94DF4e2NhGQgdA44A
+         dT08TPfZUZgkz0of54cXYItyNEHlQbHBkArsYbqcDoUXDHAB+kz50O9ewS939NtAQV8u
+         N3pg+MG4dZM9J1oQTBELA9KEuGXZuE94dTh2nx4VJ6oW11nUXuKKdq/o5lVXbnas7dEB
+         7eGFT9GZTTNoP+bU6YviC4h7qnZidfElkMDjIpsDOMoPQb/nzifgWXLs7MlD24BgMlQq
+         Xslw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=/2kZjQOSWU81kHquRCCTS3R2h91VV4bpIT1uTfaQV5o=;
-        b=pzp8wXHuP3Llk4Cx1fUzkjJCdSq4EzWBG2uNPE3TrX5qSCW78Xxcr5LTLzKYfRoYpw
-         OF9Q3szFM7HEAWkicn2lTFjZlIuEz6hi5oEhEoUcfiZPW7u5ifUWJPlD/SFZ6d9jduCP
-         IinkWJ3gqUEO4yyeRCFrFGnX1bH9/r91B7Hh0+pq54nepuqTkOF69g3hW0pTWRJNr2u/
-         NnOh30wlNb9nt8QS7cCDJr4Lmv5a5oDiCtr7xnbcj6XcT+STse8Ax3L8V0NDbE7E16fg
-         ZDQiRtXfoc8cKTWPnZSjgK0pxnKFMd/w3G19dj5gXBrB19PQ0tan9d71xR7KBxQJvo7F
-         6GPA==
-X-Gm-Message-State: APjAAAVhNm5OB28MxmEu/GUsK2Hsg5k5CaAwZFXJ1beIAU/3nygeB4JR
-        NmHmvG1k6mnGPQuaehT7Ua0=
-X-Google-Smtp-Source: APXvYqwtWhnOZOF45C6Cr5hs9BpPPXwsXrITYeTQ/PuXCt4p+AvM15okMMCqiFsrp/ZD/fCo3ObANA==
-X-Received: by 2002:a17:90a:8984:: with SMTP id v4mr43650667pjn.133.1563368481782;
-        Wed, 17 Jul 2019 06:01:21 -0700 (PDT)
-Received: from localhost ([2620:15c:6:12:9c46:e0da:efbf:69cc])
-        by smtp.gmail.com with ESMTPSA id l189sm28147054pfl.7.2019.07.17.06.01.20
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Wed, 17 Jul 2019 06:01:20 -0700 (PDT)
-Date:   Wed, 17 Jul 2019 09:01:19 -0400
-From:   Joel Fernandes <joel@joelfernandes.org>
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Adrian Ratiu <adrian.ratiu@collabora.com>,
-        Alexei Starovoitov <ast@kernel.org>, bpf@vger.kernel.org,
-        Brendan Gregg <brendan.d.gregg@gmail.com>, connoro@google.com,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        duyuchao <yuchao.du@unisoc.com>, Ingo Molnar <mingo@redhat.com>,
-        jeffv@google.com, Karim Yaghmour <karim.yaghmour@opersys.com>,
-        kernel-team@android.com, linux-kselftest@vger.kernel.org,
-        Manali Shukla <manalishukla14@gmail.com>,
-        Manjo Raja Rao <linux@manojrajarao.com>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Matt Mullins <mmullins@fb.com>,
-        Michal Gregorczyk <michalgr@fb.com>,
-        Michal Gregorczyk <michalgr@live.com>,
-        Mohammad Husain <russoue@gmail.com>, namhyung@google.com,
-        namhyung@kernel.org, netdev@vger.kernel.org,
-        paul.chaignon@gmail.com, primiano@google.com,
-        Qais Yousef <qais.yousef@arm.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Song Liu <songliubraving@fb.com>,
-        Srinivas Ramana <sramana@codeaurora.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Tamir Carmeli <carmeli.tamir@gmail.com>,
-        Yonghong Song <yhs@fb.com>
-Subject: Re: [PATCH RFC 0/4] Add support to directly attach BPF program to
- ftrace
-Message-ID: <20190717130119.GA138030@google.com>
-References: <20190710141548.132193-1-joel@joelfernandes.org>
- <20190716205455.iimn3pqpvsc3k4ry@ast-mbp.dhcp.thefacebook.com>
- <20190716213050.GA161922@google.com>
- <20190716222650.tk2coihjtsxszarf@ast-mbp.dhcp.thefacebook.com>
- <20190716224150.GC172157@google.com>
- <20190716235500.GA199237@google.com>
- <20190717012406.lugqemvubixfdd6v@ast-mbp.dhcp.thefacebook.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=upJur9hX33jRa5ZDAABYWCcVNIU4OKrA323sUj0kiJ0=;
+        b=gvdw7WjDPQrO0Zlq//szYMIZD4ZkyOZVbKtd4lGRnF7JTCHzOHdBelJL6cYMu8dFRi
+         baAjQ0iOXc6x3xa8rmC88ffGJ20ARJvPnhXzdCeZMq26fh6XKHtYtHMSP6lGZlvUqYdi
+         sQo604Cuqjtk6Ayq1zpw0l7s+84O81qbKVXry3Te5gjdfd1wGZ8GofoTUXUG3/Hlhljb
+         ljTUidZOO7HkHaZgRcPeYg/+Gehcft9KKc9G6IGvWIBI1QUsCjs38z69sAONB+WBUfV8
+         JlBxpoaS2+t0FN/edSEK5ItsHTugAUN8LpIYJfFw2Uf9DQnvCjwuU3wVE7nZqx3Hnvhe
+         CU8w==
+X-Gm-Message-State: APjAAAUvRFyc0EQ/h7ZefTBI8s1Q9ce63vpNLoYCmtOLNiaWj9/DG38k
+        Tos3PbNYWLEpDTH5sKrICD5+btaJjXXik82SXtx5rA==
+X-Google-Smtp-Source: APXvYqz7m/UfmCxQEvGyEZmLKWfGDEQqrP2qzxF/oMVv3Ek5NDX+f4ncbRdtOgqzhkxO4Lp3vwbZe7MPyGJ1vZM4Wx0=
+X-Received: by 2002:a17:90a:2488:: with SMTP id i8mr43162554pje.123.1563370608796;
+ Wed, 17 Jul 2019 06:36:48 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190717012406.lugqemvubixfdd6v@ast-mbp.dhcp.thefacebook.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <cover.1561386715.git.andreyknvl@google.com> <ea0ff94ef2b8af12ea6c222c5ebd970e0849b6dd.1561386715.git.andreyknvl@google.com>
+ <20190624174015.GL29120@arrakis.emea.arm.com> <CAAeHK+y8vE=G_odK6KH=H064nSQcVgkQkNwb2zQD9swXxKSyUQ@mail.gmail.com>
+ <20190715180510.GC4970@ziepe.ca> <CAAeHK+xPQqJP7p_JFxc4jrx9k7N0TpBWEuB8Px7XHvrfDU1_gw@mail.gmail.com>
+ <20190716120624.GA29727@ziepe.ca> <CAAeHK+xPPQ9QjAksbfWG-Zmnawt-cdw9eO_6GVxjEYcaDGvaRA@mail.gmail.com>
+ <20190717115828.GE12119@ziepe.ca>
+In-Reply-To: <20190717115828.GE12119@ziepe.ca>
+From:   Andrey Konovalov <andreyknvl@google.com>
+Date:   Wed, 17 Jul 2019 15:36:37 +0200
+Message-ID: <CAAeHK+yyQpc6cxyVeUUWUwiQYy8iAgVXmOVO=EQYSNzy9G8Q0A@mail.gmail.com>
+Subject: Re: [PATCH v18 11/15] IB/mlx4: untag user pointers in mlx4_get_umem_mr
+To:     Jason Gunthorpe <jgg@ziepe.ca>
+Cc:     Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-rdma@vger.kernel.org, linux-media@vger.kernel.org,
+        kvm@vger.kernel.org,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Will Deacon <will.deacon@arm.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Kees Cook <keescook@chromium.org>,
+        Yishai Hadas <yishaih@mellanox.com>,
+        Felix Kuehling <Felix.Kuehling@amd.com>,
+        Alexander Deucher <Alexander.Deucher@amd.com>,
+        Christian Koenig <Christian.Koenig@amd.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Jens Wiklander <jens.wiklander@linaro.org>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
+        Dave Martin <Dave.Martin@arm.com>,
+        Khalid Aziz <khalid.aziz@oracle.com>, enh <enh@google.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Kostya Serebryany <kcc@google.com>,
+        Evgeniy Stepanov <eugenis@google.com>,
+        Lee Smith <Lee.Smith@arm.com>,
+        Ramana Radhakrishnan <Ramana.Radhakrishnan@arm.com>,
+        Jacob Bramley <Jacob.Bramley@arm.com>,
+        Ruben Ayrapetyan <Ruben.Ayrapetyan@arm.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Kevin Brodsky <kevin.brodsky@arm.com>,
+        Szabolcs Nagy <Szabolcs.Nagy@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Jul 16, 2019 at 06:24:07PM -0700, Alexei Starovoitov wrote:
-[snip]
-> > > > > I don't see why a new bpf node for a trace event is a bad idea, really.
-> > > > 
-> > > > See the patches for kprobe/uprobe FD-based api and the reasons behind it.
-> > > > tldr: text is racy, doesn't scale, poor security, etc.
-> > > 
-> > > Is it possible to use perf without CAP_SYS_ADMIN and control security at the
-> > > per-event level? We are selective about who can access which event, using
-> > > selinux. That's how our ftrace-based tracers work. Its fine grained per-event
-> > > control. That's where I was going with the tracefs approach since we get that
-> > > granularity using the file system.
-> 
-> android's choice of selinux is not a factor in deciding kernel apis.
-> It's completely separate discusion wether disallowing particular tracepoints
-> for given user make sense at all.
-> Just because you can hack it in via selinux blocking particular
-> /sys/debug/tracing/ directory and convince yourself that it's somehow
-> makes android more secure. It doesn't mean that all new api should fit
-> into this model.
+On Wed, Jul 17, 2019 at 1:58 PM Jason Gunthorpe <jgg@ziepe.ca> wrote:
+>
+> On Wed, Jul 17, 2019 at 01:44:07PM +0200, Andrey Konovalov wrote:
+> > On Tue, Jul 16, 2019 at 2:06 PM Jason Gunthorpe <jgg@ziepe.ca> wrote:
+> > >
+> > > On Tue, Jul 16, 2019 at 12:42:07PM +0200, Andrey Konovalov wrote:
+> > > > On Mon, Jul 15, 2019 at 8:05 PM Jason Gunthorpe <jgg@ziepe.ca> wrote:
+> > > > >
+> > > > > On Mon, Jul 15, 2019 at 06:01:29PM +0200, Andrey Konovalov wrote:
+> > > > > > On Mon, Jun 24, 2019 at 7:40 PM Catalin Marinas <catalin.marinas@arm.com> wrote:
+> > > > > > >
+> > > > > > > On Mon, Jun 24, 2019 at 04:32:56PM +0200, Andrey Konovalov wrote:
+> > > > > > > > This patch is a part of a series that extends kernel ABI to allow to pass
+> > > > > > > > tagged user pointers (with the top byte set to something else other than
+> > > > > > > > 0x00) as syscall arguments.
+> > > > > > > >
+> > > > > > > > mlx4_get_umem_mr() uses provided user pointers for vma lookups, which can
+> > > > > > > > only by done with untagged pointers.
+> > > > > > > >
+> > > > > > > > Untag user pointers in this function.
+> > > > > > > >
+> > > > > > > > Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
+> > > > > > > >  drivers/infiniband/hw/mlx4/mr.c | 7 ++++---
+> > > > > > > >  1 file changed, 4 insertions(+), 3 deletions(-)
+> > > > > > >
+> > > > > > > Acked-by: Catalin Marinas <catalin.marinas@arm.com>
+> > > > > > >
+> > > > > > > This patch also needs an ack from the infiniband maintainers (Jason).
+> > > > > >
+> > > > > > Hi Jason,
+> > > > > >
+> > > > > > Could you take a look and give your acked-by?
+> > > > >
+> > > > > Oh, I think I did this a long time ago. Still looks OK.
+> > > >
+> > > > Hm, maybe that was we who lost it. Thanks!
+> > > >
+> > > > > You will send it?
+> > > >
+> > > > I will resend the patchset once the merge window is closed, if that's
+> > > > what you mean.
+> > >
+> > > No.. I mean who send it to Linus's tree? ie do you want me to take
+> > > this patch into rdma?
+> >
+> > I think the plan was to merge the whole series through the mm tree.
+> > But I don't mind if you want to take this patch into your tree. It's
+> > just that this patch doesn't make much sense without the rest of the
+> > series.
+>
+> Generally I prefer if subsystem changes stay in subsystem trees. If
+> the patch is good standalone, and the untag API has already been
+> merged, this is a better strategy.
 
-Its not like a hack, it is just control of which tracefs node can be
-accessed and which cannot be since the tracing can run on production systems
-out in the field and there are several concerns to address like security,
-privacy etc. It is not just for debugging usecases. We do collect traces out
-in the field where these issues are real and cannot be ignored.
+OK, feel free to take this into your tree, this works for me.
 
-SELinux model is deny everything, and then selectively grant access to what
-is needed. The VFS and security LSM hooks provide this control quite well. I am
-not sure if such control is possible through perf hence I asked the question.
-
-> I think allowing one tracepoint and disallowing another is pointless
-> from security point of view. Tracing bpf program can do bpf_probe_read
-> of anything.
-
-I think the assumption here is the user controls the program instructions at
-runtime, but that's not the case. The BPF program we are loading is not
-dynamically generated, it is built at build time and it is loaded from a
-secure verified partition, so even though it can do bpf_probe_read, it is
-still not something that the user can change. And, we are planning to make it
-even more secure by making it kernel verify the program at load time as well
-(you were on some discussions about that a few months ago).
-
-thanks,
-
- - Joel
-
+>
+> Jason
