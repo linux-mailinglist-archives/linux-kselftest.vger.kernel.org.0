@@ -2,80 +2,83 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F422B6BC0F
-	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Jul 2019 14:00:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DBB4A6BC8D
+	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Jul 2019 14:45:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726934AbfGQMA5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 17 Jul 2019 08:00:57 -0400
-Received: from mx2.suse.de ([195.135.220.15]:54610 "EHLO mx1.suse.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726063AbfGQMA5 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 17 Jul 2019 08:00:57 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id DEFB4AE86;
-        Wed, 17 Jul 2019 12:00:55 +0000 (UTC)
-Date:   Wed, 17 Jul 2019 14:00:55 +0200
-From:   Petr Mladek <pmladek@suse.com>
-To:     Joe Lawrence <joe.lawrence@redhat.com>,
-        Jiri Benc <jbenc@redhat.com>
-Cc:     linux-kselftest@vger.kernel.org, live-patching@vger.kernel.org,
+        id S1726889AbfGQMpa (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 17 Jul 2019 08:45:30 -0400
+Received: from mx1.redhat.com ([209.132.183.28]:60320 "EHLO mx1.redhat.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725906AbfGQMp3 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 17 Jul 2019 08:45:29 -0400
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mx1.redhat.com (Postfix) with ESMTPS id 907E13093382;
+        Wed, 17 Jul 2019 12:45:29 +0000 (UTC)
+Received: from localhost (unknown [10.40.205.143])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 08A32600D1;
+        Wed, 17 Jul 2019 12:45:25 +0000 (UTC)
+Date:   Wed, 17 Jul 2019 14:45:24 +0200
+From:   Jiri Benc <jbenc@redhat.com>
+To:     Petr Mladek <pmladek@suse.com>
+Cc:     Joe Lawrence <joe.lawrence@redhat.com>,
+        linux-kselftest@vger.kernel.org, live-patching@vger.kernel.org,
         shuah@kernel.org
 Subject: Re: [PATCH v2] selftests/livepatch: add test skip handling
-Message-ID: <20190717120055.pno2b7zczpcgaixg@pathway.suse.cz>
+Message-ID: <20190717144524.715f46c4@redhat.com>
+In-Reply-To: <20190717120055.pno2b7zczpcgaixg@pathway.suse.cz>
 References: <20190716133414.20196-1-joe.lawrence@redhat.com>
+        <20190717120055.pno2b7zczpcgaixg@pathway.suse.cz>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190716133414.20196-1-joe.lawrence@redhat.com>
-User-Agent: NeoMutt/20170912 (1.9.0)
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
+X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.45]); Wed, 17 Jul 2019 12:45:29 +0000 (UTC)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue 2019-07-16 09:34:14, Joe Lawrence wrote:
-> Add a skip() message function that stops the test, logs an explanation,
-> and sets the "skip" return code (4).
+On Wed, 17 Jul 2019 14:00:55 +0200, Petr Mladek wrote:
+> Adding Jiri into CC to be sure that we really solved the original problem.
+
+The patch looks good to me, the runner expects 4 as an indication that
+the test was skipped.
+
+> I get the following output when livepatching is not configured:
 > 
-> Before loading a livepatch self-test kernel module, first verify that
-> we've built and installed it by running a 'modprobe --dry-run'.  This
-> should catch a few environment issues, including !CONFIG_LIVEPATCH and
-> !CONFIG_TEST_LIVEPATCH.  In these cases, exit gracefully with the new
-> skip() function.
+> $> make run_tests  
+> TAP version 13
+> 1..4
+> # selftests: livepatch: test-livepatch.sh
+> # TEST: basic function patching ... SKIP: Failed modprobe --dry-run of module: test_klp_livepatch
+> not ok 1 selftests: livepatch: test-livepatch.sh # SKIP
+> # selftests: livepatch: test-callbacks.sh
+> # TEST: target module before livepatch ... SKIP: Failed modprobe --dry-run of module: test_klp_callbacks_mod
+> not ok 2 selftests: livepatch: test-callbacks.sh # SKIP
+> # selftests: livepatch: test-shadow-vars.sh
+> # TEST: basic shadow variable API ... SKIP: Failed modprobe --dry-run of module: test_klp_shadow_vars
+> not ok 3 selftests: livepatch: test-shadow-vars.sh # SKIP
+> # selftests: livepatch: test-state.sh
+> # TEST: system state modification ... SKIP: Failed modprobe --dry-run of module: test_klp_state
+> not ok 4 selftests: livepatch: test-state.sh # SKIP
 > 
-> Reported-by: Jiri Benc <jbenc@redhat.com>
+> Jiri, is it acceptable solution for you, please?
 
-Adding Jiri into CC to be sure that we really solved the original problem.
+It looks correct. My reading of the TAP 13 specification is that it
+should be returned as "ok" instead of "not ok" but that is not a
+problem of this patch.
 
-I get the following output when livepatching is not configured:
+> Otherwise, the patch looks fine to me. If Jiri is fine
+> then feel free to use:
+> 
+> Reviewed-by: Petr Mladek <pmladek@suse.com>
 
-$> make run_tests
-TAP version 13
-1..4
-# selftests: livepatch: test-livepatch.sh
-# TEST: basic function patching ... SKIP: Failed modprobe --dry-run of module: test_klp_livepatch
-not ok 1 selftests: livepatch: test-livepatch.sh # SKIP
-# selftests: livepatch: test-callbacks.sh
-# TEST: target module before livepatch ... SKIP: Failed modprobe --dry-run of module: test_klp_callbacks_mod
-not ok 2 selftests: livepatch: test-callbacks.sh # SKIP
-# selftests: livepatch: test-shadow-vars.sh
-# TEST: basic shadow variable API ... SKIP: Failed modprobe --dry-run of module: test_klp_shadow_vars
-not ok 3 selftests: livepatch: test-shadow-vars.sh # SKIP
-# selftests: livepatch: test-state.sh
-# TEST: system state modification ... SKIP: Failed modprobe --dry-run of module: test_klp_state
-not ok 4 selftests: livepatch: test-state.sh # SKIP
+Sure.
 
-Jiri, is it acceptable solution for you, please?
+Acked-by: Jiri Benc <jbenc@redhat.com>
 
+Thanks!
 
-> Suggested-by: Shuah Khan <shuah@kernel.org>
-> Signed-off-by: Joe Lawrence <joe.lawrence@redhat.com>
-
-Otherwise, the patch looks fine to me. If Jiri is fine
-then feel free to use:
-
-Reviewed-by: Petr Mladek <pmladek@suse.com>
-
-Best Regards,
-Petr
+ Jiri
