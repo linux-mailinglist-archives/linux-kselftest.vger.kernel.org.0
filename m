@@ -2,109 +2,99 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 137DF6B3EB
-	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Jul 2019 03:56:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 291546B8B2
+	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Jul 2019 10:57:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726277AbfGQB4p (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 16 Jul 2019 21:56:45 -0400
-Received: from mail-pg1-f201.google.com ([209.85.215.201]:35002 "EHLO
-        mail-pg1-f201.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728766AbfGQB4o (ORCPT
+        id S1726486AbfGQI5D (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 17 Jul 2019 04:57:03 -0400
+Received: from mail-lj1-f194.google.com ([209.85.208.194]:44222 "EHLO
+        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725912AbfGQI5D (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 16 Jul 2019 21:56:44 -0400
-Received: by mail-pg1-f201.google.com with SMTP id e7so2183712pgm.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 16 Jul 2019 18:56:44 -0700 (PDT)
+        Wed, 17 Jul 2019 04:57:03 -0400
+Received: by mail-lj1-f194.google.com with SMTP id k18so22807131ljc.11
+        for <linux-kselftest@vger.kernel.org>; Wed, 17 Jul 2019 01:57:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=z+RsQ5cMJRNJEspG7oJoFcFROmHPEJhG9JB06H11s3Q=;
-        b=arQQpTGJERz+HpGPXFp2jlPN5FrwHz2WQgWAk2OJzhGjTvteOU1VI4pyg3Gluszw+4
-         vjWiOIXlN3LE6Wmx+vW8ya52UlgsM6wNwD7n+F3tTlm0oU8wIAFq/wdLYE/uqwXxmQlX
-         XH8Q+EuWSZgjc3pc2sIgMXZRv15qqL94qa0UO9XEjvbkfa9x4jqUS6XSlv6anCR5d/Qu
-         TojpzGJ8KJngr73CNti9m0kYQQzcoyj/lkheRLPJEVpXYgERpvNTv8Z1n1LTd7t4E729
-         ECeSIi3rVf+NrWYm31K34bfHpNTeBSIN8kh5bzP8sJs2A90bieFh3IVp2mMrPJo+7TpA
-         I/fQ==
+        bh=5jVJYwVPqhI92ePrVwuK/g+oP5mpkNXJhduBRrTnzOo=;
+        b=hc6r1e69nhIl69WPP0wsHJjCJ0EIaTLGofpXpOOCuwEBWVM2DslumLrlHBCVRPlXOb
+         vtpofLq3bWMezI1jFYPQSlVS0XUVXadYW1mcxJJ5hzyT0MTd+x3PpzFNVy3N1IxT0mBM
+         zCVb5nyOsBRFPJnDRXtMVc95qbpz21UCgaHQBRVnZjF87bPjqx3yZHbISO4sBn7ubXjb
+         qa7ZJwAAPRVKsL+9pm4ezR+ltfBh3ZdLMYqJFyBAUnv1FDYODKsz9I1vzYgHx5jMZToN
+         VCYnF5+0nRvQ69Xkihe/2ovzECrI4sGWEORpaknO3Y4aTs7qO9TZ198lz6V70XEcqWDr
+         bOOw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=z+RsQ5cMJRNJEspG7oJoFcFROmHPEJhG9JB06H11s3Q=;
-        b=nsNbi1uyZ3E9G3m4Vc5ewJiqbsDD/QfYoHkJal+ybIadfYQF64nA09PjGIg5+coioD
-         IlqC0H5kSx5BrHNu+a0clBfm2EoRpUbb226tRozRaHaD4iCJV1z8DgODDVaCawExKLIj
-         IrIP9U6ErM6apsXB+dPDdfTuBHVIEl+mwpcEjpFGjUkx0j3MRNRSm8N+mwywgBGykpC2
-         N6WKEKF/CEE7QIffTSRkt4OcWFb6ayJvBZY1xxgc7LUr7roB0OWaTonZ0DskoVVaZd5U
-         aE3HCGJeOPuLXaNKmmd6IVHuysQKTO88ppxKsrTUyIKF0a2GckbTGJSfUqQQLaWcNIZp
-         xTRg==
-X-Gm-Message-State: APjAAAXPYCxlsrBbwlrRHUD4UgnEExiPaAaW6i/BFpEFFYcdNvctWjXv
-        GE8Ur+UTzJ/SqwUTCdQUpK/fgOp0NmArk5HFa2xf5w==
-X-Google-Smtp-Source: APXvYqwCZQKnuVk17fjP8A6U6bIZkWGFvrucA1ktqKosKL/38OKDiYQRbphN4EY4EbgHhiCugGJd7KJEeLMjHEFzWtBqZg==
-X-Received: by 2002:a65:4505:: with SMTP id n5mr34106191pgq.301.1563328603229;
- Tue, 16 Jul 2019 18:56:43 -0700 (PDT)
-Date:   Tue, 16 Jul 2019 18:55:43 -0700
-In-Reply-To: <20190717015543.152251-1-brendanhiggins@google.com>
-Message-Id: <20190717015543.152251-19-brendanhiggins@google.com>
-Mime-Version: 1.0
-References: <20190717015543.152251-1-brendanhiggins@google.com>
-X-Mailer: git-send-email 2.22.0.510.g264f2c817a-goog
-Subject: [PATCH v11 18/18] MAINTAINERS: add proc sysctl KUnit test to PROC
- SYSCTL section
-From:   Brendan Higgins <brendanhiggins@google.com>
-To:     frowand.list@gmail.com, gregkh@linuxfoundation.org,
-        jpoimboe@redhat.com, keescook@google.com,
-        kieran.bingham@ideasonboard.com, mcgrof@kernel.org,
-        peterz@infradead.org, robh@kernel.org, sboyd@kernel.org,
-        shuah@kernel.org, tytso@mit.edu, yamada.masahiro@socionext.com
-Cc:     devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        kunit-dev@googlegroups.com, linux-doc@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kbuild@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-nvdimm@lists.01.org, linux-um@lists.infradead.org,
-        Alexander.Levin@microsoft.com, Tim.Bird@sony.com,
-        amir73il@gmail.com, dan.carpenter@oracle.com, daniel@ffwll.ch,
-        jdike@addtoit.com, joel@jms.id.au, julia.lawall@lip6.fr,
-        khilman@baylibre.com, knut.omang@oracle.com, logang@deltatee.com,
-        mpe@ellerman.id.au, pmladek@suse.com, rdunlap@infradead.org,
-        richard@nod.at, rientjes@google.com, rostedt@goodmis.org,
-        wfg@linux.intel.com, Brendan Higgins <brendanhiggins@google.com>,
-        Iurii Zaikin <yzaikin@google.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=5jVJYwVPqhI92ePrVwuK/g+oP5mpkNXJhduBRrTnzOo=;
+        b=NO8kIgJ2PKMxlMQN9TSgDXSvVCzy3LIj2NyX4zos5H4bFUoGu4rxBS8vmwsSXyISjY
+         R4e6g4oZkJZlSyIkLZ1UMp5o8X7pLcGV0kXqrPq8bw91TvJXwKy8DTr/GTpu1DGnSpou
+         YlwPGFYyVlfvb83kqUzoWfor/EoYt+ZbVzrXyLigOlM39vgoInKquQ20jD2UaGqq39+4
+         xBlOsCh1DSIL3Bb0s5TNUwDZMJk3vEfCldySaqSZD7wgpWtOSXmlQh7YG8hTfErfiW3y
+         OIwutEai4HtlLpAgWnwqzofUo3lxWcb0B7Y6DekNtydoRfD3L+pNQA0DZNOCTun2ZzBk
+         Xsvg==
+X-Gm-Message-State: APjAAAXu5k7tVAt58BTv5hwtk3c1nVsSVITQx7GwDiN7BnIhEr8nnF9c
+        XlzrlrqVb8ugJllL96WnUciW92AgCjVT6MXKo7ppfg==
+X-Google-Smtp-Source: APXvYqyhRKr01SffiXafxqbMn+xTzX5Ioffnm7MxINn2mQfMWmEYQmOejSLNGmv1u5rD0MnWkP9irHPVVa+jHScvu+s=
+X-Received: by 2002:a2e:8559:: with SMTP id u25mr20141598ljj.224.1563353821144;
+ Wed, 17 Jul 2019 01:57:01 -0700 (PDT)
+MIME-Version: 1.0
+References: <20190405174708.1010-1-guro@fb.com> <20190405174708.1010-7-guro@fb.com>
+ <CA+G9fYvz6MA0N8GgwY5QNdWBAw+XT9QcmwnABsSpjLnwz_jLzA@mail.gmail.com> <20190717004904.GA32357@castle.dhcp.thefacebook.com>
+In-Reply-To: <20190717004904.GA32357@castle.dhcp.thefacebook.com>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Wed, 17 Jul 2019 14:26:49 +0530
+Message-ID: <CA+G9fYt+UmakwaZAM4gR-B+V8kZUJVNh8gFBcXa4zU2j0Cz0ZQ@mail.gmail.com>
+Subject: Re: [PATCH v10 6/9] kselftests: cgroup: add freezer controller self-tests
+To:     Roman Gushchin <guro@fb.com>
+Cc:     Roman Gushchin <guroan@gmail.com>, Tejun Heo <tj@kernel.org>,
+        Oleg Nesterov <oleg@redhat.com>,
+        Kernel Team <Kernel-team@fb.com>,
+        "cgroups@vger.kernel.org" <cgroups@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Shuah Khan <shuah@kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        "lkft-triage@lists.linaro.org" <lkft-triage@lists.linaro.org>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add entry for the new proc sysctl KUnit test to the PROC SYSCTL section,
-and add Iurii as a maintainer.
+Hi Roman,
 
-Signed-off-by: Brendan Higgins <brendanhiggins@google.com>
-Cc: Iurii Zaikin <yzaikin@google.com>
-Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Reviewed-by: Logan Gunthorpe <logang@deltatee.com>
-Acked-by: Luis Chamberlain <mcgrof@kernel.org>
----
- MAINTAINERS | 2 ++
- 1 file changed, 2 insertions(+)
+> The interaction between ptrace and freezer is complicated
+> (as ptrace in general),so there are known cases when spurious
+> cgroup transitions (frozen <-> non frozen <-> frozen ) can happen.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 48d04d180a988..f8204c75114da 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -12721,12 +12721,14 @@ F:	Documentation/filesystems/proc.txt
- PROC SYSCTL
- M:	Luis Chamberlain <mcgrof@kernel.org>
- M:	Kees Cook <keescook@chromium.org>
-+M:	Iurii Zaikin <yzaikin@google.com>
- L:	linux-kernel@vger.kernel.org
- L:	linux-fsdevel@vger.kernel.org
- S:	Maintained
- F:	fs/proc/proc_sysctl.c
- F:	include/linux/sysctl.h
- F:	kernel/sysctl.c
-+F:	kernel/sysctl-test.c
- F:	tools/testing/selftests/sysctl/
- 
- PS3 NETWORK SUPPORT
--- 
-2.22.0.510.g264f2c817a-goog
+When test ran for 8 times it got failed 5 times.
+I have noticed intermittent failure on x86_64, arm64 hikey device and
+qemu_arm64.
 
+>
+> Does it create any difficulties? If so, I'll send a diff to ignore
+> the result of this test for now.
+
+No difficulties. I will mark this test case as known failure.
+
+> > > This patch implements 9 tests for the freezer controller for
+> > > cgroup v2:
+> > ...
+> > > 6) ptrace test: the test checks that it's possible to attach to
+> > > a process in a frozen cgroup, get some information and detach, and
+> > > the cgroup will remain frozen.
+> >
+> > selftests cgroup test_freezer failed because of the sys entry path not found.
+>
+> Can you, please, elaborate on this?
+
+I see this failure output on screen and sharing log here.
+
+Please find full test log here,
+https://lkft.validation.linaro.org/scheduler/job/825346#L673
+
+- Naresh
