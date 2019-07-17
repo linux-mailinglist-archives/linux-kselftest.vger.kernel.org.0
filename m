@@ -2,83 +2,138 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DBB4A6BC8D
-	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Jul 2019 14:45:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 288D36BCB6
+	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Jul 2019 15:01:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726889AbfGQMpa (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 17 Jul 2019 08:45:30 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:60320 "EHLO mx1.redhat.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725906AbfGQMp3 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 17 Jul 2019 08:45:29 -0400
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id 907E13093382;
-        Wed, 17 Jul 2019 12:45:29 +0000 (UTC)
-Received: from localhost (unknown [10.40.205.143])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 08A32600D1;
-        Wed, 17 Jul 2019 12:45:25 +0000 (UTC)
-Date:   Wed, 17 Jul 2019 14:45:24 +0200
-From:   Jiri Benc <jbenc@redhat.com>
-To:     Petr Mladek <pmladek@suse.com>
-Cc:     Joe Lawrence <joe.lawrence@redhat.com>,
-        linux-kselftest@vger.kernel.org, live-patching@vger.kernel.org,
-        shuah@kernel.org
-Subject: Re: [PATCH v2] selftests/livepatch: add test skip handling
-Message-ID: <20190717144524.715f46c4@redhat.com>
-In-Reply-To: <20190717120055.pno2b7zczpcgaixg@pathway.suse.cz>
-References: <20190716133414.20196-1-joe.lawrence@redhat.com>
-        <20190717120055.pno2b7zczpcgaixg@pathway.suse.cz>
+        id S1726273AbfGQNBX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 17 Jul 2019 09:01:23 -0400
+Received: from mail-pf1-f196.google.com ([209.85.210.196]:36340 "EHLO
+        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725936AbfGQNBW (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 17 Jul 2019 09:01:22 -0400
+Received: by mail-pf1-f196.google.com with SMTP id r7so10820341pfl.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 17 Jul 2019 06:01:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=joelfernandes.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=/2kZjQOSWU81kHquRCCTS3R2h91VV4bpIT1uTfaQV5o=;
+        b=af1ZzoQSHrqVDDWQrA4VASz5++0JDUGwmcQd31ADjyOhdWK/pICy2eNdyY7iNr5pqV
+         NaPEcXn/twlQE6dChS+rDBe/c9Qno+5OAYnYvg80MvabLRJQ6EOwm2cMF7rJS05j9kSd
+         oZwEH7sW7elIJT6hLNlXxYjzbIuI+PrKdwaWQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=/2kZjQOSWU81kHquRCCTS3R2h91VV4bpIT1uTfaQV5o=;
+        b=pzp8wXHuP3Llk4Cx1fUzkjJCdSq4EzWBG2uNPE3TrX5qSCW78Xxcr5LTLzKYfRoYpw
+         OF9Q3szFM7HEAWkicn2lTFjZlIuEz6hi5oEhEoUcfiZPW7u5ifUWJPlD/SFZ6d9jduCP
+         IinkWJ3gqUEO4yyeRCFrFGnX1bH9/r91B7Hh0+pq54nepuqTkOF69g3hW0pTWRJNr2u/
+         NnOh30wlNb9nt8QS7cCDJr4Lmv5a5oDiCtr7xnbcj6XcT+STse8Ax3L8V0NDbE7E16fg
+         ZDQiRtXfoc8cKTWPnZSjgK0pxnKFMd/w3G19dj5gXBrB19PQ0tan9d71xR7KBxQJvo7F
+         6GPA==
+X-Gm-Message-State: APjAAAVhNm5OB28MxmEu/GUsK2Hsg5k5CaAwZFXJ1beIAU/3nygeB4JR
+        NmHmvG1k6mnGPQuaehT7Ua0=
+X-Google-Smtp-Source: APXvYqwtWhnOZOF45C6Cr5hs9BpPPXwsXrITYeTQ/PuXCt4p+AvM15okMMCqiFsrp/ZD/fCo3ObANA==
+X-Received: by 2002:a17:90a:8984:: with SMTP id v4mr43650667pjn.133.1563368481782;
+        Wed, 17 Jul 2019 06:01:21 -0700 (PDT)
+Received: from localhost ([2620:15c:6:12:9c46:e0da:efbf:69cc])
+        by smtp.gmail.com with ESMTPSA id l189sm28147054pfl.7.2019.07.17.06.01.20
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Wed, 17 Jul 2019 06:01:20 -0700 (PDT)
+Date:   Wed, 17 Jul 2019 09:01:19 -0400
+From:   Joel Fernandes <joel@joelfernandes.org>
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Adrian Ratiu <adrian.ratiu@collabora.com>,
+        Alexei Starovoitov <ast@kernel.org>, bpf@vger.kernel.org,
+        Brendan Gregg <brendan.d.gregg@gmail.com>, connoro@google.com,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        duyuchao <yuchao.du@unisoc.com>, Ingo Molnar <mingo@redhat.com>,
+        jeffv@google.com, Karim Yaghmour <karim.yaghmour@opersys.com>,
+        kernel-team@android.com, linux-kselftest@vger.kernel.org,
+        Manali Shukla <manalishukla14@gmail.com>,
+        Manjo Raja Rao <linux@manojrajarao.com>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Matt Mullins <mmullins@fb.com>,
+        Michal Gregorczyk <michalgr@fb.com>,
+        Michal Gregorczyk <michalgr@live.com>,
+        Mohammad Husain <russoue@gmail.com>, namhyung@google.com,
+        namhyung@kernel.org, netdev@vger.kernel.org,
+        paul.chaignon@gmail.com, primiano@google.com,
+        Qais Yousef <qais.yousef@arm.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Song Liu <songliubraving@fb.com>,
+        Srinivas Ramana <sramana@codeaurora.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Tamir Carmeli <carmeli.tamir@gmail.com>,
+        Yonghong Song <yhs@fb.com>
+Subject: Re: [PATCH RFC 0/4] Add support to directly attach BPF program to
+ ftrace
+Message-ID: <20190717130119.GA138030@google.com>
+References: <20190710141548.132193-1-joel@joelfernandes.org>
+ <20190716205455.iimn3pqpvsc3k4ry@ast-mbp.dhcp.thefacebook.com>
+ <20190716213050.GA161922@google.com>
+ <20190716222650.tk2coihjtsxszarf@ast-mbp.dhcp.thefacebook.com>
+ <20190716224150.GC172157@google.com>
+ <20190716235500.GA199237@google.com>
+ <20190717012406.lugqemvubixfdd6v@ast-mbp.dhcp.thefacebook.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
-X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.45]); Wed, 17 Jul 2019 12:45:29 +0000 (UTC)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190717012406.lugqemvubixfdd6v@ast-mbp.dhcp.thefacebook.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, 17 Jul 2019 14:00:55 +0200, Petr Mladek wrote:
-> Adding Jiri into CC to be sure that we really solved the original problem.
-
-The patch looks good to me, the runner expects 4 as an indication that
-the test was skipped.
-
-> I get the following output when livepatching is not configured:
+On Tue, Jul 16, 2019 at 06:24:07PM -0700, Alexei Starovoitov wrote:
+[snip]
+> > > > > I don't see why a new bpf node for a trace event is a bad idea, really.
+> > > > 
+> > > > See the patches for kprobe/uprobe FD-based api and the reasons behind it.
+> > > > tldr: text is racy, doesn't scale, poor security, etc.
+> > > 
+> > > Is it possible to use perf without CAP_SYS_ADMIN and control security at the
+> > > per-event level? We are selective about who can access which event, using
+> > > selinux. That's how our ftrace-based tracers work. Its fine grained per-event
+> > > control. That's where I was going with the tracefs approach since we get that
+> > > granularity using the file system.
 > 
-> $> make run_tests  
-> TAP version 13
-> 1..4
-> # selftests: livepatch: test-livepatch.sh
-> # TEST: basic function patching ... SKIP: Failed modprobe --dry-run of module: test_klp_livepatch
-> not ok 1 selftests: livepatch: test-livepatch.sh # SKIP
-> # selftests: livepatch: test-callbacks.sh
-> # TEST: target module before livepatch ... SKIP: Failed modprobe --dry-run of module: test_klp_callbacks_mod
-> not ok 2 selftests: livepatch: test-callbacks.sh # SKIP
-> # selftests: livepatch: test-shadow-vars.sh
-> # TEST: basic shadow variable API ... SKIP: Failed modprobe --dry-run of module: test_klp_shadow_vars
-> not ok 3 selftests: livepatch: test-shadow-vars.sh # SKIP
-> # selftests: livepatch: test-state.sh
-> # TEST: system state modification ... SKIP: Failed modprobe --dry-run of module: test_klp_state
-> not ok 4 selftests: livepatch: test-state.sh # SKIP
-> 
-> Jiri, is it acceptable solution for you, please?
+> android's choice of selinux is not a factor in deciding kernel apis.
+> It's completely separate discusion wether disallowing particular tracepoints
+> for given user make sense at all.
+> Just because you can hack it in via selinux blocking particular
+> /sys/debug/tracing/ directory and convince yourself that it's somehow
+> makes android more secure. It doesn't mean that all new api should fit
+> into this model.
 
-It looks correct. My reading of the TAP 13 specification is that it
-should be returned as "ok" instead of "not ok" but that is not a
-problem of this patch.
+Its not like a hack, it is just control of which tracefs node can be
+accessed and which cannot be since the tracing can run on production systems
+out in the field and there are several concerns to address like security,
+privacy etc. It is not just for debugging usecases. We do collect traces out
+in the field where these issues are real and cannot be ignored.
 
-> Otherwise, the patch looks fine to me. If Jiri is fine
-> then feel free to use:
-> 
-> Reviewed-by: Petr Mladek <pmladek@suse.com>
+SELinux model is deny everything, and then selectively grant access to what
+is needed. The VFS and security LSM hooks provide this control quite well. I am
+not sure if such control is possible through perf hence I asked the question.
 
-Sure.
+> I think allowing one tracepoint and disallowing another is pointless
+> from security point of view. Tracing bpf program can do bpf_probe_read
+> of anything.
 
-Acked-by: Jiri Benc <jbenc@redhat.com>
+I think the assumption here is the user controls the program instructions at
+runtime, but that's not the case. The BPF program we are loading is not
+dynamically generated, it is built at build time and it is loaded from a
+secure verified partition, so even though it can do bpf_probe_read, it is
+still not something that the user can change. And, we are planning to make it
+even more secure by making it kernel verify the program at load time as well
+(you were on some discussions about that a few months ago).
 
-Thanks!
+thanks,
 
- Jiri
+ - Joel
+
