@@ -2,144 +2,168 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C56466B293
-	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Jul 2019 01:59:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45BCC6B2F0
+	for <lists+linux-kselftest@lfdr.de>; Wed, 17 Jul 2019 02:49:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729521AbfGPX6H (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 16 Jul 2019 19:58:07 -0400
-Received: from mail-io1-f70.google.com ([209.85.166.70]:39556 "EHLO
-        mail-io1-f70.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728491AbfGPX6H (ORCPT
+        id S1730493AbfGQAt0 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 16 Jul 2019 20:49:26 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:14054 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726344AbfGQAtZ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 16 Jul 2019 19:58:07 -0400
-Received: by mail-io1-f70.google.com with SMTP id y13so25125155iol.6
-        for <linux-kselftest@vger.kernel.org>; Tue, 16 Jul 2019 16:58:06 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=04Wvxtoj12TF+6z0qf7a2JYPiNoTFIelyWa5q9OcB9o=;
-        b=Y8RoALfgaCO6/l4SIdzN/FcgZtk7vMfK/gfKZ2p5NsYnKJcFRs7tyGVEWyF5giKSDm
-         BYpHjGBMF7pCWBAsTiglKRtnaJuX1Go2R41x7NjyKmaG/lX1Ez6JLEaakSZ83L7O8E+J
-         mmOu3ethpt90qigdzXov+Pf7dZvf89aoUaJxlVxapwYIwhPcqdmQseBjJVhD5Ma8xw/4
-         kuJuO6l40dWOiQQetWV6cCIZ1R8aFrNz0Je8XlkbVUyAa1jJiPo/DN8NzuIoQ7EsPzD2
-         A83/4R29kJIDgpqVvj2RJs/JoPKXEcXtivtih4ZFOjjQ3uprryZ6aqn0EWXvkRMXyi2s
-         +HbA==
-X-Gm-Message-State: APjAAAU+xkuL30bmI23TFzfxprJ2SvGip19JTnBavt6S5eM03CprpDxv
-        +JT6CerWEmaeQOcJKhdb4EZnJwuvYKiMLiGtjPfrEypWnf5k
-X-Google-Smtp-Source: APXvYqw6MgjkP1Q8lzpCier7Y6bbnZmvhg7ZXpdamqk8o0lRzBL5g64lhJuw4rb4lHslSmi5QKmbMocp+2fQuPy7mw0MK4ok9G8w
+        Tue, 16 Jul 2019 20:49:25 -0400
+Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x6H0lXg6030271;
+        Tue, 16 Jul 2019 17:49:16 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : references : in-reply-to : content-type : content-id
+ : content-transfer-encoding : mime-version; s=facebook;
+ bh=2ku0EgpNaitFugfFNzpgMALweDBXYpV13ha37sxxzNA=;
+ b=QbEAEUBUPn6VLAN/vtr8FYloi3NRkRU78Lid6weyNKNF6L82MGcl+6UiYtwu/HtfzBR0
+ EolJ1gPXAo3+Nvzc1PYi4BpeXYkxkWF7nyumlcrCV+32S6pFZKuOlaR6HTrUeIL3zbf9
+ jcN/aHGVue8l3K+rGa8291gDfwSyul+ph9w= 
+Received: from mail.thefacebook.com (mailout.thefacebook.com [199.201.64.23])
+        by mx0a-00082601.pphosted.com with ESMTP id 2tsj89skbs-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
+        Tue, 16 Jul 2019 17:49:16 -0700
+Received: from prn-hub06.TheFacebook.com (2620:10d:c081:35::130) by
+ prn-hub01.TheFacebook.com (2620:10d:c081:35::125) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.1.1713.5; Tue, 16 Jul 2019 17:49:15 -0700
+Received: from NAM03-DM3-obe.outbound.protection.outlook.com (192.168.54.28)
+ by o365-in.thefacebook.com (192.168.16.30) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.1.1713.5
+ via Frontend Transport; Tue, 16 Jul 2019 17:49:14 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=mtD68+BkzcCOBCszMzj77aH13eLu0wMKP15QvXiPRkF1Vs7VbhQKkOoExdRWXJxN38MliYs9IVM/Dz3r722SBXJX9NU91jCYvaRT83IVP/9N2TtXlMqQl+WvQxj3gCb9KQlRWXPs1jLupPeR2FpH1CkkDvm6cuWu4mGtbRCdFj4SYMR3w8/MCsHFXVUWFs4G9eT8edzUVeB5GPvPBZIMNdDmBr23E1KZ3I+fQFB2g3wqyeLu2MuC163DhyxQv4ZSJVfQm1sgCBfdKe40i+DJRVSM72WljfUxTd1kcXjOFuOUrFepNTXpxg0llhAkOyHh25jR18YUl8HXQnW+joXNsQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=2ku0EgpNaitFugfFNzpgMALweDBXYpV13ha37sxxzNA=;
+ b=ldpxGMnQMMECIVc/VANfePpyFNpgWFNAEuC1YEW9Z+xnNk68lhb+fiDIalWpK51C9O6vit7ABBn6TFxRAzzi7KaQ7acD0AR5Ey3rPL1d8tgwXVZrZCV8SRUtjnaCZFou+V3nHFlE9q707SopSKLVsIcRD45kjGsg5K/WdCoBwblPCFuQCxFClOJ0CF6N4q7D9JC5JT2uDtsjJl+iVv5JsaZaRW9Tgr5v+SWlPybkr9abTYN8RlMGmjSPmFCR9no4QLZzdySCNgLY8DMlrzyOl/VCtGOEcOHcD4RBV5PlNH0zkOgUPIPhDhkEIybk1febihRzCav4QEhAWxUUNhKB9A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1;spf=pass
+ smtp.mailfrom=fb.com;dmarc=pass action=none header.from=fb.com;dkim=pass
+ header.d=fb.com;arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.onmicrosoft.com;
+ s=selector1-fb-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=2ku0EgpNaitFugfFNzpgMALweDBXYpV13ha37sxxzNA=;
+ b=JlAW30qUeCKMtzBUftDIY+1IqJLiUTJTnRHfxw27GvjfOrYfylUKjU/tV3sajtOlbzuaAcC496xUmjcS6kDVwowioP0VmO8ya1ZvWZPld6wy0rFrEzSmvkgJHuqsk9ro4tlc7ZAZtlgv1EikMp2fhJFGjcwiAJpENYxYC2hNnqg=
+Received: from BN8PR15MB2626.namprd15.prod.outlook.com (20.179.137.220) by
+ BN8PR15MB3057.namprd15.prod.outlook.com (20.178.221.90) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2073.14; Wed, 17 Jul 2019 00:49:09 +0000
+Received: from BN8PR15MB2626.namprd15.prod.outlook.com
+ ([fe80::c8c8:6331:aba0:6f3d]) by BN8PR15MB2626.namprd15.prod.outlook.com
+ ([fe80::c8c8:6331:aba0:6f3d%7]) with mapi id 15.20.2073.012; Wed, 17 Jul 2019
+ 00:49:09 +0000
+From:   Roman Gushchin <guro@fb.com>
+To:     Naresh Kamboju <naresh.kamboju@linaro.org>
+CC:     Roman Gushchin <guroan@gmail.com>, Tejun Heo <tj@kernel.org>,
+        "Oleg Nesterov" <oleg@redhat.com>,
+        Kernel Team <Kernel-team@fb.com>,
+        "cgroups@vger.kernel.org" <cgroups@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Shuah Khan <shuah@kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        "lkft-triage@lists.linaro.org" <lkft-triage@lists.linaro.org>
+Subject: Re: [PATCH v10 6/9] kselftests: cgroup: add freezer controller
+ self-tests
+Thread-Topic: [PATCH v10 6/9] kselftests: cgroup: add freezer controller
+ self-tests
+Thread-Index: AQHU69e+99TbmRtJs06SJqByGIH3TabN82yAgACnwQA=
+Date:   Wed, 17 Jul 2019 00:49:09 +0000
+Message-ID: <20190717004904.GA32357@castle.dhcp.thefacebook.com>
+References: <20190405174708.1010-1-guro@fb.com>
+ <20190405174708.1010-7-guro@fb.com>
+ <CA+G9fYvz6MA0N8GgwY5QNdWBAw+XT9QcmwnABsSpjLnwz_jLzA@mail.gmail.com>
+In-Reply-To: <CA+G9fYvz6MA0N8GgwY5QNdWBAw+XT9QcmwnABsSpjLnwz_jLzA@mail.gmail.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-clientproxiedby: BYAPR05CA0073.namprd05.prod.outlook.com
+ (2603:10b6:a03:e0::14) To BN8PR15MB2626.namprd15.prod.outlook.com
+ (2603:10b6:408:c7::28)
+x-ms-exchange-messagesentrepresentingtype: 1
+x-originating-ip: [2620:10d:c090:200::2:f93c]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: e3f5f401-a703-4aa7-9588-08d70a509401
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(2017052603328)(7193020);SRVR:BN8PR15MB3057;
+x-ms-traffictypediagnostic: BN8PR15MB3057:
+x-microsoft-antispam-prvs: <BN8PR15MB305704F9BC4A38032DE49C98BEC90@BN8PR15MB3057.namprd15.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:10000;
+x-forefront-prvs: 01018CB5B3
+x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(396003)(39860400002)(346002)(376002)(136003)(366004)(189003)(199004)(8676002)(186003)(9686003)(6512007)(6246003)(8936002)(68736007)(99286004)(76176011)(71200400001)(478600001)(305945005)(71190400001)(6116002)(386003)(316002)(14444005)(256004)(5024004)(6436002)(52116002)(102836004)(486006)(11346002)(54906003)(46003)(1076003)(81166006)(14454004)(229853002)(25786009)(2906002)(53936002)(446003)(6486002)(6916009)(5660300002)(476003)(7736002)(66446008)(86362001)(6506007)(33656002)(64756008)(66476007)(66946007)(4326008)(66556008)(81156014);DIR:OUT;SFP:1102;SCL:1;SRVR:BN8PR15MB3057;H:BN8PR15MB2626.namprd15.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+received-spf: None (protection.outlook.com: fb.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: cuurbjXu2kuo9C1Vm/Ju+ZjNX0pkRiXpw7nftMMf+IxiLTi4Gc4e+cGm0wtj7k6w+YAM+iEYHrhe3aTzD1rTWSFXwCwLQ2DeSeVC8dedNQvGfe19HLzgP0w19mW/CnI+Mtz57zYzs8DPov86gds0VbxT5Z423iFLSmSQg8i7B9vUZE4B4AF7+k56Bi3Tfh++5ZHmEz7bZXTmznDlg1ksI8eBQiqx3SiN2a8xIYH6nNxdJG4ncD32SzKqXI2m3EOzWCFYJrtWdKQYFW+LHVy0l3hfaluTQKIy7k5K33v4DknkoUjJRQJyp+MDJ9kkeUWIBPiecJClbPcHsfRyCTYmcTpP3x6n2rCu0QDjVvOqNoK6xSj+cCJRTLdXtMCcKW+KfId5DSLGFgqBcoiLixNduhPqHb1EfNiC0dFWxl27MU8=
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <6615751279655F448AC550872ECF4FCD@namprd15.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-X-Received: by 2002:a5d:9957:: with SMTP id v23mr32648760ios.117.1563321486085;
- Tue, 16 Jul 2019 16:58:06 -0700 (PDT)
-Date:   Tue, 16 Jul 2019 16:58:06 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000d917f4058dd525cf@google.com>
-Subject: general protection fault in tls_setsockopt
-From:   syzbot <syzbot+23d9570edec63669d890@syzkaller.appspotmail.com>
-To:     ast@kernel.org, aviadye@mellanox.com,
-        bhole_prashant_q7@lab.ntt.co.jp, borisp@mellanox.com,
-        daniel@iogearbox.net, davejwatson@fb.com, davem@davemloft.net,
-        john.fastabend@gmail.com, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
-        shuah@kernel.org, songliubraving@fb.com,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
+X-MS-Exchange-CrossTenant-Network-Message-Id: e3f5f401-a703-4aa7-9588-08d70a509401
+X-MS-Exchange-CrossTenant-originalarrivaltime: 17 Jul 2019 00:49:09.6445
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: guro@fb.com
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN8PR15MB3057
+X-OriginatorOrg: fb.com
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-07-16_06:,,
+ signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 priorityscore=1501
+ malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
+ clxscore=1011 lowpriorityscore=0 mlxscore=0 impostorscore=0
+ mlxlogscore=871 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.0.1-1810050000 definitions=main-1907170008
+X-FB-Internal: deliver
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hello,
+On Tue, Jul 16, 2019 at 08:18:39PM +0530, Naresh Kamboju wrote:
+> Hi Roman,
+>=20
+> Just want to share information here on what we notice on running this tes=
+t case,
 
-syzbot found the following crash on:
+Hi Naresh!
 
-HEAD commit:    a131c2bf Merge tag 'acpi-5.3-rc1-2' of git://git.kernel.or..
-git tree:       net-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=1603e9c0600000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=8bff73c5ba9e876
-dashboard link: https://syzkaller.appspot.com/bug?extid=23d9570edec63669d890
-compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=13560870600000
+Thank you for the report!
 
-The bug was bisected to:
+The interaction between ptrace and freezer is complicated
+(as ptrace in general),so there are known cases when spurious
+cgroup transitions (frozen <-> non frozen <-> frozen ) can happen.
 
-commit 7c85c448e7d74c4ddd759440a2141eab663567cf
-Author: Prashant Bhole <bhole_prashant_q7@lab.ntt.co.jp>
-Date:   Tue Oct 9 01:04:54 2018 +0000
+Does it create any difficulties? If so, I'll send a diff to ignore
+the result of this test for now.
 
-     selftests/bpf: test_verifier, check bpf_map_lookup_elem access in bpf  
-prog
+Thank you!
 
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=17000114600000
-final crash:    https://syzkaller.appspot.com/x/report.txt?x=14800114600000
-console output: https://syzkaller.appspot.com/x/log.txt?x=10800114600000
+>=20
+> On Fri, 5 Apr 2019 at 23:17, Roman Gushchin <guroan@gmail.com> wrote:
+> >
+> > This patch implements 9 tests for the freezer controller for
+> > cgroup v2:
+> ...
+> > 6) ptrace test: the test checks that it's possible to attach to
+> > a process in a frozen cgroup, get some information and detach, and
+> > the cgroup will remain frozen.
+>=20
+> selftests cgroup test_freezer failed because of the sys entry path not fo=
+und.
 
-IMPORTANT: if you fix the bug, please add the following tag to the commit:
-Reported-by: syzbot+23d9570edec63669d890@syzkaller.appspotmail.com
-Fixes: 7c85c448e7d7 ("selftests/bpf: test_verifier, check  
-bpf_map_lookup_elem access in bpf prog")
+Can you, please, elaborate on this?
 
-kasan: CONFIG_KASAN_INLINE enabled
-kasan: GPF could be caused by NULL-ptr deref or user memory access
-general protection fault: 0000 [#1] PREEMPT SMP KASAN
-CPU: 0 PID: 9098 Comm: syz-executor.2 Not tainted 5.2.0+ #65
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS  
-Google 01/01/2011
-RIP: 0010:tls_setsockopt+0x87/0x8c0 net/tls/tls_main.c:592
-Code: 80 3c 02 00 0f 85 a5 07 00 00 49 8b 84 24 b0 06 00 00 48 ba 00 00 00  
-00 00 fc ff df 48 8d b8 88 00 00 00 48 89 f9 48 c1 e9 03 <80> 3c 11 00 0f  
-85 85 07 00 00 41 89 d8 4c 89 f1 44 89 ea 44 89 fe
-RSP: 0018:ffff88809b2e7d30 EFLAGS: 00010206
-RAX: 0000000000000000 RBX: 0000000000000004 RCX: 0000000000000011
-RDX: dffffc0000000000 RSI: ffffffff86186a84 RDI: 0000000000000088
-RBP: ffff88809b2e7d80 R08: ffff888098896480 R09: ffff888098896d08
-R10: ffffed1015d06c83 R11: ffff8880ae83641b R12: ffff888099d86d00
-R13: 000000000000001f R14: 0000000020000340 R15: 0000000000000006
-FS:  00007f29b1f6b700(0000) GS:ffff8880ae800000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007ffb5492d518 CR3: 00000000a49ea000 CR4: 00000000001406f0
-Call Trace:
-  sock_common_setsockopt+0x94/0xd0 net/core/sock.c:3130
-  __sys_setsockopt+0x253/0x4b0 net/socket.c:2080
-  __do_sys_setsockopt net/socket.c:2096 [inline]
-  __se_sys_setsockopt net/socket.c:2093 [inline]
-  __x64_sys_setsockopt+0xbe/0x150 net/socket.c:2093
-  do_syscall_64+0xfd/0x680 arch/x86/entry/common.c:296
-  entry_SYSCALL_64_after_hwframe+0x49/0xbe
-RIP: 0033:0x459819
-Code: fd b7 fb ff c3 66 2e 0f 1f 84 00 00 00 00 00 66 90 48 89 f8 48 89 f7  
-48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff  
-ff 0f 83 cb b7 fb ff c3 66 2e 0f 1f 84 00 00 00 00
-RSP: 002b:00007f29b1f6ac78 EFLAGS: 00000246 ORIG_RAX: 0000000000000036
-RAX: ffffffffffffffda RBX: 0000000000000005 RCX: 0000000000459819
-RDX: 000000000000001f RSI: 0000000000000006 RDI: 0000000000000005
-RBP: 000000000075bf20 R08: 0000000000000004 R09: 0000000000000000
-R10: 0000000020000340 R11: 0000000000000246 R12: 00007f29b1f6b6d4
-R13: 00000000004c7cb9 R14: 00000000004dd878 R15: 00000000ffffffff
-Modules linked in:
----[ end trace 1e30f09ab6b57d8c ]---
-RIP: 0010:tls_setsockopt+0x87/0x8c0 net/tls/tls_main.c:592
-Code: 80 3c 02 00 0f 85 a5 07 00 00 49 8b 84 24 b0 06 00 00 48 ba 00 00 00  
-00 00 fc ff df 48 8d b8 88 00 00 00 48 89 f9 48 c1 e9 03 <80> 3c 11 00 0f  
-85 85 07 00 00 41 89 d8 4c 89 f1 44 89 ea 44 89 fe
-RSP: 0018:ffff88809b2e7d30 EFLAGS: 00010206
-RAX: 0000000000000000 RBX: 0000000000000004 RCX: 0000000000000011
-RDX: dffffc0000000000 RSI: ffffffff86186a84 RDI: 0000000000000088
-RBP: ffff88809b2e7d80 R08: ffff888098896480 R09: ffff888098896d08
-R10: ffffed1015d06c83 R11: ffff8880ae83641b R12: ffff888099d86d00
-R13: 000000000000001f R14: 0000000020000340 R15: 0000000000000006
-FS:  00007f29b1f6b700(0000) GS:ffff8880ae800000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00000000007126b4 CR3: 00000000a49ea000 CR4: 00000000001406f0
+>  Cgroup /sys/fs/cgroup/unified/cg_test_ptrace isn't frozen
+> /sys/fs/cgroup/unified/cg_test_ptrace: isn't_frozen #
+> # not ok 6 test_cgfreezer_ptrace
+>=20
+> This test case fails intermittently.
 
-
----
-This bug is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this bug report. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
-syzbot can test patches for this bug, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+Thank you!
