@@ -2,60 +2,178 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E7B566CDB4
-	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Jul 2019 13:55:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EF3B6D047
+	for <lists+linux-kselftest@lfdr.de>; Thu, 18 Jul 2019 16:48:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726715AbfGRLzd (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 18 Jul 2019 07:55:33 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:58598 "EHLO mx1.redhat.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726608AbfGRLzd (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 18 Jul 2019 07:55:33 -0400
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id 5D58080F79;
-        Thu, 18 Jul 2019 11:55:33 +0000 (UTC)
-Received: from thuth.com (dhcp-200-228.str.redhat.com [10.33.200.228])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 49F0D5D71A;
-        Thu, 18 Jul 2019 11:55:32 +0000 (UTC)
-From:   Thomas Huth <thuth@redhat.com>
-To:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        =?UTF-8?q?Radim=20Kr=C4=8Dm=C3=A1=C5=99?= <rkrcmar@redhat.com>
-Cc:     trivial@kernel.org, linux-kselftest@vger.kernel.org
-Subject: [PATCH] KVM: selftests: Remove superfluous define from vmx.c
-Date:   Thu, 18 Jul 2019 13:55:27 +0200
-Message-Id: <20190718115527.6996-1-thuth@redhat.com>
+        id S1727942AbfGROsT (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 18 Jul 2019 10:48:19 -0400
+Received: from mail-lj1-f196.google.com ([209.85.208.196]:34915 "EHLO
+        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727812AbfGROsS (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 18 Jul 2019 10:48:18 -0400
+Received: by mail-lj1-f196.google.com with SMTP id x25so27667821ljh.2
+        for <linux-kselftest@vger.kernel.org>; Thu, 18 Jul 2019 07:48:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rasmusvillemoes.dk; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=qOzcTnaZtrCxVZ+wrCV9j1v3ZSJaRvDDDE3Ip4m8PX4=;
+        b=BvozhdyNjQm5IKs1TT9YoWn3Ui6wySHrveALu6p1t7AtDp7QFxBLfHh88f5ww+lLJn
+         uwy3k971xxqR/HSbz4pAOIhSLMVdxGZ//qhiRBmEGbP5iSimOi3DrF8NmakZGMPtS2dX
+         7klk9Axk//12MJN1Z1lHBXwZgwDxdfLj6taYs=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=qOzcTnaZtrCxVZ+wrCV9j1v3ZSJaRvDDDE3Ip4m8PX4=;
+        b=QCXZT1CBKV/2LX/vZvW5159NJ9/0khCmgtO3MySTdolkKENXF8TxXkFK4aVbN3ZDT8
+         zPMU4XKX1ZDLMdWC/eUcuN8eU8sdGS2vB5mpi4WZqjlEzSWrGbBb++cZZuWs8LSBrX8K
+         f1F0LfGfrDMFXKmhXEFUMuTRVImz406WkVPaYUg9y24Gvm1EscC9AV/520YuVijcFYBd
+         dEsrnHwxmRqaW3hr7p+MIWGDXa1Od2H9RHMbMu2IGNEilPVjESjEMr6Z7G31NmzCC2RS
+         JirBjN5pjmH794lWMiSOnCgKaZJt2rS4ZnJMtGNflEvOSWka1du8Bv0P7M6n7geTgwf2
+         cKEA==
+X-Gm-Message-State: APjAAAXZpaoi4VUM43oeI41CLgOHQNzWSdqi/RgXSu2wsZxG41AfQV85
+        3WWEz7YjZyDPc1zJJb+HKOk=
+X-Google-Smtp-Source: APXvYqxmTPpUAHG/iv/MbFly8EXHSdBuBHGZ2qYmzwo/cj6avvxhzmR7eZRDDVHxMRGQ2XfudRkVGQ==
+X-Received: by 2002:a05:651c:d1:: with SMTP id 17mr24822389ljr.174.1563461295757;
+        Thu, 18 Jul 2019 07:48:15 -0700 (PDT)
+Received: from [172.16.11.28] ([81.216.59.226])
+        by smtp.gmail.com with ESMTPSA id t4sm5672901ljh.9.2019.07.18.07.48.13
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 18 Jul 2019 07:48:15 -0700 (PDT)
+Subject: Re: [PATCH v9 08/10] open: openat2(2) syscall
+To:     Aleksa Sarai <cyphar@cyphar.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J. Bruce Fields" <bfields@fieldses.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        David Howells <dhowells@redhat.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>
+Cc:     Christian Brauner <christian@brauner.io>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Jann Horn <jannh@google.com>, Tycho Andersen <tycho@tycho.ws>,
+        David Drysdale <drysdale@google.com>,
+        Chanho Min <chanho.min@lge.com>,
+        Oleg Nesterov <oleg@redhat.com>, Aleksa Sarai <asarai@suse.de>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        containers@lists.linux-foundation.org, linux-alpha@vger.kernel.org,
+        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-ia64@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        linux-xtensa@linux-xtensa.org, sparclinux@vger.kernel.org
+References: <20190706145737.5299-1-cyphar@cyphar.com>
+ <20190706145737.5299-9-cyphar@cyphar.com>
+From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
+Message-ID: <845e4364-685f-343b-46fb-c418766dce3e@rasmusvillemoes.dk>
+Date:   Thu, 18 Jul 2019 16:48:12 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
-X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.27]); Thu, 18 Jul 2019 11:55:33 +0000 (UTC)
+In-Reply-To: <20190706145737.5299-9-cyphar@cyphar.com>
+Content-Type: text/plain; charset=windows-1252
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The code in vmx.c does not use "program_invocation_name", so there
-is no need to "#define _GNU_SOURCE" here.
+On 06/07/2019 16.57, Aleksa Sarai wrote:
+> 
+> --- a/fs/open.c
+> +++ b/fs/open.c
+> @@ -928,24 +928,32 @@ struct file *open_with_fake_path(const struct path *path, int flags,
+>  }
+>  EXPORT_SYMBOL(open_with_fake_path);
+>  
+> -static inline int build_open_flags(int flags, umode_t mode, struct open_flags *op)
+> +static inline int build_open_flags(struct open_how how, struct open_flags *op)
+>  {
 
-Signed-off-by: Thomas Huth <thuth@redhat.com>
----
- tools/testing/selftests/kvm/lib/x86_64/vmx.c | 2 --
- 1 file changed, 2 deletions(-)
+How does passing such a huge struct by value affect code generation?
+Does gcc actually inline the function (and does it even inline the old
+one given that it's already non-trivial and has more than one caller).
 
-diff --git a/tools/testing/selftests/kvm/lib/x86_64/vmx.c b/tools/testing/selftests/kvm/lib/x86_64/vmx.c
-index fe56d159d65f..204f847bd065 100644
---- a/tools/testing/selftests/kvm/lib/x86_64/vmx.c
-+++ b/tools/testing/selftests/kvm/lib/x86_64/vmx.c
-@@ -5,8 +5,6 @@
-  * Copyright (C) 2018, Google LLC.
-  */
- 
--#define _GNU_SOURCE /* for program_invocation_name */
--
- #include "test_util.h"
- #include "kvm_util.h"
- #include "processor.h"
--- 
-2.21.0
+>  	int lookup_flags = 0;
+> -	int acc_mode = ACC_MODE(flags);
+> +	int opath_mask = 0;
+> +	int acc_mode = ACC_MODE(how.flags);
+> +
+> +	if (how.resolve & ~VALID_RESOLVE_FLAGS)
+> +		return -EINVAL;
+> +	if (!(how.flags & (O_PATH | O_CREAT | __O_TMPFILE)) && how.mode != 0)
+> +		return -EINVAL;
+> +	if (memchr_inv(how.reserved, 0, sizeof(how.reserved)))
+> +		return -EINVAL;
 
+How about passing how by const reference, and copy the few fields you
+need to local variables. That would at least simplify this patch by
+eliminating a lot of the
+
+> -	flags &= VALID_OPEN_FLAGS;
+> +	how.flags &= VALID_OPEN_FLAGS;
+>  
+> -	if (flags & (O_CREAT | __O_TMPFILE))
+> -		op->mode = (mode & S_IALLUGO) | S_IFREG;
+> +	if (how.flags & (O_CREAT | __O_TMPFILE))
+> +		op->mode = (how.mode & S_IALLUGO) | S_IFREG;
+
+churn.
+
+>  
+> diff --git a/include/linux/fcntl.h b/include/linux/fcntl.h
+> index 2868ae6c8fc1..e59917292213 100644
+> --- a/include/linux/fcntl.h
+> +++ b/include/linux/fcntl.h
+> @@ -4,13 +4,26 @@
+>  
+>  #include <uapi/linux/fcntl.h>
+>  
+> -/* list of all valid flags for the open/openat flags argument: */
+> +/* Should open_how.mode be set for older syscalls wrappers? */
+> +#define OPENHOW_MODE(flags, mode) \
+> +	(((flags) | (O_CREAT | __O_TMPFILE)) ? (mode) : 0)
+> +
+
+Typo: (((flags) & (O_CREAT | __O_TMPFILE)) ? (mode) : 0)
+
+> +/**
+> + * Arguments for how openat2(2) should open the target path. If @extra is zero,
+> + * then openat2(2) is identical to openat(2).
+> + *
+> + * @flags: O_* flags (unknown flags ignored).
+> + * @mode: O_CREAT file mode (ignored otherwise).
+
+should probably say "O_CREAT/O_TMPFILE file mode".
+
+> + * @upgrade_mask: restrict how the O_PATH may be re-opened (ignored otherwise).
+> + * @resolve: RESOLVE_* flags (-EINVAL on unknown flags).
+> + * @reserved: reserved for future extensions, must be zeroed.
+> + */
+> +struct open_how {
+> +	__u32 flags;
+> +	union {
+> +		__u16 mode;
+> +		__u16 upgrade_mask;
+> +	};
+> +	__u16 resolve;
+
+So mode and upgrade_mask are naturally u16 aka mode_t. And yes, they
+probably never need to be used together, so the union works. That then
+makes the next member 2-byte aligned, so using a u16 for the resolve
+flags brings us to an 8-byte boundary, and 11 unused flag bits should be
+enough for a while. But it seems a bit artificial to cram all this
+together and then add 56 bytes of reserved space.
+
+Rasmus
