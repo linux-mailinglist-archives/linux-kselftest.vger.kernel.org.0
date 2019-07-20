@@ -2,110 +2,97 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 404FD6ECE6
-	for <lists+linux-kselftest@lfdr.de>; Sat, 20 Jul 2019 02:10:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73BEC6ED60
+	for <lists+linux-kselftest@lfdr.de>; Sat, 20 Jul 2019 04:51:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733260AbfGTAK2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 19 Jul 2019 20:10:28 -0400
-Received: from mx1.mailbox.org ([80.241.60.212]:35184 "EHLO mx1.mailbox.org"
+        id S1728968AbfGTCvM (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 19 Jul 2019 22:51:12 -0400
+Received: from mx1.redhat.com ([209.132.183.28]:45854 "EHLO mx1.redhat.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730015AbfGTAK2 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 19 Jul 2019 20:10:28 -0400
-Received: from smtp2.mailbox.org (smtp2.mailbox.org [80.241.60.241])
-        (using TLSv1.2 with cipher ECDHE-RSA-CHACHA20-POLY1305 (256/256 bits))
+        id S1728058AbfGTCvM (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 19 Jul 2019 22:51:12 -0400
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mx1.mailbox.org (Postfix) with ESMTPS id 503C9501CC;
-        Sat, 20 Jul 2019 02:10:21 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at heinlein-support.de
-Received: from smtp2.mailbox.org ([80.241.60.241])
-        by spamfilter05.heinlein-hosting.de (spamfilter05.heinlein-hosting.de [80.241.56.123]) (amavisd-new, port 10030)
-        with ESMTP id wYoKm814sQqS; Sat, 20 Jul 2019 02:10:12 +0200 (CEST)
-Date:   Sat, 20 Jul 2019 10:09:30 +1000
-From:   Aleksa Sarai <cyphar@cyphar.com>
-To:     shuah <shuah@kernel.org>
-Cc:     Al Viro <viro@zeniv.linux.org.uk>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J. Bruce Fields" <bfields@fieldses.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        David Howells <dhowells@redhat.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Jann Horn <jannh@google.com>,
-        Christian Brauner <christian@brauner.io>,
-        Tycho Andersen <tycho@tycho.ws>,
-        David Drysdale <drysdale@google.com>,
-        Chanho Min <chanho.min@lge.com>,
-        Oleg Nesterov <oleg@redhat.com>, Aleksa Sarai <asarai@suse.de>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        containers@lists.linux-foundation.org, linux-alpha@vger.kernel.org,
-        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-fsdevel@vger.kernel.org, linux-ia64@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        linux-xtensa@linux-xtensa.org, sparclinux@vger.kernel.org
-Subject: Re: [PATCH v10 8/9] kselftest: save-and-restore errno to allow for
- %m formatting
-Message-ID: <20190720000930.g3jyjupgimptuubl@yavin>
-References: <20190719164225.27083-1-cyphar@cyphar.com>
- <20190719164225.27083-9-cyphar@cyphar.com>
- <b32d95a1-8a49-65ef-4ddd-fe86a7ca01d5@kernel.org>
+        by mx1.redhat.com (Postfix) with ESMTPS id 548AE821CB;
+        Sat, 20 Jul 2019 02:51:12 +0000 (UTC)
+Received: from [10.10.124.112] (ovpn-124-112.rdu2.redhat.com [10.10.124.112])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id D40FF608A4;
+        Sat, 20 Jul 2019 02:51:11 +0000 (UTC)
+Subject: Re: [PATCH] selftests/livepatch: add test skip handling
+To:     shuah <shuah@kernel.org>, live-patching@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+References: <20190714142829.29458-1-joe.lawrence@redhat.com>
+ <20190714143306.GA29501@redhat.com>
+ <5535ff5e-0f75-9185-11bb-400465f09f5c@kernel.org>
+From:   Joe Lawrence <joe.lawrence@redhat.com>
+Message-ID: <42feff41-8a92-e252-0e90-5c0335547de1@redhat.com>
+Date:   Fri, 19 Jul 2019 22:51:11 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="636rtrosv3xeor7c"
-Content-Disposition: inline
-In-Reply-To: <b32d95a1-8a49-65ef-4ddd-fe86a7ca01d5@kernel.org>
+In-Reply-To: <5535ff5e-0f75-9185-11bb-400465f09f5c@kernel.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
+X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.28]); Sat, 20 Jul 2019 02:51:12 +0000 (UTC)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+On 7/19/19 6:11 PM, shuah wrote:
+> On 7/14/19 8:33 AM, Joe Lawrence wrote:
+>> On Sun, Jul 14, 2019 at 10:28:29AM -0400, Joe Lawrence wrote:
+>> 
+ >> [ ... snip ... ]
+>>
+>> Testing:
+>>
+>> Here's the output if modprobe --dry-run doesn't like the modules (not
+>> built, etc.):
+>>
+>>     TAP version 13
+>>     selftests: livepatch: test-livepatch.sh
+>>     ========================================
+>>     SKIP: Failed modprobe --dry-run of module: test_klp_livepatch
+>>     not ok 1..1 selftests: livepatch: test-livepatch.sh [SKIP]
+>>     selftests: livepatch: test-callbacks.sh
+>>     ========================================
+>>     SKIP: Failed modprobe --dry-run of module: test_klp_callbacks_demo
+>>     not ok 1..2 selftests: livepatch: test-callbacks.sh [SKIP]
+>>     selftests: livepatch: test-shadow-vars.sh
+>>     ========================================
+>>     SKIP: Failed modprobe --dry-run of module: test_klp_shadow_vars
+>>     not ok 1..3 selftests: livepatch: test-shadow-vars.sh [SKIP]
+>> 
+> 
+> Please refine these messages to say what users should do. In addition
+> to what failed, also add what is missing - enable config option etc.
+> 
 
---636rtrosv3xeor7c
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Hi Shuah,
 
-On 2019-07-19, shuah <shuah@kernel.org> wrote:
-> On 7/19/19 10:42 AM, Aleksa Sarai wrote:
-> > Previously, using "%m" in a ksft_* format string can result in strange
-> > output because the errno value wasn't saved before calling other libc
-> > functions. The solution is to simply save and restore the errno before
-> > we format the user-supplied format string.
-> >=20
-> > Signed-off-by: Aleksa Sarai <cyphar@cyphar.com>
-> [...]
-> Hi Aleksa,
->=20
-> Can you send this patch separate from the patch series. I will apply
-> this as bug fix to 5.3-rc2 or rc3.
->=20
-> This isn't part of this series anyway and I would like to get this in
-> right away.
+Note that v2 was posted [1], but the output remains basically the same, 
+so your comments still apply.
 
-Done, and I'll drop it in v11 after the rest gets reviewed.
+Off the top of my head, modprobe can fail for many reasons: unprivileged 
+user, missing .ko files, missing modules.dep entry, kernel vermagic, 
+interface versions, etc.
 
---=20
-Aleksa Sarai
-Senior Software Engineer (Containers)
-SUSE Linux GmbH
-<https://www.cyphar.com/>
+What would you think about modifying our skip() function to provide a 
+catch-all list of CONFIG, environment, etc. requirements?  Something 
+like, "Please ensure that the kernel was build with CONFIG_XYZ and that 
+the tests are run with foo privileges"?  That would let us avoid trying 
+to figure out exactly why the modprobe failed, but still help out the user.
 
---636rtrosv3xeor7c
-Content-Type: application/pgp-signature; name="signature.asc"
+Alternatively, are there existing modprobe callers in the selftests that 
+already do a better job?
 
------BEGIN PGP SIGNATURE-----
+[1] 
+https://lore.kernel.org/linux-kselftest/eac825ab-04c2-77cf-671e-1a2a576109b0@linux.vnet.ibm.com/T/#mc2f70095215738cb6a539e2c2e6a415c78a8add6
 
-iHUEABYIAB0WIQSxZm6dtfE8gxLLfYqdlLljIbnQEgUCXTJbtgAKCRCdlLljIbnQ
-ErjeAQDm5ltY062NGtOMR1eaop8IvTWe5GYu7R+vym5BewUWYgD9HGmujOKl8CQ5
-rJXhxSxnaze1/BDj2gUmfSjSP3IJNwo=
-=CHUB
------END PGP SIGNATURE-----
+Thanks,
 
---636rtrosv3xeor7c--
+-- Joe
