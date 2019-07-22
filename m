@@ -2,127 +2,154 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4472B701DE
-	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Jul 2019 16:05:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B6CD705A4
+	for <lists+linux-kselftest@lfdr.de>; Mon, 22 Jul 2019 18:46:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728812AbfGVOFs (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 22 Jul 2019 10:05:48 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:39012 "EHLO mx1.redhat.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728591AbfGVOFs (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 22 Jul 2019 10:05:48 -0400
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id 1E4F630821A3;
-        Mon, 22 Jul 2019 14:05:48 +0000 (UTC)
-Received: from jlaw-desktop.redhat.com (ovpn-124-112.rdu2.redhat.com [10.10.124.112])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 881E9620CE;
-        Mon, 22 Jul 2019 14:05:47 +0000 (UTC)
-From:   Joe Lawrence <joe.lawrence@redhat.com>
-To:     live-patching@vger.kernel.org, linux-kselftest@vger.kernel.org
-Cc:     shuah@kernel.org, Jiri Benc <jbenc@redhat.com>
-Subject: [PATCH v3] selftests/livepatch: add test skip handling
-Date:   Mon, 22 Jul 2019 10:05:44 -0400
-Message-Id: <20190722140544.29867-1-joe.lawrence@redhat.com>
+        id S1728795AbfGVQqJ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 22 Jul 2019 12:46:09 -0400
+Received: from mail-pg1-f194.google.com ([209.85.215.194]:34614 "EHLO
+        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728530AbfGVQqJ (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 22 Jul 2019 12:46:09 -0400
+Received: by mail-pg1-f194.google.com with SMTP id n9so11708375pgc.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 22 Jul 2019 09:46:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=F8BugWPvgcU2u1kFFZKMyP/IOkg4/qodeykECt+PCWA=;
+        b=VX6SSuVoSHuo5NAioif+DJtSSs1RJl179j5hlo4DTfAYF66Jgcx0vpiJB8eR+9HEL8
+         +f/45Mc4lQN3jKnZezfzKg+yOPAVpcviTazcgmREFQYvaP41eWd/rYtiTmOP5jut4IGW
+         UsbCxeU7Nx57xcR3YkKPrTzMk7AWS/2VcXYuY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=F8BugWPvgcU2u1kFFZKMyP/IOkg4/qodeykECt+PCWA=;
+        b=BQnp+burBExij16A17w3GnDzUU8rcP2F5GI8vvcS7Q3Y2HU8RFNt1GgZtj4CjkVR/M
+         AMCBFMnA0SAfSswmnPqTsmcVOrVD7w0ZVwcauTg3PvBtXiXdlnyhr7YPkXXi511XWXSI
+         +F3lOQY7YU23eL+lu9JZMmOxyK3DuZkOYycN9n53adjrkaw1cdaydGIB644uFwJkHKNG
+         q+dl0XiRJudGOyPNJTKvYotTAFrHEjj6q5ZJMXX61aoTvUaW5WAmefZEkecXtwP4rk7T
+         HQVIDdDs9wet2Eev8GhZjcrWDbBVlEK9nPiQtjbe+CZXbitGQX5Qvis2OnZsj8VI3Sjo
+         uIRw==
+X-Gm-Message-State: APjAAAUPM23Q8H8Hedln9STgJLVtzLMAgDexFF3f1LyIC8/G0hHnL7Nr
+        x9aw/j4H3QYqW2ymojtJt6gdvA==
+X-Google-Smtp-Source: APXvYqzl1okfrN5zPZDspTEQta/i5+YABh20qrSg3GL1AN5406TswuRoR6v+V+I5B+11TbFoYh/o0Q==
+X-Received: by 2002:a17:90a:ff17:: with SMTP id ce23mr77676431pjb.47.1563813968675;
+        Mon, 22 Jul 2019 09:46:08 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id 4sm48411440pfc.92.2019.07.22.09.46.07
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Mon, 22 Jul 2019 09:46:07 -0700 (PDT)
+Date:   Mon, 22 Jul 2019 09:46:06 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Andrey Konovalov <andreyknvl@google.com>
+Cc:     Al Viro <viro@zeniv.linux.org.uk>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-rdma@vger.kernel.org, linux-media@vger.kernel.org,
+        kvm@vger.kernel.org,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Will Deacon <will.deacon@arm.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Yishai Hadas <yishaih@mellanox.com>,
+        Felix Kuehling <Felix.Kuehling@amd.com>,
+        Alexander Deucher <Alexander.Deucher@amd.com>,
+        Christian Koenig <Christian.Koenig@amd.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Jens Wiklander <jens.wiklander@linaro.org>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
+        Dave Martin <Dave.Martin@arm.com>,
+        Khalid Aziz <khalid.aziz@oracle.com>, enh <enh@google.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Christoph Hellwig <hch@infradead.org>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Kostya Serebryany <kcc@google.com>,
+        Evgeniy Stepanov <eugenis@google.com>,
+        Lee Smith <Lee.Smith@arm.com>,
+        Ramana Radhakrishnan <Ramana.Radhakrishnan@arm.com>,
+        Jacob Bramley <Jacob.Bramley@arm.com>,
+        Ruben Ayrapetyan <Ruben.Ayrapetyan@arm.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Kevin Brodsky <kevin.brodsky@arm.com>,
+        Szabolcs Nagy <Szabolcs.Nagy@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>
+Subject: Re: [PATCH v18 07/15] fs/namespace: untag user pointers in
+ copy_mount_options
+Message-ID: <201907220944.5821C92518@keescook>
+References: <cover.1561386715.git.andreyknvl@google.com>
+ <41e0a911e4e4d533486a1468114e6878e21f9f84.1561386715.git.andreyknvl@google.com>
+ <20190624175009.GM29120@arrakis.emea.arm.com>
+ <CAAeHK+x2TL057Fr0K7FZBTYgeEPVU3cC6scEeiSYk-Jkb3xgfg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
-X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.47]); Mon, 22 Jul 2019 14:05:48 +0000 (UTC)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAAeHK+x2TL057Fr0K7FZBTYgeEPVU3cC6scEeiSYk-Jkb3xgfg@mail.gmail.com>
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add a skip() message function that stops the test, logs an explanation,
-and sets the "skip" return code (4).
++Eric Biederman too, who might be able to Ack this...
 
-Before loading a livepatch self-test kernel module, first verify that
-we've built and installed it by running a 'modprobe --dry-run'.  This
-should catch a few environment issues, including !CONFIG_LIVEPATCH and
-!CONFIG_TEST_LIVEPATCH.  In these cases, exit gracefully with the new
-skip() function.
+On Mon, Jul 15, 2019 at 06:00:04PM +0200, Andrey Konovalov wrote:
+> On Mon, Jun 24, 2019 at 7:50 PM Catalin Marinas <catalin.marinas@arm.com> wrote:
+> >
+> > On Mon, Jun 24, 2019 at 04:32:52PM +0200, Andrey Konovalov wrote:
+> > > This patch is a part of a series that extends kernel ABI to allow to pass
+> > > tagged user pointers (with the top byte set to something else other than
+> > > 0x00) as syscall arguments.
+> > >
+> > > In copy_mount_options a user address is being subtracted from TASK_SIZE.
+> > > If the address is lower than TASK_SIZE, the size is calculated to not
+> > > allow the exact_copy_from_user() call to cross TASK_SIZE boundary.
+> > > However if the address is tagged, then the size will be calculated
+> > > incorrectly.
+> > >
+> > > Untag the address before subtracting.
+> > >
+> > > Reviewed-by: Khalid Aziz <khalid.aziz@oracle.com>
+> > > Reviewed-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
+> > > Reviewed-by: Kees Cook <keescook@chromium.org>
+> > > Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
+> > > Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
+> > > ---
+> > >  fs/namespace.c | 2 +-
+> > >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > >
+> > > diff --git a/fs/namespace.c b/fs/namespace.c
+> > > index 7660c2749c96..ec78f7223917 100644
+> > > --- a/fs/namespace.c
+> > > +++ b/fs/namespace.c
+> > > @@ -2994,7 +2994,7 @@ void *copy_mount_options(const void __user * data)
+> > >        * the remainder of the page.
+> > >        */
+> > >       /* copy_from_user cannot cross TASK_SIZE ! */
+> > > -     size = TASK_SIZE - (unsigned long)data;
+> > > +     size = TASK_SIZE - (unsigned long)untagged_addr(data);
+> > >       if (size > PAGE_SIZE)
+> > >               size = PAGE_SIZE;
+> >
+> > I think this patch needs an ack from Al Viro (cc'ed).
+> >
+> > --
+> > Catalin
+> 
+> Hi Al,
+> 
+> Could you take a look and give your acked-by?
+> 
+> Thanks!
 
-Reported-by: Jiri Benc <jbenc@redhat.com>
-Suggested-by: Shuah Khan <shuah@kernel.org>
-Signed-off-by: Joe Lawrence <joe.lawrence@redhat.com>
----
-
-v3: tweak modprobe error message: check kernel config and run as root,
-so output now looks like [shuah] :
-
-  % make run_tests
-  TAP version 13
-  1..3
-  # selftests: livepatch: test-livepatch.sh
-  # TEST: basic function patching ... SKIP: unable load module test_klp_livepatch, verify CONFIG_TEST_LIVEPATCH=m and run self-tests as root
-  not ok 1 selftests: livepatch: test-livepatch.sh # SKIP
-  # selftests: livepatch: test-callbacks.sh
-  # TEST: target module before livepatch ... SKIP: unable load module test_klp_callbacks_mod, verify CONFIG_TEST_LIVEPATCH=m and run self-tests as root
-  not ok 2 selftests: livepatch: test-callbacks.sh # SKIP
-  # selftests: livepatch: test-shadow-vars.sh
-  # TEST: basic shadow variable API ... SKIP: unable load module test_klp_shadow_vars, verify CONFIG_TEST_LIVEPATCH=m and run self-tests as root
-  not ok 3 selftests: livepatch: test-shadow-vars.sh # SKIP
-
-v2: move assert_mod() call into load_mod() and load_lp_nowait(), before
-    they check whether the module is a livepatch or not (a test-failing
-    assertion). [mbenes, pmladek]
-
- .../testing/selftests/livepatch/functions.sh  | 20 +++++++++++++++++++
- 1 file changed, 20 insertions(+)
-
-diff --git a/tools/testing/selftests/livepatch/functions.sh b/tools/testing/selftests/livepatch/functions.sh
-index 30195449c63c..8eb21fcc71de 100644
---- a/tools/testing/selftests/livepatch/functions.sh
-+++ b/tools/testing/selftests/livepatch/functions.sh
-@@ -13,6 +13,14 @@ function log() {
- 	echo "$1" > /dev/kmsg
- }
- 
-+# skip(msg) - testing can't proceed
-+#	msg - explanation
-+function skip() {
-+	log "SKIP: $1"
-+	echo "SKIP: $1" >&2
-+	exit 4
-+}
-+
- # die(msg) - game over, man
- #	msg - dying words
- function die() {
-@@ -43,6 +51,12 @@ function loop_until() {
- 	done
- }
- 
-+function assert_mod() {
-+	local mod="$1"
-+
-+	modprobe --dry-run "$mod" &>/dev/null
-+}
-+
- function is_livepatch_mod() {
- 	local mod="$1"
- 
-@@ -75,6 +89,9 @@ function __load_mod() {
- function load_mod() {
- 	local mod="$1"; shift
- 
-+	assert_mod "$mod" ||
-+		skip "unable load module ${mod}, verify CONFIG_TEST_LIVEPATCH=m and run self-tests as root"
-+
- 	is_livepatch_mod "$mod" &&
- 		die "use load_lp() to load the livepatch module $mod"
- 
-@@ -88,6 +105,9 @@ function load_mod() {
- function load_lp_nowait() {
- 	local mod="$1"; shift
- 
-+	assert_mod "$mod" ||
-+		skip "unable load module ${mod}, verify CONFIG_TEST_LIVEPATCH=m and run self-tests as root"
-+
- 	is_livepatch_mod "$mod" ||
- 		die "module $mod is not a livepatch"
- 
 -- 
-2.21.0
-
+Kees Cook
