@@ -2,44 +2,40 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 385CF71C05
-	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Jul 2019 17:44:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 15F7371C40
+	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Jul 2019 17:54:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727251AbfGWPok (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 23 Jul 2019 11:44:40 -0400
-Received: from merlin.infradead.org ([205.233.59.134]:45514 "EHLO
-        merlin.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726410AbfGWPok (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 23 Jul 2019 11:44:40 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=merlin.20170209; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:MIME-Version:Date:Message-ID:From:References:To:Subject:Sender:
-        Reply-To:Cc:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=CBzbQAQ88+Tnqc6Sizg4AVsPyC78/8SBIlQyCkD9ikw=; b=3TzkdI0V+g60KZCDuKD6fvpjqT
-        KQePii2fLsTVPTKF2Cr/GIzxZ6VOkY4CdgJiV3LdPT2wpRsmVY1Isvxygd5sEujjoa/4bT0MZZhUc
-        Vgl7MiuFLf1sB4jh+PsR9NUC/Ll883Lc/Bz6LPvq1yoK40gS8TzDmcqTP772WjijWXphO1EFRnjwI
-        bh4boXzjhJZwO7inrkpziM90KoO4XdxCRioXnfjCjIaE+c5hRaJeOtyxdPuRZyHLKApF38+O6b8VK
-        U+6pen1d5jLqCrQqrqTEDvMcqTfcoRS0yVJJ+a7QLL4lH+H5iNzMLTngk7aoahScob/XKkF0Q9UES
-        IuskWmoA==;
-Received: from static-50-53-52-16.bvtn.or.frontiernet.net ([50.53.52.16] helo=[192.168.1.17])
-        by merlin.infradead.org with esmtpsa (Exim 4.92 #3 (Red Hat Linux))
-        id 1hpwxz-0000wm-3m; Tue, 23 Jul 2019 15:44:39 +0000
-Subject: Re: [PATCH] selftests: kmod: Fix typo in kmod.sh
-To:     Masanari Iida <standby24x7@gmail.com>,
-        linux-kernel@vger.kernel.org, shuah@kernel.org,
-        linux-kselftest@vger.kernel.org
-References: <20190723102252.19931-1-standby24x7@gmail.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-Message-ID: <e803bc0d-d5f3-5821-181e-930e5099254a@infradead.org>
-Date:   Tue, 23 Jul 2019 08:44:37 -0700
+        id S1732205AbfGWPyH (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 23 Jul 2019 11:54:07 -0400
+Received: from mail.kernel.org ([198.145.29.99]:50394 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1730033AbfGWPyH (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 23 Jul 2019 11:54:07 -0400
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net [24.9.64.241])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 8D62B206B8;
+        Tue, 23 Jul 2019 15:54:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1563897246;
+        bh=b6VnbTtD9IPzYVY1gRe1ylhiT1DaFR8zYW6Mgy/1M5g=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=HZW3ipDkg/rCQkwYFSg/p8M7yS4JETGblrZ2mLlYY9+sRerNyPgapoTonQy8e0rOX
+         ir/FEfIPI9XZ/QYNERNBFpabjTf4vObUkfU0eDN25EAeVMuw6qF+9h9yX4+y9CeBal
+         EXjukEEejkNYMqMhI58CORLgs8F40MxS7GK5Z1PU=
+Subject: Re: [PATCH v3] selftests/livepatch: add test skip handling
+To:     Joe Lawrence <joe.lawrence@redhat.com>,
+        live-patching@vger.kernel.org, linux-kselftest@vger.kernel.org
+Cc:     Jiri Benc <jbenc@redhat.com>, shuah <shuah@kernel.org>
+References: <20190722140544.29867-1-joe.lawrence@redhat.com>
+From:   shuah <shuah@kernel.org>
+Message-ID: <e450e2ec-b683-f712-c8d5-ef1c2e2dee7c@kernel.org>
+Date:   Tue, 23 Jul 2019 09:53:53 -0600
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-In-Reply-To: <20190723102252.19931-1-standby24x7@gmail.com>
-Content-Type: text/plain; charset=utf-8
+In-Reply-To: <20190722140544.29867-1-joe.lawrence@redhat.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 Sender: linux-kselftest-owner@vger.kernel.org
@@ -47,52 +43,50 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 7/23/19 3:22 AM, Masanari Iida wrote:
-> This patch fixes some spelling typos in kmod.sh
+Hi Joe,
+
+On 7/22/19 8:05 AM, Joe Lawrence wrote:
+> Add a skip() message function that stops the test, logs an explanation,
+> and sets the "skip" return code (4).
 > 
-> Signed-off-by: Masanari Iida <standby24x7@gmail.com>
-
-Acked-by: Randy Dunlap <rdunlap@infradead.org>
-
-Thanks.
-
+> Before loading a livepatch self-test kernel module, first verify that
+> we've built and installed it by running a 'modprobe --dry-run'.  This
+> should catch a few environment issues, including !CONFIG_LIVEPATCH and
+> !CONFIG_TEST_LIVEPATCH.  In these cases, exit gracefully with the new
+> skip() function.
+> 
+> Reported-by: Jiri Benc <jbenc@redhat.com>
+> Suggested-by: Shuah Khan <shuah@kernel.org>
+> Signed-off-by: Joe Lawrence <joe.lawrence@redhat.com>
 > ---
->  tools/testing/selftests/kmod/kmod.sh | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
 > 
-> diff --git a/tools/testing/selftests/kmod/kmod.sh b/tools/testing/selftests/kmod/kmod.sh
-> index 0a76314b4414..8b944cf042f6 100755
-> --- a/tools/testing/selftests/kmod/kmod.sh
-> +++ b/tools/testing/selftests/kmod/kmod.sh
-> @@ -28,7 +28,7 @@
->  # override by exporting to your environment prior running this script.
->  # For instance this script assumes you do not have xfs loaded upon boot.
->  # If this is false, export DEFAULT_KMOD_FS="ext4" prior to running this
-> -# script if the filesyste module you don't have loaded upon bootup
-> +# script if the filesystem module you don't have loaded upon bootup
->  # is ext4 instead. Refer to allow_user_defaults() for a list of user
->  # override variables possible.
->  #
-> @@ -263,7 +263,7 @@ config_get_test_result()
->  config_reset()
->  {
->  	if ! echo -n "1" >"$DIR"/reset; then
-> -		echo "$0: reset shuld have worked" >&2
-> +		echo "$0: reset should have worked" >&2
->  		exit 1
->  	fi
->  }
-> @@ -488,7 +488,7 @@ usage()
->  	echo Example uses:
->  	echo
->  	echo "${TEST_NAME}.sh		-- executes all tests"
-> -	echo "${TEST_NAME}.sh -t 0008	-- Executes test ID 0008 number of times is recomended"
-> +	echo "${TEST_NAME}.sh -t 0008	-- Executes test ID 0008 number of times is recommended"
->  	echo "${TEST_NAME}.sh -w 0008	-- Watch test ID 0008 run until an error occurs"
->  	echo "${TEST_NAME}.sh -s 0008	-- Run test ID 0008 once"
->  	echo "${TEST_NAME}.sh -c 0008 3	-- Run test ID 0008 three times"
+> v3: tweak modprobe error message: check kernel config and run as root,
+> so output now looks like [shuah] :
 > 
 
+Couple of small tweaks to user visible message below.
 
--- 
-~Randy
+>    % make run_tests
+>    TAP version 13
+>    1..3
+>    # selftests: livepatch: test-livepatch.sh
+>    # TEST: basic function patching ... SKIP: unable load module test_klp_livepatch, verify CONFIG_TEST_LIVEPATCH=m and run self-tests as root
+>    not ok 1 selftests: livepatch: test-livepatch.sh # SKIP
+
+unable to
+
+>    # selftests: livepatch: test-callbacks.sh
+>    # TEST: target module before livepatch ... SKIP: unable load module test_klp_callbacks_mod, verify CONFIG_TEST_LIVEPATCH=m and run self-tests as root
+
+unable to
+
+>    not ok 2 selftests: livepatch: test-callbacks.sh # SKIP
+>    # selftests: livepatch: test-shadow-vars.sh
+>    # TEST: basic shadow variable API ... SKIP: unable load module test_klp_shadow_vars, verify CONFIG_TEST_LIVEPATCH=m and run self-tests as root
+> 
+
+unable to
+
+thanks for taking care of this.
+
+-- Shuah
