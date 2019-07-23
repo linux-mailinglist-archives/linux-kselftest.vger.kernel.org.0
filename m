@@ -2,34 +2,59 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8430570DB2
-	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Jul 2019 01:54:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B7C9C70E29
+	for <lists+linux-kselftest@lfdr.de>; Tue, 23 Jul 2019 02:32:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387473AbfGVXyN (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 22 Jul 2019 19:54:13 -0400
-Received: from mail.kernel.org ([198.145.29.99]:47124 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731007AbfGVXyM (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 22 Jul 2019 19:54:12 -0400
-Received: from kernel.org (unknown [104.132.0.74])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 06C1320840;
-        Mon, 22 Jul 2019 23:54:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1563839651;
-        bh=7riE0sVQmQS5QgS4pP9ptPUvfmyCxgbuxcUzFNIX2L8=;
-        h=In-Reply-To:References:Subject:To:Cc:From:Date:From;
-        b=lMfzRRCskgjYJCyPlokQPKY6jX+VpgCrEwPkMIQvRxf8iOB5wgrS9PjXaN0wjtfWh
-         RiuaqfDlvSUHC1e16Pk0GMsnB1H5f28N5075BUdTFeSOe4/ZlQbTkjJF0oMcqI6dyP
-         T+b1BFHi89keU/CNeTzd05/B7YC7Rqku9pnyKVeY=
-Content-Type: text/plain; charset="utf-8"
+        id S1726291AbfGWAch (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 22 Jul 2019 20:32:37 -0400
+Received: from mail-pg1-f196.google.com ([209.85.215.196]:44293 "EHLO
+        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728957AbfGWAcd (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 22 Jul 2019 20:32:33 -0400
+Received: by mail-pg1-f196.google.com with SMTP id i18so18461496pgl.11
+        for <linux-kselftest@vger.kernel.org>; Mon, 22 Jul 2019 17:32:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=vuvO2vdByXr9tZ4gIUtMWHJb47SWaOs3dPS9JirOd8A=;
+        b=Zl9GjnPN0xA37eJPDX7MMY5U59qIMhaH0oHaFDaQC5kc56db6tSm1k92X8vD9olKQv
+         OxaZTUgiRL7QcEtCdRCTPLyfWDQhRyOXO/nSFoU6NA2mvCQcdvEZ0WClLYkrEms7tZo/
+         izrTbbctUhAN1VB9J0Q7y+pRVPXmJcR9HPRnbtizx6ihsgsakAq/rgha1JCGMsgY2RiH
+         PJ1yTUdO8H1C8vedwH16edJ6CisD7/Lc2QkWysnWnCsUClX9aMwTBEN+KsRdmKr24KRk
+         pqLlahy+9/ouBHzutT221O182aQu5jXOaH8IgOSQxKXVRStd+1V11liNjuOCoEoDcsOL
+         bt9w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=vuvO2vdByXr9tZ4gIUtMWHJb47SWaOs3dPS9JirOd8A=;
+        b=Upj0jPORLtweawvjA8wST6ug7mofnOyusc4VEEsTA31TUzUw9Bj/cu+Hs0NeENHagd
+         ZFapkgjOVx0siYgvlL13gViP7R089k6n38Kml1nBo0ShTfi0KS5Em63+rsA67QusOqtQ
+         vzb8TfGqQOND0r9yekbLFxLuLVbg0EzAxJftM7Um4t2aQL99AoaEbLANnD1ManRdiSjh
+         CEzg0fzOaaxYAfibL8dmrLPiy2xhgRLVW7rYbzGFpamDNfN/eMeQsFAAF1W666qXZzv0
+         jWj9wyKAsQ1VewNp/im/Rxp+eWnYrmO+/QIlSkWoDOigNeORfQFylE5HzHzF3lPwqrDU
+         2w/A==
+X-Gm-Message-State: APjAAAVFJQV7VZZLXSsqjGxPCRRPEkGZiPe2peivJJKvVmpigdTFsYV1
+        +u7HhmaObxWo/MOEYXvlojJl2GRfpzzUgGrmXyeE0g==
+X-Google-Smtp-Source: APXvYqxh+VUvsGh5iLsrxoHbLc3jsob++DVglc3Oa483B1QKCacTy9ml6NDURiDh9l6nBgWwR+AIwjhgcbpU33mL7Pc=
+X-Received: by 2002:aa7:9191:: with SMTP id x17mr2893489pfa.23.1563841951086;
+ Mon, 22 Jul 2019 17:32:31 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <CAFd5g45hdCxEavSxirr0un_uLzo5Z-J4gHRA06qjzcQrTzmjVg@mail.gmail.com>
-References: <20190712081744.87097-1-brendanhiggins@google.com> <CAFd5g47ikJmA0uGoavAFsh+hQvDmgsOi26tyii0612R=rt7iiw@mail.gmail.com> <CAFd5g44_axVHNMBzxSURQB_-R+Rif7cZcg7PyZ_SS+5hcy5jZA@mail.gmail.com> <20190716175021.9CA412173C@mail.kernel.org> <CAFd5g453vXeSUCZenCk_CzJ-8a1ym9RaPo0NVF=FujF9ac-5Ag@mail.gmail.com> <20190718175024.C3EC421019@mail.kernel.org> <CAFd5g46a7C1+R6ZcE_SkqaYqgrH5Rx3M=X7orFyaMgFLDbeYYA@mail.gmail.com> <20190719000834.GA3228@google.com> <20190722200347.261D3218C9@mail.kernel.org> <CAFd5g45hdCxEavSxirr0un_uLzo5Z-J4gHRA06qjzcQrTzmjVg@mail.gmail.com>
+References: <20190712081744.87097-1-brendanhiggins@google.com>
+ <CAFd5g47ikJmA0uGoavAFsh+hQvDmgsOi26tyii0612R=rt7iiw@mail.gmail.com>
+ <CAFd5g44_axVHNMBzxSURQB_-R+Rif7cZcg7PyZ_SS+5hcy5jZA@mail.gmail.com>
+ <20190716175021.9CA412173C@mail.kernel.org> <CAFd5g453vXeSUCZenCk_CzJ-8a1ym9RaPo0NVF=FujF9ac-5Ag@mail.gmail.com>
+ <20190718175024.C3EC421019@mail.kernel.org> <CAFd5g46a7C1+R6ZcE_SkqaYqgrH5Rx3M=X7orFyaMgFLDbeYYA@mail.gmail.com>
+ <20190719000834.GA3228@google.com> <20190722200347.261D3218C9@mail.kernel.org>
+ <CAFd5g45hdCxEavSxirr0un_uLzo5Z-J4gHRA06qjzcQrTzmjVg@mail.gmail.com> <20190722235411.06C1320840@mail.kernel.org>
+In-Reply-To: <20190722235411.06C1320840@mail.kernel.org>
+From:   Brendan Higgins <brendanhiggins@google.com>
+Date:   Mon, 22 Jul 2019 17:32:19 -0700
+Message-ID: <CAFd5g46h9XSRfA1H4kZR7u0Eh_F-fgPjoLPzqzLgFTXxeb105g@mail.gmail.com>
 Subject: Re: [PATCH v9 04/18] kunit: test: add kunit_stream a std::stream like logger
-To:     Brendan Higgins <brendanhiggins@google.com>
+To:     Stephen Boyd <sboyd@kernel.org>
 Cc:     Frank Rowand <frowand.list@gmail.com>,
         Greg KH <gregkh@linuxfoundation.org>,
         Josh Poimboeuf <jpoimboe@redhat.com>,
@@ -38,7 +63,7 @@ Cc:     Frank Rowand <frowand.list@gmail.com>,
         Luis Chamberlain <mcgrof@kernel.org>,
         Peter Zijlstra <peterz@infradead.org>,
         Rob Herring <robh@kernel.org>, shuah <shuah@kernel.org>,
-        Theodore Ts'o <tytso@mit.edu>,
+        "Theodore Ts'o" <tytso@mit.edu>,
         Masahiro Yamada <yamada.masahiro@socionext.com>,
         devicetree <devicetree@vger.kernel.org>,
         dri-devel <dri-devel@lists.freedesktop.org>,
@@ -67,60 +92,110 @@ Cc:     Frank Rowand <frowand.list@gmail.com>,
         Richard Weinberger <richard@nod.at>,
         David Rientjes <rientjes@google.com>,
         Steven Rostedt <rostedt@goodmis.org>, wfg@linux.intel.com
-From:   Stephen Boyd <sboyd@kernel.org>
-User-Agent: alot/0.8.1
-Date:   Mon, 22 Jul 2019 16:54:10 -0700
-Message-Id: <20190722235411.06C1320840@mail.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Quoting Brendan Higgins (2019-07-22 15:30:49)
-> On Mon, Jul 22, 2019 at 1:03 PM Stephen Boyd <sboyd@kernel.org> wrote:
+On Mon, Jul 22, 2019 at 4:54 PM Stephen Boyd <sboyd@kernel.org> wrote:
+>
+> Quoting Brendan Higgins (2019-07-22 15:30:49)
+> > On Mon, Jul 22, 2019 at 1:03 PM Stephen Boyd <sboyd@kernel.org> wrote:
+> > >
+> > >
+> > > What's the calling context of the assertions and expectations? I still
+> > > don't like the fact that string stream needs to allocate buffers and
+> > > throw them into a list somewhere because the calling context matters
+> > > there.
 > >
+> > The calling context is the same as before, which is anywhere.
+>
+> Ok. That's concerning then.
+
+Yeah. Luis suggested just not supporting the IRQ context until later.
+See my later comment.
+
+> > > I'd prefer we just wrote directly to the console/log via printk
+> > > instead. That way things are simple because we use the existing
+> > > buffering path of printk, but maybe there's some benefit to the string
+> > > stream that I don't see? Right now it looks like it builds a string and
+> > > then dumps it to printk so I'm sort of lost what the benefit is over
+> > > just writing directly with printk.
 > >
-> > What's the calling context of the assertions and expectations? I still
-> > don't like the fact that string stream needs to allocate buffers and
-> > throw them into a list somewhere because the calling context matters
-> > there.
->=20
-> The calling context is the same as before, which is anywhere.
+> > It's just buffering it so the whole string gets printed uninterrupted.
+> > If we were to print out piecemeal to printk, couldn't we have another
+> > call to printk come in causing it to garble the KUnit message we are
+> > in the middle of printing?
+>
+> Yes, printing piecemeal by calling printk many times could lead to
+> interleaving of messages if something else comes in such as an interrupt
+> printing something. Printk has some support to hold "records" but I'm
+> not sure how that would work here because KERN_CONT talks about only
+> being used early on in boot code. I haven't looked at printk in detail
+> though so maybe I'm all wrong and KERN_CONT just works?
 
-Ok. That's concerning then.
+It says KERN_CONT is not SMP safe, and it isn't supposed to contain
+newlines, so it doesn't sound like it does any buffering for you. I
+looked at it a while ago and those comments agreed with my
+understanding of the code, but I could be wrong.
 
->=20
-> > I'd prefer we just wrote directly to the console/log via printk
-> > instead. That way things are simple because we use the existing
-> > buffering path of printk, but maybe there's some benefit to the string
-> > stream that I don't see? Right now it looks like it builds a string and
-> > then dumps it to printk so I'm sort of lost what the benefit is over
-> > just writing directly with printk.
->=20
-> It's just buffering it so the whole string gets printed uninterrupted.
-> If we were to print out piecemeal to printk, couldn't we have another
-> call to printk come in causing it to garble the KUnit message we are
-> in the middle of printing?
+> Can printk be called once with whatever is in the struct?
 
-Yes, printing piecemeal by calling printk many times could lead to
-interleaving of messages if something else comes in such as an interrupt
-printing something. Printk has some support to hold "records" but I'm
-not sure how that would work here because KERN_CONT talks about only
-being used early on in boot code. I haven't looked at printk in detail
-though so maybe I'm all wrong and KERN_CONT just works?
+Unfortunately, no. That is part of what I was trying to illustrate
+with this patch. Most of the messages are deterministic, but
+hardcoding all the possible message types would lead to a massive
+number of hard coded strings. However, even this would break down for
+the mocking formatters. All the different ways a function can be
+called are just too complex to encode into a finite set of hard coded
+fmt strings.
 
-Can printk be called once with whatever is in the struct? Otherwise if
-this is about making printk into a structured log then maybe printk
-isn't the proper solution anyway. Maybe a dev interface should be used
-instead that can handle starting and stopping tests (via ioctl) in
-addition to reading test results, records, etc. with read() and a
-clearing of the records. Then the seqfile API works naturally. All of
-this is a bit premature, but it looks like you're going down the path of
-making something akin to ftrace that stores binary formatted
-assertion/expectation records in a lockless ring buffer that then
-formats those records when the user asks for them.
+> Otherwise if
+> this is about making printk into a structured log then maybe printk
+> isn't the proper solution anyway. Maybe a dev interface should be used
+> instead that can handle starting and stopping tests (via ioctl) in
+> addition to reading test results, records, etc. with read() and a
+> clearing of the records. Then the seqfile API works naturally. All of
 
-I can imagine someone wanting to write unit tests that check conditions
-from a simulated hardirq context via irq works (a driver mock
-framework?), so this doesn't seem far off.
+Ehhh...I wouldn't mind providing such an interface, but I would really
+like to be able to provide the results without having to depend on a
+userland doing something to get test results. That has always been a
+pretty important goal for me.
 
+> this is a bit premature, but it looks like you're going down the path of
+> making something akin to ftrace that stores binary formatted
+> assertion/expectation records in a lockless ring buffer that then
+> formats those records when the user asks for them.
+
+Like you said, I think it is a bit premature to go that far.
+
+In anycase, I don't see a way to get rid of string_stream, without
+significantly sacrificing usability.
+
+> I can imagine someone wanting to write unit tests that check conditions
+> from a simulated hardirq context via irq works (a driver mock
+> framework?), so this doesn't seem far off.
+
+Yep, I actually presented the first pieces of that in the RFC v1 that
+I linked to you earlier in this discussion. I have a more fleshed out
+example here:
+
+https://kunit.googlesource.com/linux/+/e10484ad2f9fc7926412ec84739fe105981b4771/drivers/i2c/busses/i2c-aspeed-test.c
+
+I actually already have some people at Google playing around with it.
+So yeah, not far off at all! However, in these cases we are not
+actually running in the IRQ context (despite the fact that we are
+testing IRQ code) because we provide a fake IRQ chip, or some other
+fake mechanism that triggers the IRQ. Still, I could see someone
+wanting to do it in a non-fake-IRQ context.
+
+Luis' suggestion was just to hold off on the IRQ safe stuff at the
+outset, since that is going to require a lot more effort to review. I
+know that's kind of the future coding argument again, but maybe the
+answer will be to just restrict what features an IRQ user has access
+to (maybe just really simple expectations, for example). I mean, we
+will probably have to restrict what they are allowed to use anyway.
+
+Luis, do you have any ideas?
+
+Cheers
