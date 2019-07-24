@@ -2,169 +2,318 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D2B307290D
-	for <lists+linux-kselftest@lfdr.de>; Wed, 24 Jul 2019 09:31:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A05A872C70
+	for <lists+linux-kselftest@lfdr.de>; Wed, 24 Jul 2019 12:38:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726067AbfGXHbb (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 24 Jul 2019 03:31:31 -0400
-Received: from mx2.suse.de ([195.135.220.15]:52770 "EHLO mx1.suse.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725851AbfGXHbb (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 24 Jul 2019 03:31:31 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id 12D7EAEF8;
-        Wed, 24 Jul 2019 07:31:28 +0000 (UTC)
-Date:   Wed, 24 Jul 2019 09:31:25 +0200
-From:   Petr Mladek <pmladek@suse.com>
-To:     Stephen Boyd <sboyd@kernel.org>
-Cc:     Brendan Higgins <brendanhiggins@google.com>,
-        Jeff Dike <jdike@addtoit.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Amir Goldstein <amir73il@gmail.com>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Kees Cook <keescook@google.com>,
-        David Rientjes <rientjes@google.com>,
-        kunit-dev@googlegroups.com,
-        Kieran Bingham <kieran.bingham@ideasonboard.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Rob Herring <robh@kernel.org>, shuah <shuah@kernel.org>,
-        wfg@linux.intel.com, Greg KH <gregkh@linuxfoundation.org>,
-        Julia Lawall <julia.lawall@lip6.fr>,
-        linux-nvdimm <linux-nvdimm@lists.01.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        linux-um@lists.infradead.org,
-        Sasha Levin <Alexander.Levin@microsoft.com>,
-        Theodore Ts'o <tytso@mit.edu>,
-        Richard Weinberger <richard@nod.at>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Knut Omang <knut.omang@oracle.com>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Masahiro Yamada <yamada.masahiro@socionext.com>,
-        Timothy Bird <Tim.Bird@sony.com>,
-        devicetree <devicetree@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        linux-fsdevel@vger.kernel.org,
-        linux-kbuild <linux-kbuild@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH v9 04/18] kunit: test: add kunit_stream a std::stream
- like logger
-Message-ID: <20190724073125.xyzfywctrcvg6fmh@pathway.suse.cz>
-References: <CAFd5g47ikJmA0uGoavAFsh+hQvDmgsOi26tyii0612R=rt7iiw@mail.gmail.com>
- <CAFd5g44_axVHNMBzxSURQB_-R+Rif7cZcg7PyZ_SS+5hcy5jZA@mail.gmail.com>
- <20190716175021.9CA412173C@mail.kernel.org>
- <CAFd5g453vXeSUCZenCk_CzJ-8a1ym9RaPo0NVF=FujF9ac-5Ag@mail.gmail.com>
- <20190718175024.C3EC421019@mail.kernel.org>
- <CAFd5g46a7C1+R6ZcE_SkqaYqgrH5Rx3M=X7orFyaMgFLDbeYYA@mail.gmail.com>
- <20190719000834.GA3228@google.com>
- <20190722200347.261D3218C9@mail.kernel.org>
- <CAFd5g45hdCxEavSxirr0un_uLzo5Z-J4gHRA06qjzcQrTzmjVg@mail.gmail.com>
- <20190722235411.06C1320840@mail.kernel.org>
+        id S1726070AbfGXKiw (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 24 Jul 2019 06:38:52 -0400
+Received: from mail-ed1-f65.google.com ([209.85.208.65]:38810 "EHLO
+        mail-ed1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727218AbfGXKiv (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 24 Jul 2019 06:38:51 -0400
+Received: by mail-ed1-f65.google.com with SMTP id r12so11885617edo.5
+        for <linux-kselftest@vger.kernel.org>; Wed, 24 Jul 2019 03:38:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=brauner.io; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=tjY9nE9968Ntch0u6iReN6FuAbMsQopxOYWKjAGnkbA=;
+        b=Yq2cS775kikY+d71EzDiFevayszTdsQrx0Ai1GKpm+S5MrPiang2f11vcvFCq1hI0K
+         QdgX67kmZK+ZSrKw93oGa16GEwdhZ4c5f9s/RKtduYIfWHwiJK/iLUwmh7FyDNXgCsPT
+         +OVMBMYLfFYibrCkQ6PX5QogprrDCB/otJpc5z06fnEPV31vpORN7uBLNIt/6bwBvtEl
+         G3SBx5Rjc4qzBq795BzvRAxHue18TUh0ay4bF08oc4XFYrm0zEU3SA/Dj3iw9GEHyUXd
+         b9mXL0rV9GunBrv5N+onBpAWarAMwhqr5zb6aEQvlWCCXNOCt+cYtKGPdueZwqAbvFKA
+         n7Ug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=tjY9nE9968Ntch0u6iReN6FuAbMsQopxOYWKjAGnkbA=;
+        b=QzCYRreAnS4RwmqBQSWOaoBnVXJZZfRJjmVnJf1vxcBtDxmmHlpjjsUE5In4SQ+hIz
+         c/SA140fnU3vAJrvYc1SN7BkCUgIX5UtJK8VHYItvclgGJ/PGWuuOaOZfCdtCt3e2h1I
+         cuOeoevBh+1+V1v4ryEqAKqwToHsQDSHh8bd5G6Tj/h9NoHb7RwtejrgXgBtXlHNMPuK
+         v6dkK2HyvVTkRQLSsELYnua/0/UOGUZWAonPb5CGrvmEPzE+/AQQXT7RMlZqiuP7gENd
+         hMMDWWfXgPWsoAmZ77i8kVvEt6PKiTqxKJSdwzUR3g+d0rQsquXoSOlIdkFWzGHAQok/
+         rowg==
+X-Gm-Message-State: APjAAAUeB3LYL0uTNPT96Q25/u1xWOXM0BowsJBATvJAbxi8lz9UVEB3
+        f+acQbIG/t/xYJLLfG8GB88=
+X-Google-Smtp-Source: APXvYqwRkGDYcIejJAFECSIW4cz/gSOl2l7GUACOtqmNU8HBYkOsbTeQTP/ulT8XC/NL7Ah1lm6Fcg==
+X-Received: by 2002:aa7:cd17:: with SMTP id b23mr71131459edw.278.1563964728775;
+        Wed, 24 Jul 2019 03:38:48 -0700 (PDT)
+Received: from brauner.io ([178.19.218.101])
+        by smtp.gmail.com with ESMTPSA id l35sm12607281edc.2.2019.07.24.03.38.47
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Wed, 24 Jul 2019 03:38:48 -0700 (PDT)
+Date:   Wed, 24 Jul 2019 12:38:46 +0200
+From:   Christian Brauner <christian@brauner.io>
+To:     Suren Baghdasaryan <surenb@google.com>
+Cc:     arnd@arndb.de, ebiederm@xmission.com, keescook@chromium.org,
+        joel@joelfernandes.org, dancol@google.com, tglx@linutronix.de,
+        jannh@google.com, dhowells@redhat.com, mtk.manpages@gmail.com,
+        luto@kernel.org, akpm@linux-foundation.org, oleg@redhat.com,
+        cyphar@cyphar.com, torvalds@linux-foundation.org,
+        viro@zeniv.linux.org.uk, linux-api@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, kernel-team@android.com
+Subject: Re: [PATCH 1/1] tests: add pidfd poll tests
+Message-ID: <20190724103845.pxhpx7n6ih2byrsm@brauner.io>
+References: <20190723173907.196488-1-surenb@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20190722235411.06C1320840@mail.kernel.org>
-User-Agent: NeoMutt/20170912 (1.9.0)
+In-Reply-To: <20190723173907.196488-1-surenb@google.com>
+User-Agent: NeoMutt/20180716
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon 2019-07-22 16:54:10, Stephen Boyd wrote:
-> Quoting Brendan Higgins (2019-07-22 15:30:49)
-> > On Mon, Jul 22, 2019 at 1:03 PM Stephen Boyd <sboyd@kernel.org> wrote:
-> > >
-> > >
-> > > What's the calling context of the assertions and expectations? I still
-> > > don't like the fact that string stream needs to allocate buffers and
-> > > throw them into a list somewhere because the calling context matters
-> > > there.
-> > 
-> > The calling context is the same as before, which is anywhere.
+On Tue, Jul 23, 2019 at 10:39:07AM -0700, Suren Baghdasaryan wrote:
+> This adds testing for polling on pidfd of a process being killed. Test runs
+> 10000 iterations by default to stress test pidfd polling functionality.
+> It accepts an optional command-line parameter to override the number or
+> iterations to run.
+> Specifically, it tests for:
+> - pidfd_open on a child process succeeds
+> - pidfd_send_signal on a child process succeeds
+> - polling on pidfd succeeds and returns exactly one event
+> - returned event is POLLIN
+> - event is received within 3 secs of the process being killed
 > 
-> Ok. That's concerning then.
+> 10000 iterations was chosen because of the race condition being tested
+> which is not consistently reproducible but usually is revealed after less
+> than 2000 iterations.
+> Reveals race fixed by commit b191d6491be6 ("pidfd: fix a poll race when setting exit_state")
+
+Thanks for upstreaming the stress-tester. A few comments below.
+
 > 
-> > 
-> > > I'd prefer we just wrote directly to the console/log via printk
-> > > instead. That way things are simple because we use the existing
-> > > buffering path of printk, but maybe there's some benefit to the string
-> > > stream that I don't see? Right now it looks like it builds a string and
-> > > then dumps it to printk so I'm sort of lost what the benefit is over
-> > > just writing directly with printk.
-> > 
-> > It's just buffering it so the whole string gets printed uninterrupted.
-> > If we were to print out piecemeal to printk, couldn't we have another
-> > call to printk come in causing it to garble the KUnit message we are
-> > in the middle of printing?
+> Signed-off-by: Suren Baghdasaryan <surenb@google.com>
+> ---
+>  tools/testing/selftests/pidfd/.gitignore      |   1 +
+>  tools/testing/selftests/pidfd/Makefile        |   2 +-
+>  .../testing/selftests/pidfd/pidfd_poll_test.c | 137 ++++++++++++++++++
+>  3 files changed, 139 insertions(+), 1 deletion(-)
+>  create mode 100644 tools/testing/selftests/pidfd/pidfd_poll_test.c
 > 
-> Yes, printing piecemeal by calling printk many times could lead to
-> interleaving of messages if something else comes in such as an interrupt
-> printing something. Printk has some support to hold "records" but I'm
-> not sure how that would work here because KERN_CONT talks about only
-> being used early on in boot code. I haven't looked at printk in detail
-> though so maybe I'm all wrong and KERN_CONT just works?
+> diff --git a/tools/testing/selftests/pidfd/.gitignore b/tools/testing/selftests/pidfd/.gitignore
+> index 16d84d117bc0..a67896347d34 100644
+> --- a/tools/testing/selftests/pidfd/.gitignore
+> +++ b/tools/testing/selftests/pidfd/.gitignore
+> @@ -1,2 +1,3 @@
+>  pidfd_open_test
+> +pidfd_poll_test
+>  pidfd_test
+> diff --git a/tools/testing/selftests/pidfd/Makefile b/tools/testing/selftests/pidfd/Makefile
+> index 720b2d884b3c..ed58b7108d18 100644
+> --- a/tools/testing/selftests/pidfd/Makefile
+> +++ b/tools/testing/selftests/pidfd/Makefile
+> @@ -1,7 +1,7 @@
+>  # SPDX-License-Identifier: GPL-2.0-only
+>  CFLAGS += -g -I../../../../usr/include/ -lpthread
+>  
+> -TEST_GEN_PROGS := pidfd_test pidfd_open_test
+> +TEST_GEN_PROGS := pidfd_test pidfd_open_test pidfd_poll_test
+>  
+>  include ../lib.mk
+>  
+> diff --git a/tools/testing/selftests/pidfd/pidfd_poll_test.c b/tools/testing/selftests/pidfd/pidfd_poll_test.c
+> new file mode 100644
+> index 000000000000..f2934aa070ae
+> --- /dev/null
+> +++ b/tools/testing/selftests/pidfd/pidfd_poll_test.c
+> @@ -0,0 +1,137 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +
+> +#define _GNU_SOURCE
+> +#include <errno.h>
+> +#include <linux/types.h>
+> +#include <linux/wait.h>
+> +#include <poll.h>
+> +#include <signal.h>
+> +#include <stdbool.h>
+> +#include <stdio.h>
+> +#include <stdlib.h>
+> +#include <string.h>
+> +#include <syscall.h>
+> +#include <sys/wait.h>
+> +#include <unistd.h>
+> +
+> +#include "pidfd.h"
+> +#include "../kselftest.h"
+> +
+> +#define __NR_pidfd_send_signal 424
+> +#define __NR_pidfd_open 434
 
-KERN_CONT does not guarantee that the message will get printed
-together. The pieces get interleaved with messages printed in
-parallel.
+That won't work on Alpha where this number is unfortunately different so
+I'm not sure which syscall you'd hit there (/me checks 
+424	common	tgkill				sys_tgkill
+)
 
-Note that KERN_CONT was originally really meant to be used only during
-boot. It was later used more widely and ended in the best effort category.
+The better option is to just place
 
-There were several attempts to make it more reliable. But it was
-always either too complicated or error prone or both.
+#ifndef __NR_pidfd_send_signal
+#define __NR_pidfd_send_signal -1
+#endif
 
-You need to use your own buffering if you rely want perfect output.
-The question is if it is really worth the complexity. Also note that
-any buffering reduces the chance that the messages will reach
-the console.
+#ifndef __NR_pidfd_open
+#define __NR_pidfd_open -1
+#endif
 
-BTW: There is a work in progress on a lockless printk ring buffer.
-It will make printk() more secure regarding deadlocks. But it might
-make transparent handling of continuous lines even more tricky.
+into the pidfd.h header.
 
-I guess that local buffering, before calling printk(), will be
-even more important then. Well, it might really force us to create
-an API for it.
+> +
+> +static inline int sys_pidfd_open(pid_t pid, unsigned int flags)
+> +{
+> +	return syscall(__NR_pidfd_open, pid, flags);
+> +}
+> +
+> +static inline int sys_pidfd_send_signal(int pidfd, int sig, siginfo_t *info,
+> +					unsigned int flags)
+> +{
+> +	return syscall(__NR_pidfd_send_signal, pidfd, sig, info, flags);
+> +}
+
+Those can go into pidfd.h too.
+
+> +
+> +static bool timeout;
+> +
+> +static void handle_alarm(int sig)
+> +{
+> +	timeout = true;
+> +}
+> +
+> +int main(int argc, char **argv)
+> +{
+> +	int ret = 1;
+> +	int pidfd = -1;
+> +	struct pollfd fds;
+> +	int iter, nevents;
+> +	int nr_iterations = 10000;
+> +
+> +	fds.events = POLLIN;
+
+if (argc > 2)
+	ksft_exit_fail_msg("Unexpected command line argument");
+
+> +	if (argc > 1) {
+
+	if (argc == 2)
+
+> +		nr_iterations = atoi(argv[1]);
+> +		if (!nr_iterations) {
+
+You should probably also check for negative values.
+
+> +			ksft_test_result_fail("invalid input parameter %s\n",
+> +				argv[1]);
+> +			return ksft_exit_fail();
+> +		}
+> +	}
+> +
+> +	ksft_print_msg("running pidfd poll test for %d iterations\n",
+> +		nr_iterations);
+> +
+> +	for (iter = 0; iter < nr_iterations; iter++) {
+> +		int child_pid = fork();
+> +
+> +		if (!child_pid) {
+> +			/* Child process just sleeps for a min */
+> +			sleep(60);
+> +			exit(0);
+
+Just for kicks, please use exit(EXIT_SUCCESS)
+
+> +		}
 
 
-> Can printk be called once with whatever is in the struct? Otherwise if
-> this is about making printk into a structured log then maybe printk
-> isn't the proper solution anyway. Maybe a dev interface should be used
-> instead that can handle starting and stopping tests (via ioctl) in
-> addition to reading test results, records, etc. with read() and a
-> clearing of the records. Then the seqfile API works naturally. All of
-> this is a bit premature, but it looks like you're going down the path of
-> making something akin to ftrace that stores binary formatted
-> assertion/expectation records in a lockless ring buffer that then
-> formats those records when the user asks for them.
+You should switch the checkes, i.e.
 
-IMHO, ftrace postpones the text formatting primary because it does not
-not want to slow down the traced code more than necessary. It is yet
-another layer and there should be some strong reason for it.
+	if (child_pid < 0)
+		/* do stuff */
 
-> I can imagine someone wanting to write unit tests that check conditions
-> from a simulated hardirq context via irq works (a driver mock
-> framework?), so this doesn't seem far off.
+	if (child_pid == 0)
+		/* do other stuff */
 
-Note that stroring the messages into the printk log is basically safe in any
-context. It uses temporary per-CPU buffers for recursive messages and
-in NMI. The only problem is panic() when some CPU gets stuck with the
-lock taken. This will get solved by the lockless ringbuffer. Also
-the temporary buffers will not be necessary any longer.
+> +
+> +		/* Parent kills the child and waits for its death */
+> +		if (child_pid < 0) {
+> +			if (errno == EAGAIN) {
+> +				iter--;
+> +				continue;
+> +			}
+> +			ksft_print_msg("%s - failed to fork a child process\n",
+> +				strerror(errno));
 
-Much bigger problems are with consoles. There are many of them. It
-means a lot of code and more locks involved, including scheduler
-locks. Note that console lock is a semaphore.
+Uhm, shouldn't you exit with an error here?, i.e.
 
-Best Regards,
-Petr
+		ksft_exit_fail_msg(...
+
+> +		}
+> +		pidfd = sys_pidfd_open(child_pid, 0);
+> +		if (pidfd < 0) {
+> +			ksft_print_msg("%s - pidfd_open failed\n",
+> +				strerror(errno));
+> +			goto on_error;
+
+I think you honestly can just call ksft_exit_fail_msg() everywhere. The
+fds will be cleaned up on process exit anyway and it's pretty
+short-lived.
+
+> +		}
+> +		/* Setup 3 sec alarm - plenty of time */
+> +		if (signal(SIGALRM, handle_alarm) == SIG_ERR) {
+> +			ksft_print_msg("%s - signal failed\n",
+> +				strerror(errno));
+> +			goto on_error;
+> +		}
+> +		alarm(3);
+> +		/* Send SIGKILL to the child */
+> +		if (sys_pidfd_send_signal(pidfd, SIGKILL, NULL, 0)) {
+> +			ksft_print_msg("%s - pidfd_send_signal failed\n",
+> +				strerror(errno));
+> +			goto on_error;
+> +		}
+> +		/* Wait for the death notification */
+> +		fds.fd = pidfd;
+> +		nevents = poll(&fds, 1, -1);
+> +		if (nevents < 0) {
+> +			ksft_print_msg("%s - poll failed\n",
+> +				strerror(errno));
+> +			goto on_error;
+> +		}
+> +		if (nevents != 1) {
+> +			ksft_print_msg("unexpected poll result: %d\n",
+> +				nevents);
+> +			goto on_error;
+> +		}
+> +		if (!(fds.revents & POLLIN)) {
+> +			ksft_print_msg(
+> +				"unexpected event type received: 0x%x\n",
+> +				fds.revents);
+> +			goto on_error;
+> +		}
+> +		if (timeout) {
+> +			ksft_print_msg("death notification wait timeout\n");
+> +			goto on_error;
+> +		}
+> +		close(pidfd);
+> +	}
+> +	ret = 0;
+> +
+> +on_error:
+> +	if (pidfd)
+> +		close(pidfd);
+> +
+> +	if (ret) {
+> +		ksft_test_result_fail("failed after %d retries\n", iter);
+> +		return ksft_exit_fail();
+> +	}
+> +
+> +	ksft_test_result_pass("pidfd poll test: pass\n");
+> +	return ksft_exit_pass();
+> +}
+> -- 
+> 2.22.0.657.g960e92d24f-goog
+> 
