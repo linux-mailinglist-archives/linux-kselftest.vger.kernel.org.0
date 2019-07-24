@@ -2,323 +2,133 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 70ABE7348C
-	for <lists+linux-kselftest@lfdr.de>; Wed, 24 Jul 2019 19:04:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F117734B8
+	for <lists+linux-kselftest@lfdr.de>; Wed, 24 Jul 2019 19:12:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726531AbfGXREN (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 24 Jul 2019 13:04:13 -0400
-Received: from mail-wm1-f67.google.com ([209.85.128.67]:38273 "EHLO
-        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726575AbfGXREN (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 24 Jul 2019 13:04:13 -0400
-Received: by mail-wm1-f67.google.com with SMTP id s15so20927868wmj.3
-        for <linux-kselftest@vger.kernel.org>; Wed, 24 Jul 2019 10:04:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=9ujl5V1w4mNBwDy22VY19uphlCRoFVxEw++qYxxlthA=;
-        b=AvO6TdTpeaemGncAgHgSxvl8NyD+ABGy6HpIx+gdSw3/+fVJOMgK2JF+4W8fj1ZJBt
-         s27RIRFiCs+xFIUdb4sGio2LtzoROeMNvZt2BuBZ+NjHEp9x10eRKwmYrYuwyi0EaSba
-         BA1+TOvT+HNRnmlD8GajxDa6UaZX0MlEdzenLRoc5ktMBIn+f5U288Pa8vKTeD7e5SXg
-         21nritV+/vlHQO+aed/d0HCnrkTeIZz/+a8JDSnPM+mjTjyn0Hl1iJEZIJGq9fWW8YBx
-         e/VFvtYht2SXkLAprcvCKAkDSaIA605hLTmab19xP1OxZlzAM7cZ86Siat8iBhjEDEmS
-         qzGQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=9ujl5V1w4mNBwDy22VY19uphlCRoFVxEw++qYxxlthA=;
-        b=QMUPXVbV+jfmILx2fgVxHxSYdmNpLeyymNLuB0rNVH2BnU0IUKh4y26U2oXe7hcVUt
-         WECsf2GP0bbMTYKyyfDoZZTz3Jy0LH9V1bsI3qf/Ro63JBzlX9U1xNli9WTxx4+LqPsm
-         K/yeiCuv040UQaDXWLXtXeTI2+iBgBpv+Jkyte1XePD0C4yL+g8dxSmKzH+NwhqbqSLH
-         Ezn24NNfrk5Q/lbu7ijLTn8J0Z5vi11NkQTkQMNS34YjDViBkgyWOHzzKY2OiPayOLp6
-         se2xTwnWJYvCGucAFW3yobfgld3olOivv3FbTFM5gmTi4VG2uCN1MkKJWr/LwxxP7PVK
-         iJlQ==
-X-Gm-Message-State: APjAAAVn991l1qUyOIds//T564lvRW1Ha4zpv6njgdpbjt5753fwVZzg
-        ROIGi/n8/+PWH6aaWnhrjikwTTHqQ4NzuO1aSOxJ+g==
-X-Google-Smtp-Source: APXvYqzNJMRhZ7Ymxuw1/AjYI4F1X3Qu0/2IUKwriRcLlXLq8WjFtWfbaXBEb+zE63rhrwq1F9Knz0iaikccl9aLXsc=
-X-Received: by 2002:a7b:c947:: with SMTP id i7mr77639368wml.77.1563987849601;
- Wed, 24 Jul 2019 10:04:09 -0700 (PDT)
-MIME-Version: 1.0
-References: <20190723173907.196488-1-surenb@google.com> <20190724103845.pxhpx7n6ih2byrsm@brauner.io>
-In-Reply-To: <20190724103845.pxhpx7n6ih2byrsm@brauner.io>
-From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Wed, 24 Jul 2019 10:03:58 -0700
-Message-ID: <CAJuCfpG-xfDhbjhEWkDtZDfvh7S7zQNu-8Z8pwAYVL35Kees8w@mail.gmail.com>
-Subject: Re: [PATCH 1/1] tests: add pidfd poll tests
-To:     Christian Brauner <christian@brauner.io>
-Cc:     arnd@arndb.de, "Eric W. Biederman" <ebiederm@xmission.com>,
-        Kees Cook <keescook@chromium.org>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Daniel Colascione <dancol@google.com>, tglx@linutronix.de,
-        Jann Horn <jannh@google.com>, dhowells@redhat.com,
-        mtk.manpages@gmail.com, luto@kernel.org,
+        id S1726731AbfGXRM1 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 24 Jul 2019 13:12:27 -0400
+Received: from foss.arm.com ([217.140.110.172]:44146 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726238AbfGXRM0 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 24 Jul 2019 13:12:26 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0E49528;
+        Wed, 24 Jul 2019 10:12:26 -0700 (PDT)
+Received: from [10.1.196.72] (e119884-lin.cambridge.arm.com [10.1.196.72])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3CE253F71F;
+        Wed, 24 Jul 2019 10:12:21 -0700 (PDT)
+Subject: Re: [PATCH v19 00/15] arm64: untag user pointers passed to the kernel
+To:     Will Deacon <will.deacon@arm.com>,
+        Andrey Konovalov <andreyknvl@google.com>
+Cc:     Will Deacon <will@kernel.org>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Oleg Nesterov <oleg@redhat.com>, cyphar@cyphar.com,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        viro@zeniv.linux.org.uk, linux-api@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        kernel-team <kernel-team@android.com>
-Content-Type: text/plain; charset="UTF-8"
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Mark Rutland <mark.rutland@arm.com>, kvm@vger.kernel.org,
+        Szabolcs Nagy <Szabolcs.Nagy@arm.com>,
+        dri-devel@lists.freedesktop.org,
+        Kostya Serebryany <kcc@google.com>,
+        Khalid Aziz <khalid.aziz@oracle.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Felix Kuehling <Felix.Kuehling@amd.com>,
+        Jacob Bramley <Jacob.Bramley@arm.com>,
+        Leon Romanovsky <leon@kernel.org>, linux-rdma@vger.kernel.org,
+        amd-gfx@lists.freedesktop.org,
+        Christoph Hellwig <hch@infradead.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Dave Martin <Dave.Martin@arm.com>,
+        Evgeniy Stepanov <eugenis@google.com>,
+        linux-media@vger.kernel.org, Kevin Brodsky <kevin.brodsky@arm.com>,
+        Kees Cook <keescook@chromium.org>,
+        Ruben Ayrapetyan <Ruben.Ayrapetyan@arm.com>,
+        Ramana Radhakrishnan <Ramana.Radhakrishnan@arm.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Yishai Hadas <yishaih@mellanox.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Jens Wiklander <jens.wiklander@linaro.org>,
+        Lee Smith <Lee.Smith@arm.com>,
+        Alexander Deucher <Alexander.Deucher@amd.com>,
+        enh <enh@google.com>, Robin Murphy <robin.murphy@arm.com>,
+        Christian Koenig <Christian.Koenig@amd.com>,
+        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>
+References: <cover.1563904656.git.andreyknvl@google.com>
+ <CAAeHK+yc0D_nd7nTRsY4=qcSx+eQR0VLut3uXMf4NEiE-VpeCw@mail.gmail.com>
+ <20190724140212.qzvbcx5j2gi5lcoj@willie-the-truck>
+ <CAAeHK+xXzdQHpVXL7f1T2Ef2P7GwFmDMSaBH4VG8fT3=c_OnjQ@mail.gmail.com>
+ <20190724142059.GC21234@fuggles.cambridge.arm.com>
+From:   Vincenzo Frascino <vincenzo.frascino@arm.com>
+Message-ID: <f27f4e55-fcd6-9ae7-d9ca-cac2aea5fe70@arm.com>
+Date:   Wed, 24 Jul 2019 18:12:20 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
+MIME-Version: 1.0
+In-Reply-To: <20190724142059.GC21234@fuggles.cambridge.arm.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Jul 24, 2019 at 3:38 AM Christian Brauner <christian@brauner.io> wrote:
->
-> On Tue, Jul 23, 2019 at 10:39:07AM -0700, Suren Baghdasaryan wrote:
-> > This adds testing for polling on pidfd of a process being killed. Test runs
-> > 10000 iterations by default to stress test pidfd polling functionality.
-> > It accepts an optional command-line parameter to override the number or
-> > iterations to run.
-> > Specifically, it tests for:
-> > - pidfd_open on a child process succeeds
-> > - pidfd_send_signal on a child process succeeds
-> > - polling on pidfd succeeds and returns exactly one event
-> > - returned event is POLLIN
-> > - event is received within 3 secs of the process being killed
-> >
-> > 10000 iterations was chosen because of the race condition being tested
-> > which is not consistently reproducible but usually is revealed after less
-> > than 2000 iterations.
-> > Reveals race fixed by commit b191d6491be6 ("pidfd: fix a poll race when setting exit_state")
->
-> Thanks for upstreaming the stress-tester. A few comments below.
->
+Hi Will and Andrey,
 
-Thanks for the comments. All make sense. I'll send an update later
-today or tomorrow.
+On 24/07/2019 15:20, Will Deacon wrote:
+> On Wed, Jul 24, 2019 at 04:16:49PM +0200, Andrey Konovalov wrote:
+>> On Wed, Jul 24, 2019 at 4:02 PM Will Deacon <will@kernel.org> wrote:
+>>> On Tue, Jul 23, 2019 at 08:03:29PM +0200, Andrey Konovalov wrote:
+>>>> On Tue, Jul 23, 2019 at 7:59 PM Andrey Konovalov <andreyknvl@google.com> wrote:
+>>>>>
+>>>>> === Overview
+>>>>>
+>>>>> arm64 has a feature called Top Byte Ignore, which allows to embed pointer
+>>>>> tags into the top byte of each pointer. Userspace programs (such as
+>>>>> HWASan, a memory debugging tool [1]) might use this feature and pass
+>>>>> tagged user pointers to the kernel through syscalls or other interfaces.
+>>>>>
+>>>>> Right now the kernel is already able to handle user faults with tagged
+>>>>> pointers, due to these patches:
+>>>>>
+>>>>> 1. 81cddd65 ("arm64: traps: fix userspace cache maintenance emulation on a
+>>>>>              tagged pointer")
+>>>>> 2. 7dcd9dd8 ("arm64: hw_breakpoint: fix watchpoint matching for tagged
+>>>>>               pointers")
+>>>>> 3. 276e9327 ("arm64: entry: improve data abort handling of tagged
+>>>>>               pointers")
+>>>>>
+>>>>> This patchset extends tagged pointer support to syscall arguments.
+>>>
+>>> [...]
+>>>
+>>>> Do you think this is ready to be merged?
+>>>>
+>>>> Should this go through the mm or the arm tree?
+>>>
+>>> I would certainly prefer to take at least the arm64 bits via the arm64 tree
+>>> (i.e. patches 1, 2 and 15). We also need a Documentation patch describing
+>>> the new ABI.
+>>
+>> Sounds good! Should I post those patches together with the
+>> Documentation patches from Vincenzo as a separate patchset?
+> 
+> Yes, please (although as you say below, we need a new version of those
+> patches from Vincenzo to address the feedback on v5). The other thing I
+> should say is that I'd be happy to queue the other patches in the series
+> too, but some of them are missing acks from the relevant maintainers (e.g.
+> the mm/ and fs/ changes).
+> 
 
-> >
-> > Signed-off-by: Suren Baghdasaryan <surenb@google.com>
-> > ---
-> >  tools/testing/selftests/pidfd/.gitignore      |   1 +
-> >  tools/testing/selftests/pidfd/Makefile        |   2 +-
-> >  .../testing/selftests/pidfd/pidfd_poll_test.c | 137 ++++++++++++++++++
-> >  3 files changed, 139 insertions(+), 1 deletion(-)
-> >  create mode 100644 tools/testing/selftests/pidfd/pidfd_poll_test.c
-> >
-> > diff --git a/tools/testing/selftests/pidfd/.gitignore b/tools/testing/selftests/pidfd/.gitignore
-> > index 16d84d117bc0..a67896347d34 100644
-> > --- a/tools/testing/selftests/pidfd/.gitignore
-> > +++ b/tools/testing/selftests/pidfd/.gitignore
-> > @@ -1,2 +1,3 @@
-> >  pidfd_open_test
-> > +pidfd_poll_test
-> >  pidfd_test
-> > diff --git a/tools/testing/selftests/pidfd/Makefile b/tools/testing/selftests/pidfd/Makefile
-> > index 720b2d884b3c..ed58b7108d18 100644
-> > --- a/tools/testing/selftests/pidfd/Makefile
-> > +++ b/tools/testing/selftests/pidfd/Makefile
-> > @@ -1,7 +1,7 @@
-> >  # SPDX-License-Identifier: GPL-2.0-only
-> >  CFLAGS += -g -I../../../../usr/include/ -lpthread
-> >
-> > -TEST_GEN_PROGS := pidfd_test pidfd_open_test
-> > +TEST_GEN_PROGS := pidfd_test pidfd_open_test pidfd_poll_test
-> >
-> >  include ../lib.mk
-> >
-> > diff --git a/tools/testing/selftests/pidfd/pidfd_poll_test.c b/tools/testing/selftests/pidfd/pidfd_poll_test.c
-> > new file mode 100644
-> > index 000000000000..f2934aa070ae
-> > --- /dev/null
-> > +++ b/tools/testing/selftests/pidfd/pidfd_poll_test.c
-> > @@ -0,0 +1,137 @@
-> > +// SPDX-License-Identifier: GPL-2.0
-> > +
-> > +#define _GNU_SOURCE
-> > +#include <errno.h>
-> > +#include <linux/types.h>
-> > +#include <linux/wait.h>
-> > +#include <poll.h>
-> > +#include <signal.h>
-> > +#include <stdbool.h>
-> > +#include <stdio.h>
-> > +#include <stdlib.h>
-> > +#include <string.h>
-> > +#include <syscall.h>
-> > +#include <sys/wait.h>
-> > +#include <unistd.h>
-> > +
-> > +#include "pidfd.h"
-> > +#include "../kselftest.h"
-> > +
-> > +#define __NR_pidfd_send_signal 424
-> > +#define __NR_pidfd_open 434
->
-> That won't work on Alpha where this number is unfortunately different so
-> I'm not sure which syscall you'd hit there (/me checks
-> 424     common  tgkill                          sys_tgkill
-> )
->
-> The better option is to just place
->
-> #ifndef __NR_pidfd_send_signal
-> #define __NR_pidfd_send_signal -1
-> #endif
->
-> #ifndef __NR_pidfd_open
-> #define __NR_pidfd_open -1
-> #endif
->
-> into the pidfd.h header.
->
-> > +
-> > +static inline int sys_pidfd_open(pid_t pid, unsigned int flags)
-> > +{
-> > +     return syscall(__NR_pidfd_open, pid, flags);
-> > +}
-> > +
-> > +static inline int sys_pidfd_send_signal(int pidfd, int sig, siginfo_t *info,
-> > +                                     unsigned int flags)
-> > +{
-> > +     return syscall(__NR_pidfd_send_signal, pidfd, sig, info, flags);
-> > +}
->
-> Those can go into pidfd.h too.
->
-> > +
-> > +static bool timeout;
-> > +
-> > +static void handle_alarm(int sig)
-> > +{
-> > +     timeout = true;
-> > +}
-> > +
-> > +int main(int argc, char **argv)
-> > +{
-> > +     int ret = 1;
-> > +     int pidfd = -1;
-> > +     struct pollfd fds;
-> > +     int iter, nevents;
-> > +     int nr_iterations = 10000;
-> > +
-> > +     fds.events = POLLIN;
->
-> if (argc > 2)
->         ksft_exit_fail_msg("Unexpected command line argument");
->
-> > +     if (argc > 1) {
->
->         if (argc == 2)
->
-> > +             nr_iterations = atoi(argv[1]);
-> > +             if (!nr_iterations) {
->
-> You should probably also check for negative values.
->
-> > +                     ksft_test_result_fail("invalid input parameter %s\n",
-> > +                             argv[1]);
-> > +                     return ksft_exit_fail();
-> > +             }
-> > +     }
-> > +
-> > +     ksft_print_msg("running pidfd poll test for %d iterations\n",
-> > +             nr_iterations);
-> > +
-> > +     for (iter = 0; iter < nr_iterations; iter++) {
-> > +             int child_pid = fork();
-> > +
-> > +             if (!child_pid) {
-> > +                     /* Child process just sleeps for a min */
-> > +                     sleep(60);
-> > +                     exit(0);
->
-> Just for kicks, please use exit(EXIT_SUCCESS)
->
-> > +             }
->
->
-> You should switch the checkes, i.e.
->
->         if (child_pid < 0)
->                 /* do stuff */
->
->         if (child_pid == 0)
->                 /* do other stuff */
->
-> > +
-> > +             /* Parent kills the child and waits for its death */
-> > +             if (child_pid < 0) {
-> > +                     if (errno == EAGAIN) {
-> > +                             iter--;
-> > +                             continue;
-> > +                     }
-> > +                     ksft_print_msg("%s - failed to fork a child process\n",
-> > +                             strerror(errno));
->
-> Uhm, shouldn't you exit with an error here?, i.e.
->
->                 ksft_exit_fail_msg(...
->
-> > +             }
-> > +             pidfd = sys_pidfd_open(child_pid, 0);
-> > +             if (pidfd < 0) {
-> > +                     ksft_print_msg("%s - pidfd_open failed\n",
-> > +                             strerror(errno));
-> > +                     goto on_error;
->
-> I think you honestly can just call ksft_exit_fail_msg() everywhere. The
-> fds will be cleaned up on process exit anyway and it's pretty
-> short-lived.
->
-> > +             }
-> > +             /* Setup 3 sec alarm - plenty of time */
-> > +             if (signal(SIGALRM, handle_alarm) == SIG_ERR) {
-> > +                     ksft_print_msg("%s - signal failed\n",
-> > +                             strerror(errno));
-> > +                     goto on_error;
-> > +             }
-> > +             alarm(3);
-> > +             /* Send SIGKILL to the child */
-> > +             if (sys_pidfd_send_signal(pidfd, SIGKILL, NULL, 0)) {
-> > +                     ksft_print_msg("%s - pidfd_send_signal failed\n",
-> > +                             strerror(errno));
-> > +                     goto on_error;
-> > +             }
-> > +             /* Wait for the death notification */
-> > +             fds.fd = pidfd;
-> > +             nevents = poll(&fds, 1, -1);
-> > +             if (nevents < 0) {
-> > +                     ksft_print_msg("%s - poll failed\n",
-> > +                             strerror(errno));
-> > +                     goto on_error;
-> > +             }
-> > +             if (nevents != 1) {
-> > +                     ksft_print_msg("unexpected poll result: %d\n",
-> > +                             nevents);
-> > +                     goto on_error;
-> > +             }
-> > +             if (!(fds.revents & POLLIN)) {
-> > +                     ksft_print_msg(
-> > +                             "unexpected event type received: 0x%x\n",
-> > +                             fds.revents);
-> > +                     goto on_error;
-> > +             }
-> > +             if (timeout) {
-> > +                     ksft_print_msg("death notification wait timeout\n");
-> > +                     goto on_error;
-> > +             }
-> > +             close(pidfd);
-> > +     }
-> > +     ret = 0;
-> > +
-> > +on_error:
-> > +     if (pidfd)
-> > +             close(pidfd);
-> > +
-> > +     if (ret) {
-> > +             ksft_test_result_fail("failed after %d retries\n", iter);
-> > +             return ksft_exit_fail();
-> > +     }
-> > +
-> > +     ksft_test_result_pass("pidfd poll test: pass\n");
-> > +     return ksft_exit_pass();
-> > +}
-> > --
-> > 2.22.0.657.g960e92d24f-goog
-> >
+I am actively working on the document and will share v6 with the requested
+changes in the next few days.
+
+> Will
+> 
+
+-- 
+Regards,
+Vincenzo
