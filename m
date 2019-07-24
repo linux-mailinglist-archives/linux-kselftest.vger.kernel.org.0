@@ -2,133 +2,89 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F117734B8
-	for <lists+linux-kselftest@lfdr.de>; Wed, 24 Jul 2019 19:12:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62E86736DB
+	for <lists+linux-kselftest@lfdr.de>; Wed, 24 Jul 2019 20:45:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726731AbfGXRM1 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 24 Jul 2019 13:12:27 -0400
-Received: from foss.arm.com ([217.140.110.172]:44146 "EHLO foss.arm.com"
+        id S1726388AbfGXSp4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 24 Jul 2019 14:45:56 -0400
+Received: from mx1.redhat.com ([209.132.183.28]:57732 "EHLO mx1.redhat.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726238AbfGXRM0 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 24 Jul 2019 13:12:26 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0E49528;
-        Wed, 24 Jul 2019 10:12:26 -0700 (PDT)
-Received: from [10.1.196.72] (e119884-lin.cambridge.arm.com [10.1.196.72])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3CE253F71F;
-        Wed, 24 Jul 2019 10:12:21 -0700 (PDT)
-Subject: Re: [PATCH v19 00/15] arm64: untag user pointers passed to the kernel
-To:     Will Deacon <will.deacon@arm.com>,
-        Andrey Konovalov <andreyknvl@google.com>
-Cc:     Will Deacon <will@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Mark Rutland <mark.rutland@arm.com>, kvm@vger.kernel.org,
-        Szabolcs Nagy <Szabolcs.Nagy@arm.com>,
-        dri-devel@lists.freedesktop.org,
-        Kostya Serebryany <kcc@google.com>,
-        Khalid Aziz <khalid.aziz@oracle.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Felix Kuehling <Felix.Kuehling@amd.com>,
-        Jacob Bramley <Jacob.Bramley@arm.com>,
-        Leon Romanovsky <leon@kernel.org>, linux-rdma@vger.kernel.org,
-        amd-gfx@lists.freedesktop.org,
-        Christoph Hellwig <hch@infradead.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Dave Martin <Dave.Martin@arm.com>,
-        Evgeniy Stepanov <eugenis@google.com>,
-        linux-media@vger.kernel.org, Kevin Brodsky <kevin.brodsky@arm.com>,
-        Kees Cook <keescook@chromium.org>,
-        Ruben Ayrapetyan <Ruben.Ayrapetyan@arm.com>,
-        Ramana Radhakrishnan <Ramana.Radhakrishnan@arm.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Yishai Hadas <yishaih@mellanox.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Jens Wiklander <jens.wiklander@linaro.org>,
-        Lee Smith <Lee.Smith@arm.com>,
-        Alexander Deucher <Alexander.Deucher@amd.com>,
-        enh <enh@google.com>, Robin Murphy <robin.murphy@arm.com>,
-        Christian Koenig <Christian.Koenig@amd.com>,
-        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>
-References: <cover.1563904656.git.andreyknvl@google.com>
- <CAAeHK+yc0D_nd7nTRsY4=qcSx+eQR0VLut3uXMf4NEiE-VpeCw@mail.gmail.com>
- <20190724140212.qzvbcx5j2gi5lcoj@willie-the-truck>
- <CAAeHK+xXzdQHpVXL7f1T2Ef2P7GwFmDMSaBH4VG8fT3=c_OnjQ@mail.gmail.com>
- <20190724142059.GC21234@fuggles.cambridge.arm.com>
-From:   Vincenzo Frascino <vincenzo.frascino@arm.com>
-Message-ID: <f27f4e55-fcd6-9ae7-d9ca-cac2aea5fe70@arm.com>
-Date:   Wed, 24 Jul 2019 18:12:20 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        id S2387665AbfGXSpz (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 24 Jul 2019 14:45:55 -0400
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mx1.redhat.com (Postfix) with ESMTPS id D3D7CC05FBC0;
+        Wed, 24 Jul 2019 18:45:55 +0000 (UTC)
+Received: from localhost.localdomain (ovpn-120-104.rdu2.redhat.com [10.10.120.104])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 3790F60BF7;
+        Wed, 24 Jul 2019 18:45:55 +0000 (UTC)
+Subject: Re: [PATCH v3] selftests/livepatch: add test skip handling
+To:     shuah <shuah@kernel.org>, Petr Mladek <pmladek@suse.com>
+Cc:     linux-kselftest@vger.kernel.org, live-patching@vger.kernel.org,
+        Jiri Benc <jbenc@redhat.com>
+References: <20190722140544.29867-1-joe.lawrence@redhat.com>
+ <20190724062730.xtutfqgpsr3pubv7@pathway.suse.cz>
+ <0aae34cf-ae82-1f80-7bc9-27708c61287a@kernel.org>
+From:   Joe Lawrence <joe.lawrence@redhat.com>
+Organization: Red Hat
+Message-ID: <643f0d9f-ada1-da3d-7980-4f2df6a6e63f@redhat.com>
+Date:   Wed, 24 Jul 2019 14:45:49 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
+ Thunderbird/52.9.1
 MIME-Version: 1.0
-In-Reply-To: <20190724142059.GC21234@fuggles.cambridge.arm.com>
-Content-Type: text/plain; charset=utf-8
+In-Reply-To: <0aae34cf-ae82-1f80-7bc9-27708c61287a@kernel.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
+X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.32]); Wed, 24 Jul 2019 18:45:55 +0000 (UTC)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Will and Andrey,
-
-On 24/07/2019 15:20, Will Deacon wrote:
-> On Wed, Jul 24, 2019 at 04:16:49PM +0200, Andrey Konovalov wrote:
->> On Wed, Jul 24, 2019 at 4:02 PM Will Deacon <will@kernel.org> wrote:
->>> On Tue, Jul 23, 2019 at 08:03:29PM +0200, Andrey Konovalov wrote:
->>>> On Tue, Jul 23, 2019 at 7:59 PM Andrey Konovalov <andreyknvl@google.com> wrote:
->>>>>
->>>>> === Overview
->>>>>
->>>>> arm64 has a feature called Top Byte Ignore, which allows to embed pointer
->>>>> tags into the top byte of each pointer. Userspace programs (such as
->>>>> HWASan, a memory debugging tool [1]) might use this feature and pass
->>>>> tagged user pointers to the kernel through syscalls or other interfaces.
->>>>>
->>>>> Right now the kernel is already able to handle user faults with tagged
->>>>> pointers, due to these patches:
->>>>>
->>>>> 1. 81cddd65 ("arm64: traps: fix userspace cache maintenance emulation on a
->>>>>              tagged pointer")
->>>>> 2. 7dcd9dd8 ("arm64: hw_breakpoint: fix watchpoint matching for tagged
->>>>>               pointers")
->>>>> 3. 276e9327 ("arm64: entry: improve data abort handling of tagged
->>>>>               pointers")
->>>>>
->>>>> This patchset extends tagged pointer support to syscall arguments.
+On 07/24/2019 12:45 PM, shuah wrote:
+> On 7/24/19 12:27 AM, Petr Mladek wrote:
+>> On Mon 2019-07-22 10:05:44, Joe Lawrence wrote:
+>>> Add a skip() message function that stops the test, logs an explanation,
+>>> and sets the "skip" return code (4).
 >>>
->>> [...]
+>>> Before loading a livepatch self-test kernel module, first verify that
+>>> we've built and installed it by running a 'modprobe --dry-run'.  This
+>>> should catch a few environment issues, including !CONFIG_LIVEPATCH and
+>>> !CONFIG_TEST_LIVEPATCH.  In these cases, exit gracefully with the new
+>>> skip() function.
 >>>
->>>> Do you think this is ready to be merged?
->>>>
->>>> Should this go through the mm or the arm tree?
->>>
->>> I would certainly prefer to take at least the arm64 bits via the arm64 tree
->>> (i.e. patches 1, 2 and 15). We also need a Documentation patch describing
->>> the new ABI.
+>>> Reported-by: Jiri Benc <jbenc@redhat.com>
+>>> Suggested-by: Shuah Khan <shuah@kernel.org>
+>>> Signed-off-by: Joe Lawrence <joe.lawrence@redhat.com>
 >>
->> Sounds good! Should I post those patches together with the
->> Documentation patches from Vincenzo as a separate patchset?
+>> Reviewed-by: Petr Mladek <pmladek@suse.com>
+>>
+>> Best Regards,
+>> Petr
+>>
+>> PS: No need to send v4. The missing "to", suggested by Shuah, could
+>>      get added when pushing the patch into the repo.
+>>
 > 
-> Yes, please (although as you say below, we need a new version of those
-> patches from Vincenzo to address the feedback on v5). The other thing I
-> should say is that I'd be happy to queue the other patches in the series
-> too, but some of them are missing acks from the relevant maintainers (e.g.
-> the mm/ and fs/ changes).
+> I can't make changes to the patch. I can adjust the commit log at times
+> and correct merge conflicts.
+> 
+> I would like to see v4 for this.
 > 
 
-I am actively working on the document and will share v6 with the requested
-changes in the next few days.
+We should clarify for which tree this and "[PATCH] selftests/livepatch: 
+push and pop dynamic debug config​" would be merged.  I had assumed this 
+would go to the livepatching tree, but Shuah, do you prefer that 
+selftest-centric patches go through the selftests tree?
 
-> Will
-> 
+I'm okay with either and can send up a v4 if needed.  But also this 
+would be good to know for future changesets like this, we can perhaps 
+mark the destination branch in advance.
 
--- 
-Regards,
-Vincenzo
+Thanks,
+
+-- Joe
+
