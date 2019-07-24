@@ -2,96 +2,139 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 84DA273156
-	for <lists+linux-kselftest@lfdr.de>; Wed, 24 Jul 2019 16:16:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2D0E7315A
+	for <lists+linux-kselftest@lfdr.de>; Wed, 24 Jul 2019 16:17:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726287AbfGXOQB (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 24 Jul 2019 10:16:01 -0400
-Received: from mail-pf1-f194.google.com ([209.85.210.194]:44449 "EHLO
-        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725870AbfGXOQB (ORCPT
+        id S1726900AbfGXORC (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 24 Jul 2019 10:17:02 -0400
+Received: from mail-pf1-f196.google.com ([209.85.210.196]:42724 "EHLO
+        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725870AbfGXORB (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 24 Jul 2019 10:16:01 -0400
-Received: by mail-pf1-f194.google.com with SMTP id t16so21009327pfe.11;
-        Wed, 24 Jul 2019 07:16:00 -0700 (PDT)
+        Wed, 24 Jul 2019 10:17:01 -0400
+Received: by mail-pf1-f196.google.com with SMTP id q10so21025287pff.9
+        for <linux-kselftest@vger.kernel.org>; Wed, 24 Jul 2019 07:17:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=D2niVLsdZKtUu10jdvC8RdtEQjbdxPl6wlDVDqafru4=;
-        b=mGsmj29nBng8l3G9WUE6TqeL5PhM7V5sw7PQDuNqCPdg7k7t6yLaidwBZlFCYe/ZkU
-         0pU64QjvMfcd/cDOmR3jRMVfxtXCnV8p4PyAlmcjF75KjEu341B+FpHXG57SC5VChmcl
-         Jm65sd2ShUaA8ApPk4qoOSn4nLIMYlvejCioknX0xdVUxFdRzHLu62nE75JtptFYJwpb
-         y83NAxY1U0h80mKZ+msygNKGuzhhh8ixZ68wJXhvSXsNZBslzGQuktcY3c7pmbKd9vPw
-         fZlvBNJBZ9e++J0qM+aCLIT2x+jJlSD1q3nGm9eKgIR1bB2AmjusGMejBp6eMXudnS72
-         G4wA==
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=iVEa+BrbD+ybsnA2U1ljAFs3yPdamhmoGuSiTUjWPJ4=;
+        b=DWU4WjGAtgl8VCFFOjc8wXQ0g23uMAUtJpd38Z3oaJgwn4NfatixOvhmdpOdL+fxhG
+         e0wlc3X1shT5Iq30jjbbWGUReEBT4OBXlYiiQUhWx2Q7uiFMfOEneT8NH6f9J2qp0V5H
+         uul5tf2SvUAF38K7907CwJA6dKexcEorDJsv/KoSqA3HSUAO6tsOMxjz0hFsJBWrp9kB
+         d53dWGlSvFswyl6j+n5LUh4qGYRvo3+KwFNfAV8S+2jUqD0GvKKHxnABV1FWZ1+b1OBh
+         oB2T3ZDN/Zfw5qlFjUWW5qYsM2z/YZXngByjiqcmIeT7gWGze9CMbYqnOAvNwjkoL4TA
+         mEew==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=D2niVLsdZKtUu10jdvC8RdtEQjbdxPl6wlDVDqafru4=;
-        b=GQeAeOo0mW6La5GMHT5T2itJbLf+0fuMnn+j49rj5CqEJOwlLfK2KvEYK9Fe//9wXj
-         h8PipzFTMj9S909msHIy2jpelVf646X7sBZha9VwTAb4WnwXvzXrWT+4xRffM4QXKFzA
-         9zwPbKaU3LKA8vGdSdSQZHK9dt+5LULQeULDa3gJBw6HKeUJM9bzN4mqP+5/hi8NF5Om
-         Ykz9pbwd7iUhEkNEp91oyLskC/0346WvH5Olf/3y5xYcsPUWWSrZSbisIslPYTqDNoSY
-         f7nAHIUaSGe28B0j+k672OJ6zSqT94K4pkMVTFWVW7b2Xe1zjiDWwajTXiXp5gL0IBoG
-         rmcQ==
-X-Gm-Message-State: APjAAAUB64GTnDg1d6kt7rjiX4fWThN2Tcb9HYTrbP7QKx7yOepilENJ
-        GLbXlRAOzHQjN7zxLDFljdo=
-X-Google-Smtp-Source: APXvYqwSAT17fwPwcWVMVT9/K/beHWmtX06kb53WhP7hy4B580mMpmO7dwD3E2Cyf5G55e6B3R4MLw==
-X-Received: by 2002:a65:60d3:: with SMTP id r19mr56459815pgv.91.1563977760057;
-        Wed, 24 Jul 2019 07:16:00 -0700 (PDT)
-Received: from masabert (i118-21-156-233.s30.a048.ap.plala.or.jp. [118.21.156.233])
-        by smtp.gmail.com with ESMTPSA id f88sm45672023pjg.5.2019.07.24.07.15.59
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 24 Jul 2019 07:15:59 -0700 (PDT)
-Received: by masabert (Postfix, from userid 1000)
-        id DC3CA201374; Wed, 24 Jul 2019 23:15:56 +0900 (JST)
-From:   Masanari Iida <standby24x7@gmail.com>
-To:     shuah@kernel.org, linux-kernel@vger.kernel.org, jiri@mellanox.com,
-        idosch@mellanox.com, linux-kselftest@vger.kernel.org,
-        rdunlap@infradead.org
-Cc:     Masanari Iida <standby24x7@gmail.com>
-Subject: [PATCH] selftests: mlxsw: Fix typo in qos_mc_aware.sh
-Date:   Wed, 24 Jul 2019 23:15:54 +0900
-Message-Id: <20190724141554.31723-1-standby24x7@gmail.com>
-X-Mailer: git-send-email 2.22.0.545.g9c9b961d7eb1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=iVEa+BrbD+ybsnA2U1ljAFs3yPdamhmoGuSiTUjWPJ4=;
+        b=QccyCdz+6LCC1FiePfyd8UZzDCO1KV9ZeTAeeQrbV8Lq7sHofzBY2g7XV5+c65YGEm
+         0SRuaKbIvBeAeGZcSU6s8UjLdBky0OY4G5UFFeP2s6KetGMx0pkmArXzDnDn/fAkxv6K
+         6h8sBDXj8jRbnoWFCmTj99kgHnS/ElqnCVvy/zVh73wqndeMzKNG/S3C2K7j9Gwk/rbi
+         9sh7f4AWO97c/EgWKYfXkWFH/SeAe++8q/AqyCpNbjb6eRaR+ss3kaigyn3jt4kf9BCY
+         KES5AtTXQs1SjW6Pcpg0IINTHd5kfXVHfgAVwhBFyg5DRT93lo1mWWefbU5rwAsk8/FF
+         KLLA==
+X-Gm-Message-State: APjAAAV5/UjRgmSihZm//Wm4oh44M2rwzDsKnzKVGV1RS3ZXPBmlHkZv
+        fY62VfutWE9ZjS5WT7z4GRNK0jo+ezKnRUM+5byGnA==
+X-Google-Smtp-Source: APXvYqz2dMxGxnq2kAfIP49TpeG4FcaV+yTvRZ4CcUcR9QT0oeQ2GoQPtuki1B+xbKFnrASZfeBQUkyN7t1WRbfNCv8=
+X-Received: by 2002:aa7:86c6:: with SMTP id h6mr11779914pfo.51.1563977820600;
+ Wed, 24 Jul 2019 07:17:00 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <cover.1563904656.git.andreyknvl@google.com> <CAAeHK+yc0D_nd7nTRsY4=qcSx+eQR0VLut3uXMf4NEiE-VpeCw@mail.gmail.com>
+ <20190724140212.qzvbcx5j2gi5lcoj@willie-the-truck>
+In-Reply-To: <20190724140212.qzvbcx5j2gi5lcoj@willie-the-truck>
+From:   Andrey Konovalov <andreyknvl@google.com>
+Date:   Wed, 24 Jul 2019 16:16:49 +0200
+Message-ID: <CAAeHK+xXzdQHpVXL7f1T2Ef2P7GwFmDMSaBH4VG8fT3=c_OnjQ@mail.gmail.com>
+Subject: Re: [PATCH v19 00/15] arm64: untag user pointers passed to the kernel
+To:     Will Deacon <will@kernel.org>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Mark Rutland <mark.rutland@arm.com>, kvm@vger.kernel.org,
+        Szabolcs Nagy <Szabolcs.Nagy@arm.com>,
+        Will Deacon <will.deacon@arm.com>,
+        dri-devel@lists.freedesktop.org,
+        Kostya Serebryany <kcc@google.com>,
+        Khalid Aziz <khalid.aziz@oracle.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Felix Kuehling <Felix.Kuehling@amd.com>,
+        Jacob Bramley <Jacob.Bramley@arm.com>,
+        Leon Romanovsky <leon@kernel.org>, linux-rdma@vger.kernel.org,
+        amd-gfx@lists.freedesktop.org,
+        Christoph Hellwig <hch@infradead.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Dave Martin <Dave.Martin@arm.com>,
+        Evgeniy Stepanov <eugenis@google.com>,
+        linux-media@vger.kernel.org, Kevin Brodsky <kevin.brodsky@arm.com>,
+        Kees Cook <keescook@chromium.org>,
+        Ruben Ayrapetyan <Ruben.Ayrapetyan@arm.com>,
+        Ramana Radhakrishnan <Ramana.Radhakrishnan@arm.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Yishai Hadas <yishaih@mellanox.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Jens Wiklander <jens.wiklander@linaro.org>,
+        Lee Smith <Lee.Smith@arm.com>,
+        Alexander Deucher <Alexander.Deucher@amd.com>,
+        enh <enh@google.com>, Robin Murphy <robin.murphy@arm.com>,
+        Christian Koenig <Christian.Koenig@amd.com>,
+        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This patch fixes some spelling typo in qos_mc_aware.sh
+On Wed, Jul 24, 2019 at 4:02 PM Will Deacon <will@kernel.org> wrote:
+>
+> Hi Andrey,
+>
+> On Tue, Jul 23, 2019 at 08:03:29PM +0200, Andrey Konovalov wrote:
+> > On Tue, Jul 23, 2019 at 7:59 PM Andrey Konovalov <andreyknvl@google.com> wrote:
+> > >
+> > > === Overview
+> > >
+> > > arm64 has a feature called Top Byte Ignore, which allows to embed pointer
+> > > tags into the top byte of each pointer. Userspace programs (such as
+> > > HWASan, a memory debugging tool [1]) might use this feature and pass
+> > > tagged user pointers to the kernel through syscalls or other interfaces.
+> > >
+> > > Right now the kernel is already able to handle user faults with tagged
+> > > pointers, due to these patches:
+> > >
+> > > 1. 81cddd65 ("arm64: traps: fix userspace cache maintenance emulation on a
+> > >              tagged pointer")
+> > > 2. 7dcd9dd8 ("arm64: hw_breakpoint: fix watchpoint matching for tagged
+> > >               pointers")
+> > > 3. 276e9327 ("arm64: entry: improve data abort handling of tagged
+> > >               pointers")
+> > >
+> > > This patchset extends tagged pointer support to syscall arguments.
+>
+> [...]
+>
+> > Do you think this is ready to be merged?
+> >
+> > Should this go through the mm or the arm tree?
+>
+> I would certainly prefer to take at least the arm64 bits via the arm64 tree
+> (i.e. patches 1, 2 and 15). We also need a Documentation patch describing
+> the new ABI.
 
-Signed-off-by: Masanari Iida <standby24x7@gmail.com>
----
- tools/testing/selftests/drivers/net/mlxsw/qos_mc_aware.sh | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Sounds good! Should I post those patches together with the
+Documentation patches from Vincenzo as a separate patchset?
 
-diff --git a/tools/testing/selftests/drivers/net/mlxsw/qos_mc_aware.sh b/tools/testing/selftests/drivers/net/mlxsw/qos_mc_aware.sh
-index 71231ad2dbfb..47315fe48d5a 100755
---- a/tools/testing/selftests/drivers/net/mlxsw/qos_mc_aware.sh
-+++ b/tools/testing/selftests/drivers/net/mlxsw/qos_mc_aware.sh
-@@ -262,7 +262,7 @@ test_mc_aware()
- 
- 	stop_traffic
- 
--	log_test "UC performace under MC overload"
-+	log_test "UC performance under MC overload"
- 
- 	echo "UC-only throughput  $(humanize $ucth1)"
- 	echo "UC+MC throughput    $(humanize $ucth2)"
-@@ -316,7 +316,7 @@ test_uc_aware()
- 
- 	stop_traffic
- 
--	log_test "MC performace under UC overload"
-+	log_test "MC performance under UC overload"
- 	echo "    ingress UC throughput $(humanize ${uc_ir})"
- 	echo "    egress UC throughput  $(humanize ${uc_er})"
- 	echo "    sent $attempts BC ARPs, got $passes responses"
--- 
-2.22.0.545.g9c9b961d7eb1
+Vincenzo, could you share the last version of the Documentation patches?
 
+Thanks!
+
+>
+> Will
