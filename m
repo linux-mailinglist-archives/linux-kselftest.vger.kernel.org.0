@@ -2,240 +2,188 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C785274D08
-	for <lists+linux-kselftest@lfdr.de>; Thu, 25 Jul 2019 13:26:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2738974D0A
+	for <lists+linux-kselftest@lfdr.de>; Thu, 25 Jul 2019 13:26:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391422AbfGYL0B (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 25 Jul 2019 07:26:01 -0400
-Received: from mail-ed1-f67.google.com ([209.85.208.67]:36564 "EHLO
+        id S2391855AbfGYL0u (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 25 Jul 2019 07:26:50 -0400
+Received: from mail-ed1-f67.google.com ([209.85.208.67]:46321 "EHLO
         mail-ed1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2391453AbfGYL0A (ORCPT
+        with ESMTP id S2391453AbfGYL0u (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 25 Jul 2019 07:26:00 -0400
-Received: by mail-ed1-f67.google.com with SMTP id k21so49925556edq.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 25 Jul 2019 04:25:59 -0700 (PDT)
+        Thu, 25 Jul 2019 07:26:50 -0400
+Received: by mail-ed1-f67.google.com with SMTP id d4so49928842edr.13
+        for <linux-kselftest@vger.kernel.org>; Thu, 25 Jul 2019 04:26:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=brauner.io; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=WEyRmkVEOhbCidFA/vuD+08ymbEUCrNcC1FlwBWlNvU=;
-        b=Z44WeL2IgALPub8m1//8lGs/Cy9HjnAR3/QntgGnpnZJeDt9nmtrvldMs4mX7DugWk
-         3ZzFRsW4KWFbsNsT2IqgSEn5bKRnsbYaNfPEBTkoqljdUElGtxJzkOA/cWySyCZSALP/
-         kxynbogPFGmp+bb9rhnK8h5X4fb+lC3OjGIpESVVvmA3gICHHQEiZygh8Cu0Gr2zB+4K
-         zWMT7hw9Tchh/vctd/Mpj9AAT5nVhn4sz+5rnjECkHni6s5yRY9L3pPR7MT/ujksk8Pc
-         fRBMaW1MYDEINYCem2qAeDRBlU/3oyxaqumnZFg8A4FT90scF9pu7xY5ac4fcs/ZQJif
-         pRXQ==
+        bh=+MsnDi3TdRcq0Eiuzr/rb//Hp/GfDkvda3lMlcb36Ks=;
+        b=b/F4JcUQl83tPVozzBu5F9CU6h56hPODr0mGZNR3LS2W1DigF6WZyQ1Wks10OG77RM
+         ckhQKX98WXTd3txW7lrs8/1wPcu84MqzzBLPVp+W0HggS+piHzProvl9Yefm0tbMUO3c
+         HCIWDdnfYUgWQ8DuHLkq+bxMt9aymj1cv5EjKVTXdVN+umIqXRzWfmV2gL+fR2xbLrPj
+         RY+uBQJTSqrMPGstXND4j9tXDhOZiw6ZWCzlF9jKnI5+VVTAor4tLuUcOZuhItlcPX+q
+         aT9qRsem1N8MNkIsGMNlQcu7EY2qA7FVjApRXDuTnBgZJEbsOylvGLs8coztlZ7csFi+
+         RkSQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=WEyRmkVEOhbCidFA/vuD+08ymbEUCrNcC1FlwBWlNvU=;
-        b=XMqhZN6F4RBsIID5iBQpJgKLaWH4NzzL3BbPnq9dwiivtydkhZ7+CNt1o+sVZxMJZN
-         ETe/QiQnVzeg3DY5pTKC0Z1WhgifgoHHZqVYrvLvelDjwQpTlBkQWpjYH3r1hCoBraic
-         cP3mQ9m7q3Th37T5UppuU1rbBWX8zf47qLQ8ATBZ6dnn5dBjWwMfND8qDYoTAoBuL1yK
-         DZ/dSIBsUws68/iKwAfY+1lzyqToAvtEiSioDsFJjqzba1fFlwrSqtyuOjdtIWDvXpu6
-         6bLWVFaXb6dT3mwMuQqIS7ROHZJgcW5jgivVUhFujiTd0jELr2r9UXNLDfHzPl5mGsWH
-         6VKg==
-X-Gm-Message-State: APjAAAXRscI7aRF1SE529k9R3ItIWLBkgAglYdLqrF9ksIwqv3WxCNjC
-        daXoyKpuEYRJyQeYCzlD2jU=
-X-Google-Smtp-Source: APXvYqzdJF3uuYSmNVrexhnBJVZDV8LubJU6KLLdYy+8y9OwRMK8CS7CUQ8jNgLDBpyr6KB7AUoGvA==
-X-Received: by 2002:a17:906:af86:: with SMTP id mj6mr22060265ejb.157.1564053958749;
-        Thu, 25 Jul 2019 04:25:58 -0700 (PDT)
+        bh=+MsnDi3TdRcq0Eiuzr/rb//Hp/GfDkvda3lMlcb36Ks=;
+        b=Sand/gU4xFkPIx/4V++xrEsCY69ws8Ac4cYYf6eyMNDthVJQ3gunGorOHj2lwzjdwb
+         /N6K+dR3p8AGK7JI0/sny32o55/755y99wSPrZWXuP0OKNeN1OsazKuM1TXPcsA6q+b6
+         h0FL1sXZoQglnor8WSuw+zmcJ6N3mwGln3XJcR8534Cj8/IEX0qonXsp+KIe0hv+/QFB
+         Ym9cN2B6uFCoSFCDZ3UzslL0DZaUuN+muGgsHlrpyYNVhTNyPAvggiP1Xj87/GbbNRgu
+         XA/OVi/zZphofj5LUGzV0nCNWIn1RSVFWKfASsDqVk6GuRKtak1K1M6QrcwisFEzbNl1
+         Ling==
+X-Gm-Message-State: APjAAAWjsR8nBlBbRzH76u0xcwsgtFSKC+9/DFMPWdd4/aeRO/w5Yt/K
+        JopkND538BGMfJxi4pXFpP8=
+X-Google-Smtp-Source: APXvYqz45wZYr+xYJObGRvEU/ruW0IkRbuAamHnnWi+3R/3sSwJnF6NiNimeicSeNqg9xlFNrUb92g==
+X-Received: by 2002:a50:974b:: with SMTP id d11mr76228953edb.24.1564054008153;
+        Thu, 25 Jul 2019 04:26:48 -0700 (PDT)
 Received: from brauner.io (ip5b40f7ec.dynamic.kabel-deutschland.de. [91.64.247.236])
-        by smtp.gmail.com with ESMTPSA id j16sm9809808ejq.66.2019.07.25.04.25.57
+        by smtp.gmail.com with ESMTPSA id m32sm13387538edc.89.2019.07.25.04.26.46
         (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Thu, 25 Jul 2019 04:25:58 -0700 (PDT)
-Date:   Thu, 25 Jul 2019 13:25:57 +0200
+        Thu, 25 Jul 2019 04:26:47 -0700 (PDT)
+Date:   Thu, 25 Jul 2019 13:26:46 +0200
 From:   Christian Brauner <christian@brauner.io>
 To:     Suren Baghdasaryan <surenb@google.com>
-Cc:     arnd@arndb.de, ebiederm@xmission.com, keescook@chromium.org,
-        joel@joelfernandes.org, dancol@google.com, tglx@linutronix.de,
-        jannh@google.com, dhowells@redhat.com, mtk.manpages@gmail.com,
-        luto@kernel.org, akpm@linux-foundation.org, oleg@redhat.com,
-        cyphar@cyphar.com, torvalds@linux-foundation.org,
+Cc:     arnd@arndb.de, "Eric W. Biederman" <ebiederm@xmission.com>,
+        Kees Cook <keescook@chromium.org>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Daniel Colascione <dancol@google.com>, tglx@linutronix.de,
+        Jann Horn <jannh@google.com>, dhowells@redhat.com,
+        mtk.manpages@gmail.com, luto@kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Oleg Nesterov <oleg@redhat.com>, cyphar@cyphar.com,
+        Linus Torvalds <torvalds@linux-foundation.org>,
         viro@zeniv.linux.org.uk, linux-api@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, kernel-team@android.com
-Subject: Re: [PATCH v2 2/2] tests: add pidfd poll tests
-Message-ID: <20190725112556.f7t5natdomohzm2u@brauner.io>
+        linux-kselftest@vger.kernel.org,
+        kernel-team <kernel-team@android.com>
+Subject: Re: [PATCH v2 1/2] tests: move common definitions and functions into
+ pidfd.h
+Message-ID: <20190725112645.m6hushfosm62nfwt@brauner.io>
 References: <20190725002204.185225-1-surenb@google.com>
- <20190725002204.185225-2-surenb@google.com>
+ <CAJuCfpH0OVCjA7ST4dtQ839+gEHKT_T=t-SN=ghPO4ev-GEfYg@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20190725002204.185225-2-surenb@google.com>
+In-Reply-To: <CAJuCfpH0OVCjA7ST4dtQ839+gEHKT_T=t-SN=ghPO4ev-GEfYg@mail.gmail.com>
 User-Agent: NeoMutt/20180716
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Jul 24, 2019 at 05:22:04PM -0700, Suren Baghdasaryan wrote:
-> This adds testing for polling on pidfd of a process being killed. Test runs
-> 10000 iterations by default to stress test pidfd polling functionality.
-> It accepts an optional command-line parameter to override the number or
-> iterations to run.
-> Specifically, it tests for:
-> - pidfd_open on a child process succeeds
-> - pidfd_send_signal on a child process succeeds
-> - polling on pidfd succeeds and returns exactly one event
-> - returned event is POLLIN
-> - event is received within 3 secs of the process being killed
-> 
-> 10000 iterations was chosen because of the race condition being tested
-> which is not consistently reproducible but usually is revealed after less
-> than 2000 iterations.
-> Reveals race fixed by commit b191d6491be6 ("pidfd: fix a poll race when setting exit_state")
-> 
-> Signed-off-by: Suren Baghdasaryan <surenb@google.com>
+On Wed, Jul 24, 2019 at 05:34:04PM -0700, Suren Baghdasaryan wrote:
+> I'm terribly sorry. I forgot to add a link to the original version of
 
-Reviewed-by: Christian Brauner <christian@brauner.io>
+No worries!
 
-> ---
->  tools/testing/selftests/pidfd/.gitignore      |   1 +
->  tools/testing/selftests/pidfd/Makefile        |   2 +-
->  .../testing/selftests/pidfd/pidfd_poll_test.c | 112 ++++++++++++++++++
->  3 files changed, 114 insertions(+), 1 deletion(-)
->  create mode 100644 tools/testing/selftests/pidfd/pidfd_poll_test.c
+> this patch with Christian's comments. It's at:
+> https://lore.kernel.org/linux-kselftest/20190723173907.196488-1-surenb@google.com
+> and I think I addressed all comments there.
+> The patch should apply cleanly to the latest Linus' ToT (v5.3-rc1).
+> Thanks,
+> Suren.
+
+I'll pick this up.
+
+Thanks!
+Christian
+
 > 
-> diff --git a/tools/testing/selftests/pidfd/.gitignore b/tools/testing/selftests/pidfd/.gitignore
-> index 16d84d117bc0..a67896347d34 100644
-> --- a/tools/testing/selftests/pidfd/.gitignore
-> +++ b/tools/testing/selftests/pidfd/.gitignore
-> @@ -1,2 +1,3 @@
->  pidfd_open_test
-> +pidfd_poll_test
->  pidfd_test
-> diff --git a/tools/testing/selftests/pidfd/Makefile b/tools/testing/selftests/pidfd/Makefile
-> index 720b2d884b3c..ed58b7108d18 100644
-> --- a/tools/testing/selftests/pidfd/Makefile
-> +++ b/tools/testing/selftests/pidfd/Makefile
-> @@ -1,7 +1,7 @@
->  # SPDX-License-Identifier: GPL-2.0-only
->  CFLAGS += -g -I../../../../usr/include/ -lpthread
->  
-> -TEST_GEN_PROGS := pidfd_test pidfd_open_test
-> +TEST_GEN_PROGS := pidfd_test pidfd_open_test pidfd_poll_test
->  
->  include ../lib.mk
->  
-> diff --git a/tools/testing/selftests/pidfd/pidfd_poll_test.c b/tools/testing/selftests/pidfd/pidfd_poll_test.c
-> new file mode 100644
-> index 000000000000..d45c612a0fe5
-> --- /dev/null
-> +++ b/tools/testing/selftests/pidfd/pidfd_poll_test.c
-> @@ -0,0 +1,112 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +
-> +#define _GNU_SOURCE
-> +#include <errno.h>
-> +#include <linux/types.h>
-> +#include <linux/wait.h>
-> +#include <poll.h>
-> +#include <signal.h>
-> +#include <stdbool.h>
-> +#include <stdio.h>
-> +#include <stdlib.h>
-> +#include <string.h>
-> +#include <syscall.h>
-> +#include <sys/wait.h>
-> +#include <unistd.h>
-> +
-> +#include "pidfd.h"
-> +#include "../kselftest.h"
-> +
-> +static bool timeout;
-> +
-> +static void handle_alarm(int sig)
-> +{
-> +	timeout = true;
-> +}
-> +
-> +int main(int argc, char **argv)
-> +{
-> +	struct pollfd fds;
-> +	int iter, nevents;
-> +	int nr_iterations = 10000;
-> +
-> +	fds.events = POLLIN;
-> +
-> +	if (argc > 2)
-> +		ksft_exit_fail_msg("Unexpected command line argument\n");
-> +
-> +	if (argc == 2) {
-> +		nr_iterations = atoi(argv[1]);
-> +		if (nr_iterations <= 0)
-> +			ksft_exit_fail_msg("invalid input parameter %s\n",
-> +					argv[1]);
-> +	}
-> +
-> +	ksft_print_msg("running pidfd poll test for %d iterations\n",
-> +		nr_iterations);
-> +
-> +	for (iter = 0; iter < nr_iterations; iter++) {
-> +		int pidfd;
-> +		int child_pid = fork();
-> +
-> +		if (child_pid < 0) {
-> +			if (errno == EAGAIN) {
-> +				iter--;
-> +				continue;
-> +			}
-> +			ksft_exit_fail_msg(
-> +				"%s - failed to fork a child process\n",
-> +				strerror(errno));
-> +		}
-> +
-> +		if (!child_pid) {
-> +			/* Child process just sleeps for a min and exits */
-> +			sleep(60);
-> +			exit(EXIT_SUCCESS);
-> +		}
-> +
-> +		/* Parent kills the child and waits for its death */
-> +		pidfd = sys_pidfd_open(child_pid, 0);
-> +		if (pidfd < 0)
-> +			ksft_exit_fail_msg("%s - pidfd_open failed\n",
-> +					strerror(errno));
-> +
-> +		/* Setup 3 sec alarm - plenty of time */
-> +		if (signal(SIGALRM, handle_alarm) == SIG_ERR)
-> +			ksft_exit_fail_msg("%s - signal failed\n",
-> +					strerror(errno));
-> +		alarm(3);
-> +
-> +		/* Send SIGKILL to the child */
-> +		if (sys_pidfd_send_signal(pidfd, SIGKILL, NULL, 0))
-> +			ksft_exit_fail_msg("%s - pidfd_send_signal failed\n",
-> +					strerror(errno));
-> +
-> +		/* Wait for the death notification */
-> +		fds.fd = pidfd;
-> +		nevents = poll(&fds, 1, -1);
-> +
-> +		/* Check for error conditions */
-> +		if (nevents < 0)
-> +			ksft_exit_fail_msg("%s - poll failed\n",
-> +					strerror(errno));
-> +
-> +		if (nevents != 1)
-> +			ksft_exit_fail_msg("unexpected poll result: %d\n",
-> +					nevents);
-> +
-> +		if (!(fds.revents & POLLIN))
-> +			ksft_exit_fail_msg(
-> +				"unexpected event type received: 0x%x\n",
-> +				fds.revents);
-> +
-> +		if (timeout)
-> +			ksft_exit_fail_msg(
-> +				"death notification wait timeout\n");
-> +
-> +		close(pidfd);
-> +	}
-> +
-> +	ksft_test_result_pass("pidfd poll test: pass\n");
-> +	return ksft_exit_pass();
-> +}
-> -- 
-> 2.22.0.709.g102302147b-goog
-> 
+> On Wed, Jul 24, 2019 at 5:22 PM Suren Baghdasaryan <surenb@google.com> wrote:
+> >
+> > Move definitions and functions used across different pidfd tests into
+> > pidfd.h header.
+> >
+> > Signed-off-by: Suren Baghdasaryan <surenb@google.com>
+> > ---
+> >  tools/testing/selftests/pidfd/pidfd.h          | 18 ++++++++++++++++++
+> >  .../testing/selftests/pidfd/pidfd_open_test.c  |  5 -----
+> >  tools/testing/selftests/pidfd/pidfd_test.c     | 10 ----------
+> >  3 files changed, 18 insertions(+), 15 deletions(-)
+> >
+> > diff --git a/tools/testing/selftests/pidfd/pidfd.h b/tools/testing/selftests/pidfd/pidfd.h
+> > index 8452e910463f..db4377af6be7 100644
+> > --- a/tools/testing/selftests/pidfd/pidfd.h
+> > +++ b/tools/testing/selftests/pidfd/pidfd.h
+> > @@ -16,6 +16,14 @@
+> >
+> >  #include "../kselftest.h"
+> >
+> > +#ifndef __NR_pidfd_open
+> > +#define __NR_pidfd_open -1
+> > +#endif
+> > +
+> > +#ifndef __NR_pidfd_send_signal
+> > +#define __NR_pidfd_send_signal -1
+> > +#endif
+> > +
+> >  /*
+> >   * The kernel reserves 300 pids via RESERVED_PIDS in kernel/pid.c
+> >   * That means, when it wraps around any pid < 300 will be skipped.
+> > @@ -53,5 +61,15 @@ int wait_for_pid(pid_t pid)
+> >         return WEXITSTATUS(status);
+> >  }
+> >
+> > +static inline int sys_pidfd_open(pid_t pid, unsigned int flags)
+> > +{
+> > +       return syscall(__NR_pidfd_open, pid, flags);
+> > +}
+> > +
+> > +static inline int sys_pidfd_send_signal(int pidfd, int sig, siginfo_t *info,
+> > +                                       unsigned int flags)
+> > +{
+> > +       return syscall(__NR_pidfd_send_signal, pidfd, sig, info, flags);
+> > +}
+> >
+> >  #endif /* __PIDFD_H */
+> > diff --git a/tools/testing/selftests/pidfd/pidfd_open_test.c b/tools/testing/selftests/pidfd/pidfd_open_test.c
+> > index 0377133dd6dc..b9fe75fc3e51 100644
+> > --- a/tools/testing/selftests/pidfd/pidfd_open_test.c
+> > +++ b/tools/testing/selftests/pidfd/pidfd_open_test.c
+> > @@ -22,11 +22,6 @@
+> >  #include "pidfd.h"
+> >  #include "../kselftest.h"
+> >
+> > -static inline int sys_pidfd_open(pid_t pid, unsigned int flags)
+> > -{
+> > -       return syscall(__NR_pidfd_open, pid, flags);
+> > -}
+> > -
+> >  static int safe_int(const char *numstr, int *converted)
+> >  {
+> >         char *err = NULL;
+> > diff --git a/tools/testing/selftests/pidfd/pidfd_test.c b/tools/testing/selftests/pidfd/pidfd_test.c
+> > index 7eaa8a3de262..17b2fd621726 100644
+> > --- a/tools/testing/selftests/pidfd/pidfd_test.c
+> > +++ b/tools/testing/selftests/pidfd/pidfd_test.c
+> > @@ -21,10 +21,6 @@
+> >  #include "pidfd.h"
+> >  #include "../kselftest.h"
+> >
+> > -#ifndef __NR_pidfd_send_signal
+> > -#define __NR_pidfd_send_signal -1
+> > -#endif
+> > -
+> >  #define str(s) _str(s)
+> >  #define _str(s) #s
+> >  #define CHILD_THREAD_MIN_WAIT 3 /* seconds */
+> > @@ -47,12 +43,6 @@ static pid_t pidfd_clone(int flags, int *pidfd, int (*fn)(void *))
+> >  #endif
+> >  }
+> >
+> > -static inline int sys_pidfd_send_signal(int pidfd, int sig, siginfo_t *info,
+> > -                                       unsigned int flags)
+> > -{
+> > -       return syscall(__NR_pidfd_send_signal, pidfd, sig, info, flags);
+> > -}
+> > -
+> >  static int signal_received;
+> >
+> >  static void set_signal_received_on_sigusr1(int sig)
+> > --
+> > 2.22.0.709.g102302147b-goog
+> >
