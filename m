@@ -2,238 +2,129 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 423C275961
-	for <lists+linux-kselftest@lfdr.de>; Thu, 25 Jul 2019 23:14:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D90EC75E3D
+	for <lists+linux-kselftest@lfdr.de>; Fri, 26 Jul 2019 07:15:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726416AbfGYVOd (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 25 Jul 2019 17:14:33 -0400
-Received: from ou.quest-ce.net ([195.154.187.82]:59803 "EHLO ou.quest-ce.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726380AbfGYVOd (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 25 Jul 2019 17:14:33 -0400
-Received: from [2a01:e35:39f2:1220:9dd7:c176:119b:4c9d] (helo=opteyam2)
-        by ou.quest-ce.net with esmtpsa (TLS1.1:RSA_AES_256_CBC_SHA1:256)
-        (Exim 4.80)
-        (envelope-from <ydroneaud@opteya.com>)
-        id 1hql3w-0004Wf-OP; Thu, 25 Jul 2019 23:14:09 +0200
-Message-ID: <162f478fd918636008effc3f3ca869b4865e5d78.camel@opteya.com>
-From:   Yann Droneaud <ydroneaud@opteya.com>
-To:     Suren Baghdasaryan <surenb@google.com>
-Cc:     Christian Brauner <christian@brauner.io>, arnd@arndb.de,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Kees Cook <keescook@chromium.org>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Daniel Colascione <dancol@google.com>, tglx@linutronix.de,
-        Jann Horn <jannh@google.com>, dhowells@redhat.com,
-        mtk.manpages@gmail.com, luto@kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Oleg Nesterov <oleg@redhat.com>, cyphar@cyphar.com,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        viro@zeniv.linux.org.uk, linux-api@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        kernel-team <kernel-team@android.com>
-Date:   Thu, 25 Jul 2019 23:14:08 +0200
-In-Reply-To: <CAJuCfpG6+9Ly8YRn+vK=SPTKZt32ivL=AA==Vn_M_rrgxZKGZQ@mail.gmail.com>
-References: <20190725002204.185225-1-surenb@google.com>
-         <20190725002204.185225-2-surenb@google.com>
-         <57a23124f9e4d7ac5fb3145e990810dc2d190f72.camel@opteya.com>
-         <CAJuCfpFvL1WjpCv74T23x1fgSok8FK=a-dMgcrSCVnu-masY8A@mail.gmail.com>
-         <bdd5475f06763b8c3050b3b87471c5f6ce2e9168.camel@opteya.com>
-         <CAJuCfpG6+9Ly8YRn+vK=SPTKZt32ivL=AA==Vn_M_rrgxZKGZQ@mail.gmail.com>
-Organization: OPTEYA
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.32.4 (3.32.4-1.fc30) 
+        id S1725899AbfGZFPo (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 26 Jul 2019 01:15:44 -0400
+Received: from mail-eopbgr790122.outbound.protection.outlook.com ([40.107.79.122]:37888
+        "EHLO NAM03-CO1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725815AbfGZFPo (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 26 Jul 2019 01:15:44 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=RLu9y41WyrtHZX291E/lHBP56PPHQJAAq43ZJPANhZar9f1ysdVJcdL/gAgCcp4BSsOXjCJpgxOjblmz0YZqzu9ckfMidGXOeXfJYYTq1Y6x9xsKMMJFv2S0DcQ9x+4D+bo5Y6DUzJhMToEZ2zDIk3DYWYCq3/nZrONmUzjrE7wAdBSkyoG26BbNgWmRP9ST6l3uEAPKX3E3Vxa0ZDh5dq+2qunbBP8dwdVxovrIGBq+9/aII9q8Ut9bJG/NGNAL8jGYKBWzF6fGt2+1gp6htoVPp8mpp7BojlKzfw4d2gJqP5Bjz+xnA8Jzl4GlwdUfHM6kzvRzCrVIgYCoDxkUWA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=AbfHS0Lpl+FEBr59jEJrBwRm/eISZeE50hRkaeS1KLw=;
+ b=K+M9O+/E2Gu5Z4aVUsJuo07JQnHZx/tZkVQExQ9f85yjx+Pedgafl5JwZ5I30xZeT0bQextFWxAn3vRQ6UUNhnc2rxiC+cYcoGKcZRWj9LGyA59BWr9c339P5xLyecPi/8LdvaRWgjoUlhXBc7nj3d8TYDTj/xU5+ezPx93G8uIKU2e24eCFoixJ102ySYwDtBP0QyY5lcHtGyNgo4zvV3+krxNw1stvUp41/KFu1/y9ONSV0/z/SGANjDaVO3xIBnGYLtT62fjxD1DyRVob7kMWS9RuzNa2cOMut9k8loLnwmF9og98V8+n9r9aF8LUQSNGEmsLNfc0uWtWpOfe1g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1;spf=pass
+ smtp.mailfrom=wavecomp.com;dmarc=pass action=none
+ header.from=mips.com;dkim=pass header.d=mips.com;arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wavecomp.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=AbfHS0Lpl+FEBr59jEJrBwRm/eISZeE50hRkaeS1KLw=;
+ b=YoLng8gtCzX+3xUkNBUa2Q8fv9ntilSv3qQa3/GF1StjZBRPP1vOmRQYq7IOSSdeYXCBAklDLTsAVGtX5l9YnPjY/VtJtG/WGQwIf6yC4lLxKPX8rfkyNnjaN1n/UhnezLaIXrHOXebhmQdHyiJF6N0SiG9maAf+D3XpaM5b7dU=
+Received: from MWHPR2201MB1277.namprd22.prod.outlook.com (10.172.60.12) by
+ MWHPR2201MB1501.namprd22.prod.outlook.com (10.174.170.150) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2115.10; Fri, 26 Jul 2019 05:15:36 +0000
+Received: from MWHPR2201MB1277.namprd22.prod.outlook.com
+ ([fe80::49d3:37f8:217:c83]) by MWHPR2201MB1277.namprd22.prod.outlook.com
+ ([fe80::49d3:37f8:217:c83%6]) with mapi id 15.20.2094.017; Fri, 26 Jul 2019
+ 05:15:36 +0000
+From:   Paul Burton <paul.burton@mips.com>
+To:     Vincenzo Frascino <vincenzo.frascino@arm.com>
+CC:     "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will.deacon@arm.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Russell King <linux@armlinux.org.uk>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Paul Burton <pburton@wavecomp.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Mark Salyzyn <salyzyn@android.com>,
+        Peter Collingbourne <pcc@google.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Dmitry Safonov <0x7f454c46@gmail.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Huw Davies <huw@codeweavers.com>,
+        Shijith Thotton <sthotton@marvell.com>,
+        Andre Przywara <andre.przywara@arm.com>,
+        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>
+Subject: Re: [PATCH v7 19/25] mips: Add support for generic vDSO
+Thread-Topic: [PATCH v7 19/25] mips: Add support for generic vDSO
+Thread-Index: AQHVKBdBT62A9PHS5kqstEWJZIpgrqbckh8A
+Date:   Fri, 26 Jul 2019 05:15:35 +0000
+Message-ID: <MWHPR2201MB1277C33D971A9C8945812CFCC1C00@MWHPR2201MB1277.namprd22.prod.outlook.com>
+References: <20190621095252.32307-20-vincenzo.frascino@arm.com>
+In-Reply-To: <20190621095252.32307-20-vincenzo.frascino@arm.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-clientproxiedby: BYAPR07CA0020.namprd07.prod.outlook.com
+ (2603:10b6:a02:bc::33) To MWHPR2201MB1277.namprd22.prod.outlook.com
+ (2603:10b6:301:18::12)
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=pburton@wavecomp.com; 
+x-ms-exchange-messagesentrepresentingtype: 1
+x-originating-ip: [2601:646:8a00:9810:5cfa:8da3:1021:be72]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: eefa4eab-75d8-4b8c-bd7a-08d711884a41
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(2017052603328)(7193020);SRVR:MWHPR2201MB1501;
+x-ms-traffictypediagnostic: MWHPR2201MB1501:
+x-microsoft-antispam-prvs: <MWHPR2201MB1501BC9787485B9263612973C1C00@MWHPR2201MB1501.namprd22.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:8273;
+x-forefront-prvs: 01106E96F6
+x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(346002)(376002)(396003)(136003)(39850400004)(366004)(189003)(199004)(66946007)(446003)(14454004)(66476007)(66556008)(64756008)(66446008)(74316002)(9686003)(68736007)(55016002)(7416002)(478600001)(99286004)(6916009)(4744005)(25786009)(316002)(5660300002)(6246003)(71190400001)(71200400001)(4326008)(6116002)(53936002)(476003)(8676002)(44832011)(11346002)(81156014)(81166006)(54906003)(486006)(7736002)(8936002)(2906002)(6506007)(256004)(6436002)(229853002)(305945005)(102836004)(186003)(386003)(52536014)(42882007)(46003)(33656002)(52116002)(7696005)(76176011)(41533002);DIR:OUT;SFP:1102;SCL:1;SRVR:MWHPR2201MB1501;H:MWHPR2201MB1277.namprd22.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+received-spf: None (protection.outlook.com: wavecomp.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: p7WzZhWK0m+oI/PbWDH1Kk4p+6DgFHYBhhiaZ8Tm4+z5Klb1oa0KJZiCAIq1ELD4vaRObLFe5YmbYTojMYhGNI4MCE7QGjXoYmJFJIj2xA3p9FmI/WciWsIlo/E93iWSdpjzo5SvgUylnAe+H4Uq2egV6cfohZvROrcR6piJrWYfxFfJm0QMhDkON/WWuf0+mH5AO3ic3rjJAkwkLtFRac/jGsneh9MdkDeGHHAceo17Rx5qDYLU2SJn5ok/5gzCHVtpFRawvlFgVe+j1HVr2a7CpEMEIHgPIp3YBUA8sPB5whkbMElxdDSPnqF7WF09roI/ho0f6UAAX2hyvx/4Wu02fyiYHZ7SLlZ2LgFnUap8bwXMVFBBtbsr+M4yjRzMb2IlWmTwtKXGvZbov3KemHtaGK+w9DzGqja/NdYtjD0=
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a01:e35:39f2:1220:9dd7:c176:119b:4c9d
-X-SA-Exim-Mail-From: ydroneaud@opteya.com
-X-Spam-Checker-Version: SpamAssassin 3.3.2 (2011-06-06) on ou.quest-ce.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=5.0 tests=ALL_TRUSTED,BAYES_00,
-        URIBL_BLOCKED autolearn=ham version=3.3.2
-Subject: Re: [PATCH v2 2/2] tests: add pidfd poll tests
-X-SA-Exim-Version: 4.2.1 (built Mon, 26 Dec 2011 16:24:06 +0000)
-X-SA-Exim-Scanned: Yes (on ou.quest-ce.net)
+X-OriginatorOrg: mips.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: eefa4eab-75d8-4b8c-bd7a-08d711884a41
+X-MS-Exchange-CrossTenant-originalarrivaltime: 26 Jul 2019 05:15:35.8674
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 463607d3-1db3-40a0-8a29-970c56230104
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: pburton@wavecomp.com
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR2201MB1501
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi,
+Hello,
 
-Le jeudi 25 juillet 2019 à 14:10 -0700, Suren Baghdasaryan a écrit :
-> On Thu, Jul 25, 2019 at 1:57 PM Yann Droneaud <ydroneaud@opteya.com> wrote:
-> > Le jeudi 25 juillet 2019 à 08:48 -0700, Suren Baghdasaryan a écrit :
-> > > On Thu, Jul 25, 2019 at 4:58 AM Yann Droneaud <ydroneaud@opteya.com> wrote:
-> > > > Le mercredi 24 juillet 2019 à 17:22 -0700, Suren Baghdasaryan a écrit :
-> > > > > This adds testing for polling on pidfd of a process being killed. Test runs
-> > > > > 10000 iterations by default to stress test pidfd polling functionality.
-> > > > > It accepts an optional command-line parameter to override the number or
-> > > > > iterations to run.
-> > > > > Specifically, it tests for:
-> > > > > - pidfd_open on a child process succeeds
-> > > > > - pidfd_send_signal on a child process succeeds
-> > > > > - polling on pidfd succeeds and returns exactly one event
-> > > > > - returned event is POLLIN
-> > > > > - event is received within 3 secs of the process being killed
-> > > > > 
-> > > > > 10000 iterations was chosen because of the race condition being tested
-> > > > > which is not consistently reproducible but usually is revealed after less
-> > > > > than 2000 iterations.
-> > > > > Reveals race fixed by commit b191d6491be6 ("pidfd: fix a poll race when setting exit_state")
-> > > > > 
-> > > > > Signed-off-by: Suren Baghdasaryan <surenb@google.com>
-> > > > > ---
-> > > > >  tools/testing/selftests/pidfd/.gitignore      |   1 +
-> > > > >  tools/testing/selftests/pidfd/Makefile        |   2 +-
-> > > > >  .../testing/selftests/pidfd/pidfd_poll_test.c | 112 ++++++++++++++++++
-> > > > >  3 files changed, 114 insertions(+), 1 deletion(-)
-> > > > >  create mode 100644 tools/testing/selftests/pidfd/pidfd_poll_test.c
+Vincenzo Frascino wrote:
+> The mips vDSO library requires some adaptations to take advantage of the
+> newly introduced generic vDSO library.
+>=20
+> Introduce the following changes:
+> - Modification of vdso.c to be compliant with the common vdso datapage
+> - Use of lib/vdso for gettimeofday
+>=20
+> Cc: Ralf Baechle <ralf@linux-mips.org>
+> Cc: Paul Burton <paul.burton@mips.com>
+> Signed-off-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
 
-[...]
+Applied to mips-next.
 
-> > > > > diff --git a/tools/testing/selftests/pidfd/pidfd_poll_test.c b/tools/testing/selftests/pidfd/pidfd_poll_test.c
-> > > > > new file mode 100644
-> > > > > index 000000000000..d45c612a0fe5
-> > > > > --- /dev/null
-> > > > > +++ b/tools/testing/selftests/pidfd/pidfd_poll_test.c
-> > > > > @@ -0,0 +1,112 @@
-> > > > > +// SPDX-License-Identifier: GPL-2.0
-> > > > > +
-> > > > > +#define _GNU_SOURCE
-> > > > > +#include <errno.h>
-> > > > > +#include <linux/types.h>
-> > > > > +#include <linux/wait.h>
-> > > > > +#include <poll.h>
-> > > > > +#include <signal.h>
-> > > > > +#include <stdbool.h>
-> > > > > +#include <stdio.h>
-> > > > > +#include <stdlib.h>
-> > > > > +#include <string.h>
-> > > > > +#include <syscall.h>
-> > > > > +#include <sys/wait.h>
-> > > > > +#include <unistd.h>
-> > > > > +
-> > > > > +#include "pidfd.h"
-> > > > > +#include "../kselftest.h"
-> > > > > +
-> > > > > +static bool timeout;
-> > > > > +
-> > > > > +static void handle_alarm(int sig)
-> > > > > +{
-> > > > > +     timeout = true;
-> > > > > +}
-> > > > > +
-> > > > > +int main(int argc, char **argv)
-> > > > > +{
-> > > > > +     struct pollfd fds;
-> > > > > +     int iter, nevents;
-> > > > > +     int nr_iterations = 10000;
-> > > > > +
-> > > > > +     fds.events = POLLIN;
-> > > > > +
-> > > > > +     if (argc > 2)
-> > > > > +             ksft_exit_fail_msg("Unexpected command line argument\n");
-> > > > > +
-> > > > > +     if (argc == 2) {
-> > > > > +             nr_iterations = atoi(argv[1]);
-> > > > > +             if (nr_iterations <= 0)
-> > > > > +                     ksft_exit_fail_msg("invalid input parameter %s\n",
-> > > > > +                                     argv[1]);
-> > > > > +     }
-> > > > > +
-> > > > > +     ksft_print_msg("running pidfd poll test for %d iterations\n",
-> > > > > +             nr_iterations);
-> > > > > +
-> > > > > +     for (iter = 0; iter < nr_iterations; iter++) {
-> > > > > +             int pidfd;
-> > > > > +             int child_pid = fork();
-> > > > > +
-> > > > > +             if (child_pid < 0) {
-> > > > > +                     if (errno == EAGAIN) {
-> > > > > +                             iter--;
-> > > > > +                             continue;
-> > > > > +                     }
-> > > > > +                     ksft_exit_fail_msg(
-> > > > > +                             "%s - failed to fork a child process\n",
-> > > > > +                             strerror(errno));
-> > > > > +             }
-> > > > > +
-> > > > > +             if (!child_pid) {
-> > > > > +                     /* Child process just sleeps for a min and exits */
-> > > > > +                     sleep(60);
-> > > > > +                     exit(EXIT_SUCCESS);
-> > > > > +             }
-> > > > > +
-> > > > > +             /* Parent kills the child and waits for its death */
-> > > > > +             pidfd = sys_pidfd_open(child_pid, 0);
-> > > > > +             if (pidfd < 0)
-> > > > > +                     ksft_exit_fail_msg("%s - pidfd_open failed\n",
-> > > > > +                                     strerror(errno));
-> > > > > +
-> > > > > +             /* Setup 3 sec alarm - plenty of time */
-> > > > > +             if (signal(SIGALRM, handle_alarm) == SIG_ERR)
-> > > > > +                     ksft_exit_fail_msg("%s - signal failed\n",
-> > > > > +                                     strerror(errno));
-> > > > > +             alarm(3);
-> > > > > +
-> > > > > +             /* Send SIGKILL to the child */
-> > > > > +             if (sys_pidfd_send_signal(pidfd, SIGKILL, NULL, 0))
-> > > > > +                     ksft_exit_fail_msg("%s - pidfd_send_signal failed\n",
-> > > > > +                                     strerror(errno));
-> > > > > +
-> > > > > +             /* Wait for the death notification */
-> > > > > +             fds.fd = pidfd;
-> > > > > +             nevents = poll(&fds, 1, -1);
-> > > > > +
-> > > > > +             /* Check for error conditions */
-> > > > > +             if (nevents < 0)
-> > > > > +                     ksft_exit_fail_msg("%s - poll failed\n",
-> > > > > +                                     strerror(errno));
-> > > > > +
-> > > > > +             if (nevents != 1)
-> > > > > +                     ksft_exit_fail_msg("unexpected poll result: %d\n",
-> > > > > +                                     nevents);
-> > > > > +
-> > > > > +             if (!(fds.revents & POLLIN))
-> > > > > +                     ksft_exit_fail_msg(
-> > > > > +                             "unexpected event type received: 0x%x\n",
-> > > > > +                             fds.revents);
-> > > > > +
-> > > > > +             if (timeout)
-> > > > > +                     ksft_exit_fail_msg(
-> > > > > +                             "death notification wait timeout\n");
-> > > > > +
-> > > > > +             close(pidfd);
-> > > > 
-> > > > There's no call to wait(), or alike function. Is it required for the
-> > > > test to left zombies ?
-> > > 
-> > > The test checks that death notification gets sent from kernel, which
-> > > by design should happen for any process that has non-zero
-> > > task->exit_state and that includes zombies (see
-> > > https://elixir.bootlin.com/linux/v5.3-rc1/source/kernel/fork.c#L1731
-> > > for that condition). So IIUC this code, the poll() should succeed no
-> > > matter if the task is zombie or dead. Or do I misunderstand your
-> > > question?
-> > 
-> > OK, so I think it would be better to call wait() (in the future
-> > pidfd_wait()) to reap processes as they die.
-> > 
-> > I'm not afraid by one zombie, but herding an army of 10000 zombie
-> > processes is another matter :)
-> 
-> Ah, I see what you mean now. I can respin this patch with a
-> wait(child_pid, NULL, 0) after close(pidfd) call. Would that address
-> your concern?
-> 
+Thanks,
+    Paul
 
-Yes, thanks !
-
-Regards.
-
--- 
-Yann Droneaud
-OPTEYA
-
-
+[ This message was auto-generated; if you believe anything is incorrect
+  then please email paul.burton@mips.com to report it. ]
