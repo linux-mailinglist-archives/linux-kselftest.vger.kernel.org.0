@@ -2,142 +2,97 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CAC076F1B
-	for <lists+linux-kselftest@lfdr.de>; Fri, 26 Jul 2019 18:30:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DF3276F7B
+	for <lists+linux-kselftest@lfdr.de>; Fri, 26 Jul 2019 19:07:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728898AbfGZQaH (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 26 Jul 2019 12:30:07 -0400
-Received: from foss.arm.com ([217.140.110.172]:47142 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727514AbfGZQaH (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 26 Jul 2019 12:30:07 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3CB9D15A2;
-        Fri, 26 Jul 2019 09:30:06 -0700 (PDT)
-Received: from e119884-lin.cambridge.arm.com (e119884-lin.cambridge.arm.com [10.1.196.72])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8C6543F71F;
-        Fri, 26 Jul 2019 09:30:03 -0700 (PDT)
-From:   Vincenzo Frascino <vincenzo.frascino@arm.com>
-To:     linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Cc:     catalin.marinas@arm.com, will.deacon@arm.com, arnd@arndb.de,
-        linux@armlinux.org.uk, ralf@linux-mips.org, paul.burton@mips.com,
-        daniel.lezcano@linaro.org, tglx@linutronix.de, salyzyn@android.com,
-        pcc@google.com, shuah@kernel.org, 0x7f454c46@gmail.com,
-        linux@rasmusvillemoes.dk, huw@codeweavers.com,
-        sthotton@marvell.com, andre.przywara@arm.com, luto@kernel.org
-Subject: [PATCH 2/2] mips: vdso: Fix flip/flop vdso building bug
-Date:   Fri, 26 Jul 2019 17:29:44 +0100
-Message-Id: <20190726162944.12149-3-vincenzo.frascino@arm.com>
-X-Mailer: git-send-email 2.22.0
-In-Reply-To: <20190726162944.12149-1-vincenzo.frascino@arm.com>
-References: <MWHPR2201MB1277C33D971A9C8945812CFCC1C00@MWHPR2201MB1277.namprd22.prod.outlook.com>
- <20190726162944.12149-1-vincenzo.frascino@arm.com>
+        id S1728176AbfGZRHc (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 26 Jul 2019 13:07:32 -0400
+Received: from mail-pf1-f196.google.com ([209.85.210.196]:36139 "EHLO
+        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728117AbfGZRHc (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 26 Jul 2019 13:07:32 -0400
+Received: by mail-pf1-f196.google.com with SMTP id r7so24810300pfl.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 26 Jul 2019 10:07:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=joelfernandes.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=bS9fLvgPfVAg2OSCXOIsqMJpT25qiH0bC1jmAoaZ02w=;
+        b=NCCJAR+Za7x3HaI8H5CFemHhLHGi3ev3MyV5WZl6zAmaxI8OUei868E/4fIbbi8NYf
+         JVsMGzQbOfELxLHWUyNslJINjJvSI23zCdoPTHtmWiwKPX8rmLbwreOy023i8Uerom1w
+         pHcYS8RdoXLSF16XXrQIP91pHB3W5r3YHZh9Y=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=bS9fLvgPfVAg2OSCXOIsqMJpT25qiH0bC1jmAoaZ02w=;
+        b=cMLKypqRtNZ3ZuIwvKfIi9xx3X6bsVLtQ140FCqlDEHYlo/YmdUDmd1FHhSIj0nbBH
+         /jnIfuvV9J66fyV5kFMm6v3XBpgVt04um73aM2+xm4a5MAsPO/BIgO0aSIdufq0rj23T
+         XrZte/7OcQU8Zxlx1f5gr2NSaqyfYGWVr1ApsFWrVxlAcEcMydEVu0obVLfno/cTgnkn
+         nazNgQSeuHE8oPay0N7MXe1mw9be3gK26V8c0Gt9an403k3D/5Mvo8PYLAyvQX+YYUCd
+         H+mVncKX2IqGtnlJ8hgOhUH9FG1akfv1ZW/2SBX2vMyrjT80cXI7X2QPavDelg9KxdDo
+         PhUg==
+X-Gm-Message-State: APjAAAWVCDvnbXOzuxcyf13IJPcT9kJYvcddhBSI2wVElC+jxy1A7YC7
+        vOvVue1P8g/AVFoyEBWAMsE=
+X-Google-Smtp-Source: APXvYqx+mjnUeYOhiUHp2OSWra7c9gbT97jFl03WbbuCc21u9SPLAOw/T91dX4uBmrKfQ4lkwCj2og==
+X-Received: by 2002:a17:90a:3225:: with SMTP id k34mr97679092pjb.31.1564160851038;
+        Fri, 26 Jul 2019 10:07:31 -0700 (PDT)
+Received: from localhost ([2620:15c:6:12:9c46:e0da:efbf:69cc])
+        by smtp.gmail.com with ESMTPSA id c130sm51664784pfc.184.2019.07.26.10.07.29
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Fri, 26 Jul 2019 10:07:30 -0700 (PDT)
+Date:   Fri, 26 Jul 2019 13:07:28 -0400
+From:   Joel Fernandes <joel@joelfernandes.org>
+To:     Suren Baghdasaryan <surenb@google.com>
+Cc:     christian@brauner.io, arnd@arndb.de, ebiederm@xmission.com,
+        keescook@chromium.org, dancol@google.com, tglx@linutronix.de,
+        jannh@google.com, dhowells@redhat.com, mtk.manpages@gmail.com,
+        luto@kernel.org, akpm@linux-foundation.org, oleg@redhat.com,
+        cyphar@cyphar.com, torvalds@linux-foundation.org,
+        viro@zeniv.linux.org.uk, linux-api@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, kernel-team@android.com
+Subject: Re: [PATCH v3 2/2] tests: add pidfd poll tests
+Message-ID: <20190726170728.GA157922@google.com>
+References: <20190726162226.252750-1-surenb@google.com>
+ <20190726162226.252750-2-surenb@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190726162226.252750-2-surenb@google.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Running "make" on an already compiled kernel tree will rebuild the
-vdso library even if this has not been modified.
+On Fri, Jul 26, 2019 at 09:22:26AM -0700, Suren Baghdasaryan wrote:
+> This adds testing for polling on pidfd of a process being killed. Test runs
+> 10000 iterations by default to stress test pidfd polling functionality.
+> It accepts an optional command-line parameter to override the number or
+> iterations to run.
+> Specifically, it tests for:
+> - pidfd_open on a child process succeeds
+> - pidfd_send_signal on a child process succeeds
+> - polling on pidfd succeeds and returns exactly one event
+> - returned event is POLLIN
+> - event is received within 3 secs of the process being killed
+> 
+> 10000 iterations was chosen because of the race condition being tested
+> which is not consistently reproducible but usually is revealed after less
+> than 2000 iterations.
+> Reveals race fixed by commit b191d6491be6 ("pidfd: fix a poll race when setting exit_state")
+> 
+> Signed-off-by: Suren Baghdasaryan <surenb@google.com>
+> ---
 
-$ make
-  GEN     Makefile
-  Using linux as source for kernel
-  CALL   linux/scripts/atomic/check-atomics.sh
-  CALL   linux/scripts/checksyscalls.sh
-<stdin>:1511:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-  CHK     include/generated/compile.h
-  VDSO    arch/mips/vdso/vdso.so.dbg.raw
-  OBJCOPY arch/mips/vdso/vdso.so.raw
-  GENVDSO arch/mips/vdso/vdso-image.c
-  CC      arch/mips/vdso/vdso-image.o
-  AR      arch/mips/vdso/built-in.a
-  AR      arch/mips/built-in.a
-  CHK     include/generated/autoksyms.h
-  GEN     .version
-  CHK     include/generated/compile.h
-  UPD     include/generated/compile.h
-  CC      init/version.o
-  AR      init/built-in.a
-  LD      vmlinux.o
-  MODPOST vmlinux.o
-  MODINFO modules.builtin.modinfo
-  KSYM    .tmp_kallsyms1.o
-  KSYM    .tmp_kallsyms2.o
-  LD      vmlinux
-  SORTEX  vmlinux
-  SYSMAP  System.map
-  Building modules, stage 2.
-  ITS     arch/mips/boot/vmlinux.gz.its
-  OBJCOPY arch/mips/boot/vmlinux.bin
-  MODPOST 7 modules
-  GZIP    arch/mips/boot/vmlinux.bin.gz
-  ITB     arch/mips/boot/vmlinux.gz.itb
+> +		close(pidfd);
+> +		// Wait for child to prevent zombies
 
-The issue is generated by the fact that "if_changed" is called twice
-in a single target.
+Comment style should be /* */, but I think Christian would be kind enough to
+fix that when he applies the patch so shouldn't need a resend.
 
-Fix the build bug merging the two commands into a single function.
+Thanks Suren and Christian!
 
-Signed-off-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
----
- arch/mips/vdso/Makefile | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
-
-diff --git a/arch/mips/vdso/Makefile b/arch/mips/vdso/Makefile
-index 6b482ac52e61..69cfa0a5339e 100644
---- a/arch/mips/vdso/Makefile
-+++ b/arch/mips/vdso/Makefile
-@@ -79,11 +79,14 @@ UBSAN_SANITIZE := n
- # Shared build commands.
- #
- 
-+quiet_cmd_vdsold_and_vdso_check = LD      $@
-+      cmd_vdsold_and_vdso_check = $(cmd_vdsold); $(cmd_vdso_check)
-+
- quiet_cmd_vdsold = VDSO    $@
-       cmd_vdsold = $(CC) $(c_flags) $(VDSO_LDFLAGS) \
-                    -Wl,-T $(filter %.lds,$^) $(filter %.o,$^) -o $@
- 
--quiet_cmd_vdsoas_o_S = AS       $@
-+quiet_cmd_vdsoas_o_S = AS      $@
-       cmd_vdsoas_o_S = $(CC) $(a_flags) -c -o $@ $<
- 
- # Strip rule for the raw .so files
-@@ -119,8 +122,7 @@ $(obj-vdso): KBUILD_AFLAGS := $(aflags-vdso) $(native-abi)
- $(obj)/vdso.lds: KBUILD_CPPFLAGS := $(ccflags-vdso) $(native-abi)
- 
- $(obj)/vdso.so.dbg.raw: $(obj)/vdso.lds $(obj-vdso) FORCE
--	$(call if_changed,vdsold)
--	$(call if_changed,vdso_check)
-+	$(call if_changed,vdsold_and_vdso_check)
- 
- $(obj)/vdso-image.c: $(obj)/vdso.so.dbg.raw $(obj)/vdso.so.raw \
-                      $(obj)/genvdso FORCE
-@@ -158,8 +160,7 @@ $(obj)/vdso-o32.lds: $(src)/vdso.lds.S FORCE
- 	$(call if_changed_dep,cpp_lds_S)
- 
- $(obj)/vdso-o32.so.dbg.raw: $(obj)/vdso-o32.lds $(obj-vdso-o32) FORCE
--	$(call if_changed,vdsold)
--	$(call if_changed,vdso_check)
-+	$(call if_changed,vdsold_and_vdso_check)
- 
- $(obj)/vdso-o32-image.c: VDSO_NAME := o32
- $(obj)/vdso-o32-image.c: $(obj)/vdso-o32.so.dbg.raw $(obj)/vdso-o32.so.raw \
-@@ -199,8 +200,7 @@ $(obj)/vdso-n32.lds: $(src)/vdso.lds.S FORCE
- 	$(call if_changed_dep,cpp_lds_S)
- 
- $(obj)/vdso-n32.so.dbg.raw: $(obj)/vdso-n32.lds $(obj-vdso-n32) FORCE
--	$(call if_changed,vdsold)
--	$(call if_changed,vdso_check)
-+	$(call if_changed,vdsold_and_vdso_check)
- 
- $(obj)/vdso-n32-image.c: VDSO_NAME := n32
- $(obj)/vdso-n32-image.c: $(obj)/vdso-n32.so.dbg.raw $(obj)/vdso-n32.so.raw \
--- 
-2.22.0
+Reviewed-by: Joel Fernandes (Google) <joel@joelfernandes.org>
 
