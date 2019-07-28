@@ -2,257 +2,279 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 26BFC77B06
-	for <lists+linux-kselftest@lfdr.de>; Sat, 27 Jul 2019 20:24:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03C5377C9E
+	for <lists+linux-kselftest@lfdr.de>; Sun, 28 Jul 2019 03:03:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388014AbfG0SYz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 27 Jul 2019 14:24:55 -0400
-Received: from ou.quest-ce.net ([195.154.187.82]:32826 "EHLO ou.quest-ce.net"
+        id S2387653AbfG1BDK (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 27 Jul 2019 21:03:10 -0400
+Received: from mx2.mailbox.org ([80.241.60.215]:47184 "EHLO mx2.mailbox.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2387945AbfG0SYy (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 27 Jul 2019 14:24:54 -0400
-Received: from [37.170.35.169] (helo=opteyam2)
-        by ou.quest-ce.net with esmtpsa (TLS1.1:RSA_AES_256_CBC_SHA1:256)
-        (Exim 4.80)
-        (envelope-from <ydroneaud@opteya.com>)
-        id 1hrRMh-000A9w-T9; Sat, 27 Jul 2019 20:24:20 +0200
-Message-ID: <542deab5d3450adc004602b9b8bbb4e38824c35b.camel@opteya.com>
-From:   Yann Droneaud <ydroneaud@opteya.com>
-To:     Suren Baghdasaryan <surenb@google.com>
-Cc:     christian@brauner.io, arnd@arndb.de, ebiederm@xmission.com,
-        keescook@chromium.org, joel@joelfernandes.org, dancol@google.com,
-        tglx@linutronix.de, jannh@google.com, dhowells@redhat.com,
-        mtk.manpages@gmail.com, luto@kernel.org, akpm@linux-foundation.org,
-        oleg@redhat.com, cyphar@cyphar.com, torvalds@linux-foundation.org,
-        viro@zeniv.linux.org.uk, linux-api@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, kernel-team@android.com
-Date:   Sat, 27 Jul 2019 20:24:13 +0200
-In-Reply-To: <20190726162226.252750-2-surenb@google.com>
-References: <20190726162226.252750-1-surenb@google.com>
-         <20190726162226.252750-2-surenb@google.com>
-Organization: OPTEYA
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.32.4 (3.32.4-1.fc30) 
+        id S1726240AbfG1BDK (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Sat, 27 Jul 2019 21:03:10 -0400
+Received: from smtp2.mailbox.org (smtp2.mailbox.org [IPv6:2001:67c:2050:105:465:1:2:0])
+        (using TLSv1.2 with cipher ECDHE-RSA-CHACHA20-POLY1305 (256/256 bits))
+        (No client certificate requested)
+        by mx2.mailbox.org (Postfix) with ESMTPS id 48697A1C0F;
+        Sun, 28 Jul 2019 03:03:03 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at heinlein-support.de
+Received: from smtp2.mailbox.org ([80.241.60.241])
+        by spamfilter01.heinlein-hosting.de (spamfilter01.heinlein-hosting.de [80.241.56.115]) (amavisd-new, port 10030)
+        with ESMTP id k_ewpL23oLoK; Sun, 28 Jul 2019 03:02:53 +0200 (CEST)
+From:   Aleksa Sarai <cyphar@cyphar.com>
+To:     Al Viro <viro@zeniv.linux.org.uk>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J. Bruce Fields" <bfields@fieldses.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        David Howells <dhowells@redhat.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>
+Cc:     Aleksa Sarai <cyphar@cyphar.com>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Jann Horn <jannh@google.com>,
+        Christian Brauner <christian@brauner.io>,
+        David Drysdale <drysdale@google.com>,
+        Tycho Andersen <tycho@tycho.ws>,
+        Kees Cook <keescook@chromium.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        containers@lists.linux-foundation.org,
+        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Chanho Min <chanho.min@lge.com>,
+        Oleg Nesterov <oleg@redhat.com>, Aleksa Sarai <asarai@suse.de>,
+        linux-alpha@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        linux-xtensa@linux-xtensa.org, sparclinux@vger.kernel.org
+Subject: [PATCH v11 0/8] namei: openat2(2) path resolution restrictions
+Date:   Sun, 28 Jul 2019 11:01:59 +1000
+Message-Id: <20190728010207.9781-1-cyphar@cyphar.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 37.170.35.169
-X-SA-Exim-Mail-From: ydroneaud@opteya.com
-X-Spam-Checker-Version: SpamAssassin 3.3.2 (2011-06-06) on ou.quest-ce.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=5.0 tests=ALL_TRUSTED,BAYES_00,
-        URIBL_BLOCKED autolearn=ham version=3.3.2
-Subject: Re: [PATCH v3 2/2] tests: add pidfd poll tests
-X-SA-Exim-Version: 4.2.1 (built Mon, 26 Dec 2011 16:24:06 +0000)
-X-SA-Exim-Scanned: Yes (on ou.quest-ce.net)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi,
+This patch is being developed here (with snapshots of each series
+version being stashed in separate branches with names of the form
+"resolveat/vX-summary"):
+    <https://github.com/cyphar/linux/tree/resolveat/master>
 
-Le vendredi 26 juillet 2019 à 09:22 -0700, Suren Baghdasaryan a écrit :
-> This adds testing for polling on pidfd of a process being killed. Test runs
-> 10000 iterations by default to stress test pidfd polling functionality.
-> It accepts an optional command-line parameter to override the number or
-> iterations to run.
-> Specifically, it tests for:
-> - pidfd_open on a child process succeeds
-> - pidfd_send_signal on a child process succeeds
-> - polling on pidfd succeeds and returns exactly one event
-> - returned event is POLLIN
-> - event is received within 3 secs of the process being killed
-> 
-> 10000 iterations was chosen because of the race condition being tested
-> which is not consistently reproducible but usually is revealed after less
-> than 2000 iterations.
-> Reveals race fixed by commit b191d6491be6 ("pidfd: fix a poll race when setting exit_state")
-> 
-> Signed-off-by: Suren Baghdasaryan <surenb@google.com>
-> ---
->  tools/testing/selftests/pidfd/.gitignore      |   1 +
->  tools/testing/selftests/pidfd/Makefile        |   2 +-
->  .../testing/selftests/pidfd/pidfd_poll_test.c | 117 ++++++++++++++++++
->  3 files changed, 119 insertions(+), 1 deletion(-)
->  create mode 100644 tools/testing/selftests/pidfd/pidfd_poll_test.c
-> 
-> diff --git a/tools/testing/selftests/pidfd/.gitignore b/tools/testing/selftests/pidfd/.gitignore
-> index 16d84d117bc0..a67896347d34 100644
-> --- a/tools/testing/selftests/pidfd/.gitignore
-> +++ b/tools/testing/selftests/pidfd/.gitignore
-> @@ -1,2 +1,3 @@
->  pidfd_open_test
-> +pidfd_poll_test
->  pidfd_test
-> diff --git a/tools/testing/selftests/pidfd/Makefile b/tools/testing/selftests/pidfd/Makefile
-> index 720b2d884b3c..ed58b7108d18 100644
-> --- a/tools/testing/selftests/pidfd/Makefile
-> +++ b/tools/testing/selftests/pidfd/Makefile
-> @@ -1,7 +1,7 @@
->  # SPDX-License-Identifier: GPL-2.0-only
->  CFLAGS += -g -I../../../../usr/include/ -lpthread
->  
-> -TEST_GEN_PROGS := pidfd_test pidfd_open_test
-> +TEST_GEN_PROGS := pidfd_test pidfd_open_test pidfd_poll_test
->  
->  include ../lib.mk
->  
-> diff --git a/tools/testing/selftests/pidfd/pidfd_poll_test.c b/tools/testing/selftests/pidfd/pidfd_poll_test.c
-> new file mode 100644
-> index 000000000000..f1b62b91e53e
-> --- /dev/null
-> +++ b/tools/testing/selftests/pidfd/pidfd_poll_test.c
-> @@ -0,0 +1,117 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +
-> +#define _GNU_SOURCE
-> +#include <errno.h>
-> +#include <linux/types.h>
-> +#include <linux/wait.h>
-> +#include <poll.h>
-> +#include <signal.h>
-> +#include <stdbool.h>
-> +#include <stdio.h>
-> +#include <stdlib.h>
-> +#include <string.h>
-> +#include <syscall.h>
-> +#include <sys/wait.h>
-> +#include <unistd.h>
-> +
-> +#include "pidfd.h"
-> +#include "../kselftest.h"
-> +
-> +static bool timeout;
-> +
-> +static void handle_alarm(int sig)
-> +{
-> +	timeout = true;
-> +}
+Patch changelog:
+ v11:
+    * Fix checkpatch.pl errors and warnings where reasonable.
+    * Minor cleanup to pr_warn logging for may_open_magiclink().
+    * Drop kselftests patch to handle %m formatting correctly, and send
+      it through the kselftests tree directly. [Shuah Khan]
+ v10:
+    * Ensure that unlazy_walk() will fail if we are in a scoped walk and
+      the caller has zeroed nd->root (this happens in a few places, I'm
+      not sure why because unlazy_walk() does legitimize_path()
+      already). In this case we need to go through path_init() again to
+      reset it (otherwise we will have a breakout because set_root()
+      will breakout).
+      * Also add a WARN_ON (and return -ENOTRECOVERABLE) if
+        LOOKUP_IN_ROOT is set and we are in set_root() -- which should
+        never happen and will cause a breakout.
+    * Make changes suggested by Al Viro:
+      * Remove nd->{opath_mask,acc_mode} by moving all of the magic-link
+        permission logic be done after trailing_symlink() (with
+        trailing_magiclink()) only within path_openat().
+      * Introduce LOOKUP_MAGICLINK_JUMPED to be able to detect
+        magic-link jumps done with nd_jump_link() (so we don't end up
+        blocking other LOOKUP_JUMPED cases).
+      * Simplify all of the path_init() changes to make the code far
+        less confusing. dirfd_path_init() turns out to be un-necessary.
+    * Make openat2(2) also -EINVAL on unknown how->flags.
+      [Dmitry V. Levin]
+    * Clean up bad definitions of O_EMPTYPATH on architectures where O_*
+      flags are subtly different to <asm-generic/fcntl.h>.
+    * Switch away from passing a struct to build_open_flags() and
+      instead just copy the one field we need to temporarily modify
+      (how->flags). Also fix a bug in OPENHOW_MODE. [Rasmus Villemoes]
+    * Fix syscall linkages and switch to 437. [Arnd Bergmann]
+    * Clean up text in commit messages and the cover-letter.
+      [Rolf Eike Beer]
+    * Fix openat2 selftest makefile. [Michael Ellerman]
 
-Not needed if poll() timeout is used instead.
+The need for some sort of control over VFS's path resolution (to avoid
+malicious paths resulting in inadvertent breakouts) has been a very
+long-standing desire of many userspace applications. This patchset is a
+revival of Al Viro's old AT_NO_JUMPS[1,2] patchset (which was a variant
+of David Drysdale's O_BENEATH patchset[3] which was a spin-off of the
+Capsicum project[4]) with a few additions and changes made based on the
+previous discussion within [5] as well as others I felt were useful.
 
-> +
-> +int main(int argc, char **argv)
-> +{
-> +	struct pollfd fds;
-> +	int iter, nevents;
-> +	int nr_iterations = 10000;
-> +
-> +	fds.events = POLLIN;
-> +
-> +	if (argc > 2)
-> +		ksft_exit_fail_msg("Unexpected command line argument\n");
-> +
-> +	if (argc == 2) {
-> +		nr_iterations = atoi(argv[1]);
-> +		if (nr_iterations <= 0)
-> +			ksft_exit_fail_msg("invalid input parameter %s\n",
-> +					argv[1]);
-> +	}
-> +
-> +	ksft_print_msg("running pidfd poll test for %d iterations\n",
-> +		nr_iterations);
-> +
-> +	for (iter = 0; iter < nr_iterations; iter++) {
-> +		int pidfd;
-> +		int child_pid = fork();
-> +
-> +		if (child_pid < 0) {
-> +			if (errno == EAGAIN) {
-> +				iter--;
-> +				continue;
-> +			}
-> +			ksft_exit_fail_msg(
-> +				"%s - failed to fork a child process\n",
-> +				strerror(errno));
-> +		}
-> +
-> +		if (child_pid == 0) {
-> +			/* Child process just sleeps for a min and exits */
-> +			sleep(60);
+In line with the conclusions of the original discussion of AT_NO_JUMPS,
+the flag has been split up into separate flags. However, instead of
+being an openat(2) flag it is provided through a new syscall openat2(2)
+which provides several other improvements to the openat(2) interface (see the
+patch description for more details). The following new LOOKUP_* flags are
+added:
 
-Instead of relying on a timer for no reason, I would use the following:
+  * LOOKUP_NO_XDEV blocks all mountpoint crossings (upwards, downwards,
+    or through absolute links). Absolute pathnames alone in openat(2) do
+    not trigger this.
 
-	while (1)
-		pause();
+  * LOOKUP_NO_MAGICLINKS blocks resolution through /proc/$pid/fd-style
+    links. This is done by blocking the usage of nd_jump_link() during
+    resolution in a filesystem. The term "magic-links" is used to match
+    with the only reference to these links in Documentation/, but I'm
+    happy to change the name.
 
-> +			exit(EXIT_SUCCESS);
-> +		}
-> +
-> +		/* Parent kills the child and waits for its death */
-> +		pidfd = sys_pidfd_open(child_pid, 0);
-> +		if (pidfd < 0)
-> +			ksft_exit_fail_msg("%s - pidfd_open failed\n",
-> +					strerror(errno));
-> +
-> +		/* Setup 3 sec alarm - plenty of time */
-> +		if (signal(SIGALRM, handle_alarm) == SIG_ERR)
-> +			ksft_exit_fail_msg("%s - signal failed\n",
-> +					strerror(errno));
-> +		alarm(3);
-> +
+    It should be noted that this is different to the scope of
+    ~LOOKUP_FOLLOW in that it applies to all path components. However,
+    you can do openat2(NO_FOLLOW|NO_MAGICLINKS) on a magic-link and it
+    will *not* fail (assuming that no parent component was a
+    magic-link), and you will have an fd for the magic-link.
 
-Would the poll() timeout be more simpler to use than relying on
-SIGALRM: no need to setup signal, no need for handler, no need for
-timeout variable.
+  * LOOKUP_BENEATH disallows escapes to outside the starting dirfd's
+    tree, using techniques such as ".." or absolute links. Absolute
+    paths in openat(2) are also disallowed. Conceptually this flag is to
+    ensure you "stay below" a certain point in the filesystem tree --
+    but this requires some additional to protect against various races
+    that would allow escape using "..".
 
-> +		/* Send SIGKILL to the child */
-> +		if (sys_pidfd_send_signal(pidfd, SIGKILL, NULL, 0))
-> +			ksft_exit_fail_msg("%s - pidfd_send_signal failed\n",
-> +					strerror(errno));
-> +
-> +		/* Wait for the death notification */
-> +		fds.fd = pidfd;
-> +		nevents = poll(&fds, 1, -1);
-> +
+    Currently LOOKUP_BENEATH implies LOOKUP_NO_MAGICLINKS, because it
+    can trivially beam you around the filesystem (breaking the
+    protection). In future, there might be similar safety checks done as
+    in LOOKUP_IN_ROOT, but that requires more discussion.
 
-With
+In addition, two new flags are added that expand on the above ideas:
 
-        nevents = poll(&fds, 1, 3000);
+  * LOOKUP_NO_SYMLINKS does what it says on the tin. No symlink
+    resolution is allowed at all, including magic-links. Just as with
+    LOOKUP_NO_MAGICLINKS this can still be used with NOFOLLOW to open an
+    fd for the symlink as long as no parent path had a symlink
+    component.
 
-> +		/* Check for error conditions */
-> +		if (nevents < 0)
-> +			ksft_exit_fail_msg("%s - poll failed\n",
-> +					strerror(errno));
-> +
+  * LOOKUP_IN_ROOT is an extension of LOOKUP_BENEATH that, rather than
+    blocking attempts to move past the root, forces all such movements
+    to be scoped to the starting point. This provides chroot(2)-like
+    protection but without the cost of a chroot(2) for each filesystem
+    operation, as well as being safe against race attacks that chroot(2)
+    is not.
 
-And
-	if (nevents == 0)
-		ksft_exit_fail_msg(
-			"death notification wait timeout\n");
- 
-> +		if (nevents != 1)
-> +			ksft_exit_fail_msg("unexpected poll result: %d\n",
-> +					nevents);
-> +
-> +		if (!(fds.revents & POLLIN))
-> +			ksft_exit_fail_msg(
-> +				"unexpected event type received: 0x%x\n",
-> +				fds.revents);
-> +
-> +		if (timeout)
-> +			ksft_exit_fail_msg(
-> +				"death notification wait timeout\n");
-> +
-> +		close(pidfd);
-> +		// Wait for child to prevent zombies
-> +		if (waitpid(child_pid, NULL, 0) < 0)
-> +			ksft_exit_fail_msg("%s - waitpid failed\n",
-> +					strerror(errno));
+    If a race is detected (as with LOOKUP_BENEATH) then an error is
+    generated, and similar to LOOKUP_BENEATH it is not permitted to cross
+    magic-links with LOOKUP_IN_ROOT.
 
-I feel safer now you defeated the zombies army :) Thanks.
+    The primary need for this is from container runtimes, which
+    currently need to do symlink scoping in userspace[6] when opening
+    paths in a potentially malicious container. There is a long list of
+    CVEs that could have bene mitigated by having RESOLVE_THIS_ROOT
+    (such as CVE-2017-1002101, CVE-2017-1002102, CVE-2018-15664, and
+    CVE-2019-5736, just to name a few).
 
-> +
-> +	}
-> +
-> +	ksft_test_result_pass("pidfd poll test: pass\n");
-> +	return ksft_exit_pass();
-> +}
+And further, several semantics of file descriptor "re-opening" are now
+changed to prevent attacks like CVE-2019-5736 by restricting how
+magic-links can be resolved (based on their mode). This required some
+other changes to the semantics of the modes of O_PATH file descriptor's
+associated /proc/self/fd magic-links. openat2(2) has the ability to
+further restrict re-opening of its own O_PATH fds, so that users can
+make even better use of this feature.
 
-Regards
+Finally, O_EMPTYPATH was added so that users can do /proc/self/fd-style
+re-opening without depending on procfs. The new restricted semantics for
+magic-links are applied here too.
+
+In order to make all of the above more usable, I'm working on
+libpathrs[7] which is a C-friendly library for safe path resolution. It
+features a userspace-emulated backend if the kernel doesn't support
+openat2(2). Hopefully we can get userspace to switch to using it, and
+thus get openat2(2) support for free once it's ready.
+
+Cc: Al Viro <viro@zeniv.linux.org.uk>
+Cc: Eric Biederman <ebiederm@xmission.com>
+Cc: Andy Lutomirski <luto@kernel.org>
+Cc: David Howells <dhowells@redhat.com>
+Cc: Jann Horn <jannh@google.com>
+Cc: Christian Brauner <christian@brauner.io>
+Cc: David Drysdale <drysdale@google.com>
+Cc: Tycho Andersen <tycho@tycho.ws>
+Cc: Kees Cook <keescook@chromium.org>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: <containers@lists.linux-foundation.org>
+Cc: <linux-fsdevel@vger.kernel.org>
+Cc: <linux-api@vger.kernel.org>
+
+[1]: https://lwn.net/Articles/721443/
+[2]: https://lore.kernel.org/patchwork/patch/784221/
+[3]: https://lwn.net/Articles/619151/
+[4]: https://lwn.net/Articles/603929/
+[5]: https://lwn.net/Articles/723057/
+[6]: https://github.com/cyphar/filepath-securejoin
+[7]: https://github.com/openSUSE/libpathrs
+
+Aleksa Sarai (8):
+  namei: obey trailing magic-link DAC permissions
+  procfs: switch magic-link modes to be more sane
+  open: O_EMPTYPATH: procfs-less file descriptor re-opening
+  namei: O_BENEATH-style path resolution flags
+  namei: LOOKUP_IN_ROOT: chroot-like path resolution
+  namei: aggressively check for nd->root escape on ".." resolution
+  open: openat2(2) syscall
+  selftests: add openat2(2) selftests
+
+ Documentation/filesystems/path-lookup.rst     |  12 +-
+ arch/alpha/include/uapi/asm/fcntl.h           |   1 +
+ arch/alpha/kernel/syscalls/syscall.tbl        |   1 +
+ arch/arm/tools/syscall.tbl                    |   1 +
+ arch/arm64/include/asm/unistd.h               |   2 +-
+ arch/arm64/include/asm/unistd32.h             |   2 +
+ arch/ia64/kernel/syscalls/syscall.tbl         |   1 +
+ arch/m68k/kernel/syscalls/syscall.tbl         |   1 +
+ arch/microblaze/kernel/syscalls/syscall.tbl   |   1 +
+ arch/mips/kernel/syscalls/syscall_n32.tbl     |   1 +
+ arch/mips/kernel/syscalls/syscall_n64.tbl     |   1 +
+ arch/mips/kernel/syscalls/syscall_o32.tbl     |   1 +
+ arch/parisc/include/uapi/asm/fcntl.h          |  39 +-
+ arch/parisc/kernel/syscalls/syscall.tbl       |   1 +
+ arch/powerpc/kernel/syscalls/syscall.tbl      |   1 +
+ arch/s390/kernel/syscalls/syscall.tbl         |   1 +
+ arch/sh/kernel/syscalls/syscall.tbl           |   1 +
+ arch/sparc/include/uapi/asm/fcntl.h           |   1 +
+ arch/sparc/kernel/syscalls/syscall.tbl        |   1 +
+ arch/x86/entry/syscalls/syscall_32.tbl        |   1 +
+ arch/x86/entry/syscalls/syscall_64.tbl        |   1 +
+ arch/xtensa/kernel/syscalls/syscall.tbl       |   1 +
+ fs/fcntl.c                                    |   2 +-
+ fs/internal.h                                 |   1 +
+ fs/namei.c                                    | 270 ++++++++++--
+ fs/open.c                                     | 112 ++++-
+ fs/proc/base.c                                |  20 +-
+ fs/proc/fd.c                                  |  23 +-
+ fs/proc/namespaces.c                          |   2 +-
+ include/linux/fcntl.h                         |  17 +-
+ include/linux/fs.h                            |   8 +-
+ include/linux/namei.h                         |   9 +
+ include/linux/syscalls.h                      |  17 +-
+ include/uapi/asm-generic/fcntl.h              |   4 +
+ include/uapi/asm-generic/unistd.h             |   5 +-
+ include/uapi/linux/fcntl.h                    |  42 ++
+ tools/testing/selftests/Makefile              |   1 +
+ tools/testing/selftests/memfd/memfd_test.c    |   7 +-
+ tools/testing/selftests/openat2/.gitignore    |   1 +
+ tools/testing/selftests/openat2/Makefile      |   8 +
+ tools/testing/selftests/openat2/helpers.c     | 162 +++++++
+ tools/testing/selftests/openat2/helpers.h     | 116 +++++
+ .../testing/selftests/openat2/linkmode_test.c | 333 +++++++++++++++
+ .../selftests/openat2/rename_attack_test.c    | 127 ++++++
+ .../testing/selftests/openat2/resolve_test.c  | 402 ++++++++++++++++++
+ 45 files changed, 1655 insertions(+), 107 deletions(-)
+ create mode 100644 tools/testing/selftests/openat2/.gitignore
+ create mode 100644 tools/testing/selftests/openat2/Makefile
+ create mode 100644 tools/testing/selftests/openat2/helpers.c
+ create mode 100644 tools/testing/selftests/openat2/helpers.h
+ create mode 100644 tools/testing/selftests/openat2/linkmode_test.c
+ create mode 100644 tools/testing/selftests/openat2/rename_attack_test.c
+ create mode 100644 tools/testing/selftests/openat2/resolve_test.c
 
 -- 
-Yann Droneaud
-OPTEYA
-
+2.22.0
 
