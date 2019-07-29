@@ -2,141 +2,227 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B3D578206
-	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Jul 2019 00:20:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E21279691
+	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Jul 2019 21:53:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726139AbfG1WUV (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 28 Jul 2019 18:20:21 -0400
-Received: from mail-eopbgr710092.outbound.protection.outlook.com ([40.107.71.92]:19728
-        "EHLO NAM05-BY2-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726097AbfG1WUV (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 28 Jul 2019 18:20:21 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=FFlbTVuwOW+4kDWU1BEnqqxRQOMEtusbDrst7ESMHXkE1b0tkdqrWeOqOdMisOsjvuNjdgH0rP45sVM0sLblZcMFE4dUpmeY2AouYADjRgXRXQsKCe5xT0tYzhPQ/xVl/YgPO8rT7aiYgb14CwaYz+amEX1lSiTWHeXWoBA2/B0QlAiEEPn1CoXFZhpyjCeJhwkQ4BFtrrdvEsBMVp/WFbhEtAnAEKV7Wk6VN9q6zl/fMNXoE528N/L3b/VcUicp7qvJLYQf10Na3o4DZWFHZOhRA5wKScMCMM5tX1tm2zqnJqBo4q1gyny3mKPR2+yhpTQ/IB6LPvK8TRv09adDiA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=d3opuFXbaKwLLJOMaMaC7S7a1B0Uyu3kQutKi36Thdc=;
- b=Txy6I+m2uNxIeTZqCebyzQDAfWzizx/TwnOZ/l2AecMYRt6axWmXQfCBp5Vg27bpJ+Q0ZuCiqyFy9niyqCdhPCy462HeDXEyHSvPnR3DaQaTCg4PXucfdiO/l8Z9wzrkOEFQzDmRtcrHqqKkP7ejkyiY5VcIsR6Wx47c6ORsz1dYoDkxnxi9MX6G90NZrUrv9QrzGjScFOTTzvRXe7VUnbeMBVtRWQvzdH3GSzvgAwAJZlKblQi4Lq+tStL/mu0ruy1ptXzDV3N5g0ZkgqJYbKcrwYsvhjcSjV+zQ7lNexoXPN2fa47lE1Dh6zok1EjK+lNLCerD2h2pcyaWgqOcCQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1;spf=pass
- smtp.mailfrom=wavecomp.com;dmarc=pass action=none
- header.from=mips.com;dkim=pass header.d=mips.com;arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wavecomp.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=d3opuFXbaKwLLJOMaMaC7S7a1B0Uyu3kQutKi36Thdc=;
- b=mTYVHu06tdCBzuP8ZafQTXXXw0gJnCUBQohen0e/imOnFtKdn0ek63OQP9OO90/GUgNrgeC9brM1oq6DE3yThvdqrFFOqiejSsjqtIkAWaOZ2+klm2bJdllEcQ9g1YvV/HSfIcK5dzsXj3AfN8C7V/nyNOUScf3xinqe+eEXU7c=
-Received: from MWHPR2201MB1277.namprd22.prod.outlook.com (10.172.60.12) by
- MWHPR2201MB1070.namprd22.prod.outlook.com (10.174.169.144) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2115.14; Sun, 28 Jul 2019 22:20:18 +0000
-Received: from MWHPR2201MB1277.namprd22.prod.outlook.com
- ([fe80::105a:1595:b6ef:cbdf]) by MWHPR2201MB1277.namprd22.prod.outlook.com
- ([fe80::105a:1595:b6ef:cbdf%4]) with mapi id 15.20.2115.005; Sun, 28 Jul 2019
- 22:20:18 +0000
-From:   Paul Burton <paul.burton@mips.com>
-To:     Vincenzo Frascino <vincenzo.frascino@arm.com>
-CC:     "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
-        "will.deacon@arm.com" <will.deacon@arm.com>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "linux@armlinux.org.uk" <linux@armlinux.org.uk>,
-        "ralf@linux-mips.org" <ralf@linux-mips.org>,
-        Paul Burton <pburton@wavecomp.com>,
-        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "salyzyn@android.com" <salyzyn@android.com>,
-        "pcc@google.com" <pcc@google.com>,
-        "shuah@kernel.org" <shuah@kernel.org>,
-        "0x7f454c46@gmail.com" <0x7f454c46@gmail.com>,
-        "linux@rasmusvillemoes.dk" <linux@rasmusvillemoes.dk>,
-        "huw@codeweavers.com" <huw@codeweavers.com>,
-        "sthotton@marvell.com" <sthotton@marvell.com>,
-        "andre.przywara@arm.com" <andre.przywara@arm.com>,
-        "luto@kernel.org" <luto@kernel.org>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>
-Subject: Re: [PATCH 0/2] mips: vdso: Fix Makefile
-Thread-Topic: [PATCH 0/2] mips: vdso: Fix Makefile
-Thread-Index: AQHVRZKjNDOd89w6f0OrGlErnSrK7Q==
-Date:   Sun, 28 Jul 2019 22:20:18 +0000
-Message-ID: <MWHPR2201MB1277BCF195D341D7AB3FA5EBC1C20@MWHPR2201MB1277.namprd22.prod.outlook.com>
-References: <20190726162944.12149-1-vincenzo.frascino@arm.com>
-In-Reply-To: <20190726162944.12149-1-vincenzo.frascino@arm.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-clientproxiedby: BYAPR06CA0030.namprd06.prod.outlook.com
- (2603:10b6:a03:d4::43) To MWHPR2201MB1277.namprd22.prod.outlook.com
- (2603:10b6:301:18::12)
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=pburton@wavecomp.com; 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-originating-ip: [73.93.4.225]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 7d77f69b-e456-428a-f59a-08d713a9c578
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(2017052603328)(7193020);SRVR:MWHPR2201MB1070;
-x-ms-traffictypediagnostic: MWHPR2201MB1070:
-x-microsoft-antispam-prvs: <MWHPR2201MB10706CC264D422693AF3C918C1C20@MWHPR2201MB1070.namprd22.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:8273;
-x-forefront-prvs: 01128BA907
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(1496009)(39830400003)(376002)(396003)(346002)(136003)(366004)(189003)(199004)(33656002)(229853002)(386003)(76176011)(102836004)(6246003)(6506007)(71200400001)(71190400001)(7696005)(7416002)(14454004)(99286004)(54906003)(52116002)(6436002)(53936002)(6916009)(478600001)(256004)(74316002)(4326008)(2906002)(7736002)(66556008)(64756008)(42882007)(11346002)(476003)(55016002)(52536014)(26005)(446003)(305945005)(66476007)(44832011)(9686003)(8936002)(316002)(66066001)(4744005)(486006)(68736007)(6116002)(81166006)(3846002)(5660300002)(66446008)(66946007)(186003)(8676002)(25786009)(81156014);DIR:OUT;SFP:1102;SCL:1;SRVR:MWHPR2201MB1070;H:MWHPR2201MB1277.namprd22.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
-received-spf: None (protection.outlook.com: wavecomp.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: PFfJqBqSbNu0EDcWM+C3Q69PZxOLKFq0MBMpYg0wHV+ytGOFB5JwSkPmvqptqTQUxliwi2WcrbCI4HlRHS40F/7deyN/k4zzI1PagUPczwoCNo2b+QQte/7rZCDMdVZU62RZiaXw8ul1LwuMgu3YCndH7TFDikrqB25kaGP/quwllYxIYWqVGD2zslAwKrY+CmLbHZNIs8TiV2jAU1Fq5prRCwU99rE6ZNm2McR6pWkFDQ4y7L46yZBWU14HvA143FNtg1/6j+1M/K2Zz3wjd0yWpqZ7bhBYgxdw3lUJxI1XT/ymrbSRBlESQ2PxUmCpPJ3ymXTdnVRiQpG4takckcPSpCn6bLTAcQNl5LPEMoE/oaTOOH/h2aEUH/by1GtQoTkZp7SiY9BYlX7YnrBbEL1ci43u82KAvy1fDtDHNI0=
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+        id S2390868AbfG2TxG (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 29 Jul 2019 15:53:06 -0400
+Received: from mail.kernel.org ([198.145.29.99]:45068 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2403961AbfG2TxF (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 29 Jul 2019 15:53:05 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id EFEBF21773;
+        Mon, 29 Jul 2019 19:53:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1564429983;
+        bh=gJD8e620zaPYnffCTRC+zsCd09tdPtH5UnNylRM9SSU=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=DBfIvMaK8nCZHlACUV0qXdOzlvKyC/ApQOzTjZRHSgQZn46dwgEGCLfrZgNsktiM5
+         pDMDf2bIKT7/mpVzFQFIDqU3O5pa938VLkJgB5WTFLpKGcVbz3hW3hOB7qs7TG5eCC
+         dwywnWkuq+gskCGHVhSQPVa+glonWsRNv9Ip9YRg=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Will Deacon <will.deacon@arm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Joel Fernandes <joelaf@google.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Dave Watson <davejwatson@fb.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Andi Kleen <andi@firstfloor.org>,
+        linux-kselftest@vger.kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Chris Lameter <cl@linux.com>,
+        Russell King <linux@arm.linux.org.uk>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        "Paul E . McKenney" <paulmck@linux.vnet.ibm.com>,
+        Paul Turner <pjt@google.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Maurer <bmaurer@fb.com>, linux-api@vger.kernel.org,
+        Andy Lutomirski <luto@amacapital.net>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Carlos ODonell <carlos@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.2 121/215] rseq/selftests: Fix Thumb mode build failure on arm32
+Date:   Mon, 29 Jul 2019 21:21:57 +0200
+Message-Id: <20190729190800.113109828@linuxfoundation.org>
+X-Mailer: git-send-email 2.22.0
+In-Reply-To: <20190729190739.971253303@linuxfoundation.org>
+References: <20190729190739.971253303@linuxfoundation.org>
+User-Agent: quilt/0.66
 MIME-Version: 1.0
-X-OriginatorOrg: mips.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7d77f69b-e456-428a-f59a-08d713a9c578
-X-MS-Exchange-CrossTenant-originalarrivaltime: 28 Jul 2019 22:20:18.4568
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 463607d3-1db3-40a0-8a29-970c56230104
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: pburton@wavecomp.com
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR2201MB1070
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hello,
+[ Upstream commit ee8a84c60bcc1f1615bd9cb3edfe501e26cdc85b ]
 
-Vincenzo Frascino wrote:
-> Consequently to the unified vDSO transition of the MIPS architecture few
-> compilation issues appeared due to:
-> - A wrong source path for the configuration environment settings for
-> the O32 and N32 vDSO library generation.
-> - A flip/flop vDSO building bug that would cause to rebuild the vDSO
-> library every second time.
->=20
-> This patch series addresses both the issues providing the respective
-> fixes.
->=20
-> This patchset is rebased on top of mips-next.
->=20
-> Cc: Paul Burton <paul.burton@mips.com>
-> Signed-off-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
->=20
-> Vincenzo Frascino (2):
-> mips: vdso: Fix source path
-> mips: vdso: Fix flip/flop vdso building bug
->=20
-> arch/mips/vdso/Makefile | 18 +++++++++---------
-> 1 file changed, 9 insertions(+), 9 deletions(-)
+Using ".arm .inst" for the arm signature introduces build issues for
+programs compiled in Thumb mode because the assembler stays in the
+arm mode for the rest of the inline assembly. Revert to using a ".word"
+to express the signature as data instead.
 
-Series applied to mips-next.
+The choice of signature is a valid trap instruction on arm32 little
+endian, where both code and data are little endian.
 
-Thanks,
-    Paul
+ARMv6+ big endian (BE8) generates mixed endianness code vs data:
+little-endian code and big-endian data. The data value of the signature
+needs to have its byte order reversed to generate the trap instruction.
 
-[ This message was auto-generated; if you believe anything is incorrect
-  then please email paul.burton@mips.com to report it. ]
+Prior to ARMv6, -mbig-endian generates big-endian code and data
+(which match), so the endianness of the data representation of the
+signature should not be reversed. However, the choice between BE32
+and BE8 is done by the linker, so we cannot know whether code and
+data endianness will be mixed before the linker is invoked. So rather
+than try to play tricks with the linker, the rseq signature is simply
+data (not a trap instruction) prior to ARMv6 on big endian. This is
+why the signature is expressed as data (.word) rather than as
+instruction (.inst) in assembler.
+
+Because a ".word" is used to emit the signature, it will be interpreted
+as a literal pool by a disassembler, not as an actual instruction.
+Considering that the signature is not meant to be executed except in
+scenarios where the program execution is completely bogus, this should
+not be an issue.
+
+Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Acked-by: Will Deacon <will.deacon@arm.com>
+CC: Peter Zijlstra <peterz@infradead.org>
+CC: Thomas Gleixner <tglx@linutronix.de>
+CC: Joel Fernandes <joelaf@google.com>
+CC: Catalin Marinas <catalin.marinas@arm.com>
+CC: Dave Watson <davejwatson@fb.com>
+CC: Will Deacon <will.deacon@arm.com>
+CC: Shuah Khan <shuah@kernel.org>
+CC: Andi Kleen <andi@firstfloor.org>
+CC: linux-kselftest@vger.kernel.org
+CC: "H . Peter Anvin" <hpa@zytor.com>
+CC: Chris Lameter <cl@linux.com>
+CC: Russell King <linux@arm.linux.org.uk>
+CC: Michael Kerrisk <mtk.manpages@gmail.com>
+CC: "Paul E . McKenney" <paulmck@linux.vnet.ibm.com>
+CC: Paul Turner <pjt@google.com>
+CC: Boqun Feng <boqun.feng@gmail.com>
+CC: Josh Triplett <josh@joshtriplett.org>
+CC: Steven Rostedt <rostedt@goodmis.org>
+CC: Ben Maurer <bmaurer@fb.com>
+CC: linux-api@vger.kernel.org
+CC: Andy Lutomirski <luto@amacapital.net>
+CC: Andrew Morton <akpm@linux-foundation.org>
+CC: Linus Torvalds <torvalds@linux-foundation.org>
+CC: Carlos O'Donell <carlos@redhat.com>
+CC: Florian Weimer <fweimer@redhat.com>
+Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ tools/testing/selftests/rseq/rseq-arm.h | 61 +++++++++++++------------
+ 1 file changed, 33 insertions(+), 28 deletions(-)
+
+diff --git a/tools/testing/selftests/rseq/rseq-arm.h b/tools/testing/selftests/rseq/rseq-arm.h
+index 84f28f147fb6..5943c816c07c 100644
+--- a/tools/testing/selftests/rseq/rseq-arm.h
++++ b/tools/testing/selftests/rseq/rseq-arm.h
+@@ -6,6 +6,8 @@
+  */
+ 
+ /*
++ * - ARM little endian
++ *
+  * RSEQ_SIG uses the udf A32 instruction with an uncommon immediate operand
+  * value 0x5de3. This traps if user-space reaches this instruction by mistake,
+  * and the uncommon operand ensures the kernel does not move the instruction
+@@ -22,36 +24,40 @@
+  * def3        udf    #243      ; 0xf3
+  * e7f5        b.n    <7f5>
+  *
+- * pre-ARMv6 big endian code:
+- * e7f5        b.n    <7f5>
+- * def3        udf    #243      ; 0xf3
++ * - ARMv6+ big endian (BE8):
+  *
+  * ARMv6+ -mbig-endian generates mixed endianness code vs data: little-endian
+- * code and big-endian data. Ensure the RSEQ_SIG data signature matches code
+- * endianness. Prior to ARMv6, -mbig-endian generates big-endian code and data
+- * (which match), so there is no need to reverse the endianness of the data
+- * representation of the signature. However, the choice between BE32 and BE8
+- * is done by the linker, so we cannot know whether code and data endianness
+- * will be mixed before the linker is invoked.
++ * code and big-endian data. The data value of the signature needs to have its
++ * byte order reversed to generate the trap instruction:
++ *
++ * Data: 0xf3def5e7
++ *
++ * Translates to this A32 instruction pattern:
++ *
++ * e7f5def3    udf    #24035    ; 0x5de3
++ *
++ * Translates to this T16 instruction pattern:
++ *
++ * def3        udf    #243      ; 0xf3
++ * e7f5        b.n    <7f5>
++ *
++ * - Prior to ARMv6 big endian (BE32):
++ *
++ * Prior to ARMv6, -mbig-endian generates big-endian code and data
++ * (which match), so the endianness of the data representation of the
++ * signature should not be reversed. However, the choice between BE32
++ * and BE8 is done by the linker, so we cannot know whether code and
++ * data endianness will be mixed before the linker is invoked. So rather
++ * than try to play tricks with the linker, the rseq signature is simply
++ * data (not a trap instruction) prior to ARMv6 on big endian. This is
++ * why the signature is expressed as data (.word) rather than as
++ * instruction (.inst) in assembler.
+  */
+ 
+-#define RSEQ_SIG_CODE	0xe7f5def3
+-
+-#ifndef __ASSEMBLER__
+-
+-#define RSEQ_SIG_DATA							\
+-	({								\
+-		int sig;						\
+-		asm volatile ("b 2f\n\t"				\
+-			      "1: .inst " __rseq_str(RSEQ_SIG_CODE) "\n\t" \
+-			      "2:\n\t"					\
+-			      "ldr %[sig], 1b\n\t"			\
+-			      : [sig] "=r" (sig));			\
+-		sig;							\
+-	})
+-
+-#define RSEQ_SIG	RSEQ_SIG_DATA
+-
++#ifdef __ARMEB__
++#define RSEQ_SIG    0xf3def5e7      /* udf    #24035    ; 0x5de3 (ARMv6+) */
++#else
++#define RSEQ_SIG    0xe7f5def3      /* udf    #24035    ; 0x5de3 */
+ #endif
+ 
+ #define rseq_smp_mb()	__asm__ __volatile__ ("dmb" ::: "memory", "cc")
+@@ -125,8 +131,7 @@ do {									\
+ 		__rseq_str(table_label) ":\n\t"				\
+ 		".word " __rseq_str(version) ", " __rseq_str(flags) "\n\t" \
+ 		".word " __rseq_str(start_ip) ", 0x0, " __rseq_str(post_commit_offset) ", 0x0, " __rseq_str(abort_ip) ", 0x0\n\t" \
+-		".arm\n\t"						\
+-		".inst " __rseq_str(RSEQ_SIG_CODE) "\n\t"		\
++		".word " __rseq_str(RSEQ_SIG) "\n\t"			\
+ 		__rseq_str(label) ":\n\t"				\
+ 		teardown						\
+ 		"b %l[" __rseq_str(abort_label) "]\n\t"
+-- 
+2.20.1
+
+
+
