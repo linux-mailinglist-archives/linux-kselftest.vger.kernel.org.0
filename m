@@ -2,248 +2,123 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DF1BB7ADC8
-	for <lists+linux-kselftest@lfdr.de>; Tue, 30 Jul 2019 18:33:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E91487AF50
+	for <lists+linux-kselftest@lfdr.de>; Tue, 30 Jul 2019 19:11:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729001AbfG3Qdu (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 30 Jul 2019 12:33:50 -0400
-Received: from mail-io1-f66.google.com ([209.85.166.66]:37194 "EHLO
-        mail-io1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729523AbfG3Qdu (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 30 Jul 2019 12:33:50 -0400
-Received: by mail-io1-f66.google.com with SMTP id q22so9780647iog.4
-        for <linux-kselftest@vger.kernel.org>; Tue, 30 Jul 2019 09:33:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=to:cc:from:subject:message-id:date:user-agent:mime-version
-         :content-language;
-        bh=KDoydqM/4PNQk1C3wiilLCzdxfZ2P2ofICXyjT/BiWg=;
-        b=AFlQcULevo63D36h/Zb6unEW2gvSjI9MHiceRZdIS88Q+ngp+E+CsCyiMJ9KX0ZbRp
-         N4NcU4yHLlwj0uB9BZGJ7QMHWzwdC+PLuku5yV+r11DDAwhkizHHLj3QdwLbf5A3iIO3
-         a6xO0MFHtRmXWO9RJ43RrLtmqyT3ByBAokmBw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:to:cc:from:subject:message-id:date:user-agent
-         :mime-version:content-language;
-        bh=KDoydqM/4PNQk1C3wiilLCzdxfZ2P2ofICXyjT/BiWg=;
-        b=B8HE5Eb1dD7yQw/ztY7O3gpMYWwBJO6hfFj6oWQe5+u1MEmIa2myt2vnSOr7sws7dF
-         0wGaRF/ukSZAFor5ym2Gceg7aHK+PItZR98LfQ8OIJzQSfFoCR0tU6EOEP0Qhd0h+qJN
-         vg9XSslBlahje91rombowgC1PxFhsaOD4kyS8FQhjEb2VmBDynPaRjjaXJ0Bm4qBTqYp
-         +N5T/wrmcEQ71U40/Z5PQvyksUqjyse2vUnhyGqcPFsLkoovGxOOYC9o4fgBN6b9t9lU
-         AlWqT80eCO8xLYUNkSCYMHNywq0DeA9TDAguq++KArrPnskEX/G7qwXkOTV4gvSAfbms
-         MM8A==
-X-Gm-Message-State: APjAAAXpgFGEJ9xJJbu/isgL2Rpclfb0GuzNxYuy2L0jyYBp+uFA+Obf
-        W/V6FkkrMMAZ0yGtfn29d7Gh2rqBvvs=
-X-Google-Smtp-Source: APXvYqySJCCDz9k+CCH4hXgB2ZZY0msNGZoC4JCZ2dYyOQnEbdov7u9e4hWkSnO3/U7n568ZJuzfjQ==
-X-Received: by 2002:a02:6616:: with SMTP id k22mr80748842jac.100.1564504429163;
-        Tue, 30 Jul 2019 09:33:49 -0700 (PDT)
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id u17sm59733545iob.57.2019.07.30.09.33.47
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 30 Jul 2019 09:33:48 -0700 (PDT)
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Shuah Khan <skhan@linuxfoundation.org>, joe.lawrence@redhat.com,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Subject: [GIT PULL] Kselftest update for Linux 5.3-rc3
-Message-ID: <9b7fa63d-7c3f-bb3a-663b-e5279a0a0086@linuxfoundation.org>
-Date:   Tue, 30 Jul 2019 10:33:47 -0600
+        id S1726951AbfG3RLa (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 30 Jul 2019 13:11:30 -0400
+Received: from mx1.redhat.com ([209.132.183.28]:60956 "EHLO mx1.redhat.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725947AbfG3RLa (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 30 Jul 2019 13:11:30 -0400
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mx1.redhat.com (Postfix) with ESMTPS id 9335E31D8AA;
+        Tue, 30 Jul 2019 17:11:29 +0000 (UTC)
+Received: from thuth.remote.csb (ovpn-116-106.ams2.redhat.com [10.36.116.106])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 729155D6B2;
+        Tue, 30 Jul 2019 17:11:24 +0000 (UTC)
+Subject: Re: [PATCH 2/2] KVM: selftests: Enable dirty_log_test on s390x
+To:     Christian Borntraeger <borntraeger@de.ibm.com>,
+        kvm@vger.kernel.org, Janosch Frank <frankja@linux.ibm.com>
+Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-s390@vger.kernel.org, David Hildenbrand <david@redhat.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        =?UTF-8?B?UmFkaW0gS3LEjW3DocWZ?= <rkrcmar@redhat.com>,
+        Shuah Khan <shuah@kernel.org>, Peter Xu <peterx@redhat.com>
+References: <20190730100112.18205-1-thuth@redhat.com>
+ <20190730100112.18205-3-thuth@redhat.com>
+ <d48ac43b-c960-54af-a145-360a67b4a3d9@de.ibm.com>
+From:   Thomas Huth <thuth@redhat.com>
+Openpgp: preference=signencrypt
+Autocrypt: addr=thuth@redhat.com; keydata=
+ xsFNBFH7eUwBEACzyOXKU+5Pcs6wNpKzrlJwzRl3VGZt95VCdb+FgoU9g11m7FWcOafrVRwU
+ yYkTm9+7zBUc0sW5AuPGR/dp3pSLX/yFWsA/UB4nJsHqgDvDU7BImSeiTrnpMOTXb7Arw2a2
+ 4CflIyFqjCpfDM4MuTmzTjXq4Uov1giGE9X6viNo1pxyEpd7PanlKNnf4PqEQp06X4IgUacW
+ tSGj6Gcns1bCuHV8OPWLkf4hkRnu8hdL6i60Yxz4E6TqlrpxsfYwLXgEeswPHOA6Mn4Cso9O
+ 0lewVYfFfsmokfAVMKWzOl1Sr0KGI5T9CpmRfAiSHpthhHWnECcJFwl72NTi6kUcUzG4se81
+ O6n9d/kTj7pzTmBdfwuOZ0YUSqcqs0W+l1NcASSYZQaDoD3/SLk+nqVeCBB4OnYOGhgmIHNW
+ 0CwMRO/GK+20alxzk//V9GmIM2ACElbfF8+Uug3pqiHkVnKqM7W9/S1NH2qmxB6zMiJUHlTH
+ gnVeZX0dgH27mzstcF786uPcdEqS0KJuxh2kk5IvUSL3Qn3ZgmgdxBMyCPciD/1cb7/Ahazr
+ 3ThHQXSHXkH/aDXdfLsKVuwDzHLVSkdSnZdt5HHh75/NFHxwaTlydgfHmFFwodK8y/TjyiGZ
+ zg2Kje38xnz8zKn9iesFBCcONXS7txENTzX0z80WKBhK+XSFJwARAQABzRxUaG9tYXMgSHV0
+ aCA8dGguaHV0aEBnbXguZGU+wsF7BBMBAgAlAhsDBgsJCAcDAgYVCAIJCgsEFgIDAQIeAQIX
+ gAUCUfuWKwIZAQAKCRAu2dd0/nAttbe/EACb9hafyOb2FmhUqeAiBORSsUifFacQ7laVjcgR
+ I4um8CSHvxijYftpkM2EdAtmXIKgbNDpQoXcWLXB9lu9mLgTO4DVT00TRR65ikn3FCWcyT74
+ ENTOzRKyKLsDCjhXKPblTPIQbYAUCOWElcyAPm0ERd62fA/rKNxgIiNo/l4UODOMoOJm2/Ox
+ ZoTckW68Eqv7k9L7m7j+Hn3hoDTjAmcCBJt+j7pOhzWvCbqoNOIH8C8qvPaNlrba+R/K6jkO
+ 6jZkTbYQpGIofEQJ/TNn38IsNGpI1ALTHWFtoMxp3j2Imz0REO6dRE2fHRN8sVlHgkoeGhmY
+ NbDsDE1jFQOEObFnu0euk//7BXU7tGOHckVAZ8T1smiRPHfQU7UEH2a/grndxJ+PNeM5w7n2
+ l+FN3cf2KgPotCK2s9MjSdZA7C5e3rFYO8lqiqTJKvc62vqp3e7B0Kjyy5/QtzSOejBij2QL
+ xkKSFNtxIz4MtuxN8e3IDQNxsKry3nF7R4MDvouXlMo6wP9KuyNWb+vFJt9GtbgfDMIFVamp
+ ZfhEWzWRJH4VgksENA4K/BzjEHCcbTUb1TFsiB1VRnBPJ0SqlvifnfKk6HcpkDk6Pg8Q5FOJ
+ gbNHrdgXsm+m/9GF2zUUr+rOlhVbK23TUqKqPfwnD7uxjpakVcJnsVCFqJpZi1F/ga9IN87B
+ TQRR+3lMARAAtp831HniPHb9AuKq3wj83ujZK8lH5RLrfVsB4X1wi47bwo56BqhXpR/zxPTR
+ eOFT0gnbw9UkphVc7uk/alnXMDEmgvnuxv89PwIQX6k3qLABeV7ykJQG/WT5HQ6+2DdGtVw3
+ 2vjYAPiWQeETsgWRRQMDR0/hwp8s8tL/UodwYCScH6Vxx9pdy353L1fK4Bb9G73a+9FPjp9l
+ x+WwKTsltVqSBuSjyZQ3c3EE8qbTidXZxB38JwARH8yN3TX+t65cbBqLl/zRUUUTapHQpUEd
+ yoAsHIml32e4q+3xdLtTdlLi7FgPBItSazcqZPjEcYW73UAuLcmQmfJlQ5PkDiuqcitn+KzH
+ /1pqsTU7QFZjbmSMJyXY0TDErOFuMOjf20b6arcpEqse1V3IKrb+nqqA2azboRm3pEANLAJw
+ iVTwK3qwGRgK5ut6N/Znv20VEHkFUsRAZoOusrIRfR5HFDxlXguAdEz8M/hxXFYYXqOoaCYy
+ 6pJxTjy0Y/tIfmS/g9Bnp8qg9wsrsnk0+XRnDVPak++G3Uq9tJPwpJbyO0vcqEI3vAXkAB7X
+ VXLzvFwi66RrsPUoDkuzj+aCNumtOePDOCpXQGPpKl+l1aYRMN/+lNSk3+1sVuc2C07WnYyE
+ gV/cbEVklPmKrNwu6DeUyD0qI/bVzKMWZAiB1r56hsGeyYcAEQEAAcLBXwQYAQIACQUCUft5
+ TAIbDAAKCRAu2dd0/nAttYTwEACLAS/THRqXRKb17PQmKwZHerUvZm2klo+lwQ3wNQBHUJAT
+ p2R9ULexyXrJPqjUpy7+voz+FcKiuQBTKyieiIxO46oMxsbXGZ70o3gxjxdYdgimUD6U8PPd
+ JH8tfAL4BR5FZNjspcnscN2jgbF4OrpDeOLyBaj6HPmElNPtECHWCaf1xbIFsZxSDGMA6cUh
+ 0uX3Q8VI7JN1AR2cfiIRY7NrIlWYucJxyKjO3ivWm69nCtsHiJ0wcF8KlVo7F2eLaufo0K8A
+ ynL8SHMF3VEyxsXOP2f1UR9T2Ur30MXcTBpjUxml1TX3RWY5uH89Js/jlIugBwuAmacJ7JYh
+ lTg6sF/GNc4nPb4kk2yktNWTade+TzsllYlJPaorD2Qe8qX0iFUhFC6y9+O6mP4ZvWoYapp9
+ ezYNuebMgEr93ob1+4sFg3812wNP01WqsGtWCJHnPv/JoonFdMzD/bIkXGEJMk6ks2kxQQZq
+ g6Ik/s/vxOfao/xCn8nHt7GwvVy41795hzK6tbSl+BuyCRp0vfPRP34OnK7+jR2nvQpJu/pU
+ rCELuGwT9hsYkUPjVd4lfylN3mzEc6iAv/wwjsc0DRTSQCpXT3v2ymTAsRKrVaEZLibTXaf+
+ WslxWek3xNYRiqwwWAJuL652eAlxUgQ5ZS+fXBRTiQpJ+F26I/2lccScRd9G5w==
+Organization: Red Hat
+Message-ID: <02c5c7b4-c45e-4573-d2c3-ebfa2cd2c9d1@redhat.com>
+Date:   Tue, 30 Jul 2019 19:11:23 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-Content-Type: multipart/mixed;
- boundary="------------24AF2ECE419D14C7D78A028E"
+In-Reply-To: <d48ac43b-c960-54af-a145-360a67b4a3d9@de.ibm.com>
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
+X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.29]); Tue, 30 Jul 2019 17:11:29 +0000 (UTC)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This is a multi-part message in MIME format.
---------------24AF2ECE419D14C7D78A028E
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
+On 30/07/2019 16.57, Christian Borntraeger wrote:
+> 
+> 
+> On 30.07.19 12:01, Thomas Huth wrote:
+>> To run the dirty_log_test on s390x, we have to make sure that we
+>> access the dirty log bitmap with little endian byte ordering and
+>> we have to properly align the memslot of the guest.
+>> Also all dirty bits of a segment are set once on s390x when one
+>> of the pages of a segment are written to for the first time, so
+>> we have to make sure that we touch all pages during the first
+>> iteration to keep the test in sync here.
+> 
+> While this fixes the test (and the migration does work fine), it still
+> means that s390x overindicates the dirty bit for sparsely populated
+> 1M segments. It is just a performance issue, but maybe we should try 
+> to get this fixed.
 
-Hi Linus,
+I hope you don't expect me to fix this - the gmap code is really not my
+turf...
 
-Please pull the following Kselftest fixes update for Linux 5.3-rc3.
+> Not sure what to do here to remember us about this, 
+> adding this as expected fail?
 
-This Kselftest update for Linux 5.3-rc3 consists of minor fixes to
-tests and one major fix to livepatch test to add skip handling to
-avoid false fail reports when livepatch is disabled.
+There is no such thing like an expected failure in KVM selftests -
+that's only available in kvm-unit-tests.
 
-diff is attached.
+So the only option that I currently see is to add a printf("TODO: ...")
+on s390x here... would that work for you?
 
-thanks,
--- Shuah
-
-
-----------------------------------------------------------------
-The following changes since commit 5f9e832c137075045d15cd6899ab0505cfb2ca4b:
-
-   Linus 5.3-rc1 (2019-07-21 14:05:38 -0700)
-
-are available in the Git repository at:
-
-   git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest 
-tags/linux-kselftest-5.3-rc3
-
-for you to fetch changes up to 527d37e9e575bc0e9024de9b499385e7bb31f1ad:
-
-   selftests/livepatch: add test skip handling (2019-07-24 14:17:46 -0600)
-
-----------------------------------------------------------------
-linux-kselftest-5.3-rc3
-
-This Kselftest update for Linux 5.3-rc3 consists of minor fixes to
-tests and one major fix to livepatch test to add skip handling to
-avoid false fail reports when livepatch is disabled.
-
-----------------------------------------------------------------
-Colin Ian King (1):
-       selftests/x86: fix spelling mistake "FAILT" -> "FAIL"
-
-Joe Lawrence (1):
-       selftests/livepatch: add test skip handling
-
-Masanari Iida (2):
-       selftests: kmod: Fix typo in kmod.sh
-       selftests: mlxsw: Fix typo in qos_mc_aware.sh
-
-  .../selftests/drivers/net/mlxsw/qos_mc_aware.sh      |  4 ++--
-  tools/testing/selftests/kmod/kmod.sh                 |  6 +++---
-  tools/testing/selftests/livepatch/functions.sh       | 20 
-++++++++++++++++++++
-  tools/testing/selftests/x86/test_vsyscall.c          |  2 +-
-  4 files changed, 26 insertions(+), 6 deletions(-)
-
-----------------------------------------------------------------
-
---------------24AF2ECE419D14C7D78A028E
-Content-Type: text/x-patch;
- name="linux-kselftest-5.3-rc3.diff"
-Content-Transfer-Encoding: 7bit
-Content-Disposition: attachment;
- filename="linux-kselftest-5.3-rc3.diff"
-
-diff --git a/tools/testing/selftests/drivers/net/mlxsw/qos_mc_aware.sh b/tools/testing/selftests/drivers/net/mlxsw/qos_mc_aware.sh
-index 71231ad2dbfb..47315fe48d5a 100755
---- a/tools/testing/selftests/drivers/net/mlxsw/qos_mc_aware.sh
-+++ b/tools/testing/selftests/drivers/net/mlxsw/qos_mc_aware.sh
-@@ -262,7 +262,7 @@ test_mc_aware()
- 
- 	stop_traffic
- 
--	log_test "UC performace under MC overload"
-+	log_test "UC performance under MC overload"
- 
- 	echo "UC-only throughput  $(humanize $ucth1)"
- 	echo "UC+MC throughput    $(humanize $ucth2)"
-@@ -316,7 +316,7 @@ test_uc_aware()
- 
- 	stop_traffic
- 
--	log_test "MC performace under UC overload"
-+	log_test "MC performance under UC overload"
- 	echo "    ingress UC throughput $(humanize ${uc_ir})"
- 	echo "    egress UC throughput  $(humanize ${uc_er})"
- 	echo "    sent $attempts BC ARPs, got $passes responses"
-diff --git a/tools/testing/selftests/kmod/kmod.sh b/tools/testing/selftests/kmod/kmod.sh
-index 0a76314b4414..8b944cf042f6 100755
---- a/tools/testing/selftests/kmod/kmod.sh
-+++ b/tools/testing/selftests/kmod/kmod.sh
-@@ -28,7 +28,7 @@
- # override by exporting to your environment prior running this script.
- # For instance this script assumes you do not have xfs loaded upon boot.
- # If this is false, export DEFAULT_KMOD_FS="ext4" prior to running this
--# script if the filesyste module you don't have loaded upon bootup
-+# script if the filesystem module you don't have loaded upon bootup
- # is ext4 instead. Refer to allow_user_defaults() for a list of user
- # override variables possible.
- #
-@@ -263,7 +263,7 @@ config_get_test_result()
- config_reset()
- {
- 	if ! echo -n "1" >"$DIR"/reset; then
--		echo "$0: reset shuld have worked" >&2
-+		echo "$0: reset should have worked" >&2
- 		exit 1
- 	fi
- }
-@@ -488,7 +488,7 @@ usage()
- 	echo Example uses:
- 	echo
- 	echo "${TEST_NAME}.sh		-- executes all tests"
--	echo "${TEST_NAME}.sh -t 0008	-- Executes test ID 0008 number of times is recomended"
-+	echo "${TEST_NAME}.sh -t 0008	-- Executes test ID 0008 number of times is recommended"
- 	echo "${TEST_NAME}.sh -w 0008	-- Watch test ID 0008 run until an error occurs"
- 	echo "${TEST_NAME}.sh -s 0008	-- Run test ID 0008 once"
- 	echo "${TEST_NAME}.sh -c 0008 3	-- Run test ID 0008 three times"
-diff --git a/tools/testing/selftests/livepatch/functions.sh b/tools/testing/selftests/livepatch/functions.sh
-index 30195449c63c..edcfeace4655 100644
---- a/tools/testing/selftests/livepatch/functions.sh
-+++ b/tools/testing/selftests/livepatch/functions.sh
-@@ -13,6 +13,14 @@ function log() {
- 	echo "$1" > /dev/kmsg
- }
- 
-+# skip(msg) - testing can't proceed
-+#	msg - explanation
-+function skip() {
-+	log "SKIP: $1"
-+	echo "SKIP: $1" >&2
-+	exit 4
-+}
-+
- # die(msg) - game over, man
- #	msg - dying words
- function die() {
-@@ -43,6 +51,12 @@ function loop_until() {
- 	done
- }
- 
-+function assert_mod() {
-+	local mod="$1"
-+
-+	modprobe --dry-run "$mod" &>/dev/null
-+}
-+
- function is_livepatch_mod() {
- 	local mod="$1"
- 
-@@ -75,6 +89,9 @@ function __load_mod() {
- function load_mod() {
- 	local mod="$1"; shift
- 
-+	assert_mod "$mod" ||
-+		skip "unable to load module ${mod}, verify CONFIG_TEST_LIVEPATCH=m and run self-tests as root"
-+
- 	is_livepatch_mod "$mod" &&
- 		die "use load_lp() to load the livepatch module $mod"
- 
-@@ -88,6 +105,9 @@ function load_mod() {
- function load_lp_nowait() {
- 	local mod="$1"; shift
- 
-+	assert_mod "$mod" ||
-+		skip "unable to load module ${mod}, verify CONFIG_TEST_LIVEPATCH=m and run self-tests as root"
-+
- 	is_livepatch_mod "$mod" ||
- 		die "module $mod is not a livepatch"
- 
-diff --git a/tools/testing/selftests/x86/test_vsyscall.c b/tools/testing/selftests/x86/test_vsyscall.c
-index 4602326b8f5b..a4f4d4cf22c3 100644
---- a/tools/testing/selftests/x86/test_vsyscall.c
-+++ b/tools/testing/selftests/x86/test_vsyscall.c
-@@ -451,7 +451,7 @@ static int test_vsys_x(void)
- 		printf("[OK]\tExecuting the vsyscall page failed: #PF(0x%lx)\n",
- 		       segv_err);
- 	} else {
--		printf("[FAILT]\tExecution failed with the wrong error: #PF(0x%lx)\n",
-+		printf("[FAIL]\tExecution failed with the wrong error: #PF(0x%lx)\n",
- 		       segv_err);
- 		return 1;
- 	}
-
---------------24AF2ECE419D14C7D78A028E--
+ Thomas
