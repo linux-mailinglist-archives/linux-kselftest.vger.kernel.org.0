@@ -2,349 +2,302 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F30D77AB5D
-	for <lists+linux-kselftest@lfdr.de>; Tue, 30 Jul 2019 16:48:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40E407ABA0
+	for <lists+linux-kselftest@lfdr.de>; Tue, 30 Jul 2019 16:59:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731585AbfG3OsY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 30 Jul 2019 10:48:24 -0400
-Received: from foss.arm.com ([217.140.110.172]:33922 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731560AbfG3OsX (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 30 Jul 2019 10:48:23 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id F245628;
-        Tue, 30 Jul 2019 07:48:22 -0700 (PDT)
-Received: from [10.1.194.48] (e123572-lin.cambridge.arm.com [10.1.194.48])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0551C3F694;
-        Tue, 30 Jul 2019 07:48:18 -0700 (PDT)
-Subject: Re: [PATCH v6 1/2] arm64: Define
- Documentation/arm64/tagged-address-abi.rst
-To:     Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
-        linux-mm@kvack.org, linux-arch@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Szabolcs Nagy <szabolcs.nagy@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will.deacon@arm.com>,
-        Andrey Konovalov <andreyknvl@google.com>
-References: <cover.1563904656.git.andreyknvl@google.com>
- <20190725135044.24381-1-vincenzo.frascino@arm.com>
- <20190725135044.24381-2-vincenzo.frascino@arm.com>
- <52fa2cfc-f7a6-af6f-0dc2-f9ea0e41ac3c@arm.com>
- <c45df19e-8f48-7f4e-3eae-ada54cb6f707@arm.com>
- <6eba1250-c0a2-0a51-c8c2-0e77e6241f29@arm.com>
- <fb2e7693-9fc9-da47-0c8d-a8367cf8060f@arm.com>
-From:   Kevin Brodsky <kevin.brodsky@arm.com>
-Message-ID: <bf068016-70ea-1624-a937-6278e9031343@arm.com>
-Date:   Tue, 30 Jul 2019 15:48:16 +0100
+        id S1728286AbfG3O56 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 30 Jul 2019 10:57:58 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:32020 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1731795AbfG3O55 (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 30 Jul 2019 10:57:57 -0400
+Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x6UEvosX121902
+        for <linux-kselftest@vger.kernel.org>; Tue, 30 Jul 2019 10:57:57 -0400
+Received: from e06smtp03.uk.ibm.com (e06smtp03.uk.ibm.com [195.75.94.99])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 2u2nnt7ade-1
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-kselftest@vger.kernel.org>; Tue, 30 Jul 2019 10:57:55 -0400
+Received: from localhost
+        by e06smtp03.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-kselftest@vger.kernel.org> from <borntraeger@de.ibm.com>;
+        Tue, 30 Jul 2019 15:57:39 +0100
+Received: from b06avi18878370.portsmouth.uk.ibm.com (9.149.26.194)
+        by e06smtp03.uk.ibm.com (192.168.101.133) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
+        Tue, 30 Jul 2019 15:57:36 +0100
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
+        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x6UEvZjS23921000
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 30 Jul 2019 14:57:35 GMT
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 4AF2FA405F;
+        Tue, 30 Jul 2019 14:57:35 +0000 (GMT)
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 437D7A4062;
+        Tue, 30 Jul 2019 14:57:34 +0000 (GMT)
+Received: from oc7455500831.ibm.com (unknown [9.145.144.206])
+        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Tue, 30 Jul 2019 14:57:34 +0000 (GMT)
+Subject: Re: [PATCH 2/2] KVM: selftests: Enable dirty_log_test on s390x
+To:     Thomas Huth <thuth@redhat.com>, kvm@vger.kernel.org,
+        Janosch Frank <frankja@linux.ibm.com>
+Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-s390@vger.kernel.org, David Hildenbrand <david@redhat.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        =?UTF-8?B?UmFkaW0gS3LEjW3DocWZ?= <rkrcmar@redhat.com>,
+        Shuah Khan <shuah@kernel.org>, Peter Xu <peterx@redhat.com>
+References: <20190730100112.18205-1-thuth@redhat.com>
+ <20190730100112.18205-3-thuth@redhat.com>
+From:   Christian Borntraeger <borntraeger@de.ibm.com>
+Openpgp: preference=signencrypt
+Autocrypt: addr=borntraeger@de.ibm.com; prefer-encrypt=mutual; keydata=
+ mQINBE6cPPgBEAC2VpALY0UJjGmgAmavkL/iAdqul2/F9ONz42K6NrwmT+SI9CylKHIX+fdf
+ J34pLNJDmDVEdeb+brtpwC9JEZOLVE0nb+SR83CsAINJYKG3V1b3Kfs0hydseYKsBYqJTN2j
+ CmUXDYq9J7uOyQQ7TNVoQejmpp5ifR4EzwIFfmYDekxRVZDJygD0wL/EzUr8Je3/j548NLyL
+ 4Uhv6CIPf3TY3/aLVKXdxz/ntbLgMcfZsDoHgDk3lY3r1iwbWwEM2+eYRdSZaR4VD+JRD7p8
+ 0FBadNwWnBce1fmQp3EklodGi5y7TNZ/CKdJ+jRPAAnw7SINhSd7PhJMruDAJaUlbYaIm23A
+ +82g+IGe4z9tRGQ9TAflezVMhT5J3ccu6cpIjjvwDlbxucSmtVi5VtPAMTLmfjYp7VY2Tgr+
+ T92v7+V96jAfE3Zy2nq52e8RDdUo/F6faxcumdl+aLhhKLXgrozpoe2nL0Nyc2uqFjkjwXXI
+ OBQiaqGeWtxeKJP+O8MIpjyGuHUGzvjNx5S/592TQO3phpT5IFWfMgbu4OreZ9yekDhf7Cvn
+ /fkYsiLDz9W6Clihd/xlpm79+jlhm4E3xBPiQOPCZowmHjx57mXVAypOP2Eu+i2nyQrkapaY
+ IdisDQfWPdNeHNOiPnPS3+GhVlPcqSJAIWnuO7Ofw1ZVOyg/jwARAQABtDRDaHJpc3RpYW4g
+ Qm9ybnRyYWVnZXIgKElCTSkgPGJvcm50cmFlZ2VyQGRlLmlibS5jb20+iQI4BBMBAgAiBQJO
+ nDz4AhsDBgsJCAcDAgYVCAIJCgsEFgIDAQIeAQIXgAAKCRARe7yAtaYcfOYVD/9sqc6ZdYKD
+ bmDIvc2/1LL0g7OgiA8pHJlYN2WHvIhUoZUIqy8Sw2EFny/nlpPVWfG290JizNS2LZ0mCeGZ
+ 80yt0EpQNR8tLVzLSSr0GgoY0lwsKhAnx3p3AOrA8WXsPL6prLAu3yJI5D0ym4MJ6KlYVIjU
+ ppi4NLWz7ncA2nDwiIqk8PBGxsjdc/W767zOOv7117rwhaGHgrJ2tLxoGWj0uoH3ZVhITP1z
+ gqHXYaehPEELDV36WrSKidTarfThCWW0T3y4bH/mjvqi4ji9emp1/pOWs5/fmd4HpKW+44tD
+ Yt4rSJRSa8lsXnZaEPaeY3nkbWPcy3vX6qafIey5d8dc8Uyaan39WslnJFNEx8cCqJrC77kI
+ vcnl65HaW3y48DezrMDH34t3FsNrSVv5fRQ0mbEed8hbn4jguFAjPt4az1xawSp0YvhzwATJ
+ YmZWRMa3LPx/fAxoolq9cNa0UB3D3jmikWktm+Jnp6aPeQ2Db3C0cDyxcOQY/GASYHY3KNra
+ z8iwS7vULyq1lVhOXg1EeSm+lXQ1Ciz3ub3AhzE4c0ASqRrIHloVHBmh4favY4DEFN19Xw1p
+ 76vBu6QjlsJGjvROW3GRKpLGogQTLslbjCdIYyp3AJq2KkoKxqdeQYm0LZXjtAwtRDbDo71C
+ FxS7i/qfvWJv8ie7bE9A6Wsjn7kCDQROnDz4ARAAmPI1e8xB0k23TsEg8O1sBCTXkV8HSEq7
+ JlWz7SWyM8oFkJqYAB7E1GTXV5UZcr9iurCMKGSTrSu3ermLja4+k0w71pLxws859V+3z1jr
+ nhB3dGzVZEUhCr3EuN0t8eHSLSMyrlPL5qJ11JelnuhToT6535cLOzeTlECc51bp5Xf6/XSx
+ SMQaIU1nDM31R13o98oRPQnvSqOeljc25aflKnVkSfqWSrZmb4b0bcWUFFUKVPfQ5Z6JEcJg
+ Hp7qPXHW7+tJTgmI1iM/BIkDwQ8qe3Wz8R6rfupde+T70NiId1M9w5rdo0JJsjKAPePKOSDo
+ RX1kseJsTZH88wyJ30WuqEqH9zBxif0WtPQUTjz/YgFbmZ8OkB1i+lrBCVHPdcmvathknAxS
+ bXL7j37VmYNyVoXez11zPYm+7LA2rvzP9WxR8bPhJvHLhKGk2kZESiNFzP/E4r4Wo24GT4eh
+ YrDo7GBHN82V4O9JxWZtjpxBBl8bH9PvGWBmOXky7/bP6h96jFu9ZYzVgIkBP3UYW+Pb1a+b
+ w4A83/5ImPwtBrN324bNUxPPqUWNW0ftiR5b81ms/rOcDC/k/VoN1B+IHkXrcBf742VOLID4
+ YP+CB9GXrwuF5KyQ5zEPCAjlOqZoq1fX/xGSsumfM7d6/OR8lvUPmqHfAzW3s9n4lZOW5Jfx
+ bbkAEQEAAYkCHwQYAQIACQUCTpw8+AIbDAAKCRARe7yAtaYcfPzbD/9WNGVf60oXezNzSVCL
+ hfS36l/zy4iy9H9rUZFmmmlBufWOATjiGAXnn0rr/Jh6Zy9NHuvpe3tyNYZLjB9pHT6mRZX7
+ Z1vDxeLgMjTv983TQ2hUSlhRSc6e6kGDJyG1WnGQaqymUllCmeC/p9q5m3IRxQrd0skfdN1V
+ AMttRwvipmnMduy5SdNayY2YbhWLQ2wS3XHJ39a7D7SQz+gUQfXgE3pf3FlwbwZhRtVR3z5u
+ aKjxqjybS3Ojimx4NkWjidwOaUVZTqEecBV+QCzi2oDr9+XtEs0m5YGI4v+Y/kHocNBP0myd
+ pF3OoXvcWdTb5atk+OKcc8t4TviKy1WCNujC+yBSq3OM8gbmk6NwCwqhHQzXCibMlVF9hq5a
+ FiJb8p4QKSVyLhM8EM3HtiFqFJSV7F+h+2W0kDyzBGyE0D8z3T+L3MOj3JJJkfCwbEbTpk4f
+ n8zMboekuNruDw1OADRMPlhoWb+g6exBWx/YN4AY9LbE2KuaScONqph5/HvJDsUldcRN3a5V
+ RGIN40QWFVlZvkKIEkzlzqpAyGaRLhXJPv/6tpoQaCQQoSAc5Z9kM/wEd9e2zMeojcWjUXgg
+ oWj8A/wY4UXExGBu+UCzzP/6sQRpBiPFgmqPTytrDo/gsUGqjOudLiHQcMU+uunULYQxVghC
+ syiRa+UVlsKmx1hsEg==
+Date:   Tue, 30 Jul 2019 16:57:33 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.7.2
 MIME-Version: 1.0
-In-Reply-To: <fb2e7693-9fc9-da47-0c8d-a8367cf8060f@arm.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-GB
+In-Reply-To: <20190730100112.18205-3-thuth@redhat.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+x-cbid: 19073014-0012-0000-0000-00000337A7DD
+X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
+x-cbparentid: 19073014-0013-0000-0000-000021714DBD
+Message-Id: <d48ac43b-c960-54af-a145-360a67b4a3d9@de.ibm.com>
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-07-30_07:,,
+ signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
+ clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
+ mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.0.1-1906280000 definitions=main-1907300155
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 30/07/2019 15:24, Vincenzo Frascino wrote:
-> Hi Kevin,
->
-> On 7/30/19 2:57 PM, Kevin Brodsky wrote:
->> On 30/07/2019 14:25, Vincenzo Frascino wrote:
->>> Hi Kevin,
->>>
->>> On 7/30/19 11:32 AM, Kevin Brodsky wrote:
->>>> Some more comments. Mostly minor wording issues, except the prctl() exclusion at
->>>> the end.
->>>>
->>>> On 25/07/2019 14:50, Vincenzo Frascino wrote:
->>>>> On arm64 the TCR_EL1.TBI0 bit has been always enabled hence
->>>>> the userspace (EL0) is allowed to set a non-zero value in the
->>>>> top byte but the resulting pointers are not allowed at the
->>>>> user-kernel syscall ABI boundary.
->>>>>
->>>>> With the relaxed ABI proposed through this document, it is now possible
->>>>> to pass tagged pointers to the syscalls, when these pointers are in
->>>>> memory ranges obtained by an anonymous (MAP_ANONYMOUS) mmap().
->>>>>
->>>>> This change in the ABI requires a mechanism to requires the userspace
->>>>> to opt-in to such an option.
->>>>>
->>>>> Specify and document the way in which sysctl and prctl() can be used
->>>>> in combination to allow the userspace to opt-in this feature.
->>>>>
->>>>> Cc: Catalin Marinas <catalin.marinas@arm.com>
->>>>> Cc: Will Deacon <will.deacon@arm.com>
->>>>> CC: Andrey Konovalov <andreyknvl@google.com>
->>>>> Signed-off-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
->>>>> Acked-by: Szabolcs Nagy <szabolcs.nagy@arm.com>
->>>>> ---
->>>>>     Documentation/arm64/tagged-address-abi.rst | 148 +++++++++++++++++++++
->>>>>     1 file changed, 148 insertions(+)
->>>>>     create mode 100644 Documentation/arm64/tagged-address-abi.rst
->>>>>
->>>>> diff --git a/Documentation/arm64/tagged-address-abi.rst
->>>>> b/Documentation/arm64/tagged-address-abi.rst
->>>>> new file mode 100644
->>>>> index 000000000000..a8ecb991de82
->>>>> --- /dev/null
->>>>> +++ b/Documentation/arm64/tagged-address-abi.rst
->>>>> @@ -0,0 +1,148 @@
->>>>> +========================
->>>>> +ARM64 TAGGED ADDRESS ABI
->>>>> +========================
->>>>> +
->>>>> +Author: Vincenzo Frascino <vincenzo.frascino@arm.com>
->>>>> +
->>>>> +Date: 25 July 2019
->>>>> +
->>>>> +This document describes the usage and semantics of the Tagged Address
->>>>> +ABI on arm64.
->>>>> +
->>>>> +1. Introduction
->>>>> +---------------
->>>>> +
->>>>> +On arm64 the TCR_EL1.TBI0 bit has always been enabled on the kernel, hence
->>>>> +the userspace (EL0) is entitled to perform a user memory access through a
->>>>> +64-bit pointer with a non-zero top byte but the resulting pointers are not
->>>>> +allowed at the user-kernel syscall ABI boundary.
->>>>> +
->>>>> +This document describes a relaxation of the ABI that makes it possible to
->>>>> +to pass tagged pointers to the syscalls, when these pointers are in memory
->>>> One too many "to" (at the end the previous line).
->>>>
->>> Yep will fix in v7.
->>>
->>>>> +ranges obtained as described in section 2.
->>>>> +
->>>>> +Since it is not desirable to relax the ABI to allow tagged user addresses
->>>>> +into the kernel indiscriminately, arm64 provides a new sysctl interface
->>>>> +(/proc/sys/abi/tagged_addr) that is used to prevent the applications from
->>>>> +enabling the relaxed ABI and a new prctl() interface that can be used to
->>>>> +enable or disable the relaxed ABI.
->>>>> +A detailed description of the newly introduced mechanisms will be provided
->>>>> +in section 2.
->>>>> +
->>>>> +2. ARM64 Tagged Address ABI
->>>>> +---------------------------
->>>>> +
->>>>> +From the kernel syscall interface perspective, we define, for the purposes
->>>>> +of this document, a "valid tagged pointer" as a pointer that either has a
->>>>> +zero value set in the top byte or has a non-zero value, is in memory ranges
->>>>> +privately owned by a userspace process and is obtained in one of the
->>>>> +following ways:
->>>>> +- mmap() done by the process itself, where either:
->>>>> +
->>>>> +  - flags have **MAP_PRIVATE** and **MAP_ANONYMOUS**
->>>>> +  - flags have **MAP_PRIVATE** and the file descriptor refers to a regular
->>>>> +    file or **/dev/zero**
->>>>> +
->>>>> +- brk() system call done by the process itself (i.e. the heap area between
->>>>> +  the initial location of the program break at process creation and its
->>>>> +  current location).
->>>>> +- any memory mapped by the kernel in the process's address space during
->>>>> +  creation and with the same restrictions as for mmap() (e.g. data, bss,
->>>>> +  stack).
->>>>> +
->>>>> +The ARM64 Tagged Address ABI is an opt-in feature, and an application can
->>>>> +control it using the following:
->>>>> +
->>>>> +- **/proc/sys/abi/tagged_addr**: a new sysctl interface that can be used to
->>>>> +  prevent the applications from enabling the access to the relaxed ABI.
->>>>> +  The sysctl supports the following configuration options:
->>>>> +
->>>>> +  - **0**: Disable the access to the ARM64 Tagged Address ABI for all
->>>>> +    the applications.
->>>>> +  - **1** (Default): Enable the access to the ARM64 Tagged Address ABI for
->>>>> +    all the applications.
->>>>> +
->>>>> +   If the access to the ARM64 Tagged Address ABI is disabled at a certain
->>>>> +   point in time, all the applications that were using tagging before this
->>>>> +   event occurs, will continue to use tagging.
->>>> "tagging" may be misinterpreted here. I would be more explicit by saying that
->>>> the tagged address ABI remains enabled in processes that opted in before the
->>>> access got disabled.
->>>>
->>> Assuming that ARM64 Tagged Address ABI gives access to "tagging" and since it is
->>> what this document is talking about, I do not see how it can be misinterpreted ;)
->> "tagging" is a confusing term ("using tagging" even more so), it could be
->> interpreted as memory tagging (especially in the presence of MTE). This document
->> does not use "tagging" anywhere else, which is good. Let's stick to the same
->> name for the ABI throughout the document, repetition is less problematic than
->> vague wording.
->>
-> This document does not cover MTE, it covers the "ARM64 Tagged Address ABI" hence
-> "tagging" has a precise semantical meaning in this context. Still I do not see
-> how it can be confused.
->
->>>>> +- **prctl()s**:
->>>>> +
->>>>> +  - **PR_SET_TAGGED_ADDR_CTRL**: Invoked by a process, can be used to
->>>>> enable or
->>>>> +    disable its access to the ARM64 Tagged Address ABI.
->>>> I still find the wording confusing, because "access to the ABI" is not used
->>>> consistently. The "tagged_addr" sysctl enables *access to the ABI*, that's fine.
->>>> However, PR_SET_TAGGED_ADDR_CTRL enables *the ABI itself* (which is only
->>>> possible if access to the ABI is enabled).
->>>>
->>> As it stands, it enables or disables the ABI itself when used with
->>> PR_TAGGED_ADDR_ENABLE, or can enable other things in future. IMHO the only thing
->>> that these features have in common is the access to the ABI which is granted by
->>> this prctl().
->> I see your point, you could have other bits controlling other aspects. However,
->> I would really avoid saying that this prctl is used to enable or disable access
->> to the new ABI, because it isn't (either you have access to the new ABI and this
->> prctl can be used, or you don't and this prctl will fail).
->>
-> What is the system wide evidence that the access to the ABI is denied? Or what
-> is the system wide evidence that it is granted?
->
-> In other words, is it enough for a process to have the sysctl set (system wide)
-> to know that the the ABI is enabled and have granted access to it? or does it
-> need to do something else?
 
-I think we really have a wording problem here, which is why this part of the document 
-and this discussion is confusing.
 
-tagged_addr=1 (system-wide) allows processes to enable the tagged address ABI by 
-calling prctl(PR_SET_TAGGED_ADDR_CTRL). It does not alter the state of any running 
-process, and does not enable the ABI by default for new processes either. Conversely, 
-when tagged_addr=0, that prctl() is always denied.
+On 30.07.19 12:01, Thomas Huth wrote:
+> To run the dirty_log_test on s390x, we have to make sure that we
+> access the dirty log bitmap with little endian byte ordering and
+> we have to properly align the memslot of the guest.
+> Also all dirty bits of a segment are set once on s390x when one
+> of the pages of a segment are written to for the first time, so
+> we have to make sure that we touch all pages during the first
+> iteration to keep the test in sync here.
 
-The current description of the sysctl and prctl does not make that clear. I think 
-that it would be much more obvious by reorganising that section as such:
-- prctl() first, the current wording is fine.
-- sysctl() second, described *only* in terms of the prctl() (denying 
-PR_SET_TAGGED_ADDR_CTRL or not), and nothing else, to avoid wording issues.
-
-It's certainly not the only way to do it, but that would be much clearer to me :)
-
-Kevin
-
->>>>> +
->>>>> +    The (unsigned int) arg2 argument is a bit mask describing the control mode
->>>>> +    used:
->>>>> +
->>>>> +    - **PR_TAGGED_ADDR_ENABLE**: Enable ARM64 Tagged Address ABI.
->>>>> +
->>>>> +    The prctl(PR_SET_TAGGED_ADDR_CTRL, ...) will return -EINVAL if the ARM64
->>>>> +    Tagged Address ABI is not available.
->>>> For clarity, it would be good to mention that one possible reason for the ABI
->>>> not to be available is tagged_addr == 0.
->>>>
->>> The logical implication is already quite clear tagged_addr == 0 (Disabled) =>
->>> Tagged Address ABI not available => return -EINVAL. I do not see the need to
->>> repeat the concept twice.
->>>
->>>>> +
->>>>> +    The arguments arg3, arg4, and arg5 are ignored.
->>>>> +  - **PR_GET_TAGGED_ADDR_CTRL**: can be used to check the status of the Tagged
->>>>> +    Address ABI.
->>>>> +
->>>>> +    The arguments arg2, arg3, arg4, and arg5 are ignored.
->>>>> +
->>>>> +The ABI properties set by the mechanisms described above are inherited by
->>>>> threads
->>>>> +of the same application and fork()'ed children but cleared by execve().
->>>>> +
->>>>> +When a process has successfully opted into the new ABI by invoking
->>>>> +PR_SET_TAGGED_ADDR_CTRL prctl(), this guarantees the following behaviours:
->>>>> +
->>>>> + - Every currently available syscall, except the cases mentioned in section
->>>>> 3, can
->>>>> +   accept any valid tagged pointer. The same rule is applicable to any syscall
->>>>> +   introduced in the future.
->>>> I thought Catalin wanted to drop this guarantee?
->>>>
->>> The guarantee is changed and explicitly includes the syscalls that can be added
->>> in the future. IMHO since we are defining an ABI, we cannot leave that topic in
->>> an uncharted territory, we need to address it.
->> It makes sense to me, just wanted to be sure that Catalin is on the same page.
->>
->>>>> + - If a non valid tagged pointer is passed to a syscall then the behaviour
->>>>> +   is undefined.
->>>>> + - Every valid tagged pointer is expected to work as an untagged one.
->>>>> + - The kernel preserves any valid tagged pointer and returns it to the
->>>>> +   userspace unchanged (i.e. on syscall return) in all the cases except the
->>>>> +   ones documented in the "Preserving tags" section of tagged-pointers.txt.
->>>>> +
->>>>> +A definition of the meaning of tagged pointers on arm64 can be found in:
->>>>> +Documentation/arm64/tagged-pointers.txt.
->>>>> +
->>>>> +3. ARM64 Tagged Address ABI Exceptions
->>>>> +--------------------------------------
->>>>> +
->>>>> +The behaviours described in section 2, with particular reference to the
->>>>> +acceptance by the syscalls of any valid tagged pointer are not applicable
->>>>> +to the following cases:
->>>>> +
->>>>> + - mmap() addr parameter.
->>>>> + - mremap() new_address parameter.
->>>>> + - prctl(PR_SET_MM, PR_SET_MM_MAP, ...) struct prctl_mm_map fields.
->>>>> + - prctl(PR_SET_MM, PR_SET_MM_MAP_SIZE, ...) struct prctl_mm_map fields.
->>>> All the PR_SET_MM options that specify pointers (PR_SET_MM_START_CODE,
->>>> PR_SET_MM_END_CODE, ...) should be excluded as well. AFAICT (but don't take my
->>>> word for it), that's all of them except PR_SET_MM_EXE_FILE. Conversely,
->>>> PR_SET_MM_MAP_SIZE should not be excluded (it does not pass a prctl_mm_map
->>>> struct, and the pointer to unsigned int can be tagged).
->>>>
->>> Agreed, I clearly misread the prctl() man page here. Fill fix in v7.
->>> PR_SET_MM_MAP_SIZE _returns_  struct prctl_mm_map, does not take it as a
->>> parameter.
->> OK. About PR_SET_MM_MAP_SIZE, it neither takes nor returns struct prctl_mm_map.
->> It writes the size of prctl_map to the int pointed to by arg3, and does nothing
->> else. Therefore, there's no need to exclude it.
->>
-> Agreed, I missed the word size in my reply: s/_returns_  struct
-> prctl_mm_map/_returns_  the size of struct prctl_mm_map/
->
->> BTW I've just realised that the man page is wrong about PR_SET_MM_MAP_SIZE, the
->> pointer to int is passed in arg3, not arg4. Anyone knows where to report that?
->>
->> Thanks,
->> Kevin
->>
->>> Vincenzo
->>>
->>>> Kevin
->>>>
->>>>> +
->>>>> +Any attempt to use non-zero tagged pointers will lead to undefined behaviour.
->>>>> +
->>>>> +4. Example of correct usage
->>>>> +---------------------------
->>>>> +.. code-block:: c
->>>>> +
->>>>> +   void main(void)
->>>>> +   {
->>>>> +           static int tbi_enabled = 0;
->>>>> +           unsigned long tag = 0;
->>>>> +
->>>>> +           char *ptr = mmap(NULL, PAGE_SIZE, PROT_READ | PROT_WRITE,
->>>>> +                            MAP_ANONYMOUS, -1, 0);
->>>>> +
->>>>> +           if (prctl(PR_SET_TAGGED_ADDR_CTRL, PR_TAGGED_ADDR_ENABLE,
->>>>> +                     0, 0, 0) == 0)
->>>>> +                   tbi_enabled = 1;
->>>>> +
->>>>> +           if (ptr == (void *)-1) /* MAP_FAILED */
->>>>> +                   return -1;
->>>>> +
->>>>> +           if (tbi_enabled)
->>>>> +                   tag = rand() & 0xff;
->>>>> +
->>>>> +           ptr = (char *)((unsigned long)ptr | (tag << TAG_SHIFT));
->>>>> +
->>>>> +           *ptr = 'a';
->>>>> +
->>>>> +           ...
->>>>> +   }
->>>>> +
->>>> _______________________________________________
->>>> linux-arm-kernel mailing list
->>>> linux-arm-kernel@lists.infradead.org
->>>> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+While this fixes the test (and the migration does work fine), it still
+means that s390x overindicates the dirty bit for sparsely populated
+1M segments. It is just a performance issue, but maybe we should try 
+to get this fixed. Not sure what to do here to remember us about this, 
+adding this as expected fail?
+> 
+> Signed-off-by: Thomas Huth <thuth@redhat.com>
+> ---
+>  tools/testing/selftests/kvm/Makefile         |  1 +
+>  tools/testing/selftests/kvm/dirty_log_test.c | 70 ++++++++++++++++++--
+>  2 files changed, 66 insertions(+), 5 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftests/kvm/Makefile
+> index ba7849751989..ac7e63e00fee 100644
+> --- a/tools/testing/selftests/kvm/Makefile
+> +++ b/tools/testing/selftests/kvm/Makefile
+> @@ -33,6 +33,7 @@ TEST_GEN_PROGS_aarch64 += dirty_log_test
+>  TEST_GEN_PROGS_aarch64 += kvm_create_max_vcpus
+>  
+>  TEST_GEN_PROGS_s390x += s390x/sync_regs_test
+> +TEST_GEN_PROGS_s390x += dirty_log_test
+>  TEST_GEN_PROGS_s390x += kvm_create_max_vcpus
+>  
+>  TEST_GEN_PROGS += $(TEST_GEN_PROGS_$(UNAME_M))
+> diff --git a/tools/testing/selftests/kvm/dirty_log_test.c b/tools/testing/selftests/kvm/dirty_log_test.c
+> index ceb52b952637..7a1223ad0ff3 100644
+> --- a/tools/testing/selftests/kvm/dirty_log_test.c
+> +++ b/tools/testing/selftests/kvm/dirty_log_test.c
+> @@ -26,9 +26,22 @@
+>  /* The memory slot index to track dirty pages */
+>  #define TEST_MEM_SLOT_INDEX		1
+>  
+> +#ifdef __s390x__
+> +
+> +/*
+> + * On s390x, the ELF program is sometimes linked at 0x80000000, so we can
+> + * not use 0x40000000 here without overlapping into that region. Thus let's
+> + * use 0xc0000000 as base address there instead.
+> + */
+> +#define DEFAULT_GUEST_TEST_MEM		0xc0000000
+> +
+> +#else
+> +
+>  /* Default guest test memory offset, 1G */
+>  #define DEFAULT_GUEST_TEST_MEM		0x40000000
+>  
+> +#endif
+> +
+>  /* How many pages to dirty for each guest loop */
+>  #define TEST_PAGES_PER_LOOP		1024
+>  
+> @@ -38,6 +51,27 @@
+>  /* Interval for each host loop (ms) */
+>  #define TEST_HOST_LOOP_INTERVAL		10UL
+>  
+> +/* Dirty bitmaps are always little endian, so we need to swap on big endian */
+> +#if defined(__s390x__)
+> +# define BITOP_LE_SWIZZLE	((BITS_PER_LONG-1) & ~0x7)
+> +# define test_bit_le(nr, addr) \
+> +	test_bit((nr) ^ BITOP_LE_SWIZZLE, addr)
+> +# define set_bit_le(nr, addr) \
+> +	set_bit((nr) ^ BITOP_LE_SWIZZLE, addr)
+> +# define clear_bit_le(nr, addr) \
+> +	clear_bit((nr) ^ BITOP_LE_SWIZZLE, addr)
+> +# define test_and_set_bit_le(nr, addr) \
+> +	test_and_set_bit((nr) ^ BITOP_LE_SWIZZLE, addr)
+> +# define test_and_clear_bit_le(nr, addr) \
+> +	test_and_clear_bit((nr) ^ BITOP_LE_SWIZZLE, addr)
+> +#else
+> +# define test_bit_le	test_bit
+> +# define set_bit_le	set_bit
+> +# define clear_bit_le	clear_bit
+> +# define test_and_set_bit_le	test_and_set_bit
+> +# define test_and_clear_bit_le	test_and_clear_bit
+> +#endif
+> +
+>  /*
+>   * Guest/Host shared variables. Ensure addr_gva2hva() and/or
+>   * sync_global_to/from_guest() are used when accessing from
+> @@ -69,11 +103,25 @@ static uint64_t guest_test_virt_mem = DEFAULT_GUEST_TEST_MEM;
+>   */
+>  static void guest_code(void)
+>  {
+> +	uint64_t addr;
+>  	int i;
+>  
+> +#ifdef __s390x__
+> +	/*
+> +	 * On s390x, all pages of a 1M segment are initially marked as dirty
+> +	 * when a page of the segment is written to for the very first time.
+> +	 * To compensate this specialty in this test, we need to touch all
+> +	 * pages during the first iteration.
+> +	 */
+> +	for (i = 0; i < guest_num_pages; i++) {
+> +		addr = guest_test_virt_mem + i * guest_page_size;
+> +		*(uint64_t *)addr = READ_ONCE(iteration);
+> +	}
+> +#endif
+> +
+>  	while (true) {
+>  		for (i = 0; i < TEST_PAGES_PER_LOOP; i++) {
+> -			uint64_t addr = guest_test_virt_mem;
+> +			addr = guest_test_virt_mem;
+>  			addr += (READ_ONCE(random_array[i]) % guest_num_pages)
+>  				* guest_page_size;
+>  			addr &= ~(host_page_size - 1);
+> @@ -158,15 +206,15 @@ static void vm_dirty_log_verify(unsigned long *bmap)
+>  		value_ptr = host_test_mem + page * host_page_size;
+>  
+>  		/* If this is a special page that we were tracking... */
+> -		if (test_and_clear_bit(page, host_bmap_track)) {
+> +		if (test_and_clear_bit_le(page, host_bmap_track)) {
+>  			host_track_next_count++;
+> -			TEST_ASSERT(test_bit(page, bmap),
+> +			TEST_ASSERT(test_bit_le(page, bmap),
+>  				    "Page %"PRIu64" should have its dirty bit "
+>  				    "set in this iteration but it is missing",
+>  				    page);
+>  		}
+>  
+> -		if (test_bit(page, bmap)) {
+> +		if (test_bit_le(page, bmap)) {
+>  			host_dirty_count++;
+>  			/*
+>  			 * If the bit is set, the value written onto
+> @@ -209,7 +257,7 @@ static void vm_dirty_log_verify(unsigned long *bmap)
+>  				 * should report its dirtyness in the
+>  				 * next run
+>  				 */
+> -				set_bit(page, host_bmap_track);
+> +				set_bit_le(page, host_bmap_track);
+>  			}
+>  		}
+>  	}
+> @@ -293,6 +341,10 @@ static void run_test(enum vm_guest_mode mode, unsigned long iterations,
+>  	 * case where the size is not aligned to 64 pages.
+>  	 */
+>  	guest_num_pages = (1ul << (30 - guest_page_shift)) + 16;
+> +#ifdef __s390x__
+> +	/* Round up to multiple of 1M (segment size) */
+> +	guest_num_pages = (guest_num_pages + 0xff) & ~0xffUL;
+> +#endif
+>  	host_page_size = getpagesize();
+>  	host_num_pages = (guest_num_pages * guest_page_size) / host_page_size +
+>  			 !!((guest_num_pages * guest_page_size) % host_page_size);
+> @@ -304,6 +356,11 @@ static void run_test(enum vm_guest_mode mode, unsigned long iterations,
+>  		guest_test_phys_mem = phys_offset;
+>  	}
+>  
+> +#ifdef __s390x__
+> +	/* Align to 1M (segment size) */
+> +	guest_test_phys_mem &= ~((1 << 20) - 1);
+> +#endif
+> +
+>  	DEBUG("guest physical test memory offset: 0x%lx\n", guest_test_phys_mem);
+>  
+>  	bmap = bitmap_alloc(host_num_pages);
+> @@ -454,6 +511,9 @@ int main(int argc, char *argv[])
+>  		vm_guest_mode_params_init(VM_MODE_P48V48_64K, true, true);
+>  	}
+>  #endif
+> +#ifdef __s390x__
+> +	vm_guest_mode_params_init(VM_MODE_P40V48_4K, true, true);
+> +#endif
+>  
+>  	while ((opt = getopt(argc, argv, "hi:I:p:m:")) != -1) {
+>  		switch (opt) {
+> 
 
