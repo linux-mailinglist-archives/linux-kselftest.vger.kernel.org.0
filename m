@@ -2,143 +2,102 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D36417BE68
-	for <lists+linux-kselftest@lfdr.de>; Wed, 31 Jul 2019 12:29:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41A947BEB1
+	for <lists+linux-kselftest@lfdr.de>; Wed, 31 Jul 2019 12:55:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387588AbfGaK3C (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 31 Jul 2019 06:29:02 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:60684 "EHLO mx1.redhat.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2387399AbfGaK3C (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 31 Jul 2019 06:29:02 -0400
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id 44D6EC01DE0D;
-        Wed, 31 Jul 2019 10:29:01 +0000 (UTC)
-Received: from kamzik.brq.redhat.com (unknown [10.43.2.160])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id F173019C70;
-        Wed, 31 Jul 2019 10:28:51 +0000 (UTC)
-Date:   Wed, 31 Jul 2019 12:28:49 +0200
-From:   Andrew Jones <drjones@redhat.com>
-To:     Thomas Huth <thuth@redhat.com>
-Cc:     kvm@vger.kernel.org,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-s390@vger.kernel.org, David Hildenbrand <david@redhat.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Radim =?utf-8?B?S3LEjW3DocWZ?= <rkrcmar@redhat.com>,
-        Shuah Khan <shuah@kernel.org>, Peter Xu <peterx@redhat.com>
-Subject: Re: [PATCH 1/2] KVM: selftests: Implement ucall() for s390x
-Message-ID: <20190731102849.x26rdan7cddmpvhe@kamzik.brq.redhat.com>
-References: <20190730100112.18205-1-thuth@redhat.com>
- <20190730100112.18205-2-thuth@redhat.com>
- <20190730104807.7uzuvd52foybakgu@kamzik.brq.redhat.com>
- <d9cb3c86-6390-3803-f2c6-d47f5c24139f@redhat.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <d9cb3c86-6390-3803-f2c6-d47f5c24139f@redhat.com>
-User-Agent: NeoMutt/20180716
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
-X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.31]); Wed, 31 Jul 2019 10:29:01 +0000 (UTC)
+        id S1728387AbfGaKzt (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 31 Jul 2019 06:55:49 -0400
+Received: from mail-wm1-f67.google.com ([209.85.128.67]:53760 "EHLO
+        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727024AbfGaKzt (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 31 Jul 2019 06:55:49 -0400
+Received: by mail-wm1-f67.google.com with SMTP id x15so60342943wmj.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 31 Jul 2019 03:55:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id;
+        bh=TDzD4mVy0JnW8wivYuq40NvZrehE5P3+AXFL+h905R8=;
+        b=WNMsbmyz6D6vL9V6DopwuW1s80Gg6oqYGLlA0GJ8RnDqXKSMBuyTYqRBqfhzj9Vffq
+         wl9a5rf74ruxe3IlxypYN4x9BVxL7mlQPHncZ0jmz8pBEGtUAlq88DV0+PNuEQokidbI
+         01jJzGXYdAnjNlSgmwuOLPLupEQt93/+w7eji2TzrzBQG4t/JWkd3GctA3MGZbpVADTA
+         6B1ItYcMYe+vJZQmPWGongPZrKj1kDGsrDGbxHDk0PuAb1ZzpGWQQimPQogwr2ESvDcR
+         JzQuXGQUq4oyde/xmWLagYhdQLfu2Nvi6w80bNdvcg/Dv+8UtAmQOMIILMuZdUy9HJdN
+         Um1A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=TDzD4mVy0JnW8wivYuq40NvZrehE5P3+AXFL+h905R8=;
+        b=ccFX0OkgP2+nny9ANfrhFZT2xIuunmX8l1dbIvW1BuZXQ88z8squ3C9GhVQF9k/d4S
+         NdKCcgUn5+ew0t2F3YKP7HMGwv1Cth9mrcAa+61tJwi9XkuycD0TlWqMY2VP9P+CMnTS
+         CCHPa0XIc2xuif5vIJmYnS2xcQJXwlWaR8SqCKxUkzPe+rUwLD8rDVOJksCeGLoL9yHY
+         1O7NjPT1c1FkLLgkAaJX+xTAZ0M/5yUp15od16ASJNQQzGnUEUJ4/xNl1o53kZ5WP6Iy
+         pjWQPUnZEg78yiNABcE2/tyTgPcPuWROwAyVIHf1S9zZvRYIOhNxaqsajdXqf44vWtgV
+         ENuQ==
+X-Gm-Message-State: APjAAAUSUar8oobPA0FL3qYpIca0oKZuCupMfe9YBVJovwu1cRWND3bY
+        wLc4oxaRFT/nS6KvTULca0LrnFbHK/nrpQ==
+X-Google-Smtp-Source: APXvYqzdekKZMBfdaKCjtzUencNZJvkLCqiIWA5u9hwHKpwmTeSFcpzTl4f4+JaBlbZ+1xTy2sL1sQ==
+X-Received: by 2002:a1c:7d08:: with SMTP id y8mr93262568wmc.50.1564570546683;
+        Wed, 31 Jul 2019 03:55:46 -0700 (PDT)
+Received: from hackbox2.linaro.org ([81.128.185.34])
+        by smtp.gmail.com with ESMTPSA id a84sm85426114wmf.29.2019.07.31.03.55.45
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Wed, 31 Jul 2019 03:55:45 -0700 (PDT)
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+To:     linux-kselftest@vger.kernel.org, kvm@vger.kernel.org
+Cc:     pbonzini@redhat.com, linux-kernel@vger.kernel.org,
+        drjones@redhat.com, sean.j.christopherson@intel.com,
+        Naresh Kamboju <naresh.kamboju@linaro.org>
+Subject: [PATCH] selftests: kvm: Adding config fragments
+Date:   Wed, 31 Jul 2019 11:55:40 +0100
+Message-Id: <20190731105540.28962-1-naresh.kamboju@linaro.org>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Jul 31, 2019 at 11:43:16AM +0200, Thomas Huth wrote:
-> On 30/07/2019 12.48, Andrew Jones wrote:
-> > On Tue, Jul 30, 2019 at 12:01:11PM +0200, Thomas Huth wrote:
-> >> On s390x, we can neither exit via PIO nor MMIO, but have to use
-> >> an instruction like DIAGNOSE. While we're at it, rename UCALL_PIO
-> >> to UCALL_DEFAULT, since PIO only works on x86 anyway, and this
-> >> way we can re-use the "default" type for the DIAGNOSE exit on s390x.
-> >>
-> >> Now that ucall() is implemented, we can use it in the sync_reg_test
-> >> on s390x, too.
-> >>
-> >> Signed-off-by: Thomas Huth <thuth@redhat.com>
-> >> ---
-> >>  .../testing/selftests/kvm/include/kvm_util.h  |  2 +-
-> >>  tools/testing/selftests/kvm/lib/ucall.c       | 34 +++++++++++++++----
-> >>  .../selftests/kvm/s390x/sync_regs_test.c      |  6 ++--
-> >>  3 files changed, 32 insertions(+), 10 deletions(-)
-> >>
-> >> diff --git a/tools/testing/selftests/kvm/include/kvm_util.h b/tools/testing/selftests/kvm/include/kvm_util.h
-> >> index e0e66b115ef2..c37aea2e33e5 100644
-> >> --- a/tools/testing/selftests/kvm/include/kvm_util.h
-> >> +++ b/tools/testing/selftests/kvm/include/kvm_util.h
-> >> @@ -167,7 +167,7 @@ int vm_create_device(struct kvm_vm *vm, struct kvm_create_device *cd);
-> >>  
-> >>  /* ucall implementation types */
-> >>  typedef enum {
-> >> -	UCALL_PIO,
-> >> +	UCALL_DEFAULT,
-> > 
-> > I'd rather we keep explicit types defined; keep PIO and add DIAG. Then
-> > we can have
-> > 
-> > /*  Set default ucall types */
-> > #if defined(__x86_64__)
-> >   ucall_type = UCALL_PIO;
-> > #elif defined(__aarch64__)
-> >   ucall_type = UCALL_MMIO;
-> >   ucall_requires_init = true;
-> > #elif defined(__s390x__)
-> >   ucall_type = UCALL_DIAG;
-> > #endif
-> > 
-> > And add an assert in get_ucall()
-> > 
-> >  assert(!ucall_requires_init || ucall_initialized);
-> 
-> I'm not sure whether I really like that. It's yet another additional
-> #ifdef block, and yet another variable ...
-> 
-> What do you think about removing the enum completely and simply code it
-> directly, without the ucall_type indirection, i.e.:
-> 
-> void ucall(uint64_t cmd, int nargs, ...)
-> {
-> 	struct ucall uc = {
-> 		.cmd = cmd,
-> 	};
-> 	va_list va;
-> 	int i;
-> 
-> 	nargs = nargs <= UCALL_MAX_ARGS ? nargs : UCALL_MAX_ARGS;
-> 
-> 	va_start(va, nargs);
-> 	for (i = 0; i < nargs; ++i)
-> 		uc.args[i] = va_arg(va, uint64_t);
-> 	va_end(va);
-> 
-> #if defined(__x86_64__)
-> 
-> 	/* Exit via PIO */
-> 	asm volatile("in %[port], %%al"
-> 		: : [port] "d" (UCALL_PIO_PORT), "D" (&uc) : "rax");
-> 
-> #elif defined(__aarch64__)
-> 
-> 	*ucall_exit_mmio_addr = (vm_vaddr_t)&uc;
-> 
-> #elif defined(__s390x__)
-> 
-> 	/* Exit via DIAGNOSE 0x501 (normally used for breakpoints) */
-> 	asm volatile ("diag 0,%0,0x501" : : "a"(&uc) : "memory");
-> 
-> #endif
-> }
-> 
-> I think that's way less confusing than having to understand the meaning
-> of ucall_type etc. before...?
->
+selftests kvm test cases need pre-required kernel configs for the test
+to get pass.
 
-Sounds good to me.
+Signed-off-by: Naresh Kamboju <naresh.kamboju@linaro.org>
+---
+ tools/testing/selftests/kvm/config | 26 ++++++++++++++++++++++++++
+ 1 file changed, 26 insertions(+)
+ create mode 100644 tools/testing/selftests/kvm/config
 
-Thanks,
-drew 
+diff --git a/tools/testing/selftests/kvm/config b/tools/testing/selftests/kvm/config
+new file mode 100644
+index 000000000000..3b1cbd726af6
+--- /dev/null
++++ b/tools/testing/selftests/kvm/config
+@@ -0,0 +1,26 @@
++CONFIG_ARCH_ENABLE_THP_MIGRATION=y
++CONFIG_HAVE_KVM_IRQCHIP=y
++CONFIG_HAVE_KVM_IRQFD=y
++CONFIG_HAVE_KVM_IRQ_ROUTING=y
++CONFIG_HAVE_KVM_EVENTFD=y
++CONFIG_KVM_MMIO=y
++CONFIG_KVM_ASYNC_PF=y
++CONFIG_HAVE_KVM_MSI=y
++CONFIG_HAVE_KVM_CPU_RELAX_INTERCEPT=y
++CONFIG_KVM_VFIO=y
++CONFIG_KVM_GENERIC_DIRTYLOG_READ_PROTECT=y
++CONFIG_KVM_COMPAT=y
++CONFIG_HAVE_KVM_IRQ_BYPASS=y
++CONFIG_HAVE_KVM_NO_POLL=y
++CONFIG_KVM=y
++CONFIG_VHOST_NET=y
++CONFIG_VHOST=y
++CONFIG_VHOST_CROSS_ENDIAN_LEGACY=y
++CONFIG_USER_RETURN_NOTIFIER=y
++CONFIG_PREEMPT_NOTIFIERS=y
++CONFIG_TRANSPARENT_HUGEPAGE=y
++CONFIG_TRANSPARENT_HUGEPAGE_MADVISE=y
++CONFIG_THP_SWAP=y
++CONFIG_TRANSPARENT_HUGE_PAGECACHE=y
++CONFIG_IRQ_BYPASS_MANAGER=y
++CONFIG_XARRAY_MULTI=y
+-- 
+2.17.1
+
