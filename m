@@ -2,37 +2,62 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D4DDA7C908
-	for <lists+linux-kselftest@lfdr.de>; Wed, 31 Jul 2019 18:43:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A5A37C934
+	for <lists+linux-kselftest@lfdr.de>; Wed, 31 Jul 2019 18:51:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730378AbfGaQns (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 31 Jul 2019 12:43:48 -0400
-Received: from mga04.intel.com ([192.55.52.120]:30347 "EHLO mga04.intel.com"
+        id S1730454AbfGaQvA (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 31 Jul 2019 12:51:00 -0400
+Received: from mga04.intel.com ([192.55.52.120]:30941 "EHLO mga04.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730367AbfGaQnr (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 31 Jul 2019 12:43:47 -0400
+        id S1726669AbfGaQu7 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 31 Jul 2019 12:50:59 -0400
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
 Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 31 Jul 2019 09:43:47 -0700
+  by fmsmga104.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 31 Jul 2019 09:50:59 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.64,330,1559545200"; 
-   d="scan'208";a="183748784"
+   d="scan'208";a="183752276"
 Received: from ray.jf.intel.com (HELO [10.7.201.140]) ([10.7.201.140])
-  by orsmga002.jf.intel.com with ESMTP; 31 Jul 2019 09:43:46 -0700
-Subject: Re: [PATCH v6 1/2] arm64: Define
- Documentation/arm64/tagged-address-abi.rst
-To:     Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
-        linux-mm@kvack.org, linux-arch@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+  by orsmga002.jf.intel.com with ESMTP; 31 Jul 2019 09:50:58 -0700
+Subject: Re: [PATCH v19 00/15] arm64: untag user pointers passed to the kernel
+To:     Andrey Konovalov <andreyknvl@google.com>,
+        linux-arm-kernel@lists.infradead.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, amd-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, linux-rdma@vger.kernel.org,
+        linux-media@vger.kernel.org, kvm@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
 Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
         Will Deacon <will.deacon@arm.com>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        Szabolcs Nagy <szabolcs.nagy@arm.com>
+        Mark Rutland <mark.rutland@arm.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Kees Cook <keescook@chromium.org>,
+        Yishai Hadas <yishaih@mellanox.com>,
+        Felix Kuehling <Felix.Kuehling@amd.com>,
+        Alexander Deucher <Alexander.Deucher@amd.com>,
+        Christian Koenig <Christian.Koenig@amd.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Jens Wiklander <jens.wiklander@linaro.org>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
+        Dave Martin <Dave.Martin@arm.com>,
+        Khalid Aziz <khalid.aziz@oracle.com>, enh <enh@google.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Christoph Hellwig <hch@infradead.org>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Kostya Serebryany <kcc@google.com>,
+        Evgeniy Stepanov <eugenis@google.com>,
+        Lee Smith <Lee.Smith@arm.com>,
+        Ramana Radhakrishnan <Ramana.Radhakrishnan@arm.com>,
+        Jacob Bramley <Jacob.Bramley@arm.com>,
+        Ruben Ayrapetyan <Ruben.Ayrapetyan@arm.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Kevin Brodsky <kevin.brodsky@arm.com>,
+        Szabolcs Nagy <Szabolcs.Nagy@arm.com>
 References: <cover.1563904656.git.andreyknvl@google.com>
- <20190725135044.24381-1-vincenzo.frascino@arm.com>
- <20190725135044.24381-2-vincenzo.frascino@arm.com>
 From:   Dave Hansen <dave.hansen@intel.com>
 Openpgp: preference=signencrypt
 Autocrypt: addr=dave.hansen@intel.com; keydata=
@@ -78,12 +103,12 @@ Autocrypt: addr=dave.hansen@intel.com; keydata=
  MTsCeQDdjpgHsj+P2ZDeEKCbma4m6Ez/YWs4+zDm1X8uZDkZcfQlD9NldbKDJEXLIjYWo1PH
  hYepSffIWPyvBMBTW2W5FRjJ4vLRrJSUoEfJuPQ3vW9Y73foyo/qFoURHO48AinGPZ7PC7TF
  vUaNOTjKedrqHkaOcqB185ahG2had0xnFsDPlx5y
-Message-ID: <b74e7ce7-d58a-68a0-2f28-6648ec6302c0@intel.com>
-Date:   Wed, 31 Jul 2019 09:43:46 -0700
+Message-ID: <8c618cc9-ae68-9769-c5bb-67f1295abc4e@intel.com>
+Date:   Wed, 31 Jul 2019 09:50:58 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.8.0
 MIME-Version: 1.0
-In-Reply-To: <20190725135044.24381-2-vincenzo.frascino@arm.com>
+In-Reply-To: <cover.1563904656.git.andreyknvl@google.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -92,10 +117,9 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 7/25/19 6:50 AM, Vincenzo Frascino wrote:
-> With the relaxed ABI proposed through this document, it is now possible
-> to pass tagged pointers to the syscalls, when these pointers are in
-> memory ranges obtained by an anonymous (MAP_ANONYMOUS) mmap().
+On 7/23/19 10:58 AM, Andrey Konovalov wrote:
+> The mmap and mremap (only new_addr) syscalls do not currently accept
+> tagged addresses. Architectures may interpret the tag as a background
+> colour for the corresponding vma.
 
-I don't see a lot of description of why this restriction is necessary.
-What's the problem with supporting MAP_SHARED?
+What the heck is a "background colour"? :)
