@@ -2,36 +2,34 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 589DC7DF34
-	for <lists+linux-kselftest@lfdr.de>; Thu,  1 Aug 2019 17:36:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E63D7E073
+	for <lists+linux-kselftest@lfdr.de>; Thu,  1 Aug 2019 18:45:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728809AbfHAPgs (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 1 Aug 2019 11:36:48 -0400
-Received: from mga11.intel.com ([192.55.52.93]:20061 "EHLO mga11.intel.com"
+        id S1733119AbfHAQpP (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 1 Aug 2019 12:45:15 -0400
+Received: from mga05.intel.com ([192.55.52.43]:30312 "EHLO mga05.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726654AbfHAPgs (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 1 Aug 2019 11:36:48 -0400
+        id S1733108AbfHAQpO (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 1 Aug 2019 12:45:14 -0400
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 01 Aug 2019 08:36:47 -0700
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 01 Aug 2019 09:45:06 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.64,334,1559545200"; 
-   d="scan'208";a="184278760"
-Received: from unknown (HELO [10.7.201.140]) ([10.7.201.140])
-  by orsmga002.jf.intel.com with ESMTP; 01 Aug 2019 08:36:47 -0700
-Subject: Re: [PATCH v19 00/15] arm64: untag user pointers passed to the kernel
-To:     Andrey Konovalov <andreyknvl@google.com>,
-        Kevin Brodsky <kevin.brodsky@arm.com>
-Cc:     Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-rdma@vger.kernel.org, linux-media@vger.kernel.org,
-        kvm@vger.kernel.org,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
+   d="scan'208";a="175307534"
+Received: from ray.jf.intel.com (HELO [10.7.201.140]) ([10.7.201.140])
+  by orsmga003.jf.intel.com with ESMTP; 01 Aug 2019 09:45:06 -0700
+Subject: Re: [PATCH v19 02/15] arm64: Introduce prctl() options to control the
+ tagged user addresses ABI
+To:     Kevin Brodsky <kevin.brodsky@arm.com>,
+        Andrey Konovalov <andreyknvl@google.com>,
+        linux-arm-kernel@lists.infradead.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, amd-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, linux-rdma@vger.kernel.org,
+        linux-media@vger.kernel.org, kvm@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
         Vincenzo Frascino <vincenzo.frascino@arm.com>,
         Will Deacon <will.deacon@arm.com>,
         Mark Rutland <mark.rutland@arm.com>,
@@ -61,9 +59,9 @@ Cc:     Linux ARM <linux-arm-kernel@lists.infradead.org>,
         Robin Murphy <robin.murphy@arm.com>,
         Szabolcs Nagy <Szabolcs.Nagy@arm.com>
 References: <cover.1563904656.git.andreyknvl@google.com>
- <8c618cc9-ae68-9769-c5bb-67f1295abc4e@intel.com>
- <13b4cf53-3ecb-f7e7-b504-d77af15d77aa@arm.com>
- <CAAeHK+zTFqsLiB3Wf0bAi5A8ukQX5ZuvfUg4td-=r5UhBsUBOQ@mail.gmail.com>
+ <1c05651c53f90d07e98ee4973c2786ccf315db12.1563904656.git.andreyknvl@google.com>
+ <7a34470c-73f0-26ac-e63d-161191d4b1e4@intel.com>
+ <2b274c6f-6023-8eb8-5a86-507e6000e13d@arm.com>
 From:   Dave Hansen <dave.hansen@intel.com>
 Openpgp: preference=signencrypt
 Autocrypt: addr=dave.hansen@intel.com; keydata=
@@ -109,12 +107,12 @@ Autocrypt: addr=dave.hansen@intel.com; keydata=
  MTsCeQDdjpgHsj+P2ZDeEKCbma4m6Ez/YWs4+zDm1X8uZDkZcfQlD9NldbKDJEXLIjYWo1PH
  hYepSffIWPyvBMBTW2W5FRjJ4vLRrJSUoEfJuPQ3vW9Y73foyo/qFoURHO48AinGPZ7PC7TF
  vUaNOTjKedrqHkaOcqB185ahG2had0xnFsDPlx5y
-Message-ID: <96fd8da4-a912-f6cc-2b32-5791027dbbd5@intel.com>
-Date:   Thu, 1 Aug 2019 08:36:47 -0700
+Message-ID: <88c59d1e-eda9-fcfe-5ee3-64a331f34313@intel.com>
+Date:   Thu, 1 Aug 2019 09:45:05 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.8.0
 MIME-Version: 1.0
-In-Reply-To: <CAAeHK+zTFqsLiB3Wf0bAi5A8ukQX5ZuvfUg4td-=r5UhBsUBOQ@mail.gmail.com>
+In-Reply-To: <2b274c6f-6023-8eb8-5a86-507e6000e13d@arm.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -123,24 +121,17 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 8/1/19 5:48 AM, Andrey Konovalov wrote:
-> On Thu, Aug 1, 2019 at 2:11 PM Kevin Brodsky <kevin.brodsky@arm.com> wrote:
->> On 31/07/2019 17:50, Dave Hansen wrote:
->>> On 7/23/19 10:58 AM, Andrey Konovalov wrote:
->>>> The mmap and mremap (only new_addr) syscalls do not currently accept
->>>> tagged addresses. Architectures may interpret the tag as a background
->>>> colour for the corresponding vma.
->>> What the heck is a "background colour"? :)
->> Good point, this is some jargon that we started using for MTE, the idea being that
->> the kernel could set a tag value (specified during mmap()) as "background colour" for
->> anonymous pages allocated in that range.
->>
->> Anyway, this patch series is not about MTE. Andrey, for v20 (if any), I think it's
->> best to drop this last sentence to avoid any confusion.
-> Sure, thanks!
+On 8/1/19 5:38 AM, Kevin Brodsky wrote:
+> This patch series only changes what is allowed or not at the syscall
+> interface. It does not change the address space size. On arm64, TBI (Top
+> Byte Ignore) has always been enabled for userspace, so it has never been
+> possible to use the upper 8 bits of user pointers for addressing.
 
-OK, but what does that mean for tagged addresses getting passed to
-mmap/mremap?  That sentence read to me like "architectures might allow
-tags for ...something...".  So do we accept tagged addresses into those
-syscalls?
+Oh, so does the address space that's available already chop that out?
 
+> If other architectures were to support a similar functionality, then I
+> agree that a common and more generic interface (if needed) would be
+> helpful, but as it stands this is an arm64-specific prctl, and on arm64
+> the address tag is defined by the architecture as bits [63:56].
+
+It should then be an arch_prctl(), no?
