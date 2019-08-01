@@ -2,31 +2,64 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 53BDC7DBA4
-	for <lists+linux-kselftest@lfdr.de>; Thu,  1 Aug 2019 14:38:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 579337DBDE
+	for <lists+linux-kselftest@lfdr.de>; Thu,  1 Aug 2019 14:48:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730458AbfHAMiO (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 1 Aug 2019 08:38:14 -0400
-Received: from foss.arm.com ([217.140.110.172]:35274 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726422AbfHAMiN (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 1 Aug 2019 08:38:13 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id EA8AC1570;
-        Thu,  1 Aug 2019 05:38:12 -0700 (PDT)
-Received: from [10.1.194.48] (e123572-lin.cambridge.arm.com [10.1.194.48])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E84103F575;
-        Thu,  1 Aug 2019 05:38:07 -0700 (PDT)
-Subject: Re: [PATCH v19 02/15] arm64: Introduce prctl() options to control the
- tagged user addresses ABI
-To:     Dave Hansen <dave.hansen@intel.com>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        linux-arm-kernel@lists.infradead.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, amd-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, linux-rdma@vger.kernel.org,
-        linux-media@vger.kernel.org, kvm@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        id S1731531AbfHAMsu (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 1 Aug 2019 08:48:50 -0400
+Received: from mail-pg1-f194.google.com ([209.85.215.194]:35202 "EHLO
+        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731487AbfHAMsu (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 1 Aug 2019 08:48:50 -0400
+Received: by mail-pg1-f194.google.com with SMTP id s1so27852431pgr.2
+        for <linux-kselftest@vger.kernel.org>; Thu, 01 Aug 2019 05:48:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ATAFhJly7oayn4QwVxAmF/cKx18eZXYIEq5cLXvpdzg=;
+        b=mjC+j0aaEEkkMHnLNHs9TEJqIdScFWRlkAZG8TbiBl3AyUZ8l5nLaU29ZLHSb7WvwH
+         X3OlQDdgsBZjncfM3ONy8Dqcuih1q2WnbLztoEOKMtf5vefqmMIHHwchJuo+ue+DCVka
+         b9rui+0AvY5PeeX+qJY2jvBZQab/NzRkSsMupCgkTdlEDxE6K7Nu5zDKiMeGfnD3hicf
+         2VPYUTHD9bJKAQWesHnbiPWY9rwW/eF7WIHmcnvL9DkrJEokfA1mnjx39I+4RQdt1WLM
+         ieuyPRr8iw6XMHiEGmpinxm+wGAydMTsA6N4zI0Tg/WWtENcJ84NKdjINucR3C9EQWXN
+         EQGw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ATAFhJly7oayn4QwVxAmF/cKx18eZXYIEq5cLXvpdzg=;
+        b=EAHTKD1g4oTp1NbdW/P1MzNaHjXsL3R1hJ/bCzEw89Vbnce93DzgXf+QytfmLMiJpm
+         lSZOojHu8lXDj4heoaznPMgj/bDhdEGM9c+SGSLI1OzFuUOIrHPqg1KpGCLnBCFjNYKG
+         v/oPb9/1pkFUxNejjjF/RarIbHUdHakLVspCrsQlU/+YZfZZuuxxFe59jekaPvC6PnRp
+         oRozmsXLBvenj5oNyz2mTE95rSAWL24vxQcf9s2pIQ7FJGeabAR+3kxV+qpukJFfYUsI
+         t/HZ7jq/5pbldrEMAHIjkL8T7VWMFRY5AXMbN2FWA6MX4lr/1e3tchTSrD/qxKkKBxyI
+         K9+w==
+X-Gm-Message-State: APjAAAVnH/UbK6n5p/dkOUA2G+IAZvFT34RB0ZL4pNI9INdwFxkE3rYB
+        WiQ7t/2U8xTVTYE2ZzRe05mnAwH4VOlx7eQoTOzO/A==
+X-Google-Smtp-Source: APXvYqyuYmWo+CP2FzNWYkHFT0ZLT3W5Y5OJQeMQdVh76HiNmdD4jPQ2fznL3kD7gDek9Cqsx8/zBcK9HOnHQgVpStE=
+X-Received: by 2002:a65:4b8b:: with SMTP id t11mr118476394pgq.130.1564663728917;
+ Thu, 01 Aug 2019 05:48:48 -0700 (PDT)
+MIME-Version: 1.0
+References: <cover.1563904656.git.andreyknvl@google.com> <8c618cc9-ae68-9769-c5bb-67f1295abc4e@intel.com>
+ <13b4cf53-3ecb-f7e7-b504-d77af15d77aa@arm.com>
+In-Reply-To: <13b4cf53-3ecb-f7e7-b504-d77af15d77aa@arm.com>
+From:   Andrey Konovalov <andreyknvl@google.com>
+Date:   Thu, 1 Aug 2019 14:48:37 +0200
+Message-ID: <CAAeHK+zTFqsLiB3Wf0bAi5A8ukQX5ZuvfUg4td-=r5UhBsUBOQ@mail.gmail.com>
+Subject: Re: [PATCH v19 00/15] arm64: untag user pointers passed to the kernel
+To:     Kevin Brodsky <kevin.brodsky@arm.com>
+Cc:     Dave Hansen <dave.hansen@intel.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-rdma@vger.kernel.org, linux-media@vger.kernel.org,
+        kvm@vger.kernel.org,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
         Vincenzo Frascino <vincenzo.frascino@arm.com>,
         Will Deacon <will.deacon@arm.com>,
         Mark Rutland <mark.rutland@arm.com>,
@@ -55,58 +88,29 @@ Cc:     Catalin Marinas <catalin.marinas@arm.com>,
         Ruben Ayrapetyan <Ruben.Ayrapetyan@arm.com>,
         Robin Murphy <robin.murphy@arm.com>,
         Szabolcs Nagy <Szabolcs.Nagy@arm.com>
-References: <cover.1563904656.git.andreyknvl@google.com>
- <1c05651c53f90d07e98ee4973c2786ccf315db12.1563904656.git.andreyknvl@google.com>
- <7a34470c-73f0-26ac-e63d-161191d4b1e4@intel.com>
-From:   Kevin Brodsky <kevin.brodsky@arm.com>
-Message-ID: <2b274c6f-6023-8eb8-5a86-507e6000e13d@arm.com>
-Date:   Thu, 1 Aug 2019 13:38:06 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
-MIME-Version: 1.0
-In-Reply-To: <7a34470c-73f0-26ac-e63d-161191d4b1e4@intel.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-GB
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 31/07/2019 18:05, Dave Hansen wrote:
-> On 7/23/19 10:58 AM, Andrey Konovalov wrote:
->> +long set_tagged_addr_ctrl(unsigned long arg)
->> +{
->> +	if (!tagged_addr_prctl_allowed)
->> +		return -EINVAL;
->> +	if (is_compat_task())
->> +		return -EINVAL;
->> +	if (arg & ~PR_TAGGED_ADDR_ENABLE)
->> +		return -EINVAL;
->> +
->> +	update_thread_flag(TIF_TAGGED_ADDR, arg & PR_TAGGED_ADDR_ENABLE);
->> +
->> +	return 0;
->> +}
-> Instead of a plain enable/disable, a more flexible ABI would be to have
-> the tag mask be passed in.  That way, an implementation that has a
-> flexible tag size can select it.  It also ensures that userspace
-> actually knows what the tag size is and isn't surprised if a hardware
-> implementation changes the tag size or position.
+On Thu, Aug 1, 2019 at 2:11 PM Kevin Brodsky <kevin.brodsky@arm.com> wrote:
 >
-> Also, this whole set deals with tagging/untagging, but there's an
-> effective loss of address space when you do this.  Is that dealt with
-> anywhere?  How do we ensure that allocations don't get placed at a
-> tagged address before this gets turned on?  Where's that checking?
+> On 31/07/2019 17:50, Dave Hansen wrote:
+> > On 7/23/19 10:58 AM, Andrey Konovalov wrote:
+> >> The mmap and mremap (only new_addr) syscalls do not currently accept
+> >> tagged addresses. Architectures may interpret the tag as a background
+> >> colour for the corresponding vma.
+> > What the heck is a "background colour"? :)
+>
+> Good point, this is some jargon that we started using for MTE, the idea being that
+> the kernel could set a tag value (specified during mmap()) as "background colour" for
+> anonymous pages allocated in that range.
+>
+> Anyway, this patch series is not about MTE. Andrey, for v20 (if any), I think it's
+> best to drop this last sentence to avoid any confusion.
 
-This patch series only changes what is allowed or not at the syscall interface. It 
-does not change the address space size. On arm64, TBI (Top Byte Ignore) has always 
-been enabled for userspace, so it has never been possible to use the upper 8 bits of 
-user pointers for addressing.
+Sure, thanks!
 
-If other architectures were to support a similar functionality, then I agree that a 
-common and more generic interface (if needed) would be helpful, but as it stands this 
-is an arm64-specific prctl, and on arm64 the address tag is defined by the 
-architecture as bits [63:56].
-
-Kevin
+>
+> Kevin
