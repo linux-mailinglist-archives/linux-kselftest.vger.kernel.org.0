@@ -2,50 +2,55 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 62617823FC
-	for <lists+linux-kselftest@lfdr.de>; Mon,  5 Aug 2019 19:28:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 251E38253A
+	for <lists+linux-kselftest@lfdr.de>; Mon,  5 Aug 2019 21:00:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729540AbfHER2N (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 5 Aug 2019 13:28:13 -0400
-Received: from shards.monkeyblade.net ([23.128.96.9]:59560 "EHLO
-        shards.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729496AbfHER2N (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 5 Aug 2019 13:28:13 -0400
-Received: from localhost (unknown [IPv6:2601:601:9f80:35cd::d71])
-        (using TLSv1 with cipher AES256-SHA (256/256 bits))
-        (Client did not present a certificate)
-        (Authenticated sender: davem-davemloft)
-        by shards.monkeyblade.net (Postfix) with ESMTPSA id 5F24515407F16;
-        Mon,  5 Aug 2019 10:28:12 -0700 (PDT)
-Date:   Mon, 05 Aug 2019 10:28:11 -0700 (PDT)
-Message-Id: <20190805.102811.142667979127203692.davem@davemloft.net>
-To:     colin.king@canonical.com
-Cc:     shuah@kernel.org, netdev@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH]][next] selftests: nettest: fix spelling mistake:
- "potocol" -> "protocol"
-From:   David Miller <davem@davemloft.net>
-In-Reply-To: <20190805105211.27229-1-colin.king@canonical.com>
-References: <20190805105211.27229-1-colin.king@canonical.com>
-X-Mailer: Mew version 6.8 on Emacs 26.1
-Mime-Version: 1.0
-Content-Type: Text/Plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.5.12 (shards.monkeyblade.net [149.20.54.216]); Mon, 05 Aug 2019 10:28:12 -0700 (PDT)
+        id S1728870AbfHETAQ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 5 Aug 2019 15:00:16 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46690 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1730312AbfHETAO (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 5 Aug 2019 15:00:14 -0400
+Subject: Re: [GIT PULL] Kselftest update for Linux 5.3-rc4
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1565031613;
+        bh=wpUOLqaS16oABeMn/4FQyGK2+p3IV+uJrL/F9YARAzU=;
+        h=From:In-Reply-To:References:Date:To:Cc:From;
+        b=YpjBCjoO/IpaLi+nIyD56NXx4uOTBvfs+4/q+WdCHpeJKBgNPFLWGFG63jWjO2SCF
+         yVnbUY/bYhO7hxje2Q7IKFrGOjpN/e3KRXpKH0NqZYrX/Fn6dIGg0BRgIsZZMado0C
+         mwxNbrv8og47Muwbg++41r1XpbVOodfBsU99Qfyk=
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <288074f1-9d9c-0795-9ec9-e0d78a5715a4@linuxfoundation.org>
+References: <288074f1-9d9c-0795-9ec9-e0d78a5715a4@linuxfoundation.org>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <288074f1-9d9c-0795-9ec9-e0d78a5715a4@linuxfoundation.org>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest
+ tags/linux-kselftest-5.3-rc4
+X-PR-Tracked-Commit-Id: fbb01c52471c8fb4ec2422c0ab26c134bd90bbff
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 9e9671cea72e0652a8a0d03b7c96a8a798470c43
+Message-Id: <156503161320.31890.6531089298812473644.pr-tracker-bot@kernel.org>
+Date:   Mon, 05 Aug 2019 19:00:13 +0000
+To:     Shuah Khan <skhan@linuxfoundation.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        joe.lawrence@redhat.com, Aleksa Sarai <cyphar@cyphar.com>
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Colin King <colin.king@canonical.com>
-Date: Mon,  5 Aug 2019 11:52:11 +0100
+The pull request you sent on Mon, 5 Aug 2019 09:56:41 -0600:
 
-> From: Colin Ian King <colin.king@canonical.com>
-> 
-> There is a spelling mistake in an error messgae. Fix it.
-> 
-> Signed-off-by: Colin Ian King <colin.king@canonical.com>
+> git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest tags/linux-kselftest-5.3-rc4
 
-Applied to net-next.
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/9e9671cea72e0652a8a0d03b7c96a8a798470c43
+
+Thank you!
+
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.wiki.kernel.org/userdoc/prtracker
