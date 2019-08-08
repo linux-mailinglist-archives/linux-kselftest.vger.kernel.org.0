@@ -2,85 +2,80 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B3428861D4
-	for <lists+linux-kselftest@lfdr.de>; Thu,  8 Aug 2019 14:33:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54C228652E
+	for <lists+linux-kselftest@lfdr.de>; Thu,  8 Aug 2019 17:10:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2403870AbfHHMbv (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 8 Aug 2019 08:31:51 -0400
-Received: from mail-wr1-f65.google.com ([209.85.221.65]:40836 "EHLO
-        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2389968AbfHHMbv (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 8 Aug 2019 08:31:51 -0400
-Received: by mail-wr1-f65.google.com with SMTP id r1so94706571wrl.7
-        for <linux-kselftest@vger.kernel.org>; Thu, 08 Aug 2019 05:31:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id;
-        bh=719/5DFvRfWwCLtGmiwAoLfgu4awkKtG7JiiAlJQkos=;
-        b=e7eo+W1fI12hnUdWyfetUQNy8huNzKGC0JTjy2Uf12H39LvQJjs2VSYqyNWH5IowtM
-         O4gs4wf1RNCEvAh4neSGwqpIbrJ1EDZa3A/kRSS5nlnBh8rja5DroiXGQG6/GnjSx07X
-         tcKyenRHFV4OQHg41LLJqa4joXEWOL/hZMtVTzHh017ouCrFd7R2wa03aVkvTIguwOLw
-         Diq4RiUuMUwT+kolbxDoDVmvLmgJWG8Qsnt5QBcF7HO/AVYmLbd7cIMTxtWFOUj5IJtQ
-         a+ci9bA2UTszQbarL4LpCpi9a8+F3xt6nbZ6B05RoktxiufweNYAosdPGGu1AlHtJUQl
-         L1YQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=719/5DFvRfWwCLtGmiwAoLfgu4awkKtG7JiiAlJQkos=;
-        b=azj6v4o6dklpmdClVdGObBOB1bizlYxnx7sXFplDV4O17dLbBfQjw2EaKyeZYso4CU
-         pKza8seQHGD/sjObnSZYAhbmdo+tVAmdjZ4O7skJqGSTmdh+kd1LX2EWKgki33jei0ls
-         B46Vizr/udRwEr9AGsdn2724voqKieeI3A8izASzp3EASWhG86KMLS2UZELCBr8ZRBna
-         CBM3vTWInspmOYxYs973kDPPIo2n2ViGOQrsfqXecxxgB+w8EZ3/CCEDETdzdsQCdaUD
-         9LQgj7w4SVjxrEe+iYrh1zfiwWC/+MMfv+o6kNdfFJVNvtWvAuA8MvyH9EkBZCqns08s
-         Abuw==
-X-Gm-Message-State: APjAAAVvUT2LEod40jQRvZmRLFiuQ0ed6sW7TVpmr+82hJDbZscGF3qg
-        TqjsfICVid6o2GzuRemrl+OE/w==
-X-Google-Smtp-Source: APXvYqwlq7Scq3WaphemqYY+kgeK5uDkZrYgbJ3SRXsQJKsK6KIXuoAOPIVRKn+9+pdgqHpZk4NGJQ==
-X-Received: by 2002:adf:9486:: with SMTP id 6mr17484262wrr.242.1565267509386;
-        Thu, 08 Aug 2019 05:31:49 -0700 (PDT)
-Received: from hackbox2.linaro.org ([81.128.185.34])
-        by smtp.gmail.com with ESMTPSA id h97sm3206111wrh.74.2019.08.08.05.31.48
-        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
-        Thu, 08 Aug 2019 05:31:48 -0700 (PDT)
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-To:     pbonzini@redhat.com, shuah@kernel.org
-Cc:     linux-kernel@vger.kernel.org, drjones@redhat.com,
-        sean.j.christopherson@intel.com, linux-kselftest@vger.kernel.org,
-        kvm@vger.kernel.org, Naresh Kamboju <naresh.kamboju@linaro.org>
-Subject: [PATCH v2] selftests: kvm: Adding config fragments
-Date:   Thu,  8 Aug 2019 13:31:40 +0100
-Message-Id: <20190808123140.25583-1-naresh.kamboju@linaro.org>
-X-Mailer: git-send-email 2.17.1
+        id S1732297AbfHHPKO (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 8 Aug 2019 11:10:14 -0400
+Received: from mx1.redhat.com ([209.132.183.28]:40690 "EHLO mx1.redhat.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1730678AbfHHPKO (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 8 Aug 2019 11:10:14 -0400
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mx1.redhat.com (Postfix) with ESMTPS id 5ED5C8DA5B;
+        Thu,  8 Aug 2019 15:10:14 +0000 (UTC)
+Received: from kamzik.brq.redhat.com (unknown [10.43.2.160])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id D1EF9600CC;
+        Thu,  8 Aug 2019 15:10:12 +0000 (UTC)
+Date:   Thu, 8 Aug 2019 17:10:10 +0200
+From:   Andrew Jones <drjones@redhat.com>
+To:     Naresh Kamboju <naresh.kamboju@linaro.org>
+Cc:     pbonzini@redhat.com, shuah@kernel.org,
+        linux-kernel@vger.kernel.org, sean.j.christopherson@intel.com,
+        linux-kselftest@vger.kernel.org, kvm@vger.kernel.org
+Subject: Re: [PATCH v2] selftests: kvm: Adding config fragments
+Message-ID: <20190808151010.ktbqbfevgcs3bkjy@kamzik.brq.redhat.com>
+References: <20190808123140.25583-1-naresh.kamboju@linaro.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190808123140.25583-1-naresh.kamboju@linaro.org>
+User-Agent: NeoMutt/20180716
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
+X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.28]); Thu, 08 Aug 2019 15:10:14 +0000 (UTC)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-selftests kvm all test cases need pre-required kernel configs for the
-tests to get pass.
+On Thu, Aug 08, 2019 at 01:31:40PM +0100, Naresh Kamboju wrote:
+> selftests kvm all test cases need pre-required kernel configs for the
+> tests to get pass.
+> 
+> The KVM tests are skipped without these configs:
+> 
+>         dev_fd = open(KVM_DEV_PATH, O_RDONLY);
+>         if (dev_fd < 0)
+>                 exit(KSFT_SKIP);
+> 
+> Signed-off-by: Naresh Kamboju <naresh.kamboju@linaro.org>
+> ---
+>  tools/testing/selftests/kvm/config | 3 +++
+>  1 file changed, 3 insertions(+)
+>  create mode 100644 tools/testing/selftests/kvm/config
+> 
+> diff --git a/tools/testing/selftests/kvm/config b/tools/testing/selftests/kvm/config
+> new file mode 100644
+> index 000000000000..63ed533f73d6
+> --- /dev/null
+> +++ b/tools/testing/selftests/kvm/config
+> @@ -0,0 +1,3 @@
+> +CONFIG_KVM=y
+> +CONFIG_KVM_INTEL=y
+> +CONFIG_KVM_AMD=y
+> -- 
+> 2.17.1
+>
 
-The KVM tests are skipped without these configs:
+What does the kselftests config file do? I was about to complain that this
+would break compiling on non-x86 platforms, but 'make kselftest' and other
+forms of invoking the build work fine on aarch64 even with this config
+file. So is this just for documentation? If so, then its still obviously
+wrong for non-x86 platforms. The only config that makes sense here is KVM.
+If the other options need to be documented for x86, then should they get
+an additional config file? tools/testing/selftests/kvm/x86_64/config?
 
-        dev_fd = open(KVM_DEV_PATH, O_RDONLY);
-        if (dev_fd < 0)
-                exit(KSFT_SKIP);
-
-Signed-off-by: Naresh Kamboju <naresh.kamboju@linaro.org>
----
- tools/testing/selftests/kvm/config | 3 +++
- 1 file changed, 3 insertions(+)
- create mode 100644 tools/testing/selftests/kvm/config
-
-diff --git a/tools/testing/selftests/kvm/config b/tools/testing/selftests/kvm/config
-new file mode 100644
-index 000000000000..63ed533f73d6
---- /dev/null
-+++ b/tools/testing/selftests/kvm/config
-@@ -0,0 +1,3 @@
-+CONFIG_KVM=y
-+CONFIG_KVM_INTEL=y
-+CONFIG_KVM_AMD=y
--- 
-2.17.1
-
+Thanks,
+drew
