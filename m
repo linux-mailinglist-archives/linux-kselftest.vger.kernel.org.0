@@ -2,126 +2,153 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4946686DB4
-	for <lists+linux-kselftest@lfdr.de>; Fri,  9 Aug 2019 01:09:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C656486DBD
+	for <lists+linux-kselftest@lfdr.de>; Fri,  9 Aug 2019 01:13:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404603AbfHHXJH (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 8 Aug 2019 19:09:07 -0400
-Received: from mail-pl1-f196.google.com ([209.85.214.196]:36550 "EHLO
-        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2404001AbfHHXJH (ORCPT
+        id S1733258AbfHHXNx (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 8 Aug 2019 19:13:53 -0400
+Received: from mail-vk1-f201.google.com ([209.85.221.201]:52693 "EHLO
+        mail-vk1-f201.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732708AbfHHXNw (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 8 Aug 2019 19:09:07 -0400
-Received: by mail-pl1-f196.google.com with SMTP id k8so44176217plt.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 08 Aug 2019 16:09:06 -0700 (PDT)
+        Thu, 8 Aug 2019 19:13:52 -0400
+Received: by mail-vk1-f201.google.com with SMTP id l186so41093461vke.19
+        for <linux-kselftest@vger.kernel.org>; Thu, 08 Aug 2019 16:13:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=PshILyRjCCo0C5QCJz7frN2AnaNP8oJw8QYaH2iANig=;
-        b=dbDwiA4Adn6NNb5EvA73thvbmUP2keuqre4+n/NxwEHqhexDztnDaNh7AsRSTZZe49
-         hYpD3IzLcNsObNJn7jV0JwQOyof3bHoudWE9xbxMphJZ3xC6+cAju3iiWanCTUgT+RRy
-         5BTDqjSStXzv50strdYe4GteQ70uxl48L/KiQ=
+        d=google.com; s=20161025;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=wId29/KRlL3T3iL7X0HyROciU3enoTeQrmaI3uDvplM=;
+        b=TMFjcZ4vhBvh4e7isaMSjyShLhjqgNI9SS84mRQBUZq7giQJNsbMV9xB8o589wPJjG
+         ATqzdkESubrtjfyBEvm0HFq7aHibDZTA+VfHQqC1k82g6SeBBy3ZTDPxYWtdtsgA5gb2
+         BaRU8mj248iyCd1JsH8c8z3c/1h2TbfYGpCiSAfmctaAa6DGr8+fhUkhzZc2E+FF0zff
+         4oqJ0+yopnx6PrZt4GfyCNDb5JdmETVvW4BJCoi29CZ8EgWzd2MoiLzfjPs4BA70d/ap
+         1mA4DuppfOGpbfO7bbk50y9t/h43rXMwgeWryuxIKqhcmfIG6gPb9Ygmtl0pwmsfnGk7
+         iD5A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=PshILyRjCCo0C5QCJz7frN2AnaNP8oJw8QYaH2iANig=;
-        b=XBxLpPZ9bIw8ZsfRJ1ytQX4wwY4bJjPdp8ZmtmcuL9PpAhqkN3Oqh5MlmLS+SwWcj1
-         nYMhIKHjQlwbAztkNPiVi3Y98hbJLauDvxmdShkpobAXGJKBxGqadXAwPLCzOZFTDLKA
-         Wad+yN+JyEnHpSFigqmB4kcNID6ehFVPPU8CiaT4vGppw9349o9L2bYaLxSFeI0uaO2c
-         zjDtc06P3yhJm/9RXOkUZ0ghm/UaN1mLm8xDZbJen9KlhakfoBwEH3ub63RZkP1DmY+Z
-         wUnPbknsHKVPh1VpwpHS+oeyWif/lHy449WyJVFRvb4+nVgot4MWRCUcbPDmh72V/jJz
-         1Oog==
-X-Gm-Message-State: APjAAAXgUfPnkltq+OiUmE4h/Z/TKvnjfNTjLpT8Gu1PUKh6HOQ9dpHC
-        LpMbC0iuetFWLPOY1+caCpabHg==
-X-Google-Smtp-Source: APXvYqwRMwQCoIwwE1SVnXBBenp7lYzRwUiHs8nPiovNgZn+1R84ViErtlLi11BYuAEM5u5dpbcusw==
-X-Received: by 2002:a17:902:d70a:: with SMTP id w10mr15179356ply.251.1565305746634;
-        Thu, 08 Aug 2019 16:09:06 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id o130sm157376311pfg.171.2019.08.08.16.09.05
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Thu, 08 Aug 2019 16:09:05 -0700 (PDT)
-Date:   Thu, 8 Aug 2019 16:09:04 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Andrey Konovalov <andreyknvl@google.com>,
-        Will Deacon <will@kernel.org>,
-        Will Deacon <will.deacon@arm.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Mark Rutland <mark.rutland@arm.com>, kvm@vger.kernel.org,
-        Szabolcs Nagy <Szabolcs.Nagy@arm.com>,
-        dri-devel@lists.freedesktop.org,
-        Kostya Serebryany <kcc@google.com>,
-        Khalid Aziz <khalid.aziz@oracle.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Felix Kuehling <Felix.Kuehling@amd.com>,
-        Jacob Bramley <Jacob.Bramley@arm.com>,
-        Leon Romanovsky <leon@kernel.org>, linux-rdma@vger.kernel.org,
-        amd-gfx@lists.freedesktop.org,
-        Christoph Hellwig <hch@infradead.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Dave Martin <Dave.Martin@arm.com>,
-        Evgeniy Stepanov <eugenis@google.com>,
-        linux-media@vger.kernel.org, Kevin Brodsky <kevin.brodsky@arm.com>,
-        Ruben Ayrapetyan <Ruben.Ayrapetyan@arm.com>,
-        Ramana Radhakrishnan <Ramana.Radhakrishnan@arm.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Yishai Hadas <yishaih@mellanox.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Jens Wiklander <jens.wiklander@linaro.org>,
-        Lee Smith <Lee.Smith@arm.com>,
-        Alexander Deucher <Alexander.Deucher@amd.com>,
-        enh <enh@google.com>, Robin Murphy <robin.murphy@arm.com>,
-        Christian Koenig <Christian.Koenig@amd.com>,
-        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>
-Subject: Re: [PATCH v19 00/15] arm64: untag user pointers passed to the kernel
-Message-ID: <201908081608.A4F6711@keescook>
-References: <cover.1563904656.git.andreyknvl@google.com>
- <CAAeHK+yc0D_nd7nTRsY4=qcSx+eQR0VLut3uXMf4NEiE-VpeCw@mail.gmail.com>
- <20190724140212.qzvbcx5j2gi5lcoj@willie-the-truck>
- <CAAeHK+xXzdQHpVXL7f1T2Ef2P7GwFmDMSaBH4VG8fT3=c_OnjQ@mail.gmail.com>
- <20190724142059.GC21234@fuggles.cambridge.arm.com>
- <20190806171335.4dzjex5asoertaob@willie-the-truck>
- <CAAeHK+zF01mxU+PkEYLkoVu-ZZM6jNfL_OwMJKRwLr-sdU4Myg@mail.gmail.com>
- <201908081410.C16D2BD@keescook>
- <20190808153300.09d3eb80772515f0ea062833@linux-foundation.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190808153300.09d3eb80772515f0ea062833@linux-foundation.org>
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=wId29/KRlL3T3iL7X0HyROciU3enoTeQrmaI3uDvplM=;
+        b=DC0eIpyOlVrmm5yHcpC79+F6WjQCENBHwfUt1Ls2oFMAmlAGVvIX73nPzCSe7JoS2T
+         hq4yduXooP8FMM1q/f9CUT1Ql2XV6urzfK3vG2cRmm2KgCiH3yXpww8WCo34JTmmAltk
+         PKqm2Int/VWIHLPEa0g3JsWFFetqm5H2HVyLpKazkyRbZ6j5QhAGVqmlgFZG2Vdgqnrm
+         Q+IST2Ujh8OvB1zPiuel3nhm/tizUcCcyNrOktyXOd1HtyIhNqb4+77stz/VfbqXOHjz
+         vkk+G7ucEL8z0VxpnTdvDqBWfIjFZqDeXJtG0X1jLwyOl0C0FH1Tx8SYUAiTHtV+X6yC
+         TRZw==
+X-Gm-Message-State: APjAAAUVxqLP0CDxrdO7ujURF/hU9eVUBnmbvR4/Qfdhc/0k6/tX41YO
+        Rjq+g6lHBZYfpltwWg5wooXFrDTspA/lxKk9/Q==
+X-Google-Smtp-Source: APXvYqzJjnEQKXMAlqlBk6hL4U4b6xmXEzBX0SnBKAOjCUKuT01y6ae1E3MP3SuI38xxfLnqA1lnQNJFkC1pyxj9Hg==
+X-Received: by 2002:a1f:5945:: with SMTP id n66mr6951132vkb.58.1565306031133;
+ Thu, 08 Aug 2019 16:13:51 -0700 (PDT)
+Date:   Thu,  8 Aug 2019 16:13:35 -0700
+Message-Id: <20190808231340.53601-1-almasrymina@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.23.0.rc1.153.gdeed80330f-goog
+Subject: [RFC PATCH v2 0/5] hugetlb_cgroup: Add hugetlb_cgroup reservation limits
+From:   Mina Almasry <almasrymina@google.com>
+To:     mike.kravetz@oracle.com
+Cc:     shuah@kernel.org, almasrymina@google.com, rientjes@google.com,
+        shakeelb@google.com, gthelen@google.com, akpm@linux-foundation.org,
+        khalid.aziz@oracle.com, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Aug 08, 2019 at 03:33:00PM -0700, Andrew Morton wrote:
-> On Thu, 8 Aug 2019 14:12:19 -0700 Kees Cook <keescook@chromium.org> wrote:
-> 
-> > > The ones that are left are the mm ones: 4, 5, 6, 7 and 8.
-> > > 
-> > > Andrew, could you take a look and give your Acked-by or pick them up directly?
-> > 
-> > Given the subsystem Acks, it seems like 3-10 and 12 could all just go
-> > via Andrew? I hope he agrees. :)
-> 
-> I'll grab everything that has not yet appeared in linux-next.  If more
-> of these patches appear in linux-next I'll drop those as well.
-> 
-> The review discussion against " [PATCH v19 02/15] arm64: Introduce
-> prctl() options to control the tagged user addresses ABI" has petered
-> out inconclusively.  prctl() vs arch_prctl().
+Problem:
+Currently tasks attempting to allocate more hugetlb memory than is available get
+a failure at mmap/shmget time. This is thanks to Hugetlbfs Reservations [1].
+However, if a task attempts to allocate hugetlb memory only more than its
+hugetlb_cgroup limit allows, the kernel will allow the mmap/shmget call,
+but will SIGBUS the task when it attempts to fault the memory in.
 
-I've always disliked arch_prctl() existing at all. Given that tagging is
-likely to be a multi-architectural feature, it seems like the controls
-should live in prctl() to me.
+We have developers interested in using hugetlb_cgroups, and they have expressed
+dissatisfaction regarding this behavior. We'd like to improve this
+behavior such that tasks violating the hugetlb_cgroup limits get an error on
+mmap/shmget time, rather than getting SIGBUS'd when they try to fault
+the excess memory in.
 
--- 
-Kees Cook
+The underlying problem is that today's hugetlb_cgroup accounting happens
+at hugetlb memory *fault* time, rather than at *reservation* time.
+Thus, enforcing the hugetlb_cgroup limit only happens at fault time, and
+the offending task gets SIGBUS'd.
+
+Proposed Solution:
+A new page counter named hugetlb.xMB.reservation_[limit|usage]_in_bytes. This
+counter has slightly different semantics than
+hugetlb.xMB.[limit|usage]_in_bytes:
+
+- While usage_in_bytes tracks all *faulted* hugetlb memory,
+reservation_usage_in_bytes tracks all *reserved* hugetlb memory.
+
+- If a task attempts to reserve more memory than limit_in_bytes allows,
+the kernel will allow it to do so. But if a task attempts to reserve
+more memory than reservation_limit_in_bytes, the kernel will fail this
+reservation.
+
+This proposal is implemented in this patch, with tests to verify
+functionality and show the usage.
+
+Alternatives considered:
+1. A new cgroup, instead of only a new page_counter attached to
+   the existing hugetlb_cgroup. Adding a new cgroup seemed like a lot of code
+   duplication with hugetlb_cgroup. Keeping hugetlb related page counters under
+   hugetlb_cgroup seemed cleaner as well.
+
+2. Instead of adding a new counter, we considered adding a sysctl that modifies
+   the behavior of hugetlb.xMB.[limit|usage]_in_bytes, to do accounting at
+   reservation time rather than fault time. Adding a new page_counter seems
+   better as userspace could, if it wants, choose to enforce different cgroups
+   differently: one via limit_in_bytes, and another via
+   reservation_limit_in_bytes. This could be very useful if you're
+   transitioning how hugetlb memory is partitioned on your system one
+   cgroup at a time, for example. Also, someone may find usage for both
+   limit_in_bytes and reservation_limit_in_bytes concurrently, and this
+   approach gives them the option to do so.
+
+Caveats:
+1. This support is implemented for cgroups-v1. I have not tried
+   hugetlb_cgroups with cgroups v2, and AFAICT it's not supported yet.
+   This is largely because we use cgroups-v1 for now. If required, I
+   can add hugetlb_cgroup support to cgroups v2 in this patch or
+   a follow up.
+2. Most complicated bit of this patch I believe is: where to store the
+   pointer to the hugetlb_cgroup to uncharge at unreservation time?
+   Normally the cgroup pointers hang off the struct page. But, with
+   hugetlb_cgroup reservations, one task can reserve a specific page and another
+   task may fault it in (I believe), so storing the pointer in struct
+   page is not appropriate. Proposed approach here is to store the pointer in
+   the resv_map. See patch for details.
+
+Signed-off-by: Mina Almasry <almasrymina@google.com>
+
+[1]: https://www.kernel.org/doc/html/latest/vm/hugetlbfs_reserv.html
+
+Changes in v2:
+- Split the patch into a 5 patch series.
+- Fixed patch subject.
+
+Mina Almasry (5):
+  hugetlb_cgroup: Add hugetlb_cgroup reservation counter
+  hugetlb_cgroup: add interface for charge/uncharge hugetlb reservations
+  hugetlb_cgroup: add reservation accounting for private mappings
+  hugetlb_cgroup: add accounting for shared mappings
+  hugetlb_cgroup: Add hugetlb_cgroup reservation tests
+
+ include/linux/hugetlb.h                       |  10 +-
+ include/linux/hugetlb_cgroup.h                |  19 +-
+ mm/hugetlb.c                                  | 256 ++++++++--
+ mm/hugetlb_cgroup.c                           | 153 +++++-
+ tools/testing/selftests/vm/.gitignore         |   1 +
+ tools/testing/selftests/vm/Makefile           |   4 +
+ .../selftests/vm/charge_reserved_hugetlb.sh   | 438 ++++++++++++++++++
+ .../selftests/vm/write_hugetlb_memory.sh      |  22 +
+ .../testing/selftests/vm/write_to_hugetlbfs.c | 252 ++++++++++
+ 9 files changed, 1087 insertions(+), 68 deletions(-)
+ create mode 100755 tools/testing/selftests/vm/charge_reserved_hugetlb.sh
+ create mode 100644 tools/testing/selftests/vm/write_hugetlb_memory.sh
+ create mode 100644 tools/testing/selftests/vm/write_to_hugetlbfs.c
+
+--
+2.23.0.rc1.153.gdeed80330f-goog
