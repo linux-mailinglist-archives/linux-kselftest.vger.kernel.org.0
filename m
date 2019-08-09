@@ -2,182 +2,166 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D78687EF7
-	for <lists+linux-kselftest@lfdr.de>; Fri,  9 Aug 2019 18:08:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA3D4881B3
+	for <lists+linux-kselftest@lfdr.de>; Fri,  9 Aug 2019 19:55:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2436964AbfHIQII (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 9 Aug 2019 12:08:08 -0400
-Received: from foss.arm.com ([217.140.110.172]:49466 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726490AbfHIQII (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 9 Aug 2019 12:08:08 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 37BC415AB;
-        Fri,  9 Aug 2019 09:08:07 -0700 (PDT)
-Received: from arrakis.emea.arm.com (arrakis.cambridge.arm.com [10.1.196.78])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6D88D3F575;
-        Fri,  9 Aug 2019 09:08:02 -0700 (PDT)
-Date:   Fri, 9 Aug 2019 17:08:00 +0100
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     Andrey Konovalov <andreyknvl@google.com>,
-        Will Deacon <will.deacon@arm.com>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, amd-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, linux-rdma@vger.kernel.org,
-        linux-media@vger.kernel.org, kvm@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Kees Cook <keescook@chromium.org>,
-        Yishai Hadas <yishaih@mellanox.com>,
-        Felix Kuehling <Felix.Kuehling@amd.com>,
-        Alexander Deucher <Alexander.Deucher@amd.com>,
-        Christian Koenig <Christian.Koenig@amd.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Jens Wiklander <jens.wiklander@linaro.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
-        Dave Martin <Dave.Martin@arm.com>,
-        Khalid Aziz <khalid.aziz@oracle.com>, enh <enh@google.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Christoph Hellwig <hch@infradead.org>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Kostya Serebryany <kcc@google.com>,
-        Evgeniy Stepanov <eugenis@google.com>,
-        Lee Smith <Lee.Smith@arm.com>,
-        Ramana Radhakrishnan <Ramana.Radhakrishnan@arm.com>,
-        Jacob Bramley <Jacob.Bramley@arm.com>,
-        Ruben Ayrapetyan <Ruben.Ayrapetyan@arm.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Kevin Brodsky <kevin.brodsky@arm.com>,
-        Szabolcs Nagy <Szabolcs.Nagy@arm.com>,
-        Dave Hansen <dave.hansen@intel.com>
-Subject: Re: [PATCH v19 02/15] arm64: Introduce prctl() options to control
- the tagged user addresses ABI
-Message-ID: <20190809160800.GC23083@arrakis.emea.arm.com>
-References: <cover.1563904656.git.andreyknvl@google.com>
- <1c05651c53f90d07e98ee4973c2786ccf315db12.1563904656.git.andreyknvl@google.com>
+        id S2407603AbfHIRy7 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 9 Aug 2019 13:54:59 -0400
+Received: from userp2130.oracle.com ([156.151.31.86]:57380 "EHLO
+        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726574AbfHIRy6 (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 9 Aug 2019 13:54:58 -0400
+Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
+        by userp2130.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x79HrkaD085556;
+        Fri, 9 Aug 2019 17:54:49 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=subject : to : cc :
+ references : from : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=corp-2019-08-05;
+ bh=BIZJ8s9VWMSHzLAmHEjdX/xl2iyn2dtlXxgsI9RWSag=;
+ b=b/m9aXWdVCJLg8mbuczqSBp03AvKIfgtHPMb9MdszRXG57gCF0QeOC8x/UFYYOsnAx5c
+ ljkmFUzvrpBvLmR9/R4JKHRezPLovTu/h1x7clREgVokVo+B6WmV4betutdzX01lzvOC
+ DZ7X5vvSBE7mV3edFQSAMN/mK13xiYM/EJdfWFq77NKZS20OpsLu7uqzXgsT3PWVaCFS
+ zmMADnM9NgwcfE6PlhaadJ8RdZ5DJVtU77dN7JqwM+hGDhQr5lTaI8bhhFNhn8N9y9P6
+ YAeg8gIGpihtJz+CZTi38w/jun5NwKk1IaydvqChXvjBlWTELZ3pyf1UF9uewzdM5ViP Iw== 
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=subject : to : cc :
+ references : from : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=corp-2018-07-02;
+ bh=BIZJ8s9VWMSHzLAmHEjdX/xl2iyn2dtlXxgsI9RWSag=;
+ b=D0pz9qIehlbVBpUKr1uUJgaq3OBCscE1NJ4uiLmUb5tREbOV0Bm2B1c6e+hgtkah6PBD
+ ANv/kvw4q1IuyqM8T3/nzrf82NSfONja/P7kjtpaTkgxs4QbRkalgYqVwfEWDlKgf+fj
+ mLkggSa8Mnoj49hppTkHhNntvBAHyY1NKyMqKXlIL42rc2NELErCjQSCINzMNzdw6Djn
+ z/pogYq7opVYtUcmuCzqEEogy/48lKcJSuGNgE7y1y58qZFZPDeDSl1p4eNagAmMmRC+
+ Hs4gFhzcae+b0lEsaTKCiGCPlNN1utvBgM9ldt2r32l8HsDGBxAOianucwSuArWDKKao 0Q== 
+Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
+        by userp2130.oracle.com with ESMTP id 2u8hps966a-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 09 Aug 2019 17:54:49 +0000
+Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
+        by userp3030.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x79HqtdV028169;
+        Fri, 9 Aug 2019 17:54:48 GMT
+Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
+        by userp3030.oracle.com with ESMTP id 2u8pj9cu4n-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 09 Aug 2019 17:54:48 +0000
+Received: from abhmp0011.oracle.com (abhmp0011.oracle.com [141.146.116.17])
+        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id x79Hske0002658;
+        Fri, 9 Aug 2019 17:54:46 GMT
+Received: from [192.168.1.222] (/71.63.128.209)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Fri, 09 Aug 2019 10:54:46 -0700
+Subject: Re: [RFC PATCH v2 0/5] hugetlb_cgroup: Add hugetlb_cgroup reservation
+ limits
+To:     Mina Almasry <almasrymina@google.com>
+Cc:     shuah@kernel.org, rientjes@google.com, shakeelb@google.com,
+        gthelen@google.com, akpm@linux-foundation.org,
+        khalid.aziz@oracle.com, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>,
+        Aneesh Kumar <aneesh.kumar@linux.vnet.ibm.com>,
+        cgroups@vger.kernel.org
+References: <20190808231340.53601-1-almasrymina@google.com>
+From:   Mike Kravetz <mike.kravetz@oracle.com>
+Message-ID: <f0a5afe9-2586-38c9-9a6d-8a2b7b288b50@oracle.com>
+Date:   Fri, 9 Aug 2019 10:54:44 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1c05651c53f90d07e98ee4973c2786ccf315db12.1563904656.git.andreyknvl@google.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20190808231340.53601-1-almasrymina@google.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9344 signatures=668685
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
+ phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=999
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.0.1-1906280000 definitions=main-1908090178
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9344 signatures=668685
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
+ suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1011
+ lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1906280000
+ definitions=main-1908090178
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Jul 23, 2019 at 07:58:39PM +0200, Andrey Konovalov wrote:
-> From: Catalin Marinas <catalin.marinas@arm.com>
+(+CC  Michal Koutný, cgroups@vger.kernel.org, Aneesh Kumar)
+
+On 8/8/19 4:13 PM, Mina Almasry wrote:
+> Problem:
+> Currently tasks attempting to allocate more hugetlb memory than is available get
+> a failure at mmap/shmget time. This is thanks to Hugetlbfs Reservations [1].
+> However, if a task attempts to allocate hugetlb memory only more than its
+> hugetlb_cgroup limit allows, the kernel will allow the mmap/shmget call,
+> but will SIGBUS the task when it attempts to fault the memory in.
 > 
-> It is not desirable to relax the ABI to allow tagged user addresses into
-> the kernel indiscriminately. This patch introduces a prctl() interface
-> for enabling or disabling the tagged ABI with a global sysctl control
-> for preventing applications from enabling the relaxed ABI (meant for
-> testing user-space prctl() return error checking without reconfiguring
-> the kernel). The ABI properties are inherited by threads of the same
-> application and fork()'ed children but cleared on execve(). A Kconfig
-> option allows the overall disabling of the relaxed ABI.
+> We have developers interested in using hugetlb_cgroups, and they have expressed
+> dissatisfaction regarding this behavior. We'd like to improve this
+> behavior such that tasks violating the hugetlb_cgroup limits get an error on
+> mmap/shmget time, rather than getting SIGBUS'd when they try to fault
+> the excess memory in.
 > 
-> The PR_SET_TAGGED_ADDR_CTRL will be expanded in the future to handle
-> MTE-specific settings like imprecise vs precise exceptions.
+> The underlying problem is that today's hugetlb_cgroup accounting happens
+> at hugetlb memory *fault* time, rather than at *reservation* time.
+> Thus, enforcing the hugetlb_cgroup limit only happens at fault time, and
+> the offending task gets SIGBUS'd.
 > 
-> Reviewed-by: Kees Cook <keescook@chromium.org>
-> Signed-off-by: Catalin Marinas <catalin.marinas@arm.com>
-> Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
+> Proposed Solution:
+> A new page counter named hugetlb.xMB.reservation_[limit|usage]_in_bytes. This
+> counter has slightly different semantics than
+> hugetlb.xMB.[limit|usage]_in_bytes:
+> 
+> - While usage_in_bytes tracks all *faulted* hugetlb memory,
+> reservation_usage_in_bytes tracks all *reserved* hugetlb memory.
+> 
+> - If a task attempts to reserve more memory than limit_in_bytes allows,
+> the kernel will allow it to do so. But if a task attempts to reserve
+> more memory than reservation_limit_in_bytes, the kernel will fail this
+> reservation.
+> 
+> This proposal is implemented in this patch, with tests to verify
+> functionality and show the usage.
 
-Following several discussions on the list and in private, I'm proposing
-the update below. I can send it as a patch on top of the current series
-since Will has already queued this.
+Thanks for taking on this effort Mina.
 
----------------8<-------------------------------------
-From 1b3f57ab0c2c51f8b31c19fb34d270e1f3ee57fe Mon Sep 17 00:00:00 2001
-From: Catalin Marinas <catalin.marinas@arm.com>
-Date: Fri, 9 Aug 2019 15:09:15 +0100
-Subject: [PATCH] fixup! arm64: Introduce prctl() options to control the
- tagged user addresses ABI
+Before looking at the details of the code, it might be helpful to discuss
+the expected semantics of the proposed reservation limits.
 
-Rename abi.tagged_addr sysctl control to abi.tagged_addr_disabled,
-defaulting to 0. Only prevent prctl(PR_TAGGED_ADDR_ENABLE)from being
-called when abi.tagged_addr_disabled==1.
+I see you took into account the differences between private and shared
+mappings.  This is good, as the reservation behavior is different for each
+of these cases.  First let's look at private mappings.
 
-Force unused arg* of the new prctl() to 0.
+For private mappings, the reservation usage will be the size of the mapping.
+This should be fairly simple.  As reservations are consumed in the hugetlbfs
+code, reservations in the resv_map are removed.  I see you have a hook into
+region_del.  So, the expectation is that as reservations are consumed the
+reservation usage will drop for the cgroup.  Correct?
+The only tricky thing about private mappings is COW because of fork.  Current
+reservation semantics specify that all reservations stay with the parent.
+If child faults and can not get page, SIGBUS.  I assume the new reservation
+limits will work the same.
 
-Signed-off-by: Catalin Marinas <catalin.marinas@arm.com>
----
- arch/arm64/kernel/process.c | 17 ++++++++++-------
- kernel/sys.c                |  4 ++++
- 2 files changed, 14 insertions(+), 7 deletions(-)
+I believe tracking reservations for shared mappings can get quite complicated.
+The hugetlbfs reservation code around shared mappings 'works' on the basis
+that shared mapping reservations are global.  As a result, reservations are
+more associated with the inode than with the task making the reservation.
+For example, consider a file of size 4 hugetlb pages.
+Task A maps the first 2 pages, and 2 reservations are taken.  Task B maps
+all 4 pages, and 2 additional reservations are taken.  I am not really sure
+of the desired semantics here for reservation limits if A and B are in separate
+cgroups.  Should B be charged for 4 or 2 reservations?
+Also in the example above, after both tasks create their mappings suppose
+Task B faults in the first page.  Does the reservation usage of Task A go
+down as it originally had the reservation?
 
-diff --git a/arch/arm64/kernel/process.c b/arch/arm64/kernel/process.c
-index 76b7c55026aa..03689c0beb34 100644
---- a/arch/arm64/kernel/process.c
-+++ b/arch/arm64/kernel/process.c
-@@ -579,17 +579,22 @@ void arch_setup_new_exec(void)
- /*
-  * Control the relaxed ABI allowing tagged user addresses into the kernel.
-  */
--static unsigned int tagged_addr_prctl_allowed = 1;
-+static unsigned int tagged_addr_disabled;
- 
- long set_tagged_addr_ctrl(unsigned long arg)
- {
--	if (!tagged_addr_prctl_allowed)
--		return -EINVAL;
- 	if (is_compat_task())
- 		return -EINVAL;
- 	if (arg & ~PR_TAGGED_ADDR_ENABLE)
- 		return -EINVAL;
- 
-+	/*
-+	 * Do not allow the enabling of the tagged address ABI if globally
-+	 * disabled via sysctl abi.tagged_addr_disabled.
-+	 */
-+	if (arg & PR_TAGGED_ADDR_ENABLE && tagged_addr_disabled)
-+		return -EINVAL;
-+
- 	update_thread_flag(TIF_TAGGED_ADDR, arg & PR_TAGGED_ADDR_ENABLE);
- 
- 	return 0;
-@@ -597,8 +602,6 @@ long set_tagged_addr_ctrl(unsigned long arg)
- 
- long get_tagged_addr_ctrl(void)
- {
--	if (!tagged_addr_prctl_allowed)
--		return -EINVAL;
- 	if (is_compat_task())
- 		return -EINVAL;
- 
-@@ -618,9 +621,9 @@ static int one = 1;
- 
- static struct ctl_table tagged_addr_sysctl_table[] = {
- 	{
--		.procname	= "tagged_addr",
-+		.procname	= "tagged_addr_disabled",
- 		.mode		= 0644,
--		.data		= &tagged_addr_prctl_allowed,
-+		.data		= &tagged_addr_disabled,
- 		.maxlen		= sizeof(int),
- 		.proc_handler	= proc_dointvec_minmax,
- 		.extra1		= &zero,
-diff --git a/kernel/sys.c b/kernel/sys.c
-index c6c4d5358bd3..ec48396b4943 100644
---- a/kernel/sys.c
-+++ b/kernel/sys.c
-@@ -2499,9 +2499,13 @@ SYSCALL_DEFINE5(prctl, int, option, unsigned long, arg2, unsigned long, arg3,
- 		error = PAC_RESET_KEYS(me, arg2);
- 		break;
- 	case PR_SET_TAGGED_ADDR_CTRL:
-+		if (arg3 || arg4 || arg5)
-+			return -EINVAL;
- 		error = SET_TAGGED_ADDR_CTRL(arg2);
- 		break;
- 	case PR_GET_TAGGED_ADDR_CTRL:
-+		if (arg2 || arg3 || arg4 || arg5)
-+			return -EINVAL;
- 		error = GET_TAGGED_ADDR_CTRL();
- 		break;
- 	default:
+It should also be noted that when hugetlbfs reservations are 'consumed' for
+shared mappings there are no changes to the resv_map.  Rather the unmap code
+compares the contents of the page cache to the resv_map to determine how
+many reservations were actually consumed.  I did not look close enough to
+determine the code drops reservation usage counts as pages are added to shared
+mappings.
+
+-- 
+Mike Kravetz
