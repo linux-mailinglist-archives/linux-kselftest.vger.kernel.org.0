@@ -2,117 +2,118 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A0C48737E
-	for <lists+linux-kselftest@lfdr.de>; Fri,  9 Aug 2019 09:53:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6F2D874B6
+	for <lists+linux-kselftest@lfdr.de>; Fri,  9 Aug 2019 11:00:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2405836AbfHIHxV (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 9 Aug 2019 03:53:21 -0400
-Received: from mail-lj1-f196.google.com ([209.85.208.196]:40399 "EHLO
-        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2405809AbfHIHxV (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 9 Aug 2019 03:53:21 -0400
-Received: by mail-lj1-f196.google.com with SMTP id m8so57653093lji.7
-        for <linux-kselftest@vger.kernel.org>; Fri, 09 Aug 2019 00:53:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=GqqiFOTILayCWP92aAvbU7rZYbJzYJq2hFWqssnZfow=;
-        b=nY8IF2S8A3L3Vuay9KDIsTtuFYPZeeklDr8dKII6lyiCdYnIje0PkqQD6KT7a8QWHU
-         4FUv3TSucrFG98xqdbHX/fz/oYdj+KcmhxIwu8wKAtss6gbGo71dbqGgeWzg90cnNTLd
-         daAxPNFCgGaViq4pcXkR0d3YXrO3QvcYqJLrUvOmGL94qGQ59Qp7Xv4ryXeG5I2fMJ+M
-         RYNGCai1CaOieNia2IDUnrL3GIqtVgZc/GqiIUa3v0hJ0AeNWaNOq2pWS/Vu4XzMDeyG
-         iuvJ/pFULgifhSM/dP60F1hCYQ+lhZ8YerE+lgkMmWp/Rib29Nj7JqNyN1P8uIoH04Es
-         rtlQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=GqqiFOTILayCWP92aAvbU7rZYbJzYJq2hFWqssnZfow=;
-        b=QmBA4JshqVMUreo5jsoe75JlzU0wbSxjFglsnSR3z1etjkwlQVIUwS2++mhUodGCHr
-         6R8q8rD/CgAhPsmsELBgEoupvcTxz3J6F1CFMzZhVoolEVYmwWlDLjSq1caBseaiW/pL
-         rv/qOCCFhicccQLUerLVa0H/umle34FRquXiCgMVIlEetQ2wbHrHznJDM7jprr+4raiN
-         9WV/b34qkD4FnknQoTx5zQ92aJ/iG6Dr/ekKp7Jt19pHJz6+7Wkb4Qad8Hkww7VvhbXs
-         gRXIHZ0os13v+AtXYCRdfEm3HoISbF5cGRJVoeWxMHHkWr0TlM59+urhkoyBTmz7+9WU
-         mfUQ==
-X-Gm-Message-State: APjAAAWSmodgLdVhkJyITE2M89WX4V83CBiwS5cIeQw9G8VEtpBLPM9Z
-        saPBY86iyDJE7QhqQpjd2AezJ+uWqjR6JT1PKW3UKg==
-X-Google-Smtp-Source: APXvYqxFQuHM3xYJAfyF6kQS8ItALDrQIiaCIj4v6PZYeYPQwqRCeQNlySydBHuBNvEurL5a+9vQM3W8O0NVFX8Igw4=
-X-Received: by 2002:a2e:87d0:: with SMTP id v16mr10709810ljj.24.1565337199321;
- Fri, 09 Aug 2019 00:53:19 -0700 (PDT)
-MIME-Version: 1.0
-References: <20190809072415.29305-1-naresh.kamboju@linaro.org> <0a0e0563-aba7-e59c-1fbd-547126d404ed@redhat.com>
-In-Reply-To: <0a0e0563-aba7-e59c-1fbd-547126d404ed@redhat.com>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Fri, 9 Aug 2019 13:23:08 +0530
-Message-ID: <CA+G9fYt4QPjHtyoZUfe_tv+uT6yybHehymuDWBFHL-QH3K-PxA@mail.gmail.com>
-Subject: Re: [PATCH v3 1/2] selftests: kvm: Adding config fragments
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Shuah Khan <shuah@kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Andrew Jones <drjones@redhat.com>,
-        sean.j.christopherson@intel.com,
+        id S2406047AbfHIJAZ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 9 Aug 2019 05:00:25 -0400
+Received: from foss.arm.com ([217.140.110.172]:43754 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2405974AbfHIJAZ (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 9 Aug 2019 05:00:25 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5F595344;
+        Fri,  9 Aug 2019 02:00:24 -0700 (PDT)
+Received: from arrakis.emea.arm.com (arrakis.cambridge.arm.com [10.1.196.78])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 796343F706;
+        Fri,  9 Aug 2019 02:00:19 -0700 (PDT)
+Date:   Fri, 9 Aug 2019 10:00:17 +0100
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Andrey Konovalov <andreyknvl@google.com>,
+        Will Deacon <will@kernel.org>,
+        Will Deacon <will.deacon@arm.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Mark Rutland <mark.rutland@arm.com>, kvm@vger.kernel.org,
+        Szabolcs Nagy <Szabolcs.Nagy@arm.com>,
+        dri-devel@lists.freedesktop.org,
+        Kostya Serebryany <kcc@google.com>,
+        Khalid Aziz <khalid.aziz@oracle.com>,
         "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>, kvm list <kvm@vger.kernel.org>,
-        Dan Rue <dan.rue@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
+        <linux-kselftest@vger.kernel.org>,
+        Felix Kuehling <Felix.Kuehling@amd.com>,
+        Jacob Bramley <Jacob.Bramley@arm.com>,
+        Leon Romanovsky <leon@kernel.org>, linux-rdma@vger.kernel.org,
+        amd-gfx@lists.freedesktop.org,
+        Christoph Hellwig <hch@infradead.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Dave Martin <Dave.Martin@arm.com>,
+        Evgeniy Stepanov <eugenis@google.com>,
+        linux-media@vger.kernel.org, Kevin Brodsky <kevin.brodsky@arm.com>,
+        Ruben Ayrapetyan <Ruben.Ayrapetyan@arm.com>,
+        Ramana Radhakrishnan <Ramana.Radhakrishnan@arm.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Yishai Hadas <yishaih@mellanox.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Jens Wiklander <jens.wiklander@linaro.org>,
+        Lee Smith <Lee.Smith@arm.com>,
+        Alexander Deucher <Alexander.Deucher@amd.com>,
+        enh <enh@google.com>, Robin Murphy <robin.murphy@arm.com>,
+        Christian Koenig <Christian.Koenig@amd.com>,
+        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
+        Dave Hansen <dave.hansen@intel.com>
+Subject: Re: [PATCH v19 00/15] arm64: untag user pointers passed to the kernel
+Message-ID: <20190809090016.GA23083@arrakis.emea.arm.com>
+References: <cover.1563904656.git.andreyknvl@google.com>
+ <CAAeHK+yc0D_nd7nTRsY4=qcSx+eQR0VLut3uXMf4NEiE-VpeCw@mail.gmail.com>
+ <20190724140212.qzvbcx5j2gi5lcoj@willie-the-truck>
+ <CAAeHK+xXzdQHpVXL7f1T2Ef2P7GwFmDMSaBH4VG8fT3=c_OnjQ@mail.gmail.com>
+ <20190724142059.GC21234@fuggles.cambridge.arm.com>
+ <20190806171335.4dzjex5asoertaob@willie-the-truck>
+ <CAAeHK+zF01mxU+PkEYLkoVu-ZZM6jNfL_OwMJKRwLr-sdU4Myg@mail.gmail.com>
+ <201908081410.C16D2BD@keescook>
+ <20190808153300.09d3eb80772515f0ea062833@linux-foundation.org>
+ <201908081608.A4F6711@keescook>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <201908081608.A4F6711@keescook>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, 9 Aug 2019 at 13:09, Paolo Bonzini <pbonzini@redhat.com> wrote:
->
-> On 09/08/19 09:24, Naresh Kamboju wrote:
-> > selftests kvm all test cases need pre-required kernel config for the
-> > tests to get pass.
-> >
-> > CONFIG_KVM=y
-> >
-> > The KVM tests are skipped without these configs:
-> >
-> >         dev_fd = open(KVM_DEV_PATH, O_RDONLY);
-> >         if (dev_fd < 0)
-> >                 exit(KSFT_SKIP);
-> >
-> > Signed-off-by: Naresh Kamboju <naresh.kamboju@linaro.org>
-> > Acked-by: Shuah Khan <skhan@linuxfoundation.org>
-> > ---
-> >  tools/testing/selftests/kvm/config | 1 +
-> >  1 file changed, 1 insertion(+)
-> >  create mode 100644 tools/testing/selftests/kvm/config
-> >
-> > diff --git a/tools/testing/selftests/kvm/config b/tools/testing/selftests/kvm/config
-> > new file mode 100644
-> > index 000000000000..14f90d8d6801
-> > --- /dev/null
-> > +++ b/tools/testing/selftests/kvm/config
-> > @@ -0,0 +1 @@
-> > +CONFIG_KVM=y
-> >
->
-> I think this is more complicated without a real benefit, so I'll merge v2.
+On Thu, Aug 08, 2019 at 04:09:04PM -0700, Kees Cook wrote:
+> On Thu, Aug 08, 2019 at 03:33:00PM -0700, Andrew Morton wrote:
+> > On Thu, 8 Aug 2019 14:12:19 -0700 Kees Cook <keescook@chromium.org> wrote:
+> > 
+> > > > The ones that are left are the mm ones: 4, 5, 6, 7 and 8.
+> > > > 
+> > > > Andrew, could you take a look and give your Acked-by or pick them up directly?
+> > > 
+> > > Given the subsystem Acks, it seems like 3-10 and 12 could all just go
+> > > via Andrew? I hope he agrees. :)
+> > 
+> > I'll grab everything that has not yet appeared in linux-next.  If more
+> > of these patches appear in linux-next I'll drop those as well.
+> > 
+> > The review discussion against " [PATCH v19 02/15] arm64: Introduce
+> > prctl() options to control the tagged user addresses ABI" has petered
+> > out inconclusively.  prctl() vs arch_prctl().
+> 
+> I've always disliked arch_prctl() existing at all. Given that tagging is
+> likely to be a multi-architectural feature, it seems like the controls
+> should live in prctl() to me.
 
-With the recent changes to 'kselftest-merge' nested configs also get merged.
-Please refer this below commit for more details.
----
-commit 6d3db46c8e331908775b0135dc7d2e5920bf6d90
-Author: Dan Rue <dan.rue@linaro.org>
-Date:   Mon May 20 10:16:14 2019 -0500
+It took a bit of grep'ing to figure out what Dave H meant by
+arch_prctl(). It's an x86-specific syscall which we do not have on arm64
+(and possibly any other architecture). Actually, we don't have any arm64
+specific syscalls, only the generic unistd.h, hence the confusion. For
+other arm64-specific prctls like SVE we used the generic sys_prctl() and
+I can see x86 not being consistent either (PR_MPX_ENABLE_MANAGEMENT).
 
-    kbuild: teach kselftest-merge to find nested config files
+In general I disagree with adding any arm64-specific syscalls but in
+this instance it can't even be justified. I'd rather see some clean-up
+similar to arch_ptrace/ptrace_request than introducing new syscall
+numbers (but as I suggested in my reply to Dave, that's for another
+patch series).
 
-    Current implementation of kselftest-merge only finds config files that
-    are one level deep using `$(srctree)/tools/testing/selftests/*/config`.
-
-    Often, config files are added in nested directories, and do not get
-    picked up by kselftest-merge.
-
-    Use `find` to catch all config files under
-    `$(srctree)/tools/testing/selftests` instead.
-
-    Signed-off-by: Dan Rue <dan.rue@linaro.org>
-    Signed-off-by: Masahiro Yamada <yamada.masahiro@socionext.com>
-
-- Naresh
+-- 
+Catalin
