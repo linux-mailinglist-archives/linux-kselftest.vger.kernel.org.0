@@ -2,124 +2,73 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EBB93875E2
-	for <lists+linux-kselftest@lfdr.de>; Fri,  9 Aug 2019 11:28:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B324C87716
+	for <lists+linux-kselftest@lfdr.de>; Fri,  9 Aug 2019 12:18:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727063AbfHIJ2J (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 9 Aug 2019 05:28:09 -0400
-Received: from foss.arm.com ([217.140.110.172]:44118 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726233AbfHIJ2J (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 9 Aug 2019 05:28:09 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D4D7415A2;
-        Fri,  9 Aug 2019 02:28:07 -0700 (PDT)
-Received: from arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id EA7C43F575;
-        Fri,  9 Aug 2019 02:28:02 -0700 (PDT)
-Date:   Fri, 9 Aug 2019 10:28:00 +0100
-From:   Dave Martin <Dave.Martin@arm.com>
-To:     Catalin Marinas <catalin.marinas@arm.com>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Mark Rutland <mark.rutland@arm.com>, kvm@vger.kernel.org,
-        Christian Koenig <Christian.Koenig@amd.com>,
-        Szabolcs Nagy <Szabolcs.Nagy@arm.com>,
-        Will Deacon <will.deacon@arm.com>,
-        dri-devel@lists.freedesktop.org,
-        Kostya Serebryany <kcc@google.com>,
-        Khalid Aziz <khalid.aziz@oracle.com>,
-        Lee Smith <Lee.Smith@arm.com>,
+        id S2406305AbfHIKSM (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 9 Aug 2019 06:18:12 -0400
+Received: from mail-wr1-f67.google.com ([209.85.221.67]:44430 "EHLO
+        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2406167AbfHIKSM (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 9 Aug 2019 06:18:12 -0400
+Received: by mail-wr1-f67.google.com with SMTP id p17so97712749wrf.11
+        for <linux-kselftest@vger.kernel.org>; Fri, 09 Aug 2019 03:18:10 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:openpgp:message-id
+         :date:user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=cuVKDc0uavb8FjLQUAtTTA5OlojkA129esFBNoztMxo=;
+        b=BcR+Z8QmLJ2oJGr7IhlR7VoCrRshgBCk+rrR3ygNzq2peFJlSWdfnIT9DOAns7IU2Z
+         MZZyu0zPVXjnyvfRiQY/ZYbd+OzaAaXRbhvnH+VgOMa49XGSgJBnxcO0GhgFn5qJvxWQ
+         tbxmP0NGQeeesIDf6XZhfmJqmEMUKN5T9oMDncqVBAjF1V9Z7/YN7e6Y+F5aEVd+FJ1U
+         boEEtNRpxbq6TtaeoJvsPVEI1cHbyZ1uSHPg9gDWJi2lzxZXwtT3iH5UPjOsViDW8s+3
+         DS1bDQz1vkP2pChr488E9jjcRkAhEoSZef6CrjV69tmbLd9hzzNQq4mVfnE7zT6QYXWT
+         n7lg==
+X-Gm-Message-State: APjAAAVhmxyzBIrj9l/8D60h5nNK+QQsWY1O4lYtsPBKBlspkVJecUnc
+        CMAMIg9Cktyt97krboDyE0hS7Q==
+X-Google-Smtp-Source: APXvYqwGlQdoLBApaInPPRuk+HOjO5hFnd6m+xzhuho3EgmDFnNdQo4FMdSiYqdiHuankaDhNx4XOA==
+X-Received: by 2002:adf:f744:: with SMTP id z4mr3790705wrp.211.1565345889872;
+        Fri, 09 Aug 2019 03:18:09 -0700 (PDT)
+Received: from ?IPv6:2001:b07:6468:f312:b42d:b492:69df:ed61? ([2001:b07:6468:f312:b42d:b492:69df:ed61])
+        by smtp.gmail.com with ESMTPSA id y16sm209844185wrg.85.2019.08.09.03.18.09
+        (version=TLS1_3 cipher=AEAD-AES128-GCM-SHA256 bits=128/128);
+        Fri, 09 Aug 2019 03:18:09 -0700 (PDT)
+Subject: Re: [PATCH v3 1/2] selftests: kvm: Adding config fragments
+To:     Naresh Kamboju <naresh.kamboju@linaro.org>
+Cc:     Shuah Khan <shuah@kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Andrew Jones <drjones@redhat.com>,
+        sean.j.christopherson@intel.com,
         "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Jacob Bramley <Jacob.Bramley@arm.com>,
-        Leon Romanovsky <leon@kernel.org>, linux-rdma@vger.kernel.org,
-        amd-gfx@lists.freedesktop.org,
-        Christoph Hellwig <hch@infradead.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Evgeniy Stepanov <eugenis@google.com>,
-        linux-media@vger.kernel.org,
-        Ruben Ayrapetyan <Ruben.Ayrapetyan@arm.com>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        Kevin Brodsky <kevin.brodsky@arm.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felix Kuehling <Felix.Kuehling@amd.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Jens Wiklander <jens.wiklander@linaro.org>,
-        Ramana Radhakrishnan <Ramana.Radhakrishnan@arm.com>,
-        Alexander Deucher <Alexander.Deucher@amd.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        enh <enh@google.com>, Robin Murphy <robin.murphy@arm.com>,
-        Yishai Hadas <yishaih@mellanox.com>,
-        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>
-Subject: Re: [PATCH v19 00/15] arm64: untag user pointers passed to the kernel
-Message-ID: <20190809092758.GK10425@arm.com>
-References: <CAAeHK+yc0D_nd7nTRsY4=qcSx+eQR0VLut3uXMf4NEiE-VpeCw@mail.gmail.com>
- <20190724140212.qzvbcx5j2gi5lcoj@willie-the-truck>
- <CAAeHK+xXzdQHpVXL7f1T2Ef2P7GwFmDMSaBH4VG8fT3=c_OnjQ@mail.gmail.com>
- <20190724142059.GC21234@fuggles.cambridge.arm.com>
- <20190806171335.4dzjex5asoertaob@willie-the-truck>
- <CAAeHK+zF01mxU+PkEYLkoVu-ZZM6jNfL_OwMJKRwLr-sdU4Myg@mail.gmail.com>
- <201908081410.C16D2BD@keescook>
- <20190808153300.09d3eb80772515f0ea062833@linux-foundation.org>
- <201908081608.A4F6711@keescook>
- <20190809090016.GA23083@arrakis.emea.arm.com>
+        <linux-kselftest@vger.kernel.org>, kvm list <kvm@vger.kernel.org>,
+        Dan Rue <dan.rue@linaro.org>
+References: <20190809072415.29305-1-naresh.kamboju@linaro.org>
+ <0a0e0563-aba7-e59c-1fbd-547126d404ed@redhat.com>
+ <CA+G9fYt4QPjHtyoZUfe_tv+uT6yybHehymuDWBFHL-QH3K-PxA@mail.gmail.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+Openpgp: preference=signencrypt
+Message-ID: <28a9ac44-7ae2-7892-4e68-59245b6dc27b@redhat.com>
+Date:   Fri, 9 Aug 2019 12:18:08 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190809090016.GA23083@arrakis.emea.arm.com>
-User-Agent: Mutt/1.5.23 (2014-03-12)
+In-Reply-To: <CA+G9fYt4QPjHtyoZUfe_tv+uT6yybHehymuDWBFHL-QH3K-PxA@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Aug 09, 2019 at 10:00:17AM +0100, Catalin Marinas wrote:
-> On Thu, Aug 08, 2019 at 04:09:04PM -0700, Kees Cook wrote:
-> > On Thu, Aug 08, 2019 at 03:33:00PM -0700, Andrew Morton wrote:
-> > > On Thu, 8 Aug 2019 14:12:19 -0700 Kees Cook <keescook@chromium.org> wrote:
-> > > 
-> > > > > The ones that are left are the mm ones: 4, 5, 6, 7 and 8.
-> > > > > 
-> > > > > Andrew, could you take a look and give your Acked-by or pick them up directly?
-> > > > 
-> > > > Given the subsystem Acks, it seems like 3-10 and 12 could all just go
-> > > > via Andrew? I hope he agrees. :)
-> > > 
-> > > I'll grab everything that has not yet appeared in linux-next.  If more
-> > > of these patches appear in linux-next I'll drop those as well.
-> > > 
-> > > The review discussion against " [PATCH v19 02/15] arm64: Introduce
-> > > prctl() options to control the tagged user addresses ABI" has petered
-> > > out inconclusively.  prctl() vs arch_prctl().
-> > 
-> > I've always disliked arch_prctl() existing at all. Given that tagging is
-> > likely to be a multi-architectural feature, it seems like the controls
-> > should live in prctl() to me.
-> 
-> It took a bit of grep'ing to figure out what Dave H meant by
-> arch_prctl(). It's an x86-specific syscall which we do not have on arm64
-> (and possibly any other architecture). Actually, we don't have any arm64
-> specific syscalls, only the generic unistd.h, hence the confusion. For
-> other arm64-specific prctls like SVE we used the generic sys_prctl() and
-> I can see x86 not being consistent either (PR_MPX_ENABLE_MANAGEMENT).
-> 
-> In general I disagree with adding any arm64-specific syscalls but in
-> this instance it can't even be justified. I'd rather see some clean-up
-> similar to arch_ptrace/ptrace_request than introducing new syscall
-> numbers (but as I suggested in my reply to Dave, that's for another
-> patch series).
+On 09/08/19 09:53, Naresh Kamboju wrote:
+>> I think this is more complicated without a real benefit, so I'll merge v2.
+> With the recent changes to 'kselftest-merge' nested configs also get merged.
+> Please refer this below commit for more details.
 
-I had a go at refactoring this a while ago, but it fell by the wayside.
+Sure---both v2 and v3 work but this one adds more config files with
+little benefit.
 
-I can try to resurrect it if it's still considered worthwhile.
-
-Cheers
----Dave
+Paolo
