@@ -2,80 +2,155 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C9C38A0FB
-	for <lists+linux-kselftest@lfdr.de>; Mon, 12 Aug 2019 16:26:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 60B3A8A59F
+	for <lists+linux-kselftest@lfdr.de>; Mon, 12 Aug 2019 20:24:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726358AbfHLOZt (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 12 Aug 2019 10:25:49 -0400
-Received: from mail.kernel.org ([198.145.29.99]:47754 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726296AbfHLOZt (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 12 Aug 2019 10:25:49 -0400
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net [24.9.64.241])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 05E3620665;
-        Mon, 12 Aug 2019 14:25:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1565619948;
-        bh=dnLPVpEUWOO5jDD79kMhEtPATXAMvxJya3SuCzucbT4=;
-        h=Subject:To:References:From:Date:In-Reply-To:From;
-        b=Gu7RkPlXykG7GIHnPPD7Pwx2t1jhIQ8Oxcdju5Yoj9uuNETYQLsJxkEMaY8jvi4Gu
-         p/lev0jWc8wzWMXVbIrU1g7hHDKlb2A+MMR9xZsrBWep4y5fgj8+xxNyw8BDDmTvAs
-         qI+4BJ6hz/zJbajZ2ofsnc4gX1cxiGOrVpAW6A+g=
-Subject: Re: [PATCH 3/3] selftests: ir: fix ir_loopback test failure
-To:     Sean Young <sean@mess.org>, linux-media@vger.kernel.org,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>, shuah <shuah@kernel.org>
-References: <20190810114458.8883-1-sean@mess.org>
- <20190810114458.8883-3-sean@mess.org>
-From:   shuah <shuah@kernel.org>
-Message-ID: <7b612199-542e-a4e6-6544-3cd4936f72e4@kernel.org>
-Date:   Mon, 12 Aug 2019 08:25:41 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
-MIME-Version: 1.0
-In-Reply-To: <20190810114458.8883-3-sean@mess.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+        id S1726500AbfHLSYl (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 12 Aug 2019 14:24:41 -0400
+Received: from mail-qt1-f202.google.com ([209.85.160.202]:36959 "EHLO
+        mail-qt1-f202.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726498AbfHLSYk (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 12 Aug 2019 14:24:40 -0400
+Received: by mail-qt1-f202.google.com with SMTP id 41so91658108qtm.4
+        for <linux-kselftest@vger.kernel.org>; Mon, 12 Aug 2019 11:24:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=9mTljNvnyVjruVsrPNgUh53D69b4G0uh+rf/XKR7JZU=;
+        b=LnitzvMrBNB6LXONfL+PvwD9Ikk/vWzKySiopcnIrxQgVqiY5+jLuNhJ9ZjzPBotY0
+         Y0ntD2wGlkRwN/WqMUqePvF0CIftp/LQyZGsiE/rMamSPolRPy/gI1hWyTFrYjj8Az0S
+         iO+WLGSlSP4wDNeKPbhpSACldOlKIN0vm2AbpOTth5lwOi+wd5FtPBH+6DMV4BF7XZ5u
+         DCsO7wsqQZmhB7r+8C/SPCwSznOeI9ADcdzFPsEOZDZ9rWtgCf15F0uO/DhlcKvYD1vS
+         ikhy6UaROEOWv19ZHJDw8MIz7i0jbDy1yYL+vXOT6UpBhCm16LBtfsDmmxW8jdqFq7iG
+         CYUg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=9mTljNvnyVjruVsrPNgUh53D69b4G0uh+rf/XKR7JZU=;
+        b=DyCB44TGefjTIT9svxGJvkCI72K9t4D9fCD5W3WbUUlvM1SLrK+zPUkoLFZkIYR+X1
+         G/1dSPQHEROXBGbQJWAtOgJt2NKd1qLwbl6Y7kSTZHeQ6DUl3rj58T4oFIDXk13n2XGJ
+         mXlNY8fkYJ4GqZA+81sYEHn1TLNYwrI2e44dde2UTG8BrF5qVy55gQLpcLR9rN+xn1WY
+         KZgD/lXEOqCTvUeMwXpGterz+uDevkb6KKe5qMqOvlkZoCizhrzcXIPa+DS1JOKPP2eR
+         PIp/cMkRPI1D2aJBLmX7ORrzp13Esd2o+CcCBv7Xe13f5Zq0y5nu7/9PkgTMjjjgkIKE
+         JYuw==
+X-Gm-Message-State: APjAAAVz+F9onYUFVGpj1Ggs41rDnzjQD4+sQY+hPFzfc03hsubIGYmk
+        beIglrbrxDRkY3pMecNZf5Dz/vGFa9OzsM/R1CKPBw==
+X-Google-Smtp-Source: APXvYqyX/pgx0ykzeqZ6WcltGi5sso4Ln3mqeyyrGVZaHJD02/SPkwtsL4N8Ya+oDgvaUGfqUr1kIJOvfUwiqmtqKuHktw==
+X-Received: by 2002:a37:4a88:: with SMTP id x130mr13395431qka.501.1565634278957;
+ Mon, 12 Aug 2019 11:24:38 -0700 (PDT)
+Date:   Mon, 12 Aug 2019 11:24:03 -0700
+Message-Id: <20190812182421.141150-1-brendanhiggins@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.23.0.rc1.153.gdeed80330f-goog
+Subject: [PATCH v12 00/18] kunit: introduce KUnit, the Linux kernel unit
+ testing framework
+From:   Brendan Higgins <brendanhiggins@google.com>
+To:     frowand.list@gmail.com, gregkh@linuxfoundation.org,
+        jpoimboe@redhat.com, keescook@google.com,
+        kieran.bingham@ideasonboard.com, mcgrof@kernel.org,
+        peterz@infradead.org, robh@kernel.org, sboyd@kernel.org,
+        shuah@kernel.org, tytso@mit.edu, yamada.masahiro@socionext.com
+Cc:     devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        kunit-dev@googlegroups.com, linux-doc@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kbuild@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-nvdimm@lists.01.org, linux-um@lists.infradead.org,
+        Alexander.Levin@microsoft.com, Tim.Bird@sony.com,
+        amir73il@gmail.com, dan.carpenter@oracle.com, daniel@ffwll.ch,
+        jdike@addtoit.com, joel@jms.id.au, julia.lawall@lip6.fr,
+        khilman@baylibre.com, knut.omang@oracle.com, logang@deltatee.com,
+        mpe@ellerman.id.au, pmladek@suse.com, rdunlap@infradead.org,
+        richard@nod.at, rientjes@google.com, rostedt@goodmis.org,
+        wfg@linux.intel.com, Brendan Higgins <brendanhiggins@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 8/10/19 5:44 AM, Sean Young wrote:
-> The decoder is called rc-mm, not rcmm. This was renamed late in the cycle
-> so this bug crept in.
-> 
-> Cc: Shuah Khan <shuah@kernel.org>
-> Signed-off-by: Sean Young <sean@mess.org>
-> ---
->   tools/testing/selftests/ir/ir_loopback.c | 6 +++---
->   1 file changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/ir/ir_loopback.c b/tools/testing/selftests/ir/ir_loopback.c
-> index e700e09e3682..af7f9c7d59bc 100644
-> --- a/tools/testing/selftests/ir/ir_loopback.c
-> +++ b/tools/testing/selftests/ir/ir_loopback.c
-> @@ -54,9 +54,9 @@ static const struct {
->   	{ RC_PROTO_RC6_MCE, "rc-6-mce", 0x00007fff, "rc-6" },
->   	{ RC_PROTO_SHARP, "sharp", 0x1fff, "sharp" },
->   	{ RC_PROTO_IMON, "imon", 0x7fffffff, "imon" },
-> -	{ RC_PROTO_RCMM12, "rcmm-12", 0x00000fff, "rcmm" },
-> -	{ RC_PROTO_RCMM24, "rcmm-24", 0x00ffffff, "rcmm" },
-> -	{ RC_PROTO_RCMM32, "rcmm-32", 0xffffffff, "rcmm" },
-> +	{ RC_PROTO_RCMM12, "rcmm-12", 0x00000fff, "rc-mm" },
-> +	{ RC_PROTO_RCMM24, "rcmm-24", 0x00ffffff, "rc-mm" },
-> +	{ RC_PROTO_RCMM32, "rcmm-32", 0xffffffff, "rc-mm" },
->   };
->   
->   int lirc_open(const char *rc)
-> 
+## TL;DR
 
-Thanks Sean! Please cc - linux-keseltest makling list on these patches.
+This revision removes dependence on kunit_stream in favor of
+kunit_assert, as suggested by Stephen Boyd. kunit_assert provides a more
+structured interface for constructing messages and allows most required
+data to be stored on the stack for most expectations until it is
+determined that a failure message must be produced.
 
-I can take this through my tree or here is my Ack for it go through
-media tree
+As a part of introducing kunit_assert, expectations (KUNIT_EXPECT_*) and
+assertions (KUNIT_ASSERT_*) have been substantially refactored.
+Nevertheless, behavior should be the same.
 
-Acked-by: Shuah Khan <skhan@linuxfoundation.org>
+As this revision, adds a new patch, it, [PATCH v12 04/18], needs to be
+reviewed. All other patches have appropriate reviews and acks.
+
+I also rebased the patchset on v5.3-rc3.
+
+## Background
+
+This patch set proposes KUnit, a lightweight unit testing and mocking
+framework for the Linux kernel.
+
+Unlike Autotest and kselftest, KUnit is a true unit testing framework;
+it does not require installing the kernel on a test machine or in a VM
+(however, KUnit still allows you to run tests on test machines or in VMs
+if you want[1]) and does not require tests to be written in userspace
+running on a host kernel. Additionally, KUnit is fast: From invocation
+to completion KUnit can run several dozen tests in about a second.
+Currently, the entire KUnit test suite for KUnit runs in under a second
+from the initial invocation (build time excluded).
+
+KUnit is heavily inspired by JUnit, Python's unittest.mock, and
+Googletest/Googlemock for C++. KUnit provides facilities for defining
+unit test cases, grouping related test cases into test suites, providing
+common infrastructure for running tests, mocking, spying, and much more.
+
+### What's so special about unit testing?
+
+A unit test is supposed to test a single unit of code in isolation,
+hence the name. There should be no dependencies outside the control of
+the test; this means no external dependencies, which makes tests orders
+of magnitudes faster. Likewise, since there are no external dependencies,
+there are no hoops to jump through to run the tests. Additionally, this
+makes unit tests deterministic: a failing unit test always indicates a
+problem. Finally, because unit tests necessarily have finer granularity,
+they are able to test all code paths easily solving the classic problem
+of difficulty in exercising error handling code.
+
+### Is KUnit trying to replace other testing frameworks for the kernel?
+
+No. Most existing tests for the Linux kernel are end-to-end tests, which
+have their place. A well tested system has lots of unit tests, a
+reasonable number of integration tests, and some end-to-end tests. KUnit
+is just trying to address the unit test space which is currently not
+being addressed.
+
+### More information on KUnit
+
+There is a bunch of documentation near the end of this patch set that
+describes how to use KUnit and best practices for writing unit tests.
+For convenience I am hosting the compiled docs here[2].
+
+Additionally for convenience, I have applied these patches to a
+branch[3]. The repo may be cloned with:
+git clone https://kunit.googlesource.com/linux
+This patchset is on the kunit/rfc/v5.3/v12 branch.
+
+## Changes Since Last Version
+
+- Dropped patch "[PATCH v11 04/18] kunit: test: add kunit_stream a
+  std::stream like logger" and replaced it with "[PATCH v12 04/18]
+  kunit: test: add assertion printing library", which provides a totally
+  new mechanism for constructing expectation/assertion failure messages.
+- Substantially refactored expectations and assertions definitions in
+  [PATCH 05/18] and [PATCH 11/18] respectively.
+- Rebased patchset on v5.3-rc3.
+- Fixed a minor documentation bug.
+
+[1] https://google.github.io/kunit-docs/third_party/kernel/docs/usage.html#kunit-on-non-uml-architectures
+[2] https://google.github.io/kunit-docs/third_party/kernel/docs/
+[3] https://kunit.googlesource.com/linux/+/kunit/rfc/v5.3/v12
+
+-- 
+2.23.0.rc1.153.gdeed80330f-goog
+
