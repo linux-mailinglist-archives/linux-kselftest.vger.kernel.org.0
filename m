@@ -2,54 +2,54 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id ECC8C8AF76
-	for <lists+linux-kselftest@lfdr.de>; Tue, 13 Aug 2019 08:13:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA7768AF7B
+	for <lists+linux-kselftest@lfdr.de>; Tue, 13 Aug 2019 08:13:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727579AbfHMGL0 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 13 Aug 2019 02:11:26 -0400
-Received: from aserp2120.oracle.com ([141.146.126.78]:58794 "EHLO
-        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727160AbfHMGLZ (ORCPT
+        id S1727628AbfHMGLd (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 13 Aug 2019 02:11:33 -0400
+Received: from userp2130.oracle.com ([156.151.31.86]:59996 "EHLO
+        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727160AbfHMGLc (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 13 Aug 2019 02:11:25 -0400
-Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
-        by aserp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x7D68qma039301;
-        Tue, 13 Aug 2019 06:11:03 GMT
+        Tue, 13 Aug 2019 02:11:32 -0400
+Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
+        by userp2130.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x7D68vbv010941;
+        Tue, 13 Aug 2019 06:11:09 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding; s=corp-2019-08-05;
- bh=Uy/BMiU/6+cWYwyuGulp2z1PvG2gjuEr4h5V5AOFnps=;
- b=bseU9hdVmB1A+Dk0d5EgItfE7Bqp6KFA0P5q2Ti0ZdmhBaBM7sd9z+8V8odxDX3t99o0
- QFzmuKVv1TOjCmFHJlV09W+OdFFzPRrkUG7CQhBK6FWaBKNSts0XtX4Ff/735efVONc0
- 2BgPL3ENvQQSK2N8pPV9gG/SPdMIrGH627ux5ZImBz40p8EHwvI6hgiT5ZzYO85HqJiT
- G7PHNX3gUvji4nWjny/XSq8A7UUet/kLSUVVqlcXCxMKiQDYlN8MtlLidZlNF4rrYUa5
- EjI7vHoRs7gql8mltjSsLqfB25V+vbDlzot5Kl0ypfH+Vzh0eA47vihvJvcp7ERyUUuJ Kg== 
+ bh=riCWR7mvkEEzB8Hnj6RmL24fxUl4FVMwMdqKUi2IlJM=;
+ b=lBowMwvd4Th1sxDn2mY448tzEh9z8fZLB8EUVAfCdsRgsIKFD1l1ymj09aDhjn565vce
+ YD6C7V01vBJZ755ZL47x97n7Zk9VSkudLUHni9ZL7sOFXoTZq0vEgKtJP2EQfCf+0O0f
+ L5Wa6ZT+mN1CvdhUXK8aJMAzorCZX+0QFeG4hO8bsGKPFCDdMaYGW/wdsrAS/nYvs0jk
+ 8e2VDoveEexSyO5u6d499mFMw4+YAxTUk6Ydn4opVZSSVZJWhbCXNwwa2ibHheOQqS+H
+ vvd5viRkBpgD9a4pfqA09v2ndAk7rDJUR7HlFLqhTli6i0GItqSaaOk2Xn5Qdormuuh4 +g== 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding; s=corp-2018-07-02;
- bh=Uy/BMiU/6+cWYwyuGulp2z1PvG2gjuEr4h5V5AOFnps=;
- b=f4LOi+gT1LbC4u+uMdpH+QRodUD4BB8Ss1ST/KzYabW4UZElZLcSbCe0M94B/uvtOXl3
- NJnlWXWuWYiciU6BCkGQPtaeFOG+4gKu5U00nYijXsHXVFsQUiY55wDfVjs1O7Ca0Wag
- zvwmopqO2LWKdUm5Yd0tBD+glqmSq8s23HrsTZCu8iifOPfhwe80fDi7fbVCwcgN4Uaf
- wsh0VVSA+iO4w8RN6c1UmeFdWiqyHDQFdTi4BIW0UXK7vnM/plQKI7hwOhEKI5OpbfYN
- A19lWWfwmY1jZLpACUSPsowNVhyzbpPGvCc6iU2jLU+Rd01sMV0JKPUbaetEqJgTdps0 pQ== 
-Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by aserp2120.oracle.com with ESMTP id 2u9nvp41a6-1
+ bh=riCWR7mvkEEzB8Hnj6RmL24fxUl4FVMwMdqKUi2IlJM=;
+ b=HUSyqWGUtptLjrwDWbKzdyJDj3ruplWKeJG5C6nFLNuSM8JQTs4BLCzqgmNV58zz8YBh
+ WwoVDzMm2weNVIdE+aMNSYupgqLxUuhDcrC6pkZd01S4K+R6ObWv2r6NQ7EmQac0Z8z9
+ RaDdH1ETlvmHqaqVWRVEzv78wA606u/gTm1euv/MxgLTPdSHiX9KUf2O+ytoCTdG1owC
+ I3Hb/Zu6iD1l4GWwLRFCq1Eqn4BSoIwB19+o5b3d5jHiy06+ALfcNSSZoJ6UcBjsTMOb
+ vZ1I4ZfTp1QX9rN8c9CLSsQ+oUM2pFHU69Gqb3BF++zU3pIqYNc662VWvnbFdZsylyYo rA== 
+Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
+        by userp2130.oracle.com with ESMTP id 2u9nbtc0t5-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 13 Aug 2019 06:11:03 +0000
-Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x7D67SsC157036;
-        Tue, 13 Aug 2019 06:11:03 GMT
-Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
-        by aserp3020.oracle.com with ESMTP id 2u9nrenkff-1
+        Tue, 13 Aug 2019 06:11:09 +0000
+Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
+        by aserp3030.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x7D67QcY096480;
+        Tue, 13 Aug 2019 06:11:08 GMT
+Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
+        by aserp3030.oracle.com with ESMTP id 2u9m0aydjp-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 13 Aug 2019 06:11:03 +0000
+        Tue, 13 Aug 2019 06:11:07 +0000
 Received: from abhmp0019.oracle.com (abhmp0019.oracle.com [141.146.116.25])
-        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id x7D6B23C026398;
-        Tue, 13 Aug 2019 06:11:02 GMT
+        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id x7D6B6P9010982;
+        Tue, 13 Aug 2019 06:11:06 GMT
 Received: from abi.no.oracle.com (/10.172.144.123)
         by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Mon, 12 Aug 2019 23:11:01 -0700
+        with ESMTP ; Mon, 12 Aug 2019 23:11:05 -0700
 From:   Knut Omang <knut.omang@oracle.com>
 To:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     linux-doc@vger.kernel.org, linux-kbuild@vger.kernel.org,
@@ -69,9 +69,9 @@ Cc:     linux-doc@vger.kernel.org, linux-kbuild@vger.kernel.org,
         "Theodore Ts'o" <tytso@mit.edu>, Daniel Vetter <daniel@ffwll.ch>,
         Stephen Boyd <sboyd@kernel.org>,
         Knut Omang <knut.omang@oracle.com>
-Subject: [RFC 03/19] ktf: Introduce a generic netlink protocol for test result communication
-Date:   Tue, 13 Aug 2019 08:09:18 +0200
-Message-Id: <a29b3d27234a7ad3f5d6f7571d08167077dc0350.1565676440.git-series.knut.omang@oracle.com>
+Subject: [RFC 04/19] ktf: An implementation of a generic associative array container
+Date:   Tue, 13 Aug 2019 08:09:19 +0200
+Message-Id: <6fb12b13002454d5bcba407cbd51c1ee9ecf3ec6.1565676440.git-series.knut.omang@oracle.com>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <cover.92d76bb4f6dcedc971d0b72a49e8e459a98bca54.1565676440.git-series.knut.omang@oracle.com>
 References: <cover.92d76bb4f6dcedc971d0b72a49e8e459a98bca54.1565676440.git-series.knut.omang@oracle.com>
@@ -93,682 +93,448 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The generic netlink protocol used to communicate between
-kernel and user space about tests and test results, as well as some
-means for configuring tests within the kernel.
+This container is mapping from an index datatype to a "value"
+datatatype, using rbtree for the implementation.
+This datatype is used for various purposes by ktf to
+store and find data related to the actual test cases.
 
-Unlike other kernel side test code in the kernel, ktf does not print
-anything from inside the kernel (except for optional debugging
-features to help "internal" debugging of ktf or ktf tests).
-Instead all test results are communicated back to the user space
-frontend, which decides how to do the reporting.
-
-ktf_nl.c:        ktf netlink protocol implementation
-ktf_unlproto.h:  implements interfaces for user-kernel netlink interactions
+ktf_map.c:       Implementation of a kernel version independent std::map like API
+ktf_map.h:       simple objects with key lookup to be inlined into a
 
 Signed-off-by: Knut Omang <knut.omang@oracle.com>
 ---
- tools/testing/selftests/ktf/kernel/ktf_nl.c       | 516 +++++++++++++++-
- tools/testing/selftests/ktf/kernel/ktf_nl.h       |  15 +-
- tools/testing/selftests/ktf/kernel/ktf_unlproto.h | 105 +++-
- 3 files changed, 636 insertions(+)
- create mode 100644 tools/testing/selftests/ktf/kernel/ktf_nl.c
- create mode 100644 tools/testing/selftests/ktf/kernel/ktf_nl.h
- create mode 100644 tools/testing/selftests/ktf/kernel/ktf_unlproto.h
+ tools/testing/selftests/ktf/kernel/ktf_map.c | 261 ++++++++++++++++++++-
+ tools/testing/selftests/ktf/kernel/ktf_map.h | 154 ++++++++++++-
+ 2 files changed, 415 insertions(+)
+ create mode 100644 tools/testing/selftests/ktf/kernel/ktf_map.c
+ create mode 100644 tools/testing/selftests/ktf/kernel/ktf_map.h
 
-diff --git a/tools/testing/selftests/ktf/kernel/ktf_nl.c b/tools/testing/selftests/ktf/kernel/ktf_nl.c
+diff --git a/tools/testing/selftests/ktf/kernel/ktf_map.c b/tools/testing/selftests/ktf/kernel/ktf_map.c
 new file mode 100644
-index 0000000..56d5f3b
+index 0000000..78ae5fb
 --- /dev/null
-+++ b/tools/testing/selftests/ktf/kernel/ktf_nl.c
-@@ -0,0 +1,516 @@
++++ b/tools/testing/selftests/ktf/kernel/ktf_map.c
+@@ -0,0 +1,261 @@
 +/*
 + * Copyright (c) 2017, Oracle and/or its affiliates. All rights reserved.
 + *    Author: Knut Omang <knut.omang@oracle.com>
 + *
 + * SPDX-License-Identifier: GPL-2.0
 + *
-+ * ktf_nl.c: ktf netlink protocol implementation
++ * ktf_map.c: Implementation of a kernel version independent std::map like API
++ *   (made abstract to allow impl to change)
 + */
-+#include <linux/version.h>
-+#include <net/netlink.h>
-+#include <net/genetlink.h>
-+#define NL_INTERNAL 1
-+#include "ktf_unlproto.h"
-+#include "ktf_test.h"
-+#include "ktf_nl.h"
++
++#include "ktf_map.h"
 +#include "ktf.h"
-+#include "ktf_cov.h"
 +
-+/* Generic netlink support to communicate with user level
-+ * test framework.
-+ */
-+
-+/* Callback functions defined below */
-+static int ktf_run(struct sk_buff *skb, struct genl_info *info);
-+static int ktf_query(struct sk_buff *skb, struct genl_info *info);
-+static int ktf_req(struct sk_buff *skb, struct genl_info *info);
-+static int ktf_resp(struct sk_buff *skb, struct genl_info *info);
-+static int ktf_cov_cmd(enum ktf_cmd_type type, struct sk_buff *skb,
-+		       struct genl_info *info);
-+static int ktf_ctx_cfg(struct sk_buff *skb, struct genl_info *info);
-+static int send_version_only(struct sk_buff *skb, struct genl_info *info);
-+
-+/* operation definition */
-+static struct genl_ops ktf_ops[] = {
-+	{
-+		.cmd = KTF_C_REQ,
-+		.flags = 0,
-+		.doit = ktf_req,
-+		.dumpit = NULL,
-+	},
-+	{
-+		.cmd = KTF_C_RESP,
-+		.flags = 0,
-+		.doit = ktf_resp,
-+		.dumpit = NULL,
-+	}
-+};
-+
-+/* family definition */
-+static struct genl_family ktf_gnl_family = {
-+	.module = THIS_MODULE,
-+	.hdrsize = 0,
-+	.name = "ktf",
-+	.version = 1,
-+	.maxattr = KTF_A_MAX + 4,
-+	.policy = ktf_gnl_policy,
-+	.ops = ktf_ops,
-+	.n_ops = ARRAY_SIZE(ktf_ops),
-+};
-+
-+/* handler, returns 0 on success, negative
-+ * values on failure. It doesn't make much difference
-+ * what error values are used, as they are anyway discarded
-+ * at the netlink level, but do result in a nonzero return
-+ * from nl_wait_for_ack() in user space.
-+ */
-+static int ktf_req(struct sk_buff *skb, struct genl_info *info)
++void ktf_map_init(struct ktf_map *map, ktf_map_elem_comparefn elem_comparefn,
++		  ktf_map_elem_freefn elem_freefn)
 +{
-+	enum ktf_cmd_type type;
-+	u64 version;
-+
-+	/* Dispatch on type of request */
-+
-+	if (!info->attrs[KTF_A_TYPE] || !info->attrs[KTF_A_VERSION]) {
-+		terr("received netlink msg with no type/version!");
-+		return -EINVAL;
-+	}
-+
-+	version = nla_get_u64(info->attrs[KTF_A_VERSION]);
-+	if (ktf_version_check(version)) {
-+		/* a query is the first call for any reasonable application:
-+		 * Respond to it with a version only:
-+		 */
-+		if (nla_get_u32(info->attrs[KTF_A_TYPE]) == KTF_CT_QUERY)
-+			return send_version_only(skb, info);
-+		return -EINVAL;
-+	}
-+
-+	type = nla_get_u32(info->attrs[KTF_A_TYPE]);
-+	switch (type) {
-+	case KTF_CT_QUERY:
-+		return ktf_query(skb, info);
-+	case KTF_CT_RUN:
-+		return ktf_run(skb, info);
-+	case KTF_CT_COV_ENABLE:
-+	case KTF_CT_COV_DISABLE:
-+		return ktf_cov_cmd(type, skb, info);
-+	case KTF_CT_CTX_CFG:
-+		return ktf_ctx_cfg(skb, info);
-+	default:
-+		terr("received netlink msg with invalid type (%d)", type);
-+	}
-+	return -EINVAL;
++	map->root = RB_ROOT;
++	map->size = 0;
++	map->elem_comparefn = elem_comparefn;
++	map->elem_freefn = elem_freefn;
++	spin_lock_init(&map->lock);
 +}
 +
-+/* Reply with just version information to let user space report the issue: */
-+static int send_version_only(struct sk_buff *skb, struct genl_info *info)
++int ktf_map_elem_init(struct ktf_map_elem *elem, const char *key)
 +{
-+	struct sk_buff *resp_skb = nlmsg_new(NLMSG_DEFAULT_SIZE, GFP_KERNEL);
-+	void *data;
-+	int retval = 0;
-+
-+	if (!resp_skb)
-+		return -ENOMEM;
-+	data = genlmsg_put_reply(resp_skb, info, &ktf_gnl_family,
-+				 0, KTF_C_RESP);
-+	if (!data) {
-+		retval = -ENOMEM;
-+		goto resp_failure;
-+	}
-+	nla_put_u32(resp_skb, KTF_A_TYPE, KTF_CT_QUERY);
-+	nla_put_u64_64bit(resp_skb, KTF_A_VERSION, KTF_VERSION_LATEST, 0);
-+
-+	/* Recompute message header */
-+	genlmsg_end(resp_skb, data);
-+
-+	retval = genlmsg_reply(resp_skb, info);
-+resp_failure:
-+	/* Free buffer if failure */
-+	if (retval)
-+		nlmsg_free(resp_skb);
-+	return retval;
-+}
-+
-+/* Send data about one testcase */
-+static int send_test_data(struct sk_buff *resp_skb, struct ktf_case *tc)
-+{
-+	struct nlattr *nest_attr;
-+	struct ktf_test *t;
-+	int stat;
-+	int cnt = 0;
-+
-+	stat = nla_put_string(resp_skb, KTF_A_STR, ktf_case_name(tc));
-+	if (stat)
-+		return stat;
-+
-+	nest_attr = nla_nest_start(resp_skb, KTF_A_TEST);
-+	ktf_testcase_for_each_test(t, tc) {
-+		cnt++;
-+		/* A test is not valid if the handle requires a context and none is present */
-+		if (t->handle->id) {
-+			stat = nla_put_u32(resp_skb, KTF_A_HID, t->handle->id);
-+			if (stat)
-+				goto fail;
-+		} else if (t->handle->require_context) {
-+			continue;
-+		}
-+		stat = nla_put_string(resp_skb, KTF_A_STR, t->name);
-+		if (stat)
-+			goto fail;
-+	}
-+	nla_nest_end(resp_skb, nest_attr);
-+	tlog(T_DEBUG, "Sent data about %d tests", cnt);
-+	return 0;
-+fail:
-+	twarn("Failed with status %d after sending data about %d tests", stat, cnt);
-+	/* we hold reference to t here - drop it! */
-+	ktf_test_put(t);
-+	return stat;
-+}
-+
-+static int send_handle_data(struct sk_buff *resp_skb, struct ktf_handle *handle)
-+{
-+	struct ktf_context_type *ct;
-+	struct nlattr *nest_attr;
-+	struct ktf_context *ctx;
-+	int stat;
-+
-+	tlog(T_DEBUG, "Sending context handle %d: ", handle->id);
-+
-+	/* Send HID */
-+	stat = nla_put_u32(resp_skb, KTF_A_HID, handle->id);
-+	if (stat)
-+		return stat;
-+
-+	/* Send contexts */
-+	nest_attr = nla_nest_start(resp_skb, KTF_A_LIST);
-+	if (!nest_attr)
-+		return -ENOMEM;
-+
-+	tlog(T_DEBUG, "Sending context type list");
-+	/* Send any context types that user space are allowed to create contexts for */
-+	ktf_map_for_each_entry(ct, &handle->ctx_type_map, elem) {
-+		if (ct->alloc) {
-+			stat = nla_put_string(resp_skb, KTF_A_FILE, ct->name);
-+			if (stat)
-+				return -ENOMEM;
-+		}
-+	}
-+
-+	/* Then send all the contexts themselves */
-+	ctx = ktf_find_first_context(handle);
-+	while (ctx) {
-+		nla_put_string(resp_skb, KTF_A_STR, ktf_context_name(ctx));
-+		if (ctx->config_cb) {
-+			stat = nla_put_string(resp_skb, KTF_A_MOD, ctx->type->name);
-+			if (stat)
-+				return stat;
-+			stat = nla_put_u32(resp_skb, KTF_A_STAT, ctx->config_errno);
-+			if (stat)
-+				return stat;
-+		}
-+		ctx = ktf_find_next_context(ctx);
-+	}
-+	nla_nest_end(resp_skb, nest_attr);
-+	return 0;
-+}
-+
-+static int ktf_query(struct sk_buff *skb, struct genl_info *info)
-+{
-+	struct sk_buff *resp_skb;
-+	void *data;
-+	int retval = 0;
-+	struct nlattr *nest_attr;
-+	struct ktf_handle *handle;
-+	struct ktf_case *tc;
-+
-+	/* No options yet, just send a response */
-+	resp_skb = nlmsg_new(NLMSG_DEFAULT_SIZE, GFP_KERNEL);
-+	if (!resp_skb)
-+		return -ENOMEM;
-+
-+	data = genlmsg_put_reply(resp_skb, info, &ktf_gnl_family,
-+				 0, KTF_C_RESP);
-+	if (!data) {
-+		retval = -ENOMEM;
-+		goto resp_failure;
-+	}
-+
-+	nla_put_u64_64bit(resp_skb, KTF_A_VERSION, KTF_VERSION_LATEST, 0);
-+
-+	/* Add all test sets to the report
-+	 *  We send test info as follows:
-+	 *    KTF_CT_QUERY hid1 [context1 [context2 ...]] hid2 [context1 [context2 ...]]
-+	 *                   testset_num [testset1 [name1 name2 ..] testset2 [name1 name2 ..]]
-+	 *  Handle IDs without contexts are not present
++	memcpy(elem->key, key, KTF_MAX_KEY);
++	/* For strings that are too long, ensure truncation at
++	 * KTF_MAX_NAME == KTF_MAX_KEY - 1 length:
 +	 */
-+	if (!nla_put_u32(resp_skb, KTF_A_TYPE, KTF_CT_QUERY)) {
-+		if (!list_empty(&context_handles)) {
-+			/* Traverse list of handles with contexts */
-+			nest_attr = nla_nest_start(resp_skb, KTF_A_HLIST);
-+			list_for_each_entry(handle, &context_handles, handle_list) {
-+				retval = send_handle_data(resp_skb, handle);
-+				if (retval)
-+					goto resp_failure;
-+			}
-+			nla_nest_end(resp_skb, nest_attr);
-+		}
-+
-+		/* Send total number of tests */
-+		tlog(T_DEBUG, "Total #of test cases: %ld", ktf_case_count());
-+		nla_put_u32(resp_skb, KTF_A_NUM, ktf_case_count());
-+		nest_attr = nla_nest_start(resp_skb, KTF_A_LIST);
-+		if (!nest_attr) {
-+			retval = -ENOMEM;
-+			goto resp_failure;
-+		}
-+		ktf_for_each_testcase(tc) {
-+			retval = send_test_data(resp_skb, tc);
-+			if (retval) {
-+				retval = -ENOMEM;
-+				goto resp_failure;
-+			}
-+		}
-+		nla_nest_end(resp_skb, nest_attr);
-+	}
-+
-+	/* Recompute message header */
-+	genlmsg_end(resp_skb, data);
-+
-+	retval = genlmsg_reply(resp_skb, info);
-+resp_failure:
-+	if (retval)
-+		twarn("Message failure (status %d)", retval);
-+	/* Free buffer if failure */
-+	if (retval)
-+		nlmsg_free(resp_skb);
-+	return retval;
-+}
-+
-+static int ktf_run_func(struct sk_buff *skb, const char *ctxname,
-+			const char *setname, const char *testname,
-+			u32 value, void *oob_data, size_t oob_data_sz)
-+{
-+	struct ktf_case *testset = ktf_case_find(setname);
-+	struct ktf_test *t;
-+	int tn = 0;
-+
-+	if (!testset) {
-+		tlog(T_INFO, "No such testset \"%s\"\n", setname);
-+		return -EFAULT;
-+	}
-+
-+	/* Execute test functions */
-+	ktf_testcase_for_each_test(t, testset) {
-+		if (t->fun && strcmp(t->name, testname) == 0) {
-+			struct ktf_context *ctx = ktf_find_context(t->handle, ctxname);
-+
-+			ktf_run_hook(skb, ctx, t, value, oob_data, oob_data_sz);
-+		} else if (!t->fun) {
-+			tlog(T_DEBUG, "** no function for test %s.%s **", t->tclass, t->name);
-+		}
-+		tn++;
-+	}
-+	tlog(T_DEBUG, "Set %s contained %d tests", ktf_case_name(testset), tn);
-+	ktf_case_put(testset);
++	elem->key[KTF_MAX_NAME] = '\0';
++	elem->map = NULL;
++	kref_init(&elem->refcount);
 +	return 0;
 +}
 +
-+static int ktf_run(struct sk_buff *skb, struct genl_info *info)
-+{
-+	u32 value = 0;
-+	struct sk_buff *resp_skb;
-+	void *data;
-+	int retval = 0;
-+	struct nlattr *nest_attr, *data_attr;
-+	char ctxname_store[KTF_MAX_NAME + 1];
-+	char *ctxname = ctxname_store;
-+	char setname[KTF_MAX_NAME + 1];
-+	char testname[KTF_MAX_NAME + 1];
-+	void *oob_data = NULL;
-+	size_t oob_data_sz = 0;
-+
-+	if (info->attrs[KTF_A_STR])
-+		nla_strlcpy(ctxname, info->attrs[KTF_A_STR], KTF_MAX_NAME);
-+	else
-+		ctxname = NULL;
-+
-+	if (!info->attrs[KTF_A_SNAM])	{
-+		terr("received KTF_CT_RUN msg without testset name!");
-+		return -EINVAL;
-+	}
-+	nla_strlcpy(setname, info->attrs[KTF_A_SNAM], KTF_MAX_NAME);
-+
-+	if (!info->attrs[KTF_A_TNAM])	{  /* Test name wo/context */
-+		terr("received KTF_CT_RUN msg without test name!");
-+		return -EINVAL;
-+	}
-+	nla_strlcpy(testname, info->attrs[KTF_A_TNAM], KTF_MAX_NAME);
-+
-+	if (info->attrs[KTF_A_NUM])	{
-+		/* Using NUM field as optional u32 input parameter to test */
-+		value = nla_get_u32(info->attrs[KTF_A_NUM]);
-+	}
-+
-+	data_attr = info->attrs[KTF_A_DATA];
-+	if (data_attr)	{
-+		/* User space sends out-of-band data: */
-+		oob_data = nla_memdup(data_attr, GFP_KERNEL);
-+		oob_data_sz = nla_len(data_attr);
-+	}
-+
-+	tlog(T_DEBUG, "Request for testset %s, test %s\n", setname, testname);
-+
-+	/* Start building a response */
-+	resp_skb = nlmsg_new(NLMSG_DEFAULT_SIZE, GFP_KERNEL);
-+	if (!resp_skb)
-+		return -ENOMEM;
-+
-+	data = genlmsg_put_reply(resp_skb, info, &ktf_gnl_family,
-+				 0, KTF_C_RESP);
-+	if (!data) {
-+		retval = -ENOMEM;
-+		goto put_fail;
-+	}
-+
-+	nla_put_u32(resp_skb, KTF_A_TYPE, KTF_CT_RUN);
-+	nest_attr = nla_nest_start(resp_skb, KTF_A_LIST);
-+	retval = ktf_run_func(resp_skb, ctxname, setname, testname, value, oob_data, oob_data_sz);
-+	nla_nest_end(resp_skb, nest_attr);
-+	nla_put_u32(resp_skb, KTF_A_STAT, retval);
-+
-+	/* Recompute message header */
-+	genlmsg_end(resp_skb, data);
-+
-+	retval = genlmsg_reply(resp_skb, info);
-+	if (!retval)
-+		tlog(T_DEBUG, "Sent reply for test %s.%s\n", setname, testname);
-+	else
-+		twarn("Failed to send reply for test %s.%s - value %d",
-+		      setname, testname, retval);
-+
-+	kfree(oob_data);
-+put_fail:
-+	/* Free buffer if failure */
-+	if (retval)
-+		nlmsg_free(resp_skb);
-+	return retval;
-+}
-+
-+static int ktf_resp(struct sk_buff *skb, struct genl_info *info)
-+{
-+	/* not to expect this message here */
-+	terr("unexpected netlink RESP msg received");
-+	return 0;
-+}
-+
-+static int ktf_cov_cmd(enum ktf_cmd_type type, struct sk_buff *skb,
-+		       struct genl_info *info)
-+{
-+	char *cmd = type == KTF_CT_COV_ENABLE ? "COV_ENABLE" : "COV_DISABLE";
-+	char module[KTF_MAX_NAME + 1];
-+	struct sk_buff *resp_skb;
-+	int retval = 0;
-+	void *data;
-+	u32 opts = 0;
-+
-+	if (!info->attrs[KTF_A_MOD])   {
-+		terr("received KTF_CT_%s msg without module name!", cmd);
-+		return -EINVAL;
-+	}
-+	nla_strlcpy(module, info->attrs[KTF_A_MOD], KTF_MAX_NAME);
-+	if (info->attrs[KTF_A_COVOPT])
-+		opts = nla_get_u32(info->attrs[KTF_A_COVOPT]);
-+
-+	/* Start building a response */
-+	resp_skb = nlmsg_new(NLMSG_DEFAULT_SIZE, GFP_KERNEL);
-+	if (!resp_skb)
-+		return -ENOMEM;
-+
-+	tlog(T_DEBUG, "%s coverage for %s\n", cmd, module);
-+	if (type == KTF_CT_COV_ENABLE)
-+		retval = ktf_cov_enable(module, opts);
-+	else
-+		ktf_cov_disable(module);
-+
-+	data = genlmsg_put_reply(resp_skb, info, &ktf_gnl_family,
-+				 0, KTF_C_RESP);
-+	if (!data) {
-+		retval = -ENOMEM;
-+		goto put_fail;
-+	}
-+	nla_put_u32(resp_skb, KTF_A_TYPE, type);
-+	nla_put_u32(resp_skb, KTF_A_STAT, retval);
-+	/* Recompute message header */
-+	genlmsg_end(resp_skb, data);
-+
-+	retval = genlmsg_reply(resp_skb, info);
-+	if (!retval)
-+		tlog(T_DEBUG, "Sent reply for %s module %s\n",
-+		     cmd, module);
-+	else
-+		twarn("Failed to send reply for %s module %s - value %d",
-+		      cmd, module, retval);
-+put_fail:
-+	/* Free buffer if failure */
-+	if (retval)
-+		nlmsg_free(resp_skb);
-+	return retval;
-+}
-+
-+/* Process request to configure a configurable context:
-+ * Expected format:  KTF_CT_CTX_CFG hid type_name context_name data
-+ * placed in A_HID, A_FILE, A_STR and A_DATA respectively.
++/* A convenience unsigned int compare function as an alternative
++ * to the string compare:
 + */
-+static int ktf_ctx_cfg(struct sk_buff *skb, struct genl_info *info)
++int ktf_uint_compare(const char *ac, const char *bc)
 +{
-+	char ctxname[KTF_MAX_NAME + 1];
-+	char type_name[KTF_MAX_NAME + 1];
-+	struct nlattr *data_attr;
-+	void *ctx_data = NULL;
-+	size_t ctx_data_sz = 0;
-+	int hid;
-+	struct ktf_handle *handle;
-+	struct ktf_context *ctx;
-+	int ret;
++	unsigned int a = *((unsigned int *)ac);
++	unsigned int b = *((unsigned int *)bc);
 +
-+	if (!info->attrs[KTF_A_STR] || !info->attrs[KTF_A_HID])
-+		return -EINVAL;
-+	data_attr = info->attrs[KTF_A_DATA];
-+	if (!data_attr)
-+		return -EINVAL;
-+	hid = nla_get_u32(info->attrs[KTF_A_HID]);
-+	handle = ktf_handle_find(hid);
-+	if (!handle)
-+		return -EINVAL;
-+	if (info->attrs[KTF_A_FILE])
-+		nla_strlcpy(type_name, info->attrs[KTF_A_FILE], KTF_MAX_NAME);
++	return a > b ? 1 : (a < b ? -1 : 0);
++}
++EXPORT_SYMBOL(ktf_uint_compare);
++
++/* Copy "elem"s key representation into "name".  For cases where no
++ * compare function is defined - i.e. string keys - just copy string,
++ * otherwise name is hexascii of first 8 bytes of key.
++ */
++char *
++ktf_map_elem_name(struct ktf_map_elem *elem, char *name)
++{
++	if (!name)
++		return NULL;
++
++	if (!elem || !elem->map)
++		(void)strlcpy(name, "<none>", KTF_MAX_NAME);
++	else if (!elem->map->elem_comparefn)
++		(void)strlcpy(name, elem->key, KTF_MAX_NAME);
 +	else
-+		strcpy(type_name, "default");
-+	nla_strlcpy(ctxname, info->attrs[KTF_A_STR], KTF_MAX_NAME);
-+	tlog(T_DEBUG, "Trying to find/create context %s with type %s\n", ctxname, type_name);
-+	ctx = ktf_find_create_context(handle, ctxname, type_name);
-+	if (!ctx)
-+		return -ENODEV;
++		(void)snprintf(name, KTF_MAX_NAME, "'%*ph'", 8, elem->key);
 +
-+	tlog(T_DEBUG, "Received context configuration for context %s, handle %d\n",
-+	     ctxname, hid);
-+
-+	ctx_data = nla_memdup(data_attr, GFP_KERNEL);
-+	ctx_data_sz = nla_len(data_attr);
-+	ret = ktf_context_set_config(ctx, ctx_data, ctx_data_sz);
-+	kfree(ctx_data);
-+	return ret;
++	return name;
 +}
 +
-+int ktf_nl_register(void)
++/* Called when refcount of elem is 0. */
++static void ktf_map_elem_release(struct kref *kref)
 +{
-+	int stat = genl_register_family(&ktf_gnl_family);
-+	return stat;
++	struct ktf_map_elem *elem = container_of(kref, struct ktf_map_elem,
++						 refcount);
++	struct ktf_map *map = elem->map;
++	char name[KTF_MAX_KEY];
++
++	tlog(T_DEBUG_V, "Releasing %s, %s free function",
++	     ktf_map_elem_name(elem, name),
++	     map && map->elem_freefn ? "calling" : "no");
++	if (map && map->elem_freefn)
++		map->elem_freefn(elem);
 +}
 +
-+void ktf_nl_unregister(void)
++void ktf_map_elem_put(struct ktf_map_elem *elem)
 +{
-+	genl_unregister_family(&ktf_gnl_family);
++	char name[KTF_MAX_KEY];
++
++	tlog(T_DEBUG_V, "Decreasing refcount for %s to %d",
++	     ktf_map_elem_name(elem, name),
++	     refcount_read(&elem->refcount.refcount) - 1);
++	kref_put(&elem->refcount, ktf_map_elem_release);
 +}
-diff --git a/tools/testing/selftests/ktf/kernel/ktf_nl.h b/tools/testing/selftests/ktf/kernel/ktf_nl.h
++
++void ktf_map_elem_get(struct ktf_map_elem *elem)
++{
++	char name[KTF_MAX_KEY];
++
++	tlog(T_DEBUG_V, "Increasing refcount for %s to %d",
++	     ktf_map_elem_name(elem, name),
++	     refcount_read(&elem->refcount.refcount) + 1);
++	kref_get(&elem->refcount);
++}
++
++struct ktf_map_elem *ktf_map_find(struct ktf_map *map, const char *key)
++{
++	struct rb_node *node;
++	unsigned long flags;
++
++	/* may be called in interrupt context */
++	spin_lock_irqsave(&map->lock, flags);
++	node = map->root.rb_node;
++
++	while (node) {
++		struct ktf_map_elem *elem = container_of(node, struct ktf_map_elem, node);
++		int result;
++
++		if (map->elem_comparefn)
++			result = map->elem_comparefn(key, elem->key);
++		else
++			result = strncmp(key, elem->key, KTF_MAX_KEY);
++
++		if (result < 0) {
++			node = node->rb_left;
++		} else if (result > 0) {
++			node = node->rb_right;
++		} else {
++			ktf_map_elem_get(elem);
++			spin_unlock_irqrestore(&map->lock, flags);
++			return elem;
++		}
++	}
++	spin_unlock_irqrestore(&map->lock, flags);
++	return NULL;
++}
++
++/* Find the first map elem in 'map' */
++struct ktf_map_elem *ktf_map_find_first(struct ktf_map *map)
++{
++	struct ktf_map_elem *elem = NULL;
++	struct rb_node *node;
++	unsigned long flags;
++
++	spin_lock_irqsave(&map->lock, flags);
++	node = rb_first(&map->root);
++	if (node) {
++		elem = container_of(node, struct ktf_map_elem, node);
++		ktf_map_elem_get(elem);
++	}
++	spin_unlock_irqrestore(&map->lock, flags);
++	return elem;
++}
++
++/* Find the next element in the map after 'elem' if any */
++struct ktf_map_elem *ktf_map_find_next(struct ktf_map_elem *elem)
++{
++	struct ktf_map_elem *next = NULL;
++	struct ktf_map *map = elem->map;
++	struct rb_node *node;
++	unsigned long flags;
++
++	if (!elem->map)
++		return NULL;
++	spin_lock_irqsave(&map->lock, flags);
++	node = rb_next(&elem->node);
++
++	/* Assumption here - we don't need ref to elem any more.
++	 * Common usage pattern is
++	 *
++	 * for (elem = ktf_map_elem_first(map); elem != NULL;
++	 *      elem = ktf_map_find_next(elem))
++	 *
++	 * but if other use cases occur we may need to revisit.
++	 * This assumption allows us to define our _for_each macros
++	 * and still manage refcounts.
++	 */
++	ktf_map_elem_put(elem);
++
++	if (node) {
++		next = container_of(node, struct ktf_map_elem, node);
++		ktf_map_elem_get(next);
++	}
++	spin_unlock_irqrestore(&map->lock, flags);
++	return next;
++}
++
++int ktf_map_insert(struct ktf_map *map, struct ktf_map_elem *elem)
++{
++	struct rb_node **newobj, *parent = NULL;
++	unsigned long flags;
++
++	spin_lock_irqsave(&map->lock, flags);
++	newobj = &map->root.rb_node;
++	while (*newobj) {
++		struct ktf_map_elem *this = container_of(*newobj, struct ktf_map_elem, node);
++		int result;
++
++		if (map->elem_comparefn)
++			result = map->elem_comparefn(elem->key, this->key);
++		else
++			result = strncmp(elem->key, this->key, KTF_MAX_KEY);
++
++		parent = *newobj;
++		if (result < 0) {
++			newobj = &((*newobj)->rb_left);
++		} else if (result > 0) {
++			newobj = &((*newobj)->rb_right);
++		} else {
++			spin_unlock_irqrestore(&map->lock, flags);
++			return -EEXIST;
++		}
++	}
++
++	/* Add newobj node and rebalance tree. */
++	rb_link_node(&elem->node, parent, newobj);
++	rb_insert_color(&elem->node, &map->root);
++	elem->map = map;
++	map->size++;
++	/* Bump reference count for map reference */
++	ktf_map_elem_get(elem);
++	spin_unlock_irqrestore(&map->lock, flags);
++	return 0;
++}
++
++void ktf_map_remove_elem(struct ktf_map *map, struct ktf_map_elem *elem)
++{
++	if (elem) {
++		rb_erase(&elem->node, &map->root);
++		map->size--;
++		ktf_map_elem_put(elem);
++	}
++}
++
++struct ktf_map_elem *ktf_map_remove(struct ktf_map *map, const char *key)
++{
++	struct ktf_map_elem *elem;
++	unsigned long flags;
++
++	elem = ktf_map_find(map, key);
++	spin_lock_irqsave(&map->lock, flags);
++	ktf_map_remove_elem(map, elem);
++	spin_unlock_irqrestore(&map->lock, flags);
++	return elem;
++}
++
++void ktf_map_delete_all(struct ktf_map *map)
++{
++	struct ktf_map_elem *elem;
++	struct rb_node *node;
++	unsigned long flags;
++
++	spin_lock_irqsave(&map->lock, flags);
++	do {
++		node = rb_first(&(map)->root);
++		if (node) {
++			rb_erase(node, &(map)->root);
++			map->size--;
++			elem = container_of(node, struct ktf_map_elem, node);
++			ktf_map_elem_put(elem);
++		}
++	} while (node);
++	spin_unlock_irqrestore(&map->lock, flags);
++}
+diff --git a/tools/testing/selftests/ktf/kernel/ktf_map.h b/tools/testing/selftests/ktf/kernel/ktf_map.h
 new file mode 100644
-index 0000000..87d8012
+index 0000000..1c8ae9b
 --- /dev/null
-+++ b/tools/testing/selftests/ktf/kernel/ktf_nl.h
-@@ -0,0 +1,15 @@
++++ b/tools/testing/selftests/ktf/kernel/ktf_map.h
+@@ -0,0 +1,154 @@
 +/*
 + * Copyright (c) 2017, Oracle and/or its affiliates. All rights reserved.
 + *    Author: Knut Omang <knut.omang@oracle.com>
 + *
 + * SPDX-License-Identifier: GPL-2.0
 + *
-+ * nl.h: ktf netlink protocol interface
-+ */
-+#ifndef KTF_NL_H
-+#define KTF_NL_H
-+
-+int ktf_nl_register(void);
-+void ktf_nl_unregister(void);
-+
-+#endif
-diff --git a/tools/testing/selftests/ktf/kernel/ktf_unlproto.h b/tools/testing/selftests/ktf/kernel/ktf_unlproto.h
-new file mode 100644
-index 0000000..e6d4525
---- /dev/null
-+++ b/tools/testing/selftests/ktf/kernel/ktf_unlproto.h
-@@ -0,0 +1,105 @@
-+/*
-+ * Copyright (c) 2017, Oracle and/or its affiliates. All rights reserved.
-+ *    Author: Knut Omang <knut.omang@oracle.com>
-+ *
-+ * SPDX-License-Identifier: GPL-2.0
-+ *
-+ * ktf_unlproto.h: implements interfaces for user-kernel netlink interactions
-+ *   for querying/running tests.
-+ */
-+#ifndef _KTF_UNLPROTO_H
-+#define _KTF_UNLPROTO_H
-+#ifdef __cplusplus
-+extern "C" {
-+#endif
-+
-+enum ktf_cmd_type {
-+	KTF_CT_UNSPEC,
-+	KTF_CT_QUERY,
-+	KTF_CT_RUN,
-+	KTF_CT_COV_ENABLE,
-+	KTF_CT_COV_DISABLE,
-+	KTF_CT_CTX_CFG,
-+	KTF_CT_MAX,
-+};
-+
-+/* Netlink protocol definition shared between user and kernel space
-+ * Include once per user app as it defines struct values!
++ * ktf_map.h: simple objects with key lookup to be inlined into a
++ *    larger object
 + */
 +
-+/* supported attributes */
-+enum ktf_attr {
-+	KTF_A_UNSPEC,
-+	KTF_A_TYPE,
-+	KTF_A_VERSION,
-+	KTF_A_SNAM,   /* Test suite name */
-+	KTF_A_TNAM,   /* Test name */
-+	KTF_A_NUM,
-+	KTF_A_STR,
-+	KTF_A_FILE,
-+	KTF_A_STAT,
-+	KTF_A_LIST,
-+	KTF_A_TEST,
-+	KTF_A_HID,    /* Test handle ID */
-+	KTF_A_HLIST,  /* List of handles repr. as a LIST of contexts for a given HID */
-+	KTF_A_MOD,    /* module for coverage analysis, also used for context type */
-+	KTF_A_COVOPT, /* options for coverage analysis */
-+	KTF_A_DATA,   /* Binary data used by a.o. hybrid tests */
-+	KTF_A_MAX
++#ifndef _KTF_MAP_H
++#define _KTF_MAP_H
++#include <linux/kref.h>
++#include <linux/version.h>
++#include <linux/rbtree.h>
++
++#define	KTF_MAX_KEY 64
++#define KTF_MAX_NAME (KTF_MAX_KEY - 1)
++
++struct ktf_map_elem;
++
++/* Compare function called to compare element keys - optional and if
++ * not specified we revert to string comparison.  Should return < 0
++ * if first key < second, > 0 if first key > second, and 0 if they are
++ * identical.
++ */
++typedef int (*ktf_map_elem_comparefn)(const char *, const char *);
++
++/* A convenience unsigned int compare function as an alternative
++ * to the string compare:
++ */
++int ktf_uint_compare(const char *a, const char *b);
++
++/* Free function called when elem refcnt is 0 - optional and of course for
++ * dynamically-allocated elems only.
++ */
++typedef void (*ktf_map_elem_freefn)(struct ktf_map_elem *);
++
++struct ktf_map {
++	struct rb_root root; /* The rb tree holding the map */
++	size_t size;	     /* Current size (number of elements) of the map */
++	spinlock_t lock;     /* held for map lookup etc */
++	ktf_map_elem_comparefn elem_comparefn; /* Key comparison function */
++	ktf_map_elem_freefn elem_freefn; /* Free function */
 +};
 +
-+/* attribute policy */
-+#ifdef NL_INTERNAL
-+static struct nla_policy ktf_gnl_policy[KTF_A_MAX] = {
-+	[KTF_A_TYPE]  = { .type = NLA_U32 },
-+	[KTF_A_VERSION] = { .type = NLA_U64 },
-+	[KTF_A_SNAM]  = { .type = NLA_STRING },
-+	[KTF_A_TNAM]  = { .type = NLA_STRING },
-+	[KTF_A_NUM]   = { .type = NLA_U32 },
-+	[KTF_A_STAT]  = { .type = NLA_U32 },
-+	[KTF_A_HID]   = { .type = NLA_U32 },
-+	[KTF_A_LIST]  = { .type = NLA_NESTED },
-+	[KTF_A_TEST]  = { .type = NLA_NESTED },
-+	[KTF_A_HLIST] = { .type = NLA_NESTED },
-+	[KTF_A_STR]   = { .type = NLA_STRING },
-+	[KTF_A_FILE]  = { .type = NLA_STRING },
-+	[KTF_A_MOD]   = { .type = NLA_STRING },
-+	[KTF_A_COVOPT] = { .type = NLA_U32 },
-+	[KTF_A_DATA] = { .type = NLA_BINARY },
-+};
-+#endif
-+
-+/* supported commands */
-+enum ktf_cmd {
-+	KTF_C_UNSPEC,
-+	KTF_C_REQ,
-+	KTF_C_RESP,
-+	KTF_C_MAX
++struct ktf_map_elem {
++	struct rb_node node;	      /* Linkage for the map */
++	char key[KTF_MAX_KEY+1] __aligned(8);
++		/* Key of the element - must be unique within the same map */
++	struct ktf_map *map;  /* owning map */
++	struct kref refcount; /* reference count for element */
 +};
 +
-+enum ktf_vshift {
-+	KTF_VSHIFT_BUILD = 0,
-+	KTF_VSHIFT_MICRO = 16,
-+	KTF_VSHIFT_MINOR = 32,
-+	KTF_VSHIFT_MAJOR = 48
-+};
++#define __KTF_MAP_INITIALIZER(_mapname, _elem_comparefn, _elem_freefn) \
++        { \
++		.root = RB_ROOT, \
++		.size = 0, \
++		.lock = __SPIN_LOCK_UNLOCKED(_mapname), \
++		.elem_comparefn = _elem_comparefn, \
++		.elem_freefn = _elem_freefn, \
++	}
 +
-+#define KTF_VERSION(__field, __v) \
-+	((__v & (0xffffULL << KTF_VSHIFT_##__field)) \
-+	>> KTF_VSHIFT_##__field)
++#define DEFINE_KTF_MAP(_mapname, _elem_comparefn, _elem_freefn) \
++	struct ktf_map _mapname = __KTF_MAP_INITIALIZER(_mapname, _elem_comparefn, _elem_freefn)
 +
-+#define KTF_VERSION_SET(__field, __v) \
-+	((__v & 0xffffULL) << KTF_VSHIFT_##__field)
++void ktf_map_init(struct ktf_map *map, ktf_map_elem_comparefn elem_comparefn,
++	ktf_map_elem_freefn elem_freefn);
 +
-+#define	KTF_VERSION_LATEST	\
-+	(KTF_VERSION_SET(MAJOR, 0ULL) | KTF_VERSION_SET(MINOR, 2ULL) | KTF_VERSION_SET(MICRO, 1ULL))
++/* returns 0 upon success or -errno upon error */
++int ktf_map_elem_init(struct ktf_map_elem *elem, const char *key);
 +
-+/* Coverage options */
-+#define	KTF_COV_OPT_MEM		0x1
++/* increase/reduce reference count to element.  If count reaches 0, the
++ * free function associated with map (if any) is called.
++ */
++void ktf_map_elem_get(struct ktf_map_elem *elem);
++void ktf_map_elem_put(struct ktf_map_elem *elem);
 +
-+struct nla_policy *ktf_get_gnl_policy(void);
++char *ktf_map_elem_name(struct ktf_map_elem *elem, char *name);
 +
-+#ifdef __cplusplus
++/* Insert a new element in map - return 0 iff 'elem' was inserted or -1 if
++ * the key already existed - duplicates are not insterted.
++ */
++int ktf_map_insert(struct ktf_map *map, struct ktf_map_elem *elem);
++
++/* Find and return the element with 'key' */
++struct ktf_map_elem *ktf_map_find(struct ktf_map *map, const char *key);
++
++/* Find the first map elem in 'map' with reference count increased. */
++struct ktf_map_elem *ktf_map_find_first(struct ktf_map *map);
++
++/* Find the next element in the map after 'elem' if any.  Decreases refcount
++ * for "elem" and increases it for returned map element - this helps manage
++ * reference counts when iterating over map elements.
++ */
++struct ktf_map_elem *ktf_map_find_next(struct ktf_map_elem *elem);
++
++/* Remove the element 'key' from the map and return a pointer to it with
++ * refcount increased.
++ */
++struct ktf_map_elem *ktf_map_remove(struct ktf_map *map, const char *key);
++
++/* Remove specific element elem from the map. Refcount is not increased
++ * as caller must already have had a reference.
++ */
++void ktf_map_remove_elem(struct ktf_map *map, struct ktf_map_elem *elem);
++
++void ktf_map_delete_all(struct ktf_map *map);
++
++static inline size_t ktf_map_size(struct ktf_map *map) {
++	return map->size;
 +}
-+#endif
++
++static inline bool ktf_map_empty(struct ktf_map *map) {
++	return map->size == 0;
++}
++
++/* Gets first entry with refcount of entry increased for caller. */
++#define ktf_map_first_entry(_map, _type, _member) \
++	ktf_map_empty(_map) ? NULL : \
++	container_of(ktf_map_find_first(_map), _type, _member)
++
++/* Gets next elem after "pos", decreasing refcount for pos and increasing
++ * it for returned entry.
++ */
++#define ktf_map_next_entry(_pos, _member) ({ \
++	struct ktf_map_elem *_e = ktf_map_find_next(&(_pos)->_member); \
++        _e ? container_of(_e, typeof(*_pos), _member) : NULL; \
++})
++
++/* Iterates over map elements, incrementing refcount for current element and
++ * decreasing it when we iterate to the next element.  Important - if you
++ * break out of the loop via break/return, ensure ktf_map_elem_put(pos)
++ * is called for current element since we have a reference to it for the
++ * current loop body iteration.
++ */
++#define ktf_map_for_each(pos, map)	\
++	for (pos = ktf_map_find_first(map); pos != NULL; pos = ktf_map_find_next(pos))
++
++/* Iterate over map elements in similar manner as above but using
++ * container_of() wrappers to work with the type embedding a
++ * "struct ktf_map_elem".
++ */
++#define ktf_map_for_each_entry(_pos, _map, _member) \
++	for (_pos = ktf_map_first_entry(_map, typeof(*_pos), _member);	\
++	     _pos != NULL; \
++	     _pos = ktf_map_next_entry(_pos, _member))
++
++#define ktf_map_find_entry(_map, _key, _type, _member) ({	\
++	struct ktf_map_elem *_entry = ktf_map_find(_map, _key);	\
++        _entry ? container_of(_entry, _type, _member) : NULL; \
++})
++
 +#endif
 -- 
 git-series 0.9.1
