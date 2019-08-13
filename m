@@ -2,204 +2,170 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E83418BFF4
-	for <lists+linux-kselftest@lfdr.de>; Tue, 13 Aug 2019 19:51:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78C138C4DC
+	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Aug 2019 01:40:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728207AbfHMRvD (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 13 Aug 2019 13:51:03 -0400
-Received: from mail-pg1-f193.google.com ([209.85.215.193]:38001 "EHLO
-        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727679AbfHMRvD (ORCPT
+        id S1726102AbfHMXky (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 13 Aug 2019 19:40:54 -0400
+Received: from userp2120.oracle.com ([156.151.31.85]:49408 "EHLO
+        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725923AbfHMXkx (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 13 Aug 2019 13:51:03 -0400
-Received: by mail-pg1-f193.google.com with SMTP id e11so1070221pga.5
-        for <linux-kselftest@vger.kernel.org>; Tue, 13 Aug 2019 10:51:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=bYvJDB8ENVMXI7xYb0Ylsc0wziPDSy3JqRQOkU0CNB4=;
-        b=wG3a3k31jsSF6BIw8bkJXaJI2NxjB+fdjeiW5Z94mwfwqnNKU5XLNXf7GJUmwneh8F
-         3+4lVI1GRH9lQcxHScomTp5mrcJRuXuQVeD3Q6mE1zSKDCCLbx1i0wEdWhs3iVc2YdTd
-         xhd8H8X9oAwqxtZKRsyozKJT6lA88T1G3bLtDBTqY2QDZpMR5nNvUx2koCL6DcD7N5qG
-         1YPcyP3wEqDe/BuBfxdbVpfCm/P7lXjphsb1sUO676202tsqc3ygNmA76O+a2OozdwKB
-         fWvA1i8dioD1rmDgz+0bCKYcYA/IxVXl3eUAT80SGOsC2d6bSuuL0sz3Tb9bEvGaQKlH
-         nHXA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=bYvJDB8ENVMXI7xYb0Ylsc0wziPDSy3JqRQOkU0CNB4=;
-        b=WM7wD5BDrEGoIAjMlttaDsthLCh7v9k3C0WQm1M++S2nn83SH1u3VhUIhxSMCDMgnO
-         hR7/o4op1gEMeA0QntD+ywhkIV418AfD0Jx8h/AHWmBZ6536voXssD6IPAAy8EV4Egul
-         wX5eu88rWQMuEFxjXIIOgSLYpJonhFuZSg5XQOusB1g7837kd1FJLydCeVQLx7Ep+J5j
-         L4PhTchXF564F5FRpUPisAuM7jIgUDdQ2P4v/THU977lYgUfzXeF9mJ2SLSkFZ0OPSkD
-         ArIaC9oiMp2yLZ0/iN4B+VOp+4JHhU6lduimojXZSt+OCkvcJ32aVHt8g024iWP7AicW
-         BoNg==
-X-Gm-Message-State: APjAAAVxGmAZLv1cgTVwvIBLt1G0Xv85sRHa61385FjY3si4Uoz3gS36
-        NH1Wp53gLs6oG2YBLjKa5snzIpm4UXgwuRu9dkrhxA==
-X-Google-Smtp-Source: APXvYqxrLaoMidJUTH3HR3ySeiZBysRXGkgA8Tfb3y1r5OWM88+G8mJO83zwubWmBlkV2gYuE+Son415m2aWs0YE6pQ=
-X-Received: by 2002:aa7:8f2e:: with SMTP id y14mr12892823pfr.113.1565718661800;
- Tue, 13 Aug 2019 10:51:01 -0700 (PDT)
+        Tue, 13 Aug 2019 19:40:53 -0400
+Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
+        by userp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x7DNcgnI160249;
+        Tue, 13 Aug 2019 23:40:43 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=subject : to : cc :
+ references : from : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=corp-2019-08-05;
+ bh=4sbmczonSDq7hMSzD5d9nB/WEujCYY2Kbl0OVowZy30=;
+ b=Mg48PWRCx/UGmdQ+LhxE0ApUMA7usmcn1IT6wfUB5oESpjaJU95lAFUuOP+lrXza5i2O
+ nGjnhjYB1nLdwSAsLGfRqAq8GrzokGXFZs0QyU0dvnO25FfoQSwyRbC4yZj4Kj+btcxY
+ iFDLLUdN0+FyulEzyuGWuf/4Uk5OVbkO/OgUfapiZZCyLFvHEWCP27leFn22m0y+gsTe
+ 1hFbzXXR0oHlRKmZRbIywzASgEONv5aerYMH2thpsejQ1zdhiSlWJQB2LohBqfS86SNE
+ QXvMxHJGlBGyz/09dAR9paxjdwWJIj/k0n0MNZ74YFw8ZhDH2Ypm0s/vFLr6h48ARUUz XQ== 
+Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
+        by userp2120.oracle.com with ESMTP id 2u9pjqh721-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 13 Aug 2019 23:40:42 +0000
+Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
+        by aserp3030.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x7DNcbpL140772;
+        Tue, 13 Aug 2019 23:40:42 GMT
+Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
+        by aserp3030.oracle.com with ESMTP id 2ubwrgk14p-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 13 Aug 2019 23:40:42 +0000
+Received: from abhmp0015.oracle.com (abhmp0015.oracle.com [141.146.116.21])
+        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id x7DNeeLZ018940;
+        Tue, 13 Aug 2019 23:40:41 GMT
+Received: from [192.168.1.222] (/71.63.128.209)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Tue, 13 Aug 2019 16:40:40 -0700
+Subject: Re: [RFC PATCH v2 0/5] hugetlb_cgroup: Add hugetlb_cgroup reservation
+ limits
+To:     Mina Almasry <almasrymina@google.com>
+Cc:     shuah <shuah@kernel.org>, David Rientjes <rientjes@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Greg Thelen <gthelen@google.com>, akpm@linux-foundation.org,
+        khalid.aziz@oracle.com, open list <linux-kernel@vger.kernel.org>,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>,
+        Aneesh Kumar <aneesh.kumar@linux.vnet.ibm.com>,
+        cgroups@vger.kernel.org
+References: <20190808231340.53601-1-almasrymina@google.com>
+ <f0a5afe9-2586-38c9-9a6d-8a2b7b288b50@oracle.com>
+ <CAHS8izOKmaOETBd_545Zex=KFNjYOvf3dCzcMRUEXnnhYCK5bw@mail.gmail.com>
+ <71a29844-7367-44c4-23be-eff26ac80467@oracle.com>
+ <CAHS8izPGhHS+=qnf7Vy=C8kXQ=7v7XH3uEVitrW6ARRYU6iDdg@mail.gmail.com>
+From:   Mike Kravetz <mike.kravetz@oracle.com>
+Message-ID: <ce087279-7235-e579-4aec-bc3792b6c09c@oracle.com>
+Date:   Tue, 13 Aug 2019 16:40:39 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 MIME-Version: 1.0
-References: <cover.92d76bb4f6dcedc971d0b72a49e8e459a98bca54.1565676440.git-series.knut.omang@oracle.com>
- <CAFd5g47bK2hv6dRvqE3hOyq-FrgrR8NJo__HonHFoYOOMkWh6w@mail.gmail.com> <b4d2cf8635103e30313773761b095f3a1cfd9a82.camel@oracle.com>
-In-Reply-To: <b4d2cf8635103e30313773761b095f3a1cfd9a82.camel@oracle.com>
-From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Tue, 13 Aug 2019 10:50:49 -0700
-Message-ID: <CAFd5g47Q+bRQfyyqPx7CvcnUWnpDxO9goXtEaH8U4EWLbmhFUA@mail.gmail.com>
-Subject: Re: [RFC 00/19] Integration of Kernel Test Framework (KTF) into the
- kernel tree
-To:     Knut Omang <knut.omang@oracle.com>
-Cc:     "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        linux-kbuild <linux-kbuild@vger.kernel.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Masahiro Yamada <yamada.masahiro@socionext.com>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Shreyans Devendra Doshi <0xinfosect0r@gmail.com>,
-        Alan Maguire <alan.maguire@oracle.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Hidenori Yamaji <hidenori.yamaji@sony.com>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Timothy Bird <Tim.Bird@sony.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        "Theodore Ts'o" <tytso@mit.edu>, Daniel Vetter <daniel@ffwll.ch>,
-        Stephen Boyd <sboyd@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <CAHS8izPGhHS+=qnf7Vy=C8kXQ=7v7XH3uEVitrW6ARRYU6iDdg@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9348 signatures=668684
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
+ phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=999
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.0.1-1906280000 definitions=main-1908130224
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9348 signatures=668684
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
+ suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
+ lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1906280000
+ definitions=main-1908130224
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Aug 13, 2019 at 4:29 AM Knut Omang <knut.omang@oracle.com> wrote:
->
-> On Tue, 2019-08-13 at 01:17 -0700, Brendan Higgins wrote:
-> > On Mon, Aug 12, 2019 at 11:11 PM Knut Omang <knut.omang@oracle.com> wrote:
-> > [...]
-> > > Alan Maguire (3):
-> > >   ktf: Implementation of ktf support for overriding function entry and return.
-> > >   ktf: A simple debugfs interface to test results
-> > >   ktf: Simple coverage support
-> > >
-> > > Knut Omang (16):
-> > >   kbuild: Fixes to rules for host-cshlib and host-cxxshlib
-> > >   ktf: Introduce the main part of the kernel side of ktf
-> > >   ktf: Introduce a generic netlink protocol for test result communication
-> > >   ktf: An implementation of a generic associative array container
-> > >   ktf: Configurable context support for network info setup
-> > >   ktf: resolve: A helper utility to aid in exposing private kernel symbols to KTF tests.
-> > >   ktf: Add documentation for Kernel Test Framework (KTF)
-> > >   ktf: Add a small test suite with a few tests to test KTF itself
-> > >   ktf: Main part of user land library for executing tests
-> > >   ktf: Integration logic for running ktf tests from googletest
-> > >   ktf: Internal debugging facilities
-> > >   ktf: Some simple examples
-> > >   ktf: Some user applications to run tests
-> > >   ktf: Toplevel ktf Makefile/makefile includes and scripts to run from kselftest
-> > >   kselftests: Enable building ktf
-> > >   Documentation/dev-tools: Add index entry for KTF documentation
-> > >
-> > >  Documentation/dev-tools/index.rst                   |    1 +-
-> > >  Documentation/dev-tools/ktf/concepts.rst            |  242 +++-
-> > >  Documentation/dev-tools/ktf/debugging.rst           |  248 +++-
-> > >  Documentation/dev-tools/ktf/examples.rst            |   26 +-
-> > >  Documentation/dev-tools/ktf/features.rst            |  307 ++++-
-> > >  Documentation/dev-tools/ktf/implementation.rst      |   70 +-
-> > >  Documentation/dev-tools/ktf/index.rst               |   14 +-
-> > >  Documentation/dev-tools/ktf/installation.rst        |   73 +-
-> > >  Documentation/dev-tools/ktf/introduction.rst        |  134 ++-
-> > >  Documentation/dev-tools/ktf/progref.rst             |  144 ++-
-> > >  scripts/Makefile.host                               |   17 +-
-> > >  tools/testing/selftests/Makefile                    |    1 +-
-> > >  tools/testing/selftests/ktf/Makefile                |   21 +-
-> > >  tools/testing/selftests/ktf/examples/Makefile       |   17 +-
-> > >  tools/testing/selftests/ktf/examples/h2.c           |   45 +-
-> > >  tools/testing/selftests/ktf/examples/h3.c           |   84 +-
-> > >  tools/testing/selftests/ktf/examples/h4.c           |   62 +-
-> > >  tools/testing/selftests/ktf/examples/hello.c        |   38 +-
-> > >  tools/testing/selftests/ktf/examples/kgdemo.c       |   61 +-
-> > >  tools/testing/selftests/ktf/kernel/Makefile         |   15 +-
-> > >  tools/testing/selftests/ktf/kernel/ktf.h            |  604 +++++++-
-> > >  tools/testing/selftests/ktf/kernel/ktf_context.c    |  409 +++++-
-> > >  tools/testing/selftests/ktf/kernel/ktf_cov.c        |  690 ++++++++-
-> > >  tools/testing/selftests/ktf/kernel/ktf_cov.h        |   94 +-
-> > >  tools/testing/selftests/ktf/kernel/ktf_debugfs.c    |  356 ++++-
-> > >  tools/testing/selftests/ktf/kernel/ktf_debugfs.h    |   34 +-
-> > >  tools/testing/selftests/ktf/kernel/ktf_map.c        |  261 +++-
-> > >  tools/testing/selftests/ktf/kernel/ktf_map.h        |  154 ++-
-> > >  tools/testing/selftests/ktf/kernel/ktf_netctx.c     |  132 ++-
-> > >  tools/testing/selftests/ktf/kernel/ktf_netctx.h     |   64 +-
-> > >  tools/testing/selftests/ktf/kernel/ktf_nl.c         |  516 ++++++-
-> > >  tools/testing/selftests/ktf/kernel/ktf_nl.h         |   15 +-
-> > >  tools/testing/selftests/ktf/kernel/ktf_override.c   |   45 +-
-> > >  tools/testing/selftests/ktf/kernel/ktf_override.h   |   15 +-
-> > >  tools/testing/selftests/ktf/kernel/ktf_test.c       |  397 +++++-
-> > >  tools/testing/selftests/ktf/kernel/ktf_test.h       |  381 ++++-
-> > >  tools/testing/selftests/ktf/kernel/ktf_unlproto.h   |  105 +-
-> > >  tools/testing/selftests/ktf/lib/Makefile            |   21 +-
-> > >  tools/testing/selftests/ktf/lib/ktf.h               |  114 +-
-> > >  tools/testing/selftests/ktf/lib/ktf_debug.cc        |   20 +-
-> > >  tools/testing/selftests/ktf/lib/ktf_debug.h         |   59 +-
-> > >  tools/testing/selftests/ktf/lib/ktf_int.cc          | 1031 ++++++++++++-
-> > >  tools/testing/selftests/ktf/lib/ktf_int.h           |   84 +-
-> > >  tools/testing/selftests/ktf/lib/ktf_run.cc          |  177 ++-
-> > >  tools/testing/selftests/ktf/lib/ktf_unlproto.c      |   21 +-
-> > >  tools/testing/selftests/ktf/scripts/ktf_syms.mk     |   16 +-
-> > >  tools/testing/selftests/ktf/scripts/resolve         |  188 ++-
-> > >  tools/testing/selftests/ktf/scripts/runtests.mk     |    3 +-
-> > >  tools/testing/selftests/ktf/scripts/runtests.sh     |  100 +-
-> > >  tools/testing/selftests/ktf/scripts/top_make.mk     |   14 +-
-> > >  tools/testing/selftests/ktf/selftest/Makefile       |   17 +-
-> > >  tools/testing/selftests/ktf/selftest/context.c      |  149 ++-
-> > >  tools/testing/selftests/ktf/selftest/context.h      |   15 +-
-> > >  tools/testing/selftests/ktf/selftest/context_self.h |   34 +-
-> > >  tools/testing/selftests/ktf/selftest/hybrid.c       |   35 +-
-> > >  tools/testing/selftests/ktf/selftest/hybrid.h       |   24 +-
-> > >  tools/testing/selftests/ktf/selftest/hybrid_self.h  |   27 +-
-> > >  tools/testing/selftests/ktf/selftest/ktf_syms.txt   |   17 +-
-> > >  tools/testing/selftests/ktf/selftest/self.c         |  661 ++++++++-
-> > >  tools/testing/selftests/ktf/user/Makefile           |   26 +-
-> > >  tools/testing/selftests/ktf/user/hybrid.cc          |   39 +-
-> > >  tools/testing/selftests/ktf/user/ktfcov.cc          |   68 +-
-> > >  tools/testing/selftests/ktf/user/ktfrun.cc          |   20 +-
-> > >  tools/testing/selftests/ktf/user/ktftest.cc         |   46 +-
-> > >  64 files changed, 8909 insertions(+), 9 deletions(-)
-> >
-> > It also looks like all your test code lives outside of the kernel
-> > source dir. I take it you intend for tests to live in
-> > tools/testing/selftests/ktf/ ?
->
-> Good point,
-> with this RFC it would be just to add another directory under ktf/
-> but this was just to find a simple way to integrate it below selftests,
-> without interfering with the current structure.
->
-> I imagine a tighter integration/unification between normal Kbuild targets and selftests
-> targets that also took kernel module building into consideration would be a better solution.
+On 8/10/19 3:01 PM, Mina Almasry wrote:
+> On Sat, Aug 10, 2019 at 11:58 AM Mike Kravetz <mike.kravetz@oracle.com> wrote:
+>>
+>> On 8/9/19 12:42 PM, Mina Almasry wrote:
+>>> On Fri, Aug 9, 2019 at 10:54 AM Mike Kravetz <mike.kravetz@oracle.com> wrote:
+>>>> On 8/8/19 4:13 PM, Mina Almasry wrote:
+>>>>> Problem:
+>>>>> Currently tasks attempting to allocate more hugetlb memory than is available get
+>>>>> a failure at mmap/shmget time. This is thanks to Hugetlbfs Reservations [1].
+>>>>> However, if a task attempts to allocate hugetlb memory only more than its
+>>>>> hugetlb_cgroup limit allows, the kernel will allow the mmap/shmget call,
+>>>>> but will SIGBUS the task when it attempts to fault the memory in.
+>> <snip>
+>>>> I believe tracking reservations for shared mappings can get quite complicated.
+>>>> The hugetlbfs reservation code around shared mappings 'works' on the basis
+>>>> that shared mapping reservations are global.  As a result, reservations are
+>>>> more associated with the inode than with the task making the reservation.
+>>>
+>>> FWIW, I found it not too bad. And my tests at least don't detect an
+>>> anomaly around shared mappings. The key I think is that I'm tracking
+>>> cgroup to uncharge on the file_region entry inside the resv_map, so we
+>>> know who allocated each file_region entry exactly and we can uncharge
+>>> them when the entry is region_del'd.
+>>>
+>>>> For example, consider a file of size 4 hugetlb pages.
+>>>> Task A maps the first 2 pages, and 2 reservations are taken.  Task B maps
+>>>> all 4 pages, and 2 additional reservations are taken.  I am not really sure
+>>>> of the desired semantics here for reservation limits if A and B are in separate
+>>>> cgroups.  Should B be charged for 4 or 2 reservations?
+>>>
+>>> Task A's cgroup is charged 2 pages to its reservation usage.
+>>> Task B's cgroup is charged 2 pages to its reservation usage.
+>>
+>> OK,
+>> Suppose Task B's cgroup allowed 2 huge pages reservation and 2 huge pages
+>> allocation.  The mmap would succeed, but Task B could potentially need to
+>> allocate more than 2 huge pages.  So, when faulting in more than 2 huge
+>> pages B would get a SIGBUS.  Correct?  Or, am I missing something?
+>>
+>> Perhaps reservation charge should always be the same as map size/maximum
+>> allocation size?
+> 
+> I'm thinking this would work similar to how other shared memory like
+> tmpfs is accounted for right now. I.e. if a task conducts an operation
+> that causes memory to be allocated then that task is charged for that
+> memory, and if another task uses memory that has already been
+> allocated and charged by another task, then it can use the memory
+> without being charged.
+> 
+> So in case of hugetlb memory, if a task is mmaping memory that causes
+> a new reservation to be made, and new entries to be created in the
+> resv_map for the shared mapping, then that task gets charged. If the
+> task is mmaping memory that is already reserved or faulted, then it
+> reserves or faults it without getting charged.
+> 
+> In the example above, in chronological order:
+> - Task A mmaps 2 hugetlb pages, gets charged 2 hugetlb reservations.
+> - Task B mmaps 4 hugetlb pages, gets charged only 2 hugetlb
+> reservations because the first 2 are charged already and can be used
+> without incurring a charge.
+> - Task B accesses 4 hugetlb pages, gets charged *4* hugetlb faults,
+> since none of the 4 pages are faulted in yet. If the task is only
+> allowed 2 hugetlb page faults then it will actually get a SIGBUS.
+> - Task A accesses 4 hugetlb pages, gets charged no faults, since all
+> the hugetlb faults is charged to Task B.
+> 
+> So, yes, I can see a scenario where userspace still gets SIGBUS'd, but
+> I think that's fine because:
+> 1. Notice that the SIGBUS is due to the faulting limit, and not the
+> reservation limit, so we're not regressing the status quo per say.
+> Folks using the fault limit today understand the SIGBUS risk.
+> 2. the way I expect folks to use this is to use 'reservation limits'
+> to partition the available hugetlb memory on the machine using it and
+> forgo using the existing fault limits. Using both at the same time I
+> think would be a superuser feature for folks that really know what
+> they are doing, and understand the risk of SIGBUS that comes with
+> using the existing fault limits.
+> 3. I expect userspace to in general handle this correctly because
+> there are similar challenges with all shared memory and accounting of
+> it, even in tmpfs, I think.
 
-I think tests should live alongside the code that they test, so if I
-understand what you are saying, then I agree. Where do you think KTF
-should go then?
-
-> I think this is a good topic for discussion.
-> As I indicate above, I think it is problematic that test code has to be explicitly
-> configured in as we configure code features of the kernel, which changes the "logical"
-> kernel we build.
-
-Yep, Luis Chamberlain and I have been discussing this for a while (I
-should probably try to open up that conversation and add you to it);
-it's a very tricky problem. I think that in the long term a good goal
-is to have a way to express code dependencies separate from the
-configuration system, but that would probably mean some substantial
-changes to Kbuild and friends. Even then, we have all these macros
-that generate different code (not just on/off) depending on how the
-kernel is configured.
-
-> So some more "native" support for test modules are desired, IMHO.
-
-What do you mean by "native"? Just having the tests be more aware of the code?
+Ok, that helps explain your use case.  I agree that it would be difficult
+to use both fault and reservation limits together.  Especially in the case
+of shared mappings.
+-- 
+Mike Kravetz
