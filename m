@@ -2,54 +2,54 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BF6C08AF68
-	for <lists+linux-kselftest@lfdr.de>; Tue, 13 Aug 2019 08:11:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C4B58AF6C
+	for <lists+linux-kselftest@lfdr.de>; Tue, 13 Aug 2019 08:11:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727696AbfHMGLn (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 13 Aug 2019 02:11:43 -0400
-Received: from aserp2120.oracle.com ([141.146.126.78]:59252 "EHLO
-        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727633AbfHMGLm (ORCPT
+        id S1727633AbfHMGLu (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 13 Aug 2019 02:11:50 -0400
+Received: from userp2120.oracle.com ([156.151.31.85]:37622 "EHLO
+        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727246AbfHMGLt (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 13 Aug 2019 02:11:42 -0400
-Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
-        by aserp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x7D68q2U039297;
-        Tue, 13 Aug 2019 06:11:23 GMT
+        Tue, 13 Aug 2019 02:11:49 -0400
+Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
+        by userp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x7D68xaE022057;
+        Tue, 13 Aug 2019 06:11:28 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding; s=corp-2019-08-05;
- bh=3I+2e/NCnQWfD8Vz78i6DuiXG2jHYFkQRKPcdrFu7Xc=;
- b=ZCaPbWlKx/J6N0HGU5IRAjsBK9CnXsfwASMXQXU1DR8QC5w2JtNF2CqCRQwAzqt/ExYb
- kTeV3cdG4eks3RYMPpZuWahp0Vrn+zDCuvgsNto1/G0W4jeiDq/OAjd9Qy1c/z7plQLi
- CkVz+EPzukG/gbTIo8e/aF3IRG2H69rGVstTTd4gUFw/Aq+LmnVCQK+veg4aGKuK9BX3
- 3WrcKfmir+qW4diDSQR4/Yml/sLHypnchluMY8apCAYef3/VKl08RYXfesXfwuB344X1
- hA8SvSIqC6Q39AZJZxHbhqyrMOwv4irD73o/EwB+qUyLgWUHeqgJ2OizO69xBDS1v65/ tg== 
+ bh=HhMcyroqMij2d5Lg82WAj2ypfByRL1QVurPA9HxkD10=;
+ b=evEJsYytDvz7TszRj3tKgr0f8rPrOK8GLUt+racWZSc9xGskbSd61/F+PskkMlEoos2x
+ mS0Uq1Y59M02yvsarvALYv3o0gRVn6SVUp3GWvptZ22sT0kE9Zw4WqSk4y6f9XhWfTDY
+ Y01ew73D+sh/bCIu+igf7SKNEHCUqs8o22/6akImSyPqp1VHsxuOrAuFJUwRxGWG5WDA
+ EK4Zz7mkjXGU6PICiS2uXstF7iiG5uBLEZjDUDR+LNlDc5kZ/Figfm8SRpm6unAfRuLS
+ xWWW7koG50Rbt+SBNd6Iy665SBvPhFt2eGeYFQHHnd8eQjhwF7NmLpdal/relVp0URfD BQ== 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding; s=corp-2018-07-02;
- bh=3I+2e/NCnQWfD8Vz78i6DuiXG2jHYFkQRKPcdrFu7Xc=;
- b=DnRVNvIk1/YBqv2nBdtgOVL68mfYb1MEbcdMp6tJxh7qwjZCDKx1EQSXlzN5Kvh0+WZM
- 9Rn0YIu+29UYRk8wTzVBaJoYsXvYjjFQqlPzRG7vUPg55qoj4/cI8JIK9HZDsZNdJbXO
- xsy82PtovUatao+dLEfH5VoOMYnnZ6CbSQVMePA0TC/u7Q0X90n1eROVnh2v3+dIr/sF
- Geob03XS07Ydkg2eMqjbyWNbDZ7Eko6kN2FgqHrFJGDFqf44fFAVlkkSVuL6p7Wf1eqs
- mA8iXIGoJVeLZAYEvV20aoapyaigX6VN95BK4aWy3XrWEq5OvvSJXcvr3Ibu5YMYRvF0 Fw== 
-Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
-        by aserp2120.oracle.com with ESMTP id 2u9nvp41hd-1
+ bh=HhMcyroqMij2d5Lg82WAj2ypfByRL1QVurPA9HxkD10=;
+ b=pd2ldQlK7kezzlqOr6fZolDPz0faMs3pLmMHzqqXPzZ6Nre82W5hazHH4zo4MIKK3C8R
+ Dzhrx9jEplMlSENGA1sbohJ01q8FwWCe1MD1gov1yd+LRWDz6lvMtpoHD6DUXeiFPnQO
+ fLwo4njOtLTTYlrB036zledWx8Oi6OXfpN1+snxLuHgnKk0D0kyDJnmvhUoc+QvO64Dq
+ B3cSQp2lG7NDK6/okI7DqY/itFQdBgsnJaKPH50pWydmUUYJCoT0mDhhfTLD6UA/9k+n
+ ZX0koUsBIijOkgXT9h6wumr+i9MlPepjvOnEcZRfPSJ956VVnAWWhoqF6D9CIbfjstvn Yg== 
+Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
+        by userp2120.oracle.com with ESMTP id 2u9pjqbvkh-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 13 Aug 2019 06:11:22 +0000
-Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
-        by aserp3030.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x7D67QrL096452;
-        Tue, 13 Aug 2019 06:11:22 GMT
-Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
-        by aserp3030.oracle.com with ESMTP id 2u9m0aye0w-1
+        Tue, 13 Aug 2019 06:11:28 +0000
+Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
+        by aserp3020.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x7D67ShE157015;
+        Tue, 13 Aug 2019 06:11:27 GMT
+Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
+        by aserp3020.oracle.com with ESMTP id 2u9nrenm67-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 13 Aug 2019 06:11:22 +0000
+        Tue, 13 Aug 2019 06:11:27 +0000
 Received: from abhmp0019.oracle.com (abhmp0019.oracle.com [141.146.116.25])
-        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id x7D6BLtr026649;
-        Tue, 13 Aug 2019 06:11:21 GMT
+        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id x7D6BPgd026354;
+        Tue, 13 Aug 2019 06:11:25 GMT
 Received: from abi.no.oracle.com (/10.172.144.123)
         by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Mon, 12 Aug 2019 23:11:21 -0700
+        with ESMTP ; Mon, 12 Aug 2019 23:11:25 -0700
 From:   Knut Omang <knut.omang@oracle.com>
 To:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     linux-doc@vger.kernel.org, linux-kbuild@vger.kernel.org,
@@ -69,22 +69,22 @@ Cc:     linux-doc@vger.kernel.org, linux-kbuild@vger.kernel.org,
         "Theodore Ts'o" <tytso@mit.edu>, Daniel Vetter <daniel@ffwll.ch>,
         Stephen Boyd <sboyd@kernel.org>,
         Knut Omang <knut.omang@oracle.com>
-Subject: [RFC 08/19] ktf: Configurable context support for network info setup
-Date:   Tue, 13 Aug 2019 08:09:23 +0200
-Message-Id: <ddf9f91c347d1c731b4cceea318783bb293676c3.1565676440.git-series.knut.omang@oracle.com>
+Subject: [RFC 09/19] ktf: resolve: A helper utility to aid in exposing private kernel symbols to KTF tests.
+Date:   Tue, 13 Aug 2019 08:09:24 +0200
+Message-Id: <09d79897772dd370a61967b03e83fa4b8663698b.1565676440.git-series.knut.omang@oracle.com>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <cover.92d76bb4f6dcedc971d0b72a49e8e459a98bca54.1565676440.git-series.knut.omang@oracle.com>
 References: <cover.92d76bb4f6dcedc971d0b72a49e8e459a98bca54.1565676440.git-series.knut.omang@oracle.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9347 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=4 malwarescore=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
  phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=999
  adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.0.1-1906280000 definitions=main-1908130067
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9347 signatures=668685
 X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
- suspectscore=4 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
+ suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
  lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1906280000
  definitions=main-1908130067
@@ -93,227 +93,216 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-An implementation of configurable contexts for exchanging network
-information, to make it easier to run network tests potentially
-involving more than one kernel.
+Takes an input file foo.txt with a list of symbols on the form:
 
-ktf_netctx.h:    Configurable context setup for multinode network tests
+#module foo
+#header foo.h
+private_foo_symbol_1
+private_foo_symbol_2
+
+and creates usable definitions to access these (requires CONFIG_KALLSYMS_ALL).
+This is useful to be able to easily and cleanly test internal interfaces of a module.
+Examples follows in the selftests later in the series.
 
 Signed-off-by: Knut Omang <knut.omang@oracle.com>
 ---
- tools/testing/selftests/ktf/kernel/ktf_netctx.c | 132 +++++++++++++++++-
- tools/testing/selftests/ktf/kernel/ktf_netctx.h |  64 ++++++++-
- 2 files changed, 196 insertions(+)
- create mode 100644 tools/testing/selftests/ktf/kernel/ktf_netctx.c
- create mode 100644 tools/testing/selftests/ktf/kernel/ktf_netctx.h
+ tools/testing/selftests/ktf/scripts/resolve | 188 +++++++++++++++++++++-
+ 1 file changed, 188 insertions(+)
+ create mode 100755 tools/testing/selftests/ktf/scripts/resolve
 
-diff --git a/tools/testing/selftests/ktf/kernel/ktf_netctx.c b/tools/testing/selftests/ktf/kernel/ktf_netctx.c
-new file mode 100644
-index 0000000..84ef6ac
+diff --git a/tools/testing/selftests/ktf/scripts/resolve b/tools/testing/selftests/ktf/scripts/resolve
+new file mode 100755
+index 0000000..74005f7
 --- /dev/null
-+++ b/tools/testing/selftests/ktf/kernel/ktf_netctx.c
-@@ -0,0 +1,132 @@
-+/*
-+ * Copyright (c) 2019, Oracle and/or its affiliates. All rights reserved.
-+ *    Author: Knut Omang <knut.omang@oracle.com>
-+ *
-+ * SPDX-License-Identifier: GPL-2.0
-+ *
-+ * ktf_netcfg.h: Configurable context setup for multinode network tests
-+ *
-+ */
++++ b/tools/testing/selftests/ktf/scripts/resolve
+@@ -0,0 +1,188 @@
++#!/usr/bin/python
 +
-+#include "ktf.h"
-+#include "ktf_netctx.h"
-+#include <linux/in.h>
++# Copyright (c) 2017, Oracle and/or its affiliates. All rights reserved.
++#    Author: Knut Omang <knut.omang@oracle.com>
++#
++# SPDX-License-Identifier: GPL-2.0
++#
++# A script to generate code and header definitions for
++# module and kernel symbols not directly exposed to KTF.
++# (See the documentation for KTF for details)
++#
 +
-+/* Configuration callback to configure a network context */
++import os, sys, re, shutil, string, ConfigParser
 +
-+int ktf_netctx_cb(struct ktf_context *ctx, const void *data, size_t data_sz)
-+{
-+	struct ktf_netctx *nc = container_of(ctx, struct ktf_netctx, k);
-+	struct ktf_addrinfo *kai = (struct ktf_addrinfo *)data;
-+	short n = kai->n;
-+	size_t param_sz;
++def usage():
++    print "Usage: resolve symbolfile outputfile"
++    exit(0)
 +
-+	if (n < 2) {
-+		terr("Unsupported number of nodes (%d) - must be at least 2", n);
-+		return -EINVAL;
-+	}
++class FuncInfo:
++    def __init__(self, sym, re_sym, re_decl):
++        self.symbol = sym
++        self.re_sym = re_sym
++        self.re_decl = re_decl
 +
-+	param_sz = sizeof(*kai) + sizeof(kai->a) * (n - 2);
++    def __repr__(self):
++        return "FuncInfo: [%s: %s]" % (self.symbol, self.re_decl)
 +
-+	if (n > nc->max_nodes || n < nc->min_nodes) {
-+		terr("Unsupported number of nodes (%d) - must be between %d and %d!",
-+		     n, nc->min_nodes, nc->max_nodes);
-+		return -EINVAL;
-+	}
++class Module:
++    def __init__(self, name, header):
++        self.cur_header = header
++        self.prefix = "Z"
++        self.name = name
++        self.symbols = {}  # Input:  headerfile -> symbol list
++        self.func_def = []  # FuncInfo list
++        self.debug = False
++        all_modules.append(self)
 +
-+	if (param_sz != data_sz) {
-+		terr("Expected %lu bytes of parameter data, received %lu!",
-+		     param_sz, data_sz);
-+		return -EINVAL;
-+	}
++    def log(self, str):
++        if self.debug:
++            print str
 +
-+	if (nc->a && nc->a_sz != data_sz) {
-+		kfree(nc->a);
-+		nc->a = NULL;
-+	}
++    def SetHeader(self, header):
++        self.cur_header = header
 +
-+	if (!nc->a) {
-+		nc->a = kzalloc(data_sz, GFP_KERNEL);
-+		if (!nc->a)
-+			return -ENOMEM;
-+	}
++    def AddSymbol(self, sym):
++        try:
++            h = self.symbols[self.cur_header]
++            h.append(sym)
++        except:
++            self.symbols[self.cur_header] = [sym]
 +
-+	memcpy(nc->a, kai, data_sz);
-+	return 0;
-+}
-+EXPORT_SYMBOL(ktf_netctx_cb);
++    # Open along include path:
++    def Open(self, filename):
++        for p in includepath:
++            try:
++                f = os.path.join(p, filename)
++                self.log(" -- trying " + f)
++                header = open(f,'r')
++                return header
++            except:
++                continue
++        sys.stderr.write(" ** unable to open \"%s\"\n" % filename)
++        return None
 +
-+void ktf_netctx_cleanup(struct ktf_context *ctx)
-+{
-+	struct ktf_netctx *nc = container_of(ctx, struct ktf_netctx, k);
++    # Parse the relevant header files for function defs:
++    def ParseDefs(self):
++        for hf in self.symbols.keys():
++            self.log(" ** Parsing %s:" % hf)
++            header = self.Open(hf)
++            if header == None:
++                return
++            content = header.read()
++            symbols = self.symbols[hf]
++            types = r"(extern|u8|u16|u32|u64|int|long|size_t|off_t|loff_t|void|struct|union\s)(.*[\*\s]"
++            funor = ")(" + "|".join(symbols) + r")(\([^\)]+\);)$"
++            tt = types + funor
++            s = re.compile(tt, re.MULTILINE)
++            miter = s.finditer(content)
++            s_count = 0
++            for m in miter:
++                sym = m.group(3)
++                re_name = "_".join([self.prefix, sym])
++                re_decl = "%s%s(*%s)%s" % (m.group(1), m.group(2), re_name, m.group(4))
++                self.func_def.append(FuncInfo(sym, re_name, re_decl))
++                s_count = s_count + 1
 +
-+	kfree(nc->a);
-+}
-+EXPORT_SYMBOL(ktf_netctx_cleanup);
++            if s_count != len(symbols):
++                print " ** Warning: File %s: Found %d definitions from %d symbols!" % \
++                    (hf, s_count, len(symbols))
++                print " ** - please check/fix output manually!"
 +
-+/* Make network contexts dynamically allocatable from user mode
-+ * Caller must supply desired values for callback functions in @nct.
-+ */
-+int ktf_netctx_enable(struct ktf_handle *handle, struct ktf_netctx_type *nct,
-+		      short min_nodes, short max_nodes)
-+{
-+	struct ktf_context *lo_ctx;
-+	struct ktf_addrinfo ai = {
-+		.n = 2,
-+		.rank = 0
-+	};
-+	int ret;
-+	int i;
++    # Output functions:
++    def write_funcs(self, file):
++        for fi in self.func_def:
++            file.write("\t%s\n"% fi.re_decl)
 +
-+	ret = ktf_handle_add_ctx_type(handle, &nct->t);
-+	if (ret)
-+		return ret;
++    def write_defines(self, file):
++        for fi in self.func_def:
++            file.write("#define %s ktf_syms.%s\n" % (fi.symbol, fi.re_sym))
 +
-+	nct->min_nodes = min_nodes;
-+	nct->max_nodes = max_nodes;
-+	strcpy(nct->t.name, "netctx");
++    def write_resolve_calls(self, file):
++        for fi in self.func_def:
++            file.write("\tktf_resolve_symbol(%s, %s);\n" % (self.name, fi.symbol))
 +
-+	for (i = 0; i < 2; i++) {
-+		struct sockaddr_in *ai_in = (struct sockaddr_in *)&ai.a[i].addr;
++usage_h = False
++my_argv = []
++includepath = [""]
 +
-+		ai.a[i].addr.ss_family = AF_INET;
-+		strcpy(ai.a[i].ifname, "lo");
-+		ai_in->sin_addr.s_addr = htonl(INADDR_LOOPBACK);
-+	}
++for arg in sys.argv[1:]:
++    if arg == "-h":
++        usage_h = True
++        continue
++    incl = re.match(r"-I([^\s]+)", arg)
++    if incl != None:
++        includepath.append(incl.group(1))
++        continue
++    genopt = re.match(r"-([^\s]+)", arg)
++    if genopt != None:
++        # Silently ignore other cc options as we accept cc-flags-y:
++        #
++        continue
++    my_argv.append(arg)
 +
-+	/* create and configure the loopback network context */
-+	lo_ctx = ktf_context_add_from(handle, "lo", &nct->t);
-+	if (!lo_ctx)
-+		return -ENOMEM;
++# Main program:
 +
-+	ret = ktf_context_set_config(lo_ctx, &ai, sizeof(ai));
-+	if (ret)
-+		return ret;
++if len(my_argv) != 2 or usage_h:
++    usage()
 +
-+	return 0;
-+}
-+EXPORT_SYMBOL(ktf_netctx_enable);
++symfile = my_argv[0]
++outputfile = my_argv[1]
 +
-+struct sockaddr_storage *ktf_netctx_addr(struct ktf_netctx *ctx, short rank)
-+{
-+	return &ctx->a->a[rank].addr;
-+}
-+EXPORT_SYMBOL(ktf_netctx_addr);
++all_modules = []
++module = Module("kernel", None)  # Default, at the top of the file is the main kernel symbols
++header = None  # A header directive is required before any symbols
 +
-+const char *ktf_netctx_ifname(struct ktf_netctx *ctx, short rank)
-+{
-+	return ctx->a->a[rank].ifname;
-+}
-+EXPORT_SYMBOL(ktf_netctx_ifname);
++try:
++    file = open(symfile, 'r')
++except:
++    print "Unable to open config file \"%s\"" % symfile
++    exit(1)
++for line in file:
++    match = re.match(r"^#(\w+) ([\w\.]+)\s*$", line)
++    if match != None:
++        cmd = match.group(1)
++        value = match.group(2)
++        if cmd == "module":
++            module = Module(value, header)
++        elif cmd == "header":
++            header = value
++            module.SetHeader(header)
++        else:
++            raise ResolveError("Unknown directive \"%s\"" % cmd)
++        #print "%s set to %s" % (cmd, value)
++        continue
++    match = re.match(r"\s*(\w+)\s*", line)
++    if match != None:
++        s = match.group(1)
++        module.AddSymbol(s)
 +
-+short ktf_netctx_rank(struct ktf_netctx *ctx)
-+{
-+	return ctx->a->rank;
-+}
-+EXPORT_SYMBOL(ktf_netctx_rank);
++for m in all_modules:
++    m.ParseDefs()
 +
-+short ktf_netctx_n(struct ktf_netctx *ctx)
-+{
-+	return ctx->a->n;
-+}
-+EXPORT_SYMBOL(ktf_netctx_n);
-diff --git a/tools/testing/selftests/ktf/kernel/ktf_netctx.h b/tools/testing/selftests/ktf/kernel/ktf_netctx.h
-new file mode 100644
-index 0000000..414c744
---- /dev/null
-+++ b/tools/testing/selftests/ktf/kernel/ktf_netctx.h
-@@ -0,0 +1,64 @@
-+/*
-+ * Copyright (c) 2019, Oracle and/or its affiliates. All rights reserved.
-+ *    Author: Knut Omang <knut.omang@oracle.com>
-+ *
-+ * SPDX-License-Identifier: GPL-2.0
-+ *
-+ * ktf_netctx.h: Configurable context setup for multinode network tests
-+ *
-+ * KTF implements handling on the kernel side for this but leaves
-+ * user space implementation to construct the corresponding
-+ * stuct ktf_addrinfo parameter block
-+ */
++try:
++    output = open(outputfile, "w")
++except:
++    print "Failed to open output header file \"%s\"" % outputfile
++output.write('#ifndef _KTF_RESOLVE_H\n#define _KTF_RESOLVE_H\n')
++output.write('#include "ktf.h"\n\nstruct ktf_syms {\n')
 +
-+#ifndef _KTF_NETCTX_H
-+#define _KTF_NETCTX_H
++for m in all_modules:
++    m.write_funcs(output)
 +
-+/* KTF matches against this type id as a possible discriminator: */
-+#define KTF_NETCTX_TYPE_ID 0x2222
++output.write('};\n\n')
 +
-+#define IFNAMSZ 16
++for m in all_modules:
++    m.write_defines(output)
 +
-+struct ktf_peer_address
-+{
-+	struct sockaddr_storage addr; /* Address to use for this peer */
-+	char ifname[IFNAMSZ];	    /* Local name of the interface with this address at peer */
-+};
++output.write('\n\nextern struct ktf_syms ktf_syms;\n')
++output.write('\nint ktf_resolve_symbols(void);\n#ifndef KTF_CLIENT\n')
++output.write('struct ktf_syms ktf_syms;\n\n')
 +
-+struct ktf_addrinfo
-+{
-+	short n;		    /* Number of nodes involved, including the local */
-+	short rank;		    /* Index into ktf_peer_address that corresponds to local host */
-+	struct ktf_peer_address a[2]; /* KTF expects size n instead of 2 here */
-+};
++output.write('\nint ktf_resolve_symbols(void)\n{\n')
 +
-+#ifdef __KERNEL__
++for m in all_modules:
++    m.write_resolve_calls(output)
 +
-+struct ktf_netctx {
-+	struct ktf_context k;
-+	struct ktf_addrinfo *a; /* Addr.info dyn.allocated based on incoming data */
-+	size_t a_sz;		/* Size of the allocation in a, if any */
-+	short min_nodes;	/* Minimum number of nodes for this context */
-+	short max_nodes;	/* Maximum number of nodes this context supports */
-+};
-+
-+struct ktf_netctx_type {
-+	struct ktf_context_type t;
-+	short min_nodes;	/* Minimum number of nodes for the context type */
-+	short max_nodes;	/* Maximum number of nodes for the context type */
-+};
-+
-+int ktf_netctx_enable(struct ktf_handle *handle, struct ktf_netctx_type *nct,
-+		      short min_nodes, short max_nodes);
-+
-+int ktf_netctx_cb(struct ktf_context *ctx, const void *data, size_t data_sz);
-+void ktf_netctx_cleanup(struct ktf_context *ctx);
-+
-+struct sockaddr_storage *ktf_netctx_addr(struct ktf_netctx *ctx, short rank);
-+const char *ktf_netctx_ifname(struct ktf_netctx *ctx, short rank);
-+short ktf_netctx_rank(struct ktf_netctx *ctx);
-+short ktf_netctx_n(struct ktf_netctx *ctx);
-+
-+#endif
-+
-+#endif
++output.write('\treturn 0;\n}\n\n#endif /* !KTF_CLIENT */\n#endif /* _KTF_RESOLVE_H */ \n')
++output.close()
 -- 
 git-series 0.9.1
