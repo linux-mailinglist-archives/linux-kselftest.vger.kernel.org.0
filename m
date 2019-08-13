@@ -2,138 +2,89 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 156368BE1B
-	for <lists+linux-kselftest@lfdr.de>; Tue, 13 Aug 2019 18:19:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 481E28BE57
+	for <lists+linux-kselftest@lfdr.de>; Tue, 13 Aug 2019 18:22:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727592AbfHMQTf (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 13 Aug 2019 12:19:35 -0400
-Received: from aserp2120.oracle.com ([141.146.126.78]:33022 "EHLO
-        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727211AbfHMQTf (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 13 Aug 2019 12:19:35 -0400
-Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
-        by aserp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x7DG8mQW196607;
-        Tue, 13 Aug 2019 16:19:11 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=message-id : subject
- : from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=corp-2019-08-05;
- bh=HTb/5J0BxVV9yBflGge7ur7d2g2RQgG9Szn5YAC5Qi4=;
- b=YxnsGrUDIMQnzffjadT6wZJ1O7v7EcxMSFdST2astU26n1dhaoXZ+dGbGYWFWGsMpCn4
- iiXWn0sd+JxeRckdCxllKWddBRgCpFVkShEuBQt7czpK6EZCBjX8WLScT1s3VdyBetU+
- NhYwMeKuhZIouo2tua4Kprwfqvk7A09fWLasW8wcCmr8kYtOlsGyyqc3Ct6k2u4mZAQz
- RRcXVUzlyPOkAWQ0apgOv7imzoixgU16YIVkVQfAV2J7elRl0ecQP3/ecbL1Y4urLMVO
- D9qCZKaYKz7qX7LUBXaPd4wwL+TNnQYJTNX1+HKFJn9ncjC8v4lM67zvSTIQ5/1TjZR/ Vw== 
-Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
-        by aserp2120.oracle.com with ESMTP id 2u9nvp7ffp-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 13 Aug 2019 16:19:10 +0000
-Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
-        by aserp3030.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x7DG8PSe111097;
-        Tue, 13 Aug 2019 16:19:10 GMT
-Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
-        by aserp3030.oracle.com with ESMTP id 2ubwrg68be-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 13 Aug 2019 16:19:10 +0000
-Received: from abhmp0002.oracle.com (abhmp0002.oracle.com [141.146.116.8])
-        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id x7DGJ7xS032677;
-        Tue, 13 Aug 2019 16:19:07 GMT
-Received: from asu (/92.220.18.196)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Tue, 13 Aug 2019 09:19:06 -0700
-Message-ID: <14b99d26a4cff1c813c92818dc1234007fa06fc9.camel@oracle.com>
-Subject: Re: [RFC 01/19] kbuild: Fixes to rules for host-cshlib and
- host-cxxshlib
-From:   Knut Omang <knut.omang@oracle.com>
-To:     Masahiro Yamada <yamada.masahiro@socionext.com>
-Cc:     "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Shreyans Devendra Doshi <0xinfosect0r@gmail.com>,
-        Alan Maguire <alan.maguire@oracle.com>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Hidenori Yamaji <hidenori.yamaji@sony.com>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Timothy Bird <Tim.Bird@sony.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        "Theodore Ts'o" <tytso@mit.edu>, Daniel Vetter <daniel@ffwll.ch>,
-        Stephen Boyd <sboyd@kernel.org>
-Date:   Tue, 13 Aug 2019 18:19:01 +0200
-In-Reply-To: <CAK7LNASX4jPRxRxD+JafAfKqjck=x27HuHZgPV1VFfW8MzcwZA@mail.gmail.com>
-References: <cover.92d76bb4f6dcedc971d0b72a49e8e459a98bca54.1565676440.git-series.knut.omang@oracle.com>
-         <be2c361eac49ded2848b2a555b75e30cc3c24e71.1565676440.git-series.knut.omang@oracle.com>
-         <CAK7LNASX4jPRxRxD+JafAfKqjck=x27HuHZgPV1VFfW8MzcwZA@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.30.5 (3.30.5-1.fc29) 
+        id S1728155AbfHMQW6 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 13 Aug 2019 12:22:58 -0400
+Received: from foss.arm.com ([217.140.110.172]:39878 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728084AbfHMQW6 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 13 Aug 2019 12:22:58 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8D329337;
+        Tue, 13 Aug 2019 09:22:57 -0700 (PDT)
+Received: from arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id BFD1B3F706;
+        Tue, 13 Aug 2019 09:22:56 -0700 (PDT)
+Date:   Tue, 13 Aug 2019 17:22:54 +0100
+From:   Dave Martin <Dave.Martin@arm.com>
+To:     Cristian Marussi <cristian.marussi@arm.com>
+Cc:     linux-kselftest@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, shuah@kernel.org,
+        andreyknvl@google.com
+Subject: Re: [PATCH v3 00/11] Add arm64/signal initial kselftest support
+Message-ID: <20190813162254.GX10425@arm.com>
+References: <20190802170300.20662-1-cristian.marussi@arm.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9348 signatures=668684
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
- phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=999
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.0.1-1906280000 definitions=main-1908130161
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9348 signatures=668684
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
- suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
- lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1906280000
- definitions=main-1908130161
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190802170300.20662-1-cristian.marussi@arm.com>
+User-Agent: Mutt/1.5.23 (2014-03-12)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, 2019-08-13 at 23:01 +0900, Masahiro Yamada wrote:
-> On Tue, Aug 13, 2019 at 3:13 PM Knut Omang <knut.omang@oracle.com> wrote:
-> >
-> > C++ libraries interfacing to C APIs might sometimes need some glue
-> > logic more easily written in C.
-> > Allow a C++ library to also contain 0 or more C objects.
-> >
-> > Also fix rules for both C and C++ shared libraries:
-> > - C++ shared libraries depended on .c instead of .cc files
-> > - Rules were referenced as -objs instead of the intended
-> >   -cobjs and -cxxobjs following the pattern from hostprogs*.
-> >
-> > Signed-off-by: Knut Omang <knut.omang@oracle.com>
+On Fri, Aug 02, 2019 at 06:02:49PM +0100, Cristian Marussi wrote:
+> Hi
 > 
-> 
-> How is this patch related to the rest of this series?
+> this patchset aims to add the initial arch-specific arm64 support to
+> kselftest starting with signals-related test-cases.
+> A common internal test-case layout is proposed which then it is anyway
+> wired-up to the toplevel kselftest Makefile, so that it should be possible
+> at the end to run it on an arm64 target in the usual way with KSFT.
 
-This is just my (likely naive) way I to get what I had working 
-using autotools in the Github version of KTF) translated into something 
-comparable using kbuild only. We need to build a shared library consisting 
-of a few C++ files and a very simple C file, and a couple of simple binaries, 
-and the rule in there does seem to take .c files and subject them to the 
-C++ compiler, which makes this difficult to achieve?
+The tests look like a reasonable base overall and something that we can
+extend later as needed.
 
-> This patch breaks GCC-plugins.
-> Did you really compile-test this patch before the submission?
+There are various minor things that need attention -- see my comments on
+the individual patches.  Apart for some things that can be factored out,
+I don't think any of it involves redesign.
 
-Sorry for my ignorance here:
-I ran through the kernel build and installed the resulting kernel 
-on a VM that I used to test this, if that's what you are asking 
-about?
 
-Do I need some unusual .config options or run a special make target 
-to trigger the problem you see?
+A few general comments:
 
-I used a recent Fedora config with default values for new options,
-and ran the normal default make target (also with O=) and make selftests 
-to test the patch itself.
+ * Please wrap all commit messages to <= 75 chars, and follow the other
+   guidelines about commit messages in
+   Documentation/process/submitting-patches.rst).
 
-Thanks,
-Knut
+ * Remember to run scripts/checkpatch.pl on your patches.  Currently
+   various issues are reported: they should mostly be trivial to fix.
+   checkpatch does report some false positives, but most of the warnings
+   I see look relevant.
 
-> --
-> Best Regards
-> 
-> Masahiro Yamada
+ * If you like, you can add an Author: line alongside the copyright
+   notice in new files that you create.  (You'll see this elsewhere in
+   the kernel if you grep.)
 
+One general stylistic issue (IMHO):
+
+ * Try to avoid inventing names for things that have no established
+   name (for example "magic0" to mean "magic number 0").
+
+   The risk is that the reader wastes time grepping for the definition,
+   when really the text should be read at face value.  It's best to use
+   all caps just for #define names, abbreviations, and other things
+   that are customarily capitalised (like "CPU" etc.).  Other words
+   containing underscores may resemble variable / function names, and
+   may cause confusion of there is no actual variable or function with
+   that name.
+
+   I don't think it's worth heavily reworking the patches for this, but
+   it's something to bear in mind.
+
+[...]
+
+Cheers
+---Dave
