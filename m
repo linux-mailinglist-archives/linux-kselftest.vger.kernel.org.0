@@ -2,72 +2,111 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A3D88BE89
-	for <lists+linux-kselftest@lfdr.de>; Tue, 13 Aug 2019 18:28:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA88D8BEE9
+	for <lists+linux-kselftest@lfdr.de>; Tue, 13 Aug 2019 18:48:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727504AbfHMQ2J (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 13 Aug 2019 12:28:09 -0400
-Received: from foss.arm.com ([217.140.110.172]:40220 "EHLO foss.arm.com"
+        id S1727923AbfHMQsU (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 13 Aug 2019 12:48:20 -0400
+Received: from mail.kernel.org ([198.145.29.99]:35070 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727053AbfHMQ2J (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 13 Aug 2019 12:28:09 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3C99A337;
-        Tue, 13 Aug 2019 09:28:09 -0700 (PDT)
-Received: from arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A68513F706;
-        Tue, 13 Aug 2019 09:28:08 -0700 (PDT)
-Date:   Tue, 13 Aug 2019 17:28:06 +0100
-From:   Dave Martin <Dave.Martin@arm.com>
-To:     Cristian Marussi <cristian.marussi@arm.com>
-Cc:     linux-kselftest@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v3 11/11] kselftest: arm64: fake_sigreturn_misaligned_sp
-Message-ID: <20190813162806.GJ10425@arm.com>
-References: <20190802170300.20662-1-cristian.marussi@arm.com>
- <20190802170300.20662-12-cristian.marussi@arm.com>
- <8811be0d-efb3-b6da-9f6b-acaeb3edce7d@arm.com>
+        id S1726769AbfHMQsT (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 13 Aug 2019 12:48:19 -0400
+Received: from kernel.org (unknown [104.132.0.74])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 06A2D20842;
+        Tue, 13 Aug 2019 16:48:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1565714898;
+        bh=+ClQXQZYMO3oD0vJh2iCm8rSEOKMIpNSMDMOjbE3t+k=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=pjR7+sDpG5QV8mqVLOqQHM+8vC+tRobkv0ngA4hd4MBaO/KrG4XqTeZ1bpn5bn1bq
+         KhfBsT1su6Wd2h61ArrsWNQlNeGWtPTPht9QXac/YRw1heGospZwGZg3FIXZ4HQ+Nu
+         vKsI/4s3VfFW3biZ3Mbn7FIY6xfwnAsdy1fw46EY=
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <8811be0d-efb3-b6da-9f6b-acaeb3edce7d@arm.com>
-User-Agent: Mutt/1.5.23 (2014-03-12)
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <CAFd5g452+-6m1eiVK0ccTDkJ2wH8GBwxRDw5owwC8h3NscE1ag@mail.gmail.com>
+References: <20190812182421.141150-1-brendanhiggins@google.com> <20190812225520.5A67C206A2@mail.kernel.org> <20190812233336.GA224410@google.com> <20190812235940.100842063F@mail.kernel.org> <CAFd5g44xciLPBhH_J3zUcY3TedWTijdnWgF055qffF+dAguhPQ@mail.gmail.com> <20190813045623.F3D9520842@mail.kernel.org> <CAFd5g46PJNTOUAA4GOOrW==74Zy7u1sRESTanL_BXBn6QykscA@mail.gmail.com> <20190813053023.CC86120651@mail.kernel.org> <CAFd5g47v7410QRAizPV8zaHrKrc95-Sk-GNzRRVngN741OKnvg@mail.gmail.com> <CAFd5g452+-6m1eiVK0ccTDkJ2wH8GBwxRDw5owwC8h3NscE1ag@mail.gmail.com>
+Subject: Re: [PATCH v12 03/18] kunit: test: add string_stream a std::stream like string builder
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     Frank Rowand <frowand.list@gmail.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Kees Cook <keescook@google.com>,
+        Kieran Bingham <kieran.bingham@ideasonboard.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Rob Herring <robh@kernel.org>, shuah <shuah@kernel.org>,
+        Theodore Ts'o <tytso@mit.edu>,
+        Masahiro Yamada <yamada.masahiro@socionext.com>,
+        devicetree <devicetree@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        kunit-dev@googlegroups.com,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        linux-fsdevel@vger.kernel.org,
+        linux-kbuild <linux-kbuild@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        linux-nvdimm <linux-nvdimm@lists.01.org>,
+        linux-um@lists.infradead.org,
+        Sasha Levin <Alexander.Levin@microsoft.com>,
+        "Bird, Timothy" <Tim.Bird@sony.com>,
+        Amir Goldstein <amir73il@gmail.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Daniel Vetter <daniel@ffwll.ch>, Jeff Dike <jdike@addtoit.com>,
+        Joel Stanley <joel@jms.id.au>,
+        Julia Lawall <julia.lawall@lip6.fr>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Knut Omang <knut.omang@oracle.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Petr Mladek <pmladek@suse.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Richard Weinberger <richard@nod.at>,
+        David Rientjes <rientjes@google.com>,
+        Steven Rostedt <rostedt@goodmis.org>, wfg@linux.intel.com
+To:     Brendan Higgins <brendanhiggins@google.com>
+User-Agent: alot/0.8.1
+Date:   Tue, 13 Aug 2019 09:48:17 -0700
+Message-Id: <20190813164818.06A2D20842@mail.kernel.org>
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Aug 07, 2019 at 05:04:13PM +0100, Cristian Marussi wrote:
-> On 02/08/2019 18:03, Cristian Marussi wrote:
-> > Added a simple fake_sigreturn testcase which places a valid
-> > sigframe on a non-16 bytes aligned SP.
-> > fake_sigretrun() helper function has been patched accordingly
-> > to support placing a sigframe on a non-16 bytes aligned address.
-> > Expects a SIGSEGV on test PASS.
-> > 
-> > Adds also a test TODO lists holding some further test ideas.
-> > 
-> > Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
-> > ---
-> > Re-added this text after fixing the forced misaglinment procedure in
-> > fake_sigreturn() itself: require a ZERO alignment and you'll get
-> > your sigframe placed on a misaligned SP (2-bytes off the 16-align)
-> > ---
-> >  .../testing/selftests/arm64/signal/signals.S  | 21 +++++++++----
-> >  .../arm64/signal/testcases/TODO.readme        |  8 +++++
-> >  .../testcases/fake_sigreturn_misaligned_sp.c  | 30 +++++++++++++++++++
-> >  3 files changed, 53 insertions(+), 6 deletions(-)
-> >  create mode 100644 tools/testing/selftests/arm64/signal/testcases/TODO.readme
-> >  create mode 100644 tools/testing/selftests/arm64/signal/testcases/fake_sigreturn_misaligned_sp.c
-> > 
-> 
-> When this test was re-added in V3, the related .gitignore was missed.
-> It will go in V4
+Quoting Brendan Higgins (2019-08-13 02:12:54)
+> On Tue, Aug 13, 2019 at 2:04 AM Brendan Higgins
+> <brendanhiggins@google.com> wrote:
+> >
+> > On Mon, Aug 12, 2019 at 10:30 PM Stephen Boyd <sboyd@kernel.org> wrote:
+> > >
+> > > Quoting Brendan Higgins (2019-08-12 22:02:59)
+> > > > However, now that I added the kunit_resource_destroy, I thought it
+> > > > might be good to free the string_stream after I use it in each call=
+ to
+> > > > kunit_assert->format(...) in which case I will be using this logic.
+> > > >
+> > > > So I think the right thing to do is to expose string_stream_destroy=
+ so
+> > > > kunit_do_assert can clean up when it's done, and then demote
+> > > > string_stream_clear to static. Sound good?
+> > >
+> > > Ok, sure. I don't really see how clearing it explicitly when the
+> > > assertion prints vs. never allocating it to begin with is really any
+> > > different. Maybe I've missed something though.
+> >
+> > It's for the case that we *do* print something out. Once we are doing
+> > printing, we don't want the fragments anymore.
+>=20
+> Oops, sorry fat fingered: s/doing/done
 
-Ack, or otherwise try switching to using wildcards in .gitignore as
-suggested in my reply to patch 4.
+Yes, but when we print something out we've run into some sort of problem
+and then the test is over. So freeing the memory when it fails vs. when
+the test is over seems like a minor difference. Or is it also used to
+print other informational messages while the test is running?
 
-[...]
+I'm not particularly worried here, just trying to see if less code is
+possible.
 
-Cheers
----Dave
