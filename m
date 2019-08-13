@@ -2,138 +2,123 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B19288B377
-	for <lists+linux-kselftest@lfdr.de>; Tue, 13 Aug 2019 11:13:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED2028B49A
+	for <lists+linux-kselftest@lfdr.de>; Tue, 13 Aug 2019 11:51:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727651AbfHMJNJ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 13 Aug 2019 05:13:09 -0400
-Received: from mail-lf1-f67.google.com ([209.85.167.67]:45019 "EHLO
-        mail-lf1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727605AbfHMJNJ (ORCPT
+        id S1727298AbfHMJvq (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 13 Aug 2019 05:51:46 -0400
+Received: from userp2130.oracle.com ([156.151.31.86]:57898 "EHLO
+        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727890AbfHMJvp (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 13 Aug 2019 05:13:09 -0400
-Received: by mail-lf1-f67.google.com with SMTP id v16so4536052lfg.11
-        for <linux-kselftest@vger.kernel.org>; Tue, 13 Aug 2019 02:13:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=b9ILhd2aCjQh4oMSFsJoowCjN4C8D/s8MJgq4YAEBLc=;
-        b=W2oxF32qcEgwvRN+TzYXAddY5GIfE0TU07ZZEMjsnTdZHws8iAZ2t8Ultvl9YT7B9l
-         FcqQcsJALGn/N6C5ZuExhftHA8ZS8MNOrSUeIrQu3gBXXLe4ixyR8Oo5hmg4UUGyabxo
-         uWv09COtEGpqAdax3WCg5P2ubO3WE1ftRGYMB38Ed3fgj3xpruF/YDRjA5s4U1SsywTz
-         raOTZO3u1j8iOcpslIka2xJ8bkvq+QSToLsxoCLDTz8ppRJhCuL8ltvK/wB/IXN51+OA
-         Tmzcrff2zT5F1o2XfVqbtXnT9QaUbGOA7cZQ4WzLX6NEXNn++uTMldyauztGbKy/kIWW
-         PdfQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=b9ILhd2aCjQh4oMSFsJoowCjN4C8D/s8MJgq4YAEBLc=;
-        b=jLPOA3qUiwiKTI57vWC9Uxfk3icixdlkEWsofOIjt9R9D13FqBYNOFS/JbXx17qZLW
-         NUEDbGHaMukd4Fs3wJ/0me+8pUgbbemobaDzuJ754nEEGG5CIg0LY3gCC0fZvhYmz+Id
-         GBrVwHUqUTwHrpsfpkF21uyVTuVnPTh+7Aw9LGdGdkDBHRvxk7JJn3IelT7Nprig6Lb+
-         Kk79CAM47Xf6+xlxOEW6YKwVEeF1oukasa+TkFMBxeSSmwiXmRTypID903lPZSa45yRj
-         jBEwnRigqzUftUzdjbK1gk17n4P/FAwH0TzoLyb9NeAFQoQ/ZD754bhvNoAOKV2/oyL0
-         uE+Q==
-X-Gm-Message-State: APjAAAWONLR3N0pvmB9Q5dSMrFZz5QcMuEGPVF/VdpHBSlsKSN5RYi0X
-        mB/T3KtrOTIOB8EGRkGon37sg2lpae4XxUHTKeL9IQ==
-X-Google-Smtp-Source: APXvYqwLnkbduPeN9fnl3i+lRRTsMYZatTj1IuJmhpqxnMiio1q0JfaKumMLZmtQt11+bQEG/iQwBN5AGKfhGyCW+Rs=
-X-Received: by 2002:ac2:5dd6:: with SMTP id x22mr21614482lfq.92.1565687586809;
- Tue, 13 Aug 2019 02:13:06 -0700 (PDT)
-MIME-Version: 1.0
-References: <20190812182421.141150-1-brendanhiggins@google.com>
- <20190812182421.141150-4-brendanhiggins@google.com> <20190812225520.5A67C206A2@mail.kernel.org>
- <20190812233336.GA224410@google.com> <20190812235940.100842063F@mail.kernel.org>
- <CAFd5g44xciLPBhH_J3zUcY3TedWTijdnWgF055qffF+dAguhPQ@mail.gmail.com>
- <20190813045623.F3D9520842@mail.kernel.org> <CAFd5g46PJNTOUAA4GOOrW==74Zy7u1sRESTanL_BXBn6QykscA@mail.gmail.com>
- <20190813053023.CC86120651@mail.kernel.org> <CAFd5g47v7410QRAizPV8zaHrKrc95-Sk-GNzRRVngN741OKnvg@mail.gmail.com>
-In-Reply-To: <CAFd5g47v7410QRAizPV8zaHrKrc95-Sk-GNzRRVngN741OKnvg@mail.gmail.com>
-From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Tue, 13 Aug 2019 02:12:54 -0700
-Message-ID: <CAFd5g452+-6m1eiVK0ccTDkJ2wH8GBwxRDw5owwC8h3NscE1ag@mail.gmail.com>
-Subject: Re: [PATCH v12 03/18] kunit: test: add string_stream a std::stream
- like string builder
-To:     Stephen Boyd <sboyd@kernel.org>
-Cc:     Frank Rowand <frowand.list@gmail.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Kees Cook <keescook@google.com>,
-        Kieran Bingham <kieran.bingham@ideasonboard.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Rob Herring <robh@kernel.org>, shuah <shuah@kernel.org>,
-        "Theodore Ts'o" <tytso@mit.edu>,
+        Tue, 13 Aug 2019 05:51:45 -0400
+Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
+        by userp2130.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x7D9nFOG016489;
+        Tue, 13 Aug 2019 09:51:18 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=message-id : subject
+ : from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=corp-2019-08-05;
+ bh=kyPIjO27oB72GLTsVcnxsAv0kJDQtfl0IzTAum6ojek=;
+ b=kcmhkiuOmv0oYQi5OPzF9osdz7+bo7yoSXgjRgG1NAhUu3WcDaebg2xHw97VJLaCHBcx
+ F2jDxB9tMl32E2zoQm5QQHuvfy7mvmNx2nYorz5jehmaU7JqyQVNmL9FH8p+x97cAEGD
+ 8+etznfdhqt9O+Fky33OsU4QGWoDAHTIJ+uknRlen5oZb8N89l6qtVgLCS+lvqCnoDDf
+ iEcok/maVV3tAM21DjTaGWFOn8p+1l5z2bX7VFIDJvMMJLgzlspM5o5N7cO8CAbetZcf
+ bn3RW4rcKulilvuQPkJPQ3RPlqF3jQ8iluSepqFZl+711xTqx+vz+yY1FGglA1HIeJF+ pQ== 
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=message-id : subject
+ : from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=corp-2018-07-02;
+ bh=kyPIjO27oB72GLTsVcnxsAv0kJDQtfl0IzTAum6ojek=;
+ b=Nc8KdvEMmM3jNiuK3jeEAFgXthR4fLpum+U9m6yQ/Ysv81woltVn9LNejPlLREsYfMrX
+ 2LxN/DiBxXCRP7S9QAy0mMeKfEmAnNNQgE69x5Zao2KpoAuINCSpFPW9yNVFPvEK9MPf
+ HL5WJ9iBJuqh98WLFJ7FUuGmYzMRYpIA35aE1NjeQ4TLIqSCpfBcU40CEcs1iXqkYPQh
+ M7KCxdmC84/wgU0ZNqPi4UxsKzfDp/2+WZLRBGQCekTkCTBBL2nZXCa4E9C3tTPZbmRb
+ Je4Ozgen/wJq6jfx/9YbxIL9c6DaCAn4/CjKY/4+nK9QN4dJb1jlmWcZL4KQredQVimI lQ== 
+Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
+        by userp2130.oracle.com with ESMTP id 2u9nbtd996-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 13 Aug 2019 09:51:18 +0000
+Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
+        by aserp3030.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x7D9laLB094626;
+        Tue, 13 Aug 2019 09:51:17 GMT
+Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
+        by aserp3030.oracle.com with ESMTP id 2u9m0b5ykf-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 13 Aug 2019 09:51:17 +0000
+Received: from abhmp0015.oracle.com (abhmp0015.oracle.com [141.146.116.21])
+        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id x7D9pAXh004636;
+        Tue, 13 Aug 2019 09:51:10 GMT
+Received: from abi.no.oracle.com (/141.143.213.43)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Tue, 13 Aug 2019 02:51:10 -0700
+Message-ID: <f0e1a6efa8f21ab93935c4c19e13b904d4a71f98.camel@oracle.com>
+Subject: Re: [RFC 00/19] Integration of Kernel Test Framework (KTF) into the
+ kernel tree
+From:   Knut Omang <knut.omang@oracle.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kbuild@vger.kernel.org,
+        Shuah Khan <shuah@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
         Masahiro Yamada <yamada.masahiro@socionext.com>,
-        devicetree <devicetree@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        kunit-dev@googlegroups.com,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        linux-fsdevel@vger.kernel.org,
-        linux-kbuild <linux-kbuild@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        linux-nvdimm <linux-nvdimm@lists.01.org>,
-        linux-um@lists.infradead.org,
-        Sasha Levin <Alexander.Levin@microsoft.com>,
-        "Bird, Timothy" <Tim.Bird@sony.com>,
-        Amir Goldstein <amir73il@gmail.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Daniel Vetter <daniel@ffwll.ch>, Jeff Dike <jdike@addtoit.com>,
-        Joel Stanley <joel@jms.id.au>,
-        Julia Lawall <julia.lawall@lip6.fr>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Shreyans Devendra Doshi <0xinfosect0r@gmail.com>,
+        Alan Maguire <alan.maguire@oracle.com>,
+        Brendan Higgins <brendanhiggins@google.com>,
         Kevin Hilman <khilman@baylibre.com>,
-        Knut Omang <knut.omang@oracle.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Petr Mladek <pmladek@suse.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Richard Weinberger <richard@nod.at>,
-        David Rientjes <rientjes@google.com>,
-        Steven Rostedt <rostedt@goodmis.org>, wfg@linux.intel.com
+        Hidenori Yamaji <hidenori.yamaji@sony.com>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Timothy Bird <Tim.Bird@sony.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        "Theodore Ts'o" <tytso@mit.edu>, Daniel Vetter <daniel@ffwll.ch>,
+        Stephen Boyd <sboyd@kernel.org>
+Date:   Tue, 13 Aug 2019 11:51:05 +0200
+In-Reply-To: <20190813082336.GB17627@kroah.com>
+References: <cover.92d76bb4f6dcedc971d0b72a49e8e459a98bca54.1565676440.git-series.knut.omang@oracle.com>
+         <20190813082336.GB17627@kroah.com>
 Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.30.5 (3.30.5-1.fc29) 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9347 signatures=668685
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
+ phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=999
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.0.1-1906280000 definitions=main-1908130105
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9347 signatures=668685
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
+ suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
+ lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1906280000
+ definitions=main-1908130105
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Aug 13, 2019 at 2:04 AM Brendan Higgins
-<brendanhiggins@google.com> wrote:
->
-> On Mon, Aug 12, 2019 at 10:30 PM Stephen Boyd <sboyd@kernel.org> wrote:
-> >
-> > Quoting Brendan Higgins (2019-08-12 22:02:59)
-> > > On Mon, Aug 12, 2019 at 9:56 PM Stephen Boyd <sboyd@kernel.org> wrote:
-> > > >
-> > > > Quoting Brendan Higgins (2019-08-12 17:41:05)
-> > > > > On Mon, Aug 12, 2019 at 4:59 PM Stephen Boyd <sboyd@kernel.org> wrote:
-> > > > > >
-> > > > > > > kunit_resource_destroy (respective equivalents to devm_kfree, and
-> > > > > > > devres_destroy) and use kunit_kfree here?
-> > > > > > >
-> > > > > >
-> > > > > > Yes, or drop the API entirely? Does anything need this functionality?
-> > > > >
-> > > > > Drop the kunit_resource API? I would strongly prefer not to.
-> > > >
-> > > > No. I mean this API, string_stream_clear(). Does anything use it?
-> > >
-> > > Oh, right. No.
-> > >
-> > > However, now that I added the kunit_resource_destroy, I thought it
-> > > might be good to free the string_stream after I use it in each call to
-> > > kunit_assert->format(...) in which case I will be using this logic.
-> > >
-> > > So I think the right thing to do is to expose string_stream_destroy so
-> > > kunit_do_assert can clean up when it's done, and then demote
-> > > string_stream_clear to static. Sound good?
-> >
-> > Ok, sure. I don't really see how clearing it explicitly when the
-> > assertion prints vs. never allocating it to begin with is really any
-> > different. Maybe I've missed something though.
->
-> It's for the case that we *do* print something out. Once we are doing
-> printing, we don't want the fragments anymore.
+On Tue, 2019-08-13 at 10:23 +0200, Greg Kroah-Hartman wrote:
+> On Tue, Aug 13, 2019 at 08:09:15AM +0200, Knut Omang wrote:
+> > and in the making::
+> > 
+> > kunit/			  (kernel only (UML))
+> 
+> You are going to have to integrate this with kunit, to come up with a
+> superset of both in the end.
 
-Oops, sorry fat fingered: s/doing/done
+Yes, I agree - getting to a unified approach has been my intention since I first brought this
+up at LPC'17.
+
+> And I do not think that kunit is only UML, it's just that seems to be
+> what Brendan tests with, but should work with other arches as well.
+
+If I get Brendan right, it is UML only now but can be extended to also support 
+kernels running on real hardware. Still it is kernel only, while KTF also has the 
+hybrid mode, where a test can have code and assertions both in user mode and kernel mode.
+This is made easier and more streamlined by letting all reporting happen from user mode.
+
+Thanks!
+Knut
+
+> thanks,
+> 
+> greg k-h
+
