@@ -2,54 +2,54 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D68898AF83
-	for <lists+linux-kselftest@lfdr.de>; Tue, 13 Aug 2019 08:13:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5BDC8AF85
+	for <lists+linux-kselftest@lfdr.de>; Tue, 13 Aug 2019 08:13:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727754AbfHMGL7 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 13 Aug 2019 02:11:59 -0400
-Received: from userp2130.oracle.com ([156.151.31.86]:60640 "EHLO
-        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727246AbfHMGL6 (ORCPT
+        id S1727246AbfHMGMC (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 13 Aug 2019 02:12:02 -0400
+Received: from userp2120.oracle.com ([156.151.31.85]:37862 "EHLO
+        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727748AbfHMGMB (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 13 Aug 2019 02:11:58 -0400
-Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
-        by userp2130.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x7D693sm011117;
-        Tue, 13 Aug 2019 06:11:36 GMT
+        Tue, 13 Aug 2019 02:12:01 -0400
+Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
+        by userp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x7D690jC022084;
+        Tue, 13 Aug 2019 06:11:38 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding; s=corp-2019-08-05;
- bh=qpt6s5f2ZMaRIgJiplhgON8Bp1uiCExpeX8yfJisRo0=;
- b=RIvpVm8o8LO7TiFDQSKpSMjoPd96rRCcbOYvoTM6hGDerfSraoVTsssN1c71EYbIkf5D
- w+Wd5MM1frqreAWrhbQ7tU1Cwe1jYUp43lkDUMwnBIIA8v/FYUl+7DGbmPBZWbwthTPp
- svqSZj8Wk7ajsd7Y/b+8MEuW26iluj5Yb9aQWR6Sqwx74dUQ9sjLYv+eEx++53qfnck7
- cICnj29SRq6J+okWyi5AQbDY1T5xwnmY2ooiQjGgYm/Rt4Pi1shrMhdDwfd0RLOf8LbD
- oF+sEHEn8qPgS4mM1MlZ6FZRrF8fyFqmpvVZcJ/601qe7R88zTPsiQOllwsJkkpf/KRx ew== 
+ bh=d0uU65Z04im+BrtimXWGyB6YZa/jBywtmtJQJXOqv7E=;
+ b=HkRnfsIO/EN5rfLivPXtBjOrKEnDUTWwo1Veec7kOoSQI+113RzqCUtaVxKYAonmbj6s
+ e1mnqEEldeEqx/bJAvBk4ctZt+As+YzpKp59ymGj9VvaW2jTbwsZS9lWiljFjXBEgLAJ
+ 0pvXgOecdB+Ed0qXc/UfldfL8tXqMFmMA66qHv697NdvsMnIyA0hG8fvx22Fs1IZfGmE
+ XviXlGChg8qY6ugUU/d8pCG/qDAilMuvgnd4JgSBya1Il1WP0PE0lQ3mOwfz5afdinKj
+ LN4eLRrtntCpoIUidv4qjcTkmOHRBcqzCXLr5LrLjy79cgOlo45BByzwaeGdvbSee5HO aw== 
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding; s=corp-2018-07-02;
- bh=qpt6s5f2ZMaRIgJiplhgON8Bp1uiCExpeX8yfJisRo0=;
- b=OBswWIC+orkFZ8bCLW/oOxXhUnAvhETNpobsidoTyF7lAwlj5AlRJFd1Gr5zZ6KibMxd
- 2zVaB/zVCQoGw+Ynyw8JDRnlW4lpHZ4pTdI3bA1+0GELDIIEjK78PlgXg3v6eQ/UQ/Mm
- /bizjXp+mes44tevw3dppI3Tf4CPNpZHfYL20BBLHLBHxFMAz4GKn//aME+WkwdKJqF0
- 8xkt6UmIn+OZFC3mmFlKzuYKVdVvTSHw07ahNRfkAV2jeJ6GL6vOThPoDR8EcX84Enn+
- wRDvBFUeLmCxuqmnXpFTi/hkfcNAsur+nOvF6U98asuLCQtBgPZqmiSUSZFKrjYBAQ3J tg== 
-Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by userp2130.oracle.com with ESMTP id 2u9nbtc12u-1
+ bh=d0uU65Z04im+BrtimXWGyB6YZa/jBywtmtJQJXOqv7E=;
+ b=PSpUlK/ikqLNeuQQltf+DgLyJBJcWWu3Iwp9nFmMQnG9/ALsbuXD2pyphmqxLbOJ2FqL
+ Qy6U4elNXd52nesqzG7+aa+p6WSNz0qmb9Tu8O5DI5m2FZIFlVPMsHT4f5scLzu1jHAx
+ 2L/die7wqSIthSCB1ES96oQsJ2yY232utujPOEO81evLj/AI3ZjIt1MfI3fXUHUukyZx
+ qodzVLlfiYNJCc15FGmqBxVnBDCIp8A6sONf3x1qfPBQyvpLOigkSWO35/ALQU83XG0S
+ n5hPpQm5VpmuvfDKJtlvM7EKP/6/zxCC/Y5z7aCDb+BnD2xGIAyCCNWvEOl/Ki4FsOJr tA== 
+Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
+        by userp2120.oracle.com with ESMTP id 2u9pjqbvms-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 13 Aug 2019 06:11:36 +0000
-Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x7D67TTd157170;
-        Tue, 13 Aug 2019 06:11:35 GMT
-Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
-        by aserp3020.oracle.com with ESMTP id 2u9nrenm99-1
+        Tue, 13 Aug 2019 06:11:38 +0000
+Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
+        by userp3030.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x7D68YLF049765;
+        Tue, 13 Aug 2019 06:11:38 GMT
+Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
+        by userp3030.oracle.com with ESMTP id 2u9k1w41j4-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 13 Aug 2019 06:11:35 +0000
+        Tue, 13 Aug 2019 06:11:37 +0000
 Received: from abhmp0019.oracle.com (abhmp0019.oracle.com [141.146.116.25])
-        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id x7D6BXm4011235;
-        Tue, 13 Aug 2019 06:11:33 GMT
+        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id x7D6BawQ026730;
+        Tue, 13 Aug 2019 06:11:36 GMT
 Received: from abi.no.oracle.com (/10.172.144.123)
         by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Mon, 12 Aug 2019 23:11:32 -0700
+        with ESMTP ; Mon, 12 Aug 2019 23:11:36 -0700
 From:   Knut Omang <knut.omang@oracle.com>
 To:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     linux-doc@vger.kernel.org, linux-kbuild@vger.kernel.org,
@@ -69,9 +69,9 @@ Cc:     linux-doc@vger.kernel.org, linux-kbuild@vger.kernel.org,
         "Theodore Ts'o" <tytso@mit.edu>, Daniel Vetter <daniel@ffwll.ch>,
         Stephen Boyd <sboyd@kernel.org>,
         Knut Omang <knut.omang@oracle.com>
-Subject: [RFC 11/19] ktf: Add a small test suite with a few tests to test KTF itself
-Date:   Tue, 13 Aug 2019 08:09:26 +0200
-Message-Id: <f799b8bdcdaa843e6202ca73ecc73366cdf5ecd6.1565676440.git-series.knut.omang@oracle.com>
+Subject: [RFC 12/19] ktf: Main part of user land library for executing tests
+Date:   Tue, 13 Aug 2019 08:09:27 +0200
+Message-Id: <45a49a1c8c826254db169e104f1d50b389e02a03.1565676440.git-series.knut.omang@oracle.com>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <cover.92d76bb4f6dcedc971d0b72a49e8e459a98bca54.1565676440.git-series.knut.omang@oracle.com>
 References: <cover.92d76bb4f6dcedc971d0b72a49e8e459a98bca54.1565676440.git-series.knut.omang@oracle.com>
@@ -93,1068 +93,1299 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-context.c:       Parameterized context test case, kernel side:
-context.h:       Parameterized context test case, kernel side.
-context_self.h:  The data structure passed between user level and kernel for the
-hybrid.c:        Hybrid (combined user level and kernel) self tests,
-hybrid.h:        Hybrid (combined user level and kernel) self tests,
-hybrid_self.h:   The data structure passed between user level and kernel for the
-self.c:          Some simple self tests for KTF
+Implementation of the main part of the user library to communicate
+with the kernel side of ktf about tests, configuration and test
+results.
+
+ktf.h:           User mode side of KTF extensions to the gtest unit test framework.
+ktf_int.cc:     Implementation of Gtest user land test management
+ktf_int.h:       User mode side of extension to the gtest unit test framework:
 
 Signed-off-by: Knut Omang <knut.omang@oracle.com>
 ---
- tools/testing/selftests/ktf/selftest/Makefile       |  17 +-
- tools/testing/selftests/ktf/selftest/context.c      | 149 +++-
- tools/testing/selftests/ktf/selftest/context.h      |  15 +-
- tools/testing/selftests/ktf/selftest/context_self.h |  34 +-
- tools/testing/selftests/ktf/selftest/hybrid.c       |  35 +-
- tools/testing/selftests/ktf/selftest/hybrid.h       |  24 +-
- tools/testing/selftests/ktf/selftest/hybrid_self.h  |  27 +-
- tools/testing/selftests/ktf/selftest/ktf_syms.txt   |  17 +-
- tools/testing/selftests/ktf/selftest/self.c         | 661 +++++++++++++-
- 9 files changed, 979 insertions(+)
- create mode 100644 tools/testing/selftests/ktf/selftest/Makefile
- create mode 100644 tools/testing/selftests/ktf/selftest/context.c
- create mode 100644 tools/testing/selftests/ktf/selftest/context.h
- create mode 100644 tools/testing/selftests/ktf/selftest/context_self.h
- create mode 100644 tools/testing/selftests/ktf/selftest/hybrid.c
- create mode 100644 tools/testing/selftests/ktf/selftest/hybrid.h
- create mode 100644 tools/testing/selftests/ktf/selftest/hybrid_self.h
- create mode 100644 tools/testing/selftests/ktf/selftest/ktf_syms.txt
- create mode 100644 tools/testing/selftests/ktf/selftest/self.c
+ tools/testing/selftests/ktf/lib/Makefile   |   21 +-
+ tools/testing/selftests/ktf/lib/ktf.h      |  114 ++-
+ tools/testing/selftests/ktf/lib/ktf_int.cc | 1031 +++++++++++++++++++++-
+ tools/testing/selftests/ktf/lib/ktf_int.h  |   84 ++-
+ 4 files changed, 1250 insertions(+)
+ create mode 100644 tools/testing/selftests/ktf/lib/Makefile
+ create mode 100644 tools/testing/selftests/ktf/lib/ktf.h
+ create mode 100644 tools/testing/selftests/ktf/lib/ktf_int.cc
+ create mode 100644 tools/testing/selftests/ktf/lib/ktf_int.h
 
-diff --git a/tools/testing/selftests/ktf/selftest/Makefile b/tools/testing/selftests/ktf/selftest/Makefile
+diff --git a/tools/testing/selftests/ktf/lib/Makefile b/tools/testing/selftests/ktf/lib/Makefile
 new file mode 100644
-index 0000000..8737bf4
+index 0000000..c2be04b
 --- /dev/null
-+++ b/tools/testing/selftests/ktf/selftest/Makefile
-@@ -0,0 +1,17 @@
-+# Copyright (c) 2017, 2018, Oracle and/or its affiliates. All rights reserved.
-+#
-+# SPDX-License-Identifier: GPL-2.0
-+#
-+# Kernel module implementing a test suite for testing KTF itself
-+#
++++ b/tools/testing/selftests/ktf/lib/Makefile
+@@ -0,0 +1,21 @@
 +
-+ccflags-y += -Wno-vla
++GTEST_CFLAGS ?= -I$(GTEST_PATH)/include -DGTEST_HAS_PTHREAD=1 -lpthread
++GTEST_LIBS ?= -L$(GTEST_PATH)/lib64 -lgtest -lpthread
++NETLINK_CFLAGS ?= $(shell pkgconf --cflags libnl-genl-3.0)
++HOST_EXTRACFLAGS = -I$(srctree)/$(src)/.. $(NETLINK_CFLAGS) $(GTEST_CFLAGS) \
++		-Wall -Werror -Wno-packed-bitfield-compat -D_GNU_SOURCE
++HOST_EXTRACXXFLAGS = -I$(srctree)/$(src)/.. $(NETLINK_CFLAGS) $(GTEST_CFLAGS) \
++		-Wall \
++		-Wno-packed-bitfield-compat \
++		-Wno-pointer-arith -Werror \
++		-D__FILENAME__=\"`basename $<`\"
 +
-+ccflags-y += -I$(srctree)/$(src)/../kernel -I$(src)
++hostcxxlibs-y := libktf.so
++libktf-cshobjs = ktf_unlproto.o
++libktf-cxxshobjs = ktf_int.o ktf_run.o ktf_debug.o
 +
-+obj-m := selftest.o
++targets := $(addprefix $(obj)/,$(libktf-cshobjs)) \
++	   $(addprefix $(obj)/,$(libktf-cxxshobjs)) \
++	   $(addprefix $(obj)/,$(hostcxxlibs-y))
 +
-+include $(srctree)/$(src)/../scripts/ktf_syms.mk
-+
-+selftest-y := self.o hybrid.o context.o
-+
-diff --git a/tools/testing/selftests/ktf/selftest/context.c b/tools/testing/selftests/ktf/selftest/context.c
++__build: $(targets)
+diff --git a/tools/testing/selftests/ktf/lib/ktf.h b/tools/testing/selftests/ktf/lib/ktf.h
 new file mode 100644
-index 0000000..9129b5b
+index 0000000..942eb28
 --- /dev/null
-+++ b/tools/testing/selftests/ktf/selftest/context.c
-@@ -0,0 +1,149 @@
-+/* Copyright (c) 2019, Oracle and/or its affiliates. All rights reserved.
++++ b/tools/testing/selftests/ktf/lib/ktf.h
+@@ -0,0 +1,114 @@
++/*
++ * Copyright (c) 2011, 2018, Oracle and/or its affiliates. All rights reserved.
++ *    Author: Knut Omang <knut.omang@oracle.com>
 + *
 + * SPDX-License-Identifier: GPL-2.0
 + *
-+ * context.c: Parameterized context test case, kernel side:
++ * ktf.h: User mode side of KTF extensions to the gtest unit test framework.
++ * Include this to write hybrid tests
++ *
++ */
++#ifndef _KTF_H
++#define _KTF_H
++#include <gtest/gtest.h>
++
++namespace ktf
++{
++
++  /* Interfaces intended to be used directly by programs:
++   * ----------------------------------------------------
++   */
++  class KernelTest;
++
++  /* Invoke the kernel test - to be called directly from user mode
++   * hybrid tests:
++   */
++  void run(KernelTest* kt, std::string ctx = "");
++
++  /* Function for enabling/disabling coverage for module */
++  int set_coverage(std::string module, unsigned int opts, bool enabled);
++
++  typedef void (*configurator)(void);
++
++  // Initialize KTF:
++  // If necessary, supply a callback that uses the KTF_CONTEXT_CFG* macros below
++  // to configure any necessary contexts:
++  void setup(configurator c = NULL);
++
++} // end namespace ktf
++
++/* HTEST: Define user part of a hybrid test.
++ * Hybrid tests are tests that have a user and a kernel counterpart,
++ * to allow testing of interaction between user mode and the kernel:
++ */
++#define HTEST(__setname,__testname)	\
++  class __setname ## _ ## __testname : public ktf::test_cb	\
++  {\
++  public:\
++    __setname ## _ ## __testname() {\
++      ktf::add_wrapper(#__setname,#__testname,as_test_cb()); \
++    }\
++    virtual void fun(ktf::KernelTest* kt);	\
++  }; \
++  __setname ## _ ## __testname \
++     __setname ## _ ## __testname ## _value;\
++  void __setname ## _ ## __testname::fun(ktf::KernelTest* self)
++
++
++/* Part of KTF support for hybrid tests: allocate/get a reference to
++ * an out-of-band user data pointer:
++ */
++#define KTF_USERDATA(__kt_ptr, __priv_datatype, __priv_data) \
++  struct __priv_datatype *__priv_data =	\
++    (struct __priv_datatype *)get_priv(__kt_ptr, sizeof(struct __priv_datatype)); \
++  ASSERT_TRUE(__priv_data); \
++  ASSERT_EQ(get_priv_sz(__kt_ptr), sizeof(struct __priv_datatype))
++
++/* KTF support for configurable contexts:
++ * Send a configuation data structure to the given context name.
++ */
++#define KTF_CONTEXT_CFG(__context_name, __context_type_name, __priv_datatype, __priv_data) \
++  ktf::configure_context(__context_name, __context_type_name, \
++  			 (struct __priv_datatype *)__priv_data, \
++			 sizeof(__priv_datatype))
++/* Alternative to KTF_CONTEXT_CFG: If there are multiple contexts with the same name
++ * (but with different handles) use a test name to identify the context to be configured
++ */
++#define KTF_CONTEXT_CFG_FOR_TEST(__test_name, __context_type_name, __priv_datatype, __priv_data) \
++  ktf::configure_context_for_test(__test_name, __context_type_name, \
++				  (struct __priv_datatype *)__priv_data, \
++				  sizeof(__priv_datatype))
++
++
++
++/* Private interfaces (needed by macro definitions above)
++ * ------------------------------------------------------
 + */
 +
-+#include "ktf.h"
-+#include "context.h"
++namespace ktf {
++  class test_cb
++  {
++  public:
++    virtual ~test_cb() {}
++    virtual test_cb* as_test_cb() { return this; }
++    virtual void fun(KernelTest* kt) {}
++  };
 +
-+/* Declare a specific handle for this test to avoid interfering with the
-+ * other tests:
++  /* Function for adding a user level test wrapper */
++  void add_wrapper(const std::string setname, const std::string testname,
++		   test_cb* tcb);
++
++  /* get a priv pointer of the given size, allocate if necessary */
++  void* get_priv(KernelTest* kt, size_t priv_sz);
++
++  /* Get the size of the existing priv data */
++  size_t get_priv_sz(KernelTest *kt);
++
++  // Configure ktf context - to be used via KTF_CONTEXT_CFG*():
++  void configure_context(const std::string context, const std::string type_name,
++			 void *data, size_t data_sz);
++  void configure_context_for_test(const std::string testname, const std::string type_name,
++				  void *data, size_t data_sz);
++} // end namespace ktf
++
++#endif
+diff --git a/tools/testing/selftests/ktf/lib/ktf_int.cc b/tools/testing/selftests/ktf/lib/ktf_int.cc
+new file mode 100644
+index 0000000..6ac1f54
+--- /dev/null
++++ b/tools/testing/selftests/ktf/lib/ktf_int.cc
+@@ -0,0 +1,1031 @@
++/*
++ * Copyright (c) 2012, 2017, Oracle and/or its affiliates. All rights reserved.
++ *    Author: Knut Omang <knut.omang@oracle.com>
++ *
++ * SPDX-License-Identifier: GPL-2.0
++ *
++ * ktf_int.cpp: Implementation of Gtest user land test management
++ * for kernel and hybrid test functionality provided by KTF.
 + */
-+static KTF_HANDLE_INIT(ct_handle);
++#include <netlink/netlink.h>
++#include <netlink/genl/genl.h>
++#include <netlink/genl/ctrl.h>
++#include <unistd.h>
++#include "kernel/ktf_unlproto.h"
++#include <assert.h>
++#include <errno.h>
++#include <fcntl.h>
++#include <map>
++#include <set>
++#include <string>
++#include "ktf_int.h"
++#include "ktf_debug.h"
 +
-+struct param_test_ctx {
-+	struct ktf_context k;
-+	struct test_parameter_block p;
++#include <netlink/version.h>
++
++int devcnt = 0;
++
++namespace ktf
++{
++
++struct nl_sock* sock = NULL;
++int family = -1;
++
++int printed_header = 0;
++
++typedef std::map<std::string, KernelTest*> testmap;
++typedef std::map<std::string, test_cb*> wrappermap;
++
++class testset
++{
++public:
++  testset() : setnum(0)
++  { }
++
++  ~testset()
++  {
++    for (testmap::iterator it = tests.begin(); it != tests.end(); ++it)
++      delete it->second;
++  }
++
++  testmap tests;
++  stringvec test_names;
++  wrappermap wrapper;
++  int setnum;
 +};
 +
-+struct param_test_ctx param_ctx[2];
-+
-+#define MYVALUE 0xdabadaba
-+
-+/* Declare the callback that accepts a parameter block */
-+static int param_ctx_cb(struct ktf_context *ctx, const void *data, size_t data_sz)
++/* ConfigurableContext keeps track of a ktf_context that requires configuration.
++ * Context names are unique within a handle, so a handle ID is necessary to
++ * identify the context. The actual configuration data must be agreed upon between
++ * user mode and kernel mode on a per context basis. They can use type_id
++ * to identify which type of parameter a context needs.
++ * The type_id is also used to create new contexts in the kernel.
++ * The kernel implementation must enable such dynamically extensible context sets
++ * on a per type_id basis.
++ */
++class ConfigurableContext
 +{
-+	struct param_test_ctx *px = container_of(ctx, struct param_test_ctx, k);
-+	struct test_parameter_block *pb = (struct test_parameter_block *)data;
-+	long orig_myvalue;
++public:
++  ConfigurableContext(const std::string& name, const std::string& type_name,
++		      unsigned int hid, int cfg_stat);
 +
-+	if (data_sz != sizeof(*pb))
-+		return -EINVAL;
-+	/* check data validity here, if possible.. */
-+	orig_myvalue = px->p.myvalue;
-+	memcpy(&px->p, pb, data_sz);
-+	/* Enforce "policies" */
-+	px->p.myvalue = orig_myvalue;
-+	return 0;
++  std::string str_state();
++  int Configure(void *data, size_t data_sz);
++
++  const std::string& Type()
++  {
++    return type_name;
++  }
++
++  std::string name;
++  int handle_id;
++  std::string type_name;
++  int cfg_stat;
++};
++
++typedef std::map<std::string, testset> setmap;
++typedef std::set<std::string> stringset;
++typedef std::vector<ConfigurableContext*> context_vector;
++
++struct name_iter
++{
++  setmap::iterator it;
++  std::string setname;
++};
++
++class ContextType
++{
++public:
++  ContextType(int handle_id, const std::string& type_name);
++  int handle_id;
++  std::string type_name;
++};
++
++  ContextType::ContextType(int hid, const std::string& tn)
++  : handle_id(hid),
++    type_name(tn)
++{}
++
++/* We trick the gtest template framework
++ * to get a new set of test names as a side effect of
++ * invocation of get_test_names()
++ */
++
++/* Wrap globals in an object to control init order and
++ * memory cleanup:
++ */
++class KernelTestMgr
++{
++public:
++  KernelTestMgr() : next_set(0), cur(NULL)
++  { }
++
++  ~KernelTestMgr();
++
++  testset& find_add_set(std::string& setname);
++  testset& find_add_test(std::string& setname, std::string& testname);
++  void add_test(const std::string& setname, const char* tname, unsigned int handle_id);
++  KernelTest* find_test(const std::string&setname, const std::string& testname, std::string* ctx);
++  void add_wrapper(const std::string setname, const std::string testname, test_cb* tcb);
++
++  stringvec& get_set_names() { return set_names; }
++  stringvec get_test_names();
++
++  stringvec get_testsets()
++  {
++    return set_names;
++  }
++
++  std::string get_current_setname()
++  {
++    return cur->setname;
++  }
++
++  stringvec& get_contexts(unsigned int id)
++  {
++    return handle_to_ctxvec[id];
++  }
++
++  void add_cset(unsigned int hid, stringvec& ctxs);
++  void add_ctype(unsigned int hid, const std::string& type_name);
++  std::vector<ConfigurableContext*> add_configurable_context(const std::string& ctx,
++							     const std::string& type_name,
++							     unsigned int hid, int cfg_stat);
++  std::vector<ConfigurableContext*> add_configurable_contexts(const std::string& ctx,
++							      std::vector<ContextType*> type_vec);
++  std::vector<ConfigurableContext*> find_contexts(const std::string& ctx, const std::string& type_name);
++
++  /* Contexts may be created on the fly if the kernel supports it for this type_name: */
++  std::vector<ConfigurableContext*> maybe_create_context(const std::string& ctx,
++							 const std::string& type_name);
++
++  /* Update the list of contexts returned from the kernel with a newly created one */
++  void add_context(unsigned int hid, const std::string& ctx);
++private:
++  setmap sets;
++  stringvec test_names;
++  stringvec set_names;
++  stringset kernelsets;
++  std::map<unsigned int, stringvec> handle_to_ctxvec;
++  std::map<std::string, context_vector> cfg_contexts;
++
++  // Context types that allows dynamically created contexts:
++  std::map<std::string, std::vector<ContextType*> > ctx_types;
++  int next_set;
++  name_iter* cur;
++};
++
++KernelTestMgr::~KernelTestMgr()
++{
++  std::map<std::string, context_vector>::iterator it;
++  for (it = cfg_contexts.begin(); it != cfg_contexts.end(); ++it)
++  {
++    context_vector::iterator vit;
++    for (vit = it->second.begin(); vit != it->second.end(); ++vit)
++      delete *vit;
++  }
++
++  std::map<std::string, std::vector<ContextType*> >::iterator tit;
++  for (tit = ctx_types.begin(); tit != ctx_types.end(); ++tit)
++  {
++    std::vector<ContextType*>::iterator ttit;
++    for (ttit = tit->second.begin(); ttit != tit->second.end(); ++ttit)
++      delete *ttit;
++  }
 +}
 +
-+TEST(selftest, param)
++context_vector KernelTestMgr::find_contexts(const std::string& ctx, const std::string& type_name)
 +{
-+	struct param_test_ctx *px = container_of(ctx, struct param_test_ctx, k);
++  std::map<std::string,context_vector>::iterator it;
++  it = cfg_contexts.find(ctx);
++  if (it == cfg_contexts.end())
++    return maybe_create_context(ctx, type_name);
++  else
++    return it->second;
++}
 +
-+	/* Now, here we can fail (using ASSERT) or ignore by silently return
-+	 * depending on what's most useful, if a test hasn't been configured.
-+	 * For this selftest we just use EXPECT so we can have the actual current
-+	 * parameter values reported as well.
-+	 *
-+	 * Notice that these parameters are
-+	 * persistent throughout the instance 'life' of the kernel test module,
-+	 * so if one user program has configured them, then
-+	 * programs ignorant of the parameters may still end up
-+	 * executing the tests with previously configured parameters:
-+	 *
-+	 * This simplified example uses the same configuration struct for both
-+	 * context type IDs, but the idea is that they can be completely different.
-+	 */
-+	EXPECT_INT_EQ(ctx->config_errno, 0);
-+	if (KTF_CONTEXT_CFG_OK(ctx)) {
-+		switch (ctx->type->name[13]) {
-+		case '1':
-+			EXPECT_LONG_EQ(px->p.magic, CONTEXT_MAGIC1);
-+			break;
-+		case '2':
-+			EXPECT_LONG_EQ(px->p.magic, CONTEXT_MAGIC2);
-+			break;
-+		case '3':
-+			EXPECT_LONG_EQ(px->p.magic, CONTEXT_MAGIC3);
-+			EXPECT_LONG_EQ(px->p.myvalue, MYVALUE);
-+			break;
-+		}
-+		EXPECT_STREQ(px->p.s, CONTEXT_MSG);
-+	} else {
-+		EXPECT_LONG_EQ(px->p.magic, 0);
-+		EXPECT_STREQ(px->p.s, "");
++context_vector KernelTestMgr::maybe_create_context(const std::string& ctx, const std::string& type_name)
++{
++  std::map<std::string, std::vector<ContextType*> >::iterator it;
++  it = ctx_types.find(type_name);
++  if (it == ctx_types.end())
++    return context_vector();
++  else
++    return add_configurable_contexts(ctx, it->second);
++}
++
++void KernelTestMgr::add_context(unsigned int hid, const std::string& ctx)
++{
++  handle_to_ctxvec[hid].push_back(ctx);
++}
++
++
++KernelTestMgr& kmgr()
++{
++  static KernelTestMgr kmgr_;
++  return kmgr_;
++}
++
++testset& KernelTestMgr::find_add_test(std::string& setname, std::string& testname)
++{
++  testset& ts(find_add_set(setname));
++  test_names.push_back(testname);
++  return ts;
++}
++
++testset& KernelTestMgr::find_add_set(std::string& setname)
++{
++  bool new_set = false;
++
++  log(KTF_DEBUG, "find_add_set(%s)\n", setname.c_str());
++
++  stringset::iterator it = kernelsets.find(setname);
++  if (it == kernelsets.end()) {
++    kernelsets.insert(setname);
++    set_names.push_back(setname);
++    new_set = true;
++  }
++
++  /* This implicitly adds a new testset to sets, if it's not there: */
++  testset& ts = sets[setname];
++  if (new_set)
++  {
++    ts.setnum = next_set++;
++    log(KTF_INFO, "added %s (set %d) total %lu sets\n", setname.c_str(), ts.setnum, sets.size());
++  }
++  return ts;
++}
++
++
++void KernelTestMgr::add_test(const std::string& setname, const char* tname,
++			     unsigned int handle_id)
++{
++  log(KTF_INFO_V, "add_test: %s.%s", setname.c_str(),tname);
++  logs(KTF_INFO_V,
++       if (handle_id)
++	 fprintf(stderr, " [id %d]\n", handle_id);
++       else
++	 fprintf(stderr, "\n"));
++  std::string name(tname);
++  new KernelTest(setname, tname, handle_id);
++}
++
++
++/* Here we might get called with test names expanded with context names */
++KernelTest* KernelTestMgr::find_test(const std::string&setname,
++				     const std::string& testname,
++				     std::string* pctx)
++{
++  size_t pos;
++  log(KTF_DEBUG, "find test %s.%s\n", setname.c_str(), testname.c_str());
++
++  /* Try direct lookup first: */
++  KernelTest* kt = sets[setname].tests[testname];
++  if (kt) {
++    *pctx = std::string();
++    return kt;
++  }
++
++  /* If we don't have any contexts set, no need to parse name: */
++  if (handle_to_ctxvec.empty())
++    return NULL;
++
++  pos = testname.find_last_of('_');
++  while (pos >= 0) {
++    std::string tname = testname.substr(0,pos);
++    std::string ctx = testname.substr(pos + 1, testname.npos);
++    *pctx = ctx;
++    kt = sets[setname].tests[tname];
++    if (kt)
++      return kt;
++    /* context name might contain an '_' , iterate on: */
++    pos = tname.find_last_of('_');
++  }
++  return NULL;
++}
++
++
++void KernelTestMgr::add_cset(unsigned int hid, stringvec& ctxs)
++{
++  log(KTF_INFO, "hid %d: ", hid);
++  logs(KTF_INFO, for (stringvec::iterator it = ctxs.begin(); it != ctxs.end(); ++it)
++	 fprintf(stderr, "%s ", it->c_str());
++       fprintf(stderr, "\n"));
++  handle_to_ctxvec[hid] = ctxs;
++}
++
++void KernelTestMgr::add_ctype(unsigned int hid, const std::string& type_name)
++{
++  log(KTF_INFO, "hid %d: dynamical type: %s\n", hid, type_name.c_str());
++  ctx_types[type_name].push_back(new ContextType(hid, type_name));
++}
++
++std::vector<ConfigurableContext*> KernelTestMgr::add_configurable_context(const std::string& ctx,
++									  const std::string& type_name,
++									  unsigned int hid, int cfg_stat)
++{
++  cfg_contexts[ctx].push_back(new ConfigurableContext(ctx, type_name, hid, cfg_stat));
++  return cfg_contexts[ctx];
++}
++
++/* Function for adding a wrapper user level test */
++void KernelTestMgr::add_wrapper(const std::string setname, const std::string testname,
++				test_cb* tcb)
++{
++  log(KTF_DEBUG, "add_wrapper: %s.%s\n", setname.c_str(),testname.c_str());
++  testset& ts = sets[setname];
++
++  /* Depending on C++ initialization order which vary between compiler version
++   * (sigh!) either the kernel tests have already been processed or we have to store
++   * this object in wrapper for later insertion:
++   */
++  KernelTest *kt = ts.tests[testname];
++  if (kt) {
++    log(KTF_DEBUG_V, "Assigning user_test for %s.%s\n",
++	setname.c_str(), testname.c_str());
++    kt->user_test = tcb;
++  } else {
++    log(KTF_DEBUG_V, "Set wrapper for %s.%s\n",
++	setname.c_str(), testname.c_str());
++    ts.wrapper[testname] = tcb;
++  }
++}
++
++std::vector<ConfigurableContext*> KernelTestMgr::add_configurable_contexts(const std::string& ctx,
++									   std::vector<ContextType*> type_vec)
++{
++  std::vector<ContextType*>::iterator it = type_vec.begin();
++  for (; it != type_vec.end(); ++it) {
++    /* We use ENODEV (instead of the kernel's ENOENT to indicate to ConfigurableContext that
++     * this context was not reported in the query, and thus need to be added locally upon a
++     * successful configuration:
++     */
++    cfg_contexts[ctx].push_back(new ConfigurableContext(ctx, (*it)->type_name, (*it)->handle_id, ENODEV));
++  }
++  return cfg_contexts[ctx];
++}
++
++
++stringvec KernelTestMgr::get_test_names()
++{
++  if (!cur) {
++    cur = new name_iter();
++    cur->it = sets.begin();
++  }
++
++  /* Filter out any combined tests that do not have a kernel counterpart loaded */
++  while (cur->it->second.wrapper.size() != 0 && cur->it != sets.end()) {
++    if (cur->it->second.test_names.size() == 0)
++      log(KTF_INFO, "Note: Skipping test suite %s which has combined tests with no kernel counterpart\n",
++	  cur->it->first.c_str());
++    ++(cur->it);
++  }
++
++  if (cur->it == sets.end()) {
++    delete cur;
++    cur = NULL;
++    return stringvec();
++  }
++
++  stringvec& v = cur->it->second.test_names;
++  cur->setname = cur->it->first;
++
++  ++(cur->it);
++  return v;
++}
++
++ConfigurableContext::ConfigurableContext(const std::string& name_, const std::string& type_name_,
++                                         unsigned int hid, int cfg_stat_)
++  : name(name_),
++    handle_id(hid),
++    type_name(type_name_),
++    cfg_stat(cfg_stat_)
++{
++  log(KTF_INFO, "%s[%s] (hid %d): state: %s\n",
++      name.c_str(), type_name.c_str(), hid, str_state().c_str());
++}
++
++std::string ConfigurableContext::str_state()
++{
++  switch (cfg_stat) {
++  case 0:
++    return std::string("READY");
++  case ENOENT:
++    return std::string("UNCONFIGURED");
++  case ENODEV:
++    return std::string("UNCREATED");
++  default:
++    char tmp[100];
++    sprintf(tmp, "ERROR(%d)", cfg_stat);
++    return std::string(tmp);
++  }
++}
++
++int ConfigurableContext::Configure(void *data, size_t data_sz)
++{
++  struct nl_msg *msg = nlmsg_alloc();
++  int err;
++
++  log(KTF_INFO, "%s, data_sz %lu\n", name.c_str(), data_sz);
++  genlmsg_put(msg, NL_AUTO_PID, NL_AUTO_SEQ, family, 0, NLM_F_REQUEST,
++              KTF_C_REQ, 1);
++  nla_put_u32(msg, KTF_A_TYPE, KTF_CT_CTX_CFG);
++  nla_put_u64(msg, KTF_A_VERSION, KTF_VERSION_LATEST);
++  nla_put_string(msg, KTF_A_STR, name.c_str());
++  nla_put_u32(msg, KTF_A_HID, handle_id);
++  nla_put_string(msg, KTF_A_FILE, type_name.c_str());
++  nla_put(msg, KTF_A_DATA, data_sz, data);
++
++  // Send message over netlink socket
++  nl_send_auto_complete(sock, msg);
++
++  // Free message
++  nlmsg_free(msg);
++
++  // Wait for acknowledgement:
++  // This function also returns error status if the message
++  // was not deemed ok by the kernel, but the error status
++  // does not resemble what the netlink recipient returned.
++  //
++  // This message receives no response beyond the error code.
++  //
++  err = nl_wait_for_ack(sock);
++
++  if (!err && cfg_stat == ENODEV) {
++    // Successfully added a new context, update it's state and
++    // tell kmgr() about it:
++    kmgr().add_context(handle_id, name);
++    cfg_stat = 0;
++  }
++  return err;
++}
++
++void *get_priv(KernelTest *kt, size_t sz)
++{
++  return kt->get_priv(sz);
++}
++
++size_t get_priv_sz(KernelTest *kt)
++{
++  return kt->user_priv_sz;
++}
++
++int set_coverage(std::string module, unsigned int opts, bool enabled)
++{
++  struct nl_msg *msg;
++  int err;
++
++  msg = nlmsg_alloc();
++  genlmsg_put(msg, NL_AUTO_PID, NL_AUTO_SEQ, family, 0, NLM_F_REQUEST,
++              KTF_C_REQ, 1);
++  nla_put_u32(msg, KTF_A_TYPE,
++  	      enabled ? KTF_CT_COV_ENABLE : KTF_CT_COV_DISABLE);
++  nla_put_u32(msg, KTF_A_COVOPT, opts);
++  nla_put_u64(msg, KTF_A_VERSION, KTF_VERSION_LATEST);
++  nla_put_string(msg, KTF_A_MOD, module.c_str());
++
++  // Send message over netlink socket
++  nl_send_auto_complete(sock, msg);
++
++  // Free message
++  nlmsg_free(msg);
++
++  //Wait for acknowledgement:
++  // This function also returns error status if the message
++  // was not deemed ok by the kernel.
++  //
++  err = nl_wait_for_ack(sock);
++  if (err == 0) {
++	// Then wait for the answer and receive it
++	nl_recvmsgs_default(sock);
++  }
++  return err;
++}
++
++  KernelTest::KernelTest(const std::string& sn, const char* tn, unsigned int handle_id)
++  : setname(sn),
++    testname(tn),
++    setnum(0),
++    testnum(0),
++    user_priv(NULL),
++    user_priv_sz(0),
++    user_test(NULL),
++    file(NULL),
++    line(-1)
++{
++
++  name = setname;
++  name.append(".");
++  name.append(testname);
++
++  testset& ts(kmgr().find_add_test(setname, testname));
++  setnum = ts.setnum;
++  ts.tests[testname] = this;
++
++  if (!handle_id)
++    ts.test_names.push_back(testname);
++  else {
++    stringvec& ctxv = kmgr().get_contexts(handle_id);
++    for (stringvec::iterator it = ctxv.begin(); it != ctxv.end(); ++it)
++      ts.test_names.push_back(testname + "_" + *it);
++  }
++  testnum = ts.tests.size();
++
++  wrappermap::iterator hit = ts.wrapper.find(testname);
++  if (hit != ts.wrapper.end()) {
++    log(KTF_DEBUG_V, "Assigning user_test from wrapper for %s.%s\n",
++	setname.c_str(), testname.c_str());
++    user_test = hit->second;
++    /* Clear out wrapper entry as we skip any test sets
++     * with nonempty wrapper lists during test execution:
++     */
++    ts.wrapper.erase(hit);
++  }
++}
++
++
++KernelTest::~KernelTest()
++{
++  if (user_priv)
++    free(user_priv);
++}
++
++void* KernelTest::get_priv(size_t p_sz)
++{
++  if (!user_priv) {
++    user_priv = malloc(p_sz);
++    if (user_priv)
++      user_priv_sz = p_sz;
++  }
++  return user_priv;
++}
++
++static int parse_cb(struct nl_msg *msg, void *arg);
++static int debug_cb(struct nl_msg *msg, void *arg);
++static int error_cb(struct nl_msg *msg, void *arg);
++
++int nl_connect(void)
++{
++  /* Allocate a new netlink socket */
++  sock = nl_socket_alloc();
++  if (sock == NULL){
++    fprintf(stderr, "Failed to allocate a nl socket");
++    exit(1);
++  }
++
++  /* Connect to generic netlink socket on kernel side */
++  int stat = genl_connect(sock);
++  if (stat) {
++    fprintf(stderr, "Failed to open generic netlink connection");
++    exit(1);
++  }
++
++  /* Ask kernel to resolve family name to family id */
++  family = genl_ctrl_resolve(sock, "ktf");
++  if (family <= 0) {
++    fprintf(stderr, "Netlink protocol family for ktf not found - is the ktf module loaded?\n");
++    exit(1);
++  }
++
++  /* Specify the generic callback functions for messages */
++  nl_socket_modify_cb(sock, NL_CB_VALID, NL_CB_CUSTOM, parse_cb, NULL);
++  nl_socket_modify_cb(sock, NL_CB_INVALID, NL_CB_CUSTOM, error_cb, NULL);
++  return 0;
++}
++
++
++void default_test_handler(int result,  const char* file, int line, const char* report)
++{
++  if (result >= 0) {
++    fprintf(stderr, "default_test_handler: Result %d: %s,%d\n",result,file,line);
++  } else {
++    fprintf(stderr, "default_test_handler: Result %d\n",result);
++  }
++}
++
++test_handler handle_test = default_test_handler;
++
++bool setup(test_handler ht)
++{
++  ktf_debug_init();
++  handle_test = ht;
++  return nl_connect() == 0;
++}
++
++
++configurator do_context_configure = NULL;
++
++void set_configurator(configurator c)
++{
++  do_context_configure = c;
++}
++
++/* Query kernel for available tests in index order */
++stringvec& query_testsets()
++{
++  struct nl_msg *msg;
++  int err;
++
++  msg = nlmsg_alloc();
++  genlmsg_put(msg, NL_AUTO_PID, NL_AUTO_SEQ, family, 0, NLM_F_REQUEST,
++	      KTF_C_REQ, 1);
++  nla_put_u32(msg, KTF_A_TYPE, KTF_CT_QUERY);
++  nla_put_u64(msg, KTF_A_VERSION, KTF_VERSION_LATEST);
++
++  // Send message over netlink socket
++  nl_send_auto_complete(sock, msg);
++
++  // Free message
++  nlmsg_free(msg);
++
++  // Wait for acknowledgement:
++  // This function also returns error status if the message
++  // was not deemed ok by the kernel.
++  //
++  err = nl_wait_for_ack(sock);
++  if (err < 0) {
++    errno = -err;
++    return kmgr().get_set_names();
++  }
++
++  // Then wait for the answer and receive it
++  nl_recvmsgs_default(sock);
++  return kmgr().get_set_names();
++}
++
++stringvec get_test_names()
++{
++  return kmgr().get_test_names();
++}
++
++std::string get_current_setname()
++{
++  return kmgr().get_current_setname();
++}
++
++KernelTest* find_test(const std::string&setname, const std::string& testname, std::string* ctx)
++{
++  return kmgr().find_test(setname, testname, ctx);
++}
++
++void add_wrapper(const std::string setname, const std::string testname, test_cb* tcb)
++{
++  kmgr().add_wrapper(setname, testname, tcb);
++}
++
++void run_test(KernelTest* kt, std::string& ctx)
++{
++  if (kt->user_test)
++    kt->user_test->fun(kt);
++  else
++    run(kt, ctx);
++}
++
++/* Run the kernel test */
++void run(KernelTest* kt, std::string context)
++{
++  struct nl_msg *msg;
++
++  log(KTF_DEBUG_V, "START kernel test (%ld,%ld): %s\n", kt->setnum,
++		kt->testnum, kt->name.c_str());
++
++  msg = nlmsg_alloc();
++  genlmsg_put(msg, NL_AUTO_PID, NL_AUTO_SEQ, family, 0, NLM_F_REQUEST,
++	      KTF_C_REQ, 1);
++  nla_put_u32(msg, KTF_A_TYPE, KTF_CT_RUN);
++  nla_put_u64(msg, KTF_A_VERSION, KTF_VERSION_LATEST);
++  nla_put_string(msg, KTF_A_SNAM, kt->setname.c_str());
++  nla_put_string(msg, KTF_A_TNAM, kt->testname.c_str());
++
++  if (!context.empty())
++    nla_put_string(msg, KTF_A_STR, context.c_str());
++
++  /* Send any test specific out-of-band data */
++  if (kt->user_priv)
++    nla_put(msg, KTF_A_DATA, kt->user_priv_sz, kt->user_priv);
++
++  // Send message over netlink socket
++  nl_send_auto_complete(sock, msg);
++
++  // Free message
++  nlmsg_free(msg);
++
++  // Wait for acknowledgement - otherwise
++  // nl_recvmsg_default will sometimes take the ack for the next message..
++  int err = nl_wait_for_ack(sock);
++  if (err < 0) {
++    errno = -err;
++    return;
++  }
++
++  // Wait for the answer and receive it
++  nl_recvmsgs_default(sock);
++
++  log(KTF_DEBUG_V, "END   ktf::run_kernel_test %s\n", kt->name.c_str());
++}
++
++
++void configure_context(const std::string context, const std::string type_name, void *data, size_t data_sz)
++{
++  context_vector ct = kmgr().find_contexts(context, type_name);
++  ASSERT_GE(ct.size(), 1UL) << " - no context found named " << context;
++  ASSERT_EQ(ct.size(), 1UL) << " - More than one context named " << context
++			  << " - use KTF_CONTEXT_CFG_FOR_TEST to uniquely identify context.";
++  ASSERT_EQ(type_name, ct[0]->Type());
++  ASSERT_EQ(ct[0]->Configure(data, data_sz), 0);
++}
++
++void configure_context_for_test(const std::string& setname, const std::string& testname,
++				const std::string& type_name, void *data, size_t data_sz)
++{
++  std::string context;
++  KernelTest *kt = kmgr().find_test(setname, testname, &context);
++  context_vector ct = kmgr().find_contexts(context, type_name);
++  ASSERT_TRUE(kt) << " Could not find test " << setname << "." << testname;
++  int handle_id = kt->handle_id;
++  ASSERT_NE(handle_id, 0) << " test " << setname << "." << testname << " does not have a context";
++
++  for (context_vector::iterator it = ct.begin(); it != ct.end(); ++it)
++    if ((*it)->handle_id == handle_id)
++    {
++      ASSERT_EQ(type_name, (*it)->Type());
++      ASSERT_EQ((*it)->Configure(data, data_sz), 0);
++      return;
++    }
++  ASSERT_TRUE(false) << " unconfigurable context found for test " << setname << "." << testname << "?";
++}
++
++
++static nl_cb_action parse_one_set(std::string& setname,
++				  std::string& testname, struct nlattr* attr)
++{
++  int rem = 0;
++  struct nlattr *nla;
++  const char* msg;
++  unsigned int handle_id = 0;
++
++  nla_for_each_nested(nla, attr, rem) {
++    switch (nla_type(nla)) {
++    case KTF_A_HID:
++      handle_id = nla_get_u32(nla);
++      break;
++    case KTF_A_STR:
++      msg = nla_get_string(nla);
++      kmgr().add_test(setname, msg, handle_id);
++      handle_id = 0;
++      break;
++    default:
++      fprintf(stderr,"parse_result: Unexpected attribute type %d\n", nla_type(nla));
++      return NL_SKIP;
++    }
++  }
++  return NL_OK;
++}
++
++
++
++static int parse_query(struct nl_msg *msg, struct nlattr** attrs)
++{
++  int alloc = 0, rem = 0, rem2 = 0, cfg_stat;
++  nl_cb_action stat;
++  std::string setname,testname,ctx;
++
++  /* Version 0.1.0.0 did not report version back from the kernel */
++  uint64_t kernel_version = (KTF_VERSION_SET(MAJOR, 0ULL) | KTF_VERSION_SET(MINOR, 1ULL));
++
++  if (attrs[KTF_A_VERSION])
++    kernel_version = nla_get_u64(attrs[KTF_A_VERSION]);
++
++  /* We only got here if we were compatible enough, log that we had differences */
++  if (kernel_version != KTF_VERSION_LATEST)
++  {
++    const char* note = "Note";
++    bool is_compatible =
++      KTF_VERSION(MAJOR, KTF_VERSION_LATEST) == KTF_VERSION(MAJOR, kernel_version) &&
++      KTF_VERSION(MINOR, KTF_VERSION_LATEST) == KTF_VERSION(MINOR, kernel_version);
++    if (!is_compatible)
++      note = "Error";
++
++    fprintf(stderr,
++	    "%s: KTF version difference - user lib %llu.%llu.%llu.%llu, kernel has %llu.%llu.%llu.%llu\n",
++	    note,
++	    KTF_VERSION(MAJOR, KTF_VERSION_LATEST),
++	    KTF_VERSION(MINOR, KTF_VERSION_LATEST),
++	    KTF_VERSION(MICRO, KTF_VERSION_LATEST),
++	    KTF_VERSION(BUILD, KTF_VERSION_LATEST),
++	    KTF_VERSION(MAJOR, kernel_version),
++	    KTF_VERSION(MINOR, kernel_version),
++	    KTF_VERSION(MICRO, kernel_version),
++	    KTF_VERSION(BUILD, kernel_version));
++    if (!is_compatible)
++      return NL_SKIP;
++  }
++
++  if (attrs[KTF_A_HLIST]) {
++    struct nlattr *nla, *nla2;
++    stringvec contexts;
++    unsigned int handle_id = 0;
++    const char* type_name = NULL;
++
++    /* Parse info on handle IDs and associated contexts and/or
++     * types that allows dynamical creation of new contexts
++     * (defined here via KTF_A_FILE):
++     */
++    nla_for_each_nested(nla, attrs[KTF_A_HLIST], rem) {
++      switch (nla_type(nla)) {
++      case KTF_A_HID:
++	handle_id = nla_get_u32(nla);
++	break;
++      case KTF_A_LIST:
++	nla_for_each_nested(nla2, nla, rem2) {
++	  switch (nla_type(nla2)) {
++	  case KTF_A_FILE:
++	    type_name = nla_get_string(nla2);
++	    kmgr().add_ctype(handle_id, type_name);
++	    break;
++	  case KTF_A_STR:
++	    ctx = nla_get_string(nla2);
++	    contexts.push_back(ctx);
++	    break;
++	  case KTF_A_MOD:
++	    type_name = nla_get_string(nla2);
++	    break;
++	  case KTF_A_STAT:
++	    cfg_stat = nla_get_u32(nla2);
++	    kmgr().add_configurable_context(ctx, type_name, handle_id, cfg_stat);
++	    break;
++	  }
 +	}
++	/* Add this set of contexts for the handle_id */
++	kmgr().add_cset(handle_id, contexts);
++	handle_id = 0;
++	contexts.clear();
++	break;
++      default:
++	fprintf(stderr,"parse_query[HLIST]: Unexpected attribute type %d\n", nla_type(nla));
++	return NL_SKIP;
++      }
++    }
++  }
++
++  // Now we know enough about contexts and type_ids to actually configure
++  // any contexts that needs to be configured, and this must be
++  // done before the list of tests gets spanned out because addition
++  // of new contexts can lead to more tests being "generated":
++  //
++  if (do_context_configure)
++    do_context_configure();
++
++  if (attrs[KTF_A_NUM]) {
++    alloc = nla_get_u32(attrs[KTF_A_NUM]);
++    log(KTF_DEBUG, "Kernel offers %d test sets:\n", alloc);
++  } else {
++    fprintf(stderr,"No test set count in kernel response??\n");
++    return -1;
++  }
++
++  if (attrs[KTF_A_LIST]) {
++    struct nlattr *nla;
++
++    /* Parse info on test sets */
++    nla_for_each_nested(nla, attrs[KTF_A_LIST], rem) {
++      switch (nla_type(nla)) {
++      case KTF_A_STR:
++	setname = nla_get_string(nla);
++	break;
++      case KTF_A_TEST:
++	stat = parse_one_set(setname, testname, nla);
++	if (stat != NL_OK)
++	  return stat;
++	break;
++      default:
++	fprintf(stderr,"parse_query[LIST]: Unexpected attribute type %d\n", nla_type(nla));
++	return NL_SKIP;
++      }
++      kmgr().find_add_set(setname); /* Just to make sure empty sets are also added */
++    }
++  }
++
++  return NL_OK;
 +}
 +
-+struct param_test_type {
-+	struct ktf_context_type kt;
-+	/* space for cfg data (such as constraints) for the context type */
-+	long myvalue;
-+};
 +
-+static struct ktf_context *type3_alloc(struct ktf_context_type *ct)
++static enum nl_cb_action parse_result(struct nl_msg *msg, struct nlattr** attrs)
 +{
-+	struct param_test_type *pct = container_of(ct, struct param_test_type, kt);
-+	struct param_test_ctx *ctx = kzalloc(sizeof(*ctx), GFP_KERNEL);
++  int assert_cnt = 0, fail_cnt = 0;
++  int rem = 0, stat;
++  const char *file = "no_file",*report = "no_report";
 +
-+	ctx->p.myvalue = pct->myvalue;
-+	return &ctx->k;
-+}
-+
-+static void type3_cleanup(struct ktf_context *ctx)
-+{
-+	struct param_test_ctx *px = container_of(ctx, struct param_test_ctx, k);
-+
-+	kfree(px);
-+}
-+
-+TEST(selftest, dupltype)
-+{
-+	/* Verify that we cannot add the same context type twice */
-+
-+	static struct param_test_type dupltype = {
-+		.myvalue = 0,
-+		.kt.alloc = type3_alloc,
-+		.kt.config_cb = param_ctx_cb,
-+		.kt.cleanup = type3_cleanup,
-+		.kt.name = "context_type_3"
-+	};
-+
-+	ASSERT_INT_EQ(-EEXIST, ktf_handle_add_ctx_type(&ct_handle, &dupltype.kt));
-+}
-+
-+void add_context_tests(void)
-+{
-+	int ret = KTF_CONTEXT_ADD_TO_CFG(ct_handle, &param_ctx[0].k, "context1",
-+					 param_ctx_cb, "context_type_1");
-+
-+	if (ret)
-+		return;
-+
-+	ret = KTF_CONTEXT_ADD_TO_CFG(ct_handle, &param_ctx[1].k, "context2",
-+				     param_ctx_cb, "context_type_2");
-+	if (ret)
-+		return;
-+
-+	{
-+		static struct param_test_type ctx_type3 = {
-+			.myvalue = MYVALUE,
-+			.kt.alloc = type3_alloc,
-+			.kt.config_cb = param_ctx_cb,
-+			.kt.cleanup = type3_cleanup,
-+			.kt.name = "context_type_3"
-+		};
-+		ret = ktf_handle_add_ctx_type(&ct_handle, &ctx_type3.kt);
++  if (attrs[KTF_A_STAT]) {
++    stat = nla_get_u32(attrs[KTF_A_STAT]);
++    log(KTF_DEBUG, "parsed test status %d\n", stat);
++    if (stat) {
++      fprintf(stderr, "Failed to execute test in kernel - status %d\n", stat);
++    }
++  }
++  if (attrs[KTF_A_LIST]) {
++    /* Parse list of test results */
++    struct nlattr *nla;
++    int result = -1, line = 0;
++    nla_for_each_nested(nla, attrs[KTF_A_LIST], rem) {
++      switch (nla_type(nla)) {
++      case KTF_A_STAT:
++	/* Flush previous test, if any */
++	handle_test(result,file,line,report);
++	result = nla_get_u32(nla);
++	/* Our own count and report since check does such a lousy
++	 * job in counting individual checks */
++	if (result)
++	  assert_cnt += result;
++	else {
++	  fail_cnt++;
++	  assert_cnt++;
 +	}
++	break;
++      case KTF_A_FILE:
++	file = nla_get_string(nla);
++	if (!file)
++	  file = "no_file";
++	break;
++      case KTF_A_NUM:
++	line = nla_get_u32(nla);
++	break;
++      case KTF_A_STR:
++	report = nla_get_string(nla);
++	if (!report)
++	  report = "no_report";
++	break;
++      default:
++	fprintf(stderr,"parse_result: Unexpected attribute type %d\n", nla_type(nla));
++	return NL_SKIP;
++      }
++    }
++    /* Handle last test */
++    handle_test(result,file,line,report);
++  }
 +
-+	ADD_TEST_TO(ct_handle, param);
-+	ADD_TEST(dupltype);
++  return NL_OK;
 +}
 +
-+void context_tests_cleanup(void)
++static enum nl_cb_action parse_cov_endis(struct nl_msg *msg, struct nlattr** attrs)
 +{
-+	KTF_HANDLE_CLEANUP(ct_handle);
-+}
-diff --git a/tools/testing/selftests/ktf/selftest/context.h b/tools/testing/selftests/ktf/selftest/context.h
-new file mode 100644
-index 0000000..69b970a
---- /dev/null
-+++ b/tools/testing/selftests/ktf/selftest/context.h
-@@ -0,0 +1,15 @@
-+/* Copyright (c) 2019, Oracle and/or its affiliates. All rights reserved.
-+ *
-+ * SPDX-License-Identifier: GPL-2.0
-+ *
-+ * context.h: Parameterized context test case, kernel side.
-+ */
-+#ifndef _CONTEXT_H
-+#define _CONTEXT_H
++  enum ktf_cmd_type type = (ktf_cmd_type)nla_get_u32(attrs[KTF_A_TYPE]);
++  const char *cmd = type == KTF_CT_COV_ENABLE ? "enable" : "disable";
++  int retval = nla_get_u32(attrs[KTF_A_STAT]);
 +
-+#include "context_self.h"
-+
-+void add_context_tests(void);
-+void context_tests_cleanup(void);
-+
-+#endif
-diff --git a/tools/testing/selftests/ktf/selftest/context_self.h b/tools/testing/selftests/ktf/selftest/context_self.h
-new file mode 100644
-index 0000000..3939559
---- /dev/null
-+++ b/tools/testing/selftests/ktf/selftest/context_self.h
-@@ -0,0 +1,34 @@
-+/*
-+ * Copyright (c) 2019, Oracle and/or its affiliates. All rights reserved.
-+ *
-+ * SPDX-License-Identifier: GPL-2.0
-+ *
-+ * context_self.h: The data structure passed between user level and kernel for the
-+ *  hybrid self tests. Included both from user space and kernel space and
-+ *  needs to be a C struct.
-+ */
-+
-+#ifndef KTF_CONTEXT_SELF_H
-+#define KTF_CONTEXT_SELF_H
-+
-+#define CONTEXT_SELF_MAX_TEXT 30
-+
-+/* A simple example parameter block:
-+ * For verification purposes it can be useful to have a field
-+ * like 'magic' below, which serves for the purpose of
-+ * a sanity check that the parameters sent by the user program
-+ * actually corresponds to what the kernel expects:
-+ */
-+struct test_parameter_block {
-+	long magic;
-+	long myvalue;
-+	char s[CONTEXT_SELF_MAX_TEXT+1];
-+};
-+
-+/* Constants for the selftest.param_context test: */
-+#define CONTEXT_MSG "from user to kernel"
-+#define CONTEXT_MAGIC1 0xfaaa1234UL
-+#define CONTEXT_MAGIC2 0xaabbccUL
-+#define CONTEXT_MAGIC3 0x123456UL
-+
-+#endif
-diff --git a/tools/testing/selftests/ktf/selftest/hybrid.c b/tools/testing/selftests/ktf/selftest/hybrid.c
-new file mode 100644
-index 0000000..999a7d8
---- /dev/null
-+++ b/tools/testing/selftests/ktf/selftest/hybrid.c
-@@ -0,0 +1,35 @@
-+/*
-+ * Copyright (c) 2011, 2018, Oracle and/or its affiliates. All rights reserved.
-+ *
-+ * SPDX-License-Identifier: GPL-2.0
-+ *
-+ * hybrid.c: Hybrid (combined user level and kernel) self tests,
-+ *  kernel side:
-+ */
-+
-+#include "ktf.h"
-+#include "hybrid.h"
-+
-+/* First a simple message passing test that just verifies that we receive
-+ * "out-of-band" data from user space:
-+ */
-+
-+TEST(selftest, msg)
-+{
-+	/* Accept data of type 'struct hybrid_self_params' (defined in hybrid_self.h)
-+	 * from user mode. This functionality is to allow user mode to test something,
-+	 * for instance that a certain parameter is handled in a specific way in the kernel.
-+	 * The user then has the option to provide data to the kernel out-of-band to
-+	 * tell the kernel side what to expect.
-+	 * In this test, just verify that data has been transmitted correctly:
-+	 */
-+	KTF_USERDATA(self, hybrid_self_params, data);
-+
-+	EXPECT_STREQ(data->text_val, HYBRID_MSG);
-+	EXPECT_LONG_EQ(data->val, HYBRID_MSG_VAL);
++  if (retval)
++    fprintf(stderr, "Coverage %s operation failed with status %d\n", cmd, retval);
++  return NL_OK;
 +}
 +
-+void add_hybrid_tests(void)
++static int parse_cb(struct nl_msg *msg, void *arg)
 +{
-+	ADD_TEST(msg);
++  struct nlmsghdr *nlh = nlmsg_hdr(msg);
++  int maxtype = KTF_A_MAX+10;
++  struct nlattr *attrs[maxtype];
++  enum ktf_cmd_type type;
++
++  //  memset(attrs, 0, sizeof(attrs));
++
++  /* Validate message and parse attributes */
++  int err = genlmsg_parse(nlh, 0, attrs, KTF_A_MAX, ktf_get_gnl_policy());
++  if (err < 0) return err;
++
++  if (!attrs[KTF_A_TYPE]) {
++    fprintf(stderr, "Received kernel response without a type\n");
++    return NL_SKIP;
++  }
++
++  type = (ktf_cmd_type)nla_get_u32(attrs[KTF_A_TYPE]);
++  switch (type) {
++  case KTF_CT_QUERY:
++    return parse_query(msg, attrs);
++  case KTF_CT_RUN:
++    return parse_result(msg, attrs);
++  case KTF_CT_COV_ENABLE:
++  case KTF_CT_COV_DISABLE:
++    return parse_cov_endis(msg, attrs);
++  default:
++    debug_cb(msg, attrs);
++  }
++  return NL_SKIP;
 +}
-diff --git a/tools/testing/selftests/ktf/selftest/hybrid.h b/tools/testing/selftests/ktf/selftest/hybrid.h
-new file mode 100644
-index 0000000..0ba6f72
---- /dev/null
-+++ b/tools/testing/selftests/ktf/selftest/hybrid.h
-@@ -0,0 +1,24 @@
-+/*
-+ * Copyright (c) 2011, 2018, Oracle and/or its affiliates. All rights reserved.
-+ *
-+ * SPDX-License-Identifier: GPL-2.0
-+ *
-+ * hybrid.h: Hybrid (combined user level and kernel) self tests,
-+ *  kernel side, internal interface:
-+ */
-+
-+#ifndef KTF_HYBRID_H
-+#define KTF_HYBRID_H
-+
-+#include "hybrid_self.h"
-+
-+/* The kernel part of hybrid tests must be added to KTFs set of tests like any other tests,
-+ * in fact from KTF's kernel perspective it is like any other test, except that it likely will
-+ * fail if called without the context provided from the user space side.
-+ *
-+ * This function adds the tests declared in hybrid.c
-+ */
-+void add_hybrid_tests(void);
 +
 +
-+#endif
-diff --git a/tools/testing/selftests/ktf/selftest/hybrid_self.h b/tools/testing/selftests/ktf/selftest/hybrid_self.h
-new file mode 100644
-index 0000000..21c6c92
---- /dev/null
-+++ b/tools/testing/selftests/ktf/selftest/hybrid_self.h
-@@ -0,0 +1,27 @@
-+/*
-+ * Copyright (c) 2011, 2018, Oracle and/or its affiliates. All rights reserved.
-+ *
-+ * SPDX-License-Identifier: GPL-2.0
-+ *
-+ * hybrid_self.h: The data structure passed between user level and kernel for the
-+ *  hybrid self tests. Included both from user space and kernel space and
-+ *  needs to be a C struct.
-+ */
-+
-+#ifndef KTF_HYBRID_SELF_H
-+#define KTF_HYBRID_SELF_H
-+
-+#define HYBRID_SELF_MAX_TEXT 127
-+
-+struct hybrid_self_params
++static int error_cb(struct nl_msg *msg, void *arg)
 +{
-+	char text_val[HYBRID_SELF_MAX_TEXT+1];
-+	unsigned long val;
-+};
++  struct nlmsghdr *nlh = nlmsg_hdr(msg);
++  fprintf(stderr, "Received invalid netlink message - type %d\n", nlh->nlmsg_type);
++  return NL_OK;
++}
 +
 +
-+/* Constants for the selftest.msg test: */
-+#define HYBRID_MSG "a little test string"
-+#define HYBRID_MSG_VAL  0xffUL
++static int debug_cb(struct nl_msg *msg, void *arg)
++{
++  struct nlmsghdr *nlh = nlmsg_hdr(msg);
++  fprintf(stderr, "[Received netlink message of type %d]\n", nlh->nlmsg_type);
++    nl_msg_dump(msg, stderr);
++    return NL_OK;
++}
 +
-+#endif
-diff --git a/tools/testing/selftests/ktf/selftest/ktf_syms.txt b/tools/testing/selftests/ktf/selftest/ktf_syms.txt
++} // end namespace ktf
+diff --git a/tools/testing/selftests/ktf/lib/ktf_int.h b/tools/testing/selftests/ktf/lib/ktf_int.h
 new file mode 100644
-index 0000000..721ae98
+index 0000000..1a06533
 --- /dev/null
-+++ b/tools/testing/selftests/ktf/selftest/ktf_syms.txt
-@@ -0,0 +1,17 @@
-+#module ktf
-+#header ktf_map.h
-+ktf_map_init
-+ktf_map_elem_init
-+ktf_map_insert
-+ktf_map_find
-+ktf_map_find_first
-+ktf_map_remove
-+ktf_map_elem_get
-+ktf_map_elem_put
-+ktf_map_find_next
-+ktf_map_delete_all
-+#header ktf_cov.h
-+ktf_cov_entry_find
-+ktf_cov_entry_put
-+ktf_cov_enable
-+ktf_cov_disable
-diff --git a/tools/testing/selftests/ktf/selftest/self.c b/tools/testing/selftests/ktf/selftest/self.c
-new file mode 100644
-index 0000000..8b7a582
---- /dev/null
-+++ b/tools/testing/selftests/ktf/selftest/self.c
-@@ -0,0 +1,661 @@
++++ b/tools/testing/selftests/ktf/lib/ktf_int.h
+@@ -0,0 +1,84 @@
 +/*
 + * Copyright (c) 2011, 2017, Oracle and/or its affiliates. All rights reserved.
++ *    Author: Knut Omang <knut.omang@oracle.com>
 + *
 + * SPDX-License-Identifier: GPL-2.0
 + *
-+ * self.c: Some simple self tests for KTF
++ * ktf_int.h: User mode side of extension to the gtest unit test framework:
++ *  1) Kernel test support via netlink
++ *  2) Standard command line parameters
++ *
++ * This file exposes some internals - for users of hybrid tests including
++ * ktf.h should be sufficient:
 + */
-+#include <linux/module.h>
-+#include <linux/mm_types.h>
-+#include <linux/slab.h>
-+#include <linux/slab_def.h>
 +
++#ifndef KTF_INT_H
++#define KTF_INT_H
++#include <string>
++#include <vector>
 +#include "ktf.h"
-+#include "ktf_map.h"
-+#include "ktf_cov.h"
-+#include "ktf_syms.h"
 +
-+#include "hybrid.h"
-+#include "context.h"
++typedef std::vector<std::string> stringvec;
 +
-+MODULE_LICENSE("GPL");
-+
-+struct map_test_ctx {
-+	struct ktf_context k;
-+};
-+
-+static struct map_test_ctx s_mctx[4];
-+
-+/* Declare a simple handle with no contexts for simple (unparameterized) tests: */
-+KTF_INIT();
-+
-+/* For tests that defines multiple test cases
-+ * (e.g. if the test scope requires application of each test on several devices or
-+ *  other abstract contexts, definable by the test module)
-+ */
-+static KTF_HANDLE_INIT(dual_handle);
-+static KTF_HANDLE_INIT(single_handle);
-+static KTF_HANDLE_INIT(no_handle);
-+static KTF_HANDLE_INIT_VERSION(wrongversion_handle, 0, false);
-+
-+static struct map_test_ctx *to_mctx(struct ktf_context *ctx)
++namespace ktf
 +{
-+	return container_of(ctx, struct map_test_ctx, k);
-+}
 +
-+struct myelem {
-+	struct ktf_map_elem foo;
-+	int freed;
-+	int order;
-+};
-+
-+/* --- Simple insertion and removal test --- */
-+
-+TEST(selftest, simplemap)
-+{
-+	int i;
-+	const int nelems = 3;
-+	struct map_test_ctx *mctx = to_mctx(ctx);
-+	struct ktf_map tm;
-+	struct myelem e[nelems];
-+
-+	if (mctx)
-+		tlog(T_DEBUG, "ctx %s", mctx->k.elem.key);
-+	else
-+		tlog(T_DEBUG, "ctx <none>");
-+
-+	ktf_map_init(&tm, NULL, NULL);
-+	EXPECT_INT_EQ(0, ktf_map_elem_init(&e[0].foo, "foo"));
-+	EXPECT_INT_EQ(0, ktf_map_elem_init(&e[1].foo, "bar"));
-+	EXPECT_INT_EQ(0, ktf_map_elem_init(&e[2].foo, "zax"));
-+
-+	for (i = 0; i < nelems; i++) {
-+		EXPECT_LONG_EQ(i, ktf_map_size(&tm));
-+		EXPECT_INT_EQ(0, ktf_map_insert(&tm, &e[i].foo));
-+	}
-+	EXPECT_LONG_EQ(i, ktf_map_size(&tm));
-+
-+	/* Should be sorted alphabetically so we get 'bar' back: */
-+	EXPECT_ADDR_EQ(&e[1].foo, ktf_map_find_first(&tm));
-+
-+	for (i = 0; i < nelems; i++) {
-+		EXPECT_LONG_EQ(nelems - i, ktf_map_size(&tm));
-+		EXPECT_ADDR_EQ(&e[i].foo, ktf_map_remove(&tm, e[i].foo.key));
-+	}
-+	EXPECT_LONG_EQ(0, ktf_map_size(&tm));
-+}
-+
-+/* --- Reference counting test --- */
-+
-+/* should be called when refcount is 0. */
-+static void myelem_free(struct ktf_map_elem *elem)
-+{
-+	struct myelem *myelem = container_of(elem, struct myelem, foo);
-+
-+	myelem->freed = 1;
-+}
-+
-+TEST(selftest, mapref)
-+{
-+	int i;
-+	const int nelems = 3;
-+	struct myelem e[nelems], *ep;
-+	struct ktf_map tm;
-+	struct ktf_map_elem *elem;
-+
-+	ktf_map_init(&tm, NULL, myelem_free);
-+	/* Init map elems with "foo" "bar" "zax" */
-+	EXPECT_INT_EQ(0, ktf_map_elem_init(&e[0].foo, "foo"));
-+	EXPECT_INT_EQ(0, ktf_map_elem_init(&e[1].foo, "bar"));
-+	EXPECT_INT_EQ(0, ktf_map_elem_init(&e[2].foo, "zax"));
-+
-+	/* Insert elems and drop our refcounts (map still holds ref) */
-+	for (i = 0; i < nelems; i++) {
-+		EXPECT_INT_EQ(0, ktf_map_insert(&tm, &e[i].foo));
-+		ktf_map_elem_put(&e[i].foo);
-+	}
-+
-+	/* This macro takes (and drops) refcount for each elem */
-+	ktf_map_for_each_entry(ep, &tm, foo)
-+		ep->freed = 0;
-+
-+	for (i = 0; i < nelems; i++) {
-+		elem = ktf_map_remove(&tm, e[i].foo.key);
-+		EXPECT_INT_EQ(0, e[i].freed);
-+		/* free our ref, now free function should be called. */
-+		ktf_map_elem_put(elem);
-+		EXPECT_INT_EQ(1, e[i].freed);
-+	}
-+
-+	ktf_map_delete_all(&tm);
-+	EXPECT_LONG_EQ(0, ktf_map_size(&tm));
-+}
-+
-+/* --- Test that the expect macros work as if-then-else single statement */
-+TEST(selftest, statements)
-+{
-+	char c;
-+	char *cp = &c;
-+	/* These are mostly intended as compilation syntax tests */
-+	if (_i)
-+		EXPECT_TRUE(true);
-+	else
-+		EXPECT_FALSE(false);
-+	if (_i)
-+		ASSERT_TRUE(true);
-+	else
-+		ASSERT_FALSE(false);
-+	if (_i)
-+		ASSERT_OK_ADDR(cp);
-+	else
-+		ASSERT_OK_ADDR_GOTO(cp, out);
-+	if (_i)
-+		ASSERT_OK_ADDR_BREAK(cp);
-+out:
-+	EXPECT_TRUE(true);
-+}
-+
-+/* --- Compare function test --- */
-+
-+/* key comparison function */
-+static int myelem_cmp(const char *key1, const char *key2)
-+{
-+	int i1 = *((int *)key1);
-+	int i2 = *((int *)key2);
-+
-+	if (i1 < i2)
-+		return -1;
-+	else if (i1 > i2)
-+		return 1;
-+	return 0;
-+}
-+
-+TEST(selftest, mapcmpfunc)
-+{
-+	int i;
-+	const int nelems = 3;
-+	struct myelem e[nelems], *ep;
-+	struct ktf_map tm;
-+
-+	ktf_map_init(&tm, myelem_cmp, NULL);
-+	/* Init map elems with keys "foo" "bar" "zax" */
-+	EXPECT_INT_EQ(0, ktf_map_elem_init(&e[0].foo, "foo"));
-+	EXPECT_INT_EQ(0, ktf_map_elem_init(&e[1].foo, "bar"));
-+	EXPECT_INT_EQ(0, ktf_map_elem_init(&e[2].foo, "zax"));
-+
-+	/* Insert elems with order values 3, 2, 1. Ensure we see order
-+	 * 1, 2, 3 on retrieval.
-+	 */
-+	for (i = 0; i < nelems; i++) {
-+		e[i].order = nelems - i;
-+		EXPECT_INT_EQ(0, ktf_map_elem_init(&e[i].foo,
-+						   (char *)&e[i].order));
-+		EXPECT_INT_EQ(0, ktf_map_insert(&tm, &e[i].foo));
-+	}
-+	i = 1;
-+	/* Ensure ordering via compare function is respected */
-+	ktf_map_for_each_entry(ep, &tm, foo)
-+		EXPECT_INT_EQ(ep->order, i++);
-+
-+	ktf_map_delete_all(&tm);
-+	EXPECT_LONG_EQ(0, ktf_map_size(&tm));
-+}
-+
-+/* --- Verify that key name is truncated at KTF_MAX_NAME length --- */
-+
-+TEST(selftest, map_keyoverflow)
-+{
-+	struct myelem e;
-+	struct ktf_map tm;
-+	char jumbokey[KTF_MAX_NAME + 2];
-+	char jumbokey_truncated[KTF_MAX_NAME + 1];
-+
-+	ktf_map_init(&tm, NULL, NULL);
-+	memset(jumbokey, 'x', KTF_MAX_NAME + 1);
-+	memset(jumbokey_truncated, 'x', KTF_MAX_NAME);
-+	jumbokey_truncated[KTF_MAX_NAME] = '\0';
-+	EXPECT_INT_EQ(0, ktf_map_elem_init(&e.foo, jumbokey));
-+	EXPECT_TRUE(strcmp(e.foo.key, jumbokey_truncated) == 0);
-+}
-+
-+struct mykey {
-+	unsigned long address;
-+	unsigned long size;
-+};
-+
-+/* Comparison here is to check if k1's address falls in range
-+ * [k2->address, k2->address + k2->size].  Similar compare used in
-+ * ktf_cov to figure out if a function address lies within the function
-+ * code.
-+ */
-+static int custom_compare(const char *key1, const char *key2)
-+{
-+	struct mykey *k1 = (struct mykey *)key1;
-+	struct mykey *k2 = (struct mykey *)key2;
-+
-+	if (k1->address < k2->address)
-+		return -1;
-+	if (k1->address >= (k2->address + k2->size))
-+		return 1;
-+	return 0;
-+}
-+
-+/* --- Verify that opaque keys with custom compare function work --- */
-+
-+TEST(selftest, map_customkey)
-+{
-+	const int nelems = 3;
-+	int baseaddr = 1024;
-+	struct ktf_map cm;
-+	struct mykey keys[nelems], search;
-+	struct myelem elems[nelems];
-+	int i, j;
-+
-+	ktf_map_init(&cm, custom_compare, NULL);
-+
-+	/* Ensure we can add entries and then retrieve them via search key. */
-+	for (i = 0; i < nelems; i++) {
-+		baseaddr += (i << 2);
-+		keys[i].address = baseaddr;
-+		keys[i].size = (i + 1) << 2;
-+		ASSERT_INT_EQ_GOTO(ktf_map_elem_init(&elems[i].foo,
-+						     (char *)&keys[i]),
-+				   0, done);
-+		ASSERT_INT_EQ_GOTO(ktf_map_insert(&cm, &elems[i].foo), 0, done);
-+	}
-+
-+	baseaddr = 1024;
-+
-+	/* Ensure all search addresses within range of [base address, size]
-+	 * find appropriate entries.
-+	 */
-+	for (i = 0; i < nelems; i++) {
-+		baseaddr += (i << 2);
-+		for (j = 0; j < (i + 1) << 2; j++) {
-+			search.address = baseaddr + j;
-+			search.size = 0;
-+			ASSERT_ADDR_EQ_GOTO(ktf_map_find_entry(&cm,
-+							       (char *)&search,
-+							       struct myelem,
-+							       foo),
-+					    &elems[i], done);
-+		}
-+	}
-+
-+done:
-+	ktf_map_delete_all(&cm);
-+}
-+
-+TEST(selftest, dummy)
-+{
-+	/* The default handle does not have any contexts in this test set */
-+	ASSERT_FALSE(ctx);
-+}
-+
-+TEST(selftest, wrongversion)
-+{
-+	tlog(T_INFO, "This test should never have run - wrong version\n!!!");
-+	EXPECT_TRUE(false);
-+}
-+
-+static void add_map_tests(void)
-+{
-+	ADD_TEST(dummy);
-+	ADD_LOOP_TEST(statements, 0, 2);
-+	ADD_TEST_TO(dual_handle, simplemap);
-+	ADD_TEST_TO(dual_handle, mapref);
-+	ADD_TEST_TO(dual_handle, mapcmpfunc);
-+	ADD_TEST(map_keyoverflow);
-+	ADD_TEST(map_customkey);
-+
-+	terr("-- version check test: --");
-+	/* This should fail */
-+	ADD_TEST_TO(wrongversion_handle, wrongversion);
-+}
-+
-+static int probecount;
-+static int proberet;
-+
-+KTF_ENTRY_PROBE(printk, printkhandler)
-+{
-+	probecount++;
-+
-+	KTF_ENTRY_PROBE_RETURN(0);
-+}
-+
-+static int entryarg0, entryarg1;
-+
-+KTF_ENTRY_PROBE(probeargtest, probeargtesthandler)
-+{
-+	entryarg0 = (int)KTF_ENTRY_PROBE_ARG0;
-+	entryarg1 = (int)KTF_ENTRY_PROBE_ARG1;
-+	KTF_ENTRY_PROBE_RETURN(0);
-+}
-+
-+noinline void probeargtest(int arg0, int arg1)
-+{
-+	tlog(T_INFO, "got args %d, %d\n", arg0, arg1);
-+}
-+
-+TEST(selftest, probeentry)
-+{
-+	probecount = 0;
-+	ASSERT_INT_EQ(KTF_REGISTER_ENTRY_PROBE(printk, printkhandler), 0);
-+	/* Need T_WARN for unconditional printk() */
-+	twarn("Testing kprobe entry...");
-+	ASSERT_INT_GT_GOTO(probecount, 0, done);
-+	ASSERT_INT_EQ_GOTO(KTF_REGISTER_ENTRY_PROBE(probeargtest,
-+						    probeargtesthandler),
-+			   0, done);
-+	probeargtest(1, 2);
-+	ASSERT_INT_EQ_GOTO(entryarg0, 1, done);
-+	ASSERT_INT_EQ_GOTO(entryarg1, 2, done);
-+done:
-+	KTF_UNREGISTER_ENTRY_PROBE(probeargtest, probeargtesthandler);
-+	KTF_UNREGISTER_ENTRY_PROBE(printk, printkhandler);
-+}
-+
-+static int override_failed;
-+
-+noinline int myfunc(int i)
-+{
-+	override_failed = 1;
-+	return i;
-+}
-+
-+KTF_OVERRIDE(myfunc, myfunc_override)
-+{
-+	KTF_SET_RETURN_VALUE(0);
-+	KTF_OVERRIDE_RETURN;
-+}
-+
-+TEST(selftest, override)
-+{
-+	override_failed = 0;
-+
-+	ASSERT_INT_EQ(KTF_REGISTER_OVERRIDE(myfunc, myfunc_override), 0);
-+
-+	(void)myfunc(0);
-+
-+	/* Verify override function runs instead. */
-+	ASSERT_TRUE_GOTO(override_failed == 0, done);
-+
-+	/* Verify override function modifies return value. */
-+	ASSERT_INT_EQ_GOTO(myfunc(100), 0, done);
-+	ASSERT_TRUE_GOTO(override_failed == 0, done);
-+done:
-+	KTF_UNREGISTER_OVERRIDE(myfunc, myfunc_override);
-+}
-+
-+noinline int probesum(int a, int b)
-+{
-+	tlog(T_INFO, "Adding %d + %d", a, b);
-+	return a + b;
-+}
-+
-+KTF_RETURN_PROBE(probesum, probesumhandler)
-+{
-+	tlog(T_DEBUG, "return value before modifying %ld",
-+	     regs_return_value(regs));
-+	KTF_SET_RETURN_VALUE(-1);
-+	tlog(T_DEBUG, "return value after modifying %ld",
-+	     regs_return_value(regs));
-+	return 0;
-+}
-+
-+KTF_RETURN_PROBE(printk, printkrethandler)
-+{
-+	proberet = KTF_RETURN_VALUE();
-+
-+	return 0;
-+}
-+
-+TEST(selftest, probereturn)
-+{
-+	char *teststr = "Testing kprobe return...";
-+
-+	proberet = -1;
-+	ASSERT_INT_EQ_GOTO(KTF_REGISTER_RETURN_PROBE(printk, printkrethandler),
-+			   0, done);
-+	printk(KERN_INFO "%s", teststr);
-+	ASSERT_INT_EQ_GOTO(proberet, strlen(teststr), done);
-+
-+	/* Now test modification of return value */
-+	ASSERT_INT_EQ_GOTO(probesum(1, 1), 2, done);
-+	ASSERT_INT_EQ_GOTO(KTF_REGISTER_RETURN_PROBE(probesum, probesumhandler),
-+			   0, done);
-+	ASSERT_INT_EQ_GOTO(probesum(1, 1), -1, done);
-+done:
-+	KTF_UNREGISTER_RETURN_PROBE(printk, printkrethandler);
-+	KTF_UNREGISTER_RETURN_PROBE(probesum, probesumhandler);
-+}
-+
-+static void add_probe_tests(void)
-+{
-+	ADD_TEST(probeentry);
-+	ADD_TEST(probereturn);
-+	ADD_TEST(override);
-+}
-+
-+noinline void cov_counted(void)
-+{
-+	tlog(T_INFO, "got called!");
-+}
-+
-+noinline void *doalloc(struct kmem_cache *c, size_t sz)
-+{
-+	if (c)
-+		return kmem_cache_alloc(c, GFP_KERNEL);
-+	return kmalloc(sz, GFP_KERNEL);
-+}
-+
-+TEST(selftest, acov)
-+{
-+	/* A very basic test just to enable and disable the coverage support,
-+	 * without the memory tracking option and without making use of it:
-+	 */
-+	ASSERT_INT_EQ(0, ktf_cov_enable((THIS_MODULE)->name, 0));
-+	ktf_cov_disable((THIS_MODULE)->name);
-+}
-+
-+TEST(selftest, cov)
-+{
-+	int foundp1 = 0, foundp2 = 0, foundp3 = 0, foundp4 = 0;
-+	struct ktf_cov_entry *e;
-+	struct ktf_cov_mem *m;
-+	char *p1 = NULL, *p2 = NULL, *p3 = NULL, *p4 = NULL;
-+	struct kmem_cache *c = NULL;
-+	int oldcount;
-+
-+	c = kmem_cache_create("selftest_cov_cache",
-+			      32, 0,
-+			     SLAB_HWCACHE_ALIGN | SLAB_PANIC, NULL);
-+
-+	ASSERT_ADDR_NE(NULL, c);
-+
-+	tlog(T_INFO, "Allocated cache %p : %s %u\n", c, c->name, c->object_size);
-+	ASSERT_INT_EQ(0, ktf_cov_enable((THIS_MODULE)->name, KTF_COV_OPT_MEM));
-+
-+	e = ktf_cov_entry_find((unsigned long)cov_counted, 0);
-+	ASSERT_ADDR_NE_GOTO(e, NULL, done);
-+	oldcount = e->count;
-+	ktf_cov_entry_put(e);
-+	cov_counted();
-+	e = ktf_cov_entry_find((unsigned long)cov_counted, 0);
-+	ASSERT_ADDR_NE_GOTO(e, NULL, done);
-+	if (e) {
-+		ASSERT_INT_EQ(e->count, oldcount + 1);
-+		ktf_cov_entry_put(e);
-+	}
-+
-+	/* Need to call a noinline fn to do allocs since this test function
-+	 * will be inlined; and to track allocations they need to come
-+	 * from this module.  Don't need to do the same for kfree since
-+	 * we check every kfree() to see if it is freeing a tracked allocation.
-+	 */
-+	p1 = doalloc(NULL, 8);
-+	ASSERT_ADDR_NE_GOTO(p1, NULL, done);
-+	p2 = doalloc(NULL, 16);
-+	ASSERT_ADDR_NE_GOTO(p2, NULL, done);
-+	p3 = doalloc(c, 0);
-+	ASSERT_ADDR_NE_GOTO(p3, NULL, done);
-+	p4 = doalloc(c, 0);
-+	ASSERT_ADDR_NE_GOTO(p4, NULL, done);
-+
-+	ktf_for_each_cov_mem(m) {
-+		if (m->key.address == (unsigned long)p1)
-+			foundp1 = 1;
-+		if (m->key.address == (unsigned long)p2 && m->key.size == 16)
-+			foundp2 = 1;
-+		if (m->key.address == (unsigned long)p3 && m->key.size == 32)
-+			foundp3 = 1;
-+		if (m->key.address == (unsigned long)p4)
-+			foundp4 = 1;
-+	}
-+	ASSERT_INT_EQ_GOTO(foundp1, 1, done);
-+	ASSERT_INT_EQ_GOTO(foundp2, 1, done);
-+	ASSERT_INT_EQ_GOTO(foundp3, 1, done);
-+	ASSERT_INT_EQ_GOTO(foundp4, 1, done);
-+	kfree(p1);
-+	kmem_cache_free(c, p4);
-+	/* Didn't free p2/p3 - should still be on our cov_mem list */
-+	foundp1 = 0;
-+	foundp2 = 0;
-+	foundp3 = 0;
-+	foundp4 = 0;
-+	ktf_for_each_cov_mem(m) {
-+		if (m->key.address == (unsigned long)p1)
-+			foundp1 = 1;
-+		if (m->key.address == (unsigned long)p2)
-+			foundp2 = 1;
-+		if (m->key.address == (unsigned long)p3)
-+			foundp3 = 1;
-+		if (m->key.address == (unsigned long)p4)
-+			foundp4 = 1;
-+	}
-+	ASSERT_INT_EQ_GOTO(foundp2, 1, done);
-+	ASSERT_INT_EQ_GOTO(foundp3, 1, done);
-+	ASSERT_INT_EQ_GOTO(foundp1, 0, done);
-+	ASSERT_INT_EQ_GOTO(foundp4, 0, done);
-+done:
-+	kfree(p2);
-+	if (p3)
-+		kmem_cache_free(c, p3);
-+	ktf_cov_disable((THIS_MODULE)->name);
-+	kmem_cache_destroy(c);
-+}
-+
-+static void add_cov_tests(void)
-+{
-+	ADD_TEST(acov);
-+	/* We still seem to have some subtle issues with the memory coverage test feature,
-+	 * as sometimes allocations made by the coverage framework itself,
-+	 * for this particular test survives the cleanup function.
-+	 * Whether it is our attempt to test ourselves or a more generic problem
-+	 * is not fully understood yet, so disable this test for now:
-+	 */
-+	/* ADD_TEST(cov); */
-+}
-+
-+KTF_THREAD(test_thread)
-+{
-+	/* ensure assertions can work in thread context */
-+	ASSERT_INT_EQ(1, 1);
-+}
-+
-+#define NUM_TEST_THREADS 20
-+
-+static struct ktf_thread test_threads[NUM_TEST_THREADS];
-+
-+TEST(selftest, thread)
-+{
-+	int assertions, i;
-+
-+	for (i = 0; i < NUM_TEST_THREADS; i++) {
-+		KTF_THREAD_INIT(test_thread, &test_threads[i]);
-+		KTF_THREAD_RUN(&test_threads[i]);
-+	}
-+	for (i = 0; i < NUM_TEST_THREADS; i++)
-+		KTF_THREAD_WAIT_COMPLETED(&test_threads[i]);
-+
-+	assertions = (int)ktf_get_assertion_count();
-+
-+	/* Verify assertion in thread */
-+	ASSERT_INT_EQ(assertions, NUM_TEST_THREADS);
-+}
-+
-+static void add_thread_tests(void)
-+{
-+	ADD_TEST(thread);
-+}
-+
-+static int selftest_module_var;
-+
-+/*
-+ * Test that ktf_find_symbol works both for module symbols and
-+ * core kernel symbols:
-+ */
-+TEST(selftest, symbol)
-+{
-+	/* Verify finding kernel-internal symbol works. */
-+	ASSERT_ADDR_NE(ktf_find_symbol(NULL, "skbuff_head_cache"), NULL);
-+
-+	/* Verify finding module symbols works, both when we specify the
-+	 * module name and when we don't.
-+	 */
-+	ASSERT_ADDR_EQ(ktf_find_symbol(NULL, "selftest_module_var"),
-+		       &selftest_module_var);
-+
-+	ASSERT_ADDR_EQ(ktf_find_symbol("selftest", "selftest_module_var"),
-+		       &selftest_module_var);
-+}
-+
-+static void add_symbol_tests(void)
-+{
-+	ADD_TEST(symbol);
-+}
-+
-+static int __init selftest_init(void)
-+{
-+	int ret = KTF_CONTEXT_ADD_TO(dual_handle, &s_mctx[1].k, "map1");
-+
-+	tlog(T_DEBUG, "map1 gets %d", ret);
-+	if (ret)
-+		return ret;
-+
-+	ret = KTF_CONTEXT_ADD_TO(dual_handle, &s_mctx[2].k, "map2");
-+	if (ret)
-+		goto fail;
-+
-+	ret = KTF_CONTEXT_ADD_TO(single_handle, &s_mctx[3].k, "map3");
-+	if (ret)
-+		goto fail;
-+
-+	ktf_resolve_symbols();
-+
-+	add_map_tests();
-+	add_probe_tests();
-+	add_cov_tests();
-+	add_thread_tests();
-+	add_hybrid_tests();
-+	add_context_tests();
-+	add_symbol_tests();
-+	tlog(T_INFO, "selftest: loaded");
-+	return 0;
-+fail:
-+	KTF_CLEANUP();
-+	return ret;
-+}
-+
-+static void __exit selftest_exit(void)
-+{
-+	context_tests_cleanup();
-+	KTF_HANDLE_CLEANUP(single_handle);
-+	KTF_HANDLE_CLEANUP(dual_handle);
-+	KTF_HANDLE_CLEANUP(no_handle);
-+	KTF_CLEANUP();
-+	tlog(T_INFO, "selftest: unloaded");
-+}
-+
-+module_init(selftest_init);
-+module_exit(selftest_exit);
++  /* A callback handler to be called for each assertion result */
++  typedef void (*test_handler)(int result,  const char* file, int line, const char* report);
++
++  class KernelTest
++  {
++  public:
++    KernelTest(const std::string& setname, const char* testname, unsigned int handle_id);
++    ~KernelTest();
++    void* get_priv(size_t priv_sz);
++    size_t get_priv_sz(KernelTest *kt);
++    std::string setname;
++    std::string testname;
++    unsigned int handle_id;
++    std::string name;
++    size_t setnum;  /* This test belongs to this set in the kernel */
++    size_t testnum; /* This test's index (test number) in the kernel */
++    void* user_priv;  /* Optional private data for the test */
++    size_t user_priv_sz; /* Size of the user_priv data if used */
++    test_cb* user_test;  /* Optional user level wrapper function for the kernel test */
++    char* file;
++    int line;
++  };
++
++  void *get_priv(KernelTest *kt, size_t priv_sz);
++
++  // Set up connection to the kernel test driver:
++  // @handle_test contains the test framework's handling code for test assertions */
++  bool setup(test_handler handle_test);
++
++  void set_configurator(configurator c);
++
++  // Parse command line args (call after gtest arg parsing)
++  char** parse_opts(int argc, char** argv);
++
++  /* Query kernel for available tests in index order */
++  stringvec& query_testsets();
++
++  stringvec get_testsets();
++  std::string get_current_setname();
++  stringvec get_test_names();
++
++  KernelTest* find_test(const std::string& setname, const std::string& testname,
++			std::string* ctx);
++
++  /* "private" - only run from gtest framework */
++  void run_test(KernelTest* test, std::string& ctx);
++} // end namespace ktf
++
++
++/* Redefine for C++ until we can get it patched - type mismatch by default */
++#ifdef nla_for_each_nested
++#undef nla_for_each_nested
++#endif
++#define nla_for_each_nested(pos, nla, rem) \
++  for (pos = (struct nlattr*)nla_data(nla), rem = nla_len(nla);	\
++             nla_ok(pos, rem); \
++             pos = nla_next(pos, &(rem)))
++
++#endif
 -- 
 git-series 0.9.1
