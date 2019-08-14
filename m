@@ -2,162 +2,199 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 93C978C4EC
-	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Aug 2019 01:54:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8FA38C5CB
+	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Aug 2019 04:03:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726231AbfHMXyn (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 13 Aug 2019 19:54:43 -0400
-Received: from userp2130.oracle.com ([156.151.31.86]:52144 "EHLO
-        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726155AbfHMXyn (ORCPT
+        id S1727038AbfHNCDp (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 13 Aug 2019 22:03:45 -0400
+Received: from conssluserg-06.nifty.com ([210.131.2.91]:44716 "EHLO
+        conssluserg-06.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726373AbfHNCDp (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 13 Aug 2019 19:54:43 -0400
-Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
-        by userp2130.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x7DNs0ej159246;
-        Tue, 13 Aug 2019 23:54:37 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=subject : to : cc :
- references : from : message-id : date : mime-version : in-reply-to :
- content-type : content-transfer-encoding; s=corp-2019-08-05;
- bh=8uoxkmua1OS2X8xhxw5mu7ScJfwZNdN5PSdmlkbyv8g=;
- b=C/hffB2/CGhrbY+ybbD2RdOJshB9uPQiYKhfH3UFDwszzYTQ66/GGB6XygmPp4PIwbVx
- bwHxOm4r/8KGxtRF8fItyF+Jy3nnc3Y29khBpxZlHY1GpfBLlQBOg85UTcwv1sHj+qSx
- azxMUtwbXSZWoJY/+gqDW5xJVuA04mg/gY2bOqdVedOjwV3swFgnyqGx4q37R476ZRTA
- MSiDd0TjLE39DhY4aQFKpsO988HPK2Nunhrx13KDNSSdYCLR5847XoABJDa4mLMY4atA
- 9kN4JZoJ6NtmGzbYtVv7dn79wantwW0ksPQalJ4VxXYiUfkmTum5rtCNjMt7Ula7zTkT lw== 
-Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
-        by userp2130.oracle.com with ESMTP id 2u9nbthcfy-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 13 Aug 2019 23:54:37 +0000
-Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
-        by aserp3030.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x7DNqqOF165505;
-        Tue, 13 Aug 2019 23:54:36 GMT
-Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
-        by aserp3030.oracle.com with ESMTP id 2ubwrgk88d-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 13 Aug 2019 23:54:36 +0000
-Received: from abhmp0007.oracle.com (abhmp0007.oracle.com [141.146.116.13])
-        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id x7DNsZpC025046;
-        Tue, 13 Aug 2019 23:54:35 GMT
-Received: from [192.168.1.222] (/71.63.128.209)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Tue, 13 Aug 2019 16:54:35 -0700
-Subject: Re: [RFC PATCH v2 4/5] hugetlb_cgroup: Add accounting for shared
- mappings
-To:     Mina Almasry <almasrymina@google.com>
-Cc:     shuah@kernel.org, rientjes@google.com, shakeelb@google.com,
-        gthelen@google.com, akpm@linux-foundation.org,
-        khalid.aziz@oracle.com, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org
-References: <20190808231340.53601-1-almasrymina@google.com>
- <20190808231340.53601-5-almasrymina@google.com>
-From:   Mike Kravetz <mike.kravetz@oracle.com>
-Message-ID: <47cfc50d-bea3-0247-247e-888d2942f134@oracle.com>
-Date:   Tue, 13 Aug 2019 16:54:33 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
+        Tue, 13 Aug 2019 22:03:45 -0400
+Received: from mail-vs1-f48.google.com (mail-vs1-f48.google.com [209.85.217.48]) (authenticated)
+        by conssluserg-06.nifty.com with ESMTP id x7E23L5g029484;
+        Wed, 14 Aug 2019 11:03:22 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-06.nifty.com x7E23L5g029484
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1565748202;
+        bh=gg/aXfWoj1dr/iQJNgz6p/0wrctSN5GJ08iIhhlqIHY=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=LYR09X6NkgDT7yZadd1KwV6UdmZQdkHcmevmz1kYVgM7IRpW8m2ty4KkMUt9OiLTP
+         LDCwbVSXHQOidRWyWa/4obYsDJnX+u/v6b/uZDjHW/Av0Xwke1IlCJbO6RZfBpS7J0
+         sLpDUnGdv9S3IGvrM5kepqaJs9eNULIzfuZmiBm9K/OmYcRF1rEo6I8izp7orGyFsl
+         +QaImjQUlAzgxCiVrwzEFUPj4A5la3t91WYCKQnyJ6Z+r4kE5J8KvVbM0QSSOHILXb
+         QhjKkd/ZShxTCZE8NFPDNz8nDU7ieFBSzpEz1uVf4iyp8yKDT4CSyAQZ5ZRDVxIbES
+         IQHLtGL6cF/Gw==
+X-Nifty-SrcIP: [209.85.217.48]
+Received: by mail-vs1-f48.google.com with SMTP id u3so73515988vsh.6;
+        Tue, 13 Aug 2019 19:03:22 -0700 (PDT)
+X-Gm-Message-State: APjAAAXrh117WL2CovHMwdRm5km7NRTCeWBSnrJuFabGIY8xh0cq0WUk
+        bg4GcgfpDJyojVXNkrQGwJS0aW64LaAGJzmfvPA=
+X-Google-Smtp-Source: APXvYqzqNBqm+hwNLTOEci/lspPuPMkY9zOEYB7EyM/q2ufzPas85GtjdbUpizxOvvLyJqnSy4EsbPJ3kQPFBvoIe60=
+X-Received: by 2002:a67:b916:: with SMTP id q22mr242654vsn.54.1565748201144;
+ Tue, 13 Aug 2019 19:03:21 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20190808231340.53601-5-almasrymina@google.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9348 signatures=668684
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=2 malwarescore=0
- phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=999
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.0.1-1906280000 definitions=main-1908130227
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9348 signatures=668684
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
- suspectscore=2 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
- lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1906280000
- definitions=main-1908130227
+References: <cover.92d76bb4f6dcedc971d0b72a49e8e459a98bca54.1565676440.git-series.knut.omang@oracle.com>
+ <be2c361eac49ded2848b2a555b75e30cc3c24e71.1565676440.git-series.knut.omang@oracle.com>
+ <CAK7LNASX4jPRxRxD+JafAfKqjck=x27HuHZgPV1VFfW8MzcwZA@mail.gmail.com> <14b99d26a4cff1c813c92818dc1234007fa06fc9.camel@oracle.com>
+In-Reply-To: <14b99d26a4cff1c813c92818dc1234007fa06fc9.camel@oracle.com>
+From:   Masahiro Yamada <yamada.masahiro@socionext.com>
+Date:   Wed, 14 Aug 2019 11:02:45 +0900
+X-Gmail-Original-Message-ID: <CAK7LNASgfd6KPRQ=hcqKkpZ6EVhFmbBjCXa30bvEqscu_5dwbQ@mail.gmail.com>
+Message-ID: <CAK7LNASgfd6KPRQ=hcqKkpZ6EVhFmbBjCXa30bvEqscu_5dwbQ@mail.gmail.com>
+Subject: Re: [RFC 01/19] kbuild: Fixes to rules for host-cshlib and host-cxxshlib
+To:     Knut Omang <knut.omang@oracle.com>
+Cc:     "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Shreyans Devendra Doshi <0xinfosect0r@gmail.com>,
+        Alan Maguire <alan.maguire@oracle.com>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Hidenori Yamaji <hidenori.yamaji@sony.com>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Timothy Bird <Tim.Bird@sony.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        "Theodore Ts'o" <tytso@mit.edu>, Daniel Vetter <daniel@ffwll.ch>,
+        Stephen Boyd <sboyd@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 8/8/19 4:13 PM, Mina Almasry wrote:
-> For shared mappings, the pointer to the hugetlb_cgroup to uncharge lives
-> in the resv_map entries, in file_region->reservation_counter.
-> 
-> When a file_region entry is added to the resv_map via region_add, we
-> also charge the appropriate hugetlb_cgroup and put the pointer to that
-> in file_region->reservation_counter. This is slightly delicate since we
-> need to not modify the resv_map until we know that charging the
-> reservation has succeeded. If charging doesn't succeed, we report the
-> error to the caller, so that the kernel fails the reservation.
+Hi Knut,
 
-I wish we did not need to modify these region_() routines as they are
-already difficult to understand.  However, I see no other way with the
-desired semantics.
+On Wed, Aug 14, 2019 at 1:19 AM Knut Omang <knut.omang@oracle.com> wrote:
+>
+> On Tue, 2019-08-13 at 23:01 +0900, Masahiro Yamada wrote:
+> > On Tue, Aug 13, 2019 at 3:13 PM Knut Omang <knut.omang@oracle.com> wrote:
+> > >
+> > > C++ libraries interfacing to C APIs might sometimes need some glue
+> > > logic more easily written in C.
+> > > Allow a C++ library to also contain 0 or more C objects.
+> > >
+> > > Also fix rules for both C and C++ shared libraries:
+> > > - C++ shared libraries depended on .c instead of .cc files
+> > > - Rules were referenced as -objs instead of the intended
+> > >   -cobjs and -cxxobjs following the pattern from hostprogs*.
+> > >
+> > > Signed-off-by: Knut Omang <knut.omang@oracle.com>
+> >
+> >
+> > How is this patch related to the rest of this series?
+>
+> This is just my (likely naive) way I to get what I had working
+> using autotools in the Github version of KTF) translated into something
+> comparable using kbuild only. We need to build a shared library consisting
+> of a few C++ files and a very simple C file, and a couple of simple binaries,
+> and the rule in there does seem to take .c files and subject them to the
+> C++ compiler, which makes this difficult to achieve?
 
-> On region_del, which is when the hugetlb memory is unreserved, we delete
-> the file_region entry in the resv_map, but also uncharge the
-> file_region->reservation_counter.
-> 
-> ---
->  mm/hugetlb.c | 208 +++++++++++++++++++++++++++++++++++++++++----------
->  1 file changed, 170 insertions(+), 38 deletions(-)
-> 
-> diff --git a/mm/hugetlb.c b/mm/hugetlb.c
-> index 235996aef6618..d76e3137110ab 100644
-> --- a/mm/hugetlb.c
-> +++ b/mm/hugetlb.c
-> @@ -242,8 +242,72 @@ struct file_region {
->  	struct list_head link;
->  	long from;
->  	long to;
-> +#ifdef CONFIG_CGROUP_HUGETLB
-> +	/*
-> +	 * On shared mappings, each reserved region appears as a struct
-> +	 * file_region in resv_map. These fields hold the info needed to
-> +	 * uncharge each reservation.
-> +	 */
-> +	struct page_counter *reservation_counter;
-> +	unsigned long pages_per_hpage;
-> +#endif
->  };
-> 
-> +/* Must be called with resv->lock held. Calling this with dry_run == true will
-> + * count the number of pages added but will not modify the linked list.
-> + */
-> +static long consume_regions_we_overlap_with(struct file_region *rg,
-> +		struct list_head *head, long f, long *t,
-> +		struct hugetlb_cgroup *h_cg,
-> +		struct hstate *h,
-> +		bool dry_run)
-> +{
-> +	long add = 0;
-> +	struct file_region *trg = NULL, *nrg = NULL;
-> +
-> +	/* Consume any regions we now overlap with. */
-> +	nrg = rg;
-> +	list_for_each_entry_safe(rg, trg, rg->link.prev, link) {
-> +		if (&rg->link == head)
-> +			break;
-> +		if (rg->from > *t)
-> +			break;
-> +
-> +		/* If this area reaches higher then extend our area to
-> +		 * include it completely.  If this is not the first area
-> +		 * which we intend to reuse, free it.
-> +		 */
-> +		if (rg->to > *t)
-> +			*t = rg->to;
-> +		if (rg != nrg) {
-> +			/* Decrement return value by the deleted range.
-> +			 * Another range will span this area so that by
-> +			 * end of routine add will be >= zero
-> +			 */
-> +			add -= (rg->to - rg->from);
-> +			if (!dry_run) {
-> +				list_del(&rg->link);
-> +				kfree(rg);
 
-Is it possible that the region struct we are deleting pointed to
-a reservation_counter?  Perhaps even for another cgroup?
-Just concerned with the way regions are coalesced that we may be
-deleting counters.
+Looking at the diff stat of the cover-letter,
+the rest of this patch series is touching only
+Documentation/ and tools/testing/kselftests/.
+
+So, this one is unused by the rest of the changes, isn't it?
+Am I missing something?
+
+
+
+> > This patch breaks GCC-plugins.
+> > Did you really compile-test this patch before the submission?
+>
+> Sorry for my ignorance here:
+> I ran through the kernel build and installed the resulting kernel
+> on a VM that I used to test this, if that's what you are asking
+> about?
+>
+> Do I need some unusual .config options or run a special make target
+> to trigger the problem you see?
+>
+> I used a recent Fedora config with default values for new options,
+> and ran the normal default make target (also with O=) and make selftests
+> to test the patch itself.
+
+
+I just built allmodconfig for arm.
+
+(The 0-day bot tests allmodconfig for most of architectures,
+so you may receive error reports anyway.)
+
+
+With your patch, I got the following:
+
+
+masahiro@grover:~/ref/linux$ make  ARCH=arm
+CROSS_COMPILE=arm-linux-gnueabihf-  allmodconfig all
+  HOSTCC  scripts/basic/fixdep
+  HOSTCC  scripts/kconfig/conf.o
+  HOSTCC  scripts/kconfig/confdata.o
+  HOSTCC  scripts/kconfig/expr.o
+  LEX     scripts/kconfig/lexer.lex.c
+  YACC    scripts/kconfig/parser.tab.h
+  HOSTCC  scripts/kconfig/lexer.lex.o
+  YACC    scripts/kconfig/parser.tab.c
+  HOSTCC  scripts/kconfig/parser.tab.o
+  HOSTCC  scripts/kconfig/preprocess.o
+  HOSTCC  scripts/kconfig/symbol.o
+  HOSTLD  scripts/kconfig/conf
+scripts/kconfig/conf  --allmodconfig Kconfig
+#
+# configuration written to .config
+#
+  SYSHDR  arch/arm/include/generated/uapi/asm/unistd-common.h
+  SYSHDR  arch/arm/include/generated/uapi/asm/unistd-oabi.h
+  SYSHDR  arch/arm/include/generated/uapi/asm/unistd-eabi.h
+  HOSTCC  scripts/dtc/dtc.o
+  HOSTCC  scripts/dtc/flattree.o
+  HOSTCC  scripts/dtc/fstree.o
+  HOSTCC  scripts/dtc/data.o
+  HOSTCC  scripts/dtc/livetree.o
+  HOSTCC  scripts/dtc/treesource.o
+  HOSTCC  scripts/dtc/srcpos.o
+  HOSTCC  scripts/dtc/checks.o
+  HOSTCC  scripts/dtc/util.o
+  LEX     scripts/dtc/dtc-lexer.lex.c
+  YACC    scripts/dtc/dtc-parser.tab.h
+  HOSTCC  scripts/dtc/dtc-lexer.lex.o
+  YACC    scripts/dtc/dtc-parser.tab.c
+  HOSTCC  scripts/dtc/dtc-parser.tab.o
+  HOSTCC  scripts/dtc/yamltree.o
+  HOSTLD  scripts/dtc/dtc
+  CC      scripts/gcc-plugins/latent_entropy_plugin.o
+cc1: error: cannot load plugin ./scripts/gcc-plugins/arm_ssp_per_task_plugin.so
+   ./scripts/gcc-plugins/arm_ssp_per_task_plugin.so: cannot open
+shared object file: No such file or directory
+cc1: error: cannot load plugin ./scripts/gcc-plugins/structleak_plugin.so
+   ./scripts/gcc-plugins/structleak_plugin.so: cannot open shared
+object file: No such file or directory
+cc1: error: cannot load plugin ./scripts/gcc-plugins/latent_entropy_plugin.so
+   ./scripts/gcc-plugins/latent_entropy_plugin.so: cannot open shared
+object file: No such file or directory
+cc1: error: cannot load plugin ./scripts/gcc-plugins/randomize_layout_plugin.so
+   ./scripts/gcc-plugins/randomize_layout_plugin.so: cannot open
+shared object file: No such file or directory
+make[3]: *** [scripts/Makefile.build;281:
+scripts/gcc-plugins/latent_entropy_plugin.o] Error 1
+make[2]: *** [scripts/Makefile.build;497: scripts/gcc-plugins] Error 2
+make[1]: *** [Makefile;1097: scripts] Error 2
+make: *** [Makefile;330: __build_one_by_one] Error 2
+
+
+
+
+
+
 
 -- 
-Mike Kravetz
+Best Regards
+Masahiro Yamada
