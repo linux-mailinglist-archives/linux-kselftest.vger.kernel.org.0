@@ -2,39 +2,39 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 65A7E8C74F
-	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Aug 2019 04:22:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4230D8C7FE
+	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Aug 2019 04:29:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728703AbfHNCSd (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 13 Aug 2019 22:18:33 -0400
-Received: from mail.kernel.org ([198.145.29.99]:49500 "EHLO mail.kernel.org"
+        id S1729501AbfHNCZw (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 13 Aug 2019 22:25:52 -0400
+Received: from mail.kernel.org ([198.145.29.99]:53976 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728348AbfHNCSc (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 13 Aug 2019 22:18:32 -0400
+        id S1728775AbfHNCZw (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 13 Aug 2019 22:25:52 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id A01302084D;
-        Wed, 14 Aug 2019 02:18:31 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 3A51120679;
+        Wed, 14 Aug 2019 02:25:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1565749112;
+        s=default; t=1565749550;
         bh=5rLlWUJ+nSWbLbJ/vJkace/NVU+oEELFK99umC/pAFk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=dvk+mxh4RjjbneTU8b2AU14sbbsKrW3v9usjimp82BkwtrbqQRmNE1gBNBFI9vjkY
-         yZF6R+Y8gY8mFPu8JF5PdX0qDYzVxvWIQbXiI5zMrPLCaEz6VphQ5JEj6Bzp8DF1Oh
-         RBF8XqmQMy5wNJaal4FbvKtFY/I/mbmBf50yiBnE=
+        b=gbS6sF8tVhyYo52tmZ/A2hUN0o3fTnFQ8Qr8iSw6/7+pvi8Vq0gEnSGXwCYcoko3d
+         uwBBwri9gaxZFTywsIkpeuXwn/j19miuM6h9P1JTnsadx4ONsP3Na4SUcV1kdIWgev
+         eFeEw+M6u8k2yitYEC4K4OKPx+H7Ds7vDCZt3WWs=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
         Paolo Bonzini <pbonzini@redhat.com>,
         Sasha Levin <sashal@kernel.org>, kvm@vger.kernel.org,
         linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 68/68] selftests: kvm: Adding config fragments
-Date:   Tue, 13 Aug 2019 22:15:46 -0400
-Message-Id: <20190814021548.16001-68-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.9 33/33] selftests: kvm: Adding config fragments
+Date:   Tue, 13 Aug 2019 22:23:23 -0400
+Message-Id: <20190814022323.17111-33-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190814021548.16001-1-sashal@kernel.org>
-References: <20190814021548.16001-1-sashal@kernel.org>
+In-Reply-To: <20190814022323.17111-1-sashal@kernel.org>
+References: <20190814022323.17111-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
