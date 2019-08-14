@@ -2,39 +2,40 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E1F48C8B1
-	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Aug 2019 04:33:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C05F8C8A3
+	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Aug 2019 04:33:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728283AbfHNCPs (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 13 Aug 2019 22:15:48 -0400
-Received: from mail.kernel.org ([198.145.29.99]:47282 "EHLO mail.kernel.org"
+        id S1728543AbfHNCQF (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 13 Aug 2019 22:16:05 -0400
+Received: from mail.kernel.org ([198.145.29.99]:47562 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728415AbfHNCPp (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 13 Aug 2019 22:15:45 -0400
+        id S1728882AbfHNCQC (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 13 Aug 2019 22:16:02 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 3B07C20842;
-        Wed, 14 Aug 2019 02:15:44 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id BA90920989;
+        Wed, 14 Aug 2019 02:16:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1565748945;
-        bh=5rLlWUJ+nSWbLbJ/vJkace/NVU+oEELFK99umC/pAFk=;
+        s=default; t=1565748961;
+        bh=1tO7IzmyXmBKGPRjkYYiQe4X081UKGtbvVd4HDr63qk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=MZKL3RSl76VyAaIXEtaa4EIzhp0rW/PAO+62/7Z0z3C8KoJExBzWo9o04ypnCRKib
-         xDeNxsn/XgSpRCubnJTNOObroeu7sM+XU6IBWqbYaco3pdR5rLJtI2nUEArPij6fxe
-         DKi0+yu56ZswDPmIVfcqUTwZ3Rgnfay6OhT4opYQ=
+        b=Jq+kVT9SaV5gFlKJU9BCgAdt8w1UXuH6I8ok/Xszklj1ClFhlMD1Fli53/Ij+rHj5
+         H228GcMcSKgHY21MXvTyu1QiXGtvbGwoDi0ZouiJc6dFN1GAVK0zmjV9KR/2QFM2uq
+         A15pLblcLThUIPhq0vco6c94sgKgRi5g1fof6j1w=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sasha Levin <sashal@kernel.org>, kvm@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.2 123/123] selftests: kvm: Adding config fragments
-Date:   Tue, 13 Aug 2019 22:10:47 -0400
-Message-Id: <20190814021047.14828-123-sashal@kernel.org>
+Cc:     Ilya Leoshkevich <iii@linux.ibm.com>, Andrey Ignatov <rdna@fb.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Sasha Levin <sashal@kernel.org>,
+        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.19 08/68] selftests/bpf: fix sendmsg6_prog on s390
+Date:   Tue, 13 Aug 2019 22:14:46 -0400
+Message-Id: <20190814021548.16001-8-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190814021047.14828-1-sashal@kernel.org>
-References: <20190814021047.14828-1-sashal@kernel.org>
+In-Reply-To: <20190814021548.16001-1-sashal@kernel.org>
+References: <20190814021548.16001-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -44,30 +45,40 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Naresh Kamboju <naresh.kamboju () linaro ! org>
+From: Ilya Leoshkevich <iii@linux.ibm.com>
 
-[ Upstream commit c096397c78f766db972f923433031f2dec01cae0 ]
+[ Upstream commit c8eee4135a456bc031d67cadc454e76880d1afd8 ]
 
-selftests kvm test cases need pre-required kernel configs for the test
-to get pass.
+"sendmsg6: rewrite IP & port (C)" fails on s390, because the code in
+sendmsg_v6_prog() assumes that (ctx->user_ip6[0] & 0xFFFF) refers to
+leading IPv6 address digits, which is not the case on big-endian
+machines.
 
-Signed-off-by: Naresh Kamboju <naresh.kamboju@linaro.org>
-Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+Since checking bitwise operations doesn't seem to be the point of the
+test, replace two short comparisons with a single int comparison.
+
+Signed-off-by: Ilya Leoshkevich <iii@linux.ibm.com>
+Acked-by: Andrey Ignatov <rdna@fb.com>
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/testing/selftests/kvm/config | 3 +++
- 1 file changed, 3 insertions(+)
- create mode 100644 tools/testing/selftests/kvm/config
+ tools/testing/selftests/bpf/sendmsg6_prog.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/kvm/config b/tools/testing/selftests/kvm/config
-new file mode 100644
-index 0000000000000..63ed533f73d6e
---- /dev/null
-+++ b/tools/testing/selftests/kvm/config
-@@ -0,0 +1,3 @@
-+CONFIG_KVM=y
-+CONFIG_KVM_INTEL=y
-+CONFIG_KVM_AMD=y
+diff --git a/tools/testing/selftests/bpf/sendmsg6_prog.c b/tools/testing/selftests/bpf/sendmsg6_prog.c
+index 5aeaa284fc474..a680628204108 100644
+--- a/tools/testing/selftests/bpf/sendmsg6_prog.c
++++ b/tools/testing/selftests/bpf/sendmsg6_prog.c
+@@ -41,8 +41,7 @@ int sendmsg_v6_prog(struct bpf_sock_addr *ctx)
+ 	}
+ 
+ 	/* Rewrite destination. */
+-	if ((ctx->user_ip6[0] & 0xFFFF) == bpf_htons(0xFACE) &&
+-	     ctx->user_ip6[0] >> 16 == bpf_htons(0xB00C)) {
++	if (ctx->user_ip6[0] == bpf_htonl(0xFACEB00C)) {
+ 		ctx->user_ip6[0] = bpf_htonl(DST_REWRITE_IP6_0);
+ 		ctx->user_ip6[1] = bpf_htonl(DST_REWRITE_IP6_1);
+ 		ctx->user_ip6[2] = bpf_htonl(DST_REWRITE_IP6_2);
 -- 
 2.20.1
 
