@@ -2,102 +2,97 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 83AFA8DB21
-	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Aug 2019 19:23:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 225458E024
+	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Aug 2019 23:49:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730309AbfHNRXE (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 14 Aug 2019 13:23:04 -0400
-Received: from mail.kernel.org ([198.145.29.99]:45684 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729276AbfHNRXC (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 14 Aug 2019 13:23:02 -0400
-Received: from kernel.org (unknown [104.132.0.74])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 9246520665;
-        Wed, 14 Aug 2019 17:23:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1565803381;
-        bh=FN7svZ/+iXMULArgYt1oBNGNoJcD+bkl47j+nxOdq5Y=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=U2k+Omw28LwRRoFmVtodT07PV6nxV/NjO0n84ZnQwJqJzPx0vkjnq79bp1wEvklFG
-         VMEVAJLqqexfV8yMpJeyrQSBTfCgZag1WzGsv1E4V8fP+esmsvW+CqJy/MmWeHrA/1
-         KqbEgb8F4a9wCCJHNpBFKV7UIh0krHKOR86fwJ8w=
-Content-Type: text/plain; charset="utf-8"
+        id S1729362AbfHNVtz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 14 Aug 2019 17:49:55 -0400
+Received: from mail-lf1-f67.google.com ([209.85.167.67]:46745 "EHLO
+        mail-lf1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728683AbfHNVtz (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 14 Aug 2019 17:49:55 -0400
+Received: by mail-lf1-f67.google.com with SMTP id n19so311346lfe.13
+        for <linux-kselftest@vger.kernel.org>; Wed, 14 Aug 2019 14:49:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=quNqjepPTnacbRHb7c2eVenKYgne2iNuWND1D+zRC8U=;
+        b=sUjGo9yXU26Huey71Nv31NVxbfEQLci9On0kv2+ROoSDiFng0MELV4XmPa++4r0itW
+         S5eWusmIAQMYTWT+1aGb4zEKFcnCYhWdDl+pGNDkM1RSxyeMjCdvmcu3q2o/2pUdi6UF
+         DYPar1pHFv5KdFyV+Bu9Y501HsDE6mDRsdR39XWmJJhDySt3K/BsWTkoKw3Xh7QQYFj/
+         O6req7zP9ZrhPa3rgIPBNu/n5wLAByRkzhzjvucDhDsLct1uEYj0qsmdcKIcxsqpsH6C
+         ujz1gIvbPaMPB4Prv16krM7VDSlAFA4YPLD8H7yInX2sgJNZFZ4ySRsnEAfODauihknM
+         tNSA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=quNqjepPTnacbRHb7c2eVenKYgne2iNuWND1D+zRC8U=;
+        b=VPSAFhtjLgDg3LjEMczqXAFKBNSJKf81CoxK+YpCkPQj8EI3ZPLE9DQhKESqD1dyKT
+         pzDvR5jSbeeIlVd7dkB654SSmJ71Ov2cMF4DUcAA3ijr6NgWFPX2+E5dQJxCbygXBGb2
+         NRvHOM4YCldOOSUwtEy2Wz9F77yasEKd2dCrmasyBjUV0LEMXy29Z+QZI7ewGZSRafq3
+         jCyTv7y91ZCFDcIGMDVbvRh230X1HC+EJgNcGffwnTE5wltbze7Z4f67Q5PmyGTxBi0y
+         IJI01GjqC0EsHiu7tY19MLKCjYWd4UrEKSH5MwaH47Wg1vF4dlpgNQSKvrsFzslbYTeD
+         NjAg==
+X-Gm-Message-State: APjAAAWOUHVBB37t3h1afbarqDLzvvzy1rBkAONl2yACSBUx56+iSQlC
+        kmDPbYenWUYYRSIJSbiZ7Syo7A==
+X-Google-Smtp-Source: APXvYqx5hCgL1mgFSNzMB6K9DMlwFxrQNrI/rXad6WZ66DwVgNjvwjQt1QrWhgbNk0bmmtTuTQ7enQ==
+X-Received: by 2002:ac2:484e:: with SMTP id 14mr783405lfy.50.1565819393263;
+        Wed, 14 Aug 2019 14:49:53 -0700 (PDT)
+Received: from localhost (c-243c70d5.07-21-73746f28.bbcust.telenor.se. [213.112.60.36])
+        by smtp.gmail.com with ESMTPSA id z30sm132722lfj.63.2019.08.14.14.49.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 14 Aug 2019 14:49:52 -0700 (PDT)
+From:   Anders Roxell <anders.roxell@linaro.org>
+To:     davem@davemloft.net, shuah@kernel.org
+Cc:     netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Anders Roxell <anders.roxell@linaro.org>
+Subject: [PATCH] selftests: net: tcp_fastopen_backup_key.sh: fix shellcheck issue
+Date:   Wed, 14 Aug 2019 23:49:48 +0200
+Message-Id: <20190814214948.5571-1-anders.roxell@linaro.org>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <CAFd5g45NdQEcP0JQpZc3HYYgNZfsBsHL+ByXRK+OupWObwMuqg@mail.gmail.com>
-References: <20190814055108.214253-1-brendanhiggins@google.com> <CAFd5g45NdQEcP0JQpZc3HYYgNZfsBsHL+ByXRK+OupWObwMuqg@mail.gmail.com>
-Subject: Re: [PATCH v13 00/18] kunit: introduce KUnit, the Linux kernel unit testing framework
-From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     devicetree <devicetree@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        kunit-dev@googlegroups.com,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        linux-fsdevel@vger.kernel.org,
-        linux-kbuild <linux-kbuild@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        linux-nvdimm <linux-nvdimm@lists.01.org>,
-        linux-um@lists.infradead.org,
-        Sasha Levin <Alexander.Levin@microsoft.com>,
-        "Bird, Timothy" <Tim.Bird@sony.com>,
-        Amir Goldstein <amir73il@gmail.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Daniel Vetter <daniel@ffwll.ch>, Jeff Dike <jdike@addtoit.com>,
-        Joel Stanley <joel@jms.id.au>,
-        Julia Lawall <julia.lawall@lip6.fr>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Knut Omang <knut.omang@oracle.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Petr Mladek <pmladek@suse.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Richard Weinberger <richard@nod.at>,
-        David Rientjes <rientjes@google.com>,
-        Steven Rostedt <rostedt@goodmis.org>, wfg@linux.intel.com,
-        Bjorn Helgaas <bhelgaas@google.com>
-To:     Brendan Higgins <brendanhiggins@google.com>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Kees Cook <keescook@google.com>,
-        Kieran Bingham <kieran.bingham@ideasonboard.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Masahiro Yamada <yamada.masahiro@socionext.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Rob Herring <robh@kernel.org>, Theodore Ts'o <tytso@mit.edu>,
-        shuah <shuah@kernel.org>
-User-Agent: alot/0.8.1
-Date:   Wed, 14 Aug 2019 10:23:00 -0700
-Message-Id: <20190814172301.9246520665@mail.kernel.org>
+Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Quoting Brendan Higgins (2019-08-14 03:03:47)
-> On Tue, Aug 13, 2019 at 10:52 PM Brendan Higgins
-> <brendanhiggins@google.com> wrote:
-> >
-> > ## TL;DR
-> >
-> > This revision addresses comments from Stephen and Bjorn Helgaas. Most
-> > changes are pretty minor stuff that doesn't affect the API in anyway.
-> > One significant change, however, is that I added support for freeing
-> > kunit_resource managed resources before the test case is finished via
-> > kunit_resource_destroy(). Additionally, Bjorn pointed out that I broke
-> > KUnit on certain configurations (like the default one for x86, whoops).
-> >
-> > Based on Stephen's feedback on the previous change, I think we are
-> > pretty close. I am not expecting any significant changes from here on
-> > out.
->=20
-> Stephen, it looks like you have just replied with "Reviewed-bys" on
-> all the remaining emails that you looked at. Is there anything else
-> that we are missing? Or is this ready for Shuah to apply?
->=20
+When running tcp_fastopen_backup_key.sh the following issue was seen in
+a busybox environment.
+./tcp_fastopen_backup_key.sh: line 33: [: -ne: unary operator expected
 
-I think it's good to go! Thanks for the persistence.
+Shellcheck showed the following issue.
+$ shellcheck tools/testing/selftests/net/tcp_fastopen_backup_key.sh
+
+In tools/testing/selftests/net/tcp_fastopen_backup_key.sh line 33:
+        if [ $val -ne 0 ]; then
+             ^-- SC2086: Double quote to prevent globbing and word splitting.
+
+Rework to add double quotes around the variable 'val' that shellcheck
+recommends.
+
+Signed-off-by: Anders Roxell <anders.roxell@linaro.org>
+---
+ tools/testing/selftests/net/tcp_fastopen_backup_key.sh | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/tools/testing/selftests/net/tcp_fastopen_backup_key.sh b/tools/testing/selftests/net/tcp_fastopen_backup_key.sh
+index 41476399e184..ba5ec3eb314e 100755
+--- a/tools/testing/selftests/net/tcp_fastopen_backup_key.sh
++++ b/tools/testing/selftests/net/tcp_fastopen_backup_key.sh
+@@ -30,7 +30,7 @@ do_test() {
+ 	ip netns exec "${NETNS}" ./tcp_fastopen_backup_key "$1"
+ 	val=$(ip netns exec "${NETNS}" nstat -az | \
+ 		grep TcpExtTCPFastOpenPassiveFail | awk '{print $2}')
+-	if [ $val -ne 0 ]; then
++	if [ "$val" -ne 0 ]; then
+ 		echo "FAIL: TcpExtTCPFastOpenPassiveFail non-zero"
+ 		return 1
+ 	fi
+-- 
+2.20.1
 
