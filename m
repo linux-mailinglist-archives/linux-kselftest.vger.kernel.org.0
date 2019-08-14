@@ -2,77 +2,104 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CE0F08D483
-	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Aug 2019 15:20:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 566008D5B6
+	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Aug 2019 16:13:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727697AbfHNNUv (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 14 Aug 2019 09:20:51 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:34954 "EHLO mx1.redhat.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726263AbfHNNUv (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 14 Aug 2019 09:20:51 -0400
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id 3CA602A09C1;
-        Wed, 14 Aug 2019 13:20:51 +0000 (UTC)
-Received: from [10.16.196.35] (wlan-196-35.bos.redhat.com [10.16.196.35])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 3F95C17AB7;
-        Wed, 14 Aug 2019 13:20:50 +0000 (UTC)
-Subject: Re: [PATCH] selftests: livepatch: add missing fragments to config
-To:     Anders Roxell <anders.roxell@linaro.org>, shuah@kernel.org,
-        pmladek@suse.com, mbenes@suse.cz, jikos@kernel.org,
-        jpoimboe@redhat.com
-Cc:     live-patching@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20190814111651.28433-1-anders.roxell@linaro.org>
-From:   Joe Lawrence <joe.lawrence@redhat.com>
-Message-ID: <e01a1182-d9cf-b2c2-78a9-35f60861e4a9@redhat.com>
-Date:   Wed, 14 Aug 2019 09:20:49 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        id S1726121AbfHNONx (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 14 Aug 2019 10:13:53 -0400
+Received: from userp2130.oracle.com ([156.151.31.86]:46440 "EHLO
+        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726126AbfHNONx (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 14 Aug 2019 10:13:53 -0400
+Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
+        by userp2130.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x7EEDcPj085298;
+        Wed, 14 Aug 2019 14:13:51 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : mime-version : content-type; s=corp-2019-08-05;
+ bh=w8S7qTO11ul3944CiOYAHAk7kryjpA0NRFV5XlgZncU=;
+ b=fbtwkFKuxPL9ZqpIZ7RKI0Vn44ldgYhX6yH2qfuIyTKBOgWD4Db5XUbKOGwC92sL6DxK
+ oOQrFg+Ya/JwQub/Bh8A/nCLo+gOTrzEP6K4rr5FjScXpPeKLV6/JZyUO+AabKg8xl+P
+ WK/qtUv0ZRxaKi++GnQcnvHm81SJtpPYgrqccRsztag5JAaVkfD837r7ZSF04HOpgntj
+ 69FnLmAOzMG6UaE0D/DTdVbk5QxZKV1d952QW6KGVWTeeOsZkodYBDNmwCYz71BCFiSU
+ CTDqRd3+NhXGAwwB/oNZZrWlvbtMAAeI6SjLgzF8bZNUizMSncaxkKhplDCotXt2szbR +g== 
+Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
+        by userp2130.oracle.com with ESMTP id 2u9nbtn5vk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 14 Aug 2019 14:13:51 +0000
+Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
+        by aserp3030.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x7EECZKk057021;
+        Wed, 14 Aug 2019 14:13:50 GMT
+Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
+        by aserp3030.oracle.com with ESMTP id 2ubwrh9ws3-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 14 Aug 2019 14:13:50 +0000
+Received: from abhmp0001.oracle.com (abhmp0001.oracle.com [141.146.116.7])
+        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id x7EECUuw002337;
+        Wed, 14 Aug 2019 14:12:30 GMT
+Received: from mwanda (/41.57.98.10)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Wed, 14 Aug 2019 07:12:30 -0700
+Date:   Wed, 14 Aug 2019 17:12:24 +0300
+From:   Dan Carpenter <dan.carpenter@oracle.com>
+To:     dsahern@gmail.com
+Cc:     linux-kselftest@vger.kernel.org
+Subject: [bug report] selftests: Add nettest
+Message-ID: <20190814141224.GA32264@mwanda>
 MIME-Version: 1.0
-In-Reply-To: <20190814111651.28433-1-anders.roxell@linaro.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
-X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.38]); Wed, 14 Aug 2019 13:20:51 +0000 (UTC)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9348 signatures=668684
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=1 malwarescore=0
+ phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=646
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.0.1-1906280000 definitions=main-1908140148
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9348 signatures=668684
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
+ suspectscore=1 phishscore=0 bulkscore=0 spamscore=0 clxscore=1011
+ lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=696 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1906280000
+ definitions=main-1908140148
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 8/14/19 7:16 AM, Anders Roxell wrote:
-> When generating config with 'make defconfig kselftest-merge' fragment
-> CONFIG_TEST_LIVEPATCH=m isn't set.
-> 
-> Rework to enable CONFIG_LIVEPATCH and CONFIG_DYNAMIC_DEBUG as well.
-> 
-> Signed-off-by: Anders Roxell <anders.roxell@linaro.org>
-> ---
->   tools/testing/selftests/livepatch/config | 2 ++
->   1 file changed, 2 insertions(+)
-> 
-> diff --git a/tools/testing/selftests/livepatch/config b/tools/testing/selftests/livepatch/config
-> index 0dd7700464a8..ad23100cb27c 100644
-> --- a/tools/testing/selftests/livepatch/config
-> +++ b/tools/testing/selftests/livepatch/config
-> @@ -1 +1,3 @@
-> +CONFIG_LIVEPATCH=y
-> +CONFIG_DYNAMIC_DEBUG=y
->   CONFIG_TEST_LIVEPATCH=m
-> 
+Hello David Ahern,
 
-Cool, I didn't know about that make target when doing commit 
-bae054372aba ("selftests/livepatch: add DYNAMIC_DEBUG config dependency")
+The patch acda655fefae: "selftests: Add nettest" from Aug 1, 2019,
+leads to the following static checker warning:
 
-How does kselftest-merge verify dependencies?
+	./tools/testing/selftests/net/nettest.c:1690 main()
+	warn: unsigned 'tmp' is never less than zero.
 
-CONFIG_LIVEPATCH has its own list of configuration dependencies (see 
-kernel/livepatch/Kconfig) but we don't list all of those in this config 
-file.  Just curious.
+./tools/testing/selftests/net/nettest.c
+  1680                  case '1':
+  1681                          args.has_expected_raddr = 1;
+  1682                          if (convert_addr(&args, optarg,
+  1683                                           ADDR_TYPE_EXPECTED_REMOTE))
+  1684                                  return 1;
+  1685  
+  1686                          break;
+  1687                  case '2':
+  1688                          if (str_to_uint(optarg, 0, 0x7ffffff, &tmp) != 0) {
+  1689                                  tmp = get_ifidx(optarg);
+  1690                                  if (tmp < 0) {
 
-Thanks,
+"tmp" is unsigned so it can't be negative.  Also all the callers assume
+that get_ifidx() returns negatives on error but it looks like it really
+returns zero on error so it's a bit unclear to me.
 
--- Joe
+  1691                                          fprintf(stderr,
+  1692                                                  "Invalid device index\n");
+  1693                                          return 1;
+  1694                                  }
+  1695                          }
+  1696                          args.expected_ifindex = (int)tmp;
+  1697                          break;
+  1698                  case 'q':
+  1699                          quiet = 1;
+
+regards,
+dan carpenter
