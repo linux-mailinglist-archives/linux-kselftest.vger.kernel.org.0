@@ -2,55 +2,55 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8869F8F76A
-	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Aug 2019 01:09:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F23A68F78A
+	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Aug 2019 01:21:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387425AbfHOXJL (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 15 Aug 2019 19:09:11 -0400
-Received: from mail-oi1-f193.google.com ([209.85.167.193]:38132 "EHLO
-        mail-oi1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726080AbfHOXJK (ORCPT
+        id S1731980AbfHOXVn (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 15 Aug 2019 19:21:43 -0400
+Received: from mail-ot1-f65.google.com ([209.85.210.65]:35499 "EHLO
+        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731923AbfHOXVn (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 15 Aug 2019 19:09:10 -0400
-Received: by mail-oi1-f193.google.com with SMTP id p124so3484323oig.5
-        for <linux-kselftest@vger.kernel.org>; Thu, 15 Aug 2019 16:09:10 -0700 (PDT)
+        Thu, 15 Aug 2019 19:21:43 -0400
+Received: by mail-ot1-f65.google.com with SMTP id g17so7201844otl.2
+        for <linux-kselftest@vger.kernel.org>; Thu, 15 Aug 2019 16:21:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=Pubd6f1tcZHifquOcrj8xQglVw6DCxjyDkP+6D1UxS0=;
-        b=JkRFzeRfQlWs+Pyjcat2Ssn+D8XoJ1Uow7Ah+iXZrqxiUrkwD5e301ji+FAnkgr3Mi
-         zQyExXAXO0ueRB6RKdinbV4d+uew/w3RGB1LZBzLVeWxJU1P+s7GT8dtzEEfX1l490DR
-         5RRcWZMODHPXuCDS97ebyvj1t4/x10SAdNswXg5uL1xvkwb/77E/VvebPuUbzUAp8mcW
-         aLfr2eozWfE9Hz1Szd5c8U8Whe5ZubXfCrM+YBMFJxGap3xnbKhQgHjzjQPnn+klku5l
-         VVvGmdO7O1JLyLjJFvUB4dACVRZaZImub65FzL/miuQuE4GIHHIO8W0NT4Y7VsAstxOL
-         5Ilg==
+        bh=dKki/EwYrEwHcUw/EYpE1A8bRtkdaIPBT0A+rYW833k=;
+        b=FqJsEUX9p2wJpt0QFo4kVRltYAd4kE8/zf05Glq1awj72YkDCwC7a2k5uFBU8npGFL
+         QfYnI4GpcsTnPpFAbdygnd05TGAIKRFnqfDyPf1s8A8s3zdt06ymK68sFO94ObOkpukU
+         f77EXc5p++cCSZo5EWrNoeATWln0Aon7ESr2igTXrlIW7h2UxzLx5qRdXCFUd+4L2mqR
+         0/HdgDUqKqKE+TmIdJqJojMsY54IVcR3kezx3rZzTLHkwY9BGRmvU4vruBdo+LjP1GQD
+         hjbEkdLrRtnI/f1w+2MFsO7qmpaMyEaSQV6lNZZ6u9vW6V232fdmmy18YUIlZyySIxwF
+         BXOw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=Pubd6f1tcZHifquOcrj8xQglVw6DCxjyDkP+6D1UxS0=;
-        b=HsG43yPERzrSagAYveXzkHThXLPjUKQruJ+Xfu18AF0wie8SwLmcAzL5ql8eN2bgAo
-         yEfvPDAkPRcPbK7Dbgn0la5we/no3frfxkExGC4eJZ4srM+adnyrOBReD15YoejK1Uwd
-         b7QQnSNRZmoYLTRJnguyZ988mmdmkmQ9DhOrtdScoIRlz0bgC90FwHMj/jo1MRkeUtCy
-         C/wakhybJnx67uVAEMc+pFFkK+MKRKOPxyt7I2YoUxDm8Vo5AEQImZNck3KGeAClVjmY
-         j5vhw0RsJHLU80GV1kBm0t2elWW6LgrZ2UT8D3znymlmcwfLI8wlEgz6eWj2mmbQ7a6Y
-         3lpg==
-X-Gm-Message-State: APjAAAVeURupsIU3flIHCr0LzY6qUXHbhln3HGJndNy0mkLfaegrdtYT
-        lNFGLRpFG8nJ80yI1iC1iKROGMIsO3Td/5QpEg4o0Q==
-X-Google-Smtp-Source: APXvYqxN0uUAEJhEjtJzjXxnKNYpPNiK/F/NzefhYeJ0Iv6GCu8lETSML8m0YWqPezXLufCngXQA/Okrum/me97k7VQ=
-X-Received: by 2002:aca:cfcb:: with SMTP id f194mr3347602oig.103.1565910549591;
- Thu, 15 Aug 2019 16:09:09 -0700 (PDT)
+        bh=dKki/EwYrEwHcUw/EYpE1A8bRtkdaIPBT0A+rYW833k=;
+        b=HEZxECKfoi1ka5vvC2Yzy6en4rKRHrwTkA+rpGalzEuXO9TAlZICqIyT83bKmAQp/Y
+         ON2MV/+W9KOTsCvpuEgwMsEIqIAMmrO10Hr1vgqKjoRnyb/4wO6BoV/GcuX/kgvBjx8X
+         hrqxacK1h/XnYosLZZ23R0KM/iWcrq2aFMKB12wLyvOvr8IZdCYKx66GaTv5sH7QX9RT
+         NWdrrcsa9Ks71BD4REg2rrsOWIrLlYKGOZqniuGRwurjPCsv7UWE37/ekXS6ncIv4plv
+         1/EPazu1YgdyTZ4bOpAcpzM6CTFMXb+aJkpHxAqzXXlSombsP0C4ksnBa1hkAPAI6UNx
+         LEPg==
+X-Gm-Message-State: APjAAAX7TMbpbJIZIlNzS5dTYafAcoae1VktBFOiKl+feFcDXkUKjbGr
+        mdlmpz8xqHY5D04v3G6BmqyTmKgkauE2ww0aTPJ+XA==
+X-Google-Smtp-Source: APXvYqxSjZHhbV1aP2RGVVFy2EPRPYaaT1UXVhJW6VhVjBobqiJVhmRI6Ldx53tmxKJWmjGthsUVUJgqdFvYe2CWjjc=
+X-Received: by 2002:a9d:6508:: with SMTP id i8mr5532464otl.355.1565911301709;
+ Thu, 15 Aug 2019 16:21:41 -0700 (PDT)
 MIME-Version: 1.0
-References: <20190808231340.53601-1-almasrymina@google.com>
- <20190808231340.53601-5-almasrymina@google.com> <47cfc50d-bea3-0247-247e-888d2942f134@oracle.com>
-In-Reply-To: <47cfc50d-bea3-0247-247e-888d2942f134@oracle.com>
+References: <20190808231340.53601-1-almasrymina@google.com> <20190815035352.14952-1-hdanton@sina.com>
+In-Reply-To: <20190815035352.14952-1-hdanton@sina.com>
 From:   Mina Almasry <almasrymina@google.com>
-Date:   Thu, 15 Aug 2019 16:08:57 -0700
-Message-ID: <CAHS8izNAZLQnHi6qXiO_efgSs1x2NOXKOKy7rZf+oF-8+hq=YQ@mail.gmail.com>
-Subject: Re: [RFC PATCH v2 4/5] hugetlb_cgroup: Add accounting for shared mappings
-To:     Mike Kravetz <mike.kravetz@oracle.com>
-Cc:     shuah <shuah@kernel.org>, David Rientjes <rientjes@google.com>,
+Date:   Thu, 15 Aug 2019 16:21:30 -0700
+Message-ID: <CAHS8izP5dJsDmLuL14q8aJS_hhd1svq1FPpTNL+qKW8+6mm76g@mail.gmail.com>
+Subject: Re: [RFC PATCH v2 1/5] hugetlb_cgroup: Add hugetlb_cgroup reservation counter
+To:     Hillf Danton <hdanton@sina.com>
+Cc:     Mike Kravetz <mike.kravetz@oracle.com>, shuah <shuah@kernel.org>,
+        David Rientjes <rientjes@google.com>,
         Shakeel Butt <shakeelb@google.com>,
         Greg Thelen <gthelen@google.com>, akpm@linux-foundation.org,
         khalid.aziz@oracle.com, open list <linux-kernel@vger.kernel.org>,
@@ -61,94 +61,249 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Aug 13, 2019 at 4:54 PM Mike Kravetz <mike.kravetz@oracle.com> wrote:
+On Wed, Aug 14, 2019 at 8:54 PM Hillf Danton <hdanton@sina.com> wrote:
 >
-> On 8/8/19 4:13 PM, Mina Almasry wrote:
-> > For shared mappings, the pointer to the hugetlb_cgroup to uncharge lives
-> > in the resv_map entries, in file_region->reservation_counter.
+>
+> On Thu,  8 Aug 2019 16:13:36 -0700 Mina Almasry wrote:
 > >
-> > When a file_region entry is added to the resv_map via region_add, we
-> > also charge the appropriate hugetlb_cgroup and put the pointer to that
-> > in file_region->reservation_counter. This is slightly delicate since we
-> > need to not modify the resv_map until we know that charging the
-> > reservation has succeeded. If charging doesn't succeed, we report the
-> > error to the caller, so that the kernel fails the reservation.
->
-> I wish we did not need to modify these region_() routines as they are
-> already difficult to understand.  However, I see no other way with the
-> desired semantics.
->
-> > On region_del, which is when the hugetlb memory is unreserved, we delete
-> > the file_region entry in the resv_map, but also uncharge the
-> > file_region->reservation_counter.
-> >
+> > These counters will track hugetlb reservations rather than hugetlb
+> > memory faulted in. This patch only adds the counter, following patches
+> > add the charging and uncharging of the counter.
 > > ---
-> >  mm/hugetlb.c | 208 +++++++++++++++++++++++++++++++++++++++++----------
-> >  1 file changed, 170 insertions(+), 38 deletions(-)
+>
+>   !?!
+>
+
+Thanks for reviewing. I'm not sure what you're referring to though.
+What's wrong here?
+
+> >  include/linux/hugetlb.h |  2 +-
+> >  mm/hugetlb_cgroup.c     | 86 +++++++++++++++++++++++++++++++++++++----
+> >  2 files changed, 80 insertions(+), 8 deletions(-)
 > >
-> > diff --git a/mm/hugetlb.c b/mm/hugetlb.c
-> > index 235996aef6618..d76e3137110ab 100644
-> > --- a/mm/hugetlb.c
-> > +++ b/mm/hugetlb.c
-> > @@ -242,8 +242,72 @@ struct file_region {
-> >       struct list_head link;
-> >       long from;
-> >       long to;
-> > +#ifdef CONFIG_CGROUP_HUGETLB
+> > diff --git a/include/linux/hugetlb.h b/include/linux/hugetlb.h
+> > index edfca42783192..6777b3013345d 100644
+> > --- a/include/linux/hugetlb.h
+> > +++ b/include/linux/hugetlb.h
+> > @@ -340,7 +340,7 @@ struct hstate {
+> >       unsigned int surplus_huge_pages_node[MAX_NUMNODES];
+> >  #ifdef CONFIG_CGROUP_HUGETLB
+> >       /* cgroup control files */
+> > -     struct cftype cgroup_files[5];
+> > +     struct cftype cgroup_files[9];
+>
+> Move that enum in this header file and replace numbers with characters
+> to easy both reading and maintaining.
+> >  #endif
+> >       char name[HSTATE_NAME_LEN];
+> >  };
+> > diff --git a/mm/hugetlb_cgroup.c b/mm/hugetlb_cgroup.c
+> > index 68c2f2f3c05b7..708103663988a 100644
+> > --- a/mm/hugetlb_cgroup.c
+> > +++ b/mm/hugetlb_cgroup.c
+> > @@ -25,6 +25,10 @@ struct hugetlb_cgroup {
+> >        * the counter to account for hugepages from hugetlb.
+> >        */
+> >       struct page_counter hugepage[HUGE_MAX_HSTATE];
 > > +     /*
-> > +      * On shared mappings, each reserved region appears as a struct
-> > +      * file_region in resv_map. These fields hold the info needed to
-> > +      * uncharge each reservation.
+> > +      * the counter to account for hugepage reservations from hugetlb.
 > > +      */
-> > +     struct page_counter *reservation_counter;
-> > +     unsigned long pages_per_hpage;
-> > +#endif
+> > +     struct page_counter reserved_hugepage[HUGE_MAX_HSTATE];
 > >  };
 > >
-> > +/* Must be called with resv->lock held. Calling this with dry_run == true will
-> > + * count the number of pages added but will not modify the linked list.
-> > + */
-> > +static long consume_regions_we_overlap_with(struct file_region *rg,
-> > +             struct list_head *head, long f, long *t,
-> > +             struct hugetlb_cgroup *h_cg,
-> > +             struct hstate *h,
-> > +             bool dry_run)
+> >  #define MEMFILE_PRIVATE(x, val)      (((x) << 16) | (val))
+> > @@ -33,6 +37,15 @@ struct hugetlb_cgroup {
+> >
+> >  static struct hugetlb_cgroup *root_h_cgroup __read_mostly;
+> >
+> > +static inline
+> > +struct page_counter *get_counter(struct hugetlb_cgroup *h_cg, int idx,
+> > +                              bool reserved)
+>
+> s/get_/hugetlb_cgroup_get_/ to make it not too generic.
 > > +{
-> > +     long add = 0;
-> > +     struct file_region *trg = NULL, *nrg = NULL;
+> > +     if (reserved)
+> > +             return  &h_cg->reserved_hugepage[idx];
+> > +     return &h_cg->hugepage[idx];
+> > +}
 > > +
-> > +     /* Consume any regions we now overlap with. */
-> > +     nrg = rg;
-> > +     list_for_each_entry_safe(rg, trg, rg->link.prev, link) {
-> > +             if (&rg->link == head)
-> > +                     break;
-> > +             if (rg->from > *t)
-> > +                     break;
+> >  static inline
+> >  struct hugetlb_cgroup *hugetlb_cgroup_from_css(struct cgroup_subsys_state *s)
+> >  {
+> > @@ -256,28 +269,42 @@ void hugetlb_cgroup_uncharge_cgroup(int idx, unsigned long nr_pages,
+> >
+> >  enum {
+> >       RES_USAGE,
+> > +     RES_RESERVATION_USAGE,
+> >       RES_LIMIT,
+> > +     RES_RESERVATION_LIMIT,
+> >       RES_MAX_USAGE,
+> > +     RES_RESERVATION_MAX_USAGE,
+> >       RES_FAILCNT,
+> > +     RES_RESERVATION_FAILCNT,
+> >  };
+> >
+> >  static u64 hugetlb_cgroup_read_u64(struct cgroup_subsys_state *css,
+> >                                  struct cftype *cft)
+> >  {
+> >       struct page_counter *counter;
+> > +     struct page_counter *reserved_counter;
+> >       struct hugetlb_cgroup *h_cg = hugetlb_cgroup_from_css(css);
+> >
+> >       counter = &h_cg->hugepage[MEMFILE_IDX(cft->private)];
+> > +     reserved_counter = &h_cg->reserved_hugepage[MEMFILE_IDX(cft->private)];
+> >
+> >       switch (MEMFILE_ATTR(cft->private)) {
+> >       case RES_USAGE:
+> >               return (u64)page_counter_read(counter) * PAGE_SIZE;
+> > +     case RES_RESERVATION_USAGE:
+> > +             return (u64)page_counter_read(reserved_counter) * PAGE_SIZE;
+> >       case RES_LIMIT:
+> >               return (u64)counter->max * PAGE_SIZE;
+> > +     case RES_RESERVATION_LIMIT:
+> > +             return (u64)reserved_counter->max * PAGE_SIZE;
+> >       case RES_MAX_USAGE:
+> >               return (u64)counter->watermark * PAGE_SIZE;
+> > +     case RES_RESERVATION_MAX_USAGE:
+> > +             return (u64)reserved_counter->watermark * PAGE_SIZE;
+> >       case RES_FAILCNT:
+> >               return counter->failcnt;
+> > +     case RES_RESERVATION_FAILCNT:
+> > +             return reserved_counter->failcnt;
+> >       default:
+> >               BUG();
+> >       }
+> > @@ -291,6 +318,7 @@ static ssize_t hugetlb_cgroup_write(struct kernfs_open_file *of,
+> >       int ret, idx;
+> >       unsigned long nr_pages;
+> >       struct hugetlb_cgroup *h_cg = hugetlb_cgroup_from_css(of_css(of));
+> > +     bool reserved = false;
+> >
+> >       if (hugetlb_cgroup_is_root(h_cg)) /* Can't set limit on root */
+> >               return -EINVAL;
+> > @@ -303,10 +331,16 @@ static ssize_t hugetlb_cgroup_write(struct kernfs_open_file *of,
+> >       idx = MEMFILE_IDX(of_cft(of)->private);
+> >       nr_pages = round_down(nr_pages, 1 << huge_page_order(&hstates[idx]));
+> >
+> > +     if (MEMFILE_ATTR(of_cft(of)->private) == RES_RESERVATION_LIMIT) {
+> > +             reserved = true;
+> > +     }
 > > +
-> > +             /* If this area reaches higher then extend our area to
-> > +              * include it completely.  If this is not the first area
-> > +              * which we intend to reuse, free it.
-> > +              */
-> > +             if (rg->to > *t)
-> > +                     *t = rg->to;
-> > +             if (rg != nrg) {
-> > +                     /* Decrement return value by the deleted range.
-> > +                      * Another range will span this area so that by
-> > +                      * end of routine add will be >= zero
-> > +                      */
-> > +                     add -= (rg->to - rg->from);
-> > +                     if (!dry_run) {
-> > +                             list_del(&rg->link);
-> > +                             kfree(rg);
+> >       switch (MEMFILE_ATTR(of_cft(of)->private)) {
+> > +     case RES_RESERVATION_LIMIT:
+>                 reserved = true;
+>                 /* fall thru */
 >
-> Is it possible that the region struct we are deleting pointed to
-> a reservation_counter?  Perhaps even for another cgroup?
-> Just concerned with the way regions are coalesced that we may be
-> deleting counters.
+> >       case RES_LIMIT:
+> >               mutex_lock(&hugetlb_limit_mutex);
+> > -             ret = page_counter_set_max(&h_cg->hugepage[idx], nr_pages);
+> > +             ret = page_counter_set_max(get_counter(h_cg, idx, reserved),
+> > +                                        nr_pages);
+> >               mutex_unlock(&hugetlb_limit_mutex);
+> >               break;
+> >       default:
+> > @@ -320,18 +354,26 @@ static ssize_t hugetlb_cgroup_reset(struct kernfs_open_file *of,
+> >                                   char *buf, size_t nbytes, loff_t off)
+> >  {
+> >       int ret = 0;
+> > -     struct page_counter *counter;
+> > +     struct page_counter *counter, *reserved_counter;
+> >       struct hugetlb_cgroup *h_cg = hugetlb_cgroup_from_css(of_css(of));
+> >
+> >       counter = &h_cg->hugepage[MEMFILE_IDX(of_cft(of)->private)];
+> > +     reserved_counter = &h_cg->reserved_hugepage[
+> > +             MEMFILE_IDX(of_cft(of)->private)];
+> >
+> >       switch (MEMFILE_ATTR(of_cft(of)->private)) {
+> >       case RES_MAX_USAGE:
+> >               page_counter_reset_watermark(counter);
+> >               break;
+> > +     case RES_RESERVATION_MAX_USAGE:
+> > +             page_counter_reset_watermark(reserved_counter);
+> > +             break;
+> >       case RES_FAILCNT:
+> >               counter->failcnt = 0;
+> >               break;
+> > +     case RES_RESERVATION_FAILCNT:
+> > +             reserved_counter->failcnt = 0;
+> > +             break;
+> >       default:
+> >               ret = -EINVAL;
+> >               break;
+> > @@ -357,7 +399,7 @@ static void __init __hugetlb_cgroup_file_init(int idx)
+> >       struct hstate *h = &hstates[idx];
+> >
+> >       /* format the size */
+> > -     mem_fmt(buf, 32, huge_page_size(h));
+> > +     mem_fmt(buf, sizeof(buf), huge_page_size(h));
+> >
+> >       /* Add the limit file */
+> >       cft = &h->cgroup_files[0];
+> > @@ -366,28 +408,58 @@ static void __init __hugetlb_cgroup_file_init(int idx)
+> >       cft->read_u64 = hugetlb_cgroup_read_u64;
+> >       cft->write = hugetlb_cgroup_write;
+> >
+> > -     /* Add the usage file */
+> > +     /* Add the reservation limit file */
+> >       cft = &h->cgroup_files[1];
+> > +     snprintf(cft->name, MAX_CFTYPE_NAME, "%s.reservation_limit_in_bytes",
+> > +              buf);
+> > +     cft->private = MEMFILE_PRIVATE(idx, RES_RESERVATION_LIMIT);
+> > +     cft->read_u64 = hugetlb_cgroup_read_u64;
+> > +     cft->write = hugetlb_cgroup_write;
+> > +
+> > +     /* Add the usage file */
+> > +     cft = &h->cgroup_files[2];
+> >       snprintf(cft->name, MAX_CFTYPE_NAME, "%s.usage_in_bytes", buf);
+> >       cft->private = MEMFILE_PRIVATE(idx, RES_USAGE);
+> >       cft->read_u64 = hugetlb_cgroup_read_u64;
+> >
+> > +     /* Add the reservation usage file */
+> > +     cft = &h->cgroup_files[3];
+> > +     snprintf(cft->name, MAX_CFTYPE_NAME, "%s.reservation_usage_in_bytes",
+> > +                     buf);
+> > +     cft->private = MEMFILE_PRIVATE(idx, RES_RESERVATION_USAGE);
+> > +     cft->read_u64 = hugetlb_cgroup_read_u64;
+> > +
+> >       /* Add the MAX usage file */
+> > -     cft = &h->cgroup_files[2];
+> > +     cft = &h->cgroup_files[4];
+> >       snprintf(cft->name, MAX_CFTYPE_NAME, "%s.max_usage_in_bytes", buf);
+> >       cft->private = MEMFILE_PRIVATE(idx, RES_MAX_USAGE);
+> >       cft->write = hugetlb_cgroup_reset;
+> >       cft->read_u64 = hugetlb_cgroup_read_u64;
+> >
+> > +     /* Add the MAX reservation usage file */
+> > +     cft = &h->cgroup_files[5];
+> > +     snprintf(cft->name, MAX_CFTYPE_NAME,
+> > +                     "%s.reservation_max_usage_in_bytes", buf);
+> > +     cft->private = MEMFILE_PRIVATE(idx, RES_RESERVATION_MAX_USAGE);
+> > +     cft->write = hugetlb_cgroup_reset;
+> > +     cft->read_u64 = hugetlb_cgroup_read_u64;
+> > +
+> >       /* Add the failcntfile */
+> > -     cft = &h->cgroup_files[3];
+> > +     cft = &h->cgroup_files[6];
+> >       snprintf(cft->name, MAX_CFTYPE_NAME, "%s.failcnt", buf);
+> >       cft->private  = MEMFILE_PRIVATE(idx, RES_FAILCNT);
+> >       cft->write = hugetlb_cgroup_reset;
+> >       cft->read_u64 = hugetlb_cgroup_read_u64;
+> >
+> > +     /* Add the reservation failcntfile */
+> > +     cft = &h->cgroup_files[7];
+> > +     snprintf(cft->name, MAX_CFTYPE_NAME, "%s.reservation_failcnt", buf);
+> > +     cft->private  = MEMFILE_PRIVATE(idx, RES_FAILCNT);
+> > +     cft->write = hugetlb_cgroup_reset;
+> > +     cft->read_u64 = hugetlb_cgroup_read_u64;
+> > +
+> >       /* NULL terminate the last cft */
+> > -     cft = &h->cgroup_files[4];
+> > +     cft = &h->cgroup_files[8];
+> >       memset(cft, 0, sizeof(*cft));
 >
-
-Yep, that needs to be handled I think. Thanks for catching!
-
-
-> --
-> Mike Kravetz
+> Replace numbers with characters.
+> >
+> >       WARN_ON(cgroup_add_legacy_cftypes(&hugetlb_cgrp_subsys,
+> > --
+> > 2.23.0.rc1.153.gdeed80330f-goog
+>
