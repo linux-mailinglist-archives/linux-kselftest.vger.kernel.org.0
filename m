@@ -2,102 +2,84 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E2DA8E612
-	for <lists+linux-kselftest@lfdr.de>; Thu, 15 Aug 2019 10:18:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 890768E75F
+	for <lists+linux-kselftest@lfdr.de>; Thu, 15 Aug 2019 10:49:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726865AbfHOISO (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 15 Aug 2019 04:18:14 -0400
-Received: from userp2120.oracle.com ([156.151.31.85]:51558 "EHLO
-        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730869AbfHOISN (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 15 Aug 2019 04:18:13 -0400
-Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
-        by userp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x7F8EUpI180838;
-        Thu, 15 Aug 2019 08:18:11 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : mime-version : content-type; s=corp-2019-08-05;
- bh=HelmCFZbqj2rmdhjCFWAXjTPPw6e+Nfouk8FRPn/GBs=;
- b=FX49OUYITaQbV3OTdZIBcKa+07DGGdLiJMe/lSrakBGZaSci4pGq7+TJqok9VLlTLWtj
- 9WOFw9Pbxt6tlJjZgmtheeWbGgRL1Cdmvwq6LIoIXWAmsOFak6UZ9BI1g2Ucpqfvt34/
- rqpehVfIpnfFfUdcVWnkQ2TaqN8Gwq/FZbfd1SRyo7wAj8QL0uPur/GaHgdHB2BiIGVe
- 1kcUjFXD4UvjtlDwuQXPz0FyUU8vyruzdNAHZsb9RFslCJk+isd16Ez3ELIjdPujo9kM
- YPCC3EexUyAyXLw7z1oBJQmNV5Veu6ca7Kp9nb1Ar4pjQIGeAcpLnU7Pctw0d+7HZEN1 DQ== 
-Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by userp2120.oracle.com with ESMTP id 2u9pjqse55-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 15 Aug 2019 08:18:11 +0000
-Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x7F8I5dr006659;
-        Thu, 15 Aug 2019 08:18:10 GMT
-Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
-        by aserp3020.oracle.com with ESMTP id 2ucpys4u71-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 15 Aug 2019 08:18:10 +0000
-Received: from abhmp0011.oracle.com (abhmp0011.oracle.com [141.146.116.17])
-        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id x7F8IAH3012048;
-        Thu, 15 Aug 2019 08:18:10 GMT
-Received: from mwanda (/41.57.98.10)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Thu, 15 Aug 2019 01:18:09 -0700
-Date:   Thu, 15 Aug 2019 11:18:03 +0300
-From:   Dan Carpenter <dan.carpenter@oracle.com>
-To:     andreyknvl@google.com
-Cc:     linux-kselftest@vger.kernel.org
-Subject: [bug report] selftests, arm64: add a selftest for passing tagged
- pointers to kernel
-Message-ID: <20190815081803.GA27238@mwanda>
+        id S1728660AbfHOItZ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 15 Aug 2019 04:49:25 -0400
+Received: from mail.kernel.org ([198.145.29.99]:35646 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726027AbfHOItZ (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 15 Aug 2019 04:49:25 -0400
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 78148218C9;
+        Thu, 15 Aug 2019 08:49:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1565858964;
+        bh=hWTTTkR4rwS2l5FUJgldUqWsSPmx6Qek8c4m1QxhUZo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=u8AWuu4fOejF2RYy+PawpZAqyzXp/u36EwXSoyuwIVTiJh3PmN8+cLh1CbYclj0zj
+         Yt9LP0sq+ypW5XMoQ0yddIDatDT7WgwIfvXdV79rAYO0C36sYi3mB8xmiYgX03juSl
+         yiMai7+diCiyTFHAtcgdnVT6IawYsx4mBjAvkpTc=
+Date:   Thu, 15 Aug 2019 10:49:21 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Knut Omang <knut.omang@oracle.com>
+Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kbuild@vger.kernel.org,
+        Shuah Khan <shuah@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Masahiro Yamada <yamada.masahiro@socionext.com>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Shreyans Devendra Doshi <0xinfosect0r@gmail.com>,
+        Alan Maguire <alan.maguire@oracle.com>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Hidenori Yamaji <hidenori.yamaji@sony.com>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Timothy Bird <Tim.Bird@sony.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Theodore Ts'o <tytso@mit.edu>, Daniel Vetter <daniel@ffwll.ch>,
+        Stephen Boyd <sboyd@kernel.org>
+Subject: Re: [RFC 06/19] ktf: A simple debugfs interface to test results
+Message-ID: <20190815084921.GE3512@kroah.com>
+References: <cover.92d76bb4f6dcedc971d0b72a49e8e459a98bca54.1565676440.git-series.knut.omang@oracle.com>
+ <ae6c38384e2338aa3cfb8a4e4dd1002833789253.1565676440.git-series.knut.omang@oracle.com>
+ <20190813082152.GA17627@kroah.com>
+ <a63bea757e02656a38463cc794da7da15273dd16.camel@oracle.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9349 signatures=668684
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=3 malwarescore=0
- phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=848
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.0.1-1906280000 definitions=main-1908150088
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9349 signatures=668684
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
- suspectscore=3 phishscore=0 bulkscore=0 spamscore=0 clxscore=1011
- lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=897 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1906280000
- definitions=main-1908150087
+In-Reply-To: <a63bea757e02656a38463cc794da7da15273dd16.camel@oracle.com>
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hello Andrey Konovalov,
+On Wed, Aug 14, 2019 at 07:17:07PM +0200, Knut Omang wrote:
+> I notice the discussion and your response here: 
+> http://linux-kernel.2935.n7.nabble.com/debugfs-and-module-unloading-td865175.html
+> I assume that means that protection against module unload while a debugfs file
+> is open is now safe.
 
-The patch 9ce1263033cd: "selftests, arm64: add a selftest for passing
-tagged pointers to kernel" from Jul 23, 2019, leads to the following
-static checker warning:
+It should be, if you set the *owner field of your file_operations
+properly.  Try it and see!
 
-	./tools/testing/selftests/arm64/tags_test.c:25 main()
-	error: uninitialized symbol 'tagged_ptr'.
+> On older kernels, having this code in place is far better than an unprotected 
+> debugfs entry/exit - I have tested it extensively in the past :-)
 
-tools/testing/selftests/arm64/tags_test.c
-    14  int main(void)
-    15  {
-    16          static int tbi_enabled = 0;
-    17          struct utsname *ptr, *tagged_ptr;
-                                      ^^^^^^^^^^
+Yes, it seems to work, but again, it really is racy and will fail.
+Please don't use it.
 
-    18          int err;
-    19  
-    20          if (prctl(PR_SET_TAGGED_ADDR_CTRL, PR_TAGGED_ADDR_ENABLE, 0, 0, 0) == 0)
-    21                  tbi_enabled = 1;
-    22          ptr = (struct utsname *)malloc(sizeof(*ptr));
-    23          if (tbi_enabled)
-    24                  tagged_ptr = (struct utsname *)SET_TAG(ptr, 0x42);
-                ^^^^^^^^^^^^^^^
-No else path.
+> I perfectly agree with you that reducing the hole for a race condition 
+> is generally a bad idea, but from the above mail thread 
+> it seems that's the only available choice for older kernels?
 
-    25          err = uname(tagged_ptr);
-    26          free(ptr);
-    27  
-    28          return err;
-    29  }
+I have no idea, but please, do not use that pattern of code as it is
+racy in all kernels, from all of time.
 
-regards,
-dan carpenter
+thanks,
+
+greg k-h
