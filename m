@@ -2,96 +2,102 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 25EEA8E5D3
-	for <lists+linux-kselftest@lfdr.de>; Thu, 15 Aug 2019 09:58:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E2DA8E612
+	for <lists+linux-kselftest@lfdr.de>; Thu, 15 Aug 2019 10:18:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730745AbfHOH6k (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 15 Aug 2019 03:58:40 -0400
-Received: from mail-lf1-f68.google.com ([209.85.167.68]:44760 "EHLO
-        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728660AbfHOH6k (ORCPT
+        id S1726865AbfHOISO (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 15 Aug 2019 04:18:14 -0400
+Received: from userp2120.oracle.com ([156.151.31.85]:51558 "EHLO
+        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730869AbfHOISN (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 15 Aug 2019 03:58:40 -0400
-Received: by mail-lf1-f68.google.com with SMTP id v16so1066769lfg.11
-        for <linux-kselftest@vger.kernel.org>; Thu, 15 Aug 2019 00:58:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ZxYIVJXDl0DAiqdp8/QVOF+ggKcEMBtGLnHvtUKRSiU=;
-        b=T0OEX7pfHxaxo4aOq3gWAKq/k0OH2V2V+0DlhgiT8Hrugb/ErCNRJlwXiF/Nr/oE/w
-         4QYtPLkq3vH5b/AhdCSlkirEHFA5XypmeH9DrVATrPxXf/2iJ1FEHF4KhayWLtKLqt1Z
-         okxEUthyOLkUCCJxiDwPdOgsa+jYUm0rwvb15ZWFrcAIW5BY08SehpOBA8iGpKfiYhLj
-         qw5PevsY02PaqtX/tnUtCusfkEE2SkxjevazeUKUYxO1kcXuRl3MrRKHfdbMzWdCfycZ
-         Nr0oJerFm+zm4wRsJ9JU+889w1msI+zFq7lHEvsyyfHNfdsJJEHWYzqYdY+CFIzD6VUl
-         dbjw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ZxYIVJXDl0DAiqdp8/QVOF+ggKcEMBtGLnHvtUKRSiU=;
-        b=eOG1q20ISuPjJzIybGfUvWepEob/K/7XbpdRb4SUAxJrLWkIL2b/x06HtlXKLphDld
-         iJ4RLwdN9H6g7B7l1Hkobrk0jcAKBnPHqsUWZVMTn8PuUW6Ay/74SDsGnZ0eXs3RUbOj
-         SnBmo0n73vRtlZGeAADDHipfHDODw/gsB3H3d+4mVsnOqhE2bMpH7KXjbO7ThEcz0vHB
-         2pLKqAWmPOmd376JrZpZuDsTor1wfSO2tux5JnHe7q6NUM9I+dc+vwYOHJclXiUconrM
-         skC6yW0LCSlDqIpDjsNiAQPgpqoqiwtKuKZNMhCXXQN0k83vTs0XHNm2ycAGmebD2ag6
-         15Xg==
-X-Gm-Message-State: APjAAAU5W2zCEoyZVDhbgNungk8WG0ErL8de7rXZcrrN0Jecc/n7OWBJ
-        KDGWw5CwyCFG3nTgdmsxRO9l7w==
-X-Google-Smtp-Source: APXvYqxls4X1ddxQTHCuwIDVXDZ78NOkk+luCUq8TVbBFysydFKTl+4JYn40PZg7QDBcqHkKXP/y1A==
-X-Received: by 2002:a19:9111:: with SMTP id t17mr1694958lfd.113.1565855918902;
-        Thu, 15 Aug 2019 00:58:38 -0700 (PDT)
-Received: from localhost (c-243c70d5.07-21-73746f28.bbcust.telenor.se. [213.112.60.36])
-        by smtp.gmail.com with ESMTPSA id w8sm319257lfq.53.2019.08.15.00.58.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Aug 2019 00:58:38 -0700 (PDT)
-From:   Anders Roxell <anders.roxell@linaro.org>
-To:     davem@davemloft.net, shuah@kernel.org
-Cc:     netdev@vger.kernel.org, tim.bird@sony.com,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Anders Roxell <anders.roxell@linaro.org>
-Subject: [PATCH v2] selftests: net: tcp_fastopen_backup_key.sh: fix shellcheck issue
-Date:   Thu, 15 Aug 2019 09:58:26 +0200
-Message-Id: <20190815075826.13210-1-anders.roxell@linaro.org>
-X-Mailer: git-send-email 2.20.1
+        Thu, 15 Aug 2019 04:18:13 -0400
+Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
+        by userp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x7F8EUpI180838;
+        Thu, 15 Aug 2019 08:18:11 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : mime-version : content-type; s=corp-2019-08-05;
+ bh=HelmCFZbqj2rmdhjCFWAXjTPPw6e+Nfouk8FRPn/GBs=;
+ b=FX49OUYITaQbV3OTdZIBcKa+07DGGdLiJMe/lSrakBGZaSci4pGq7+TJqok9VLlTLWtj
+ 9WOFw9Pbxt6tlJjZgmtheeWbGgRL1Cdmvwq6LIoIXWAmsOFak6UZ9BI1g2Ucpqfvt34/
+ rqpehVfIpnfFfUdcVWnkQ2TaqN8Gwq/FZbfd1SRyo7wAj8QL0uPur/GaHgdHB2BiIGVe
+ 1kcUjFXD4UvjtlDwuQXPz0FyUU8vyruzdNAHZsb9RFslCJk+isd16Ez3ELIjdPujo9kM
+ YPCC3EexUyAyXLw7z1oBJQmNV5Veu6ca7Kp9nb1Ar4pjQIGeAcpLnU7Pctw0d+7HZEN1 DQ== 
+Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
+        by userp2120.oracle.com with ESMTP id 2u9pjqse55-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 15 Aug 2019 08:18:11 +0000
+Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
+        by aserp3020.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x7F8I5dr006659;
+        Thu, 15 Aug 2019 08:18:10 GMT
+Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
+        by aserp3020.oracle.com with ESMTP id 2ucpys4u71-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 15 Aug 2019 08:18:10 +0000
+Received: from abhmp0011.oracle.com (abhmp0011.oracle.com [141.146.116.17])
+        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id x7F8IAH3012048;
+        Thu, 15 Aug 2019 08:18:10 GMT
+Received: from mwanda (/41.57.98.10)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Thu, 15 Aug 2019 01:18:09 -0700
+Date:   Thu, 15 Aug 2019 11:18:03 +0300
+From:   Dan Carpenter <dan.carpenter@oracle.com>
+To:     andreyknvl@google.com
+Cc:     linux-kselftest@vger.kernel.org
+Subject: [bug report] selftests, arm64: add a selftest for passing tagged
+ pointers to kernel
+Message-ID: <20190815081803.GA27238@mwanda>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9349 signatures=668684
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=3 malwarescore=0
+ phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=848
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.0.1-1906280000 definitions=main-1908150088
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9349 signatures=668684
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
+ suspectscore=3 phishscore=0 bulkscore=0 spamscore=0 clxscore=1011
+ lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=897 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1906280000
+ definitions=main-1908150087
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-When running tcp_fastopen_backup_key.sh the following issue was seen in
-a busybox environment.
-./tcp_fastopen_backup_key.sh: line 33: [: -ne: unary operator expected
+Hello Andrey Konovalov,
 
-Shellcheck showed the following issue.
-$ shellcheck tools/testing/selftests/net/tcp_fastopen_backup_key.sh
+The patch 9ce1263033cd: "selftests, arm64: add a selftest for passing
+tagged pointers to kernel" from Jul 23, 2019, leads to the following
+static checker warning:
 
-In tools/testing/selftests/net/tcp_fastopen_backup_key.sh line 33:
-        if [ $val -ne 0 ]; then
-             ^-- SC2086: Double quote to prevent globbing and word splitting.
+	./tools/testing/selftests/arm64/tags_test.c:25 main()
+	error: uninitialized symbol 'tagged_ptr'.
 
-Rework to do a string comparison instead.
+tools/testing/selftests/arm64/tags_test.c
+    14  int main(void)
+    15  {
+    16          static int tbi_enabled = 0;
+    17          struct utsname *ptr, *tagged_ptr;
+                                      ^^^^^^^^^^
 
-Signed-off-by: Anders Roxell <anders.roxell@linaro.org>
----
- tools/testing/selftests/net/tcp_fastopen_backup_key.sh | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+    18          int err;
+    19  
+    20          if (prctl(PR_SET_TAGGED_ADDR_CTRL, PR_TAGGED_ADDR_ENABLE, 0, 0, 0) == 0)
+    21                  tbi_enabled = 1;
+    22          ptr = (struct utsname *)malloc(sizeof(*ptr));
+    23          if (tbi_enabled)
+    24                  tagged_ptr = (struct utsname *)SET_TAG(ptr, 0x42);
+                ^^^^^^^^^^^^^^^
+No else path.
 
-diff --git a/tools/testing/selftests/net/tcp_fastopen_backup_key.sh b/tools/testing/selftests/net/tcp_fastopen_backup_key.sh
-index 41476399e184..f6e65674b83c 100755
---- a/tools/testing/selftests/net/tcp_fastopen_backup_key.sh
-+++ b/tools/testing/selftests/net/tcp_fastopen_backup_key.sh
-@@ -30,7 +30,7 @@ do_test() {
- 	ip netns exec "${NETNS}" ./tcp_fastopen_backup_key "$1"
- 	val=$(ip netns exec "${NETNS}" nstat -az | \
- 		grep TcpExtTCPFastOpenPassiveFail | awk '{print $2}')
--	if [ $val -ne 0 ]; then
-+	if [ "$val" != 0 ]; then
- 		echo "FAIL: TcpExtTCPFastOpenPassiveFail non-zero"
- 		return 1
- 	fi
--- 
-2.20.1
+    25          err = uname(tagged_ptr);
+    26          free(ptr);
+    27  
+    28          return err;
+    29  }
 
+regards,
+dan carpenter
