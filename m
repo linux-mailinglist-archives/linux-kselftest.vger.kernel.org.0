@@ -2,147 +2,183 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 28B9C8F7DD
-	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Aug 2019 02:10:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B302B90568
+	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Aug 2019 18:06:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726464AbfHPAKC (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 15 Aug 2019 20:10:02 -0400
-Received: from mail-pf1-f195.google.com ([209.85.210.195]:38768 "EHLO
-        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726441AbfHPAKB (ORCPT
+        id S1727352AbfHPQGQ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 16 Aug 2019 12:06:16 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:28540 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727397AbfHPQGQ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 15 Aug 2019 20:10:01 -0400
-Received: by mail-pf1-f195.google.com with SMTP id o70so2157103pfg.5
-        for <linux-kselftest@vger.kernel.org>; Thu, 15 Aug 2019 17:10:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=XVcmO8RzpRC/BFyAhdGsg6GtacmmL8vW5DzIGcj2y00=;
-        b=UyJlZup3Cv7yWgUuLvmQAnNfqDuhuM74GoMYvrExOhXCciNnhsHNjBZs2PEruaFfjG
-         Jcui7w1fA8S36tDl5u6QHeKZF53YBkNnI8NRPTT9EsiCecxj3lysIb5IqKM09mKOGb1+
-         UDcxcyEFboiIxHynVYAC8K3EeVb9qsmZqVhaw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=XVcmO8RzpRC/BFyAhdGsg6GtacmmL8vW5DzIGcj2y00=;
-        b=m7O7zIwYan3GD6pppy5LCvQGTsbxx3zCxkc5dNNXouJt2gnVLtI9yBcrx865t6JLlc
-         hTv/kpZ437cRpWIchTbXE4J0xQMikvMPvi8M/5Sw/058h6Z/Ntdqft/b9Ogdj6R7NhFv
-         0MqtzSn9F4traJaoqytypQLKAq0IuLJ1ep+ewIq9luac/8aWK6mN7U+Ua05Y3g5FHpp+
-         bdpC5+Jb119R96Tmz7GTCW4i1rgg6r0pjX3mn/gPO0ZsEMfqAgWqEX9XYuk7g/amnn6a
-         SWKQKcWd4E+G6znkAv4WqahnkKz6Hb+PnVN6k8cJ265bSNkbbMna2rAwoUswXJGRqgzZ
-         LQ/g==
-X-Gm-Message-State: APjAAAUOSMFqVbH6cdZCFczYa0oXyJq50qTPcfOaKS+im+Xxyw8j1ZGV
-        K4ookebAM7vzEgNFr5di3jmk4g==
-X-Google-Smtp-Source: APXvYqwAprqv8uGMD++iNatIdUckz9u8bL8pKGeHjyJM0EavcZ5h0ap9TeggfP0kBtQm1ZfTd3GqbQ==
-X-Received: by 2002:a17:90a:b947:: with SMTP id f7mr4557928pjw.63.1565914200957;
-        Thu, 15 Aug 2019 17:10:00 -0700 (PDT)
-Received: from lbrmn-lnxub113.broadcom.net ([192.19.228.250])
-        by smtp.gmail.com with ESMTPSA id g2sm4056916pfi.26.2019.08.15.17.09.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Aug 2019 17:10:00 -0700 (PDT)
-From:   Scott Branden <scott.branden@broadcom.com>
-To:     Luis Chamberlain <mcgrof@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andy Gross <andy.gross@linaro.org>,
-        David Brown <david.brown@linaro.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Shuah Khan <shuah@kernel.org>, bjorn.andersson@linaro.org
-Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org,
-        BCM Kernel Feedback <bcm-kernel-feedback-list@broadcom.com>,
-        Olof Johansson <olof@lixom.net>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Colin Ian King <colin.king@canonical.com>,
+        Fri, 16 Aug 2019 12:06:16 -0400
+Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x7GG4xgd132689
+        for <linux-kselftest@vger.kernel.org>; Fri, 16 Aug 2019 12:06:15 -0400
+Received: from e06smtp04.uk.ibm.com (e06smtp04.uk.ibm.com [195.75.94.100])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 2udy92h2cr-1
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-kselftest@vger.kernel.org>; Fri, 16 Aug 2019 12:06:14 -0400
+Received: from localhost
+        by e06smtp04.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-kselftest@vger.kernel.org> from <iii@linux.ibm.com>;
+        Fri, 16 Aug 2019 17:06:12 +0100
+Received: from b06cxnps3075.portsmouth.uk.ibm.com (9.149.109.195)
+        by e06smtp04.uk.ibm.com (192.168.101.134) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
+        Fri, 16 Aug 2019 17:06:10 +0100
+Received: from d06av24.portsmouth.uk.ibm.com (d06av24.portsmouth.uk.ibm.com [9.149.105.60])
+        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x7GG687W43647206
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 16 Aug 2019 16:06:08 GMT
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 3C52442042;
+        Fri, 16 Aug 2019 16:06:08 +0000 (GMT)
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E70E54203F;
+        Fri, 16 Aug 2019 16:06:07 +0000 (GMT)
+Received: from white.boeblingen.de.ibm.com (unknown [9.152.96.190])
+        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Fri, 16 Aug 2019 16:06:07 +0000 (GMT)
+From:   Ilya Leoshkevich <iii@linux.ibm.com>
+To:     Shuah Khan <shuah@kernel.org>
+Cc:     linux-kselftest@vger.kernel.org, bpf@vger.kernel.org,
         Kees Cook <keescook@chromium.org>,
-        Takashi Iwai <tiwai@suse.de>, linux-kselftest@vger.kernel.org,
-        Scott Branden <scott.branden@broadcom.com>
-Subject: [PATCH 3/3] firmware: add mutex fw_lock_fallback for race condition
-Date:   Thu, 15 Aug 2019 17:09:45 -0700
-Message-Id: <20190816000945.29810-4-scott.branden@broadcom.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20190816000945.29810-1-scott.branden@broadcom.com>
-References: <20190816000945.29810-1-scott.branden@broadcom.com>
+        Heiko Carstens <heiko.carstens@de.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Ilya Leoshkevich <iii@linux.ibm.com>
+Subject: [PATCH] selftests: use "$(MAKE)" instead of "make"
+Date:   Fri, 16 Aug 2019 18:06:04 +0200
+X-Mailer: git-send-email 2.21.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+x-cbid: 19081616-0016-0000-0000-0000029F740A
+X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
+x-cbparentid: 19081616-0017-0000-0000-000032FF9729
+Message-Id: <20190816160604.61294-1-iii@linux.ibm.com>
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-08-16_07:,,
+ signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
+ clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
+ mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.0.1-1906280000 definitions=main-1908160170
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-A race condition exists between _request_firmware_prepare checking
-if firmware is assigned and firmware_fallback_sysfs creating a sysfs
-entry (kernel trace below).  To avoid such condition add a mutex
-fw_lock_fallback to protect against such condition.
+When doing "make kselftest TARGETS=bpf -j12", bpf progs end up being
+compiled sequentially and thus slowly.
 
-misc test_firmware: Falling back to sysfs fallback for: nope-test-firmware.bin
-sysfs: cannot create duplicate filename '/devices/virtual/misc/test_firmware/nope-test-firmware.bin'
-CPU: 4 PID: 2059 Comm: test_firmware-3 Not tainted 5.3.0-rc4 #1
-Hardware name: Dell Inc. OptiPlex 7010/0KRC95, BIOS A13 03/25/2013
-Call Trace:
- dump_stack+0x67/0x90
- sysfs_warn_dup.cold+0x17/0x24
- sysfs_create_dir_ns+0xb3/0xd0
- kobject_add_internal+0xa6/0x2a0
- kobject_add+0x7e/0xb0
- ? _cond_resched+0x15/0x30
- device_add+0x121/0x670
- firmware_fallback_sysfs+0x15c/0x3c9
- _request_firmware+0x432/0x5a0
- ? devres_find+0x63/0xc0
- request_firmware_into_buf+0x63/0x80
- test_fw_run_batch_request+0x96/0xe0
- kthread+0xfb/0x130
- ? reset_store+0x30/0x30
- ? kthread_park+0x80/0x80
- ret_from_fork+0x3a/0x50
-kobject_add_internal failed for nope-test-firmware.bin with -EEXIST, don't try to register things with the same name in the same directory.
+The reason is that parent make (tools/testing/selftests/Makefile) does
+not share its jobserver with child make
+(tools/testing/selftests/bpf/Makefile), therefore the latter runs with
+-j1.
 
-Signed-off-by: Scott Branden <scott.branden@broadcom.com>
+Change all instances of "make" to "$(MAKE)", so that the whole make
+hierarchy runs using a single jobserver.
+
+Signed-off-by: Ilya Leoshkevich <iii@linux.ibm.com>
 ---
- drivers/base/firmware_loader/main.c | 15 +++++++++++++++
- 1 file changed, 15 insertions(+)
+I tested this with:
 
-diff --git a/drivers/base/firmware_loader/main.c b/drivers/base/firmware_loader/main.c
-index bf44c79beae9..ce9896e3b782 100644
---- a/drivers/base/firmware_loader/main.c
-+++ b/drivers/base/firmware_loader/main.c
-@@ -88,6 +88,7 @@ static inline struct fw_priv *to_fw_priv(struct kref *ref)
- /* fw_lock could be moved to 'struct fw_sysfs' but since it is just
-  * guarding for corner cases a global lock should be OK */
- DEFINE_MUTEX(fw_lock);
-+DEFINE_MUTEX(fw_lock_fallback);
+	make kselftest
+	make -C tools/testing/selftests
+	make -C tools/testing/selftests/bpf
+
+Unfortunately, in my setup a lot of tests fail for a number of reasons.
+However, this change does not make it worse.
+
+tools/testing/selftests/Makefile | 22 +++++++++++-----------
+ 1 file changed, 11 insertions(+), 11 deletions(-)
+
+diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
+index 25b43a8c2b15..c3feccb99ff5 100644
+--- a/tools/testing/selftests/Makefile
++++ b/tools/testing/selftests/Makefile
+@@ -126,9 +126,9 @@ endif
+ # in the default INSTALL_HDR_PATH usr/include.
+ khdr:
+ ifeq (1,$(DEFAULT_INSTALL_HDR_PATH))
+-	make --no-builtin-rules ARCH=$(ARCH) -C $(top_srcdir) headers_install
++	$(MAKE) --no-builtin-rules ARCH=$(ARCH) -C $(top_srcdir) headers_install
+ else
+-	make --no-builtin-rules INSTALL_HDR_PATH=$$BUILD/usr \
++	$(MAKE) --no-builtin-rules INSTALL_HDR_PATH=$$BUILD/usr \
+ 		ARCH=$(ARCH) -C $(top_srcdir) headers_install
+ endif
  
- static struct firmware_cache fw_cache;
+@@ -136,35 +136,35 @@ all: khdr
+ 	@for TARGET in $(TARGETS); do		\
+ 		BUILD_TARGET=$$BUILD/$$TARGET;	\
+ 		mkdir $$BUILD_TARGET  -p;	\
+-		make OUTPUT=$$BUILD_TARGET -C $$TARGET;\
++		$(MAKE) OUTPUT=$$BUILD_TARGET -C $$TARGET;\
+ 	done;
  
-@@ -758,6 +759,17 @@ _request_firmware(const struct firmware **firmware_p, const char *name,
- 	if (!firmware_p)
- 		return -EINVAL;
+ run_tests: all
+ 	@for TARGET in $(TARGETS); do \
+ 		BUILD_TARGET=$$BUILD/$$TARGET;	\
+-		make OUTPUT=$$BUILD_TARGET -C $$TARGET run_tests;\
++		$(MAKE) OUTPUT=$$BUILD_TARGET -C $$TARGET run_tests;\
+ 	done;
  
-+	/*
-+	 * There is a race condition between _request_firmware_prepare checking
-+	 * if firmware is assigned and firmware_fallback_sysfs creating sysfs
-+	 * entries with duplicate names.
-+	 * Yet, with this lock the firmware_test locks up with cache enabled
-+	 * and no event used during firmware test.
-+	 * This points to some very racy code I don't know how to entirely fix.
-+	 */
-+	if (opt_flags & FW_OPT_NOCACHE)
-+		mutex_lock(&fw_lock_fallback);
-+
- 	if (!name || name[0] == '\0') {
- 		ret = -EINVAL;
- 		goto out;
-@@ -791,6 +803,9 @@ _request_firmware(const struct firmware **firmware_p, const char *name,
- 		fw = NULL;
- 	}
+ hotplug:
+ 	@for TARGET in $(TARGETS_HOTPLUG); do \
+ 		BUILD_TARGET=$$BUILD/$$TARGET;	\
+-		make OUTPUT=$$BUILD_TARGET -C $$TARGET;\
++		$(MAKE) OUTPUT=$$BUILD_TARGET -C $$TARGET;\
+ 	done;
  
-+	if (opt_flags & FW_OPT_NOCACHE)
-+		mutex_unlock(&fw_lock_fallback);
-+
- 	*firmware_p = fw;
- 	return ret;
- }
+ run_hotplug: hotplug
+ 	@for TARGET in $(TARGETS_HOTPLUG); do \
+ 		BUILD_TARGET=$$BUILD/$$TARGET;	\
+-		make OUTPUT=$$BUILD_TARGET -C $$TARGET run_full_test;\
++		$(MAKE) OUTPUT=$$BUILD_TARGET -C $$TARGET run_full_test;\
+ 	done;
+ 
+ clean_hotplug:
+ 	@for TARGET in $(TARGETS_HOTPLUG); do \
+ 		BUILD_TARGET=$$BUILD/$$TARGET;	\
+-		make OUTPUT=$$BUILD_TARGET -C $$TARGET clean;\
++		$(MAKE) OUTPUT=$$BUILD_TARGET -C $$TARGET clean;\
+ 	done;
+ 
+ run_pstore_crash:
+-	make -C pstore run_crash
++	$(MAKE) -C pstore run_crash
+ 
+ # Use $BUILD as the default install root. $BUILD points to the
+ # right output location for the following cases:
+@@ -184,7 +184,7 @@ ifdef INSTALL_PATH
+ 	install -m 744 kselftest/prefix.pl $(INSTALL_PATH)/kselftest/
+ 	@for TARGET in $(TARGETS); do \
+ 		BUILD_TARGET=$$BUILD/$$TARGET;	\
+-		make OUTPUT=$$BUILD_TARGET -C $$TARGET INSTALL_PATH=$(INSTALL_PATH)/$$TARGET install; \
++		$(MAKE) OUTPUT=$$BUILD_TARGET -C $$TARGET INSTALL_PATH=$(INSTALL_PATH)/$$TARGET install; \
+ 	done;
+ 
+ 	@# Ask all targets to emit their test scripts
+@@ -203,7 +203,7 @@ ifdef INSTALL_PATH
+ 		echo "[ -w /dev/kmsg ] && echo \"kselftest: Running tests in $$TARGET\" >> /dev/kmsg" >> $(ALL_SCRIPT); \
+ 		echo "cd $$TARGET" >> $(ALL_SCRIPT); \
+ 		echo -n "run_many" >> $(ALL_SCRIPT); \
+-		make -s --no-print-directory OUTPUT=$$BUILD_TARGET -C $$TARGET emit_tests >> $(ALL_SCRIPT); \
++		$(MAKE) -s --no-print-directory OUTPUT=$$BUILD_TARGET -C $$TARGET emit_tests >> $(ALL_SCRIPT); \
+ 		echo "" >> $(ALL_SCRIPT);	    \
+ 		echo "cd \$$ROOT" >> $(ALL_SCRIPT); \
+ 	done;
+@@ -216,7 +216,7 @@ endif
+ clean:
+ 	@for TARGET in $(TARGETS); do \
+ 		BUILD_TARGET=$$BUILD/$$TARGET;	\
+-		make OUTPUT=$$BUILD_TARGET -C $$TARGET clean;\
++		$(MAKE) OUTPUT=$$BUILD_TARGET -C $$TARGET clean;\
+ 	done;
+ 
+ .PHONY: khdr all run_tests hotplug run_hotplug clean_hotplug run_pstore_crash install clean
 -- 
-2.17.1
+2.21.0
 
