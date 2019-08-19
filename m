@@ -2,78 +2,83 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6881694EF2
-	for <lists+linux-kselftest@lfdr.de>; Mon, 19 Aug 2019 22:27:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C66294FE1
+	for <lists+linux-kselftest@lfdr.de>; Mon, 19 Aug 2019 23:29:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728193AbfHSU1s (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 19 Aug 2019 16:27:48 -0400
-Received: from mail.kernel.org ([198.145.29.99]:34920 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728055AbfHSU1r (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 19 Aug 2019 16:27:47 -0400
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net [24.9.64.241])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 7870822CE8;
-        Mon, 19 Aug 2019 20:27:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1566246466;
-        bh=ZxiY8oc0urWl0QYJ1Y4rbhRFi1IDO8uMUtJMrSH6Yw4=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=Md3a9+NwMnRoeLJLdZPLP95yv5crqmRealAtQb1qKAwz93/RCFVE8Pbxqd95YnN/d
-         0kxym8WK8LJyav0wWANy0F86u5FErDR2UHKtQatmQuo1E5gpSyhTVSUfVPjw8S2OqU
-         Q43eNXbuyIoIXfRI/2rnmO1af06VpZW/b9Rw7oGQ=
-Subject: Re: [PATCH 2/3] selftest: firmware: Add request_firmware_into_buf
- tests
-To:     Luis Chamberlain <mcgrof@kernel.org>,
-        Scott Branden <scott.branden@broadcom.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Andy Gross <andy.gross@linaro.org>,
-        David Brown <david.brown@linaro.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        bjorn.andersson@linaro.org,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org,
-        BCM Kernel Feedback <bcm-kernel-feedback-list@broadcom.com>,
-        Olof Johansson <olof@lixom.net>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Colin Ian King <colin.king@canonical.com>,
-        Kees Cook <keescook@chromium.org>,
-        Takashi Iwai <tiwai@suse.de>, linux-kselftest@vger.kernel.org,
-        shuah <shuah@kernel.org>
-References: <20190816000945.29810-1-scott.branden@broadcom.com>
- <20190816000945.29810-3-scott.branden@broadcom.com>
- <20190819052453.GQ16384@42.do-not-panic.com>
-From:   shuah <shuah@kernel.org>
-Message-ID: <35b86503-39d9-282d-0ba6-817a1b44ffb2@kernel.org>
-Date:   Mon, 19 Aug 2019 14:27:44 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        id S1728426AbfHSV3Q (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 19 Aug 2019 17:29:16 -0400
+Received: from mail-qk1-f193.google.com ([209.85.222.193]:39179 "EHLO
+        mail-qk1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728376AbfHSV3Q (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 19 Aug 2019 17:29:16 -0400
+Received: by mail-qk1-f193.google.com with SMTP id 125so2754489qkl.6
+        for <linux-kselftest@vger.kernel.org>; Mon, 19 Aug 2019 14:29:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=netronome-com.20150623.gappssmtp.com; s=20150623;
+        h=date:from:to:cc:subject:message-id:in-reply-to:references
+         :organization:mime-version:content-transfer-encoding;
+        bh=0l0Pa0ElqK1DZWn0mgQwwfUufG1B6hMxS63646CFTfA=;
+        b=vFz2D+dsGimCQxKLYPtL7kb/5ZcKWdyiABI2FKvG71x0Bt4YfuWuG8RNWUymu7+m63
+         icUb3o9Hvu2mjZDqcuQyJtpfPz5WuJcFWSV08m2zKHRq/736D558UHD2+TfpavBooYE3
+         byafPyfYpri+HCXimSPC/s+okyeKn7GYqvUg8KLPFFH9IGtta2DBVXasDP3o7kU+B8yB
+         hK/qkWZIQdl/8ts0c2lDMC2hRpXdo/dkSgNJ1SHd5k1sRjw1okoGZcVA05Lyls1/vxUr
+         mJMEMOnaJPE/nidQWBE9NTNc2+pgrZJlIQ33GP1teo9fmrNqtBtrDfFPTHrzVK1dE2PH
+         /AYQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:in-reply-to
+         :references:organization:mime-version:content-transfer-encoding;
+        bh=0l0Pa0ElqK1DZWn0mgQwwfUufG1B6hMxS63646CFTfA=;
+        b=Tmbw/BMG87TMKxZQ3WqhlVEcWTPg0eyZMyr8KQLFQdQMLl+obVfXOM+H4urn4AHNv3
+         NeldXSy+1b1ylTBV5m6OWSmn1EmdXX5oFNo3FLPUEF6jQhbgW5+9WhmYmkjtiGf1Bntd
+         pbVdlm/QNAvBluLEDnM8ZGae/LgrcVmUe6b1C81RMNfRwZDqwNygGnnplABBomjf4kjU
+         0D0dmeEuECSQmVDErhpNiRhujaMV5pQ3r+GBRfygiT8pYH5urR35+Q12qC0O8kwpkvsy
+         8fgecq1TKdesNeO3gendPG2kkbtI5X4QlZyVU1CPmry951qNejV3Bcz10pZKi9mdnAbP
+         Sy2w==
+X-Gm-Message-State: APjAAAXn0r7Zn6NgTSzeCopSi9FCCASLMhBn/tA1udTzNoklcUBaTO3T
+        7+irBcoI9a1UWjdHr6qe6Ltu/A==
+X-Google-Smtp-Source: APXvYqzTQy/Lr6Ti+E/hIvFy1hXuDHcWSKY1hLZDpyObSYqbHZKCD29b41aVxncBy/HWCPAzxZo3yQ==
+X-Received: by 2002:a05:620a:10ae:: with SMTP id h14mr7798507qkk.40.1566250155654;
+        Mon, 19 Aug 2019 14:29:15 -0700 (PDT)
+Received: from cakuba.netronome.com ([66.60.152.14])
+        by smtp.gmail.com with ESMTPSA id h26sm8387575qta.58.2019.08.19.14.29.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 19 Aug 2019 14:29:15 -0700 (PDT)
+Date:   Mon, 19 Aug 2019 14:29:08 -0700
+From:   Jakub Kicinski <jakub.kicinski@netronome.com>
+To:     syzbot <syzbot+23d9570edec63669d890@syzkaller.appspotmail.com>
+Cc:     ast@kernel.org, aviadye@mellanox.com,
+        bhole_prashant_q7@lab.ntt.co.jp, borisp@mellanox.com,
+        daniel@iogearbox.net, davejwatson@fb.com, davem@davemloft.net,
+        john.fastabend@gmail.com, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+        shuah@kernel.org, songliubraving@fb.com,
+        syzkaller-bugs@googlegroups.com
+Subject: Re: general protection fault in tls_setsockopt
+Message-ID: <20190819142908.72082c69@cakuba.netronome.com>
+In-Reply-To: <000000000000d917f4058dd525cf@google.com>
+References: <000000000000d917f4058dd525cf@google.com>
+Organization: Netronome Systems, Ltd.
 MIME-Version: 1.0
-In-Reply-To: <20190819052453.GQ16384@42.do-not-panic.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 8/18/19 11:24 PM, Luis Chamberlain wrote:
-> On Thu, Aug 15, 2019 at 05:09:44PM -0700, Scott Branden wrote:
->> Add tests cases for checking request_firmware_into_buf api.
->> API was introduced into kernel with no testing present previously.
->>
->> Signed-off-by: Scott Branden <scott.branden@broadcom.com>
+On Tue, 16 Jul 2019 16:58:06 -0700, syzbot wrote:
+> Hello,
 > 
-> Acked-by: Luis Chamberlain <mcgrof@kernel.org>
+> syzbot found the following crash on:
 > 
->    Luis
-> 
+> HEAD commit:    a131c2bf Merge tag 'acpi-5.3-rc1-2' of git://git.kernel.or..
+> git tree:       net-next
+> console output: https://syzkaller.appspot.com/x/log.txt?x=1603e9c0600000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=8bff73c5ba9e876
+> dashboard link: https://syzkaller.appspot.com/bug?extid=23d9570edec63669d890
+> compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=13560870600000
 
-Greg! Pls let me know if you would like me to take this
-throough my tree. If not,
-
-Acked-by: Shuah Khan <skhan@linuxfoundation.org>
+#syz fix: net/tls: partially revert fix transition through disconnect with close
