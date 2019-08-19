@@ -2,126 +2,235 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 14647948B8
-	for <lists+linux-kselftest@lfdr.de>; Mon, 19 Aug 2019 17:45:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FE86949B0
+	for <lists+linux-kselftest@lfdr.de>; Mon, 19 Aug 2019 18:19:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726343AbfHSPpJ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 19 Aug 2019 11:45:09 -0400
-Received: from mail-pf1-f196.google.com ([209.85.210.196]:34623 "EHLO
-        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726905AbfHSPpJ (ORCPT
+        id S1727813AbfHSQT4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 19 Aug 2019 12:19:56 -0400
+Received: from mail-pl1-f193.google.com ([209.85.214.193]:42916 "EHLO
+        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727032AbfHSQT4 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 19 Aug 2019 11:45:09 -0400
-Received: by mail-pf1-f196.google.com with SMTP id b24so1394720pfp.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 19 Aug 2019 08:45:09 -0700 (PDT)
+        Mon, 19 Aug 2019 12:19:56 -0400
+Received: by mail-pl1-f193.google.com with SMTP id y1so1186423plp.9
+        for <linux-kselftest@vger.kernel.org>; Mon, 19 Aug 2019 09:19:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=zMGg7ZRNK7NfpqI/Qet9Dxr9rbclh2xtbR4hUTFM6IY=;
-        b=GJoHV9QE4xGJAUCqD7zOGEihP3UiAZjpj3bmVElnV3mGgDu9+IBupxqZo5crTOTBSn
-         9E4KUL6HMvh/OBYUcO8Tpulqz8WiyGQenGKjsASlkTFv2dXi8Y/niM3/Z+P7vnlKNIaZ
-         MtFd0UdR9JYH1Lcgtiq3NMGR7NeTcmBx3BytYCkuY0+Mh6In/PjXGCT7JB+YD1Ki2rnw
-         M/YU/3ABnIwEbCJlH3DAt0qAYIkuPOryLlR92BarOXnc/HJERVegrVcC8hFgAU/vJ7Go
-         FvSFH9zA3QmxP0Me+8WMdbNNwakaShO+N+03UzcmCf/+VKatv8Kx3ZtIc9UnmtYKv3wf
-         5kAg==
+        d=broadcom.com; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-transfer-encoding:content-language;
+        bh=IKQPktxfBXL0jaMh5fXrtktV3oFNbQQrLd0UoqhuRhc=;
+        b=DMMQAXvJwkyqlEk1Z2h6vxJfOKFQi1ug7u+ZCzbyrKi+g/PxG2u7ifgSTSxzvSFtTP
+         NJJMZIEShk0FdmE/MIxJo6xftNZtiYT8lUOEb6UB5ZW8t/hX6r7XTUGfwL2XWBBCgW5C
+         KhxIeYon6r88GtPZSxPpSVLKZ5sjyT76+UC2M=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=zMGg7ZRNK7NfpqI/Qet9Dxr9rbclh2xtbR4hUTFM6IY=;
-        b=YBxwIx2khBA+cRbZZELO61VpB2OHYM3wM4InKtZoqGcwmweki2uY2gYfFE6n7g0HCc
-         1FiqYsLYo1SNtSjRqQdsxt0IIru8L8Xxj3fba4HdoSmeAEbY9Y8LnbeQRGf00H5A5aNT
-         8Rb/tdz0AC6hU5GjFGGmKUZov6VB2cDpzmG9nmiBEzvVUKUw4kkHMxS6GwJ+DGziLHmy
-         U3LVolgcFabGKLyNPAwhS/4PGWRvuP6qjYgyafZnLuzYQtOlP/GNGE1QogypJCXvUCmi
-         p0Nz7ctXX3cGxsbRgU1Wqj+MscVfycxlr4bZZxeFdfDS2wiOs4lrFRYKZvF/aSDTmtHR
-         55DQ==
-X-Gm-Message-State: APjAAAUI7KDV8OHrbvbwCDA68GYR0X4LPSG/xob2B+ipym8LrFWRcV2V
-        DjO62lXHHhdwVqezjUQRi6zTUYP0sVoedatANZnMVw==
-X-Google-Smtp-Source: APXvYqyflWC4oeyk4cX94v5k6CQJ/8FEDGgMF+Kmp2ZaCbPDE8MBxb9njXOAWHJ8AnGwbz7Ioq7XIseAIciXEoaHYEw=
-X-Received: by 2002:a63:3006:: with SMTP id w6mr20727946pgw.440.1566229508161;
- Mon, 19 Aug 2019 08:45:08 -0700 (PDT)
-MIME-Version: 1.0
-References: <00eb8ba84205c59cac01b1b47615116a461c302c.1566220355.git.andreyknvl@google.com>
- <20190819150342.sxk3zzxvrxhkpp6j@willie-the-truck> <CAAeHK+xP6HnLJt_RKW67x8nbJLJp5A=av57BfwiFrA88eFn60w@mail.gmail.com>
- <20190819153856.odtneqxfxva2wjgu@willie-the-truck>
-In-Reply-To: <20190819153856.odtneqxfxva2wjgu@willie-the-truck>
-From:   Andrey Konovalov <andreyknvl@google.com>
-Date:   Mon, 19 Aug 2019 17:44:56 +0200
-Message-ID: <CAAeHK+zf_VKOttBVfZUdp-ra=uNTx_faCmJkrM81BzgEaOZjSQ@mail.gmail.com>
-Subject: Re: [PATCH ARM] selftests, arm64: fix uninitialized symbol in tags_test.c
-To:     Will Deacon <will@kernel.org>
-Cc:     Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-rdma@vger.kernel.org, linux-media@vger.kernel.org,
-        kvm@vger.kernel.org,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Will Deacon <will.deacon@arm.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Szabolcs Nagy <Szabolcs.Nagy@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Kostya Serebryany <kcc@google.com>,
-        Khalid Aziz <khalid.aziz@oracle.com>,
-        Felix Kuehling <Felix.Kuehling@amd.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Jacob Bramley <Jacob.Bramley@arm.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Dave Martin <Dave.Martin@arm.com>,
-        Evgeniy Stepanov <eugenis@google.com>,
-        Kevin Brodsky <kevin.brodsky@arm.com>,
-        Kees Cook <keescook@chromium.org>,
-        Ruben Ayrapetyan <Ruben.Ayrapetyan@arm.com>,
-        Ramana Radhakrishnan <Ramana.Radhakrishnan@arm.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Yishai Hadas <yishaih@mellanox.com>,
-        Jens Wiklander <jens.wiklander@linaro.org>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Lee Smith <Lee.Smith@arm.com>,
-        Alexander Deucher <Alexander.Deucher@amd.com>,
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=IKQPktxfBXL0jaMh5fXrtktV3oFNbQQrLd0UoqhuRhc=;
+        b=Wi/0FfdQmVkoQI61CXHsB6g04GU1VW89UuMXJr9HmnPf5w3Ah919CR4Pb0x8Jrn1BC
+         Bpwh/0+apjRDCAiJ26FLNCDeP3mBh9I/52tzrYasat2oFTrEHR3Ao0vB+tvBbGI8AlxL
+         m6T4zKcf9GgN2GbJjSOBPxiKJurHU7uK7FS1f6uTl4xVj+bCIWKI56jXxcgVGmExCpqB
+         rZNT5aTvDMK5I6sDm0tfy/OJQP8rD1jLAHSfSqFldyWmkqQLCD4YZdlKPW76pZvkXxVs
+         rFkT7983n6eD3/EotFJoC8KdCiXocIgrj2+uCeNVOmXWg9uHhxPHMq249h5J9uC0/zr6
+         jznQ==
+X-Gm-Message-State: APjAAAXcVMYMXmZvDyGI+gmFo0cibDPfEog5pcyE/9zpg7iieljikyk+
+        Dt5DryTjE4Q9yptK0FEbYPH52eBjqglogLAMFPPM4ohnNG5omQ1QSjvpTXOaxhFwq8H9qrwD5YX
+        lDEJRFG3SCJ1GPYypvHOvq3pFtjcgqB0ee00Fazu/AnJ0B8sxCjoJUpjrKbpFQgvrySeLvzsS7u
+        23fj07eW+1DsAMzqM=
+X-Google-Smtp-Source: APXvYqwggUe1ybtvS8MZcOslAorQNN7iDpcavR1/jeVJFyWXp1Q8jgD3DpZL12K988TGev7L7T6nYg==
+X-Received: by 2002:a17:902:b591:: with SMTP id a17mr23927025pls.189.1566231594942;
+        Mon, 19 Aug 2019 09:19:54 -0700 (PDT)
+Received: from [10.136.13.65] ([192.19.228.250])
+        by smtp.gmail.com with ESMTPSA id c22sm8016983pfi.82.2019.08.19.09.19.52
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 19 Aug 2019 09:19:54 -0700 (PDT)
+Subject: Re: [PATCH 3/3] firmware: add mutex fw_lock_fallback for race
+ condition
+To:     Luis Chamberlain <mcgrof@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andy Gross <andy.gross@linaro.org>,
+        David Brown <david.brown@linaro.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Shuah Khan <shuah@kernel.org>, bjorn.andersson@linaro.org,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org,
+        BCM Kernel Feedback <bcm-kernel-feedback-list@broadcom.com>,
+        Olof Johansson <olof@lixom.net>,
         Andrew Morton <akpm@linux-foundation.org>,
-        enh <enh@google.com>, Robin Murphy <robin.murphy@arm.com>,
-        Christian Koenig <Christian.Koenig@amd.com>,
-        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Colin Ian King <colin.king@canonical.com>,
+        Kees Cook <keescook@chromium.org>,
+        Takashi Iwai <tiwai@suse.de>, linux-kselftest@vger.kernel.org
+References: <20190816000945.29810-1-scott.branden@broadcom.com>
+ <20190816000945.29810-4-scott.branden@broadcom.com>
+ <20190819053937.GR16384@42.do-not-panic.com>
+From:   Scott Branden <scott.branden@broadcom.com>
+Message-ID: <16823ee6-c52a-b3b5-caed-79c00772fa68@broadcom.com>
+Date:   Mon, 19 Aug 2019 09:19:51 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
+MIME-Version: 1.0
+In-Reply-To: <20190819053937.GR16384@42.do-not-panic.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Aug 19, 2019 at 5:39 PM Will Deacon <will@kernel.org> wrote:
->
-> On Mon, Aug 19, 2019 at 05:16:37PM +0200, Andrey Konovalov wrote:
-> > On Mon, Aug 19, 2019 at 5:03 PM Will Deacon <will@kernel.org> wrote:
-> > >
-> > > On Mon, Aug 19, 2019 at 03:14:42PM +0200, Andrey Konovalov wrote:
-> > > > Fix tagged_ptr not being initialized when TBI is not enabled.
-> > > >
-> > > > Dan Carpenter <dan.carpenter@oracle.com>
-> > >
-> > > Guessing this was Reported-by, or has Dan introduced his own tag now? ;)
-> >
-> > Oops, yes, Reported-by :)
-> >
-> > >
-> > > Got a link to the report?
-> >
-> > https://www.spinics.net/lists/linux-kselftest/msg09446.html
->
-> Thanks, I'll fix up the commit message and push this out later on. If you
-> get a chance, would you be able to look at the pending changes from
-> Catalin[1], please?
->
-> Will
->
-> [1] https://lkml.kernel.org/r/20190815154403.16473-1-catalin.marinas@arm.com
+Hi Luis,
 
-Sure! I didn't realize some actioned is required from me on those.
-I'll add my Acked-by's. Thanks!
+Thanks for the review.
+
+I did not think this patch would be the final solution either
+
+as indicated in the original cover letter and code comment.
+
+Some comments inline.
+
+On 2019-08-18 10:39 p.m., Luis Chamberlain wrote:
+
+> On Thu, Aug 15, 2019 at 05:09:45PM -0700, Scott Branden wrote:
+>> A race condition exists between _request_firmware_prepare checking
+>> if firmware is assigned and firmware_fallback_sysfs creating a sysfs
+>> entry (kernel trace below).  To avoid such condition add a mutex
+>> fw_lock_fallback to protect against such condition.
+> I am not buying this fix, and it seems sloppy. More below.
+>
+>> misc test_firmware: Falling back to sysfs fallback for: nope-test-firmware.bin
+> So the fallback kicks in with the file that is not there.
+>
+>> sysfs: cannot create duplicate filename '/devices/virtual/misc/test_firmware/nope-test-firmware.bin'
+> And we have a duplicate entry, for the *device* created to allow us to
+> create a file entry to allow us to copy the file. Your tests had a loop,
+> so there is actually a race between two entries being created while
+> one one failed.
+>
+>> CPU: 4 PID: 2059 Comm: test_firmware-3 Not tainted 5.3.0-rc4 #1
+>> Hardware name: Dell Inc. OptiPlex 7010/0KRC95, BIOS A13 03/25/2013
+>> Call Trace:
+>>   dump_stack+0x67/0x90
+>>   sysfs_warn_dup.cold+0x17/0x24
+>>   sysfs_create_dir_ns+0xb3/0xd0
+>>   kobject_add_internal+0xa6/0x2a0
+>>   kobject_add+0x7e/0xb0
+> Note: kobject_add().
+>
+>>   ? _cond_resched+0x15/0x30
+>>   device_add+0x121/0x670
+>>   firmware_fallback_sysfs+0x15c/0x3c9
+>>   _request_firmware+0x432/0x5a0
+>>   ? devres_find+0x63/0xc0
+>>   request_firmware_into_buf+0x63/0x80
+>>   test_fw_run_batch_request+0x96/0xe0
+>>   kthread+0xfb/0x130
+>>   ? reset_store+0x30/0x30
+>>   ? kthread_park+0x80/0x80
+>>   ret_from_fork+0x3a/0x50
+>> kobject_add_internal failed for nope-test-firmware.bin with -EEXIST, don't try to register things with the same name in the same directory.
+> So above it makes it even clearer, two kobjets with the same name.
+>
+>> Signed-off-by: Scott Branden <scott.branden@broadcom.com>
+>> ---
+>>   drivers/base/firmware_loader/main.c | 15 +++++++++++++++
+>>   1 file changed, 15 insertions(+)
+>>
+>> diff --git a/drivers/base/firmware_loader/main.c b/drivers/base/firmware_loader/main.c
+>> index bf44c79beae9..ce9896e3b782 100644
+>> --- a/drivers/base/firmware_loader/main.c
+>> +++ b/drivers/base/firmware_loader/main.c
+>> @@ -88,6 +88,7 @@ static inline struct fw_priv *to_fw_priv(struct kref *ref)
+>>   /* fw_lock could be moved to 'struct fw_sysfs' but since it is just
+>>    * guarding for corner cases a global lock should be OK */
+>>   DEFINE_MUTEX(fw_lock);
+>> +DEFINE_MUTEX(fw_lock_fallback);
+> The reason I don't like this fix is that this mutex is named after ther
+> fallback interface... but...
+>
+>>   
+>>   static struct firmware_cache fw_cache;
+>>   
+>> @@ -758,6 +759,17 @@ _request_firmware(const struct firmware **firmware_p, const char *name,
+>>   	if (!firmware_p)
+>>   		return -EINVAL;
+>>   
+>> +	/*
+>> +	 * There is a race condition between _request_firmware_prepare checking
+>> +	 * if firmware is assigned and firmware_fallback_sysfs creating sysfs
+>> +	 * entries with duplicate names.
+>> +	 * Yet, with this lock the firmware_test locks up with cache enabled
+>> +	 * and no event used during firmware test.
+>> +	 * This points to some very racy code I don't know how to entirely fix.
+>> +	 */
+>> +	if (opt_flags & FW_OPT_NOCACHE)
+>> +		mutex_lock(&fw_lock_fallback);
+> Whoa.. What does no-cache have anything to do with the fallback interface
+> other than the fact we enable this feature for the fallback interface?
+> We don't need to penalize non-fallback users who *also* may want to
+> enable the no-cache feature.
+>
+> So, the fix should be within the boundaries of the creation / deletion
+> of the kobject, not this nocache feature. Can you please re-evaluate
+> this code and look for a more compartamentalized solution to the
+> fallback code only?
+
+To be honest, I find the entire firmware code sloppy.  I don't think the 
+cache/no-cache feature is
+
+implemented or tested properly nor fallback to begin with.  I'm not 
+claiming this patch is the final
+
+solution and indicated such in the cover letter and the comment above.
+
+I hope there is someone more familiar with this code to comment further 
+and come up with a proper solution.
+
+
+I have found numerous issues and race conditions with the firmware code 
+(I simply added a test).
+
+1) Try loading the same valid firmware using no-cache once it has 
+already been loaded with cache.
+
+It won't work, which is why I had to use a different filename in the 
+test for request_firmware_into_buf.
+
+2) Try removing the "if (opt_flags & FW_OPT_NOCACHE)" in my patch and 
+always call the mutex.
+
+The firmware test will lock up during a "no uevent" test.  I am not 
+familiar with the code to
+
+know why such is true and what issue this exposes in the code.
+
+3) I have a driver that uses request_firmware_into_buf and have multiple 
+instances of the driver
+
+loading the same firmware in parallel.  Some of the data is not read 
+correctly in each instance.
+
+I haven't yet to reproduce this issue with the firmware test but 
+currently have a mutex around the entire
+
+call to request_firmware_into_buf in our driver.
+
+
+Perhaps it is better at this point to add a mutex in 
+request_firmware_into_buf to make is entirely safe?
+
+(Perhaps even with every request_firmware functions as none seems to be 
+tested properly.)
+
+Or, add a new function called safe_request_firmware_into_buf with such 
+mutex to protect the function.
+
+The current racey request_firmware functions could then be left alone 
+and those who want reliable
+
+firmware loading can use the safe calls?
+
+>
+>    Luis
