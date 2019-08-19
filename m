@@ -2,235 +2,163 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FE86949B0
-	for <lists+linux-kselftest@lfdr.de>; Mon, 19 Aug 2019 18:19:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3980D94EB6
+	for <lists+linux-kselftest@lfdr.de>; Mon, 19 Aug 2019 22:08:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727813AbfHSQT4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 19 Aug 2019 12:19:56 -0400
-Received: from mail-pl1-f193.google.com ([209.85.214.193]:42916 "EHLO
-        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727032AbfHSQT4 (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 19 Aug 2019 12:19:56 -0400
-Received: by mail-pl1-f193.google.com with SMTP id y1so1186423plp.9
-        for <linux-kselftest@vger.kernel.org>; Mon, 19 Aug 2019 09:19:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-transfer-encoding:content-language;
-        bh=IKQPktxfBXL0jaMh5fXrtktV3oFNbQQrLd0UoqhuRhc=;
-        b=DMMQAXvJwkyqlEk1Z2h6vxJfOKFQi1ug7u+ZCzbyrKi+g/PxG2u7ifgSTSxzvSFtTP
-         NJJMZIEShk0FdmE/MIxJo6xftNZtiYT8lUOEb6UB5ZW8t/hX6r7XTUGfwL2XWBBCgW5C
-         KhxIeYon6r88GtPZSxPpSVLKZ5sjyT76+UC2M=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=IKQPktxfBXL0jaMh5fXrtktV3oFNbQQrLd0UoqhuRhc=;
-        b=Wi/0FfdQmVkoQI61CXHsB6g04GU1VW89UuMXJr9HmnPf5w3Ah919CR4Pb0x8Jrn1BC
-         Bpwh/0+apjRDCAiJ26FLNCDeP3mBh9I/52tzrYasat2oFTrEHR3Ao0vB+tvBbGI8AlxL
-         m6T4zKcf9GgN2GbJjSOBPxiKJurHU7uK7FS1f6uTl4xVj+bCIWKI56jXxcgVGmExCpqB
-         rZNT5aTvDMK5I6sDm0tfy/OJQP8rD1jLAHSfSqFldyWmkqQLCD4YZdlKPW76pZvkXxVs
-         rFkT7983n6eD3/EotFJoC8KdCiXocIgrj2+uCeNVOmXWg9uHhxPHMq249h5J9uC0/zr6
-         jznQ==
-X-Gm-Message-State: APjAAAXcVMYMXmZvDyGI+gmFo0cibDPfEog5pcyE/9zpg7iieljikyk+
-        Dt5DryTjE4Q9yptK0FEbYPH52eBjqglogLAMFPPM4ohnNG5omQ1QSjvpTXOaxhFwq8H9qrwD5YX
-        lDEJRFG3SCJ1GPYypvHOvq3pFtjcgqB0ee00Fazu/AnJ0B8sxCjoJUpjrKbpFQgvrySeLvzsS7u
-        23fj07eW+1DsAMzqM=
-X-Google-Smtp-Source: APXvYqwggUe1ybtvS8MZcOslAorQNN7iDpcavR1/jeVJFyWXp1Q8jgD3DpZL12K988TGev7L7T6nYg==
-X-Received: by 2002:a17:902:b591:: with SMTP id a17mr23927025pls.189.1566231594942;
-        Mon, 19 Aug 2019 09:19:54 -0700 (PDT)
-Received: from [10.136.13.65] ([192.19.228.250])
-        by smtp.gmail.com with ESMTPSA id c22sm8016983pfi.82.2019.08.19.09.19.52
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 19 Aug 2019 09:19:54 -0700 (PDT)
-Subject: Re: [PATCH 3/3] firmware: add mutex fw_lock_fallback for race
- condition
-To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andy Gross <andy.gross@linaro.org>,
-        David Brown <david.brown@linaro.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Shuah Khan <shuah@kernel.org>, bjorn.andersson@linaro.org,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org,
-        BCM Kernel Feedback <bcm-kernel-feedback-list@broadcom.com>,
-        Olof Johansson <olof@lixom.net>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Colin Ian King <colin.king@canonical.com>,
+        id S1728272AbfHSUH5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 19 Aug 2019 16:07:57 -0400
+Received: from mail.kernel.org ([198.145.29.99]:56736 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727925AbfHSUH4 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 19 Aug 2019 16:07:56 -0400
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net [24.9.64.241])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id E4AF0206C1;
+        Mon, 19 Aug 2019 20:07:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1566245275;
+        bh=9qErU7zoZi/gN4TKy6hFAtqTwhsJ2c7jCan+McstIBw=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=fv24PsTskgvfwGqWTPvrgXRWHaotE4vHz50rjxRu7bW0Bu9hPro+ombpEMF8EGex5
+         vZuWKj72hKa0WU39JwwPRaalNsipkjVOH9Mqwo9R6YSiAgqFMK847ndFkE3P4a/Zgp
+         cNWZCFjoPykhaUY+30WK2fXVNZj3uv2GfZa5bH48=
+Subject: Re: [PATCH] selftests: use "$(MAKE)" instead of "make"
+To:     Ilya Leoshkevich <iii@linux.ibm.com>
+Cc:     linux-kselftest@vger.kernel.org, bpf@vger.kernel.org,
         Kees Cook <keescook@chromium.org>,
-        Takashi Iwai <tiwai@suse.de>, linux-kselftest@vger.kernel.org
-References: <20190816000945.29810-1-scott.branden@broadcom.com>
- <20190816000945.29810-4-scott.branden@broadcom.com>
- <20190819053937.GR16384@42.do-not-panic.com>
-From:   Scott Branden <scott.branden@broadcom.com>
-Message-ID: <16823ee6-c52a-b3b5-caed-79c00772fa68@broadcom.com>
-Date:   Mon, 19 Aug 2019 09:19:51 -0700
+        Heiko Carstens <heiko.carstens@de.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>, shuah <shuah@kernel.org>
+References: <20190816160604.61294-1-iii@linux.ibm.com>
+From:   shuah <shuah@kernel.org>
+Message-ID: <138130b1-cecc-2e9d-757e-db28a3ad9028@kernel.org>
+Date:   Mon, 19 Aug 2019 14:07:34 -0600
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.8.0
 MIME-Version: 1.0
-In-Reply-To: <20190819053937.GR16384@42.do-not-panic.com>
+In-Reply-To: <20190816160604.61294-1-iii@linux.ibm.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
 Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Luis,
+On 8/16/19 10:06 AM, Ilya Leoshkevich wrote:
+> When doing "make kselftest TARGETS=bpf -j12", bpf progs end up being
+> compiled sequentially and thus slowly.
+> 
+> The reason is that parent make (tools/testing/selftests/Makefile) does
+> not share its jobserver with child make
+> (tools/testing/selftests/bpf/Makefile), therefore the latter runs with
+> -j1.
+> 
+> Change all instances of "make" to "$(MAKE)", so that the whole make
+> hierarchy runs using a single jobserver.
+> 
+> Signed-off-by: Ilya Leoshkevich <iii@linux.ibm.com>
+> ---
+> I tested this with:
+> 
+> 	make kselftest
+> 	make -C tools/testing/selftests
+> 	make -C tools/testing/selftests/bpf
+> 
+> Unfortunately, in my setup a lot of tests fail for a number of reasons.
+> However, this change does not make it worse.
+> 
+> tools/testing/selftests/Makefile | 22 +++++++++++-----------
+>   1 file changed, 11 insertions(+), 11 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
+> index 25b43a8c2b15..c3feccb99ff5 100644
+> --- a/tools/testing/selftests/Makefile
+> +++ b/tools/testing/selftests/Makefile
+> @@ -126,9 +126,9 @@ endif
+>   # in the default INSTALL_HDR_PATH usr/include.
+>   khdr:
+>   ifeq (1,$(DEFAULT_INSTALL_HDR_PATH))
+> -	make --no-builtin-rules ARCH=$(ARCH) -C $(top_srcdir) headers_install
+> +	$(MAKE) --no-builtin-rules ARCH=$(ARCH) -C $(top_srcdir) headers_install
+>   else
+> -	make --no-builtin-rules INSTALL_HDR_PATH=$$BUILD/usr \
+> +	$(MAKE) --no-builtin-rules INSTALL_HDR_PATH=$$BUILD/usr \
+>   		ARCH=$(ARCH) -C $(top_srcdir) headers_install
+>   endif
+>   
+> @@ -136,35 +136,35 @@ all: khdr
+>   	@for TARGET in $(TARGETS); do		\
+>   		BUILD_TARGET=$$BUILD/$$TARGET;	\
+>   		mkdir $$BUILD_TARGET  -p;	\
+> -		make OUTPUT=$$BUILD_TARGET -C $$TARGET;\
+> +		$(MAKE) OUTPUT=$$BUILD_TARGET -C $$TARGET;\
+>   	done;
+>   
+>   run_tests: all
+>   	@for TARGET in $(TARGETS); do \
+>   		BUILD_TARGET=$$BUILD/$$TARGET;	\
+> -		make OUTPUT=$$BUILD_TARGET -C $$TARGET run_tests;\
+> +		$(MAKE) OUTPUT=$$BUILD_TARGET -C $$TARGET run_tests;\
+>   	done;
+>   
+>   hotplug:
+>   	@for TARGET in $(TARGETS_HOTPLUG); do \
+>   		BUILD_TARGET=$$BUILD/$$TARGET;	\
+> -		make OUTPUT=$$BUILD_TARGET -C $$TARGET;\
+> +		$(MAKE) OUTPUT=$$BUILD_TARGET -C $$TARGET;\
+>   	done;
+>   
+>   run_hotplug: hotplug
+>   	@for TARGET in $(TARGETS_HOTPLUG); do \
+>   		BUILD_TARGET=$$BUILD/$$TARGET;	\
+> -		make OUTPUT=$$BUILD_TARGET -C $$TARGET run_full_test;\
+> +		$(MAKE) OUTPUT=$$BUILD_TARGET -C $$TARGET run_full_test;\
+>   	done;
+>   
+>   clean_hotplug:
+>   	@for TARGET in $(TARGETS_HOTPLUG); do \
+>   		BUILD_TARGET=$$BUILD/$$TARGET;	\
+> -		make OUTPUT=$$BUILD_TARGET -C $$TARGET clean;\
+> +		$(MAKE) OUTPUT=$$BUILD_TARGET -C $$TARGET clean;\
+>   	done;
+>   
+>   run_pstore_crash:
+> -	make -C pstore run_crash
+> +	$(MAKE) -C pstore run_crash
+>   
+>   # Use $BUILD as the default install root. $BUILD points to the
+>   # right output location for the following cases:
+> @@ -184,7 +184,7 @@ ifdef INSTALL_PATH
+>   	install -m 744 kselftest/prefix.pl $(INSTALL_PATH)/kselftest/
+>   	@for TARGET in $(TARGETS); do \
+>   		BUILD_TARGET=$$BUILD/$$TARGET;	\
+> -		make OUTPUT=$$BUILD_TARGET -C $$TARGET INSTALL_PATH=$(INSTALL_PATH)/$$TARGET install; \
+> +		$(MAKE) OUTPUT=$$BUILD_TARGET -C $$TARGET INSTALL_PATH=$(INSTALL_PATH)/$$TARGET install; \
+>   	done;
+>   
+>   	@# Ask all targets to emit their test scripts
+> @@ -203,7 +203,7 @@ ifdef INSTALL_PATH
+>   		echo "[ -w /dev/kmsg ] && echo \"kselftest: Running tests in $$TARGET\" >> /dev/kmsg" >> $(ALL_SCRIPT); \
+>   		echo "cd $$TARGET" >> $(ALL_SCRIPT); \
+>   		echo -n "run_many" >> $(ALL_SCRIPT); \
+> -		make -s --no-print-directory OUTPUT=$$BUILD_TARGET -C $$TARGET emit_tests >> $(ALL_SCRIPT); \
+> +		$(MAKE) -s --no-print-directory OUTPUT=$$BUILD_TARGET -C $$TARGET emit_tests >> $(ALL_SCRIPT); \
+>   		echo "" >> $(ALL_SCRIPT);	    \
+>   		echo "cd \$$ROOT" >> $(ALL_SCRIPT); \
+>   	done;
+> @@ -216,7 +216,7 @@ endif
+>   clean:
+>   	@for TARGET in $(TARGETS); do \
+>   		BUILD_TARGET=$$BUILD/$$TARGET;	\
+> -		make OUTPUT=$$BUILD_TARGET -C $$TARGET clean;\
+> +		$(MAKE) OUTPUT=$$BUILD_TARGET -C $$TARGET clean;\
+>   	done;
+>   
+>   .PHONY: khdr all run_tests hotplug run_hotplug clean_hotplug run_pstore_crash install clean
+> 
 
-Thanks for the review.
+Thanks. I will apply this for 5.4-rc1
 
-I did not think this patch would be the final solution either
-
-as indicated in the original cover letter and code comment.
-
-Some comments inline.
-
-On 2019-08-18 10:39 p.m., Luis Chamberlain wrote:
-
-> On Thu, Aug 15, 2019 at 05:09:45PM -0700, Scott Branden wrote:
->> A race condition exists between _request_firmware_prepare checking
->> if firmware is assigned and firmware_fallback_sysfs creating a sysfs
->> entry (kernel trace below).  To avoid such condition add a mutex
->> fw_lock_fallback to protect against such condition.
-> I am not buying this fix, and it seems sloppy. More below.
->
->> misc test_firmware: Falling back to sysfs fallback for: nope-test-firmware.bin
-> So the fallback kicks in with the file that is not there.
->
->> sysfs: cannot create duplicate filename '/devices/virtual/misc/test_firmware/nope-test-firmware.bin'
-> And we have a duplicate entry, for the *device* created to allow us to
-> create a file entry to allow us to copy the file. Your tests had a loop,
-> so there is actually a race between two entries being created while
-> one one failed.
->
->> CPU: 4 PID: 2059 Comm: test_firmware-3 Not tainted 5.3.0-rc4 #1
->> Hardware name: Dell Inc. OptiPlex 7010/0KRC95, BIOS A13 03/25/2013
->> Call Trace:
->>   dump_stack+0x67/0x90
->>   sysfs_warn_dup.cold+0x17/0x24
->>   sysfs_create_dir_ns+0xb3/0xd0
->>   kobject_add_internal+0xa6/0x2a0
->>   kobject_add+0x7e/0xb0
-> Note: kobject_add().
->
->>   ? _cond_resched+0x15/0x30
->>   device_add+0x121/0x670
->>   firmware_fallback_sysfs+0x15c/0x3c9
->>   _request_firmware+0x432/0x5a0
->>   ? devres_find+0x63/0xc0
->>   request_firmware_into_buf+0x63/0x80
->>   test_fw_run_batch_request+0x96/0xe0
->>   kthread+0xfb/0x130
->>   ? reset_store+0x30/0x30
->>   ? kthread_park+0x80/0x80
->>   ret_from_fork+0x3a/0x50
->> kobject_add_internal failed for nope-test-firmware.bin with -EEXIST, don't try to register things with the same name in the same directory.
-> So above it makes it even clearer, two kobjets with the same name.
->
->> Signed-off-by: Scott Branden <scott.branden@broadcom.com>
->> ---
->>   drivers/base/firmware_loader/main.c | 15 +++++++++++++++
->>   1 file changed, 15 insertions(+)
->>
->> diff --git a/drivers/base/firmware_loader/main.c b/drivers/base/firmware_loader/main.c
->> index bf44c79beae9..ce9896e3b782 100644
->> --- a/drivers/base/firmware_loader/main.c
->> +++ b/drivers/base/firmware_loader/main.c
->> @@ -88,6 +88,7 @@ static inline struct fw_priv *to_fw_priv(struct kref *ref)
->>   /* fw_lock could be moved to 'struct fw_sysfs' but since it is just
->>    * guarding for corner cases a global lock should be OK */
->>   DEFINE_MUTEX(fw_lock);
->> +DEFINE_MUTEX(fw_lock_fallback);
-> The reason I don't like this fix is that this mutex is named after ther
-> fallback interface... but...
->
->>   
->>   static struct firmware_cache fw_cache;
->>   
->> @@ -758,6 +759,17 @@ _request_firmware(const struct firmware **firmware_p, const char *name,
->>   	if (!firmware_p)
->>   		return -EINVAL;
->>   
->> +	/*
->> +	 * There is a race condition between _request_firmware_prepare checking
->> +	 * if firmware is assigned and firmware_fallback_sysfs creating sysfs
->> +	 * entries with duplicate names.
->> +	 * Yet, with this lock the firmware_test locks up with cache enabled
->> +	 * and no event used during firmware test.
->> +	 * This points to some very racy code I don't know how to entirely fix.
->> +	 */
->> +	if (opt_flags & FW_OPT_NOCACHE)
->> +		mutex_lock(&fw_lock_fallback);
-> Whoa.. What does no-cache have anything to do with the fallback interface
-> other than the fact we enable this feature for the fallback interface?
-> We don't need to penalize non-fallback users who *also* may want to
-> enable the no-cache feature.
->
-> So, the fix should be within the boundaries of the creation / deletion
-> of the kobject, not this nocache feature. Can you please re-evaluate
-> this code and look for a more compartamentalized solution to the
-> fallback code only?
-
-To be honest, I find the entire firmware code sloppy.  I don't think the 
-cache/no-cache feature is
-
-implemented or tested properly nor fallback to begin with.  I'm not 
-claiming this patch is the final
-
-solution and indicated such in the cover letter and the comment above.
-
-I hope there is someone more familiar with this code to comment further 
-and come up with a proper solution.
-
-
-I have found numerous issues and race conditions with the firmware code 
-(I simply added a test).
-
-1) Try loading the same valid firmware using no-cache once it has 
-already been loaded with cache.
-
-It won't work, which is why I had to use a different filename in the 
-test for request_firmware_into_buf.
-
-2) Try removing the "if (opt_flags & FW_OPT_NOCACHE)" in my patch and 
-always call the mutex.
-
-The firmware test will lock up during a "no uevent" test.  I am not 
-familiar with the code to
-
-know why such is true and what issue this exposes in the code.
-
-3) I have a driver that uses request_firmware_into_buf and have multiple 
-instances of the driver
-
-loading the same firmware in parallel.  Some of the data is not read 
-correctly in each instance.
-
-I haven't yet to reproduce this issue with the firmware test but 
-currently have a mutex around the entire
-
-call to request_firmware_into_buf in our driver.
-
-
-Perhaps it is better at this point to add a mutex in 
-request_firmware_into_buf to make is entirely safe?
-
-(Perhaps even with every request_firmware functions as none seems to be 
-tested properly.)
-
-Or, add a new function called safe_request_firmware_into_buf with such 
-mutex to protect the function.
-
-The current racey request_firmware functions could then be left alone 
-and those who want reliable
-
-firmware loading can use the safe calls?
-
->
->    Luis
+thanks,
+-- Shuah
