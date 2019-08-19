@@ -2,90 +2,55 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7552F92480
-	for <lists+linux-kselftest@lfdr.de>; Mon, 19 Aug 2019 15:16:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B758924AD
+	for <lists+linux-kselftest@lfdr.de>; Mon, 19 Aug 2019 15:22:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727632AbfHSNQ4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 19 Aug 2019 09:16:56 -0400
-Received: from mail-pg1-f194.google.com ([209.85.215.194]:46613 "EHLO
-        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727623AbfHSNQz (ORCPT
+        id S1727537AbfHSNW3 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 19 Aug 2019 09:22:29 -0400
+Received: from mail-pf1-f196.google.com ([209.85.210.196]:43967 "EHLO
+        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727424AbfHSNW3 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 19 Aug 2019 09:16:55 -0400
-Received: by mail-pg1-f194.google.com with SMTP id m3so1202061pgv.13
-        for <linux-kselftest@vger.kernel.org>; Mon, 19 Aug 2019 06:16:55 -0700 (PDT)
+        Mon, 19 Aug 2019 09:22:29 -0400
+Received: by mail-pf1-f196.google.com with SMTP id v12so1163923pfn.10
+        for <linux-kselftest@vger.kernel.org>; Mon, 19 Aug 2019 06:22:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=G3QrTp7p7joYbJCkRsXIJddWfOp/eioksMTpigV+wkM=;
-        b=M2vK+xZVjtXBYjUxUUk1iMNbxYwjUd+W6togCQiYPc7Vu+BGQx7l3hXcn4ECMLvDWt
-         DlIAvUe8ekFSnxnofy3VvCNWLct8LZOpiNSM+v1WhYFyPJDwu5gZzaBjspAETr+32sje
-         Xh1peTR5yYmEcUyhpwKV8rR/zI3wE7krkn5mWhAZXsBdSmKIExx6Aai/02AtaqBWuiMJ
-         rwdLtwVmt2z/BiSdji1RT9OqjhuC+NoRsQcrlELRw7LuJbnkQsJhQDfS2T7BkdRszDtd
-         SsGJHm5kXWMKbJ6caWbq9raXqyHYkwoMk/qLwvz6vTD2dWWbREUV34BsqN2ExAzlW+sj
-         Ywjg==
+        bh=/cQU4KQrxQys58Jg2W2ly4+q7AEo42feQrOFY3UWkd4=;
+        b=foc8SMFZSY7hAWCfbQkF1NyaOEME7p+GgYs0mQEYRExVuzMdmcZIO69KkuSM4Gz30z
+         phr2GKMnO1gZyljMtVqE9trmrF1TH2ocny/sZqPsLWPCxKwCu94MIAboGuOZImCz4a+2
+         6rugHvHTcSLrXh/FgSQtb2EpaVzIldZdJ1mX44LSDuhUVTwTvioNwPCq6jOoQPAbyxZW
+         lamLTwYsht9EE4ljavIwA+m6MJDig3/cxHeALGSjp3/p0zmMbr01oY5frJa9Ajy67IYX
+         ONH4A9HAHI0b+nkkHfJwUjbj1fzefUF1CSfLclemRepOywryAIEQlAVG1da9NNvcIp56
+         c4CA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=G3QrTp7p7joYbJCkRsXIJddWfOp/eioksMTpigV+wkM=;
-        b=naLtvA8y9VX7tafbcERRkO2xptlPMym1+97iyfZGz34jk2l7TUk01dnc0By5iCKnz1
-         Oq8/yDpW7p/JkxszhE7trTDO/+HRfUyrQ0bsG34WeKXBsRN2qBPtVNbtOCpjP1zhaIIJ
-         njQPDwgNGXKZM7/VZpXyaZSN6E6Hpqme46HqRfqyojkHpTkEoYRtU9UaUxMCcuc0Vcs/
-         XGCYyDE+T3wisPBtlzkMvjLTWnFrEw7ZMO26bMv2y0fP7PMFKwPx+3tzFIk7qj5IWiXQ
-         9gCmMTap9wJFvi1hrCLj2l5Nox1WCQ2cwtX8jOrhO/XpEUkZqV9Avr+OP2KsUP9KX5KD
-         a4Xw==
-X-Gm-Message-State: APjAAAW4Sy3CekabfyQtrdmVfk/uDzYhL0djccwI6pYQg/TmwwMGmSZL
-        B8vFp5sdOCGaMMT8lvvBUUvj54JhQTLI0VzCNq7Ejg==
-X-Google-Smtp-Source: APXvYqyVpOFailHQYDN6SGrqGiLu77ISHhF0UzRLkKGS0q9bNLzKJCagc2Nkkti9u80AQyBrYjiyPqa9PxLeXB9+mf8=
-X-Received: by 2002:aa7:9e0a:: with SMTP id y10mr23727599pfq.93.1566220614754;
- Mon, 19 Aug 2019 06:16:54 -0700 (PDT)
+        bh=/cQU4KQrxQys58Jg2W2ly4+q7AEo42feQrOFY3UWkd4=;
+        b=bVdsxRHqpiC/lNP5wU2x8Pd6qUthyoBG48VJ6Z0vuJMKkiMOtY7IXwT6pQUBuaLMgq
+         iYMtgSAAIICOH34WoILqm/A4J1vkHKZohbbwZXwwIQAQMes46GA54fiSg5LrlpQaEskf
+         M9fSo/aP3W175ffFTJ23PBDO7qzIlyEIdbvhnfJmsEMxf5iMAJRVMVeTE+ZUMvyISAUO
+         sfdAEnXhdT3Dy38Db5lbL1YhDjVI0BmiGrloxy8NglvfPg5eyZXGwsUlVqsDt4sU/efd
+         XPVf3IlpxyiSYGfng5oUqUSvH6o+hQcU56FpeV37cuEIRvfY98UFJSUYGpPBZXbUbQG4
+         JfWw==
+X-Gm-Message-State: APjAAAU8hyhLiFXG8mLSlbYTiOJ1D4g4UTEtbNZKT2zuQ7F5UCZhiv8J
+        44AI5if+zLWIMBzcqIPXutsih+tZvcx50+r+3tKDY8lsg8U=
+X-Google-Smtp-Source: APXvYqwZh6+Pm6DLf/0IMEFuil+Sv4cgeF7APqK2x1eQmDZdJjRuYhVJzU6Gu2u88qeYL93rGmDLKMONZaHxZYuLG7g=
+X-Received: by 2002:aa7:9e9a:: with SMTP id p26mr24549954pfq.25.1566220948252;
+ Mon, 19 Aug 2019 06:22:28 -0700 (PDT)
 MIME-Version: 1.0
-References: <00eb8ba84205c59cac01b1b47615116a461c302c.1566220355.git.andreyknvl@google.com>
-In-Reply-To: <00eb8ba84205c59cac01b1b47615116a461c302c.1566220355.git.andreyknvl@google.com>
+References: <20190815081803.GA27238@mwanda>
+In-Reply-To: <20190815081803.GA27238@mwanda>
 From:   Andrey Konovalov <andreyknvl@google.com>
-Date:   Mon, 19 Aug 2019 15:16:43 +0200
-Message-ID: <CAAeHK+xBKrS0LZX+d3psaynznU4tQGfz4wQ9oFanxjjPv1ytVQ@mail.gmail.com>
-Subject: Re: [PATCH ARM] selftests, arm64: fix uninitialized symbol in tags_test.c
-To:     Will Deacon <will.deacon@arm.com>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Kees Cook <keescook@chromium.org>,
-        Yishai Hadas <yishaih@mellanox.com>,
-        Felix Kuehling <Felix.Kuehling@amd.com>,
-        Alexander Deucher <Alexander.Deucher@amd.com>,
-        Christian Koenig <Christian.Koenig@amd.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Jens Wiklander <jens.wiklander@linaro.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
-        Dave Martin <Dave.Martin@arm.com>,
-        Khalid Aziz <khalid.aziz@oracle.com>, enh <enh@google.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Christoph Hellwig <hch@infradead.org>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Kostya Serebryany <kcc@google.com>,
-        Evgeniy Stepanov <eugenis@google.com>,
-        Lee Smith <Lee.Smith@arm.com>,
-        Ramana Radhakrishnan <Ramana.Radhakrishnan@arm.com>,
-        Jacob Bramley <Jacob.Bramley@arm.com>,
-        Ruben Ayrapetyan <Ruben.Ayrapetyan@arm.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Kevin Brodsky <kevin.brodsky@arm.com>,
-        Szabolcs Nagy <Szabolcs.Nagy@arm.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-rdma@vger.kernel.org, linux-media@vger.kernel.org,
-        kvm@vger.kernel.org,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
+Date:   Mon, 19 Aug 2019 15:22:17 +0200
+Message-ID: <CAAeHK+x6q_dTGdtTMuEg6L7wwCipo29tM8NKQK+MgZ9Q1XqCMA@mail.gmail.com>
+Subject: Re: [bug report] selftests, arm64: add a selftest for passing tagged
+ pointers to kernel
+To:     Dan Carpenter <dan.carpenter@oracle.com>
+Cc:     "open list:KERNEL SELFTEST FRAMEWORK" 
         <linux-kselftest@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
@@ -93,48 +58,45 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Aug 19, 2019 at 3:14 PM Andrey Konovalov <andreyknvl@google.com> wrote:
+On Thu, Aug 15, 2019 at 10:18 AM Dan Carpenter <dan.carpenter@oracle.com> wrote:
 >
-> Fix tagged_ptr not being initialized when TBI is not enabled.
+> Hello Andrey Konovalov,
 >
-> Dan Carpenter <dan.carpenter@oracle.com>
-> Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
-> ---
->  tools/testing/selftests/arm64/tags_test.c | 8 +++++---
->  1 file changed, 5 insertions(+), 3 deletions(-)
+> The patch 9ce1263033cd: "selftests, arm64: add a selftest for passing
+> tagged pointers to kernel" from Jul 23, 2019, leads to the following
+> static checker warning:
 >
-> diff --git a/tools/testing/selftests/arm64/tags_test.c b/tools/testing/selftests/arm64/tags_test.c
-> index 22a1b266e373..5701163460ef 100644
-> --- a/tools/testing/selftests/arm64/tags_test.c
-> +++ b/tools/testing/selftests/arm64/tags_test.c
-> @@ -14,15 +14,17 @@
->  int main(void)
->  {
->         static int tbi_enabled = 0;
-> -       struct utsname *ptr, *tagged_ptr;
-> +       unsigned long tag = 0;
-> +       struct utsname *ptr;
->         int err;
+>         ./tools/testing/selftests/arm64/tags_test.c:25 main()
+>         error: uninitialized symbol 'tagged_ptr'.
 >
->         if (prctl(PR_SET_TAGGED_ADDR_CTRL, PR_TAGGED_ADDR_ENABLE, 0, 0, 0) == 0)
->                 tbi_enabled = 1;
->         ptr = (struct utsname *)malloc(sizeof(*ptr));
->         if (tbi_enabled)
-> -               tagged_ptr = (struct utsname *)SET_TAG(ptr, 0x42);
-> -       err = uname(tagged_ptr);
-> +               tag = 0x42;
-> +       ptr = (struct utsname *)SET_TAG(ptr, tag);
-> +       err = uname(ptr);
->         free(ptr);
+> tools/testing/selftests/arm64/tags_test.c
+>     14  int main(void)
+>     15  {
+>     16          static int tbi_enabled = 0;
+>     17          struct utsname *ptr, *tagged_ptr;
+>                                       ^^^^^^^^^^
 >
->         return err;
-> --
-> 2.23.0.rc1.153.gdeed80330f-goog
+>     18          int err;
+>     19
+>     20          if (prctl(PR_SET_TAGGED_ADDR_CTRL, PR_TAGGED_ADDR_ENABLE, 0, 0, 0) == 0)
+>     21                  tbi_enabled = 1;
+>     22          ptr = (struct utsname *)malloc(sizeof(*ptr));
+>     23          if (tbi_enabled)
+>     24                  tagged_ptr = (struct utsname *)SET_TAG(ptr, 0x42);
+>                 ^^^^^^^^^^^^^^^
+> No else path.
 >
+>     25          err = uname(tagged_ptr);
+>     26          free(ptr);
+>     27
+>     28          return err;
+>     29  }
+>
+> regards,
+> dan carpenter
 
-Hi Will,
+Hi Dan,
 
-This is supposed to go on top of the TBI related patches that you have
-added to the arm tree.
+Just sent a patch with a fix.
 
-Thanks!
+Thanks for the report!
