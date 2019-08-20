@@ -2,93 +2,67 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E01696B6F
-	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Aug 2019 23:26:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9FD396D9F
+	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Aug 2019 01:24:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730680AbfHTV0o (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 20 Aug 2019 17:26:44 -0400
-Received: from mail-pg1-f195.google.com ([209.85.215.195]:36293 "EHLO
-        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730273AbfHTV0o (ORCPT
+        id S1726463AbfHTXUz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 20 Aug 2019 19:20:55 -0400
+Received: from mail-vk1-f201.google.com ([209.85.221.201]:45021 "EHLO
+        mail-vk1-f201.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726413AbfHTXUy (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 20 Aug 2019 17:26:44 -0400
-Received: by mail-pg1-f195.google.com with SMTP id l21so43033pgm.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 20 Aug 2019 14:26:44 -0700 (PDT)
+        Tue, 20 Aug 2019 19:20:54 -0400
+Received: by mail-vk1-f201.google.com with SMTP id a5so219415vki.11
+        for <linux-kselftest@vger.kernel.org>; Tue, 20 Aug 2019 16:20:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=kfF4vdGcFJm/Wf6JQ1wcuplxthXZW1HNbOa1JyPqpZg=;
-        b=YezYmx2WChZMi1DRr1XoN8XfZITumH+PgqY3JQdS5w4u2vwKLbtcH66ah2vjoQnnog
-         QyUxcFY+vLpiQeDhK9KTH5U7uOLNo0vnuD4a52N1MJjkiOZI294BDWFVvwrEEKdhPBaO
-         XVT2+i53gVsOodGBAl0E+xI0gCcD/lVNo3bqvB93NFaE/xG/irV6qGiYAx5Sa0TgkhIz
-         Derb91GymDQKbZ5lMgnZKtNSZMjrGXdFpCsjUGQOYWWslojKah3JT/incq30S9xuCblQ
-         rssihHZxJUKUKjpEGuvFLm+OHFk0eFFOuKdMDTyPyJe4rypnj3lPr/tiL1vR+LS2dnzq
-         EaFQ==
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=d/yRotIqofKL6ivNLT0spFL8C+ImKotVaARxIwjjT6U=;
+        b=AVw2bVu+4NwiDCTMe7ctCvAsytyWg/rXh1qSlFIYcZ34MZ2W4zFBX61usfUDXKDI+U
+         6mkzeHkKvCm3jsXc7ellvdvzMZ/yYq5pQYIgEJEeej2GmzjldUwbhas7sVL0y1BF9R5Q
+         aeLd89FDK15SPfbl+SuyrbqBs3o2uiag6LIW+dn6YgaIXzRVfITYu/qa+PVnh2pu0la1
+         EgwkQGeMgeft4WVs3y+cr1sGSCDFeF0e6bPs6wefJLtZGnA3fREotyJnv1WY33ED8Kos
+         PZta1YwDrJCXLZftQ0jdf7GzZQX+uUMqkEw7bGquy+vwd3aApIC+kCto7n+WJu4zEbsw
+         +lOA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=kfF4vdGcFJm/Wf6JQ1wcuplxthXZW1HNbOa1JyPqpZg=;
-        b=IffguUkFZEgAX029Up0hZA56U/ZYULahzHBTpZouu+eEeOkKWfAmw3V/YkfgQupGjm
-         Dh2Nsb6w+qjCES8evY8N1TKmxXcSy1kUZxWs4Nan7iQtB9ir+qTjLiGjP+Y3EF5uzKmz
-         YeIh+PEjc1rTZyySiKpMDCirJ3dTvd8W75n7b67f7jcvZm3Q5eeMQSud7jqNkKBuiW6R
-         4apaa5r5NbKOiK1YN/1rxsvplJVFc3DiHulGf7RRyKql5RByDz4Fq6jHYJLm0k4btoqd
-         dERvoOREwKvndZnYktQD2aILtl4OVhx4GOobjXXxlJWAyzoNTqnj3ER+ogHFaAudoEIo
-         yQ4w==
-X-Gm-Message-State: APjAAAWSnqe65GoZLa1TT1PZDM3YpQDP+rYs6BBeA6pk97vuXBldgYcC
-        Crw2Gb2j1A197INu2o775Frl7tDZnLr6ZTbSIAxBgg==
-X-Google-Smtp-Source: APXvYqzLsasEUUNlQqQQsMBDlcH+Tp5YqnFlWE8k2udTHXgEapZH91qiWX0NVeTeH8163H7ZgTGtPG9Wj/vODuCC5PA=
-X-Received: by 2002:aa7:8f2e:: with SMTP id y14mr32322000pfr.113.1566336403144;
- Tue, 20 Aug 2019 14:26:43 -0700 (PDT)
-MIME-Version: 1.0
-References: <20190814055108.214253-1-brendanhiggins@google.com>
- <5b880f49-0213-1a6e-9c9f-153e6ab91eeb@kernel.org> <20190820182450.GA38078@google.com>
- <e8eaf28e-75df-c966-809a-2e3631353cc9@kernel.org>
-In-Reply-To: <e8eaf28e-75df-c966-809a-2e3631353cc9@kernel.org>
-From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Tue, 20 Aug 2019 14:26:32 -0700
-Message-ID: <CAFd5g44JT_KQ+OxjVdG0qMWuaEB0Zq5x=r6tLsqJdncwZ_zbGA@mail.gmail.com>
-Subject: Re: [PATCH v13 00/18] kunit: introduce KUnit, the Linux kernel unit
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=d/yRotIqofKL6ivNLT0spFL8C+ImKotVaARxIwjjT6U=;
+        b=PjdAzrvykHrFArzPwSuOB5dio/hGPkZ4bBlZdPzIvHG+rPVSKef/gmO1IPVHVioGa/
+         RlOJsC4Pucay2lkQTFn/DxCPK8R0wpABg/Ic/XFqu3pN2uszmkBO2A1kZnOrDsv0tYdb
+         rC6J7ojppL75mPt5fZ2t/cBvRnt3DtbzaJMuCGsXRk+mNNrxHu7dOphin0H53hWr7t4z
+         DgnTX3fBrrhnQbbSmtAbkiANMWQoS+JQ0aL2BJ5LFS+25JtGn9fV4EThuK8iVnFzv7a/
+         gO7YtxrP5GYbK2/GxgK8LVZq8rs9eOyjNXywCKfkLwOQRnsf/FgG6ht7Pd2XKH2rAgej
+         sd9Q==
+X-Gm-Message-State: APjAAAVLhpegu3Vxlu9jx31Mrd2HT1KZlfIj2Ti1L5Tz+x3DEiAX3zpE
+        XiTr3jlp53wiecGqDxgWm3xKe+JWiAQhu3jIftlInA==
+X-Google-Smtp-Source: APXvYqxI/nPId+DHfk6D741GOqFrVhdMCpaqnV+6xqhMReBcYshk3sm1bvTSqco2NKWiElhS3+UgytqYYzLVwPw9MVYXZA==
+X-Received: by 2002:a67:2605:: with SMTP id m5mr19353609vsm.120.1566343253112;
+ Tue, 20 Aug 2019 16:20:53 -0700 (PDT)
+Date:   Tue, 20 Aug 2019 16:20:28 -0700
+Message-Id: <20190820232046.50175-1-brendanhiggins@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.23.0.rc1.153.gdeed80330f-goog
+Subject: [PATCH v14 00/18] kunit: introduce KUnit, the Linux kernel unit
  testing framework
-To:     shuah <shuah@kernel.org>
-Cc:     Frank Rowand <frowand.list@gmail.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Kees Cook <keescook@google.com>,
-        Kieran Bingham <kieran.bingham@ideasonboard.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Rob Herring <robh@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
-        "Theodore Ts'o" <tytso@mit.edu>,
-        Masahiro Yamada <yamada.masahiro@socionext.com>,
-        devicetree <devicetree@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        kunit-dev@googlegroups.com,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        linux-fsdevel@vger.kernel.org,
-        linux-kbuild <linux-kbuild@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        linux-nvdimm <linux-nvdimm@lists.01.org>,
-        linux-um@lists.infradead.org,
-        Sasha Levin <Alexander.Levin@microsoft.com>,
-        "Bird, Timothy" <Tim.Bird@sony.com>,
-        Amir Goldstein <amir73il@gmail.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Daniel Vetter <daniel@ffwll.ch>, Jeff Dike <jdike@addtoit.com>,
-        Joel Stanley <joel@jms.id.au>,
-        Julia Lawall <julia.lawall@lip6.fr>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Knut Omang <knut.omang@oracle.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Petr Mladek <pmladek@suse.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Richard Weinberger <richard@nod.at>,
-        David Rientjes <rientjes@google.com>,
-        Steven Rostedt <rostedt@goodmis.org>, wfg@linux.intel.com,
+From:   Brendan Higgins <brendanhiggins@google.com>
+To:     frowand.list@gmail.com, gregkh@linuxfoundation.org,
+        jpoimboe@redhat.com, keescook@google.com,
+        kieran.bingham@ideasonboard.com, mcgrof@kernel.org,
+        peterz@infradead.org, robh@kernel.org, sboyd@kernel.org,
+        shuah@kernel.org, tytso@mit.edu, yamada.masahiro@socionext.com
+Cc:     devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        kunit-dev@googlegroups.com, linux-doc@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kbuild@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-nvdimm@lists.01.org, linux-um@lists.infradead.org,
+        Alexander.Levin@microsoft.com, Tim.Bird@sony.com,
+        amir73il@gmail.com, dan.carpenter@oracle.com, daniel@ffwll.ch,
+        jdike@addtoit.com, joel@jms.id.au, julia.lawall@lip6.fr,
+        khilman@baylibre.com, knut.omang@oracle.com, logang@deltatee.com,
+        mpe@ellerman.id.au, pmladek@suse.com, rdunlap@infradead.org,
+        richard@nod.at, rientjes@google.com, rostedt@goodmis.org,
+        wfg@linux.intel.com, Brendan Higgins <brendanhiggins@google.com>,
         Bjorn Helgaas <bhelgaas@google.com>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
@@ -96,55 +70,72 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Aug 20, 2019 at 12:08 PM shuah <shuah@kernel.org> wrote:
->
-> On 8/20/19 12:24 PM, Brendan Higgins wrote:
-> > On Tue, Aug 20, 2019 at 11:24:45AM -0600, shuah wrote:
-> >> On 8/13/19 11:50 PM, Brendan Higgins wrote:
-> >>> ## TL;DR
-> >>>
-> >>> This revision addresses comments from Stephen and Bjorn Helgaas. Most
-> >>> changes are pretty minor stuff that doesn't affect the API in anyway.
-> >>> One significant change, however, is that I added support for freeing
-> >>> kunit_resource managed resources before the test case is finished via
-> >>> kunit_resource_destroy(). Additionally, Bjorn pointed out that I broke
-> >>> KUnit on certain configurations (like the default one for x86, whoops).
-> >>>
-> >>> Based on Stephen's feedback on the previous change, I think we are
-> >>> pretty close. I am not expecting any significant changes from here on
-> >>> out.
-> >>>
-> >>
-> >> Hi Brendan,
-> >>
-> >> I found checkpatch errors in one or two patches. Can you fix those and
-> >> send v14.
-> >
-> > Hi Shuah,
-> >
-> > Are you refering to the following errors?
-> >
-> > ERROR: Macros with complex values should be enclosed in parentheses
-> > #144: FILE: include/kunit/test.h:456:
-> > +#define KUNIT_BINARY_CLASS \
-> > +       kunit_binary_assert, KUNIT_INIT_BINARY_ASSERT_STRUCT
-> >
-> > ERROR: Macros with complex values should be enclosed in parentheses
-> > #146: FILE: include/kunit/test.h:458:
-> > +#define KUNIT_BINARY_PTR_CLASS \
-> > +       kunit_binary_ptr_assert, KUNIT_INIT_BINARY_PTR_ASSERT_STRUCT
-> >
-> > These values should *not* be in parentheses. I am guessing checkpatch is
-> > getting confused and thinks that these are complex expressions, when
-> > they are not.
-> >
-> > I ignored the errors since I figured checkpatch was complaining
-> > erroneously.
-> >
-> > I could refactor the code to remove these macros entirely, but I think
-> > the code is cleaner with them.
-> >
->
-> Please do. I am not veru sure what value these macros add.
+## TL;DR
 
-Alright, I will have something for you later today.
+This revision addresses comments from Shuah by removing two macros that
+were causing checkpatch errors. No API or major structual changes have
+been made since v13.
+
+## Background
+
+This patch set proposes KUnit, a lightweight unit testing and mocking
+framework for the Linux kernel.
+
+Unlike Autotest and kselftest, KUnit is a true unit testing framework;
+it does not require installing the kernel on a test machine or in a VM
+(however, KUnit still allows you to run tests on test machines or in VMs
+if you want[1]) and does not require tests to be written in userspace
+running on a host kernel. Additionally, KUnit is fast: From invocation
+to completion KUnit can run several dozen tests in about a second.
+Currently, the entire KUnit test suite for KUnit runs in under a second
+from the initial invocation (build time excluded).
+
+KUnit is heavily inspired by JUnit, Python's unittest.mock, and
+Googletest/Googlemock for C++. KUnit provides facilities for defining
+unit test cases, grouping related test cases into test suites, providing
+common infrastructure for running tests, mocking, spying, and much more.
+
+### What's so special about unit testing?
+
+A unit test is supposed to test a single unit of code in isolation,
+hence the name. There should be no dependencies outside the control of
+the test; this means no external dependencies, which makes tests orders
+of magnitudes faster. Likewise, since there are no external dependencies,
+there are no hoops to jump through to run the tests. Additionally, this
+makes unit tests deterministic: a failing unit test always indicates a
+problem. Finally, because unit tests necessarily have finer granularity,
+they are able to test all code paths easily solving the classic problem
+of difficulty in exercising error handling code.
+
+### Is KUnit trying to replace other testing frameworks for the kernel?
+
+No. Most existing tests for the Linux kernel are end-to-end tests, which
+have their place. A well tested system has lots of unit tests, a
+reasonable number of integration tests, and some end-to-end tests. KUnit
+is just trying to address the unit test space which is currently not
+being addressed.
+
+### More information on KUnit
+
+There is a bunch of documentation near the end of this patch set that
+describes how to use KUnit and best practices for writing unit tests.
+For convenience I am hosting the compiled docs here[2].
+
+Additionally for convenience, I have applied these patches to a
+branch[3]. The repo may be cloned with:
+git clone https://kunit.googlesource.com/linux
+This patchset is on the kunit/rfc/v5.3/v14 branch.
+
+## Changes Since Last Version
+
+- Removed to macros which helped define expectation and assertion
+  macros; these values are now just copied and pasted. Change was made
+  to fix checkpatch error, as suggested by Shuah.
+
+[1] https://google.github.io/kunit-docs/third_party/kernel/docs/usage.html#kunit-on-non-uml-architectures
+[2] https://google.github.io/kunit-docs/third_party/kernel/docs/
+[3] https://kunit.googlesource.com/linux/+/kunit/rfc/v5.3/v14
+
+-- 
+2.23.0.rc1.153.gdeed80330f-goog
+
