@@ -2,88 +2,89 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CA9AA9612D
-	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Aug 2019 15:46:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9317961F3
+	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Aug 2019 16:08:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729819AbfHTNlm (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 20 Aug 2019 09:41:42 -0400
-Received: from mail-lj1-f194.google.com ([209.85.208.194]:42398 "EHLO
-        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730429AbfHTNll (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 20 Aug 2019 09:41:41 -0400
-Received: by mail-lj1-f194.google.com with SMTP id l14so5158212ljj.9
-        for <linux-kselftest@vger.kernel.org>; Tue, 20 Aug 2019 06:41:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=gNuDQYJVmflL/Wny4LHIdiHjJtChxjlf3zzR+P07bYQ=;
-        b=ZDi1SFp8FXJaCjqmp4zm/ByzXqtJBaAQvabUX02QHSb6SDgYVNy5d57jcfvwyT0dA5
-         8fzbFhHg9LRNWdJpl72dppeSuclNMByTBbZmU1xF7nAeqeBmQRvhlMYjmaiXLE4LV8wa
-         zxoY/hF5DCBbdn3mRlsGF/QKdWdyYmxwOQPdPchKF8HLcZypJV/Ukw61WnY3PsnFAK6u
-         Q+YJvglENuW+ieeSkGQnazSrxJiAcBHbB6uLYLGz1AJ9h/LaCq1SaT3QhJAAHmVF4Fz7
-         Q2G5T+L+zrAQfW0/HE1GXl6UCt7EAtJC8GptIXHJXVjn/yaRqmlb/VYXAa36kix3OPE7
-         AUMw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=gNuDQYJVmflL/Wny4LHIdiHjJtChxjlf3zzR+P07bYQ=;
-        b=qKGvrVl/oxt8M0HEiSP+kRK38KLvSdnISlEDPs6WPejOQdKPipJ6RpsPoZ3+d6HrPM
-         pu2QFoehGWYClY72nTp6gdaJCQ3BNxknGyvPYifpwKs/iHMt/DZn9GXHCyKZE1r4hDA5
-         87IM2xClx1bJShtn+YcSrywntVMgzsbDSCsPQcjBfkWaGM4CJEnkbDa8LvM+OeXDh7XA
-         FFdT951+94ImKppHgh8Aiu328qZBCCMrzk93lgzGVLZy4MZok5dMB5CmrtqJSOkx+yN4
-         Tc3ogCzu2tYdpfnO0MupKanzAO8HEuBSpJ0sLza1UNCsYAHHBVhF6NZGxzRccEu6Nfkd
-         JCyw==
-X-Gm-Message-State: APjAAAX+Oo3vcG417d8VbN6DgGGVd0CMo+5eY+PFcF0aJmQAwOY1xtpJ
-        npMmhdEDCxzGQJHYZSuUD8ZEIg==
-X-Google-Smtp-Source: APXvYqxp8WgHlmWB1TJ1U6T1cdPC1f76z95rZGZ+Y6JhIi2z2/jagdLSnDlzo64tshfBrRxPu29rpQ==
-X-Received: by 2002:a2e:b0cb:: with SMTP id g11mr15447861ljl.76.1566308499392;
-        Tue, 20 Aug 2019 06:41:39 -0700 (PDT)
-Received: from localhost (c-243c70d5.07-21-73746f28.bbcust.telenor.se. [213.112.60.36])
-        by smtp.gmail.com with ESMTPSA id f22sm2820208ljh.22.2019.08.20.06.41.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Aug 2019 06:41:38 -0700 (PDT)
-From:   Anders Roxell <anders.roxell@linaro.org>
-To:     shuah@kernel.org, ast@kernel.org, daniel@iogearbox.net
-Cc:     linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Anders Roxell <anders.roxell@linaro.org>
-Subject: [PATCH] selftests: bpf: add config fragment BPF_JIT
-Date:   Tue, 20 Aug 2019 15:41:34 +0200
-Message-Id: <20190820134134.25818-1-anders.roxell@linaro.org>
-X-Mailer: git-send-email 2.20.1
+        id S1730227AbfHTOHg (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 20 Aug 2019 10:07:36 -0400
+Received: from mx1.redhat.com ([209.132.183.28]:42038 "EHLO mx1.redhat.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729960AbfHTOHf (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 20 Aug 2019 10:07:35 -0400
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mx1.redhat.com (Postfix) with ESMTPS id BD665A35FE8;
+        Tue, 20 Aug 2019 14:07:34 +0000 (UTC)
+Received: from carbon (ovpn-200-29.brq.redhat.com [10.40.200.29])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id B5FC03DE5;
+        Tue, 20 Aug 2019 14:07:30 +0000 (UTC)
+Date:   Tue, 20 Aug 2019 16:07:26 +0200
+From:   Jesper Dangaard Brouer <jbrouer@redhat.com>
+To:     Anders Roxell <anders.roxell@linaro.org>
+Cc:     shuah@kernel.org, ast@kernel.org, daniel@iogearbox.net,
+        davem@davemloft.net, jakub.kicinski@netronome.com, hawk@kernel.org,
+        john.fastabend@gmail.com, linux-kselftest@vger.kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] selftests: bpf: install files test_xdp_vlan.sh
+Message-ID: <20190820160726.5a8990c8@carbon>
+In-Reply-To: <20190820134121.25728-1-anders.roxell@linaro.org>
+References: <20190820134121.25728-1-anders.roxell@linaro.org>
+Organization: Red Hat Inc.
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
+X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.6.2 (mx1.redhat.com [10.5.110.68]); Tue, 20 Aug 2019 14:07:35 +0000 (UTC)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-When running test_kmod.sh the following shows up
+On Tue, 20 Aug 2019 15:41:21 +0200
+Anders Roxell <anders.roxell@linaro.org> wrote:
 
- # sysctl cannot stat /proc/sys/net/core/bpf_jit_enable No such file or directory
- cannot: stat_/proc/sys/net/core/bpf_jit_enable #
- # sysctl cannot stat /proc/sys/net/core/bpf_jit_harden No such file or directory
- cannot: stat_/proc/sys/net/core/bpf_jit_harden #
+> When ./test_xdp_vlan_mode_generic.sh runs it complains that it can't
+> find file test_xdp_vlan.sh.
+> 
+>  # selftests: bpf: test_xdp_vlan_mode_generic.sh
+>  # ./test_xdp_vlan_mode_generic.sh: line 9: ./test_xdp_vlan.sh: No such
+>  file or directory
+> 
+> Rework so that test_xdp_vlan.sh gets installed, added to the variable
+> TEST_PROGS_EXTENDED.
+> 
+> Fixes: d35661fcf95d ("selftests/bpf: add wrapper scripts for test_xdp_vlan.sh")
+> Signed-off-by: Anders Roxell <anders.roxell@linaro.org>
+> ---
 
-Rework to enable CONFIG_BPF_JIT to solve "No such file or directory"
+Thanks for catching this!
 
-Signed-off-by: Anders Roxell <anders.roxell@linaro.org>
----
- tools/testing/selftests/bpf/config | 1 +
- 1 file changed, 1 insertion(+)
+Acked-by: Jesper Dangaard Brouer <jbrouer@redhat.com>
 
-diff --git a/tools/testing/selftests/bpf/config b/tools/testing/selftests/bpf/config
-index f7a0744db31e..5dc109f4c097 100644
---- a/tools/testing/selftests/bpf/config
-+++ b/tools/testing/selftests/bpf/config
-@@ -34,3 +34,4 @@ CONFIG_NET_MPLS_GSO=m
- CONFIG_MPLS_ROUTING=m
- CONFIG_MPLS_IPTUNNEL=m
- CONFIG_IPV6_SIT=m
-+CONFIG_BPF_JIT=y
+>  tools/testing/selftests/bpf/Makefile | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+> index 1faad0c3c3c9..d7968e20463c 100644
+> --- a/tools/testing/selftests/bpf/Makefile
+> +++ b/tools/testing/selftests/bpf/Makefile
+> @@ -68,7 +68,8 @@ TEST_PROGS := test_kmod.sh \
+>  TEST_PROGS_EXTENDED := with_addr.sh \
+>  	with_tunnels.sh \
+>  	tcp_client.py \
+> -	tcp_server.py
+> +	tcp_server.py \
+> +	test_xdp_vlan.sh
+>  
+>  # Compile but not part of 'make run_tests'
+>  TEST_GEN_PROGS_EXTENDED = test_libbpf_open test_sock_addr test_skb_cgroup_id_user \
+
+
+
 -- 
-2.20.1
-
+Best regards,
+  Jesper Dangaard Brouer
+  MSc.CS, Principal Kernel Engineer at Red Hat
+  LinkedIn: http://www.linkedin.com/in/brouer
