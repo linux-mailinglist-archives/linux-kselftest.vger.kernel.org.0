@@ -2,269 +2,83 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B723965A2
-	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Aug 2019 17:55:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E202196762
+	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Aug 2019 19:25:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730510AbfHTPzD (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 20 Aug 2019 11:55:03 -0400
-Received: from mail-pl1-f196.google.com ([209.85.214.196]:37191 "EHLO
-        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730548AbfHTPzD (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 20 Aug 2019 11:55:03 -0400
-Received: by mail-pl1-f196.google.com with SMTP id bj8so2966577plb.4
-        for <linux-kselftest@vger.kernel.org>; Tue, 20 Aug 2019 08:55:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-transfer-encoding:content-language;
-        bh=//QQ1ht+tfIE4padC2Q4HKNAwrbhTDJJQX8waDwKAjk=;
-        b=VQmitB5v4y5q/rJdoXEU3q0jb4QaW0EmJBEezy3BWQDoDxCU4sXzkvbo5rguMaOy9B
-         R0S0gnMJXQzkOHRlX9ySUTvkaUgyz6TkSBKI/CBL4ThTCpjpgB1EZXA4pBTOI6vwsn5C
-         ZrPrPydAcm6vyYibW/o6W47x08xvkfeF1cXEM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=//QQ1ht+tfIE4padC2Q4HKNAwrbhTDJJQX8waDwKAjk=;
-        b=uJFspp9Q7zMi8YmDeQK6buT8scch3QiPf6jFY2FqhGi845vIUwOUIWe2pC4d7Zn7Ws
-         EVt9bhcaQuw7UFi75JQ4ZOS/b+veOmBvO/ZANOqiKOtpxKduD/NrVWUl7YRvDT4IhA0r
-         rFAAJ11NY85a1/xW399fuImew1WotqxrtLvPjtfOnFzYe44ybAfdFnaU7zzmODPAbeKy
-         M44hqVVgf2eNUMxbl2LmEBBlcdxhoN8S7c30MxbzrnYX3kjg2Wd8TPSvOSFQ+WeHi3bf
-         v2m1AsOlws9vIJ6v0pJOX7ytJCcaI3HMEvQdVxShLydPfdUM/exYJf2/oqenmVMx/emA
-         KDFA==
-X-Gm-Message-State: APjAAAUOGRskypQyfdlRoBL56XA8tni142uowQtJUHW5AWYfDAufjhgP
-        bMcixNIUBIyM6SIaVF8j795VggvOnfcwZ9rk8pVPCWh+PNSydFJE25SDhDqwk6eI5Cc0JaIOlXi
-        FPXNe4qxeoqZ9DgSDxGUPRvrOaEMvPGgbEKHBQeQqQ7EX400lFAUKLgnFdntgNdVJAs6+TmP/R9
-        iDFioiQycSGPuvgIU=
-X-Google-Smtp-Source: APXvYqwv29npnp3S1cUOa4oSbGNTjYfsnr9tFYIb6WC009cJCEBGo+6fpxgThTkzC9broAD99z/Clw==
-X-Received: by 2002:a17:902:848c:: with SMTP id c12mr26869867plo.47.1566316501842;
-        Tue, 20 Aug 2019 08:55:01 -0700 (PDT)
-Received: from [10.136.13.65] ([192.19.228.250])
-        by smtp.gmail.com with ESMTPSA id g8sm16705907pgk.1.2019.08.20.08.54.59
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 20 Aug 2019 08:55:00 -0700 (PDT)
-Subject: Re: [PATCH 3/3] firmware: add mutex fw_lock_fallback for race
- condition
-To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andy Gross <andy.gross@linaro.org>,
-        David Brown <david.brown@linaro.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Shuah Khan <shuah@kernel.org>, bjorn.andersson@linaro.org,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org,
-        BCM Kernel Feedback <bcm-kernel-feedback-list@broadcom.com>,
-        Olof Johansson <olof@lixom.net>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Colin Ian King <colin.king@canonical.com>,
-        Kees Cook <keescook@chromium.org>,
-        Takashi Iwai <tiwai@suse.de>, linux-kselftest@vger.kernel.org
-References: <20190816000945.29810-1-scott.branden@broadcom.com>
- <20190816000945.29810-4-scott.branden@broadcom.com>
- <20190819053937.GR16384@42.do-not-panic.com>
- <16823ee6-c52a-b3b5-caed-79c00772fa68@broadcom.com>
- <20190820012655.GU16384@42.do-not-panic.com>
-From:   Scott Branden <scott.branden@broadcom.com>
-Message-ID: <76fac608-427e-b039-61d4-4ef35ac95715@broadcom.com>
-Date:   Tue, 20 Aug 2019 08:54:58 -0700
+        id S1729888AbfHTRYu (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 20 Aug 2019 13:24:50 -0400
+Received: from mail.kernel.org ([198.145.29.99]:47980 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725971AbfHTRYu (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 20 Aug 2019 13:24:50 -0400
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net [24.9.64.241])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 4D3702054F;
+        Tue, 20 Aug 2019 17:24:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1566321889;
+        bh=32bftUSKN3Wtl2ZUSwOigociAvrqIpLWLd4sbLVVuNs=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=mNf7pt3nluqjn7wPRl9oxtXsVnuSZaSCBUZomyCyPzzn86pMm1C66eV2ovN537fzs
+         twDIX2TwIIhksR2hUFeG2rerO7ZyNg5kILiIjocQMh8JrJt3TqkiQ7ehTmVji22V5G
+         ZtcCI3OBDRsHFfQ2uCdN2ixEmqYcj9rmuODIJfnw=
+Subject: Re: [PATCH v13 00/18] kunit: introduce KUnit, the Linux kernel unit
+ testing framework
+To:     Brendan Higgins <brendanhiggins@google.com>,
+        frowand.list@gmail.com, gregkh@linuxfoundation.org,
+        jpoimboe@redhat.com, keescook@google.com,
+        kieran.bingham@ideasonboard.com, mcgrof@kernel.org,
+        peterz@infradead.org, robh@kernel.org, sboyd@kernel.org,
+        tytso@mit.edu, yamada.masahiro@socionext.com
+Cc:     devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        kunit-dev@googlegroups.com, linux-doc@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kbuild@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-nvdimm@lists.01.org, linux-um@lists.infradead.org,
+        Alexander.Levin@microsoft.com, Tim.Bird@sony.com,
+        amir73il@gmail.com, dan.carpenter@oracle.com, daniel@ffwll.ch,
+        jdike@addtoit.com, joel@jms.id.au, julia.lawall@lip6.fr,
+        khilman@baylibre.com, knut.omang@oracle.com, logang@deltatee.com,
+        mpe@ellerman.id.au, pmladek@suse.com, rdunlap@infradead.org,
+        richard@nod.at, rientjes@google.com, rostedt@goodmis.org,
+        wfg@linux.intel.com, Bjorn Helgaas <bhelgaas@google.com>,
+        shuah <shuah@kernel.org>
+References: <20190814055108.214253-1-brendanhiggins@google.com>
+From:   shuah <shuah@kernel.org>
+Message-ID: <5b880f49-0213-1a6e-9c9f-153e6ab91eeb@kernel.org>
+Date:   Tue, 20 Aug 2019 11:24:45 -0600
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.8.0
 MIME-Version: 1.0
-In-Reply-To: <20190820012655.GU16384@42.do-not-panic.com>
+In-Reply-To: <20190814055108.214253-1-brendanhiggins@google.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
 Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Luis,
+On 8/13/19 11:50 PM, Brendan Higgins wrote:
+> ## TL;DR
+> 
+> This revision addresses comments from Stephen and Bjorn Helgaas. Most
+> changes are pretty minor stuff that doesn't affect the API in anyway.
+> One significant change, however, is that I added support for freeing
+> kunit_resource managed resources before the test case is finished via
+> kunit_resource_destroy(). Additionally, Bjorn pointed out that I broke
+> KUnit on certain configurations (like the default one for x86, whoops).
+> 
+> Based on Stephen's feedback on the previous change, I think we are
+> pretty close. I am not expecting any significant changes from here on
+> out.
+> 
 
-I'm glad you are a subject expert in this area.
+Hi Brendan,
 
-Some more comments inline.
+I found checkpatch errors in one or two patches. Can you fix those and
+send v14.
 
-
-On 2019-08-19 6:26 p.m., Luis Chamberlain wrote:
-> On Mon, Aug 19, 2019 at 09:19:51AM -0700, Scott Branden wrote:
->> To be honest, I find the entire firmware code sloppy.
-> And that is after years of cleanup on my part. Try going back to v4.1
-> for instance, check the code out then for an incredible horrific sight :)
->
->> I don't think the cache/no-cache feature is
->> implemented or tested properly nor fallback to begin with.
-> I'm in total agreement! I *know* there must be holes in that code, and I
-> acknowledge a few possible gotchas on the commit logs. For instance, I
-> acknowledged that the firmware cache had a secondary purpose which was
-> not well documented or understood through commit e44565f62a720
-> ("firmware: fix batched requests - wake all waiters"). The firmware
-> cache allows for batching requests and sharing the same original request
-> for multiple consecutive requests which *race against each other*.
-> That's when I started having my doubts about the architecture of the
-> firmware cache mechanism, it seemed too complex and perhaps overkill
-> and considered killing it.
-
-Great (kill it!).  I have no need for cached or batched requests.
-
-The would remove a lot of problems.
-
->
-> As I noted in that commit, the firmware cache is used for:
->      
-> 1) Addressing races with file lookups during the suspend/resume cycle by
-> keeping firmware in memory during the suspend/resume cycle
-> 	
-> 2) Batched requests for the same file rely only on work from the first
-> file lookup, which keeps the firmware in memory until the last
-> release_firmware() is called
->
-> Also worth quoting from that commit as well:
->
-> "Batched requests *only* take effect if secondary requests come in
-> prior to the first user calling release_firmware(). The devres name used
-> for the internal firmware cache is used as a hint other pending requests
-> are ongoing, the firmware buffer data is kept in memory until the last
-> user of the buffer calls release_firmware(), therefore serializing
-> requests and delaying the release until all requests are done."
->
-> Later we discovered that the firmware cache had a serious security issue
-> since its inception through commit 422b3db2a503 ("firmware: Fix security
-> issue with request_firmware_into_buf()"). Granted, exploiting this would
-> require the ability to load kernel code, so the vector of exploitation
-> is rather small.
->
-> The cache stuff cannot be removed as it *at least* resolves the fw
-> suspend stuff, but still, this can likely use a revisit in rachitecture
-> long term. The second implicit use case for batched requests however
-> seems complex and not sure if its worth to maintain. I'll note that
-> at least some drivers *do* their own firmware caching, iwlwifi, is one,
-> so there is an example there to allow drivers to say "I actually don't
-> need caching" for the future.
->
-> If you're volunteering to cleaning / testing the cache stuff I highly
-> welcome that.
-
-I would only volunteer to remove it, not test or support it.
-
->   That and the fallback stuff has been needing testing for
-> years. Someoone was working on patches on the test case for cache stuff
-> a while ago, from Intel, but they disappeared.
-Again, I would only volunteer to remove the fallback mechanism to remove 
-added race conditions.
->> I'm not claiming this patch is the final
->> solution and indicated such in the cover letter and the comment above.
-> I missed that sorry.
->
->> I hope there is someone more familiar with this code to comment further and
->> come up with a proper solution.
-> Alright, I'll dig in and take a look, and propose an alternative.
->
->> I have found numerous issues and race conditions with the firmware code (I
->> simply added a test).
-> That is nothing compared to the amount of fixes I have found and
-> actually fixed too, the code was a nightmare before I took on
-> maintenance.
->
->> 1) Try loading the same valid firmware using no-cache once it has already
->> been loaded with cache.
-> :)
->
->> It won't work, which is why I had to use a different filename in the test
->> for request_firmware_into_buf.
-> Alright, I'll go try to fix this. Thanks for the report.
-
-I think it's a minor issue compared to the race conditions present.
-
-In reality I don't think anyone will load the same firmware using cache vs.
-
-no-cache.
-
-It's just something I stumbled upon when adding the test case and then 
-had to avoid.
-
->
->> 2) Try removing the "if (opt_flags & FW_OPT_NOCACHE)" in my patch and always
->> call the mutex.
->>
->> The firmware test will lock up during a "no uevent" test.  I am not familiar
->> with the code to
->>
->> know why such is true and what issue this exposes in the code.
-> I hinted in my review of the oops what the issue was.
-
-I don't know if it's the same bug for the "no uevent" test case though?  
-The test
-
-just hangs and the kernel oops is not present.  It might be exposing another
-
-underlying issue with the request_firmware code.
-
->
->> 3) I have a driver that uses request_firmware_into_buf and have multiple
->> instances of the driver
-> Cool, is the driver upstream?
-
-I'm working on cleaning up the driver right now to upstream.
-
-First thing is I need the request_firmware_into_buf tests accepted upstream.
-
-Then I can add my enhancement to request_firmware_into_buf to partial 
-read the file (previous sent out but needed test case).
-
-In order to do so Greg K-H required a test case for this but even the 
-current API had no test.
-
-In that patch series I can then add the new driver which requires my 
-enhanced request_firmware_into_buf.
-
->
->> loading the same firmware in parallel.  Some of the data is not read
->> correctly in each instance.
-> Makes perfect sense considering the lack of testing I noted.
->
->> I haven't yet to reproduce this issue with the firmware test
-> That's because of batched firmware request mechanism.
-
-Is there a way to not use the batch firmware request mechanism when 
-calling request_firmware_into_buf
-
-to see if the problem doesn't happen?
-
->
->> but currently
->> have a mutex around the entire
->> call to request_firmware_into_buf in our driver.
-> I will take a look at this now.
->
->> Perhaps it is better at this point to add a mutex in
->> request_firmware_into_buf to make is entirely safe?
-> No, that is not sufficient, although it would also solve the
-> issue.
-
-I don't have another solution with all the other mechanisms in
-
-play in the current firmware code.  For now I'll leave the mutex
-
-in the driver I'm upstreaming so it works reliably.
-
->
->> (Perhaps even with every request_firmware functions as none seems to be
->> tested properly.)
-> No, you are incorrect. The other firmware API calls *have* been
-> elaborately tested. The firmware cache stuff *is a mess* however,
-> since we *use and support it*, I've done my best to salvage it and
-> document it.
-
-OK, I don't use any of the other mechanisms right now.
-
-All I require is request_firmware_into_buf.
-
->
-> I'll take a look at this and propose an alternative solution.
->
->    Luis
+thanks,
+-- Shuah
