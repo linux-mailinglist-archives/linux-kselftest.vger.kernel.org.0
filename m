@@ -2,36 +2,58 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E202196762
-	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Aug 2019 19:25:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 221E49688C
+	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Aug 2019 20:26:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729888AbfHTRYu (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 20 Aug 2019 13:24:50 -0400
-Received: from mail.kernel.org ([198.145.29.99]:47980 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725971AbfHTRYu (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 20 Aug 2019 13:24:50 -0400
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net [24.9.64.241])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 4D3702054F;
-        Tue, 20 Aug 2019 17:24:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1566321889;
-        bh=32bftUSKN3Wtl2ZUSwOigociAvrqIpLWLd4sbLVVuNs=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=mNf7pt3nluqjn7wPRl9oxtXsVnuSZaSCBUZomyCyPzzn86pMm1C66eV2ovN537fzs
-         twDIX2TwIIhksR2hUFeG2rerO7ZyNg5kILiIjocQMh8JrJt3TqkiQ7ehTmVji22V5G
-         ZtcCI3OBDRsHFfQ2uCdN2ixEmqYcj9rmuODIJfnw=
-Subject: Re: [PATCH v13 00/18] kunit: introduce KUnit, the Linux kernel unit
- testing framework
-To:     Brendan Higgins <brendanhiggins@google.com>,
-        frowand.list@gmail.com, gregkh@linuxfoundation.org,
+        id S1729852AbfHTSY6 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 20 Aug 2019 14:24:58 -0400
+Received: from mail-pf1-f196.google.com ([209.85.210.196]:43479 "EHLO
+        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729900AbfHTSY6 (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 20 Aug 2019 14:24:58 -0400
+Received: by mail-pf1-f196.google.com with SMTP id v12so3868202pfn.10
+        for <linux-kselftest@vger.kernel.org>; Tue, 20 Aug 2019 11:24:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=54TsZDfDW3TriN1nqx27Ow/a4BBsLJIgLp0TtrQghOk=;
+        b=ETn6ov6vEQVZ6Z8d+QOJIR5ZdOHT4ZDivDB2VkpQ0qnDIs9MQrQ638udwnr/9nsV39
+         Q9CE1bjJjQqBou8vTO6RAPzU8X9Tiq1MLFyQK2/DJWm5diN99WuwayJaLt2azZswGQO6
+         PgJRFVxL4YQGtCWP5gy6mT//u52PocvwVbmI1tMnbwHSew1qhj9G4kLkgm0cfOXOG/+z
+         KBuOacguM7Ku15bvGQe9U+2RVhwBdPlfoBEveO5qY2aaNvMSGTBP0IPNRwdL5M9uwBLI
+         rRbk5djqLbCbCvoJbmUcAx9Gb5ONtUGkfOKYOiRtBndtwfw3IyR9R3OQOevfv1X/iVGx
+         ii2w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=54TsZDfDW3TriN1nqx27Ow/a4BBsLJIgLp0TtrQghOk=;
+        b=A5DBOXNeJvV4DUZCbt8v21JmsgfDiAGOUlMmOwIY/59lFszNoGkpdyBX3jTbku7sSr
+         rauDWnFdwoXxRPlIU+7e5AKupeUlPpKgEeZSMQKEGij6GEssIqxqyIhmQV98yIcVjC8y
+         oXRYiyVgjufhbWtxZikSqW9sGPLIZ0vmhxjCgiRDWWuz2oVRNTLuApKN0KV0rR4Qb+YO
+         XuXiDvAwDiqies5G08an9P6MNd2SNzHA5yBvGQSL4rhQv9b8y8d5HGJ+o4d95KHDxiEm
+         EelJSbf23aG4RD4J9G1zZcWDxxemqHRGeZQ6yhyT5MuteIS0ocekyDpZC+MskoP6cjMe
+         GmtA==
+X-Gm-Message-State: APjAAAX1cGmXz8j5S1ExJ1//pM9Pw0rULyFbuHQH9O9sTFEYWyT9q6cv
+        7bCUn/KwvyA4WFWtgVZ37/pGog==
+X-Google-Smtp-Source: APXvYqz6e4UEkK1ofDpL52W0zxkSIj5ZMAzgsILYeZML13HEn/+04ibT+w1ZAtBgHDGP+VY3TZZ4jA==
+X-Received: by 2002:a17:90a:3aaf:: with SMTP id b44mr1312628pjc.87.1566325496873;
+        Tue, 20 Aug 2019 11:24:56 -0700 (PDT)
+Received: from google.com ([2620:15c:2cb:1:e90c:8e54:c2b4:29e7])
+        by smtp.gmail.com with ESMTPSA id u16sm20305376pgm.83.2019.08.20.11.24.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 20 Aug 2019 11:24:55 -0700 (PDT)
+Date:   Tue, 20 Aug 2019 11:24:50 -0700
+From:   Brendan Higgins <brendanhiggins@google.com>
+To:     shuah <shuah@kernel.org>
+Cc:     frowand.list@gmail.com, gregkh@linuxfoundation.org,
         jpoimboe@redhat.com, keescook@google.com,
         kieran.bingham@ideasonboard.com, mcgrof@kernel.org,
         peterz@infradead.org, robh@kernel.org, sboyd@kernel.org,
-        tytso@mit.edu, yamada.masahiro@socionext.com
-Cc:     devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        tytso@mit.edu, yamada.masahiro@socionext.com,
+        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
         kunit-dev@googlegroups.com, linux-doc@vger.kernel.org,
         linux-fsdevel@vger.kernel.org, linux-kbuild@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
@@ -42,43 +64,70 @@ Cc:     devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
         khilman@baylibre.com, knut.omang@oracle.com, logang@deltatee.com,
         mpe@ellerman.id.au, pmladek@suse.com, rdunlap@infradead.org,
         richard@nod.at, rientjes@google.com, rostedt@goodmis.org,
-        wfg@linux.intel.com, Bjorn Helgaas <bhelgaas@google.com>,
-        shuah <shuah@kernel.org>
+        wfg@linux.intel.com, Bjorn Helgaas <bhelgaas@google.com>
+Subject: Re: [PATCH v13 00/18] kunit: introduce KUnit, the Linux kernel unit
+ testing framework
+Message-ID: <20190820182450.GA38078@google.com>
 References: <20190814055108.214253-1-brendanhiggins@google.com>
-From:   shuah <shuah@kernel.org>
-Message-ID: <5b880f49-0213-1a6e-9c9f-153e6ab91eeb@kernel.org>
-Date:   Tue, 20 Aug 2019 11:24:45 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+ <5b880f49-0213-1a6e-9c9f-153e6ab91eeb@kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <20190814055108.214253-1-brendanhiggins@google.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <5b880f49-0213-1a6e-9c9f-153e6ab91eeb@kernel.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 8/13/19 11:50 PM, Brendan Higgins wrote:
-> ## TL;DR
+On Tue, Aug 20, 2019 at 11:24:45AM -0600, shuah wrote:
+> On 8/13/19 11:50 PM, Brendan Higgins wrote:
+> > ## TL;DR
+> > 
+> > This revision addresses comments from Stephen and Bjorn Helgaas. Most
+> > changes are pretty minor stuff that doesn't affect the API in anyway.
+> > One significant change, however, is that I added support for freeing
+> > kunit_resource managed resources before the test case is finished via
+> > kunit_resource_destroy(). Additionally, Bjorn pointed out that I broke
+> > KUnit on certain configurations (like the default one for x86, whoops).
+> > 
+> > Based on Stephen's feedback on the previous change, I think we are
+> > pretty close. I am not expecting any significant changes from here on
+> > out.
+> > 
 > 
-> This revision addresses comments from Stephen and Bjorn Helgaas. Most
-> changes are pretty minor stuff that doesn't affect the API in anyway.
-> One significant change, however, is that I added support for freeing
-> kunit_resource managed resources before the test case is finished via
-> kunit_resource_destroy(). Additionally, Bjorn pointed out that I broke
-> KUnit on certain configurations (like the default one for x86, whoops).
+> Hi Brendan,
 > 
-> Based on Stephen's feedback on the previous change, I think we are
-> pretty close. I am not expecting any significant changes from here on
-> out.
-> 
+> I found checkpatch errors in one or two patches. Can you fix those and
+> send v14.
 
-Hi Brendan,
+Hi Shuah,
 
-I found checkpatch errors in one or two patches. Can you fix those and
-send v14.
+Are you refering to the following errors?
 
-thanks,
--- Shuah
+ERROR: Macros with complex values should be enclosed in parentheses
+#144: FILE: include/kunit/test.h:456:
++#define KUNIT_BINARY_CLASS \
++       kunit_binary_assert, KUNIT_INIT_BINARY_ASSERT_STRUCT
+
+ERROR: Macros with complex values should be enclosed in parentheses
+#146: FILE: include/kunit/test.h:458:
++#define KUNIT_BINARY_PTR_CLASS \
++       kunit_binary_ptr_assert, KUNIT_INIT_BINARY_PTR_ASSERT_STRUCT
+
+These values should *not* be in parentheses. I am guessing checkpatch is
+getting confused and thinks that these are complex expressions, when
+they are not.
+
+I ignored the errors since I figured checkpatch was complaining
+erroneously.
+
+I could refactor the code to remove these macros entirely, but I think
+the code is cleaner with them.
+
+What would you prefer I do?
+
+NB: These macros are introduced in: "[PATCH v13 05/18] kunit: test: add
+the concept of expectations"
+
+Thanks!
