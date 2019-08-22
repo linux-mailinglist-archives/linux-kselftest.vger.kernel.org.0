@@ -2,51 +2,52 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 62F6D99F05
-	for <lists+linux-kselftest@lfdr.de>; Thu, 22 Aug 2019 20:40:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 58D0B99FFC
+	for <lists+linux-kselftest@lfdr.de>; Thu, 22 Aug 2019 21:25:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390975AbfHVSk2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 22 Aug 2019 14:40:28 -0400
-Received: from mail-pf1-f195.google.com ([209.85.210.195]:38815 "EHLO
-        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2390957AbfHVSk1 (ORCPT
+        id S2389239AbfHVTZr (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 22 Aug 2019 15:25:47 -0400
+Received: from mail-pg1-f196.google.com ([209.85.215.196]:40559 "EHLO
+        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2391877AbfHVTZH (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 22 Aug 2019 14:40:27 -0400
-Received: by mail-pf1-f195.google.com with SMTP id o70so4538037pfg.5
-        for <linux-kselftest@vger.kernel.org>; Thu, 22 Aug 2019 11:40:26 -0700 (PDT)
+        Thu, 22 Aug 2019 15:25:07 -0400
+Received: by mail-pg1-f196.google.com with SMTP id w10so4234391pgj.7
+        for <linux-kselftest@vger.kernel.org>; Thu, 22 Aug 2019 12:25:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=broadcom.com; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=IA8z/5AqtCHFT32SY+cIXSmPc0kaoD29PlyZ57NhalY=;
-        b=BgB5KJgRI2OAMFO3lQmNArPftpDtD+nVUiJaoL/PL/14HemQ//f8oXX5mmTLwZrVeM
-         UpdaOWdFUaGyxjitCmu4G6tGH22q5Ilv8GjvfFNAiukCsGLnKENYAmgPzQfNG76hKWON
-         znl1GkmY7IAARq4+4slXfINLE8Of4Aji/+3EU=
+        h=from:to:cc:subject:date:message-id;
+        bh=V6iaCvkOKV70LTF1R2QxVbxqJJklSryV7VrfrPuNBPI=;
+        b=WM1U6q3fPx6VAdWuhVbasFSZ7o86MDefD/45MBjids0aZXHG3L567a42cBKkzs82Zy
+         zepTPT7of9GWrAA3oxb/hR24FzE6TL1jBjFt/La5FVBTSo5fAU9pLUw8QsoTi8c39do6
+         K6CLNpIF2TTudMamXSJHhT0QSIy/Gk+Qg06W4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=IA8z/5AqtCHFT32SY+cIXSmPc0kaoD29PlyZ57NhalY=;
-        b=NQ6J3eiKy2caIf4hBg9de31Aq/cp8SFEsN6EIit5pT4RHCg8GQMjhK13TCOZywWdIO
-         xeN8xU9SVtcLcCYPxt8xcK+xdTfKkWYa89Muai/MQoivvbu8GrvmMhNXHgWeV1JoFNfC
-         09JIgRvxHTO4N2FyEYQvlwKftFMwVEU9dvCtnGUxYpMgQum0j/ZUVzCzE0FHdJWnKDlx
-         QvJJNNTWVqrbp1NqPerop9Tjn1U1wQovHku1FwaG/IYO11Sv9EWyNp99zyceflRnXH3h
-         nJbDYF6N07SvD8J3TCyoWLdJSmcEPOo2PgpeKwG8cUH1sc18sBFBN8bAtBUFO/nG5BVE
-         yOwg==
-X-Gm-Message-State: APjAAAX0TB8qsi4Y80Ln/3G6DUJNyu09H84iU+RrXqqx2Z9KoeToW8rc
-        OhbrftgPvFnSYczFdRIOedjL/Q==
-X-Google-Smtp-Source: APXvYqzSMdvmuGNbJy/sI3mS9i6KFKJnX0SBbijQnHdu2yhzqHbRk47dNRYki3R7ggqlt+YvXbkscQ==
-X-Received: by 2002:a17:90a:86c2:: with SMTP id y2mr1144374pjv.46.1566499226035;
-        Thu, 22 Aug 2019 11:40:26 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=V6iaCvkOKV70LTF1R2QxVbxqJJklSryV7VrfrPuNBPI=;
+        b=ouFbwrDPF2KzTYtDHUUyuEGUJclttObp9s5TwR+WQdoIl8U0piOKwFB0MlmpL87GxE
+         2kAPR9xSUHBNZJeWFlVA6bdhOpB4KKKQLSsey2tfsMXb4fFxgk2w6ZoxHQvPqsL8znSp
+         qv9v57Zse0Kn2syjvzZ9dixdxZyY16G49V2hgi+LuVgkxVSbq1uPgTol6pZ8GAQUcLWK
+         XUmh1xvtTukDfIBzSD4bWdAmGXcaNDhlw1vPLbnaXm6M0KW2ryXmb8O+rOgNWFI0B8co
+         ZJxRi/FQigpPm6Ch4WVcfbW2j4lLn/m+rEkXr5y7fx4RTpU14vHW4ANCi3x1TsdiJYYj
+         ctWA==
+X-Gm-Message-State: APjAAAXfTchQvbZQFWqQ4YzVqoMzC/Fbk8pihdq7J6LH826WJHDkdxAL
+        YN30dBq1RlF+yBTnezS+cPU86Q==
+X-Google-Smtp-Source: APXvYqzSHf/VaI25XUU6JwgxHcTwum+eqwNg/nDEX2+Z4NtuYsQqfDBBgWEP7OESrOUbhgp0aExEbQ==
+X-Received: by 2002:a62:7503:: with SMTP id q3mr859120pfc.151.1566501906434;
+        Thu, 22 Aug 2019 12:25:06 -0700 (PDT)
 Received: from lbrmn-lnxub113.broadcom.net ([192.19.228.250])
-        by smtp.gmail.com with ESMTPSA id z19sm51056pgv.35.2019.08.22.11.40.23
+        by smtp.gmail.com with ESMTPSA id c12sm198018pfc.22.2019.08.22.12.25.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Aug 2019 11:40:25 -0700 (PDT)
+        Thu, 22 Aug 2019 12:25:05 -0700 (PDT)
 From:   Scott Branden <scott.branden@broadcom.com>
 To:     Luis Chamberlain <mcgrof@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         David Brown <david.brown@linaro.org>,
         Alexander Viro <viro@zeniv.linux.org.uk>,
-        Shuah Khan <shuah@kernel.org>, bjorn.andersson@linaro.org
+        Shuah Khan <shuah@kernel.org>, bjorn.andersson@linaro.org,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Arnd Bergmann <arnd@arndb.de>
 Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
         linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
         linux-fsdevel@vger.kernel.org,
@@ -58,184 +59,75 @@ Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
         Kees Cook <keescook@chromium.org>,
         Takashi Iwai <tiwai@suse.de>, linux-kselftest@vger.kernel.org,
         Scott Branden <scott.branden@broadcom.com>
-Subject: [PATCH v2 2/2] selftests: firmware: Add request_firmware_into_buf tests
-Date:   Thu, 22 Aug 2019 11:40:05 -0700
-Message-Id: <20190822184005.901-3-scott.branden@broadcom.com>
+Subject: [PATCH 0/7] firmware: add partial read support in request_firmware_into_buf
+Date:   Thu, 22 Aug 2019 12:24:44 -0700
+Message-Id: <20190822192451.5983-1-scott.branden@broadcom.com>
 X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20190822184005.901-1-scott.branden@broadcom.com>
-References: <20190822184005.901-1-scott.branden@broadcom.com>
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add tests cases for checking request_firmware_into_buf api.
-API was introduced into kernel with no testing present previously.
+This patch series adds partial read support in request_firmware_into_buf.
+In order to accept the enhanced API it has been requested that kernel
+selftests and upstreamed driver utilize the API enhancement and so
+are included in this patch series.
 
-Signed-off-by: Scott Branden <scott.branden@broadcom.com>
-Acked-by: Luis Chamberlain <mcgrof@kernel.org>
-Acked-by: Shuah Khan <skhan@linuxfoundation.org>
----
- .../selftests/firmware/fw_filesystem.sh       | 57 ++++++++++++++++++-
- tools/testing/selftests/firmware/fw_lib.sh    | 11 ++++
- 2 files changed, 66 insertions(+), 2 deletions(-)
+Also, no tests existed for existing request_firmware_into_buf kernel API.
+Therefore tests have been created and submitted upstream here:
+"[PATCH v2 0/2] firmware: selftest for request_firmware_into_buf"
+https://lkml.org/lkml/2019/8/22/1367
 
-diff --git a/tools/testing/selftests/firmware/fw_filesystem.sh b/tools/testing/selftests/firmware/fw_filesystem.sh
-index f901076aa2ea..56894477c8bd 100755
---- a/tools/testing/selftests/firmware/fw_filesystem.sh
-+++ b/tools/testing/selftests/firmware/fw_filesystem.sh
-@@ -116,6 +116,16 @@ config_set_name()
- 	echo -n $1 >  $DIR/config_name
- }
- 
-+config_set_into_buf()
-+{
-+	echo 1 >  $DIR/config_into_buf
-+}
-+
-+config_unset_into_buf()
-+{
-+	echo 0 >  $DIR/config_into_buf
-+}
-+
- config_set_sync_direct()
- {
- 	echo 1 >  $DIR/config_sync_direct
-@@ -153,11 +163,14 @@ config_set_read_fw_idx()
- 
- read_firmwares()
- {
--	if [ "$1" = "xzonly" ]; then
--		fwfile="${FW}-orig"
-+	if [ "$(cat $DIR/config_into_buf)" == "1" ]; then
-+		fwfile="$FW_INTO_BUF"
- 	else
- 		fwfile="$FW"
- 	fi
-+	if [ "$1" = "xzonly" ]; then
-+		fwfile="${fwfile}-orig"
-+	fi
- 	for i in $(seq 0 3); do
- 		config_set_read_fw_idx $i
- 		# Verify the contents are what we expect.
-@@ -194,6 +207,18 @@ test_batched_request_firmware_nofile()
- 	echo "OK"
- }
- 
-+test_batched_request_firmware_into_buf_nofile()
-+{
-+	echo -n "Batched request_firmware_into_buf() nofile try #$1: "
-+	config_reset
-+	config_set_name nope-test-firmware.bin
-+	config_set_into_buf
-+	config_trigger_sync
-+	read_firmwares_expect_nofile
-+	release_all_firmware
-+	echo "OK"
-+}
-+
- test_batched_request_firmware_direct_nofile()
- {
- 	echo -n "Batched request_firmware_direct() nofile try #$1: "
-@@ -259,6 +284,18 @@ test_batched_request_firmware()
- 	echo "OK"
- }
- 
-+test_batched_request_firmware_into_buf()
-+{
-+	echo -n "Batched request_firmware_into_buf() $2 try #$1: "
-+	config_reset
-+	config_set_name $TEST_FIRMWARE_INTO_BUF_FILENAME
-+	config_set_into_buf
-+	config_trigger_sync
-+	read_firmwares $2
-+	release_all_firmware
-+	echo "OK"
-+}
-+
- test_batched_request_firmware_direct()
- {
- 	echo -n "Batched request_firmware_direct() $2 try #$1: "
-@@ -307,6 +344,10 @@ for i in $(seq 1 5); do
- 	test_batched_request_firmware $i normal
- done
- 
-+for i in $(seq 1 5); do
-+	test_batched_request_firmware_into_buf $i normal
-+done
-+
- for i in $(seq 1 5); do
- 	test_batched_request_firmware_direct $i normal
- done
-@@ -327,6 +368,10 @@ for i in $(seq 1 5); do
- 	test_batched_request_firmware_nofile $i
- done
- 
-+for i in $(seq 1 5); do
-+	test_batched_request_firmware_into_buf_nofile $i
-+done
-+
- for i in $(seq 1 5); do
- 	test_batched_request_firmware_direct_nofile $i
- done
-@@ -350,6 +395,10 @@ for i in $(seq 1 5); do
- 	test_batched_request_firmware $i both
- done
- 
-+for i in $(seq 1 5); do
-+	test_batched_request_firmware_into_buf $i both
-+done
-+
- for i in $(seq 1 5); do
- 	test_batched_request_firmware_direct $i both
- done
-@@ -370,6 +419,10 @@ for i in $(seq 1 5); do
- 	test_batched_request_firmware $i xzonly
- done
- 
-+for i in $(seq 1 5); do
-+	test_batched_request_firmware_into_buf $i xzonly
-+done
-+
- for i in $(seq 1 5); do
- 	test_batched_request_firmware_direct $i xzonly
- done
-diff --git a/tools/testing/selftests/firmware/fw_lib.sh b/tools/testing/selftests/firmware/fw_lib.sh
-index f236cc295450..b879305a766d 100755
---- a/tools/testing/selftests/firmware/fw_lib.sh
-+++ b/tools/testing/selftests/firmware/fw_lib.sh
-@@ -9,6 +9,12 @@ DIR=/sys/devices/virtual/misc/test_firmware
- PROC_CONFIG="/proc/config.gz"
- TEST_DIR=$(dirname $0)
- 
-+# We need to load a different file to test request_firmware_into_buf
-+# I believe the issue is firmware loaded cached vs. non-cached
-+# with same filename is bungled.
-+# To reproduce rename this to test-firmware.bin
-+TEST_FIRMWARE_INTO_BUF_FILENAME=test-firmware-into-buf.bin
-+
- # Kselftest framework requirement - SKIP code is 4.
- ksft_skip=4
- 
-@@ -108,6 +114,8 @@ setup_tmp_file()
- 	FWPATH=$(mktemp -d)
- 	FW="$FWPATH/test-firmware.bin"
- 	echo "ABCD0123" >"$FW"
-+	FW_INTO_BUF="$FWPATH/$TEST_FIRMWARE_INTO_BUF_FILENAME"
-+	echo "EFGH4567" >"$FW_INTO_BUF"
- 	NAME=$(basename "$FW")
- 	if [ "$TEST_REQS_FW_SET_CUSTOM_PATH" = "yes" ]; then
- 		echo -n "$FWPATH" >/sys/module/firmware_class/parameters/path
-@@ -175,6 +183,9 @@ test_finish()
- 	if [ -f $FW ]; then
- 		rm -f "$FW"
- 	fi
-+	if [ -f $FW_INTO_BUF ]; then
-+		rm -f "$FW_INTO_BUF"
-+	fi
- 	if [ -d $FWPATH ]; then
- 		rm -rf "$FWPATH"
- 	fi
+The firmware selftests patches here require those patches to
+be applied first in order for the firmware selftest patches in this
+series to be valid.
+
+Finally, in this patch series is the addition of a new Broadcom Valkyrie driver
+utilizing the new request_firmware_into_buf enhanced API.
+
+Scott Branden (7):
+  fs: introduce kernel_pread_file* support
+  firmware: add offset to request_firmware_into_buf
+  test_firmware: add partial read support for request_firmware_into_buf
+  selftests: firmware: Test partial file reads of
+    request_firmware_into_buf
+  bcm-vk: add bcm_vk UAPI
+  misc: bcm-vk: add Broadcom Valkyrie driver
+  MAINTAINERS: bcm-vk: Add maintainer for Broadcom Valkyrie Driver
+
+ MAINTAINERS                                   |    7 +
+ drivers/base/firmware_loader/firmware.h       |    5 +
+ drivers/base/firmware_loader/main.c           |   49 +-
+ drivers/misc/Kconfig                          |    1 +
+ drivers/misc/Makefile                         |    1 +
+ drivers/misc/bcm-vk/Kconfig                   |   16 +
+ drivers/misc/bcm-vk/Makefile                  |    7 +
+ drivers/misc/bcm-vk/README                    |   29 +
+ drivers/misc/bcm-vk/bcm_vk.h                  |  229 +++
+ drivers/misc/bcm-vk/bcm_vk_dev.c              | 1558 +++++++++++++++++
+ drivers/misc/bcm-vk/bcm_vk_msg.c              |  963 ++++++++++
+ drivers/misc/bcm-vk/bcm_vk_msg.h              |  169 ++
+ drivers/misc/bcm-vk/bcm_vk_sg.c               |  273 +++
+ drivers/misc/bcm-vk/bcm_vk_sg.h               |   60 +
+ drivers/soc/qcom/mdt_loader.c                 |    7 +-
+ fs/exec.c                                     |   77 +-
+ include/linux/firmware.h                      |    8 +-
+ include/linux/fs.h                            |   15 +
+ include/uapi/linux/misc/bcm_vk.h              |   88 +
+ lib/test_firmware.c                           |  139 +-
+ .../selftests/firmware/fw_filesystem.sh       |   80 +
+ 21 files changed, 3744 insertions(+), 37 deletions(-)
+ create mode 100644 drivers/misc/bcm-vk/Kconfig
+ create mode 100644 drivers/misc/bcm-vk/Makefile
+ create mode 100644 drivers/misc/bcm-vk/README
+ create mode 100644 drivers/misc/bcm-vk/bcm_vk.h
+ create mode 100644 drivers/misc/bcm-vk/bcm_vk_dev.c
+ create mode 100644 drivers/misc/bcm-vk/bcm_vk_msg.c
+ create mode 100644 drivers/misc/bcm-vk/bcm_vk_msg.h
+ create mode 100644 drivers/misc/bcm-vk/bcm_vk_sg.c
+ create mode 100644 drivers/misc/bcm-vk/bcm_vk_sg.h
+ create mode 100644 include/uapi/linux/misc/bcm_vk.h
+
 -- 
 2.17.1
 
