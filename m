@@ -2,54 +2,50 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 231DF99FF4
-	for <lists+linux-kselftest@lfdr.de>; Thu, 22 Aug 2019 21:25:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5FC19A071
+	for <lists+linux-kselftest@lfdr.de>; Thu, 22 Aug 2019 21:47:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391930AbfHVTZ1 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 22 Aug 2019 15:25:27 -0400
-Received: from mail-pl1-f193.google.com ([209.85.214.193]:32834 "EHLO
+        id S1730818AbfHVTrQ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 22 Aug 2019 15:47:16 -0400
+Received: from mail-pl1-f193.google.com ([209.85.214.193]:41013 "EHLO
         mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2404384AbfHVTZZ (ORCPT
+        with ESMTP id S1725886AbfHVTrP (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 22 Aug 2019 15:25:25 -0400
-Received: by mail-pl1-f193.google.com with SMTP id go14so4012562plb.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 22 Aug 2019 12:25:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=cvNFosYfslBR/6BVIMWexVcAL5TsK7108rSnZMZd4X4=;
-        b=LqfcfkmpyJUSc2aXfZWs3W0xMRRcheys90Q7EO54mjpiPWnL9sBnbv8XMLomSSx8O9
-         9ktpA4rZhdplpQ4ro5QS7HE4S//9qBDE3luw1BnSeewiMlF5fftt+LT15Sit1z7GBMmo
-         yaCcSKkt+tggxjuspHuFaMogtb3SCbr2pE7Uw=
+        Thu, 22 Aug 2019 15:47:15 -0400
+Received: by mail-pl1-f193.google.com with SMTP id m9so4037368pls.8;
+        Thu, 22 Aug 2019 12:47:15 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=cvNFosYfslBR/6BVIMWexVcAL5TsK7108rSnZMZd4X4=;
-        b=ZvVlLRlwaUkNmswIjeeXSLhfdz/v76+lpNGmDUAGKkKBzGNy602UF2kVid+iDNllI7
-         cDfDyp2vn38SZWoe7lBJ8LU0HtD1O3x45TIPcTWed+6RgkW85Y4o6e79iJzcG26UulIX
-         pGPX6rR0WZ8bFqeuQiis/XNB2qA4Kybr9PIHuM39OzcSi/nualHCGCNI8T7VKiMsNgzu
-         NuiCQCVP5LQmQXwp3sqX2l1kOvdi4PBBMsXCNZzfwJpPge2acKbvqt1BFWrmF2zsvhyB
-         2FyMDWkaTVHaDyxAJ6lNdcNEFjTPdIz8UCyYDLpT3VThuUDz09hHHXUz6+L8vUjiaM+x
-         W/PQ==
-X-Gm-Message-State: APjAAAWv9K4u6/jLjWAoWfdXzUsc+oG3YN7ngz9F6FgSjwfO7E4O7qwB
-        VyJp1/u5rv/sd1GNfwCT5FQ7gw==
-X-Google-Smtp-Source: APXvYqxTvONL03yjcaj7MsrmAUaBSFUgWDAcWsFUDtXLuMO0GvKeUtS496WfXIlpijUGpqlrHgo0FQ==
-X-Received: by 2002:a17:902:ba81:: with SMTP id k1mr441791pls.213.1566501924580;
-        Thu, 22 Aug 2019 12:25:24 -0700 (PDT)
-Received: from lbrmn-lnxub113.broadcom.net ([192.19.228.250])
-        by smtp.gmail.com with ESMTPSA id c12sm198018pfc.22.2019.08.22.12.25.22
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=H7farA7jorlmfZ2e+AMW8oiTvvYc+aUzfxfRcuDpHnk=;
+        b=XO4/rwGLYk9SBYN8k7GRXHDJphUJmcRBvDWG44PY0QNg4zarCGqP8SQnHDyXKGZ3+M
+         doJ1GLX4b3OrVB/XVGKbBKAjw5QZN7Y/sf9EyO12Dx/Md0Zem8PiQ510+QghLiapF353
+         NEjs8KjS6x7LFgqS9j37zXpDdEdbVWk4xzJgyl4plClMJ9JwBsXatMrkIHtzzdkKvWep
+         DszRlTYo3xdTOOSkx1w5rJA8hd1o6ANEg3m9L9lQf+LkH7ELC2ZWziLlC14NPXxkFRw+
+         Q+rgwbzLCdzpTWNDnNdn/gF8027ea0R43zKbSC7gTabiPEJAqpRoIrAM/XF8LDxM3ns5
+         bYOA==
+X-Gm-Message-State: APjAAAXsYlBkxja3KFMZjogKk3Gd6UmmI8qGhGRRxVHu0V4uY91luxQ1
+        AIyevmmzEYb07svMXGkpUYI=
+X-Google-Smtp-Source: APXvYqx6e1XLcwxb1JcJfBbBHwrao8k3VyUgyeVUu0YdIROLSdrc1+tR5DYnDeiqbeePBddV80b7dA==
+X-Received: by 2002:a17:902:5a04:: with SMTP id q4mr543629pli.280.1566503234605;
+        Thu, 22 Aug 2019 12:47:14 -0700 (PDT)
+Received: from 42.do-not-panic.com (42.do-not-panic.com. [157.230.128.187])
+        by smtp.gmail.com with ESMTPSA id s4sm324360pjp.15.2019.08.22.12.47.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Aug 2019 12:25:24 -0700 (PDT)
-From:   Scott Branden <scott.branden@broadcom.com>
-To:     Luis Chamberlain <mcgrof@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thu, 22 Aug 2019 12:47:13 -0700 (PDT)
+Received: by 42.do-not-panic.com (Postfix, from userid 1000)
+        id 92076403DC; Thu, 22 Aug 2019 19:47:12 +0000 (UTC)
+Date:   Thu, 22 Aug 2019 19:47:12 +0000
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Scott Branden <scott.branden@broadcom.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         David Brown <david.brown@linaro.org>,
         Alexander Viro <viro@zeniv.linux.org.uk>,
         Shuah Khan <shuah@kernel.org>, bjorn.andersson@linaro.org,
         Shuah Khan <skhan@linuxfoundation.org>,
-        Arnd Bergmann <arnd@arndb.de>
-Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
         linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
         linux-fsdevel@vger.kernel.org,
         BCM Kernel Feedback <bcm-kernel-feedback-list@broadcom.com>,
@@ -59,43 +55,42 @@ Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
         Colin Ian King <colin.king@canonical.com>,
         Kees Cook <keescook@chromium.org>,
         Takashi Iwai <tiwai@suse.de>, linux-kselftest@vger.kernel.org,
-        Scott Branden <scott.branden@broadcom.com>
-Subject: [PATCH 7/7] MAINTAINERS: bcm-vk: Add maintainer for Broadcom Valkyrie Driver
-Date:   Thu, 22 Aug 2019 12:24:51 -0700
-Message-Id: <20190822192451.5983-8-scott.branden@broadcom.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20190822192451.5983-1-scott.branden@broadcom.com>
+        mcgrof@kernel.org
+Subject: Re: [PATCH 2/7] firmware: add offset to request_firmware_into_buf
+Message-ID: <20190822194712.GG16384@42.do-not-panic.com>
 References: <20190822192451.5983-1-scott.branden@broadcom.com>
+ <20190822192451.5983-3-scott.branden@broadcom.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190822192451.5983-3-scott.branden@broadcom.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add maintainer entry for new Broadcom Valkyrie Driver
+On Thu, Aug 22, 2019 at 12:24:46PM -0700, Scott Branden wrote:
+> @@ -923,16 +936,22 @@ EXPORT_SYMBOL_GPL(firmware_request_cache);
+>   */
+>  int
+>  request_firmware_into_buf(const struct firmware **firmware_p, const char *name,
+> -			  struct device *device, void *buf, size_t size)
+> +			  struct device *device, void *buf, size_t size,
+> +			  size_t offset, unsigned int pread_flags)
 
-Signed-off-by: Scott Branden <scott.branden@broadcom.com>
----
- MAINTAINERS | 7 +++++++
- 1 file changed, 7 insertions(+)
+This implies you having to change the other callers, and while currently
+our list of drivers is small, following the history of the firmware API
+and the long history of debate of *how* we should evolve its API, its
+preferred we add yet another new caller for this functionality. So
+please add a new caller, and use EXPORT_SYMBOL_GPL().
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 08176d64eed5..6eb2e3accf1d 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -3456,6 +3456,13 @@ L:	netdev@vger.kernel.org
- S:	Supported
- F:	drivers/net/ethernet/broadcom/tg3.*
- 
-+BROADCOM VALKYRIE DRIVER
-+M:	Scott Branden <scott.branden@broadcom.com>
-+L:	bcm-kernel-feedback-list@broadcom.com
-+S:	Supported
-+F:	drivers/misc/bcm-vk/
-+F:	include/uapi/linux/misc/bcm_vk.h
-+
- BROCADE BFA FC SCSI DRIVER
- M:	Anil Gurumurthy <anil.gurumurthy@qlogic.com>
- M:	Sudarsana Kalluru <sudarsana.kalluru@qlogic.com>
--- 
-2.17.1
+And while at it, pleaase use firmware_request_*() as the prefix, as we
+have want to use that as the instilled prefix. We have yet to complete
+the rename of the others older callers but its just a matter of time.
 
+So something like: firmware_request_into_buf_offset()
+
+And thanks for adding a test case!
+
+  Luis
