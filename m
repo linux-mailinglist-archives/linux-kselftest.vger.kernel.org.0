@@ -2,92 +2,91 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 64DF399380
-	for <lists+linux-kselftest@lfdr.de>; Thu, 22 Aug 2019 14:30:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B00A99F01
+	for <lists+linux-kselftest@lfdr.de>; Thu, 22 Aug 2019 20:40:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731019AbfHVMaL (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 22 Aug 2019 08:30:11 -0400
-Received: from mail-lf1-f67.google.com ([209.85.167.67]:34631 "EHLO
-        mail-lf1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731759AbfHVMaL (ORCPT
+        id S2387714AbfHVSkW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 22 Aug 2019 14:40:22 -0400
+Received: from mail-pl1-f194.google.com ([209.85.214.194]:37191 "EHLO
+        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731699AbfHVSkW (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 22 Aug 2019 08:30:11 -0400
-Received: by mail-lf1-f67.google.com with SMTP id b29so4415060lfq.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 22 Aug 2019 05:30:09 -0700 (PDT)
+        Thu, 22 Aug 2019 14:40:22 -0400
+Received: by mail-pl1-f194.google.com with SMTP id bj8so3947209plb.4
+        for <linux-kselftest@vger.kernel.org>; Thu, 22 Aug 2019 11:40:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=aWwEGZ7IKPwlD1SyN53LweuoS+rG8j2WBRgPDxMagPA=;
-        b=qdsf9ywOac8zY5MUNYHyLmgYuaLEam3BAv+2GvrFskmj3ct8zemKNUowr1wIxEiP1M
-         lRPp3sn48RvDBAbNg2d67Jd4wJEBqI0o8nsmJEETirP1d1yMA/tgYMvnDcm7RJAVlBij
-         H+NZg1+WZOy+HUc+u1at+99zf1CHmmmJX8AW9+YePuC2w0GF+BtrxLekvJsl5VkhTTXT
-         mKs5g8mOFQFa8leShp0vgwCesAdOh7yzZNBB9FQdEAiuwWJWAN3c+6SXwQ+FsCkMZ1by
-         YsRkjOk/c4p/7ULzNlfyEncajpaOniYhuxpV3losFfdL2Uflk3chvmC6JTkb1OQ1rZfN
-         0X0g==
+        d=broadcom.com; s=google;
+        h=from:to:cc:subject:date:message-id;
+        bh=l3f7J9dLXFEkkPEpHoZfCHDBojT5vl2BXru+bCQWM9k=;
+        b=ex7I0HZM1XZ6nwcwJqKZFzWwvGvKmcP9p6rxpsVI/+xYBxClCbtueXcVx0JxcT5oID
+         JXpkwA/Bhug+LEiV8vtZANPVM3IxNyQ+W/6m3o6LQa+FPXzahsdNpQXLz2q9/iBg5cf9
+         Q81XzJ2UHw+Xu2lkdOP+AvS2qPMEACeupEn/k=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=aWwEGZ7IKPwlD1SyN53LweuoS+rG8j2WBRgPDxMagPA=;
-        b=RN+ma7foOwHo4QxFVBwjOPyrSQYDSiizV0LmnoW/FDxbwO2IZ3hAlg0qOVbmcn/uP/
-         hJIkf6EhCoNzdDWp4v9BgGsFTwsb7QR2MhY+gHFOr/+MIUcAGq7roGFuN1+s2iSP9GsB
-         CQA1jj5OHAfOBxtTPFf+o07ECGska/iDvFzm4HtdXgpXqHoC2n9S4racWJESTX1n2zgN
-         qnf/acEY9bUHqp9NINILx7PnzHbxXoZsM6Edd36irun8wsCNzwi3RvfF5LO6tZ8jwNnx
-         lMqIa7PTzasalp1o/2swP7a4Oeoh+IH50/HaXPbOBU8J+khpqIE0KAu26OiifB8qCJ2n
-         eVZQ==
-X-Gm-Message-State: APjAAAW2sQaaDMHQP1W5FbBTMYw37UkdOOUwCkfnyBQaGCAYt9yi8c4Y
-        d+XL+QGHPp8XcnGIhlCAEjt2ZrO6ItV3nIYCl3k=
-X-Google-Smtp-Source: APXvYqzkz4kIg1ocssl6sKZ5ftGmnbPjIaQ9YF1WIwZSNRn0V0Y9OD1nUZw+XNW+ei4U76lXEt8Xdra2dmuzo8BqHv4=
-X-Received: by 2002:ac2:592f:: with SMTP id v15mr4155679lfi.57.1566477009142;
- Thu, 22 Aug 2019 05:30:09 -0700 (PDT)
-MIME-Version: 1.0
-Received: by 2002:a19:dc4f:0:0:0:0:0 with HTTP; Thu, 22 Aug 2019 05:30:08
- -0700 (PDT)
-Reply-To: eku.lawfirm@gmail.com
-From:   "Law firm(Eku and Associates)" <elenabaltach66@gmail.com>
-Date:   Thu, 22 Aug 2019 12:30:08 +0000
-Message-ID: <CAOGpsp5-jtxg0EF9UNKiS2JiLByUAiDoKpw7HM0DuZo7wP=xMw@mail.gmail.com>
-Subject: MY $25,000,000.00 INVESTMENT PROPOSAL WITH YOU AND IN YOUR COUNTRY.
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=l3f7J9dLXFEkkPEpHoZfCHDBojT5vl2BXru+bCQWM9k=;
+        b=nSPX5LQlZeI1SFVH6mf2ZuWzfp3hRzlgVkOyRnxTo3QyqPABo7R6JMmLfffZr0L/ZK
+         8YiNCnjRl7lewRgYgCRqdeEMrJzTUloS8haer7Ba+48FlcTOLjfixIqIeG93I6KWzvJ1
+         R3TzhBvKyNEFcxylv1BZHQkUkdXGFrC/RX50q9Klzo+K8gAgh+dzQcb0Ov/Djp3CBEh/
+         ME3q493iV/+lQQwpmtk75WOUyfWHrMw8TU0scXEamDpz7tRkYjiVZBJSk8/oHK9ZeOVB
+         k7aEFuHeRdXKyMUx0qM4wv1ExQJe8wIk5aWF1z5EvoMYZUV5dThZsffdHl1rPNv6NqGV
+         qx6w==
+X-Gm-Message-State: APjAAAUU5I0fWFcmwKsuFVd5VDUb/NdIAHqMLIA57gQ4FetEDLjR1UjX
+        X5n+bJLF+5V0VGJou30NeVxWzA==
+X-Google-Smtp-Source: APXvYqxPQ9aH3jF39LKTjf20cbeWadPkB+uuUPl7/RjqxCo7ecZeQNFkTtcAcpXBrjBObejQFr9TmQ==
+X-Received: by 2002:a17:902:a8:: with SMTP id a37mr226321pla.316.1566499220955;
+        Thu, 22 Aug 2019 11:40:20 -0700 (PDT)
+Received: from lbrmn-lnxub113.broadcom.net ([192.19.228.250])
+        by smtp.gmail.com with ESMTPSA id z19sm51056pgv.35.2019.08.22.11.40.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 22 Aug 2019 11:40:20 -0700 (PDT)
+From:   Scott Branden <scott.branden@broadcom.com>
+To:     Luis Chamberlain <mcgrof@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        David Brown <david.brown@linaro.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Shuah Khan <shuah@kernel.org>, bjorn.andersson@linaro.org
+Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org,
+        BCM Kernel Feedback <bcm-kernel-feedback-list@broadcom.com>,
+        Olof Johansson <olof@lixom.net>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Colin Ian King <colin.king@canonical.com>,
+        Kees Cook <keescook@chromium.org>,
+        Takashi Iwai <tiwai@suse.de>, linux-kselftest@vger.kernel.org,
+        Scott Branden <scott.branden@broadcom.com>
+Subject: [PATCH v2 0/2] firmware: selftest for request_firmware_into_buf
+Date:   Thu, 22 Aug 2019 11:40:03 -0700
+Message-Id: <20190822184005.901-1-scott.branden@broadcom.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
---=20
-Dear,
-With due respect this is not spam or Scam mail, because I have
-contacted you before and there was no response from you,I apologise if
-the contents of this mail are contrary to your moral ethics, which I
-feel may be of great disturbance to your person, but please treat this
-with absolute confidentiality, believing that this email reaches you
-in good faith. My contacting you is not a mistake or a coincidence
-because God can use any person known or unknown to accomplish great
-things.
-I am a lawyer and I have an investment business proposal to offer you.
-It is not official but should be considered as legal and confidential
-business. I have a customer's deposit of $US25 million dollars ready
-to be moved for investment if you can partner with us. We are ready to
-offer you 10% of this total amount as your compensation for supporting
-the transaction to completion. If you are interested to help me please
-reply me with your full details as stated below:
-(1) Your full names:
-(2) Your address:
-(3) Your occupation:
-(4) Your mobile telephone number:
-(5) Your nationality:
-(6) Your present location:
-(7) Your age:
-So that I will provide you more details on what to do and what is
-required for successful completion.
-Note: DO NOT REPLY ME IF YOU ARE NOT INTERESTED AND WITHOUT THE ABOVE
-MENTIONED DETAILS
+This patch series adds kernel selftest of request_firmware_into_buf.
+The API was added to the kernel previously untested.
 
-Sinc=C3=A8rement v=C3=B4tre,
-Avocat Etienne Eku Esq.(Lawfirm)
-Procureur principal. De Cabinet d=E2=80=99avocats de l=E2=80=99Afrique de l=
-=E2=80=99ouest.
-Skype:westafricalawfirm
+Changes from v1:
+- Dropped demonstration patch for a race condition discovered
+while testing request_firmare_into_buf.
+The new test exposes a kernel opps with the firmware fallback mechanism that may
+be fixed separate from these tests.
+- minor whitespace formatting in patch
+- added Ack's
+- added "s" in commit message (changed selftest: to selftests:)
+
+Scott Branden (2):
+  test_firmware: add support for request_firmware_into_buf
+  selftests: firmware: Add request_firmware_into_buf tests
+
+ lib/test_firmware.c                           | 50 +++++++++++++++-
+ .../selftests/firmware/fw_filesystem.sh       | 57 ++++++++++++++++++-
+ tools/testing/selftests/firmware/fw_lib.sh    | 11 ++++
+ 3 files changed, 114 insertions(+), 4 deletions(-)
+
+-- 
+2.17.1
+
