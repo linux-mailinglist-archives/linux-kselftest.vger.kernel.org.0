@@ -2,62 +2,53 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 49D9097E42
-	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Aug 2019 17:12:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F74998A26
+	for <lists+linux-kselftest@lfdr.de>; Thu, 22 Aug 2019 06:04:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726513AbfHUPL4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 21 Aug 2019 11:11:56 -0400
-Received: from www62.your-server.de ([213.133.104.62]:42510 "EHLO
-        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726478AbfHUPLz (ORCPT
+        id S1725926AbfHVEE3 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 22 Aug 2019 00:04:29 -0400
+Received: from shards.monkeyblade.net ([23.128.96.9]:37986 "EHLO
+        shards.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725710AbfHVEE3 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 21 Aug 2019 11:11:55 -0400
-Received: from sslproxy05.your-server.de ([78.46.172.2])
-        by www62.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
-        (Exim 4.89_1)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1i0SH7-0003Vf-TQ; Wed, 21 Aug 2019 17:11:50 +0200
-Received: from [2a02:120b:2c12:c120:71a0:62dd:894c:fd0e] (helo=pc-66.home)
-        by sslproxy05.your-server.de with esmtpsa (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384:256)
-        (Exim 4.89)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1i0SH7-000A6R-N0; Wed, 21 Aug 2019 17:11:49 +0200
-Subject: Re: [PATCH] selftests: bpf: install files test_xdp_vlan.sh
-To:     Anders Roxell <anders.roxell@linaro.org>, shuah@kernel.org,
-        ast@kernel.org, davem@davemloft.net, jakub.kicinski@netronome.com,
-        hawk@kernel.org, john.fastabend@gmail.com
-Cc:     linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20190820134121.25728-1-anders.roxell@linaro.org>
-From:   Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <d612fdef-6c79-01be-2b71-f1828b3051ce@iogearbox.net>
-Date:   Wed, 21 Aug 2019 17:11:48 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
-MIME-Version: 1.0
-In-Reply-To: <20190820134121.25728-1-anders.roxell@linaro.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
+        Thu, 22 Aug 2019 00:04:29 -0400
+Received: from localhost (unknown [IPv6:2601:601:9f80:35cd::d71])
+        (using TLSv1 with cipher AES256-SHA (256/256 bits))
+        (Client did not present a certificate)
+        (Authenticated sender: davem-davemloft)
+        by shards.monkeyblade.net (Postfix) with ESMTPSA id 44FD91524749A;
+        Wed, 21 Aug 2019 21:04:28 -0700 (PDT)
+Date:   Wed, 21 Aug 2019 21:04:27 -0700 (PDT)
+Message-Id: <20190821.210427.500229269128524420.davem@davemloft.net>
+To:     anders.roxell@linaro.org
+Cc:     shuah@kernel.org, netdev@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] selftests: net: add missing NFT_FWD_NETDEV to config
+From:   David Miller <davem@davemloft.net>
+In-Reply-To: <20190820134102.25636-1-anders.roxell@linaro.org>
+References: <20190820134102.25636-1-anders.roxell@linaro.org>
+X-Mailer: Mew version 6.8 on Emacs 26.1
+Mime-Version: 1.0
+Content-Type: Text/Plain; charset=us-ascii
 Content-Transfer-Encoding: 7bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.100.3/25548/Wed Aug 21 10:27:18 2019)
+X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.5.12 (shards.monkeyblade.net [149.20.54.216]); Wed, 21 Aug 2019 21:04:28 -0700 (PDT)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 8/20/19 3:41 PM, Anders Roxell wrote:
-> When ./test_xdp_vlan_mode_generic.sh runs it complains that it can't
-> find file test_xdp_vlan.sh.
-> 
->   # selftests: bpf: test_xdp_vlan_mode_generic.sh
->   # ./test_xdp_vlan_mode_generic.sh: line 9: ./test_xdp_vlan.sh: No such
->   file or directory
-> 
-> Rework so that test_xdp_vlan.sh gets installed, added to the variable
-> TEST_PROGS_EXTENDED.
-> 
-> Fixes: d35661fcf95d ("selftests/bpf: add wrapper scripts for test_xdp_vlan.sh")
-> Signed-off-by: Anders Roxell <anders.roxell@linaro.org>
+From: Anders Roxell <anders.roxell@linaro.org>
+Date: Tue, 20 Aug 2019 15:41:02 +0200
 
-Applied, thanks!
+> When running xfrm_policy.sh we see the following
+> 
+>  # sysctl cannot stat /proc/sys/net/ipv4/conf/eth1/forwarding No such file or directory
+>  cannot: stat_/proc/sys/net/ipv4/conf/eth1/forwarding #
+
+I don't understand how a netfilter config options is going to make that
+generic ipv4 protocol per-device sysctl appear.
+
+If it's unrelated to your change, don't include it in the commit message
+as it is confusing.
+
+Thank you.
