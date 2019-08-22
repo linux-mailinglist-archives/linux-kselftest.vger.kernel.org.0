@@ -2,102 +2,176 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D1D489A278
-	for <lists+linux-kselftest@lfdr.de>; Fri, 23 Aug 2019 00:00:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8567F9A3D2
+	for <lists+linux-kselftest@lfdr.de>; Fri, 23 Aug 2019 01:30:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388476AbfHVV61 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 22 Aug 2019 17:58:27 -0400
-Received: from mail-pl1-f196.google.com ([209.85.214.196]:44054 "EHLO
-        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732386AbfHVV61 (ORCPT
+        id S1726384AbfHVXam (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 22 Aug 2019 19:30:42 -0400
+Received: from mail-pf1-f195.google.com ([209.85.210.195]:42746 "EHLO
+        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726363AbfHVXam (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 22 Aug 2019 17:58:27 -0400
-Received: by mail-pl1-f196.google.com with SMTP id t14so4223135plr.11;
-        Thu, 22 Aug 2019 14:58:26 -0700 (PDT)
+        Thu, 22 Aug 2019 19:30:42 -0400
+Received: by mail-pf1-f195.google.com with SMTP id i30so5022937pfk.9
+        for <linux-kselftest@vger.kernel.org>; Thu, 22 Aug 2019 16:30:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:mime-version:content-disposition
-         :content-transfer-encoding:user-agent;
-        bh=sigJYFk+Q8pR1o6eZ0D86keNFXFBPNuofqZlri3Zfmk=;
-        b=MMyLRLW7rKWEn3A5ln1ByMZuj2c1D9cAVkujgr3g9HJK/+goKhOkHiBBAbFXHZyyCL
-         qypLXtTaT1HUEKAmyox5mrE+54FqTQL5F1nr4E/7bGZsmnAw1iVxbuDw44Euy6ftXuYg
-         ve3X0EkKXzJmeUTVIoQVSQpRT1MuEysJo9slO9brBZThml+dcqCq+5nPw75j8YlSboHV
-         jwhVSXxF+7n5G4/WnfxCbv9pBTXgBbJr5rNJ929dgdB1omA2AVpOjffXZZNpR8+I3Ah5
-         z6rKEDC86duu91bjUzI2+zwFIvGeXQSZ0hKnLaiLjTAhTGPa2SD42RSbNdqxSBwKVpOI
-         JKVg==
+        d=broadcom.com; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-transfer-encoding:content-language;
+        bh=pipHIj2z8t6n6jqMVgjlsl2tSXUd+7sKmIuVqD9kPY4=;
+        b=hMnkoT5tbbKTZsnL0o1jbPhA9Rz8Qwpwy4McYBokvjjLVHvSW4wOMynuN5oMcP122a
+         7WuQfzvAX0353Q+FkxsoKOMI95qLc2yuaJ1UYcq6w9RXgM4ouNA07MzId4svJ02rAvrs
+         ZYfoOc+wEVTW6rnnvuG4FkOXzoQ9sH0pA1diY=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition:content-transfer-encoding:user-agent;
-        bh=sigJYFk+Q8pR1o6eZ0D86keNFXFBPNuofqZlri3Zfmk=;
-        b=o74IgHzptI7qdRi6HDUJ/WSHz+1bLXXouvmIlciVmdeuHH3DwVw6TE5buVOVF0uOG5
-         PCmrw5sqhJct5g1zOPqmO+h9v7ngvvoK5JbtGLIFup1N/hOKC4aLk5kxEDMR3P8gQARe
-         ZAOdV6u237PnM2aewzTQcUbZIQFykmgHK9yDh3XYSC7rqbPwbblwgmsXRbtvD6gduY4A
-         5pK6w2zhxlYHxY2Ak54LK2d/1kTzxuQMQ8XO/fyez2+EjWre/j0eiKlCA9DX1J0mHFqr
-         qSZIXjRQ8mJ0mU/9dAew6cwVwxT5r5l5wZPgfu4bjmkj/1oltIMFXsNy310jQvNgWpf2
-         51ZQ==
-X-Gm-Message-State: APjAAAV4BYf5YAbkxW4Kwu1KC8I7tUYhyGXFF1y5q8SSB0tJjroGsQLX
-        VCDeOHTTQJSObM6uQcFonp8=
-X-Google-Smtp-Source: APXvYqw93Ei4FhobENkoQh8QOfxTx3CADzCPuxWcsPQGrncMEjvS9dtshtbkr7lInAVoKuIUOM0QTw==
-X-Received: by 2002:a17:902:fe14:: with SMTP id g20mr1022404plj.54.1566511106363;
-        Thu, 22 Aug 2019 14:58:26 -0700 (PDT)
-Received: from ip-172-31-44-144.us-west-2.compute.internal (ec2-54-213-13-77.us-west-2.compute.amazonaws.com. [54.213.13.77])
-        by smtp.gmail.com with ESMTPSA id t23sm387068pfl.154.2019.08.22.14.58.25
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Thu, 22 Aug 2019 14:58:25 -0700 (PDT)
-Date:   Thu, 22 Aug 2019 21:58:23 +0000
-From:   Alakesh Haloi <alakesh.haloi@gmail.com>
-To:     Kees Cook <keescook@chromium.org>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Will Drewry <wad@chromium.org>, Shuah Khan <shuah@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>
-Cc:     linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] seccomp: fix compilation errors in seccomp-bpf kselftest
-Message-ID: <20190822215823.GA11292@ip-172-31-44-144.us-west-2.compute.internal>
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=pipHIj2z8t6n6jqMVgjlsl2tSXUd+7sKmIuVqD9kPY4=;
+        b=Yb+T5vWOo2ZKnqUmDTi3TtKvSU0ydEPdVKu2ofSiTqqEurX++JJAM2oG/ozxOPVVuI
+         N3Bu9Nuyiyc2mxIy6uG6x0QWdgaTtlk/p25roZhvLzcr4wRSm1sH1CMHFXrJ9DTORDHr
+         eGgaRP2jqM1PTUTTb5dW96PN2haJtDa4DF0GP1yA5hftsHrFb9BNbnNYaSBbcy6BAH/N
+         UkHf5BwCFUrI9rT0BGplU/5Vx58OLeiwuZnNyMvmldQXS4zqubiHCdIQFoK8H5WvFjhN
+         mLjhwR0zwImxkqOS4HT49T+iek5rKkMuM5spJXviFRnlGhHGdvHvS4NPS4dI93nNAQwa
+         uMgg==
+X-Gm-Message-State: APjAAAVGnuZuLcbQp+TuE6WlkZ1jAgEPPwPFqxX6jEsYkt3bjb82yXn9
+        pgMY47Tv98RNe08+2REnRFEeMMzWc8UsaCJby1XolJ3lKRg6oJVkbIEItS4ifoHzcOrvhu0Bgm1
+        VnE3KRaBitYQ+b8nyV8M6nQtVX35fL0/cLhkV2Mn8JQQ25+JsqmhS4/dE1il6bLdwcqGxkMJ1EU
+        Iimn4vXT5kS28c
+X-Google-Smtp-Source: APXvYqzKrKT+k/MJjU1tTcW0RKdJpKgeuPCz/JwywMw0aLkN5Y6KHgx4CNyQzDQLoks+nrLfaVWIWQ==
+X-Received: by 2002:a17:90a:234f:: with SMTP id f73mr2274285pje.130.1566516640592;
+        Thu, 22 Aug 2019 16:30:40 -0700 (PDT)
+Received: from [10.136.13.65] ([192.19.228.250])
+        by smtp.gmail.com with ESMTPSA id c12sm526175pfc.22.2019.08.22.16.30.38
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 22 Aug 2019 16:30:40 -0700 (PDT)
+Subject: Re: [PATCH 2/7] firmware: add offset to request_firmware_into_buf
+To:     Luis Chamberlain <mcgrof@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        David Brown <david.brown@linaro.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Shuah Khan <shuah@kernel.org>, bjorn.andersson@linaro.org,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org,
+        BCM Kernel Feedback <bcm-kernel-feedback-list@broadcom.com>,
+        Olof Johansson <olof@lixom.net>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Colin Ian King <colin.king@canonical.com>,
+        Kees Cook <keescook@chromium.org>,
+        Takashi Iwai <tiwai@suse.de>, linux-kselftest@vger.kernel.org
+References: <20190822192451.5983-1-scott.branden@broadcom.com>
+ <20190822192451.5983-3-scott.branden@broadcom.com>
+ <20190822194712.GG16384@42.do-not-panic.com>
+ <7ee02971-e177-af05-28e0-90575ebe12e0@broadcom.com>
+ <20190822211220.GR16384@42.do-not-panic.com>
+From:   Scott Branden <scott.branden@broadcom.com>
+Message-ID: <009295ce-bdc5-61d8-b450-5fcdae041922@broadcom.com>
+Date:   Thu, 22 Aug 2019 16:30:37 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+In-Reply-To: <20190822211220.GR16384@42.do-not-panic.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Language: en-US
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Without this patch we see following error while building and kselftest
-for secccomp_bpf fails.
+Hi Luis,
 
-seccomp_bpf.c:1787:20: error: ‘PTRACE_EVENTMSG_SYSCALL_ENTRY’ undeclared (first use in this function);
-seccomp_bpf.c:1788:6: error: ‘PTRACE_EVENTMSG_SYSCALL_EXIT’ undeclared (first use in this function);
+On 2019-08-22 2:12 p.m., Luis Chamberlain wrote:
+> On Thu, Aug 22, 2019 at 01:07:41PM -0700, Scott Branden wrote:
+>> On 2019-08-22 12:47 p.m., Luis Chamberlain wrote:
+>>> This implies you having to change the other callers, and while currently
+>>> our list of drivers is small,
+>> Yes, the list is small, very small.
+>>
+>> There is a single driver making a call to the existing API.
+>>
+>> And, the maintainer of that driver wanted
+>> to start utilizing my enhanced API instead of the current API.
+> You mean in the near term future? Your change makes it use the full file.
+> Just checking.
 
-Signed-off-by: Alakesh Haloi <alakesh.haloi@gmail.com>
----
- tools/testing/selftests/seccomp/seccomp_bpf.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+The change in the patch keeps the existing functionality in the
 
-diff --git a/tools/testing/selftests/seccomp/seccomp_bpf.c b/tools/testing/selftests/seccomp/seccomp_bpf.c
-index 6ef7f16c4cf5..2e619760fc3e 100644
---- a/tools/testing/selftests/seccomp/seccomp_bpf.c
-+++ b/tools/testing/selftests/seccomp/seccomp_bpf.c
-@@ -1353,6 +1353,14 @@ TEST_F(precedence, log_is_fifth_in_any_order)
- #define PTRACE_EVENT_SECCOMP 7
- #endif
- 
-+#ifndef PTRACE_EVENTMSG_SYSCALL_ENTRY
-+#define PTRACE_EVENTMSG_SYSCALL_ENTRY 1
-+#endif
-+
-+#ifndef PTRACE_EVENTMSG_SYSCALL_EXIT
-+#define PTRACE_EVENTMSG_SYSCALL_EXIT 2
-+#endif
-+
- #define IS_SECCOMP_EVENT(status) ((status >> 16) == PTRACE_EVENT_SECCOMP)
- bool tracer_running;
- void tracer_stop(int sig)
--- 
-2.17.1
+qcom mdt_loader by reading the full file using the enhanced api.
 
+I don't know when Bjorn will switch to use the partial firmware load:
+
+https://lkml.org/lkml/2019/5/27/9
+
+>
+>> As such I think it is very reasonable to update the API right now.
+> I'd prefer to see it separate, and we fix the race *before* we introduce
+> the new functionality. I'll be poking at that shortly but I should note
+> that I leave on vacation this weekend and won't be back for a good while.
+> I already have an idea of how to approach this.
+>
+> When the current user want to use the new API it can do so, and then we
+> just kill the older caller.
+
+We can kill the older api right now as my patch in qcom mdt_loader
+
+calls the new API which allows reading of full or partial files?
+
+>
+>>> following the history of the firmware API
+>>> and the long history of debate of *how* we should evolve its API, its
+>>> preferred we add yet another new caller for this functionality. So
+>>> please add a new caller, and use EXPORT_SYMBOL_GPL().
+>>>
+>>> And while at it, pleaase use firmware_request_*() as the prefix, as we
+>>> have want to use that as the instilled prefix. We have yet to complete
+>>> the rename of the others older callers but its just a matter of time.
+>>>
+>>> So something like: firmware_request_into_buf_offset()
+>> I would prefer to rename the API at this time given there is only a single
+>> user.
+>>
+>> Otherwise I would need to duplicate quite a bit in the test code to support
+>> testing the single user of the old api and then enhanced API.
+>> Or, I can leave existing API in place and change the test case to
+>> just test the enhanced API to keep things simpler in the test code?
+> If the new user is going to move to the API once available I will be
+> happy to then leave out testing for the older API. That would make
+> sense.
+
+I have switched the single user of the existing api to the new
+
+API in the patch already?  And both full and partial reads using
+
+the new API are tested with this patch series.  If you really insist
+
+on keeping the old API for a single user I can drop that change from the
+
+patch series and have the old request_firmware_api call simply
+
+be a wrapper calling the new API.
+
+>
+> But if you do want to keep testing for the old API, and allow an easy
+> removal for it on the test driver, wouldn't a function pointer suffice
+> for which API call to use based on a boolean?
+>
+> But yeah if we're going to abandon the old mechanism I'm happy to skip
+> its te
+
+We can skip right now then.  As enhanced API is a superset of old API.
+
+If you want the old API left in place I can just add the wrapper 
+described and
+
+only test the newly named function and thus indirectly test the old
+
+request_firmware_into_buf.
+
+> sting.
+>
+>    Luis
