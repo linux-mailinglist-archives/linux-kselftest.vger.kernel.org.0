@@ -2,254 +2,714 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id ECB029B175
-	for <lists+linux-kselftest@lfdr.de>; Fri, 23 Aug 2019 15:56:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DADF9B2DB
+	for <lists+linux-kselftest@lfdr.de>; Fri, 23 Aug 2019 17:00:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2405737AbfHWN4T (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 23 Aug 2019 09:56:19 -0400
-Received: from foss.arm.com ([217.140.110.172]:34904 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2388949AbfHWN4T (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 23 Aug 2019 09:56:19 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id EBE6B28;
-        Fri, 23 Aug 2019 06:56:17 -0700 (PDT)
-Received: from [10.1.197.50] (e120937-lin.cambridge.arm.com [10.1.197.50])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 310B13F718;
-        Fri, 23 Aug 2019 06:56:13 -0700 (PDT)
-Subject: Re: [PATCH v18 15/15] selftests, arm64: add a selftest for passing
- tagged pointers to kernel
-To:     Andrey Konovalov <andreyknvl@google.com>,
-        linux-arm-kernel@lists.infradead.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, amd-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, linux-rdma@vger.kernel.org,
-        linux-media@vger.kernel.org, kvm@vger.kernel.org,
+        id S1726400AbfHWPAn (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 23 Aug 2019 11:00:43 -0400
+Received: from mail-wr1-f68.google.com ([209.85.221.68]:39240 "EHLO
+        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725934AbfHWPAn (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 23 Aug 2019 11:00:43 -0400
+Received: by mail-wr1-f68.google.com with SMTP id t16so8930666wra.6
+        for <linux-kselftest@vger.kernel.org>; Fri, 23 Aug 2019 08:00:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:date:to:message-id:subject:mime-version;
+        bh=CxZSK7G2jzyLrne2++YHQLarPgAygChsoumM6H7ueuI=;
+        b=eklc57J8LxT38shFwIP+6WOV8Er5m5VFwDyokB4oaISHE7MW6rh83cjaKguulnGueB
+         uq3M12w7zywiULO9Ko5afsn5AswDmE4Qcf2oIF2PddfXPSdnLVJFL5d5L9tySSlsrCia
+         hCya23tvk+FDvo8Ec3OVVyrqYoaf4yCYhKP6ncjmkElRB9yo2zB9UFZjs62M92Ep8iYi
+         /tlDYtFfMMvkC4cRmWiCtzl46fF4nrHn7apgA45jXsqtumCNGCpbuBoQANnYNHJgUdcd
+         uQ6QXsl7N10ojpPS7FInNCzoIFyWF7/CfXPn2hk5C+FykLbXsXQDtH88OW5UPxktlB9r
+         zKkg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:date:to:message-id:subject:mime-version;
+        bh=CxZSK7G2jzyLrne2++YHQLarPgAygChsoumM6H7ueuI=;
+        b=ZGTpcha4g/Rh6aRs+xiFn4ZVpeA2VSPs9vUveJcV7f9jNXJG+nE7F3e7pQPfHmSb8M
+         VKd4U01zFNWkH4kZCyZUZSuQaHxzhH0Srq+GEo4p5gNphDU5kEE36f6XASiPlwWqaZPl
+         uJi62cO+WH8OFwZfWu2h294TlnGFtF35cmoKqhrj1R1jQKAiopHZDK9pSExDxyMhamGG
+         W979swOIQhntMfzNPSbe8eD5EpJWvDPobvh89Ws/PHiW51vtiw9ULTai1+E0jtRqu79g
+         nDTcPGpXiPYOfqct+2F2FTwtfovKbMrQ5Tjc/Bt3rXJrlAoZ96b/JZJoKJebX0svF30T
+         R07w==
+X-Gm-Message-State: APjAAAXadisRFVxVkdiaNGTWJFUn44TMGY1mhOlYy84BzPyIpQUE5m9v
+        5HmN/l6qzfetNufnsT+xJpwcFtkDB7A=
+X-Google-Smtp-Source: APXvYqy+YwwmAIhuqXNP8bMCOWbcXvAdCw/S08SS2rJ5r0NjPdjLc7NC28MJiJlFJjiJ/c4vkoHQEA==
+X-Received: by 2002:a5d:500c:: with SMTP id e12mr5330332wrt.213.1566572438232;
+        Fri, 23 Aug 2019 08:00:38 -0700 (PDT)
+Received: from jenkins (ci.linaro.org. [88.99.136.175])
+        by smtp.gmail.com with ESMTPSA id u186sm7155376wmu.26.2019.08.23.08.00.37
+        (version=TLS1 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
+        Fri, 23 Aug 2019 08:00:37 -0700 (PDT)
+From:   ci_notify@linaro.org
+X-Google-Original-From: linaro-infrastructure-errors@lists.linaro.org
+Date:   Fri, 23 Aug 2019 15:00:36 +0000 (UTC)
+To:     lkft-triage@lists.linaro.org, dan.rue@linaro.org,
+        anders.roxell@linaro.org, naresh.kamboju@linaro.org,
         linux-kselftest@vger.kernel.org
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Will Deacon <will.deacon@arm.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Kees Cook <keescook@chromium.org>,
-        Yishai Hadas <yishaih@mellanox.com>,
-        Felix Kuehling <Felix.Kuehling@amd.com>,
-        Alexander Deucher <Alexander.Deucher@amd.com>,
-        Christian Koenig <Christian.Koenig@amd.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Jens Wiklander <jens.wiklander@linaro.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
-        Dave Martin <Dave.Martin@arm.com>,
-        Khalid Aziz <khalid.aziz@oracle.com>, enh <enh@google.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Christoph Hellwig <hch@infradead.org>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Kostya Serebryany <kcc@google.com>,
-        Evgeniy Stepanov <eugenis@google.com>,
-        Lee Smith <Lee.Smith@arm.com>,
-        Ramana Radhakrishnan <Ramana.Radhakrishnan@arm.com>,
-        Jacob Bramley <Jacob.Bramley@arm.com>,
-        Ruben Ayrapetyan <Ruben.Ayrapetyan@arm.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Kevin Brodsky <kevin.brodsky@arm.com>,
-        Szabolcs Nagy <Szabolcs.Nagy@arm.com>
-References: <cover.1561386715.git.andreyknvl@google.com>
- <0999c80cd639b78ae27c0674069d552833227564.1561386715.git.andreyknvl@google.com>
-From:   Cristian Marussi <cristian.marussi@arm.com>
-Message-ID: <6af3f619-4356-2f67-ed76-92beceb1e0a0@arm.com>
-Date:   Fri, 23 Aug 2019 14:56:11 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+Message-ID: <742876032.2253.1566572437636.JavaMail.javamailuser@localhost>
+Subject: next-20190823 kselftest results
 MIME-Version: 1.0
-In-Reply-To: <0999c80cd639b78ae27c0674069d552833227564.1561386715.git.andreyknvl@google.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/mixed; 
+        boundary="----=_Part_2252_2119061037.1566572436933"
+X-Jenkins-Job: LKFT Notify kselftest on next
+X-Jenkins-Result: SUCCESS
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Andrey
+------=_Part_2252_2119061037.1566572436933
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On 24/06/2019 15:33, Andrey Konovalov wrote:
-> This patch is a part of a series that extends kernel ABI to allow to pass
-> tagged user pointers (with the top byte set to something else other than
-> 0x00) as syscall arguments.
-> 
-> This patch adds a simple test, that calls the uname syscall with a
-> tagged user pointer as an argument. Without the kernel accepting tagged
-> user pointers the test fails with EFAULT.
-> 
-> Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
-> ---
->  tools/testing/selftests/arm64/.gitignore      |  1 +
->  tools/testing/selftests/arm64/Makefile        | 11 +++++++
->  .../testing/selftests/arm64/run_tags_test.sh  | 12 ++++++++
->  tools/testing/selftests/arm64/tags_test.c     | 29 +++++++++++++++++++
->  4 files changed, 53 insertions(+)
->  create mode 100644 tools/testing/selftests/arm64/.gitignore
->  create mode 100644 tools/testing/selftests/arm64/Makefile
->  create mode 100755 tools/testing/selftests/arm64/run_tags_test.sh
->  create mode 100644 tools/testing/selftests/arm64/tags_test.c
+Summary
+------------------------------------------------------------------------
+kernel: 5.3.0-rc5
+git repo: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+git branch: master
+git commit: 9733a7c62c66722bcfdb1a6fe4d35c497312d59a
+git describe: next-20190823
+Test details: https://qa-reports.linaro.org/lkft/linux-next-oe/build/next-20190823
 
-After building a fresh Kernel from arm64/for-next-core from scratch at:
+Regressions (compared to build next-20190819)
+------------------------------------------------------------------------
+i386:                                                                                                      
+ kselftest:                                                                                         
+    * bpf_test_skb_cgroup_id.sh                                                                                                         
+                                                                                         
+    * cpufreq_main.sh                                                                                                         
+juno-r2 - arm64:                                                                                                      
+ kselftest:                                                                                         
+    * bpf_test_sock_addr.sh                                                                                                         
+                                                                                         
+    * cgroup_test_freezer                                                                                                         
+qemu_arm:                                                                                                      
+ kselftest:                                                                                         
+    * bpf_test_sock_addr.sh                                                                                                         
+                                                                                         
+    * timers_rtcpie                                                                                                         
+qemu_x86_64:                                                                                                      
+ kselftest:                                                                                         
+    * cgroup_test_freezer                                                                                                         
+x15 - arm:                                                                                                      
+ kselftest:                                                                                         
+    * cgroup_test_freezer                                                                                                         
+                                                                                         
+    * net_so_txtime.sh                                                                                                         
+x86_64:                                                                                                      
+ kselftest:                                                                                         
+    * bpf_test_skb_cgroup_id.sh                                                                                                         
+                                                                                         
+    * bpf_test_sock_addr.sh                                                                                                         
+                                                                                         
+    * cpufreq_main.sh                                                                                                         
+                                                                                                          
+                                                                                                                       
+Fixes (compared to build next-20190819)                                                                   
+------------------------------------------------------------------------                                               
+i386:                                                                                                      
+ kselftest:                                                                                         
+    * bpf_test_xdp_vlan_mode_generic.sh                                                                                                         
+juno-r2 - arm64:                                                                                                      
+ kselftest:                                                                                         
+    * bpf_test_xdp_vlan_mode_generic.sh                                                                                                         
+                                                                                         
+    * bpf_test_xdp_vlan_mode_native.sh                                                                                                         
+qemu_arm:                                                                                                      
+ kselftest:                                                                                         
+    * bpf_test_xdp_vlan_mode_generic.sh                                                                                                         
+                                                                                         
+    * bpf_test_xdp_vlan_mode_native.sh                                                                                                         
+qemu_arm64:                                                                                                      
+ kselftest:                                                                                         
+    * bpf_test_xdp_vlan_mode_generic.sh                                                                                                         
+                                                                                         
+    * bpf_test_xdp_vlan_mode_native.sh                                                                                                         
+qemu_i386:                                                                                                      
+ kselftest:                                                                                         
+    * bpf_test_xdp_vlan_mode_generic.sh                                                                                                         
+                                                                                         
+    * bpf_test_xdp_vlan_mode_native.sh                                                                                                         
+qemu_x86_64:                                                                                                      
+ kselftest:                                                                                         
+    * bpf_test_xdp_vlan_mode_generic.sh                                                                                                         
+                                                                                         
+    * bpf_test_xdp_vlan_mode_native.sh                                                                                                         
+                                                                                         
+    * net_udpgso_bench.sh                                                                                                         
+x15 - arm:                                                                                                      
+ kselftest:                                                                                         
+    * bpf_test_sock_addr.sh                                                                                                         
+                                                                                         
+    * bpf_test_xdp_vlan_mode_generic.sh                                                                                                         
+                                                                                         
+    * bpf_test_xdp_vlan_mode_native.sh                                                                                                         
+x86_64:                                                                                                      
+ kselftest:                                                                                         
+    * bpf_test_xdp_vlan_mode_generic.sh                                                                                                         
+                                                                                         
+    * bpf_test_xdp_vlan_mode_native.sh                                                                                                         
 
-commit 239ab658bea3b387424501e7c416640d6752dc0c 
-Merge: 6bfa3134bd3a 42d038c4fb00 1243cb6a676f d55c5f28afaf d06fa5a118f1 34b5560db40d
-Author: Will Deacon <will@kernel.org>
-Date:   Thu Aug 22 18:23:53 2019 +0100
 
-    Merge branches 'for-next/error-injection', 'for-next/tbi', 'for-next/psci-cpuidle', 'for-next/cpu-topology' and 'for-next/52-bit-kva' into for-next/core
+In total:
+------------------------------------------------------------------------
+Ran 1384 total tests in the following environments and test suites.
+pass 776
+fail 499
+xfail 0
+skip 109
+
+Environments
+--------------
+- dragonboard-410c - arm64
+- hi6220-hikey - arm64
+- i386
+- juno-r2 - arm64
+- qemu_arm
+- qemu_arm64
+- qemu_i386
+- qemu_x86_64
+- x15 - arm
+- x86_64
+
+Test Suites
+-----------
+* boot-lkft-kselftests-master-591
+* kselftest
 
 
-KSFT arm64 tests build is broken for me, both setting or not KBUILD_OUTPUT=
+Failures
+------------------------------------------------------------------------
 
-13:30 $ make TARGETS=arm64 kselftest-clean                       
-make[1]: Entering directory '/home/crimar01/ARM/dev/src/pdsw/out_linux'
-rm -f -r /home/crimar01/ARM/dev/src/pdsw/out_linux//kselftest/arm64/tags_test
-make[1]: Leaving directory '/home/crimar01/ARM/dev/src/pdsw/out_linux'
+dragonboard-410c:
 
-✔ ~/ARM/dev/src/pdsw/linux [arm64_for_next_core|…8⚑ 23]
+qemu_x86_64:
+* kselftest/binderfs_binderfs_test
+* kselftest/bpf_get_cgroup_id_user
+* kselftest/bpf_test_btf_dump
+* kselftest/bpf_test_flow_dissector.sh
+* kselftest/bpf_test_libbpf.sh
+* kselftest/bpf_test_lwt_ip_encap.sh
+* kselftest/bpf_test_lwt_seg6local.sh
+* kselftest/bpf_test_maps
+* kselftest/bpf_test_netcnt
+* kselftest/bpf_test_progs
+* kselftest/bpf_test_select_reuseport
+* kselftest/bpf_test_socket_cookie
+* kselftest/bpf_test_sock_fields
+* kselftest/bpf_test_sockmap
+* kselftest/bpf_test_sockopt_inherit
+* kselftest/bpf_test_sockopt_sk
+* kselftest/bpf_test_tc_edt.sh
+* kselftest/bpf_test_tcpbpf_user
+* kselftest/bpf_test_tcpnotify_user
+* kselftest/bpf_test_tcp_rtt
+* kselftest/bpf_test_tc_tunnel.sh
+* kselftest/bpf_test_tunnel.sh
+* kselftest/bpf_test_xdping.sh
+* kselftest/bpf_xdping
+* kselftest/cgroup_test_freezer
+* kselftest/cpufreq_main.sh
+* kselftest/firmware_fw_run_tests.sh
+* kselftest/ftrace_ftracetest
+* kselftest/kvm_clear_dirty_log_test
+* kselftest/kvm_cr4_cpuid_sync_test
+* kselftest/kvm_dirty_log_test
+* kselftest/kvm_evmcs_test
+* kselftest/kvm_hyperv_cpuid
+* kselftest/kvm_kvm_create_max_vcpus
+* kselftest/kvm_platform_info_test
+* kselftest/kvm_set_sregs_test
+* kselftest/kvm_smm_test
+* kselftest/kvm_state_test
+* kselftest/kvm_sync_regs_test
+* kselftest/lib_bitmap.sh
+* kselftest/lib_prime_numbers.sh
+* kselftest/lib_printf.sh
+* kselftest/lib_strscpy.sh
+* kselftest/net_fib-onlink-tests.sh
+* kselftest/net_fib_tests.sh
+* kselftest/net_ip_defrag.sh
+* kselftest/net_l2tp.sh
+* kselftest/net_pmtu.sh
+* kselftest/net_psock_snd.sh
+* kselftest/net_run_netsocktests
+* kselftest/net_tcp_fastopen_backup_key.sh
+* kselftest/net_test_vxlan_under_vrf.sh
+* kselftest/net_xfrm_policy.sh
+* kselftest/pidfd_pidfd_open_test
+* kselftest/pidfd_pidfd_poll_test
+* kselftest/pstore_pstore_tests
+* kselftest/seccomp_seccomp_bpf
+* kselftest/timestamping_txtimestamp.sh
+* kselftest/tpm2_test_smoke.sh
+* kselftest/tpm2_test_space.sh
+* kselftest/x86_fsgsbase_64
 
-13:30 $ make TARGETS=arm64 kselftest                  
-make[1]: Entering directory '/home/crimar01/ARM/dev/src/pdsw/out_linux'
-arch/arm64/Makefile:56: CROSS_COMPILE_COMPAT not defined or empty, the compat vDSO will not be built
-make --no-builtin-rules INSTALL_HDR_PATH=$BUILD/usr \
-        ARCH=arm64 -C ../../.. headers_install             
-  HOSTCC  scripts/basic/fixdep                     
-  HOSTCC  scripts/unifdef                         
-...
-...
-  HDRINST usr/include/asm/msgbuf.h
-  HDRINST usr/include/asm/shmbuf.h
-  INSTALL /home/crimar01/ARM/dev/src/pdsw/out_linux//kselftest/usr/include
-/opt/toolchains/gcc-arm-8.3-2019.03-x86_64-aarch64-linux-gnu/bin/aarch64-linux-gnu-gcc     tags_test.c  -o /home/crimar01/ARM/dev/src/pdsw/out_linux//kselftest/arm64/tags_test
-tags_test.c: In function ‘main’:
-tags_test.c:21:12: error: ‘PR_SET_TAGGED_ADDR_CTRL’ undeclared (first use in this function); did you mean ‘PR_GET_TID_ADDRESS’?
-  if (prctl(PR_SET_TAGGED_ADDR_CTRL, PR_TAGGED_ADDR_ENABLE, 0, 0, 0) == 0)
-            ^~~~~~~~~~~~~~~~~~~~~~~
-            PR_GET_TID_ADDRESS
-tags_test.c:21:12: note: each undeclared identifier is reported only once for each function it appears in
-tags_test.c:21:37: error: ‘PR_TAGGED_ADDR_ENABLE’ undeclared (first use in this function); did you mean ‘PR_GET_DUMPABLE’?
-  if (prctl(PR_SET_TAGGED_ADDR_CTRL, PR_TAGGED_ADDR_ENABLE, 0, 0, 0) == 0)
-                                     ^~~~~~~~~~~~~~~~~~~~~
-                                     PR_GET_DUMPABLE
-../lib.mk:138: recipe for target '/home/crimar01/ARM/dev/src/pdsw/out_linux//kselftest/arm64/tags_test' failed
-make[3]: *** [/home/crimar01/ARM/dev/src/pdsw/out_linux//kselftest/arm64/tags_test] Error 1
-Makefile:136: recipe for target 'all' failed
-make[2]: *** [all] Error 2
-/home/crimar01/ARM/dev/src/pdsw/linux/Makefile:1237: recipe for target 'kselftest' failed
-make[1]: *** [kselftest] Error 2
-make[1]: Leaving directory '/home/crimar01/ARM/dev/src/pdsw/out_linux'
-Makefile:179: recipe for target 'sub-make' failed
-make: *** [sub-make] Error 2
+x86:
+* kselftest/binderfs_binderfs_test
+* kselftest/bpf_get_cgroup_id_user
+* kselftest/bpf_test_btf_dump
+* kselftest/bpf_test_flow_dissector.sh
+* kselftest/bpf_test_libbpf.sh
+* kselftest/bpf_test_lwt_ip_encap.sh
+* kselftest/bpf_test_lwt_seg6local.sh
+* kselftest/bpf_test_maps
+* kselftest/bpf_test_netcnt
+* kselftest/bpf_test_progs
+* kselftest/bpf_test_skb_cgroup_id.sh
+* kselftest/bpf_test_sock_addr.sh
+* kselftest/bpf_test_socket_cookie
+* kselftest/bpf_test_sock_fields
+* kselftest/bpf_test_sockmap
+* kselftest/bpf_test_sockopt_inherit
+* kselftest/bpf_test_sockopt_sk
+* kselftest/bpf_test_tc_edt.sh
+* kselftest/bpf_test_tcpnotify_user
+* kselftest/bpf_test_tcp_rtt
+* kselftest/bpf_test_tc_tunnel.sh
+* kselftest/bpf_test_tunnel.sh
+* kselftest/bpf_test_xdping.sh
+* kselftest/bpf_xdping
+* kselftest/cpufreq_main.sh
+* kselftest/firmware_fw_run_tests.sh
+* kselftest/ftrace_ftracetest
+* kselftest/kvm_clear_dirty_log_test
+* kselftest/kvm_cr4_cpuid_sync_test
+* kselftest/kvm_dirty_log_test
+* kselftest/kvm_evmcs_test
+* kselftest/kvm_hyperv_cpuid
+* kselftest/kvm_kvm_create_max_vcpus
+* kselftest/kvm_platform_info_test
+* kselftest/kvm_set_sregs_test
+* kselftest/kvm_smm_test
+* kselftest/kvm_state_test
+* kselftest/kvm_sync_regs_test
+* kselftest/kvm_vmx_close_while_nested_test
+* kselftest/kvm_vmx_set_nested_state_test
+* kselftest/kvm_vmx_tsc_adjust_test
+* kselftest/lib_bitmap.sh
+* kselftest/lib_prime_numbers.sh
+* kselftest/lib_printf.sh
+* kselftest/lib_strscpy.sh
+* kselftest/net_fib-onlink-tests.sh
+* kselftest/net_fib_tests.sh
+* kselftest/net_ip_defrag.sh
+* kselftest/net_l2tp.sh
+* kselftest/net_pmtu.sh
+* kselftest/net_psock_snd.sh
+* kselftest/net_run_netsocktests
+* kselftest/net_tcp_fastopen_backup_key.sh
+* kselftest/net_test_vxlan_under_vrf.sh
+* kselftest/net_xfrm_policy.sh
+* kselftest/pidfd_pidfd_open_test
+* kselftest/pidfd_pidfd_poll_test
+* kselftest/pstore_pstore_tests
+* kselftest/seccomp_seccomp_bpf
+* kselftest/timestamping_txtimestamp.sh
+* kselftest/tpm2_test_smoke.sh
+* kselftest/tpm2_test_space.sh
 
-Despite seeing KSFT installing Kernel Headers, they cannot be found.
+qemu_arm64:
+* kselftest/binderfs_binderfs_test
+* kselftest/bpf_get_cgroup_id_user
+* kselftest/bpf_test_btf_dump
+* kselftest/bpf_test_flow_dissector.sh
+* kselftest/bpf_test_libbpf.sh
+* kselftest/bpf_test_lwt_ip_encap.sh
+* kselftest/bpf_test_lwt_seg6local.sh
+* kselftest/bpf_test_maps
+* kselftest/bpf_test_netcnt
+* kselftest/bpf_test_progs
+* kselftest/bpf_test_select_reuseport
+* kselftest/bpf_test_socket_cookie
+* kselftest/bpf_test_sock_fields
+* kselftest/bpf_test_sockmap
+* kselftest/bpf_test_sockopt_inherit
+* kselftest/bpf_test_sockopt_sk
+* kselftest/bpf_test_tc_edt.sh
+* kselftest/bpf_test_tcpbpf_user
+* kselftest/bpf_test_tcp_check_syncookie.sh
+* kselftest/bpf_test_tcpnotify_user
+* kselftest/bpf_test_tcp_rtt
+* kselftest/bpf_test_tc_tunnel.sh
+* kselftest/bpf_test_tunnel.sh
+* kselftest/bpf_test_verifier
+* kselftest/bpf_test_xdping.sh
+* kselftest/bpf_xdping
+* kselftest/cgroup_test_freezer
+* kselftest/cpufreq_main.sh
+* kselftest/firmware_fw_run_tests.sh
+* kselftest/ftrace_ftracetest
+* kselftest/kvm_clear_dirty_log_test
+* kselftest/kvm_cr4_cpuid_sync_test
+* kselftest/kvm_dirty_log_test
+* kselftest/kvm_evmcs_test
+* kselftest/kvm_hyperv_cpuid
+* kselftest/kvm_kvm_create_max_vcpus
+* kselftest/kvm_mmio_warning_test
+* kselftest/kvm_platform_info_test
+* kselftest/kvm_set_sregs_test
+* kselftest/kvm_smm_test
+* kselftest/kvm_state_test
+* kselftest/kvm_sync_regs_test
+* kselftest/kvm_vmx_close_while_nested_test
+* kselftest/kvm_vmx_set_nested_state_test
+* kselftest/kvm_vmx_tsc_adjust_test
+* kselftest/lib_bitmap.sh
+* kselftest/lib_prime_numbers.sh
+* kselftest/lib_printf.sh
+* kselftest/lib_strscpy.sh
+* kselftest/net_fib-onlink-tests.sh
+* kselftest/net_fib_rule_tests.sh
+* kselftest/net_fib_tests.sh
+* kselftest/netfilter_conntrack_icmp_related.sh
+* kselftest/netfilter_nft_nat.sh
+* kselftest/net_ip_defrag.sh
+* kselftest/net_l2tp.sh
+* kselftest/net_pmtu.sh
+* kselftest/net_psock_snd.sh
+* kselftest/net_run_netsocktests
+* kselftest/net_tcp_fastopen_backup_key.sh
+* kselftest/net_test_vxlan_under_vrf.sh
+* kselftest/pidfd_pidfd_open_test
+* kselftest/pidfd_pidfd_poll_test
+* kselftest/pidfd_pidfd_test
+* kselftest/pidfd_pidfd_wait
+* kselftest/pstore_pstore_tests
+* kselftest/seccomp_seccomp_bpf
+* kselftest/timestamping_txtimestamp.sh
+* kselftest/tpm2_test_smoke.sh
+* kselftest/tpm2_test_space.sh
 
-Fixing this patch like this make it work for me:
+juno-r2:
+* kselftest/bpf_get_cgroup_id_user
+* kselftest/bpf_test_btf_dump
+* kselftest/bpf_test_flow_dissector.sh
+* kselftest/bpf_test_libbpf.sh
+* kselftest/bpf_test_lwt_ip_encap.sh
+* kselftest/bpf_test_lwt_seg6local.sh
+* kselftest/bpf_test_maps
+* kselftest/bpf_test_netcnt
+* kselftest/bpf_test_progs
+* kselftest/bpf_test_select_reuseport
+* kselftest/bpf_test_sock_addr.sh
+* kselftest/bpf_test_socket_cookie
+* kselftest/bpf_test_sock_fields
+* kselftest/bpf_test_sockmap
+* kselftest/bpf_test_sockopt_inherit
+* kselftest/bpf_test_sockopt_sk
+* kselftest/bpf_test_tc_edt.sh
+* kselftest/bpf_test_tcpbpf_user
+* kselftest/bpf_test_tcp_check_syncookie.sh
+* kselftest/bpf_test_tcpnotify_user
+* kselftest/bpf_test_tcp_rtt
+* kselftest/bpf_test_tc_tunnel.sh
+* kselftest/bpf_test_tunnel.sh
+* kselftest/bpf_test_verifier
+* kselftest/bpf_test_xdping.sh
+* kselftest/bpf_xdping
+* kselftest/cgroup_test_freezer
+* kselftest/cpufreq_main.sh
 
-diff --git a/tools/testing/selftests/arm64/Makefile b/tools/testing/selftests/arm64/Makefile                                                                                        
-index a61b2e743e99..f9f79fb272f0 100644                             
---- a/tools/testing/selftests/arm64/Makefile   
-+++ b/tools/testing/selftests/arm64/Makefile                                                     
-@@ -4,6 +4,7 @@                                                                       
- ARCH ?= $(shell uname -m 2>/dev/null || echo not)                                              
-                                                       
- ifneq (,$(filter $(ARCH),aarch64 arm64))                                            
-+CFLAGS += -I../../../../usr/include/                                                               
- TEST_GEN_PROGS := tags_test                                  
- TEST_PROGS := run_tags_test.sh                                    
- endif                                                             
+i386:
+* kselftest/binderfs_binderfs_test
+* kselftest/bpf_get_cgroup_id_user
+* kselftest/bpf_test_btf_dump
+* kselftest/bpf_test_flow_dissector.sh
+* kselftest/bpf_test_hashmap
+* kselftest/bpf_test_libbpf.sh
+* kselftest/bpf_test_lwt_ip_encap.sh
+* kselftest/bpf_test_lwt_seg6local.sh
+* kselftest/bpf_test_maps
+* kselftest/bpf_test_netcnt
+* kselftest/bpf_test_progs
+* kselftest/bpf_test_select_reuseport
+* kselftest/bpf_test_skb_cgroup_id.sh
+* kselftest/bpf_test_socket_cookie
+* kselftest/bpf_test_sock_fields
+* kselftest/bpf_test_sockopt_inherit
+* kselftest/bpf_test_sockopt_sk
+* kselftest/bpf_test_sysctl
+* kselftest/bpf_test_tc_edt.sh
+* kselftest/bpf_test_tcpnotify_user
+* kselftest/bpf_test_tcp_rtt
+* kselftest/bpf_test_tc_tunnel.sh
+* kselftest/bpf_test_tunnel.sh
+* kselftest/bpf_test_xdping.sh
+* kselftest/bpf_xdping
+* kselftest/cpufreq_main.sh
+* kselftest/firmware_fw_run_tests.sh
+* kselftest/ftrace_ftracetest
+* kselftest/kvm_clear_dirty_log_test
+* kselftest/kvm_cr4_cpuid_sync_test
+* kselftest/kvm_dirty_log_test
+* kselftest/kvm_evmcs_test
+* kselftest/kvm_hyperv_cpuid
+* kselftest/kvm_kvm_create_max_vcpus
+* kselftest/kvm_mmio_warning_test
+* kselftest/kvm_platform_info_test
+* kselftest/kvm_set_sregs_test
+* kselftest/kvm_smm_test
+* kselftest/kvm_state_test
+* kselftest/kvm_sync_regs_test
+* kselftest/kvm_vmx_close_while_nested_test
+* kselftest/kvm_vmx_set_nested_state_test
+* kselftest/kvm_vmx_tsc_adjust_test
+* kselftest/lib_bitmap.sh
+* kselftest/lib_prime_numbers.sh
+* kselftest/lib_printf.sh
+* kselftest/lib_strscpy.sh
+* kselftest/net_fib-onlink-tests.sh
+* kselftest/net_fib_tests.sh
+* kselftest/net_ip_defrag.sh
+* kselftest/net_l2tp.sh
+* kselftest/net_pmtu.sh
+* kselftest/net_psock_snd.sh
+* kselftest/net_run_netsocktests
+* kselftest/net_tcp_fastopen_backup_key.sh
+* kselftest/net_test_vxlan_under_vrf.sh
+* kselftest/pidfd_pidfd_open_test
+* kselftest/pidfd_pidfd_poll_test
+* kselftest/proc_proc-self-map-files-002
+* kselftest/proc_proc-self-syscall
+* kselftest/pstore_pstore_tests
+* kselftest/timestamping_txtimestamp.sh
 
-but is not really a proper fix since it does NOT account for case in which you have
-installed the Kernel Headers in a non standard location like when you use KBUILD_OUTPUT.
+hi6220-hikey:
+* boot-lkft-kselftests-master-591/hi6220-hikey-r2
 
-Am I missing something ?
+x15:
+* kselftest/binderfs_binderfs_test
+* kselftest/bpf_get_cgroup_id_user
+* kselftest/bpf_test_btf_dump
+* kselftest/bpf_test_flow_dissector.sh
+* kselftest/bpf_test_libbpf.sh
+* kselftest/bpf_test_lwt_ip_encap.sh
+* kselftest/bpf_test_lwt_seg6local.sh
+* kselftest/bpf_test_maps
+* kselftest/bpf_test_netcnt
+* kselftest/bpf_test_progs
+* kselftest/bpf_test_select_reuseport
+* kselftest/bpf_test_socket_cookie
+* kselftest/bpf_test_sock_fields
+* kselftest/bpf_test_sockmap
+* kselftest/bpf_test_sockopt_inherit
+* kselftest/bpf_test_sockopt_sk
+* kselftest/bpf_test_sysctl
+* kselftest/bpf_test_tc_edt.sh
+* kselftest/bpf_test_tcpbpf_user
+* kselftest/bpf_test_tcp_check_syncookie.sh
+* kselftest/bpf_test_tcpnotify_user
+* kselftest/bpf_test_tcp_rtt
+* kselftest/bpf_test_tc_tunnel.sh
+* kselftest/bpf_test_tunnel.sh
+* kselftest/bpf_test_verifier
+* kselftest/bpf_test_xdping.sh
+* kselftest/bpf_xdping
+* kselftest/cgroup_test_freezer
+* kselftest/firmware_fw_run_tests.sh
+* kselftest/ftrace_ftracetest
+* kselftest/kvm_clear_dirty_log_test
+* kselftest/kvm_cr4_cpuid_sync_test
+* kselftest/kvm_dirty_log_test
+* kselftest/kvm_evmcs_test
+* kselftest/kvm_hyperv_cpuid
+* kselftest/kvm_kvm_create_max_vcpus
+* kselftest/kvm_mmio_warning_test
+* kselftest/kvm_platform_info_test
+* kselftest/kvm_set_sregs_test
+* kselftest/kvm_smm_test
+* kselftest/kvm_state_test
+* kselftest/kvm_sync_regs_test
+* kselftest/kvm_vmx_close_while_nested_test
+* kselftest/kvm_vmx_set_nested_state_test
+* kselftest/kvm_vmx_tsc_adjust_test
+* kselftest/lib_bitmap.sh
+* kselftest/lib_prime_numbers.sh
+* kselftest/lib_printf.sh
+* kselftest/lib_strscpy.sh
+* kselftest/net_fib-onlink-tests.sh
+* kselftest/net_fib_rule_tests.sh
+* kselftest/net_fib_tests.sh
+* kselftest/netfilter_conntrack_icmp_related.sh
+* kselftest/netfilter_nft_nat.sh
+* kselftest/net_ip_defrag.sh
+* kselftest/net_l2tp.sh
+* kselftest/net_pmtu.sh
+* kselftest/net_psock_snd.sh
+* kselftest/net_reuseport_bpf_numa
+* kselftest/net_run_netsocktests
+* kselftest/net_so_txtime.sh
+* kselftest/net_tcp_fastopen_backup_key.sh
+* kselftest/net_test_vxlan_under_vrf.sh
+* kselftest/pidfd_pidfd_open_test
+* kselftest/pidfd_pidfd_poll_test
+* kselftest/proc_proc-self-map-files-002
+* kselftest/proc_proc-self-syscall
+* kselftest/pstore_pstore_tests
+* kselftest/seccomp_seccomp_bpf
+* kselftest/timestamping_txtimestamp.sh
+* kselftest/tpm2_test_smoke.sh
+* kselftest/tpm2_test_space.sh
 
-Thanks
+qemu_arm:
+* kselftest/binderfs_binderfs_test
+* kselftest/bpf_get_cgroup_id_user
+* kselftest/bpf_test_btf_dump
+* kselftest/bpf_test_flow_dissector.sh
+* kselftest/bpf_test_libbpf.sh
+* kselftest/bpf_test_lwt_ip_encap.sh
+* kselftest/bpf_test_lwt_seg6local.sh
+* kselftest/bpf_test_maps
+* kselftest/bpf_test_netcnt
+* kselftest/bpf_test_progs
+* kselftest/bpf_test_select_reuseport
+* kselftest/bpf_test_sock_addr.sh
+* kselftest/bpf_test_socket_cookie
+* kselftest/bpf_test_sock_fields
+* kselftest/bpf_test_sockmap
+* kselftest/bpf_test_sockopt_inherit
+* kselftest/bpf_test_sockopt_sk
+* kselftest/bpf_test_sysctl
+* kselftest/bpf_test_tc_edt.sh
+* kselftest/bpf_test_tcpbpf_user
+* kselftest/bpf_test_tcp_check_syncookie.sh
+* kselftest/bpf_test_tcpnotify_user
+* kselftest/bpf_test_tcp_rtt
+* kselftest/bpf_test_tc_tunnel.sh
+* kselftest/bpf_test_tunnel.sh
+* kselftest/bpf_test_verifier
+* kselftest/bpf_test_xdping.sh
+* kselftest/bpf_xdping
+* kselftest/cpufreq_main.sh
+* kselftest/firmware_fw_run_tests.sh
+* kselftest/ftrace_ftracetest
+* kselftest/kvm_clear_dirty_log_test
+* kselftest/kvm_cr4_cpuid_sync_test
+* kselftest/kvm_dirty_log_test
+* kselftest/kvm_evmcs_test
+* kselftest/kvm_hyperv_cpuid
+* kselftest/kvm_kvm_create_max_vcpus
+* kselftest/kvm_mmio_warning_test
+* kselftest/kvm_platform_info_test
+* kselftest/kvm_set_sregs_test
+* kselftest/kvm_smm_test
+* kselftest/kvm_state_test
+* kselftest/kvm_sync_regs_test
+* kselftest/kvm_vmx_close_while_nested_test
+* kselftest/kvm_vmx_set_nested_state_test
+* kselftest/kvm_vmx_tsc_adjust_test
+* kselftest/lib_bitmap.sh
+* kselftest/lib_prime_numbers.sh
+* kselftest/lib_printf.sh
+* kselftest/lib_strscpy.sh
+* kselftest/net_fib-onlink-tests.sh
+* kselftest/net_fib_rule_tests.sh
+* kselftest/net_fib_tests.sh
+* kselftest/netfilter_conntrack_icmp_related.sh
+* kselftest/netfilter_nft_nat.sh
+* kselftest/net_ip_defrag.sh
+* kselftest/net_l2tp.sh
+* kselftest/net_pmtu.sh
+* kselftest/net_psock_snd.sh
+* kselftest/net_reuseport_bpf_numa
+* kselftest/net_run_netsocktests
+* kselftest/net_tcp_fastopen_backup_key.sh
+* kselftest/net_test_vxlan_under_vrf.sh
+* kselftest/pidfd_pidfd_open_test
+* kselftest/pidfd_pidfd_poll_test
+* kselftest/proc_proc-self-map-files-002
+* kselftest/proc_proc-self-syscall
+* kselftest/pstore_pstore_tests
+* kselftest/seccomp_seccomp_bpf
+* kselftest/timers_rtcpie
+* kselftest/timestamping_txtimestamp.sh
+* kselftest/tpm2_test_smoke.sh
+* kselftest/tpm2_test_space.sh
 
-Cristian
+qemu_i386:
+* kselftest/binderfs_binderfs_test
+* kselftest/bpf_get_cgroup_id_user
+* kselftest/bpf_test_btf_dump
+* kselftest/bpf_test_flow_dissector.sh
+* kselftest/bpf_test_libbpf.sh
+* kselftest/bpf_test_lwt_ip_encap.sh
+* kselftest/bpf_test_lwt_seg6local.sh
+* kselftest/bpf_test_maps
+* kselftest/bpf_test_netcnt
+* kselftest/bpf_test_progs
+* kselftest/bpf_test_select_reuseport
+* kselftest/bpf_test_socket_cookie
+* kselftest/bpf_test_sock_fields
+* kselftest/bpf_test_sockmap
+* kselftest/bpf_test_sockopt_inherit
+* kselftest/bpf_test_sockopt_sk
+* kselftest/bpf_test_sysctl
+* kselftest/bpf_test_tc_edt.sh
+* kselftest/bpf_test_tcpbpf_user
+* kselftest/bpf_test_tcpnotify_user
+* kselftest/bpf_test_tcp_rtt
+* kselftest/bpf_test_tc_tunnel.sh
+* kselftest/bpf_test_tunnel.sh
+* kselftest/bpf_test_xdping.sh
+* kselftest/bpf_xdping
+* kselftest/cpufreq_main.sh
+* kselftest/firmware_fw_run_tests.sh
+* kselftest/ftrace_ftracetest
+* kselftest/kvm_clear_dirty_log_test
+* kselftest/kvm_cr4_cpuid_sync_test
+* kselftest/kvm_dirty_log_test
+* kselftest/kvm_evmcs_test
+* kselftest/kvm_hyperv_cpuid
+* kselftest/kvm_kvm_create_max_vcpus
+* kselftest/kvm_mmio_warning_test
+* kselftest/kvm_platform_info_test
+* kselftest/kvm_set_sregs_test
+* kselftest/kvm_smm_test
+* kselftest/kvm_state_test
+* kselftest/kvm_sync_regs_test
+* kselftest/kvm_vmx_close_while_nested_test
+* kselftest/kvm_vmx_set_nested_state_test
+* kselftest/kvm_vmx_tsc_adjust_test
+* kselftest/lib_bitmap.sh
+* kselftest/lib_prime_numbers.sh
+* kselftest/lib_printf.sh
+* kselftest/lib_strscpy.sh
+* kselftest/net_fib-onlink-tests.sh
+* kselftest/net_fib_tests.sh
+* kselftest/netfilter_conntrack_icmp_related.sh
+* kselftest/netfilter_nft_nat.sh
+* kselftest/net_ip_defrag.sh
+* kselftest/net_l2tp.sh
+* kselftest/net_pmtu.sh
+* kselftest/net_psock_snd.sh
+* kselftest/net_run_netsocktests
+* kselftest/net_tcp_fastopen_backup_key.sh
+* kselftest/net_test_vxlan_under_vrf.sh
+* kselftest/net_xfrm_policy.sh
+* kselftest/pidfd_pidfd_open_test
+* kselftest/pidfd_pidfd_poll_test
+* kselftest/proc_proc-self-map-files-002
+* kselftest/proc_proc-self-syscall
+* kselftest/pstore_pstore_tests
+* kselftest/seccomp_seccomp_bpf
+* kselftest/size_get_size
+* kselftest/timestamping_txtimestamp.sh
+* kselftest/tpm2_test_smoke.sh
+* kselftest/tpm2_test_space.sh
+* kselftest/x86_sigreturn_32
 
-> 
-> diff --git a/tools/testing/selftests/arm64/.gitignore b/tools/testing/selftests/arm64/.gitignore
-> new file mode 100644
-> index 000000000000..e8fae8d61ed6
-> --- /dev/null
-> +++ b/tools/testing/selftests/arm64/.gitignore
-> @@ -0,0 +1 @@
-> +tags_test
-> diff --git a/tools/testing/selftests/arm64/Makefile b/tools/testing/selftests/arm64/Makefile
-> new file mode 100644
-> index 000000000000..a61b2e743e99
-> --- /dev/null
-> +++ b/tools/testing/selftests/arm64/Makefile
-> @@ -0,0 +1,11 @@
-> +# SPDX-License-Identifier: GPL-2.0
-> +
-> +# ARCH can be overridden by the user for cross compiling
-> +ARCH ?= $(shell uname -m 2>/dev/null || echo not)
-> +
-> +ifneq (,$(filter $(ARCH),aarch64 arm64))
-> +TEST_GEN_PROGS := tags_test
-> +TEST_PROGS := run_tags_test.sh
-> +endif
-> +
-> +include ../lib.mk
-> diff --git a/tools/testing/selftests/arm64/run_tags_test.sh b/tools/testing/selftests/arm64/run_tags_test.sh
-> new file mode 100755
-> index 000000000000..745f11379930
-> --- /dev/null
-> +++ b/tools/testing/selftests/arm64/run_tags_test.sh
-> @@ -0,0 +1,12 @@
-> +#!/bin/sh
-> +# SPDX-License-Identifier: GPL-2.0
-> +
-> +echo "--------------------"
-> +echo "running tags test"
-> +echo "--------------------"
-> +./tags_test
-> +if [ $? -ne 0 ]; then
-> +	echo "[FAIL]"
-> +else
-> +	echo "[PASS]"
-> +fi
-> diff --git a/tools/testing/selftests/arm64/tags_test.c b/tools/testing/selftests/arm64/tags_test.c
-> new file mode 100644
-> index 000000000000..22a1b266e373
-> --- /dev/null
-> +++ b/tools/testing/selftests/arm64/tags_test.c
-> @@ -0,0 +1,29 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +
-> +#include <stdio.h>
-> +#include <stdlib.h>
-> +#include <unistd.h>
-> +#include <stdint.h>
-> +#include <sys/prctl.h>
-> +#include <sys/utsname.h>
-> +
-> +#define SHIFT_TAG(tag)		((uint64_t)(tag) << 56)
-> +#define SET_TAG(ptr, tag)	(((uint64_t)(ptr) & ~SHIFT_TAG(0xff)) | \
-> +					SHIFT_TAG(tag))
-> +
-> +int main(void)
-> +{
-> +	static int tbi_enabled = 0;
-> +	struct utsname *ptr, *tagged_ptr;
-> +	int err;
-> +
-> +	if (prctl(PR_SET_TAGGED_ADDR_CTRL, PR_TAGGED_ADDR_ENABLE, 0, 0, 0) == 0)
-> +		tbi_enabled = 1;
-> +	ptr = (struct utsname *)malloc(sizeof(*ptr));
-> +	if (tbi_enabled)
-> +		tagged_ptr = (struct utsname *)SET_TAG(ptr, 0x42);
-> +	err = uname(tagged_ptr);
-> +	free(ptr);
-> +
-> +	return err;
-> +}
-> 
 
+Skips
+------------------------------------------------------------------------
+No skips
+
+
+-- 
+Linaro LKFT
+https://lkft.linaro.org
+------=_Part_2252_2119061037.1566572436933--
