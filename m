@@ -2,60 +2,60 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E47039B8A3
-	for <lists+linux-kselftest@lfdr.de>; Sat, 24 Aug 2019 00:54:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F67F9B8AF
+	for <lists+linux-kselftest@lfdr.de>; Sat, 24 Aug 2019 01:01:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726917AbfHWWyQ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 23 Aug 2019 18:54:16 -0400
-Received: from mail-ot1-f68.google.com ([209.85.210.68]:42394 "EHLO
-        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726559AbfHWWyP (ORCPT
+        id S1727088AbfHWXBt (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 23 Aug 2019 19:01:49 -0400
+Received: from mail-ot1-f66.google.com ([209.85.210.66]:39761 "EHLO
+        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726973AbfHWXBs (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 23 Aug 2019 18:54:15 -0400
-Received: by mail-ot1-f68.google.com with SMTP id j7so10206341ota.9
-        for <linux-kselftest@vger.kernel.org>; Fri, 23 Aug 2019 15:54:14 -0700 (PDT)
+        Fri, 23 Aug 2019 19:01:48 -0400
+Received: by mail-ot1-f66.google.com with SMTP id b1so10229571otp.6
+        for <linux-kselftest@vger.kernel.org>; Fri, 23 Aug 2019 16:01:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=carlosedp-com.20150623.gappssmtp.com; s=20150623;
         h=sender:mime-version:references:in-reply-to:from:date:message-id
-         :subject:to:cc;
-        bh=tzDrHmFEcYK0I28RjAt4Fuw9PRGX0gxadXFcnRSTG0Q=;
-        b=mZ49T6ZPEyZCC1pwf9r3Am19lhgltKzQYucXa1x+bu8k1heIdnm1495V2ekRmLikCB
-         km1PSkluj6U2RnYGyCbbGiN+DCx3EouEBJVz9OnutxnQgaxqvukBurUhDqCEN6BnnYB4
-         QWo7btWgRZWc1WGh8ip80Iy8bGOZNTdUFM8h59ByuukwKSNq50CjfCYdwropWBBwSql6
-         J5yF9h7Qs5+cKpel7Z/9rnIM3GyVyDdTCheg0HhEb8t3HZXwd0IeiD4lHxYVedFTVvn1
-         D+SmGXC7DUN0IuKPtHdnADvmwoO3uN1NLxGukvA0tTBZoWbG9CBdJ8pEiU6rxaLdJH83
-         nDKw==
+         :subject:to:cc:content-transfer-encoding;
+        bh=0pXIWT49qT99+MZqSX6J3qIkOa98enjaIWpmEfE3IPA=;
+        b=Jl5d/uqkObPLx0iH9yZrJcloZb/epBBG+ZOpG+5BM35bvyU+j2FXYKQykwPsIKmni1
+         4s9a6V9tpfMAPLD+bVtSCM1ehPdw4b9HDVnPHAZrH/wFVzsyF1e53oa4nRRjEGZr68/X
+         XNc5uKoUP53m+GghArqfiiMRkv108FWQvdRaiaAZDCP9J4zVO+aUylyTom/QVzMeTr9W
+         NqtUl4Mh2Fj8QEBdmz8GCfemwdMhUQYd6EOIdNkmaGe9MNsztG2SzR9M1c3Ho26lXa6l
+         cSGsRJVxYaogzVog1vlgU9ilj/WfunMayQ2g0z+Sgj6s/Qxa4wfUkaB9bdnNnYZ7D9YM
+         5nvA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:sender:mime-version:references:in-reply-to:from
-         :date:message-id:subject:to:cc;
-        bh=tzDrHmFEcYK0I28RjAt4Fuw9PRGX0gxadXFcnRSTG0Q=;
-        b=BNca5FqALvgH2OTwDGgEZnpdPFDBR4z/lx7FuQGmPlGGuJR8qdNWVC52YQ+Ls204VQ
-         TmbYMTyd9DKX2w0mz/Y/yerfc0/I3Fj+u43qy852DoUCDN42Mrxbxd9P587AecDKN3HR
-         bU+2m5jMg4R+T0B2hEMU6z7MVbpViDLHW0cKHj22ASUPH7wwF9ZWfM/YYCkIzUtnsPRe
-         1G+wvQYtngCYDPaIm8Hm9NZNlh65CsPXE0YBhFJgNBkxW162TCpyw3rtqSBGwR3srnS7
-         MRB/Y7KsmuD+M1ZKY64iyclmmtrKsKjGgy+/3PnuRGfIxPKVB7VbbNjPC5l7bM19OPb9
-         VY9A==
-X-Gm-Message-State: APjAAAXmVusw3YBd6HoIwE+TONuCTYTpmb9ZGaKyPuaw2R858wtDI+xB
-        5jraj/idusNm/Tvi0p9OoVN5jKLGRvDV0w==
-X-Google-Smtp-Source: APXvYqzu7br4vKdPTd8chj2nuB+5kW8vtOIzXF2DFgc/O7N8xCo1m6HFuQgX2Rm4ouYocgtvvF266A==
-X-Received: by 2002:a9d:5502:: with SMTP id l2mr33832oth.309.1566600853740;
-        Fri, 23 Aug 2019 15:54:13 -0700 (PDT)
-Received: from mail-ot1-f47.google.com (mail-ot1-f47.google.com. [209.85.210.47])
-        by smtp.gmail.com with ESMTPSA id j189sm1220305oih.30.2019.08.23.15.54.12
+         :date:message-id:subject:to:cc:content-transfer-encoding;
+        bh=0pXIWT49qT99+MZqSX6J3qIkOa98enjaIWpmEfE3IPA=;
+        b=ZiUSXkmRx78E9vs/t4A45yKy3V/lQhZJ/lYCn1ApMiI/pqsUcvYULklxmaWbRkuAMP
+         4C/uXoiNUEi2ffAu/E+RtSZg0BPCJp25nWWqkwmTuoChgKdzCTDqtEIkLBGppg+SXyIW
+         cr1do6/7M9X3+qC/ahXehoDnmaBybhwFXnXIhk1qjjWKQomETOp8dg6mJ+p9gaUiXIPj
+         KVb9nWbFqSJ119gmI6q9LDbJsc2Yi8VudTeYIfv4iJIquwazKl4suwaUiOrpLxfftbMl
+         3QKCKtYOGs6NeIEfnXvS9DkRym9wiEXiyrkgfBPPDtPesu8igW8cnibrF6URL0KntFpf
+         RF4g==
+X-Gm-Message-State: APjAAAVYAOLd4sy3zdXyVFN6zPlvEb1jjx/P1cQAJzhlsAFL3NvgMAWg
+        plhsuxXTmay7dzPE+2BCSzH1sA==
+X-Google-Smtp-Source: APXvYqxjdhYqTxe5EbW70/otAuTR1sEII3koQUg1ztzU/MDoB0CZqsYegiJoS8K/xWHT26sgFBTbAQ==
+X-Received: by 2002:a9d:7f0f:: with SMTP id j15mr5900877otq.41.1566601307001;
+        Fri, 23 Aug 2019 16:01:47 -0700 (PDT)
+Received: from mail-oi1-f173.google.com (mail-oi1-f173.google.com. [209.85.167.173])
+        by smtp.gmail.com with ESMTPSA id c3sm1356218otm.70.2019.08.23.16.01.46
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 23 Aug 2019 15:54:12 -0700 (PDT)
-Received: by mail-ot1-f47.google.com with SMTP id c7so10247336otp.1;
-        Fri, 23 Aug 2019 15:54:12 -0700 (PDT)
-X-Received: by 2002:a9d:2cc:: with SMTP id 70mr3070288otl.145.1566600852132;
- Fri, 23 Aug 2019 15:54:12 -0700 (PDT)
+        Fri, 23 Aug 2019 16:01:46 -0700 (PDT)
+Received: by mail-oi1-f173.google.com with SMTP id y8so8209513oih.10;
+        Fri, 23 Aug 2019 16:01:46 -0700 (PDT)
+X-Received: by 2002:aca:2209:: with SMTP id b9mr4930123oic.54.1566601305670;
+ Fri, 23 Aug 2019 16:01:45 -0700 (PDT)
 MIME-Version: 1.0
 References: <20190822205533.4877-1-david.abdurachmanov@sifive.com>
 In-Reply-To: <20190822205533.4877-1-david.abdurachmanov@sifive.com>
 From:   Carlos Eduardo de Paula <me@carlosedp.com>
-Date:   Fri, 23 Aug 2019 19:54:01 -0300
-X-Gmail-Original-Message-ID: <CADnnUqe2Phwy7cUAaawLzcBLbMtHKvJPr9Gmn9zQsVSGf_K=VA@mail.gmail.com>
-Message-ID: <CADnnUqe2Phwy7cUAaawLzcBLbMtHKvJPr9Gmn9zQsVSGf_K=VA@mail.gmail.com>
+Date:   Fri, 23 Aug 2019 20:01:34 -0300
+X-Gmail-Original-Message-ID: <CADnnUqcmDMRe1f+3jG8SPR6jRrnBsY8VVD70VbKEm0NqYeoicA@mail.gmail.com>
+Message-ID: <CADnnUqcmDMRe1f+3jG8SPR6jRrnBsY8VVD70VbKEm0NqYeoicA@mail.gmail.com>
 Subject: Re: [PATCH v2] riscv: add support for SECCOMP and SECCOMP_FILTER
 To:     David Abdurachmanov <david.abdurachmanov@gmail.com>
 Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
@@ -80,6 +80,7 @@ Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
         linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
         bpf@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
@@ -89,7 +90,8 @@ On Thu, Aug 22, 2019 at 5:56 PM David Abdurachmanov
 <david.abdurachmanov@gmail.com> wrote:
 >
 > This patch was extensively tested on Fedora/RISCV (applied by default on
-> top of 5.2-rc7 kernel for <2 months). The patch was also tested with 5.3-rc
+> top of 5.2-rc7 kernel for <2 months). The patch was also tested with 5.3-=
+rc
 > on QEMU and SiFive Unleashed board.
 >
 > libseccomp (userspace) was rebased:
@@ -110,6 +112,7 @@ On Thu, Aug 22, 2019 at 5:56 PM David Abdurachmanov
 > Cc: me@carlosedp.com
 >
 > Signed-off-by: David Abdurachmanov <david.abdurachmanov@sifive.com>
+> Tested-by: Carlos de Paula <me@carlosedp.com>
 > ---
 >  arch/riscv/Kconfig                            | 14 ++++++++++
 >  arch/riscv/include/asm/seccomp.h              | 10 +++++++
@@ -152,7 +155,8 @@ On Thu, Aug 22, 2019 at 5:56 PM David Abdurachmanov
 >  endmenu
 >
 >  menu "Boot options"
-> diff --git a/arch/riscv/include/asm/seccomp.h b/arch/riscv/include/asm/seccomp.h
+> diff --git a/arch/riscv/include/asm/seccomp.h b/arch/riscv/include/asm/se=
+ccomp.h
 > new file mode 100644
 > index 000000000000..bf7744ee3b3d
 > --- /dev/null
@@ -168,13 +172,16 @@ On Thu, Aug 22, 2019 at 5:56 PM David Abdurachmanov
 > +#include <asm-generic/seccomp.h>
 > +
 > +#endif /* _ASM_SECCOMP_H */
-> diff --git a/arch/riscv/include/asm/thread_info.h b/arch/riscv/include/asm/thread_info.h
+> diff --git a/arch/riscv/include/asm/thread_info.h b/arch/riscv/include/as=
+m/thread_info.h
 > index 905372d7eeb8..a0b2a29a0da1 100644
 > --- a/arch/riscv/include/asm/thread_info.h
 > +++ b/arch/riscv/include/asm/thread_info.h
 > @@ -75,6 +75,7 @@ struct thread_info {
->  #define TIF_MEMDIE             5       /* is terminating due to OOM killer */
->  #define TIF_SYSCALL_TRACEPOINT  6       /* syscall tracepoint instrumentation */
+>  #define TIF_MEMDIE             5       /* is terminating due to OOM kill=
+er */
+>  #define TIF_SYSCALL_TRACEPOINT  6       /* syscall tracepoint instrument=
+ation */
 >  #define TIF_SYSCALL_AUDIT      7       /* syscall auditing */
 > +#define TIF_SECCOMP            8       /* syscall secure computing */
 >
@@ -190,8 +197,10 @@ On Thu, Aug 22, 2019 at 5:56 PM David Abdurachmanov
 >         (_TIF_NOTIFY_RESUME | _TIF_SIGPENDING | _TIF_NEED_RESCHED)
 >
 >  #define _TIF_SYSCALL_WORK \
-> -       (_TIF_SYSCALL_TRACE | _TIF_SYSCALL_TRACEPOINT | _TIF_SYSCALL_AUDIT)
-> +       (_TIF_SYSCALL_TRACE | _TIF_SYSCALL_TRACEPOINT | _TIF_SYSCALL_AUDIT | \
+> -       (_TIF_SYSCALL_TRACE | _TIF_SYSCALL_TRACEPOINT | _TIF_SYSCALL_AUDI=
+T)
+> +       (_TIF_SYSCALL_TRACE | _TIF_SYSCALL_TRACEPOINT | _TIF_SYSCALL_AUDI=
+T | \
 > +        _TIF_SECCOMP )
 >
 >  #endif /* _ASM_RISCV_THREAD_INFO_H */
@@ -214,11 +223,13 @@ On Thu, Aug 22, 2019 at 5:56 PM David Abdurachmanov
 > +       REG_L a7, PT_A7(sp)
 > +       /*
 > +        * Syscall number held in a7.
-> +        * If syscall number is above allowed value, redirect to ni_syscall.
+> +        * If syscall number is above allowed value, redirect to ni_sysca=
+ll.
 > +        */
 > +       bge a7, t0, 1f
 > +       /*
-> +        * Check if syscall is rejected by tracer or seccomp, i.e., a7 == -1.
+> +        * Check if syscall is rejected by tracer or seccomp, i.e., a7 =
+=3D=3D -1.
 > +        * If yes, we pretend it was executed.
 > +        */
 > +       li t1, -1
@@ -253,7 +264,7 @@ On Thu, Aug 22, 2019 at 5:56 PM David Abdurachmanov
 > +        * If this fails we might have return value in a0 from seccomp
 > +        * (via SECCOMP_RET_ERRNO/TRACE).
 > +        */
-> +       if (secure_computing(NULL) == -1) {
+> +       if (secure_computing(NULL) =3D=3D -1) {
 > +               syscall_set_nr(current, regs, -1);
 > +               return;
 > +       }
@@ -261,7 +272,8 @@ On Thu, Aug 22, 2019 at 5:56 PM David Abdurachmanov
 >  #ifdef CONFIG_HAVE_SYSCALL_TRACEPOINTS
 >         if (test_thread_flag(TIF_SYSCALL_TRACEPOINT))
 >                 trace_sys_enter(regs, syscall_get_nr(current, regs));
-> diff --git a/tools/testing/selftests/seccomp/seccomp_bpf.c b/tools/testing/selftests/seccomp/seccomp_bpf.c
+> diff --git a/tools/testing/selftests/seccomp/seccomp_bpf.c b/tools/testin=
+g/selftests/seccomp/seccomp_bpf.c
 > index 6ef7f16c4cf5..492e0adad9d3 100644
 > --- a/tools/testing/selftests/seccomp/seccomp_bpf.c
 > +++ b/tools/testing/selftests/seccomp/seccomp_bpf.c
@@ -278,28 +290,208 @@ On Thu, Aug 22, 2019 at 5:56 PM David Abdurachmanov
 >  # define ARCH_REGS     struct user_pt_regs
 >  # define SYSCALL_NUM   regs[8]
 >  # define SYSCALL_RET   regs[0]
-> +#elif defined(__riscv) && __riscv_xlen == 64
+> +#elif defined(__riscv) && __riscv_xlen =3D=3D 64
 > +# define ARCH_REGS     struct user_regs_struct
 > +# define SYSCALL_NUM   a7
 > +# define SYSCALL_RET   a0
 >  #elif defined(__hppa__)
 >  # define ARCH_REGS     struct user_regs_struct
 >  # define SYSCALL_NUM   gr[20]
-> @@ -1671,7 +1677,7 @@ void change_syscall(struct __test_metadata *_metadata,
+> @@ -1671,7 +1677,7 @@ void change_syscall(struct __test_metadata *_metada=
+ta,
 >         EXPECT_EQ(0, ret) {}
 >
->  #if defined(__x86_64__) || defined(__i386__) || defined(__powerpc__) || \
+>  #if defined(__x86_64__) || defined(__i386__) || defined(__powerpc__) || =
+\
 > -    defined(__s390__) || defined(__hppa__)
 > +    defined(__s390__) || defined(__hppa__) || defined(__riscv)
 >         {
->                 regs.SYSCALL_NUM = syscall;
+>                 regs.SYSCALL_NUM =3D syscall;
 >         }
 > --
 > 2.21.0
 >
 
-Tested-by: Carlos de Paula <me@carlosedp.com>
--- 
+Kernel selftests results:
+
+=E2=9E=9C uname -a
+Linux fedora-unleashed 5.2.0-rc7-30159-g2d072d4-dirty #3 SMP Thu Jul 4
+20:18:21 -03 2019 riscv64 riscv64 riscv64 GNU/Linux
+
+=E2=9E=9C sudo ./seccomp_bpf
+[=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D] Running 74 tests from 1 test cases.
+[ RUN      ] global.mode_strict_support
+[       OK ] global.mode_strict_support
+[ RUN      ] global.mode_strict_cannot_call_prctl
+[       OK ] global.mode_strict_cannot_call_prctl
+[ RUN      ] global.no_new_privs_support
+[       OK ] global.no_new_privs_support
+[ RUN      ] global.mode_filter_support
+[       OK ] global.mode_filter_support
+[ RUN      ] global.mode_filter_without_nnp
+[       OK ] global.mode_filter_without_nnp
+[ RUN      ] global.filter_size_limits
+[       OK ] global.filter_size_limits
+[ RUN      ] global.filter_chain_limits
+[       OK ] global.filter_chain_limits
+[ RUN      ] global.mode_filter_cannot_move_to_strict
+[       OK ] global.mode_filter_cannot_move_to_strict
+[ RUN      ] global.mode_filter_get_seccomp
+[       OK ] global.mode_filter_get_seccomp
+[ RUN      ] global.ALLOW_all
+[       OK ] global.ALLOW_all
+[ RUN      ] global.empty_prog
+[       OK ] global.empty_prog
+[ RUN      ] global.log_all
+[       OK ] global.log_all
+[ RUN      ] global.unknown_ret_is_kill_inside
+[       OK ] global.unknown_ret_is_kill_inside
+[ RUN      ] global.unknown_ret_is_kill_above_allow
+[       OK ] global.unknown_ret_is_kill_above_allow
+[ RUN      ] global.KILL_all
+[       OK ] global.KILL_all
+[ RUN      ] global.KILL_one
+[       OK ] global.KILL_one
+[ RUN      ] global.KILL_one_arg_one
+[       OK ] global.KILL_one_arg_one
+[ RUN      ] global.KILL_one_arg_six
+[       OK ] global.KILL_one_arg_six
+[ RUN      ] global.KILL_thread
+[       OK ] global.KILL_thread
+[ RUN      ] global.KILL_process
+[       OK ] global.KILL_process
+[ RUN      ] global.arg_out_of_range
+[       OK ] global.arg_out_of_range
+[ RUN      ] global.ERRNO_valid
+[       OK ] global.ERRNO_valid
+[ RUN      ] global.ERRNO_zero
+[       OK ] global.ERRNO_zero
+[ RUN      ] global.ERRNO_capped
+[       OK ] global.ERRNO_capped
+[ RUN      ] global.ERRNO_order
+[       OK ] global.ERRNO_order
+[ RUN      ] TRAP.dfl
+[       OK ] TRAP.dfl
+[ RUN      ] TRAP.ign
+[       OK ] TRAP.ign
+[ RUN      ] TRAP.handler
+[       OK ] TRAP.handler
+[ RUN      ] precedence.allow_ok
+[       OK ] precedence.allow_ok
+[ RUN      ] precedence.kill_is_highest
+[       OK ] precedence.kill_is_highest
+[ RUN      ] precedence.kill_is_highest_in_any_order
+[       OK ] precedence.kill_is_highest_in_any_order
+[ RUN      ] precedence.trap_is_second
+[       OK ] precedence.trap_is_second
+[ RUN      ] precedence.trap_is_second_in_any_order
+[       OK ] precedence.trap_is_second_in_any_order
+[ RUN      ] precedence.errno_is_third
+[       OK ] precedence.errno_is_third
+[ RUN      ] precedence.errno_is_third_in_any_order
+[       OK ] precedence.errno_is_third_in_any_order
+[ RUN      ] precedence.trace_is_fourth
+[       OK ] precedence.trace_is_fourth
+[ RUN      ] precedence.trace_is_fourth_in_any_order
+[       OK ] precedence.trace_is_fourth_in_any_order
+[ RUN      ] precedence.log_is_fifth
+[       OK ] precedence.log_is_fifth
+[ RUN      ] precedence.log_is_fifth_in_any_order
+[       OK ] precedence.log_is_fifth_in_any_order
+[ RUN      ] TRACE_poke.read_has_side_effects
+[       OK ] TRACE_poke.read_has_side_effects
+[ RUN      ] TRACE_poke.getpid_runs_normally
+[       OK ] TRACE_poke.getpid_runs_normally
+[ RUN      ] TRACE_syscall.ptrace_syscall_redirected
+[       OK ] TRACE_syscall.ptrace_syscall_redirected
+[ RUN      ] TRACE_syscall.ptrace_syscall_errno
+[       OK ] TRACE_syscall.ptrace_syscall_errno
+[ RUN      ] TRACE_syscall.ptrace_syscall_faked
+[       OK ] TRACE_syscall.ptrace_syscall_faked
+[ RUN      ] TRACE_syscall.syscall_allowed
+[       OK ] TRACE_syscall.syscall_allowed
+[ RUN      ] TRACE_syscall.syscall_redirected
+[       OK ] TRACE_syscall.syscall_redirected
+[ RUN      ] TRACE_syscall.syscall_errno
+[       OK ] TRACE_syscall.syscall_errno
+[ RUN      ] TRACE_syscall.syscall_faked
+[       OK ] TRACE_syscall.syscall_faked
+[ RUN      ] TRACE_syscall.skip_after_RET_TRACE
+[       OK ] TRACE_syscall.skip_after_RET_TRACE
+[ RUN      ] TRACE_syscall.kill_after_RET_TRACE
+[       OK ] TRACE_syscall.kill_after_RET_TRACE
+[ RUN      ] TRACE_syscall.skip_after_ptrace
+[       OK ] TRACE_syscall.skip_after_ptrace
+[ RUN      ] TRACE_syscall.kill_after_ptrace
+[       OK ] TRACE_syscall.kill_after_ptrace
+[ RUN      ] global.seccomp_syscall
+[       OK ] global.seccomp_syscall
+[ RUN      ] global.seccomp_syscall_mode_lock
+[       OK ] global.seccomp_syscall_mode_lock
+[ RUN      ] global.detect_seccomp_filter_flags
+[       OK ] global.detect_seccomp_filter_flags
+[ RUN      ] global.TSYNC_first
+[       OK ] global.TSYNC_first
+[ RUN      ] TSYNC.siblings_fail_prctl
+[       OK ] TSYNC.siblings_fail_prctl
+[ RUN      ] TSYNC.two_siblings_with_ancestor
+[       OK ] TSYNC.two_siblings_with_ancestor
+[ RUN      ] TSYNC.two_sibling_want_nnp
+[       OK ] TSYNC.two_sibling_want_nnp
+[ RUN      ] TSYNC.two_siblings_with_no_filter
+[       OK ] TSYNC.two_siblings_with_no_filter
+[ RUN      ] TSYNC.two_siblings_with_one_divergence
+[       OK ] TSYNC.two_siblings_with_one_divergence
+[ RUN      ] TSYNC.two_siblings_not_under_filter
+[       OK ] TSYNC.two_siblings_not_under_filter
+[ RUN      ] global.syscall_restart
+[       OK ] global.syscall_restart
+[ RUN      ] global.filter_flag_log
+[       OK ] global.filter_flag_log
+[ RUN      ] global.get_action_avail
+[       OK ] global.get_action_avail
+[ RUN      ] global.get_metadata
+[       OK ] global.get_metadata
+[ RUN      ] global.user_notification_basic
+[       OK ] global.user_notification_basic
+[ RUN      ] global.user_notification_kill_in_middle
+[       OK ] global.user_notification_kill_in_middle
+[ RUN      ] global.user_notification_signal
+[1]    5951 alarm      sudo ./seccomp_bpf
+
+carlosedp in ~ at fedora-unleashed
+=E2=9E=9C sudo ./seccomp_benchmark
+Calibrating reasonable sample size...
+1564584448.964538790 - 1564584448.964529687 =3D 9103
+1564584448.964588859 - 1564584448.964575204 =3D 13655
+1564584448.964631342 - 1564584448.964604790 =3D 26552
+1564584448.964710239 - 1564584448.964644997 =3D 65242
+1564584448.964842239 - 1564584448.964726928 =3D 115311
+1564584448.965072859 - 1564584448.964857411 =3D 215448
+1564584448.965513618 - 1564584448.965089549 =3D 424069
+1564584448.966417894 - 1564584448.965532584 =3D 885310
+1564584448.968286377 - 1564584448.966443687 =3D 1842690
+1564584448.971667549 - 1564584448.968314446 =3D 3353103
+1564584448.978288790 - 1564584448.971694101 =3D 6594689
+1564584448.991803618 - 1564584448.978313066 =3D 13490552
+1564584449.017692308 - 1564584448.991836239 =3D 25856069
+1564584449.069651756 - 1564584449.017713549 =3D 51938207
+1564584449.173110928 - 1564584449.069673756 =3D 103437172
+1564584449.380001204 - 1564584449.173132928 =3D 206868276
+1564584449.793857618 - 1564584449.380041411 =3D 413816207
+1564584450.625367342 - 1564584449.793898584 =3D 831468758
+1564584452.299529411 - 1564584450.625426514 =3D 1674102897
+1564584455.665938307 - 1564584452.299592376 =3D 3366345931
+1564584462.331777479 - 1564584455.665973962 =3D 6665803517
+Benchmarking 33554432 samples...
+18.107882743 - 12.075641371 =3D 6032241372
+getpid native: 179 ns
+34.720410331 - 18.107978605 =3D 16612431726
+getpid RET_ALLOW: 495 ns
+Estimated seccomp overhead per syscall: 316 n
+
+
+--=20
 ________________________________________
 Carlos Eduardo de Paula
 me@carlosedp.com
