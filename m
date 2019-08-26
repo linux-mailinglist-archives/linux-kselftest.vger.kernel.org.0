@@ -2,133 +2,125 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A20169BFFD
-	for <lists+linux-kselftest@lfdr.de>; Sat, 24 Aug 2019 22:18:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EA9D9D1DA
+	for <lists+linux-kselftest@lfdr.de>; Mon, 26 Aug 2019 16:43:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727708AbfHXUSL (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 24 Aug 2019 16:18:11 -0400
-Received: from mail-ua1-f68.google.com ([209.85.222.68]:43421 "EHLO
-        mail-ua1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727738AbfHXUSL (ORCPT
+        id S1731835AbfHZOnD (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 26 Aug 2019 10:43:03 -0400
+Received: from mail-qt1-f195.google.com ([209.85.160.195]:38884 "EHLO
+        mail-qt1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729753AbfHZOnD (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 24 Aug 2019 16:18:11 -0400
-Received: by mail-ua1-f68.google.com with SMTP id y7so4447123uae.10
-        for <linux-kselftest@vger.kernel.org>; Sat, 24 Aug 2019 13:18:10 -0700 (PDT)
+        Mon, 26 Aug 2019 10:43:03 -0400
+Received: by mail-qt1-f195.google.com with SMTP id q64so6413849qtd.5
+        for <linux-kselftest@vger.kernel.org>; Mon, 26 Aug 2019 07:43:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=0zfEO+Of97f0VCldvVRJl3jzEF01O6soGli/loZclzk=;
-        b=CiJfEFfo1GhUFTvULOmIWC5bky0UhNotA9EofhxO4+2Cd9KvnmBRPB6hGuQFhuAXwJ
-         Mf7+XdP/Zb4xXtjIaOfMfbMaQpe98nHR1WFAIDUqUl6lSfoh5N6YkchHMEss2Z7wmXRv
-         mIN1BXAFZpi+SynQvspsYrZxrH8jV01EUoqVt4oI5oVTwO6tctGVNu+Gx+DZX4YcnnWT
-         pUO0Oeafs9qrk8HXoIhQUWukfn1efWZ6t1CZQkpVU6dxRoB/3gD8bO7d0APRfzkEuP01
-         6A3Oop2AiXmYSlChvGG9uj5KK5z6ZoLIIlfJYts9owMo4k3T92eSIqfy7wB0W5m6uFPz
-         fndA==
+        d=tycho-ws.20150623.gappssmtp.com; s=20150623;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=u5tRAUVjwICwqP1eBMBkWBXaZ38ZgsH4zDqL+x+uPlE=;
+        b=Wu1kiSaxjFuhzmEinNBFb3YSHaE7tSSzhgK59v+g0nF2SRc1aArk53h1nFKU2RdEOO
+         7s5h7s4OntPORswAHcuLR7+Qiq4GczQqM3oPkb7XE3DotQMOT3IcVnkCzS1rNLinJ/7E
+         +7/zDaE+SV1wA4Yxdnk6nqlkF3a97y8n1XpvrrL1KgxdXE1rUwApL/Qd2quWZPlA7WoN
+         wflbv4VDsfNRD27owdg5ha2p6s1BqGQJ0j6UgKXt59E7+YNdsHepMJbosXKuWenNd9MK
+         Wh34L0M7vLXsB/gE6GU2P2a3lyz/vq2AT9pNpzM9DjeBxlG45gJD6HuDBRaFtj1Sprgp
+         KwRA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=0zfEO+Of97f0VCldvVRJl3jzEF01O6soGli/loZclzk=;
-        b=q48Yk1XNqTzwVWcBY+1fAC6SiJf/LipQFDPUGokv8RvxcnFsPWFtojR6Tw+uQmJ0Ee
-         dyzZ1C6InpmfBH+6ul4uxDC1I9K1GQWx2N+v6NDwKh6vu/agIUMxD+pk0zfudvNbgvjD
-         DlXOnhzNp401IPI4MMSUlOOLlY/3OQ3YBSM9rRmh08aUjcetZ04ooRumbv+0wNm879iI
-         DtI1nwS/HJkgFWWUD+Q6brL239be3mRROJJr9Hq6C5q9Hl7LGpXNPoHOh4Ck5E0hzbPu
-         Uk0ELgevu3sUMddmiskRcKIKLH0e82CF5PPhEEG6NBtimltFBbqDl3pDzQs9vDotHmlF
-         OC0Q==
-X-Gm-Message-State: APjAAAU7wNPcibs2EzCHasA800Pl/tAoHVr+Y5dRkzY0jPT1eJ6xUD5T
-        SWg5wsK/xGAhhW5Zg8m/d8gVu+D7c3EiEk9LlmXL7g==
-X-Google-Smtp-Source: APXvYqxjVPBCRB+CRwr4t5I/R3fEcc9xAf9hOK0mmX0eHtTD2rTNJ8/siW0Z/MdtMGoJdUYWfX/KXqMK5Snr1pytTE0=
-X-Received: by 2002:a9f:230c:: with SMTP id 12mr5623819uae.85.1566677889720;
- Sat, 24 Aug 2019 13:18:09 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=u5tRAUVjwICwqP1eBMBkWBXaZ38ZgsH4zDqL+x+uPlE=;
+        b=WTprXyUoP2b/LYVURcfmT/Ia2JLsNnHoUSrVTIa/uGL76YttnYPYOckM4HaJomLcu0
+         tp0m15WazGR01Xnm/GVKB0EShtBo4Q3tba3nqARzFLip1Dyt94jW1notUHqFF93H/cBo
+         cJr4bDKoao547zgL1KQA+oLMD0LNKJycGqGeTFt5oHzxhAmLL6lTKNrhm/vUaqfk04p0
+         GeWDDj1uElSqtF0lPBDH814BesiN0dCLEhrgsidwhAr5TKJoBmEEwuaCwbBF2RK4/inF
+         2bEAdWIrpa+3IhuVSamaE/LxP7IUU/c+yF9DoeyTmu0aIONdoaWIuqgtWXI3H1q9YSVd
+         s1ZQ==
+X-Gm-Message-State: APjAAAWjByRnrKeQ2I7Z1uAh3SnNkVWiQsDHKi5zzlJySDumCdyHoys2
+        4eD6UL0Ji4ZMpUP17rJwqoLe+Q==
+X-Google-Smtp-Source: APXvYqwVYjVrmp2SGBbNu2DRmDXtuB0C5ntzmIKReoSuTK9X/Uz0O0RgWFDJp+X7U6707NimRb4gdQ==
+X-Received: by 2002:ac8:7158:: with SMTP id h24mr17459504qtp.73.1566830582162;
+        Mon, 26 Aug 2019 07:43:02 -0700 (PDT)
+Received: from cisco.hsd1.co.comcast.net ([2601:282:901:dd7b:3979:c36f:a14f:ef87])
+        by smtp.gmail.com with ESMTPSA id o33sm7089937qtd.72.2019.08.26.07.43.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 26 Aug 2019 07:43:01 -0700 (PDT)
+From:   Tycho Andersen <tycho@tycho.ws>
+To:     Shuah Khan <shuah@kernel.org>, Kees Cook <keescook@chromium.org>
+Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Tycho Andersen <tycho@tycho.ws>
+Subject: [PATCH] selftests/seccomp: fix build on older kernels
+Date:   Mon, 26 Aug 2019 08:43:02 -0600
+Message-Id: <20190826144302.7745-1-tycho@tycho.ws>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-References: <20190820033406.29796-1-cyphar@cyphar.com> <20190820033406.29796-8-cyphar@cyphar.com>
-In-Reply-To: <20190820033406.29796-8-cyphar@cyphar.com>
-From:   Daniel Colascione <dancol@google.com>
-Date:   Sat, 24 Aug 2019 13:17:33 -0700
-Message-ID: <CAKOZuesfxRBJe314rkTKXtjXdz6ki3uAUBYVbu5Q2rd3=ADphQ@mail.gmail.com>
-Subject: Re: [PATCH RESEND v11 7/8] open: openat2(2) syscall
-To:     Aleksa Sarai <cyphar@cyphar.com>
-Cc:     Al Viro <viro@zeniv.linux.org.uk>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J. Bruce Fields" <bfields@fieldses.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        David Howells <dhowells@redhat.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Christian Brauner <christian@brauner.io>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Jann Horn <jannh@google.com>, Tycho Andersen <tycho@tycho.ws>,
-        David Drysdale <drysdale@google.com>,
-        Chanho Min <chanho.min@lge.com>,
-        Oleg Nesterov <oleg@redhat.com>, Aleksa Sarai <asarai@suse.de>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        containers@lists.linux-foundation.org, linux-alpha@vger.kernel.org,
-        Linux API <linux-api@vger.kernel.org>,
-        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Linux FS Devel <linux-fsdevel@vger.kernel.org>,
-        linux-ia64@vger.kernel.org,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, linux-xtensa@linux-xtensa.org,
-        sparclinux@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Aug 19, 2019 at 8:37 PM Aleksa Sarai <cyphar@cyphar.com> wrote:
->
-> The most obvious syscall to add support for the new LOOKUP_* scoping
-> flags would be openat(2). However, there are a few reasons why this is
-> not the best course of action:
->
->  * The new LOOKUP_* flags are intended to be security features, and
->    openat(2) will silently ignore all unknown flags. This means that
->    users would need to avoid foot-gunning themselves constantly when
->    using this interface if it were part of openat(2). This can be fixed
->    by having userspace libraries handle this for users[1], but should be
->    avoided if possible.
->
->  * Resolution scoping feels like a different operation to the existing
->    O_* flags. And since openat(2) has limited flag space, it seems to be
->    quite wasteful to clutter it with 5 flags that are all
->    resolution-related. Arguably O_NOFOLLOW is also a resolution flag but
->    its entire purpose is to error out if you encounter a trailing
->    symlink -- not to scope resolution.
->
->  * Other systems would be able to reimplement this syscall allowing for
->    cross-OS standardisation rather than being hidden amongst O_* flags
->    which may result in it not being used by all the parties that might
->    want to use it (file servers, web servers, container runtimes, etc).
->
->  * It gives us the opportunity to iterate on the O_PATH interface. In
->    particular, the new @how->upgrade_mask field for fd re-opening is
->    only possible because we have a clean slate without needing to re-use
->    the ACC_MODE flag design nor the existing openat(2) @mode semantics.
->
-> To this end, we introduce the openat2(2) syscall. It provides all of the
-> features of openat(2) through the @how->flags argument, but also
-> also provides a new @how->resolve argument which exposes RESOLVE_* flags
-> that map to our new LOOKUP_* flags. It also eliminates the long-standing
-> ugliness of variadic-open(2) by embedding it in a struct.
->
-> In order to allow for userspace to lock down their usage of file
-> descriptor re-opening, openat2(2) has the ability for users to disallow
-> certain re-opening modes through @how->upgrade_mask. At the moment,
-> there is no UPGRADE_NOEXEC. The open_how struct is padded to 64 bytes
-> for future extensions (all of the reserved bits must be zeroed).
+The seccomp selftest goes to some length to build against older kernel
+headers, viz. all the #ifdefs at the beginning of the file. 201766a20e30
+("ptrace: add PTRACE_GET_SYSCALL_INFO request") introduces some additional
+macros, but doesn't do the #ifdef dance. Let's add that dance here to
+avoid:
 
-Why pad the structure when new functionality (perhaps accommodated via
-a larger structure) could be signaled by passing a new flag? Adding
-reserved fields to a structure with a size embedded in the ABI makes a
-lot of sense --- e.g., pthread_mutex_t can't grow. But this structure
-can grow, so the reservation seems needless to me.
+gcc -Wl,-no-as-needed -Wall  seccomp_bpf.c -lpthread -o seccomp_bpf
+In file included from seccomp_bpf.c:51:
+seccomp_bpf.c: In function ‘tracer_ptrace’:
+seccomp_bpf.c:1787:20: error: ‘PTRACE_EVENTMSG_SYSCALL_ENTRY’ undeclared (first use in this function); did you mean ‘PTRACE_EVENT_CLONE’?
+  EXPECT_EQ(entry ? PTRACE_EVENTMSG_SYSCALL_ENTRY
+                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../kselftest_harness.h:608:13: note: in definition of macro ‘__EXPECT’
+  __typeof__(_expected) __exp = (_expected); \
+             ^~~~~~~~~
+seccomp_bpf.c:1787:2: note: in expansion of macro ‘EXPECT_EQ’
+  EXPECT_EQ(entry ? PTRACE_EVENTMSG_SYSCALL_ENTRY
+  ^~~~~~~~~
+seccomp_bpf.c:1787:20: note: each undeclared identifier is reported only once for each function it appears in
+  EXPECT_EQ(entry ? PTRACE_EVENTMSG_SYSCALL_ENTRY
+                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../kselftest_harness.h:608:13: note: in definition of macro ‘__EXPECT’
+  __typeof__(_expected) __exp = (_expected); \
+             ^~~~~~~~~
+seccomp_bpf.c:1787:2: note: in expansion of macro ‘EXPECT_EQ’
+  EXPECT_EQ(entry ? PTRACE_EVENTMSG_SYSCALL_ENTRY
+  ^~~~~~~~~
+seccomp_bpf.c:1788:6: error: ‘PTRACE_EVENTMSG_SYSCALL_EXIT’ undeclared (first use in this function); did you mean ‘PTRACE_EVENT_EXIT’?
+    : PTRACE_EVENTMSG_SYSCALL_EXIT, msg);
+      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../kselftest_harness.h:608:13: note: in definition of macro ‘__EXPECT’
+  __typeof__(_expected) __exp = (_expected); \
+             ^~~~~~~~~
+seccomp_bpf.c:1787:2: note: in expansion of macro ‘EXPECT_EQ’
+  EXPECT_EQ(entry ? PTRACE_EVENTMSG_SYSCALL_ENTRY
+  ^~~~~~~~~
+make: *** [Makefile:12: seccomp_bpf] Error 1
+
+Signed-off-by: Tycho Andersen <tycho@tycho.ws>
+Fixes: 201766a20e30 ("ptrace: add PTRACE_GET_SYSCALL_INFO request")
+---
+ tools/testing/selftests/seccomp/seccomp_bpf.c | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/tools/testing/selftests/seccomp/seccomp_bpf.c b/tools/testing/selftests/seccomp/seccomp_bpf.c
+index 6ef7f16c4cf5..7f8b5c8982e3 100644
+--- a/tools/testing/selftests/seccomp/seccomp_bpf.c
++++ b/tools/testing/selftests/seccomp/seccomp_bpf.c
+@@ -199,6 +199,11 @@ struct seccomp_notif_sizes {
+ };
+ #endif
+ 
++#ifndef PTRACE_EVENTMSG_SYSCALL_ENTRY
++#define PTRACE_EVENTMSG_SYSCALL_ENTRY	1
++#define PTRACE_EVENTMSG_SYSCALL_EXIT	2
++#endif
++
+ #ifndef seccomp
+ int seccomp(unsigned int op, unsigned int flags, void *args)
+ {
+-- 
+2.20.1
+
