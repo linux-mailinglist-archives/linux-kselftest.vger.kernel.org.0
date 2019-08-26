@@ -2,104 +2,88 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 93DDC9D222
-	for <lists+linux-kselftest@lfdr.de>; Mon, 26 Aug 2019 16:58:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F9089D29A
+	for <lists+linux-kselftest@lfdr.de>; Mon, 26 Aug 2019 17:21:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732771AbfHZO5y (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 26 Aug 2019 10:57:54 -0400
-Received: from mail-qk1-f193.google.com ([209.85.222.193]:46036 "EHLO
-        mail-qk1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732588AbfHZO5y (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 26 Aug 2019 10:57:54 -0400
-Received: by mail-qk1-f193.google.com with SMTP id m2so14236812qki.12
-        for <linux-kselftest@vger.kernel.org>; Mon, 26 Aug 2019 07:57:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tycho-ws.20150623.gappssmtp.com; s=20150623;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=NPJGDOo6L0S+CxpwgDKYq0p9QenFZx3WP7pTe8S4sMs=;
-        b=AGKzs8O5qznJgGIwpcBHKPCKaBpDnNPQopX6O6DHaXhR0KlirNeInM2VbTizrvmum3
-         0f4vpmov8OQjbLJk1Uu16D/TOk9HdYztfjR2UNe9dwmng70wrygV1IvJyjMDJATGZ7yk
-         PobQ8qvG35MNY31lVY5cwgH3G7bORvaNch/ljPBUTdENjG6RkvRB2RS2398T2uRSGen5
-         ViR0M5vcYyWEOfqp9LX7QdJWMYS6i91HVP7ljpA9/AH4jOB2UJTgVO/bz9QxDRTSh9fV
-         2R9wHdvrj+d6EskJaU21USriV0jICM3S69Lq+YySOHBCEcG9R76zVDNftBSWlXet/W2R
-         qVNw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=NPJGDOo6L0S+CxpwgDKYq0p9QenFZx3WP7pTe8S4sMs=;
-        b=gu+KTwmdh6gj7rU1GKFF2u5SlR36987xQIsHAKfJ1SCKU3jigAdFNIX5DWfOdWG3cM
-         5L3VSR2oUzB63SPctlkfPQYJWd+aO1zMKep1CG3eh3jtQh8IowOubTIgP/t7VaabZgx6
-         Kc/0xGei6xkFgLcMQakNdmmJRshfRLm6X7+M+i48jyIxrsynZMMSpviuzCDrhpwzd9d7
-         qBTgGyUoOk7QVPJd1co90eoeNQ8EWK9BvldFi3Xu81hzBkOs8+Vb2t9t/Wr4CqRZOti1
-         Z6gRvNwJzHgiUjkOcQ2IM/BD7rUedFl5rw2hOogxVjs1naxlgjRpDj/afxxEuJWOjmC0
-         slFQ==
-X-Gm-Message-State: APjAAAX07Tff+WENjfPIw4tjsdV9o5TiUI9RX0IQvKEU6rptiNHXRklv
-        KbyGqLH6MDZaL8/t6C6o6g1l/w==
-X-Google-Smtp-Source: APXvYqylzZdUtT3tWQZ6cbQ0jUMry5R+13+YQvBswaR16gpPILhv7dep1DWgwRIXcXehIisp40eyBA==
-X-Received: by 2002:a37:6e03:: with SMTP id j3mr16061933qkc.362.1566831472597;
-        Mon, 26 Aug 2019 07:57:52 -0700 (PDT)
-Received: from cisco ([2601:282:901:dd7b:3979:c36f:a14f:ef87])
-        by smtp.gmail.com with ESMTPSA id m20sm7309611qtk.11.2019.08.26.07.57.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Aug 2019 07:57:51 -0700 (PDT)
-Date:   Mon, 26 Aug 2019 08:57:56 -0600
-From:   Tycho Andersen <tycho@tycho.ws>
-To:     Paul Walmsley <paul.walmsley@sifive.com>
-Cc:     David Abdurachmanov <david.abdurachmanov@gmail.com>,
-        Palmer Dabbelt <palmer@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Oleg Nesterov <oleg@redhat.com>,
+        id S1732117AbfHZPUz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 26 Aug 2019 11:20:55 -0400
+Received: from mx2.suse.de ([195.135.220.15]:45612 "EHLO mx1.suse.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1727850AbfHZPUy (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 26 Aug 2019 11:20:54 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx1.suse.de (Postfix) with ESMTP id DE107B635;
+        Mon, 26 Aug 2019 15:20:52 +0000 (UTC)
+Date:   Mon, 26 Aug 2019 17:20:52 +0200
+Message-ID: <s5hr258j6ln.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Scott Branden <scott.branden@broadcom.com>
+Cc:     Luis Chamberlain <mcgrof@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        David Brown <david.brown@linaro.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Shuah Khan <shuah@kernel.org>, bjorn.andersson@linaro.org,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org,
+        BCM Kernel Feedback <bcm-kernel-feedback-list@broadcom.com>,
+        Olof Johansson <olof@lixom.net>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Colin Ian King <colin.king@canonical.com>,
         Kees Cook <keescook@chromium.org>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Will Drewry <wad@chromium.org>, Shuah Khan <shuah@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        David Abdurachmanov <david.abdurachmanov@sifive.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Allison Randal <allison@lohutok.net>,
-        Alexios Zavras <alexios.zavras@intel.com>,
-        Anup Patel <Anup.Patel@wdc.com>,
-        Vincent Chen <vincentc@andestech.com>,
-        Alan Kao <alankao@andestech.com>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, me@carlosedp.com
-Subject: Re: [PATCH v2] riscv: add support for SECCOMP and SECCOMP_FILTER
-Message-ID: <20190826145756.GB4664@cisco>
-References: <20190822205533.4877-1-david.abdurachmanov@sifive.com>
- <alpine.DEB.2.21.9999.1908231717550.25649@viisi.sifive.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <alpine.DEB.2.21.9999.1908231717550.25649@viisi.sifive.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH 2/7] firmware: add offset to request_firmware_into_buf
+In-Reply-To: <10461fcf-9eca-32b6-0f9d-23c63b3f3442@broadcom.com>
+References: <20190822192451.5983-1-scott.branden@broadcom.com>
+        <20190822192451.5983-3-scott.branden@broadcom.com>
+        <s5hef1crybq.wl-tiwai@suse.de>
+        <10461fcf-9eca-32b6-0f9d-23c63b3f3442@broadcom.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI/1.14.6 (Maruoka)
+ FLIM/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL/10.8 Emacs/25.3
+ (x86_64-suse-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI 1.14.6 - "Maruoka")
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi,
-
-On Fri, Aug 23, 2019 at 05:30:53PM -0700, Paul Walmsley wrote:
-> On Thu, 22 Aug 2019, David Abdurachmanov wrote:
+On Fri, 23 Aug 2019 21:44:42 +0200,
+Scott Branden wrote:
 > 
-> > There is one failing kernel selftest: global.user_notification_signal
+> Hi Takashi,
 > 
-> Also - could you follow up with the author of this failing test to see if 
-> we can get some more clarity about what might be going wrong here?  It 
-> appears that the failing test was added in commit 6a21cc50f0c7f ("seccomp: 
-> add a return code to trap to userspace") by Tycho Andersen 
-> <tycho@tycho.ws>.
+> Thanks for review.  comments below.
+> 
+> On 2019-08-23 3:05 a.m., Takashi Iwai wrote:
+> > On Thu, 22 Aug 2019 21:24:46 +0200,
+> > Scott Branden wrote:
+> >> Add offset to request_firmware_into_buf to allow for portions
+> >> of firmware file to be read into a buffer.  Necessary where firmware
+> >> needs to be loaded in portions from file in memory constrained systems.
+> > AFAIU, this won't work with the fallback user helper, right?
+> Seems to work fine in the fw_run_tests.sh with fallbacks.
 
-Can you post an strace and a cat of /proc/$pid/stack for both tasks
-where it gets stuck? I don't have any riscv hardware, and it "works
-for me" on x86 and arm64 with 100 tries.
+But how?  You patch doesn't change anything about the fallback loading
+mechanism.  Or, if the expected behavior is to load the whole content
+and then copy a part, what's the merit of this API?
 
-Thanks,
+> > Also it won't work for the compressed firmware files as-is.
+> Although unnecessary, seems to work fine in the fw_run_tests.sh with
+> "both" and "xzonly" options.
 
-Tycho
+This looks also suspicious.  Loading a part of the file from the
+middle and decompression won't work together, from obvious reasons.
+
+If the test passes, it means that the test itself is more likely
+incorrect, I'm afraid.
+
+
+thanks,
+
+Takashi
