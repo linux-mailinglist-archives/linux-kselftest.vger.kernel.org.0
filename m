@@ -2,125 +2,104 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EA9D9D1DA
-	for <lists+linux-kselftest@lfdr.de>; Mon, 26 Aug 2019 16:43:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93DDC9D222
+	for <lists+linux-kselftest@lfdr.de>; Mon, 26 Aug 2019 16:58:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731835AbfHZOnD (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 26 Aug 2019 10:43:03 -0400
-Received: from mail-qt1-f195.google.com ([209.85.160.195]:38884 "EHLO
-        mail-qt1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729753AbfHZOnD (ORCPT
+        id S1732771AbfHZO5y (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 26 Aug 2019 10:57:54 -0400
+Received: from mail-qk1-f193.google.com ([209.85.222.193]:46036 "EHLO
+        mail-qk1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732588AbfHZO5y (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 26 Aug 2019 10:43:03 -0400
-Received: by mail-qt1-f195.google.com with SMTP id q64so6413849qtd.5
-        for <linux-kselftest@vger.kernel.org>; Mon, 26 Aug 2019 07:43:02 -0700 (PDT)
+        Mon, 26 Aug 2019 10:57:54 -0400
+Received: by mail-qk1-f193.google.com with SMTP id m2so14236812qki.12
+        for <linux-kselftest@vger.kernel.org>; Mon, 26 Aug 2019 07:57:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=tycho-ws.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=u5tRAUVjwICwqP1eBMBkWBXaZ38ZgsH4zDqL+x+uPlE=;
-        b=Wu1kiSaxjFuhzmEinNBFb3YSHaE7tSSzhgK59v+g0nF2SRc1aArk53h1nFKU2RdEOO
-         7s5h7s4OntPORswAHcuLR7+Qiq4GczQqM3oPkb7XE3DotQMOT3IcVnkCzS1rNLinJ/7E
-         +7/zDaE+SV1wA4Yxdnk6nqlkF3a97y8n1XpvrrL1KgxdXE1rUwApL/Qd2quWZPlA7WoN
-         wflbv4VDsfNRD27owdg5ha2p6s1BqGQJ0j6UgKXt59E7+YNdsHepMJbosXKuWenNd9MK
-         Wh34L0M7vLXsB/gE6GU2P2a3lyz/vq2AT9pNpzM9DjeBxlG45gJD6HuDBRaFtj1Sprgp
-         KwRA==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=NPJGDOo6L0S+CxpwgDKYq0p9QenFZx3WP7pTe8S4sMs=;
+        b=AGKzs8O5qznJgGIwpcBHKPCKaBpDnNPQopX6O6DHaXhR0KlirNeInM2VbTizrvmum3
+         0f4vpmov8OQjbLJk1Uu16D/TOk9HdYztfjR2UNe9dwmng70wrygV1IvJyjMDJATGZ7yk
+         PobQ8qvG35MNY31lVY5cwgH3G7bORvaNch/ljPBUTdENjG6RkvRB2RS2398T2uRSGen5
+         ViR0M5vcYyWEOfqp9LX7QdJWMYS6i91HVP7ljpA9/AH4jOB2UJTgVO/bz9QxDRTSh9fV
+         2R9wHdvrj+d6EskJaU21USriV0jICM3S69Lq+YySOHBCEcG9R76zVDNftBSWlXet/W2R
+         qVNw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=u5tRAUVjwICwqP1eBMBkWBXaZ38ZgsH4zDqL+x+uPlE=;
-        b=WTprXyUoP2b/LYVURcfmT/Ia2JLsNnHoUSrVTIa/uGL76YttnYPYOckM4HaJomLcu0
-         tp0m15WazGR01Xnm/GVKB0EShtBo4Q3tba3nqARzFLip1Dyt94jW1notUHqFF93H/cBo
-         cJr4bDKoao547zgL1KQA+oLMD0LNKJycGqGeTFt5oHzxhAmLL6lTKNrhm/vUaqfk04p0
-         GeWDDj1uElSqtF0lPBDH814BesiN0dCLEhrgsidwhAr5TKJoBmEEwuaCwbBF2RK4/inF
-         2bEAdWIrpa+3IhuVSamaE/LxP7IUU/c+yF9DoeyTmu0aIONdoaWIuqgtWXI3H1q9YSVd
-         s1ZQ==
-X-Gm-Message-State: APjAAAWjByRnrKeQ2I7Z1uAh3SnNkVWiQsDHKi5zzlJySDumCdyHoys2
-        4eD6UL0Ji4ZMpUP17rJwqoLe+Q==
-X-Google-Smtp-Source: APXvYqwVYjVrmp2SGBbNu2DRmDXtuB0C5ntzmIKReoSuTK9X/Uz0O0RgWFDJp+X7U6707NimRb4gdQ==
-X-Received: by 2002:ac8:7158:: with SMTP id h24mr17459504qtp.73.1566830582162;
-        Mon, 26 Aug 2019 07:43:02 -0700 (PDT)
-Received: from cisco.hsd1.co.comcast.net ([2601:282:901:dd7b:3979:c36f:a14f:ef87])
-        by smtp.gmail.com with ESMTPSA id o33sm7089937qtd.72.2019.08.26.07.43.00
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=NPJGDOo6L0S+CxpwgDKYq0p9QenFZx3WP7pTe8S4sMs=;
+        b=gu+KTwmdh6gj7rU1GKFF2u5SlR36987xQIsHAKfJ1SCKU3jigAdFNIX5DWfOdWG3cM
+         5L3VSR2oUzB63SPctlkfPQYJWd+aO1zMKep1CG3eh3jtQh8IowOubTIgP/t7VaabZgx6
+         Kc/0xGei6xkFgLcMQakNdmmJRshfRLm6X7+M+i48jyIxrsynZMMSpviuzCDrhpwzd9d7
+         qBTgGyUoOk7QVPJd1co90eoeNQ8EWK9BvldFi3Xu81hzBkOs8+Vb2t9t/Wr4CqRZOti1
+         Z6gRvNwJzHgiUjkOcQ2IM/BD7rUedFl5rw2hOogxVjs1naxlgjRpDj/afxxEuJWOjmC0
+         slFQ==
+X-Gm-Message-State: APjAAAX07Tff+WENjfPIw4tjsdV9o5TiUI9RX0IQvKEU6rptiNHXRklv
+        KbyGqLH6MDZaL8/t6C6o6g1l/w==
+X-Google-Smtp-Source: APXvYqylzZdUtT3tWQZ6cbQ0jUMry5R+13+YQvBswaR16gpPILhv7dep1DWgwRIXcXehIisp40eyBA==
+X-Received: by 2002:a37:6e03:: with SMTP id j3mr16061933qkc.362.1566831472597;
+        Mon, 26 Aug 2019 07:57:52 -0700 (PDT)
+Received: from cisco ([2601:282:901:dd7b:3979:c36f:a14f:ef87])
+        by smtp.gmail.com with ESMTPSA id m20sm7309611qtk.11.2019.08.26.07.57.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Aug 2019 07:43:01 -0700 (PDT)
+        Mon, 26 Aug 2019 07:57:51 -0700 (PDT)
+Date:   Mon, 26 Aug 2019 08:57:56 -0600
 From:   Tycho Andersen <tycho@tycho.ws>
-To:     Shuah Khan <shuah@kernel.org>, Kees Cook <keescook@chromium.org>
-Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Tycho Andersen <tycho@tycho.ws>
-Subject: [PATCH] selftests/seccomp: fix build on older kernels
-Date:   Mon, 26 Aug 2019 08:43:02 -0600
-Message-Id: <20190826144302.7745-1-tycho@tycho.ws>
-X-Mailer: git-send-email 2.20.1
+To:     Paul Walmsley <paul.walmsley@sifive.com>
+Cc:     David Abdurachmanov <david.abdurachmanov@gmail.com>,
+        Palmer Dabbelt <palmer@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Oleg Nesterov <oleg@redhat.com>,
+        Kees Cook <keescook@chromium.org>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Will Drewry <wad@chromium.org>, Shuah Khan <shuah@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        David Abdurachmanov <david.abdurachmanov@sifive.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Allison Randal <allison@lohutok.net>,
+        Alexios Zavras <alexios.zavras@intel.com>,
+        Anup Patel <Anup.Patel@wdc.com>,
+        Vincent Chen <vincentc@andestech.com>,
+        Alan Kao <alankao@andestech.com>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, me@carlosedp.com
+Subject: Re: [PATCH v2] riscv: add support for SECCOMP and SECCOMP_FILTER
+Message-ID: <20190826145756.GB4664@cisco>
+References: <20190822205533.4877-1-david.abdurachmanov@sifive.com>
+ <alpine.DEB.2.21.9999.1908231717550.25649@viisi.sifive.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <alpine.DEB.2.21.9999.1908231717550.25649@viisi.sifive.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The seccomp selftest goes to some length to build against older kernel
-headers, viz. all the #ifdefs at the beginning of the file. 201766a20e30
-("ptrace: add PTRACE_GET_SYSCALL_INFO request") introduces some additional
-macros, but doesn't do the #ifdef dance. Let's add that dance here to
-avoid:
+Hi,
 
-gcc -Wl,-no-as-needed -Wall  seccomp_bpf.c -lpthread -o seccomp_bpf
-In file included from seccomp_bpf.c:51:
-seccomp_bpf.c: In function ‘tracer_ptrace’:
-seccomp_bpf.c:1787:20: error: ‘PTRACE_EVENTMSG_SYSCALL_ENTRY’ undeclared (first use in this function); did you mean ‘PTRACE_EVENT_CLONE’?
-  EXPECT_EQ(entry ? PTRACE_EVENTMSG_SYSCALL_ENTRY
-                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-../kselftest_harness.h:608:13: note: in definition of macro ‘__EXPECT’
-  __typeof__(_expected) __exp = (_expected); \
-             ^~~~~~~~~
-seccomp_bpf.c:1787:2: note: in expansion of macro ‘EXPECT_EQ’
-  EXPECT_EQ(entry ? PTRACE_EVENTMSG_SYSCALL_ENTRY
-  ^~~~~~~~~
-seccomp_bpf.c:1787:20: note: each undeclared identifier is reported only once for each function it appears in
-  EXPECT_EQ(entry ? PTRACE_EVENTMSG_SYSCALL_ENTRY
-                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-../kselftest_harness.h:608:13: note: in definition of macro ‘__EXPECT’
-  __typeof__(_expected) __exp = (_expected); \
-             ^~~~~~~~~
-seccomp_bpf.c:1787:2: note: in expansion of macro ‘EXPECT_EQ’
-  EXPECT_EQ(entry ? PTRACE_EVENTMSG_SYSCALL_ENTRY
-  ^~~~~~~~~
-seccomp_bpf.c:1788:6: error: ‘PTRACE_EVENTMSG_SYSCALL_EXIT’ undeclared (first use in this function); did you mean ‘PTRACE_EVENT_EXIT’?
-    : PTRACE_EVENTMSG_SYSCALL_EXIT, msg);
-      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-../kselftest_harness.h:608:13: note: in definition of macro ‘__EXPECT’
-  __typeof__(_expected) __exp = (_expected); \
-             ^~~~~~~~~
-seccomp_bpf.c:1787:2: note: in expansion of macro ‘EXPECT_EQ’
-  EXPECT_EQ(entry ? PTRACE_EVENTMSG_SYSCALL_ENTRY
-  ^~~~~~~~~
-make: *** [Makefile:12: seccomp_bpf] Error 1
+On Fri, Aug 23, 2019 at 05:30:53PM -0700, Paul Walmsley wrote:
+> On Thu, 22 Aug 2019, David Abdurachmanov wrote:
+> 
+> > There is one failing kernel selftest: global.user_notification_signal
+> 
+> Also - could you follow up with the author of this failing test to see if 
+> we can get some more clarity about what might be going wrong here?  It 
+> appears that the failing test was added in commit 6a21cc50f0c7f ("seccomp: 
+> add a return code to trap to userspace") by Tycho Andersen 
+> <tycho@tycho.ws>.
 
-Signed-off-by: Tycho Andersen <tycho@tycho.ws>
-Fixes: 201766a20e30 ("ptrace: add PTRACE_GET_SYSCALL_INFO request")
----
- tools/testing/selftests/seccomp/seccomp_bpf.c | 5 +++++
- 1 file changed, 5 insertions(+)
+Can you post an strace and a cat of /proc/$pid/stack for both tasks
+where it gets stuck? I don't have any riscv hardware, and it "works
+for me" on x86 and arm64 with 100 tries.
 
-diff --git a/tools/testing/selftests/seccomp/seccomp_bpf.c b/tools/testing/selftests/seccomp/seccomp_bpf.c
-index 6ef7f16c4cf5..7f8b5c8982e3 100644
---- a/tools/testing/selftests/seccomp/seccomp_bpf.c
-+++ b/tools/testing/selftests/seccomp/seccomp_bpf.c
-@@ -199,6 +199,11 @@ struct seccomp_notif_sizes {
- };
- #endif
- 
-+#ifndef PTRACE_EVENTMSG_SYSCALL_ENTRY
-+#define PTRACE_EVENTMSG_SYSCALL_ENTRY	1
-+#define PTRACE_EVENTMSG_SYSCALL_EXIT	2
-+#endif
-+
- #ifndef seccomp
- int seccomp(unsigned int op, unsigned int flags, void *args)
- {
--- 
-2.20.1
+Thanks,
 
+Tycho
