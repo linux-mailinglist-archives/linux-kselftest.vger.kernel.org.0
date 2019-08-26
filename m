@@ -2,136 +2,169 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 05D489D4DD
-	for <lists+linux-kselftest@lfdr.de>; Mon, 26 Aug 2019 19:24:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A4B9B9D9EC
+	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Aug 2019 01:32:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727815AbfHZRY2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 26 Aug 2019 13:24:28 -0400
-Received: from mail-pf1-f193.google.com ([209.85.210.193]:40837 "EHLO
-        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732246AbfHZRY1 (ORCPT
+        id S1726466AbfHZXcw (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 26 Aug 2019 19:32:52 -0400
+Received: from mail-pf1-f202.google.com ([209.85.210.202]:37320 "EHLO
+        mail-pf1-f202.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726555AbfHZXct (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 26 Aug 2019 13:24:27 -0400
-Received: by mail-pf1-f193.google.com with SMTP id w16so12214346pfn.7
-        for <linux-kselftest@vger.kernel.org>; Mon, 26 Aug 2019 10:24:27 -0700 (PDT)
+        Mon, 26 Aug 2019 19:32:49 -0400
+Received: by mail-pf1-f202.google.com with SMTP id w30so13269212pfj.4
+        for <linux-kselftest@vger.kernel.org>; Mon, 26 Aug 2019 16:32:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-transfer-encoding:content-language;
-        bh=rb7iuoQ+Gomsu2YAozXkWUQXactVdSD0FsFa8hD/asE=;
-        b=HBeA4vv1OE7pU+fZx/EbqN3SIPc9pJCssSACM6VAx0KIsNSmqCt9TNcKSo6ViYIta8
-         VnGF0hO9m6P/IFiHhsdNYqw+PIqEQWlLsr7vza+YyHFuS6wxvDtgwFRWaV3JvV8j3y0X
-         ZamFoBKQfRUeDH2RTk0zPBc0yXtO9k7lpVEW4=
+        d=google.com; s=20161025;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=ElPLhkujITMw+6kOZxdN4egPf1l2LHGwTUiYDYEp8fM=;
+        b=CY1aI8s69o9YGJ6K0vFmmYLyZzVcf7onXN3mweVqR4ZVSJ+5HLlMO+q+W9vvWtb6vR
+         z2AkrdPcZcVdVlYEGdkDSHBbkFBq51Ovx3UJg1LQ4+Ycem0XA2703fLioTfaokEhnbA8
+         syXgP8odCYCcmUvJVe8bSrlTzfih3jZ+pCyEfFf7ALVFgfr+A50/JcYr33g1gZ3yJUT5
+         pRNe4gRSKcKE0AUplOuw3dNWsmY4BpIby3TVjfxq9tasyxAMh4DsD8kRtius50dvXEUd
+         WiEEXxDZY+WKTX2pe0nvVtRh9/M/BgviA6AIcxL76YM9EiRGO7Bg+4aetvVdl6UVPQmN
+         oNUw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=rb7iuoQ+Gomsu2YAozXkWUQXactVdSD0FsFa8hD/asE=;
-        b=ONvACHg+wk3AE31X7gX4KTLxqVmbJ3Ks1PwgWItH3sHM5KAan7Bv9pszEj8NevzL98
-         mWUQsBQRN0txrkkYCzWByukYoKtSu2n/kkJyjFsT9nVMoL8X58v2xEznT2iSZvgvvnPc
-         DNyLs+uyvmcUlrS/8ImzcdCFYp9fRbZofAVV3qJBQ3YdysWqqnw+6jykjHZ8pMdJCUao
-         fIWg0ZBEWFSjJZPHEc1Vq7tTEGlOZuDzeSQSVWRIEaCvMF7vqRvGqKaleEhHz+io1zKL
-         0Ab2QLG8lhYpR6ZUFy6ynJPxRQRwypSx9h23K7HX0rZppGVPvMC7S6381vLBKesXbV1Z
-         A5Iw==
-X-Gm-Message-State: APjAAAWUFqiJC7CZHGZy0HP0++i3zknPHE1OLcn+un9nSs+u/w0R3h/o
-        q0WLfxB/RqlrhhYs9XbC+2H+nn6R3gI+Z9dTCIdCreVJ32kZavdbegTR6PYSOU/qX+WbpiQ/lTz
-        ujB/eAilMAaJ815zk7++S/Tx8J35Sd1kQH4mJNR5u9Ob9httCOVrvNF7XZaWEi7J0y8bAExrm8W
-        1wDg0mZ8SmKbzk
-X-Google-Smtp-Source: APXvYqy2UucAHzKtHomdYNdhdeh/53QLrBQTZBYCiOe75MQZJzjbcSg4NTGKaSXApN0+GGxaWaPfYA==
-X-Received: by 2002:a63:f758:: with SMTP id f24mr17277542pgk.319.1566840265911;
-        Mon, 26 Aug 2019 10:24:25 -0700 (PDT)
-Received: from [10.136.13.65] ([192.19.228.250])
-        by smtp.gmail.com with ESMTPSA id c22sm11740149pfi.82.2019.08.26.10.24.23
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 26 Aug 2019 10:24:24 -0700 (PDT)
-Subject: Re: [PATCH 2/7] firmware: add offset to request_firmware_into_buf
-To:     Takashi Iwai <tiwai@suse.de>
-Cc:     Luis Chamberlain <mcgrof@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        David Brown <david.brown@linaro.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Shuah Khan <shuah@kernel.org>, bjorn.andersson@linaro.org,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org,
-        BCM Kernel Feedback <bcm-kernel-feedback-list@broadcom.com>,
-        Olof Johansson <olof@lixom.net>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Colin Ian King <colin.king@canonical.com>,
-        Kees Cook <keescook@chromium.org>,
-        linux-kselftest@vger.kernel.org
-References: <20190822192451.5983-1-scott.branden@broadcom.com>
- <20190822192451.5983-3-scott.branden@broadcom.com>
- <s5hef1crybq.wl-tiwai@suse.de>
- <10461fcf-9eca-32b6-0f9d-23c63b3f3442@broadcom.com>
- <s5hr258j6ln.wl-tiwai@suse.de>
- <93b8285a-e5eb-d4a4-545d-426bbbeb8008@broadcom.com>
- <s5ho90byhnv.wl-tiwai@suse.de>
-From:   Scott Branden <scott.branden@broadcom.com>
-Message-ID: <b440f372-45be-c06c-94a1-44ae6b1e7eb8@broadcom.com>
-Date:   Mon, 26 Aug 2019 10:24:22 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
-MIME-Version: 1.0
-In-Reply-To: <s5ho90byhnv.wl-tiwai@suse.de>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=ElPLhkujITMw+6kOZxdN4egPf1l2LHGwTUiYDYEp8fM=;
+        b=c7+mBUV/UVne6wE7iPt8bGrSUNum9CX/JAXoY92dCh1aPg+7kWYEMNu7gsAnNe5WeB
+         lVlzVj756ly3VOjmpxB9TL6d7uCWyiOR2qCgKC2McBURHjZ+S2I+/brtnaU1RnVhhDMH
+         1E0ckrPO70el3er3LYvBnboybvTrpwgJ303nSMo2fMw6DcEVuTuK4oBqnJux9mG0gwqU
+         PWJgUK3dg+kvF9CgYBLYfjawMKEz7JB7eL8QeO9Cb0Y6jnAbLaJlzVN2JbL0CZdvcuxC
+         sZST+1WOxAcS7TdbGmRGz5t2MMTKXvvLYZd1i9NT+cc97slZsHKR3JOXCdimcy1ehjA/
+         jRtw==
+X-Gm-Message-State: APjAAAU/TDuI5hS+3SJonI/9W/cg8tAcJ4i1nIQFE8BEz7XqPOG8LmJW
+        fyxWnrP7eS6VFehBy2fiZbUYm31PkSwM64sqEw==
+X-Google-Smtp-Source: APXvYqy4f+EGhY8DA4EciaGoRIk8Vvo11a6sPW9cP6RYxJwTxvvZimzDTPUT71oa4DyVBmPcrm+fw+qhfDPlEnv/bQ==
+X-Received: by 2002:a63:c013:: with SMTP id h19mr18714986pgg.108.1566862367741;
+ Mon, 26 Aug 2019 16:32:47 -0700 (PDT)
+Date:   Mon, 26 Aug 2019 16:32:34 -0700
+Message-Id: <20190826233240.11524-1-almasrymina@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.23.0.187.g17f5b7556c-goog
+Subject: [PATCH v3 0/6] hugetlb_cgroup: Add hugetlb_cgroup reservation limits
+From:   Mina Almasry <almasrymina@google.com>
+To:     mike.kravetz@oracle.com
+Cc:     shuah@kernel.org, almasrymina@google.com, rientjes@google.com,
+        shakeelb@google.com, gthelen@google.com, akpm@linux-foundation.org,
+        khalid.aziz@oracle.com, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        cgroups@vger.kernel.org, aneesh.kumar@linux.vnet.ibm.com,
+        mkoutny@suse.com
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Takashi,
+Problem:
+Currently tasks attempting to allocate more hugetlb memory than is available get
+a failure at mmap/shmget time. This is thanks to Hugetlbfs Reservations [1].
+However, if a task attempts to allocate hugetlb memory only more than its
+hugetlb_cgroup limit allows, the kernel will allow the mmap/shmget call,
+but will SIGBUS the task when it attempts to fault the memory in.
 
-On 2019-08-26 10:12 a.m., Takashi Iwai wrote:
-> On Mon, 26 Aug 2019 17:41:40 +0200,
-> Scott Branden wrote:
->> HI Takashi,
->>
->> On 2019-08-26 8:20 a.m., Takashi Iwai wrote:
->>> On Fri, 23 Aug 2019 21:44:42 +0200,
->>> Scott Branden wrote:
->>>> Hi Takashi,
->>>>
->>>> Thanks for review.  comments below.
->>>>
->>>> On 2019-08-23 3:05 a.m., Takashi Iwai wrote:
->>>>> On Thu, 22 Aug 2019 21:24:46 +0200,
->>>>> Scott Branden wrote:
->>>>>> Add offset to request_firmware_into_buf to allow for portions
->>>>>> of firmware file to be read into a buffer.  Necessary where firmware
->>>>>> needs to be loaded in portions from file in memory constrained systems.
->>>>> AFAIU, this won't work with the fallback user helper, right?
->>>> Seems to work fine in the fw_run_tests.sh with fallbacks.
->>> But how?  You patch doesn't change anything about the fallback loading
->>> mechanism.
->> Correct - I didn't change any of the underlying mechanisms,
->> so however request_firmware_into_buf worked before it still does.
->>>    Or, if the expected behavior is to load the whole content
->>> and then copy a part, what's the merit of this API?
->> The merit of the API is that the entire file is not copied into a buffer.
->> In my use case, the buffer is a memory region in PCIe space that isn't
->> even large enough for the whole file.  So the only way to get the file
->> is to read it
->> in portions.
-> BTW: does the use case above mean that the firmware API directly
-> writes onto the given PCI iomem region?  If so, I'm not sure whether
-> it would work as expected on all architectures.  There must be a
-> reason of the presence of iomem-related API like memcpy_toio()...
-Yes, we access the PCI region directly in the driver and thus also 
-through request_firmware_into_buf.
-I will admit I am not familiar with every subtlety of PCI accesses. Any 
-comments to the Valkyrie driver in this patch series are appreciated.
-But not all drivers need to work on all architectures. I can add a 
-depends on x86 64bit architectures to the driver to limit it to such.
->
->
-> thanks,
->
-> Takashi
+We have developers interested in using hugetlb_cgroups, and they have expressed
+dissatisfaction regarding this behavior. We'd like to improve this
+behavior such that tasks violating the hugetlb_cgroup limits get an error on
+mmap/shmget time, rather than getting SIGBUS'd when they try to fault
+the excess memory in.
 
+The underlying problem is that today's hugetlb_cgroup accounting happens
+at hugetlb memory *fault* time, rather than at *reservation* time.
+Thus, enforcing the hugetlb_cgroup limit only happens at fault time, and
+the offending task gets SIGBUS'd.
+
+Proposed Solution:
+A new page counter named hugetlb.xMB.reservation_[limit|usage]_in_bytes. This
+counter has slightly different semantics than
+hugetlb.xMB.[limit|usage]_in_bytes:
+
+- While usage_in_bytes tracks all *faulted* hugetlb memory,
+reservation_usage_in_bytes tracks all *reserved* hugetlb memory.
+
+- If a task attempts to reserve more memory than limit_in_bytes allows,
+the kernel will allow it to do so. But if a task attempts to reserve
+more memory than reservation_limit_in_bytes, the kernel will fail this
+reservation.
+
+This proposal is implemented in this patch, with tests to verify
+functionality and show the usage.
+
+Alternatives considered:
+1. A new cgroup, instead of only a new page_counter attached to
+   the existing hugetlb_cgroup. Adding a new cgroup seemed like a lot of code
+   duplication with hugetlb_cgroup. Keeping hugetlb related page counters under
+   hugetlb_cgroup seemed cleaner as well.
+
+2. Instead of adding a new counter, we considered adding a sysctl that modifies
+   the behavior of hugetlb.xMB.[limit|usage]_in_bytes, to do accounting at
+   reservation time rather than fault time. Adding a new page_counter seems
+   better as userspace could, if it wants, choose to enforce different cgroups
+   differently: one via limit_in_bytes, and another via
+   reservation_limit_in_bytes. This could be very useful if you're
+   transitioning how hugetlb memory is partitioned on your system one
+   cgroup at a time, for example. Also, someone may find usage for both
+   limit_in_bytes and reservation_limit_in_bytes concurrently, and this
+   approach gives them the option to do so.
+
+Caveats:
+1. This support is implemented for cgroups-v1. I have not tried
+   hugetlb_cgroups with cgroups v2, and AFAICT it's not supported yet.
+   This is largely because we use cgroups-v1 for now. If required, I
+   can add hugetlb_cgroup support to cgroups v2 in this patch or
+   a follow up.
+2. Most complicated bit of this patch I believe is: where to store the
+   pointer to the hugetlb_cgroup to uncharge at unreservation time?
+   Normally the cgroup pointers hang off the struct page. But, with
+   hugetlb_cgroup reservations, one task can reserve a specific page and another
+   task may fault it in (I believe), so storing the pointer in struct
+   page is not appropriate. Proposed approach here is to store the pointer in
+   the resv_map. See patch for details.
+
+Signed-off-by: Mina Almasry <almasrymina@google.com>
+
+[1]: https://www.kernel.org/doc/html/latest/vm/hugetlbfs_reserv.html
+
+Changes in v3:
+- Addressed comments of Hillf Danton:
+  - Added docs.
+  - cgroup_files now uses enum.
+  - Various readability improvements.
+- Addressed comments of Mike Kravetz.
+  - region_* functions no longer coalesce file_region entries in the resv_map.
+  - region_add() and region_chg() refactored to make them much easier to
+    understand and remove duplicated code so this patch doesn't add too much
+    complexity.
+  - Refactored common functionality into helpers.
+
+Changes in v2:
+- Split the patch into a 5 patch series.
+- Fixed patch subject.
+
+Mina Almasry (6):
+  hugetlb_cgroup: Add hugetlb_cgroup reservation counter
+  hugetlb_cgroup: add interface for charge/uncharge hugetlb reservations
+  hugetlb_cgroup: add reservation accounting for private mappings
+  hugetlb_cgroup: add accounting for shared mappings
+  hugetlb_cgroup: Add hugetlb_cgroup reservation tests
+  hugetlb_cgroup: Add hugetlb_cgroup reservation docs
+
+ .../admin-guide/cgroup-v1/hugetlb.rst         |  84 ++-
+ include/linux/hugetlb.h                       |  24 +-
+ include/linux/hugetlb_cgroup.h                |  19 +-
+ mm/hugetlb.c                                  | 493 ++++++++++++------
+ mm/hugetlb_cgroup.c                           | 187 +++++--
+ tools/testing/selftests/vm/.gitignore         |   1 +
+ tools/testing/selftests/vm/Makefile           |   4 +
+ .../selftests/vm/charge_reserved_hugetlb.sh   | 438 ++++++++++++++++
+ .../selftests/vm/write_hugetlb_memory.sh      |  22 +
+ .../testing/selftests/vm/write_to_hugetlbfs.c | 252 +++++++++
+ 10 files changed, 1300 insertions(+), 224 deletions(-)
+ create mode 100755 tools/testing/selftests/vm/charge_reserved_hugetlb.sh
+ create mode 100644 tools/testing/selftests/vm/write_hugetlb_memory.sh
+ create mode 100644 tools/testing/selftests/vm/write_to_hugetlbfs.c
+
+--
+2.23.0.187.g17f5b7556c-goog
