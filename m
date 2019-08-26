@@ -2,48 +2,52 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A4B9B9D9EC
-	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Aug 2019 01:32:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 295599D9ED
+	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Aug 2019 01:33:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726466AbfHZXcw (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 26 Aug 2019 19:32:52 -0400
-Received: from mail-pf1-f202.google.com ([209.85.210.202]:37320 "EHLO
-        mail-pf1-f202.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726555AbfHZXct (ORCPT
+        id S1726678AbfHZXdF (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 26 Aug 2019 19:33:05 -0400
+Received: from mail-qt1-f202.google.com ([209.85.160.202]:41550 "EHLO
+        mail-qt1-f202.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726555AbfHZXdF (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 26 Aug 2019 19:32:49 -0400
-Received: by mail-pf1-f202.google.com with SMTP id w30so13269212pfj.4
-        for <linux-kselftest@vger.kernel.org>; Mon, 26 Aug 2019 16:32:48 -0700 (PDT)
+        Mon, 26 Aug 2019 19:33:05 -0400
+Received: by mail-qt1-f202.google.com with SMTP id c22so19093702qta.8
+        for <linux-kselftest@vger.kernel.org>; Mon, 26 Aug 2019 16:33:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=ElPLhkujITMw+6kOZxdN4egPf1l2LHGwTUiYDYEp8fM=;
-        b=CY1aI8s69o9YGJ6K0vFmmYLyZzVcf7onXN3mweVqR4ZVSJ+5HLlMO+q+W9vvWtb6vR
-         z2AkrdPcZcVdVlYEGdkDSHBbkFBq51Ovx3UJg1LQ4+Ycem0XA2703fLioTfaokEhnbA8
-         syXgP8odCYCcmUvJVe8bSrlTzfih3jZ+pCyEfFf7ALVFgfr+A50/JcYr33g1gZ3yJUT5
-         pRNe4gRSKcKE0AUplOuw3dNWsmY4BpIby3TVjfxq9tasyxAMh4DsD8kRtius50dvXEUd
-         WiEEXxDZY+WKTX2pe0nvVtRh9/M/BgviA6AIcxL76YM9EiRGO7Bg+4aetvVdl6UVPQmN
-         oNUw==
+        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+         :cc;
+        bh=pMSrPLzVDw1XICtNdfHCjhSkFMAozhktzn43CPlv63A=;
+        b=otOw5OA1sX/jNb1jYDH6S9zrRuVcgN6R4YNdN/7HVF8iibqC6QR8TpEPe54ArOpR6J
+         KvsJeEV5Gukpx27uQF9n+RiBL8SjTsZ6g2joWMxG7zuJXTA+CpeWxpvXSN95QW/rdQ/k
+         zuLX0gtJY3E5H4TuhVrjkrNj7a525Ud0a93g7wqhcZ2EBKqvN09p1mBaRdCFAOnkeXAg
+         bA7MOgCgrpt139u20WOfpGJQV6reDC7nqBEqXDcKuRE5/hzI9ocj4hM4cCtlRlMG2+HR
+         349Ip/uiwHH5QjSBEq33BSUUgxUMtZTTOUC+24i5B60ru66Z22hX934+XyndMeR5JiPo
+         IGLw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=ElPLhkujITMw+6kOZxdN4egPf1l2LHGwTUiYDYEp8fM=;
-        b=c7+mBUV/UVne6wE7iPt8bGrSUNum9CX/JAXoY92dCh1aPg+7kWYEMNu7gsAnNe5WeB
-         lVlzVj756ly3VOjmpxB9TL6d7uCWyiOR2qCgKC2McBURHjZ+S2I+/brtnaU1RnVhhDMH
-         1E0ckrPO70el3er3LYvBnboybvTrpwgJ303nSMo2fMw6DcEVuTuK4oBqnJux9mG0gwqU
-         PWJgUK3dg+kvF9CgYBLYfjawMKEz7JB7eL8QeO9Cb0Y6jnAbLaJlzVN2JbL0CZdvcuxC
-         sZST+1WOxAcS7TdbGmRGz5t2MMTKXvvLYZd1i9NT+cc97slZsHKR3JOXCdimcy1ehjA/
-         jRtw==
-X-Gm-Message-State: APjAAAU/TDuI5hS+3SJonI/9W/cg8tAcJ4i1nIQFE8BEz7XqPOG8LmJW
-        fyxWnrP7eS6VFehBy2fiZbUYm31PkSwM64sqEw==
-X-Google-Smtp-Source: APXvYqy4f+EGhY8DA4EciaGoRIk8Vvo11a6sPW9cP6RYxJwTxvvZimzDTPUT71oa4DyVBmPcrm+fw+qhfDPlEnv/bQ==
-X-Received: by 2002:a63:c013:: with SMTP id h19mr18714986pgg.108.1566862367741;
- Mon, 26 Aug 2019 16:32:47 -0700 (PDT)
-Date:   Mon, 26 Aug 2019 16:32:34 -0700
-Message-Id: <20190826233240.11524-1-almasrymina@google.com>
+        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
+         :references:subject:from:to:cc;
+        bh=pMSrPLzVDw1XICtNdfHCjhSkFMAozhktzn43CPlv63A=;
+        b=AMMiaKBgNcoAIFj+0O8qOA65FEhi4S+FE/loyjGgLktH9g5ME9X01jMPYn0MGsKFkG
+         jfoDG1HuGSp4XDPxC6Mwe+ubR4tzu8jcK/ZXokBFC1SwQgjXkslyZkPbJb/vg9/xQsXH
+         ly16x60nw5QCcR68owiu79U7izIY+FzL52egQY9xgXBvpNNBHZg0lSbxvnIhecFtUvqI
+         nzJYtoDdMHhhJNkhUP76R9dqpKPUSYcJdrTZfoCQ44zhnwh5T8W7+f/6X0HcfiwrfaZR
+         b3qTFs1TOT5Fj8aRxybEGedSybjmXFa479j1av4OqDHc2h5n4uyY3OXJGR5Y5gSgJIam
+         ZOtA==
+X-Gm-Message-State: APjAAAURealuPytV6hIFitpT/xeHeJbFpjANruhlsy4msWHrwYmANMOF
+        STxm9T383ecX3BlufIn8JQGxnvXA4KJAmdfuIw==
+X-Google-Smtp-Source: APXvYqzZthcJtvCShn4pCfZlvUZzveyAV/4uxV06OHB7vYkHwJw6IYyKKMLPes4tQXRBT0ofpPTGKZCMnsPOfNcBJw==
+X-Received: by 2002:a0c:db12:: with SMTP id d18mr17990534qvk.199.1566862383641;
+ Mon, 26 Aug 2019 16:33:03 -0700 (PDT)
+Date:   Mon, 26 Aug 2019 16:32:35 -0700
+In-Reply-To: <20190826233240.11524-1-almasrymina@google.com>
+Message-Id: <20190826233240.11524-2-almasrymina@google.com>
 Mime-Version: 1.0
+References: <20190826233240.11524-1-almasrymina@google.com>
 X-Mailer: git-send-email 2.23.0.187.g17f5b7556c-goog
-Subject: [PATCH v3 0/6] hugetlb_cgroup: Add hugetlb_cgroup reservation limits
+Subject: [PATCH v3 1/6] hugetlb_cgroup: Add hugetlb_cgroup reservation counter
 From:   Mina Almasry <almasrymina@google.com>
 To:     mike.kravetz@oracle.com
 Cc:     shuah@kernel.org, almasrymina@google.com, rientjes@google.com,
@@ -58,113 +62,256 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Problem:
-Currently tasks attempting to allocate more hugetlb memory than is available get
-a failure at mmap/shmget time. This is thanks to Hugetlbfs Reservations [1].
-However, if a task attempts to allocate hugetlb memory only more than its
-hugetlb_cgroup limit allows, the kernel will allow the mmap/shmget call,
-but will SIGBUS the task when it attempts to fault the memory in.
+These counters will track hugetlb reservations rather than hugetlb
+memory faulted in. This patch only adds the counter, following patches
+add the charging and uncharging of the counter.
 
-We have developers interested in using hugetlb_cgroups, and they have expressed
-dissatisfaction regarding this behavior. We'd like to improve this
-behavior such that tasks violating the hugetlb_cgroup limits get an error on
-mmap/shmget time, rather than getting SIGBUS'd when they try to fault
-the excess memory in.
+---
+ include/linux/hugetlb.h |  16 +++++-
+ mm/hugetlb_cgroup.c     | 111 ++++++++++++++++++++++++++++++----------
+ 2 files changed, 100 insertions(+), 27 deletions(-)
 
-The underlying problem is that today's hugetlb_cgroup accounting happens
-at hugetlb memory *fault* time, rather than at *reservation* time.
-Thus, enforcing the hugetlb_cgroup limit only happens at fault time, and
-the offending task gets SIGBUS'd.
+diff --git a/include/linux/hugetlb.h b/include/linux/hugetlb.h
+index edfca42783192..128ff1aff1c93 100644
+--- a/include/linux/hugetlb.h
++++ b/include/linux/hugetlb.h
+@@ -320,6 +320,20 @@ unsigned long hugetlb_get_unmapped_area(struct file *file, unsigned long addr,
 
-Proposed Solution:
-A new page counter named hugetlb.xMB.reservation_[limit|usage]_in_bytes. This
-counter has slightly different semantics than
-hugetlb.xMB.[limit|usage]_in_bytes:
+ #ifdef CONFIG_HUGETLB_PAGE
 
-- While usage_in_bytes tracks all *faulted* hugetlb memory,
-reservation_usage_in_bytes tracks all *reserved* hugetlb memory.
++enum {
++	HUGETLB_RES_USAGE,
++	HUGETLB_RES_RESERVATION_USAGE,
++	HUGETLB_RES_LIMIT,
++	HUGETLB_RES_RESERVATION_LIMIT,
++	HUGETLB_RES_MAX_USAGE,
++	HUGETLB_RES_RESERVATION_MAX_USAGE,
++	HUGETLB_RES_FAILCNT,
++	HUGETLB_RES_RESERVATION_FAILCNT,
++	HUGETLB_RES_NULL,
++	HUGETLB_RES_MAX,
++};
++
++
+ #define HSTATE_NAME_LEN 32
+ /* Defines one hugetlb page size */
+ struct hstate {
+@@ -340,7 +354,7 @@ struct hstate {
+ 	unsigned int surplus_huge_pages_node[MAX_NUMNODES];
+ #ifdef CONFIG_CGROUP_HUGETLB
+ 	/* cgroup control files */
+-	struct cftype cgroup_files[5];
++	struct cftype cgroup_files[HUGETLB_RES_MAX];
+ #endif
+ 	char name[HSTATE_NAME_LEN];
+ };
+diff --git a/mm/hugetlb_cgroup.c b/mm/hugetlb_cgroup.c
+index 68c2f2f3c05b7..51a72624bd1ff 100644
+--- a/mm/hugetlb_cgroup.c
++++ b/mm/hugetlb_cgroup.c
+@@ -25,6 +25,10 @@ struct hugetlb_cgroup {
+ 	 * the counter to account for hugepages from hugetlb.
+ 	 */
+ 	struct page_counter hugepage[HUGE_MAX_HSTATE];
++	/*
++	 * the counter to account for hugepage reservations from hugetlb.
++	 */
++	struct page_counter reserved_hugepage[HUGE_MAX_HSTATE];
+ };
 
-- If a task attempts to reserve more memory than limit_in_bytes allows,
-the kernel will allow it to do so. But if a task attempts to reserve
-more memory than reservation_limit_in_bytes, the kernel will fail this
-reservation.
+ #define MEMFILE_PRIVATE(x, val)	(((x) << 16) | (val))
+@@ -33,6 +37,15 @@ struct hugetlb_cgroup {
 
-This proposal is implemented in this patch, with tests to verify
-functionality and show the usage.
+ static struct hugetlb_cgroup *root_h_cgroup __read_mostly;
 
-Alternatives considered:
-1. A new cgroup, instead of only a new page_counter attached to
-   the existing hugetlb_cgroup. Adding a new cgroup seemed like a lot of code
-   duplication with hugetlb_cgroup. Keeping hugetlb related page counters under
-   hugetlb_cgroup seemed cleaner as well.
++static inline
++struct page_counter *hugetlb_cgroup_get_counter(struct hugetlb_cgroup *h_cg, int idx,
++				 bool reserved)
++{
++	if (reserved)
++		return  &h_cg->reserved_hugepage[idx];
++	return &h_cg->hugepage[idx];
++}
++
+ static inline
+ struct hugetlb_cgroup *hugetlb_cgroup_from_css(struct cgroup_subsys_state *s)
+ {
+@@ -254,30 +267,33 @@ void hugetlb_cgroup_uncharge_cgroup(int idx, unsigned long nr_pages,
+ 	return;
+ }
 
-2. Instead of adding a new counter, we considered adding a sysctl that modifies
-   the behavior of hugetlb.xMB.[limit|usage]_in_bytes, to do accounting at
-   reservation time rather than fault time. Adding a new page_counter seems
-   better as userspace could, if it wants, choose to enforce different cgroups
-   differently: one via limit_in_bytes, and another via
-   reservation_limit_in_bytes. This could be very useful if you're
-   transitioning how hugetlb memory is partitioned on your system one
-   cgroup at a time, for example. Also, someone may find usage for both
-   limit_in_bytes and reservation_limit_in_bytes concurrently, and this
-   approach gives them the option to do so.
+-enum {
+-	RES_USAGE,
+-	RES_LIMIT,
+-	RES_MAX_USAGE,
+-	RES_FAILCNT,
+-};
+-
+ static u64 hugetlb_cgroup_read_u64(struct cgroup_subsys_state *css,
+ 				   struct cftype *cft)
+ {
+ 	struct page_counter *counter;
++	struct page_counter *reserved_counter;
+ 	struct hugetlb_cgroup *h_cg = hugetlb_cgroup_from_css(css);
 
-Caveats:
-1. This support is implemented for cgroups-v1. I have not tried
-   hugetlb_cgroups with cgroups v2, and AFAICT it's not supported yet.
-   This is largely because we use cgroups-v1 for now. If required, I
-   can add hugetlb_cgroup support to cgroups v2 in this patch or
-   a follow up.
-2. Most complicated bit of this patch I believe is: where to store the
-   pointer to the hugetlb_cgroup to uncharge at unreservation time?
-   Normally the cgroup pointers hang off the struct page. But, with
-   hugetlb_cgroup reservations, one task can reserve a specific page and another
-   task may fault it in (I believe), so storing the pointer in struct
-   page is not appropriate. Proposed approach here is to store the pointer in
-   the resv_map. See patch for details.
+ 	counter = &h_cg->hugepage[MEMFILE_IDX(cft->private)];
++	reserved_counter = &h_cg->reserved_hugepage[MEMFILE_IDX(cft->private)];
 
-Signed-off-by: Mina Almasry <almasrymina@google.com>
+ 	switch (MEMFILE_ATTR(cft->private)) {
+-	case RES_USAGE:
++	case HUGETLB_RES_USAGE:
+ 		return (u64)page_counter_read(counter) * PAGE_SIZE;
+-	case RES_LIMIT:
++	case HUGETLB_RES_RESERVATION_USAGE:
++		return (u64)page_counter_read(reserved_counter) * PAGE_SIZE;
++	case HUGETLB_RES_LIMIT:
+ 		return (u64)counter->max * PAGE_SIZE;
+-	case RES_MAX_USAGE:
++	case HUGETLB_RES_RESERVATION_LIMIT:
++		return (u64)reserved_counter->max * PAGE_SIZE;
++	case HUGETLB_RES_MAX_USAGE:
+ 		return (u64)counter->watermark * PAGE_SIZE;
+-	case RES_FAILCNT:
++	case HUGETLB_RES_RESERVATION_MAX_USAGE:
++		return (u64)reserved_counter->watermark * PAGE_SIZE;
++	case HUGETLB_RES_FAILCNT:
+ 		return counter->failcnt;
++	case HUGETLB_RES_RESERVATION_FAILCNT:
++		return reserved_counter->failcnt;
+ 	default:
+ 		BUG();
+ 	}
+@@ -291,6 +307,7 @@ static ssize_t hugetlb_cgroup_write(struct kernfs_open_file *of,
+ 	int ret, idx;
+ 	unsigned long nr_pages;
+ 	struct hugetlb_cgroup *h_cg = hugetlb_cgroup_from_css(of_css(of));
++	bool reserved = false;
 
-[1]: https://www.kernel.org/doc/html/latest/vm/hugetlbfs_reserv.html
+ 	if (hugetlb_cgroup_is_root(h_cg)) /* Can't set limit on root */
+ 		return -EINVAL;
+@@ -304,9 +321,13 @@ static ssize_t hugetlb_cgroup_write(struct kernfs_open_file *of,
+ 	nr_pages = round_down(nr_pages, 1 << huge_page_order(&hstates[idx]));
 
-Changes in v3:
-- Addressed comments of Hillf Danton:
-  - Added docs.
-  - cgroup_files now uses enum.
-  - Various readability improvements.
-- Addressed comments of Mike Kravetz.
-  - region_* functions no longer coalesce file_region entries in the resv_map.
-  - region_add() and region_chg() refactored to make them much easier to
-    understand and remove duplicated code so this patch doesn't add too much
-    complexity.
-  - Refactored common functionality into helpers.
+ 	switch (MEMFILE_ATTR(of_cft(of)->private)) {
+-	case RES_LIMIT:
++	case HUGETLB_RES_RESERVATION_LIMIT:
++		reserved = true;
++		/* Fall through. */
++	case HUGETLB_RES_LIMIT:
+ 		mutex_lock(&hugetlb_limit_mutex);
+-		ret = page_counter_set_max(&h_cg->hugepage[idx], nr_pages);
++		ret = page_counter_set_max(hugetlb_cgroup_get_counter(h_cg, idx, reserved),
++					   nr_pages);
+ 		mutex_unlock(&hugetlb_limit_mutex);
+ 		break;
+ 	default:
+@@ -320,18 +341,26 @@ static ssize_t hugetlb_cgroup_reset(struct kernfs_open_file *of,
+ 				    char *buf, size_t nbytes, loff_t off)
+ {
+ 	int ret = 0;
+-	struct page_counter *counter;
++	struct page_counter *counter, *reserved_counter;
+ 	struct hugetlb_cgroup *h_cg = hugetlb_cgroup_from_css(of_css(of));
 
-Changes in v2:
-- Split the patch into a 5 patch series.
-- Fixed patch subject.
+ 	counter = &h_cg->hugepage[MEMFILE_IDX(of_cft(of)->private)];
++	reserved_counter = &h_cg->reserved_hugepage[
++		MEMFILE_IDX(of_cft(of)->private)];
 
-Mina Almasry (6):
-  hugetlb_cgroup: Add hugetlb_cgroup reservation counter
-  hugetlb_cgroup: add interface for charge/uncharge hugetlb reservations
-  hugetlb_cgroup: add reservation accounting for private mappings
-  hugetlb_cgroup: add accounting for shared mappings
-  hugetlb_cgroup: Add hugetlb_cgroup reservation tests
-  hugetlb_cgroup: Add hugetlb_cgroup reservation docs
+ 	switch (MEMFILE_ATTR(of_cft(of)->private)) {
+-	case RES_MAX_USAGE:
++	case HUGETLB_RES_MAX_USAGE:
+ 		page_counter_reset_watermark(counter);
+ 		break;
+-	case RES_FAILCNT:
++	case HUGETLB_RES_RESERVATION_MAX_USAGE:
++		page_counter_reset_watermark(reserved_counter);
++		break;
++	case HUGETLB_RES_FAILCNT:
+ 		counter->failcnt = 0;
+ 		break;
++	case HUGETLB_RES_RESERVATION_FAILCNT:
++		reserved_counter->failcnt = 0;
++		break;
+ 	default:
+ 		ret = -EINVAL;
+ 		break;
+@@ -357,37 +386,67 @@ static void __init __hugetlb_cgroup_file_init(int idx)
+ 	struct hstate *h = &hstates[idx];
 
- .../admin-guide/cgroup-v1/hugetlb.rst         |  84 ++-
- include/linux/hugetlb.h                       |  24 +-
- include/linux/hugetlb_cgroup.h                |  19 +-
- mm/hugetlb.c                                  | 493 ++++++++++++------
- mm/hugetlb_cgroup.c                           | 187 +++++--
- tools/testing/selftests/vm/.gitignore         |   1 +
- tools/testing/selftests/vm/Makefile           |   4 +
- .../selftests/vm/charge_reserved_hugetlb.sh   | 438 ++++++++++++++++
- .../selftests/vm/write_hugetlb_memory.sh      |  22 +
- .../testing/selftests/vm/write_to_hugetlbfs.c | 252 +++++++++
- 10 files changed, 1300 insertions(+), 224 deletions(-)
- create mode 100755 tools/testing/selftests/vm/charge_reserved_hugetlb.sh
- create mode 100644 tools/testing/selftests/vm/write_hugetlb_memory.sh
- create mode 100644 tools/testing/selftests/vm/write_to_hugetlbfs.c
+ 	/* format the size */
+-	mem_fmt(buf, 32, huge_page_size(h));
++	mem_fmt(buf, sizeof(buf), huge_page_size(h));
 
+ 	/* Add the limit file */
+-	cft = &h->cgroup_files[0];
++	cft = &h->cgroup_files[HUGETLB_RES_LIMIT];
+ 	snprintf(cft->name, MAX_CFTYPE_NAME, "%s.limit_in_bytes", buf);
+-	cft->private = MEMFILE_PRIVATE(idx, RES_LIMIT);
++	cft->private = MEMFILE_PRIVATE(idx, HUGETLB_RES_LIMIT);
++	cft->read_u64 = hugetlb_cgroup_read_u64;
++	cft->write = hugetlb_cgroup_write;
++
++	/* Add the reservation limit file */
++	cft = &h->cgroup_files[HUGETLB_RES_RESERVATION_LIMIT];
++	snprintf(cft->name, MAX_CFTYPE_NAME, "%s.reservation_limit_in_bytes",
++		 buf);
++	cft->private = MEMFILE_PRIVATE(idx, HUGETLB_RES_RESERVATION_LIMIT);
+ 	cft->read_u64 = hugetlb_cgroup_read_u64;
+ 	cft->write = hugetlb_cgroup_write;
+
+ 	/* Add the usage file */
+-	cft = &h->cgroup_files[1];
++	cft = &h->cgroup_files[HUGETLB_RES_USAGE];
+ 	snprintf(cft->name, MAX_CFTYPE_NAME, "%s.usage_in_bytes", buf);
+-	cft->private = MEMFILE_PRIVATE(idx, RES_USAGE);
++	cft->private = MEMFILE_PRIVATE(idx, HUGETLB_RES_USAGE);
++	cft->read_u64 = hugetlb_cgroup_read_u64;
++
++	/* Add the reservation usage file */
++	cft = &h->cgroup_files[HUGETLB_RES_RESERVATION_USAGE];
++	snprintf(cft->name, MAX_CFTYPE_NAME, "%s.reservation_usage_in_bytes",
++			buf);
++	cft->private = MEMFILE_PRIVATE(idx, HUGETLB_RES_RESERVATION_USAGE);
+ 	cft->read_u64 = hugetlb_cgroup_read_u64;
+
+ 	/* Add the MAX usage file */
+-	cft = &h->cgroup_files[2];
++	cft = &h->cgroup_files[HUGETLB_RES_MAX_USAGE];
+ 	snprintf(cft->name, MAX_CFTYPE_NAME, "%s.max_usage_in_bytes", buf);
+-	cft->private = MEMFILE_PRIVATE(idx, RES_MAX_USAGE);
++	cft->private = MEMFILE_PRIVATE(idx, HUGETLB_RES_MAX_USAGE);
++	cft->write = hugetlb_cgroup_reset;
++	cft->read_u64 = hugetlb_cgroup_read_u64;
++
++	/* Add the MAX reservation usage file */
++	cft = &h->cgroup_files[HUGETLB_RES_RESERVATION_MAX_USAGE];
++	snprintf(cft->name, MAX_CFTYPE_NAME,
++			"%s.reservation_max_usage_in_bytes", buf);
++	cft->private = MEMFILE_PRIVATE(idx, HUGETLB_RES_RESERVATION_MAX_USAGE);
+ 	cft->write = hugetlb_cgroup_reset;
+ 	cft->read_u64 = hugetlb_cgroup_read_u64;
+
+ 	/* Add the failcntfile */
+-	cft = &h->cgroup_files[3];
++	cft = &h->cgroup_files[HUGETLB_RES_FAILCNT];
+ 	snprintf(cft->name, MAX_CFTYPE_NAME, "%s.failcnt", buf);
+-	cft->private  = MEMFILE_PRIVATE(idx, RES_FAILCNT);
++	cft->private  = MEMFILE_PRIVATE(idx, HUGETLB_RES_FAILCNT);
++	cft->write = hugetlb_cgroup_reset;
++	cft->read_u64 = hugetlb_cgroup_read_u64;
++
++	/* Add the reservation failcntfile */
++	cft = &h->cgroup_files[HUGETLB_RES_RESERVATION_FAILCNT];
++	snprintf(cft->name, MAX_CFTYPE_NAME, "%s.reservation_failcnt", buf);
++	cft->private  = MEMFILE_PRIVATE(idx, HUGETLB_RES_RESERVATION_FAILCNT);
+ 	cft->write = hugetlb_cgroup_reset;
+ 	cft->read_u64 = hugetlb_cgroup_read_u64;
+
+ 	/* NULL terminate the last cft */
+-	cft = &h->cgroup_files[4];
++	cft = &h->cgroup_files[HUGETLB_RES_NULL];
+ 	memset(cft, 0, sizeof(*cft));
+
+ 	WARN_ON(cgroup_add_legacy_cftypes(&hugetlb_cgrp_subsys,
 --
 2.23.0.187.g17f5b7556c-goog
