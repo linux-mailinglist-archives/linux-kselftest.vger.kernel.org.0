@@ -2,111 +2,829 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 603529DABA
-	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Aug 2019 02:38:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 66B329E520
+	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Aug 2019 12:01:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727205AbfH0AhM (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 26 Aug 2019 20:37:12 -0400
-Received: from mail-io1-f66.google.com ([209.85.166.66]:37827 "EHLO
-        mail-io1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726487AbfH0AhM (ORCPT
+        id S1728519AbfH0KAp (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 27 Aug 2019 06:00:45 -0400
+Received: from mail-wm1-f68.google.com ([209.85.128.68]:51036 "EHLO
+        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727633AbfH0KAo (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 26 Aug 2019 20:37:12 -0400
-Received: by mail-io1-f66.google.com with SMTP id q22so42075957iog.4
-        for <linux-kselftest@vger.kernel.org>; Mon, 26 Aug 2019 17:37:11 -0700 (PDT)
+        Tue, 27 Aug 2019 06:00:44 -0400
+Received: by mail-wm1-f68.google.com with SMTP id v15so2424186wml.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 27 Aug 2019 03:00:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=BzeVAWovI9wNatL9dmXA8c77UhbonukUh6rmg5r+32k=;
-        b=RFd2pTJzpbhIHF6iGKKLVB6oA47DzUgxrLAPE7IxEi6UB3IZzHyhvbYooAtYVjcJWW
-         4DjCKMeysWFIR+5+ixOtvr0LuvkmTvkQfQRH2mCLNjECnJxVKcUAXiVoZ+ZTljt9wt+Q
-         sDuBx6JUPqc8uKtyJhA0TdgvqrzmEPubyW8eA=
+        d=linaro.org; s=google;
+        h=from:date:to:message-id:subject:mime-version;
+        bh=3Vzr3AGl3O2RN9kOGFh44R0+IQGsI6hP11ooQ0k/wsw=;
+        b=TszWb7k/2NnMFx/b8zdBlnT5DkBfNjfF/ewwt3HHmaOz4BgkCJmb2sOym6i41r+Rzf
+         GTZi4M4QyVNW0cJm2NYR1Z1ZHQRfXqLdK2vo6QHeXgIiM+hP5NrIReXX9sIzrwntY8Nh
+         rMbQAotfSBXaRntyBdEyho9yujEW4eqhFdK3gIWfwVZut881Ja7EdfkGchEDsALs1zbK
+         6a+gT/2JXft2vsmchqP/HOKcXGAQPTaUX2ge9T9h7uZi9SpMfNFIKXcgphEu6PlmDH70
+         dqakD9rSy/dZu/mNe/OkoJBNMNmRvG+0DidmYl8GF4V/pAfal7eBs6dNeAy5tpk81xnU
+         x7rQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=BzeVAWovI9wNatL9dmXA8c77UhbonukUh6rmg5r+32k=;
-        b=ew0GMFjZgwvApJCkiUnoIa/re0dQQrv7opcG3x8LJK+W8jKgLMzFn8oQjyQZv8SQYB
-         23U+x/onCrgnzIfYhiOfONu9GnSM35mzhq7YasF2Q93CPbAnUcPgyQZGAmR7ngiVyB+K
-         ClzNci+dnce0eBHfSpAul7PrMhj4Jn79ez3VeTH7pBpQD8e5oTmmerEX/zQsxjolXBUf
-         rN1hBWKmDxnW3GKsDccg7AME9f5NGe6Crs3hAJTNwAIY5eeuDD/z1vvLr3jLJuFK5Y6U
-         nlwTJZ+nCkJxIsSv81TF7Zhqqv3DDlPZ1Z4fjrnQEzSkyMH7QMd6r8tJuIV4jyPquni3
-         Vaaw==
-X-Gm-Message-State: APjAAAWOdyrcKrObCxXj2mpq5+Pv+yoiSH9goS6WKVbgQNL0lvkK32BS
-        TGSXdX7Iot2AdgUd0Xa6MCrg4A==
-X-Google-Smtp-Source: APXvYqxc72IrPdBOQjJ7DSRNsqCKEkfC2oIBkrJ4CwrkYFZ/PDg3oRQ89onY+gSPvXLkKnSmphNiWw==
-X-Received: by 2002:a5d:9c12:: with SMTP id 18mr6327310ioe.48.1566866231264;
-        Mon, 26 Aug 2019 17:37:11 -0700 (PDT)
-Received: from shuah-t480s.internal (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id v23sm9995828ioh.58.2019.08.26.17.37.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Aug 2019 17:37:10 -0700 (PDT)
-From:   Shuah Khan <skhan@linuxfoundation.org>
-To:     shuah@kernel.org, corbet@lwn.net
-Cc:     Shuah Khan <skhan@linuxfoundation.org>,
-        linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dan.rue@linaro.org,
-        anders.roxell@linaro.org
-Subject: [PATCH v2] doc: kselftest: update for clarity on running kselftests in CI rings
-Date:   Mon, 26 Aug 2019 18:37:09 -0600
-Message-Id: <20190827003709.26950-1-skhan@linuxfoundation.org>
-X-Mailer: git-send-email 2.20.1
+        h=x-gm-message-state:from:date:to:message-id:subject:mime-version;
+        bh=3Vzr3AGl3O2RN9kOGFh44R0+IQGsI6hP11ooQ0k/wsw=;
+        b=paaBVipihZvIgvMepwNCyfdMQ5Su2+nbcOERd9PVfmcubVCWVbp5b+gefs962RclyO
+         DpY07WLUZ14A+Kv+0gjJxeZQRFAmCL7vuwl8zmc3wxU8LNKFzIc5XmaoMsh7r08SYDjD
+         Pcyuh5sLXYtmCnnmp1AcmN/3stZVJ9oPqeeeHKtchKdwNjE1W2GqUIuO23QyMrULdi4h
+         3BgA7o/S8gnMQISzsOMjITtg1ROJOi1apnwGxPKpVySVWJVIxX5lbcHtdDNx9vg9JM8Q
+         aIwHN1qAAAsaf6A0iKI7ksNL39iwXrjZSbbW3gIAHrwNeNdHcQktnOIQeYo2GsppLWcX
+         6PFg==
+X-Gm-Message-State: APjAAAWdq+adBZR7lRihKu6CPcM++zQzDZ1JjYEY4a91Qo6ViyOW7hvv
+        TOtN2Fs/rzuXCV++m1mnc3AgmNdTEnU=
+X-Google-Smtp-Source: APXvYqyMtZhqs4Rj6mI56TB4L+K+cWtKmhagyqT6WyeiJs58MrqaWgK+W2R19C8TdkCWUKKW0LGSbw==
+X-Received: by 2002:a1c:dd82:: with SMTP id u124mr27655254wmg.89.1566900039840;
+        Tue, 27 Aug 2019 03:00:39 -0700 (PDT)
+Received: from jenkins (ci.linaro.org. [88.99.136.175])
+        by smtp.gmail.com with ESMTPSA id f10sm12686384wrw.16.2019.08.27.03.00.38
+        (version=TLS1 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
+        Tue, 27 Aug 2019 03:00:38 -0700 (PDT)
+From:   ci_notify@linaro.org
+X-Google-Original-From: linaro-infrastructure-errors@lists.linaro.org
+Date:   Tue, 27 Aug 2019 10:00:38 +0000 (UTC)
+To:     lkft-triage@lists.linaro.org, dan.rue@linaro.org,
+        anders.roxell@linaro.org, naresh.kamboju@linaro.org,
+        linux-kselftest@vger.kernel.org
+Message-ID: <1768829320.2970.1566900038800.JavaMail.javamailuser@localhost>
+Subject: next-20190826 kselftest results
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/mixed; 
+        boundary="----=_Part_2969_981833266.1566900038348"
+X-Jenkins-Job: LKFT Notify kselftest on next
+X-Jenkins-Result: SUCCESS
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Update to add clarity and recommendations on running newer kselftests
-on older kernels vs. matching the kernel and kselftest revisions.
+------=_Part_2969_981833266.1566900038348
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-The recommendation is "Match kernel revision and kselftest."
+Summary
+------------------------------------------------------------------------
+kernel: 5.3.0-rc6
+git repo: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+git branch: master
+git commit: ed858b88e6cbcb2664667f571a3df7165d36b798
+git describe: next-20190826
+Test details: https://qa-reports.linaro.org/lkft/linux-next-oe/build/next-20190826
 
-Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
----
-Changes since v1: Fixed "WARNING: Title underline too short."
+Regressions (compared to build next-20190823)
+------------------------------------------------------------------------
+juno-r2 - arm64:                                                                                                      
+ kselftest:                                                                                         
+    * net_udpgso_bench.sh                                                                                                         
+x15 - arm:                                                                                                      
+ kselftest:                                                                                         
+    * bpf_test_sock_addr.sh                                                                                                         
+                                                                                         
+    * rtc_rtctest                                                                                                         
+                                                                                                          
+                                                                                                                       
+Fixes (compared to build next-20190823)                                                                   
+------------------------------------------------------------------------                                               
+i386:                                                                                                      
+ kselftest:                                                                                         
+    * net_fib-onlink-tests.sh                                                                                                         
+qemu_arm:                                                                                                      
+ kselftest:                                                                                         
+    * bpf_test_sock_addr.sh                                                                                                         
+                                                                                         
+    * timers_rtcpie                                                                                                         
+qemu_arm64:                                                                                                      
+ kselftest:                                                                                         
+    * cgroup_test_freezer                                                                                                         
+qemu_x86_64:                                                                                                      
+ kselftest:                                                                                         
+    * cgroup_test_freezer                                                                                                         
+x15 - arm:                                                                                                      
+ kselftest:                                                                                         
+    * cgroup_test_freezer                                                                                                         
+                                                                                         
+    * net_so_txtime.sh                                                                                                         
 
- Documentation/dev-tools/kselftest.rst | 25 +++++++++++++++++++++++++
- 1 file changed, 25 insertions(+)
 
-diff --git a/Documentation/dev-tools/kselftest.rst b/Documentation/dev-tools/kselftest.rst
-index 25604904fa6e..308506c5e8fa 100644
---- a/Documentation/dev-tools/kselftest.rst
-+++ b/Documentation/dev-tools/kselftest.rst
-@@ -12,6 +12,31 @@ write new tests using the framework on Kselftest wiki:
- 
- https://kselftest.wiki.kernel.org/
- 
-+Recommendations on running kselftests in Continuous Integration test rings
-+==========================================================================
-+
-+It is recommended that users run Kselftest from the same release. Running
-+newer Kselftest on older kernels isn't recommended for the following
-+reasons:
-+
-+- Kselftest from mainline and linux-next might not be stable enough to run
-+  on stable kernels.
-+- Kselftests detect feature dependencies at run-time and skip tests if a
-+  feature and/or configuration they test aren't enabled. Running newer
-+  tests on older kernels could result in a few too many skipped/failed
-+  conditions. It becomes difficult to evaluate the results.
-+- Newer tests provide better coverage. However, users should make a judgement
-+  call on coverage vs. run to run consistency and being able to compare
-+  run to run results on older kernels.
-+
-+Recommendations:
-+
-+Match kernel revision and kselftest. Especially important for LTS and
-+Stable kernel Continuous Integration test rings.
-+
-+Hot-plug tests
-+==============
-+
- On some systems, hot-plug tests could hang forever waiting for cpu and
- memory to be ready to be offlined. A special hot-plug target is created
- to run the full range of hot-plug tests. In default mode, hot-plug tests run
+In total:
+------------------------------------------------------------------------
+Ran 1906 total tests in the following environments and test suites.
+pass 1104
+fail 655
+xfail 0
+skip 147
+
+Environments
+--------------
+- dragonboard-410c - arm64
+- hi6220-hikey - arm64
+- i386
+- juno-r2 - arm64
+- qemu_arm
+- qemu_arm64
+- qemu_i386
+- qemu_x86_64
+- x15 - arm
+- x86_64
+
+Test Suites
+-----------
+* boot-lkft-kselftests-master-592
+* kselftest
+* boot-lkft-kselftests-vsyscall-mode-native-master-592
+* boot-lkft-kselftests-vsyscall-mode-none-master-592
+* kselftest-vsyscall-mode-native
+* kselftest-vsyscall-mode-none
+
+
+Failures
+------------------------------------------------------------------------
+
+hi6220-hikey:
+* boot-lkft-kselftests-master-592/hi6220-hikey-r2
+
+qemu_i386:
+* kselftest/binderfs_binderfs_test
+* kselftest/bpf_get_cgroup_id_user
+* kselftest/bpf_test_btf_dump
+* kselftest/bpf_test_flow_dissector.sh
+* kselftest/bpf_test_hashmap
+* kselftest/bpf_test_libbpf.sh
+* kselftest/bpf_test_lwt_ip_encap.sh
+* kselftest/bpf_test_lwt_seg6local.sh
+* kselftest/bpf_test_maps
+* kselftest/bpf_test_netcnt
+* kselftest/bpf_test_progs
+* kselftest/bpf_test_select_reuseport
+* kselftest/bpf_test_socket_cookie
+* kselftest/bpf_test_sock_fields
+* kselftest/bpf_test_sockmap
+* kselftest/bpf_test_sockopt_inherit
+* kselftest/bpf_test_sockopt_sk
+* kselftest/bpf_test_sysctl
+* kselftest/bpf_test_tc_edt.sh
+* kselftest/bpf_test_tcpbpf_user
+* kselftest/bpf_test_tcpnotify_user
+* kselftest/bpf_test_tcp_rtt
+* kselftest/bpf_test_tc_tunnel.sh
+* kselftest/bpf_test_tunnel.sh
+* kselftest/bpf_test_xdping.sh
+* kselftest/bpf_xdping
+* kselftest/cpufreq_main.sh
+* kselftest/firmware_fw_run_tests.sh
+* kselftest/ftrace_ftracetest
+* kselftest/kvm_clear_dirty_log_test
+* kselftest/kvm_cr4_cpuid_sync_test
+* kselftest/kvm_dirty_log_test
+* kselftest/kvm_evmcs_test
+* kselftest/kvm_hyperv_cpuid
+* kselftest/kvm_kvm_create_max_vcpus
+* kselftest/kvm_mmio_warning_test
+* kselftest/kvm_platform_info_test
+* kselftest/kvm_set_sregs_test
+* kselftest/kvm_smm_test
+* kselftest/kvm_state_test
+* kselftest/kvm_sync_regs_test
+* kselftest/kvm_vmx_close_while_nested_test
+* kselftest/kvm_vmx_set_nested_state_test
+* kselftest/kvm_vmx_tsc_adjust_test
+* kselftest/lib_bitmap.sh
+* kselftest/lib_prime_numbers.sh
+* kselftest/lib_printf.sh
+* kselftest/lib_strscpy.sh
+* kselftest/net_fib-onlink-tests.sh
+* kselftest/net_fib_tests.sh
+* kselftest/netfilter_conntrack_icmp_related.sh
+* kselftest/netfilter_nft_nat.sh
+* kselftest/net_ip_defrag.sh
+* kselftest/net_l2tp.sh
+* kselftest/net_pmtu.sh
+* kselftest/net_psock_snd.sh
+* kselftest/net_run_netsocktests
+* kselftest/net_tcp_fastopen_backup_key.sh
+* kselftest/net_test_vxlan_under_vrf.sh
+* kselftest/net_xfrm_policy.sh
+* kselftest/pidfd_pidfd_open_test
+* kselftest/pidfd_pidfd_poll_test
+* kselftest/proc_proc-self-map-files-002
+* kselftest/proc_proc-self-syscall
+* kselftest/pstore_pstore_tests
+* kselftest/seccomp_seccomp_bpf
+* kselftest/size_get_size
+* kselftest/timestamping_txtimestamp.sh
+* kselftest/tpm2_test_smoke.sh
+* kselftest/tpm2_test_space.sh
+* kselftest/x86_sigreturn_32
+
+i386:
+* kselftest/binderfs_binderfs_test
+* kselftest/bpf_get_cgroup_id_user
+* kselftest/bpf_test_btf_dump
+* kselftest/bpf_test_flow_dissector.sh
+* kselftest/bpf_test_hashmap
+* kselftest/bpf_test_libbpf.sh
+* kselftest/bpf_test_lwt_ip_encap.sh
+* kselftest/bpf_test_lwt_seg6local.sh
+* kselftest/bpf_test_maps
+* kselftest/bpf_test_netcnt
+* kselftest/bpf_test_progs
+* kselftest/bpf_test_select_reuseport
+* kselftest/bpf_test_skb_cgroup_id.sh
+* kselftest/bpf_test_socket_cookie
+* kselftest/bpf_test_sock_fields
+* kselftest/bpf_test_sockopt_inherit
+* kselftest/bpf_test_sockopt_sk
+* kselftest/bpf_test_sysctl
+* kselftest/bpf_test_tc_edt.sh
+* kselftest/bpf_test_tcpnotify_user
+* kselftest/bpf_test_tcp_rtt
+* kselftest/bpf_test_tc_tunnel.sh
+* kselftest/bpf_test_tunnel.sh
+* kselftest/bpf_test_xdping.sh
+* kselftest/bpf_xdping
+* kselftest/cpufreq_main.sh
+* kselftest/firmware_fw_run_tests.sh
+* kselftest/ftrace_ftracetest
+* kselftest/kvm_clear_dirty_log_test
+* kselftest/kvm_cr4_cpuid_sync_test
+* kselftest/kvm_dirty_log_test
+* kselftest/kvm_evmcs_test
+* kselftest/kvm_hyperv_cpuid
+* kselftest/kvm_kvm_create_max_vcpus
+* kselftest/kvm_mmio_warning_test
+* kselftest/kvm_platform_info_test
+* kselftest/kvm_set_sregs_test
+* kselftest/kvm_smm_test
+* kselftest/kvm_state_test
+* kselftest/kvm_sync_regs_test
+* kselftest/kvm_vmx_close_while_nested_test
+* kselftest/kvm_vmx_set_nested_state_test
+* kselftest/kvm_vmx_tsc_adjust_test
+* kselftest/lib_bitmap.sh
+* kselftest/lib_prime_numbers.sh
+* kselftest/lib_printf.sh
+* kselftest/lib_strscpy.sh
+* kselftest/net_fib_tests.sh
+* kselftest/net_ip_defrag.sh
+* kselftest/net_l2tp.sh
+* kselftest/net_pmtu.sh
+* kselftest/net_psock_snd.sh
+* kselftest/net_run_netsocktests
+* kselftest/net_tcp_fastopen_backup_key.sh
+* kselftest/net_test_vxlan_under_vrf.sh
+* kselftest/pidfd_pidfd_open_test
+* kselftest/pidfd_pidfd_poll_test
+* kselftest/proc_proc-self-map-files-002
+* kselftest/proc_proc-self-syscall
+* kselftest/timestamping_txtimestamp.sh
+
+x15:
+* kselftest/binderfs_binderfs_test
+* kselftest/bpf_get_cgroup_id_user
+* kselftest/bpf_test_btf_dump
+* kselftest/bpf_test_flow_dissector.sh
+* kselftest/bpf_test_libbpf.sh
+* kselftest/bpf_test_lwt_ip_encap.sh
+* kselftest/bpf_test_lwt_seg6local.sh
+* kselftest/bpf_test_maps
+* kselftest/bpf_test_netcnt
+* kselftest/bpf_test_progs
+* kselftest/bpf_test_select_reuseport
+* kselftest/bpf_test_sock_addr.sh
+* kselftest/bpf_test_socket_cookie
+* kselftest/bpf_test_sock_fields
+* kselftest/bpf_test_sockmap
+* kselftest/bpf_test_sockopt_inherit
+* kselftest/bpf_test_sockopt_sk
+* kselftest/bpf_test_sysctl
+* kselftest/bpf_test_tc_edt.sh
+* kselftest/bpf_test_tcpbpf_user
+* kselftest/bpf_test_tcp_check_syncookie.sh
+* kselftest/bpf_test_tcpnotify_user
+* kselftest/bpf_test_tcp_rtt
+* kselftest/bpf_test_tc_tunnel.sh
+* kselftest/bpf_test_tunnel.sh
+* kselftest/bpf_test_verifier
+* kselftest/bpf_test_xdping.sh
+* kselftest/bpf_xdping
+* kselftest/firmware_fw_run_tests.sh
+* kselftest/ftrace_ftracetest
+* kselftest/kvm_clear_dirty_log_test
+* kselftest/kvm_cr4_cpuid_sync_test
+* kselftest/kvm_dirty_log_test
+* kselftest/kvm_evmcs_test
+* kselftest/kvm_hyperv_cpuid
+* kselftest/kvm_kvm_create_max_vcpus
+* kselftest/kvm_mmio_warning_test
+* kselftest/kvm_platform_info_test
+* kselftest/kvm_set_sregs_test
+* kselftest/kvm_smm_test
+* kselftest/kvm_state_test
+* kselftest/kvm_sync_regs_test
+* kselftest/kvm_vmx_close_while_nested_test
+* kselftest/kvm_vmx_set_nested_state_test
+* kselftest/kvm_vmx_tsc_adjust_test
+* kselftest/lib_bitmap.sh
+* kselftest/lib_prime_numbers.sh
+* kselftest/lib_printf.sh
+* kselftest/lib_strscpy.sh
+* kselftest/net_fib-onlink-tests.sh
+* kselftest/net_fib_rule_tests.sh
+* kselftest/net_fib_tests.sh
+* kselftest/netfilter_conntrack_icmp_related.sh
+* kselftest/netfilter_nft_nat.sh
+* kselftest/net_ip_defrag.sh
+* kselftest/net_l2tp.sh
+* kselftest/net_pmtu.sh
+* kselftest/net_psock_snd.sh
+* kselftest/net_reuseport_bpf_numa
+* kselftest/net_run_netsocktests
+* kselftest/net_tcp_fastopen_backup_key.sh
+* kselftest/net_test_vxlan_under_vrf.sh
+* kselftest/pidfd_pidfd_open_test
+* kselftest/pidfd_pidfd_poll_test
+* kselftest/proc_proc-self-map-files-002
+* kselftest/proc_proc-self-syscall
+* kselftest/pstore_pstore_tests
+* kselftest/rtc_rtctest
+* kselftest/seccomp_seccomp_bpf
+* kselftest/timestamping_txtimestamp.sh
+* kselftest/tpm2_test_smoke.sh
+* kselftest/tpm2_test_space.sh
+
+qemu_x86_64:
+* kselftest/binderfs_binderfs_test
+* kselftest/bpf_get_cgroup_id_user
+* kselftest/bpf_test_btf_dump
+* kselftest/bpf_test_flow_dissector.sh
+* kselftest/bpf_test_libbpf.sh
+* kselftest/bpf_test_lwt_ip_encap.sh
+* kselftest/bpf_test_lwt_seg6local.sh
+* kselftest/bpf_test_maps
+* kselftest/bpf_test_netcnt
+* kselftest/bpf_test_progs
+* kselftest/bpf_test_select_reuseport
+* kselftest/bpf_test_socket_cookie
+* kselftest/bpf_test_sock_fields
+* kselftest/bpf_test_sockmap
+* kselftest/bpf_test_sockopt_inherit
+* kselftest/bpf_test_sockopt_sk
+* kselftest/bpf_test_tc_edt.sh
+* kselftest/bpf_test_tcpbpf_user
+* kselftest/bpf_test_tcpnotify_user
+* kselftest/bpf_test_tcp_rtt
+* kselftest/bpf_test_tc_tunnel.sh
+* kselftest/bpf_test_tunnel.sh
+* kselftest/bpf_test_xdping.sh
+* kselftest/bpf_xdping
+* kselftest/cpufreq_main.sh
+* kselftest/firmware_fw_run_tests.sh
+* kselftest/ftrace_ftracetest
+* kselftest/kvm_clear_dirty_log_test
+* kselftest/kvm_cr4_cpuid_sync_test
+* kselftest/kvm_dirty_log_test
+* kselftest/kvm_evmcs_test
+* kselftest/kvm_hyperv_cpuid
+* kselftest/kvm_kvm_create_max_vcpus
+* kselftest/kvm_platform_info_test
+* kselftest/kvm_set_sregs_test
+* kselftest/kvm_smm_test
+* kselftest/kvm_state_test
+* kselftest/kvm_sync_regs_test
+* kselftest/lib_bitmap.sh
+* kselftest/lib_prime_numbers.sh
+* kselftest/lib_printf.sh
+* kselftest/lib_strscpy.sh
+* kselftest/net_fib-onlink-tests.sh
+* kselftest/net_fib_tests.sh
+* kselftest/net_ip_defrag.sh
+* kselftest/net_l2tp.sh
+* kselftest/net_pmtu.sh
+* kselftest/net_psock_snd.sh
+* kselftest/net_run_netsocktests
+* kselftest/net_tcp_fastopen_backup_key.sh
+* kselftest/net_test_vxlan_under_vrf.sh
+* kselftest/net_xfrm_policy.sh
+* kselftest/pidfd_pidfd_open_test
+* kselftest/pidfd_pidfd_poll_test
+* kselftest/pstore_pstore_tests
+* kselftest/seccomp_seccomp_bpf
+* kselftest/timestamping_txtimestamp.sh
+* kselftest/tpm2_test_smoke.sh
+* kselftest/tpm2_test_space.sh
+* kselftest/x86_fsgsbase_64
+
+x86:
+* kselftest-vsyscall-mode-none/binderfs_binderfs_test
+* kselftest-vsyscall-mode-none/bpf_get_cgroup_id_user
+* kselftest-vsyscall-mode-none/bpf_test_btf_dump
+* kselftest-vsyscall-mode-none/bpf_test_flow_dissector.sh
+* kselftest-vsyscall-mode-none/bpf_test_libbpf.sh
+* kselftest-vsyscall-mode-none/bpf_test_lwt_ip_encap.sh
+* kselftest-vsyscall-mode-none/bpf_test_lwt_seg6local.sh
+* kselftest-vsyscall-mode-none/bpf_test_maps
+* kselftest-vsyscall-mode-none/bpf_test_netcnt
+* kselftest-vsyscall-mode-none/bpf_test_progs
+* kselftest-vsyscall-mode-none/bpf_test_select_reuseport
+* kselftest-vsyscall-mode-none/bpf_test_skb_cgroup_id.sh
+* kselftest-vsyscall-mode-none/bpf_test_socket_cookie
+* kselftest-vsyscall-mode-none/bpf_test_sock_fields
+* kselftest-vsyscall-mode-none/bpf_test_sockopt_inherit
+* kselftest-vsyscall-mode-none/bpf_test_sockopt_sk
+* kselftest-vsyscall-mode-none/bpf_test_tc_edt.sh
+* kselftest-vsyscall-mode-none/bpf_test_tcpnotify_user
+* kselftest-vsyscall-mode-none/bpf_test_tcp_rtt
+* kselftest-vsyscall-mode-none/bpf_test_tc_tunnel.sh
+* kselftest-vsyscall-mode-none/bpf_test_tunnel.sh
+* kselftest-vsyscall-mode-none/bpf_test_xdping.sh
+* kselftest-vsyscall-mode-none/bpf_xdping
+* kselftest-vsyscall-mode-none/cpufreq_main.sh
+* kselftest-vsyscall-mode-none/firmware_fw_run_tests.sh
+* kselftest-vsyscall-mode-none/ftrace_ftracetest
+* kselftest-vsyscall-mode-none/kvm_clear_dirty_log_test
+* kselftest-vsyscall-mode-none/kvm_cr4_cpuid_sync_test
+* kselftest-vsyscall-mode-none/kvm_dirty_log_test
+* kselftest-vsyscall-mode-none/kvm_evmcs_test
+* kselftest-vsyscall-mode-none/kvm_hyperv_cpuid
+* kselftest-vsyscall-mode-none/kvm_kvm_create_max_vcpus
+* kselftest-vsyscall-mode-none/kvm_platform_info_test
+* kselftest-vsyscall-mode-none/kvm_set_sregs_test
+* kselftest-vsyscall-mode-none/kvm_smm_test
+* kselftest-vsyscall-mode-none/kvm_state_test
+* kselftest-vsyscall-mode-none/kvm_sync_regs_test
+* kselftest-vsyscall-mode-none/kvm_vmx_close_while_nested_test
+* kselftest-vsyscall-mode-none/kvm_vmx_set_nested_state_test
+* kselftest-vsyscall-mode-none/kvm_vmx_tsc_adjust_test
+* kselftest-vsyscall-mode-none/lib_bitmap.sh
+* kselftest-vsyscall-mode-none/lib_prime_numbers.sh
+* kselftest-vsyscall-mode-none/lib_printf.sh
+* kselftest-vsyscall-mode-none/lib_strscpy.sh
+* kselftest-vsyscall-mode-none/net_fib-onlink-tests.sh
+* kselftest-vsyscall-mode-none/net_fib_tests.sh
+* kselftest-vsyscall-mode-none/net_ip_defrag.sh
+* kselftest-vsyscall-mode-none/net_l2tp.sh
+* kselftest-vsyscall-mode-none/net_pmtu.sh
+* kselftest-vsyscall-mode-none/net_psock_snd.sh
+* kselftest-vsyscall-mode-none/net_run_netsocktests
+* kselftest-vsyscall-mode-none/net_tcp_fastopen_backup_key.sh
+* kselftest-vsyscall-mode-none/net_test_vxlan_under_vrf.sh
+* kselftest-vsyscall-mode-none/pidfd_pidfd_open_test
+* kselftest-vsyscall-mode-none/pidfd_pidfd_poll_test
+* kselftest-vsyscall-mode-none/pstore_pstore_tests
+* kselftest-vsyscall-mode-none/seccomp_seccomp_bpf
+* kselftest-vsyscall-mode-none/timestamping_txtimestamp.sh
+* kselftest-vsyscall-mode-none/tpm2_test_smoke.sh
+* kselftest-vsyscall-mode-none/tpm2_test_space.sh
+* kselftest/binderfs_binderfs_test
+* kselftest/bpf_get_cgroup_id_user
+* kselftest/bpf_test_btf_dump
+* kselftest/bpf_test_flow_dissector.sh
+* kselftest/bpf_test_libbpf.sh
+* kselftest/bpf_test_lwt_ip_encap.sh
+* kselftest/bpf_test_lwt_seg6local.sh
+* kselftest/bpf_test_maps
+* kselftest/bpf_test_netcnt
+* kselftest/bpf_test_progs
+* kselftest/bpf_test_select_reuseport
+* kselftest/bpf_test_skb_cgroup_id.sh
+* kselftest/bpf_test_sock_addr.sh
+* kselftest/bpf_test_sock_fields
+* kselftest/bpf_test_sockmap
+* kselftest/bpf_test_sockopt_inherit
+* kselftest/bpf_test_sockopt_sk
+* kselftest/bpf_test_tc_edt.sh
+* kselftest/bpf_test_tcpnotify_user
+* kselftest/bpf_test_tcp_rtt
+* kselftest/bpf_test_tc_tunnel.sh
+* kselftest/bpf_test_tunnel.sh
+* kselftest/bpf_test_xdping.sh
+* kselftest/bpf_xdping
+* kselftest/cpufreq_main.sh
+* kselftest/firmware_fw_run_tests.sh
+* kselftest/ftrace_ftracetest
+* kselftest/kvm_clear_dirty_log_test
+* kselftest/kvm_cr4_cpuid_sync_test
+* kselftest/kvm_dirty_log_test
+* kselftest/kvm_evmcs_test
+* kselftest/kvm_hyperv_cpuid
+* kselftest/kvm_kvm_create_max_vcpus
+* kselftest/kvm_platform_info_test
+* kselftest/kvm_set_sregs_test
+* kselftest/kvm_smm_test
+* kselftest/kvm_state_test
+* kselftest/kvm_sync_regs_test
+* kselftest/kvm_vmx_close_while_nested_test
+* kselftest/kvm_vmx_set_nested_state_test
+* kselftest/kvm_vmx_tsc_adjust_test
+* kselftest/lib_bitmap.sh
+* kselftest/lib_prime_numbers.sh
+* kselftest/lib_printf.sh
+* kselftest/lib_strscpy.sh
+* kselftest/net_fib-onlink-tests.sh
+* kselftest/net_fib_tests.sh
+* kselftest/net_ip_defrag.sh
+* kselftest/net_l2tp.sh
+* kselftest/net_pmtu.sh
+* kselftest/net_psock_snd.sh
+* kselftest/net_tcp_fastopen_backup_key.sh
+* kselftest/net_test_vxlan_under_vrf.sh
+* kselftest/net_xfrm_policy.sh
+* kselftest/pidfd_pidfd_open_test
+* kselftest/pidfd_pidfd_poll_test
+* kselftest/pstore_pstore_tests
+* kselftest/seccomp_seccomp_bpf
+* kselftest/timestamping_txtimestamp.sh
+* kselftest/tpm2_test_smoke.sh
+* kselftest/tpm2_test_space.sh
+* kselftest-vsyscall-mode-native/binderfs_binderfs_test
+* kselftest-vsyscall-mode-native/bpf_test_btf_dump
+* kselftest-vsyscall-mode-native/bpf_test_flow_dissector.sh
+* kselftest-vsyscall-mode-native/bpf_test_libbpf.sh
+* kselftest-vsyscall-mode-native/bpf_test_lwt_ip_encap.sh
+* kselftest-vsyscall-mode-native/bpf_test_lwt_seg6local.sh
+* kselftest-vsyscall-mode-native/bpf_test_maps
+* kselftest-vsyscall-mode-native/bpf_test_netcnt
+* kselftest-vsyscall-mode-native/bpf_test_progs
+* kselftest-vsyscall-mode-native/bpf_test_select_reuseport
+* kselftest-vsyscall-mode-native/bpf_test_skb_cgroup_id.sh
+* kselftest-vsyscall-mode-native/bpf_test_socket_cookie
+* kselftest-vsyscall-mode-native/bpf_test_sock_fields
+* kselftest-vsyscall-mode-native/bpf_test_sockopt_inherit
+* kselftest-vsyscall-mode-native/bpf_test_sockopt_sk
+* kselftest-vsyscall-mode-native/bpf_test_tc_edt.sh
+* kselftest-vsyscall-mode-native/bpf_test_tcpnotify_user
+* kselftest-vsyscall-mode-native/bpf_test_tcp_rtt
+* kselftest-vsyscall-mode-native/bpf_test_tc_tunnel.sh
+* kselftest-vsyscall-mode-native/bpf_test_tunnel.sh
+* kselftest-vsyscall-mode-native/bpf_test_xdping.sh
+* kselftest-vsyscall-mode-native/bpf_xdping
+* kselftest-vsyscall-mode-native/cpufreq_main.sh
+* kselftest-vsyscall-mode-native/firmware_fw_run_tests.sh
+* kselftest-vsyscall-mode-native/ftrace_ftracetest
+* kselftest-vsyscall-mode-native/kvm_clear_dirty_log_test
+* kselftest-vsyscall-mode-native/kvm_cr4_cpuid_sync_test
+* kselftest-vsyscall-mode-native/kvm_dirty_log_test
+* kselftest-vsyscall-mode-native/kvm_evmcs_test
+* kselftest-vsyscall-mode-native/kvm_hyperv_cpuid
+* kselftest-vsyscall-mode-native/kvm_kvm_create_max_vcpus
+* kselftest-vsyscall-mode-native/kvm_platform_info_test
+* kselftest-vsyscall-mode-native/kvm_set_sregs_test
+* kselftest-vsyscall-mode-native/kvm_state_test
+* kselftest-vsyscall-mode-native/kvm_sync_regs_test
+* kselftest-vsyscall-mode-native/kvm_vmx_close_while_nested_test
+* kselftest-vsyscall-mode-native/kvm_vmx_set_nested_state_test
+* kselftest-vsyscall-mode-native/kvm_vmx_tsc_adjust_test
+* kselftest-vsyscall-mode-native/lib_bitmap.sh
+* kselftest-vsyscall-mode-native/lib_prime_numbers.sh
+* kselftest-vsyscall-mode-native/lib_printf.sh
+* kselftest-vsyscall-mode-native/lib_strscpy.sh
+* kselftest-vsyscall-mode-native/net_fib-onlink-tests.sh
+* kselftest-vsyscall-mode-native/net_fib_tests.sh
+* kselftest-vsyscall-mode-native/net_ip_defrag.sh
+* kselftest-vsyscall-mode-native/net_l2tp.sh
+* kselftest-vsyscall-mode-native/net_pmtu.sh
+* kselftest-vsyscall-mode-native/net_psock_snd.sh
+* kselftest-vsyscall-mode-native/net_run_netsocktests
+* kselftest-vsyscall-mode-native/net_tcp_fastopen_backup_key.sh
+* kselftest-vsyscall-mode-native/net_test_vxlan_under_vrf.sh
+* kselftest-vsyscall-mode-native/net_xfrm_policy.sh
+* kselftest-vsyscall-mode-native/pidfd_pidfd_open_test
+* kselftest-vsyscall-mode-native/pidfd_pidfd_poll_test
+* kselftest-vsyscall-mode-native/pstore_pstore_tests
+* kselftest-vsyscall-mode-native/seccomp_seccomp_bpf
+* kselftest-vsyscall-mode-native/timestamping_txtimestamp.sh
+* kselftest-vsyscall-mode-native/tpm2_test_smoke.sh
+* kselftest-vsyscall-mode-native/tpm2_test_space.sh
+
+qemu_arm64:
+* kselftest/binderfs_binderfs_test
+* kselftest/bpf_get_cgroup_id_user
+* kselftest/bpf_test_btf_dump
+* kselftest/bpf_test_flow_dissector.sh
+* kselftest/bpf_test_libbpf.sh
+* kselftest/bpf_test_lwt_ip_encap.sh
+* kselftest/bpf_test_lwt_seg6local.sh
+* kselftest/bpf_test_maps
+* kselftest/bpf_test_netcnt
+* kselftest/bpf_test_progs
+* kselftest/bpf_test_select_reuseport
+* kselftest/bpf_test_socket_cookie
+* kselftest/bpf_test_sock_fields
+* kselftest/bpf_test_sockmap
+* kselftest/bpf_test_sockopt_inherit
+* kselftest/bpf_test_sockopt_sk
+* kselftest/bpf_test_tc_edt.sh
+* kselftest/bpf_test_tcpbpf_user
+* kselftest/bpf_test_tcp_check_syncookie.sh
+* kselftest/bpf_test_tcpnotify_user
+* kselftest/bpf_test_tcp_rtt
+* kselftest/bpf_test_tc_tunnel.sh
+* kselftest/bpf_test_tunnel.sh
+* kselftest/bpf_test_verifier
+* kselftest/bpf_test_xdping.sh
+* kselftest/bpf_xdping
+* kselftest/cpufreq_main.sh
+* kselftest/firmware_fw_run_tests.sh
+* kselftest/ftrace_ftracetest
+* kselftest/kvm_clear_dirty_log_test
+* kselftest/kvm_cr4_cpuid_sync_test
+* kselftest/kvm_dirty_log_test
+* kselftest/kvm_evmcs_test
+* kselftest/kvm_hyperv_cpuid
+* kselftest/kvm_kvm_create_max_vcpus
+* kselftest/kvm_mmio_warning_test
+* kselftest/kvm_platform_info_test
+* kselftest/kvm_set_sregs_test
+* kselftest/kvm_smm_test
+* kselftest/kvm_state_test
+* kselftest/kvm_sync_regs_test
+* kselftest/kvm_vmx_close_while_nested_test
+* kselftest/kvm_vmx_set_nested_state_test
+* kselftest/kvm_vmx_tsc_adjust_test
+* kselftest/lib_bitmap.sh
+* kselftest/lib_prime_numbers.sh
+* kselftest/lib_printf.sh
+* kselftest/lib_strscpy.sh
+* kselftest/net_fib-onlink-tests.sh
+* kselftest/net_fib_rule_tests.sh
+* kselftest/net_fib_tests.sh
+* kselftest/netfilter_conntrack_icmp_related.sh
+* kselftest/netfilter_nft_nat.sh
+* kselftest/net_ip_defrag.sh
+* kselftest/net_l2tp.sh
+* kselftest/net_pmtu.sh
+* kselftest/net_psock_snd.sh
+* kselftest/net_run_netsocktests
+* kselftest/net_tcp_fastopen_backup_key.sh
+* kselftest/net_test_vxlan_under_vrf.sh
+* kselftest/pidfd_pidfd_open_test
+* kselftest/pidfd_pidfd_poll_test
+* kselftest/pidfd_pidfd_test
+* kselftest/pidfd_pidfd_wait
+* kselftest/pstore_pstore_tests
+* kselftest/seccomp_seccomp_bpf
+* kselftest/timestamping_txtimestamp.sh
+* kselftest/tpm2_test_smoke.sh
+* kselftest/tpm2_test_space.sh
+
+juno-r2:
+* kselftest/binderfs_binderfs_test
+* kselftest/bpf_get_cgroup_id_user
+* kselftest/bpf_test_btf_dump
+* kselftest/bpf_test_flow_dissector.sh
+* kselftest/bpf_test_libbpf.sh
+* kselftest/bpf_test_lwt_ip_encap.sh
+* kselftest/bpf_test_lwt_seg6local.sh
+* kselftest/bpf_test_maps
+* kselftest/bpf_test_netcnt
+* kselftest/bpf_test_progs
+* kselftest/bpf_test_select_reuseport
+* kselftest/bpf_test_socket_cookie
+* kselftest/bpf_test_sock_fields
+* kselftest/bpf_test_sockmap
+* kselftest/bpf_test_sockopt_inherit
+* kselftest/bpf_test_sockopt_sk
+* kselftest/bpf_test_tc_edt.sh
+* kselftest/bpf_test_tcpbpf_user
+* kselftest/bpf_test_tcp_check_syncookie.sh
+* kselftest/bpf_test_tcpnotify_user
+* kselftest/bpf_test_tcp_rtt
+* kselftest/bpf_test_tc_tunnel.sh
+* kselftest/bpf_test_tunnel.sh
+* kselftest/bpf_test_verifier
+* kselftest/bpf_test_xdping.sh
+* kselftest/bpf_xdping
+* kselftest/cpufreq_main.sh
+* kselftest/firmware_fw_run_tests.sh
+* kselftest/ftrace_ftracetest
+* kselftest/kvm_clear_dirty_log_test
+* kselftest/kvm_cr4_cpuid_sync_test
+* kselftest/kvm_dirty_log_test
+* kselftest/kvm_evmcs_test
+* kselftest/kvm_hyperv_cpuid
+* kselftest/kvm_kvm_create_max_vcpus
+* kselftest/kvm_mmio_warning_test
+* kselftest/kvm_platform_info_test
+* kselftest/kvm_set_sregs_test
+* kselftest/kvm_smm_test
+* kselftest/kvm_state_test
+* kselftest/kvm_sync_regs_test
+* kselftest/kvm_vmx_close_while_nested_test
+* kselftest/kvm_vmx_set_nested_state_test
+* kselftest/kvm_vmx_tsc_adjust_test
+* kselftest/lib_bitmap.sh
+* kselftest/lib_prime_numbers.sh
+* kselftest/lib_printf.sh
+* kselftest/lib_strscpy.sh
+* kselftest/net_fib-onlink-tests.sh
+* kselftest/net_fib_rule_tests.sh
+* kselftest/net_fib_tests.sh
+* kselftest/netfilter_conntrack_icmp_related.sh
+* kselftest/netfilter_nft_nat.sh
+* kselftest/net_ip_defrag.sh
+* kselftest/net_l2tp.sh
+* kselftest/net_pmtu.sh
+* kselftest/net_psock_snd.sh
+* kselftest/net_run_netsocktests
+* kselftest/net_tcp_fastopen_backup_key.sh
+* kselftest/net_test_vxlan_under_vrf.sh
+* kselftest/net_udpgso_bench.sh
+* kselftest/pidfd_pidfd_open_test
+* kselftest/pidfd_pidfd_poll_test
+* kselftest/pidfd_pidfd_test
+* kselftest/pidfd_pidfd_wait
+* kselftest/pstore_pstore_tests
+* kselftest/seccomp_seccomp_bpf
+* kselftest/timestamping_txtimestamp.sh
+* kselftest/tpm2_test_smoke.sh
+* kselftest/tpm2_test_space.sh
+
+qemu_arm:
+* kselftest/binderfs_binderfs_test
+* kselftest/bpf_get_cgroup_id_user
+* kselftest/bpf_test_btf_dump
+* kselftest/bpf_test_flow_dissector.sh
+* kselftest/bpf_test_libbpf.sh
+* kselftest/bpf_test_lwt_ip_encap.sh
+* kselftest/bpf_test_lwt_seg6local.sh
+* kselftest/bpf_test_maps
+* kselftest/bpf_test_netcnt
+* kselftest/bpf_test_progs
+* kselftest/bpf_test_select_reuseport
+* kselftest/bpf_test_socket_cookie
+* kselftest/bpf_test_sock_fields
+* kselftest/bpf_test_sockmap
+* kselftest/bpf_test_sockopt_inherit
+* kselftest/bpf_test_sockopt_sk
+* kselftest/bpf_test_sysctl
+* kselftest/bpf_test_tc_edt.sh
+* kselftest/bpf_test_tcpbpf_user
+* kselftest/bpf_test_tcp_check_syncookie.sh
+* kselftest/bpf_test_tcpnotify_user
+* kselftest/bpf_test_tcp_rtt
+* kselftest/bpf_test_tc_tunnel.sh
+* kselftest/bpf_test_tunnel.sh
+* kselftest/bpf_test_verifier
+* kselftest/bpf_test_xdping.sh
+* kselftest/bpf_xdping
+* kselftest/cpufreq_main.sh
+* kselftest/firmware_fw_run_tests.sh
+* kselftest/ftrace_ftracetest
+* kselftest/kvm_clear_dirty_log_test
+* kselftest/kvm_cr4_cpuid_sync_test
+* kselftest/kvm_dirty_log_test
+* kselftest/kvm_evmcs_test
+* kselftest/kvm_hyperv_cpuid
+* kselftest/kvm_kvm_create_max_vcpus
+* kselftest/kvm_mmio_warning_test
+* kselftest/kvm_platform_info_test
+* kselftest/kvm_set_sregs_test
+* kselftest/kvm_smm_test
+* kselftest/kvm_state_test
+* kselftest/kvm_sync_regs_test
+* kselftest/kvm_vmx_close_while_nested_test
+* kselftest/kvm_vmx_set_nested_state_test
+* kselftest/kvm_vmx_tsc_adjust_test
+* kselftest/lib_bitmap.sh
+* kselftest/lib_prime_numbers.sh
+* kselftest/lib_printf.sh
+* kselftest/lib_strscpy.sh
+* kselftest/net_fib-onlink-tests.sh
+* kselftest/net_fib_rule_tests.sh
+* kselftest/net_fib_tests.sh
+* kselftest/netfilter_conntrack_icmp_related.sh
+* kselftest/netfilter_nft_nat.sh
+* kselftest/net_ip_defrag.sh
+* kselftest/net_l2tp.sh
+* kselftest/net_pmtu.sh
+* kselftest/net_psock_snd.sh
+* kselftest/net_reuseport_bpf_numa
+* kselftest/net_run_netsocktests
+* kselftest/net_tcp_fastopen_backup_key.sh
+* kselftest/net_test_vxlan_under_vrf.sh
+* kselftest/pidfd_pidfd_open_test
+* kselftest/pidfd_pidfd_poll_test
+* kselftest/proc_proc-self-map-files-002
+* kselftest/proc_proc-self-syscall
+* kselftest/pstore_pstore_tests
+* kselftest/seccomp_seccomp_bpf
+* kselftest/timestamping_txtimestamp.sh
+* kselftest/tpm2_test_smoke.sh
+* kselftest/tpm2_test_space.sh
+
+dragonboard-410c:
+* boot-lkft-kselftests-master-592/dragonboard-410c
+
+
+Skips
+------------------------------------------------------------------------
+No skips
+
+
 -- 
-2.20.1
-
+Linaro LKFT
+https://lkft.linaro.org
+------=_Part_2969_981833266.1566900038348--
