@@ -2,104 +2,72 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 536D4A0618
-	for <lists+linux-kselftest@lfdr.de>; Wed, 28 Aug 2019 17:20:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D53CA06A6
+	for <lists+linux-kselftest@lfdr.de>; Wed, 28 Aug 2019 17:53:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726877AbfH1PUN (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 28 Aug 2019 11:20:13 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:10114 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726605AbfH1PUJ (ORCPT
+        id S1726865AbfH1PxV (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 28 Aug 2019 11:53:21 -0400
+Received: from bombadil.infradead.org ([198.137.202.133]:55870 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726863AbfH1PxU (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 28 Aug 2019 11:20:09 -0400
-Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x7SFIGHs109609
-        for <linux-kselftest@vger.kernel.org>; Wed, 28 Aug 2019 11:20:08 -0400
-Received: from e06smtp04.uk.ibm.com (e06smtp04.uk.ibm.com [195.75.94.100])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 2unuc025q5-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-kselftest@vger.kernel.org>; Wed, 28 Aug 2019 11:20:08 -0400
-Received: from localhost
-        by e06smtp04.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-kselftest@vger.kernel.org> from <zohar@linux.ibm.com>;
-        Wed, 28 Aug 2019 16:20:05 +0100
-Received: from b06cxnps4076.portsmouth.uk.ibm.com (9.149.109.198)
-        by e06smtp04.uk.ibm.com (192.168.101.134) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Wed, 28 Aug 2019 16:20:01 +0100
-Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
-        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x7SFK0Zv24510654
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 28 Aug 2019 15:20:00 GMT
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 7D25411C054;
-        Wed, 28 Aug 2019 15:20:00 +0000 (GMT)
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 26EF411C04A;
-        Wed, 28 Aug 2019 15:19:59 +0000 (GMT)
-Received: from localhost.localdomain (unknown [9.85.129.156])
-        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Wed, 28 Aug 2019 15:19:59 +0000 (GMT)
-Subject: Re: [PATCH] sefltest/ima: support appended signatures (modsig)
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     shuah <shuah@kernel.org>, linux-integrity@vger.kernel.org
-Cc:     Thiago Jung Bauermann <bauerman@linux.ibm.com>,
-        Petr Vorel <pvorel@suse.cz>, Jessica Yu <jeyu@kernel.org>,
-        Dave Young <dyoung@redhat.com>,
-        linux-kselftest@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-kernel@vger.kernel.org
-Date:   Wed, 28 Aug 2019 11:19:58 -0400
-In-Reply-To: <2f89d09f-1b69-3d77-6846-01bef7d20f39@kernel.org>
-References: <1566995946-6582-1-git-send-email-zohar@linux.ibm.com>
-         <2f89d09f-1b69-3d77-6846-01bef7d20f39@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-x-cbid: 19082815-0016-0000-0000-000002A3EF99
-X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 19082815-0017-0000-0000-0000330440F8
-Message-Id: <1567005598.6115.40.camel@linux.ibm.com>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-08-28_07:,,
- signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
- clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1906280000 definitions=main-1908280157
+        Wed, 28 Aug 2019 11:53:20 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:
+        Subject:Sender:Reply-To:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=gQZskAU+8k336EC6UmUC7ikUT5tx26F1fzK9gaSbLLs=; b=EWma0uMu9kw+jEO+hZ+1+Tyw1
+        wIMr90xNPIQTuwomkBqe4oh4/4hoMaV+W7N3hLa6GYx3WRLvMJUSfwfAPR2r/K/9wROl9EpNL+/+A
+        prWlsPA7sjxqjUisFU42ap0eHmRf2WPAiwJtg4KdjTasczha8bCIb/9m4ni1W5fikZVQHBef3Hs3M
+        irW7e2qwgx9hhV7k0AFtRq0pGSgtn0KRwua7wPgztbYmdds+Dl0rRIn2rdfenDH9dpdXqmO55ASPs
+        VGkobLGAcWFmdfgJ+8DqM8Lm7XTMq8xgqIh7WM5C+tPSr3Nnu2Apb26WpeLU8o580KQMrGhVzp+Oc
+        4NS/JhWLQ==;
+Received: from [2601:1c0:6200:6e8::4f71]
+        by bombadil.infradead.org with esmtpsa (Exim 4.92 #3 (Red Hat Linux))
+        id 1i30Fe-0005vm-Pb; Wed, 28 Aug 2019 15:52:50 +0000
+Subject: Re: [PATCH v2] kunit: fix failure to build without printk
+To:     Brendan Higgins <brendanhiggins@google.com>, shuah@kernel.org
+Cc:     kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, frowand.list@gmail.com,
+        sboyd@kernel.org, pmladek@suse.com, sergey.senozhatsky@gmail.com,
+        rostedt@goodmis.org, Stephen Rothwell <sfr@canb.auug.org.au>,
+        Sergey Senozhatsky <sergey.senozhatsky.work@gmail.com>
+References: <20190828093143.163302-1-brendanhiggins@google.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+Message-ID: <4856aac6-1760-8ba5-dee0-aecfedbbe266@infradead.org>
+Date:   Wed, 28 Aug 2019 08:52:49 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
+MIME-Version: 1.0
+In-Reply-To: <20190828093143.163302-1-brendanhiggins@google.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, 2019-08-28 at 08:45 -0600, shuah wrote:
-> Hi Mimi,
+On 8/28/19 2:31 AM, Brendan Higgins wrote:
+> Previously KUnit assumed that printk would always be present, which is
+> not a valid assumption to make. Fix that by removing call to
+> vprintk_emit, and calling printk directly.
 > 
-> On 8/28/19 6:39 AM, Mimi Zohar wrote:
-> > Detect and allow appended signatures.
-> > 
-> 
-> Can you please add a couple of more sentences on the feature
-> and what happens without it? I know this is a test for the
-> feature, however, it will be useful for users and testers to
-> know more about this test and the feature it is testing.
+> Reported-by: Randy Dunlap <rdunlap@infradead.org>
+> Link: https://lore.kernel.org/linux-kselftest/0352fae9-564f-4a97-715a-fabe016259df@kernel.org/T/#t
+> Cc: Stephen Rothwell <sfr@canb.auug.org.au>
+> Cc: Sergey Senozhatsky <sergey.senozhatsky.work@gmail.com>
+> Signed-off-by: Brendan Higgins <brendanhiggins@google.com>
+> ---
+>  include/kunit/test.h | 11 ++++-----
+>  kunit/test.c         | 57 +++++---------------------------------------
+>  2 files changed, 11 insertions(+), 57 deletions(-)
 
-I've updated the patch description as requested.  
+Acked-by: Randy Dunlap <rdunlap@infradead.org> # build-tested
 
-> Also, are there test skip conditions to be concerned about?
+thanks.
 
-The kexec selftests tests the coordination of the different methods of
-verifying the kexec kernel image.  As the appended signature support
-is part of IMA, there is no new skip conditions.
-
-> Is there a dependency on another tree or would like me to take
-> this through kselftest tree?
-
-I would prefer upstreaming this test with the rest of IMA support for
-appended signatures.
-
-thanks,
-
-Mimi
-
+-- 
+~Randy
