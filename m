@@ -2,125 +2,127 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 685389F9C6
-	for <lists+linux-kselftest@lfdr.de>; Wed, 28 Aug 2019 07:24:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75DC69FE73
+	for <lists+linux-kselftest@lfdr.de>; Wed, 28 Aug 2019 11:28:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726052AbfH1FYK (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 28 Aug 2019 01:24:10 -0400
-Received: from mail-pf1-f193.google.com ([209.85.210.193]:46748 "EHLO
-        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725951AbfH1FYK (ORCPT
+        id S1726421AbfH1J22 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 28 Aug 2019 05:28:28 -0400
+Received: from mail-pg1-f196.google.com ([209.85.215.196]:38129 "EHLO
+        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726370AbfH1J22 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 28 Aug 2019 01:24:10 -0400
-Received: by mail-pf1-f193.google.com with SMTP id q139so887105pfc.13;
-        Tue, 27 Aug 2019 22:24:09 -0700 (PDT)
+        Wed, 28 Aug 2019 05:28:28 -0400
+Received: by mail-pg1-f196.google.com with SMTP id e11so1150421pga.5
+        for <linux-kselftest@vger.kernel.org>; Wed, 28 Aug 2019 02:28:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=dhdmXWrPSEQR4IZD4RGdgvn2ki148613KDqA6rGmWaI=;
-        b=i4noJJp/M0iD0dPteicCV8FGVXl2m1GkFp8vAJTAej0neka8LLxDZ3YK8WUC3H6g8N
-         vOqWi/cOcdC4U6RkntBrYPeqPxElNnIy+tIOqzea9nkpEjQXLZC6DnXOx0Ujd/WdYc34
-         78i43ywWSE3Q09hx06YRFdr0CbEQQnS+iWFWh9JLxQjUonYN0p0SEKJQCIGg6SjDWgdI
-         Vfn1pDIPbOVQ+/IHni7frGrYxu/VeJ32DsHnsM7wvnATAjDkdjO8HvPi6hjjB5xTrzEK
-         b0bTwvZpU6ripnoiRwhd6gsisBjXgHh4EU1YjhbyDB10sxuSwp9L6lt1ZbvXIrXC/wbn
-         vpNQ==
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=HZx5QFMA3ykkKGmHMbJA9Au62IZ9SSb+Y6psbhqhgAw=;
+        b=YPeGmbRVPwD/7g2CmOmiMzsT4L5WWOv2r2bNBnmdYXYUdM7lfCheB+6UIEIkeIvhEE
+         nWz906pKGcRMJtzH7+G1GdPbcCIER8yDS+oiQMyDRgunWHj5gQbyKVBqevudyuYkLrVB
+         MVCDZfupL8I2v3rMh/EGJlRTAlOJ4Dze4TAnERGZCR8hbRuoba/hp+nPLK1N1v8vbDq5
+         wwFgokuSoEMJMX0Uvn4cMIcj993z0hs7OxnZA//OflzG+fzN2UNZtkUZDyiPiqNkmVb7
+         MhybdIIXRC+qvwcxNC7+jWWg7KyDMxRYSC3XFT9QUdqEhFZM/5qKag3vjguBt5cNVd7R
+         aH0A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=dhdmXWrPSEQR4IZD4RGdgvn2ki148613KDqA6rGmWaI=;
-        b=Di6Ntv/T9vlZWC7ib+G2pu4MhxmsFjN70SHdXXG2QhpX03KyKcaqorHQ1HQil5m+p+
-         +QX5uBFm0gjViGjUrSjcdIn03A6xjdjXX8Ndewl0+Opm6innlVIC4XSSNRdmMrhFTyZL
-         D+175wwi1sLveYCPeA2ljPEw8ONFNjNmFxFNeuj7BPeqCPct3KZE3f95AEMUSTXxs5ZX
-         U9WIC10r/oP951xe2pN78P3zbPGdwEfkmEajrScY1uCcpPcI5AzCapZFcN7f0qq6hAEO
-         WPfaBIiyiZ52bcGphTMfgHe+C8qZJfSgE0uRiI+qi+qmA18YUzeKYDsVfT9Re2XmFMjB
-         5tKA==
-X-Gm-Message-State: APjAAAXrE0PLR+VvBbR93zJUJspqgM319wxP8rs/4eOVYB4UGhoXfkJc
-        S9PTCQvbTqsOm/+06SbmAXM=
-X-Google-Smtp-Source: APXvYqz/5YFoNR5M/xs4inkuDaLGA7dlFEHHBrYKZRgHiAKVZ9UdSKE7ntbJiGhDLAj/HBTM/tO2Ag==
-X-Received: by 2002:a62:144f:: with SMTP id 76mr2648466pfu.62.1566969849639;
-        Tue, 27 Aug 2019 22:24:09 -0700 (PDT)
-Received: from localhost ([39.7.47.251])
-        by smtp.gmail.com with ESMTPSA id e3sm920351pjr.9.2019.08.27.22.24.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Aug 2019 22:24:08 -0700 (PDT)
-Date:   Wed, 28 Aug 2019 14:24:05 +0900
-From:   Sergey Senozhatsky <sergey.senozhatsky.work@gmail.com>
-To:     Brendan Higgins <brendanhiggins@google.com>
-Cc:     Sergey Senozhatsky <sergey.senozhatsky.work@gmail.com>,
-        shuah@kernel.org, pmladek@suse.com, sergey.senozhatsky@gmail.com,
-        rostedt@goodmis.org, kunit-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        frowand.list@gmail.com, sboyd@kernel.org,
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=HZx5QFMA3ykkKGmHMbJA9Au62IZ9SSb+Y6psbhqhgAw=;
+        b=Y/tG4EsqwKuX6WWe0RO/WdC+79orRHthPjc6AA2JIVrWO9bfqi3GWVwM82Cv1LaeK6
+         +sB3Jd7j+x1a2P93GqtlmHWGu3IREZvJzsR8IpzWZygBbJ5fnVcfcop35S5/w0Y8T/mm
+         1Ao7H079cLsUdLSoMOKpOuw29wsqk32kO8RIZkx7LbioSjVWOcSr889hZZ+4Rqj3dudv
+         4QrPjV3AgyrYl+u1tDnn8fzxvq5HNde9Ujgn25JMrJL8uDEljN38yEQAb+G1YfzwJRBa
+         4Vu11elT3rXroaofAnaky9kiqj5GFf/7TcJEestiWPnFUOc7HY+dMKEbdSojoOJZwrL+
+         Q/3w==
+X-Gm-Message-State: APjAAAW+YvesZ64cZ1nPR9f4zsxlfDi63bnstThxDZkNLxpZYCzCH3OW
+        YB6Q6vSFCaBS9wyuRTXe5g571DZNp6Fr+PrOCFgtYg==
+X-Google-Smtp-Source: APXvYqz0WqpF7fj08ZtVZkh5HfCpm8kVU1XmTLvg2tS/TEiLZHZzWWuukt700aOKth9QMBIx7YzEEiet/r/7g7OMqgc=
+X-Received: by 2002:a63:b919:: with SMTP id z25mr2563361pge.201.1566984507452;
+ Wed, 28 Aug 2019 02:28:27 -0700 (PDT)
+MIME-Version: 1.0
+References: <20190827234835.234473-1-brendanhiggins@google.com>
+ <20190828030231.GA24069@jagdpanzerIV> <20190828044529.GA30152@google.com> <20190828052405.GA526@jagdpanzerIV>
+In-Reply-To: <20190828052405.GA526@jagdpanzerIV>
+From:   Brendan Higgins <brendanhiggins@google.com>
+Date:   Wed, 28 Aug 2019 02:28:16 -0700
+Message-ID: <CAFd5g44U_DcCKtNOBKXiqsNuQbhKSTyr=jLRjNnKUxj8S0ZDrw@mail.gmail.com>
+Subject: Re: [PATCH v1] printk: add dummy vprintk_emit for when CONFIG_PRINTK=n
+To:     Sergey Senozhatsky <sergey.senozhatsky.work@gmail.com>
+Cc:     shuah <shuah@kernel.org>, Petr Mladek <pmladek@suse.com>,
+        sergey.senozhatsky@gmail.com, Steven Rostedt <rostedt@goodmis.org>,
+        kunit-dev@googlegroups.com,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Stephen Boyd <sboyd@kernel.org>,
         Randy Dunlap <rdunlap@infradead.org>,
         Stephen Rothwell <sfr@canb.auug.org.au>
-Subject: Re: [PATCH v1] printk: add dummy vprintk_emit for when
- CONFIG_PRINTK=n
-Message-ID: <20190828052405.GA526@jagdpanzerIV>
-References: <20190827234835.234473-1-brendanhiggins@google.com>
- <20190828030231.GA24069@jagdpanzerIV>
- <20190828044529.GA30152@google.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190828044529.GA30152@google.com>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On (08/27/19 21:45), Brendan Higgins wrote:
-[..]
-> I actually use it in a very similar way as dev_printk() does. I am using
-> it to define an equivalent kunit_printk(), which takes a log level, and
-> adds its own test information to the log.
-> 
-> What I have now is:
-> 
-> static int kunit_vprintk_emit(int level, const char *fmt, va_list args)
-> {
-> 	return vprintk_emit(0, level, NULL, 0, fmt, args);
-> }
-> 
-> static int kunit_printk_emit(int level, const char *fmt, ...)
-> {
-> 	va_list args;
-> 	int ret;
-> 
-> 	va_start(args, fmt);
-> 	ret = kunit_vprintk_emit(level, fmt, args);
-> 	va_end(args);
-> 
-> 	return ret;
-> }
-> 
-> static void kunit_vprintk(const struct kunit *test,
-> 			  const char *level,
-> 			  struct va_format *vaf)
-> {
-> 	kunit_printk_emit(level[1] - '0', "\t# %s: %pV", test->name, vaf);
-> }
+On Tue, Aug 27, 2019 at 10:24 PM Sergey Senozhatsky
+<sergey.senozhatsky.work@gmail.com> wrote:
+>
+> On (08/27/19 21:45), Brendan Higgins wrote:
+> [..]
+> > I actually use it in a very similar way as dev_printk() does. I am using
+> > it to define an equivalent kunit_printk(), which takes a log level, and
+> > adds its own test information to the log.
+> >
+> > What I have now is:
+> >
+> > static int kunit_vprintk_emit(int level, const char *fmt, va_list args)
+> > {
+> >       return vprintk_emit(0, level, NULL, 0, fmt, args);
+> > }
+> >
+> > static int kunit_printk_emit(int level, const char *fmt, ...)
+> > {
+> >       va_list args;
+> >       int ret;
+> >
+> >       va_start(args, fmt);
+> >       ret = kunit_vprintk_emit(level, fmt, args);
+> >       va_end(args);
+> >
+> >       return ret;
+> > }
+> >
+> > static void kunit_vprintk(const struct kunit *test,
+> >                         const char *level,
+> >                         struct va_format *vaf)
+> > {
+> >       kunit_printk_emit(level[1] - '0', "\t# %s: %pV", test->name, vaf);
+> > }
+>
+> Basically, for prefixes we have pr_fmt().
+>
+> #define pr_fmt(fmt) "module name: " fmt
+>
+> but pr_fmt() is mostly for static prefixes. If that doesn't work for
+> you, then maybe you can tweak kunit_foo() macros?
 
-Basically, for prefixes we have pr_fmt().
+That doesn't work. The prefix is dynamic.
 
-#define pr_fmt(fmt) "module name: " fmt
+> E.g. something like this
+>
+> #define kunit_info(test, fmt, ...)                                   \
+>         printk(KERN_INFO "\t# %s: " pr_fmt(fmt), (test)->name, ##__VA_ARGS__)
+>
+> #define kunit_err(test, fmt, ...)                                    \
+>         printk(KERN_ERR "\t# %s: " pr_fmt(fmt), (test)->name, ##__VA_ARGS__)
+>
+> #define kunit_debug(test, fmt, ...)                                  \
+>         printk(KERN_DEBUG "\t# %s: " pr_fmt(fmt), (test)->name, ##__VA_ARGS__)
+>
+> Would that do the trick? Am I missing something?
 
-but pr_fmt() is mostly for static prefixes. If that doesn't work for
-you, then maybe you can tweak kunit_foo() macros?
+This appears to work. I will send out a patch that incorporates this.
 
-E.g. something like this
-
-#define kunit_info(test, fmt, ...)                                   \
-	printk(KERN_INFO "\t# %s: " pr_fmt(fmt), (test)->name, ##__VA_ARGS__)
-
-#define kunit_err(test, fmt, ...)                                    \
-	printk(KERN_ERR "\t# %s: " pr_fmt(fmt), (test)->name, ##__VA_ARGS__)
-
-#define kunit_debug(test, fmt, ...)                                  \
-	printk(KERN_DEBUG "\t# %s: " pr_fmt(fmt), (test)->name, ##__VA_ARGS__)
-
-Would that do the trick? Am I missing something?
-
-	-ss
+Thanks!
