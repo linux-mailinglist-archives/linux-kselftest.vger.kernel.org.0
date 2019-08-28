@@ -2,63 +2,135 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C3A89A0A3F
-	for <lists+linux-kselftest@lfdr.de>; Wed, 28 Aug 2019 21:17:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19531A0C7D
+	for <lists+linux-kselftest@lfdr.de>; Wed, 28 Aug 2019 23:38:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726576AbfH1TR6 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 28 Aug 2019 15:17:58 -0400
-Received: from mail.kernel.org ([198.145.29.99]:55448 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726400AbfH1TR6 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 28 Aug 2019 15:17:58 -0400
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net [24.9.64.241])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id D9A56214DA;
-        Wed, 28 Aug 2019 19:17:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1567019877;
-        bh=JzG+dAL9CutFkCeaKxXi8FmvgK4eO6VPyeCKPmIpZNA=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=hu/9hmn8Uytf9xJVkeHKHLxAvPP0sIw7IeW28Isam5+nMmPOUUo2BBiKcBtd2C4Tf
-         SsHIj+LggPH5MA/F+/h4W4SDQA2A7JSyrI2p1OYza6D/520xbhsKyPNo6N4zhSoAD3
-         04NXlSn3W+s274z++3shcmJf//ZxLE2/AK71yJaI=
-Subject: Re: [PATCH v2] doc: kselftest: update for clarity on running
- kselftests in CI rings
-To:     Shuah Khan <skhan@linuxfoundation.org>, corbet@lwn.net
-Cc:     linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dan.rue@linaro.org,
-        anders.roxell@linaro.org, shuah <shuah@kernel.org>
-References: <20190827003709.26950-1-skhan@linuxfoundation.org>
-From:   shuah <shuah@kernel.org>
-Message-ID: <f5088365-68a1-6036-0037-b6e9af01391f@kernel.org>
-Date:   Wed, 28 Aug 2019 13:17:37 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        id S1726898AbfH1ViN (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 28 Aug 2019 17:38:13 -0400
+Received: from mail-wr1-f67.google.com ([209.85.221.67]:34836 "EHLO
+        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726839AbfH1ViN (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 28 Aug 2019 17:38:13 -0400
+Received: by mail-wr1-f67.google.com with SMTP id g7so1299638wrx.2;
+        Wed, 28 Aug 2019 14:38:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=sGjhjuh8luS+aqRBrfS7bHWA5KJ+QKi4i3rS6Cai6WY=;
+        b=SiERiSw553Kaxk/tRLH5J9b4vOVe5PEhITDMHzFEy2/8RX+K5wXHNtNLCnw4SbRJDk
+         JCCiIjdQLrIoZA/CfHjgVs42XEDgAWj4hn7afiVHrFw8LJtdpynYnsoxpBqKbSqTqfJd
+         HNKWuEzo2ini90T5kpyxNSKb+8ForNyAOwc/MVmCzxKfCGPiRbo466ilnhXU68kB1bA3
+         EhqYXDVTNeccNDqqIA7pYJlVX3RC/R8qfQnLNqoxVjSsXOio6D72LFOvsXoI14FflENV
+         wapdyA8ef8PQbXzGRWwhRRf3ISJ1p8DISLOgSWn54ygagD1I+Y5zRELj7YNRL6Zba8BR
+         qYwg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=sGjhjuh8luS+aqRBrfS7bHWA5KJ+QKi4i3rS6Cai6WY=;
+        b=WRkPN+kakvwxC+mu/Dm1fIbftsBCSl93ykeqz8HlCDQ2py12fYG5XU5czwS17odAHl
+         6nubPsiL0QeNtdwIYBVqeKUJ5GHa7bBvK/rYZ3bQcNna3z7szfsKuYwrmJdtdOtyHjGV
+         vi9h1V20qQKiNeBLR69l9KJ6PTreQqsizPNWhLDgi+pIL7aKvWjTT+4DhlFxV/bilA1t
+         hTDOnmxwEvrYab2Gj237G+lAxFoeNbcn3yZkM7y++jcR+8IjSZRZG0Fuk+hz62DRtskl
+         RKOE5/UNFrAHHVzrEbL0GFEaa3HHcfzBW6kgK6ScL8Rdo2+S33mGq4tQ/h5PGLEb6nwu
+         q0xA==
+X-Gm-Message-State: APjAAAUsCtrsEjw0AWHVyLLyHEen1a3f6LSkyo1vhdNSTKea32LUfQ3O
+        +8gHqwksAnlCevWGbxeY/fV7UWmneQMV++DEwfw=
+X-Google-Smtp-Source: APXvYqy0U65XUAnttf145xEP+EHodRd9s98VxWubDUuMO7oGhPo6lBhmmd2Vbn44BFVHtYxXeHabTrxP5Dn2X0NcIS4=
+X-Received: by 2002:a5d:51c6:: with SMTP id n6mr7299855wrv.206.1567028290871;
+ Wed, 28 Aug 2019 14:38:10 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20190827003709.26950-1-skhan@linuxfoundation.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <20190822205533.4877-1-david.abdurachmanov@sifive.com> <201908251451.73C6812E8@keescook>
+In-Reply-To: <201908251451.73C6812E8@keescook>
+From:   David Abdurachmanov <david.abdurachmanov@gmail.com>
+Date:   Wed, 28 Aug 2019 14:37:34 -0700
+Message-ID: <CAEn-LToB1atxDvehBanVaxg6sk8zDkMe_CbqeTVgKNzOvD9-Sw@mail.gmail.com>
+Subject: Re: [PATCH v2] riscv: add support for SECCOMP and SECCOMP_FILTER
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Oleg Nesterov <oleg@redhat.com>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Will Drewry <wad@chromium.org>, Shuah Khan <shuah@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        David Abdurachmanov <david.abdurachmanov@sifive.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Allison Randal <allison@lohutok.net>,
+        Alexios Zavras <alexios.zavras@intel.com>,
+        Anup Patel <Anup.Patel@wdc.com>,
+        Vincent Chen <vincentc@andestech.com>,
+        Alan Kao <alankao@andestech.com>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, me@carlosedp.com
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 8/26/19 6:37 PM, Shuah Khan wrote:
-> Update to add clarity and recommendations on running newer kselftests
-> on older kernels vs. matching the kernel and kselftest revisions.
-> 
-> The recommendation is "Match kernel revision and kselftest."
-> 
-> Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
-> ---
-> Changes since v1: Fixed "WARNING: Title underline too short."
+On Wed, Aug 28, 2019 at 10:36 AM Kees Cook <keescook@chromium.org> wrote:
+>
+> On Thu, Aug 22, 2019 at 01:55:22PM -0700, David Abdurachmanov wrote:
+> > This patch was extensively tested on Fedora/RISCV (applied by default on
+> > top of 5.2-rc7 kernel for <2 months). The patch was also tested with 5.3-rc
+> > on QEMU and SiFive Unleashed board.
+>
+> Oops, I see the mention of QEMU here. Where's the best place to find
+> instructions on creating a qemu riscv image/environment?
 
-I have a few more changes and would like to make and send a v3 after
-the LPC's Testing and Fuzzing kselftest discussion.
+Examples from what I personally use:
+https://github.com/riscv/meta-riscv
+https://fedoraproject.org/wiki/Architectures/RISC-V/Installing#Boot_with_libvirt
+(might be outdated)
 
-Holding off on this patch for now.
+If you are running machine with a properly working libvirt/QEMU setup:
 
-thanks,
--- Shuah
+VIRTBUILDER_IMAGE=fedora-rawhide-developer-20190703n0
+FIRMWARE=fw_payload-uboot-qemu-virt-smode.elf
+wget https://dl.fedoraproject.org/pub/alt/risc-v/disk-images/fedora/rawhide/20190703.n.0/Developer/$FIRMWARE
+echo riscv > /tmp/rootpw
+virt-builder \
+    --verbose \
+    --source https://dl.fedoraproject.org/pub/alt/risc-v/repo/virt-builder-images/images/index
+\
+    --no-check-signature \
+    --arch riscv64 \
+    --size 10G \
+    --format raw \
+    --hostname fedora-riscv \
+    -o disk \
+    --root-password file:/tmp/rootpw \
+    ${VIRTBUILDER_IMAGE}
+
+sudo virt-install \
+    --name fedora-riscv \
+    --arch riscv64 \
+    --vcpus 4 \
+    --memory 3048 \
+    --import \
+    --disk path=$PWD/disk \
+    --boot kernel=$PWD/${FIRMWARE} \
+    --network network=default \
+    --graphics none \
+    --serial log.file=/tmp/fedora-riscv.serial.log \
+    --noautoconsole
+
+The following does incl. SECCOMP v2 patch on top of 5.2-rc7 kernel.
+
+>
+> > There is one failing kernel selftest: global.user_notification_signal
+>
+> This test has been fragile (and is not arch-specific), so as long as
+> everything else is passing, I would call this patch ready to go. :)
+>
+> Reviewed-by: Kees Cook <keescook@chromium.org>
+>
+> --
+> Kees Cook
