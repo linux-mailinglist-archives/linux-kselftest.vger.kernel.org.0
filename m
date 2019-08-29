@@ -2,99 +2,81 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7842AA0E7A
-	for <lists+linux-kselftest@lfdr.de>; Thu, 29 Aug 2019 02:01:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BFFC6A0EAA
+	for <lists+linux-kselftest@lfdr.de>; Thu, 29 Aug 2019 02:42:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725892AbfH2ABq (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 28 Aug 2019 20:01:46 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:14804 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726825AbfH2ABq (ORCPT
+        id S1726787AbfH2Amb (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 28 Aug 2019 20:42:31 -0400
+Received: from mail-yw1-f68.google.com ([209.85.161.68]:43359 "EHLO
+        mail-yw1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726384AbfH2Amb (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 28 Aug 2019 20:01:46 -0400
-Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x7SNvO7j148929
-        for <linux-kselftest@vger.kernel.org>; Wed, 28 Aug 2019 20:01:45 -0400
-Received: from e06smtp04.uk.ibm.com (e06smtp04.uk.ibm.com [195.75.94.100])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 2up3nm8723-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-kselftest@vger.kernel.org>; Wed, 28 Aug 2019 20:01:45 -0400
-Received: from localhost
-        by e06smtp04.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-kselftest@vger.kernel.org> from <zohar@linux.ibm.com>;
-        Thu, 29 Aug 2019 01:01:43 +0100
-Received: from b06cxnps4074.portsmouth.uk.ibm.com (9.149.109.196)
-        by e06smtp04.uk.ibm.com (192.168.101.134) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Thu, 29 Aug 2019 01:01:40 +0100
-Received: from d06av24.portsmouth.uk.ibm.com (mk.ibm.com [9.149.105.60])
-        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x7T01dRp21168142
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 29 Aug 2019 00:01:39 GMT
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 2D3F342042;
-        Thu, 29 Aug 2019 00:01:39 +0000 (GMT)
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id B61F34207D;
-        Thu, 29 Aug 2019 00:01:37 +0000 (GMT)
-Received: from localhost.localdomain (unknown [9.85.129.156])
-        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Thu, 29 Aug 2019 00:01:37 +0000 (GMT)
-Subject: Re: [PATCH v1] sefltest/ima: support appended signatures (modsig)
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Thiago Jung Bauermann <bauerman@linux.ibm.com>
-Cc:     linux-integrity@vger.kernel.org, Petr Vorel <pvorel@suse.cz>,
-        Jessica Yu <jeyu@kernel.org>, Dave Young <dyoung@redhat.com>,
-        shuah <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Date:   Wed, 28 Aug 2019 20:01:37 -0400
-In-Reply-To: <87o908eu7l.fsf@morokweng.localdomain>
-References: <1567005240-12912-1-git-send-email-zohar@linux.ibm.com>
-         <87o908eu7l.fsf@morokweng.localdomain>
+        Wed, 28 Aug 2019 20:42:31 -0400
+Received: by mail-yw1-f68.google.com with SMTP id n205so547665ywb.10
+        for <linux-kselftest@vger.kernel.org>; Wed, 28 Aug 2019 17:42:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=JGRwNGErn4fgKcrUQ6xiTdFGa/UMxL0bW7u4f7HW4+s=;
+        b=pBO9kFI77gE/gtpKbWkDAhKyiVvqdGWPANz9tNI0ulLcwYHoReFSfdXsKvIH5b2ukK
+         WGnn+9GA91GX0cvQr5BUecBkiW3S29/Rw0gTWQUMFlFjv518j/HXADFAj+4761buG12B
+         iyiEMUsd42x8e+ChjWSlMASRf9onmoRTvLke52aYFW5iHXS/bcePN11ElmPPs2wEHwr+
+         +lo9WwG12RwAezKZNZnE+4D2qf1ZmnQwI4Yefcvpkkl6fjQclDsYV6Df+hzX3xOmZ8Wm
+         w625t6PosUftPeW/9D5oDaSYkeGL4TR12mZ+mdAvFl3FLIEjoe+eb+wrL1d7u+9yz/dL
+         GWgA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=JGRwNGErn4fgKcrUQ6xiTdFGa/UMxL0bW7u4f7HW4+s=;
+        b=KFo2E46bfmbdoRfAbvFquOPB3s/etMp+2omKki17vwo0cxSsALiLdbL9aREDbESoyM
+         BNiRZvoROfn3m9XrfrtuYmZJlF0yGjE1ynI6S5Ct7zSISnYJ8EgdCfmBMZJXDpbmarIm
+         l+eircqTOZh25IMPTAUAPcXwsMp7Vlpm/GMh6LmueWey0etkopXB9Pt/aSTQeZ/5cUEZ
+         Zl+oYxaX/lklMF+KPIyt4hbvlK3XZ4QvC4YsUdI5hj/q/BcUPrUcUnkWn5jRD+mNkeCJ
+         y7GXDMmqLOhdibdr8/3TXvNGM28A+5sf+7u8NnYYf9bS5TnEFtMunojj+5B4/2DiUKjc
+         Nb9w==
+X-Gm-Message-State: APjAAAU3Nk2BtwaDwARFjw5WMCPh1ILGyFCtrf3MvZ5JIRHuO0F8xLmA
+        heMiH7Ad4+2rac0m9ZEmwpVk3/lUxRKf2MKW1lmkMQ==
+X-Google-Smtp-Source: APXvYqy5sKfSQACB2NAIiSOftUd7x4Lw2pJ4Aa//yGOwNk/VbNo7vi6L+kgnsQlyUjh9vJq+0hA9wmBNIT5b9wnNNlk=
+X-Received: by 2002:a81:6643:: with SMTP id a64mr4939106ywc.205.1567039350010;
+ Wed, 28 Aug 2019 17:42:30 -0700 (PDT)
+MIME-Version: 1.0
+References: <20190826233240.11524-1-almasrymina@google.com> <20190828112340.GB7466@dhcp22.suse.cz>
+In-Reply-To: <20190828112340.GB7466@dhcp22.suse.cz>
+From:   Shakeel Butt <shakeelb@google.com>
+Date:   Wed, 28 Aug 2019 17:42:17 -0700
+Message-ID: <CALvZod50oU2M6uhUU1JsBz+qWYgSCb9brMVVnxmGnzSRY+1k_w@mail.gmail.com>
+Subject: Re: [PATCH v3 0/6] hugetlb_cgroup: Add hugetlb_cgroup reservation limits
+To:     Michal Hocko <mhocko@kernel.org>
+Cc:     Mina Almasry <almasrymina@google.com>, mike.kravetz@oracle.com,
+        shuah@kernel.org, David Rientjes <rientjes@google.com>,
+        Greg Thelen <gthelen@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        khalid.aziz@oracle.com, LKML <linux-kernel@vger.kernel.org>,
+        Linux MM <linux-mm@kvack.org>, linux-kselftest@vger.kernel.org,
+        Cgroups <cgroups@vger.kernel.org>,
+        aneesh.kumar@linux.vnet.ibm.com, mkoutny@suse.com
 Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-x-cbid: 19082900-0016-0000-0000-000002A41152
-X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 19082900-0017-0000-0000-0000330463C3
-Message-Id: <1567036897.6115.94.camel@linux.ibm.com>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-08-28_13:,,
- signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
- clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=797 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1906280000 definitions=main-1908280221
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, 2019-08-28 at 20:38 -0300, Thiago Jung Bauermann wrote:
-> Hello Mimi,
-> 
-> Mimi Zohar <zohar@linux.ibm.com> writes:
-> 
-> > In addition to the PE/COFF and IMA xattr signatures, the kexec kernel
-> > image can be signed with an appended signature, using the same
-> > scripts/sign-file tool that is used to sign kernel modules.
-> >
-> > This patch adds support for detecting a kernel image signed with an
-> > appended signature and updates the existing test messages
-> > appropriately.
-> >
-> > Reviewed-by: Petr Vorel <pvorel@suse.cz>
-> > Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
-> 
-> Thanks for doing this!
+On Wed, Aug 28, 2019 at 4:23 AM Michal Hocko <mhocko@kernel.org> wrote:
+>
+> On Mon 26-08-19 16:32:34, Mina Almasry wrote:
+> >  mm/hugetlb.c                                  | 493 ++++++++++++------
+> >  mm/hugetlb_cgroup.c                           | 187 +++++--
+>
+> This is a lot of changes to an already subtle code which hugetlb
+> reservations undoubly are. Moreover cgroupv1 is feature frozen and I am
+> not aware of any plans to port the controller to v2. That all doesn't
+> sound in favor of this change.
 
-You're welcome.  This isn't in lieu of a proper regression test that
-verifies the IMA measurement list template modsig and d-modsig data
-fields.  That still needs to be written.
+Actually "no plan to port the controller to v2" makes the case strong
+for these changes (and other new features) to be done in v1. If there
+is an alternative solution in v2 then I can understand the push-back
+on changes in v1 but that is not the case here.
 
-thanks,
-
-Mimi
-
+Shakeel
