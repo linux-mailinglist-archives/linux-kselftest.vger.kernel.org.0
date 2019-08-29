@@ -2,236 +2,176 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 65CE2A19B4
-	for <lists+linux-kselftest@lfdr.de>; Thu, 29 Aug 2019 14:14:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A88FA19CC
+	for <lists+linux-kselftest@lfdr.de>; Thu, 29 Aug 2019 14:16:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727171AbfH2MOV (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 29 Aug 2019 08:14:21 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:64869 "EHLO mx1.redhat.com"
+        id S1727386AbfH2MQJ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 29 Aug 2019 08:16:09 -0400
+Received: from mx2.mailbox.org ([80.241.60.215]:28272 "EHLO mx2.mailbox.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726983AbfH2MOV (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 29 Aug 2019 08:14:21 -0400
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        id S1727174AbfH2MQI (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 29 Aug 2019 08:16:08 -0400
+Received: from smtp1.mailbox.org (smtp1.mailbox.org [80.241.60.240])
+        (using TLSv1.2 with cipher ECDHE-RSA-CHACHA20-POLY1305 (256/256 bits))
         (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id 6EB8B3082145;
-        Thu, 29 Aug 2019 12:14:20 +0000 (UTC)
-Received: from thuth.com (ovpn-116-53.ams2.redhat.com [10.36.116.53])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 5024060CD0;
-        Thu, 29 Aug 2019 12:14:16 +0000 (UTC)
-From:   Thomas Huth <thuth@redhat.com>
-To:     kvm@vger.kernel.org,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>
-Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        David Hildenbrand <david@redhat.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        =?UTF-8?q?Radim=20Kr=C4=8Dm=C3=A1=C5=99?= <rkrcmar@redhat.com>
-Subject: [PATCH v2] KVM: selftests: Add a test for the KVM_S390_MEM_OP ioctl
-Date:   Thu, 29 Aug 2019 14:14:12 +0200
-Message-Id: <20190829121412.30194-1-thuth@redhat.com>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
-X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.42]); Thu, 29 Aug 2019 12:14:20 +0000 (UTC)
+        by mx2.mailbox.org (Postfix) with ESMTPS id 2ACB4A1069;
+        Thu, 29 Aug 2019 14:16:02 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at heinlein-support.de
+Received: from smtp1.mailbox.org ([80.241.60.240])
+        by spamfilter02.heinlein-hosting.de (spamfilter02.heinlein-hosting.de [80.241.56.116]) (amavisd-new, port 10030)
+        with ESMTP id WXJzDwa0kR9t; Thu, 29 Aug 2019 14:15:51 +0200 (CEST)
+Date:   Thu, 29 Aug 2019 22:15:27 +1000
+From:   Aleksa Sarai <cyphar@cyphar.com>
+To:     Daniel Colascione <dancol@google.com>
+Cc:     Al Viro <viro@zeniv.linux.org.uk>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J. Bruce Fields" <bfields@fieldses.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        David Howells <dhowells@redhat.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Christian Brauner <christian@brauner.io>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Jann Horn <jannh@google.com>, Tycho Andersen <tycho@tycho.ws>,
+        David Drysdale <drysdale@google.com>,
+        Chanho Min <chanho.min@lge.com>,
+        Oleg Nesterov <oleg@redhat.com>, Aleksa Sarai <asarai@suse.de>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        containers@lists.linux-foundation.org, linux-alpha@vger.kernel.org,
+        Linux API <linux-api@vger.kernel.org>,
+        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Linux FS Devel <linux-fsdevel@vger.kernel.org>,
+        linux-ia64@vger.kernel.org,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, linux-xtensa@linux-xtensa.org,
+        sparclinux@vger.kernel.org
+Subject: Re: [PATCH RESEND v11 7/8] open: openat2(2) syscall
+Message-ID: <20190829121527.u2uvdyeatme5cgkb@yavin>
+References: <20190820033406.29796-1-cyphar@cyphar.com>
+ <20190820033406.29796-8-cyphar@cyphar.com>
+ <CAKOZuesfxRBJe314rkTKXtjXdz6ki3uAUBYVbu5Q2rd3=ADphQ@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="ys4y6f5eyfdosi3x"
+Content-Disposition: inline
+In-Reply-To: <CAKOZuesfxRBJe314rkTKXtjXdz6ki3uAUBYVbu5Q2rd3=ADphQ@mail.gmail.com>
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Check that we can write and read the guest memory with this s390x
-ioctl, and that some error cases are handled correctly.
 
-Signed-off-by: Thomas Huth <thuth@redhat.com>
----
- v2: Check the ioctl also with "size" set to 0
+--ys4y6f5eyfdosi3x
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
- tools/testing/selftests/kvm/Makefile      |   1 +
- tools/testing/selftests/kvm/s390x/memop.c | 165 ++++++++++++++++++++++
- 2 files changed, 166 insertions(+)
- create mode 100644 tools/testing/selftests/kvm/s390x/memop.c
+On 2019-08-24, Daniel Colascione <dancol@google.com> wrote:
+> On Mon, Aug 19, 2019 at 8:37 PM Aleksa Sarai <cyphar@cyphar.com> wrote:
+> >
+> > The most obvious syscall to add support for the new LOOKUP_* scoping
+> > flags would be openat(2). However, there are a few reasons why this is
+> > not the best course of action:
+> >
+> >  * The new LOOKUP_* flags are intended to be security features, and
+> >    openat(2) will silently ignore all unknown flags. This means that
+> >    users would need to avoid foot-gunning themselves constantly when
+> >    using this interface if it were part of openat(2). This can be fixed
+> >    by having userspace libraries handle this for users[1], but should be
+> >    avoided if possible.
+> >
+> >  * Resolution scoping feels like a different operation to the existing
+> >    O_* flags. And since openat(2) has limited flag space, it seems to be
+> >    quite wasteful to clutter it with 5 flags that are all
+> >    resolution-related. Arguably O_NOFOLLOW is also a resolution flag but
+> >    its entire purpose is to error out if you encounter a trailing
+> >    symlink -- not to scope resolution.
+> >
+> >  * Other systems would be able to reimplement this syscall allowing for
+> >    cross-OS standardisation rather than being hidden amongst O_* flags
+> >    which may result in it not being used by all the parties that might
+> >    want to use it (file servers, web servers, container runtimes, etc).
+> >
+> >  * It gives us the opportunity to iterate on the O_PATH interface. In
+> >    particular, the new @how->upgrade_mask field for fd re-opening is
+> >    only possible because we have a clean slate without needing to re-use
+> >    the ACC_MODE flag design nor the existing openat(2) @mode semantics.
+> >
+> > To this end, we introduce the openat2(2) syscall. It provides all of the
+> > features of openat(2) through the @how->flags argument, but also
+> > also provides a new @how->resolve argument which exposes RESOLVE_* flags
+> > that map to our new LOOKUP_* flags. It also eliminates the long-standing
+> > ugliness of variadic-open(2) by embedding it in a struct.
+> >
+> > In order to allow for userspace to lock down their usage of file
+> > descriptor re-opening, openat2(2) has the ability for users to disallow
+> > certain re-opening modes through @how->upgrade_mask. At the moment,
+> > there is no UPGRADE_NOEXEC. The open_how struct is padded to 64 bytes
+> > for future extensions (all of the reserved bits must be zeroed).
+>=20
+> Why pad the structure when new functionality (perhaps accommodated via
+> a larger structure) could be signaled by passing a new flag? Adding
+> reserved fields to a structure with a size embedded in the ABI makes a
+> lot of sense --- e.g., pthread_mutex_t can't grow. But this structure
+> can grow, so the reservation seems needless to me.
 
-diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftests/kvm/Makefile
-index 1b48a94b4350..62c591f87dab 100644
---- a/tools/testing/selftests/kvm/Makefile
-+++ b/tools/testing/selftests/kvm/Makefile
-@@ -32,6 +32,7 @@ TEST_GEN_PROGS_aarch64 += clear_dirty_log_test
- TEST_GEN_PROGS_aarch64 += dirty_log_test
- TEST_GEN_PROGS_aarch64 += kvm_create_max_vcpus
- 
-+TEST_GEN_PROGS_s390x = s390x/memop
- TEST_GEN_PROGS_s390x += s390x/sync_regs_test
- TEST_GEN_PROGS_s390x += dirty_log_test
- TEST_GEN_PROGS_s390x += kvm_create_max_vcpus
-diff --git a/tools/testing/selftests/kvm/s390x/memop.c b/tools/testing/selftests/kvm/s390x/memop.c
-new file mode 100644
-index 000000000000..e6a65f9e48ca
---- /dev/null
-+++ b/tools/testing/selftests/kvm/s390x/memop.c
-@@ -0,0 +1,165 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+/*
-+ * Test for s390x KVM_S390_MEM_OP
-+ *
-+ * Copyright (C) 2019, Red Hat, Inc.
-+ */
-+
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <string.h>
-+#include <sys/ioctl.h>
-+
-+#include "test_util.h"
-+#include "kvm_util.h"
-+
-+#define VCPU_ID 1
-+
-+static uint8_t mem1[65536];
-+static uint8_t mem2[65536];
-+
-+static void guest_code(void)
-+{
-+	int i;
-+
-+	for (;;) {
-+		for (i = 0; i < sizeof(mem2); i++)
-+			mem2[i] = mem1[i];
-+		GUEST_SYNC(0);
-+	}
-+}
-+
-+int main(int argc, char *argv[])
-+{
-+	struct kvm_vm *vm;
-+	struct kvm_run *run;
-+	struct kvm_s390_mem_op ksmo;
-+	int rv, i, maxsize;
-+
-+	setbuf(stdout, NULL);	/* Tell stdout not to buffer its content */
-+
-+	maxsize = kvm_check_cap(KVM_CAP_S390_MEM_OP);
-+	if (!maxsize) {
-+		fprintf(stderr, "CAP_S390_MEM_OP not supported -> skip test\n");
-+		exit(KSFT_SKIP);
-+	}
-+	if (maxsize > sizeof(mem1))
-+		maxsize = sizeof(mem1);
-+
-+	/* Create VM */
-+	vm = vm_create_default(VCPU_ID, 0, guest_code);
-+	run = vcpu_state(vm, VCPU_ID);
-+
-+	for (i = 0; i < sizeof(mem1); i++)
-+		mem1[i] = i * i + i;
-+
-+	/* Set the first array */
-+	ksmo.gaddr = addr_gva2gpa(vm, (uintptr_t)mem1);
-+	ksmo.flags = 0;
-+	ksmo.size = maxsize;
-+	ksmo.op = KVM_S390_MEMOP_LOGICAL_WRITE;
-+	ksmo.buf = (uintptr_t)mem1;
-+	ksmo.ar = 0;
-+	vcpu_ioctl(vm, VCPU_ID, KVM_S390_MEM_OP, &ksmo);
-+
-+	/* Let the guest code copy the first array to the second */
-+	vcpu_run(vm, VCPU_ID);
-+	TEST_ASSERT(run->exit_reason == KVM_EXIT_S390_SIEIC,
-+		    "Unexpected exit reason: %u (%s)\n",
-+		    run->exit_reason,
-+		    exit_reason_str(run->exit_reason));
-+
-+	memset(mem2, 0xaa, sizeof(mem2));
-+
-+	/* Get the second array */
-+	ksmo.gaddr = (uintptr_t)mem2;
-+	ksmo.flags = 0;
-+	ksmo.size = maxsize;
-+	ksmo.op = KVM_S390_MEMOP_LOGICAL_READ;
-+	ksmo.buf = (uintptr_t)mem2;
-+	ksmo.ar = 0;
-+	vcpu_ioctl(vm, VCPU_ID, KVM_S390_MEM_OP, &ksmo);
-+
-+	TEST_ASSERT(!memcmp(mem1, mem2, maxsize),
-+		    "Memory contents do not match!");
-+
-+	/* Check error conditions - first bad size: */
-+	ksmo.gaddr = (uintptr_t)mem1;
-+	ksmo.flags = 0;
-+	ksmo.size = -1;
-+	ksmo.op = KVM_S390_MEMOP_LOGICAL_WRITE;
-+	ksmo.buf = (uintptr_t)mem1;
-+	ksmo.ar = 0;
-+	rv = _vcpu_ioctl(vm, VCPU_ID, KVM_S390_MEM_OP, &ksmo);
-+	TEST_ASSERT(rv == -1 && errno == E2BIG, "ioctl allows insane sizes");
-+
-+	/* Zero size: */
-+	ksmo.gaddr = (uintptr_t)mem1;
-+	ksmo.flags = 0;
-+	ksmo.size = 0;
-+	ksmo.op = KVM_S390_MEMOP_LOGICAL_WRITE;
-+	ksmo.buf = (uintptr_t)mem1;
-+	ksmo.ar = 0;
-+	rv = _vcpu_ioctl(vm, VCPU_ID, KVM_S390_MEM_OP, &ksmo);
-+	TEST_ASSERT(rv == -1, "ioctl allows 0 as size");
-+
-+	/* Bad flags: */
-+	ksmo.gaddr = (uintptr_t)mem1;
-+	ksmo.flags = -1;
-+	ksmo.size = maxsize;
-+	ksmo.op = KVM_S390_MEMOP_LOGICAL_WRITE;
-+	ksmo.buf = (uintptr_t)mem1;
-+	ksmo.ar = 0;
-+	rv = _vcpu_ioctl(vm, VCPU_ID, KVM_S390_MEM_OP, &ksmo);
-+	TEST_ASSERT(rv == -1 && errno == EINVAL, "ioctl allows all flags?");
-+
-+	/* Bad operation: */
-+	ksmo.gaddr = (uintptr_t)mem1;
-+	ksmo.flags = 0;
-+	ksmo.size = maxsize;
-+	ksmo.op = -1;
-+	ksmo.buf = (uintptr_t)mem1;
-+	ksmo.ar = 0;
-+	rv = _vcpu_ioctl(vm, VCPU_ID, KVM_S390_MEM_OP, &ksmo);
-+	TEST_ASSERT(rv == -1 && errno == EINVAL, "ioctl allows all flags?");
-+
-+	/* Bad guest address: */
-+	ksmo.gaddr = ~0xfffUL;
-+	ksmo.flags = KVM_S390_MEMOP_F_CHECK_ONLY;
-+	ksmo.size = maxsize;
-+	ksmo.op = KVM_S390_MEMOP_LOGICAL_WRITE;
-+	ksmo.buf = (uintptr_t)mem1;
-+	ksmo.ar = 0;
-+	rv = _vcpu_ioctl(vm, VCPU_ID, KVM_S390_MEM_OP, &ksmo);
-+	TEST_ASSERT(rv > 0, "ioctl does not report bad guest memory access");
-+
-+	/* Bad host address: */
-+	ksmo.gaddr = (uintptr_t)mem1;
-+	ksmo.flags = 0;
-+	ksmo.size = maxsize;
-+	ksmo.op = KVM_S390_MEMOP_LOGICAL_WRITE;
-+	ksmo.buf = 0;
-+	ksmo.ar = 0;
-+	rv = _vcpu_ioctl(vm, VCPU_ID, KVM_S390_MEM_OP, &ksmo);
-+	TEST_ASSERT(rv == -1 && errno == EFAULT,
-+		    "ioctl does not report bad host memory address");
-+
-+	/* Bad access register: */
-+	run->psw_mask &= ~(3UL << (63 - 17));
-+	run->psw_mask |= 1UL << (63 - 17);  /* Enable AR mode */
-+	vcpu_run(vm, VCPU_ID);              /* To sync new state to SIE block */
-+	ksmo.gaddr = (uintptr_t)mem1;
-+	ksmo.flags = 0;
-+	ksmo.size = maxsize;
-+	ksmo.op = KVM_S390_MEMOP_LOGICAL_WRITE;
-+	ksmo.buf = (uintptr_t)mem1;
-+	ksmo.ar = 17;
-+	rv = _vcpu_ioctl(vm, VCPU_ID, KVM_S390_MEM_OP, &ksmo);
-+	TEST_ASSERT(rv == -1 && errno == EINVAL, "ioctl allows ARs > 15");
-+	run->psw_mask &= ~(3UL << (63 - 17));   /* Disable AR mode */
-+	vcpu_run(vm, VCPU_ID);                  /* Run to sync new state */
-+
-+	kvm_vm_free(vm);
-+
-+	return 0;
-+}
--- 
-2.18.1
+Quite a few folks have said that ->reserved is either unnecessary or
+too big. I will be changing this, though I am not clear what the best
+way of extending the structure is. If anyone has a strong opinion on
+this (or an alternative to the ones listed below), please chime in. I
+don't have any really strong attachment to this aspect of the API.
 
+There appear to be a few ways we can do it (that all have precedence
+with other syscalls):
+
+ 1. Use O_* flags to indicate extensions.
+ 2. A separate "version" field that is incremented when we change.
+ 3. Add a size_t argument to openat2(2).
+ 4. Reserve space (as in this patchset).
+
+(My personal preference would be (3), followed closely by (2).)
+
+The main problem with (1) is that it pollutes the open(2) and openat(2)
+syscalls with new O_* flags, which is probably not a good API decision
+(syscall flags are already "bad" enough, let's not throw a bunch of
+no-ops into the mix).
+
+(2) is mostly fine except for a slight issue of ergonomics (glibc would
+have to auto-fill the version field or make wrappers in order to make it
+easier to use sanely). But this does have the benefit that we could
+re-arrange fields (not that this is something we'd want to do anyway).
+
+Both (1) and (2) have the problem that the "struct version" is inside
+the struct so we'd need to copy_from_user() twice. This isn't the end of
+the world, it just feels a bit less clean than is ideal. (3) fixes that
+problem, at the cost of making the API slightly more cumbersome to use
+directly (though again glibc could wrap that away).
+
+And the downsides of (4) are pretty well discussed already.
+
+--=20
+Aleksa Sarai
+Senior Software Engineer (Containers)
+SUSE Linux GmbH
+<https://www.cyphar.com/>
+
+--ys4y6f5eyfdosi3x
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQSxZm6dtfE8gxLLfYqdlLljIbnQEgUCXWfB2wAKCRCdlLljIbnQ
+EljcAQC+BitddeHjv2a9yspU0gLaZB6nn8UBahZIqiE8+4xUoAEAuibGdlSM4ag8
+ZYal7PGiNelUZH1S6GPHj1bvVNNGOQ0=
+=OczH
+-----END PGP SIGNATURE-----
+
+--ys4y6f5eyfdosi3x--
