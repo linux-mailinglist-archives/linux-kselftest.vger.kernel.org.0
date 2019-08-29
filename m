@@ -2,114 +2,323 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7909CA1B8A
-	for <lists+linux-kselftest@lfdr.de>; Thu, 29 Aug 2019 15:35:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50FCBA1BBF
+	for <lists+linux-kselftest@lfdr.de>; Thu, 29 Aug 2019 15:44:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727673AbfH2Ne7 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 29 Aug 2019 09:34:59 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:51468 "EHLO mx1.redhat.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727109AbfH2Ne7 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 29 Aug 2019 09:34:59 -0400
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id 621DC807062;
-        Thu, 29 Aug 2019 13:34:59 +0000 (UTC)
-Received: from thuth.remote.csb (ovpn-116-53.ams2.redhat.com [10.36.116.53])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 10A975C1D6;
-        Thu, 29 Aug 2019 13:34:54 +0000 (UTC)
+        id S1727223AbfH2Not (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 29 Aug 2019 09:44:49 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:46426 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1727066AbfH2Nop (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 29 Aug 2019 09:44:45 -0400
+Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x7TDi12s038526
+        for <linux-kselftest@vger.kernel.org>; Thu, 29 Aug 2019 09:44:43 -0400
+Received: from e06smtp07.uk.ibm.com (e06smtp07.uk.ibm.com [195.75.94.103])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 2upeadc63m-1
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-kselftest@vger.kernel.org>; Thu, 29 Aug 2019 09:44:43 -0400
+Received: from localhost
+        by e06smtp07.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-kselftest@vger.kernel.org> from <borntraeger@de.ibm.com>;
+        Thu, 29 Aug 2019 14:44:41 +0100
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (9.149.109.194)
+        by e06smtp07.uk.ibm.com (192.168.101.137) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
+        Thu, 29 Aug 2019 14:44:39 +0100
+Received: from d06av24.portsmouth.uk.ibm.com (d06av24.portsmouth.uk.ibm.com [9.149.105.60])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x7TDicwQ43450592
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 29 Aug 2019 13:44:38 GMT
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 0CAA042047;
+        Thu, 29 Aug 2019 13:44:38 +0000 (GMT)
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id AAC1F42049;
+        Thu, 29 Aug 2019 13:44:37 +0000 (GMT)
+Received: from oc7455500831.ibm.com (unknown [9.152.224.51])
+        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Thu, 29 Aug 2019 13:44:37 +0000 (GMT)
 Subject: Re: [PATCH v3] KVM: selftests: Add a test for the KVM_S390_MEM_OP
  ioctl
-To:     Christian Borntraeger <borntraeger@de.ibm.com>,
-        kvm@vger.kernel.org, Janosch Frank <frankja@linux.ibm.com>
+To:     Thomas Huth <thuth@redhat.com>, kvm@vger.kernel.org,
+        Janosch Frank <frankja@linux.ibm.com>
 Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
         David Hildenbrand <david@redhat.com>,
         Cornelia Huck <cohuck@redhat.com>,
         =?UTF-8?B?UmFkaW0gS3LEjW3DocWZ?= <rkrcmar@redhat.com>
 References: <20190829130732.580-1-thuth@redhat.com>
- <c15f4505-95aa-34eb-d618-927af550d00b@de.ibm.com>
-From:   Thomas Huth <thuth@redhat.com>
+From:   Christian Borntraeger <borntraeger@de.ibm.com>
 Openpgp: preference=signencrypt
-Autocrypt: addr=thuth@redhat.com; prefer-encrypt=mutual; keydata=
- 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
-Organization: Red Hat
-Message-ID: <9457a569-c829-74c9-9836-e9bc76a3ca46@redhat.com>
-Date:   Thu, 29 Aug 2019 15:34:54 +0200
+Autocrypt: addr=borntraeger@de.ibm.com; prefer-encrypt=mutual; keydata=
+ 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
+ syiRa+UVlsKmx1hsEg==
+Date:   Thu, 29 Aug 2019 15:44:37 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.8.0
 MIME-Version: 1.0
-In-Reply-To: <c15f4505-95aa-34eb-d618-927af550d00b@de.ibm.com>
+In-Reply-To: <20190829130732.580-1-thuth@redhat.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
-X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.6.2 (mx1.redhat.com [10.5.110.67]); Thu, 29 Aug 2019 13:34:59 +0000 (UTC)
+X-TM-AS-GCONF: 00
+x-cbid: 19082913-0028-0000-0000-000003954736
+X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
+x-cbparentid: 19082913-0029-0000-0000-0000245787CC
+Message-Id: <0cc74231-d01e-2b2c-5f6d-252f328e547d@de.ibm.com>
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-08-29_06:,,
+ signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ malwarescore=0 suspectscore=2 phishscore=0 bulkscore=0 spamscore=0
+ clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
+ mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.0.1-1906280000 definitions=main-1908290151
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 29/08/2019 15.26, Christian Borntraeger wrote:
+thanks applied. 
+
+On 29.08.19 15:07, Thomas Huth wrote:
+> Check that we can write and read the guest memory with this s390x
+> ioctl, and that some error cases are handled correctly.
 > 
+> Signed-off-by: Thomas Huth <thuth@redhat.com>
+> ---
+>  v3:
+>  - Replaced wrong copy-n-pasted report string with a proper one
+>  - Check for errno after calling the ioctl with size = 0
+>  
+>  tools/testing/selftests/kvm/Makefile      |   1 +
+>  tools/testing/selftests/kvm/s390x/memop.c | 166 ++++++++++++++++++++++
+>  2 files changed, 167 insertions(+)
+>  create mode 100644 tools/testing/selftests/kvm/s390x/memop.c
 > 
-> On 29.08.19 15:07, Thomas Huth wrote:
->> Check that we can write and read the guest memory with this s390x
->> ioctl, and that some error cases are handled correctly.
->>
->> Signed-off-by: Thomas Huth <thuth@redhat.com>
->> ---
->>  v3:
->>  - Replaced wrong copy-n-pasted report string with a proper one
->>  - Check for errno after calling the ioctl with size = 0
+> diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftests/kvm/Makefile
+> index 1b48a94b4350..62c591f87dab 100644
+> --- a/tools/testing/selftests/kvm/Makefile
+> +++ b/tools/testing/selftests/kvm/Makefile
+> @@ -32,6 +32,7 @@ TEST_GEN_PROGS_aarch64 += clear_dirty_log_test
+>  TEST_GEN_PROGS_aarch64 += dirty_log_test
+>  TEST_GEN_PROGS_aarch64 += kvm_create_max_vcpus
+>  
+> +TEST_GEN_PROGS_s390x = s390x/memop
+>  TEST_GEN_PROGS_s390x += s390x/sync_regs_test
+>  TEST_GEN_PROGS_s390x += dirty_log_test
+>  TEST_GEN_PROGS_s390x += kvm_create_max_vcpus
+> diff --git a/tools/testing/selftests/kvm/s390x/memop.c b/tools/testing/selftests/kvm/s390x/memop.c
+> new file mode 100644
+> index 000000000000..9edaa9a134ce
+> --- /dev/null
+> +++ b/tools/testing/selftests/kvm/s390x/memop.c
+> @@ -0,0 +1,166 @@
+> +// SPDX-License-Identifier: GPL-2.0-or-later
+> +/*
+> + * Test for s390x KVM_S390_MEM_OP
+> + *
+> + * Copyright (C) 2019, Red Hat, Inc.
+> + */
+> +
+> +#include <stdio.h>
+> +#include <stdlib.h>
+> +#include <string.h>
+> +#include <sys/ioctl.h>
+> +
+> +#include "test_util.h"
+> +#include "kvm_util.h"
+> +
+> +#define VCPU_ID 1
+> +
+> +static uint8_t mem1[65536];
+> +static uint8_t mem2[65536];
+> +
+> +static void guest_code(void)
+> +{
+> +	int i;
+> +
+> +	for (;;) {
+> +		for (i = 0; i < sizeof(mem2); i++)
+> +			mem2[i] = mem1[i];
+> +		GUEST_SYNC(0);
+> +	}
+> +}
+> +
+> +int main(int argc, char *argv[])
+> +{
+> +	struct kvm_vm *vm;
+> +	struct kvm_run *run;
+> +	struct kvm_s390_mem_op ksmo;
+> +	int rv, i, maxsize;
+> +
+> +	setbuf(stdout, NULL);	/* Tell stdout not to buffer its content */
+> +
+> +	maxsize = kvm_check_cap(KVM_CAP_S390_MEM_OP);
+> +	if (!maxsize) {
+> +		fprintf(stderr, "CAP_S390_MEM_OP not supported -> skip test\n");
+> +		exit(KSFT_SKIP);
+> +	}
+> +	if (maxsize > sizeof(mem1))
+> +		maxsize = sizeof(mem1);
+> +
+> +	/* Create VM */
+> +	vm = vm_create_default(VCPU_ID, 0, guest_code);
+> +	run = vcpu_state(vm, VCPU_ID);
+> +
+> +	for (i = 0; i < sizeof(mem1); i++)
+> +		mem1[i] = i * i + i;
+> +
+> +	/* Set the first array */
+> +	ksmo.gaddr = addr_gva2gpa(vm, (uintptr_t)mem1);
+> +	ksmo.flags = 0;
+> +	ksmo.size = maxsize;
+> +	ksmo.op = KVM_S390_MEMOP_LOGICAL_WRITE;
+> +	ksmo.buf = (uintptr_t)mem1;
+> +	ksmo.ar = 0;
+> +	vcpu_ioctl(vm, VCPU_ID, KVM_S390_MEM_OP, &ksmo);
+> +
+> +	/* Let the guest code copy the first array to the second */
+> +	vcpu_run(vm, VCPU_ID);
+> +	TEST_ASSERT(run->exit_reason == KVM_EXIT_S390_SIEIC,
+> +		    "Unexpected exit reason: %u (%s)\n",
+> +		    run->exit_reason,
+> +		    exit_reason_str(run->exit_reason));
+> +
+> +	memset(mem2, 0xaa, sizeof(mem2));
+> +
+> +	/* Get the second array */
+> +	ksmo.gaddr = (uintptr_t)mem2;
+> +	ksmo.flags = 0;
+> +	ksmo.size = maxsize;
+> +	ksmo.op = KVM_S390_MEMOP_LOGICAL_READ;
+> +	ksmo.buf = (uintptr_t)mem2;
+> +	ksmo.ar = 0;
+> +	vcpu_ioctl(vm, VCPU_ID, KVM_S390_MEM_OP, &ksmo);
+> +
+> +	TEST_ASSERT(!memcmp(mem1, mem2, maxsize),
+> +		    "Memory contents do not match!");
+> +
+> +	/* Check error conditions - first bad size: */
+> +	ksmo.gaddr = (uintptr_t)mem1;
+> +	ksmo.flags = 0;
+> +	ksmo.size = -1;
+> +	ksmo.op = KVM_S390_MEMOP_LOGICAL_WRITE;
+> +	ksmo.buf = (uintptr_t)mem1;
+> +	ksmo.ar = 0;
+> +	rv = _vcpu_ioctl(vm, VCPU_ID, KVM_S390_MEM_OP, &ksmo);
+> +	TEST_ASSERT(rv == -1 && errno == E2BIG, "ioctl allows insane sizes");
+> +
+> +	/* Zero size: */
+> +	ksmo.gaddr = (uintptr_t)mem1;
+> +	ksmo.flags = 0;
+> +	ksmo.size = 0;
+> +	ksmo.op = KVM_S390_MEMOP_LOGICAL_WRITE;
+> +	ksmo.buf = (uintptr_t)mem1;
+> +	ksmo.ar = 0;
+> +	rv = _vcpu_ioctl(vm, VCPU_ID, KVM_S390_MEM_OP, &ksmo);
+> +	TEST_ASSERT(rv == -1 && (errno == EINVAL || errno == ENOMEM),
+> +		    "ioctl allows 0 as size");
+> +
+> +	/* Bad flags: */
+> +	ksmo.gaddr = (uintptr_t)mem1;
+> +	ksmo.flags = -1;
+> +	ksmo.size = maxsize;
+> +	ksmo.op = KVM_S390_MEMOP_LOGICAL_WRITE;
+> +	ksmo.buf = (uintptr_t)mem1;
+> +	ksmo.ar = 0;
+> +	rv = _vcpu_ioctl(vm, VCPU_ID, KVM_S390_MEM_OP, &ksmo);
+> +	TEST_ASSERT(rv == -1 && errno == EINVAL, "ioctl allows all flags");
+> +
+> +	/* Bad operation: */
+> +	ksmo.gaddr = (uintptr_t)mem1;
+> +	ksmo.flags = 0;
+> +	ksmo.size = maxsize;
+> +	ksmo.op = -1;
+> +	ksmo.buf = (uintptr_t)mem1;
+> +	ksmo.ar = 0;
+> +	rv = _vcpu_ioctl(vm, VCPU_ID, KVM_S390_MEM_OP, &ksmo);
+> +	TEST_ASSERT(rv == -1 && errno == EINVAL, "ioctl allows bad operations");
+> +
+> +	/* Bad guest address: */
+> +	ksmo.gaddr = ~0xfffUL;
+> +	ksmo.flags = KVM_S390_MEMOP_F_CHECK_ONLY;
+> +	ksmo.size = maxsize;
+> +	ksmo.op = KVM_S390_MEMOP_LOGICAL_WRITE;
+> +	ksmo.buf = (uintptr_t)mem1;
+> +	ksmo.ar = 0;
+> +	rv = _vcpu_ioctl(vm, VCPU_ID, KVM_S390_MEM_OP, &ksmo);
+> +	TEST_ASSERT(rv > 0, "ioctl does not report bad guest memory access");
+> +
+> +	/* Bad host address: */
+> +	ksmo.gaddr = (uintptr_t)mem1;
+> +	ksmo.flags = 0;
+> +	ksmo.size = maxsize;
+> +	ksmo.op = KVM_S390_MEMOP_LOGICAL_WRITE;
+> +	ksmo.buf = 0;
+> +	ksmo.ar = 0;
+> +	rv = _vcpu_ioctl(vm, VCPU_ID, KVM_S390_MEM_OP, &ksmo);
+> +	TEST_ASSERT(rv == -1 && errno == EFAULT,
+> +		    "ioctl does not report bad host memory address");
+> +
+> +	/* Bad access register: */
+> +	run->psw_mask &= ~(3UL << (63 - 17));
+> +	run->psw_mask |= 1UL << (63 - 17);  /* Enable AR mode */
+> +	vcpu_run(vm, VCPU_ID);              /* To sync new state to SIE block */
+> +	ksmo.gaddr = (uintptr_t)mem1;
+> +	ksmo.flags = 0;
+> +	ksmo.size = maxsize;
+> +	ksmo.op = KVM_S390_MEMOP_LOGICAL_WRITE;
+> +	ksmo.buf = (uintptr_t)mem1;
+> +	ksmo.ar = 17;
+> +	rv = _vcpu_ioctl(vm, VCPU_ID, KVM_S390_MEM_OP, &ksmo);
+> +	TEST_ASSERT(rv == -1 && errno == EINVAL, "ioctl allows ARs > 15");
+> +	run->psw_mask &= ~(3UL << (63 - 17));   /* Disable AR mode */
+> +	vcpu_run(vm, VCPU_ID);                  /* Run to sync new state */
+> +
+> +	kvm_vm_free(vm);
+> +
+> +	return 0;
+> +}
 > 
-> the test succeeds (as the vmalloc fails) but dmesg then has the warning.
-> Do we have a chance to parse dmesg somehow?
 
-I'm not aware of an easy way to do this from within the KVM selftests.
-
-> I will apply this nevertheless for the time being together with the fix.
-
-Thanks!
-
- Thomas
