@@ -2,81 +2,106 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BFFC6A0EAA
-	for <lists+linux-kselftest@lfdr.de>; Thu, 29 Aug 2019 02:42:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CD03A0EE8
+	for <lists+linux-kselftest@lfdr.de>; Thu, 29 Aug 2019 03:30:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726787AbfH2Amb (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 28 Aug 2019 20:42:31 -0400
-Received: from mail-yw1-f68.google.com ([209.85.161.68]:43359 "EHLO
-        mail-yw1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726384AbfH2Amb (ORCPT
+        id S1726514AbfH2BaR (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 28 Aug 2019 21:30:17 -0400
+Received: from mail-pf1-f196.google.com ([209.85.210.196]:44589 "EHLO
+        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726384AbfH2BaQ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 28 Aug 2019 20:42:31 -0400
-Received: by mail-yw1-f68.google.com with SMTP id n205so547665ywb.10
-        for <linux-kselftest@vger.kernel.org>; Wed, 28 Aug 2019 17:42:30 -0700 (PDT)
+        Wed, 28 Aug 2019 21:30:16 -0400
+Received: by mail-pf1-f196.google.com with SMTP id c81so907438pfc.11
+        for <linux-kselftest@vger.kernel.org>; Wed, 28 Aug 2019 18:30:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=JGRwNGErn4fgKcrUQ6xiTdFGa/UMxL0bW7u4f7HW4+s=;
-        b=pBO9kFI77gE/gtpKbWkDAhKyiVvqdGWPANz9tNI0ulLcwYHoReFSfdXsKvIH5b2ukK
-         WGnn+9GA91GX0cvQr5BUecBkiW3S29/Rw0gTWQUMFlFjv518j/HXADFAj+4761buG12B
-         iyiEMUsd42x8e+ChjWSlMASRf9onmoRTvLke52aYFW5iHXS/bcePN11ElmPPs2wEHwr+
-         +lo9WwG12RwAezKZNZnE+4D2qf1ZmnQwI4Yefcvpkkl6fjQclDsYV6Df+hzX3xOmZ8Wm
-         w625t6PosUftPeW/9D5oDaSYkeGL4TR12mZ+mdAvFl3FLIEjoe+eb+wrL1d7u+9yz/dL
-         GWgA==
+        d=sifive.com; s=google;
+        h=date:from:to:cc:subject:in-reply-to:message-id:references
+         :user-agent:mime-version;
+        bh=oNuMQ0k3tolgyGaRQrF7TXZFayppiTIHnhst6LSZzgM=;
+        b=N0Tiu7A4E04tZ0bGKbShdzjcMamCLdZF8w9OOQK6PqJNfA15z95T1h2MEkAr1QGrkv
+         MTmnaoNxMhluJ+2QIg5wgRlKZG4ebI1krbhI2gFwPGhzgjl3Mo9eYwmeXkS342XWdvW2
+         6o8joBVW/w2HTRLZcmWXJgsyKzxaDVdpZopFc+IAFxfJItzbjS6MQxV8iMzvMh+wCbxD
+         Jlu+YvTpNL5xNRiykc69s779w7U0EiJlNB8fL9OGeoCN3UhQ1qRDkxoOPgj2e9fdO+nP
+         rUwqW2dh56+pi8vTJEXJED0sq/nTmn2tjeRp9FDE/GII0XdAAqqoM5RIQmupCWDxlq+V
+         rHBA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=JGRwNGErn4fgKcrUQ6xiTdFGa/UMxL0bW7u4f7HW4+s=;
-        b=KFo2E46bfmbdoRfAbvFquOPB3s/etMp+2omKki17vwo0cxSsALiLdbL9aREDbESoyM
-         BNiRZvoROfn3m9XrfrtuYmZJlF0yGjE1ynI6S5Ct7zSISnYJ8EgdCfmBMZJXDpbmarIm
-         l+eircqTOZh25IMPTAUAPcXwsMp7Vlpm/GMh6LmueWey0etkopXB9Pt/aSTQeZ/5cUEZ
-         Zl+oYxaX/lklMF+KPIyt4hbvlK3XZ4QvC4YsUdI5hj/q/BcUPrUcUnkWn5jRD+mNkeCJ
-         y7GXDMmqLOhdibdr8/3TXvNGM28A+5sf+7u8NnYYf9bS5TnEFtMunojj+5B4/2DiUKjc
-         Nb9w==
-X-Gm-Message-State: APjAAAU3Nk2BtwaDwARFjw5WMCPh1ILGyFCtrf3MvZ5JIRHuO0F8xLmA
-        heMiH7Ad4+2rac0m9ZEmwpVk3/lUxRKf2MKW1lmkMQ==
-X-Google-Smtp-Source: APXvYqy5sKfSQACB2NAIiSOftUd7x4Lw2pJ4Aa//yGOwNk/VbNo7vi6L+kgnsQlyUjh9vJq+0hA9wmBNIT5b9wnNNlk=
-X-Received: by 2002:a81:6643:: with SMTP id a64mr4939106ywc.205.1567039350010;
- Wed, 28 Aug 2019 17:42:30 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:in-reply-to:message-id
+         :references:user-agent:mime-version;
+        bh=oNuMQ0k3tolgyGaRQrF7TXZFayppiTIHnhst6LSZzgM=;
+        b=VR5NViAEzocK6y+ykJ1QF07XP+qkwYiJN2hzA8hF3/gXKddlrZsK2Db1+bxagQgbxS
+         J8mdaTWUzltMkrX3kFaPFZw5Sdg/LcJqlBZ0QmfgtHpPRmScuHV67WRSjvjfXVcbNj3T
+         zJSiKFyeqofFv7BCC6gbV3dDZr8uJiO+wZa8OoqdyNpVzPi3t5tg+/dlmf2gRKJtHl8+
+         ViNcSZq3VsE5PkQgPNbcXCnV758dnWs6MUDl8JRxomvRuRyMy6OJHRvK3X/MDtkkrGow
+         /7It8Zl4dAB/bNlW2j4bf9Qisjo56byDKy2L0j/rcFtPc0AwfiCaS6SYHZir1BCr2Pa0
+         l7XA==
+X-Gm-Message-State: APjAAAVsAsqQW5hFziozWr5BmUxHt475mv//5UZubcyMDiENLV4PD32m
+        vaoBkduwREo5XXISzrOJ4w2Hcw==
+X-Google-Smtp-Source: APXvYqzneWTer11an0OtynaQ0NdmFFtoQFTgNrY29fSA6ajAUSOjqiO56Ptl9fWn/+Jpt6o1LcWHIg==
+X-Received: by 2002:aa7:8602:: with SMTP id p2mr8123966pfn.138.1567042216270;
+        Wed, 28 Aug 2019 18:30:16 -0700 (PDT)
+Received: from localhost ([12.206.222.5])
+        by smtp.gmail.com with ESMTPSA id y13sm669451pfm.164.2019.08.28.18.30.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 28 Aug 2019 18:30:15 -0700 (PDT)
+Date:   Wed, 28 Aug 2019 18:30:14 -0700 (PDT)
+From:   Paul Walmsley <paul.walmsley@sifive.com>
+X-X-Sender: paulw@viisi.sifive.com
+To:     Kees Cook <keescook@chromium.org>, Tycho Andersen <tycho@tycho.ws>
+cc:     David Abdurachmanov <david.abdurachmanov@gmail.com>,
+        Palmer Dabbelt <palmer@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Oleg Nesterov <oleg@redhat.com>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Will Drewry <wad@chromium.org>, Shuah Khan <shuah@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        David Abdurachmanov <david.abdurachmanov@sifive.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Allison Randal <allison@lohutok.net>,
+        Alexios Zavras <alexios.zavras@intel.com>,
+        Anup Patel <Anup.Patel@wdc.com>,
+        Vincent Chen <vincentc@andestech.com>,
+        Alan Kao <alankao@andestech.com>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, me@carlosedp.com
+Subject: Re: [PATCH v2] riscv: add support for SECCOMP and SECCOMP_FILTER
+In-Reply-To: <201908261043.08510F5E66@keescook>
+Message-ID: <alpine.DEB.2.21.9999.1908281825240.13811@viisi.sifive.com>
+References: <20190822205533.4877-1-david.abdurachmanov@sifive.com> <alpine.DEB.2.21.9999.1908231717550.25649@viisi.sifive.com> <20190826145756.GB4664@cisco> <CAEn-LTrtn01=fp6taBBG_QkfBtgiJyt6oUjZJOi6VN8OeXp6=g@mail.gmail.com>
+ <201908261043.08510F5E66@keescook>
+User-Agent: Alpine 2.21.9999 (DEB 301 2018-08-15)
 MIME-Version: 1.0
-References: <20190826233240.11524-1-almasrymina@google.com> <20190828112340.GB7466@dhcp22.suse.cz>
-In-Reply-To: <20190828112340.GB7466@dhcp22.suse.cz>
-From:   Shakeel Butt <shakeelb@google.com>
-Date:   Wed, 28 Aug 2019 17:42:17 -0700
-Message-ID: <CALvZod50oU2M6uhUU1JsBz+qWYgSCb9brMVVnxmGnzSRY+1k_w@mail.gmail.com>
-Subject: Re: [PATCH v3 0/6] hugetlb_cgroup: Add hugetlb_cgroup reservation limits
-To:     Michal Hocko <mhocko@kernel.org>
-Cc:     Mina Almasry <almasrymina@google.com>, mike.kravetz@oracle.com,
-        shuah@kernel.org, David Rientjes <rientjes@google.com>,
-        Greg Thelen <gthelen@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        khalid.aziz@oracle.com, LKML <linux-kernel@vger.kernel.org>,
-        Linux MM <linux-mm@kvack.org>, linux-kselftest@vger.kernel.org,
-        Cgroups <cgroups@vger.kernel.org>,
-        aneesh.kumar@linux.vnet.ibm.com, mkoutny@suse.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=US-ASCII
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Aug 28, 2019 at 4:23 AM Michal Hocko <mhocko@kernel.org> wrote:
->
-> On Mon 26-08-19 16:32:34, Mina Almasry wrote:
-> >  mm/hugetlb.c                                  | 493 ++++++++++++------
-> >  mm/hugetlb_cgroup.c                           | 187 +++++--
->
-> This is a lot of changes to an already subtle code which hugetlb
-> reservations undoubly are. Moreover cgroupv1 is feature frozen and I am
-> not aware of any plans to port the controller to v2. That all doesn't
-> sound in favor of this change.
+Hi Kees,
 
-Actually "no plan to port the controller to v2" makes the case strong
-for these changes (and other new features) to be done in v1. If there
-is an alternative solution in v2 then I can understand the push-back
-on changes in v1 but that is not the case here.
+On Mon, 26 Aug 2019, Kees Cook wrote:
 
-Shakeel
+> On Mon, Aug 26, 2019 at 09:39:50AM -0700, David Abdurachmanov wrote:
+> > I don't have the a build with SECCOMP for the board right now, so it
+> > will have to wait. I just finished a new kernel (almost rc6) for Fedora,
+> 
+> FWIW, I don't think this should block landing the code: all the tests
+> fail without seccomp support. ;) So this patch is an improvement!
+
+Am sympathetic to this -- we did it with the hugetlb patches for RISC-V -- 
+but it would be good to understand a little bit more about why the test 
+fails before we merge it.
+
+Once we merge the patch, it will probably reduce the motivation for others 
+to either understand and fix the underlying problem with the RISC-V code 
+-- or, if it truly is a flaky test, to drop (or fix) the test in the 
+seccomp_bpf kselftests.
+
+Thanks for helping to take a closer look at this,
+
+- Paul
