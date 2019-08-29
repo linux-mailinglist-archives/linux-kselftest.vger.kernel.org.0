@@ -2,165 +2,239 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B0639A1AB1
-	for <lists+linux-kselftest@lfdr.de>; Thu, 29 Aug 2019 15:05:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E8FDA1AE1
+	for <lists+linux-kselftest@lfdr.de>; Thu, 29 Aug 2019 15:07:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727503AbfH2NFL (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 29 Aug 2019 09:05:11 -0400
-Received: from mail-lf1-f68.google.com ([209.85.167.68]:45643 "EHLO
-        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727505AbfH2NFL (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 29 Aug 2019 09:05:11 -0400
-Received: by mail-lf1-f68.google.com with SMTP id r134so1569006lff.12
-        for <linux-kselftest@vger.kernel.org>; Thu, 29 Aug 2019 06:05:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rasmusvillemoes.dk; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=+pz1tJCvEpXqhYntc4a+eXdQw4YkeZzY/CUqzEnQfhI=;
-        b=VwOF8bMUMlpcVPjnH7KLm7q9YPGAJyoJCaqTHg0eB7cJNs33HPtWse0a6S+38yOz8O
-         NHVqczdRdynKQIjzWAF9I3YpK+wBqgWsLCV+xSrpqG8v5x5MeuksDGvoajweRjwbjZ5a
-         38t56VL/f1C5Tbh/lNpCLIQcFzQtYKavA1iaY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=+pz1tJCvEpXqhYntc4a+eXdQw4YkeZzY/CUqzEnQfhI=;
-        b=ic2iZAJe0UW77Mc6jP6Ll9/f6KDLprHeJsng/fi7szDSdfZz2pvKVd6HLE6sPQjcp+
-         VNd8X6dl8F3j2PAj7WJZf0VDVWj+3D/NXqfh+4F7rSEpSQfSvmp8fYNjTr/N0xJmNy9T
-         yocKJgyqHoM6wp7gqpHl+d54/SwD8CLe8y2Jq6WO/Lxo+jo4s4AE9an6X4OIkpiltpKz
-         z2PPljBIwmnZqpOV4/WZ4Yi608IWlAzUIkbOyzv2QDlshHftHlkJxaB3JggXcRirfbJj
-         IWBJp0KlpinKo6yLBPYtxa77Tc8Zf1yTjZxJTNsZLhPCD3XpFOmDDbzJcGsori6XFGba
-         mKNw==
-X-Gm-Message-State: APjAAAUzf/5eXErDHShxH05mrbIDSXoejIq1x5vsxnZCmabboZsI1T7e
-        kxT+3o4zWw34SB79X/qzU4Zvvw==
-X-Google-Smtp-Source: APXvYqzC/znEm7g6SWABzaV06VBY2y9BWKEbRXRSbaRH8cAy80Qu1m8PhCO/oz8TivPdICdvt4gS+A==
-X-Received: by 2002:a19:ef05:: with SMTP id n5mr6063058lfh.192.1567083908173;
-        Thu, 29 Aug 2019 06:05:08 -0700 (PDT)
-Received: from [172.16.11.28] ([81.216.59.226])
-        by smtp.gmail.com with ESMTPSA id j23sm346381ljc.6.2019.08.29.06.05.05
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 29 Aug 2019 06:05:07 -0700 (PDT)
-Subject: Re: [PATCH RESEND v11 7/8] open: openat2(2) syscall
-To:     Aleksa Sarai <cyphar@cyphar.com>,
-        Daniel Colascione <dancol@google.com>
-Cc:     Al Viro <viro@zeniv.linux.org.uk>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J. Bruce Fields" <bfields@fieldses.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        David Howells <dhowells@redhat.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Christian Brauner <christian@brauner.io>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Jann Horn <jannh@google.com>, Tycho Andersen <tycho@tycho.ws>,
-        David Drysdale <drysdale@google.com>,
-        Chanho Min <chanho.min@lge.com>,
-        Oleg Nesterov <oleg@redhat.com>, Aleksa Sarai <asarai@suse.de>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        containers@lists.linux-foundation.org, linux-alpha@vger.kernel.org,
-        Linux API <linux-api@vger.kernel.org>,
-        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Linux FS Devel <linux-fsdevel@vger.kernel.org>,
-        linux-ia64@vger.kernel.org,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, linux-xtensa@linux-xtensa.org,
-        sparclinux@vger.kernel.org
-References: <20190820033406.29796-1-cyphar@cyphar.com>
- <20190820033406.29796-8-cyphar@cyphar.com>
- <CAKOZuesfxRBJe314rkTKXtjXdz6ki3uAUBYVbu5Q2rd3=ADphQ@mail.gmail.com>
- <20190829121527.u2uvdyeatme5cgkb@yavin>
-From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
-Message-ID: <899401fa-ff0a-2ce9-8826-09904efab2d2@rasmusvillemoes.dk>
-Date:   Thu, 29 Aug 2019 15:05:05 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
-MIME-Version: 1.0
-In-Reply-To: <20190829121527.u2uvdyeatme5cgkb@yavin>
-Content-Type: text/plain; charset=windows-1252
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+        id S1727066AbfH2NHn (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 29 Aug 2019 09:07:43 -0400
+Received: from mx1.redhat.com ([209.132.183.28]:41016 "EHLO mx1.redhat.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725990AbfH2NHm (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 29 Aug 2019 09:07:42 -0400
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mx1.redhat.com (Postfix) with ESMTPS id 7AA35308FB82;
+        Thu, 29 Aug 2019 13:07:41 +0000 (UTC)
+Received: from thuth.com (ovpn-116-53.ams2.redhat.com [10.36.116.53])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 3CE1110016EB;
+        Thu, 29 Aug 2019 13:07:35 +0000 (UTC)
+From:   Thomas Huth <thuth@redhat.com>
+To:     kvm@vger.kernel.org,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>
+Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        David Hildenbrand <david@redhat.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        =?UTF-8?q?Radim=20Kr=C4=8Dm=C3=A1=C5=99?= <rkrcmar@redhat.com>
+Subject: [PATCH v3] KVM: selftests: Add a test for the KVM_S390_MEM_OP ioctl
+Date:   Thu, 29 Aug 2019 15:07:32 +0200
+Message-Id: <20190829130732.580-1-thuth@redhat.com>
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
+X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.43]); Thu, 29 Aug 2019 13:07:41 +0000 (UTC)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 29/08/2019 14.15, Aleksa Sarai wrote:
-> On 2019-08-24, Daniel Colascione <dancol@google.com> wrote:
+Check that we can write and read the guest memory with this s390x
+ioctl, and that some error cases are handled correctly.
 
->> Why pad the structure when new functionality (perhaps accommodated via
->> a larger structure) could be signaled by passing a new flag? Adding
->> reserved fields to a structure with a size embedded in the ABI makes a
->> lot of sense --- e.g., pthread_mutex_t can't grow. But this structure
->> can grow, so the reservation seems needless to me.
-> 
-> Quite a few folks have said that ->reserved is either unnecessary or
-> too big. I will be changing this, though I am not clear what the best
-> way of extending the structure is. If anyone has a strong opinion on
-> this (or an alternative to the ones listed below), please chime in. I
-> don't have any really strong attachment to this aspect of the API.
-> 
-> There appear to be a few ways we can do it (that all have precedence
-> with other syscalls):
-> 
->  1. Use O_* flags to indicate extensions.
->  2. A separate "version" field that is incremented when we change.
->  3. Add a size_t argument to openat2(2).
->  4. Reserve space (as in this patchset).
-> 
-> (My personal preference would be (3), followed closely by (2).)
+Signed-off-by: Thomas Huth <thuth@redhat.com>
+---
+ v3:
+ - Replaced wrong copy-n-pasted report string with a proper one
+ - Check for errno after calling the ioctl with size = 0
+ 
+ tools/testing/selftests/kvm/Makefile      |   1 +
+ tools/testing/selftests/kvm/s390x/memop.c | 166 ++++++++++++++++++++++
+ 2 files changed, 167 insertions(+)
+ create mode 100644 tools/testing/selftests/kvm/s390x/memop.c
 
-3, definitely, and instead of having to invent a new scheme for every
-new syscall, make that the default pattern by providing a helper
-
-int __copy_abi_struct(void *kernel, size_t ksize, const void __user
-*user, size_t usize)
-{
-	size_t copy = min(ksize, usize);
-
-	if (copy_from_user(kernel, user, copy))
-		return -EFAULT;
-
-	if (usize > ksize) {
-		/* maybe a separate "return user_is_zero(user + ksize, usize -
-ksize);" helper */
-		char c;
-		user += ksize;
-		usize -= ksize;
-		while (usize--) {
-			if (get_user(c, user++))
-				return -EFAULT;
-			if (c)
-				return -EINVAL;
-		}
-	} else if (ksize > usize) {
-		memset(kernel + usize, 0, ksize - usize);
-	}
-	return 0;
-}
-#define copy_abi_struct(kernel, user, usize)	\
-	__copy_abi_struct(kernel, sizeof(*kernel), user, usize)
-
-> Both (1) and (2) have the problem that the "struct version" is inside
-> the struct so we'd need to copy_from_user() twice. This isn't the end of
-> the world, it just feels a bit less clean than is ideal. (3) fixes that
-> problem, at the cost of making the API slightly more cumbersome to use
-> directly (though again glibc could wrap that away).
-
-I don't see how 3 is cumbersome to use directly. Userspace code does
-struct openat_of_the_day args = {.field1 = x, .field3 = y} and passes
-&args, sizeof(args). What does glibc need to do beyond its usual munging
-of the userspace ABI registers to the syscall ABI registers?
-
-Rasmus
+diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftests/kvm/Makefile
+index 1b48a94b4350..62c591f87dab 100644
+--- a/tools/testing/selftests/kvm/Makefile
++++ b/tools/testing/selftests/kvm/Makefile
+@@ -32,6 +32,7 @@ TEST_GEN_PROGS_aarch64 += clear_dirty_log_test
+ TEST_GEN_PROGS_aarch64 += dirty_log_test
+ TEST_GEN_PROGS_aarch64 += kvm_create_max_vcpus
+ 
++TEST_GEN_PROGS_s390x = s390x/memop
+ TEST_GEN_PROGS_s390x += s390x/sync_regs_test
+ TEST_GEN_PROGS_s390x += dirty_log_test
+ TEST_GEN_PROGS_s390x += kvm_create_max_vcpus
+diff --git a/tools/testing/selftests/kvm/s390x/memop.c b/tools/testing/selftests/kvm/s390x/memop.c
+new file mode 100644
+index 000000000000..9edaa9a134ce
+--- /dev/null
++++ b/tools/testing/selftests/kvm/s390x/memop.c
+@@ -0,0 +1,166 @@
++// SPDX-License-Identifier: GPL-2.0-or-later
++/*
++ * Test for s390x KVM_S390_MEM_OP
++ *
++ * Copyright (C) 2019, Red Hat, Inc.
++ */
++
++#include <stdio.h>
++#include <stdlib.h>
++#include <string.h>
++#include <sys/ioctl.h>
++
++#include "test_util.h"
++#include "kvm_util.h"
++
++#define VCPU_ID 1
++
++static uint8_t mem1[65536];
++static uint8_t mem2[65536];
++
++static void guest_code(void)
++{
++	int i;
++
++	for (;;) {
++		for (i = 0; i < sizeof(mem2); i++)
++			mem2[i] = mem1[i];
++		GUEST_SYNC(0);
++	}
++}
++
++int main(int argc, char *argv[])
++{
++	struct kvm_vm *vm;
++	struct kvm_run *run;
++	struct kvm_s390_mem_op ksmo;
++	int rv, i, maxsize;
++
++	setbuf(stdout, NULL);	/* Tell stdout not to buffer its content */
++
++	maxsize = kvm_check_cap(KVM_CAP_S390_MEM_OP);
++	if (!maxsize) {
++		fprintf(stderr, "CAP_S390_MEM_OP not supported -> skip test\n");
++		exit(KSFT_SKIP);
++	}
++	if (maxsize > sizeof(mem1))
++		maxsize = sizeof(mem1);
++
++	/* Create VM */
++	vm = vm_create_default(VCPU_ID, 0, guest_code);
++	run = vcpu_state(vm, VCPU_ID);
++
++	for (i = 0; i < sizeof(mem1); i++)
++		mem1[i] = i * i + i;
++
++	/* Set the first array */
++	ksmo.gaddr = addr_gva2gpa(vm, (uintptr_t)mem1);
++	ksmo.flags = 0;
++	ksmo.size = maxsize;
++	ksmo.op = KVM_S390_MEMOP_LOGICAL_WRITE;
++	ksmo.buf = (uintptr_t)mem1;
++	ksmo.ar = 0;
++	vcpu_ioctl(vm, VCPU_ID, KVM_S390_MEM_OP, &ksmo);
++
++	/* Let the guest code copy the first array to the second */
++	vcpu_run(vm, VCPU_ID);
++	TEST_ASSERT(run->exit_reason == KVM_EXIT_S390_SIEIC,
++		    "Unexpected exit reason: %u (%s)\n",
++		    run->exit_reason,
++		    exit_reason_str(run->exit_reason));
++
++	memset(mem2, 0xaa, sizeof(mem2));
++
++	/* Get the second array */
++	ksmo.gaddr = (uintptr_t)mem2;
++	ksmo.flags = 0;
++	ksmo.size = maxsize;
++	ksmo.op = KVM_S390_MEMOP_LOGICAL_READ;
++	ksmo.buf = (uintptr_t)mem2;
++	ksmo.ar = 0;
++	vcpu_ioctl(vm, VCPU_ID, KVM_S390_MEM_OP, &ksmo);
++
++	TEST_ASSERT(!memcmp(mem1, mem2, maxsize),
++		    "Memory contents do not match!");
++
++	/* Check error conditions - first bad size: */
++	ksmo.gaddr = (uintptr_t)mem1;
++	ksmo.flags = 0;
++	ksmo.size = -1;
++	ksmo.op = KVM_S390_MEMOP_LOGICAL_WRITE;
++	ksmo.buf = (uintptr_t)mem1;
++	ksmo.ar = 0;
++	rv = _vcpu_ioctl(vm, VCPU_ID, KVM_S390_MEM_OP, &ksmo);
++	TEST_ASSERT(rv == -1 && errno == E2BIG, "ioctl allows insane sizes");
++
++	/* Zero size: */
++	ksmo.gaddr = (uintptr_t)mem1;
++	ksmo.flags = 0;
++	ksmo.size = 0;
++	ksmo.op = KVM_S390_MEMOP_LOGICAL_WRITE;
++	ksmo.buf = (uintptr_t)mem1;
++	ksmo.ar = 0;
++	rv = _vcpu_ioctl(vm, VCPU_ID, KVM_S390_MEM_OP, &ksmo);
++	TEST_ASSERT(rv == -1 && (errno == EINVAL || errno == ENOMEM),
++		    "ioctl allows 0 as size");
++
++	/* Bad flags: */
++	ksmo.gaddr = (uintptr_t)mem1;
++	ksmo.flags = -1;
++	ksmo.size = maxsize;
++	ksmo.op = KVM_S390_MEMOP_LOGICAL_WRITE;
++	ksmo.buf = (uintptr_t)mem1;
++	ksmo.ar = 0;
++	rv = _vcpu_ioctl(vm, VCPU_ID, KVM_S390_MEM_OP, &ksmo);
++	TEST_ASSERT(rv == -1 && errno == EINVAL, "ioctl allows all flags");
++
++	/* Bad operation: */
++	ksmo.gaddr = (uintptr_t)mem1;
++	ksmo.flags = 0;
++	ksmo.size = maxsize;
++	ksmo.op = -1;
++	ksmo.buf = (uintptr_t)mem1;
++	ksmo.ar = 0;
++	rv = _vcpu_ioctl(vm, VCPU_ID, KVM_S390_MEM_OP, &ksmo);
++	TEST_ASSERT(rv == -1 && errno == EINVAL, "ioctl allows bad operations");
++
++	/* Bad guest address: */
++	ksmo.gaddr = ~0xfffUL;
++	ksmo.flags = KVM_S390_MEMOP_F_CHECK_ONLY;
++	ksmo.size = maxsize;
++	ksmo.op = KVM_S390_MEMOP_LOGICAL_WRITE;
++	ksmo.buf = (uintptr_t)mem1;
++	ksmo.ar = 0;
++	rv = _vcpu_ioctl(vm, VCPU_ID, KVM_S390_MEM_OP, &ksmo);
++	TEST_ASSERT(rv > 0, "ioctl does not report bad guest memory access");
++
++	/* Bad host address: */
++	ksmo.gaddr = (uintptr_t)mem1;
++	ksmo.flags = 0;
++	ksmo.size = maxsize;
++	ksmo.op = KVM_S390_MEMOP_LOGICAL_WRITE;
++	ksmo.buf = 0;
++	ksmo.ar = 0;
++	rv = _vcpu_ioctl(vm, VCPU_ID, KVM_S390_MEM_OP, &ksmo);
++	TEST_ASSERT(rv == -1 && errno == EFAULT,
++		    "ioctl does not report bad host memory address");
++
++	/* Bad access register: */
++	run->psw_mask &= ~(3UL << (63 - 17));
++	run->psw_mask |= 1UL << (63 - 17);  /* Enable AR mode */
++	vcpu_run(vm, VCPU_ID);              /* To sync new state to SIE block */
++	ksmo.gaddr = (uintptr_t)mem1;
++	ksmo.flags = 0;
++	ksmo.size = maxsize;
++	ksmo.op = KVM_S390_MEMOP_LOGICAL_WRITE;
++	ksmo.buf = (uintptr_t)mem1;
++	ksmo.ar = 17;
++	rv = _vcpu_ioctl(vm, VCPU_ID, KVM_S390_MEM_OP, &ksmo);
++	TEST_ASSERT(rv == -1 && errno == EINVAL, "ioctl allows ARs > 15");
++	run->psw_mask &= ~(3UL << (63 - 17));   /* Disable AR mode */
++	vcpu_run(vm, VCPU_ID);                  /* Run to sync new state */
++
++	kvm_vm_free(vm);
++
++	return 0;
++}
+-- 
+2.18.1
 
