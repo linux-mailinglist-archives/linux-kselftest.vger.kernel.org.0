@@ -2,142 +2,126 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 59EA7A21C4
-	for <lists+linux-kselftest@lfdr.de>; Thu, 29 Aug 2019 19:06:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E60BA2244
+	for <lists+linux-kselftest@lfdr.de>; Thu, 29 Aug 2019 19:30:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727173AbfH2RGJ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 29 Aug 2019 13:06:09 -0400
-Received: from mail-pg1-f195.google.com ([209.85.215.195]:36319 "EHLO
-        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727802AbfH2RGJ (ORCPT
+        id S1727673AbfH2RaT (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 29 Aug 2019 13:30:19 -0400
+Received: from mail-pf1-f196.google.com ([209.85.210.196]:45879 "EHLO
+        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727481AbfH2RaT (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 29 Aug 2019 13:06:09 -0400
-Received: by mail-pg1-f195.google.com with SMTP id l21so1919461pgm.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 29 Aug 2019 10:06:08 -0700 (PDT)
+        Thu, 29 Aug 2019 13:30:19 -0400
+Received: by mail-pf1-f196.google.com with SMTP id w26so2507316pfq.12
+        for <linux-kselftest@vger.kernel.org>; Thu, 29 Aug 2019 10:30:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=i1DJmvd8voYWLbxEBUB8nLGj+ccKrfRNfMLOZPulnv0=;
-        b=G8clkpoAG2wM7TmydjOjIMm7fNWG8ep55osvEJVVhpQe84OPg7U+DYdiZtLW5h+LER
-         LVxlkBUao1QISYfuzi3UJEEIP+SH7ZlQj3OLcVbDv5XUxkhWXectWPf0MLd3w+TAdwvU
-         Ugs/jNHjuICUeUS519629+GrUHSoAHF7v/aUg=
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=9P0WfjoCbGsF0tCaY3AP3tO4MJYieVniooFn3hh+yRY=;
+        b=R6DHywhlu0KnxK3bWoOttWC+abX6w+7G9ghMwCXGRYMvVBacXxaCDvEEaOrIDipSN8
+         /GJy4+6HtLNdmt/Pc6RmJzqbl50J8FDDlHLjYworL1SBTQbobIZucCpjqHikuGWWULZv
+         k7NGzCDng5CLqkj10dEAi1KHc/uMF5LtWUR3eU0B+mGF8fmSXUlOCLXogD1lsd3bIjEX
+         DzjIq02pO8/cuzoSA5VG2Xqwq98VlxEl+a3DledCYCuurVZm6YI+vyyyUWJ5C4ptXG2e
+         zMs2siK4erlxhMosre2ECcdbe19e55S9DNsLSYwQ8z8xbLh0/abOp3M3rRwekeBFEWBs
+         eWiQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=i1DJmvd8voYWLbxEBUB8nLGj+ccKrfRNfMLOZPulnv0=;
-        b=Q6xcDAap2S2IY1QkIjZzySwPxv+SdDwvXIbgVDmT+0EpoBecj9705XP/AeDDE+NTf6
-         /1JG6henSNeH8iIY4eLX/98Bduf4n8OwcN1STOIDebAIEgk9upjPxDfZ7zOX1cmVY9k/
-         h4UEVg4tXHhIR7/wk0b7iVa55Bk/N7MMPhoYDovv0Hae3DNuUK9xwz/8MpCxZ8wC3NGg
-         yd0Du0Bg57zxc74Ukh+1C0bzDqu2IeUm7UtROpI1bMLMehA40XBjeskr9qcFMuYz7pNO
-         xuCuqkxZDlrv5gqBKM0NgwDdvmQH49EVRhso9cy4bn/vB2NLzDfUD1ugyzORds/Ru3Yn
-         X7iw==
-X-Gm-Message-State: APjAAAUqaibUsG1iL+oT1ofwzk1zchB6hT6KVb/xT0z8caL4bpKqZQOV
-        Oegcp8AK7Sp73NbzDiBv1GgxhA==
-X-Google-Smtp-Source: APXvYqz0wp9mb9x5mvRK0pA6+zC9B0EAIvxqn7uz8Hh6S3XZ5PoeZHkueVVQ/55Ag8IPJDeVG6h46w==
-X-Received: by 2002:a63:2157:: with SMTP id s23mr9520562pgm.167.1567098368482;
-        Thu, 29 Aug 2019 10:06:08 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id v15sm3687506pfn.69.2019.08.29.10.06.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Aug 2019 10:06:07 -0700 (PDT)
-Date:   Thu, 29 Aug 2019 10:06:06 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Shuah Khan <shuah@kernel.org>
-Cc:     Tycho Andersen <tycho@tycho.ws>, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Alakesh Haloi <alakesh.haloi@gmail.com>
-Subject: Re: [PATCH] selftests/seccomp: fix build on older kernels
-Message-ID: <201908291003.005EB96606@keescook>
-References: <20190826144302.7745-1-tycho@tycho.ws>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=9P0WfjoCbGsF0tCaY3AP3tO4MJYieVniooFn3hh+yRY=;
+        b=b9IDe4yBQF29tUDliBQX/Bs3ISWYYGj+VpKUnEPDKUFTc6D4b4OtIfMQ5fJH3G9K0p
+         XLVxz2fZ4E7HoyFibkNJgP4umZFU6mR0Jyz8wSwKQMs+Haxpr1hsytHL4AIf/gLNBvdB
+         fTUlr4Q3XfjYUwjpc4pEpKHCAzE9FoPGEqBFonCvGSqGerGnf2wl7EcG70H0dhGAIL3Y
+         IZ12C+NNG21wsFraF2w3+RemPffFG97UlxBAKZjfRyodBtp86jdGGUqWTGaJppfAus4W
+         3OMdfTGO7bh+wN89zM5Sm7RuU+JeGDPsqwEPQQUkWHPd3MUZ6B495zCaLCcGw7OJHjbc
+         munA==
+X-Gm-Message-State: APjAAAV7MquNcCLbRj89Bv1XRRPsjWRkBnbJQYnqC3w5ucOgtSBGMwJ7
+        kwReobKFZCfMTEcP6FQU7tLcmupGRcpUtObrTM+kwg==
+X-Google-Smtp-Source: APXvYqwiXDAQvlk79yohuHj01mAp6kp0moEJ8mc8kjKdBi44BPXzEbkC+hlGqRbCYDApfshRC3Dhy9MbrwxGMDP405c=
+X-Received: by 2002:a17:90a:9905:: with SMTP id b5mr8148612pjp.117.1567099818005;
+ Thu, 29 Aug 2019 10:30:18 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20190826144302.7745-1-tycho@tycho.ws>
+References: <20190827003709.26950-1-skhan@linuxfoundation.org>
+In-Reply-To: <20190827003709.26950-1-skhan@linuxfoundation.org>
+From:   Brendan Higgins <brendanhiggins@google.com>
+Date:   Thu, 29 Aug 2019 10:30:06 -0700
+Message-ID: <CAFd5g47jeZGqdhOUEOFGwHqHQ1O0=99Ce+bFhZ-7PCyFT1YO1Q@mail.gmail.com>
+Subject: Re: [PATCH v2] doc: kselftest: update for clarity on running
+ kselftests in CI rings
+To:     Shuah Khan <skhan@linuxfoundation.org>
+Cc:     shuah <shuah@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        dan.rue@linaro.org, anders.roxell@linaro.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Aug 26, 2019 at 08:43:02AM -0600, Tycho Andersen wrote:
-> The seccomp selftest goes to some length to build against older kernel
-> headers, viz. all the #ifdefs at the beginning of the file. 201766a20e30
-> ("ptrace: add PTRACE_GET_SYSCALL_INFO request") introduces some additional
-> macros, but doesn't do the #ifdef dance. Let's add that dance here to
-> avoid:
-> 
-> gcc -Wl,-no-as-needed -Wall  seccomp_bpf.c -lpthread -o seccomp_bpf
-> In file included from seccomp_bpf.c:51:
-> seccomp_bpf.c: In function ‘tracer_ptrace’:
-> seccomp_bpf.c:1787:20: error: ‘PTRACE_EVENTMSG_SYSCALL_ENTRY’ undeclared (first use in this function); did you mean ‘PTRACE_EVENT_CLONE’?
->   EXPECT_EQ(entry ? PTRACE_EVENTMSG_SYSCALL_ENTRY
->                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> ../kselftest_harness.h:608:13: note: in definition of macro ‘__EXPECT’
->   __typeof__(_expected) __exp = (_expected); \
->              ^~~~~~~~~
-> seccomp_bpf.c:1787:2: note: in expansion of macro ‘EXPECT_EQ’
->   EXPECT_EQ(entry ? PTRACE_EVENTMSG_SYSCALL_ENTRY
->   ^~~~~~~~~
-> seccomp_bpf.c:1787:20: note: each undeclared identifier is reported only once for each function it appears in
->   EXPECT_EQ(entry ? PTRACE_EVENTMSG_SYSCALL_ENTRY
->                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> ../kselftest_harness.h:608:13: note: in definition of macro ‘__EXPECT’
->   __typeof__(_expected) __exp = (_expected); \
->              ^~~~~~~~~
-> seccomp_bpf.c:1787:2: note: in expansion of macro ‘EXPECT_EQ’
->   EXPECT_EQ(entry ? PTRACE_EVENTMSG_SYSCALL_ENTRY
->   ^~~~~~~~~
-> seccomp_bpf.c:1788:6: error: ‘PTRACE_EVENTMSG_SYSCALL_EXIT’ undeclared (first use in this function); did you mean ‘PTRACE_EVENT_EXIT’?
->     : PTRACE_EVENTMSG_SYSCALL_EXIT, msg);
->       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> ../kselftest_harness.h:608:13: note: in definition of macro ‘__EXPECT’
->   __typeof__(_expected) __exp = (_expected); \
->              ^~~~~~~~~
-> seccomp_bpf.c:1787:2: note: in expansion of macro ‘EXPECT_EQ’
->   EXPECT_EQ(entry ? PTRACE_EVENTMSG_SYSCALL_ENTRY
->   ^~~~~~~~~
-> make: *** [Makefile:12: seccomp_bpf] Error 1
-> 
-> Signed-off-by: Tycho Andersen <tycho@tycho.ws>
-> Fixes: 201766a20e30 ("ptrace: add PTRACE_GET_SYSCALL_INFO request")
+On Mon, Aug 26, 2019 at 5:37 PM Shuah Khan <skhan@linuxfoundation.org> wrote:
+>
+> Update to add clarity and recommendations on running newer kselftests
+> on older kernels vs. matching the kernel and kselftest revisions.
+>
+> The recommendation is "Match kernel revision and kselftest."
+>
+> Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
 
-Acked-by: Kees Cook <keescook@chromium.org>
+Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
 
-Alakesh Haloi also sent a fix[1] for this. I prefer Tycho's solution
-(one #ifndef and a Fixes line). Shuah, can you please apply this?
-
-Thanks!
-
--Kees
-
-[1] https://lore.kernel.org/lkml/20190822215823.GA11292@ip-172-31-44-144.us-west-2.compute.internal
+One minor comment below.
 
 > ---
->  tools/testing/selftests/seccomp/seccomp_bpf.c | 5 +++++
->  1 file changed, 5 insertions(+)
-> 
-> diff --git a/tools/testing/selftests/seccomp/seccomp_bpf.c b/tools/testing/selftests/seccomp/seccomp_bpf.c
-> index 6ef7f16c4cf5..7f8b5c8982e3 100644
-> --- a/tools/testing/selftests/seccomp/seccomp_bpf.c
-> +++ b/tools/testing/selftests/seccomp/seccomp_bpf.c
-> @@ -199,6 +199,11 @@ struct seccomp_notif_sizes {
->  };
->  #endif
->  
-> +#ifndef PTRACE_EVENTMSG_SYSCALL_ENTRY
-> +#define PTRACE_EVENTMSG_SYSCALL_ENTRY	1
-> +#define PTRACE_EVENTMSG_SYSCALL_EXIT	2
-> +#endif
+> Changes since v1: Fixed "WARNING: Title underline too short."
+>
+>  Documentation/dev-tools/kselftest.rst | 25 +++++++++++++++++++++++++
+>  1 file changed, 25 insertions(+)
+>
+> diff --git a/Documentation/dev-tools/kselftest.rst b/Documentation/dev-tools/kselftest.rst
+> index 25604904fa6e..308506c5e8fa 100644
+> --- a/Documentation/dev-tools/kselftest.rst
+> +++ b/Documentation/dev-tools/kselftest.rst
+> @@ -12,6 +12,31 @@ write new tests using the framework on Kselftest wiki:
+>
+>  https://kselftest.wiki.kernel.org/
+>
+> +Recommendations on running kselftests in Continuous Integration test rings
+> +==========================================================================
 > +
->  #ifndef seccomp
->  int seccomp(unsigned int op, unsigned int flags, void *args)
->  {
-> -- 
-> 2.20.1
-> 
+> +It is recommended that users run Kselftest from the same release. Running
+> +newer Kselftest on older kernels isn't recommended for the following
+> +reasons:
+> +
+> +- Kselftest from mainline and linux-next might not be stable enough to run
+> +  on stable kernels.
+> +- Kselftests detect feature dependencies at run-time and skip tests if a
+> +  feature and/or configuration they test aren't enabled. Running newer
+> +  tests on older kernels could result in a few too many skipped/failed
+> +  conditions. It becomes difficult to evaluate the results.
+> +- Newer tests provide better coverage. However, users should make a judgement
+> +  call on coverage vs. run to run consistency and being able to compare
+> +  run to run results on older kernels.
+> +
+> +Recommendations:
 
--- 
-Kees Cook
+I think this should be the "note" directive. You already have a list
+of recommendations above; this seems like a TLDR section, or an
+important note or tip.
+
+> +
+> +Match kernel revision and kselftest. Especially important for LTS and
+> +Stable kernel Continuous Integration test rings.
+> +
+> +Hot-plug tests
+> +==============
+> +
+>  On some systems, hot-plug tests could hang forever waiting for cpu and
+>  memory to be ready to be offlined. A special hot-plug target is created
+>  to run the full range of hot-plug tests. In default mode, hot-plug tests run
+> --
+> 2.20.1
+>
