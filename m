@@ -2,124 +2,101 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B26E1A2285
-	for <lists+linux-kselftest@lfdr.de>; Thu, 29 Aug 2019 19:39:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 839AAA2338
+	for <lists+linux-kselftest@lfdr.de>; Thu, 29 Aug 2019 20:14:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727481AbfH2Rjf (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 29 Aug 2019 13:39:35 -0400
-Received: from mail.kernel.org ([198.145.29.99]:40830 "EHLO mail.kernel.org"
+        id S1728779AbfH2SOJ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 29 Aug 2019 14:14:09 -0400
+Received: from mail.kernel.org ([198.145.29.99]:55910 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727228AbfH2Rje (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 29 Aug 2019 13:39:34 -0400
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net [24.9.64.241])
+        id S1728756AbfH2SOJ (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 29 Aug 2019 14:14:09 -0400
+Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 8AEF221726;
-        Thu, 29 Aug 2019 17:39:32 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 8FB24233FF;
+        Thu, 29 Aug 2019 18:14:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1567100373;
-        bh=EuCHrvEvdbp8z1/Lg/yUsnYZ4GrW13AmJ1Li6JNqah4=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=BEbe7vu3O2sPbUB/hlCQ+OPAVVFF8f+DR6DPd61XoLB4O+eAAYvUXJoZm32wJqset
-         yxsZmnwdOOrWMfl+wg/blme7nNlg3D6Rf6WA6v7dhWhhO7MJxAv2SHJcSgHmbkIjBt
-         mqaQ58iB+xIRLRCcOHMc3VukpwfZNmtc56tKMgN4=
-Subject: Re: [PATCH v2] doc: kselftest: update for clarity on running
- kselftests in CI rings
-To:     Brendan Higgins <brendanhiggins@google.com>,
-        Shuah Khan <skhan@linuxfoundation.org>
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        dan.rue@linaro.org, anders.roxell@linaro.org,
-        shuah <shuah@kernel.org>
-References: <20190827003709.26950-1-skhan@linuxfoundation.org>
- <CAFd5g47jeZGqdhOUEOFGwHqHQ1O0=99Ce+bFhZ-7PCyFT1YO1Q@mail.gmail.com>
-From:   shuah <shuah@kernel.org>
-Message-ID: <f328adad-7559-a459-fd56-b46795d882c6@kernel.org>
-Date:   Thu, 29 Aug 2019 11:39:31 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        s=default; t=1567102448;
+        bh=9J6tgIBdn5EzmWaOuyi4pYjxZ4aRUf4lrRb3sOcTqBg=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=pPCPXPvyCbnUgyqiPg/WW6t8FczwS0dAMtlEpjbzpbGRwU+bcycAm9NjWAX53dQwl
+         HtwxhDgV3h36+BeqxTvYEbFqtAX3GIKpq3gm26XcVgl9W11cYgBd8KGFK9vtHt+257
+         3L9Vr+8roDqU0R/nigzhy9Rtr55ouv3Kke/ZfDYQ=
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Sasha Levin <sashal@kernel.org>, kvm@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.2 32/76] selftests: kvm: do not try running the VM in vmx_set_nested_state_test
+Date:   Thu, 29 Aug 2019 14:12:27 -0400
+Message-Id: <20190829181311.7562-32-sashal@kernel.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20190829181311.7562-1-sashal@kernel.org>
+References: <20190829181311.7562-1-sashal@kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <CAFd5g47jeZGqdhOUEOFGwHqHQ1O0=99Ce+bFhZ-7PCyFT1YO1Q@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 8/29/19 11:30 AM, Brendan Higgins wrote:
-> On Mon, Aug 26, 2019 at 5:37 PM Shuah Khan <skhan@linuxfoundation.org> wrote:
->>
->> Update to add clarity and recommendations on running newer kselftests
->> on older kernels vs. matching the kernel and kselftest revisions.
->>
->> The recommendation is "Match kernel revision and kselftest."
->>
->> Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
-> 
-> Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
-> 
-> One minor comment below.
-> 
->> ---
->> Changes since v1: Fixed "WARNING: Title underline too short."
->>
->>   Documentation/dev-tools/kselftest.rst | 25 +++++++++++++++++++++++++
->>   1 file changed, 25 insertions(+)
->>
->> diff --git a/Documentation/dev-tools/kselftest.rst b/Documentation/dev-tools/kselftest.rst
->> index 25604904fa6e..308506c5e8fa 100644
->> --- a/Documentation/dev-tools/kselftest.rst
->> +++ b/Documentation/dev-tools/kselftest.rst
->> @@ -12,6 +12,31 @@ write new tests using the framework on Kselftest wiki:
->>
->>   https://kselftest.wiki.kernel.org/
->>
->> +Recommendations on running kselftests in Continuous Integration test rings
->> +==========================================================================
->> +
->> +It is recommended that users run Kselftest from the same release. Running
->> +newer Kselftest on older kernels isn't recommended for the following
->> +reasons:
->> +
->> +- Kselftest from mainline and linux-next might not be stable enough to run
->> +  on stable kernels.
->> +- Kselftests detect feature dependencies at run-time and skip tests if a
->> +  feature and/or configuration they test aren't enabled. Running newer
->> +  tests on older kernels could result in a few too many skipped/failed
->> +  conditions. It becomes difficult to evaluate the results.
->> +- Newer tests provide better coverage. However, users should make a judgement
->> +  call on coverage vs. run to run consistency and being able to compare
->> +  run to run results on older kernels.
->> +
->> +Recommendations:
-> 
-> I think this should be the "note" directive. You already have a list
-> of recommendations above; this seems like a TLDR section, or an
-> important note or tip.
-> 
->> +
->> +Match kernel revision and kselftest. Especially important for LTS and
->> +Stable kernel Continuous Integration test rings.
->> +
->> +Hot-plug tests
->> +==============
->> +
->>   On some systems, hot-plug tests could hang forever waiting for cpu and
->>   memory to be ready to be offlined. A special hot-plug target is created
->>   to run the full range of hot-plug tests. In default mode, hot-plug tests run
->> --
->> 2.20.1
->>
-> 
+From: Paolo Bonzini <pbonzini@redhat.com>
 
-Thanks Brendan. I am holding off on this patch for now. I will have
-to make some updates. I will fold your comment in when I send an
-updated patch.
+[ Upstream commit 92cd0f0be3d7adb63611c28693ec0399beded837 ]
 
-thanks,
--- Shuah
+This test is only covering various edge cases of the
+KVM_SET_NESTED_STATE ioctl.  Running the VM does not really
+add anything.
+
+Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ .../kvm/x86_64/vmx_set_nested_state_test.c        | 15 ---------------
+ 1 file changed, 15 deletions(-)
+
+diff --git a/tools/testing/selftests/kvm/x86_64/vmx_set_nested_state_test.c b/tools/testing/selftests/kvm/x86_64/vmx_set_nested_state_test.c
+index ed7218d166da6..a99fc66dafeb6 100644
+--- a/tools/testing/selftests/kvm/x86_64/vmx_set_nested_state_test.c
++++ b/tools/testing/selftests/kvm/x86_64/vmx_set_nested_state_test.c
+@@ -27,22 +27,13 @@
+ 
+ void test_nested_state(struct kvm_vm *vm, struct kvm_nested_state *state)
+ {
+-	volatile struct kvm_run *run;
+-
+ 	vcpu_nested_state_set(vm, VCPU_ID, state, false);
+-	run = vcpu_state(vm, VCPU_ID);
+-	vcpu_run(vm, VCPU_ID);
+-	TEST_ASSERT(run->exit_reason == KVM_EXIT_SHUTDOWN,
+-		"Got exit_reason other than KVM_EXIT_SHUTDOWN: %u (%s),\n",
+-		run->exit_reason,
+-		exit_reason_str(run->exit_reason));
+ }
+ 
+ void test_nested_state_expect_errno(struct kvm_vm *vm,
+ 				    struct kvm_nested_state *state,
+ 				    int expected_errno)
+ {
+-	volatile struct kvm_run *run;
+ 	int rv;
+ 
+ 	rv = vcpu_nested_state_set(vm, VCPU_ID, state, true);
+@@ -50,12 +41,6 @@ void test_nested_state_expect_errno(struct kvm_vm *vm,
+ 		"Expected %s (%d) from vcpu_nested_state_set but got rv: %i errno: %s (%d)",
+ 		strerror(expected_errno), expected_errno, rv, strerror(errno),
+ 		errno);
+-	run = vcpu_state(vm, VCPU_ID);
+-	vcpu_run(vm, VCPU_ID);
+-	TEST_ASSERT(run->exit_reason == KVM_EXIT_SHUTDOWN,
+-		"Got exit_reason other than KVM_EXIT_SHUTDOWN: %u (%s),\n",
+-		run->exit_reason,
+-		exit_reason_str(run->exit_reason));
+ }
+ 
+ void test_nested_state_expect_einval(struct kvm_vm *vm,
+-- 
+2.20.1
+
