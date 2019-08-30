@@ -2,89 +2,76 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DF1E7A37E1
-	for <lists+linux-kselftest@lfdr.de>; Fri, 30 Aug 2019 15:38:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8ECCFA3880
+	for <lists+linux-kselftest@lfdr.de>; Fri, 30 Aug 2019 15:59:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727729AbfH3NiY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 30 Aug 2019 09:38:24 -0400
-Received: from smtp1.de.adit-jv.com ([93.241.18.167]:41455 "EHLO
-        smtp1.de.adit-jv.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727780AbfH3NiY (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 30 Aug 2019 09:38:24 -0400
-Received: from localhost (smtp1.de.adit-jv.com [127.0.0.1])
-        by smtp1.de.adit-jv.com (Postfix) with ESMTP id 42A593C0579;
-        Fri, 30 Aug 2019 15:38:22 +0200 (CEST)
-Received: from smtp1.de.adit-jv.com ([127.0.0.1])
-        by localhost (smtp1.de.adit-jv.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id xi7ekeR7DieB; Fri, 30 Aug 2019 15:38:16 +0200 (CEST)
-Received: from HI2EXCH01.adit-jv.com (hi2exch01.adit-jv.com [10.72.92.24])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by smtp1.de.adit-jv.com (Postfix) with ESMTPS id 89A243C04C0;
-        Fri, 30 Aug 2019 15:38:16 +0200 (CEST)
-Received: from vmlxhi-102.adit-jv.com (10.72.93.184) by HI2EXCH01.adit-jv.com
- (10.72.92.24) with Microsoft SMTP Server (TLS) id 14.3.468.0; Fri, 30 Aug
- 2019 15:38:16 +0200
-Date:   Fri, 30 Aug 2019 15:38:13 +0200
-From:   Eugeniu Rosca <erosca@de.adit-jv.com>
-To:     "George G. Davis" <george_davis@mentor.com>
-CC:     Shuah Khan <shuah@kernel.org>,
-        Jerry Hoemann <jerry.hoemann@hpe.com>,
-        Colin Ian King <colin.king@canonical.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Eugeniu Rosca <erosca@de.adit-jv.com>,
-        Eugeniu Rosca <roscaeugeniu@gmail.com>
-Subject: Re: [PATCH v2] selftests: watchdog: Add optional file argument
-Message-ID: <20190830133813.GA23613@vmlxhi-102.adit-jv.com>
-References: <1567169597-10330-1-git-send-email-george_davis@mentor.com>
+        id S1727780AbfH3N7P (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 30 Aug 2019 09:59:15 -0400
+Received: from foss.arm.com ([217.140.110.172]:60762 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727751AbfH3N7P (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 30 Aug 2019 09:59:15 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7773A344;
+        Fri, 30 Aug 2019 06:59:14 -0700 (PDT)
+Received: from e119884-lin.cambridge.arm.com (e119884-lin.cambridge.arm.com [10.1.196.72])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E04803F703;
+        Fri, 30 Aug 2019 06:59:12 -0700 (PDT)
+From:   Vincenzo Frascino <vincenzo.frascino@arm.com>
+To:     linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Cc:     catalin.marinas@arm.com, will@kernel.org, paul.burton@mips.com,
+        tglx@linutronix.de, salyzyn@android.com, 0x7f454c46@gmail.com,
+        luto@kernel.org
+Subject: [PATCH v2 0/8] vdso: Complete the conversion to 32bit syscalls
+Date:   Fri, 30 Aug 2019 14:58:54 +0100
+Message-Id: <20190830135902.20861-1-vincenzo.frascino@arm.com>
+X-Mailer: git-send-email 2.23.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <1567169597-10330-1-git-send-email-george_davis@mentor.com>
-User-Agent: Mutt/1.12.1+40 (7f8642d4ee82) (2019-06-28)
-X-Originating-IP: [10.72.93.184]
+Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi George,
+This patch series is a follow up to "lib/vdso, x86/vdso: Fix fallout
+from generic VDSO conversion" [1].
 
-On Fri, Aug 30, 2019 at 08:53:16AM -0400, George G. Davis wrote:
-> Some systems have multiple watchdog devices where the first device
-> registered is assigned to the /dev/watchdog device file. In order
-> to test other watchdog devices, add an optional file argument for
-> selecting non-default watchdog devices for testing.
-> 
-> Tested-by: Eugeniu Rosca <erosca@de.adit-jv.com>
-> Signed-off-by: George G. Davis <george_davis@mentor.com>
-> ---
-> v1:
-> - https://lkml.org/lkml/2019/8/29/16
-> v2:
-> - Update printf for ENOENT case based on report from Eugeniu Rosca
+The main purpose is to complete the 32bit vDSOs conversion to use the
+legacy 32bit syscalls as a fallback. With the conversion of all the
+architectures present in -next complete, this patch series removes as
+well the conditional choice in between 32 and 64 bit for 32bit vDSOs.
 
-Below interdiff [1] matches my expectations. Thanks!
+This series has been rebased on linux-next/master.
 
-Reviewed-by: Eugeniu Rosca <erosca@de.adit-jv.com>
+[1] https://lkml.org/lkml/2019/7/28/86
 
-[1] interdiff <(git show patch_v1) <(git show patch_v2)  
-diff -u b/tools/testing/selftests/watchdog/watchdog-test.c b/tools/testing/selftests/watchdog/watchdog-test.c
---- b/tools/testing/selftests/watchdog/watchdog-test.c
-+++ b/tools/testing/selftests/watchdog/watchdog-test.c
-@@ -107,7 +107,7 @@
- 
- 	if (fd == -1) {
- 		if (errno == ENOENT)
--			printf("Watchdog device not enabled.\n");
-+			printf("Watchdog device (%s) not found.\n", file);
- 		else if (errno == EACCES)
- 			printf("Run watchdog as root.\n");
- 		else
+Cc: Catalin Marinas <catalin.marinas@arm.com>
+Cc: Will Deacon <will@kernel.org>
+Cc: Paul Burton <paul.burton@mips.com>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Dmitry Safonov <0x7f454c46@gmail.com>
+Cc: Andy Lutomirski <luto@kernel.org>
+Signed-off-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
+
+Vincenzo Frascino (8):
+  arm64: compat: vdso: Expose BUILD_VDSO32
+  lib: vdso: Build 32 bit specific functions in the right context
+  mips: compat: vdso: Use legacy syscalls as fallback
+  lib: vdso: Remove VDSO_HAS_32BIT_FALLBACK
+  lib: vdso: Remove checks on return value for 32 bit vDSO
+  arm64: compat: vdso: Remove unused VDSO_HAS_32BIT_FALLBACK
+  mips: vdso: Remove unused VDSO_HAS_32BIT_FALLBACK
+  x86: vdso: Remove unused VDSO_HAS_32BIT_FALLBACK
+
+ .../include/asm/vdso/compat_gettimeofday.h    |  2 +-
+ arch/mips/include/asm/vdso/gettimeofday.h     | 43 +++++++++++++++++++
+ arch/mips/vdso/config-n32-o32-env.c           |  1 +
+ arch/x86/include/asm/vdso/gettimeofday.h      |  2 -
+ lib/vdso/gettimeofday.c                       | 30 ++++++-------
+ 5 files changed, 57 insertions(+), 21 deletions(-)
 
 -- 
-Best Regards,
-Eugeniu.
+2.23.0
+
