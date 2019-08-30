@@ -2,103 +2,69 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DDF2FA38FC
-	for <lists+linux-kselftest@lfdr.de>; Fri, 30 Aug 2019 16:16:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75C8BA392D
+	for <lists+linux-kselftest@lfdr.de>; Fri, 30 Aug 2019 16:26:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727945AbfH3OQx (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 30 Aug 2019 10:16:53 -0400
-Received: from foss.arm.com ([217.140.110.172]:32928 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727751AbfH3OQx (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 30 Aug 2019 10:16:53 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4BC1B344;
-        Fri, 30 Aug 2019 07:16:52 -0700 (PDT)
-Received: from [10.1.196.72] (e119884-lin.cambridge.arm.com [10.1.196.72])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3B4383F703;
-        Fri, 30 Aug 2019 07:16:49 -0700 (PDT)
-Subject: Re: [PATCH v2 5/8] lib: vdso: Remove checks on return value for 32
- bit vDSO
-From:   Vincenzo Frascino <vincenzo.frascino@arm.com>
-To:     linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Cc:     catalin.marinas@arm.com, 0x7f454c46@gmail.com, salyzyn@android.com,
-        paul.burton@mips.com, luto@kernel.org, tglx@linutronix.de,
-        will@kernel.org
-References: <20190830135902.20861-1-vincenzo.frascino@arm.com>
- <20190830135902.20861-6-vincenzo.frascino@arm.com>
-Message-ID: <ffbbd289-b282-53e6-03c2-14563bd8ebf3@arm.com>
-Date:   Fri, 30 Aug 2019 15:16:47 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        id S1727781AbfH3O0I (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 30 Aug 2019 10:26:08 -0400
+Received: from esa3.mentor.iphmx.com ([68.232.137.180]:31275 "EHLO
+        esa3.mentor.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727751AbfH3O0I (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 30 Aug 2019 10:26:08 -0400
+IronPort-SDR: BZwO+eVQ2DhvOexO6jPHW7miXC3PC3hLOr+JIQFInS3ajLDTntLpXlkasf8tEAwbNwno3dihOT
+ 87OECZJ2JbnbE6bQUz9U5YnsMcnRz/4mTeuAcV4qyMxMggE0Nh48RNvUsVHBFW3dfHM0UwLl/A
+ ZasqYfHGhutqnW13NrJ06YLrtTFKC9gvGpyw2bG4w3b8p5cEZi7OrJgFiiLREdsR8+y+5Icnpw
+ uD1/Uk0ylEi6FjNzYGLLWPHr9tbr5myRQkZ2NVZXfC3g56nOwN+hnqGDbOG6hFZfFJ1GzdTZ/K
+ zVs=
+X-IronPort-AV: E=Sophos;i="5.64,447,1559548800"; 
+   d="scan'208";a="40907662"
+Received: from orw-gwy-02-in.mentorg.com ([192.94.38.167])
+  by esa3.mentor.iphmx.com with ESMTP; 30 Aug 2019 06:26:07 -0800
+IronPort-SDR: k7PZGsyo7J5cTJqQCVY17iYG2gQwQ8Mdya3Z5JIN9Mln8HRe/iUzRueBudOlcTmuXlOr6uG1et
+ 67c+Pc/w10iVXLQxvbszV+qh2b4BhwJha9oovBu2a+69zXUHvm6UvuPV1xAU/Cixeb9ZAxUtj1
+ YSZM7pD1L+h4btyJ4sk179JF/7ax3QR5Z28tE4wLRDcbPwlHl8EdEsvxl6BM6b51CcJfQwccMY
+ +EMnNIoSryYxXfb1URP4x9YJfX2Lr3z/VCGJcHx8M+FFLuQaEuQah5S8ClMkXvIme8JladIUlq
+ OvM=
+Date:   Fri, 30 Aug 2019 10:26:04 -0400
+From:   "George G. Davis" <george_davis@mentor.com>
+To:     Eugeniu Rosca <erosca@de.adit-jv.com>
+CC:     Shuah Khan <shuah@kernel.org>,
+        Jerry Hoemann <jerry.hoemann@hpe.com>,
+        Colin Ian King <colin.king@canonical.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Eugeniu Rosca <roscaeugeniu@gmail.com>
+Subject: Re: [PATCH v2] selftests: watchdog: Add optional file argument
+Message-ID: <20190830142603.GA23419@mam-gdavis-lt>
+References: <1567169597-10330-1-git-send-email-george_davis@mentor.com>
+ <20190830133813.GA23613@vmlxhi-102.adit-jv.com>
 MIME-Version: 1.0
-In-Reply-To: <20190830135902.20861-6-vincenzo.frascino@arm.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20190830133813.GA23613@vmlxhi-102.adit-jv.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-ClientProxiedBy: svr-orw-mbx-03.mgc.mentorg.com (147.34.90.203) To
+ svr-orw-mbx-01.mgc.mentorg.com (147.34.90.201)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 30/08/2019 14:58, Vincenzo Frascino wrote:
-> Since all the architectures that support the generic vDSO library have
-> been converted to support the 32 bit fallbacks it is not required
-> anymore to check the return value of __cvdso_clock_get*time32_common()
-> before updating the old_timespec fields.
-> 
-> Remove the related checks from the generic vdso library.
-> 
-> Cc: Thomas Gleixner <tglx@linutronix.de>
-> CC: Andy Lutomirski <luto@kernel.org>
+Hello Eugeniu,
 
-Forgot to add to this patch:
-
-Suggested-by: Andy Lutomirski <luto@kernel.org>
-
-> References: c60a32ea4f45 ("lib/vdso/32: Provide legacy syscall fallbacks")
-> Signed-off-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
-> ---
->  lib/vdso/gettimeofday.c | 16 ++++++++--------
->  1 file changed, 8 insertions(+), 8 deletions(-)
+On Fri, Aug 30, 2019 at 03:38:13PM +0200, Eugeniu Rosca wrote:
+> Hi George,
 > 
-> diff --git a/lib/vdso/gettimeofday.c b/lib/vdso/gettimeofday.c
-> index 2c4b311c226d..d5bc16748f81 100644
-> --- a/lib/vdso/gettimeofday.c
-> +++ b/lib/vdso/gettimeofday.c
-> @@ -129,10 +129,10 @@ __cvdso_clock_gettime32(clockid_t clock, struct old_timespec32 *res)
->  	if (unlikely(ret))
->  		return clock_gettime32_fallback(clock, res);
->  
-> -	if (likely(!ret)) {
-> -		res->tv_sec = ts.tv_sec;
-> -		res->tv_nsec = ts.tv_nsec;
-> -	}
-> +	/* For ret == 0 */
-> +	res->tv_sec = ts.tv_sec;
-> +	res->tv_nsec = ts.tv_nsec;
-> +
->  	return ret;
->  }
->  #endif /* BUILD_VDSO32 */
-> @@ -238,10 +238,10 @@ __cvdso_clock_getres_time32(clockid_t clock, struct old_timespec32 *res)
->  	if (unlikely(ret))
->  		return clock_getres32_fallback(clock, res);
->  
-> -	if (likely(!ret)) {
-> -		res->tv_sec = ts.tv_sec;
-> -		res->tv_nsec = ts.tv_nsec;
-> -	}
-> +	/* For ret == 0 */
-> +	res->tv_sec = ts.tv_sec;
-> +	res->tv_nsec = ts.tv_nsec;
-> +
->  	return ret;
->  }
->  #endif /* BUILD_VDSO32 */
+> On Fri, Aug 30, 2019 at 08:53:16AM -0400, George G. Davis wrote:
+> > v2:
+> > - Update printf for ENOENT case based on report from Eugeniu Rosca
 > 
+> Below interdiff [1] matches my expectations. Thanks!
+
+Thanks for confirming.
 
 -- 
 Regards,
-Vincenzo
+George
