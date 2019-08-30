@@ -2,125 +2,106 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E8109A39AA
-	for <lists+linux-kselftest@lfdr.de>; Fri, 30 Aug 2019 16:55:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4F89A39B3
+	for <lists+linux-kselftest@lfdr.de>; Fri, 30 Aug 2019 16:59:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727729AbfH3Ozy (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 30 Aug 2019 10:55:54 -0400
-Received: from foss.arm.com ([217.140.110.172]:33504 "EHLO foss.arm.com"
+        id S1727729AbfH3O7i (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 30 Aug 2019 10:59:38 -0400
+Received: from mail.kernel.org ([198.145.29.99]:39098 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727791AbfH3Ozy (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 30 Aug 2019 10:55:54 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5EF86344;
-        Fri, 30 Aug 2019 07:55:53 -0700 (PDT)
-Received: from [10.1.197.50] (e120937-lin.cambridge.arm.com [10.1.197.50])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id AB8053F703;
-        Fri, 30 Aug 2019 07:55:52 -0700 (PDT)
-Subject: Re: [PATCH v3 08/11] kselftest: arm64: fake_sigreturn_missing_fpsimd
-To:     Dave Martin <Dave.Martin@arm.com>
-Cc:     linux-kselftest@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, shuah@kernel.org,
-        andreyknvl@google.com
-References: <20190802170300.20662-1-cristian.marussi@arm.com>
- <20190802170300.20662-9-cristian.marussi@arm.com>
- <20190813162622.GF10425@arm.com>
-From:   Cristian Marussi <cristian.marussi@arm.com>
-Message-ID: <35f30b95-5b0b-52f0-5b73-954713f0682d@arm.com>
-Date:   Fri, 30 Aug 2019 15:55:49 +0100
+        id S1727751AbfH3O7i (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 30 Aug 2019 10:59:38 -0400
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net [24.9.64.241])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 70C352341B;
+        Fri, 30 Aug 2019 14:59:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1567177177;
+        bh=yuEg/AYA1c6NUhWecZUlheoiYTGMOlPXr3slJwLMjBE=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=u1JFAqN/QGD4Fr1TrQB0MS943k5rWA952cBRxVbOh9N0fjLhRovc2G1XoK6mDEGXl
+         zQRqexm0Nzp2k5V9m7YyupViYZnXtEYln5bMhI0CMIUjUrnDUCChwEioFkGkCjYBXv
+         Br+Hx3PpKg8ee/48k5R/YO9a0jdkk06ep3gGNN0A=
+Subject: Re: [PATCH] seccomp: fix compilation errors in seccomp-bpf kselftest
+To:     Alakesh Haloi <alakesh.haloi@gmail.com>,
+        Kees Cook <keescook@chromium.org>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Will Drewry <wad@chromium.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>
+Cc:     linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        shuah <shuah@kernel.org>
+References: <20190822215823.GA11292@ip-172-31-44-144.us-west-2.compute.internal>
+ <30e993fe-de76-9831-7ecc-61fcbcd51ae0@kernel.org>
+From:   shuah <shuah@kernel.org>
+Message-ID: <b19f12c1-9d22-f366-ebb8-2ac0759bfebf@kernel.org>
+Date:   Fri, 30 Aug 2019 08:59:35 -0600
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.8.0
 MIME-Version: 1.0
-In-Reply-To: <20190813162622.GF10425@arm.com>
-Content-Type: text/plain; charset=utf-8
+In-Reply-To: <30e993fe-de76-9831-7ecc-61fcbcd51ae0@kernel.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi
-
-On 13/08/2019 17:26, Dave Martin wrote:
-> On Fri, Aug 02, 2019 at 06:02:57PM +0100, Cristian Marussi wrote:
->> Added a simple fake_sigreturn testcase which builds a ucontext_t
-> 
-> Add
-Ok
-
-> 
->> without the required fpsimd_context and place it onto the stack.
->> Expects a SIGSEGV on test PASS.
+On 8/30/19 8:09 AM, shuah wrote:
+> On 8/22/19 3:58 PM, Alakesh Haloi wrote:
+>> Without this patch we see following error while building and kselftest
+>> for secccomp_bpf fails.
 >>
->> Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
+>> seccomp_bpf.c:1787:20: error: ‘PTRACE_EVENTMSG_SYSCALL_ENTRY’ 
+>> undeclared (first use in this function);
+>> seccomp_bpf.c:1788:6: error: ‘PTRACE_EVENTMSG_SYSCALL_EXIT’ undeclared 
+>> (first use in this function);
+>>
+>> Signed-off-by: Alakesh Haloi <alakesh.haloi@gmail.com>
 >> ---
->>  .../arm64/signal/testcases/.gitignore         |  1 +
->>  .../testcases/fake_sigreturn_missing_fpsimd.c | 44 +++++++++++++++++++
->>  2 files changed, 45 insertions(+)
->>  create mode 100644 tools/testing/selftests/arm64/signal/testcases/fake_sigreturn_missing_fpsimd.c
+>>   tools/testing/selftests/seccomp/seccomp_bpf.c | 8 ++++++++
+>>   1 file changed, 8 insertions(+)
 >>
->> diff --git a/tools/testing/selftests/arm64/signal/testcases/.gitignore b/tools/testing/selftests/arm64/signal/testcases/.gitignore
->> index cf2a73599818..17d1c5e73319 100644
->> --- a/tools/testing/selftests/arm64/signal/testcases/.gitignore
->> +++ b/tools/testing/selftests/arm64/signal/testcases/.gitignore
->> @@ -6,3 +6,4 @@ mangle_pstate_invalid_mode_el3
->>  mangle_pstate_ssbs_regs
->>  fake_sigreturn_bad_magic
->>  fake_sigreturn_bad_size_for_magic0
->> +fake_sigreturn_missing_fpsimd
->> diff --git a/tools/testing/selftests/arm64/signal/testcases/fake_sigreturn_missing_fpsimd.c b/tools/testing/selftests/arm64/signal/testcases/fake_sigreturn_missing_fpsimd.c
->> new file mode 100644
->> index 000000000000..b8dd57ce6844
->> --- /dev/null
->> +++ b/tools/testing/selftests/arm64/signal/testcases/fake_sigreturn_missing_fpsimd.c
->> @@ -0,0 +1,44 @@
->> +/* SPDX-License-Identifier: GPL-2.0 */
->> +/* Copyright (C) 2019 ARM Limited */
+>> diff --git a/tools/testing/selftests/seccomp/seccomp_bpf.c 
+>> b/tools/testing/selftests/seccomp/seccomp_bpf.c
+>> index 6ef7f16c4cf5..2e619760fc3e 100644
+>> --- a/tools/testing/selftests/seccomp/seccomp_bpf.c
+>> +++ b/tools/testing/selftests/seccomp/seccomp_bpf.c
+>> @@ -1353,6 +1353,14 @@ TEST_F(precedence, log_is_fifth_in_any_order)
+>>   #define PTRACE_EVENT_SECCOMP 7
+>>   #endif
+>> +#ifndef PTRACE_EVENTMSG_SYSCALL_ENTRY
+>> +#define PTRACE_EVENTMSG_SYSCALL_ENTRY 1
+>> +#endif
 >> +
+>> +#ifndef PTRACE_EVENTMSG_SYSCALL_EXIT
+>> +#define PTRACE_EVENTMSG_SYSCALL_EXIT 2
+>> +#endif
+>> +
+>>   #define IS_SECCOMP_EVENT(status) ((status >> 16) == 
+>> PTRACE_EVENT_SECCOMP)
+>>   bool tracer_running;
+>>   void tracer_stop(int sig)
+>>
 > 
-> signal.h?
+> Hi Kees,
 > 
-Ok
->> +#include <stdio.h>
->> +#include <ucontext.h>
->> +
->> +#include "test_signals_utils.h"
->> +#include "testcases.h"
->> +
->> +struct fake_sigframe sf;
->> +
->> +static int fake_sigreturn_missing_fpsimd_run(struct tdescr *td,
->> +					     siginfo_t *si, ucontext_t *uc)
->> +{
->> +	size_t resv_sz, offset;
->> +	struct _aarch64_ctx *head = GET_SF_RESV_HEAD(sf);
->> +
->> +	/* just to fill the ucontext_t with something real */
->> +	if (!get_current_context(td, &sf.uc))
->> +		return 1;
->> +
->> +	resv_sz = GET_SF_RESV_SIZE(sf);
->> +	head = get_header(head, FPSIMD_MAGIC, resv_sz, &offset);
->> +	/* just give up and timeout if still not enough space */
->> +	if (head && resv_sz - offset >= HDR_SZ) {
->> +		fprintf(stderr, "Mangling template header. Spare space:%zd\n",
->> +			resv_sz - offset);
->> +		/* Just overwrite fpsmid_context */
->> +		write_terminator_record(head);
->> +
->> +		ASSERT_BAD_CONTEXT(&sf.uc);
->> +		fake_sigreturn(&sf, sizeof(sf), 16);
->> +	}
->> +
->> +	return 1;
->> +}
+> Okay to apply this one for 5.4-rc1. Or is this going through bpf tree?
+> If it is going through bpf tree:
 > 
-> [...]
+> Acked-by: Shuah Khan <skhan@linuxfoundation.org>
 > 
-> Seems reasonable otherwise.
-> 
-> Cheers
-> ---Dave
+> thanks,
+> -- Shuah
 > 
 
+I saw your mail about Tycho's solution to be your preferred. Ignore this
+message. I am applying Tycho's patch.
+
+thanks,
+-- Shuah
