@@ -2,127 +2,176 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 76589A3A2C
-	for <lists+linux-kselftest@lfdr.de>; Fri, 30 Aug 2019 17:19:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 64751A3A35
+	for <lists+linux-kselftest@lfdr.de>; Fri, 30 Aug 2019 17:21:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727820AbfH3PTD (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 30 Aug 2019 11:19:03 -0400
-Received: from mail.kernel.org ([198.145.29.99]:47340 "EHLO mail.kernel.org"
+        id S1727922AbfH3PVc (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 30 Aug 2019 11:21:32 -0400
+Received: from foss.arm.com ([217.140.110.172]:33870 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727135AbfH3PTD (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 30 Aug 2019 11:19:03 -0400
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net [24.9.64.241])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id C070E23407;
-        Fri, 30 Aug 2019 15:19:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1567178342;
-        bh=vQfKaQCOOvRxsISEVm5YkqcibbR2NduhLMlGiVwylHM=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=HUd34ltmgb0Kcr0QVXguoMwr0LOFCR3TLG8GlgiZA3Tc1NdjOPVZHMPV0y14johUM
-         s8uuapf3mG5hF9AGpHhRQ/nMiX+ZP/j/AzDX2WvC6yT87jRsC5olXOUMx27FKWxS7I
-         i5l4GgnM6wBjoYeLSttlJA3S3K2OPj7oOqCxuOSo=
-Subject: Re: [PATCH] selftests/seccomp: fix build on older kernels
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Tycho Andersen <tycho@tycho.ws>, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Alakesh Haloi <alakesh.haloi@gmail.com>,
-        shuah <shuah@kernel.org>
-References: <20190826144302.7745-1-tycho@tycho.ws>
- <201908291003.005EB96606@keescook>
- <f01c3383-0184-9770-c72e-7fe08b552112@kernel.org>
-From:   shuah <shuah@kernel.org>
-Message-ID: <1a3e9d47-73f5-9cf5-e050-46a455b6a6cc@kernel.org>
-Date:   Fri, 30 Aug 2019 09:19:00 -0600
+        id S1727135AbfH3PVc (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 30 Aug 2019 11:21:32 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 81BA0344;
+        Fri, 30 Aug 2019 08:21:31 -0700 (PDT)
+Received: from [10.1.197.50] (e120937-lin.cambridge.arm.com [10.1.197.50])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id CD0E43F703;
+        Fri, 30 Aug 2019 08:21:30 -0700 (PDT)
+Subject: Re: [PATCH v3 10/11] kselftest: arm64: fake_sigreturn_bad_size
+To:     Dave Martin <Dave.Martin@arm.com>
+Cc:     linux-kselftest@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, shuah@kernel.org,
+        andreyknvl@google.com
+References: <20190802170300.20662-1-cristian.marussi@arm.com>
+ <20190802170300.20662-11-cristian.marussi@arm.com>
+ <20190813162646.GH10425@arm.com>
+From:   Cristian Marussi <cristian.marussi@arm.com>
+Message-ID: <599bc78e-718d-0475-0ab0-79e1277e55ab@arm.com>
+Date:   Fri, 30 Aug 2019 16:21:29 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.8.0
 MIME-Version: 1.0
-In-Reply-To: <f01c3383-0184-9770-c72e-7fe08b552112@kernel.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
+In-Reply-To: <20190813162646.GH10425@arm.com>
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 8/29/19 6:45 PM, shuah wrote:
-> On 8/29/19 11:06 AM, Kees Cook wrote:
->> On Mon, Aug 26, 2019 at 08:43:02AM -0600, Tycho Andersen wrote:
->>> The seccomp selftest goes to some length to build against older kernel
->>> headers, viz. all the #ifdefs at the beginning of the file. 201766a20e30
->>> ("ptrace: add PTRACE_GET_SYSCALL_INFO request") introduces some 
->>> additional
->>> macros, but doesn't do the #ifdef dance. Let's add that dance here to
->>> avoid:
->>>
->>> gcc -Wl,-no-as-needed -Wall  seccomp_bpf.c -lpthread -o seccomp_bpf
->>> In file included from seccomp_bpf.c:51:
->>> seccomp_bpf.c: In function ‘tracer_ptrace’:
->>> seccomp_bpf.c:1787:20: error: ‘PTRACE_EVENTMSG_SYSCALL_ENTRY’ 
->>> undeclared (first use in this function); did you mean 
->>> ‘PTRACE_EVENT_CLONE’?
->>>    EXPECT_EQ(entry ? PTRACE_EVENTMSG_SYSCALL_ENTRY
->>>                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->>> ../kselftest_harness.h:608:13: note: in definition of macro ‘__EXPECT’
->>>    __typeof__(_expected) __exp = (_expected); \
->>>               ^~~~~~~~~
->>> seccomp_bpf.c:1787:2: note: in expansion of macro ‘EXPECT_EQ’
->>>    EXPECT_EQ(entry ? PTRACE_EVENTMSG_SYSCALL_ENTRY
->>>    ^~~~~~~~~
->>> seccomp_bpf.c:1787:20: note: each undeclared identifier is reported 
->>> only once for each function it appears in
->>>    EXPECT_EQ(entry ? PTRACE_EVENTMSG_SYSCALL_ENTRY
->>>                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->>> ../kselftest_harness.h:608:13: note: in definition of macro ‘__EXPECT’
->>>    __typeof__(_expected) __exp = (_expected); \
->>>               ^~~~~~~~~
->>> seccomp_bpf.c:1787:2: note: in expansion of macro ‘EXPECT_EQ’
->>>    EXPECT_EQ(entry ? PTRACE_EVENTMSG_SYSCALL_ENTRY
->>>    ^~~~~~~~~
->>> seccomp_bpf.c:1788:6: error: ‘PTRACE_EVENTMSG_SYSCALL_EXIT’ 
->>> undeclared (first use in this function); did you mean 
->>> ‘PTRACE_EVENT_EXIT’?
->>>      : PTRACE_EVENTMSG_SYSCALL_EXIT, msg);
->>>        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
->>> ../kselftest_harness.h:608:13: note: in definition of macro ‘__EXPECT’
->>>    __typeof__(_expected) __exp = (_expected); \
->>>               ^~~~~~~~~
->>> seccomp_bpf.c:1787:2: note: in expansion of macro ‘EXPECT_EQ’
->>>    EXPECT_EQ(entry ? PTRACE_EVENTMSG_SYSCALL_ENTRY
->>>    ^~~~~~~~~
->>> make: *** [Makefile:12: seccomp_bpf] Error 1
->>>
->>> Signed-off-by: Tycho Andersen <tycho@tycho.ws>
->>> Fixes: 201766a20e30 ("ptrace: add PTRACE_GET_SYSCALL_INFO request")
+On 13/08/2019 17:26, Dave Martin wrote:
+> On Fri, Aug 02, 2019 at 06:02:59PM +0100, Cristian Marussi wrote:
+>> Added a simple fake_sigreturn testcase which builds a ucontext_t
+> 
+> Add
+
+Ok
+
+> 
+>> with a badly sized header that causes a overrun in the __reserved
+>> area and place it onto the stack. Expects a SIGSEGV on test PASS.
 >>
->> Acked-by: Kees Cook <keescook@chromium.org>
+>> Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
+>> ---
+>>  .../arm64/signal/testcases/.gitignore         |  1 +
+>>  .../testcases/fake_sigreturn_bad_size.c       | 85 +++++++++++++++++++
+>>  2 files changed, 86 insertions(+)
+>>  create mode 100644 tools/testing/selftests/arm64/signal/testcases/fake_sigreturn_bad_size.c
 >>
->> Alakesh Haloi also sent a fix[1] for this. I prefer Tycho's solution
->> (one #ifndef and a Fixes line). Shuah, can you please apply this?
->>
+>> diff --git a/tools/testing/selftests/arm64/signal/testcases/.gitignore b/tools/testing/selftests/arm64/signal/testcases/.gitignore
+>> index 94f9baaf638c..3408e0f5ba98 100644
+>> --- a/tools/testing/selftests/arm64/signal/testcases/.gitignore
+>> +++ b/tools/testing/selftests/arm64/signal/testcases/.gitignore
+>> @@ -8,3 +8,4 @@ fake_sigreturn_bad_magic
+>>  fake_sigreturn_bad_size_for_magic0
+>>  fake_sigreturn_missing_fpsimd
+>>  fake_sigreturn_duplicated_fpsimd
+>> +fake_sigreturn_bad_size
+>> diff --git a/tools/testing/selftests/arm64/signal/testcases/fake_sigreturn_bad_size.c b/tools/testing/selftests/arm64/signal/testcases/fake_sigreturn_bad_size.c
+>> new file mode 100644
+>> index 000000000000..1467fb534d8b
+>> --- /dev/null
+>> +++ b/tools/testing/selftests/arm64/signal/testcases/fake_sigreturn_bad_size.c
+>> @@ -0,0 +1,85 @@
+>> +/* SPDX-License-Identifier: GPL-2.0 */
+>> +/* Copyright (C) 2019 ARM Limited */
+>> +
 > 
-> Kees,
+> signal.h?
 > 
-> Yes I will pick this up.
+Ok
+>> +#include <stdio.h>
+>> +#include <ucontext.h>
+>> +
+>> +#include "test_signals_utils.h"
+>> +#include "testcases.h"
+>> +
+>> +struct fake_sigframe sf;
+>> +
+>> +#define MIN_SZ_ALIGN	16
+>> +
+>> +static int fake_sigreturn_bad_size_run(struct tdescr *td,
+>> +				       siginfo_t *si, ucontext_t *uc)
+>> +{
+>> +	size_t resv_sz, need_sz, offset;
+>> +	struct _aarch64_ctx *shead = GET_SF_RESV_HEAD(sf), *head;
+>> +
+>> +	/* just to fill the ucontext_t with something real */
+>> +	if (!get_current_context(td, &sf.uc))
+>> +		return 1;
+>> +
+>> +	resv_sz = GET_SF_RESV_SIZE(sf);
+>> +	/*
+>> +	 * find the terminator, preserving existing headers
+>> +	 * and verify amount of spare room in __reserved area.
+>> +	 */
+>> +	head = get_terminator(shead, resv_sz, &offset);
+>> +	/*
+>> +	 * try stripping extra_context header when low on space:
+>> +	 * we need at least  for the bad sized esr_context.
 > 
-> thanks,
-> -- Shuah
+> double space
+> 
+ok.
+>> +	 */
+>> +	need_sz = HDR_SZ + sizeof(struct esr_context);
+>> +	if (head && resv_sz - offset < need_sz) {
+>> +		fprintf(stderr, "Low on space:%zd. Discarding extra_context.\n",
+>> +			resv_sz - offset);
+>> +		head = get_header(shead, EXTRA_MAGIC, resv_sz, &offset);
+>> +	}
+>> +	/* just give up and timeout if still not enough space */
+>> +	if (head && resv_sz - offset >= need_sz) {
+>> +		fprintf(stderr, "Mangling template header. Spare space:%zd\n",
+>> +			resv_sz - offset);
+>> +		/*
+>> +		 * Use an esr_context to build a fake header with a
+>> +		 * size greater then the free __reserved area minus HDR_SZ;
+>> +		 * using ESR_MAGIC here since it is not checked for size nor
+>> +		 * is limited to one instance.
+>> +		 *
+>> +		 * At first inject an additional normal esr_context
+>> +		 */
+>> +		head->magic = ESR_MAGIC;
+>> +		head->size = sizeof(struct esr_context);
+>> +		/* and terminate properly */
+>> +		write_terminator_record(GET_RESV_NEXT_HEAD(head));
+>> +		ASSERT_GOOD_CONTEXT(&sf.uc);
+>> +
+>> +		/*
+>> +		 * now mess with fake esr_context size: leaving less space than
+>> +		 * neededwhile keeping size value 16-aligned
+>> +		 *
+>> +		 * It must trigger a SEGV from Kernel on:
+>> +		 *
+>> +		 *	resv_sz - offset < sizeof(*head)
+>> +		 */
+>> +		/* at first set the maximum good 16-aligned size */
+>> +		head->size = (resv_sz - offset - need_sz + MIN_SZ_ALIGN) & ~0xfUL;
+>> +		/* plus a bit more of 16-aligned sized stuff */
+>> +		head->size += MIN_SZ_ALIGN;
+>> +		/* and terminate properly */
+>> +		write_terminator_record(GET_RESV_NEXT_HEAD(head));
+>> +		ASSERT_BAD_CONTEXT(&sf.uc);
+>> +		fake_sigreturn(&sf, sizeof(sf), 16);
+>> +	}
+>> +
+>> +	return 1;
+>> +}
 > 
 
-Applied after fixing the following checkpatch error in the commit log:
+I'll convert to use new helper get_starting_head() to make space in __reserved.
 
-ERROR: Please use git commit description style 'commit <12+ chars of 
-sha1> ("<title line>")' - ie: 'commit 201766a20e30 ("ptrace: add 
-PTRACE_GET_SYSCALL_INFO request")'
-#82:
+> [...]
+> 
+> Otherwise looks reasonable.
+> 
+> Cheers
+> ---Dave
 
-Now reads as follows:
+Cheers
 
-Commit 201766a20e30 ("ptrace: add PTRACE_GET_SYSCALL_INFO request")
-     introduces some additional macros, but doesn't do the #ifdef dance.
-     Let's add that dance here to avoid:
+Cristian
+> 
 
-thanks,
--- Shuah
