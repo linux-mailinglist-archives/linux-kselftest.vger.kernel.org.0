@@ -2,105 +2,127 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 73A17A3A11
-	for <lists+linux-kselftest@lfdr.de>; Fri, 30 Aug 2019 17:12:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76589A3A2C
+	for <lists+linux-kselftest@lfdr.de>; Fri, 30 Aug 2019 17:19:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727809AbfH3PMN (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 30 Aug 2019 11:12:13 -0400
-Received: from mail.kernel.org ([198.145.29.99]:44314 "EHLO mail.kernel.org"
+        id S1727820AbfH3PTD (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 30 Aug 2019 11:19:03 -0400
+Received: from mail.kernel.org ([198.145.29.99]:47340 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727135AbfH3PMN (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 30 Aug 2019 11:12:13 -0400
+        id S1727135AbfH3PTD (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 30 Aug 2019 11:19:03 -0400
 Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net [24.9.64.241])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 7F2BE23407;
-        Fri, 30 Aug 2019 15:12:11 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id C070E23407;
+        Fri, 30 Aug 2019 15:19:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1567177932;
-        bh=8V3NVUeMC2JfI4D6VRgLVlFPa41Ds+EvfqE2GvzzqKo=;
+        s=default; t=1567178342;
+        bh=vQfKaQCOOvRxsISEVm5YkqcibbR2NduhLMlGiVwylHM=;
         h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=x6EcA4t1bM+bXSxdaK3uC3DhfynKUEqlncFfHeSiRQH2WwF7W5aeTlsmXY0zxEDDg
-         gw8kzBQDDToOkKMgD+D43UY4nQpnMnH0iZczC3a3fEno6awttQTUhVqh9ssK0TD3OG
-         v2qPQ6jzlaH5BhEOQ6XtCrNsO1w/yoAJOyQwQa00=
-Subject: Re: [PATCH v2] selftests: watchdog: Add optional file argument
-To:     "George G. Davis" <george_davis@mentor.com>,
-        Jerry Hoemann <jerry.hoemann@hpe.com>,
-        Colin Ian King <colin.king@canonical.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Cc:     Eugeniu Rosca <erosca@de.adit-jv.com>, shuah <shuah@kernel.org>
-References: <1567169597-10330-1-git-send-email-george_davis@mentor.com>
+        b=HUd34ltmgb0Kcr0QVXguoMwr0LOFCR3TLG8GlgiZA3Tc1NdjOPVZHMPV0y14johUM
+         s8uuapf3mG5hF9AGpHhRQ/nMiX+ZP/j/AzDX2WvC6yT87jRsC5olXOUMx27FKWxS7I
+         i5l4GgnM6wBjoYeLSttlJA3S3K2OPj7oOqCxuOSo=
+Subject: Re: [PATCH] selftests/seccomp: fix build on older kernels
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Tycho Andersen <tycho@tycho.ws>, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Alakesh Haloi <alakesh.haloi@gmail.com>,
+        shuah <shuah@kernel.org>
+References: <20190826144302.7745-1-tycho@tycho.ws>
+ <201908291003.005EB96606@keescook>
+ <f01c3383-0184-9770-c72e-7fe08b552112@kernel.org>
 From:   shuah <shuah@kernel.org>
-Message-ID: <197ee603-6ea7-a3c8-6b62-e3ba95433053@kernel.org>
-Date:   Fri, 30 Aug 2019 09:12:10 -0600
+Message-ID: <1a3e9d47-73f5-9cf5-e050-46a455b6a6cc@kernel.org>
+Date:   Fri, 30 Aug 2019 09:19:00 -0600
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.8.0
 MIME-Version: 1.0
-In-Reply-To: <1567169597-10330-1-git-send-email-george_davis@mentor.com>
+In-Reply-To: <f01c3383-0184-9770-c72e-7fe08b552112@kernel.org>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 8/30/19 6:53 AM, George G. Davis wrote:
-> Some systems have multiple watchdog devices where the first device
-> registered is assigned to the /dev/watchdog device file. In order
-> to test other watchdog devices, add an optional file argument for
-> selecting non-default watchdog devices for testing.
+On 8/29/19 6:45 PM, shuah wrote:
+> On 8/29/19 11:06 AM, Kees Cook wrote:
+>> On Mon, Aug 26, 2019 at 08:43:02AM -0600, Tycho Andersen wrote:
+>>> The seccomp selftest goes to some length to build against older kernel
+>>> headers, viz. all the #ifdefs at the beginning of the file. 201766a20e30
+>>> ("ptrace: add PTRACE_GET_SYSCALL_INFO request") introduces some 
+>>> additional
+>>> macros, but doesn't do the #ifdef dance. Let's add that dance here to
+>>> avoid:
+>>>
+>>> gcc -Wl,-no-as-needed -Wall  seccomp_bpf.c -lpthread -o seccomp_bpf
+>>> In file included from seccomp_bpf.c:51:
+>>> seccomp_bpf.c: In function ‘tracer_ptrace’:
+>>> seccomp_bpf.c:1787:20: error: ‘PTRACE_EVENTMSG_SYSCALL_ENTRY’ 
+>>> undeclared (first use in this function); did you mean 
+>>> ‘PTRACE_EVENT_CLONE’?
+>>>    EXPECT_EQ(entry ? PTRACE_EVENTMSG_SYSCALL_ENTRY
+>>>                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>>> ../kselftest_harness.h:608:13: note: in definition of macro ‘__EXPECT’
+>>>    __typeof__(_expected) __exp = (_expected); \
+>>>               ^~~~~~~~~
+>>> seccomp_bpf.c:1787:2: note: in expansion of macro ‘EXPECT_EQ’
+>>>    EXPECT_EQ(entry ? PTRACE_EVENTMSG_SYSCALL_ENTRY
+>>>    ^~~~~~~~~
+>>> seccomp_bpf.c:1787:20: note: each undeclared identifier is reported 
+>>> only once for each function it appears in
+>>>    EXPECT_EQ(entry ? PTRACE_EVENTMSG_SYSCALL_ENTRY
+>>>                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>>> ../kselftest_harness.h:608:13: note: in definition of macro ‘__EXPECT’
+>>>    __typeof__(_expected) __exp = (_expected); \
+>>>               ^~~~~~~~~
+>>> seccomp_bpf.c:1787:2: note: in expansion of macro ‘EXPECT_EQ’
+>>>    EXPECT_EQ(entry ? PTRACE_EVENTMSG_SYSCALL_ENTRY
+>>>    ^~~~~~~~~
+>>> seccomp_bpf.c:1788:6: error: ‘PTRACE_EVENTMSG_SYSCALL_EXIT’ 
+>>> undeclared (first use in this function); did you mean 
+>>> ‘PTRACE_EVENT_EXIT’?
+>>>      : PTRACE_EVENTMSG_SYSCALL_EXIT, msg);
+>>>        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>>> ../kselftest_harness.h:608:13: note: in definition of macro ‘__EXPECT’
+>>>    __typeof__(_expected) __exp = (_expected); \
+>>>               ^~~~~~~~~
+>>> seccomp_bpf.c:1787:2: note: in expansion of macro ‘EXPECT_EQ’
+>>>    EXPECT_EQ(entry ? PTRACE_EVENTMSG_SYSCALL_ENTRY
+>>>    ^~~~~~~~~
+>>> make: *** [Makefile:12: seccomp_bpf] Error 1
+>>>
+>>> Signed-off-by: Tycho Andersen <tycho@tycho.ws>
+>>> Fixes: 201766a20e30 ("ptrace: add PTRACE_GET_SYSCALL_INFO request")
+>>
+>> Acked-by: Kees Cook <keescook@chromium.org>
+>>
+>> Alakesh Haloi also sent a fix[1] for this. I prefer Tycho's solution
+>> (one #ifndef and a Fixes line). Shuah, can you please apply this?
+>>
 > 
-> Tested-by: Eugeniu Rosca <erosca@de.adit-jv.com>
-> Signed-off-by: George G. Davis <george_davis@mentor.com>
-> ---
-> v1:
-> - https://lkml.org/lkml/2019/8/29/16
-> v2:
-> - Update printf for ENOENT case based on report from Eugeniu Rosca
-> ---
->   tools/testing/selftests/watchdog/watchdog-test.c | 19 ++++++++++++++++---
->   1 file changed, 16 insertions(+), 3 deletions(-)
+> Kees,
 > 
-> diff --git a/tools/testing/selftests/watchdog/watchdog-test.c b/tools/testing/selftests/watchdog/watchdog-test.c
-> index c2333c78cf04..9f17cae61007 100644
-> --- a/tools/testing/selftests/watchdog/watchdog-test.c
-> +++ b/tools/testing/selftests/watchdog/watchdog-test.c
-> @@ -19,7 +19,7 @@
->   
->   int fd;
->   const char v = 'V';
-> -static const char sopts[] = "bdehp:t:Tn:NL";
-> +static const char sopts[] = "bdehp:t:Tn:NLf:";
->   static const struct option lopts[] = {
->   	{"bootstatus",          no_argument, NULL, 'b'},
->   	{"disable",             no_argument, NULL, 'd'},
-> @@ -31,6 +31,7 @@ static const struct option lopts[] = {
->   	{"pretimeout",    required_argument, NULL, 'n'},
->   	{"getpretimeout",       no_argument, NULL, 'N'},
->   	{"gettimeleft",		no_argument, NULL, 'L'},
-> +	{"file",          required_argument, NULL, 'f'},
->   	{NULL,                  no_argument, NULL, 0x0}
->   };
->   
-> @@ -69,6 +70,7 @@ static void term(int sig)
->   static void usage(char *progname)
->   {
->   	printf("Usage: %s [options]\n", progname);
-> +	printf(" -f, --file          Open watchdog device file (default is /dev/watchdog)\n");
+> Yes I will pick this up.
+> 
+> thanks,
+> -- Shuah
+> 
 
-Can you split this line into two printf's. Checkpatch doesn't like
-it.
+Applied after fixing the following checkpatch error in the commit log:
 
-printf(" -f, --file          Open watchdog device file\n");
-A second one below for default.
+ERROR: Please use git commit description style 'commit <12+ chars of 
+sha1> ("<title line>")' - ie: 'commit 201766a20e30 ("ptrace: add 
+PTRACE_GET_SYSCALL_INFO request")'
+#82:
 
-On a separate note, I wish this usage block uses \t instead of spacing
-things out.
+Now reads as follows:
+
+Commit 201766a20e30 ("ptrace: add PTRACE_GET_SYSCALL_INFO request")
+     introduces some additional macros, but doesn't do the #ifdef dance.
+     Let's add that dance here to avoid:
 
 thanks,
 -- Shuah
-
-
