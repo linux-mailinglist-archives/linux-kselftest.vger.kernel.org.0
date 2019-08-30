@@ -2,46 +2,37 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 19F81A3BD1
-	for <lists+linux-kselftest@lfdr.de>; Fri, 30 Aug 2019 18:20:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8986FA3C15
+	for <lists+linux-kselftest@lfdr.de>; Fri, 30 Aug 2019 18:33:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727135AbfH3QU0 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 30 Aug 2019 12:20:26 -0400
-Received: from mail.kernel.org ([198.145.29.99]:38260 "EHLO mail.kernel.org"
+        id S1727792AbfH3Qd2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 30 Aug 2019 12:33:28 -0400
+Received: from foss.arm.com ([217.140.110.172]:34772 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727434AbfH3QU0 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 30 Aug 2019 12:20:26 -0400
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net [24.9.64.241])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 063132341B;
-        Fri, 30 Aug 2019 16:20:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1567182025;
-        bh=7MOipqKt2Wmhp8etEhAUF9iImbxmzYm8rI9O4cKGm/c=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=GOjHZLU8Epe54Oc+cpo+LHgMFF42/oSRz1S3EhcKAnb5S8ffa8d0DWdVVIdCHQv46
-         iusD8tsuBtfNUpvwo6sHzgX+noKayeaZY9sIyXqhaVkIsL5gfvhRjb6nW7EvQQ/fDS
-         XJgPwxCKgfKqJHniuvLRgw/9hDmZyMRQ1gMNljVY=
-Subject: Re: [PATCH v2] selftests: watchdog: Add optional file argument
-To:     "George G. Davis" <george_davis@mentor.com>
-Cc:     Jerry Hoemann <jerry.hoemann@hpe.com>,
-        Colin Ian King <colin.king@canonical.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Eugeniu Rosca <erosca@de.adit-jv.com>, shuah <shuah@kernel.org>
-References: <1567169597-10330-1-git-send-email-george_davis@mentor.com>
- <197ee603-6ea7-a3c8-6b62-e3ba95433053@kernel.org>
- <20190830161320.GD23419@mam-gdavis-lt>
-From:   shuah <shuah@kernel.org>
-Message-ID: <ff4527a1-3b94-9b4a-b785-507eb861379c@kernel.org>
-Date:   Fri, 30 Aug 2019 10:20:23 -0600
+        id S1727304AbfH3Qd2 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 30 Aug 2019 12:33:28 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 738BC344;
+        Fri, 30 Aug 2019 09:33:27 -0700 (PDT)
+Received: from [10.1.197.50] (e120937-lin.cambridge.arm.com [10.1.197.50])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id BDEA83F718;
+        Fri, 30 Aug 2019 09:33:26 -0700 (PDT)
+Subject: Re: [PATCH v3 11/11] kselftest: arm64: fake_sigreturn_misaligned_sp
+To:     Dave Martin <Dave.Martin@arm.com>
+Cc:     linux-kselftest@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, shuah@kernel.org,
+        andreyknvl@google.com
+References: <20190802170300.20662-1-cristian.marussi@arm.com>
+ <20190802170300.20662-12-cristian.marussi@arm.com>
+ <20190813162756.GI10425@arm.com>
+From:   Cristian Marussi <cristian.marussi@arm.com>
+Message-ID: <fc3e0796-8bef-eb5d-4e20-2d15c138430e@arm.com>
+Date:   Fri, 30 Aug 2019 17:33:25 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.8.0
 MIME-Version: 1.0
-In-Reply-To: <20190830161320.GD23419@mam-gdavis-lt>
-Content-Type: text/plain; charset=utf-8; format=flowed
+In-Reply-To: <20190813162756.GI10425@arm.com>
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 Sender: linux-kselftest-owner@vger.kernel.org
@@ -49,51 +40,158 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 8/30/19 10:13 AM, George G. Davis wrote:
-> On Fri, Aug 30, 2019 at 09:12:10AM -0600, shuah wrote:
->> On 8/30/19 6:53 AM, George G. Davis wrote:
->>> diff --git a/tools/testing/selftests/watchdog/watchdog-test.c b/tools/testing/selftests/watchdog/watchdog-test.c
->>> @@ -69,6 +70,7 @@ static void term(int sig)
->>>   static void usage(char *progname)
->>>   {
->>>   	printf("Usage: %s [options]\n", progname);
->>> +	printf(" -f, --file          Open watchdog device file (default is /dev/watchdog)\n");
+On 13/08/2019 17:27, Dave Martin wrote:
+> On Fri, Aug 02, 2019 at 06:03:00PM +0100, Cristian Marussi wrote:
+>> Added a simple fake_sigreturn testcase which places a valid
+> 
+> Add
+> 
+Ok
+
+>> sigframe on a non-16 bytes aligned SP.
+>> fake_sigretrun() helper function has been patched accordingly
+>> to support placing a sigframe on a non-16 bytes aligned address.
+>> Expects a SIGSEGV on test PASS.
 >>
->> Can you split this line into two printf's. Checkpatch doesn't like
->> it.
+>> Adds also a test TODO lists holding some further test ideas.
+> 
+> Adds -> Also add
+> lists -> list
+> 
+
+Removed together with the TODO.
+
+>> Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
+>> ---
+>> Re-added this text after fixing the forced misaglinment procedure in
+>> fake_sigreturn() itself: require a ZERO alignment and you'll get
+>> your sigframe placed on a misaligned SP (2-bytes off the 16-align)
+>> ---
+>>  .../testing/selftests/arm64/signal/signals.S  | 21 +++++++++----
+>>  .../arm64/signal/testcases/TODO.readme        |  8 +++++
+>>  .../testcases/fake_sigreturn_misaligned_sp.c  | 30 +++++++++++++++++++
+>>  3 files changed, 53 insertions(+), 6 deletions(-)
+>>  create mode 100644 tools/testing/selftests/arm64/signal/testcases/TODO.readme
+>>  create mode 100644 tools/testing/selftests/arm64/signal/testcases/fake_sigreturn_misaligned_sp.c
 >>
->> printf(" -f, --file          Open watchdog device file\n");
->> A second one below for default.
+>> diff --git a/tools/testing/selftests/arm64/signal/signals.S b/tools/testing/selftests/arm64/signal/signals.S
+>> index 6262b877400b..2099871176ed 100644
+>> --- a/tools/testing/selftests/arm64/signal/signals.S
+>> +++ b/tools/testing/selftests/arm64/signal/signals.S
+>> @@ -13,19 +13,28 @@ call_fmt:
+>>  
+>>  .globl fake_sigreturn
+>>  
+>> -/*	fake_sigreturn	x0:&sigframe,  x1:sigframe_size,  x2:alignment_SP */
+>> +/*	fake_sigreturn	x0:&sigframe, x1:sigframe_sz, x2:align */
+>>  fake_sigreturn:
+>> -	mov x20, x0
+>> -	mov x21, x1
+>> -	mov x22, x2
+>> -	mov x23, sp
+>>  
+>> -	/* create space on the stack for fake sigframe..."x22"-aligned */
+>> +	/* Save args and decide which aligment to enforce */
+>> +	mov 	x23, sp
+>> +	mov	x20, x0
+>> +	mov 	x21, x1
+>> +	/* x22 and x24 used for forcing alignment or misalignment */
+>> +	mov	x22, x2
+>> +	mov	x24, #0
+>> +	cbnz	x22, 1f
+>> +	mov	x22, #16
+>> +	mov	x24, #2
+>> +
+>> +1:	/* create space on the stack for fake sigframe..."x22"-aligned */
+>>  	mov x0, #0
+>>  	add x0, x21, x22
+>>  	sub x22, x22, #1
+>>  	bic x0, x0, x22
+>>  	sub x23, x23, x0
+>> +	/* force misaligned by x24 bytes if required alignment was zero */
+>> +	add x23, x23, x24
+>>  
+>>  	ldr x0, =call_fmt
+>>  	mov x1, x21
 > 
-> Sure, I'll add the following interdiff in v3:
+> Would it be simpler for the third argument to specify a number of bytes
+> to subtract from SP after allocating 16-byte aligned storage to
+> accommodate sigframe_sz?
 > 
-> diff --git a/tools/testing/selftests/watchdog/watchdog-test.c b/tools/testing/selftests/watchdog/watchdog-test.c
-> index 9f17cae61007..6a68b486dd61 100644
-> --- a/tools/testing/selftests/watchdog/watchdog-test.c
-> +++ b/tools/testing/selftests/watchdog/watchdog-test.c
-> @@ -70,7 +70,8 @@ static void term(int sig)
->   static void usage(char *progname)
->   {
->   	printf("Usage: %s [options]\n", progname);
-> -	printf(" -f, --file          Open watchdog device file (default is /dev/watchdog)\n");
-> +	printf(" -f, --file          Open watchdog device file\n");
-> +	printf("                     Default is /dev/watchdog\n");
+> Then 0 gives an aligned frame, 1 gives a frame misaligned by 1 byte,
+> etc.
+> 
+> 
+> Also if all this is a fix to the original fake_sigreturn, can we merge
+> it into the original patch instead?
+> 
+Yes simplified and merged into 6/11
 
-Thanks. This is what I am looking for. Please send v3 with thsi change.
-
->   	printf(" -b, --bootstatus    Get last boot status (Watchdog/POR)\n");
->   	printf(" -d, --disable       Turn off the watchdog timer\n");
->   	printf(" -e, --enable        Turn on the watchdog timer\n");
+>> diff --git a/tools/testing/selftests/arm64/signal/testcases/TODO.readme b/tools/testing/selftests/arm64/signal/testcases/TODO.readme
+>> new file mode 100644
+>> index 000000000000..5c949492e7ab
+>> --- /dev/null
+>> +++ b/tools/testing/selftests/arm64/signal/testcases/TODO.readme
+>> @@ -0,0 +1,8 @@
+>> +Some more possible ideas for signals tests:
+>> +
+>> +- fake_sigreturn_unmapped_sp
+>> +- fake_sigreturn_kernelspace_sp
+>> +- fake_sigreturn_sve_bad_extra_context
+>> +- mangle_sve_invalid_extra_context
+>> +- mangle_pstate_invalid_el for H modes (+ macroization ?)
+>> +- fake_sigreturn_overflow_reserved
 > 
->> On a separate note, I wish this usage block uses \t instead of spacing
->> things out.
+> This seems a reasonable list, but it occurs to me that it will tend to
+> go out of sync as tests get added.  So maybe just put this list in the
+> cover letter instead of including it in the patch.
 > 
-> I noticed that most of those lines are hard spaced with only one using tabs.
-> To remain consistent with existing CodingStyle, I used hard spaces.
+> We should probably have a one-line description of each proposed test,
+> since the names are a bit cryptic.
+
+Moving to cover letter with description.
+
+> 
+>> diff --git a/tools/testing/selftests/arm64/signal/testcases/fake_sigreturn_misaligned_sp.c b/tools/testing/selftests/arm64/signal/testcases/fake_sigreturn_misaligned_sp.c
+>> new file mode 100644
+>> index 000000000000..3ee8c500c7d1
+>> --- /dev/null
+>> +++ b/tools/testing/selftests/arm64/signal/testcases/fake_sigreturn_misaligned_sp.c
+>> @@ -0,0 +1,30 @@
+>> +/* SPDX-License-Identifier: GPL-2.0 */
+>> +/* Copyright (C) 2019 ARM Limited */
+>> +
+> 
+> signal.h?
+
+ok
+> 
+>> +#include <ucontext.h>
+>> +
+>> +#include "test_signals_utils.h"
+>> +#include "testcases.h"
+>> +
+>> +struct fake_sigframe sf;
+>> +
+>> +static int fake_sigreturn_misaligned_run(struct tdescr *td,
+>> +				         siginfo_t *si, ucontext_t *uc)
+>> +{
+>> +	/* just to fill the ucontext_t with something real */
+>> +	if (!get_current_context(td, &sf.uc))
+>> +		return 1;
+>> +
+>> +	/* Forcing sigframe on misaligned (=!16) SP */
+>> +	fake_sigreturn(&sf, sizeof(sf), 0);
+>> +
+>> +	return 1;
+>> +}
+> 
+> [...]
+> 
+> Cheers
+> ---Dave
 > 
 
-yes. My comment about using "\t" can be done later and if you would like
-to send for that patch, I will be happy to take it.
+Cheers
 
-thanks,
--- Shuah
+Cristian
