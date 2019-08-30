@@ -2,67 +2,94 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A328A38A1
-	for <lists+linux-kselftest@lfdr.de>; Fri, 30 Aug 2019 16:00:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90DC2A38D2
+	for <lists+linux-kselftest@lfdr.de>; Fri, 30 Aug 2019 16:09:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728635AbfH3N7d (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 30 Aug 2019 09:59:33 -0400
-Received: from foss.arm.com ([217.140.110.172]:60876 "EHLO foss.arm.com"
+        id S1727783AbfH3OJb (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 30 Aug 2019 10:09:31 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46668 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728628AbfH3N73 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 30 Aug 2019 09:59:29 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B61F41576;
-        Fri, 30 Aug 2019 06:59:28 -0700 (PDT)
-Received: from e119884-lin.cambridge.arm.com (e119884-lin.cambridge.arm.com [10.1.196.72])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2C9363F703;
-        Fri, 30 Aug 2019 06:59:27 -0700 (PDT)
-From:   Vincenzo Frascino <vincenzo.frascino@arm.com>
-To:     linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Cc:     catalin.marinas@arm.com, will@kernel.org, paul.burton@mips.com,
-        tglx@linutronix.de, salyzyn@android.com, 0x7f454c46@gmail.com,
-        luto@kernel.org
-Subject: [PATCH v2 8/8] x86: vdso: Remove unused VDSO_HAS_32BIT_FALLBACK
-Date:   Fri, 30 Aug 2019 14:59:02 +0100
-Message-Id: <20190830135902.20861-9-vincenzo.frascino@arm.com>
-X-Mailer: git-send-email 2.23.0
-In-Reply-To: <20190830135902.20861-1-vincenzo.frascino@arm.com>
-References: <20190830135902.20861-1-vincenzo.frascino@arm.com>
+        id S1727791AbfH3OJb (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 30 Aug 2019 10:09:31 -0400
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net [24.9.64.241])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 96DBD22CE9;
+        Fri, 30 Aug 2019 14:09:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1567174170;
+        bh=p5AjW3xVDRxCRokQLJsTqv+1lmdRB2z4uTAo1OGwa4Q=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=E/heTaWMHie+f9aeljhO/1yfl9cSU7vcNF/AqUhGNPWL/KPpd7dNvx0UyWaxDk1k2
+         VFXySM1rPovDrqpfURtsc0Qw49mjuDC3qFcbeYuFqQRddu0yUujxGnbUUQ6uBdz0AY
+         Fg6wPEqFXmdOf/n5IqZABnc7lopIyAgMoMkspmt4=
+Subject: Re: [PATCH] seccomp: fix compilation errors in seccomp-bpf kselftest
+To:     Alakesh Haloi <alakesh.haloi@gmail.com>,
+        Kees Cook <keescook@chromium.org>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Will Drewry <wad@chromium.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>
+Cc:     linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        shuah <shuah@kernel.org>
+References: <20190822215823.GA11292@ip-172-31-44-144.us-west-2.compute.internal>
+From:   shuah <shuah@kernel.org>
+Message-ID: <30e993fe-de76-9831-7ecc-61fcbcd51ae0@kernel.org>
+Date:   Fri, 30 Aug 2019 08:09:20 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
+In-Reply-To: <20190822215823.GA11292@ip-172-31-44-144.us-west-2.compute.internal>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-VDSO_HAS_32BIT_FALLBACK has been removed from the core since
-the architectures that support the generic vDSO library have
-been converted to support the 32 bit fallbacks.
+On 8/22/19 3:58 PM, Alakesh Haloi wrote:
+> Without this patch we see following error while building and kselftest
+> for secccomp_bpf fails.
+> 
+> seccomp_bpf.c:1787:20: error: ‘PTRACE_EVENTMSG_SYSCALL_ENTRY’ undeclared (first use in this function);
+> seccomp_bpf.c:1788:6: error: ‘PTRACE_EVENTMSG_SYSCALL_EXIT’ undeclared (first use in this function);
+> 
+> Signed-off-by: Alakesh Haloi <alakesh.haloi@gmail.com>
+> ---
+>   tools/testing/selftests/seccomp/seccomp_bpf.c | 8 ++++++++
+>   1 file changed, 8 insertions(+)
+> 
+> diff --git a/tools/testing/selftests/seccomp/seccomp_bpf.c b/tools/testing/selftests/seccomp/seccomp_bpf.c
+> index 6ef7f16c4cf5..2e619760fc3e 100644
+> --- a/tools/testing/selftests/seccomp/seccomp_bpf.c
+> +++ b/tools/testing/selftests/seccomp/seccomp_bpf.c
+> @@ -1353,6 +1353,14 @@ TEST_F(precedence, log_is_fifth_in_any_order)
+>   #define PTRACE_EVENT_SECCOMP 7
+>   #endif
+>   
+> +#ifndef PTRACE_EVENTMSG_SYSCALL_ENTRY
+> +#define PTRACE_EVENTMSG_SYSCALL_ENTRY 1
+> +#endif
+> +
+> +#ifndef PTRACE_EVENTMSG_SYSCALL_EXIT
+> +#define PTRACE_EVENTMSG_SYSCALL_EXIT 2
+> +#endif
+> +
+>   #define IS_SECCOMP_EVENT(status) ((status >> 16) == PTRACE_EVENT_SECCOMP)
+>   bool tracer_running;
+>   void tracer_stop(int sig)
+> 
 
-Remove unused VDSO_HAS_32BIT_FALLBACK from x86 vdso.
+Hi Kees,
 
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Andy Lutomirski <luto@kernel.org>
-Signed-off-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
----
- arch/x86/include/asm/vdso/gettimeofday.h | 2 --
- 1 file changed, 2 deletions(-)
+Okay to apply this one for 5.4-rc1. Or is this going through bpf tree?
+If it is going through bpf tree:
 
-diff --git a/arch/x86/include/asm/vdso/gettimeofday.h b/arch/x86/include/asm/vdso/gettimeofday.h
-index ba71a63cdac4..6aa8e3eda31d 100644
---- a/arch/x86/include/asm/vdso/gettimeofday.h
-+++ b/arch/x86/include/asm/vdso/gettimeofday.h
-@@ -96,8 +96,6 @@ long clock_getres_fallback(clockid_t _clkid, struct __kernel_timespec *_ts)
- 
- #else
- 
--#define VDSO_HAS_32BIT_FALLBACK	1
--
- static __always_inline
- long clock_gettime_fallback(clockid_t _clkid, struct __kernel_timespec *_ts)
- {
--- 
-2.23.0
+Acked-by: Shuah Khan <skhan@linuxfoundation.org>
 
+thanks,
+-- Shuah
