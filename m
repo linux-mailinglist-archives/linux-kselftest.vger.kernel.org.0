@@ -2,116 +2,102 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4324DA25C3
-	for <lists+linux-kselftest@lfdr.de>; Thu, 29 Aug 2019 20:32:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB680A2B95
+	for <lists+linux-kselftest@lfdr.de>; Fri, 30 Aug 2019 02:46:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728841AbfH2SOc (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 29 Aug 2019 14:14:32 -0400
-Received: from mail.kernel.org ([198.145.29.99]:56154 "EHLO mail.kernel.org"
+        id S1726991AbfH3AqB (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 29 Aug 2019 20:46:01 -0400
+Received: from mail.kernel.org ([198.145.29.99]:52878 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728836AbfH2SOb (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 29 Aug 2019 14:14:31 -0400
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
+        id S1726014AbfH3AqB (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 29 Aug 2019 20:46:01 -0400
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net [24.9.64.241])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 766CE2339E;
-        Thu, 29 Aug 2019 18:14:29 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 87B3A21726;
+        Fri, 30 Aug 2019 00:45:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1567102470;
-        bh=bJlc/+TfIgbgjjmyWhzlBUWdW2bkR1oySzbllaFjg+k=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ExstUR2N4UeW5Im0znp1kKz6YpCnKI3yNM+AnQ085ujM+IO87E0Bisf4B6x09hQZ/
-         wXms6Pk/W25mo1vBB/3xPJGRpnefsp9Cauz0bP+oFMfBWXWH1u7XiXQuxY7ZKRCSM/
-         nNPEoltKw2cXnToRXp1+OcgU1tm7qBa+ugE1ITC0=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Sasha Levin <sashal@kernel.org>, kvm@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.2 34/76] selftests: kvm: fix vmx_set_nested_state_test
-Date:   Thu, 29 Aug 2019 14:12:29 -0400
-Message-Id: <20190829181311.7562-34-sashal@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190829181311.7562-1-sashal@kernel.org>
-References: <20190829181311.7562-1-sashal@kernel.org>
+        s=default; t=1567125960;
+        bh=c0Z7vK3gtHxVtiNB6cGmSFVoyYyfkh3Fb9aD2+lkTDM=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=SVwyjjgQjmBexDCnZ3AHRrP9daZi+VvYsUZBp8tg7of0Pw7UdGx/vlARw8e5M4C1n
+         EiizSA+NwAvtg38MGFMJf3Aj5UskdmE4M/Eq64yMNm+PB+FkrVD4B4fmQ/F7S+sgsw
+         5iV1fZ+kXi98wRSbIQ0Yh+5+EpNIj/hlSxWwe8t0=
+Subject: Re: [PATCH] selftests/seccomp: fix build on older kernels
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Tycho Andersen <tycho@tycho.ws>, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Alakesh Haloi <alakesh.haloi@gmail.com>,
+        shuah <shuah@kernel.org>
+References: <20190826144302.7745-1-tycho@tycho.ws>
+ <201908291003.005EB96606@keescook>
+From:   shuah <shuah@kernel.org>
+Message-ID: <f01c3383-0184-9770-c72e-7fe08b552112@kernel.org>
+Date:   Thu, 29 Aug 2019 18:45:58 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
+In-Reply-To: <201908291003.005EB96606@keescook>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Paolo Bonzini <pbonzini@redhat.com>
+On 8/29/19 11:06 AM, Kees Cook wrote:
+> On Mon, Aug 26, 2019 at 08:43:02AM -0600, Tycho Andersen wrote:
+>> The seccomp selftest goes to some length to build against older kernel
+>> headers, viz. all the #ifdefs at the beginning of the file. 201766a20e30
+>> ("ptrace: add PTRACE_GET_SYSCALL_INFO request") introduces some additional
+>> macros, but doesn't do the #ifdef dance. Let's add that dance here to
+>> avoid:
+>>
+>> gcc -Wl,-no-as-needed -Wall  seccomp_bpf.c -lpthread -o seccomp_bpf
+>> In file included from seccomp_bpf.c:51:
+>> seccomp_bpf.c: In function ‘tracer_ptrace’:
+>> seccomp_bpf.c:1787:20: error: ‘PTRACE_EVENTMSG_SYSCALL_ENTRY’ undeclared (first use in this function); did you mean ‘PTRACE_EVENT_CLONE’?
+>>    EXPECT_EQ(entry ? PTRACE_EVENTMSG_SYSCALL_ENTRY
+>>                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> ../kselftest_harness.h:608:13: note: in definition of macro ‘__EXPECT’
+>>    __typeof__(_expected) __exp = (_expected); \
+>>               ^~~~~~~~~
+>> seccomp_bpf.c:1787:2: note: in expansion of macro ‘EXPECT_EQ’
+>>    EXPECT_EQ(entry ? PTRACE_EVENTMSG_SYSCALL_ENTRY
+>>    ^~~~~~~~~
+>> seccomp_bpf.c:1787:20: note: each undeclared identifier is reported only once for each function it appears in
+>>    EXPECT_EQ(entry ? PTRACE_EVENTMSG_SYSCALL_ENTRY
+>>                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> ../kselftest_harness.h:608:13: note: in definition of macro ‘__EXPECT’
+>>    __typeof__(_expected) __exp = (_expected); \
+>>               ^~~~~~~~~
+>> seccomp_bpf.c:1787:2: note: in expansion of macro ‘EXPECT_EQ’
+>>    EXPECT_EQ(entry ? PTRACE_EVENTMSG_SYSCALL_ENTRY
+>>    ^~~~~~~~~
+>> seccomp_bpf.c:1788:6: error: ‘PTRACE_EVENTMSG_SYSCALL_EXIT’ undeclared (first use in this function); did you mean ‘PTRACE_EVENT_EXIT’?
+>>      : PTRACE_EVENTMSG_SYSCALL_EXIT, msg);
+>>        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> ../kselftest_harness.h:608:13: note: in definition of macro ‘__EXPECT’
+>>    __typeof__(_expected) __exp = (_expected); \
+>>               ^~~~~~~~~
+>> seccomp_bpf.c:1787:2: note: in expansion of macro ‘EXPECT_EQ’
+>>    EXPECT_EQ(entry ? PTRACE_EVENTMSG_SYSCALL_ENTRY
+>>    ^~~~~~~~~
+>> make: *** [Makefile:12: seccomp_bpf] Error 1
+>>
+>> Signed-off-by: Tycho Andersen <tycho@tycho.ws>
+>> Fixes: 201766a20e30 ("ptrace: add PTRACE_GET_SYSCALL_INFO request")
+> 
+> Acked-by: Kees Cook <keescook@chromium.org>
+> 
+> Alakesh Haloi also sent a fix[1] for this. I prefer Tycho's solution
+> (one #ifndef and a Fixes line). Shuah, can you please apply this?
+> 
 
-[ Upstream commit c930e19790bbbff31c018009907c813fa0925f63 ]
+Kees,
 
-vmx_set_nested_state_test is trying to use the KVM_STATE_NESTED_EVMCS without
-enabling enlightened VMCS first.  Correct the outcome of the test, and actually
-test that it succeeds after the capability is enabled.
+Yes I will pick this up.
 
-Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- .../kvm/x86_64/vmx_set_nested_state_test.c      | 17 ++++++++++++++---
- 1 file changed, 14 insertions(+), 3 deletions(-)
-
-diff --git a/tools/testing/selftests/kvm/x86_64/vmx_set_nested_state_test.c b/tools/testing/selftests/kvm/x86_64/vmx_set_nested_state_test.c
-index a99fc66dafeb6..853e370e8a394 100644
---- a/tools/testing/selftests/kvm/x86_64/vmx_set_nested_state_test.c
-+++ b/tools/testing/selftests/kvm/x86_64/vmx_set_nested_state_test.c
-@@ -25,6 +25,8 @@
- #define VMCS12_REVISION 0x11e57ed0
- #define VCPU_ID 5
- 
-+bool have_evmcs;
-+
- void test_nested_state(struct kvm_vm *vm, struct kvm_nested_state *state)
- {
- 	vcpu_nested_state_set(vm, VCPU_ID, state, false);
-@@ -75,8 +77,9 @@ void set_default_vmx_state(struct kvm_nested_state *state, int size)
- {
- 	memset(state, 0, size);
- 	state->flags = KVM_STATE_NESTED_GUEST_MODE  |
--			KVM_STATE_NESTED_RUN_PENDING |
--			KVM_STATE_NESTED_EVMCS;
-+			KVM_STATE_NESTED_RUN_PENDING;
-+	if (have_evmcs)
-+		state->flags |= KVM_STATE_NESTED_EVMCS;
- 	state->format = 0;
- 	state->size = size;
- 	state->hdr.vmx.vmxon_pa = 0x1000;
-@@ -126,13 +129,19 @@ void test_vmx_nested_state(struct kvm_vm *vm)
- 	/*
- 	 * Setting vmxon_pa == -1ull and vmcs_pa == -1ull exits early without
- 	 * setting the nested state but flags other than eVMCS must be clear.
-+	 * The eVMCS flag can be set if the enlightened VMCS capability has
-+	 * been enabled.
- 	 */
- 	set_default_vmx_state(state, state_sz);
- 	state->hdr.vmx.vmxon_pa = -1ull;
- 	state->hdr.vmx.vmcs12_pa = -1ull;
- 	test_nested_state_expect_einval(vm, state);
- 
--	state->flags = KVM_STATE_NESTED_EVMCS;
-+	state->flags &= KVM_STATE_NESTED_EVMCS;
-+	if (have_evmcs) {
-+		test_nested_state_expect_einval(vm, state);
-+		vcpu_enable_evmcs(vm, VCPU_ID);
-+	}
- 	test_nested_state(vm, state);
- 
- 	/* It is invalid to have vmxon_pa == -1ull and SMM flags non-zero. */
-@@ -217,6 +226,8 @@ int main(int argc, char *argv[])
- 	struct kvm_nested_state state;
- 	struct kvm_cpuid_entry2 *entry = kvm_get_supported_cpuid_entry(1);
- 
-+	have_evmcs = kvm_check_cap(KVM_CAP_HYPERV_ENLIGHTENED_VMCS);
-+
- 	if (!kvm_check_cap(KVM_CAP_NESTED_STATE)) {
- 		printf("KVM_CAP_NESTED_STATE not available, skipping test\n");
- 		exit(KSFT_SKIP);
--- 
-2.20.1
-
+thanks,
+-- Shuah
