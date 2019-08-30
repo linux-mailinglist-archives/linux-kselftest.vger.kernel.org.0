@@ -2,32 +2,28 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8853CA2EAB
-	for <lists+linux-kselftest@lfdr.de>; Fri, 30 Aug 2019 06:51:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5320A2EAD
+	for <lists+linux-kselftest@lfdr.de>; Fri, 30 Aug 2019 06:56:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725802AbfH3EvK (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 30 Aug 2019 00:51:10 -0400
-Received: from smtprelay0077.hostedemail.com ([216.40.44.77]:55047 "EHLO
+        id S1725802AbfH3E4u (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 30 Aug 2019 00:56:50 -0400
+Received: from smtprelay0133.hostedemail.com ([216.40.44.133]:53171 "EHLO
         smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1725648AbfH3EvK (ORCPT
+        by vger.kernel.org with ESMTP id S1725648AbfH3E4t (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 30 Aug 2019 00:51:10 -0400
-X-Greylist: delayed 364 seconds by postgrey-1.27 at vger.kernel.org; Fri, 30 Aug 2019 00:51:08 EDT
-Received: from smtprelay.hostedemail.com (10.5.19.251.rfc1918.com [10.5.19.251])
-        by smtpgrave02.hostedemail.com (Postfix) with ESMTP id 7BBF318027675;
-        Fri, 30 Aug 2019 04:45:03 +0000 (UTC)
+        Fri, 30 Aug 2019 00:56:49 -0400
 Received: from filter.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
-        by smtprelay03.hostedemail.com (Postfix) with ESMTP id 80AE78368F12;
-        Fri, 30 Aug 2019 04:45:02 +0000 (UTC)
+        by smtprelay02.hostedemail.com (Postfix) with ESMTP id 3FC70909B;
+        Fri, 30 Aug 2019 04:56:48 +0000 (UTC)
 X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Spam-Summary: 2,0,0,,d41d8cd98f00b204,joe@perches.com,:::::::::::::::::::::::::,RULES_HIT:2:41:69:355:379:599:800:960:966:967:973:982:988:989:1260:1277:1311:1313:1314:1345:1359:1437:1515:1516:1518:1535:1593:1594:1605:1730:1747:1777:1792:2196:2199:2393:2525:2559:2563:2682:2685:2828:2859:2902:2933:2937:2939:2942:2945:2947:2951:2954:3022:3138:3139:3140:3141:3142:3622:3865:3866:3867:3868:3870:3871:3872:3874:3934:3936:3938:3941:3944:3947:3950:3953:3956:3959:4049:4119:4250:4321:4385:4605:5007:6119:6690:7514:7862:7875:7903:8603:8660:9025:9389:9592:10004:10848:11026:11232:11473:11658:11914:12043:12296:12297:12438:12555:12663:12683:12740:12760:12895:13148:13230:13439:14659:21060:21063:21080:21324:21433:21451:21611:21627:21740:21749:21939:30012:30029:30034:30054:30075:30091,0,RBL:error,CacheIP:none,Bayesian:0.5,0.5,0.5,Netcheck:none,DomainCache:0,MSF:not bulk,SPF:fn,MSBL:0,DNSBL:neutral,Custom_rules:0:0:0,LFtime:31,LUA_SUMMARY:none
-X-HE-Tag: skin65_2ba1ffce8e74c
-X-Filterd-Recvd-Size: 8183
-Received: from XPS-9350 (cpe-23-242-196-136.socal.res.rr.com [23.242.196.136])
+X-Spam-Summary: 2,0,0,,d41d8cd98f00b204,joe@perches.com,:::::::::::::::::::::::::,RULES_HIT:41:355:379:599:960:973:988:989:1260:1277:1311:1313:1314:1345:1359:1437:1515:1516:1518:1534:1540:1593:1594:1711:1730:1747:1777:1792:2393:2559:2562:2828:3138:3139:3140:3141:3142:3352:3622:3865:3867:3871:4321:5007:10004:10400:10848:11026:11232:11658:11914:12043:12296:12297:12679:12740:12760:12895:13069:13095:13311:13357:13439:14659:14721:21080:21324:21433:21451:21627:30029:30054:30091,0,RBL:23.242.196.136:@perches.com:.lbl8.mailshell.net-62.8.0.180 64.201.201.201,CacheIP:none,Bayesian:0.5,0.5,0.5,Netcheck:none,DomainCache:0,MSF:not bulk,SPF:fn,MSBL:0,DNSBL:neutral,Custom_rules:0:0:0,LFtime:25,LUA_SUMMARY:none
+X-HE-Tag: rake28_deb57dfa01b
+X-Filterd-Recvd-Size: 2134
+Received: from XPS-9350.home (cpe-23-242-196-136.socal.res.rr.com [23.242.196.136])
         (Authenticated sender: joe@perches.com)
-        by omf13.hostedemail.com (Postfix) with ESMTPA;
-        Fri, 30 Aug 2019 04:44:59 +0000 (UTC)
-Message-ID: <f2d5b474411b2940d62198490f06e77890fbdb32.camel@perches.com>
+        by omf14.hostedemail.com (Postfix) with ESMTPA;
+        Fri, 30 Aug 2019 04:56:45 +0000 (UTC)
+Message-ID: <b9b83ce738fc0abde04ad82d0fa6786a1370fbab.camel@perches.com>
 Subject: Re: [PATCH v2] kunit: fix failure to build without printk
 From:   Joe Perches <joe@perches.com>
 To:     shuah <shuah@kernel.org>,
@@ -38,11 +34,12 @@ Cc:     kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org,
         sboyd@kernel.org, pmladek@suse.com, sergey.senozhatsky@gmail.com,
         rostedt@goodmis.org, Randy Dunlap <rdunlap@infradead.org>,
         Stephen Rothwell <sfr@canb.auug.org.au>
-Date:   Thu, 29 Aug 2019 21:44:58 -0700
-In-Reply-To: <8b2d63bf-56cd-e8f5-e8ee-2891c2c1be8f@kernel.org>
+Date:   Thu, 29 Aug 2019 21:56:44 -0700
+In-Reply-To: <f2d5b474411b2940d62198490f06e77890fbdb32.camel@perches.com>
 References: <20190828093143.163302-1-brendanhiggins@google.com>
          <20190828094929.GA14038@jagdpanzerIV>
          <8b2d63bf-56cd-e8f5-e8ee-2891c2c1be8f@kernel.org>
+         <f2d5b474411b2940d62198490f06e77890fbdb32.camel@perches.com>
 Content-Type: text/plain; charset="ISO-8859-1"
 User-Agent: Evolution 3.32.1-2 
 MIME-Version: 1.0
@@ -52,225 +49,26 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, 2019-08-29 at 11:01 -0600, shuah wrote:
-> On 8/28/19 3:49 AM, Sergey Senozhatsky wrote:
-> > On (08/28/19 02:31), Brendan Higgins wrote:
-> > [..]
-> > > Previously KUnit assumed that printk would always be present, which is
-> > > not a valid assumption to make. Fix that by removing call to
-> > > vprintk_emit, and calling printk directly.
-> > > 
-> > > Reported-by: Randy Dunlap <rdunlap@infradead.org>
-> > > Link: https://lore.kernel.org/linux-kselftest/0352fae9-564f-4a97-715a-fabe016259df@kernel.org/T/#t
-> > > Cc: Stephen Rothwell <sfr@canb.auug.org.au>
-> > > Cc: Sergey Senozhatsky <sergey.senozhatsky.work@gmail.com>
-> > > Signed-off-by: Brendan Higgins <brendanhiggins@google.com>
+On Thu, 2019-08-29 at 21:44 -0700, Joe Perches wrote:
+> On Thu, 2019-08-29 at 11:01 -0600, shuah wrote:
+[]
+> > WARNING: Prefer [subsystem eg: netdev]_level([subsystem]dev, ... then 
+> > dev_level(dev, ... then pr_level(...  to printk(KERN_LEVEL ...
+> > #105: FILE: include/kunit/test.h:343:
+> > +	printk(KERN_LEVEL "\t# %s: " fmt, (test)->name, ##__VA_ARGS__)
 > > 
-> > [..]
 > > 
-> > > -static void kunit_vprintk(const struct kunit *test,
-> > > -			  const char *level,
-> > > -			  struct va_format *vaf)
-> > > -{
-> > > -	kunit_printk_emit(level[1] - '0', "\t# %s: %pV", test->name, vaf);
-> > > -}
-> > 
-> > This patch looks good to me. I like the removal of recursive
-> > vsprintf() (%pV).
-> > 
-> > 	-ss
-> > 
-> 
-> Hi Sergey,
-> 
-> What are the guidelines for using printk(). I recall some discussion
-> about not using printk(). I am seeing the following from checkpatch
-> script:
-> 
-> 
-> WARNING: Prefer [subsystem eg: netdev]_level([subsystem]dev, ... then 
-> dev_level(dev, ... then pr_level(...  to printk(KERN_LEVEL ...
-> #105: FILE: include/kunit/test.h:343:
-> +	printk(KERN_LEVEL "\t# %s: " fmt, (test)->name, ##__VA_ARGS__)
-> 
-> 
-> Is there supposed to be pr_level() - I can find dev_level()
-> 
-> cc'ing Joe Perches for his feedback on this message recommending
-> pr_level() which isn't in 5.3.
+> > Is there supposed to be pr_level() - I can find dev_level()
 
-I don't care for pr_level or KERN_LEVEL in a printk.
+btw: the checkpatch message is meant to be interpreted as
 
-I think this is somewhat overly complicated.
+Prefer [subsystem eg: netdev]_<level>([subsystem]dev, ...) then dev_<level>(dev, ...) then pr_<level>(...), to printk(KERN_<LEVEL> ...)
 
-I think I'd write it like:
----
- include/kunit/test.h | 11 ++++-----
- kunit/test.c         | 69 ++++++++++++++++------------------------------------
- 2 files changed, 26 insertions(+), 54 deletions(-)
+btw2:
 
-diff --git a/include/kunit/test.h b/include/kunit/test.h
-index 8b7eb03d4971..aa4abf0a22a5 100644
---- a/include/kunit/test.h
-+++ b/include/kunit/test.h
-@@ -339,9 +339,8 @@ static inline void *kunit_kzalloc(struct kunit *test, size_t size, gfp_t gfp)
- 
- void kunit_cleanup(struct kunit *test);
- 
--void __printf(3, 4) kunit_printk(const char *level,
--				 const struct kunit *test,
--				 const char *fmt, ...);
-+__printf(2, 3)
-+void kunit_printk(const struct kunit *test, const char *fmt, ...);
- 
- /**
-  * kunit_info() - Prints an INFO level message associated with @test.
-@@ -353,7 +352,7 @@ void __printf(3, 4) kunit_printk(const char *level,
-  * Takes a variable number of format parameters just like printk().
-  */
- #define kunit_info(test, fmt, ...) \
--	kunit_printk(KERN_INFO, test, fmt, ##__VA_ARGS__)
-+	kunit_printk(test, KERN_INFO fmt, ##__VA_ARGS__)
- 
- /**
-  * kunit_warn() - Prints a WARN level message associated with @test.
-@@ -364,7 +363,7 @@ void __printf(3, 4) kunit_printk(const char *level,
-  * Prints a warning level message.
-  */
- #define kunit_warn(test, fmt, ...) \
--	kunit_printk(KERN_WARNING, test, fmt, ##__VA_ARGS__)
-+	kunit_printk(test, KERN_WARNING fmt, ##__VA_ARGS__)
- 
- /**
-  * kunit_err() - Prints an ERROR level message associated with @test.
-@@ -375,7 +374,7 @@ void __printf(3, 4) kunit_printk(const char *level,
-  * Prints an error level message.
-  */
- #define kunit_err(test, fmt, ...) \
--	kunit_printk(KERN_ERR, test, fmt, ##__VA_ARGS__)
-+	kunit_printk(test, KERN_ERR fmt, ##__VA_ARGS__)
- 
- /**
-  * KUNIT_SUCCEED() - A no-op expectation. Only exists for code clarity.
-diff --git a/kunit/test.c b/kunit/test.c
-index b2ca9b94c353..ddb9bffb5a5d 100644
---- a/kunit/test.c
-+++ b/kunit/test.c
-@@ -16,40 +16,6 @@ static void kunit_set_failure(struct kunit *test)
- 	WRITE_ONCE(test->success, false);
- }
- 
--static int kunit_vprintk_emit(int level, const char *fmt, va_list args)
--{
--	return vprintk_emit(0, level, NULL, 0, fmt, args);
--}
--
--static int kunit_printk_emit(int level, const char *fmt, ...)
--{
--	va_list args;
--	int ret;
--
--	va_start(args, fmt);
--	ret = kunit_vprintk_emit(level, fmt, args);
--	va_end(args);
--
--	return ret;
--}
--
--static void kunit_vprintk(const struct kunit *test,
--			  const char *level,
--			  struct va_format *vaf)
--{
--	kunit_printk_emit(level[1] - '0', "\t# %s: %pV", test->name, vaf);
--}
--
--static void kunit_print_tap_version(void)
--{
--	static bool kunit_has_printed_tap_version;
--
--	if (!kunit_has_printed_tap_version) {
--		kunit_printk_emit(LOGLEVEL_INFO, "TAP version 14\n");
--		kunit_has_printed_tap_version = true;
--	}
--}
--
- static size_t kunit_test_cases_len(struct kunit_case *test_cases)
- {
- 	struct kunit_case *test_case;
-@@ -63,11 +29,9 @@ static size_t kunit_test_cases_len(struct kunit_case *test_cases)
- 
- static void kunit_print_subtest_start(struct kunit_suite *suite)
- {
--	kunit_print_tap_version();
--	kunit_printk_emit(LOGLEVEL_INFO, "\t# Subtest: %s\n", suite->name);
--	kunit_printk_emit(LOGLEVEL_INFO,
--			  "\t1..%zd\n",
--			  kunit_test_cases_len(suite->test_cases));
-+	pr_info_once("TAP version 14\n");
-+	pr_info("\t# Subtest: %s\n", suite->name);
-+	pr_info("\t1..%zd\n", kunit_test_cases_len(suite->test_cases));
- }
- 
- static void kunit_print_ok_not_ok(bool should_indent,
-@@ -87,9 +51,8 @@ static void kunit_print_ok_not_ok(bool should_indent,
- 	else
- 		ok_not_ok = "not ok";
- 
--	kunit_printk_emit(LOGLEVEL_INFO,
--			  "%s%s %zd - %s\n",
--			  indent, ok_not_ok, test_number, description);
-+	pr_info("%s%s %zd - %s\n",
-+		indent, ok_not_ok, test_number, description);
- }
- 
- static bool kunit_suite_has_succeeded(struct kunit_suite *suite)
-@@ -133,11 +96,11 @@ static void kunit_print_string_stream(struct kunit *test,
- 		kunit_err(test,
- 			  "Could not allocate buffer, dumping stream:\n");
- 		list_for_each_entry(fragment, &stream->fragments, node) {
--			kunit_err(test, fragment->fragment);
-+			kunit_err(test, "%s", fragment->fragment);
- 		}
- 		kunit_err(test, "\n");
- 	} else {
--		kunit_err(test, buf);
-+		kunit_err(test, "%s", buf);
- 		kunit_kfree(test, buf);
- 	}
- }
-@@ -505,19 +468,29 @@ void kunit_cleanup(struct kunit *test)
- 	}
- }
- 
--void kunit_printk(const char *level,
--		  const struct kunit *test,
--		  const char *fmt, ...)
-+void kunit_printk(const struct kunit *test, const char *fmt, ...)
- {
-+	char lvl[PRINTK_MAX_SINGLE_HEADER_LEN + 1] = "\0";
- 	struct va_format vaf;
- 	va_list args;
-+	int kern_level;
- 
- 	va_start(args, fmt);
- 
-+	while ((kern_level = printk_get_level(fmt)) != 0) {
-+		size_t size = printk_skip_level(fmt) - fmt;
-+
-+		if (kern_level >= '0' && kern_level <= '7') {
-+			memcpy(lvl, fmt,  size);
-+			lvl[size] = '\0';
-+		}
-+		fmt += size;
-+	}
-+
- 	vaf.fmt = fmt;
- 	vaf.va = &args;
- 
--	kunit_vprintk(test, level, &vaf);
-+	printk("%s\t# %s %pV\n", lvl, test->name, &vaf);
- 
- 	va_end(args);
- }
+dev_level is actually not a function, but a convenience macro argument
+which indirects to an actual specific logging function.
+
+So no, there is not supposed to be a pr_level.
 
 
