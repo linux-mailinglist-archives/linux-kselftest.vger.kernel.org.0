@@ -2,285 +2,290 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EA9CDA6526
-	for <lists+linux-kselftest@lfdr.de>; Tue,  3 Sep 2019 11:27:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76B0DA65F5
+	for <lists+linux-kselftest@lfdr.de>; Tue,  3 Sep 2019 11:45:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727667AbfICJ1M (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 3 Sep 2019 05:27:12 -0400
-Received: from mail-eopbgr40089.outbound.protection.outlook.com ([40.107.4.89]:42817
-        "EHLO EUR03-DB5-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1728169AbfICJ1M (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 3 Sep 2019 05:27:12 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=armh.onmicrosoft.com;
- s=selector2-armh-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=0UgJVHCufGj6eLbHerW2KRl6EUUtPgGwNa2HIKSinso=;
- b=6cO4P9CFpWR+FAfv0JKU+7b/hFarN8cU633m6EkM3DZhGIdB3ayVWMSBkMROhtlwrFsSpHfaRKMIYwcoiyHmZuY1iNVHWBcm+ZzmISCQaFk7K59Fd+alJBMjZx6RdObf7GjGnhqFHTEX3CApzgKq+Y8nHDnr2IL4FlEaxDj9Teg=
-Received: from VI1PR0802CA0032.eurprd08.prod.outlook.com
- (2603:10a6:800:a9::18) by DB8PR08MB4956.eurprd08.prod.outlook.com
- (2603:10a6:10:e0::25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2220.22; Tue, 3 Sep
- 2019 09:27:04 +0000
-Received: from VE1EUR03FT047.eop-EUR03.prod.protection.outlook.com
- (2a01:111:f400:7e09::204) by VI1PR0802CA0032.outlook.office365.com
- (2603:10a6:800:a9::18) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.20.2241.14 via Frontend
- Transport; Tue, 3 Sep 2019 09:27:04 +0000
-Authentication-Results: spf=temperror (sender IP is 63.35.35.123)
- smtp.mailfrom=arm.com; vger.kernel.org; dkim=pass (signature was verified)
- header.d=armh.onmicrosoft.com;vger.kernel.org; dmarc=temperror action=none
- header.from=arm.com;
-Received-SPF: TempError (protection.outlook.com: error in processing during
- lookup of arm.com: DNS Timeout)
-Received: from 64aa7808-outbound-1.mta.getcheckrecipient.com (63.35.35.123) by
- VE1EUR03FT047.mail.protection.outlook.com (10.152.19.218) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.20.2220.16 via Frontend Transport; Tue, 3 Sep 2019 09:27:02 +0000
-Received: ("Tessian outbound eec90fc31dfb:v27"); Tue, 03 Sep 2019 09:26:55 +0000
-X-CheckRecipientChecked: true
-X-CR-MTA-CID: c05632b31bdceb1e
-X-CR-MTA-TID: 64aa7808
-Received: from 110caa496f4e.2 (ip-172-16-0-2.eu-west-1.compute.internal [104.47.2.55])
-        by 64aa7808-outbound-1.mta.getcheckrecipient.com id 0ED1BE4E-6392-4ED8-8D43-6B9F975D7402.1;
-        Tue, 03 Sep 2019 09:26:50 +0000
-Received: from EUR01-DB5-obe.outbound.protection.outlook.com (mail-db5eur01lp2055.outbound.protection.outlook.com [104.47.2.55])
-    by 64aa7808-outbound-1.mta.getcheckrecipient.com with ESMTPS id 110caa496f4e.2
-    (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384);
-    Tue, 03 Sep 2019 09:26:50 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=cuuLToyZNwAo0fPlqONQJbMZY/Sv0Rh3rrKCoSCioRqGh0R4BRtArq3s8ra5qht7VTAXQOYVwPOuTutzLZL/JhsKWJI/xA/Tdd4mP7iKPjzxrY2oyWgWF49sSuqm4xYeZG7W3LMjMdrr8naCznOCyHcbI5DYuQMqtG1CgBvbbqmOsgwbJribqj4JLwSd8cEbR+kt32Yc/XAwV6fvcWgPMaoJ++amwK7LgVK3c+qbgxGfqbAIC0npYNjVSQrAVvV6P/Fqh/9ab4fwwMmqRA/yw29HYOH3LsZzTdSzIKP+X4E5NEqqKe+/J0yzztJeCn2gJs9PgdrYJCJVLGCnu4R+VQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Qwq/UM0eqflGvxVt6uM02rNEx8MR0LsaUMP/kLpGX7Y=;
- b=D/8ai5rVevLlA44AHMqsY4Y+I9Uguz+Ftc18GBjCIO6ClfofwoQB4kmjT2miseTRDKQGE5Gryl/kiWxlcvBUfZ1vX2/TIYHuOR440fCRnYmNyaDJwICI8rxStmVXf6jn0KuKkIfrLDsF5U8HsBqdp2nW5MNd219PQ12wfVoSKVBt4a43m+k7xymcvN1JYYr7dxnXscBXiZIag/d9ClZuP0aIKfgkyIwLKz9VZ2z4rh31ce/9CBIWsrUNVPEiVL3os3T89tAKci4DEaZ4myiWT0ilC3F/gMkPLyF26QrrZIF06zR9SlPyCL1V1APIgsl3UGQEuryuhLp9Jx576bJBSg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=arm.com; dmarc=pass action=none header.from=arm.com; dkim=pass
- header.d=arm.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=armh.onmicrosoft.com;
- s=selector2-armh-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Qwq/UM0eqflGvxVt6uM02rNEx8MR0LsaUMP/kLpGX7Y=;
- b=1g8HqHbbRpoNOyMW9t1GpO1T686fRJKOVAPVBiX+rIdmDg2RuFBTd6eCmFEgikUydW+IngOo+Ol+/0wN6xIrvzf8Pt1dLCv0UwzQp0kkdFt0mutxChBf/GldbmuRGcxTUiX73E7BJFvSbQ6FAZOOw8T3NfdGYF5qgnCamyBpC6c=
-Received: from AM5PR0801MB1636.eurprd08.prod.outlook.com (10.169.246.150) by
- AM5PR0801MB1955.eurprd08.prod.outlook.com (10.168.155.148) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2220.18; Tue, 3 Sep 2019 09:26:49 +0000
-Received: from AM5PR0801MB1636.eurprd08.prod.outlook.com
- ([fe80::f165:3db2:5f04:faac]) by AM5PR0801MB1636.eurprd08.prod.outlook.com
- ([fe80::f165:3db2:5f04:faac%9]) with mapi id 15.20.2220.022; Tue, 3 Sep 2019
- 09:26:49 +0000
-From:   Amit Kachhap <Amit.Kachhap@arm.com>
-To:     Cristian Marussi <Cristian.Marussi@arm.com>,
+        id S1728094AbfICJpy (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 3 Sep 2019 05:45:54 -0400
+Received: from foss.arm.com ([217.140.110.172]:34946 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727078AbfICJpy (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 3 Sep 2019 05:45:54 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 768AC28;
+        Tue,  3 Sep 2019 02:45:53 -0700 (PDT)
+Received: from [10.1.197.50] (e120937-lin.cambridge.arm.com [10.1.197.50])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 908753F59C;
+        Tue,  3 Sep 2019 02:45:52 -0700 (PDT)
+Subject: Re: [PATCH v5 01/11] kselftest: arm64: add skeleton Makefile
+To:     Amit Kachhap <Amit.Kachhap@arm.com>,
         "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
         "linux-arm-kernel@lists.infradead.org" 
         <linux-arm-kernel@lists.infradead.org>,
         "shuah@kernel.org" <shuah@kernel.org>
-CC:     "andreyknvl@google.com" <andreyknvl@google.com>,
+Cc:     "andreyknvl@google.com" <andreyknvl@google.com>,
         Dave P Martin <Dave.Martin@arm.com>
-Subject: Re: [PATCH v5 01/11] kselftest: arm64: add skeleton Makefile
-Thread-Topic: [PATCH v5 01/11] kselftest: arm64: add skeleton Makefile
-Thread-Index: AQHVYYHHGdHT14GrNEGMWz5zmwvD+qcZsFwA
-Date:   Tue, 3 Sep 2019 09:26:49 +0000
-Message-ID: <cce97298-7a27-c470-6fc5-873b4447ecc9@arm.com>
 References: <20190902112932.36129-1-cristian.marussi@arm.com>
  <20190902112932.36129-2-cristian.marussi@arm.com>
-In-Reply-To: <20190902112932.36129-2-cristian.marussi@arm.com>
-Accept-Language: en-IN, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-clientproxiedby: MAXPR0101CA0040.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:a00:d::26) To AM5PR0801MB1636.eurprd08.prod.outlook.com
- (2603:10a6:203:3a::22)
-Authentication-Results-Original: spf=none (sender IP is )
- smtp.mailfrom=Amit.Kachhap@arm.com; 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-originating-ip: [217.140.105.40]
-x-ms-publictraffictype: Email
-X-MS-Office365-Filtering-Correlation-Id: cbee811d-8834-46f0-25a3-08d73050e127
-X-MS-Office365-Filtering-HT: Tenant
-X-Microsoft-Antispam-Untrusted: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600166)(711020)(4605104)(1401327)(4618075)(2017052603328)(7193020);SRVR:AM5PR0801MB1955;
-X-MS-TrafficTypeDiagnostic: AM5PR0801MB1955:|AM5PR0801MB1955:|DB8PR08MB4956:
-x-ms-exchange-transport-forked: True
-X-Microsoft-Antispam-PRVS: <DB8PR08MB49569B07EDA59AD1C62BCF5E8CB90@DB8PR08MB4956.eurprd08.prod.outlook.com>
-x-checkrecipientrouted: true
-x-ms-oob-tlc-oobclassifiers: OLM:5516;OLM:5516;
-x-forefront-prvs: 01494FA7F7
-X-Forefront-Antispam-Report-Untrusted: SFV:NSPM;SFS:(10009020)(4636009)(396003)(376002)(39860400002)(346002)(136003)(366004)(189003)(199004)(3846002)(316002)(2501003)(66556008)(66446008)(64756008)(53936002)(66946007)(66476007)(8936002)(476003)(86362001)(5660300002)(25786009)(478600001)(6436002)(6116002)(99286004)(4326008)(6246003)(81156014)(54906003)(44832011)(486006)(31686004)(110136005)(26005)(7736002)(71190400001)(71200400001)(52116002)(2201001)(14454004)(31696002)(8676002)(53546011)(6506007)(386003)(256004)(14444005)(229853002)(2906002)(66066001)(102836004)(36756003)(2616005)(186003)(11346002)(6486002)(446003)(81166006)(6512007)(76176011)(305945005);DIR:OUT;SFP:1101;SCL:1;SRVR:AM5PR0801MB1955;H:AM5PR0801MB1636.eurprd08.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
-received-spf: None (protection.outlook.com: arm.com does not designate
- permitted sender hosts)
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam-Message-Info-Original: kGJ4PIQdX8FbyVAJ6Z9qg0AudslecT3MpJdEqrOcmL/9w3SzaK2DeVE2/8SnTjoNMkEsDldmMT8fIZrJXB1+cDtZKFgi/ty0Q4OXcZOZncD7lZJwAgmHAt/c89YKud/afAgg6vSTvS6Wi+C8QNDKPCA6/nyn+VlGS5xU3LrvjrEWLQlvxhyl5w+juosFzT3Xmg9zf6v2x6XCfazw914Hdk0D6ocZ97ajepSUDmZ6raRBt0eerXxeuj3e1C22xSr1nP3++1evZyOR7U58hPggCt0nHqUW/z1ya92E0zXDGpIKkKK6IEdJDuIlzbhOTJoqo0fqvCTMkJRxJgX4QGfGoESORD119p/lavW97Ocd+9e7FR7ahHgoi4lfbPiSQeRDtOHnbAI7uUqsOE54vhjI2a4Eo1Knvq2uLrg6dEdVCZY=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <F5618DCE0F6FCF40B40DA062E9A2CA29@eurprd08.prod.outlook.com>
-Content-Transfer-Encoding: base64
+ <cce97298-7a27-c470-6fc5-873b4447ecc9@arm.com>
+From:   Cristian Marussi <cristian.marussi@arm.com>
+Message-ID: <7029edac-87f9-d817-4fff-ad80778f46e7@arm.com>
+Date:   Tue, 3 Sep 2019 10:45:51 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM5PR0801MB1955
-Original-Authentication-Results: spf=none (sender IP is )
- smtp.mailfrom=Amit.Kachhap@arm.com; 
-X-EOPAttributedMessage: 0
-X-MS-Exchange-Transport-CrossTenantHeadersStripped: VE1EUR03FT047.eop-EUR03.prod.protection.outlook.com
-X-Forefront-Antispam-Report: CIP:63.35.35.123;IPV:CAL;SCL:-1;CTRY:IE;EFV:NLI;SFV:NSPM;SFS:(10009020)(4636009)(376002)(136003)(396003)(39860400002)(346002)(2980300002)(189003)(199004)(40434004)(76130400001)(63350400001)(31696002)(3846002)(2501003)(70586007)(2201001)(5660300002)(6116002)(2906002)(22756006)(99286004)(110136005)(229853002)(47776003)(54906003)(66066001)(23676004)(2486003)(86362001)(8676002)(81156014)(81166006)(8936002)(26005)(478600001)(5024004)(6512007)(336012)(305945005)(476003)(14444005)(50466002)(6246003)(6506007)(31686004)(356004)(186003)(102836004)(36756003)(11346002)(486006)(36906005)(316002)(26826003)(25786009)(2616005)(14454004)(6486002)(4326008)(7736002)(53546011)(386003)(76176011)(70206006)(436003)(446003)(63370400001)(126002);DIR:OUT;SFP:1101;SCL:1;SRVR:DB8PR08MB4956;H:64aa7808-outbound-1.mta.getcheckrecipient.com;FPR:;SPF:TempError;LANG:en;PTR:ec2-63-35-35-123.eu-west-1.compute.amazonaws.com;MX:1;A:1;
-X-MS-Office365-Filtering-Correlation-Id-Prvs: e18a55f9-5bd9-4900-0df5-08d73050d8cd
-X-Microsoft-Antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600166)(710020)(711020)(4605104)(1401327)(4618075)(2017052603328)(7193020);SRVR:DB8PR08MB4956;
-X-Forefront-PRVS: 01494FA7F7
-X-Microsoft-Antispam-Message-Info: jWmViW51DN9Jog6I0K+lk4HIMjH1ldwudi3m/3nxu8bF841xzzV9Wy+2rjsY2G6I0jJ+EeUTYLs0OTdPv5Q0ZX5tQfa6fy3tJyVb80MCkY4jYU9tkiHT8QmZN8YlO1bZxOWe7NrYdodqKswi7YUH9lI04SBlY1FT602ZZ2W7Q4FJyGOlG2fSlyyqKPHIYbnp1TnZb5rkJqGJcvnMyW1CBZe73UtzB4xoaFL5UvKQILku7bZ2apoDlpZNA2ue9Zz1QHOB1TNtgIGGkaaC7OOvl079T8SxxY9+6+C9mwxZVwoVNXzU8xb3MmjOuKbJMLLInOrQWc5mxNM3Q8Mh2X6eGkyb5Ani2b5ndPjRlkcTN4WLswn/E8qSK9ofG3p0o9BtA4m+pU+vVSsOwJ71oJvV6cuCOj5rT1eRoOTkXjTt2gI=
-X-OriginatorOrg: arm.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Sep 2019 09:27:02.7559
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: cbee811d-8834-46f0-25a3-08d73050e127
-X-MS-Exchange-CrossTenant-Id: f34e5979-57d9-4aaa-ad4d-b122a662184d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=f34e5979-57d9-4aaa-ad4d-b122a662184d;Ip=[63.35.35.123];Helo=[64aa7808-outbound-1.mta.getcheckrecipient.com]
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB8PR08MB4956
+In-Reply-To: <cce97298-7a27-c470-6fc5-873b4447ecc9@arm.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-DQpIaSBDcmlzdGlhbiwNCg0KT24gOS8yLzE5IDQ6NTkgUE0sIENyaXN0aWFuIE1hcnVzc2kgd3Jv
-dGU6DQo+IEFkZCBhIG5ldyBhcm02NC1zcGVjaWZpYyBlbXB0eSBzdWJzeXN0ZW0gYW1vbmdzdCBU
-QVJHRVRTIG9mIEtTRlQgYnVpbGQNCj4gZnJhbWV3b3JrOyBrZWVwIHRoZXNlIG5ldyBhcm02NCBL
-U0ZUIHRlc3RjYXNlcyBzZXBhcmF0ZWQgaW50byBkaXN0aW5jdA0KPiBzdWJkaXJzIGluc2lkZSB0
-b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9hcm02NC8gZGVwZW5kaW5nIG9uIHRoZSBzcGVjaWZpYw0K
-PiBzdWJzeXN0ZW0gdGFyZ2V0ZWQuDQo+DQo+IEFkZCBpbnRvIHRvcGxldmVsIGFybTY0IEtTRlQg
-TWFrZWZpbGUgYSBtZWNoYW5pc20gdG8gZ3Vlc3MgdGhlIGVmZmVjdGl2ZQ0KPiBsb2NhdGlvbiBv
-ZiBLZXJuZWwgaGVhZGVycyBhcyBpbnN0YWxsZWQgYnkgS1NGVCBmcmFtZXdvcmsuDQo+DQo+IE1l
-cmdlIHdpdGgNCj4NCj4gY29tbWl0IDljZTEyNjMwMzNjZCAoInNlbGZ0ZXN0cywgYXJtNjQ6IGFk
-ZCBhIHNlbGZ0ZXN0IGZvciBwYXNzaW5nDQo+ICAgICAgICAgICAgICAgICAgICB0YWdnZWQgcG9p
-bnRlcnMgdG8ga2VybmVsIikNCj4NCj4gd2hpbGUgbW92aW5nIHN1Y2ggS1NGVCB0YWdzIHRlc3Rz
-IGluc2lkZSB0aGVpciBvd24gc3ViZGlyZWN0b3J5DQo+IChhcm02NC90YWdzKS4NCj4NCj4gU2ln
-bmVkLW9mZi1ieTogQ3Jpc3RpYW4gTWFydXNzaSA8Y3Jpc3RpYW4ubWFydXNzaUBhcm0uY29tPg0K
-PiAtLS0NCj4gdjQgLS0+IHY1DQo+IC0gcmViYXNlZCBvbiBhcm02NC9mb3ItbmV4dC9jb3JlDQo+
-IC0gbWVyZ2VkIHRoaXMgcGF0Y2ggd2l0aCBLU0ZUIGFybTY0IHRhZ3MgcGF0Y2gsIHdoaWxlIG1v
-dmluZyB0aGUgbGF0dGVyDQo+ICAgIGludG8gaXRzIG93biBzdWJkaXINCj4gLSBtb3ZlZCBrZXJu
-ZWwgaGVhZGVyIGluY2x1ZGVzIHNlYXJjaCBtZWNoYW5pc20gZnJvbSBLU0ZUIGFybTY0DQo+ICAg
-IFNJR05BTCBNYWtlZmlsZQ0KVGhpcyBhcHByb2FjaCBicmVha3MgdGhlIGNvbXBpbGF0aW9uIG9m
-IGluZGl2aWR1YWwgdGVzdCBjYXNlcyB3aGljaCBuZWVkDQp0byBleHBvcnQgaW5jbHVkZXMgaW5k
-aXZpZHVhbGx5Lg0KDQptYWtlIC1DIHRvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL2FybTY0L3NpZ25h
-bA0KDQouLi8uLi9saWIubWs6MjU6IC4uLy4uLy4uLy4uL3NjcmlwdHMvc3ViYXJjaC5pbmNsdWRl
-OiBObyBzdWNoIGZpbGUgb3INCmRpcmVjdG9yeQ0KTWFrZWZpbGU6MjU6IHdhcm5pbmc6IG92ZXJy
-aWRpbmcgcmVjaXBlIGZvciB0YXJnZXQgJ2NsZWFuJw0KLi4vLi4vbGliLm1rOjEyMzogd2Fybmlu
-ZzogaWdub3Jpbmcgb2xkIHJlY2lwZSBmb3IgdGFyZ2V0ICdjbGVhbicNCm1ha2U6ICoqKiBObyBy
-dWxlIHRvIG1ha2UgdGFyZ2V0ICcuLi8uLi8uLi8uLi9zY3JpcHRzL3N1YmFyY2guaW5jbHVkZScu
-DQpTdG9wLg0KDQpIb3dldmVyIHRhZ3MgdGVzdCB3b3JrcyB3ZWxsLA0KbWFrZSAtQyB0b29scy90
-ZXN0aW5nL3NlbGZ0ZXN0cy9hcm02NC90YWdzDQoNCmFhcmNoNjQtbm9uZS1saW51eC1nbnUtZ2Nj
-ICAgICB0YWdzX3Rlc3QuYyAgLW8NCi9ob21lL2FtaWthYzAxL3dvcmsvTVRFX1dPUksvbGludXgt
-c2VydmVyL2xpbnV4L3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL2FybTY0L3RhZ3MvdGFnc190ZXN0
-DQoNCg0KVGhhbmtzLA0KQW1pdCBEYW5pZWwNCg0KPiAtIGV4cG9ydCBwcm9wZXIgdG9wX3NyY2Rp
-ciBFTlYgZm9yIGxpYi5taw0KPiB2MyAtLT4gdjQNCj4gLSBjb21tZW50IHJld29yZA0KPiAtIHNp
-bXBsaWZpZWQgZG9jdW1lbnRhdGlvbiBpbiBSRUFETUUNCj4gLSBkcm9wcGVkIFJFQURNRSBhYm91
-dCBzdGFuZGFsb25lDQo+IC0tLQ0KPiAgIHRvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL01ha2VmaWxl
-ICAgICAgICAgICAgICB8ICAxICsNCj4gICB0b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9hcm02NC9N
-YWtlZmlsZSAgICAgICAgfCA3MCArKysrKysrKysrKysrKysrKy0tDQo+ICAgdG9vbHMvdGVzdGlu
-Zy9zZWxmdGVzdHMvYXJtNjQvUkVBRE1FICAgICAgICAgIHwgMjAgKysrKysrDQo+ICAgdG9vbHMv
-dGVzdGluZy9zZWxmdGVzdHMvYXJtNjQvdGFncy9NYWtlZmlsZSAgIHwgMTAgKysrDQo+ICAgLi4u
-L2FybTY0L3sgPT4gdGFnc30vcnVuX3RhZ3NfdGVzdC5zaCAgICAgICAgIHwgIDANCj4gICAuLi4v
-c2VsZnRlc3RzL2FybTY0L3sgPT4gdGFnc30vdGFnc190ZXN0LmMgICAgfCAgMA0KPiAgIDYgZmls
-ZXMgY2hhbmdlZCwgOTUgaW5zZXJ0aW9ucygrKSwgNiBkZWxldGlvbnMoLSkNCj4gICBjcmVhdGUg
-bW9kZSAxMDA2NDQgdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMvYXJtNjQvUkVBRE1FDQo+ICAgY3Jl
-YXRlIG1vZGUgMTAwNjQ0IHRvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL2FybTY0L3RhZ3MvTWFrZWZp
-bGUNCj4gICByZW5hbWUgdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMvYXJtNjQveyA9PiB0YWdzfS9y
-dW5fdGFnc190ZXN0LnNoICgxMDAlKQ0KPiAgIHJlbmFtZSB0b29scy90ZXN0aW5nL3NlbGZ0ZXN0
-cy9hcm02NC97ID0+IHRhZ3N9L3RhZ3NfdGVzdC5jICgxMDAlKQ0KPg0KPiBkaWZmIC0tZ2l0IGEv
-dG9vbHMvdGVzdGluZy9zZWxmdGVzdHMvTWFrZWZpbGUgYi90b29scy90ZXN0aW5nL3NlbGZ0ZXN0
-cy9NYWtlZmlsZQ0KPiBpbmRleCAyNWI0M2E4YzJiMTUuLjE3MjJkYWU5MzgxYSAxMDA2NDQNCj4g
-LS0tIGEvdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMvTWFrZWZpbGUNCj4gKysrIGIvdG9vbHMvdGVz
-dGluZy9zZWxmdGVzdHMvTWFrZWZpbGUNCj4gQEAgLTEsNSArMSw2IEBADQo+ICAgIyBTUERYLUxp
-Y2Vuc2UtSWRlbnRpZmllcjogR1BMLTIuMA0KPiAgIFRBUkdFVFMgPSBhbmRyb2lkDQo+ICtUQVJH
-RVRTICs9IGFybTY0DQo+ICAgVEFSR0VUUyArPSBicGYNCj4gICBUQVJHRVRTICs9IGJyZWFrcG9p
-bnRzDQo+ICAgVEFSR0VUUyArPSBjYXBhYmlsaXRpZXMNCj4gZGlmZiAtLWdpdCBhL3Rvb2xzL3Rl
-c3Rpbmcvc2VsZnRlc3RzL2FybTY0L01ha2VmaWxlIGIvdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMv
-YXJtNjQvTWFrZWZpbGUNCj4gaW5kZXggYTYxYjJlNzQzZTk5Li41ZGJiMGZmZGZjOWEgMTAwNjQ0
-DQo+IC0tLSBhL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL2FybTY0L01ha2VmaWxlDQo+ICsrKyBi
-L3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL2FybTY0L01ha2VmaWxlDQo+IEBAIC0xLDExICsxLDY5
-IEBADQo+ICAgIyBTUERYLUxpY2Vuc2UtSWRlbnRpZmllcjogR1BMLTIuMA0KPiArIyBDb3B5cmln
-aHQgKEMpIDIwMTkgQVJNIExpbWl0ZWQNCj4NCj4gLSMgQVJDSCBjYW4gYmUgb3ZlcnJpZGRlbiBi
-eSB0aGUgdXNlciBmb3IgY3Jvc3MgY29tcGlsaW5nDQo+IC1BUkNIID89ICQoc2hlbGwgdW5hbWUg
-LW0gMj4vZGV2L251bGwgfHwgZWNobyBub3QpDQo+ICsjIFdoZW4gQVJDSCBub3Qgb3ZlcnJpZGRl
-biBmb3IgY3Jvc3Njb21waWxpbmcsIGxvb2t1cCBtYWNoaW5lDQo+ICtBUkNIID89ICQoc2hlbGwg
-dW5hbWUgLW0pDQo+ICtBUkNIIDo9ICQoc2hlbGwgZWNobyAkKEFSQ0gpIHwgc2VkIC1lIHMvYWFy
-Y2g2NC9hcm02NC8pDQo+DQo+IC1pZm5lcSAoLCQoZmlsdGVyICQoQVJDSCksYWFyY2g2NCBhcm02
-NCkpDQo+IC1URVNUX0dFTl9QUk9HUyA6PSB0YWdzX3Rlc3QNCj4gLVRFU1RfUFJPR1MgOj0gcnVu
-X3RhZ3NfdGVzdC5zaA0KPiAraWZlcSAoIngkKEFSQ0gpIiwgInhhcm02NCIpDQo+ICtTVUJESVJT
-IDo9IHRhZ3MNCj4gK2Vsc2UNCj4gK1NVQkRJUlMgOj0NCj4gICBlbmRpZg0KPg0KPiAtaW5jbHVk
-ZSAuLi9saWIubWsNCj4gK0NGTEFHUyA6PSAtV2FsbCAtTzIgLWcNCj4gKw0KPiArIyBBIHByb3Bl
-ciB0b3Bfc3JjZGlyIGlzIG5lZWRlZCBieSBLU0ZUKGxpYi5taykNCj4gK3RvcF9zcmNkaXIgPSAu
-Li8uLi8uLi8uLi8uLg0KPiArDQo+ICsjIEFkZGl0aW9uYWwgaW5jbHVkZSBwYXRocyBuZWVkZWQg
-Ynkga3NlbGZ0ZXN0LmggYW5kIGxvY2FsIGhlYWRlcnMNCj4gK0NGTEFHUyArPSAtSSQodG9wX3Ny
-Y2RpcikvdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMvDQo+ICsNCj4gKyMgR3Vlc3Npbmcgd2hlcmUg
-dGhlIEtlcm5lbCBoZWFkZXJzIGNvdWxkIGhhdmUgYmVlbiBpbnN0YWxsZWQNCj4gKyMgZGVwZW5k
-aW5nIG9uIEVOViBjb25maWcNCj4gK2lmZXEgKCQoS0JVSUxEX09VVFBVVCksKQ0KPiAra2hkcl9k
-aXIgPSAkKHRvcF9zcmNkaXIpL3Vzci9pbmNsdWRlDQo+ICtlbHNlDQo+ICsjIHRoZSBLU0ZUIHBy
-ZWZlcnJlZCBsb2NhdGlvbiB3aGVuIEtCVUlMRF9PVVRQVVQgaXMgc2V0DQo+ICtraGRyX2RpciA9
-ICQoS0JVSUxEX09VVFBVVCkva3NlbGZ0ZXN0L3Vzci9pbmNsdWRlDQo+ICtlbmRpZg0KPiArDQo+
-ICtDRkxBR1MgKz0gLUkkKGtoZHJfZGlyKQ0KPiArDQo+ICtleHBvcnQgQ0MNCj4gK2V4cG9ydCBD
-RkxBR1MNCj4gK2V4cG9ydCB0b3Bfc3JjZGlyDQo+ICsNCj4gK2FsbDoNCj4gKyAgICAgQGZvciBE
-SVIgaW4gJChTVUJESVJTKTsgZG8gICAgICAgICAgICAgICAgICAgICAgICAgICAgICBcDQo+ICsg
-ICAgICAgICAgICAgQlVJTERfVEFSR0VUPSQoT1VUUFVUKS8kJERJUjsgICAgICAgICAgICAgICAg
-ICAgXA0KPiArICAgICAgICAgICAgIG1rZGlyIC1wICQkQlVJTERfVEFSR0VUOyAgICAgICAgICAg
-ICAgICAgICAgICAgIFwNCj4gKyAgICAgICAgICAgICBtYWtlIE9VVFBVVD0kJEJVSUxEX1RBUkdF
-VCAtQyAkJERJUiAkQDsgICAgICAgICBcDQo+ICsgICAgIGRvbmUNCj4gKw0KPiAraW5zdGFsbDog
-YWxsDQo+ICsgICAgIEBmb3IgRElSIGluICQoU1VCRElSUyk7IGRvICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgXA0KPiArICAgICAgICAgICAgIEJVSUxEX1RBUkdFVD0kKE9VVFBVVCkvJCRE
-SVI7ICAgICAgICAgICAgICAgICAgIFwNCj4gKyAgICAgICAgICAgICBtYWtlIE9VVFBVVD0kJEJV
-SUxEX1RBUkdFVCAtQyAkJERJUiAkQDsgICAgICAgICBcDQo+ICsgICAgIGRvbmUNCj4gKw0KPiAr
-cnVuX3Rlc3RzOiBhbGwNCj4gKyAgICAgQGZvciBESVIgaW4gJChTVUJESVJTKTsgZG8gICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICBcDQo+ICsgICAgICAgICAgICAgQlVJTERfVEFSR0VUPSQo
-T1VUUFVUKS8kJERJUjsgICAgICAgICAgICAgICAgICAgXA0KPiArICAgICAgICAgICAgIG1ha2Ug
-T1VUUFVUPSQkQlVJTERfVEFSR0VUIC1DICQkRElSICRAOyAgICAgICAgIFwNCj4gKyAgICAgZG9u
-ZQ0KPiArDQo+ICsjIEF2b2lkIGFueSBvdXRwdXQgb24gbm9uIGFybTY0IG9uIGVtaXRfdGVzdHMN
-Cj4gK2VtaXRfdGVzdHM6IGFsbA0KPiArICAgICBAZm9yIERJUiBpbiAkKFNVQkRJUlMpOyBkbyAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgIFwNCj4gKyAgICAgICAgICAgICBCVUlMRF9UQVJH
-RVQ9JChPVVRQVVQpLyQkRElSOyAgICAgICAgICAgICAgICAgICBcDQo+ICsgICAgICAgICAgICAg
-bWFrZSBPVVRQVVQ9JCRCVUlMRF9UQVJHRVQgLUMgJCRESVIgJEA7ICAgICAgICAgXA0KPiArICAg
-ICBkb25lDQo+ICsNCj4gK2NsZWFuOg0KPiArICAgICBAZm9yIERJUiBpbiAkKFNVQkRJUlMpOyBk
-byAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIFwNCj4gKyAgICAgICAgICAgICBCVUlMRF9U
-QVJHRVQ9JChPVVRQVVQpLyQkRElSOyAgICAgICAgICAgICAgICAgICBcDQo+ICsgICAgICAgICAg
-ICAgbWFrZSBPVVRQVVQ9JCRCVUlMRF9UQVJHRVQgLUMgJCRESVIgJEA7ICAgICAgICAgXA0KPiAr
-ICAgICBkb25lDQo+ICsNCj4gKy5QSE9OWTogYWxsIGNsZWFuIGluc3RhbGwgcnVuX3Rlc3RzIGVt
-aXRfdGVzdHMNCj4gZGlmZiAtLWdpdCBhL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL2FybTY0L1JF
-QURNRSBiL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL2FybTY0L1JFQURNRQ0KPiBuZXcgZmlsZSBt
-b2RlIDEwMDY0NA0KPiBpbmRleCAwMDAwMDAwMDAwMDAuLmFjYTg5MmU2MmE2Yw0KPiAtLS0gL2Rl
-di9udWxsDQo+ICsrKyBiL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL2FybTY0L1JFQURNRQ0KPiBA
-QCAtMCwwICsxLDIwIEBADQo+ICtLU2VsZlRlc3QgQVJNNjQNCj4gKz09PT09PT09PT09PT09PQ0K
-PiArDQo+ICstIFRoZXNlIHRlc3RzIGFyZSBhcm02NCBzcGVjaWZpYyBhbmQgc28gbm90IGJ1aWx0
-IG9yIHJ1biBidXQganVzdCBza2lwcGVkDQo+ICsgIGNvbXBsZXRlbHkgd2hlbiBlbnYtdmFyaWFi
-bGUgQVJDSCBpcyBmb3VuZCB0byBiZSBkaWZmZXJlbnQgdGhhbiAnYXJtNjQnDQo+ICsgIGFuZCBg
-dW5hbWUgLW1gIHJlcG9ydHMgb3RoZXIgdGhhbiAnYWFyY2g2NCcuDQo+ICsNCj4gKy0gSG9sZGlu
-ZyB0cnVlIHRoZSBhYm92ZSwgQVJNNjQgS1NGVCB0ZXN0cyBjYW4gYmUgcnVuIHdpdGhpbiB0aGUg
-S1NlbGZUZXN0DQo+ICsgIGZyYW1ld29yayB1c2luZyBzdGFuZGFyZCBMaW51eCB0b3AtbGV2ZWwt
-bWFrZWZpbGUgdGFyZ2V0czoNCj4gKw0KPiArICAgICAgJCBtYWtlIFRBUkdFVFM9YXJtNjQga3Nl
-bGZ0ZXN0LWNsZWFuDQo+ICsgICAgICAkIG1ha2UgVEFSR0VUUz1hcm02NCBrc2VsZnRlc3QNCj4g
-Kw0KPiArICAgICAgb3INCj4gKw0KPiArICAgICAgJCBtYWtlIC1DIHRvb2xzL3Rlc3Rpbmcvc2Vs
-ZnRlc3RzIFRBUkdFVFM9YXJtNjQgXA0KPiArICAgICAgICAgICAgIElOU1RBTExfUEFUSD08eW91
-ci1pbnN0YWxsYXRpb24tcGF0aD4gaW5zdGFsbA0KPiArDQo+ICsgICBGdXJ0aGVyIGRldGFpbHMg
-b24gYnVpbGRpbmcgYW5kIHJ1bm5pbmcgS0ZTVCBjYW4gYmUgZm91bmQgaW46DQo+ICsgICAgIERv
-Y3VtZW50YXRpb24vZGV2LXRvb2xzL2tzZWxmdGVzdC5yc3QNCj4gZGlmZiAtLWdpdCBhL3Rvb2xz
-L3Rlc3Rpbmcvc2VsZnRlc3RzL2FybTY0L3RhZ3MvTWFrZWZpbGUgYi90b29scy90ZXN0aW5nL3Nl
-bGZ0ZXN0cy9hcm02NC90YWdzL01ha2VmaWxlDQo+IG5ldyBmaWxlIG1vZGUgMTAwNjQ0DQo+IGlu
-ZGV4IDAwMDAwMDAwMDAwMC4uNzYyMDU1MzMxMzViDQo+IC0tLSAvZGV2L251bGwNCj4gKysrIGIv
-dG9vbHMvdGVzdGluZy9zZWxmdGVzdHMvYXJtNjQvdGFncy9NYWtlZmlsZQ0KPiBAQCAtMCwwICsx
-LDEwIEBADQo+ICsjIFNQRFgtTGljZW5zZS1JZGVudGlmaWVyOiBHUEwtMi4wDQo+ICsjIEFSQ0gg
-Y2FuIGJlIG92ZXJyaWRkZW4gYnkgdGhlIHVzZXIgZm9yIGNyb3NzIGNvbXBpbGluZw0KPiArQVJD
-SCA/PSAkKHNoZWxsIHVuYW1lIC1tIDI+L2Rldi9udWxsIHx8IGVjaG8gbm90KQ0KPiArDQo+ICtp
-Zm5lcSAoLCQoZmlsdGVyICQoQVJDSCksYWFyY2g2NCBhcm02NCkpDQo+ICtURVNUX0dFTl9QUk9H
-UyA6PSB0YWdzX3Rlc3QNCj4gK1RFU1RfUFJPR1MgOj0gcnVuX3RhZ3NfdGVzdC5zaA0KPiArZW5k
-aWYNCj4gKw0KPiAraW5jbHVkZSAuLi8uLi9saWIubWsNCj4gZGlmZiAtLWdpdCBhL3Rvb2xzL3Rl
-c3Rpbmcvc2VsZnRlc3RzL2FybTY0L3J1bl90YWdzX3Rlc3Quc2ggYi90b29scy90ZXN0aW5nL3Nl
-bGZ0ZXN0cy9hcm02NC90YWdzL3J1bl90YWdzX3Rlc3Quc2gNCj4gc2ltaWxhcml0eSBpbmRleCAx
-MDAlDQo+IHJlbmFtZSBmcm9tIHRvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL2FybTY0L3J1bl90YWdz
-X3Rlc3Quc2gNCj4gcmVuYW1lIHRvIHRvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL2FybTY0L3RhZ3Mv
-cnVuX3RhZ3NfdGVzdC5zaA0KPiBkaWZmIC0tZ2l0IGEvdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMv
-YXJtNjQvdGFnc190ZXN0LmMgYi90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9hcm02NC90YWdzL3Rh
-Z3NfdGVzdC5jDQo+IHNpbWlsYXJpdHkgaW5kZXggMTAwJQ0KPiByZW5hbWUgZnJvbSB0b29scy90
-ZXN0aW5nL3NlbGZ0ZXN0cy9hcm02NC90YWdzX3Rlc3QuYw0KPiByZW5hbWUgdG8gdG9vbHMvdGVz
-dGluZy9zZWxmdGVzdHMvYXJtNjQvdGFncy90YWdzX3Rlc3QuYw0KPg0KSU1QT1JUQU5UIE5PVElD
-RTogVGhlIGNvbnRlbnRzIG9mIHRoaXMgZW1haWwgYW5kIGFueSBhdHRhY2htZW50cyBhcmUgY29u
-ZmlkZW50aWFsIGFuZCBtYXkgYWxzbyBiZSBwcml2aWxlZ2VkLiBJZiB5b3UgYXJlIG5vdCB0aGUg
-aW50ZW5kZWQgcmVjaXBpZW50LCBwbGVhc2Ugbm90aWZ5IHRoZSBzZW5kZXIgaW1tZWRpYXRlbHkg
-YW5kIGRvIG5vdCBkaXNjbG9zZSB0aGUgY29udGVudHMgdG8gYW55IG90aGVyIHBlcnNvbiwgdXNl
-IGl0IGZvciBhbnkgcHVycG9zZSwgb3Igc3RvcmUgb3IgY29weSB0aGUgaW5mb3JtYXRpb24gaW4g
-YW55IG1lZGl1bS4gVGhhbmsgeW91Lg0K
+Hi Amit
+
+On 03/09/2019 10:26, Amit Kachhap wrote:
+> 
+> Hi Cristian,
+> 
+> On 9/2/19 4:59 PM, Cristian Marussi wrote:
+>> Add a new arm64-specific empty subsystem amongst TARGETS of KSFT build
+>> framework; keep these new arm64 KSFT testcases separated into distinct
+>> subdirs inside tools/testing/selftests/arm64/ depending on the specific
+>> subsystem targeted.
+>>
+>> Add into toplevel arm64 KSFT Makefile a mechanism to guess the effective
+>> location of Kernel headers as installed by KSFT framework.
+>>
+>> Merge with
+>>
+>> commit 9ce1263033cd ("selftests, arm64: add a selftest for passing
+>> 		     tagged pointers to kernel")
+>>
+>> while moving such KSFT tags tests inside their own subdirectory
+>> (arm64/tags).
+>>
+>> Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
+>> ---
+>> v4 --> v5
+>> - rebased on arm64/for-next/core
+>> - merged this patch with KSFT arm64 tags patch, while moving the latter
+>>    into its own subdir
+>> - moved kernel header includes search mechanism from KSFT arm64
+>>    SIGNAL Makefile
+> This approach breaks the compilation of individual test cases which need 
+> to export includes individually.
+> 
+> make -C tools/testing/selftests/arm64/signal
+> 
+> ../../lib.mk:25: ../../../../scripts/subarch.include: No such file or 
+> directory
+> Makefile:25: warning: overriding recipe for target 'clean'
+> ../../lib.mk:123: warning: ignoring old recipe for target 'clean'
+> make: *** No rule to make target '../../../../scripts/subarch.include'. 
+> Stop.
+> 
+
+Having removed standalone mode in signal I was not expecting to be able
+to run distinct arm64 subsystems as before with:
+
+$ make -C tools/testing/selftests/arm64/signal
+(which was not a standard KSFT thing)
+
+but only using standard targets way like:
+
+$ make -C tools/testing/selftests TARGETS=arm64 
+
+or 
+
+$ make -C tools/testing/selftests TARGETS=arm64 \
+		INSTALL_PATH=<your-installation-path> install
+
+or
+
+$ make TARGETS=arm64 kselftest
+
+which runs all tests inside arm64 as a whole.
+(I should have changed arm64 README accordingly)
+
+
+> However tags test works well,
+> make -C tools/testing/selftests/arm64/tags
+> 
+> aarch64-none-linux-gnu-gcc     tags_test.c  -o 
+> /home/amikac01/work/MTE_WORK/linux-server/linux/tools/testing/selftests/arm64/tags/tags_test
+> 
+
+But I'll have a look why tags expose different behavior.
+
+> 
+> Thanks,
+> Amit Daniel
+
+
+Thanks
+
+Cristian
+> 
+>> - export proper top_srcdir ENV for lib.mk
+>> v3 --> v4
+>> - comment reword
+>> - simplified documentation in README
+>> - dropped README about standalone
+>> ---
+>>   tools/testing/selftests/Makefile              |  1 +
+>>   tools/testing/selftests/arm64/Makefile        | 70 +++++++++++++++++--
+>>   tools/testing/selftests/arm64/README          | 20 ++++++
+>>   tools/testing/selftests/arm64/tags/Makefile   | 10 +++
+>>   .../arm64/{ => tags}/run_tags_test.sh         |  0
+>>   .../selftests/arm64/{ => tags}/tags_test.c    |  0
+>>   6 files changed, 95 insertions(+), 6 deletions(-)
+>>   create mode 100644 tools/testing/selftests/arm64/README
+>>   create mode 100644 tools/testing/selftests/arm64/tags/Makefile
+>>   rename tools/testing/selftests/arm64/{ => tags}/run_tags_test.sh (100%)
+>>   rename tools/testing/selftests/arm64/{ => tags}/tags_test.c (100%)
+>>
+>> diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
+>> index 25b43a8c2b15..1722dae9381a 100644
+>> --- a/tools/testing/selftests/Makefile
+>> +++ b/tools/testing/selftests/Makefile
+>> @@ -1,5 +1,6 @@
+>>   # SPDX-License-Identifier: GPL-2.0
+>>   TARGETS = android
+>> +TARGETS += arm64
+>>   TARGETS += bpf
+>>   TARGETS += breakpoints
+>>   TARGETS += capabilities
+>> diff --git a/tools/testing/selftests/arm64/Makefile b/tools/testing/selftests/arm64/Makefile
+>> index a61b2e743e99..5dbb0ffdfc9a 100644
+>> --- a/tools/testing/selftests/arm64/Makefile
+>> +++ b/tools/testing/selftests/arm64/Makefile
+>> @@ -1,11 +1,69 @@
+>>   # SPDX-License-Identifier: GPL-2.0
+>> +# Copyright (C) 2019 ARM Limited
+>>   
+>> -# ARCH can be overridden by the user for cross compiling
+>> -ARCH ?= $(shell uname -m 2>/dev/null || echo not)
+>> +# When ARCH not overridden for crosscompiling, lookup machine
+>> +ARCH ?= $(shell uname -m)
+>> +ARCH := $(shell echo $(ARCH) | sed -e s/aarch64/arm64/)
+>>   
+>> -ifneq (,$(filter $(ARCH),aarch64 arm64))
+>> -TEST_GEN_PROGS := tags_test
+>> -TEST_PROGS := run_tags_test.sh
+>> +ifeq ("x$(ARCH)", "xarm64")
+>> +SUBDIRS := tags
+>> +else
+>> +SUBDIRS :=
+>>   endif
+>>   
+>> -include ../lib.mk
+>> +CFLAGS := -Wall -O2 -g
+>> +
+>> +# A proper top_srcdir is needed by KSFT(lib.mk)
+>> +top_srcdir = ../../../../..
+>> +
+>> +# Additional include paths needed by kselftest.h and local headers
+>> +CFLAGS += -I$(top_srcdir)/tools/testing/selftests/
+>> +
+>> +# Guessing where the Kernel headers could have been installed
+>> +# depending on ENV config
+>> +ifeq ($(KBUILD_OUTPUT),)
+>> +khdr_dir = $(top_srcdir)/usr/include
+>> +else
+>> +# the KSFT preferred location when KBUILD_OUTPUT is set
+>> +khdr_dir = $(KBUILD_OUTPUT)/kselftest/usr/include
+>> +endif
+>> +
+>> +CFLAGS += -I$(khdr_dir)
+>> +
+>> +export CC
+>> +export CFLAGS
+>> +export top_srcdir
+>> +
+>> +all:
+>> +	@for DIR in $(SUBDIRS); do				\
+>> +		BUILD_TARGET=$(OUTPUT)/$$DIR;			\
+>> +		mkdir -p $$BUILD_TARGET;			\
+>> +		make OUTPUT=$$BUILD_TARGET -C $$DIR $@;		\
+>> +	done
+>> +
+>> +install: all
+>> +	@for DIR in $(SUBDIRS); do				\
+>> +		BUILD_TARGET=$(OUTPUT)/$$DIR;			\
+>> +		make OUTPUT=$$BUILD_TARGET -C $$DIR $@;		\
+>> +	done
+>> +
+>> +run_tests: all
+>> +	@for DIR in $(SUBDIRS); do				\
+>> +		BUILD_TARGET=$(OUTPUT)/$$DIR;			\
+>> +		make OUTPUT=$$BUILD_TARGET -C $$DIR $@;		\
+>> +	done
+>> +
+>> +# Avoid any output on non arm64 on emit_tests
+>> +emit_tests: all
+>> +	@for DIR in $(SUBDIRS); do				\
+>> +		BUILD_TARGET=$(OUTPUT)/$$DIR;			\
+>> +		make OUTPUT=$$BUILD_TARGET -C $$DIR $@;		\
+>> +	done
+>> +
+>> +clean:
+>> +	@for DIR in $(SUBDIRS); do				\
+>> +		BUILD_TARGET=$(OUTPUT)/$$DIR;			\
+>> +		make OUTPUT=$$BUILD_TARGET -C $$DIR $@;		\
+>> +	done
+>> +
+>> +.PHONY: all clean install run_tests emit_tests
+>> diff --git a/tools/testing/selftests/arm64/README b/tools/testing/selftests/arm64/README
+>> new file mode 100644
+>> index 000000000000..aca892e62a6c
+>> --- /dev/null
+>> +++ b/tools/testing/selftests/arm64/README
+>> @@ -0,0 +1,20 @@
+>> +KSelfTest ARM64
+>> +===============
+>> +
+>> +- These tests are arm64 specific and so not built or run but just skipped
+>> +  completely when env-variable ARCH is found to be different than 'arm64'
+>> +  and `uname -m` reports other than 'aarch64'.
+>> +
+>> +- Holding true the above, ARM64 KSFT tests can be run within the KSelfTest
+>> +  framework using standard Linux top-level-makefile targets:
+>> +
+>> +      $ make TARGETS=arm64 kselftest-clean
+>> +      $ make TARGETS=arm64 kselftest
+>> +
+>> +      or
+>> +
+>> +      $ make -C tools/testing/selftests TARGETS=arm64 \
+>> +		INSTALL_PATH=<your-installation-path> install
+>> +
+>> +   Further details on building and running KFST can be found in:
+>> +     Documentation/dev-tools/kselftest.rst
+>> diff --git a/tools/testing/selftests/arm64/tags/Makefile b/tools/testing/selftests/arm64/tags/Makefile
+>> new file mode 100644
+>> index 000000000000..76205533135b
+>> --- /dev/null
+>> +++ b/tools/testing/selftests/arm64/tags/Makefile
+>> @@ -0,0 +1,10 @@
+>> +# SPDX-License-Identifier: GPL-2.0
+>> +# ARCH can be overridden by the user for cross compiling
+>> +ARCH ?= $(shell uname -m 2>/dev/null || echo not)
+>> +
+>> +ifneq (,$(filter $(ARCH),aarch64 arm64))
+>> +TEST_GEN_PROGS := tags_test
+>> +TEST_PROGS := run_tags_test.sh
+>> +endif
+>> +
+>> +include ../../lib.mk
+>> diff --git a/tools/testing/selftests/arm64/run_tags_test.sh b/tools/testing/selftests/arm64/tags/run_tags_test.sh
+>> similarity index 100%
+>> rename from tools/testing/selftests/arm64/run_tags_test.sh
+>> rename to tools/testing/selftests/arm64/tags/run_tags_test.sh
+>> diff --git a/tools/testing/selftests/arm64/tags_test.c b/tools/testing/selftests/arm64/tags/tags_test.c
+>> similarity index 100%
+>> rename from tools/testing/selftests/arm64/tags_test.c
+>> rename to tools/testing/selftests/arm64/tags/tags_test.c
+>>
+
