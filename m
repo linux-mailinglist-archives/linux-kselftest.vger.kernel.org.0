@@ -2,149 +2,154 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 14863A77A7
-	for <lists+linux-kselftest@lfdr.de>; Wed,  4 Sep 2019 01:42:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 55566A77AB
+	for <lists+linux-kselftest@lfdr.de>; Wed,  4 Sep 2019 01:46:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727428AbfICXmS (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 3 Sep 2019 19:42:18 -0400
-Received: from mail-pf1-f196.google.com ([209.85.210.196]:33417 "EHLO
-        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727138AbfICXmS (ORCPT
+        id S1726105AbfICXq2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 3 Sep 2019 19:46:28 -0400
+Received: from userp2130.oracle.com ([156.151.31.86]:47656 "EHLO
+        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726090AbfICXq1 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 3 Sep 2019 19:42:18 -0400
-Received: by mail-pf1-f196.google.com with SMTP id q10so6873662pfl.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 03 Sep 2019 16:42:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=iDUo/y9ZDm5RjOqvZVGi8MX8WMGwdoBIf79UmNXP1E4=;
-        b=CZrj85nreQCGi8N/Hu/wYEOXm5QfbxtrIy4Lm1mNg44Xj1iZ1T7vw2RcuVh+eqBBpe
-         MI3UZnrUbzTFrp4RObXT0guYmOlLb5iC3bfYfEjqeyrYPqQJ68UaT4oZBonW/em8if+7
-         iq0j0Kmyi0eZBUra862PEY+xlmL6djPzt3sQarY9F6SB8laBl6c4f5b9UFsbbdI5eVY8
-         GwYX8IHHw1rsL0MvK/lhw5ZBDj9Qd9uokJWM3AT+ADhJt41NkduL8pGOp9PRgelIBfSJ
-         /u4kTla8iGWUjLDcrrCi4R3rTko/02CKg8zN6i8FeS6Uhaj/N5egwjHqA7EvnEniUtAZ
-         VlvA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=iDUo/y9ZDm5RjOqvZVGi8MX8WMGwdoBIf79UmNXP1E4=;
-        b=DyOwjhFRSV33H5kl5ma/cP3KvE5hqblIVcwmx9P2hNWFZuDukMy7RTZHGB7rQ6k+ta
-         5RTBykJu8roFWX6fLC3ymbRR6kG1yxy8asvCZuN1b30NQxm+9SANBLu2FNaTes5Ch0NY
-         NJKdhUPfL69StnojIe9jsdjHjWIM4wGFU6rekYfNNbu+U0kj3ZdCVeuddpoDB5VOArDA
-         0rbdNwv+Ho+b8nj5+jeIbKK59KQHGT+aN4to7YoNB4og54x3xWWhJLJ5Ldl5ngiLMHfP
-         7UgdNFSmfEOm2daWfAjeNwI0cSbIE3VA8HqsvlWNYRwl7se125QxilL/tkLPe2/BsUuc
-         PtFA==
-X-Gm-Message-State: APjAAAU0b1eLkWoGamEMJJVlI/Y6YgOCkQCkBwTg6qhn0gJASg0RN/eR
-        vfWP/P2nTIN29J6p8JWJNeRUZ5iFqtOlwFFowY/BzA==
-X-Google-Smtp-Source: APXvYqwzmrASWAARHjqJ7zscoiXxQWOh6SQDfj0r7SubCG3PdrQVLFSJviyJ8eXU9firAOxoRYFdW4ny1A/Wo9/WC4k=
-X-Received: by 2002:a63:b919:: with SMTP id z25mr32171096pge.201.1567554136349;
- Tue, 03 Sep 2019 16:42:16 -0700 (PDT)
+        Tue, 3 Sep 2019 19:46:27 -0400
+Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
+        by userp2130.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x83NiMgm016233;
+        Tue, 3 Sep 2019 23:46:10 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=subject : from : to :
+ cc : references : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=corp-2019-08-05;
+ bh=gVzd1xf9o+fcSS2lfDeJltPXEjbUtM30OmGuZGgNO7M=;
+ b=hSmwubqrsY25Qx8aIq/54/tJiLgh28xXXlaE0aNL0uV9fXey2tXHfMl0THru4K7mEjr9
+ oZag18RuzqILZ9Cg9xZUYVU/7L/ZpfkToycFo1IE6TraQKhwh6rdwSDw/hOYY7QjE1Ec
+ q02lZeb892ymnKgpkKK9/31TDcipl2reZmoXAJe4dbsIHaqnEcowWrONpgec1otShh5C
+ eV7VMyIcACsuK3r41bdRNt4dxUaWo1+RH8WhdhyesJxQwWc00L9TljBtURYSfJLWRkiT
+ G8fqrPSjXVNb9xteZdgoXIv5K1yYMXoRlR1HPqE6gqA7f1Lj1LdPS+3LqCwUuEGhA27n Sg== 
+Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
+        by userp2130.oracle.com with ESMTP id 2ut23tg065-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 03 Sep 2019 23:46:09 +0000
+Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
+        by userp3020.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x83NhNr7016728;
+        Tue, 3 Sep 2019 23:44:09 GMT
+Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
+        by userp3020.oracle.com with ESMTP id 2ut1hmh6sy-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 03 Sep 2019 23:44:09 +0000
+Received: from abhmp0016.oracle.com (abhmp0016.oracle.com [141.146.116.22])
+        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id x83Ni2e1013424;
+        Tue, 3 Sep 2019 23:44:02 GMT
+Received: from [192.168.1.222] (/71.63.128.209)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Tue, 03 Sep 2019 16:44:02 -0700
+Subject: Re: [PATCH v3 0/6] hugetlb_cgroup: Add hugetlb_cgroup reservation
+ limits
+From:   Mike Kravetz <mike.kravetz@oracle.com>
+To:     Michal Hocko <mhocko@kernel.org>,
+        Mina Almasry <almasrymina@google.com>
+Cc:     shuah <shuah@kernel.org>, David Rientjes <rientjes@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Greg Thelen <gthelen@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        khalid.aziz@oracle.com, open list <linux-kernel@vger.kernel.org>,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        cgroups@vger.kernel.org,
+        Aneesh Kumar <aneesh.kumar@linux.vnet.ibm.com>,
+        =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>,
+        Tejun Heo <tj@kernel.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Li Zefan <lizefan@huawei.com>
+References: <20190826233240.11524-1-almasrymina@google.com>
+ <20190828112340.GB7466@dhcp22.suse.cz>
+ <CAHS8izPPhPoqh-J9LJ40NJUCbgTFS60oZNuDSHmgtMQiYw72RA@mail.gmail.com>
+ <20190829071807.GR28313@dhcp22.suse.cz>
+ <cb7ebcce-05c5-3384-5632-2bbac9995c15@oracle.com>
+Message-ID: <e7f91a50-5957-249c-8756-25ea87c77fc4@oracle.com>
+Date:   Tue, 3 Sep 2019 16:44:00 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 MIME-Version: 1.0
-References: <20190903232112.181303-1-brendanhiggins@google.com> <7778af20a8e13e6e906ee3d2030ca6af4ba1c37d.camel@perches.com>
-In-Reply-To: <7778af20a8e13e6e906ee3d2030ca6af4ba1c37d.camel@perches.com>
-From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Tue, 3 Sep 2019 16:42:05 -0700
-Message-ID: <CAFd5g479vsN1M24SNgpH4GDj5XK0yAvLsUpA0s6NqfCtTT+isQ@mail.gmail.com>
-Subject: Re: [PATCH v3] kunit: fix failure to build without printk
-To:     Joe Perches <joe@perches.com>
-Cc:     shuah <shuah@kernel.org>, kunit-dev@googlegroups.com,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Petr Mladek <pmladek@suse.com>, sergey.senozhatsky@gmail.com,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Sergey Senozhatsky <sergey.senozhatsky.work@gmail.com>,
-        "Bird, Timothy" <Tim.Bird@sony.com>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <cb7ebcce-05c5-3384-5632-2bbac9995c15@oracle.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9369 signatures=668685
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
+ phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=999
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.0.1-1906280000 definitions=main-1909030239
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9369 signatures=668685
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
+ suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
+ lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1906280000
+ definitions=main-1909030239
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Sep 3, 2019 at 4:35 PM Joe Perches <joe@perches.com> wrote:
->
-> On Tue, 2019-09-03 at 16:21 -0700, Brendan Higgins wrote:
-> > Previously KUnit assumed that printk would always be present, which is
-> > not a valid assumption to make. Fix that by removing call to
-> > vprintk_emit, and calling printk directly.
-> >
-> > This fixes a build error[1] reported by Randy.
-> >
-> > For context this change comes after much discussion. My first stab[2] at
-> > this was just to make the KUnit logging code compile out; however, it
-> > was agreed that if we were going to use vprintk_emit, then vprintk_emit
-> > should provide a no-op stub, which lead to my second attempt[3]. In
-> > response to me trying to stub out vprintk_emit, Sergey Senozhatsky
-> > suggested a way for me to remove our usage of vprintk_emit, which led to
-> > my third attempt at solving this[4].
-> >
-> > In my previous version of this patch[4], I completely removed
-> > vprintk_emit, as suggested by Sergey; however, there was a bit of debate
-> > over whether Sergey's solution was the best. The debate arose due to
-> > Sergey's version resulting in a checkpatch warning, which resulted in a
-> > debate over correct printk usage. Joe Perches offered an alternative fix
-> > which was somewhat less far reaching than what Sergey had suggested and
-> > importantly relied on continuing to use %pV. Much of the debated
-> > centered around whether %pV should be widely used, and whether Sergey's
-> > version would result in object size bloat. Ultimately, we decided to go
-> > with Sergey's version.
-> >
-> > Reported-by: Randy Dunlap <rdunlap@infradead.org>
-> > Link[1]: https://lore.kernel.org/linux-kselftest/c7229254-0d90-d90e-f3df-5b6d6fc0b51f@infradead.org/
-> > Link[2]: https://lore.kernel.org/linux-kselftest/20190827174932.44177-1-brendanhiggins@google.com/
-> > Link[3]: https://lore.kernel.org/linux-kselftest/20190827234835.234473-1-brendanhiggins@google.com/
-> > Link[4]: https://lore.kernel.org/linux-kselftest/20190828093143.163302-1-brendanhiggins@google.com/
-> > Cc: Stephen Rothwell <sfr@canb.auug.org.au>
-> > Cc: Sergey Senozhatsky <sergey.senozhatsky.work@gmail.com>
-> > Cc: Joe Perches <joe@perches.com>
-> > Cc: Tim.Bird@sony.com
-> > Signed-off-by: Brendan Higgins <brendanhiggins@google.com>
-> > Acked-by: Randy Dunlap <rdunlap@infradead.org> # build-tested
-> > Reviewed-by: Petr Mladek <pmladek@suse.com>
-> > ---
-> >
-> > Sorry for the long commit message, but given the long discussion (and
-> > some of the confusion that occurred in the discussion), it seemed
-> > appropriate to summarize the discussion around this patch up to this
-> > point (especially since one of the proposed patches was under a separate
-> > patch subject).
-> >
-> > No changes have been made to this patch since v2, other than the commit
-> > log.
-> []
-> > diff --git a/include/kunit/test.h b/include/kunit/test.h
-> []
-> > @@ -339,9 +339,8 @@ static inline void *kunit_kzalloc(struct kunit *test, size_t size, gfp_t gfp)
-> >
-> >  void kunit_cleanup(struct kunit *test);
-> >
-> > -void __printf(3, 4) kunit_printk(const char *level,
-> > -                              const struct kunit *test,
-> > -                              const char *fmt, ...);
-> > +#define kunit_print_level(KERN_LEVEL, test, fmt, ...) \
-> > +     printk(KERN_LEVEL "\t# %s: " fmt, (test)->name, ##__VA_ARGS__)
->
-> Non trivial notes:
->
-> Please do not use KERN_LEVEL as a macro argument.
-> It would just be a source of possible confusion.
->
-> Please use level or lvl like nearly every other macro
-> that does this uses.
+On 9/3/19 10:57 AM, Mike Kravetz wrote:
+> On 8/29/19 12:18 AM, Michal Hocko wrote:
+>> [Cc cgroups maintainers]
+>>
+>> On Wed 28-08-19 10:58:00, Mina Almasry wrote:
+>>> On Wed, Aug 28, 2019 at 4:23 AM Michal Hocko <mhocko@kernel.org> wrote:
+>>>>
+>>>> On Mon 26-08-19 16:32:34, Mina Almasry wrote:
+>>>>>  mm/hugetlb.c                                  | 493 ++++++++++++------
+>>>>>  mm/hugetlb_cgroup.c                           | 187 +++++--
+>>>>
+>>>> This is a lot of changes to an already subtle code which hugetlb
+>>>> reservations undoubly are.
+>>>
+>>> For what it's worth, I think this patch series is a net decrease in
+>>> the complexity of the reservation code, especially the region_*
+>>> functions, which is where a lot of the complexity lies. I removed the
+>>> race between region_del and region_{add|chg}, refactored the main
+>>> logic into smaller code, moved common code to helpers and deleted the
+>>> duplicates, and finally added lots of comments to the hard to
+>>> understand pieces. I hope that when folks review the changes they will
+>>> see that! :)
+>>
+>> Post those improvements as standalone patches and sell them as
+>> improvements. We can talk about the net additional complexity of the
+>> controller much easier then.
+> 
+> All such changes appear to be in patch 4 of this series.  The commit message
+> says "region_add() and region_chg() are heavily refactored to in this commit
+> to make the code easier to understand and remove duplication.".  However, the
+> modifications were also added to accommodate the new cgroup reservation
+> accounting.  I think it would be helpful to explain why the existing code does
+> not work with the new accounting.  For example, one change is because
+> "existing code coalesces resv_map entries for shared mappings.  new cgroup
+> accounting requires that resv_map entries be kept separate for proper
+> uncharging."
+> 
+> I am starting to review the changes, but it would help if there was a high
+> level description.  I also like Michal's idea of calling out the region_*
+> changes separately.  If not a standalone patch, at least the first patch of
+> the series.  This new code will be exercised even if cgroup reservation
+> accounting not enabled, so it is very important than no subtle regressions
+> be introduced.
 
-Will do.
+While looking at the region_* changes, I started thinking about this no
+coalesce change for shared mappings which I think is necessary.  Am I
+mistaken, or is this a requirement?
 
-> And there is nothing wrong with using kunit_printk and it's
-> not necessary to use an odd name like kunit_printk_level.
+If it is a requirement, then think about some of the possible scenarios
+such as:
+- There is a hugetlbfs file of size 10 huge pages.
+- Task A has reservations for pages at offset 1 3 5 7 and 9
+- Task B then mmaps the entire file which should result in reservations
+  at 0 2 4 6 and 8.
+- region_chg will return 5, but will also need to allocate 5 resv_map
+  entries for the subsequent region_add which can not fail.  Correct?
+  The code does not appear to handle this.
 
-Sounds reasonable.
+BTW, this series will BUG when running libhugetlbfs test suite.  It will
+hit this in resv_map_release().
 
-[...]
+	VM_BUG_ON(resv_map->adds_in_progress);
 
-Thanks!
+-- 
+Mike Kravetz
