@@ -2,100 +2,95 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 049E5A6BDA
-	for <lists+linux-kselftest@lfdr.de>; Tue,  3 Sep 2019 16:50:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3271EA6BDE
+	for <lists+linux-kselftest@lfdr.de>; Tue,  3 Sep 2019 16:51:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729452AbfICOuB (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 3 Sep 2019 10:50:01 -0400
-Received: from foss.arm.com ([217.140.110.172]:38518 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727667AbfICOuA (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 3 Sep 2019 10:50:00 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BF1EC337;
-        Tue,  3 Sep 2019 07:49:59 -0700 (PDT)
-Received: from [10.37.8.116] (unknown [10.37.8.116])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C3E663F246;
-        Tue,  3 Sep 2019 07:49:57 -0700 (PDT)
-Subject: Re: [PATCH v2 7/8] mips: vdso: Remove unused VDSO_HAS_32BIT_FALLBACK
-To:     Paul Burton <paul.burton@mips.com>
-Cc:     "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
-        "will@kernel.org" <will@kernel.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "salyzyn@android.com" <salyzyn@android.com>,
-        "0x7f454c46@gmail.com" <0x7f454c46@gmail.com>,
-        "luto@kernel.org" <luto@kernel.org>
-References: <20190830135902.20861-1-vincenzo.frascino@arm.com>
- <20190830135902.20861-8-vincenzo.frascino@arm.com>
- <20190903143801.7upetfqe6upouzlh@pburton-laptop>
-From:   Vincenzo Frascino <vincenzo.frascino@arm.com>
-Message-ID: <f783346b-3e33-1bce-f204-f9737ef493e0@arm.com>
-Date:   Tue, 3 Sep 2019 15:51:32 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+        id S1729578AbfICOvD (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 3 Sep 2019 10:51:03 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:34682 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1728679AbfICOvC (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 3 Sep 2019 10:51:02 -0400
+Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x83EmgE2039237
+        for <linux-kselftest@vger.kernel.org>; Tue, 3 Sep 2019 10:51:01 -0400
+Received: from e06smtp04.uk.ibm.com (e06smtp04.uk.ibm.com [195.75.94.100])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 2uss0nbkkg-1
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-kselftest@vger.kernel.org>; Tue, 03 Sep 2019 10:51:01 -0400
+Received: from localhost
+        by e06smtp04.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-kselftest@vger.kernel.org> from <iii@linux.ibm.com>;
+        Tue, 3 Sep 2019 15:50:59 +0100
+Received: from b06cxnps4074.portsmouth.uk.ibm.com (9.149.109.196)
+        by e06smtp04.uk.ibm.com (192.168.101.134) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
+        Tue, 3 Sep 2019 15:50:57 +0100
+Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x83Eot3L52035814
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 3 Sep 2019 14:50:55 GMT
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 5FE0A11C04C;
+        Tue,  3 Sep 2019 14:50:55 +0000 (GMT)
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 196B011C058;
+        Tue,  3 Sep 2019 14:50:55 +0000 (GMT)
+Received: from white.boeblingen.de.ibm.com (unknown [9.152.99.150])
+        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Tue,  3 Sep 2019 14:50:55 +0000 (GMT)
+From:   Ilya Leoshkevich <iii@linux.ibm.com>
+To:     Shuah Khan <shuah@kernel.org>
+Cc:     linux-kselftest@vger.kernel.org,
+        Heiko Carstens <heiko.carstens@de.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Ilya Leoshkevich <iii@linux.ibm.com>
+Subject: [PATCH] selftests: fix prepending $(OUTPUT) to $(TEST_PROGS)
+Date:   Tue,  3 Sep 2019 16:50:52 +0200
+X-Mailer: git-send-email 2.21.0
 MIME-Version: 1.0
-In-Reply-To: <20190903143801.7upetfqe6upouzlh@pburton-laptop>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+x-cbid: 19090314-0016-0000-0000-000002A624F8
+X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
+x-cbparentid: 19090314-0017-0000-0000-000033068D68
+Message-Id: <20190903145052.94735-1-iii@linux.ibm.com>
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-09-03_02:,,
+ signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
+ clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
+ mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.0.1-1906280000 definitions=main-1909030156
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Paul,
+The current logic prepends $(OUTPUT) only to the first member of
+$(TEST_PROGS). Use $(foreach) loop to prepend it to each member.
 
-On 9/3/19 3:46 PM, Paul Burton wrote:
-> Hi Vincenzo,
-> 
-> On Fri, Aug 30, 2019 at 02:59:01PM +0100, Vincenzo Frascino wrote:
->> VDSO_HAS_32BIT_FALLBACK has been removed from the core since
->> the architectures that support the generic vDSO library have
->> been converted to support the 32 bit fallbacks.
->>
->> Remove unused VDSO_HAS_32BIT_FALLBACK from mips vdso.
->>
->> Cc: Paul Burton <paul.burton@mips.com>
->> Signed-off-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
-> 
-> Do you want this one in mips-next too, or applied somewhere else along
-> with the rest of the series? If the latter:
-> 
->     Acked-by: Paul Burton <paul.burton@mips.com>
-> 
+Fixes: 1a940687e424 ("selftests: lib.mk: copy test scripts and test files for make O=dir run")
+Signed-off-by: Ilya Leoshkevich <iii@linux.ibm.com>
+---
+ tools/testing/selftests/lib.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-This patch has a dependency on patch n5 hence can not be applied independently.
-
-Thanks,
-Vincenzo
-
-> Thanks,
->     Paul
-> 
->> ---
->>  arch/mips/include/asm/vdso/gettimeofday.h | 2 --
->>  1 file changed, 2 deletions(-)
->>
->> diff --git a/arch/mips/include/asm/vdso/gettimeofday.h b/arch/mips/include/asm/vdso/gettimeofday.h
->> index e78462e8ca2e..5ad2b086626d 100644
->> --- a/arch/mips/include/asm/vdso/gettimeofday.h
->> +++ b/arch/mips/include/asm/vdso/gettimeofday.h
->> @@ -107,8 +107,6 @@ static __always_inline int clock_getres_fallback(
->>  
->>  #if _MIPS_SIM != _MIPS_SIM_ABI64
->>  
->> -#define VDSO_HAS_32BIT_FALLBACK	1
->> -
->>  static __always_inline long clock_gettime32_fallback(
->>  					clockid_t _clkid,
->>  					struct old_timespec32 *_ts)
->> -- 
->> 2.23.0
->>
+diff --git a/tools/testing/selftests/lib.mk b/tools/testing/selftests/lib.mk
+index 1c8a1963d03f..857916ebbb9b 100644
+--- a/tools/testing/selftests/lib.mk
++++ b/tools/testing/selftests/lib.mk
+@@ -75,7 +75,8 @@ ifdef building_out_of_srctree
+ 		@rsync -aq $(TEST_PROGS) $(TEST_PROGS_EXTENDED) $(TEST_FILES) $(OUTPUT)
+ 	fi
+ 	@if [ "X$(TEST_PROGS)" != "X" ]; then
+-		$(call RUN_TESTS, $(TEST_GEN_PROGS) $(TEST_CUSTOM_PROGS) $(OUTPUT)/$(TEST_PROGS))
++		$(call RUN_TESTS, $(TEST_GEN_PROGS) $(TEST_CUSTOM_PROGS) \
++				  $(foreach p,$(TEST_PROGS),$(OUTPUT)$(p)))
+ 	else
+ 		$(call RUN_TESTS, $(TEST_GEN_PROGS) $(TEST_CUSTOM_PROGS))
+ 	fi
+-- 
+2.21.0
 
