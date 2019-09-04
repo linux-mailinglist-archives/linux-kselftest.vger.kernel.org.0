@@ -2,62 +2,32 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C586A9647
-	for <lists+linux-kselftest@lfdr.de>; Thu,  5 Sep 2019 00:23:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1C09A9686
+	for <lists+linux-kselftest@lfdr.de>; Thu,  5 Sep 2019 00:31:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725965AbfIDWXi (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 4 Sep 2019 18:23:38 -0400
-Received: from mail-lf1-f68.google.com ([209.85.167.68]:36979 "EHLO
-        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727722AbfIDWXi (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 4 Sep 2019 18:23:38 -0400
-Received: by mail-lf1-f68.google.com with SMTP id w67so292629lff.4
-        for <linux-kselftest@vger.kernel.org>; Wed, 04 Sep 2019 15:23:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=L+6eZ5jXr9FHa9aXBFBl0ghBEbFlLODFrE967a3DFmE=;
-        b=hfyCSdKgCY/Fe6ZhOgmUuzH+l1Av9MeoieBRJhOHgspd/HlfkJB3tRok9F33ql8Uzt
-         YCi53+gSbOv7WH3zYmMiTF0zGBnANwxV7c7oClcZwaNIXXqds0cxD5Xcu535ms7QpKLP
-         zDVTwLMuj95aI+DpS0Y7tzdH7BHLTHU6tmSJs=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=L+6eZ5jXr9FHa9aXBFBl0ghBEbFlLODFrE967a3DFmE=;
-        b=O897raxkMBOfmu7mHsQOffKn5Q7jlZ1ri8FhG18UXlkoaeH8ZUmiZP3hd6DR/sQJde
-         +aCVyHNSF+cgljejYeZTn7EcRX4ZkaSiPyNgzrkWhrKtkG6TjTKVLEQjtXe3MZUm/4Ng
-         Bi/a0KIJYLr8/t51ci/2FShdjABf8GYzTmJ3xSiLnqZ2DX7bxvNDunxFk0uDrCOI903E
-         KmzKs0zGk7udklMhydG/6gONLg5btuRM9pj0/ksWCDtkKcgHnit85cbIk0swc8yhvLaf
-         T37Oa0H2WT5jEd7oxqZiJd+hvkIDvVRJnF9+tA6J+5W0COiS+erO8H4xD7jPmLXkxVkF
-         XJNw==
-X-Gm-Message-State: APjAAAWD0iWct8VigqRYQ3kRqEBFGAOiur0PeM0IHg+TZxyxfPRxvdZ0
-        QsL6Rc4f7seLrUilTXDs/qfFb+aTYKY=
-X-Google-Smtp-Source: APXvYqzsNUPlTIx/ytlVlDokHN53Ngkrjs7go8s6jjWj40aYr/kJbWDiDrbLVQGdNmIZjk1+6uDWoQ==
-X-Received: by 2002:a05:6512:25b:: with SMTP id b27mr271372lfo.60.1567635815692;
-        Wed, 04 Sep 2019 15:23:35 -0700 (PDT)
-Received: from mail-lj1-f175.google.com (mail-lj1-f175.google.com. [209.85.208.175])
-        by smtp.gmail.com with ESMTPSA id z21sm16650ljn.100.2019.09.04.15.23.35
-        for <linux-kselftest@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 04 Sep 2019 15:23:35 -0700 (PDT)
-Received: by mail-lj1-f175.google.com with SMTP id l1so273289lji.12
-        for <linux-kselftest@vger.kernel.org>; Wed, 04 Sep 2019 15:23:35 -0700 (PDT)
-X-Received: by 2002:a2e:9a84:: with SMTP id p4mr24283824lji.52.1567635425244;
- Wed, 04 Sep 2019 15:17:05 -0700 (PDT)
-MIME-Version: 1.0
-References: <20190904201933.10736-1-cyphar@cyphar.com> <20190904201933.10736-11-cyphar@cyphar.com>
- <CAHk-=wiod1rQMU+6Zew=cLE8uX4tUdf42bM5eKngMnNVS2My7g@mail.gmail.com> <20190904214856.vnvom7h5xontvngq@yavin.dot.cyphar.com>
-In-Reply-To: <20190904214856.vnvom7h5xontvngq@yavin.dot.cyphar.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Wed, 4 Sep 2019 15:16:49 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wgcJq21Hydh7Tx5-o8empoPp7ULDBw0Am-du_Pa+fcftQ@mail.gmail.com>
-Message-ID: <CAHk-=wgcJq21Hydh7Tx5-o8empoPp7ULDBw0Am-du_Pa+fcftQ@mail.gmail.com>
-Subject: Re: [PATCH v12 10/12] namei: aggressively check for nd->root escape
- on ".." resolution
-To:     Aleksa Sarai <cyphar@cyphar.com>
+        id S1730447AbfIDWb3 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 4 Sep 2019 18:31:29 -0400
+Received: from mx1.redhat.com ([209.132.183.28]:33580 "EHLO mx1.redhat.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729919AbfIDWb2 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 4 Sep 2019 18:31:28 -0400
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mx1.redhat.com (Postfix) with ESMTPS id 7774A10277E2;
+        Wed,  4 Sep 2019 22:31:27 +0000 (UTC)
+Received: from warthog.procyon.org.uk (ovpn-120-255.rdu2.redhat.com [10.10.120.255])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 2332A1001956;
+        Wed,  4 Sep 2019 22:31:16 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <CAHk-=wgcJq21Hydh7Tx5-o8empoPp7ULDBw0Am-du_Pa+fcftQ@mail.gmail.com>
+References: <CAHk-=wgcJq21Hydh7Tx5-o8empoPp7ULDBw0Am-du_Pa+fcftQ@mail.gmail.com> <20190904201933.10736-1-cyphar@cyphar.com> <20190904201933.10736-11-cyphar@cyphar.com> <CAHk-=wiod1rQMU+6Zew=cLE8uX4tUdf42bM5eKngMnNVS2My7g@mail.gmail.com> <20190904214856.vnvom7h5xontvngq@yavin.dot.cyphar.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+cc:     Aleksa Sarai <cyphar@cyphar.com>
 Cc:     Al Viro <viro@zeniv.linux.org.uk>,
         Jeff Layton <jlayton@kernel.org>,
         "J. Bruce Fields" <bfields@fieldses.org>,
@@ -99,39 +69,31 @@ Cc:     Al Viro <viro@zeniv.linux.org.uk>,
         linux-s390 <linux-s390@vger.kernel.org>,
         Linux-sh list <linux-sh@vger.kernel.org>,
         linux-xtensa@linux-xtensa.org, sparclinux@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: [PATCH v12 10/12] namei: aggressively check for nd->root escape on ".." resolution
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <20591.1567636276.1@warthog.procyon.org.uk>
+Date:   Wed, 04 Sep 2019 23:31:16 +0100
+Message-ID: <20592.1567636276@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
+X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.6.2 (mx1.redhat.com [10.5.110.66]); Wed, 04 Sep 2019 22:31:28 +0000 (UTC)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Sep 4, 2019 at 2:49 PM Aleksa Sarai <cyphar@cyphar.com> wrote:
->
-> Hinting to userspace to do a retry (with -EAGAIN as you mention in your
-> other mail) wouldn't be a bad thing at all, though you'd almost
-> certainly get quite a few spurious -EAGAINs -- &{mount,rename}_lock are
-> global for the entire machine, after all.
+Linus Torvalds <torvalds@linux-foundation.org> wrote:
 
-I'd hope that we have some future (possibly very long-term)
-alternative that is not quite system-global, but yes, right now they
-are.
+> > Hinting to userspace to do a retry (with -EAGAIN as you mention in your
+> > other mail) wouldn't be a bad thing at all, though you'd almost
+> > certainly get quite a few spurious -EAGAINs -- &{mount,rename}_lock are
+> > global for the entire machine, after all.
+> 
+> I'd hope that we have some future (possibly very long-term)
+> alternative that is not quite system-global, but yes, right now they
+> are.
 
-Which is one reason I'd rather see EAGAIN in user space - yes, it
-probably makes it even easier to trigger, but it also means that user
-space might be able to do something about it when it does trigger.
+It ought to be reasonably easy to make them per-sb at least, I think.  We
+don't allow cross-super rename, right?
 
-For example, maybe user space can first just use an untrusted path
-as-is, and if it gets EAGAIN or EXDEV, it may be that user space can
-simplify the path (ie turn "xyz/.../abc" into just "abc".
-
-And even if user space doesn't do anything like that, I suspect a
-performance problem is going to be a whole lot easier to debug and
-report when somebody ends up seeing excessive retries happening. As a
-developer you'll see it in profiles or in system call traces, rather
-than it resulting in very odd possible slowdowns for the kernel.
-
-And yeah, it would probably be best to then at least delay doing
-option 3 indefinitely, just to make sure user space knows about and
-actually has a test-case for that EAGAIN happening.
-
-              Linus
+David
