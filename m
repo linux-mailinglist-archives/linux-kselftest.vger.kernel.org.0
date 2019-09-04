@@ -2,74 +2,73 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C4258A8163
-	for <lists+linux-kselftest@lfdr.de>; Wed,  4 Sep 2019 13:49:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 39B22A8164
+	for <lists+linux-kselftest@lfdr.de>; Wed,  4 Sep 2019 13:49:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728021AbfIDLtF (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 4 Sep 2019 07:49:05 -0400
-Received: from foss.arm.com ([217.140.110.172]:52720 "EHLO foss.arm.com"
+        id S1729356AbfIDLtO (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 4 Sep 2019 07:49:14 -0400
+Received: from foss.arm.com ([217.140.110.172]:52740 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727125AbfIDLtF (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 4 Sep 2019 07:49:05 -0400
+        id S1727125AbfIDLtO (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 4 Sep 2019 07:49:14 -0400
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5DBFE337;
-        Wed,  4 Sep 2019 04:49:04 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 609BE337;
+        Wed,  4 Sep 2019 04:49:13 -0700 (PDT)
 Received: from arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 76ABB3F246;
-        Wed,  4 Sep 2019 04:49:03 -0700 (PDT)
-Date:   Wed, 4 Sep 2019 12:49:01 +0100
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 78C983F246;
+        Wed,  4 Sep 2019 04:49:12 -0700 (PDT)
+Date:   Wed, 4 Sep 2019 12:49:10 +0100
 From:   Dave Martin <Dave.Martin@arm.com>
 To:     Cristian Marussi <cristian.marussi@arm.com>
 Cc:     linux-kselftest@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, shuah@kernel.org,
         amit.kachhap@arm.com, andreyknvl@google.com
-Subject: Re: [PATCH v5 07/11] kselftest: arm64:
- fake_sigreturn_bad_size_for_magic0
-Message-ID: <20190904114901.GX27757@arm.com>
+Subject: Re: [PATCH v5 08/11] kselftest: arm64: fake_sigreturn_missing_fpsimd
+Message-ID: <20190904114910.GY27757@arm.com>
 References: <20190902112932.36129-1-cristian.marussi@arm.com>
- <20190902112932.36129-8-cristian.marussi@arm.com>
+ <20190902112932.36129-9-cristian.marussi@arm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190902112932.36129-8-cristian.marussi@arm.com>
+In-Reply-To: <20190902112932.36129-9-cristian.marussi@arm.com>
 User-Agent: Mutt/1.5.23 (2014-03-12)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Sep 02, 2019 at 12:29:28pm +0100, Cristian Marussi wrote:
-> Add a simple fake_sigreturn testcase which builds a ucontext_t with a
-> badly sized terminator record and place it onto the stack.
+On Mon, Sep 02, 2019 at 12:29:29pm +0100, Cristian Marussi wrote:
+> Add a simple fake_sigreturn testcase which builds a ucontext_t without
+> the required fpsimd_context and place it onto the stack.
 > Expects a SIGSEGV on test PASS.
 > 
 > Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
 > ---
 > v3 --> v4
 > - fix commit
-> - add signal.h include
-> - using new get_starting_head() helper
+> - added signal.h
 > - added test description
 > ---
->  .../fake_sigreturn_bad_size_for_magic0.c      | 49 +++++++++++++++++++
->  1 file changed, 49 insertions(+)
->  create mode 100644 tools/testing/selftests/arm64/signal/testcases/fake_sigreturn_bad_size_for_magic0.c
+>  .../testcases/fake_sigreturn_missing_fpsimd.c | 50 +++++++++++++++++++
+>  1 file changed, 50 insertions(+)
+>  create mode 100644 tools/testing/selftests/arm64/signal/testcases/fake_sigreturn_missing_fpsimd.c
 > 
-> diff --git a/tools/testing/selftests/arm64/signal/testcases/fake_sigreturn_bad_size_for_magic0.c b/tools/testing/selftests/arm64/signal/testcases/fake_sigreturn_bad_size_for_magic0.c
+> diff --git a/tools/testing/selftests/arm64/signal/testcases/fake_sigreturn_missing_fpsimd.c b/tools/testing/selftests/arm64/signal/testcases/fake_sigreturn_missing_fpsimd.c
 > new file mode 100644
-> index 000000000000..25017fe18214
+> index 000000000000..08ecd8073a1a
 > --- /dev/null
-> +++ b/tools/testing/selftests/arm64/signal/testcases/fake_sigreturn_bad_size_for_magic0.c
-> @@ -0,0 +1,49 @@
+> +++ b/tools/testing/selftests/arm64/signal/testcases/fake_sigreturn_missing_fpsimd.c
+> @@ -0,0 +1,50 @@
 > +// SPDX-License-Identifier: GPL-2.0
 > +/*
 > + * Copyright (C) 2019 ARM Limited
 > + *
-> + * Place a fake sigframe on the stack including a badly sized terminator
-> + * record: on sigreturn Kernel must spot this attempt and the test case
-> + * is expected to be terminated via SEGV.
+> + * Place a fake sigframe on the stack missing the mandatory FPSIMD
+> + * record: on sigreturn Kernel must spot this attempt and the test
+> + * case is expected to be terminated via SEGV.
 > + */
 > +
+> +#include <stdio.h>
 > +#include <signal.h>
 > +#include <ucontext.h>
 > +
@@ -78,31 +77,30 @@ On Mon, Sep 02, 2019 at 12:29:28pm +0100, Cristian Marussi wrote:
 > +
 > +struct fake_sigframe sf;
 > +
-> +static int fake_sigreturn_bad_size_for_magic0_run(struct tdescr *td,
-> +						  siginfo_t *si, ucontext_t *uc)
+> +static int fake_sigreturn_missing_fpsimd_run(struct tdescr *td,
+> +					     siginfo_t *si, ucontext_t *uc)
 > +{
-> +	size_t resv_sz, need_sz;
-> +	struct _aarch64_ctx *shead = GET_SF_RESV_HEAD(sf), *head;
+> +	size_t resv_sz, offset;
+> +	struct _aarch64_ctx *head = GET_SF_RESV_HEAD(sf);
 > +
 > +	/* just to fill the ucontext_t with something real */
 > +	if (!get_current_context(td, &sf.uc))
 > +		return 1;
 > +
 > +	resv_sz = GET_SF_RESV_SIZE(sf);
-> +	/* at least HDR_SZ for the badly sized terminator. */
-> +	need_sz = HDR_SZ;
+> +	head = get_header(head, FPSIMD_MAGIC, resv_sz, &offset);
+> +	if (head && resv_sz - offset >= HDR_SZ) {
+> +		fprintf(stderr, "Mangling template header. Spare space:%zd\n",
+> +			resv_sz - offset);
+> +		/* Just overwrite fpsmid_context */
+> +		write_terminator_record(head);
 
-Nit: do we need the resv_sz and need_sz variables here?
+Strictly speaking, we may be throwing away more than just the
+fpsimd_context record here.
 
-> +	head = get_starting_head(shead, need_sz, resv_sz, NULL);
-> +	if (head) {
+But I think the test works nonetheless.  fpsimd_context is the only
+record that's mandatory in any case.
 
-Perhaps we could fail immediately rather than relying on timeout here?
-
-Probably not a huge deal though.
-
-> +		head->magic = 0;
-> +		head->size = HDR_SZ;
 > +
 > +		ASSERT_BAD_CONTEXT(&sf.uc);
 > +		fake_sigreturn(&sf, sizeof(sf), 0);
@@ -112,13 +110,13 @@ Probably not a huge deal though.
 > +}
 > +
 > +struct tdescr tde = {
-> +		.name = "FAKE_SIGRETURN_BAD_SIZE_FOR_TERMINATOR",
-> +		.descr = "Trigger a sigreturn using non-zero size terminator",
+> +		.name = "FAKE_SIGRETURN_MISSING_FPSIMD",
+> +		.descr = "Triggers a sigreturn with a missing fpsimd_context",
 > +		.sig_ok = SIGSEGV,
 > +		.timeout = 3,
-> +		.run = fake_sigreturn_bad_size_for_magic0_run,
+> +		.run = fake_sigreturn_missing_fpsimd_run,
 > +};
 
-Either way,
+Assuming the comment I just posted on v3 of this patch makes sense to you,
 
 Reviewed-by: Dave Martin <Dave.Martin@arm.com>
