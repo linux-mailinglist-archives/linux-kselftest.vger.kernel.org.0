@@ -2,487 +2,281 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D6B4FA8D46
-	for <lists+linux-kselftest@lfdr.de>; Wed,  4 Sep 2019 21:31:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A7811A92F8
+	for <lists+linux-kselftest@lfdr.de>; Wed,  4 Sep 2019 22:20:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732042AbfIDQm6 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 4 Sep 2019 12:42:58 -0400
-Received: from mail-pf1-f196.google.com ([209.85.210.196]:40523 "EHLO
-        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731909AbfIDQm5 (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 4 Sep 2019 12:42:57 -0400
-Received: by mail-pf1-f196.google.com with SMTP id x127so904987pfb.7
-        for <linux-kselftest@vger.kernel.org>; Wed, 04 Sep 2019 09:42:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=k/oSgBJoI5i7CG44m8oeHuWL1TxHBP3PuiLD3GqEJMs=;
-        b=nwB/hLSn8C9Fkj9mb1gL3IZdiu1myDs/hI9yOnbYVwPMQzq/+T5kRyXBBJu+pVilfL
-         7IRiEtjBA/24FhzA3AmKhmd/sXJUIn0xXj+X/OcSYB247wOsL2jjiUMzMS3Si9jSLz3p
-         iNpkS3Y26SHcoE9ke8ZItIXfdzQIHvSvxcg1/CLwEPZwJg59YiMNG4DpVskuIl97C1kF
-         aw6aVY6TIGl+2KqCYIg4WiMgl8e2amGB6/4D0G14vgZzjGWzEaEnsKr53cvPyVKtIcTx
-         KqFvOn2rofspFPjswyZusr7qO1AlM4WAqNtiuH3vHf5g0nSeN3Iu8s9fKTNm6g4kQGnK
-         gSDg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=k/oSgBJoI5i7CG44m8oeHuWL1TxHBP3PuiLD3GqEJMs=;
-        b=fXIfOQq9Ch4kH0dGUSMi6hkUhrunD6L9SWaWX7fYsZgfDb5AC8crHE0z8DoiO1Ofjr
-         kB+QLndxtODgh3uFmJaVDmXvTrMBk9u8zvWqbcrODXLVbjFyJWgtV9TLgtdgNZs9Xz8s
-         yZWQz8/MiRzygMCXdcnOnQd/D+ngtDZflWrVeAsLRJMjKLuLWpxqNsPtAvtjfF2aWG2c
-         L0OUUsfMya2rtuBru8UBN2pTCBMlvvO4e1vE36id3ggdjvessq4JD45q0QzahKihAaGy
-         MpS6R0agm72pjtVmVcnO0WvOeWv1LnV5kfv+WBJ5j3oB/CNqrvbEE1dMa8TuMdZm0rRk
-         HdnA==
-X-Gm-Message-State: APjAAAUJkIDiRgIr7osuJrlAxmw90cPlYjkBOAIrrXQMTDuM8Wi3KOnz
-        ZPqSbI/dQvj7DfQ9qEY5a0vCArfLco5gnmUfp7nYzQ==
-X-Google-Smtp-Source: APXvYqw9ghhpbkJW620d4F/i5xnGBSYo4okqbHY5PpWEgkRysrp4BZlxOoeP81KxTXsXeG8r2lv3BozPz89snZ14Gcg=
-X-Received: by 2002:aa7:8bcc:: with SMTP id s12mr31960729pfd.93.1567615376516;
- Wed, 04 Sep 2019 09:42:56 -0700 (PDT)
-MIME-Version: 1.0
-References: <cover.1561386715.git.andreyknvl@google.com> <0999c80cd639b78ae27c0674069d552833227564.1561386715.git.andreyknvl@google.com>
- <6af3f619-4356-2f67-ed76-92beceb1e0a0@arm.com> <CAAeHK+yhbUcuLhoetjGUbqM4j9fX84hbwmxzNPF+e1zXj6nKNw@mail.gmail.com>
- <d6bc5c4b-68b5-0a58-0f52-8bce20986dcf@arm.com> <CAAeHK+xXN_oHt0rAcWdTs0XhkYRhWqf3iv-n+dYmY075xosJnw@mail.gmail.com>
- <92ca7fd1-2aa7-3bec-384d-52033b6496c1@arm.com>
-In-Reply-To: <92ca7fd1-2aa7-3bec-384d-52033b6496c1@arm.com>
-From:   Andrey Konovalov <andreyknvl@google.com>
-Date:   Wed, 4 Sep 2019 18:42:45 +0200
-Message-ID: <CAAeHK+ybMvTNB8_fQxNqhb0s0Swr61XPHu3CvEUQxi2vHW6anw@mail.gmail.com>
-Subject: Re: [PATCH v18 15/15] selftests, arm64: add a selftest for passing
- tagged pointers to kernel
-To:     Cristian Marussi <cristian.marussi@arm.com>
-Cc:     Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-rdma@vger.kernel.org, linux-media@vger.kernel.org,
-        kvm@vger.kernel.org,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Will Deacon <will.deacon@arm.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        id S1728878AbfIDUUQ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 4 Sep 2019 16:20:16 -0400
+Received: from mx2.mailbox.org ([80.241.60.215]:60506 "EHLO mx2.mailbox.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726834AbfIDUUQ (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 4 Sep 2019 16:20:16 -0400
+Received: from smtp2.mailbox.org (smtp2.mailbox.org [80.241.60.241])
+        (using TLSv1.2 with cipher ECDHE-RSA-CHACHA20-POLY1305 (256/256 bits))
+        (No client certificate requested)
+        by mx2.mailbox.org (Postfix) with ESMTPS id E41B0A0D17;
+        Wed,  4 Sep 2019 22:20:08 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at heinlein-support.de
+Received: from smtp2.mailbox.org ([80.241.60.241])
+        by spamfilter05.heinlein-hosting.de (spamfilter05.heinlein-hosting.de [80.241.56.123]) (amavisd-new, port 10030)
+        with ESMTP id 2Dhxv46xQ4FZ; Wed,  4 Sep 2019 22:20:04 +0200 (CEST)
+From:   Aleksa Sarai <cyphar@cyphar.com>
+To:     Al Viro <viro@zeniv.linux.org.uk>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J. Bruce Fields" <bfields@fieldses.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        David Howells <dhowells@redhat.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Christian Brauner <christian@brauner.io>
+Cc:     Aleksa Sarai <cyphar@cyphar.com>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Jann Horn <jannh@google.com>,
+        David Drysdale <drysdale@google.com>,
+        Tycho Andersen <tycho@tycho.ws>,
         Kees Cook <keescook@chromium.org>,
-        Yishai Hadas <yishaih@mellanox.com>,
-        Felix Kuehling <Felix.Kuehling@amd.com>,
-        Alexander Deucher <Alexander.Deucher@amd.com>,
-        Christian Koenig <Christian.Koenig@amd.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Jens Wiklander <jens.wiklander@linaro.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
-        Dave Martin <Dave.Martin@arm.com>,
-        Khalid Aziz <khalid.aziz@oracle.com>, enh <enh@google.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Christoph Hellwig <hch@infradead.org>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Kostya Serebryany <kcc@google.com>,
-        Evgeniy Stepanov <eugenis@google.com>,
-        Lee Smith <Lee.Smith@arm.com>,
-        Ramana Radhakrishnan <Ramana.Radhakrishnan@arm.com>,
-        Jacob Bramley <Jacob.Bramley@arm.com>,
-        Ruben Ayrapetyan <Ruben.Ayrapetyan@arm.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Kevin Brodsky <kevin.brodsky@arm.com>,
-        Szabolcs Nagy <Szabolcs.Nagy@arm.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Chanho Min <chanho.min@lge.com>,
+        Oleg Nesterov <oleg@redhat.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Aleksa Sarai <asarai@suse.de>,
+        containers@lists.linux-foundation.org, linux-alpha@vger.kernel.org,
+        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-ia64@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        linux-xtensa@linux-xtensa.org, sparclinux@vger.kernel.org
+Subject: [PATCH v12 00/12] namei: openat2(2) path resolution restrictions
+Date:   Thu,  5 Sep 2019 06:19:21 +1000
+Message-Id: <20190904201933.10736-1-cyphar@cyphar.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Sep 4, 2019 at 6:22 PM Cristian Marussi
-<cristian.marussi@arm.com> wrote:
->
-> Hi Andrey !
->
-> On 04/09/2019 15:52, Andrey Konovalov wrote:
-> > On Fri, Aug 23, 2019 at 7:49 PM Cristian Marussi
-> > <cristian.marussi@arm.com> wrote:
-> >>
-> >>
-> >> Hi
-> >>
-> >> On 23/08/2019 18:16, Andrey Konovalov wrote:
-> >>> On Fri, Aug 23, 2019 at 3:56 PM Cristian Marussi
-> >>> <cristian.marussi@arm.com> wrote:
-> >>>>
-> >>>> Hi Andrey
-> >>>>
-> >>>> On 24/06/2019 15:33, Andrey Konovalov wrote:
-> >>>>> This patch is a part of a series that extends kernel ABI to allow t=
-o pass
-> >>>>> tagged user pointers (with the top byte set to something else other=
- than
-> >>>>> 0x00) as syscall arguments.
-> >>>>>
-> >>>>> This patch adds a simple test, that calls the uname syscall with a
-> >>>>> tagged user pointer as an argument. Without the kernel accepting ta=
-gged
-> >>>>> user pointers the test fails with EFAULT.
-> >>>>>
-> >>>>> Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
-> >>>>> ---
-> >>>>>  tools/testing/selftests/arm64/.gitignore      |  1 +
-> >>>>>  tools/testing/selftests/arm64/Makefile        | 11 +++++++
-> >>>>>  .../testing/selftests/arm64/run_tags_test.sh  | 12 ++++++++
-> >>>>>  tools/testing/selftests/arm64/tags_test.c     | 29 +++++++++++++++=
-++++
-> >>>>>  4 files changed, 53 insertions(+)
-> >>>>>  create mode 100644 tools/testing/selftests/arm64/.gitignore
-> >>>>>  create mode 100644 tools/testing/selftests/arm64/Makefile
-> >>>>>  create mode 100755 tools/testing/selftests/arm64/run_tags_test.sh
-> >>>>>  create mode 100644 tools/testing/selftests/arm64/tags_test.c
-> >>>>
-> >>>> After building a fresh Kernel from arm64/for-next-core from scratch =
-at:
-> >>>>
-> >>>> commit 239ab658bea3b387424501e7c416640d6752dc0c
-> >>>> Merge: 6bfa3134bd3a 42d038c4fb00 1243cb6a676f d55c5f28afaf d06fa5a11=
-8f1 34b5560db40d
-> >>>> Author: Will Deacon <will@kernel.org>
-> >>>> Date:   Thu Aug 22 18:23:53 2019 +0100
-> >>>>
-> >>>>     Merge branches 'for-next/error-injection', 'for-next/tbi', 'for-=
-next/psci-cpuidle', 'for-next/cpu-topology' and 'for-next/52-bit-kva' into =
-for-next/core
-> >>>>
-> >>>>
-> >>>> KSFT arm64 tests build is broken for me, both setting or not KBUILD_=
-OUTPUT=3D
-> >>>>
-> >>>> 13:30 $ make TARGETS=3Darm64 kselftest-clean
-> >>>> make[1]: Entering directory '/home/crimar01/ARM/dev/src/pdsw/out_lin=
-ux'
-> >>>> rm -f -r /home/crimar01/ARM/dev/src/pdsw/out_linux//kselftest/arm64/=
-tags_test
-> >>>> make[1]: Leaving directory '/home/crimar01/ARM/dev/src/pdsw/out_linu=
-x'
-> >>>>
-> >>>> =E2=9C=94 ~/ARM/dev/src/pdsw/linux [arm64_for_next_core|=E2=80=A68=
-=E2=9A=91 23]
-> >>>>
-> >>>> 13:30 $ make TARGETS=3Darm64 kselftest
-> >>>> make[1]: Entering directory '/home/crimar01/ARM/dev/src/pdsw/out_lin=
-ux'
-> >>>> arch/arm64/Makefile:56: CROSS_COMPILE_COMPAT not defined or empty, t=
-he compat vDSO will not be built
-> >>>> make --no-builtin-rules INSTALL_HDR_PATH=3D$BUILD/usr \
-> >>>>         ARCH=3Darm64 -C ../../.. headers_install
-> >>>>   HOSTCC  scripts/basic/fixdep
-> >>>>   HOSTCC  scripts/unifdef
-> >>>> ...
-> >>>> ...
-> >>>>   HDRINST usr/include/asm/msgbuf.h
-> >>>>   HDRINST usr/include/asm/shmbuf.h
-> >>>>   INSTALL /home/crimar01/ARM/dev/src/pdsw/out_linux//kselftest/usr/i=
-nclude
-> >>>> /opt/toolchains/gcc-arm-8.3-2019.03-x86_64-aarch64-linux-gnu/bin/aar=
-ch64-linux-gnu-gcc     tags_test.c  -o /home/crimar01/ARM/dev/src/pdsw/out_=
-linux//kselftest/arm64/tags_test
-> >>>> tags_test.c: In function =E2=80=98main=E2=80=99:
-> >>>> tags_test.c:21:12: error: =E2=80=98PR_SET_TAGGED_ADDR_CTRL=E2=80=99 =
-undeclared (first use in this function); did you mean =E2=80=98PR_GET_TID_A=
-DDRESS=E2=80=99?
-> >>>>   if (prctl(PR_SET_TAGGED_ADDR_CTRL, PR_TAGGED_ADDR_ENABLE, 0, 0, 0)=
- =3D=3D 0)
-> >>>>             ^~~~~~~~~~~~~~~~~~~~~~~
-> >>>>             PR_GET_TID_ADDRESS
-> >>>> tags_test.c:21:12: note: each undeclared identifier is reported only=
- once for each function it appears in
-> >>>> tags_test.c:21:37: error: =E2=80=98PR_TAGGED_ADDR_ENABLE=E2=80=99 un=
-declared (first use in this function); did you mean =E2=80=98PR_GET_DUMPABL=
-E=E2=80=99?
-> >>>>   if (prctl(PR_SET_TAGGED_ADDR_CTRL, PR_TAGGED_ADDR_ENABLE, 0, 0, 0)=
- =3D=3D 0)
-> >>>>                                      ^~~~~~~~~~~~~~~~~~~~~
-> >>>>                                      PR_GET_DUMPABLE
-> >>>> ../lib.mk:138: recipe for target '/home/crimar01/ARM/dev/src/pdsw/ou=
-t_linux//kselftest/arm64/tags_test' failed
-> >>>> make[3]: *** [/home/crimar01/ARM/dev/src/pdsw/out_linux//kselftest/a=
-rm64/tags_test] Error 1
-> >>>> Makefile:136: recipe for target 'all' failed
-> >>>> make[2]: *** [all] Error 2
-> >>>> /home/crimar01/ARM/dev/src/pdsw/linux/Makefile:1237: recipe for targ=
-et 'kselftest' failed
-> >>>> make[1]: *** [kselftest] Error 2
-> >>>> make[1]: Leaving directory '/home/crimar01/ARM/dev/src/pdsw/out_linu=
-x'
-> >>>> Makefile:179: recipe for target 'sub-make' failed
-> >>>> make: *** [sub-make] Error 2
-> >>>>
-> >>>> Despite seeing KSFT installing Kernel Headers, they cannot be found.
-> >>>>
-> >>>> Fixing this patch like this make it work for me:
-> >>>>
-> >>>> diff --git a/tools/testing/selftests/arm64/Makefile b/tools/testing/=
-selftests/arm64/Makefile
-> >>>> index a61b2e743e99..f9f79fb272f0 100644
-> >>>> --- a/tools/testing/selftests/arm64/Makefile
-> >>>> +++ b/tools/testing/selftests/arm64/Makefile
-> >>>> @@ -4,6 +4,7 @@
-> >>>>  ARCH ?=3D $(shell uname -m 2>/dev/null || echo not)
-> >>>>
-> >>>>  ifneq (,$(filter $(ARCH),aarch64 arm64))
-> >>>> +CFLAGS +=3D -I../../../../usr/include/
-> >>>>  TEST_GEN_PROGS :=3D tags_test
-> >>>>  TEST_PROGS :=3D run_tags_test.sh
-> >>>>  endif
-> >>>>
-> >>>> but is not really a proper fix since it does NOT account for case in=
- which you have
-> >>>> installed the Kernel Headers in a non standard location like when yo=
-u use KBUILD_OUTPUT.
-> >>>>
-> >>>> Am I missing something ?
-> >>>
-> >>> Hm, PR_SET_TAGGED_ADDR_CTRL is defined in include/uapi/linux/prctl.h,
-> >>> and the test has #include <sys/prctl.h> so as long as you've updated
-> >>> your kernel headers this should work.
-> >>>
-> >>> (I'm OOO next week, I'll see if I can reproduce this once I'm back).
-> >>
-> >> Ok. Thanks for the reply.
-> >>
-> >> I think I've got it in my local tree having cloned arm64/for-next-core=
-:
-> >>
-> >> 18:32 $ egrep -A 10 PR_SET_TAG ./include/uapi/linux/prctl.h
-> >> #define PR_SET_TAGGED_ADDR_CTRL         55
-> >> #define PR_GET_TAGGED_ADDR_CTRL         56
-> >> # define PR_TAGGED_ADDR_ENABLE          (1UL << 0)
-> >>
-> >> #endif /* _LINUX_PRCTL_H */
-> >>
-> >> and Kernel header are locally installed in my kernel src dir (by KSFT =
-indeed)
-> >>
-> >> 18:34 $ egrep -RA 10 PR_SET_TAG usr/include/
-> >> usr/include/linux/prctl.h:#define PR_SET_TAGGED_ADDR_CTRL             =
-  55
-> >> usr/include/linux/prctl.h-#define PR_GET_TAGGED_ADDR_CTRL             =
-  56
-> >> usr/include/linux/prctl.h-# define PR_TAGGED_ADDR_ENABLE              =
-  (1UL << 0)
-> >> usr/include/linux/prctl.h-
-> >> usr/include/linux/prctl.h-#endif /* _LINUX_PRCTL_H */
-> >>
-> >> but how are they supposed to be found if nor the test Makefile
-> >> neither the KSFT Makefile who installs them pass any -I options to the
-> >> compiler ?
-> >> I suppose <sys/prctl.h> tries to include arch specific headers from th=
-e regular system path,
-> >> but when you are cross-compiling ?
-> >>
-> >> 18:34 $ make TARGETS=3Darm64 kselftest
-> >> make[1]: Entering directory '/home/crimar01/ARM/dev/src/pdsw/out_linux=
-'
-> >> arch/arm64/Makefile:56: CROSS_COMPILE_COMPAT not defined or empty, the=
- compat vDSO will not be built
-> >> make --no-builtin-rules INSTALL_HDR_PATH=3D$BUILD/usr \
-> >>         ARCH=3Darm64 -C ../../.. headers_install
-> >>   INSTALL /home/crimar01/ARM/dev/src/pdsw/out_linux/kselftest/usr/incl=
-ude
-> >> /opt/toolchains/gcc-arm-8.3-2019.03-x86_64-aarch64-linux-gnu/bin/aarch=
-64-linux-gnu-gcc -Wall -O2 -g    tags_test.c  -o /home/crimar01/ARM/dev/src=
-/pdsw/out_linux/kselftest/arm64/tags/tags_test
-> >> tags_test.c: In function =E2=80=98main=E2=80=99:
-> >> tags_test.c:20:12: error: =E2=80=98PR_SET_TAGGED_ADDR_CTRL=E2=80=99 un=
-declared (first use in this function); did you mean =E2=80=98PR_GET_TID_ADD=
-RESS=E2=80=99?
-> >>   if (prctl(PR_SET_TAGGED_ADDR_CTRL, PR_TAGGED_ADDR_ENABLE, 0, 0, 0) =
-=3D=3D 0)
-> >>             ^~~~~~~~~~~~~~~~~~~~~~~
-> >>             PR_GET_TID_ADDRESS
-> >> tags_test.c:20:12: note: each undeclared identifier is reported only o=
-nce for each function it appears in
-> >> tags_test.c:20:37: error: =E2=80=98PR_TAGGED_ADDR_ENABLE=E2=80=99 unde=
-clared (first use in this function); did you mean =E2=80=98PR_GET_DUMPABLE=
-=E2=80=99?
-> >>   if (prctl(PR_SET_TAGGED_ADDR_CTRL, PR_TAGGED_ADDR_ENABLE, 0, 0, 0) =
-=3D=3D 0)
-> >>                                      ^~~~~~~~~~~~~~~~~~~~~
-> >>                                      PR_GET_DUMPABLE
-> >> ../../lib.mk:138: recipe for target '/home/crimar01/ARM/dev/src/pdsw/o=
-ut_linux/kselftest/arm64/tags/tags_test' failed
-> >> make[4]: *** [/home/crimar01/ARM/dev/src/pdsw/out_linux/kselftest/arm6=
-4/tags/tags_test] Error 1
-> >> Makefile:19: recipe for target 'all' failed
-> >> make[3]: *** [all] Error 2
-> >> Makefile:137: recipe for target 'all' failed
-> >> make[2]: *** [all] Error 2
-> >> /home/crimar01/ARM/dev/src/pdsw/linux/Makefile:1236: recipe for target=
- 'kselftest' failed
-> >> make[1]: *** [kselftest] Error 2
-> >> make[1]: Leaving directory '/home/crimar01/ARM/dev/src/pdsw/out_linux'
-> >> Makefile:179: recipe for target 'sub-make' failed
-> >> make: *** [sub-make] Error 2
-> >>
-> >>
-> >> In fact many KSFT testcases seems to brutally add default headers path=
-:
-> >>
-> >> tools/testing/selftests/memfd/Makefile:CFLAGS +=3D -I../../../../inclu=
-de/uapi/
-> >> tools/testing/selftests/memfd/Makefile:CFLAGS +=3D -I../../../../inclu=
-de/
-> >> tools/testing/selftests/memfd/Makefile:CFLAGS +=3D -I../../../../usr/i=
-nclude/
-> >> tools/testing/selftests/net/Makefile:CFLAGS +=3D -I../../../../usr/inc=
-lude/
-> >> tools/testing/selftests/membarrier/Makefile:CFLAGS +=3D -g -I../../../=
-../usr/include/
-> >> ...
-> >
-> > Hi Cristian!
-> >
-> > Indeed, I can reproduce the issue. I don't know what's the proper way
-> > to resolve this. Adding "CFLAGS +=3D -I../../../../usr/include/" looks
-> > good to me. AFAICS your series resolves this issue in a similar way,
-> > but I think we should fix this before the current rc is released. Do
-> > you want to submit a patch that adds this simple fix or should I do
-> > that?
-> >
->
-> Please feel free to post the single line patch above to quickly fix this =
-before
-> release, so we don't have a broken build straight away. (our CI is alread=
-y beating me...:D)
+This patchset is being developed here:
+    <https://github.com/cyphar/linux/tree/resolveat/master>
 
-Done.
+Patch changelog:
+ v12:
+  * Remove @how->reserved field from openat2(2), and instead use the
+    (struct, size) design for syscall extensions.
+  * Implement copy_struct_{to,from}_user() to unify (struct, size)
+    syscall extension designs (as well as make them slightly more
+    efficient by using memchr_inv() as well as using buffers and
+    avoiding repeated access_ok() checks for trailing byte operations).
+    * Port sched_setattr(), perf_event_attr(), and clone3() to use the
+      new helpers.
+ v11: <https://lore.kernel.org/lkml/20190820033406.29796-1-cyphar@cyphar.com/>
+      <https://lore.kernel.org/lkml/20190728010207.9781-1-cyphar@cyphar.com/>
+ v10: <https://lore.kernel.org/lkml/20190719164225.27083-1-cyphar@cyphar.com/>
+ v09: <https://lore.kernel.org/lkml/20190706145737.5299-1-cyphar@cyphar.com/>
+ v08: <https://lore.kernel.org/lkml/20190520133305.11925-1-cyphar@cyphar.com/>
+ v07: <https://lore.kernel.org/lkml/20190507164317.13562-1-cyphar@cyphar.com/>
+ v06: <https://lore.kernel.org/lkml/20190506165439.9155-1-cyphar@cyphar.com/>
+ v05: <https://lore.kernel.org/lkml/20190320143717.2523-1-cyphar@cyphar.com/>
+ v04: <https://lore.kernel.org/lkml/20181112142654.341-1-cyphar@cyphar.com/>
+ v03: <https://lore.kernel.org/lkml/20181009070230.12884-1-cyphar@cyphar.com/>
+ v02: <https://lore.kernel.org/lkml/20181009065300.11053-1-cyphar@cyphar.com/>
+ v01: <https://lore.kernel.org/lkml/20180929103453.12025-1-cyphar@cyphar.com/>
 
->
-> On my side (01/11) in the meantime I'll fix the top level KSFT arm64 make=
-file so as to calculate
-> and propagate once for all the headers search path down to all KSFT arm64=
-/ in one go,
-> trying to guess where they are; this is needed because the above fix work=
-s fine as long
-> as you don't have KBUILD_OUTPUT set, once you set it, KSFT installs khead=
-ers in a different
-> place and the  above -I fix is fooled again....but this is a general prob=
-lem also in other
-> KSFT tests as I can see now so I think this fix is good enough for now
-> (and the fix on my side, even if trivial, is not going to go into this re=
-lease for sure)
+The need for some sort of control over VFS's path resolution (to avoid
+malicious paths resulting in inadvertent breakouts) has been a very
+long-standing desire of many userspace applications. This patchset is a
+revival of Al Viro's old AT_NO_JUMPS[1,2] patchset (which was a variant
+of David Drysdale's O_BENEATH patchset[3] which was a spin-off of the
+Capsicum project[4]) with a few additions and changes made based on the
+previous discussion within [5] as well as others I felt were useful.
 
-Ah, I see.
+In line with the conclusions of the original discussion of AT_NO_JUMPS,
+the flag has been split up into separate flags. However, instead of
+being an openat(2) flag it is provided through a new syscall openat2(2)
+which provides several other improvements to the openat(2) interface (see the
+patch description for more details). The following new LOOKUP_* flags are
+added:
 
-Thanks for the report!
+  * LOOKUP_NO_XDEV blocks all mountpoint crossings (upwards, downwards,
+    or through absolute links). Absolute pathnames alone in openat(2) do
+    not trigger this.
 
->
-> Thanks !
->
-> Cheers
->
-> Cristian
->
-> > Thanks!
-> >
-> >>
-> >> Cheers
-> >>
-> >> Cristian
-> >>>
-> >>>
-> >>>
-> >>>>
-> >>>> Thanks
-> >>>>
-> >>>> Cristian
-> >>>>
-> >>>>>
-> >>>>> diff --git a/tools/testing/selftests/arm64/.gitignore b/tools/testi=
-ng/selftests/arm64/.gitignore
-> >>>>> new file mode 100644
-> >>>>> index 000000000000..e8fae8d61ed6
-> >>>>> --- /dev/null
-> >>>>> +++ b/tools/testing/selftests/arm64/.gitignore
-> >>>>> @@ -0,0 +1 @@
-> >>>>> +tags_test
-> >>>>> diff --git a/tools/testing/selftests/arm64/Makefile b/tools/testing=
-/selftests/arm64/Makefile
-> >>>>> new file mode 100644
-> >>>>> index 000000000000..a61b2e743e99
-> >>>>> --- /dev/null
-> >>>>> +++ b/tools/testing/selftests/arm64/Makefile
-> >>>>> @@ -0,0 +1,11 @@
-> >>>>> +# SPDX-License-Identifier: GPL-2.0
-> >>>>> +
-> >>>>> +# ARCH can be overridden by the user for cross compiling
-> >>>>> +ARCH ?=3D $(shell uname -m 2>/dev/null || echo not)
-> >>>>> +
-> >>>>> +ifneq (,$(filter $(ARCH),aarch64 arm64))
-> >>>>> +TEST_GEN_PROGS :=3D tags_test
-> >>>>> +TEST_PROGS :=3D run_tags_test.sh
-> >>>>> +endif
-> >>>>> +
-> >>>>> +include ../lib.mk
-> >>>>> diff --git a/tools/testing/selftests/arm64/run_tags_test.sh b/tools=
-/testing/selftests/arm64/run_tags_test.sh
-> >>>>> new file mode 100755
-> >>>>> index 000000000000..745f11379930
-> >>>>> --- /dev/null
-> >>>>> +++ b/tools/testing/selftests/arm64/run_tags_test.sh
-> >>>>> @@ -0,0 +1,12 @@
-> >>>>> +#!/bin/sh
-> >>>>> +# SPDX-License-Identifier: GPL-2.0
-> >>>>> +
-> >>>>> +echo "--------------------"
-> >>>>> +echo "running tags test"
-> >>>>> +echo "--------------------"
-> >>>>> +./tags_test
-> >>>>> +if [ $? -ne 0 ]; then
-> >>>>> +     echo "[FAIL]"
-> >>>>> +else
-> >>>>> +     echo "[PASS]"
-> >>>>> +fi
-> >>>>> diff --git a/tools/testing/selftests/arm64/tags_test.c b/tools/test=
-ing/selftests/arm64/tags_test.c
-> >>>>> new file mode 100644
-> >>>>> index 000000000000..22a1b266e373
-> >>>>> --- /dev/null
-> >>>>> +++ b/tools/testing/selftests/arm64/tags_test.c
-> >>>>> @@ -0,0 +1,29 @@
-> >>>>> +// SPDX-License-Identifier: GPL-2.0
-> >>>>> +
-> >>>>> +#include <stdio.h>
-> >>>>> +#include <stdlib.h>
-> >>>>> +#include <unistd.h>
-> >>>>> +#include <stdint.h>
-> >>>>> +#include <sys/prctl.h>
-> >>>>> +#include <sys/utsname.h>
-> >>>>> +
-> >>>>> +#define SHIFT_TAG(tag)               ((uint64_t)(tag) << 56)
-> >>>>> +#define SET_TAG(ptr, tag)    (((uint64_t)(ptr) & ~SHIFT_TAG(0xff))=
- | \
-> >>>>> +                                     SHIFT_TAG(tag))
-> >>>>> +
-> >>>>> +int main(void)
-> >>>>> +{
-> >>>>> +     static int tbi_enabled =3D 0;
-> >>>>> +     struct utsname *ptr, *tagged_ptr;
-> >>>>> +     int err;
-> >>>>> +
-> >>>>> +     if (prctl(PR_SET_TAGGED_ADDR_CTRL, PR_TAGGED_ADDR_ENABLE, 0, =
-0, 0) =3D=3D 0)
-> >>>>> +             tbi_enabled =3D 1;
-> >>>>> +     ptr =3D (struct utsname *)malloc(sizeof(*ptr));
-> >>>>> +     if (tbi_enabled)
-> >>>>> +             tagged_ptr =3D (struct utsname *)SET_TAG(ptr, 0x42);
-> >>>>> +     err =3D uname(tagged_ptr);
-> >>>>> +     free(ptr);
-> >>>>> +
-> >>>>> +     return err;
-> >>>>> +}
-> >>>>>
-> >>>>
-> >>
->
+  * LOOKUP_NO_MAGICLINKS blocks resolution through /proc/$pid/fd-style
+    links. This is done by blocking the usage of nd_jump_link() during
+    resolution in a filesystem. The term "magic-links" is used to match
+    with the only reference to these links in Documentation/, but I'm
+    happy to change the name.
+
+    It should be noted that this is different to the scope of
+    ~LOOKUP_FOLLOW in that it applies to all path components. However,
+    you can do openat2(NO_FOLLOW|NO_MAGICLINKS) on a magic-link and it
+    will *not* fail (assuming that no parent component was a
+    magic-link), and you will have an fd for the magic-link.
+
+  * LOOKUP_BENEATH disallows escapes to outside the starting dirfd's
+    tree, using techniques such as ".." or absolute links. Absolute
+    paths in openat(2) are also disallowed. Conceptually this flag is to
+    ensure you "stay below" a certain point in the filesystem tree --
+    but this requires some additional to protect against various races
+    that would allow escape using "..".
+
+    Currently LOOKUP_BENEATH implies LOOKUP_NO_MAGICLINKS, because it
+    can trivially beam you around the filesystem (breaking the
+    protection). In future, there might be similar safety checks done as
+    in LOOKUP_IN_ROOT, but that requires more discussion.
+
+In addition, two new flags are added that expand on the above ideas:
+
+  * LOOKUP_NO_SYMLINKS does what it says on the tin. No symlink
+    resolution is allowed at all, including magic-links. Just as with
+    LOOKUP_NO_MAGICLINKS this can still be used with NOFOLLOW to open an
+    fd for the symlink as long as no parent path had a symlink
+    component.
+
+  * LOOKUP_IN_ROOT is an extension of LOOKUP_BENEATH that, rather than
+    blocking attempts to move past the root, forces all such movements
+    to be scoped to the starting point. This provides chroot(2)-like
+    protection but without the cost of a chroot(2) for each filesystem
+    operation, as well as being safe against race attacks that chroot(2)
+    is not.
+
+    If a race is detected (as with LOOKUP_BENEATH) then an error is
+    generated, and similar to LOOKUP_BENEATH it is not permitted to cross
+    magic-links with LOOKUP_IN_ROOT.
+
+    The primary need for this is from container runtimes, which
+    currently need to do symlink scoping in userspace[6] when opening
+    paths in a potentially malicious container. There is a long list of
+    CVEs that could have bene mitigated by having RESOLVE_THIS_ROOT
+    (such as CVE-2017-1002101, CVE-2017-1002102, CVE-2018-15664, and
+    CVE-2019-5736, just to name a few).
+
+And further, several semantics of file descriptor "re-opening" are now
+changed to prevent attacks like CVE-2019-5736 by restricting how
+magic-links can be resolved (based on their mode). This required some
+other changes to the semantics of the modes of O_PATH file descriptor's
+associated /proc/self/fd magic-links. openat2(2) has the ability to
+further restrict re-opening of its own O_PATH fds, so that users can
+make even better use of this feature.
+
+Finally, O_EMPTYPATH was added so that users can do /proc/self/fd-style
+re-opening without depending on procfs. The new restricted semantics for
+magic-links are applied here too.
+
+In order to make all of the above more usable, I'm working on
+libpathrs[7] which is a C-friendly library for safe path resolution. It
+features a userspace-emulated backend if the kernel doesn't support
+openat2(2). Hopefully we can get userspace to switch to using it, and
+thus get openat2(2) support for free once it's ready.
+
+Cc: Al Viro <viro@zeniv.linux.org.uk>
+Cc: Eric Biederman <ebiederm@xmission.com>
+Cc: Andy Lutomirski <luto@kernel.org>
+Cc: David Howells <dhowells@redhat.com>
+Cc: Jann Horn <jannh@google.com>
+Cc: Christian Brauner <christian@brauner.io>
+Cc: David Drysdale <drysdale@google.com>
+Cc: Tycho Andersen <tycho@tycho.ws>
+Cc: Kees Cook <keescook@chromium.org>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>
+
+[1]: https://lwn.net/Articles/721443/
+[2]: https://lore.kernel.org/patchwork/patch/784221/
+[3]: https://lwn.net/Articles/619151/
+[4]: https://lwn.net/Articles/603929/
+[5]: https://lwn.net/Articles/723057/
+[6]: https://github.com/cyphar/filepath-securejoin
+[7]: https://github.com/openSUSE/libpathrs
+
+Aleksa Sarai (12):
+  lib: introduce copy_struct_{to,from}_user helpers
+  clone3: switch to copy_struct_from_user()
+  sched_setattr: switch to copy_struct_{to,from}_user()
+  perf_event_open: switch to copy_struct_from_user()
+  namei: obey trailing magic-link DAC permissions
+  procfs: switch magic-link modes to be more sane
+  open: O_EMPTYPATH: procfs-less file descriptor re-opening
+  namei: O_BENEATH-style path resolution flags
+  namei: LOOKUP_IN_ROOT: chroot-like path resolution
+  namei: aggressively check for nd->root escape on ".." resolution
+  open: openat2(2) syscall
+  selftests: add openat2(2) selftests
+
+ Documentation/filesystems/path-lookup.rst     |  12 +-
+ arch/alpha/include/uapi/asm/fcntl.h           |   1 +
+ arch/alpha/kernel/syscalls/syscall.tbl        |   1 +
+ arch/arm/tools/syscall.tbl                    |   1 +
+ arch/arm64/include/asm/unistd.h               |   2 +-
+ arch/arm64/include/asm/unistd32.h             |   2 +
+ arch/ia64/kernel/syscalls/syscall.tbl         |   1 +
+ arch/m68k/kernel/syscalls/syscall.tbl         |   1 +
+ arch/microblaze/kernel/syscalls/syscall.tbl   |   1 +
+ arch/mips/kernel/syscalls/syscall_n32.tbl     |   1 +
+ arch/mips/kernel/syscalls/syscall_n64.tbl     |   1 +
+ arch/mips/kernel/syscalls/syscall_o32.tbl     |   1 +
+ arch/parisc/include/uapi/asm/fcntl.h          |  39 +-
+ arch/parisc/kernel/syscalls/syscall.tbl       |   1 +
+ arch/powerpc/kernel/syscalls/syscall.tbl      |   1 +
+ arch/s390/kernel/syscalls/syscall.tbl         |   1 +
+ arch/sh/kernel/syscalls/syscall.tbl           |   1 +
+ arch/sparc/include/uapi/asm/fcntl.h           |   1 +
+ arch/sparc/kernel/syscalls/syscall.tbl        |   1 +
+ arch/x86/entry/syscalls/syscall_32.tbl        |   1 +
+ arch/x86/entry/syscalls/syscall_64.tbl        |   1 +
+ arch/xtensa/kernel/syscalls/syscall.tbl       |   1 +
+ fs/fcntl.c                                    |   2 +-
+ fs/internal.h                                 |   1 +
+ fs/namei.c                                    | 270 ++++++++++--
+ fs/open.c                                     | 100 ++++-
+ fs/proc/base.c                                |  20 +-
+ fs/proc/fd.c                                  |  23 +-
+ fs/proc/namespaces.c                          |   2 +-
+ include/linux/fcntl.h                         |  21 +-
+ include/linux/fs.h                            |   8 +-
+ include/linux/namei.h                         |   9 +
+ include/linux/syscalls.h                      |  14 +-
+ include/linux/uaccess.h                       |   5 +
+ include/uapi/asm-generic/fcntl.h              |   4 +
+ include/uapi/asm-generic/unistd.h             |   5 +-
+ include/uapi/linux/fcntl.h                    |  42 ++
+ include/uapi/linux/sched.h                    |   2 +
+ kernel/events/core.c                          |  45 +-
+ kernel/fork.c                                 |  34 +-
+ kernel/sched/core.c                           |  85 +---
+ lib/Makefile                                  |   2 +-
+ lib/struct_user.c                             | 182 ++++++++
+ tools/testing/selftests/Makefile              |   1 +
+ tools/testing/selftests/memfd/memfd_test.c    |   7 +-
+ tools/testing/selftests/openat2/.gitignore    |   1 +
+ tools/testing/selftests/openat2/Makefile      |   8 +
+ tools/testing/selftests/openat2/helpers.c     | 167 ++++++++
+ tools/testing/selftests/openat2/helpers.h     | 118 +++++
+ .../testing/selftests/openat2/linkmode_test.c | 333 +++++++++++++++
+ .../testing/selftests/openat2/openat2_test.c  | 106 +++++
+ .../selftests/openat2/rename_attack_test.c    | 127 ++++++
+ .../testing/selftests/openat2/resolve_test.c  | 402 ++++++++++++++++++
+ 53 files changed, 1971 insertions(+), 248 deletions(-)
+ create mode 100644 lib/struct_user.c
+ create mode 100644 tools/testing/selftests/openat2/.gitignore
+ create mode 100644 tools/testing/selftests/openat2/Makefile
+ create mode 100644 tools/testing/selftests/openat2/helpers.c
+ create mode 100644 tools/testing/selftests/openat2/helpers.h
+ create mode 100644 tools/testing/selftests/openat2/linkmode_test.c
+ create mode 100644 tools/testing/selftests/openat2/openat2_test.c
+ create mode 100644 tools/testing/selftests/openat2/rename_attack_test.c
+ create mode 100644 tools/testing/selftests/openat2/resolve_test.c
+
+-- 
+2.23.0
+
