@@ -2,138 +2,171 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A29C0AA4BD
-	for <lists+linux-kselftest@lfdr.de>; Thu,  5 Sep 2019 15:40:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73144AA4EB
+	for <lists+linux-kselftest@lfdr.de>; Thu,  5 Sep 2019 15:45:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730469AbfIENkw (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 5 Sep 2019 09:40:52 -0400
-Received: from mx2.mailbox.org ([80.241.60.215]:42942 "EHLO mx2.mailbox.org"
+        id S1727768AbfIENpp (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 5 Sep 2019 09:45:45 -0400
+Received: from foss.arm.com ([217.140.110.172]:45572 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725975AbfIENkv (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 5 Sep 2019 09:40:51 -0400
-Received: from smtp2.mailbox.org (smtp2.mailbox.org [80.241.60.241])
-        (using TLSv1.2 with cipher ECDHE-RSA-CHACHA20-POLY1305 (256/256 bits))
-        (No client certificate requested)
-        by mx2.mailbox.org (Postfix) with ESMTPS id 641B2A2002;
-        Thu,  5 Sep 2019 15:40:45 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at heinlein-support.de
-Received: from smtp2.mailbox.org ([80.241.60.241])
-        by spamfilter04.heinlein-hosting.de (spamfilter04.heinlein-hosting.de [80.241.56.122]) (amavisd-new, port 10030)
-        with ESMTP id fp988BBgv0Z0; Thu,  5 Sep 2019 15:40:41 +0200 (CEST)
-Date:   Thu, 5 Sep 2019 23:40:17 +1000
-From:   Aleksa Sarai <cyphar@cyphar.com>
-To:     Christian Brauner <christian.brauner@ubuntu.com>
-Cc:     Al Viro <viro@zeniv.linux.org.uk>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J. Bruce Fields" <bfields@fieldses.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        David Howells <dhowells@redhat.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Christian Brauner <christian@brauner.io>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Jann Horn <jannh@google.com>, Tycho Andersen <tycho@tycho.ws>,
-        David Drysdale <drysdale@google.com>,
-        Chanho Min <chanho.min@lge.com>,
-        Oleg Nesterov <oleg@redhat.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Aleksa Sarai <asarai@suse.de>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        containers@lists.linux-foundation.org, linux-alpha@vger.kernel.org,
-        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-fsdevel@vger.kernel.org, linux-ia64@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        linux-xtensa@linux-xtensa.org, sparclinux@vger.kernel.org
-Subject: Re: [PATCH v12 01/12] lib: introduce copy_struct_{to,from}_user
- helpers
-Message-ID: <20190905134017.rstiqa6v6roslzlu@yavin.dot.cyphar.com>
-References: <20190904201933.10736-1-cyphar@cyphar.com>
- <20190904201933.10736-2-cyphar@cyphar.com>
- <20190905110544.d6c5t7rx25kvywmi@wittgenstein>
+        id S1727900AbfIENpp (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 5 Sep 2019 09:45:45 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0284A28;
+        Thu,  5 Sep 2019 06:45:44 -0700 (PDT)
+Received: from [10.1.197.50] (e120937-lin.cambridge.arm.com [10.1.197.50])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 337913F67D;
+        Thu,  5 Sep 2019 06:45:43 -0700 (PDT)
+Subject: Re: [PATCH v5 01/11] kselftest: arm64: add skeleton Makefile
+To:     Dave Martin <Dave.Martin@arm.com>
+Cc:     linux-kselftest@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, shuah@kernel.org,
+        amit.kachhap@arm.com, andreyknvl@google.com
+References: <20190902112932.36129-1-cristian.marussi@arm.com>
+ <20190902112932.36129-2-cristian.marussi@arm.com>
+ <20190904114734.GR27757@arm.com>
+From:   Cristian Marussi <cristian.marussi@arm.com>
+Message-ID: <4e7f583f-df36-1d7b-7a41-160abc60a296@arm.com>
+Date:   Thu, 5 Sep 2019 14:45:39 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="lfmn5rszd42a2efo"
-Content-Disposition: inline
-In-Reply-To: <20190905110544.d6c5t7rx25kvywmi@wittgenstein>
+In-Reply-To: <20190904114734.GR27757@arm.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+On 04/09/2019 12:47, Dave Martin wrote:
+> On Mon, Sep 02, 2019 at 12:29:22pm +0100, Cristian Marussi wrote:
+>> Add a new arm64-specific empty subsystem amongst TARGETS of KSFT build
+>> framework; keep these new arm64 KSFT testcases separated into distinct
+> 
+> Nit: this isn't true any more, since the tags tests already added the
+> arm64 subsystem here.
 
---lfmn5rszd42a2efo
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Ok
+> 
+>> subdirs inside tools/testing/selftests/arm64/ depending on the specific
+>> subsystem targeted.
+>>
+>> Add into toplevel arm64 KSFT Makefile a mechanism to guess the effective
+>> location of Kernel headers as installed by KSFT framework.
+> 
+> This:
+> 
+>> Merge with
+>>
+>> commit 9ce1263033cd ("selftests, arm64: add a selftest for passing
+>> 		     tagged pointers to kernel")
+>>
+>> while moving such KSFT tags tests inside their own subdirectory
+>> (arm64/tags).
+> 
+> ...could be put under the tearoff, but it doesn't really belong in the
+> commit message IMHO.
+> 
+> I suggest rewriting the commit message to reflect the current
+> situation (but it can be kept brief).
+> 
+> Basically, what this patch now seems to do is to prepare for adding
+> more arm64 tests, by moving the tags tests into their own subdirectory
+> and extending the existing skeleton Makefile as appropriate.
+> 
 
-On 2019-09-05, Christian Brauner <christian.brauner@ubuntu.com> wrote:
-> On Thu, Sep 05, 2019 at 06:19:22AM +1000, Aleksa Sarai wrote:
-> > A common pattern for syscall extensions is increasing the size of a
-> > struct passed from userspace, such that the zero-value of the new fields
-> > result in the old kernel behaviour (allowing for a mix of userspace and
-> > kernel vintages to operate on one another in most cases). This is done
-> > in both directions -- hence two helpers -- though it's more common to
-> > have to copy user space structs into kernel space.
-> >=20
-> > Previously there was no common lib/ function that implemented
-> > the necessary extension-checking semantics (and different syscalls
-> > implemented them slightly differently or incompletely[1]). A future
-> > patch replaces all of the common uses of this pattern to use the new
-> > copy_struct_{to,from}_user() helpers.
-> >=20
-> > [1]: For instance {sched_setattr,perf_event_open,clone3}(2) all do do
-> >      similar checks to copy_struct_from_user() while rt_sigprocmask(2)
-> >      always rejects differently-sized struct arguments.
-> >=20
-> > Suggested-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
-> > Signed-off-by: Aleksa Sarai <cyphar@cyphar.com>
+Ok
+>> Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
+>> ---
+>> v4 --> v5
+>> - rebased on arm64/for-next/core
+>> - merged this patch with KSFT arm64 tags patch, while moving the latter
+>>   into its own subdir
+>> - moved kernel header includes search mechanism from KSFT arm64
+>>   SIGNAL Makefile
+>> - export proper top_srcdir ENV for lib.mk
+>> v3 --> v4
+>> - comment reword
+>> - simplified documentation in README
+>> - dropped README about standalone
+>> ---
+> 
+> [...]
+> 
+>> diff --git a/tools/testing/selftests/arm64/Makefile b/tools/testing/selftests/arm64/Makefile
+>> index a61b2e743e99..5dbb0ffdfc9a 100644
+>> --- a/tools/testing/selftests/arm64/Makefile
+>> +++ b/tools/testing/selftests/arm64/Makefile
+>> @@ -1,11 +1,69 @@
+>>  # SPDX-License-Identifier: GPL-2.0
+>> +# Copyright (C) 2019 ARM Limited
+> 
+> Change of copyright?  This isn't pure Arm IP upstream IIUC.
+> 
+> Maybe just drop it: Makefiles don't usually contain significant IP, so
+> many have no copyright message anyway.
+> 
+Right. I'll drop.
+>> -# ARCH can be overridden by the user for cross compiling
+>> -ARCH ?= $(shell uname -m 2>/dev/null || echo not)
+>> +# When ARCH not overridden for crosscompiling, lookup machine
+>> +ARCH ?= $(shell uname -m)
+>> +ARCH := $(shell echo $(ARCH) | sed -e s/aarch64/arm64/)
+>>  
+>> -ifneq (,$(filter $(ARCH),aarch64 arm64))
+>> -TEST_GEN_PROGS := tags_test
+>> -TEST_PROGS := run_tags_test.sh
+>> +ifeq ("x$(ARCH)", "xarm64")
+>> +SUBDIRS := tags
+>> +else
+>> +SUBDIRS :=
+>>  endif
+>>  
+>> -include ../lib.mk
+>> +CFLAGS := -Wall -O2 -g
+>> +
+>> +# A proper top_srcdir is needed by KSFT(lib.mk)
+>> +top_srcdir = ../../../../..
+>> +
+>> +# Additional include paths needed by kselftest.h and local headers
+>> +CFLAGS += -I$(top_srcdir)/tools/testing/selftests/
+>> +
+>> +# Guessing where the Kernel headers could have been installed
+>> +# depending on ENV config
+>> +ifeq ($(KBUILD_OUTPUT),)
+>> +khdr_dir = $(top_srcdir)/usr/include
+>> +else
+>> +# the KSFT preferred location when KBUILD_OUTPUT is set
+>> +khdr_dir = $(KBUILD_OUTPUT)/kselftest/usr/include
+>> +endif
+> 
+> Looking at this, can we just pass the directory in from the toplevel
+> "all" rule instead of guessing?
+> 
+Do you mean toplevel in KSFT ?
+I think it's how should be done at the end, but I was trying to keep this series on
+arm64/ lands only. (also maybe I'm missing something obvious in KSFT handling of this
+situation....even though many other KSFT use built CFLAGS like: -I../../../usr/include
+or similar)
 
-[...]
+> Maybe don't churn this for now though.  It's something that could be
+> looked at later.
+> 
 
-> > +	if (unlikely(!access_ok(src, usize)))
-> > +		return -EFAULT;
-> > +
-> > +	/* Deal with trailing bytes. */
-> > +	if (usize < ksize)
-> > +		memset(dst + size, 0, rest);
-[...]
-> That's a change in behavior for clone3() and sched at least, no? Unless
-> - which I guess you might have done - you have moved the "error out when
-> the struct is too small" part before the call to copy_struct_from_user()
-> for them.
+Ok. I'll leave here and fix it to avoid relative paths...which could be problematic
+when exported to lower level Makefiles.
 
-Yes, I've put the minimum size check to the callers in all of the
-cases (in the case of clone3() I've #define'd a CLONE_ARGS_SIZE_VER0 to
-match the others -- see patch 2 of the series).
+Cheers
 
---=20
-Aleksa Sarai
-Senior Software Engineer (Containers)
-SUSE Linux GmbH
-<https://www.cyphar.com/>
+Cristian
 
---lfmn5rszd42a2efo
-Content-Type: application/pgp-signature; name="signature.asc"
+> [...]
+> 
+> Apart from the comments above, the patch looks reasonable to me.
+> 
+> Cheers
+> ---Dave
+> 
 
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQSxZm6dtfE8gxLLfYqdlLljIbnQEgUCXXEQPQAKCRCdlLljIbnQ
-EmI0AQDWLDq3CfEAPKhr2gyUgsbcgKNMnsXSA4qFj1Jjd61fzQEAqPhisgSoisGO
-mIYO56C9d94ktWhTGVP9Bs10TG3V/Ac=
-=1PLZ
------END PGP SIGNATURE-----
-
---lfmn5rszd42a2efo--
