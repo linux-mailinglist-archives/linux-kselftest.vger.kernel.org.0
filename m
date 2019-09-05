@@ -2,143 +2,108 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 06DBFA974C
-	for <lists+linux-kselftest@lfdr.de>; Thu,  5 Sep 2019 01:45:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6718AA97D5
+	for <lists+linux-kselftest@lfdr.de>; Thu,  5 Sep 2019 03:11:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729773AbfIDXpS (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 4 Sep 2019 19:45:18 -0400
-Received: from mail-lf1-f65.google.com ([209.85.167.65]:40708 "EHLO
-        mail-lf1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729963AbfIDXpR (ORCPT
+        id S1728286AbfIEBLA (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 4 Sep 2019 21:11:00 -0400
+Received: from mail-lj1-f193.google.com ([209.85.208.193]:34688 "EHLO
+        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726240AbfIEBK7 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 4 Sep 2019 19:45:17 -0400
-Received: by mail-lf1-f65.google.com with SMTP id u29so394873lfk.7
-        for <linux-kselftest@vger.kernel.org>; Wed, 04 Sep 2019 16:45:16 -0700 (PDT)
+        Wed, 4 Sep 2019 21:10:59 -0400
+Received: by mail-lj1-f193.google.com with SMTP id x18so621285ljh.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 04 Sep 2019 18:10:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
+        d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=lkW/YWLZKFkaRlur1cRxiMMOTA0gNhHwo+TbpZCC63g=;
-        b=Cnu5WYs/aAthmsXfnwtWzL5CNjpaY23sMnhFtcX1zve3r2rc/Ho+dRzPF32HPRMBnj
-         gveXLtTDU7YHSGctyOcfke7l1YNaudqputmw6AJ3ZcUOsNYmqHCIu9DY9WHGlywCQ4Su
-         iCCcCFmwH9f6fkeMSqS83pY7B6dx4aSlHZljU=
+         :cc:content-transfer-encoding;
+        bh=WyHVwV+7lAWgH1R2i9ysnM5HCldoC4oI4CCPuZ3doyI=;
+        b=sn/ogdrFBxD994h23gtI7Z2GZH+2UCVo7W8VbjV+/zlgMc9hB0qAzYynFhfr3JE3iK
+         ECCZfC85stQz9yW6kJhViR4GZhBF60S3952VgfnKCZ7euM+qHCkxZ4QJ3ExlepEX1auD
+         cfjDdlfTCWjDInRB5b6yjgzIyB/55ynKlXYXK6hu0oAKed9WGiTU9Iq5c13X14qGZCGG
+         LoznsEDspzcYAEwmxMI2i+9OzFS9XLoeSMFGs4WANzueLs+IC5bLLjyVK7BxdcWkjNUf
+         t+21jvq5j1t5anylXhMZFyqSylwntok2OAq5jSPyMa94jBcjHVCuxV4MvB0Z7LxFgyM4
+         CG1A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=lkW/YWLZKFkaRlur1cRxiMMOTA0gNhHwo+TbpZCC63g=;
-        b=sJjXlV5YT8qWDEEZ4dz3hb/X8ZCAbChVmU4qqhw3nPQVtKacegoDN7UPkqO9AZmwnv
-         8hNUepr6apa+lKffVNqTNwMNQg78AtVTW6/5xkcEfOi+bfa67jKTa/ZBKnIFgSA7Yg+J
-         9ynGEEMvuzkwbmBuSXcFsuZ8r9nsk2P8p9EKYlhb07frUyJUBux7NJpAbnsBce5sZmBH
-         zYPzxI6Ps8yh4QKRhbaPmQH/xlCskKWUH8uWQOvka97/lWJFqaBil5dwmF8jYprZUfjF
-         oVINbZCuqhu3P+5NiSh4MJbArQe/VrLEwimriDBChaTTAHizCbowwcXPK8vune53a7U4
-         +cGw==
-X-Gm-Message-State: APjAAAX9SPmMG0c/4ThTifxdGDV2AjOet9kvWNJu7+vleDxKAi+b8Mag
-        9qEZae1r4hrwyc0SDPtEvFcRJT48Ok8=
-X-Google-Smtp-Source: APXvYqzKmU3/ibp82AcAKWXF3pQXGeCXT8onUqWcHLXos0TFknenumTq3LrdjfUCVoH4Dg7kTXtofQ==
-X-Received: by 2002:ac2:520d:: with SMTP id a13mr389116lfl.101.1567640715206;
-        Wed, 04 Sep 2019 16:45:15 -0700 (PDT)
-Received: from mail-lj1-f170.google.com (mail-lj1-f170.google.com. [209.85.208.170])
-        by smtp.gmail.com with ESMTPSA id c197sm70180lfg.46.2019.09.04.16.45.12
-        for <linux-kselftest@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 04 Sep 2019 16:45:14 -0700 (PDT)
-Received: by mail-lj1-f170.google.com with SMTP id j16so450462ljg.6
-        for <linux-kselftest@vger.kernel.org>; Wed, 04 Sep 2019 16:45:12 -0700 (PDT)
-X-Received: by 2002:a2e:3a0e:: with SMTP id h14mr127121lja.180.1567640710863;
- Wed, 04 Sep 2019 16:45:10 -0700 (PDT)
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=WyHVwV+7lAWgH1R2i9ysnM5HCldoC4oI4CCPuZ3doyI=;
+        b=Iscjs1EADp3FBM2y4KmoY0gDegzGIytbBlYChwtfZeJ+OuX8u1l1r51vgLEbMri6PJ
+         1SQPlsLHg3x2R+CNceXkwuPK+8OWhEagETSIK8DvXM4xai6j1vhytjDZjSTekdmAP4hq
+         9BFJOAB9uW3V81OgHfEaojF8FdenGgNXmuPUGxk9S9R49BGioQcB4X/BIJ4XQl1mZZg6
+         vXPvLItd6m27tGHo3rakunZ9lGZgXrsCP6qVVqbn7DAQMTPehZPF0F1WG1XdhPdGabEK
+         0ASIIvT2pH/ImfuVQ+AT05aIadocAxFmioSCidCndkI4B58Z3XiKcz1ZP+mEUMXStHXb
+         OO0Q==
+X-Gm-Message-State: APjAAAVuQh7JczRHdw/QdfUJVDmfUacsVas4dXZas/ND/4BNvV50g/tz
+        jSuHq8mVzMu6FMccsigntw7QXafH98ZvtpFCVcpxTw==
+X-Google-Smtp-Source: APXvYqyM7YdRaj3gRnVlg7+oOqf7l+oX9vD7se2y3EMoWvepDFR7ywjd44SpkfvRUQrjHtpJtVW6ehpKsplXmar3iIg=
+X-Received: by 2002:a2e:2b89:: with SMTP id r9mr285056ljr.34.1567645857675;
+ Wed, 04 Sep 2019 18:10:57 -0700 (PDT)
 MIME-Version: 1.0
-References: <20190904201933.10736-1-cyphar@cyphar.com> <20190904201933.10736-11-cyphar@cyphar.com>
- <CAHk-=wiod1rQMU+6Zew=cLE8uX4tUdf42bM5eKngMnNVS2My7g@mail.gmail.com>
- <20190904214856.vnvom7h5xontvngq@yavin.dot.cyphar.com> <CAHk-=wgcJq21Hydh7Tx5-o8empoPp7ULDBw0Am-du_Pa+fcftQ@mail.gmail.com>
- <20592.1567636276@warthog.procyon.org.uk> <CAHk-=wg7Wq1kj8kZ+SSpfU_o991woW60NWca9yBA2ccs2eNx8Q@mail.gmail.com>
- <20190904232911.GN1131@ZenIV.linux.org.uk>
-In-Reply-To: <20190904232911.GN1131@ZenIV.linux.org.uk>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Wed, 4 Sep 2019 16:44:54 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wjx3y1Y7iE6T0yiERc8G5iT1sTABWbX_nFxw9NVHCFCPA@mail.gmail.com>
-Message-ID: <CAHk-=wjx3y1Y7iE6T0yiERc8G5iT1sTABWbX_nFxw9NVHCFCPA@mail.gmail.com>
-Subject: Re: [PATCH v12 10/12] namei: aggressively check for nd->root escape
- on ".." resolution
-To:     Al Viro <viro@zeniv.linux.org.uk>
-Cc:     David Howells <dhowells@redhat.com>,
-        Aleksa Sarai <cyphar@cyphar.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J. Bruce Fields" <bfields@fieldses.org>,
-        Arnd Bergmann <arnd@arndb.de>, Shuah Khan <shuah@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Christian Brauner <christian@brauner.io>,
-        Jann Horn <jannh@google.com>,
-        Kees Cook <keescook@chromium.org>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Tycho Andersen <tycho@tycho.ws>,
-        David Drysdale <drysdale@google.com>,
-        Chanho Min <chanho.min@lge.com>,
-        Oleg Nesterov <oleg@redhat.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Aleksa Sarai <asarai@suse.de>,
-        Linux Containers <containers@lists.linux-foundation.org>,
-        alpha <linux-alpha@vger.kernel.org>,
-        Linux API <linux-api@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        linux-ia64@vger.kernel.org,
-        Linux List Kernel Mailing <linux-kernel@vger.kernel.org>,
+References: <943338456.3594.1567519226589.JavaMail.javamailuser@localhost> <34634351-ecff-4520-cbc0-8ab6a4412150@kernel.org>
+In-Reply-To: <34634351-ecff-4520-cbc0-8ab6a4412150@kernel.org>
+From:   =?UTF-8?B?RGFuaWVsIETDrWF6?= <daniel.diaz@linaro.org>
+Date:   Wed, 4 Sep 2019 20:10:46 -0500
+Message-ID: <CAEUSe78FOo26W+96v4o5mv3Dr5HvWdgssEXDaq4b_kJZhCY+TQ@mail.gmail.com>
+Subject: Re: next-20190903 kselftest results
+To:     shuah <shuah@kernel.org>
+Cc:     ci_notify@linaro.org, lkft-triage@lists.linaro.org,
+        Dan Rue <dan.rue@linaro.org>,
+        Anders Roxell <anders.roxell@linaro.org>,
+        Naresh Kamboju <naresh.kamboju@linaro.org>,
         "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        Linux-sh list <linux-sh@vger.kernel.org>,
-        linux-xtensa@linux-xtensa.org, sparclinux@vger.kernel.org
+        <linux-kselftest@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Sep 4, 2019 at 4:29 PM Al Viro <viro@zeniv.linux.org.uk> wrote:
->
-> On Wed, Sep 04, 2019 at 03:38:20PM -0700, Linus Torvalds wrote:
-> > On Wed, Sep 4, 2019 at 3:31 PM David Howells <dhowells@redhat.com> wrote:
-> > >
-> > > It ought to be reasonably easy to make them per-sb at least, I think.  We
-> > > don't allow cross-super rename, right?
+Hello!
+
+On Wed, 4 Sep 2019 at 17:44, shuah <shuah@kernel.org> wrote:
+> On 9/3/19 8:00 AM, ci_notify@linaro.org wrote:
+> > Summary
+> > -----------------------------------------------------------------------=
+-
+> > kernel: 5.3.0-rc7
+> > git repo: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-ne=
+xt.git
+> > git branch: master
+> > git commit: 7dc4585e03786f84d6e9dc16caa3ba5b8b44d986
+> > git describe: next-20190903
+> > Test details: https://qa-reports.linaro.org/lkft/linux-next-oe/build/ne=
+xt-20190903
 > >
-> > Right now the sequence count handling very much depends on it being a
-> > global entity on the reader side, at least.
-> >
-> > And while the rename sequence count could (and probably should) be
-> > per-sb, the same is very much not true of the mount one.
+> > Regressions (compared to build next-20190902)
 >
-> Huh?  That will cost us having to have a per-superblock dentry
-> hash table; recall that lockless lockup can give false negatives
-> if something gets moved from chain to chain, and rename_lock is
-> first and foremost used to catch those and retry.  If we split
-> it on per-superblock basis, we can't have dentries from different
-> superblocks in the same chain anymore...
+> Looks like you are running kselftest from 5.2 on this linux-next.
+> You won't be able to find any kselftest test regressions this way.
+> You aren't testing the kselftest patches that are in linux-next
+> for Linux 5.4-rc1.
 
-That's exactly the "very much depends on it being a global entity on
-the reader side" thing.
+The way OE refers to versions can be confusing (it was for me, at
+least). The version is said to be "5.2+gitAUTOINC+7dc4585e03", which
+means that it's 5.2 (last known version) + some Git commits. In this
+case, 7dc4585e03 points to next-20190903.
 
-I'm not convinced that's the _only_ way to handle things. Maybe a
-combination of (wild handwaving) per-hashqueue sequence count and some
-clever scheme for pathname handling could work.
 
-I've not personally seen a load where the global rename lock has been
-a problem (very few things really do a lot of renames), but
-system-wide locks do make me nervous.
+> It would be helpful if you match the kernel and kselftest for linux-next
+> and Linux mainline.
 
-We have other (and worse) ones. tasklist_lock comes to mind.
+Indeed, we do that exactly:
+* linux-next is tested with the in-kernel version of kselftests
+* linux-mainline is tested with the in-kernel version of kselftests
+* linux-stable 5.2 is tested with the latest released kselftests
+(*should* be 5.2.11)
+* linux-stable 4.19 is tested with the latest released kselftests
+(*should* be 5.2.11)
+* and so on for 4.14, 4.9 and 4.4
 
-             Linus
+Greetings!
+
+Daniel D=C3=ADaz
+daniel.diaz@linaro.org
