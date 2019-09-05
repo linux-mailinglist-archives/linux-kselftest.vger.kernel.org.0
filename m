@@ -2,125 +2,124 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E1F5EAAC7F
-	for <lists+linux-kselftest@lfdr.de>; Thu,  5 Sep 2019 21:55:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 234BFAAC8A
+	for <lists+linux-kselftest@lfdr.de>; Thu,  5 Sep 2019 21:57:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388682AbfIETzY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 5 Sep 2019 15:55:24 -0400
-Received: from mail-oi1-f193.google.com ([209.85.167.193]:33635 "EHLO
-        mail-oi1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726008AbfIETzY (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 5 Sep 2019 15:55:24 -0400
-Received: by mail-oi1-f193.google.com with SMTP id e12so2700177oie.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 05 Sep 2019 12:55:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=0E53FGGcFw2XkCPybueZ5rdV/s9NQh6tuW3+GUXCXGs=;
-        b=VGbVic4g4iq558TW4/70JbzqBVSLs2OD6RYvmwl5QuMLvX12QTRqKBc25h98tnlvfd
-         v80uRkHZ/GTRqZ9g0C91oXPt7FF9Cjg2RFsnqXMbw5eyQo4fETfoQfYqB3ODTpk1KGbT
-         Sh7ZlY3E1TGKRoYaW0H4kZo4b2PTayljx1y2V3yNZ4Xk1AiYBIE7CMPHAO6aUXmgSVvL
-         n+hxUokjuXNIO43xyQEVoEOE/WcMVZM7h6kPMc9wbPx58jxtemgv5zSJ0dDz0qRpK6Bu
-         TGXYQQxbrjGOBl9YxOCNePENdnFw6LVmvebG7GfSIuvOrT+Ti3KvjxrDKiOToU7kEiSF
-         wq6A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=0E53FGGcFw2XkCPybueZ5rdV/s9NQh6tuW3+GUXCXGs=;
-        b=Dg/MlwJSzrP0eAmAliWq1mjxr8v/E+CKz8EoJ55NBbWyKWQu15k+a2sAAvbRRYVbaW
-         GLojKWpe+jK/pgW0h+vM/uMeeOgSgbJDaEZk082XFBRgtMxRmC+PgLCcoRwdPeUGMqcC
-         hvXZY+64fZaX9G5RltdxYNslIazDadYgfZHBj2ynpprZ9e/V27/a0n6nMTFCP3uOfXp+
-         7preRZiFZ8F/u8Us3Iv7W4dBfqqSfCp/cKTzsqhs8lCg/AlDXyzclIEYwEebcF3jocFU
-         mDIxInoasduumcUWecs8Ly/UkIMgK23stVHugVPTdHP6DHwmIf02fLURLBnuJSNTSO2n
-         Ymkg==
-X-Gm-Message-State: APjAAAUe6yiGAxC9Gcc0dpqKgUnbTLUIB0EMt4ygWkaZKE8EKmkWZkqr
-        17tIbPL6yzCjEowwQUFJngp1GUOmf3NSUamMSI09LA==
-X-Google-Smtp-Source: APXvYqx6VttttrIJnDmBplUS87vH5bQEfhKTAgd32Tl3Oi50+6KfQnD/K/l60tl025VmSmrNPuDhwiRmvNSPrZdx/7U=
-X-Received: by 2002:aca:da86:: with SMTP id r128mr4231021oig.103.1567713322635;
- Thu, 05 Sep 2019 12:55:22 -0700 (PDT)
-MIME-Version: 1.0
-References: <20190826233240.11524-1-almasrymina@google.com>
- <20190828112340.GB7466@dhcp22.suse.cz> <CAHS8izPPhPoqh-J9LJ40NJUCbgTFS60oZNuDSHmgtMQiYw72RA@mail.gmail.com>
- <20190829071807.GR28313@dhcp22.suse.cz> <cb7ebcce-05c5-3384-5632-2bbac9995c15@oracle.com>
-In-Reply-To: <cb7ebcce-05c5-3384-5632-2bbac9995c15@oracle.com>
-From:   Mina Almasry <almasrymina@google.com>
-Date:   Thu, 5 Sep 2019 12:55:11 -0700
-Message-ID: <CAHS8izP=8WDvZvTjenX5CtdKfYTbOO+bU7oK1Nx=r7QZrBjpaw@mail.gmail.com>
-Subject: Re: [PATCH v3 0/6] hugetlb_cgroup: Add hugetlb_cgroup reservation limits
-To:     Mike Kravetz <mike.kravetz@oracle.com>
-Cc:     Michal Hocko <mhocko@kernel.org>, shuah <shuah@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Greg Thelen <gthelen@google.com>,
+        id S2391558AbfIET4y (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 5 Sep 2019 15:56:54 -0400
+Received: from mx2.mailbox.org ([80.241.60.215]:58904 "EHLO mx2.mailbox.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1733174AbfIET4y (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 5 Sep 2019 15:56:54 -0400
+Received: from smtp2.mailbox.org (smtp2.mailbox.org [80.241.60.241])
+        (using TLSv1.2 with cipher ECDHE-RSA-CHACHA20-POLY1305 (256/256 bits))
+        (No client certificate requested)
+        by mx2.mailbox.org (Postfix) with ESMTPS id DCACBA0D19;
+        Thu,  5 Sep 2019 21:56:47 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at heinlein-support.de
+Received: from smtp2.mailbox.org ([80.241.60.241])
+        by spamfilter04.heinlein-hosting.de (spamfilter04.heinlein-hosting.de [80.241.56.122]) (amavisd-new, port 10030)
+        with ESMTP id MUcBvZslYqK5; Thu,  5 Sep 2019 21:56:42 +0200 (CEST)
+Date:   Fri, 6 Sep 2019 05:56:18 +1000
+From:   Aleksa Sarai <cyphar@cyphar.com>
+To:     Al Viro <viro@zeniv.linux.org.uk>
+Cc:     Christian Brauner <christian.brauner@ubuntu.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J. Bruce Fields" <bfields@fieldses.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        David Howells <dhowells@redhat.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Christian Brauner <christian@brauner.io>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Andy Lutomirski <luto@kernel.org>,
         Andrew Morton <akpm@linux-foundation.org>,
-        khalid.aziz@oracle.com, open list <linux-kernel@vger.kernel.org>,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        cgroups@vger.kernel.org,
-        Aneesh Kumar <aneesh.kumar@linux.vnet.ibm.com>,
-        =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>,
-        Tejun Heo <tj@kernel.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Li Zefan <lizefan@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
+        Alexei Starovoitov <ast@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Jann Horn <jannh@google.com>, Tycho Andersen <tycho@tycho.ws>,
+        David Drysdale <drysdale@google.com>,
+        Chanho Min <chanho.min@lge.com>,
+        Oleg Nesterov <oleg@redhat.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Aleksa Sarai <asarai@suse.de>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        containers@lists.linux-foundation.org, linux-alpha@vger.kernel.org,
+        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-ia64@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        linux-xtensa@linux-xtensa.org, sparclinux@vger.kernel.org
+Subject: Re: [PATCH v12 01/12] lib: introduce copy_struct_{to,from}_user
+ helpers
+Message-ID: <20190905195618.pwzgvuzadkfpznfz@yavin.dot.cyphar.com>
+References: <20190904201933.10736-1-cyphar@cyphar.com>
+ <20190904201933.10736-2-cyphar@cyphar.com>
+ <20190905180750.GQ1131@ZenIV.linux.org.uk>
+ <20190905182303.7f6bxpa2enbgcegv@wittgenstein>
+ <20190905182801.GR1131@ZenIV.linux.org.uk>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="lkob4nx2s4nikwgg"
+Content-Disposition: inline
+In-Reply-To: <20190905182801.GR1131@ZenIV.linux.org.uk>
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Sep 3, 2019 at 10:58 AM Mike Kravetz <mike.kravetz@oracle.com> wrote:
->
-> On 8/29/19 12:18 AM, Michal Hocko wrote:
-> > [Cc cgroups maintainers]
-> >
-> > On Wed 28-08-19 10:58:00, Mina Almasry wrote:
-> >> On Wed, Aug 28, 2019 at 4:23 AM Michal Hocko <mhocko@kernel.org> wrote:
-> >>>
-> >>> On Mon 26-08-19 16:32:34, Mina Almasry wrote:
-> >>>>  mm/hugetlb.c                                  | 493 ++++++++++++------
-> >>>>  mm/hugetlb_cgroup.c                           | 187 +++++--
-> >>>
-> >>> This is a lot of changes to an already subtle code which hugetlb
-> >>> reservations undoubly are.
-> >>
-> >> For what it's worth, I think this patch series is a net decrease in
-> >> the complexity of the reservation code, especially the region_*
-> >> functions, which is where a lot of the complexity lies. I removed the
-> >> race between region_del and region_{add|chg}, refactored the main
-> >> logic into smaller code, moved common code to helpers and deleted the
-> >> duplicates, and finally added lots of comments to the hard to
-> >> understand pieces. I hope that when folks review the changes they will
-> >> see that! :)
-> >
-> > Post those improvements as standalone patches and sell them as
-> > improvements. We can talk about the net additional complexity of the
-> > controller much easier then.
->
-> All such changes appear to be in patch 4 of this series.  The commit message
-> says "region_add() and region_chg() are heavily refactored to in this commit
-> to make the code easier to understand and remove duplication.".  However, the
-> modifications were also added to accommodate the new cgroup reservation
-> accounting.  I think it would be helpful to explain why the existing code does
-> not work with the new accounting.  For example, one change is because
-> "existing code coalesces resv_map entries for shared mappings.  new cgroup
-> accounting requires that resv_map entries be kept separate for proper
-> uncharging."
->
-> I am starting to review the changes, but it would help if there was a high
-> level description.  I also like Michal's idea of calling out the region_*
-> changes separately.  If not a standalone patch, at least the first patch of
-> the series.  This new code will be exercised even if cgroup reservation
-> accounting not enabled, so it is very important than no subtle regressions
-> be introduced.
->
 
-Yep, seems I'm not calling out these changes as clearly as I should.
-I'll look into breaking them into separate patches. I'll probably put
-them as a separate patch or right behind current patchset 4, since
-they are really done to make removing the coalescing a bit easier. Let
-me look into that.
+--lkob4nx2s4nikwgg
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> --
-> Mike Kravetz
+On 2019-09-05, Al Viro <viro@zeniv.linux.org.uk> wrote:
+> On Thu, Sep 05, 2019 at 08:23:03PM +0200, Christian Brauner wrote:
+>=20
+> > Because every caller of that function right now has that limit set
+> > anyway iirc. So we can either remove it from here and place it back for
+> > the individual callers or leave it in the helper.
+> > Also, I'm really asking, why not? Is it unreasonable to have an upper
+> > bound on the size (for a long time probably) or are you disagreeing with
+> > PAGE_SIZE being used? PAGE_SIZE limit is currently used by sched, perf,
+> > bpf, and clone3 and in a few other places.
+>=20
+> For a primitive that can be safely used with any size (OK, any within
+> the usual 2Gb limit)?  Why push the random policy into the place where
+> it doesn't belong?
+>=20
+> Seriously, what's the point?  If they want to have a large chunk of
+> userland memory zeroed or checked for non-zeroes - why would that
+> be a problem?
+
+Thinking about it some more, there isn't really any r/w amplification --
+so there isn't much to gain by passing giant structs. Though, if we are
+going to permit 2GB buffers, isn't that also an argument to use
+memchr_inv()? :P
+
+--=20
+Aleksa Sarai
+Senior Software Engineer (Containers)
+SUSE Linux GmbH
+<https://www.cyphar.com/>
+
+--lkob4nx2s4nikwgg
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQSxZm6dtfE8gxLLfYqdlLljIbnQEgUCXXFoXwAKCRCdlLljIbnQ
+EkH6AP4mTXfGXldo6DW9pN3b8QgoKfRKIsKKRirvrHzSGLXpkgEAgJQFw7jvGxM5
+R7P96Ylo52dN3tmTa+41vZfPhMozHwA=
+=OHll
+-----END PGP SIGNATURE-----
+
+--lkob4nx2s4nikwgg--
