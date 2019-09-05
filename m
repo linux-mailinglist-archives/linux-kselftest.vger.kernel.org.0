@@ -2,851 +2,349 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 87511A9C7B
-	for <lists+linux-kselftest@lfdr.de>; Thu,  5 Sep 2019 10:00:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C444A9D56
+	for <lists+linux-kselftest@lfdr.de>; Thu,  5 Sep 2019 10:43:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726073AbfIEIAw (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 5 Sep 2019 04:00:52 -0400
-Received: from mail-wr1-f66.google.com ([209.85.221.66]:40182 "EHLO
-        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728072AbfIEIAw (ORCPT
+        id S1732003AbfIEIn6 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 5 Sep 2019 04:43:58 -0400
+Received: from mail-lj1-f194.google.com ([209.85.208.194]:45040 "EHLO
+        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731737AbfIEIn6 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 5 Sep 2019 04:00:52 -0400
-Received: by mail-wr1-f66.google.com with SMTP id w13so1514945wru.7
-        for <linux-kselftest@vger.kernel.org>; Thu, 05 Sep 2019 01:00:47 -0700 (PDT)
+        Thu, 5 Sep 2019 04:43:58 -0400
+Received: by mail-lj1-f194.google.com with SMTP id u14so1512452ljj.11
+        for <linux-kselftest@vger.kernel.org>; Thu, 05 Sep 2019 01:43:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:date:to:message-id:subject:mime-version;
-        bh=mYRVdqFmbU+Qu5XS9rM17tDyepQrnCnwVuTSHAlCIew=;
-        b=pHGkiCOmZYRSCqV2TC200/Lr5XswVlAwCcht81RKZhI+J6B51KhJCjPCYBzb6tDqcl
-         TcYuiYONB/Lr1jaPZxH34cWxtdYpK5teIuJZuNe8Dlx80w0VNv/1Q+RP4C6+eXzcpji8
-         4OLS18GbpVDP4YOL6gyrZvJfMVkxMozYIkb8IA+pLSRgSmskZLTJT+YxjxBGAdruziMi
-         h26dn1K2o5tmceR0CUuHyl73qVM23bQArPfBR6y3L/u2HvBb6tq0UfL/9+EQJYbCwpmf
-         noFmywPmr2mfGdrd8aMB1IC3HAGxaLAEWSgJ6cuu9ukOy4nNfscdCuNDyGGPACHRTavY
-         yjSg==
+        d=rasmusvillemoes.dk; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=NBuoXU/CsvpEfHDk6v7qAee7rwiMK16vCU2UCK4nqCQ=;
+        b=N6IVzoEohl3Ii8OgzeM6vAo9dY5+J6qYVU5h5ZRS7mowRtkkYIOgOVnCpVVmpMuP4M
+         JnwE+sy/QoDSWwTWRo6bHTZUWVmRUdVAAthZM02dIMNYyiwdhWwEDXgYyipiWXEyubVf
+         ef+6I5cJONBZQkYxa9wFQDCcEfEWCsqK9Ws1g=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:date:to:message-id:subject:mime-version;
-        bh=mYRVdqFmbU+Qu5XS9rM17tDyepQrnCnwVuTSHAlCIew=;
-        b=G+EWEGyZS592tzSu1/f12vLkFN9Nz5YtFIFyhC8xPGgGs1vugf6fVvw3suKSpBVjss
-         HwvFkRKgZdX346Xqp4wJ3aThe9yuXh5ckqgLuHqyoSAUXubhzEwEKNI7hY/QGaeBUO58
-         j69inzRsxiEzeh7GI+lJto//bbn8x4iWGMmUfv+zd0kjMB1cw3ePI9RB9nnLvNAYoKQr
-         HacRL7EcTqi5xvwyfM+a5VMHJ/lthBYouG+iV3765ExedVMRrGjm1g7Qg72fffWrThM2
-         5A9Q4qOLA8+1fEiODXrJhyrR/zencQaz44IcE6vHQAkq5UVxjhPB5r7k7+/NbbZBHmOD
-         WPEw==
-X-Gm-Message-State: APjAAAW0iqYCT5f3eK8EX5pXc0kzjLC4vA2qeHSsYLH0eko8p+Yzpo7M
-        0NQhuaVHx4hmRrIQ7Uv1IpfWeA==
-X-Google-Smtp-Source: APXvYqxYaNTEAMoxfgOJaX6/x2DqaxRPrlqDKisRQJEx/QvMbLNkKi65oiwcdDuvFLDuwMwZ7QEGmQ==
-X-Received: by 2002:adf:ffc6:: with SMTP id x6mr1514301wrs.346.1567670447114;
-        Thu, 05 Sep 2019 01:00:47 -0700 (PDT)
-Received: from jenkins (ci.linaro.org. [88.99.136.175])
-        by smtp.gmail.com with ESMTPSA id q24sm6096118wmc.3.2019.09.05.01.00.46
-        (version=TLS1 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
-        Thu, 05 Sep 2019 01:00:46 -0700 (PDT)
-From:   ci_notify@linaro.org
-X-Google-Original-From: linaro-infrastructure-errors@lists.linaro.org
-Date:   Thu, 5 Sep 2019 08:00:46 +0000 (UTC)
-To:     lkft-triage@lists.linaro.org, dan.rue@linaro.org,
-        anders.roxell@linaro.org, naresh.kamboju@linaro.org,
-        shuah@kernel.org, linux-kselftest@vger.kernel.org
-Message-ID: <1840878247.3764.1567670446497.JavaMail.javamailuser@localhost>
-Subject: next-20190904 kselftest results
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=NBuoXU/CsvpEfHDk6v7qAee7rwiMK16vCU2UCK4nqCQ=;
+        b=iWeGnL/3IwYCDHwqOCsRqVXwXBrAhHmBedJCV5AFDa1l+cprHADiMzO9UpXCURCgs1
+         uyrSJFW5cpb3gbB6QgJNOyvL9RTpsfNYdLGAQJrWzE6YA++7wpiz9zh0iper5s4PEYSy
+         /ikkziUUclDQC1Z2Aj7mhAG1ew/RBbayFHXLwk9FQjV0kPmSlW/MmRdnq6DrMU2HsVY7
+         aSapM7CprAIz6YhFIYJhfPZ3V1ZENoQ/JQ8dolrA9VBzMQ7dosqIIESCxhY6rige4wjk
+         LvQL8QPshJP1Om6zrxnRub/IsL7wFVS40VkzGucEzzPZm8yDZW2Wxruj0hsVupCj4bR9
+         0K6Q==
+X-Gm-Message-State: APjAAAVnWtLXZB0Sqa2p+u1r+3khDhlZDn7GD6nnc64RtMhHSdOkftPO
+        IGr3FaoS9a/Q1mGuEV0ktCKNnQ==
+X-Google-Smtp-Source: APXvYqytSckEtF1ynO/D0dH8NXuZW7wdO2pDnnfImuEUflVZ+2h5sNxfU5qE5h9/+CC+5M7TGsxbSA==
+X-Received: by 2002:a05:651c:1023:: with SMTP id w3mr1206160ljm.94.1567673035658;
+        Thu, 05 Sep 2019 01:43:55 -0700 (PDT)
+Received: from [172.16.11.28] ([81.216.59.226])
+        by smtp.gmail.com with ESMTPSA id k7sm249936lji.68.2019.09.05.01.43.52
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 05 Sep 2019 01:43:54 -0700 (PDT)
+Subject: Re: [PATCH v12 01/12] lib: introduce copy_struct_{to,from}_user
+ helpers
+To:     Aleksa Sarai <cyphar@cyphar.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J. Bruce Fields" <bfields@fieldses.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        David Howells <dhowells@redhat.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Christian Brauner <christian@brauner.io>
+Cc:     Eric Biederman <ebiederm@xmission.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Jann Horn <jannh@google.com>, Tycho Andersen <tycho@tycho.ws>,
+        David Drysdale <drysdale@google.com>,
+        Chanho Min <chanho.min@lge.com>,
+        Oleg Nesterov <oleg@redhat.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Aleksa Sarai <asarai@suse.de>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        containers@lists.linux-foundation.org, linux-alpha@vger.kernel.org,
+        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-ia64@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        linux-xtensa@linux-xtensa.org, sparclinux@vger.kernel.org
+References: <20190904201933.10736-1-cyphar@cyphar.com>
+ <20190904201933.10736-2-cyphar@cyphar.com>
+From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
+Message-ID: <57ba3752-c4a6-d2a4-1a4d-a0e13bccd473@rasmusvillemoes.dk>
+Date:   Thu, 5 Sep 2019 10:43:52 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-Content-Type: multipart/mixed; 
-        boundary="----=_Part_3763_1640767816.1567670446048"
-X-Jenkins-Job: LKFT Notify kselftest on next
-X-Jenkins-Result: SUCCESS
+In-Reply-To: <20190904201933.10736-2-cyphar@cyphar.com>
+Content-Type: text/plain; charset=windows-1252
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-------=_Part_3763_1640767816.1567670446048
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+On 04/09/2019 22.19, Aleksa Sarai wrote:
+> A common pattern for syscall extensions is increasing the size of a
+> struct passed from userspace, such that the zero-value of the new fields
+> result in the old kernel behaviour (allowing for a mix of userspace and
+> kernel vintages to operate on one another in most cases). This is done
+> in both directions -- hence two helpers -- though it's more common to
+> have to copy user space structs into kernel space.
+> 
+> Previously there was no common lib/ function that implemented
+> the necessary extension-checking semantics (and different syscalls
+> implemented them slightly differently or incompletely[1]). A future
+> patch replaces all of the common uses of this pattern to use the new
+> copy_struct_{to,from}_user() helpers.
+> 
+> [1]: For instance {sched_setattr,perf_event_open,clone3}(2) all do do
+>      similar checks to copy_struct_from_user() while rt_sigprocmask(2)
+>      always rejects differently-sized struct arguments.
+> 
+> Suggested-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
+> Signed-off-by: Aleksa Sarai <cyphar@cyphar.com>
+> ---
+> diff --git a/lib/struct_user.c b/lib/struct_user.c
+> new file mode 100644
+> index 000000000000..7301ab1bbe98
+> --- /dev/null
+> +++ b/lib/struct_user.c
+> @@ -0,0 +1,182 @@
+> +// SPDX-License-Identifier: GPL-2.0-or-later
+> +/*
+> + * Copyright (C) 2019 SUSE LLC
+> + * Copyright (C) 2019 Aleksa Sarai <cyphar@cyphar.com>
+> + */
+> +
+> +#include <linux/types.h>
+> +#include <linux/export.h>
+> +#include <linux/uaccess.h>
+> +#include <linux/kernel.h>
+> +#include <linux/string.h>
+> +
+> +#define BUFFER_SIZE 64
+> +
+> +/*
+> + * "memset(p, 0, size)" but for user space buffers. Caller must have already
+> + * checked access_ok(p, size).
+> + */
 
-Summary
-------------------------------------------------------------------------
-kernel: 5.3.0-rc7
-git repo: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-git branch: master
-git commit: 35394d031b710e832849fca60d0f53b513f0c390
-git describe: next-20190904
-Test details: https://qa-reports.linaro.org/lkft/linux-next-oe/build/next-20190904
+Isn't this __clear_user() exactly (perhaps except for the return value)?
+Perhaps not every arch has that?
 
-Regressions (compared to build next-20190903)
-------------------------------------------------------------------------
-No regressions                                                                                                          
-                                                                                                                       
-Fixes (compared to build next-20190903)                                                                   
-------------------------------------------------------------------------                                               
-No fixes
+> +static int __memzero_user(void __user *p, size_t s)
+> +{
+> +	const char zeros[BUFFER_SIZE] = {};
+> +	while (s > 0) {
+> +		size_t n = min(s, sizeof(zeros));
+> +
+> +		if (__copy_to_user(p, zeros, n))
+> +			return -EFAULT;
+> +
+> +		p += n;
+> +		s -= n;
+> +	}
+> +	return 0;
+> +}
+> +
+> +/**
+> + * copy_struct_to_user: copy a struct to user space
+> + * @dst:   Destination address, in user space.
+> + * @usize: Size of @dst struct.
+> + * @src:   Source address, in kernel space.
+> + * @ksize: Size of @src struct.
+> + *
+> + * Returns (in all cases, some data may have been copied):
+> + *  * -EFBIG:  (@usize < @ksize) and there are non-zero trailing bytes in @src.
+> + *  * -EFAULT: access to user space failed.
+> + */
+> +int copy_struct_to_user(void __user *dst, size_t usize,
+> +			const void *src, size_t ksize)
+> +{
+> +	size_t size = min(ksize, usize);
+> +	size_t rest = abs(ksize - usize);
 
-In total:
-------------------------------------------------------------------------
-Ran 2051 total tests in the following environments and test suites.
-pass 1195
-fail 709
-xfail 0
-skip 147
+Eh, I'd avoid abs() here due to the funkiness of the implicit type
+conversions - ksize-usize has type size_t, then that's coerced to an int
+(or a long maybe?), the abs is applied which return an int/long (or
+unsigned versions?). Something like "rest = max(ksize, usize) - size;"
+is more obviously correct and doesn't fall into any
+narrowing/widening/sign extending traps.
 
-Environments
---------------
-- dragonboard-410c - arm64
-- hi6220-hikey - arm64
-- i386
-- juno-r2 - arm64
-- qemu_arm
-- qemu_arm64
-- qemu_i386
-- qemu_x86_64
-- x15 - arm
-- x86_64
+> +	if (unlikely(usize > PAGE_SIZE))
+> +		return -EFAULT;
 
-Test Suites
------------
-* kselftest
-* kselftest-vsyscall-mode-native
-* kselftest-vsyscall-mode-none
+Please don't. That is a restriction on all future extensions - once a
+kernel is shipped with a syscall using this helper with that arbitrary
+restriction in place, that syscall is forever prevented from extending
+its arg struct beyond PAGE_SIZE (which is arch-dependent anyway). Sure,
+it's hard to imagine, but who'd have thought 32 O_* or CLONE_* bits
+weren't enough for everybody?
 
+This is only for future compatibility, and if someone runs an app
+compiled against 7.3 headers on a 5.4 kernel, they probably don't care
+about performance, but they would like their app to run.
 
-Failures
-------------------------------------------------------------------------
+[If we ever create such a large ABI struct that doesn't fit on stack,
+we'd have to extend our API a little to create a dup_struct_from_user()
+that does the kmalloc() for us and then calls copy_struct_from_user() -
+but we might want that long before we hit PAGE_SIZE structs].
 
-juno-r2:
-* kselftest/binderfs_binderfs_test
-* kselftest/bpf_get_cgroup_id_user
-* kselftest/bpf_test_bpftool_build.sh
-* kselftest/bpf_test_btf_dump
-* kselftest/bpf_test_flow_dissector.sh
-* kselftest/bpf_test_libbpf.sh
-* kselftest/bpf_test_lwt_ip_encap.sh
-* kselftest/bpf_test_lwt_seg6local.sh
-* kselftest/bpf_test_maps
-* kselftest/bpf_test_netcnt
-* kselftest/bpf_test_progs
-* kselftest/bpf_test_select_reuseport
-* kselftest/bpf_test_sock_addr.sh
-* kselftest/bpf_test_socket_cookie
-* kselftest/bpf_test_sock_fields
-* kselftest/bpf_test_sockmap
-* kselftest/bpf_test_sockopt_inherit
-* kselftest/bpf_test_sockopt_sk
-* kselftest/bpf_test_tc_edt.sh
-* kselftest/bpf_test_tcpbpf_user
-* kselftest/bpf_test_tcp_check_syncookie.sh
-* kselftest/bpf_test_tcpnotify_user
-* kselftest/bpf_test_tcp_rtt
-* kselftest/bpf_test_tc_tunnel.sh
-* kselftest/bpf_test_tunnel.sh
-* kselftest/bpf_test_verifier
-* kselftest/bpf_test_xdping.sh
-* kselftest/bpf_xdping
-* kselftest/cgroup_test_freezer
-* kselftest/cpufreq_main.sh
-* kselftest/firmware_fw_run_tests.sh
-* kselftest/ftrace_ftracetest
-* kselftest/kvm_clear_dirty_log_test
-* kselftest/kvm_cr4_cpuid_sync_test
-* kselftest/kvm_dirty_log_test
-* kselftest/kvm_evmcs_test
-* kselftest/kvm_hyperv_cpuid
-* kselftest/kvm_kvm_create_max_vcpus
-* kselftest/kvm_mmio_warning_test
-* kselftest/kvm_platform_info_test
-* kselftest/kvm_set_sregs_test
-* kselftest/kvm_smm_test
-* kselftest/kvm_state_test
-* kselftest/kvm_sync_regs_test
-* kselftest/kvm_vmx_close_while_nested_test
-* kselftest/kvm_vmx_set_nested_state_test
-* kselftest/kvm_vmx_tsc_adjust_test
-* kselftest/lib_bitmap.sh
-* kselftest/lib_prime_numbers.sh
-* kselftest/lib_printf.sh
-* kselftest/lib_strscpy.sh
-* kselftest/net_fib-onlink-tests.sh
-* kselftest/net_fib_rule_tests.sh
-* kselftest/net_fib_tests.sh
-* kselftest/netfilter_nft_nat.sh
-* kselftest/net_ip_defrag.sh
-* kselftest/net_l2tp.sh
-* kselftest/net_pmtu.sh
-* kselftest/net_psock_snd.sh
-* kselftest/net_run_netsocktests
-* kselftest/net_tcp_fastopen_backup_key.sh
-* kselftest/net_test_vxlan_under_vrf.sh
-* kselftest/pidfd_pidfd_open_test
-* kselftest/pidfd_pidfd_poll_test
-* kselftest/pidfd_pidfd_test
-* kselftest/pidfd_pidfd_wait
-* kselftest/pstore_pstore_tests
-* kselftest/timestamping_txtimestamp.sh
-* kselftest/tpm2_test_smoke.sh
-* kselftest/tpm2_test_space.sh
+> +	if (unlikely(!access_ok(dst, usize)))
+> +		return -EFAULT;
+> +
+> +	/* Deal with trailing bytes. */
+> +	if (usize < ksize) {
+> +		if (memchr_inv(src + size, 0, rest))
+> +			return -EFBIG;
+> +	} else if (usize > ksize) {
+> +		if (__memzero_user(dst + size, rest))
+> +			return -EFAULT;
 
-qemu_arm64:
-* kselftest/binderfs_binderfs_test
-* kselftest/bpf_get_cgroup_id_user
-* kselftest/bpf_test_bpftool_build.sh
-* kselftest/bpf_test_btf_dump
-* kselftest/bpf_test_flow_dissector.sh
-* kselftest/bpf_test_libbpf.sh
-* kselftest/bpf_test_lwt_ip_encap.sh
-* kselftest/bpf_test_lwt_seg6local.sh
-* kselftest/bpf_test_maps
-* kselftest/bpf_test_netcnt
-* kselftest/bpf_test_progs
-* kselftest/bpf_test_select_reuseport
-* kselftest/bpf_test_sock_addr.sh
-* kselftest/bpf_test_socket_cookie
-* kselftest/bpf_test_sock_fields
-* kselftest/bpf_test_sockmap
-* kselftest/bpf_test_sockopt_inherit
-* kselftest/bpf_test_sockopt_sk
-* kselftest/bpf_test_tc_edt.sh
-* kselftest/bpf_test_tcpbpf_user
-* kselftest/bpf_test_tcp_check_syncookie.sh
-* kselftest/bpf_test_tcpnotify_user
-* kselftest/bpf_test_tcp_rtt
-* kselftest/bpf_test_tc_tunnel.sh
-* kselftest/bpf_test_tunnel.sh
-* kselftest/bpf_test_verifier
-* kselftest/bpf_test_xdping.sh
-* kselftest/bpf_xdping
-* kselftest/cgroup_test_freezer
-* kselftest/cpufreq_main.sh
-* kselftest/firmware_fw_run_tests.sh
-* kselftest/ftrace_ftracetest
-* kselftest/kvm_clear_dirty_log_test
-* kselftest/kvm_cr4_cpuid_sync_test
-* kselftest/kvm_dirty_log_test
-* kselftest/kvm_evmcs_test
-* kselftest/kvm_hyperv_cpuid
-* kselftest/kvm_kvm_create_max_vcpus
-* kselftest/kvm_mmio_warning_test
-* kselftest/kvm_platform_info_test
-* kselftest/kvm_set_sregs_test
-* kselftest/kvm_smm_test
-* kselftest/kvm_state_test
-* kselftest/kvm_sync_regs_test
-* kselftest/kvm_vmx_close_while_nested_test
-* kselftest/kvm_vmx_set_nested_state_test
-* kselftest/kvm_vmx_tsc_adjust_test
-* kselftest/lib_bitmap.sh
-* kselftest/lib_prime_numbers.sh
-* kselftest/lib_printf.sh
-* kselftest/lib_strscpy.sh
-* kselftest/net_fib-onlink-tests.sh
-* kselftest/net_fib_rule_tests.sh
-* kselftest/net_fib_tests.sh
-* kselftest/netfilter_conntrack_icmp_related.sh
-* kselftest/netfilter_nft_nat.sh
-* kselftest/net_ip_defrag.sh
-* kselftest/net_l2tp.sh
-* kselftest/net_pmtu.sh
-* kselftest/net_psock_snd.sh
-* kselftest/net_run_netsocktests
-* kselftest/net_tcp_fastopen_backup_key.sh
-* kselftest/net_test_vxlan_under_vrf.sh
-* kselftest/pidfd_pidfd_open_test
-* kselftest/pidfd_pidfd_poll_test
-* kselftest/pidfd_pidfd_test
-* kselftest/pidfd_pidfd_wait
-* kselftest/pstore_pstore_tests
-* kselftest/timestamping_txtimestamp.sh
-* kselftest/tpm2_test_smoke.sh
-* kselftest/tpm2_test_space.sh
+I think that could simply be __clear_user().
 
-qemu_x86_64:
-* kselftest/binderfs_binderfs_test
-* kselftest/bpf_get_cgroup_id_user
-* kselftest/bpf_test_bpftool_build.sh
-* kselftest/bpf_test_btf_dump
-* kselftest/bpf_test_flow_dissector.sh
-* kselftest/bpf_test_libbpf.sh
-* kselftest/bpf_test_lwt_ip_encap.sh
-* kselftest/bpf_test_lwt_seg6local.sh
-* kselftest/bpf_test_maps
-* kselftest/bpf_test_netcnt
-* kselftest/bpf_test_progs
-* kselftest/bpf_test_select_reuseport
-* kselftest/bpf_test_socket_cookie
-* kselftest/bpf_test_sock_fields
-* kselftest/bpf_test_sockmap
-* kselftest/bpf_test_sockopt_inherit
-* kselftest/bpf_test_sockopt_sk
-* kselftest/bpf_test_tc_edt.sh
-* kselftest/bpf_test_tcpbpf_user
-* kselftest/bpf_test_tcpnotify_user
-* kselftest/bpf_test_tcp_rtt
-* kselftest/bpf_test_tc_tunnel.sh
-* kselftest/bpf_test_tunnel.sh
-* kselftest/bpf_test_xdping.sh
-* kselftest/bpf_xdping
-* kselftest/cpufreq_main.sh
-* kselftest/firmware_fw_run_tests.sh
-* kselftest/ftrace_ftracetest
-* kselftest/kvm_clear_dirty_log_test
-* kselftest/kvm_cr4_cpuid_sync_test
-* kselftest/kvm_dirty_log_test
-* kselftest/kvm_evmcs_test
-* kselftest/kvm_hyperv_cpuid
-* kselftest/kvm_kvm_create_max_vcpus
-* kselftest/kvm_platform_info_test
-* kselftest/kvm_set_sregs_test
-* kselftest/kvm_smm_test
-* kselftest/kvm_state_test
-* kselftest/kvm_sync_regs_test
-* kselftest/lib_bitmap.sh
-* kselftest/lib_prime_numbers.sh
-* kselftest/lib_printf.sh
-* kselftest/lib_strscpy.sh
-* kselftest/net_fib-onlink-tests.sh
-* kselftest/net_fib_tests.sh
-* kselftest/net_ip_defrag.sh
-* kselftest/net_l2tp.sh
-* kselftest/net_pmtu.sh
-* kselftest/net_psock_snd.sh
-* kselftest/net_run_netsocktests
-* kselftest/net_tcp_fastopen_backup_key.sh
-* kselftest/net_test_vxlan_under_vrf.sh
-* kselftest/net_xfrm_policy.sh
-* kselftest/pidfd_pidfd_open_test
-* kselftest/pidfd_pidfd_poll_test
-* kselftest/pstore_pstore_tests
-* kselftest/timestamping_txtimestamp.sh
-* kselftest/tpm2_test_smoke.sh
-* kselftest/tpm2_test_space.sh
-* kselftest/x86_fsgsbase_64
+> +	}
+> +	/* Copy the interoperable parts of the struct. */
+> +	if (__copy_to_user(dst, src, size))
+> +		return -EFAULT;
 
-x86:
-* kselftest/binderfs_binderfs_test
-* kselftest/bpf_test_bpftool_build.sh
-* kselftest/bpf_test_btf_dump
-* kselftest/bpf_test_flow_dissector.sh
-* kselftest/bpf_test_libbpf.sh
-* kselftest/bpf_test_lwt_ip_encap.sh
-* kselftest/bpf_test_lwt_seg6local.sh
-* kselftest/bpf_test_maps
-* kselftest/bpf_test_netcnt
-* kselftest/bpf_test_progs
-* kselftest/bpf_test_select_reuseport
-* kselftest/bpf_test_sock_addr.sh
-* kselftest/bpf_test_sock_fields
-* kselftest/bpf_test_sockopt_inherit
-* kselftest/bpf_test_sockopt_sk
-* kselftest/bpf_test_tc_edt.sh
-* kselftest/bpf_test_tcp_rtt
-* kselftest/bpf_test_tc_tunnel.sh
-* kselftest/bpf_test_tunnel.sh
-* kselftest/bpf_test_xdping.sh
-* kselftest/bpf_xdping
-* kselftest/firmware_fw_run_tests.sh
-* kselftest/ftrace_ftracetest
-* kselftest/kvm_clear_dirty_log_test
-* kselftest/kvm_cr4_cpuid_sync_test
-* kselftest/kvm_dirty_log_test
-* kselftest/kvm_evmcs_test
-* kselftest/kvm_hyperv_cpuid
-* kselftest/kvm_kvm_create_max_vcpus
-* kselftest/kvm_platform_info_test
-* kselftest/kvm_set_sregs_test
-* kselftest/kvm_smm_test
-* kselftest/kvm_state_test
-* kselftest/kvm_sync_regs_test
-* kselftest/kvm_vmx_close_while_nested_test
-* kselftest/kvm_vmx_set_nested_state_test
-* kselftest/kvm_vmx_tsc_adjust_test
-* kselftest/lib_bitmap.sh
-* kselftest/lib_prime_numbers.sh
-* kselftest/lib_printf.sh
-* kselftest/lib_strscpy.sh
-* kselftest/net_fib_tests.sh
-* kselftest/net_ip_defrag.sh
-* kselftest/net_l2tp.sh
-* kselftest/net_pmtu.sh
-* kselftest/net_psock_snd.sh
-* kselftest/net_run_netsocktests
-* kselftest/net_tcp_fastopen_backup_key.sh
-* kselftest/net_test_vxlan_under_vrf.sh
-* kselftest/net_xfrm_policy.sh
-* kselftest/pidfd_pidfd_open_test
-* kselftest/pidfd_pidfd_poll_test
-* kselftest/pstore_pstore_tests
-* kselftest/timestamping_txtimestamp.sh
-* kselftest/tpm2_test_smoke.sh
-* kselftest/tpm2_test_space.sh
-* kselftest/x86_fsgsbase_64
-* kselftest-vsyscall-mode-native/binderfs_binderfs_test
-* kselftest-vsyscall-mode-native/bpf_test_bpftool_build.sh
-* kselftest-vsyscall-mode-native/bpf_test_btf_dump
-* kselftest-vsyscall-mode-native/bpf_test_flow_dissector.sh
-* kselftest-vsyscall-mode-native/bpf_test_libbpf.sh
-* kselftest-vsyscall-mode-native/bpf_test_lwt_ip_encap.sh
-* kselftest-vsyscall-mode-native/bpf_test_maps
-* kselftest-vsyscall-mode-native/bpf_test_netcnt
-* kselftest-vsyscall-mode-native/bpf_test_progs
-* kselftest-vsyscall-mode-native/bpf_test_select_reuseport
-* kselftest-vsyscall-mode-native/bpf_test_sock_addr.sh
-* kselftest-vsyscall-mode-native/bpf_test_sock_fields
-* kselftest-vsyscall-mode-native/bpf_test_sockopt_inherit
-* kselftest-vsyscall-mode-native/bpf_test_sockopt_sk
-* kselftest-vsyscall-mode-native/bpf_test_tc_edt.sh
-* kselftest-vsyscall-mode-native/bpf_test_tcpnotify_user
-* kselftest-vsyscall-mode-native/bpf_test_tcp_rtt
-* kselftest-vsyscall-mode-native/bpf_test_tc_tunnel.sh
-* kselftest-vsyscall-mode-native/bpf_test_tunnel.sh
-* kselftest-vsyscall-mode-native/bpf_test_xdping.sh
-* kselftest-vsyscall-mode-native/bpf_xdping
-* kselftest-vsyscall-mode-native/firmware_fw_run_tests.sh
-* kselftest-vsyscall-mode-native/ftrace_ftracetest
-* kselftest-vsyscall-mode-native/kvm_clear_dirty_log_test
-* kselftest-vsyscall-mode-native/kvm_cr4_cpuid_sync_test
-* kselftest-vsyscall-mode-native/kvm_dirty_log_test
-* kselftest-vsyscall-mode-native/kvm_evmcs_test
-* kselftest-vsyscall-mode-native/kvm_hyperv_cpuid
-* kselftest-vsyscall-mode-native/kvm_kvm_create_max_vcpus
-* kselftest-vsyscall-mode-native/kvm_platform_info_test
-* kselftest-vsyscall-mode-native/kvm_set_sregs_test
-* kselftest-vsyscall-mode-native/kvm_smm_test
-* kselftest-vsyscall-mode-native/kvm_state_test
-* kselftest-vsyscall-mode-native/kvm_sync_regs_test
-* kselftest-vsyscall-mode-native/kvm_vmx_close_while_nested_test
-* kselftest-vsyscall-mode-native/kvm_vmx_set_nested_state_test
-* kselftest-vsyscall-mode-native/kvm_vmx_tsc_adjust_test
-* kselftest-vsyscall-mode-native/lib_bitmap.sh
-* kselftest-vsyscall-mode-native/lib_prime_numbers.sh
-* kselftest-vsyscall-mode-native/lib_printf.sh
-* kselftest-vsyscall-mode-native/lib_strscpy.sh
-* kselftest-vsyscall-mode-native/net_fib-onlink-tests.sh
-* kselftest-vsyscall-mode-native/net_fib_tests.sh
-* kselftest-vsyscall-mode-native/net_ip_defrag.sh
-* kselftest-vsyscall-mode-native/net_l2tp.sh
-* kselftest-vsyscall-mode-native/net_pmtu.sh
-* kselftest-vsyscall-mode-native/net_psock_snd.sh
-* kselftest-vsyscall-mode-native/net_run_netsocktests
-* kselftest-vsyscall-mode-native/net_tcp_fastopen_backup_key.sh
-* kselftest-vsyscall-mode-native/net_test_vxlan_under_vrf.sh
-* kselftest-vsyscall-mode-native/net_xfrm_policy.sh
-* kselftest-vsyscall-mode-native/pidfd_pidfd_open_test
-* kselftest-vsyscall-mode-native/pidfd_pidfd_poll_test
-* kselftest-vsyscall-mode-native/pstore_pstore_tests
-* kselftest-vsyscall-mode-native/timestamping_txtimestamp.sh
-* kselftest-vsyscall-mode-native/tpm2_test_smoke.sh
-* kselftest-vsyscall-mode-native/tpm2_test_space.sh
-* kselftest-vsyscall-mode-none/binderfs_binderfs_test
-* kselftest-vsyscall-mode-none/bpf_test_bpftool_build.sh
-* kselftest-vsyscall-mode-none/bpf_test_btf_dump
-* kselftest-vsyscall-mode-none/bpf_test_flow_dissector.sh
-* kselftest-vsyscall-mode-none/bpf_test_libbpf.sh
-* kselftest-vsyscall-mode-none/bpf_test_lwt_ip_encap.sh
-* kselftest-vsyscall-mode-none/bpf_test_lwt_seg6local.sh
-* kselftest-vsyscall-mode-none/bpf_test_maps
-* kselftest-vsyscall-mode-none/bpf_test_netcnt
-* kselftest-vsyscall-mode-none/bpf_test_progs
-* kselftest-vsyscall-mode-none/bpf_test_sock_fields
-* kselftest-vsyscall-mode-none/bpf_test_sockopt_inherit
-* kselftest-vsyscall-mode-none/bpf_test_sockopt_sk
-* kselftest-vsyscall-mode-none/bpf_test_tc_edt.sh
-* kselftest-vsyscall-mode-none/bpf_test_tcp_rtt
-* kselftest-vsyscall-mode-none/bpf_test_tunnel.sh
-* kselftest-vsyscall-mode-none/bpf_test_xdping.sh
-* kselftest-vsyscall-mode-none/bpf_xdping
-* kselftest-vsyscall-mode-none/firmware_fw_run_tests.sh
-* kselftest-vsyscall-mode-none/ftrace_ftracetest
-* kselftest-vsyscall-mode-none/kvm_clear_dirty_log_test
-* kselftest-vsyscall-mode-none/kvm_dirty_log_test
-* kselftest-vsyscall-mode-none/kvm_evmcs_test
-* kselftest-vsyscall-mode-none/kvm_hyperv_cpuid
-* kselftest-vsyscall-mode-none/kvm_kvm_create_max_vcpus
-* kselftest-vsyscall-mode-none/kvm_platform_info_test
-* kselftest-vsyscall-mode-none/kvm_set_sregs_test
-* kselftest-vsyscall-mode-none/kvm_smm_test
-* kselftest-vsyscall-mode-none/kvm_state_test
-* kselftest-vsyscall-mode-none/kvm_sync_regs_test
-* kselftest-vsyscall-mode-none/kvm_vmx_close_while_nested_test
-* kselftest-vsyscall-mode-none/kvm_vmx_set_nested_state_test
-* kselftest-vsyscall-mode-none/kvm_vmx_tsc_adjust_test
-* kselftest-vsyscall-mode-none/lib_bitmap.sh
-* kselftest-vsyscall-mode-none/lib_prime_numbers.sh
-* kselftest-vsyscall-mode-none/lib_printf.sh
-* kselftest-vsyscall-mode-none/lib_strscpy.sh
-* kselftest-vsyscall-mode-none/net_fib-onlink-tests.sh
-* kselftest-vsyscall-mode-none/net_fib_tests.sh
-* kselftest-vsyscall-mode-none/net_ip_defrag.sh
-* kselftest-vsyscall-mode-none/net_l2tp.sh
-* kselftest-vsyscall-mode-none/net_pmtu.sh
-* kselftest-vsyscall-mode-none/net_psock_snd.sh
-* kselftest-vsyscall-mode-none/net_run_netsocktests
-* kselftest-vsyscall-mode-none/net_tcp_fastopen_backup_key.sh
-* kselftest-vsyscall-mode-none/net_test_vxlan_under_vrf.sh
-* kselftest-vsyscall-mode-none/net_xfrm_policy.sh
-* kselftest-vsyscall-mode-none/pidfd_pidfd_open_test
-* kselftest-vsyscall-mode-none/pidfd_pidfd_poll_test
-* kselftest-vsyscall-mode-none/pstore_pstore_tests
-* kselftest-vsyscall-mode-none/timestamping_txtimestamp.sh
-* kselftest-vsyscall-mode-none/tpm2_test_smoke.sh
-* kselftest-vsyscall-mode-none/tpm2_test_space.sh
+I think I understand why you put this last instead of handling the
+buffer in the "natural" order. However,
+I'm wondering whether we should actually do this copy before checking
+that the extra kernel bytes are 0 - the user will still be told that
+there was some extra information via the -EFBIG/-E2BIG return, but maybe
+in some cases the part he understands is good enough. But I also guess
+we have to look to existing users to see whether that would prevent them
+from being converted to using this helper.
 
-x15:
-* kselftest/binderfs_binderfs_test
-* kselftest/bpf_get_cgroup_id_user
-* kselftest/bpf_test_bpftool_build.sh
-* kselftest/bpf_test_btf_dump
-* kselftest/bpf_test_flow_dissector.sh
-* kselftest/bpf_test_libbpf.sh
-* kselftest/bpf_test_lwt_ip_encap.sh
-* kselftest/bpf_test_lwt_seg6local.sh
-* kselftest/bpf_test_maps
-* kselftest/bpf_test_netcnt
-* kselftest/bpf_test_progs
-* kselftest/bpf_test_select_reuseport
-* kselftest/bpf_test_socket_cookie
-* kselftest/bpf_test_sock_fields
-* kselftest/bpf_test_sockmap
-* kselftest/bpf_test_sockopt_inherit
-* kselftest/bpf_test_sockopt_sk
-* kselftest/bpf_test_sysctl
-* kselftest/bpf_test_tc_edt.sh
-* kselftest/bpf_test_tcpbpf_user
-* kselftest/bpf_test_tcp_check_syncookie.sh
-* kselftest/bpf_test_tcpnotify_user
-* kselftest/bpf_test_tcp_rtt
-* kselftest/bpf_test_tc_tunnel.sh
-* kselftest/bpf_test_tunnel.sh
-* kselftest/bpf_test_verifier
-* kselftest/bpf_test_xdping.sh
-* kselftest/bpf_xdping
-* kselftest/firmware_fw_run_tests.sh
-* kselftest/ftrace_ftracetest
-* kselftest/kvm_clear_dirty_log_test
-* kselftest/kvm_cr4_cpuid_sync_test
-* kselftest/kvm_dirty_log_test
-* kselftest/kvm_evmcs_test
-* kselftest/kvm_hyperv_cpuid
-* kselftest/kvm_kvm_create_max_vcpus
-* kselftest/kvm_mmio_warning_test
-* kselftest/kvm_platform_info_test
-* kselftest/kvm_set_sregs_test
-* kselftest/kvm_smm_test
-* kselftest/kvm_state_test
-* kselftest/kvm_sync_regs_test
-* kselftest/kvm_vmx_close_while_nested_test
-* kselftest/kvm_vmx_set_nested_state_test
-* kselftest/kvm_vmx_tsc_adjust_test
-* kselftest/lib_bitmap.sh
-* kselftest/lib_prime_numbers.sh
-* kselftest/lib_printf.sh
-* kselftest/lib_strscpy.sh
-* kselftest/net_fib-onlink-tests.sh
-* kselftest/net_fib_rule_tests.sh
-* kselftest/net_fib_tests.sh
-* kselftest/netfilter_conntrack_icmp_related.sh
-* kselftest/netfilter_nft_nat.sh
-* kselftest/net_ip_defrag.sh
-* kselftest/net_l2tp.sh
-* kselftest/net_pmtu.sh
-* kselftest/net_psock_snd.sh
-* kselftest/net_reuseport_bpf_numa
-* kselftest/net_run_netsocktests
-* kselftest/net_so_txtime.sh
-* kselftest/net_tcp_fastopen_backup_key.sh
-* kselftest/net_test_vxlan_under_vrf.sh
-* kselftest/pidfd_pidfd_open_test
-* kselftest/pidfd_pidfd_poll_test
-* kselftest/proc_proc-self-map-files-002
-* kselftest/proc_proc-self-syscall
-* kselftest/pstore_pstore_tests
-* kselftest/rtc_rtctest
-* kselftest/seccomp_seccomp_bpf
-* kselftest/timestamping_txtimestamp.sh
-* kselftest/tpm2_test_smoke.sh
-* kselftest/tpm2_test_space.sh
+linux-api folks, WDYT?
 
-qemu_arm:
-* kselftest/binderfs_binderfs_test
-* kselftest/bpf_get_cgroup_id_user
-* kselftest/bpf_test_bpftool_build.sh
-* kselftest/bpf_test_btf_dump
-* kselftest/bpf_test_flow_dissector.sh
-* kselftest/bpf_test_libbpf.sh
-* kselftest/bpf_test_lwt_ip_encap.sh
-* kselftest/bpf_test_lwt_seg6local.sh
-* kselftest/bpf_test_maps
-* kselftest/bpf_test_netcnt
-* kselftest/bpf_test_progs
-* kselftest/bpf_test_select_reuseport
-* kselftest/bpf_test_socket_cookie
-* kselftest/bpf_test_sock_fields
-* kselftest/bpf_test_sockmap
-* kselftest/bpf_test_sockopt_inherit
-* kselftest/bpf_test_sockopt_sk
-* kselftest/bpf_test_sysctl
-* kselftest/bpf_test_tc_edt.sh
-* kselftest/bpf_test_tcpbpf_user
-* kselftest/bpf_test_tcp_check_syncookie.sh
-* kselftest/bpf_test_tcpnotify_user
-* kselftest/bpf_test_tcp_rtt
-* kselftest/bpf_test_tc_tunnel.sh
-* kselftest/bpf_test_tunnel.sh
-* kselftest/bpf_test_verifier
-* kselftest/bpf_test_xdping.sh
-* kselftest/bpf_xdping
-* kselftest/cpufreq_main.sh
-* kselftest/firmware_fw_run_tests.sh
-* kselftest/ftrace_ftracetest
-* kselftest/kvm_clear_dirty_log_test
-* kselftest/kvm_cr4_cpuid_sync_test
-* kselftest/kvm_dirty_log_test
-* kselftest/kvm_evmcs_test
-* kselftest/kvm_hyperv_cpuid
-* kselftest/kvm_kvm_create_max_vcpus
-* kselftest/kvm_mmio_warning_test
-* kselftest/kvm_platform_info_test
-* kselftest/kvm_set_sregs_test
-* kselftest/kvm_smm_test
-* kselftest/kvm_state_test
-* kselftest/kvm_sync_regs_test
-* kselftest/kvm_vmx_close_while_nested_test
-* kselftest/kvm_vmx_set_nested_state_test
-* kselftest/kvm_vmx_tsc_adjust_test
-* kselftest/lib_bitmap.sh
-* kselftest/lib_prime_numbers.sh
-* kselftest/lib_printf.sh
-* kselftest/lib_strscpy.sh
-* kselftest/net_fib-onlink-tests.sh
-* kselftest/net_fib_rule_tests.sh
-* kselftest/net_fib_tests.sh
-* kselftest/netfilter_conntrack_icmp_related.sh
-* kselftest/netfilter_nft_nat.sh
-* kselftest/net_ip_defrag.sh
-* kselftest/net_l2tp.sh
-* kselftest/net_pmtu.sh
-* kselftest/net_psock_snd.sh
-* kselftest/net_reuseport_bpf_numa
-* kselftest/net_run_netsocktests
-* kselftest/net_tcp_fastopen_backup_key.sh
-* kselftest/net_test_vxlan_under_vrf.sh
-* kselftest/pidfd_pidfd_open_test
-* kselftest/pidfd_pidfd_poll_test
-* kselftest/proc_proc-self-map-files-002
-* kselftest/proc_proc-self-syscall
-* kselftest/pstore_pstore_tests
-* kselftest/seccomp_seccomp_bpf
-* kselftest/timestamping_txtimestamp.sh
-* kselftest/tpm2_test_smoke.sh
-* kselftest/tpm2_test_space.sh
+> +	return 0;
 
-qemu_i386:
-* kselftest/binderfs_binderfs_test
-* kselftest/bpf_get_cgroup_id_user
-* kselftest/bpf_test_bpftool_build.sh
-* kselftest/bpf_test_btf_dump
-* kselftest/bpf_test_flow_dissector.sh
-* kselftest/bpf_test_libbpf.sh
-* kselftest/bpf_test_lwt_ip_encap.sh
-* kselftest/bpf_test_lwt_seg6local.sh
-* kselftest/bpf_test_maps
-* kselftest/bpf_test_netcnt
-* kselftest/bpf_test_progs
-* kselftest/bpf_test_select_reuseport
-* kselftest/bpf_test_sock_addr.sh
-* kselftest/bpf_test_socket_cookie
-* kselftest/bpf_test_sock_fields
-* kselftest/bpf_test_sockmap
-* kselftest/bpf_test_sockopt_inherit
-* kselftest/bpf_test_sockopt_sk
-* kselftest/bpf_test_sysctl
-* kselftest/bpf_test_tc_edt.sh
-* kselftest/bpf_test_tcpbpf_user
-* kselftest/bpf_test_tcpnotify_user
-* kselftest/bpf_test_tcp_rtt
-* kselftest/bpf_test_tc_tunnel.sh
-* kselftest/bpf_test_tunnel.sh
-* kselftest/bpf_test_xdping.sh
-* kselftest/bpf_xdping
-* kselftest/cpufreq_main.sh
-* kselftest/firmware_fw_run_tests.sh
-* kselftest/ftrace_ftracetest
-* kselftest/kvm_clear_dirty_log_test
-* kselftest/kvm_cr4_cpuid_sync_test
-* kselftest/kvm_dirty_log_test
-* kselftest/kvm_evmcs_test
-* kselftest/kvm_hyperv_cpuid
-* kselftest/kvm_kvm_create_max_vcpus
-* kselftest/kvm_mmio_warning_test
-* kselftest/kvm_platform_info_test
-* kselftest/kvm_set_sregs_test
-* kselftest/kvm_smm_test
-* kselftest/kvm_state_test
-* kselftest/kvm_sync_regs_test
-* kselftest/kvm_vmx_close_while_nested_test
-* kselftest/kvm_vmx_set_nested_state_test
-* kselftest/kvm_vmx_tsc_adjust_test
-* kselftest/lib_bitmap.sh
-* kselftest/lib_prime_numbers.sh
-* kselftest/lib_printf.sh
-* kselftest/lib_strscpy.sh
-* kselftest/net_fib-onlink-tests.sh
-* kselftest/net_fib_tests.sh
-* kselftest/netfilter_conntrack_icmp_related.sh
-* kselftest/netfilter_nft_nat.sh
-* kselftest/net_ip_defrag.sh
-* kselftest/net_l2tp.sh
-* kselftest/net_pmtu.sh
-* kselftest/net_psock_snd.sh
-* kselftest/net_run_netsocktests
-* kselftest/net_tcp_fastopen_backup_key.sh
-* kselftest/net_test_vxlan_under_vrf.sh
-* kselftest/net_xfrm_policy.sh
-* kselftest/pidfd_pidfd_open_test
-* kselftest/pidfd_pidfd_poll_test
-* kselftest/proc_proc-self-map-files-002
-* kselftest/proc_proc-self-syscall
-* kselftest/pstore_pstore_tests
-* kselftest/seccomp_seccomp_bpf
-* kselftest/size_get_size
-* kselftest/timestamping_txtimestamp.sh
-* kselftest/tpm2_test_smoke.sh
-* kselftest/tpm2_test_space.sh
-* kselftest/x86_sigreturn_32
+Maybe more useful to "return size;", some users might want to know/pass
+on how much was actually copied.
 
-i386:
-* kselftest/binderfs_binderfs_test
-* kselftest/bpf_test_bpftool_build.sh
-* kselftest/bpf_test_btf_dump
-* kselftest/bpf_test_flow_dissector.sh
-* kselftest/bpf_test_libbpf.sh
-* kselftest/bpf_test_lwt_ip_encap.sh
-* kselftest/bpf_test_lwt_seg6local.sh
-* kselftest/bpf_test_maps
-* kselftest/bpf_test_netcnt
-* kselftest/bpf_test_progs
-* kselftest/bpf_test_select_reuseport
-* kselftest/bpf_test_sock_fields
-* kselftest/bpf_test_sockopt_inherit
-* kselftest/bpf_test_sockopt_sk
-* kselftest/bpf_test_sysctl
-* kselftest/bpf_test_tc_edt.sh
-* kselftest/bpf_test_tcpnotify_user
-* kselftest/bpf_test_tcp_rtt
-* kselftest/bpf_test_tc_tunnel.sh
-* kselftest/bpf_test_tunnel.sh
-* kselftest/bpf_test_xdping.sh
-* kselftest/bpf_xdping
-* kselftest/firmware_fw_run_tests.sh
-* kselftest/ftrace_ftracetest
-* kselftest/kvm_clear_dirty_log_test
-* kselftest/kvm_cr4_cpuid_sync_test
-* kselftest/kvm_dirty_log_test
-* kselftest/kvm_evmcs_test
-* kselftest/kvm_hyperv_cpuid
-* kselftest/kvm_kvm_create_max_vcpus
-* kselftest/kvm_mmio_warning_test
-* kselftest/kvm_platform_info_test
-* kselftest/kvm_set_sregs_test
-* kselftest/kvm_smm_test
-* kselftest/kvm_state_test
-* kselftest/kvm_sync_regs_test
-* kselftest/kvm_vmx_close_while_nested_test
-* kselftest/kvm_vmx_set_nested_state_test
-* kselftest/kvm_vmx_tsc_adjust_test
-* kselftest/lib_bitmap.sh
-* kselftest/lib_prime_numbers.sh
-* kselftest/lib_printf.sh
-* kselftest/lib_strscpy.sh
-* kselftest/net_fib-onlink-tests.sh
-* kselftest/net_fib_tests.sh
-* kselftest/net_ip_defrag.sh
-* kselftest/net_pmtu.sh
-* kselftest/net_psock_snd.sh
-* kselftest/net_run_netsocktests
-* kselftest/net_test_vxlan_under_vrf.sh
+> +}
+> +EXPORT_SYMBOL(copy_struct_to_user);
 
-dragonboard-410c:
-* kselftest/binderfs_binderfs_test
-* kselftest/bpf_get_cgroup_id_user
-* kselftest/bpf_test_btf_dump
-* kselftest/bpf_test_flow_dissector.sh
-* kselftest/bpf_test_libbpf.sh
-* kselftest/bpf_test_lwt_ip_encap.sh
-* kselftest/bpf_test_lwt_seg6local.sh
-* kselftest/bpf_test_maps
-* kselftest/bpf_test_netcnt
-* kselftest/bpf_test_progs
-* kselftest/bpf_test_select_reuseport
-* kselftest/bpf_test_sock_addr.sh
-* kselftest/bpf_test_socket_cookie
-* kselftest/bpf_test_sock_fields
-* kselftest/bpf_test_sockmap
-* kselftest/bpf_test_sockopt_inherit
-* kselftest/bpf_test_sockopt_sk
-* kselftest/bpf_test_tc_edt.sh
-* kselftest/bpf_test_tcpbpf_user
-* kselftest/bpf_test_tcp_check_syncookie.sh
-* kselftest/bpf_test_tcpnotify_user
-* kselftest/bpf_test_tcp_rtt
-* kselftest/bpf_test_tc_tunnel.sh
-* kselftest/bpf_test_tunnel.sh
-* kselftest/bpf_test_verifier
-* kselftest/bpf_test_xdping.sh
-* kselftest/bpf_xdping
-* kselftest/firmware_fw_run_tests.sh
-* kselftest/ftrace_ftracetest
-* kselftest/kvm_clear_dirty_log_test
-* kselftest/kvm_cr4_cpuid_sync_test
-* kselftest/kvm_dirty_log_test
-* kselftest/kvm_evmcs_test
-* kselftest/kvm_hyperv_cpuid
-* kselftest/kvm_kvm_create_max_vcpus
-* kselftest/kvm_mmio_warning_test
-* kselftest/kvm_platform_info_test
-* kselftest/kvm_set_sregs_test
-* kselftest/kvm_smm_test
-* kselftest/kvm_state_test
-* kselftest/kvm_sync_regs_test
-* kselftest/kvm_vmx_close_while_nested_test
-* kselftest/kvm_vmx_set_nested_state_test
-* kselftest/kvm_vmx_tsc_adjust_test
-* kselftest/lib_bitmap.sh
-* kselftest/lib_prime_numbers.sh
-* kselftest/lib_printf.sh
-* kselftest/lib_strscpy.sh
-* kselftest/net_fib-onlink-tests.sh
-* kselftest/net_fib_rule_tests.sh
-* kselftest/net_fib_tests.sh
-* kselftest/netfilter_conntrack_icmp_related.sh
-* kselftest/netfilter_nft_nat.sh
-* kselftest/net_ip_defrag.sh
-* kselftest/net_l2tp.sh
-* kselftest/net_pmtu.sh
-* kselftest/net_psock_snd.sh
-* kselftest/net_run_afpackettests
-* kselftest/net_run_netsocktests
-* kselftest/net_so_txtime.sh
-* kselftest/net_tcp_fastopen_backup_key.sh
-* kselftest/net_test_vxlan_under_vrf.sh
-* kselftest/net_udpgso_bench.sh
-* kselftest/pidfd_pidfd_open_test
-* kselftest/pidfd_pidfd_poll_test
-* kselftest/pidfd_pidfd_test
-* kselftest/pidfd_pidfd_wait
-* kselftest/pstore_pstore_tests
-* kselftest/rtc_rtctest
-* kselftest/timers_rtcpie
-* kselftest/timestamping_txtimestamp.sh
-* kselftest/tpm2_test_smoke.sh
-* kselftest/tpm2_test_space.sh
-* kselftest/vm_run_vmtests
+Can't we wait with this until a modular user shows up? The primary users
+are syscalls, which can't be modular AFAIK.
 
+> +/**
+> + * copy_struct_from_user: copy a struct from user space
+> + * @dst:   Destination address, in kernel space. This buffer must be @ksize
+> + *         bytes long.
+> + * @ksize: Size of @dst struct.
+> + * @src:   Source address, in user space.
+> + * @usize: (Alleged) size of @src struct.
+> + *
+> + * Copies a struct from user space to kernel space, in a way that guarantees
+> + * backwards-compatibility for struct syscall arguments (as long as future
+> + * struct extensions are made such that all new fields are *appended* to the
+> + * old struct, and zeroed-out new fields have the same meaning as the old
+> + * struct).
+> + *
+> + * @ksize is just sizeof(*dst), and @usize should've been passed by user space.
+> + * The recommended usage is something like the following:
+> + *
+> + *   SYSCALL_DEFINE2(foobar, const struct foo __user *, uarg, size_t, usize)
+> + *   {
+> + *      int err;
+> + *      struct foo karg = {};
+> + *
+> + *      err = copy_struct_from_user(&karg, sizeof(karg), uarg, size);
+> + *      if (err)
+> + *        return err;
+> + *
+> + *      // ...
+> + *   }
+> + *
+> + * There are three cases to consider:
+> + *  * If @usize == @ksize, then it's copied verbatim.
+> + *  * If @usize < @ksize, then the user space has passed an old struct to a
+> + *    newer kernel. The rest of the trailing bytes in @dst (@ksize - @usize)
+> + *    are to be zero-filled.
+> + *  * If @usize > @ksize, then the user space has passed a new struct to an
+> + *    older kernel. The trailing bytes unknown to the kernel (@usize - @ksize)
+> + *    are checked to ensure they are zeroed, otherwise -E2BIG is returned.
+> + *
+> + * Returns (in all cases, some data may have been copied):
+> + *  * -E2BIG:  (@usize > @ksize) and there are non-zero trailing bytes in @src.
+> + *  * -E2BIG:  @usize is "too big" (at time of writing, >PAGE_SIZE).
+> + *  * -EFAULT: access to user space failed.
+> + */
+> +int copy_struct_from_user(void *dst, size_t ksize,
+> +			  const void __user *src, size_t usize)
+> +{
+> +	size_t size = min(ksize, usize);
+> +	size_t rest = abs(ksize - usize);
 
-Skips
-------------------------------------------------------------------------
-No skips
+As above.
 
+> +	if (unlikely(usize > PAGE_SIZE))
+> +		return -EFAULT;
 
--- 
-Linaro LKFT
-https://lkft.linaro.org
-------=_Part_3763_1640767816.1567670446048--
+As above.
+
+> +	if (unlikely(!access_ok(src, usize)))
+> +		return -EFAULT;
+> +
+> +	/* Deal with trailing bytes. */
+> +	if (usize < ksize)
+> +		memset(dst + size, 0, rest);
+> +	else if (usize > ksize) {
+> +		const void __user *addr = src + size;
+> +		char buffer[BUFFER_SIZE] = {};
+> +
+> +		while (rest > 0) {
+> +			size_t bufsize = min(rest, sizeof(buffer));
+> +
+> +			if (__copy_from_user(buffer, addr, bufsize))
+> +				return -EFAULT;
+> +			if (memchr_inv(buffer, 0, bufsize))
+> +				return -E2BIG;
+> +
+> +			addr += bufsize;
+> +			rest -= bufsize;
+> +		}
+
+I'd create a __user_is_zero() helper for this - that way the two
+branches in the two helpers become nicely symmetric, each just calling a
+single helper that deals appropriately with the tail. And we can discuss
+how to implement __user_is_zero() in another bikeshed.
+
+> +	}
+> +	/* Copy the interoperable parts of the struct. */
+> +	if (__copy_from_user(dst, src, size))
+> +		return -EFAULT;
+
+If you do move up the __copy_to_user(), please move this as well - on
+the kernel side, we certainly don't care that we copied some bytes to a
+local buffer which we then ignore because the user had a non-zero tail.
+But if __copy_to_user() is kept last in copy_struct_to_user(), this
+should stay for symmetry.
+
+> +	return 0;
+
+As above.
+
+> +}
+> +EXPORT_SYMBOL(copy_struct_from_user);
+
+As above.
+
+Rasmus
+
