@@ -2,169 +2,144 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D46FAACBE
-	for <lists+linux-kselftest@lfdr.de>; Thu,  5 Sep 2019 22:07:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE0D1AAE82
+	for <lists+linux-kselftest@lfdr.de>; Fri,  6 Sep 2019 00:32:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733252AbfIEUHn (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 5 Sep 2019 16:07:43 -0400
-Received: from mail-oi1-f196.google.com ([209.85.167.196]:34150 "EHLO
-        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1733184AbfIEUHm (ORCPT
+        id S2389882AbfIEWc3 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 5 Sep 2019 18:32:29 -0400
+Received: from zeniv.linux.org.uk ([195.92.253.2]:43054 "EHLO
+        ZenIV.linux.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732639AbfIEWc2 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 5 Sep 2019 16:07:42 -0400
-Received: by mail-oi1-f196.google.com with SMTP id g128so3033437oib.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 05 Sep 2019 13:07:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=6k7PZuJzGWrD6r0C7js2ghL9hn4vXg63+nMGa3lc03Q=;
-        b=fEPR9+4FnJ/Wuh5lAs7l0q7dg8u+29rxGa1vObZGAYxHLXpMJmWtvQm0WI7yFHpbA9
-         sotwZ5fvHtmhbOOjsGD4XdRWAE+6AYb3s0hVUcTs0ij1ac4cvAJs5swoW2m9fu57OadR
-         o7BrkXPdVisi/74Qj4Up0mSJKh8d9sLEmWMfy0aV0iHYtAC5JGXFYDT9kmIBY8JKcNFQ
-         WvzUvTWDjYTc+t0UA+BITLbIMNqKrTmCn661eeX0fPI9t70tskNE478AIBdUgubiXhlJ
-         3kroS/4vY/n8ro+zwulHYVAcsEsu6RBGxZdPvkeg1EPaxxG7BNg55LP1WNtcedAtAJlo
-         YeMg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=6k7PZuJzGWrD6r0C7js2ghL9hn4vXg63+nMGa3lc03Q=;
-        b=IQolg3F/ew/e4islYRgVsbXaIy/uD5A0LHPhtoju5PDHrDU4KyuOJA6Syaz7WAMHFE
-         Jutqgt5KKEDlKhD9DqNRdKZ79S2tKAafBfzHeE2Qde3Ndu5jxnr6fSaewQYflFEU50Bw
-         TUIHlI9xf0agrmqFPgyF1qaT88kdZKoj6qrBbOb8raPPXjyLTVFAqQaJiaD/L1D+UOE0
-         w54aM1mrJNeNDsbRPerqsI2BR8G+rvIRA7z2Kw93a07RgZOv6uXnfmnerslrdQnk68G3
-         fIKULF4CGhVwyD9HcmBoOGxK6W+oMZwV5aVDJdXWG1Waa9qhPDWJPmOwg43b62KLANaO
-         JXZA==
-X-Gm-Message-State: APjAAAUngQXn9Z142DxpycXlkZMUevKLnsWdiw6wq0b8oplQ7zyXKx96
-        UW0CNno+t1DRvVAOr5cSvtDDselPXHzRtTepY/f/OA==
-X-Google-Smtp-Source: APXvYqzyY+dI8j4oksYtUG/bs6k+iiXfYPjfr4iAtUt+sQklxzS+bW2yptWP0sznueZLxU0tmkvtO8vWY8nAzmtJJEY=
-X-Received: by 2002:aca:da86:: with SMTP id r128mr4287079oig.103.1567714061086;
- Thu, 05 Sep 2019 13:07:41 -0700 (PDT)
-MIME-Version: 1.0
-References: <20190826233240.11524-1-almasrymina@google.com>
- <20190828112340.GB7466@dhcp22.suse.cz> <CAHS8izPPhPoqh-J9LJ40NJUCbgTFS60oZNuDSHmgtMQiYw72RA@mail.gmail.com>
- <20190829071807.GR28313@dhcp22.suse.cz> <cb7ebcce-05c5-3384-5632-2bbac9995c15@oracle.com>
- <e7f91a50-5957-249c-8756-25ea87c77fc4@oracle.com>
-In-Reply-To: <e7f91a50-5957-249c-8756-25ea87c77fc4@oracle.com>
-From:   Mina Almasry <almasrymina@google.com>
-Date:   Thu, 5 Sep 2019 13:07:30 -0700
-Message-ID: <CAHS8izMCA9+sY+dxHxuFgANCLD2oNznPqGYvi1+C2xOkv=7EYw@mail.gmail.com>
-Subject: Re: [PATCH v3 0/6] hugetlb_cgroup: Add hugetlb_cgroup reservation limits
-To:     Mike Kravetz <mike.kravetz@oracle.com>
-Cc:     Michal Hocko <mhocko@kernel.org>, shuah <shuah@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Greg Thelen <gthelen@google.com>,
+        Thu, 5 Sep 2019 18:32:28 -0400
+Received: from viro by ZenIV.linux.org.uk with local (Exim 4.92.1 #3 (Red Hat Linux))
+        id 1i60I9-0001pN-0U; Thu, 05 Sep 2019 22:31:49 +0000
+Date:   Thu, 5 Sep 2019 23:31:48 +0100
+From:   Al Viro <viro@zeniv.linux.org.uk>
+To:     Aleksa Sarai <cyphar@cyphar.com>
+Cc:     Christian Brauner <christian.brauner@ubuntu.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J. Bruce Fields" <bfields@fieldses.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        David Howells <dhowells@redhat.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Christian Brauner <christian@brauner.io>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Andy Lutomirski <luto@kernel.org>,
         Andrew Morton <akpm@linux-foundation.org>,
-        khalid.aziz@oracle.com, open list <linux-kernel@vger.kernel.org>,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        cgroups@vger.kernel.org,
-        Aneesh Kumar <aneesh.kumar@linux.vnet.ibm.com>,
-        =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>,
-        Tejun Heo <tj@kernel.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Li Zefan <lizefan@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
+        Alexei Starovoitov <ast@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Jann Horn <jannh@google.com>, Tycho Andersen <tycho@tycho.ws>,
+        David Drysdale <drysdale@google.com>,
+        Chanho Min <chanho.min@lge.com>,
+        Oleg Nesterov <oleg@redhat.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Aleksa Sarai <asarai@suse.de>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        containers@lists.linux-foundation.org, linux-alpha@vger.kernel.org,
+        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-ia64@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        linux-xtensa@linux-xtensa.org, sparclinux@vger.kernel.org
+Subject: Re: [PATCH v12 01/12] lib: introduce copy_struct_{to,from}_user
+ helpers
+Message-ID: <20190905223148.GS1131@ZenIV.linux.org.uk>
+References: <20190904201933.10736-1-cyphar@cyphar.com>
+ <20190904201933.10736-2-cyphar@cyphar.com>
+ <20190905180750.GQ1131@ZenIV.linux.org.uk>
+ <20190905182303.7f6bxpa2enbgcegv@wittgenstein>
+ <20190905182801.GR1131@ZenIV.linux.org.uk>
+ <20190905195618.pwzgvuzadkfpznfz@yavin.dot.cyphar.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190905195618.pwzgvuzadkfpznfz@yavin.dot.cyphar.com>
+User-Agent: Mutt/1.12.0 (2019-05-25)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Sep 3, 2019 at 4:46 PM Mike Kravetz <mike.kravetz@oracle.com> wrote:
->
-> On 9/3/19 10:57 AM, Mike Kravetz wrote:
-> > On 8/29/19 12:18 AM, Michal Hocko wrote:
-> >> [Cc cgroups maintainers]
-> >>
-> >> On Wed 28-08-19 10:58:00, Mina Almasry wrote:
-> >>> On Wed, Aug 28, 2019 at 4:23 AM Michal Hocko <mhocko@kernel.org> wrote:
-> >>>>
-> >>>> On Mon 26-08-19 16:32:34, Mina Almasry wrote:
-> >>>>>  mm/hugetlb.c                                  | 493 ++++++++++++------
-> >>>>>  mm/hugetlb_cgroup.c                           | 187 +++++--
-> >>>>
-> >>>> This is a lot of changes to an already subtle code which hugetlb
-> >>>> reservations undoubly are.
-> >>>
-> >>> For what it's worth, I think this patch series is a net decrease in
-> >>> the complexity of the reservation code, especially the region_*
-> >>> functions, which is where a lot of the complexity lies. I removed the
-> >>> race between region_del and region_{add|chg}, refactored the main
-> >>> logic into smaller code, moved common code to helpers and deleted the
-> >>> duplicates, and finally added lots of comments to the hard to
-> >>> understand pieces. I hope that when folks review the changes they will
-> >>> see that! :)
-> >>
-> >> Post those improvements as standalone patches and sell them as
-> >> improvements. We can talk about the net additional complexity of the
-> >> controller much easier then.
-> >
-> > All such changes appear to be in patch 4 of this series.  The commit message
-> > says "region_add() and region_chg() are heavily refactored to in this commit
-> > to make the code easier to understand and remove duplication.".  However, the
-> > modifications were also added to accommodate the new cgroup reservation
-> > accounting.  I think it would be helpful to explain why the existing code does
-> > not work with the new accounting.  For example, one change is because
-> > "existing code coalesces resv_map entries for shared mappings.  new cgroup
-> > accounting requires that resv_map entries be kept separate for proper
-> > uncharging."
-> >
-> > I am starting to review the changes, but it would help if there was a high
-> > level description.  I also like Michal's idea of calling out the region_*
-> > changes separately.  If not a standalone patch, at least the first patch of
-> > the series.  This new code will be exercised even if cgroup reservation
-> > accounting not enabled, so it is very important than no subtle regressions
-> > be introduced.
->
-> While looking at the region_* changes, I started thinking about this no
-> coalesce change for shared mappings which I think is necessary.  Am I
-> mistaken, or is this a requirement?
->
+On Fri, Sep 06, 2019 at 05:56:18AM +1000, Aleksa Sarai wrote:
+> On 2019-09-05, Al Viro <viro@zeniv.linux.org.uk> wrote:
+> > On Thu, Sep 05, 2019 at 08:23:03PM +0200, Christian Brauner wrote:
+> > 
+> > > Because every caller of that function right now has that limit set
+> > > anyway iirc. So we can either remove it from here and place it back for
+> > > the individual callers or leave it in the helper.
+> > > Also, I'm really asking, why not? Is it unreasonable to have an upper
+> > > bound on the size (for a long time probably) or are you disagreeing with
+> > > PAGE_SIZE being used? PAGE_SIZE limit is currently used by sched, perf,
+> > > bpf, and clone3 and in a few other places.
+> > 
+> > For a primitive that can be safely used with any size (OK, any within
+> > the usual 2Gb limit)?  Why push the random policy into the place where
+> > it doesn't belong?
+> > 
+> > Seriously, what's the point?  If they want to have a large chunk of
+> > userland memory zeroed or checked for non-zeroes - why would that
+> > be a problem?
+> 
+> Thinking about it some more, there isn't really any r/w amplification --
+> so there isn't much to gain by passing giant structs. Though, if we are
+> going to permit 2GB buffers, isn't that also an argument to use
+> memchr_inv()? :P
 
-No coalesce is a requirement, yes. The idea is that task A can reseve
-range [0-1], and task B can reserve range [1-2]. We want the code to
-put in 2 regions:
+I'm not sure I understand the last bit.  If you look at what copy_from_user()
+does on misaligned source/destination, especially on architectures that
+really, really do not like unaligned access...
 
-1. [0-1], with cgroup information that points to task A's cgroup.
-2. [1-2], with cgroup information that points to task B's cgroup.
+Case in point: alpha (and it's not unusual in that respect).  What it boils
+down to is
+	copy bytes until the destination is aligned
+	if source and destination are both aligned
+		copy word by word
+	else
+		read word by word, storing the mix of two adjacent words
+	copy the rest byte by byte
 
-If coalescing is happening, then you end up with one region [0-2] with
-cgroup information for one of those cgroups, and someone gets
-uncharged wrong when the reservation is freed.
+The unpleasant case (to and from having different remainders modulo 8) is
+basically
 
-Technically we can still coalesce if the cgroup information is the
-same and I can do that, but the region_* code becomes more
-complicated, and you mentioned on an earlier patchset that you were
-concerned with how complicated the region_* functions are as is.
+	if (count >= 8) {
+		u64 *aligned = (u64 *)(from & ~7);
+		u64 *dest = (u64 *)to;
+		int bitshift = (from & 7) * 8;
+		u64 prev, next;
 
-> If it is a requirement, then think about some of the possible scenarios
-> such as:
-> - There is a hugetlbfs file of size 10 huge pages.
-> - Task A has reservations for pages at offset 1 3 5 7 and 9
-> - Task B then mmaps the entire file which should result in reservations
->   at 0 2 4 6 and 8.
-> - region_chg will return 5, but will also need to allocate 5 resv_map
->   entries for the subsequent region_add which can not fail.  Correct?
->   The code does not appear to handle this.
->
+		prev = aligned[0];
+		do {   
+			next = aligned[1];
+			prev <<= bitshift;
+			prev |= next >> (64 - bitshift);
+			*dest++ = prev;
+			aligned++;  
+			prev = next;
+			from += 8;
+			to += 8;
+			count -= 8;
+		} while (count >= 8);
+	}
 
-I thought the code did handle this. region_chg calls
-allocate_enough_cache_for_range_and_lock(), which in this scenario
-will put 5 entries in resv_map->region_cache. region_add will use
-these 5 region_cache entries to do its business.
+Now, mix that with "... and do memchr_inv() on the copy to find if we'd
+copied any non-zeroes, nevermind where" and it starts looking really
+ridiculous.
 
-I'll add a test in my suite to test this case to make sure.
+We should just read the fscking source, aligned down to word boundary
+and check each word being read.  The first and the last ones - masked.
+All there is to it.  On almost all architectures that'll work well
+enough; s390 might want something more elaborate (there even word-by-word
+copies are costly, but I'd suggest talking to them for details).
 
-> BTW, this series will BUG when running libhugetlbfs test suite.  It will
-> hit this in resv_map_release().
->
->         VM_BUG_ON(resv_map->adds_in_progress);
->
-
-Sorry about that, I've been having trouble running the libhugetlbfs
-tests, but I'm still on it. I'll get to the bottom of this by next
-patch series.
-
-> --
-> Mike Kravetz
+Something like bool all_zeroes_user(const void __user *p, size_t count)
+would probably be a sane API...
