@@ -2,167 +2,139 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DAC5AA59D
-	for <lists+linux-kselftest@lfdr.de>; Thu,  5 Sep 2019 16:18:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A2FB2AA5A7
+	for <lists+linux-kselftest@lfdr.de>; Thu,  5 Sep 2019 16:20:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732943AbfIEOSi (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 5 Sep 2019 10:18:38 -0400
-Received: from foss.arm.com ([217.140.110.172]:45970 "EHLO foss.arm.com"
+        id S1732612AbfIEOU2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 5 Sep 2019 10:20:28 -0400
+Received: from foss.arm.com ([217.140.110.172]:46002 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727009AbfIEOSi (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 5 Sep 2019 10:18:38 -0400
+        id S1725290AbfIEOU1 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 5 Sep 2019 10:20:27 -0400
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9C27028;
-        Thu,  5 Sep 2019 07:18:37 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3188528;
+        Thu,  5 Sep 2019 07:20:27 -0700 (PDT)
 Received: from arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B3A913F67D;
-        Thu,  5 Sep 2019 07:18:36 -0700 (PDT)
-Date:   Thu, 5 Sep 2019 15:18:34 +0100
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 494B93F67D;
+        Thu,  5 Sep 2019 07:20:26 -0700 (PDT)
+Date:   Thu, 5 Sep 2019 15:20:24 +0100
 From:   Dave Martin <Dave.Martin@arm.com>
 To:     Cristian Marussi <cristian.marussi@arm.com>
 Cc:     amit.kachhap@arm.com, andreyknvl@google.com, shuah@kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v5 01/11] kselftest: arm64: add skeleton Makefile
-Message-ID: <20190905141834.GE27757@arm.com>
+        linux-kselftest@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v5 09/11] kselftest: arm64:
+ fake_sigreturn_duplicated_fpsimd
+Message-ID: <20190905142023.GF27757@arm.com>
 References: <20190902112932.36129-1-cristian.marussi@arm.com>
- <20190902112932.36129-2-cristian.marussi@arm.com>
- <20190904114734.GR27757@arm.com>
- <4e7f583f-df36-1d7b-7a41-160abc60a296@arm.com>
+ <20190902112932.36129-10-cristian.marussi@arm.com>
+ <20190904114923.GZ27757@arm.com>
+ <f29dbde7-90eb-3a06-71a0-e434afa9f89d@arm.com>
+ <20190905123904.GD27757@arm.com>
+ <365b527e-793e-ad83-47a8-5d8692ed50c4@arm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <4e7f583f-df36-1d7b-7a41-160abc60a296@arm.com>
+In-Reply-To: <365b527e-793e-ad83-47a8-5d8692ed50c4@arm.com>
 User-Agent: Mutt/1.5.23 (2014-03-12)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Sep 05, 2019 at 02:45:39PM +0100, Cristian Marussi wrote:
-> On 04/09/2019 12:47, Dave Martin wrote:
-> > On Mon, Sep 02, 2019 at 12:29:22pm +0100, Cristian Marussi wrote:
-> >> Add a new arm64-specific empty subsystem amongst TARGETS of KSFT build
-> >> framework; keep these new arm64 KSFT testcases separated into distinct
-> > 
-> > Nit: this isn't true any more, since the tags tests already added the
-> > arm64 subsystem here.
-> 
-> Ok
-> > 
-> >> subdirs inside tools/testing/selftests/arm64/ depending on the specific
-> >> subsystem targeted.
+On Thu, Sep 05, 2019 at 02:32:09PM +0100, Cristian Marussi wrote:
+> On 05/09/2019 13:39, Dave Martin wrote:
+> > On Thu, Sep 05, 2019 at 01:15:58PM +0100, Cristian Marussi wrote:
+> >> Hi
 > >>
-> >> Add into toplevel arm64 KSFT Makefile a mechanism to guess the effective
-> >> location of Kernel headers as installed by KSFT framework.
-> > 
-> > This:
-> > 
-> >> Merge with
+> >> On 04/09/2019 12:49, Dave Martin wrote:
+> >>> On Mon, Sep 02, 2019 at 12:29:30pm +0100, Cristian Marussi wrote:
+> >>>> Add a simple fake_sigreturn testcase which builds a ucontext_t with
+> >>>> an anomalous additional fpsimd_context and place it onto the stack.
+> >>>> Expects a SIGSEGV on test PASS.
+> >>>>
+> >>>> Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
+> >>>> ---
+> >>>> v3 --> v4
+> >>>> - fix commit
+> >>>> - missing include
+> >>>> - using new get_starting_head() helper
+> >>>> - added test description
+> >>>> ---
+> >>>>  .../fake_sigreturn_duplicated_fpsimd.c        | 52 +++++++++++++++++++
+> >>>>  1 file changed, 52 insertions(+)
+> >>>>  create mode 100644 tools/testing/selftests/arm64/signal/testcases/fake_sigreturn_duplicated_fpsimd.c
+> >>>>
+> >>>> diff --git a/tools/testing/selftests/arm64/signal/testcases/fake_sigreturn_duplicated_fpsimd.c b/tools/testing/selftests/arm64/signal/testcases/fake_sigreturn_duplicated_fpsimd.c
+> >>>> new file mode 100644
+> >>>> index 000000000000..c7122c44f53f
+> >>>> --- /dev/null
+> >>>> +++ b/tools/testing/selftests/arm64/signal/testcases/fake_sigreturn_duplicated_fpsimd.c
+> >>>> @@ -0,0 +1,52 @@
+> >>>> +// SPDX-License-Identifier: GPL-2.0
+> >>>> +/*
+> >>>> + * Copyright (C) 2019 ARM Limited
+> >>>> + *
+> >>>> + * Place a fake sigframe on the stack including an additional FPSIMD
+> >>>> + * record: on sigreturn Kernel must spot this attempt and the test
+> >>>> + * case is expected to be terminated via SEGV.
+> >>>> + */
+> >>>> +
+> >>>> +#include <signal.h>
+> >>>> +#include <ucontext.h>
+> >>>> +
+> >>>> +#include "test_signals_utils.h"
+> >>>> +#include "testcases.h"
+> >>>> +
+> >>>> +struct fake_sigframe sf;
+> >>>> +
+> >>>> +static int fake_sigreturn_duplicated_fpsimd_run(struct tdescr *td,
+> >>>> +						siginfo_t *si, ucontext_t *uc)
+> >>>> +{
+> >>>> +	size_t resv_sz, need_sz;
+> >>>> +	struct _aarch64_ctx *shead = GET_SF_RESV_HEAD(sf), *head;
+> >>>> +
+> >>>> +	/* just to fill the ucontext_t with something real */
+> >>>> +	if (!get_current_context(td, &sf.uc))
+> >>>> +		return 1;
+> >>>> +
+> >>>> +	resv_sz = GET_SF_RESV_SIZE(sf);
+> >>>> +	need_sz = HDR_SZ + sizeof(struct fpsimd_context);
+> >>>
+> >>> Nit: Maybe write this sum in the same order as the records we're going 
+> >>> o append, i.e.:
+> >>>
+> >>> 	need_sz = sizeof(struct fpsimd_context) + HDR_SZ; /* for terminator */
 > >>
-> >> commit 9ce1263033cd ("selftests, arm64: add a selftest for passing
-> >> 		     tagged pointers to kernel")
+> >> Ok
 > >>
-> >> while moving such KSFT tags tests inside their own subdirectory
-> >> (arm64/tags).
+> >>>
+> >>> Also, maybe fail this test if there is no fpsimd_context in the initial
+> >>> frame from get_current_context(): that would be a kernel bug, but we
+> >>> wouldn't be giving fake_sigreturn() duplicate fpsimd_contexts in that
+> >>> case -- so this test wouldn't test the thing it's supposed to test.
+> >>>
+> >>
+> >> Any context grabbed by get_current_context() is verified at first to be sane
+> >> when is copied in the handler by ASSERT_GOOD_CONTEXT()
+> >>
+> >>>   } else if (signum == sig_copyctx && current->live_uc) {
+> >>>                 memcpy(current->live_uc, uc, current->live_sz);
+> >>>                 ASSERT_GOOD_CONTEXT(current->live_uc);
+> >>>                 current->live_uc_valid = 1;
+> >>
+> >> A missing fpsimd in the original sigframe would lead to an abort()
+> >> straight away while preparing the test, and the test will fail.
 > > 
-> > ...could be put under the tearoff, but it doesn't really belong in the
-> > commit message IMHO.
+> > OK, but there is no abort() in ASSERT_GOOD_CONTEXT(), only assert(0).
+> > Can you add an abort() after the assert() in there in patch 2?
 > > 
-> > I suggest rewriting the commit message to reflect the current
-> > situation (but it can be kept brief).
-> > 
-> > Basically, what this patch now seems to do is to prepare for adding
-> > more arm64 tests, by moving the tags tests into their own subdirectory
-> > and extending the existing skeleton Makefile as appropriate.
-> > 
-> 
-> Ok
-> >> Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
-> >> ---
-> >> v4 --> v5
-> >> - rebased on arm64/for-next/core
-> >> - merged this patch with KSFT arm64 tags patch, while moving the latter
-> >>   into its own subdir
-> >> - moved kernel header includes search mechanism from KSFT arm64
-> >>   SIGNAL Makefile
-> >> - export proper top_srcdir ENV for lib.mk
-> >> v3 --> v4
-> >> - comment reword
-> >> - simplified documentation in README
-> >> - dropped README about standalone
-> >> ---
-> > 
-> > [...]
-> > 
-> >> diff --git a/tools/testing/selftests/arm64/Makefile b/tools/testing/selftests/arm64/Makefile
-> >> index a61b2e743e99..5dbb0ffdfc9a 100644
-> >> --- a/tools/testing/selftests/arm64/Makefile
-> >> +++ b/tools/testing/selftests/arm64/Makefile
-> >> @@ -1,11 +1,69 @@
-> >>  # SPDX-License-Identifier: GPL-2.0
-> >> +# Copyright (C) 2019 ARM Limited
-> > 
-> > Change of copyright?  This isn't pure Arm IP upstream IIUC.
-> > 
-> > Maybe just drop it: Makefiles don't usually contain significant IP, so
-> > many have no copyright message anyway.
-> > 
-> Right. I'll drop.
-> >> -# ARCH can be overridden by the user for cross compiling
-> >> -ARCH ?= $(shell uname -m 2>/dev/null || echo not)
-> >> +# When ARCH not overridden for crosscompiling, lookup machine
-> >> +ARCH ?= $(shell uname -m)
-> >> +ARCH := $(shell echo $(ARCH) | sed -e s/aarch64/arm64/)
-> >>  
-> >> -ifneq (,$(filter $(ARCH),aarch64 arm64))
-> >> -TEST_GEN_PROGS := tags_test
-> >> -TEST_PROGS := run_tags_test.sh
-> >> +ifeq ("x$(ARCH)", "xarm64")
-> >> +SUBDIRS := tags
-> >> +else
-> >> +SUBDIRS :=
-> >>  endif
-> >>  
-> >> -include ../lib.mk
-> >> +CFLAGS := -Wall -O2 -g
-> >> +
-> >> +# A proper top_srcdir is needed by KSFT(lib.mk)
-> >> +top_srcdir = ../../../../..
-> >> +
-> >> +# Additional include paths needed by kselftest.h and local headers
-> >> +CFLAGS += -I$(top_srcdir)/tools/testing/selftests/
-> >> +
-> >> +# Guessing where the Kernel headers could have been installed
-> >> +# depending on ENV config
-> >> +ifeq ($(KBUILD_OUTPUT),)
-> >> +khdr_dir = $(top_srcdir)/usr/include
-> >> +else
-> >> +# the KSFT preferred location when KBUILD_OUTPUT is set
-> >> +khdr_dir = $(KBUILD_OUTPUT)/kselftest/usr/include
-> >> +endif
-> > 
-> > Looking at this, can we just pass the directory in from the toplevel
-> > "all" rule instead of guessing?
-> > 
-> Do you mean toplevel in KSFT ?
-> I think it's how should be done at the end, but I was trying to keep this series on
-> arm64/ lands only. (also maybe I'm missing something obvious in KSFT handling of this
-> situation....even though many other KSFT use built CFLAGS like: -I../../../usr/include
-> or similar)
-> 
-> > Maybe don't churn this for now though.  It's something that could be
-> > looked at later.
-> > 
-> 
-> Ok. I'll leave here and fix it to avoid relative paths...which could be problematic
-> when exported to lower level Makefiles.
-> 
-> Cheers
-> 
-> Cristian
+> Ok yes, I meant the abort coming from assert(0) in fact....I'll review all
+> the critical asserts for additional aborts in V6
 
-Sounds reasonable
+OK -- I guess this only matters for things that should be reported as
+test failures.  Things that are purely bugs in the test are less of a
+concern.
 
 Cheers
 ---Dave
