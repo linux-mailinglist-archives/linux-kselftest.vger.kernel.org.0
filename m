@@ -2,289 +2,174 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 170DDAAA6B
-	for <lists+linux-kselftest@lfdr.de>; Thu,  5 Sep 2019 19:57:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09623AAA94
+	for <lists+linux-kselftest@lfdr.de>; Thu,  5 Sep 2019 20:08:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732975AbfIER5I (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 5 Sep 2019 13:57:08 -0400
-Received: from foss.arm.com ([217.140.110.172]:48170 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729101AbfIER5I (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 5 Sep 2019 13:57:08 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0FB77337;
-        Thu,  5 Sep 2019 10:57:07 -0700 (PDT)
-Received: from [10.1.197.50] (e120937-lin.cambridge.arm.com [10.1.197.50])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3B7483F718;
-        Thu,  5 Sep 2019 10:57:06 -0700 (PDT)
-Subject: Re: [PATCH v5 01/11] kselftest: arm64: add skeleton Makefile
-To:     Amit Kachhap <Amit.Kachhap@arm.com>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "shuah@kernel.org" <shuah@kernel.org>
-Cc:     "andreyknvl@google.com" <andreyknvl@google.com>,
-        Dave P Martin <Dave.Martin@arm.com>
-References: <20190902112932.36129-1-cristian.marussi@arm.com>
- <20190902112932.36129-2-cristian.marussi@arm.com>
- <cce97298-7a27-c470-6fc5-873b4447ecc9@arm.com>
-From:   Cristian Marussi <cristian.marussi@arm.com>
-Message-ID: <e7b7b3fe-aba8-a4f2-400b-7cdeebd080e8@arm.com>
-Date:   Thu, 5 Sep 2019 18:57:02 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        id S2403832AbfIESIY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 5 Sep 2019 14:08:24 -0400
+Received: from zeniv.linux.org.uk ([195.92.253.2]:39314 "EHLO
+        ZenIV.linux.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726097AbfIESIY (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 5 Sep 2019 14:08:24 -0400
+Received: from viro by ZenIV.linux.org.uk with local (Exim 4.92.1 #3 (Red Hat Linux))
+        id 1i5wAg-000437-LE; Thu, 05 Sep 2019 18:07:51 +0000
+Date:   Thu, 5 Sep 2019 19:07:50 +0100
+From:   Al Viro <viro@zeniv.linux.org.uk>
+To:     Aleksa Sarai <cyphar@cyphar.com>
+Cc:     Jeff Layton <jlayton@kernel.org>,
+        "J. Bruce Fields" <bfields@fieldses.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        David Howells <dhowells@redhat.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Christian Brauner <christian@brauner.io>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Jann Horn <jannh@google.com>, Tycho Andersen <tycho@tycho.ws>,
+        David Drysdale <drysdale@google.com>,
+        Chanho Min <chanho.min@lge.com>,
+        Oleg Nesterov <oleg@redhat.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Aleksa Sarai <asarai@suse.de>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        containers@lists.linux-foundation.org, linux-alpha@vger.kernel.org,
+        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-ia64@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        linux-xtensa@linux-xtensa.org, sparclinux@vger.kernel.org
+Subject: Re: [PATCH v12 01/12] lib: introduce copy_struct_{to,from}_user
+ helpers
+Message-ID: <20190905180750.GQ1131@ZenIV.linux.org.uk>
+References: <20190904201933.10736-1-cyphar@cyphar.com>
+ <20190904201933.10736-2-cyphar@cyphar.com>
 MIME-Version: 1.0
-In-Reply-To: <cce97298-7a27-c470-6fc5-873b4447ecc9@arm.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190904201933.10736-2-cyphar@cyphar.com>
+User-Agent: Mutt/1.12.0 (2019-05-25)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Amit
+On Thu, Sep 05, 2019 at 06:19:22AM +1000, Aleksa Sarai wrote:
+> +/*
+> + * "memset(p, 0, size)" but for user space buffers. Caller must have already
+> + * checked access_ok(p, size).
+> + */
+> +static int __memzero_user(void __user *p, size_t s)
+> +{
+> +	const char zeros[BUFFER_SIZE] = {};
+> +	while (s > 0) {
+> +		size_t n = min(s, sizeof(zeros));
+> +
+> +		if (__copy_to_user(p, zeros, n))
+> +			return -EFAULT;
+> +
+> +		p += n;
+> +		s -= n;
+> +	}
+> +	return 0;
+> +}
 
-On 03/09/2019 10:26, Amit Kachhap wrote:
-> 
-> Hi Cristian,
-> 
-> On 9/2/19 4:59 PM, Cristian Marussi wrote:
->> Add a new arm64-specific empty subsystem amongst TARGETS of KSFT build
->> framework; keep these new arm64 KSFT testcases separated into distinct
->> subdirs inside tools/testing/selftests/arm64/ depending on the specific
->> subsystem targeted.
->>
->> Add into toplevel arm64 KSFT Makefile a mechanism to guess the effective
->> location of Kernel headers as installed by KSFT framework.
->>
->> Merge with
->>
->> commit 9ce1263033cd ("selftests, arm64: add a selftest for passing
->> 		     tagged pointers to kernel")
->>
->> while moving such KSFT tags tests inside their own subdirectory
->> (arm64/tags).
->>
->> Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
->> ---
->> v4 --> v5
->> - rebased on arm64/for-next/core
->> - merged this patch with KSFT arm64 tags patch, while moving the latter
->>    into its own subdir
->> - moved kernel header includes search mechanism from KSFT arm64
->>    SIGNAL Makefile
-> This approach breaks the compilation of individual test cases which need 
-> to export includes individually.
-> 
-> make -C tools/testing/selftests/arm64/signal
-> 
-> ../../lib.mk:25: ../../../../scripts/subarch.include: No such file or 
-> directory
-> Makefile:25: warning: overriding recipe for target 'clean'
-> ../../lib.mk:123: warning: ignoring old recipe for target 'clean'
-> make: *** No rule to make target '../../../../scripts/subarch.include'. 
-> Stop.
-> 
-> However tags test works well,
-> make -C tools/testing/selftests/arm64/tags
-> 
-> aarch64-none-linux-gnu-gcc     tags_test.c  -o 
-> /home/amikac01/work/MTE_WORK/linux-server/linux/tools/testing/selftests/arm64/tags/tags_test
-> 
-> 
-> Thanks,
-> Amit Daniel
-> 
+That's called clear_user().
 
-So at the end I think I'll opt for the following in V6 regarding the issue of being able to build specific
-KSFT arm64 subsystems while properly searching kernel headers (and keeping compatible with the KSFT
-framework completely):
+> +int copy_struct_to_user(void __user *dst, size_t usize,
+> +			const void *src, size_t ksize)
+> +{
+> +	size_t size = min(ksize, usize);
+> +	size_t rest = abs(ksize - usize);
+> +
+> +	if (unlikely(usize > PAGE_SIZE))
+> +		return -EFAULT;
 
-- only arm64 toplevel KSFT Makefile searches for the kernel headers location for all and propagates down the info
+Why?
 
-- you can also now optionally specify which arm64 subsystem to build (to avoid have to build, say, all of signal/
-  if you are not interested into....a sort of standalone mode without all the burden of the old standalone mode)
+> +	} else if (usize > ksize) {
+> +		if (__memzero_user(dst + size, rest))
+> +			return -EFAULT;
+> +	}
+> +	/* Copy the interoperable parts of the struct. */
+> +	if (__copy_to_user(dst, src, size))
+> +		return -EFAULT;
 
-So you can issue:
+Why not simply clear_user() and copy_to_user()?
 
-$ make TARGETS=arm64 kselftest
+> +int copy_struct_from_user(void *dst, size_t ksize,
+> +			  const void __user *src, size_t usize)
+> +{
+> +	size_t size = min(ksize, usize);
+> +	size_t rest = abs(ksize - usize);
 
-or similarly:
+Cute, but... you would be just as well without that 'rest' thing.
 
-$ make -C tools/testing/selftests TARGETS=arm64 \
-                INSTALL_PATH=<your-installation-path> install
+> +
+> +	if (unlikely(usize > PAGE_SIZE))
+> +		return -EFAULT;
 
-or select subsystems:
+Again, why?
 
-$ make -C tools/testing/selftests TARGETS=arm64 SUBTARGETS="tags signal" \
-                INSTALL_PATH=<your-installation-path> install
+> +	if (unlikely(!access_ok(src, usize)))
+> +		return -EFAULT;
 
-with all of the above looking for the K headers in the proper place and without
-duplicating the search code in multiple places. (bugs apart :D)
+Why not simply copy_from_user() here?
 
-Thanks
+> +	/* Deal with trailing bytes. */
+> +	if (usize < ksize)
+> +		memset(dst + size, 0, rest);
+> +	else if (usize > ksize) {
+> +		const void __user *addr = src + size;
+> +		char buffer[BUFFER_SIZE] = {};
+> +
+> +		while (rest > 0) {
+> +			size_t bufsize = min(rest, sizeof(buffer));
+> +
+> +			if (__copy_from_user(buffer, addr, bufsize))
+> +				return -EFAULT;
+> +			if (memchr_inv(buffer, 0, bufsize))
+> +				return -E2BIG;
 
-Cristian
-
->> - export proper top_srcdir ENV for lib.mk
->> v3 --> v4
->> - comment reword
->> - simplified documentation in README
->> - dropped README about standalone
->> ---
->>   tools/testing/selftests/Makefile              |  1 +
->>   tools/testing/selftests/arm64/Makefile        | 70 +++++++++++++++++--
->>   tools/testing/selftests/arm64/README          | 20 ++++++
->>   tools/testing/selftests/arm64/tags/Makefile   | 10 +++
->>   .../arm64/{ => tags}/run_tags_test.sh         |  0
->>   .../selftests/arm64/{ => tags}/tags_test.c    |  0
->>   6 files changed, 95 insertions(+), 6 deletions(-)
->>   create mode 100644 tools/testing/selftests/arm64/README
->>   create mode 100644 tools/testing/selftests/arm64/tags/Makefile
->>   rename tools/testing/selftests/arm64/{ => tags}/run_tags_test.sh (100%)
->>   rename tools/testing/selftests/arm64/{ => tags}/tags_test.c (100%)
->>
->> diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
->> index 25b43a8c2b15..1722dae9381a 100644
->> --- a/tools/testing/selftests/Makefile
->> +++ b/tools/testing/selftests/Makefile
->> @@ -1,5 +1,6 @@
->>   # SPDX-License-Identifier: GPL-2.0
->>   TARGETS = android
->> +TARGETS += arm64
->>   TARGETS += bpf
->>   TARGETS += breakpoints
->>   TARGETS += capabilities
->> diff --git a/tools/testing/selftests/arm64/Makefile b/tools/testing/selftests/arm64/Makefile
->> index a61b2e743e99..5dbb0ffdfc9a 100644
->> --- a/tools/testing/selftests/arm64/Makefile
->> +++ b/tools/testing/selftests/arm64/Makefile
->> @@ -1,11 +1,69 @@
->>   # SPDX-License-Identifier: GPL-2.0
->> +# Copyright (C) 2019 ARM Limited
->>   
->> -# ARCH can be overridden by the user for cross compiling
->> -ARCH ?= $(shell uname -m 2>/dev/null || echo not)
->> +# When ARCH not overridden for crosscompiling, lookup machine
->> +ARCH ?= $(shell uname -m)
->> +ARCH := $(shell echo $(ARCH) | sed -e s/aarch64/arm64/)
->>   
->> -ifneq (,$(filter $(ARCH),aarch64 arm64))
->> -TEST_GEN_PROGS := tags_test
->> -TEST_PROGS := run_tags_test.sh
->> +ifeq ("x$(ARCH)", "xarm64")
->> +SUBDIRS := tags
->> +else
->> +SUBDIRS :=
->>   endif
->>   
->> -include ../lib.mk
->> +CFLAGS := -Wall -O2 -g
->> +
->> +# A proper top_srcdir is needed by KSFT(lib.mk)
->> +top_srcdir = ../../../../..
->> +
->> +# Additional include paths needed by kselftest.h and local headers
->> +CFLAGS += -I$(top_srcdir)/tools/testing/selftests/
->> +
->> +# Guessing where the Kernel headers could have been installed
->> +# depending on ENV config
->> +ifeq ($(KBUILD_OUTPUT),)
->> +khdr_dir = $(top_srcdir)/usr/include
->> +else
->> +# the KSFT preferred location when KBUILD_OUTPUT is set
->> +khdr_dir = $(KBUILD_OUTPUT)/kselftest/usr/include
->> +endif
->> +
->> +CFLAGS += -I$(khdr_dir)
->> +
->> +export CC
->> +export CFLAGS
->> +export top_srcdir
->> +
->> +all:
->> +	@for DIR in $(SUBDIRS); do				\
->> +		BUILD_TARGET=$(OUTPUT)/$$DIR;			\
->> +		mkdir -p $$BUILD_TARGET;			\
->> +		make OUTPUT=$$BUILD_TARGET -C $$DIR $@;		\
->> +	done
->> +
->> +install: all
->> +	@for DIR in $(SUBDIRS); do				\
->> +		BUILD_TARGET=$(OUTPUT)/$$DIR;			\
->> +		make OUTPUT=$$BUILD_TARGET -C $$DIR $@;		\
->> +	done
->> +
->> +run_tests: all
->> +	@for DIR in $(SUBDIRS); do				\
->> +		BUILD_TARGET=$(OUTPUT)/$$DIR;			\
->> +		make OUTPUT=$$BUILD_TARGET -C $$DIR $@;		\
->> +	done
->> +
->> +# Avoid any output on non arm64 on emit_tests
->> +emit_tests: all
->> +	@for DIR in $(SUBDIRS); do				\
->> +		BUILD_TARGET=$(OUTPUT)/$$DIR;			\
->> +		make OUTPUT=$$BUILD_TARGET -C $$DIR $@;		\
->> +	done
->> +
->> +clean:
->> +	@for DIR in $(SUBDIRS); do				\
->> +		BUILD_TARGET=$(OUTPUT)/$$DIR;			\
->> +		make OUTPUT=$$BUILD_TARGET -C $$DIR $@;		\
->> +	done
->> +
->> +.PHONY: all clean install run_tests emit_tests
->> diff --git a/tools/testing/selftests/arm64/README b/tools/testing/selftests/arm64/README
->> new file mode 100644
->> index 000000000000..aca892e62a6c
->> --- /dev/null
->> +++ b/tools/testing/selftests/arm64/README
->> @@ -0,0 +1,20 @@
->> +KSelfTest ARM64
->> +===============
->> +
->> +- These tests are arm64 specific and so not built or run but just skipped
->> +  completely when env-variable ARCH is found to be different than 'arm64'
->> +  and `uname -m` reports other than 'aarch64'.
->> +
->> +- Holding true the above, ARM64 KSFT tests can be run within the KSelfTest
->> +  framework using standard Linux top-level-makefile targets:
->> +
->> +      $ make TARGETS=arm64 kselftest-clean
->> +      $ make TARGETS=arm64 kselftest
->> +
->> +      or
->> +
->> +      $ make -C tools/testing/selftests TARGETS=arm64 \
->> +		INSTALL_PATH=<your-installation-path> install
->> +
->> +   Further details on building and running KFST can be found in:
->> +     Documentation/dev-tools/kselftest.rst
->> diff --git a/tools/testing/selftests/arm64/tags/Makefile b/tools/testing/selftests/arm64/tags/Makefile
->> new file mode 100644
->> index 000000000000..76205533135b
->> --- /dev/null
->> +++ b/tools/testing/selftests/arm64/tags/Makefile
->> @@ -0,0 +1,10 @@
->> +# SPDX-License-Identifier: GPL-2.0
->> +# ARCH can be overridden by the user for cross compiling
->> +ARCH ?= $(shell uname -m 2>/dev/null || echo not)
->> +
->> +ifneq (,$(filter $(ARCH),aarch64 arm64))
->> +TEST_GEN_PROGS := tags_test
->> +TEST_PROGS := run_tags_test.sh
->> +endif
->> +
->> +include ../../lib.mk
->> diff --git a/tools/testing/selftests/arm64/run_tags_test.sh b/tools/testing/selftests/arm64/tags/run_tags_test.sh
->> similarity index 100%
->> rename from tools/testing/selftests/arm64/run_tags_test.sh
->> rename to tools/testing/selftests/arm64/tags/run_tags_test.sh
->> diff --git a/tools/testing/selftests/arm64/tags_test.c b/tools/testing/selftests/arm64/tags/tags_test.c
->> similarity index 100%
->> rename from tools/testing/selftests/arm64/tags_test.c
->> rename to tools/testing/selftests/arm64/tags/tags_test.c
->>
-
+Frankly, that looks like a candidate for is_all_zeroes_user().
+With the loop like above serving as a dumb default.  And on
+badly alighed address it _will_ be dumb.  Probably too much
+so - something like
+	if ((unsigned long)addr & 1) {
+		u8 v;
+		if (get_user(v, (__u8 __user *)addr))
+			return -EFAULT;
+		if (v)
+			return -E2BIG;
+		addr++;
+	}
+	if ((unsigned long)addr & 2) {
+		u16 v;
+		if (get_user(v, (__u16 __user *)addr))
+			return -EFAULT;
+		if (v)
+			return -E2BIG;
+		addr +=2;
+	}
+	if ((unsigned long)addr & 4) {
+		u32 v;
+		if (get_user(v, (__u32 __user *)addr))
+			return -EFAULT;
+		if (v)
+			return -E2BIG;
+	}
+	<read the rest like you currently do>
+would be saner, and things like x86 could trivially add an
+asm variant - it's not hard.  Incidentally, memchr_inv() is
+an overkill in this case...
