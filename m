@@ -2,82 +2,82 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 742ADABABA
-	for <lists+linux-kselftest@lfdr.de>; Fri,  6 Sep 2019 16:21:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 43902ABC77
+	for <lists+linux-kselftest@lfdr.de>; Fri,  6 Sep 2019 17:28:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387881AbfIFOVy (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 6 Sep 2019 10:21:54 -0400
-Received: from foss.arm.com ([217.140.110.172]:57040 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732020AbfIFOVx (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 6 Sep 2019 10:21:53 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2E10228;
-        Fri,  6 Sep 2019 07:21:53 -0700 (PDT)
-Received: from [10.1.197.50] (e120937-lin.cambridge.arm.com [10.1.197.50])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8AA123F718;
-        Fri,  6 Sep 2019 07:21:51 -0700 (PDT)
-Subject: Re: [PATCH ARM64] selftests, arm64: add kernel headers path for
- tags_test
-To:     Andrey Konovalov <andreyknvl@google.com>,
-        Will Deacon <will@kernel.org>
-Cc:     Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Will Deacon <will.deacon@arm.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Evgeniy Stepanov <eugenis@google.com>,
-        Kostya Serebryany <kcc@google.com>,
-        Amit Kachhap <Amit.Kachhap@arm.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Dmitry Vyukov <dvyukov@google.com>
-References: <c28135c82eaf6d6e2c7e02c1ebc2b99a607d8116.1567615235.git.andreyknvl@google.com>
- <20190906135151.d74nq3qzjmhe4mb5@willie-the-truck>
- <CAAeHK+zDZo6oaSDnJfiD_S1WYqAT13yEFP7hbehZ62C-BBp3rQ@mail.gmail.com>
-From:   Cristian Marussi <cristian.marussi@arm.com>
-Message-ID: <febb420d-003a-0288-8636-7fd7878ef63b@arm.com>
-Date:   Fri, 6 Sep 2019 15:21:49 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        id S2391173AbfIFP2S (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 6 Sep 2019 11:28:18 -0400
+Received: from mout.kundenserver.de ([212.227.17.24]:59889 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388007AbfIFP2R (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 6 Sep 2019 11:28:17 -0400
+Received: from threadripper.lan ([149.172.19.189]) by mrelayeu.kundenserver.de
+ (mreue108 [212.227.15.145]) with ESMTPA (Nemesis) id
+ 1McpS0-1if2jw10Ms-00ZtUu; Fri, 06 Sep 2019 17:28:02 +0200
+From:   Arnd Bergmann <arnd@arndb.de>
+To:     Brendan Higgins <brendanhiggins@google.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] kunit: add PRINTK dependency
+Date:   Fri,  6 Sep 2019 17:27:45 +0200
+Message-Id: <20190906152800.1662489-1-arnd@arndb.de>
+X-Mailer: git-send-email 2.20.0
 MIME-Version: 1.0
-In-Reply-To: <CAAeHK+zDZo6oaSDnJfiD_S1WYqAT13yEFP7hbehZ62C-BBp3rQ@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-Provags-ID: V03:K1:xQht81px/ceYx++wN+B2QvBkFd39U6O35ZakKPBR4duPVEzMpZ6
+ aEvP0fGtplDdzkiG5ZJ/xJxJyreFTU0C341Rp/SN2n0HPHSrTQP/6UZ0TW+Mf8UGOHL4mLz
+ GTOPiILBrpAAAdleY1XIxLrQdPcgjFpzktrxx+SGY3A1FwPrthVxPXhBPSo8iies5eiSYZa
+ U2PEq/uSfNR5FxEDzv8uQ==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:MA9m20dznII=:XUqyWaYvYb9f8p8w20bBZw
+ uUH4FdWPjuZV89mmTgGVg99mY1ukZgPeRT+GRh3d6lFToBjKbfaoh+PmKdZTIDiIUCcdkvkf3
+ eqLpOXSKy+7Cs9NfX4KBMIYOpupDHVKoqJ+yfzHoF9OduOtbREqZKPxILC/BCQpD4YKGLbIIw
+ DNCP3cfCvCMnIwAeZNcG7dipqZZ2wlS0xakiks6J8mfnEQhZSr26fwdQxbM2688t9tRNtEqjA
+ yTTnx1iKlvMlh49KpbLGGI6IpI7c2QD6R1VGJBZEmRr4BdyaqiIqlYDW4V8weFPxQoWdhyLzq
+ am01dgujshTbqbIN59MHpnrhDSnL3QXC+VyoZHLFQaQVENJEzAcug5gLe2s2jMk2SBjuSZvGA
+ jqCjOo8Qs7Eq18oR0oi2QwHuqZrc5r0UkV5mDtKnSOzWkkYDb0UFRp5s85qkmB0iAwD95LWyA
+ W9A53ip3HNK/i2ObdeiMlOBrX0FPLxIHj6AHYxQCHgJy460f40xfJKtz6QkG/UhanqwC2dyLq
+ wsdGz3Gi3NQI3FNzDKALgpvjFDUuQm6RfVz5XMXO8jaNuoCljo3KFv0o8GCME0evUTxCMF90h
+ mLxIC2PYdRLaximU2IvVHo3wOXZrjR2KgRYvIkqc8hrHOvyQu7AsqlMvyZNsmOKsiraqzeOlb
+ jJRTh7BwokLj9xW7sYT+gtI/I5uUYOtUvdFUOwPejtkt1gAYXsfd+Vw+70D/l3GpxqEYL6KJ4
+ HpZQX2IqcjmfkvRndSrXkul9Gv55FMvdXeyBzHZbQfSoyOqr6dy07YIy2E8VNv1UlGy0g/PdA
+ 38ErFLNR+/f4+zn+KK9Adr6DLMlF/vyT82/VH6lVuYBenCk008=
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 06/09/2019 14:55, Andrey Konovalov wrote:
-> On Fri, Sep 6, 2019 at 3:51 PM Will Deacon <will@kernel.org> wrote:
->>
->> On Wed, Sep 04, 2019 at 06:41:00PM +0200, Andrey Konovalov wrote:
->>> tags_test.c relies on PR_SET_TAGGED_ADDR_CTRL/PR_TAGGED_ADDR_ENABLE being
->>> present in system headers. When this is not the case the build of this
->>> test fails with undeclared identifier errors.
->>>
->>> Fix by providing the path to the KSFT installed kernel headers in CFLAGS.
->>>
->>> Reported-by: Cristian Marussi <cristian.marussi@arm.com>
->>> Suggested-by: Cristian Marussi <cristian.marussi@arm.com>
->>> Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
->>> ---
->>>  tools/testing/selftests/arm64/Makefile | 1 +
->>>  1 file changed, 1 insertion(+)
->>
->> Damn, I just tagged the arm64 queue for 5.4 and didn't spot this patch.
->>
->> I'll queue it at -rc1 instead, if that's ok? It doesn't look urgent.
-> 
-> Sorry, I guess I should have pinged you directly.
-> 
-> I think it should be fine to leave it for rc1. It might cause a build
-> error in some kernel CI systems if they run kselftests though.
-> 
+The vprintk_emit() function is not available when CONFIG_PRINTK
+is disabled:
 
-It won't be a big issue probably.
+kunit/test.c:22:9: error: implicit declaration of function 'vprintk_emit' [-Werror,-Wimplicit-function-declaration]
 
-Cristian
+I suppose without printk(), there is not much use in kunit
+either, so add a Kconfig depenedency here.
+
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+---
+ kunit/Kconfig | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/kunit/Kconfig b/kunit/Kconfig
+index 8541ef95b65a..e80d8af00454 100644
+--- a/kunit/Kconfig
++++ b/kunit/Kconfig
+@@ -6,6 +6,7 @@ menu "KUnit support"
+ 
+ config KUNIT
+ 	bool "Enable support for unit tests (KUnit)"
++	depends on PRINTK
+ 	help
+ 	  Enables support for kernel unit tests (KUnit), a lightweight unit
+ 	  testing and mocking framework for the Linux kernel. These tests are
+-- 
+2.20.0
+
