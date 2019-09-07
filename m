@@ -2,102 +2,111 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BBFA1AC3BA
-	for <lists+linux-kselftest@lfdr.de>; Sat,  7 Sep 2019 02:44:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6D21AC3D2
+	for <lists+linux-kselftest@lfdr.de>; Sat,  7 Sep 2019 03:16:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729121AbfIGAoD (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 6 Sep 2019 20:44:03 -0400
-Received: from mail-pg1-f193.google.com ([209.85.215.193]:32976 "EHLO
-        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2393085AbfIGAoA (ORCPT
+        id S2405657AbfIGBQp (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 6 Sep 2019 21:16:45 -0400
+Received: from mail-pf1-f196.google.com ([209.85.210.196]:40196 "EHLO
+        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2405656AbfIGBQo (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 6 Sep 2019 20:44:00 -0400
-Received: by mail-pg1-f193.google.com with SMTP id n190so4462956pgn.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 06 Sep 2019 17:44:00 -0700 (PDT)
+        Fri, 6 Sep 2019 21:16:44 -0400
+Received: by mail-pf1-f196.google.com with SMTP id x127so5703086pfb.7
+        for <linux-kselftest@vger.kernel.org>; Fri, 06 Sep 2019 18:16:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=Qq+ViY1LzTKSZu7bhAccIqZ/Vrzl8d1032PbomfEyFI=;
-        b=n7/teM7m5aZbE1shei+cdfMkg1tdBR1zKLy2TcRf4qFA/v75LU483wyCY0kuW4fasm
-         bN/U3dSFZ4TbNy62Z05NOELMTUHQavfaiZqchmgH9E+RL4jPMFy2VLEkyaq9ca9pr0+a
-         ZtJVrhe+xaj2XOVmemaHzu4vlvc6I5+qzRPaNW9Qn/xqDysDhAG2o452neAD5n++i5pc
-         w0dokgJeE+NPPJTcIyIErlfWZTS4yYfJQuO6qj6PftV/CI8Kl2mlEh5olkp8HBhpTCP3
-         QSTPAsailtOOs1KCcL1ZhUdXYh+JQanFd19NbVdG3YvcKcqKaAwZFjD7MM+IsbXn+F4i
-         fkwA==
+        bh=CUMLUYw11DOEGaOt2c3KR4xlcT4J6qqAgrc0awCt3Eg=;
+        b=vj2w/e5cynYE+vjfAZI2tX5TyOa/eIly90Mtloq9dBUi4zV3OZBAX+V5D5J9JIseOG
+         RVAP+maymyZ9QcA4ipuuzzpb8QujB0NJSTP6gzJ2W4XlfE8yzBdlYqE7ZIQnmrCIoSWV
+         UqjcrpLJ3/OPmpSyA8sPj/o9pNcrNJ1oM09VH91yWHpK99FK8jHCHOG2Wg8CkgiUP+Np
+         5ZNlOa6OKdWi0q6Bvp3WF/SDQT91OEOlcGWS3zIHeWSFX4IZfirFiwDFLqkKA8hR488T
+         0bo0DaZwtEwwEMa4OmpA097YR4u1fZA7mJbAHmMihtE/I8Z8uLb0ZDPzxCWg2+x0mkLF
+         nHfg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=Qq+ViY1LzTKSZu7bhAccIqZ/Vrzl8d1032PbomfEyFI=;
-        b=Bi85uJi63ftiMDci6V1tIVA52KCDTlfFLZCL8Q7qdbh/+rjnD73iIdh1iduWtYHcZQ
-         tpdHQEWdozYPXZREorjL8QDHU2BhiKDrwoS5dx+HiW/t2oR99UcZU7hJhdJZgSGMjiBn
-         OFoejZinLU6w0YMf4m1MMFEPquWfULLgMSSE+tigcHPp57N0R+X1WtHI9/r3N9ImpIh/
-         i/8R4CBYJuqvAc9NYgoIuBaF1yHQjwctzm9lVgo/8lLYBlRIqBJ0O7BCbtIJTwASvlQS
-         CZ8vwt8ymxJOhcCnBiLaWv9+0NAm0orFOEmUR9zI1KVfxmDmI68PaOrx3zBdKscgjb9u
-         g7nw==
-X-Gm-Message-State: APjAAAXClMxITJZLmjSM0N2H824sneyAh6P0q9Hda5vEUWEAqLPKnFoE
-        5/IXAUXHg/sXTGcvmxYIw7BXcrz9eHndemp5oF1nig==
-X-Google-Smtp-Source: APXvYqxNP6gWOyjr1acOuCGc/GdMi0xFXjEM4HZgQ5wAy7E8EJDZcEtr9GXcq4irNMIDrGsZSm1SJQndC627Tp7FRAk=
-X-Received: by 2002:a17:90a:7f01:: with SMTP id k1mr12133159pjl.84.1567817039262;
- Fri, 06 Sep 2019 17:43:59 -0700 (PDT)
+        bh=CUMLUYw11DOEGaOt2c3KR4xlcT4J6qqAgrc0awCt3Eg=;
+        b=XuRouJIQMqyjiYmHmzdbiUwBzaReywJm0/I217NnOizk5PLir6nG4AxnB/LJ3FUWQY
+         i1VQu+KxhMMUWY0AttQMoAaYBCG9bVvaknj0m3hf4OvKZE+A6CUIyTUKh9ZAvBayvXW0
+         Fe8Oh7pmBGbg30tE5FMLxfzL+VhNEse4I4GomyPDtYqkr71c00kyrWSeKgGm/CmChf6g
+         0J+4MlrY9kmuYNxIvs8Gxuovf54gYhfetb6CO6a3jpdrHqWsxhQVnWrqTlX2NkucredX
+         pAqzRw3m1x7BJM7dcIu/lli9PSQxe6B1uDncFUmQaBUu+sxPCqMKdHqStlM//v3iywbj
+         TiHQ==
+X-Gm-Message-State: APjAAAViSijBHDlZH+T53opCILDPvmg1WJ0hip04pklo5n9CHSIQ39x/
+        UHHbiWG9ZLQNDvOBC7Cj/vJ7PiiUWinUZbXwYyTdPQ==
+X-Google-Smtp-Source: APXvYqxR7S1A/sQRfcM0XOrt9xhBDpv1jiYBpo79su3QI6BNtMNGtX/Qi3gydenKSctOVWxhVYDRklQXBkHTIDB5eKo=
+X-Received: by 2002:a63:205f:: with SMTP id r31mr3094032pgm.159.1567819003432;
+ Fri, 06 Sep 2019 18:16:43 -0700 (PDT)
 MIME-Version: 1.0
-References: <20190906152800.1662489-1-arnd@arndb.de> <5dfe1bfc-0236-25cf-756b-ce05f7110136@linuxfoundation.org>
- <CAK8P3a3ynubySZ3A5M7D__B6R+caMjys=v+GVjqA78rppOJQQQ@mail.gmail.com> <67f4fe26-7d6a-68f2-dc45-af358be590df@linuxfoundation.org>
-In-Reply-To: <67f4fe26-7d6a-68f2-dc45-af358be590df@linuxfoundation.org>
+References: <CAEjAshr=JqVpF651eSZYFhwVAMNZ29LWcfrH07K_M9GU=hPnvg@mail.gmail.com>
+ <1567786314-12330-1-git-send-email-sj38.park@gmail.com>
+In-Reply-To: <1567786314-12330-1-git-send-email-sj38.park@gmail.com>
 From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Fri, 6 Sep 2019 17:43:48 -0700
-Message-ID: <CAFd5g47uH-6Bn53Dd8VsFMVn7o26txY2rrUe_XmU3+E4VV_B=A@mail.gmail.com>
-Subject: Re: [PATCH] kunit: add PRINTK dependency
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Shuah Khan <skhan@linuxfoundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Stephen Boyd <sboyd@kernel.org>,
+Date:   Fri, 6 Sep 2019 18:16:32 -0700
+Message-ID: <CAFd5g44=8TV4VciMkcD2DHR+UsnpwyEFbw2Xucwo7-as6Py_4g@mail.gmail.com>
+Subject: Re: [PATCH] kunit: Fix '--build_dir' option
+To:     SeongJae Park <sj38.park@gmail.com>
+Cc:     shuah <shuah@kernel.org>,
         "open list:KERNEL SELFTEST FRAMEWORK" 
         <linux-kselftest@vger.kernel.org>, kunit-dev@googlegroups.com,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        shuah <shuah@kernel.org>
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Sep 6, 2019 at 9:08 AM Shuah Khan <skhan@linuxfoundation.org> wrote:
+On Fri, Sep 6, 2019 at 9:12 AM SeongJae Park <sj38.park@gmail.com> wrote:
 >
-> On 9/6/19 10:02 AM, Arnd Bergmann wrote:
-> > On Fri, Sep 6, 2019 at 5:39 PM Shuah Khan <skhan@linuxfoundation.org> wrote:
-> >
-> >>>    config KUNIT
-> >>>        bool "Enable support for unit tests (KUnit)"
-> >>> +     depends on PRINTK
-> >>>        help
-> >>>          Enables support for kernel unit tests (KUnit), a lightweight unit
-> >>>          testing and mocking framework for the Linux kernel. These tests are
-> >>>
-> >>
-> >> Hi Arnd,
-> >>
-> >> This is found and fixed already. I am just about to apply Berndan's
-> >> patch that fixes this dependency. All of this vprintk_emit() stuff
-> >> is redone.
-> >
-> > Ok, perfect. Unfortunately I only started testing the coming
-> > linux-next release after Stephen went on his break, so
-> > I'm missing some updates.
-> >
+> Running kunit with '--build_dir' option gives following error message:
 >
-> No worries. I am pushing it now - should be there in 5-10 mins.
+> ```
+> $ ./tools/testing/kunit/kunit.py run --build_dir ../linux.out.kunit/
+> [00:57:24] Building KUnit Kernel ...
+> [00:57:29] Starting KUnit Kernel ...
+> Traceback (most recent call last):
+>   File "./tools/testing/kunit/kunit.py", line 136, in <module>
+>     main(sys.argv[1:])
+>   File "./tools/testing/kunit/kunit.py", line 129, in main
+>     result = run_tests(linux, request)
+>   File "./tools/testing/kunit/kunit.py", line 68, in run_tests
+>     test_result = kunit_parser.parse_run_tests(kunit_output)
+>   File "/home/sjpark/linux/tools/testing/kunit/kunit_parser.py", line
+> 283, in parse_run_tests
+>     test_result =
+> parse_test_result(list(isolate_kunit_output(kernel_output)))
+>   File "/home/sjpark/linux/tools/testing/kunit/kunit_parser.py", line
+> 54, in isolate_kunit_output
+>     for line in kernel_output:
+>   File "/home/sjpark/linux/tools/testing/kunit/kunit_kernel.py", line
+> 145, in run_kernel
+>     process = self._ops.linux_bin(args, timeout, build_dir)
+>   File "/home/sjpark/linux/tools/testing/kunit/kunit_kernel.py", line
+> 69, in linux_bin
+>     stderr=subprocess.PIPE)
+>   File "/usr/lib/python3.5/subprocess.py", line 947, in __init__
+>     restore_signals, start_new_session)
+>   File "/usr/lib/python3.5/subprocess.py", line 1551, in _execute_child
+>     raise child_exception_type(errno_num, err_msg)
+> FileNotFoundError: [Errno 2] No such file or directory: './linux'
+> ```
 >
-> Please use linuxk-kselftest next.
+> This error occurs because the '--build_dir' option value is not passed
+> to the 'run_kernel()' function.  Consequently, the function assumes
+> the kernel image that built for the tests, which is under the
+> '--build_dir' directory, is in kernel source directory and finally raises
+> the 'FileNotFoundError'.
 >
-> Let me know if you see any issues. Thanks for testing it.
+> This commit fixes the problem by properly passing the '--build_dir'
+> option value to the 'run_kernel()'.
+>
+> Signed-off-by: SeongJae Park <sj38.park@gmail.com>
 
-Hi Arnd, Shuah accepted my version of the fix earlier today.
-Nevertheless, I really appreciate you looking into this. Sorry for
-wasting your time.
-
-Please let me know if you run into any additional issues.
+Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
+Tested-by: Brendan Higgins <brendanhiggins@google.com>
 
 Thanks!
