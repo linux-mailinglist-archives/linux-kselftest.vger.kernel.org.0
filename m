@@ -2,49 +2,49 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 11ABAAC56A
-	for <lists+linux-kselftest@lfdr.de>; Sat,  7 Sep 2019 10:59:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BBB0AC56C
+	for <lists+linux-kselftest@lfdr.de>; Sat,  7 Sep 2019 10:59:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391521AbfIGI7p (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 7 Sep 2019 04:59:45 -0400
-Received: from mail-wr1-f66.google.com ([209.85.221.66]:46346 "EHLO
+        id S2394572AbfIGI7y (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 7 Sep 2019 04:59:54 -0400
+Received: from mail-wr1-f66.google.com ([209.85.221.66]:44532 "EHLO
         mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2390692AbfIGI7p (ORCPT
+        with ESMTP id S2390692AbfIGI7x (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 7 Sep 2019 04:59:45 -0400
-Received: by mail-wr1-f66.google.com with SMTP id h7so8848931wrt.13;
-        Sat, 07 Sep 2019 01:59:43 -0700 (PDT)
+        Sat, 7 Sep 2019 04:59:53 -0400
+Received: by mail-wr1-f66.google.com with SMTP id 30so8812963wrk.11;
+        Sat, 07 Sep 2019 01:59:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=jsIMACDqxff3KGbVW1Gr6ExXEjisbsF9hjOYbr2Kxz4=;
-        b=TjsrMFnxmWdH5YiIaWM5qEKaZsYQGusAfyc9ldPE640gb3MpAzZiocLXS9wzHpPvch
-         2dLjczIzxmHZhSjvqe5JcTJmyFu7iIUggTAusLm1z4aHJeabURD5dD5w+1b4S4HMAY+u
-         GYr03uoRqNShe9awBBgvMCWsuVvH9xJlktHEsx/T5DiabN5hqy/IH6FbWdvdbDBC44rv
-         aQbBZEBncjhs7EtDhuTj7khKGSgbIXavHswNAmdm7AGcO1or0FgxwgTgBbI6YYiKS4Qt
-         83wIqF+tgvtLi8CqeGFV7/+D/F7VwlO7WQSd+xaFTpCeEGRaAqVsUKB9/dEXr3Wlr4pS
-         RUng==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=gnxWO73QUUHi2cXeJhawoF5m1VJA2QTLwFF/szRZaoM=;
+        b=OkFbFciKRCN/o51L7Ja+aVWvv5cVplr5L+O1Gc7XKpINzLW4s88UIBL9Rv9Lj8d4cs
+         DnyYR6wR2tafOe/sjYd+slKkxcD+u1s8VwmV0feDCQ2Ll3q7Vx4U2IjUuvykRTz/EiyT
+         XkAANFLBDomxrpMPmdi0fYH/5LUNe51acTaTXuDZZUe9Fxgbc74lPc30CQqz2wPijbXI
+         yWZmKocUpoSXvpzxv2fhPyiVbD7pSP2EqmIFVOEEN9CzPBCIiZKo/VrED/Co8KGdKH6f
+         bF1JC8kaW+JH+CvSkgU/XkuI9I2OSb9cEP4oYj97XbDE6e1+w4t/Ccr6ZxL9aDHcb+To
+         1aAA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=jsIMACDqxff3KGbVW1Gr6ExXEjisbsF9hjOYbr2Kxz4=;
-        b=mNo9ripXRb4EED6yIaIdTAizYvon059blk7Qs8pZCj6Xa4lW8zKOHDDrDyw7c4GhIP
-         zysQFaCSwaqYOJCOgjRIf333ojHTr6wZ0+akNlfkpuP/2rXC8aaMU515bwVsP91qZSf3
-         TwqW3B/EwVy9gMgux5JncFj2dffzkplArJxd5j2FS/1p0tufLc2oo6PCBLCFCXxVHnA6
-         O/zTmyFD4ivIKb6qP3uvnhZf/fy+ZQS3XN4v1uUmDGMWmbm/2C56PD/HLzXNhfbafI8P
-         UFTAd4ncfW8C8C35AWC93M00sh5W4dABPqxFd8ye8JDXBORffbJPLRXXZ5B6sWSJokvr
-         MBbw==
-X-Gm-Message-State: APjAAAUHY8TH1+ArCcUSqNpKbvUYwDqD/uGV6pUewfqLhP9i++lwezD+
-        cYzx3Po6TpsZQytofMzQcTo=
-X-Google-Smtp-Source: APXvYqwvSB8r+8hieyWroNrOXH9BxkzHJD0PYInV24502TrcISVLC4cj1a1Wj5eNvq3mHWp8sx45DA==
-X-Received: by 2002:adf:fe0f:: with SMTP id n15mr11061805wrr.343.1567846782624;
-        Sat, 07 Sep 2019 01:59:42 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=gnxWO73QUUHi2cXeJhawoF5m1VJA2QTLwFF/szRZaoM=;
+        b=fjD1nICOtzkGCOtK/FH67mp1I5ZLrV0Qdke0wyFIlleFfpXX/QMfP09QYVqrbbXA55
+         /qLiwThdU1SgAOg1PlR4UvuEiDWmVbqfvwU0JWhLrNyh1AnMMUke6DTk2lDRQdFtwt59
+         ck+ADMiAD/xQNDOPPXecknLpR2Om6dGJ2+rPymqrW2EyXvmnWrZXU/R+Ba404KClFRZm
+         V4PAPqXagZKmi1UA5CIP0YcDMwkKSR9/QiYqAtiQE++RheMjSyfzDnfy67r3YoQcDByc
+         VMz6yCjrXPtC2+TrFnA/lOVfTwjkOb5CA3J39zYNjvoyDMu8Pm6bl4CL/Wmzt7n9Nnb1
+         mLqA==
+X-Gm-Message-State: APjAAAXwU/A5IVQLcTH8ep4FiUcuhzXsiW4MS0VCi1tnACeQeSCgrbgU
+        OWEGyqBYldteAPrNSFy/CrA=
+X-Google-Smtp-Source: APXvYqzD3ub+prw5PrfqRmLe7Pfax+rBD62eVo3vcu7HUWAQNq01XEEVrUBEqZ5okdtqSUrlDgEYvg==
+X-Received: by 2002:adf:d1a4:: with SMTP id w4mr11362546wrc.331.1567846791511;
+        Sat, 07 Sep 2019 01:59:51 -0700 (PDT)
 Received: from localhost.localdomain (ipb218f54c.dynamic.kabel-deutschland.de. [178.24.245.76])
-        by smtp.gmail.com with ESMTPSA id o22sm14080838wra.96.2019.09.07.01.59.41
+        by smtp.gmail.com with ESMTPSA id o22sm14080838wra.96.2019.09.07.01.59.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 07 Sep 2019 01:59:41 -0700 (PDT)
+        Sat, 07 Sep 2019 01:59:51 -0700 (PDT)
 From:   Eugeniu Rosca <roscaeugeniu@gmail.com>
 X-Google-Original-From: Eugeniu Rosca <erosca@de.adit-jv.com>
 To:     Shuah Khan <shuah@kernel.org>,
@@ -54,10 +54,12 @@ To:     Shuah Khan <shuah@kernel.org>,
         linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     Eugeniu Rosca <erosca@de.adit-jv.com>,
         Eugeniu Rosca <roscaeugeniu@gmail.com>
-Subject: [PATCH 1/2] selftests: watchdog: Validate optional file argument
-Date:   Sat,  7 Sep 2019 10:58:32 +0200
-Message-Id: <20190907085833.21167-1-erosca@de.adit-jv.com>
+Subject: [PATCH 2/2] selftests: watchdog: Add command line option to show watchdog_info
+Date:   Sat,  7 Sep 2019 10:58:33 +0200
+Message-Id: <20190907085833.21167-2-erosca@de.adit-jv.com>
 X-Mailer: git-send-email 2.23.0
+In-Reply-To: <20190907085833.21167-1-erosca@de.adit-jv.com>
+References: <20190907085833.21167-1-erosca@de.adit-jv.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
@@ -67,53 +69,73 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 From: "George G. Davis" <george_davis@mentor.com>
 
-As reported by Eugeniu Rosca, the newly added optional file
-argument does not validate if the file is indeed a watchdog, e.g.:
+A side of affect of commit "selftests: watchdog: Add optional file
+argument" is that arbitrary files may be opened for watchdog testing, e.g.
+/dev/null. To prevent watchdog-test from operating on non-watchdog device
+files, commit "selftests: watchdog: Validate optional file argument" was
+added to validate that a file is indeed a watchdog device via an
+ioctl(WDIOC_GETSUPPORT) call. Since the watchdog_info is available as a
+result of the ioctl(WDIOC_GETSUPPORT) call, add a command line option to
+show the watchdog_info.
 
-./watchdog-test  -f /dev/zero
-Watchdog Ticking Away!
-
-Fix it by confirming that the WDIOC_GETSUPPORT ioctl succeeds.
-
-Reported-by: Eugeniu Rosca <erosca@de.adit-jv.com>
+Suggested-by: Eugeniu Rosca <erosca@de.adit-jv.com>
 Signed-off-by: George G. Davis <george_davis@mentor.com>
 Signed-off-by: Eugeniu Rosca <erosca@de.adit-jv.com>
 ---
-v1: Applied/tested on commit ce54eab71e210f ("kunit: fix failure to build without printk") of
+v1: Applied/tested on commit ce54eab71e210f ("kunit: fix failure to build without printk") of 
     https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git/log/?h=next
 
- tools/testing/selftests/watchdog/watchdog-test.c | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+ tools/testing/selftests/watchdog/watchdog-test.c | 16 +++++++++++++++-
+ 1 file changed, 15 insertions(+), 1 deletion(-)
 
 diff --git a/tools/testing/selftests/watchdog/watchdog-test.c b/tools/testing/selftests/watchdog/watchdog-test.c
-index afff120c7be6..6ed822dc2222 100644
+index 6ed822dc2222..f45e510500c0 100644
 --- a/tools/testing/selftests/watchdog/watchdog-test.c
 +++ b/tools/testing/selftests/watchdog/watchdog-test.c
-@@ -97,6 +97,7 @@ int main(int argc, char *argv[])
- 	int c;
- 	int oneshot = 0;
- 	char *file = "/dev/watchdog";
-+	struct watchdog_info info;
+@@ -19,7 +19,7 @@
  
- 	setbuf(stdout, NULL);
+ int fd;
+ const char v = 'V';
+-static const char sopts[] = "bdehp:t:Tn:NLf:";
++static const char sopts[] = "bdehp:t:Tn:NLf:i";
+ static const struct option lopts[] = {
+ 	{"bootstatus",          no_argument, NULL, 'b'},
+ 	{"disable",             no_argument, NULL, 'd'},
+@@ -32,6 +32,7 @@ static const struct option lopts[] = {
+ 	{"getpretimeout",       no_argument, NULL, 'N'},
+ 	{"gettimeleft",		no_argument, NULL, 'L'},
+ 	{"file",          required_argument, NULL, 'f'},
++	{"info",		no_argument, NULL, 'i'},
+ 	{NULL,                  no_argument, NULL, 0x0}
+ };
  
-@@ -118,6 +119,16 @@ int main(int argc, char *argv[])
- 		exit(-1);
- 	}
+@@ -72,6 +73,7 @@ static void usage(char *progname)
+ 	printf("Usage: %s [options]\n", progname);
+ 	printf(" -f, --file\t\tOpen watchdog device file\n");
+ 	printf("\t\t\tDefault is /dev/watchdog\n");
++	printf(" -i, --info\t\tShow watchdog_info\n");
+ 	printf(" -b, --bootstatus\tGet last boot status (Watchdog/POR)\n");
+ 	printf(" -d, --disable\t\tTurn off the watchdog timer\n");
+ 	printf(" -e, --enable\t\tTurn on the watchdog timer\n");
+@@ -216,6 +218,18 @@ int main(int argc, char *argv[])
+ 		case 'f':
+ 			/* Handled above */
+ 			break;
++		case 'i':
++			/*
++			 * watchdog_info was obtained as part of file open
++			 * validation. So we just show it here.
++			 */
++			oneshot = 1;
++			printf("watchdog_info:\n");
++			printf(" identity:\t\t%s\n", info.identity);
++			printf(" firmware_version:\t%u\n",
++			       info.firmware_version);
++			printf(" options:\t\t%08x\n", info.options);
++			break;
  
-+	/*
-+	 * Validate that `file` is a watchdog device
-+	 */
-+	ret = ioctl(fd, WDIOC_GETSUPPORT, &info);
-+	if (ret) {
-+		printf("WDIOC_GETSUPPORT error '%s'\n", strerror(errno));
-+		close(fd);
-+		exit(ret);
-+	}
-+
- 	optind = 0;
- 
- 	while ((c = getopt_long(argc, argv, sopts, lopts, NULL)) != -1) {
+ 		default:
+ 			usage(argv[0]);
 -- 
 2.23.0
 
