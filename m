@@ -2,134 +2,229 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C7AAAAC57E
-	for <lists+linux-kselftest@lfdr.de>; Sat,  7 Sep 2019 11:08:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E7C9AC6A4
+	for <lists+linux-kselftest@lfdr.de>; Sat,  7 Sep 2019 14:41:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730796AbfIGJI4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 7 Sep 2019 05:08:56 -0400
-Received: from mail-lj1-f194.google.com ([209.85.208.194]:44448 "EHLO
-        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726027AbfIGJI4 (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 7 Sep 2019 05:08:56 -0400
-Received: by mail-lj1-f194.google.com with SMTP id u14so8140484ljj.11;
-        Sat, 07 Sep 2019 02:08:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=57pJ4no4y9N9rdXaPnbc6NKFvi7Sztl7VDY6EouK97c=;
-        b=sA6scNG5yXnhj8Uegl1+IgPLtcdsp033+yXU14Qvq0obowVGM2Ize3/9ManY4kNpCs
-         dNfzGsc+pxK18EAkrX6+NufgjUjrI0qzxG9qcuWwh6VBvpMn5s2y+oD2ClVUNacfcWb/
-         jxFMkrex6wCqhSJK5rRS+kWjz8wCaeUq4AvBhhOlLYHZn6u9DEmKcs7VaRCEeGAzpeEo
-         9k21j1lkPT+Mp73aaiikYYU1FnhNewBjae9F1IzGk4HPHZWtxa0SsMcqtoVF9RfVf3j/
-         /BHqklrPJIBA6pESqIj7TxlYvejNiubWPEvlSFqEKyal7XjqQ89qXX85g8YvfEUr3yum
-         QUfQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=57pJ4no4y9N9rdXaPnbc6NKFvi7Sztl7VDY6EouK97c=;
-        b=pzEIZIGsTlJDyCaMKQyM8e6B0IcKa2dFy9x8wtxCaXjJYCqZtAhLq7g/Xh33hoa9zn
-         T4/HdmiWd5r/1rBxVFnNFOVcRaTxlbUBIsM0wpgOXN1DRg4Z+yrsCfZFz8qi1Hogfv59
-         IKe126tt2hFhogpf7TCH6MwrQ5z1sQ0m5gvcvRoalc9XM6uMgXf/1Anm+X6y9JDPGaYR
-         hJiAKt5uw3Ft8XfvLPj36yNJ46xmuEmEA/mmJ+s+MNsRZ67FD4xmr6Bg0+2s6aGX+pNb
-         I3DHga36rpbs45zJaRTvW59Wmnq/USQyVfvYCgrdRHelDpUV/rqzYvlQqgg9fT2p8rLQ
-         LcNg==
-X-Gm-Message-State: APjAAAX+3X/j0IfpJv4hVCcNR3pOaGHbX2/KUghV1/DRZ6d3K6kHkc+L
-        KrdxZMDmYjgpnhX2eaDpms/vEwBhsmDDTrE+DLI=
-X-Google-Smtp-Source: APXvYqx0vCqXuT6U9buB7r0r2uh65Ik//yileB7tiom+hol9mqP/t6XtaTjNszHtlETH4QtB8/isVNDz0EDrUpQk1+c=
-X-Received: by 2002:a2e:9012:: with SMTP id h18mr8660506ljg.45.1567847333996;
- Sat, 07 Sep 2019 02:08:53 -0700 (PDT)
-MIME-Version: 1.0
-References: <CAEjAshr=JqVpF651eSZYFhwVAMNZ29LWcfrH07K_M9GU=hPnvg@mail.gmail.com>
- <1567786314-12330-1-git-send-email-sj38.park@gmail.com> <CAFd5g44=8TV4VciMkcD2DHR+UsnpwyEFbw2Xucwo7-as6Py_4g@mail.gmail.com>
- <1bc1c5da-2810-60d3-4e76-8d0b73fdd521@kernel.org>
-In-Reply-To: <1bc1c5da-2810-60d3-4e76-8d0b73fdd521@kernel.org>
-From:   SeongJae Park <sj38.park@gmail.com>
-Date:   Sat, 7 Sep 2019 11:08:27 +0200
-Message-ID: <CAEjAshqmSG8FdUvBpv892jvMyWy5=YqXjEEU65=Z=9URBRCQ9A@mail.gmail.com>
-Subject: Re: [PATCH] kunit: Fix '--build_dir' option
-To:     shuah <shuah@kernel.org>
-Cc:     Brendan Higgins <brendanhiggins@google.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>, kunit-dev@googlegroups.com,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+        id S2405919AbfIGMkx (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 7 Sep 2019 08:40:53 -0400
+Received: from mail.kernel.org ([198.145.29.99]:49340 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1731870AbfIGMkx (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Sat, 7 Sep 2019 08:40:53 -0400
+Received: from tleilax.poochiereds.net (68-20-15-154.lightspeed.rlghnc.sbcglobal.net [68.20.15.154])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 6CE4A21871;
+        Sat,  7 Sep 2019 12:40:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1567860051;
+        bh=8CdC9s2J+EXRB9t2P5assmBfzpxHrY6X7806hW2vZbI=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=BMvFV1UX5X6Uy9Wv1qL/PSUiseB7R2rehCkF1jManrfGr8YI9PSHDWUn9L+S2pFuv
+         RCN9fVNO1dVgQYKSzjsx39Mxn3GBmfn+uxlg8EP9mU5AYcsQNbkdlUXvr6YJL1XW0i
+         aq/hmJ23hyXTE39ZyvTfy0uteQUqAjbcN+eR3HO4=
+Message-ID: <7236f382d72130f2afbbe8940e72cc67e5c6dce0.camel@kernel.org>
+Subject: Re: [PATCH v12 11/12] open: openat2(2) syscall
+From:   Jeff Layton <jlayton@kernel.org>
+To:     Aleksa Sarai <cyphar@cyphar.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        "J. Bruce Fields" <bfields@fieldses.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        David Howells <dhowells@redhat.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Christian Brauner <christian@brauner.io>
+Cc:     Eric Biederman <ebiederm@xmission.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Jann Horn <jannh@google.com>, Tycho Andersen <tycho@tycho.ws>,
+        David Drysdale <drysdale@google.com>,
+        Chanho Min <chanho.min@lge.com>,
+        Oleg Nesterov <oleg@redhat.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Aleksa Sarai <asarai@suse.de>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        containers@lists.linux-foundation.org, linux-alpha@vger.kernel.org,
+        linux-api@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-ia64@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        linux-xtensa@linux-xtensa.org, sparclinux@vger.kernel.org
+Date:   Sat, 07 Sep 2019 08:40:47 -0400
+In-Reply-To: <20190904201933.10736-12-cyphar@cyphar.com>
+References: <20190904201933.10736-1-cyphar@cyphar.com>
+         <20190904201933.10736-12-cyphar@cyphar.com>
 Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.32.4 (3.32.4-1.fc30) 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sat, Sep 7, 2019 at 4:33 AM shuah <shuah@kernel.org> wrote:
->
-> On 9/6/19 7:16 PM, Brendan Higgins wrote:
-> > On Fri, Sep 6, 2019 at 9:12 AM SeongJae Park <sj38.park@gmail.com> wrote:
-> >>
-> >> Running kunit with '--build_dir' option gives following error message:
-> >>
-> >> ```
-> >> $ ./tools/testing/kunit/kunit.py run --build_dir ../linux.out.kunit/
-> >> [00:57:24] Building KUnit Kernel ...
-> >> [00:57:29] Starting KUnit Kernel ...
-> >> Traceback (most recent call last):
-> >>    File "./tools/testing/kunit/kunit.py", line 136, in <module>
-> >>      main(sys.argv[1:])
-> >>    File "./tools/testing/kunit/kunit.py", line 129, in main
-> >>      result = run_tests(linux, request)
-> >>    File "./tools/testing/kunit/kunit.py", line 68, in run_tests
-> >>      test_result = kunit_parser.parse_run_tests(kunit_output)
-> >>    File "/home/sjpark/linux/tools/testing/kunit/kunit_parser.py", line
-> >> 283, in parse_run_tests
-> >>      test_result =
-> >> parse_test_result(list(isolate_kunit_output(kernel_output)))
-> >>    File "/home/sjpark/linux/tools/testing/kunit/kunit_parser.py", line
-> >> 54, in isolate_kunit_output
-> >>      for line in kernel_output:
-> >>    File "/home/sjpark/linux/tools/testing/kunit/kunit_kernel.py", line
-> >> 145, in run_kernel
-> >>      process = self._ops.linux_bin(args, timeout, build_dir)
-> >>    File "/home/sjpark/linux/tools/testing/kunit/kunit_kernel.py", line
-> >> 69, in linux_bin
-> >>      stderr=subprocess.PIPE)
-> >>    File "/usr/lib/python3.5/subprocess.py", line 947, in __init__
-> >>      restore_signals, start_new_session)
-> >>    File "/usr/lib/python3.5/subprocess.py", line 1551, in _execute_child
-> >>      raise child_exception_type(errno_num, err_msg)
-> >> FileNotFoundError: [Errno 2] No such file or directory: './linux'
-> >> ```
-> >>
-> >> This error occurs because the '--build_dir' option value is not passed
-> >> to the 'run_kernel()' function.  Consequently, the function assumes
-> >> the kernel image that built for the tests, which is under the
-> >> '--build_dir' directory, is in kernel source directory and finally raises
-> >> the 'FileNotFoundError'.
-> >>
-> >> This commit fixes the problem by properly passing the '--build_dir'
-> >> option value to the 'run_kernel()'.
-> >>
-> >> Signed-off-by: SeongJae Park <sj38.park@gmail.com>
-> >
-> > Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
-> > Tested-by: Brendan Higgins <brendanhiggins@google.com>
-> >
-> > Thanks!
-> >
->
-> Thanks Brendan! I will apply the patch for 5.4-rc1.
+On Thu, 2019-09-05 at 06:19 +1000, Aleksa Sarai wrote:
+> The most obvious syscall to add support for the new LOOKUP_* scoping
+> flags would be openat(2). However, there are a few reasons why this is
+> not the best course of action:
+> 
+>  * The new LOOKUP_* flags are intended to be security features, and
+>    openat(2) will silently ignore all unknown flags. This means that
+>    users would need to avoid foot-gunning themselves constantly when
+>    using this interface if it were part of openat(2). This can be fixed
+>    by having userspace libraries handle this for users[1], but should be
+>    avoided if possible.
+> 
+>  * Resolution scoping feels like a different operation to the existing
+>    O_* flags. And since openat(2) has limited flag space, it seems to be
+>    quite wasteful to clutter it with 5 flags that are all
+>    resolution-related. Arguably O_NOFOLLOW is also a resolution flag but
+>    its entire purpose is to error out if you encounter a trailing
+>    symlink -- not to scope resolution.
+> 
+>  * Other systems would be able to reimplement this syscall allowing for
+>    cross-OS standardisation rather than being hidden amongst O_* flags
+>    which may result in it not being used by all the parties that might
+>    want to use it (file servers, web servers, container runtimes, etc).
+> 
+>  * It gives us the opportunity to iterate on the O_PATH interface. In
+>    particular, the new @how->upgrade_mask field for fd re-opening is
+>    only possible because we have a clean slate without needing to re-use
+>    the ACC_MODE flag design nor the existing openat(2) @mode semantics.
+> 
+> To this end, we introduce the openat2(2) syscall. It provides all of the
+> features of openat(2) through the @how->flags argument, but also
+> also provides a new @how->resolve argument which exposes RESOLVE_* flags
+> that map to our new LOOKUP_* flags. It also eliminates the long-standing
+> ugliness of variadic-open(2) by embedding it in a struct.
+> 
+> In order to allow for userspace to lock down their usage of file
+> descriptor re-opening, openat2(2) has the ability for users to disallow
+> certain re-opening modes through @how->upgrade_mask. At the moment,
+> there is no UPGRADE_NOEXEC.
+> 
+> [1]: https://github.com/openSUSE/libpathrs
+> 
+> Suggested-by: Christian Brauner <christian@brauner.io>
+> Signed-off-by: Aleksa Sarai <cyphar@cyphar.com>
+> ---
+>  arch/alpha/kernel/syscalls/syscall.tbl      |  1 +
+>  arch/arm/tools/syscall.tbl                  |  1 +
+>  arch/arm64/include/asm/unistd.h             |  2 +-
+>  arch/arm64/include/asm/unistd32.h           |  2 +
+>  arch/ia64/kernel/syscalls/syscall.tbl       |  1 +
+>  arch/m68k/kernel/syscalls/syscall.tbl       |  1 +
+>  arch/microblaze/kernel/syscalls/syscall.tbl |  1 +
+>  arch/mips/kernel/syscalls/syscall_n32.tbl   |  1 +
+>  arch/mips/kernel/syscalls/syscall_n64.tbl   |  1 +
+>  arch/mips/kernel/syscalls/syscall_o32.tbl   |  1 +
+>  arch/parisc/kernel/syscalls/syscall.tbl     |  1 +
+>  arch/powerpc/kernel/syscalls/syscall.tbl    |  1 +
+>  arch/s390/kernel/syscalls/syscall.tbl       |  1 +
+>  arch/sh/kernel/syscalls/syscall.tbl         |  1 +
+>  arch/sparc/kernel/syscalls/syscall.tbl      |  1 +
+>  arch/x86/entry/syscalls/syscall_32.tbl      |  1 +
+>  arch/x86/entry/syscalls/syscall_64.tbl      |  1 +
+>  arch/xtensa/kernel/syscalls/syscall.tbl     |  1 +
+>  fs/open.c                                   | 94 ++++++++++++++++-----
+>  include/linux/fcntl.h                       | 19 ++++-
+>  include/linux/fs.h                          |  4 +-
+>  include/linux/syscalls.h                    | 14 ++-
+>  include/uapi/asm-generic/unistd.h           |  5 +-
+>  include/uapi/linux/fcntl.h                  | 42 +++++++++
+>  24 files changed, 168 insertions(+), 30 deletions(-)
+> 
 
-Thank you both!
+[...]
 
->
-> SeongJae Park! In the future, please send tag versions. This should
-> have been [PATCH v2].
+> diff --git a/include/uapi/linux/fcntl.h b/include/uapi/linux/fcntl.h
+> index 1d338357df8a..479baf2da10e 100644
+> --- a/include/uapi/linux/fcntl.h
+> +++ b/include/uapi/linux/fcntl.h
+> @@ -93,5 +93,47 @@
+>  
+>  #define AT_RECURSIVE		0x8000	/* Apply to the entire subtree */
+>  
+> +/**
+> + * Arguments for how openat2(2) should open the target path. If @resolve is
+> + * zero, then openat2(2) operates identically to openat(2).
+> + *
+> + * However, unlike openat(2), unknown bits in @flags result in -EINVAL rather
+> + * than being silently ignored. In addition, @mode (or @upgrade_mask) must be
+> + * zero unless one of {O_CREAT, O_TMPFILE, O_PATH} are set.
+> + *
 
-Yes, I will.
+After thinking about this a bit, I wonder if we might be better served
+with a new set of OA2_* flags instead of repurposing the O_* flags?
+
+Yes, those flags are familiar, but this is an entirely new syscall. We
+have a chance to make a fresh start. Does something like O_LARGEFILE
+have any real place in openat2? I'd argue no.
+
+Also, once you want to add a new flag, then we get into the mess of how
+to document whether open/openat also support it. It'd be good to freeze
+changes on those syscalls and aim to only introduce new functionality in
+openat2.
+
+That would also allow us to drop some flags from openat2 that we really
+don't need, and maybe expand the flag space to 64 bits initially, to
+allow for expansion into the future.
+
+Thoughts?
+
+> + * @flags: O_* flags.
+> + * @mode: O_CREAT/O_TMPFILE file mode.
+> + * @upgrade_mask: UPGRADE_* flags (to restrict O_PATH re-opening).
+> + * @resolve: RESOLVE_* flags.
+> + */
+> +struct open_how {
+> +	__u32 flags;
+> +	union {
+> +		__u16 mode;
+> +		__u16 upgrade_mask;
+> +	};
+> +	__u16 resolve;
+> +};
+> +
+> +#define OPEN_HOW_SIZE_VER0	8 /* sizeof first published struct */
+> +
+
+Hmm, there is no version field. When you want to expand this in the
+future, what is the plan? Add a new flag to indicate that it's some
+length?
 
 
-Thanks,
-SeongJae Park
+> +/* how->resolve flags for openat2(2). */
+> +#define RESOLVE_NO_XDEV		0x01 /* Block mount-point crossings
+> +					(includes bind-mounts). */
+> +#define RESOLVE_NO_MAGICLINKS	0x02 /* Block traversal through procfs-style
+> +					"magic-links". */
+> +#define RESOLVE_NO_SYMLINKS	0x04 /* Block traversal through all symlinks
+> +					(implies OEXT_NO_MAGICLINKS) */
+> +#define RESOLVE_BENEATH		0x08 /* Block "lexical" trickery like
+> +					"..", symlinks, and absolute
+> +					paths which escape the dirfd. */
+> +#define RESOLVE_IN_ROOT		0x10 /* Make all jumps to "/" and ".."
+> +					be scoped inside the dirfd
+> +					(similar to chroot(2)). */
+> +
+> +/* how->upgrade flags for openat2(2). */
+> +/* First bit is reserved for a future UPGRADE_NOEXEC flag. */
+> +#define UPGRADE_NOREAD		0x02 /* Block re-opening with MAY_READ. */
+> +#define UPGRADE_NOWRITE		0x04 /* Block re-opening with MAY_WRITE. */
+>  
+>  #endif /* _UAPI_LINUX_FCNTL_H */
 
->
-> thanks,
-> -- Shuah
+-- 
+Jeff Layton <jlayton@kernel.org>
+
