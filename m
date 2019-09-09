@@ -2,318 +2,448 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EEB34AD947
-	for <lists+linux-kselftest@lfdr.de>; Mon,  9 Sep 2019 14:42:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CF97ADC7C
+	for <lists+linux-kselftest@lfdr.de>; Mon,  9 Sep 2019 17:52:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728767AbfIIMm3 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 9 Sep 2019 08:42:29 -0400
-Received: from mail-eopbgr60070.outbound.protection.outlook.com ([40.107.6.70]:10662
-        "EHLO EUR04-DB3-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1728254AbfIIMm2 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 9 Sep 2019 08:42:28 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=armh.onmicrosoft.com;
- s=selector2-armh-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=IXm/yeW8E8tjunBvM76aRXZo7naLtQbzD6tiNo9XISY=;
- b=iKlcQ9r7MV53gnu72QTDwzjK99zb4fzCs968ZQ4vvlAl0soeIb/HhdAanOtLg7aFTKEUH3+DAQLcnuOxgAOfT+O8waErwXMQkNAljc2u++6ERFxxAV1awUNfs3X0XUPsmzN/wzxmZohvUQeRoPMdYq1H4QjtfeqVADfU+qnCFjM=
-Received: from VE1PR08CA0032.eurprd08.prod.outlook.com (2603:10a6:803:104::45)
- by AM6PR08MB4135.eurprd08.prod.outlook.com (2603:10a6:20b:a9::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2241.14; Mon, 9 Sep
- 2019 12:42:20 +0000
-Received: from DB5EUR03FT005.eop-EUR03.prod.protection.outlook.com
- (2a01:111:f400:7e0a::207) by VE1PR08CA0032.outlook.office365.com
- (2603:10a6:803:104::45) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.20.2241.14 via Frontend
- Transport; Mon, 9 Sep 2019 12:42:20 +0000
-Authentication-Results: spf=temperror (sender IP is 63.35.35.123)
- smtp.mailfrom=arm.com; vger.kernel.org; dkim=pass (signature was verified)
- header.d=armh.onmicrosoft.com;vger.kernel.org; dmarc=temperror action=none
- header.from=arm.com;
-Received-SPF: TempError (protection.outlook.com: error in processing during
- lookup of arm.com: DNS Timeout)
-Received: from 64aa7808-outbound-1.mta.getcheckrecipient.com (63.35.35.123) by
- DB5EUR03FT005.mail.protection.outlook.com (10.152.20.122) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.20.2241.14 via Frontend Transport; Mon, 9 Sep 2019 12:42:18 +0000
-Received: ("Tessian outbound a68750feb7d5:v28"); Mon, 09 Sep 2019 12:42:14 +0000
-X-CheckRecipientChecked: true
-X-CR-MTA-CID: 9c8cb18529faa1e0
-X-CR-MTA-TID: 64aa7808
-Received: from da746e8e074d.2 (ip-172-16-0-2.eu-west-1.compute.internal [104.47.9.51])
-        by 64aa7808-outbound-1.mta.getcheckrecipient.com id 52B2012B-DAA1-4AA6-99F0-A78D3BA65A0F.1;
-        Mon, 09 Sep 2019 12:42:09 +0000
-Received: from EUR03-VE1-obe.outbound.protection.outlook.com (mail-ve1eur03lp2051.outbound.protection.outlook.com [104.47.9.51])
-    by 64aa7808-outbound-1.mta.getcheckrecipient.com with ESMTPS id da746e8e074d.2
-    (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384);
-    Mon, 09 Sep 2019 12:42:09 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Pc+whORQ37f9HaHYG5maMWH/dnzHexKos0IkFMOVZlsl0bk+MwbPzJA/a12nbXgoYq3GbewDJ57Yfu6W/GQ8bcCLXKC8rCVslVouK/oKhkdZL+3I+9mlcTXFfaaXw5q7c8pl/5gVPEUCITIiN5KRSUAxgCb1CWYne8K728nHrvhbffyQD4AA3721Jq35FxpAzFs+fDPg2CSXQ/Zcqgllh67uM0r4U02kQ1QSYnv3Trs7iM8oMTCa5EVzJNy1U8ElLmIJvLD0Zgsy+7VKvwXHJpt1xJ2dCvFpnKj55r0GkUEu4VsGbgC4Hl5n14vhIDNDy9n+u4jY+S3w1WUrVWTUEg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=HabwYuZ9SCBzOzKaYqtG5XIHfEj4+0A6BNoQvRehb7w=;
- b=crS1x0rfSdtEr6e9ZgsZBEIrjZm4EiM/xsIfrmC0axM+nPJM9MIFO+StErRA6cACNlfUVE7Ql2FIBtyovmNn21U+58T2948XeB9/kdol0PdksBPppXQVhVrP0sJKtJ/z8Jg0+k/V6hz62lsCKTYzlEgd5WQbmn/ml9CySNqW4ZxO3n9nHIyE69+3Fg9UwIEzl4E90LB61nj2cGVIpwCkt82gQbJcL7mooPRsARBUpQQsOIovsgmwKsLb5z1Iae0YcWQb4FXrwN23hsm30DZ5iSxhsbqhn4TmKKwCnlX4V+0I8n4O9lyiJnnAgAp3RpQzI+wq0jc9gV4iCzUbwxBdpQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=arm.com; dmarc=pass action=none header.from=arm.com; dkim=pass
- header.d=arm.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=armh.onmicrosoft.com;
- s=selector2-armh-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=HabwYuZ9SCBzOzKaYqtG5XIHfEj4+0A6BNoQvRehb7w=;
- b=rpUVtSlKIpTtb4kc+OXiLq49cHJpv1Y6qeTcQzlCy9nP4Yn/c7uZGxFGNYU3biCPDmD/0o0q6MtUIVDtHTTNLUVl66OcmTTCjlSb6GiI2pdJpWF/1RB4VYx2AzrVlXWMeltGG7uTsgia7YEJKfY9yri0WFGvpC1u6gThksvZLTI=
-Received: from AM5PR0801MB1636.eurprd08.prod.outlook.com (10.169.246.150) by
- AM5PR0801MB1985.eurprd08.prod.outlook.com (10.168.158.12) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2241.15; Mon, 9 Sep 2019 12:42:06 +0000
-Received: from AM5PR0801MB1636.eurprd08.prod.outlook.com
- ([fe80::9d26:ed3a:6b5e:b5c3]) by AM5PR0801MB1636.eurprd08.prod.outlook.com
- ([fe80::9d26:ed3a:6b5e:b5c3%2]) with mapi id 15.20.2241.018; Mon, 9 Sep 2019
- 12:42:06 +0000
-From:   Amit Kachhap <Amit.Kachhap@arm.com>
-To:     Cristian Marussi <Cristian.Marussi@arm.com>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "shuah@kernel.org" <shuah@kernel.org>
-CC:     "andreyknvl@google.com" <andreyknvl@google.com>,
-        Dave P Martin <Dave.Martin@arm.com>
-Subject: Re: [PATCH v5 01/11] kselftest: arm64: add skeleton Makefile
-Thread-Topic: [PATCH v5 01/11] kselftest: arm64: add skeleton Makefile
-Thread-Index: AQHVYYHHGdHT14GrNEGMWz5zmwvD+g==
-Date:   Mon, 9 Sep 2019 12:42:06 +0000
-Message-ID: <0a284da1-ff63-dfe9-e479-6ad68865aea1@arm.com>
+        id S2389048AbfIIPv6 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 9 Sep 2019 11:51:58 -0400
+Received: from foss.arm.com ([217.140.110.172]:52992 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727003AbfIIPv5 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 9 Sep 2019 11:51:57 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3DD51169E;
+        Mon,  9 Sep 2019 08:51:57 -0700 (PDT)
+Received: from [10.1.197.50] (e120937-lin.cambridge.arm.com [10.1.197.50])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 516963F59C;
+        Mon,  9 Sep 2019 08:51:56 -0700 (PDT)
+From:   Cristian Marussi <cristian.marussi@arm.com>
+Subject: Re: [PATCH v5 05/11] kselftest: arm64: mangle_pstate_ssbs_regs
+To:     Dave Martin <Dave.Martin@arm.com>
+Cc:     linux-kselftest@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, shuah@kernel.org,
+        amit.kachhap@arm.com, andreyknvl@google.com
 References: <20190902112932.36129-1-cristian.marussi@arm.com>
- <20190902112932.36129-2-cristian.marussi@arm.com>
- <cce97298-7a27-c470-6fc5-873b4447ecc9@arm.com>
- <e7b7b3fe-aba8-a4f2-400b-7cdeebd080e8@arm.com>
-In-Reply-To: <e7b7b3fe-aba8-a4f2-400b-7cdeebd080e8@arm.com>
-Accept-Language: en-IN, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-clientproxiedby: PN1PR01CA0112.INDPRD01.PROD.OUTLOOK.COM (2603:1096:c00::28)
- To AM5PR0801MB1636.eurprd08.prod.outlook.com (2603:10a6:203:3a::22)
-Authentication-Results-Original: spf=none (sender IP is )
- smtp.mailfrom=Amit.Kachhap@arm.com; 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-originating-ip: [217.140.105.40]
-x-ms-publictraffictype: Email
-X-MS-Office365-Filtering-Correlation-Id: 2ba99ee8-4878-4e96-cfe5-08d7352326d4
-X-MS-Office365-Filtering-HT: Tenant
-X-Microsoft-Antispam-Untrusted: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600166)(711020)(4605104)(1401327)(4618075)(2017052603328)(7193020);SRVR:AM5PR0801MB1985;
-X-MS-TrafficTypeDiagnostic: AM5PR0801MB1985:|AM5PR0801MB1985:|AM6PR08MB4135:
-x-ms-exchange-transport-forked: True
-X-Microsoft-Antispam-PRVS: <AM6PR08MB413503CC073C4B72D538DD788CB70@AM6PR08MB4135.eurprd08.prod.outlook.com>
-x-checkrecipientrouted: true
-x-ms-oob-tlc-oobclassifiers: OLM:10000;OLM:10000;
-x-forefront-prvs: 01559F388D
-X-Forefront-Antispam-Report-Untrusted: SFV:NSPM;SFS:(10009020)(4636009)(396003)(39860400002)(376002)(366004)(346002)(136003)(189003)(199004)(256004)(54906003)(53936002)(66556008)(229853002)(6246003)(31696002)(66476007)(66446008)(2906002)(66946007)(6486002)(6512007)(102836004)(81166006)(81156014)(186003)(4326008)(476003)(99286004)(44832011)(8936002)(486006)(2616005)(64756008)(25786009)(36756003)(86362001)(6436002)(8676002)(53546011)(6506007)(26005)(386003)(2201001)(76176011)(7736002)(110136005)(478600001)(305945005)(446003)(11346002)(52116002)(71200400001)(71190400001)(14444005)(3846002)(31686004)(6116002)(66066001)(5660300002)(14454004)(316002)(2501003);DIR:OUT;SFP:1101;SCL:1;SRVR:AM5PR0801MB1985;H:AM5PR0801MB1636.eurprd08.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
-received-spf: None (protection.outlook.com: arm.com does not designate
- permitted sender hosts)
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam-Message-Info-Original: rG1LoDO+ZazuUC9JhXGSZOfnJklQh/oMhCE84+O8MqJ3C9aQzNAW2pSsYaM3Plj3igGmTqkcmQMybfTVWWAPPD/4A5kw77pZ7HU/o0Y4q59IsP+h1m8bYj3qEakvf+ZnswXeTqNe7dgCNT1y7pnxdslEEiPu/tiQKzZ8tjHtsYqewjhJf80SKF9F21O9+pVq4XTCzIA81Abk6Nxatc2aeAvevPywcJ7c9aNmZHIauSp2lokbZQbgKkGLCdRtunaAOSVe3cZWP7we9xRWz2N0MzI+TjRUjlpQwQ3KPJamVdzlP5NTKd9s9g7rcB157Z4bnuopmZyPL9+pdn6Pxzz3TA3BzumsFFuqiXw/wWMJxpwbt3qMwp1Vx7v5xEgWPpZ/JHAxcOQystzkJAxkt7GkqMB3yQuDctO+pFLoX9lUeE0=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <A0A4B4E08D74D7429A1E587C7C3FBBBE@eurprd08.prod.outlook.com>
-Content-Transfer-Encoding: base64
+ <20190902112932.36129-6-cristian.marussi@arm.com>
+ <20190904114836.GV27757@arm.com>
+Message-ID: <1794920f-84b3-a4e6-b20a-b769d95df0c8@arm.com>
+Date:   Mon, 9 Sep 2019 16:51:54 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM5PR0801MB1985
-Original-Authentication-Results: spf=none (sender IP is )
- smtp.mailfrom=Amit.Kachhap@arm.com; 
-X-EOPAttributedMessage: 0
-X-MS-Exchange-Transport-CrossTenantHeadersStripped: DB5EUR03FT005.eop-EUR03.prod.protection.outlook.com
-X-Forefront-Antispam-Report: CIP:63.35.35.123;IPV:CAL;SCL:-1;CTRY:IE;EFV:NLI;SFV:NSPM;SFS:(10009020)(4636009)(346002)(376002)(39860400002)(136003)(396003)(2980300002)(199004)(189003)(40434004)(436003)(25786009)(229853002)(5660300002)(14454004)(7736002)(316002)(305945005)(63370400001)(63350400001)(66066001)(23676004)(6506007)(5024004)(47776003)(386003)(2906002)(2501003)(14444005)(4326008)(53546011)(6486002)(22756006)(478600001)(26826003)(76176011)(6116002)(76130400001)(102836004)(50466002)(86362001)(36756003)(31686004)(126002)(8676002)(2486003)(31696002)(81156014)(476003)(81166006)(8936002)(26005)(2201001)(54906003)(11346002)(70586007)(110136005)(2616005)(446003)(336012)(70206006)(356004)(6512007)(3846002)(6246003)(186003)(486006)(99286004);DIR:OUT;SFP:1101;SCL:1;SRVR:AM6PR08MB4135;H:64aa7808-outbound-1.mta.getcheckrecipient.com;FPR:;SPF:TempError;LANG:en;PTR:ec2-63-35-35-123.eu-west-1.compute.amazonaws.com;A:1;MX:1;
-X-MS-Office365-Filtering-Correlation-Id-Prvs: e4e98750-1fdc-4e11-b5e4-08d735231f2a
-X-Microsoft-Antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600166)(710020)(711020)(4605104)(1401327)(4618075)(2017052603328)(7193020);SRVR:AM6PR08MB4135;
-X-Forefront-PRVS: 01559F388D
-X-Microsoft-Antispam-Message-Info: 5kfYVs0H5NyeutO3leLbx7VRMypaIGu9Uoj8OtT6mt9Am0QCI/7xevo+VHDUleKPpX2e4swh4spO5xsYiSiLq3WbGO5n0h2LTOiqAOzdq0AD7Eesc0GbUN9KcCBNCKT3dk901341LhsQogX5NpBl43PxeJAowSDeQH82xDELRWVBqyZgqP5gZ5iqgTrsbOkIEa6sZod+GN77eo53fAo5Yecm4a8lEPpnO+QQ/hMy9cS/qY4xfz7+WKnIwiVVc8JYg7LL/+nU0AXWHx+S3rgofGlwoKLxgjdzdtyuroFcvbVkLT04H/QzsRBanI8x8PF11sCS/iqMZ0gQ80WCmm0AWJc+k2dndrU/LTbxKVZXYGdDWrBfIpirkOIL66Q3PA0dGmZTEmoHoUE7LZbN9JyroD6ojEN6NnHs0Wj/xAP7fWY=
-X-OriginatorOrg: arm.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Sep 2019 12:42:18.6752
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2ba99ee8-4878-4e96-cfe5-08d7352326d4
-X-MS-Exchange-CrossTenant-Id: f34e5979-57d9-4aaa-ad4d-b122a662184d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=f34e5979-57d9-4aaa-ad4d-b122a662184d;Ip=[63.35.35.123];Helo=[64aa7808-outbound-1.mta.getcheckrecipient.com]
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM6PR08MB4135
+In-Reply-To: <20190904114836.GV27757@arm.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-SGksDQoNCk9uIDkvNS8xOSAxMToyNyBQTSwgQ3Jpc3RpYW4gTWFydXNzaSB3cm90ZToNCj4gSGkg
-QW1pdA0KPg0KPiBPbiAwMy8wOS8yMDE5IDEwOjI2LCBBbWl0IEthY2hoYXAgd3JvdGU6DQo+Pg0K
-Pj4gSGkgQ3Jpc3RpYW4sDQo+Pg0KPj4gT24gOS8yLzE5IDQ6NTkgUE0sIENyaXN0aWFuIE1hcnVz
-c2kgd3JvdGU6DQo+Pj4gQWRkIGEgbmV3IGFybTY0LXNwZWNpZmljIGVtcHR5IHN1YnN5c3RlbSBh
-bW9uZ3N0IFRBUkdFVFMgb2YgS1NGVCBidWlsZA0KPj4+IGZyYW1ld29yazsga2VlcCB0aGVzZSBu
-ZXcgYXJtNjQgS1NGVCB0ZXN0Y2FzZXMgc2VwYXJhdGVkIGludG8gZGlzdGluY3QNCj4+PiBzdWJk
-aXJzIGluc2lkZSB0b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9hcm02NC8gZGVwZW5kaW5nIG9uIHRo
-ZSBzcGVjaWZpYw0KPj4+IHN1YnN5c3RlbSB0YXJnZXRlZC4NCj4+Pg0KPj4+IEFkZCBpbnRvIHRv
-cGxldmVsIGFybTY0IEtTRlQgTWFrZWZpbGUgYSBtZWNoYW5pc20gdG8gZ3Vlc3MgdGhlIGVmZmVj
-dGl2ZQ0KPj4+IGxvY2F0aW9uIG9mIEtlcm5lbCBoZWFkZXJzIGFzIGluc3RhbGxlZCBieSBLU0ZU
-IGZyYW1ld29yay4NCj4+Pg0KPj4+IE1lcmdlIHdpdGgNCj4+Pg0KPj4+IGNvbW1pdCA5Y2UxMjYz
-MDMzY2QgKCJzZWxmdGVzdHMsIGFybTY0OiBhZGQgYSBzZWxmdGVzdCBmb3IgcGFzc2luZw0KPj4+
-ICAgICAgICAgICAgICAgICAgdGFnZ2VkIHBvaW50ZXJzIHRvIGtlcm5lbCIpDQo+Pj4NCj4+PiB3
-aGlsZSBtb3Zpbmcgc3VjaCBLU0ZUIHRhZ3MgdGVzdHMgaW5zaWRlIHRoZWlyIG93biBzdWJkaXJl
-Y3RvcnkNCj4+PiAoYXJtNjQvdGFncykuDQo+Pj4NCj4+PiBTaWduZWQtb2ZmLWJ5OiBDcmlzdGlh
-biBNYXJ1c3NpIDxjcmlzdGlhbi5tYXJ1c3NpQGFybS5jb20+DQo+Pj4gLS0tDQo+Pj4gdjQgLS0+
-IHY1DQo+Pj4gLSByZWJhc2VkIG9uIGFybTY0L2Zvci1uZXh0L2NvcmUNCj4+PiAtIG1lcmdlZCB0
-aGlzIHBhdGNoIHdpdGggS1NGVCBhcm02NCB0YWdzIHBhdGNoLCB3aGlsZSBtb3ZpbmcgdGhlIGxh
-dHRlcg0KPj4+ICAgICBpbnRvIGl0cyBvd24gc3ViZGlyDQo+Pj4gLSBtb3ZlZCBrZXJuZWwgaGVh
-ZGVyIGluY2x1ZGVzIHNlYXJjaCBtZWNoYW5pc20gZnJvbSBLU0ZUIGFybTY0DQo+Pj4gICAgIFNJ
-R05BTCBNYWtlZmlsZQ0KPj4gVGhpcyBhcHByb2FjaCBicmVha3MgdGhlIGNvbXBpbGF0aW9uIG9m
-IGluZGl2aWR1YWwgdGVzdCBjYXNlcyB3aGljaCBuZWVkDQo+PiB0byBleHBvcnQgaW5jbHVkZXMg
-aW5kaXZpZHVhbGx5Lg0KPj4NCj4+IG1ha2UgLUMgdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMvYXJt
-NjQvc2lnbmFsDQo+Pg0KPj4gLi4vLi4vbGliLm1rOjI1OiAuLi8uLi8uLi8uLi9zY3JpcHRzL3N1
-YmFyY2guaW5jbHVkZTogTm8gc3VjaCBmaWxlIG9yDQo+PiBkaXJlY3RvcnkNCj4+IE1ha2VmaWxl
-OjI1OiB3YXJuaW5nOiBvdmVycmlkaW5nIHJlY2lwZSBmb3IgdGFyZ2V0ICdjbGVhbicNCj4+IC4u
-Ly4uL2xpYi5tazoxMjM6IHdhcm5pbmc6IGlnbm9yaW5nIG9sZCByZWNpcGUgZm9yIHRhcmdldCAn
-Y2xlYW4nDQo+PiBtYWtlOiAqKiogTm8gcnVsZSB0byBtYWtlIHRhcmdldCAnLi4vLi4vLi4vLi4v
-c2NyaXB0cy9zdWJhcmNoLmluY2x1ZGUnLg0KPj4gU3RvcC4NCj4+DQo+PiBIb3dldmVyIHRhZ3Mg
-dGVzdCB3b3JrcyB3ZWxsLA0KPj4gbWFrZSAtQyB0b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9hcm02
-NC90YWdzDQo+Pg0KPj4gYWFyY2g2NC1ub25lLWxpbnV4LWdudS1nY2MgICAgIHRhZ3NfdGVzdC5j
-ICAtbw0KPj4gL2hvbWUvYW1pa2FjMDEvd29yay9NVEVfV09SSy9saW51eC1zZXJ2ZXIvbGludXgv
-dG9vbHMvdGVzdGluZy9zZWxmdGVzdHMvYXJtNjQvdGFncy90YWdzX3Rlc3QNCj4+DQo+Pg0KPj4g
-VGhhbmtzLA0KPj4gQW1pdCBEYW5pZWwNCj4+DQo+DQo+IFNvIGF0IHRoZSBlbmQgSSB0aGluayBJ
-J2xsIG9wdCBmb3IgdGhlIGZvbGxvd2luZyBpbiBWNiByZWdhcmRpbmcgdGhlIGlzc3VlIG9mIGJl
-aW5nIGFibGUgdG8gYnVpbGQgc3BlY2lmaWMNCj4gS1NGVCBhcm02NCBzdWJzeXN0ZW1zIHdoaWxl
-IHByb3Blcmx5IHNlYXJjaGluZyBrZXJuZWwgaGVhZGVycyAoYW5kIGtlZXBpbmcgY29tcGF0aWJs
-ZSB3aXRoIHRoZSBLU0ZUDQo+IGZyYW1ld29yayBjb21wbGV0ZWx5KToNCj4NCj4gLSBvbmx5IGFy
-bTY0IHRvcGxldmVsIEtTRlQgTWFrZWZpbGUgc2VhcmNoZXMgZm9yIHRoZSBrZXJuZWwgaGVhZGVy
-cyBsb2NhdGlvbiBmb3IgYWxsIGFuZCBwcm9wYWdhdGVzIGRvd24gdGhlIGluZm8NCj4NCj4gLSB5
-b3UgY2FuIGFsc28gbm93IG9wdGlvbmFsbHkgc3BlY2lmeSB3aGljaCBhcm02NCBzdWJzeXN0ZW0g
-dG8gYnVpbGQgKHRvIGF2b2lkIGhhdmUgdG8gYnVpbGQsIHNheSwgYWxsIG9mIHNpZ25hbC8NCj4g
-ICAgaWYgeW91IGFyZSBub3QgaW50ZXJlc3RlZCBpbnRvLi4uLmEgc29ydCBvZiBzdGFuZGFsb25l
-IG1vZGUgd2l0aG91dCBhbGwgdGhlIGJ1cmRlbiBvZiB0aGUgb2xkIHN0YW5kYWxvbmUgbW9kZSkN
-Cm9rLg0KPg0KPiBTbyB5b3UgY2FuIGlzc3VlOg0KPg0KPiAkIG1ha2UgVEFSR0VUUz1hcm02NCBr
-c2VsZnRlc3QNCj4NCj4gb3Igc2ltaWxhcmx5Og0KPg0KPiAkIG1ha2UgLUMgdG9vbHMvdGVzdGlu
-Zy9zZWxmdGVzdHMgVEFSR0VUUz1hcm02NCBcDQo+ICAgICAgICAgICAgICAgICAgSU5TVEFMTF9Q
-QVRIPTx5b3VyLWluc3RhbGxhdGlvbi1wYXRoPiBpbnN0YWxsDQo+DQo+IG9yIHNlbGVjdCBzdWJz
-eXN0ZW1zOg0KPg0KPiAkIG1ha2UgLUMgdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMgVEFSR0VUUz1h
-cm02NCBTVUJUQVJHRVRTPSJ0YWdzIHNpZ25hbCIgXA0KPiAgICAgICAgICAgICAgICAgIElOU1RB
-TExfUEFUSD08eW91ci1pbnN0YWxsYXRpb24tcGF0aD4gaW5zdGFsbA0KVGhpcyBvcHRpb24gd2ls
-bCBiZSB1c2VmdWwgYXMgaXQgaXMgYmV0dGVyIHRvIGNvbXBpbGUganVzdCBvbmUgc3VidGFyZ2V0
-DQppbiBkZXZlbG9wbWVudCBwaGFzZS4NCg0KVGhhbmtzLA0KQW1pdA0KPg0KPiB3aXRoIGFsbCBv
-ZiB0aGUgYWJvdmUgbG9va2luZyBmb3IgdGhlIEsgaGVhZGVycyBpbiB0aGUgcHJvcGVyIHBsYWNl
-IGFuZCB3aXRob3V0DQo+IGR1cGxpY2F0aW5nIHRoZSBzZWFyY2ggY29kZSBpbiBtdWx0aXBsZSBw
-bGFjZXMuIChidWdzIGFwYXJ0IDpEKQ0KPg0KPiBUaGFua3MNCj4NCj4gQ3Jpc3RpYW4NCj4NCj4+
-PiAtIGV4cG9ydCBwcm9wZXIgdG9wX3NyY2RpciBFTlYgZm9yIGxpYi5taw0KPj4+IHYzIC0tPiB2
-NA0KPj4+IC0gY29tbWVudCByZXdvcmQNCj4+PiAtIHNpbXBsaWZpZWQgZG9jdW1lbnRhdGlvbiBp
-biBSRUFETUUNCj4+PiAtIGRyb3BwZWQgUkVBRE1FIGFib3V0IHN0YW5kYWxvbmUNCj4+PiAtLS0N
-Cj4+PiAgICB0b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9NYWtlZmlsZSAgICAgICAgICAgICAgfCAg
-MSArDQo+Pj4gICAgdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMvYXJtNjQvTWFrZWZpbGUgICAgICAg
-IHwgNzAgKysrKysrKysrKysrKysrKystLQ0KPj4+ICAgIHRvb2xzL3Rlc3Rpbmcvc2VsZnRlc3Rz
-L2FybTY0L1JFQURNRSAgICAgICAgICB8IDIwICsrKysrKw0KPj4+ICAgIHRvb2xzL3Rlc3Rpbmcv
-c2VsZnRlc3RzL2FybTY0L3RhZ3MvTWFrZWZpbGUgICB8IDEwICsrKw0KPj4+ICAgIC4uLi9hcm02
-NC97ID0+IHRhZ3N9L3J1bl90YWdzX3Rlc3Quc2ggICAgICAgICB8ICAwDQo+Pj4gICAgLi4uL3Nl
-bGZ0ZXN0cy9hcm02NC97ID0+IHRhZ3N9L3RhZ3NfdGVzdC5jICAgIHwgIDANCj4+PiAgICA2IGZp
-bGVzIGNoYW5nZWQsIDk1IGluc2VydGlvbnMoKyksIDYgZGVsZXRpb25zKC0pDQo+Pj4gICAgY3Jl
-YXRlIG1vZGUgMTAwNjQ0IHRvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL2FybTY0L1JFQURNRQ0KPj4+
-ICAgIGNyZWF0ZSBtb2RlIDEwMDY0NCB0b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9hcm02NC90YWdz
-L01ha2VmaWxlDQo+Pj4gICAgcmVuYW1lIHRvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL2FybTY0L3sg
-PT4gdGFnc30vcnVuX3RhZ3NfdGVzdC5zaCAoMTAwJSkNCj4+PiAgICByZW5hbWUgdG9vbHMvdGVz
-dGluZy9zZWxmdGVzdHMvYXJtNjQveyA9PiB0YWdzfS90YWdzX3Rlc3QuYyAoMTAwJSkNCj4+Pg0K
-Pj4+IGRpZmYgLS1naXQgYS90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9NYWtlZmlsZSBiL3Rvb2xz
-L3Rlc3Rpbmcvc2VsZnRlc3RzL01ha2VmaWxlDQo+Pj4gaW5kZXggMjViNDNhOGMyYjE1Li4xNzIy
-ZGFlOTM4MWEgMTAwNjQ0DQo+Pj4gLS0tIGEvdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMvTWFrZWZp
-bGUNCj4+PiArKysgYi90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9NYWtlZmlsZQ0KPj4+IEBAIC0x
-LDUgKzEsNiBAQA0KPj4+ICAgICMgU1BEWC1MaWNlbnNlLUlkZW50aWZpZXI6IEdQTC0yLjANCj4+
-PiAgICBUQVJHRVRTID0gYW5kcm9pZA0KPj4+ICtUQVJHRVRTICs9IGFybTY0DQo+Pj4gICAgVEFS
-R0VUUyArPSBicGYNCj4+PiAgICBUQVJHRVRTICs9IGJyZWFrcG9pbnRzDQo+Pj4gICAgVEFSR0VU
-UyArPSBjYXBhYmlsaXRpZXMNCj4+PiBkaWZmIC0tZ2l0IGEvdG9vbHMvdGVzdGluZy9zZWxmdGVz
-dHMvYXJtNjQvTWFrZWZpbGUgYi90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9hcm02NC9NYWtlZmls
-ZQ0KPj4+IGluZGV4IGE2MWIyZTc0M2U5OS4uNWRiYjBmZmRmYzlhIDEwMDY0NA0KPj4+IC0tLSBh
-L3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL2FybTY0L01ha2VmaWxlDQo+Pj4gKysrIGIvdG9vbHMv
-dGVzdGluZy9zZWxmdGVzdHMvYXJtNjQvTWFrZWZpbGUNCj4+PiBAQCAtMSwxMSArMSw2OSBAQA0K
-Pj4+ICAgICMgU1BEWC1MaWNlbnNlLUlkZW50aWZpZXI6IEdQTC0yLjANCj4+PiArIyBDb3B5cmln
-aHQgKEMpIDIwMTkgQVJNIExpbWl0ZWQNCj4+Pg0KPj4+IC0jIEFSQ0ggY2FuIGJlIG92ZXJyaWRk
-ZW4gYnkgdGhlIHVzZXIgZm9yIGNyb3NzIGNvbXBpbGluZw0KPj4+IC1BUkNIID89ICQoc2hlbGwg
-dW5hbWUgLW0gMj4vZGV2L251bGwgfHwgZWNobyBub3QpDQo+Pj4gKyMgV2hlbiBBUkNIIG5vdCBv
-dmVycmlkZGVuIGZvciBjcm9zc2NvbXBpbGluZywgbG9va3VwIG1hY2hpbmUNCj4+PiArQVJDSCA/
-PSAkKHNoZWxsIHVuYW1lIC1tKQ0KPj4+ICtBUkNIIDo9ICQoc2hlbGwgZWNobyAkKEFSQ0gpIHwg
-c2VkIC1lIHMvYWFyY2g2NC9hcm02NC8pDQo+Pj4NCj4+PiAtaWZuZXEgKCwkKGZpbHRlciAkKEFS
-Q0gpLGFhcmNoNjQgYXJtNjQpKQ0KPj4+IC1URVNUX0dFTl9QUk9HUyA6PSB0YWdzX3Rlc3QNCj4+
-PiAtVEVTVF9QUk9HUyA6PSBydW5fdGFnc190ZXN0LnNoDQo+Pj4gK2lmZXEgKCJ4JChBUkNIKSIs
-ICJ4YXJtNjQiKQ0KPj4+ICtTVUJESVJTIDo9IHRhZ3MNCj4+PiArZWxzZQ0KPj4+ICtTVUJESVJT
-IDo9DQo+Pj4gICAgZW5kaWYNCj4+Pg0KPj4+IC1pbmNsdWRlIC4uL2xpYi5taw0KPj4+ICtDRkxB
-R1MgOj0gLVdhbGwgLU8yIC1nDQo+Pj4gKw0KPj4+ICsjIEEgcHJvcGVyIHRvcF9zcmNkaXIgaXMg
-bmVlZGVkIGJ5IEtTRlQobGliLm1rKQ0KPj4+ICt0b3Bfc3JjZGlyID0gLi4vLi4vLi4vLi4vLi4N
-Cj4+PiArDQo+Pj4gKyMgQWRkaXRpb25hbCBpbmNsdWRlIHBhdGhzIG5lZWRlZCBieSBrc2VsZnRl
-c3QuaCBhbmQgbG9jYWwgaGVhZGVycw0KPj4+ICtDRkxBR1MgKz0gLUkkKHRvcF9zcmNkaXIpL3Rv
-b2xzL3Rlc3Rpbmcvc2VsZnRlc3RzLw0KPj4+ICsNCj4+PiArIyBHdWVzc2luZyB3aGVyZSB0aGUg
-S2VybmVsIGhlYWRlcnMgY291bGQgaGF2ZSBiZWVuIGluc3RhbGxlZA0KPj4+ICsjIGRlcGVuZGlu
-ZyBvbiBFTlYgY29uZmlnDQo+Pj4gK2lmZXEgKCQoS0JVSUxEX09VVFBVVCksKQ0KPj4+ICtraGRy
-X2RpciA9ICQodG9wX3NyY2RpcikvdXNyL2luY2x1ZGUNCj4+PiArZWxzZQ0KPj4+ICsjIHRoZSBL
-U0ZUIHByZWZlcnJlZCBsb2NhdGlvbiB3aGVuIEtCVUlMRF9PVVRQVVQgaXMgc2V0DQo+Pj4gK2to
-ZHJfZGlyID0gJChLQlVJTERfT1VUUFVUKS9rc2VsZnRlc3QvdXNyL2luY2x1ZGUNCj4+PiArZW5k
-aWYNCj4+PiArDQo+Pj4gK0NGTEFHUyArPSAtSSQoa2hkcl9kaXIpDQo+Pj4gKw0KPj4+ICtleHBv
-cnQgQ0MNCj4+PiArZXhwb3J0IENGTEFHUw0KPj4+ICtleHBvcnQgdG9wX3NyY2Rpcg0KPj4+ICsN
-Cj4+PiArYWxsOg0KPj4+ICsgICBAZm9yIERJUiBpbiAkKFNVQkRJUlMpOyBkbyAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgIFwNCj4+PiArICAgICAgICAgICBCVUlMRF9UQVJHRVQ9JChPVVRQ
-VVQpLyQkRElSOyAgICAgICAgICAgICAgICAgICBcDQo+Pj4gKyAgICAgICAgICAgbWtkaXIgLXAg
-JCRCVUlMRF9UQVJHRVQ7ICAgICAgICAgICAgICAgICAgICAgICAgXA0KPj4+ICsgICAgICAgICAg
-IG1ha2UgT1VUUFVUPSQkQlVJTERfVEFSR0VUIC1DICQkRElSICRAOyAgICAgICAgIFwNCj4+PiAr
-ICAgZG9uZQ0KPj4+ICsNCj4+PiAraW5zdGFsbDogYWxsDQo+Pj4gKyAgIEBmb3IgRElSIGluICQo
-U1VCRElSUyk7IGRvICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgXA0KPj4+ICsgICAgICAg
-ICAgIEJVSUxEX1RBUkdFVD0kKE9VVFBVVCkvJCRESVI7ICAgICAgICAgICAgICAgICAgIFwNCj4+
-PiArICAgICAgICAgICBtYWtlIE9VVFBVVD0kJEJVSUxEX1RBUkdFVCAtQyAkJERJUiAkQDsgICAg
-ICAgICBcDQo+Pj4gKyAgIGRvbmUNCj4+PiArDQo+Pj4gK3J1bl90ZXN0czogYWxsDQo+Pj4gKyAg
-IEBmb3IgRElSIGluICQoU1VCRElSUyk7IGRvICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-XA0KPj4+ICsgICAgICAgICAgIEJVSUxEX1RBUkdFVD0kKE9VVFBVVCkvJCRESVI7ICAgICAgICAg
-ICAgICAgICAgIFwNCj4+PiArICAgICAgICAgICBtYWtlIE9VVFBVVD0kJEJVSUxEX1RBUkdFVCAt
-QyAkJERJUiAkQDsgICAgICAgICBcDQo+Pj4gKyAgIGRvbmUNCj4+PiArDQo+Pj4gKyMgQXZvaWQg
-YW55IG91dHB1dCBvbiBub24gYXJtNjQgb24gZW1pdF90ZXN0cw0KPj4+ICtlbWl0X3Rlc3RzOiBh
-bGwNCj4+PiArICAgQGZvciBESVIgaW4gJChTVUJESVJTKTsgZG8gICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICBcDQo+Pj4gKyAgICAgICAgICAgQlVJTERfVEFSR0VUPSQoT1VUUFVUKS8kJERJ
-UjsgICAgICAgICAgICAgICAgICAgXA0KPj4+ICsgICAgICAgICAgIG1ha2UgT1VUUFVUPSQkQlVJ
-TERfVEFSR0VUIC1DICQkRElSICRAOyAgICAgICAgIFwNCj4+PiArICAgZG9uZQ0KPj4+ICsNCj4+
-PiArY2xlYW46DQo+Pj4gKyAgIEBmb3IgRElSIGluICQoU1VCRElSUyk7IGRvICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgXA0KPj4+ICsgICAgICAgICAgIEJVSUxEX1RBUkdFVD0kKE9VVFBV
-VCkvJCRESVI7ICAgICAgICAgICAgICAgICAgIFwNCj4+PiArICAgICAgICAgICBtYWtlIE9VVFBV
-VD0kJEJVSUxEX1RBUkdFVCAtQyAkJERJUiAkQDsgICAgICAgICBcDQo+Pj4gKyAgIGRvbmUNCj4+
-PiArDQo+Pj4gKy5QSE9OWTogYWxsIGNsZWFuIGluc3RhbGwgcnVuX3Rlc3RzIGVtaXRfdGVzdHMN
-Cj4+PiBkaWZmIC0tZ2l0IGEvdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMvYXJtNjQvUkVBRE1FIGIv
-dG9vbHMvdGVzdGluZy9zZWxmdGVzdHMvYXJtNjQvUkVBRE1FDQo+Pj4gbmV3IGZpbGUgbW9kZSAx
-MDA2NDQNCj4+PiBpbmRleCAwMDAwMDAwMDAwMDAuLmFjYTg5MmU2MmE2Yw0KPj4+IC0tLSAvZGV2
-L251bGwNCj4+PiArKysgYi90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9hcm02NC9SRUFETUUNCj4+
-PiBAQCAtMCwwICsxLDIwIEBADQo+Pj4gK0tTZWxmVGVzdCBBUk02NA0KPj4+ICs9PT09PT09PT09
-PT09PT0NCj4+PiArDQo+Pj4gKy0gVGhlc2UgdGVzdHMgYXJlIGFybTY0IHNwZWNpZmljIGFuZCBz
-byBub3QgYnVpbHQgb3IgcnVuIGJ1dCBqdXN0IHNraXBwZWQNCj4+PiArICBjb21wbGV0ZWx5IHdo
-ZW4gZW52LXZhcmlhYmxlIEFSQ0ggaXMgZm91bmQgdG8gYmUgZGlmZmVyZW50IHRoYW4gJ2FybTY0
-Jw0KPj4+ICsgIGFuZCBgdW5hbWUgLW1gIHJlcG9ydHMgb3RoZXIgdGhhbiAnYWFyY2g2NCcuDQo+
-Pj4gKw0KPj4+ICstIEhvbGRpbmcgdHJ1ZSB0aGUgYWJvdmUsIEFSTTY0IEtTRlQgdGVzdHMgY2Fu
-IGJlIHJ1biB3aXRoaW4gdGhlIEtTZWxmVGVzdA0KPj4+ICsgIGZyYW1ld29yayB1c2luZyBzdGFu
-ZGFyZCBMaW51eCB0b3AtbGV2ZWwtbWFrZWZpbGUgdGFyZ2V0czoNCj4+PiArDQo+Pj4gKyAgICAg
-ICQgbWFrZSBUQVJHRVRTPWFybTY0IGtzZWxmdGVzdC1jbGVhbg0KPj4+ICsgICAgICAkIG1ha2Ug
-VEFSR0VUUz1hcm02NCBrc2VsZnRlc3QNCj4+PiArDQo+Pj4gKyAgICAgIG9yDQo+Pj4gKw0KPj4+
-ICsgICAgICAkIG1ha2UgLUMgdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMgVEFSR0VUUz1hcm02NCBc
-DQo+Pj4gKyAgICAgICAgICAgSU5TVEFMTF9QQVRIPTx5b3VyLWluc3RhbGxhdGlvbi1wYXRoPiBp
-bnN0YWxsDQo+Pj4gKw0KPj4+ICsgICBGdXJ0aGVyIGRldGFpbHMgb24gYnVpbGRpbmcgYW5kIHJ1
-bm5pbmcgS0ZTVCBjYW4gYmUgZm91bmQgaW46DQo+Pj4gKyAgICAgRG9jdW1lbnRhdGlvbi9kZXYt
-dG9vbHMva3NlbGZ0ZXN0LnJzdA0KPj4+IGRpZmYgLS1naXQgYS90b29scy90ZXN0aW5nL3NlbGZ0
-ZXN0cy9hcm02NC90YWdzL01ha2VmaWxlIGIvdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMvYXJtNjQv
-dGFncy9NYWtlZmlsZQ0KPj4+IG5ldyBmaWxlIG1vZGUgMTAwNjQ0DQo+Pj4gaW5kZXggMDAwMDAw
-MDAwMDAwLi43NjIwNTUzMzEzNWINCj4+PiAtLS0gL2Rldi9udWxsDQo+Pj4gKysrIGIvdG9vbHMv
-dGVzdGluZy9zZWxmdGVzdHMvYXJtNjQvdGFncy9NYWtlZmlsZQ0KPj4+IEBAIC0wLDAgKzEsMTAg
-QEANCj4+PiArIyBTUERYLUxpY2Vuc2UtSWRlbnRpZmllcjogR1BMLTIuMA0KPj4+ICsjIEFSQ0gg
-Y2FuIGJlIG92ZXJyaWRkZW4gYnkgdGhlIHVzZXIgZm9yIGNyb3NzIGNvbXBpbGluZw0KPj4+ICtB
-UkNIID89ICQoc2hlbGwgdW5hbWUgLW0gMj4vZGV2L251bGwgfHwgZWNobyBub3QpDQo+Pj4gKw0K
-Pj4+ICtpZm5lcSAoLCQoZmlsdGVyICQoQVJDSCksYWFyY2g2NCBhcm02NCkpDQo+Pj4gK1RFU1Rf
-R0VOX1BST0dTIDo9IHRhZ3NfdGVzdA0KPj4+ICtURVNUX1BST0dTIDo9IHJ1bl90YWdzX3Rlc3Qu
-c2gNCj4+PiArZW5kaWYNCj4+PiArDQo+Pj4gK2luY2x1ZGUgLi4vLi4vbGliLm1rDQo+Pj4gZGlm
-ZiAtLWdpdCBhL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL2FybTY0L3J1bl90YWdzX3Rlc3Quc2gg
-Yi90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9hcm02NC90YWdzL3J1bl90YWdzX3Rlc3Quc2gNCj4+
-PiBzaW1pbGFyaXR5IGluZGV4IDEwMCUNCj4+PiByZW5hbWUgZnJvbSB0b29scy90ZXN0aW5nL3Nl
-bGZ0ZXN0cy9hcm02NC9ydW5fdGFnc190ZXN0LnNoDQo+Pj4gcmVuYW1lIHRvIHRvb2xzL3Rlc3Rp
-bmcvc2VsZnRlc3RzL2FybTY0L3RhZ3MvcnVuX3RhZ3NfdGVzdC5zaA0KPj4+IGRpZmYgLS1naXQg
-YS90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9hcm02NC90YWdzX3Rlc3QuYyBiL3Rvb2xzL3Rlc3Rp
-bmcvc2VsZnRlc3RzL2FybTY0L3RhZ3MvdGFnc190ZXN0LmMNCj4+PiBzaW1pbGFyaXR5IGluZGV4
-IDEwMCUNCj4+PiByZW5hbWUgZnJvbSB0b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9hcm02NC90YWdz
-X3Rlc3QuYw0KPj4+IHJlbmFtZSB0byB0b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9hcm02NC90YWdz
-L3RhZ3NfdGVzdC5jDQo+Pj4NCj4NCj4NCklNUE9SVEFOVCBOT1RJQ0U6IFRoZSBjb250ZW50cyBv
-ZiB0aGlzIGVtYWlsIGFuZCBhbnkgYXR0YWNobWVudHMgYXJlIGNvbmZpZGVudGlhbCBhbmQgbWF5
-IGFsc28gYmUgcHJpdmlsZWdlZC4gSWYgeW91IGFyZSBub3QgdGhlIGludGVuZGVkIHJlY2lwaWVu
-dCwgcGxlYXNlIG5vdGlmeSB0aGUgc2VuZGVyIGltbWVkaWF0ZWx5IGFuZCBkbyBub3QgZGlzY2xv
-c2UgdGhlIGNvbnRlbnRzIHRvIGFueSBvdGhlciBwZXJzb24sIHVzZSBpdCBmb3IgYW55IHB1cnBv
-c2UsIG9yIHN0b3JlIG9yIGNvcHkgdGhlIGluZm9ybWF0aW9uIGluIGFueSBtZWRpdW0uIFRoYW5r
-IHlvdS4NCg==
+Hi
+
+On 04/09/2019 12:48, Dave Martin wrote:
+> On Mon, Sep 02, 2019 at 12:29:26pm +0100, Cristian Marussi wrote:
+>> Add a simple mangle testcase which messes with the ucontext_t from within
+>> the signal handler, trying to set the PSTATE SSBS bit.
+>> Expect SIGILL if SSBS feature is unsupported or that, on test PASS, the
+>> value set in PSTATE.SSBS in the signal frame is preserved by sigreturn.
+>>
+>> Additionally, in order to support this test specific needs:
+>> - extend signal testing framework to allow the definition of a custom per
+>>   test initialization function to be run at the end of test setup.
+>> - introduced a set_regval() helper to set system register values in a
+>>   toolchain independent way.
+>> - introduce also a new common utility function: get_current_context()
+>>   which can be used to grab a ucontext without the help of libc, and
+>>   detect if such ucontext has been actively used to jump back into it.
+>>
+>> Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
+>> ---
+>> v3 --> v4
+>> - fix commit message
+>> - missing include signal.h
+>> - added .init per-test init-func
+>> - added set_regval() helper
+>> - added SSBS clear to 0 custom .init function
+>> - removed volatile qualifier associated with sig_atomic_t data
+>> - added dsb inside handler to ensure the writes related to the
+>>   grabbed ucontext have completed
+>> - added test description
+>> ---
+>>  .../selftests/arm64/signal/test_signals.h     | 20 +++-
+>>  .../arm64/signal/test_signals_utils.c         | 98 +++++++++++++++++++
+>>  .../arm64/signal/test_signals_utils.h         |  2 +
+>>  .../testcases/mangle_pstate_ssbs_regs.c       | 69 +++++++++++++
+>>  4 files changed, 184 insertions(+), 5 deletions(-)
+>>  create mode 100644 tools/testing/selftests/arm64/signal/testcases/mangle_pstate_ssbs_regs.c
+>>
+>> diff --git a/tools/testing/selftests/arm64/signal/test_signals.h b/tools/testing/selftests/arm64/signal/test_signals.h
+>> index a1cf69997604..0767e27fbe78 100644
+>> --- a/tools/testing/selftests/arm64/signal/test_signals.h
+>> +++ b/tools/testing/selftests/arm64/signal/test_signals.h
+>> @@ -27,6 +27,14 @@
+>>  	: "memory");					\
+>>  }
+>>  
+>> +#define set_regval(regname, in)				\
+>> +{							\
+>> +	asm volatile("msr " __stringify(regname) ", %0" \
+>> +	:						\
+>> +	: "r" (in)					\
+>> +	: "memory");					\
+>> +}
+>> +
+>>  /* Regs encoding and masks naming copied in from sysreg.h */
+>>  #define SYS_ID_AA64MMFR1_EL1	S3_0_C0_C7_1	/* MRS Emulated */
+>>  #define SYS_ID_AA64MMFR2_EL1	S3_0_C0_C7_2	/* MRS Emulated */
+>> @@ -89,12 +97,16 @@ struct tdescr {
+>>  	/* optional sa_flags for the installed handler */
+>>  	int		sa_flags;
+>>  	ucontext_t	saved_uc;
+>> -
+>> -	/* a custom setup function to be called before test starts */
+>> +	/* used by get_current_ctx() */
+>> +	size_t		live_sz;
+>> +	ucontext_t	*live_uc;
+>> +	sig_atomic_t	live_uc_valid;
+>> +	/* a custom setup: called alternatively to default_setup */
+>>  	int (*setup)(struct tdescr *td);
+>> +	/* a custom init: called by default test initialization */
+>> +	void (*init)(struct tdescr *td);
+>>  	/* a custom cleanup function called before test exits */
+>>  	void (*cleanup)(struct tdescr *td);
+>> -
+>>  	/* an optional function to be used as a trigger for test starting */
+>>  	int (*trigger)(struct tdescr *td);
+>>  	/*
+>> @@ -102,10 +114,8 @@ struct tdescr {
+>>  	 * presence of the trigger function above; this is mandatory
+>>  	 */
+>>  	int (*run)(struct tdescr *td, siginfo_t *si, ucontext_t *uc);
+>> -
+>>  	/* an optional function for custom results' processing */
+>>  	void (*check_result)(struct tdescr *td);
+>> -
+>>  	void *priv;
+>>  };
+>>  
+>> diff --git a/tools/testing/selftests/arm64/signal/test_signals_utils.c b/tools/testing/selftests/arm64/signal/test_signals_utils.c
+>> index e2a5f37e6ad3..c6fdcb23f246 100644
+>> --- a/tools/testing/selftests/arm64/signal/test_signals_utils.c
+>> +++ b/tools/testing/selftests/arm64/signal/test_signals_utils.c
+>> @@ -11,12 +11,16 @@
+>>  #include <linux/auxvec.h>
+>>  #include <ucontext.h>
+>>  
+>> +#include <asm/unistd.h>
+>> +
+>>  #include "test_signals.h"
+>>  #include "test_signals_utils.h"
+>>  #include "testcases/testcases.h"
+>>  
+>>  extern struct tdescr *current;
+>>  
+>> +static int sig_copyctx = SIGUSR2;
+>> +
+>>  static char *feats_store[FMAX_END] = {
+>>  	" SSBS ",
+>>  	" PAN ",
+>> @@ -43,6 +47,81 @@ static inline char *feats_to_string(unsigned long feats)
+>>  	return feats_string;
+>>  }
+>>  
+>> +/*
+>> + * Obtaining a valid and full-blown ucontext_t from userspace is tricky:
+>> + * libc getcontext does() not save all the regs and messes with some of
+>> + * them (pstate value in particular is not reliable).
+>> + * Here we use a service signal to grab the ucontext_t from inside a
+>> + * dedicated signal handler, since there, it is populated by Kernel
+>> + * itself in setup_sigframe(). The grabbed context is then stored and
+>> + * made available in td->live_uc.
+>> + *
+>> + * Anyway this function really serves a dual purpose:
+>> + *
+>> + * 1. grab a valid sigcontext into td->live_uc for result analysis: in
+>> + * such case it returns 1.
+>> + *
+>> + * 2. detect if somehow a previously grabbed live_uc context has been
+>> + * used actively with a sigreturn: in such a case the execution would have
+>> + * magically resumed in the middle of the function itself (seen_already==1):
+>> + * in such a case return 0, since in fact we have not just simply grabbed
+>> + * the context.
+>> + *
+>> + * This latter case is useful to detect when a fake_sigreturn test-case has
+>> + * unexpectedly survived without hittig a SEGV.
+>> + */
+>> +bool get_current_context(struct tdescr *td, ucontext_t *dest_uc)
+>> +{
+>> +	static sig_atomic_t seen_already;
+>> +
+>> +	assert(td && dest_uc);
+>> +	/* it's a genuine invocation..reinit */
+>> +	seen_already = 0;
+>> +	td->live_uc_valid = 0;
+>> +	td->live_sz = sizeof(*dest_uc);
+>> +	memset(dest_uc, 0x00, td->live_sz);
+>> +	td->live_uc = dest_uc;
+>> +	/*
+>> +	 * Grab ucontext_t triggering a signal...
+>> +	 * ASM equivalent of raise(sig_copyctx);
+>> +	 *
+>> +	 * Note that:
+>> +	 * - live_uc_valid is declared sig_atomic_t in struct tdescr
+>> +	 *   since it will be changed inside the sig_copyctx handler
+>> +	 * - the kill() syscall invocation returns only after any possible
+>> +	 *   registered signal handler for the invoked signal has returned,
+>> +	 *   so that live_uc_valid flag is surely up to date when this
+>> +	 *   function return it.
+>> +	 * - the additional 'memory' clobber is there to avoid possible
+>> +	 *   compiler's assumption on live_uc_valid, seen-already and
+>> +	 *   the content pointed by dest_uc, which are all changed inside
+>> +	 *   the signal handler, without resorting to the volatile qualifier
+>> +	 *   (and keeping quiet checkpatch.pl)
+>> +	 */
+>> +	asm volatile ("mov x8, %0\n\t"
+>> +		      "svc #0\n\t"
+>> +		      "mov x1, %1\n\t"
+>> +		      "mov x8, %2\n\t"
+>> +		      "svc #0"
+>> +		      :
+>> +		      : "i" (__NR_getpid), "r" (sig_copyctx), "i" (__NR_kill)
+>> +		      : "x1", "x8", "x0", "memory");
+>> +	/*
+>> +	 * If we get here with seen_already==1 it implies the td->live_uc
+>> +	 * context has been used to get back here....this probably means
+>> +	 * a test has failed to cause a SEGV...anyway the live_uc has not
+>> +	 * just been acquired...so return 0
+>> +	 */
+>> +	if (seen_already) {
+>> +		fprintf(stdout,
+>> +			"Successful sigreturn detected: live_uc is stale !\n");
+>> +		return 0;
+>> +	}
+>> +	seen_already = 1;
+>> +
+>> +	return td->live_uc_valid;
+>> +}
+>> +
+>>  static void unblock_signal(int signum)
+>>  {
+>>  	sigset_t sset;
+>> @@ -124,6 +203,17 @@ static void default_handler(int signum, siginfo_t *si, void *uc)
+>>  		 * to terminate immediately exiting straight away
+>>  		 */
+>>  		default_result(current, 1);
+>> +	} else if (signum == sig_copyctx && current->live_uc) {
+>> +		memcpy(current->live_uc, uc, current->live_sz);
+>> +		ASSERT_GOOD_CONTEXT(current->live_uc);
+>> +		current->live_uc_valid = 1;
+>> +		/*
+>> +		 * Ensure above writes have completed before signal
+>> +		 * handler terminates
+>> +		 */
+>> +		asm volatile ("dsb sy" ::: "memory");
+> 
+> The dsb doesn't help here: this has no effect on how the compiler caches
+> variables in registers etc.
+> 
+> Overall, I think some details need a bit of a rethink here.
+> 
+
+Beside the dsb which I understand is useless, I thought the memory clobber
+could have helped at least with the compiler optimization/re-ordering issues
+while avoiding the volatile. (but not fully)
+
+> We need some way to ensure coherency of accesses to variables around
+> and inside the signal handler here, but since we're running in a single
+> thread that may be interrupted by a signal handler (running in the same
+> thread), it's compiler<->compiler coherency that's the issue here, not
+> cpu<->cpu or cpu<->device coherency.
+> 
+> There may also be atomicity concerns, since the compiler might move
+> stuff across and/or duplicate or tear reads/writes around the asm where
+> the signal is delivered.
+> 
+> The classic solution to these problems is to use volatile, but this
+> is a blunt tool and you often end up having to mark more objects
+> volatile than you really want to in order to ensure correctness.  The
+> ordering behaviour of accesses to volatiles is also ill-specified for
+> accesses made in different threads.
+> 
+> That said, efficiency is of no concern here and we're single-threaded,
+> so a blunt, simple tool may still be adequate.
+> 
+I'll revert back to use volatile despite checkpatch complaints, and sig_atomic_t
+where needed, and add an output param in the inline asm for *dest_uc to avoid
+compiler making assumptions about it
+
+> 
+> Another issue is that nothing stops the stack frame the captured SP
+> points to from disappearing between get_current_context() and the
+> fake_sigreturn() that tries to jump back to it.
+> 
+> To avoid this issue, we'd probably need to inline more of
+> get_current_context(), i.e., turn it into a macro.
+> 
+
+I made it a static __always_inline.
+
+Moreover I moved away from kill(mypid, USR1) approach since the syscall path
+will zero the SVE regs before grabbing the sigframe
+(and is bad for future signal/SVE tests).
+
+I'm instead now using brk and catch the SIGTRAP (picked form the arm64/signal
+SVE tests patch still to be published)
+
+>> +		fprintf(stderr,
+>> +			"GOOD CONTEXT grabbed from sig_copyctx handler\n");
+>>  	} else {
+>>  		if (signum == current->sig_unsupp && !are_feats_ok(current)) {
+>>  			fprintf(stderr,
+>> @@ -222,7 +312,15 @@ static int test_init(struct tdescr *td)
+>>  			!feats_ok ? "NOT " : "");
+>>  	}
+>>  
+>> +	if (td->sig_trig == sig_copyctx)
+>> +		sig_copyctx = SIGUSR1;
+>> +	unblock_signal(sig_copyctx);
+>> +
+>> +	/* Perform test specific additional initialization */
+>> +	if (td->init)
+>> +		td->init(td);
+>>  	td->initialized = 1;
+>> +
+>>  	return 1;
+>>  }
+>>  
+>> diff --git a/tools/testing/selftests/arm64/signal/test_signals_utils.h b/tools/testing/selftests/arm64/signal/test_signals_utils.h
+>> index 8658d1a7d4b9..ce35be8ebc8e 100644
+>> --- a/tools/testing/selftests/arm64/signal/test_signals_utils.h
+>> +++ b/tools/testing/selftests/arm64/signal/test_signals_utils.h
+>> @@ -10,4 +10,6 @@ int test_setup(struct tdescr *td);
+>>  void test_cleanup(struct tdescr *td);
+>>  int test_run(struct tdescr *td);
+>>  void test_result(struct tdescr *td);
+>> +
+>> +bool get_current_context(struct tdescr *td, ucontext_t *dest_uc);
+>>  #endif
+>> diff --git a/tools/testing/selftests/arm64/signal/testcases/mangle_pstate_ssbs_regs.c b/tools/testing/selftests/arm64/signal/testcases/mangle_pstate_ssbs_regs.c
+>> new file mode 100644
+>> index 000000000000..15e6f62512d5
+>> --- /dev/null
+>> +++ b/tools/testing/selftests/arm64/signal/testcases/mangle_pstate_ssbs_regs.c
+>> @@ -0,0 +1,69 @@
+>> +// SPDX-License-Identifier: GPL-2.0
+>> +/*
+>> + * Copyright (C) 2019 ARM Limited
+>> + *
+>> + * Try to mangle the ucontext from inside a signal handler, setting the
+>> + * SSBS bit to 1 and veryfing that such modification is preserved.
+>> + */
+>> +
+>> +#include <stdio.h>
+>> +#include <signal.h>
+>> +#include <ucontext.h>
+>> +
+>> +#include "test_signals_utils.h"
+>> +#include "testcases.h"
+>> +
+>> +static void mangle_invalid_pstate_ssbs_init(struct tdescr *td)
+>> +{
+>> +	fprintf(stderr, "Clearing SSBS to 0\n");
+>> +	set_regval(SSBS_SYSREG, 0);
+>> +}
+>> +
+>> +static int mangle_invalid_pstate_ssbs_run(struct tdescr *td,
+>> +					  siginfo_t *si, ucontext_t *uc)
+>> +{
+>> +	ASSERT_GOOD_CONTEXT(uc);
+>> +
+>> +	/* set bit value */
+>> +	uc->uc_mcontext.pstate |= PSR_SSBS_BIT;
+> 
+> Can we check that uc->uc_mcontext.pstate & PSR_SSBS_BIT is initially 0?
+> 
+> If not, it suggests either a test bug, or modification of the SSBS
+> flag by other C code before the test signal was delivered.
+> 
+Here the situation is a bit tricky: architecture defines three levels of
+SSBS support:
+ 1.  SSBS bit + MRS SSBS instruction or
+ 2.  SSBS bit ONLY
+ 3.  no support
+
+HW_SSBS capability is reported as supported by kernel only for full support (1.)
+Otherwise it is reported as unsupported, even if in 2. the PSTATE.SSBS bit is working
+and I can look it up using util get_current_context().
+
+Moreover the test is supposed to check that the sigreturn Kernel path does NOT clear
+improperly the SSBS bit while returning: so as long as we can set the SSBS bit in uc PSTATE
+we can check if it is cleared.
+
+So in order to gather as much info as possible from the test without incurring in unneeded
+SIGILL (attempting to use MRS), my new approach is:
+
+- test anyway no matter if SSBS is supported: check that bit is NOT cleared on sigreturn
+- use MRS clear to 0 on test_init only if SSBS declared as supported
+- abort when PSTATE.SSBS bit is not cleared on test start (trigger) ONLY if SSBS was declared supported  (and so cleared in test_init)
+- check test result using:
+  - MRS SSBS if HW_SSBS supported
+  - PSTATE.SSBS get_current_context if HW_SSBS NOT supported
+  - print out always PSTATE retrieved values
+
+This way I was able to avoid SIGILL and properly test at any level of support (1,2,3)
+both the PASS and the FAIL path (using a Kernel which does NOT  properly preserve the
+SSBS bit)
+
+
+>> +	fprintf(stderr, "SSBS set to 1 -- PSTATE: 0x%016llX\n",
+>> +		uc->uc_mcontext.pstate);
+>> +	/* Save after mangling...it should be preserved */
+>> +	td->saved_uc = *uc;
+>> +
+>> +	return 1;
+>> +}
+>> +
+>> +static void pstate_ssbs_bit_checks(struct tdescr *td)
+>> +{
+>> +	uint64_t val = 0;
+>> +	ucontext_t uc;
+>> +
+>> +	/* This check reports some result even if MRS SSBS unsupported */
+>> +	if (get_current_context(td, &uc))
+>> +		fprintf(stderr,
+>> +			"INFO: live_uc - got PSTATE: 0x%016llX -> SSBS %s\n",
+>> +			uc.uc_mcontext.pstate,
+>> +			(td->saved_uc.uc_mcontext.pstate & PSR_SSBS_BIT) ==
+>> +			(uc.uc_mcontext.pstate & PSR_SSBS_BIT) ?
+>> +			"PRESERVED" : "CLEARED");
+>> +
+>> +	fprintf(stderr, "Checking with MRS SSBS...\n");
+>> +	get_regval(SSBS_SYSREG, val);
+>> +	fprintf(stderr, "INFO: MRS SSBS - got: 0x%016lX\n", val);
+>> +	/* pass when preserved */
+>> +	td->pass = (val & PSR_SSBS_BIT) ==
+>> +		   (td->saved_uc.uc_mcontext.pstate & PSR_SSBS_BIT);
+>> +}
+>> +
+>> +struct tdescr tde = {
+>> +		.sanity_disabled = true,
+>> +		.name = "MANGLE_PSTATE_SSBS_REGS",
+>> +		.descr = "Mangling uc_mcontext changing SSBS.(PRESERVE)",
+> 
+> Can we come up with a clearer description here?  I'm not sure how to
+> read this.
+> 
+
+Ok..I was trying to please checkpatch.
+> [...]
+> 
+> Cheers
+> ---Dave
+> 
+
+Cheers
+
+Cristian
