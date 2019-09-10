@@ -2,132 +2,135 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CB64AE3BA
-	for <lists+linux-kselftest@lfdr.de>; Tue, 10 Sep 2019 08:30:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 51849AE3D0
+	for <lists+linux-kselftest@lfdr.de>; Tue, 10 Sep 2019 08:35:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2393422AbfIJGax (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 10 Sep 2019 02:30:53 -0400
-Received: from aserp2120.oracle.com ([141.146.126.78]:56048 "EHLO
-        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726141AbfIJGax (ORCPT
+        id S2393493AbfIJGfm (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 10 Sep 2019 02:35:42 -0400
+Received: from mail-wr1-f66.google.com ([209.85.221.66]:34009 "EHLO
+        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729627AbfIJGfl (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 10 Sep 2019 02:30:53 -0400
-Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
-        by aserp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x8A6TqNN083577;
-        Tue, 10 Sep 2019 06:30:35 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=message-id : subject
- : from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=corp-2019-08-05;
- bh=nQaZxzczW4tza5Wbr0dtefaVBrArShMkDFsHCXd1Ri0=;
- b=sI2KEAGmaI5CRFosxf9kr1D+v3p3z4HZ+dLc+3NvFBFOy5zS8G7WgrOnQ4Cm5AGz0C0y
- kGmJ4Ala6OQfyyu6dCOgIHHUpGFJYcDDFOhcF5z4VCkIW0pzK/8AvIWDlf9/Yov0ZGPD
- CFCIossYWktU6JXJTAKOrrSB4m1TDUIJqI/0wMJFYy1SZfVtshqgKdJ4XAsxTtmkHgJj
- EXKs3/8Y8Z00NT0YsfTjH9xv/I2ahefqx1Xa7fuxQJJlLjxBQkxwTk9efbkk0OzNEKMA
- HOD+2e/uawWloaFvQ9VbxJIKxiXvZ68G4EdFWMsTfB+k/vgasN0vIumFqXSqRv/R7mos 0w== 
-Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by aserp2120.oracle.com with ESMTP id 2uw1jy0y04-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 10 Sep 2019 06:30:35 +0000
-Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x8A6ThdK190282;
-        Tue, 10 Sep 2019 06:30:35 GMT
-Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
-        by aserp3020.oracle.com with ESMTP id 2uwqktb0c1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 10 Sep 2019 06:30:35 +0000
-Received: from abhmp0010.oracle.com (abhmp0010.oracle.com [141.146.116.16])
-        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id x8A6UUDb013981;
-        Tue, 10 Sep 2019 06:30:30 GMT
-Received: from ovo (/148.69.85.38)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Mon, 09 Sep 2019 23:30:29 -0700
-Message-ID: <644ff48481f3dd7295798dcef88b4abcc8695260.camel@oracle.com>
-Subject: Re: [RFC 03/19] ktf: Introduce a generic netlink protocol for test
- result communication
-From:   Knut Omang <knut.omang@oracle.com>
-To:     Brendan Higgins <brendanhiggins@google.com>
-Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kbuild@vger.kernel.org,
+        Tue, 10 Sep 2019 02:35:41 -0400
+Received: by mail-wr1-f66.google.com with SMTP id a11so7851369wrx.1;
+        Mon, 09 Sep 2019 23:35:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=9uC8BSyBqqvpBHr+UBJrMjpTjeLS9eaSkiimfXBOGmI=;
+        b=RT2CZzYflWq0hJIviZ1qNiz7T8GR4+WUrisMZXe3m9cauTkqIyyVGGFPULrde7A02W
+         tj7FplDkEllE02owPbUYDzEtapP1C48use/4kFc7fZZmFt/DdDZTI55D8qvOaO2r24Ne
+         q4FNPrvlkjfx+lYW3lSYcZ69k2e463dcG9Y4rn+PPa/Glpr++eDfgJ8gFO5kdGQ+ZZAk
+         nXhnUxrt/DhKZTkCCWYef7FPywkEzNn0z8LUShNXRMIkZZwOG/G3kJoXGIwG7zGeC0aS
+         TI+DZ2QVgsA7VVK9EZCvbN7bPdpk9PkNXAPdUVWeWNcFfO4yiY8K5tj2pJUrGvJYeUSW
+         9/rw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to:user-agent;
+        bh=9uC8BSyBqqvpBHr+UBJrMjpTjeLS9eaSkiimfXBOGmI=;
+        b=OGIIu7kQiC9NfKryZfiQuYrZPpsBPFxbvEH8fwEKiZuuqtgtF7jXfIN29NnGbc7fId
+         rvFMXp1KemiGvI8uDGKpmB7TKTpH09ZSH+pP6wff/kjUKi7y/gzYWD37MGi08QJKXSU5
+         qIzIK/9psV/Dmfg+9g4+w5obNvUboDNYacCXAulcDEnDDCAlCvNGVCW+/KRRgW+yYKgs
+         bJbBptmLeUkrnIBvsbU7dGCeqeZV5c2GnIcnxDregkX0MA47Sf4/LsthdFQLCntmSSpS
+         lDqB3Sg9s1mVKXpH8rGLDUn39r1sa8uWlauqHahO9JXETkbxQ2gJO9wOvf2hvpR7bsNy
+         0bJQ==
+X-Gm-Message-State: APjAAAVO1jrEEqNqZtkwzYjI7tJkcM927HxyjlUx7zJFLbv3jtpt93vv
+        vOFlChZAgfWDE3vxlNeRRCw=
+X-Google-Smtp-Source: APXvYqw8XHm4leFwnC6sWR8BjhyMsv0e/YjeclMhzrktUUdT/wG1WxzN3IHekSLZEGkf3MnHklk0qA==
+X-Received: by 2002:a5d:6b0f:: with SMTP id v15mr22340960wrw.19.1568097336267;
+        Mon, 09 Sep 2019 23:35:36 -0700 (PDT)
+Received: from gmail.com (2E8B0CD5.catv.pool.telekom.hu. [46.139.12.213])
+        by smtp.gmail.com with ESMTPSA id u22sm32329249wru.72.2019.09.09.23.35.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 09 Sep 2019 23:35:35 -0700 (PDT)
+Date:   Tue, 10 Sep 2019 08:35:32 +0200
+From:   Ingo Molnar <mingo@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Andy Lutomirski <luto@amacapital.net>,
+        Jeff Layton <jlayton@kernel.org>,
+        Aleksa Sarai <cyphar@cyphar.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        "J. Bruce Fields" <bfields@fieldses.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        David Howells <dhowells@redhat.com>,
         Shuah Khan <shuah@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Masahiro Yamada <yamada.masahiro@socionext.com>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Shreyans Devendra Doshi <0xinfosect0r@gmail.com>,
-        Alan Maguire <alan.maguire@oracle.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Hidenori Yamaji <hidenori.yamaji@sony.com>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Timothy Bird <Tim.Bird@sony.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        "Theodore Ts'o" <tytso@mit.edu>, Daniel Vetter <daniel@ffwll.ch>,
-        Stephen Boyd <sboyd@kernel.org>
-Date:   Tue, 10 Sep 2019 08:30:25 +0200
-In-Reply-To: <20190909012837.GA33048@google.com>
-References: <cover.92d76bb4f6dcedc971d0b72a49e8e459a98bca54.1565676440.git-series.knut.omang@oracle.com>
-         <a29b3d27234a7ad3f5d6f7571d08167077dc0350.1565676440.git-series.knut.omang@oracle.com>
-         <20190909012837.GA33048@google.com>
-Organization: Oracle Inc
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.30.5 (3.30.5-1.fc29) 
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Christian Brauner <christian@brauner.io>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Jann Horn <jannh@google.com>, Tycho Andersen <tycho@tycho.ws>,
+        David Drysdale <drysdale@google.com>,
+        Chanho Min <chanho.min@lge.com>,
+        Oleg Nesterov <oleg@redhat.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Aleksa Sarai <asarai@suse.de>,
+        Linux Containers <containers@lists.linux-foundation.org>,
+        alpha <linux-alpha@vger.kernel.org>,
+        Linux API <linux-api@vger.kernel.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        linux-ia64@vger.kernel.org,
+        Linux List Kernel Mailing <linux-kernel@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org,
+        linux-s390 <linux-s390@vger.kernel.org>,
+        Linux-sh list <linux-sh@vger.kernel.org>,
+        linux-xtensa@linux-xtensa.org, sparclinux@vger.kernel.org
+Subject: Re: [PATCH v12 11/12] open: openat2(2) syscall
+Message-ID: <20190910063532.GB1579@gmail.com>
+References: <20190904201933.10736-1-cyphar@cyphar.com>
+ <20190904201933.10736-12-cyphar@cyphar.com>
+ <7236f382d72130f2afbbe8940e72cc67e5c6dce0.camel@kernel.org>
+ <CAHk-=whZx97Nm-gUK0ppofj2RA2LLz2vmaDUTKSSV-+yYB9q_Q@mail.gmail.com>
+ <C81D6D29-F6BF-48E6-A15E-3ABCB2C992E5@amacapital.net>
+ <CAHk-=whe90Ec_RRrMRLE0=bJOHNS9YmVwcytVxmrfK3oCuZF6A@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9375 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
- phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=999
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.0.1-1906280000 definitions=main-1909100063
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9375 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
- suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
- lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1906280000
- definitions=main-1909100063
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHk-=whe90Ec_RRrMRLE0=bJOHNS9YmVwcytVxmrfK3oCuZF6A@mail.gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sun, 2019-09-08 at 18:28 -0700, Brendan Higgins wrote:
-> On Tue, Aug 13, 2019 at 08:09:18AM +0200, Knut Omang wrote:
-> > The generic netlink protocol used to communicate between
-> > kernel and user space about tests and test results, as well as some
-> > means for configuring tests within the kernel.
-> > 
-> > Unlike other kernel side test code in the kernel, ktf does not print
-> > anything from inside the kernel (except for optional debugging
-> > features to help "internal" debugging of ktf or ktf tests).
-> > Instead all test results are communicated back to the user space
-> > frontend, which decides how to do the reporting.
+
+* Linus Torvalds <torvalds@linux-foundation.org> wrote:
+
+> On Sat, Sep 7, 2019 at 10:42 AM Andy Lutomirski <luto@amacapital.net> wrote:
+> >
+> > Linus, you rejected resolveat() because you wanted a *nice* API
 > 
-> So why netlink? Why not just a file interface?
+> No. I rejected resoveat() because it was a completely broken garbage
+> API that couldn't do even basic stuff right (like O_CREAT).
+> 
+> We have a ton of flag space in the new openat2() model, we might as
+> well leave the old flags alone that people are (a) used to and (b) we
+> have code to support _anyway_.
+> 
+> Making up a new flag namespace is only going to cause us - and users -
+> more work, and more confusion. For no actual advantage. It's not going
+> to be "cleaner". It's just going to be worse.
 
-Netlink allows more flexibility in that it is bidirectional and asynchronous.
-User space may query the kernel for available tests and then decide which tests
-to invoke. User land test frameworks like Googletest allows use of wildcards and
-exceptions to select particular tests to run. This is in my opinion very
-important functionality as we want the tests to be valuable as developer tools,
-not just to check the code as part of a later QA cycle. 
-Being able to run a single test or a small subset of the tests is very useful.
+I suspect there is a "add a clean new flags namespace" analogy to the 
+classic "add a clean new standard" XKCD:
 
-Wrt test reporting, the kernel side just dispatches off messages about test
-results as they are gathered. Compare this to the complexities, side effects and
-limitations of printk.
-
-Besides, for hybrid tests, bidirectional communication allows a test to contain
-a mix (or a function) of results gathered in the kernel and in user space.
-
-We also use it for network tests, where user space needs to tell the kernel 
-what peer(s) to communicate with, and for certain minimal configuration, such as
-which device instance to use for device testing. Test nodes may vary in what
-they offer of hardware. Although we'd like to minimize the need for
-configuration, as results should be easily reproducable, sometimes there is no
-good way around.
+	https://xkcd.com/927/
 
 Thanks,
-Knut
 
-> [...]
-> 
-> Cheers
-
+	Ingo
