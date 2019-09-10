@@ -2,172 +2,208 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BAA03AEA1B
-	for <lists+linux-kselftest@lfdr.de>; Tue, 10 Sep 2019 14:18:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80BCFAEA4F
+	for <lists+linux-kselftest@lfdr.de>; Tue, 10 Sep 2019 14:26:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388356AbfIJMSW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 10 Sep 2019 08:18:22 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:25160 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1731146AbfIJMSV (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 10 Sep 2019 08:18:21 -0400
-Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x8ACHUxY003110
-        for <linux-kselftest@vger.kernel.org>; Tue, 10 Sep 2019 08:18:20 -0400
-Received: from e06smtp01.uk.ibm.com (e06smtp01.uk.ibm.com [195.75.94.97])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 2ux9w4bxu6-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-kselftest@vger.kernel.org>; Tue, 10 Sep 2019 08:18:20 -0400
-Received: from localhost
-        by e06smtp01.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-kselftest@vger.kernel.org> from <iii@linux.ibm.com>;
-        Tue, 10 Sep 2019 13:18:18 +0100
-Received: from b06cxnps4076.portsmouth.uk.ibm.com (9.149.109.198)
-        by e06smtp01.uk.ibm.com (192.168.101.131) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Tue, 10 Sep 2019 13:18:17 +0100
-Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
-        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x8ACIFxH45678818
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 10 Sep 2019 12:18:15 GMT
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 42A3FA40A8;
-        Tue, 10 Sep 2019 12:18:15 +0000 (GMT)
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id DABCFA40B8;
-        Tue, 10 Sep 2019 12:18:14 +0000 (GMT)
-Received: from white.boeblingen.de.ibm.com (unknown [9.145.93.131])
-        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue, 10 Sep 2019 12:18:14 +0000 (GMT)
-From:   Ilya Leoshkevich <iii@linux.ibm.com>
-To:     Shuah Khan <shuah@kernel.org>
+        id S2391992AbfIJMZj (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 10 Sep 2019 08:25:39 -0400
+Received: from foss.arm.com ([217.140.110.172]:34250 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726762AbfIJMZi (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 10 Sep 2019 08:25:38 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 21E2C1000;
+        Tue, 10 Sep 2019 05:25:38 -0700 (PDT)
+Received: from [10.1.197.50] (e120937-lin.cambridge.arm.com [10.1.197.50])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 50E5D3F59C;
+        Tue, 10 Sep 2019 05:25:37 -0700 (PDT)
+Subject: Re: [PATCH v5 00/11] Add arm64/signal initial kselftest support
+To:     Dave Martin <Dave.Martin@arm.com>
 Cc:     linux-kselftest@vger.kernel.org,
-        Heiko Carstens <heiko.carstens@de.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Ilya Leoshkevich <iii@linux.ibm.com>
-Subject: [PATCH v2] selftests: fix prepending $(OUTPUT) to $(TEST_PROGS)
-Date:   Tue, 10 Sep 2019 13:18:13 +0100
-X-Mailer: git-send-email 2.21.0
+        linux-arm-kernel@lists.infradead.org, shuah@kernel.org,
+        amit.kachhap@arm.com, andreyknvl@google.com
+References: <20190902112932.36129-1-cristian.marussi@arm.com>
+ <20190904114722.GQ27757@arm.com>
+From:   Cristian Marussi <cristian.marussi@arm.com>
+Message-ID: <74165b2e-eb4c-994f-20ca-b69f71f3f5bc@arm.com>
+Date:   Tue, 10 Sep 2019 13:25:31 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-x-cbid: 19091012-4275-0000-0000-00000363EFFD
-X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 19091012-4276-0000-0000-0000387643F7
-Message-Id: <20190910121813.45742-1-iii@linux.ibm.com>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-09-10_07:,,
- signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
- clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1906280000 definitions=main-1909100121
+In-Reply-To: <20190904114722.GQ27757@arm.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The current logic prepends $(OUTPUT) only to the first member of
-$(TEST_PROGS). Use $(addprefix) to prepend it to each member.
+On 04/09/2019 12:47, Dave Martin wrote:
+> On Mon, Sep 02, 2019 at 12:29:21pm +0100, Cristian Marussi wrote:
+>> Hi
+>>
+>> this patchset aims to add the initial arch-specific arm64 support to
+>> kselftest starting with signals-related test-cases.
+>> A common internal test-case layout is proposed which then it is anyway
+>> wired-up to the toplevel kselftest Makefile, so that it should be possible
+>> at the end to run it on an arm64 target in the usual way with KSFT.
+> 
+> BTW, it's helpful to state the base branch / commit as clearly as
+> possible near the top of the cover letter, say,
+> 
+> --8<--
+> 
+> This series is based on arm64/for-next/core [1]
+> commit 9ce1263033cd ("selftests, arm64: add a selftest for passing tagged pointers to kernel")
+> 
+> [1] git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-next/core
+> 
+> -->8--
+> 
+> This is particularly important if you expect the maintainer to pick up
+> the patches.
+> 
+> You don't need to reference a specific commit unless there's a
+> significant chance of conflicts if the wrong commit is used, but it can
+> help provide a clue as to why you're basing on this alternate branch.
+> 
 
-Also, $(OUTPUT) is assumed to end with a / almost everywhere else in
-the kernel, make this the case for kselftest as well.
+Ok, thanks I'll do.
 
-Fixes: 1a940687e424 ("selftests: lib.mk: copy test scripts and test files for make O=dir run")
-Signed-off-by: Ilya Leoshkevich <iii@linux.ibm.com>
----
+>> ~/linux# make TARGETS=arm64 kselftest
+>>
+>> New KSFT arm64 testcases live inside tools/testing/selftests/arm64 grouped by
+>> family inside subdirectories: arm64/signal is the first family proposed with
+>> this series.
+>> This series converts also to this subdirectory scheme the pre-existing
+>> (already queued on arm64/for-next/core) KSFT arm64 tags tests, moving them
+>> into arm64/tags.
+>>
+>> Thanks
+>>
+>> Cristian
+>>
+>>
+>> Notes:
+>> -----
+>> - further details in the included READMEs
+>>
+>> - more tests still to be written (current strategy is going through the related
+>>   Kernel signal-handling code and write a test for each possible and sensible code-path)
+>>   A few ideas for more TODO testcases:
+>> 	- fake_sigreturn_unmapped_sp: SP into unmapped addrs
+>> 	- fake_sigreturn_kernelspace_sp: SP into kernel addrs
+>> 	- fake_sigreturn_sve_bad_extra_context: SVE extra context badly formed
+>> 	- mangle_sve_invalid_extra_context: SVE extra_context invalid
+>>
+>> - SVE signal testcases and special handling will be part of an additional patch
+>>   still to be released
+> 
+> What's your approach to checking that the test failure paths work?
+> 
+> We could either hack the kernel or the tests to provoke "fake" failures,
+> and I don't think it's necessary to test everything in this way,
+> providing we have confidence that the test strategy and framework works
+> in general.
+> 
 
-v1->v2:
- - Append / to $(OUTPUT).
- - Use $(addprefix) instead of $(foreach).
+So my approach to testing the tests itself has been as follows:
 
-tools/testing/selftests/Makefile | 16 ++++++++--------
- tools/testing/selftests/lib.mk   |  3 ++-
- 2 files changed, 10 insertions(+), 9 deletions(-)
+- PASS path: instrumented Kernel itself to print the exact line where the SEGV
+  is supposed to be called and manually check once for all (just redone now).
+  Something like:
 
-diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-index c3feccb99ff5..49bcd066907e 100644
---- a/tools/testing/selftests/Makefile
-+++ b/tools/testing/selftests/Makefile
-@@ -136,31 +136,31 @@ all: khdr
- 	@for TARGET in $(TARGETS); do		\
- 		BUILD_TARGET=$$BUILD/$$TARGET;	\
- 		mkdir $$BUILD_TARGET  -p;	\
--		$(MAKE) OUTPUT=$$BUILD_TARGET -C $$TARGET;\
-+		$(MAKE) OUTPUT=$$BUILD_TARGET/ -C $$TARGET;\
- 	done;
- 
- run_tests: all
- 	@for TARGET in $(TARGETS); do \
- 		BUILD_TARGET=$$BUILD/$$TARGET;	\
--		$(MAKE) OUTPUT=$$BUILD_TARGET -C $$TARGET run_tests;\
-+		$(MAKE) OUTPUT=$$BUILD_TARGET/ -C $$TARGET run_tests;\
- 	done;
- 
- hotplug:
- 	@for TARGET in $(TARGETS_HOTPLUG); do \
- 		BUILD_TARGET=$$BUILD/$$TARGET;	\
--		$(MAKE) OUTPUT=$$BUILD_TARGET -C $$TARGET;\
-+		$(MAKE) OUTPUT=$$BUILD_TARGET/ -C $$TARGET;\
- 	done;
- 
- run_hotplug: hotplug
- 	@for TARGET in $(TARGETS_HOTPLUG); do \
- 		BUILD_TARGET=$$BUILD/$$TARGET;	\
--		$(MAKE) OUTPUT=$$BUILD_TARGET -C $$TARGET run_full_test;\
-+		$(MAKE) OUTPUT=$$BUILD_TARGET/ -C $$TARGET run_full_test;\
- 	done;
- 
- clean_hotplug:
- 	@for TARGET in $(TARGETS_HOTPLUG); do \
- 		BUILD_TARGET=$$BUILD/$$TARGET;	\
--		$(MAKE) OUTPUT=$$BUILD_TARGET -C $$TARGET clean;\
-+		$(MAKE) OUTPUT=$$BUILD_TARGET/ -C $$TARGET clean;\
- 	done;
- 
- run_pstore_crash:
-@@ -184,7 +184,7 @@ ifdef INSTALL_PATH
- 	install -m 744 kselftest/prefix.pl $(INSTALL_PATH)/kselftest/
- 	@for TARGET in $(TARGETS); do \
- 		BUILD_TARGET=$$BUILD/$$TARGET;	\
--		$(MAKE) OUTPUT=$$BUILD_TARGET -C $$TARGET INSTALL_PATH=$(INSTALL_PATH)/$$TARGET install; \
-+		$(MAKE) OUTPUT=$$BUILD_TARGET/ -C $$TARGET INSTALL_PATH=$(INSTALL_PATH)/$$TARGET install; \
- 	done;
- 
- 	@# Ask all targets to emit their test scripts
-@@ -203,7 +203,7 @@ ifdef INSTALL_PATH
- 		echo "[ -w /dev/kmsg ] && echo \"kselftest: Running tests in $$TARGET\" >> /dev/kmsg" >> $(ALL_SCRIPT); \
- 		echo "cd $$TARGET" >> $(ALL_SCRIPT); \
- 		echo -n "run_many" >> $(ALL_SCRIPT); \
--		$(MAKE) -s --no-print-directory OUTPUT=$$BUILD_TARGET -C $$TARGET emit_tests >> $(ALL_SCRIPT); \
-+		$(MAKE) -s --no-print-directory OUTPUT=$$BUILD_TARGET/ -C $$TARGET emit_tests >> $(ALL_SCRIPT); \
- 		echo "" >> $(ALL_SCRIPT);	    \
- 		echo "cd \$$ROOT" >> $(ALL_SCRIPT); \
- 	done;
-@@ -216,7 +216,7 @@ endif
- clean:
- 	@for TARGET in $(TARGETS); do \
- 		BUILD_TARGET=$$BUILD/$$TARGET;	\
--		$(MAKE) OUTPUT=$$BUILD_TARGET -C $$TARGET clean;\
-+		$(MAKE) OUTPUT=$$BUILD_TARGET/ -C $$TARGET clean;\
- 	done;
- 
- .PHONY: khdr all run_tests hotplug run_hotplug clean_hotplug run_pstore_crash install clean
-diff --git a/tools/testing/selftests/lib.mk b/tools/testing/selftests/lib.mk
-index 1c8a1963d03f..27a97a1b4e9e 100644
---- a/tools/testing/selftests/lib.mk
-+++ b/tools/testing/selftests/lib.mk
-@@ -75,7 +75,8 @@ ifdef building_out_of_srctree
- 		@rsync -aq $(TEST_PROGS) $(TEST_PROGS_EXTENDED) $(TEST_FILES) $(OUTPUT)
- 	fi
- 	@if [ "X$(TEST_PROGS)" != "X" ]; then
--		$(call RUN_TESTS, $(TEST_GEN_PROGS) $(TEST_CUSTOM_PROGS) $(OUTPUT)/$(TEST_PROGS))
-+		$(call RUN_TESTS, $(TEST_GEN_PROGS) $(TEST_CUSTOM_PROGS) \
-+				  $(addprefix $(OUTPUT),$(TEST_PROGS)))
- 	else
- 		$(call RUN_TESTS, $(TEST_GEN_PROGS) $(TEST_CUSTOM_PROGS))
- 	fi
--- 
-2.21.0
+# FAKE_SIGRETURN_MISALIGNED_SP :: Triggers a sigreturn with a misaligned sigframe
+Registered handlers for all signals.
+Detected MINSTKSIGSZ:9984
+Testcase initialized.
+uc context validated.
+GOOD CONTEXT grabbed from sig_copyctx handler
+Handled SIG_COPYCTX
+Calling sigreturn with fake sigframe sized:4688 at SP @FFFFCAAE5253
+[  188.206911] Kernel SEGV @ 571                                                   <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+SIG_OK -- SP:0xFFFFCAAE5253  si_addr@:0xffffcaae5253  si_code:2  token@:0xffffcaae5253  offset:0
+==>> completed. PASS(1)
+
+
+- FAIL path: tried at first the same approach (instrument to avoid the SEGV), but thinking that
+  this could have led to general Kernel instability while processing bad sigframes,
+  I instead instrumented tests and utils as follows:
+
+  - mangle_ TESTS:
+
+    + removed the "mangling" for each test, and observed test FAIL (NO SEGV)
+
+# MANGLE_PSTATE_INVALID_MODE_EL1h :: Mangling uc_mcontext INVALID MODE EL1h
+Registered handlers for all signals.
+Detected MINSTKSIGSZ:9984
+Testcase initialized.
+uc context validated.
+Handled SIG_TRIG
+==>> completed. FAIL(0)
+
+    + SSBS: being this a peculiar mangle_ test, where we check that SSBS is PRESERVED as it is
+      on Kernel restoring sigframe (no expected SEGV), I used a kernel patched to NOT preserve
+      the SSBS bit (so clearing it). Moreover I experimented with the various SSBS support levels
+      (no_supp/SSBS_BIT/MRS+SSBS_BIT) and observed how test behaved related to the detected SSBS support
+
+    + verify that an anomalous SEGV (no SEGV_ACCER) is detected (say a *(* int)0x00= inside handler)
+
+# MANGLE_PSTATE_INVALID_DAIF_BITS :: Mangling uc_mcontext with INVALID DAIF_BITS
+Registered handlers for all signals.
+Detected MINSTKSIGSZ:9984
+Testcase initialized.
+uc context validated.
+SIG_OK -- SP:0xFFFFFBE96DA0  si_addr@:(nil)  si_code:1  token@:(nil)  offset:0
+si_code != SEGV_ACCERR...test is probably broken!  <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+-- RX UNEXPECTED SIGNAL: 6
+==>> completed. FAIL(0)
+
+
+  - fake_sigreturn_ TESTS:
+
+    + verify placing on the stack the good context grabbed from get_current_context() as it is
+      (GOOD), execution flow is anomalously restored inside get_current_context() and such 
+      anomaly is spotted (without deadly loops)
+
+# FAKE_SIGRETURN_BAD_MAGIC :: Trigger a sigreturn with a sigframe with a bad magic
+Registered handlers for all signals.
+Detected MINSTKSIGSZ:9984
+Testcase initialized.
+uc context validated.
+GOOD CONTEXT grabbed from sig_copyctx handler
+Handled SIG_COPYCTX
+Calling sigreturn with fake sigframe sized:4688 at SP @FFFFCAC61F80
+Unexpected successful sigreturn detected: live_uc is stale !        <<<<<<<<<<<<<<<<<<<<<<<<<<<
+==>> completed. FAIL(0)
+
+    + verify that an early SEGV is detected as anomalous (say a *(* int)0x00 before fake sigframe
+      has been placed on the stack)
+
+# FAKE_SIGRETURN_BAD_MAGIC :: Trigger a sigreturn with a sigframe with a bad magic
+Registered handlers for all signals.
+Detected MINSTKSIGSZ:9984
+Testcase initialized.
+uc context validated.
+GOOD CONTEXT grabbed from sig_copyctx handler
+Handled SIG_COPYCTX
+Available space:3552
+Using badly built context - ERR: BAD MAGIC !
+Calling sigreturn with fake sigframe sized:4688 at SP @FFFFE77C96D0
+SIG_OK -- SP:0xFFFFE77C96D0  si_addr@:(nil)  si_code:1  token@:(nil)  offset:0
+current->token ZEROED...test is probably broken!   <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+-- RX UNEXPECTED SIGNAL: 6
+==>> completed. FAIL(0)
+
+
+> [...]
+> 
+> Cheers
+> ---Dave
+> 
+
+Cheers
+
+Cristian
 
