@@ -2,95 +2,71 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 617BFAEA6C
-	for <lists+linux-kselftest@lfdr.de>; Tue, 10 Sep 2019 14:31:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C959DAF0D0
+	for <lists+linux-kselftest@lfdr.de>; Tue, 10 Sep 2019 20:02:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731902AbfIJMbv (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 10 Sep 2019 08:31:51 -0400
-Received: from foss.arm.com ([217.140.110.172]:34438 "EHLO foss.arm.com"
+        id S1726653AbfIJSCB (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 10 Sep 2019 14:02:01 -0400
+Received: from mx1.redhat.com ([209.132.183.28]:44944 "EHLO mx1.redhat.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729868AbfIJMbu (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 10 Sep 2019 08:31:50 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 55CAF1000;
-        Tue, 10 Sep 2019 05:31:50 -0700 (PDT)
-Received: from e120937-lin.cambridge.arm.com (e120937-lin.cambridge.arm.com [10.1.197.50])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6ECA43F59C;
-        Tue, 10 Sep 2019 05:31:49 -0700 (PDT)
-From:   Cristian Marussi <cristian.marussi@arm.com>
-To:     linux-kselftest@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, shuah@kernel.org
-Cc:     andreyknvl@google.com, dave.martin@arm.com, amit.kachhap@arm.com
-Subject: [PATCH v6 11/11] kselftest: arm64: fake_sigreturn_misaligned_sp
-Date:   Tue, 10 Sep 2019 13:31:11 +0100
-Message-Id: <20190910123111.33478-12-cristian.marussi@arm.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20190910123111.33478-1-cristian.marussi@arm.com>
-References: <20190910123111.33478-1-cristian.marussi@arm.com>
+        id S1726421AbfIJSCB (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 10 Sep 2019 14:02:01 -0400
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mx1.redhat.com (Postfix) with ESMTPS id 54C9C898102;
+        Tue, 10 Sep 2019 18:02:01 +0000 (UTC)
+Received: from asgard.redhat.com (ovpn-112-20.ams2.redhat.com [10.36.112.20])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id E2EAB6092D;
+        Tue, 10 Sep 2019 18:01:57 +0000 (UTC)
+Date:   Tue, 10 Sep 2019 19:01:30 +0100
+From:   Eugene Syromiatnikov <esyr@redhat.com>
+To:     linux-kernel@vger.kernel.org,
+        Christian Brauner <christian@brauner.io>,
+        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org
+Cc:     Adrian Reber <areber@redhat.com>
+Subject: [PATCH v2 0/6] Update clone3 self-tests
+Message-ID: <cover.1568138393.git.esyr@redhat.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.5.23 (2014-03-12)
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
+X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.6.2 (mx1.redhat.com [10.5.110.67]); Tue, 10 Sep 2019 18:02:01 +0000 (UTC)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add a simple fake_sigreturn testcase which places a valid sigframe on a
-non-16 bytes aligned SP. Expects a SIGSEGV on test PASS.
+Hello.
 
-Reviewed-by: Dave Martin <Dave.Martin@arm.com>
-Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
----
-v3 --> v4
-- fix commit
-- use new fake_sigreturn misalig_bytes params
-- removed TODO
-- added test description
----
- .../testcases/fake_sigreturn_misaligned_sp.c  | 37 +++++++++++++++++++
- 1 file changed, 37 insertions(+)
- create mode 100644 tools/testing/selftests/arm64/signal/testcases/fake_sigreturn_misaligned_sp.c
+This patch set updates clone3 selftest in several aspects:
+ - adding checks for exit_signal invalid values handling;
+ - adding clone3 to selftests targets;
+ - enabling clone3 tests on all architectures;
+ - minor cleanups of the clone3 test.
 
-diff --git a/tools/testing/selftests/arm64/signal/testcases/fake_sigreturn_misaligned_sp.c b/tools/testing/selftests/arm64/signal/testcases/fake_sigreturn_misaligned_sp.c
-new file mode 100644
-index 000000000000..1e089e66f9f3
---- /dev/null
-+++ b/tools/testing/selftests/arm64/signal/testcases/fake_sigreturn_misaligned_sp.c
-@@ -0,0 +1,37 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright (C) 2019 ARM Limited
-+ *
-+ * Place a fake sigframe on the stack at a misaligned SP: on sigreturn
-+ * Kernel must spot this attempt and the test case is expected to be
-+ * terminated via SEGV.
-+ */
-+
-+#include <signal.h>
-+#include <ucontext.h>
-+
-+#include "test_signals_utils.h"
-+#include "testcases.h"
-+
-+struct fake_sigframe sf;
-+
-+static int fake_sigreturn_misaligned_run(struct tdescr *td,
-+					 siginfo_t *si, ucontext_t *uc)
-+{
-+	/* just to fill the ucontext_t with something real */
-+	if (!get_current_context(td, &sf.uc))
-+		return 1;
-+
-+	/* Forcing sigframe on misaligned SP (16 + 3) */
-+	fake_sigreturn(&sf, sizeof(sf), 3);
-+
-+	return 1;
-+}
-+
-+struct tdescr tde = {
-+		.name = "FAKE_SIGRETURN_MISALIGNED_SP",
-+		.descr = "Triggers a sigreturn with a misaligned sigframe",
-+		.sig_ok = SIGSEGV,
-+		.timeout = 3,
-+		.run = fake_sigreturn_misaligned_run,
-+};
+Applied on top of brauer/linux.git/for-next.
+
+Changes since v1[1]:
+ - exit_signal check extended to cover more cases of invalid
+   exit_signal value.
+
+[1] https://lkml.org/lkml/2019/9/10/416
+
+Eugene Syromiatnikov (6):
+  selftests/clone3: convert test modes into an enum
+  selftests/clone3: add a check for invalid exit_signal
+  selftests/clone3: use uint64_t for flags parameter
+  selftests/clone3: fix up format strings
+  selftests/clone3: enable clone3 self-tests on all architectures
+  selftests: add clone3 to TARGETS
+
+ tools/testing/selftests/Makefile        |  1 +
+ tools/testing/selftests/clone3/Makefile |  4 +--
+ tools/testing/selftests/clone3/clone3.c | 64 ++++++++++++++++++++++++++++-----
+ 3 files changed, 57 insertions(+), 12 deletions(-)
+
 -- 
-2.17.1
+2.1.4
 
