@@ -2,98 +2,71 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 81EF0B0351
-	for <lists+linux-kselftest@lfdr.de>; Wed, 11 Sep 2019 20:02:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 869A6B0354
+	for <lists+linux-kselftest@lfdr.de>; Wed, 11 Sep 2019 20:03:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729748AbfIKSCt (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 11 Sep 2019 14:02:49 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:59354 "EHLO mx1.redhat.com"
+        id S1730041AbfIKSC5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 11 Sep 2019 14:02:57 -0400
+Received: from mx1.redhat.com ([209.132.183.28]:41168 "EHLO mx1.redhat.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729727AbfIKSCt (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 11 Sep 2019 14:02:49 -0400
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
+        id S1729727AbfIKSC5 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 11 Sep 2019 14:02:57 -0400
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id 179E6C049E23;
-        Wed, 11 Sep 2019 18:02:49 +0000 (UTC)
+        by mx1.redhat.com (Postfix) with ESMTPS id A2F1485539;
+        Wed, 11 Sep 2019 18:02:57 +0000 (UTC)
 Received: from asgard.redhat.com (ovpn-112-27.ams2.redhat.com [10.36.112.27])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 432B66012A;
-        Wed, 11 Sep 2019 18:02:45 +0000 (UTC)
-Date:   Wed, 11 Sep 2019 19:02:19 +0100
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 26A6160BEC;
+        Wed, 11 Sep 2019 18:02:53 +0000 (UTC)
+Date:   Wed, 11 Sep 2019 19:02:27 +0100
 From:   Eugene Syromiatnikov <esyr@redhat.com>
 To:     linux-kernel@vger.kernel.org,
         Christian Brauner <christian@brauner.io>,
         Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org
 Cc:     Adrian Reber <areber@redhat.com>
-Subject: [PATCH v3 3/6] selftests/clone3: use uint64_t for flags parameter
-Message-ID: <54e36f7ac30572eb52e3e2c5892230bc3ec94f93.1568224280.git.esyr@redhat.com>
+Subject: [PATCH v3 4/6] selftests/clone3: fix up format strings
+Message-ID: <9c76596961b2638cd752ebd65830be9279b5fb9b.1568224280.git.esyr@redhat.com>
 References: <cover.1568224280.git.esyr@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 In-Reply-To: <cover.1568224280.git.esyr@redhat.com>
 User-Agent: Mutt/1.5.23 (2014-03-12)
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
-X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.31]); Wed, 11 Sep 2019 18:02:49 +0000 (UTC)
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
+X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.28]); Wed, 11 Sep 2019 18:02:57 +0000 (UTC)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Flags parameter in both userspace and kernel clone args is 64-bit wide,
-there's little reason to have it signed and 32-bit in tests.
-
-* tools/testing/selftests/clone3/clone3.c: Include <inttypes.h> and
-<stdint.h>.
-(call_clone3): Change flags parameter type from int to uint64_t.
-(test_clone3): Change flags parameter type from int to uint64_t; change
-the format string that prints it accordingly.
+* tools/testing/selftests/clone3/clone3.c (test_clone3): Change format
+qualifier for printing size field from %d to %zu; place colon right
+after the word "says".
 
 Signed-off-by: Eugene Syromiatnikov <esyr@redhat.com>
 ---
- tools/testing/selftests/clone3/clone3.c | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
+ tools/testing/selftests/clone3/clone3.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/tools/testing/selftests/clone3/clone3.c b/tools/testing/selftests/clone3/clone3.c
-index 4837865..264d03a 100644
+index 264d03a..86f888b 100644
 --- a/tools/testing/selftests/clone3/clone3.c
 +++ b/tools/testing/selftests/clone3/clone3.c
-@@ -4,8 +4,10 @@
- 
- #define _GNU_SOURCE
- #include <errno.h>
-+#include <inttypes.h>
- #include <linux/types.h>
- #include <linux/sched.h>
-+#include <stdint.h>
- #include <stdio.h>
- #include <stdlib.h>
- #include <sys/syscall.h>
-@@ -39,7 +41,7 @@ static pid_t raw_clone(struct clone_args *args, size_t size)
- 	return syscall(__NR_clone3, args, size);
- }
- 
--static int call_clone3(int flags, size_t size, enum test_mode test_mode)
-+static int call_clone3(uint64_t flags, size_t size, enum test_mode test_mode)
- {
- 	struct clone_args args = {0};
- 	pid_t ppid = -1;
-@@ -117,12 +119,13 @@ static int call_clone3(int flags, size_t size, enum test_mode test_mode)
- 	return 0;
- }
- 
--static int test_clone3(int flags, size_t size, int expected,
-+static int test_clone3(uint64_t flags, size_t size, int expected,
- 		       enum test_mode test_mode)
+@@ -124,11 +124,11 @@ static int test_clone3(uint64_t flags, size_t size, int expected,
  {
  	int ret;
  
--	ksft_print_msg("[%d] Trying clone3() with flags 0x%x (size %d)\n",
-+	ksft_print_msg("[%d] Trying clone3() with flags %#" PRIx64 " (size %d)"
-+			"\n",
+-	ksft_print_msg("[%d] Trying clone3() with flags %#" PRIx64 " (size %d)"
++	ksft_print_msg("[%d] Trying clone3() with flags %#" PRIx64 " (size %zu)"
+ 			"\n",
  			getpid(), flags, size);
  	ret = call_clone3(flags, size, test_mode);
- 	ksft_print_msg("[%d] clone3() with flags says :%d expected %d\n",
+-	ksft_print_msg("[%d] clone3() with flags says :%d expected %d\n",
++	ksft_print_msg("[%d] clone3() with flags says: %d expected %d\n",
+ 			getpid(), ret, expected);
+ 	if (ret != expected)
+ 		ksft_exit_fail_msg(
 -- 
 2.1.4
 
