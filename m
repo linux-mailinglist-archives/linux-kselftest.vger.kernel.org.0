@@ -2,41 +2,42 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CD14B3BEA
-	for <lists+linux-kselftest@lfdr.de>; Mon, 16 Sep 2019 15:56:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 974E8B3BF5
+	for <lists+linux-kselftest@lfdr.de>; Mon, 16 Sep 2019 15:58:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388173AbfIPNz6 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 16 Sep 2019 09:55:58 -0400
-Received: from esa3.mentor.iphmx.com ([68.232.137.180]:3796 "EHLO
-        esa3.mentor.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388106AbfIPNz6 (ORCPT
+        id S2387431AbfIPN6J (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 16 Sep 2019 09:58:09 -0400
+Received: from smtp1.de.adit-jv.com ([93.241.18.167]:37294 "EHLO
+        smtp1.de.adit-jv.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727989AbfIPN6J (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 16 Sep 2019 09:55:58 -0400
-IronPort-SDR: 4I8apyNuXh3AqGh354En5LTjGW9EL/qvnrCao5fLDAmQO54hrnJGAdPSqNWkpBvW/EVK6f/8WE
- 6c8xCHsF9Koh2Alc3Yp7xOTSq2+1oxJa5DWgJkTbHqTqgt4/v6x8eHgp47GK2qPDCrpQ3dLu5i
- d6zdKewJkrj7zvhOn4z8z9OoDP2eH/FFP/cGeXsIg+A3E3xefE+fB/ke+Uqe+yfcYLrnrvjgCS
- CkrXquqgOQThZQAdE7nvJnpLZyARkYQFq3R5tkWRyk5kplwfKC6cqcOwbYUFzMF9KAN8BwV2c1
- uJE=
-X-IronPort-AV: E=Sophos;i="5.64,512,1559548800"; 
-   d="scan'208";a="41379300"
-Received: from orw-gwy-01-in.mentorg.com ([192.94.38.165])
-  by esa3.mentor.iphmx.com with ESMTP; 16 Sep 2019 05:55:57 -0800
-IronPort-SDR: wlO2LzgkeJ8oH18yZpIOlZaWjERCDQACrOKK5QemycTs5lkqAzE8kVqHYFJNTrCJU1oXRt14ld
- 4s06f73GPZLzoIWmn1dik2bnAgUcUvZjXQsDRDw3oeDcr52fMBK4F+eZAhZBOsISK8a3I2PW+Z
- 6XuiZN5/yVGtdyNOx18sC2bcZmEGYEOrF369Zn6b7DSRJ3EL7Ob4t+1cY4EZcRPcwBhmzSPvaK
- maubildXZd5e2muyO6w5y4SoRfMPcynPJk2mSssn1vH8JCKq+pUzWAhIGSuqtfMx/PO97+Fifl
- h3U=
-Date:   Mon, 16 Sep 2019 09:55:54 -0400
-From:   "George G. Davis" <george_davis@mentor.com>
+        Mon, 16 Sep 2019 09:58:09 -0400
+Received: from localhost (smtp1.de.adit-jv.com [127.0.0.1])
+        by smtp1.de.adit-jv.com (Postfix) with ESMTP id 0BFA83C0579;
+        Mon, 16 Sep 2019 15:58:06 +0200 (CEST)
+Received: from smtp1.de.adit-jv.com ([127.0.0.1])
+        by localhost (smtp1.de.adit-jv.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id IWPcCamjG3-f; Mon, 16 Sep 2019 15:57:59 +0200 (CEST)
+Received: from HI2EXCH01.adit-jv.com (hi2exch01.adit-jv.com [10.72.92.24])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by smtp1.de.adit-jv.com (Postfix) with ESMTPS id 6B0E33C00C4;
+        Mon, 16 Sep 2019 15:57:59 +0200 (CEST)
+Received: from vmlxhi-102.adit-jv.com (10.72.93.184) by HI2EXCH01.adit-jv.com
+ (10.72.92.24) with Microsoft SMTP Server (TLS) id 14.3.468.0; Mon, 16 Sep
+ 2019 15:57:58 +0200
+Date:   Mon, 16 Sep 2019 15:57:56 +0200
+From:   Eugeniu Rosca <erosca@de.adit-jv.com>
 To:     shuah <shuah@kernel.org>
 CC:     Eugeniu Rosca <roscaeugeniu@gmail.com>,
+        "George G. Davis" <george_davis@mentor.com>,
         Jerry Hoemann <jerry.hoemann@hpe.com>,
         Colin Ian King <colin.king@canonical.com>,
         <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         Eugeniu Rosca <erosca@de.adit-jv.com>
 Subject: Re: [PATCH 2/2] selftests: watchdog: Add command line option to show
  watchdog_info
-Message-ID: <20190916135553.GA19227@mam-gdavis-lt>
+Message-ID: <20190916135756.GA24319@vmlxhi-102.adit-jv.com>
 References: <20190907085833.21167-1-erosca@de.adit-jv.com>
  <20190907085833.21167-2-erosca@de.adit-jv.com>
  <2b08fa83-185b-4eb7-1217-37ed31d810b5@kernel.org>
@@ -44,93 +45,77 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
 In-Reply-To: <2b08fa83-185b-4eb7-1217-37ed31d810b5@kernel.org>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-ClientProxiedBy: svr-orw-mbx-04.mgc.mentorg.com (147.34.90.204) To
- svr-orw-mbx-01.mgc.mentorg.com (147.34.90.201)
+User-Agent: Mutt/1.12.1+40 (7f8642d4ee82) (2019-06-28)
+X-Originating-IP: [10.72.93.184]
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hello,
+Hi Shuah,
+CC George
 
 On Mon, Sep 16, 2019 at 07:26:41AM -0600, shuah wrote:
-> On 9/7/19 2:58 AM, Eugeniu Rosca wrote:
-> >diff --git a/tools/testing/selftests/watchdog/watchdog-test.c b/tools/testing/selftests/watchdog/watchdog-test.c
-> >index 6ed822dc2222..f45e510500c0 100644
-> >--- a/tools/testing/selftests/watchdog/watchdog-test.c
-> >+++ b/tools/testing/selftests/watchdog/watchdog-test.c
-> >@@ -19,7 +19,7 @@
-> >  int fd;
-> >  const char v = 'V';
-> >-static const char sopts[] = "bdehp:t:Tn:NLf:";
-> >+static const char sopts[] = "bdehp:t:Tn:NLf:i";
-> >  static const struct option lopts[] = {
-> >  	{"bootstatus",          no_argument, NULL, 'b'},
-> >  	{"disable",             no_argument, NULL, 'd'},
-> >@@ -32,6 +32,7 @@ static const struct option lopts[] = {
-> >  	{"getpretimeout",       no_argument, NULL, 'N'},
-> >  	{"gettimeleft",		no_argument, NULL, 'L'},
-> >  	{"file",          required_argument, NULL, 'f'},
-> >+	{"info",		no_argument, NULL, 'i'},
-> >  	{NULL,                  no_argument, NULL, 0x0}
-> >  };
-> >@@ -72,6 +73,7 @@ static void usage(char *progname)
-> >  	printf("Usage: %s [options]\n", progname);
-> >  	printf(" -f, --file\t\tOpen watchdog device file\n");
-> >  	printf("\t\t\tDefault is /dev/watchdog\n");
-> >+	printf(" -i, --info\t\tShow watchdog_info\n");
-> >  	printf(" -b, --bootstatus\tGet last boot status (Watchdog/POR)\n");
-> >  	printf(" -d, --disable\t\tTurn off the watchdog timer\n");
-> >  	printf(" -e, --enable\t\tTurn on the watchdog timer\n");
-> >@@ -216,6 +218,18 @@ int main(int argc, char *argv[])
-> >  		case 'f':
-> >  			/* Handled above */
-> >  			break;
-> >+		case 'i':
-> >+			/*
-> >+			 * watchdog_info was obtained as part of file open
-> >+			 * validation. So we just show it here.
-> >+			 */
-> >+			oneshot = 1;
-> >+			printf("watchdog_info:\n");
-> >+			printf(" identity:\t\t%s\n", info.identity);
-> >+			printf(" firmware_version:\t%u\n",
-> >+			       info.firmware_version);
-> >+			printf(" options:\t\t%08x\n", info.options);
-> >+			break;
-> >  		default:
-> >  			usage(argv[0]);
-> >
+[..]
+> >   		case 'f':
+> >   			/* Handled above */
+> >   			break;
+> > +		case 'i':
+> > +			/*
+> > +			 * watchdog_info was obtained as part of file open
+> > +			 * validation. So we just show it here.
+> > +			 */
+> > +			oneshot = 1;
+> > +			printf("watchdog_info:\n");
+> > +			printf(" identity:\t\t%s\n", info.identity);
+> > +			printf(" firmware_version:\t%u\n",
+> > +			       info.firmware_version);
+> > +			printf(" options:\t\t%08x\n", info.options);
+> > +			break;
+> >   		default:
+> >   			usage(argv[0]);
+> > 
 > 
-> I would like to see these combined.
-
-Ok.
-
-> Please don't add another argument.
-
-I'm not clear on your request here. Do you want to drop the addition
-of optional --info|-i command line option and always display the
-watchdog_info?
-
-If yes, perhaps Eugeniu may mention what he has already mentioned to me earlier
-that "it's very useful to see the watchdog identity" but "some users might
-perceive the console output a bit busy if the Watchdog identity: <WDT name>
-message is always on" so perhaps it is "more user-friendly to still call the
-WDIOC_GETSUPPORT ioctl to sanitize the device file, but to only print the
-Watchdog identity: message when the user passes e.g. a new -i, --identity
-parameter".
-
-
+> I would like to see these combined. Please don't add another argument.
 > Combine patch and 1&2.
 
-I'll do that but I'm not entirely clear on your "Please don't add another
-argument" request.
+With all my appreciation for your comment, why do you think it is better
+to get rid of the new argument? I don't think it is user-friendly to
+always report the watchdog_info to the user. Just look at outputs [1-2]
+and imagine that the watchdog_info part would pop up unconditionally.
+It looks too busy to me.
 
-> 
-> thanks,
-> -- Shuah
+[1] watchdog-test -b -i
+Last boot is caused by: Power-On-Reset.
+watchdog_info:
+ identity:              Renesas WDT Watchdog
+ firmware_version:      0
+ options:               000081a0
+
+[2] watchdog-test -i --help    
+watchdog_info:
+ identity:              Renesas WDT Watchdog
+ firmware_version:      0
+ options:               000081a0
+Usage: ./watchdog-test [options]
+ -f, --file             Open watchdog device file
+                        Default is /dev/watchdog
+ -i, --info             Show watchdog_info
+ -b, --bootstatus       Get last boot status (Watchdog/POR)
+ -d, --disable          Turn off the watchdog timer
+ -e, --enable           Turn on the watchdog timer
+ -h, --help             Print the help message
+ -p, --pingrate=P       Set ping rate to P seconds (default 1)
+ -t, --timeout=T        Set timeout to T seconds
+ -T, --gettimeout       Get the timeout
+ -n, --pretimeout=T     Set the pretimeout to T seconds
+ -N, --getpretimeout    Get the pretimeout
+ -L, --gettimeleft      Get the time left until timer expires
+
+Parameters are parsed left-to-right in real-time.
+Example: ./watchdog-test -d -t 10 -p 5 -e
+Example: ./watchdog-test -t 12 -T -n 7 -N
 
 -- 
-Regards,
-George
+Best Regards,
+Eugeniu.
