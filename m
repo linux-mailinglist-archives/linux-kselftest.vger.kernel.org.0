@@ -2,120 +2,95 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 974E8B3BF5
-	for <lists+linux-kselftest@lfdr.de>; Mon, 16 Sep 2019 15:58:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F69FB3D11
+	for <lists+linux-kselftest@lfdr.de>; Mon, 16 Sep 2019 17:03:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387431AbfIPN6J (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 16 Sep 2019 09:58:09 -0400
-Received: from smtp1.de.adit-jv.com ([93.241.18.167]:37294 "EHLO
-        smtp1.de.adit-jv.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727989AbfIPN6J (ORCPT
+        id S2387986AbfIPPDm (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 16 Sep 2019 11:03:42 -0400
+Received: from youngberry.canonical.com ([91.189.89.112]:50277 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2387705AbfIPPDl (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 16 Sep 2019 09:58:09 -0400
-Received: from localhost (smtp1.de.adit-jv.com [127.0.0.1])
-        by smtp1.de.adit-jv.com (Postfix) with ESMTP id 0BFA83C0579;
-        Mon, 16 Sep 2019 15:58:06 +0200 (CEST)
-Received: from smtp1.de.adit-jv.com ([127.0.0.1])
-        by localhost (smtp1.de.adit-jv.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id IWPcCamjG3-f; Mon, 16 Sep 2019 15:57:59 +0200 (CEST)
-Received: from HI2EXCH01.adit-jv.com (hi2exch01.adit-jv.com [10.72.92.24])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by smtp1.de.adit-jv.com (Postfix) with ESMTPS id 6B0E33C00C4;
-        Mon, 16 Sep 2019 15:57:59 +0200 (CEST)
-Received: from vmlxhi-102.adit-jv.com (10.72.93.184) by HI2EXCH01.adit-jv.com
- (10.72.92.24) with Microsoft SMTP Server (TLS) id 14.3.468.0; Mon, 16 Sep
- 2019 15:57:58 +0200
-Date:   Mon, 16 Sep 2019 15:57:56 +0200
-From:   Eugeniu Rosca <erosca@de.adit-jv.com>
-To:     shuah <shuah@kernel.org>
-CC:     Eugeniu Rosca <roscaeugeniu@gmail.com>,
-        "George G. Davis" <george_davis@mentor.com>,
-        Jerry Hoemann <jerry.hoemann@hpe.com>,
-        Colin Ian King <colin.king@canonical.com>,
-        <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Eugeniu Rosca <erosca@de.adit-jv.com>
-Subject: Re: [PATCH 2/2] selftests: watchdog: Add command line option to show
- watchdog_info
-Message-ID: <20190916135756.GA24319@vmlxhi-102.adit-jv.com>
-References: <20190907085833.21167-1-erosca@de.adit-jv.com>
- <20190907085833.21167-2-erosca@de.adit-jv.com>
- <2b08fa83-185b-4eb7-1217-37ed31d810b5@kernel.org>
+        Mon, 16 Sep 2019 11:03:41 -0400
+Received: from mail-wr1-f69.google.com ([209.85.221.69])
+        by youngberry.canonical.com with esmtps (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.86_2)
+        (envelope-from <marcelo.cerri@canonical.com>)
+        id 1i9sXU-0003V1-T6
+        for linux-kselftest@vger.kernel.org; Mon, 16 Sep 2019 15:03:40 +0000
+Received: by mail-wr1-f69.google.com with SMTP id w10so33444wrl.5
+        for <linux-kselftest@vger.kernel.org>; Mon, 16 Sep 2019 08:03:40 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=UpaiSLVZTJH//yVMd4hniWSWY+v8c4Nt+/1LTwDfd60=;
+        b=KJKmdtwJ/IQ5AhJcuJkuqhzGEIctcG8i/0mu6kMZFOfLdngntbYwBdjVE8mc/2ZHcZ
+         lBHfJ6wppSr4feDtU0pdnAwRH6XCZXx4k3+38raZzcZbF358hkgTFh9/z6CABKhzV/dr
+         o2zMcwMNzSDvzC14KHJMvPsKc9WaEDf47NCLD4pBnEvjAV3J92LYr+v85I8b+2TG4CzF
+         2nzEwiJz31Q7CXYuL0fIrLjnW1CfSUe0ZRJXHSHnjpZUAFTnZkaP9UTL5qm8MM2odX5F
+         5I1tBJDFOTLcG1X1CA1Blw1qdKngRTUaoBznivdwGKuSHNzeACx0lMy1EthCSRgg0PVt
+         iYeA==
+X-Gm-Message-State: APjAAAXn+M1ZSFUy9htvh5Uee7/nOIi8awbqKE2PpHd9bHQNNCAMJcny
+        K2EIhVQnO3yUeRFurcdnU91bn+9/zog2T3CgOn/fpBs8Hr7Izq9duPwRIruZjByNb4PkyKTAL1C
+        OisOeOeIZgFq4HVMp6YrkKNVbTI6T8n9PkF+EIljlA0Bf
+X-Received: by 2002:a5d:4b4e:: with SMTP id w14mr159040wrs.191.1568646220536;
+        Mon, 16 Sep 2019 08:03:40 -0700 (PDT)
+X-Google-Smtp-Source: APXvYqwQBkINemvJ4SG/cnXsg6i1JejX1kLd5HO272cp1ciclatRAjNPd1icxSBzVQh00CQOmLtm2A==
+X-Received: by 2002:a5d:4b4e:: with SMTP id w14mr159015wrs.191.1568646220250;
+        Mon, 16 Sep 2019 08:03:40 -0700 (PDT)
+Received: from localhost.localdomain (static-dcd-cqq-121001.business.bouyguestelecom.com. [212.194.121.1])
+        by smtp.gmail.com with ESMTPSA id w125sm121823wmg.32.2019.09.16.08.03.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 16 Sep 2019 08:03:39 -0700 (PDT)
+From:   Marcelo Henrique Cerri <marcelo.cerri@canonical.com>
+To:     "David S. Miller" <davem@davemloft.net>,
+        Shuah Khan <shuah@kernel.org>
+Cc:     netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] selftests/net: replace AF_MAX with INT_MAX in socket.c
+Date:   Mon, 16 Sep 2019 12:03:37 -0300
+Message-Id: <20190916150337.18049-1-marcelo.cerri@canonical.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <2b08fa83-185b-4eb7-1217-37ed31d810b5@kernel.org>
-User-Agent: Mutt/1.12.1+40 (7f8642d4ee82) (2019-06-28)
-X-Originating-IP: [10.72.93.184]
+Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Shuah,
-CC George
+Use INT_MAX instead of AF_MAX, since libc might have a smaller value
+of AF_MAX than the kernel, what causes the test to fail.
 
-On Mon, Sep 16, 2019 at 07:26:41AM -0600, shuah wrote:
-[..]
-> >   		case 'f':
-> >   			/* Handled above */
-> >   			break;
-> > +		case 'i':
-> > +			/*
-> > +			 * watchdog_info was obtained as part of file open
-> > +			 * validation. So we just show it here.
-> > +			 */
-> > +			oneshot = 1;
-> > +			printf("watchdog_info:\n");
-> > +			printf(" identity:\t\t%s\n", info.identity);
-> > +			printf(" firmware_version:\t%u\n",
-> > +			       info.firmware_version);
-> > +			printf(" options:\t\t%08x\n", info.options);
-> > +			break;
-> >   		default:
-> >   			usage(argv[0]);
-> > 
-> 
-> I would like to see these combined. Please don't add another argument.
-> Combine patch and 1&2.
+Signed-off-by: Marcelo Henrique Cerri <marcelo.cerri@canonical.com>
+---
+ tools/testing/selftests/net/socket.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-With all my appreciation for your comment, why do you think it is better
-to get rid of the new argument? I don't think it is user-friendly to
-always report the watchdog_info to the user. Just look at outputs [1-2]
-and imagine that the watchdog_info part would pop up unconditionally.
-It looks too busy to me.
-
-[1] watchdog-test -b -i
-Last boot is caused by: Power-On-Reset.
-watchdog_info:
- identity:              Renesas WDT Watchdog
- firmware_version:      0
- options:               000081a0
-
-[2] watchdog-test -i --help    
-watchdog_info:
- identity:              Renesas WDT Watchdog
- firmware_version:      0
- options:               000081a0
-Usage: ./watchdog-test [options]
- -f, --file             Open watchdog device file
-                        Default is /dev/watchdog
- -i, --info             Show watchdog_info
- -b, --bootstatus       Get last boot status (Watchdog/POR)
- -d, --disable          Turn off the watchdog timer
- -e, --enable           Turn on the watchdog timer
- -h, --help             Print the help message
- -p, --pingrate=P       Set ping rate to P seconds (default 1)
- -t, --timeout=T        Set timeout to T seconds
- -T, --gettimeout       Get the timeout
- -n, --pretimeout=T     Set the pretimeout to T seconds
- -N, --getpretimeout    Get the pretimeout
- -L, --gettimeleft      Get the time left until timer expires
-
-Parameters are parsed left-to-right in real-time.
-Example: ./watchdog-test -d -t 10 -p 5 -e
-Example: ./watchdog-test -t 12 -T -n 7 -N
-
+diff --git a/tools/testing/selftests/net/socket.c b/tools/testing/selftests/net/socket.c
+index afca1ead677f..10e75ba90124 100644
+--- a/tools/testing/selftests/net/socket.c
++++ b/tools/testing/selftests/net/socket.c
+@@ -6,6 +6,7 @@
+ #include <sys/types.h>
+ #include <sys/socket.h>
+ #include <netinet/in.h>
++#include <limits.h>
+ 
+ struct socket_testcase {
+ 	int	domain;
+@@ -24,7 +25,10 @@ struct socket_testcase {
+ };
+ 
+ static struct socket_testcase tests[] = {
+-	{ AF_MAX,  0,           0,           -EAFNOSUPPORT,    0 },
++	/* libc might have a smaller value of AF_MAX than the kernel
++	 * actually supports, so use INT_MAX instead.
++	 */
++	{ INT_MAX, 0,           0,           -EAFNOSUPPORT,    0  },
+ 	{ AF_INET, SOCK_STREAM, IPPROTO_TCP, 0,                1  },
+ 	{ AF_INET, SOCK_DGRAM,  IPPROTO_TCP, -EPROTONOSUPPORT, 1  },
+ 	{ AF_INET, SOCK_DGRAM,  IPPROTO_UDP, 0,                1  },
 -- 
-Best Regards,
-Eugeniu.
+2.20.1
+
