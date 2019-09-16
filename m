@@ -2,331 +2,127 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BD8EB44AF
-	for <lists+linux-kselftest@lfdr.de>; Tue, 17 Sep 2019 01:43:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A2352B44C0
+	for <lists+linux-kselftest@lfdr.de>; Tue, 17 Sep 2019 01:57:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726283AbfIPXnp (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 16 Sep 2019 19:43:45 -0400
-Received: from mail.kernel.org ([198.145.29.99]:50416 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726118AbfIPXnp (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 16 Sep 2019 19:43:45 -0400
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net [24.9.64.241])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id E8FA62067D;
-        Mon, 16 Sep 2019 23:43:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1568677424;
-        bh=e/hngzbUvNpKnZYKP4ffRCFSsXZN3NH9FSM5eWqs71s=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=jDligZVzINbJ3j6ZRJjby810iN7lNdHb8kJUKmZ864i+NGyZ3GGqaqS9/X6tQ8NDr
-         JVSfuylOX0IyV8kv5icgnbCL503P3lr+R4l391/Yg8SYYgg1AJDalq4uUtLjg2GA/t
-         h+Bm/Dv1T41ig/hphX0tobLmtbfI7z6p1oWyp/OY=
-Subject: Re: [PATCH v4 1/9] hugetlb_cgroup: Add hugetlb_cgroup reservation
- counter
-To:     Mina Almasry <almasrymina@google.com>, mike.kravetz@oracle.com
-Cc:     rientjes@google.com, shakeelb@google.com, gthelen@google.com,
-        akpm@linux-foundation.org, khalid.aziz@oracle.com,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org, cgroups@vger.kernel.org,
-        aneesh.kumar@linux.vnet.ibm.com, mkoutny@suse.com,
-        Hillf Danton <hdanton@sina.com>, shuah <shuah@kernel.org>
+        id S1729526AbfIPX5k (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 16 Sep 2019 19:57:40 -0400
+Received: from aserp2120.oracle.com ([141.146.126.78]:43754 "EHLO
+        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728891AbfIPX5j (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 16 Sep 2019 19:57:39 -0400
+Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
+        by aserp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x8GNnx84096081;
+        Mon, 16 Sep 2019 23:57:07 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=subject : to : cc :
+ references : from : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=corp-2019-08-05;
+ bh=IuSLh0fb/BvGl8pVix7sy0MqWGyNSfMj/T9waRFCoi8=;
+ b=Tl3ojxBSLNTUyPlp46F0uqZ9+/J9tk6YWvuggRkE92WBOn3WxBpiam3c9Z1CvBLiV1pt
+ r4GLLmcvDbTKOvsl9CphukxDVJCHsFkY0V8F7IkXWmAS0joTBNXJWCPwH07xRCRqgvU+
+ 9ac1clwPeFGamvbU1FKqYV8dPEArhoQuD9z9HST34oU4i6COHUwmF2fEfJMxbwv/ujid
+ bW5jXOXoTaI6wLbG1Vr3UwqZd3GUxWMdhxeBDBicSYxqhekT1N3XkXuvwhyFHNDsSpnU
+ Vev/1ep5bPue2h9jdCJ7Y06i/J/ZHcp1GDtGAxemTiAOJE/SGtHj/jENTVkorZWGQ1KH /g== 
+Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
+        by aserp2120.oracle.com with ESMTP id 2v0r5pamr0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 16 Sep 2019 23:57:07 +0000
+Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
+        by aserp3030.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x8GNrlI0014393;
+        Mon, 16 Sep 2019 23:57:07 GMT
+Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
+        by aserp3030.oracle.com with ESMTP id 2v0p8vakx1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 16 Sep 2019 23:57:07 +0000
+Received: from abhmp0010.oracle.com (abhmp0010.oracle.com [141.146.116.16])
+        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id x8GNv6Cb025921;
+        Mon, 16 Sep 2019 23:57:06 GMT
+Received: from [192.168.1.222] (/71.63.128.209)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Mon, 16 Sep 2019 16:57:06 -0700
+Subject: Re: [PATCH v4 6/9] hugetlb: disable region_add file_region coalescing
+To:     Mina Almasry <almasrymina@google.com>
+Cc:     shuah@kernel.org, rientjes@google.com, shakeelb@google.com,
+        gthelen@google.com, akpm@linux-foundation.org,
+        khalid.aziz@oracle.com, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        cgroups@vger.kernel.org, aneesh.kumar@linux.vnet.ibm.com,
+        mkoutny@suse.com
 References: <20190910233146.206080-1-almasrymina@google.com>
- <20190910233146.206080-2-almasrymina@google.com>
-From:   shuah <shuah@kernel.org>
-Message-ID: <1a8cfaca-190e-ca21-f633-d48d94328735@kernel.org>
-Date:   Mon, 16 Sep 2019 17:43:41 -0600
+ <20190910233146.206080-7-almasrymina@google.com>
+From:   Mike Kravetz <mike.kravetz@oracle.com>
+Message-ID: <abe11781-7267-e54e-0b81-46dc4ea6d5a4@oracle.com>
+Date:   Mon, 16 Sep 2019 16:57:04 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+ Thunderbird/60.7.0
 MIME-Version: 1.0
-In-Reply-To: <20190910233146.206080-2-almasrymina@google.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
+In-Reply-To: <20190910233146.206080-7-almasrymina@google.com>
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9382 signatures=668685
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
+ phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=999
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.0.1-1908290000 definitions=main-1909160227
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9382 signatures=668685
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
+ suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
+ lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1908290000
+ definitions=main-1909160227
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 9/10/19 5:31 PM, Mina Almasry wrote:
-> These counters will track hugetlb reservations rather than hugetlb
-> memory faulted in. This patch only adds the counter, following patches
-> add the charging and uncharging of the counter.
+On 9/10/19 4:31 PM, Mina Almasry wrote:
+> A follow up patch in this series adds hugetlb cgroup uncharge info the
+> file_region entries in resv->regions. The cgroup uncharge info may
+> differ for different regions, so they can no longer be coalesced at
+> region_add time. So, disable region coalescing in region_add in this
+> patch.
 > 
+> Behavior change:
+> 
+> Say a resv_map exists like this [0->1], [2->3], and [5->6].
+> 
+> Then a region_chg/add call comes in region_chg/add(f=0, t=5).
+> 
+> Old code would generate resv->regions: [0->5], [5->6].
+> New code would generate resv->regions: [0->1], [1->2], [2->3], [3->5],
+> [5->6].
+> 
+> Special care needs to be taken to handle the resv->adds_in_progress
+> variable correctly. In the past, only 1 region would be added for every
+> region_chg and region_add call. But now, each call may add multiple
+> regions, so we can no longer increment adds_in_progress by 1 in region_chg,
+> or decrement adds_in_progress by 1 after region_add or region_abort. Instead,
+> region_chg calls add_reservation_in_range() to count the number of regions
+> needed and allocates those, and that info is passed to region_add and
+> region_abort to decrement adds_in_progress correctly.
 
-Why are we adding these counters? I see the reasons in the cover letter.
-Why not add the details on why this is needed here in this commitlog
+Hate to throw more theoretical examples at you but ...
 
-Please add more information on why and rephrase the commit log.
+Consider an existing reserv_map like [3-10]
+Then a region_chg/add call comes in region_chg/add(f=0, t=10).
+The region_chg is going to return 3 (additional reservations needed), and
+also out_regions_needed = 1 as it would want to create a region [0-3].
+Correct?
+But, there is nothing to prevent another thread from doing a region_del [5-7]
+after the region_chg and before region_add.  Correct?
+If so, it seems the region_add would need to create two regions, but there
+is only one in the cache and we would BUG in get_file_region_entry_from_cache.
+Am I reading the code correctly?
 
-> Signed-off-by: Mina Almasry <almasrymina@google.com>
-> Acked-by: Hillf Danton <hdanton@sina.com>
-> ---
->   include/linux/hugetlb.h |  16 +++++-
->   mm/hugetlb_cgroup.c     | 111 ++++++++++++++++++++++++++++++----------
->   2 files changed, 100 insertions(+), 27 deletions(-)
-> 
-> diff --git a/include/linux/hugetlb.h b/include/linux/hugetlb.h
-> index edfca42783192..128ff1aff1c93 100644
-> --- a/include/linux/hugetlb.h
-> +++ b/include/linux/hugetlb.h
-> @@ -320,6 +320,20 @@ unsigned long hugetlb_get_unmapped_area(struct file *file, unsigned long addr,
-> 
->   #ifdef CONFIG_HUGETLB_PAGE
-> 
-> +enum {
-> +	HUGETLB_RES_USAGE,
-> +	HUGETLB_RES_RESERVATION_USAGE,
-> +	HUGETLB_RES_LIMIT,
-> +	HUGETLB_RES_RESERVATION_LIMIT,
-> +	HUGETLB_RES_MAX_USAGE,
-> +	HUGETLB_RES_RESERVATION_MAX_USAGE,
-> +	HUGETLB_RES_FAILCNT,
-> +	HUGETLB_RES_RESERVATION_FAILCNT,
-> +	HUGETLB_RES_NULL,
-> +	HUGETLB_RES_MAX,
-> +};
-> +
+The existing code wants to make sure region_add called after region_chg will
+never return error.  This is why all needed allocations were done in the
+region_chg call, and it was relatively easy to do in existing code when
+region_chg would only need one additional region at most.
 
-Please add information on what these track. As an example
-HUGETLB_RES_RESERVATION_LIMIT is so close to HUGETLB_RES_LIMIT
-
-What are we tracking and measuring?
-
-> +
->   #define HSTATE_NAME_LEN 32
->   /* Defines one hugetlb page size */
->   struct hstate {
-> @@ -340,7 +354,7 @@ struct hstate {
->   	unsigned int surplus_huge_pages_node[MAX_NUMNODES];
->   #ifdef CONFIG_CGROUP_HUGETLB
->   	/* cgroup control files */
-> -	struct cftype cgroup_files[5];
-> +	struct cftype cgroup_files[HUGETLB_RES_MAX];
->   #endif
->   	char name[HSTATE_NAME_LEN];
->   };
-> diff --git a/mm/hugetlb_cgroup.c b/mm/hugetlb_cgroup.c
-> index 68c2f2f3c05b7..51a72624bd1ff 100644
-> --- a/mm/hugetlb_cgroup.c
-> +++ b/mm/hugetlb_cgroup.c
-> @@ -25,6 +25,10 @@ struct hugetlb_cgroup {
->   	 * the counter to account for hugepages from hugetlb.
->   	 */
->   	struct page_counter hugepage[HUGE_MAX_HSTATE];
-> +	/*
-> +	 * the counter to account for hugepage reservations from hugetlb.
-> +	 */
-> +	struct page_counter reserved_hugepage[HUGE_MAX_HSTATE];
->   };
-> 
->   #define MEMFILE_PRIVATE(x, val)	(((x) << 16) | (val))
-> @@ -33,6 +37,15 @@ struct hugetlb_cgroup {
-> 
->   static struct hugetlb_cgroup *root_h_cgroup __read_mostly;
-> 
-> +static inline
-> +struct page_counter *hugetlb_cgroup_get_counter(struct hugetlb_cgroup *h_cg, int idx,
-> +				 bool reserved)
-> +{
-> +	if (reserved)
-> +		return  &h_cg->reserved_hugepage[idx];
-> +	return &h_cg->hugepage[idx];
-> +}
-> +
->   static inline
->   struct hugetlb_cgroup *hugetlb_cgroup_from_css(struct cgroup_subsys_state *s)
->   {
-> @@ -254,30 +267,33 @@ void hugetlb_cgroup_uncharge_cgroup(int idx, unsigned long nr_pages,
->   	return;
->   }
-> 
-> -enum {
-> -	RES_USAGE,
-> -	RES_LIMIT,
-> -	RES_MAX_USAGE,
-> -	RES_FAILCNT,
-> -};
-> -
->   static u64 hugetlb_cgroup_read_u64(struct cgroup_subsys_state *css,
->   				   struct cftype *cft)
->   {
->   	struct page_counter *counter;
-> +	struct page_counter *reserved_counter;
->   	struct hugetlb_cgroup *h_cg = hugetlb_cgroup_from_css(css);
-> 
->   	counter = &h_cg->hugepage[MEMFILE_IDX(cft->private)];
-> +	reserved_counter = &h_cg->reserved_hugepage[MEMFILE_IDX(cft->private)];
-> 
->   	switch (MEMFILE_ATTR(cft->private)) {
-> -	case RES_USAGE:
-> +	case HUGETLB_RES_USAGE:
->   		return (u64)page_counter_read(counter) * PAGE_SIZE;
-> -	case RES_LIMIT:
-> +	case HUGETLB_RES_RESERVATION_USAGE:
-> +		return (u64)page_counter_read(reserved_counter) * PAGE_SIZE;
-> +	case HUGETLB_RES_LIMIT:
->   		return (u64)counter->max * PAGE_SIZE;
-> -	case RES_MAX_USAGE:
-> +	case HUGETLB_RES_RESERVATION_LIMIT:
-> +		return (u64)reserved_counter->max * PAGE_SIZE;
-> +	case HUGETLB_RES_MAX_USAGE:
->   		return (u64)counter->watermark * PAGE_SIZE;
-> -	case RES_FAILCNT:
-> +	case HUGETLB_RES_RESERVATION_MAX_USAGE:
-> +		return (u64)reserved_counter->watermark * PAGE_SIZE;
-> +	case HUGETLB_RES_FAILCNT:
->   		return counter->failcnt;
-> +	case HUGETLB_RES_RESERVATION_FAILCNT:
-> +		return reserved_counter->failcnt;
->   	default:
->   		BUG();
->   	}
-> @@ -291,6 +307,7 @@ static ssize_t hugetlb_cgroup_write(struct kernfs_open_file *of,
->   	int ret, idx;
->   	unsigned long nr_pages;
->   	struct hugetlb_cgroup *h_cg = hugetlb_cgroup_from_css(of_css(of));
-> +	bool reserved = false;
-> 
->   	if (hugetlb_cgroup_is_root(h_cg)) /* Can't set limit on root */
->   		return -EINVAL;
-> @@ -304,9 +321,13 @@ static ssize_t hugetlb_cgroup_write(struct kernfs_open_file *of,
->   	nr_pages = round_down(nr_pages, 1 << huge_page_order(&hstates[idx]));
-> 
->   	switch (MEMFILE_ATTR(of_cft(of)->private)) {
-> -	case RES_LIMIT:
-> +	case HUGETLB_RES_RESERVATION_LIMIT:
-> +		reserved = true;
-> +		/* Fall through. */
-> +	case HUGETLB_RES_LIMIT:
->   		mutex_lock(&hugetlb_limit_mutex);
-> -		ret = page_counter_set_max(&h_cg->hugepage[idx], nr_pages);
-> +		ret = page_counter_set_max(hugetlb_cgroup_get_counter(h_cg, idx, reserved),
-> +					   nr_pages);
->   		mutex_unlock(&hugetlb_limit_mutex);
->   		break;
->   	default:
-> @@ -320,18 +341,26 @@ static ssize_t hugetlb_cgroup_reset(struct kernfs_open_file *of,
->   				    char *buf, size_t nbytes, loff_t off)
->   {
->   	int ret = 0;
-> -	struct page_counter *counter;
-> +	struct page_counter *counter, *reserved_counter;
->   	struct hugetlb_cgroup *h_cg = hugetlb_cgroup_from_css(of_css(of));
-> 
->   	counter = &h_cg->hugepage[MEMFILE_IDX(of_cft(of)->private)];
-> +	reserved_counter = &h_cg->reserved_hugepage[
-> +		MEMFILE_IDX(of_cft(of)->private)];
-> 
-
-Please indent this. It is hard to read.
-
->   	switch (MEMFILE_ATTR(of_cft(of)->private)) {
-> -	case RES_MAX_USAGE:
-> +	case HUGETLB_RES_MAX_USAGE:
->   		page_counter_reset_watermark(counter);
->   		break;
-> -	case RES_FAILCNT:
-> +	case HUGETLB_RES_RESERVATION_MAX_USAGE:
-> +		page_counter_reset_watermark(reserved_counter);
-> +		break;
-> +	case HUGETLB_RES_FAILCNT:
->   		counter->failcnt = 0;
->   		break;
-> +	case HUGETLB_RES_RESERVATION_FAILCNT:
-> +		reserved_counter->failcnt = 0;
-> +		break;
->   	default:
->   		ret = -EINVAL;
->   		break;
-> @@ -357,37 +386,67 @@ static void __init __hugetlb_cgroup_file_init(int idx)
->   	struct hstate *h = &hstates[idx];
-> 
->   	/* format the size */
-> -	mem_fmt(buf, 32, huge_page_size(h));
-> +	mem_fmt(buf, sizeof(buf), huge_page_size(h));
-> 
->   	/* Add the limit file */
-> -	cft = &h->cgroup_files[0];
-> +	cft = &h->cgroup_files[HUGETLB_RES_LIMIT];
->   	snprintf(cft->name, MAX_CFTYPE_NAME, "%s.limit_in_bytes", buf);
-> -	cft->private = MEMFILE_PRIVATE(idx, RES_LIMIT);
-> +	cft->private = MEMFILE_PRIVATE(idx, HUGETLB_RES_LIMIT);
-> +	cft->read_u64 = hugetlb_cgroup_read_u64;
-> +	cft->write = hugetlb_cgroup_write;
-> +
-> +	/* Add the reservation limit file */
-> +	cft = &h->cgroup_files[HUGETLB_RES_RESERVATION_LIMIT];
-> +	snprintf(cft->name, MAX_CFTYPE_NAME, "%s.reservation_limit_in_bytes",
-> +		 buf);
-> +	cft->private = MEMFILE_PRIVATE(idx, HUGETLB_RES_RESERVATION_LIMIT);
->   	cft->read_u64 = hugetlb_cgroup_read_u64;
->   	cft->write = hugetlb_cgroup_write;
-> 
->   	/* Add the usage file */
-> -	cft = &h->cgroup_files[1];
-> +	cft = &h->cgroup_files[HUGETLB_RES_USAGE];
->   	snprintf(cft->name, MAX_CFTYPE_NAME, "%s.usage_in_bytes", buf);
-> -	cft->private = MEMFILE_PRIVATE(idx, RES_USAGE);
-> +	cft->private = MEMFILE_PRIVATE(idx, HUGETLB_RES_USAGE);
-> +	cft->read_u64 = hugetlb_cgroup_read_u64;
-> +
-> +	/* Add the reservation usage file */
-> +	cft = &h->cgroup_files[HUGETLB_RES_RESERVATION_USAGE];
-> +	snprintf(cft->name, MAX_CFTYPE_NAME, "%s.reservation_usage_in_bytes",
-> +			buf);
-
-Please line buf with cft->name for readability.
-
-> +	cft->private = MEMFILE_PRIVATE(idx, HUGETLB_RES_RESERVATION_USAGE);
->   	cft->read_u64 = hugetlb_cgroup_read_u64;
-> 
->   	/* Add the MAX usage file */
-> -	cft = &h->cgroup_files[2];
-> +	cft = &h->cgroup_files[HUGETLB_RES_MAX_USAGE];
->   	snprintf(cft->name, MAX_CFTYPE_NAME, "%s.max_usage_in_bytes", buf);
-> -	cft->private = MEMFILE_PRIVATE(idx, RES_MAX_USAGE);
-> +	cft->private = MEMFILE_PRIVATE(idx, HUGETLB_RES_MAX_USAGE);
-> +	cft->write = hugetlb_cgroup_reset;
-> +	cft->read_u64 = hugetlb_cgroup_read_u64;
-> +
-> +	/* Add the MAX reservation usage file */
-> +	cft = &h->cgroup_files[HUGETLB_RES_RESERVATION_MAX_USAGE];
-> +	snprintf(cft->name, MAX_CFTYPE_NAME,
-> +			"%s.reservation_max_usage_in_bytes", buf);
-
-Same here.
-
-> +	cft->private = MEMFILE_PRIVATE(idx, HUGETLB_RES_RESERVATION_MAX_USAGE);
->   	cft->write = hugetlb_cgroup_reset;
->   	cft->read_u64 = hugetlb_cgroup_read_u64;
-> 
->   	/* Add the failcntfile */
-> -	cft = &h->cgroup_files[3];
-> +	cft = &h->cgroup_files[HUGETLB_RES_FAILCNT];
->   	snprintf(cft->name, MAX_CFTYPE_NAME, "%s.failcnt", buf);
-> -	cft->private  = MEMFILE_PRIVATE(idx, RES_FAILCNT);
-> +	cft->private  = MEMFILE_PRIVATE(idx, HUGETLB_RES_FAILCNT);
-> +	cft->write = hugetlb_cgroup_reset;
-> +	cft->read_u64 = hugetlb_cgroup_read_u64;
-> +
-> +	/* Add the reservation failcntfile */
-> +	cft = &h->cgroup_files[HUGETLB_RES_RESERVATION_FAILCNT];
-> +	snprintf(cft->name, MAX_CFTYPE_NAME, "%s.reservation_failcnt", buf);
-> +	cft->private  = MEMFILE_PRIVATE(idx, HUGETLB_RES_RESERVATION_FAILCNT);
->   	cft->write = hugetlb_cgroup_reset;
->   	cft->read_u64 = hugetlb_cgroup_read_u64;
-> 
->   	/* NULL terminate the last cft */
-> -	cft = &h->cgroup_files[4];
-> +	cft = &h->cgroup_files[HUGETLB_RES_NULL];
->   	memset(cft, 0, sizeof(*cft));
-> 
->   	WARN_ON(cgroup_add_legacy_cftypes(&hugetlb_cgrp_subsys,
-> --
-> 2.23.0.162.g0b9fbb3734-goog
-> 
-
-thanks,
--- Shuah
+I'm thinking that we may have to make region_chg allocate the worst case
+number of regions (t - f)/2, OR change to the code such that region_add
+could return an error.
+-- 
+Mike Kravetz
