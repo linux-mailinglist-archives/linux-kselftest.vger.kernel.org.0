@@ -2,203 +2,104 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F16B6B3A0D
-	for <lists+linux-kselftest@lfdr.de>; Mon, 16 Sep 2019 14:14:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E1C1B3B41
+	for <lists+linux-kselftest@lfdr.de>; Mon, 16 Sep 2019 15:25:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727813AbfIPMOd (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 16 Sep 2019 08:14:33 -0400
-Received: from foss.arm.com ([217.140.110.172]:44064 "EHLO foss.arm.com"
+        id S1733177AbfIPNZX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 16 Sep 2019 09:25:23 -0400
+Received: from mail.kernel.org ([198.145.29.99]:48642 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726875AbfIPMOd (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 16 Sep 2019 08:14:33 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D7F53337;
-        Mon, 16 Sep 2019 05:14:31 -0700 (PDT)
-Received: from arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id EFC323F59C;
-        Mon, 16 Sep 2019 05:14:30 -0700 (PDT)
-Date:   Mon, 16 Sep 2019 13:14:28 +0100
-From:   Dave Martin <Dave.Martin@arm.com>
-To:     Cristian Marussi <cristian.marussi@arm.com>
-Cc:     amit.kachhap@arm.com, andreyknvl@google.com, shuah@kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v5 00/11] Add arm64/signal initial kselftest support
-Message-ID: <20190916121428.GJ27757@arm.com>
-References: <20190902112932.36129-1-cristian.marussi@arm.com>
- <20190904114722.GQ27757@arm.com>
- <74165b2e-eb4c-994f-20ca-b69f71f3f5bc@arm.com>
+        id S1727742AbfIPNZX (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 16 Sep 2019 09:25:23 -0400
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net [24.9.64.241])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 0E38B214D9;
+        Mon, 16 Sep 2019 13:25:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1568640322;
+        bh=JQdrtnmyKg2DjT5CLoYa3+kCDakSs39kT0Pa7rv8YAY=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=Kya6U2nziL0KBsVYCrRT5pIoqQUuitGr+giC8DkexN5FVcktxHmIUHsBfD87wjzVd
+         V2quVZpQCriHWKgDsWXDkhDWrP6KdbLIN3THYSWQGaRqZUWTT2TY8MgOrio6hYQuud
+         ryFgUz0UybroQX8ILL0ckZ28d7JZbtp8AVv1wEyc=
+Subject: Re: [PATCH 1/2] selftests: watchdog: Validate optional file argument
+To:     Eugeniu Rosca <roscaeugeniu@gmail.com>,
+        "George G. Davis" <george_davis@mentor.com>,
+        Jerry Hoemann <jerry.hoemann@hpe.com>,
+        Colin Ian King <colin.king@canonical.com>,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Eugeniu Rosca <erosca@de.adit-jv.com>, shuah <shuah@kernel.org>
+References: <20190907085833.21167-1-erosca@de.adit-jv.com>
+From:   shuah <shuah@kernel.org>
+Message-ID: <ed9db2a8-194f-3d42-7339-b66970f68552@kernel.org>
+Date:   Mon, 16 Sep 2019 07:25:21 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <74165b2e-eb4c-994f-20ca-b69f71f3f5bc@arm.com>
-User-Agent: Mutt/1.5.23 (2014-03-12)
+In-Reply-To: <20190907085833.21167-1-erosca@de.adit-jv.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Sep 10, 2019 at 01:25:31PM +0100, Cristian Marussi wrote:
-> On 04/09/2019 12:47, Dave Martin wrote:
-> > On Mon, Sep 02, 2019 at 12:29:21pm +0100, Cristian Marussi wrote:
-> >> Hi
-> >>
-> >> this patchset aims to add the initial arch-specific arm64 support to
-> >> kselftest starting with signals-related test-cases.
-> >> A common internal test-case layout is proposed which then it is anyway
-> >> wired-up to the toplevel kselftest Makefile, so that it should be possible
-> >> at the end to run it on an arm64 target in the usual way with KSFT.
-> > 
-> > BTW, it's helpful to state the base branch / commit as clearly as
-> > possible near the top of the cover letter, say,
-> > 
-> > --8<--
-> > 
-> > This series is based on arm64/for-next/core [1]
-> > commit 9ce1263033cd ("selftests, arm64: add a selftest for passing tagged pointers to kernel")
-> > 
-> > [1] git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-next/core
-> > 
-> > -->8--
-> > 
-> > This is particularly important if you expect the maintainer to pick up
-> > the patches.
-> > 
-> > You don't need to reference a specific commit unless there's a
-> > significant chance of conflicts if the wrong commit is used, but it can
-> > help provide a clue as to why you're basing on this alternate branch.
-> > 
+On 9/7/19 2:58 AM, Eugeniu Rosca wrote:
+> From: "George G. Davis" <george_davis@mentor.com>
 > 
-> Ok, thanks I'll do.
+> As reported by Eugeniu Rosca, the newly added optional file
+> argument does not validate if the file is indeed a watchdog, e.g.:
 > 
-> >> ~/linux# make TARGETS=arm64 kselftest
-> >>
-> >> New KSFT arm64 testcases live inside tools/testing/selftests/arm64 grouped by
-> >> family inside subdirectories: arm64/signal is the first family proposed with
-> >> this series.
-> >> This series converts also to this subdirectory scheme the pre-existing
-> >> (already queued on arm64/for-next/core) KSFT arm64 tags tests, moving them
-> >> into arm64/tags.
-> >>
-> >> Thanks
-> >>
-> >> Cristian
-> >>
-> >>
-> >> Notes:
-> >> -----
-> >> - further details in the included READMEs
-> >>
-> >> - more tests still to be written (current strategy is going through the related
-> >>   Kernel signal-handling code and write a test for each possible and sensible code-path)
-> >>   A few ideas for more TODO testcases:
-> >> 	- fake_sigreturn_unmapped_sp: SP into unmapped addrs
-> >> 	- fake_sigreturn_kernelspace_sp: SP into kernel addrs
-> >> 	- fake_sigreturn_sve_bad_extra_context: SVE extra context badly formed
-> >> 	- mangle_sve_invalid_extra_context: SVE extra_context invalid
-> >>
-> >> - SVE signal testcases and special handling will be part of an additional patch
-> >>   still to be released
-> > 
-> > What's your approach to checking that the test failure paths work?
-> > 
-> > We could either hack the kernel or the tests to provoke "fake" failures,
-> > and I don't think it's necessary to test everything in this way,
-> > providing we have confidence that the test strategy and framework works
-> > in general.
-> > 
+> ./watchdog-test  -f /dev/zero
+> Watchdog Ticking Away!
 > 
-> So my approach to testing the tests itself has been as follows:
+> Fix it by confirming that the WDIOC_GETSUPPORT ioctl succeeds.
 > 
-> - PASS path: instrumented Kernel itself to print the exact line where the SEGV
->   is supposed to be called and manually check once for all (just redone now).
->   Something like:
+> Reported-by: Eugeniu Rosca <erosca@de.adit-jv.com>
+> Signed-off-by: George G. Davis <george_davis@mentor.com>
+> Signed-off-by: Eugeniu Rosca <erosca@de.adit-jv.com>
+> ---
+> v1: Applied/tested on commit ce54eab71e210f ("kunit: fix failure to build without printk") of
+>      https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git/log/?h=next
 > 
-> # FAKE_SIGRETURN_MISALIGNED_SP :: Triggers a sigreturn with a misaligned sigframe
-> Registered handlers for all signals.
-> Detected MINSTKSIGSZ:9984
-> Testcase initialized.
-> uc context validated.
-> GOOD CONTEXT grabbed from sig_copyctx handler
-> Handled SIG_COPYCTX
-> Calling sigreturn with fake sigframe sized:4688 at SP @FFFFCAAE5253
-> [  188.206911] Kernel SEGV @ 571                                                   <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-> SIG_OK -- SP:0xFFFFCAAE5253  si_addr@:0xffffcaae5253  si_code:2  token@:0xffffcaae5253  offset:0
-> ==>> completed. PASS(1)
+>   tools/testing/selftests/watchdog/watchdog-test.c | 11 +++++++++++
+>   1 file changed, 11 insertions(+)
 > 
+> diff --git a/tools/testing/selftests/watchdog/watchdog-test.c b/tools/testing/selftests/watchdog/watchdog-test.c
+> index afff120c7be6..6ed822dc2222 100644
+> --- a/tools/testing/selftests/watchdog/watchdog-test.c
+> +++ b/tools/testing/selftests/watchdog/watchdog-test.c
+> @@ -97,6 +97,7 @@ int main(int argc, char *argv[])
+>   	int c;
+>   	int oneshot = 0;
+>   	char *file = "/dev/watchdog";
+> +	struct watchdog_info info;
+>   
+>   	setbuf(stdout, NULL);
+>   
+> @@ -118,6 +119,16 @@ int main(int argc, char *argv[])
+>   		exit(-1);
+>   	}
+>   
+> +	/*
+> +	 * Validate that `file` is a watchdog device
+> +	 */
+> +	ret = ioctl(fd, WDIOC_GETSUPPORT, &info);
+> +	if (ret) {
+> +		printf("WDIOC_GETSUPPORT error '%s'\n", strerror(errno));
+> +		close(fd);
+> +		exit(ret);
+> +	}
+> +
+>   	optind = 0;
+>   
+>   	while ((c = getopt_long(argc, argv, sopts, lopts, NULL)) != -1) {
 > 
-> - FAIL path: tried at first the same approach (instrument to avoid the SEGV), but thinking that
->   this could have led to general Kernel instability while processing bad sigframes,
->   I instead instrumented tests and utils as follows:
-> 
->   - mangle_ TESTS:
-> 
->     + removed the "mangling" for each test, and observed test FAIL (NO SEGV)
-> 
-> # MANGLE_PSTATE_INVALID_MODE_EL1h :: Mangling uc_mcontext INVALID MODE EL1h
-> Registered handlers for all signals.
-> Detected MINSTKSIGSZ:9984
-> Testcase initialized.
-> uc context validated.
-> Handled SIG_TRIG
-> ==>> completed. FAIL(0)
-> 
->     + SSBS: being this a peculiar mangle_ test, where we check that SSBS is PRESERVED as it is
->       on Kernel restoring sigframe (no expected SEGV), I used a kernel patched to NOT preserve
->       the SSBS bit (so clearing it). Moreover I experimented with the various SSBS support levels
->       (no_supp/SSBS_BIT/MRS+SSBS_BIT) and observed how test behaved related to the detected SSBS support
-> 
->     + verify that an anomalous SEGV (no SEGV_ACCER) is detected (say a *(* int)0x00= inside handler)
-> 
-> # MANGLE_PSTATE_INVALID_DAIF_BITS :: Mangling uc_mcontext with INVALID DAIF_BITS
-> Registered handlers for all signals.
-> Detected MINSTKSIGSZ:9984
-> Testcase initialized.
-> uc context validated.
-> SIG_OK -- SP:0xFFFFFBE96DA0  si_addr@:(nil)  si_code:1  token@:(nil)  offset:0
-> si_code != SEGV_ACCERR...test is probably broken!  <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-> -- RX UNEXPECTED SIGNAL: 6
-> ==>> completed. FAIL(0)
-> 
-> 
->   - fake_sigreturn_ TESTS:
-> 
->     + verify placing on the stack the good context grabbed from get_current_context() as it is
->       (GOOD), execution flow is anomalously restored inside get_current_context() and such 
->       anomaly is spotted (without deadly loops)
-> 
-> # FAKE_SIGRETURN_BAD_MAGIC :: Trigger a sigreturn with a sigframe with a bad magic
-> Registered handlers for all signals.
-> Detected MINSTKSIGSZ:9984
-> Testcase initialized.
-> uc context validated.
-> GOOD CONTEXT grabbed from sig_copyctx handler
-> Handled SIG_COPYCTX
-> Calling sigreturn with fake sigframe sized:4688 at SP @FFFFCAC61F80
-> Unexpected successful sigreturn detected: live_uc is stale !        <<<<<<<<<<<<<<<<<<<<<<<<<<<
-> ==>> completed. FAIL(0)
-> 
->     + verify that an early SEGV is detected as anomalous (say a *(* int)0x00 before fake sigframe
->       has been placed on the stack)
-> 
-> # FAKE_SIGRETURN_BAD_MAGIC :: Trigger a sigreturn with a sigframe with a bad magic
-> Registered handlers for all signals.
-> Detected MINSTKSIGSZ:9984
-> Testcase initialized.
-> uc context validated.
-> GOOD CONTEXT grabbed from sig_copyctx handler
-> Handled SIG_COPYCTX
-> Available space:3552
-> Using badly built context - ERR: BAD MAGIC !
-> Calling sigreturn with fake sigframe sized:4688 at SP @FFFFE77C96D0
-> SIG_OK -- SP:0xFFFFE77C96D0  si_addr@:(nil)  si_code:1  token@:(nil)  offset:0
-> current->token ZEROED...test is probably broken!   <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-> -- RX UNEXPECTED SIGNAL: 6
-> ==>> completed. FAIL(0)
 
-OK, seems reasonable.
+Thanks for catching this. I will pull this in for second update for
+5.4-rc1.
 
-I was just curious as to how you'd approached it.
-
-Cheers
----Dave
+thanks,
+-- Shuah
