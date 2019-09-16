@@ -2,42 +2,42 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EBF4BB3F15
-	for <lists+linux-kselftest@lfdr.de>; Mon, 16 Sep 2019 18:37:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA912B3F1D
+	for <lists+linux-kselftest@lfdr.de>; Mon, 16 Sep 2019 18:40:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387415AbfIPQhR (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 16 Sep 2019 12:37:17 -0400
-Received: from mail.kernel.org ([198.145.29.99]:34770 "EHLO mail.kernel.org"
+        id S1731797AbfIPQk2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 16 Sep 2019 12:40:28 -0400
+Received: from mail.kernel.org ([198.145.29.99]:36134 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727950AbfIPQhR (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 16 Sep 2019 12:37:17 -0400
+        id S1727050AbfIPQk2 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 16 Sep 2019 12:40:28 -0400
 Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net [24.9.64.241])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 3BB7D214D9;
-        Mon, 16 Sep 2019 16:37:16 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 5E5FD214D9;
+        Mon, 16 Sep 2019 16:40:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1568651836;
-        bh=A4EC8rYENbB35cqZcR/Jp9eGTrxiDPiBK2ZwBJAd0RY=;
+        s=default; t=1568652027;
+        bh=nAd7VWDdh6f8BChag+MS/I8GI49oB6sxV0473vFpljo=;
         h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=nLwejD44HX8XnRRvatCXwqkeSGcj194yx1ey+33mBRNN06oqL6nsQKBEU0X2O/atx
-         O++fLg6U1iwj8GQX4TKp30wMsOewvjUXl56CK1RtBAnwUUsPWWfFcGKSy0TRrDJXlv
-         E3Y9C9vI91BlxtXgO27qsR+fIwFGZDDb7GhstvIg=
-Subject: Re: [PATCH 2/6] selftests/clone3: add a check for invalid exit_signal
+        b=avjDOL511fCSVE5gWNJexazlOhs/NWuc/7zVIta8BrPBFbm2E+9MDOQtAN0FPjZuJ
+         6cBfHv1btdr6Zaqo3ZHfcDs7AyE6RH82ZJOEYlevb2TRG7HMPWX3ybPY5sGg840BFJ
+         SWGxTzkhaAmxtUIr0fs8YsiA76Q31Ilvm2vPe7hg=
+Subject: Re: [PATCH 3/6] selftests/clone3: use uint64_t for flags parameter
 To:     Eugene Syromiatnikov <esyr@redhat.com>,
         linux-kernel@vger.kernel.org,
         Christian Brauner <christian@brauner.io>,
         linux-kselftest@vger.kernel.org
 Cc:     Adrian Reber <areber@redhat.com>, shuah <shuah@kernel.org>
 References: <cover.1568116761.git.esyr@redhat.com>
- <f5c715164c87a226afca711559e7ed72a70426a4.1568116761.git.esyr@redhat.com>
+ <3f7bd9f0446360f90f12b9e9d3af1de2f5133a81.1568116761.git.esyr@redhat.com>
 From:   shuah <shuah@kernel.org>
-Message-ID: <f93052b9-9520-c53a-27dd-b096d3336576@kernel.org>
-Date:   Mon, 16 Sep 2019 10:37:15 -0600
+Message-ID: <1b15fe21-76d9-a858-08a8-02e19afc6b11@kernel.org>
+Date:   Mon, 16 Sep 2019 10:40:25 -0600
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.8.0
 MIME-Version: 1.0
-In-Reply-To: <f5c715164c87a226afca711559e7ed72a70426a4.1568116761.git.esyr@redhat.com>
+In-Reply-To: <3f7bd9f0446360f90f12b9e9d3af1de2f5133a81.1568116761.git.esyr@redhat.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -47,71 +47,68 @@ List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
 On 9/10/19 6:03 AM, Eugene Syromiatnikov wrote:
-> Check that the kernel fails calls with exit_signal with non-zero highest
-> 32 bits.
+> Flags parameter in both userspace and kernel clone args is 64-bit wide,
+> there's little reason to have it signed and 32-bit in tests.
 > 
 
-Describe what you are testing:
+So what are doing? You are stating the problem here, how are you
+fixing it?
 
-"Add a test case for clone3() non-zero highest 32 bits behavior. It
-should fail with exit_signal value??"
-
-Add checks for unsupported cases. Handle unsupported architectures
-and configurations with skip
-
-> * tools/testing/selftests/clone3/clone3.c (enum test_mode): Add
-> CLONE3_ARGS_BIG_EXIT_SIGNAL.
-> (call_clone3): Add args.exit_signal initialisation in case
-> test_mode == CLONE3_ARGS_BIG_EXIT_SIGNAL.
-> (main): Add test_clone3 clone check with
-> test_mode == CLONE3_ARGS_BIG_EXIT_SIGNAL.
-
-Please don't include pseudo code in the commit log.
-
+> * tools/testing/selftests/clone3/clone3.c: Include <inttypes.h> and
+> <stdint.h>.
+> (call_clone3): Change flags parameter type from int to uint64_t.
+> (test_clone3): Change flags parameter type from int to uint64_t; change
+> the format string that prints it accordingly.
 > 
+
+I am not going to say this again. Please don't include pseudo code in
+the commit log.
+
 > Signed-off-by: Eugene Syromiatnikov <esyr@redhat.com>
 > ---
->   tools/testing/selftests/clone3/clone3.c | 9 +++++++++
->   1 file changed, 9 insertions(+)
+>   tools/testing/selftests/clone3/clone3.c | 9 ++++++---
+>   1 file changed, 6 insertions(+), 3 deletions(-)
 > 
 > diff --git a/tools/testing/selftests/clone3/clone3.c b/tools/testing/selftests/clone3/clone3.c
-> index 7b65ee5..4f23a0c 100644
+> index 4f23a0c..1746a9b 100644
 > --- a/tools/testing/selftests/clone3/clone3.c
 > +++ b/tools/testing/selftests/clone3/clone3.c
-> @@ -28,6 +28,7 @@ enum test_mode {
->   	CLONE3_ARGS_NO_TEST,
->   	CLONE3_ARGS_ALL_0,
->   	CLONE3_ARGS_ALL_1,
-> +	CLONE3_ARGS_BIG_EXIT_SIGNAL,
->   };
+> @@ -4,8 +4,10 @@
 >   
->   static pid_t raw_clone(struct clone_args *args, size_t size)
-> @@ -72,6 +73,10 @@ static int call_clone3(int flags, size_t size, enum test_mode test_mode)
->   		args.tls = 1;
->   		args.set_tid = 1;
->   		break;
-> +
-> +	case CLONE3_ARGS_BIG_EXIT_SIGNAL:
-> +		args.exit_signal = 0xbadc0ded00000000;
-
-Please add a comment to indicate what this is. I am assuming
-this bad sig val.
-
-> +		break;
->   	}
+>   #define _GNU_SOURCE
+>   #include <errno.h>
+> +#include <inttypes.h>
+>   #include <linux/types.h>
+>   #include <linux/sched.h>
+> +#include <stdint.h>
+>   #include <stdio.h>
+>   #include <stdlib.h>
+>   #include <sys/syscall.h>
+> @@ -36,7 +38,7 @@ static pid_t raw_clone(struct clone_args *args, size_t size)
+>   	return syscall(__NR_clone3, args, size);
+>   }
 >   
->   	pid = raw_clone(&args, size);
-> @@ -146,6 +151,10 @@ int main(int argc, char *argv[])
->   	/* Do a clone3() with all members set to 1 */
->   	if (test_clone3(0, CLONE3_ARGS_SIZE_V0, -EINVAL, CLONE3_ARGS_ALL_1))
->   		goto on_error;
-> +	/* Do a clone3() with exit_signal having highest 32 bits non-zero */
-> +	if (test_clone3(0, CLONE3_ARGS_SIZE_V0, -EINVAL,
-> +			CLONE3_ARGS_BIG_EXIT_SIGNAL))
-> +		goto on_error;
->   	/*
->   	 * Do a clone3() with sizeof(struct clone_args) + 8
->   	 * and all members set to 0.
+> -static int call_clone3(int flags, size_t size, enum test_mode test_mode)
+> +static int call_clone3(uint64_t flags, size_t size, enum test_mode test_mode)
+>   {
+>   	struct clone_args args = {0};
+>   	pid_t ppid = -1;
+> @@ -102,12 +104,13 @@ static int call_clone3(int flags, size_t size, enum test_mode test_mode)
+>   	return 0;
+>   }
+>   
+> -static int test_clone3(int flags, size_t size, int expected,
+> +static int test_clone3(uint64_t flags, size_t size, int expected,
+>   		       enum test_mode test_mode)
+>   {
+>   	int ret;
+>   
+> -	ksft_print_msg("[%d] Trying clone3() with flags 0x%x (size %d)\n",
+> +	ksft_print_msg("[%d] Trying clone3() with flags %#" PRIx64 " (size %d)"
+> +			"\n",
+>   			getpid(), flags, size);
+>   	ret = call_clone3(flags, size, test_mode);
+>   	ksft_print_msg("[%d] clone3() with flags says :%d expected %d\n",
 > 
 
 thanks,
