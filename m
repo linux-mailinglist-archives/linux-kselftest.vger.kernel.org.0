@@ -2,204 +2,115 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 43DA8B525F
-	for <lists+linux-kselftest@lfdr.de>; Tue, 17 Sep 2019 18:05:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2377BB5262
+	for <lists+linux-kselftest@lfdr.de>; Tue, 17 Sep 2019 18:05:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728054AbfIQQFi (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 17 Sep 2019 12:05:38 -0400
-Received: from foss.arm.com ([217.140.110.172]:58082 "EHLO foss.arm.com"
+        id S1728034AbfIQQFs (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 17 Sep 2019 12:05:48 -0400
+Received: from foss.arm.com ([217.140.110.172]:58090 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727865AbfIQQFi (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 17 Sep 2019 12:05:38 -0400
+        id S1727865AbfIQQFs (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 17 Sep 2019 12:05:48 -0400
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 88D2515A2;
-        Tue, 17 Sep 2019 09:05:37 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 12E7315A2;
+        Tue, 17 Sep 2019 09:05:48 -0700 (PDT)
 Received: from arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A04B03F575;
-        Tue, 17 Sep 2019 09:05:36 -0700 (PDT)
-Date:   Tue, 17 Sep 2019 17:05:34 +0100
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2BB7E3F575;
+        Tue, 17 Sep 2019 09:05:47 -0700 (PDT)
+Date:   Tue, 17 Sep 2019 17:05:45 +0100
 From:   Dave Martin <Dave.Martin@arm.com>
 To:     Cristian Marussi <cristian.marussi@arm.com>
 Cc:     linux-kselftest@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, shuah@kernel.org,
         amit.kachhap@arm.com, andreyknvl@google.com
-Subject: Re: [PATCH v6 01/11] kselftest: arm64: extend toplevel skeleton
- Makefile
-Message-ID: <20190917160534.GK27757@arm.com>
+Subject: Re: [PATCH v6 02/11] kselftest: arm64:
+ mangle_pstate_invalid_compat_toggle and common utils
+Message-ID: <20190917160545.GL27757@arm.com>
 References: <20190910123111.33478-1-cristian.marussi@arm.com>
- <20190910123111.33478-2-cristian.marussi@arm.com>
+ <20190910123111.33478-3-cristian.marussi@arm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190910123111.33478-2-cristian.marussi@arm.com>
+In-Reply-To: <20190910123111.33478-3-cristian.marussi@arm.com>
 User-Agent: Mutt/1.5.23 (2014-03-12)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Sep 10, 2019 at 01:31:01pm +0100, Cristian Marussi wrote:
-> Modify KSFT arm64 toplevel Makefile to maintain arm64 kselftests organized
-> by subsystem, keeping them into distinct subdirectories under arm64 custom
-> KSFT directory: tools/testing/selftests/arm64/
+On Tue, Sep 10, 2019 at 01:31:02pm +0100, Cristian Marussi wrote:
+> Add some arm64/signal specific boilerplate and utility code to help
+> further testcases' development.
 > 
-> Add to such toplevel Makefile a mechanism to guess the effective location
-> of Kernel headers as installed by KSFT framework.
-> 
-> Fit existing arm64 tags kselftest into this new schema moving them into
-> their own subdirectory (arm64/tags).
+> Introduce also one simple testcase mangle_pstate_invalid_compat_toggle
+> and some related helpers: it is a simple mangle testcase which messes
+> with the ucontext_t from within the signal handler, trying to toggle
+> PSTATE state bits to switch the system between 32bit/64bit execution
+> state. Expects SIGSEGV on test PASS.
 > 
 > Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
 > ---
-> Based on:
-> commit 9ce1263033cd ("selftests, arm64: add a selftest for passing
-> 		     tagged pointers to kernel")
-> ---
 > v5 --> v6
-> - using realpath to avoid passing down relative paths
-> - fix commit msg & Copyright
-> - removed unneded Makefile export
-> - added SUBTARGETS specification, to allow building specific only some
->   arm64 test subsystems
-> v4 --> v5
-> - rebased on arm64/for-next/core
-> - merged this patch with KSFT arm64 tags patch, while moving the latter
->   into its own subdir
-> - moved kernel header includes search mechanism from KSFT arm64
->   SIGNAL Makefile
-> - export proper top_srcdir ENV for lib.mk
-> v3 --> v4
-> - comment reword
-> - simplified documentation in README
-> - dropped README about standalone
-> ---
->  tools/testing/selftests/Makefile              |  1 +
->  tools/testing/selftests/arm64/Makefile        | 63 +++++++++++++++++--
->  tools/testing/selftests/arm64/README          | 25 ++++++++
->  tools/testing/selftests/arm64/tags/Makefile   |  6 ++
->  .../arm64/{ => tags}/run_tags_test.sh         |  0
->  .../selftests/arm64/{ => tags}/tags_test.c    |  0
->  6 files changed, 91 insertions(+), 4 deletions(-)
->  create mode 100644 tools/testing/selftests/arm64/README
->  create mode 100644 tools/testing/selftests/arm64/tags/Makefile
->  rename tools/testing/selftests/arm64/{ => tags}/run_tags_test.sh (100%)
->  rename tools/testing/selftests/arm64/{ => tags}/tags_test.c (100%)
-> 
-> diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-> index 25b43a8c2b15..1722dae9381a 100644
-> --- a/tools/testing/selftests/Makefile
-> +++ b/tools/testing/selftests/Makefile
-> @@ -1,5 +1,6 @@
->  # SPDX-License-Identifier: GPL-2.0
->  TARGETS = android
-> +TARGETS += arm64
->  TARGETS += bpf
->  TARGETS += breakpoints
->  TARGETS += capabilities
-> diff --git a/tools/testing/selftests/arm64/Makefile b/tools/testing/selftests/arm64/Makefile
-> index a61b2e743e99..cbb2a5a9e3fc 100644
-> --- a/tools/testing/selftests/arm64/Makefile
-> +++ b/tools/testing/selftests/arm64/Makefile
-> @@ -1,11 +1,66 @@
->  # SPDX-License-Identifier: GPL-2.0
->  
-> -# ARCH can be overridden by the user for cross compiling
-> +# When ARCH not overridden for crosscompiling, lookup machine
->  ARCH ?= $(shell uname -m 2>/dev/null || echo not)
->  
->  ifneq (,$(filter $(ARCH),aarch64 arm64))
-> -TEST_GEN_PROGS := tags_test
-> -TEST_PROGS := run_tags_test.sh
-> +SUBTARGETS ?= tags
-> +else
-> +SUBTARGETS :=
->  endif
->  
-> -include ../lib.mk
-> +CFLAGS := -Wall -O2 -g
+> - fix commit msg
+> - feat_names is char const *const
+> - better supported options check and reporting
+> - removed critical asserts to avoid issues with NDEBUG
+> - more robust get_header
+> - fix validation for ESR_CONTEXT size
+> - add more explicit comment in GET_RESV_NEXT_HEAD() macro
+> - refactored default_handler()
+> - feats_ok() now public
+> - call always test_results() no matter the outcome of test_run()
+
+[...]
+
+> diff --git a/tools/testing/selftests/arm64/signal/test_signals_utils.c b/tools/testing/selftests/arm64/signal/test_signals_utils.c
+
+[...]
+
+> +static int test_init(struct tdescr *td)
+> +{
+> +	td->minsigstksz = getauxval(AT_MINSIGSTKSZ);
+> +	if (!td->minsigstksz)
+> +		td->minsigstksz = MINSIGSTKSZ;
+> +	fprintf(stderr, "Detected MINSTKSIGSZ:%d\n", td->minsigstksz);
 > +
-> +# A proper top_srcdir is needed by KSFT(lib.mk)
-> +top_srcdir = $(realpath ../../../../)
+> +	if (td->feats_required) {
+> +		td->feats_supported = 0;
+> +		/*
+> +		 * Checking for CPU required features using both the
+> +		 * auxval and the arm64 MRS Emulation to read sysregs.
+> +		 */
+> +		if (getauxval(AT_HWCAP) & HWCAP_SSBS)
+> +			td->feats_supported |= FEAT_SSBS;
+> +		if (getauxval(AT_HWCAP) & HWCAP_CPUID) {
+> +			uint64_t val = 0;
 > +
-> +# Additional include paths needed by kselftest.h and local headers
-> +CFLAGS += -I$(top_srcdir)/tools/testing/selftests/
-> +
-> +# Guessing where the Kernel headers could have been installed
-> +# depending on ENV config
-> +ifeq ($(KBUILD_OUTPUT),)
-> +khdr_dir = $(top_srcdir)/usr/include
-> +else
-> +# the KSFT preferred location when KBUILD_OUTPUT is set
-> +khdr_dir = $(KBUILD_OUTPUT)/kselftest/usr/include
-> +endif
+> +			/* Uses MRS emulation to check capability */
+> +			get_regval(SYS_ID_AA64MMFR1_EL1, val);
+> +			if (ID_AA64MMFR1_EL1_PAN_SUPPORTED(val))
+> +				td->feats_supported |= FEAT_PAN;
+> +			/* Uses MRS emulation to check capability */
+> +			get_regval(SYS_ID_AA64MMFR2_EL1, val);
+> +			if (ID_AA64MMFR2_EL1_UAO_SUPPORTED(val))
+> +				td->feats_supported |= FEAT_UAO;
+> +		} else {
+> +			fprintf(stderr,
+> +				"HWCAP_CPUID NOT available. Mark ALL feats UNSUPPORTED.\n");
 
-I still tend to think that for now we should just do what all the other
-tests do.
+Nit: this message isn't strictly correct now: SSBS may still be detected
+even if HWCAP_CPUID isn't present.
 
-Most tests use
+For simplicity I suggest to drop this fprintf() (and the containing
+else { }, which is otherwise empty).
 
-	CFLAGS += -I../../../../usr/include/
-
-in their Makefiles.
-
-For us, the test Makefiles are nested one level deeper, so I guess
-we would put
-
-	CFLAGS += -I../../../../../usr/include/
-
-in each.
+The following code reports what features are supported in any case, so
+the user will be able to see what was detected.
 
 
-This will break in some cases, but only in the same cases where
-kselftest is already broken.
-
-Ideally we would fix this globally, but can that instead be done
-independently of this series?
-
-Fixing only arm64, by pasting some arbitrary logic from
-selftests/Makefile doesn't seem like a future-proof approach.
-
-
-Or did I miss something?
-
-> +
-> +CFLAGS += -I$(khdr_dir)
-> +
-> +export CFLAGS
-> +export top_srcdir
-> +
-> +all:
-> +	@for DIR in $(SUBTARGETS); do				\
-> +		BUILD_TARGET=$(OUTPUT)/$$DIR;			\
-> +		mkdir -p $$BUILD_TARGET;			\
-> +		make OUTPUT=$$BUILD_TARGET -C $$DIR $@;		\
-> +	done
-> +
-> +install: all
-> +	@for DIR in $(SUBTARGETS); do				\
-> +		BUILD_TARGET=$(OUTPUT)/$$DIR;			\
-> +		make OUTPUT=$$BUILD_TARGET -C $$DIR $@;		\
-> +	done
-> +
-> +run_tests: all
-> +	@for DIR in $(SUBTARGETS); do				\
-> +		BUILD_TARGET=$(OUTPUT)/$$DIR;			\
-> +		make OUTPUT=$$BUILD_TARGET -C $$DIR $@;		\
-> +	done
-> +
-> +# Avoid any output on non arm64 on emit_tests
-
-This comment can be dropped: the whole file does nothing for
-non-arm64, and it achieves it in the same way as other arch-specific
-Makefiles, so it's odd to have the comment here specifically (?)
-
-
-With or without the above changes, I'm happy to give
+The rest looks reasonable to me now, so with the above nit fixed:
 
 Reviewed-by: Dave Martin <Dave.Martin@arm.com>
-
-(but Shuah or someone will need to give a view on how this integrates
-with kselftest overall).
 
 [...]
 
