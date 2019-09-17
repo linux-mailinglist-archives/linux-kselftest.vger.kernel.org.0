@@ -2,128 +2,242 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 40080B50C8
-	for <lists+linux-kselftest@lfdr.de>; Tue, 17 Sep 2019 16:54:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B9F0EB5139
+	for <lists+linux-kselftest@lfdr.de>; Tue, 17 Sep 2019 17:17:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728670AbfIQOyN (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 17 Sep 2019 10:54:13 -0400
-Received: from smtp1.de.adit-jv.com ([93.241.18.167]:44531 "EHLO
-        smtp1.de.adit-jv.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727315AbfIQOyN (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 17 Sep 2019 10:54:13 -0400
-Received: from localhost (smtp1.de.adit-jv.com [127.0.0.1])
-        by smtp1.de.adit-jv.com (Postfix) with ESMTP id C92BF3C0579;
-        Tue, 17 Sep 2019 16:54:09 +0200 (CEST)
-Received: from smtp1.de.adit-jv.com ([127.0.0.1])
-        by localhost (smtp1.de.adit-jv.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id C98Q-R7PqAfm; Tue, 17 Sep 2019 16:54:04 +0200 (CEST)
-Received: from HI2EXCH01.adit-jv.com (hi2exch01.adit-jv.com [10.72.92.24])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by smtp1.de.adit-jv.com (Postfix) with ESMTPS id 0D0F33C00C4;
-        Tue, 17 Sep 2019 16:54:04 +0200 (CEST)
-Received: from vmlxhi-102.adit-jv.com (10.72.93.184) by HI2EXCH01.adit-jv.com
- (10.72.92.24) with Microsoft SMTP Server (TLS) id 14.3.468.0; Tue, 17 Sep
- 2019 16:54:03 +0200
-Date:   Tue, 17 Sep 2019 16:54:00 +0200
-From:   Eugeniu Rosca <erosca@de.adit-jv.com>
-To:     shuah <shuah@kernel.org>
-CC:     "George G. Davis" <george_davis@mentor.com>,
-        Eugeniu Rosca <erosca@de.adit-jv.com>,
-        Eugeniu Rosca <roscaeugeniu@gmail.com>,
-        Jerry Hoemann <jerry.hoemann@hpe.com>,
-        Colin Ian King <colin.king@canonical.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2] selftests: watchdog: Validate optional file argument
-Message-ID: <20190917145400.GA14341@vmlxhi-102.adit-jv.com>
-References: <1568659751-1845-1-git-send-email-george_davis@mentor.com>
- <fa008fd8-f867-b80e-84ed-148e1630c09e@kernel.org>
+        id S1729329AbfIQPRE (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 17 Sep 2019 11:17:04 -0400
+Received: from foss.arm.com ([217.140.110.172]:57356 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729310AbfIQPRD (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 17 Sep 2019 11:17:03 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0FD0E15A2;
+        Tue, 17 Sep 2019 08:17:03 -0700 (PDT)
+Received: from [10.1.197.50] (e120937-lin.cambridge.arm.com [10.1.197.50])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2088B3F575;
+        Tue, 17 Sep 2019 08:17:02 -0700 (PDT)
+Subject: Re: [PATCH v6 01/11] kselftest: arm64: extend toplevel skeleton
+ Makefile
+To:     Anders Roxell <anders.roxell@linaro.org>
+Cc:     linux-kselftest@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, shuah@kernel.org,
+        andreyknvl@google.com, dave.martin@arm.com, amit.kachhap@arm.com
+References: <20190910123111.33478-1-cristian.marussi@arm.com>
+ <20190910123111.33478-2-cristian.marussi@arm.com>
+ <20190917134223.GA2695@localhost.localdomain>
+From:   Cristian Marussi <cristian.marussi@arm.com>
+Message-ID: <38863e6e-4d6f-b7a6-2add-937fff9e5ef2@arm.com>
+Date:   Tue, 17 Sep 2019 16:17:00 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <fa008fd8-f867-b80e-84ed-148e1630c09e@kernel.org>
-User-Agent: Mutt/1.12.1+40 (7f8642d4ee82) (2019-06-28)
-X-Originating-IP: [10.72.93.184]
+In-Reply-To: <20190917134223.GA2695@localhost.localdomain>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Shuah,
+Hi Anders
 
-On Mon, Sep 16, 2019 at 07:19:35PM -0600, shuah wrote:
-> On 9/16/19 12:49 PM, George G. Davis wrote:
-> > As reported by Eugeniu Rosca, a side of affect of commit c3f2490d6e92
-> > ("selftests: watchdog: Add optional file argument") is that arbitrary files
-> > may be opened for watchdog testing, e.g.
-> > 
+thanks for the review.
+
+On 17/09/2019 14:42, Anders Roxell wrote:
+> On 2019-09-10 13:31, Cristian Marussi wrote:
+>> Modify KSFT arm64 toplevel Makefile to maintain arm64 kselftests organized
+>> by subsystem, keeping them into distinct subdirectories under arm64 custom
+>> KSFT directory: tools/testing/selftests/arm64/
+>>
+>> Add to such toplevel Makefile a mechanism to guess the effective location
+>> of Kernel headers as installed by KSFT framework.
+>>
+>> Fit existing arm64 tags kselftest into this new schema moving them into
+>> their own subdirectory (arm64/tags).
+>>
+>> Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
+>> ---
+>> Based on:
+>> commit 9ce1263033cd ("selftests, arm64: add a selftest for passing
+>> 		     tagged pointers to kernel")
+>> ---
+>> v5 --> v6
+>> - using realpath to avoid passing down relative paths
+>> - fix commit msg & Copyright
+>> - removed unneded Makefile export
+>> - added SUBTARGETS specification, to allow building specific only some
+>>   arm64 test subsystems
+>> v4 --> v5
+>> - rebased on arm64/for-next/core
+>> - merged this patch with KSFT arm64 tags patch, while moving the latter
+>>   into its own subdir
+>> - moved kernel header includes search mechanism from KSFT arm64
+>>   SIGNAL Makefile
+>> - export proper top_srcdir ENV for lib.mk
+>> v3 --> v4
+>> - comment reword
+>> - simplified documentation in README
+>> - dropped README about standalone
+>> ---
+>>  tools/testing/selftests/Makefile              |  1 +
+>>  tools/testing/selftests/arm64/Makefile        | 63 +++++++++++++++++--
+>>  tools/testing/selftests/arm64/README          | 25 ++++++++
+>>  tools/testing/selftests/arm64/tags/Makefile   |  6 ++
+>>  .../arm64/{ => tags}/run_tags_test.sh         |  0
+>>  .../selftests/arm64/{ => tags}/tags_test.c    |  0
+>>  6 files changed, 91 insertions(+), 4 deletions(-)
+>>  create mode 100644 tools/testing/selftests/arm64/README
+>>  create mode 100644 tools/testing/selftests/arm64/tags/Makefile
+>>  rename tools/testing/selftests/arm64/{ => tags}/run_tags_test.sh (100%)
+>>  rename tools/testing/selftests/arm64/{ => tags}/tags_test.c (100%)
+>>
+>> diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
+>> index 25b43a8c2b15..1722dae9381a 100644
+>> --- a/tools/testing/selftests/Makefile
+>> +++ b/tools/testing/selftests/Makefile
+>> @@ -1,5 +1,6 @@
+>>  # SPDX-License-Identifier: GPL-2.0
+>>  TARGETS = android
+>> +TARGETS += arm64
+>>  TARGETS += bpf
+>>  TARGETS += breakpoints
+>>  TARGETS += capabilities
+>> diff --git a/tools/testing/selftests/arm64/Makefile b/tools/testing/selftests/arm64/Makefile
+>> index a61b2e743e99..cbb2a5a9e3fc 100644
+>> --- a/tools/testing/selftests/arm64/Makefile
+>> +++ b/tools/testing/selftests/arm64/Makefile
+>> @@ -1,11 +1,66 @@
+>>  # SPDX-License-Identifier: GPL-2.0
+>>  
+>> -# ARCH can be overridden by the user for cross compiling
+>> +# When ARCH not overridden for crosscompiling, lookup machine
+>>  ARCH ?= $(shell uname -m 2>/dev/null || echo not)
+>>  
+>>  ifneq (,$(filter $(ARCH),aarch64 arm64))
+>> -TEST_GEN_PROGS := tags_test
+>> -TEST_PROGS := run_tags_test.sh
+>> +SUBTARGETS ?= tags
+>> +else
+>> +SUBTARGETS :=
+>>  endif
+>>  
+>> -include ../lib.mk
+>> +CFLAGS := -Wall -O2 -g
+>> +
+>> +# A proper top_srcdir is needed by KSFT(lib.mk)
+>> +top_srcdir = $(realpath ../../../../)
+>> +
+>> +# Additional include paths needed by kselftest.h and local headers
+>> +CFLAGS += -I$(top_srcdir)/tools/testing/selftests/
+>> +
+>> +# Guessing where the Kernel headers could have been installed
+>> +# depending on ENV config
+>> +ifeq ($(KBUILD_OUTPUT),)
+>> +khdr_dir = $(top_srcdir)/usr/include
+>> +else
+>> +# the KSFT preferred location when KBUILD_OUTPUT is set
+>> +khdr_dir = $(KBUILD_OUTPUT)/kselftest/usr/include
+>> +endif
+>> +
+>> +CFLAGS += -I$(khdr_dir)
+>> +
+>> +export CFLAGS
+>> +export top_srcdir
+>> +
+>> +all:
+>> +	@for DIR in $(SUBTARGETS); do				\
+>> +		BUILD_TARGET=$(OUTPUT)/$$DIR;			\
+>> +		mkdir -p $$BUILD_TARGET;			\
+>> +		make OUTPUT=$$BUILD_TARGET -C $$DIR $@;		\
+>> +	done
+>> +
+>> +install: all
+>> +	@for DIR in $(SUBTARGETS); do				\
+>> +		BUILD_TARGET=$(OUTPUT)/$$DIR;			\
+>> +		make OUTPUT=$$BUILD_TARGET -C $$DIR $@;		\
+>> +	done
+>> +
+>> +run_tests: all
+>> +	@for DIR in $(SUBTARGETS); do				\
+>> +		BUILD_TARGET=$(OUTPUT)/$$DIR;			\
+>> +		make OUTPUT=$$BUILD_TARGET -C $$DIR $@;		\
+>> +	done
+>> +
+>> +# Avoid any output on non arm64 on emit_tests
+>> +emit_tests: all
+>> +	@for DIR in $(SUBTARGETS); do				\
+>> +		BUILD_TARGET=$(OUTPUT)/$$DIR;			\
+>> +		make OUTPUT=$$BUILD_TARGET -C $$DIR $@;		\
+>> +	done
+>> +
+>> +clean:
+>> +	@for DIR in $(SUBTARGETS); do				\
+>> +		BUILD_TARGET=$(OUTPUT)/$$DIR;			\
+>> +		make OUTPUT=$$BUILD_TARGET -C $$DIR $@;		\
+>> +	done
+>> +
+>> +.PHONY: all clean install run_tests emit_tests
+>> diff --git a/tools/testing/selftests/arm64/README b/tools/testing/selftests/arm64/README
+>> new file mode 100644
+>> index 000000000000..cc1e51796fee
+>> --- /dev/null
+>> +++ b/tools/testing/selftests/arm64/README
+>> @@ -0,0 +1,25 @@
+>> +KSelfTest ARM64
+>> +===============
+>> +
+>> +- These tests are arm64 specific and so not built or run but just skipped
+>> +  completely when env-variable ARCH is found to be different than 'arm64'
+>> +  and `uname -m` reports other than 'aarch64'.
+>> +
+>> +- Holding true the above, ARM64 KSFT tests can be run within the KSelfTest
+>> +  framework using standard Linux top-level-makefile targets:
+>> +
+>> +      $ make TARGETS=arm64 kselftest-clean
+>> +      $ make TARGETS=arm64 kselftest
+>> +
+>> +      or
+>> +
+>> +      $ make -C tools/testing/selftests TARGETS=arm64 \
+>> +		INSTALL_PATH=<your-installation-path> install
+>> +
+>> +      or, alternatively, only specific arm64/ subtargets can be picked:
+>> +
+>> +      $ make -C tools/testing/selftests TARGETS=arm64 SUBTARGETS="tags signal" \
+>> +		INSTALL_PATH=<your-installation-path> install
+>> +
+>> +   Further details on building and running KFST can be found in:
+>> +     Documentation/dev-tools/kselftest.rst
+>> diff --git a/tools/testing/selftests/arm64/tags/Makefile b/tools/testing/selftests/arm64/tags/Makefile
+>> new file mode 100644
+>> index 000000000000..dcc8b0467b68
+>> --- /dev/null
+>> +++ b/tools/testing/selftests/arm64/tags/Makefile
+>> @@ -0,0 +1,6 @@
+>> +# SPDX-License-Identifier: GPL-2.0
+>> +
+>> +TEST_GEN_PROGS := tags_test
 > 
-> You don't need to say this here since you are already have a
-> Reported-by tag. 
-
-This looks like asking people to stick to your personal taste which
-BTW doesn't really match the patterns established in Linux community.
-
-With a bit of scripting, I am able to find around 4600 vanilla commits
-which happen to mention the name of the reporter in addition to
-Reported-by: https://paste.ubuntu.com/p/wNXfdGCJbX/ .
-
-I really don't care if my name is mentioned once or twice, but I do
-believe that requesting a new patch revision just based on this criteria
-is nonsense. Can you please revise your review criteria?
-
-> You are missing the Fixes tag.
-
-The _fixed_ commit didn't land in vanilla as of v5.3-2061-gad062195731.
-It is still undergoing the linux-next testing, where it can be found as
-https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=c3f2490d6e92
-("selftests: watchdog: Add optional file argument").
-
-Since the _fixed_ commit is not yet in mainline, there is no Fixes tag
-included in this patch.
-
-> > ./watchdog-test  -f /dev/zero
-> > Watchdog Ticking Away!
-> > 
-> > To prevent watchdog-test from operating on non-watchdog device files,
-> > validate that a file is indeed a watchdog device via an
-> > ioctl(WDIOC_GETSUPPORT) call.
-> > 
-> > While we're at it, since the watchdog_info is available as a result of the
-> > ioctl(WDIOC_GETSUPPORT) call, add a command line option to optionally show
-> > the watchdog_info.
-> > 
+> This should be TEST_GEN_FILES, since its used by run_tags_test.sh.
+> If its TEST_GEN_PROGS it will be added to the script run_kselftest.sh,
+> and I don't think thats the intent, even though it looked like that
+> before.
 > 
-> Let's try this again. I want two patches. The first one with Fixes tag.
-> The first patch might be candidate for going into stables.
 
-This makes me wonder if you figured out the relationship and timeline
-of this and the fixed patches. Since both are going to be part of the
-same kernel release (v5.4), why do you worry about the stable updates?
+In fact I saw the tags tests running twice (via ./tags_test and via ./run_tags_test.sh) when called
+via run_kselftest.sh....but since it was already like that in the original patch so I did not want to
+fix it in the context of this series (where tags tests are simply relocated into their own directory)
 
+I could add a separate fix on top of this series if it could make sense.
+
+Cheers
+
+Cristian
+
+
+> Cheers,
+> Anders
 > 
-> The -i (info) should be a separate patch. This won't go into stables.
 
-Please, see the above. I don't think this patch, or any of its parts,
-are candidate for linux-stable.
-
-> 
-> Please write a clear commit log. The following will help:
-> 
-> https://chris.beams.io/posts/git-commit/
-
-With all my appreciation for https://chris.beams.io/, I see no
-contributions from him in Linux whatsoever. Given that Linux commit
-descriptions and summary lines obey specific/unique rules, I doubt this
-is the best guide to provide to your contributors :)
-
-With the above inputs, can you please outline your expectations
-precisely which changes are expected in the next patch revision, if at
-all needed?
-
--- 
-Best Regards,
-Eugeniu
