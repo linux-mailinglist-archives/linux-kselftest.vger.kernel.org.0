@@ -2,197 +2,205 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 482C2B6767
-	for <lists+linux-kselftest@lfdr.de>; Wed, 18 Sep 2019 17:46:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62262B6916
+	for <lists+linux-kselftest@lfdr.de>; Wed, 18 Sep 2019 19:30:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731743AbfIRPqh (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 18 Sep 2019 11:46:37 -0400
-Received: from mx1.mailbox.org ([80.241.60.212]:18286 "EHLO mx1.mailbox.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726676AbfIRPqg (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 18 Sep 2019 11:46:36 -0400
-Received: from smtp1.mailbox.org (smtp1.mailbox.org [80.241.60.240])
-        (using TLSv1.2 with cipher ECDHE-RSA-CHACHA20-POLY1305 (256/256 bits))
-        (No client certificate requested)
-        by mx1.mailbox.org (Postfix) with ESMTPS id A4F6050D4B;
-        Wed, 18 Sep 2019 17:46:30 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at heinlein-support.de
-Received: from smtp1.mailbox.org ([80.241.60.240])
-        by spamfilter06.heinlein-hosting.de (spamfilter06.heinlein-hosting.de [80.241.56.125]) (amavisd-new, port 10030)
-        with ESMTP id ZgCJrYNr5TyO; Wed, 18 Sep 2019 17:46:22 +0200 (CEST)
-Date:   Wed, 18 Sep 2019 17:46:15 +0200
-From:   Aleksa Sarai <cyphar@cyphar.com>
-To:     Jann Horn <jannh@google.com>
-Cc:     Al Viro <viro@zeniv.linux.org.uk>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J. Bruce Fields" <bfields@fieldses.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        David Howells <dhowells@redhat.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Christian Brauner <christian@brauner.io>,
-        Andy Lutomirski <luto@kernel.org>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
+        id S1729319AbfIRRaD (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 18 Sep 2019 13:30:03 -0400
+Received: from mail-pl1-f194.google.com ([209.85.214.194]:42061 "EHLO
+        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728260AbfIRRaD (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 18 Sep 2019 13:30:03 -0400
+Received: by mail-pl1-f194.google.com with SMTP id e5so266897pls.9
+        for <linux-kselftest@vger.kernel.org>; Wed, 18 Sep 2019 10:30:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=GUxs3ppBWjO6MvWeEa5OPViHs5o2PNpYpDSgemqtMKU=;
+        b=MBFaKfnAunKPJzeuvir2VqnMxhnWK27CCeerc22oy+A19xqjzPiI7wD6vVQ6qYhOwK
+         kG5j6/le65zDAy6TKhXfvNwzVPleX2r+h3VC3w0Sdqs5smyn/1nloTqrLwVFivS3+Jw8
+         +tJdsaW2QjuFQxKripj59KUr7CgEEfadLTX6U=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=GUxs3ppBWjO6MvWeEa5OPViHs5o2PNpYpDSgemqtMKU=;
+        b=VebLntb1boeT1h1/i+Hr3BIA09hJecz+HjlLZljAE5fljd0ZCcDfahJwH7+3jYKPAQ
+         YLIfJKnWoJ8zUG+NpO0ewopNsgKARwpbzjteaWVvElej0KjpYdfWPLCwIZt/BAUMg+/2
+         LALq5m7nfD8N2JR051Ot96iowJwyHgmhXeDmN7SKr59TMFHdqrCMlCaitX1OWeizlW6L
+         l243NL9srHGUX2gSC1DwKVytu+KOAji1zgyzjQzRTGkClW9Rc9Oq+e23cmici7fyztMV
+         0FfIx3T2dG/m166Z5u0wWKxKrd4kXvLTCf3g90IPx2vPDPkTU05jJH2oiHj4supb5JJr
+         ctWQ==
+X-Gm-Message-State: APjAAAUpAeDpMy9UGIW5EpxgUgDV03Nj0UnlMNjhgQcZACVjk8OfteMI
+        A6fMz1HspJrK00dKmZfmpGQ8vA==
+X-Google-Smtp-Source: APXvYqz2fE+Or3qClARFl8tcu+gzAJlmtllJFa2j2ZTrTLIYt/MmOrrS7xSYwcMKS2c2wevFxCkkMg==
+X-Received: by 2002:a17:902:758a:: with SMTP id j10mr5397703pll.233.1568827802416;
+        Wed, 18 Sep 2019 10:30:02 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id a29sm9816765pfr.152.2019.09.18.10.30.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 18 Sep 2019 10:30:01 -0700 (PDT)
+Date:   Wed, 18 Sep 2019 10:30:00 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Christian Brauner <christian.brauner@ubuntu.com>
+Cc:     luto@amacapital.net, jannh@google.com, wad@chromium.org,
+        shuah@kernel.org, ast@kernel.org, daniel@iogearbox.net,
+        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
         Tycho Andersen <tycho@tycho.ws>,
-        David Drysdale <drysdale@google.com>,
-        Chanho Min <chanho.min@lge.com>,
-        Oleg Nesterov <oleg@redhat.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Aleksa Sarai <asarai@suse.de>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Linux Containers <containers@lists.linux-foundation.org>,
-        linux-alpha@vger.kernel.org, Linux API <linux-api@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        linux-ia64@vger.kernel.org,
-        kernel list <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        linux-sh@vger.kernel.org, linux-xtensa@linux-xtensa.org,
-        sparclinux@vger.kernel.org
-Subject: Re: [PATCH v12 05/12] namei: obey trailing magic-link DAC permissions
-Message-ID: <20190918154615.suruy5v5xjftfwyl@yavin.microfocus.com>
-References: <20190904201933.10736-1-cyphar@cyphar.com>
- <20190904201933.10736-6-cyphar@cyphar.com>
- <CAG48ez1_64249RdX6Nj_32YS+jhuXZBAd_ZL9ozggbSQy+cc-A@mail.gmail.com>
- <20190918135100.sdxdmdluq6wlwryv@yavin.microfocus.com>
+        Tyler Hicks <tyhicks@canonical.com>
+Subject: Re: [PATCH 1/4] seccomp: add SECCOMP_RET_USER_NOTIF_ALLOW
+Message-ID: <201909181018.E3CEC9A81@keescook>
+References: <20190918084833.9369-1-christian.brauner@ubuntu.com>
+ <20190918084833.9369-2-christian.brauner@ubuntu.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="blplt4ksioniygek"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190918135100.sdxdmdluq6wlwryv@yavin.microfocus.com>
+In-Reply-To: <20190918084833.9369-2-christian.brauner@ubuntu.com>
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+On Wed, Sep 18, 2019 at 10:48:30AM +0200, Christian Brauner wrote:
+> This allows the seccomp notifier to continue a syscall. A positive
+> discussion about this feature was triggered by a post to the
+> ksummit-discuss mailing list (cf. [3]) and took place during KSummit
+> (cf. [1]) and again at the containers/checkpoint-restore
+> micro-conference at Linux Plumbers.
+> 
+> Recently we landed seccomp support for SECCOMP_RET_USER_NOTIF (cf. [4])
+> which enables a process (watchee) to retrieve an fd for its seccomp
+> filter. This fd can then be handed to another (usually more privileged)
+> process (watcher). The watcher will then be able to receive seccomp
+> messages about the syscalls having been performed by the watchee.
+> 
+> This feature is heavily used in some userspace workloads. For example,
+> it is currently used to intercept mknod() syscalls in user namespaces
+> aka in containers.
+> The mknod() syscall can be easily filtered based on dev_t. This allows
+> us to only intercept a very specific subset of mknod() syscalls.
+> Furthermore, mknod() is not possible in user namespaces toto coelo and
+> so intercepting and denying syscalls that are not in the whitelist on
+> accident is not a big deal. The watchee won't notice a difference.
+> 
+> In contrast to mknod(), a lot of other syscall we intercept (e.g.
+> setxattr()) cannot be easily filtered like mknod() because they have
+> pointer arguments. Additionally, some of them might actually succeed in
+> user namespaces (e.g. setxattr() for all "user.*" xattrs). Since we
+> currently cannot tell seccomp to continue from a user notifier we are
+> stuck with performing all of the syscalls in lieu of the container. This
+> is a huge security liability since it is extremely difficult to
+> correctly assume all of the necessary privileges of the calling task
+> such that the syscall can be successfully emulated without escaping
+> other additional security restrictions (think missing CAP_MKNOD for
+> mknod(), or MS_NODEV on a filesystem etc.). This can be solved by
+> telling seccomp to resume the syscall.
+> 
+> One thing that came up in the discussion was the problem that another
+> thread could change the memory after userspace has decided to let the
+> syscall continue which is a well known TOCTOU with seccomp which is
+> present in other ways already.
+> The discussion showed that this feature is already very useful for any
+> syscall without pointer arguments. For any accidentally intercepted
+> non-pointer syscall it is safe to continue.
+> For syscalls with pointer arguments there is a race but for any cautious
+> userspace and the main usec cases the race doesn't matter. The notifier
+> is intended to be used in a scenario where a more privileged watcher
+> supervises the syscalls of lesser privileged watchee to allow it to get
+> around kernel-enforced limitations by performing the syscall for it
+> whenever deemed save by the watcher. Hence, if a user tricks the watcher
+> into allowing a syscall they will either get a deny based on
+> kernel-enforced restrictions later or they will have changed the
+> arguments in such a way that they manage to perform a syscall with
+> arguments that they would've been allowed to do anyway.
+> In general, it is good to point out again, that the notifier fd was not
+> intended to allow userspace to implement a security policy but rather to
+> work around kernel security mechanisms in cases where the watcher knows
+> that a given action is safe to perform.
+> 
+> /* References */
+> [1]: https://linuxplumbersconf.org/event/4/contributions/560
+> [2]: https://linuxplumbersconf.org/event/4/contributions/477
+> [3]: https://lore.kernel.org/r/20190719093538.dhyopljyr5ns33qx@brauner.io
+> [4]: commit 6a21cc50f0c7 ("seccomp: add a return code to trap to userspace")
+> 
+> Signed-off-by: Christian Brauner <christian.brauner@ubuntu.com>
+> Cc: Kees Cook <keescook@chromium.org>
+> Cc: Andy Lutomirski <luto@amacapital.net>
+> Cc: Will Drewry <wad@chromium.org>
+> Cc: Tycho Andersen <tycho@tycho.ws>
+> CC: Tyler Hicks <tyhicks@canonical.com>
+> Cc: Jann Horn <jannh@google.com>
+> ---
+>  include/uapi/linux/seccomp.h |  2 ++
+>  kernel/seccomp.c             | 24 ++++++++++++++++++++----
+>  2 files changed, 22 insertions(+), 4 deletions(-)
+> 
+> diff --git a/include/uapi/linux/seccomp.h b/include/uapi/linux/seccomp.h
+> index 90734aa5aa36..2c23b9aa6383 100644
+> --- a/include/uapi/linux/seccomp.h
+> +++ b/include/uapi/linux/seccomp.h
+> @@ -76,6 +76,8 @@ struct seccomp_notif {
+>  	struct seccomp_data data;
+>  };
+>  
+> +#define SECCOMP_RET_USER_NOTIF_ALLOW 0x00000001
 
---blplt4ksioniygek
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+nit: I'd like to avoid confusion here about what "family" these flags
+belong to. "SECCOMP_RET_..." is used for the cBPF filter return action
+value, so let's instead call this:
 
-On 2019-09-18, Aleksa Sarai <cyphar@cyphar.com> wrote:
-> On 2019-09-17, Jann Horn <jannh@google.com> wrote:
-> > On Wed, Sep 4, 2019 at 10:21 PM Aleksa Sarai <cyphar@cyphar.com> wrote:
-> > > The ability for userspace to "re-open" file descriptors through
-> > > /proc/self/fd has been a very useful tool for all sorts of usecases
-> > > (container runtimes are one common example). However, the current
-> > > interface for doing this has resulted in some pretty subtle security
-> > > holes. Userspace can re-open a file descriptor with more permissions
-> > > than the original, which can result in cases such as /proc/$pid/exe
-> > > being re-opened O_RDWR at a later date even though (by definition)
-> > > /proc/$pid/exe cannot be opened for writing. When combined with O_PATH
-> > > the results can get even more confusing.
-> > [...]
-> > > Instead we have to restrict it in such a way that it doesn't break
-> > > (good) users but does block potential attackers. The solution applied=
- in
-> > > this patch is to restrict *re-opening* (not resolution through)
-> > > magic-links by requiring that mode of the link be obeyed. Normal
-> > > symlinks have modes of a+rwx but magic-links have other modes. These
-> > > magic-link modes were historically ignored during path resolution, but
-> > > they've now been re-purposed for more useful ends.
-> >=20
-> > Thanks for dealing with this issue!
-> >=20
-> > [...]
-> > > diff --git a/fs/namei.c b/fs/namei.c
-> > > index 209c51a5226c..54d57dad0f91 100644
-> > > --- a/fs/namei.c
-> > > +++ b/fs/namei.c
-> > > @@ -872,7 +872,7 @@ void nd_jump_link(struct path *path)
-> > >
-> > >         nd->path =3D *path;
-> > >         nd->inode =3D nd->path.dentry->d_inode;
-> > > -       nd->flags |=3D LOOKUP_JUMPED;
-> > > +       nd->flags |=3D LOOKUP_JUMPED | LOOKUP_MAGICLINK_JUMPED;
-> > >  }
-> > [...]
-> > > +static int trailing_magiclink(struct nameidata *nd, int acc_mode,
-> > > +                             fmode_t *opath_mask)
-> > > +{
-> > > +       struct inode *inode =3D nd->link_inode;
-> > > +       fmode_t upgrade_mask =3D 0;
-> > > +
-> > > +       /* Was the trailing_symlink() a magic-link? */
-> > > +       if (!(nd->flags & LOOKUP_MAGICLINK_JUMPED))
-> > > +               return 0;
-> > > +
-> > > +       /*
-> > > +        * Figure out the upgrade-mask of the link_inode. Since these=
- aren't
-> > > +        * strictly POSIX semantics we don't do an acl_permission_che=
-ck() here,
-> > > +        * so we only care that at least one bit is set for each upgr=
-ade-mode.
-> > > +        */
-> > > +       if (inode->i_mode & S_IRUGO)
-> > > +               upgrade_mask |=3D FMODE_PATH_READ;
-> > > +       if (inode->i_mode & S_IWUGO)
-> > > +               upgrade_mask |=3D FMODE_PATH_WRITE;
-> > > +       /* Restrict the O_PATH upgrade-mask of the caller. */
-> > > +       if (opath_mask)
-> > > +               *opath_mask &=3D upgrade_mask;
-> > > +       return may_open_magiclink(upgrade_mask, acc_mode);
-> > >  }
-> >=20
-> > This looks racy because entries in the file descriptor table can be
-> > switched out as long as task->files->file_lock isn't held. Unless I'm
-> > missing something, something like the following (untested) would
-> > bypass this restriction:
->=20
-> You're absolutely right -- good catch!
->=20
-> > Perhaps you could change nd_jump_link() to "void nd_jump_link(struct
-> > path *path, umode_t link_mode)", and let proc_pid_get_link() pass the
-> > link_mode through from an out-argument of .proc_get_link()? Then
-> > proc_fd_link() could grab the proper mode in a race-free manner. And
-> > nd_jump_link() could stash the mode in the nameidata.
->=20
-> This indeed does appear to be the simplest solution -- I'm currently
-> testing a variation of the patch you proposed (with a few extra bits to
-> deal with nd_jump_link and proc_get_link being used elsewhere).
->=20
-> I'll include this change (assuming it fixes the flaw you found) in the
-> v13 series I'll send around next week. Thanks, Jann!
+#define SECCOMP_USER_NOTIF_CONTINUE	BIT(0)
 
-In case you're interested -- I've also included a selftest based on this
-attack in my series (though it uses CLONE_FILES so that we could also
-test O_EMPTYPATH, which wasn't affected because it didn't go through
-procfs and thus couldn't hit the "outdated inode->i_mode" problem).
+I'm thinking of "continue" as slightly different from "allow", in the
+sense that I'd like to hint that this doesn't mean arguments could have
+been reliably "filtered" via user notification.
 
-The attack script succeeds around 20% of the time on the original
-patchset, and with the updated patchset it doesn't succeed in several
-hundred thousand attempts (which I've repeated a few times).
+And at the same time, please add a giant comment about this in the
+header that details the purpose ("check if I should do something on
+behalf of the process") and not "is this safe to allow?", due to the
+argument parsing ToCToU.
 
---=20
-Aleksa Sarai
-Senior Software Engineer (Containers)
-SUSE Linux GmbH
-<https://www.cyphar.com/>
+> -static void seccomp_do_user_notification(int this_syscall,
+> +static bool seccomp_do_user_notification(int this_syscall,
 
---blplt4ksioniygek
-Content-Type: application/pgp-signature; name="signature.asc"
+I'd prefer this stay an "int", just to keep it similar to the other
+functions that are checked in __seccomp_filter().
 
------BEGIN PGP SIGNATURE-----
+> +	/* perform syscall */
 
-iHUEABYIAB0WIQSxZm6dtfE8gxLLfYqdlLljIbnQEgUCXYJRRAAKCRCdlLljIbnQ
-Ep3WAP0cvG8YTD9aS1zuiIbFfMQLKt1nuxBciHwn7LaCHk9Z0QEAtNdPaxztVO/p
-utsBd24Q6vZYzx6vj8OnW5nGpjaLpQA=
-=rL8c
------END PGP SIGNATURE-----
+nit: expand this commit to something like "Userspace requests we
+continue and perform syscall".
 
---blplt4ksioniygek--
+> +	if (flags & SECCOMP_RET_USER_NOTIF_ALLOW)
+> +		return false;
+
+return 0;
+
+> +
+>  	syscall_set_return_value(current, task_pt_regs(current),
+>  				 err, ret);
+> +	return true;
+
+return -1;
+
+(This makes it look more like a "skip on failure")
+
+> +	if (resp.flags & ~SECCOMP_RET_USER_NOTIF_ALLOW)
+> +		return -EINVAL;
+> +
+> +	if ((resp.flags & SECCOMP_RET_USER_NOTIF_ALLOW) &&
+> +	    (resp.error || resp.val))
+>  		return -EINVAL;
+
+Ah yeah, good idea.
+
+Beyond these nits, yes, looks good and should help the usability of this
+feature. Thanks for getting it written and tested!
+
+-- 
+Kees Cook
