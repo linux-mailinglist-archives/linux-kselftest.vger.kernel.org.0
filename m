@@ -2,112 +2,153 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EE029B83B7
-	for <lists+linux-kselftest@lfdr.de>; Thu, 19 Sep 2019 23:50:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B311DB8602
+	for <lists+linux-kselftest@lfdr.de>; Fri, 20 Sep 2019 00:26:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733053AbfISVu3 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 19 Sep 2019 17:50:29 -0400
-Received: from youngberry.canonical.com ([91.189.89.112]:55156 "EHLO
+        id S2405663AbfISW0R (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 19 Sep 2019 18:26:17 -0400
+Received: from youngberry.canonical.com ([91.189.89.112]:55952 "EHLO
         youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1733028AbfISVu3 (ORCPT
+        with ESMTP id S2406829AbfISWWZ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 19 Sep 2019 17:50:29 -0400
+        Thu, 19 Sep 2019 18:22:25 -0400
 Received: from static-dcd-cqq-121001.business.bouyguestelecom.com ([212.194.121.1] helo=wittgenstein)
         by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
         (Exim 4.86_2)
         (envelope-from <christian.brauner@ubuntu.com>)
-        id 1iB4Ji-00055W-Mw; Thu, 19 Sep 2019 21:50:22 +0000
-Date:   Thu, 19 Sep 2019 23:50:21 +0200
+        id 1iB4ob-0007Gc-Nt; Thu, 19 Sep 2019 22:22:17 +0000
+Date:   Fri, 20 Sep 2019 00:22:16 +0200
 From:   Christian Brauner <christian.brauner@ubuntu.com>
-To:     shuah <shuah@kernel.org>
-Cc:     keescook@chromium.org, luto@amacapital.net, jannh@google.com,
-        wad@chromium.org, ast@kernel.org, daniel@iogearbox.net,
-        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        Tycho Andersen <tycho@tycho.ws>,
-        Tyler Hicks <tyhicks@canonical.com>, stable@vger.kernel.org
-Subject: Re: [PATCH v1 3/3] seccomp: test SECCOMP_USER_NOTIF_FLAG_CONTINUE
-Message-ID: <20190919215020.7gfqwy44umxollou@wittgenstein>
+To:     Jann Horn <jannh@google.com>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Will Drewry <wad@chromium.org>, Shuah Khan <shuah@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>, kafai@fb.com,
+        Song Liu <songliubraving@fb.com>, yhs@fb.com,
+        kernel list <linux-kernel@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
+        bpf@vger.kernel.org, Tycho Andersen <tycho@tycho.ws>,
+        Tyler Hicks <tyhicks@canonical.com>
+Subject: Re: [PATCH v1 1/3] seccomp: add SECCOMP_USER_NOTIF_FLAG_CONTINUE
+Message-ID: <20190919222143.o3pumstojzhgfw4v@wittgenstein>
 References: <20190919095903.19370-1-christian.brauner@ubuntu.com>
- <20190919095903.19370-4-christian.brauner@ubuntu.com>
- <ad7d2901-6639-3684-b71c-bdc1a6a020cc@kernel.org>
+ <20190919095903.19370-2-christian.brauner@ubuntu.com>
+ <CAG48ez1QkJAMgTpqv4EqbDmYPPpxuB8cR=XhUAr1fHZOBY_DHg@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <ad7d2901-6639-3684-b71c-bdc1a6a020cc@kernel.org>
+In-Reply-To: <CAG48ez1QkJAMgTpqv4EqbDmYPPpxuB8cR=XhUAr1fHZOBY_DHg@mail.gmail.com>
 User-Agent: NeoMutt/20180716
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Sep 19, 2019 at 11:13:46AM -0600, shuah wrote:
-> On 9/19/19 3:59 AM, Christian Brauner wrote:
-> > Test whether a syscall can be performed after having been intercepted by
-> > the seccomp notifier. The test uses dup() and kcmp() since it allows us to
-> > nicely test whether the dup() syscall actually succeeded by comparing whether
-> > the fds refer to the same underlying struct file.
-> > 
-> > Signed-off-by: Christian Brauner <christian.brauner@ubuntu.com>
-> > Cc: Kees Cook <keescook@chromium.org>
-> > Cc: Andy Lutomirski <luto@amacapital.net>
-> > Cc: Will Drewry <wad@chromium.org>
-> > Cc: Shuah Khan <shuah@kernel.org>
-> > Cc: Alexei Starovoitov <ast@kernel.org>
-> > Cc: Daniel Borkmann <daniel@iogearbox.net>
-> > Cc: Martin KaFai Lau <kafai@fb.com>
-> > Cc: Song Liu <songliubraving@fb.com>
-> > Cc: Yonghong Song <yhs@fb.com>
-> > Cc: Tycho Andersen <tycho@tycho.ws>
-> > CC: Tyler Hicks <tyhicks@canonical.com>
-> > Cc: stable@vger.kernel.org
-> > Cc: linux-kselftest@vger.kernel.org
-> > Cc: netdev@vger.kernel.org
-> > Cc: bpf@vger.kernel.org
-> > ---
-> > /* v1 */
-> > - Christian Brauner <christian.brauner@ubuntu.com>:
-> >    - adapt to new flag name SECCOMP_USER_NOTIF_FLAG_CONTINUE
-> > 
-> > /* v0 */
-> > Link: https://lore.kernel.org/r/20190918084833.9369-5-christian.brauner@ubuntu.com
-> > ---
-> >   tools/testing/selftests/seccomp/seccomp_bpf.c | 102 ++++++++++++++++++
-> >   1 file changed, 102 insertions(+)
-> > 
-> > diff --git a/tools/testing/selftests/seccomp/seccomp_bpf.c b/tools/testing/selftests/seccomp/seccomp_bpf.c
-> > index e996d7b7fd6e..b0966599acb5 100644
-> > --- a/tools/testing/selftests/seccomp/seccomp_bpf.c
-> > +++ b/tools/testing/selftests/seccomp/seccomp_bpf.c
-> > @@ -44,6 +44,7 @@
-> >   #include <sys/times.h>
-> >   #include <sys/socket.h>
-> >   #include <sys/ioctl.h>
-> > +#include <linux/kcmp.h>
-> >   #include <unistd.h>
-> >   #include <sys/syscall.h>
-> > @@ -167,6 +168,10 @@ struct seccomp_metadata {
-> >   #define SECCOMP_RET_USER_NOTIF 0x7fc00000U
-> > +#ifndef SECCOMP_USER_NOTIF_FLAG_CONTINUE
-> > +#define SECCOMP_USER_NOTIF_FLAG_CONTINUE 0x00000001
-> > +#endif
+On Thu, Sep 19, 2019 at 09:37:06PM +0200, Jann Horn wrote:
+> On Thu, Sep 19, 2019 at 11:59 AM Christian Brauner
+> <christian.brauner@ubuntu.com> wrote:
+> > This allows the seccomp notifier to continue a syscall.
+> [...]
+> > Recently we landed seccomp support for SECCOMP_RET_USER_NOTIF (cf. [4])
+> > which enables a process (watchee) to retrieve an fd for its seccomp
+> > filter. This fd can then be handed to another (usually more privileged)
+> > process (watcher). The watcher will then be able to receive seccomp
+> > messages about the syscalls having been performed by the watchee.
+> [...]
+> > This can be solved by
+> > telling seccomp to resume the syscall.
+> [...]
+> > @@ -780,8 +783,14 @@ static void seccomp_do_user_notification(int this_syscall,
+> >                 list_del(&n.list);
+> >  out:
+> >         mutex_unlock(&match->notify_lock);
 > > +
-> >   #define SECCOMP_IOC_MAGIC		'!'
-> >   #define SECCOMP_IO(nr)			_IO(SECCOMP_IOC_MAGIC, nr)
-> >   #define SECCOMP_IOR(nr, type)		_IOR(SECCOMP_IOC_MAGIC, nr, type)
-> > @@ -3481,6 +3486,103 @@ TEST(seccomp_get_notif_sizes)
-> >   	EXPECT_EQ(sizes.seccomp_notif_resp, sizeof(struct seccomp_notif_resp));
-> >   }
-> > +static int filecmp(pid_t pid1, pid_t pid2, int fd1, int fd2)
-> > +{
-> > +#ifdef __NR_kcmp
-> > +	return syscall(__NR_kcmp, pid1, pid2, KCMP_FILE, fd1, fd2);
-> > +#else
-> > +	errno = ENOSYS;
-> > +	return -1;
+> > +       /* Userspace requests to continue the syscall. */
+> > +       if (flags & SECCOMP_USER_NOTIF_FLAG_CONTINUE)
+> > +               return 0;
+> > +
+> >         syscall_set_return_value(current, task_pt_regs(current),
+> >                                  err, ret);
+> > +       return -1;
+> >  }
 > 
-> This should be SKIP for kselftest so this isn't counted a failure.
-> In this case test can't be run because of a missing dependency.
+> Seccomp currently expects the various seccomp return values to be
+> fully ordered based on how much action the kernel should take against
+> the requested syscall. Currently, the range of return values is
+> basically divided into three regions: "block syscall in some way"
+> (from SECCOMP_RET_KILL_PROCESS to SECCOMP_RET_USER_NOTIF), "let ptrace
+> decide" (SECCOMP_RET_TRACE) and "allow" (SECCOMP_RET_LOG and
+> SECCOMP_RET_ALLOW). If SECCOMP_RET_USER_NOTIF becomes able to allow
+> syscalls, it will be able to override a negative decision from
+> SECCOMP_RET_TRACE.
+> 
+> In practice, that's probably not a big deal, since I'm not aware of
+> anyone actually using SECCOMP_RET_TRACE for security purposes, and on
+> top of that, you'd have to allow ioctl(..., SECCOMP_IOCTL_NOTIF_SEND,
+> ...) and seccomp() with SECCOMP_FILTER_FLAG_NEW_LISTENER in your
+> seccomp policy for this to work.
+> 
+> More interestingly, what about the case where two
+> SECCOMP_RET_USER_NOTIF filters are installed? The most recently
+> installed filter takes precedence if the return values's action parts
+> are the same (and this is also documented in the manpage); so if a
+> container engine installs a filter that always intercepts sys_foobar()
+> (and never uses SECCOMP_USER_NOTIF_FLAG_CONTINUE), and then something
+> inside the container also installs a filter that always intercepts
+> sys_foobar() (and always uses SECCOMP_USER_NOTIF_FLAG_CONTINUE), the
+> container engine's filter will become ineffective.
 
-Right, I can just ifdef the whole test and report a skip.
+Excellent point. We discussed the nested container case today.
+
+> 
+> With my tendency to overcomplicate things, I'm thinking that maybe it
+> might be a good idea to:
+>  - collect a list of all filters that returned SECCOMP_RET_USER_NOTIF,
+> as well as the highest-precedence return value that was less strict
+> than SECCOMP_RET_USER_NOTIF
+>  - sequentially send notifications to all of the
+> SECCOMP_RET_USER_NOTIF filters until one doesn't return
+> SECCOMP_USER_NOTIF_FLAG_CONTINUE
+>  - if all returned SECCOMP_USER_NOTIF_FLAG_CONTINUE, go with the
+> highest-precedence return value that was less strict than
+> SECCOMP_RET_USER_NOTIF, or allow if no such return value was
+> encountered
+> 
+> But perhaps, for now, it would also be enough to just expand the big
+> fat warning note and tell people that if they allow the use of
+> SECCOMP_IOCTL_NOTIF_SEND and SECCOMP_FILTER_FLAG_NEW_LISTENER in their
+> filter, SECCOMP_RET_USER_NOTIF is bypassable. And if someone actually
+> has a usecase where SECCOMP_RET_USER_NOTIF should be secure and nested
+> SECCOMP_RET_USER_NOTIF support is needed, that more complicated logic
+> could be added later?
+
+Yes, I think that is the correct approach for now.
+Realistically, the most useful scenario is a host-privileged supervisor
+process and a user-namespaced supervised process (or to use a concrete
+example, a host-privileged container manager and an unprivileged
+container). Having a user-namespaced supervisor process supervising
+another nested user-namespaced process is for the most part useless
+because the supervisor can't do any of the interesting syscalls (e.g.
+mounting block devices that are deemed safe, faking mknod() etc.). So I
+expect seccomp with USER_NOTIF to be blocked just for good measure. 
+Also - maybe I'm wrong - the warning we added points out that this is
+only safe if the supervised process can already rely on kernel (or
+other) restrictions, i.e. even if an attacker overwrites pointer syscall
+arguments with harmful ones the supervisor must be sure that they are
+already blocked anyway. Which can be generalized to: if an unwanted
+syscall goes through in _some_ way then the supervisor must be sure that
+it is blocked.
+Iiuc, for your specific attack all the nested attacker can do is to
+never actually get the (outer) supervisor to fake the syscall for it.
+A more interesting case might be where the host-privileged supervising
+process wants to deny a syscall that would otherwise succeed. But if
+that's the case then the outer supervisor is trying to implement a
+security policy. But we explicitly point out that this is not possible
+with the notifier in general.
+But honestly, that is very advanced and it seems unlikely that someone
+would want this. So I'd say let's just point this out.
+
+Christian
