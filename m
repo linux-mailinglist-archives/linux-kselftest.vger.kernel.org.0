@@ -2,284 +2,206 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AB013B82D4
-	for <lists+linux-kselftest@lfdr.de>; Thu, 19 Sep 2019 22:41:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A4544B82E0
+	for <lists+linux-kselftest@lfdr.de>; Thu, 19 Sep 2019 22:48:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729256AbfISUlv (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 19 Sep 2019 16:41:51 -0400
-Received: from mail-eopbgr690135.outbound.protection.outlook.com ([40.107.69.135]:1870
-        "EHLO NAM04-CO1-obe.outbound.protection.outlook.com"
+        id S1732462AbfISUsC (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 19 Sep 2019 16:48:02 -0400
+Received: from mail-eopbgr750093.outbound.protection.outlook.com ([40.107.75.93]:10823
+        "EHLO NAM02-BL2-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1728984AbfISUlv (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 19 Sep 2019 16:41:51 -0400
+        id S1727273AbfISUsB (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 19 Sep 2019 16:48:01 -0400
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=oHY1FR38TfAsm+eDr93Pc7gDaG39ODQ7gUTm8ftK1YmOt4PNXmTW2mPJYZVeZKGdb4USdDO0YT0nKUOu57Bn3GdvtWZ6gJm5wtfQDsGfflH3e6kjzO5P8iifG8Va2U7J3NV1PgtejUg+ShfOlzgMT+D5bFiClK9+pHLVJeQaIi9rI8tjaSBgv5d5SSe+5k/hljsSR6YAxtPAozZflP0lmz1C4nvuMcHwjogw0Qn1aQ+WTbVyNB+i7Ta3cPofP1C8halLLGSRM2PL08Buz6GdGEZdTuIDFYIb7rXgmyACcOlpDr37c1GtB8A7mBnuMaSdUJe03aETNP/KYEZK6gcKcA==
+ b=DFIs/jeflh0+y6VN2TNLeAhJa2JI2MVyffSJhDae4F/8eA+T3gCwfUudZJ84NUeTfHSdO6r0jOE/PnTH42HlDjRR35oOtAANv3Owl1U7MvkdpzYU1+f5hMta54+7rwDPpLkWduRf+2/p7y8rVCZGAbKsfSoXCOOVJADmlppikj8LdZT77l4OKRzFX+kKnsQD9onFkS31QZxBJOa5tK50fcRIBxSeFKl7jiiANr5DyPkqtJkEhAjt2AnOyp4TOhCWvYLITs9geXQp9yLuP7kWcddoD+lIYYNfWYuJW2WsAeNZ6rKXb4A/tk17mgNIpkosNmGeiFjHr6S5xuKyItjI1Q==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Xa/IBwGoxex2GWg2QMs7Xjh5M6MkBKkep5abjJ2NX0c=;
- b=myk7rNoqi2FuGyGYP+GJY3t4EKGczfVrDL0WtPQ01X0DVulG5KU0ergS6Wc0Xc7jRcgwUQhE5lOYseAjQMihiSmbChygKLtrWFLTRXzfqfhkBpUmSUhas/fOqgDF186ALZ7QDk03aqUd4EplBHi4EFHfU4RQyLKXIgdkbZMGE2yJ7Ewj3Z4ROKtxUzdYJfnFFdoRMYAabbeRS3XCSCx4jmg85C2SD/wsDkFohIt6UD43JK0hnfSRMOKAUqpID1MtJ+UQ79ICuktwBZPxWVnuaIUlXQRIANH2HefRi5uduWLKDQiPb2sk6Dm6MYwRRtP6MaeYH8dbW0b7lIN+euZcPQ==
+ bh=e5BeZiQqZOcTKvkJztZwrg+K8SeoOsxnGq6hhFzqkDQ=;
+ b=fWZjBlzlKMO5ERyztXE2PauZIZffKJNMH032PnnUFKPqmBhHLnMN8/SLDMQHQcYiEtANpEuTzatJM1CUqSY/RgyUPSETSByxudV3mPcdwyD+Rhm1wP0oI0TWPp4zhX+Vy8c6bfpmxe/4PJZEZ/FSEcfXoVSCnnK+knDZ9V1K+oP+y9yUe6SRkQdO0TamEO/0tkGEM1rKz7pRybuA+lj5tz8me0M/9VdQlP2ktsBK7vkaMlijgknDvGON6r2JloDCZxcwXx1+pfgKRFzmt6Mq4GhQDfgvjEwnVRWLye9B4RAHXWVzYZyLn6cgNbbaFt2bKtd/Q7Tr0SATNQGExCWEgw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 160.33.194.230) smtp.rcpttodomain=chromium.org smtp.mailfrom=sony.com;
+ 160.33.194.228) smtp.rcpttodomain=kernel.org smtp.mailfrom=sony.com;
  dmarc=pass (p=none sp=none pct=100) action=none header.from=sony.com;
  dkim=none (message not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Sony.onmicrosoft.com;
  s=selector2-Sony-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Xa/IBwGoxex2GWg2QMs7Xjh5M6MkBKkep5abjJ2NX0c=;
- b=t3gm23hVMXXN6VcehBqdB5FZ0iSQM5k4hxY05WKeFH9e6VI1L8O51MmQJ/8oCR3Ugm3p/r6XEUiCXIG0djUikJXO/2EDtAFvX3nRf+NapflU++0jMfHp1pBfmGkT8OVJUJBSrfDPwXZ/BnXhxfRo3S4SAxQKsW3tyQyM7uT26iw=
-Received: from MWHPR13CA0020.namprd13.prod.outlook.com (2603:10b6:300:16::30)
- by DM5PR13MB1179.namprd13.prod.outlook.com (2603:10b6:3:72::23) with
+ bh=e5BeZiQqZOcTKvkJztZwrg+K8SeoOsxnGq6hhFzqkDQ=;
+ b=CqS3rsjcqwDlASrXoAMFIqf9Qx0pjtAVtK6LiPvu8Qm0oY++0989yaePkEvElzvF/ZqaMK9LfQY+GvPyivzqAXs8E7fsVaJet6dEBu29DRXrA0brOzlHhUds6KfnKIp6qB2d31wE4hyN4ADBgwwmPp7MlXjX1NMwJn9WSMIhrUo=
+Received: from CY4PR13CA0006.namprd13.prod.outlook.com (2603:10b6:903:32::16)
+ by CY4PR13MB1173.namprd13.prod.outlook.com (2603:10b6:903:3c::23) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2284.14; Thu, 19 Sep
- 2019 20:41:48 +0000
-Received: from SN1NAM02FT040.eop-nam02.prod.protection.outlook.com
- (2a01:111:f400:7e44::205) by MWHPR13CA0020.outlook.office365.com
- (2603:10b6:300:16::30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2284.17; Thu, 19 Sep
+ 2019 20:47:57 +0000
+Received: from SN1NAM02FT013.eop-nam02.prod.protection.outlook.com
+ (2a01:111:f400:7e44::200) by CY4PR13CA0006.outlook.office365.com
+ (2603:10b6:903:32::16) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2284.14 via Frontend
- Transport; Thu, 19 Sep 2019 20:41:48 +0000
-Authentication-Results: spf=pass (sender IP is 160.33.194.230)
- smtp.mailfrom=sony.com; chromium.org; dkim=none (message not signed)
- header.d=none;chromium.org; dmarc=pass action=none header.from=sony.com;
+ Transport; Thu, 19 Sep 2019 20:47:57 +0000
+Authentication-Results: spf=pass (sender IP is 160.33.194.228)
+ smtp.mailfrom=sony.com; kernel.org; dkim=none (message not signed)
+ header.d=none;kernel.org; dmarc=pass action=none header.from=sony.com;
 Received-SPF: Pass (protection.outlook.com: domain of sony.com designates
- 160.33.194.230 as permitted sender) receiver=protection.outlook.com;
- client-ip=160.33.194.230; helo=usculsndmail03v.am.sony.com;
-Received: from usculsndmail03v.am.sony.com (160.33.194.230) by
- SN1NAM02FT040.mail.protection.outlook.com (10.152.72.195) with Microsoft SMTP
+ 160.33.194.228 as permitted sender) receiver=protection.outlook.com;
+ client-ip=160.33.194.228; helo=usculsndmail01v.am.sony.com;
+Received: from usculsndmail01v.am.sony.com (160.33.194.228) by
+ SN1NAM02FT013.mail.protection.outlook.com (10.152.72.98) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2263.17 via Frontend Transport; Thu, 19 Sep 2019 20:41:47 +0000
+ 15.20.2284.20 via Frontend Transport; Thu, 19 Sep 2019 20:47:56 +0000
 Received: from usculsndmail12v.am.sony.com (usculsndmail12v.am.sony.com [146.215.230.103])
-        by usculsndmail03v.am.sony.com (Sentrion-MTA-4.3.2/Sentrion-MTA-4.3.2) with ESMTP id x8JKfku8003963;
-        Thu, 19 Sep 2019 20:41:46 GMT
-Received: from USCULXHUB05V.am.sony.com (usculxhub05v.am.sony.com [146.215.231.43])
-        by usculsndmail12v.am.sony.com (Sentrion-MTA-4.3.2/Sentrion-MTA-4.3.2) with ESMTP id x8JKfkrO026077;
-        Thu, 19 Sep 2019 20:41:46 GMT
+        by usculsndmail01v.am.sony.com (Sentrion-MTA-4.3.2/Sentrion-MTA-4.3.2) with ESMTP id x8JKlt0A026764;
+        Thu, 19 Sep 2019 20:47:55 GMT
+Received: from USCULXHUB01V.am.sony.com (usculxhub01v.am.sony.com [146.215.231.15])
+        by usculsndmail12v.am.sony.com (Sentrion-MTA-4.3.2/Sentrion-MTA-4.3.2) with ESMTP id x8JKlsIh001670;
+        Thu, 19 Sep 2019 20:47:55 GMT
 Received: from USCULXMSG01.am.sony.com ([fe80::b09d:6cb6:665e:d1b5]) by
- USCULXHUB05V.am.sony.com ([146.215.231.43]) with mapi id 14.03.0439.000; Thu,
- 19 Sep 2019 16:41:45 -0400
+ USCULXHUB01V.am.sony.com ([146.215.231.15]) with mapi id 14.03.0439.000; Thu,
+ 19 Sep 2019 16:47:54 -0400
 From:   <Tim.Bird@sony.com>
-To:     <keescook@chromium.org>, <shuah@kernel.org>
-CC:     <anders.roxell@linaro.org>, <alexandre.belloni@bootlin.com>,
-        <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
+To:     <shuah@kernel.org>, <alexandre.belloni@bootlin.com>,
+        <keescook@chromium.org>
+CC:     <anders.roxell@linaro.org>, <linux-kernel@vger.kernel.org>,
+        <linux-kselftest@vger.kernel.org>
 Subject: RE: [PATCH] selftests/kselftest/runner.sh: Add 45 second timeout
  per test
 Thread-Topic: [PATCH] selftests/kselftest/runner.sh: Add 45 second timeout
  per test
-Thread-Index: AQHVbxUXsNEjsnpJkUeVTYYfiT5hwaczb7LQ
-Date:   Thu, 19 Sep 2019 20:41:42 +0000
-Message-ID: <ECADFF3FD767C149AD96A924E7EA6EAF977BA636@USCULXMSG01.am.sony.com>
+Thread-Index: AQHVbxUXsNEjsnpJkUeVTYYfiT5hwacznHuAgAAUu4D//8Y04A==
+Date:   Thu, 19 Sep 2019 20:47:51 +0000
+Message-ID: <ECADFF3FD767C149AD96A924E7EA6EAF977BA651@USCULXMSG01.am.sony.com>
 References: <201909191102.97FA56072@keescook>
-In-Reply-To: <201909191102.97FA56072@keescook>
+ <20190919185525.GD21254@piout.net>
+ <4844c68f-603d-14f2-f976-5bd255268c0d@kernel.org>
+In-Reply-To: <4844c68f-603d-14f2-f976-5bd255268c0d@kernel.org>
 Accept-Language: en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
 x-originating-ip: [146.215.228.6]
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
 X-EOPAttributedMessage: 0
 X-MS-Office365-Filtering-HT: Tenant
-X-Forefront-Antispam-Report: CIP:160.33.194.230;IPV:NLI;CTRY:US;EFV:NLI;SFV:NSPM;SFS:(10019020)(136003)(396003)(376002)(39860400002)(346002)(51444003)(13464003)(199004)(189003)(106002)(229853002)(8746002)(26005)(70206006)(6306002)(76176011)(54906003)(7696005)(2906002)(2876002)(70586007)(23726003)(6116002)(3846002)(8936002)(6246003)(316002)(102836004)(46406003)(126002)(446003)(336012)(37786003)(86362001)(5660300002)(6666004)(55016002)(356004)(186003)(476003)(11346002)(426003)(110136005)(33656002)(246002)(14444005)(486006)(4326008)(66066001)(8676002)(97756001)(7736002)(55846006)(966005)(478600001)(50466002)(47776003)(305945005)(5001870100001);DIR:OUT;SFP:1102;SCL:1;SRVR:DM5PR13MB1179;H:usculsndmail03v.am.sony.com;FPR:;SPF:Pass;LANG:en;PTR:mail.sonyusa.com,mail03.sonyusa.com;A:1;MX:1;
+X-Forefront-Antispam-Report: CIP:160.33.194.228;IPV:NLI;CTRY:US;EFV:NLI;SFV:NSPM;SFS:(10019020)(346002)(376002)(136003)(39860400002)(396003)(189003)(199004)(13464003)(11346002)(53546011)(6246003)(102836004)(316002)(305945005)(55016002)(478600001)(7736002)(8676002)(33656002)(2486003)(8936002)(55846006)(23676004)(126002)(476003)(486006)(246002)(7696005)(76176011)(2201001)(86362001)(54906003)(106002)(110136005)(6666004)(356004)(5660300002)(26005)(336012)(446003)(50466002)(2876002)(2906002)(47776003)(66066001)(186003)(4326008)(3846002)(14444005)(426003)(229853002)(70586007)(70206006)(436003)(37786003)(6116002)(5001870100001);DIR:OUT;SFP:1102;SCL:1;SRVR:CY4PR13MB1173;H:usculsndmail01v.am.sony.com;FPR:;SPF:Pass;LANG:en;PTR:mail.sonyusa.com,mail01.sonyusa.com;MX:1;A:1;
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: bd409794-57be-4668-3c91-08d73d41cac8
-X-Microsoft-Antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(5600167)(711020)(4605104)(4709080)(1401327)(4618075)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(2017052603328)(7193020);SRVR:DM5PR13MB1179;
-X-MS-TrafficTypeDiagnostic: DM5PR13MB1179:
-X-MS-Exchange-PUrlCount: 2
-X-Microsoft-Antispam-PRVS: <DM5PR13MB1179BAE654FA99BBF807E61EFD890@DM5PR13MB1179.namprd13.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:8882;
+X-MS-Office365-Filtering-Correlation-Id: a9e52dc1-d220-4934-213d-08d73d42a69e
+X-Microsoft-Antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600167)(711020)(4605104)(4709080)(1401327)(4618075)(2017052603328)(7193020);SRVR:CY4PR13MB1173;
+X-MS-TrafficTypeDiagnostic: CY4PR13MB1173:
+X-Microsoft-Antispam-PRVS: <CY4PR13MB117316449C43C7BEEFE2A381FD890@CY4PR13MB1173.namprd13.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:10000;
 X-Forefront-PRVS: 016572D96D
 X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam-Message-Info: jeocI6OVlTh/ZhAkN/26p7OlTzSBojjIm3dMvZC9e2rlT+cpe1PdRTrnKWIJ/ZMONjs8kyWfZLfqFbtq1Ecw4DH7PLa8TB8cDsJ6XTSqDhSYU+5pZNG6TuRH8oUayQUeDjqL8vZy5u7YaiGp4WPx/M6ZmtC3Iw6RDY5avcbi0WRCdOdVzUO2lfXIOU7Z/xu9EsHMZdtDotglMayrAI0kFcJzveIUtJ2+h9PVX8d67hGI9Aw14l0M7PHAezMACOnX03hmw8RiWRaXe4mimo1/1fuVcCM83a+Aer21YPLjKEBBjNXqpCXWDOQ/8kKGPopf6llHsFXHNQAO42OS45DYL8NhvqzGXwUiWhf3WHrG5ogR0yP6ZLsLhJWL/jttrTC2wtJ0v6gjGfNoWK3Ej8oAMmavW8uQbiy6bMPWIPPogfw=
+X-Microsoft-Antispam-Message-Info: rlY2AkK/rwRQgm3kLbmxpiWNVESFqlGjWIAVfvdb8yMtJkNUhyJZvj4WhWyMJWfVIjirhOGfGMgXLfgNlZ+MxRIawknwiCRIH1EB79rh1L+L8hkNvj3vg0ZLC2Gu0lhtaPic3YXE+FDqOW751LJF31xacC1JsE6G/mnYeT1hfQox1ZEqR9P2k4hlvUBF1m02v3yDyESQL5VoFNJjASotydKHnH5oELAi3breoLETJb3rY9RN56LP+LP7D4ILZUjyOTJAmgocKC1tnykUhVQM0A42cG2+KerokQh1hyEjwXoFSg77njaxMlWpJ92ntZTN9EKn8knMzSj7WRZ3LYgAMvhTsaRCHx5lEbvPei1xQ/NfjL93HpS3lQvLF1R1igeaH+CSPfJSbm5cy1FHh/3waYYUGJBMFGHK/16+CBzLAIc=
 X-OriginatorOrg: sony.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Sep 2019 20:41:47.9602
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Sep 2019 20:47:56.7820
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: bd409794-57be-4668-3c91-08d73d41cac8
+X-MS-Exchange-CrossTenant-Network-Message-Id: a9e52dc1-d220-4934-213d-08d73d42a69e
 X-MS-Exchange-CrossTenant-Id: 66c65d8a-9158-4521-a2d8-664963db48e4
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=66c65d8a-9158-4521-a2d8-664963db48e4;Ip=[160.33.194.230];Helo=[usculsndmail03v.am.sony.com]
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=66c65d8a-9158-4521-a2d8-664963db48e4;Ip=[160.33.194.228];Helo=[usculsndmail01v.am.sony.com]
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR13MB1179
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR13MB1173
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-
-
-> -----Original Message-----
-> From: Kees Cook
->=20
-> Commit a745f7af3cbd ("selftests/harness: Add 30 second timeout per
-> test") solves the problem of kselftest_harness.h-using binary tests
-> possibly hanging forever. However, scripts and other binaries can still
-> hang forever. This adds a global timeout to each test script run.
->=20
-> To make this configurable (e.g. as needed in the "rtc" test case),
-> include a new per-test-directory "settings" file (similar to "config")
-> that can contain kselftest-specific settings. The first recognized field
-> is "timeout".
-
-OK - this is quite interesting.  I have had on my to-do list an action
-item to propose the creation of a file (or a standard kerneldoc string)
-to hold CI-related meta-data (of which timeout is one example).
-
-What other meta-data did you have in mind?
-
-I would like (that Fuego, and probably other CI systems would like) to have
- access to data like test dependencies, descriptions, and results interpret=
-ation
-that would be beneficial for both CI systems (using them to control test in=
-vocations and scheduling), as
-well as users who are trying to interpret and handle the test results.
-So this concept is a very welcome addition to kselftest.
-
-LTP is in the process of adopting a new system for expressing and handling =
-their test meta-data.
-See the discussion at:=20
-https://lists.yoctoproject.org/pipermail/automated-testing/2019-August/0004=
-71.html
-and the prototype implementation at:
-https://github.com/metan-ucw/ltp/tree/master/docparse
-
-I realize that that system is coupled pretty tightly to LTP, but conceptual=
-ly
-some of the same type of information would be valuable for kselftest tests.
-One example of a specific field that would be handy is 'need_root'.
-
-It would be nice to avoid proliferation of such meta-data schemas (that is
-field names), so maybe we can have a discussion about this before adopting
-something?
-
-Just FYI, I'm OK with the name 'timeout'.  I think that's pretty much unive=
-rsally
-used by all CI runners I'm aware of to indicate the test timeout value.  Bu=
-t
-before adopting other fields it would be good to start comparing notes
-and not invent a bunch of new field names for concepts that are already in
-other systems.
-
->=20
-> Additionally, this splits the reporting for timeouts into a specific
-> "TIMEOUT" not-ok (and adds exit code reporting in the remaining case).
->=20
-> Signed-off-by: Kees Cook <keescook@chromium.org>
-> ---
->  tools/testing/selftests/kselftest/runner.sh | 36 +++++++++++++++++++--
->  tools/testing/selftests/rtc/settings        |  1 +
->  2 files changed, 34 insertions(+), 3 deletions(-)
->  create mode 100644 tools/testing/selftests/rtc/settings
->=20
-> diff --git a/tools/testing/selftests/kselftest/runner.sh
-> b/tools/testing/selftests/kselftest/runner.sh
-> index 00c9020bdda8..84de7bc74f2c 100644
-> --- a/tools/testing/selftests/kselftest/runner.sh
-> +++ b/tools/testing/selftests/kselftest/runner.sh
-> @@ -3,9 +3,14 @@
->  #
->  # Runs a set of tests in a given subdirectory.
->  export skip_rc=3D4
-> +export timeout_rc=3D124
-what are the units here?  I presume seconds?
-
->  export logfile=3D/dev/stdout
->  export per_test_logging=3D
->=20
-> +# Defaults for "settings" file fields:
-> +# "timeout" how many seconds to let each test run before failing.
-> +export kselftest_default_timeout=3D45
-> +
->  # There isn't a shell-agnostic way to find the path of a sourced file,
->  # so we must rely on BASE_DIR being set to find other tools.
->  if [ -z "$BASE_DIR" ]; then
-> @@ -24,6 +29,16 @@ tap_prefix()
->  	fi
->  }
->=20
-> +tap_timeout()
-> +{
-> +	# Make sure tests will time out if utility is available.
-> +	if [ -x /usr/bin/timeout ] ; then
-> +		/usr/bin/timeout "$kselftest_timeout" "$1"
-> +	else
-> +		"$1"
-> +	fi
-> +}
-> +
->  run_one()
->  {
->  	DIR=3D"$1"
-> @@ -32,6 +47,18 @@ run_one()
->=20
->  	BASENAME_TEST=3D$(basename $TEST)
->=20
-> +	# Reset any "settings"-file variables.
-> +	export kselftest_timeout=3D"$kselftest_default_timeout"
-> +	# Load per-test-directory kselftest "settings" file.
-> +	settings=3D"$BASE_DIR/$DIR/settings"
-> +	if [ -r "$settings" ] ; then
-> +		while read line ; do
-> +			field=3D$(echo "$line" | cut -d=3D -f1)
-> +			value=3D$(echo "$line" | cut -d=3D -f2-)
-> +			eval "kselftest_$field"=3D"$value"
-> +		done < "$settings"
-> +	fi
-> +
->  	TEST_HDR_MSG=3D"selftests: $DIR: $BASENAME_TEST"
->  	echo "# $TEST_HDR_MSG"
->  	if [ ! -x "$TEST" ]; then
-> @@ -44,14 +71,17 @@ run_one()
->  		echo "not ok $test_num $TEST_HDR_MSG"
->  	else
->  		cd `dirname $TEST` > /dev/null
-> -		(((((./$BASENAME_TEST 2>&1; echo $? >&3) |
-> +		((((( tap_timeout ./$BASENAME_TEST 2>&1; echo $? >&3) |
->  			tap_prefix >&4) 3>&1) |
->  			(read xs; exit $xs)) 4>>"$logfile" &&
->  		echo "ok $test_num $TEST_HDR_MSG") ||
-> -		(if [ $? -eq $skip_rc ]; then	\
-> +		(rc=3D$?;	\
-> +		if [ $rc -eq $skip_rc ]; then	\
->  			echo "not ok $test_num $TEST_HDR_MSG # SKIP"
-> +		elif [ $rc -eq $timeout_rc ]; then \
-> +			echo "not ok $test_num $TEST_HDR_MSG #
-> TIMEOUT"
-This is an extension to the TAP protocol (well, not strictly, since it is i=
-n a comment),
-but it should be documented.
-
-I took an action item at the CKI hackfest to rigorously document the
-details of how kselftest has extended (or augmented) TAP.  For example
-our indentation mechanism for sub-tests.  You and I talked about this
-a bit at Plumbers, but I'd like to follow up and add something
-to Documentation/dev-tools/kselftest.rst so users and CI systems
-can know how to appropriately parse and manage kselftest TAP output.
-
-I'll start a separate thread on that when I get to documenting it,
-but this would definitely be an addition to that documentation.
-
->  		else
-> -			echo "not ok $test_num $TEST_HDR_MSG"
-> +			echo "not ok $test_num $TEST_HDR_MSG #
-> exit=3D$rc"
-Is this also something new to kselftest's TAP output that should be documen=
-ted?
-
->  		fi)
->  		cd - >/dev/null
->  	fi
-> diff --git a/tools/testing/selftests/rtc/settings
-> b/tools/testing/selftests/rtc/settings
-> new file mode 100644
-> index 000000000000..ba4d85f74cd6
-> --- /dev/null
-> +++ b/tools/testing/selftests/rtc/settings
-> @@ -0,0 +1 @@
-> +timeout=3D90
-
-This is introducing a schema for meta-data naming, and a first field name.
-I have no problem with this one, but it might be worth comparing it with
-names expected by various kselftest-calling  CI systems.  I'll try to work
-on this shortly and report back any issues.
-
-Thanks for this.  I think this points us in an interesting new direction.
- -- Tim
+PiAtLS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0KPiBGcm9tOiBzaHVhaA0KPiANCj4gT24gOS8x
+OS8xOSAxMjo1NSBQTSwgQWxleGFuZHJlIEJlbGxvbmkgd3JvdGU6DQo+ID4gT24gMTkvMDkvMjAx
+OSAxMTowNjo0NC0wNzAwLCBLZWVzIENvb2sgd3JvdGU6DQo+ID4+IENvbW1pdCBhNzQ1ZjdhZjNj
+YmQgKCJzZWxmdGVzdHMvaGFybmVzczogQWRkIDMwIHNlY29uZCB0aW1lb3V0IHBlcg0KPiA+PiB0
+ZXN0Iikgc29sdmVzIHRoZSBwcm9ibGVtIG9mIGtzZWxmdGVzdF9oYXJuZXNzLmgtdXNpbmcgYmlu
+YXJ5IHRlc3RzDQo+ID4+IHBvc3NpYmx5IGhhbmdpbmcgZm9yZXZlci4gSG93ZXZlciwgc2NyaXB0
+cyBhbmQgb3RoZXIgYmluYXJpZXMgY2FuIHN0aWxsDQo+ID4+IGhhbmcgZm9yZXZlci4gVGhpcyBh
+ZGRzIGEgZ2xvYmFsIHRpbWVvdXQgdG8gZWFjaCB0ZXN0IHNjcmlwdCBydW4uDQo+ID4+DQo+IA0K
+PiBUaW1lb3V0IGlzIGdvb2QsIGJ1dCByZWFsbHkgdGVzdHMgc2hvdWxkIG5vdCBoYW5nLiBTbyB3
+ZSBoYXZlIHRvIHNvbWVob3cNCj4gaW5kaWNhdGUgdGhhdCB0aGUgdGVzdCBuZWVkcyB0byBiZSBm
+aXhlZC4NCg0KV2VsbCwgYSB0ZXN0IGhhbmdpbmcgaXMgc29tZXRoaW5nIHRoYXQgbWlnaHQgaW5k
+aWNhdGUgZWl0aGVyIGEgZmFpbGluZyANCmluIHRoZSB0ZXN0LCBvciB0aGUgZGV0ZWN0aW9uIG9m
+IGFuIGFjdHVhbCBwcm9ibGVtLg0KDQo+IA0KPiBUaGlzIHRpbWVvdXQgaXMgYSBiYW5kLWFpZCBh
+bmQgbm90IHJlYWwgc29sdXRpb24gZm9yIHRoZSBwcm9ibGVtLiBUaGlzDQo+IGFyYml0cmFyeSB2
+YWx1ZSBkb2Vzbid0IHRha2UgaW50byBhY2NvdW50IHRoYXQgdGhlIHRlc3QocykgaW4gdGhhdA0K
+PiBwYXJ0aWN1bGFyIGRpcmVjdG9yeSAoVEFSR0VUKSBjb3VsZCBiZSBydW5uaW5nIG5vcm1hbGx5
+IGFuZCB3b3JraW5nDQo+IHRocm91Z2ggYWxsIHRoZSB0ZXN0cy4NClllcy4gIEFsc28sIGhhdmlu
+ZyBhIHNpbmdsZSB0aW1lb3V0IHZhbHVlIGRvZXNuJ3QgcmVmbGVjdCB0aGUgbmVlZA0KdG8gdGVz
+dCBvbiBkaWZmZXJlbnQgaGFyZHdhcmUgd2l0aCBwb3RlbnRpYWxseSBodWdlIGRpZmZlcmVuY2Vz
+IGluDQpDUFUgc3BlZWQgKG9yIG90aGVyIHJlc291cmNlIHBlcmZvcm1hbmNlIGRpZmZlcmVuY2Vz
+KS4NCg0KU2luY2Uga3NlbGZ0ZXN0IGhhcyBhIHBvbGljeSBvZiBoYXZpbmcgZWFjaCB0ZXN0IHJ1
+biBxdWlja2x5LCB0aGlzIGlzIHNvbWV3aGF0DQptaXRpZ2F0ZWQuICBCdXQgc3RpbGwsIHNvbWUg
+ZW1iZWRkZWQgYm9hcmRzIGFyZSBydW5uaW5nIG1hZ25pdHVkZXMNCnNsb3dlciB0aGFuIHlvdXIg
+ImF2ZXJhZ2UiIGVudGVycHJpc2UgTGludXggbWFjaGluZS4gIEZpbmRpbmcgYSB0aW1lb3V0DQp0
+aGF0IGNhbiBoYW5kbGUgYWxsIGhhcmR3YXJlIGNhc2VzIGlzIGRpZmZpY3VsdC4NCiAtLSBUaW0N
+Cg0KPiANCj4gV2UgbmVlZCBzb21lIHdheSB0byBkaWZmZXJlbnRpYXRlIHRoZSB0d28gY2FzZXMu
+DQpBZ3JlZWQuDQo+IA0KPiA+PiBUbyBtYWtlIHRoaXMgY29uZmlndXJhYmxlIChlLmcuIGFzIG5l
+ZWRlZCBpbiB0aGUgInJ0YyIgdGVzdCBjYXNlKSwNCj4gPj4gaW5jbHVkZSBhIG5ldyBwZXItdGVz
+dC1kaXJlY3RvcnkgInNldHRpbmdzIiBmaWxlIChzaW1pbGFyIHRvICJjb25maWciKQ0KPiA+PiB0
+aGF0IGNhbiBjb250YWluIGtzZWxmdGVzdC1zcGVjaWZpYyBzZXR0aW5ncy4gVGhlIGZpcnN0IHJl
+Y29nbml6ZWQgZmllbGQNCj4gPj4gaXMgInRpbWVvdXQiLg0KPiA+Pg0KPiA+DQo+ID4gU2VlbXMg
+Z29vZCB0byBtZS4gSSB3YXMgYWxzbyB3b25kZXJpbmcgd2hldGhlciB0aGlzIGlzIGFjdHVhbGx5
+DQo+ID4gcmVhc29uYWJsZSB0byBoYXZlIHRlc3RzIHJ1bm5pbmcgZm9yIHNvIGxvbmcuIEkgd2Fu
+dGVkIHRvIGRpc2N1c3MgdGhhdA0KPiA+IGF0IExQQyBidXQgSSBtaXNzZWQgdGhlIHNlc3Npb24u
+DQo+ID4NCj4gDQo+IFRoZXJlIGlzIHRoZSBpbmRpdmlkdWFsIHRlc3QgdGltZXMgYW5kIG92ZXJh
+bGwga3NlbGZ0ZXN0IHJ1biB0aW1lLiBXZQ0KPiBoYXZlIGxvdHMgb2YgdGVzdHMgbm93IGFuZCBp
+dCBkb2VzIHRha2UgbG9uZy4NCj4gDQo+ID4+IEFkZGl0aW9uYWxseSwgdGhpcyBzcGxpdHMgdGhl
+IHJlcG9ydGluZyBmb3IgdGltZW91dHMgaW50byBhIHNwZWNpZmljDQo+ID4+ICJUSU1FT1VUIiBu
+b3Qtb2sgKGFuZCBhZGRzIGV4aXQgY29kZSByZXBvcnRpbmcgaW4gdGhlIHJlbWFpbmluZyBjYXNl
+KS4NCj4gPj4NCj4gPj4gU2lnbmVkLW9mZi1ieTogS2VlcyBDb29rIDxrZWVzY29va0BjaHJvbWl1
+bS5vcmc+DQo+ID4+IC0tLQ0KPiA+PiAgIHRvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL2tzZWxmdGVz
+dC9ydW5uZXIuc2ggfCAzNg0KPiArKysrKysrKysrKysrKysrKysrLS0NCj4gPj4gICB0b29scy90
+ZXN0aW5nL3NlbGZ0ZXN0cy9ydGMvc2V0dGluZ3MgICAgICAgIHwgIDEgKw0KPiA+PiAgIDIgZmls
+ZXMgY2hhbmdlZCwgMzQgaW5zZXJ0aW9ucygrKSwgMyBkZWxldGlvbnMoLSkNCj4gPj4gICBjcmVh
+dGUgbW9kZSAxMDA2NDQgdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMvcnRjL3NldHRpbmdzDQo+ID4+
+DQo+ID4+IGRpZmYgLS1naXQgYS90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9rc2VsZnRlc3QvcnVu
+bmVyLnNoDQo+IGIvdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMva3NlbGZ0ZXN0L3J1bm5lci5zaA0K
+PiA+PiBpbmRleCAwMGM5MDIwYmRkYTguLjg0ZGU3YmM3NGYyYyAxMDA2NDQNCj4gPj4gLS0tIGEv
+dG9vbHMvdGVzdGluZy9zZWxmdGVzdHMva3NlbGZ0ZXN0L3J1bm5lci5zaA0KPiA+PiArKysgYi90
+b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9rc2VsZnRlc3QvcnVubmVyLnNoDQo+ID4+IEBAIC0zLDkg
+KzMsMTQgQEANCj4gPj4gICAjDQo+ID4+ICAgIyBSdW5zIGEgc2V0IG9mIHRlc3RzIGluIGEgZ2l2
+ZW4gc3ViZGlyZWN0b3J5Lg0KPiA+PiAgIGV4cG9ydCBza2lwX3JjPTQNCj4gPj4gK2V4cG9ydCB0
+aW1lb3V0X3JjPTEyNA0KPiA+PiAgIGV4cG9ydCBsb2dmaWxlPS9kZXYvc3Rkb3V0DQo+ID4+ICAg
+ZXhwb3J0IHBlcl90ZXN0X2xvZ2dpbmc9DQo+ID4+DQo+ID4+ICsjIERlZmF1bHRzIGZvciAic2V0
+dGluZ3MiIGZpbGUgZmllbGRzOg0KPiA+PiArIyAidGltZW91dCIgaG93IG1hbnkgc2Vjb25kcyB0
+byBsZXQgZWFjaCB0ZXN0IHJ1biBiZWZvcmUgZmFpbGluZy4NCj4gPj4gK2V4cG9ydCBrc2VsZnRl
+c3RfZGVmYXVsdF90aW1lb3V0PTQ1DQo+ID4+ICsNCj4gPj4gICAjIFRoZXJlIGlzbid0IGEgc2hl
+bGwtYWdub3N0aWMgd2F5IHRvIGZpbmQgdGhlIHBhdGggb2YgYSBzb3VyY2VkIGZpbGUsDQo+ID4+
+ICAgIyBzbyB3ZSBtdXN0IHJlbHkgb24gQkFTRV9ESVIgYmVpbmcgc2V0IHRvIGZpbmQgb3RoZXIg
+dG9vbHMuDQo+ID4+ICAgaWYgWyAteiAiJEJBU0VfRElSIiBdOyB0aGVuDQo+ID4+IEBAIC0yNCw2
+ICsyOSwxNiBAQCB0YXBfcHJlZml4KCkNCj4gPj4gICAJZmkNCj4gPj4gICB9DQo+ID4+DQo+ID4+
+ICt0YXBfdGltZW91dCgpDQo+ID4+ICt7DQo+ID4+ICsJIyBNYWtlIHN1cmUgdGVzdHMgd2lsbCB0
+aW1lIG91dCBpZiB1dGlsaXR5IGlzIGF2YWlsYWJsZS4NCj4gPj4gKwlpZiBbIC14IC91c3IvYmlu
+L3RpbWVvdXQgXSA7IHRoZW4NCj4gPj4gKwkJL3Vzci9iaW4vdGltZW91dCAiJGtzZWxmdGVzdF90
+aW1lb3V0IiAiJDEiDQo+ID4+ICsJZWxzZQ0KPiA+PiArCQkiJDEiDQo+ID4+ICsJZmkNCj4gPj4g
+K30NCj4gPj4gKw0KPiA+PiAgIHJ1bl9vbmUoKQ0KPiA+PiAgIHsNCj4gPj4gICAJRElSPSIkMSIN
+Cj4gPj4gQEAgLTMyLDYgKzQ3LDE4IEBAIHJ1bl9vbmUoKQ0KPiA+Pg0KPiA+PiAgIAlCQVNFTkFN
+RV9URVNUPSQoYmFzZW5hbWUgJFRFU1QpDQo+ID4+DQo+ID4+ICsJIyBSZXNldCBhbnkgInNldHRp
+bmdzIi1maWxlIHZhcmlhYmxlcy4NCj4gPj4gKwlleHBvcnQga3NlbGZ0ZXN0X3RpbWVvdXQ9IiRr
+c2VsZnRlc3RfZGVmYXVsdF90aW1lb3V0Ig0KPiA+PiArCSMgTG9hZCBwZXItdGVzdC1kaXJlY3Rv
+cnkga3NlbGZ0ZXN0ICJzZXR0aW5ncyIgZmlsZS4NCj4gPj4gKwlzZXR0aW5ncz0iJEJBU0VfRElS
+LyRESVIvc2V0dGluZ3MiDQo+ID4+ICsJaWYgWyAtciAiJHNldHRpbmdzIiBdIDsgdGhlbg0KPiA+
+PiArCQl3aGlsZSByZWFkIGxpbmUgOyBkbw0KPiA+PiArCQkJZmllbGQ9JChlY2hvICIkbGluZSIg
+fCBjdXQgLWQ9IC1mMSkNCj4gPj4gKwkJCXZhbHVlPSQoZWNobyAiJGxpbmUiIHwgY3V0IC1kPSAt
+ZjItKQ0KPiA+PiArCQkJZXZhbCAia3NlbGZ0ZXN0XyRmaWVsZCI9IiR2YWx1ZSINCj4gPj4gKwkJ
+ZG9uZSA8ICIkc2V0dGluZ3MiDQo+ID4+ICsJZmkNCj4gPj4gKw0KPiA+PiAgIAlURVNUX0hEUl9N
+U0c9InNlbGZ0ZXN0czogJERJUjogJEJBU0VOQU1FX1RFU1QiDQo+ID4+ICAgCWVjaG8gIiMgJFRF
+U1RfSERSX01TRyINCj4gPj4gICAJaWYgWyAhIC14ICIkVEVTVCIgXTsgdGhlbg0KPiA+PiBAQCAt
+NDQsMTQgKzcxLDE3IEBAIHJ1bl9vbmUoKQ0KPiA+PiAgIAkJZWNobyAibm90IG9rICR0ZXN0X251
+bSAkVEVTVF9IRFJfTVNHIg0KPiA+PiAgIAllbHNlDQo+ID4+ICAgCQljZCBgZGlybmFtZSAkVEVT
+VGAgPiAvZGV2L251bGwNCj4gPj4gLQkJKCgoKCguLyRCQVNFTkFNRV9URVNUIDI+JjE7IGVjaG8g
+JD8gPiYzKSB8DQo+ID4+ICsJCSgoKCgoIHRhcF90aW1lb3V0IC4vJEJBU0VOQU1FX1RFU1QgMj4m
+MTsgZWNobyAkPyA+JjMpIHwNCj4gPj4gICAJCQl0YXBfcHJlZml4ID4mNCkgMz4mMSkgfA0KPiA+
+PiAgIAkJCShyZWFkIHhzOyBleGl0ICR4cykpIDQ+PiIkbG9nZmlsZSIgJiYNCj4gPj4gICAJCWVj
+aG8gIm9rICR0ZXN0X251bSAkVEVTVF9IRFJfTVNHIikgfHwNCj4gPj4gLQkJKGlmIFsgJD8gLWVx
+ICRza2lwX3JjIF07IHRoZW4JXA0KPiA+PiArCQkocmM9JD87CVwNCj4gPj4gKwkJaWYgWyAkcmMg
+LWVxICRza2lwX3JjIF07IHRoZW4JXA0KPiA+PiAgIAkJCWVjaG8gIm5vdCBvayAkdGVzdF9udW0g
+JFRFU1RfSERSX01TRyAjIFNLSVAiDQo+ID4+ICsJCWVsaWYgWyAkcmMgLWVxICR0aW1lb3V0X3Jj
+IF07IHRoZW4gXA0KPiA+PiArCQkJZWNobyAibm90IG9rICR0ZXN0X251bSAkVEVTVF9IRFJfTVNH
+ICMNCj4gVElNRU9VVCINCj4gPj4gICAJCWVsc2UNCj4gPj4gLQkJCWVjaG8gIm5vdCBvayAkdGVz
+dF9udW0gJFRFU1RfSERSX01TRyINCj4gPj4gKwkJCWVjaG8gIm5vdCBvayAkdGVzdF9udW0gJFRF
+U1RfSERSX01TRyAjDQo+IGV4aXQ9JHJjIg0KPiA+PiAgIAkJZmkpDQo+ID4+ICAgCQljZCAtID4v
+ZGV2L251bGwNCj4gPj4gICAJZmkNCj4gPj4gZGlmZiAtLWdpdCBhL3Rvb2xzL3Rlc3Rpbmcvc2Vs
+ZnRlc3RzL3J0Yy9zZXR0aW5ncw0KPiBiL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL3J0Yy9zZXR0
+aW5ncw0KPiA+PiBuZXcgZmlsZSBtb2RlIDEwMDY0NA0KPiA+PiBpbmRleCAwMDAwMDAwMDAwMDAu
+LmJhNGQ4NWY3NGNkNg0KPiA+PiAtLS0gL2Rldi9udWxsDQo+ID4+ICsrKyBiL3Rvb2xzL3Rlc3Rp
+bmcvc2VsZnRlc3RzL3J0Yy9zZXR0aW5ncw0KPiA+PiBAQCAtMCwwICsxIEBADQo+ID4+ICt0aW1l
+b3V0PTkwDQo+ID4+IC0tDQo+ID4+IDIuMTcuMQ0KPiA+Pg0KPiA+Pg0KPiA+PiAtLQ0KPiA+PiBL
+ZWVzIENvb2sNCj4gPg0KPiANCj4gdGhhbmtzLA0KPiAtLSBTaHVhaA0K
