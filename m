@@ -2,105 +2,74 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7ADF8B77A1
-	for <lists+linux-kselftest@lfdr.de>; Thu, 19 Sep 2019 12:42:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83080B7D0A
+	for <lists+linux-kselftest@lfdr.de>; Thu, 19 Sep 2019 16:39:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388133AbfISKmy (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 19 Sep 2019 06:42:54 -0400
-Received: from vmicros1.altlinux.org ([194.107.17.57]:43728 "EHLO
-        vmicros1.altlinux.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387520AbfISKmy (ORCPT
+        id S1732640AbfISOjd (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 19 Sep 2019 10:39:33 -0400
+Received: from mail-lj1-f196.google.com ([209.85.208.196]:44782 "EHLO
+        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732579AbfISOjd (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 19 Sep 2019 06:42:54 -0400
-Received: from mua.local.altlinux.org (mua.local.altlinux.org [192.168.1.14])
-        by vmicros1.altlinux.org (Postfix) with ESMTP id DA8F072CCAE;
-        Thu, 19 Sep 2019 13:42:51 +0300 (MSK)
-Received: by mua.local.altlinux.org (Postfix, from userid 508)
-        id CC39F7CCB47; Thu, 19 Sep 2019 13:42:51 +0300 (MSK)
-Date:   Thu, 19 Sep 2019 13:42:51 +0300
-From:   "Dmitry V. Levin" <ldv@altlinux.org>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Tyler Hicks <tyhicks@canonical.com>,
-        Christian Brauner <christian.brauner@ubuntu.com>,
-        luto@amacapital.net, jannh@google.com, wad@chromium.org,
-        shuah@kernel.org, ast@kernel.org, daniel@iogearbox.net,
-        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        Tycho Andersen <tycho@tycho.ws>, stable@vger.kernel.org
-Subject: Re: [PATCH 2/4] seccomp: add two missing ptrace ifdefines
-Message-ID: <20190919104251.GA16834@altlinux.org>
-References: <20190918084833.9369-1-christian.brauner@ubuntu.com>
- <20190918084833.9369-3-christian.brauner@ubuntu.com>
- <20190918091512.GA5088@elm>
- <201909181031.1EE73B4@keescook>
+        Thu, 19 Sep 2019 10:39:33 -0400
+Received: by mail-lj1-f196.google.com with SMTP id m13so3812786ljj.11;
+        Thu, 19 Sep 2019 07:39:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=qb8wSvIQ4nC55X54/RWJ18Vfsst4KOF/u6y+XHfA/dI=;
+        b=oYT2MlDgxVIBlh+OLSBJ4m3Lop7TBaO3jQ+SyVAeuhXATMFGGnLzt1qBS9IdSS+3ob
+         gNWOpdwD8ta3IWlNJb4ifMzbpQaujil4oegSphzZ2DolV4EnWfTrg7NzlEgtLbxg+m/M
+         g2OQnxKIYIBZKF5kxExB+XU40HQuHGKipV6jDf54mS2CxJR2AFiMzcU/q2EWtE+eVZeU
+         4bdX4B92kmC6N22zC2SLxG9Mq2PJyPaoQ7LyIBBH0Rq/wNT1CKGJJc9bPrwFOp6hEfzi
+         3u0MEKuiDixNq8pbYVNYb9/B4rstFm3mnC+WC0Z9D9Oj/Amv6GPRzlgbLEvwDxx+ff+N
+         GebA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=qb8wSvIQ4nC55X54/RWJ18Vfsst4KOF/u6y+XHfA/dI=;
+        b=Fo+JPDh/kpkwiI0hnetC502NAN8y7E3cNi2MadGrETKoTmzXIB/EdBHpCiFKaUmDZH
+         iOKEWQcrcMbNwPh3R/HaeFwSxoAEwxKiAA0pa2DHrsmiuUCqWCHuXcXXdzap9O12kvBm
+         MBD00VSpaQQ8maTvxyW3TeyBo+x7EDflFmAaEFxvhxYBBh6Qa9+BgeMPRnllTKX5GBRz
+         UJb4wV5c3QjBcjcFJNBua3SsPMFv78CGa2YuwIlO4+q++M2hHMckSXOW03nBQNw3YPZu
+         yK5qebf7OSC0u3E8kXJJJfT2GH/TAbpjqQAEnaUwBlQtVXu1ky7+t/f0JqLis4oje6Lw
+         1B0w==
+X-Gm-Message-State: APjAAAUytwmg2LmzX1fGEA8IX5HTSU8RlXiPrZ8IAroBfrKH/h9o7nGX
+        zDzyosVXRtiLTvsixADu86FPKELYhWKlhPDhphU=
+X-Google-Smtp-Source: APXvYqwBIPpOQ0YhBy4YmO/A1wzqqtCBNaYvPSrmcyJfMpmmAi6MvcQQzq9pi2y/PMo4xLxzcvzRscJo0f01qTA+Tx0=
+X-Received: by 2002:a2e:9708:: with SMTP id r8mr5592899lji.58.1568903970830;
+ Thu, 19 Sep 2019 07:39:30 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <201909181031.1EE73B4@keescook>
+References: <20190919082902.GA15755@yogzotot>
+In-Reply-To: <20190919082902.GA15755@yogzotot>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Thu, 19 Sep 2019 07:39:19 -0700
+Message-ID: <CAADnVQK6FjwivxDsmoskH_Zwr+Q730+H9u_5hBBdyzzDP1vyRg@mail.gmail.com>
+Subject: Re: [PATCH] selftests: update .gitignore files for selftests/bpf and selftests/zram
+To:     Anatoly Pugachev <matorola@gmail.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        bpf <bpf@vger.kernel.org>
+Cc:     "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, Shuah Khan <shuah@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Sep 18, 2019 at 10:33:09AM -0700, Kees Cook wrote:
-> On Wed, Sep 18, 2019 at 11:15:12AM +0200, Tyler Hicks wrote:
-> > On 2019-09-18 10:48:31, Christian Brauner wrote:
-> > > Add tw missing ptrace ifdefines to avoid compilation errors on systems
-> > > that do not provide PTRACE_EVENTMSG_SYSCALL_ENTRY or
-> > > PTRACE_EVENTMSG_SYSCALL_EXIT or:
-> > > 
-> > > gcc -Wl,-no-as-needed -Wall  seccomp_bpf.c -lpthread -o seccomp_bpf
-> > > In file included from seccomp_bpf.c:52:0:
-> > > seccomp_bpf.c: In function ‘tracer_ptrace’:
-> > > seccomp_bpf.c:1792:20: error: ‘PTRACE_EVENTMSG_SYSCALL_ENTRY’ undeclared (first use in this function); did you mean ‘PTRACE_EVENT_CLONE’?
-> > >   EXPECT_EQ(entry ? PTRACE_EVENTMSG_SYSCALL_ENTRY
-> > >                     ^
-> > > ../kselftest_harness.h:608:13: note: in definition of macro ‘__EXPECT’
-> > >   __typeof__(_expected) __exp = (_expected); \
-> > >              ^~~~~~~~~
-> > > seccomp_bpf.c:1792:2: note: in expansion of macro ‘EXPECT_EQ’
-> > >   EXPECT_EQ(entry ? PTRACE_EVENTMSG_SYSCALL_ENTRY
-> > >   ^~~~~~~~~
-> > > seccomp_bpf.c:1792:20: note: each undeclared identifier is reported only once for each function it appears in
-> > >   EXPECT_EQ(entry ? PTRACE_EVENTMSG_SYSCALL_ENTRY
-> > >                     ^
-> > > ../kselftest_harness.h:608:13: note: in definition of macro ‘__EXPECT’
-> > >   __typeof__(_expected) __exp = (_expected); \
-> > >              ^~~~~~~~~
-> > > seccomp_bpf.c:1792:2: note: in expansion of macro ‘EXPECT_EQ’
-> > >   EXPECT_EQ(entry ? PTRACE_EVENTMSG_SYSCALL_ENTRY
-> > >   ^~~~~~~~~
-> > > seccomp_bpf.c:1793:6: error: ‘PTRACE_EVENTMSG_SYSCALL_EXIT’ undeclared (first use in this function); did you mean ‘PTRACE_EVENTMSG_SYSCALL_ENTRY’?
-> > >     : PTRACE_EVENTMSG_SYSCALL_EXIT, msg);
-> > >       ^
-> > > ../kselftest_harness.h:608:13: note: in definition of macro ‘__EXPECT’
-> > >   __typeof__(_expected) __exp = (_expected); \
-> > >              ^~~~~~~~~
-> > > seccomp_bpf.c:1792:2: note: in expansion of macro ‘EXPECT_EQ’
-> > >   EXPECT_EQ(entry ? PTRACE_EVENTMSG_SYSCALL_ENTRY
-> > >   ^~~~~~~~~
-> > > 
-> > > Fixes: 6a21cc50f0c7 ("seccomp: add a return code to trap to userspace")
-> > 
-> > I think this Fixes line is incorrect and should be changed to:
-> > 
-> > Fixes: 201766a20e30 ("ptrace: add PTRACE_GET_SYSCALL_INFO request")
-> > 
-> > With that changed,
-> > 
-> > Reviewed-by: Tyler Hicks <tyhicks@canonical.com>
-> 
-> This is actually fixed in -next already (and, yes, with the Fixes line
-> Tyler has mentioned):
-> 
-> https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git/commit/?h=next&id=69b2d3c5924273a0ae968d3818210fc57a1b9d07
+On Thu, Sep 19, 2019 at 1:35 AM Anatoly Pugachev <matorola@gmail.com> wrote:
+>
+> selftests: update .gitignore files for selftests/bpf and selftests/zram
+>
+> Signed-off-by: Anatoly Pugachev <matorola@gmail.com>
+> ---
+>  tools/testing/selftests/bpf/.gitignore  | 4 ++++
+>  tools/testing/selftests/zram/.gitignore | 1 +
+>  2 files changed, 5 insertions(+)
+>  create mode 100644 tools/testing/selftests/zram/.gitignore
 
-Excuse me, does it mean that you expect each selftest to be self-hosted?
-I was (and still is) under impression that selftests should be built
-with headers installed from the tree. Is it the case, or is it not?
-
-
--- 
-ldv
+could you please split this patch into selftests/bpf/ and the rest?
+we'll take bpf bits via bpf tree.
