@@ -2,148 +2,73 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E861B7381
-	for <lists+linux-kselftest@lfdr.de>; Thu, 19 Sep 2019 08:54:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A614B7533
+	for <lists+linux-kselftest@lfdr.de>; Thu, 19 Sep 2019 10:35:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731564AbfISGx7 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 19 Sep 2019 02:53:59 -0400
-Received: from youngberry.canonical.com ([91.189.89.112]:49724 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725320AbfISGx6 (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 19 Sep 2019 02:53:58 -0400
-Received: from static-dcd-cqq-121001.business.bouyguestelecom.com ([212.194.121.1] helo=wittgenstein)
-        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.86_2)
-        (envelope-from <christian.brauner@ubuntu.com>)
-        id 1iAqK7-0004uy-7E; Thu, 19 Sep 2019 06:53:51 +0000
-Date:   Thu, 19 Sep 2019 08:53:50 +0200
-From:   Christian Brauner <christian.brauner@ubuntu.com>
-To:     Tycho Andersen <tycho@tycho.ws>
-Cc:     Kees Cook <keescook@chromium.org>, luto@amacapital.net,
-        jannh@google.com, wad@chromium.org, shuah@kernel.org,
-        ast@kernel.org, daniel@iogearbox.net, kafai@fb.com,
-        songliubraving@fb.com, yhs@fb.com, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, Tyler Hicks <tyhicks@canonical.com>
-Subject: Re: [PATCH 1/4] seccomp: add SECCOMP_RET_USER_NOTIF_ALLOW
-Message-ID: <20190919065349.niedwegw6lczu2zr@wittgenstein>
-References: <20190918084833.9369-1-christian.brauner@ubuntu.com>
- <20190918084833.9369-2-christian.brauner@ubuntu.com>
- <201909181018.E3CEC9A81@keescook>
- <20190918180712.GG3835@cisco>
+        id S2387759AbfISIf5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 19 Sep 2019 04:35:57 -0400
+Received: from u164.east.ru ([195.170.63.164]:58268 "EHLO mx.lavteam.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2387617AbfISIf5 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 19 Sep 2019 04:35:57 -0400
+X-Greylist: delayed 411 seconds by postgrey-1.27 at vger.kernel.org; Thu, 19 Sep 2019 04:35:56 EDT
+Received: from yogzotot (yogzotot [192.168.111.254])
+        by mx.lavteam.org (Postfix) with ESMTPS id 509EA2E69;
+        Thu, 19 Sep 2019 11:29:03 +0300 (MSK)
+Date:   Thu, 19 Sep 2019 11:29:02 +0300
+From:   Anatoly Pugachev <matorola@gmail.com>
+To:     linux-kselftest@vger.kernel.org
+Cc:     Shuah Khan <shuah@kernel.org>, Alexei Starovoitov <ast@kernel.org>
+Subject: [PATCH] selftests: update .gitignore files for selftests/bpf and
+ selftests/zram
+Message-ID: <20190919082902.GA15755@yogzotot>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190918180712.GG3835@cisco>
-User-Agent: NeoMutt/20180716
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Sep 18, 2019 at 12:07:12PM -0600, Tycho Andersen wrote:
-> On Wed, Sep 18, 2019 at 10:30:00AM -0700, Kees Cook wrote:
-> > On Wed, Sep 18, 2019 at 10:48:30AM +0200, Christian Brauner wrote:
-> > > This allows the seccomp notifier to continue a syscall. A positive
-> > > discussion about this feature was triggered by a post to the
-> > > ksummit-discuss mailing list (cf. [3]) and took place during KSummit
-> > > (cf. [1]) and again at the containers/checkpoint-restore
-> > > micro-conference at Linux Plumbers.
-> > > 
-> > > Recently we landed seccomp support for SECCOMP_RET_USER_NOTIF (cf. [4])
-> > > which enables a process (watchee) to retrieve an fd for its seccomp
-> > > filter. This fd can then be handed to another (usually more privileged)
-> > > process (watcher). The watcher will then be able to receive seccomp
-> > > messages about the syscalls having been performed by the watchee.
-> > > 
-> > > This feature is heavily used in some userspace workloads. For example,
-> > > it is currently used to intercept mknod() syscalls in user namespaces
-> > > aka in containers.
-> > > The mknod() syscall can be easily filtered based on dev_t. This allows
-> > > us to only intercept a very specific subset of mknod() syscalls.
-> > > Furthermore, mknod() is not possible in user namespaces toto coelo and
-> > > so intercepting and denying syscalls that are not in the whitelist on
-> > > accident is not a big deal. The watchee won't notice a difference.
-> > > 
-> > > In contrast to mknod(), a lot of other syscall we intercept (e.g.
-> > > setxattr()) cannot be easily filtered like mknod() because they have
-> > > pointer arguments. Additionally, some of them might actually succeed in
-> > > user namespaces (e.g. setxattr() for all "user.*" xattrs). Since we
-> > > currently cannot tell seccomp to continue from a user notifier we are
-> > > stuck with performing all of the syscalls in lieu of the container. This
-> > > is a huge security liability since it is extremely difficult to
-> > > correctly assume all of the necessary privileges of the calling task
-> > > such that the syscall can be successfully emulated without escaping
-> > > other additional security restrictions (think missing CAP_MKNOD for
-> > > mknod(), or MS_NODEV on a filesystem etc.). This can be solved by
-> > > telling seccomp to resume the syscall.
-> > > 
-> > > One thing that came up in the discussion was the problem that another
-> > > thread could change the memory after userspace has decided to let the
-> > > syscall continue which is a well known TOCTOU with seccomp which is
-> > > present in other ways already.
-> > > The discussion showed that this feature is already very useful for any
-> > > syscall without pointer arguments. For any accidentally intercepted
-> > > non-pointer syscall it is safe to continue.
-> > > For syscalls with pointer arguments there is a race but for any cautious
-> > > userspace and the main usec cases the race doesn't matter. The notifier
-> > > is intended to be used in a scenario where a more privileged watcher
-> > > supervises the syscalls of lesser privileged watchee to allow it to get
-> > > around kernel-enforced limitations by performing the syscall for it
-> > > whenever deemed save by the watcher. Hence, if a user tricks the watcher
-> > > into allowing a syscall they will either get a deny based on
-> > > kernel-enforced restrictions later or they will have changed the
-> > > arguments in such a way that they manage to perform a syscall with
-> > > arguments that they would've been allowed to do anyway.
-> > > In general, it is good to point out again, that the notifier fd was not
-> > > intended to allow userspace to implement a security policy but rather to
-> > > work around kernel security mechanisms in cases where the watcher knows
-> > > that a given action is safe to perform.
-> > > 
-> > > /* References */
-> > > [1]: https://linuxplumbersconf.org/event/4/contributions/560
-> > > [2]: https://linuxplumbersconf.org/event/4/contributions/477
-> > > [3]: https://lore.kernel.org/r/20190719093538.dhyopljyr5ns33qx@brauner.io
-> > > [4]: commit 6a21cc50f0c7 ("seccomp: add a return code to trap to userspace")
-> > > 
-> > > Signed-off-by: Christian Brauner <christian.brauner@ubuntu.com>
-> > > Cc: Kees Cook <keescook@chromium.org>
-> > > Cc: Andy Lutomirski <luto@amacapital.net>
-> > > Cc: Will Drewry <wad@chromium.org>
-> > > Cc: Tycho Andersen <tycho@tycho.ws>
-> > > CC: Tyler Hicks <tyhicks@canonical.com>
-> > > Cc: Jann Horn <jannh@google.com>
-> > > ---
-> > >  include/uapi/linux/seccomp.h |  2 ++
-> > >  kernel/seccomp.c             | 24 ++++++++++++++++++++----
-> > >  2 files changed, 22 insertions(+), 4 deletions(-)
-> > > 
-> > > diff --git a/include/uapi/linux/seccomp.h b/include/uapi/linux/seccomp.h
-> > > index 90734aa5aa36..2c23b9aa6383 100644
-> > > --- a/include/uapi/linux/seccomp.h
-> > > +++ b/include/uapi/linux/seccomp.h
-> > > @@ -76,6 +76,8 @@ struct seccomp_notif {
-> > >  	struct seccomp_data data;
-> > >  };
-> > >  
-> > > +#define SECCOMP_RET_USER_NOTIF_ALLOW 0x00000001
-> > 
-> > nit: I'd like to avoid confusion here about what "family" these flags
-> > belong to. "SECCOMP_RET_..." is used for the cBPF filter return action
-> > value, so let's instead call this:
-> > 
-> > #define SECCOMP_USER_NOTIF_CONTINUE	BIT(0)
-> 
-> +1, I was thinking maybe even SECCOMP_USER_NOTIF_FLAG_CONTINUE.
+selftests: update .gitignore files for selftests/bpf and selftests/zram
 
-I'll flip a coin between yours and Kees suggestion. :)
+Signed-off-by: Anatoly Pugachev <matorola@gmail.com>
+---
+ tools/testing/selftests/bpf/.gitignore  | 4 ++++
+ tools/testing/selftests/zram/.gitignore | 1 +
+ 2 files changed, 5 insertions(+)
+ create mode 100644 tools/testing/selftests/zram/.gitignore
 
-> 
-> But the whole series (minus the patch that already exists) looks good
-> to me if we make this change:
-> 
-> Reviewed-by: Tycho Andersen <tycho@tycho.ws>
+diff --git a/tools/testing/selftests/bpf/.gitignore b/tools/testing/selftests/bpf/.gitignore
+index 7470327edcfe..218ac37f460a 100644
+--- a/tools/testing/selftests/bpf/.gitignore
++++ b/tools/testing/selftests/bpf/.gitignore
+@@ -15,6 +15,9 @@ test_libbpf_open
+ test_sock
+ test_sock_addr
+ test_sock_fields
++test_sockopt
++test_sockopt_multi
++test_sockopt_sk
+ urandom_read
+ test_btf
+ test_sockmap
+@@ -32,6 +35,7 @@ test_section_names
+ test_tcpnotify_user
+ test_libbpf
+ test_tcp_check_syncookie_user
++test_tcp_rtt
+ test_sysctl
+ alu32
+ libbpf.pc
+diff --git a/tools/testing/selftests/zram/.gitignore b/tools/testing/selftests/zram/.gitignore
+new file mode 100644
+index 000000000000..b4a2cb6fafa6
+--- /dev/null
++++ b/tools/testing/selftests/zram/.gitignore
+@@ -0,0 +1 @@
++err.log
+-- 
+2.23.0
 
-Thanks for the review! :)
-Christian
