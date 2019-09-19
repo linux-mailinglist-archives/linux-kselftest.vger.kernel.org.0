@@ -2,74 +2,96 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 83080B7D0A
-	for <lists+linux-kselftest@lfdr.de>; Thu, 19 Sep 2019 16:39:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1E96B7F74
+	for <lists+linux-kselftest@lfdr.de>; Thu, 19 Sep 2019 18:55:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732640AbfISOjd (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 19 Sep 2019 10:39:33 -0400
-Received: from mail-lj1-f196.google.com ([209.85.208.196]:44782 "EHLO
-        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732579AbfISOjd (ORCPT
+        id S2391247AbfISQze (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 19 Sep 2019 12:55:34 -0400
+Received: from mail-pf1-f195.google.com ([209.85.210.195]:40563 "EHLO
+        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2390990AbfISQze (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 19 Sep 2019 10:39:33 -0400
-Received: by mail-lj1-f196.google.com with SMTP id m13so3812786ljj.11;
-        Thu, 19 Sep 2019 07:39:31 -0700 (PDT)
+        Thu, 19 Sep 2019 12:55:34 -0400
+Received: by mail-pf1-f195.google.com with SMTP id x127so2689313pfb.7
+        for <linux-kselftest@vger.kernel.org>; Thu, 19 Sep 2019 09:55:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=qb8wSvIQ4nC55X54/RWJ18Vfsst4KOF/u6y+XHfA/dI=;
-        b=oYT2MlDgxVIBlh+OLSBJ4m3Lop7TBaO3jQ+SyVAeuhXATMFGGnLzt1qBS9IdSS+3ob
-         gNWOpdwD8ta3IWlNJb4ifMzbpQaujil4oegSphzZ2DolV4EnWfTrg7NzlEgtLbxg+m/M
-         g2OQnxKIYIBZKF5kxExB+XU40HQuHGKipV6jDf54mS2CxJR2AFiMzcU/q2EWtE+eVZeU
-         4bdX4B92kmC6N22zC2SLxG9Mq2PJyPaoQ7LyIBBH0Rq/wNT1CKGJJc9bPrwFOp6hEfzi
-         3u0MEKuiDixNq8pbYVNYb9/B4rstFm3mnC+WC0Z9D9Oj/Amv6GPRzlgbLEvwDxx+ff+N
-         GebA==
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=vKHGVC2TBv+sLI5Edyli1ZnZuQJKo2XmgdaDIhIwBKQ=;
+        b=Q6ZXGNHId7DBF16qRzWjOVrjjWMIk9gF2BlQ3nAW2OPUcTUkCsnk6/NyiCDdTnkbuQ
+         MVylF1TZ86CAYhVM34nj3IVmzadWHImCp8eXVyaId7+4LfT61yxP+g6jb+kP20WEATgS
+         oznxdzTHAqD9/Lokv9dqcPOfn4HLHjcWB3CW4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=qb8wSvIQ4nC55X54/RWJ18Vfsst4KOF/u6y+XHfA/dI=;
-        b=Fo+JPDh/kpkwiI0hnetC502NAN8y7E3cNi2MadGrETKoTmzXIB/EdBHpCiFKaUmDZH
-         iOKEWQcrcMbNwPh3R/HaeFwSxoAEwxKiAA0pa2DHrsmiuUCqWCHuXcXXdzap9O12kvBm
-         MBD00VSpaQQ8maTvxyW3TeyBo+x7EDflFmAaEFxvhxYBBh6Qa9+BgeMPRnllTKX5GBRz
-         UJb4wV5c3QjBcjcFJNBua3SsPMFv78CGa2YuwIlO4+q++M2hHMckSXOW03nBQNw3YPZu
-         yK5qebf7OSC0u3E8kXJJJfT2GH/TAbpjqQAEnaUwBlQtVXu1ky7+t/f0JqLis4oje6Lw
-         1B0w==
-X-Gm-Message-State: APjAAAUytwmg2LmzX1fGEA8IX5HTSU8RlXiPrZ8IAroBfrKH/h9o7nGX
-        zDzyosVXRtiLTvsixADu86FPKELYhWKlhPDhphU=
-X-Google-Smtp-Source: APXvYqwBIPpOQ0YhBy4YmO/A1wzqqtCBNaYvPSrmcyJfMpmmAi6MvcQQzq9pi2y/PMo4xLxzcvzRscJo0f01qTA+Tx0=
-X-Received: by 2002:a2e:9708:: with SMTP id r8mr5592899lji.58.1568903970830;
- Thu, 19 Sep 2019 07:39:30 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=vKHGVC2TBv+sLI5Edyli1ZnZuQJKo2XmgdaDIhIwBKQ=;
+        b=PGjLYW8TPuoO9PH9h10ItwQC0mAanjWTGHegFe6jBwD3kX7eN7yB+BZ0hGN9rhOU/O
+         aui0OwhgNZ/Ex0bEcuOHpb6oqenwP5VOfGWmCpHgedZ5v+8qaeKyZ+ON62VgSdF52kKF
+         nHZweOB1bKzO3gOoOxYjh4XCkME0mBG8OqyA8XGKpzlyQW/ITbLKkCoXgb2NtJvdldg/
+         bEuSsgbxRaPrcHGWMzcGB0sgNOeBRS20u05EPFX35GaVWjZ9JxAhomD/6SCe1Ku7Fw7I
+         CcAhCnl7TYIczrEZyZ0lGBYLJxrkeYaRHuctvTU9GT+C7EUGatZ1KTqefQTnuFg3DByX
+         inHQ==
+X-Gm-Message-State: APjAAAVyxUDrrwwOgUiuW2nz0PoS1B9p0/eAkaN5WWulhQCoTQwEuNnQ
+        VDoLUHC8mKQCOv22pyhaaiVvMQ==
+X-Google-Smtp-Source: APXvYqw6zEHZKGyziOXSgqUJbbCCYyEPYuCqQ3kwb1DJ6hxrcEF9h2MB7qPcwFj2W56qe0ZKdQnWWg==
+X-Received: by 2002:a17:90a:7347:: with SMTP id j7mr4863606pjs.88.1568912132371;
+        Thu, 19 Sep 2019 09:55:32 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id d5sm4872630pjw.31.2019.09.19.09.55.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 19 Sep 2019 09:55:31 -0700 (PDT)
+Date:   Thu, 19 Sep 2019 09:55:30 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     "Dmitry V. Levin" <ldv@altlinux.org>
+Cc:     Tyler Hicks <tyhicks@canonical.com>,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        luto@amacapital.net, jannh@google.com, wad@chromium.org,
+        shuah@kernel.org, ast@kernel.org, daniel@iogearbox.net,
+        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        Tycho Andersen <tycho@tycho.ws>, stable@vger.kernel.org
+Subject: Re: [PATCH 2/4] seccomp: add two missing ptrace ifdefines
+Message-ID: <201909190918.443D6BC7@keescook>
+References: <20190918084833.9369-1-christian.brauner@ubuntu.com>
+ <20190918084833.9369-3-christian.brauner@ubuntu.com>
+ <20190918091512.GA5088@elm>
+ <201909181031.1EE73B4@keescook>
+ <20190919104251.GA16834@altlinux.org>
 MIME-Version: 1.0
-References: <20190919082902.GA15755@yogzotot>
-In-Reply-To: <20190919082902.GA15755@yogzotot>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Thu, 19 Sep 2019 07:39:19 -0700
-Message-ID: <CAADnVQK6FjwivxDsmoskH_Zwr+Q730+H9u_5hBBdyzzDP1vyRg@mail.gmail.com>
-Subject: Re: [PATCH] selftests: update .gitignore files for selftests/bpf and selftests/zram
-To:     Anatoly Pugachev <matorola@gmail.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        bpf <bpf@vger.kernel.org>
-Cc:     "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>, Shuah Khan <shuah@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190919104251.GA16834@altlinux.org>
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Sep 19, 2019 at 1:35 AM Anatoly Pugachev <matorola@gmail.com> wrote:
->
-> selftests: update .gitignore files for selftests/bpf and selftests/zram
->
-> Signed-off-by: Anatoly Pugachev <matorola@gmail.com>
-> ---
->  tools/testing/selftests/bpf/.gitignore  | 4 ++++
->  tools/testing/selftests/zram/.gitignore | 1 +
->  2 files changed, 5 insertions(+)
->  create mode 100644 tools/testing/selftests/zram/.gitignore
+On Thu, Sep 19, 2019 at 01:42:51PM +0300, Dmitry V. Levin wrote:
+> On Wed, Sep 18, 2019 at 10:33:09AM -0700, Kees Cook wrote:
+> > This is actually fixed in -next already (and, yes, with the Fixes line
+> > Tyler has mentioned):
+> > 
+> > https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git/commit/?h=next&id=69b2d3c5924273a0ae968d3818210fc57a1b9d07
+> 
+> Excuse me, does it mean that you expect each selftest to be self-hosted?
+> I was (and still is) under impression that selftests should be built
+> with headers installed from the tree. Is it the case, or is it not?
 
-could you please split this patch into selftests/bpf/ and the rest?
-we'll take bpf bits via bpf tree.
+As you know (but to give others some context) there is a long-standing
+bug in the selftest build environment that causes these problems (it
+isn't including the uAPI headers) which you'd proposed to be fixed
+recently[1]. Did that ever get sent as a "real" patch? I don't see it
+in Shuah's tree; can you send it to Shuah?
+
+But even with that fixed, since the seccomp selftest has a history of
+being built stand-alone, I've continued to take these kinds of fixes.
+
+-Kees
+
+[1] https://lore.kernel.org/lkml/20190805094719.GA1693@altlinux.org/
+
+-- 
+Kees Cook
