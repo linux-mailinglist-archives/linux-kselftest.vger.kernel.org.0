@@ -2,153 +2,130 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B311DB8602
-	for <lists+linux-kselftest@lfdr.de>; Fri, 20 Sep 2019 00:26:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13279B85DB
+	for <lists+linux-kselftest@lfdr.de>; Fri, 20 Sep 2019 00:25:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2405663AbfISW0R (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 19 Sep 2019 18:26:17 -0400
-Received: from youngberry.canonical.com ([91.189.89.112]:55952 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2406829AbfISWWZ (ORCPT
+        id S2392228AbfISWZK (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 19 Sep 2019 18:25:10 -0400
+Received: from mail-qt1-f202.google.com ([209.85.160.202]:50197 "EHLO
+        mail-qt1-f202.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2407135AbfISWY2 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 19 Sep 2019 18:22:25 -0400
-Received: from static-dcd-cqq-121001.business.bouyguestelecom.com ([212.194.121.1] helo=wittgenstein)
-        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.86_2)
-        (envelope-from <christian.brauner@ubuntu.com>)
-        id 1iB4ob-0007Gc-Nt; Thu, 19 Sep 2019 22:22:17 +0000
-Date:   Fri, 20 Sep 2019 00:22:16 +0200
-From:   Christian Brauner <christian.brauner@ubuntu.com>
-To:     Jann Horn <jannh@google.com>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Will Drewry <wad@chromium.org>, Shuah Khan <shuah@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>, kafai@fb.com,
-        Song Liu <songliubraving@fb.com>, yhs@fb.com,
-        kernel list <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        bpf@vger.kernel.org, Tycho Andersen <tycho@tycho.ws>,
-        Tyler Hicks <tyhicks@canonical.com>
-Subject: Re: [PATCH v1 1/3] seccomp: add SECCOMP_USER_NOTIF_FLAG_CONTINUE
-Message-ID: <20190919222143.o3pumstojzhgfw4v@wittgenstein>
-References: <20190919095903.19370-1-christian.brauner@ubuntu.com>
- <20190919095903.19370-2-christian.brauner@ubuntu.com>
- <CAG48ez1QkJAMgTpqv4EqbDmYPPpxuB8cR=XhUAr1fHZOBY_DHg@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAG48ez1QkJAMgTpqv4EqbDmYPPpxuB8cR=XhUAr1fHZOBY_DHg@mail.gmail.com>
-User-Agent: NeoMutt/20180716
+        Thu, 19 Sep 2019 18:24:28 -0400
+Received: by mail-qt1-f202.google.com with SMTP id x26so5735710qtr.17
+        for <linux-kselftest@vger.kernel.org>; Thu, 19 Sep 2019 15:24:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=ieJJfZWRKKIX60np7mueb+mmTEbZMC8x8RYuPdA8C20=;
+        b=QnOn4cu3RXmIUffEGilk2J2NAOH2uH0HiV7ymdBeadWqAib3RPsOSvnnTZgqcBKPSu
+         tnorXppl3gmlwv+V+J3RRaX0IB+7JLz4Xvey54Fvktrgv0Kd6hu84J6pB/eAT7qwIYeX
+         LyPrpbWlomgsxsVRoxqPGPXaJXmuMxQ8hmY2sIQWghSi/KMF1qdNnsr4atjr5mG54YrG
+         VyOWBlkSBx5UrOvc72t+EfhKNdY7IG/2+AA3mh82ljh0TND7aUV3WHV1idKU7xVhINs3
+         Y0gmC9DWzRxFEOMiWah30HYYMQiC0etKCDgP/EOIFUvOwPa2Biu/RDcE4n4hSnepMGAf
+         35KQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=ieJJfZWRKKIX60np7mueb+mmTEbZMC8x8RYuPdA8C20=;
+        b=KJfXKpmKP3yv4M1t7VfqrFzQvG3KOZD2R5cik8Ctt8AOyBcdSrzBcYh8ibvEyf526j
+         2OF6FzLAzNP2c5UyIlHjpls0WKMTMdgFY4cWmxI4QFy0O/nNjrCh5QpO7lWzYiX+ySRl
+         uHfBTnpmJWzqFku1AfoG1cmuFlT5JJ/JaTl3SfzdNuZFcqvhy5xuXg0a7ToE+uP9M/zW
+         lfvavnZyBzV1py7QveLppEKX+BVz3w3qWYhtdY7H88i5eCN/JSc0jJu6dgAPpDHnieMO
+         mng8SDpr9U/lcDtCjsCJImf0gLMYk5C9BcU/xEHA4T0cyeb5uGplWPwqVfNNF485iKDc
+         3XTw==
+X-Gm-Message-State: APjAAAXWqHGbLgSAe3Lks2N61mDcWxLYqbF6r5OgK30wwWSBeAFGL6zH
+        6ppJ3MMHe3+/iTAjQkYzMIBiX+YH1oig9rky1A==
+X-Google-Smtp-Source: APXvYqwXK1WbmT4rAswLs8+X1D8BDR4SwECC8J4GsDv/o8c6p+TW6Y5FUulJqUKIQYym02x92CkFE+kqGy/bVviL2Q==
+X-Received: by 2002:a37:2748:: with SMTP id n69mr157636qkn.318.1568931865458;
+ Thu, 19 Sep 2019 15:24:25 -0700 (PDT)
+Date:   Thu, 19 Sep 2019 15:24:14 -0700
+Message-Id: <20190919222421.27408-1-almasrymina@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.23.0.351.gc4317032e6-goog
+Subject: [PATCH v5 0/7] hugetlb_cgroup: Add hugetlb_cgroup reservation limits
+From:   Mina Almasry <almasrymina@google.com>
+To:     mike.kravetz@oracle.com
+Cc:     shuah@kernel.org, almasrymina@google.com, rientjes@google.com,
+        shakeelb@google.com, gthelen@google.com, akpm@linux-foundation.org,
+        khalid.aziz@oracle.com, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        cgroups@vger.kernel.org, aneesh.kumar@linux.vnet.ibm.com,
+        mkoutny@suse.com
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Sep 19, 2019 at 09:37:06PM +0200, Jann Horn wrote:
-> On Thu, Sep 19, 2019 at 11:59 AM Christian Brauner
-> <christian.brauner@ubuntu.com> wrote:
-> > This allows the seccomp notifier to continue a syscall.
-> [...]
-> > Recently we landed seccomp support for SECCOMP_RET_USER_NOTIF (cf. [4])
-> > which enables a process (watchee) to retrieve an fd for its seccomp
-> > filter. This fd can then be handed to another (usually more privileged)
-> > process (watcher). The watcher will then be able to receive seccomp
-> > messages about the syscalls having been performed by the watchee.
-> [...]
-> > This can be solved by
-> > telling seccomp to resume the syscall.
-> [...]
-> > @@ -780,8 +783,14 @@ static void seccomp_do_user_notification(int this_syscall,
-> >                 list_del(&n.list);
-> >  out:
-> >         mutex_unlock(&match->notify_lock);
-> > +
-> > +       /* Userspace requests to continue the syscall. */
-> > +       if (flags & SECCOMP_USER_NOTIF_FLAG_CONTINUE)
-> > +               return 0;
-> > +
-> >         syscall_set_return_value(current, task_pt_regs(current),
-> >                                  err, ret);
-> > +       return -1;
-> >  }
-> 
-> Seccomp currently expects the various seccomp return values to be
-> fully ordered based on how much action the kernel should take against
-> the requested syscall. Currently, the range of return values is
-> basically divided into three regions: "block syscall in some way"
-> (from SECCOMP_RET_KILL_PROCESS to SECCOMP_RET_USER_NOTIF), "let ptrace
-> decide" (SECCOMP_RET_TRACE) and "allow" (SECCOMP_RET_LOG and
-> SECCOMP_RET_ALLOW). If SECCOMP_RET_USER_NOTIF becomes able to allow
-> syscalls, it will be able to override a negative decision from
-> SECCOMP_RET_TRACE.
-> 
-> In practice, that's probably not a big deal, since I'm not aware of
-> anyone actually using SECCOMP_RET_TRACE for security purposes, and on
-> top of that, you'd have to allow ioctl(..., SECCOMP_IOCTL_NOTIF_SEND,
-> ...) and seccomp() with SECCOMP_FILTER_FLAG_NEW_LISTENER in your
-> seccomp policy for this to work.
-> 
-> More interestingly, what about the case where two
-> SECCOMP_RET_USER_NOTIF filters are installed? The most recently
-> installed filter takes precedence if the return values's action parts
-> are the same (and this is also documented in the manpage); so if a
-> container engine installs a filter that always intercepts sys_foobar()
-> (and never uses SECCOMP_USER_NOTIF_FLAG_CONTINUE), and then something
-> inside the container also installs a filter that always intercepts
-> sys_foobar() (and always uses SECCOMP_USER_NOTIF_FLAG_CONTINUE), the
-> container engine's filter will become ineffective.
+Patch series implements hugetlb_cgroup reservation usage and limits, which
+track hugetlb reservations rather than hugetlb memory faulted in. Details of
+the approach is 1/7.
 
-Excellent point. We discussed the nested container case today.
+Changes in v5:
+- Moved the bulk of the description to the first patch in the series.
+- Clang formatted the entire series.
+- Split off 'hugetlb: remove duplicated code' and 'hugetlb: region_chg provides
+  only cache entry' into their own patch series.
+- Added comments to HUGETLB_RES enum.
+- Fixed bug in 'hugetlb: disable region_add file_region coalescing' calculating
+  the wrong number of regions_needed in some cases.
+- Changed sleeps in test to proper conditions.
+- Misc fixes in test based on shuah@ review.
 
-> 
-> With my tendency to overcomplicate things, I'm thinking that maybe it
-> might be a good idea to:
->  - collect a list of all filters that returned SECCOMP_RET_USER_NOTIF,
-> as well as the highest-precedence return value that was less strict
-> than SECCOMP_RET_USER_NOTIF
->  - sequentially send notifications to all of the
-> SECCOMP_RET_USER_NOTIF filters until one doesn't return
-> SECCOMP_USER_NOTIF_FLAG_CONTINUE
->  - if all returned SECCOMP_USER_NOTIF_FLAG_CONTINUE, go with the
-> highest-precedence return value that was less strict than
-> SECCOMP_RET_USER_NOTIF, or allow if no such return value was
-> encountered
-> 
-> But perhaps, for now, it would also be enough to just expand the big
-> fat warning note and tell people that if they allow the use of
-> SECCOMP_IOCTL_NOTIF_SEND and SECCOMP_FILTER_FLAG_NEW_LISTENER in their
-> filter, SECCOMP_RET_USER_NOTIF is bypassable. And if someone actually
-> has a usecase where SECCOMP_RET_USER_NOTIF should be secure and nested
-> SECCOMP_RET_USER_NOTIF support is needed, that more complicated logic
-> could be added later?
+Changes in v4:
+- Split up 'hugetlb_cgroup: add accounting for shared mappings' into 4 patches
+  for better isolation and context on the indvidual changes:
+  - hugetlb_cgroup: add accounting for shared mappings
+  - hugetlb: disable region_add file_region coalescing
+  - hugetlb: remove duplicated code
+  - hugetlb: region_chg provides only cache entry
+- Fixed resv->adds_in_progress accounting.
+- Retained behavior that region_add never fails, in earlier patchsets region_add
+  could return failure.
+- Fixed libhugetlbfs failure.
+- Minor fix to the added tests that was preventing them from running on some
+  environments.
 
-Yes, I think that is the correct approach for now.
-Realistically, the most useful scenario is a host-privileged supervisor
-process and a user-namespaced supervised process (or to use a concrete
-example, a host-privileged container manager and an unprivileged
-container). Having a user-namespaced supervisor process supervising
-another nested user-namespaced process is for the most part useless
-because the supervisor can't do any of the interesting syscalls (e.g.
-mounting block devices that are deemed safe, faking mknod() etc.). So I
-expect seccomp with USER_NOTIF to be blocked just for good measure. 
-Also - maybe I'm wrong - the warning we added points out that this is
-only safe if the supervised process can already rely on kernel (or
-other) restrictions, i.e. even if an attacker overwrites pointer syscall
-arguments with harmful ones the supervisor must be sure that they are
-already blocked anyway. Which can be generalized to: if an unwanted
-syscall goes through in _some_ way then the supervisor must be sure that
-it is blocked.
-Iiuc, for your specific attack all the nested attacker can do is to
-never actually get the (outer) supervisor to fake the syscall for it.
-A more interesting case might be where the host-privileged supervising
-process wants to deny a syscall that would otherwise succeed. But if
-that's the case then the outer supervisor is trying to implement a
-security policy. But we explicitly point out that this is not possible
-with the notifier in general.
-But honestly, that is very advanced and it seems unlikely that someone
-would want this. So I'd say let's just point this out.
+Changes in v3:
+- Addressed comments of Hillf Danton:
+  - Added docs.
+  - cgroup_files now uses enum.
+  - Various readability improvements.
+- Addressed comments of Mike Kravetz.
+  - region_* functions no longer coalesce file_region entries in the resv_map.
+  - region_add() and region_chg() refactored to make them much easier to
+    understand and remove duplicated code so this patch doesn't add too much
+    complexity.
+  - Refactored common functionality into helpers.
 
-Christian
+Changes in v2:
+- Split the patch into a 5 patch series.
+- Fixed patch subject.
+
+Mina Almasry (7):
+  hugetlb_cgroup: Add hugetlb_cgroup reservation counter
+  hugetlb_cgroup: add interface for charge/uncharge hugetlb reservations
+  hugetlb_cgroup: add reservation accounting for private mappings
+  hugetlb: disable region_add file_region coalescing
+  hugetlb_cgroup: add accounting for shared mappings
+  hugetlb_cgroup: Add hugetlb_cgroup reservation tests
+  hugetlb_cgroup: Add hugetlb_cgroup reservation docs
+
+ .../admin-guide/cgroup-v1/hugetlb.rst         |  85 +++-
+ include/linux/hugetlb.h                       |  31 +-
+ include/linux/hugetlb_cgroup.h                |  33 +-
+ mm/hugetlb.c                                  | 423 +++++++++++-----
+ mm/hugetlb_cgroup.c                           | 190 ++++++--
+ tools/testing/selftests/vm/.gitignore         |   1 +
+ tools/testing/selftests/vm/Makefile           |   1 +
+ .../selftests/vm/charge_reserved_hugetlb.sh   | 461 ++++++++++++++++++
+ .../selftests/vm/write_hugetlb_memory.sh      |  22 +
+ .../testing/selftests/vm/write_to_hugetlbfs.c | 250 ++++++++++
+ 10 files changed, 1306 insertions(+), 191 deletions(-)
+ create mode 100755 tools/testing/selftests/vm/charge_reserved_hugetlb.sh
+ create mode 100644 tools/testing/selftests/vm/write_hugetlb_memory.sh
+ create mode 100644 tools/testing/selftests/vm/write_to_hugetlbfs.c
+
+--
+2.23.0.351.gc4317032e6-goog
