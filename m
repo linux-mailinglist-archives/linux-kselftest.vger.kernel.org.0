@@ -2,107 +2,96 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 61025B8D29
-	for <lists+linux-kselftest@lfdr.de>; Fri, 20 Sep 2019 10:48:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3995B9518
+	for <lists+linux-kselftest@lfdr.de>; Fri, 20 Sep 2019 18:18:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2437847AbfITIsD (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 20 Sep 2019 04:48:03 -0400
-Received: from mail-qt1-f196.google.com ([209.85.160.196]:46613 "EHLO
-        mail-qt1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2437843AbfITIsD (ORCPT
+        id S2390601AbfITQSO (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 20 Sep 2019 12:18:14 -0400
+Received: from mail-lj1-f196.google.com ([209.85.208.196]:33836 "EHLO
+        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2390287AbfITQSO (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 20 Sep 2019 04:48:03 -0400
-Received: by mail-qt1-f196.google.com with SMTP id u22so7715265qtq.13
-        for <linux-kselftest@vger.kernel.org>; Fri, 20 Sep 2019 01:48:01 -0700 (PDT)
+        Fri, 20 Sep 2019 12:18:14 -0400
+Received: by mail-lj1-f196.google.com with SMTP id j19so6160004lja.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 20 Sep 2019 09:18:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tycho-ws.20150623.gappssmtp.com; s=20150623;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to
-         :user-agent;
-        bh=0ghb2ofoQaWYR79lBqsKSuBtiFPcVpCWcmnaiOOknyg=;
-        b=UdK7rtRdmjoms5ysOvQapgLVFBipggdRniC9S94pv9NhHQCFd2aVrGAdK2rzjD6akG
-         Yf8ycU1kg+M6bOXq0f15wgCxnNprnGI/gc2rCxE9KqAVVtlgfkVRbVFD6QWobsi8W263
-         efuNNhPLvEviZp+j+EWYx7ydei3p5mcg/VQI8ai1CGq2dhk2Of1jy0IjVWAnv4sT86t6
-         Xx3fZnHGhpYzgxN3rQwOYno/wCgehqisSaWqo6O/AmwyDQEcBVDPhMqHGxg4dRTNY3VF
-         3fQpH9Q+2KKsjirkPFVgsKrelftHn3GoWC1k+gT9vGTKk5NJGVmzWgg0mrO9kxhw4GFz
-         9j2A==
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=/tRAwwujfBovXt36HtC9JZ/4MVaZlXqEF94BXjqBttQ=;
+        b=OuqSL56Vss9lPTztD/skWobMCVipuMEUX9+lHEdLASwSyG2xgG8y/svapwJXwLJJ5u
+         M79im92CVbCsjPjTYjVv8TYLIjFWLKAMMY6KVlzWgrt2X3MS5NS4puwacoKKKjsNj6mF
+         Qa7CZgFDD3VTS2AuGKApg6P+YvbDbM9exl/2w=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to:user-agent;
-        bh=0ghb2ofoQaWYR79lBqsKSuBtiFPcVpCWcmnaiOOknyg=;
-        b=MwTgKP9BBFHJuPqiuNqIe+V7U72wuxLuUyo+hvNUht4/42tCBFwvREC4HvwknfFG2i
-         x//fhZvM2ZV46Rn5Jz2JS2WGr1WH15QDOK2t+88d/e9zkLmk5o83V50qwVEFF8yx9U37
-         HLzh6Y6LTrgAXDpP/UCzomNlnampWIVAZTE9r+HM/cRrsFmkJl7E2+4AjidhwjvqDl4d
-         WzvKmIv2iAPI2cAZ2ctDOJ/bjZPKvVAEgrxdHRyxISxqsyCIAlx51bc/HaE7Ten06xx2
-         LB1p7OoudURHFpeMU1vH2QxvswTWao2ITUaFAX40W4jtfzLB9hJsoZvMUfYqUPobqlaA
-         rNkw==
-X-Gm-Message-State: APjAAAXlei7KbaEdtUEre3qc7/v3owv805lQvGF6TOwLdIBjjJXKaH1Q
-        qdHQYiLMGZkA6S0wqd+AQb5BRw==
-X-Google-Smtp-Source: APXvYqwOfEkZdd8pxj56VhHGXpmptTJLeojyZODLnOylGmjCMZvNA8CWEC3PiyQA78uxaUnCTZkJ1Q==
-X-Received: by 2002:a05:6214:1231:: with SMTP id p17mr12236189qvv.170.1568969280324;
-        Fri, 20 Sep 2019 01:48:00 -0700 (PDT)
-Received: from cisco ([192.241.255.151])
-        by smtp.gmail.com with ESMTPSA id z141sm693660qka.126.2019.09.20.01.47.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 Sep 2019 01:47:59 -0700 (PDT)
-Date:   Fri, 20 Sep 2019 10:47:53 +0200
-From:   Tycho Andersen <tycho@tycho.ws>
-To:     Christian Brauner <christian.brauner@ubuntu.com>
-Cc:     keescook@chromium.org, luto@amacapital.net, jannh@google.com,
-        wad@chromium.org, shuah@kernel.org, ast@kernel.org,
-        daniel@iogearbox.net, kafai@fb.com, songliubraving@fb.com,
-        yhs@fb.com, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, Tyler Hicks <tyhicks@canonical.com>,
-        stable@vger.kernel.org
-Subject: Re: [PATCH v2 2/3] seccomp: avoid overflow in implicit constant
- conversion
-Message-ID: <20190920084753.GA16893@cisco>
-References: <20190920083007.11475-1-christian.brauner@ubuntu.com>
- <20190920083007.11475-3-christian.brauner@ubuntu.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=/tRAwwujfBovXt36HtC9JZ/4MVaZlXqEF94BXjqBttQ=;
+        b=mk0Ir11tB0swWn2eQ/Sk88WPD7HX2qTuot8G79dXUwLtiP01tzbG7k3nT1tOmY5uVU
+         JlhLVApkxRMF6YnoydnYitUH3a5hsc3MXoYaa1WO93wiFvnb7gktrHgaJRgSKMblPlu0
+         AUKEyTOlhrzW5B+zcTPwLWG0WybhTwQOOiNWMvnYPKkVxB3LpDm3XmlgzkJlmCj96/9X
+         0KVWJ+CJQRW43Eatje0NICk5PCXnVBD7HqxxihknwRfr5aEHaK60G/+8MOr/ojtngeqS
+         BBEkMkafI2wLz8s3B6m+khGF/hXeJbdl+fW4fBPa7sulG9aXojkdtZW9QEktDcKuIBgg
+         At9Q==
+X-Gm-Message-State: APjAAAUSvivydt1/2l9Q8JylLj02OZDqTbvBhsHMU8DzIPHmhqSW1wd7
+        hiSUqhUyVDiEFF1wyXa7QCZNjOjoNL4=
+X-Google-Smtp-Source: APXvYqwQe5MrTo15gSOIrS+BChFkqCsXgJDPzztuF1EWT7S5rezEmC1C/0z1y/ATt3+yErs0tRzTDg==
+X-Received: by 2002:a2e:9ac1:: with SMTP id p1mr3434684ljj.179.1568996291317;
+        Fri, 20 Sep 2019 09:18:11 -0700 (PDT)
+Received: from mail-lj1-f173.google.com (mail-lj1-f173.google.com. [209.85.208.173])
+        by smtp.gmail.com with ESMTPSA id 21sm537325ljq.15.2019.09.20.09.18.10
+        for <linux-kselftest@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 20 Sep 2019 09:18:10 -0700 (PDT)
+Received: by mail-lj1-f173.google.com with SMTP id b20so2266479ljj.5
+        for <linux-kselftest@vger.kernel.org>; Fri, 20 Sep 2019 09:18:10 -0700 (PDT)
+X-Received: by 2002:a2e:3e07:: with SMTP id l7mr9721577lja.180.1568996289896;
+ Fri, 20 Sep 2019 09:18:09 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20190920083007.11475-3-christian.brauner@ubuntu.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <be8059f4-8e8f-cd18-0978-a9c861f6396b@linuxfoundation.org>
+In-Reply-To: <be8059f4-8e8f-cd18-0978-a9c861f6396b@linuxfoundation.org>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Fri, 20 Sep 2019 09:17:53 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wgs+UoZWfHGENWSVBd57Z-Vp0Nqe68R6wkDb5zF+cfvDg@mail.gmail.com>
+Message-ID: <CAHk-=wgs+UoZWfHGENWSVBd57Z-Vp0Nqe68R6wkDb5zF+cfvDg@mail.gmail.com>
+Subject: Re: [GIT PULL] Kselftest update for Linux 5.4-rc1
+To:     Shuah Khan <skhan@linuxfoundation.org>
+Cc:     Mark Brown <broonie@kernel.org>,
+        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        Anders Roxell <anders.roxell@linaro.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Sep 20, 2019 at 10:30:06AM +0200, Christian Brauner wrote:
-> USER_NOTIF_MAGIC is assigned to int variables in this test so set it to INT_MAX
-> to avoid warnings:
-> 
-> seccomp_bpf.c: In function ‘user_notification_continue’:
-> seccomp_bpf.c:3088:26: warning: overflow in implicit constant conversion [-Woverflow]
->  #define USER_NOTIF_MAGIC 116983961184613L
->                           ^
-> seccomp_bpf.c:3572:15: note: in expansion of macro ‘USER_NOTIF_MAGIC’
->   resp.error = USER_NOTIF_MAGIC;
->                ^~~~~~~~~~~~~~~~
-> 
-> Fixes: 6a21cc50f0c7 ("seccomp: add a return code to trap to userspace")
-> Signed-off-by: Christian Brauner <christian.brauner@ubuntu.com>
-> Reviewed-by: Tyler Hicks <tyhicks@canonical.com>
-> Cc: Kees Cook <keescook@chromium.org>
-> Cc: Andy Lutomirski <luto@amacapital.net>
-> Cc: Will Drewry <wad@chromium.org>
-> Cc: Shuah Khan <shuah@kernel.org>
-> Cc: Alexei Starovoitov <ast@kernel.org>
-> Cc: Daniel Borkmann <daniel@iogearbox.net>
-> Cc: Martin KaFai Lau <kafai@fb.com>
-> Cc: Song Liu <songliubraving@fb.com>
-> Cc: Yonghong Song <yhs@fb.com>
-> Cc: Tycho Andersen <tycho@tycho.ws>
+On Tue, Sep 17, 2019 at 12:26 PM Shuah Khan <skhan@linuxfoundation.org> wrote:
+>
+> This Kselftest update for Linux 5.4-rc1 consists of several fixes to
+> existing tests and adds KUnit, a lightweight unit testing and mocking
+> framework for the Linux kernel from Brendan Higgins.
 
-You can also add,
+So I pulled this, but then I almost immediately unpulled it.
 
-Reviewed-by: Tycho Andersen <tycho@tycho.ws>
+My reason for doing that may be odd, but it's because of the top-level
+'kunit' directory. This shouldn't be on the top level.
 
-for this one.
+The reason I react so strongly is that it actually breaks my finger
+memory. I don't type out filenames - I auto-compete them. So "kernel/"
+is "k<tab>", "drivers/" is "d<tab>" etc.
 
-Tycho
+It already doesn't work for everything ("mm/" is actually "mm<tab>"
+not because we have files in the git tree, but because the build
+creates various "module" files), but this breaks a common pattern for
+me.
+
+> In the future KUnit will be linked to Kselftest framework to provide
+> a way to trigger KUnit tests from user-space.
+
+Can the kernel parts please move to lib/kunit/ or something like that?
+
+               Linus
