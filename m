@@ -2,107 +2,92 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 92D48B96F3
-	for <lists+linux-kselftest@lfdr.de>; Fri, 20 Sep 2019 20:06:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CDA3CB9708
+	for <lists+linux-kselftest@lfdr.de>; Fri, 20 Sep 2019 20:15:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2406229AbfITSGk (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 20 Sep 2019 14:06:40 -0400
-Received: from mail-io1-f68.google.com ([209.85.166.68]:41214 "EHLO
-        mail-io1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2389658AbfITSGj (ORCPT
+        id S2406297AbfITSPG (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 20 Sep 2019 14:15:06 -0400
+Received: from mail-lj1-f196.google.com ([209.85.208.196]:41275 "EHLO
+        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2405222AbfITSPF (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 20 Sep 2019 14:06:39 -0400
-Received: by mail-io1-f68.google.com with SMTP id r26so18131364ioh.8
-        for <linux-kselftest@vger.kernel.org>; Fri, 20 Sep 2019 11:06:39 -0700 (PDT)
+        Fri, 20 Sep 2019 14:15:05 -0400
+Received: by mail-lj1-f196.google.com with SMTP id f5so7960050ljg.8
+        for <linux-kselftest@vger.kernel.org>; Fri, 20 Sep 2019 11:15:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=nJi+jkD9qkHLIeHwUoAJGIQIqvA5hcES7DlWqDuq6Uo=;
-        b=M7KNKfCYlTuZYd5fJJ2JsOl9hW194OD55o4viiTNyKlcrYO0rDmZoxtNZd4ZB+KS2y
-         ralsCLv78mEryfEF7fz/DcUaj+6ezd0i2fS+q4+ysIRasL9xeEMWMJveP4Ej8BML7QO0
-         LLV5JfMtSFzBnFdKfTUMeIAxG/AIpg6jr2Kqk=
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Zt1SAAFEs8ODGQeBze+y3jkP3GGDWb6CUJZJ+mep9IQ=;
+        b=BsWbLr4w/0GDvh9Ak8RFLIst3kS16o2QLFg9WZj4E50GhmHASYFPC7ui83Iczmw1Ri
+         jYHP2sgVjW0qSCtVtqmf3H1cJVLPDAG+fC7X0/HxU15K1OFCjiu+JyzQZfy/KKGn1mHN
+         dFhnS0YTcemB+7Lffoo7831CoRVoUMp47IEP4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=nJi+jkD9qkHLIeHwUoAJGIQIqvA5hcES7DlWqDuq6Uo=;
-        b=sf0m+j7HsOSGei07cXANk3cVxKWBwhwDPv53PkcY7K/Dvz1e9dSxhtxmTTv8D9e1kr
-         /jdDxalDOrPjnhfJNOtV19/oOknWJGYEIVVuZZg/VahRh+VHknTZ0YT0iGTPO7jSh529
-         lGkN4SXjE6P7tGIdcQvXUOkShFa3nsWeD0Lq0dVMJ27oR+MyFJEmL6X7ZpTsh7WtuSa4
-         dXAxx0tyen3mmlFAEOlhHnK39jrZk9udMLApZ0WZlWtA6GmYRFxgWKfRGwOZ3cH+Ycp9
-         xCu0k0DU7j4hoQcGFvkMl1Cz4V89JbKEbt96oY1PliE9Cxr7As2kCH/555iVTP7PJ8/m
-         DW0g==
-X-Gm-Message-State: APjAAAXpzAkPGBGcDh9eQyX+eSUEU18kaXghRJ8/JZcFOneSWc8WkWnT
-        HCt9XBEnAB4ROW9KPcRz2i2S9w==
-X-Google-Smtp-Source: APXvYqzcxmufuhpTV8cPIXs3gqKlIndr6SLD+RwC0Nj0QKygB/UhV/bxz2HEf/+9nCsKFuqws5/ZmQ==
-X-Received: by 2002:a6b:7109:: with SMTP id q9mr15165154iog.229.1569002798715;
-        Fri, 20 Sep 2019 11:06:38 -0700 (PDT)
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id a26sm2573274iot.46.2019.09.20.11.06.37
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 20 Sep 2019 11:06:38 -0700 (PDT)
-Subject: Re: [GIT PULL] Kselftest update for Linux 5.4-rc1
-To:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Brendan Higgins <brendanhiggins@google.com>
-Cc:     Mark Brown <broonie@kernel.org>,
-        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        Anders Roxell <anders.roxell@linaro.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Zt1SAAFEs8ODGQeBze+y3jkP3GGDWb6CUJZJ+mep9IQ=;
+        b=hVNU+aUrHuDCznRtB4lBQEBhXi8vcwsWK7szZxO4sxmD/dEoniO1nRGmDncrLyX1vF
+         0gCvMNFeNuIYxcIzssVYZ2eqdhSktz4+Uj4xFiBgla6iMJAYARxw/fFzPTJATcz97HCb
+         PYSiOjZVQxtgku+/FSO2beI4haj+BY6G3Ak4OteItVdG600rmpqDmZ+DB1ozFx7GniOY
+         qUBbLf1GEvLz+iKNRouHPdl2IVPO0eCipXiumsu0iMbjsEbhKeCqeIUjc+UIDyI68HLH
+         fFnACQVQSj/8wSxWLeNp4RPHmnqJvIVseYcYvPpzS3b7eBRB7p4Gw2Xl+Ea760aGa4xr
+         +DmA==
+X-Gm-Message-State: APjAAAV/LkjTzFHCMZ/7hXtCbV0eHxU2p7mva0VvSw0DUFjVY+WrU3iG
+        PQl8R/8FK0mxIHPvu+XQsBJ8zfLGHFM=
+X-Google-Smtp-Source: APXvYqzll1BhqxCGcs7UGNap9U+fsNURWrTwAlcd5oLAJbucYbAVl6Lzrb0NSn4E88qtFOzs1RWZRA==
+X-Received: by 2002:a2e:9a83:: with SMTP id p3mr1776850lji.136.1569003303322;
+        Fri, 20 Sep 2019 11:15:03 -0700 (PDT)
+Received: from mail-lf1-f51.google.com (mail-lf1-f51.google.com. [209.85.167.51])
+        by smtp.gmail.com with ESMTPSA id o5sm636836lfn.42.2019.09.20.11.15.02
+        for <linux-kselftest@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 20 Sep 2019 11:15:02 -0700 (PDT)
+Received: by mail-lf1-f51.google.com with SMTP id w6so5691235lfl.2
+        for <linux-kselftest@vger.kernel.org>; Fri, 20 Sep 2019 11:15:02 -0700 (PDT)
+X-Received: by 2002:a19:741a:: with SMTP id v26mr9438094lfe.79.1569003302026;
+ Fri, 20 Sep 2019 11:15:02 -0700 (PDT)
+MIME-Version: 1.0
 References: <be8059f4-8e8f-cd18-0978-a9c861f6396b@linuxfoundation.org>
  <CAHk-=wgs+UoZWfHGENWSVBd57Z-Vp0Nqe68R6wkDb5zF+cfvDg@mail.gmail.com>
  <CAKRRn-edxk9Du70A27V=d3Na73fh=fVvGEVsQRGROrQm05YRrA@mail.gmail.com>
  <CAFd5g45ROPm-1SD5cD772gqESaP3D8RbBhSiJXZzbaA+2hFdHA@mail.gmail.com>
- <CAHk-=wgMuNLBhJR_nFHrpViHbz2ErQ-fJV6B9o0+wym+Wk+r0w@mail.gmail.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <2474b796-2e38-2e27-06db-4d917e822a26@linuxfoundation.org>
-Date:   Fri, 20 Sep 2019 12:06:37 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
-MIME-Version: 1.0
-In-Reply-To: <CAHk-=wgMuNLBhJR_nFHrpViHbz2ErQ-fJV6B9o0+wym+Wk+r0w@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+ <CAHk-=wgMuNLBhJR_nFHrpViHbz2ErQ-fJV6B9o0+wym+Wk+r0w@mail.gmail.com> <CAFd5g46b1S5TZYGMP4F2f3Xhb1HrYTUFBOEK5gXuMBFEkzhZ3A@mail.gmail.com>
+In-Reply-To: <CAFd5g46b1S5TZYGMP4F2f3Xhb1HrYTUFBOEK5gXuMBFEkzhZ3A@mail.gmail.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Fri, 20 Sep 2019 11:14:45 -0700
+X-Gmail-Original-Message-ID: <CAHk-=whr5K4ZH2K9pj=PZNWbiHfuz4noorjJa746_FOxLAgfxw@mail.gmail.com>
+Message-ID: <CAHk-=whr5K4ZH2K9pj=PZNWbiHfuz4noorjJa746_FOxLAgfxw@mail.gmail.com>
+Subject: Re: [GIT PULL] Kselftest update for Linux 5.4-rc1
+To:     Brendan Higgins <brendanhiggins@google.com>
+Cc:     Shuah Khan <skhan@linuxfoundation.org>,
+        Mark Brown <broonie@kernel.org>,
+        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        Anders Roxell <anders.roxell@linaro.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 9/20/19 10:51 AM, Linus Torvalds wrote:
-> On Fri, Sep 20, 2019 at 9:35 AM Brendan Higgins
-> <brendanhiggins@google.com> wrote:
->>
->> Sorry about that. I am surprised that none of the other reviewers
->> brought this up.
-> 
-> I think I'm "special".
-> 
-> There was some other similar change a few years ago, which I
-> absolutely hated because of how it broke autocomplete for me. Very few
-> other people seemed to react to it.
-> 
-> Part of it may be that the kernel is almost the _only_ project I work
-> with, so unlike a lot of other developers, I end up having muscle
-> memory for kernel-specific issues.
-> 
-> Auto-completion was also one of the (many) reasons why I hated CVS -
-> having that annoying "CVS" directory there just always annoyed me.
-> There's a reason why git uses a dot-file.
-> 
-> So I just have issues that perhaps other people don't react to as
-> much. And aggressive tab-completion happens to be a thing for me.
-> 
+On Fri, Sep 20, 2019 at 11:03 AM Brendan Higgins
+<brendanhiggins@google.com> wrote:
+>
+> Fair enough. On that note, are you okay with the `include/kunit/`
+> directory, or do you want me to move it to `include/linux/kunit`?
 
-Thanks for explaining. Brendan and I will get this sorted out.
+"include/kunit" should work just fine for me. At least I didn't react
+to it immediately when I had done my test-pull, and it doesn't change
+any auto-completion patterns for me either.
 
-Looks like my previous response didn't make it to the kselftest
-and kernel lists.
+[ We already have two 'k' names under include, but even if that wasn't
+true, I don't type those names anyway so I wouldn't have had
+muscle-memory for those two directories in the first place.
 
-thanks,
--- Shuah
+  Under include, it's "linux" (and to a smaller extent "asm-generic")
+that I autocomplete. ]
 
+            Linus
