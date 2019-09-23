@@ -2,139 +2,224 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 18BE4BBAB5
-	for <lists+linux-kselftest@lfdr.de>; Mon, 23 Sep 2019 19:47:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C939BBAE9
+	for <lists+linux-kselftest@lfdr.de>; Mon, 23 Sep 2019 20:06:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2440199AbfIWRrr (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 23 Sep 2019 13:47:47 -0400
-Received: from userp2120.oracle.com ([156.151.31.85]:33246 "EHLO
-        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2389763AbfIWRrr (ORCPT
+        id S2440304AbfIWSGc (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 23 Sep 2019 14:06:32 -0400
+Received: from mail-pl1-f194.google.com ([209.85.214.194]:35494 "EHLO
+        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2394234AbfIWSGb (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 23 Sep 2019 13:47:47 -0400
-Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
-        by userp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x8NHdNbD090061;
-        Mon, 23 Sep 2019 17:47:37 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=subject : to : cc :
- references : from : message-id : date : mime-version : in-reply-to :
- content-type : content-transfer-encoding; s=corp-2019-08-05;
- bh=yDskfBufBcPBjCvniq+DMnbkW78ezLoVWcAK8svPf2o=;
- b=Ql5vbWG+kxg7x8Ups95HkSOCpzWtP7UKlTCD+zxH28gfZGKYH4Yz328gucDUXJT6oPmp
- sE7fD3Qg9ORS/5vusZqCpWBJ8saeGwfEc2Ukl/I3/TKJDNqMl1CR4zZQmvxLgjIxelup
- ueLksD8fC6fJO/x2UB2VAyzOmxIBGP9hVuOnBhqdWMJt2XaKKV/TBPTCcRVtaMquqUcI
- MxmYdbpnJdI7rQHCOVdyEerxDxapTPEklcIX65jlGFbnaoOud9SjKHLp+aOcmPUlFSSj
- GNrFmBAV4Vq7kil71S5KZV+zevmnZfeg8NtJtPc1EaOs39h4aYZiiZ43Qs+PIsEqNjeU AQ== 
-Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by userp2120.oracle.com with ESMTP id 2v5cgqrfg7-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 23 Sep 2019 17:47:37 +0000
-Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x8NHcuvX179186;
-        Mon, 23 Sep 2019 17:47:36 GMT
-Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
-        by aserp3020.oracle.com with ESMTP id 2v6yvptysg-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 23 Sep 2019 17:47:36 +0000
-Received: from abhmp0006.oracle.com (abhmp0006.oracle.com [141.146.116.12])
-        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id x8NHlW2K007596;
-        Mon, 23 Sep 2019 17:47:33 GMT
-Received: from [192.168.1.222] (/71.63.128.209)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Mon, 23 Sep 2019 10:47:32 -0700
-Subject: Re: [PATCH v5 0/7] hugetlb_cgroup: Add hugetlb_cgroup reservation
- limits
-To:     Mina Almasry <almasrymina@google.com>,
-        aneesh.kumar@linux.vnet.ibm.com
-Cc:     shuah@kernel.org, rientjes@google.com, shakeelb@google.com,
-        gthelen@google.com, akpm@linux-foundation.org,
-        khalid.aziz@oracle.com, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        cgroups@vger.kernel.org, mkoutny@suse.com
-References: <20190919222421.27408-1-almasrymina@google.com>
-From:   Mike Kravetz <mike.kravetz@oracle.com>
-Message-ID: <3c73d2b7-f8d0-16bf-b0f0-86673c3e9ce3@oracle.com>
-Date:   Mon, 23 Sep 2019 10:47:30 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
+        Mon, 23 Sep 2019 14:06:31 -0400
+Received: by mail-pl1-f194.google.com with SMTP id y10so5525728plp.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 23 Sep 2019 11:06:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=nhneKc2j612Q2N+13gaGbKUVRsMhSSxGH7dWRfDGMkM=;
+        b=T1+NUcrIy3lmkEWKUYoZizpT4pz7k1bgugAw5x236rFYSY4jiXwwGSkW/t3eTOgxZZ
+         BdFUIyPtNrmuOnFW8pMCBh0TOJ0ymwQs3hrr2tpjSwDy/Jn7hGK64HYhWlOR+Pme/Rjs
+         q1skpdHUJIQUzoH1STCk8Qg+RNLa+nlemSvf5GuWwDF1JHGzH7MzOgvgGfuUDt1Yjlx+
+         jLfCXyd8JabRhAP+sdDZJeube1e/2Pp2+w4UQdEthm0TnALHcGP03fa6VfY8gUFfbf65
+         93WWIiL7H75Fl011ZWNdHPF+hL1hlBHne2JyK6E63p3OCh/BSVxvl8asUe8na9vlCXYJ
+         Puqg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=nhneKc2j612Q2N+13gaGbKUVRsMhSSxGH7dWRfDGMkM=;
+        b=LMicS6rQtKoiyOS64/Tz+A3Y7WeTarxJIB+whU8Elj4ntCS9H04yBoWdBVGjjDjzXk
+         9Dh/qMTsN8/RzwJgNP+nr2dSkld2OwOiCQvQWkanlQXPiP+qcvPEqElettBsHWVeAywf
+         eRKvBSILgosShyTq2refD1MXjUiqg9t3cGJTmHrOItbqzbK3oUDXKT3+kELjPnTO3V3H
+         4JDr+ORfqAjkYoc18hg/ByYoy6QGH537RY3y34vY+4foV9Q4PtuxD0JfHYn83INs6nYa
+         nYeJM7Qp6d8Ma2Ih6vofXFWcuk7Dn5w7XxCOQlRjxVfOpqj1eCi+hU7UTuOPPmeER7cE
+         /Elg==
+X-Gm-Message-State: APjAAAXUMfkrEKrsGEe3w6Pu5zVjZBym6kpC/8wkJpnZueC7QNyLRGib
+        ob4s2oIBBETg3fGnJzPLBeu+Ae8095kA1VtiqZKj/g==
+X-Google-Smtp-Source: APXvYqwfsjyOL3n2LFVEPJm/qlWBl4UOe3/cXY8+uFis2YYWhVkjpN1GVmQ/ETS5lMq5TdaURd2f4h4p74UheIpwH8I=
+X-Received: by 2002:a17:902:ff0e:: with SMTP id f14mr1025347plj.325.1569261990405;
+ Mon, 23 Sep 2019 11:06:30 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20190919222421.27408-1-almasrymina@google.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9389 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
- phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=999
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.0.1-1908290000 definitions=main-1909230157
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9389 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
- suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
- lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1908290000
- definitions=main-1909230157
+References: <20190923090249.127984-1-brendanhiggins@google.com>
+ <20190923090249.127984-16-brendanhiggins@google.com> <d87eba35-ae09-0c53-bbbe-51ee9dc9531f@infradead.org>
+In-Reply-To: <d87eba35-ae09-0c53-bbbe-51ee9dc9531f@infradead.org>
+From:   Brendan Higgins <brendanhiggins@google.com>
+Date:   Mon, 23 Sep 2019 11:06:19 -0700
+Message-ID: <CAFd5g45y-NWzbn8E8hUg=n4U5E+N6_4D8eCXhQ74Y0N4zqVW=w@mail.gmail.com>
+Subject: Re: [PATCH v18 15/19] Documentation: kunit: add documentation for KUnit
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     Frank Rowand <frowand.list@gmail.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Kees Cook <keescook@google.com>,
+        Kieran Bingham <kieran.bingham@ideasonboard.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Rob Herring <robh@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
+        shuah <shuah@kernel.org>, "Theodore Ts'o" <tytso@mit.edu>,
+        Masahiro Yamada <yamada.masahiro@socionext.com>,
+        devicetree <devicetree@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        kunit-dev@googlegroups.com,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        linux-fsdevel@vger.kernel.org,
+        linux-kbuild <linux-kbuild@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        linux-nvdimm <linux-nvdimm@lists.01.org>,
+        linux-um@lists.infradead.org,
+        Sasha Levin <Alexander.Levin@microsoft.com>,
+        "Bird, Timothy" <Tim.Bird@sony.com>,
+        Amir Goldstein <amir73il@gmail.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Daniel Vetter <daniel@ffwll.ch>, Jeff Dike <jdike@addtoit.com>,
+        Joel Stanley <joel@jms.id.au>,
+        Julia Lawall <julia.lawall@lip6.fr>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Knut Omang <knut.omang@oracle.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Petr Mladek <pmladek@suse.com>,
+        Richard Weinberger <richard@nod.at>,
+        David Rientjes <rientjes@google.com>,
+        Steven Rostedt <rostedt@goodmis.org>, wfg@linux.intel.com,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Felix Guo <felixguoxiuping@gmail.com>,
+        Jonathan Corbet <corbet@lwn.net>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 9/19/19 3:24 PM, Mina Almasry wrote:
-> Patch series implements hugetlb_cgroup reservation usage and limits, which
-> track hugetlb reservations rather than hugetlb memory faulted in. Details of
-> the approach is 1/7.
+On Mon, Sep 23, 2019 at 8:48 AM Randy Dunlap <rdunlap@infradead.org> wrote:
+>
+> On 9/23/19 2:02 AM, Brendan Higgins wrote:
+> > Add documentation for KUnit, the Linux kernel unit testing framework.
+> > - Add intro and usage guide for KUnit
+> > - Add API reference
+> >
+> > Signed-off-by: Felix Guo <felixguoxiuping@gmail.com>
+> > Signed-off-by: Brendan Higgins <brendanhiggins@google.com>
+> > Cc: Jonathan Corbet <corbet@lwn.net>
+> > Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > Reviewed-by: Logan Gunthorpe <logang@deltatee.com>
+> > Reviewed-by: Stephen Boyd <sboyd@kernel.org>
+> > ---
+> >  Documentation/dev-tools/index.rst           |   1 +
+> >  Documentation/dev-tools/kunit/api/index.rst |  16 +
+> >  Documentation/dev-tools/kunit/api/test.rst  |  11 +
+> >  Documentation/dev-tools/kunit/faq.rst       |  62 +++
+> >  Documentation/dev-tools/kunit/index.rst     |  79 +++
+> >  Documentation/dev-tools/kunit/start.rst     | 180 ++++++
+> >  Documentation/dev-tools/kunit/usage.rst     | 576 ++++++++++++++++++++
+> >  7 files changed, 925 insertions(+)
+> >  create mode 100644 Documentation/dev-tools/kunit/api/index.rst
+> >  create mode 100644 Documentation/dev-tools/kunit/api/test.rst
+> >  create mode 100644 Documentation/dev-tools/kunit/faq.rst
+> >  create mode 100644 Documentation/dev-tools/kunit/index.rst
+> >  create mode 100644 Documentation/dev-tools/kunit/start.rst
+> >  create mode 100644 Documentation/dev-tools/kunit/usage.rst
+>
+>
+> > diff --git a/Documentation/dev-tools/kunit/start.rst b/Documentation/dev-tools/kunit/start.rst
+> > new file mode 100644
+> > index 000000000000..6dc229e46bb3
+> > --- /dev/null
+> > +++ b/Documentation/dev-tools/kunit/start.rst
+> > @@ -0,0 +1,180 @@
+> > +.. SPDX-License-Identifier: GPL-2.0
+> > +
+> > +===============
+> > +Getting Started
+> > +===============
+> > +
+> > +Installing dependencies
+> > +=======================
+> > +KUnit has the same dependencies as the Linux kernel. As long as you can build
+> > +the kernel, you can run KUnit.
+> > +
+> > +KUnit Wrapper
+> > +=============
+> > +Included with KUnit is a simple Python wrapper that helps format the output to
+> > +easily use and read KUnit output. It handles building and running the kernel, as
+> > +well as formatting the output.
+> > +
+> > +The wrapper can be run with:
+> > +
+> > +.. code-block:: bash
+> > +
+> > +   ./tools/testing/kunit/kunit.py run
+> > +
+> > +Creating a kunitconfig
+> > +======================
+> > +The Python script is a thin wrapper around Kbuild as such, it needs to be
+>
+>                                        around Kbuild. As such,
 
-Thanks for your continued efforts Mina.
+Thanks for pointing this out.
 
-One thing that has bothered me with this approach from the beginning is that
-hugetlb reservations are related to, but somewhat distinct from hugetlb
-allocations.  The original (existing) huegtlb cgroup implementation does not
-take reservations into account.  This is an issue you are trying to address
-by adding a cgroup support for hugetlb reservations.  However, this new
-reservation cgroup ignores hugetlb allocations at fault time.
+>
+> > +configured with a ``kunitconfig`` file. This file essentially contains the
+> > +regular Kernel config, with the specific test targets as well.
+> > +
+> > +.. code-block:: bash
+> > +
+> > +     git clone -b master https://kunit.googlesource.com/kunitconfig $PATH_TO_KUNITCONFIG_REPO
+> > +     cd $PATH_TO_LINUX_REPO
+> > +     ln -s $PATH_TO_KUNIT_CONFIG_REPO/kunitconfig kunitconfig
+> > +
+> > +You may want to add kunitconfig to your local gitignore.
+> > +
+> > +Verifying KUnit Works
+> > +---------------------
+> > +
+> > +To make sure that everything is set up correctly, simply invoke the Python
+> > +wrapper from your kernel repo:
+> > +
+> > +.. code-block:: bash
+> > +
+> > +     ./tools/testing/kunit/kunit.py
+> > +
+> > +.. note::
+> > +   You may want to run ``make mrproper`` first.
+>
+> I normally use O=builddir when building kernels.
+> Does this support using O=builddir ?
 
-I 'think' the whole purpose of any hugetlb cgroup is to manage the allocation
-of hugetlb pages.  Both the existing cgroup code and the reservation approach
-have what I think are some serious flaws.  Consider a system with 100 hugetlb
-pages available.  A sysadmin, has two groups A and B and wants to limit hugetlb
-usage to 50 pages each.
+Yep, it supports specifying a separate build directory.
 
-With the existing implementation, a task in group A could create a mmap of
-100 pages in size and reserve all 100 pages.  Since the pages are 'reserved',
-nobody in group B can allocate ANY huge pages.  This is true even though
-no pages have been allocated in A (or B).
+> > +
+> > +If everything worked correctly, you should see the following:
+> > +
+> > +.. code-block:: bash
+> > +
+> > +     Generating .config ...
+> > +     Building KUnit Kernel ...
+> > +     Starting KUnit Kernel ...
+> > +
+> > +followed by a list of tests that are run. All of them should be passing.
+> > +
+> > +.. note::
+> > +   Because it is building a lot of sources for the first time, the ``Building
+> > +   kunit kernel`` step may take a while.
+> > +
+> > +Writing your first test
+> > +=======================
+>
+> [snip]
+>
+> > diff --git a/Documentation/dev-tools/kunit/usage.rst b/Documentation/dev-tools/kunit/usage.rst
+> > new file mode 100644
+> > index 000000000000..c6e69634e274
+> > --- /dev/null
+> > +++ b/Documentation/dev-tools/kunit/usage.rst
+>
+> TBD...
 
-With the reservation implementation, a task in group A could use MAP_NORESERVE
-and allocate all 100 pages without taking any reservations.
+What did you mean by this comment?
 
-As mentioned in your documentation, it would be possible to use both the
-existing (allocation) and new reservation cgroups together.  Perhaps if both
-are setup for the 50/50 split things would work a little better.
-
-However, instead of creating a new reservation crgoup how about adding
-reservation support to the existing allocation cgroup support.  One could
-even argue that a reservation is an allocation as it sets aside huge pages
-that can only be used for a specific purpose.  Here is something that
-may work.
-
-Starting with the existing allocation cgroup.
-- When hugetlb pages are reserved, the cgroup of the task making the
-  reservations is charged.  Tracking for the charged cgroup is done in the
-  reservation map in the same way proposed by this patch set.
-- At page fault time,
-  - If a reservation already exists for that specific area do not charge the
-    faulting task.  No tracking in page, just the reservation map.
-  - If no reservation exists, charge the group of the faulting task.  Tracking
-    of this information is in the page itself as implemented today.
-- When the hugetlb object is removed, compare the reservation map with any
-  allocated pages.  If cgroup tracking information exists in page, uncharge
-  that group.  Otherwise, unharge the group (if any) in the reservation map.
-
-One of the advantages of a separate reservation cgroup is that the existing
-code is unmodified.  Combining the two provides a more complete/accurate
-solution IMO.  But, it has the potential to break existing users.
-
-I really would like to get feedback from anyone that knows how the existing
-hugetlb cgroup controller may be used today.  Comments from Aneesh would
-be very welcome to know if reservations were considered in development of the
-existing code.
--- 
-Mike Kravetz
+Cheers
