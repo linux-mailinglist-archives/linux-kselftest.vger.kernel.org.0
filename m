@@ -2,153 +2,202 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6188DBB0E1
-	for <lists+linux-kselftest@lfdr.de>; Mon, 23 Sep 2019 11:05:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9520EBB708
+	for <lists+linux-kselftest@lfdr.de>; Mon, 23 Sep 2019 16:44:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2406435AbfIWJFP (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 23 Sep 2019 05:05:15 -0400
-Received: from mail-pg1-f194.google.com ([209.85.215.194]:38709 "EHLO
-        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729483AbfIWJFP (ORCPT
+        id S2438157AbfIWOok (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 23 Sep 2019 10:44:40 -0400
+Received: from mail-io1-f67.google.com ([209.85.166.67]:35985 "EHLO
+        mail-io1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2437469AbfIWOoj (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 23 Sep 2019 05:05:15 -0400
-Received: by mail-pg1-f194.google.com with SMTP id x10so7661846pgi.5
-        for <linux-kselftest@vger.kernel.org>; Mon, 23 Sep 2019 02:05:14 -0700 (PDT)
+        Mon, 23 Sep 2019 10:44:39 -0400
+Received: by mail-io1-f67.google.com with SMTP id b136so34057068iof.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 23 Sep 2019 07:44:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=v8pa0Tk6FlMlkzD8bXA6NA6bMdvmrzwl4PAFIDbVMYM=;
-        b=NvXQgh6IW3soN2kC6YtQSTm4nJDtjH7T1g1wwUk4J2MMTXgFeWqE4zDVwCvgvthfAE
-         WGgMCY+3F8tX2ulk7a71LHHwNjjj6szslWqQDPwjwKZALkV5YkTouU1UbPdDScjYS1A3
-         tU4aEIFZK99BR3XOVeaN/cSOFn3rfi7yObVLV3PWs+NfL5qPlxMyeRQLXGH1oSX1DcR+
-         Y00Kq9GxGhG7rrAxC5FyQBB+KSDkFMah1k7qmSzRXBnClfBw0q/Abrxnd2xhD8r5qEtT
-         Tri2HbzI2Jc1bPenj4gaZNMu/v3ap/CxdJdQ2lrX7Qpp+yqg86whqYHZk9TgPcLogoid
-         i1DA==
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=7IY3WfHR/RHwzLSdcAp2xrnv8k5NJEy3PyaVmfv4CDY=;
+        b=NQ7ZNPV8IVbnPn1nKeczSvWdIziO7/LvkOpRdtfn7jjcfCmJd63EnpzPiyZak1/PA1
+         PCepRjqBYRV249u0xy119RiiVRrbQnoewKvKDN2U/b/k/jXe+1AcSfJJemdKfTF/C3Ji
+         rmsB1NgrpiBiQvGfWkKTemBKK4IGpSYPKY4A8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=v8pa0Tk6FlMlkzD8bXA6NA6bMdvmrzwl4PAFIDbVMYM=;
-        b=TPg3gA+LbiSJVA2esXVLL+mVl0XGI5+2Hb3WdbjJHj/p/LBt70l3smcq+L62Tq0hHC
-         ukHdsE84Xf1Lytv1ZXBZYOkKP4WvA9ifBQ2DttaURcD62slPBBqEXOKVgIzxL24Q0Eyu
-         Fm1PCIcblBpfbvvVp8U70mGCcmSoYI0cQPeWJ6Cxv9gPIgK88mZVvoHJQnTQnvbKFgF2
-         mi9gipVMpy4LzabPe7WfZEmxdrz6ixfJrAvFa+oJoUPUZEUemZQ2afK6OVBD/ncDZupW
-         hslTXRbRWI9h7Txg0cMXSg9gsFlXmg/GZOoAMoUhyxdhpXl0OalBtJmiAZq+vQ0lAJlr
-         oXhg==
-X-Gm-Message-State: APjAAAUD5HVXirDEJRb7UjuRWTBWS6jU7f/DMvmM4Pd3P9sGT2IFQT9x
-        MJCCtWD4bq46KOIQerE7CrcBT6RbcvGgZlNSOIGizQ==
-X-Google-Smtp-Source: APXvYqwcsKtiLcxSzZRbvj/9c2PAwvr8gZTaDk07lPhILKUwjb/s/yL4yzfAO84TT2ZemaVLn8TDzTeRlveY2nu9F6o=
-X-Received: by 2002:a17:90a:1746:: with SMTP id 6mr5388129pjm.117.1569229513429;
- Mon, 23 Sep 2019 02:05:13 -0700 (PDT)
-MIME-Version: 1.0
-References: <20190921001855.200947-1-brendanhiggins@google.com>
- <20190921001855.200947-8-brendanhiggins@google.com> <944ac47d-1411-9ebd-d0d4-a616c88c9c20@infradead.org>
-In-Reply-To: <944ac47d-1411-9ebd-d0d4-a616c88c9c20@infradead.org>
-From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Mon, 23 Sep 2019 02:05:02 -0700
-Message-ID: <CAFd5g44e9bdK8h5+U1MkqPNuf2k9vnu-iPFLTzGajEHPEcRpHQ@mail.gmail.com>
-Subject: Re: [PATCH v17 07/19] kunit: test: add initial tests
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     Frank Rowand <frowand.list@gmail.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Kees Cook <keescook@google.com>,
-        Kieran Bingham <kieran.bingham@ideasonboard.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Rob Herring <robh@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
-        shuah <shuah@kernel.org>, "Theodore Ts'o" <tytso@mit.edu>,
-        Masahiro Yamada <yamada.masahiro@socionext.com>,
-        devicetree <devicetree@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        kunit-dev@googlegroups.com,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        linux-fsdevel@vger.kernel.org,
-        linux-kbuild <linux-kbuild@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=7IY3WfHR/RHwzLSdcAp2xrnv8k5NJEy3PyaVmfv4CDY=;
+        b=cVz9Bt7iXXVmO8ZxYVLpgJMqhjCu7C9KMNPHGWIQdY4fqOAaGjkU3ZJcKKQCZFJMgo
+         zabUbEZolVI3ohIoUqnuirZ6OcIPOZ1WezxkDGwg4kAFXK8mIHcsjeYLoXctKnWd/Dix
+         NQmQwGJlnmpYNRGlVp2fv6eJ2c6kkpU3X40bS63tAvMhikNk3+9R2TRAHFFhT4a+J3/i
+         4stoevev8GuDfyNdHGHLgjR94eSG2NM3eKECX32U56F816QLZL/sGUgoIykedQ7GoGBy
+         ptMTbaeWqYkGVH7xz50lqm1TRrpNj9vSDFKZKQ6R2zZLdxeXp2sazQjnHpUumQhsHXQR
+         KdJg==
+X-Gm-Message-State: APjAAAXmXCMMDHAc1LwbxcJx3DW6EquYruBb21r1IJHwhPfPnOsImBRn
+        PoAFhdz3CeXwrkY8SvDPT2AqWw==
+X-Google-Smtp-Source: APXvYqybAlJF5w6qEKsknpz6oEPoDndN/VoHitulS16OkFb0EfO8MLKYb6kdbgZ9Y3KL54FOS7PMgA==
+X-Received: by 2002:a02:6616:: with SMTP id k22mr35837275jac.129.1569249878822;
+        Mon, 23 Sep 2019 07:44:38 -0700 (PDT)
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
+        by smtp.gmail.com with ESMTPSA id a25sm6058452iod.62.2019.09.23.07.44.37
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 23 Sep 2019 07:44:38 -0700 (PDT)
+Subject: Re: [GIT PULL] Kselftest update for Linux 5.4-rc1
+To:     Greg KH <gregkh@linuxfoundation.org>,
+        Ingo Molnar <mingo@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        Anders Roxell <anders.roxell@linaro.org>,
         "open list:KERNEL SELFTEST FRAMEWORK" 
         <linux-kselftest@vger.kernel.org>,
-        linux-nvdimm <linux-nvdimm@lists.01.org>,
-        linux-um@lists.infradead.org,
-        Sasha Levin <Alexander.Levin@microsoft.com>,
-        "Bird, Timothy" <Tim.Bird@sony.com>,
-        Amir Goldstein <amir73il@gmail.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Daniel Vetter <daniel@ffwll.ch>, Jeff Dike <jdike@addtoit.com>,
-        Joel Stanley <joel@jms.id.au>,
-        Julia Lawall <julia.lawall@lip6.fr>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Knut Omang <knut.omang@oracle.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Petr Mladek <pmladek@suse.com>,
-        Richard Weinberger <richard@nod.at>,
-        David Rientjes <rientjes@google.com>,
-        Steven Rostedt <rostedt@goodmis.org>, wfg@linux.intel.com,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Content-Type: text/plain; charset="UTF-8"
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <be8059f4-8e8f-cd18-0978-a9c861f6396b@linuxfoundation.org>
+ <CAHk-=wgs+UoZWfHGENWSVBd57Z-Vp0Nqe68R6wkDb5zF+cfvDg@mail.gmail.com>
+ <CAKRRn-edxk9Du70A27V=d3Na73fh=fVvGEVsQRGROrQm05YRrA@mail.gmail.com>
+ <CAFd5g45ROPm-1SD5cD772gqESaP3D8RbBhSiJXZzbaA+2hFdHA@mail.gmail.com>
+ <CAHk-=wgMuNLBhJR_nFHrpViHbz2ErQ-fJV6B9o0+wym+Wk+r0w@mail.gmail.com>
+ <20190922112555.GB122003@gmail.com> <20190922115247.GA2679387@kroah.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <0ab5da69-e4f2-8990-20f9-354461235581@linuxfoundation.org>
+Date:   Mon, 23 Sep 2019 08:44:37 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
+MIME-Version: 1.0
+In-Reply-To: <20190922115247.GA2679387@kroah.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sun, Sep 22, 2019 at 9:28 AM Randy Dunlap <rdunlap@infradead.org> wrote:
->
-> On 9/20/19 5:18 PM, Brendan Higgins wrote:
-> > Add a test for string stream along with a simpler example.
-> >
-> > Signed-off-by: Brendan Higgins <brendanhiggins@google.com>
-> > Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > Reviewed-by: Logan Gunthorpe <logang@deltatee.com>
-> > Reviewed-by: Stephen Boyd <sboyd@kernel.org>
-> > ---
-> >  lib/kunit/Kconfig              | 25 ++++++++++
-> >  lib/kunit/Makefile             |  4 ++
-> >  lib/kunit/example-test.c       | 88 ++++++++++++++++++++++++++++++++++
-> >  lib/kunit/string-stream-test.c | 52 ++++++++++++++++++++
-> >  4 files changed, 169 insertions(+)
-> >  create mode 100644 lib/kunit/example-test.c
-> >  create mode 100644 lib/kunit/string-stream-test.c
-> >
-> > diff --git a/lib/kunit/Kconfig b/lib/kunit/Kconfig
-> > index 666b9cb67a74..3868c226cf31 100644
-> > --- a/lib/kunit/Kconfig
-> > +++ b/lib/kunit/Kconfig
-> > @@ -11,3 +11,28 @@ menuconfig KUNIT
-> >         special hardware when using UML. Can also be used on most other
-> >         architectures. For more information, please see
-> >         Documentation/dev-tools/kunit/.
-> > +
-> > +if KUNIT
->
-> The 'if' above provides the dependency clause, so the 2 'depends on KUNIT'
-> below are not needed.  They are redundant.
+On 9/22/19 5:52 AM, Greg KH wrote:
+> On Sun, Sep 22, 2019 at 01:25:55PM +0200, Ingo Molnar wrote:
+>>
+>> * Linus Torvalds <torvalds@linux-foundation.org> wrote:
+>>
+>>> On Fri, Sep 20, 2019 at 9:35 AM Brendan Higgins
+>>> <brendanhiggins@google.com> wrote:
+>>>>
+>>>> Sorry about that. I am surprised that none of the other reviewers
+>>>> brought this up.
+>>>
+>>> I think I'm "special".
+>>>
+>>> There was some other similar change a few years ago, which I
+>>> absolutely hated because of how it broke autocomplete for me. Very few
+>>> other people seemed to react to it.
+>>
+>> FWIW, I am obsessively sensitive to autocomplete and overall source code
+>> file hieararchy and nomenclature details as well, so it's not just you.
+>>
+>> Beyond the muscle memory aspect, nonsensical naming and inanely flat file
+>> hierarchies annoy kernel developers and makes it harder for newbies to
+>> understand the kernel source as well.
+>>
+>> The less clutter, the more organization, the better - and there's very
+>> few valid technical reasons to add any new files or directories to the
+>> top level directory - we should probably *remove* quite a few.
+>>
+>> For example 'firmware/' was recently moved to drivers/firmware/, and in a
+>> similar fashion about a third of the remaining 22 directories should
+>> probably be moved too:
+>>
+>>    drwxr-xr-x    arch
+>>    drwxr-xr-x    block
+>>    drwxr-xr-x    certs           # move to build/certs/ dir
+>>    drwxr-xr-x    crypto          # move to kernel/crypto/ or security/crypto/
+>>    drwxr-xr-x    Documentation
+>>    drwxr-xr-x    drivers
+>>    drwxr-xr-x    fs
+>>    drwxr-xr-x    include
+>>    drwxr-xr-x    init
+>>    drwxr-xr-x    ipc             # move to kernel/ipc/
+>>    drwxr-xr-x    kernel
+>>    drwxr-xr-x    lib
+>>    drwxr-xr-x    LICENSES
+>>    drwxr-xr-x    mm
+>>    drwxr-xr-x    net
+>>    drwxr-xr-x    samples         # move to Documentation/samples/
+>>    drwxr-xr-x    scripts         # move to build/scripts/
+>>    drwxr-xr-x    security
+>>    drwxr-xr-x    sound           # move to drivers/sound/
+>>    drwxr-xr-x    tools
+>>    drwxr-xr-x    usr             # move to build/usr/
+>>    drwxr-xr-x    virt            # move to the already existing drivers/virt/
+>>
+>>    -rw-r--r--    COPYING
+>>    -rw-r--r--    CREDITS
+>>    -rw-r--r--    Kbuild
+>>    -rw-r--r--    Kconfig
+>>    -rw-r--r--    MAINTAINERS
+>>    -rw-r--r--    Makefile
+>>    -rw-r--r--    README
+>>
+>> There's a few borderline ones:
+>>
+>>   - 'block' could in principle move to drivers/block/core/ but it's fine
+>>     at the top level too I think.
+>>
+>>   - 'init' could in principle be moved to kernel/init/ - but it's not
+>>     wrong at the top level either.
+>>
+>> The remaining top level hierarchy would look pretty sweet and short:
+>>
+>>    drwxr-xr-x    arch
+>>    drwxr-xr-x    block
+>>    drwxr-xr-x    build             # new
+>>    drwxr-xr-x    Documentation
+>>    drwxr-xr-x    drivers
+>>    drwxr-xr-x    fs
+>>    drwxr-xr-x    include
+>>    drwxr-xr-x    init
+>>    drwxr-xr-x    kernel
+>>    drwxr-xr-x    lib
+>>    drwxr-xr-x    LICENSES
+>>    drwxr-xr-x    mm
+>>    drwxr-xr-x    net
+>>    drwxr-xr-x    security
+>>    drwxr-xr-x    tools
+>>
+>>    -rw-r--r--    COPYING
+>>    -rw-r--r--    CREDITS
+>>    -rw-r--r--    Kbuild
+>>    -rw-r--r--    Kconfig
+>>    -rw-r--r--    MAINTAINERS
+>>    -rw-r--r--    Makefile
+>>    -rw-r--r--    README
+>>
+>> I'm volunteering to do this (in a scripted, repeatable, reviewable,
+>> tweakable and "easy to execute in a quiet moment" fashion), although
+>> I also expect you to balk at the churn. :-)
+> 
+> I for one would love the above changes.  And I'm the one that has to
+> deal with all of the backporting issues that arise with stable backports :)
+> 
 
-Thanks for catching that. I fixed it in the new revision I just sent out.
+I am exploring the possibility to move selftests to a better location
+or add a git alias so it can be found easily. With the addition of KUnit
+and future work that is planned to connect kselftest and KUnit, it would
+make sense have selftests to be in a location that is better suited than
+where it currently resides.
 
-> > +
-> > +config KUNIT_TEST
-> > +     bool "KUnit test for KUnit"
-> > +     depends on KUNIT
-> > +     help
-> > +       Enables the unit tests for the KUnit test framework. These tests test
-> > +       the KUnit test framework itself; the tests are both written using
-> > +       KUnit and test KUnit. This option should only be enabled for testing
-> > +       purposes by developers interested in testing that KUnit works as
-> > +       expected.
-> > +
-> > +config KUNIT_EXAMPLE_TEST
-> > +     bool "Example test for KUnit"
-> > +     depends on KUNIT
-> > +     help
-> > +       Enables an example unit test that illustrates some of the basic
-> > +       features of KUnit. This test only exists to help new users understand
-> > +       what KUnit is and how it is used. Please refer to the example test
-> > +       itself, lib/kunit/example-test.c, for more information. This option
-> > +       is intended for curious hackers who would like to understand how to
-> > +       use KUnit for kernel development.
-> > +
-> > +endif # KUNIT
+I have been getting feedback from some developers that they would like
+to see selftests more visible and easier to find.
 
-Cheers
+There are some dependencies (unintended, shouldn't exist) between some
+tests and content under tools that might pose some logistical problems,
+in addition to the churn of backporting.
+
+I haven't explored "git alias" yet though. Since this topic of moving
+came up, I would liek to get feedback on selftests location in general
+and where would be a good place for it.
+
+thanks,
+-- Shuah
+
