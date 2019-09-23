@@ -2,269 +2,287 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D0D18BBE0F
-	for <lists+linux-kselftest@lfdr.de>; Mon, 23 Sep 2019 23:41:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 769E4BBE1D
+	for <lists+linux-kselftest@lfdr.de>; Mon, 23 Sep 2019 23:50:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2502999AbfIWVls (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 23 Sep 2019 17:41:48 -0400
-Received: from mail-pg1-f172.google.com ([209.85.215.172]:44510 "EHLO
-        mail-pg1-f172.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2390047AbfIWVlr (ORCPT
+        id S2503150AbfIWVuN (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 23 Sep 2019 17:50:13 -0400
+Received: from mxcp02out.l3harris.com ([166.20.196.24]:6259 "EHLO
+        mxcp02out.l3harris.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2503114AbfIWVuN (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 23 Sep 2019 17:41:47 -0400
-Received: by mail-pg1-f172.google.com with SMTP id g3so7173624pgs.11
-        for <linux-kselftest@vger.kernel.org>; Mon, 23 Sep 2019 14:41:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=zjHt44Fl+axePhJiYINVzQJUZJs/FYN4XgWoDnbz0aY=;
-        b=RiGjTo7A6/cxzOXGzCP9RQ3aP5Xmq8R2cDwM6kTjgqpiOFQx63Ps0JxZM77Iu5ZJnW
-         APunfGasMxkjelcyKjPj4sQirQRXaHIkySw7UhEfUeKTJQrKHGDhiNdRBxMHLID3zC+D
-         tZBb2tENM+8NR/S/e6g8QfOHhl9ebOMYR5s8E7LqTwdZneLYncpeRV7M+ZjiHwmYGzbb
-         mYPFtmoXeMtQJHkaVTSW7/FlwLkjDmGJKnJYqAgxjxlWx3TGPS/v08rzvMLwSVaY2Eq2
-         g6aevj7YOvQfn4xrwYCOag04l4OVC593ljdI7hJ/hahsqby+WPmWRnUSuH5aGpyaJOde
-         lZRA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=zjHt44Fl+axePhJiYINVzQJUZJs/FYN4XgWoDnbz0aY=;
-        b=Ekrf1GwQRXfFU7TP/vECnpqhTSLgZdPo2bbO9ygWaO5GgCXav1v+kHpL1dsTWq2CIo
-         bHLo8uQCUU8XkSflC7/+KPAQpeUjYXp4PUBGPH7fcqZG2fPBhZFU9C73E9vhNvl4XuLZ
-         6er3weCg29ylt9sQqNbjg9ZUH9tCSTg5idpJrJZshImNU1REBW1IvZAZyJRTPxNRt+7/
-         qM+ins0IuJQn2h9/Kuzx9RJdb4QcyUzZTJtX4VD8hjMWf792ZdZk15lIpnay7jVYL8ph
-         kFJXyVswFwhZ/KIWAe8920YZyHjJOQxgiErwDv/cKa8L7LKJwQh3QiOeetf9EScbBFSi
-         oWHg==
-X-Gm-Message-State: APjAAAV1C6NjS8ztHZ5CYnn+2d6uR+lc3fulmH4EL2ZfU2508NZwNuPf
-        Gq5BZGsoAN1EBMuH3MdcLIg5seM0DtXq2dQ1SWbS0Q==
-X-Google-Smtp-Source: APXvYqzFh0Vhn7AAG0a95U0LOxpaSwWFWl9vC3jMRlKXkTRcL9KGuOdARtjVONk6dYoyDCii7TCKr8aH+I53anoqQAQ=
-X-Received: by 2002:a63:ba47:: with SMTP id l7mr1956155pgu.201.1569274905911;
- Mon, 23 Sep 2019 14:41:45 -0700 (PDT)
-MIME-Version: 1.0
-References: <CABVgOSk79D0pmcWn-ynwGMfSxiD5AGrYWHmcQ5awre7QnQoKPg@mail.gmail.com>
-In-Reply-To: <CABVgOSk79D0pmcWn-ynwGMfSxiD5AGrYWHmcQ5awre7QnQoKPg@mail.gmail.com>
-From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Mon, 23 Sep 2019 14:41:34 -0700
-Message-ID: <CAFd5g4659KMmAtJshzs0n=rPZX5EGFBgYfNkH5RznZH=JnxeHQ@mail.gmail.com>
-Subject: Re: kunit: what do we do with the 'kunit/alpha/master' branch?
-To:     David Gow <davidgow@google.com>
-Cc:     David Chiang <davidchiang@google.com>,
-        David Siebert <David.Siebert@l3harris.com>,
+        Mon, 23 Sep 2019 17:50:13 -0400
+X-Greylist: delayed 302 seconds by postgrey-1.27 at vger.kernel.org; Mon, 23 Sep 2019 17:50:11 EDT
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=l3harris.com; i=@l3harris.com; q=dns/txt; s=mail;
+  t=1569275411; x=1600811411;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:mime-version:content-transfer-encoding;
+  bh=sHU+LFQWrn+pM5oUprZ0QCw9QiNdmxrZnzRfnDOzaqI=;
+  b=WYYmmiFYRsZjrqA4+xo+EgGxiCWXPl2lpD9Gj7wpYkFm1s8GHclnQuqj
+   2jQnOiHj80Ha9FnpzNAJfW0/lV10V7dqmOf1KBI/nRWlMsSSblRL36ykI
+   eTM5feALt0T04Cnqppw0h3rQYL9R5MkTh30HAxhS6ChcD0CihnF4QVXZf
+   rmaRE8bhFys66BCSvm1LvLWVFvfP0gwpaKRpieS6iMEbvtUgmJbcAmw0C
+   Mp/+Ilo9D8l13sXBBD4VEBDQ9dkobEHEmm4oW5mRE/SSRN+QW7i0SLrbR
+   xZ/AI/TygccH9MI4r5SfxmQQX3f36knqyaNkv+lZAhuuaMitqwbrqvuDt
+   g==;
+Received: from mlbxsmtpout01.harris.com (HELO mlbxsmtp01.harris.com) ([192.52.234.91])
+  by mxcp02out.l3harris.com with ESMTP/TLS/DHE-RSA-AES256-SHA256; 23 Sep 2019 21:45:08 +0000
+X-AuditID: c034ea5a-783ff700000022d4-ef-5d893ce46ad7
+Received: from MLBXCH14.cs.myharris.net ( [10.64.224.132])
+        (using TLS with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by mlbxsmtp01.harris.com (mail) with SMTP id 3F.25.08916.4EC398D5; Mon, 23 Sep 2019 17:45:08 -0400 (EDT)
+From:   "Siebert, David" <David.Siebert@L3Harris.com>
+To:     Brendan Higgins <brendanhiggins@google.com>,
+        David Gow <davidgow@google.com>
+CC:     David Chiang <davidchiang@google.com>,
         Kees Cook <keescook@chromium.org>,
         Mike Salvatore <mike.salvatore@canonical.com>,
         Pei Huang <peihuang@google.com>,
         Sagi Shahar <sagis@google.com>,
         Sangsu Ha <sangsu.ha@samsung.com>,
-        Shuah Khan <shuah@kernel.org>, kunit-dev@googlegroups.com,
+        Shuah Khan <shuah@kernel.org>,
+        "kunit-dev@googlegroups.com" <kunit-dev@googlegroups.com>,
         "open list:KERNEL SELFTEST FRAMEWORK" 
         <linux-kselftest@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Subject: RE: kunit: what do we do with the 'kunit/alpha/master' branch?
+Thread-Topic: kunit: what do we do with the 'kunit/alpha/master' branch?
+Thread-Index: AQHVbYePF+dO5z4e10qCJOCgwtmDnqc6F1UA//+9UsA=
+Date:   Mon, 23 Sep 2019 21:45:07 +0000
+Message-ID: <2ff728c5dd5f4ca6a2c70734bdf0f967@MLBXCH16.cs.myharris.net>
+References: <CABVgOSk79D0pmcWn-ynwGMfSxiD5AGrYWHmcQ5awre7QnQoKPg@mail.gmail.com>
+ <CAFd5g4659KMmAtJshzs0n=rPZX5EGFBgYfNkH5RznZH=JnxeHQ@mail.gmail.com>
+In-Reply-To: <CAFd5g4659KMmAtJshzs0n=rPZX5EGFBgYfNkH5RznZH=JnxeHQ@mail.gmail.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-titus-metadata-40: eyJDYXRlZ29yeUxhYmVscyI6IiIsIk1ldGFkYXRhIjp7Im5zIjoiaHR0cDpcL1wvd3d3LnRpdHVzLmNvbVwvbnNcL1Byb2Zlc3Npb25hbFNhbXBsZSIsImlkIjoiNzQ0YTVlOWMtZmU1Ni00YTJlLThlZmUtMTQ2ZTM1MWMwNGRlIiwicHJvcHMiOlt7Im4iOiJDTEFTU0lGSUNBVElPTiIsInZhbHMiOlt7InZhbHVlIjoiR2VuZXJhbCJ9XX1dfSwiU3ViamVjdExhYmVscyI6W10sIlRNQ1ZlcnNpb24iOiIxOC40LjE4MzUuMTEwIiwiVHJ1c3RlZExhYmVsSGFzaCI6Imp4UWtVZXB4SVZpbG9WXC9LWjNpNmZYTzIzbEJaQU1ZcFlQYzFaMndoTlpcL3VxVkxwZzh0clZEOHVFU1YzcVdPcSJ9
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.64.224.62]
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrDIsWRmVeSWpSXmKPExsXC5fCgRfeJTWesQdNTGYuLNyYzW+x7/5vV
+        4sTGDSwWZ7pzLZbM2MhmMf3OezaLg4emM1mcXjOfyaJn12JWiw0nVjBbTHm5jt2B22NWQy+b
+        x+yGiyweCzaVeuyZeJLNY9OqTjaPvi2rGD0+b5ILYI/isklJzcksSy3St0vgyjh8eitbwYuS
+        is0tC5kbGF8UdjFyckgImEhs2vOVtYuRi0NIoJ9JYvLGbexdjBwcbALGEjcf1oDUiAgESezZ
+        tYsdpIZZoIdZYvuyKYwgCWEBd4kvXV/B6kUEPCT6dpZA1FtJ/Lr/lB3EZhFQlbjydjYziM0L
+        VD5p9QcWiF3TGSU2H1/FCtLLKRAo8WaFH0gNo4CYxPdTa5hAbGYBcYlbT+YzQdwpILFkz3lm
+        CFtU4uXjf2A3SwicZZbY0NECVWQgsXXpPhYIW0Hi1fENLCDzmQU0Jdbv0oeYqSgxpfshO8Q9
+        ghInZz5hmcAoNgvJulkIHbOQdMxC0rGAkWUVo2huTlJFcW5JgYGhXkZiUVFmsV5yfu4mRmAE
+        HzB5FbWDceOlV3qHGJk4GA8xSnAwK4nwbtJqixXiTUmsrEotyo8vKs1JLT7EKM3BoiTO6yzb
+        GSskkJ5YkpqdmlqQWgSTZeLglGpgarVu/Xz7Tvz65QdWVRR1f4y4lXlJZr4L/3SLQyflk7T5
+        stez+3q+O2a+K3W/f+TpQEeeC6uvvOyenGsb+OJo2ZdXLGobJ50+3rU1XMSk6OqJJansZfm7
+        dglx7rPY0DPFufewya/AnZ+k/tw2vhb78dufBa+iP+8psH2mZ+F6+Y/mCR3eTWycK7/3WtU3
+        XtKLTDgr7j477cYK39Tz5oW+Ggbvjiqw7TpxfmagXnDLSfcbm5u8f2Z8v/vfapXEhQth05W5
+        3q78rvdsfvSGajevxF2eC19O/RcSwhBxLWcDR11Ny4nYWTOmJE5iFI5cOoPv4q1PZzRkhHN9
+        j0w4K953a0rO8YJZuWmPPrJ7hszf9EuJpTgj0VCLuag4EQDVkMZOTwMAAA==
+Content-Transfer-Encoding: base64
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Sep 17, 2019 at 11:41 AM David Gow <davidgow@google.com> wrote:
->
-> TL;DR: We expect KUnit to be accepted upstream into Linus' branch in
-> the next week or two, and we now need to figure out what we are going
-> to do with our non-upstream 'kunit/alpha/master' branch.
+DQpSaWdodCBub3cgSSBhbSBmb2N1c2VkIG9uIHRoZSBtb2NraW5nIGFuZCBnZXR0aW5nIHRoYXQg
+dG8gd29yay4gSSBhbSBzdGlsbCBoYXZlIHNvbWUgdmVyeSBzdHJhbmdlIGlzc3VlcyB3aXRoIG1v
+Y2tpbmcgc29tZSBmdW5jdGlvbiBjYWxscyBpbmNsdWRpbmcga2VybmVsIHBhbmljcy4NCllvdXIg
+cGxhbiBzZWVtcyBsb2dpY2FsIGJ1dCBqdXN0IGhvdyB1c2VmdWwgaXMgaXQgd2l0aG91dCBtb2Nr
+aW5nPw0KLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCkZyb206IEJyZW5kYW4gSGlnZ2lucyBb
+bWFpbHRvOmJyZW5kYW5oaWdnaW5zQGdvb2dsZS5jb21dIA0KU2VudDogTW9uZGF5LCBTZXB0ZW1i
+ZXIgMjMsIDIwMTkgNTo0MiBQTQ0KVG86IERhdmlkIEdvdyA8ZGF2aWRnb3dAZ29vZ2xlLmNvbT4N
+CkNjOiBEYXZpZCBDaGlhbmcgPGRhdmlkY2hpYW5nQGdvb2dsZS5jb20+OyBTaWViZXJ0LCBEYXZp
+ZCAoVVMpIDxEYXZpZC5TaWViZXJ0QEwzSGFycmlzLmNvbT47IEtlZXMgQ29vayA8a2Vlc2Nvb2tA
+Y2hyb21pdW0ub3JnPjsgTWlrZSBTYWx2YXRvcmUgPG1pa2Uuc2FsdmF0b3JlQGNhbm9uaWNhbC5j
+b20+OyBQZWkgSHVhbmcgPHBlaWh1YW5nQGdvb2dsZS5jb20+OyBTYWdpIFNoYWhhciA8c2FnaXNA
+Z29vZ2xlLmNvbT47IFNhbmdzdSBIYSA8c2FuZ3N1LmhhQHNhbXN1bmcuY29tPjsgU2h1YWggS2hh
+biA8c2h1YWhAa2VybmVsLm9yZz47IGt1bml0LWRldkBnb29nbGVncm91cHMuY29tOyBvcGVuIGxp
+c3Q6S0VSTkVMIFNFTEZURVNUIEZSQU1FV09SSyA8bGludXgta3NlbGZ0ZXN0QHZnZXIua2VybmVs
+Lm9yZz4NClN1YmplY3Q6IFJlOiBrdW5pdDogd2hhdCBkbyB3ZSBkbyB3aXRoIHRoZSAna3VuaXQv
+YWxwaGEvbWFzdGVyJyBicmFuY2g/DQoNCk9uIFR1ZSwgU2VwIDE3LCAyMDE5IGF0IDExOjQxIEFN
+IERhdmlkIEdvdyA8ZGF2aWRnb3dAZ29vZ2xlLmNvbT4gd3JvdGU6DQo+DQo+IFRMO0RSOiBXZSBl
+eHBlY3QgS1VuaXQgdG8gYmUgYWNjZXB0ZWQgdXBzdHJlYW0gaW50byBMaW51cycgYnJhbmNoIGlu
+IA0KPiB0aGUgbmV4dCB3ZWVrIG9yIHR3bywgYW5kIHdlIG5vdyBuZWVkIHRvIGZpZ3VyZSBvdXQg
+d2hhdCB3ZSBhcmUgZ29pbmcgDQo+IHRvIGRvIHdpdGggb3VyIG5vbi11cHN0cmVhbSAna3VuaXQv
+YWxwaGEvbWFzdGVyJyBicmFuY2guDQoNCkdpdmVuIHRoYXQgaXQgaGFzIGJlZW4gYWJvdXQgYSB3
+ZWVrIGFuZCB3ZSBoYXZlbid0IGhlYXJkIGFueSBjb21tZW50cywgY29tcGxhaW50cywgb3IgY29u
+Y2VybnMgYWJvdXQgdGhpcy4gSSBhc3N1bWUgdGhhdCB0aGVyZSBhcmUgbm8gc3Ryb25nIG9waW5p
+b25zIGFnYWluc3QgdGhpcywgYW5kIHBlb3BsZSB3aWxsIGJlIGdlbmVyYWxseSBva2F5IHdpdGgg
+dGhpcyBzdHJhdGVneS4NCg0KQXMgbWVudGlvbmVkIHByZXZpb3VzbHksIHdlIGFyZSBleHBlY3Rp
+bmcgdG8gc2VlIEtVbml0IG1ha2UgaXQgaW50byB0b3J2YWxkcy9tYXN0ZXIgdGhpcyBtZXJnZSB3
+aW5kb3cgKHRoZSBuZXh0IHdlZWsgb3Igc28pLCBzbyB3ZSB3aWxsIHByb2JhYmx5IHVwZGF0ZS9y
+ZW5hbWUga3VuaXQvYWxwaGEvbWFzdGVyIHNob3J0bHkgdGhlcmVhZnRlci4NCg0KQ2hlZXJzDQoN
+Cj4gSGVsbG8gZXZlcnlvbmUsDQo+DQo+IFdlJ3ZlIHB1dCB0b2dldGhlciBhIHJvdWdoIHByb3Bv
+c2FsIG9mIHdoYXQgd2Ugc2hvdWxkIGRvIHdpdGggb3VyIA0KPiBub3QtdXBzdHJlYW0gYnJhbmNo
+LCBrbm93biB0byBtb3N0IHBlb3BsZSB1c2luZyBpdCBhcyANCj4gJ2t1bml0L2FscGhhL21hc3Rl
+cidbMV0sIG5vdyB0aGF0IEtVbml0J3MgYWNjZXB0YW5jZSBpbnRvIG1haW5saW5lIA0KPiBhcHBl
+YXJzIHRvIGJlIGltbWluZW50ICh0aGUgS1VuaXQgTVZQIHBhdGNoc2V0IGlzIG5vdyBpbiBsaW51
+eC1uZXh0LCANCj4gYW5kIHRoZSBtZXJnZSB3aW5kb3cganVzdCBvcGVuZWQpLg0KPg0KPiA9PT09
+PT09PT09DQo+IEJhY2tncm91bmQNCj4gPT09PT09PT09PQ0KPg0KPiBLVW5pdCBkZXZlbG9wbWVu
+dCBpcyBjdXJyZW50bHkgc3BsaXQgYmV0d2VlbiB0d28gdmVyc2lvbnM6IHRoZSANCj4gJ2t1bml0
+L2FscGhhL21hc3RlcidbMV0gZ2l0IGJyYW5jaCwgYW5kIHRoZSB2ZXJzaW9uIGJlaW5nIHN1Ym1p
+dHRlZCB0byANCj4gdGhlIHVwc3RyZWFtIExpbnV4IGtlcm5lbC4gV2hpbGUgdGhlcmUgYXJlIHNv
+bWUgZ29vZCByZWFzb25zIHRvIA0KPiBjb250aW51ZSB0byBoYXZlIHR3byBzZXBhcmF0ZSB2ZXJz
+aW9ucyBvZiBLVW5pdCwgYXQgcHJlc2VudCB0aGVyZSBpcyANCj4gc29tZSB1bmNlcnRhaW50eSBh
+cm91bmQgdGhlIGRpZmZlcmVuY2UgYmV0d2VlbiB0aGVzZSB2ZXJzaW9ucywgYW5kIGluIA0KPiB3
+aGljaCBjaXJjdW1zdGFuY2VzIGVhY2ggdmVyc2lvbiBpcyB1c2VmdWwuDQo+DQo+IEF0IHByZXNl
+bnQsIHRoZSAna3VuaXQvYWxwaGEvbWFzdGVyJyBicmFuY2ggc2VydmVzIGEgZmV3IGRpZmZlcmVu
+dCANCj4gcHVycG9zZXMuIEl0IGlzIGEgcGxhY2UgZm9yIGNvZGUgbm90LXlldC1yZWFkeSBmb3Ig
+dXBzdHJlYW0gLS0gc3VjaCBhcyANCj4gdGhlIG1vY2tpbmcgZnJhbWV3b3JrIC0tIHdoaWxlIGJl
+aW5nIGRldmVsb3BlZCwgd2hpbGUgYWxzbyBhY3RpbmcgYXMgYSANCj4gc3RhYmxlIHZlcnNpb24g
+Zm9yIGN1c3RvbWVycyB3aG8gZG8gbm90IHdpc2ggdG8gZm9sbG93IGFsb25nIHdpdGggdGhlIA0K
+PiBjaGFuZ2VzIG1hZGUgZHVyaW5nIHRoZSB1cHN0cmVhbWluZyBwcm9jZXNzLiBBZGRpbmcgdG8g
+dGhlIGNvbmZ1c2lvbiwgDQo+IHRoZSBuYW1lICdrdW5pdC9hbHBoYS9tYXN0ZXInIHJlZmVycyB0
+byBhbiBlYXJseSAoYWxwaGEpIHZlcnNpb24gb2YgDQo+IEtVbml0LCBhbmQgdGhlIHZlcnNpb24g
+b2YgS1VuaXQgYmVpbmcgdXBzdHJlYW1lZCBoYXMgbm93IGRpdmVyZ2VkIA0KPiBzaWduaWZpY2Fu
+dGx5IGZyb20gdGhpcyB2ZXJzaW9uLCByZXF1aXJpbmcgc2lnbmlmaWNhbnQgZGlmZmVyZW5jZXMg
+aW4gDQo+IGRvY3VtZW50YXRpb24sIGFuZCByZXF1aXJpbmcgYSBudW1iZXIgb2YgY2hhbmdlcyB0
+byB0ZXN0cyB3aGVuIHBvcnRpbmcgDQo+IGZyb20gb25lIHZlcnNpb24gdG8gdGhlIG90aGVyLiBG
+aW5hbGx5LCBpdCBpcyBub3QgY2xlYXIgaG93IHRoZSANCj4gJ2t1bml0L2FscGhhL21hc3Rlcicg
+dmVyc2lvbiBzaG91bGQgZXZvbHZlIGFzIGZlYXR1cmVzIGl0IGNvbnRhaW5zIGFyZSANCj4gdXBz
+dHJlYW1lZC4NCj4NCj4gT24gdGhlIG90aGVyIGhhbmQsIHRoZSB2ZXJzaW9uIGJlaW5nIHVwc3Ry
+ZWFtZWQgaGFzIGl0cyBvd24gDQo+IGNvbXBsaWNhdGlvbnMuIEl0IGNvbnRhaW5zIHNpZ25pZmlj
+YW50bHkgZmV3ZXIgZmVhdHVyZXMgKGFzIGZlYXR1cmVzIA0KPiBzdWNoIGFzIHRoZSBtb2NraW5n
+IGZyYW1ld29ya3Mgd2lsbCBiZSB1cHN0cmVhbWVkIGluZGl2aWR1YWxseSksIGFuZCANCj4gc28g
+aXMgbGVzcyB1c2VmdWwgZm9yIHRoZSBhdmVyYWdlIGN1c3RvbWVyLiBVbnRpbCBlYWNoIGZlYXR1
+cmUgaXMgDQo+IHVwc3RyZWFtZWQsIGl0IGlzIGl0ZXJhdGVkIG9uIHJhcGlkbHkgdG8gYWRkcmVz
+cyBjb21tZW50cyBmcm9tIHRoZSANCj4ga2VybmVsIGNvbW11bml0eSwgc28gaW4tcHJvZ3Jlc3Mg
+ZmVhdHVyZXMgYXJlIG5vdCBzdGFibGUgZW5vdWdoIHRvIA0KPiByZWFzb25hYmx5IGJ1aWxkIG9u
+LiBGaW5hbGx5LCBpdCBleGlzdHMgb25seSBhcyBhIHNldCBvZiBwYXRjaGVzIG9uIA0KPiBtYWls
+aW5nIGxpc3RzLCByYXRoZXIgdGhhbiBhcyBhIG1haW50YWluZWQgZ2l0IHJlcG9zaXRvcnkgKGR1
+ZSB0byB0aGUgDQo+IGZhY3QgdGhhdCB0aGUgcGF0Y2hlcyB0aGVtc2VsdmVzIGFyZSBjaGFuZ2lu
+ZyByYXBpZGx5KSwgbWFraW5nIGl0IA0KPiBkaWZmaWN1bHQgZm9yIGVhcmx5IGFkb3B0ZXJzIHRv
+IGluY29ycG9yYXRlIGludG8gdGhlaXIgb3duIHRyZWVzLg0KPg0KPiBXaGlsc3Qgd2UgYmVsaWV2
+ZSB0aGVyZSB0byBiZSBlbm91Z2ggKGF0IHRpbWVzIGNvbmZsaWN0aW5nKSBnb2FscyANCj4gYWJv
+dmUgdG8ganVzdGlmeSBoYXZpbmcgbXVsdGlwbGUgdmVyc2lvbnMgb2YgS1VuaXQsIHdlIHdhbnQg
+dG8gZW5zdXJlIA0KPiB0aGF0IHRoZXkgYXJlIG1lZXRpbmcgdGhlaXIgZ29hbHMsIGFuZCB0aGF0
+IHdlIGhhdmUgYSBwcm9jZXNzIHRvIA0KPiBlbnN1cmUgdGhhdCBjb2RlIGZpbmRzIGl0cyB3YXkg
+aW50byB0aGUgY29ycmVjdCB2ZXJzaW9uLCB0aGF0IHdlIGNhbiANCj4gZGVwcmVjYXRlIGFuZCBy
+ZW1vdmUgZmFpbGVkIGV4cGVyaW1lbnRzIG9yIHN1cGVyc2VkZWQgdmVyc2lvbnMsIGFuZCANCj4g
+dGhhdCB3ZSBjYW4ga2VlcCBwYWNlIHdpdGggdXBzdHJlYW0ga2VybmVsIHJlbGVhc2VzLg0KPg0K
+PiA9PT09PT09PT09PT0NCj4gVGhlIFByb3Bvc2FsDQo+ID09PT09PT09PT09PQ0KPg0KPiBXZSBw
+cm9wb3NlIGhhdmluZyB0d28gdHJhY2tzIG9mIGRldmVsb3BtZW50OiB0aGUgdXBzdHJlYW0ga2Vy
+bmVsIA0KPiAoY29tcHJpc2luZyBib3RoIGNvZGUgdGhhdCBoYXMgYmVlbiB1cHN0cmVhbWVkLCBh
+bmQgY29kZSB3aGljaCBpcyBpbiANCj4gdGhlIHByb2Nlc3Mgb2YgYmVpbmcgdXBzdHJlYW1lZCAt
+LSBpLmUuIGlzIGJlaW5nIHJldmlld2VkIG9uIHRoZSANCj4gbWFpbGluZyBsaXN0cyksIGFuZCBh
+biAnZXhwZXJpbWVudGFsJyBicmFuY2gsIHdoaWNoIGNvbnRhaW5zIGZlYXR1cmVzIA0KPiB3aGlj
+aCBhcmUgeWV0IHRvIGJlIHN1Ym1pdHRlZCB1cHN0cmVhbS4NCj4NCj4gUGVyaW9kaWNhbGx5LCB0
+aGUgJ2V4cGVyaW1lbnRhbCcgYnJhbmNoIHdpbGwgYmUgcmVwbGFjZWQgd2l0aCBhIG5ldyANCj4g
+J2V4cGVyaW1lbnRhbCcgYnJhbmNoIGJhc2VkIG9uIHRoZSBsYXRlc3QgdXBzdHJlYW0gdmVyc2lv
+bi4gVGhpcyB3aWxsIA0KPiBhbGxvdyB1cyB0byBmb2N1cyBvbiBjb2RlIGJhc2VkIG9uIHVwc3Ry
+ZWFtIHZlcnNpb25zIGJ5IGRlcHJlY2F0aW5nIA0KPiBlYXJsaWVyLCBleHBlcmltZW50YWwgdmVy
+c2lvbnMgb2YgZmVhdHVyZXMuIFRoZSBvbGRlciBleHBlcmltZW50YWwgDQo+IGJyYW5jaCB3aWxs
+IHN0YXkgYXJvdW5kLCBidXQgcmVjZWl2ZSBubyBuZXcgZmVhdHVyZXMgb3Igc3VwcG9ydDoNCj4g
+Y3VzdG9tZXJzIHdpbGwgbmVlZCB0byBldmVudHVhbGx5IG1pZ3JhdGUgdG8gZWl0aGVyIHRoZSB1
+cHN0cmVhbSANCj4ga2VybmVsIChpZiBhbGwgb2YgdGhlIGZlYXR1cmVzIHRoZXkgcmVxdWlyZSBo
+YXZlIGJlZW4gdXBzdHJlYW1lZCksIG9yIA0KPiB0byB0aGUgbGF0ZXN0ICdleHBlcmltZW50YWwn
+IGJyYW5jaCAoaWYgdGhleSBzdGlsbCByZXF1aXJlIA0KPiBub24tdXBzdHJlYW1lZCBmZWF0dXJl
+cykuDQo+DQo+IFdoZXJlIHByYWN0aWNhbCwgJ2V4cGVyaW1lbnRhbCcgYnJhbmNoZXMgd2lsbCB0
+cnkgdG8gcHJvdmlkZSBhIHN0YWJsZSANCj4gaW50ZXJmYWNlIChhbmQvb3IgY29tcGF0aWJpbGl0
+eSBsYXllcnMvc2hpbXMpIHN1Y2ggdGhhdCB1c2VycyBjYW4gDQo+IHdyaXRlIHRlc3RzIGFnYWlu
+c3QgYW4gZXhwZXJpbWVudGFsIHZlcnNpb24gYW5kIGV4cGVjdCBvdXIgY2hhbmdlcyB0byANCj4g
+YnJlYWsgdGhlbSBpbmZyZXF1ZW50bHkuIFdlIGRvbid0IGludGVuZCB0byBtYWtlIGFueSBzb2xp
+ZCBndWFyYW50ZWUsDQo+IGhvd2V2ZXI6IHNvIHVzZXJzIHdpbGwgbmVlZCB0byBiZSBhYmxlIHRv
+IGRlYWwgd2l0aCBzb21lIGJyZWFrYWdlLg0KPg0KPiBXZSBleHBlY3QgbW9zdCBjaGFuZ2VzIHRv
+IEtVbml0IHRvIGJlIHN1Ym1pdHRlZCBkaXJlY3RseSB1cHN0cmVhbSwgYW5kIA0KPiByZXNlcnZl
+IHRoZSAnZXhwZXJpbWVudGFsJyBicmFuY2ggZm9yIGZlYXR1cmVzIHdoZXJlOg0KPiBhKSB0aGUg
+ZGVzaWduIGlzIHlldCB0byBiZSBwcm92ZW4gYnkgZWFybHkgYWRvcHRlcnMsIGFuZCBpcyBsaWtl
+bHkgdG8gDQo+IGNoYW5nZTsNCj4gYikgdGhlIGZlYXR1cmUgaXMgbGFyZ2UgZW5vdWdoIHRoYXQg
+aGF2aW5nIGEgc29saWQgc3RhZ2luZyBlbnZpcm9ubWVudCANCj4gaW4gd2hpY2ggc2V2ZXJhbCBk
+ZXZlbG9wZXJzIGNhbiB3b3JrIGlzIG5lY2Vzc2FyeTsgYW5kL29yDQo+IGMpIGl0IGRlcGVuZHMg
+b24gZXhpc3RpbmcgZmVhdHVyZXMgb25seSBhdmFpbGFibGUgaW4gdGhlICdleHBlcmltZW50YWwn
+IGJyYW5jaC4NCj4NCj4gQW4gZXhhbXBsZSBvZiBmZWF0dXJlcyBzdWl0ZWQgdG8gdGhlICdleHBl
+cmltZW50YWwnIGJyYW5jaCBhcmUgdGhlIA0KPiBtb2NraW5nIHN5c3RlbXNbMl0uDQo+DQo+ID09
+PT09PT09PT09PT09PT09PT09PQ0KPiBMaWZldGltZSBvZiBhIGZlYXR1cmUNCj4gPT09PT09PT09
+PT09PT09PT09PT09DQo+DQo+IEEgbmV3IGZlYXR1cmUgKHRoYXQgZm9yIG9uZSBvZiB0aGUgYWJv
+dmUgcmVhc29ucyBtYXkgcmVxdWlyZSBzb21lIA0KPiBleHBlcmltZW50YXRpb24gYmVmb3JlIGJl
+aW5nIHNlbnQgdXBzdHJlYW0pIHdvdWxkIHR5cGljYWxseSBiZSANCj4gZGV2ZWxvcGVkIGFzIGZv
+bGxvd3M6DQo+DQo+IDEuIEFuIGluaXRpYWwgdmVyc2lvbiBvZiB0aGUgZmVhdHVyZSBpcyBkZXZl
+bG9wZWQgYWdhaW5zdCB0aGUgbGF0ZXN0IA0KPiAnZXhwZXJpbWVudGFsJyBicmFuY2guDQo+IDIu
+IFRoZSBmZWF0dXJlIGlzIHRlc3RlZCBieSB1c2VycyBvZiB0aGUgJ2V4cGVyaW1lbnRhbCcgYnJh
+bmNoLg0KPiAzLiBJdCBpcyByZXZpc2VkIGFzIG5lZWRlZCB3aXRoaW4gdGhlICdleHBlcmltZW50
+YWwnIGJyYW5jaC4gSWYgDQo+IGJyZWFraW5nIGNoYW5nZXMgYXJlIHJlcXVpcmVkLCBhbmQgc3Vw
+cG9ydGluZyBzb21lIGZvcm0gb2YgDQo+IGNvbXBhdGliaWxpdHkgbGF5ZXIgaXMgcHJhY3RpY2Fs
+LCBzdWNoIGEgbGF5ZXIgaXMgaW1wbGVtZW50ZWQgdG8gYXZvaWQgDQo+IGJyZWFraW5nIGV4aXN0
+aW5nICdleHBlcmltZW50YWwnIGN1c3RvbWVycy4NCj4gNC4gT25jZSB0aGUgZmVhdHVyZSBpcyBk
+ZWVtZWQgcmVhZHksIGl0IGlzIHN1Ym1pdHRlZCB0byB0aGUgbWFpbGluZyANCj4gbGlzdHMgZm9y
+IHRoZSB1cHN0cmVhbSBrZXJuZWwuIEFueSBjb21wYXRpYmlsaXR5IGxheWVycyBmb3IgZWFybGll
+ciANCj4gZXhwZXJpbWVudGFsIHZlcnNpb24gYXJlIHJlbW92ZWQgLS0gdGhpcyBpcyBhICdjbGVh
+bicgdmVyc2lvbiBvZiB0aGUgDQo+IGNoYW5nZS4NCj4gNS4gRGV2ZWxvcG1lbnQgb2YgdGhlIGNo
+YW5nZSBjb250aW51ZXMgb24gdGhlIGtlcm5lbCBtYWlsaW5nIGxpc3RzOg0KPiBhbnkgcGFydGlj
+dWxhcmx5IGltcG9ydGFudCBjaGFuZ2VzIG9yIGJ1Z2ZpeGVzIGFyZSBwb3J0ZWQgdG8gdGhlIA0K
+PiAnZXhwZXJpbWVudGFsJyBicmFuY2ggaWYgZmVhc2libGUsIGJ1dCBjb21wbGV0ZSBjb252ZXJn
+ZW5jZSBpcyBub3QgDQo+IGV4cGVjdGVkIGF0IHRoaXMgc3RhZ2UuDQo+IDYuIFdoZW4gdGhlIGZl
+YXR1cmUgaXMgYWNjZXB0ZWQgdXBzdHJlYW0sIGEgbmV3ICdleHBlcmltZW50YWwnIGJyYW5jaCAN
+Cj4gaXMgY3JlYXRlZCBiYXNlZCBvbiB0aGUgbmV3IHVwc3RyZWFtIGtlcm5lbC4gRGV2ZWxvcG1l
+bnQgb24gdGhlIG9sZCANCj4gJ2V4cGVyaW1lbnRhbCcgYnJhbmNoIGNlYXNlcy4NCj4gNy4gVGhl
+IHVwc3RyZWFtIHZlcnNpb24gb2YgdGhlIGZlYXR1cmUgaGFzIG5vdyBzdXBlcnNlZGVkIHRoZSAN
+Cj4gZXhwZXJpbWVudGFsIHZlcnNpb24uIEFsbCBmdXR1cmUgZGV2ZWxvcG1lbnQgaXMgZG9uZSBi
+YXNlZCBvbiB0aGUgDQo+IHVwc3RyZWFtIHZlcnNpb24sIGVpdGhlciBpbiB0aGUgbmV3ICdleHBl
+cmltZW50YWwnIGJyYW5jaCwgb3IgZGlyZWN0bHkgDQo+IGFnYWluc3QgdGhlIHVwc3RyZWFtIGtl
+cm5lbC4NCj4gOC4gQW55IGN1c3RvbWVycyBzdGlsbCB1c2luZyB0aGUgZXhwZXJpbWVudGFsIHZl
+cnNpb24gb2YgdGhlIGZlYXR1cmUgDQo+IHdpbGwgbmVlZCB0byB1cGRhdGUgdGhlaXIgY29kZSB0
+byB3b3JrIHdpdGggdGhlIHVwc3RyZWFtIHZlcnNpb24gaW4gDQo+IG9yZGVyIHRvIHVwZGF0ZSB0
+byB0aGUgbmV3IChzdXBwb3J0ZWQpICdleHBlcmltZW50YWwnIGJyYW5jaCwgb3IgdG8gDQo+IHRo
+ZSB1cHN0cmVhbSBrZXJuZWwuDQo+DQo+ID09PT09PT09PT09PT09PT09PT09PT09PT09PQ0KPiBX
+aGF0IGRvZXMgdGhpcyBtZWFuIGZvciBtZT8NCj4gPT09PT09PT09PT09PT09PT09PT09PT09PT09
+DQo+DQo+IC4uLmFzIGEgdXNlcj8NCj4gLS0tLS0tLS0tLS0tLQ0KPg0KPiBJZiB5b3UncmUgdXNp
+bmcgdGhlIHVwc3RyZWFtIHZlcnNpb24gb2YgS1VuaXQsIG5vdGhpbmchIEZlYXR1cmVzIHdpbGwg
+DQo+IGNvbnRpbnVlIHRvIGJlIHB1c2hlZCB1cHN0cmVhbSB3aGVuIHRoZXkncmUgcmVhZHkuDQo+
+DQo+IElmIHlvdSdyZSB1c2luZyB0aGUgJ2t1bml0L2FscGhhL21hc3RlcicgYnJhbmNoLCB0aGVu
+IHlvdSdsbCBuZWVkIHRvIA0KPiBzd2l0Y2ggdG8gdGhlIG5ldyAnZXhwZXJpbWVudGFsLTx2ZXJz
+aW9uPicgYnJhbmNoZXMuIEV2ZXJ5IHNvIG9mdGVuLCANCj4gd2UnbGwgY3JlYXRlIGEgbmV3ICdl
+eHBlcmltZW50YWwtPHZlcnNpb24+JyBicmFuY2gsIGFuZCB5b3UnbGwgbmVlZCB0byANCj4gcmVi
+YXNlIHlvdXIgY29kZSBvbiB0b3Agb2YgdGhhdCB0byBrZWVwIHJlY2VpdmluZyB1cGRhdGVkIGZl
+YXR1cmVzIGFuZCANCj4gYnVnZml4ZXMuIFdoaWxlIHdlIGludGVuZCB0byBtYWtlIHRoaXMgYXMg
+cGFpbmxlc3MgYXMgcG9zc2libGUsIHRoZXJlIA0KPiBtYXkgYmUgYnJlYWtpbmcgY2hhbmdlcyB3
+aGljaCByZXF1aXJlIHlvdSB0byByZXdvcmsgc29tZSBvZiB5b3VyIA0KPiB0ZXN0cy4NCj4NCj4g
+T25jZSBhIGZlYXR1cmUgZXhpc3RzIGluIHRoZSB1cHN0cmVhbSBrZXJuZWwsIHRoZSB2ZXJzaW9u
+IG9mIHRoYXQgDQo+IGZlYXR1cmUgaW4gdGhlICdleHBlcmltZW50YWwnIGJyYW5jaGVzIHNob3Vs
+ZCBzdGFiaWxpc2Ugc29tZXdoYXQuDQo+DQo+IC4uLmFzIGEgS1VuaXQgZGV2ZWxvcGVyPw0KPiAt
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0NCj4NCj4gRm9yIG1vc3QgY2hhbmdlcy9idWdmaXhlcyB3
+aGljaCBhcHBseSBjbGVhbmx5IHRvIHRoZSB1cHN0cmVhbSB2ZXJzaW9uLCANCj4geW91IHNob3Vs
+ZCBkaXJlY3RseSBzdWJtaXQgdGhlc2UgdXBzdHJlYW0gYXMgYmVmb3JlLiBJZiBpdCBpcyBmZWFz
+aWJsZSANCj4gYW5kIHVzZWZ1bCB0byBiYWNrcG9ydCB0aGVtIHRvIHRoZSBsYXRlc3QgJ2V4cGVy
+aW1lbnRhbCcgYnJhbmNoIChlLmcuLCANCj4gdGhleSBhcmUgYnVnZml4ZXMgdG8gY29kZSB0aGF0
+IHRoZSBleHBlcmltZW50YWwgYnJhbmNoIGFscmVhZHkgaGFzKSwgDQo+IHBsZWFzZSBkbyBzby4N
+Cj4NCj4gRm9yIG1vcmUgbWFqb3IgZmVhdHVyZXMgKG9yIGFueXRoaW5nIHdoaWNoIGRlcGVuZHMg
+b24gDQo+IHlldC10by1iZS11cHN0cmVhbWVkIGNvZGUpLCB5b3Ugc2hvdWxkIGRldmVsb3AgdGhl
+bSBpbiB0aGUgbGF0ZXN0IA0KPiAnZXhwZXJpbWVudGFsJyBicmFuY2guIEZvciB0aGUgbW9zdCBw
+YXJ0LCB5b3UgY2FuIHRyZWF0IHRoaXMgdGhlIHNhbWUgDQo+IHdheSBhcyB0aGUgb2xkICdrdW5p
+dC9hbHBoYS9tYXN0ZXInIGJyYW5jaCwgYnV0IG5vdGUgdGhhdCBjaGFuZ2VzIHdpbGwgDQo+IG5l
+ZWQgdG8gYmUgcmViYXNlZCBvbiB0b3Agb2YgYSBuZXdlciBleHBlcmltZW50YWwgYnJhbmNoIHBl
+cmlvZGljYWxseS4NCj4gSXQgbWF5IG1ha2Ugc2Vuc2UgdG8gdXNlIHRoaXMgYXMgYW4gb3Bwb3J0
+dW5pdHkgdG8gdGlkeSB0aGUgY29kZSB1cA0KPiBzb21ld2hhdDogYnkgcmVtb3ZpbmcgY29tcGF0
+aWJpbGl0eSBjb2RlIGZvciBkZXByZWNhdGVkIGZlYXR1cmVzLCBvciANCj4gdG8gbWVyZ2UgJ2Zp
+eHVwJyBjb21taXRzLiBPbmNlIHRoZSBjb2RlIGhhcyBiZWVuIHVwc3RyZWFtZWQsIHRoZSBuZXh0
+IA0KPiByZWJhc2Ugb2YgdGhlICdleHBlcmltZW50YWwnIGJyYW5jaCBzaG91bGQgb25seSB1c2Ug
+dGhlIHVwc3RyZWFtDQo+IHZlcnNpb246IHRoZXJlIHNob3VsZCBub3QgYmUgYSBzZXBhcmF0ZSAn
+ZXhwZXJpbWVudGFsJyB2ZXJzaW9uIG9mIA0KPiB1cHN0cmVhbSBjb2RlIHNhdmUgZm9yIHRoZSBk
+ZXZlbG9wbWVudCBvZiBhIG5ldyAnZXhwZXJpbWVudGFsJyBmZWF0dXJlIA0KPiBvciBidWdmaXgu
+DQo+DQo+IEZvciBtb3JlIGRldGFpbHMsIHNlZSB0aGUgJ0xpZmV0aW1lIG9mIGEgZmVhdHVyZScg
+c2VjdGlvbiBhYm92ZS4NCj4NCj4gPT09PT09PT09PT09PQ0KPiBJbiBDb25jbHVzaW9uDQo+ID09
+PT09PT09PT09PT0NCj4NCj4gV2UnbGwgY29udGludWUgdG8gYmUgd29ya2luZyB3aXRoIHVwc3Ry
+ZWFtIGFzIGJlZm9yZSwgYnV0IHdlIGludGVuZCB0byANCj4gcmVuYW1lIGFuZCBtb3JlIGV4cGxp
+Y2l0bHkgc3BlY2lmeSB0aGUgcHVycG9zZSBvZiB0aGUgDQo+ICdrdW5pdC9hbHBoYS9tYXN0ZXIn
+IGJyYW5jaCBhcyBhYm92ZS4gVGhpcyB3aWxsIHJlcXVpcmUgYSBiaXQgbW9yZSANCj4gd29yayBm
+cm9tIHBlb3BsZSB1c2luZyBhbmQgZGV2ZWxvcGluZyBhZ2FpbnN0IHRoaXMgJ2V4cGVyaW1lbnRh
+bCcNCj4gYnJhbmNoLCBidXQgYWxsb3dzIHVzIHRvIGNvbnRpbnVlIHRvIHVzZSBpdCBmb3IgZmVh
+dHVyZXMgc3VjaCBhcyB0aGUgDQo+IG1vY2tpbmcgZnJhbWV3b3JrIHdoaWxlIGxpbWl0aW5nIGl0
+cyBkaXZlcmdlbmNlIGZyb20gdXBzdHJlYW0uDQo+DQo+IERvIGxldCB1cyBrbm93IGlmIHRoaXMg
+c291bmRzIHJlYXNvbmFibGUgdG8geW91LCBpZiBpdCB3aWxsIGFmZmVjdCANCj4geW91ciB1c2Ug
+Y2FzZSwgb3IgaWYgeW91IGhhdmUgYW55IHF1ZXN0aW9ucy4NCj4NCj4gQ2hlZXJzLA0KPiAtLSBE
+YXZpZCAmIEJyZW5kYW4NCj4NCj4NCj4gWzFdIA0KPiBodHRwczovL2t1bml0Lmdvb2dsZXNvdXJj
+ZS5jb20vbGludXgvKy9yZWZzL2hlYWRzL2t1bml0L2FscGhhL21hc3Rlcg0KPiBbMl0gDQo+IGh0
+dHBzOi8va3VuaXQuZ29vZ2xlc291cmNlLmNvbS9saW51eC8rL2t1bml0L2FscGhhL21hc3Rlci9E
+b2N1bWVudGF0aW8NCj4gbi90ZXN0L3VzYWdlLnJzdCMxODcNCgogIAoKQ09ORklERU5USUFMSVRZ
+IE5PVElDRTogVGhpcyBlbWFpbCBhbmQgYW55IGF0dGFjaG1lbnRzIGFyZSBmb3IgdGhlIHNvbGUg
+dXNlIG9mIHRoZSBpbnRlbmRlZCByZWNpcGllbnQgYW5kIG1heSBjb250YWluIG1hdGVyaWFsIHRo
+YXQgaXMgcHJvcHJpZXRhcnksIGNvbmZpZGVudGlhbCwgcHJpdmlsZWdlZCBvciBvdGhlcndpc2Ug
+bGVnYWxseSBwcm90ZWN0ZWQgb3IgcmVzdHJpY3RlZCB1bmRlciBhcHBsaWNhYmxlIGdvdmVybm1l
+bnQgbGF3cy4gQW55IHJldmlldywgZGlzY2xvc3VyZSwgZGlzdHJpYnV0aW5nIG9yIG90aGVyIHVz
+ZSB3aXRob3V0IGV4cHJlc3NlZCBwZXJtaXNzaW9uIG9mIHRoZSBzZW5kZXIgaXMgc3RyaWN0bHkg
+cHJvaGliaXRlZC4gSWYgeW91IGFyZSBub3QgdGhlIGludGVuZGVkIHJlY2lwaWVudCwgcGxlYXNl
+IGNvbnRhY3QgdGhlIHNlbmRlciBhbmQgZGVsZXRlIGFsbCBjb3BpZXMgd2l0aG91dCByZWFkaW5n
+LCBwcmludGluZywgb3Igc2F2aW5nLgoK
 
-Given that it has been about a week and we haven't heard any comments,
-complaints, or concerns about this. I assume that there are no strong
-opinions against this, and people will be generally okay with this
-strategy.
-
-As mentioned previously, we are expecting to see KUnit make it into
-torvalds/master this merge window (the next week or so), so we will
-probably update/rename kunit/alpha/master shortly thereafter.
-
-Cheers
-
-> Hello everyone,
->
-> We've put together a rough proposal of what we should do with our
-> not-upstream branch, known to most people using it as
-> 'kunit/alpha/master'[1], now that KUnit's acceptance into mainline
-> appears to be imminent (the KUnit MVP patchset is now in linux-next,
-> and the merge window just opened).
->
-> ==========
-> Background
-> ==========
->
-> KUnit development is currently split between two versions: the
-> 'kunit/alpha/master'[1] git branch, and the version being submitted to
-> the upstream Linux kernel. While there are some good reasons to
-> continue to have two separate versions of KUnit, at present there is
-> some uncertainty around the difference between these versions, and in
-> which circumstances each version is useful.
->
-> At present, the 'kunit/alpha/master' branch serves a few different
-> purposes. It is a place for code not-yet-ready for upstream -- such as
-> the mocking framework -- while being developed, while also acting as a
-> stable version for customers who do not wish to follow along with the
-> changes made during the upstreaming process. Adding to the confusion,
-> the name 'kunit/alpha/master' refers to an early (alpha) version of
-> KUnit, and the version of KUnit being upstreamed has now diverged
-> significantly from this version, requiring significant differences in
-> documentation, and requiring a number of changes to tests when porting
-> from one version to the other. Finally, it is not clear how the
-> 'kunit/alpha/master' version should evolve as features it contains are
-> upstreamed.
->
-> On the other hand, the version being upstreamed has its own
-> complications. It contains significantly fewer features (as features
-> such as the mocking frameworks will be upstreamed individually), and
-> so is less useful for the average customer. Until each feature is
-> upstreamed, it is iterated on rapidly to address comments from the
-> kernel community, so in-progress features are not stable enough to
-> reasonably build on. Finally, it exists only as a set of patches on
-> mailing lists, rather than as a maintained git repository (due to the
-> fact that the patches themselves are changing rapidly), making it
-> difficult for early adopters to incorporate into their own trees.
->
-> Whilst we believe there to be enough (at times conflicting) goals
-> above to justify having multiple versions of KUnit, we want to ensure
-> that they are meeting their goals, and that we have a process to
-> ensure that code finds its way into the correct version, that we can
-> deprecate and remove failed experiments or superseded versions, and
-> that we can keep pace with upstream kernel releases.
->
-> ============
-> The Proposal
-> ============
->
-> We propose having two tracks of development: the upstream kernel
-> (comprising both code that has been upstreamed, and code which is in
-> the process of being upstreamed -- i.e. is being reviewed on the
-> mailing lists), and an 'experimental' branch, which contains features
-> which are yet to be submitted upstream.
->
-> Periodically, the 'experimental' branch will be replaced with a new
-> 'experimental' branch based on the latest upstream version. This will
-> allow us to focus on code based on upstream versions by deprecating
-> earlier, experimental versions of features. The older experimental
-> branch will stay around, but receive no new features or support:
-> customers will need to eventually migrate to either the upstream
-> kernel (if all of the features they require have been upstreamed), or
-> to the latest 'experimental' branch (if they still require
-> non-upstreamed features).
->
-> Where practical, 'experimental' branches will try to provide a stable
-> interface (and/or compatibility layers/shims) such that users can
-> write tests against an experimental version and expect our changes to
-> break them infrequently. We don't intend to make any solid guarantee,
-> however: so users will need to be able to deal with some breakage.
->
-> We expect most changes to KUnit to be submitted directly upstream, and
-> reserve the 'experimental' branch for features where:
-> a) the design is yet to be proven by early adopters, and is likely to change;
-> b) the feature is large enough that having a solid staging environment
-> in which several developers can work is necessary; and/or
-> c) it depends on existing features only available in the 'experimental' branch.
->
-> An example of features suited to the 'experimental' branch are the
-> mocking systems[2].
->
-> =====================
-> Lifetime of a feature
-> =====================
->
-> A new feature (that for one of the above reasons may require some
-> experimentation before being sent upstream) would typically be
-> developed as follows:
->
-> 1. An initial version of the feature is developed against the latest
-> 'experimental' branch.
-> 2. The feature is tested by users of the 'experimental' branch.
-> 3. It is revised as needed within the 'experimental' branch. If
-> breaking changes are required, and supporting some form of
-> compatibility layer is practical, such a layer is implemented to avoid
-> breaking existing 'experimental' customers.
-> 4. Once the feature is deemed ready, it is submitted to the mailing
-> lists for the upstream kernel. Any compatibility layers for earlier
-> experimental version are removed -- this is a 'clean' version of the
-> change.
-> 5. Development of the change continues on the kernel mailing lists:
-> any particularly important changes or bugfixes are ported to the
-> 'experimental' branch if feasible, but complete convergence is not
-> expected at this stage.
-> 6. When the feature is accepted upstream, a new 'experimental' branch
-> is created based on the new upstream kernel. Development on the old
-> 'experimental' branch ceases.
-> 7. The upstream version of the feature has now superseded the
-> experimental version. All future development is done based on the
-> upstream version, either in the new 'experimental' branch, or directly
-> against the upstream kernel.
-> 8. Any customers still using the experimental version of the feature
-> will need to update their code to work with the upstream version in
-> order to update to the new (supported) 'experimental' branch, or to
-> the upstream kernel.
->
-> ===========================
-> What does this mean for me?
-> ===========================
->
-> ...as a user?
-> -------------
->
-> If you're using the upstream version of KUnit, nothing! Features will
-> continue to be pushed upstream when they're ready.
->
-> If you're using the 'kunit/alpha/master' branch, then you'll need to
-> switch to the new 'experimental-<version>' branches. Every so often,
-> we'll create a new 'experimental-<version>' branch, and you'll need to
-> rebase your code on top of that to keep receiving updated features and
-> bugfixes. While we intend to make this as painless as possible, there
-> may be breaking changes which require you to rework some of your
-> tests.
->
-> Once a feature exists in the upstream kernel, the version of that
-> feature in the 'experimental' branches should stabilise somewhat.
->
-> ...as a KUnit developer?
-> ------------------------
->
-> For most changes/bugfixes which apply cleanly to the upstream version,
-> you should directly submit these upstream as before. If it is feasible
-> and useful to backport them to the latest 'experimental' branch (e.g.,
-> they are bugfixes to code that the experimental branch already has),
-> please do so.
->
-> For more major features (or anything which depends on
-> yet-to-be-upstreamed code), you should develop them in the latest
-> 'experimental' branch. For the most part, you can treat this the same
-> way as the old 'kunit/alpha/master' branch, but note that changes will
-> need to be rebased on top of a newer experimental branch periodically.
-> It may make sense to use this as an opportunity to tidy the code up
-> somewhat: by removing compatibility code for deprecated features, or
-> to merge 'fixup' commits. Once the code has been upstreamed, the next
-> rebase of the 'experimental' branch should only use the upstream
-> version: there should not be a separate 'experimental' version of
-> upstream code save for the development of a new 'experimental' feature
-> or bugfix.
->
-> For more details, see the 'Lifetime of a feature' section above.
->
-> =============
-> In Conclusion
-> =============
->
-> We'll continue to be working with upstream as before, but we intend to
-> rename and more explicitly specify the purpose of the
-> 'kunit/alpha/master' branch as above. This will require a bit more
-> work from people using and developing against this 'experimental'
-> branch, but allows us to continue to use it for features such as the
-> mocking framework while limiting its divergence from upstream.
->
-> Do let us know if this sounds reasonable to you, if it will affect
-> your use case, or if you have any questions.
->
-> Cheers,
-> -- David & Brendan
->
->
-> [1] https://kunit.googlesource.com/linux/+/refs/heads/kunit/alpha/master
-> [2] https://kunit.googlesource.com/linux/+/kunit/alpha/master/Documentation/test/usage.rst#187
