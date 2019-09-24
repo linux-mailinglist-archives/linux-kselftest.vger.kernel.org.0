@@ -2,234 +2,141 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A33E0BBF7C
-	for <lists+linux-kselftest@lfdr.de>; Tue, 24 Sep 2019 02:52:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C4A6BC3CD
+	for <lists+linux-kselftest@lfdr.de>; Tue, 24 Sep 2019 10:07:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2503290AbfIXAwm (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 23 Sep 2019 20:52:42 -0400
-Received: from bombadil.infradead.org ([198.137.202.133]:49670 "EHLO
-        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2392180AbfIXAwm (ORCPT
+        id S2504040AbfIXIHV (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 24 Sep 2019 04:07:21 -0400
+Received: from mail-wm1-f52.google.com ([209.85.128.52]:39257 "EHLO
+        mail-wm1-f52.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2503934AbfIXIHV (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 23 Sep 2019 20:52:42 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:
-        Subject:Sender:Reply-To:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=jh2HpGC5bGaRmxvM2gOqp+wVb3QEYlE1PNWZkFQUHFE=; b=oEYDBQJd0G/4BY0pCNUO+Lv9r
-        SqJaqivdZfguVcMkF6Y2uZ9VZXSqFwWxAS1hwrPFws9ouIBwFs5XWJmHMhgeyw6W/4vZ/ql81m4jh
-        nT+Wk4ZCGSEEbxJ8okLALAofdkVzWZZ+tRRh2oumeDlAPhpYYo8GD0r6X4ouXOWR6iHqDbaP0bGtE
-        L5GfQXZmvOdaB9HbMgRdH18QAKRnVfBVyyqUW/FSrT0L/cN0HN2iJbX8MzV+j3CIFl9EyeT2m6PlN
-        peTnf4da6+6XPCugTap6mPKGe6caLFDpbjnaUxgSlpo6zp4aakMicOtwx41xxvl2ITgiQaFASk5qs
-        dSlYgx8qg==;
-Received: from [2601:1c0:6280:3f0::9a1f]
-        by bombadil.infradead.org with esmtpsa (Exim 4.92.2 #3 (Red Hat Linux))
-        id 1iCZ3R-00047x-0N; Tue, 24 Sep 2019 00:51:45 +0000
-Subject: Re: [PATCH v18 15/19] Documentation: kunit: add documentation for
- KUnit
-To:     Brendan Higgins <brendanhiggins@google.com>,
-        frowand.list@gmail.com, gregkh@linuxfoundation.org,
-        jpoimboe@redhat.com, keescook@google.com,
-        kieran.bingham@ideasonboard.com, mcgrof@kernel.org,
-        peterz@infradead.org, robh@kernel.org, sboyd@kernel.org,
-        shuah@kernel.org, tytso@mit.edu, yamada.masahiro@socionext.com
-Cc:     devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        kunit-dev@googlegroups.com, linux-doc@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kbuild@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-nvdimm@lists.01.org, linux-um@lists.infradead.org,
-        Alexander.Levin@microsoft.com, Tim.Bird@sony.com,
-        amir73il@gmail.com, dan.carpenter@oracle.com, daniel@ffwll.ch,
-        jdike@addtoit.com, joel@jms.id.au, julia.lawall@lip6.fr,
-        khilman@baylibre.com, knut.omang@oracle.com, logang@deltatee.com,
-        mpe@ellerman.id.au, pmladek@suse.com, richard@nod.at,
-        rientjes@google.com, rostedt@goodmis.org, wfg@linux.intel.com,
-        torvalds@linux-foundation.org,
-        Felix Guo <felixguoxiuping@gmail.com>,
-        Jonathan Corbet <corbet@lwn.net>
-References: <20190923090249.127984-1-brendanhiggins@google.com>
- <20190923090249.127984-16-brendanhiggins@google.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-Message-ID: <9cd80aa2-fc8d-1fed-838b-cf4951692b6d@infradead.org>
-Date:   Mon, 23 Sep 2019 17:51:41 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Tue, 24 Sep 2019 04:07:21 -0400
+Received: by mail-wm1-f52.google.com with SMTP id v17so941991wml.4;
+        Tue, 24 Sep 2019 01:07:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=vazoaJV8w6hXBuGcHHYiuY1lqVoAb/qasD3kvGZNtoI=;
+        b=uwCe+JBkx/ianOrarr5XVh4sVtM2bN6EOy+rywel/DgCMbKDeRGoYF/Xw3zeBsFpsW
+         DTBS5YcoSYMo0oqgUu/4UvAbDLfXBUIPzxqL04w59l641+pNI3bkxWcr25lW+PXUQUUw
+         qz3gvAq8LVvdl+JvBvycCQn3XEgIK6D4qBX5H6+AdRsw8VhCwyMpjE6PDT3Qb5DfvW1W
+         Qny1dsWGmnuAukL9pDGcUAmAemxjsvfQHnd6z9lqhAkTkBXR1NXaHaYCblYRBkgX4+1y
+         rH79Uzm6qLFpe87ltCEk/8C79pSQ0Nf6hIWtrn0RwjF4lO6WW0CnbY+4w4FqryAwgnKe
+         5mEQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to:user-agent;
+        bh=vazoaJV8w6hXBuGcHHYiuY1lqVoAb/qasD3kvGZNtoI=;
+        b=OSpLFa+xymHzVpQMHhpt8f5O2dtpCqE7MtvH/aitA5mm7pdPg//HrTvalXoldiHSu3
+         pCbWvYQWYGPK3kHQcJOuN+7LyDq5GuitrE16NBNd87NY2AEDpzB7oEKj4fQR93gMDMye
+         hki3oXZ0uGC38dmDCEW6OuxvqN5DEuB/g3NQVN7XkaXFl5+hlcNHGe80vfzmFtiH+N/+
+         +zE0cYvTJesAgHH4l3Zx4ScRzJK9HtaeQTf3OccJX8QtocfCnCg1+qDy+KIrUM6gGuVt
+         HVN5wolIWEgs0m0VnrzyL6GaWN7gBxnso0mP4ygQfChuY4l/QX61DElyL25HJh+jOGht
+         Os4w==
+X-Gm-Message-State: APjAAAXkmRwDSjlGMwTGc8BgL+QqpcQSijameoDkZkHm9/ZNu/WVEueF
+        iuOqBddKwBbmKOGHfHu2+D0=
+X-Google-Smtp-Source: APXvYqyf1JKKGJC2wktTnx0Kdyy1fK1Sztzy0S3aKXmkFcSCQG/+ODXjdnuIcUAnsJWuuUp6KcUU3g==
+X-Received: by 2002:a7b:c10b:: with SMTP id w11mr1504702wmi.108.1569312437903;
+        Tue, 24 Sep 2019 01:07:17 -0700 (PDT)
+Received: from gmail.com (2E8B0CD5.catv.pool.telekom.hu. [46.139.12.213])
+        by smtp.gmail.com with ESMTPSA id d9sm2118700wrf.62.2019.09.24.01.07.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 24 Sep 2019 01:07:17 -0700 (PDT)
+Date:   Tue, 24 Sep 2019 10:07:15 +0200
+From:   Ingo Molnar <mingo@kernel.org>
+To:     Tim.Bird@sony.com
+Cc:     torvalds@linux-foundation.org, brendanhiggins@google.com,
+        skhan@linuxfoundation.org, broonie@kernel.org,
+        jarkko.sakkinen@linux.intel.com, anders.roxell@linaro.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [GIT PULL] Kselftest update for Linux 5.4-rc1
+Message-ID: <20190924080715.GA63699@gmail.com>
+References: <be8059f4-8e8f-cd18-0978-a9c861f6396b@linuxfoundation.org>
+ <CAHk-=wgs+UoZWfHGENWSVBd57Z-Vp0Nqe68R6wkDb5zF+cfvDg@mail.gmail.com>
+ <CAKRRn-edxk9Du70A27V=d3Na73fh=fVvGEVsQRGROrQm05YRrA@mail.gmail.com>
+ <CAFd5g45ROPm-1SD5cD772gqESaP3D8RbBhSiJXZzbaA+2hFdHA@mail.gmail.com>
+ <CAHk-=wgMuNLBhJR_nFHrpViHbz2ErQ-fJV6B9o0+wym+Wk+r0w@mail.gmail.com>
+ <20190922112555.GB122003@gmail.com>
+ <ECADFF3FD767C149AD96A924E7EA6EAF977BB784@USCULXMSG01.am.sony.com>
 MIME-Version: 1.0
-In-Reply-To: <20190923090249.127984-16-brendanhiggins@google.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ECADFF3FD767C149AD96A924E7EA6EAF977BB784@USCULXMSG01.am.sony.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 9/23/19 2:02 AM, Brendan Higgins wrote:
 
-> diff --git a/Documentation/dev-tools/kunit/usage.rst b/Documentation/dev-tools/kunit/usage.rst
-> new file mode 100644
-> index 000000000000..c6e69634e274
-> --- /dev/null
-> +++ b/Documentation/dev-tools/kunit/usage.rst
-> @@ -0,0 +1,576 @@
-> +.. SPDX-License-Identifier: GPL-2.0
-> +
-> +===========
-> +Using KUnit
-> +===========
-> +
-> +The purpose of this document is to describe what KUnit is, how it works, how it
-> +is intended to be used, and all the concepts and terminology that are needed to
-> +understand it. This guide assumes a working knowledge of the Linux kernel and
-> +some basic knowledge of testing.
-> +
-> +For a high level introduction to KUnit, including setting up KUnit for your
-> +project, see :doc:`start`.
-> +
-> +Organization of this document
-> +=============================
-> +
-> +This document is organized into two main sections: Testing and Isolating
-> +Behavior. The first covers what a unit test is and how to use KUnit to write
+* Tim.Bird@sony.com <Tim.Bird@sony.com> wrote:
 
-                              what unit tests are
-would agree with the following "them."
+> > -----Original Message-----
+> > From: Ingo Molnar on Sunday, September 22, 2019 1:26 AM
+> > 
+> > * Linus Torvalds <torvalds@linux-foundation.org> wrote:
+> > 
+> > > On Fri, Sep 20, 2019 at 9:35 AM Brendan Higgins
+> > > <brendanhiggins@google.com> wrote:
+> > > >
+> > > > Sorry about that. I am surprised that none of the other reviewers
+> > > > brought this up.
+> > >
+> > > I think I'm "special".
+> > >
+> > > There was some other similar change a few years ago, which I
+> > > absolutely hated because of how it broke autocomplete for me. Very few
+> > > other people seemed to react to it.
+> > 
+> > FWIW, I am obsessively sensitive to autocomplete and overall source code
+> > file hieararchy and nomenclature details as well, so it's not just you.
+> > 
+> > Beyond the muscle memory aspect, nonsensical naming and inanely flat file
+> > hierarchies annoy kernel developers and makes it harder for newbies to
+> > understand the kernel source as well.
+> > 
+> > The less clutter, the more organization, the better - and there's very
+> > few valid technical reasons to add any new files or directories to the
+> > top level directory - we should probably *remove* quite a few.
+> > 
+> > For example 'firmware/' was recently moved to drivers/firmware/, and in a
+> > similar fashion about a third of the remaining 22 directories should
+> > probably be moved too:
+> > 
+> >   drwxr-xr-x    arch
+> >   drwxr-xr-x    block
+> >   drwxr-xr-x    certs           # move to build/certs/ dir
+> >   drwxr-xr-x    crypto          # move to kernel/crypto/ or security/crypto/
+> >   drwxr-xr-x    Documentation
+> >   drwxr-xr-x    drivers
+> >   drwxr-xr-x    fs
+> >   drwxr-xr-x    include
+> >   drwxr-xr-x    init
+> >   drwxr-xr-x    ipc             # move to kernel/ipc/
+> >   drwxr-xr-x    kernel
+> >   drwxr-xr-x    lib
+> >   drwxr-xr-x    LICENSES
+> >   drwxr-xr-x    mm
+> >   drwxr-xr-x    net
+> >   drwxr-xr-x    samples         # move to Documentation/samples/
+> >   drwxr-xr-x    scripts         # move to build/scripts/
+> 
+> This one seems like it would break a lot of workflows, and contributor
+> muscle memory and scripts.  get_maintainer.pl and checkpatch.pl
+> are probably in quite a few people's scripts.
+> 
+> Also, I'm not sure '/build' is the right destination for this.  There
+> are a lot more things in there than just build scripts.  If you really
+> want to remove the top level 'scripts', it might be best to put
+> the  scripts from top-level '/scripts' into '/tools/scripts', which is
+> mostly empty now.
 
-> +them. The second covers how to use KUnit to isolate code and make it possible
-> +to unit test code that was otherwise un-unit-testable.
-> +
-> +Testing
-> +=======
-> +
+Agreed - I'll leave it alone for now, because you are right that it's 
+widely used.
 
-[snip]
+Thanks,
 
-
-> +
-> +Test Suites
-> +~~~~~~~~~~~
-> +
-> +Now obviously one unit test isn't very helpful; the power comes from having
-> +many test cases covering all of your behaviors. Consequently it is common to
-
-                   covering all of a unit's behaviors.
-
-> +have many *similar* tests; in order to reduce duplication in these closely
-> +related tests most unit testing frameworks provide the concept of a *test
-> +suite*, in KUnit we call it a *test suite*; all it is is just a collection of
-
-                                             . This is just a collection of
-
-> +test cases for a unit of code with a set up function that gets invoked before
-> +every test cases and then a tear down function that gets invoked after every
-
-   every test case
-
-> +test case completes.
-> +
-> +Example:
-> +
-> +.. code-block:: c
-> +
-> +	static struct kunit_case example_test_cases[] = {
-> +		KUNIT_CASE(example_test_foo),
-> +		KUNIT_CASE(example_test_bar),
-> +		KUNIT_CASE(example_test_baz),
-> +		{}
-> +	};
-> +
-> +	static struct kunit_suite example_test_suite = {
-> +		.name = "example",
-> +		.init = example_test_init,
-> +		.exit = example_test_exit,
-> +		.test_cases = example_test_cases,
-> +	};
-> +	kunit_test_suite(example_test_suite);
-> +
-> +In the above example the test suite, ``example_test_suite``, would run the test
-> +cases ``example_test_foo``, ``example_test_bar``, and ``example_test_baz``,
-> +each would have ``example_test_init`` called immediately before it and would
-> +have ``example_test_exit`` called immediately after it.
-> +``kunit_test_suite(example_test_suite)`` registers the test suite with the
-> +KUnit test framework.
-> +
-> +.. note::
-> +   A test case will only be run if it is associated with a test suite.
-> +
-> +For a more information on these types of things see the :doc:`api/test`.
-
-   For more
-
-> +
-> +Isolating Behavior
-> +==================
-> +
-
-[snip]
-
-> +
-> +.. _kunit-on-non-uml:
-> +
-> +KUnit on non-UML architectures
-> +==============================
-> +
-> +By default KUnit uses UML as a way to provide dependencies for code under test.
-> +Under most circumstances KUnit's usage of UML should be treated as an
-> +implementation detail of how KUnit works under the hood. Nevertheless, there
-> +are instances where being able to run architecture specific code, or test
-
-                           I would drop the comma above.
-
-> +against real hardware is desirable. For these reasons KUnit supports running on
-> +other architectures.
-> +
-> +Running existing KUnit tests on non-UML architectures
-> +-----------------------------------------------------
-> +
-
-[snip]
-
-> +Writing new tests for other architectures
-> +-----------------------------------------
-> +
-> +The first thing you must do is ask yourself whether it is necessary to write a
-> +KUnit test for a specific architecture, and then whether it is necessary to
-> +write that test for a particular piece of hardware. In general, writing a test
-> +that depends on having access to a particular piece of hardware or software (not
-> +included in the Linux source repo) should be avoided at all costs.
-> +
-> +Even if you only ever plan on running your KUnit test on your hardware
-> +configuration, other people may want to run your tests and may not have access
-> +to your hardware. If you write your test to run on UML, then anyone can run your
-> +tests without knowing anything about your particular setup, and you can still
-> +run your tests on your hardware setup just by compiling for your architecture.
-> +
-> +.. important::
-> +   Always prefer tests that run on UML to tests that only run under a particular
-> +   architecture, and always prefer tests that run under QEMU or another easy
-> +   (and monitarily free) to obtain software environment to a specific piece of
-
-           monetarily
-
-> +   hardware.
-> +
-> +Nevertheless, there are still valid reasons to write an architecture or hardware
-> +specific test: for example, you might want to test some code that really belongs
-> +in ``arch/some-arch/*``. Even so, try your best to write the test so that it
-> +does not depend on physical hardware: if some of your test cases don't need the
-> +hardware, only require the hardware for tests that actually need it.
-> +
-> +Now that you have narrowed down exactly what bits are hardware specific, the
-> +actual procedure for writing and running the tests is pretty much the same as
-> +writing normal KUnit tests. One special caveat is that you have to reset
-> +hardware state in between test cases; if this is not possible, you may only be
-> +able to run one test case per invocation.
-> +
-> +.. TODO(brendanhiggins@google.com): Add an actual example of an architecture
-> +   dependent KUnit test.
-
-
--- 
-~Randy
+	Ingo
