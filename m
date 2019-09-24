@@ -2,91 +2,85 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E6C1ABD343
-	for <lists+linux-kselftest@lfdr.de>; Tue, 24 Sep 2019 22:05:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F2AB8BD360
+	for <lists+linux-kselftest@lfdr.de>; Tue, 24 Sep 2019 22:15:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2409794AbfIXUFY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 24 Sep 2019 16:05:24 -0400
-Received: from mail-io1-f68.google.com ([209.85.166.68]:35416 "EHLO
+        id S2388910AbfIXUPB (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 24 Sep 2019 16:15:01 -0400
+Received: from mail-io1-f68.google.com ([209.85.166.68]:41525 "EHLO
         mail-io1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728956AbfIXUFX (ORCPT
+        with ESMTP id S1726254AbfIXUPB (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 24 Sep 2019 16:05:23 -0400
-Received: by mail-io1-f68.google.com with SMTP id q10so7629962iop.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 24 Sep 2019 13:05:21 -0700 (PDT)
+        Tue, 24 Sep 2019 16:15:01 -0400
+Received: by mail-io1-f68.google.com with SMTP id r26so7618590ioh.8
+        for <linux-kselftest@vger.kernel.org>; Tue, 24 Sep 2019 13:15:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=tzqNMqA07jBcBpcqIcid0j0G7N4xLkFUhmGjg7IIOuU=;
-        b=DCyKK193tOOwAbtGLptlJdOOKYY/0pAfa4quNNXrWUvG3TJ7wXw/pThGwGpG+9QiwN
-         FazKM7SpbmIueD8YLUzNgzzgixAWUC4leRTPUG/z7IwX9zqjQydBTyOUnRi/xqLq7O0X
-         vwnBLD/ePKlVhAXYcazuiJhoHAT+eKbgJPEi0=
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=DI0egddMaTlmXPpI6j4ITK90qBcGxWnZ/Lc990IvF2Y=;
+        b=JTMndQ+nYpdyNF5MJOGWUHZv+QevSaM0HzuyG4IdtM+xtvoSK1XA6X5CBcgkwcsFmA
+         3GUTDUHSWAunyQPQX5jfxq+rvzj+h6POMg142essaWiGeLpd6xri8wEzS2VNPNctGHcg
+         +xxXg9XTK7XRkzjGWbajAgkQlVoz2vQx7NuKI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=tzqNMqA07jBcBpcqIcid0j0G7N4xLkFUhmGjg7IIOuU=;
-        b=c5yYxOVTBE3ylOweNzoRlwzy1JRfPQzmUa4v+jUVsX2s2KAPZMWlcvy+4hu1miC/0e
-         g/ufhLmTRueqhCSuOVz8ChB5gurs88wGwgEQn8cuEiT1JEIhbAo6iS2iOVJULW85tr2F
-         FXMjsYw8AsFDigOlfqUVQ3RtZ5qOfquF/wv5n7BPB9gi9MXsKbvhN9TQ/Z4SiBLbeI6K
-         I9ktJH1vRPE+9a4Sp09Is73bXRdDIYgOSIaRhZDwzln3UdiWQgbrK0CkjWYS+oxN06jA
-         71Q6tJaZeirSzd+Ny2fkHlx7bVOXsYiwHghWJFX9Gh5bQHVgYGce+evX21KzdBbKjbqu
-         3VAQ==
-X-Gm-Message-State: APjAAAX5BfcvDBWNhV4QXunK6CgsAlTqySk4HL9tgmNqR2newqmOeqOA
-        mbQsh8Na5f5Zvnk2RqVRYdb6nQ==
-X-Google-Smtp-Source: APXvYqxALuZ+2sOPVcl1PCpmgHoIsSghK1bXD0k9qNItmHh8nea4aKSF+aMNcivHLWvltHMCZ47cgQ==
-X-Received: by 2002:a5d:89da:: with SMTP id a26mr4311422iot.61.1569355520865;
-        Tue, 24 Sep 2019 13:05:20 -0700 (PDT)
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id k66sm4656319iof.25.2019.09.24.13.05.19
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 24 Sep 2019 13:05:20 -0700 (PDT)
-Subject: Re: [PATCH] selftests: proc: Fix _GNU_SOURCE redefined build warns
-To:     Alexey Dobriyan <adobriyan@gmail.com>
-Cc:     shuah@kernel.org, akpm@linux-foundation.org,
-        sabyasachi.linux@gmail.com, jrdr.linux@gmail.com,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        "skh >> Shuah Khan" <skhan@linuxfoundation.org>
-References: <20190924181910.23588-1-skhan@linuxfoundation.org>
- <20190924181910.23588-2-skhan@linuxfoundation.org>
- <20190924195253.GA2633@avx2>
+        bh=DI0egddMaTlmXPpI6j4ITK90qBcGxWnZ/Lc990IvF2Y=;
+        b=Qx8mlxHS75WiI1QLIrb9BHrb5/0nnahR8JTJp1Bki0oMD9eGPMrWA9KmFoMcewlVdV
+         DOBWmP35LFYPRlXB4vZ9Yz6WwmrVdrgvAhUqITnyh1cRBsK8+iQR+iOj7dEj7ouIuLTY
+         7bLSVBJOhsBPMhWWlVoHv4w5xZ2f5Vcth2ISWueTiy9H/2zOdbBRT3MwMIzIfEvJag8d
+         1NKglSpyXWc1s4V0VlUBLa4TAZmZOMygL18MClSboy9Cxs0WO1xUwRu9o1De69xDh0Yc
+         Ta5mEkl+v9RiWXHWdt6V7nOjcy2rYjgP0CArN1hWdHQDu3rJBnUo4efJFKBpMIRbduKF
+         4+mA==
+X-Gm-Message-State: APjAAAXG6Tof7bpURHyNRQmWathXcXSqL1rJbr+G74wee2bAK/JQdExf
+        9fkF0OPhCQWd952cpQ6WuTamhw==
+X-Google-Smtp-Source: APXvYqxn6tRAr9RxU9eibq7Mfj2KW3OBHKsrpfR/gHKH+DusHXd6HU+er1lZb6yRz3aWg8YmGuURRw==
+X-Received: by 2002:a02:cd8d:: with SMTP id l13mr744030jap.138.1569356100138;
+        Tue, 24 Sep 2019 13:15:00 -0700 (PDT)
+Received: from shuah-t480s.internal (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
+        by smtp.gmail.com with ESMTPSA id b24sm2007733iob.2.2019.09.24.13.14.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 24 Sep 2019 13:14:59 -0700 (PDT)
 From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <f6c20b9b-4984-f865-3698-70b61bcd4be0@linuxfoundation.org>
-Date:   Tue, 24 Sep 2019 14:05:19 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+To:     pbonzini@redhat.com, rkrcmar@redhat.com, shuah@kernel.org
+Cc:     Shuah Khan <skhan@linuxfoundation.org>, kvm@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] selftests: kvm: Fix libkvm build error
+Date:   Tue, 24 Sep 2019 14:14:51 -0600
+Message-Id: <20190924201451.31977-1-skhan@linuxfoundation.org>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-In-Reply-To: <20190924195253.GA2633@avx2>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 9/24/19 1:52 PM, Alexey Dobriyan wrote:
-> On Tue, Sep 24, 2019 at 12:19:10PM -0600, Shuah Khan wrote:
->> Fix the following _GNU_SOURCE redefined build warns:
->>
->> proc-loadavg-001.c:17: warning: "_GNU_SOURCE" redefined
->> proc-self-syscall.c:16: warning: "_GNU_SOURCE" redefined
->> proc-uptime-002.c:18: warning: "_GNU_SOURCE" redefined
-> 
->> +#ifndef _GNU_SOURCE
->>   #define _GNU_SOURCE
->> +#endif
-> 
-> Why are you doing this.
-> 
-> There are 140 redefinitions of _GNU_SOURCE
-> 
+Fix the following build error:
 
+libkvm.a(assert.o): relocation R_X86_64_32 against `.rodata.str1.1' can not be used when making a PIE object; recompile with -fPIC
 
-Is there something wrong with getting rid of this warning?
+Add -fPIC to CFLAGS to fix it.
 
-thanks,
--- Shuah
+Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
+---
+ tools/testing/selftests/kvm/Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftests/kvm/Makefile
+index 62c591f87dab..b4a55d300e75 100644
+--- a/tools/testing/selftests/kvm/Makefile
++++ b/tools/testing/selftests/kvm/Makefile
+@@ -44,7 +44,7 @@ INSTALL_HDR_PATH = $(top_srcdir)/usr
+ LINUX_HDR_PATH = $(INSTALL_HDR_PATH)/include/
+ LINUX_TOOL_INCLUDE = $(top_srcdir)/tools/include
+ CFLAGS += -Wall -Wstrict-prototypes -Wuninitialized -O2 -g -std=gnu99 \
+-	-fno-stack-protector -fno-PIE -I$(LINUX_TOOL_INCLUDE) \
++	-fno-stack-protector -fPIC -fno-PIE -I$(LINUX_TOOL_INCLUDE) \
+ 	-I$(LINUX_HDR_PATH) -Iinclude -I$(<D) -Iinclude/$(UNAME_M) -I..
+ 
+ no-pie-option := $(call try-run, echo 'int main() { return 0; }' | \
+-- 
+2.20.1
+
