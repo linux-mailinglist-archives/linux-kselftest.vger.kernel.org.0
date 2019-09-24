@@ -2,81 +2,136 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CD0C9BCDF6
-	for <lists+linux-kselftest@lfdr.de>; Tue, 24 Sep 2019 18:52:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73484BD0A2
+	for <lists+linux-kselftest@lfdr.de>; Tue, 24 Sep 2019 19:29:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404021AbfIXQrv (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 24 Sep 2019 12:47:51 -0400
-Received: from mail.kernel.org ([198.145.29.99]:39258 "EHLO mail.kernel.org"
+        id S1730790AbfIXR3k (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 24 Sep 2019 13:29:40 -0400
+Received: from foss.arm.com ([217.140.110.172]:34874 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2633309AbfIXQrt (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 24 Sep 2019 12:47:49 -0400
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 250ED20673;
-        Tue, 24 Sep 2019 16:47:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1569343669;
-        bh=szCeKCu1HOCfG8Xa5dhnSRI7Vdwm04GAxX3XtKErotk=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=VQbofE0MsdjroR/zv5valnd6YlN+3HpXlkjL3pBpvUItK7EF66CfoTI1E2/pzGuiJ
-         gPopTmzcFRfCTLpGRP1/JaAoSYQ3CDwJPquOF3tw5w+g+YTeW6ODNsus5G/KkfxbqO
-         a2F9G1rVDzELCfOGiQILmmwMV9WlTaq/O2/zA2Z0=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Gustavo Romero <gromero@linux.vnet.ibm.com>,
-        "Desnes A . Nunes do Rosario" <desnesn@linux.ibm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Sasha Levin <sashal@kernel.org>, linuxppc-dev@lists.ozlabs.org,
-        linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.2 48/70] selftests/powerpc: Retry on host facility unavailable
-Date:   Tue, 24 Sep 2019 12:45:27 -0400
-Message-Id: <20190924164549.27058-48-sashal@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190924164549.27058-1-sashal@kernel.org>
-References: <20190924164549.27058-1-sashal@kernel.org>
+        id S1729883AbfIXR3k (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 24 Sep 2019 13:29:40 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0A30F142F;
+        Tue, 24 Sep 2019 10:29:39 -0700 (PDT)
+Received: from [10.1.197.50] (e120937-lin.cambridge.arm.com [10.1.197.50])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1FF443F694;
+        Tue, 24 Sep 2019 10:29:38 -0700 (PDT)
+Subject: Re: Linux 5.4 - bpf test build fails
+To:     Shuah Khan <skhan@linuxfoundation.org>,
+        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        Daniel Borkmann <daniel@iogearbox.net>
+Cc:     "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>,
+        "David S. Miller" <davem@davemloft.net>
+References: <742ecabe-45ce-cf6e-2540-25d6dc23c45f@linuxfoundation.org>
+ <1d1bbc01-5cf4-72e6-76b3-754d23366c8f@arm.com>
+ <34a9bd63-a251-0b4f-73b6-06b9bbf9d3fa@linuxfoundation.org>
+ <a603ee8e-b0af-6506-0667-77269b0951b2@linuxfoundation.org>
+From:   Cristian Marussi <cristian.marussi@arm.com>
+Message-ID: <c3dda8d0-1794-ffd1-4d76-690ac2be8b8f@arm.com>
+Date:   Tue, 24 Sep 2019 18:29:36 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <a603ee8e-b0af-6506-0667-77269b0951b2@linuxfoundation.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Gustavo Romero <gromero@linux.vnet.ibm.com>
+Hi Shuah
 
-[ Upstream commit 6652bf6408895b09d31fd4128a1589a1a0672823 ]
+On 24/09/2019 17:39, Shuah Khan wrote:
+> On 9/24/19 10:03 AM, Shuah Khan wrote:
+>> On 9/24/19 9:52 AM, Cristian Marussi wrote:
+>>> Hi Shuah
+>>>
+>>> On 24/09/2019 16:26, Shuah Khan wrote:
+>>>> Hi Alexei and Daniel,
+>>>>
+>>>> bpf test doesn't build on Linux 5.4 mainline. Do you know what's
+>>>> happening here.
+>>>>
+>>>>
+>>>> make -C tools/testing/selftests/bpf/
+>>>
+>>> side question, since I'm writing arm64/ tests.
+>>>
+>>> my "build-testcases" following the KSFT docs are:
+>>>
+>>> make kselftest
+>>> make TARGETS=arm64 kselftest
+>>> make -C tools/testing/selftests/
+>>> make -C tools/testing/selftests/ INSTALL_PATH=<install-path> install
+>>> make TARGETS=arm64 -C tools/testing/selftests/
+>>> make TARGETS=arm64 -C tools/testing/selftests/ 
+>>> INSTALL_PATH=<install-path> install
+>>> ./kselftest_install.sh <install-path>
+> 
+> Cristian,
+> 
+> That being said, I definitely want to see this list limited to
+> a few options.
+> 
+> One problem is that if somebody wants to do just a build, there
+> is no option from the main makefile. I have sent support for that
+> a few months ago and the patch didn't got lost it appears. I am
+> working on resending those patches. The same is true for install.
+> I sent in a patch for that a while back and I am going to resend.
+> These will make it easier for users.
+> 
+> I would really want to get to supporting only these options:
+> 
+> These are supported now:
+> 
+> make kselftest
+> make TARGETS=arm64 kselftest (one or more targets)
+> 
+> Replace the following:
+> 
+> make -C tools/testing/selftests/ with
+> 
+> make kselftes_build option from main makefile
+> 
+> Replace this:
+> make -C tools/testing/selftests/ INSTALL_PATH=<install-path> install
+> 
+> with
+> make kselftest_install
 
-TM test tm-unavailable must take into account aborts due to host aborting
-a transactin because of a facility unavailable exception, just like it
-already does for aborts on reschedules (TM_CAUSE_KVM_RESCHED).
+Yes these top level options would be absolutely useful to avoid multiplication
+of build targets to support and test.
 
-Reported-by: Desnes A. Nunes do Rosario <desnesn@linux.ibm.com>
-Tested-by: Desnes A. Nunes do Rosario <desnesn@linux.ibm.com>
-Signed-off-by: Gustavo Romero <gromero@linux.vnet.ibm.com>
-Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
-Link: https://lore.kernel.org/r/1566341651-19747-1-git-send-email-gromero@linux.vnet.ibm.com
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- tools/testing/selftests/powerpc/tm/tm.h | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+Moreover, currently, since there was a lot of test growing into arm64/
+inside subdirs like arm64/signal, I support (still under review in fact) in the arm64/
+toplevel makefile the possibility of building/installing by subdirs only, in order
+to be able to limit what you want to build/install of a TARGET (resulting in quicker devel),
+issuing something like:
 
-diff --git a/tools/testing/selftests/powerpc/tm/tm.h b/tools/testing/selftests/powerpc/tm/tm.h
-index 97f9f491c541a..c402464b038fc 100644
---- a/tools/testing/selftests/powerpc/tm/tm.h
-+++ b/tools/testing/selftests/powerpc/tm/tm.h
-@@ -55,7 +55,8 @@ static inline bool failure_is_unavailable(void)
- static inline bool failure_is_reschedule(void)
- {
- 	if ((failure_code() & TM_CAUSE_RESCHED) == TM_CAUSE_RESCHED ||
--	    (failure_code() & TM_CAUSE_KVM_RESCHED) == TM_CAUSE_KVM_RESCHED)
-+	    (failure_code() & TM_CAUSE_KVM_RESCHED) == TM_CAUSE_KVM_RESCHED ||
-+	    (failure_code() & TM_CAUSE_KVM_FAC_UNAV) == TM_CAUSE_KVM_FAC_UNAV)
- 		return true;
- 
- 	return false;
--- 
-2.20.1
+make TARGETS=arm64 SUBTARGETS=signal -C tools/testing/selftests/
+
+if possible, that would be useful if kept functional even in the
+new schema. I mean being able to still issue:
+
+make TARGETS=arm64 SUBTARGETS=signal kselftes_build 
+
+with the SUBTARGETS= or whatever ENV var handling delegated to the lower level
+makefiles (so not handled by the toplevel, but just let go through)
+
+Cheers
+
+Cristian
+
+> 
+> That way we can support all the use-cases from the main Makefile
+> 
+> thanks,
+> -- Shuah
+> 
+> 
 
