@@ -2,170 +2,129 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3505FBD1CB
-	for <lists+linux-kselftest@lfdr.de>; Tue, 24 Sep 2019 20:23:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F10FEBD214
+	for <lists+linux-kselftest@lfdr.de>; Tue, 24 Sep 2019 20:49:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729256AbfIXSXO (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 24 Sep 2019 14:23:14 -0400
-Received: from mail-io1-f47.google.com ([209.85.166.47]:37670 "EHLO
-        mail-io1-f47.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726177AbfIXSXO (ORCPT
+        id S1730392AbfIXStx (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 24 Sep 2019 14:49:53 -0400
+Received: from www62.your-server.de ([213.133.104.62]:48528 "EHLO
+        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726925AbfIXStx (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 24 Sep 2019 14:23:14 -0400
-Received: by mail-io1-f47.google.com with SMTP id b19so6870187iob.4
-        for <linux-kselftest@vger.kernel.org>; Tue, 24 Sep 2019 11:23:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=JCRwRvIn5WnSIjJ8UCyA8yQaqy8F1gjAcRkVOQB7q9I=;
-        b=Ep9nbVOXt43g2GclKMujhZBtqpVD24/fugjF20R07gEhpQOmpgtpTnMiipYTlVRUsh
-         x0q1dnIC70qIcrWtw7LA9CSHAIi0jLFwtDGGedygehl5k1u3uvQec64chGwkXexJ7E70
-         aHb8Qxu2dI/iGt/P03nuAL0MHi1aovz5lzpuU=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=JCRwRvIn5WnSIjJ8UCyA8yQaqy8F1gjAcRkVOQB7q9I=;
-        b=FB46nXFEhzGxMrL0S9goyEGg8BLShoL3jsDUvQyZlOpln48okXxr1uNbfDaqRnesBf
-         VCDgZeQolRS8D+4zXMpvi5U4c/arZ83gc0NeMphuA0E6RG7D0GXzvo8+7ufTaTHuQqb8
-         3TRGFxNQMpGTwlidFs4CodWClCMK//TYe1q+x6bC/XFi2nXhC/f2hoJgMTYWxLrRdtOE
-         r34922q6nchTlEP1rYG5+kgjOPYYSgAU/RGp3FXW1JdoAsmxOZfSeVAH0vGXyjsSU+vi
-         o7oAlC2/1Ao3XvRU3ppWssKj/VDlnU6Y+3o2YDGEoI2FEPDgnwpK4tyNuG7Eq1KKkqIb
-         KGJA==
-X-Gm-Message-State: APjAAAXK6RTlgrhO6QFTHA3nZyvaAPFUVYCLmoXsANyFCrK0bb7OssHY
-        6Z0RyIIEZNz7HYE5DyAZDB8tog==
-X-Google-Smtp-Source: APXvYqxK0F4oMWpvW+erHciK5obgRJA5cW6Px156FnlU93cw6O2tYswirK5NqitWoQDlIgoeKiloJw==
-X-Received: by 2002:a02:246:: with SMTP id 67mr106308jau.121.1569349393695;
-        Tue, 24 Sep 2019 11:23:13 -0700 (PDT)
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id f26sm1242052ion.4.2019.09.24.11.23.12
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 24 Sep 2019 11:23:13 -0700 (PDT)
+        Tue, 24 Sep 2019 14:49:53 -0400
+Received: from [178.197.248.15] (helo=localhost)
+        by www62.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
+        (Exim 4.89_1)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1iCpsg-0000x9-SG; Tue, 24 Sep 2019 20:49:46 +0200
+Date:   Tue, 24 Sep 2019 20:49:46 +0200
+From:   Daniel Borkmann <daniel@iogearbox.net>
+To:     Shuah Khan <skhan@linuxfoundation.org>
+Cc:     Yonghong Song <yhs@fb.com>,
+        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Andrii Nakryiko <andriin@fb.com>
 Subject: Re: Linux 5.4 - bpf test build fails
-To:     Tim.Bird@sony.com, cristian.marussi@arm.com,
-        alexei.starovoitov@gmail.com, daniel@iogearbox.net
-Cc:     linux-kselftest@vger.kernel.org, bpf@vger.kernel.org,
-        netdev@vger.kernel.org, davem@davemloft.net,
-        "skh >> Shuah Khan" <skhan@linuxfoundation.org>
+Message-ID: <20190924184946.GB5889@pc-63.home>
 References: <742ecabe-45ce-cf6e-2540-25d6dc23c45f@linuxfoundation.org>
- <1d1bbc01-5cf4-72e6-76b3-754d23366c8f@arm.com>
- <34a9bd63-a251-0b4f-73b6-06b9bbf9d3fa@linuxfoundation.org>
- <a603ee8e-b0af-6506-0667-77269b0951b2@linuxfoundation.org>
- <c3dda8d0-1794-ffd1-4d76-690ac2be8b8f@arm.com>
- <ECADFF3FD767C149AD96A924E7EA6EAF977BCBF5@USCULXMSG01.am.sony.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <d4c916ec-14a5-1076-7b84-3ca42026dd19@linuxfoundation.org>
-Date:   Tue, 24 Sep 2019 12:23:12 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+ <0a5bf608-bb15-c116-8e58-7224b6c3b62f@fb.com>
+ <05b7830c-1fa8-b613-0535-1f5f5a40a25a@linuxfoundation.org>
 MIME-Version: 1.0
-In-Reply-To: <ECADFF3FD767C149AD96A924E7EA6EAF977BCBF5@USCULXMSG01.am.sony.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <05b7830c-1fa8-b613-0535-1f5f5a40a25a@linuxfoundation.org>
+User-Agent: Mutt/1.12.1 (2019-06-15)
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.101.4/25582/Tue Sep 24 10:20:37 2019)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 9/24/19 12:07 PM, Tim.Bird@sony.com wrote:
+On Tue, Sep 24, 2019 at 09:48:35AM -0600, Shuah Khan wrote:
+> On 9/24/19 9:43 AM, Yonghong Song wrote:
+> > On 9/24/19 8:26 AM, Shuah Khan wrote:
+> > > Hi Alexei and Daniel,
+> > > 
+> > > bpf test doesn't build on Linux 5.4 mainline. Do you know what's
+> > > happening here.
+> > > 
+> > > make -C tools/testing/selftests/bpf/
+> > > 
+> > > -c progs/test_core_reloc_ptr_as_arr.c -o - || echo "clang failed") | \
+> > > llc -march=bpf -mcpu=generic  -filetype=obj -o
+> > > /mnt/data/lkml/linux_5.4/tools/testing/selftests/bpf/test_core_reloc_ptr_as_arr.o
+> > > 
+> > > progs/test_core_reloc_ptr_as_arr.c:25:6: error: use of unknown builtin
+> > >         '__builtin_preserve_access_index' [-Wimplicit-function-declaration]
+> > >           if (BPF_CORE_READ(&out->a, &in[2].a))
+> > >               ^
+> > > ./bpf_helpers.h:533:10: note: expanded from macro 'BPF_CORE_READ'
+> > >                          __builtin_preserve_access_index(src))
+> > >                          ^
+> > > progs/test_core_reloc_ptr_as_arr.c:25:6: warning: incompatible integer to
+> > >         pointer conversion passing 'int' to parameter of type 'const void *'
+> > >         [-Wint-conversion]
+> > >           if (BPF_CORE_READ(&out->a, &in[2].a))
+> > >               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> > > ./bpf_helpers.h:533:10: note: expanded from macro 'BPF_CORE_READ'
+> > >                          __builtin_preserve_access_index(src))
+> > >                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> > > 1 warning and 1 error generated.
+> > > llc: error: llc: <stdin>:1:1: error: expected top-level entity
+> > > clang failed
+> > > 
+> > > Also
+> > > 
+> > > make TARGETS=bpf kselftest fails as well. Dependency between
+> > > tools/lib/bpf and the test. How can we avoid this type of
+> > > dependency or resolve it in a way it doesn't result in build
+> > > failures?
+> > 
+> > Thanks, Shuah.
+> > 
+> > The clang __builtin_preserve_access_index() intrinsic is
+> > introduced in LLVM9 (which just released last week) and
+> > the builtin and other CO-RE features are only supported
+> > in LLVM10 (current development branch) with more bug fixes
+> > and added features.
+> > 
+> > I think we should do a feature test for llvm version and only
+> > enable these tests when llvm version >= 10.
 > 
-> 
->> -----Original Message-----
->> From: Cristian Marussi on Tuesday, September 24, 2019 7:30 AM
->>
->> Hi Shuah
->>
->> On 24/09/2019 17:39, Shuah Khan wrote:
->>> On 9/24/19 10:03 AM, Shuah Khan wrote:
->>>> On 9/24/19 9:52 AM, Cristian Marussi wrote:
->>>>> Hi Shuah
->>>>>
->>>>> On 24/09/2019 16:26, Shuah Khan wrote:
->>>>>> Hi Alexei and Daniel,
->>>>>>
->>>>>> bpf test doesn't build on Linux 5.4 mainline. Do you know what's
->>>>>> happening here.
->>>>>>
->>>>>>
->>>>>> make -C tools/testing/selftests/bpf/
->>>>>
->>>>> side question, since I'm writing arm64/ tests.
->>>>>
->>>>> my "build-testcases" following the KSFT docs are:
->>>>>
->>>>> make kselftest
->>>>> make TARGETS=arm64 kselftest
->>>>> make -C tools/testing/selftests/
->>>>> make -C tools/testing/selftests/ INSTALL_PATH=<install-path> install
->>>>> make TARGETS=arm64 -C tools/testing/selftests/
->>>>> make TARGETS=arm64 -C tools/testing/selftests/
->>>>> INSTALL_PATH=<install-path> install
->>>>> ./kselftest_install.sh <install-path>
->>>
->>> Cristian,
->>>
->>> That being said, I definitely want to see this list limited to
->>> a few options.
->>>
->>> One problem is that if somebody wants to do just a build, there
->>> is no option from the main makefile. I have sent support for that
->>> a few months ago and the patch didn't got lost it appears. I am
->>> working on resending those patches. The same is true for install.
->>> I sent in a patch for that a while back and I am going to resend.
->>> These will make it easier for users.
->>>
->>> I would really want to get to supporting only these options:
->>>
->>> These are supported now:
->>>
->>> make kselftest
->>> make TARGETS=arm64 kselftest (one or more targets)
->>>
->>> Replace the following:
->>>
->>> make -C tools/testing/selftests/ with
->>>
->>> make kselftes_build option from main makefile
->>>
->>> Replace this:
->>> make -C tools/testing/selftests/ INSTALL_PATH=<install-path> install
->>>
->>> with
->>> make kselftest_install
->>
->> Yes these top level options would be absolutely useful to avoid multiplication
->> of build targets to support and test.
->>
->> Moreover, currently, since there was a lot of test growing into arm64/
->> inside subdirs like arm64/signal, I support (still under review in fact) in the
->> arm64/
->> toplevel makefile the possibility of building/installing by subdirs only, in order
->> to be able to limit what you want to build/install of a TARGET (resulting in
->> quicker devel),
->> issuing something like:
->>
->> make TARGETS=arm64 SUBTARGETS=signal -C tools/testing/selftests/
->>
->> if possible, that would be useful if kept functional even in the
->> new schema. I mean being able to still issue:
->>
->> make TARGETS=arm64 SUBTARGETS=signal kselftes_build
-> 
->  From a user perspective, instead of adding a new SUBTARGETS variable,
-> I would prefer something like the following:
-> 
-> make TARGET=arm64/signal kselftest_build
-> 
-> If you just add a single flat subsidiary namespace, then it doesn't support further
-> increasing the directory depth in the future.
-> 
+> Yes. If new tests depend on a particular llvm revision, the failing
+> the build is a regression. I would like to see older tests that don't
+> have dependency build and run.
 
-TARGETS is make variable. Adding sub-targets might not be easy without
-cluttering the selftests main Makefile. I will have to look into it.
+So far we haven't made it a requirement as majority of BPF contributors
+that would run/add tests in here are also on bleeding edge LLVM anyway
+and other CIs like 0-day bot have simply upgraded their LLVM version
+from git whenever there was a failure similar to the one here so its
+ensured that really /all/ test cases are running and nothing would be
+skipped. There is worry to some degree that CIs just keep sticking to
+an old compiler since tests "just" pass and regressions wouldn't be
+caught on new releases for those that are skipped.
 
-thanks,
--- Shuah
+That said, for the C based tests, it should actually be straight forward
+to categorize them based on built-in macros like ...
 
+$ echo | clang -dM -E -
+[...]
+#define __clang_major__ 10
+#define __clang_minor__ 0
+[...]
+
+... given there is now also bpf-gcc, the test matrix gets bigger anyway,
+so it might be worth rethinking to run the suite multiple times with
+different major llvm{,gcc} versions at some point to make sure their
+generated BPF bytecode keeps passing the verifier, and yell loudly if
+newer features had to be skipped due to lack of recent compiler version.
+This would be a super set of /just/ skipping tests and improve coverage
+at the same time.
+
+Thanks,
+Daniel
