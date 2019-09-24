@@ -2,120 +2,170 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C3688BD1B7
-	for <lists+linux-kselftest@lfdr.de>; Tue, 24 Sep 2019 20:19:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3505FBD1CB
+	for <lists+linux-kselftest@lfdr.de>; Tue, 24 Sep 2019 20:23:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730637AbfIXSTP (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 24 Sep 2019 14:19:15 -0400
-Received: from mail-io1-f67.google.com ([209.85.166.67]:43631 "EHLO
-        mail-io1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730602AbfIXSTP (ORCPT
+        id S1729256AbfIXSXO (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 24 Sep 2019 14:23:14 -0400
+Received: from mail-io1-f47.google.com ([209.85.166.47]:37670 "EHLO
+        mail-io1-f47.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726177AbfIXSXO (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 24 Sep 2019 14:19:15 -0400
-Received: by mail-io1-f67.google.com with SMTP id v2so6765686iob.10
-        for <linux-kselftest@vger.kernel.org>; Tue, 24 Sep 2019 11:19:14 -0700 (PDT)
+        Tue, 24 Sep 2019 14:23:14 -0400
+Received: by mail-io1-f47.google.com with SMTP id b19so6870187iob.4
+        for <linux-kselftest@vger.kernel.org>; Tue, 24 Sep 2019 11:23:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linuxfoundation.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=EOiRSARkp3F6HwO3VBjfruq1JmqAa9T16KuDWC1Mj24=;
-        b=f0OtgxW1mZYsRiqiMXKFJAiP/qsfAm4vioC7LMMblRGULzt1gd02KiomCjgqsvDzh4
-         s4n4AjWgNmNkU6E4+fXx9yva9igDd2N3/jH57gq+cUbTJg/bSkco5nR2pij96rVH40Sk
-         9RUKae7Wu4kg3VlWbAUsqWHWn3dk9PYICH0nA=
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=JCRwRvIn5WnSIjJ8UCyA8yQaqy8F1gjAcRkVOQB7q9I=;
+        b=Ep9nbVOXt43g2GclKMujhZBtqpVD24/fugjF20R07gEhpQOmpgtpTnMiipYTlVRUsh
+         x0q1dnIC70qIcrWtw7LA9CSHAIi0jLFwtDGGedygehl5k1u3uvQec64chGwkXexJ7E70
+         aHb8Qxu2dI/iGt/P03nuAL0MHi1aovz5lzpuU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=EOiRSARkp3F6HwO3VBjfruq1JmqAa9T16KuDWC1Mj24=;
-        b=HYE18hH+nQLgJaxAWi9hoxycg/VL3YGAybVBvtH1v6+AHZSAdZXLAcKdQhwvkdwG7f
-         RkXoyYc5WIeN6Co1lEDi/CrxLjLFzAj57pqsAgdze5Be3x/Ox0NDMT9MVNFXmoJ70Svx
-         gWMeE+8lmmyM0Md1v4flOkcU6N+GyESxHuQxcAoiz061qgVL92QcWDiDTG4PS6eKICQD
-         g8B0+FFacyQQ0dgrxcRxSRaw5g1RHJ1mWtnKQ/MV4dIoP1eXBS2+E8+Di33nwrswEDct
-         moPfiuHQjNUinaGZ3dFtbHLUXwUIwO8DuImGklu1aKvJuDGMpgUd26+Ibo7cGUlzh0R9
-         qVLg==
-X-Gm-Message-State: APjAAAXCxjRnK1R4DeDxPenWVejtPo4r24NhyV2UhhV06CW5gUnosjN/
-        mt0YiShaGh+ZV+tsarh1eP0mcQ==
-X-Google-Smtp-Source: APXvYqw6wXfLz8lHYVaZ7lWb3saJlApZPvWBONhm0WBRi6N/bGzAMCA1AJj2E2PiLe/DqV1RSOh47g==
-X-Received: by 2002:a6b:fe09:: with SMTP id x9mr4737235ioh.144.1569349154482;
-        Tue, 24 Sep 2019 11:19:14 -0700 (PDT)
-Received: from shuah-t480s.internal (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id w7sm3627033iob.17.2019.09.24.11.19.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Sep 2019 11:19:13 -0700 (PDT)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=JCRwRvIn5WnSIjJ8UCyA8yQaqy8F1gjAcRkVOQB7q9I=;
+        b=FB46nXFEhzGxMrL0S9goyEGg8BLShoL3jsDUvQyZlOpln48okXxr1uNbfDaqRnesBf
+         VCDgZeQolRS8D+4zXMpvi5U4c/arZ83gc0NeMphuA0E6RG7D0GXzvo8+7ufTaTHuQqb8
+         3TRGFxNQMpGTwlidFs4CodWClCMK//TYe1q+x6bC/XFi2nXhC/f2hoJgMTYWxLrRdtOE
+         r34922q6nchTlEP1rYG5+kgjOPYYSgAU/RGp3FXW1JdoAsmxOZfSeVAH0vGXyjsSU+vi
+         o7oAlC2/1Ao3XvRU3ppWssKj/VDlnU6Y+3o2YDGEoI2FEPDgnwpK4tyNuG7Eq1KKkqIb
+         KGJA==
+X-Gm-Message-State: APjAAAXK6RTlgrhO6QFTHA3nZyvaAPFUVYCLmoXsANyFCrK0bb7OssHY
+        6Z0RyIIEZNz7HYE5DyAZDB8tog==
+X-Google-Smtp-Source: APXvYqxK0F4oMWpvW+erHciK5obgRJA5cW6Px156FnlU93cw6O2tYswirK5NqitWoQDlIgoeKiloJw==
+X-Received: by 2002:a02:246:: with SMTP id 67mr106308jau.121.1569349393695;
+        Tue, 24 Sep 2019 11:23:13 -0700 (PDT)
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
+        by smtp.gmail.com with ESMTPSA id f26sm1242052ion.4.2019.09.24.11.23.12
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 24 Sep 2019 11:23:13 -0700 (PDT)
+Subject: Re: Linux 5.4 - bpf test build fails
+To:     Tim.Bird@sony.com, cristian.marussi@arm.com,
+        alexei.starovoitov@gmail.com, daniel@iogearbox.net
+Cc:     linux-kselftest@vger.kernel.org, bpf@vger.kernel.org,
+        netdev@vger.kernel.org, davem@davemloft.net,
+        "skh >> Shuah Khan" <skhan@linuxfoundation.org>
+References: <742ecabe-45ce-cf6e-2540-25d6dc23c45f@linuxfoundation.org>
+ <1d1bbc01-5cf4-72e6-76b3-754d23366c8f@arm.com>
+ <34a9bd63-a251-0b4f-73b6-06b9bbf9d3fa@linuxfoundation.org>
+ <a603ee8e-b0af-6506-0667-77269b0951b2@linuxfoundation.org>
+ <c3dda8d0-1794-ffd1-4d76-690ac2be8b8f@arm.com>
+ <ECADFF3FD767C149AD96A924E7EA6EAF977BCBF5@USCULXMSG01.am.sony.com>
 From:   Shuah Khan <skhan@linuxfoundation.org>
-To:     adobriyan@gmail.com, shuah@kernel.org, akpm@linux-foundation.org,
-        sabyasachi.linux@gmail.com, jrdr.linux@gmail.com
-Cc:     Shuah Khan <skhan@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: [PATCH] selftests: proc: Fix _GNU_SOURCE redefined build warns
-Date:   Tue, 24 Sep 2019 12:19:10 -0600
-Message-Id: <20190924181910.23588-2-skhan@linuxfoundation.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190924181910.23588-1-skhan@linuxfoundation.org>
-References: <20190924181910.23588-1-skhan@linuxfoundation.org>
+Message-ID: <d4c916ec-14a5-1076-7b84-3ca42026dd19@linuxfoundation.org>
+Date:   Tue, 24 Sep 2019 12:23:12 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <ECADFF3FD767C149AD96A924E7EA6EAF977BCBF5@USCULXMSG01.am.sony.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Fix the following _GNU_SOURCE redefined build warns:
+On 9/24/19 12:07 PM, Tim.Bird@sony.com wrote:
+> 
+> 
+>> -----Original Message-----
+>> From: Cristian Marussi on Tuesday, September 24, 2019 7:30 AM
+>>
+>> Hi Shuah
+>>
+>> On 24/09/2019 17:39, Shuah Khan wrote:
+>>> On 9/24/19 10:03 AM, Shuah Khan wrote:
+>>>> On 9/24/19 9:52 AM, Cristian Marussi wrote:
+>>>>> Hi Shuah
+>>>>>
+>>>>> On 24/09/2019 16:26, Shuah Khan wrote:
+>>>>>> Hi Alexei and Daniel,
+>>>>>>
+>>>>>> bpf test doesn't build on Linux 5.4 mainline. Do you know what's
+>>>>>> happening here.
+>>>>>>
+>>>>>>
+>>>>>> make -C tools/testing/selftests/bpf/
+>>>>>
+>>>>> side question, since I'm writing arm64/ tests.
+>>>>>
+>>>>> my "build-testcases" following the KSFT docs are:
+>>>>>
+>>>>> make kselftest
+>>>>> make TARGETS=arm64 kselftest
+>>>>> make -C tools/testing/selftests/
+>>>>> make -C tools/testing/selftests/ INSTALL_PATH=<install-path> install
+>>>>> make TARGETS=arm64 -C tools/testing/selftests/
+>>>>> make TARGETS=arm64 -C tools/testing/selftests/
+>>>>> INSTALL_PATH=<install-path> install
+>>>>> ./kselftest_install.sh <install-path>
+>>>
+>>> Cristian,
+>>>
+>>> That being said, I definitely want to see this list limited to
+>>> a few options.
+>>>
+>>> One problem is that if somebody wants to do just a build, there
+>>> is no option from the main makefile. I have sent support for that
+>>> a few months ago and the patch didn't got lost it appears. I am
+>>> working on resending those patches. The same is true for install.
+>>> I sent in a patch for that a while back and I am going to resend.
+>>> These will make it easier for users.
+>>>
+>>> I would really want to get to supporting only these options:
+>>>
+>>> These are supported now:
+>>>
+>>> make kselftest
+>>> make TARGETS=arm64 kselftest (one or more targets)
+>>>
+>>> Replace the following:
+>>>
+>>> make -C tools/testing/selftests/ with
+>>>
+>>> make kselftes_build option from main makefile
+>>>
+>>> Replace this:
+>>> make -C tools/testing/selftests/ INSTALL_PATH=<install-path> install
+>>>
+>>> with
+>>> make kselftest_install
+>>
+>> Yes these top level options would be absolutely useful to avoid multiplication
+>> of build targets to support and test.
+>>
+>> Moreover, currently, since there was a lot of test growing into arm64/
+>> inside subdirs like arm64/signal, I support (still under review in fact) in the
+>> arm64/
+>> toplevel makefile the possibility of building/installing by subdirs only, in order
+>> to be able to limit what you want to build/install of a TARGET (resulting in
+>> quicker devel),
+>> issuing something like:
+>>
+>> make TARGETS=arm64 SUBTARGETS=signal -C tools/testing/selftests/
+>>
+>> if possible, that would be useful if kept functional even in the
+>> new schema. I mean being able to still issue:
+>>
+>> make TARGETS=arm64 SUBTARGETS=signal kselftes_build
+> 
+>  From a user perspective, instead of adding a new SUBTARGETS variable,
+> I would prefer something like the following:
+> 
+> make TARGET=arm64/signal kselftest_build
+> 
+> If you just add a single flat subsidiary namespace, then it doesn't support further
+> increasing the directory depth in the future.
+> 
 
-proc-loadavg-001.c:17: warning: "_GNU_SOURCE" redefined
-proc-self-syscall.c:16: warning: "_GNU_SOURCE" redefined
-proc-uptime-002.c:18: warning: "_GNU_SOURCE" redefined
+TARGETS is make variable. Adding sub-targets might not be easy without
+cluttering the selftests main Makefile. I will have to look into it.
 
-Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
----
- tools/testing/selftests/proc/proc-loadavg-001.c  | 2 ++
- tools/testing/selftests/proc/proc-self-syscall.c | 2 ++
- tools/testing/selftests/proc/proc-uptime-002.c   | 2 ++
- 3 files changed, 6 insertions(+)
-
-diff --git a/tools/testing/selftests/proc/proc-loadavg-001.c b/tools/testing/selftests/proc/proc-loadavg-001.c
-index 471e2aa28077..e29326a708e4 100644
---- a/tools/testing/selftests/proc/proc-loadavg-001.c
-+++ b/tools/testing/selftests/proc/proc-loadavg-001.c
-@@ -14,7 +14,9 @@
-  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
-  */
- /* Test that /proc/loadavg correctly reports last pid in pid namespace. */
-+#ifndef _GNU_SOURCE
- #define _GNU_SOURCE
-+#endif
- #include <errno.h>
- #include <sched.h>
- #include <sys/types.h>
-diff --git a/tools/testing/selftests/proc/proc-self-syscall.c b/tools/testing/selftests/proc/proc-self-syscall.c
-index 9f6d000c0245..6a01448df035 100644
---- a/tools/testing/selftests/proc/proc-self-syscall.c
-+++ b/tools/testing/selftests/proc/proc-self-syscall.c
-@@ -13,7 +13,9 @@
-  * ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
-  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
-  */
-+#ifndef _GNU_SOURCE
- #define _GNU_SOURCE
-+#endif
- #include <unistd.h>
- #include <sys/syscall.h>
- #include <sys/types.h>
-diff --git a/tools/testing/selftests/proc/proc-uptime-002.c b/tools/testing/selftests/proc/proc-uptime-002.c
-index 30e2b7849089..35eec74540ae 100644
---- a/tools/testing/selftests/proc/proc-uptime-002.c
-+++ b/tools/testing/selftests/proc/proc-uptime-002.c
-@@ -15,7 +15,9 @@
-  */
- // Test that values in /proc/uptime increment monotonically
- // while shifting across CPUs.
-+#ifndef _GNU_SOURCE
- #define _GNU_SOURCE
-+#endif
- #undef NDEBUG
- #include <assert.h>
- #include <unistd.h>
--- 
-2.20.1
+thanks,
+-- Shuah
 
