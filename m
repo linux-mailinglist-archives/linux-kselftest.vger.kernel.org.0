@@ -2,27 +2,27 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 13985BCD45
-	for <lists+linux-kselftest@lfdr.de>; Tue, 24 Sep 2019 18:46:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD0C9BCDF6
+	for <lists+linux-kselftest@lfdr.de>; Tue, 24 Sep 2019 18:52:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2409874AbfIXQom (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 24 Sep 2019 12:44:42 -0400
-Received: from mail.kernel.org ([198.145.29.99]:33900 "EHLO mail.kernel.org"
+        id S2404021AbfIXQrv (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 24 Sep 2019 12:47:51 -0400
+Received: from mail.kernel.org ([198.145.29.99]:39258 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2409873AbfIXQol (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 24 Sep 2019 12:44:41 -0400
+        id S2633309AbfIXQrt (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 24 Sep 2019 12:47:49 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 94C6521783;
-        Tue, 24 Sep 2019 16:44:39 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 250ED20673;
+        Tue, 24 Sep 2019 16:47:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1569343480;
+        s=default; t=1569343669;
         bh=szCeKCu1HOCfG8Xa5dhnSRI7Vdwm04GAxX3XtKErotk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Zf4+BgWA9pk7T5TImcaCy108DnTvGzqEnxHy8Rqp5dIT2hIkNpaczeSxhmPeLdCJE
-         FAUwYq6FoKN8F1IIdaeHvgoumeANMB+0CoIXpdYY+2SrQZdthkeaV9VHay3BoboxqZ
-         f2JMHAiBcLKRj/FMndMPhH3HDPhdR5Dtm3WdMXKA=
+        b=VQbofE0MsdjroR/zv5valnd6YlN+3HpXlkjL3pBpvUItK7EF66CfoTI1E2/pzGuiJ
+         gPopTmzcFRfCTLpGRP1/JaAoSYQ3CDwJPquOF3tw5w+g+YTeW6ODNsus5G/KkfxbqO
+         a2F9G1rVDzELCfOGiQILmmwMV9WlTaq/O2/zA2Z0=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Gustavo Romero <gromero@linux.vnet.ibm.com>,
@@ -30,12 +30,12 @@ Cc:     Gustavo Romero <gromero@linux.vnet.ibm.com>,
         Michael Ellerman <mpe@ellerman.id.au>,
         Sasha Levin <sashal@kernel.org>, linuxppc-dev@lists.ozlabs.org,
         linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.3 63/87] selftests/powerpc: Retry on host facility unavailable
-Date:   Tue, 24 Sep 2019 12:41:19 -0400
-Message-Id: <20190924164144.25591-63-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.2 48/70] selftests/powerpc: Retry on host facility unavailable
+Date:   Tue, 24 Sep 2019 12:45:27 -0400
+Message-Id: <20190924164549.27058-48-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20190924164144.25591-1-sashal@kernel.org>
-References: <20190924164144.25591-1-sashal@kernel.org>
+In-Reply-To: <20190924164549.27058-1-sashal@kernel.org>
+References: <20190924164549.27058-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
