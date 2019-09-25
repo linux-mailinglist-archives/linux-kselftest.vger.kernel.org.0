@@ -2,149 +2,390 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AF333BE641
-	for <lists+linux-kselftest@lfdr.de>; Wed, 25 Sep 2019 22:20:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 06FFEBE831
+	for <lists+linux-kselftest@lfdr.de>; Thu, 26 Sep 2019 00:16:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2393083AbfIYUUU (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 25 Sep 2019 16:20:20 -0400
-Received: from mail-eopbgr810122.outbound.protection.outlook.com ([40.107.81.122]:8640
-        "EHLO NAM01-BY2-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727743AbfIYUUT (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 25 Sep 2019 16:20:19 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=K08C5SrLVjH7pG+jmuYN3DKP/7I6v91hC9J8EiQYA2nnaUJ6nSQE7JrlazFruSN8kSAQF3ztsiGnl1z1Woh8Nvu436rQGx5exhWmqpxfyExUvSRVfdLoInpSOkn48VbQn0Kb1vUd932+SuWrspIKNadhjxPpWzWOebvZZXz1MYqklAkfDHXsNeUJ5nk/mDaylWg76ooG47zghGxFZQ9Db/idEIDxdejWEPnfrzZK+EEio+OcighQ3iZt6UPMMUArga16okMqQnUArOCnAqsTVcEX2J7aY0yaNG3PHgL8fwVh4KCr3q1rQdDnMaVtSj/zTVJyyTugxyLHg+nSVPDN3Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=xiwFRSJv2GVPFhdUNhsFL2MMxzWIVAoiq7Vz0F7dRn4=;
- b=flU5fHSjhRfTyiBWYnb/3Xdbjqchr1PRkVsqJlKkQpqaWkkEqY5DJjvoOJRQ7en/2IKibENerzuC13IZbgiQ1xFd2JHByzNv4hGV1gIlhFNe2FQOZCwZL2BOf2tKnd1+Q+BWCNhIhaebKj+Zrv0KiYkZSJWc+oK4jtloiDKKj784D0TpAg8qEeQzW4qmioCA/LN6HfzS8iihWbXlOBGf+rAlXjPXVWLK5qE+AH6sRk6HMhjYYaXdZn9D4dcSsaueOHOkxgqNj6q3etQw2B5pOWbR/SCcSDnEopSQ3sAvwfcWiXHGcwJMO4lE85tvH5OmPeBX0IL9gBqsmfHbgmx9rQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 160.33.194.230) smtp.rcpttodomain=arm.com smtp.mailfrom=sony.com; dmarc=pass
- (p=none sp=none pct=100) action=none header.from=sony.com; dkim=none (message
- not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Sony.onmicrosoft.com;
- s=selector2-Sony-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=xiwFRSJv2GVPFhdUNhsFL2MMxzWIVAoiq7Vz0F7dRn4=;
- b=APJW2ACwoxnY+Lh+nFdQuWc0PIH7MZ1QcwHu5nBANawqt7LkV38dsMj4MHDtwEBsDPDSvO2bx0e7sXtIHZ2E2IRX79wQDKQkLkl398SgteurQv1JHzn+wbobm8y0ucOBg0zoybSg6qaQaavaZ/QL0zzuT3e8lC0YeBRWODpI7TE=
-Received: from BY5PR13CA0012.namprd13.prod.outlook.com (2603:10b6:a03:180::25)
- by DM6PR13MB2939.namprd13.prod.outlook.com (2603:10b6:5:4::12) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2305.11; Wed, 25 Sep 2019 20:20:17 +0000
-Received: from SN1NAM02FT019.eop-nam02.prod.protection.outlook.com
- (2a01:111:f400:7e44::207) by BY5PR13CA0012.outlook.office365.com
- (2603:10b6:a03:180::25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2305.12 via Frontend
- Transport; Wed, 25 Sep 2019 20:20:17 +0000
-Authentication-Results: spf=pass (sender IP is 160.33.194.230)
- smtp.mailfrom=sony.com; arm.com; dkim=none (message not signed)
- header.d=none;arm.com; dmarc=pass action=none header.from=sony.com;
-Received-SPF: Pass (protection.outlook.com: domain of sony.com designates
- 160.33.194.230 as permitted sender) receiver=protection.outlook.com;
- client-ip=160.33.194.230; helo=usculsndmail03v.am.sony.com;
-Received: from usculsndmail03v.am.sony.com (160.33.194.230) by
- SN1NAM02FT019.mail.protection.outlook.com (10.152.72.130) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2284.25 via Frontend Transport; Wed, 25 Sep 2019 20:20:16 +0000
-Received: from usculsndmail13v.am.sony.com (usculsndmail13v.am.sony.com [146.215.230.104])
-        by usculsndmail03v.am.sony.com (Sentrion-MTA-4.3.2/Sentrion-MTA-4.3.2) with ESMTP id x8PKKFRF001393;
-        Wed, 25 Sep 2019 20:20:15 GMT
-Received: from USCULXHUB02V.am.sony.com (usculxhub02v.am.sony.com [146.215.231.16])
-        by usculsndmail13v.am.sony.com (Sentrion-MTA-4.3.2/Sentrion-MTA-4.3.2) with ESMTP id x8PKKFmQ019631;
-        Wed, 25 Sep 2019 20:20:15 GMT
-Received: from USCULXMSG01.am.sony.com ([fe80::b09d:6cb6:665e:d1b5]) by
- USCULXHUB02V.am.sony.com ([146.215.231.16]) with mapi id 14.03.0439.000; Wed,
- 25 Sep 2019 16:20:14 -0400
-From:   <Tim.Bird@sony.com>
-To:     <cristian.marussi@arm.com>, <linux-kselftest@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <shuah@kernel.org>
-CC:     <dave.martin@arm.com>
-Subject: RE: [PATCH 1/2] kselftest: add capability to skip chosen TARGETS
-Thread-Topic: [PATCH 1/2] kselftest: add capability to skip chosen TARGETS
-Thread-Index: AQHVc6S04USvYnGSCEmE8aUG8m7ED6c8zSQg
-Date:   Wed, 25 Sep 2019 20:20:07 +0000
-Message-ID: <ECADFF3FD767C149AD96A924E7EA6EAF977BD152@USCULXMSG01.am.sony.com>
-References: <20190925132421.23572-1-cristian.marussi@arm.com>
-In-Reply-To: <20190925132421.23572-1-cristian.marussi@arm.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [146.215.231.6]
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        id S1729078AbfIYWQl (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 25 Sep 2019 18:16:41 -0400
+Received: from mail-io1-f66.google.com ([209.85.166.66]:34577 "EHLO
+        mail-io1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728277AbfIYWQl (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 25 Sep 2019 18:16:41 -0400
+Received: by mail-io1-f66.google.com with SMTP id q1so1161881ion.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 25 Sep 2019 15:16:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=to:cc:from:subject:message-id:date:user-agent:mime-version
+         :content-language;
+        bh=w4gadLLHs2A9nM8uLns+2A3TjlnvTrDdFnbGeq+CsP4=;
+        b=JeYNTYcrgQ88EP1K7ijtOF8BR15gKOoBwgiHSJxYfjZv39su5wmaUtIA2lUAs6Fgpq
+         Ga+TJJMh6RWZYdtEC7iJRI8v7VkH6zgwRBI5v11tFnViVHAniUzCa8VtxX1BEghWBeUj
+         jDsAMDK0W66VB16+9c5b5g5EEaGUOmCl+meG8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:to:cc:from:subject:message-id:date:user-agent
+         :mime-version:content-language;
+        bh=w4gadLLHs2A9nM8uLns+2A3TjlnvTrDdFnbGeq+CsP4=;
+        b=on82D26ZkRU40A/4Hp2tZJTAuoOOnN2AxvdDZmqIDSLsoESmyc5rkUHYrEnkUBU/t6
+         BnlZAE5Ix0UBNleRt7aH5C8Vxd36jKQNtAZCYsYOqGuDsTjpjUSG/qm1gU1J5o62PTdH
+         wQiTl71yzSD0vMBDgRJC+N1gBY1gfLMYYq4IEVQsbR7JrCptrm499mprUGK885J0z8hx
+         +xX11781tOVeZ2c25mYWEk4zg898ipqISAD0JHz6/q9wn4GeIdOE7J9DjWlASapPE9Nb
+         NmVbPkqmnciq08N1742aM9/33gx/lBN9pMXv9mYXBsNo1zqGZ99Fu/A/R03JhkrnB2tY
+         wtag==
+X-Gm-Message-State: APjAAAXRatFxmN2R8sjDScgUk1K2poxYKEjXt/onXKow0IVpZjoFyEE4
+        XVAs5Jj5ucDWflNaMLoVi4Qh17a8imM=
+X-Google-Smtp-Source: APXvYqzb5nHtvVFhHQATwcjL856t6gAyXNURP86aq70L1aRDf2FhtPOMIx/JLApY8BN4tyO1fckUMw==
+X-Received: by 2002:a5d:8f92:: with SMTP id l18mr249347iol.143.1569449799910;
+        Wed, 25 Sep 2019 15:16:39 -0700 (PDT)
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
+        by smtp.gmail.com with ESMTPSA id g75sm69755ila.43.2019.09.25.15.16.38
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 25 Sep 2019 15:16:39 -0700 (PDT)
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Mark Brown <broonie@kernel.org>,
+        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        Anders Roxell <anders.roxell@linaro.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Subject: [GIT PULL] Kselftest update for Linux 5.4-rc1 (minus kunit)
+Message-ID: <20820aaa-8555-d981-6f31-d872da9dd965@linuxfoundation.org>
+Date:   Wed, 25 Sep 2019 16:16:38 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-X-EOPAttributedMessage: 0
-X-MS-Office365-Filtering-HT: Tenant
-X-Forefront-Antispam-Report: CIP:160.33.194.230;IPV:NLI;CTRY:US;EFV:NLI;SFV:NSPM;SFS:(10019020)(39860400002)(136003)(396003)(346002)(376002)(189003)(199004)(13464003)(26005)(316002)(11346002)(336012)(102836004)(8746002)(426003)(97756001)(55016002)(126002)(446003)(66066001)(186003)(55846006)(7696005)(6666004)(86362001)(47776003)(8676002)(478600001)(4326008)(46406003)(476003)(356004)(8936002)(110136005)(70586007)(7736002)(106002)(33656002)(76176011)(246002)(305945005)(2201001)(486006)(70206006)(37786003)(6116002)(50466002)(23726003)(6246003)(3846002)(2876002)(2906002)(229853002)(5660300002)(5001870100001);DIR:OUT;SFP:1102;SCL:1;SRVR:DM6PR13MB2939;H:usculsndmail03v.am.sony.com;FPR:;SPF:Pass;LANG:en;PTR:mail03.sonyusa.com,mail.sonyusa.com;MX:1;A:1;
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: c94766a6-4690-4989-eab2-08d741f5c79c
-X-MS-TrafficTypeDiagnostic: DM6PR13MB2939:
-X-Microsoft-Antispam-PRVS: <DM6PR13MB29392F9B870059F913D511ECFD870@DM6PR13MB2939.namprd13.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:4502;
-X-Forefront-PRVS: 01713B2841
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: jyo3VxXIsoOy4MyKYdv6YVhQqJeXmezW77xOHuf03UK428c/1DWrwRl6FxAoJvuxfemFLV1Pd7Ay7RQbY9JwR2BU/9zKbShuXhJDJgO1wAjDPdpG+wuxZuDLymvYDoFYz2lh1VQsmegWS7DSuTqAIVAOsri17olXtY3LyJfilz43YdYR3Gbr9/TsD1RWKNvwaiFTvHUeyKLx1BWvRsNQGeLs7Jc1gxn5LEV4La6iSwY9LpRHTVkY7vV/scfCXzqkXO2Q0b1ZpYzqZQKrJCcClJ/Bzjl3/qbdlluN76H+mCwU3bJ5uYTgfQllOlKkhag9aCx/Z/NcEfRPbcvr0lB+QSXrCYavhW05JZMNnB0hcU4nwYczbLPhvpqJ2qSM+pZum42ndEMrAFTjvU1TBuzw3Y0AkQaShtJ0zCzVm5dPpjE=
-X-OriginatorOrg: sony.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Sep 2019 20:20:16.7026
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: c94766a6-4690-4989-eab2-08d741f5c79c
-X-MS-Exchange-CrossTenant-Id: 66c65d8a-9158-4521-a2d8-664963db48e4
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=66c65d8a-9158-4521-a2d8-664963db48e4;Ip=[160.33.194.230];Helo=[usculsndmail03v.am.sony.com]
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR13MB2939
+Content-Type: multipart/mixed;
+ boundary="------------36B1E5FF27D1C8EAF5C60560"
+Content-Language: en-US
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Just a few nits inline below.
+This is a multi-part message in MIME format.
+--------------36B1E5FF27D1C8EAF5C60560
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-> -----Original Message-----
-> From: Cristian Marussi on Wednesday, September 25, 2019 3:24 AM
->=20
-> Let the user specify an optional TARGETS skiplist through the new optiona=
-l
-> SKIP_TARGETS Makefile variable.
->=20
-> It is easier to skip at will a reduced and well defined list of possibly
+Hi Linus,
 
-It seems like there's a word missing.
-at will a -> at will using a
+Please pull the following Kselftest update for Linux 5.4-rc1 (minus kunit).
 
-> problematic targets with SKIP_TARGETS then to provide a partially strippe=
-d
+This Kselftest update for Linux 5.4-rc1 consists of several fixes to
+existing tests.
 
-then -> than
+diff is attached.
 
-> down list of good targets using the usual TARGETS variable.
->=20
-> Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
-> ---
->  tools/testing/selftests/Makefile | 4 ++++
->  1 file changed, 4 insertions(+)
->=20
-> diff --git a/tools/testing/selftests/Makefile
-> b/tools/testing/selftests/Makefile
-> index 25b43a8c2b15..103936faa46d 100644
-> --- a/tools/testing/selftests/Makefile
-> +++ b/tools/testing/selftests/Makefile
-> @@ -132,6 +132,10 @@ else
->  		ARCH=3D$(ARCH) -C $(top_srcdir) headers_install
->  endif
->=20
-> +# User can optionally provide a TARGETS skiplist.
-> +SKIP_TARGETS ?=3D
-> +TARGETS :=3D $(filter-out $(SKIP_TARGETS), $(TARGETS))
-> +
->  all: khdr
->  	@for TARGET in $(TARGETS); do		\
->  		BUILD_TARGET=3D$$BUILD/$$TARGET;	\
-> --
-> 2.17.1
+This pull has just the ksleftest patches I sent in my previous pull
+request. I dropped the KUnit patches and rebased.
 
-Great feature!  Thanks.
- -- Tim
+I will send another pull request for the KUnit work later on this
+week.
 
+Please note that there is conflict between
+
+tools/testing/selftests/tpm2/Makefile
+
+between commit:
+
+   3fb2179b0f3553a ("selftests/tpm2: Add the missing TEST_FILES assignment")
+
+from the tpmdd tree and commit:
+
+   d04e26067d13f01 ("selftests: tpm2: install python files")
+
+Please take the fix from kselftest tree which is the correct
+version for this change.
+
+d04e26067d13f01 ("selftests: tpm2: install python files")
+
+Please let me know if you have any questions and/or concerns.
+
+thanks,
+-- Shuah
+
+----------------------------------------------------------------
+
+The following changes since commit d1abaeb3be7b5fa6d7a1fbbd2e14e3310005c4c1:
+
+   Linux 5.3-rc5 (2019-08-18 14:31:08 -0700)
+
+are available in the Git repository at:
+
+   git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest 
+tags/linux-kselftest-5.4-rc1.1
+
+for you to fetch changes up to 721cb3c8bc8890e824b7be53bf951960ff7811f9:
+
+   selftests: tpm2: install python files (2019-09-23 08:33:16 -0600)
+
+----------------------------------------------------------------
+linux-kselftest-5.4-rc1.1
+
+This Kselftest update for Linux 5.4-rc1 consists of fixes to existing
+tests.
+
+----------------------------------------------------------------
+Anders Roxell (2):
+       selftests: livepatch: add missing fragments to config
+       selftests: tpm2: install python files
+
+George G. Davis (2):
+       selftests: watchdog: Add optional file argument
+       selftests: watchdog: cleanup whitespace in usage options
+
+Ilya Leoshkevich (1):
+       selftests: use "$(MAKE)" instead of "make"
+
+Masanari Iida (1):
+       selftest/ftrace: Fix typo in trigger-snapshot.tc
+
+Tycho Andersen (1):
+       selftests/seccomp: fix build on older kernels
+
+  tools/testing/selftests/Makefile                   | 22 ++++++------
+  .../ftrace/test.d/trigger/trigger-snapshot.tc      |  2 +-
+  tools/testing/selftests/livepatch/config           |  2 ++
+  tools/testing/selftests/seccomp/seccomp_bpf.c      |  5 +++
+  tools/testing/selftests/tpm2/Makefile              |  1 +
+  tools/testing/selftests/watchdog/watchdog-test.c   | 41 
++++++++++++++++-------
+  6 files changed, 48 insertions(+), 25 deletions(-)
+----------------------------------------------------------------
+
+--------------36B1E5FF27D1C8EAF5C60560
+Content-Type: text/x-patch;
+ name="linux-kselftest-5.4-rc1.1.diff"
+Content-Transfer-Encoding: 7bit
+Content-Disposition: attachment;
+ filename="linux-kselftest-5.4-rc1.1.diff"
+
+diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
+index 25b43a8c2b15..c3feccb99ff5 100644
+--- a/tools/testing/selftests/Makefile
++++ b/tools/testing/selftests/Makefile
+@@ -126,9 +126,9 @@ endif
+ # in the default INSTALL_HDR_PATH usr/include.
+ khdr:
+ ifeq (1,$(DEFAULT_INSTALL_HDR_PATH))
+-	make --no-builtin-rules ARCH=$(ARCH) -C $(top_srcdir) headers_install
++	$(MAKE) --no-builtin-rules ARCH=$(ARCH) -C $(top_srcdir) headers_install
+ else
+-	make --no-builtin-rules INSTALL_HDR_PATH=$$BUILD/usr \
++	$(MAKE) --no-builtin-rules INSTALL_HDR_PATH=$$BUILD/usr \
+ 		ARCH=$(ARCH) -C $(top_srcdir) headers_install
+ endif
+ 
+@@ -136,35 +136,35 @@ all: khdr
+ 	@for TARGET in $(TARGETS); do		\
+ 		BUILD_TARGET=$$BUILD/$$TARGET;	\
+ 		mkdir $$BUILD_TARGET  -p;	\
+-		make OUTPUT=$$BUILD_TARGET -C $$TARGET;\
++		$(MAKE) OUTPUT=$$BUILD_TARGET -C $$TARGET;\
+ 	done;
+ 
+ run_tests: all
+ 	@for TARGET in $(TARGETS); do \
+ 		BUILD_TARGET=$$BUILD/$$TARGET;	\
+-		make OUTPUT=$$BUILD_TARGET -C $$TARGET run_tests;\
++		$(MAKE) OUTPUT=$$BUILD_TARGET -C $$TARGET run_tests;\
+ 	done;
+ 
+ hotplug:
+ 	@for TARGET in $(TARGETS_HOTPLUG); do \
+ 		BUILD_TARGET=$$BUILD/$$TARGET;	\
+-		make OUTPUT=$$BUILD_TARGET -C $$TARGET;\
++		$(MAKE) OUTPUT=$$BUILD_TARGET -C $$TARGET;\
+ 	done;
+ 
+ run_hotplug: hotplug
+ 	@for TARGET in $(TARGETS_HOTPLUG); do \
+ 		BUILD_TARGET=$$BUILD/$$TARGET;	\
+-		make OUTPUT=$$BUILD_TARGET -C $$TARGET run_full_test;\
++		$(MAKE) OUTPUT=$$BUILD_TARGET -C $$TARGET run_full_test;\
+ 	done;
+ 
+ clean_hotplug:
+ 	@for TARGET in $(TARGETS_HOTPLUG); do \
+ 		BUILD_TARGET=$$BUILD/$$TARGET;	\
+-		make OUTPUT=$$BUILD_TARGET -C $$TARGET clean;\
++		$(MAKE) OUTPUT=$$BUILD_TARGET -C $$TARGET clean;\
+ 	done;
+ 
+ run_pstore_crash:
+-	make -C pstore run_crash
++	$(MAKE) -C pstore run_crash
+ 
+ # Use $BUILD as the default install root. $BUILD points to the
+ # right output location for the following cases:
+@@ -184,7 +184,7 @@ ifdef INSTALL_PATH
+ 	install -m 744 kselftest/prefix.pl $(INSTALL_PATH)/kselftest/
+ 	@for TARGET in $(TARGETS); do \
+ 		BUILD_TARGET=$$BUILD/$$TARGET;	\
+-		make OUTPUT=$$BUILD_TARGET -C $$TARGET INSTALL_PATH=$(INSTALL_PATH)/$$TARGET install; \
++		$(MAKE) OUTPUT=$$BUILD_TARGET -C $$TARGET INSTALL_PATH=$(INSTALL_PATH)/$$TARGET install; \
+ 	done;
+ 
+ 	@# Ask all targets to emit their test scripts
+@@ -203,7 +203,7 @@ ifdef INSTALL_PATH
+ 		echo "[ -w /dev/kmsg ] && echo \"kselftest: Running tests in $$TARGET\" >> /dev/kmsg" >> $(ALL_SCRIPT); \
+ 		echo "cd $$TARGET" >> $(ALL_SCRIPT); \
+ 		echo -n "run_many" >> $(ALL_SCRIPT); \
+-		make -s --no-print-directory OUTPUT=$$BUILD_TARGET -C $$TARGET emit_tests >> $(ALL_SCRIPT); \
++		$(MAKE) -s --no-print-directory OUTPUT=$$BUILD_TARGET -C $$TARGET emit_tests >> $(ALL_SCRIPT); \
+ 		echo "" >> $(ALL_SCRIPT);	    \
+ 		echo "cd \$$ROOT" >> $(ALL_SCRIPT); \
+ 	done;
+@@ -216,7 +216,7 @@ endif
+ clean:
+ 	@for TARGET in $(TARGETS); do \
+ 		BUILD_TARGET=$$BUILD/$$TARGET;	\
+-		make OUTPUT=$$BUILD_TARGET -C $$TARGET clean;\
++		$(MAKE) OUTPUT=$$BUILD_TARGET -C $$TARGET clean;\
+ 	done;
+ 
+ .PHONY: khdr all run_tests hotplug run_hotplug clean_hotplug run_pstore_crash install clean
+diff --git a/tools/testing/selftests/ftrace/test.d/trigger/trigger-snapshot.tc b/tools/testing/selftests/ftrace/test.d/trigger/trigger-snapshot.tc
+index 7717c0a09686..ac738500d17f 100644
+--- a/tools/testing/selftests/ftrace/test.d/trigger/trigger-snapshot.tc
++++ b/tools/testing/selftests/ftrace/test.d/trigger/trigger-snapshot.tc
+@@ -28,7 +28,7 @@ if [ -z "$FEATURE" ]; then
+     exit_unsupported
+ fi
+ 
+-echo "Test snapshot tigger"
++echo "Test snapshot trigger"
+ echo 0 > snapshot
+ echo 1 > events/sched/sched_process_fork/enable
+ ( echo "forked")
+diff --git a/tools/testing/selftests/livepatch/config b/tools/testing/selftests/livepatch/config
+index 0dd7700464a8..ad23100cb27c 100644
+--- a/tools/testing/selftests/livepatch/config
++++ b/tools/testing/selftests/livepatch/config
+@@ -1 +1,3 @@
++CONFIG_LIVEPATCH=y
++CONFIG_DYNAMIC_DEBUG=y
+ CONFIG_TEST_LIVEPATCH=m
+diff --git a/tools/testing/selftests/seccomp/seccomp_bpf.c b/tools/testing/selftests/seccomp/seccomp_bpf.c
+index 6ef7f16c4cf5..7f8b5c8982e3 100644
+--- a/tools/testing/selftests/seccomp/seccomp_bpf.c
++++ b/tools/testing/selftests/seccomp/seccomp_bpf.c
+@@ -199,6 +199,11 @@ struct seccomp_notif_sizes {
+ };
+ #endif
+ 
++#ifndef PTRACE_EVENTMSG_SYSCALL_ENTRY
++#define PTRACE_EVENTMSG_SYSCALL_ENTRY	1
++#define PTRACE_EVENTMSG_SYSCALL_EXIT	2
++#endif
++
+ #ifndef seccomp
+ int seccomp(unsigned int op, unsigned int flags, void *args)
+ {
+diff --git a/tools/testing/selftests/tpm2/Makefile b/tools/testing/selftests/tpm2/Makefile
+index 9dd848427a7b..1a5db1eb8ed5 100644
+--- a/tools/testing/selftests/tpm2/Makefile
++++ b/tools/testing/selftests/tpm2/Makefile
+@@ -2,3 +2,4 @@
+ include ../lib.mk
+ 
+ TEST_PROGS := test_smoke.sh test_space.sh
++TEST_PROGS_EXTENDED := tpm2.py tpm2_tests.py
+diff --git a/tools/testing/selftests/watchdog/watchdog-test.c b/tools/testing/selftests/watchdog/watchdog-test.c
+index c2333c78cf04..afff120c7be6 100644
+--- a/tools/testing/selftests/watchdog/watchdog-test.c
++++ b/tools/testing/selftests/watchdog/watchdog-test.c
+@@ -19,7 +19,7 @@
+ 
+ int fd;
+ const char v = 'V';
+-static const char sopts[] = "bdehp:t:Tn:NL";
++static const char sopts[] = "bdehp:t:Tn:NLf:";
+ static const struct option lopts[] = {
+ 	{"bootstatus",          no_argument, NULL, 'b'},
+ 	{"disable",             no_argument, NULL, 'd'},
+@@ -31,6 +31,7 @@ static const struct option lopts[] = {
+ 	{"pretimeout",    required_argument, NULL, 'n'},
+ 	{"getpretimeout",       no_argument, NULL, 'N'},
+ 	{"gettimeleft",		no_argument, NULL, 'L'},
++	{"file",          required_argument, NULL, 'f'},
+ 	{NULL,                  no_argument, NULL, 0x0}
+ };
+ 
+@@ -69,16 +70,19 @@ static void term(int sig)
+ static void usage(char *progname)
+ {
+ 	printf("Usage: %s [options]\n", progname);
+-	printf(" -b, --bootstatus    Get last boot status (Watchdog/POR)\n");
+-	printf(" -d, --disable       Turn off the watchdog timer\n");
+-	printf(" -e, --enable        Turn on the watchdog timer\n");
+-	printf(" -h, --help          Print the help message\n");
+-	printf(" -p, --pingrate=P    Set ping rate to P seconds (default %d)\n", DEFAULT_PING_RATE);
+-	printf(" -t, --timeout=T     Set timeout to T seconds\n");
+-	printf(" -T, --gettimeout    Get the timeout\n");
+-	printf(" -n, --pretimeout=T  Set the pretimeout to T seconds\n");
+-	printf(" -N, --getpretimeout Get the pretimeout\n");
+-	printf(" -L, --gettimeleft   Get the time left until timer expires\n");
++	printf(" -f, --file\t\tOpen watchdog device file\n");
++	printf("\t\t\tDefault is /dev/watchdog\n");
++	printf(" -b, --bootstatus\tGet last boot status (Watchdog/POR)\n");
++	printf(" -d, --disable\t\tTurn off the watchdog timer\n");
++	printf(" -e, --enable\t\tTurn on the watchdog timer\n");
++	printf(" -h, --help\t\tPrint the help message\n");
++	printf(" -p, --pingrate=P\tSet ping rate to P seconds (default %d)\n",
++	       DEFAULT_PING_RATE);
++	printf(" -t, --timeout=T\tSet timeout to T seconds\n");
++	printf(" -T, --gettimeout\tGet the timeout\n");
++	printf(" -n, --pretimeout=T\tSet the pretimeout to T seconds\n");
++	printf(" -N, --getpretimeout\tGet the pretimeout\n");
++	printf(" -L, --gettimeleft\tGet the time left until timer expires\n");
+ 	printf("\n");
+ 	printf("Parameters are parsed left-to-right in real-time.\n");
+ 	printf("Example: %s -d -t 10 -p 5 -e\n", progname);
+@@ -92,14 +96,20 @@ int main(int argc, char *argv[])
+ 	int ret;
+ 	int c;
+ 	int oneshot = 0;
++	char *file = "/dev/watchdog";
+ 
+ 	setbuf(stdout, NULL);
+ 
+-	fd = open("/dev/watchdog", O_WRONLY);
++	while ((c = getopt_long(argc, argv, sopts, lopts, NULL)) != -1) {
++		if (c == 'f')
++			file = optarg;
++	}
++
++	fd = open(file, O_WRONLY);
+ 
+ 	if (fd == -1) {
+ 		if (errno == ENOENT)
+-			printf("Watchdog device not enabled.\n");
++			printf("Watchdog device (%s) not found.\n", file);
+ 		else if (errno == EACCES)
+ 			printf("Run watchdog as root.\n");
+ 		else
+@@ -108,6 +118,8 @@ int main(int argc, char *argv[])
+ 		exit(-1);
+ 	}
+ 
++	optind = 0;
++
+ 	while ((c = getopt_long(argc, argv, sopts, lopts, NULL)) != -1) {
+ 		switch (c) {
+ 		case 'b':
+@@ -190,6 +202,9 @@ int main(int argc, char *argv[])
+ 			else
+ 				printf("WDIOC_GETTIMELEFT error '%s'\n", strerror(errno));
+ 			break;
++		case 'f':
++			/* Handled above */
++			break;
+ 
+ 		default:
+ 			usage(argv[0]);
+
+--------------36B1E5FF27D1C8EAF5C60560--
