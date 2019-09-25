@@ -2,90 +2,149 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AF3B0BE5C4
-	for <lists+linux-kselftest@lfdr.de>; Wed, 25 Sep 2019 21:36:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF333BE641
+	for <lists+linux-kselftest@lfdr.de>; Wed, 25 Sep 2019 22:20:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2392351AbfIYTgp (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 25 Sep 2019 15:36:45 -0400
-Received: from mail.kernel.org ([198.145.29.99]:55464 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2392365AbfIYTgp (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 25 Sep 2019 15:36:45 -0400
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net [24.9.64.241])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 096CF21D7A;
-        Wed, 25 Sep 2019 19:36:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1569440204;
-        bh=5Gm1h33RuHVX6DX/tp8dYOGoNk7nNRxZvLsX8xAjiEs=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=g/W0J48ReDDn0f5ap0TBcejsFoEq5uE4KOq9RcgbdS6bW5GjlIhhr4cl3ILlNEhKA
-         Mv4aWCMhOSxQHTwoneDcE4pm7/7W3F5e1J5jGCINyLsxfbpYBLD9L9yE9+yQfdpmHT
-         QP19hWhnnLIcHBynngLmRdgaY8//nOKvd1oG+ubY=
-Subject: Re: [PATCH 2/2] kselftest: exclude failed TARGETS from runlist
-To:     Cristian Marussi <cristian.marussi@arm.com>,
-        linux-kselftest@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Cc:     dave.martin@arm.com, shuah <shuah@kernel.org>
+        id S2393083AbfIYUUU (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 25 Sep 2019 16:20:20 -0400
+Received: from mail-eopbgr810122.outbound.protection.outlook.com ([40.107.81.122]:8640
+        "EHLO NAM01-BY2-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1727743AbfIYUUT (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 25 Sep 2019 16:20:19 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=K08C5SrLVjH7pG+jmuYN3DKP/7I6v91hC9J8EiQYA2nnaUJ6nSQE7JrlazFruSN8kSAQF3ztsiGnl1z1Woh8Nvu436rQGx5exhWmqpxfyExUvSRVfdLoInpSOkn48VbQn0Kb1vUd932+SuWrspIKNadhjxPpWzWOebvZZXz1MYqklAkfDHXsNeUJ5nk/mDaylWg76ooG47zghGxFZQ9Db/idEIDxdejWEPnfrzZK+EEio+OcighQ3iZt6UPMMUArga16okMqQnUArOCnAqsTVcEX2J7aY0yaNG3PHgL8fwVh4KCr3q1rQdDnMaVtSj/zTVJyyTugxyLHg+nSVPDN3Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=xiwFRSJv2GVPFhdUNhsFL2MMxzWIVAoiq7Vz0F7dRn4=;
+ b=flU5fHSjhRfTyiBWYnb/3Xdbjqchr1PRkVsqJlKkQpqaWkkEqY5DJjvoOJRQ7en/2IKibENerzuC13IZbgiQ1xFd2JHByzNv4hGV1gIlhFNe2FQOZCwZL2BOf2tKnd1+Q+BWCNhIhaebKj+Zrv0KiYkZSJWc+oK4jtloiDKKj784D0TpAg8qEeQzW4qmioCA/LN6HfzS8iihWbXlOBGf+rAlXjPXVWLK5qE+AH6sRk6HMhjYYaXdZn9D4dcSsaueOHOkxgqNj6q3etQw2B5pOWbR/SCcSDnEopSQ3sAvwfcWiXHGcwJMO4lE85tvH5OmPeBX0IL9gBqsmfHbgmx9rQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 160.33.194.230) smtp.rcpttodomain=arm.com smtp.mailfrom=sony.com; dmarc=pass
+ (p=none sp=none pct=100) action=none header.from=sony.com; dkim=none (message
+ not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Sony.onmicrosoft.com;
+ s=selector2-Sony-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=xiwFRSJv2GVPFhdUNhsFL2MMxzWIVAoiq7Vz0F7dRn4=;
+ b=APJW2ACwoxnY+Lh+nFdQuWc0PIH7MZ1QcwHu5nBANawqt7LkV38dsMj4MHDtwEBsDPDSvO2bx0e7sXtIHZ2E2IRX79wQDKQkLkl398SgteurQv1JHzn+wbobm8y0ucOBg0zoybSg6qaQaavaZ/QL0zzuT3e8lC0YeBRWODpI7TE=
+Received: from BY5PR13CA0012.namprd13.prod.outlook.com (2603:10b6:a03:180::25)
+ by DM6PR13MB2939.namprd13.prod.outlook.com (2603:10b6:5:4::12) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2305.11; Wed, 25 Sep 2019 20:20:17 +0000
+Received: from SN1NAM02FT019.eop-nam02.prod.protection.outlook.com
+ (2a01:111:f400:7e44::207) by BY5PR13CA0012.outlook.office365.com
+ (2603:10b6:a03:180::25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2305.12 via Frontend
+ Transport; Wed, 25 Sep 2019 20:20:17 +0000
+Authentication-Results: spf=pass (sender IP is 160.33.194.230)
+ smtp.mailfrom=sony.com; arm.com; dkim=none (message not signed)
+ header.d=none;arm.com; dmarc=pass action=none header.from=sony.com;
+Received-SPF: Pass (protection.outlook.com: domain of sony.com designates
+ 160.33.194.230 as permitted sender) receiver=protection.outlook.com;
+ client-ip=160.33.194.230; helo=usculsndmail03v.am.sony.com;
+Received: from usculsndmail03v.am.sony.com (160.33.194.230) by
+ SN1NAM02FT019.mail.protection.outlook.com (10.152.72.130) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2284.25 via Frontend Transport; Wed, 25 Sep 2019 20:20:16 +0000
+Received: from usculsndmail13v.am.sony.com (usculsndmail13v.am.sony.com [146.215.230.104])
+        by usculsndmail03v.am.sony.com (Sentrion-MTA-4.3.2/Sentrion-MTA-4.3.2) with ESMTP id x8PKKFRF001393;
+        Wed, 25 Sep 2019 20:20:15 GMT
+Received: from USCULXHUB02V.am.sony.com (usculxhub02v.am.sony.com [146.215.231.16])
+        by usculsndmail13v.am.sony.com (Sentrion-MTA-4.3.2/Sentrion-MTA-4.3.2) with ESMTP id x8PKKFmQ019631;
+        Wed, 25 Sep 2019 20:20:15 GMT
+Received: from USCULXMSG01.am.sony.com ([fe80::b09d:6cb6:665e:d1b5]) by
+ USCULXHUB02V.am.sony.com ([146.215.231.16]) with mapi id 14.03.0439.000; Wed,
+ 25 Sep 2019 16:20:14 -0400
+From:   <Tim.Bird@sony.com>
+To:     <cristian.marussi@arm.com>, <linux-kselftest@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <shuah@kernel.org>
+CC:     <dave.martin@arm.com>
+Subject: RE: [PATCH 1/2] kselftest: add capability to skip chosen TARGETS
+Thread-Topic: [PATCH 1/2] kselftest: add capability to skip chosen TARGETS
+Thread-Index: AQHVc6S04USvYnGSCEmE8aUG8m7ED6c8zSQg
+Date:   Wed, 25 Sep 2019 20:20:07 +0000
+Message-ID: <ECADFF3FD767C149AD96A924E7EA6EAF977BD152@USCULXMSG01.am.sony.com>
 References: <20190925132421.23572-1-cristian.marussi@arm.com>
- <20190925132421.23572-2-cristian.marussi@arm.com>
-From:   shuah <shuah@kernel.org>
-Message-ID: <ca1c013b-4f8f-fe63-a6d1-008d961416e3@kernel.org>
-Date:   Wed, 25 Sep 2019 13:36:43 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
-MIME-Version: 1.0
-In-Reply-To: <20190925132421.23572-2-cristian.marussi@arm.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
+In-Reply-To: <20190925132421.23572-1-cristian.marussi@arm.com>
+Accept-Language: en-US
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [146.215.231.6]
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-EOPAttributedMessage: 0
+X-MS-Office365-Filtering-HT: Tenant
+X-Forefront-Antispam-Report: CIP:160.33.194.230;IPV:NLI;CTRY:US;EFV:NLI;SFV:NSPM;SFS:(10019020)(39860400002)(136003)(396003)(346002)(376002)(189003)(199004)(13464003)(26005)(316002)(11346002)(336012)(102836004)(8746002)(426003)(97756001)(55016002)(126002)(446003)(66066001)(186003)(55846006)(7696005)(6666004)(86362001)(47776003)(8676002)(478600001)(4326008)(46406003)(476003)(356004)(8936002)(110136005)(70586007)(7736002)(106002)(33656002)(76176011)(246002)(305945005)(2201001)(486006)(70206006)(37786003)(6116002)(50466002)(23726003)(6246003)(3846002)(2876002)(2906002)(229853002)(5660300002)(5001870100001);DIR:OUT;SFP:1102;SCL:1;SRVR:DM6PR13MB2939;H:usculsndmail03v.am.sony.com;FPR:;SPF:Pass;LANG:en;PTR:mail03.sonyusa.com,mail.sonyusa.com;MX:1;A:1;
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: c94766a6-4690-4989-eab2-08d741f5c79c
+X-MS-TrafficTypeDiagnostic: DM6PR13MB2939:
+X-Microsoft-Antispam-PRVS: <DM6PR13MB29392F9B870059F913D511ECFD870@DM6PR13MB2939.namprd13.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:4502;
+X-Forefront-PRVS: 01713B2841
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: jyo3VxXIsoOy4MyKYdv6YVhQqJeXmezW77xOHuf03UK428c/1DWrwRl6FxAoJvuxfemFLV1Pd7Ay7RQbY9JwR2BU/9zKbShuXhJDJgO1wAjDPdpG+wuxZuDLymvYDoFYz2lh1VQsmegWS7DSuTqAIVAOsri17olXtY3LyJfilz43YdYR3Gbr9/TsD1RWKNvwaiFTvHUeyKLx1BWvRsNQGeLs7Jc1gxn5LEV4La6iSwY9LpRHTVkY7vV/scfCXzqkXO2Q0b1ZpYzqZQKrJCcClJ/Bzjl3/qbdlluN76H+mCwU3bJ5uYTgfQllOlKkhag9aCx/Z/NcEfRPbcvr0lB+QSXrCYavhW05JZMNnB0hcU4nwYczbLPhvpqJ2qSM+pZum42ndEMrAFTjvU1TBuzw3Y0AkQaShtJ0zCzVm5dPpjE=
+X-OriginatorOrg: sony.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Sep 2019 20:20:16.7026
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: c94766a6-4690-4989-eab2-08d741f5c79c
+X-MS-Exchange-CrossTenant-Id: 66c65d8a-9158-4521-a2d8-664963db48e4
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=66c65d8a-9158-4521-a2d8-664963db48e4;Ip=[160.33.194.230];Helo=[usculsndmail03v.am.sony.com]
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR13MB2939
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 9/25/19 7:24 AM, Cristian Marussi wrote:
-> A TARGET which failed to be built/installed should not be included in the
-> runlist generated inside the run_kselftest.sh script.
-> 
+Just a few nits inline below.
+
+> -----Original Message-----
+> From: Cristian Marussi on Wednesday, September 25, 2019 3:24 AM
+>=20
+> Let the user specify an optional TARGETS skiplist through the new optiona=
+l
+> SKIP_TARGETS Makefile variable.
+>=20
+> It is easier to skip at will a reduced and well defined list of possibly
+
+It seems like there's a word missing.
+at will a -> at will using a
+
+> problematic targets with SKIP_TARGETS then to provide a partially strippe=
+d
+
+then -> than
+
+> down list of good targets using the usual TARGETS variable.
+>=20
 > Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
 > ---
-> As an example, here BPF failed to compile but was included in the runlist
-> and attempted to run anyway:
-> 
-> ...
-> ./KSFT_LAST_2/run_kselftest.sh: 37: cd: can't cd to bpf
-> TAP version 13
-> 1..49
-> \# selftests: KSFT_LAST_2: test_verifier
-> \# Warning: file test_verifier is missing!
-> not ok 1 selftests: KSFT_LAST_2: test_verifier
-> \# selftests: KSFT_LAST_2: test_tag
-> \# Warning: file test_tag is missing!
-> ---
->   tools/testing/selftests/Makefile | 4 ++++
->   1 file changed, 4 insertions(+)
-> 
-> diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-> index 103936faa46d..e11ace11b07c 100644
+>  tools/testing/selftests/Makefile | 4 ++++
+>  1 file changed, 4 insertions(+)
+>=20
+> diff --git a/tools/testing/selftests/Makefile
+> b/tools/testing/selftests/Makefile
+> index 25b43a8c2b15..103936faa46d 100644
 > --- a/tools/testing/selftests/Makefile
 > +++ b/tools/testing/selftests/Makefile
-> @@ -202,8 +202,12 @@ ifdef INSTALL_PATH
->   	echo "  cat /dev/null > \$$logfile" >> $(ALL_SCRIPT)
->   	echo "fi" >> $(ALL_SCRIPT)
->   
-> +	@# While building run_kselftest.sh skip also non-existent TARGET dirs:
-> +	@# they could be the result of a build failure and should NOT be
-> +	@# included in the generated runlist.
->   	for TARGET in $(TARGETS); do \
->   		BUILD_TARGET=$$BUILD/$$TARGET;	\
-> +		[ ! -d $$INSTALL_PATH/$$TARGET ] && echo "Skipping non-existent dir: $$TARGET" && continue; \
->   		echo "[ -w /dev/kmsg ] && echo \"kselftest: Running tests in $$TARGET\" >> /dev/kmsg" >> $(ALL_SCRIPT); \
->   		echo "cd $$TARGET" >> $(ALL_SCRIPT); \
->   		echo -n "run_many" >> $(ALL_SCRIPT); \
-> 
+> @@ -132,6 +132,10 @@ else
+>  		ARCH=3D$(ARCH) -C $(top_srcdir) headers_install
+>  endif
+>=20
+> +# User can optionally provide a TARGETS skiplist.
+> +SKIP_TARGETS ?=3D
+> +TARGETS :=3D $(filter-out $(SKIP_TARGETS), $(TARGETS))
+> +
+>  all: khdr
+>  	@for TARGET in $(TARGETS); do		\
+>  		BUILD_TARGET=3D$$BUILD/$$TARGET;	\
+> --
+> 2.17.1
 
-This is great. Thanks for the patch.
+Great feature!  Thanks.
+ -- Tim
 
--- Shuah
