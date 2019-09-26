@@ -2,150 +2,156 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D3C4BFB3F
-	for <lists+linux-kselftest@lfdr.de>; Fri, 27 Sep 2019 00:11:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 24F16BFB5C
+	for <lists+linux-kselftest@lfdr.de>; Fri, 27 Sep 2019 00:40:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728841AbfIZWLj (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 26 Sep 2019 18:11:39 -0400
-Received: from mail-io1-f65.google.com ([209.85.166.65]:38223 "EHLO
-        mail-io1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726229AbfIZWLj (ORCPT
+        id S1726084AbfIZWkS (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 26 Sep 2019 18:40:18 -0400
+Received: from mail-io1-f52.google.com ([209.85.166.52]:35870 "EHLO
+        mail-io1-f52.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727381AbfIZWkS (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 26 Sep 2019 18:11:39 -0400
-Received: by mail-io1-f65.google.com with SMTP id u8so10740889iom.5
-        for <linux-kselftest@vger.kernel.org>; Thu, 26 Sep 2019 15:11:39 -0700 (PDT)
+        Thu, 26 Sep 2019 18:40:18 -0400
+Received: by mail-io1-f52.google.com with SMTP id b136so10932371iof.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 26 Sep 2019 15:40:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=e5GWt3lztsgnfc3sldD8RB9/EhbtgxcMAZ8pv6IBv0o=;
-        b=DNPR0aGdrz0Z8MxoYfs7keH6LEZ15NGlhg7uvwGt/utwm1UUTEfsyN4gUyHMfg37WS
-         NFX+lvIQClaCK9QlECR98ZRoQp9yYwjccp/1ZmtZFBlQhRUY0eEkOBXYudCmgsjE3CMT
-         UPWq9nbhTGUrx7AcnsfCUxCnNo8ucyLXg6Ivo=
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=dRBrES6OXe6mAupynRdyMTCoPmyYs41wvldB7LkXBu4=;
+        b=XCmr6puVVPyEobymUL0+RsE2FErfwLgMhiaP74snpgl4A64MMTQyo7Cx2pzlG+cNTd
+         Jf/8eypsox0EwAIyZdYVklRt+WrBcomgxkkwrN4/dMGUNCmPpKKGGRrKsnZ5Bvnvs8xN
+         ZV4zbHHR2cO4bMLzupuC3HFxaobP14yDlguy8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=e5GWt3lztsgnfc3sldD8RB9/EhbtgxcMAZ8pv6IBv0o=;
-        b=WGPDSb5zTFjlNT7av8O+ZGu4qf+AK38V7+UBtEsKe3F9ya+3Edz2mwpIWjR5AT78Lo
-         pSsdXNcB6TgleXrVeAXFMYHJwyR6naHMm07/rlTZQ4eQkUfjR+T3c+x4MyqdAfh4IvPy
-         GUwatC3ITJD8Scj4dlE/gq3SWuRsDT5Ze3H2Pzf5vEGo4utCyAbVvcFg6gAhD5WA0AOc
-         +T++WxhkhBkNVjQ7Smr13re7wkcQG3rFeLw3wQaBS09ONJbf5+bVf2tYgLZyFAYABUfV
-         vZSpT73t3FdWzb/xJBBoNJtYfrfwtKC66wkpSDUr9m5Cx/U4nQHVdSalb0Iavnfm0MI6
-         i/Zw==
-X-Gm-Message-State: APjAAAWBLuW5W4OmpD3Fo3IUKLCc9acw0DooHFHogw9UjxqReCzl2Gtf
-        y1raW9zh4/+KghzzY3B0sK1FZA==
-X-Google-Smtp-Source: APXvYqzEIS99foCZIJEt/mjEPQI28ZkWb2KVeBSzeuCd5zi5J2t81jLUt+IwTIWsCPnNn1bbmfgnQg==
-X-Received: by 2002:a92:c00d:: with SMTP id q13mr1102096ild.169.1569535898607;
-        Thu, 26 Sep 2019 15:11:38 -0700 (PDT)
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id a17sm320403ilf.22.2019.09.26.15.11.37
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 26 Sep 2019 15:11:37 -0700 (PDT)
-Subject: Re: [PATCH 2/2] selftests: Add kselftest_install target to main
- Makefile
-To:     Masahiro Yamada <yamada.masahiro@socionext.com>
-Cc:     Michal Marek <michal.lkml@markovi.net>,
-        "Cc: Shuah Khan" <shuah@kernel.org>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "skh >> Shuah Khan" <skhan@linuxfoundation.org>
-References: <cover.1569452305.git.skhan@linuxfoundation.org>
- <b3c50f4c726df521039f57295b53349227f629d9.1569452305.git.skhan@linuxfoundation.org>
- <CAK7LNATCFF9ERTwtPnnbMLGv++NJ_5zXxB0=NWHdSGrYADj3ug@mail.gmail.com>
+        bh=dRBrES6OXe6mAupynRdyMTCoPmyYs41wvldB7LkXBu4=;
+        b=BsMykewyFqbc0GV2sx/fNDzkx94G3IR4tAUiHlLN44BLJwdpWW8EAEppcf7ycbgRvL
+         fJNxoBLMqjK48/rjz1VM3s6WFTDBYS6EU+bwcGEhCyjdJxBByosClpDCplNo8k5cXNv9
+         JzmAiJjKE2bckgBH5utXi5fDV51IejCzJCyZWDWmbCXsu1pfQTGDIRLYT4gwFxp+i/Qr
+         gz77aOzO0kr3/vhISO6DyJLIGT3ChA0CBg93JwoFLBmTfceZFbJp0RKuk/1BYGE+0aFk
+         mDLTIZQ5p1zx7AjSoqbp54FntabkHF0HTM2AX5/1ogds0vtO6M5tPnSaqTx3aWCI8dQ7
+         dYCQ==
+X-Gm-Message-State: APjAAAXFkdvMKKNvsNI8lDcZqyDIEvpBECcGfH10RhtcdoOX3pvGP9uz
+        RJ3JURmsDYRB7P9AAH9/imkn6g==
+X-Google-Smtp-Source: APXvYqyV8/rLOlYVMt0omstgu3VSz3zBvI5/Ju/jqPZtz3uWdB6tPAczH0I34DB8A1coHZRONv5DYg==
+X-Received: by 2002:a02:a999:: with SMTP id q25mr5932710jam.27.1569537617222;
+        Thu, 26 Sep 2019 15:40:17 -0700 (PDT)
+Received: from shuah-t480s.internal (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
+        by smtp.gmail.com with ESMTPSA id o16sm301303ilf.80.2019.09.26.15.40.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 26 Sep 2019 15:40:16 -0700 (PDT)
 From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <43a7962e-4fae-78e4-1db2-b75c7ff802b1@linuxfoundation.org>
-Date:   Thu, 26 Sep 2019 16:11:36 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+To:     yamada.masahiro@socionext.com, michal.lkml@markovi.net,
+        shuah@kernel.org
+Cc:     Shuah Khan <skhan@linuxfoundation.org>,
+        linux-kbuild@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2] selftests: Add kselftest-all and kselftest-install targets
+Date:   Thu, 26 Sep 2019 16:40:14 -0600
+Message-Id: <20190926224014.28910-1-skhan@linuxfoundation.org>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-In-Reply-To: <CAK7LNATCFF9ERTwtPnnbMLGv++NJ_5zXxB0=NWHdSGrYADj3ug@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 9/25/19 9:24 PM, Masahiro Yamada wrote:
-> Hi Shuah,
-> 
-> 
-> 
-> On Thu, Sep 26, 2019 at 8:05 AM Shuah Khan <skhan@linuxfoundation.org> wrote:
->>
->> Add kselftest_install target to install tests from the top level
->> Makefile. This is to simplify kselftest use-cases for CI and
->> distributions where build and test systems are different.
->>
->> This change addresses requests from developers and testers to add
->> support for installing kselftest from the main Makefile.
->>
->> In addition, make the install directory the same when install is
->> run using "make kselftest_install" or by running kselftest_install.sh.
->> Also fix the INSTALL_PATH variable conflict between main Makefile.
->>
->> Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
-> 
-> So, if these two patches were applied, we would see the following:
-> 
-> 
-> PHONY += kselftest_build
-> kselftest_build:
->          $(Q)$(MAKE) -C $(srctree)/tools/testing/selftests all
-> 
-> PHONY += kselftest
-> kselftest:
->          $(Q)$(MAKE) -C $(srctree)/tools/testing/selftests run_tests
-> 
-> PHONY += kselftest_install
-> kselftest_install:
->          $(Q)$(MAKE) -C $(srctree)/tools/testing/selftests install
-> 
-> PHONY += kselftest-clean
-> kselftest-clean:
->          $(Q)$(MAKE) -C $(srctree)/tools/testing/selftests clean
-> 
-> 
-> I do not want to see this endless crap addition just for
-> changing the working directory to $(srctree)/tools/testing/selftests
-> 
-> 
-> 
-> Why don't you use pattern rule?
-> Those will be reduced into the two rules.
-> 
+Add kselftest-all target to build tests from the top level
+Makefile. This is to simplify kselftest use-cases for CI and
+distributions where build and test systems are different.
 
-I just didn't think about simplifying it. Thanks for
-being direct.
+Current kselftest target builds and runs tests on a development
+system which is a developer use-case.
 
-> 
-> 
-> PHONY += kselftest
-> kselftest:
->          $(Q)$(MAKE) -C $(srctree)/tools/testing/selftests run_tests
-> 
-> kselftest-%: FORCE
->          $(Q)$(MAKE) -C $(srctree)/tools/testing/selftests $*
-> 
-> 
-> 
-> This also avoids your inconsistency about
-> "kselftest-" vs "kselftest_".
-> 
-> 
-> Given the existing "kselftest-clean" and "kselftest-merge",
-> "kselftest_build" and "kselftest_install"
-> (using an underscore instead of n hyphen)
-> would add needless confusion.
-> 
-> 
+Add kselftest-install target to install tests from the top level
+Makefile. This is to simplify kselftest use-cases for CI and
+distributions where build and test systems are different.
 
-Done. Sending v2 with two patches collapsed into one.
+This change addresses requests from developers and testers to add
+support for installing kselftest from the main Makefile.
 
-thanks,
--- Shuah
+In addition, make the install directory the same when install is
+run using "make kselftest-install" or by running kselftest_install.sh.
+Also fix the INSTALL_PATH variable conflict between main Makefile and
+selftests Makefile.
+
+Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
+---
+Changes since v1:
+- Collpased two patches that added separate targets to
+  build and install into one patch using pattern rule to
+  invoke all, install, and clean targets from main Makefile.
+
+ Makefile                                     | 5 ++---
+ tools/testing/selftests/Makefile             | 8 ++++++--
+ tools/testing/selftests/kselftest_install.sh | 4 ++--
+ 3 files changed, 10 insertions(+), 7 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index d456746da347..ec296c60c1af 100644
+--- a/Makefile
++++ b/Makefile
+@@ -1237,9 +1237,8 @@ PHONY += kselftest
+ kselftest:
+ 	$(Q)$(MAKE) -C $(srctree)/tools/testing/selftests run_tests
+ 
+-PHONY += kselftest-clean
+-kselftest-clean:
+-	$(Q)$(MAKE) -C $(srctree)/tools/testing/selftests clean
++kselftest-%: FORCE
++	$(Q)$(MAKE) -C $(srctree)/tools/testing/selftests $*
+ 
+ PHONY += kselftest-merge
+ kselftest-merge:
+diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
+index c3feccb99ff5..bad18145ed1a 100644
+--- a/tools/testing/selftests/Makefile
++++ b/tools/testing/selftests/Makefile
+@@ -171,9 +171,12 @@ run_pstore_crash:
+ # 1. output_dir=kernel_src
+ # 2. a separate output directory is specified using O= KBUILD_OUTPUT
+ # 3. a separate output directory is specified using KBUILD_OUTPUT
++# Avoid conflict with INSTALL_PATH set by the main Makefile
+ #
+-INSTALL_PATH ?= $(BUILD)/install
+-INSTALL_PATH := $(abspath $(INSTALL_PATH))
++KSFT_INSTALL_PATH ?= $(BUILD)/kselftest_install
++KSFT_INSTALL_PATH := $(abspath $(KSFT_INSTALL_PATH))
++# Avoid changing the rest of the logic here and lib.mk.
++INSTALL_PATH := $(KSFT_INSTALL_PATH)
+ ALL_SCRIPT := $(INSTALL_PATH)/run_kselftest.sh
+ 
+ install: all
+@@ -203,6 +206,7 @@ ifdef INSTALL_PATH
+ 		echo "[ -w /dev/kmsg ] && echo \"kselftest: Running tests in $$TARGET\" >> /dev/kmsg" >> $(ALL_SCRIPT); \
+ 		echo "cd $$TARGET" >> $(ALL_SCRIPT); \
+ 		echo -n "run_many" >> $(ALL_SCRIPT); \
++		echo -n "Emit Tests for $$TARGET\n"; \
+ 		$(MAKE) -s --no-print-directory OUTPUT=$$BUILD_TARGET -C $$TARGET emit_tests >> $(ALL_SCRIPT); \
+ 		echo "" >> $(ALL_SCRIPT);	    \
+ 		echo "cd \$$ROOT" >> $(ALL_SCRIPT); \
+diff --git a/tools/testing/selftests/kselftest_install.sh b/tools/testing/selftests/kselftest_install.sh
+index ec304463883c..e2e1911d62d5 100755
+--- a/tools/testing/selftests/kselftest_install.sh
++++ b/tools/testing/selftests/kselftest_install.sh
+@@ -24,12 +24,12 @@ main()
+ 		echo "$0: Installing in specified location - $install_loc ..."
+ 	fi
+ 
+-	install_dir=$install_loc/kselftest
++	install_dir=$install_loc/kselftest_install
+ 
+ # Create install directory
+ 	mkdir -p $install_dir
+ # Build tests
+-	INSTALL_PATH=$install_dir make install
++	KSFT_INSTALL_PATH=$install_dir make install
+ }
+ 
+ main "$@"
+-- 
+2.20.1
+
