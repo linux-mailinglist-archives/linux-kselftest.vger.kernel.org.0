@@ -2,110 +2,116 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 15DC3BF73B
-	for <lists+linux-kselftest@lfdr.de>; Thu, 26 Sep 2019 18:59:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 95BDABF7B8
+	for <lists+linux-kselftest@lfdr.de>; Thu, 26 Sep 2019 19:41:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727444AbfIZQ64 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 26 Sep 2019 12:58:56 -0400
-Received: from cmccmta2.chinamobile.com ([221.176.66.80]:4845 "EHLO
-        cmccmta2.chinamobile.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727512AbfIZQ64 (ORCPT
+        id S1727774AbfIZRl2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 26 Sep 2019 13:41:28 -0400
+Received: from mail-io1-f47.google.com ([209.85.166.47]:36060 "EHLO
+        mail-io1-f47.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727646AbfIZRl2 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 26 Sep 2019 12:58:56 -0400
-Received: from spf.mail.chinamobile.com (unknown[172.16.121.15]) by rmmx-syy-dmz-app06-12006 (RichMail) with SMTP id 2ee65d8cec1ff87-2eb90; Fri, 27 Sep 2019 00:49:37 +0800 (CST)
-X-RM-TRANSID: 2ee65d8cec1ff87-2eb90
-X-RM-TagInfo: emlType=0                                       
-X-RM-SPAM-FLAG: 00000000
-Received: from localhost (unknown[223.105.0.241])
-        by rmsmtp-syy-appsvr08-12008 (RichMail) with SMTP id 2ee85d8cec20ac9-71c3b;
-        Fri, 27 Sep 2019 00:49:37 +0800 (CST)
-X-RM-TRANSID: 2ee85d8cec20ac9-71c3b
-From:   Haishuang Yan <yanhaishuang@cmss.chinamobile.com>
-To:     Shuah Khan <shuah@kernel.org>,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
-        "David S. Miller" <davem@davemloft.net>
-Cc:     Julian Anastasov <ja@ssi.bg>, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Haishuang Yan <yanhaishuang@cmss.chinamobile.com>
-Subject: [PATCH 3/3] selftests: netfilter: add ipvs tunnel test case
-Date:   Fri, 27 Sep 2019 00:48:52 +0800
-Message-Id: <1569516532-708-4-git-send-email-yanhaishuang@cmss.chinamobile.com>
-X-Mailer: git-send-email 1.8.3.1
-In-Reply-To: <1569516532-708-1-git-send-email-yanhaishuang@cmss.chinamobile.com>
-References: <1569516532-708-1-git-send-email-yanhaishuang@cmss.chinamobile.com>
+        Thu, 26 Sep 2019 13:41:28 -0400
+Received: by mail-io1-f47.google.com with SMTP id b136so8805581iof.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 26 Sep 2019 10:41:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=to:cc:from:subject:message-id:date:user-agent:mime-version
+         :content-language:content-transfer-encoding;
+        bh=XCD2xeyPn+9SlMl+6tWPk/w4mgLYZgUgG9fP/+jHp2o=;
+        b=baxHxB4Rlw7tG/EPVqBEdgNik5cSRnK+RIlWcRHg0973CSvw2W88u9DHRyBuEof7ej
+         tL3T3T4fJ6IMo9CfD6wmUKHCvF1emLTG/QNyawFrUqnltB2yX7abe09yCsnzpSHk5ZnS
+         vbtu/UZ0CAQWR0NGpPKm6yanDn4gy4jDd5/n0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:to:cc:from:subject:message-id:date:user-agent
+         :mime-version:content-language:content-transfer-encoding;
+        bh=XCD2xeyPn+9SlMl+6tWPk/w4mgLYZgUgG9fP/+jHp2o=;
+        b=a+GSLy4ZKcPnK8FKjPSfBjPLdNoM1qEbnHxGriFZvSTSQCVh/MC1seCnmA/EoLjA+g
+         XrDg/ZgnZswDD4lWlnt5hFfpPQ4WUoduyLXRhQkanJfnBlZCDfDIf6t2hRC+taNz/9Gg
+         sJw09G+eeAUfDlM+1pn1TZSku1J6OonjqcqxdHWuxhcPS5NehFkNky7tzd68RVsy5MB1
+         pZr6SgzLXZlVw3XWX+apPT+oHYZCWb2re+YIrN/y1V0uFHsPNxEsK/AKyci2/BpNMpSQ
+         ON0OHp4Ikp+/F8JiV8CKDkp1vyyfLMtB2PkhoSYXeMbAXkPZlYUeuA8P8c2qDJx3fL/z
+         tH7g==
+X-Gm-Message-State: APjAAAWXkofNIVQUs6Q3Q8sbI1r5L2fi1Smn7oiE2rLR/vCrAaYfuJJE
+        X/OzceryVHPW7QMkAlPozfLRlw==
+X-Google-Smtp-Source: APXvYqx/koFgVWPKTpLAEmigcGzPpnXH6yWphZJAuo49B1qLun85bmt3YrE2S6vhKb7Cq/R+XIbwAA==
+X-Received: by 2002:a92:1794:: with SMTP id 20mr3547589ilx.62.1569519686624;
+        Thu, 26 Sep 2019 10:41:26 -0700 (PDT)
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
+        by smtp.gmail.com with ESMTPSA id r141sm1628669ior.53.2019.09.26.10.41.25
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 26 Sep 2019 10:41:26 -0700 (PDT)
+To:     "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>
+Cc:     Shuah Khan <skhan@linuxfoundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Subject: Linux 5.4 kselftest known issues
+Message-ID: <a293684f-4ab6-51af-60b1-caf4eb97ff05@linuxfoundation.org>
+Date:   Thu, 26 Sep 2019 11:41:25 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Test virtual server via ipip tunnel.
+Here are the know kselftest issues on Linux 5.4 with
+top commit commit 619e17cf75dd58905aa67ccd494a6ba5f19d6cc6
+on x86_64:
 
-Tested:
-# selftests: netfilter: ipvs.sh
-# Testing DR mode...
-# Testing NAT mode...
-# Testing Tunnel mode...
-# ipvs.sh: PASS
-ok 6 selftests: netfilter: ipvs.sh
+The goal is to get these addressed before 5.4 comes out.
 
-Signed-off-by: Haishuang Yan <yanhaishuang@cmss.chinamobile.com>
----
- tools/testing/selftests/netfilter/ipvs.sh | 33 +++++++++++++++++++++++++++++++
- 1 file changed, 33 insertions(+)
+3 build failures and status:
 
-diff --git a/tools/testing/selftests/netfilter/ipvs.sh b/tools/testing/selftests/netfilter/ipvs.sh
-index 40058f9..2012cec 100755
---- a/tools/testing/selftests/netfilter/ipvs.sh
-+++ b/tools/testing/selftests/netfilter/ipvs.sh
-@@ -167,6 +167,33 @@ test_nat() {
-     test_service
- }
- 
-+test_tun() {
-+    ip netns exec ns0 ip route add ${vip_v4} via ${gip_v4} dev br0
-+
-+    ip netns exec ns1 modprobe ipip
-+    ip netns exec ns1 ip link set tunl0 up
-+    ip netns exec ns1 sysctl -qw net.ipv4.ip_forward=0
-+    ip netns exec ns1 sysctl -qw net.ipv4.conf.all.send_redirects=0
-+    ip netns exec ns1 sysctl -qw net.ipv4.conf.default.send_redirects=0
-+    ip netns exec ns1 ipvsadm -A -t ${vip_v4}:${port} -s rr
-+    ip netns exec ns1 ipvsadm -a -i -t ${vip_v4}:${port} -r ${rip_v4}:${port}
-+    ip netns exec ns1 ip addr add ${vip_v4}/32 dev lo:1
-+
-+    ip netns exec ns2 modprobe ipip
-+    ip netns exec ns2 ip link set tunl0 up
-+    ip netns exec ns2 sysctl -qw net.ipv4.conf.all.arp_ignore=1
-+    ip netns exec ns2 sysctl -qw net.ipv4.conf.all.arp_announce=2
-+    ip netns exec ns2 sysctl -qw net.ipv4.conf.all.rp_filter=0
-+    ip netns exec ns2 sysctl -qw net.ipv4.conf.lo.arp_ignore=1
-+    ip netns exec ns2 sysctl -qw net.ipv4.conf.lo.arp_announce=2
-+    ip netns exec ns2 sysctl -qw net.ipv4.conf.lo.rp_filter=0
-+    ip netns exec ns2 sysctl -qw net.ipv4.conf.tunl0.rp_filter=0
-+    ip netns exec ns2 sysctl -qw net.ipv4.conf.veth21.rp_filter=0
-+    ip netns exec ns2 ip addr add ${vip_v4}/32 dev lo:1
-+
-+    test_service
-+}
-+
- run_tests() {
- 	local errors=
- 
-@@ -182,6 +209,12 @@ run_tests() {
- 	test_nat
- 	errors=$(( $errors + $? ))
- 
-+	echo "Testing Tunnel mode..."
-+	cleanup
-+	setup
-+	test_tun
-+	errors=$(( $errors + $? ))
-+
- 	return $errors
- }
- 
--- 
-1.8.3.1
+pidfd - undefined reference to `pthread_create' collect2: error: ld 
+returned 1 exit status
+
+Fixed: https://patchwork.kernel.org/patch/11159517/
+
+bfp (two issues)
+
+1. "make TARGETS=bpf kselftest" build fails
+Makefile:127: tools/build/Makefile.include: No such file or directory
+
+This is due to recent kbuild changes and I have a patch ready to send.
+
+2. Related to llvm latest version dependency. This is a hard dependency.
+Unless users upgrade to latest llvvm, bpf test won't run. The new llvm
+might not be supported on all distros yet, in which case bpf will not
+get tested in some rings and on some architectures.
+
+gpio
+
+"make TARGETS=gpio kselftest" build fails
+
+Makefile:23: tools/build/Makefile.include: No such file or directory
+
+This is due to recent kbuild changes and I have a patch ready to send.
+
+kvm
+
+"make TARGETS=kvm kselftest" build fails due --no-pie flags.
+
+I am working on a fix for this. no-pie-option defines aren't working
+correctly and I suspect try-run miht not be defined in this kselftest
+build case.
+
+thanks,
+-- Shuah
+
+
+
+
+
+
+
+
 
 
 
