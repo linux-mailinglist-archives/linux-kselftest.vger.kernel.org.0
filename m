@@ -2,127 +2,118 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CAA87BF0B0
-	for <lists+linux-kselftest@lfdr.de>; Thu, 26 Sep 2019 13:00:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34F42BF35E
+	for <lists+linux-kselftest@lfdr.de>; Thu, 26 Sep 2019 14:51:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725784AbfIZLAR (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 26 Sep 2019 07:00:17 -0400
-Received: from foss.arm.com ([217.140.110.172]:46014 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725812AbfIZLAR (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 26 Sep 2019 07:00:17 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B267F1000;
-        Thu, 26 Sep 2019 04:00:16 -0700 (PDT)
-Received: from [10.1.197.50] (e120937-lin.cambridge.arm.com [10.1.197.50])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id DE1763F67D;
-        Thu, 26 Sep 2019 04:00:15 -0700 (PDT)
-Subject: Re: [PATCH v6 02/11] kselftest: arm64:
- mangle_pstate_invalid_compat_toggle and common utils
-To:     Dave Martin <Dave.Martin@arm.com>
-Cc:     linux-kselftest@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, shuah@kernel.org,
-        amit.kachhap@arm.com, andreyknvl@google.com
-References: <20190910123111.33478-1-cristian.marussi@arm.com>
- <20190910123111.33478-3-cristian.marussi@arm.com>
- <20190917160545.GL27757@arm.com>
-From:   Cristian Marussi <cristian.marussi@arm.com>
-Message-ID: <799f7556-75a8-59bb-ec3d-624d2bc241e6@arm.com>
-Date:   Thu, 26 Sep 2019 12:00:13 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        id S1726317AbfIZMv6 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 26 Sep 2019 08:51:58 -0400
+Received: from mx2.suse.de ([195.135.220.15]:39886 "EHLO mx1.suse.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725768AbfIZMv6 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 26 Sep 2019 08:51:58 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx1.suse.de (Postfix) with ESMTP id A87C0ABCE;
+        Thu, 26 Sep 2019 12:51:55 +0000 (UTC)
+Received: by ds.suse.cz (Postfix, from userid 10065)
+        id 388BDDA8E5; Thu, 26 Sep 2019 14:52:14 +0200 (CEST)
+Date:   Thu, 26 Sep 2019 14:52:13 +0200
+From:   David Sterba <dsterba@suse.cz>
+To:     Ingo Molnar <mingo@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Mark Brown <broonie@kernel.org>,
+        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        Anders Roxell <anders.roxell@linaro.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [GIT PULL] Kselftest update for Linux 5.4-rc1
+Message-ID: <20190926125213.GO2751@twin.jikos.cz>
+Reply-To: dsterba@suse.cz
+Mail-Followup-To: dsterba@suse.cz, Ingo Molnar <mingo@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Mark Brown <broonie@kernel.org>,
+        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        Anders Roxell <anders.roxell@linaro.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <be8059f4-8e8f-cd18-0978-a9c861f6396b@linuxfoundation.org>
+ <CAHk-=wgs+UoZWfHGENWSVBd57Z-Vp0Nqe68R6wkDb5zF+cfvDg@mail.gmail.com>
+ <CAKRRn-edxk9Du70A27V=d3Na73fh=fVvGEVsQRGROrQm05YRrA@mail.gmail.com>
+ <CAFd5g45ROPm-1SD5cD772gqESaP3D8RbBhSiJXZzbaA+2hFdHA@mail.gmail.com>
+ <CAHk-=wgMuNLBhJR_nFHrpViHbz2ErQ-fJV6B9o0+wym+Wk+r0w@mail.gmail.com>
+ <20190922112555.GB122003@gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20190917160545.GL27757@arm.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190922112555.GB122003@gmail.com>
+User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 17/09/2019 17:05, Dave Martin wrote:
-> On Tue, Sep 10, 2019 at 01:31:02pm +0100, Cristian Marussi wrote:
->> Add some arm64/signal specific boilerplate and utility code to help
->> further testcases' development.
->>
->> Introduce also one simple testcase mangle_pstate_invalid_compat_toggle
->> and some related helpers: it is a simple mangle testcase which messes
->> with the ucontext_t from within the signal handler, trying to toggle
->> PSTATE state bits to switch the system between 32bit/64bit execution
->> state. Expects SIGSEGV on test PASS.
->>
->> Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
->> ---
->> v5 --> v6
->> - fix commit msg
->> - feat_names is char const *const
->> - better supported options check and reporting
->> - removed critical asserts to avoid issues with NDEBUG
->> - more robust get_header
->> - fix validation for ESR_CONTEXT size
->> - add more explicit comment in GET_RESV_NEXT_HEAD() macro
->> - refactored default_handler()
->> - feats_ok() now public
->> - call always test_results() no matter the outcome of test_run()
+On Sun, Sep 22, 2019 at 01:25:55PM +0200, Ingo Molnar wrote:
 > 
-> [...]
+> * Linus Torvalds <torvalds@linux-foundation.org> wrote:
 > 
->> diff --git a/tools/testing/selftests/arm64/signal/test_signals_utils.c b/tools/testing/selftests/arm64/signal/test_signals_utils.c
+> > On Fri, Sep 20, 2019 at 9:35 AM Brendan Higgins
+> > <brendanhiggins@google.com> wrote:
+> > >
+> > > Sorry about that. I am surprised that none of the other reviewers
+> > > brought this up.
+> > 
+> > I think I'm "special".
+> > 
+> > There was some other similar change a few years ago, which I
+> > absolutely hated because of how it broke autocomplete for me. Very few
+> > other people seemed to react to it.
 > 
-> [...]
+> FWIW, I am obsessively sensitive to autocomplete and overall source code 
+> file hieararchy and nomenclature details as well, so it's not just you.
 > 
->> +static int test_init(struct tdescr *td)
->> +{
->> +	td->minsigstksz = getauxval(AT_MINSIGSTKSZ);
->> +	if (!td->minsigstksz)
->> +		td->minsigstksz = MINSIGSTKSZ;
->> +	fprintf(stderr, "Detected MINSTKSIGSZ:%d\n", td->minsigstksz);
->> +
->> +	if (td->feats_required) {
->> +		td->feats_supported = 0;
->> +		/*
->> +		 * Checking for CPU required features using both the
->> +		 * auxval and the arm64 MRS Emulation to read sysregs.
->> +		 */
->> +		if (getauxval(AT_HWCAP) & HWCAP_SSBS)
->> +			td->feats_supported |= FEAT_SSBS;
->> +		if (getauxval(AT_HWCAP) & HWCAP_CPUID) {
->> +			uint64_t val = 0;
->> +
->> +			/* Uses MRS emulation to check capability */
->> +			get_regval(SYS_ID_AA64MMFR1_EL1, val);
->> +			if (ID_AA64MMFR1_EL1_PAN_SUPPORTED(val))
->> +				td->feats_supported |= FEAT_PAN;
->> +			/* Uses MRS emulation to check capability */
->> +			get_regval(SYS_ID_AA64MMFR2_EL1, val);
->> +			if (ID_AA64MMFR2_EL1_UAO_SUPPORTED(val))
->> +				td->feats_supported |= FEAT_UAO;
->> +		} else {
->> +			fprintf(stderr,
->> +				"HWCAP_CPUID NOT available. Mark ALL feats UNSUPPORTED.\n");
+> Beyond the muscle memory aspect, nonsensical naming and inanely flat file 
+> hierarchies annoy kernel developers and makes it harder for newbies to 
+> understand the kernel source as well.
 > 
-> Nit: this message isn't strictly correct now: SSBS may still be detected
-> even if HWCAP_CPUID isn't present.
+> The less clutter, the more organization, the better - and there's very 
+> few valid technical reasons to add any new files or directories to the 
+> top level directory - we should probably *remove* quite a few.
 > 
-> For simplicity I suggest to drop this fprintf() (and the containing
-> else { }, which is otherwise empty).
+> For example 'firmware/' was recently moved to drivers/firmware/, and in a 
+> similar fashion about a third of the remaining 22 directories should 
+> probably be moved too:
 > 
-> The following code reports what features are supported in any case, so
-> the user will be able to see what was detected.
-> 
-> 
-> The rest looks reasonable to me now, so with the above nit fixed:
-> 
-> Reviewed-by: Dave Martin <Dave.Martin@arm.com>
+>   drwxr-xr-x    arch
+>   drwxr-xr-x    block
+>   drwxr-xr-x    certs           # move to build/certs/ dir
+>   drwxr-xr-x    crypto          # move to kernel/crypto/ or security/crypto/
 
-Thanks I'll do the above fixes in v7.
+For code with lots of history and active development, moving is quite
+counterproductive as it makes tracking a change tedious. Git can follow
+the path changes, but that's exactly the step I'd like not to do. That's
+similar to pure whitespace cleanup patches that are noise.
 
-Cristian
-> 
-> [...]
-> 
-> Cheers
-> ---Dave
-> 
+The decision for move should be IMO up to the maintainers of the code,
+that apparently worked for firmware/ -> drivers/firmware that has been
+mentioned.  That's fine.
 
+The muscle memory argument sounds quite weak to me, each of us has some
+habits, editor settings and coding style preferences, we will never
+agree. That's fine too.
+
+The reason I'd find valid for moving is to reduce confusion when working
+with the files, not to promote a "formally correct classification" and
+hierarchy of directories that will stand in the way in the daily work.
+
+Though I'm not directly affected by most of the proposed changes, I feel
+I should speak up before the file maneuvers reach code I care about.
+
+>  - 'block' could in principle move to drivers/block/core/ but it's fine 
+>    at the top level too I think.
+
+Following that principle, we can move mm/ -> drivers/char/memory/ right? :)
