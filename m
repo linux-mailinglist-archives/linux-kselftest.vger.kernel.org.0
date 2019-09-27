@@ -2,86 +2,113 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1ABDBC05F4
-	for <lists+linux-kselftest@lfdr.de>; Fri, 27 Sep 2019 15:06:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CCA8C06B5
+	for <lists+linux-kselftest@lfdr.de>; Fri, 27 Sep 2019 15:52:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726843AbfI0NGi (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 27 Sep 2019 09:06:38 -0400
-Received: from mail-ed1-f68.google.com ([209.85.208.68]:37722 "EHLO
-        mail-ed1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726144AbfI0NGi (ORCPT
+        id S1727557AbfI0Nwt (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 27 Sep 2019 09:52:49 -0400
+Received: from atrey.karlin.mff.cuni.cz ([195.113.26.193]:60697 "EHLO
+        atrey.karlin.mff.cuni.cz" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726163AbfI0Nwt (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 27 Sep 2019 09:06:38 -0400
-Received: by mail-ed1-f68.google.com with SMTP id r4so2277363edy.4;
-        Fri, 27 Sep 2019 06:06:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=pfddVZ+BXRM3AZXqv+ZT0fTLNYdGcpGyrxWu4D92uZE=;
-        b=GXS1LbBmD64+zLp5u1YnxdYeQ8PrVxKHTGIY9o7mMl0x2b9Kbktua72wlNmpRk41F0
-         gEfcX5YdImGN42x6nLhqWZ/OSZfTKKk3qjj/AY1ANbARrSbIdA9a922XYEKuBsompZBU
-         vh2VX1ugpRxCvXH2QZHDwXKJOcFSQ0qTbRYxQVe3NLRHUJJGaaj27kQBmF598JFdp/vI
-         Ap0KUCazl3OlpNq1zBUTHISC5rv/CDO7KE6ZuQUfQZF5pLYQZR9C+ANHJ0GuRZ35TUDx
-         4PqHbt0HSLeYVmk4iqNtyY65tI4hRYU1Gswxg++xxKM/6KaRw1XZs8ldsp22sgNBWLgO
-         xbhg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=pfddVZ+BXRM3AZXqv+ZT0fTLNYdGcpGyrxWu4D92uZE=;
-        b=i8gwM3yAjv4KEGHPAi3DnEtkM6Hg5i6u2vGHt6EO+9phUq9o6kO0yZQsfRzj4SpCvh
-         1xErhK9AJYZkkBqDlsAsxRgIFCpBcN13hfA/cj2n94fYP41N2z2/wg3A8tPA+jXZ1r9M
-         TUvqyosV3nVrNvi+yQeD0+G/WE0AH07ZpRlWtjkZYsuTAwd+9RHeQk6gkwXsXHx6HH+5
-         5lIkuKFELbTP/JwJ9t4+f6DJ9GA4Q2M0K1m8NovWrNgB2YbJ0JvKCe+rfen6bKhKlKkw
-         KI6nzceiMQeICrSXfENtD+xAIymviURhLezYUGmK1H7OZsJ0xb9bjGvS+w0hzaF6ZM0K
-         TPBQ==
-X-Gm-Message-State: APjAAAWxz/62agqC4PfaM7bno8zfd//eQVS3H514G8zkol9DBac2AYyO
-        jR5MhjfPfcDGqsI5Sv2sU4nS3fDic+wyCKCg2Sc=
-X-Google-Smtp-Source: APXvYqz6jHSQsa3IMSkr7eTUjAru2YBYnHAlMN5XRDfFnNXyoEYJaovgiUnurVtV4xx3I5tSSmmCz536FsHxleUSAIM=
-X-Received: by 2002:a05:6402:1858:: with SMTP id v24mr4395130edy.130.1569589596288;
- Fri, 27 Sep 2019 06:06:36 -0700 (PDT)
-MIME-Version: 1.0
-References: <20190919082902.GA15755@yogzotot> <CAADnVQK6FjwivxDsmoskH_Zwr+Q730+H9u_5hBBdyzzDP1vyRg@mail.gmail.com>
- <56fb689c-428b-ad1a-6f25-48422420e4c5@kernel.org>
-In-Reply-To: <56fb689c-428b-ad1a-6f25-48422420e4c5@kernel.org>
-From:   Anatoly Pugachev <matorola@gmail.com>
-Date:   Fri, 27 Sep 2019 16:06:24 +0300
-Message-ID: <CADxRZqwzXc1-bFFHx1_LUw-95+f+1cYnHZp7RKqycwfcsF28OA@mail.gmail.com>
-Subject: Re: [PATCH] selftests: update .gitignore files for selftests/bpf and selftests/zram
-To:     shuah <shuah@kernel.org>
-Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        bpf <bpf@vger.kernel.org>,
+        Fri, 27 Sep 2019 09:52:49 -0400
+Received: by atrey.karlin.mff.cuni.cz (Postfix, from userid 512)
+        id A9E9C804EA; Fri, 27 Sep 2019 15:52:31 +0200 (CEST)
+Date:   Fri, 27 Sep 2019 15:52:36 +0200
+From:   Pavel Machek <pavel@ucw.cz>
+To:     Ingo Molnar <mingo@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Mark Brown <broonie@kernel.org>,
+        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        Anders Roxell <anders.roxell@linaro.org>,
         "open list:KERNEL SELFTEST FRAMEWORK" 
         <linux-kselftest@vger.kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [GIT PULL] Kselftest update for Linux 5.4-rc1
+Message-ID: <20190927135236.GA3557@bug>
+References: <be8059f4-8e8f-cd18-0978-a9c861f6396b@linuxfoundation.org>
+ <CAHk-=wgs+UoZWfHGENWSVBd57Z-Vp0Nqe68R6wkDb5zF+cfvDg@mail.gmail.com>
+ <CAKRRn-edxk9Du70A27V=d3Na73fh=fVvGEVsQRGROrQm05YRrA@mail.gmail.com>
+ <CAFd5g45ROPm-1SD5cD772gqESaP3D8RbBhSiJXZzbaA+2hFdHA@mail.gmail.com>
+ <CAHk-=wgMuNLBhJR_nFHrpViHbz2ErQ-fJV6B9o0+wym+Wk+r0w@mail.gmail.com>
+ <20190922112555.GB122003@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190922112555.GB122003@gmail.com>
+User-Agent: Mutt/1.5.23 (2014-03-12)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Sep 19, 2019 at 8:09 PM shuah <shuah@kernel.org> wrote:
->
-> On 9/19/19 8:39 AM, Alexei Starovoitov wrote:
-> > On Thu, Sep 19, 2019 at 1:35 AM Anatoly Pugachev <matorola@gmail.com> wrote:
-> >>
-> >> selftests: update .gitignore files for selftests/bpf and selftests/zram
-> >>
-> >> Signed-off-by: Anatoly Pugachev <matorola@gmail.com>
-> >> ---
-> >>   tools/testing/selftests/bpf/.gitignore  | 4 ++++
-> >>   tools/testing/selftests/zram/.gitignore | 1 +
-> >>   2 files changed, 5 insertions(+)
-> >>   create mode 100644 tools/testing/selftests/zram/.gitignore
-> >
-> > could you please split this patch into selftests/bpf/ and the rest?
-> > we'll take bpf bits via bpf tree.
->
-> Yes. Please split them. .gitignore changes for each test need to be
-> in separate patches.
+Hi!
 
-I wonder does it still make sense to post patch for .gitignore if my
-current git kernel does not show this extra compiled binaries any more
-(probably after make clean) ?
+> > I think I'm "special".
+> > 
+> > There was some other similar change a few years ago, which I
+> > absolutely hated because of how it broke autocomplete for me. Very few
+> > other people seemed to react to it.
+> 
+> FWIW, I am obsessively sensitive to autocomplete and overall source code 
+> file hieararchy and nomenclature details as well, so it's not just you.
+> 
+> Beyond the muscle memory aspect, nonsensical naming and inanely flat file 
+> hierarchies annoy kernel developers and makes it harder for newbies to 
+> understand the kernel source as well.
+> 
+> The less clutter, the more organization, the better - and there's very 
+> few valid technical reasons to add any new files or directories to the 
+> top level directory - we should probably *remove* quite a few.
+> 
+> For example 'firmware/' was recently moved to drivers/firmware/, and in a 
+> similar fashion about a third of the remaining 22 directories should 
+> probably be moved too:
+> 
+>   drwxr-xr-x    arch
+>   drwxr-xr-x    block
+>   drwxr-xr-x    certs           # move to build/certs/ dir
+>   drwxr-xr-x    crypto          # move to kernel/crypto/ or security/crypto/
+>   drwxr-xr-x    Documentation
+>   drwxr-xr-x    drivers
+>   drwxr-xr-x    fs
+>   drwxr-xr-x    include
+>   drwxr-xr-x    init
+>   drwxr-xr-x    ipc             # move to kernel/ipc/
+>   drwxr-xr-x    kernel
+>   drwxr-xr-x    lib
+>   drwxr-xr-x    LICENSES
+>   drwxr-xr-x    mm
+>   drwxr-xr-x    net
+>   drwxr-xr-x    samples         # move to Documentation/samples/
+>   drwxr-xr-x    scripts         # move to build/scripts/
+>   drwxr-xr-x    security
+>   drwxr-xr-x    sound           # move to drivers/sound/
+
+Heh, I was always surprised that sound/ made it into top level... and no, I'd not
+mind it being moved away.
+
+> There's a few borderline ones:
+> 
+>  - 'block' could in principle move to drivers/block/core/ but it's fine 
+>    at the top level too I think.
+> 
+>  - 'init' could in principle be moved to kernel/init/ - but it's not 
+>    wrong at the top level either.
+
+net would also make sense as drivers/net/core... That is what inspired sound/ afaict.
+
+> I'm volunteering to do this (in a scripted, repeatable, reviewable, 
+> tweakable and "easy to execute in a quiet moment" fashion), although
+> I also expect you to balk at the churn. :-)
+
+I'd like to see that happen...
+
+Best regards,
+									Pavel
+
+-- 
+(english) http://www.livejournal.com/~pavelmachek
+(cesky, pictures) http://atrey.karlin.mff.cuni.cz/~pavel/picture/horses/blog.html
