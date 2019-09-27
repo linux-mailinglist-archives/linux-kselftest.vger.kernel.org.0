@@ -2,117 +2,113 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D566C0BE6
-	for <lists+linux-kselftest@lfdr.de>; Fri, 27 Sep 2019 21:03:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D114C0CF0
+	for <lists+linux-kselftest@lfdr.de>; Fri, 27 Sep 2019 22:58:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727876AbfI0TD0 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 27 Sep 2019 15:03:26 -0400
-Received: from mail-io1-f66.google.com ([209.85.166.66]:40880 "EHLO
-        mail-io1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726867AbfI0TD0 (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 27 Sep 2019 15:03:26 -0400
-Received: by mail-io1-f66.google.com with SMTP id h144so19014777iof.7
-        for <linux-kselftest@vger.kernel.org>; Fri, 27 Sep 2019 12:03:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=E+qSxd+B5mAgasMeWMwc/UaJE1Xo8BpaT5oY9Q4d4wI=;
-        b=M8LKNRgSLYPUMGMl7I2w8aeFVONEoHT740JVrcttiLb0emgEnbPRGT4xrNWwgYTm37
-         OYNW6NeTPL8JAoxJiQp3ZD+GURM321crEPdivjuooi6+G0LevLZMWHea0ZcquoFLMi6X
-         7mQnLMIvY0JkTKn2G61mO5yjE9LrSYKzP5TsE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=E+qSxd+B5mAgasMeWMwc/UaJE1Xo8BpaT5oY9Q4d4wI=;
-        b=Sc8ISLZYYBXUBtuCG7iC64cac+jgOTw2bMfH6hXMiAYqv2/FtcZRHDHTAbtIY+uzLZ
-         vqy85cBMd0u+rqe3efdiFuAs28SYqQ3g+F+8GSZoQQZINnuvgwtOBwcsqoCehDDO8wDy
-         nTLHTZxCjQ+JC9qeLCvezOh94hBIYRsGZIe+OZXRkC8yTnyVpHq5vhuLeQQeGhH7KQ/e
-         fXlfDHo3hwlcnG9PAWVrB3EIF3OoC+9WRwBBmLFxjO4sFxFMaNGfXw0i6jk1QBaFcpW9
-         Ru6ciobXy2VtSTPUOMtNHvbVzJgO1DNXtuce6k6pAhSB6ICTZkWeeTMvNJIVArJM2CEV
-         ST9w==
-X-Gm-Message-State: APjAAAWQ72CTuFkVBepN8IW3JfGJlrMR9KbgsqRsVDSXTZ2cpoGc4bFo
-        R9kPc0cHq11enY4ygs3BMyaMmg==
-X-Google-Smtp-Source: APXvYqyHENgSj2WMDvi6eFaafpsFE/M30Ldy7dsDBryeYnpc0Mkk2ZpDpcDkPaiCljRGm46/wCsq+A==
-X-Received: by 2002:a5d:89da:: with SMTP id a26mr9289421iot.61.1569611005604;
-        Fri, 27 Sep 2019 12:03:25 -0700 (PDT)
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id t17sm2519972ioc.18.2019.09.27.12.03.24
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 27 Sep 2019 12:03:24 -0700 (PDT)
-Subject: Re: [PATCH] tools: bpf: Use !building_out_of_srctree to determine
- srctree
-To:     Song Liu <liu.song.a23@gmail.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
+        id S1725306AbfI0U60 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 27 Sep 2019 16:58:26 -0400
+Received: from mail.kernel.org ([198.145.29.99]:33472 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725815AbfI0U6Y (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 27 Sep 2019 16:58:24 -0400
+Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 9270F21920
+        for <linux-kselftest@vger.kernel.org>; Fri, 27 Sep 2019 20:58:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1569617903;
+        bh=JHvPXPKOI8xXY+v+RmsysJ+7eQJL2fGTE9qEG3GltO4=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=IZBobdmnLixGOMe0GgALjKFamRkN+1/IlDJ93Mesp167haHYR7IBTWvK6yM1HL85P
+         fgn5Hvfd5gJ9LHq/raH1oyc+JNVnN55DE5TJ7vnvYOudEB+EMU2l92r1xncFRaMHhV
+         RqDQ8KOcKcKYu9CMwqEVaB0ZppLtJi/hqoWYNb3U=
+Received: by mail-wr1-f48.google.com with SMTP id l3so4635794wru.7
+        for <linux-kselftest@vger.kernel.org>; Fri, 27 Sep 2019 13:58:23 -0700 (PDT)
+X-Gm-Message-State: APjAAAUuT78g9UYSQmNCQhE2d/6CNdnblxSVvgUdduJjkxm1GvFiDFE/
+        zRbjceYs+5Ao077MJl4cvv0EUQCNArez8wSZSbbdQw==
+X-Google-Smtp-Source: APXvYqxmWFPXVg5my2vdtfXTIKkRAsW/tJXeLCeFEGi5LTezBydsLm94jzUi9r5S9tnwrfzAbRz3QhWaRfS3fvEnT+I=
+X-Received: by 2002:adf:dbc6:: with SMTP id e6mr4312618wrj.149.1569617900104;
+ Fri, 27 Sep 2019 13:58:20 -0700 (PDT)
+MIME-Version: 1.0
+References: <419CB0D1-E51C-49D5-9745-7771C863462F@amacapital.net> <mhng-c8a768f7-1a90-4228-b654-be9e879c92ec@palmer-si-x1c4>
+In-Reply-To: <mhng-c8a768f7-1a90-4228-b654-be9e879c92ec@palmer-si-x1c4>
+From:   Andy Lutomirski <luto@kernel.org>
+Date:   Fri, 27 Sep 2019 13:58:08 -0700
+X-Gmail-Original-Message-ID: <CALCETrUmqKz4vu2VCPC5MYGFyiG4djbOmKG32oLtQPb=o6rJ_Q@mail.gmail.com>
+Message-ID: <CALCETrUmqKz4vu2VCPC5MYGFyiG4djbOmKG32oLtQPb=o6rJ_Q@mail.gmail.com>
+Subject: Re: [PATCH v2] riscv: add support for SECCOMP and SECCOMP_FILTER
+To:     Palmer Dabbelt <palmer@sifive.com>
+Cc:     Kees Cook <keescook@chromium.org>,
+        David Abdurachmanov <david.abdurachmanov@gmail.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Oleg Nesterov <oleg@redhat.com>,
+        Will Drewry <wad@chromium.org>, Shuah Khan <shuah@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Martin KaFai Lau <kafai@fb.com>,
         Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        linux-kselftest@vger.kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20190927011344.4695-1-skhan@linuxfoundation.org>
- <CAPhsuW5EncjNRGjt7F_BN2bNhRkf=uXVeDe6NCbJe=K2J+hdyA@mail.gmail.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <5ec40572-5df9-0e5b-5a85-eb53be48b87d@linuxfoundation.org>
-Date:   Fri, 27 Sep 2019 13:03:23 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
-MIME-Version: 1.0
-In-Reply-To: <CAPhsuW5EncjNRGjt7F_BN2bNhRkf=uXVeDe6NCbJe=K2J+hdyA@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+        David Abdurachmanov <david.abdurachmanov@sifive.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Allison Randal <allison@lohutok.net>,
+        Alexios Zavras <alexios.zavras@intel.com>,
+        Anup Patel <Anup.Patel@wdc.com>,
+        Vincent Chen <vincentc@andestech.com>,
+        Alan Kao <alankao@andestech.com>,
+        linux-riscv@lists.infradead.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>, me@carlosedp.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 9/27/19 12:44 PM, Song Liu wrote:
-> On Thu, Sep 26, 2019 at 6:14 PM Shuah Khan <skhan@linuxfoundation.org> wrote:
->>
->> make TARGETS=bpf kselftest fails with:
->>
->> Makefile:127: tools/build/Makefile.include: No such file or directory
->>
->> When the bpf tool make is invoked from tools Makefile, srctree is
->> cleared and the current logic check for srctree equals to empty
->> string to determine srctree location from CURDIR.
->>
->> When the build in invoked from selftests/bpf Makefile, the srctree
->> is set to "." and the same logic used for srctree equals to empty is
->> needed to determine srctree.
->>
->> Check building_out_of_srctree undefined as the condition for both
->> cases to fix "make TARGETS=bpf kselftest" build failure.
->>
->> Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
-> 
-> The fix looks reasonable. Thanks!
-> 
-> However, I am still seeing some failure:
-> 
-> make TARGETS=bpf kselftest
-> [...]
-> test_verifier.c
-> /data/users/songliubraving/kernel/linux-git/tools/testing/selftests/bpf/test_stub.o
-> /data/users/songliubraving/kernel/linux-git/tools/testing/selftests/bpf/libbpf.a
-> -lcap -lelf -lrt -lpthread -o
-> /data/users/songliubraving/kernel/linux-git/tools/testing/selftests/bpf/test_verifier
-> make[3]: test_verifier.c: Command not found
-> 
-> Is this just a problem with my setup?
-> 
+On Tue, Sep 3, 2019 at 3:27 PM Palmer Dabbelt <palmer@sifive.com> wrote:
+>
+> On Wed, 28 Aug 2019 10:52:05 PDT (-0700), luto@amacapital.net wrote:
+> >
+> >
+> >> On Aug 25, 2019, at 2:59 PM, Kees Cook <keescook@chromium.org> wrote:
+> >>
+> >>> On Thu, Aug 22, 2019 at 01:55:22PM -0700, David Abdurachmanov wrote:
+> >>> This patch was extensively tested on Fedora/RISCV (applied by default=
+ on
+> >>> top of 5.2-rc7 kernel for <2 months). The patch was also tested with =
+5.3-rc
+> >>> on QEMU and SiFive Unleashed board.
+> >>
+> >> Oops, I see the mention of QEMU here. Where's the best place to find
+> >> instructions on creating a qemu riscv image/environment?
+> >
+> > I don=E2=80=99t suppose one of you riscv folks would like to contribute=
+ riscv support to virtme?  virtme-run =E2=80=94arch=3Driscv would be quite =
+nice, and the total patch should be just a couple lines.  Unfortunately, it=
+ helps a lot to understand the subtleties of booting the architecture to wr=
+ite those couple lines :)
+>
+> What mailing list should I sent this to?  You need to use the "virtme" br=
+anch
+> of kernel.org/palmer/linux.git until I send the defconfig patches.
+>
+> commit a8bd7b318691891991caea298f9a5ed0f815c322
+> gpg: Signature made Tue 03 Sep 2019 03:22:45 PM PDT
+> gpg:                using RSA key 00CE76D1834960DFCE886DF8EF4CA1502CCBAB4=
+1
+> gpg:                issuer "palmer@dabbelt.com"
+> gpg: Good signature from "Palmer Dabbelt <palmer@dabbelt.com>" [ultimate]
+> gpg:                 aka "Palmer Dabbelt <palmer@sifive.com>" [ultimate]
+> Author: Palmer Dabbelt <palmer@sifive.com>
+> Date:   Tue Sep 3 14:39:39 2019 -0700
+>
+>     Add RISC-V support
 
-You are running into the second bpf failure because of the dependency
-on the latest llvm. This is known issue with bpf test and it doesn't
-compile on 5.4 and maybe even 5.3
-
-You have upgrade to the bleeding edge llvm.
-
-thanks,
--- Shuah
-
+Could you rebase onto virtme master and resend in some format that
+isn't corrupt?  git am really doesn't like your patch and, even if I
+fix it up manually, your gpg: lines are bogus.  You could also send a
+PR at https://github.com/amluto/virtme
