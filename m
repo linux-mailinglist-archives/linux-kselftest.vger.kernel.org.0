@@ -2,110 +2,86 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EE258BFF0D
-	for <lists+linux-kselftest@lfdr.de>; Fri, 27 Sep 2019 08:22:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1ABDBC05F4
+	for <lists+linux-kselftest@lfdr.de>; Fri, 27 Sep 2019 15:06:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725926AbfI0GWR (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 27 Sep 2019 02:22:17 -0400
-Received: from cmccmta2.chinamobile.com ([221.176.66.80]:2747 "EHLO
-        cmccmta2.chinamobile.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725769AbfI0GWR (ORCPT
+        id S1726843AbfI0NGi (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 27 Sep 2019 09:06:38 -0400
+Received: from mail-ed1-f68.google.com ([209.85.208.68]:37722 "EHLO
+        mail-ed1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726144AbfI0NGi (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 27 Sep 2019 02:22:17 -0400
-Received: from spf.mail.chinamobile.com (unknown[172.16.121.1]) by rmmx-syy-dmz-app07-12007 (RichMail) with SMTP id 2ee75d8daa7e602-3c291; Fri, 27 Sep 2019 14:21:51 +0800 (CST)
-X-RM-TRANSID: 2ee75d8daa7e602-3c291
-X-RM-TagInfo: emlType=0                                       
-X-RM-SPAM-FLAG: 00000000
-Received: from localhost (unknown[223.105.0.241])
-        by rmsmtp-syy-appsvr01-12001 (RichMail) with SMTP id 2ee15d8daa7ddd2-9c951;
-        Fri, 27 Sep 2019 14:21:51 +0800 (CST)
-X-RM-TRANSID: 2ee15d8daa7ddd2-9c951
-From:   Haishuang Yan <yanhaishuang@cmss.chinamobile.com>
-To:     Shuah Khan <shuah@kernel.org>,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
-        "David S. Miller" <davem@davemloft.net>
-Cc:     Julian Anastasov <ja@ssi.bg>, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, lvs-devel@vger.kernel.org,
-        netfilter-devel@vger.kernel.org,
-        Haishuang Yan <yanhaishuang@cmss.chinamobile.com>
-Subject: [PATCH v2 3/3] selftests: netfilter: add ipvs tunnel test case
-Date:   Fri, 27 Sep 2019 14:21:06 +0800
-Message-Id: <1569565266-31566-4-git-send-email-yanhaishuang@cmss.chinamobile.com>
-X-Mailer: git-send-email 1.8.3.1
-In-Reply-To: <1569565266-31566-1-git-send-email-yanhaishuang@cmss.chinamobile.com>
-References: <1569565266-31566-1-git-send-email-yanhaishuang@cmss.chinamobile.com>
+        Fri, 27 Sep 2019 09:06:38 -0400
+Received: by mail-ed1-f68.google.com with SMTP id r4so2277363edy.4;
+        Fri, 27 Sep 2019 06:06:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=pfddVZ+BXRM3AZXqv+ZT0fTLNYdGcpGyrxWu4D92uZE=;
+        b=GXS1LbBmD64+zLp5u1YnxdYeQ8PrVxKHTGIY9o7mMl0x2b9Kbktua72wlNmpRk41F0
+         gEfcX5YdImGN42x6nLhqWZ/OSZfTKKk3qjj/AY1ANbARrSbIdA9a922XYEKuBsompZBU
+         vh2VX1ugpRxCvXH2QZHDwXKJOcFSQ0qTbRYxQVe3NLRHUJJGaaj27kQBmF598JFdp/vI
+         Ap0KUCazl3OlpNq1zBUTHISC5rv/CDO7KE6ZuQUfQZF5pLYQZR9C+ANHJ0GuRZ35TUDx
+         4PqHbt0HSLeYVmk4iqNtyY65tI4hRYU1Gswxg++xxKM/6KaRw1XZs8ldsp22sgNBWLgO
+         xbhg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=pfddVZ+BXRM3AZXqv+ZT0fTLNYdGcpGyrxWu4D92uZE=;
+        b=i8gwM3yAjv4KEGHPAi3DnEtkM6Hg5i6u2vGHt6EO+9phUq9o6kO0yZQsfRzj4SpCvh
+         1xErhK9AJYZkkBqDlsAsxRgIFCpBcN13hfA/cj2n94fYP41N2z2/wg3A8tPA+jXZ1r9M
+         TUvqyosV3nVrNvi+yQeD0+G/WE0AH07ZpRlWtjkZYsuTAwd+9RHeQk6gkwXsXHx6HH+5
+         5lIkuKFELbTP/JwJ9t4+f6DJ9GA4Q2M0K1m8NovWrNgB2YbJ0JvKCe+rfen6bKhKlKkw
+         KI6nzceiMQeICrSXfENtD+xAIymviURhLezYUGmK1H7OZsJ0xb9bjGvS+w0hzaF6ZM0K
+         TPBQ==
+X-Gm-Message-State: APjAAAWxz/62agqC4PfaM7bno8zfd//eQVS3H514G8zkol9DBac2AYyO
+        jR5MhjfPfcDGqsI5Sv2sU4nS3fDic+wyCKCg2Sc=
+X-Google-Smtp-Source: APXvYqz6jHSQsa3IMSkr7eTUjAru2YBYnHAlMN5XRDfFnNXyoEYJaovgiUnurVtV4xx3I5tSSmmCz536FsHxleUSAIM=
+X-Received: by 2002:a05:6402:1858:: with SMTP id v24mr4395130edy.130.1569589596288;
+ Fri, 27 Sep 2019 06:06:36 -0700 (PDT)
+MIME-Version: 1.0
+References: <20190919082902.GA15755@yogzotot> <CAADnVQK6FjwivxDsmoskH_Zwr+Q730+H9u_5hBBdyzzDP1vyRg@mail.gmail.com>
+ <56fb689c-428b-ad1a-6f25-48422420e4c5@kernel.org>
+In-Reply-To: <56fb689c-428b-ad1a-6f25-48422420e4c5@kernel.org>
+From:   Anatoly Pugachev <matorola@gmail.com>
+Date:   Fri, 27 Sep 2019 16:06:24 +0300
+Message-ID: <CADxRZqwzXc1-bFFHx1_LUw-95+f+1cYnHZp7RKqycwfcsF28OA@mail.gmail.com>
+Subject: Re: [PATCH] selftests: update .gitignore files for selftests/bpf and selftests/zram
+To:     shuah <shuah@kernel.org>
+Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        bpf <bpf@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Test virtual server via ipip tunnel.
+On Thu, Sep 19, 2019 at 8:09 PM shuah <shuah@kernel.org> wrote:
+>
+> On 9/19/19 8:39 AM, Alexei Starovoitov wrote:
+> > On Thu, Sep 19, 2019 at 1:35 AM Anatoly Pugachev <matorola@gmail.com> wrote:
+> >>
+> >> selftests: update .gitignore files for selftests/bpf and selftests/zram
+> >>
+> >> Signed-off-by: Anatoly Pugachev <matorola@gmail.com>
+> >> ---
+> >>   tools/testing/selftests/bpf/.gitignore  | 4 ++++
+> >>   tools/testing/selftests/zram/.gitignore | 1 +
+> >>   2 files changed, 5 insertions(+)
+> >>   create mode 100644 tools/testing/selftests/zram/.gitignore
+> >
+> > could you please split this patch into selftests/bpf/ and the rest?
+> > we'll take bpf bits via bpf tree.
+>
+> Yes. Please split them. .gitignore changes for each test need to be
+> in separate patches.
 
-Tested:
-# selftests: netfilter: ipvs.sh
-# Testing DR mode...
-# Testing NAT mode...
-# Testing Tunnel mode...
-# ipvs.sh: PASS
-ok 6 selftests: netfilter: ipvs.sh
-
-Signed-off-by: Haishuang Yan <yanhaishuang@cmss.chinamobile.com>
----
-v2: optimize test script
----
- tools/testing/selftests/netfilter/ipvs.sh | 30 ++++++++++++++++++++++++++++++
- 1 file changed, 30 insertions(+)
-
-diff --git a/tools/testing/selftests/netfilter/ipvs.sh b/tools/testing/selftests/netfilter/ipvs.sh
-index e95453b..b09994e 100755
---- a/tools/testing/selftests/netfilter/ipvs.sh
-+++ b/tools/testing/selftests/netfilter/ipvs.sh
-@@ -174,6 +174,30 @@ test_nat() {
-     test_service
- }
- 
-+test_tun() {
-+    ip netns exec ns0 ip route add ${vip_v4} via ${gip_v4} dev br0
-+
-+    ip netns exec ns1 modprobe ipip
-+    ip netns exec ns1 ip link set tunl0 up
-+    ip netns exec ns1 sysctl -qw net.ipv4.ip_forward=0
-+    ip netns exec ns1 sysctl -qw net.ipv4.conf.all.send_redirects=0
-+    ip netns exec ns1 sysctl -qw net.ipv4.conf.default.send_redirects=0
-+    ip netns exec ns1 ipvsadm -A -t ${vip_v4}:${port} -s rr
-+    ip netns exec ns1 ipvsadm -a -i -t ${vip_v4}:${port} -r ${rip_v4}:${port}
-+    ip netns exec ns1 ip addr add ${vip_v4}/32 dev lo:1
-+
-+    ip netns exec ns2 modprobe ipip
-+    ip netns exec ns2 ip link set tunl0 up
-+    ip netns exec ns2 sysctl -qw net.ipv4.conf.all.arp_ignore=1
-+    ip netns exec ns2 sysctl -qw net.ipv4.conf.all.arp_announce=2
-+    ip netns exec ns2 sysctl -qw net.ipv4.conf.all.rp_filter=0
-+    ip netns exec ns2 sysctl -qw net.ipv4.conf.tunl0.rp_filter=0
-+    ip netns exec ns2 sysctl -qw net.ipv4.conf.veth21.rp_filter=0
-+    ip netns exec ns2 ip addr add ${vip_v4}/32 dev lo:1
-+
-+    test_service
-+}
-+
- run_tests() {
- 	local errors=
- 
-@@ -189,6 +213,12 @@ run_tests() {
- 	test_nat
- 	errors=$(( $errors + $? ))
- 
-+	echo "Testing Tunnel mode..."
-+	cleanup
-+	setup
-+	test_tun
-+	errors=$(( $errors + $? ))
-+
- 	return $errors
- }
- 
--- 
-1.8.3.1
-
-
-
+I wonder does it still make sense to post patch for .gitignore if my
+current git kernel does not show this extra compiled binaries any more
+(probably after make clean) ?
