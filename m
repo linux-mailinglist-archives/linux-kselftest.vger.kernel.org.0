@@ -2,53 +2,52 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 52170C096B
+	by mail.lfdr.de (Postfix) with ESMTP id C54B0C096C
 	for <lists+linux-kselftest@lfdr.de>; Fri, 27 Sep 2019 18:18:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728069AbfI0QSs (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 27 Sep 2019 12:18:48 -0400
-Received: from mail-pg1-f201.google.com ([209.85.215.201]:55136 "EHLO
-        mail-pg1-f201.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728063AbfI0QSr (ORCPT
+        id S1728044AbfI0QSu (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 27 Sep 2019 12:18:50 -0400
+Received: from mail-pf1-f201.google.com ([209.85.210.201]:50914 "EHLO
+        mail-pf1-f201.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728074AbfI0QSt (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 27 Sep 2019 12:18:47 -0400
-Received: by mail-pg1-f201.google.com with SMTP id m17so3852095pgh.21
-        for <linux-kselftest@vger.kernel.org>; Fri, 27 Sep 2019 09:18:47 -0700 (PDT)
+        Fri, 27 Sep 2019 12:18:49 -0400
+Received: by mail-pf1-f201.google.com with SMTP id q127so2219396pfc.17
+        for <linux-kselftest@vger.kernel.org>; Fri, 27 Sep 2019 09:18:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=z1+6YnORORJpDPx0AFYn1dOo56cI4E/TWHsOcAHEr2k=;
-        b=Zs3Zy66/fdR+77P3vb+NTQbTKVD1qPyOQpKRHebdpq9Z3GeBZThrfZC4N7Y+yF0Pox
-         3rajRELdEoIX5lt6E2eO1iS4GHPmvR/Q+vQUXy9gZxtanwxiVjpb+lIimnwvae14U/uU
-         0ridh0WqTAliLNwLv5RGqALKbzt3fwqz6/hA63lejNPuvDaWxGsjrBrtO3EYzMaDyWfj
-         Qy6qt8DDgBkkjcCksWpIyF80AWUsuBeolM+8is+1buqmlA+N0ml+DgWk72VtvUM/4xJX
-         bs+Cqg0rEX6fRuVKK0Ai/zbMgwpOLM6fg++CytIq1lz5g+AtKslt5UM/YBR0GHnTUAa5
-         HZCQ==
+        bh=IlvPPwGnMWD1NTIiC8jnPE4YM8+nW7ykOi0JgL0Q+GQ=;
+        b=wC4kHt5p9cIRSDgrTzzM9HAVj1PwdCZMdzNGWJmdJ7INFpMh8yjJkuHNR9idmSUYMV
+         jpuQyXHtZMCvqJa/pNatma/+SG5BcDFIzBowHoCvUFjsMsx9pknBBbBZhYPQF3V7qB/q
+         sh2ISmela0hcmFM0CafxdAldCHJY97pVx634/8jm4u8+MDcS/jweaKJl2Ylx6FwFTPM0
+         Fg47eTm1N1A4hFF88rg+J56HSP9PwFn7gst3u4Z8bedKJbnp5E07JZTH9N+gDN8Y7txG
+         FRUeuRMcXBED6pDhFMheQeWWo8SddmNJYldmvTEOQl2Iru9jw1Ih57R717YP0ExsV48o
+         6MoA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=z1+6YnORORJpDPx0AFYn1dOo56cI4E/TWHsOcAHEr2k=;
-        b=pU4tNxj7IOX+FNnqJ4crOeMxiEGUNqbVYRtfxR5cKocVAz04INq4tlopePKII2lu7l
-         cMrP2MLArmU3lkQMJG6Z/S0ohs2hNaNxSidc16bDmNtr2bBMto5RufC86zwhxfCV2lRp
-         SB/7ktc8SwDxPwTnKCOI1YWaZ/S/V4CtmqU3r5bWoD04j17M3vpfhP+n2S85Bl/gXIyq
-         7d5lzb94X/pJbWsRlAcioi3EE7QutUk4A929BLGDtdV41Os/wYOjV5fd9gQ53fB9QIDt
-         1z6IXVzkkvJGR9J2IBAy5GBGqNAtAEx+7rSCJ/s+n3o6cBnr8y0pVuhuTyAC6CgaYXHU
-         s0tA==
-X-Gm-Message-State: APjAAAW3HKv+YjtCYSyzVcjy9iv5wupRdb3fy/CfDBf8VTfSb3jjgc5Y
-        Wl6C5ZcS4H7uWA+3U7MjAP18aGchUQH9
-X-Google-Smtp-Source: APXvYqyFAximtgaKY3v89h1XKCJQ7ZZYPYzW9ka3x3G3HMJM7o0TUI3U8IinsO+VCYmtgqFWAwQSvN9sUR7L
-X-Received: by 2002:a63:c645:: with SMTP id x5mr10199467pgg.425.1569601126534;
- Fri, 27 Sep 2019 09:18:46 -0700 (PDT)
-Date:   Fri, 27 Sep 2019 09:18:31 -0700
+        bh=IlvPPwGnMWD1NTIiC8jnPE4YM8+nW7ykOi0JgL0Q+GQ=;
+        b=R+xCXqZB7JcC3/pL6K2NZo7uRXnfKXbzjKHXKCB/NV2rvZcV92eALnVpTXK9RSXMxl
+         wgRTJ8V2KHIN1eCT1OvwoeAydlUDNo7A1DPmuZ9Dlb1/0Mr1Rg8wiBqrYQrLEUSJyeAU
+         SMxjL96/gMxs0Z2f85KPT44/XP9w8mDgNPQo4CwnxWUXbPgbSyWTZrfcwif807efGN2B
+         rjWi4BWt7w7tj6qDp9cffNsOaWXpSN1FMcA8GMGzaa/yHR6LR8ef6F+vU4j7DBrMdjgk
+         pPIwTUL+hcN9XvLKNw/KOrDyc/7XUq1P/Zl9sXhzOC17pj/cBUCaJhJhzX7icL6N0EYZ
+         KdTg==
+X-Gm-Message-State: APjAAAXc7ZRKX0r7CYgI7oud69gnMi+y/3GpBlOY0mDhI7L3mk4m3wjz
+        074L4rBxcQ2T8KFd21SH9hKBrd0dodJH
+X-Google-Smtp-Source: APXvYqwCKt4vsu5/A+gyozazO8stNHyGzzddSTGHVfrUWy9VaTguzUhV/cd2QSe0wCXp9obT++vRs4KU0UCx
+X-Received: by 2002:a63:ff4a:: with SMTP id s10mr10045451pgk.166.1569601128664;
+ Fri, 27 Sep 2019 09:18:48 -0700 (PDT)
+Date:   Fri, 27 Sep 2019 09:18:32 -0700
 In-Reply-To: <20190927161836.57978-1-bgardon@google.com>
-Message-Id: <20190927161836.57978-4-bgardon@google.com>
+Message-Id: <20190927161836.57978-5-bgardon@google.com>
 Mime-Version: 1.0
 References: <20190927161836.57978-1-bgardon@google.com>
 X-Mailer: git-send-email 2.23.0.444.g18eeb5a265-goog
-Subject: [PATCH 3/9] KVM: selftests: Add memory size parameter to the demand
- paging test
+Subject: [PATCH 4/9] KVM: selftests: Pass args to vCPU instead of using globals
 From:   Ben Gardon <bgardon@google.com>
 To:     kvm@vger.kernel.org, linux-kselftest@vger.kernel.org
 Cc:     Paolo Bonzini <pbonzini@redhat.com>,
@@ -62,146 +61,177 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add an argument to allow the demand paging test to work on larger and
-smaller guest sizes.
+In preparation for supporting multiple vCPUs in the demand paging test,
+pass arguments to the vCPU instead of syncing globals to it.
 
 Signed-off-by: Ben Gardon <bgardon@google.com>
 ---
- .../selftests/kvm/demand_paging_test.c        | 55 ++++++++++++-------
- 1 file changed, 34 insertions(+), 21 deletions(-)
+ .../selftests/kvm/demand_paging_test.c        | 61 +++++++++++--------
+ 1 file changed, 37 insertions(+), 24 deletions(-)
 
 diff --git a/tools/testing/selftests/kvm/demand_paging_test.c b/tools/testing/selftests/kvm/demand_paging_test.c
-index 61ba4e6a8214a..19982a33a0ca2 100644
+index 19982a33a0ca2..8fd46e99d9e30 100644
 --- a/tools/testing/selftests/kvm/demand_paging_test.c
 +++ b/tools/testing/selftests/kvm/demand_paging_test.c
-@@ -32,6 +32,8 @@
- /* Default guest test virtual memory offset */
- #define DEFAULT_GUEST_TEST_MEM		0xc0000000
+@@ -44,7 +44,6 @@
+  */
+ static uint64_t host_page_size;
+ static uint64_t guest_page_size;
+-static uint64_t guest_num_pages;
  
-+#define DEFAULT_GUEST_TEST_MEM_SIZE (1 << 30) /* 1G */
+ static char *guest_data_prototype;
+ 
+@@ -65,14 +64,13 @@ static uint64_t guest_test_virt_mem = DEFAULT_GUEST_TEST_MEM;
+  * Continuously write to the first 8 bytes of each page in the demand paging
+  * memory region.
+  */
+-static void guest_code(void)
++static void guest_code(uint64_t gva, uint64_t pages)
+ {
+ 	int i;
+ 
+-	for (i = 0; i < guest_num_pages; i++) {
+-		uint64_t addr = guest_test_virt_mem;
++	for (i = 0; i < pages; i++) {
++		uint64_t addr = gva + (i * guest_page_size);
+ 
+-		addr += i * guest_page_size;
+ 		addr &= ~(host_page_size - 1);
+ 		*(uint64_t *)addr = 0x0123456789ABCDEF;
+ 	}
+@@ -84,18 +82,31 @@ static void guest_code(void)
+ static void *host_test_mem;
+ static uint64_t host_num_pages;
+ 
++struct vcpu_thread_args {
++	uint64_t gva;
++	uint64_t pages;
++	struct kvm_vm *vm;
++	int vcpu_id;
++};
 +
- #define __NR_userfaultfd 323
+ static void *vcpu_worker(void *data)
+ {
+ 	int ret;
+-	struct kvm_vm *vm = data;
++	struct vcpu_thread_args *args = (struct vcpu_thread_args *)data;
++	struct kvm_vm *vm = args->vm;
++	int vcpu_id = args->vcpu_id;
++	uint64_t gva = args->gva;
++	uint64_t pages = args->pages;
+ 	struct kvm_run *run;
  
- /*
-@@ -255,10 +257,9 @@ static int setup_demand_paging(struct kvm_vm *vm,
- 	return 0;
- }
+-	run = vcpu_state(vm, VCPU_ID);
++	vcpu_args_set(vm, vcpu_id, 2, gva, pages);
++
++	run = vcpu_state(vm, vcpu_id);
  
--#define GUEST_MEM_SHIFT 30 /* 1G */
+ 	/* Let the guest access its memory */
+-	ret = _vcpu_run(vm, VCPU_ID);
++	ret = _vcpu_run(vm, vcpu_id);
+ 	TEST_ASSERT(ret == 0, "vcpu_run failed: %d\n", ret);
+-	if (get_ucall(vm, VCPU_ID, NULL) != UCALL_SYNC) {
++	if (get_ucall(vm, vcpu_id, NULL) != UCALL_SYNC) {
+ 		TEST_ASSERT(false,
+ 			    "Invalid guest sync status: exit_reason=%s\n",
+ 			    exit_reason_str(run->exit_reason));
+@@ -259,11 +270,13 @@ static int setup_demand_paging(struct kvm_vm *vm,
+ 
  #define PAGE_SHIFT_4K  12
  
--static void run_test(enum vm_guest_mode mode)
-+static void run_test(enum vm_guest_mode mode, uint64_t guest_memory_bytes)
+-static void run_test(enum vm_guest_mode mode, uint64_t guest_memory_bytes)
++static void run_test(enum vm_guest_mode mode, uint64_t vcpu_wss)
  {
  	pthread_t vcpu_thread;
  	pthread_t uffd_handler_thread;
-@@ -266,33 +267,40 @@ static void run_test(enum vm_guest_mode mode)
+ 	struct kvm_vm *vm;
++	struct vcpu_thread_args vcpu_args;
++	uint64_t guest_num_pages;
  	int r;
  
  	/*
--	 * We reserve page table for 2 times of extra dirty mem which
--	 * will definitely cover the original (1G+) test range.  Here
--	 * we do the calculation with 4K page size which is the
--	 * smallest so the page number will be enough for all archs
--	 * (e.g., 64K page size guest will need even less memory for
--	 * page tables).
-+	 * We reserve page table for twice the ammount of memory we intend
-+	 * to use in the test region for demand paging. Here we do the
-+	 * calculation with 4K page size which is the smallest so the page
-+	 * number will be enough for all archs. (e.g., 64K page size guest
-+	 * will need even less memory for page tables).
+@@ -273,16 +286,15 @@ static void run_test(enum vm_guest_mode mode, uint64_t guest_memory_bytes)
+ 	 * number will be enough for all archs. (e.g., 64K page size guest
+ 	 * will need even less memory for page tables).
  	 */
- 	vm = create_vm(mode, VCPU_ID,
--		       2ul << (GUEST_MEM_SHIFT - PAGE_SHIFT_4K),
-+		       (2 * guest_memory_bytes) >> PAGE_SHIFT_4K,
+-	vm = create_vm(mode, VCPU_ID,
+-		       (2 * guest_memory_bytes) >> PAGE_SHIFT_4K,
++	vm = create_vm(mode, VCPU_ID, (2 * vcpu_wss) >> PAGE_SHIFT_4K,
  		       guest_code);
  
  	guest_page_size = vm_get_page_size(vm);
--	/*
--	 * A little more than 1G of guest page sized pages.  Cover the
--	 * case where the size is not aligned to 64 pages.
--	 */
--	guest_num_pages = (1ul << (GUEST_MEM_SHIFT -
--				   vm_get_page_shift(vm))) + 16;
-+
-+	TEST_ASSERT(guest_memory_bytes % guest_page_size == 0,
-+		    "Guest memory size is not guest page size aligned.");
-+
-+	guest_num_pages = guest_memory_bytes / guest_page_size;
-+
+ 
+-	TEST_ASSERT(guest_memory_bytes % guest_page_size == 0,
++	TEST_ASSERT(vcpu_wss % guest_page_size == 0,
+ 		    "Guest memory size is not guest page size aligned.");
+ 
+-	guest_num_pages = guest_memory_bytes / guest_page_size;
++	guest_num_pages = vcpu_wss / guest_page_size;
+ 
  #ifdef __s390x__
  	/* Round up to multiple of 1M (segment size) */
- 	guest_num_pages = (guest_num_pages + 0xff) & ~0xffUL;
- #endif
-+	/*
-+	 * If there should be more memory in the guest test region than there
-+	 * can be pages in the guest, it will definitely cause problems.
-+	 */
-+	TEST_ASSERT(guest_num_pages < vm_get_max_gfn(vm),
-+		    "Requested more guest memory than address space allows.\n"
-+		    "    guest pages: %lx max gfn: %lx\n",
-+		    guest_num_pages, vm_get_max_gfn(vm));
+@@ -298,9 +310,9 @@ static void run_test(enum vm_guest_mode mode, uint64_t guest_memory_bytes)
+ 		    guest_num_pages, vm_get_max_gfn(vm));
  
  	host_page_size = getpagesize();
--	host_num_pages = (guest_num_pages * guest_page_size) / host_page_size +
--			 !!((guest_num_pages * guest_page_size) %
--			    host_page_size);
-+	TEST_ASSERT(guest_memory_bytes % host_page_size == 0,
-+		    "Guest memory size is not host page size aligned.");
-+	host_num_pages = guest_memory_bytes / host_page_size;
+-	TEST_ASSERT(guest_memory_bytes % host_page_size == 0,
++	TEST_ASSERT(vcpu_wss % host_page_size == 0,
+ 		    "Guest memory size is not host page size aligned.");
+-	host_num_pages = guest_memory_bytes / host_page_size;
++	host_num_pages = vcpu_wss / host_page_size;
  
  	guest_test_phys_mem = (vm_get_max_gfn(vm) - guest_num_pages) *
  			      guest_page_size;
-@@ -369,7 +377,7 @@ static void help(char *name)
- 	int i;
+@@ -344,10 +356,12 @@ static void run_test(enum vm_guest_mode mode, uint64_t guest_memory_bytes)
+ 	/* Export the shared variables to the guest */
+ 	sync_global_to_guest(vm, host_page_size);
+ 	sync_global_to_guest(vm, guest_page_size);
+-	sync_global_to_guest(vm, guest_test_virt_mem);
+-	sync_global_to_guest(vm, guest_num_pages);
  
- 	puts("");
--	printf("usage: %s [-h] [-m mode]\n", name);
-+	printf("usage: %s [-h] [-m mode] [-b bytes test memory]\n", name);
- 	printf(" -m: specify the guest mode ID to test\n"
- 	       "     (default: test all supported modes)\n"
- 	       "     This option may be used multiple times.\n"
-@@ -378,6 +386,8 @@ static void help(char *name)
+-	pthread_create(&vcpu_thread, NULL, vcpu_worker, vm);
++	vcpu_args.vm = vm;
++	vcpu_args.vcpu_id = VCPU_ID;
++	vcpu_args.gva = guest_test_virt_mem;
++	vcpu_args.pages = guest_num_pages;
++	pthread_create(&vcpu_thread, NULL, vcpu_worker, &vcpu_args);
+ 
+ 	/* Wait for the vcpu thread to quit */
+ 	pthread_join(vcpu_thread, NULL);
+@@ -386,8 +400,7 @@ static void help(char *name)
  		printf("         %d:    %s%s\n", i, vm_guest_mode_string(i),
  		       vm_guest_mode_params[i].supported ? " (supported)" : "");
  	}
-+	printf(" -b: specify the number of bytes of memory which should be\n"
-+	       "     allocated to the guest.\n");
+-	printf(" -b: specify the number of bytes of memory which should be\n"
+-	       "     allocated to the guest.\n");
++	printf(" -b: specify the working set size, in bytes for each vCPU.\n");
  	puts("");
  	exit(0);
  }
-@@ -385,6 +395,7 @@ static void help(char *name)
+@@ -395,7 +408,7 @@ static void help(char *name)
  int main(int argc, char *argv[])
  {
  	bool mode_selected = false;
-+	uint64_t guest_memory_bytes = DEFAULT_GUEST_TEST_MEM_SIZE;
+-	uint64_t guest_memory_bytes = DEFAULT_GUEST_TEST_MEM_SIZE;
++	uint64_t vcpu_wss = DEFAULT_GUEST_TEST_MEM_SIZE;
  	unsigned int mode;
  	int opt, i;
  #ifdef __aarch64__
-@@ -410,7 +421,7 @@ int main(int argc, char *argv[])
- 	vm_guest_mode_params_init(VM_MODE_P40V48_4K, true, true);
- #endif
- 
--	while ((opt = getopt(argc, argv, "hm:")) != -1) {
-+	while ((opt = getopt(argc, argv, "hm:b:")) != -1) {
- 		switch (opt) {
- 		case 'm':
- 			if (!mode_selected) {
-@@ -423,6 +434,8 @@ int main(int argc, char *argv[])
- 				    "Guest mode ID %d too big", mode);
+@@ -435,7 +448,7 @@ int main(int argc, char *argv[])
  			vm_guest_mode_params[mode].enabled = true;
  			break;
-+		case 'b':
-+			guest_memory_bytes = strtoull(optarg, NULL, 0);
+ 		case 'b':
+-			guest_memory_bytes = strtoull(optarg, NULL, 0);
++			vcpu_wss = strtoull(optarg, NULL, 0);
  		case 'h':
  		default:
  			help(argv[0]);
-@@ -436,7 +449,7 @@ int main(int argc, char *argv[])
+@@ -449,7 +462,7 @@ int main(int argc, char *argv[])
  		TEST_ASSERT(vm_guest_mode_params[i].supported,
  			    "Guest mode ID %d (%s) not supported.",
  			    i, vm_guest_mode_string(i));
--		run_test(i);
-+		run_test(i, guest_memory_bytes);
+-		run_test(i, guest_memory_bytes);
++		run_test(i, vcpu_wss);
  	}
  
  	return 0;
