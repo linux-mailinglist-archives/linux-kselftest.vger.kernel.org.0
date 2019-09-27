@@ -2,178 +2,330 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 49861C0D1C
-	for <lists+linux-kselftest@lfdr.de>; Fri, 27 Sep 2019 23:18:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DBB7C0D79
+	for <lists+linux-kselftest@lfdr.de>; Fri, 27 Sep 2019 23:44:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726673AbfI0VPt (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 27 Sep 2019 17:15:49 -0400
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:35580 "EHLO
-        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1725789AbfI0VPs (ORCPT
+        id S1728304AbfI0Vou (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 27 Sep 2019 17:44:50 -0400
+Received: from userp2120.oracle.com ([156.151.31.85]:42374 "EHLO
+        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726029AbfI0Vou (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 27 Sep 2019 17:15:48 -0400
-Received: from pps.filterd (m0001303.ppops.net [127.0.0.1])
-        by m0001303.ppops.net (8.16.0.42/8.16.0.42) with SMTP id x8RLDeT6007829;
-        Fri, 27 Sep 2019 14:15:30 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
- : date : message-id : references : in-reply-to : content-type : content-id
- : content-transfer-encoding : mime-version; s=facebook;
- bh=ceqPOS0TA1R8thoAAEOEdvWi7BGLAkHVcwSe3Wyx3/Q=;
- b=E58KgLAQi3h/8/RUzWVW9i7pVNeHMlUW03MApUFPMwcTVwmF9KyUlRzGBF7ZPyuAPSQA
- BN+6jB6FToicGqLcn2Cob0yBe2YSMEi/fxOW+LQF2EVbCA7VBucfkm9WqI95O58R/iw/
- R9CKTdtDSqBJpxM9IwU4zgAigguSf+rCnio= 
-Received: from mail.thefacebook.com (mailout.thefacebook.com [199.201.64.23])
-        by m0001303.ppops.net with ESMTP id 2v9mph1uw7-4
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
-        Fri, 27 Sep 2019 14:15:30 -0700
-Received: from prn-mbx05.TheFacebook.com (2620:10d:c081:6::19) by
- prn-hub01.TheFacebook.com (2620:10d:c081:35::125) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.1.1713.5; Fri, 27 Sep 2019 14:15:26 -0700
-Received: from prn-hub02.TheFacebook.com (2620:10d:c081:35::126) by
- prn-mbx05.TheFacebook.com (2620:10d:c081:6::19) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.1.1713.5; Fri, 27 Sep 2019 14:15:26 -0700
-Received: from NAM01-BN3-obe.outbound.protection.outlook.com (192.168.54.28)
- by o365-in.thefacebook.com (192.168.16.26) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.1.1713.5
- via Frontend Transport; Fri, 27 Sep 2019 14:15:26 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=dtbnOY9aIwHPhY58Sz5PN71UdvSEENqsDIH884MWiXkCGlj5GM67zT9+R6SgJi48JC6vJwUMLA0PB1xWsD7LTVjd8RBPzXck6/euqFK9a11cRTGFrmCXrYMOnC9XL3+Q+GGz3D8Cu1/cTaCstz7Zq/y6sbsfVYQzy3A4uEvUB8m6WIPASBTClw0roV9Z4AwBbYtbkve7seS6T/g5njgLe4Zvozxd5SqXGAg/C4o2KzMxDO5PuW6FfrqJ4E6yQ7cqD8b81I5x0freUNLMG3KcHNMbdmbQ7RD63XxwZ5+54dKw/SjfZjB5i9IIGyc1d3KInDyfutv228ISeg1m4Wzfcg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ceqPOS0TA1R8thoAAEOEdvWi7BGLAkHVcwSe3Wyx3/Q=;
- b=m6bOIplSL/Q+oWDgHnP49Z2GTlH75fS2wHKIjghOf03UzpbsLUIiX89196MO8+f/TQmSKFujUFcP3ytPSH4OGPwLiLvbXL1XDGUAyrSDNzf2xXsY0pHQbXmcdxiENVxya2Lthd9rGgwRUlACAYWJ0IhtSJgKli1S+Wv6ksREMNZGDrdeNFl1duUibmM8lGDxPMx7jTee0gR9Fau/6jRMLqtwRBR+nWvLGIZLjiHFwtFr19C02AX1FAx2rT2q/hHZpnM+orsnyqDrZz0HtutgAOetUvqX4r8k3/haSzvvrhuJxQ8Z5yFNm/T3rSr97nlrAWJW38SLGRnQ4R6aQ8R39A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
- header.d=fb.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.onmicrosoft.com;
- s=selector2-fb-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ceqPOS0TA1R8thoAAEOEdvWi7BGLAkHVcwSe3Wyx3/Q=;
- b=QE023yxhQ4mxNveVhTE7pTOV4IeDFDP1Vp+UWEos5Tx8P6I1rNzQWxkRML3vgfhZ3RD2IDpf5H7D9vRy434MOA2wF9Hy6Lm7Mi4cVDMC6jWjOMDL/M4wTqhv8wgvjWJFaVU4lKZ7sJiHzPG7ImC57mBeOlk4lrlSC3KHJqhw9LM=
-Received: from MWHPR15MB1165.namprd15.prod.outlook.com (10.175.3.22) by
- MWHPR15MB1453.namprd15.prod.outlook.com (10.173.234.143) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2305.17; Fri, 27 Sep 2019 21:15:25 +0000
-Received: from MWHPR15MB1165.namprd15.prod.outlook.com
- ([fe80::a828:5750:379d:b9a1]) by MWHPR15MB1165.namprd15.prod.outlook.com
- ([fe80::a828:5750:379d:b9a1%8]) with mapi id 15.20.2305.017; Fri, 27 Sep 2019
- 21:15:24 +0000
-From:   Song Liu <songliubraving@fb.com>
-To:     Shuah Khan <skhan@linuxfoundation.org>
-CC:     Song Liu <liu.song.a23@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin Lau <kafai@fb.com>, "Yonghong Song" <yhs@fb.com>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH] tools: bpf: Use !building_out_of_srctree to determine
- srctree
-Thread-Topic: [PATCH] tools: bpf: Use !building_out_of_srctree to determine
- srctree
-Thread-Index: AQHVdNDXBxSGfE5tmEyE9kgIwPwciqc/3XAAgAAFZoCAACTiAA==
-Date:   Fri, 27 Sep 2019 21:15:24 +0000
-Message-ID: <57756C81-5B82-4E56-9CF0-5C1C4A4FBEFC@fb.com>
-References: <20190927011344.4695-1-skhan@linuxfoundation.org>
- <CAPhsuW5EncjNRGjt7F_BN2bNhRkf=uXVeDe6NCbJe=K2J+hdyA@mail.gmail.com>
- <5ec40572-5df9-0e5b-5a85-eb53be48b87d@linuxfoundation.org>
-In-Reply-To: <5ec40572-5df9-0e5b-5a85-eb53be48b87d@linuxfoundation.org>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-mailer: Apple Mail (2.3445.104.11)
-x-originating-ip: [2620:10d:c090:200::1:cdab]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 68c45fa1-16b5-4257-c9fe-08d7438fd042
-x-ms-traffictypediagnostic: MWHPR15MB1453:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <MWHPR15MB14533876EBC7A220754C87C7B3810@MWHPR15MB1453.namprd15.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:8882;
-x-forefront-prvs: 0173C6D4D5
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(346002)(376002)(39860400002)(396003)(136003)(366004)(199004)(189003)(51914003)(8676002)(478600001)(316002)(76116006)(64756008)(66446008)(36756003)(66556008)(66476007)(66946007)(81156014)(6246003)(14444005)(256004)(6486002)(4326008)(50226002)(76176011)(6436002)(8936002)(81166006)(6512007)(229853002)(71200400001)(86362001)(2616005)(446003)(11346002)(486006)(46003)(99286004)(71190400001)(305945005)(14454004)(6916009)(33656002)(476003)(7736002)(5660300002)(25786009)(186003)(2906002)(53546011)(102836004)(54906003)(6506007)(6116002);DIR:OUT;SFP:1102;SCL:1;SRVR:MWHPR15MB1453;H:MWHPR15MB1165.namprd15.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
-received-spf: None (protection.outlook.com: fb.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: heJ5Dq+R8fRhqy+zbV0eVu7LpK+eOf08edNY6+/2OotD1YQWSp6M814+a3R56V0/KJE5Xo0gPQMyDmBHDBIdcmo2wh/2MBLXcrnW9izbx5+hpbwmM7mc+lDp8xuVCufgfaWtzaBL2J4Lf7VeU2z8/FIEYmFVpA1bBR0LDoOskmTKv1XlmQzTShdhu1sFkUsjPe4NcIaTvf3zOzqDjP4FRplN2ecMcoimXx+p2TkK6D2pTXlSNH50FoGkoRQK9PNX6YNRx9E8cyZY42Q8lgF5Uv446xoRlMMNpDF1kqo0EWgr4M7BtKD0046teqJ1oEfx/vzfrjVvznHbZbgWxJ4N5ylEf/XUNDMj2qkFLBOAnAPVRjKk3DXxWtlVAnCrAIUUp0vrLXpv4dfgjS4VLR98+Y4XZSsMLtmci+WYmR1QJdY=
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <D6C6AF43DDFBD14B8925B24E4E06C797@namprd15.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
+        Fri, 27 Sep 2019 17:44:50 -0400
+Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
+        by userp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x8RLdUcN001264;
+        Fri, 27 Sep 2019 21:44:37 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=subject : to : cc :
+ references : from : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=corp-2019-08-05;
+ bh=Hk4zBrC4ftfxAK0GhvkCyWFjYJFlQ+AvZq80XV4tPQs=;
+ b=Q7xnwh8VBKvYk0s/2s9ZAa4695mEN9M9MFwzaIRE3OKTzVqDb/gKe5JsdrJEjYCyYcOB
+ 9glF6Fck3L5gO7KleN7dlcWAKToYfpDiY10+ks7JdU3VVd6LVyBQ44JfpqHus0l5UEis
+ rbzmMH/8oXwt9HXCMgMmLoFsT+9fgfao1zIzjimBRvxSp7F+VeZm4+ZNhK2CAsJENQ1+
+ qQsMd7+ISG+IlEywedVmRTIQLuLQMbRucqvrkeDawVtfFe6m3qyBU0Op1ybCRsxPXDUw
+ ikoDYUFB4IQBM9+7w6xZKKBuPvmeCzR+BU964W41P/frBjsuXq+njNF490CeAI5smCry Pg== 
+Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
+        by userp2120.oracle.com with ESMTP id 2v5cgrmm6f-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 27 Sep 2019 21:44:37 +0000
+Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
+        by aserp3020.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x8RLiEWt129975;
+        Fri, 27 Sep 2019 21:44:36 GMT
+Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
+        by aserp3020.oracle.com with ESMTP id 2v9m3fq4v7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 27 Sep 2019 21:44:36 +0000
+Received: from abhmp0017.oracle.com (abhmp0017.oracle.com [141.146.116.23])
+        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id x8RLiZX0004387;
+        Fri, 27 Sep 2019 21:44:35 GMT
+Received: from [192.168.1.222] (/71.63.128.209)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Fri, 27 Sep 2019 14:44:35 -0700
+Subject: Re: [PATCH v5 4/7] hugetlb: disable region_add file_region coalescing
+To:     Mina Almasry <almasrymina@google.com>
+Cc:     shuah@kernel.org, rientjes@google.com, shakeelb@google.com,
+        gthelen@google.com, akpm@linux-foundation.org,
+        khalid.aziz@oracle.com, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        cgroups@vger.kernel.org, aneesh.kumar@linux.vnet.ibm.com,
+        mkoutny@suse.com
+References: <20190919222421.27408-1-almasrymina@google.com>
+ <20190919222421.27408-5-almasrymina@google.com>
+From:   Mike Kravetz <mike.kravetz@oracle.com>
+Message-ID: <62a2a742-1735-7272-3c6c-213efc7adb9f@oracle.com>
+Date:   Fri, 27 Sep 2019 14:44:33 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-Network-Message-Id: 68c45fa1-16b5-4257-c9fe-08d7438fd042
-X-MS-Exchange-CrossTenant-originalarrivaltime: 27 Sep 2019 21:15:24.7497
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: pzT4P4ntiSByp0037Hqeyp9HcRNpcWjfzwI+C+C1Y/8lnA61cRaLkHWmozD7W+PEMOj8MaGjF0qAApqiN6hnSg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR15MB1453
-X-OriginatorOrg: fb.com
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,1.0.8
- definitions=2019-09-27_09:2019-09-25,2019-09-27 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxscore=0
- lowpriorityscore=0 phishscore=0 priorityscore=1501 spamscore=0 bulkscore=0
- suspectscore=0 clxscore=1011 mlxlogscore=999 adultscore=0 malwarescore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-1908290000 definitions=main-1909270178
-X-FB-Internal: deliver
+In-Reply-To: <20190919222421.27408-5-almasrymina@google.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9393 signatures=668685
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
+ phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=999
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.0.1-1908290000 definitions=main-1909270183
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9393 signatures=668685
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
+ suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
+ lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1908290000
+ definitions=main-1909270183
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+On 9/19/19 3:24 PM, Mina Almasry wrote:
+> A follow up patch in this series adds hugetlb cgroup uncharge info the
+> file_region entries in resv->regions. The cgroup uncharge info may
+> differ for different regions, so they can no longer be coalesced at
+> region_add time. So, disable region coalescing in region_add in this
+> patch.
+> 
+> Behavior change:
+> 
+> Say a resv_map exists like this [0->1], [2->3], and [5->6].
+> 
+> Then a region_chg/add call comes in region_chg/add(f=0, t=5).
+> 
+> Old code would generate resv->regions: [0->5], [5->6].
+> New code would generate resv->regions: [0->1], [1->2], [2->3], [3->5],
+> [5->6].
+> 
+> Special care needs to be taken to handle the resv->adds_in_progress
+> variable correctly. In the past, only 1 region would be added for every
+> region_chg and region_add call. But now, each call may add multiple
+> regions, so we can no longer increment adds_in_progress by 1 in region_chg,
+> or decrement adds_in_progress by 1 after region_add or region_abort. Instead,
+> region_chg calls add_reservation_in_range() to count the number of regions
+> needed and allocates those, and that info is passed to region_add and
+> region_abort to decrement adds_in_progress correctly.
+> 
+> Signed-off-by: Mina Almasry <almasrymina@google.com>
+> 
+> ---
+>  mm/hugetlb.c | 273 +++++++++++++++++++++++++++++----------------------
+>  1 file changed, 158 insertions(+), 115 deletions(-)
+> 
+> diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+> index bac1cbdd027c..d03b048084a3 100644
+> --- a/mm/hugetlb.c
+> +++ b/mm/hugetlb.c
+> @@ -244,6 +244,12 @@ struct file_region {
+>  	long to;
+>  };
+> 
+> +/* Helper that removes a struct file_region from the resv_map cache and returns
+> + * it for use.
+> + */
+> +static struct file_region *
+> +get_file_region_entry_from_cache(struct resv_map *resv, long from, long to);
+> +
 
+Instead of the forward declaration, just put the function here.
 
-> On Sep 27, 2019, at 12:03 PM, Shuah Khan <skhan@linuxfoundation.org> wrot=
-e:
->=20
-> On 9/27/19 12:44 PM, Song Liu wrote:
->> On Thu, Sep 26, 2019 at 6:14 PM Shuah Khan <skhan@linuxfoundation.org> w=
-rote:
->>>=20
->>> make TARGETS=3Dbpf kselftest fails with:
->>>=20
->>> Makefile:127: tools/build/Makefile.include: No such file or directory
->>>=20
->>> When the bpf tool make is invoked from tools Makefile, srctree is
->>> cleared and the current logic check for srctree equals to empty
->>> string to determine srctree location from CURDIR.
->>>=20
->>> When the build in invoked from selftests/bpf Makefile, the srctree
->>> is set to "." and the same logic used for srctree equals to empty is
->>> needed to determine srctree.
->>>=20
->>> Check building_out_of_srctree undefined as the condition for both
->>> cases to fix "make TARGETS=3Dbpf kselftest" build failure.
->>>=20
->>> Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
->> The fix looks reasonable. Thanks!
->> However, I am still seeing some failure:
->> make TARGETS=3Dbpf kselftest
->> [...]
->> test_verifier.c
->> /data/users/songliubraving/kernel/linux-git/tools/testing/selftests/bpf/=
-test_stub.o
->> /data/users/songliubraving/kernel/linux-git/tools/testing/selftests/bpf/=
-libbpf.a
->> -lcap -lelf -lrt -lpthread -o
->> /data/users/songliubraving/kernel/linux-git/tools/testing/selftests/bpf/=
-test_verifier
->> make[3]: test_verifier.c: Command not found
->> Is this just a problem with my setup?
->=20
-> You are running into the second bpf failure because of the dependency
-> on the latest llvm. This is known issue with bpf test and it doesn't
-> compile on 5.4 and maybe even 5.3
->=20
+>  /* Must be called with resv->lock held. Calling this with count_only == true
+>   * will count the number of pages to be added but will not modify the linked
+>   * list.
+> @@ -251,51 +257,61 @@ struct file_region {
+>  static long add_reservation_in_range(struct resv_map *resv, long f, long t,
+>  				     bool count_only)
+>  {
+> -	long chg = 0;
+> +	long add = 0;
+>  	struct list_head *head = &resv->regions;
+> +	long last_accounted_offset = f;
+>  	struct file_region *rg = NULL, *trg = NULL, *nrg = NULL;
+> 
+> -	/* Locate the region we are before or in. */
+> -	list_for_each_entry (rg, head, link)
+> -		if (f <= rg->to)
+> -			break;
+> -
+> -	/* Round our left edge to the current segment if it encloses us. */
+> -	if (f > rg->from)
+> -		f = rg->from;
+> -
+> -	chg = t - f;
+> +	/* In this loop, we essentially handle an entry for the range
+> +	 * last_accounted_offset -> rg->from, at every iteration, with some
+> +	 * bounds checking.
+> +	 */
+> +	list_for_each_entry_safe(rg, trg, head, link) {
+> +		/* Skip irrelevant regions that start before our range. */
+> +		if (rg->from < f) {
+> +			/* If this region ends after the last accounted offset,
+> +			 * then we need to update last_accounted_offset.
+> +			 */
+> +			if (rg->to > last_accounted_offset)
+> +				last_accounted_offset = rg->to;
+> +			continue;
+> +		}
+> 
+> -	/* Check for and consume any regions we now overlap with. */
+> -	nrg = rg;
+> -	list_for_each_entry_safe (rg, trg, rg->link.prev, link) {
+> -		if (&rg->link == head)
+> -			break;
+> +		/* When we find a region that starts beyond our range, we've
+> +		 * finished.
+> +		 */
+>  		if (rg->from > t)
+>  			break;
+> 
+> -		/* We overlap with this area, if it extends further than
+> -		 * us then we must extend ourselves.  Account for its
+> -		 * existing reservation.
+> +		/* Add an entry for last_accounted_offset -> rg->from, and
+> +		 * update last_accounted_offset.
+>  		 */
+> -		if (rg->to > t) {
+> -			chg += rg->to - t;
+> -			t = rg->to;
+> +		if (rg->from > last_accounted_offset) {
+> +			add += rg->from - last_accounted_offset;
+> +			if (!count_only) {
+> +				nrg = get_file_region_entry_from_cache(
+> +					resv, last_accounted_offset, rg->from);
+> +				list_add(&nrg->link, rg->link.prev);
+> +			}
+>  		}
+> -		chg -= rg->to - rg->from;
+> 
+> -		if (!count_only && rg != nrg) {
+> -			list_del(&rg->link);
+> -			kfree(rg);
+> -		}
+> +		last_accounted_offset = rg->to;
+>  	}
+> 
+> -	if (!count_only) {
+> -		nrg->from = f;
+> -		nrg->to = t;
+> +	/* Handle the case where our range extends beyond
+> +	 * last_accounted_offset.
+> +	 */
+> +	if (last_accounted_offset < t) {
+> +		add += t - last_accounted_offset;
+> +		if (!count_only) {
+> +			nrg = get_file_region_entry_from_cache(
+> +				resv, last_accounted_offset, t);
+> +			list_add(&nrg->link, rg->link.prev);
+> +		}
+> +		last_accounted_offset = t;
+>  	}
+> 
+> -	return chg;
+> +	return add;
+>  }
+> 
+>  /*
+> @@ -305,46 +321,24 @@ static long add_reservation_in_range(struct resv_map *resv, long f, long t,
 
-Thanks for the clarification.=20
+The start of this comment block says,
 
-Acked-by: Song Liu <songliubraving@fb.com>
+/*
+ * Add the huge page range represented by [f, t) to the reserve
+ * map.  Existing regions will be expanded to accommodate the specified
+ * range, or a region will be taken from the cache.
 
+We are no longer expanding existing regions.  Correct?
+As an optimization, I guess we could coalesce/combine reion entries as
+long as they are for the same cgroup.  However, it may not be worth the
+effort.
 
+>   * must exist in the cache due to the previous call to region_chg with
+>   * the same range.
+>   *
+> + * regions_needed is the out value provided by a previous
+> + * call to region_chg.
+> + *
+>   * Return the number of new huge pages added to the map.  This
+>   * number is greater than or equal to zero.
+>   */
+> -static long region_add(struct resv_map *resv, long f, long t)
+> +static long region_add(struct resv_map *resv, long f, long t,
+> +		       long regions_needed)
+>  {
+> -	struct list_head *head = &resv->regions;
+> -	struct file_region *rg, *nrg;
+>  	long add = 0;
+> 
+>  	spin_lock(&resv->lock);
+> -	/* Locate the region we are either in or before. */
+> -	list_for_each_entry(rg, head, link)
+> -		if (f <= rg->to)
+> -			break;
+> 
+> -	/*
+> -	 * If no region exists which can be expanded to include the
+> -	 * specified range, pull a region descriptor from the cache
+> -	 * and use it for this range.
+> -	 */
+> -	if (&rg->link == head || t < rg->from) {
+> -		VM_BUG_ON(resv->region_cache_count <= 0);
+> -
+> -		resv->region_cache_count--;
+> -		nrg = list_first_entry(&resv->region_cache, struct file_region,
+> -					link);
+> -		list_del(&nrg->link);
+> -
+> -		nrg->from = f;
+> -		nrg->to = t;
+> -		list_add(&nrg->link, rg->link.prev);
+> -
+> -		add += t - f;
+> -		goto out_locked;
+> -	}
+> +	VM_BUG_ON(resv->region_cache_count < regions_needed);
+> 
+>  	add = add_reservation_in_range(resv, f, t, false);
+> +	resv->adds_in_progress -= regions_needed;
 
+Consider this example,
+
+- region_chg(1,2)
+	adds_in_progress = 1
+	cache entries 1
+- region_chg(3,4)
+	adds_in_progress = 2
+	cache entries 2
+- region_chg(5,6)
+	adds_in_progress = 3
+	cache entries 3
+
+At this point, no region descriptors are in the map because only
+region_chg has been called.
+
+- region_chg(0,6)
+	adds_in_progress = 4
+	cache entries 4
+
+Is that correct so far?
+
+Then the following sequence happens,
+
+- region_add(1,2)
+	adds_in_progress = 3
+	cache entries 3
+- region_add(3,4)
+	adds_in_progress = 2
+	cache entries 2
+- region_add(5,6)
+	adds_in_progress = 1
+	cache entries 1
+
+list of region descriptors is:
+[1->2] [3->4] [5->6]
+
+- region_add(0,6)
+This is going to require 3 cache entries but only one is in the cache.
+I think we are going to BUG in get_file_region_entry_from_cache() the
+second time it is called from add_reservation_in_range().
+
+I stopped looking at the code here as things will need to change if this
+is a real issue.
+-- 
+Mike Kravetz
