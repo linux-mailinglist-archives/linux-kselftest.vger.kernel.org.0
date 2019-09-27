@@ -2,117 +2,99 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EB830C0A37
-	for <lists+linux-kselftest@lfdr.de>; Fri, 27 Sep 2019 19:20:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01B61C0B82
+	for <lists+linux-kselftest@lfdr.de>; Fri, 27 Sep 2019 20:44:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728030AbfI0RUR (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 27 Sep 2019 13:20:17 -0400
-Received: from mail-lj1-f194.google.com ([209.85.208.194]:42665 "EHLO
-        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728031AbfI0RUQ (ORCPT
+        id S1728346AbfI0SoS (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 27 Sep 2019 14:44:18 -0400
+Received: from mail-qt1-f196.google.com ([209.85.160.196]:45577 "EHLO
+        mail-qt1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728321AbfI0SoR (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 27 Sep 2019 13:20:16 -0400
-Received: by mail-lj1-f194.google.com with SMTP id y23so3226778lje.9
-        for <linux-kselftest@vger.kernel.org>; Fri, 27 Sep 2019 10:20:14 -0700 (PDT)
+        Fri, 27 Sep 2019 14:44:17 -0400
+Received: by mail-qt1-f196.google.com with SMTP id c21so8469646qtj.12;
+        Fri, 27 Sep 2019 11:44:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
+        d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=O/eekwhhc/lEaErl1cWQvuZyKqEyMda5rbusW6YMK7I=;
-        b=LkvK4hE626X9t4s92tPCDu4GVP+JW+rdiOHfvNh9N4jF4NJ9fWlvc7td1nIDU+CA3n
-         PEztECpiktmStFqQ0huvXxeFoYFnurGmt4lmEj4thS8is9bkVhtTwcYhaFJXZOE0CtAy
-         FW3A90ZFOAblRyxevEgwyKNwOoEO9RZOQsrxo=
+        bh=2og6D8JNGUcFzo2+ZOKB4t8tH7Nwv5RRVJlFtszjd+8=;
+        b=unbvXDxnpNpcf8CoeSiwRYEbaguyEnVe7BU2tnKz0HxgW0iup/mqrk+c66d6zG0Jr8
+         II95/A/X4I8kXM+g/a8ggxkX7nJMkYT9ij5nqrQEk33ll61o9WeX7MnPz4Kh9FAP1U6w
+         d4cy5S1hMCu9Oml+aTdAivYdpB0tnqVlqkjntzfd5AuoRtB/T5J74fjIz8gQHNVw+Y8P
+         /h0qSEubAKZtbVGcTy0Eqh0ya8m/WJdKRJYNzfxH2Ya6/iXwevjmn+4XqWXBkUF+El7u
+         0WnN6VOXJPuucvvX89TO9VbkZ/oaDGUVgBsmfQb2RLpW9tJEaaM0htpGrjmhR0I6pkZF
+         0rWQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=O/eekwhhc/lEaErl1cWQvuZyKqEyMda5rbusW6YMK7I=;
-        b=VXd3i2dstIoCx5KIqfbUEaf8qwMT9T2VVYYDiT/q6VFbUuS98vjns9uGBGvIxqym1M
-         sR//EoVvTA189t6S3Xm1hdRi9g1mqc7CA+OjHEj+FNoqk22JMWPw6shHVI/o+g3TIzfj
-         6Qwfddc2L29czp9HaquSZK1Ud6vJT+br49VlfBpkPt5fUUa5ByU8qyRg8BDHP6Y3JXLj
-         iQkGNnUON2dX0xN5ailFVU/1dgxtSV+MT2hRsCSMSh0AJyCLkChIiIhYltqOmCCXLazL
-         CbHFhhiNSe9HYePclLFqGQDJaqqQgfIYAd9En1krJnUPUZmPgS6KcoOa0oJmY2RuL0FQ
-         ee0g==
-X-Gm-Message-State: APjAAAVI/MwDcwpiI2fLO9Dws2wp32Ns29o0eIUrD7hgJBoI5oKgoIn5
-        lt8g0XdX3f6WvnnRiCc72LKs7SYmkH66tYRIu2g1eQ==
-X-Google-Smtp-Source: APXvYqwQ0sJhbgkRNydnIi4RrSi/dFi7mwr/zU4s+w0Ydcubj32ElrELRy3PvgOlQ56qXz+SBC5iH82TlZ2DYY/65VY=
-X-Received: by 2002:a2e:5d17:: with SMTP id r23mr3716224ljb.229.1569604813845;
- Fri, 27 Sep 2019 10:20:13 -0700 (PDT)
+        bh=2og6D8JNGUcFzo2+ZOKB4t8tH7Nwv5RRVJlFtszjd+8=;
+        b=VEi091ae405kHpUMK1amldLAYLRKLUpcTufMQQhAIp4+k+lGFDtWYRsLhIw2XkYLOy
+         PD9x5Ga/P3wWuqMdkUNQVB+wU74NjuIuI5wkk4AXyf6nYpBg3bQ/FnmKYAdwEe7Sp8Bj
+         y8QtaRTT0bQmpdoYZ0ztkoqoutHA78uffhfxolvq05z6/yDbcd8WLO4qLBneDxHaQ9PT
+         ALaiZh6YuPmNeyDBsV1shp0xPPwUPTEZL460/22HvsKgipQ3NC1lheqLu79z1tDM0t1d
+         Iwqbd091LVDRowhVjvU6VTwIw/hghA8SglbDGceDdD+0SoHDq8oalfsNXAgVQkg4nFKP
+         jS7A==
+X-Gm-Message-State: APjAAAV4V5nwtDlrh6vRuwKuRkGZ0XES0b0shoKxzNRfKfKB9QVJefBj
+        CipZuqVThavSIr6VoCZG0GglD/VJdp5EJINQ/y8=
+X-Google-Smtp-Source: APXvYqwAlwnd4veOBCqFHae+zgONBZFe8cp9ApiFkNKCb8JCy0Kv1XtjK2VEE2CERXOf4DuvZw71LzlZsjVhDobvMHg=
+X-Received: by 2002:ac8:1099:: with SMTP id a25mr11275982qtj.308.1569609855302;
+ Fri, 27 Sep 2019 11:44:15 -0700 (PDT)
 MIME-Version: 1.0
-References: <20190822205533.4877-1-david.abdurachmanov@sifive.com>
- <alpine.DEB.2.21.9999.1908231717550.25649@viisi.sifive.com>
- <20190826145756.GB4664@cisco> <CAEn-LTrtn01=fp6taBBG_QkfBtgiJyt6oUjZJOi6VN8OeXp6=g@mail.gmail.com>
- <201908261043.08510F5E66@keescook> <alpine.DEB.2.21.9999.1908281825240.13811@viisi.sifive.com>
-In-Reply-To: <alpine.DEB.2.21.9999.1908281825240.13811@viisi.sifive.com>
-From:   Kees Cook <keescook@chromium.org>
-Date:   Fri, 27 Sep 2019 10:20:02 -0700
-Message-ID: <CAJr-aD=UnCN9E_mdVJ2H5nt=6juRSWikZnA5HxDLQxXLbsRz-w@mail.gmail.com>
-Subject: Re: [PATCH v2] riscv: add support for SECCOMP and SECCOMP_FILTER
-To:     Paul Walmsley <paul.walmsley@sifive.com>
-Cc:     Tycho Andersen <tycho@tycho.ws>,
-        David Abdurachmanov <david.abdurachmanov@gmail.com>,
-        Palmer Dabbelt <palmer@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Oleg Nesterov <oleg@redhat.com>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Will Drewry <wad@chromium.org>, Shuah Khan <shuah@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
+References: <20190927011344.4695-1-skhan@linuxfoundation.org>
+In-Reply-To: <20190927011344.4695-1-skhan@linuxfoundation.org>
+From:   Song Liu <liu.song.a23@gmail.com>
+Date:   Fri, 27 Sep 2019 11:44:04 -0700
+Message-ID: <CAPhsuW5EncjNRGjt7F_BN2bNhRkf=uXVeDe6NCbJe=K2J+hdyA@mail.gmail.com>
+Subject: Re: [PATCH] tools: bpf: Use !building_out_of_srctree to determine srctree
+To:     Shuah Khan <skhan@linuxfoundation.org>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Martin KaFai Lau <kafai@fb.com>,
         Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        David Abdurachmanov <david.abdurachmanov@sifive.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Allison Randal <allison@lohutok.net>,
-        Alexios Zavras <alexios.zavras@intel.com>,
-        Anup Patel <Anup.Patel@wdc.com>,
-        Vincent Chen <vincentc@andestech.com>,
-        Alan Kao <alankao@andestech.com>,
-        linux-riscv@lists.infradead.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>, me@carlosedp.com
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        linux-kselftest@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Aug 28, 2019 at 6:30 PM Paul Walmsley <paul.walmsley@sifive.com> wrote:
-> On Mon, 26 Aug 2019, Kees Cook wrote:
+On Thu, Sep 26, 2019 at 6:14 PM Shuah Khan <skhan@linuxfoundation.org> wrote:
 >
-> > On Mon, Aug 26, 2019 at 09:39:50AM -0700, David Abdurachmanov wrote:
-> > > I don't have the a build with SECCOMP for the board right now, so it
-> > > will have to wait. I just finished a new kernel (almost rc6) for Fedora,
-> >
-> > FWIW, I don't think this should block landing the code: all the tests
-> > fail without seccomp support. ;) So this patch is an improvement!
+> make TARGETS=bpf kselftest fails with:
 >
-> Am sympathetic to this -- we did it with the hugetlb patches for RISC-V --
-> but it would be good to understand a little bit more about why the test
-> fails before we merge it.
+> Makefile:127: tools/build/Makefile.include: No such file or directory
+>
+> When the bpf tool make is invoked from tools Makefile, srctree is
+> cleared and the current logic check for srctree equals to empty
+> string to determine srctree location from CURDIR.
+>
+> When the build in invoked from selftests/bpf Makefile, the srctree
+> is set to "." and the same logic used for srctree equals to empty is
+> needed to determine srctree.
+>
+> Check building_out_of_srctree undefined as the condition for both
+> cases to fix "make TARGETS=bpf kselftest" build failure.
+>
+> Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
 
-The test is almost certainly failing due to the environmental
-requirements (i.e. namespaces, user ids, etc). There are some corner
-cases in there that we've had to fix in the past. If the other tests
-are passing, then I would expect all the seccomp internals are fine --
-it's just the case being weird. It's just a matter of figuring out
-what state the test environment is in so we can cover that corner case
-too.
+The fix looks reasonable. Thanks!
 
-> Once we merge the patch, it will probably reduce the motivation for others
-> to either understand and fix the underlying problem with the RISC-V code
-> -- or, if it truly is a flaky test, to drop (or fix) the test in the
-> seccomp_bpf kselftests.
+However, I am still seeing some failure:
 
-Sure, I get that point -- but I don't want to block seccomp landing
-for riscv for that. I suggested to David offlist that the test could
-just be marked with a FIXME XFAIL on riscv and once someone's in a
-better position to reproduce it we can fix it. (I think the test bug
-is almost certainly not riscv specific, but just some missing
-requirement that we aren't handling correctly.)
+make TARGETS=bpf kselftest
+[...]
+test_verifier.c
+/data/users/songliubraving/kernel/linux-git/tools/testing/selftests/bpf/test_stub.o
+/data/users/songliubraving/kernel/linux-git/tools/testing/selftests/bpf/libbpf.a
+-lcap -lelf -lrt -lpthread -o
+/data/users/songliubraving/kernel/linux-git/tools/testing/selftests/bpf/test_verifier
+make[3]: test_verifier.c: Command not found
 
-How does that sound?
+Is this just a problem with my setup?
 
--Kees
+Thanks,
+Song
