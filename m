@@ -2,167 +2,132 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 50EA4C11AA
-	for <lists+linux-kselftest@lfdr.de>; Sat, 28 Sep 2019 19:57:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DB12C13BF
+	for <lists+linux-kselftest@lfdr.de>; Sun, 29 Sep 2019 09:23:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728458AbfI1R5W (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 28 Sep 2019 13:57:22 -0400
-Received: from condef-03.nifty.com ([202.248.20.68]:37908 "EHLO
-        condef-03.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726155AbfI1R5W (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 28 Sep 2019 13:57:22 -0400
-Received: from conssluserg-05.nifty.com ([10.126.8.84])by condef-03.nifty.com with ESMTP id x8SHsFgZ018859
-        for <linux-kselftest@vger.kernel.org>; Sun, 29 Sep 2019 02:54:15 +0900
-Received: from mail-vs1-f52.google.com (mail-vs1-f52.google.com [209.85.217.52]) (authenticated)
-        by conssluserg-05.nifty.com with ESMTP id x8SHrwTn000817;
-        Sun, 29 Sep 2019 02:53:58 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-05.nifty.com x8SHrwTn000817
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1569693239;
-        bh=0Gd7o+697MeBCUqaaUAEfXA11UsBOCRd4GDceG/VWV4=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=xPFANoLRpX3aNeemf3C7gLC4sZ7YE7Q5QlSE0KS3GgrbAgkF7INARMIm+s9FhcTMw
-         m+xT3uOIuLPZk5TDTa7CvpChMnLjkiMJInpniRGnxGySUGDS1JKTXHGRxdVqjj55gA
-         Jh6NndGojJLx3IoCfS9CwK+nhEhj/fEJQp6mvWKQW36ZVTL/JLFKEvrAd+olzj64u2
-         8V2e4eXCwcP90UtSUyTIg5Qzs/cj7UXXiH16ruZFg4yAu10Xo79Fjpz8SXypfOc596
-         Ii0lLSuPkx1F5dOocTfQDA74GJLD7aq5kZcQzsAn+/vg5DHTJeCVlpZSf9v3F0DQeL
-         QfpfGNpwjkvRw==
-X-Nifty-SrcIP: [209.85.217.52]
-Received: by mail-vs1-f52.google.com with SMTP id p13so4058783vsr.4;
-        Sat, 28 Sep 2019 10:53:58 -0700 (PDT)
-X-Gm-Message-State: APjAAAV4RAVCoyZ2f6fRY5GfQ8H+tQTzHMZpaVux9I9K/0DkEBPKczHz
-        w/wi5oOzgTPN9RkrV1SrXX0p8+hOAVKNFD/unzI=
-X-Google-Smtp-Source: APXvYqzswS2+WFLQdAXZWkoQOfsSbayR7ZmaqNEdTu0Bi2gncoF0XyLVOTRaza3guM2TSyOyfuZU/b+7FdMS3e/zRxM=
-X-Received: by 2002:a67:1a41:: with SMTP id a62mr6023749vsa.54.1569693237601;
- Sat, 28 Sep 2019 10:53:57 -0700 (PDT)
+        id S1725906AbfI2HMI (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 29 Sep 2019 03:12:08 -0400
+Received: from mx1.redhat.com ([209.132.183.28]:48970 "EHLO mx1.redhat.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725379AbfI2HMI (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Sun, 29 Sep 2019 03:12:08 -0400
+Received: from mail-pg1-f199.google.com (mail-pg1-f199.google.com [209.85.215.199])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mx1.redhat.com (Postfix) with ESMTPS id 89768C047B68
+        for <linux-kselftest@vger.kernel.org>; Sun, 29 Sep 2019 07:12:07 +0000 (UTC)
+Received: by mail-pg1-f199.google.com with SMTP id d3so6585080pgv.9
+        for <linux-kselftest@vger.kernel.org>; Sun, 29 Sep 2019 00:12:07 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=P/07bfk0u9FOPSIi+/T+KZxeVmIxde3ui9tl/6EY7Uk=;
+        b=OuAe6Tk8neze+1nBXWLT8sV15erH0r4C3ZPk68S/2Zm3o02DGNcciMMxIT+r/BOumx
+         hkfv7MhQDAbC+FFmqmh8XbYZpx0/k6zay1MOvf0yK9y9fWjUx+Hw4C4iUBA9U8UQ4NUu
+         /U2oUDomgBGcpTqLuw4fIVhKOtueRsT1p4q8NuxUS6f7Z2IZAOrnIbDgyjFq0ZLCC1Ni
+         RXpGWHNBTdAIsr53Zd1UTEnF+3TsWRiPc/p+o1xZ5+JlU5yqf6b8fw8kq8EvRjG7NCfN
+         rvQN+VPHWLQIw/G7ZwKVeRakDoACx2MdA9Cr7LvgABJbr3p090kM4wis794bYN67TaTk
+         A/Hw==
+X-Gm-Message-State: APjAAAVug5F/fQg5x+SpNxsOBWrWwxkqNmudGd3LAmDs79UV2/8fX0LI
+        m1+Skp0QdJQz7l1XReioGPTyxyG7PLJ+QTq1OgTWwJIh7b5vraYisqtjJtB1t1yWZ9oS/MRU8EB
+        +y/424r5bSDa5vDER8LoKmhnllZTu
+X-Received: by 2002:a17:90a:dd43:: with SMTP id u3mr19471738pjv.98.1569741127080;
+        Sun, 29 Sep 2019 00:12:07 -0700 (PDT)
+X-Google-Smtp-Source: APXvYqyT+gSha82rifzCEuzdxLi+0ibYQqsvVe35iZyNCwNHd4ziL61GxDzJcbhT+7FTuiVhY6lhRQ==
+X-Received: by 2002:a17:90a:dd43:: with SMTP id u3mr19471722pjv.98.1569741126763;
+        Sun, 29 Sep 2019 00:12:06 -0700 (PDT)
+Received: from xz-x1 ([209.132.188.80])
+        by smtp.gmail.com with ESMTPSA id s97sm14566118pjc.4.2019.09.29.00.12.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 29 Sep 2019 00:12:06 -0700 (PDT)
+Date:   Sun, 29 Sep 2019 15:11:57 +0800
+From:   Peter Xu <peterx@redhat.com>
+To:     Ben Gardon <bgardon@google.com>
+Cc:     kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Cannon Matthews <cannonmatthews@google.com>,
+        Andrew Jones <drjones@redhat.com>
+Subject: Re: [PATCH 2/9] KVM: selftests: Add demand paging content to the
+ demand paging test
+Message-ID: <20190929071157.GA8903@xz-x1>
+References: <20190927161836.57978-1-bgardon@google.com>
+ <20190927161836.57978-3-bgardon@google.com>
 MIME-Version: 1.0
-References: <20190926224014.28910-1-skhan@linuxfoundation.org>
-In-Reply-To: <20190926224014.28910-1-skhan@linuxfoundation.org>
-From:   Masahiro Yamada <yamada.masahiro@socionext.com>
-Date:   Sun, 29 Sep 2019 02:53:21 +0900
-X-Gmail-Original-Message-ID: <CAK7LNASNOUwnS1=FStKCpPPxDVv=43F_dgvZehJnWQUXj4ER-g@mail.gmail.com>
-Message-ID: <CAK7LNASNOUwnS1=FStKCpPPxDVv=43F_dgvZehJnWQUXj4ER-g@mail.gmail.com>
-Subject: Re: [PATCH v2] selftests: Add kselftest-all and kselftest-install targets
-To:     Shuah Khan <skhan@linuxfoundation.org>
-Cc:     Michal Marek <michal.lkml@markovi.net>,
-        "Cc: Shuah Khan" <shuah@kernel.org>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20190927161836.57978-3-bgardon@google.com>
+User-Agent: Mutt/1.11.4 (2019-03-13)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Sep 27, 2019 at 7:40 AM Shuah Khan <skhan@linuxfoundation.org> wrote:
->
-> Add kselftest-all target to build tests from the top level
-> Makefile. This is to simplify kselftest use-cases for CI and
-> distributions where build and test systems are different.
->
-> Current kselftest target builds and runs tests on a development
-> system which is a developer use-case.
->
-> Add kselftest-install target to install tests from the top level
-> Makefile. This is to simplify kselftest use-cases for CI and
-> distributions where build and test systems are different.
->
-> This change addresses requests from developers and testers to add
-> support for installing kselftest from the main Makefile.
->
-> In addition, make the install directory the same when install is
-> run using "make kselftest-install" or by running kselftest_install.sh.
-> Also fix the INSTALL_PATH variable conflict between main Makefile and
-> selftests Makefile.
->
-> Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
-
-For the top Makefile change:
-
-Acked-by: Masahiro Yamada <yamada.masahiro@socionext.com>
-
-
+On Fri, Sep 27, 2019 at 09:18:30AM -0700, Ben Gardon wrote:
+> The demand paging test is currently a simple page access test which, while
+> potentially useful, doesn't add much versus the existing dirty logging
+> test. To improve the demand paging test, add a basic userfaultfd demand
+> paging implementation.
+> 
+> Signed-off-by: Ben Gardon <bgardon@google.com>
 > ---
-> Changes since v1:
-> - Collpased two patches that added separate targets to
->   build and install into one patch using pattern rule to
->   invoke all, install, and clean targets from main Makefile.
->
->  Makefile                                     | 5 ++---
->  tools/testing/selftests/Makefile             | 8 ++++++--
->  tools/testing/selftests/kselftest_install.sh | 4 ++--
->  3 files changed, 10 insertions(+), 7 deletions(-)
->
-> diff --git a/Makefile b/Makefile
-> index d456746da347..ec296c60c1af 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -1237,9 +1237,8 @@ PHONY += kselftest
->  kselftest:
->         $(Q)$(MAKE) -C $(srctree)/tools/testing/selftests run_tests
->
-> -PHONY += kselftest-clean
-> -kselftest-clean:
-> -       $(Q)$(MAKE) -C $(srctree)/tools/testing/selftests clean
-> +kselftest-%: FORCE
-> +       $(Q)$(MAKE) -C $(srctree)/tools/testing/selftests $*
->
->  PHONY += kselftest-merge
->  kselftest-merge:
-> diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-> index c3feccb99ff5..bad18145ed1a 100644
-> --- a/tools/testing/selftests/Makefile
-> +++ b/tools/testing/selftests/Makefile
-> @@ -171,9 +171,12 @@ run_pstore_crash:
->  # 1. output_dir=kernel_src
->  # 2. a separate output directory is specified using O= KBUILD_OUTPUT
->  # 3. a separate output directory is specified using KBUILD_OUTPUT
-> +# Avoid conflict with INSTALL_PATH set by the main Makefile
->  #
-> -INSTALL_PATH ?= $(BUILD)/install
-> -INSTALL_PATH := $(abspath $(INSTALL_PATH))
-> +KSFT_INSTALL_PATH ?= $(BUILD)/kselftest_install
-> +KSFT_INSTALL_PATH := $(abspath $(KSFT_INSTALL_PATH))
-> +# Avoid changing the rest of the logic here and lib.mk.
-> +INSTALL_PATH := $(KSFT_INSTALL_PATH)
->  ALL_SCRIPT := $(INSTALL_PATH)/run_kselftest.sh
->
->  install: all
-> @@ -203,6 +206,7 @@ ifdef INSTALL_PATH
->                 echo "[ -w /dev/kmsg ] && echo \"kselftest: Running tests in $$TARGET\" >> /dev/kmsg" >> $(ALL_SCRIPT); \
->                 echo "cd $$TARGET" >> $(ALL_SCRIPT); \
->                 echo -n "run_many" >> $(ALL_SCRIPT); \
-> +               echo -n "Emit Tests for $$TARGET\n"; \
->                 $(MAKE) -s --no-print-directory OUTPUT=$$BUILD_TARGET -C $$TARGET emit_tests >> $(ALL_SCRIPT); \
->                 echo "" >> $(ALL_SCRIPT);           \
->                 echo "cd \$$ROOT" >> $(ALL_SCRIPT); \
-> diff --git a/tools/testing/selftests/kselftest_install.sh b/tools/testing/selftests/kselftest_install.sh
-> index ec304463883c..e2e1911d62d5 100755
-> --- a/tools/testing/selftests/kselftest_install.sh
-> +++ b/tools/testing/selftests/kselftest_install.sh
-> @@ -24,12 +24,12 @@ main()
->                 echo "$0: Installing in specified location - $install_loc ..."
->         fi
->
-> -       install_dir=$install_loc/kselftest
-> +       install_dir=$install_loc/kselftest_install
->
->  # Create install directory
->         mkdir -p $install_dir
->  # Build tests
-> -       INSTALL_PATH=$install_dir make install
-> +       KSFT_INSTALL_PATH=$install_dir make install
->  }
->
->  main "$@"
-> --
-> 2.20.1
->
+>  .../selftests/kvm/demand_paging_test.c        | 157 ++++++++++++++++++
+>  1 file changed, 157 insertions(+)
+> 
+> diff --git a/tools/testing/selftests/kvm/demand_paging_test.c b/tools/testing/selftests/kvm/demand_paging_test.c
+> index 5f214517ba1de..61ba4e6a8214a 100644
+> --- a/tools/testing/selftests/kvm/demand_paging_test.c
+> +++ b/tools/testing/selftests/kvm/demand_paging_test.c
+> @@ -11,11 +11,14 @@
+>  
+>  #include <stdio.h>
+>  #include <stdlib.h>
+> +#include <sys/syscall.h>
 
+[1]
+
+>  #include <unistd.h>
+>  #include <time.h>
+> +#include <poll.h>
+>  #include <pthread.h>
+>  #include <linux/bitmap.h>
+>  #include <linux/bitops.h>
+> +#include <linux/userfaultfd.h>
+>  
+>  #include "test_util.h"
+>  #include "kvm_util.h"
+> @@ -29,6 +32,8 @@
+>  /* Default guest test virtual memory offset */
+>  #define DEFAULT_GUEST_TEST_MEM		0xc0000000
+>  
+> +#define __NR_userfaultfd 323
+
+This line can be dropped if with [1] above?
+
+[...]
+
+> +static void *uffd_handler_thread_fn(void *arg)
+> +{
+> +	struct uffd_handler_args *uffd_args = (struct uffd_handler_args *)arg;
+> +	int uffd = uffd_args->uffd;
+> +	int64_t pages = 0;
+> +
+> +	while (!quit_uffd_thread) {
+> +		struct uffd_msg msg;
+> +		struct pollfd pollfd[1];
+> +		int r;
+> +		uint64_t addr;
+> +
+> +		pollfd[0].fd = uffd;
+> +		pollfd[0].events = POLLIN;
+> +
+> +		r = poll(pollfd, 1, 2000);
+
+This may introduce an unecessary 2s delay when quit.  Maybe we can
+refer to how userfaultfd selftest did with this (please see
+uffd_poll_thread() in selftests/vm/userfaultfd.c on usage of pipefd).
+
+Thanks,
 
 -- 
-Best Regards
-Masahiro Yamada
+Peter Xu
