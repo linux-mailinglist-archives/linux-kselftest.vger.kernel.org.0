@@ -2,96 +2,122 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F841C22FD
-	for <lists+linux-kselftest@lfdr.de>; Mon, 30 Sep 2019 16:17:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FBADC2401
+	for <lists+linux-kselftest@lfdr.de>; Mon, 30 Sep 2019 17:12:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731190AbfI3OQ6 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 30 Sep 2019 10:16:58 -0400
-Received: from mail-io1-f67.google.com ([209.85.166.67]:36989 "EHLO
-        mail-io1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730902AbfI3OQ6 (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 30 Sep 2019 10:16:58 -0400
-Received: by mail-io1-f67.google.com with SMTP id b19so10630007iob.4
-        for <linux-kselftest@vger.kernel.org>; Mon, 30 Sep 2019 07:16:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=qSyzuXDiOCBGYUe5x3wq3t+cEuvzBt8YWh4PsSfAxng=;
-        b=UN3DqBAKeUwm8D0QEQjS3xJkE3+G7UwQhw6O0nfYZs1PZxchfelnwuw6XbPAxU+6iT
-         z7SVP3YgvJDIJkPDy8Bfe1iwyqHZfIHIy7DYtqo1N8vSDthWvJQNB9ATkSpZlZ3XCuki
-         qXAC8XV3pv/MJIMPSXlVWaEDCm27ZkGzg0pXY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=qSyzuXDiOCBGYUe5x3wq3t+cEuvzBt8YWh4PsSfAxng=;
-        b=a95sewTcDv95Dv4et7pFWWFEFuAXppJJgf7cirMxmxho4tOwHczQspnWJVjXrgi0L+
-         uQSIRryEBvM2EKXNpqCbhyBFvdsahagqaKQ7ohLb1P9ogyZcdRVMF5cLbTMjRDejs/sY
-         wjHS4q/9l9ov3Z07SxKsxrugQ7jSjjvdxyEsY1AtbPQMVH3DB7qXkkyxkB7JQPMd54z8
-         MBEUVFNgJMbEkrD9X2v+4zeC+zysH62tN99rbZZtkUbvZzfnZbrGUYu9zVJUsepdtTF+
-         FuEeh5CrWH9kRaLPhaf5BleHm2hPDKQTYlI8DnSQb2l782+KDdJ/sTBSvjucjfoPhMjs
-         tJ7Q==
-X-Gm-Message-State: APjAAAUpR4xjdIjqXXYAlBPXRdZlUDZb+k9kOUkz7ztTxWya5pJVQqIv
-        ma+6at4zDAEeNWECcytHyXThVw==
-X-Google-Smtp-Source: APXvYqxn8RJVirvm2HAhcEVkXxh7lQAUGhEQpdT+JkKACOG3a8byP3d+14FHtvWo1veaYWwLKjPYgA==
-X-Received: by 2002:a92:6c10:: with SMTP id h16mr6350326ilc.299.1569853017550;
-        Mon, 30 Sep 2019 07:16:57 -0700 (PDT)
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id r2sm5475403ila.52.2019.09.30.07.16.56
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 30 Sep 2019 07:16:56 -0700 (PDT)
-Subject: Re: [PATCH] tools: bpf: Use !building_out_of_srctree to determine
- srctree
-To:     Daniel Borkmann <daniel@iogearbox.net>
-Cc:     ast@kernel.org, kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20190927011344.4695-1-skhan@linuxfoundation.org>
- <20190930085815.GA7249@pc-66.home>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <ea108769-1b3e-42f8-de9c-50b4a563be57@linuxfoundation.org>
-Date:   Mon, 30 Sep 2019 08:16:55 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        id S1731504AbfI3PMi (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 30 Sep 2019 11:12:38 -0400
+Received: from mx2.suse.de ([195.135.220.15]:40412 "EHLO mx1.suse.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1731276AbfI3PMi (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 30 Sep 2019 11:12:38 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx1.suse.de (Postfix) with ESMTP id 168C9AF7E;
+        Mon, 30 Sep 2019 15:12:36 +0000 (UTC)
+Date:   Mon, 30 Sep 2019 17:12:34 +0200
+From:   Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
+To:     Mina Almasry <almasrymina@google.com>
+Cc:     Tejun Heo <tj@kernel.org>, Mike Kravetz <mike.kravetz@oracle.com>,
+        Greg Thelen <gthelen@google.com>,
+        David Rientjes <rientjes@google.com>,
+        Shakeel Butt <shakeelb@google.com>, shuah <shuah@kernel.org>,
+        linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
+        Aneesh Kumar <aneesh.kumar@linux.vnet.ibm.com>,
+        khalid.aziz@oracle.com, cgroups@vger.kernel.org,
+        open list <linux-kernel@vger.kernel.org>,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v5 0/7] hugetlb_cgroup: Add hugetlb_cgroup reservation
+ limits
+Message-ID: <20190930151233.GH6694@blackbody.suse.cz>
+References: <20190919222421.27408-1-almasrymina@google.com>
+ <3c73d2b7-f8d0-16bf-b0f0-86673c3e9ce3@oracle.com>
+ <CAHS8izOj2AT4tX-+Hcb8LB2TOUKJDHScDtJ80u4M6OWpwktq0g@mail.gmail.com>
+ <a8e9c533-1593-35ee-e65d-1f2fc2b0fb48@oracle.com>
+ <CAHS8izPfKQA8qTndyzWSm9fR_xJ=X-xmE+4P4K+ZFdxrYNuLBA@mail.gmail.com>
+ <alpine.DEB.2.21.1909261220150.39830@chino.kir.corp.google.com>
+ <8f7db4f1-9c16-def5-79dc-d38d6b9d150e@oracle.com>
+ <CAHS8izM3=ZDNukx5xhWmeJT+78Ekfff9J4s5Vqkqpx-DtH=C-A@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20190930085815.GA7249@pc-66.home>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="YhFoJY/gx7awiIuK"
+Content-Disposition: inline
+In-Reply-To: <CAHS8izM3=ZDNukx5xhWmeJT+78Ekfff9J4s5Vqkqpx-DtH=C-A@mail.gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 9/30/19 2:58 AM, Daniel Borkmann wrote:
-> On Thu, Sep 26, 2019 at 07:13:44PM -0600, Shuah Khan wrote:
->> make TARGETS=bpf kselftest fails with:
->>
->> Makefile:127: tools/build/Makefile.include: No such file or directory
->>
->> When the bpf tool make is invoked from tools Makefile, srctree is
->> cleared and the current logic check for srctree equals to empty
->> string to determine srctree location from CURDIR.
->>
->> When the build in invoked from selftests/bpf Makefile, the srctree
->> is set to "." and the same logic used for srctree equals to empty is
->> needed to determine srctree.
->>
->> Check building_out_of_srctree undefined as the condition for both
->> cases to fix "make TARGETS=bpf kselftest" build failure.
->>
->> Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
-> 
-> Applied, thanks!
-> 
 
-Hi Daniel!
+--YhFoJY/gx7awiIuK
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Is the tree the patch went into included in the linux-next?
+Hi.
 
-thanks,
--- Shuah
+On Thu, Sep 26, 2019 at 05:55:29PM -0700, Mina Almasry <almasrymina@google.com> wrote:
+> My guess is that a new controller needs to support cgroups-v2, which
+> is fine. But can a new controller also support v1? Or is there a
+> requirement that new controllers support *only* v2? I need whatever
+> solution here to work on v1.
+Here is my view of important criteria:
+
+	1) stability, v1 APIs and semantics should not be changed,
+	2) futureproofness, v1 uses should be convertible to v2 uses,
+	3) maintainability, the less (similar) code the better.
+
+And here is my braindump of some approaches:
+
+A) new controller, v2 only
+- 1) ok
+- 2) may be ok
+- 3) separate v1 and v2 implementations
+- exclusion must be ensured on hybrid hierarchies
+
+B) new controller, version oblivious (see e.g. pid)
+- 1) sort of ok
+- 2) partially ok
+- 3) two v1 implementations
+- exclusion must be ensured even on pure v1 hierarchies
+
+C) extending the existing controller, w/out v2 counterpart
+- 1) ok with workarounds (new option switching behavior)
+- 2) not ok
+- 3) likely OK
+
+D) extending the existing controller, with v2 counterpart
+- 1) ok with workarounds (new option switching behavior, see cpuset)
+- 2) may be ok
+- 3) likely OK
+
+AFAIU, the current patchset is variation of C). Personally, I think
+something like D) could work, I'm not convinced about A) and B) based on
+the breakdown above. But it may induce some other ideas.
+
+
+My two cents,
+Michal
+
+--YhFoJY/gx7awiIuK
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: Digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCAAdFiEEEoQaUCWq8F2Id1tNia1+riC5qSgFAl2SG14ACgkQia1+riC5
+qShedQ/8DyEdvjT0PcRMLE3EjsjDi32g8BDv8aIV1H1UVciQZIM+BFvPycHsjJ9N
+XwYn3bspedb10o6wm1Luj6LhXjVht5dglPSrmhTWp4E5YrLqP2AqKPt8p5ZL4pTq
+L64SrAHXo5qFq85CDnSQkFgYXmuPEkM9NCdLN3Dt30P1/zr6mrt0vhPbLNwJkgdT
+xsTp2UObM12TuEJxsnb2F6nirZLa6RHQ3utUjDZUsLbPOgnb+WbTgLyCNwHFnqUk
+bInSN/vrHcn52yYefxWuHW1VdXXV2vpjqcQG5CdYjXEzpKQxnysI+IiYxpv4kw6Q
+FQpT5nQtCVVr2EHj9LEsk9vgks2Hcfsb87psTIL0rxA4HvxiutPcDHBHqhcs/52o
+2ozl8p7G0WXGYQ+bSeTBJ35O/qtTGibw1YELSkpVhG742SrzMj9SxdhtFO7dsdeY
+uk/HdATsAPl3kAX1fOhUSmIcnOL9ECAO0pgcRnmsyPdXEDUWwaiji0tK9Q0yP6Wu
+jnFTX3MY/Nq5FhJzZ3QYvCUxc1n1LgzW9STMUU5MuTN9NYXC4AlZnZhMqduDH5HK
+l0seBNntlNnaI4lQhbWl2OR0cXTDN88Nv2bF84LBI01F4N2D/NL97p69jCMYxgUx
+5EiC89zRH0RUxb8RX+NeMG/OMd0qxTNFELjONXX1D5fpzLqg5Ao=
+=ksZu
+-----END PGP SIGNATURE-----
+
+--YhFoJY/gx7awiIuK--
