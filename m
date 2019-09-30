@@ -2,122 +2,112 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BF0E9C259C
-	for <lists+linux-kselftest@lfdr.de>; Mon, 30 Sep 2019 19:02:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 923EBC269E
+	for <lists+linux-kselftest@lfdr.de>; Mon, 30 Sep 2019 22:40:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730565AbfI3RCY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 30 Sep 2019 13:02:24 -0400
-Received: from mail-vs1-f66.google.com ([209.85.217.66]:38114 "EHLO
-        mail-vs1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730485AbfI3RCY (ORCPT
+        id S1729870AbfI3Ui1 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 30 Sep 2019 16:38:27 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:14990 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726576AbfI3Ui1 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 30 Sep 2019 13:02:24 -0400
-Received: by mail-vs1-f66.google.com with SMTP id b123so7295912vsb.5
-        for <linux-kselftest@vger.kernel.org>; Mon, 30 Sep 2019 10:02:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=dfWInwpAaXhuNaRHnFqf5Kb0nv75VBrMC3/txP8hcfk=;
-        b=vfEU9S+JHbvVzsKuQ850SjGfpwveObEbl3z5Q/cPU15GOhQM4I7irCZ/+GhRxmC7lu
-         VVNixPmC6dHcGkJE2agCguJjjB/pWBe36d15sL1qdrG0hDSryvAEhLUvxHeG1eQtOJdY
-         zH/QA3r767biQIir7H4+/iIfa5e1SoicT6pxFAXkflR6deUOmLgKVGm0WaDsvjuH+42e
-         QCqBt2KWtGf7H8kP1mbRvHuK6nqz1KqixB08aq00t3NzfRMHW9nFk8kPkYsHc55+yKPw
-         h6TW70DGiyS/Dy0JV3IWQ5tDCWkLRCJA5qiG3N0vDDrf88FXkS+fJLTsRPfRnDY0m8eM
-         xE5w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=dfWInwpAaXhuNaRHnFqf5Kb0nv75VBrMC3/txP8hcfk=;
-        b=EbJ+miuj8R63bNO3eDht6Eug3SVGMlWyFgAbYVIj5fogsXlAt7gnAD9/gXT6JhlXfQ
-         URxHz+65Tc4Cl4Q80ecby/u9lfHvfxRtvFZhyOTbnwCEzLYPErfH5SzVZfbdRQD+2pdQ
-         j4S2szrDymLPdGurRs3XKPXYWDaZ21rY9WSCjYdGki8JsYWE4lashPT6NuKbR3HRaIXZ
-         /ct7olnG5n4mBcukKSB0PL7HVPo0/9+xwmIWdvVFpMyXIQN/ES89dGVv57gylugi9ed5
-         sIlulj66qHRXl88WV+t6kDGq5/VZOcTtAAdc5IRW72dJ3pmcgufPqZhr5vARLKjA92vy
-         Yc/Q==
-X-Gm-Message-State: APjAAAUzWlwt63BMX8oZ0uhknle6BKZa0CNAux5NP/x12MEUyANvDTNT
-        RlB3pu8GC9RH5YQ+a480Ni+eVABc1xjXejLLPYvtOg==
-X-Google-Smtp-Source: APXvYqyqIeQ5pCQuEg2Zk62SjgpRI5+Pr2OmwMlOVkeeamN+h5XjCIT83r7aH1UTCZQjK5qi2XaXf9Oaw/wGHikvAfE=
-X-Received: by 2002:a67:db93:: with SMTP id f19mr10235459vsk.49.1569862942843;
- Mon, 30 Sep 2019 10:02:22 -0700 (PDT)
-MIME-Version: 1.0
-References: <20190927161836.57978-1-bgardon@google.com> <20190929072248.GB8903@xz-x1>
-In-Reply-To: <20190929072248.GB8903@xz-x1>
-From:   Ben Gardon <bgardon@google.com>
-Date:   Mon, 30 Sep 2019 10:02:11 -0700
-Message-ID: <CANgfPd-=OWEiVkQMzh2mkH1ch9VeZsoc_KykPp6AqtkpQh-7EQ@mail.gmail.com>
-Subject: Re: [PATCH 0/9] Create a userfaultfd demand paging test
-To:     Peter Xu <peterx@redhat.com>
-Cc:     kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Cannon Matthews <cannonmatthews@google.com>,
-        Andrew Jones <drjones@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
+        Mon, 30 Sep 2019 16:38:27 -0400
+Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x8UHWm3l083029
+        for <linux-kselftest@vger.kernel.org>; Mon, 30 Sep 2019 13:50:26 -0400
+Received: from e06smtp01.uk.ibm.com (e06smtp01.uk.ibm.com [195.75.94.97])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 2vbkj100vn-1
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-kselftest@vger.kernel.org>; Mon, 30 Sep 2019 13:50:26 -0400
+Received: from localhost
+        by e06smtp01.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-kselftest@vger.kernel.org> from <iii@linux.ibm.com>;
+        Mon, 30 Sep 2019 18:50:24 +0100
+Received: from b06avi18626390.portsmouth.uk.ibm.com (9.149.26.192)
+        by e06smtp01.uk.ibm.com (192.168.101.131) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
+        Mon, 30 Sep 2019 18:50:22 +0100
+Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
+        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x8UHnrlG36831614
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 30 Sep 2019 17:49:53 GMT
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 951914C044;
+        Mon, 30 Sep 2019 17:50:21 +0000 (GMT)
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 75D444C04E;
+        Mon, 30 Sep 2019 17:50:21 +0000 (GMT)
+Received: from dyn-9-152-96-81.boeblingen.de.ibm.com (unknown [9.152.96.81])
+        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Mon, 30 Sep 2019 17:50:21 +0000 (GMT)
+Content-Type: text/plain;
+        charset=us-ascii
+Mime-Version: 1.0 (Mac OS X Mail 11.5 \(3445.9.1\))
+Subject: Re: [PATCH v2] selftests: fix prepending $(OUTPUT) to $(TEST_PROGS)
+From:   Ilya Leoshkevich <iii@linux.ibm.com>
+In-Reply-To: <cb4e3c3c-3ab8-5d21-495f-5f751c79dde6@kernel.org>
+Date:   Mon, 30 Sep 2019 19:50:21 +0200
+Cc:     linux-kselftest@vger.kernel.org,
+        Heiko Carstens <heiko.carstens@de.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>
+Content-Transfer-Encoding: 7bit
+References: <20190910121813.45742-1-iii@linux.ibm.com>
+ <cb4e3c3c-3ab8-5d21-495f-5f751c79dde6@kernel.org>
+To:     shuah <shuah@kernel.org>
+X-Mailer: Apple Mail (2.3445.9.1)
+X-TM-AS-GCONF: 00
+x-cbid: 19093017-4275-0000-0000-0000036CA069
+X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
+x-cbparentid: 19093017-4276-0000-0000-0000387F2860
+Message-Id: <5CE66619-878B-4CC7-8477-32050A131FB4@linux.ibm.com>
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-09-30_10:,,
+ signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ malwarescore=0 suspectscore=4 phishscore=0 bulkscore=0 spamscore=0
+ clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
+ mlxlogscore=914 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.0.1-1908290000 definitions=main-1909300163
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Peter,
-You're absolutely right that we could demonstrate more contention by
-avoiding UFFD and just letting the kernel resolve page faults. I used
-UFFD in this test and benchmarking for the other MMU patch set because
-I believe it's a more realistic scenario. A simpler page access
-benchmark would be better for identifying further scaling problems
-within the MMU, but the only situation I can think of where that would
-be used is VM boot. However, we don't usually see many vCPUs touching
-memory all over the place on boot. In a migration or restore without
-demand paging, the memory would have to be pre-populated with the
-contents of guest memory and the KVM MMU fault handler wouldn't be
-taking a fault in get_user_pages. In the interest of eliminating the
-delay from UFFD, I will add an option to use anonymous page faults or
-prefault memory instead.
+> Am 16.09.2019 um 18:18 schrieb shuah <shuah@kernel.org>:
+> 
+> On 9/10/19 6:18 AM, Ilya Leoshkevich wrote:
+>> The current logic prepends $(OUTPUT) only to the first member of
+>> $(TEST_PROGS). Use $(addprefix) to prepend it to each member.
+> 
+> Can you please send me the error messages you are seeing so I can see
+> what is being fixed.
 
-I don't have any plans to customize the UFFD implementation at the
-moment, but experimenting with UFFD strategies will be useful for
-building higher performance post-copy in QEMU and other userspaces in
-the future.
-Thank you for taking a look at these patches.
-Ben
+linux# make kselftest TARGETS=bpf O=/mnt/linux-build
 
-On Sun, Sep 29, 2019 at 12:23 AM Peter Xu <peterx@redhat.com> wrote:
->
-> On Fri, Sep 27, 2019 at 09:18:28AM -0700, Ben Gardon wrote:
-> > When handling page faults for many vCPUs during demand paging, KVM's MMU
-> > lock becomes highly contended. This series creates a test with a naive
-> > userfaultfd based demand paging implementation to demonstrate that
-> > contention. This test serves both as a functional test of userfaultfd
-> > and a microbenchmark of demand paging performance with a variable number
-> > of vCPUs and memory per vCPU.
-> >
-> > The test creates N userfaultfd threads, N vCPUs, and a region of memory
-> > with M pages per vCPU. The N userfaultfd polling threads are each set up
-> > to serve faults on a region of memory corresponding to one of the vCPUs.
-> > Each of the vCPUs is then started, and touches each page of its disjoint
-> > memory region, sequentially. In response to faults, the userfaultfd
-> > threads copy a static buffer into the guest's memory. This creates a
-> > worst case for MMU lock contention as we have removed most of the
-> > contention between the userfaultfd threads and there is no time required
-> > to fetch the contents of guest memory.
->
-> Hi, Ben,
->
-> Even though I may not have enough MMU knowledge to say this... this of
-> course looks like a good test at least to me.  I'm just curious about
-> whether you have plan to customize the userfaultfd handler in the
-> future with this infrastructure?
->
-> Asked because IIUC with this series userfaultfd only plays a role to
-> introduce a relatively adhoc delay to page faults.  In other words,
-> I'm also curious what would be the number look like (as you mentioned
-> in your MMU rework cover letter) if you simply start hundreds of vcpu
-> and do the same test like this, but use the default anonymous page
-> faults rather than uffd page faults.  I feel like even without uffd
-> that could be a huge contention already there.  Or did I miss anything
-> important on your decision to use userfaultfd?
->
-> Thanks,
->
-> --
-> Peter Xu
+Without the patch:
+# selftests: bpf: test_libbpf.sh
+# ./test_libbpf.sh: line 23: ./test_libbpf_open: No such file or directory
+# test_libbpf: failed at file test_l4lb.o
+# selftests: test_libbpf [FAILED]
+
+With the patch:
+# selftests: bpf: test_libbpf.sh
+# selftests: test_libbpf [PASS]
+
+What happens is that run_one() does
+
+    cd `dirname $TEST`
+
+dirname is . without the patch, so the test cannot access the files
+generated in $(OUTPUT).
+
+> 
+>> Also, $(OUTPUT) is assumed to end with a / almost everywhere else in
+>> the kernel, make this the case for kselftest as well.
+> 
+> Why are these two changes in one patch? Does this fix 1a940687e424?
+> If so how?
+
+I will split the patch in two and resend. Adding / does not fix
+anything, it just makes the code more uniform w.r.t. the rest of the
+tree.
+
