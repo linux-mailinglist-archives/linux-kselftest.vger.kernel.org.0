@@ -2,238 +2,278 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 69FC0C2CD3
-	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Oct 2019 07:07:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD1DDC309F
+	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Oct 2019 11:52:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727848AbfJAFHH (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 1 Oct 2019 01:07:07 -0400
-Received: from mga17.intel.com ([192.55.52.151]:16783 "EHLO mga17.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725535AbfJAFHG (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 1 Oct 2019 01:07:06 -0400
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 30 Sep 2019 22:07:04 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.64,569,1559545200"; 
-   d="scan'208";a="190474561"
-Received: from lkp-server01.sh.intel.com (HELO lkp-server01) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 30 Sep 2019 22:06:56 -0700
-Received: from kbuild by lkp-server01 with local (Exim 4.89)
-        (envelope-from <lkp@intel.com>)
-        id 1iFANE-000IpB-8f; Tue, 01 Oct 2019 13:06:56 +0800
-Date:   Tue, 1 Oct 2019 13:06:23 +0800
-From:   kbuild test robot <lkp@intel.com>
-To:     Aleksa Sarai <cyphar@cyphar.com>
-Cc:     kbuild-all@01.org, Al Viro <viro@zeniv.linux.org.uk>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J. Bruce Fields" <bfields@fieldses.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        David Howells <dhowells@redhat.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        linux-ia64@vger.kernel.org, linux-sh@vger.kernel.org,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Alexei Starovoitov <ast@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        sparclinux@vger.kernel.org, Jiri Olsa <jolsa@redhat.com>,
-        linux-arch@vger.kernel.org, linux-s390@vger.kernel.org,
-        Tycho Andersen <tycho@tycho.ws>, Aleksa Sarai <asarai@suse.de>,
-        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-        linux-xtensa@linux-xtensa.org, Kees Cook <keescook@chromium.org>,
-        Jann Horn <jannh@google.com>, linuxppc-dev@lists.ozlabs.org,
-        Aleksa Sarai <cyphar@cyphar.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        David Drysdale <drysdale@google.com>,
-        Christian Brauner <christian@brauner.io>,
-        libc-alpha@sourceware.org, linux-parisc@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, linux-api@vger.kernel.org,
-        Chanho Min <chanho.min@lge.com>,
-        Oleg Nesterov <oleg@redhat.com>,
-        Eric Biederman <ebiederm@xmission.com>,
-        linux-alpha@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        containers@lists.linux-foundation.org
-Subject: Re: [PATCH v13 7/9] open: openat2(2) syscall
-Message-ID: <201910011326.iTYOtJYo%lkp@intel.com>
-References: <20190930183316.10190-8-cyphar@cyphar.com>
+        id S1726461AbfJAJuj (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 1 Oct 2019 05:50:39 -0400
+Received: from kirsty.vergenet.net ([202.4.237.240]:34152 "EHLO
+        kirsty.vergenet.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725765AbfJAJuj (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 1 Oct 2019 05:50:39 -0400
+Received: from reginn.horms.nl (watermunt.horms.nl [80.127.179.77])
+        by kirsty.vergenet.net (Postfix) with ESMTPA id 5E92D25B7D2;
+        Tue,  1 Oct 2019 19:50:35 +1000 (AEST)
+Received: by reginn.horms.nl (Postfix, from userid 7100)
+        id 24F8094046A; Tue,  1 Oct 2019 11:50:33 +0200 (CEST)
+Date:   Tue, 1 Oct 2019 11:50:33 +0200
+From:   Simon Horman <horms@verge.net.au>
+To:     Haishuang Yan <yanhaishuang@cmss.chinamobile.com>
+Cc:     Shuah Khan <shuah@kernel.org>,
+        Pablo Neira Ayuso <pablo@netfilter.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Julian Anastasov <ja@ssi.bg>, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, lvs-devel@vger.kernel.org,
+        netfilter-devel@vger.kernel.org
+Subject: Re: [PATCH v2 1/3] selftests: netfilter: add ipvs test script
+Message-ID: <20191001095032.4uxaw3k45afvyp4j@verge.net.au>
+References: <1569565266-31566-1-git-send-email-yanhaishuang@cmss.chinamobile.com>
+ <1569565266-31566-2-git-send-email-yanhaishuang@cmss.chinamobile.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190930183316.10190-8-cyphar@cyphar.com>
-X-Patchwork-Hint: ignore
+In-Reply-To: <1569565266-31566-2-git-send-email-yanhaishuang@cmss.chinamobile.com>
+Organisation: Horms Solutions BV
 User-Agent: NeoMutt/20170113 (1.7.2)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Aleksa,
+On Fri, Sep 27, 2019 at 02:21:04PM +0800, Haishuang Yan wrote:
+> Test virutal server via directing routing for IPv4.
+> 
+> Tested:
+> 
+> # selftests: netfilter: ipvs.sh
+> # Testing DR mode...
+> # ipvs.sh: PASS
+> ok 6 selftests: netfilter: ipvs.sh
+> 
+> Signed-off-by: Haishuang Yan <yanhaishuang@cmss.chinamobile.com>
+> ---
+> v2: optimize test script
+> ---
+>  tools/testing/selftests/netfilter/Makefile |   2 +-
+>  tools/testing/selftests/netfilter/ipvs.sh  | 184 +++++++++++++++++++++++++++++
+>  2 files changed, 185 insertions(+), 1 deletion(-)
+>  create mode 100755 tools/testing/selftests/netfilter/ipvs.sh
+> 
+> diff --git a/tools/testing/selftests/netfilter/Makefile b/tools/testing/selftests/netfilter/Makefile
+> index 4144984..de1032b 100644
+> --- a/tools/testing/selftests/netfilter/Makefile
+> +++ b/tools/testing/selftests/netfilter/Makefile
+> @@ -2,6 +2,6 @@
+>  # Makefile for netfilter selftests
+>  
+>  TEST_PROGS := nft_trans_stress.sh nft_nat.sh bridge_brouter.sh \
+> -	conntrack_icmp_related.sh nft_flowtable.sh
+> +	conntrack_icmp_related.sh nft_flowtable.sh ipvs.sh
+>  
+>  include ../lib.mk
+> diff --git a/tools/testing/selftests/netfilter/ipvs.sh b/tools/testing/selftests/netfilter/ipvs.sh
+> new file mode 100755
+> index 0000000..658c06b
+> --- /dev/null
+> +++ b/tools/testing/selftests/netfilter/ipvs.sh
+> @@ -0,0 +1,184 @@
+> +#!/bin/sh
+> +# SPDX-License-Identifier: GPL-2.0
+> +#
+> +# End-to-end ipvs test suite
+> +# Topology:
+> +#--------------------------------------------------------------+
+> +#                      |                                       |
+> +#         ns0          |         ns1                           |
+> +#      -----------     |     -----------    -----------        |
+> +#      | veth01  | --------- | veth10  |    | veth12  |        |
+> +#      -----------    peer   -----------    -----------        |
+> +#           |          |                        |              |
+> +#      -----------     |                        |              |
+> +#      |  br0    |     |-----------------  peer |--------------|
+> +#      -----------     |                        |              |
+> +#           |          |                        |              |
+> +#      ----------     peer   ----------      -----------       |
+> +#      |  veth02 | --------- |  veth20 |     | veth21  |       |
+> +#      ----------      |     ----------      -----------       |
+> +#                      |         ns2                           |
+> +#                      |                                       |
+> +#--------------------------------------------------------------+
+> +#
+> +# We assume that all network driver are loaded
+> +#
+> +
+> +# Kselftest framework requirement - SKIP code is 4.
+> +ksft_skip=4
+> +ret=0
+> +GREEN='\033[0;92m'
+> +RED='\033[0;31m'
+> +NC='\033[0m' # No Color
+> +
+> +readonly port=8080
+> +
+> +readonly vip_v4=207.175.44.110
+> +readonly cip_v4=10.0.0.2
+> +readonly gip_v4=10.0.0.1
+> +readonly dip_v4=172.16.0.1
+> +readonly rip_v4=172.16.0.2
+> +readonly sip_v4=10.0.0.3
+> +
+> +readonly infile="$(mktemp)"
+> +readonly outfile="$(mktemp)"
+> +
+> +sysipvsnet=/proc/sys/net/ipv4/vs/
+> +if [ ! -d /proc/sys/net/ipv4/vs/ ]; then
+> +    modprobe -q ip_vs
+> +    if [ $? -ne 0 ]; then
+> +        echo "SKIP: Could not run test without ipvs module"
+> +    	exit $ksft_skip
+> +    fi
+> +fi
+> +
+> +ip -Version > /dev/null 2>&1
+> +if [ $? -ne 0 ]; then
+> +	echo "SKIP: Could not run test without ip tool"
+> +	exit $ksft_skip
+> +fi
+> +
+> +ipvsadm -v > /dev/null 2>&1
+> +if [ $? -ne 0 ]; then
+> +	echo "SKIP: Could not run test without ipvsadm"
+> +	exit $ksft_skip
+> +fi
+> +
+> +nc --version > /dev/null 2>&1
+> +if [ $? -ne 0 ]; then
+> +	echo "SKIP: Could not run test without ncat"
+> +	exit $ksft_skip
+> +fi
+> +
+> +setup() {
+> +    ip netns add ns0
+> +    ip netns add ns1
+> +    ip netns add ns2
+> +
+> +    ip link add veth01 netns ns0 type veth peer name veth10 netns ns1
+> +    ip link add veth02 netns ns0 type veth peer name veth20 netns ns2
+> +    ip link add veth12 netns ns1 type veth peer name veth21 netns ns2
+> +
+> +    ip netns exec ns0 ip link set veth01 up
+> +    ip netns exec ns0 ip link set veth02 up
+> +    ip netns exec ns0 ip link add br0 type bridge
+> +    ip netns exec ns0 ip link set veth01 master br0
+> +    ip netns exec ns0 ip link set veth02 master br0
+> +    ip netns exec ns0 ip link set br0 up
+> +    ip netns exec ns0 ip addr add ${cip_v4}/24 dev br0
+> +
+> +    ip netns exec ns1 ip link set lo up
+> +    ip netns exec ns1 ip link set veth10 up
+> +    ip netns exec ns1 ip addr add ${gip_v4}/24 dev veth10
+> +    ip netns exec ns1 ip link set veth12 up
+> +    ip netns exec ns1 ip addr add ${dip_v4}/24 dev veth12
+> +
+> +    ip netns exec ns2 ip link set lo up
+> +    ip netns exec ns2 ip link set veth21 up
+> +    ip netns exec ns2 ip addr add ${rip_v4}/24 dev veth21
+> +    ip netns exec ns2 ip link set veth20 up
+> +    ip netns exec ns2 ip addr add ${sip_v4}/24 dev veth20
+> +}
+> +
+> +cleanup() {
+> +    for i in 0 1 2
+> +    do
+> +	ip netns del ns$i > /dev/null 2>&1
+> +    done
+> +    pkill nc
+> +}
+> +
+> +server_listen() {
+> +	ip netns exec ns2 nc -l -p 8080 > "${outfile}" &
+> +	server_pid=$!
+> +	sleep 0.2
+> +}
+> +
+> +client_connect() {
+> +	ip netns exec ns0 timeout 2 nc -w 1 ${vip_v4} ${port} < "${infile}"
+> +}
+> +
+> +verify_data() {
+> +	wait "${server_pid}"
+> +	# sha1sum returns two fields [sha1] [filepath]
+> +	# convert to bash array and access first elem
+> +	insum=($(sha1sum ${infile}))
 
-Thank you for the patch! Perhaps something to improve:
+When /bin/sh is dash the line above results in an error
 
-[auto build test WARNING on linus/master]
-[cannot apply to v5.4-rc1 next-20191001]
-[if your patch is applied to the wrong git tree, please drop us a note to help
-improve the system. BTW, we also suggest to use '--base' option to specify the
-base tree in git format-patch, please see https://stackoverflow.com/a/37406982]
+./ipvs.sh: 125: ./ipvs.sh: Syntax error: "(" unexpected (expecting "}")
 
-url:    https://github.com/0day-ci/linux/commits/Aleksa-Sarai/namei-openat2-2-path-resolution-restrictions/20191001-025628
-reproduce:
-        # apt-get install sparse
-        # sparse version: v0.6.1-rc1-37-gd466a02-dirty
-        make ARCH=x86_64 allmodconfig
-        make C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__'
+Could you work on making the script free of bashisms.
+Or, if that proves to be an exceisive burden, use #!/bin/bash
 
-If you fix the issue, kindly add following tag
-Reported-by: kbuild test robot <lkp@intel.com>
+Thanks!
 
-
-sparse warnings: (new ones prefixed by >>)
-
-   fs/open.c:757:13: sparse: sparse: restricted fmode_t degrades to integer
-   fs/open.c:983:18: sparse: sparse: restricted fmode_t degrades to integer
->> fs/open.c:1011:36: sparse: sparse: invalid assignment: |=
->> fs/open.c:1011:36: sparse:    left side has type int
->> fs/open.c:1011:36: sparse:    right side has type restricted fmode_t
-   fs/open.c:1013:36: sparse: sparse: invalid assignment: |=
-   fs/open.c:1013:36: sparse:    left side has type int
-   fs/open.c:1013:36: sparse:    right side has type restricted fmode_t
->> fs/open.c:1029:24: sparse: sparse: incorrect type in assignment (different base types) @@    expected restricted fmode_t [usertype] opath_mask @@    got pe] opath_mask @@
->> fs/open.c:1029:24: sparse:    expected restricted fmode_t [usertype] opath_mask
->> fs/open.c:1029:24: sparse:    got int opath_mask
->> fs/open.c:1011:36: sparse: sparse: invalid assignment: |=
->> fs/open.c:1011:36: sparse:    left side has type int
->> fs/open.c:1011:36: sparse:    right side has type restricted fmode_t
-   fs/open.c:1013:36: sparse: sparse: invalid assignment: |=
-   fs/open.c:1013:36: sparse:    left side has type int
-   fs/open.c:1013:36: sparse:    right side has type restricted fmode_t
->> fs/open.c:1029:24: sparse: sparse: incorrect type in assignment (different base types) @@    expected restricted fmode_t [usertype] opath_mask @@    got pe] opath_mask @@
->> fs/open.c:1029:24: sparse:    expected restricted fmode_t [usertype] opath_mask
->> fs/open.c:1029:24: sparse:    got int opath_mask
->> fs/open.c:1011:36: sparse: sparse: invalid assignment: |=
->> fs/open.c:1011:36: sparse:    left side has type int
->> fs/open.c:1011:36: sparse:    right side has type restricted fmode_t
-   fs/open.c:1013:36: sparse: sparse: invalid assignment: |=
-   fs/open.c:1013:36: sparse:    left side has type int
-   fs/open.c:1013:36: sparse:    right side has type restricted fmode_t
->> fs/open.c:1029:24: sparse: sparse: incorrect type in assignment (different base types) @@    expected restricted fmode_t [usertype] opath_mask @@    got pe] opath_mask @@
->> fs/open.c:1029:24: sparse:    expected restricted fmode_t [usertype] opath_mask
->> fs/open.c:1029:24: sparse:    got int opath_mask
-   fs/open.c:1173:15: sparse: sparse: undefined identifier 'copy_struct_from_user'
-
-vim +1011 fs/open.c
-
-   957	
-   958	static inline int build_open_flags(const struct open_how *how,
-   959					   struct open_flags *op)
-   960	{
-   961		int flags = how->flags;
-   962		int lookup_flags = 0;
-   963		int opath_mask = 0;
-   964		int acc_mode = ACC_MODE(flags);
-   965	
-   966		/*
-   967		 * Older syscalls still clear these bits before calling
-   968		 * build_open_flags(), but openat2(2) checks all its arguments.
-   969		 */
-   970		if (flags & ~VALID_OPEN_FLAGS)
-   971			return -EINVAL;
-   972		if (how->resolve & ~VALID_RESOLVE_FLAGS)
-   973			return -EINVAL;
-   974		if (!(how->flags & (O_PATH | O_CREAT | __O_TMPFILE)) && how->mode != 0)
-   975			return -EINVAL;
-   976	
-   977		if (flags & (O_CREAT | __O_TMPFILE))
-   978			op->mode = (how->mode & S_IALLUGO) | S_IFREG;
-   979		else
-   980			op->mode = 0;
-   981	
-   982		/* Must never be set by userspace */
- > 983		flags &= ~FMODE_NONOTIFY & ~O_CLOEXEC;
-   984	
-   985		/*
-   986		 * O_SYNC is implemented as __O_SYNC|O_DSYNC.  As many places only
-   987		 * check for O_DSYNC if the need any syncing at all we enforce it's
-   988		 * always set instead of having to deal with possibly weird behaviour
-   989		 * for malicious applications setting only __O_SYNC.
-   990		 */
-   991		if (flags & __O_SYNC)
-   992			flags |= O_DSYNC;
-   993	
-   994		if (flags & __O_TMPFILE) {
-   995			if ((flags & O_TMPFILE_MASK) != O_TMPFILE)
-   996				return -EINVAL;
-   997			if (!(acc_mode & MAY_WRITE))
-   998				return -EINVAL;
-   999		} else if (flags & O_PATH) {
-  1000			/*
-  1001			 * If we have O_PATH in the open flag. Then we
-  1002			 * cannot have anything other than the below set of flags
-  1003			 */
-  1004			flags &= O_DIRECTORY | O_NOFOLLOW | O_PATH;
-  1005			acc_mode = 0;
-  1006	
-  1007			/* Allow userspace to restrict the re-opening of O_PATH fds. */
-  1008			if (how->upgrade_mask & ~VALID_UPGRADE_FLAGS)
-  1009				return -EINVAL;
-  1010			if (!(how->upgrade_mask & UPGRADE_NOREAD))
-> 1011				opath_mask |= FMODE_PATH_READ;
-  1012			if (!(how->upgrade_mask & UPGRADE_NOWRITE))
-  1013				opath_mask |= FMODE_PATH_WRITE;
-  1014		}
-  1015	
-  1016		op->open_flag = flags;
-  1017	
-  1018		/* O_TRUNC implies we need access checks for write permissions */
-  1019		if (flags & O_TRUNC)
-  1020			acc_mode |= MAY_WRITE;
-  1021	
-  1022		/* Allow the LSM permission hook to distinguish append
-  1023		   access from general write access. */
-  1024		if (flags & O_APPEND)
-  1025			acc_mode |= MAY_APPEND;
-  1026	
-  1027		op->acc_mode = acc_mode;
-  1028		op->intent = flags & O_PATH ? 0 : LOOKUP_OPEN;
-> 1029		op->opath_mask = opath_mask;
-  1030	
-  1031		if (flags & O_CREAT) {
-  1032			op->intent |= LOOKUP_CREATE;
-  1033			if (flags & O_EXCL)
-  1034				op->intent |= LOOKUP_EXCL;
-  1035		}
-  1036	
-  1037		if (flags & O_DIRECTORY)
-  1038			lookup_flags |= LOOKUP_DIRECTORY;
-  1039		if (!(flags & O_NOFOLLOW))
-  1040			lookup_flags |= LOOKUP_FOLLOW;
-  1041		if (flags & O_EMPTYPATH)
-  1042			lookup_flags |= LOOKUP_EMPTY;
-  1043	
-  1044		if (how->resolve & RESOLVE_NO_XDEV)
-  1045			lookup_flags |= LOOKUP_NO_XDEV;
-  1046		if (how->resolve & RESOLVE_NO_MAGICLINKS)
-  1047			lookup_flags |= LOOKUP_NO_MAGICLINKS;
-  1048		if (how->resolve & RESOLVE_NO_SYMLINKS)
-  1049			lookup_flags |= LOOKUP_NO_SYMLINKS;
-  1050		if (how->resolve & RESOLVE_BENEATH)
-  1051			lookup_flags |= LOOKUP_BENEATH;
-  1052		if (how->resolve & RESOLVE_IN_ROOT)
-  1053			lookup_flags |= LOOKUP_IN_ROOT;
-  1054	
-  1055		op->lookup_flags = lookup_flags;
-  1056		return 0;
-  1057	}
-  1058	
-
----
-0-DAY kernel test infrastructure                Open Source Technology Center
-https://lists.01.org/pipermail/kbuild-all                   Intel Corporation
+> +	outsum=($(sha1sum ${outfile}))
+> +	if [[ "${insum[0]}" != "${outsum[0]}" ]]; then
+> +		echo "data mismatch"
+> +		exit 1
+> +	fi
+> +}
+> +
+> +test_service() {
+> +    server_listen
+> +    client_connect
+> +    ret=$?
+> +    if [ $ret -ne 0 ]; then
+> +	return $ret
+> +    fi
+> +    verify_data
+> +}
+> +
+> +
+> +test_dr() {
+> +    ip netns exec ns0 ip route add ${vip_v4} via ${gip_v4} dev br0
+> +
+> +    ip netns exec ns1 sysctl -qw net.ipv4.ip_forward=1
+> +    ip netns exec ns1 ipvsadm -A -t ${vip_v4}:${port} -s rr
+> +    ip netns exec ns1 ipvsadm -a -t ${vip_v4}:${port} -r ${rip_v4}:${port}
+> +    ip netns exec ns1 ip addr add ${vip_v4}/32 dev lo:1
+> +
+> +    # avoid incorrect arp response
+> +    ip netns exec ns2 sysctl -qw net.ipv4.conf.all.arp_ignore=1
+> +    ip netns exec ns2 sysctl -qw net.ipv4.conf.all.arp_announce=2
+> +    # avoid reverse route lookup
+> +    ip netns exec ns2 sysctl -qw  net.ipv4.conf.all.rp_filter=0
+> +    ip netns exec ns2 sysctl -qw  net.ipv4.conf.veth21.rp_filter=0
+> +    ip netns exec ns2 ip addr add ${vip_v4}/32 dev lo:1
+> +
+> +    test_service
+> +}
+> +
+> +run_tests() {
+> +	local errors=
+> +
+> +	echo "Testing DR mode..."
+> +	setup
+> +	test_dr
+> +	errors=$(( $errors + $? ))
+> +
+> +	return $errors
+> +}
+> +
+> +trap cleanup EXIT
+> +
+> +cleanup
+> +run_tests
+> +
+> +if [ $? -ne 0 ]; then
+> +	echo -e "$(basename $0): ${RED}FAIL${NC}"
+> +	exit 1
+> +fi
+> +echo -e "$(basename $0): ${GREEN}PASS${NC}"
+> +exit 0
+> -- 
+> 1.8.3.1
+> 
+> 
+> 
