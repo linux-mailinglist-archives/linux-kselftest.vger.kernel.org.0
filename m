@@ -2,92 +2,87 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A6D3EC3D8A
-	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Oct 2019 19:00:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91047C3FED
+	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Oct 2019 20:34:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730170AbfJAQkp (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 1 Oct 2019 12:40:45 -0400
-Received: from mail.kernel.org ([198.145.29.99]:52066 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730241AbfJAQko (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 1 Oct 2019 12:40:44 -0400
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id D3E7421D79;
-        Tue,  1 Oct 2019 16:40:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1569948043;
-        bh=8rXf1rcCw3zLras7kS4IMtEFY7Dv0pAdekM63Zo4p1g=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=hw0rp2UpCOnwwt+y7MLvTR0/AixA8DMxxoqItXLEpo8mN62bPcckG4dLPgwngg5sa
-         fAly+fz7licAcUa4bDyQbh5j7svzd2NDiSRVgveSwisIaGynvGm/TjlFalFjfB7jxe
-         9aOf+oiI/rE7GyTrF3sYpVLYl6ejHNffhzFPlfjE=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Andrii Nakryiko <andriin@fb.com>, Alexei Starovoitov <ast@fb.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Sasha Levin <sashal@kernel.org>,
-        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, clang-built-linux@googlegroups.com
-Subject: [PATCH AUTOSEL 5.3 50/71] selftests/bpf: adjust strobemeta loop to satisfy latest clang
-Date:   Tue,  1 Oct 2019 12:39:00 -0400
-Message-Id: <20191001163922.14735-50-sashal@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20191001163922.14735-1-sashal@kernel.org>
-References: <20191001163922.14735-1-sashal@kernel.org>
+        id S1726200AbfJASei (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 1 Oct 2019 14:34:38 -0400
+Received: from ja.ssi.bg ([178.16.129.10]:60728 "EHLO ja.ssi.bg"
+        rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725851AbfJASei (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 1 Oct 2019 14:34:38 -0400
+Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
+        by ja.ssi.bg (8.15.2/8.15.2) with ESMTP id x91IYDF3004229;
+        Tue, 1 Oct 2019 21:34:13 +0300
+Date:   Tue, 1 Oct 2019 21:34:13 +0300 (EEST)
+From:   Julian Anastasov <ja@ssi.bg>
+To:     Haishuang Yan <yanhaishuang@cmss.chinamobile.com>
+cc:     Shuah Khan <shuah@kernel.org>,
+        Pablo Neira Ayuso <pablo@netfilter.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Simon Horman <horms@verge.net.au>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        lvs-devel@vger.kernel.org, netfilter-devel@vger.kernel.org
+Subject: Re: [PATCH v3 0/3] selftests: netfilter: introduce test cases for
+ ipvs
+In-Reply-To: <1569939599-1872-1-git-send-email-yanhaishuang@cmss.chinamobile.com>
+Message-ID: <alpine.LFD.2.21.1910012133330.3887@ja.home.ssi.bg>
+References: <1569939599-1872-1-git-send-email-yanhaishuang@cmss.chinamobile.com>
+User-Agent: Alpine 2.21 (LFD 202 2017-01-01)
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Andrii Nakryiko <andriin@fb.com>
 
-[ Upstream commit 4670d68b9254710fdeaf794cad54d8b2c9929e0a ]
+	Hello,
 
-Some recent changes in latest Clang started causing the following
-warning when unrolling strobemeta test case main loop:
+On Tue, 1 Oct 2019, Haishuang Yan wrote:
 
-  progs/strobemeta.h:416:2: warning: loop not unrolled: the optimizer was
-  unable to perform the requested transformation; the transformation might
-  be disabled or specified as part of an unsupported transformation
-  ordering [-Wpass-failed=transform-warning]
+> This series patch include test cases for ipvs.
+> 
+> The test topology is who as below:
+> +--------------------------------------------------------------+
+> |                      |                                       |
+> |         ns0          |         ns1                           |
+> |      -----------     |     -----------    -----------        |
+> |      | veth01  | --------- | veth10  |    | veth12  |        |
+> |      -----------    peer   -----------    -----------        |
+> |           |          |                        |              |
+> |      -----------     |                        |              |
+> |      |  br0    |     |-----------------  peer |--------------|
+> |      -----------     |                        |              |
+> |           |          |                        |              |
+> |      ----------     peer   ----------      -----------       |
+> |      |  veth02 | --------- |  veth20 |     | veth12  |       |
+> |      ----------      |     ----------      -----------       |
+> |                      |         ns2                           |
+> |                      |                                       |
+> +--------------------------------------------------------------+
+> 
+> Test results:
+> # selftests: netfilter: ipvs.sh
+> # Testing DR mode...
+> # Testing NAT mode...
+> # Testing Tunnel mode...
+> # ipvs.sh: PASS
+> ok 6 selftests: netfilter: ipvs.sh
+> 
+> Haishuang Yan (3):
+>   selftests: netfilter: add ipvs test script
+>   selftests: netfilter: add ipvs nat test case
+>   selftests: netfilter: add ipvs tunnel test case
 
-This patch simplifies loop's exit condition to depend only on constant
-max iteration number (STROBE_MAX_MAP_ENTRIES), while moving early
-termination logic inside the loop body. The changes are equivalent from
-program logic standpoint, but fixes the warning. It also appears to
-improve generated BPF code, as it fixes previously failing non-unrolled
-strobemeta test cases.
+Acked-by: Julian Anastasov <ja@ssi.bg>
 
-Cc: Alexei Starovoitov <ast@fb.com>
-Signed-off-by: Andrii Nakryiko <andriin@fb.com>
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- tools/testing/selftests/bpf/progs/strobemeta.h | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+>  tools/testing/selftests/netfilter/Makefile |   2 +-
+>  tools/testing/selftests/netfilter/ipvs.sh  | 234 +++++++++++++++++++++++++++++
+>  2 files changed, 235 insertions(+), 1 deletion(-)
+>  create mode 100755 tools/testing/selftests/netfilter/ipvs.sh
 
-diff --git a/tools/testing/selftests/bpf/progs/strobemeta.h b/tools/testing/selftests/bpf/progs/strobemeta.h
-index 8a399bdfd9203..067eb625d01c5 100644
---- a/tools/testing/selftests/bpf/progs/strobemeta.h
-+++ b/tools/testing/selftests/bpf/progs/strobemeta.h
-@@ -413,7 +413,10 @@ static __always_inline void *read_map_var(struct strobemeta_cfg *cfg,
- #else
- #pragma unroll
- #endif
--	for (int i = 0; i < STROBE_MAX_MAP_ENTRIES && i < map.cnt; ++i) {
-+	for (int i = 0; i < STROBE_MAX_MAP_ENTRIES; ++i) {
-+		if (i >= map.cnt)
-+			break;
-+
- 		descr->key_lens[i] = 0;
- 		len = bpf_probe_read_str(payload, STROBE_MAX_STR_LEN,
- 					 map.entries[i].key);
--- 
-2.20.1
+Regards
 
+--
+Julian Anastasov <ja@ssi.bg>
