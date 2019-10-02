@@ -2,83 +2,97 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 446A9C929C
-	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Oct 2019 21:49:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7733EC93D6
+	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Oct 2019 23:53:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727281AbfJBTtA (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 2 Oct 2019 15:49:00 -0400
-Received: from mail.kernel.org ([198.145.29.99]:45428 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727186AbfJBTtA (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 2 Oct 2019 15:49:00 -0400
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net [24.9.64.241])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 7270A2133F;
-        Wed,  2 Oct 2019 19:48:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1570045739;
-        bh=7PVCAuEsgrCe442h9KQ9kdWMLRPwweKypkL7yGEgWA4=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=Vtizw4ru0jGMqtXcWX97sP+JdmuHPnyTNdkd6Mv1daHMDVSbeZQWIfPrw16SIZG0F
-         pU3P4Fad0j/wJNHxFMfuUnlycfCUr12VcliY6XiBYSKWhyrnXZSc0tisAwo5C/G4NS
-         X3MXCPgFhZkNnKvOrv1kPveLyGvVqpWW24l06Pqw=
-Subject: Re: [PATCH v3 1/2] selftests: watchdog: Validate optional file
- argument
-To:     Eugeniu Rosca <erosca@de.adit-jv.com>
-Cc:     "George G. Davis" <george_davis@mentor.com>,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Eugeniu Rosca <roscaeugeniu@gmail.com>,
-        shuah <shuah@kernel.org>
-References: <20190917184023.16701-1-erosca@de.adit-jv.com>
- <156996250317.31379.1299334144215961607.git-patchwork-notify@kernel.org>
- <20191002104101.GA6855@vmlxhi-102.adit-jv.com>
-From:   shuah <shuah@kernel.org>
-Message-ID: <2f1d360f-ee56-8d68-c66a-53604baf8907@kernel.org>
-Date:   Wed, 2 Oct 2019 13:48:37 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        id S1726081AbfJBVx5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 2 Oct 2019 17:53:57 -0400
+Received: from mail-pf1-f193.google.com ([209.85.210.193]:35696 "EHLO
+        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725928AbfJBVx5 (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 2 Oct 2019 17:53:57 -0400
+Received: by mail-pf1-f193.google.com with SMTP id 205so366108pfw.2
+        for <linux-kselftest@vger.kernel.org>; Wed, 02 Oct 2019 14:53:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition
+         :user-agent;
+        bh=78WP2Dv09wS4CrHxcmN8PyVj+nafJCWKcIC/S/IibVI=;
+        b=bcwvlWqz3iUPmd8kNAVv0WvcWcbB7QMcgTJZJKu+faizIPNeVrI8ZtuN8AhRbe2RyC
+         bZk7+VPGJ3fhFkRHSA2a9Ev6in/u1igyQSdB8mxyXjKPoZg7DYw+a1Gnm+OfD1Wox4PI
+         qtD/vFlmd3B4C27b21EA6KCSNEcyF1HZdrE4dgtdf/MIqf3BsJcchtsZwOBguXzSvcqE
+         r3ql6llgnORLlj93XIVfK0DHUAmdCkakm2VyN+LKmhrhrLAHH6Ij1r6TDgTSNow/Mr9B
+         jZbsuOeIGo/97J4hXBgCqz3t1bnRebyo5cutlvekfzW4hhKpynSzd/uN0uRdNyiHoh+f
+         8G+Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition:user-agent;
+        bh=78WP2Dv09wS4CrHxcmN8PyVj+nafJCWKcIC/S/IibVI=;
+        b=h0xi403TTNtyEmJo13veHzVVihP8hhOKw+olXnGdmRqBGPOpuFP1CwnK/DbBePhDk2
+         fwqXDgCvbcp++/tnFMgaJkJbNaAnSzx/ZygAWpjKedidFEh7ZW5px6GL47INibimBZrw
+         R9YubCdb7/qZ3fSf6pvTPtc8JeWyJiuBtK5W6j0oeWbGl3RT5r68hgvJlAU/Z7OwrHww
+         mh4yG3uTNx6KfdxrQXD7WY5Cg60CKOtxlRm5EP6yGqHM8Ya/Blm5C3xVmaQfCGoGQG4e
+         uCSnjCfmmHFQmFoJ47sZXQ87lp1/7ZEjvoevwR7Oo4nv7Luld8uE1BMHegUnxfosRUis
+         QUfg==
+X-Gm-Message-State: APjAAAXPikgFIi03eLt6gB26wqcWPprVVWPRPWWLkn3GC9Ovyaq3Zifj
+        QXy4mM1FIX6mHPR0imZGB/QA0A==
+X-Google-Smtp-Source: APXvYqxEUtdPca07fpB2lWdw+zEZyBIPte2vS8Yce3J7WM+kE1MxZf06cCoBmJxshbZErfyjaLkGwQ==
+X-Received: by 2002:a63:7b16:: with SMTP id w22mr6032156pgc.328.1570053236171;
+        Wed, 02 Oct 2019 14:53:56 -0700 (PDT)
+Received: from google.com ([2620:15c:2cb:1:e90c:8e54:c2b4:29e7])
+        by smtp.gmail.com with ESMTPSA id l189sm334998pgd.46.2019.10.02.14.53.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Oct 2019 14:53:55 -0700 (PDT)
+Date:   Wed, 2 Oct 2019 14:53:51 -0700
+From:   Brendan Higgins <brendanhiggins@google.com>
+To:     helpdesk@kernel.org
+Cc:     kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org
+Subject: Bugzilla Component for KUnit?
+Message-ID: <20191002215351.GA177672@google.com>
 MIME-Version: 1.0
-In-Reply-To: <20191002104101.GA6855@vmlxhi-102.adit-jv.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 10/2/19 4:41 AM, Eugeniu Rosca wrote:
-> Hi Shuah,
-> 
-> On Tue, Oct 01, 2019 at 08:41:43PM +0000, patchwork-bot+linux-kselftest@kernel.org wrote:
->> Hello:
->>
->> This series was applied to shuah/linux-kselftest.git (refs/heads/fixes).
->>
->> On Tue, 17 Sep 2019 20:40:22 +0200 you wrote:
->>> From: "George G. Davis" <george_davis@mentor.com>
->>>
->>> The newly added optional file argument does not validate if the
->>> file is indeed a watchdog, e.g.:
->>>
->>> ./watchdog-test  -f /dev/zero
->>> Watchdog Ticking Away!
->>>
->>> [...]
->>
->> Here is a summary with links:
->>    - [v3,1/2] selftests: watchdog: Validate optional file argument
->>      https://git.kernel.org/shuah/linux-kselftest/c/93c384f5d553bc4fdfb252b89ff378363ee05cee
-> 
-> Could you please update the 'Fixes:' tag in the above commit to:
-> Fixes: a4864a33f56caa ("selftests: watchdog: Add optional file argument")
-> 
-> The warning in https://patchwork.kernel.org/patch/11149287/ clearly says
-> that the fixed commit is from linux-next and it seems to have been
-> updated before landing in mainline. TIA.
-> 
+Hi,
 
-Thanks. My scripts didn't catch it for some reason. Fixed now.
+I am thinking about requesting a Bugzilla component for my kernel
+project KUnit. I am not sure if this is the right place for it.  Some
+background on KUnit: We are working on adding unit testing for the Linux
+kernel[1][2]. We have our initial patchset that introduces the subsystem
+in the process of being merged (Linus sent our PR back to us for a minor
+fix[3], so it should be in either 5.4-rc2 or 5.5, but is nevertheless in
+linux-next). However, we also have a staging repo that people are using
+and some supporting code that lives outside of the kernel.
 
--- Shuah
+So I am trying to figure out:
+
+ 1. Is it appropriate to request a Bugzilla component before our
+    subsystem has been merged into torvalds/master? I would just wait,
+    but I have some users looking to file issues, so I would prefer to
+    provide them something sooner rather than later.
+
+ 2. Is it appropriate to use the kernel's Bugzilla to track issues
+    outside of the Linux kernel? As I mention above, we have code that
+    lives outside of the kernel; is it appropriate to use kernel.org's
+    Bugzilla for this?
+
+ 3. Does Bugzilla match my planned usage model? It doesn't look like
+    Bugzilla get's much usage aside from reporting bugs. I want to use
+    it for tracking feature progress and things like that. Is that okay?
+
+If kernel.org's Bugzilla is not a fit for what I want to do, that's
+fine. I just want to make sure before I go off and potentially fracture
+a central bug repository by creating my own somewhere else.
+
+Thanks!
+
+[1] https://lwn.net/Articles/780985/
+[2] https://google.github.io/kunit-docs/third_party/kernel/docs/index.html
+[3] https://lore.kernel.org/lkml/be8059f4-8e8f-cd18-0978-a9c861f6396b@linuxfoundation.org/
