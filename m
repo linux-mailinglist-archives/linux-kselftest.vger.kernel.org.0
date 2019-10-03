@@ -2,113 +2,118 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 66BD1C96D0
-	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Oct 2019 04:47:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5157C9910
+	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Oct 2019 09:38:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727976AbfJCCrw (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 2 Oct 2019 22:47:52 -0400
-Received: from mail-lj1-f194.google.com ([209.85.208.194]:45550 "EHLO
-        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725860AbfJCCrw (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 2 Oct 2019 22:47:52 -0400
-Received: by mail-lj1-f194.google.com with SMTP id q64so903808ljb.12
-        for <linux-kselftest@vger.kernel.org>; Wed, 02 Oct 2019 19:47:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=pN0um+kQSs9flJznbqYPiNwCThq7sqsv6/WwbAw4wo4=;
-        b=h4ATNZYKw7PwNNqG3nr4vohB1AmTAIAIy2xiiP8xP6+kXrPICl1hAGWYquQvckEELv
-         klDkW+KeI8y0kCaxrM38c2wUlQwg3V14BrMpDoK+tcEcunvR1dF0PaXKSF1kcZyZx8h6
-         E41kLUF8P0bLTkimMTdYgZF+vLUaNvTx+SY4gQmYjTM6Pz411c9ZA1CLbckUqxEItrJU
-         uSl8WxeJlo8/A4lg6LlSmFrqUuhbTOaCt9r/vPzfI2ULgUPEbeyJKScqULA181Hy8q6Q
-         tSZi/tJLSRtNx5feMJ8kCz40RxmSsKgEyiB6IOtz4CAqkGY4IBDIDQ+GRTEzXqmZeuTr
-         MQrQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=pN0um+kQSs9flJznbqYPiNwCThq7sqsv6/WwbAw4wo4=;
-        b=pyizm/GE40TPI39ZqzUmU0cjf98j4V9housxnX/zI2NgydpazKJicGq9I3sLFe2MAx
-         iePll10r2JYl4ecGkh7HEQw33TOl7hIRPW9gHxyupDgGBALh3p5o0p3tz22kGqZKvc13
-         0WPhWwmv+FQgOXEcdjh+kg202MqVayu9OJF1JI9Qe0YTV/vRuvgEUCSiZo7zG3y0kkBm
-         vFhbziAAHXI/m59XvIjUn+e7IvCynSjO/y/U8n1UEu3IzmkOfZxHlcvx9noWbZiSzfpu
-         s+cc1AWXaW7vWLJKk5PP7eEw4JqL5vzLfso2hT9YGLho9vMZzOCL9nSXg04sk0CE9U/Q
-         m94g==
-X-Gm-Message-State: APjAAAUT/juWSc2hqqGQQ3+xaHrehqEXtgki6oiqaD9/Mxt14sT/Yu38
-        X1YdThrnYIc5Hq/nwD6/LnG0bpTrB1Y6bS+fTfwsYQ==
-X-Google-Smtp-Source: APXvYqzBmAcLMUf52wfvCXWS7QcJ9ibAblcUgy0hiIu9SLf9sB4ZMG1TVebM5tx14n53yjkONyCWNA3x7/MqhC1I78s=
-X-Received: by 2002:a2e:8889:: with SMTP id k9mr1916898lji.252.1570070868795;
- Wed, 02 Oct 2019 19:47:48 -0700 (PDT)
+        id S1728180AbfJCHiM (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 3 Oct 2019 03:38:12 -0400
+Received: from mx1.redhat.com ([209.132.183.28]:57116 "EHLO mx1.redhat.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728178AbfJCHiL (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 3 Oct 2019 03:38:11 -0400
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mx1.redhat.com (Postfix) with ESMTPS id 9935F10DCC9F;
+        Thu,  3 Oct 2019 07:38:11 +0000 (UTC)
+Received: from kamzik.brq.redhat.com (unknown [10.43.2.160])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id CA9BD5C21F;
+        Thu,  3 Oct 2019 07:38:07 +0000 (UTC)
+Date:   Thu, 3 Oct 2019 09:38:05 +0200
+From:   Andrew Jones <drjones@redhat.com>
+To:     Ben Gardon <bgardon@google.com>
+Cc:     kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Cannon Matthews <cannonmatthews@google.com>,
+        Peter Xu <peterx@redhat.com>
+Subject: Re: [PATCH 4/9] KVM: selftests: Pass args to vCPU instead of using
+ globals
+Message-ID: <20191003073805.jnuj3tqgxjiuvo7c@kamzik.brq.redhat.com>
+References: <20190927161836.57978-1-bgardon@google.com>
+ <20190927161836.57978-5-bgardon@google.com>
 MIME-Version: 1.0
-References: <1018171707.4561.1570021237760.JavaMail.javamailuser@localhost>
- <09618fd2-eb41-5a82-3fb4-4f4ca18bd075@kernel.org> <CAEUSe7_+RQ9UPjJW1TzFwfCpcFuOv9ha7k_Lf46RJTg-=gVf_Q@mail.gmail.com>
-In-Reply-To: <CAEUSe7_+RQ9UPjJW1TzFwfCpcFuOv9ha7k_Lf46RJTg-=gVf_Q@mail.gmail.com>
-From:   Anders Roxell <anders.roxell@linaro.org>
-Date:   Thu, 3 Oct 2019 04:47:37 +0200
-Message-ID: <CADYN=9LeWLqQ4cYAQ=Fk-xD_O4UxPN+GSwgqyB3UH3j=xH0KLA@mail.gmail.com>
-Subject: Re: next-20191002 kselftest results
-To:     =?UTF-8?B?RGFuaWVsIETDrWF6?= <daniel.diaz@linaro.org>
-Cc:     shuah <shuah@kernel.org>, lkft-triage@lists.linaro.org,
-        Dan Rue <dan.rue@linaro.org>,
-        Naresh Kamboju <naresh.kamboju@linaro.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190927161836.57978-5-bgardon@google.com>
+User-Agent: NeoMutt/20180716
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
+X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.6.2 (mx1.redhat.com [10.5.110.64]); Thu, 03 Oct 2019 07:38:11 +0000 (UTC)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, 3 Oct 2019 at 04:15, Daniel D=C3=ADaz <daniel.diaz@linaro.org> wrot=
-e:
->
-> Hello!
->
-> On Wed, 2 Oct 2019 at 20:52, shuah <shuah@kernel.org> wrote:
-> >
-> > On 10/2/19 7:00 AM, ci_notify@linaro.org wrote:
-> > > Summary
-> > > ---------------------------------------------------------------------=
----
-> > > kernel: 5.4.0-rc1
-> > > git repo: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-=
-next.git
-> > > git branch: master
-> > > git commit: a32db7e1172439240202b843642465618498170d
-> > > git describe: next-20191002
-> > > Test details: https://qa-reports.linaro.org/lkft/linux-next-oe/build/=
-next-20191002
-> > >
-> > > Regressions (compared to build next-20191001)
-> >
-> > This report is nice for quick glance of test pass/fail/skip dashboard.
-> > I am finding very difficult to figure out why the test failed.
-> >
-> > Can you please save the test run logs and stash them for access?
->
-> Logs are saved. You can click on the test details:
->   https://qa-reports.linaro.org/lkft/linux-next-oe/build/next-20191002
-> then opening "kselftests" in Test Results, choosing an environment
-> (say "x86_64"), and then (here's the tricky one) "job_url":
->   https://lkft.validation.linaro.org/scheduler/job/948404
+On Fri, Sep 27, 2019 at 09:18:32AM -0700, Ben Gardon wrote:
+> In preparation for supporting multiple vCPUs in the demand paging test,
+> pass arguments to the vCPU instead of syncing globals to it.
+> 
+> Signed-off-by: Ben Gardon <bgardon@google.com>
+> ---
+>  .../selftests/kvm/demand_paging_test.c        | 61 +++++++++++--------
+>  1 file changed, 37 insertions(+), 24 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/kvm/demand_paging_test.c b/tools/testing/selftests/kvm/demand_paging_test.c
+> index 19982a33a0ca2..8fd46e99d9e30 100644
+> --- a/tools/testing/selftests/kvm/demand_paging_test.c
+> +++ b/tools/testing/selftests/kvm/demand_paging_test.c
+> @@ -44,7 +44,6 @@
+>   */
+>  static uint64_t host_page_size;
+>  static uint64_t guest_page_size;
+> -static uint64_t guest_num_pages;
+>  
+>  static char *guest_data_prototype;
+>  
+> @@ -65,14 +64,13 @@ static uint64_t guest_test_virt_mem = DEFAULT_GUEST_TEST_MEM;
+>   * Continuously write to the first 8 bytes of each page in the demand paging
+>   * memory region.
+>   */
+> -static void guest_code(void)
+> +static void guest_code(uint64_t gva, uint64_t pages)
+>  {
+>  	int i;
+>  
+> -	for (i = 0; i < guest_num_pages; i++) {
+> -		uint64_t addr = guest_test_virt_mem;
+> +	for (i = 0; i < pages; i++) {
+> +		uint64_t addr = gva + (i * guest_page_size);
+>  
+> -		addr += i * guest_page_size;
+>  		addr &= ~(host_page_size - 1);
+>  		*(uint64_t *)addr = 0x0123456789ABCDEF;
+>  	}
+> @@ -84,18 +82,31 @@ static void guest_code(void)
+>  static void *host_test_mem;
+>  static uint64_t host_num_pages;
+>  
+> +struct vcpu_thread_args {
+> +	uint64_t gva;
+> +	uint64_t pages;
+> +	struct kvm_vm *vm;
+> +	int vcpu_id;
+> +};
+> +
+>  static void *vcpu_worker(void *data)
+>  {
+>  	int ret;
+> -	struct kvm_vm *vm = data;
+> +	struct vcpu_thread_args *args = (struct vcpu_thread_args *)data;
+> +	struct kvm_vm *vm = args->vm;
+> +	int vcpu_id = args->vcpu_id;
+> +	uint64_t gva = args->gva;
+> +	uint64_t pages = args->pages;
+>  	struct kvm_run *run;
+>  
+> -	run = vcpu_state(vm, VCPU_ID);
+> +	vcpu_args_set(vm, vcpu_id, 2, gva, pages);
 
-If you want to download the log and do grep locally you can find that
-under "Related downloads" the button "Log file" that will download the
-complete log also.
+AArch64 doesn't implement vcpu_args_set(), but I see in the first patch
+that you've added this test to AArch64 as well.
 
-Cheers,
-Anders
-[1] https://qa-reports.linaro.org/lkft/linux-next-oe/build/next-20191002/te=
-strun/948404/
+Wouldn't it be easier to just create a global array of size nr-vcpus for
+each variable that needs to be shared with the guest? Then derive the
+per-cpu index from the acpi-id or maybe abuse some msr for it. We could
+probably even add some macros to build some type of a per-cpu framework.
 
-> Running kselftests starts in line 1276 in that particular log.
->
-> Hope that sheds some light on that.
->
-> Greetings!
->
-> Daniel D=C3=ADaz
-> daniel.diaz@linaro.org
+Thanks,
+drew
