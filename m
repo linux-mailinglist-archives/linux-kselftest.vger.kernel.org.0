@@ -2,108 +2,54 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 11C66CA05C
-	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Oct 2019 16:31:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7320CA13F
+	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Oct 2019 17:39:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730166AbfJCObL (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 3 Oct 2019 10:31:11 -0400
-Received: from mail.kernel.org ([198.145.29.99]:43530 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726393AbfJCObK (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 3 Oct 2019 10:31:10 -0400
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net [24.9.64.241])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 3B56220865;
-        Thu,  3 Oct 2019 14:31:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1570113070;
-        bh=ja887EgzBcZzPkb4rXU45yrEXXzEuRz1I3W6sB1AWUk=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=YO+x/CU8yx5nIEieP2GQwzeKy8Bhu3L1P4StryiRUy79wgYddP6O1muAn0fbCoZMX
-         2PnZCz4yke0tVLVa6mS6ypabRHZMvmWWV/GYoVVntzXrSGAqXh0JjsU6jaQLw3QYmC
-         BH/XTSfQ6UqXIHe8QlaBHC0GmWhiOyfGua+RydXY=
-Subject: Re: Linux 5.4 kselftest known issues - update
-To:     Shuah Khan <skhan@linuxfoundation.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Christian Brauner <christian@brauner.io>, kvm@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        bgolaszewski@baylibre.com, Daniel Borkmann <daniel@iogearbox.net>,
-        bpf <bpf@vger.kernel.org>, Networking <netdev@vger.kernel.org>,
-        shuah <shuah@kernel.org>
-References: <a293684f-4ab6-51af-60b1-caf4eb97ff05@linuxfoundation.org>
-From:   shuah <shuah@kernel.org>
-Message-ID: <2a835150-d7f1-1c4a-80cb-d385f799dd14@kernel.org>
-Date:   Thu, 3 Oct 2019 08:30:55 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        id S1728767AbfJCPjj (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 3 Oct 2019 11:39:39 -0400
+Received: from www62.your-server.de ([213.133.104.62]:50702 "EHLO
+        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727368AbfJCPjj (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 3 Oct 2019 11:39:39 -0400
+Received: from 57.248.197.178.dynamic.dsl-lte-bonding.zhbmb00p-msn.res.cust.swisscom.ch ([178.197.248.57] helo=localhost)
+        by www62.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
+        (Exim 4.89_1)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1iG3Ca-0005Qn-5h; Thu, 03 Oct 2019 17:39:36 +0200
+Date:   Thu, 3 Oct 2019 17:39:35 +0200
+From:   Daniel Borkmann <daniel@iogearbox.net>
+To:     Ivan Khoronzhuk <ivan.khoronzhuk@linaro.org>
+Cc:     shuah@kernel.org, ast@kernel.org, kafai@fb.com,
+        songliubraving@fb.com, yhs@fb.com, linux-kselftest@vger.kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH bpf-next 0/2] selftest/bpf: remove warns for
+ enable_all_controllers
+Message-ID: <20191003153935.GA18067@pc-63.home>
+References: <20191002120404.26962-1-ivan.khoronzhuk@linaro.org>
 MIME-Version: 1.0
-In-Reply-To: <a293684f-4ab6-51af-60b1-caf4eb97ff05@linuxfoundation.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20191002120404.26962-1-ivan.khoronzhuk@linaro.org>
+User-Agent: Mutt/1.12.1 (2019-06-15)
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.101.4/25591/Thu Oct  3 10:30:38 2019)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 9/26/19 11:41 AM, Shuah Khan wrote:
-> Here are the know kselftest issues on Linux 5.4 with
-> top commit commit 619e17cf75dd58905aa67ccd494a6ba5f19d6cc6
-> on x86_64:
+On Wed, Oct 02, 2019 at 03:04:02PM +0300, Ivan Khoronzhuk wrote:
+> This micro series fixes annoying warn described in patches
+> while samples/bpf build. Second patch fixes new warn that
+> comes after fixing warn of first patch, that was masked.
 > 
-> The goal is to get these addressed before 5.4 comes out.
+> Ivan Khoronzhuk (2):
+>   selftests/bpf: add static to enable_all_controllers()
+>   selftests/bpf: correct path to include msg + path
+> 
+>  tools/testing/selftests/bpf/cgroup_helpers.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 
-All of these issues are now fixed, except the bpf llvm dependency.
-These fixes should all be in linux-next if they haven't already.
-
-> 
-> 3 build failures and status:
-> 
-> pidfd - undefined reference to `pthread_create' collect2: error: ld 
-> returned 1 exit status
-> 
-> Fixed: https://patchwork.kernel.org/patch/11159517/
-
-In
-> 
-> bfp (two issues)
-> 
-> 1. "make TARGETS=bpf kselftest" build fails
-> Makefile:127: tools/build/Makefile.include: No such file or directory
-
-https://patchwork.kernel.org/patch/11163601/
-In bpf fixes tree
-
-> 
-> This is due to recent kbuild changes and I have a patch ready to send.
-> 
-> 2. Related to llvm latest version dependency. This is a hard dependency.
-> Unless users upgrade to latest llvvm, bpf test won't run. The new llvm
-> might not be supported on all distros yet, in which case bpf will not
-> get tested in some rings and on some architectures.
-> 
-> gpio
-> 
-> "make TARGETS=gpio kselftest" build fails
-> 
-> Makefile:23: tools/build/Makefile.include: No such file or directory
-
-https://patchwork.kernel.org/patch/11163603/
-
-> 
-> This is due to recent kbuild changes and I have a patch ready to send.
-> 
-> kvm
-> 
-> "make TARGETS=kvm kselftest" build fails due --no-pie flags.
-
-https://patchwork.kernel.org/patch/11171893/
-
-I haven't found any new ones on x86_64 as of 5.4-rc1
-
-thanks,
--- Shuah
+Applied, thanks!
