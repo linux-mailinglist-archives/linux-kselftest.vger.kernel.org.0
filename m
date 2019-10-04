@@ -2,131 +2,113 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A8E37CB977
-	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Oct 2019 13:48:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D0B5CC0DF
+	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Oct 2019 18:34:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727878AbfJDLsR (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 4 Oct 2019 07:48:17 -0400
-Received: from mail105.syd.optusnet.com.au ([211.29.132.249]:51891 "EHLO
-        mail105.syd.optusnet.com.au" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726024AbfJDLsR (ORCPT
+        id S1727587AbfJDQe5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 4 Oct 2019 12:34:57 -0400
+Received: from mail-io1-f66.google.com ([209.85.166.66]:38983 "EHLO
+        mail-io1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727264AbfJDQe5 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 4 Oct 2019 07:48:17 -0400
-Received: from dimstar.local.net (n122-110-44-45.sun2.vic.optusnet.com.au [122.110.44.45])
-        by mail105.syd.optusnet.com.au (Postfix) with SMTP id 4656B3622EA
-        for <linux-kselftest@vger.kernel.org>; Fri,  4 Oct 2019 21:47:46 +1000 (AEST)
-Received: (qmail 23038 invoked by uid 501); 4 Oct 2019 11:47:45 -0000
-Date:   Fri, 4 Oct 2019 21:47:45 +1000
-From:   Duncan Roe <duncan_roe@optusnet.com.au>
-To:     Haishuang Yan <yanhaishuang@cmss.chinamobile.com>
-Cc:     Julian Anastasov <ja@ssi.bg>, Shuah Khan <shuah@kernel.org>,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Simon Horman <horms@verge.net.au>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        lvs-devel@vger.kernel.org, netfilter-devel@vger.kernel.org
-Subject: Re: [PATCH v3 0/3] selftests: netfilter: introduce test cases for
- ipvs
-Message-ID: <20191004114745.GB6803@dimstar.local.net>
-Mail-Followup-To: Haishuang Yan <yanhaishuang@cmss.chinamobile.com>,
-        Julian Anastasov <ja@ssi.bg>, Shuah Khan <shuah@kernel.org>,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Simon Horman <horms@verge.net.au>, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, lvs-devel@vger.kernel.org,
-        netfilter-devel@vger.kernel.org
-References: <1569939599-1872-1-git-send-email-yanhaishuang@cmss.chinamobile.com>
- <alpine.LFD.2.21.1910012133330.3887@ja.home.ssi.bg>
- <20191002012726.GB9810@dimstar.local.net>
- <8E2E81F3-8385-4397-9A22-F513E507507D@cmss.chinamobile.com>
+        Fri, 4 Oct 2019 12:34:57 -0400
+Received: by mail-io1-f66.google.com with SMTP id a1so14889875ioc.6
+        for <linux-kselftest@vger.kernel.org>; Fri, 04 Oct 2019 09:34:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=SGqM+3yKbVJmLVuUUp3b6/LD0hJ2CQ/5lAjad49oZfs=;
+        b=Hiq3KnxjgCoa7fM42jZ/eJ7L6fmoeIQsqkBW32bReVdq+5p5AMheZkYySQREJ130YM
+         LytbMVn1ZAdjZ3CuzAT0xI1zwzWOI89rXTaH35Mc+JeVZLc6go+PkppN7must3ymhVNX
+         GYpAciN94+YbJawhB0Tww6XV4OLTpb/ZhVdm4TBlRlTD0reAzbIWhLZxCqQKV6rxhpc4
+         cVrG+DB9/grXkk2CIUbarQ5uizb2Je7f1k2d4vyGfN3lepxarBArpurz/GG7GsSd7izP
+         W2QiXOrRhPizCd0rZ9MnDhLG6w2uRZacUV7NJ3vtE+FZzakXWjBloxwHtTlj6FeapZpA
+         rRpA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=SGqM+3yKbVJmLVuUUp3b6/LD0hJ2CQ/5lAjad49oZfs=;
+        b=hO0yJzS48Jm1y8Ib0ybmlRloFG1bbsDKrcWkLqP2s8rPlCi7UZsTwtQmiKPM4cVGWM
+         1jHgoAIjyxjFfC/kGGP5Qoyf0itTsSV0/j8vzxNFdi1ikNU8boikdx1tCH7u1wawNvHk
+         TLSTj8bNY5qdidZKxuX3b9r2v6HKlKr0vk7yGyCpVSkMw/4jFjcwYiA+PTH6AcQus16w
+         R59V972LGRdEnA5WAeXehFx0tclYhQ74d5V2qXLof0bD8nDbyIhxU0upecHyBUnF3g1v
+         mhxVyeP7c34xpdfb6RXz3oFIe+vJERDCwqjiC+dHaPMXnFgr8kjzKiWcySXKIlBQEDSK
+         5JXQ==
+X-Gm-Message-State: APjAAAXnJR8hUDRDwVvwPwwCs4oNKJ1h7e+kMMFdWIStmmq5LiVPY/Vg
+        Na/W+rs5FSQuJpDPBYxhROjwJhXfDLUufUJozVg5d58n/CI=
+X-Google-Smtp-Source: APXvYqy3ZAxCYueRwp6jwND+zik8W1OIH/2S/kqrX3mVWekZw9RcfVxwvG/7PBgjpCQlVTEiRlJTLW5rN4egcQgQXUU=
+X-Received: by 2002:a92:cd45:: with SMTP id v5mr17338504ilq.197.1570206896657;
+ Fri, 04 Oct 2019 09:34:56 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <8E2E81F3-8385-4397-9A22-F513E507507D@cmss.chinamobile.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Optus-CM-Score: 0
-X-Optus-CM-Analysis: v=2.2 cv=D+Q3ErZj c=1 sm=1 tr=0
-        a=4DzML1vCOQ6Odsy8BUtSXQ==:117 a=4DzML1vCOQ6Odsy8BUtSXQ==:17
-        a=jpOVt7BSZ2e4Z31A5e1TngXxSK0=:19 a=kj9zAlcOel0A:10 a=XobE76Q3jBoA:10
-        a=PO7r1zJSAAAA:8 a=YExiR9hJhUxYzP8DYcgA:9 a=CjuIK1q_8ugA:10
+References: <157016600217.8022.346317009413291058.stgit@devnote2>
+In-Reply-To: <157016600217.8022.346317009413291058.stgit@devnote2>
+From:   Jassi Brar <jaswinder.singh@linaro.org>
+Date:   Fri, 4 Oct 2019 11:34:45 -0500
+Message-ID: <CAJe_Zhdq4sFGgv-CJf12_qJzFq+oASTmsD8xReX877V1NYSCBw@mail.gmail.com>
+Subject: Re: [BUGFIX PATCH] selftests: Use real temporary working directory
+ for archiving
+To:     Masami Hiramatsu <mhiramat@kernel.org>
+Cc:     Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
+        lkml <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Oct 03, 2019 at 10:41:06PM +0800, Haishuang Yan wrote:
+On Fri, 4 Oct 2019 at 00:13, Masami Hiramatsu <mhiramat@kernel.org> wrote:
 >
+> Use real temporary working directory for generating kselftest
+> archive.
 >
-> > On 2019??10??2??, at ????9:27, Duncan Roe <duncan_roe@optusnet.com.au> wrote:
-> >
-> > On Tue, Oct 01, 2019 at 09:34:13PM +0300, Julian Anastasov wrote:
-> >>
-> >> 	Hello,
-> >>
-> >> On Tue, 1 Oct 2019, Haishuang Yan wrote:
-> >>
-> >>> This series patch include test cases for ipvs.
-> >>>
-> >>> The test topology is who as below:
-> >>> +--------------------------------------------------------------+
-> >>> |                      |                                       |
-> >>> |         ns0          |         ns1                           |
-> >>> |      -----------     |     -----------    -----------        |
-> >>> |      | veth01  | --------- | veth10  |    | veth12  |        |
-> >>> |      -----------    peer   -----------    -----------        |
-> >>> |           |          |                        |              |
-> >>> |      -----------     |                        |              |
-> >>> |      |  br0    |     |-----------------  peer |--------------|
-> >>> |      -----------     |                        |              |
-> >>> |           |          |                        |              |
-> >>> |      ----------     peer   ----------      -----------       |
-> >>> |      |  veth02 | --------- |  veth20 |     | veth12  |       |
-> >>> |      ----------      |     ----------      -----------       |
-> >>> |                      |         ns2                           |
-> >>> |                      |                                       |
-> >>> +--------------------------------------------------------------+
-> >>>
-> >>> Test results:
-> >>> # selftests: netfilter: ipvs.sh
-> >>> # Testing DR mode...
-> >>> # Testing NAT mode...
-> >>> # Testing Tunnel mode...
-> >>> # ipvs.sh: PASS
-> >>> ok 6 selftests: netfilter: ipvs.sh
-> >>>
-> >>> Haishuang Yan (3):
-> >>>  selftests: netfilter: add ipvs test script
-> >>>  selftests: netfilter: add ipvs nat test case
-> >>>  selftests: netfilter: add ipvs tunnel test case
-> >>
-> >> Acked-by: Julian Anastasov <ja@ssi.bg>
-> >>
-> >>> tools/testing/selftests/netfilter/Makefile |   2 +-
-> >>> tools/testing/selftests/netfilter/ipvs.sh  | 234 +++++++++++++++++++++++++++++
-> >>> 2 files changed, 235 insertions(+), 1 deletion(-)
-> >>> create mode 100755 tools/testing/selftests/netfilter/ipvs.sh
-> >>
-> >> Regards
-> >>
-> >> --
-> >> Julian Anastasov <ja@ssi.bg>
-> >
-> > I still prefer #!/bin/sh in 1/3. You never know what's in someone's environment
-> >
-> > Cheers ... Duncan.
-> >
+> tools/testing/selftests/kselftest directory has been used for
+> the temporary working directory for making a tar archive from
+> gen_kselftest_tar.sh, and it removes the directory for cleanup.
 >
-> It??s also my preference too. "_"	
+> However, since the kselftest directory became a part of the
+> repository, it must not be used as a working dir.
 >
-> I have tested both #!/bin/bash and #!/bin/sh script, they all works properly.
+> Introduce mktemp to prepare a temporary working directory
+> for archiving kselftests.
+>
+> Signed-off-by: Masami Hiramatsu <mhiramat@kernel.org>
+> ---
+>  tools/testing/selftests/gen_kselftest_tar.sh |    8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
+>
+> diff --git a/tools/testing/selftests/gen_kselftest_tar.sh b/tools/testing=
+/selftests/gen_kselftest_tar.sh
+> index a27e2eec3586..eba1e9987ffc 100755
+> --- a/tools/testing/selftests/gen_kselftest_tar.sh
+> +++ b/tools/testing/selftests/gen_kselftest_tar.sh
+> @@ -38,16 +38,16 @@ main()
+>         esac
+>         fi
+>
+> -       install_dir=3D./kselftest
+> +       tmpdir=3D`mktemp -d ./install-XXXXXX` || exit 1
+>
+>  # Run install using INSTALL_KSFT_PATH override to generate install
+>  # directory
+> -./kselftest_install.sh
+> -tar $copts kselftest${ext} $install_dir
+> +./kselftest_install.sh $tmpdir
+> +tar $copts kselftest${ext} -C $tmpdir kselftest
+>  echo "Kselftest archive kselftest${ext} created!"
+>
+>  # clean up install directory
+> -rm -rf kselftest
+> +rm -rf $tmpdir
+>  }
+>
+>  main "$@"
+>
+FWIW,  Acked-by: Jassi Brar <jaswinder.singh@linaro.org>
 
-Enter these 2 lines:
-> ip(){ return 0; }
-> export -f ip
-
-Now try the #!/bin/bash script. If that now fails, try again with #!/bin/bash
-changed to #!/bin/bash -p
-
-Any better now?
-
-Cheers ... Duncan.
+--=20
+Linaro.org =E2=94=82 Open source software for ARM SoCs | Follow Linaro
+http://facebook.com/pages/Linaro/155974581091106  -
+http://twitter.com/#!/linaroorg - http://linaro.org/linaro-blog
