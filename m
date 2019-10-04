@@ -2,85 +2,129 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2535FCB41B
-	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Oct 2019 07:13:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29B20CB4B2
+	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Oct 2019 09:00:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730457AbfJDFN0 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 4 Oct 2019 01:13:26 -0400
-Received: from mail.kernel.org ([198.145.29.99]:33416 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730018AbfJDFN0 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 4 Oct 2019 01:13:26 -0400
-Received: from localhost.localdomain (NE2965lan1.rev.em-net.ne.jp [210.141.244.193])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 1DFE6207FF;
-        Fri,  4 Oct 2019 05:13:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1570166005;
-        bh=ES869BO6h9noSDr8RsOScfEsr4Cnt/LG2wJ9+/QDzwM=;
-        h=From:To:Cc:Subject:Date:From;
-        b=ZPqHINHRy5lTLkQZNkeucgHQfed1wSGf3sWHUaWtYp2k2+3LzQhzGom8BvDNXQiWi
-         N+7CtJmO5eHYpb8NBxLwRnwm8/uD4Zb6oUI1Da/sZITUBGyuE0iPjBYnIjik9PHC5T
-         SwU6x6hgQ/QCoZQyLz0VCuMSQb/69Mb30UJq7PkQ=
-From:   Masami Hiramatsu <mhiramat@kernel.org>
-To:     Shuah Khan <shuah@kernel.org>
-Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        jaswinder.singh@linaro.org
-Subject: [BUGFIX PATCH] selftests: Use real temporary working directory for archiving
-Date:   Fri,  4 Oct 2019 14:13:22 +0900
-Message-Id: <157016600217.8022.346317009413291058.stgit@devnote2>
-X-Mailer: git-send-email 2.20.1
-User-Agent: StGit/0.17.1-dirty
+        id S2387454AbfJDHA1 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 4 Oct 2019 03:00:27 -0400
+Received: from mail-wm1-f66.google.com ([209.85.128.66]:54240 "EHLO
+        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2387820AbfJDHA1 (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 4 Oct 2019 03:00:27 -0400
+Received: by mail-wm1-f66.google.com with SMTP id i16so4550626wmd.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 04 Oct 2019 00:00:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:date:to:message-id:subject:mime-version;
+        bh=w+YhATWxQp3QBmlrt7KEz07gaaTo8Qb8bTf9I4uOB0s=;
+        b=wXHaxWBz2jINfRDTlkiAHxpiaX5JqnGr48NPo5kRil5ElXOMWIyEe3hNIckpqNOFTJ
+         1kF+nzfD/V0n5SjD1X8GzsFNK828s3XPSE3NTg3Zbrwz7V+5CLqH4ChFRuoTpxwpAyFg
+         V04M1Iqm7/Cdla0GdKX1jCAWyx5ltzcNiBFZm+lHDbDuFNWVrEBsuJ6PXLv5zwYrjHh+
+         ZR7YD2BbTjirPxWHrQPXBMY13qPSqb48+jRl6PSc+qGLwdoN9dqB8uYi9lwx33tFwv+s
+         7jgUQtLvWY5AXHm8MmF5e6XupffPBCstKiAxIrCrS5BdsHvYhmdJDY8wTfx6Xhn9onmT
+         jr/g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:date:to:message-id:subject:mime-version;
+        bh=w+YhATWxQp3QBmlrt7KEz07gaaTo8Qb8bTf9I4uOB0s=;
+        b=jWWS54GUgs8sDT5Yc/i6SKSg/QKuxQBz8uf9dflK92P1Ww+XQdcYec4JmAEWj2ivkd
+         clcvl3VnR4knP/Ahiwh2ppA5Kqwn5pKG9qAP0O0dU16AmIB/Qi3iqF7aDpYuCSqblsZp
+         jgbT2GzeH5QzsRur6J1zrZvKNbPmlYJ8DxoPZhpJULmVJgsDDJUuIiCEGveSgnTZJpi3
+         2JzKwN2SB3xOauBMzwcjJB04w+VDmoyY4Ew439kEy9WXIDfkhnf+jveDtzJH0BgsL167
+         dEwkVMY9TDb2XnPjjHhKWRu8ScjyM6oLzekuB4+Xaz6Cjv8zvVt7Er03JB4cXTtBd/MU
+         kQ5w==
+X-Gm-Message-State: APjAAAXXD/2vRbwCUPYWm/YHxeZDs4zvboVUAPQEz3/jj4YtL93tBuoj
+        Op8ggfBXA0Op09PEycoPGgtf9A==
+X-Google-Smtp-Source: APXvYqxUNDhAGiVlC6RRLORsYiGzI+KUDXODClh+HNrnK1Jei1cBEkb7KJQw6Li+Rfqc1pmseSQl9A==
+X-Received: by 2002:a1c:1a4b:: with SMTP id a72mr9570770wma.44.1570172425250;
+        Fri, 04 Oct 2019 00:00:25 -0700 (PDT)
+Received: from 172.17.0.4 (ci.linaro.org. [88.99.136.175])
+        by smtp.gmail.com with ESMTPSA id r27sm11584106wrc.55.2019.10.04.00.00.24
+        (version=TLS1 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
+        Fri, 04 Oct 2019 00:00:24 -0700 (PDT)
+From:   ci_notify@linaro.org
+X-Google-Original-From: linaro-infrastructure-errors@lists.linaro.org
+Date:   Fri, 4 Oct 2019 07:00:24 +0000 (UTC)
+To:     lkft-triage@lists.linaro.org, dan.rue@linaro.org,
+        anders.roxell@linaro.org, naresh.kamboju@linaro.org,
+        shuah@kernel.org, linux-kselftest@vger.kernel.org
+Message-ID: <772759105.5040.1570172424644.JavaMail.javamailuser@localhost>
+Subject: next-20191004 kselftest results
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/mixed; 
+        boundary="----=_Part_5039_1365586500.1570172424012"
+X-Jenkins-Job: LKFT Notify kselftest on next
+X-Jenkins-Result: SUCCESS
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Use real temporary working directory for generating kselftest
-archive.
+------=_Part_5039_1365586500.1570172424012
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-tools/testing/selftests/kselftest directory has been used for
-the temporary working directory for making a tar archive from
-gen_kselftest_tar.sh, and it removes the directory for cleanup.
+Summary
+------------------------------------------------------------------------
+kernel: 5.4.0-rc1
+git repo: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+git branch: master
+git commit: 311ef88adfa3b69c40234bf3000d1269e718919a
+git describe: next-20191004
+Test details: https://qa-reports.linaro.org/lkft/linux-next-oe/build/next-20191004
 
-However, since the kselftest directory became a part of the
-repository, it must not be used as a working dir.
+Regressions (compared to build next-20191003)
+------------------------------------------------------------------------
+No regressions                                                                                                          
+                                                                                                                       
+Fixes (compared to build next-20191003)                                                                   
+------------------------------------------------------------------------                                               
+No fixes
 
-Introduce mktemp to prepare a temporary working directory
-for archiving kselftests.
+In total:
+------------------------------------------------------------------------
+Ran 0 total tests in the following environments and test suites.
+pass 0
+fail 0
+xfail 0
+skip 0
 
-Signed-off-by: Masami Hiramatsu <mhiramat@kernel.org>
----
- tools/testing/selftests/gen_kselftest_tar.sh |    8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+Environments
+--------------
+- dragonboard-410c - arm64
+- hi6220-hikey - arm64
+- i386
+- juno-r2 - arm64
+- x15 - arm
+- x86_64
 
-diff --git a/tools/testing/selftests/gen_kselftest_tar.sh b/tools/testing/selftests/gen_kselftest_tar.sh
-index a27e2eec3586..eba1e9987ffc 100755
---- a/tools/testing/selftests/gen_kselftest_tar.sh
-+++ b/tools/testing/selftests/gen_kselftest_tar.sh
-@@ -38,16 +38,16 @@ main()
- 	esac
- 	fi
- 
--	install_dir=./kselftest
-+	tmpdir=`mktemp -d ./install-XXXXXX` || exit 1
- 
- # Run install using INSTALL_KSFT_PATH override to generate install
- # directory
--./kselftest_install.sh
--tar $copts kselftest${ext} $install_dir
-+./kselftest_install.sh $tmpdir
-+tar $copts kselftest${ext} -C $tmpdir kselftest
- echo "Kselftest archive kselftest${ext} created!"
- 
- # clean up install directory
--rm -rf kselftest
-+rm -rf $tmpdir
- }
- 
- main "$@"
+Test Suites
+-----------
 
+
+Failures
+------------------------------------------------------------------------
+
+hi6220-hikey:
+
+juno-r2:
+
+i386:
+
+x86:
+
+x15:
+
+dragonboard-410c:
+
+
+Skips
+------------------------------------------------------------------------
+No skips
+
+
+-- 
+Linaro LKFT
+https://lkft.linaro.org
+------=_Part_5039_1365586500.1570172424012--
