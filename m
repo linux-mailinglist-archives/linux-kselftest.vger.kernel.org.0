@@ -2,132 +2,204 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 08489CC716
-	for <lists+linux-kselftest@lfdr.de>; Sat,  5 Oct 2019 03:06:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C4717CC723
+	for <lists+linux-kselftest@lfdr.de>; Sat,  5 Oct 2019 03:18:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725909AbfJEBGB convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 4 Oct 2019 21:06:01 -0400
-Received: from cmccmta3.chinamobile.com ([221.176.66.81]:3111 "EHLO
-        cmccmta3.chinamobile.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725730AbfJEBGB (ORCPT
+        id S1725909AbfJEBST (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 4 Oct 2019 21:18:19 -0400
+Received: from mail-pl1-f194.google.com ([209.85.214.194]:39083 "EHLO
+        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726327AbfJEBST (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 4 Oct 2019 21:06:01 -0400
-Received: from spf.mail.chinamobile.com (unknown[172.16.121.11]) by rmmx-syy-dmz-app12-12012 (RichMail) with SMTP id 2eec5d97ec641ed-bc085; Sat, 05 Oct 2019 09:05:40 +0800 (CST)
-X-RM-TRANSID: 2eec5d97ec641ed-bc085
-X-RM-TagInfo: emlType=0                                       
-X-RM-SPAM-FLAG: 00000000
-Received: from [10.0.0.249] (unknown[112.0.144.232])
-        by rmsmtp-syy-appsvr06-12006 (RichMail) with SMTP id 2ee65d97ec619ac-e007b;
-        Sat, 05 Oct 2019 09:05:40 +0800 (CST)
-X-RM-TRANSID: 2ee65d97ec619ac-e007b
-Content-Type: text/plain; charset=gb2312
-Mime-Version: 1.0 (Mac OS X Mail 10.3 \(3273\))
-Subject: Re: [PATCH v3 0/3] selftests: netfilter: introduce test cases for
- ipvs
-From:   Haishuang Yan <yanhaishuang@cmss.chinamobile.com>
-In-Reply-To: <20191004114745.GB6803@dimstar.local.net>
-Date:   Sat, 5 Oct 2019 09:05:37 +0800
-Cc:     Julian Anastasov <ja@ssi.bg>, Shuah Khan <shuah@kernel.org>,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Simon Horman <horms@verge.net.au>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        lvs-devel@vger.kernel.org, netfilter-devel@vger.kernel.org
-Content-Transfer-Encoding: 8BIT
-Message-Id: <4C9C0C54-4CC6-49A4-A868-6F7604B1AB2B@cmss.chinamobile.com>
-References: <1569939599-1872-1-git-send-email-yanhaishuang@cmss.chinamobile.com>
- <alpine.LFD.2.21.1910012133330.3887@ja.home.ssi.bg>
- <20191002012726.GB9810@dimstar.local.net>
- <8E2E81F3-8385-4397-9A22-F513E507507D@cmss.chinamobile.com>
- <20191004114745.GB6803@dimstar.local.net>
-To:     Duncan Roe <duncan_roe@optusnet.com.au>
-X-Mailer: Apple Mail (2.3273)
+        Fri, 4 Oct 2019 21:18:19 -0400
+Received: by mail-pl1-f194.google.com with SMTP id s17so3913965plp.6
+        for <linux-kselftest@vger.kernel.org>; Fri, 04 Oct 2019 18:18:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=q2oP8A+66Rac3wNrpkR8MWsLUwrIym5JWD2OWoQLn2I=;
+        b=GPhhjUv+KkS/VzHR5+UKHbUpig67OUz+p2ab8gzDSHD3qWPn5BM1Y5BuX7lxM7j2sb
+         kfHr9wmq/ZxD9CMSuGBeBnRcFNxBoNrc0jkNUB4Rgmx5E/OBumH+nRsrohMgMe+j/Rvr
+         t8LXEhaVzelX3CPRpPkB2Y5G0/ztqK3oeYNRWvHYetjEo1eOHmWOT3CD6xhMJchs6eDb
+         OxHBa5qEKGeZBHYqpxi4evGAx/VhufwkpQPNLZaEp4DWShmC9T8N6LCor4kERCu29UaE
+         O+Yo2QExYcBHz7N8yqMIajJuvzJZ49QCOIBtYIj8yxzgyIBkwnbnqn5CemWWy9ROQDur
+         OLdw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=q2oP8A+66Rac3wNrpkR8MWsLUwrIym5JWD2OWoQLn2I=;
+        b=J9CSd3G3iacKln8+CWYDWny50eTvO+IhndzC0APoOyweq5TW5V4rN8ECeytNxQCJeh
+         isNHL5t1o97ql8jjS6TEvfPGYV83k9fOk4JBiymnRxBqgvcQPInvWpbqwUj7Aj0L0ji4
+         lRPLyDxEAZHAYaOL3/p27Kad+IeeCVV27Pn6mCRr5Ppu59aMP/ec1o3gN3jePiBeHflC
+         SGZSSP0ncGQX6ODQSWgz4IVwG/NsqeS2UdR1NL+RkRUaoI5TbhFAQrFuMEdnQRoVxzPc
+         x6BmWhqbVq2ooLKInAQ1+T5ewFWNib5bAHQiCOnmhBVS3+96Z7c6q0tcGW+WudLfn31s
+         pGPQ==
+X-Gm-Message-State: APjAAAVwkYyF3mvTUg72Pjw2pkMzaN7wnewRF5Dzi+G2ygPp6PX3AP1g
+        ylHnso2j7n1yyg1M7ftE6J0cYeLZDNMEQBc+szxeEQ==
+X-Google-Smtp-Source: APXvYqxXIgL1V9Pz63bm5hrH1w7OGcZMj9O7xWX+0gLh6oom7FtSqHJPBvTviBg5NgEsO3lWv0/RgnZ1WUmPfaPcH/I=
+X-Received: by 2002:a17:902:8f88:: with SMTP id z8mr18539665plo.232.1570238296215;
+ Fri, 04 Oct 2019 18:18:16 -0700 (PDT)
+MIME-Version: 1.0
+References: <20190923090249.127984-1-brendanhiggins@google.com>
+ <20191004213812.GA24644@mit.edu> <CAHk-=whX-JbpM2Sc85epng_GAgGGzxRAJ2SSKkMf9N1Lsqe+OA@mail.gmail.com>
+ <56e2e1a7-f8fe-765b-8452-1710b41895bf@kernel.org> <20191004222714.GA107737@google.com>
+ <ad800337-1ae2-49d2-e715-aa1974e28a10@kernel.org> <20191004232955.GC12012@mit.edu>
+ <CAFd5g456rBSp177EkYAwsF+KZ0rxJa90mzUpW2M3R7tWbMAh9Q@mail.gmail.com>
+ <63e59b0b-b51e-01f4-6359-a134a1f903fd@kernel.org> <CAFd5g47wji3T9RFmqBwt+jPY0tb83y46oj_ttOq=rTX_N1Ggyg@mail.gmail.com>
+ <544bdfcb-fb35-5008-ec94-8d404a08fd14@kernel.org>
+In-Reply-To: <544bdfcb-fb35-5008-ec94-8d404a08fd14@kernel.org>
+From:   Brendan Higgins <brendanhiggins@google.com>
+Date:   Fri, 4 Oct 2019 18:18:04 -0700
+Message-ID: <CAFd5g467PkfELixpU0JbaepEAAD_ugAA340-uORngC-eXsQQ-g@mail.gmail.com>
+Subject: Re: [PATCH v18 00/19] kunit: introduce KUnit, the Linux kernel unit
+ testing framework
+To:     shuah <shuah@kernel.org>
+Cc:     "Theodore Y. Ts'o" <tytso@mit.edu>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Kees Cook <keescook@google.com>,
+        Kieran Bingham <kieran.bingham@ideasonboard.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Rob Herring <robh@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
+        Masahiro Yamada <yamada.masahiro@socionext.com>,
+        devicetree <devicetree@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        kunit-dev@googlegroups.com,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        linux-nvdimm <linux-nvdimm@lists.01.org>,
+        linux-um@lists.infradead.org,
+        Sasha Levin <Alexander.Levin@microsoft.com>,
+        "Bird, Timothy" <Tim.Bird@sony.com>,
+        Amir Goldstein <amir73il@gmail.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Daniel Vetter <daniel@ffwll.ch>, Jeff Dike <jdike@addtoit.com>,
+        Joel Stanley <joel@jms.id.au>,
+        Julia Lawall <julia.lawall@lip6.fr>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Knut Omang <knut.omang@oracle.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Petr Mladek <pmladek@suse.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Richard Weinberger <richard@nod.at>,
+        David Rientjes <rientjes@google.com>,
+        Steven Rostedt <rostedt@goodmis.org>, wfg@linux.intel.com
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+On Fri, Oct 4, 2019 at 5:49 PM shuah <shuah@kernel.org> wrote:
+>
+> On 10/4/19 6:33 PM, Brendan Higgins wrote:
+> > On Fri, Oct 4, 2019 at 4:57 PM shuah <shuah@kernel.org> wrote:
+> >>
+> >> On 10/4/19 5:52 PM, Brendan Higgins wrote:
+> >>> On Fri, Oct 4, 2019 at 4:30 PM Theodore Y. Ts'o <tytso@mit.edu> wrote:
+> >>>>
+> >>>> On Fri, Oct 04, 2019 at 04:47:09PM -0600, shuah wrote:
+> >>>>>> However, if I encourage arbitrary tests/improvements into my KUnit
+> >>>>>> branch, it further diverges away from torvalds/master, and is more
+> >>>>>> likely that there will be a merge conflict or issue that is not related
+> >>>>>> to the core KUnit changes that will cause the whole thing to be
+> >>>>>> rejected again in v5.5.
+> >>>>>
+> >>>>> The idea is that the new development will happen based on kunit in
+> >>>>> linux-kselftest next. It will work just fine. As we accepts patches,
+> >>>>> they will go on top of kunit that is in linux-next now.
+> >>>>
+> >>>> I don't see how this would work.  If I add unit tests to ext4, they
+> >>>> would be in fs/ext4.  And to the extent that I need to add test mocks
+> >>>> to allow the unit tests to work, they will involve changes to existing
+> >>>> files in fs/ext4.  I can't put them in the ext4.git tree without
+> >>>> pulling in the kunit changes into the ext4 git tree.  And if they ext4
+> >>>> unit tests land in the kunit tree, it would be a receipe for large
+> >>>> numbers of merge conflicts.
+> >>>
+> >>> That's where I was originally coming from.
+> >>>
+> >>> So here's a dumb idea: what if we merged KUnit through the ext4 tree?
+> >>> I imagine that could potentially get very confusing when we go back to
+> >>> sending changes in through the kselftest tree, but at least it means
+> >>> that ext4 can use it in the meantime, which means that it at least
+> >>> gets to be useful to one group of people. Also, since Ted seems pretty
+> >>> keen on using this, I imagine it is much more likely to produce real
+> >>> world, immediately useful tests not written by me (I'm not being lazy,
+> >>> I just think it is better to get other people's experiences other than
+> >>> my own).
+> >>>
+> >>
+> >> That doesn't make sense does it? The tests might not be limited to
+> >> fs/ext4. We might have other sub-systems that add tests.
+> >
+> > Well, I have some small isolated examples that I think would probably
+> > work no matter what, so we can get some usage outside of ext4. Also,
+> > if we want to limit the number of tests, then we don't expect to get
+> > much usage outside of ext4 before v5.5 anyway. I just figure, it's
+> > better to make it work for one person than no one, right?
+> >
+> > In any case, I admit it is not a great idea. I just thought it had
+> > some interesting advantages over going in through linux-kselftest that
+> > were worth exploring.
+> >
+> >> So, we will have to work to make linux-next as the base for new
+> >> development and limit the number of tests to where it will be
+> >> easier work in this mode for 5.5. We can stage the pull requests
+> >> so that kunit lands first followed by tests.
+> >
+> > So we are going to encourage maintainers to allow tests in their tree
+> > based on KUnit on the assumption that KUnit will get merged before
+> > there changes? That sounds like a huge burden, not just on us, but on
+> > other maintainers and users.
+> >
+> > I think if we are going to allow tests before KUnit is merged, we
+> > should have the tests come in through the same tree as KUnit.
+> >
+> >> We have a similar situation with kselftest as well. Sub-systems
+> >> send tests that depend on their tress separately.
+> >
+> > Well it is different if the maintainer wants to send the test in
+> > through their tree, right? Otherwise, it won't matter what the state
+> > of linux-next is and it won't matter when linux-kselftest gets merged.
+> > Or am I not understanding you?
+> >
+>
+> Let's talk about current state. Right now kunit is in linux-next and
+> we want to add a few more tests. We will have to coordinate the effort.
+> Once kunit get into mainline, then the need for this coordination goes
+> down.
 
-> On 2019年10月4日, at 下午7:47, Duncan Roe <duncan_roe@optusnet.com.au> wrote:
-> 
-> On Thu, Oct 03, 2019 at 10:41:06PM +0800, Haishuang Yan wrote:
->> 
->> 
->>> On 2019??10??2??, at ????9:27, Duncan Roe <duncan_roe@optusnet.com.au> wrote:
->>> 
->>> On Tue, Oct 01, 2019 at 09:34:13PM +0300, Julian Anastasov wrote:
->>>> 
->>>> 	Hello,
->>>> 
->>>> On Tue, 1 Oct 2019, Haishuang Yan wrote:
->>>> 
->>>>> This series patch include test cases for ipvs.
->>>>> 
->>>>> The test topology is who as below:
->>>>> +--------------------------------------------------------------+
->>>>> |                      |                                       |
->>>>> |         ns0          |         ns1                           |
->>>>> |      -----------     |     -----------    -----------        |
->>>>> |      | veth01  | --------- | veth10  |    | veth12  |        |
->>>>> |      -----------    peer   -----------    -----------        |
->>>>> |           |          |                        |              |
->>>>> |      -----------     |                        |              |
->>>>> |      |  br0    |     |-----------------  peer |--------------|
->>>>> |      -----------     |                        |              |
->>>>> |           |          |                        |              |
->>>>> |      ----------     peer   ----------      -----------       |
->>>>> |      |  veth02 | --------- |  veth20 |     | veth12  |       |
->>>>> |      ----------      |     ----------      -----------       |
->>>>> |                      |         ns2                           |
->>>>> |                      |                                       |
->>>>> +--------------------------------------------------------------+
->>>>> 
->>>>> Test results:
->>>>> # selftests: netfilter: ipvs.sh
->>>>> # Testing DR mode...
->>>>> # Testing NAT mode...
->>>>> # Testing Tunnel mode...
->>>>> # ipvs.sh: PASS
->>>>> ok 6 selftests: netfilter: ipvs.sh
->>>>> 
->>>>> Haishuang Yan (3):
->>>>> selftests: netfilter: add ipvs test script
->>>>> selftests: netfilter: add ipvs nat test case
->>>>> selftests: netfilter: add ipvs tunnel test case
->>>> 
->>>> Acked-by: Julian Anastasov <ja@ssi.bg>
->>>> 
->>>>> tools/testing/selftests/netfilter/Makefile |   2 +-
->>>>> tools/testing/selftests/netfilter/ipvs.sh  | 234 +++++++++++++++++++++++++++++
->>>>> 2 files changed, 235 insertions(+), 1 deletion(-)
->>>>> create mode 100755 tools/testing/selftests/netfilter/ipvs.sh
->>>> 
->>>> Regards
->>>> 
->>>> --
->>>> Julian Anastasov <ja@ssi.bg>
->>> 
->>> I still prefer #!/bin/sh in 1/3. You never know what's in someone's environment
->>> 
->>> Cheers ... Duncan.
->>> 
->> 
->> It??s also my preference too. "_"	
->> 
->> I have tested both #!/bin/bash and #!/bin/sh script, they all works properly.
-> 
-> Enter these 2 lines:
->> ip(){ return 0; }
->> export -f ip
-> 
-> Now try the #!/bin/bash script. If that now fails, try again with #!/bin/bash
-> changed to #!/bin/bash -p
-> 
-> Any better now?
-> 
-> Cheers ... Duncan.
-> 
-It’s better now, thanks for your explanation.
-In v3 commit I will use #!/bin/bash -p to prevent exporting function from environment variables.
+Sure, I was just thinking that getting other people to write the tests
+would be better. Since not only is it then useful to someone else, it
+provides the best possible exercise of KUnit.
 
+Nevertheless, it would probably just be easier to get a handful of
+example tests, and it is less likely to result in any issues for v5.5,
+so that's probably better. (I think that is what you are hinting at
+here. ;-) )
+
+Hey Ted, do you know if that ext4 timestamp test can go in through
+linux-kselftest? It seemed fairly self-contained. Or is that what you
+were saying wouldn't work for you?
+
+> Let's focus on the next few weeks first so we can get this into mainline
+> in 5.5.
+
+I agree. That is the most important thing.
+
+> The two of us can chat next week and come up with a plan.
+
+Sure.
+
+Cheers!
