@@ -2,204 +2,312 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C4717CC723
-	for <lists+linux-kselftest@lfdr.de>; Sat,  5 Oct 2019 03:18:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08FF4CC728
+	for <lists+linux-kselftest@lfdr.de>; Sat,  5 Oct 2019 03:20:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725909AbfJEBST (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 4 Oct 2019 21:18:19 -0400
-Received: from mail-pl1-f194.google.com ([209.85.214.194]:39083 "EHLO
-        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726327AbfJEBST (ORCPT
+        id S1725730AbfJEBUy (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 4 Oct 2019 21:20:54 -0400
+Received: from mail-oi1-f195.google.com ([209.85.167.195]:38539 "EHLO
+        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725909AbfJEBUx (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 4 Oct 2019 21:18:19 -0400
-Received: by mail-pl1-f194.google.com with SMTP id s17so3913965plp.6
-        for <linux-kselftest@vger.kernel.org>; Fri, 04 Oct 2019 18:18:17 -0700 (PDT)
+        Fri, 4 Oct 2019 21:20:53 -0400
+Received: by mail-oi1-f195.google.com with SMTP id m16so7322748oic.5
+        for <linux-kselftest@vger.kernel.org>; Fri, 04 Oct 2019 18:20:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=q2oP8A+66Rac3wNrpkR8MWsLUwrIym5JWD2OWoQLn2I=;
-        b=GPhhjUv+KkS/VzHR5+UKHbUpig67OUz+p2ab8gzDSHD3qWPn5BM1Y5BuX7lxM7j2sb
-         kfHr9wmq/ZxD9CMSuGBeBnRcFNxBoNrc0jkNUB4Rgmx5E/OBumH+nRsrohMgMe+j/Rvr
-         t8LXEhaVzelX3CPRpPkB2Y5G0/ztqK3oeYNRWvHYetjEo1eOHmWOT3CD6xhMJchs6eDb
-         OxHBa5qEKGeZBHYqpxi4evGAx/VhufwkpQPNLZaEp4DWShmC9T8N6LCor4kERCu29UaE
-         O+Yo2QExYcBHz7N8yqMIajJuvzJZ49QCOIBtYIj8yxzgyIBkwnbnqn5CemWWy9ROQDur
-         OLdw==
+        d=sifive.com; s=google;
+        h=date:from:to:cc:subject:in-reply-to:message-id:references
+         :user-agent:mime-version;
+        bh=l7SpZ5N+nq30rgJQpL3EBg3liLfBQdxTGgET1uXmwsc=;
+        b=Zze+RMswfsiddqq3WNI6XF4iUfnjUN6r5TgrfWQ4m6MyLHMOGcWr4pEvPthzvwK8aN
+         tt1fKZzJzv6YWCnV00bfmaolg5RrsHhjCXMRdAd9mQyvBTuwFB7dxJvhxWh2MphwtRh9
+         PBjrwgb5NQPBRaMP+qkUDRWwWhCnohuoUhclbWAWelsBXXZJiPZr7waaEGU5epdBmy31
+         82zCYtmRC57tRi55eycEDhBXSt2ihJGHpdbsNqKa2WVexsNXjySNeZ9MTZFQUaJH8rLu
+         91RMXm5UnBZPKPxRp6Qa3HhgE6eZP/hsLXtZNeCZqU4f1wIKjm3KU1rBQ+KxyfJGkAOq
+         mcIg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=q2oP8A+66Rac3wNrpkR8MWsLUwrIym5JWD2OWoQLn2I=;
-        b=J9CSd3G3iacKln8+CWYDWny50eTvO+IhndzC0APoOyweq5TW5V4rN8ECeytNxQCJeh
-         isNHL5t1o97ql8jjS6TEvfPGYV83k9fOk4JBiymnRxBqgvcQPInvWpbqwUj7Aj0L0ji4
-         lRPLyDxEAZHAYaOL3/p27Kad+IeeCVV27Pn6mCRr5Ppu59aMP/ec1o3gN3jePiBeHflC
-         SGZSSP0ncGQX6ODQSWgz4IVwG/NsqeS2UdR1NL+RkRUaoI5TbhFAQrFuMEdnQRoVxzPc
-         x6BmWhqbVq2ooLKInAQ1+T5ewFWNib5bAHQiCOnmhBVS3+96Z7c6q0tcGW+WudLfn31s
-         pGPQ==
-X-Gm-Message-State: APjAAAVwkYyF3mvTUg72Pjw2pkMzaN7wnewRF5Dzi+G2ygPp6PX3AP1g
-        ylHnso2j7n1yyg1M7ftE6J0cYeLZDNMEQBc+szxeEQ==
-X-Google-Smtp-Source: APXvYqxXIgL1V9Pz63bm5hrH1w7OGcZMj9O7xWX+0gLh6oom7FtSqHJPBvTviBg5NgEsO3lWv0/RgnZ1WUmPfaPcH/I=
-X-Received: by 2002:a17:902:8f88:: with SMTP id z8mr18539665plo.232.1570238296215;
- Fri, 04 Oct 2019 18:18:16 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:in-reply-to:message-id
+         :references:user-agent:mime-version;
+        bh=l7SpZ5N+nq30rgJQpL3EBg3liLfBQdxTGgET1uXmwsc=;
+        b=aFzCdhxyoh0gi4H7Q9oYiQG95dYTsWuqb+PIcZt8NKOdHLR2CHQu4/jmM7Z9VWsnsk
+         8MGQtTZGlIbnjbxNx3e9c78AGMGyNpnabOzZ/gETquwvbGYRMggKRMHVogl1IQuBB5WW
+         Q0G7xP+3fR5x2i/t7DHJRgZsJrHSLI49oQXJoxhkdBuQgg729ICWC0YEwEVvQUrGiRmH
+         FXVmRzUMIxrp43rDuGaW5tkoBbgFv1pYY8K08/OW5ytxU2kK70sZjefeFIQg4Zt3BV2c
+         tGfCIkRHB6I8ls1BOdYVuCJsYffGlSufPDrXXpyLZkl5cdMH73jRkYBrXdkII3OdNsjP
+         VZIQ==
+X-Gm-Message-State: APjAAAVD/WyLDbd5sTsXcDiFZTJ27ebrsR8Uk0HMDo7zm9wejyzZW5Ul
+        JVPkXDBxtUNyLKV8ZMWFOyG1Ug==
+X-Google-Smtp-Source: APXvYqzioOi+HOtThzusxaB/ANabIUdROpbaSBNWELHI+GDE5ZcWC75F+oaJ1TZH0khzFfbAEuRH6w==
+X-Received: by 2002:aca:c4d3:: with SMTP id u202mr8918088oif.139.1570238452426;
+        Fri, 04 Oct 2019 18:20:52 -0700 (PDT)
+Received: from localhost ([2600:100e:b029:4ada:34fb:aeb7:d598:e51c])
+        by smtp.gmail.com with ESMTPSA id y30sm2321328oix.36.2019.10.04.18.20.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 04 Oct 2019 18:20:51 -0700 (PDT)
+Date:   Fri, 4 Oct 2019 18:20:50 -0700 (PDT)
+From:   Paul Walmsley <paul.walmsley@sifive.com>
+X-X-Sender: paulw@viisi.sifive.com
+To:     Shuah Khan <shuah@kernel.org>
+cc:     Palmer Dabbelt <palmer@sifive.com>,
+        David Abdurachmanov <david.abdurachmanov@gmail.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Oleg Nesterov <oleg@redhat.com>,
+        Kees Cook <keescook@chromium.org>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Will Drewry <wad@chromium.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        David Abdurachmanov <david.abdurachmanov@sifive.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Allison Randal <allison@lohutok.net>,
+        Alexios Zavras <alexios.zavras@intel.com>,
+        Anup Patel <Anup.Patel@wdc.com>,
+        Vincent Chen <vincentc@andestech.com>,
+        Alan Kao <alankao@andestech.com>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, me@carlosedp.com
+Subject: Re: [PATCH v2] riscv: add support for SECCOMP and SECCOMP_FILTER
+In-Reply-To: <20190822205533.4877-1-david.abdurachmanov@sifive.com>
+Message-ID: <alpine.DEB.2.21.9999.1910041819230.15827@viisi.sifive.com>
+References: <20190822205533.4877-1-david.abdurachmanov@sifive.com>
+User-Agent: Alpine 2.21.9999 (DEB 301 2018-08-15)
 MIME-Version: 1.0
-References: <20190923090249.127984-1-brendanhiggins@google.com>
- <20191004213812.GA24644@mit.edu> <CAHk-=whX-JbpM2Sc85epng_GAgGGzxRAJ2SSKkMf9N1Lsqe+OA@mail.gmail.com>
- <56e2e1a7-f8fe-765b-8452-1710b41895bf@kernel.org> <20191004222714.GA107737@google.com>
- <ad800337-1ae2-49d2-e715-aa1974e28a10@kernel.org> <20191004232955.GC12012@mit.edu>
- <CAFd5g456rBSp177EkYAwsF+KZ0rxJa90mzUpW2M3R7tWbMAh9Q@mail.gmail.com>
- <63e59b0b-b51e-01f4-6359-a134a1f903fd@kernel.org> <CAFd5g47wji3T9RFmqBwt+jPY0tb83y46oj_ttOq=rTX_N1Ggyg@mail.gmail.com>
- <544bdfcb-fb35-5008-ec94-8d404a08fd14@kernel.org>
-In-Reply-To: <544bdfcb-fb35-5008-ec94-8d404a08fd14@kernel.org>
-From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Fri, 4 Oct 2019 18:18:04 -0700
-Message-ID: <CAFd5g467PkfELixpU0JbaepEAAD_ugAA340-uORngC-eXsQQ-g@mail.gmail.com>
-Subject: Re: [PATCH v18 00/19] kunit: introduce KUnit, the Linux kernel unit
- testing framework
-To:     shuah <shuah@kernel.org>
-Cc:     "Theodore Y. Ts'o" <tytso@mit.edu>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Kees Cook <keescook@google.com>,
-        Kieran Bingham <kieran.bingham@ideasonboard.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Rob Herring <robh@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
-        Masahiro Yamada <yamada.masahiro@socionext.com>,
-        devicetree <devicetree@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        kunit-dev@googlegroups.com,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        linux-nvdimm <linux-nvdimm@lists.01.org>,
-        linux-um@lists.infradead.org,
-        Sasha Levin <Alexander.Levin@microsoft.com>,
-        "Bird, Timothy" <Tim.Bird@sony.com>,
-        Amir Goldstein <amir73il@gmail.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Daniel Vetter <daniel@ffwll.ch>, Jeff Dike <jdike@addtoit.com>,
-        Joel Stanley <joel@jms.id.au>,
-        Julia Lawall <julia.lawall@lip6.fr>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Knut Omang <knut.omang@oracle.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Petr Mladek <pmladek@suse.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Richard Weinberger <richard@nod.at>,
-        David Rientjes <rientjes@google.com>,
-        Steven Rostedt <rostedt@goodmis.org>, wfg@linux.intel.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=US-ASCII
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Oct 4, 2019 at 5:49 PM shuah <shuah@kernel.org> wrote:
->
-> On 10/4/19 6:33 PM, Brendan Higgins wrote:
-> > On Fri, Oct 4, 2019 at 4:57 PM shuah <shuah@kernel.org> wrote:
-> >>
-> >> On 10/4/19 5:52 PM, Brendan Higgins wrote:
-> >>> On Fri, Oct 4, 2019 at 4:30 PM Theodore Y. Ts'o <tytso@mit.edu> wrote:
-> >>>>
-> >>>> On Fri, Oct 04, 2019 at 04:47:09PM -0600, shuah wrote:
-> >>>>>> However, if I encourage arbitrary tests/improvements into my KUnit
-> >>>>>> branch, it further diverges away from torvalds/master, and is more
-> >>>>>> likely that there will be a merge conflict or issue that is not related
-> >>>>>> to the core KUnit changes that will cause the whole thing to be
-> >>>>>> rejected again in v5.5.
-> >>>>>
-> >>>>> The idea is that the new development will happen based on kunit in
-> >>>>> linux-kselftest next. It will work just fine. As we accepts patches,
-> >>>>> they will go on top of kunit that is in linux-next now.
-> >>>>
-> >>>> I don't see how this would work.  If I add unit tests to ext4, they
-> >>>> would be in fs/ext4.  And to the extent that I need to add test mocks
-> >>>> to allow the unit tests to work, they will involve changes to existing
-> >>>> files in fs/ext4.  I can't put them in the ext4.git tree without
-> >>>> pulling in the kunit changes into the ext4 git tree.  And if they ext4
-> >>>> unit tests land in the kunit tree, it would be a receipe for large
-> >>>> numbers of merge conflicts.
-> >>>
-> >>> That's where I was originally coming from.
-> >>>
-> >>> So here's a dumb idea: what if we merged KUnit through the ext4 tree?
-> >>> I imagine that could potentially get very confusing when we go back to
-> >>> sending changes in through the kselftest tree, but at least it means
-> >>> that ext4 can use it in the meantime, which means that it at least
-> >>> gets to be useful to one group of people. Also, since Ted seems pretty
-> >>> keen on using this, I imagine it is much more likely to produce real
-> >>> world, immediately useful tests not written by me (I'm not being lazy,
-> >>> I just think it is better to get other people's experiences other than
-> >>> my own).
-> >>>
-> >>
-> >> That doesn't make sense does it? The tests might not be limited to
-> >> fs/ext4. We might have other sub-systems that add tests.
-> >
-> > Well, I have some small isolated examples that I think would probably
-> > work no matter what, so we can get some usage outside of ext4. Also,
-> > if we want to limit the number of tests, then we don't expect to get
-> > much usage outside of ext4 before v5.5 anyway. I just figure, it's
-> > better to make it work for one person than no one, right?
-> >
-> > In any case, I admit it is not a great idea. I just thought it had
-> > some interesting advantages over going in through linux-kselftest that
-> > were worth exploring.
-> >
-> >> So, we will have to work to make linux-next as the base for new
-> >> development and limit the number of tests to where it will be
-> >> easier work in this mode for 5.5. We can stage the pull requests
-> >> so that kunit lands first followed by tests.
-> >
-> > So we are going to encourage maintainers to allow tests in their tree
-> > based on KUnit on the assumption that KUnit will get merged before
-> > there changes? That sounds like a huge burden, not just on us, but on
-> > other maintainers and users.
-> >
-> > I think if we are going to allow tests before KUnit is merged, we
-> > should have the tests come in through the same tree as KUnit.
-> >
-> >> We have a similar situation with kselftest as well. Sub-systems
-> >> send tests that depend on their tress separately.
-> >
-> > Well it is different if the maintainer wants to send the test in
-> > through their tree, right? Otherwise, it won't matter what the state
-> > of linux-next is and it won't matter when linux-kselftest gets merged.
-> > Or am I not understanding you?
-> >
->
-> Let's talk about current state. Right now kunit is in linux-next and
-> we want to add a few more tests. We will have to coordinate the effort.
-> Once kunit get into mainline, then the need for this coordination goes
-> down.
+Hello Shuah,
 
-Sure, I was just thinking that getting other people to write the tests
-would be better. Since not only is it then useful to someone else, it
-provides the best possible exercise of KUnit.
+On Thu, 22 Aug 2019, David Abdurachmanov wrote:
 
-Nevertheless, it would probably just be easier to get a handful of
-example tests, and it is less likely to result in any issues for v5.5,
-so that's probably better. (I think that is what you are hinting at
-here. ;-) )
+> This patch was extensively tested on Fedora/RISCV (applied by default on
+> top of 5.2-rc7 kernel for <2 months). The patch was also tested with 5.3-rc
+> on QEMU and SiFive Unleashed board.
+> 
+> libseccomp (userspace) was rebased:
+> https://github.com/seccomp/libseccomp/pull/134
+> 
+> Fully passes libseccomp regression testing (simulation and live).
+> 
+> There is one failing kernel selftest: global.user_notification_signal
+> 
+> v1 -> v2:
+>   - return immediatly if secure_computing(NULL) returns -1
+>   - fixed whitespace issues
+>   - add missing seccomp.h
+>   - remove patch #2 (solved now)
+>   - add riscv to seccomp kernel selftest
+> 
+> Cc: keescook@chromium.org
+> Cc: me@carlosedp.com
+> 
+> Signed-off-by: David Abdurachmanov <david.abdurachmanov@sifive.com>
 
-Hey Ted, do you know if that ext4 timestamp test can go in through
-linux-kselftest? It seemed fairly self-contained. Or is that what you
-were saying wouldn't work for you?
+We'd like to merge this patch through the RISC-V tree.
+Care to ack the change to tools/testing/selftests/seccomp/seccomp_bpf.c ?  
 
-> Let's focus on the next few weeks first so we can get this into mainline
-> in 5.5.
+Kees has already reviewed it:
 
-I agree. That is the most important thing.
+https://lore.kernel.org/linux-riscv/CAJr-aD=UnCN9E_mdVJ2H5nt=6juRSWikZnA5HxDLQxXLbsRz-w@mail.gmail.com/
 
-> The two of us can chat next week and come up with a plan.
 
-Sure.
+- Paul
 
-Cheers!
+
+> ---
+>  arch/riscv/Kconfig                            | 14 ++++++++++
+>  arch/riscv/include/asm/seccomp.h              | 10 +++++++
+>  arch/riscv/include/asm/thread_info.h          |  5 +++-
+>  arch/riscv/kernel/entry.S                     | 27 +++++++++++++++++--
+>  arch/riscv/kernel/ptrace.c                    | 10 +++++++
+>  tools/testing/selftests/seccomp/seccomp_bpf.c |  8 +++++-
+>  6 files changed, 70 insertions(+), 4 deletions(-)
+>  create mode 100644 arch/riscv/include/asm/seccomp.h
+> 
+> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+> index 59a4727ecd6c..441e63ff5adc 100644
+> --- a/arch/riscv/Kconfig
+> +++ b/arch/riscv/Kconfig
+> @@ -31,6 +31,7 @@ config RISCV
+>  	select GENERIC_SMP_IDLE_THREAD
+>  	select GENERIC_ATOMIC64 if !64BIT
+>  	select HAVE_ARCH_AUDITSYSCALL
+> +	select HAVE_ARCH_SECCOMP_FILTER
+>  	select HAVE_MEMBLOCK_NODE_MAP
+>  	select HAVE_DMA_CONTIGUOUS
+>  	select HAVE_FUTEX_CMPXCHG if FUTEX
+> @@ -235,6 +236,19 @@ menu "Kernel features"
+>  
+>  source "kernel/Kconfig.hz"
+>  
+> +config SECCOMP
+> +	bool "Enable seccomp to safely compute untrusted bytecode"
+> +	help
+> +	  This kernel feature is useful for number crunching applications
+> +	  that may need to compute untrusted bytecode during their
+> +	  execution. By using pipes or other transports made available to
+> +	  the process as file descriptors supporting the read/write
+> +	  syscalls, it's possible to isolate those applications in
+> +	  their own address space using seccomp. Once seccomp is
+> +	  enabled via prctl(PR_SET_SECCOMP), it cannot be disabled
+> +	  and the task is only allowed to execute a few safe syscalls
+> +	  defined by each seccomp mode.
+> +
+>  endmenu
+>  
+>  menu "Boot options"
+> diff --git a/arch/riscv/include/asm/seccomp.h b/arch/riscv/include/asm/seccomp.h
+> new file mode 100644
+> index 000000000000..bf7744ee3b3d
+> --- /dev/null
+> +++ b/arch/riscv/include/asm/seccomp.h
+> @@ -0,0 +1,10 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +
+> +#ifndef _ASM_SECCOMP_H
+> +#define _ASM_SECCOMP_H
+> +
+> +#include <asm/unistd.h>
+> +
+> +#include <asm-generic/seccomp.h>
+> +
+> +#endif /* _ASM_SECCOMP_H */
+> diff --git a/arch/riscv/include/asm/thread_info.h b/arch/riscv/include/asm/thread_info.h
+> index 905372d7eeb8..a0b2a29a0da1 100644
+> --- a/arch/riscv/include/asm/thread_info.h
+> +++ b/arch/riscv/include/asm/thread_info.h
+> @@ -75,6 +75,7 @@ struct thread_info {
+>  #define TIF_MEMDIE		5	/* is terminating due to OOM killer */
+>  #define TIF_SYSCALL_TRACEPOINT  6       /* syscall tracepoint instrumentation */
+>  #define TIF_SYSCALL_AUDIT	7	/* syscall auditing */
+> +#define TIF_SECCOMP		8	/* syscall secure computing */
+>  
+>  #define _TIF_SYSCALL_TRACE	(1 << TIF_SYSCALL_TRACE)
+>  #define _TIF_NOTIFY_RESUME	(1 << TIF_NOTIFY_RESUME)
+> @@ -82,11 +83,13 @@ struct thread_info {
+>  #define _TIF_NEED_RESCHED	(1 << TIF_NEED_RESCHED)
+>  #define _TIF_SYSCALL_TRACEPOINT	(1 << TIF_SYSCALL_TRACEPOINT)
+>  #define _TIF_SYSCALL_AUDIT	(1 << TIF_SYSCALL_AUDIT)
+> +#define _TIF_SECCOMP		(1 << TIF_SECCOMP)
+>  
+>  #define _TIF_WORK_MASK \
+>  	(_TIF_NOTIFY_RESUME | _TIF_SIGPENDING | _TIF_NEED_RESCHED)
+>  
+>  #define _TIF_SYSCALL_WORK \
+> -	(_TIF_SYSCALL_TRACE | _TIF_SYSCALL_TRACEPOINT | _TIF_SYSCALL_AUDIT)
+> +	(_TIF_SYSCALL_TRACE | _TIF_SYSCALL_TRACEPOINT | _TIF_SYSCALL_AUDIT | \
+> +	 _TIF_SECCOMP )
+>  
+>  #endif /* _ASM_RISCV_THREAD_INFO_H */
+> diff --git a/arch/riscv/kernel/entry.S b/arch/riscv/kernel/entry.S
+> index bc7a56e1ca6f..0bbedfa3e47d 100644
+> --- a/arch/riscv/kernel/entry.S
+> +++ b/arch/riscv/kernel/entry.S
+> @@ -203,8 +203,25 @@ check_syscall_nr:
+>  	/* Check to make sure we don't jump to a bogus syscall number. */
+>  	li t0, __NR_syscalls
+>  	la s0, sys_ni_syscall
+> -	/* Syscall number held in a7 */
+> -	bgeu a7, t0, 1f
+> +	/*
+> +	 * The tracer can change syscall number to valid/invalid value.
+> +	 * We use syscall_set_nr helper in syscall_trace_enter thus we
+> +	 * cannot trust the current value in a7 and have to reload from
+> +	 * the current task pt_regs.
+> +	 */
+> +	REG_L a7, PT_A7(sp)
+> +	/*
+> +	 * Syscall number held in a7.
+> +	 * If syscall number is above allowed value, redirect to ni_syscall.
+> +	 */
+> +	bge a7, t0, 1f
+> +	/*
+> +	 * Check if syscall is rejected by tracer or seccomp, i.e., a7 == -1.
+> +	 * If yes, we pretend it was executed.
+> +	 */
+> +	li t1, -1
+> +	beq a7, t1, ret_from_syscall_rejected
+> +	/* Call syscall */
+>  	la s0, sys_call_table
+>  	slli t0, a7, RISCV_LGPTR
+>  	add s0, s0, t0
+> @@ -215,6 +232,12 @@ check_syscall_nr:
+>  ret_from_syscall:
+>  	/* Set user a0 to kernel a0 */
+>  	REG_S a0, PT_A0(sp)
+> +	/*
+> +	 * We didn't execute the actual syscall.
+> +	 * Seccomp already set return value for the current task pt_regs.
+> +	 * (If it was configured with SECCOMP_RET_ERRNO/TRACE)
+> +	 */
+> +ret_from_syscall_rejected:
+>  	/* Trace syscalls, but only if requested by the user. */
+>  	REG_L t0, TASK_TI_FLAGS(tp)
+>  	andi t0, t0, _TIF_SYSCALL_WORK
+> diff --git a/arch/riscv/kernel/ptrace.c b/arch/riscv/kernel/ptrace.c
+> index 368751438366..63e47c9f85f0 100644
+> --- a/arch/riscv/kernel/ptrace.c
+> +++ b/arch/riscv/kernel/ptrace.c
+> @@ -154,6 +154,16 @@ void do_syscall_trace_enter(struct pt_regs *regs)
+>  		if (tracehook_report_syscall_entry(regs))
+>  			syscall_set_nr(current, regs, -1);
+>  
+> +	/*
+> +	 * Do the secure computing after ptrace; failures should be fast.
+> +	 * If this fails we might have return value in a0 from seccomp
+> +	 * (via SECCOMP_RET_ERRNO/TRACE).
+> +	 */
+> +	if (secure_computing(NULL) == -1) {
+> +		syscall_set_nr(current, regs, -1);
+> +		return;
+> +	}
+> +
+>  #ifdef CONFIG_HAVE_SYSCALL_TRACEPOINTS
+>  	if (test_thread_flag(TIF_SYSCALL_TRACEPOINT))
+>  		trace_sys_enter(regs, syscall_get_nr(current, regs));
+> diff --git a/tools/testing/selftests/seccomp/seccomp_bpf.c b/tools/testing/selftests/seccomp/seccomp_bpf.c
+> index 6ef7f16c4cf5..492e0adad9d3 100644
+> --- a/tools/testing/selftests/seccomp/seccomp_bpf.c
+> +++ b/tools/testing/selftests/seccomp/seccomp_bpf.c
+> @@ -112,6 +112,8 @@ struct seccomp_data {
+>  #  define __NR_seccomp 383
+>  # elif defined(__aarch64__)
+>  #  define __NR_seccomp 277
+> +# elif defined(__riscv)
+> +#  define __NR_seccomp 277
+>  # elif defined(__hppa__)
+>  #  define __NR_seccomp 338
+>  # elif defined(__powerpc__)
+> @@ -1582,6 +1584,10 @@ TEST_F(TRACE_poke, getpid_runs_normally)
+>  # define ARCH_REGS	struct user_pt_regs
+>  # define SYSCALL_NUM	regs[8]
+>  # define SYSCALL_RET	regs[0]
+> +#elif defined(__riscv) && __riscv_xlen == 64
+> +# define ARCH_REGS	struct user_regs_struct
+> +# define SYSCALL_NUM	a7
+> +# define SYSCALL_RET	a0
+>  #elif defined(__hppa__)
+>  # define ARCH_REGS	struct user_regs_struct
+>  # define SYSCALL_NUM	gr[20]
+> @@ -1671,7 +1677,7 @@ void change_syscall(struct __test_metadata *_metadata,
+>  	EXPECT_EQ(0, ret) {}
+>  
+>  #if defined(__x86_64__) || defined(__i386__) || defined(__powerpc__) || \
+> -    defined(__s390__) || defined(__hppa__)
+> +    defined(__s390__) || defined(__hppa__) || defined(__riscv)
+>  	{
+>  		regs.SYSCALL_NUM = syscall;
+>  	}
+> -- 
+> 2.21.0
+> 
+> 
+
+
+- Paul
