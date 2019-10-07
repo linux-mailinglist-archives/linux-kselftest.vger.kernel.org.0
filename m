@@ -2,36 +2,35 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E2EBECE6E4
-	for <lists+linux-kselftest@lfdr.de>; Mon,  7 Oct 2019 17:11:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB7C2CE6E6
+	for <lists+linux-kselftest@lfdr.de>; Mon,  7 Oct 2019 17:11:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727947AbfJGPKk (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 7 Oct 2019 11:10:40 -0400
-Received: from mail.kernel.org ([198.145.29.99]:35984 "EHLO mail.kernel.org"
+        id S1728703AbfJGPKv (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 7 Oct 2019 11:10:51 -0400
+Received: from mail.kernel.org ([198.145.29.99]:36132 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726334AbfJGPKk (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 7 Oct 2019 11:10:40 -0400
+        id S1726334AbfJGPKv (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 7 Oct 2019 11:10:51 -0400
 Received: from localhost.localdomain (NE2965lan1.rev.em-net.ne.jp [210.141.244.193])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 63C712070B;
-        Mon,  7 Oct 2019 15:10:38 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id B72ED2070B;
+        Mon,  7 Oct 2019 15:10:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1570461039;
-        bh=tDjT88ehXn17T4Z8Un3YkEcUnFAmU6vDClRr1XSP4eU=;
+        s=default; t=1570461050;
+        bh=FIUvS515BRyZWWsbgjwGzMabdeFOcPuhq53HL6bR4Bk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=RbY4A44UDgdgxyBHp7zYLnqHeWFOtKZbWXyxtxUMDBybpt6eEoVq+bnAp1pSdkfDK
-         Sm8Sdb/d+SVIx4YBPrfOxtFOZ2vI0g4p9qatFeonj/Lb+B0Gwl1GfsxRhoX/U5gH+P
-         dHNvUbsndyDI5iDbaVGIG3t3TRk1DWDgWz751onQ=
+        b=FRmNryRQEJ7cqOuMLYqnj3fakuyXTQjkXrRFklSczVw8sNMLx6mTpun3s+zPhdmZG
+         y4wmcn+OMIqE5RHl6X/ENa+uU/zcy34t9AYLy8QNlRSQLCaF3bHSGax7N1TX8gJUoj
+         CZI7bcVSjH74fw3VabpUlilxjtXfasRrH+na6gdc=
 From:   Masami Hiramatsu <mhiramat@kernel.org>
 To:     Shuah Khan <shuah@kernel.org>
 Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        jaswinder.singh@linaro.org,
-        Anshuman Khandual <khandual@linux.vnet.ibm.com>,
-        "Aneesh Kumar K . V" <aneesh.kumar@linux.vnet.ibm.com>
-Subject: [BUGFIX PATCH 2/5] selftests: vm: Build/Run 64bit tests only on 64bit arch
-Date:   Tue,  8 Oct 2019 00:10:36 +0900
-Message-Id: <157046103602.20724.2137257179743632576.stgit@devnote2>
+        jaswinder.singh@linaro.org, Eric Dumazet <edumazet@google.com>,
+        "David S . Miller" <davem@davemloft.net>
+Subject: [BUGFIX PATCH 3/5] selftests: net: Use size_t and ssize_t for counting file size
+Date:   Tue,  8 Oct 2019 00:10:45 +0900
+Message-Id: <157046104535.20724.6659308145965966926.stgit@devnote2>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <157046101671.20724.9561877942986463668.stgit@devnote2>
 References: <157046101671.20724.9561877942986463668.stgit@devnote2>
@@ -44,77 +43,55 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Some virtual address range tests requires 64bit address space,
-and we can not build and run those tests on the 32bit machine.
-
-Filter the 64bit architectures in Makefile and run_vmtests,
-so that those tests are built/run only on 64bit archs.
+Use size_t and ssize_t correctly for counting send file size
+instead of unsigned long and long, because long is 32bit on
+32bit arch, which is not enough for counting long file size (>4GB).
 
 Signed-off-by: Masami Hiramatsu <mhiramat@kernel.org>
-Cc: Anshuman Khandual <khandual@linux.vnet.ibm.com>
-Cc: Aneesh Kumar K.V <aneesh.kumar@linux.vnet.ibm.com>
+Cc: Eric Dumazet <edumazet@google.com>
+Cc: David S. Miller <davem@davemloft.net>
 ---
- tools/testing/selftests/vm/Makefile    |    5 +++++
- tools/testing/selftests/vm/run_vmtests |   10 ++++++++++
- 2 files changed, 15 insertions(+)
+ tools/testing/selftests/net/tcp_mmap.c |    8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/tools/testing/selftests/vm/Makefile b/tools/testing/selftests/vm/Makefile
-index 9534dc2bc929..7f9a8a8c31da 100644
---- a/tools/testing/selftests/vm/Makefile
-+++ b/tools/testing/selftests/vm/Makefile
-@@ -1,5 +1,7 @@
- # SPDX-License-Identifier: GPL-2.0
- # Makefile for vm selftests
-+uname_M := $(shell uname -m 2>/dev/null || echo not)
-+ARCH ?= $(shell echo $(uname_M) | sed -e 's/aarch64.*/arm64/')
+diff --git a/tools/testing/selftests/net/tcp_mmap.c b/tools/testing/selftests/net/tcp_mmap.c
+index 31ced79f4f25..33035d1b3f6d 100644
+--- a/tools/testing/selftests/net/tcp_mmap.c
++++ b/tools/testing/selftests/net/tcp_mmap.c
+@@ -71,7 +71,7 @@
+ #define MSG_ZEROCOPY    0x4000000
+ #endif
  
- CFLAGS = -Wall -I ../../../../usr/include $(EXTRA_CFLAGS)
- LDLIBS = -lrt
-@@ -16,8 +18,11 @@ TEST_GEN_FILES += on-fault-limit
- TEST_GEN_FILES += thuge-gen
- TEST_GEN_FILES += transhuge-stress
- TEST_GEN_FILES += userfaultfd
-+
-+ifneq (,$(filter $(ARCH),arm64 ia64 mips64 parisc64 ppc64 riscv64 s390x sh64 sparc64 x86_64))
- TEST_GEN_FILES += va_128TBswitch
- TEST_GEN_FILES += virtual_address_range
-+endif
+-#define FILE_SZ (1UL << 35)
++#define FILE_SZ (1ULL << 35)
+ static int cfg_family = AF_INET6;
+ static socklen_t cfg_alen = sizeof(struct sockaddr_in6);
+ static int cfg_port = 8787;
+@@ -155,7 +155,7 @@ void *child_thread(void *arg)
+ 			socklen_t zc_len = sizeof(zc);
+ 			int res;
  
- TEST_PROGS := run_vmtests
+-			zc.address = (__u64)addr;
++			zc.address = (__u64)((unsigned long)addr);
+ 			zc.length = chunk_size;
+ 			zc.recv_skip_hint = 0;
+ 			res = getsockopt(fd, IPPROTO_TCP, TCP_ZEROCOPY_RECEIVE,
+@@ -302,7 +302,7 @@ int main(int argc, char *argv[])
+ {
+ 	struct sockaddr_storage listenaddr, addr;
+ 	unsigned int max_pacing_rate = 0;
+-	unsigned long total = 0;
++	size_t total = 0;
+ 	char *host = NULL;
+ 	int fd, c, on = 1;
+ 	char *buffer;
+@@ -417,7 +417,7 @@ int main(int argc, char *argv[])
+ 		zflg = 0;
+ 	}
+ 	while (total < FILE_SZ) {
+-		long wr = FILE_SZ - total;
++		ssize_t wr = FILE_SZ - total;
  
-diff --git a/tools/testing/selftests/vm/run_vmtests b/tools/testing/selftests/vm/run_vmtests
-index 951c507a27f7..a692ea828317 100755
---- a/tools/testing/selftests/vm/run_vmtests
-+++ b/tools/testing/selftests/vm/run_vmtests
-@@ -58,6 +58,14 @@ else
- 	exit 1
- fi
- 
-+#filter 64bit architectures
-+ARCH64STR="arm64 ia64 mips64 parisc64 ppc64 riscv64 s390x sh64 sparc64 x86_64"
-+if [ -z $ARCH ]; then
-+  ARCH=`uname -m 2>/dev/null | sed -e 's/aarch64.*/arm64/'`
-+fi
-+VADDR64=0
-+echo "$ARCH64STR" | grep $ARCH && VADDR64=1
-+
- mkdir $mnt
- mount -t hugetlbfs none $mnt
- 
-@@ -189,6 +197,7 @@ else
- 	echo "[PASS]"
- fi
- 
-+if [ $VADDR64 -ne 0 ]; then
- echo "-----------------------------"
- echo "running virtual_address_range"
- echo "-----------------------------"
-@@ -210,6 +219,7 @@ if [ $? -ne 0 ]; then
- else
-     echo "[PASS]"
- fi
-+fi # VADDR64
- 
- echo "------------------------------------"
- echo "running vmalloc stability smoke test"
+ 		if (wr > chunk_size)
+ 			wr = chunk_size;
 
