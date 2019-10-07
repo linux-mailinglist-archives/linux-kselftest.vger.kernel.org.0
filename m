@@ -2,160 +2,121 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EA077CEEAC
-	for <lists+linux-kselftest@lfdr.de>; Mon,  7 Oct 2019 23:58:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65F2DCEEC3
+	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Oct 2019 00:03:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728983AbfJGV6L (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 7 Oct 2019 17:58:11 -0400
-Received: from mail-pg1-f194.google.com ([209.85.215.194]:42592 "EHLO
-        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728980AbfJGV6L (ORCPT
+        id S1728422AbfJGWDn (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 7 Oct 2019 18:03:43 -0400
+Received: from mail-pg1-f193.google.com ([209.85.215.193]:43364 "EHLO
+        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729513AbfJGWDn (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 7 Oct 2019 17:58:11 -0400
-Received: by mail-pg1-f194.google.com with SMTP id z12so9010508pgp.9
-        for <linux-kselftest@vger.kernel.org>; Mon, 07 Oct 2019 14:58:10 -0700 (PDT)
+        Mon, 7 Oct 2019 18:03:43 -0400
+Received: by mail-pg1-f193.google.com with SMTP id i32so1728951pgl.10
+        for <linux-kselftest@vger.kernel.org>; Mon, 07 Oct 2019 15:03:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=d9R2DytZLVyk2fwJJFRzpjruYoBx/tgy0WautWlgOD8=;
-        b=Fi8DtEjIQeSKrxEK0+d42P779M0GrBfYYm+MgPk1Xj1ol6nl48uSmWyivr1wC7aQZ3
-         SBRmwey+QVdnbcBzrHYjark4SV/68MO04hHYrjLg3R2duGdAIJ5D/Pw347dnBXlwVVH9
-         cW0799mRq1crPTl6lQ1S5motdn4zbfG51kqiYkqh4QLUaAwbqSgYjyrsMXFrj9clkPza
-         rC2EoEsxcUDjOSrQKRUHgLnxjiw5GdhHX3W7HR3KjuBbfx3Ua9JPhKkdjJ3Fq0E2j3MH
-         MXkaPHBzET+2hjqUAQfDu+is4YsBX9qz8Hluoezq/wI+rMOd4b3VwQIAQ2jMKJsHOqwH
-         Hejg==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=UZGzcGWSg7j1xVwFlul4lYcpfYvPiRRuiper8S6eU8I=;
+        b=OHR/EYO3cx6EzPLG+F/+e+l1QFiXnAScx7C66XtHVA4XkmhUKC8GCyCrw7porywgnY
+         G52UMxivFJ3ALT04VoTi+K9+uuJlh/wG2mFaMuwE1MEax0cvsjjShc4khXPVh4hHfaPC
+         MJWsVeU9IwaEM5alXFzudcZCuLv9f7HlfNXiTVP5q8HP0CMxVn5Z0xvYWY5j4YyIx35n
+         skIA2xwOCPTtHRZR9D7bw++okRR0sytqs8Aie70egpUaO4SDNSz5qd63ZmEM5JIYeRP3
+         VRvH4ETFFPrsUZ4CTtji1vrAzMLrnv3Bv+stoP0+uZEWJzKMC1E3fng9tz/Q5E9Cgtuh
+         0rPg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=d9R2DytZLVyk2fwJJFRzpjruYoBx/tgy0WautWlgOD8=;
-        b=C6f5CVP4QyFZ7TMuK1Qh5NTP5zL937e6zxEjZhgXn/BVTK3bQqpJrqjvtsQVt+hYtn
-         bBTK02S/lbZE/sdsQoiy9Rz2yVCG0dgIa7eqW8Lx1032hSiqdk/ensyXjJ/yNlEd1uD5
-         xiTJyDxUBAZHJnzH4z/FmWF47A6OHep8fVT+EiIwKNnIP+3Kxnbr7YLYUnFlp65lWoG6
-         MTAY1ptzJ7R7B6tCiGB4GH3IL+5cI5+M9YXqgIT6JCD4Wolw9xvRV2tPOc0sfc1rowSH
-         TeknXMXJSbcGz6pvW5QCDxhkAw2jOPbDP8IJwBjnLLZXGfUe11aAPJvR+MDdtFDqogs2
-         NbyQ==
-X-Gm-Message-State: APjAAAW1OcESjTLws+Y0GC9s/luwkuaI3XBgmVwXcn/n4+s+FGAK0C29
-        pSY4cqdlqJwKBUu+j4jcbBqk0Q==
-X-Google-Smtp-Source: APXvYqwL205rHfAPFri+fkXARng7t7g7JOTuAdW9fVsDitixtXyp2m0tM+RHh6xfTDgdgPcNZjw6lw==
-X-Received: by 2002:a62:75d2:: with SMTP id q201mr34993831pfc.43.1570485489852;
-        Mon, 07 Oct 2019 14:58:09 -0700 (PDT)
-Received: from google.com ([2620:15c:2cb:1:e90c:8e54:c2b4:29e7])
-        by smtp.gmail.com with ESMTPSA id 26sm13262381pgz.70.2019.10.07.14.58.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Oct 2019 14:58:08 -0700 (PDT)
-Date:   Mon, 7 Oct 2019 14:58:04 -0700
-From:   Brendan Higgins <brendanhiggins@google.com>
-To:     David Gow <davidgow@google.com>
-Cc:     shuah@kernel.org, akpm@linux-foundation.org, keescook@chromium.org,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] lib/list-test: add a test for the 'list' doubly linked
- list
-Message-ID: <20191007215804.GA119460@google.com>
-References: <20191007213633.92565-1-davidgow@google.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=UZGzcGWSg7j1xVwFlul4lYcpfYvPiRRuiper8S6eU8I=;
+        b=PpNUvohDWoiOaf9v1r2ZwhNttTNppzxwEMK/4Gz1iD5QIGAXsbQzv+wh0zvc7BvZMu
+         XykGOBa2DrMaGkUqQJlv8LWK3dXhSRMH43v0TY9vV2uQu1mIce4ObSTyMxaipuZ50xNX
+         5rd1RW7FjucoKsISixqOKxrLTGRrNrHqwrZJFN6vTEMOzpugZ4jhDsd1RT9JW7pn9VXT
+         HE6nwUXR4tpv8Y9Xnf0oNCUjfpfDQ3C4M68iGi+EO34q4A3k3w7WIHMtcvgYR7FTB/4y
+         5i2bSk1VTcx7WnveBhYJqpxQoxHCzhOlb8eFEVrchpxYdST8d21pTz3dSRV/iT/GhfkO
+         +2pQ==
+X-Gm-Message-State: APjAAAWYydWxK6USeND0eVn4QAUZ4B7UGsHvocRQRY1MbquCxDcrrv5k
+        /4cS6XKjt8O6Kp/iOMdHON8KeyxLguGr70nbsu8nsA==
+X-Google-Smtp-Source: APXvYqymIFmH/VdtekqcD7IGssXBBT3ftOgwACxjQDDGzT3sa3TN5XbpsxVHSgFRKPMOa6CZsa+r/b9Fhw8989/rN3o=
+X-Received: by 2002:a63:6641:: with SMTP id a62mr31888287pgc.384.1570485821624;
+ Mon, 07 Oct 2019 15:03:41 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191007213633.92565-1-davidgow@google.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <CAEjAshr=JqVpF651eSZYFhwVAMNZ29LWcfrH07K_M9GU=hPnvg@mail.gmail.com>
+ <1567786314-12330-1-git-send-email-sj38.park@gmail.com> <CAFd5g44=8TV4VciMkcD2DHR+UsnpwyEFbw2Xucwo7-as6Py_4g@mail.gmail.com>
+ <1bc1c5da-2810-60d3-4e76-8d0b73fdd521@kernel.org>
+In-Reply-To: <1bc1c5da-2810-60d3-4e76-8d0b73fdd521@kernel.org>
+From:   Brendan Higgins <brendanhiggins@google.com>
+Date:   Mon, 7 Oct 2019 15:03:29 -0700
+Message-ID: <CAFd5g47GXbVk4AbRgKb5voG+DLyEEM+KEb+Fgw3u1qjRY2ZhmQ@mail.gmail.com>
+Subject: Re: [PATCH] kunit: Fix '--build_dir' option
+To:     shuah <shuah@kernel.org>
+Cc:     SeongJae Park <sj38.park@gmail.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, kunit-dev@googlegroups.com,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Oct 07, 2019 at 02:36:33PM -0700, David Gow wrote:
-> This change adds a KUnit test for the kernel doubly linked list
-> implementation in include/linux/list.h
-> 
-> Note that, at present, it only tests the list_ types (not the
-> singly-linked hlist_), and does not yet test all of the
-> list_for_each_entry* macros (and some related things like
-> list_prepare_entry).
-> 
-> This change depends on KUnit, so should be merged via the 'test' branch:
-> https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git/log/?h=test
+On Fri, Sep 6, 2019 at 7:33 PM shuah <shuah@kernel.org> wrote:
+>
+> On 9/6/19 7:16 PM, Brendan Higgins wrote:
+> > On Fri, Sep 6, 2019 at 9:12 AM SeongJae Park <sj38.park@gmail.com> wrote:
+> >>
+> >> Running kunit with '--build_dir' option gives following error message:
+> >>
+> >> ```
+> >> $ ./tools/testing/kunit/kunit.py run --build_dir ../linux.out.kunit/
+> >> [00:57:24] Building KUnit Kernel ...
+> >> [00:57:29] Starting KUnit Kernel ...
+> >> Traceback (most recent call last):
+> >>    File "./tools/testing/kunit/kunit.py", line 136, in <module>
+> >>      main(sys.argv[1:])
+> >>    File "./tools/testing/kunit/kunit.py", line 129, in main
+> >>      result = run_tests(linux, request)
+> >>    File "./tools/testing/kunit/kunit.py", line 68, in run_tests
+> >>      test_result = kunit_parser.parse_run_tests(kunit_output)
+> >>    File "/home/sjpark/linux/tools/testing/kunit/kunit_parser.py", line
+> >> 283, in parse_run_tests
+> >>      test_result =
+> >> parse_test_result(list(isolate_kunit_output(kernel_output)))
+> >>    File "/home/sjpark/linux/tools/testing/kunit/kunit_parser.py", line
+> >> 54, in isolate_kunit_output
+> >>      for line in kernel_output:
+> >>    File "/home/sjpark/linux/tools/testing/kunit/kunit_kernel.py", line
+> >> 145, in run_kernel
+> >>      process = self._ops.linux_bin(args, timeout, build_dir)
+> >>    File "/home/sjpark/linux/tools/testing/kunit/kunit_kernel.py", line
+> >> 69, in linux_bin
+> >>      stderr=subprocess.PIPE)
+> >>    File "/usr/lib/python3.5/subprocess.py", line 947, in __init__
+> >>      restore_signals, start_new_session)
+> >>    File "/usr/lib/python3.5/subprocess.py", line 1551, in _execute_child
+> >>      raise child_exception_type(errno_num, err_msg)
+> >> FileNotFoundError: [Errno 2] No such file or directory: './linux'
+> >> ```
+> >>
+> >> This error occurs because the '--build_dir' option value is not passed
+> >> to the 'run_kernel()' function.  Consequently, the function assumes
+> >> the kernel image that built for the tests, which is under the
+> >> '--build_dir' directory, is in kernel source directory and finally raises
+> >> the 'FileNotFoundError'.
+> >>
+> >> This commit fixes the problem by properly passing the '--build_dir'
+> >> option value to the 'run_kernel()'.
+> >>
+> >> Signed-off-by: SeongJae Park <sj38.park@gmail.com>
+> >
+> > Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
+> > Tested-by: Brendan Higgins <brendanhiggins@google.com>
+> >
+> > Thanks!
+> >
+>
+> Thanks Brendan! I will apply the patch for 5.4-rc1.
 
-Others might feel differently than me, but I think this should go in the
-comment section (below the "---").
-
-> Signed-off-by: David Gow <davidgow@google.com>
-
-Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
-Tested-by: Brendan Higgins <brendanhiggins@google.com>
-
-> ---
->  lib/Kconfig.debug |  12 +
->  lib/Makefile      |   3 +
->  lib/list-test.c   | 711 ++++++++++++++++++++++++++++++++++++++++++++++
->  3 files changed, 726 insertions(+)
->  create mode 100644 lib/list-test.c
-> 
-> diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-> index a3017a5dadcd..60691c0aac3e 100644
-> --- a/lib/Kconfig.debug
-> +++ b/lib/Kconfig.debug
-> @@ -1961,6 +1961,18 @@ config SYSCTL_KUNIT_TEST
->  
->  	  If unsure, say N.
->  
-> +config LIST_TEST
-> +	bool "KUnit Test for Kernel Linked-list stuctures"
-> +	depends on KUNIT
-> +	help
-> +	  This builds the linked list unit test, which runs on boot.
-> +	  It tests that the API and basic functionality of the list_head type
-> +	  and associated macros.
-> +	  For more information on KUnit and unit tests in general please refer
-> +	  to the KUnit documentation in Documentation/dev-tools/kunit/.
-> +
-> +	  If unsure, say N.
-> +
->  config TEST_UDELAY
->  	tristate "udelay test driver"
->  	help
-> diff --git a/lib/Makefile b/lib/Makefile
-> index bba1fd5485f7..309e174ee35d 100644
-> --- a/lib/Makefile
-> +++ b/lib/Makefile
-> @@ -292,3 +292,6 @@ obj-$(CONFIG_GENERIC_LIB_MULDI3) += muldi3.o
->  obj-$(CONFIG_GENERIC_LIB_CMPDI2) += cmpdi2.o
->  obj-$(CONFIG_GENERIC_LIB_UCMPDI2) += ucmpdi2.o
->  obj-$(CONFIG_OBJAGG) += objagg.o
-> +
-> +# KUnit tests
-> +obj-$(CONFIG_LIST_TEST) += list-test.o
-> diff --git a/lib/list-test.c b/lib/list-test.c
-> new file mode 100644
-> index 000000000000..f333e8b0d9fe
-> --- /dev/null
-> +++ b/lib/list-test.c
-> @@ -0,0 +1,711 @@
-> +// SPDX-License-Identifier: GPL-2.0
-
-Might also want to add a bit more of a description here. Even if it is
-just something like "KUnit test for the doubly linked list data
-structure."
-
-Also:
-
-/*
- * <Insert description here.>
- *
- * Copyright (C) 2019, Google LLC.
- * Author: David Gow <davidgow@google.com>
- */
-
-> +#include <kunit/test.h>
-> +
-> +#include <linux/list.h>
-> +
-> +struct list_test_struct {
-> +	int data;
-> +	struct list_head list;
-> +};
-
-<snip>
-
-Thanks!
+Shuah, can you apply this to the kselftest KUnit branch? This should
+not require a resend.
