@@ -2,34 +2,36 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 06835CE6E2
+	by mail.lfdr.de (Postfix) with ESMTP id E2EBECE6E4
 	for <lists+linux-kselftest@lfdr.de>; Mon,  7 Oct 2019 17:11:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727711AbfJGPKb (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 7 Oct 2019 11:10:31 -0400
-Received: from mail.kernel.org ([198.145.29.99]:35838 "EHLO mail.kernel.org"
+        id S1727947AbfJGPKk (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 7 Oct 2019 11:10:40 -0400
+Received: from mail.kernel.org ([198.145.29.99]:35984 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726334AbfJGPKb (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 7 Oct 2019 11:10:31 -0400
+        id S1726334AbfJGPKk (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 7 Oct 2019 11:10:40 -0400
 Received: from localhost.localdomain (NE2965lan1.rev.em-net.ne.jp [210.141.244.193])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 345042070B;
-        Mon,  7 Oct 2019 15:10:29 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 63C712070B;
+        Mon,  7 Oct 2019 15:10:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1570461030;
-        bh=6r8t1dHquGoeni2YRJD6dXFGHQJJSEJgPmcLrD52UVM=;
+        s=default; t=1570461039;
+        bh=tDjT88ehXn17T4Z8Un3YkEcUnFAmU6vDClRr1XSP4eU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=e/cmF24hrXBDDYcLA9BZjxFU+liz1gVBG1zCoAhvOiDQMgL7G1v2F+tf6vEL1xHAq
-         3IuarbMoRCj6tm7pAYmsv8LZqMLtmy916SylBjscyWkfvWUo3uW0E7uZ1w6CK7O9XB
-         N2P8+ebCe91z0A9CNpQGnXWmkmnqmAm378qnwcqk=
+        b=RbY4A44UDgdgxyBHp7zYLnqHeWFOtKZbWXyxtxUMDBybpt6eEoVq+bnAp1pSdkfDK
+         Sm8Sdb/d+SVIx4YBPrfOxtFOZ2vI0g4p9qatFeonj/Lb+B0Gwl1GfsxRhoX/U5gH+P
+         dHNvUbsndyDI5iDbaVGIG3t3TRk1DWDgWz751onQ=
 From:   Masami Hiramatsu <mhiramat@kernel.org>
 To:     Shuah Khan <shuah@kernel.org>
 Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        jaswinder.singh@linaro.org, Alexey Dobriyan <adobriyan@gmail.com>
-Subject: [BUGFIX PATCH 1/5] selftests: proc: Make va_max 3GB on 32bit arch
-Date:   Tue,  8 Oct 2019 00:10:26 +0900
-Message-Id: <157046102656.20724.3358140818300189230.stgit@devnote2>
+        jaswinder.singh@linaro.org,
+        Anshuman Khandual <khandual@linux.vnet.ibm.com>,
+        "Aneesh Kumar K . V" <aneesh.kumar@linux.vnet.ibm.com>
+Subject: [BUGFIX PATCH 2/5] selftests: vm: Build/Run 64bit tests only on 64bit arch
+Date:   Tue,  8 Oct 2019 00:10:36 +0900
+Message-Id: <157046103602.20724.2137257179743632576.stgit@devnote2>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <157046101671.20724.9561877942986463668.stgit@devnote2>
 References: <157046101671.20724.9561877942986463668.stgit@devnote2>
@@ -42,48 +44,77 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Currently proc-self-map-files-002.c sets va_max (max test address
-of user virtual address) to 4GB, but it is too big for 32bit
-arch and 1UL << 32 is overflow on 32bit long.
+Some virtual address range tests requires 64bit address space,
+and we can not build and run those tests on the 32bit machine.
 
-Make va_max 3GB on 32bit arch like i386 and arm.
+Filter the 64bit architectures in Makefile and run_vmtests,
+so that those tests are built/run only on 64bit archs.
 
 Signed-off-by: Masami Hiramatsu <mhiramat@kernel.org>
-Cc: Alexey Dobriyan <adobriyan@gmail.com>
+Cc: Anshuman Khandual <khandual@linux.vnet.ibm.com>
+Cc: Aneesh Kumar K.V <aneesh.kumar@linux.vnet.ibm.com>
 ---
- .../selftests/proc/proc-self-map-files-002.c       |   11 ++++++++++-
- 1 file changed, 10 insertions(+), 1 deletion(-)
+ tools/testing/selftests/vm/Makefile    |    5 +++++
+ tools/testing/selftests/vm/run_vmtests |   10 ++++++++++
+ 2 files changed, 15 insertions(+)
 
-diff --git a/tools/testing/selftests/proc/proc-self-map-files-002.c b/tools/testing/selftests/proc/proc-self-map-files-002.c
-index 47b7473dedef..d517f8c479fb 100644
---- a/tools/testing/selftests/proc/proc-self-map-files-002.c
-+++ b/tools/testing/selftests/proc/proc-self-map-files-002.c
-@@ -22,6 +22,7 @@
- #include <unistd.h>
- #include <sys/mman.h>
- #include <stdlib.h>
-+#include <asm/bitsperlong.h>
+diff --git a/tools/testing/selftests/vm/Makefile b/tools/testing/selftests/vm/Makefile
+index 9534dc2bc929..7f9a8a8c31da 100644
+--- a/tools/testing/selftests/vm/Makefile
++++ b/tools/testing/selftests/vm/Makefile
+@@ -1,5 +1,7 @@
+ # SPDX-License-Identifier: GPL-2.0
+ # Makefile for vm selftests
++uname_M := $(shell uname -m 2>/dev/null || echo not)
++ARCH ?= $(shell echo $(uname_M) | sed -e 's/aarch64.*/arm64/')
  
- static void pass(const char *fmt, unsigned long a, unsigned long b)
- {
-@@ -44,10 +45,18 @@ static void fail(const char *fmt, unsigned long a, unsigned long b)
- 	exit(1);
- }
- 
-+#if __BITS_PER_LONG == 32
-+# define VA_MAX (3UL << 30)
-+#elif __BITS_PER_LONG == 64
-+# define VA_MAX (1UL << 32)
-+#else
-+# define VA_MAX 0
-+#endif
+ CFLAGS = -Wall -I ../../../../usr/include $(EXTRA_CFLAGS)
+ LDLIBS = -lrt
+@@ -16,8 +18,11 @@ TEST_GEN_FILES += on-fault-limit
+ TEST_GEN_FILES += thuge-gen
+ TEST_GEN_FILES += transhuge-stress
+ TEST_GEN_FILES += userfaultfd
 +
- int main(void)
- {
- 	const int PAGE_SIZE = sysconf(_SC_PAGESIZE);
--	const unsigned long va_max = 1UL << 32;
-+	const unsigned long va_max = VA_MAX;
- 	unsigned long va;
- 	void *p;
- 	int fd;
++ifneq (,$(filter $(ARCH),arm64 ia64 mips64 parisc64 ppc64 riscv64 s390x sh64 sparc64 x86_64))
+ TEST_GEN_FILES += va_128TBswitch
+ TEST_GEN_FILES += virtual_address_range
++endif
+ 
+ TEST_PROGS := run_vmtests
+ 
+diff --git a/tools/testing/selftests/vm/run_vmtests b/tools/testing/selftests/vm/run_vmtests
+index 951c507a27f7..a692ea828317 100755
+--- a/tools/testing/selftests/vm/run_vmtests
++++ b/tools/testing/selftests/vm/run_vmtests
+@@ -58,6 +58,14 @@ else
+ 	exit 1
+ fi
+ 
++#filter 64bit architectures
++ARCH64STR="arm64 ia64 mips64 parisc64 ppc64 riscv64 s390x sh64 sparc64 x86_64"
++if [ -z $ARCH ]; then
++  ARCH=`uname -m 2>/dev/null | sed -e 's/aarch64.*/arm64/'`
++fi
++VADDR64=0
++echo "$ARCH64STR" | grep $ARCH && VADDR64=1
++
+ mkdir $mnt
+ mount -t hugetlbfs none $mnt
+ 
+@@ -189,6 +197,7 @@ else
+ 	echo "[PASS]"
+ fi
+ 
++if [ $VADDR64 -ne 0 ]; then
+ echo "-----------------------------"
+ echo "running virtual_address_range"
+ echo "-----------------------------"
+@@ -210,6 +219,7 @@ if [ $? -ne 0 ]; then
+ else
+     echo "[PASS]"
+ fi
++fi # VADDR64
+ 
+ echo "------------------------------------"
+ echo "running vmalloc stability smoke test"
 
