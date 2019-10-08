@@ -2,92 +2,55 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 52D1FD0041
-	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Oct 2019 19:59:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 564D0D004F
+	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Oct 2019 20:00:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726336AbfJHR7V (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 8 Oct 2019 13:59:21 -0400
-Received: from mail-wm1-f67.google.com ([209.85.128.67]:55332 "EHLO
-        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726320AbfJHR7V (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 8 Oct 2019 13:59:21 -0400
-Received: by mail-wm1-f67.google.com with SMTP id a6so4124774wma.5;
-        Tue, 08 Oct 2019 10:59:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=de/h/+CZqrrnC1bJlNTMniZfSzB6FHNGFGPPpwsaq7Q=;
-        b=CD3PDvXHvPqaQA+NWxzdIBr9gEtKMWzC7kNysSHLMFWQ9B2PEUUS+BkiohrEuNrm0S
-         ojYhC4kmNjgXy3yeRz6IOlTd5kEKb022VYzxMea6dqo2pmb+G4kO2X5lUHmbUn1PG8lY
-         oiaV0mL9oIMh9ADeBIGQifBuhU7Su8Rg+dq+NQX00u3b8zQoB/g0web0ISe5aPTAeaSY
-         zs0ljEZxI+vJppQaWXQA7SDC4n4zUvUBKfO5Wpdqr4C5vVQAkazhO7ZaFCkjEGgUDOO4
-         Jx+ndVm1G2sDFS7WdQkXEAjiiEo/geDpLusi5IhKC6AI1qdfgPAcklDEMpTdB/QqqjGu
-         Bd0w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=de/h/+CZqrrnC1bJlNTMniZfSzB6FHNGFGPPpwsaq7Q=;
-        b=ehHCkNMaw+u2zyS9DMRONCo5PvOfIgknjYdpaiWd2fjJ6Sy/XvejmoO6jWGm2hSDv0
-         o76sW3e0pPlq2QemIkIGQbpgMuSly6VJjpziJSbUjQ6G7C7gne+Ny9bxqzLuZROBC4Dc
-         20IQWzoMF3Xp/GMTYrKj6CM5KS6nHxKftFnaGrQEQCirLT9+/36PkJCsnh+1E84qmdm7
-         HU+xiAd6FTjfEAD8/5MHy90/hSJsycaQoAp7sw3WUvABKAD4Ce9Bva7ElBnX2lm610gH
-         GVsHAf5aARWfSoABzjDZ+uD5OZto96enjj6q1iDZ5D6CvCtlGxSQAL7mgBWBqyBIuX2W
-         +0Hw==
-X-Gm-Message-State: APjAAAUxTVCz82Vblv6kQFwLFqug+ctj5X2n47kvETcqfpvRQsAHlHER
-        zNvZyd5ONlPLhjIeK0U6kg==
-X-Google-Smtp-Source: APXvYqxeUUSPQhJ79Xf8sAszWDyBD/coVq+bBBubV/Yh6l5sN7oLJT+vL4GQBpGUyn/D5O/P40r4EQ==
-X-Received: by 2002:a1c:e912:: with SMTP id q18mr4736768wmc.42.1570557559484;
-        Tue, 08 Oct 2019 10:59:19 -0700 (PDT)
-Received: from avx2 ([46.53.253.157])
-        by smtp.gmail.com with ESMTPSA id u68sm5643087wmu.12.2019.10.08.10.59.18
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 08 Oct 2019 10:59:18 -0700 (PDT)
-Date:   Tue, 8 Oct 2019 20:59:16 +0300
-From:   Alexey Dobriyan <adobriyan@gmail.com>
-To:     Masami Hiramatsu <mhiramat@kernel.org>
-Cc:     Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, jaswinder.singh@linaro.org
-Subject: Re: [BUGFIX PATCH 1/5] selftests: proc: Make va_max 3GB on 32bit arch
-Message-ID: <20191008175916.GA20780@avx2>
-References: <157046101671.20724.9561877942986463668.stgit@devnote2>
- <157046102656.20724.3358140818300189230.stgit@devnote2>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <157046102656.20724.3358140818300189230.stgit@devnote2>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        id S1729647AbfJHSAK (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 8 Oct 2019 14:00:10 -0400
+Received: from mail.kernel.org ([198.145.29.99]:47498 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726336AbfJHSAK (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 8 Oct 2019 14:00:10 -0400
+Subject: Re: [GIT PULL] Kselftest update for Linux 5.4-rc3
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1570557609;
+        bh=HwzVqlpqTlUCC0/ZTEjrzR58/tMSplLoD1BQABsruxQ=;
+        h=From:In-Reply-To:References:Date:To:Cc:From;
+        b=ciRhypSKlarR/snUNq1fn+bjKOyy6Qr+d0GDLdrdE5uAg1QWw+JToScxakmArZ8ZQ
+         5iGB4817VhPoUhjYOAAZPQM7+VLV2YFLpwCz2b/6D1zYpOldnA/h3p888HtPMo5Gx2
+         5lObbEG/w0RapP5hN6aoh19HXpMeU+JgRye/3mtQ=
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <be198a81-7b4b-5d4c-c8c4-8dc3920f2ae5@linuxfoundation.org>
+References: <be198a81-7b4b-5d4c-c8c4-8dc3920f2ae5@linuxfoundation.org>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <be198a81-7b4b-5d4c-c8c4-8dc3920f2ae5@linuxfoundation.org>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest
+ tags/linux-kselftest-5.4-rc3
+X-PR-Tracked-Commit-Id: ce3a677802121e038d2f062e90f96f84e7351da0
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: f54e66ae770fe559fb21383f95d739ac74c03ea8
+Message-Id: <157055760984.21274.18416681419306362425.pr-tracker-bot@kernel.org>
+Date:   Tue, 08 Oct 2019 18:00:09 +0000
+To:     Shuah Khan <skhan@linuxfoundation.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        shuah <shuah@kernel.org>
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Oct 08, 2019 at 12:10:26AM +0900, Masami Hiramatsu wrote:
-> Currently proc-self-map-files-002.c sets va_max (max test address
-> of user virtual address) to 4GB, but it is too big for 32bit
-> arch and 1UL << 32 is overflow on 32bit long.
-> 
-> Make va_max 3GB on 32bit arch like i386 and arm.
+The pull request you sent on Mon, 7 Oct 2019 15:02:55 -0600:
 
-IIRC i386 had 1G/3G split, so 3GB would be too much still.
+> git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest tags/linux-kselftest-5.4-rc3
 
-> --- a/tools/testing/selftests/proc/proc-self-map-files-002.c
-> +++ b/tools/testing/selftests/proc/proc-self-map-files-002.c
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/f54e66ae770fe559fb21383f95d739ac74c03ea8
 
-> +#if __BITS_PER_LONG == 32
-> +# define VA_MAX (3UL << 30)
-> +#elif __BITS_PER_LONG == 64
-> +# define VA_MAX (1UL << 32)
-> +#else
-> +# define VA_MAX 0
-> +#endif
-> +
->  int main(void)
->  {
->  	const int PAGE_SIZE = sysconf(_SC_PAGESIZE);
-> -	const unsigned long va_max = 1UL << 32;
-> +	const unsigned long va_max = VA_MAX;
+Thank you!
 
-This limit doesn't need to be precise, 1GB is "big enough".
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.wiki.kernel.org/userdoc/prtracker
