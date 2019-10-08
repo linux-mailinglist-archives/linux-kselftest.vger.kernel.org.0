@@ -2,132 +2,104 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 94214CFB3D
-	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Oct 2019 15:23:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EA4BCFCBC
+	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Oct 2019 16:46:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730439AbfJHNXN (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 8 Oct 2019 09:23:13 -0400
-Received: from mail-qt1-f175.google.com ([209.85.160.175]:35413 "EHLO
-        mail-qt1-f175.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730332AbfJHNXN (ORCPT
+        id S1727412AbfJHOpy (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 8 Oct 2019 10:45:54 -0400
+Received: from userp2120.oracle.com ([156.151.31.85]:48700 "EHLO
+        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725795AbfJHOpx (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 8 Oct 2019 09:23:13 -0400
-Received: by mail-qt1-f175.google.com with SMTP id m15so25281034qtq.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 08 Oct 2019 06:23:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=xpaq6J8Q7pR+GF70lFDtN/pybeFRutczVu4rh088PwA=;
-        b=Oi+4pJqoHHGuiMgaAJhKn7BnzPBOo5Mvju4Dm0pV0qDxSfqaKe0oI+RrIcN2wbTZ6S
-         5SWywdcV8CG0W2llQzfWkSZqV5sLZiz6R0uGP7EdI5IzulUbtyzuCKse7iHwPfqaksz2
-         UZi9xF7UMw0QsnDQ+7ZtCznOe/22aUj3grVyKJgCvzchvaRY6rC79LeBBZHNy5AwIIze
-         Xuh2dC09Pj6iMVVn43F1GjtuaMFyg1D+1uukeK3ShshtOe7PZs0C+A+N2b1xsHVGzg2N
-         +/wJo914Oi2JRKUDws4ha5pan3T6dkFLSxJjlild/5LWwTpRUYGWphIQs769hx3B/unt
-         CuvA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=xpaq6J8Q7pR+GF70lFDtN/pybeFRutczVu4rh088PwA=;
-        b=dGjXKzqDncOlxmHt6y9CFtTm8mrwfcOzddkkoP7qSXa1dnN8hYO5WO6pYBDOdjhsRL
-         aCduaEEKuCSarVfyXRFKbCCNVfNEi16Fd+JskQGjkBInIXG3fF1W+qT8zy4SertPaYe5
-         RxWwcMRb7WxxqoSPZyppjJnt+2SZuDNgW6SbBC1PmYXV/iPbl3mDTnqproN+gBGpmQSC
-         4JPUUVKVXMssfwR2HKO10yvVVdiRYzF21DZjV8lpIcdTdyJ62VaAjIwrSyhsvjKNnK5N
-         N27QoaSQEhRE9VIgpdpaYIOXMMyQC8Eipj3fnSaxlis6ggw40GVUc8xWImBZ4Nt1pyR5
-         97zg==
-X-Gm-Message-State: APjAAAXPfes1vKI/1/jVV80C9fb2NdVQBkyFmPy7qXgvdws4NSSK39GN
-        KBO6OdsRNAKYEB0XJjm+CqSjuLcpWLzj1qkcGZcceg==
-X-Google-Smtp-Source: APXvYqyWHP88Ue91/hV0U8TFT0jTxgp1Elao/keXPuZv7+DgIhOsHhpofJS/Ke2V7b6HK5QWj+bjvrFkKEy9LxBs+hI=
-X-Received: by 2002:ac8:7646:: with SMTP id i6mr36355637qtr.50.1570540990726;
- Tue, 08 Oct 2019 06:23:10 -0700 (PDT)
-MIME-Version: 1.0
-References: <CACT4Y+YjOxmOzzPt_xaYE44QNZfq9haNfbnVBrTnPXe7zuSEfA@mail.gmail.com>
- <87zhibwgzm.fsf@rpws.prws.suse.cz> <CACT4Y+akZ4h9kN1Gg329-fKq-G=QeDdoFxW_Bp_r7+0sDsE+mw@mail.gmail.com>
- <87y2xvwf9v.fsf@rpws.prws.suse.cz>
-In-Reply-To: <87y2xvwf9v.fsf@rpws.prws.suse.cz>
-From:   Dmitry Vyukov <dvyukov@google.com>
-Date:   Tue, 8 Oct 2019 15:22:58 +0200
-Message-ID: <CACT4Y+a=WSm5Z4KzkPJaapvsfbnTx3Ghvy7Wq4j=QNZ3W-aAmA@mail.gmail.com>
-Subject: Re: [Automated-testing] syzkaller reproducers
-To:     rpalethorpe@suse.de
-Cc:     automated-testing@yoctoproject.org, Shuah Khan <shuah@kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>, kernelci@groups.io,
-        syzkaller <syzkaller@googlegroups.com>
-Content-Type: text/plain; charset="UTF-8"
+        Tue, 8 Oct 2019 10:45:53 -0400
+Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
+        by userp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x98ESp9c070052;
+        Tue, 8 Oct 2019 14:44:31 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id; s=corp-2019-08-05;
+ bh=bmUUyXdPet1IcRfhw6Xp6Zh40UK2k91Okb0Yfi2nf3I=;
+ b=q+TsZBhQZK1mG82uogKprFD4wzpJfpLeZNkjHKJrya+W4l0Ew/IIymnaoOPVmkdVVl+n
+ 3rXrlXEabI7amMxsUyYe9Hb/Wu2KoLQuSFuvzlfGevSA++/V8rHKOTktzvLUYEZRcjnI
+ fCPz6mwunGgJ2lCXnFAuvMdCT9DcFrcc/DSk1ghVsoK1kvlw4IonWNHzwi8/hUxWtNlF
+ a2NgxopA6ENRMnRLmCprRF/60AlDXRnZPkbGDl3PZFc/lKlSuR5ftNZwaY3+jbA83LL+
+ S/Bolo2aqdLWb/vbJsQcSgQCA5Pk5ooSr5KTIfKm8rLUc+xJ/9fnFBFPSLc+57a2EI91 zw== 
+Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
+        by userp2120.oracle.com with ESMTP id 2vektrdhtb-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 08 Oct 2019 14:44:31 +0000
+Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
+        by userp3030.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x98ERt6S047811;
+        Tue, 8 Oct 2019 14:44:30 GMT
+Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
+        by userp3030.oracle.com with ESMTP id 2vgeuy2976-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 08 Oct 2019 14:44:30 +0000
+Received: from abhmp0020.oracle.com (abhmp0020.oracle.com [141.146.116.26])
+        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id x98EiPf2031757;
+        Tue, 8 Oct 2019 14:44:25 GMT
+Received: from dhcp-10-175-191-48.vpn.oracle.com (/10.175.191.48)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Tue, 08 Oct 2019 14:44:24 +0000
+From:   Alan Maguire <alan.maguire@oracle.com>
+To:     linux-kselftest@vger.kernel.org, brendanhiggins@google.com,
+        skhan@linuxfoundation.org
+Cc:     mcgrof@kernel.org, keescook@chromium.org, yzaikin@google.com,
+        akpm@linux-foundation.org, yamada.masahiro@socionext.com,
+        catalin.marinas@arm.com, joe.lawrence@redhat.com,
+        penguin-kernel@i-love.sakura.ne.jp, schowdary@nvidia.com,
+        urezki@gmail.com, andriy.shevchenko@linux.intel.com,
+        changbin.du@intel.com, kunit-dev@googlegroups.com,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        Alan Maguire <alan.maguire@oracle.com>
+Subject: [PATCH linux-kselftest-test 0/3] kunit: support module-based build
+Date:   Tue,  8 Oct 2019 15:43:49 +0100
+Message-Id: <1570545832-32326-1-git-send-email-alan.maguire@oracle.com>
+X-Mailer: git-send-email 1.8.3.1
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9403 signatures=668684
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=38 malwarescore=0
+ phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=899
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.0.1-1908290000 definitions=main-1910080133
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9403 signatures=668684
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
+ suspectscore=38 phishscore=0 bulkscore=0 spamscore=0 clxscore=1011
+ lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=976 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1908290000
+ definitions=main-1910080133
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Oct 8, 2019 at 3:14 PM Richard Palethorpe <rpalethorpe@suse.de> wrote:
->
-> Hello,
->
-> Dmitry Vyukov <dvyukov@google.com> writes:
->
-> > On Tue, Oct 8, 2019 at 2:37 PM Richard Palethorpe <rpalethorpe@suse.de> wrote:
-> >>
-> >> Hello,
-> >>
-> >> Dmitry Vyukov <dvyukov@google.com> writes:
-> >>
-> >> > Hi Shuah,
-> >> >
-> >> > We discussed collecting and uploading all syzkaller reproducers
-> >> > somewhere. You wanted to see how they look. I've uploaded all current
-> >> > reproducers here:
-> >> > https://github.com/dvyukov/syzkaller-repros
-> >> > Minimalistic build/run scripts are included.
-> >> > +some testing mailing lists too as this can be used as a test suite
-> >> > If you have any potential uses for this, you are welcome to use it.
-> >> > But then we probably need to find some more official and shared place
-> >> > for them than my private github.
-> >> > The test programs can also be bulk updated if necessary, because all
-> >> > of this is auto-generated.
-> >> >
-> >> > Thanks
-> >>
-> >> I discussed this a bit with Metan. We think it would be fairly trivial
-> >> to create an LTP wrapper for these.
-> >>
-> >> So we just create an LTP test which forks and execs one of these
-> >> reproducers then checks for kernel taints after the child completes or
-> >> is killed. It can take the reproducer path as an argument and we can
-> >> generate a runtest file with all the reproducers in that we are able to
-> >> compile.
-> >>
-> >> I imagine a lot of these reproducers will not work on older kernels, so
-> >> this would just be a best efforts basis. We would ignore any problems
-> >> during execution unless there is a kernel error.
-> >>
-> >> This should work with existing LTP runners with maybe a minor change or
-> >> two to building and configuration.
-> >>
-> >> I will start experimenting with this and post the results to the LTP
-> >> mailing list.
-> >
-> >
-> > Hi Richard,
-> >
-> > Sounds great!
-> >
-> > Yes, these are totally best effort. May also require some configs, etc.
-> > Also note that each should be run in a clean temp dir and with a
-> > timeout b/c some have an infinite loop.
->
-> Thanks, fortunately the LTP lib can do that automatically.
->
-> However the default timeout is 5 minutes, but I guess this should be
-> more like ~3 seconds as in the run script?
+For consumers wishing to run kunit on real hardware, it would be
+ideal if the kunit framework and tests supported module-based builds.
+This is an advantage as it reduces the test task to running
+"modprobe mytests.ko", and CONFIG_KUNIT* options can be "always on"
+(or rather "always m").  KUnit based tests will load the kunit module
+as an implicit dependency.
 
-This really depends on the bug type and specific bug.
-syzkaller runs reproducers for up to 7 minutes. Sometimes even that is
-not enough to reproduce some bugs. We also detect hung tasks only
-after 3-4 minutes (may produce flakes with smaller timeout).
-Most reproducers can also run in parallel, that may help to partially
-neutralize large timeouts.
-But also if these run repeatedly/continuously, we can use smaller
-timeout on each run (don't need to catch crash on every run).
-Let's start with somewhere, we can tune later as we gather experience.
+Alan Maguire (3):
+  kunit: allow kunit tests to be loaded as a module
+  kunit: allow kunit to be loaded as a module
+  kunit: update documentation to describe module-based build
+
+ Documentation/dev-tools/kunit/faq.rst   |  3 ++-
+ Documentation/dev-tools/kunit/index.rst |  3 +++
+ Documentation/dev-tools/kunit/usage.rst | 16 +++++++++++++++
+ include/kunit/test.h                    | 36 ++++++++++++++++++++++++---------
+ kernel/sysctl-test.c                    |  6 +++++-
+ kunit/Kconfig                           |  6 +++---
+ kunit/Makefile                          |  9 +++++++++
+ kunit/assert.c                          |  8 ++++++++
+ kunit/example-test.c                    |  6 +++++-
+ kunit/string-stream-test.c              |  9 +++++++--
+ kunit/string-stream.c                   |  7 +++++++
+ kunit/test-test.c                       |  8 ++++++--
+ kunit/test.c                            | 12 +++++++++++
+ kunit/try-catch.c                       |  8 ++++++--
+ lib/Kconfig.debug                       |  4 ++--
+ 15 files changed, 117 insertions(+), 24 deletions(-)
+
+-- 
+1.8.3.1
+
