@@ -2,118 +2,152 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DAAAD0309
-	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Oct 2019 23:47:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A455D03AB
+	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Oct 2019 01:00:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726062AbfJHVrJ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 8 Oct 2019 17:47:09 -0400
-Received: from mail-pg1-f194.google.com ([209.85.215.194]:42247 "EHLO
-        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726007AbfJHVrI (ORCPT
+        id S1725953AbfJHXAF (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 8 Oct 2019 19:00:05 -0400
+Received: from mail-pl1-f196.google.com ([209.85.214.196]:44988 "EHLO
+        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725848AbfJHXAF (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 8 Oct 2019 17:47:08 -0400
-Received: by mail-pg1-f194.google.com with SMTP id z12so4061pgp.9
-        for <linux-kselftest@vger.kernel.org>; Tue, 08 Oct 2019 14:47:07 -0700 (PDT)
+        Tue, 8 Oct 2019 19:00:05 -0400
+Received: by mail-pl1-f196.google.com with SMTP id q15so59005pll.11
+        for <linux-kselftest@vger.kernel.org>; Tue, 08 Oct 2019 16:00:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=deKxqqIeBJnms1ArtnCHEcClgbbTOafzse1Vw29vp3M=;
-        b=FiOaf3BluQtz79g61N30s9XrSWDujtsm+6AAYd+wa70Q+3AsODwCTRCuR4GyRN/hrT
-         SIad+dd5d2TROZ/tWHeb/O0bcimfWZJEHD0C58O17e+eWehUTHa50JxLCXaGg3+Pwdbf
-         Rv3HMnwA2hLHY2pOpUmPw0Y5VkDqFL7ZadoKP80JrU+moRBfy3+2TZ/nn3cbt9mjZwuA
-         qTxwsVmuRA7CM2wqEwxmW5X/rCeEwtekbfUduwXKxyXaKW96nPQfnT8on+T27qsC11L5
-         bQdsep4WzKpTicx+rsKUnVpbKIFpHXsrKbxKKYnG/iWR3w+vYpF6IULBXXFsN1cFpX4+
-         9z1Q==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Eyo69Bj9AG/hnXPevoWygqlppJemIYNJ7F2RPuWU8dY=;
+        b=POFNouzMoxXQIv9JnlsSQgK3y3HMhAy3mp2TYc598ljUPvN8FBTKuIE9wAwzZqL+/F
+         HZw+PT1DTt3Gjbf8QtFh34JvPf9Q/hPy5X6qhumTnnasWaD4yUX6AsWhNjT6JN/5nVXH
+         xbvpKtpOu/SW3ycJtZj6EuK/TO0A1HFU+6f7NzoBSJ8XBcbOHDvTcrDPYHlwxTs8D+5p
+         ISSGweWiERgDfqtXvDbluCimeJ0wkkroHkxoHoSBf1dB8MubcphrrZRCiSGJICH24gnf
+         Cr4bbNPSwSzAxYzhSWZtGL3A34XK5x+qKE/8jQZ7m8Lg91jmnIXNiqLRJERrR3qQkGbv
+         IgrQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=deKxqqIeBJnms1ArtnCHEcClgbbTOafzse1Vw29vp3M=;
-        b=i4lu6TvX3VKRUsAy3QwyR88o7HtSe/knIwcvWjpbt8AlBjCebY7JHCGtlAUtKtTwfM
-         l/66XAznGoAJ8/FOCAvP3D2sMboCBRYw0hUdJllJ+W8ER8c7C8VXhk534ci5SKUqs7Dx
-         ZiKscZ/5Cwp30uUhZ/iqeS3aV/A75n1IguJDkCYZK+505dpUbCCMWEw4RAvGZjEupeGW
-         CUeW8XJWqZVfnqfm0TTGcQtV9yA5alPHxvXuKK2Jq+ETfhGPoCC5QGVHqrO+XgW4VKCg
-         VCeWyrlj4LUTenapsOY6yS+a7eR1mXvWf7jLG1dhlBBLqPU7hO47fxeHiQqoGS4Ij7V/
-         7tig==
-X-Gm-Message-State: APjAAAXAn02u1ky6s1q+hhzx9RDrFfBdZn98mfCEcLgoUExcmQFtFB3B
-        TosNAMtkAQwxCGkmfA/+LbdRwg==
-X-Google-Smtp-Source: APXvYqzrPn6t1Floi5tLW9Ts9jTNHSZ5+XjjhsO4ow7Qm01JTGlIdau0pgLA4Keuom9H5ytTcP0GsA==
-X-Received: by 2002:a63:ba58:: with SMTP id l24mr591901pgu.434.1570571226070;
-        Tue, 08 Oct 2019 14:47:06 -0700 (PDT)
-Received: from google.com ([2620:15c:2cb:1:e90c:8e54:c2b4:29e7])
-        by smtp.gmail.com with ESMTPSA id v19sm87014pff.46.2019.10.08.14.47.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Oct 2019 14:47:04 -0700 (PDT)
-Date:   Tue, 8 Oct 2019 14:47:00 -0700
-From:   Brendan Higgins <brendanhiggins@google.com>
-To:     Alan Maguire <alan.maguire@oracle.com>
-Cc:     linux-kselftest@vger.kernel.org, skhan@linuxfoundation.org,
-        mcgrof@kernel.org, keescook@chromium.org, yzaikin@google.com,
-        akpm@linux-foundation.org, yamada.masahiro@socionext.com,
-        catalin.marinas@arm.com, joe.lawrence@redhat.com,
-        penguin-kernel@i-love.sakura.ne.jp, schowdary@nvidia.com,
-        urezki@gmail.com, andriy.shevchenko@linux.intel.com,
-        changbin.du@intel.com, kunit-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        Knut Omang <knut.omang@oracle.com>
-Subject: Re: [PATCH v2 linux-kselftest-test 3/3] kunit: update documentation
- to describe module-based build
-Message-ID: <20191008214700.GC186342@google.com>
-References: <1570546546-549-1-git-send-email-alan.maguire@oracle.com>
- <1570546546-549-4-git-send-email-alan.maguire@oracle.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Eyo69Bj9AG/hnXPevoWygqlppJemIYNJ7F2RPuWU8dY=;
+        b=B1TnouKs5JBm3+Nj7m4LVOjoVZjyOf2hV9HDEY/6BP7LGTV0PMx1PYW9E5AE6HbZyD
+         KKoRSp8N7eN/m1i+nDW9omECp3LUEFvpe+TR0sHias8eDfHjC8Yg7FVp0Hjmav0VhEoE
+         wG+Nb0kiQjEMwfwkIovYH5hdHSyDYQysPtk1DHKUlLtFHuXH6hObvorylIW+dMqsb1tG
+         rpvGD8PIKttE7uAgbedCKY8y2znAfxHsyw4WkARgCB7oO31aI+TwabRswNge3rnf/36G
+         f7lpr2sYfvoaIsvAcJVRn4SlD36be3Pn9YdgLyDXemflPVN2GAoQvF/q+4kISYzL6HnV
+         YenQ==
+X-Gm-Message-State: APjAAAVEvF7C6nl73Gjffd4cMNzSKfyujkNvhzIpYmOe9phmW0qaxG9b
+        EDiLT8g7GJQVVrjIe6VTAi8wziSW7U7J/gsI4r6cjzr+LFaJHg==
+X-Google-Smtp-Source: APXvYqwt6lKV097yKIvMMLvJn2axxESyqhaimfQfK2VgBnSpIw3QAm7iMeYTx54wc+6BItZKAD+0+Qi1GLCAejI/EIc=
+X-Received: by 2002:a17:902:8216:: with SMTP id x22mr20714pln.232.1570575604135;
+ Tue, 08 Oct 2019 16:00:04 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1570546546-549-4-git-send-email-alan.maguire@oracle.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20191007213633.92565-1-davidgow@google.com> <20191008174837.GA155928@google.com>
+ <201910081110.C2C582408F@keescook>
+In-Reply-To: <201910081110.C2C582408F@keescook>
+From:   Brendan Higgins <brendanhiggins@google.com>
+Date:   Tue, 8 Oct 2019 15:59:43 -0700
+Message-ID: <CAFd5g46V6m8OyQmi9H7qdwtXcaFJrz3e6c4+SQ8yaauR7SFayg@mail.gmail.com>
+Subject: Re: [PATCH] lib/list-test: add a test for the 'list' doubly linked list
+To:     Kees Cook <keescook@chromium.org>
+Cc:     David Gow <davidgow@google.com>, shuah <shuah@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, kunit-dev@googlegroups.com,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Oct 08, 2019 at 03:55:46PM +0100, Alan Maguire wrote:
-> Documentation should describe how to build kunit and tests as
-> modules.
-> 
-> Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
-> Signed-off-by: Knut Omang <knut.omang@oracle.com>
-> 
-> ---
->  Documentation/dev-tools/kunit/faq.rst   |  3 ++-
->  Documentation/dev-tools/kunit/index.rst |  3 +++
->  Documentation/dev-tools/kunit/usage.rst | 16 ++++++++++++++++
->  3 files changed, 21 insertions(+), 1 deletion(-)
-[...]
-> diff --git a/Documentation/dev-tools/kunit/usage.rst b/Documentation/dev-tools/kunit/usage.rst
-> index c6e6963..fa0f03f 100644
-> --- a/Documentation/dev-tools/kunit/usage.rst
-> +++ b/Documentation/dev-tools/kunit/usage.rst
-> @@ -539,6 +539,22 @@ Interspersed in the kernel logs you might see the following:
->  
->  Congratulations, you just ran a KUnit test on the x86 architecture!
->  
-> +In a similar manner, kunit and kunit tests can also be built as modules,
-> +so if you wanted to run tests in this way you might add the following config
-> +options to your ``.config``:
-> +
-> +.. code-block:: none
-> +
-> +        CONFIG_KUNIT=m
-> +        CONFIG_KUNIT_EXAMPLE_TEST=m
+On Tue, Oct 8, 2019 at 11:15 AM Kees Cook <keescook@chromium.org> wrote:
+>
+> On Tue, Oct 08, 2019 at 10:48:37AM -0700, Brendan Higgins wrote:
+> > On Mon, Oct 07, 2019 at 02:36:33PM -0700, David Gow wrote:
+> > > This change adds a KUnit test for the kernel doubly linked list
+> > > implementation in include/linux/list.h
+> > >
+> > > Note that, at present, it only tests the list_ types (not the
+> > > singly-linked hlist_), and does not yet test all of the
+> > > list_for_each_entry* macros (and some related things like
+> > > list_prepare_entry).
+> > >
+> > > This change depends on KUnit, so should be merged via the 'test' branch:
+> > > https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git/log/?h=test
+> > >
+> > > Signed-off-by: David Gow <davidgow@google.com>
+> > > ---
+> > >  lib/Kconfig.debug |  12 +
+> > >  lib/Makefile      |   3 +
+> > >  lib/list-test.c   | 711 ++++++++++++++++++++++++++++++++++++++++++++++
+> > >  3 files changed, 726 insertions(+)
+> > >  create mode 100644 lib/list-test.c
+> >
+> > Also, I think it might be good to make a MAINTAINERs entry for this
+> > test.
+>
+> Another thought, though maybe this is already covered and I missed the
+> "best practices" notes on naming conventions.
+>
+> As the "one-off" tests are already named "foo_test.c" it seems like
+> KUnit tests should be named distinctly. Should this be lib/kunit-list.c,
+> lib/list-kunit.c, or something else?
 
-This doesn't appear to be properly tabbed.
+So we already had a discussion on this here:
+https://patchwork.kernel.org/patch/10925861/
 
-> +Once the kernel is built and installed, a simple
-> +
-> +.. code-block:: bash
-> +	modprobe example-test
-> +
-> +...will run the tests.
-> +
->  Writing new tests for other architectures
->  -----------------------------------------
->  
-> -- 
-> 1.8.3.1
-> 
+(Sounds like I should have probably documented that :-))
+
+However, I am sympathetic to your argument. I was thinking that it
+might be good to make get_maintainer suggest CC'ing kunit-dev@ and
+linux-kselftest@ for all new tests and this would be hard with the
+*-test.c naming scheme.
+
+If we are going to change it, now is probably the time to do it :-)
+
+> For internal naming of structs and tests, should things be
+> named "kunit_foo"? Examples here would be kunit_list_struct and
+> kunit_list_test_...
+
+I had generally been following the pattern:
+
+foo.c
+struct foo_bar {};
+int foo_baz() {}
+foo-test.c
+struct foo_test_buzz {};
+void foo_test_does_foo_baz_buzz(struct kunit *test) {}
+
+However, now that you point that out I am realizing there is a bunch
+of stuff here that is not consistent with that (whoops, sorry for not
+catching that earlier, David).
+
+Nevertheless, I think the list_test_struct is fine and conforms to the pattern.
+
+> When testing other stuff, should only exposed interfaces be tested?
+> Many things have their API exposed via registration of a static structure
+> of function pointers to static functions. What's the proposed best way
+> to get at that? Should the KUnit tests is IN the .c file that declares
+> all the static functions?
+
+Yeah, that is a good point, but I don't think entirely relevant to
+this code review.
+
+Fundamentally it boils down to figuring out what your API is, and
+coming up with a way to expose it. For drivers, that means finding a
+way to give KUnit access to the generated driver objects, in some
+cases it means using more dependency injection, in other cases it may
+mean making something that is static, not static.
+
+I know those answers sound pretty unsatisfying, and I have some
+features planned which alleviate some of those issues, but I think the
+most important thing is making examples of how to deal with some of
+the broad cases, getting agreement on them, documenting them, finding
+exceptions and iterating.
+
+Nevertheless, if you want to start enumerating cases and proposed
+solutions, I would be more than happy to have that conversation now,
+but we might want to fork the discussion.
+
+Cheers!
