@@ -2,307 +2,172 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CBA3BD0063
-	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Oct 2019 20:02:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E342D0064
+	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Oct 2019 20:02:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727220AbfJHSBG (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 8 Oct 2019 14:01:06 -0400
-Received: from foss.arm.com ([217.140.110.172]:42618 "EHLO foss.arm.com"
+        id S1726439AbfJHSBQ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 8 Oct 2019 14:01:16 -0400
+Received: from foss.arm.com ([217.140.110.172]:42628 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726384AbfJHSBG (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 8 Oct 2019 14:01:06 -0400
+        id S1726384AbfJHSBQ (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 8 Oct 2019 14:01:16 -0400
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 626BF15BE;
-        Tue,  8 Oct 2019 11:01:05 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C8DAC15BE;
+        Tue,  8 Oct 2019 11:01:15 -0700 (PDT)
 Received: from arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 78E073F6C4;
-        Tue,  8 Oct 2019 11:01:04 -0700 (PDT)
-Date:   Tue, 8 Oct 2019 19:01:02 +0100
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E1B683F6C4;
+        Tue,  8 Oct 2019 11:01:14 -0700 (PDT)
+Date:   Tue, 8 Oct 2019 19:01:12 +0100
 From:   Dave Martin <Dave.Martin@arm.com>
 To:     Cristian Marussi <cristian.marussi@arm.com>
 Cc:     linux-kselftest@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, shuah@kernel.org,
         amit.kachhap@arm.com, andreyknvl@google.com
-Subject: Re: [PATCH v7 06/11] kselftest: arm64: fake_sigreturn_bad_magic
-Message-ID: <20191008180102.GX27757@arm.com>
+Subject: Re: [PATCH v7 05/11] kselftest: arm64: mangle_pstate_ssbs_regs
+Message-ID: <20191008180112.GY27757@arm.com>
 References: <20191007182954.25730-1-cristian.marussi@arm.com>
- <20191007182954.25730-7-cristian.marussi@arm.com>
+ <20191007182954.25730-6-cristian.marussi@arm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20191007182954.25730-7-cristian.marussi@arm.com>
+In-Reply-To: <20191007182954.25730-6-cristian.marussi@arm.com>
 User-Agent: Mutt/1.5.23 (2014-03-12)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Oct 07, 2019 at 07:29:49pm +0100, Cristian Marussi wrote:
-> Add a simple fake_sigreturn testcase which builds a ucontext_t with a bad
-> magic header and place it onto the stack. Expects a SIGSEGV on test PASS.
+On Mon, Oct 07, 2019 at 07:29:48pm +0100, Cristian Marussi wrote:
+> Add a simple mangle testcase which messes with the ucontext_t from within
+> the signal handler, trying to set the PSTATE SSBS bit and verify that
+> SSBS bit set is preserved across sigreturn.
+> Lookup PSTATE.SSBS directly using dedicated helper to grab PSTATE from a
+> live sigframe.
 > 
-> Introduce a common utility assembly trampoline function to invoke a
-> sigreturn while placing the provided sigframe at wanted alignment and
-> also an helper to make space when needed inside the sigframe reserved
-> area.
+> Additionally, in order to support this test specific needs:
+> - extend signal testing framework to allow the definition of a custom
+>   per test initialization function to be run at the end of test setup
+>   and before test run routine. This will support also test SKIP.
+> - introduce also a new common utility function: get_current_context()
+>   which can be used to grab a ucontext without the help of libc, and
+>   detect if such ucontext has been actively used to jump back.
 > 
 > Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
-
-Looks good to me now:
-
-Reviewed-by: Dave Martin <Dave.Martin@arm.com>
-
-Cheers
----Dave
-
 > ---
 > v6 --> v7
-> - fix fake_sigreturn alignment routines (+15)
-> v5 --> v6
-> - fake_sigreturn: cleaned up, avoiding excessive SP misalignments
-> - fake_sigreturn: better formatting and prologue
-> - get_starting_header: cleand up and commented
-> - avoid timeout on failure
-> v3 --> v4
-> - fix commit
-> - fix signal.S, handle misalign requests too
-> - remove unneeded comments
-> - add signal.h include
-> - added get_starting_head() helper
-> - added test description
-> ---
->  tools/testing/selftests/arm64/signal/Makefile |  2 +-
->  .../testing/selftests/arm64/signal/signals.S  | 64 +++++++++++++++++++
->  .../arm64/signal/test_signals_utils.h         |  2 +
->  .../testcases/fake_sigreturn_bad_magic.c      | 52 +++++++++++++++
->  .../arm64/signal/testcases/testcases.c        | 46 +++++++++++++
->  .../arm64/signal/testcases/testcases.h        |  4 ++
->  6 files changed, 169 insertions(+), 1 deletion(-)
->  create mode 100644 tools/testing/selftests/arm64/signal/signals.S
->  create mode 100644 tools/testing/selftests/arm64/signal/testcases/fake_sigreturn_bad_magic.c
-> 
-> diff --git a/tools/testing/selftests/arm64/signal/Makefile b/tools/testing/selftests/arm64/signal/Makefile
-> index f78f5190e3d4..b497cfea4643 100644
-> --- a/tools/testing/selftests/arm64/signal/Makefile
-> +++ b/tools/testing/selftests/arm64/signal/Makefile
-> @@ -28,5 +28,5 @@ clean:
->  # Common test-unit targets to build common-layout test-cases executables
->  # Needs secondary expansion to properly include the testcase c-file in pre-reqs
->  .SECONDEXPANSION:
-> -$(PROGS): test_signals.c test_signals_utils.c testcases/testcases.c $$@.c test_signals.h test_signals_utils.h testcases/testcases.h
-> +$(PROGS): test_signals.c test_signals_utils.c testcases/testcases.c signals.S $$@.c test_signals.h test_signals_utils.h testcases/testcases.h
->  	$(CC) $(CFLAGS) $^ -o $@
-> diff --git a/tools/testing/selftests/arm64/signal/signals.S b/tools/testing/selftests/arm64/signal/signals.S
-> new file mode 100644
-> index 000000000000..9f8c1aefc3b9
-> --- /dev/null
-> +++ b/tools/testing/selftests/arm64/signal/signals.S
-> @@ -0,0 +1,64 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +/* Copyright (C) 2019 ARM Limited */
-> +
-> +#include <asm/unistd.h>
-> +
-> +.section        .rodata, "a"
-> +call_fmt:
-> +	.asciz "Calling sigreturn with fake sigframe sized:%zd at SP @%08lX\n"
-> +
-> +.text
-> +
-> +.globl fake_sigreturn
-> +
-> +/*	fake_sigreturn	x0:&sigframe,  x1:sigframe_size,  x2:misalign_bytes */
-> +fake_sigreturn:
-> +	stp	x29, x30, [sp, #-16]!
-> +	mov	x29, sp
-> +
-> +	mov	x20, x0
-> +	mov	x21, x1
-> +	mov	x22, x2
-> +
-> +	/* create space on the stack for fake sigframe 16 bytes-aligned */
-> +	add	x0, x21, x22
-> +	add	x0, x0, #15
-> +	bic	x0, x0, #15 /* round_up(sigframe_size + misalign_bytes, 16) */
-> +	sub	sp, sp, x0
-> +	add	x23, sp, x22 /* new sigframe base with misaligment if any */
-> +
-> +	ldr	x0, =call_fmt
-> +	mov	x1, x21
-> +	mov	x2, x23
-> +	bl	printf
-> +
-> +	/* memcpy the provided content, while still keeping SP aligned */
-> +	mov	x0, x23
-> +	mov	x1, x20
-> +	mov	x2, x21
-> +	bl	memcpy
-> +
-> +	/*
-> +	 * Here saving a last minute SP to current->token acts as a marker:
-> +	 * if we got here, we are successfully faking a sigreturn; in other
-> +	 * words we are sure no bad fatal signal has been raised till now
-> +	 * for unrelated reasons, so we should consider the possibly observed
-> +	 * fatal signal like SEGV coming from Kernel restore_sigframe() and
-> +	 * triggered as expected from our test-case.
-> +	 * For simplicity this assumes that current field 'token' is laid out
-> +	 * as first in struct tdescr
-> +	 */
-> +	ldr	x0, current
-> +	str	x23, [x0]
-> +	/* finally move SP to misaligned address...if any requested */
-> +	mov	sp, x23
-> +
-> +	mov	x8, #__NR_rt_sigreturn
-> +	svc	#0
-> +
-> +	/*
-> +	 * Above sigreturn should not return...looping here leads to a timeout
-> +	 * and ensure proper and clean test failure, instead of jumping around
-> +	 * on a potentially corrupted stack.
-> +	 */
-> +	b	.
-> diff --git a/tools/testing/selftests/arm64/signal/test_signals_utils.h b/tools/testing/selftests/arm64/signal/test_signals_utils.h
-> index fd67b1f23c41..6772b5c8d274 100644
-> --- a/tools/testing/selftests/arm64/signal/test_signals_utils.h
-> +++ b/tools/testing/selftests/arm64/signal/test_signals_utils.h
-> @@ -115,4 +115,6 @@ static __always_inline bool get_current_context(struct tdescr *td,
+> - fixed missing header for memcpy
+> - fixed misleading comment in get_current_context()
+> - fixed retvalue checks on get_current_context() invocation
+> - extend test_init()/test_result() and .init to report KSFT_SKIP
+> - SKIP mangle_pstate_ssbs_regs if SSBS not supported at all
+> - check SSBS support looking up ID_AA64PFR1_EL1.SSBS in test_init()
+>   instead of using MRS/MSR
+
+[...]
+
+> diff --git a/tools/testing/selftests/arm64/signal/test_signals.c b/tools/testing/selftests/arm64/signal/test_signals.c
+> index cb970346b280..416b1ff43199 100644
+> --- a/tools/testing/selftests/arm64/signal/test_signals.c
+> +++ b/tools/testing/selftests/arm64/signal/test_signals.c
+> @@ -19,11 +19,11 @@ int main(int argc, char *argv[])
+>  	current = &tde;
 >  
->  	return td->live_uc_valid;
+>  	ksft_print_msg("%s :: %s\n", current->name, current->descr);
+> -	if (test_setup(current)) {
+> +	if (test_setup(current) && test_init(current)) {
+>  		test_run(current);
+> -		test_result(current);
+>  		test_cleanup(current);
+>  	}
+> +	test_result(current);
+>  
+> -	return current->pass ? KSFT_PASS : KSFT_FAIL;
+> +	return current->result;
 >  }
-> +
-> +int fake_sigreturn(void *sigframe, size_t sz, int misalign_bytes);
->  #endif
-> diff --git a/tools/testing/selftests/arm64/signal/testcases/fake_sigreturn_bad_magic.c b/tools/testing/selftests/arm64/signal/testcases/fake_sigreturn_bad_magic.c
+> diff --git a/tools/testing/selftests/arm64/signal/test_signals.h b/tools/testing/selftests/arm64/signal/test_signals.h
+> index f712b5daa10b..ad8175806034 100644
+> --- a/tools/testing/selftests/arm64/signal/test_signals.h
+> +++ b/tools/testing/selftests/arm64/signal/test_signals.h
+> @@ -27,13 +27,25 @@
+>  	: "memory");					\
+>  }
+>  
+> +#define set_regval(regname, in)				\
+> +{							\
+> +	asm volatile("msr " __stringify(regname) ", %0" \
+> +	:						\
+> +	: "r" (in)					\
+> +	: "memory");					\
+> +}
+
+Unused macro?  Now that the test doesn't try to change the SSBS state
+via MSR, I don't think anything else is using this.
+
+[...]
+
+> diff --git a/tools/testing/selftests/arm64/signal/testcases/mangle_pstate_ssbs_regs.c b/tools/testing/selftests/arm64/signal/testcases/mangle_pstate_ssbs_regs.c
 > new file mode 100644
-> index 000000000000..8dc600a7d4fd
+> index 000000000000..780161dbd7c0
 > --- /dev/null
-> +++ b/tools/testing/selftests/arm64/signal/testcases/fake_sigreturn_bad_magic.c
-> @@ -0,0 +1,52 @@
+> +++ b/tools/testing/selftests/arm64/signal/testcases/mangle_pstate_ssbs_regs.c
+> @@ -0,0 +1,92 @@
 > +// SPDX-License-Identifier: GPL-2.0
 > +/*
 > + * Copyright (C) 2019 ARM Limited
 > + *
-> + * Place a fake sigframe on the stack including a BAD Unknown magic
-> + * record: on sigreturn Kernel must spot this attempt and the test
-> + * case is expected to be terminated via SEGV.
+> + * Try to mangle the ucontext from inside a signal handler, setting the
+> + * SSBS bit to 1 and veryfing that such modification is preserved.
 > + */
 > +
+> +#include <stdio.h>
+> +#include <stdlib.h>
 > +#include <signal.h>
 > +#include <ucontext.h>
+> +
+> +#include <kselftest.h>
 > +
 > +#include "test_signals_utils.h"
 > +#include "testcases.h"
 > +
-> +struct fake_sigframe sf;
-> +
-> +static int fake_sigreturn_bad_magic_run(struct tdescr *td,
-> +					siginfo_t *si, ucontext_t *uc)
+> +static bool mangle_invalid_pstate_ssbs_init(struct tdescr *td)
 > +{
-> +	struct _aarch64_ctx *shead = GET_SF_RESV_HEAD(sf), *head;
+> +	bool ret;
 > +
-> +	/* just to fill the ucontext_t with something real */
-> +	if (!get_current_context(td, &sf.uc))
-> +		return 1;
-> +
-> +	/* need at least 2*HDR_SZ space: KSFT_BAD_MAGIC + terminator. */
-> +	head = get_starting_head(shead, HDR_SZ * 2, GET_SF_RESV_SIZE(sf), NULL);
-> +	if (!head)
-> +		return 0;
-> +
-> +	/*
-> +	 * use a well known NON existent bad magic...something
-> +	 * we should pretty sure won't be ever defined in Kernel
-> +	 */
-> +	head->magic = KSFT_BAD_MAGIC;
-> +	head->size = HDR_SZ;
-> +	write_terminator_record(GET_RESV_NEXT_HEAD(head));
-> +
-> +	ASSERT_BAD_CONTEXT(&sf.uc);
-> +	fake_sigreturn(&sf, sizeof(sf), 0);
-> +
-> +	return 1;
-> +}
-> +
-> +struct tdescr tde = {
-> +		.name = "FAKE_SIGRETURN_BAD_MAGIC",
-> +		.descr = "Trigger a sigreturn with a sigframe with a bad magic",
-> +		.sig_ok = SIGSEGV,
-> +		.timeout = 3,
-> +		.run = fake_sigreturn_bad_magic_run,
-> +};
-> diff --git a/tools/testing/selftests/arm64/signal/testcases/testcases.c b/tools/testing/selftests/arm64/signal/testcases/testcases.c
-> index 1914a01222a1..e3521949b800 100644
-> --- a/tools/testing/selftests/arm64/signal/testcases/testcases.c
-> +++ b/tools/testing/selftests/arm64/signal/testcases/testcases.c
-> @@ -148,3 +148,49 @@ bool validate_reserved(ucontext_t *uc, size_t resv_sz, char **err)
->  
->  	return true;
->  }
-> +
-> +/*
-> + * This function walks through the records inside the provided reserved area
-> + * trying to find enough space to fit @need_sz bytes: if not enough space is
-> + * available and an extra_context record is present, it throws away the
-> + * extra_context record.
-> + *
-> + * It returns a pointer to a new header where it is possible to start storing
-> + * our need_sz bytes.
-> + *
-> + * @shead: points to the start of reserved area
-> + * @need_sz: needed bytes
-> + * @resv_sz: reserved area size in bytes
-> + * @offset: if not null, this will be filled with the offset of the return
-> + *	    head pointer from @shead
-> + *
-> + * @return: pointer to a new head where to start storing need_sz bytes, or
-> + *	    NULL if space could not be made available.
-> + */
-> +struct _aarch64_ctx *get_starting_head(struct _aarch64_ctx *shead,
-> +				       size_t need_sz, size_t resv_sz,
-> +				       size_t *offset)
-> +{
-> +	size_t offs = 0;
-> +	struct _aarch64_ctx *head;
-> +
-> +	head = get_terminator(shead, resv_sz, &offs);
-> +	/* not found a terminator...no need to update offset if any */
-> +	if (!head)
-> +		return head;
-> +	if (resv_sz - offs < need_sz) {
-> +		fprintf(stderr, "Low on space:%zd. Discarding extra_context.\n",
-> +			resv_sz - offs);
-> +		head = get_header(shead, EXTRA_MAGIC, resv_sz, &offs);
-> +		if (!head || resv_sz - offs < need_sz) {
-> +			fprintf(stderr,
-> +				"Failed to reclaim space on sigframe.\n");
-> +			return NULL;
-> +		}
+> +	ret = feats_ok(td);
+> +	if (!ret) {
+> +		fprintf(stderr, "%s: unsupported feature - SKIP.\n", td->name);
+> +		td->result = KSFT_SKIP;
 > +	}
 > +
-> +	fprintf(stderr, "Available space:%zd\n", resv_sz - offs);
-> +	if (offset)
-> +		*offset = offs;
-> +	return head;
+> +	return ret;
 > +}
-> diff --git a/tools/testing/selftests/arm64/signal/testcases/testcases.h b/tools/testing/selftests/arm64/signal/testcases/testcases.h
-> index 04987f7870bc..ad884c135314 100644
-> --- a/tools/testing/selftests/arm64/signal/testcases/testcases.h
-> +++ b/tools/testing/selftests/arm64/signal/testcases/testcases.h
-> @@ -97,4 +97,8 @@ static inline void write_terminator_record(struct _aarch64_ctx *tail)
->  		tail->size = 0;
->  	}
->  }
 > +
-> +struct _aarch64_ctx *get_starting_head(struct _aarch64_ctx *shead,
-> +				       size_t need_sz, size_t resv_sz,
-> +				       size_t *offset);
->  #endif
-> -- 
-> 2.17.1
-> 
-> 
-> _______________________________________________
-> linux-arm-kernel mailing list
-> linux-arm-kernel@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+> +static int mangle_invalid_pstate_ssbs_run(struct tdescr *td,
+> +					  siginfo_t *si, ucontext_t *uc)
+> +{
+> +	ASSERT_GOOD_CONTEXT(uc);
+> +
+> +	/* set bit value ... should NOT be cleared by Kernel on sigreturn */
+> +	uc->uc_mcontext.pstate |= PSR_SSBS_BIT;
+> +	fprintf(stderr, "SSBS set to 1 -- PSTATE: 0x%016llX\n",
+> +		uc->uc_mcontext.pstate);
+> +	/* Save after mangling...it should be preserved */
+> +	td->saved_uc = *uc;
+
+Hmmm, now I'm wondering about how things like
+prctl(PR_SET_SPECULATION_CTRL) are supposed to interact with other ways
+of manipulating PSTATE.SSBS.  Before we've answered this, we don't know
+what result to expect from this test in various configurations...
+
+To avoid this series depending on answering that question immediately,
+can we drop this test from the series for now?
+
+To reduce rework effort, maybe keep this patch in its current position
+in the series, with just the utility code, but drop the testcase.
+
+Sorry for the churn -- I didn't think of this issue earlier :(
+
+[...]
+
+Cheers
+---Dave
