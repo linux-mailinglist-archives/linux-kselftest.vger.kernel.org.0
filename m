@@ -2,70 +2,43 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D394DCF99B
-	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Oct 2019 14:16:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BA75CF9FE
+	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Oct 2019 14:37:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730199AbfJHMQh (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 8 Oct 2019 08:16:37 -0400
-Received: from mail-qt1-f170.google.com ([209.85.160.170]:42427 "EHLO
-        mail-qt1-f170.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730671AbfJHMQh (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 8 Oct 2019 08:16:37 -0400
-Received: by mail-qt1-f170.google.com with SMTP id w14so24856693qto.9
-        for <linux-kselftest@vger.kernel.org>; Tue, 08 Oct 2019 05:16:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=zMRBEmvr/0+C4eSur48+05eunJVcl+/Y23nSATspD+o=;
-        b=FGj96vJFdgIaORXYiNbhFecOtCzt4j/C2xMW+MPxiqQ/1rngL70lWAD9rs827oxlKn
-         tysP07UFMggTAC4WLoZuvFL0xAHfP5su+GC0CQjtu30LTbInUXN0eNS+oL4+dTDYRPNy
-         QrOhLcGTh2fbbg+h5lRD8TC92UfWT+iseqWsxxoqKJT6QL+yTdxcsTYlc3sXRygZVcEP
-         P2rXFc68H6tc2HHj5J+Ymwd6xxZiLDptfbPRw3Fd4KgxP0jycZDz5gYyglKU5W4yd5wq
-         uzqYTphwcEkdsEfiRKqcu2F/QS8AKUKPgMIl5GCTS4xGcKH+ae22QROaEsTuxtN+0Z2E
-         rtDw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=zMRBEmvr/0+C4eSur48+05eunJVcl+/Y23nSATspD+o=;
-        b=L9LJ/na7WpayiKJowyuX0O58iWpEe5oInVUFTTZ/LEe2PYe7m/Cd5EMZ39bmQYqiV1
-         K/oBACeOxdjeZENi/lV59b0sKU+qxKfAJUdk1cR/GZ/7SJNGw4YlmTqIMnyAmjfn97kL
-         vfMrxwKcN7st6Yf607FTRQHasopyvwk4tCMOf7E1BptNagQKVogZqRauMAd7rcc0xDIn
-         2TJqK/3pdzEI/vZgzQ4AMiOnNUvYy0MbqGZSjEP99U///TvQhkx75YoETGShQVpfvbz9
-         t2fEzQk5S7f3ANxgegWgBgGjgu0QlE8Bgi4sh+KaabSOr0VI4QrsCgs4CplG/G1NzPau
-         vdyA==
-X-Gm-Message-State: APjAAAWv9b9ryoaALXMNE5ONoLcMjp/xcQJOIh9BaJJMod7EhL4ntN3R
-        FTpLBFfVwXaebDwCid4f9FgNh300xE2KlrBoY9Rr/g==
-X-Google-Smtp-Source: APXvYqxMyFJnZAQcVvA9CTZ54QUsrCp4849HLutjfyoNsGiW3lnJeBJ3sj2MhCPNU/U9W9Ox2ajx/n7bKu8eKaqIa6g=
-X-Received: by 2002:ac8:646:: with SMTP id e6mr6456151qth.57.1570536995827;
- Tue, 08 Oct 2019 05:16:35 -0700 (PDT)
-MIME-Version: 1.0
+        id S1730906AbfJHMhT (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 8 Oct 2019 08:37:19 -0400
+Received: from mx2.suse.de ([195.135.220.15]:35626 "EHLO mx1.suse.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1730605AbfJHMhT (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 8 Oct 2019 08:37:19 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx1.suse.de (Postfix) with ESMTP id 0DAE7B123;
+        Tue,  8 Oct 2019 12:37:18 +0000 (UTC)
 References: <CACT4Y+YjOxmOzzPt_xaYE44QNZfq9haNfbnVBrTnPXe7zuSEfA@mail.gmail.com>
-In-Reply-To: <CACT4Y+YjOxmOzzPt_xaYE44QNZfq9haNfbnVBrTnPXe7zuSEfA@mail.gmail.com>
-From:   Dmitry Vyukov <dvyukov@google.com>
-Date:   Tue, 8 Oct 2019 14:16:24 +0200
-Message-ID: <CACT4Y+ZaN900gwx=PHS10hrKofZib7HA7JFxE_DkwChyttYW+A@mail.gmail.com>
-Subject: Re: syzkaller reproducers
-To:     Shuah Khan <shuah@kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        automated-testing@yoctoproject.org, kernelci@groups.io,
-        George Kennedy <george.kennedy@oracle.com>,
-        Dhaval Giani <dhaval.giani@gmail.com>,
-        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Jan Setje-Eilers <jan.setjeeilers@oracle.com>
-Cc:     syzkaller <syzkaller@googlegroups.com>
-Content-Type: text/plain; charset="UTF-8"
+User-agent: mu4e 1.2.0; emacs 26.3
+From:   Richard Palethorpe <rpalethorpe@suse.de>
+To:     automated-testing@yoctoproject.org
+Cc:     Shuah Khan <shuah@kernel.org>,
+        "open list\:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, kernelci@groups.io,
+        syzkaller <syzkaller@googlegroups.com>
+Subject: Re: [Automated-testing] syzkaller reproducers
+Reply-To: rpalethorpe@suse.de
+In-reply-to: <CACT4Y+YjOxmOzzPt_xaYE44QNZfq9haNfbnVBrTnPXe7zuSEfA@mail.gmail.com>
+Date:   Tue, 08 Oct 2019 14:37:17 +0200
+Message-ID: <87zhibwgzm.fsf@rpws.prws.suse.cz>
+MIME-Version: 1.0
+Content-Type: text/plain
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Oct 8, 2019 at 1:46 PM Dmitry Vyukov <dvyukov@google.com> wrote:
->
+Hello,
+
+Dmitry Vyukov <dvyukov@google.com> writes:
+
 > Hi Shuah,
 >
 > We discussed collecting and uploading all syzkaller reproducers
@@ -82,4 +55,25 @@ On Tue, Oct 8, 2019 at 1:46 PM Dmitry Vyukov <dvyukov@google.com> wrote:
 >
 > Thanks
 
-+more people who expressed interest in the test suite before
+I discussed this a bit with Metan. We think it would be fairly trivial
+to create an LTP wrapper for these.
+
+So we just create an LTP test which forks and execs one of these
+reproducers then checks for kernel taints after the child completes or
+is killed. It can take the reproducer path as an argument and we can
+generate a runtest file with all the reproducers in that we are able to
+compile.
+
+I imagine a lot of these reproducers will not work on older kernels, so
+this would just be a best efforts basis. We would ignore any problems
+during execution unless there is a kernel error.
+
+This should work with existing LTP runners with maybe a minor change or
+two to building and configuration.
+
+I will start experimenting with this and post the results to the LTP
+mailing list.
+
+--
+Thank you,
+Richard.
