@@ -2,86 +2,91 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 37D5AD05B4
-	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Oct 2019 04:50:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07FF0D08B7
+	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Oct 2019 09:46:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729802AbfJICuC (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 8 Oct 2019 22:50:02 -0400
-Received: from mail.kernel.org ([198.145.29.99]:52426 "EHLO mail.kernel.org"
+        id S1728528AbfJIHqt (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 9 Oct 2019 03:46:49 -0400
+Received: from foss.arm.com ([217.140.110.172]:55080 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726490AbfJICuC (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 8 Oct 2019 22:50:02 -0400
-Received: from devnote2 (p242255-mobac01.tokyo.ocn.ne.jp [153.233.233.255])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id CA9B220859;
-        Wed,  9 Oct 2019 02:49:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1570589401;
-        bh=c9ZsUO3Tnqh9b6HhdHVMOjLdz1Zzv2yW4eAWutX54fw=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=FHY4vzrRmHCoNoJUr2tDT7SUWxayXbylpuEe1ZedDwK38y9KqavCvnmMbork9vq0r
-         rx5xDFQZJT9qGZXamrOnhTzXTJmfX8s5EOtdSXilktmrbwVFA+E0OwN1qZHK7HK/B5
-         swC+H09+2847A0KuJhaZ6M/O4TJMw82cbu8TVEFU=
-Date:   Wed, 9 Oct 2019 11:49:56 +0900
-From:   Masami Hiramatsu <mhiramat@kernel.org>
-To:     Alexey Dobriyan <adobriyan@gmail.com>
-Cc:     Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, jaswinder.singh@linaro.org
-Subject: Re: [BUGFIX PATCH 1/5] selftests: proc: Make va_max 3GB on 32bit
- arch
-Message-Id: <20191009114956.37f3771b700e438a90945408@kernel.org>
-In-Reply-To: <20191008175916.GA20780@avx2>
-References: <157046101671.20724.9561877942986463668.stgit@devnote2>
-        <157046102656.20724.3358140818300189230.stgit@devnote2>
-        <20191008175916.GA20780@avx2>
-X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+        id S1729771AbfJIHqs (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 9 Oct 2019 03:46:48 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3383A1000;
+        Wed,  9 Oct 2019 00:46:48 -0700 (PDT)
+Received: from [10.37.8.60] (unknown [10.37.8.60])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2ADE03F68E;
+        Wed,  9 Oct 2019 00:46:47 -0700 (PDT)
+Subject: Re: [PATCH v7 02/11] kselftest: arm64:
+ mangle_pstate_invalid_compat_toggle and common utils
+To:     Dave Martin <Dave.Martin@arm.com>
+Cc:     linux-kselftest@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, shuah@kernel.org,
+        amit.kachhap@arm.com, andreyknvl@google.com
+References: <20191007182954.25730-1-cristian.marussi@arm.com>
+ <20191007182954.25730-3-cristian.marussi@arm.com>
+ <20191008180119.GZ27757@arm.com>
+From:   Cristian Marussi <cristian.marussi@arm.com>
+Message-ID: <51cb947d-c477-f378-8457-34b7e807d6cc@arm.com>
+Date:   Wed, 9 Oct 2019 08:47:22 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
+MIME-Version: 1.0
+In-Reply-To: <20191008180119.GZ27757@arm.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, 8 Oct 2019 20:59:16 +0300
-Alexey Dobriyan <adobriyan@gmail.com> wrote:
 
-> On Tue, Oct 08, 2019 at 12:10:26AM +0900, Masami Hiramatsu wrote:
-> > Currently proc-self-map-files-002.c sets va_max (max test address
-> > of user virtual address) to 4GB, but it is too big for 32bit
-> > arch and 1UL << 32 is overflow on 32bit long.
-> > 
-> > Make va_max 3GB on 32bit arch like i386 and arm.
+
+On 10/8/19 7:01 PM, Dave Martin wrote:
+> On Mon, Oct 07, 2019 at 07:29:45pm +0100, Cristian Marussi wrote:
+>> Add some arm64/signal specific boilerplate and utility code to help
+>> further testcases' development.
+>>
+>> Introduce also one simple testcase mangle_pstate_invalid_compat_toggle
+>> and some related helpers: it is a simple mangle testcase which messes
+>> with the ucontext_t from within the signal handler, trying to toggle
+>> PSTATE state bits to switch the system between 32bit/64bit execution
+>> state. Expects SIGSEGV on test PASS.
+>>
+>> Reviewed-by: Dave Martin <Dave.Martin@arm.com>
+>> Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
+>> ---
+>> v6 --> v7
+>> - removed ambiguos fprintf in test_init
+>> - fixed spacing
 > 
-> IIRC i386 had 1G/3G split, so 3GB would be too much still.
-
-Hmm, would you know what is the best value for that?
-i386 can also be configured 3G/1G, 2G/2G and 1G/3G, so it
-depends on the build configuration. Would 1G is enough for test?
-
-Thank you,
-
+> [...]
 > 
-> > --- a/tools/testing/selftests/proc/proc-self-map-files-002.c
-> > +++ b/tools/testing/selftests/proc/proc-self-map-files-002.c
+>> diff --git a/tools/testing/selftests/arm64/signal/test_signals.h b/tools/testing/selftests/arm64/signal/test_signals.h
 > 
-> > +#if __BITS_PER_LONG == 32
-> > +# define VA_MAX (3UL << 30)
-> > +#elif __BITS_PER_LONG == 64
-> > +# define VA_MAX (1UL << 32)
-> > +#else
-> > +# define VA_MAX 0
-> > +#endif
-> > +
-> >  int main(void)
-> >  {
-> >  	const int PAGE_SIZE = sysconf(_SC_PAGESIZE);
-> > -	const unsigned long va_max = 1UL << 32;
-> > +	const unsigned long va_max = VA_MAX;
+> [...]
 > 
-> This limit doesn't need to be precise, 1GB is "big enough".
+>> +/* Local Helpers */
+>> +#define ID_AA64MMFR1_EL1_PAN_SUPPORTED(val) \
+>> +	(!!((val) & (0xfUL << ID_AA64MMFR1_PAN_SHIFT)))
+>> +#define ID_AA64MMFR2_EL1_UAO_SUPPORTED(val) \
+>> +	(!!((val) & (0xfUL << ID_AA64MMFR2_UAO_SHIFT)))
+>> +
+>> +#define SSBS_SYSREG		S3_3_C4_C2_6	/* EL0 supported */
+> 
+> Does anything in the series still use SSBS_SYSREG?
+> 
+> If not, please drop it.  No need to remove my Reviewed-by just for thato
+> change.
+> 
 
+Ok I'll remove all the SSBS refs, even related to capabilities check at
+test init.
 
--- 
-Masami Hiramatsu <mhiramat@kernel.org>
+Cristian
+> [...]
+> 
+> Cheers
+> ---Dave
+> 
