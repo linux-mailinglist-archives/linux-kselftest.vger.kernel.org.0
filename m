@@ -2,28 +2,28 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A9035D09AE
-	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Oct 2019 10:26:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E79ED09AF
+	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Oct 2019 10:26:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725903AbfJII03 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 9 Oct 2019 04:26:29 -0400
-Received: from foss.arm.com ([217.140.110.172]:56234 "EHLO foss.arm.com"
+        id S1728054AbfJII0b (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 9 Oct 2019 04:26:31 -0400
+Received: from foss.arm.com ([217.140.110.172]:56246 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729592AbfJII03 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 9 Oct 2019 04:26:29 -0400
+        id S1729592AbfJII0b (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 9 Oct 2019 04:26:31 -0400
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4BA3215BE;
-        Wed,  9 Oct 2019 01:26:29 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 695911000;
+        Wed,  9 Oct 2019 01:26:30 -0700 (PDT)
 Received: from e120937-lin.cambridge.arm.com (e120937-lin.cambridge.arm.com [10.1.197.50])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6451E3F68E;
-        Wed,  9 Oct 2019 01:26:28 -0700 (PDT)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 802D73F68E;
+        Wed,  9 Oct 2019 01:26:29 -0700 (PDT)
 From:   Cristian Marussi <cristian.marussi@arm.com>
 To:     linux-kselftest@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, shuah@kernel.org
 Cc:     andreyknvl@google.com, dave.martin@arm.com, amit.kachhap@arm.com
-Subject: [PATCH v8 03/12] kselftest: arm64: mangle_pstate_invalid_daif_bits
-Date:   Wed,  9 Oct 2019 09:26:02 +0100
-Message-Id: <20191009082611.9441-4-cristian.marussi@arm.com>
+Subject: [PATCH v8 04/12] kselftest: arm64: mangle_pstate_invalid_mode_el[123][ht]
+Date:   Wed,  9 Oct 2019 09:26:03 +0100
+Message-Id: <20191009082611.9441-5-cristian.marussi@arm.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20191009082611.9441-1-cristian.marussi@arm.com>
 References: <20191009082611.9441-1-cristian.marussi@arm.com>
@@ -32,62 +32,196 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add a simple mangle testcase which messes with the ucontext_t from within
-the signal handler, trying to set PSTATE DAIF bits to an invalid value
-(masking everything). Expects SIGSEGV on test PASS.
+Add 6 simple mangle testcases that mess with the ucontext_t from within
+the signal handler, trying to toggle PSTATE mode bits to trick the system
+into switching to EL1/EL2/EL3 using both SP_EL0(t) and SP_ELx(h).
+Expects SIGSEGV on test PASS.
 
 Reviewed-by: Dave Martin <Dave.Martin@arm.com>
 Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
 ---
 v3 --> v4
 - fixed commit message
-- added testcase comment description
+- macroization
+- splitted into 6 macro-ised testcases to address t/h SP selection modes
+- added test description
 ---
- .../mangle_pstate_invalid_daif_bits.c         | 35 +++++++++++++++++++
- 1 file changed, 35 insertions(+)
- create mode 100644 tools/testing/selftests/arm64/signal/testcases/mangle_pstate_invalid_daif_bits.c
+ .../mangle_pstate_invalid_mode_el1h.c         | 15 ++++++++++
+ .../mangle_pstate_invalid_mode_el1t.c         | 15 ++++++++++
+ .../mangle_pstate_invalid_mode_el2h.c         | 15 ++++++++++
+ .../mangle_pstate_invalid_mode_el2t.c         | 15 ++++++++++
+ .../mangle_pstate_invalid_mode_el3h.c         | 15 ++++++++++
+ .../mangle_pstate_invalid_mode_el3t.c         | 15 ++++++++++
+ .../mangle_pstate_invalid_mode_template.h     | 28 +++++++++++++++++++
+ 7 files changed, 118 insertions(+)
+ create mode 100644 tools/testing/selftests/arm64/signal/testcases/mangle_pstate_invalid_mode_el1h.c
+ create mode 100644 tools/testing/selftests/arm64/signal/testcases/mangle_pstate_invalid_mode_el1t.c
+ create mode 100644 tools/testing/selftests/arm64/signal/testcases/mangle_pstate_invalid_mode_el2h.c
+ create mode 100644 tools/testing/selftests/arm64/signal/testcases/mangle_pstate_invalid_mode_el2t.c
+ create mode 100644 tools/testing/selftests/arm64/signal/testcases/mangle_pstate_invalid_mode_el3h.c
+ create mode 100644 tools/testing/selftests/arm64/signal/testcases/mangle_pstate_invalid_mode_el3t.c
+ create mode 100644 tools/testing/selftests/arm64/signal/testcases/mangle_pstate_invalid_mode_template.h
 
-diff --git a/tools/testing/selftests/arm64/signal/testcases/mangle_pstate_invalid_daif_bits.c b/tools/testing/selftests/arm64/signal/testcases/mangle_pstate_invalid_daif_bits.c
+diff --git a/tools/testing/selftests/arm64/signal/testcases/mangle_pstate_invalid_mode_el1h.c b/tools/testing/selftests/arm64/signal/testcases/mangle_pstate_invalid_mode_el1h.c
 new file mode 100644
-index 000000000000..434b82597007
+index 000000000000..95f821abdf46
 --- /dev/null
-+++ b/tools/testing/selftests/arm64/signal/testcases/mangle_pstate_invalid_daif_bits.c
-@@ -0,0 +1,35 @@
++++ b/tools/testing/selftests/arm64/signal/testcases/mangle_pstate_invalid_mode_el1h.c
+@@ -0,0 +1,15 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
 + * Copyright (C) 2019 ARM Limited
 + *
-+ * Try to mangle the ucontext from inside a signal handler, mangling the
-+ * DAIF bits in an illegal manner: this attempt must be spotted by Kernel
-+ * and the test case is expected to be terminated via SEGV.
-+ *
++ * Try to mangle the ucontext from inside a signal handler, toggling
++ * the mode bit to escalate exception level: this attempt must be spotted
++ * by Kernel and the test case is expected to be termninated via SEGV.
 + */
 +
 +#include "test_signals_utils.h"
 +#include "testcases.h"
 +
-+static int mangle_invalid_pstate_run(struct tdescr *td, siginfo_t *si,
-+				     ucontext_t *uc)
-+{
-+	ASSERT_GOOD_CONTEXT(uc);
++#include "mangle_pstate_invalid_mode_template.h"
 +
-+	/*
-+	 * This config should trigger a SIGSEGV by Kernel when it checks
-+	 * the sigframe consistency in valid_user_regs() routine.
-+	 */
-+	uc->uc_mcontext.pstate |= PSR_D_BIT | PSR_A_BIT | PSR_I_BIT | PSR_F_BIT;
++DEFINE_TESTCASE_MANGLE_PSTATE_INVALID_MODE(1h);
+diff --git a/tools/testing/selftests/arm64/signal/testcases/mangle_pstate_invalid_mode_el1t.c b/tools/testing/selftests/arm64/signal/testcases/mangle_pstate_invalid_mode_el1t.c
+new file mode 100644
+index 000000000000..cc222d8a618a
+--- /dev/null
++++ b/tools/testing/selftests/arm64/signal/testcases/mangle_pstate_invalid_mode_el1t.c
+@@ -0,0 +1,15 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Copyright (C) 2019 ARM Limited
++ *
++ * Try to mangle the ucontext from inside a signal handler, toggling
++ * the mode bit to escalate exception level: this attempt must be spotted
++ * by Kernel and the test case is expected to be termninated via SEGV.
++ */
 +
-+	return 1;
++#include "test_signals_utils.h"
++#include "testcases.h"
++
++#include "mangle_pstate_invalid_mode_template.h"
++
++DEFINE_TESTCASE_MANGLE_PSTATE_INVALID_MODE(1t);
+diff --git a/tools/testing/selftests/arm64/signal/testcases/mangle_pstate_invalid_mode_el2h.c b/tools/testing/selftests/arm64/signal/testcases/mangle_pstate_invalid_mode_el2h.c
+new file mode 100644
+index 000000000000..2188add7d28c
+--- /dev/null
++++ b/tools/testing/selftests/arm64/signal/testcases/mangle_pstate_invalid_mode_el2h.c
+@@ -0,0 +1,15 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Copyright (C) 2019 ARM Limited
++ *
++ * Try to mangle the ucontext from inside a signal handler, toggling
++ * the mode bit to escalate exception level: this attempt must be spotted
++ * by Kernel and the test case is expected to be termninated via SEGV.
++ */
++
++#include "test_signals_utils.h"
++#include "testcases.h"
++
++#include "mangle_pstate_invalid_mode_template.h"
++
++DEFINE_TESTCASE_MANGLE_PSTATE_INVALID_MODE(2h);
+diff --git a/tools/testing/selftests/arm64/signal/testcases/mangle_pstate_invalid_mode_el2t.c b/tools/testing/selftests/arm64/signal/testcases/mangle_pstate_invalid_mode_el2t.c
+new file mode 100644
+index 000000000000..df32dd5a479c
+--- /dev/null
++++ b/tools/testing/selftests/arm64/signal/testcases/mangle_pstate_invalid_mode_el2t.c
+@@ -0,0 +1,15 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Copyright (C) 2019 ARM Limited
++ *
++ * Try to mangle the ucontext from inside a signal handler, toggling
++ * the mode bit to escalate exception level: this attempt must be spotted
++ * by Kernel and the test case is expected to be termninated via SEGV.
++ */
++
++#include "test_signals_utils.h"
++#include "testcases.h"
++
++#include "mangle_pstate_invalid_mode_template.h"
++
++DEFINE_TESTCASE_MANGLE_PSTATE_INVALID_MODE(2t);
+diff --git a/tools/testing/selftests/arm64/signal/testcases/mangle_pstate_invalid_mode_el3h.c b/tools/testing/selftests/arm64/signal/testcases/mangle_pstate_invalid_mode_el3h.c
+new file mode 100644
+index 000000000000..9e6829b7e5db
+--- /dev/null
++++ b/tools/testing/selftests/arm64/signal/testcases/mangle_pstate_invalid_mode_el3h.c
+@@ -0,0 +1,15 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Copyright (C) 2019 ARM Limited
++ *
++ * Try to mangle the ucontext from inside a signal handler, toggling
++ * the mode bit to escalate exception level: this attempt must be spotted
++ * by Kernel and the test case is expected to be termninated via SEGV.
++ */
++
++#include "test_signals_utils.h"
++#include "testcases.h"
++
++#include "mangle_pstate_invalid_mode_template.h"
++
++DEFINE_TESTCASE_MANGLE_PSTATE_INVALID_MODE(3h);
+diff --git a/tools/testing/selftests/arm64/signal/testcases/mangle_pstate_invalid_mode_el3t.c b/tools/testing/selftests/arm64/signal/testcases/mangle_pstate_invalid_mode_el3t.c
+new file mode 100644
+index 000000000000..5685a4f10d06
+--- /dev/null
++++ b/tools/testing/selftests/arm64/signal/testcases/mangle_pstate_invalid_mode_el3t.c
+@@ -0,0 +1,15 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Copyright (C) 2019 ARM Limited
++ *
++ * Try to mangle the ucontext from inside a signal handler, toggling
++ * the mode bit to escalate exception level: this attempt must be spotted
++ * by Kernel and the test case is expected to be termninated via SEGV.
++ */
++
++#include "test_signals_utils.h"
++#include "testcases.h"
++
++#include "mangle_pstate_invalid_mode_template.h"
++
++DEFINE_TESTCASE_MANGLE_PSTATE_INVALID_MODE(3t);
+diff --git a/tools/testing/selftests/arm64/signal/testcases/mangle_pstate_invalid_mode_template.h b/tools/testing/selftests/arm64/signal/testcases/mangle_pstate_invalid_mode_template.h
+new file mode 100644
+index 000000000000..f5bf1804d858
+--- /dev/null
++++ b/tools/testing/selftests/arm64/signal/testcases/mangle_pstate_invalid_mode_template.h
+@@ -0,0 +1,28 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * Copyright (C) 2019 ARM Limited
++ *
++ * Utility macro to ease definition of testcases toggling mode EL
++ */
++
++#define DEFINE_TESTCASE_MANGLE_PSTATE_INVALID_MODE(_mode)		\
++									\
++static int mangle_invalid_pstate_run(struct tdescr *td, siginfo_t *si,	\
++				     ucontext_t *uc)			\
++{									\
++	ASSERT_GOOD_CONTEXT(uc);					\
++									\
++	uc->uc_mcontext.pstate &= ~PSR_MODE_MASK;			\
++	uc->uc_mcontext.pstate |= PSR_MODE_EL ## _mode;			\
++									\
++	return 1;							\
++}									\
++									\
++struct tdescr tde = {							\
++		.sanity_disabled = true,				\
++		.name = "MANGLE_PSTATE_INVALID_MODE_EL"#_mode,		\
++		.descr = "Mangling uc_mcontext INVALID MODE EL"#_mode,	\
++		.sig_trig = SIGUSR1,					\
++		.sig_ok = SIGSEGV,					\
++		.run = mangle_invalid_pstate_run,			\
 +}
-+
-+struct tdescr tde = {
-+		.sanity_disabled = true,
-+		.name = "MANGLE_PSTATE_INVALID_DAIF_BITS",
-+		.descr = "Mangling uc_mcontext with INVALID DAIF_BITS",
-+		.sig_trig = SIGUSR1,
-+		.sig_ok = SIGSEGV,
-+		.run = mangle_invalid_pstate_run,
-+};
 -- 
 2.17.1
 
