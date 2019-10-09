@@ -2,37 +2,37 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E63F5D0DFB
-	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Oct 2019 13:52:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 277A6D0E11
+	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Oct 2019 13:55:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727570AbfJILwR (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 9 Oct 2019 07:52:17 -0400
-Received: from foss.arm.com ([217.140.110.172]:60670 "EHLO foss.arm.com"
+        id S1729883AbfJILzg (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 9 Oct 2019 07:55:36 -0400
+Received: from foss.arm.com ([217.140.110.172]:60744 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725962AbfJILwR (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 9 Oct 2019 07:52:17 -0400
+        id S1727002AbfJILzg (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 9 Oct 2019 07:55:36 -0400
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4A49A28;
-        Wed,  9 Oct 2019 04:52:16 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8B79528;
+        Wed,  9 Oct 2019 04:55:35 -0700 (PDT)
 Received: from [10.1.197.50] (e120937-lin.cambridge.arm.com [10.1.197.50])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 79E563F703;
-        Wed,  9 Oct 2019 04:52:15 -0700 (PDT)
-Subject: Re: [PATCH v8 01/12] kselftest: arm64: extend toplevel skeleton
- Makefile
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id BC4D63F703;
+        Wed,  9 Oct 2019 04:55:34 -0700 (PDT)
+Subject: Re: [PATCH v8 02/12] kselftest: arm64:
+ mangle_pstate_invalid_compat_toggle and common utils
 To:     Dave Martin <Dave.Martin@arm.com>
 Cc:     linux-kselftest@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, shuah@kernel.org,
         amit.kachhap@arm.com, andreyknvl@google.com
 References: <20191009082611.9441-1-cristian.marussi@arm.com>
- <20191009082611.9441-2-cristian.marussi@arm.com>
- <20191009111513.GA27757@arm.com>
+ <20191009082611.9441-3-cristian.marussi@arm.com>
+ <20191009111848.GB27757@arm.com>
 From:   Cristian Marussi <cristian.marussi@arm.com>
-Message-ID: <9acb0be8-512f-5e32-8dc7-1dd9534dc3fb@arm.com>
-Date:   Wed, 9 Oct 2019 12:52:14 +0100
+Message-ID: <38e73559-ad80-d05a-32ca-ac763ee648bb@arm.com>
+Date:   Wed, 9 Oct 2019 12:55:33 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.8.0
 MIME-Version: 1.0
-In-Reply-To: <20191009111513.GA27757@arm.com>
+In-Reply-To: <20191009111848.GB27757@arm.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -41,71 +41,49 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 09/10/2019 12:15, Dave Martin wrote:
-> On Wed, Oct 09, 2019 at 09:26:00AM +0100, Cristian Marussi wrote:
->> Modify KSFT arm64 toplevel Makefile to maintain arm64 kselftests organized
->> by subsystem, keeping them into distinct subdirectories under arm64 custom
->> KSFT directory: tools/testing/selftests/arm64/
+On 09/10/2019 12:18, Dave Martin wrote:
+> On Wed, Oct 09, 2019 at 09:26:01AM +0100, Cristian Marussi wrote:
+>> Add some arm64/signal specific boilerplate and utility code to help
+>> further testcases' development.
 >>
->> Add to such toplevel Makefile a mechanism to guess the effective location
->> of Kernel headers as installed by KSFT framework.
+>> Introduce also one simple testcase mangle_pstate_invalid_compat_toggle
+>> and some related helpers: it is a simple mangle testcase which messes
+>> with the ucontext_t from within the signal handler, trying to toggle
+>> PSTATE state bits to switch the system between 32bit/64bit execution
+>> state. Expects SIGSEGV on test PASS.
 >>
->> Fit existing arm64 tags kselftest into this new schema moving them into
->> their own subdirectory (arm64/tags).
->>
+>> Reviewed-by: Dave Martin <Dave.Martin@arm.com>
 >> Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
 >> ---
->> Based on:
->> commit 9ce1263033cd ("selftests, arm64: add a selftest for passing
->> 		     tagged pointers to kernel")
->> ---
->> v6 --> v7
->> - renamed SUBTARGETS to ARM64_SUBTARGETS to avoid name clashes
->> - rebased on v5.4-rc2 accounting for further new patches on top of commit 9ce1263033cd
->> v5 --> v6
->> - using realpath to avoid passing down relative paths
->> - fix commit msg & Copyright
->> - removed unneded Makefile export
->> - added SUBTARGETS specification, to allow building specific only some
->>   arm64 test subsystems
->> v4 --> v5
->> - rebased on arm64/for-next/core
->> - merged this patch with KSFT arm64 tags patch, while moving the latter
->>   into its own subdir
->> - moved kernel header includes search mechanism from KSFT arm64
->>   SIGNAL Makefile
->> - export proper top_srcdir ENV for lib.mk
->> v3 --> v4
->> - comment reword
->> - simplified documentation in README
->> - dropped README about standalone
->> ---
->>  tools/testing/selftests/Makefile              |  1 +
->>  tools/testing/selftests/arm64/Makefile        | 64 +++++++++++++++++--
->>  tools/testing/selftests/arm64/README          | 25 ++++++++
->>  tools/testing/selftests/arm64/tags/Makefile   |  7 ++
->>  .../arm64/{ => tags}/run_tags_test.sh         |  0
->>  .../selftests/arm64/{ => tags}/tags_test.c    |  0
->>  6 files changed, 92 insertions(+), 5 deletions(-)
->>  create mode 100644 tools/testing/selftests/arm64/README
->>  create mode 100644 tools/testing/selftests/arm64/tags/Makefile
->>  rename tools/testing/selftests/arm64/{ => tags}/run_tags_test.sh (100%)
->>  rename tools/testing/selftests/arm64/{ => tags}/tags_test.c (100%)
+>> v7 --> v8
+>> - removed unused SSBS_SYSREG
 > 
-> Do you need to move the tags_test line in arm64/.gitignore to
-> arm64/tags/.gitignore?
+> [...]
+> 
+>> diff --git a/tools/testing/selftests/arm64/signal/.gitignore b/tools/testing/selftests/arm64/signal/.gitignore
+>> new file mode 100644
+>> index 000000000000..e5aeae45febb
+>> --- /dev/null
+>> +++ b/tools/testing/selftests/arm64/signal/.gitignore
+>> @@ -0,0 +1,3 @@
+>> +!*.[ch]
+>> +mangle_*
+>> +fake_sigreturn_*
+> 
+> I think the !*.[ch] line needs to come last.
+> 
+> Re-including *.[ch] on the first line has no effect because no files
+> have been excluded yet.
+> 
+> (This looks like it was my mistake when I originally suggested using
+> wildcards here -- apologies for that!)
+> 
+> I'm happy for you to keey my Reviewed-by on that change.
 > 
 
-Damn...I've not spotted that since it works anyway. I'll fix in v9.
+Moved to last in v9
 
 Cristian
-
-> With that change, FWIW:
-> 
-> Reviewed-by: Dave Martin <Dave.Martin@arm.com>
-> 
-> (i.e., this looks reasonable, but I'm not a kselftest expert...)
-> 
 > [...]
 > 
 > Cheers
