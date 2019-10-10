@@ -2,373 +2,884 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 90362D2F52
-	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Oct 2019 19:11:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB998D30F7
+	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Oct 2019 20:56:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726687AbfJJRLo (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 10 Oct 2019 13:11:44 -0400
-Received: from mail-io1-f67.google.com ([209.85.166.67]:38581 "EHLO
-        mail-io1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726634AbfJJRLn (ORCPT
+        id S1726894AbfJJS4g (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 10 Oct 2019 14:56:36 -0400
+Received: from mail-pg1-f201.google.com ([209.85.215.201]:45442 "EHLO
+        mail-pg1-f201.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726387AbfJJS4g (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 10 Oct 2019 13:11:43 -0400
-Received: by mail-io1-f67.google.com with SMTP id u8so15408500iom.5
-        for <linux-kselftest@vger.kernel.org>; Thu, 10 Oct 2019 10:11:43 -0700 (PDT)
+        Thu, 10 Oct 2019 14:56:36 -0400
+Received: by mail-pg1-f201.google.com with SMTP id x31so5045234pgl.12
+        for <linux-kselftest@vger.kernel.org>; Thu, 10 Oct 2019 11:56:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=TPg/L4c8Uvgw29Zd+7UAJnKTcWYr9oJBx1w/OaevLjA=;
-        b=GlbFOwwmneuybNGd5arIwRw5l4iiNFjNTddTdrmmIo6iVlapczMMALokM9O8npHnca
-         VoBy4vG2HpsyQDFAdxMRXfzOKytcwot3CU7Kx5x3aIHr5f4lLRXOIo3JBbFjSCIftmAS
-         KCei+m3PH/OkSKpkpgii/Sw4UkHsAUfBapCKA=
+        d=google.com; s=20161025;
+        h=reply-to:date:message-id:mime-version:subject:from:to:cc;
+        bh=9+UVpgNk8CQF6QXtdJbLihVg7rPsY93dgpexzdrcZBM=;
+        b=e5rwKwDyCHuxMh/rpdE9yzCyiQyoAb5ZJdJs2uW1ZvJe5q8RknWv9n+WoF1xQh7Wq/
+         BxgnofU3/5A7cYQZGzaiIhRlXnWDXxbfHYYgqpMpuTVRXAANedK9PCTp+pbK2nmerOod
+         klDLukc8qBeoe/ETX+rxVBblF63uAsNL5215ao0277drAXmnVOy1jw8O+UVgz6bWp/or
+         UDf7LV+a5azay5zgSm+oxK2VyeFa79keyg79xQ3cC8fTPxxFyJqskzSeOoUo/qj18dUx
+         mTinoRB6mZgQZ8+KNvW3s5IF08VmaKSpsexCcl/rIzDOr1HUhMNvRQy8+1oMj37FzTeD
+         PtfQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=TPg/L4c8Uvgw29Zd+7UAJnKTcWYr9oJBx1w/OaevLjA=;
-        b=ue8WseTgdgqDN+DQmRDFD4rKVWWj7gFF/Itj95AT/1x8Z8NP4uuNpNY4kPGRlOjvia
-         8SlaNdAmsNo0datGOEs57DvUz/vPfKKyx7RXQn6pEFhGMrfStEXLqsd/gxFg4wlLhIiK
-         YcuV6WjVPG9tS/pKuVWagpzQAu2NT+6u6pCCC+A9G8scFKsdr2VowWVm5vbvHnH0hXVt
-         Fx58LH/OLOvt5N6+cIs1mNfBP5XKfbSLf7/CepaMwBwxGaNL5LpYMF2oe0xhlrGxY2mK
-         BCqdOuKzveznUTHXDoUNFYefBvu33rMlcPDUae6yVC6SUNO09MoEbLWn0BlewQxlZowK
-         cr2Q==
-X-Gm-Message-State: APjAAAV/1phPh5qYtdf2RVPL3kX2clAzn2hp2hysuYLDUyzd/KHPHiW/
-        SB6ZYyjP+5Pf/n+E/I2vhCuhVA==
-X-Google-Smtp-Source: APXvYqxcFiDsFwYxJ4X+7hPa4aNBI2n0ezxGTwZmwB5kTo55GoYcpEps0rBilcfHSMTtglr1JeogxA==
-X-Received: by 2002:a5d:9856:: with SMTP id p22mr11560565ios.29.1570727502608;
-        Thu, 10 Oct 2019 10:11:42 -0700 (PDT)
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id h4sm3748372iom.17.2019.10.10.10.11.41
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 10 Oct 2019 10:11:42 -0700 (PDT)
-Subject: Re: [PATCH linux-kselftest/test v2] ext4: add kunit test for decoding
- extended timestamps
-To:     Iurii Zaikin <yzaikin@google.com>, linux-kselftest@vger.kernel.org,
-        linux-ext4@vger.kernel.org, tytso@mit.edu, adilger.kernel@dilger.ca
-Cc:     kunit-dev@googlegroups.com, brendanhiggins@google.com,
-        "skh >> Shuah Khan" <skhan@linuxfoundation.org>
-References: <20191010023931.230475-1-yzaikin@google.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <2f2ea7b0-f683-1cdd-f3f2-ecdf44cb4a97@linuxfoundation.org>
-Date:   Thu, 10 Oct 2019 11:11:40 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
-MIME-Version: 1.0
-In-Reply-To: <20191010023931.230475-1-yzaikin@google.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+        h=x-gm-message-state:reply-to:date:message-id:mime-version:subject
+         :from:to:cc;
+        bh=9+UVpgNk8CQF6QXtdJbLihVg7rPsY93dgpexzdrcZBM=;
+        b=cIez8555ijvXo/3xrVeJbmWcg81foiDt8CvhE4HMBjyro5aWe3Bta3cspdtQl4pH2H
+         z5SCam3EhgYnm1yXAWAfzjhv/7oKNVQpublx50DqeiAIJ3CExNc85B8MZ5gA7+wDWMJi
+         cq4LzzaXxXbaQ0D7h4oNKpiTQ9RlH985QbuSQdZgm2QbwUZasNY54Foz2YeshfyRcAYt
+         fNhkrjmF7FCjhtUXCSm0ihkSX5tDdtEUgdFD1ogCxuHYtkx48a6+Cu+4xNqxg2OO+Zle
+         GnQ9CCYvuuV1S91f82fv6G4YwgU6a8nRMhZZMslEhdjWlzpJExdDBW/BITwSShdJbW7q
+         Q4CA==
+X-Gm-Message-State: APjAAAWpEF39EKpw7jsJCLzyXSG0ZcAFugwarL8Z0mTE8ua2HkqLDpga
+        cdKXKlrbjbkGHIKDtG1cotwx6uHSSmvb2Q==
+X-Google-Smtp-Source: APXvYqwm9yc/gW0K8N3S3+VgIiJgKpRAazFOfpIJC0PlC2fzNgvnu4G6viFzIssdRdA2EvP8Mm1jIS0pJq6MkA==
+X-Received: by 2002:a63:d415:: with SMTP id a21mr12168545pgh.299.1570733794707;
+ Thu, 10 Oct 2019 11:56:34 -0700 (PDT)
+Reply-To: 20191007213633.92565-1-davidgow@google.com
+Date:   Thu, 10 Oct 2019 11:56:31 -0700
+Message-Id: <20191010185631.26541-1-davidgow@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.23.0.700.g56cf767bdb-goog
+Subject: [PATCH linux-kselftest/test v2] lib/list-test: add a test for the
+ 'list' doubly linked list
+From:   David Gow <davidgow@google.com>
+To:     shuah@kernel.org, brendanhiggins@google.com,
+        akpm@linux-foundation.org, keescook@chromium.org
+Cc:     linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-kernel@vger.kernel.org, David Gow <davidgow@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 10/9/19 8:39 PM, Iurii Zaikin wrote:
-> KUnit tests for decoding extended 64 bit timestamps.
-> 
-"Added the link to the ext4 docs from which the tests were derived."
+Add a KUnit test for the kernel doubly linked list implementation in
+include/linux/list.h
 
-Document reference is great. I would still like to see summary
-in the commit log.
+Each test case (list_test_x) is focused on testing the behaviour of the
+list function/macro 'x'. None of the tests pass invalid lists to these
+macros, and so should behave identically with DEBUG_LIST enabled and
+disabled.
 
-As you said below:
+Note that, at present, it only tests the list_ types (not the
+singly-linked hlist_), and does not yet test all of the
+list_for_each_entry* macros (and some related things like
+list_prepare_entry).
 
-"This builds the ext4 inode sysctl unit test, which runs on boot."
+Signed-off-by: David Gow <davidgow@google.com>
+---
+Addressed the various comments on v1. The biggest change is the renaming
+of all of the testcases from the form x_test to list_test_x. I'm not
+super happy with how that looks (not the least because it ends up with
+'list' twice), but it is more consistent with the proc/sysctl tests.
 
-Also include what should user expect to see when one of these fails.
 
+ MAINTAINERS       |   5 +
+ lib/Kconfig.debug |  12 +
+ lib/Makefile      |   3 +
+ lib/list-test.c   | 738 ++++++++++++++++++++++++++++++++++++++++++++++
+ 4 files changed, 758 insertions(+)
+ create mode 100644 lib/list-test.c
 
-> Signed-off-by: Iurii Zaikin <yzaikin@google.com>
-> ---
->   fs/ext4/Kconfig      |  12 +++
->   fs/ext4/Makefile     |   1 +
->   fs/ext4/inode-test.c | 221 +++++++++++++++++++++++++++++++++++++++++++
->   3 files changed, 234 insertions(+)
->   create mode 100644 fs/ext4/inode-test.c
-> 
-> diff --git a/fs/ext4/Kconfig b/fs/ext4/Kconfig
-> index cbb5ca830e57..cb0b52753674 100644
-> --- a/fs/ext4/Kconfig
-> +++ b/fs/ext4/Kconfig
-> @@ -106,3 +106,15 @@ config EXT4_DEBUG
->   	  If you select Y here, then you will be able to turn on debugging
->   	  with a command such as:
->   		echo 1 > /sys/module/ext4/parameters/mballoc_debug
-> +
-> +config EXT4_KUNIT_TESTS
-> +	bool "KUnit test for ext4 inode"
-> +	depends on EXT4_FS
-> +	depends on KUNIT
-> +	help
-> +	  This builds the ext4 inode sysctl unit test, which runs on boot.
-> +	  Tests the encoding correctness of ext4 inode.
-> +	  For more information on KUnit and unit tests in general please refer
-> +	  to the KUnit documentation in Documentation/dev-tools/kunit/.
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 7ef985e01457..9ccabdb25a26 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -9504,6 +9504,11 @@ F:	Documentation/misc-devices/lis3lv02d.rst
+ F:	drivers/misc/lis3lv02d/
+ F:	drivers/platform/x86/hp_accel.c
+ 
++LIST UNIT TEST
++M:	David Gow <davidgow@google.com>
++S:	Maintained
++F:	lib/list-test.c
++
+ LIVE PATCHING
+ M:	Josh Poimboeuf <jpoimboe@redhat.com>
+ M:	Jiri Kosina <jikos@kernel.org>
+diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+index a3017a5dadcd..7b648141ff52 100644
+--- a/lib/Kconfig.debug
++++ b/lib/Kconfig.debug
+@@ -1961,6 +1961,18 @@ config SYSCTL_KUNIT_TEST
+ 
+ 	  If unsure, say N.
+ 
++config LIST_TEST
++	bool "KUnit Test for Kernel Linked-list structures"
++	depends on KUNIT
++	help
++	  This builds the linked list unit test, which runs on boot.
++	  It tests that the API and basic functionality of the list_head type
++	  and associated macros.
++	  For more information on KUnit and unit tests in general please refer
++	  to the KUnit documentation in Documentation/dev-tools/kunit/.
++
++	  If unsure, say N.
++
+ config TEST_UDELAY
+ 	tristate "udelay test driver"
+ 	help
+diff --git a/lib/Makefile b/lib/Makefile
+index bba1fd5485f7..309e174ee35d 100644
+--- a/lib/Makefile
++++ b/lib/Makefile
+@@ -292,3 +292,6 @@ obj-$(CONFIG_GENERIC_LIB_MULDI3) += muldi3.o
+ obj-$(CONFIG_GENERIC_LIB_CMPDI2) += cmpdi2.o
+ obj-$(CONFIG_GENERIC_LIB_UCMPDI2) += ucmpdi2.o
+ obj-$(CONFIG_OBJAGG) += objagg.o
++
++# KUnit tests
++obj-$(CONFIG_LIST_TEST) += list-test.o
+diff --git a/lib/list-test.c b/lib/list-test.c
+new file mode 100644
+index 000000000000..52522ba83a68
+--- /dev/null
++++ b/lib/list-test.c
+@@ -0,0 +1,738 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * KUnit test for the Kernel Linked-list structures.
++ *
++ * Copyright (C) 2019, Google LLC.
++ * Author: David Gow <davidgow@google.com>
++ */
++#include <kunit/test.h>
++
++#include <linux/list.h>
++
++struct list_test_struct {
++	int data;
++	struct list_head list;
++};
++
++static void list_test_list_init(struct kunit *test)
++{
++	/* Test the different ways of initialising a list. */
++	struct list_head list1 = LIST_HEAD_INIT(list1);
++	struct list_head list2;
++	LIST_HEAD(list3);
++	struct list_head *list4;
++	struct list_head *list5;
++
++	INIT_LIST_HEAD(&list2);
++
++	list4 = kzalloc(sizeof(*list4), 0);
++	INIT_LIST_HEAD(list4);
++
++	list5 = kmalloc(sizeof(*list5), 0);
++	memset(list5, 0xFF, sizeof(*list5));
++	INIT_LIST_HEAD(list5);
++
++	/* list_empty_careful() checks both next and prev. */
++	KUNIT_EXPECT_TRUE(test, list_empty_careful(&list1));
++	KUNIT_EXPECT_TRUE(test, list_empty_careful(&list2));
++	KUNIT_EXPECT_TRUE(test, list_empty_careful(&list3));
++	KUNIT_EXPECT_TRUE(test, list_empty_careful(list4));
++	KUNIT_EXPECT_TRUE(test, list_empty_careful(list5));
++
++	kfree(list4);
++	kfree(list5);
++}
++
++static void list_test_list_add(struct kunit *test)
++{
++	struct list_head a, b;
++	LIST_HEAD(list);
++
++	list_add(&a, &list);
++	list_add(&b, &list);
++
++	/* should be [list] -> b -> a */
++	KUNIT_EXPECT_PTR_EQ(test, list.next, &b);
++	KUNIT_EXPECT_PTR_EQ(test, b.prev, &list);
++	KUNIT_EXPECT_PTR_EQ(test, b.next, &a);
++}
++
++static void list_test_list_add_tail(struct kunit *test)
++{
++	struct list_head a, b;
++	LIST_HEAD(list);
++
++	list_add_tail(&a, &list);
++	list_add_tail(&b, &list);
++
++	/* should be [list] -> a -> b */
++	KUNIT_EXPECT_PTR_EQ(test, list.next, &a);
++	KUNIT_EXPECT_PTR_EQ(test, a.prev, &list);
++	KUNIT_EXPECT_PTR_EQ(test, a.next, &b);
++}
++
++static void list_test_list_del(struct kunit *test)
++{
++	struct list_head a, b;
++	LIST_HEAD(list);
++
++	list_add_tail(&a, &list);
++	list_add_tail(&b, &list);
++
++	/* before: [list] -> a -> b */
++	list_del(&a);
++
++	/* now: [list] -> b */
++	KUNIT_EXPECT_PTR_EQ(test, list.next, &b);
++	KUNIT_EXPECT_PTR_EQ(test, b.prev, &list);
++}
++
++static void list_test_list_replace(struct kunit *test)
++{
++	struct list_head a_old, a_new, b;
++	LIST_HEAD(list);
++
++	list_add_tail(&a_old, &list);
++	list_add_tail(&b, &list);
++
++	/* before: [list] -> a_old -> b */
++	list_replace(&a_old, &a_new);
++
++	/* now: [list] -> a_new -> b */
++	KUNIT_EXPECT_PTR_EQ(test, list.next, &a_new);
++	KUNIT_EXPECT_PTR_EQ(test, b.prev, &a_new);
++}
++
++static void list_test_list_replace_init(struct kunit *test)
++{
++	struct list_head a_old, a_new, b;
++	LIST_HEAD(list);
++
++	list_add_tail(&a_old, &list);
++	list_add_tail(&b, &list);
++
++	/* before: [list] -> a_old -> b */
++	list_replace_init(&a_old, &a_new);
++
++	/* now: [list] -> a_new -> b */
++	KUNIT_EXPECT_PTR_EQ(test, list.next, &a_new);
++	KUNIT_EXPECT_PTR_EQ(test, b.prev, &a_new);
++
++	/* check a_old is empty (initialized) */
++	KUNIT_EXPECT_TRUE(test, list_empty_careful(&a_old));
++}
++
++static void list_test_list_swap(struct kunit *test)
++{
++	struct list_head a, b;
++	LIST_HEAD(list);
++
++	list_add_tail(&a, &list);
++	list_add_tail(&b, &list);
++
++	/* before: [list] -> a -> b */
++	list_swap(&a, &b);
++
++	/* after: [list] -> b -> a */
++	KUNIT_EXPECT_PTR_EQ(test, &b, list.next);
++	KUNIT_EXPECT_PTR_EQ(test, &a, list.prev);
++
++	KUNIT_EXPECT_PTR_EQ(test, &a, b.next);
++	KUNIT_EXPECT_PTR_EQ(test, &list, b.prev);
++
++	KUNIT_EXPECT_PTR_EQ(test, &list, a.next);
++	KUNIT_EXPECT_PTR_EQ(test, &b, a.prev);
++}
++
++static void list_test_list_del_init(struct kunit *test)
++{
++	struct list_head a, b;
++	LIST_HEAD(list);
++
++	list_add_tail(&a, &list);
++	list_add_tail(&b, &list);
++
++	/* before: [list] -> a -> b */
++	list_del_init(&a);
++	/* after: [list] -> b, a initialised */
++
++	KUNIT_EXPECT_PTR_EQ(test, list.next, &b);
++	KUNIT_EXPECT_PTR_EQ(test, b.prev, &list);
++	KUNIT_EXPECT_TRUE(test, list_empty_careful(&a));
++}
++
++static void list_test_list_move(struct kunit *test)
++{
++	struct list_head a, b;
++	LIST_HEAD(list1);
++	LIST_HEAD(list2);
++
++	list_add_tail(&a, &list1);
++	list_add_tail(&b, &list2);
++
++	/* before: [list1] -> a, [list2] -> b */
++	list_move(&a, &list2);
++	/* after: [list1] empty, [list2] -> a -> b */
++
++	KUNIT_EXPECT_TRUE(test, list_empty(&list1));
++
++	KUNIT_EXPECT_PTR_EQ(test, &a, list2.next);
++	KUNIT_EXPECT_PTR_EQ(test, &b, a.next);
++}
++
++static void list_test_list_move_tail(struct kunit *test)
++{
++	struct list_head a, b;
++	LIST_HEAD(list1);
++	LIST_HEAD(list2);
++
++	list_add_tail(&a, &list1);
++	list_add_tail(&b, &list2);
++
++	/* before: [list1] -> a, [list2] -> b */
++	list_move_tail(&a, &list2);
++	/* after: [list1] empty, [list2] -> b -> a */
++
++	KUNIT_EXPECT_TRUE(test, list_empty(&list1));
++
++	KUNIT_EXPECT_PTR_EQ(test, &b, list2.next);
++	KUNIT_EXPECT_PTR_EQ(test, &a, b.next);
++}
++
++static void list_test_list_bulk_move_tail(struct kunit *test)
++{
++	struct list_head a, b, c, d, x, y;
++	struct list_head *list1_values[] = { &x, &b, &c, &y };
++	struct list_head *list2_values[] = { &a, &d };
++	struct list_head *ptr;
++	LIST_HEAD(list1);
++	LIST_HEAD(list2);
++	int i = 0;
++
++	list_add_tail(&x, &list1);
++	list_add_tail(&y, &list1);
++
++	list_add_tail(&a, &list2);
++	list_add_tail(&b, &list2);
++	list_add_tail(&c, &list2);
++	list_add_tail(&d, &list2);
++
++	/* before: [list1] -> x -> y, [list2] -> a -> b -> c -> d */
++	list_bulk_move_tail(&y, &b, &c);
++	/* after: [list1] -> x -> b -> c -> y, [list2] -> a -> d */
++
++	list_for_each(ptr, &list1) {
++		KUNIT_EXPECT_PTR_EQ(test, ptr, list1_values[i]);
++		i++;
++	}
++	KUNIT_EXPECT_EQ(test, i, 4);
++	i = 0;
++	list_for_each(ptr, &list2) {
++		KUNIT_EXPECT_PTR_EQ(test, ptr, list2_values[i]);
++		i++;
++	}
++	KUNIT_EXPECT_EQ(test, i, 2);
++}
++
++static void list_test_list_is_first(struct kunit *test)
++{
++	struct list_head a, b;
++	LIST_HEAD(list);
++
++	list_add_tail(&a, &list);
++	list_add_tail(&b, &list);
++
++	KUNIT_EXPECT_TRUE(test, list_is_first(&a, &list));
++	KUNIT_EXPECT_FALSE(test, list_is_first(&b, &list));
++}
++
++static void list_test_list_is_last(struct kunit *test)
++{
++	struct list_head a, b;
++	LIST_HEAD(list);
++
++	list_add_tail(&a, &list);
++	list_add_tail(&b, &list);
++
++	KUNIT_EXPECT_FALSE(test, list_is_last(&a, &list));
++	KUNIT_EXPECT_TRUE(test, list_is_last(&b, &list));
++}
++
++static void list_test_list_empty(struct kunit *test)
++{
++	struct list_head a;
++	LIST_HEAD(list1);
++	LIST_HEAD(list2);
++
++	list_add_tail(&a, &list1);
++
++	KUNIT_EXPECT_FALSE(test, list_empty(&list1));
++	KUNIT_EXPECT_TRUE(test, list_empty(&list2));
++}
++
++static void list_test_list_empty_careful(struct kunit *test)
++{
++	/* This test doesn't check correctness under concurrent access */
++	struct list_head a;
++	LIST_HEAD(list1);
++	LIST_HEAD(list2);
++
++	list_add_tail(&a, &list1);
++
++	KUNIT_EXPECT_FALSE(test, list_empty_careful(&list1));
++	KUNIT_EXPECT_TRUE(test, list_empty_careful(&list2));
++}
++
++static void list_test_list_rotate_left(struct kunit *test)
++{
++	struct list_head a, b;
++	LIST_HEAD(list);
++
++	list_add_tail(&a, &list);
++	list_add_tail(&b, &list);
++
++	/* before: [list] -> a -> b */
++	list_rotate_left(&list);
++	/* after: [list] -> b -> a */
++
++	KUNIT_EXPECT_PTR_EQ(test, list.next, &b);
++	KUNIT_EXPECT_PTR_EQ(test, b.prev, &list);
++	KUNIT_EXPECT_PTR_EQ(test, b.next, &a);
++}
++
++static void list_test_list_rotate_to_front(struct kunit *test)
++{
++	struct list_head a, b, c, d;
++	struct list_head *list_values[] = { &c, &d, &a, &b };
++	struct list_head *ptr;
++	LIST_HEAD(list);
++	int i = 0;
++
++	list_add_tail(&a, &list);
++	list_add_tail(&b, &list);
++	list_add_tail(&c, &list);
++	list_add_tail(&d, &list);
++
++	/* before: [list] -> a -> b -> c -> d */
++	list_rotate_to_front(&c, &list);
++	/* after: [list] -> c -> d -> a -> b */
++
++	list_for_each(ptr, &list) {
++		KUNIT_EXPECT_PTR_EQ(test, ptr, list_values[i]);
++		i++;
++	}
++	KUNIT_EXPECT_EQ(test, i, 4);
++}
++
++static void list_test_list_is_singular(struct kunit *test)
++{
++	struct list_head a, b;
++	LIST_HEAD(list);
++
++	/* [list] empty */
++	KUNIT_EXPECT_FALSE(test, list_is_singular(&list));
++
++	list_add_tail(&a, &list);
++
++	/* [list] -> a */
++	KUNIT_EXPECT_TRUE(test, list_is_singular(&list));
++
++	list_add_tail(&b, &list);
++
++	/* [list] -> a -> b */
++	KUNIT_EXPECT_FALSE(test, list_is_singular(&list));
++}
++
++static void list_test_list_cut_position(struct kunit *test)
++{
++	struct list_head entries[3], *cur;
++	LIST_HEAD(list1);
++	LIST_HEAD(list2);
++	int i = 0;
++
++	list_add_tail(&entries[0], &list1);
++	list_add_tail(&entries[1], &list1);
++	list_add_tail(&entries[2], &list1);
++
++	/* before: [list1] -> entries[0] -> entries[1] -> entries[2] */
++	list_cut_position(&list2, &list1, &entries[1]);
++	/* after: [list2] -> entries[0] -> entries[1], [list1] -> entries[2] */
++
++	list_for_each(cur, &list2) {
++		KUNIT_EXPECT_PTR_EQ(test, cur, &entries[i]);
++		i++;
++	}
++
++	KUNIT_EXPECT_EQ(test, i, 2);
++
++	list_for_each(cur, &list1) {
++		KUNIT_EXPECT_PTR_EQ(test, cur, &entries[i]);
++		i++;
++	}
++}
++
++static void list_test_list_cut_before(struct kunit *test)
++{
++	struct list_head entries[3], *cur;
++	LIST_HEAD(list1);
++	LIST_HEAD(list2);
++	int i = 0;
++
++	list_add_tail(&entries[0], &list1);
++	list_add_tail(&entries[1], &list1);
++	list_add_tail(&entries[2], &list1);
++
++	/* before: [list1] -> entries[0] -> entries[1] -> entries[2] */
++	list_cut_before(&list2, &list1, &entries[1]);
++	/* after: [list2] -> entries[0], [list1] -> entries[1] -> entries[2] */
++
++	list_for_each(cur, &list2) {
++		KUNIT_EXPECT_PTR_EQ(test, cur, &entries[i]);
++		i++;
++	}
++
++	KUNIT_EXPECT_EQ(test, i, 1);
++
++	list_for_each(cur, &list1) {
++		KUNIT_EXPECT_PTR_EQ(test, cur, &entries[i]);
++		i++;
++	}
++}
++
++static void list_test_list_splice(struct kunit *test)
++{
++	struct list_head entries[5], *cur;
++	LIST_HEAD(list1);
++	LIST_HEAD(list2);
++	int i = 0;
++
++	list_add_tail(&entries[0], &list1);
++	list_add_tail(&entries[1], &list1);
++	list_add_tail(&entries[2], &list2);
++	list_add_tail(&entries[3], &list2);
++	list_add_tail(&entries[4], &list1);
++
++	/* before: [list1]->e[0]->e[1]->e[4], [list2]->e[2]->e[3] */
++	list_splice(&list2, &entries[1]);
++	/* after: [list1]->e[0]->e[1]->e[2]->e[3]->e[4], [list2] uninit */
++
++	list_for_each(cur, &list1) {
++		KUNIT_EXPECT_PTR_EQ(test, cur, &entries[i]);
++		i++;
++	}
++
++	KUNIT_EXPECT_EQ(test, i, 5);
++}
++
++static void list_test_list_splice_tail(struct kunit *test)
++{
++	struct list_head entries[5], *cur;
++	LIST_HEAD(list1);
++	LIST_HEAD(list2);
++	int i = 0;
++
++	list_add_tail(&entries[0], &list1);
++	list_add_tail(&entries[1], &list1);
++	list_add_tail(&entries[2], &list2);
++	list_add_tail(&entries[3], &list2);
++	list_add_tail(&entries[4], &list1);
++
++	/* before: [list1]->e[0]->e[1]->e[4], [list2]->e[2]->e[3] */
++	list_splice_tail(&list2, &entries[4]);
++	/* after: [list1]->e[0]->e[1]->e[2]->e[3]->e[4], [list2] uninit */
++
++	list_for_each(cur, &list1) {
++		KUNIT_EXPECT_PTR_EQ(test, cur, &entries[i]);
++		i++;
++	}
++
++	KUNIT_EXPECT_EQ(test, i, 5);
++}
++
++static void list_test_list_splice_init(struct kunit *test)
++{
++	struct list_head entries[5], *cur;
++	LIST_HEAD(list1);
++	LIST_HEAD(list2);
++	int i = 0;
++
++	list_add_tail(&entries[0], &list1);
++	list_add_tail(&entries[1], &list1);
++	list_add_tail(&entries[2], &list2);
++	list_add_tail(&entries[3], &list2);
++	list_add_tail(&entries[4], &list1);
++
++	/* before: [list1]->e[0]->e[1]->e[4], [list2]->e[2]->e[3] */
++	list_splice_init(&list2, &entries[1]);
++	/* after: [list1]->e[0]->e[1]->e[2]->e[3]->e[4], [list2] empty */
++
++	list_for_each(cur, &list1) {
++		KUNIT_EXPECT_PTR_EQ(test, cur, &entries[i]);
++		i++;
++	}
++
++	KUNIT_EXPECT_EQ(test, i, 5);
++
++	KUNIT_EXPECT_TRUE(test, list_empty_careful(&list2));
++}
++
++static void list_test_list_splice_tail_init(struct kunit *test)
++{
++	struct list_head entries[5], *cur;
++	LIST_HEAD(list1);
++	LIST_HEAD(list2);
++	int i = 0;
++
++	list_add_tail(&entries[0], &list1);
++	list_add_tail(&entries[1], &list1);
++	list_add_tail(&entries[2], &list2);
++	list_add_tail(&entries[3], &list2);
++	list_add_tail(&entries[4], &list1);
++
++	/* before: [list1]->e[0]->e[1]->e[4], [list2]->e[2]->e[3] */
++	list_splice_tail_init(&list2, &entries[4]);
++	/* after: [list1]->e[0]->e[1]->e[2]->e[3]->e[4], [list2] empty */
++
++	list_for_each(cur, &list1) {
++		KUNIT_EXPECT_PTR_EQ(test, cur, &entries[i]);
++		i++;
++	}
++
++	KUNIT_EXPECT_EQ(test, i, 5);
++
++	KUNIT_EXPECT_TRUE(test, list_empty_careful(&list2));
++}
++
++static void list_test_list_entry(struct kunit *test)
++{
++	struct list_test_struct test_struct;
++
++	KUNIT_EXPECT_PTR_EQ(test, &test_struct, list_entry(&(test_struct.list), struct list_test_struct, list));
++}
++
++static void list_test_list_first_entry(struct kunit *test)
++{
++	struct list_test_struct test_struct1, test_struct2;
++	LIST_HEAD(list);
++
++	list_add_tail(&test_struct1.list, &list);
++	list_add_tail(&test_struct2.list, &list);
++
++
++	KUNIT_EXPECT_PTR_EQ(test, &test_struct1, list_first_entry(&list, struct list_test_struct, list));
++}
++
++static void list_test_list_last_entry(struct kunit *test)
++{
++	struct list_test_struct test_struct1, test_struct2;
++	LIST_HEAD(list);
++
++	list_add_tail(&test_struct1.list, &list);
++	list_add_tail(&test_struct2.list, &list);
++
++
++	KUNIT_EXPECT_PTR_EQ(test, &test_struct2, list_last_entry(&list, struct list_test_struct, list));
++}
++
++static void list_test_list_first_entry_or_null(struct kunit *test)
++{
++	struct list_test_struct test_struct1, test_struct2;
++	LIST_HEAD(list);
++
++	KUNIT_EXPECT_FALSE(test, list_first_entry_or_null(&list, struct list_test_struct, list));
++
++	list_add_tail(&test_struct1.list, &list);
++	list_add_tail(&test_struct2.list, &list);
++
++	KUNIT_EXPECT_PTR_EQ(test, &test_struct1, list_first_entry_or_null(&list, struct list_test_struct, list));
++}
++
++static void list_test_list_next_entry(struct kunit *test)
++{
++	struct list_test_struct test_struct1, test_struct2;
++	LIST_HEAD(list);
++
++	list_add_tail(&test_struct1.list, &list);
++	list_add_tail(&test_struct2.list, &list);
++
++
++	KUNIT_EXPECT_PTR_EQ(test, &test_struct2, list_next_entry(&test_struct1, list));
++}
++
++static void list_test_list_prev_entry(struct kunit *test)
++{
++	struct list_test_struct test_struct1, test_struct2;
++	LIST_HEAD(list);
++
++	list_add_tail(&test_struct1.list, &list);
++	list_add_tail(&test_struct2.list, &list);
++
++
++	KUNIT_EXPECT_PTR_EQ(test, &test_struct1, list_prev_entry(&test_struct2, list));
++}
++
++static void list_test_list_for_each(struct kunit *test)
++{
++	struct list_head entries[3], *cur;
++	LIST_HEAD(list);
++	int i = 0;
++
++	list_add_tail(&entries[0], &list);
++	list_add_tail(&entries[1], &list);
++	list_add_tail(&entries[2], &list);
++
++	list_for_each(cur, &list) {
++		KUNIT_EXPECT_PTR_EQ(test, cur, &entries[i]);
++		i++;
++	}
++
++	KUNIT_EXPECT_EQ(test, i, 3);
++}
++
++static void list_test_list_for_each_prev(struct kunit *test)
++{
++	struct list_head entries[3], *cur;
++	LIST_HEAD(list);
++	int i = 2;
++
++	list_add_tail(&entries[0], &list);
++	list_add_tail(&entries[1], &list);
++	list_add_tail(&entries[2], &list);
++
++	list_for_each_prev(cur, &list) {
++		KUNIT_EXPECT_PTR_EQ(test, cur, &entries[i]);
++		i--;
++	}
++
++	KUNIT_EXPECT_EQ(test, i, -1);
++}
++
++static void list_test_list_for_each_safe(struct kunit *test)
++{
++	struct list_head entries[3], *cur, *n;
++	LIST_HEAD(list);
++	int i = 0;
++
++
++	list_add_tail(&entries[0], &list);
++	list_add_tail(&entries[1], &list);
++	list_add_tail(&entries[2], &list);
++
++	list_for_each_safe(cur, n, &list) {
++		KUNIT_EXPECT_PTR_EQ(test, cur, &entries[i]);
++		list_del(&entries[i]);
++		i++;
++	}
++
++	KUNIT_EXPECT_EQ(test, i, 3);
++	KUNIT_EXPECT_TRUE(test, list_empty(&list));
++}
++
++static void list_test_list_for_each_prev_safe(struct kunit *test)
++{
++	struct list_head entries[3], *cur, *n;
++	LIST_HEAD(list);
++	int i = 2;
++
++	list_add_tail(&entries[0], &list);
++	list_add_tail(&entries[1], &list);
++	list_add_tail(&entries[2], &list);
++
++	list_for_each_prev_safe(cur, n, &list) {
++		KUNIT_EXPECT_PTR_EQ(test, cur, &entries[i]);
++		list_del(&entries[i]);
++		i--;
++	}
++
++	KUNIT_EXPECT_EQ(test, i, -1);
++	KUNIT_EXPECT_TRUE(test, list_empty(&list));
++}
++
++static void list_test_list_for_each_entry(struct kunit *test)
++{
++	struct list_test_struct entries[5], *cur;
++	static LIST_HEAD(list);
++	int i = 0;
++
++	for (i = 0; i < 5; ++i) {
++		entries[i].data = i;
++		list_add_tail(&entries[i].list, &list);
++	}
++
++	i = 0;
++
++	list_for_each_entry(cur, &list, list) {
++		KUNIT_EXPECT_EQ(test, cur->data, i);
++		i++;
++	}
++	
++	KUNIT_EXPECT_EQ(test, i, 5);
++}
++
++static void list_test_list_for_each_entry_reverse(struct kunit *test)
++{
++	struct list_test_struct entries[5], *cur;
++	static LIST_HEAD(list);
++	int i = 0;
++
++	for (i = 0; i < 5; ++i) {
++		entries[i].data = i;
++		list_add_tail(&entries[i].list, &list);
++	}
++
++	i = 4;
++
++	list_for_each_entry_reverse(cur, &list, list) {
++		KUNIT_EXPECT_EQ(test, cur->data, i);
++		i--;
++	}
++	
++	KUNIT_EXPECT_EQ(test, i, -1);
++}
++
++static struct kunit_case list_test_cases[] = {
++	KUNIT_CASE(list_test_list_init),
++	KUNIT_CASE(list_test_list_add),
++	KUNIT_CASE(list_test_list_add_tail),
++	KUNIT_CASE(list_test_list_del),
++	KUNIT_CASE(list_test_list_replace),
++	KUNIT_CASE(list_test_list_replace_init),
++	KUNIT_CASE(list_test_list_swap),
++	KUNIT_CASE(list_test_list_del_init),
++	KUNIT_CASE(list_test_list_move),
++	KUNIT_CASE(list_test_list_move_tail),
++	KUNIT_CASE(list_test_list_bulk_move_tail),
++	KUNIT_CASE(list_test_list_is_first),
++	KUNIT_CASE(list_test_list_is_last),
++	KUNIT_CASE(list_test_list_empty),
++	KUNIT_CASE(list_test_list_empty_careful),
++	KUNIT_CASE(list_test_list_rotate_left),
++	KUNIT_CASE(list_test_list_rotate_to_front),
++	KUNIT_CASE(list_test_list_is_singular),
++	KUNIT_CASE(list_test_list_cut_position),
++	KUNIT_CASE(list_test_list_cut_before),
++	KUNIT_CASE(list_test_list_splice),
++	KUNIT_CASE(list_test_list_splice_tail),
++	KUNIT_CASE(list_test_list_splice_init),
++	KUNIT_CASE(list_test_list_splice_tail_init),
++	KUNIT_CASE(list_test_list_entry),
++	KUNIT_CASE(list_test_list_first_entry),
++	KUNIT_CASE(list_test_list_last_entry),
++	KUNIT_CASE(list_test_list_first_entry_or_null),
++	KUNIT_CASE(list_test_list_next_entry),
++	KUNIT_CASE(list_test_list_prev_entry),
++	KUNIT_CASE(list_test_list_for_each),
++	KUNIT_CASE(list_test_list_for_each_prev),
++	KUNIT_CASE(list_test_list_for_each_safe),
++	KUNIT_CASE(list_test_list_for_each_prev_safe),
++	KUNIT_CASE(list_test_list_for_each_entry),
++	KUNIT_CASE(list_test_list_for_each_entry_reverse),
++	{},
++};
++
++static struct kunit_suite list_test_module = {
++	.name = "list-test",
++	.test_cases = list_test_cases,
++};
++
++kunit_test_suite(list_test_module);
+-- 
+2.23.0.700.g56cf767bdb-goog
 
-Please add Documentation/filesystems/ext4/inodes.rst Inode Timestamps
-here as well.
-
-Yeah. Especially after looking at the document, summary of what these
-test(s) is definitely helpful. You can't expect users to read the
-document before enabling it. Please write a summary of tests and what
-they do and add it here and then in the commit log. Also include what
-user should expect when they pass and when one of them fails.
-
-> +
-> +	  If unsure, say N.
-> diff --git a/fs/ext4/Makefile b/fs/ext4/Makefile
-> index b17ddc229ac5..a0588fd2eea6 100644
-> --- a/fs/ext4/Makefile
-> +++ b/fs/ext4/Makefile
-> @@ -13,4 +13,5 @@ ext4-y	:= balloc.o bitmap.o block_validity.o dir.o ext4_jbd2.o extents.o \
-> 
->   ext4-$(CONFIG_EXT4_FS_POSIX_ACL)	+= acl.o
->   ext4-$(CONFIG_EXT4_FS_SECURITY)		+= xattr_security.o
-> +ext4-$(CONFIG_EXT4_KUNIT_TESTS)	+= inode-test.o
->   ext4-$(CONFIG_FS_VERITY)		+= verity.o
-> diff --git a/fs/ext4/inode-test.c b/fs/ext4/inode-test.c
-> new file mode 100644
-> index 000000000000..43bc6cb547cd
-> --- /dev/null
-> +++ b/fs/ext4/inode-test.c
-> @@ -0,0 +1,221 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * KUnit test of ext4 inode that verify the seconds part of [a/c/m]
-> + * timestamps in ext4 inode structs are decoded correctly.
-> + * These tests are derived from the table under
-> + * Documentation/filesystems/ext4/inodes.rst Inode Timestamps
-
-Yeah. Especially after looking at the document, summary of what these
-test(s) is definitely helpful. You can't expect users to read the
-document before enabling the tests.
-
-> + */
-> +
-> +#include <kunit/test.h>
-> +#include <linux/kernel.h>
-> +#include <linux/time64.h>
-> +
-> +#include "ext4.h"
-> +
-> +/* binary: 00000000 00000000 00000000 00000000 */
-> +#define LOWER_MSB_0 0L
-> +/* binary: 01111111 11111111 11111111 11111111 */
-> +#define UPPER_MSB_0 0x7fffffffL
-> +/* binary: 10000000 00000000 00000000 00000000 */
-> +#define LOWER_MSB_1 (-0x80000000L)
-> +/* binary: 11111111 11111111 11111111 11111111 */
-> +#define UPPER_MSB_1 (-1L)
-> +/* binary: 00111111   11111111 11111111 11111111 */
-> +#define MAX_NANOSECONDS ((1L << 30) - 1)
-> +
-> +#define CASE_NAME_FORMAT "%s: msb:%x lower_bound:%x extra_bits: %x"
-> +
-> +struct timestamp_expectation {
-> +	const char *test_case_name;
-> +	struct timespec64 expected;
-> +	u32 extra_bits;
-> +	bool msb_set;
-> +	bool lower_bound;
-> +};
-> +
-> +static time64_t get_32bit_time(const struct timestamp_expectation * const test)
-> +{
-> +	if (test->msb_set) {
-> +		if (test->lower_bound)
-> +			return LOWER_MSB_1;
-> +
-> +		return UPPER_MSB_1;
-> +	}
-> +
-> +	if (test->lower_bound)
-> +		return LOWER_MSB_0;
-> +	return UPPER_MSB_0;
-> +}
-> +
-> +
-> +static void inode_test_xtimestamp_decoding(struct kunit *test)
-> +{
-> +	const struct timestamp_expectation test_data[] = {
-> +		{
-> +			.test_case_name = "1901-12-13",
-> +			.msb_set = true,
-> +			.lower_bound = true,
-> +			.extra_bits = 0,
-> +			.expected = {.tv_sec = -0x80000000LL, .tv_nsec = 0L},
-> +		},
-> +
-> +		{
-> +			.test_case_name = "1969-12-31",
-> +			.msb_set = true,
-> +			.lower_bound = false,
-> +			.extra_bits = 0,
-> +			.expected = {.tv_sec = -1LL, .tv_nsec = 0L},
-> +		},
-> +
-> +		{
-> +			.test_case_name = "1970-01-01",
-> +			.msb_set = false,
-> +			.lower_bound = true,
-> +			.extra_bits = 0,
-> +			.expected = {0LL, 0L},
-> +		},
-> +
-> +		{
-> +			.test_case_name = "2038-01-19",
-> +			.msb_set = false,
-> +			.lower_bound = false,
-> +			.extra_bits = 0,
-> +			.expected = {.tv_sec = 0x7fffffffLL, .tv_nsec = 0L},
-> +		},
-> +
-> +		{
-> +			.test_case_name = "2038-01-19",
-> +			.msb_set = true,
-> +			.lower_bound = true,
-> +			.extra_bits = 1,
-> +			.expected = {.tv_sec = 0x80000000LL, .tv_nsec = 0L},
-> +		},
-> +
-> +		{
-> +			.test_case_name = "2106-02-07",
-> +			.msb_set = true,
-> +			.lower_bound = false,
-> +			.extra_bits = 1,
-> +			.expected = {.tv_sec = 0xffffffffLL, .tv_nsec = 0L},
-> +		},
-> +
-> +		{
-> +			.test_case_name = "2106-02-07",
-> +			.msb_set = false,
-> +			.lower_bound = true,
-> +			.extra_bits = 1,
-> +			.expected = {.tv_sec = 0x100000000LL, .tv_nsec = 0L},
-> +		},
-> +
-> +		{
-> +			.test_case_name = "2174-02-25",
-> +			.msb_set = false,
-> +			.lower_bound = false,
-> +			.extra_bits = 1,
-> +			.expected = {.tv_sec = 0x17fffffffLL, .tv_nsec = 0L},
-> +		},
-> +
-> +		{
-> +			.test_case_name = "2174-02-25",
-> +			.msb_set = true,
-> +			.lower_bound = true,
-> +			.extra_bits =  2,
-> +			.expected = {.tv_sec = 0x180000000LL, .tv_nsec = 0L},
-> +		},
-> +
-> +		{
-> +			.test_case_name = "2242-03-16",
-> +			.msb_set = true,
-> +			.lower_bound = false,
-> +			.extra_bits = 2,
-> +			.expected = {.tv_sec = 0x1ffffffffLL, .tv_nsec = 0L},
-> +		},
-> +
-> +		{
-> +			.test_case_name = "2242-03-16",
-> +			.msb_set = false,
-> +			.lower_bound = true,
-> +			.extra_bits = 2,
-> +			.expected = {.tv_sec = 0x200000000LL, .tv_nsec = 0L},
-> +		},
-> +
-> +		{
-> +			.test_case_name = " 2310-04-04",
-> +			.msb_set = false,
-> +			.lower_bound = false,
-> +			.extra_bits = 2,
-> +			.expected = {.tv_sec = 0x27fffffffLL, .tv_nsec = 0L},
-> +		},
-> +
-> +		{
-> +			.test_case_name = " 2310-04-04 00:00:00.1",
-> +			.msb_set = false,
-> +			.lower_bound = false,
-> +			.extra_bits = 6,
-> +			.expected = {.tv_sec = 0x27fffffffLL, .tv_nsec = 1L},
-> +		},
-> +
-> +		{
-> +			.test_case_name = "2378-04-22 00:00:00.MAX_NSEC",
-> +			.msb_set = false,
-> +			.lower_bound = true,
-> +			.extra_bits = 0xFFFFFFFF,
-> +			.expected = {.tv_sec = 0x300000000LL,
-> +				     .tv_nsec = MAX_NANOSECONDS},
-> +		},
-> +
-> +		{
-> +			.test_case_name = "2378-04-22",
-> +			.msb_set = false,
-> +			.lower_bound = true,
-> +			.extra_bits = 3,
-> +			.expected = {.tv_sec = 0x300000000LL, .tv_nsec = 0L},
-> +		},
-> +
-> +		{
-> +			.test_case_name = "2446-05-10",
-> +			.msb_set = false,
-> +			.lower_bound = false,
-> +			.extra_bits = 3,
-> +			.expected = {.tv_sec = 0x37fffffffLL, .tv_nsec = 0L},
-> +		}
-> +	};
-> +
-
-Is there a way to make the test data dynamic. Can you read from a data
-file? It will be easier to if the data
-
-Maybe this is question to Brendan?
-
-> +	struct timespec64 timestamp;
-> +	int i;
-> +
-> +	for (i = 0; i < ARRAY_SIZE(test_data); ++i) {
-> +		timestamp.tv_sec = get_32bit_time(&test_data[i]);
-> +		ext4_decode_extra_time(&timestamp,
-> +				       cpu_to_le32(test_data[i].extra_bits));
-> +
-> +		KUNIT_EXPECT_EQ_MSG(test,
-> +				    test_data[i].expected.tv_sec,
-> +				    timestamp.tv_sec,
-> +				    CASE_NAME_FORMAT,
-> +				    test_data[i].test_case_name,
-> +				    test_data[i].msb_set,
-> +				    test_data[i].lower_bound,
-> +				    test_data[i].extra_bits);
-> +		KUNIT_EXPECT_EQ_MSG(test,
-> +				    test_data[i].expected.tv_nsec,
-> +				    timestamp.tv_nsec,
-> +				    CASE_NAME_FORMAT,
-> +				    test_data[i].test_case_name,
-> +				    test_data[i].msb_set,
-> +				    test_data[i].lower_bound,
-> +				    test_data[i].extra_bits);
-> +	}
-> +}
-> +
-> +static struct kunit_case ext4_inode_test_cases[] = {
-> +	KUNIT_CASE(inode_test_xtimestamp_decoding),
-> +	{}
-> +};
-> +
-> +static struct kunit_suite ext4_inode_test_suite = {
-> +	.name = "ext4_inode_test",
-> +	.test_cases = ext4_inode_test_cases,
-> +};
-> +
-> +kunit_test_suite(ext4_inode_test_suite);
-> --
-> 2.23.0.700.g56cf767bdb-goog
-> 
-
-thanks,
--- Shuah
