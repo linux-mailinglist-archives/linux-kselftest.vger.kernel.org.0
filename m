@@ -2,248 +2,495 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 984F3D1F16
-	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Oct 2019 05:47:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D24D4D2026
+	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Oct 2019 07:42:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732679AbfJJDrK (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 9 Oct 2019 23:47:10 -0400
-Received: from mail-eopbgr720137.outbound.protection.outlook.com ([40.107.72.137]:51739
-        "EHLO NAM05-CO1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726524AbfJJDrK (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 9 Oct 2019 23:47:10 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=fU6H7nI6jfT7T+nDSlRy5Z9pB0Bw1gzSz18l44KbfQyN3FCY2+R0Iji4e6QkXMZiZrqr519RDuZ+sxr0dLut2TjpVa8wby34/TJQuQ/k4F1enFtglPCNBRTwPbgAJrLwbJrzj/Cckb6XPMMm6oXFc6Vj9HEzb0ii8Bnk4wdMYiiOq+3l5XTOBRbDCHX6Oq/3NSrjqCvGH56Qksm/bkb+77Gu4yPI9Z25YVjWSm/AMcnUWhEcI6v9bHVGsAVxLdasscgcx4/i8A1yUB3M1rZa3qVUF6qYKohMGct+i1F1AGCVMYucp/LrDZpSPtz0V0QTBKCSqkiXVOXaGGFXfQBjfQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Qi4y0hJAOykDHnJtBheldCEib0U+xAiRTXdA+fhQrx0=;
- b=QgGCzRsdog/6RAKuXNyE6nHhoZUoxKbS9bP5cskbEoaSJ4gFpxqlwbVNFaiYL//cE929Y9C6BqEILeqPFe418iGmq2ujkiWcerLOncBqwHIu5mbEXtOw2FZDiKODxUIydM+pZoXr+2UzVpQ+dV1IUloIFtolFnUoVyH9h80TRseXxIqMxIKl4xpvLu3S0/WxtvydHFTeNTVRzV1oFmGI0p2r2GeAhnGToKSIzrsvmTLeY6fr3e8QVxexFbHyu33u9IYBaxJUWxXurITPefgUlciX6wGgUEUtbpPJ+44M7Y11//cvOkagTn7+GcTRcLl+4p+CgNIub+HOdTQgDdWPFg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=temperror (sender ip
- is 160.33.194.231) smtp.rcpttodomain=google.com smtp.mailfrom=sony.com;
- dmarc=temperror action=none header.from=sony.com; dkim=none (message not
- signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Sony.onmicrosoft.com;
- s=selector2-Sony-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Qi4y0hJAOykDHnJtBheldCEib0U+xAiRTXdA+fhQrx0=;
- b=RbGYaEseaGF5WLZLxv2nVItC0sqR+oAYOFv9E+rrLzi1nQulTKMNUuing/DddavwM21eqeVxriB6SXVji+9mTsgY32JRcySLIRBFWO5rjwNpYJSEZU24Rc/xhnAm7d0Ektnx/0yDWRuHS3RyeUJJALvcRFjykMThTWIfspW65Hc=
-Received: from BN6PR13CA0041.namprd13.prod.outlook.com (2603:10b6:404:13e::27)
- by DM6PR13MB3273.namprd13.prod.outlook.com (2603:10b6:5:19c::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2347.13; Thu, 10 Oct
- 2019 03:47:07 +0000
-Received: from SN1NAM02FT013.eop-nam02.prod.protection.outlook.com
- (2a01:111:f400:7e44::202) by BN6PR13CA0041.outlook.office365.com
- (2603:10b6:404:13e::27) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2367.5 via Frontend
- Transport; Thu, 10 Oct 2019 03:47:06 +0000
-Authentication-Results: spf=temperror (sender IP is 160.33.194.231)
- smtp.mailfrom=sony.com; google.com; dkim=none (message not signed)
- header.d=none;google.com; dmarc=temperror action=none header.from=sony.com;
-Received-SPF: TempError (protection.outlook.com: error in processing during
- lookup of sony.com: DNS Timeout)
-Received: from usculsndmail04v.am.sony.com (160.33.194.231) by
- SN1NAM02FT013.mail.protection.outlook.com (10.152.72.98) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2347.16 via Frontend Transport; Thu, 10 Oct 2019 03:47:04 +0000
-Received: from usculsndmail13v.am.sony.com (usculsndmail13v.am.sony.com [146.215.230.104])
-        by usculsndmail04v.am.sony.com (Sentrion-MTA-4.3.2/Sentrion-MTA-4.3.2) with ESMTP id x9A3l3Ww030112;
-        Thu, 10 Oct 2019 03:47:03 GMT
-Received: from USCULXHUB06V.am.sony.com (usculxhub06v.am.sony.com [146.215.231.44])
-        by usculsndmail13v.am.sony.com (Sentrion-MTA-4.3.2/Sentrion-MTA-4.3.2) with ESMTP id x9A3l2TW028872;
-        Thu, 10 Oct 2019 03:47:03 GMT
-Received: from USCULXMSG01.am.sony.com ([fe80::b09d:6cb6:665e:d1b5]) by
- USCULXHUB06V.am.sony.com ([146.215.231.44]) with mapi id 14.03.0439.000; Wed,
- 9 Oct 2019 23:47:02 -0400
-From:   <Tim.Bird@sony.com>
-To:     <yzaikin@google.com>, <linux-kselftest@vger.kernel.org>,
-        <linux-ext4@vger.kernel.org>, <skhan@linuxfoundation.org>,
-        <tytso@mit.edu>, <adilger.kernel@dilger.ca>
-CC:     <kunit-dev@googlegroups.com>, <brendanhiggins@google.com>
-Subject: RE: [PATCH linux-kselftest/test v2] ext4: add kunit test for
- decoding extended timestamps
-Thread-Topic: [PATCH linux-kselftest/test v2] ext4: add kunit test for
- decoding extended timestamps
-Thread-Index: AQHVfxQJt5KYyUfdIUCqjuPcGwlYBqdTO9/Q
-Date:   Thu, 10 Oct 2019 03:46:45 +0000
-Message-ID: <ECADFF3FD767C149AD96A924E7EA6EAF977C135F@USCULXMSG01.am.sony.com>
-References: <20191010023931.230475-1-yzaikin@google.com>
-In-Reply-To: <20191010023931.230475-1-yzaikin@google.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [146.215.231.6]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        id S1732869AbfJJFmV (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 10 Oct 2019 01:42:21 -0400
+Received: from mx2a.mailbox.org ([80.241.60.219]:22577 "EHLO mx2a.mailbox.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728912AbfJJFmU (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 10 Oct 2019 01:42:20 -0400
+Received: from smtp2.mailbox.org (smtp2.mailbox.org [IPv6:2001:67c:2050:105:465:1:2:0])
+        (using TLSv1.2 with cipher ECDHE-RSA-CHACHA20-POLY1305 (256/256 bits))
+        (No client certificate requested)
+        by mx2a.mailbox.org (Postfix) with ESMTPS id 9D878A3752;
+        Thu, 10 Oct 2019 07:42:10 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at heinlein-support.de
+Received: from smtp2.mailbox.org ([80.241.60.241])
+        by spamfilter06.heinlein-hosting.de (spamfilter06.heinlein-hosting.de [80.241.56.125]) (amavisd-new, port 10030)
+        with ESMTP id td9MA5mQz_cY; Thu, 10 Oct 2019 07:42:05 +0200 (CEST)
+From:   Aleksa Sarai <cyphar@cyphar.com>
+To:     Al Viro <viro@zeniv.linux.org.uk>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J. Bruce Fields" <bfields@fieldses.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        David Howells <dhowells@redhat.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>
+Cc:     Aleksa Sarai <cyphar@cyphar.com>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Jann Horn <jannh@google.com>, Tycho Andersen <tycho@tycho.ws>,
+        David Drysdale <drysdale@google.com>,
+        Chanho Min <chanho.min@lge.com>,
+        Oleg Nesterov <oleg@redhat.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Christian Brauner <christian@brauner.io>,
+        Aleksa Sarai <asarai@suse.de>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        containers@lists.linux-foundation.org, linux-alpha@vger.kernel.org,
+        linux-api@vger.kernel.org, libc-alpha@sourceware.org,
+        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-ia64@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        linux-xtensa@linux-xtensa.org, sparclinux@vger.kernel.org
+Subject: [PATCH v14 0/6] open: introduce openat2(2) syscall
+Date:   Thu, 10 Oct 2019 16:41:34 +1100
+Message-Id: <20191010054140.8483-1-cyphar@cyphar.com>
 MIME-Version: 1.0
-X-EOPAttributedMessage: 0
-X-MS-Office365-Filtering-HT: Tenant
-X-Forefront-Antispam-Report: CIP:160.33.194.231;IPV:NLI;CTRY:US;EFV:NLI;SFV:NSPM;SFS:(10019020)(136003)(396003)(346002)(376002)(39860400002)(13464003)(189003)(199004)(478600001)(14444005)(356004)(76176011)(23676004)(2486003)(7696005)(66066001)(50466002)(110136005)(54906003)(106002)(6666004)(33656002)(316002)(7736002)(4326008)(229853002)(3846002)(6116002)(305945005)(2171002)(5660300002)(246002)(55016002)(2906002)(8936002)(37786003)(55846006)(2876002)(47776003)(2201001)(6246003)(102836004)(186003)(26005)(63350400001)(446003)(63370400001)(426003)(11346002)(126002)(486006)(8676002)(476003)(436003)(86362001)(70206006)(336012)(70586007)(5001870100001);DIR:OUT;SFP:1102;SCL:1;SRVR:DM6PR13MB3273;H:usculsndmail04v.am.sony.com;FPR:;SPF:TempError;LANG:en;PTR:mail04.sonyusa.com,mail.sonyusa.com;MX:1;A:1;
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: f6cd40b0-88a6-446e-2607-08d74d348460
-X-MS-TrafficTypeDiagnostic: DM6PR13MB3273:
-X-Microsoft-Antispam-PRVS: <DM6PR13MB3273196D957274EB72AF8771FD940@DM6PR13MB3273.namprd13.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
-X-Forefront-PRVS: 018632C080
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 0Zxyt2MQmLER6i0Y+7Sj7diaWRnKav2caSpkv9BoMi0ZEwJAXHZDl1rAQCb/iWylk6AqR4AYfNbcC4iPqwUxDhqCRR9TogrRKFdwTVaylCRN3T8l3F47Tlh0Rkx2RrGNciqNcQLfbGHVcLZwENuq+jXzR/9jSxqyC9w99Y7RdJMwx815lOtTpqHup7B76fOFYjZFG61gGoZadVPVLm4bEZxu9KEL6EaratcBye78GMbODeARLDTlceqhbPuKrWLJsc/MmwQAU8FCZXFygNN9emzU5d5xqRMGLFW7XDsUgJcJbC+GNZlLSXBm0TbfLWGTDTUvajlRHeKfVQVyQqyUiZEsae2GXr801INCuqrvXGmOIBlpwptd/f7SZM9gZZrj9LX4FjNxS348ibn3qQKrqrqHf6JEkGRCF0JSAcfTCNM=
-X-OriginatorOrg: sony.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Oct 2019 03:47:04.9815
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: f6cd40b0-88a6-446e-2607-08d74d348460
-X-MS-Exchange-CrossTenant-Id: 66c65d8a-9158-4521-a2d8-664963db48e4
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=66c65d8a-9158-4521-a2d8-664963db48e4;Ip=[160.33.194.231];Helo=[usculsndmail04v.am.sony.com]
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR13MB3273
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-DQo+IC0tLS0tT3JpZ2luYWwgTWVzc2FnZS0tLS0tDQo+IEZyb20gSXVyaWkgWmFpa2luIG9uIFdl
-ZG5lc2RheSwgT2N0b2JlciAwOSwgMjAxOSA0OjQwIFBNDQo+IA0KPiBLVW5pdCB0ZXN0cyBmb3Ig
-ZGVjb2RpbmcgZXh0ZW5kZWQgNjQgYml0IHRpbWVzdGFtcHMuDQo+IA0KPiBTaWduZWQtb2ZmLWJ5
-OiBJdXJpaSBaYWlraW4gPHl6YWlraW5AZ29vZ2xlLmNvbT4NCj4gLS0tDQo+ICBmcy9leHQ0L0tj
-b25maWcgICAgICB8ICAxMiArKysNCj4gIGZzL2V4dDQvTWFrZWZpbGUgICAgIHwgICAxICsNCj4g
-IGZzL2V4dDQvaW5vZGUtdGVzdC5jIHwgMjIxDQo+ICsrKysrKysrKysrKysrKysrKysrKysrKysr
-KysrKysrKysrKysrKysrKysNCj4gIDMgZmlsZXMgY2hhbmdlZCwgMjM0IGluc2VydGlvbnMoKykN
-Cj4gIGNyZWF0ZSBtb2RlIDEwMDY0NCBmcy9leHQ0L2lub2RlLXRlc3QuYw0KPiANCj4gZGlmZiAt
-LWdpdCBhL2ZzL2V4dDQvS2NvbmZpZyBiL2ZzL2V4dDQvS2NvbmZpZw0KPiBpbmRleCBjYmI1Y2E4
-MzBlNTcuLmNiMGI1Mjc1MzY3NCAxMDA2NDQNCj4gLS0tIGEvZnMvZXh0NC9LY29uZmlnDQo+ICsr
-KyBiL2ZzL2V4dDQvS2NvbmZpZw0KPiBAQCAtMTA2LDMgKzEwNiwxNSBAQCBjb25maWcgRVhUNF9E
-RUJVRw0KPiAgCSAgSWYgeW91IHNlbGVjdCBZIGhlcmUsIHRoZW4geW91IHdpbGwgYmUgYWJsZSB0
-byB0dXJuIG9uIGRlYnVnZ2luZw0KPiAgCSAgd2l0aCBhIGNvbW1hbmQgc3VjaCBhczoNCj4gIAkJ
-ZWNobyAxID4gL3N5cy9tb2R1bGUvZXh0NC9wYXJhbWV0ZXJzL21iYWxsb2NfZGVidWcNCj4gKw0K
-PiArY29uZmlnIEVYVDRfS1VOSVRfVEVTVFMNCj4gKwlib29sICJLVW5pdCB0ZXN0IGZvciBleHQ0
-IGlub2RlIg0KPiArCWRlcGVuZHMgb24gRVhUNF9GUw0KPiArCWRlcGVuZHMgb24gS1VOSVQNCj4g
-KwloZWxwDQo+ICsJICBUaGlzIGJ1aWxkcyB0aGUgZXh0NCBpbm9kZSBzeXNjdGwgdW5pdCB0ZXN0
-LCB3aGljaCBydW5zIG9uIGJvb3QuDQo+ICsJICBUZXN0cyB0aGUgZW5jb2RpbmcgY29ycmVjdG5l
-c3Mgb2YgZXh0NCBpbm9kZS4NCj4gKwkgIEZvciBtb3JlIGluZm9ybWF0aW9uIG9uIEtVbml0IGFu
-ZCB1bml0IHRlc3RzIGluIGdlbmVyYWwgcGxlYXNlIHJlZmVyDQo+ICsJICB0byB0aGUgS1VuaXQg
-ZG9jdW1lbnRhdGlvbiBpbiBEb2N1bWVudGF0aW9uL2Rldi10b29scy9rdW5pdC8uDQo+ICsNCj4g
-KwkgIElmIHVuc3VyZSwgc2F5IE4uDQo+IGRpZmYgLS1naXQgYS9mcy9leHQ0L01ha2VmaWxlIGIv
-ZnMvZXh0NC9NYWtlZmlsZQ0KPiBpbmRleCBiMTdkZGMyMjlhYzUuLmEwNTg4ZmQyZWVhNiAxMDA2
-NDQNCj4gLS0tIGEvZnMvZXh0NC9NYWtlZmlsZQ0KPiArKysgYi9mcy9leHQ0L01ha2VmaWxlDQo+
-IEBAIC0xMyw0ICsxMyw1IEBAIGV4dDQteQk6PSBiYWxsb2MubyBiaXRtYXAubyBibG9ja192YWxp
-ZGl0eS5vIGRpci5vDQo+IGV4dDRfamJkMi5vIGV4dGVudHMubyBcDQo+IA0KPiAgZXh0NC0kKENP
-TkZJR19FWFQ0X0ZTX1BPU0lYX0FDTCkJKz0gYWNsLm8NCj4gIGV4dDQtJChDT05GSUdfRVhUNF9G
-U19TRUNVUklUWSkJCSs9IHhhdHRyX3NlY3VyaXR5Lm8NCj4gK2V4dDQtJChDT05GSUdfRVhUNF9L
-VU5JVF9URVNUUykJKz0gaW5vZGUtdGVzdC5vDQo+ICBleHQ0LSQoQ09ORklHX0ZTX1ZFUklUWSkJ
-CSs9IHZlcml0eS5vDQo+IGRpZmYgLS1naXQgYS9mcy9leHQ0L2lub2RlLXRlc3QuYyBiL2ZzL2V4
-dDQvaW5vZGUtdGVzdC5jDQo+IG5ldyBmaWxlIG1vZGUgMTAwNjQ0DQo+IGluZGV4IDAwMDAwMDAw
-MDAwMC4uNDNiYzZjYjU0N2NkDQo+IC0tLSAvZGV2L251bGwNCj4gKysrIGIvZnMvZXh0NC9pbm9k
-ZS10ZXN0LmMNCj4gQEAgLTAsMCArMSwyMjEgQEANCj4gKy8vIFNQRFgtTGljZW5zZS1JZGVudGlm
-aWVyOiBHUEwtMi4wDQo+ICsvKg0KPiArICogS1VuaXQgdGVzdCBvZiBleHQ0IGlub2RlIHRoYXQg
-dmVyaWZ5IHRoZSBzZWNvbmRzIHBhcnQgb2YgW2EvYy9tXQ0KPiArICogdGltZXN0YW1wcyBpbiBl
-eHQ0IGlub2RlIHN0cnVjdHMgYXJlIGRlY29kZWQgY29ycmVjdGx5Lg0KPiArICogVGhlc2UgdGVz
-dHMgYXJlIGRlcml2ZWQgZnJvbSB0aGUgdGFibGUgdW5kZXINCj4gKyAqIERvY3VtZW50YXRpb24v
-ZmlsZXN5c3RlbXMvZXh0NC9pbm9kZXMucnN0IElub2RlIFRpbWVzdGFtcHMNCj4gKyAqLw0KPiAr
-DQo+ICsjaW5jbHVkZSA8a3VuaXQvdGVzdC5oPg0KPiArI2luY2x1ZGUgPGxpbnV4L2tlcm5lbC5o
-Pg0KPiArI2luY2x1ZGUgPGxpbnV4L3RpbWU2NC5oPg0KPiArDQo+ICsjaW5jbHVkZSAiZXh0NC5o
-Ig0KPiArDQo+ICsvKiBiaW5hcnk6IDAwMDAwMDAwIDAwMDAwMDAwIDAwMDAwMDAwIDAwMDAwMDAw
-ICovDQo+ICsjZGVmaW5lIExPV0VSX01TQl8wIDBMDQo+ICsvKiBiaW5hcnk6IDAxMTExMTExIDEx
-MTExMTExIDExMTExMTExIDExMTExMTExICovDQo+ICsjZGVmaW5lIFVQUEVSX01TQl8wIDB4N2Zm
-ZmZmZmZMDQo+ICsvKiBiaW5hcnk6IDEwMDAwMDAwIDAwMDAwMDAwIDAwMDAwMDAwIDAwMDAwMDAw
-ICovDQo+ICsjZGVmaW5lIExPV0VSX01TQl8xICgtMHg4MDAwMDAwMEwpDQo+ICsvKiBiaW5hcnk6
-IDExMTExMTExIDExMTExMTExIDExMTExMTExIDExMTExMTExICovDQo+ICsjZGVmaW5lIFVQUEVS
-X01TQl8xICgtMUwpDQo+ICsvKiBiaW5hcnk6IDAwMTExMTExICAgMTExMTExMTEgMTExMTExMTEg
-MTExMTExMTEgKi8NCj4gKyNkZWZpbmUgTUFYX05BTk9TRUNPTkRTICgoMUwgPDwgMzApIC0gMSkN
-Cj4gKw0KPiArI2RlZmluZSBDQVNFX05BTUVfRk9STUFUICIlczogbXNiOiV4IGxvd2VyX2JvdW5k
-OiV4IGV4dHJhX2JpdHM6DQo+ICV4Ig0KPiArDQo+ICtzdHJ1Y3QgdGltZXN0YW1wX2V4cGVjdGF0
-aW9uIHsNCj4gKwljb25zdCBjaGFyICp0ZXN0X2Nhc2VfbmFtZTsNCj4gKwlzdHJ1Y3QgdGltZXNw
-ZWM2NCBleHBlY3RlZDsNCj4gKwl1MzIgZXh0cmFfYml0czsNCj4gKwlib29sIG1zYl9zZXQ7DQo+
-ICsJYm9vbCBsb3dlcl9ib3VuZDsNCj4gK307DQo+ICsNCj4gK3N0YXRpYyB0aW1lNjRfdCBnZXRf
-MzJiaXRfdGltZShjb25zdCBzdHJ1Y3QgdGltZXN0YW1wX2V4cGVjdGF0aW9uICogY29uc3QNCj4g
-dGVzdCkNCj4gK3sNCj4gKwlpZiAodGVzdC0+bXNiX3NldCkgew0KPiArCQlpZiAodGVzdC0+bG93
-ZXJfYm91bmQpDQo+ICsJCQlyZXR1cm4gTE9XRVJfTVNCXzE7DQo+ICsNCj4gKwkJcmV0dXJuIFVQ
-UEVSX01TQl8xOw0KPiArCX0NCj4gKw0KPiArCWlmICh0ZXN0LT5sb3dlcl9ib3VuZCkNCj4gKwkJ
-cmV0dXJuIExPV0VSX01TQl8wOw0KPiArCXJldHVybiBVUFBFUl9NU0JfMDsNCj4gK30NCj4gKw0K
-PiArDQo+ICtzdGF0aWMgdm9pZCBpbm9kZV90ZXN0X3h0aW1lc3RhbXBfZGVjb2Rpbmcoc3RydWN0
-IGt1bml0ICp0ZXN0KQ0KPiArew0KPiArCWNvbnN0IHN0cnVjdCB0aW1lc3RhbXBfZXhwZWN0YXRp
-b24gdGVzdF9kYXRhW10gPSB7DQo+ICsJCXsNCj4gKwkJCS50ZXN0X2Nhc2VfbmFtZSA9ICIxOTAx
-LTEyLTEzIiwNCj4gKwkJCS5tc2Jfc2V0ID0gdHJ1ZSwNCj4gKwkJCS5sb3dlcl9ib3VuZCA9IHRy
-dWUsDQo+ICsJCQkuZXh0cmFfYml0cyA9IDAsDQo+ICsJCQkuZXhwZWN0ZWQgPSB7LnR2X3NlYyA9
-IC0weDgwMDAwMDAwTEwsIC50dl9uc2VjID0gMEx9LA0KPiArCQl9LA0KPiArDQo+ICsJCXsNCj4g
-KwkJCS50ZXN0X2Nhc2VfbmFtZSA9ICIxOTY5LTEyLTMxIiwNCj4gKwkJCS5tc2Jfc2V0ID0gdHJ1
-ZSwNCj4gKwkJCS5sb3dlcl9ib3VuZCA9IGZhbHNlLA0KPiArCQkJLmV4dHJhX2JpdHMgPSAwLA0K
-PiArCQkJLmV4cGVjdGVkID0gey50dl9zZWMgPSAtMUxMLCAudHZfbnNlYyA9IDBMfSwNCj4gKwkJ
-fSwNCj4gKw0KPiArCQl7DQo+ICsJCQkudGVzdF9jYXNlX25hbWUgPSAiMTk3MC0wMS0wMSIsDQo+
-ICsJCQkubXNiX3NldCA9IGZhbHNlLA0KPiArCQkJLmxvd2VyX2JvdW5kID0gdHJ1ZSwNCj4gKwkJ
-CS5leHRyYV9iaXRzID0gMCwNCj4gKwkJCS5leHBlY3RlZCA9IHswTEwsIDBMfSwNCj4gKwkJfSwN
-Cj4gKw0KPiArCQl7DQo+ICsJCQkudGVzdF9jYXNlX25hbWUgPSAiMjAzOC0wMS0xOSIsDQo+ICsJ
-CQkubXNiX3NldCA9IGZhbHNlLA0KPiArCQkJLmxvd2VyX2JvdW5kID0gZmFsc2UsDQo+ICsJCQku
-ZXh0cmFfYml0cyA9IDAsDQo+ICsJCQkuZXhwZWN0ZWQgPSB7LnR2X3NlYyA9IDB4N2ZmZmZmZmZM
-TCwgLnR2X25zZWMgPSAwTH0sDQo+ICsJCX0sDQo+ICsNCj4gKwkJew0KPiArCQkJLnRlc3RfY2Fz
-ZV9uYW1lID0gIjIwMzgtMDEtMTkiLA0KSXQncyBxdWl0ZSBoYW5keSBpZiB0ZXN0Y2FzZSBuYW1l
-cyBjYW4gYmUgdW5pcXVlLCBhbmQgZGVzY3JpYmUgd2hhdCBpdCBpcyB0aGV5IGFyZSB0ZXN0aW5n
-Lg0KDQpJZiBzb21lb25lIHVuZmFtaWxpYXIgd2l0aCB0aGlzIHRlc3QgbG9va3MgYXQgdGhlIHJl
-c3VsdHMsIGl0J3MgbmljZSBpZiB0aGV5IGNhbg0KaW50dWl0IHdoYXQgaXQgd2FzIHRoYXQgd2Vu
-dCB3cm9uZywgYmFzZWQgb24gdGhlIHRlc3QgY2FzZSBuYW1lLg0KDQpJTUhPIHRoZXNlIG5hbWVz
-IGFyZSB0b28gc2hvcnQgYW5kIG5vdCBkZXNjcmlwdGl2ZSBlbm91Z2guDQogLS0gVGltDQoNCg0K
-PiArCQkJLm1zYl9zZXQgPSB0cnVlLA0KPiArCQkJLmxvd2VyX2JvdW5kID0gdHJ1ZSwNCj4gKwkJ
-CS5leHRyYV9iaXRzID0gMSwNCj4gKwkJCS5leHBlY3RlZCA9IHsudHZfc2VjID0gMHg4MDAwMDAw
-MExMLCAudHZfbnNlYyA9IDBMfSwNCj4gKwkJfSwNCj4gKw0KPiArCQl7DQo+ICsJCQkudGVzdF9j
-YXNlX25hbWUgPSAiMjEwNi0wMi0wNyIsDQo+ICsJCQkubXNiX3NldCA9IHRydWUsDQo+ICsJCQku
-bG93ZXJfYm91bmQgPSBmYWxzZSwNCj4gKwkJCS5leHRyYV9iaXRzID0gMSwNCj4gKwkJCS5leHBl
-Y3RlZCA9IHsudHZfc2VjID0gMHhmZmZmZmZmZkxMLCAudHZfbnNlYyA9IDBMfSwNCj4gKwkJfSwN
-Cj4gKw0KPiArCQl7DQo+ICsJCQkudGVzdF9jYXNlX25hbWUgPSAiMjEwNi0wMi0wNyIsDQo+ICsJ
-CQkubXNiX3NldCA9IGZhbHNlLA0KPiArCQkJLmxvd2VyX2JvdW5kID0gdHJ1ZSwNCj4gKwkJCS5l
-eHRyYV9iaXRzID0gMSwNCj4gKwkJCS5leHBlY3RlZCA9IHsudHZfc2VjID0gMHgxMDAwMDAwMDBM
-TCwgLnR2X25zZWMgPSAwTH0sDQo+ICsJCX0sDQo+ICsNCj4gKwkJew0KPiArCQkJLnRlc3RfY2Fz
-ZV9uYW1lID0gIjIxNzQtMDItMjUiLA0KPiArCQkJLm1zYl9zZXQgPSBmYWxzZSwNCj4gKwkJCS5s
-b3dlcl9ib3VuZCA9IGZhbHNlLA0KPiArCQkJLmV4dHJhX2JpdHMgPSAxLA0KPiArCQkJLmV4cGVj
-dGVkID0gey50dl9zZWMgPSAweDE3ZmZmZmZmZkxMLCAudHZfbnNlYyA9IDBMfSwNCj4gKwkJfSwN
-Cj4gKw0KPiArCQl7DQo+ICsJCQkudGVzdF9jYXNlX25hbWUgPSAiMjE3NC0wMi0yNSIsDQo+ICsJ
-CQkubXNiX3NldCA9IHRydWUsDQo+ICsJCQkubG93ZXJfYm91bmQgPSB0cnVlLA0KPiArCQkJLmV4
-dHJhX2JpdHMgPSAgMiwNCj4gKwkJCS5leHBlY3RlZCA9IHsudHZfc2VjID0gMHgxODAwMDAwMDBM
-TCwgLnR2X25zZWMgPSAwTH0sDQo+ICsJCX0sDQo+ICsNCj4gKwkJew0KPiArCQkJLnRlc3RfY2Fz
-ZV9uYW1lID0gIjIyNDItMDMtMTYiLA0KPiArCQkJLm1zYl9zZXQgPSB0cnVlLA0KPiArCQkJLmxv
-d2VyX2JvdW5kID0gZmFsc2UsDQo+ICsJCQkuZXh0cmFfYml0cyA9IDIsDQo+ICsJCQkuZXhwZWN0
-ZWQgPSB7LnR2X3NlYyA9IDB4MWZmZmZmZmZmTEwsIC50dl9uc2VjID0gMEx9LA0KPiArCQl9LA0K
-PiArDQo+ICsJCXsNCj4gKwkJCS50ZXN0X2Nhc2VfbmFtZSA9ICIyMjQyLTAzLTE2IiwNCj4gKwkJ
-CS5tc2Jfc2V0ID0gZmFsc2UsDQo+ICsJCQkubG93ZXJfYm91bmQgPSB0cnVlLA0KPiArCQkJLmV4
-dHJhX2JpdHMgPSAyLA0KPiArCQkJLmV4cGVjdGVkID0gey50dl9zZWMgPSAweDIwMDAwMDAwMExM
-LCAudHZfbnNlYyA9IDBMfSwNCj4gKwkJfSwNCj4gKw0KPiArCQl7DQo+ICsJCQkudGVzdF9jYXNl
-X25hbWUgPSAiIDIzMTAtMDQtMDQiLA0KPiArCQkJLm1zYl9zZXQgPSBmYWxzZSwNCj4gKwkJCS5s
-b3dlcl9ib3VuZCA9IGZhbHNlLA0KPiArCQkJLmV4dHJhX2JpdHMgPSAyLA0KPiArCQkJLmV4cGVj
-dGVkID0gey50dl9zZWMgPSAweDI3ZmZmZmZmZkxMLCAudHZfbnNlYyA9IDBMfSwNCj4gKwkJfSwN
-Cj4gKw0KPiArCQl7DQo+ICsJCQkudGVzdF9jYXNlX25hbWUgPSAiIDIzMTAtMDQtMDQgMDA6MDA6
-MDAuMSIsDQo+ICsJCQkubXNiX3NldCA9IGZhbHNlLA0KPiArCQkJLmxvd2VyX2JvdW5kID0gZmFs
-c2UsDQo+ICsJCQkuZXh0cmFfYml0cyA9IDYsDQo+ICsJCQkuZXhwZWN0ZWQgPSB7LnR2X3NlYyA9
-IDB4MjdmZmZmZmZmTEwsIC50dl9uc2VjID0gMUx9LA0KPiArCQl9LA0KPiArDQo+ICsJCXsNCj4g
-KwkJCS50ZXN0X2Nhc2VfbmFtZSA9ICIyMzc4LTA0LTIyDQo+IDAwOjAwOjAwLk1BWF9OU0VDIiwN
-Cj4gKwkJCS5tc2Jfc2V0ID0gZmFsc2UsDQo+ICsJCQkubG93ZXJfYm91bmQgPSB0cnVlLA0KPiAr
-CQkJLmV4dHJhX2JpdHMgPSAweEZGRkZGRkZGLA0KPiArCQkJLmV4cGVjdGVkID0gey50dl9zZWMg
-PSAweDMwMDAwMDAwMExMLA0KPiArCQkJCSAgICAgLnR2X25zZWMgPSBNQVhfTkFOT1NFQ09ORFN9
-LA0KPiArCQl9LA0KPiArDQo+ICsJCXsNCj4gKwkJCS50ZXN0X2Nhc2VfbmFtZSA9ICIyMzc4LTA0
-LTIyIiwNCj4gKwkJCS5tc2Jfc2V0ID0gZmFsc2UsDQo+ICsJCQkubG93ZXJfYm91bmQgPSB0cnVl
-LA0KPiArCQkJLmV4dHJhX2JpdHMgPSAzLA0KPiArCQkJLmV4cGVjdGVkID0gey50dl9zZWMgPSAw
-eDMwMDAwMDAwMExMLCAudHZfbnNlYyA9IDBMfSwNCj4gKwkJfSwNCj4gKw0KPiArCQl7DQo+ICsJ
-CQkudGVzdF9jYXNlX25hbWUgPSAiMjQ0Ni0wNS0xMCIsDQo+ICsJCQkubXNiX3NldCA9IGZhbHNl
-LA0KPiArCQkJLmxvd2VyX2JvdW5kID0gZmFsc2UsDQo+ICsJCQkuZXh0cmFfYml0cyA9IDMsDQo+
-ICsJCQkuZXhwZWN0ZWQgPSB7LnR2X3NlYyA9IDB4MzdmZmZmZmZmTEwsIC50dl9uc2VjID0gMEx9
-LA0KPiArCQl9DQo+ICsJfTsNCj4gKw0KPiArCXN0cnVjdCB0aW1lc3BlYzY0IHRpbWVzdGFtcDsN
-Cj4gKwlpbnQgaTsNCj4gKw0KPiArCWZvciAoaSA9IDA7IGkgPCBBUlJBWV9TSVpFKHRlc3RfZGF0
-YSk7ICsraSkgew0KPiArCQl0aW1lc3RhbXAudHZfc2VjID0gZ2V0XzMyYml0X3RpbWUoJnRlc3Rf
-ZGF0YVtpXSk7DQo+ICsJCWV4dDRfZGVjb2RlX2V4dHJhX3RpbWUoJnRpbWVzdGFtcCwNCj4gKwkJ
-CQkgICAgICAgY3B1X3RvX2xlMzIodGVzdF9kYXRhW2ldLmV4dHJhX2JpdHMpKTsNCj4gKw0KPiAr
-CQlLVU5JVF9FWFBFQ1RfRVFfTVNHKHRlc3QsDQo+ICsJCQkJICAgIHRlc3RfZGF0YVtpXS5leHBl
-Y3RlZC50dl9zZWMsDQo+ICsJCQkJICAgIHRpbWVzdGFtcC50dl9zZWMsDQo+ICsJCQkJICAgIENB
-U0VfTkFNRV9GT1JNQVQsDQo+ICsJCQkJICAgIHRlc3RfZGF0YVtpXS50ZXN0X2Nhc2VfbmFtZSwN
-Cj4gKwkJCQkgICAgdGVzdF9kYXRhW2ldLm1zYl9zZXQsDQo+ICsJCQkJICAgIHRlc3RfZGF0YVtp
-XS5sb3dlcl9ib3VuZCwNCj4gKwkJCQkgICAgdGVzdF9kYXRhW2ldLmV4dHJhX2JpdHMpOw0KPiAr
-CQlLVU5JVF9FWFBFQ1RfRVFfTVNHKHRlc3QsDQo+ICsJCQkJICAgIHRlc3RfZGF0YVtpXS5leHBl
-Y3RlZC50dl9uc2VjLA0KPiArCQkJCSAgICB0aW1lc3RhbXAudHZfbnNlYywNCj4gKwkJCQkgICAg
-Q0FTRV9OQU1FX0ZPUk1BVCwNCj4gKwkJCQkgICAgdGVzdF9kYXRhW2ldLnRlc3RfY2FzZV9uYW1l
-LA0KPiArCQkJCSAgICB0ZXN0X2RhdGFbaV0ubXNiX3NldCwNCj4gKwkJCQkgICAgdGVzdF9kYXRh
-W2ldLmxvd2VyX2JvdW5kLA0KPiArCQkJCSAgICB0ZXN0X2RhdGFbaV0uZXh0cmFfYml0cyk7DQo+
-ICsJfQ0KPiArfQ0KPiArDQo+ICtzdGF0aWMgc3RydWN0IGt1bml0X2Nhc2UgZXh0NF9pbm9kZV90
-ZXN0X2Nhc2VzW10gPSB7DQo+ICsJS1VOSVRfQ0FTRShpbm9kZV90ZXN0X3h0aW1lc3RhbXBfZGVj
-b2RpbmcpLA0KPiArCXt9DQo+ICt9Ow0KPiArDQo+ICtzdGF0aWMgc3RydWN0IGt1bml0X3N1aXRl
-IGV4dDRfaW5vZGVfdGVzdF9zdWl0ZSA9IHsNCj4gKwkubmFtZSA9ICJleHQ0X2lub2RlX3Rlc3Qi
-LA0KPiArCS50ZXN0X2Nhc2VzID0gZXh0NF9pbm9kZV90ZXN0X2Nhc2VzLA0KPiArfTsNCj4gKw0K
-PiAra3VuaXRfdGVzdF9zdWl0ZShleHQ0X2lub2RlX3Rlc3Rfc3VpdGUpOw0KPiAtLQ0KPiAyLjIz
-LjAuNzAwLmc1NmNmNzY3YmRiLWdvb2cNCg==
+This patchset is being developed here:
+  <https://github.com/cyphar/linux/tree/openat2/master>
+
+Patch changelog:
+ v14:
+  * The magic-link changes (and O_EMPTYPATH) have been dropped from this series
+    -- they will be developed and sent separately. The main reason is that we
+    need to restrict things other than open(2) (examples include truncate(2) as
+    well as mount(MS_BIND)). This will require a fair amount of extra work, and
+    there's no point stalling openat2(2) for that work to be completed.
+  * Minor rework of 'struct open_how':
+    * To avoid future headaches, make it a non-const argument.
+    * Expand ->flags and ->resolve to 64-bit fields to allow for more flag
+      extensions without needing to add separate fields too early. This
+      requires adding a bit of explicit padding (32 bits) to avoid userspace
+      putting garbage in the alignment padding -- this can be repurposed for
+      future extensions.
+    * upgrade_mask is dropped (and will be a separate field when we add it
+      again in the future) to avoid userspace foot-guns.
+    * Expand -EINVAL checks in build_open_flags(). Rather than silently
+      ignoring silly flag combinations (such as O_TMPFILE|O_PATH or
+      O_PATH|<most flags>), give an -EINVAL. All of the silent ignore semantics
+      were added to open(2) because we couldn't return -EINVAL -- but we can
+      now!
+      * open(2) and openat(2) clean up their flags before passing them to
+        build_open_flags(), so all mixed flags will continue to work. There is
+        one exception which is (O_PATH|O_TMPFILE) -- this is no longer
+        permitted (as far as I can tell this appears to be a bug, and there are
+        no userspace users that I've hit after running this code for a few
+        days). If it turns out that userspace does depend on (O_PATH|O_TMPFILE)
+        working, we can only disallow it for openat2(2).
+  * Don't zero out nd->root in complete_walk() for RCU-walk if we're doing a
+    scoped-lookup (this prevents a needless REF-walk retry).
+  * Attempt all tests on kernels that don't have openat2(2), rather than just
+    skipping everything.
+ v13: <https://lore.kernel.org/lkml/20190930183316.10190-1-cyphar@cyphar.com/>
+ v12: <https://lore.kernel.org/lkml/20190904201933.10736-1-cyphar@cyphar.com/>
+ v11: <https://lore.kernel.org/lkml/20190820033406.29796-1-cyphar@cyphar.com/>
+      <https://lore.kernel.org/lkml/20190728010207.9781-1-cyphar@cyphar.com/>
+ v10: <https://lore.kernel.org/lkml/20190719164225.27083-1-cyphar@cyphar.com/>
+ v09: <https://lore.kernel.org/lkml/20190706145737.5299-1-cyphar@cyphar.com/>
+ v08: <https://lore.kernel.org/lkml/20190520133305.11925-1-cyphar@cyphar.com/>
+ v07: <https://lore.kernel.org/lkml/20190507164317.13562-1-cyphar@cyphar.com/>
+ v06: <https://lore.kernel.org/lkml/20190506165439.9155-1-cyphar@cyphar.com/>
+ v05: <https://lore.kernel.org/lkml/20190320143717.2523-1-cyphar@cyphar.com/>
+ v04: <https://lore.kernel.org/lkml/20181112142654.341-1-cyphar@cyphar.com/>
+ v03: <https://lore.kernel.org/lkml/20181009070230.12884-1-cyphar@cyphar.com/>
+ v02: <https://lore.kernel.org/lkml/20181009065300.11053-1-cyphar@cyphar.com/>
+ v01: <https://lore.kernel.org/lkml/20180929103453.12025-1-cyphar@cyphar.com/>
+
+For a very long time, extending openat(2) with new features has been
+incredibly frustrating. This stems from the fact that openat(2) is
+possibly the most famous counter-example to the mantra "don't silently
+accept garbage from userspace" -- it doesn't check whether unknown flags
+are present[1].
+
+This means that (generally) the addition of new flags to openat(2) has
+been fraught with backwards-compatibility issues (O_TMPFILE has to be
+defined as __O_TMPFILE|O_DIRECTORY|[O_RDWR or O_WRONLY] to ensure old
+kernels gave errors, since it's insecure to silently ignore the
+flag[2]). All new security-related flags therefore have a tough road to
+being added to openat(2).
+
+Furthermore, the need for some sort of control over VFS's path resolution (to
+avoid malicious paths resulting in inadvertent breakouts) has been a very
+long-standing desire of many userspace applications. This patchset is a revival
+of Al Viro's old AT_NO_JUMPS[3] patchset (which was a variant of David
+Drysdale's O_BENEATH patchset[4] which was a spin-off of the Capsicum
+project[5]) with a few additions and changes made based on the previous
+discussion within [6] as well as others I felt were useful.
+
+In line with the conclusions of the original discussion of AT_NO_JUMPS, the
+flag has been split up into separate flags. However, instead of being an
+openat(2) flag it is provided through a new syscall openat2(2) which provides
+several other improvements to the openat(2) interface (see the patch
+description for more details). The following new LOOKUP_* flags are added:
+
+  * LOOKUP_NO_XDEV blocks all mountpoint crossings (upwards, downwards,
+    or through absolute links). Absolute pathnames alone in openat(2) do not
+    trigger this. Magic-link traversal which implies a vfsmount jump is also
+    blocked (though magic-link jumps on the same vfsmount are permitted).
+
+  * LOOKUP_NO_MAGICLINKS blocks resolution through /proc/$pid/fd-style
+    links. This is done by blocking the usage of nd_jump_link() during
+    resolution in a filesystem. The term "magic-links" is used to match
+    with the only reference to these links in Documentation/, but I'm
+    happy to change the name.
+
+    It should be noted that this is different to the scope of
+    ~LOOKUP_FOLLOW in that it applies to all path components. However,
+    you can do openat2(NO_FOLLOW|NO_MAGICLINKS) on a magic-link and it
+    will *not* fail (assuming that no parent component was a
+    magic-link), and you will have an fd for the magic-link.
+
+    In order to correctly detect magic-links, the introduction of a new
+    LOOKUP_MAGICLINK_JUMPED state flag was required.
+
+  * LOOKUP_BENEATH disallows escapes to outside the starting dirfd's
+    tree, using techniques such as ".." or absolute links. Absolute
+    paths in openat(2) are also disallowed. Conceptually this flag is to
+    ensure you "stay below" a certain point in the filesystem tree --
+    but this requires some additional to protect against various races
+    that would allow escape using "..".
+
+    Currently LOOKUP_BENEATH implies LOOKUP_NO_MAGICLINKS, because it
+    can trivially beam you around the filesystem (breaking the
+    protection). In future, there might be similar safety checks done as
+    in LOOKUP_IN_ROOT, but that requires more discussion.
+
+In addition, two new flags are added that expand on the above ideas:
+
+  * LOOKUP_NO_SYMLINKS does what it says on the tin. No symlink
+    resolution is allowed at all, including magic-links. Just as with
+    LOOKUP_NO_MAGICLINKS this can still be used with NOFOLLOW to open an
+    fd for the symlink as long as no parent path had a symlink
+    component.
+
+  * LOOKUP_IN_ROOT is an extension of LOOKUP_BENEATH that, rather than
+    blocking attempts to move past the root, forces all such movements
+    to be scoped to the starting point. This provides chroot(2)-like
+    protection but without the cost of a chroot(2) for each filesystem
+    operation, as well as being safe against race attacks that chroot(2)
+    is not.
+
+    If a race is detected (as with LOOKUP_BENEATH) then an error is
+    generated, and similar to LOOKUP_BENEATH it is not permitted to cross
+    magic-links with LOOKUP_IN_ROOT.
+
+    The primary need for this is from container runtimes, which
+    currently need to do symlink scoping in userspace[7] when opening
+    paths in a potentially malicious container. There is a long list of
+    CVEs that could have bene mitigated by having RESOLVE_THIS_ROOT
+    (such as CVE-2017-1002101, CVE-2017-1002102, CVE-2018-15664, and
+    CVE-2019-5736, just to name a few).
+
+In order to make all of the above more usable, I'm working on
+libpathrs[8] which is a C-friendly library for safe path resolution. It
+features a userspace-emulated backend if the kernel doesn't support
+openat2(2). Hopefully we can get userspace to switch to using it, and
+thus get openat2(2) support for free once it's ready.
+
+[1]: https://lwn.net/Articles/588444/
+[2]: https://lore.kernel.org/lkml/CA+55aFyyxJL1LyXZeBsf2ypriraj5ut1XkNDsunRBqgVjZU_6Q@mail.gmail.com
+[3]: https://lore.kernel.org/lkml/20170429220414.GT29622@ZenIV.linux.org.uk
+[4]: https://lore.kernel.org/lkml/1415094884-18349-1-git-send-email-drysdale@google.com
+[5]: https://lore.kernel.org/lkml/1404124096-21445-1-git-send-email-drysdale@google.com
+[6]: https://lwn.net/Articles/723057/
+[7]: https://github.com/cyphar/filepath-securejoin
+[8]: https://github.com/openSUSE/libpathrs
+
+The current draft of the openat2(2) man-page is included below.
+
+--8<---------------------------------------------------------------------------
+OPENAT2(2)                          Linux Programmer's Manual                          OPENAT2(2)
+
+NAME
+       openat2 - open and possibly create a file (extended)
+
+SYNOPSIS
+       #include <sys/types.h>
+       #include <sys/stat.h>
+       #include <fcntl.h>
+
+       int openat2(int dirfd, const char *pathname, struct open_how *how, size_t size);
+
+       Note: There is no glibc wrapper for this system call; see NOTES.
+
+DESCRIPTION
+       The  openat2()  system  call  opens the file specified by pathname.  If the specified file
+       does not exist, it may optionally (if O_CREAT is specified in  how.flags)  be  created  by
+       openat2().
+
+       As  with  openat(2),  if  pathname  is  relative,  then  it is interpreted relative to the
+       directory referred to by the file descriptor dirfd (or the current  working  directory  of
+       the  calling  process,  if dirfd is the special value AT_FDCWD.)  If pathname is absolute,
+       then dirfd is ignored (unless how.resolve contains RESOLVE_IN_ROOT, in which case pathname
+       is resolved relative to dirfd.)
+
+       The  openat2()  system  call  is  an extension of openat(2) and provides a superset of its
+       functionality.  Rather than taking a single flag argument, an extensible  structure  (how)
+       is  passed  instead  to  allow  for  future extensions.  size must be set to sizeof(struct
+       open_how), to facilitate future extensions (see the "Extensibility" section of  the  NOTES
+       for more detail on how extensions are handled.)
+
+   The open_how structure
+       The following structure indicates how pathname should be opened, and acts as a superset of
+       the flag and mode arguments to openat(2).
+
+           struct open_how {
+               __aligned_u64 flags;         /* O_* flags. */
+               __u16         mode;          /* Mode for O_{CREAT,TMPFILE}. */
+               __u16         __padding[3];  /* Must be zeroed. */
+               __aligned_u64 resolve;       /* RESOLVE_* flags. */
+           };
+
+       Any future extensions to openat2() will be implemented as new fields appended to the above
+       structure (or through reuse of pre-existing padding space), with the zero value of the new
+       fields acting as though the extension were not present.
+
+       The meaning of each field is as follows:
+
+              flags
+                     The file creation and status flags to use for this operation.   All  of  the
+                     O_* flags defined for openat(2) are valid openat2() flag values.
+
+                     Unlike openat(2), it is an error to provide openat2() unknown or conflicting
+                     flags in flags.
+
+              mode
+                     File mode for the new file, with identical semantics to the mode argument to
+                     openat(2).   However,  unlike openat(2), it is an error to provide openat2()
+                     with a mode which contains bits other than 0777.
+
+                     It is an error to provide openat2()  a  non-zero  mode  if  flags  does  not
+                     contain O_CREAT or O_TMPFILE.
+
+              resolve
+                     Change   how   the   components   of   pathname   will   be   resolved  (see
+                     path_resolution(7) for background information.)  The primary  use  case  for
+                     these flags is to allow trusted programs to restrict how untrusted paths (or
+                     paths inside untrusted directories) are resolved.  The full list of  resolve
+                     flags is given below.
+
+                     RESOLVE_NO_XDEV
+                            Disallow  traversal of mount points during path resolution (including
+                            all bind mounts).
+
+                            Users of this flag  are  encouraged  to  make  its  use  configurable
+                            (unless  it  is used for a specific security purpose), as bind mounts
+                            are very widely used by end-users.  Setting this flag indiscrimnately
+                            for   all  uses  of  openat2()  may  result  in  spurious  errors  on
+                            previously-functional systems.
+
+                     RESOLVE_NO_SYMLINKS
+                            Disallow resolution of symbolic links during path  resolution.   This
+                            option implies RESOLVE_NO_MAGICLINKS.
+
+                            If the trailing component is a symbolic link, and flags contains both
+                            O_PATH and O_NOFOLLOW, then an O_PATH file descriptor referencing the
+                            symbolic link will be returned.
+
+                            Users  of  this  flag  are  encouraged  to  make its use configurable
+                            (unless it is used for a  specific  security  purpose),  as  symbolic
+                            links   are  very  widely  used  by  end-users.   Setting  this  flag
+                            indiscrimnately for all uses of  openat2()  may  result  in  spurious
+                            errors on previously-functional systems.
+
+                     RESOLVE_NO_MAGICLINKS
+                            Disallow all magic link resolution during path resolution.
+
+                            If  the  trailing  component is a magic link, and flags contains both
+                            O_PATH and O_NOFOLLOW, then an O_PATH file descriptor referencing the
+                            magic link will be returned.
+
+                            Magic-links  are  symbolic  link-like  objects  that are most notably
+                            found   in   proc(5)   (examples    include    /proc/[pid]/exe    and
+                            /proc/[pid]/fd/*.)   Due  to  the  potential  danger  of  unknowingly
+                            opening these magic links, it may be preferable for users to  disable
+                            their resolution entirely (see symboliclink(7) for more details.)
+
+                     RESOLVE_BENEATH
+                            Do  not permit the path resolution to succeed if any component of the
+                            resolution is not a descendant of the directory indicated  by  dirfd.
+                            This  results  in  absolute  symbolic  links  (and absolute values of
+                            pathname) to be rejected.
+
+                            Currently, this flag also disables magic link  resolution.   However,
+                            this  may change in the future.  The caller should explicitly specify
+                            RESOLVE_NO_MAGICLINKS to ensure that magic links are not resolved.
+
+                     RESOLVE_IN_ROOT
+                            Treat dirfd as the root directory while resolving pathname (as though
+                            the  user  called  chroot(2)  with  dirfd as the argument.)  Absolute
+                            symbolic links and ".." path components will be scoped to dirfd.   If
+                            pathname is an absolute path, it is also treated relative to dirfd.
+
+                            However,   unlike   chroot(2)  (which  changes  the  filesystem  root
+                            permanently for a  process),  RESOLVE_IN_ROOT  allows  a  program  to
+                            efficiently restrict path resolution for only certain operations.  It
+                            also has several hardening features (such detecting  escape  attempts
+                            during ..  resolution) which chroot(2) does not.
+
+                            Currently,  this  flag also disables magic link resolution.  However,
+                            this may change in the future.  The caller should explicitly  specify
+                            RESOLVE_NO_MAGICLINKS to ensure that magic links are not resolved.
+
+                     It is an error to provide openat2() unknown flags in resolve.
+
+RETURN VALUE
+       On success, a new file descriptor is returned.  On error, -1 is returned, and errno is set
+       appropriately.
+
+ERRORS
+       The set of errors returned by openat2() includes all of the errors returned by  openat(2),
+       as well as the following additional errors:
+
+       EINVAL An unknown flag or invalid value was specified in how.
+
+       EINVAL mode is non-zero, but flags does not contain O_CREAT or O_TMPFILE.
+
+       EINVAL size was smaller than any known version of struct open_how.
+
+       E2BIG  An  extension  was specified in how, which the current kernel does not support (see
+              the "Extensibility" section of the NOTES for more  detail  on  how  extensions  are
+              handled.)
+
+       EAGAIN resolve  contains  either  RESOLVE_IN_ROOT or RESOLVE_BENEATH, and the kernel could
+              not ensure that a ".."  component  didn't  escape  (due  to  a  race  condition  or
+              potential attack.)  Callers may choose to retry the openat2() call.
+
+       EXDEV  resolve  contains either RESOLVE_IN_ROOT or RESOLVE_BENEATH, and an escape from the
+              root during path resolution was detected.
+
+       EXDEV  resolve contains RESOLVE_NO_XDEV, and a path component attempted to cross  a  mount
+              point.
+
+       ELOOP  resolve contains RESOLVE_NO_SYMLINKS, and one of the path components was a symbolic
+              link (or magic link).
+
+       ELOOP  resolve contains RESOLVE_NO_MAGICLINKS, and one of the path components was a  magic
+              link.
+
+VERSIONS
+       openat2() was added to Linux in kernel 5.FOO.
+
+CONFORMING TO
+       This system call is Linux-specific.
+
+       The semantics of RESOLVE_BENEATH were modelled after FreeBSD's O_BENEATH.
+
+NOTES
+       Glibc does not provide a wrapper for this system call; call it using systemcall(2).
+
+   Extensibility
+       In order to allow for struct open_how to be extended in future kernel revisions, openat2()
+       requires userspace to specify the size of struct open_how structure they are passing.   By
+       providing  this  information,  it  is possible for openat2() to provide both forwards- and
+       backwards-compatibility — with size acting as an  implicit  version  number  (because  new
+       extension  fields  will  always  be  appended,  the  size  will  always  increase.)   This
+       extensibility design is very similar  to  other  system  calls  such  as  perf_setattr(2),
+       perf_event_open(2), and clone(3).
+
+       If  we let usize be the size of the structure according to userspace and ksize be the size
+       of the structure which the kernel supports, then there are only three cases to consider:
+
+              *  If ksize equals usize, then there is no version mismatch and  how  can  be  used
+                 verbatim.
+
+              *  If  ksize  is  larger  than  usize,  then  there  are some extensions the kernel
+                 supports which the userspace program is unaware of.  Because all extensions must
+                 have their zero values be a no-op, the kernel treats all of the extension fields
+                 not  set  by  userspace  to  have  zero  values.    This   provides   backwards-
+                 compatibility.
+
+              *  If  ksize  is  smaller  than  usize,  then  there  are some extensions which the
+                 userspace program is aware of but the kernel  does  not  support.   Because  all
+                 extensions  must have their zero values be a no-op, the kernel can safely ignore
+                 the unsupported extension fields if  they  are  all-zero.   If  any  unsupported
+                 extension  fields  are  non-zero, then -1 is returned and errno is set to E2BIG.
+                 This provides forwards-compatibility.
+
+       Therefore, most userspace  programs  will  not  need  to  have  any  special  handling  of
+       extensions.   However,  if  a  userspace  program  wishes to determine what extensions the
+       running kernel supports, they may conduct a binary search on size  (to  find  the  largest
+       value which doesn't produce an error of E2BIG.)
+
+SEE ALSO
+       openat(2), path_resolution(7), symboliclink(7)
+
+Linux                                       2019-10-10                                 OPENAT2(2)
+--8<---------------------------------------------------------------------------
+
+Aleksa Sarai (6):
+  namei: O_BENEATH-style resolution restriction flags
+  namei: LOOKUP_IN_ROOT: chroot-like path resolution
+  namei: permit ".." resolution with LOOKUP_{IN_ROOT,BENEATH}
+  open: introduce openat2(2) syscall
+  selftests: add openat2(2) selftests
+  Documentation: path-lookup: mention LOOKUP_MAGICLINK_JUMPED
+
+ CREDITS                                       |   4 +-
+ Documentation/filesystems/path-lookup.rst     |  18 +-
+ arch/alpha/kernel/syscalls/syscall.tbl        |   1 +
+ arch/arm/tools/syscall.tbl                    |   1 +
+ arch/arm64/include/asm/unistd.h               |   2 +-
+ arch/arm64/include/asm/unistd32.h             |   2 +
+ arch/ia64/kernel/syscalls/syscall.tbl         |   1 +
+ arch/m68k/kernel/syscalls/syscall.tbl         |   1 +
+ arch/microblaze/kernel/syscalls/syscall.tbl   |   1 +
+ arch/mips/kernel/syscalls/syscall_n32.tbl     |   1 +
+ arch/mips/kernel/syscalls/syscall_n64.tbl     |   1 +
+ arch/mips/kernel/syscalls/syscall_o32.tbl     |   1 +
+ arch/parisc/kernel/syscalls/syscall.tbl       |   1 +
+ arch/powerpc/kernel/syscalls/syscall.tbl      |   1 +
+ arch/s390/kernel/syscalls/syscall.tbl         |   1 +
+ arch/sh/kernel/syscalls/syscall.tbl           |   1 +
+ arch/sparc/kernel/syscalls/syscall.tbl        |   1 +
+ arch/x86/entry/syscalls/syscall_32.tbl        |   1 +
+ arch/x86/entry/syscalls/syscall_64.tbl        |   1 +
+ arch/xtensa/kernel/syscalls/syscall.tbl       |   1 +
+ fs/namei.c                                    | 167 +++++-
+ fs/open.c                                     | 154 ++++--
+ include/linux/fcntl.h                         |  12 +-
+ include/linux/namei.h                         |  12 +
+ include/linux/syscalls.h                      |   3 +
+ include/uapi/asm-generic/unistd.h             |   5 +-
+ include/uapi/linux/fcntl.h                    |  41 ++
+ tools/testing/selftests/Makefile              |   1 +
+ tools/testing/selftests/openat2/.gitignore    |   1 +
+ tools/testing/selftests/openat2/Makefile      |   8 +
+ tools/testing/selftests/openat2/helpers.c     | 109 ++++
+ tools/testing/selftests/openat2/helpers.h     | 107 ++++
+ .../testing/selftests/openat2/openat2_test.c  | 297 ++++++++++
+ .../selftests/openat2/rename_attack_test.c    | 160 ++++++
+ .../testing/selftests/openat2/resolve_test.c  | 523 ++++++++++++++++++
+ 35 files changed, 1571 insertions(+), 71 deletions(-)
+ create mode 100644 tools/testing/selftests/openat2/.gitignore
+ create mode 100644 tools/testing/selftests/openat2/Makefile
+ create mode 100644 tools/testing/selftests/openat2/helpers.c
+ create mode 100644 tools/testing/selftests/openat2/helpers.h
+ create mode 100644 tools/testing/selftests/openat2/openat2_test.c
+ create mode 100644 tools/testing/selftests/openat2/rename_attack_test.c
+ create mode 100644 tools/testing/selftests/openat2/resolve_test.c
+
+-- 
+2.23.0
+
