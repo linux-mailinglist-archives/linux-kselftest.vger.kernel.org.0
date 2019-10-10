@@ -2,78 +2,103 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EB01D2AFE
-	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Oct 2019 15:18:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 213BFD2B2B
+	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Oct 2019 15:22:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388278AbfJJNRo (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 10 Oct 2019 09:17:44 -0400
-Received: from mail-ot1-f68.google.com ([209.85.210.68]:43992 "EHLO
-        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388034AbfJJNRn (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 10 Oct 2019 09:17:43 -0400
-Received: by mail-ot1-f68.google.com with SMTP id o44so4795035ota.10
-        for <linux-kselftest@vger.kernel.org>; Thu, 10 Oct 2019 06:17:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ub-ac-id.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=QTZIdVmjWEaVgfwGRupI4vAqJVGET3VIX90hz2R16m0=;
-        b=kbDD0ETnfb+9T5ky4afnuU19WL5B3TgSTtrvr8/78l52RfSJ/bD7cjcm8C45XsJ4wr
-         kY8zUv/ms1sLDr56E/0rqAcpldgbTirzVsO1TqrlTRt5AL5IhxusLfWbWkCQZqSDApog
-         xVZixZPZF5pv+wD9wYHHFszyBuRJ0Z0/71+2E/SGgHwnMzv66/86w9uplcX1z0grTv9p
-         1TYZ7MtIagYr+hnMPgyspL8CH18dkY1RexU6NSgr6L6/lGHi7jHNMmmGOoiBuh2azqNd
-         aWHFVXbx5cxjkbX5kJe7PAp4IU2wf06fogqa+YoO9ylF7jna+POCU+xNsHXT6R2wFQg9
-         YqYQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=QTZIdVmjWEaVgfwGRupI4vAqJVGET3VIX90hz2R16m0=;
-        b=UwkaiM1zxfsGzCJDVWcjoYMONA30Kw46g0UMcdG5sd/Q8dcaIhXA241qSJk/fZ6k5G
-         j6N7RNlh2Renw+i123vm7pcMvJhBoGVRLft3VbIPfk22m89khBje9ybV2/nnSRXMf973
-         atQvOck/ZUv5Al32p7L7o3ZPMMY0YsrbQAHCI4FJkq8aui55PvyUlCSTQjZqOwDXAZUI
-         uoPuCcN1o474dI3aNH26fN+GEpPXKc1zCy1ZNoRDUqjpw+pAkYdjG0HKbstqA8QJ8N0z
-         wCgvAWmiXOrdBaFjp/Od56nDB4+pt9uSY8Otp/pc8O5kPu99q+q3xJJih14TLpSbL/Va
-         uxvA==
-X-Gm-Message-State: APjAAAVcz3HpQaDtRt8MN83X5eX2ueIogwnW9cZGZhbspxt3pk6lbCB+
-        CA+3BFrpAy/WUpz/q1cac7H0RD1T5+VGPqL+0AmI
-X-Google-Smtp-Source: APXvYqwe5B6z/3dUuNDQtQ0n2oQYOsdY3HQR3dkIin1gqVhu0NNteov05tKzv4DhJBBR4bjK2RG7Phnj6WUHoBrkRYc=
-X-Received: by 2002:a05:6830:1103:: with SMTP id w3mr7909437otq.312.1570713462861;
- Thu, 10 Oct 2019 06:17:42 -0700 (PDT)
+        id S2388130AbfJJNWx (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 10 Oct 2019 09:22:53 -0400
+Received: from mx2.suse.de ([195.135.220.15]:44396 "EHLO mx1.suse.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S2388099AbfJJNWx (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 10 Oct 2019 09:22:53 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx1.suse.de (Postfix) with ESMTP id 717F5AED6;
+        Thu, 10 Oct 2019 13:22:51 +0000 (UTC)
+Date:   Thu, 10 Oct 2019 15:22:49 +0200
+From:   Cyril Hrubis <chrubis@suse.cz>
+To:     Dmitry Vyukov <dvyukov@google.com>
+Cc:     Richard Palethorpe <richard.palethorpe@suse.com>,
+        syzkaller <syzkaller@googlegroups.com>, kernelci@groups.io,
+        shuah <shuah@kernel.org>, ltp@lists.linux.it,
+        George Kennedy <george.kennedy@oracle.com>,
+        Cyril Hrubis <chrubis@suse.com>,
+        "open list : KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        automated-testing@yoctoproject.org
+Subject: Re: [RFC PATCH] LTP Wrapper for Syzkaller reproducers
+Message-ID: <20191010132249.GB9416@rei.lan>
+References: <20191009142446.6997-1-rpalethorpe@suse.com>
+ <CACT4Y+b0tTAQ0r_2gCVjjRh--Xwv=aLzh6MY=ciXMMrK+cAQsA@mail.gmail.com>
+ <20191009145416.GA5014@rei.lan>
+ <CACT4Y+ZL8ocQPpwR-_8+0PdF=r3AkFZKvOR==+P0y0GF67w1Vg@mail.gmail.com>
+ <20191009180447.GD15291@rei.lan>
+ <CACT4Y+ZABX2z4Lxrvokf5DHz351xTys-gJPNhFjP+Zx6Qd2zsg@mail.gmail.com>
+ <20191010093011.GA2508@rei.lan>
+ <CACT4Y+ZARc3gK9rweQnLr26Aa_8j9OrpAs-wfTVP2owqmXm+kQ@mail.gmail.com>
 MIME-Version: 1.0
-Received: by 2002:a4a:3346:0:0:0:0:0 with HTTP; Thu, 10 Oct 2019 06:17:41
- -0700 (PDT)
-Reply-To: sunrisefundingltd50@gmail.com
-From:   Valentina Yurina <v_yurina@ub.ac.id>
-Date:   Thu, 10 Oct 2019 14:17:41 +0100
-Message-ID: <CAKoEkvu4vc5Yn9-hzxQ5dYmUL=oO69=GSP0FC7O+CGz9Jni8+Q@mail.gmail.com>
-Subject: Apply For Financial investment at a lower rate 2%
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CACT4Y+ZARc3gK9rweQnLr26Aa_8j9OrpAs-wfTVP2owqmXm+kQ@mail.gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+Hi!
+> > > > > > Indeed, it's removed recursively by the test library.
+> > > > >
+> > > > > :popcorn:
+> > > > >
+> > > > > It took me several years to figure out how to more or less reliably
+> > > > > remove dirs after the fuzzer ;)
+> > > > > (no, unlink won't do ;))
+> > > >
+> > > > I guess that there are things such as immutable file attributes that has
+> > > > to be cleared and many more. Do you have piece of code somewhere that we
+> > > > can look into to spare us from reinventing the wheel?
+> > >
+> > > Here is what we have:
+> > > https://github.com/google/syzkaller/blob/c4b9981b5f5b70dc03eb3f76c618398510101a1d/executor/common_linux.h#L2358-L2461
+> > > Maybe it can be simplified, but that's what we ended up with after
+> > > some organic evolution. At least the comments may give some hints as
+> > > to what may go wrong.
+> >
+> > Thanks a lot!
+> >
+> > Also I see that you are using namespaces, and much more, to sandbox the
+> > fuzzer, I was wondering if we should do that, at least separate user and
+> > pid namespace sounds like a good idea to me.
+> 
+> I don't know how far you want to go. This sandboxing definitely helps
+> us to isolate processes and make tests more repeatable by avoiding
+> interference (I don't know if LTP, say, runs tests in parallel).
+
+Not yet, but we are slowly getting to a point where LTP tests could be
+run in parallel. It's a bit more complicated for functional tests, since
+there are number of constraints, for which tests should not be run in
+parallel. And for number of these sandboxing wouldn't help either, since
+it's more of a matter of available resources than isolation.
+
+I'm close to solving first half of the problem, i.e. propagating the
+test constraints from tests to the testrunner. I also wrote a blog post
+about this, you can read it at:
+
+https://people.kernel.org/metan/towards-parallel-kernel-test-runs
+
+But even without running tests in parallel there are resources that have
+kernel persistence and will outlive the process, such as SysV IPC. So I
+guess that at least some sandboxing has to be done even for non-parallel
+runs.
+
+> mount namespaces are useful to later drop all of test mounts at once,
+> this would solve a significant part of the remote_dir logic. If the
+> temp dir is on tmpfs in the mount namespace as well, then it will be
+> automatically dropped altogether with all contents.
+
+Again, thanks for the hint!
+
 -- 
-Hello,
-
-We are private lenders based in UK.
-
-Do you need a loan (credit) as soon as possible. Are you in search of
-money to solve your personal needs or finance your business venture,
-then get Your desired loan today! Consult us at Sunrise Funding Ltd.
-
-* We offer personal loan & huge capital loan at 2% interest rate to
-the general public both locally and internationally.
-* Credit amount range from $5,000.00 -- $500,000.00 and above.
-* Special $10,000,000.00 Loan offer for huge project also available.
-* Loan period of 6 months -- 10 years.
-* Loan is granted 24 hours after approval and accredited, directly in
-hand or bank account.
-
-Please note that you are advised to contact us for more details via
-the following e-mail address below;
-
-EMAIL : sunrisefundingltd50@gmail.com
-FIRM : Sunrise Funding Ltd UK.
+Cyril Hrubis
+chrubis@suse.cz
