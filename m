@@ -2,101 +2,393 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F7F8D339D
-	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Oct 2019 23:46:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DBA13D33CD
+	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Oct 2019 00:14:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727310AbfJJVpl (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 10 Oct 2019 17:45:41 -0400
-Received: from mail-pf1-f196.google.com ([209.85.210.196]:39548 "EHLO
-        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726986AbfJJVpl (ORCPT
+        id S1726177AbfJJWOT (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 10 Oct 2019 18:14:19 -0400
+Received: from mail-qk1-f195.google.com ([209.85.222.195]:39426 "EHLO
+        mail-qk1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725978AbfJJWOT (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 10 Oct 2019 17:45:41 -0400
-Received: by mail-pf1-f196.google.com with SMTP id v4so4749407pff.6
-        for <linux-kselftest@vger.kernel.org>; Thu, 10 Oct 2019 14:45:41 -0700 (PDT)
+        Thu, 10 Oct 2019 18:14:19 -0400
+Received: by mail-qk1-f195.google.com with SMTP id 4so7107259qki.6
+        for <linux-kselftest@vger.kernel.org>; Thu, 10 Oct 2019 15:14:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=YIwBZ8aS6SvSsNGLqbHbhINAaz2ab0wlA9dmvdVVM4A=;
-        b=YdUcl4NpTdqvCC+9YJ3lFg0qzAfx6ZRf8kViaCgvniR+b8+UvLDqd3k+90T23fv/WX
-         Zdvb5//zmBY2tUQXJsZ9a+4FyAx60YmQRgRVoK94H2lPS6yClkYtg4tuYEE5rdMz9Hoq
-         dhxs59xRlrAPfLKOPTb8hzuUkOgnAiOEUI96Q=
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=axqXitUpZQzPW9NNcvtsJ/Fag1zSuFDupbs5adqeHAY=;
+        b=mvGXyxsF2hMezJhsi7moeSj8D+ZPCuql58FjUcK0kqkhSwILlRoIZv+ZsxEXJrYDtT
+         jst4zvTFG01K7vEkAS1KgQR8i4+NLzxkvwEapssrORSwxM2THM5JPz2/+kQRBkoKt12w
+         97nq43kXSV9ArWnFbLANlz2zSWfeI+F6o0r3RjfB5zK52wiFRYq5v8Pq0GxOlWCI/Ab5
+         6dPnSTfZ22VmDmjizA356TU41fPFxFmnGBjA0tk6RtU/MbQDiV2EhPV3NTa/KCFMdnYI
+         hXxgdG7ws8shrdB8098QL8w1KoS7MDNiXG0CUOpNQUzS4Fr6rRaEzveqhpTJNn48wzog
+         5BHQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=YIwBZ8aS6SvSsNGLqbHbhINAaz2ab0wlA9dmvdVVM4A=;
-        b=DRubM/ctLKr6fCoEQEvd9m/b7AXMrl55+kKh/Hfjy+BxiEuFdPifHb08ECk6lxIp7p
-         PYhx5/lGTNxk8ZqRvxQloEq+NEyaKuuGNHFbXCzIeu4EhqN49nuoclML1UOuWjbJytwZ
-         wrrijhWboJbJUJpTnTtuD5Km/uw3G23qVrhkXy6M/UgMV0UO1p/8TffPWC22FeeAWQr6
-         06WKHnAe60dBAVGeRLB8DmJeVo03h0MQNc3QLlvX9ZkGt1KuLe72RcTkwhl2aYJfu8DL
-         lpmfqsIK7dUN+IDAHu4bFPJjYC131ZjSzbgTeE69Bj5YdPz/PcdTMIoux81go+dNR8Bu
-         Vs1A==
-X-Gm-Message-State: APjAAAVRFwydWg2RhbapnxeKMyk+3IIEsMCbDrLrJweQT+7BpZfixBDl
-        LOR53b1PiQUe+lGzkOD+K1tNCQ==
-X-Google-Smtp-Source: APXvYqyQf310R9Gl7pU6wEC+GhqsWKyvknakgQyAn5yPpF0unj06W2k6/h/uG4GXF1QJH/R7hOEkjQ==
-X-Received: by 2002:a62:1b43:: with SMTP id b64mr12428894pfb.56.1570743940731;
-        Thu, 10 Oct 2019 14:45:40 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id z189sm6230165pgz.53.2019.10.10.14.45.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Oct 2019 14:45:39 -0700 (PDT)
-Date:   Thu, 10 Oct 2019 14:45:38 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Christian Brauner <christian.brauner@ubuntu.com>
-Cc:     luto@amacapital.net, jannh@google.com, wad@chromium.org,
-        shuah@kernel.org, ast@kernel.org, daniel@iogearbox.net,
-        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        Tycho Andersen <tycho@tycho.ws>,
-        Tyler Hicks <tyhicks@canonical.com>
-Subject: Re: [PATCH v2 1/3] seccomp: add SECCOMP_USER_NOTIF_FLAG_CONTINUE
-Message-ID: <201910101440.17A13952@keescook>
-References: <20190920083007.11475-1-christian.brauner@ubuntu.com>
- <20190920083007.11475-2-christian.brauner@ubuntu.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=axqXitUpZQzPW9NNcvtsJ/Fag1zSuFDupbs5adqeHAY=;
+        b=NtO/yMhA/uV5nlpIwkxZX5WZcVR3AOwkHWsxV0k3hQHv0OSuSvUA5yCPnuGXK4tLLx
+         0lsx/bGquwrQ5nfXOTVLcjTDBb2BBOwD8DSYZDs9gVha4Lj3AdWCj3aErD3xa6D+FcBW
+         /8mEgeycDa210swwhFuH4onIK6eesmdjDs7SjYLGDk7ToZ7bBTUyHkmTdDea9hi8ZauA
+         fdKK2oj6gQiJ//FtfE/BoSwaLMopTqFWnNUPwf1fb5L74Kb57z8lyLjj66JgieGnc+CJ
+         q4s9pnMFzg0gy6oG4VPv/SHsnez1lj8PcXAwdjxsqHZ2o1+2StiNhJkod5xf7l1x2rRI
+         lxcg==
+X-Gm-Message-State: APjAAAXd89M1YtVN0+AtmtO+Ap6jv8PnhJBtetmQ1Nitc4Yi5/dwL9k8
+        pavd+N0T1qWHpFRZqvcVkXegUutEZva4PkSOYwuL
+X-Google-Smtp-Source: APXvYqzeStFXF/rIjaxV9IGoXG9xmVSRwwbd8DHMoeoL3vhcAF7r8sqhrF+9rglt4no30sm21jILw9Ulj8m7XzrI0YE=
+X-Received: by 2002:a05:620a:2193:: with SMTP id g19mr12739515qka.184.1570745657502;
+ Thu, 10 Oct 2019 15:14:17 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190920083007.11475-2-christian.brauner@ubuntu.com>
+References: <20191010023931.230475-1-yzaikin@google.com> <2f2ea7b0-f683-1cdd-f3f2-ecdf44cb4a97@linuxfoundation.org>
+In-Reply-To: <2f2ea7b0-f683-1cdd-f3f2-ecdf44cb4a97@linuxfoundation.org>
+From:   Iurii Zaikin <yzaikin@google.com>
+Date:   Thu, 10 Oct 2019 15:13:41 -0700
+Message-ID: <CAAXuY3qtSHENgy3S168_03ju_JwAucOAt5WEJGQ+pi5PfurP6g@mail.gmail.com>
+Subject: Re: [PATCH linux-kselftest/test v2] ext4: add kunit test for decoding
+ extended timestamps
+To:     Shuah Khan <skhan@linuxfoundation.org>
+Cc:     "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, linux-ext4@vger.kernel.org,
+        "Theodore Ts'o" <tytso@mit.edu>, adilger.kernel@dilger.ca,
+        kunit-dev@googlegroups.com,
+        Brendan Higgins <brendanhiggins@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Sep 20, 2019 at 10:30:05AM +0200, Christian Brauner wrote:
-> + * Similar precautions should be applied when stacking SECCOMP_RET_USER_NOTIF.
-> + * For SECCOMP_RET_USER_NOTIF filters acting on the same syscall the uppermost
-> + * filter takes precedence. This means that the uppermost
-> + * SECCOMP_RET_USER_NOTIF filter can override any SECCOMP_IOCTL_NOTIF_SEND from
-> + * lower filters essentially allowing all syscalls to pass by using
-> + * SECCOMP_USER_NOTIF_FLAG_CONTINUE. Note that SECCOMP_RET_USER_NOTIF can
-                                                          ^^^^^^^^^^^^^^
-This is meant to read RET_TRACE, yes?
-
-> + * equally be overriden by SECCOMP_USER_NOTIF_FLAG_CONTINUE.
-
-I rewrote this paragraph with that corrected and swapping some
-"upper/lower" to "most recently added" etc:
-
-+ * Similar precautions should be applied when stacking SECCOMP_RET_USER_NOTIF
-+ * or SECCOMP_RET_TRACE. For SECCOMP_RET_USER_NOTIF filters acting on the
-+ * same syscall, the most recently added filter takes precedence. This means
-+ * that the new SECCOMP_RET_USER_NOTIF filter can override any
-+ * SECCOMP_IOCTL_NOTIF_SEND from earlier filters, essentially allowing all
-+ * such filtered syscalls to be executed by sending the response
-+ * SECCOMP_USER_NOTIF_FLAG_CONTINUE. Note that SECCOMP_RET_TRACE can equally
-+ * be overriden by SECCOMP_USER_NOTIF_FLAG_CONTINUE.
-
-
-Ultimately, I think this caveat is fine. RET_USER_NOTIF and RET_TRACE are
-both used from the "process manager" use-case. The benefits of "continue"
-semantics here outweighs the RET_USER_NOTIF and RET_TRACE "bypass". If
-we end up in a situation where we need to deal with some kind of
-nesting where this is a problem in practice, we can revisit this.
-
-Applied to my for-next/seccomp. Thanks!
-
--- 
-Kees Cook
+On Thu, Oct 10, 2019 at 10:11 AM Shuah Khan <skhan@linuxfoundation.org> wrote:
+>
+> On 10/9/19 8:39 PM, Iurii Zaikin wrote:
+> > KUnit tests for decoding extended 64 bit timestamps.
+> >
+> "Added the link to the ext4 docs from which the tests were derived."
+>
+> Document reference is great. I would still like to see summary
+> in the commit log.
+>
+> As you said below:
+>
+> "This builds the ext4 inode sysctl unit test, which runs on boot."
+>
+> Also include what should user expect to see when one of these fails.
+Will do.
+>
+> > Signed-off-by: Iurii Zaikin <yzaikin@google.com>
+> > ---
+> >   fs/ext4/Kconfig      |  12 +++
+> >   fs/ext4/Makefile     |   1 +
+> >   fs/ext4/inode-test.c | 221 +++++++++++++++++++++++++++++++++++++++++++
+> >   3 files changed, 234 insertions(+)
+> >   create mode 100644 fs/ext4/inode-test.c
+> >
+> > diff --git a/fs/ext4/Kconfig b/fs/ext4/Kconfig
+> > index cbb5ca830e57..cb0b52753674 100644
+> > --- a/fs/ext4/Kconfig
+> > +++ b/fs/ext4/Kconfig
+> > @@ -106,3 +106,15 @@ config EXT4_DEBUG
+> >         If you select Y here, then you will be able to turn on debugging
+> >         with a command such as:
+> >               echo 1 > /sys/module/ext4/parameters/mballoc_debug
+> > +
+> > +config EXT4_KUNIT_TESTS
+> > +     bool "KUnit test for ext4 inode"
+> > +     depends on EXT4_FS
+> > +     depends on KUNIT
+> > +     help
+> > +       This builds the ext4 inode sysctl unit test, which runs on boot.
+> > +       Tests the encoding correctness of ext4 inode.
+> > +       For more information on KUnit and unit tests in general please refer
+> > +       to the KUnit documentation in Documentation/dev-tools/kunit/.
+>
+> Please add Documentation/filesystems/ext4/inodes.rst Inode Timestamps
+> here as well.
+> Yeah. Especially after looking at the document, summary of what these
+> test(s) is definitely helpful. You can't expect users to read the
+> document before enabling it. Please write a summary of tests and what
+> they do and add it here and then in the commit log. Also include what
+> user should expect when they pass and when one of them fails.
+>
+I'm not sure this is compatible with Theodore's preference for having a single
+config option for all ext4 tests. If anything, I should be removing
+all inode-specific
+stuff from the description.
+I think it makes sense to add wording that this option is only useful
+for devs running
+a kernel test harness and should not be enabled in production.
+> > +
+> > +       If unsure, say N.
+> > diff --git a/fs/ext4/Makefile b/fs/ext4/Makefile
+> > index b17ddc229ac5..a0588fd2eea6 100644
+> > --- a/fs/ext4/Makefile
+> > +++ b/fs/ext4/Makefile
+> > @@ -13,4 +13,5 @@ ext4-y      := balloc.o bitmap.o block_validity.o dir.o ext4_jbd2.o extents.o \
+> >
+> >   ext4-$(CONFIG_EXT4_FS_POSIX_ACL)    += acl.o
+> >   ext4-$(CONFIG_EXT4_FS_SECURITY)             += xattr_security.o
+> > +ext4-$(CONFIG_EXT4_KUNIT_TESTS)      += inode-test.o
+> >   ext4-$(CONFIG_FS_VERITY)            += verity.o
+> > diff --git a/fs/ext4/inode-test.c b/fs/ext4/inode-test.c
+> > new file mode 100644
+> > index 000000000000..43bc6cb547cd
+> > --- /dev/null
+> > +++ b/fs/ext4/inode-test.c
+> > @@ -0,0 +1,221 @@
+> > +// SPDX-License-Identifier: GPL-2.0
+> > +/*
+> > + * KUnit test of ext4 inode that verify the seconds part of [a/c/m]
+> > + * timestamps in ext4 inode structs are decoded correctly.
+> > + * These tests are derived from the table under
+> > + * Documentation/filesystems/ext4/inodes.rst Inode Timestamps
+>
+> Yeah. Especially after looking at the document, summary of what these
+> test(s) is definitely helpful. You can't expect users to read the
+> document before enabling the tests.
+>
+> > + */
+> > +
+> > +#include <kunit/test.h>
+> > +#include <linux/kernel.h>
+> > +#include <linux/time64.h>
+> > +
+> > +#include "ext4.h"
+> > +
+> > +/* binary: 00000000 00000000 00000000 00000000 */
+> > +#define LOWER_MSB_0 0L
+> > +/* binary: 01111111 11111111 11111111 11111111 */
+> > +#define UPPER_MSB_0 0x7fffffffL
+> > +/* binary: 10000000 00000000 00000000 00000000 */
+> > +#define LOWER_MSB_1 (-0x80000000L)
+> > +/* binary: 11111111 11111111 11111111 11111111 */
+> > +#define UPPER_MSB_1 (-1L)
+> > +/* binary: 00111111   11111111 11111111 11111111 */
+> > +#define MAX_NANOSECONDS ((1L << 30) - 1)
+> > +
+> > +#define CASE_NAME_FORMAT "%s: msb:%x lower_bound:%x extra_bits: %x"
+> > +
+> > +struct timestamp_expectation {
+> > +     const char *test_case_name;
+> > +     struct timespec64 expected;
+> > +     u32 extra_bits;
+> > +     bool msb_set;
+> > +     bool lower_bound;
+> > +};
+> > +
+> > +static time64_t get_32bit_time(const struct timestamp_expectation * const test)
+> > +{
+> > +     if (test->msb_set) {
+> > +             if (test->lower_bound)
+> > +                     return LOWER_MSB_1;
+> > +
+> > +             return UPPER_MSB_1;
+> > +     }
+> > +
+> > +     if (test->lower_bound)
+> > +             return LOWER_MSB_0;
+> > +     return UPPER_MSB_0;
+> > +}
+> > +
+> > +
+> > +static void inode_test_xtimestamp_decoding(struct kunit *test)
+> > +{
+> > +     const struct timestamp_expectation test_data[] = {
+> > +             {
+> > +                     .test_case_name = "1901-12-13",
+> > +                     .msb_set = true,
+> > +                     .lower_bound = true,
+> > +                     .extra_bits = 0,
+> > +                     .expected = {.tv_sec = -0x80000000LL, .tv_nsec = 0L},
+> > +             },
+> > +
+> > +             {
+> > +                     .test_case_name = "1969-12-31",
+> > +                     .msb_set = true,
+> > +                     .lower_bound = false,
+> > +                     .extra_bits = 0,
+> > +                     .expected = {.tv_sec = -1LL, .tv_nsec = 0L},
+> > +             },
+> > +
+> > +             {
+> > +                     .test_case_name = "1970-01-01",
+> > +                     .msb_set = false,
+> > +                     .lower_bound = true,
+> > +                     .extra_bits = 0,
+> > +                     .expected = {0LL, 0L},
+> > +             },
+> > +
+> > +             {
+> > +                     .test_case_name = "2038-01-19",
+> > +                     .msb_set = false,
+> > +                     .lower_bound = false,
+> > +                     .extra_bits = 0,
+> > +                     .expected = {.tv_sec = 0x7fffffffLL, .tv_nsec = 0L},
+> > +             },
+> > +
+> > +             {
+> > +                     .test_case_name = "2038-01-19",
+> > +                     .msb_set = true,
+> > +                     .lower_bound = true,
+> > +                     .extra_bits = 1,
+> > +                     .expected = {.tv_sec = 0x80000000LL, .tv_nsec = 0L},
+> > +             },
+> > +
+> > +             {
+> > +                     .test_case_name = "2106-02-07",
+> > +                     .msb_set = true,
+> > +                     .lower_bound = false,
+> > +                     .extra_bits = 1,
+> > +                     .expected = {.tv_sec = 0xffffffffLL, .tv_nsec = 0L},
+> > +             },
+> > +
+> > +             {
+> > +                     .test_case_name = "2106-02-07",
+> > +                     .msb_set = false,
+> > +                     .lower_bound = true,
+> > +                     .extra_bits = 1,
+> > +                     .expected = {.tv_sec = 0x100000000LL, .tv_nsec = 0L},
+> > +             },
+> > +
+> > +             {
+> > +                     .test_case_name = "2174-02-25",
+> > +                     .msb_set = false,
+> > +                     .lower_bound = false,
+> > +                     .extra_bits = 1,
+> > +                     .expected = {.tv_sec = 0x17fffffffLL, .tv_nsec = 0L},
+> > +             },
+> > +
+> > +             {
+> > +                     .test_case_name = "2174-02-25",
+> > +                     .msb_set = true,
+> > +                     .lower_bound = true,
+> > +                     .extra_bits =  2,
+> > +                     .expected = {.tv_sec = 0x180000000LL, .tv_nsec = 0L},
+> > +             },
+> > +
+> > +             {
+> > +                     .test_case_name = "2242-03-16",
+> > +                     .msb_set = true,
+> > +                     .lower_bound = false,
+> > +                     .extra_bits = 2,
+> > +                     .expected = {.tv_sec = 0x1ffffffffLL, .tv_nsec = 0L},
+> > +             },
+> > +
+> > +             {
+> > +                     .test_case_name = "2242-03-16",
+> > +                     .msb_set = false,
+> > +                     .lower_bound = true,
+> > +                     .extra_bits = 2,
+> > +                     .expected = {.tv_sec = 0x200000000LL, .tv_nsec = 0L},
+> > +             },
+> > +
+> > +             {
+> > +                     .test_case_name = " 2310-04-04",
+> > +                     .msb_set = false,
+> > +                     .lower_bound = false,
+> > +                     .extra_bits = 2,
+> > +                     .expected = {.tv_sec = 0x27fffffffLL, .tv_nsec = 0L},
+> > +             },
+> > +
+> > +             {
+> > +                     .test_case_name = " 2310-04-04 00:00:00.1",
+> > +                     .msb_set = false,
+> > +                     .lower_bound = false,
+> > +                     .extra_bits = 6,
+> > +                     .expected = {.tv_sec = 0x27fffffffLL, .tv_nsec = 1L},
+> > +             },
+> > +
+> > +             {
+> > +                     .test_case_name = "2378-04-22 00:00:00.MAX_NSEC",
+> > +                     .msb_set = false,
+> > +                     .lower_bound = true,
+> > +                     .extra_bits = 0xFFFFFFFF,
+> > +                     .expected = {.tv_sec = 0x300000000LL,
+> > +                                  .tv_nsec = MAX_NANOSECONDS},
+> > +             },
+> > +
+> > +             {
+> > +                     .test_case_name = "2378-04-22",
+> > +                     .msb_set = false,
+> > +                     .lower_bound = true,
+> > +                     .extra_bits = 3,
+> > +                     .expected = {.tv_sec = 0x300000000LL, .tv_nsec = 0L},
+> > +             },
+> > +
+> > +             {
+> > +                     .test_case_name = "2446-05-10",
+> > +                     .msb_set = false,
+> > +                     .lower_bound = false,
+> > +                     .extra_bits = 3,
+> > +                     .expected = {.tv_sec = 0x37fffffffLL, .tv_nsec = 0L},
+> > +             }
+> > +     };
+> > +
+>
+> Is there a way to make the test data dynamic. Can you read from a data
+> file? It will be easier to if the data
+>
+> Maybe this is question to Brendan?
+>
+From the general unit test philosophy, unit tests must be 100% deterministic,
+repeatable and simple enough to be correct by visual inspection, dynamically
+generated test data runs contrary to these goals IMHO.
+As for reading from a data file, not sure what exactly you mean here:
+ - Having a running kernel read a file in the filesystem, especially as early in
+the initialization process as KUnit currently runs is something I'm not sure
+how to implement reliably. Also, doing I/O in the tests will make them slower
+and require more setup from test running environment.
+- Having reading a file in the build stage and linking it as a data
+blob into the
+kernel image. This approach looks better to me since it avoids the I/O and has
+no noticeable speed penalty or test harness requirements. It would be up to
+Brendan whether he wants such capability in KUnit and based on the user-space
+test code I've seen so far, the number of test data points in this
+test doesn't warrant
+reading from files even in userspace which has far fewer constraints.
+> > +     struct timespec64 timestamp;
+> > +     int i;
+> > +
+> > +     for (i = 0; i < ARRAY_SIZE(test_data); ++i) {
+> > +             timestamp.tv_sec = get_32bit_time(&test_data[i]);
+> > +             ext4_decode_extra_time(&timestamp,
+> > +                                    cpu_to_le32(test_data[i].extra_bits));
+> > +
+> > +             KUNIT_EXPECT_EQ_MSG(test,
+> > +                                 test_data[i].expected.tv_sec,
+> > +                                 timestamp.tv_sec,
+> > +                                 CASE_NAME_FORMAT,
+> > +                                 test_data[i].test_case_name,
+> > +                                 test_data[i].msb_set,
+> > +                                 test_data[i].lower_bound,
+> > +                                 test_data[i].extra_bits);
+> > +             KUNIT_EXPECT_EQ_MSG(test,
+> > +                                 test_data[i].expected.tv_nsec,
+> > +                                 timestamp.tv_nsec,
+> > +                                 CASE_NAME_FORMAT,
+> > +                                 test_data[i].test_case_name,
+> > +                                 test_data[i].msb_set,
+> > +                                 test_data[i].lower_bound,
+> > +                                 test_data[i].extra_bits);
+> > +     }
+> > +}
+> > +
+> > +static struct kunit_case ext4_inode_test_cases[] = {
+> > +     KUNIT_CASE(inode_test_xtimestamp_decoding),
+> > +     {}
+> > +};
+> > +
+> > +static struct kunit_suite ext4_inode_test_suite = {
+> > +     .name = "ext4_inode_test",
+> > +     .test_cases = ext4_inode_test_cases,
+> > +};
+> > +
+> > +kunit_test_suite(ext4_inode_test_suite);
+> > --
+> > 2.23.0.700.g56cf767bdb-goog
+> >
+>
+> thanks,
+> -- Shuah
