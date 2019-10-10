@@ -2,103 +2,143 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 213BFD2B2B
-	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Oct 2019 15:22:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 436BAD2B73
+	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Oct 2019 15:35:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388130AbfJJNWx (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 10 Oct 2019 09:22:53 -0400
-Received: from mx2.suse.de ([195.135.220.15]:44396 "EHLO mx1.suse.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S2388099AbfJJNWx (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 10 Oct 2019 09:22:53 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id 717F5AED6;
-        Thu, 10 Oct 2019 13:22:51 +0000 (UTC)
-Date:   Thu, 10 Oct 2019 15:22:49 +0200
-From:   Cyril Hrubis <chrubis@suse.cz>
-To:     Dmitry Vyukov <dvyukov@google.com>
-Cc:     Richard Palethorpe <richard.palethorpe@suse.com>,
-        syzkaller <syzkaller@googlegroups.com>, kernelci@groups.io,
-        shuah <shuah@kernel.org>, ltp@lists.linux.it,
-        George Kennedy <george.kennedy@oracle.com>,
-        Cyril Hrubis <chrubis@suse.com>,
-        "open list : KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        automated-testing@yoctoproject.org
-Subject: Re: [RFC PATCH] LTP Wrapper for Syzkaller reproducers
-Message-ID: <20191010132249.GB9416@rei.lan>
-References: <20191009142446.6997-1-rpalethorpe@suse.com>
- <CACT4Y+b0tTAQ0r_2gCVjjRh--Xwv=aLzh6MY=ciXMMrK+cAQsA@mail.gmail.com>
- <20191009145416.GA5014@rei.lan>
- <CACT4Y+ZL8ocQPpwR-_8+0PdF=r3AkFZKvOR==+P0y0GF67w1Vg@mail.gmail.com>
- <20191009180447.GD15291@rei.lan>
- <CACT4Y+ZABX2z4Lxrvokf5DHz351xTys-gJPNhFjP+Zx6Qd2zsg@mail.gmail.com>
- <20191010093011.GA2508@rei.lan>
- <CACT4Y+ZARc3gK9rweQnLr26Aa_8j9OrpAs-wfTVP2owqmXm+kQ@mail.gmail.com>
+        id S1728468AbfJJNff (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 10 Oct 2019 09:35:35 -0400
+Received: from youngberry.canonical.com ([91.189.89.112]:54313 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728011AbfJJNff (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 10 Oct 2019 09:35:35 -0400
+Received: from [193.96.224.244] (helo=localhost.localdomain)
+        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.86_2)
+        (envelope-from <christian.brauner@ubuntu.com>)
+        id 1iIYbL-0001XF-Re; Thu, 10 Oct 2019 13:35:32 +0000
+From:   Christian Brauner <christian.brauner@ubuntu.com>
+To:     linux-kernel@vger.kernel.org, Oleg Nesterov <oleg@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>, libc-alpha@sourceware.org
+Cc:     Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Shuah Khan <shuah@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Michal Hocko <mhocko@suse.com>,
+        Elena Reshetova <elena.reshetova@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Roman Gushchin <guro@fb.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Aleksa Sarai <cyphar@cyphar.com>,
+        "Dmitry V. Levin" <ldv@altlinux.org>,
+        linux-kselftest@vger.kernel.org,
+        Christian Brauner <christian.brauner@ubuntu.com>
+Subject: [PATCH 1/2] clone3: add CLONE3_CLEAR_SIGHAND
+Date:   Thu, 10 Oct 2019 15:35:17 +0200
+Message-Id: <20191010133518.5420-1-christian.brauner@ubuntu.com>
+X-Mailer: git-send-email 2.23.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CACT4Y+ZARc3gK9rweQnLr26Aa_8j9OrpAs-wfTVP2owqmXm+kQ@mail.gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi!
-> > > > > > Indeed, it's removed recursively by the test library.
-> > > > >
-> > > > > :popcorn:
-> > > > >
-> > > > > It took me several years to figure out how to more or less reliably
-> > > > > remove dirs after the fuzzer ;)
-> > > > > (no, unlink won't do ;))
-> > > >
-> > > > I guess that there are things such as immutable file attributes that has
-> > > > to be cleared and many more. Do you have piece of code somewhere that we
-> > > > can look into to spare us from reinventing the wheel?
-> > >
-> > > Here is what we have:
-> > > https://github.com/google/syzkaller/blob/c4b9981b5f5b70dc03eb3f76c618398510101a1d/executor/common_linux.h#L2358-L2461
-> > > Maybe it can be simplified, but that's what we ended up with after
-> > > some organic evolution. At least the comments may give some hints as
-> > > to what may go wrong.
-> >
-> > Thanks a lot!
-> >
-> > Also I see that you are using namespaces, and much more, to sandbox the
-> > fuzzer, I was wondering if we should do that, at least separate user and
-> > pid namespace sounds like a good idea to me.
-> 
-> I don't know how far you want to go. This sandboxing definitely helps
-> us to isolate processes and make tests more repeatable by avoiding
-> interference (I don't know if LTP, say, runs tests in parallel).
+Reset all signal handlers of the child not set to SIG_IGN to SIG_DFL.
+Mutually exclusive with CLONE_SIGHAND to not disturb other thread's
+signal handler.
 
-Not yet, but we are slowly getting to a point where LTP tests could be
-run in parallel. It's a bit more complicated for functional tests, since
-there are number of constraints, for which tests should not be run in
-parallel. And for number of these sandboxing wouldn't help either, since
-it's more of a matter of available resources than isolation.
+In the spirit of closer cooperation between glibc developers and kernel
+developers (cf. [2]) this patchset came out of a discussion on the glibc
+mailing list for improving posix_spawn() (cf. [1], [3], [4]). Kernel
+support for this feature has been explicitly requested by glibc and I
+see no reason not to help them with this.
 
-I'm close to solving first half of the problem, i.e. propagating the
-test constraints from tests to the testrunner. I also wrote a blog post
-about this, you can read it at:
+The child helper process on Linux posix_spawn must ensure that no signal
+handlers are enabled, so the signal disposition must be either SIG_DFL
+or SIG_IGN. However, it requires a sigprocmask to obtain the current
+signal mask and at least _NSIG sigaction calls to reset the signal
+handlers for each posix_spawn call or complex state tracking that might
+lead to data corruption in glibc. Adding this flags lets glibc avoid
+these problems.
 
-https://people.kernel.org/metan/towards-parallel-kernel-test-runs
+[1]: https://www.sourceware.org/ml/libc-alpha/2019-10/msg00149.html
+[3]: https://www.sourceware.org/ml/libc-alpha/2019-10/msg00158.html
+[4]: https://www.sourceware.org/ml/libc-alpha/2019-10/msg00160.html
+[2]: https://lwn.net/Articles/799331/
+     '[...] by asking for better cooperation with the C-library projects
+     in general. They should be copied on patches containing ABI
+     changes, for example. I noted that there are often times where
+     C-library developers wish the kernel community had done things
+     differently; how could those be avoided in the future? Members of
+     the audience suggested that more glibc developers should perhaps
+     join the linux-api list. The other suggestion was to "copy Florian
+     on everything".'
+Cc: Oleg Nesterov <oleg@redhat.com>
+Cc: Florian Weimer <fweimer@redhat.com>
+Cc: libc-alpha@sourceware.org
+Signed-off-by: Christian Brauner <christian.brauner@ubuntu.com>
+---
+ include/uapi/linux/sched.h |  3 +++
+ kernel/fork.c              | 11 ++++++++++-
+ 2 files changed, 13 insertions(+), 1 deletion(-)
 
-But even without running tests in parallel there are resources that have
-kernel persistence and will outlive the process, such as SysV IPC. So I
-guess that at least some sandboxing has to be done even for non-parallel
-runs.
-
-> mount namespaces are useful to later drop all of test mounts at once,
-> this would solve a significant part of the remote_dir logic. If the
-> temp dir is on tmpfs in the mount namespace as well, then it will be
-> automatically dropped altogether with all contents.
-
-Again, thanks for the hint!
-
+diff --git a/include/uapi/linux/sched.h b/include/uapi/linux/sched.h
+index 99335e1f4a27..c583720f689f 100644
+--- a/include/uapi/linux/sched.h
++++ b/include/uapi/linux/sched.h
+@@ -33,6 +33,9 @@
+ #define CLONE_NEWNET		0x40000000	/* New network namespace */
+ #define CLONE_IO		0x80000000	/* Clone io context */
+ 
++/* Flags for the clone3() syscall */
++#define CLONE3_CLEAR_SIGHAND 0x100000000ULL /* Clear any signal handler and reset to SIG_DFL. */
++
+ #ifndef __ASSEMBLY__
+ /**
+  * struct clone_args - arguments for the clone3 syscall
+diff --git a/kernel/fork.c b/kernel/fork.c
+index 1f6c45f6a734..661f8d1f3881 100644
+--- a/kernel/fork.c
++++ b/kernel/fork.c
+@@ -1517,6 +1517,11 @@ static int copy_sighand(unsigned long clone_flags, struct task_struct *tsk)
+ 	spin_lock_irq(&current->sighand->siglock);
+ 	memcpy(sig->action, current->sighand->action, sizeof(sig->action));
+ 	spin_unlock_irq(&current->sighand->siglock);
++
++	/* Reset all signal handler not set to SIG_IGN to SIG_DFL. */
++	if (clone_flags & CLONE3_CLEAR_SIGHAND)
++		flush_signal_handlers(tsk, 0);
++
+ 	return 0;
+ }
+ 
+@@ -2567,7 +2572,7 @@ static bool clone3_args_valid(const struct kernel_clone_args *kargs)
+ 	 * All lower bits of the flag word are taken.
+ 	 * Verify that no other unknown flags are passed along.
+ 	 */
+-	if (kargs->flags & ~CLONE_LEGACY_FLAGS)
++	if (kargs->flags & ~(CLONE_LEGACY_FLAGS | CLONE3_CLEAR_SIGHAND))
+ 		return false;
+ 
+ 	/*
+@@ -2577,6 +2582,10 @@ static bool clone3_args_valid(const struct kernel_clone_args *kargs)
+ 	if (kargs->flags & (CLONE_DETACHED | CSIGNAL))
+ 		return false;
+ 
++	if ((kargs->flags & (CLONE_SIGHAND | CLONE3_CLEAR_SIGHAND)) ==
++	    (CLONE_SIGHAND | CLONE3_CLEAR_SIGHAND))
++		return false;
++
+ 	if ((kargs->flags & (CLONE_THREAD | CLONE_PARENT)) &&
+ 	    kargs->exit_signal)
+ 		return false;
 -- 
-Cyril Hrubis
-chrubis@suse.cz
+2.23.0
+
