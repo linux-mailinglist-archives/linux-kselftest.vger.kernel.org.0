@@ -2,85 +2,101 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D46DD268D
-	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Oct 2019 11:42:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49077D26A4
+	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Oct 2019 11:50:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732041AbfJJJmU (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 10 Oct 2019 05:42:20 -0400
-Received: from kirsty.vergenet.net ([202.4.237.240]:43010 "EHLO
-        kirsty.vergenet.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727330AbfJJJmU (ORCPT
+        id S2387596AbfJJJuP (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 10 Oct 2019 05:50:15 -0400
+Received: from mail-qk1-f196.google.com ([209.85.222.196]:33215 "EHLO
+        mail-qk1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2387544AbfJJJuP (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 10 Oct 2019 05:42:20 -0400
-Received: from reginn.horms.nl (watermunt.horms.nl [80.127.179.77])
-        by kirsty.vergenet.net (Postfix) with ESMTPA id 1D02725B7E8;
-        Thu, 10 Oct 2019 20:42:18 +1100 (AEDT)
-Received: by reginn.horms.nl (Postfix, from userid 7100)
-        id 245009405EE; Thu, 10 Oct 2019 11:42:16 +0200 (CEST)
-Date:   Thu, 10 Oct 2019 11:42:16 +0200
-From:   Simon Horman <horms@verge.net.au>
-To:     Haishuang Yan <yanhaishuang@cmss.chinamobile.com>
-Cc:     Shuah Khan <shuah@kernel.org>,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Julian Anastasov <ja@ssi.bg>, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, lvs-devel@vger.kernel.org,
-        netfilter-devel@vger.kernel.org
-Subject: Re: [PATCH v5 1/3] selftests: netfilter: add ipvs test script
-Message-ID: <20191010094215.73rlcbn2tt4wgr54@verge.net.au>
-References: <1570619790-6086-1-git-send-email-yanhaishuang@cmss.chinamobile.com>
- <1570619790-6086-2-git-send-email-yanhaishuang@cmss.chinamobile.com>
+        Thu, 10 Oct 2019 05:50:15 -0400
+Received: by mail-qk1-f196.google.com with SMTP id x134so5034135qkb.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 10 Oct 2019 02:50:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=eq21ieXGYfbio4/ONvnC5Y4VJvJvtnV+f7bJhm6JVDI=;
+        b=kgP4jNYS15D8vXlgaBAEII5Kz7MnCpluuyFU9Bf5kO1PVhrBZrcyKftchjvaVC/0Wu
+         CLo47T021TLkUeEYc8kgnUB3nbVusTl3wkaNBGww2zoZWdlY5rPKxVfHEitf9dzw/VXD
+         Itr+JE89cgAiIjdQ9tgjb2ksfPSuj/LSEd5yJbrRM5tdm2QWsUPSE6pg6mf1r4PYDFlp
+         qcV57MTt939pUHywKuBHLSiKefP2WEUy/59F07mu9TSXQpPDBV6v0d0w+LfWwIw2NvAH
+         I6hsApuZO3ONSfSKcPYTnBQojNFODYR6n+L8zBLp9hRACkZ9CO9Q7J645GjhNyEuU+x+
+         W2CQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=eq21ieXGYfbio4/ONvnC5Y4VJvJvtnV+f7bJhm6JVDI=;
+        b=TDQhfkq3mUxcwswzjvD8ae+uMiyTWRYNHOB/7VPkDyyq0NZt1DCpgLhhFsSYpnOhOJ
+         lI0WUX4hugdermwpqzOjO9X9lhft9h1DbrjH/d+IzHR4ooG9PVEluQX73uLO2rqRtzIV
+         58U3hZYLBLrg0JzOlMnI6ziDDJHQL2DRVGpPAh4ozETtx4Oi93b62Cir7JA5c1baC6Ah
+         m6tMj9x7q18CUKFSKKEXSCTBZdZXdEKAYu8QFVdN69sujspEnfYmwGzi8AUHIeUFF1iC
+         9fW0IEjEEglZt8N5Ci3r6tVZJ4mXKXXqFrmwwFXcNYi9QR8JmdBtQhYCS7iWUCjCsQyg
+         6qyg==
+X-Gm-Message-State: APjAAAVf7zttMEMbPxQRsGNB6ydpR1108nVPBqYk9dB/rwO6tG53ArVR
+        f6F9gm6wCZ3inUZZdvMocEiVbuH5/lyLyeWv9GNhXA==
+X-Google-Smtp-Source: APXvYqw0uc2wmafldvOtFV4iMk/sTNu5MMjbDOtm5t43CvU5+L67HoQvsxCb7/WviGyf24Z33oQ8SouTYm1wB5OulQg=
+X-Received: by 2002:a05:620a:6b6:: with SMTP id i22mr8537547qkh.256.1570701013485;
+ Thu, 10 Oct 2019 02:50:13 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1570619790-6086-2-git-send-email-yanhaishuang@cmss.chinamobile.com>
-Organisation: Horms Solutions BV
-User-Agent: NeoMutt/20170113 (1.7.2)
+References: <20191009142446.6997-1-rpalethorpe@suse.com> <CACT4Y+b0tTAQ0r_2gCVjjRh--Xwv=aLzh6MY=ciXMMrK+cAQsA@mail.gmail.com>
+ <20191009145416.GA5014@rei.lan> <CACT4Y+ZL8ocQPpwR-_8+0PdF=r3AkFZKvOR==+P0y0GF67w1Vg@mail.gmail.com>
+ <20191009180447.GD15291@rei.lan> <CACT4Y+ZABX2z4Lxrvokf5DHz351xTys-gJPNhFjP+Zx6Qd2zsg@mail.gmail.com>
+ <20191010093011.GA2508@rei.lan>
+In-Reply-To: <20191010093011.GA2508@rei.lan>
+From:   Dmitry Vyukov <dvyukov@google.com>
+Date:   Thu, 10 Oct 2019 11:50:01 +0200
+Message-ID: <CACT4Y+ZARc3gK9rweQnLr26Aa_8j9OrpAs-wfTVP2owqmXm+kQ@mail.gmail.com>
+Subject: Re: [RFC PATCH] LTP Wrapper for Syzkaller reproducers
+To:     Cyril Hrubis <chrubis@suse.cz>
+Cc:     Richard Palethorpe <richard.palethorpe@suse.com>,
+        syzkaller <syzkaller@googlegroups.com>, kernelci@groups.io,
+        shuah <shuah@kernel.org>, ltp@lists.linux.it,
+        George Kennedy <george.kennedy@oracle.com>,
+        Cyril Hrubis <chrubis@suse.com>,
+        "open list : KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        automated-testing@yoctoproject.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Oct 09, 2019 at 07:16:28PM +0800, Haishuang Yan wrote:
-> Test virutal server via directing routing for IPv4.
-> 
-> Tested:
-> 
-> # selftests: netfilter: ipvs.sh
-> # Testing DR mode...
-> # ipvs.sh: PASS
-> ok 6 selftests: netfilter: ipvs.sh
-> 
-> Signed-off-by: Haishuang Yan <yanhaishuang@cmss.chinamobile.com>
-> ---
-> v5: use cmp to compare two file contents suggested by Simon Horman
-> v4: use #!/bin/bash -p suggested by Duncan Roe
-> v3: use bash style
-> v2: optimize test script
-> ---
->  tools/testing/selftests/netfilter/Makefile |   2 +-
->  tools/testing/selftests/netfilter/ipvs.sh  | 178 +++++++++++++++++++++++++++++
->  2 files changed, 179 insertions(+), 1 deletion(-)
->  create mode 100755 tools/testing/selftests/netfilter/ipvs.sh
-> 
-> diff --git a/tools/testing/selftests/netfilter/Makefile b/tools/testing/selftests/netfilter/Makefile
-> index 4144984..de1032b 100644
-> --- a/tools/testing/selftests/netfilter/Makefile
-> +++ b/tools/testing/selftests/netfilter/Makefile
-> @@ -2,6 +2,6 @@
->  # Makefile for netfilter selftests
->  
->  TEST_PROGS := nft_trans_stress.sh nft_nat.sh bridge_brouter.sh \
-> -	conntrack_icmp_related.sh nft_flowtable.sh
-> +	conntrack_icmp_related.sh nft_flowtable.sh ipvs.sh
->  
->  include ../lib.mk
-> diff --git a/tools/testing/selftests/netfilter/ipvs.sh b/tools/testing/selftests/netfilter/ipvs.sh
-> new file mode 100755
-> index 0000000..f844c0a
-> --- /dev/null
-> +++ b/tools/testing/selftests/netfilter/ipvs.sh
-> @@ -0,0 +1,178 @@
-> +#!/bin/bash -p
+On Thu, Oct 10, 2019 at 11:30 AM Cyril Hrubis <chrubis@suse.cz> wrote:
+>
+> Hi!
+> > > > > Indeed, it's removed recursively by the test library.
+> > > >
+> > > > :popcorn:
+> > > >
+> > > > It took me several years to figure out how to more or less reliably
+> > > > remove dirs after the fuzzer ;)
+> > > > (no, unlink won't do ;))
+> > >
+> > > I guess that there are things such as immutable file attributes that has
+> > > to be cleared and many more. Do you have piece of code somewhere that we
+> > > can look into to spare us from reinventing the wheel?
+> >
+> > Here is what we have:
+> > https://github.com/google/syzkaller/blob/c4b9981b5f5b70dc03eb3f76c618398510101a1d/executor/common_linux.h#L2358-L2461
+> > Maybe it can be simplified, but that's what we ended up with after
+> > some organic evolution. At least the comments may give some hints as
+> > to what may go wrong.
+>
+> Thanks a lot!
+>
+> Also I see that you are using namespaces, and much more, to sandbox the
+> fuzzer, I was wondering if we should do that, at least separate user and
+> pid namespace sounds like a good idea to me.
 
-Please change this to /bin/sh
+I don't know how far you want to go. This sandboxing definitely helps
+us to isolate processes and make tests more repeatable by avoiding
+interference (I don't know if LTP, say, runs tests in parallel).
+mount namespaces are useful to later drop all of test mounts at once,
+this would solve a significant part of the remote_dir logic. If the
+temp dir is on tmpfs in the mount namespace as well, then it will be
+automatically dropped altogether with all contents.
