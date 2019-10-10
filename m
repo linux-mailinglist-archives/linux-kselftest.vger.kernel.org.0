@@ -2,111 +2,75 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C00AAD2CEC
-	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Oct 2019 16:53:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D33A5D2D92
+	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Oct 2019 17:21:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726393AbfJJOwC (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 10 Oct 2019 10:52:02 -0400
-Received: from cmccmta1.chinamobile.com ([221.176.66.79]:2391 "EHLO
-        cmccmta1.chinamobile.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725901AbfJJOwC (ORCPT
+        id S1726339AbfJJPVy (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 10 Oct 2019 11:21:54 -0400
+Received: from youngberry.canonical.com ([91.189.89.112]:57805 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725901AbfJJPVy (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 10 Oct 2019 10:52:02 -0400
-Received: from spf.mail.chinamobile.com (unknown[172.16.121.13]) by rmmx-syy-dmz-app02-12002 (RichMail) with SMTP id 2ee25d9f4569809-229e5; Thu, 10 Oct 2019 22:51:21 +0800 (CST)
-X-RM-TRANSID: 2ee25d9f4569809-229e5
-X-RM-TagInfo: emlType=0                                       
-X-RM-SPAM-FLAG: 00000000
-Received: from localhost (unknown[223.105.0.241])
-        by rmsmtp-syy-appsvr07-12007 (RichMail) with SMTP id 2ee75d9f4566e8f-c4fb8;
-        Thu, 10 Oct 2019 22:51:20 +0800 (CST)
-X-RM-TRANSID: 2ee75d9f4566e8f-c4fb8
-From:   Haishuang Yan <yanhaishuang@cmss.chinamobile.com>
-To:     Shuah Khan <shuah@kernel.org>,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Simon Horman <horms@verge.net.au>
-Cc:     Julian Anastasov <ja@ssi.bg>, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, lvs-devel@vger.kernel.org,
-        netfilter-devel@vger.kernel.org,
-        Haishuang Yan <yanhaishuang@cmss.chinamobile.com>
-Subject: [PATCH v6 3/3] selftests: netfilter: add ipvs tunnel test case
-Date:   Thu, 10 Oct 2019 22:50:55 +0800
-Message-Id: <1570719055-25110-4-git-send-email-yanhaishuang@cmss.chinamobile.com>
-X-Mailer: git-send-email 1.8.3.1
-In-Reply-To: <1570719055-25110-1-git-send-email-yanhaishuang@cmss.chinamobile.com>
-References: <1570719055-25110-1-git-send-email-yanhaishuang@cmss.chinamobile.com>
+        Thu, 10 Oct 2019 11:21:54 -0400
+Received: from [213.220.153.21] (helo=wittgenstein)
+        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.86_2)
+        (envelope-from <christian.brauner@ubuntu.com>)
+        id 1iIaGE-0001BW-Vy; Thu, 10 Oct 2019 15:21:51 +0000
+Date:   Thu, 10 Oct 2019 17:21:49 +0200
+From:   Christian Brauner <christian.brauner@ubuntu.com>
+To:     Florian Weimer <fweimer@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, Oleg Nesterov <oleg@redhat.com>,
+        libc-alpha@sourceware.org, Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Shuah Khan <shuah@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Michal Hocko <mhocko@suse.com>,
+        Elena Reshetova <elena.reshetova@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Roman Gushchin <guro@fb.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Aleksa Sarai <cyphar@cyphar.com>,
+        "Dmitry V. Levin" <ldv@altlinux.org>,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH 1/2] clone3: add CLONE3_CLEAR_SIGHAND
+Message-ID: <20191010152148.gdea35mi7s6ivev6@wittgenstein>
+References: <20191010133518.5420-1-christian.brauner@ubuntu.com>
+ <87d0f4of7j.fsf@oldenburg2.str.redhat.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <87d0f4of7j.fsf@oldenburg2.str.redhat.com>
+User-Agent: NeoMutt/20180716
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Test virtual server via ipip tunnel.
+On Thu, Oct 10, 2019 at 04:19:44PM +0200, Florian Weimer wrote:
+> * Christian Brauner:
+> 
+> > @@ -2567,7 +2572,7 @@ static bool clone3_args_valid(const struct kernel_clone_args *kargs)
+> >  	 * All lower bits of the flag word are taken.
+> >  	 * Verify that no other unknown flags are passed along.
+> >  	 */
+> > -	if (kargs->flags & ~CLONE_LEGACY_FLAGS)
+> > +	if (kargs->flags & ~(CLONE_LEGACY_FLAGS | CLONE3_CLEAR_SIGHAND))
+> >  		return false;
+> 
+> Does the comment need updating?  I feel it's a bit misleading now.
 
-Tested:
-# selftests: netfilter: ipvs.sh
-# Testing DR mode...
-# Testing NAT mode...
-# Testing Tunnel mode...
-# ipvs.sh: PASS
-ok 6 selftests: netfilter: ipvs.sh
+Yeah, maybe just:
 
-Signed-off-by: Haishuang Yan <yanhaishuang@cmss.chinamobile.com>
----
-v2: optimize test script
----
- tools/testing/selftests/netfilter/ipvs.sh | 30 ++++++++++++++++++++++++++++++
- 1 file changed, 30 insertions(+)
+/* Verify that no unknown flags are passed along. */
 
-diff --git a/tools/testing/selftests/netfilter/ipvs.sh b/tools/testing/selftests/netfilter/ipvs.sh
-index 8b2e618..c3b8f90 100755
---- a/tools/testing/selftests/netfilter/ipvs.sh
-+++ b/tools/testing/selftests/netfilter/ipvs.sh
-@@ -168,6 +168,30 @@ test_nat() {
- 	test_service
- }
- 
-+test_tun() {
-+	ip netns exec ns0 ip route add ${vip_v4} via ${gip_v4} dev br0
-+
-+	ip netns exec ns1 modprobe ipip
-+	ip netns exec ns1 ip link set tunl0 up
-+	ip netns exec ns1 sysctl -qw net.ipv4.ip_forward=0
-+	ip netns exec ns1 sysctl -qw net.ipv4.conf.all.send_redirects=0
-+	ip netns exec ns1 sysctl -qw net.ipv4.conf.default.send_redirects=0
-+	ip netns exec ns1 ipvsadm -A -t ${vip_v4}:${port} -s rr
-+	ip netns exec ns1 ipvsadm -a -i -t ${vip_v4}:${port} -r ${rip_v4}:${port}
-+	ip netns exec ns1 ip addr add ${vip_v4}/32 dev lo:1
-+
-+	ip netns exec ns2 modprobe ipip
-+	ip netns exec ns2 ip link set tunl0 up
-+	ip netns exec ns2 sysctl -qw net.ipv4.conf.all.arp_ignore=1
-+	ip netns exec ns2 sysctl -qw net.ipv4.conf.all.arp_announce=2
-+	ip netns exec ns2 sysctl -qw net.ipv4.conf.all.rp_filter=0
-+	ip netns exec ns2 sysctl -qw net.ipv4.conf.tunl0.rp_filter=0
-+	ip netns exec ns2 sysctl -qw net.ipv4.conf.veth21.rp_filter=0
-+	ip netns exec ns2 ip addr add ${vip_v4}/32 dev lo:1
-+
-+	test_service
-+}
-+
- run_tests() {
- 	local errors=
- 
-@@ -183,6 +207,12 @@ run_tests() {
- 	test_nat
- 	errors=$(( $errors + $? ))
- 
-+	echo "Testing Tunnel mode..."
-+	cleanup
-+	setup
-+	test_tun
-+	errors=$(( $errors + $? ))
-+
- 	return $errors
- }
- 
--- 
-1.8.3.1
+?
 
-
-
+Thanks!
+Christian
