@@ -2,169 +2,373 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E152FD2F5A
-	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Oct 2019 19:14:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90362D2F52
+	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Oct 2019 19:11:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726688AbfJJROE (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 10 Oct 2019 13:14:04 -0400
-Received: from mail-lf1-f65.google.com ([209.85.167.65]:44305 "EHLO
-        mail-lf1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726131AbfJJROD (ORCPT
+        id S1726687AbfJJRLo (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 10 Oct 2019 13:11:44 -0400
+Received: from mail-io1-f67.google.com ([209.85.166.67]:38581 "EHLO
+        mail-io1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726634AbfJJRLn (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 10 Oct 2019 13:14:03 -0400
-Received: by mail-lf1-f65.google.com with SMTP id q12so4960732lfc.11
-        for <linux-kselftest@vger.kernel.org>; Thu, 10 Oct 2019 10:14:01 -0700 (PDT)
+        Thu, 10 Oct 2019 13:11:43 -0400
+Received: by mail-io1-f67.google.com with SMTP id u8so15408500iom.5
+        for <linux-kselftest@vger.kernel.org>; Thu, 10 Oct 2019 10:11:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=bqvz+afB1Rg3ieCrlwoBKML7ipcOdiXJ/q/XXxTUovI=;
-        b=Xol/3a0t0AtCulvKJeuAKS1uo5PWCjeyeDeHYLSA1FXKSnOkgSTF276gwVNHa4nPiN
-         l58RJ3zV8SDjz5HcQUbk/k9PwAg2ytkBSxmhuzf7L/EFmiieyqeQcJuKFBVQbWUjfXE1
-         U4t1RhqK0BT10C1Atodrl5m0eWGZPM7fTB2Dk=
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=TPg/L4c8Uvgw29Zd+7UAJnKTcWYr9oJBx1w/OaevLjA=;
+        b=GlbFOwwmneuybNGd5arIwRw5l4iiNFjNTddTdrmmIo6iVlapczMMALokM9O8npHnca
+         VoBy4vG2HpsyQDFAdxMRXfzOKytcwot3CU7Kx5x3aIHr5f4lLRXOIo3JBbFjSCIftmAS
+         KCei+m3PH/OkSKpkpgii/Sw4UkHsAUfBapCKA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=bqvz+afB1Rg3ieCrlwoBKML7ipcOdiXJ/q/XXxTUovI=;
-        b=ZW4L4JhZEKLjMb+TGdfNZCrCbyrdcBdn+AIhgkoAncYY781P7os12bAaZ1Qffl+fIk
-         A5LYire9zFxV5xUG8AVrJyr0G4UaxZMk61QLDtWz/leATpIIFH208B9xnMAWCKyMRUCD
-         7P152Jg9HWq3J3GWt78w1J26JEpAn5C3VHUIu6o7htlNImFMvBCS3znrO/SnuMO6PrNc
-         bnzjCYcb6kMbK3XCNxcZpud7fqlDfYRYPsIf2MmaeIOHV2a5vU4sYGPa+T7LCNx8+O3t
-         6Lw89T6Sb2+JCBGv1x04L2MtnI+leLI+2tssAkFZrWCuvBCkhhNcPUzWP8q8AzMmZH1J
-         KDFQ==
-X-Gm-Message-State: APjAAAV5s14rYZvQffnFVfrtdvJFNUv+53f+CIMt6VKsDvQPImLswcf3
-        d+iXHE/GSrtl+QsNCiJtNdYteSjlxS0=
-X-Google-Smtp-Source: APXvYqwXOwFsCNjRAZ81HF88cTGw7eBUloidEIxmAR9F9BiMUuNJtjGaHPwLGMakjmYSw8MD48MIcg==
-X-Received: by 2002:a19:ad0c:: with SMTP id t12mr6624430lfc.149.1570727640636;
-        Thu, 10 Oct 2019 10:14:00 -0700 (PDT)
-Received: from mail-lf1-f48.google.com (mail-lf1-f48.google.com. [209.85.167.48])
-        by smtp.gmail.com with ESMTPSA id r75sm1459004lff.7.2019.10.10.10.14.00
-        for <linux-kselftest@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 10 Oct 2019 10:14:00 -0700 (PDT)
-Received: by mail-lf1-f48.google.com with SMTP id d17so4976553lfa.7
-        for <linux-kselftest@vger.kernel.org>; Thu, 10 Oct 2019 10:14:00 -0700 (PDT)
-X-Received: by 2002:a19:f709:: with SMTP id z9mr6611392lfe.170.1570727268603;
- Thu, 10 Oct 2019 10:07:48 -0700 (PDT)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=TPg/L4c8Uvgw29Zd+7UAJnKTcWYr9oJBx1w/OaevLjA=;
+        b=ue8WseTgdgqDN+DQmRDFD4rKVWWj7gFF/Itj95AT/1x8Z8NP4uuNpNY4kPGRlOjvia
+         8SlaNdAmsNo0datGOEs57DvUz/vPfKKyx7RXQn6pEFhGMrfStEXLqsd/gxFg4wlLhIiK
+         YcuV6WjVPG9tS/pKuVWagpzQAu2NT+6u6pCCC+A9G8scFKsdr2VowWVm5vbvHnH0hXVt
+         Fx58LH/OLOvt5N6+cIs1mNfBP5XKfbSLf7/CepaMwBwxGaNL5LpYMF2oe0xhlrGxY2mK
+         BCqdOuKzveznUTHXDoUNFYefBvu33rMlcPDUae6yVC6SUNO09MoEbLWn0BlewQxlZowK
+         cr2Q==
+X-Gm-Message-State: APjAAAV/1phPh5qYtdf2RVPL3kX2clAzn2hp2hysuYLDUyzd/KHPHiW/
+        SB6ZYyjP+5Pf/n+E/I2vhCuhVA==
+X-Google-Smtp-Source: APXvYqxcFiDsFwYxJ4X+7hPa4aNBI2n0ezxGTwZmwB5kTo55GoYcpEps0rBilcfHSMTtglr1JeogxA==
+X-Received: by 2002:a5d:9856:: with SMTP id p22mr11560565ios.29.1570727502608;
+        Thu, 10 Oct 2019 10:11:42 -0700 (PDT)
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
+        by smtp.gmail.com with ESMTPSA id h4sm3748372iom.17.2019.10.10.10.11.41
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 10 Oct 2019 10:11:42 -0700 (PDT)
+Subject: Re: [PATCH linux-kselftest/test v2] ext4: add kunit test for decoding
+ extended timestamps
+To:     Iurii Zaikin <yzaikin@google.com>, linux-kselftest@vger.kernel.org,
+        linux-ext4@vger.kernel.org, tytso@mit.edu, adilger.kernel@dilger.ca
+Cc:     kunit-dev@googlegroups.com, brendanhiggins@google.com,
+        "skh >> Shuah Khan" <skhan@linuxfoundation.org>
+References: <20191010023931.230475-1-yzaikin@google.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <2f2ea7b0-f683-1cdd-f3f2-ecdf44cb4a97@linuxfoundation.org>
+Date:   Thu, 10 Oct 2019 11:11:40 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-References: <20191010054140.8483-1-cyphar@cyphar.com> <20191010054140.8483-3-cyphar@cyphar.com>
-In-Reply-To: <20191010054140.8483-3-cyphar@cyphar.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Thu, 10 Oct 2019 10:07:32 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wh8L50f31vW8BwRUXhLiq3eoCQ3tg8ER4Yp2dzuU1w5rQ@mail.gmail.com>
-Message-ID: <CAHk-=wh8L50f31vW8BwRUXhLiq3eoCQ3tg8ER4Yp2dzuU1w5rQ@mail.gmail.com>
-Subject: Re: [PATCH v14 2/6] namei: LOOKUP_IN_ROOT: chroot-like path resolution
-To:     Aleksa Sarai <cyphar@cyphar.com>
-Cc:     Al Viro <viro@zeniv.linux.org.uk>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J. Bruce Fields" <bfields@fieldses.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        David Howells <dhowells@redhat.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Jann Horn <jannh@google.com>, Tycho Andersen <tycho@tycho.ws>,
-        David Drysdale <drysdale@google.com>,
-        Chanho Min <chanho.min@lge.com>,
-        Oleg Nesterov <oleg@redhat.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Christian Brauner <christian@brauner.io>,
-        Aleksa Sarai <asarai@suse.de>,
-        Linux Containers <containers@lists.linux-foundation.org>,
-        alpha <linux-alpha@vger.kernel.org>,
-        Linux API <linux-api@vger.kernel.org>,
-        GNU C Library <libc-alpha@sourceware.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        linux-ia64@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        Linux-sh list <linux-sh@vger.kernel.org>,
-        linux-xtensa@linux-xtensa.org, sparclinux@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20191010023931.230475-1-yzaikin@google.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Oct 9, 2019 at 10:42 PM Aleksa Sarai <cyphar@cyphar.com> wrote:
->
-> --- a/fs/namei.c
-> +++ b/fs/namei.c
-> @@ -2277,6 +2277,11 @@ static const char *path_init(struct nameidata *nd, unsigned flags)
->
->         nd->m_seq = read_seqbegin(&mount_lock);
->
-> +       /* LOOKUP_IN_ROOT treats absolute paths as being relative-to-dirfd. */
-> +       if (flags & LOOKUP_IN_ROOT)
-> +               while (*s == '/')
-> +                       s++;
+On 10/9/19 8:39 PM, Iurii Zaikin wrote:
+> KUnit tests for decoding extended 64 bit timestamps.
+> 
+"Added the link to the ext4 docs from which the tests were derived."
+
+Document reference is great. I would still like to see summary
+in the commit log.
+
+As you said below:
+
+"This builds the ext4 inode sysctl unit test, which runs on boot."
+
+Also include what should user expect to see when one of these fails.
+
+
+> Signed-off-by: Iurii Zaikin <yzaikin@google.com>
+> ---
+>   fs/ext4/Kconfig      |  12 +++
+>   fs/ext4/Makefile     |   1 +
+>   fs/ext4/inode-test.c | 221 +++++++++++++++++++++++++++++++++++++++++++
+>   3 files changed, 234 insertions(+)
+>   create mode 100644 fs/ext4/inode-test.c
+> 
+> diff --git a/fs/ext4/Kconfig b/fs/ext4/Kconfig
+> index cbb5ca830e57..cb0b52753674 100644
+> --- a/fs/ext4/Kconfig
+> +++ b/fs/ext4/Kconfig
+> @@ -106,3 +106,15 @@ config EXT4_DEBUG
+>   	  If you select Y here, then you will be able to turn on debugging
+>   	  with a command such as:
+>   		echo 1 > /sys/module/ext4/parameters/mballoc_debug
 > +
->         /* Figure out the starting path and root (if needed). */
->         if (*s == '/') {
->                 error = nd_jump_root(nd);
+> +config EXT4_KUNIT_TESTS
+> +	bool "KUnit test for ext4 inode"
+> +	depends on EXT4_FS
+> +	depends on KUNIT
+> +	help
+> +	  This builds the ext4 inode sysctl unit test, which runs on boot.
+> +	  Tests the encoding correctness of ext4 inode.
+> +	  For more information on KUnit and unit tests in general please refer
+> +	  to the KUnit documentation in Documentation/dev-tools/kunit/.
 
-Hmm. Wouldn't this make more sense all inside the if (*s =- '/') test?
-That way if would be where we check for "should we start at the root",
-which seems to make more sense conceptually.
+Please add Documentation/filesystems/ext4/inodes.rst Inode Timestamps
+here as well.
 
-That test for '/' currently has a "} else if (..)", but that's
-pointless since it ends with a "return" anyway. So the "else" logic is
-just noise.
+Yeah. Especially after looking at the document, summary of what these
+test(s) is definitely helpful. You can't expect users to read the
+document before enabling it. Please write a summary of tests and what
+they do and add it here and then in the commit log. Also include what
+user should expect when they pass and when one of them fails.
 
-And if you get rid of the unnecessary else, moving the LOOKUP_IN_ROOT
-inside the if-statement works fine.
+> +
+> +	  If unsure, say N.
+> diff --git a/fs/ext4/Makefile b/fs/ext4/Makefile
+> index b17ddc229ac5..a0588fd2eea6 100644
+> --- a/fs/ext4/Makefile
+> +++ b/fs/ext4/Makefile
+> @@ -13,4 +13,5 @@ ext4-y	:= balloc.o bitmap.o block_validity.o dir.o ext4_jbd2.o extents.o \
+> 
+>   ext4-$(CONFIG_EXT4_FS_POSIX_ACL)	+= acl.o
+>   ext4-$(CONFIG_EXT4_FS_SECURITY)		+= xattr_security.o
+> +ext4-$(CONFIG_EXT4_KUNIT_TESTS)	+= inode-test.o
+>   ext4-$(CONFIG_FS_VERITY)		+= verity.o
+> diff --git a/fs/ext4/inode-test.c b/fs/ext4/inode-test.c
+> new file mode 100644
+> index 000000000000..43bc6cb547cd
+> --- /dev/null
+> +++ b/fs/ext4/inode-test.c
+> @@ -0,0 +1,221 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * KUnit test of ext4 inode that verify the seconds part of [a/c/m]
+> + * timestamps in ext4 inode structs are decoded correctly.
+> + * These tests are derived from the table under
+> + * Documentation/filesystems/ext4/inodes.rst Inode Timestamps
 
-So this could be something like
+Yeah. Especially after looking at the document, summary of what these
+test(s) is definitely helpful. You can't expect users to read the
+document before enabling the tests.
 
-    --- a/fs/namei.c
-    +++ b/fs/namei.c
-    @@ -2194,11 +2196,19 @@ static const char *path_init(struct
-nameidata *nd, unsigned flags)
+> + */
+> +
+> +#include <kunit/test.h>
+> +#include <linux/kernel.h>
+> +#include <linux/time64.h>
+> +
+> +#include "ext4.h"
+> +
+> +/* binary: 00000000 00000000 00000000 00000000 */
+> +#define LOWER_MSB_0 0L
+> +/* binary: 01111111 11111111 11111111 11111111 */
+> +#define UPPER_MSB_0 0x7fffffffL
+> +/* binary: 10000000 00000000 00000000 00000000 */
+> +#define LOWER_MSB_1 (-0x80000000L)
+> +/* binary: 11111111 11111111 11111111 11111111 */
+> +#define UPPER_MSB_1 (-1L)
+> +/* binary: 00111111   11111111 11111111 11111111 */
+> +#define MAX_NANOSECONDS ((1L << 30) - 1)
+> +
+> +#define CASE_NAME_FORMAT "%s: msb:%x lower_bound:%x extra_bits: %x"
+> +
+> +struct timestamp_expectation {
+> +	const char *test_case_name;
+> +	struct timespec64 expected;
+> +	u32 extra_bits;
+> +	bool msb_set;
+> +	bool lower_bound;
+> +};
+> +
+> +static time64_t get_32bit_time(const struct timestamp_expectation * const test)
+> +{
+> +	if (test->msb_set) {
+> +		if (test->lower_bound)
+> +			return LOWER_MSB_1;
+> +
+> +		return UPPER_MSB_1;
+> +	}
+> +
+> +	if (test->lower_bound)
+> +		return LOWER_MSB_0;
+> +	return UPPER_MSB_0;
+> +}
+> +
+> +
+> +static void inode_test_xtimestamp_decoding(struct kunit *test)
+> +{
+> +	const struct timestamp_expectation test_data[] = {
+> +		{
+> +			.test_case_name = "1901-12-13",
+> +			.msb_set = true,
+> +			.lower_bound = true,
+> +			.extra_bits = 0,
+> +			.expected = {.tv_sec = -0x80000000LL, .tv_nsec = 0L},
+> +		},
+> +
+> +		{
+> +			.test_case_name = "1969-12-31",
+> +			.msb_set = true,
+> +			.lower_bound = false,
+> +			.extra_bits = 0,
+> +			.expected = {.tv_sec = -1LL, .tv_nsec = 0L},
+> +		},
+> +
+> +		{
+> +			.test_case_name = "1970-01-01",
+> +			.msb_set = false,
+> +			.lower_bound = true,
+> +			.extra_bits = 0,
+> +			.expected = {0LL, 0L},
+> +		},
+> +
+> +		{
+> +			.test_case_name = "2038-01-19",
+> +			.msb_set = false,
+> +			.lower_bound = false,
+> +			.extra_bits = 0,
+> +			.expected = {.tv_sec = 0x7fffffffLL, .tv_nsec = 0L},
+> +		},
+> +
+> +		{
+> +			.test_case_name = "2038-01-19",
+> +			.msb_set = true,
+> +			.lower_bound = true,
+> +			.extra_bits = 1,
+> +			.expected = {.tv_sec = 0x80000000LL, .tv_nsec = 0L},
+> +		},
+> +
+> +		{
+> +			.test_case_name = "2106-02-07",
+> +			.msb_set = true,
+> +			.lower_bound = false,
+> +			.extra_bits = 1,
+> +			.expected = {.tv_sec = 0xffffffffLL, .tv_nsec = 0L},
+> +		},
+> +
+> +		{
+> +			.test_case_name = "2106-02-07",
+> +			.msb_set = false,
+> +			.lower_bound = true,
+> +			.extra_bits = 1,
+> +			.expected = {.tv_sec = 0x100000000LL, .tv_nsec = 0L},
+> +		},
+> +
+> +		{
+> +			.test_case_name = "2174-02-25",
+> +			.msb_set = false,
+> +			.lower_bound = false,
+> +			.extra_bits = 1,
+> +			.expected = {.tv_sec = 0x17fffffffLL, .tv_nsec = 0L},
+> +		},
+> +
+> +		{
+> +			.test_case_name = "2174-02-25",
+> +			.msb_set = true,
+> +			.lower_bound = true,
+> +			.extra_bits =  2,
+> +			.expected = {.tv_sec = 0x180000000LL, .tv_nsec = 0L},
+> +		},
+> +
+> +		{
+> +			.test_case_name = "2242-03-16",
+> +			.msb_set = true,
+> +			.lower_bound = false,
+> +			.extra_bits = 2,
+> +			.expected = {.tv_sec = 0x1ffffffffLL, .tv_nsec = 0L},
+> +		},
+> +
+> +		{
+> +			.test_case_name = "2242-03-16",
+> +			.msb_set = false,
+> +			.lower_bound = true,
+> +			.extra_bits = 2,
+> +			.expected = {.tv_sec = 0x200000000LL, .tv_nsec = 0L},
+> +		},
+> +
+> +		{
+> +			.test_case_name = " 2310-04-04",
+> +			.msb_set = false,
+> +			.lower_bound = false,
+> +			.extra_bits = 2,
+> +			.expected = {.tv_sec = 0x27fffffffLL, .tv_nsec = 0L},
+> +		},
+> +
+> +		{
+> +			.test_case_name = " 2310-04-04 00:00:00.1",
+> +			.msb_set = false,
+> +			.lower_bound = false,
+> +			.extra_bits = 6,
+> +			.expected = {.tv_sec = 0x27fffffffLL, .tv_nsec = 1L},
+> +		},
+> +
+> +		{
+> +			.test_case_name = "2378-04-22 00:00:00.MAX_NSEC",
+> +			.msb_set = false,
+> +			.lower_bound = true,
+> +			.extra_bits = 0xFFFFFFFF,
+> +			.expected = {.tv_sec = 0x300000000LL,
+> +				     .tv_nsec = MAX_NANOSECONDS},
+> +		},
+> +
+> +		{
+> +			.test_case_name = "2378-04-22",
+> +			.msb_set = false,
+> +			.lower_bound = true,
+> +			.extra_bits = 3,
+> +			.expected = {.tv_sec = 0x300000000LL, .tv_nsec = 0L},
+> +		},
+> +
+> +		{
+> +			.test_case_name = "2446-05-10",
+> +			.msb_set = false,
+> +			.lower_bound = false,
+> +			.extra_bits = 3,
+> +			.expected = {.tv_sec = 0x37fffffffLL, .tv_nsec = 0L},
+> +		}
+> +	};
+> +
 
-        nd->m_seq = read_seqbegin(&mount_lock);
-        if (*s == '/') {
-    -           set_root(nd);
-    -           if (likely(!nd_jump_root(nd)))
-    -                   return s;
-    -           return ERR_PTR(-ECHILD);
-    -   } else if (nd->dfd == AT_FDCWD) {
-    +           /* LOOKUP_IN_ROOT treats absolute paths as being
-relative-to-dirfd. */
-    +           if (!(flags & LOOKUP_IN_ROOT)) {
-    +                   set_root(nd);
-    +                   if (likely(!nd_jump_root(nd)))
-    +                           return s;
-    +                   return ERR_PTR(-ECHILD);
-    +           }
-    +
-    +           /* Skip initial '/' for LOOKUP_IN_ROOT */
-    +           do { s++; } while (*s == '/');
-    +   }
-    +
-    +   if (nd->dfd == AT_FDCWD) {
-                if (flags & LOOKUP_RCU) {
-                        struct fs_struct *fs = current->fs;
-                        unsigned seq;
+Is there a way to make the test data dynamic. Can you read from a data
+file? It will be easier to if the data
 
-instead. The patch ends up slightly bigger (due to the re-indentation)
-but now it handles all the "start at root" in the same place. Doesn't
-that make sense?
+Maybe this is question to Brendan?
 
-             Linus
+> +	struct timespec64 timestamp;
+> +	int i;
+> +
+> +	for (i = 0; i < ARRAY_SIZE(test_data); ++i) {
+> +		timestamp.tv_sec = get_32bit_time(&test_data[i]);
+> +		ext4_decode_extra_time(&timestamp,
+> +				       cpu_to_le32(test_data[i].extra_bits));
+> +
+> +		KUNIT_EXPECT_EQ_MSG(test,
+> +				    test_data[i].expected.tv_sec,
+> +				    timestamp.tv_sec,
+> +				    CASE_NAME_FORMAT,
+> +				    test_data[i].test_case_name,
+> +				    test_data[i].msb_set,
+> +				    test_data[i].lower_bound,
+> +				    test_data[i].extra_bits);
+> +		KUNIT_EXPECT_EQ_MSG(test,
+> +				    test_data[i].expected.tv_nsec,
+> +				    timestamp.tv_nsec,
+> +				    CASE_NAME_FORMAT,
+> +				    test_data[i].test_case_name,
+> +				    test_data[i].msb_set,
+> +				    test_data[i].lower_bound,
+> +				    test_data[i].extra_bits);
+> +	}
+> +}
+> +
+> +static struct kunit_case ext4_inode_test_cases[] = {
+> +	KUNIT_CASE(inode_test_xtimestamp_decoding),
+> +	{}
+> +};
+> +
+> +static struct kunit_suite ext4_inode_test_suite = {
+> +	.name = "ext4_inode_test",
+> +	.test_cases = ext4_inode_test_cases,
+> +};
+> +
+> +kunit_test_suite(ext4_inode_test_suite);
+> --
+> 2.23.0.700.g56cf767bdb-goog
+> 
+
+thanks,
+-- Shuah
