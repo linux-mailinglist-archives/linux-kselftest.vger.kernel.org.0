@@ -2,138 +2,252 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E1CFD3E31
-	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Oct 2019 13:19:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F483D3F6C
+	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Oct 2019 14:23:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726935AbfJKLTt (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 11 Oct 2019 07:19:49 -0400
-Received: from mail-pf1-f196.google.com ([209.85.210.196]:39822 "EHLO
-        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727226AbfJKLTt (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 11 Oct 2019 07:19:49 -0400
-Received: by mail-pf1-f196.google.com with SMTP id v4so5916066pff.6
-        for <linux-kselftest@vger.kernel.org>; Fri, 11 Oct 2019 04:19:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=0ljULyIMp5Dm2RbiLSJ5YpQ+1SlP+EDqs8VnjvFtPbs=;
-        b=SBukcD6G/E4Q++e2MZyOopU4xjNmSBLIyw2OjHpHEArm5yavHfcNQMcy3hp1jluvT4
-         pn2E1VFZ01pACE++91eD6JY72tto6e+WxedlsanzH8AklUqB/3sr2lQn8wdyPTZKlcWX
-         dbbd2t3v4vZYcmALClOA3exUTHL0Iw8lNRNsCNuesZkxRfL/U22AngssU5rBVBGSOudG
-         BenLYRW4LtdSmaJQN3IyO38RPqNZ6nkaPcIma0B+ppZBMXcbUJAuWkgVL5V4oggQGKJh
-         rOr48xytLkVF/U1/V1iBDpiotUPGzuPGHnTbjrv9VcWJF9FLcP+fTLUfIDCwcrbFzXd/
-         XiUw==
+        id S1728072AbfJKMXu (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 11 Oct 2019 08:23:50 -0400
+Received: from mx1.redhat.com ([209.132.183.28]:41704 "EHLO mx1.redhat.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727974AbfJKMXu (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 11 Oct 2019 08:23:50 -0400
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com [209.85.208.72])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mx1.redhat.com (Postfix) with ESMTPS id 52416C05AA57
+        for <linux-kselftest@vger.kernel.org>; Fri, 11 Oct 2019 12:23:49 +0000 (UTC)
+Received: by mail-ed1-f72.google.com with SMTP id s3so5636972edr.15
+        for <linux-kselftest@vger.kernel.org>; Fri, 11 Oct 2019 05:23:49 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=0ljULyIMp5Dm2RbiLSJ5YpQ+1SlP+EDqs8VnjvFtPbs=;
-        b=i2jvg1wg6LLlNLRxaTNekhU8DWsrcyf6TBSrAgfjWFjohs8nhcoP265sUW3XWCg4y3
-         TV3aeIxPL7Z4nBqMEuF2M5HUKUc7luDTlnJqax2pjG9e5YqLYckHI0fC5Vi9YlMEEVTj
-         +IRQK0M4Buufb5ecDpKc6FE9q6JAbajzpTIDcJdFfOOW6ObBoiLSJ2Ea7OFt2nNXDBFN
-         9tgJiWyB1WkizzOykgQRkNUoXiiw2G0Ia2taX/3CyVjV0xRFyi2BUgoCxM8/86r/qIdt
-         U/d8G8RsKRUTtzgLTbEbErnZo+TwrocnzPCRVLGZ5MXBH/6uwQVjTLkLDiKEiVv/dWU1
-         a0rw==
-X-Gm-Message-State: APjAAAVzzZZpuy71aHXmmRRb0XSCF2ZoQ3Hi+7a5NGjJCNlH56BxqcnV
-        an5slDyyCwXaaA+ur6sI0CJZmtpU9wEviq11IWWEqg==
-X-Google-Smtp-Source: APXvYqxcSK91sAbjydy8izO3KdbH6dlPRpO+hbZFf3Yur0zrcqyASWP1dCZqgyrB4WUpHZP16rqu7e0PrcNPMh+RL1s=
-X-Received: by 2002:a17:90a:f495:: with SMTP id bx21mr16324796pjb.84.1570792788221;
- Fri, 11 Oct 2019 04:19:48 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=3cPBHk1mEoebcHg5P34RWIFsyAjZtXn8ix58sCjirqg=;
+        b=XLowBf80xkL/wYoS7f6wexaGKprBhZ9Rg622ULC9deUlP3NBoy5mHAdrABSSRFoy1O
+         aLt65H57cZWk/vjDKSFRH0VvsqEXXBKWM7GRO6N81zma4ZLxpCZxyIAX/Rj4OVfkrm6L
+         mG5GsYud26s+IPR4g00EGmoFh/X6MmI3i70iZApBKaWBcI8ZgP/FgsAYidNXRbVpAq1C
+         QvL+ikoRn5UAMIzfrUJCkX+t6airuYUu/AlfEBfcHTd7VHriaQqu+qnBkH7vO++ybRgq
+         J8p47Aa/C6BaTAP2yqIzyQ7PvLvUUUrbkdken5wn0fK3J4NKnPEUyNGAukoiyt3wE9oo
+         tPgA==
+X-Gm-Message-State: APjAAAVu4ktvU4mNaLGFasGveD6SZyhXHgZ5EIVuwWLaKuQnGDWtDTMF
+        NSQgZTVup64JUNQ1lb9QZ0uvC6kTD6cTZWULlHwbY5MY/M9Xy4IL7OpMejAQ9vOXBdg9oerrA8N
+        v1eshsvNsVZLq706Aa/0DPyyq/Ic9
+X-Received: by 2002:aa7:d6cd:: with SMTP id x13mr13234269edr.272.1570796627954;
+        Fri, 11 Oct 2019 05:23:47 -0700 (PDT)
+X-Google-Smtp-Source: APXvYqx3FaL2QqsIQ6t673/hPHNxo+RsW5gKJLm6+xJjO1xTQgAVjVXfuzs53s1wKTr2WV9wc/xbwQ==
+X-Received: by 2002:aa7:d6cd:: with SMTP id x13mr13234239edr.272.1570796627703;
+        Fri, 11 Oct 2019 05:23:47 -0700 (PDT)
+Received: from localhost ([2a02:2450:102e:d85:877d:43b4:dd8f:144d])
+        by smtp.gmail.com with ESMTPSA id w21sm1533538eda.90.2019.10.11.05.23.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 11 Oct 2019 05:23:47 -0700 (PDT)
+From:   Christian Kellner <ckellner@redhat.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     linux-api@vger.kernel.org,
+        Christian Kellner <christian@kellner.me>,
+        Christian Brauner <christian@brauner.io>,
+        Shuah Khan <shuah@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>, Michal Hocko <mhocko@suse.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Elena Reshetova <elena.reshetova@intel.com>,
+        Roman Gushchin <guro@fb.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Aleksa Sarai <cyphar@cyphar.com>,
+        "Dmitry V. Levin" <ldv@altlinux.org>,
+        linux-kselftest@vger.kernel.org
+Subject: [PATCH v3 2/2] pidfd: add tests for NSpid info in fdinfo
+Date:   Fri, 11 Oct 2019 14:23:21 +0200
+Message-Id: <20191011122323.7770-2-ckellner@redhat.com>
+X-Mailer: git-send-email 2.21.0
+In-Reply-To: <20191011122323.7770-1-ckellner@redhat.com>
+References: <20191009160532.20674-1-ckellner@redhat.com>
+ <20191011122323.7770-1-ckellner@redhat.com>
 MIME-Version: 1.0
-References: <c99604e5-2ea4-4075-9a39-470104298368@googlegroups.com>
-In-Reply-To: <c99604e5-2ea4-4075-9a39-470104298368@googlegroups.com>
-From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Fri, 11 Oct 2019 04:19:37 -0700
-Message-ID: <CAFd5g46+OMmP8mYsH8vcpMpdOeYryp=1Lsab4Hy6pAhWjX5-4Q@mail.gmail.com>
-Subject: Re: kunit.py should default to --build_dir=.kunit
-To:     "Theodore Ts'o" <theodore.tso@gmail.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>
-Cc:     KUnit Development <kunit-dev@googlegroups.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-+open list:KERNEL SELFTEST FRAMEWORK In case anyone in kselftest has
-any thoughts.
+From: Christian Kellner <christian@kellner.me>
 
-On Thu, Oct 10, 2019 at 7:05 PM Theodore Ts'o <theodore.tso@gmail.com> wrot=
-e:
->
-> I've been experimenting with the ext4 kunit test case, and something that=
- would be really helpful is if the default is to store the object files for=
- the ARCM=3Dum kernel and its .config file in the top-level directory .kuni=
-t.   That is, that the default for --build_dir should be .kunit.
->
-> Why does this important?  Because  the kernel developer will want to be r=
-unning unit tests as well as building kernels that can be run under whateve=
-r architecture they are normally developing for (for example, an x86 kernel=
- that can be run using kvm; or a arm64 kernel that gets run on an Android d=
-evice by using the "fastboot" command).   So that means we don't want to be=
- overwriting the object files and .config files for building the kernel for=
- x86 when building the kunit kernel using the um arch.   For example, for e=
-xt4, my ideal workflow might go something like this:
+Add tests that check that if pid namespaces are configured the fdinfo
+file of a pidfd contains an NSpid: entry containing the process id
+in the current and additionally all nested namespaces.
 
-That's a good point.
+Signed-off-by: Christian Kellner <christian@kellner.me>
+---
+ tools/testing/selftests/pidfd/Makefile        |  2 +-
+ tools/testing/selftests/pidfd/pidfd.h         | 12 +++
+ .../selftests/pidfd/pidfd_fdinfo_test.c       | 98 +++++++++++++++++++
+ tools/testing/selftests/pidfd/pidfd_test.c    | 12 ---
+ 4 files changed, 111 insertions(+), 13 deletions(-)
+ create mode 100644 tools/testing/selftests/pidfd/pidfd_fdinfo_test.c
 
-> <hack hack hack>
-> % ./tools/testing/kunit/kunit.py  run
-> <watch to see that unit tests succeed, and since most of the object files=
- have already been built for the kunit kernel in be stored in the .kunit di=
-rectory, this will be fast, since only the modified files will need to be r=
-ecompiled>
-> % kbuild
-> <this is a script that builds an x86 kernel in /build/ext4-64 that is des=
-igned to be run under either kvm or in a GCE VM; since the kunit object fil=
-es are stored in /build/ext4-kunit, the pre-existing files when building fo=
-r x86_64 haven't been disturbed, so this build is fast as well>
-> % kvm-xfstests smoke
-> <this will run xfstests using the kernel plucked from /build/ext-64, usin=
-g kvm>
->
-> The point is when I'm developing an ext4 feature, or reviewing and mergin=
-g ext4 commits, I need to be able to maintain separate build trees and sepa=
-rate config files for ARCH=3Dum as well as ARCH=3Dx86_64, and if the ARCH=
-=3Dum are stored in the kernel sources, then building with O=3D... doesn't =
-work:
->
-> <tytso@lambda> {/usr/projects/linux/kunit}   (kunit)
-> 1084% make O=3D/build/test-dir
-> make[1]: Entering directory '/build/test-dir'
-> ***
-> *** The source tree is not clean, please run 'make mrproper'
-> *** in /usr/projects/linux/kunit
-> ***
+diff --git a/tools/testing/selftests/pidfd/Makefile b/tools/testing/selftests/pidfd/Makefile
+index 7550f08822a3..43db1b98e845 100644
+--- a/tools/testing/selftests/pidfd/Makefile
++++ b/tools/testing/selftests/pidfd/Makefile
+@@ -1,7 +1,7 @@
+ # SPDX-License-Identifier: GPL-2.0-only
+ CFLAGS += -g -I../../../../usr/include/ -pthread
+ 
+-TEST_GEN_PROGS := pidfd_test pidfd_open_test pidfd_poll_test pidfd_wait
++TEST_GEN_PROGS := pidfd_test pidfd_fdinfo_test pidfd_open_test pidfd_poll_test pidfd_wait
+ 
+ include ../lib.mk
+ 
+diff --git a/tools/testing/selftests/pidfd/pidfd.h b/tools/testing/selftests/pidfd/pidfd.h
+index c6bc68329f4b..2946d788645b 100644
+--- a/tools/testing/selftests/pidfd/pidfd.h
++++ b/tools/testing/selftests/pidfd/pidfd.h
+@@ -84,4 +84,16 @@ static inline int sys_pidfd_send_signal(int pidfd, int sig, siginfo_t *info,
+ 	return syscall(__NR_pidfd_send_signal, pidfd, sig, info, flags);
+ }
+ 
++static pid_t pidfd_clone(int flags, int *pidfd, int (*fn)(void *))
++{
++	size_t stack_size = 1024;
++	char *stack[1024] = { 0 };
++
++#ifdef __ia64__
++	return __clone2(fn, stack, stack_size, flags | SIGCHLD, NULL, pidfd);
++#else
++	return clone(fn, stack + stack_size, flags | SIGCHLD, NULL, pidfd);
++#endif
++}
++
+ #endif /* __PIDFD_H */
+diff --git a/tools/testing/selftests/pidfd/pidfd_fdinfo_test.c b/tools/testing/selftests/pidfd/pidfd_fdinfo_test.c
+new file mode 100644
+index 000000000000..fbae502ad8ad
+--- /dev/null
++++ b/tools/testing/selftests/pidfd/pidfd_fdinfo_test.c
+@@ -0,0 +1,98 @@
++// SPDX-License-Identifier: GPL-2.0
++
++#define _GNU_SOURCE
++#include <errno.h>
++#include <fcntl.h>
++#include <linux/types.h>
++#include <sched.h>
++#include <signal.h>
++#include <stdio.h>
++#include <stdlib.h>
++#include <string.h>
++#include <syscall.h>
++#include <sys/wait.h>
++
++#include "pidfd.h"
++#include "../kselftest.h"
++
++static int child_fdinfo_nspid_test(void *args)
++{
++	ksft_print_msg("Child: pid %d\n", getpid());
++	return 0;
++}
++
++static int compare_fdinfo_nspid(int pidfd, char *expect, size_t len)
++{
++	char path[512];
++	FILE *f;
++	size_t n = 0;
++	ssize_t k;
++	char *line = NULL;
++	int r = -1;
++
++	snprintf(path, sizeof(path), "/proc/self/fdinfo/%d", pidfd);
++
++	f = fopen(path, "re");
++	if (!f)
++		return -1;
++
++	while ((k = getline(&line, &n, f)) != -1) {
++		if (strncmp(line, "NSpid:", 6))
++			continue;
++
++		line[k - 1] = '\0';
++		ksft_print_msg("Child: fdinfo NSpid line: '%s'.\n", line);
++		r = strncmp(line + 6, expect, len);
++		break;
++	}
++
++	free(line);
++	fclose(f);
++
++	return r;
++}
++
++static void test_pidfd_fdinfo_nspid(void)
++{
++	char expect[512];
++	int pid, pidfd = 0;
++	int n, r;
++	const char *test_name = "pidfd check for NSpid information in fdinfo";
++
++	pid = pidfd_clone(CLONE_PIDFD | CLONE_NEWPID | CLONE_NEWUSER, &pidfd,
++			  child_fdinfo_nspid_test);
++	if (pid < 0)
++		ksft_exit_fail_msg(
++			"%s test: pidfd_clone failed (ret %d, errno %d)\n",
++			test_name, pid, errno);
++
++	ksft_print_msg("Parent: child-pid: %d\n", pid);
++
++	/* The child will have pid 1 in the new pid namespace,
++	 * so the line must be 'NSPid:\t<pid>\t1'
++	 */
++	n = snprintf(expect, sizeof(expect), "\t%d\t%d", pid, 1);
++	r = compare_fdinfo_nspid(pidfd, expect, n);
++
++	(void)close(pidfd);
++
++	if (wait_for_pid(pid))
++		ksft_exit_fail_msg(
++			"%s test: waitpid failed (ret %d, errno %d)\n",
++			test_name, r, errno);
++
++	if (r != 0)
++		ksft_exit_fail_msg("%s test: Failed\n", test_name);
++	else
++		ksft_test_result_pass("%s test: Passed\n", test_name);
++}
++
++int main(int argc, char **argv)
++{
++	ksft_print_header();
++	ksft_set_plan(1);
++
++	test_pidfd_fdinfo_nspid();
++
++	return ksft_exit_pass();
++}
+diff --git a/tools/testing/selftests/pidfd/pidfd_test.c b/tools/testing/selftests/pidfd/pidfd_test.c
+index 7aff2d3b42c0..9cf0b6b3e389 100644
+--- a/tools/testing/selftests/pidfd/pidfd_test.c
++++ b/tools/testing/selftests/pidfd/pidfd_test.c
+@@ -27,18 +27,6 @@
+ 
+ #define MAX_EVENTS 5
+ 
+-static pid_t pidfd_clone(int flags, int *pidfd, int (*fn)(void *))
+-{
+-	size_t stack_size = 1024;
+-	char *stack[1024] = { 0 };
+-
+-#ifdef __ia64__
+-	return __clone2(fn, stack, stack_size, flags | SIGCHLD, NULL, pidfd);
+-#else
+-	return clone(fn, stack + stack_size, flags | SIGCHLD, NULL, pidfd);
+-#endif
+-}
+-
+ static int signal_received;
+ 
+ static void set_signal_received_on_sigusr1(int sig)
+-- 
+2.21.0
 
-Should we maybe drop `--build_dir` in favor of `O`?
-
-> One of the other reasons why it would be good to use --build_dir by defau=
-lt is that way, building with a separate O=3D build directory is regularly =
-tested.   Right now, "kunit.py --build_dir=3D" seems to be broken.
-
-Good point.
-
-> % ./tools/testing/kunit/kunit.py run --build_dir=3D/build/ext4-kunit
-> Generating .config ...
-> [22:04:12] Building KUnit Kernel ...
-> /usr/projects/linux/kunit/arch/x86/um/user-offsets.c:20:10: fatal error: =
-asm/syscalls_64.h: No such file or directory
->    20 | #include <asm/syscalls_64.h>
->       |          ^~~~~~~~~~~~~~~~~~~
-> compilation terminated.
->
-> (This appears to be an ARCH=3Dum bug, not a kunit bug, though.)
-
-Yeah, I encountered this before. Some file is not getting properly
-cleaned up by `make mrproper`. It works if you do `git clean -fdx` (I
-know that's not a real solution for most people). Nevertheless, it
-sounds like we need to sit down and actually solve this problem since
-it is affecting users now.
-
-I think you make a compelling argument. Anyone else have any thoughts on th=
-is?
