@@ -2,129 +2,94 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D68F6D40EA
-	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Oct 2019 15:19:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 95C5DD4146
+	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Oct 2019 15:31:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728298AbfJKNTN (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 11 Oct 2019 09:19:13 -0400
-Received: from outgoing-auth-1.mit.edu ([18.9.28.11]:43381 "EHLO
-        outgoing.mit.edu" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1728344AbfJKNTN (ORCPT
+        id S1728198AbfJKNbY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 11 Oct 2019 09:31:24 -0400
+Received: from mail-pg1-f196.google.com ([209.85.215.196]:41597 "EHLO
+        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727950AbfJKNbY (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 11 Oct 2019 09:19:13 -0400
-Received: from callcc.thunk.org (guestnat-104-132-34-105.corp.google.com [104.132.34.105] (may be forged))
-        (authenticated bits=0)
-        (User authenticated as tytso@ATHENA.MIT.EDU)
-        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id x9BDJ2BT010295
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 11 Oct 2019 09:19:03 -0400
-Received: by callcc.thunk.org (Postfix, from userid 15806)
-        id 63F8F42045A; Fri, 11 Oct 2019 09:19:02 -0400 (EDT)
-Date:   Fri, 11 Oct 2019 09:19:02 -0400
-From:   "Theodore Y. Ts'o" <tytso@mit.edu>
-To:     Brendan Higgins <brendanhiggins@google.com>
-Cc:     Iurii Zaikin <yzaikin@google.com>,
+        Fri, 11 Oct 2019 09:31:24 -0400
+Received: by mail-pg1-f196.google.com with SMTP id t3so5806977pga.8;
+        Fri, 11 Oct 2019 06:31:22 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=PoH5MwnZ8mABUE4xEY3uv3HD3AizjwGwq9FYbMsqiJI=;
+        b=Dd1ZRQUqxJbJ4XmorKsIkCtEacO2eN09lx8ajkjbqAfiJu29ijb20yUVFhLES2aTAC
+         4QL7Kndoe+PxN+LYdFsp2lGfyuVNxnUBXgGL/HFakv10SrqS3+YzRMMBGS/5AuM0qlDn
+         VwX4247mLRYbydvGYCP7gGBNU2Uu7H+peXDi/cJUx3mDSY340fLjw2+5GB8Wc28eCZrS
+         n8QyxrNZjj0KNuY4OPv/yTNr5LKizc2oz1sB5GJD9k262ioPMubB2zzLWSBYfH526Ws9
+         AO5vQdOSr9WbeYAmcunbARwBa9vpuV9n8vty5ILql8hK+8i5Xpwgcg7QhX6eYZNQRz83
+         4QFA==
+X-Gm-Message-State: APjAAAXticFZNFAla4guUMdajszLoyuuDSFyefuqrKwJeTlx08PUfEfJ
+        ZBOLRBXD44y6QqNk+1pUpKY=
+X-Google-Smtp-Source: APXvYqx8TVKU23vxfiCJYNLm8ZBGLiP4x+3bYJYdBArplQPvFpQtfe3pjF2ftceD826I4XWYVhs9MQ==
+X-Received: by 2002:a17:90a:9f94:: with SMTP id o20mr17787166pjp.76.1570800682200;
+        Fri, 11 Oct 2019 06:31:22 -0700 (PDT)
+Received: from 42.do-not-panic.com (42.do-not-panic.com. [157.230.128.187])
+        by smtp.gmail.com with ESMTPSA id d4sm7744375pjs.9.2019.10.11.06.31.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 11 Oct 2019 06:31:21 -0700 (PDT)
+Received: by 42.do-not-panic.com (Postfix, from userid 1000)
+        id 61BD5403EA; Fri, 11 Oct 2019 13:31:20 +0000 (UTC)
+Date:   Fri, 11 Oct 2019 13:31:20 +0000
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Takashi Iwai <tiwai@suse.de>
+Cc:     Scott Branden <scott.branden@broadcom.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        David Brown <david.brown@linaro.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Shuah Khan <shuah@kernel.org>, bjorn.andersson@linaro.org,
         Shuah Khan <skhan@linuxfoundation.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>, linux-ext4@vger.kernel.org,
-        adilger.kernel@dilger.ca, kunit-dev@googlegroups.com
-Subject: Re: [PATCH linux-kselftest/test v2] ext4: add kunit test for
- decoding extended timestamps
-Message-ID: <20191011131902.GC16225@mit.edu>
-References: <20191010023931.230475-1-yzaikin@google.com>
- <2f2ea7b0-f683-1cdd-f3f2-ecdf44cb4a97@linuxfoundation.org>
- <CAAXuY3qtSHENgy3S168_03ju_JwAucOAt5WEJGQ+pi5PfurP6g@mail.gmail.com>
- <CAFd5g46RcFV0FACuoF=jCSLzf7UFmEYn4gddaijUZ+zR_CFZBQ@mail.gmail.com>
+        Arnd Bergmann <arnd@arndb.de>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org,
+        BCM Kernel Feedback <bcm-kernel-feedback-list@broadcom.com>,
+        Olof Johansson <olof@lixom.net>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Colin Ian King <colin.king@canonical.com>,
+        Kees Cook <keescook@chromium.org>,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH 2/7] firmware: add offset to request_firmware_into_buf
+Message-ID: <20191011133120.GP16384@42.do-not-panic.com>
+References: <20190822192451.5983-1-scott.branden@broadcom.com>
+ <20190822192451.5983-3-scott.branden@broadcom.com>
+ <s5hef1crybq.wl-tiwai@suse.de>
+ <10461fcf-9eca-32b6-0f9d-23c63b3f3442@broadcom.com>
+ <s5hr258j6ln.wl-tiwai@suse.de>
+ <93b8285a-e5eb-d4a4-545d-426bbbeb8008@broadcom.com>
+ <s5ho90byhnv.wl-tiwai@suse.de>
+ <b440f372-45be-c06c-94a1-44ae6b1e7eb8@broadcom.com>
+ <s5hwoeyj3i5.wl-tiwai@suse.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAFd5g46RcFV0FACuoF=jCSLzf7UFmEYn4gddaijUZ+zR_CFZBQ@mail.gmail.com>
+In-Reply-To: <s5hwoeyj3i5.wl-tiwai@suse.de>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Oct 11, 2019 at 03:05:43AM -0700, Brendan Higgins wrote:
-> That's an interesting point. Should we try to establish a pattern for
-> how tests should be configured? My *very long term* goal is to
-> eventually have tests able to be built and run without any kind of
-> kernel of any kind, but I don't think that having a single config for
-> all tests in a subsystem gets in the way of that, so I don't think I
-> have a strong preference in terms of what I want to do.
+On Tue, Aug 27, 2019 at 12:40:02PM +0200, Takashi Iwai wrote:
+> On Mon, 26 Aug 2019 19:24:22 +0200,
+> Scott Branden wrote:
+> > 
+> > I will admit I am not familiar with every subtlety of PCI
+> > accesses. Any comments to the Valkyrie driver in this patch series are
+> > appreciated.
+> > But not all drivers need to work on all architectures. I can add a
+> > depends on x86 64bit architectures to the driver to limit it to such.
 > 
-> Nevertheless, I think establishing patterns is good. Do we want to try
-> to follow Ted's preference as a general rule from now on?
+> But it's an individual board on PCIe, and should work no matter which
+> architecture is?  Or is this really exclusive to x86?
 
-As I suggested on another thread (started on kunit-dev, but Brendan
-has cc'ed in linux-kselftest), I think it might really work well if
-"make kunit" runs all of the kunit tests automatically.  As we add
-more kunit tests, finding all of the CONFIG options so they can be
-added to the kunitconfig file is going to be hard, so kunit.py really
-needs an --allconfig which does this automatically.
+Poke Scott.
 
-Along these lines, perhaps we should state that as a general rule the
-CONFIG option for Kunit tests should only depend on KUINIT, and use
-select to enable other dependencies.  i.e., for the ext4 kunit tests,
-it should look like this:
-
-config EXT4_KUNIT_TESTS
-	bool "KUnit test for ext4 inode"
-	select EXT4_FS
-	depends on KUNIT
-...
-
-In the current patch, we use "depends on EXT4_FS", which meant that
-when I first added "CONFIG_EXT4_KUNIT_TESTS=y" to the kunitconfig
-file, I got the following confusing error message:
-
-% ./tools/testing/kunit/kunit.py  run
-Regenerating .config ...
-ERROR:root:Provided Kconfig is not contained in validated .config!
-
-Using "select EXT4_FS" makes it much easier to enable the ext4 kunit
-tests in kunitconfig.  At the moment requiring that we two lines to
-kunitconfig to enable ext4 isn't _that_ bad:
-
-CONFIG_EXT4_FS=y
-CONFIG_EXT4_KUNIT_TESTS=y
-
-but over time, if many subsystems start adding unit tests, the
-overhead of managing the kunitconfig file is going to get unwieldy.
-Hence my suggestion that we just make all Kunit CONFIG options depend
-only on CONFIG_KUNIT.
-
-> I agree with Iurii. I don't think that this example alone warrants
-> adding support for being able to read test data in from a separate
-> file (I would also like some clarification here on what is meant by
-> reading in from a separate file). I can imagine some scenarios where
-> that might make sense, but I think it would be better to get more
-> examples before trying to support that use case.
-
-So what I was thinking might happen is that for some of the largest
-unit tests before I would transition to deciding that xfstests was the
-better way to go, I *might* have a small, 100k ext4 file system which
-would checked into the kernel sources as fs/ext4/kunit_test.img, and
-there would be a makefile rule that would turn that into
-fs/ext4/kunit_test_img.c file that might look something like:
-
-const ext4_kunit_test_img[] = {
-      0xde, ...
-
-But I'm not sure I actually want to go down that path.  It would
-certainly better from a test design perspective to create test mocks
-at a higher layer, such as ext4_iget() and ext4_read_block_bitmap().
-
-The problem is that quite a bit of code in ext4 would have to be
-*extensively* refactored in order to allow for easy test mocking,
-since we have calls to sb_bread, ext4_bread(), submit_bh(), etc.,
-sprinkled alongside the code logic that we would want to test.
-
-So using a small test image and making the cut line be at the buffer
-cache layer is going to be much, *much* simpler at least in the short
-term.  So the big question is how much of an investment (or technical
-debt paydown) do I want to do right away, versus taking a shortcut to
-get better unit test coverage more quickly, and then do further tech
-debt reduction later?
-
-   	       	     	    	       - Ted
+  Luis
