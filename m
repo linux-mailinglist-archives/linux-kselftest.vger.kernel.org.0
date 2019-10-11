@@ -2,310 +2,138 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 49F3CD3D46
-	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Oct 2019 12:25:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E1CFD3E31
+	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Oct 2019 13:19:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727484AbfJKKZu (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 11 Oct 2019 06:25:50 -0400
-Received: from youngberry.canonical.com ([91.189.89.112]:36028 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727032AbfJKKZt (ORCPT
+        id S1726935AbfJKLTt (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 11 Oct 2019 07:19:49 -0400
+Received: from mail-pf1-f196.google.com ([209.85.210.196]:39822 "EHLO
+        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727226AbfJKLTt (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 11 Oct 2019 06:25:49 -0400
-Received: from v22018046084765073.goodsrv.de ([185.183.158.195] helo=localhost.localdomain)
-        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.86_2)
-        (envelope-from <christian.brauner@ubuntu.com>)
-        id 1iIs7G-0007GP-ND; Fri, 11 Oct 2019 10:25:46 +0000
-From:   Christian Brauner <christian.brauner@ubuntu.com>
-To:     linux-kernel@vger.kernel.org, Oleg Nesterov <oleg@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>, libc-alpha@sourceware.org
-Cc:     Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Shuah Khan <shuah@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Michal Hocko <mhocko@suse.com>,
-        Elena Reshetova <elena.reshetova@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Roman Gushchin <guro@fb.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Aleksa Sarai <cyphar@cyphar.com>,
-        "Dmitry V. Levin" <ldv@altlinux.org>,
-        linux-kselftest@vger.kernel.org,
-        Christian Brauner <christian.brauner@ubuntu.com>,
-        linux-api@vger.kernel.org
-Subject: [PATCH v2 2/2] tests: test CLONE3_CLEAR_SIGHAND
-Date:   Fri, 11 Oct 2019 12:25:37 +0200
-Message-Id: <20191011102537.27502-2-christian.brauner@ubuntu.com>
-X-Mailer: git-send-email 2.23.0
-In-Reply-To: <20191011102537.27502-1-christian.brauner@ubuntu.com>
-References: <20191011102537.27502-1-christian.brauner@ubuntu.com>
+        Fri, 11 Oct 2019 07:19:49 -0400
+Received: by mail-pf1-f196.google.com with SMTP id v4so5916066pff.6
+        for <linux-kselftest@vger.kernel.org>; Fri, 11 Oct 2019 04:19:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=0ljULyIMp5Dm2RbiLSJ5YpQ+1SlP+EDqs8VnjvFtPbs=;
+        b=SBukcD6G/E4Q++e2MZyOopU4xjNmSBLIyw2OjHpHEArm5yavHfcNQMcy3hp1jluvT4
+         pn2E1VFZ01pACE++91eD6JY72tto6e+WxedlsanzH8AklUqB/3sr2lQn8wdyPTZKlcWX
+         dbbd2t3v4vZYcmALClOA3exUTHL0Iw8lNRNsCNuesZkxRfL/U22AngssU5rBVBGSOudG
+         BenLYRW4LtdSmaJQN3IyO38RPqNZ6nkaPcIma0B+ppZBMXcbUJAuWkgVL5V4oggQGKJh
+         rOr48xytLkVF/U1/V1iBDpiotUPGzuPGHnTbjrv9VcWJF9FLcP+fTLUfIDCwcrbFzXd/
+         XiUw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=0ljULyIMp5Dm2RbiLSJ5YpQ+1SlP+EDqs8VnjvFtPbs=;
+        b=i2jvg1wg6LLlNLRxaTNekhU8DWsrcyf6TBSrAgfjWFjohs8nhcoP265sUW3XWCg4y3
+         TV3aeIxPL7Z4nBqMEuF2M5HUKUc7luDTlnJqax2pjG9e5YqLYckHI0fC5Vi9YlMEEVTj
+         +IRQK0M4Buufb5ecDpKc6FE9q6JAbajzpTIDcJdFfOOW6ObBoiLSJ2Ea7OFt2nNXDBFN
+         9tgJiWyB1WkizzOykgQRkNUoXiiw2G0Ia2taX/3CyVjV0xRFyi2BUgoCxM8/86r/qIdt
+         U/d8G8RsKRUTtzgLTbEbErnZo+TwrocnzPCRVLGZ5MXBH/6uwQVjTLkLDiKEiVv/dWU1
+         a0rw==
+X-Gm-Message-State: APjAAAVzzZZpuy71aHXmmRRb0XSCF2ZoQ3Hi+7a5NGjJCNlH56BxqcnV
+        an5slDyyCwXaaA+ur6sI0CJZmtpU9wEviq11IWWEqg==
+X-Google-Smtp-Source: APXvYqxcSK91sAbjydy8izO3KdbH6dlPRpO+hbZFf3Yur0zrcqyASWP1dCZqgyrB4WUpHZP16rqu7e0PrcNPMh+RL1s=
+X-Received: by 2002:a17:90a:f495:: with SMTP id bx21mr16324796pjb.84.1570792788221;
+ Fri, 11 Oct 2019 04:19:48 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <c99604e5-2ea4-4075-9a39-470104298368@googlegroups.com>
+In-Reply-To: <c99604e5-2ea4-4075-9a39-470104298368@googlegroups.com>
+From:   Brendan Higgins <brendanhiggins@google.com>
+Date:   Fri, 11 Oct 2019 04:19:37 -0700
+Message-ID: <CAFd5g46+OMmP8mYsH8vcpMpdOeYryp=1Lsab4Hy6pAhWjX5-4Q@mail.gmail.com>
+Subject: Re: kunit.py should default to --build_dir=.kunit
+To:     "Theodore Ts'o" <theodore.tso@gmail.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>
+Cc:     KUnit Development <kunit-dev@googlegroups.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Test that CLONE3_CLEAR_SIGHAND resets signal handlers to SIG_DFL for the
-child process and that CLONE3_CLEAR_SIGHAND and CLONE_SIGHAND are
-mutually exclusive.
++open list:KERNEL SELFTEST FRAMEWORK In case anyone in kselftest has
+any thoughts.
 
-Cc: Florian Weimer <fweimer@redhat.com>
-Cc: libc-alpha@sourceware.org
-Cc: linux-api@vger.kernel.org
-Signed-off-by: Christian Brauner <christian.brauner@ubuntu.com>
----
-/* v1 */
-Link: https://lore.kernel.org/r/20191010133518.5420-2-christian.brauner@ubuntu.com
+On Thu, Oct 10, 2019 at 7:05 PM Theodore Ts'o <theodore.tso@gmail.com> wrot=
+e:
+>
+> I've been experimenting with the ext4 kunit test case, and something that=
+ would be really helpful is if the default is to store the object files for=
+ the ARCM=3Dum kernel and its .config file in the top-level directory .kuni=
+t.   That is, that the default for --build_dir should be .kunit.
+>
+> Why does this important?  Because  the kernel developer will want to be r=
+unning unit tests as well as building kernels that can be run under whateve=
+r architecture they are normally developing for (for example, an x86 kernel=
+ that can be run using kvm; or a arm64 kernel that gets run on an Android d=
+evice by using the "fastboot" command).   So that means we don't want to be=
+ overwriting the object files and .config files for building the kernel for=
+ x86 when building the kunit kernel using the um arch.   For example, for e=
+xt4, my ideal workflow might go something like this:
 
-/* v2 */
-- Christian Brauner <christian.brauner@ubuntu.com>:
-  - remove unused variable
-  - reuse variable in child process instead od declaring a new one
-  - move check for mutual exclusivity of CLONE_SIGHAND and
-    CLONE3_CLEAR_SIGHAND to top of test before setting up signal
-    handlers
-  - rename variables
----
- MAINTAINERS                                   |   1 +
- tools/testing/selftests/Makefile              |   1 +
- tools/testing/selftests/clone3/.gitignore     |   1 +
- tools/testing/selftests/clone3/Makefile       |   7 +
- .../selftests/clone3/clone3_clear_sighand.c   | 172 ++++++++++++++++++
- 5 files changed, 182 insertions(+)
- create mode 100644 tools/testing/selftests/clone3/.gitignore
- create mode 100644 tools/testing/selftests/clone3/Makefile
- create mode 100644 tools/testing/selftests/clone3/clone3_clear_sighand.c
+That's a good point.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 55199ef7fa74..582275d85607 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -12828,6 +12828,7 @@ S:	Maintained
- T:	git git://git.kernel.org/pub/scm/linux/kernel/git/brauner/linux.git
- F:	samples/pidfd/
- F:	tools/testing/selftests/pidfd/
-+F:	tools/testing/selftests/clone3/
- K:	(?i)pidfd
- K:	(?i)clone3
- K:	\b(clone_args|kernel_clone_args)\b
-diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-index c3feccb99ff5..6bf7aeb47650 100644
---- a/tools/testing/selftests/Makefile
-+++ b/tools/testing/selftests/Makefile
-@@ -4,6 +4,7 @@ TARGETS += bpf
- TARGETS += breakpoints
- TARGETS += capabilities
- TARGETS += cgroup
-+TARGETS += clone3
- TARGETS += cpufreq
- TARGETS += cpu-hotplug
- TARGETS += drivers/dma-buf
-diff --git a/tools/testing/selftests/clone3/.gitignore b/tools/testing/selftests/clone3/.gitignore
-new file mode 100644
-index 000000000000..6c9f98097774
---- /dev/null
-+++ b/tools/testing/selftests/clone3/.gitignore
-@@ -0,0 +1 @@
-+clone3_clear_sighand
-diff --git a/tools/testing/selftests/clone3/Makefile b/tools/testing/selftests/clone3/Makefile
-new file mode 100644
-index 000000000000..3ecd56ebc99d
---- /dev/null
-+++ b/tools/testing/selftests/clone3/Makefile
-@@ -0,0 +1,7 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+CFLAGS += -g -I../../../../usr/include/
-+
-+TEST_GEN_PROGS := clone3_clear_sighand
-+
-+include ../lib.mk
-+
-diff --git a/tools/testing/selftests/clone3/clone3_clear_sighand.c b/tools/testing/selftests/clone3/clone3_clear_sighand.c
-new file mode 100644
-index 000000000000..1a3adc206e74
---- /dev/null
-+++ b/tools/testing/selftests/clone3/clone3_clear_sighand.c
-@@ -0,0 +1,172 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+
-+#define _GNU_SOURCE
-+#include <errno.h>
-+#include <sched.h>
-+#include <signal.h>
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <string.h>
-+#include <unistd.h>
-+#include <linux/sched.h>
-+#include <linux/types.h>
-+#include <sys/syscall.h>
-+#include <sys/wait.h>
-+
-+#include "../kselftest.h"
-+
-+#ifndef CLONE3_CLEAR_SIGHAND
-+#define CLONE3_CLEAR_SIGHAND 0x100000000ULL
-+#endif
-+
-+#ifndef __NR_clone3
-+#define __NR_clone3 -1
-+struct clone_args {
-+	__aligned_u64 flags;
-+	__aligned_u64 pidfd;
-+	__aligned_u64 child_tid;
-+	__aligned_u64 parent_tid;
-+	__aligned_u64 exit_signal;
-+	__aligned_u64 stack;
-+	__aligned_u64 stack_size;
-+	__aligned_u64 tls;
-+};
-+#endif
-+
-+static pid_t sys_clone3(struct clone_args *args, size_t size)
-+{
-+	return syscall(__NR_clone3, args, size);
-+}
-+
-+static void test_clone3_supported(void)
-+{
-+	pid_t pid;
-+	struct clone_args args = {};
-+
-+	if (__NR_clone3 < 0)
-+		ksft_exit_skip("clone3() syscall is not supported\n");
-+
-+	/* Set to something that will always cause EINVAL. */
-+	args.exit_signal = -1;
-+	pid = sys_clone3(&args, sizeof(args));
-+	if (!pid)
-+		exit(EXIT_SUCCESS);
-+
-+	if (pid > 0) {
-+		wait(NULL);
-+		ksft_exit_fail_msg(
-+			"Managed to create child process with invalid exit_signal\n");
-+	}
-+
-+	if (errno == ENOSYS)
-+		ksft_exit_skip("clone3() syscall is not supported\n");
-+
-+	ksft_print_msg("clone3() syscall supported\n");
-+}
-+
-+static void nop_handler(int signo)
-+{
-+}
-+
-+static int wait_for_pid(pid_t pid)
-+{
-+	int status, ret;
-+
-+again:
-+	ret = waitpid(pid, &status, 0);
-+	if (ret == -1) {
-+		if (errno == EINTR)
-+			goto again;
-+
-+		return -1;
-+	}
-+
-+	if (!WIFEXITED(status))
-+		return -1;
-+
-+	return WEXITSTATUS(status);
-+}
-+
-+static void test_clone3_clear_sighand(void)
-+{
-+	int ret;
-+	pid_t pid;
-+	struct clone_args args = {};
-+	struct sigaction act;
-+
-+	/*
-+	 * Check that CLONE3_CLEAR_SIGHAND and CLONE_SIGHAND are mutually
-+	 * exclusive.
-+	 */
-+	args.flags |= CLONE3_CLEAR_SIGHAND | CLONE_SIGHAND;
-+	args.exit_signal = SIGCHLD;
-+	pid = sys_clone3(&args, sizeof(args));
-+	if (pid > 0)
-+		ksft_exit_fail_msg(
-+			"clone3(CLONE3_CLEAR_SIGHAND | CLONE_SIGHAND) succeeded\n");
-+
-+	act.sa_handler = nop_handler;
-+	ret = sigemptyset(&act.sa_mask);
-+	if (ret < 0)
-+		ksft_exit_fail_msg("%s - sigemptyset() failed\n",
-+				   strerror(errno));
-+
-+	act.sa_flags = 0;
-+
-+	/* Register signal handler for SIGUSR1 */
-+	ret = sigaction(SIGUSR1, &act, NULL);
-+	if (ret < 0)
-+		ksft_exit_fail_msg(
-+			"%s - sigaction(SIGUSR1, &act, NULL) failed\n",
-+			strerror(errno));
-+
-+	/* Register signal handler for SIGUSR2 */
-+	ret = sigaction(SIGUSR2, &act, NULL);
-+	if (ret < 0)
-+		ksft_exit_fail_msg(
-+			"%s - sigaction(SIGUSR2, &act, NULL) failed\n",
-+			strerror(errno));
-+
-+	/* Check that CLONE3_CLEAR_SIGHAND works. */
-+	args.flags = CLONE3_CLEAR_SIGHAND;
-+	pid = sys_clone3(&args, sizeof(args));
-+	if (pid < 0)
-+		ksft_exit_fail_msg("%s - clone3(CLONE3_CLEAR_SIGHAND) failed\n",
-+				   strerror(errno));
-+
-+	if (pid == 0) {
-+		ret = sigaction(SIGUSR1, NULL, &act);
-+		if (ret < 0)
-+			exit(EXIT_FAILURE);
-+
-+		if (act.sa_handler != SIG_DFL)
-+			exit(EXIT_FAILURE);
-+
-+		ret = sigaction(SIGUSR2, NULL, &act);
-+		if (ret < 0)
-+			exit(EXIT_FAILURE);
-+
-+		if (act.sa_handler != SIG_DFL)
-+			exit(EXIT_FAILURE);
-+
-+		exit(EXIT_SUCCESS);
-+	}
-+
-+	ret = wait_for_pid(pid);
-+	if (ret)
-+		ksft_exit_fail_msg(
-+			"Failed to clear signal handler for child process\n");
-+
-+	ksft_test_result_pass("Cleared signal handlers for child process\n");
-+}
-+
-+int main(int argc, char **argv)
-+{
-+	ksft_print_header();
-+	ksft_set_plan(1);
-+
-+	test_clone3_supported();
-+	test_clone3_clear_sighand();
-+
-+	return ksft_exit_pass();
-+}
--- 
-2.23.0
+> <hack hack hack>
+> % ./tools/testing/kunit/kunit.py  run
+> <watch to see that unit tests succeed, and since most of the object files=
+ have already been built for the kunit kernel in be stored in the .kunit di=
+rectory, this will be fast, since only the modified files will need to be r=
+ecompiled>
+> % kbuild
+> <this is a script that builds an x86 kernel in /build/ext4-64 that is des=
+igned to be run under either kvm or in a GCE VM; since the kunit object fil=
+es are stored in /build/ext4-kunit, the pre-existing files when building fo=
+r x86_64 haven't been disturbed, so this build is fast as well>
+> % kvm-xfstests smoke
+> <this will run xfstests using the kernel plucked from /build/ext-64, usin=
+g kvm>
+>
+> The point is when I'm developing an ext4 feature, or reviewing and mergin=
+g ext4 commits, I need to be able to maintain separate build trees and sepa=
+rate config files for ARCH=3Dum as well as ARCH=3Dx86_64, and if the ARCH=
+=3Dum are stored in the kernel sources, then building with O=3D... doesn't =
+work:
+>
+> <tytso@lambda> {/usr/projects/linux/kunit}   (kunit)
+> 1084% make O=3D/build/test-dir
+> make[1]: Entering directory '/build/test-dir'
+> ***
+> *** The source tree is not clean, please run 'make mrproper'
+> *** in /usr/projects/linux/kunit
+> ***
 
+Should we maybe drop `--build_dir` in favor of `O`?
+
+> One of the other reasons why it would be good to use --build_dir by defau=
+lt is that way, building with a separate O=3D build directory is regularly =
+tested.   Right now, "kunit.py --build_dir=3D" seems to be broken.
+
+Good point.
+
+> % ./tools/testing/kunit/kunit.py run --build_dir=3D/build/ext4-kunit
+> Generating .config ...
+> [22:04:12] Building KUnit Kernel ...
+> /usr/projects/linux/kunit/arch/x86/um/user-offsets.c:20:10: fatal error: =
+asm/syscalls_64.h: No such file or directory
+>    20 | #include <asm/syscalls_64.h>
+>       |          ^~~~~~~~~~~~~~~~~~~
+> compilation terminated.
+>
+> (This appears to be an ARCH=3Dum bug, not a kunit bug, though.)
+
+Yeah, I encountered this before. Some file is not getting properly
+cleaned up by `make mrproper`. It works if you do `git clean -fdx` (I
+know that's not a real solution for most people). Nevertheless, it
+sounds like we need to sit down and actually solve this problem since
+it is affecting users now.
+
+I think you make a compelling argument. Anyone else have any thoughts on th=
+is?
