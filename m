@@ -2,94 +2,111 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 95C5DD4146
-	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Oct 2019 15:31:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 33551D4384
+	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Oct 2019 16:56:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728198AbfJKNbY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 11 Oct 2019 09:31:24 -0400
-Received: from mail-pg1-f196.google.com ([209.85.215.196]:41597 "EHLO
-        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727950AbfJKNbY (ORCPT
+        id S1726953AbfJKO4X (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 11 Oct 2019 10:56:23 -0400
+Received: from bombadil.infradead.org ([198.137.202.133]:35296 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726328AbfJKO4X (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 11 Oct 2019 09:31:24 -0400
-Received: by mail-pg1-f196.google.com with SMTP id t3so5806977pga.8;
-        Fri, 11 Oct 2019 06:31:22 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=PoH5MwnZ8mABUE4xEY3uv3HD3AizjwGwq9FYbMsqiJI=;
-        b=Dd1ZRQUqxJbJ4XmorKsIkCtEacO2eN09lx8ajkjbqAfiJu29ijb20yUVFhLES2aTAC
-         4QL7Kndoe+PxN+LYdFsp2lGfyuVNxnUBXgGL/HFakv10SrqS3+YzRMMBGS/5AuM0qlDn
-         VwX4247mLRYbydvGYCP7gGBNU2Uu7H+peXDi/cJUx3mDSY340fLjw2+5GB8Wc28eCZrS
-         n8QyxrNZjj0KNuY4OPv/yTNr5LKizc2oz1sB5GJD9k262ioPMubB2zzLWSBYfH526Ws9
-         AO5vQdOSr9WbeYAmcunbARwBa9vpuV9n8vty5ILql8hK+8i5Xpwgcg7QhX6eYZNQRz83
-         4QFA==
-X-Gm-Message-State: APjAAAXticFZNFAla4guUMdajszLoyuuDSFyefuqrKwJeTlx08PUfEfJ
-        ZBOLRBXD44y6QqNk+1pUpKY=
-X-Google-Smtp-Source: APXvYqx8TVKU23vxfiCJYNLm8ZBGLiP4x+3bYJYdBArplQPvFpQtfe3pjF2ftceD826I4XWYVhs9MQ==
-X-Received: by 2002:a17:90a:9f94:: with SMTP id o20mr17787166pjp.76.1570800682200;
-        Fri, 11 Oct 2019 06:31:22 -0700 (PDT)
-Received: from 42.do-not-panic.com (42.do-not-panic.com. [157.230.128.187])
-        by smtp.gmail.com with ESMTPSA id d4sm7744375pjs.9.2019.10.11.06.31.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Oct 2019 06:31:21 -0700 (PDT)
-Received: by 42.do-not-panic.com (Postfix, from userid 1000)
-        id 61BD5403EA; Fri, 11 Oct 2019 13:31:20 +0000 (UTC)
-Date:   Fri, 11 Oct 2019 13:31:20 +0000
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Takashi Iwai <tiwai@suse.de>
-Cc:     Scott Branden <scott.branden@broadcom.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        David Brown <david.brown@linaro.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Shuah Khan <shuah@kernel.org>, bjorn.andersson@linaro.org,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org,
-        BCM Kernel Feedback <bcm-kernel-feedback-list@broadcom.com>,
-        Olof Johansson <olof@lixom.net>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Colin Ian King <colin.king@canonical.com>,
-        Kees Cook <keescook@chromium.org>,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH 2/7] firmware: add offset to request_firmware_into_buf
-Message-ID: <20191011133120.GP16384@42.do-not-panic.com>
-References: <20190822192451.5983-1-scott.branden@broadcom.com>
- <20190822192451.5983-3-scott.branden@broadcom.com>
- <s5hef1crybq.wl-tiwai@suse.de>
- <10461fcf-9eca-32b6-0f9d-23c63b3f3442@broadcom.com>
- <s5hr258j6ln.wl-tiwai@suse.de>
- <93b8285a-e5eb-d4a4-545d-426bbbeb8008@broadcom.com>
- <s5ho90byhnv.wl-tiwai@suse.de>
- <b440f372-45be-c06c-94a1-44ae6b1e7eb8@broadcom.com>
- <s5hwoeyj3i5.wl-tiwai@suse.de>
+        Fri, 11 Oct 2019 10:56:23 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:
+        Subject:Sender:Reply-To:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=VzyDG8mxkOlQKgeR6xFwM1BuSTEYj9mJKpZy596fXRw=; b=oxmdRYkaaBxT1jEXuvrJL3yuF
+        1iwfgVy1QyrJ20/ej5EtZZ9yZeUmj/n1n/Jxs5hcla/9fjHcLPPyJCqd8UyZpx7UpH2EgJVlm1Voo
+        WA1ImROfo+fjnUWaesJXxDOpCc3XwZ7W4mW/cCTnkJDhYCkfRHEyYWRzVioQ7CkpDrKAPyT2j/8EJ
+        fVd3JPlH0EZpUJDjtdHz7eM+zEWIG4yD137Jy1X0pO1RrBNgrQQv9Zs2XljfYfbQG7RL1GwjL8mpG
+        j3oK+E+2k8hmvPdoA3RgaCf+YuUyIyLtddlnzqbzEhyWKAbhpQg6Ev0/ZSV34dqbGCRPtL/gdIv5A
+        6LTE5hK9w==;
+Received: from [2601:1c0:6280:3f0::9ef4]
+        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1iIwL7-00056i-UJ; Fri, 11 Oct 2019 14:56:21 +0000
+Subject: Re: kunit.py should default to --build_dir=.kunit
+To:     Brendan Higgins <brendanhiggins@google.com>,
+        Theodore Ts'o <theodore.tso@gmail.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>
+Cc:     KUnit Development <kunit-dev@googlegroups.com>
+References: <c99604e5-2ea4-4075-9a39-470104298368@googlegroups.com>
+ <CAFd5g46+OMmP8mYsH8vcpMpdOeYryp=1Lsab4Hy6pAhWjX5-4Q@mail.gmail.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+Message-ID: <291f012c-0ffd-599e-0dac-a6b4e05ebb97@infradead.org>
+Date:   Fri, 11 Oct 2019 07:56:20 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.1.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <s5hwoeyj3i5.wl-tiwai@suse.de>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <CAFd5g46+OMmP8mYsH8vcpMpdOeYryp=1Lsab4Hy6pAhWjX5-4Q@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Aug 27, 2019 at 12:40:02PM +0200, Takashi Iwai wrote:
-> On Mon, 26 Aug 2019 19:24:22 +0200,
-> Scott Branden wrote:
-> > 
-> > I will admit I am not familiar with every subtlety of PCI
-> > accesses. Any comments to the Valkyrie driver in this patch series are
-> > appreciated.
-> > But not all drivers need to work on all architectures. I can add a
-> > depends on x86 64bit architectures to the driver to limit it to such.
+On 10/11/19 4:19 AM, Brendan Higgins wrote:
+> +open list:KERNEL SELFTEST FRAMEWORK In case anyone in kselftest has
+> any thoughts.
 > 
-> But it's an individual board on PCIe, and should work no matter which
-> architecture is?  Or is this really exclusive to x86?
+> On Thu, Oct 10, 2019 at 7:05 PM Theodore Ts'o <theodore.tso@gmail.com> wrote:
+>>
+>> I've been experimenting with the ext4 kunit test case, and something that would be really helpful is if the default is to store the object files for the ARCM=um kernel and its .config file in the top-level directory .kunit.   That is, that the default for --build_dir should be .kunit.
+>>
+>> Why does this important?  Because  the kernel developer will want to be running unit tests as well as building kernels that can be run under whatever architecture they are normally developing for (for example, an x86 kernel that can be run using kvm; or a arm64 kernel that gets run on an Android device by using the "fastboot" command).   So that means we don't want to be overwriting the object files and .config files for building the kernel for x86 when building the kunit kernel using the um arch.   For example, for ext4, my ideal workflow might go something like this:
+> 
+> That's a good point.
+> 
+>> <hack hack hack>
+>> % ./tools/testing/kunit/kunit.py  run
+>> <watch to see that unit tests succeed, and since most of the object files have already been built for the kunit kernel in be stored in the .kunit directory, this will be fast, since only the modified files will need to be recompiled>
+>> % kbuild
+>> <this is a script that builds an x86 kernel in /build/ext4-64 that is designed to be run under either kvm or in a GCE VM; since the kunit object files are stored in /build/ext4-kunit, the pre-existing files when building for x86_64 haven't been disturbed, so this build is fast as well>
+>> % kvm-xfstests smoke
+>> <this will run xfstests using the kernel plucked from /build/ext-64, using kvm>
+>>
+>> The point is when I'm developing an ext4 feature, or reviewing and merging ext4 commits, I need to be able to maintain separate build trees and separate config files for ARCH=um as well as ARCH=x86_64, and if the ARCH=um are stored in the kernel sources, then building with O=... doesn't work:
+>>
+>> <tytso@lambda> {/usr/projects/linux/kunit}   (kunit)
+>> 1084% make O=/build/test-dir
+>> make[1]: Entering directory '/build/test-dir'
+>> ***
+>> *** The source tree is not clean, please run 'make mrproper'
+>> *** in /usr/projects/linux/kunit
+>> ***
+> 
+> Should we maybe drop `--build_dir` in favor of `O`?
 
-Poke Scott.
+Yes, preferably be consistent with the rest of the kernel makefiles.
 
-  Luis
+>> One of the other reasons why it would be good to use --build_dir by default is that way, building with a separate O= build directory is regularly tested.   Right now, "kunit.py --build_dir=" seems to be broken.
+> 
+> Good point.
+> 
+>> % ./tools/testing/kunit/kunit.py run --build_dir=/build/ext4-kunit
+>> Generating .config ...
+>> [22:04:12] Building KUnit Kernel ...
+>> /usr/projects/linux/kunit/arch/x86/um/user-offsets.c:20:10: fatal error: asm/syscalls_64.h: No such file or directory
+>>    20 | #include <asm/syscalls_64.h>
+>>       |          ^~~~~~~~~~~~~~~~~~~
+>> compilation terminated.
+>>
+>> (This appears to be an ARCH=um bug, not a kunit bug, though.)
+> 
+> Yeah, I encountered this before. Some file is not getting properly
+> cleaned up by `make mrproper`. It works if you do `git clean -fdx` (I
+> know that's not a real solution for most people). Nevertheless, it
+> sounds like we need to sit down and actually solve this problem since
+> it is affecting users now.
+> 
+> I think you make a compelling argument. Anyone else have any thoughts on this?
+> 
+
+
+-- 
+~Randy
