@@ -2,205 +2,109 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B4026D4CB5
-	for <lists+linux-kselftest@lfdr.de>; Sat, 12 Oct 2019 06:16:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 229EDD4DCC
+	for <lists+linux-kselftest@lfdr.de>; Sat, 12 Oct 2019 08:54:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726947AbfJLEQP (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 12 Oct 2019 00:16:15 -0400
-Received: from mx2a.mailbox.org ([80.241.60.219]:64707 "EHLO mx2a.mailbox.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726278AbfJLEQP (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 12 Oct 2019 00:16:15 -0400
-Received: from smtp1.mailbox.org (smtp1.mailbox.org [IPv6:2001:67c:2050:105:465:1:1:0])
-        (using TLSv1.2 with cipher ECDHE-RSA-CHACHA20-POLY1305 (256/256 bits))
-        (No client certificate requested)
-        by mx2a.mailbox.org (Postfix) with ESMTPS id A095FA18A9;
-        Sat, 12 Oct 2019 06:16:08 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at heinlein-support.de
-Received: from smtp1.mailbox.org ([80.241.60.240])
-        by gerste.heinlein-support.de (gerste.heinlein-support.de [91.198.250.173]) (amavisd-new, port 10030)
-        with ESMTP id XP4SfIU7eOyJ; Sat, 12 Oct 2019 06:16:03 +0200 (CEST)
-Date:   Sat, 12 Oct 2019 15:15:41 +1100
-From:   Aleksa Sarai <cyphar@cyphar.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Al Viro <viro@zeniv.linux.org.uk>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J. Bruce Fields" <bfields@fieldses.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        David Howells <dhowells@redhat.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
+        id S1729179AbfJLGxs (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 12 Oct 2019 02:53:48 -0400
+Received: from mail-ed1-f67.google.com ([209.85.208.67]:35414 "EHLO
+        mail-ed1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728821AbfJLGxs (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Sat, 12 Oct 2019 02:53:48 -0400
+Received: by mail-ed1-f67.google.com with SMTP id v8so10565719eds.2;
+        Fri, 11 Oct 2019 23:53:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
+         :subject:to:cc;
+        bh=BHDcnsQSrbWE+Pwo7S+n8GHA2q4eny0JAFUJGKe7xZ8=;
+        b=PbU0a8kowD3t6HBy71saesdP3fKlVa1vMs/phqLjOSTHNJKbukN3u4Tyw9JBYTjfGK
+         KmjzoK9sb6/xvZtwS8NTny6aibTAjo9w830m/FVcOSEmeFlewHjgCWFjLA+mAYpESwL2
+         dCI6N/Gk/gs51Hlh21r0vZZsjgEB0Xj3xfhVTiAE7Z3rTQzx0kpRLu4Ux+XjL/NMf940
+         VUgjoXAcZq/oplrXxk6tTvgQiYQpyrsxkI8Td0rRZh/q3On+yiAM62rjCwjOMjTAfn7y
+         4Xh6Dw1JvVN8hkEQh/TnEtedqvIlQc7gU9wdiJtJkm05Mjs+2zdTWXCclY3CwXFrxap+
+         xM6A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
+         :from:date:message-id:subject:to:cc;
+        bh=BHDcnsQSrbWE+Pwo7S+n8GHA2q4eny0JAFUJGKe7xZ8=;
+        b=P86Q/i/6HQ0AhQAEuqsV1U12x+nQA6XvmfWvWsgIUWaxY0HqYwYTgql8x+mcqsMVGn
+         oZ48u9C/20AKMiJU3eUhFdjG5kva2IBa1OjAR3dN+jkux1HrNjoaRWh4w1AP3pfloaWP
+         um20eo6OieRHVp304VSQ/xzm9k54IDaDXWqplLQbqiWkujU8U/vSNDo0FFMXDZZyBBcC
+         VamOG6sYku0Aj9/X80AtDOJTLVozVAsAiSTYGU4ug7b/gPmyS+2HzB/2UVe3jmszwqAv
+         yFqVY1JXCUSegqvR4FZwnUGMMtJ0qwaH+gKf4nNlW9vhAsdmB2kUX8Y4Xr+e24ptrHQc
+         obEw==
+X-Gm-Message-State: APjAAAUtWAm3bCK2E8fP+doT6mrakWLDMNJlzxA5paeKI8B4l9JzF93O
+        +6WO74RvSk/LlVvT3fTJkqU8xKAyhr1rPb1kk5s=
+X-Google-Smtp-Source: APXvYqzh1JhXn6wt25rBXxwiyzDYbOv7kAXqapBl3dI3xpJuHLNnt136lJlkwVriE3147d0sP1DVJNPzWbR1pVBgw1k=
+X-Received: by 2002:a17:906:792:: with SMTP id l18mr17349024ejc.170.1570863226323;
+ Fri, 11 Oct 2019 23:53:46 -0700 (PDT)
+MIME-Version: 1.0
+References: <20191010133518.5420-1-christian.brauner@ubuntu.com>
+ <CAHO5Pa3V7fDb_+U-v+LB+TeAU0vfJyUMs9mD4ZqUtbLpZcD4nA@mail.gmail.com> <20191011221208.5eglbazksfigliob@yavin.dot.cyphar.com>
+In-Reply-To: <20191011221208.5eglbazksfigliob@yavin.dot.cyphar.com>
+Reply-To: mtk.manpages@gmail.com
+From:   "Michael Kerrisk (man-pages)" <mtk.manpages@gmail.com>
+Date:   Sat, 12 Oct 2019 08:53:34 +0200
+Message-ID: <CAKgNAkhgGhGi-hMJt3UxYYDuyOZLx7c-eucpD5V7js+hsyv2CQ@mail.gmail.com>
+Subject: Re: [PATCH 1/2] clone3: add CLONE3_CLEAR_SIGHAND
+To:     Aleksa Sarai <cyphar@cyphar.com>
+Cc:     Christian Brauner <christian.brauner@ubuntu.com>,
+        Linux Kernel <linux-kernel@vger.kernel.org>,
+        Oleg Nesterov <oleg@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        "libc-alpha@sourceware.org" <libc-alpha@sourceware.org>,
         Ingo Molnar <mingo@redhat.com>,
         Peter Zijlstra <peterz@infradead.org>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Andy Lutomirski <luto@kernel.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Shuah Khan <shuah@kernel.org>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Jann Horn <jannh@google.com>, Tycho Andersen <tycho@tycho.ws>,
-        David Drysdale <drysdale@google.com>,
-        Chanho Min <chanho.min@lge.com>,
-        Oleg Nesterov <oleg@redhat.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Christian Brauner <christian@brauner.io>,
-        Aleksa Sarai <asarai@suse.de>,
-        Linux Containers <containers@lists.linux-foundation.org>,
-        alpha <linux-alpha@vger.kernel.org>,
-        Linux API <linux-api@vger.kernel.org>,
-        GNU C Library <libc-alpha@sourceware.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        linux-ia64@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        Linux-sh list <linux-sh@vger.kernel.org>,
-        linux-xtensa@linux-xtensa.org, sparclinux@vger.kernel.org
-Subject: Re: [PATCH v14 2/6] namei: LOOKUP_IN_ROOT: chroot-like path
- resolution
-Message-ID: <20191012041541.milbmfbjpj5bcl5a@yavin.dot.cyphar.com>
-References: <20191010054140.8483-1-cyphar@cyphar.com>
- <20191010054140.8483-3-cyphar@cyphar.com>
- <CAHk-=wh8L50f31vW8BwRUXhLiq3eoCQ3tg8ER4Yp2dzuU1w5rQ@mail.gmail.com>
- <20191012040815.gnc43cfmo5mnv67u@yavin.dot.cyphar.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="2tj3n7ljtot3r57d"
-Content-Disposition: inline
-In-Reply-To: <20191012040815.gnc43cfmo5mnv67u@yavin.dot.cyphar.com>
+        Michal Hocko <mhocko@suse.com>,
+        Elena Reshetova <elena.reshetova@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Roman Gushchin <guro@fb.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        "Dmitry V. Levin" <ldv@altlinux.org>,
+        linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+Hello Aleksa,
 
---2tj3n7ljtot3r57d
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Sat, 12 Oct 2019 at 00:12, Aleksa Sarai <cyphar@cyphar.com> wrote:
+>
+> On 2019-10-11, Michael Kerrisk <mtk.manpages@gmail.com> wrote:
+> > Why CLONE3_CLEAR_SIGHAND rather than just CLONE_CLEAR_SIGHAND?
+>
+> There are no more flag bits left for the classic clone()/clone2() (the
+> last one was used up by CLONE_PIDFD) -- thus this flag is clone3()-only.
 
-On 2019-10-12, Aleksa Sarai <cyphar@cyphar.com> wrote:
-> On 2019-10-10, Linus Torvalds <torvalds@linux-foundation.org> wrote:
-> > On Wed, Oct 9, 2019 at 10:42 PM Aleksa Sarai <cyphar@cyphar.com> wrote:
-> > >
-> > > --- a/fs/namei.c
-> > > +++ b/fs/namei.c
-> > > @@ -2277,6 +2277,11 @@ static const char *path_init(struct nameidata =
-*nd, unsigned flags)
-> > >
-> > >         nd->m_seq =3D read_seqbegin(&mount_lock);
-> > >
-> > > +       /* LOOKUP_IN_ROOT treats absolute paths as being relative-to-=
-dirfd. */
-> > > +       if (flags & LOOKUP_IN_ROOT)
-> > > +               while (*s =3D=3D '/')
-> > > +                       s++;
-> > > +
-> > >         /* Figure out the starting path and root (if needed). */
-> > >         if (*s =3D=3D '/') {
-> > >                 error =3D nd_jump_root(nd);
-> >=20
-> > Hmm. Wouldn't this make more sense all inside the if (*s =3D- '/') test?
-> > That way if would be where we check for "should we start at the root",
-> > which seems to make more sense conceptually.
->=20
-> I don't really agree (though I do think that both options are pretty
-> ugly). Doing it before the block makes it clear that absolute paths are
-> just treated relative-to-dirfd -- doing it inside the block makes it
-> look more like "/" is a special-case for nd_jump_root(). And while that
+Yes, I understand that. But, I'm not sure that the "3" in the prefix
+is necessary. "CLONE_" still seems better to me.
 
-Sorry, I meant "special-case for LOOKUP_IN_ROOT".
+Consider this: sometime in the near future we will probably have time
+namespaces. The new flag for those namespaces will only be usable with
+clone3(). It should NOT be called CLONE3_NEWTIME, but rather
+CLONE_NEWTIME (or similar), because that same flag will presumably
+also be used in other APIs such as unshare() and setns(). (Hmm -- I
+wonder if we are going to need a new unshare2() or some such...)
 
-> is somewhat true, this is just a side-effect of making the code more
-> clean -- my earlier versions reworked the dirfd handling to always grab
-> nd->root first if LOOKUP_IS_SCOPED. I switched to this method based on
-> Al's review.
->=20
-> In fairness, I do agree that the lonely while loop looks ugly.
+Thanks,
 
-And with the old way I did it (where we grabbed nd->root first) the
-semantics were slightly more clear -- stripping leading "/"s doesn't
-really look as "clearly obvious" as grabbing nd->root beforehand and
-treating "/"s normally. But the code was also needlessly more complex.
+Michael
 
-> > That test for '/' currently has a "} else if (..)", but that's
-> > pointless since it ends with a "return" anyway. So the "else" logic is
-> > just noise.
->=20
-> This depends on the fact that LOOKUP_BENEATH always triggers -EXDEV for
-> nd_jump_root() -- if we ever add another "scoped lookup" flag then the
-> logic will have to be further reworked.
->=20
-> (It should be noted that the new version doesn't always end with a
-> "return", but you could change it to act that way given the above
-> assumption.)
->=20
-> > And if you get rid of the unnecessary else, moving the LOOKUP_IN_ROOT
-> > inside the if-statement works fine.
-> >=20
-> > So this could be something like
-> >=20
-> >     --- a/fs/namei.c
-> >     +++ b/fs/namei.c
-> >     @@ -2194,11 +2196,19 @@ static const char *path_init(struct
-> > nameidata *nd, unsigned flags)
-> >=20
-> >         nd->m_seq =3D read_seqbegin(&mount_lock);
-> >         if (*s =3D=3D '/') {
-> >     -           set_root(nd);
-> >     -           if (likely(!nd_jump_root(nd)))
-> >     -                   return s;
-> >     -           return ERR_PTR(-ECHILD);
-> >     -   } else if (nd->dfd =3D=3D AT_FDCWD) {
-> >     +           /* LOOKUP_IN_ROOT treats absolute paths as being
-> > relative-to-dirfd. */
-> >     +           if (!(flags & LOOKUP_IN_ROOT)) {
-> >     +                   set_root(nd);
-> >     +                   if (likely(!nd_jump_root(nd)))
-> >     +                           return s;
-> >     +                   return ERR_PTR(-ECHILD);
-> >     +           }
-> >     +
-> >     +           /* Skip initial '/' for LOOKUP_IN_ROOT */
-> >     +           do { s++; } while (*s =3D=3D '/');
-> >     +   }
-> >     +
-> >     +   if (nd->dfd =3D=3D AT_FDCWD) {
-> >                 if (flags & LOOKUP_RCU) {
-> >                         struct fs_struct *fs =3D current->fs;
-> >                         unsigned seq;
-> >=20
-> > instead. The patch ends up slightly bigger (due to the re-indentation)
-> > but now it handles all the "start at root" in the same place. Doesn't
-> > that make sense?
->=20
-> It is correct (though I'd need to clean it up a bit to handle
-> nd_jump_root() correctly), and if you really would like me to change it
-> I will -- but I just don't agree that it's cleaner.
 
---=20
-Aleksa Sarai
-Senior Software Engineer (Containers)
-SUSE Linux GmbH
-<https://www.cyphar.com/>
-
---2tj3n7ljtot3r57d
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQSxZm6dtfE8gxLLfYqdlLljIbnQEgUCXaFTZwAKCRCdlLljIbnQ
-EsoyAQDTzuZiYFf1pW7tBymiBU+fSwe8/adLefrS9DH9oll0LQD+M2OnaEH8wDH5
-iC8HumWtmk7eUf1CcqNfwVk4mwQXYwU=
-=dEoe
------END PGP SIGNATURE-----
-
---2tj3n7ljtot3r57d--
+-- 
+Michael Kerrisk
+Linux man-pages maintainer; http://www.kernel.org/doc/man-pages/
+Linux/UNIX System Programming Training: http://man7.org/training/
