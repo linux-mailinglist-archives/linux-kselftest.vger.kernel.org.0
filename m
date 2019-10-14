@@ -2,147 +2,325 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B654D6AEA
-	for <lists+linux-kselftest@lfdr.de>; Mon, 14 Oct 2019 22:49:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2027DD6B09
+	for <lists+linux-kselftest@lfdr.de>; Mon, 14 Oct 2019 23:06:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387773AbfJNUtf (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 14 Oct 2019 16:49:35 -0400
-Received: from mail-eopbgr760111.outbound.protection.outlook.com ([40.107.76.111]:23521
-        "EHLO NAM02-CY1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S2387731AbfJNUtf (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 14 Oct 2019 16:49:35 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=MybpUUiGZnWjEdAgd7fYbEXahV/V1rVAgT/guxeLGYP2cD8pwvfnOVy34dBtjwkEaN1OKM7SvRfnKC9R6VJXgzOpN5q5skKL3XeaR9rd6vIJAPvBr9yCMBYeHjxmvahQqspmW3u7gZxhB8DQy7Lx89MqH23qWskMnl2NicRqFcabDx9I0mQGMTPcRX1Ze7acZRmFRChLcUBwfJKER/LeXVqJunXJdRKlX4VrLargZgaRwv7JrTOtuUIxWGpG++1YTMzRdKbIQzu0kxUlGUiR1icHXMIqStK6jsEsIpbNTXWtcoDFmZ6fZWKF3NpbV4Z+LqPR1B8gdg8iBRpn0QpVxg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=OArEe6nXYnBjam6+kgN/IG+mDckpqt8jB9TcKWjhL+8=;
- b=M/yQ3n/Nxj9iSyV8vv+9D9f9AgwrskSXaqUnK0Z9OpzsTjdC6YLmonKBlyzdPuH8CqPYQBQW9MESoa5t8TfX7KZphcvCjcEbrvnogiGhkQUe4SPLfZWNiL8cc8ddE5GVctRY+b2513j8fNtGNH3vmYebu6HOgMfFfHfGlyputdj5kY5v7oBitnNjo5fcOAkrSGSOa4DP7XP+nqhSaxEZ9H5eOALP4U+XtHNDimCIX9L1KjOetT+jyJCPqCLyGRIyA0tRszYZccZzsf3Sp+FfGYxirrEOwDNEHqpw3FFge0nv6NAhw6ZuX/yFbPH1vbemSgE4Vwk6R092HYukW8o0Gw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 160.33.194.228) smtp.rcpttodomain=linux.intel.com smtp.mailfrom=sony.com;
- dmarc=pass (p=none sp=none pct=100) action=none header.from=sony.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Sony.onmicrosoft.com;
- s=selector2-Sony-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=OArEe6nXYnBjam6+kgN/IG+mDckpqt8jB9TcKWjhL+8=;
- b=GW8ap/OtxWR7IboWJaCeN4ARVfmxmyY4CC3bxYgfZsVEI+/lz29dimTIgVXYOi+8wBLwn5egEbRa69BC5KS5XjTtJSaofKp/iRMl8n9HrssY0KACQ/AKYeMVlXBdiZCsBpZbM7+KPKFXBlKAXn3YYUbI9GDUDq0a48gogH+gj5c=
-Received: from MWHPR13CA0003.namprd13.prod.outlook.com (2603:10b6:300:16::13)
- by BN6PR13MB1507.namprd13.prod.outlook.com (2603:10b6:404:10f::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2347.15; Mon, 14 Oct
- 2019 20:48:51 +0000
-Received: from CY1NAM02FT017.eop-nam02.prod.protection.outlook.com
- (2a01:111:f400:7e45::208) by MWHPR13CA0003.outlook.office365.com
- (2603:10b6:300:16::13) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2367.6 via Frontend
- Transport; Mon, 14 Oct 2019 20:48:51 +0000
-Authentication-Results: spf=pass (sender IP is 160.33.194.228)
- smtp.mailfrom=sony.com; linux.intel.com; dkim=none (message not signed)
- header.d=none;linux.intel.com; dmarc=pass action=none header.from=sony.com;
-Received-SPF: Pass (protection.outlook.com: domain of sony.com designates
- 160.33.194.228 as permitted sender) receiver=protection.outlook.com;
- client-ip=160.33.194.228; helo=usculsndmail01v.am.sony.com;
-Received: from usculsndmail01v.am.sony.com (160.33.194.228) by
- CY1NAM02FT017.mail.protection.outlook.com (10.152.75.181) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2347.16 via Frontend Transport; Mon, 14 Oct 2019 20:48:51 +0000
-Received: from usculsndmail12v.am.sony.com (usculsndmail12v.am.sony.com [146.215.230.103])
-        by usculsndmail01v.am.sony.com (Sentrion-MTA-4.3.2/Sentrion-MTA-4.3.2) with ESMTP id x9EKmn8J020884;
-        Mon, 14 Oct 2019 20:48:50 GMT
-Received: from USCULXHUB04V.am.sony.com (hubs.sonyusa.com [146.215.231.18])
-        by usculsndmail12v.am.sony.com (Sentrion-MTA-4.3.2/Sentrion-MTA-4.3.2) with ESMTP id x9EKmnIf008425;
-        Mon, 14 Oct 2019 20:48:49 GMT
-Received: from USCULXMSG01.am.sony.com ([fe80::b09d:6cb6:665e:d1b5]) by
- USCULXHUB04V.am.sony.com ([146.215.231.18]) with mapi id 14.03.0439.000; Mon,
- 14 Oct 2019 16:48:48 -0400
-From:   <Tim.Bird@sony.com>
-To:     <jani.nikula@linux.intel.com>, <changbin.du@gmail.com>,
-        <corbet@lwn.net>
-CC:     <linux-pci@vger.kernel.org>, <linux-doc@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>,
-        <linux-crypto@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-        <linux-wireless@vger.kernel.org>, <linux-fpga@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
-        <intel-gfx@lists.freedesktop.org>, <changbin.du@gmail.com>
-Subject: RE: [PATCH] kernel-doc: rename the kernel-doc directive 'functions'
- to 'specific'
-Thread-Topic: [PATCH] kernel-doc: rename the kernel-doc directive
- 'functions' to 'specific'
-Thread-Index: AQHVgYrHjoG0ILu0Lk6IAGRKrE96jadaG2GAgACB3oA=
-Date:   Mon, 14 Oct 2019 20:48:48 +0000
-Message-ID: <ECADFF3FD767C149AD96A924E7EA6EAF977CAF09@USCULXMSG01.am.sony.com>
-References: <20191013055359.23312-1-changbin.du@gmail.com>
- <875zkrd7nq.fsf@intel.com>
-In-Reply-To: <875zkrd7nq.fsf@intel.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [146.215.228.6]
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        id S1732167AbfJNVGL (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 14 Oct 2019 17:06:11 -0400
+Received: from mail-io1-f65.google.com ([209.85.166.65]:45674 "EHLO
+        mail-io1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732164AbfJNVGL (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 14 Oct 2019 17:06:11 -0400
+Received: by mail-io1-f65.google.com with SMTP id c25so40925374iot.12
+        for <linux-kselftest@vger.kernel.org>; Mon, 14 Oct 2019 14:06:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=sifive.com; s=google;
+        h=date:from:to:cc:subject:in-reply-to:message-id:references
+         :user-agent:mime-version;
+        bh=5Fh50IqKsV9DI7qDXmQliZcABf63QxMooRZ2h3IAY6k=;
+        b=L/NbAB3JijK/RLJKceyrd9ouCTGu3WZr5yW68DkgdWytjUkVAO/3sNPIYF8veG+u8w
+         RklFrlQSfLp5ajhmL2DgLsiy7G0EmzepJKzRQ37+lB+QaOCcVAbmMckJTaoiQlSIfCCs
+         YB1QfIDm2ojYiL9wU2SsTYh4ht18EcoYX2Jmz7zakOe/fG1f4Ud88uuoxdenY/6qaKHi
+         7M94x7DwQWlH2oSz0WrMWuC3E18uCAQaeav9dEH5Wfbq1wBrllIEKfO2vUXLlrEXETtr
+         8psL+0JVlFfSjWy9FpcNmG4ErywWFRYy4oq0zWYZsYdj4lbdVjf1egjRNCxv3uvxcr8/
+         x7Wg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:in-reply-to:message-id
+         :references:user-agent:mime-version;
+        bh=5Fh50IqKsV9DI7qDXmQliZcABf63QxMooRZ2h3IAY6k=;
+        b=BcwZphdtDI+rT+KHSbxtvB2WZGIGA06qbJJK6egalc7psZKKfVW/RxkPBKBHtIK5Gt
+         G6DBOnbsi78nlZ3IzB55s7pib7bLVl3HO0UGS7NfNthiEKKmmxYiRUC5ZKOK5FAaVTEy
+         bF4XmT1N0QQrI+Bwdb3jdLk2m8E3iJxvNrSK5Mapd0FZSqh1yugqpEj/qrhfSthoaToR
+         e7R4X9iztDPKHKmzezxk++qedrlJBsrVizBOJ0rBcCXAvK52cDxZK7vATRpEmeOKkDD1
+         RjHMPFpQTD8vIbanPl3TtZ1xwszuGzU/tPfenD80qxSIzmiJQdXUNeFYWtDJ98v5dbyJ
+         pADg==
+X-Gm-Message-State: APjAAAVU0uH4Wv1lHGKG7gfKggUjdVXySy2NxcXDqjYW3fqB952vsP7P
+        31tsXSwvPdb84i3uu7ptMTrMKw==
+X-Google-Smtp-Source: APXvYqwnLoB+44Z3avtM3EZMI2/MnjmtUkhVWHppjSvExVu8UtTha0EHFRTkuSMXssxHrjmHv5AbGg==
+X-Received: by 2002:a92:7702:: with SMTP id s2mr2557103ilc.248.1571087169985;
+        Mon, 14 Oct 2019 14:06:09 -0700 (PDT)
+Received: from localhost (67-0-10-3.albq.qwest.net. [67.0.10.3])
+        by smtp.gmail.com with ESMTPSA id m15sm1695738ilg.49.2019.10.14.14.06.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Oct 2019 14:06:08 -0700 (PDT)
+Date:   Mon, 14 Oct 2019 14:06:07 -0700 (PDT)
+From:   Paul Walmsley <paul.walmsley@sifive.com>
+X-X-Sender: paulw@viisi.sifive.com
+To:     Shuah Khan <shuah@kernel.org>
+cc:     Palmer Dabbelt <palmer@sifive.com>,
+        David Abdurachmanov <david.abdurachmanov@gmail.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Oleg Nesterov <oleg@redhat.com>,
+        Kees Cook <keescook@chromium.org>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Will Drewry <wad@chromium.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        David Abdurachmanov <david.abdurachmanov@sifive.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Allison Randal <allison@lohutok.net>,
+        Alexios Zavras <alexios.zavras@intel.com>,
+        Anup Patel <Anup.Patel@wdc.com>,
+        Vincent Chen <vincentc@andestech.com>,
+        Alan Kao <alankao@andestech.com>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, me@carlosedp.com
+Subject: Re: [PATCH v2] riscv: add support for SECCOMP and SECCOMP_FILTER
+In-Reply-To: <alpine.DEB.2.21.9999.1910041819230.15827@viisi.sifive.com>
+Message-ID: <alpine.DEB.2.21.9999.1910141405220.12988@viisi.sifive.com>
+References: <20190822205533.4877-1-david.abdurachmanov@sifive.com> <alpine.DEB.2.21.9999.1910041819230.15827@viisi.sifive.com>
+User-Agent: Alpine 2.21.9999 (DEB 301 2018-08-15)
 MIME-Version: 1.0
-X-EOPAttributedMessage: 0
-X-MS-Office365-Filtering-HT: Tenant
-X-Forefront-Antispam-Report: CIP:160.33.194.228;IPV:NLI;CTRY:US;EFV:NLI;SFV:NSPM;SFS:(10019020)(376002)(396003)(136003)(39860400002)(346002)(199004)(189003)(13464003)(8676002)(37786003)(23726003)(102836004)(6246003)(97756001)(7696005)(76176011)(5660300002)(3846002)(55016002)(6116002)(86362001)(55846006)(486006)(2876002)(33656002)(476003)(126002)(46406003)(246002)(2906002)(336012)(54906003)(356004)(11346002)(186003)(26005)(14444005)(478600001)(426003)(50466002)(4326008)(47776003)(66066001)(446003)(70206006)(110136005)(7416002)(8746002)(70586007)(8936002)(106002)(305945005)(229853002)(316002)(2201001)(7736002)(2101003)(5001870100001);DIR:OUT;SFP:1102;SCL:1;SRVR:BN6PR13MB1507;H:usculsndmail01v.am.sony.com;FPR:;SPF:Pass;LANG:en;PTR:mail.sonyusa.com,mail01.sonyusa.com;A:1;MX:1;
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 3e15f9ef-1f4b-49bd-255a-08d750e7eb79
-X-MS-TrafficTypeDiagnostic: BN6PR13MB1507:
-X-Microsoft-Antispam-PRVS: <BN6PR13MB1507003AF9F82B961C9751ABFD900@BN6PR13MB1507.namprd13.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
-X-Forefront-PRVS: 01901B3451
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: ODSsHBKcgRD7wEsIwdsafZ04SyHtvm6qy2uPMrfx8nrVkiaJV82xR/OwG5okb99i7iEG7CUt+pn2KbJBPyp187ND0/kHxYb/7tP22z69BUTj6Wlx1EQoDSV+ElAIjXpN8C9DoU+jBgY6W7C27KRfwheVky55hswuncioRmZtMFK1kJEUyeM7Ng2QRXmSWjvzg5eD+pBeRIFTbw41R2yDlXxOkRNAOFdLDaUSiTsIqTqloaCmX36kXCqIpoFg0YZbKxmOMYBMBSA57f5ntoG9D4U+oJ5tHYpM7vs19N0ZrD/WMS6Dq2UYzCeQFl/EdGjVR1G99/WzNKsZfKa0Eg7uBmjCbjLFkVBs7/de3Fw5Ts373lbBgIV94u9kGMfIy4vxMe2QQWX45Oe9neLBGoV3iJYAf/TXPsVgSHA6TIoC3fA=
-X-OriginatorOrg: sony.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Oct 2019 20:48:51.3386
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3e15f9ef-1f4b-49bd-255a-08d750e7eb79
-X-MS-Exchange-CrossTenant-Id: 66c65d8a-9158-4521-a2d8-664963db48e4
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=66c65d8a-9158-4521-a2d8-664963db48e4;Ip=[160.33.194.228];Helo=[usculsndmail01v.am.sony.com]
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR13MB1507
+Content-Type: text/plain; charset=US-ASCII
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+Shuah,
+
+Could you please take a quick look at this and ack it if you're OK with 
+the tools/testing change?  We'd like to get this merged soon.
+
+- Paul
 
 
-> -----Original Message-----
-> From: Jani Nikula on October 13, 2019 11:00 PM
-> On Sun, 13 Oct 2019, Changbin Du <changbin.du@gmail.com> wrote:
-> > The 'functions' directive is not only for functions, but also works for
-> > structs/unions. So the name is misleading. This patch renames it to
-> > 'specific', so now we have export/internal/specific directives to limit
-> > the functions/types to be included in documentation. Meanwhile we
-> improved
-> > the warning message.
->=20
-> Agreed on "functions" being less than perfect. It directly exposes the
-> idiosyncrasies of scripts/kernel-doc. I'm not sure "specific" is any
-> better, though.
+On Fri, 4 Oct 2019, Paul Walmsley wrote:
 
-I strongly agree with this.  'specific' IMHO, has no semantic value and
-I'd rather just leave the only-sometimes-wrong 'functions' than convert
-to something that obscures the meaning always.
+> Hello Shuah,
+> 
+> On Thu, 22 Aug 2019, David Abdurachmanov wrote:
+> 
+> > This patch was extensively tested on Fedora/RISCV (applied by default on
+> > top of 5.2-rc7 kernel for <2 months). The patch was also tested with 5.3-rc
+> > on QEMU and SiFive Unleashed board.
+> > 
+> > libseccomp (userspace) was rebased:
+> > https://github.com/seccomp/libseccomp/pull/134
+> > 
+> > Fully passes libseccomp regression testing (simulation and live).
+> > 
+> > There is one failing kernel selftest: global.user_notification_signal
+> > 
+> > v1 -> v2:
+> >   - return immediatly if secure_computing(NULL) returns -1
+> >   - fixed whitespace issues
+> >   - add missing seccomp.h
+> >   - remove patch #2 (solved now)
+> >   - add riscv to seccomp kernel selftest
+> > 
+> > Cc: keescook@chromium.org
+> > Cc: me@carlosedp.com
+> > 
+> > Signed-off-by: David Abdurachmanov <david.abdurachmanov@sifive.com>
+> 
+> We'd like to merge this patch through the RISC-V tree.
+> Care to ack the change to tools/testing/selftests/seccomp/seccomp_bpf.c ?  
+> 
+> Kees has already reviewed it:
+> 
+> https://lore.kernel.org/linux-riscv/CAJr-aD=UnCN9E_mdVJ2H5nt=6juRSWikZnA5HxDLQxXLbsRz-w@mail.gmail.com/
+> 
+> 
+> - Paul
+> 
+> 
+> > ---
+> >  arch/riscv/Kconfig                            | 14 ++++++++++
+> >  arch/riscv/include/asm/seccomp.h              | 10 +++++++
+> >  arch/riscv/include/asm/thread_info.h          |  5 +++-
+> >  arch/riscv/kernel/entry.S                     | 27 +++++++++++++++++--
+> >  arch/riscv/kernel/ptrace.c                    | 10 +++++++
+> >  tools/testing/selftests/seccomp/seccomp_bpf.c |  8 +++++-
+> >  6 files changed, 70 insertions(+), 4 deletions(-)
+> >  create mode 100644 arch/riscv/include/asm/seccomp.h
+> > 
+> > diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+> > index 59a4727ecd6c..441e63ff5adc 100644
+> > --- a/arch/riscv/Kconfig
+> > +++ b/arch/riscv/Kconfig
+> > @@ -31,6 +31,7 @@ config RISCV
+> >  	select GENERIC_SMP_IDLE_THREAD
+> >  	select GENERIC_ATOMIC64 if !64BIT
+> >  	select HAVE_ARCH_AUDITSYSCALL
+> > +	select HAVE_ARCH_SECCOMP_FILTER
+> >  	select HAVE_MEMBLOCK_NODE_MAP
+> >  	select HAVE_DMA_CONTIGUOUS
+> >  	select HAVE_FUTEX_CMPXCHG if FUTEX
+> > @@ -235,6 +236,19 @@ menu "Kernel features"
+> >  
+> >  source "kernel/Kconfig.hz"
+> >  
+> > +config SECCOMP
+> > +	bool "Enable seccomp to safely compute untrusted bytecode"
+> > +	help
+> > +	  This kernel feature is useful for number crunching applications
+> > +	  that may need to compute untrusted bytecode during their
+> > +	  execution. By using pipes or other transports made available to
+> > +	  the process as file descriptors supporting the read/write
+> > +	  syscalls, it's possible to isolate those applications in
+> > +	  their own address space using seccomp. Once seccomp is
+> > +	  enabled via prctl(PR_SET_SECCOMP), it cannot be disabled
+> > +	  and the task is only allowed to execute a few safe syscalls
+> > +	  defined by each seccomp mode.
+> > +
+> >  endmenu
+> >  
+> >  menu "Boot options"
+> > diff --git a/arch/riscv/include/asm/seccomp.h b/arch/riscv/include/asm/seccomp.h
+> > new file mode 100644
+> > index 000000000000..bf7744ee3b3d
+> > --- /dev/null
+> > +++ b/arch/riscv/include/asm/seccomp.h
+> > @@ -0,0 +1,10 @@
+> > +/* SPDX-License-Identifier: GPL-2.0 */
+> > +
+> > +#ifndef _ASM_SECCOMP_H
+> > +#define _ASM_SECCOMP_H
+> > +
+> > +#include <asm/unistd.h>
+> > +
+> > +#include <asm-generic/seccomp.h>
+> > +
+> > +#endif /* _ASM_SECCOMP_H */
+> > diff --git a/arch/riscv/include/asm/thread_info.h b/arch/riscv/include/asm/thread_info.h
+> > index 905372d7eeb8..a0b2a29a0da1 100644
+> > --- a/arch/riscv/include/asm/thread_info.h
+> > +++ b/arch/riscv/include/asm/thread_info.h
+> > @@ -75,6 +75,7 @@ struct thread_info {
+> >  #define TIF_MEMDIE		5	/* is terminating due to OOM killer */
+> >  #define TIF_SYSCALL_TRACEPOINT  6       /* syscall tracepoint instrumentation */
+> >  #define TIF_SYSCALL_AUDIT	7	/* syscall auditing */
+> > +#define TIF_SECCOMP		8	/* syscall secure computing */
+> >  
+> >  #define _TIF_SYSCALL_TRACE	(1 << TIF_SYSCALL_TRACE)
+> >  #define _TIF_NOTIFY_RESUME	(1 << TIF_NOTIFY_RESUME)
+> > @@ -82,11 +83,13 @@ struct thread_info {
+> >  #define _TIF_NEED_RESCHED	(1 << TIF_NEED_RESCHED)
+> >  #define _TIF_SYSCALL_TRACEPOINT	(1 << TIF_SYSCALL_TRACEPOINT)
+> >  #define _TIF_SYSCALL_AUDIT	(1 << TIF_SYSCALL_AUDIT)
+> > +#define _TIF_SECCOMP		(1 << TIF_SECCOMP)
+> >  
+> >  #define _TIF_WORK_MASK \
+> >  	(_TIF_NOTIFY_RESUME | _TIF_SIGPENDING | _TIF_NEED_RESCHED)
+> >  
+> >  #define _TIF_SYSCALL_WORK \
+> > -	(_TIF_SYSCALL_TRACE | _TIF_SYSCALL_TRACEPOINT | _TIF_SYSCALL_AUDIT)
+> > +	(_TIF_SYSCALL_TRACE | _TIF_SYSCALL_TRACEPOINT | _TIF_SYSCALL_AUDIT | \
+> > +	 _TIF_SECCOMP )
+> >  
+> >  #endif /* _ASM_RISCV_THREAD_INFO_H */
+> > diff --git a/arch/riscv/kernel/entry.S b/arch/riscv/kernel/entry.S
+> > index bc7a56e1ca6f..0bbedfa3e47d 100644
+> > --- a/arch/riscv/kernel/entry.S
+> > +++ b/arch/riscv/kernel/entry.S
+> > @@ -203,8 +203,25 @@ check_syscall_nr:
+> >  	/* Check to make sure we don't jump to a bogus syscall number. */
+> >  	li t0, __NR_syscalls
+> >  	la s0, sys_ni_syscall
+> > -	/* Syscall number held in a7 */
+> > -	bgeu a7, t0, 1f
+> > +	/*
+> > +	 * The tracer can change syscall number to valid/invalid value.
+> > +	 * We use syscall_set_nr helper in syscall_trace_enter thus we
+> > +	 * cannot trust the current value in a7 and have to reload from
+> > +	 * the current task pt_regs.
+> > +	 */
+> > +	REG_L a7, PT_A7(sp)
+> > +	/*
+> > +	 * Syscall number held in a7.
+> > +	 * If syscall number is above allowed value, redirect to ni_syscall.
+> > +	 */
+> > +	bge a7, t0, 1f
+> > +	/*
+> > +	 * Check if syscall is rejected by tracer or seccomp, i.e., a7 == -1.
+> > +	 * If yes, we pretend it was executed.
+> > +	 */
+> > +	li t1, -1
+> > +	beq a7, t1, ret_from_syscall_rejected
+> > +	/* Call syscall */
+> >  	la s0, sys_call_table
+> >  	slli t0, a7, RISCV_LGPTR
+> >  	add s0, s0, t0
+> > @@ -215,6 +232,12 @@ check_syscall_nr:
+> >  ret_from_syscall:
+> >  	/* Set user a0 to kernel a0 */
+> >  	REG_S a0, PT_A0(sp)
+> > +	/*
+> > +	 * We didn't execute the actual syscall.
+> > +	 * Seccomp already set return value for the current task pt_regs.
+> > +	 * (If it was configured with SECCOMP_RET_ERRNO/TRACE)
+> > +	 */
+> > +ret_from_syscall_rejected:
+> >  	/* Trace syscalls, but only if requested by the user. */
+> >  	REG_L t0, TASK_TI_FLAGS(tp)
+> >  	andi t0, t0, _TIF_SYSCALL_WORK
+> > diff --git a/arch/riscv/kernel/ptrace.c b/arch/riscv/kernel/ptrace.c
+> > index 368751438366..63e47c9f85f0 100644
+> > --- a/arch/riscv/kernel/ptrace.c
+> > +++ b/arch/riscv/kernel/ptrace.c
+> > @@ -154,6 +154,16 @@ void do_syscall_trace_enter(struct pt_regs *regs)
+> >  		if (tracehook_report_syscall_entry(regs))
+> >  			syscall_set_nr(current, regs, -1);
+> >  
+> > +	/*
+> > +	 * Do the secure computing after ptrace; failures should be fast.
+> > +	 * If this fails we might have return value in a0 from seccomp
+> > +	 * (via SECCOMP_RET_ERRNO/TRACE).
+> > +	 */
+> > +	if (secure_computing(NULL) == -1) {
+> > +		syscall_set_nr(current, regs, -1);
+> > +		return;
+> > +	}
+> > +
+> >  #ifdef CONFIG_HAVE_SYSCALL_TRACEPOINTS
+> >  	if (test_thread_flag(TIF_SYSCALL_TRACEPOINT))
+> >  		trace_sys_enter(regs, syscall_get_nr(current, regs));
+> > diff --git a/tools/testing/selftests/seccomp/seccomp_bpf.c b/tools/testing/selftests/seccomp/seccomp_bpf.c
+> > index 6ef7f16c4cf5..492e0adad9d3 100644
+> > --- a/tools/testing/selftests/seccomp/seccomp_bpf.c
+> > +++ b/tools/testing/selftests/seccomp/seccomp_bpf.c
+> > @@ -112,6 +112,8 @@ struct seccomp_data {
+> >  #  define __NR_seccomp 383
+> >  # elif defined(__aarch64__)
+> >  #  define __NR_seccomp 277
+> > +# elif defined(__riscv)
+> > +#  define __NR_seccomp 277
+> >  # elif defined(__hppa__)
+> >  #  define __NR_seccomp 338
+> >  # elif defined(__powerpc__)
+> > @@ -1582,6 +1584,10 @@ TEST_F(TRACE_poke, getpid_runs_normally)
+> >  # define ARCH_REGS	struct user_pt_regs
+> >  # define SYSCALL_NUM	regs[8]
+> >  # define SYSCALL_RET	regs[0]
+> > +#elif defined(__riscv) && __riscv_xlen == 64
+> > +# define ARCH_REGS	struct user_regs_struct
+> > +# define SYSCALL_NUM	a7
+> > +# define SYSCALL_RET	a0
+> >  #elif defined(__hppa__)
+> >  # define ARCH_REGS	struct user_regs_struct
+> >  # define SYSCALL_NUM	gr[20]
+> > @@ -1671,7 +1677,7 @@ void change_syscall(struct __test_metadata *_metadata,
+> >  	EXPECT_EQ(0, ret) {}
+> >  
+> >  #if defined(__x86_64__) || defined(__i386__) || defined(__powerpc__) || \
+> > -    defined(__s390__) || defined(__hppa__)
+> > +    defined(__s390__) || defined(__hppa__) || defined(__riscv)
+> >  	{
+> >  		regs.SYSCALL_NUM = syscall;
+> >  	}
+> > -- 
+> > 2.21.0
+> > 
+> > 
+> 
+> 
+> - Paul
+> 
 
->=20
-> Perhaps "symbols" would be more self-explanatory. Or, actually make
-> "functions" only work on functions, and add a separate keyword for other
-> stuff. *shrug*
-My preference would be to use 'symbols'.  I tried to come up with something
-but 'symbols' is better than anything I came up with.
 
->=20
-> Seems like the patch is way too big. I'd probably add "symbols" (or
-> whatever) as a synonym for "functions" for starters, and convert
-> documents piecemeal, and finally drop the old one.
->=20
-> The scripts/kernel-doc change should be a patch of its own.
-Agreed on these two points as well.
-
-Just adding my 2 cents.
- -- Tim
