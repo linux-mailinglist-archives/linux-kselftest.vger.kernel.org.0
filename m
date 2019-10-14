@@ -2,82 +2,128 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D9ECD5E9C
-	for <lists+linux-kselftest@lfdr.de>; Mon, 14 Oct 2019 11:21:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6DC1D5FC6
+	for <lists+linux-kselftest@lfdr.de>; Mon, 14 Oct 2019 12:08:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730855AbfJNJU4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 14 Oct 2019 05:20:56 -0400
-Received: from mail-pg1-f195.google.com ([209.85.215.195]:45887 "EHLO
-        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730656AbfJNJU4 (ORCPT
+        id S1731016AbfJNKIf (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 14 Oct 2019 06:08:35 -0400
+Received: from youngberry.canonical.com ([91.189.89.112]:33409 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730880AbfJNKIf (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 14 Oct 2019 05:20:56 -0400
-Received: by mail-pg1-f195.google.com with SMTP id r1so8551413pgj.12;
-        Mon, 14 Oct 2019 02:20:54 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=z80QF2P/utfSJTosq14dGOZH3U5rnspzRIHN6J5xfow=;
-        b=jorZTQXiOxg4InwNM34RTj+HGp8ns6ZEAQ8lIGJmTY1W7sK/dLdtN+/kHo9AWSzfxA
-         q6qkIqC2NaAszGLbX+Gas/r+otb34B3WbcYD8W2Z45EVlQNDcZn5p6RO/+HtoyR7rYnN
-         U9AEdq3o8YuHyEoaCXOF7HI8XgfgZdOdVOhSy6YCEykpxl8ayOWKflp61U+VdswHlTBc
-         TGg/3FVTotloiF4hPDyFakvWxmjU2+Nq93AAqN43l6xf6LeZlZdLWyy5mCmyKNcyvNqk
-         ww4VF5SOAjU89B0eOyG16Jn1A8QnIy/vkNAcNnj0U8ip6xZkKMPcWE9PnGP/6AzRCDr3
-         Roiw==
-X-Gm-Message-State: APjAAAUwCOybWzIXVT0IY7DHaZnmQgLbgXOlo1ix9ybwKH8+0XSRiRZk
-        iNLaP39/gvRnyF+YQwbmkWQ=
-X-Google-Smtp-Source: APXvYqzOPBH0WekcHZOXSoperMZAmy+14kCD91/1ZTagF7IA+gkuA3HNJe3CMO2I1E8cjDyeEkd/Uw==
-X-Received: by 2002:a17:90a:741:: with SMTP id s1mr35956209pje.113.1571044853994;
-        Mon, 14 Oct 2019 02:20:53 -0700 (PDT)
-Received: from 42.do-not-panic.com (42.do-not-panic.com. [157.230.128.187])
-        by smtp.gmail.com with ESMTPSA id y2sm19146917pfe.126.2019.10.14.02.20.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Oct 2019 02:20:52 -0700 (PDT)
-Received: by 42.do-not-panic.com (Postfix, from userid 1000)
-        id C92B94021A; Mon, 14 Oct 2019 09:20:51 +0000 (UTC)
-Date:   Mon, 14 Oct 2019 09:20:51 +0000
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Alan Maguire <alan.maguire@oracle.com>
-Cc:     linux-kselftest@vger.kernel.org, brendanhiggins@google.com,
-        skhan@linuxfoundation.org, keescook@chromium.org,
-        yzaikin@google.com, akpm@linux-foundation.org,
-        yamada.masahiro@socionext.com, catalin.marinas@arm.com,
-        joe.lawrence@redhat.com, penguin-kernel@i-love.sakura.ne.jp,
-        schowdary@nvidia.com, urezki@gmail.com,
-        andriy.shevchenko@linux.intel.com, changbin.du@intel.com,
-        kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org
-Subject: Re: [PATCH v2 linux-kselftest-test 0/3] kunit: support building
- core/tests as modules
-Message-ID: <20191014092051.GZ16384@42.do-not-panic.com>
-References: <1570546546-549-1-git-send-email-alan.maguire@oracle.com>
+        Mon, 14 Oct 2019 06:08:35 -0400
+Received: from [212.86.36.32] (helo=wittgenstein)
+        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.86_2)
+        (envelope-from <christian.brauner@ubuntu.com>)
+        id 1iJxH8-000093-VJ; Mon, 14 Oct 2019 10:08:27 +0000
+Date:   Mon, 14 Oct 2019 12:08:26 +0200
+From:   Christian Brauner <christian.brauner@ubuntu.com>
+To:     "Michael Kerrisk (man-pages)" <mtk.manpages@gmail.com>
+Cc:     Aleksa Sarai <cyphar@cyphar.com>,
+        Linux Kernel <linux-kernel@vger.kernel.org>,
+        Oleg Nesterov <oleg@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        "libc-alpha@sourceware.org" <libc-alpha@sourceware.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Shuah Khan <shuah@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Michal Hocko <mhocko@suse.com>,
+        Elena Reshetova <elena.reshetova@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Roman Gushchin <guro@fb.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        "Dmitry V. Levin" <ldv@altlinux.org>,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH 1/2] clone3: add CLONE3_CLEAR_SIGHAND
+Message-ID: <20191014100824.sc4aqfktbn6go736@wittgenstein>
+References: <20191010133518.5420-1-christian.brauner@ubuntu.com>
+ <CAHO5Pa3V7fDb_+U-v+LB+TeAU0vfJyUMs9mD4ZqUtbLpZcD4nA@mail.gmail.com>
+ <20191011221208.5eglbazksfigliob@yavin.dot.cyphar.com>
+ <CAKgNAkhgGhGi-hMJt3UxYYDuyOZLx7c-eucpD5V7js+hsyv2CQ@mail.gmail.com>
+ <20191012074840.4to7lh4zbt4wup74@wittgenstein>
+ <b3fce4a4-10a8-befe-a438-f16dfa0cdb6b@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <1570546546-549-1-git-send-email-alan.maguire@oracle.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <b3fce4a4-10a8-befe-a438-f16dfa0cdb6b@gmail.com>
+User-Agent: NeoMutt/20180716
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Oct 08, 2019 at 03:55:43PM +0100, Alan Maguire wrote:
-> The current kunit execution model is to provide base kunit functionality
-> and tests built-in to the kernel.  The aim of this series is to allow
-> building kunit itself and tests as modules.  This in turn allows a
-> simple form of selective execution; load the module you wish to test.
-> In doing so, kunit itself (if also built as a module) will be loaded as
-> an implicit dependency.
+On Sat, Oct 12, 2019 at 01:46:54PM +0200, Michael Kerrisk (man-pages) wrote:
+> On 10/12/19 9:48 AM, Christian Brauner wrote:
+> > On Sat, Oct 12, 2019 at 08:53:34AM +0200, Michael Kerrisk (man-pages) wrote:
+> >> Hello Aleksa,
+> >>
+> >> On Sat, 12 Oct 2019 at 00:12, Aleksa Sarai <cyphar@cyphar.com> wrote:
+> >>>
+> >>> On 2019-10-11, Michael Kerrisk <mtk.manpages@gmail.com> wrote:
+> >>>> Why CLONE3_CLEAR_SIGHAND rather than just CLONE_CLEAR_SIGHAND?
+> > 
+> > I don't care much how we name this apart from the "_CLEAR_SIGHAND"
+> > suffix. But see for a little rationale below.
+> > 
+> >>>
+> >>> There are no more flag bits left for the classic clone()/clone2() (the
+> >>> last one was used up by CLONE_PIDFD) -- thus this flag is clone3()-only.
+> >>
+> >> Yes, I understand that. But, I'm not sure that the "3" in the prefix
+> >> is necessary. "CLONE_" still seems better to me.
+> >>
+> >> Consider this: sometime in the near future we will probably have time
+> >> namespaces. The new flag for those namespaces will only be usable with
+> >> clone3(). It should NOT be called CLONE3_NEWTIME, but rather
+> >> CLONE_NEWTIME (or similar), because that same flag will presumably
+> >> also be used in other APIs such as unshare() and setns(). (Hmm -- I
+> > 
+> > There are some noteable differences though. CLONE_NEWTIME takes the
+> > CSIGNAL bit which is in the range of a 32bit integer and thus useable by
+> > unshare() too. The same does not hold for CLONE{3}_CLEAR_SIGHAND. You
+> > can't pass it to unshare(). unshare() also just deals with
+> > namespace-relevant stuff so CLONE{3}_CLEAR_SIGHAND doesn't make much
+> > sense there.
 > 
-> Because this requires a core API modification - if a module delivers
-> multiple suites, they must be declared with the kunit_test_suites()
-> macro - we're proposing this patch as a candidate to be applied to the
-> test tree before too many kunit consumers appear.  We attempt to deal
-> with existing consumers in patch 1.
+> Sure, but going forward there's very likely to be more CLONE flags
+> for whatever reason, and some will be usable just in clone3()
+> while others will be more widely used (in other APIs such as
+> unshare() and setns()). Using two different prefixes for these
+> flags (CLONE_/CLONE3_) would be just confusing. AFAICS, the CLONE3_
 
-This is neat and makes sense to me. However the ordering of the patches
-seems odd. If modules depend on kunit module, then shouldn't that go
-first? Ie, we want this to be bisectable in proper order.
+I do agree with that part. And as I said in my previous mail, I don't
+care about the prefix.
 
-  Luis
+> prefix really provides no advantage, but does have the potential to
+> cause confusion down the track for the aforementioned reasons.
+> (Furthermore... Shudder! What if there's a clone4() one day. I
+> know you might say: "won't happen, we got things right this time",
+> but API history suggests that "right" now not infrequently becomes
+> "oops" later.) I do recommend CLONE_ for all the flags...
+
+I do love your trust in our ability to design syscalls (//Cc Aleksa ;)). :)
+
+> 
+> >> wonder if we are going to need a new unshare2() or some such...)
+> > 
+> > We still have one 32bit bit left (CLONE_DETACHED) which we can't reuse
+> > with clone()/clone2() but we can reuse with clone3(). We can simply
+> > earmark it for namespace-related stuff and thus still have one bit left
+> > for unshare() before we have to go for unshare2() (If we have to go
+> > there at all since I'm not sure how much more namespaces we can come up
+> > with.).
+> 
+> I'm sure there'll be more namespaces...
+
+Let's hope not. :) Anyway, no real reason to do unshare2() any time
+soon. :)
+
+Christian
