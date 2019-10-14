@@ -2,99 +2,164 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BA8CD6073
-	for <lists+linux-kselftest@lfdr.de>; Mon, 14 Oct 2019 12:42:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7969CD6079
+	for <lists+linux-kselftest@lfdr.de>; Mon, 14 Oct 2019 12:45:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731472AbfJNKmq (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 14 Oct 2019 06:42:46 -0400
-Received: from mail-pl1-f193.google.com ([209.85.214.193]:41384 "EHLO
-        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731249AbfJNKmq (ORCPT
+        id S1731525AbfJNKp4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 14 Oct 2019 06:45:56 -0400
+Received: from youngberry.canonical.com ([91.189.89.112]:34517 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731235AbfJNKpz (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 14 Oct 2019 06:42:46 -0400
-Received: by mail-pl1-f193.google.com with SMTP id t10so7840257plr.8
-        for <linux-kselftest@vger.kernel.org>; Mon, 14 Oct 2019 03:42:46 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=SXpcg/H0jtW5vgbpwS+CM1RYOydqdouPj1mZ1ztIGuY=;
-        b=A+tdDjwDmKMqBiZW6Fv0j6PY4SAxBcwdsPHx4wAKCSXSL7q269ZOFSCzucgMTZGIRs
-         HksKD7ywE6kf64fnMICxS565G82NXXoYtRccvvVd6zAu7wR2WCeesLks9BC7NQsiIgIF
-         wuthlicDp/lt+tCImIKwjczsKLG132sJvkGZDfpiPCnwMOdNmBoidB9nQ3zzNHm1tx3T
-         BlM149TNeFTv2mos+TQaSHQiyB5PfryX2aqFjcm2qXdHHuHV+c6gNKLXE0C0Ldi0c0JC
-         pBYtJXKvArgSDHLHPcpBgNes0qXQRTq18sKi7zfe14u6gv14N+LjPIcA0KjoCaBTLOYz
-         /3cQ==
-X-Gm-Message-State: APjAAAVrvkP0vGcVnk7TCafgZTU8gcNBJhWu+1D5F2OUgXDbgNaeiLG+
-        EYRtnpvgr/Dn4WH9K6zN1J7vqeVWlWE=
-X-Google-Smtp-Source: APXvYqxO855Qdm1a04+it7b5etTGII3OX7nvYwqUWRUW/VTFErVvOYC+kPSCixpSKHVqwx/ks2b2tw==
-X-Received: by 2002:a17:902:b193:: with SMTP id s19mr20553736plr.298.1571049765837;
-        Mon, 14 Oct 2019 03:42:45 -0700 (PDT)
-Received: from 42.do-not-panic.com (42.do-not-panic.com. [157.230.128.187])
-        by smtp.gmail.com with ESMTPSA id d5sm27907460pfa.180.2019.10.14.03.42.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Oct 2019 03:42:44 -0700 (PDT)
-Received: by 42.do-not-panic.com (Postfix, from userid 1000)
-        id C26834021A; Mon, 14 Oct 2019 10:42:43 +0000 (UTC)
-Date:   Mon, 14 Oct 2019 10:42:43 +0000
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Brendan Higgins <brendanhiggins@google.com>
-Cc:     Knut Omang <knut.omang@oracle.com>, Shuah Khan <shuah@kernel.org>,
-        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org
-Subject: Re: Plan for hybrid testing
-Message-ID: <20191014104243.GD16384@42.do-not-panic.com>
-References: <20190913210247.GA86838@google.com>
+        Mon, 14 Oct 2019 06:45:55 -0400
+Received: from [212.86.36.32] (helo=localhost.localdomain)
+        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.86_2)
+        (envelope-from <christian.brauner@ubuntu.com>)
+        id 1iJxrM-0002lB-2a; Mon, 14 Oct 2019 10:45:52 +0000
+From:   Christian Brauner <christian.brauner@ubuntu.com>
+To:     linux-kernel@vger.kernel.org, Oleg Nesterov <oleg@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        Arnd Bergmann <arnd@arndb.de>, libc-alpha@sourceware.org
+Cc:     David Howells <dhowells@redhat.com>, Jann Horn <jannh@google.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Shuah Khan <shuah@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Michal Hocko <mhocko@suse.com>,
+        Elena Reshetova <elena.reshetova@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Roman Gushchin <guro@fb.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Aleksa Sarai <cyphar@cyphar.com>,
+        "Dmitry V. Levin" <ldv@altlinux.org>,
+        linux-kselftest@vger.kernel.org,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        linux-api@vger.kernel.org
+Subject: [PATCH v3 1/2] clone3: add CLONE_CLEAR_SIGHAND
+Date:   Mon, 14 Oct 2019 12:45:37 +0200
+Message-Id: <20191014104538.3096-1-christian.brauner@ubuntu.com>
+X-Mailer: git-send-email 2.23.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190913210247.GA86838@google.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Sep 13, 2019 at 02:02:47PM -0700, Brendan Higgins wrote:
-> Hey Knut and Shuah,
-> 
-> Following up on our offline discussion on Wednesday night:
-> 
-> We decided that it would make sense for Knut to try to implement Hybrid
-> Testing (testing that crosses the kernel userspace boundary) that he
-> introduced here[1] on top of the existing KUnit infrastructure.
-> 
-> We discussed several possible things in the kernel that Knut could test
-> with the new Hybrid Testing feature as an initial example. Those were
-> (in reverse order of expected difficulty):
-> 
-> 1. RDS (Reliable Datagram Sockets) - We decided that, although this was
->    one of the more complicated subsystems to work with, it was probably
->    the best candidate for Knut to start with because it was in desperate
->    need of better testing, much of the testing would require crossing
->    the kernel userspace boundary to be effective, and Knut has access to
->    RDS (since he works at Oracle).
-> 
-> 2. KMOD - Probably much simpler than RDS, and the maintainer, Luis
->    Chamberlain (CC'ed) would like to see better testing here, but
->    probably still not as good as RDS because it is in less dire need of
->    testing, collaboration on this would be more difficult, and Luis is
->    currently on an extended vacation. Luis and I had already been
->    discussing testing KMOD here[2].
+Reset all signal handlers of the child not set to SIG_IGN to SIG_DFL.
+Mutually exclusive with CLONE_SIGHAND to not disturb other thread's
+signal handler.
 
-I'm back!
+In the spirit of closer cooperation between glibc developers and kernel
+developers (cf. [2]) this patchset came out of a discussion on the glibc
+mailing list for improving posix_spawn() (cf. [1], [3], [4]). Kernel
+support for this feature has been explicitly requested by glibc and I
+see no reason not to help them with this.
 
-I'm also happy and thrilled to help review the infrastructure in great
-detail given I have lofty future objectives with testing in the kernel.
-Also, kmod is a bit more complex to test, if Knut wants a simpler *easy*
-target I think test_sysctl.c would be a good target. I think the goal
-there would be to add probes for a few of the sysctl callers, and then
-test them through userspace somehow, for instance?
+The child helper process on Linux posix_spawn must ensure that no signal
+handlers are enabled, so the signal disposition must be either SIG_DFL
+or SIG_IGN. However, it requires a sigprocmask to obtain the current
+signal mask and at least _NSIG sigaction calls to reset the signal
+handlers for each posix_spawn call or complex state tracking that might
+lead to data corruption in glibc. Adding this flags lets glibc avoid
+these problems.
 
-The complexities with testing kmod is the threading aspect. So that is
-more of a challenge for a test infrastructure as a whole. However kmod
-also already has a pretty sound kthread solution which could be used
-as basis for any sound kernel multithread test solution.
+[1]: https://www.sourceware.org/ml/libc-alpha/2019-10/msg00149.html
+[3]: https://www.sourceware.org/ml/libc-alpha/2019-10/msg00158.html
+[4]: https://www.sourceware.org/ml/libc-alpha/2019-10/msg00160.html
+[2]: https://lwn.net/Articles/799331/
+     '[...] by asking for better cooperation with the C-library projects
+     in general. They should be copied on patches containing ABI
+     changes, for example. I noted that there are often times where
+     C-library developers wish the kernel community had done things
+     differently; how could those be avoided in the future? Members of
+     the audience suggested that more glibc developers should perhaps
+     join the linux-api list. The other suggestion was to "copy Florian
+     on everything".'
+Cc: Oleg Nesterov <oleg@redhat.com>
+Cc: Florian Weimer <fweimer@redhat.com>
+Cc: libc-alpha@sourceware.org
+Cc: linux-api@vger.kernel.org
+Signed-off-by: Christian Brauner <christian.brauner@ubuntu.com>
+---
+/* v1 */
+Link: https://lore.kernel.org/r/20191010133518.5420-1-christian.brauner@ubuntu.com
 
-Curious, what was decided with the regards to the generic netlink approach?
+/* v2 */
+Link: https://lore.kernel.org/r/20191011102537.27502-1-christian.brauner@ubuntu.com
+- Florian Weimer <fweimer@redhat.com>:
+  - update comment in clone3_args_valid()
 
-  Luis
+/* v3 */
+- "Michael Kerrisk (man-pages)" <mtk.manpages@gmail.com>:
+  - s/CLONE3_CLEAR_SIGHAND/CLONE_CLEAR_SIGHAND/g
+---
+ include/uapi/linux/sched.h |  3 +++
+ kernel/fork.c              | 16 +++++++++++-----
+ 2 files changed, 14 insertions(+), 5 deletions(-)
+
+diff --git a/include/uapi/linux/sched.h b/include/uapi/linux/sched.h
+index 99335e1f4a27..1d500ed03c63 100644
+--- a/include/uapi/linux/sched.h
++++ b/include/uapi/linux/sched.h
+@@ -33,6 +33,9 @@
+ #define CLONE_NEWNET		0x40000000	/* New network namespace */
+ #define CLONE_IO		0x80000000	/* Clone io context */
+ 
++/* Flags for the clone3() syscall. */
++#define CLONE_CLEAR_SIGHAND 0x100000000ULL /* Clear any signal handler and reset to SIG_DFL. */
++
+ #ifndef __ASSEMBLY__
+ /**
+  * struct clone_args - arguments for the clone3 syscall
+diff --git a/kernel/fork.c b/kernel/fork.c
+index 1f6c45f6a734..aa5b5137f071 100644
+--- a/kernel/fork.c
++++ b/kernel/fork.c
+@@ -1517,6 +1517,11 @@ static int copy_sighand(unsigned long clone_flags, struct task_struct *tsk)
+ 	spin_lock_irq(&current->sighand->siglock);
+ 	memcpy(sig->action, current->sighand->action, sizeof(sig->action));
+ 	spin_unlock_irq(&current->sighand->siglock);
++
++	/* Reset all signal handler not set to SIG_IGN to SIG_DFL. */
++	if (clone_flags & CLONE_CLEAR_SIGHAND)
++		flush_signal_handlers(tsk, 0);
++
+ 	return 0;
+ }
+ 
+@@ -2563,11 +2568,8 @@ noinline static int copy_clone_args_from_user(struct kernel_clone_args *kargs,
+ 
+ static bool clone3_args_valid(const struct kernel_clone_args *kargs)
+ {
+-	/*
+-	 * All lower bits of the flag word are taken.
+-	 * Verify that no other unknown flags are passed along.
+-	 */
+-	if (kargs->flags & ~CLONE_LEGACY_FLAGS)
++	/* Verify that no unknown flags are passed along. */
++	if (kargs->flags & ~(CLONE_LEGACY_FLAGS | CLONE_CLEAR_SIGHAND))
+ 		return false;
+ 
+ 	/*
+@@ -2577,6 +2579,10 @@ static bool clone3_args_valid(const struct kernel_clone_args *kargs)
+ 	if (kargs->flags & (CLONE_DETACHED | CSIGNAL))
+ 		return false;
+ 
++	if ((kargs->flags & (CLONE_SIGHAND | CLONE_CLEAR_SIGHAND)) ==
++	    (CLONE_SIGHAND | CLONE_CLEAR_SIGHAND))
++		return false;
++
+ 	if ((kargs->flags & (CLONE_THREAD | CLONE_PARENT)) &&
+ 	    kargs->exit_signal)
+ 		return false;
+-- 
+2.23.0
+
