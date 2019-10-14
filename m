@@ -2,135 +2,111 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F23FCD69A3
-	for <lists+linux-kselftest@lfdr.de>; Mon, 14 Oct 2019 20:43:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37B3DD69AD
+	for <lists+linux-kselftest@lfdr.de>; Mon, 14 Oct 2019 20:47:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730857AbfJNSlJ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 14 Oct 2019 14:41:09 -0400
-Received: from aserp2120.oracle.com ([141.146.126.78]:37318 "EHLO
-        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728931AbfJNSlJ (ORCPT
+        id S1732284AbfJNSql (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 14 Oct 2019 14:46:41 -0400
+Received: from hqemgate14.nvidia.com ([216.228.121.143]:3511 "EHLO
+        hqemgate14.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726169AbfJNSql (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 14 Oct 2019 14:41:09 -0400
-Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
-        by aserp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x9EIcuif104747;
-        Mon, 14 Oct 2019 18:41:03 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=message-id : subject
- : from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=corp-2019-08-05;
- bh=fwHUKuWdq5i3WupNwi0IERGmIT76mMVKPnSqLNltDps=;
- b=lpdTKvFFFU+EhRU1o96AaA6OxDzLVEl0Lgbij7vOUL+hIJvdKAJxwiYXri+ZmFtZXPkm
- LJuWN3UQkgPDPp5TagxxgyettKIM8QVkac4qds4MAhQ1/1AAFMsOQYVdeGLitsw5kEcH
- S8VQAuxdmaH1ia7WehQgyyzm22TeY7mYNRwsEk47BtgGBhLTvmZYyZMTomSEyNEmaoRZ
- 6H6EhycUURM2uo24AMNC+7HO6CiKOsohvIdVLpR2uVQSFIAN8bJrr0CUBhjBcX7fEfGO
- yEEZNFT0iPDTG3nHYZVVoKwqawFA3aoFBYNHbxEzWk/VuvkBy8WFlFWUVUl6cR/9a7zZ kw== 
-Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by aserp2120.oracle.com with ESMTP id 2vk6sqau7q-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 14 Oct 2019 18:41:03 +0000
-Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x9EIbvvC095061;
-        Mon, 14 Oct 2019 18:39:03 GMT
-Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
-        by aserp3020.oracle.com with ESMTP id 2vkrbkcemb-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 14 Oct 2019 18:39:02 +0000
-Received: from abhmp0001.oracle.com (abhmp0001.oracle.com [141.146.116.7])
-        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id x9EId0FL022897;
-        Mon, 14 Oct 2019 18:39:01 GMT
-Received: from asu (/92.220.18.196)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Mon, 14 Oct 2019 18:39:00 +0000
-Message-ID: <9212e0fb58683df4781c52e6ad0abd8eb496a452.camel@oracle.com>
-Subject: Re: Plan for hybrid testing
-From:   Knut Omang <knut.omang@oracle.com>
-To:     Luis Chamberlain <mcgrof@kernel.org>,
-        Brendan Higgins <brendanhiggins@google.com>
-Cc:     Shuah Khan <shuah@kernel.org>, kunit-dev@googlegroups.com,
-        linux-kselftest@vger.kernel.org,
-        Alan Maguire <alan.maguire@oracle.com>
-Date:   Mon, 14 Oct 2019 20:38:57 +0200
-In-Reply-To: <20191014104243.GD16384@42.do-not-panic.com>
-References: <20190913210247.GA86838@google.com>
-         <20191014104243.GD16384@42.do-not-panic.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.30.5 (3.30.5-1.fc29) 
+        Mon, 14 Oct 2019 14:46:41 -0400
+Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqemgate14.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5da4c2950000>; Mon, 14 Oct 2019 11:46:45 -0700
+Received: from hqmail.nvidia.com ([172.20.161.6])
+  by hqpgpgate101.nvidia.com (PGP Universal service);
+  Mon, 14 Oct 2019 11:46:40 -0700
+X-PGP-Universal: processed;
+        by hqpgpgate101.nvidia.com on Mon, 14 Oct 2019 11:46:40 -0700
+Received: from HQMAIL101.nvidia.com (172.20.187.10) by HQMAIL111.nvidia.com
+ (172.20.187.18) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Mon, 14 Oct
+ 2019 18:46:40 +0000
+Received: from hqnvemgw02.nvidia.com (172.16.227.111) by HQMAIL101.nvidia.com
+ (172.20.187.10) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
+ Transport; Mon, 14 Oct 2019 18:46:40 +0000
+Received: from blueforge.nvidia.com (Not Verified[10.110.48.28]) by hqnvemgw02.nvidia.com with Trustwave SEG (v7,5,8,10121)
+        id <B5da4c2900000>; Mon, 14 Oct 2019 11:46:40 -0700
+From:   John Hubbard <jhubbard@nvidia.com>
+To:     Andrew Morton <akpm@linux-foundation.org>
+CC:     Christoph Hellwig <hch@infradead.org>,
+        "Aneesh Kumar K . V" <aneesh.kumar@linux.ibm.com>,
+        Keith Busch <keith.busch@intel.com>,
+        Ira Weiny <ira.weiny@intel.com>,
+        LKML <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Christoph Hellwig <hch@lst.de>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Shuah Khan <shuah@kernel.org>,
+        <linux-kselftest@vger.kernel.org>
+Subject: [PATCH v2 0/2] gup.c, gup_benchmark.c trivial fixes before the storm
+Date:   Mon, 14 Oct 2019 11:46:37 -0700
+Message-ID: <20191014184639.1512873-1-jhubbard@nvidia.com>
+X-Mailer: git-send-email 2.23.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9410 signatures=668684
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
- phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=915
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.0.1-1908290000 definitions=main-1910140151
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9410 signatures=668684
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
- suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1011
- lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1908290000
- definitions=main-1910140151
+X-NVConfidentiality: public
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1571078805; bh=qk0npK+pn+bfxjHAA4vLiMmmSsmYH4obfm3nBaVQ5P0=;
+        h=X-PGP-Universal:From:To:CC:Subject:Date:Message-ID:X-Mailer:
+         MIME-Version:X-NVConfidentiality:Content-Transfer-Encoding:
+         Content-Type;
+        b=a+3wPUZ4Ni7vxCbt/44gYy7aOaiZolY9gjyUl+D3s62xe2b7ospotvUaGAih73ftt
+         XNDFPkBMWgRPpAuavxKVquDQ5vgj2IH3xh1ENlXCdbgzapy1WRDU5uwyoGThaFlG1X
+         Rjj+BtPHmxCJ+pD+c+yLbDf1rBaMQL+LCGnkVkctPqDffEkMNI7x3Z3ewprCc4WXAE
+         XKvkTbFhaPq4pnGI7tYnGmfeSJ9U47P5e4NAhhjEJUYqbNMKDbYkNemShzh4dJhhPc
+         9l/g/A2/CBZ+qiE+cVHPiLskW9Za7kBGgEuYgTQTV3ub2N9VjGTYQrokaB++MtUQEM
+         IhyvIF/M8BGjw==
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, 2019-10-14 at 10:42 +0000, Luis Chamberlain wrote:
-> On Fri, Sep 13, 2019 at 02:02:47PM -0700, Brendan Higgins wrote:
-> > Hey Knut and Shuah,
-> > 
-> > Following up on our offline discussion on Wednesday night:
-> > 
-> > We decided that it would make sense for Knut to try to implement Hybrid
-> > Testing (testing that crosses the kernel userspace boundary) that he
-> > introduced here[1] on top of the existing KUnit infrastructure.
-> > 
-> > We discussed several possible things in the kernel that Knut could test
-> > with the new Hybrid Testing feature as an initial example. Those were
-> > (in reverse order of expected difficulty):
-> > 
-> > 1. RDS (Reliable Datagram Sockets) - We decided that, although this was
-> >    one of the more complicated subsystems to work with, it was probably
-> >    the best candidate for Knut to start with because it was in desperate
-> >    need of better testing, much of the testing would require crossing
-> >    the kernel userspace boundary to be effective, and Knut has access to
-> >    RDS (since he works at Oracle).
-> > 
-> > 2. KMOD - Probably much simpler than RDS, and the maintainer, Luis
-> >    Chamberlain (CC'ed) would like to see better testing here, but
-> >    probably still not as good as RDS because it is in less dire need of
-> >    testing, collaboration on this would be more difficult, and Luis is
-> >    currently on an extended vacation. Luis and I had already been
-> >    discussing testing KMOD here[2].
-> 
-> I'm back!
-> 
-> I'm also happy and thrilled to help review the infrastructure in great
-> detail given I have lofty future objectives with testing in the kernel.
-> Also, kmod is a bit more complex to test, if Knut wants a simpler *easy*
-> target I think test_sysctl.c would be a good target. I think the goal
-> there would be to add probes for a few of the sysctl callers, and then
-> test them through userspace somehow, for instance?
+Hi,
 
-That sounds like a good case for the hybrid tests.
-The challenge in a kunit setting would be that it relies on a significant part of KTF
-to work as we have used it so far:
+Changes since v1:
 
-- module support - Alan has been working on this 
-- netlink approach from KTF (to allow user space execution of kernel 
-  part of test, and gathering reporting in one place)
-- probe infrastructure 
+1) Fixed a krobot-reported mistake, which also uncovered a pre-existing
+bug. Thanks to Kirill for recommending the fix.
 
-> The complexities with testing kmod is the threading aspect. So that is
-> more of a challenge for a test infrastructure as a whole. However kmod
-> also already has a pretty sound kthread solution which could be used
-> as basis for any sound kernel multithread test solution.
-> 
-> Curious, what was decided with the regards to the generic netlink approach?
+2) Added another small fix: changed the data type to unsigned int, as
+pointed out by Ira.
 
-I think in some way functionality similar to the netlink support is needed 
-for the features in KTF that we discussed, so I get it is a "yes" to add 
-support for it?
+2) Added a "Fixes:" line, thanks to Kirill and Aneesh for pinpointing the
+commit.
 
-Knut
+3) Collected Acked-by and Suggested-by's.
 
->   Luis
+Original cover letter, edited slightly
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+
+These trivial fixes apply to today's linux.git (5.4-rc3).
+
+I found these while polishing up the Next And Final get_user_pages()+dma
+tracking patchset (which is in final testing and passing nicely...so far).
+
+Anyway, as these two patches apply cleanly both before and after the larger
+gup/dma upcoming patchset, I thought it best to send this out separately,
+in order to avoid muddying the waters more than usual.
+
+Cc: Christoph Hellwig <hch@lst.de>
+Cc: Aneesh Kumar K.V <aneesh.kumar@linux.ibm.com>
+Cc: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+Cc: Keith Busch <keith.busch@intel.com>
+Cc: Ira Weiny <ira.weiny@intel.com>
+Cc: Shuah Khan <shuah@kernel.org>
+Cc: linux-kselftest@vger.kernel.org
+
+John Hubbard (2):
+  mm/gup_benchmark: add a missing "w" to getopt string
+  mm/gup: fix a misnamed "write" argument, and a related bug
+
+ mm/gup.c                                   | 14 ++++++++------
+ tools/testing/selftests/vm/gup_benchmark.c |  2 +-
+ 2 files changed, 9 insertions(+), 7 deletions(-)
+
+--=20
+2.23.0
 
