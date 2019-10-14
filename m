@@ -2,86 +2,96 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B643D611F
-	for <lists+linux-kselftest@lfdr.de>; Mon, 14 Oct 2019 13:19:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D9ABD642D
+	for <lists+linux-kselftest@lfdr.de>; Mon, 14 Oct 2019 15:36:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730105AbfJNLT3 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 14 Oct 2019 07:19:29 -0400
-Received: from mail-qk1-f169.google.com ([209.85.222.169]:42744 "EHLO
-        mail-qk1-f169.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726351AbfJNLT3 (ORCPT
+        id S1731744AbfJNNgs (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 14 Oct 2019 09:36:48 -0400
+Received: from mail-lj1-f195.google.com ([209.85.208.195]:38651 "EHLO
+        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727409AbfJNNgs (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 14 Oct 2019 07:19:29 -0400
-Received: by mail-qk1-f169.google.com with SMTP id f16so15500113qkl.9
-        for <linux-kselftest@vger.kernel.org>; Mon, 14 Oct 2019 04:19:28 -0700 (PDT)
+        Mon, 14 Oct 2019 09:36:48 -0400
+Received: by mail-lj1-f195.google.com with SMTP id b20so16690499ljj.5
+        for <linux-kselftest@vger.kernel.org>; Mon, 14 Oct 2019 06:36:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=r9BBMSyhpBFdWtL0DjmQ2VJj8KhYROwcWMbTk9Hb1B0=;
-        b=RkC9m+IK0fs73s5Uzn2fnqeFmvD/cXftcnapDExyR9iQ+WMXDX3KLeTnqv42vGdQp9
-         XF+WSLI3JbKXK1vPMyIr+ttyNM8N/+g7PhMlggQHLIiN3pmPdnEzYNs72E9luqxVABoU
-         uN3u8Bch+7WokI1aIKd++nwmFCvp6w/YkoKEFWud/VrwdPl1zUAPM7lkJNKZZIWvZ0JI
-         /n64ygq7w2QxNuQlJ9+9NRxTYFlz12y/RbSNs2eS/CdMSn0/onjSLeCxMFbFcTqLPt7f
-         Wbtxd0C8Rl+5TxvHfpw6ZWhI8O6akr8aOm9MTQNnbafAtE9PsySRfkuTmvnKEE086YoW
-         7nww==
+        d=shutemov-name.20150623.gappssmtp.com; s=20150623;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=kwbPVljcr0NSCLljc0OrTvv7XNYrir6ZBXGML3SSjPU=;
+        b=05qWHKg+TrOwztU4ZAot6PDVHWWpQZxid79fo7XRrrioC8Lnc3sSuSc2AYMczUkUSw
+         CkbNN+k3FcFi080be2vjjn8VAsMeKfzSxNry3wbMacWHSYD0iwRiSW+AeUri83swD8Ya
+         07bYiepu9TWx+9bjcdxDEYSx7lUiZXk/7r+Uk0lWt6YChTAkfWPzx4sZgPoS6PDO2CIF
+         bzGesDWFfKoCqzRXCov9hjmYv210ylBItSLFgcc9qIkV9ap9/GtKMLysd6ACbBQjRD2k
+         Ek0s+DYRtOUJ3qyhNrUBsKbjbqFLbc4Y9tZ7aIIEiBUKZjs91A6JWVekds0tHqWssr8T
+         7c4Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=r9BBMSyhpBFdWtL0DjmQ2VJj8KhYROwcWMbTk9Hb1B0=;
-        b=C/7tt5wuFM4mEbui2Tfz+oUIw7IHMqJ6Ah8db+x4zmBkwD1+Ds5cbUapcoMVX32Mlm
-         INstP8nK5Hsm9qiBcAzwZAxmj8KT+U+iUiy4OLwWdpQhlaHUMXuPmzY023ExPwX4AeC9
-         cH9LPxenRB/JFlsAyfqXLllAUSydSf4G+7GKr7pxgeF7G1kzWyR4FN80UARLJuOMaaQR
-         ttpc5zM4cUJwkdPuPLj9NtpoMl3jW8QNxVQmaO/j/mOfK/aDdcqsmN1PfXz1h2qD8ulp
-         ECgWwp6Uf3YdMT9WVE1RiYzZ2Dw6nZ5I3+NvM07iFbYrZUHfPM8VL9FtogP4mazghJmc
-         6/Ew==
-X-Gm-Message-State: APjAAAUvXpfRcFgpTMUcC7IFdUJpVSOgsyP+TYl0d0Ka9R4gNale1i1g
-        I1lS98YJVDb0MA2+kIwaSWwvu3xOvT4ZCLyV/5diwA==
-X-Google-Smtp-Source: APXvYqw4f1MGUziTj5YCtLk7mfKa8lIfqbZ/uq5fx4Oduhglc0vFDtje21AgyBjjqRMgvcveYJXDUbvmpFIC+MygRDg=
-X-Received: by 2002:a05:620a:2158:: with SMTP id m24mr29602822qkm.250.1571051967455;
- Mon, 14 Oct 2019 04:19:27 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=kwbPVljcr0NSCLljc0OrTvv7XNYrir6ZBXGML3SSjPU=;
+        b=snUrtk5euonkUE5jxBmnUQMJLQbi6mdFHzyDByxpNjQda/DtnCUBac0Z6HCyw2cZk6
+         7FMWghVlYofJ+Ehif1kF1qumsn2qQw0sJlPeR/Lirn7VuPzVsKAh1gHLP7doPdeiwMic
+         ItxGC+gwV2dJcMyi3jubHl60V7gNmBIqYfADR0XhIyP+7XeXKeo7QRiJCac45V21qvlQ
+         LU6wCNKTfh1BFNSh4irBwAeH2r2GFZpytUP/il+rPeJrT1mvGMQDvO/evIBexHaJhyBN
+         xgC1Z2I1bdljJF9e1jYPu88oWNZ9BXq+7JlPjOR/CnXPPtJ6KoYoGM/99Ss+eXB/TeJq
+         ZmEA==
+X-Gm-Message-State: APjAAAXKtWGepKTgcbCQRecuk8f+rbHO4oSfgc/uxMEbAw2KF9Ic4jlB
+        u3caGZocQYUwsMr7TlKST8E3Zg==
+X-Google-Smtp-Source: APXvYqyM5oyga4VW1RouFU2Br7VQCRYE/EjO/xLpNOZBGALk/H00a8Cezl8WSlGhqQd/ZpQ+hGkhyQ==
+X-Received: by 2002:a2e:9d3:: with SMTP id 202mr16473401ljj.112.1571060206393;
+        Mon, 14 Oct 2019 06:36:46 -0700 (PDT)
+Received: from box.localdomain ([86.57.175.117])
+        by smtp.gmail.com with ESMTPSA id t8sm4215037lfc.80.2019.10.14.06.36.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Oct 2019 06:36:45 -0700 (PDT)
+Received: by box.localdomain (Postfix, from userid 1000)
+        id BF773101288; Mon, 14 Oct 2019 16:36:44 +0300 (+03)
+Date:   Mon, 14 Oct 2019 16:36:44 +0300
+From:   "Kirill A. Shutemov" <kirill@shutemov.name>
+To:     John Hubbard <jhubbard@nvidia.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        "Aneesh Kumar K . V" <aneesh.kumar@linux.ibm.com>,
+        Keith Busch <keith.busch@intel.com>,
+        Ira Weiny <ira.weiny@intel.com>,
+        LKML <linux-kernel@vger.kernel.org>, linux-mm@kvack.org,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH 1/2] mm/gup_benchmark: add a missing "w" to getopt string
+Message-ID: <20191014133644.ecjlss24e5fy7tkl@box>
+References: <20191013221155.382378-1-jhubbard@nvidia.com>
+ <20191013221155.382378-2-jhubbard@nvidia.com>
 MIME-Version: 1.0
-References: <CACT4Y+YjOxmOzzPt_xaYE44QNZfq9haNfbnVBrTnPXe7zuSEfA@mail.gmail.com>
- <CACT4Y+ZaN900gwx=PHS10hrKofZib7HA7JFxE_DkwChyttYW+A@mail.gmail.com>
- <876a2abe-41ab-5819-4ae8-ad26186d0d1c@kernel.org> <226099bc-9763-3a73-e26a-b292f601494c@kernel.org>
- <20191011180248.GA24089@rei.lan> <b715f3d7-547f-9a43-dc41-2e46ec3bfd51@kernel.org>
- <20191014085414.GB31760@rei.lan>
-In-Reply-To: <20191014085414.GB31760@rei.lan>
-From:   Dmitry Vyukov <dvyukov@google.com>
-Date:   Mon, 14 Oct 2019 13:19:15 +0200
-Message-ID: <CACT4Y+aKbgT=i8C5aZvp8ZV52PamGm=GdnR6kQecczLQOQSGqA@mail.gmail.com>
-Subject: Re: [Automated-testing] syzkaller reproducers
-To:     Cyril Hrubis <chrubis@suse.cz>
-Cc:     shuah <shuah@kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        automated-testing@yoctoproject.org, kernelci@groups.io,
-        George Kennedy <george.kennedy@oracle.com>,
-        Dhaval Giani <dhaval.giani@gmail.com>,
-        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Jan Setje-Eilers <jan.setjeeilers@oracle.com>,
-        syzkaller <syzkaller@googlegroups.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20191013221155.382378-2-jhubbard@nvidia.com>
+User-Agent: NeoMutt/20180716
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Oct 14, 2019 at 10:54 AM Cyril Hrubis <chrubis@suse.cz> wrote:
->
-> Hi!
-> > > You are suposed to run the run.sh script in the bin directory.
-> >
-> > Yeah that does work.
-> >
-> > Would be helpful to have usage instructions instead of failing. :)
->
-> I do not think that these scripts are ever supposed to be the used in
-> production testing, you need much more than this to produce results
-> reliably. I would expect that they are supposed to be a form of very
-> minimal documentation.
+On Sun, Oct 13, 2019 at 03:11:54PM -0700, John Hubbard wrote:
+> Even though gup_benchmark.c has code to handle the -w
+> command-line option, the "w" is not part of the getopt
+> string. It looks as if it has been missing the whole time.
+> 
+> On my machine, this leads naturally to the following
+> predictable result:
+> 
+> $ sudo ./gup_benchmark -w
+> ./gup_benchmark: invalid option -- 'w'
+> 
+> ...which is fixed, with this commit.
+> 
+> Cc: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+> Cc: Keith Busch <keith.busch@intel.com>
+> Cc: Shuah Khan <shuah@kernel.org>
+> Cc: linux-kselftest@vger.kernel.org
+> Signed-off-by: John Hubbard <jhubbard@nvidia.com>
 
-Yes, I just added them as quick hints: some repros are 32-bits; each
-needs a new dir; some external timeout is needed for each test.
+Acked-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+
+-- 
+ Kirill A. Shutemov
