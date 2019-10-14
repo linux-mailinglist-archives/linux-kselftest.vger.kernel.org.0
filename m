@@ -2,317 +2,86 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 936FAD607D
-	for <lists+linux-kselftest@lfdr.de>; Mon, 14 Oct 2019 12:46:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B643D611F
+	for <lists+linux-kselftest@lfdr.de>; Mon, 14 Oct 2019 13:19:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731631AbfJNKp6 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 14 Oct 2019 06:45:58 -0400
-Received: from youngberry.canonical.com ([91.189.89.112]:34519 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731305AbfJNKp6 (ORCPT
+        id S1730105AbfJNLT3 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 14 Oct 2019 07:19:29 -0400
+Received: from mail-qk1-f169.google.com ([209.85.222.169]:42744 "EHLO
+        mail-qk1-f169.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726351AbfJNLT3 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 14 Oct 2019 06:45:58 -0400
-Received: from [212.86.36.32] (helo=localhost.localdomain)
-        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.86_2)
-        (envelope-from <christian.brauner@ubuntu.com>)
-        id 1iJxrO-0002lB-PW; Mon, 14 Oct 2019 10:45:55 +0000
-From:   Christian Brauner <christian.brauner@ubuntu.com>
-To:     linux-kernel@vger.kernel.org, Oleg Nesterov <oleg@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        Arnd Bergmann <arnd@arndb.de>, libc-alpha@sourceware.org
-Cc:     David Howells <dhowells@redhat.com>, Jann Horn <jannh@google.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Shuah Khan <shuah@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Michal Hocko <mhocko@suse.com>,
-        Elena Reshetova <elena.reshetova@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Roman Gushchin <guro@fb.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Aleksa Sarai <cyphar@cyphar.com>,
-        "Dmitry V. Levin" <ldv@altlinux.org>,
-        linux-kselftest@vger.kernel.org,
-        Christian Brauner <christian.brauner@ubuntu.com>,
-        linux-api@vger.kernel.org
-Subject: [PATCH v3 2/2] tests: test CLONE_CLEAR_SIGHAND
-Date:   Mon, 14 Oct 2019 12:45:38 +0200
-Message-Id: <20191014104538.3096-2-christian.brauner@ubuntu.com>
-X-Mailer: git-send-email 2.23.0
-In-Reply-To: <20191014104538.3096-1-christian.brauner@ubuntu.com>
-References: <20191014104538.3096-1-christian.brauner@ubuntu.com>
+        Mon, 14 Oct 2019 07:19:29 -0400
+Received: by mail-qk1-f169.google.com with SMTP id f16so15500113qkl.9
+        for <linux-kselftest@vger.kernel.org>; Mon, 14 Oct 2019 04:19:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=r9BBMSyhpBFdWtL0DjmQ2VJj8KhYROwcWMbTk9Hb1B0=;
+        b=RkC9m+IK0fs73s5Uzn2fnqeFmvD/cXftcnapDExyR9iQ+WMXDX3KLeTnqv42vGdQp9
+         XF+WSLI3JbKXK1vPMyIr+ttyNM8N/+g7PhMlggQHLIiN3pmPdnEzYNs72E9luqxVABoU
+         uN3u8Bch+7WokI1aIKd++nwmFCvp6w/YkoKEFWud/VrwdPl1zUAPM7lkJNKZZIWvZ0JI
+         /n64ygq7w2QxNuQlJ9+9NRxTYFlz12y/RbSNs2eS/CdMSn0/onjSLeCxMFbFcTqLPt7f
+         Wbtxd0C8Rl+5TxvHfpw6ZWhI8O6akr8aOm9MTQNnbafAtE9PsySRfkuTmvnKEE086YoW
+         7nww==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=r9BBMSyhpBFdWtL0DjmQ2VJj8KhYROwcWMbTk9Hb1B0=;
+        b=C/7tt5wuFM4mEbui2Tfz+oUIw7IHMqJ6Ah8db+x4zmBkwD1+Ds5cbUapcoMVX32Mlm
+         INstP8nK5Hsm9qiBcAzwZAxmj8KT+U+iUiy4OLwWdpQhlaHUMXuPmzY023ExPwX4AeC9
+         cH9LPxenRB/JFlsAyfqXLllAUSydSf4G+7GKr7pxgeF7G1kzWyR4FN80UARLJuOMaaQR
+         ttpc5zM4cUJwkdPuPLj9NtpoMl3jW8QNxVQmaO/j/mOfK/aDdcqsmN1PfXz1h2qD8ulp
+         ECgWwp6Uf3YdMT9WVE1RiYzZ2Dw6nZ5I3+NvM07iFbYrZUHfPM8VL9FtogP4mazghJmc
+         6/Ew==
+X-Gm-Message-State: APjAAAUvXpfRcFgpTMUcC7IFdUJpVSOgsyP+TYl0d0Ka9R4gNale1i1g
+        I1lS98YJVDb0MA2+kIwaSWwvu3xOvT4ZCLyV/5diwA==
+X-Google-Smtp-Source: APXvYqw4f1MGUziTj5YCtLk7mfKa8lIfqbZ/uq5fx4Oduhglc0vFDtje21AgyBjjqRMgvcveYJXDUbvmpFIC+MygRDg=
+X-Received: by 2002:a05:620a:2158:: with SMTP id m24mr29602822qkm.250.1571051967455;
+ Mon, 14 Oct 2019 04:19:27 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <CACT4Y+YjOxmOzzPt_xaYE44QNZfq9haNfbnVBrTnPXe7zuSEfA@mail.gmail.com>
+ <CACT4Y+ZaN900gwx=PHS10hrKofZib7HA7JFxE_DkwChyttYW+A@mail.gmail.com>
+ <876a2abe-41ab-5819-4ae8-ad26186d0d1c@kernel.org> <226099bc-9763-3a73-e26a-b292f601494c@kernel.org>
+ <20191011180248.GA24089@rei.lan> <b715f3d7-547f-9a43-dc41-2e46ec3bfd51@kernel.org>
+ <20191014085414.GB31760@rei.lan>
+In-Reply-To: <20191014085414.GB31760@rei.lan>
+From:   Dmitry Vyukov <dvyukov@google.com>
+Date:   Mon, 14 Oct 2019 13:19:15 +0200
+Message-ID: <CACT4Y+aKbgT=i8C5aZvp8ZV52PamGm=GdnR6kQecczLQOQSGqA@mail.gmail.com>
+Subject: Re: [Automated-testing] syzkaller reproducers
+To:     Cyril Hrubis <chrubis@suse.cz>
+Cc:     shuah <shuah@kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        automated-testing@yoctoproject.org, kernelci@groups.io,
+        George Kennedy <george.kennedy@oracle.com>,
+        Dhaval Giani <dhaval.giani@gmail.com>,
+        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Jan Setje-Eilers <jan.setjeeilers@oracle.com>,
+        syzkaller <syzkaller@googlegroups.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Test that CLONE_CLEAR_SIGHAND resets signal handlers to SIG_DFL for the
-child process and that CLONE_CLEAR_SIGHAND and CLONE_SIGHAND are
-mutually exclusive.
+On Mon, Oct 14, 2019 at 10:54 AM Cyril Hrubis <chrubis@suse.cz> wrote:
+>
+> Hi!
+> > > You are suposed to run the run.sh script in the bin directory.
+> >
+> > Yeah that does work.
+> >
+> > Would be helpful to have usage instructions instead of failing. :)
+>
+> I do not think that these scripts are ever supposed to be the used in
+> production testing, you need much more than this to produce results
+> reliably. I would expect that they are supposed to be a form of very
+> minimal documentation.
 
-Cc: Florian Weimer <fweimer@redhat.com>
-Cc: libc-alpha@sourceware.org
-Cc: linux-api@vger.kernel.org
-Signed-off-by: Christian Brauner <christian.brauner@ubuntu.com>
----
-/* v1 */
-Link: https://lore.kernel.org/r/20191010133518.5420-2-christian.brauner@ubuntu.com
-
-/* v2 */
-Link: https://lore.kernel.org/r/20191011102537.27502-2-christian.brauner@ubuntu.com
-- Christian Brauner <christian.brauner@ubuntu.com>:
-  - remove unused variable
-  - reuse variable in child process instead od declaring a new one
-  - move check for mutual exclusivity of CLONE_SIGHAND and
-    CLONE3_CLEAR_SIGHAND to top of test before setting up signal
-    handlers
-  - rename variables
-
-/* v3 */
-- Christian Brauner <christian.brauner@ubuntu.com>:
-  - s/CLONE3_CLEAR_SIGHAND/CLONE_CLEAR_SIGHAND/g
----
- MAINTAINERS                                   |   1 +
- tools/testing/selftests/Makefile              |   1 +
- tools/testing/selftests/clone3/.gitignore     |   1 +
- tools/testing/selftests/clone3/Makefile       |   7 +
- .../selftests/clone3/clone3_clear_sighand.c   | 172 ++++++++++++++++++
- 5 files changed, 182 insertions(+)
- create mode 100644 tools/testing/selftests/clone3/.gitignore
- create mode 100644 tools/testing/selftests/clone3/Makefile
- create mode 100644 tools/testing/selftests/clone3/clone3_clear_sighand.c
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 55199ef7fa74..582275d85607 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -12828,6 +12828,7 @@ S:	Maintained
- T:	git git://git.kernel.org/pub/scm/linux/kernel/git/brauner/linux.git
- F:	samples/pidfd/
- F:	tools/testing/selftests/pidfd/
-+F:	tools/testing/selftests/clone3/
- K:	(?i)pidfd
- K:	(?i)clone3
- K:	\b(clone_args|kernel_clone_args)\b
-diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-index c3feccb99ff5..6bf7aeb47650 100644
---- a/tools/testing/selftests/Makefile
-+++ b/tools/testing/selftests/Makefile
-@@ -4,6 +4,7 @@ TARGETS += bpf
- TARGETS += breakpoints
- TARGETS += capabilities
- TARGETS += cgroup
-+TARGETS += clone3
- TARGETS += cpufreq
- TARGETS += cpu-hotplug
- TARGETS += drivers/dma-buf
-diff --git a/tools/testing/selftests/clone3/.gitignore b/tools/testing/selftests/clone3/.gitignore
-new file mode 100644
-index 000000000000..6c9f98097774
---- /dev/null
-+++ b/tools/testing/selftests/clone3/.gitignore
-@@ -0,0 +1 @@
-+clone3_clear_sighand
-diff --git a/tools/testing/selftests/clone3/Makefile b/tools/testing/selftests/clone3/Makefile
-new file mode 100644
-index 000000000000..3ecd56ebc99d
---- /dev/null
-+++ b/tools/testing/selftests/clone3/Makefile
-@@ -0,0 +1,7 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+CFLAGS += -g -I../../../../usr/include/
-+
-+TEST_GEN_PROGS := clone3_clear_sighand
-+
-+include ../lib.mk
-+
-diff --git a/tools/testing/selftests/clone3/clone3_clear_sighand.c b/tools/testing/selftests/clone3/clone3_clear_sighand.c
-new file mode 100644
-index 000000000000..0d957be1bdc5
---- /dev/null
-+++ b/tools/testing/selftests/clone3/clone3_clear_sighand.c
-@@ -0,0 +1,172 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+
-+#define _GNU_SOURCE
-+#include <errno.h>
-+#include <sched.h>
-+#include <signal.h>
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <string.h>
-+#include <unistd.h>
-+#include <linux/sched.h>
-+#include <linux/types.h>
-+#include <sys/syscall.h>
-+#include <sys/wait.h>
-+
-+#include "../kselftest.h"
-+
-+#ifndef CLONE_CLEAR_SIGHAND
-+#define CLONE_CLEAR_SIGHAND 0x100000000ULL
-+#endif
-+
-+#ifndef __NR_clone3
-+#define __NR_clone3 -1
-+struct clone_args {
-+	__aligned_u64 flags;
-+	__aligned_u64 pidfd;
-+	__aligned_u64 child_tid;
-+	__aligned_u64 parent_tid;
-+	__aligned_u64 exit_signal;
-+	__aligned_u64 stack;
-+	__aligned_u64 stack_size;
-+	__aligned_u64 tls;
-+};
-+#endif
-+
-+static pid_t sys_clone3(struct clone_args *args, size_t size)
-+{
-+	return syscall(__NR_clone3, args, size);
-+}
-+
-+static void test_clone3_supported(void)
-+{
-+	pid_t pid;
-+	struct clone_args args = {};
-+
-+	if (__NR_clone3 < 0)
-+		ksft_exit_skip("clone3() syscall is not supported\n");
-+
-+	/* Set to something that will always cause EINVAL. */
-+	args.exit_signal = -1;
-+	pid = sys_clone3(&args, sizeof(args));
-+	if (!pid)
-+		exit(EXIT_SUCCESS);
-+
-+	if (pid > 0) {
-+		wait(NULL);
-+		ksft_exit_fail_msg(
-+			"Managed to create child process with invalid exit_signal\n");
-+	}
-+
-+	if (errno == ENOSYS)
-+		ksft_exit_skip("clone3() syscall is not supported\n");
-+
-+	ksft_print_msg("clone3() syscall supported\n");
-+}
-+
-+static void nop_handler(int signo)
-+{
-+}
-+
-+static int wait_for_pid(pid_t pid)
-+{
-+	int status, ret;
-+
-+again:
-+	ret = waitpid(pid, &status, 0);
-+	if (ret == -1) {
-+		if (errno == EINTR)
-+			goto again;
-+
-+		return -1;
-+	}
-+
-+	if (!WIFEXITED(status))
-+		return -1;
-+
-+	return WEXITSTATUS(status);
-+}
-+
-+static void test_clone3_clear_sighand(void)
-+{
-+	int ret;
-+	pid_t pid;
-+	struct clone_args args = {};
-+	struct sigaction act;
-+
-+	/*
-+	 * Check that CLONE_CLEAR_SIGHAND and CLONE_SIGHAND are mutually
-+	 * exclusive.
-+	 */
-+	args.flags |= CLONE_CLEAR_SIGHAND | CLONE_SIGHAND;
-+	args.exit_signal = SIGCHLD;
-+	pid = sys_clone3(&args, sizeof(args));
-+	if (pid > 0)
-+		ksft_exit_fail_msg(
-+			"clone3(CLONE_CLEAR_SIGHAND | CLONE_SIGHAND) succeeded\n");
-+
-+	act.sa_handler = nop_handler;
-+	ret = sigemptyset(&act.sa_mask);
-+	if (ret < 0)
-+		ksft_exit_fail_msg("%s - sigemptyset() failed\n",
-+				   strerror(errno));
-+
-+	act.sa_flags = 0;
-+
-+	/* Register signal handler for SIGUSR1 */
-+	ret = sigaction(SIGUSR1, &act, NULL);
-+	if (ret < 0)
-+		ksft_exit_fail_msg(
-+			"%s - sigaction(SIGUSR1, &act, NULL) failed\n",
-+			strerror(errno));
-+
-+	/* Register signal handler for SIGUSR2 */
-+	ret = sigaction(SIGUSR2, &act, NULL);
-+	if (ret < 0)
-+		ksft_exit_fail_msg(
-+			"%s - sigaction(SIGUSR2, &act, NULL) failed\n",
-+			strerror(errno));
-+
-+	/* Check that CLONE_CLEAR_SIGHAND works. */
-+	args.flags = CLONE_CLEAR_SIGHAND;
-+	pid = sys_clone3(&args, sizeof(args));
-+	if (pid < 0)
-+		ksft_exit_fail_msg("%s - clone3(CLONE_CLEAR_SIGHAND) failed\n",
-+				   strerror(errno));
-+
-+	if (pid == 0) {
-+		ret = sigaction(SIGUSR1, NULL, &act);
-+		if (ret < 0)
-+			exit(EXIT_FAILURE);
-+
-+		if (act.sa_handler != SIG_DFL)
-+			exit(EXIT_FAILURE);
-+
-+		ret = sigaction(SIGUSR2, NULL, &act);
-+		if (ret < 0)
-+			exit(EXIT_FAILURE);
-+
-+		if (act.sa_handler != SIG_DFL)
-+			exit(EXIT_FAILURE);
-+
-+		exit(EXIT_SUCCESS);
-+	}
-+
-+	ret = wait_for_pid(pid);
-+	if (ret)
-+		ksft_exit_fail_msg(
-+			"Failed to clear signal handler for child process\n");
-+
-+	ksft_test_result_pass("Cleared signal handlers for child process\n");
-+}
-+
-+int main(int argc, char **argv)
-+{
-+	ksft_print_header();
-+	ksft_set_plan(1);
-+
-+	test_clone3_supported();
-+	test_clone3_clear_sighand();
-+
-+	return ksft_exit_pass();
-+}
--- 
-2.23.0
-
+Yes, I just added them as quick hints: some repros are 32-bits; each
+needs a new dir; some external timeout is needed for each test.
