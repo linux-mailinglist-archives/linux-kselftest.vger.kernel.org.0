@@ -2,122 +2,126 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 79B30D648F
-	for <lists+linux-kselftest@lfdr.de>; Mon, 14 Oct 2019 16:02:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67477D6529
+	for <lists+linux-kselftest@lfdr.de>; Mon, 14 Oct 2019 16:29:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732385AbfJNOCw (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 14 Oct 2019 10:02:52 -0400
-Received: from userp2130.oracle.com ([156.151.31.86]:35280 "EHLO
-        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732349AbfJNOCw (ORCPT
+        id S1732628AbfJNO3n (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 14 Oct 2019 10:29:43 -0400
+Received: from mail-pf1-f193.google.com ([209.85.210.193]:36759 "EHLO
+        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731121AbfJNO3n (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 14 Oct 2019 10:02:52 -0400
-Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
-        by userp2130.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x9EDwYKK056094;
-        Mon, 14 Oct 2019 14:02:24 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : in-reply-to : message-id : references : mime-version :
- content-type; s=corp-2019-08-05;
- bh=U4Ap3qX4222IhzvGvT6XRHvbQ/1R+kRuwOXgwxPQee8=;
- b=aIa2stPu5UKaHj7gDAL/swT8Be11gfKezLOGWiK9NTguJgt1dSOxTPu7vkDEuGlf7QoY
- kZVS9J6pYtirh5oioVPyCsb/UkZVXQ5ihKML9PMA9jzvKiH6eiBX3iLoomVhoGbIp37Y
- cxQpBnrIMTdVO3AZEv0sXIzVqsi7Wu/iyBr+7NoLwuEXYjfChKepna292qjbX/os1+VU
- BQd2qaHImWJaYIFjpVP7Y/GrUcQBk6xSzEIp9Vid4aiQtcezQS/tNMESlY6d34yDguiV
- ljPXtTt/KMAK3JXzEZ76iAs78AGIAJLAp17IJFhtEnLhg8rM4q/Zy946jzp4AUgW8KRb tA== 
-Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
-        by userp2130.oracle.com with ESMTP id 2vk68u94uh-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 14 Oct 2019 14:02:23 +0000
-Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
-        by aserp3030.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x9EDhIje038365;
-        Mon, 14 Oct 2019 14:02:22 GMT
-Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
-        by aserp3030.oracle.com with ESMTP id 2vks06u8vm-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 14 Oct 2019 14:02:22 +0000
-Received: from abhmp0020.oracle.com (abhmp0020.oracle.com [141.146.116.26])
-        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id x9EE2FAF013833;
-        Mon, 14 Oct 2019 14:02:17 GMT
-Received: from dhcp-10-175-191-179.vpn.oracle.com (/10.175.191.179)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Mon, 14 Oct 2019 14:02:15 +0000
-Date:   Mon, 14 Oct 2019 15:02:03 +0100 (BST)
-From:   Alan Maguire <alan.maguire@oracle.com>
-X-X-Sender: alan@dhcp-10-175-191-179.vpn.oracle.com
-To:     Luis Chamberlain <mcgrof@kernel.org>
-cc:     Alan Maguire <alan.maguire@oracle.com>,
-        linux-kselftest@vger.kernel.org, brendanhiggins@google.com,
-        skhan@linuxfoundation.org, keescook@chromium.org,
-        yzaikin@google.com, akpm@linux-foundation.org,
-        yamada.masahiro@socionext.com, catalin.marinas@arm.com,
-        joe.lawrence@redhat.com, penguin-kernel@i-love.sakura.ne.jp,
-        schowdary@nvidia.com, urezki@gmail.com,
-        andriy.shevchenko@linux.intel.com, changbin.du@intel.com,
-        kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org
-Subject: Re: [PATCH v2 linux-kselftest-test 0/3] kunit: support building
- core/tests as modules
-In-Reply-To: <20191014092051.GZ16384@42.do-not-panic.com>
-Message-ID: <alpine.LRH.2.20.1910141452470.6620@dhcp-10-175-191-179.vpn.oracle.com>
-References: <1570546546-549-1-git-send-email-alan.maguire@oracle.com> <20191014092051.GZ16384@42.do-not-panic.com>
-User-Agent: Alpine 2.20 (LRH 67 2015-01-07)
+        Mon, 14 Oct 2019 10:29:43 -0400
+Received: by mail-pf1-f193.google.com with SMTP id y22so10515471pfr.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 14 Oct 2019 07:29:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:references:from:message-id:date:user-agent:mime-version
+         :in-reply-to:content-language:content-transfer-encoding;
+        bh=/5HMWoJTwsEo72eQ/9NRVyic0gSpYQQaazkRTolMfEM=;
+        b=LOzrovO+0UbvVs3I/jB8Z5Vbif1QgLCYn5PwVeiueFhBiJHFFYY+xm1Mt//Uf1z9T5
+         vNytahyX2ctutnUQGN0dycaAgQXnzkr34AQqcExEudMWC3woBrsYHTFGoDSScEBNwTL0
+         7tpOKR4kYSAGjNx7MMuWrW2RRcPuX0n80qaatku+XR6r7A41SjI37Lk41KFR2IprDAlq
+         1ZhVjpZfOx0HrIgSxeR3UGklU3uk2ntbGMqyy71l/uIRc2+YfnEtmJDJsrTjB1BOY5zg
+         Fuq+ppXKcx2D2mUZUccIFH2sSbA7Opqjakhf1MOISJrIS1qhn+m1F0HzwSdKb71kQE1h
+         5fEw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=/5HMWoJTwsEo72eQ/9NRVyic0gSpYQQaazkRTolMfEM=;
+        b=axv/+3j9tR9oEAixfz38UZnJfpho1S3CSPMO6g3khpTv9jAR34eRTzfvWTvOdv1Idz
+         ZDVnIOYZ4A3/KY6HTgDF30TxPKTYArdk57UQCsoJ9hEYCuBI6goAwEOBGrT9oY8oOn4B
+         DQj1bTooSsuEf6V452GIKRaww1qnzx1jnxCkgtf0iUeTHjQGH5DPOYFl7rYruHD4ew66
+         mMeD6ptu6LDj7o7U0RREv1RslGvqowmo6lxQMTx5Rbv4U6lMdUlG2N72hd+kTDT1g/At
+         y7nqVkf8y0U6dQWL0Y4y+/tHfRCClRWlK8NRJhqr5fR9j76TANu+XfV15kvHeABsgGwn
+         pXrA==
+X-Gm-Message-State: APjAAAVWluHpSXSDhm/wD4omQVM8YRVzsaJE8Gbs9QzASU8iEvASEO/z
+        alnoI8t7DMJrPKKJQzkJryzI5OKe
+X-Google-Smtp-Source: APXvYqy2E+k5Pr+q8rQcMzaN5/j/UIBgXFax+u6MJ0/lVWfKdUVkpBx7bd1E/OxsEIIdENLG086KOQ==
+X-Received: by 2002:a63:7c4f:: with SMTP id l15mr12605658pgn.408.1571063382569;
+        Mon, 14 Oct 2019 07:29:42 -0700 (PDT)
+Received: from [192.168.31.113] ([43.224.157.52])
+        by smtp.gmail.com with ESMTPSA id h68sm22767346pfb.149.2019.10.14.07.29.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 14 Oct 2019 07:29:42 -0700 (PDT)
+Subject: Re: kseltest: bpf: test_lwt_ip_encap.sh: Why -l used in test_gso
+To:     Liu Yiding <liuyd.fnst@cn.fujitsu.com>,
+        linux-kselftest@vger.kernel.org
+References: <731bcbd4-0e01-245a-8f8d-bec8024868ca@gmail.com>
+ <3c6ba815-6d95-e550-2983-ee40790ec495@cn.fujitsu.com>
+From:   Prabhakar Kushwaha <prabhakar.pkin@gmail.com>
+Message-ID: <93c27247-ff1a-8e31-ff25-ac6966560d93@gmail.com>
+Date:   Mon, 14 Oct 2019 19:59:39 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.1.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9409 signatures=668684
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=3 malwarescore=0
- phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=999
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.0.1-1908290000 definitions=main-1910140132
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9409 signatures=668684
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
- suspectscore=3 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
- lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1908290000
- definitions=main-1910140133
+In-Reply-To: <3c6ba815-6d95-e550-2983-ee40790ec495@cn.fujitsu.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-
-
-On Mon, 14 Oct 2019, Luis Chamberlain wrote:
-
-> On Tue, Oct 08, 2019 at 03:55:43PM +0100, Alan Maguire wrote:
-> > The current kunit execution model is to provide base kunit functionality
-> > and tests built-in to the kernel.  The aim of this series is to allow
-> > building kunit itself and tests as modules.  This in turn allows a
-> > simple form of selective execution; load the module you wish to test.
-> > In doing so, kunit itself (if also built as a module) will be loaded as
-> > an implicit dependency.
-> > 
-> > Because this requires a core API modification - if a module delivers
-> > multiple suites, they must be declared with the kunit_test_suites()
-> > macro - we're proposing this patch as a candidate to be applied to the
-> > test tree before too many kunit consumers appear.  We attempt to deal
-> > with existing consumers in patch 1.
+On 10/14/2019 12:04 PM, Liu Yiding wrote:
+> Hi, Kushwaha.
 > 
-> This is neat and makes sense to me.
-
-Thanks for taking a look!
-
-> However the ordering of the patches
-> seems odd. If modules depend on kunit module, then shouldn't that go
-> first? Ie, we want this to be bisectable in proper order.
+> 
+> On 10/13/19 9:59 AM, Prabhakar Kushwaha wrote:
+>> Hi All,
+>>
+>> I am trying to understand test_gso test for IPv4 and IPv6 with 
+>> following piece of code
+>>
+>>       # listen on IPv*_DST, capture TCP into $TMPFILE
+>>         if [ "${PROTO}" == "IPv4" ] ; then
+>>                 IP_DST=${IPv4_DST}
+>>                 ip netns exec ${NS3} bash -c \
+>>                        "nc -4 -l -s ${IPv4_DST} -p 9000 > ${TMPFILE} &"
+>>         elif [ "${PROTO}" == "IPv6" ] ; then
+>>                 IP_DST=${IPv6_DST}
+>>                 ip netns exec ${NS3} bash -c \
+>>                        "nc -6 -l -s ${IPv6_DST} -p 9000 > ${TMPFILE} &"
+>>                 RET=$?
+>>         else
+>>                 echo "    test_gso: unknown PROTO: ${PROTO}"
+>>     fi
+>>
+>> I have couple of queries around it
+>>
+>> a) why -l is being used for reading listen on IPv*_DST with -s option.
+>> I was looking at https://www.computerhope.com/unix/nc.htm, following 
+>> has been mentioned:
+>> -l :  Used to specify that nc should listen for an incoming connection 
+>> rather than initiate a connection to a
+>> remote host. It is an error to use this option in conjunction with the 
+>> -p, -s, or -z options.
+>> Additionally, any timeouts specified with the -w option are ignored.
+>>
+>> b) Even if there is requirement of -l option to use. can we provide 
+>> timeout option also. how? as -w dont work with -l.
+>>
+>>
+>> I am facing an issue with Linux-5.3 Kselftest where even if 
+>> test_lwt_ip_encap.sh "exit", bpf/runner.sh is not
+>> running next test case. It just wait until CRTL + c is pressed.
+> 
+> 
+> I meet same issue. "make run_tests -C bpf" bpf/runner.sh hang on 
+> test_lwt_ip_encap.sh. And when i skip it,
+> 
+> test_tc_tunnel.sh also has this problem.
+> 
 > 
 
-The reasoning here is it seemed a more likely scenario that users mught  
-build kunit built-in (CONFIG_KUNIT=y) along with test suites built as 
-modules (CONFIG_KUNIT_TEST=m). So the intermediate state after patch 2 - 
-tests buildable as modules while kunit is still built-in-only - made more 
-sense to me as something users might do in practice so that's why I 
-ordered things that way.  I'm working on a new revision of the patchset
-though, so if you feel strongly about this shout and I'll try and accommodate
-the alternative ordering.
+does this means, the problem is independent of "nc" and has no relation 
+with nc usage with -l option.
 
-Thanks!
+has anyone find it's root-cause..
 
-Alan  
+-prabhakar (pk)
 
->   Luis
-> 
+
