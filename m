@@ -2,325 +2,120 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2027DD6B09
-	for <lists+linux-kselftest@lfdr.de>; Mon, 14 Oct 2019 23:06:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45513D6CFA
+	for <lists+linux-kselftest@lfdr.de>; Tue, 15 Oct 2019 03:45:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732167AbfJNVGL (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 14 Oct 2019 17:06:11 -0400
-Received: from mail-io1-f65.google.com ([209.85.166.65]:45674 "EHLO
-        mail-io1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732164AbfJNVGL (ORCPT
+        id S1727460AbfJOBpJ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 14 Oct 2019 21:45:09 -0400
+Received: from mail-io1-f66.google.com ([209.85.166.66]:37765 "EHLO
+        mail-io1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726267AbfJOBpI (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 14 Oct 2019 17:06:11 -0400
-Received: by mail-io1-f65.google.com with SMTP id c25so40925374iot.12
-        for <linux-kselftest@vger.kernel.org>; Mon, 14 Oct 2019 14:06:10 -0700 (PDT)
+        Mon, 14 Oct 2019 21:45:08 -0400
+Received: by mail-io1-f66.google.com with SMTP id b19so42321752iob.4
+        for <linux-kselftest@vger.kernel.org>; Mon, 14 Oct 2019 18:45:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sifive.com; s=google;
-        h=date:from:to:cc:subject:in-reply-to:message-id:references
-         :user-agent:mime-version;
-        bh=5Fh50IqKsV9DI7qDXmQliZcABf63QxMooRZ2h3IAY6k=;
-        b=L/NbAB3JijK/RLJKceyrd9ouCTGu3WZr5yW68DkgdWytjUkVAO/3sNPIYF8veG+u8w
-         RklFrlQSfLp5ajhmL2DgLsiy7G0EmzepJKzRQ37+lB+QaOCcVAbmMckJTaoiQlSIfCCs
-         YB1QfIDm2ojYiL9wU2SsTYh4ht18EcoYX2Jmz7zakOe/fG1f4Ud88uuoxdenY/6qaKHi
-         7M94x7DwQWlH2oSz0WrMWuC3E18uCAQaeav9dEH5Wfbq1wBrllIEKfO2vUXLlrEXETtr
-         8psL+0JVlFfSjWy9FpcNmG4ErywWFRYy4oq0zWYZsYdj4lbdVjf1egjRNCxv3uvxcr8/
-         x7Wg==
+        d=linuxfoundation.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ACbmiCYl1yVzW4bsJf2DTWEll5BNUiB3x+RCIAqbI2k=;
+        b=B/InPDWweJaDl3CRrbzGkfGi/hdoMZPNiDIO6rLtffTrpYjG8EeSUb02dH+bdcxu2I
+         anWL0/ff0D/uJ5yG7pCpu5+TiftEGQzHM14PmSZMSGHMfUSJwej0Mh38Neob10oWLJg/
+         UUnndznfpgJw6o5s+/+DDiISKHbXeFzP+UTfk=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:in-reply-to:message-id
-         :references:user-agent:mime-version;
-        bh=5Fh50IqKsV9DI7qDXmQliZcABf63QxMooRZ2h3IAY6k=;
-        b=BcwZphdtDI+rT+KHSbxtvB2WZGIGA06qbJJK6egalc7psZKKfVW/RxkPBKBHtIK5Gt
-         G6DBOnbsi78nlZ3IzB55s7pib7bLVl3HO0UGS7NfNthiEKKmmxYiRUC5ZKOK5FAaVTEy
-         bF4XmT1N0QQrI+Bwdb3jdLk2m8E3iJxvNrSK5Mapd0FZSqh1yugqpEj/qrhfSthoaToR
-         e7R4X9iztDPKHKmzezxk++qedrlJBsrVizBOJ0rBcCXAvK52cDxZK7vATRpEmeOKkDD1
-         RjHMPFpQTD8vIbanPl3TtZ1xwszuGzU/tPfenD80qxSIzmiJQdXUNeFYWtDJ98v5dbyJ
-         pADg==
-X-Gm-Message-State: APjAAAVU0uH4Wv1lHGKG7gfKggUjdVXySy2NxcXDqjYW3fqB952vsP7P
-        31tsXSwvPdb84i3uu7ptMTrMKw==
-X-Google-Smtp-Source: APXvYqwnLoB+44Z3avtM3EZMI2/MnjmtUkhVWHppjSvExVu8UtTha0EHFRTkuSMXssxHrjmHv5AbGg==
-X-Received: by 2002:a92:7702:: with SMTP id s2mr2557103ilc.248.1571087169985;
-        Mon, 14 Oct 2019 14:06:09 -0700 (PDT)
-Received: from localhost (67-0-10-3.albq.qwest.net. [67.0.10.3])
-        by smtp.gmail.com with ESMTPSA id m15sm1695738ilg.49.2019.10.14.14.06.08
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ACbmiCYl1yVzW4bsJf2DTWEll5BNUiB3x+RCIAqbI2k=;
+        b=URL37PiKmxOqyUp89BzoA4cH2JqucODP3Wt0Aej/3jMsMs+g0DHjqnKWxR7cJLcxF/
+         69mI0d/C9dT0qdDr4C8dIO5ICuF2rq2zszvJw7bZbhVzDgkTPKPrf71xQOuioFAezvQd
+         EHLTJ9E9GgahOG/J93QsahmgHHYmSPCFIZ8iQrqmNZQ18IAICkEnSTtjptqIvDzUFrHV
+         HE7BoWyuB/SeFOKSPpwihmHNdr/gVInCXuR73uq1iUaFfYpoTZN+Bz1B/PR1RLS0uLgj
+         sMMn1KRlYC30dER0R2sRnd4r8/6dTNer21rYT77dLNas9Jm65TtmlYPrMLKK+8AZT6FS
+         140A==
+X-Gm-Message-State: APjAAAXgnRqxJileN0Yxt2JN8mVLWC3sX0c3jCmYMULIiopLsoeUX2Nz
+        YZcZYLGR+UfF62NIEu/6+YeUww==
+X-Google-Smtp-Source: APXvYqxoSvmS9iWN6kz0F/95cyO2GEurBj1hgNbVDCZa3i5PpREYM09NLtzvw6i2AGGLT8UHtm0otg==
+X-Received: by 2002:a92:cb84:: with SMTP id z4mr3868224ilo.78.1571103907831;
+        Mon, 14 Oct 2019 18:45:07 -0700 (PDT)
+Received: from shuah-t480s.internal (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
+        by smtp.gmail.com with ESMTPSA id q17sm1888383ile.5.2019.10.14.18.45.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Oct 2019 14:06:08 -0700 (PDT)
-Date:   Mon, 14 Oct 2019 14:06:07 -0700 (PDT)
-From:   Paul Walmsley <paul.walmsley@sifive.com>
-X-X-Sender: paulw@viisi.sifive.com
-To:     Shuah Khan <shuah@kernel.org>
-cc:     Palmer Dabbelt <palmer@sifive.com>,
-        David Abdurachmanov <david.abdurachmanov@gmail.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Oleg Nesterov <oleg@redhat.com>,
-        Kees Cook <keescook@chromium.org>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Will Drewry <wad@chromium.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        David Abdurachmanov <david.abdurachmanov@sifive.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Allison Randal <allison@lohutok.net>,
-        Alexios Zavras <alexios.zavras@intel.com>,
-        Anup Patel <Anup.Patel@wdc.com>,
-        Vincent Chen <vincentc@andestech.com>,
-        Alan Kao <alankao@andestech.com>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, me@carlosedp.com
-Subject: Re: [PATCH v2] riscv: add support for SECCOMP and SECCOMP_FILTER
-In-Reply-To: <alpine.DEB.2.21.9999.1910041819230.15827@viisi.sifive.com>
-Message-ID: <alpine.DEB.2.21.9999.1910141405220.12988@viisi.sifive.com>
-References: <20190822205533.4877-1-david.abdurachmanov@sifive.com> <alpine.DEB.2.21.9999.1910041819230.15827@viisi.sifive.com>
-User-Agent: Alpine 2.21.9999 (DEB 301 2018-08-15)
+        Mon, 14 Oct 2019 18:45:06 -0700 (PDT)
+From:   Shuah Khan <skhan@linuxfoundation.org>
+To:     shuah@kernel.org
+Cc:     Shuah Khan <skhan@linuxfoundation.org>,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Tim Bird <Tim.Bird@sony.com>
+Subject: [PATCH] selftests: Fix O= and KBUILD_OUTPUT handling for relative paths
+Date:   Mon, 14 Oct 2019 19:45:05 -0600
+Message-Id: <20191015014505.14259-1-skhan@linuxfoundation.org>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Shuah,
+Fix O= and KBUILD_OUTPUT handling for relative paths.
 
-Could you please take a quick look at this and ack it if you're OK with 
-the tools/testing change?  We'd like to get this merged soon.
+export KBUILD_OUTPUT=../kselftest_size
+make TARGETS=size kselftest-all
 
-- Paul
+or
 
+make O=../kselftest_size TARGETS=size kselftest-all
 
-On Fri, 4 Oct 2019, Paul Walmsley wrote:
+In both of these cases, targets get built in ../kselftest_size which is
+a one level up from the size test directory.
 
-> Hello Shuah,
-> 
-> On Thu, 22 Aug 2019, David Abdurachmanov wrote:
-> 
-> > This patch was extensively tested on Fedora/RISCV (applied by default on
-> > top of 5.2-rc7 kernel for <2 months). The patch was also tested with 5.3-rc
-> > on QEMU and SiFive Unleashed board.
-> > 
-> > libseccomp (userspace) was rebased:
-> > https://github.com/seccomp/libseccomp/pull/134
-> > 
-> > Fully passes libseccomp regression testing (simulation and live).
-> > 
-> > There is one failing kernel selftest: global.user_notification_signal
-> > 
-> > v1 -> v2:
-> >   - return immediatly if secure_computing(NULL) returns -1
-> >   - fixed whitespace issues
-> >   - add missing seccomp.h
-> >   - remove patch #2 (solved now)
-> >   - add riscv to seccomp kernel selftest
-> > 
-> > Cc: keescook@chromium.org
-> > Cc: me@carlosedp.com
-> > 
-> > Signed-off-by: David Abdurachmanov <david.abdurachmanov@sifive.com>
-> 
-> We'd like to merge this patch through the RISC-V tree.
-> Care to ack the change to tools/testing/selftests/seccomp/seccomp_bpf.c ?  
-> 
-> Kees has already reviewed it:
-> 
-> https://lore.kernel.org/linux-riscv/CAJr-aD=UnCN9E_mdVJ2H5nt=6juRSWikZnA5HxDLQxXLbsRz-w@mail.gmail.com/
-> 
-> 
-> - Paul
-> 
-> 
-> > ---
-> >  arch/riscv/Kconfig                            | 14 ++++++++++
-> >  arch/riscv/include/asm/seccomp.h              | 10 +++++++
-> >  arch/riscv/include/asm/thread_info.h          |  5 +++-
-> >  arch/riscv/kernel/entry.S                     | 27 +++++++++++++++++--
-> >  arch/riscv/kernel/ptrace.c                    | 10 +++++++
-> >  tools/testing/selftests/seccomp/seccomp_bpf.c |  8 +++++-
-> >  6 files changed, 70 insertions(+), 4 deletions(-)
-> >  create mode 100644 arch/riscv/include/asm/seccomp.h
-> > 
-> > diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-> > index 59a4727ecd6c..441e63ff5adc 100644
-> > --- a/arch/riscv/Kconfig
-> > +++ b/arch/riscv/Kconfig
-> > @@ -31,6 +31,7 @@ config RISCV
-> >  	select GENERIC_SMP_IDLE_THREAD
-> >  	select GENERIC_ATOMIC64 if !64BIT
-> >  	select HAVE_ARCH_AUDITSYSCALL
-> > +	select HAVE_ARCH_SECCOMP_FILTER
-> >  	select HAVE_MEMBLOCK_NODE_MAP
-> >  	select HAVE_DMA_CONTIGUOUS
-> >  	select HAVE_FUTEX_CMPXCHG if FUTEX
-> > @@ -235,6 +236,19 @@ menu "Kernel features"
-> >  
-> >  source "kernel/Kconfig.hz"
-> >  
-> > +config SECCOMP
-> > +	bool "Enable seccomp to safely compute untrusted bytecode"
-> > +	help
-> > +	  This kernel feature is useful for number crunching applications
-> > +	  that may need to compute untrusted bytecode during their
-> > +	  execution. By using pipes or other transports made available to
-> > +	  the process as file descriptors supporting the read/write
-> > +	  syscalls, it's possible to isolate those applications in
-> > +	  their own address space using seccomp. Once seccomp is
-> > +	  enabled via prctl(PR_SET_SECCOMP), it cannot be disabled
-> > +	  and the task is only allowed to execute a few safe syscalls
-> > +	  defined by each seccomp mode.
-> > +
-> >  endmenu
-> >  
-> >  menu "Boot options"
-> > diff --git a/arch/riscv/include/asm/seccomp.h b/arch/riscv/include/asm/seccomp.h
-> > new file mode 100644
-> > index 000000000000..bf7744ee3b3d
-> > --- /dev/null
-> > +++ b/arch/riscv/include/asm/seccomp.h
-> > @@ -0,0 +1,10 @@
-> > +/* SPDX-License-Identifier: GPL-2.0 */
-> > +
-> > +#ifndef _ASM_SECCOMP_H
-> > +#define _ASM_SECCOMP_H
-> > +
-> > +#include <asm/unistd.h>
-> > +
-> > +#include <asm-generic/seccomp.h>
-> > +
-> > +#endif /* _ASM_SECCOMP_H */
-> > diff --git a/arch/riscv/include/asm/thread_info.h b/arch/riscv/include/asm/thread_info.h
-> > index 905372d7eeb8..a0b2a29a0da1 100644
-> > --- a/arch/riscv/include/asm/thread_info.h
-> > +++ b/arch/riscv/include/asm/thread_info.h
-> > @@ -75,6 +75,7 @@ struct thread_info {
-> >  #define TIF_MEMDIE		5	/* is terminating due to OOM killer */
-> >  #define TIF_SYSCALL_TRACEPOINT  6       /* syscall tracepoint instrumentation */
-> >  #define TIF_SYSCALL_AUDIT	7	/* syscall auditing */
-> > +#define TIF_SECCOMP		8	/* syscall secure computing */
-> >  
-> >  #define _TIF_SYSCALL_TRACE	(1 << TIF_SYSCALL_TRACE)
-> >  #define _TIF_NOTIFY_RESUME	(1 << TIF_NOTIFY_RESUME)
-> > @@ -82,11 +83,13 @@ struct thread_info {
-> >  #define _TIF_NEED_RESCHED	(1 << TIF_NEED_RESCHED)
-> >  #define _TIF_SYSCALL_TRACEPOINT	(1 << TIF_SYSCALL_TRACEPOINT)
-> >  #define _TIF_SYSCALL_AUDIT	(1 << TIF_SYSCALL_AUDIT)
-> > +#define _TIF_SECCOMP		(1 << TIF_SECCOMP)
-> >  
-> >  #define _TIF_WORK_MASK \
-> >  	(_TIF_NOTIFY_RESUME | _TIF_SIGPENDING | _TIF_NEED_RESCHED)
-> >  
-> >  #define _TIF_SYSCALL_WORK \
-> > -	(_TIF_SYSCALL_TRACE | _TIF_SYSCALL_TRACEPOINT | _TIF_SYSCALL_AUDIT)
-> > +	(_TIF_SYSCALL_TRACE | _TIF_SYSCALL_TRACEPOINT | _TIF_SYSCALL_AUDIT | \
-> > +	 _TIF_SECCOMP )
-> >  
-> >  #endif /* _ASM_RISCV_THREAD_INFO_H */
-> > diff --git a/arch/riscv/kernel/entry.S b/arch/riscv/kernel/entry.S
-> > index bc7a56e1ca6f..0bbedfa3e47d 100644
-> > --- a/arch/riscv/kernel/entry.S
-> > +++ b/arch/riscv/kernel/entry.S
-> > @@ -203,8 +203,25 @@ check_syscall_nr:
-> >  	/* Check to make sure we don't jump to a bogus syscall number. */
-> >  	li t0, __NR_syscalls
-> >  	la s0, sys_ni_syscall
-> > -	/* Syscall number held in a7 */
-> > -	bgeu a7, t0, 1f
-> > +	/*
-> > +	 * The tracer can change syscall number to valid/invalid value.
-> > +	 * We use syscall_set_nr helper in syscall_trace_enter thus we
-> > +	 * cannot trust the current value in a7 and have to reload from
-> > +	 * the current task pt_regs.
-> > +	 */
-> > +	REG_L a7, PT_A7(sp)
-> > +	/*
-> > +	 * Syscall number held in a7.
-> > +	 * If syscall number is above allowed value, redirect to ni_syscall.
-> > +	 */
-> > +	bge a7, t0, 1f
-> > +	/*
-> > +	 * Check if syscall is rejected by tracer or seccomp, i.e., a7 == -1.
-> > +	 * If yes, we pretend it was executed.
-> > +	 */
-> > +	li t1, -1
-> > +	beq a7, t1, ret_from_syscall_rejected
-> > +	/* Call syscall */
-> >  	la s0, sys_call_table
-> >  	slli t0, a7, RISCV_LGPTR
-> >  	add s0, s0, t0
-> > @@ -215,6 +232,12 @@ check_syscall_nr:
-> >  ret_from_syscall:
-> >  	/* Set user a0 to kernel a0 */
-> >  	REG_S a0, PT_A0(sp)
-> > +	/*
-> > +	 * We didn't execute the actual syscall.
-> > +	 * Seccomp already set return value for the current task pt_regs.
-> > +	 * (If it was configured with SECCOMP_RET_ERRNO/TRACE)
-> > +	 */
-> > +ret_from_syscall_rejected:
-> >  	/* Trace syscalls, but only if requested by the user. */
-> >  	REG_L t0, TASK_TI_FLAGS(tp)
-> >  	andi t0, t0, _TIF_SYSCALL_WORK
-> > diff --git a/arch/riscv/kernel/ptrace.c b/arch/riscv/kernel/ptrace.c
-> > index 368751438366..63e47c9f85f0 100644
-> > --- a/arch/riscv/kernel/ptrace.c
-> > +++ b/arch/riscv/kernel/ptrace.c
-> > @@ -154,6 +154,16 @@ void do_syscall_trace_enter(struct pt_regs *regs)
-> >  		if (tracehook_report_syscall_entry(regs))
-> >  			syscall_set_nr(current, regs, -1);
-> >  
-> > +	/*
-> > +	 * Do the secure computing after ptrace; failures should be fast.
-> > +	 * If this fails we might have return value in a0 from seccomp
-> > +	 * (via SECCOMP_RET_ERRNO/TRACE).
-> > +	 */
-> > +	if (secure_computing(NULL) == -1) {
-> > +		syscall_set_nr(current, regs, -1);
-> > +		return;
-> > +	}
-> > +
-> >  #ifdef CONFIG_HAVE_SYSCALL_TRACEPOINTS
-> >  	if (test_thread_flag(TIF_SYSCALL_TRACEPOINT))
-> >  		trace_sys_enter(regs, syscall_get_nr(current, regs));
-> > diff --git a/tools/testing/selftests/seccomp/seccomp_bpf.c b/tools/testing/selftests/seccomp/seccomp_bpf.c
-> > index 6ef7f16c4cf5..492e0adad9d3 100644
-> > --- a/tools/testing/selftests/seccomp/seccomp_bpf.c
-> > +++ b/tools/testing/selftests/seccomp/seccomp_bpf.c
-> > @@ -112,6 +112,8 @@ struct seccomp_data {
-> >  #  define __NR_seccomp 383
-> >  # elif defined(__aarch64__)
-> >  #  define __NR_seccomp 277
-> > +# elif defined(__riscv)
-> > +#  define __NR_seccomp 277
-> >  # elif defined(__hppa__)
-> >  #  define __NR_seccomp 338
-> >  # elif defined(__powerpc__)
-> > @@ -1582,6 +1584,10 @@ TEST_F(TRACE_poke, getpid_runs_normally)
-> >  # define ARCH_REGS	struct user_pt_regs
-> >  # define SYSCALL_NUM	regs[8]
-> >  # define SYSCALL_RET	regs[0]
-> > +#elif defined(__riscv) && __riscv_xlen == 64
-> > +# define ARCH_REGS	struct user_regs_struct
-> > +# define SYSCALL_NUM	a7
-> > +# define SYSCALL_RET	a0
-> >  #elif defined(__hppa__)
-> >  # define ARCH_REGS	struct user_regs_struct
-> >  # define SYSCALL_NUM	gr[20]
-> > @@ -1671,7 +1677,7 @@ void change_syscall(struct __test_metadata *_metadata,
-> >  	EXPECT_EQ(0, ret) {}
-> >  
-> >  #if defined(__x86_64__) || defined(__i386__) || defined(__powerpc__) || \
-> > -    defined(__s390__) || defined(__hppa__)
-> > +    defined(__s390__) || defined(__hppa__) || defined(__riscv)
-> >  	{
-> >  		regs.SYSCALL_NUM = syscall;
-> >  	}
-> > -- 
-> > 2.21.0
-> > 
-> > 
-> 
-> 
-> - Paul
-> 
+make[1]: Entering directory '/mnt/data/lkml/kselftest_size'
+make --no-builtin-rules INSTALL_HDR_PATH=$BUILD/usr \
+        ARCH=x86 -C ../../.. headers_install
+  INSTALL ../kselftest_size/usr/include
+gcc -static -ffreestanding -nostartfiles -s    get_size.c  -o ../kselftest_size/size/get_size
+/usr/bin/ld: cannot open output file ../kselftest_size/size/get_size: No such file or directory
+collect2: error: ld returned 1 exit status
+make[3]: *** [../lib.mk:138: ../kselftest_size/size/get_size] Error 1
+make[2]: *** [Makefile:143: all] Error 2
+make[1]: *** [/mnt/data/lkml/linux_5.4/Makefile:1221: kselftest-all] Error 2
+make[1]: Leaving directory '/mnt/data/lkml/kselftest_size'
+make: *** [Makefile:179: sub-make] Error 2
 
+Use abs_objtree exported by the main Makefile.
+
+Reported-by: Tim Bird <Tim.Bird@sony.com>
+Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
+---
+ tools/testing/selftests/Makefile | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
+index 4cdbae6f4e61..3405aa26a655 100644
+--- a/tools/testing/selftests/Makefile
++++ b/tools/testing/selftests/Makefile
+@@ -86,10 +86,10 @@ override LDFLAGS =
+ endif
+ 
+ ifneq ($(O),)
+-	BUILD := $(O)
++	BUILD := $(abs_objtree)
+ else
+ 	ifneq ($(KBUILD_OUTPUT),)
+-		BUILD := $(KBUILD_OUTPUT)/kselftest
++		BUILD := $(abs_objtree)/kselftest
+ 	else
+ 		BUILD := $(shell pwd)
+ 		DEFAULT_INSTALL_HDR_PATH := 1
+@@ -102,6 +102,7 @@ include $(top_srcdir)/scripts/subarch.include
+ ARCH           ?= $(SUBARCH)
+ export KSFT_KHDR_INSTALL_DONE := 1
+ export BUILD
++#$(info abd_objtree = $(abs_objtree) BUILD = $(BUILD))
+ 
+ # build and run gpio when output directory is the src dir.
+ # gpio has dependency on tools/gpio and builds tools/gpio
+-- 
+2.20.1
 
