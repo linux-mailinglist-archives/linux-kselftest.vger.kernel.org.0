@@ -2,120 +2,108 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 45513D6CFA
-	for <lists+linux-kselftest@lfdr.de>; Tue, 15 Oct 2019 03:45:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE097D6D45
+	for <lists+linux-kselftest@lfdr.de>; Tue, 15 Oct 2019 04:42:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727460AbfJOBpJ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 14 Oct 2019 21:45:09 -0400
-Received: from mail-io1-f66.google.com ([209.85.166.66]:37765 "EHLO
-        mail-io1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726267AbfJOBpI (ORCPT
+        id S1726974AbfJOCmE (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 14 Oct 2019 22:42:04 -0400
+Received: from mail-pf1-f195.google.com ([209.85.210.195]:45262 "EHLO
+        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726430AbfJOCmE (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 14 Oct 2019 21:45:08 -0400
-Received: by mail-io1-f66.google.com with SMTP id b19so42321752iob.4
-        for <linux-kselftest@vger.kernel.org>; Mon, 14 Oct 2019 18:45:08 -0700 (PDT)
+        Mon, 14 Oct 2019 22:42:04 -0400
+Received: by mail-pf1-f195.google.com with SMTP id y72so11446801pfb.12
+        for <linux-kselftest@vger.kernel.org>; Mon, 14 Oct 2019 19:42:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ACbmiCYl1yVzW4bsJf2DTWEll5BNUiB3x+RCIAqbI2k=;
-        b=B/InPDWweJaDl3CRrbzGkfGi/hdoMZPNiDIO6rLtffTrpYjG8EeSUb02dH+bdcxu2I
-         anWL0/ff0D/uJ5yG7pCpu5+TiftEGQzHM14PmSZMSGHMfUSJwej0Mh38Neob10oWLJg/
-         UUnndznfpgJw6o5s+/+DDiISKHbXeFzP+UTfk=
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=WmRb2+dqzrp0y48jYwh6Cbf3Uo7tqKuyLbS86YRFk/U=;
+        b=b53TeBGOVgJ++2kARNaDScg3EZ1UF5jIScN/j4PCcFax1lk9nDw+gYi02vKOlQzT3d
+         KOhU7WaAB/RxsXOkcvCVfHLFOqBjB43EvhifuGSwBSh/cvv444xgFOvvuBr/Wpw+5bwu
+         hUe8m9hiLW2Sa8ik9kcBEBer9qSU0rbPiJ9DNaigmBxfgxb+CSmFztyyu9BovlHVpEQt
+         KUgiQ6PjB9NVNADxanzoECL4s3pZI61me3AMVxqQPTWNQVsQrmi84QMBbBiuu7pal37x
+         FgZ8dAOPx1Meja5qfcw32qetSqToZ8gaBhP0HGC6hM1Cy9bZUbhKCYSOFqvx0V2EqIVG
+         ybAg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ACbmiCYl1yVzW4bsJf2DTWEll5BNUiB3x+RCIAqbI2k=;
-        b=URL37PiKmxOqyUp89BzoA4cH2JqucODP3Wt0Aej/3jMsMs+g0DHjqnKWxR7cJLcxF/
-         69mI0d/C9dT0qdDr4C8dIO5ICuF2rq2zszvJw7bZbhVzDgkTPKPrf71xQOuioFAezvQd
-         EHLTJ9E9GgahOG/J93QsahmgHHYmSPCFIZ8iQrqmNZQ18IAICkEnSTtjptqIvDzUFrHV
-         HE7BoWyuB/SeFOKSPpwihmHNdr/gVInCXuR73uq1iUaFfYpoTZN+Bz1B/PR1RLS0uLgj
-         sMMn1KRlYC30dER0R2sRnd4r8/6dTNer21rYT77dLNas9Jm65TtmlYPrMLKK+8AZT6FS
-         140A==
-X-Gm-Message-State: APjAAAXgnRqxJileN0Yxt2JN8mVLWC3sX0c3jCmYMULIiopLsoeUX2Nz
-        YZcZYLGR+UfF62NIEu/6+YeUww==
-X-Google-Smtp-Source: APXvYqxoSvmS9iWN6kz0F/95cyO2GEurBj1hgNbVDCZa3i5PpREYM09NLtzvw6i2AGGLT8UHtm0otg==
-X-Received: by 2002:a92:cb84:: with SMTP id z4mr3868224ilo.78.1571103907831;
-        Mon, 14 Oct 2019 18:45:07 -0700 (PDT)
-Received: from shuah-t480s.internal (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id q17sm1888383ile.5.2019.10.14.18.45.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Oct 2019 18:45:06 -0700 (PDT)
-From:   Shuah Khan <skhan@linuxfoundation.org>
-To:     shuah@kernel.org
-Cc:     Shuah Khan <skhan@linuxfoundation.org>,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Tim Bird <Tim.Bird@sony.com>
-Subject: [PATCH] selftests: Fix O= and KBUILD_OUTPUT handling for relative paths
-Date:   Mon, 14 Oct 2019 19:45:05 -0600
-Message-Id: <20191015014505.14259-1-skhan@linuxfoundation.org>
-X-Mailer: git-send-email 2.20.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=WmRb2+dqzrp0y48jYwh6Cbf3Uo7tqKuyLbS86YRFk/U=;
+        b=uAsk7jhXPkxmkxHdsitRBX90jwwzRgm+e4KL97IIX9heJRAmkGFHSuc+dkswmsUIOX
+         qQicQLDEJwhQ/vqZAZrUVNVVS45diI0WoSOW9GGBqo4gx+WIMiNVVuQmBfB6CvlPwvFV
+         9memwVnVKtbv4+9kJJ6cMS1e0WOe3k36FDjXk8ra2t0zYuV4DDaO+MPO16CV8i38BbXa
+         tUYyElw501LlQVgXtnscjqhgaGOakDe7Jt/y8Hn9w24c3GKrvisLni5vquPArnL/gJgi
+         mpLOb/umdZaTNrKq6MTYhEF6TvFapYsZH5Aa2qHSZ5PlxHYXl/NGCzMZugHcfIVCzoh2
+         kzsA==
+X-Gm-Message-State: APjAAAXq0jqGNKlWeGQn5v/SG3ybp87B6NytpuMt/hi2qte2NySW2Prg
+        2li+06+P1fWDzvxgvbCa70xAgSFT9fpFc0mL0QNHyLhT
+X-Google-Smtp-Source: APXvYqwvQDnGYLH6xA5bcxXeTcYQwPAfSAu/RwqSF3roKG1fC6y9x62fSMQd89Dr6cv+JxxVzJy1p1mJ3JETlCEndXU=
+X-Received: by 2002:a63:3044:: with SMTP id w65mr35130364pgw.384.1571107323013;
+ Mon, 14 Oct 2019 19:42:03 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <RT-Ticket-80110@linuxfoundation> <20191002215351.GA177672@google.com>
+ <rt-4.4.0-12639-1570215347-1334.80110-6-0@linuxfoundation>
+ <CAFd5g45OmXTpUubLv9kwNXGc0+KNLjLj9tmw=qoEzvQVsWqGkw@mail.gmail.com> <rt-4.4.0-14627-1570483310-924.80110-6-0@linuxfoundation>
+In-Reply-To: <rt-4.4.0-14627-1570483310-924.80110-6-0@linuxfoundation>
+From:   Brendan Higgins <brendanhiggins@google.com>
+Date:   Mon, 14 Oct 2019 19:41:51 -0700
+Message-ID: <CAFd5g47oowqxMspHK0TA6T7Y-r6mHwTyUcW4xnRKULZq1CZDRw@mail.gmail.com>
+Subject: Re: [Kernel.org Helpdesk #80110] Bugzilla Component for KUnit?
+To:     kernel-helpdesk@rt.linuxfoundation.org
+Cc:     KUnit Development <kunit-dev@googlegroups.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Fix O= and KBUILD_OUTPUT handling for relative paths.
+On Mon, Oct 7, 2019 at 2:21 PM brendanhiggins@google.com via RT
+<kernel-helpdesk@rt.linuxfoundation.org> wrote:
+>
+> On Fri, Oct 4, 2019 at 11:55 AM Konstantin Ryabitsev via RT
+> <kernel-helpdesk@rt.linuxfoundation.org> wrote:
+> >
+> > On 2019-10-02 17:53:58, brendanhiggins@google.com wrote:
+> > > Hi,
+> > >
+> > > I am thinking about requesting a Bugzilla component for my kernel
+> > > project KUnit. I am not sure if this is the right place for it.  Some
+> > > background on KUnit: We are working on adding unit testing for the
+> > > Linux
+> > > kernel[1][2]. We have our initial patchset that introduces the
+> > > subsystem
+> > > in the process of being merged (Linus sent our PR back to us for a
+> > > minor
+> > > fix[3], so it should be in either 5.4-rc2 or 5.5, but is nevertheless
+> > > in
+> > > linux-next). However, we also have a staging repo that people are
+> > > using
+> > > and some supporting code that lives outside of the kernel.
+> > >
+> > > So I am trying to figure out:
+> > >
+> > > 1. Is it appropriate to request a Bugzilla component before our
+> > >    subsystem has been merged into torvalds/master? I would just wait,
+> > >    but I have some users looking to file issues, so I would prefer to
+> > >    provide them something sooner rather than later.
+> > >
+> > > 2. Is it appropriate to use the kernel's Bugzilla to track issues
+> > >    outside of the Linux kernel? As I mention above, we have code that
+> > >    lives outside of the kernel; is it appropriate to use kernel.org's
+> > >    Bugzilla for this?
+> > >
+> > > 3. Does Bugzilla match my planned usage model? It doesn't look like
+> > >    Bugzilla get's much usage aside from reporting bugs. I want to use
+> > >    it for tracking feature progress and things like that. Is that
+> > > okay?
+> >
+> > Yes, we can certainly host this on bugzilla.kernel.org. Would you be okay with Tools/KUnit as product/category?
+>
+> Cool, well as long as none of my above points are an issue for you.
+> Then yes, can you create me a component? I am fine with Tools/KUnit as
+> the product/category.
 
-export KBUILD_OUTPUT=../kselftest_size
-make TARGETS=size kselftest-all
-
-or
-
-make O=../kselftest_size TARGETS=size kselftest-all
-
-In both of these cases, targets get built in ../kselftest_size which is
-a one level up from the size test directory.
-
-make[1]: Entering directory '/mnt/data/lkml/kselftest_size'
-make --no-builtin-rules INSTALL_HDR_PATH=$BUILD/usr \
-        ARCH=x86 -C ../../.. headers_install
-  INSTALL ../kselftest_size/usr/include
-gcc -static -ffreestanding -nostartfiles -s    get_size.c  -o ../kselftest_size/size/get_size
-/usr/bin/ld: cannot open output file ../kselftest_size/size/get_size: No such file or directory
-collect2: error: ld returned 1 exit status
-make[3]: *** [../lib.mk:138: ../kselftest_size/size/get_size] Error 1
-make[2]: *** [Makefile:143: all] Error 2
-make[1]: *** [/mnt/data/lkml/linux_5.4/Makefile:1221: kselftest-all] Error 2
-make[1]: Leaving directory '/mnt/data/lkml/kselftest_size'
-make: *** [Makefile:179: sub-make] Error 2
-
-Use abs_objtree exported by the main Makefile.
-
-Reported-by: Tim Bird <Tim.Bird@sony.com>
-Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
----
- tools/testing/selftests/Makefile | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
-
-diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-index 4cdbae6f4e61..3405aa26a655 100644
---- a/tools/testing/selftests/Makefile
-+++ b/tools/testing/selftests/Makefile
-@@ -86,10 +86,10 @@ override LDFLAGS =
- endif
- 
- ifneq ($(O),)
--	BUILD := $(O)
-+	BUILD := $(abs_objtree)
- else
- 	ifneq ($(KBUILD_OUTPUT),)
--		BUILD := $(KBUILD_OUTPUT)/kselftest
-+		BUILD := $(abs_objtree)/kselftest
- 	else
- 		BUILD := $(shell pwd)
- 		DEFAULT_INSTALL_HDR_PATH := 1
-@@ -102,6 +102,7 @@ include $(top_srcdir)/scripts/subarch.include
- ARCH           ?= $(SUBARCH)
- export KSFT_KHDR_INSTALL_DONE := 1
- export BUILD
-+#$(info abd_objtree = $(abs_objtree) BUILD = $(BUILD))
- 
- # build and run gpio when output directory is the src dir.
- # gpio has dependency on tools/gpio and builds tools/gpio
--- 
-2.20.1
-
+Ping.
