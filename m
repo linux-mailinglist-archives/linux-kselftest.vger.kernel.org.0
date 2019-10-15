@@ -2,618 +2,333 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BAE9D7AB0
-	for <lists+linux-kselftest@lfdr.de>; Tue, 15 Oct 2019 18:00:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FA31D7B65
+	for <lists+linux-kselftest@lfdr.de>; Tue, 15 Oct 2019 18:27:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726874AbfJOQAm (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 15 Oct 2019 12:00:42 -0400
-Received: from mail-wr1-f65.google.com ([209.85.221.65]:36987 "EHLO
-        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726111AbfJOQAm (ORCPT
+        id S1729455AbfJOQ1n (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 15 Oct 2019 12:27:43 -0400
+Received: from mail-pg1-f193.google.com ([209.85.215.193]:46091 "EHLO
+        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729255AbfJOQ1m (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 15 Oct 2019 12:00:42 -0400
-Received: by mail-wr1-f65.google.com with SMTP id p14so24527612wro.4
-        for <linux-kselftest@vger.kernel.org>; Tue, 15 Oct 2019 09:00:38 -0700 (PDT)
+        Tue, 15 Oct 2019 12:27:42 -0400
+Received: by mail-pg1-f193.google.com with SMTP id e15so4444428pgu.13
+        for <linux-kselftest@vger.kernel.org>; Tue, 15 Oct 2019 09:27:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:date:to:message-id:subject:mime-version;
-        bh=R9yjwbFIFljseAbsIQSKnhal0WcvUWnE8p/efYM6sJs=;
-        b=wzk8dJOtMLllAQnFJ5b9+rbP3BG4YXbD4+iQKUoKUbruIERQ2lB1XjpNYtm/3VRGMG
-         Tlw+xRiivp598+++rLCQ6od5JS3Oio77HLKumEsSVcZoWw1GUMzNSHG+cJPiENwqvAst
-         ZxSTxG6k3sMfdj2Cv3FUeV4qbe+YSiHWOloAuwqw/Vm6pFFM2gOnnZIZDECtvZDM+eZy
-         XUx5KGpqpu8P9eTt9LZfp+EwsTzBl8PcC2hc98j4mC5peZ1vSxGGOnBzeBslC6upfxRP
-         Db+Oo34wtJI9DjIhSkv48xL5EmN21AdWUzgxOL+O2ZiFCHiLhn8lO/Re7i+PUb7gx1H0
-         0oWg==
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=2YPG3gRwYfXbp+PqjrfJDTcKIYwl4QysGzAj/FIuSos=;
+        b=MXn9aY+e1v9kk20NICPzGvwY+Px1ZIi4lzFWAFpC0mgYifIcIA4Ng8+M/saZ9oWevZ
+         5thi8H4LsvXpJWxGVtelermxVi1AOXvSgGBkrczcoQj0t0SGpVvshqREN96VE0z/cBjD
+         dCYkKU1SCSnbEcYrjv2tLpwXPFjgHkrNOrUPc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:date:to:message-id:subject:mime-version;
-        bh=R9yjwbFIFljseAbsIQSKnhal0WcvUWnE8p/efYM6sJs=;
-        b=JYTR1wRVemOSlEriLeCvT7C/2xB2GGrf/dYL0O69DlUifYtRuN08BgLLA/5a1huBEm
-         cK6+mfWCd5m2j89k6jk+qLNSG8zW+1HB6iSfetZK8e+ZGeiEyKdP8WDis8NhDhVJpbir
-         yiYKdRdrGHk7m+hZmKqhiueu0oVOq9icx2lrk5EBq08/29SyuEZ0LaEKRqagXkLZCnVu
-         EyC4/inpp0J5mNm1Voduz17x9l/RExcclOZZnDrZdgSfsVeHaQziEWyPe5wWsTa3mJPB
-         UEqYYbAMvgyU78K7BErfO0z2SbIUdicp7GRxGn0NYEC2X1AlOgUkkktzjlljwoKuWgP1
-         3uPg==
-X-Gm-Message-State: APjAAAWE557GaMoLTTysf5hI6mUdSse1Fd8NAwRCCFloBWpG2wOtOg7i
-        a/VD+bKxH1eTmrGtr0uE6bTZWg==
-X-Google-Smtp-Source: APXvYqzd5MpmXwjKLRl7TuxEMt2glTWpRXdPMqdm2Yf4pSWvi23vCjxp5tIN6AEEHL5poM9OGOuKYg==
-X-Received: by 2002:a5d:4f8b:: with SMTP id d11mr15251290wru.25.1571155238005;
-        Tue, 15 Oct 2019 09:00:38 -0700 (PDT)
-Received: from 172.17.0.4 (ci.linaro.org. [88.99.136.175])
-        by smtp.gmail.com with ESMTPSA id n14sm18634225wro.83.2019.10.15.09.00.37
-        (version=TLS1 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
-        Tue, 15 Oct 2019 09:00:37 -0700 (PDT)
-From:   ci_notify@linaro.org
-X-Google-Original-From: linaro-infrastructure-errors@lists.linaro.org
-Date:   Tue, 15 Oct 2019 16:00:36 +0000 (UTC)
-To:     lkft-triage@lists.linaro.org, dan.rue@linaro.org,
-        anders.roxell@linaro.org, naresh.kamboju@linaro.org,
-        shuah@kernel.org, linux-kselftest@vger.kernel.org
-Message-ID: <2089317917.7443.1571155237241.JavaMail.javamailuser@localhost>
-Subject: next-20191015 kselftest results
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=2YPG3gRwYfXbp+PqjrfJDTcKIYwl4QysGzAj/FIuSos=;
+        b=KZttvJH9vMHPIoL7caBpRrPjLxJpgtxqWN+/YQzYiIpEoFoiKZ06p58exklZfqTE++
+         CYKW+HV7EBIClX2wnEkM8IrxMH1lKVWdMKbSfO6gs0zK8WKWFe4qHqz05/8BkF8zLfnv
+         /Bi6IWEYlAY2SLJPI133CJZOC6NGM53RzszKEZ+Wjk7OpClRXcezFrHD2rYbKOO/3cD5
+         DM89wXw6ERQrMg7r7qwnCJlIiJsI9+fbORTQ1QOXSG+jV2AcEz2mOZuFoVaErhRK1pnD
+         vsMCbs+I+U1bQplqPNG87WE2UfrJHmsl/gUpxz30R50sxCBQft/WhfXvMqxGvEIgBNbF
+         McgA==
+X-Gm-Message-State: APjAAAXkSCCI6LD+ec1IahuJT9YQtafQc/DwrlD1S50gkGy3EvOae0n+
+        VFtO9ZF0/iwXqY4luBxZZDCbVA==
+X-Google-Smtp-Source: APXvYqxOVSEi7vMIRInZ0gQPRgs8DbiGbhqjaOX4rWv3bmMlkRYwRFZmFztuAZypLKlBXsdmkZZi4A==
+X-Received: by 2002:a17:90a:80c2:: with SMTP id k2mr43947622pjw.92.1571156861760;
+        Tue, 15 Oct 2019 09:27:41 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id 11sm21224383pgd.0.2019.10.15.09.27.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 15 Oct 2019 09:27:40 -0700 (PDT)
+Date:   Tue, 15 Oct 2019 09:27:39 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Paul Walmsley <paul.walmsley@sifive.com>
+Cc:     Shuah Khan <shuah@kernel.org>, Palmer Dabbelt <palmer@sifive.com>,
+        David Abdurachmanov <david.abdurachmanov@gmail.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Oleg Nesterov <oleg@redhat.com>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Will Drewry <wad@chromium.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        David Abdurachmanov <david.abdurachmanov@sifive.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Allison Randal <allison@lohutok.net>,
+        Alexios Zavras <alexios.zavras@intel.com>,
+        Anup Patel <Anup.Patel@wdc.com>,
+        Vincent Chen <vincentc@andestech.com>,
+        Alan Kao <alankao@andestech.com>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, me@carlosedp.com
+Subject: Re: [PATCH v2] riscv: add support for SECCOMP and SECCOMP_FILTER
+Message-ID: <201910150926.E621A5B@keescook>
+References: <20190822205533.4877-1-david.abdurachmanov@sifive.com>
+ <alpine.DEB.2.21.9999.1910041819230.15827@viisi.sifive.com>
+ <alpine.DEB.2.21.9999.1910141405220.12988@viisi.sifive.com>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; 
-        boundary="----=_Part_7442_384134017.1571155236851"
-X-Jenkins-Job: LKFT Notify kselftest on next
-X-Jenkins-Result: SUCCESS
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <alpine.DEB.2.21.9999.1910141405220.12988@viisi.sifive.com>
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-------=_Part_7442_384134017.1571155236851
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+On Mon, Oct 14, 2019 at 02:06:07PM -0700, Paul Walmsley wrote:
+> Shuah,
+> 
+> Could you please take a quick look at this and ack it if you're OK with 
+> the tools/testing change?  We'd like to get this merged soon.
 
-Summary
-------------------------------------------------------------------------
-kernel: 5.4.0-rc3
-git repo: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-git branch: master
-git commit: 0e9d28bc6c81f47f94979ec7d0ab6ac42345fcee
-git describe: next-20191015
-Test details: https://qa-reports.linaro.org/lkft/linux-next-oe/build/next-20191015
+FWIW, I regularly carry these kinds of selftest changes via my seccomp
+tree, so if Shuah is busy, I think it'll be fine to take this in
+riscv. If not, I'll take responsibility of apologizing to Shuah! :) :)
 
-Regressions (compared to build next-20191014)
-------------------------------------------------------------------------
-i386:                                                                                                      
- kselftest:                                                                                         
-    * net_fib-onlink-tests.sh                                                                                                         
-                                                                                         
-    * pidfd_pidfd_test                                                                                                         
-hi6220-hikey - arm64:                                                                                                      
- kselftest:                                                                                         
-    * seccomp_seccomp_benchmark                                                                                                         
-qemu_arm:                                                                                                      
- kselftest:                                                                                         
-    * cgroup_test_freezer                                                                                                         
-                                                                                         
-    * net_so_txtime.sh                                                                                                         
-                                                                                         
-    * seccomp_seccomp_benchmark                                                                                                         
-                                                                                                          
-                                                                                                                       
-Fixes (compared to build next-20191014)                                                                   
-------------------------------------------------------------------------                                               
-dragonboard-410c - arm64:                                                                                                      
- kselftest:                                                                                         
-    * bpf_test_sock_addr.sh                                                                                                         
-i386:                                                                                                      
- kselftest:                                                                                         
-    * bpf_test_sock_addr.sh                                                                                                         
-                                                                                         
-    * seccomp_seccomp_benchmark                                                                                                         
-qemu_i386:                                                                                                      
- kselftest:                                                                                         
-    * bpf_test_sock_addr.sh                                                                                                         
-                                                                                         
-    * net_so_txtime.sh                                                                                                         
-x15 - arm:                                                                                                      
- kselftest:                                                                                         
-    * cgroup_test_freezer                                                                                                         
-qemu_arm:                                                                                                      
- kselftest:                                                                                         
-    * epoll_epoll_wakeup_test                                                                                                         
+-Kees
 
-
-In total:
-------------------------------------------------------------------------
-Ran 1125 total tests in the following environments and test suites.
-pass 585
-fail 442
-xfail 0
-skip 98
-
-Environments
---------------
-- dragonboard-410c - arm64
-- hi6220-hikey - arm64
-- i386
-- juno-r2 - arm64
-- qemu_arm
-- qemu_arm64
-- qemu_i386
-- qemu_x86_64
-- x15 - arm
-- x86_64
-
-Test Suites
------------
-* kselftest
-
-
-Failures
-------------------------------------------------------------------------
-
-qemu_x86_64:
-
-qemu_arm64:
-
-qemu_i386:
-* kselftest/bpf_get_cgroup_id_user
-* kselftest/bpf_test_bpftool_build.sh
-* kselftest/bpf_test_dev_cgroup
-* kselftest/bpf_test_flow_dissector.sh
-* kselftest/bpf_test_hashmap
-* kselftest/bpf_test_libbpf.sh
-* kselftest/bpf_test_lwt_ip_encap.sh
-* kselftest/bpf_test_lwt_seg6local.sh
-* kselftest/bpf_test_maps
-* kselftest/bpf_test_netcnt
-* kselftest/bpf_test_progs
-* kselftest/bpf_test_select_reuseport
-* kselftest/bpf_test_socket_cookie
-* kselftest/bpf_test_sock_fields
-* kselftest/bpf_test_sockmap
-* kselftest/bpf_test_sysctl
-* kselftest/bpf_test_tc_edt.sh
-* kselftest/bpf_test_tcpbpf_user
-* kselftest/bpf_test_tcpnotify_user
-* kselftest/bpf_test_tc_tunnel.sh
-* kselftest/bpf_test_tunnel.sh
-* kselftest/bpf_test_xdping.sh
-* kselftest/bpf_xdping
-* kselftest/cpufreq_main.sh
-* kselftest/firmware_fw_run_tests.sh
-* kselftest/kvm_clear_dirty_log_test
-* kselftest/kvm_cr4_cpuid_sync_test
-* kselftest/kvm_dirty_log_test
-* kselftest/kvm_evmcs_test
-* kselftest/kvm_hyperv_cpuid
-* kselftest/kvm_kvm_create_max_vcpus
-* kselftest/kvm_mmio_warning_test
-* kselftest/kvm_platform_info_test
-* kselftest/kvm_set_sregs_test
-* kselftest/kvm_smm_test
-* kselftest/kvm_state_test
-* kselftest/kvm_sync_regs_test
-* kselftest/kvm_vmx_close_while_nested_test
-* kselftest/kvm_vmx_dirty_log_test
-* kselftest/kvm_vmx_set_nested_state_test
-* kselftest/kvm_vmx_tsc_adjust_test
-* kselftest/lib_bitmap.sh
-* kselftest/lib_prime_numbers.sh
-* kselftest/lib_printf.sh
-* kselftest/lib_strscpy.sh
-* kselftest/mqueue_mq_perf_tests
-* kselftest/net_fib-onlink-tests.sh
-* kselftest/net_fib_tests.sh
-* kselftest/netfilter_conntrack_icmp_related.sh
-* kselftest/netfilter_nft_nat.sh
-* kselftest/net_ip_defrag.sh
-* kselftest/net_l2tp.sh
-* kselftest/net_pmtu.sh
-* kselftest/net_psock_snd.sh
-* kselftest/net_run_netsocktests
-* kselftest/net_tcp_fastopen_backup_key.sh
-* kselftest/net_test_vxlan_under_vrf.sh
-* kselftest/net_udpgso_bench.sh
-* kselftest/net_xfrm_policy.sh
-* kselftest/pidfd_pidfd_open_test
-* kselftest/pidfd_pidfd_poll_test
-* kselftest/proc_proc-self-map-files-002
-* kselftest/proc_proc-self-syscall
-* kselftest/pstore_pstore_tests
-* kselftest/rseq_run_param_test.sh
-* kselftest/rtc_rtctest
-* kselftest/size_get_size
-* kselftest/timers_set-timer-lat
-* kselftest/timestamping_txtimestamp.sh
-* kselftest/tpm2_test_smoke.sh
-* kselftest/tpm2_test_space.sh
-* kselftest/vm_run_vmtests
-* kselftest/x86_ldt_gdt_32
-* kselftest/x86_sigreturn_32
-
-qemu_arm:
-* kselftest/bpf_get_cgroup_id_user
-* kselftest/bpf_test_bpftool_build.sh
-* kselftest/bpf_test_dev_cgroup
-* kselftest/bpf_test_flow_dissector.sh
-* kselftest/bpf_test_hashmap
-* kselftest/bpf_test_kmod.sh
-* kselftest/bpf_test_libbpf.sh
-* kselftest/bpf_test_lwt_ip_encap.sh
-* kselftest/bpf_test_lwt_seg6local.sh
-* kselftest/bpf_test_maps
-* kselftest/bpf_test_netcnt
-* kselftest/bpf_test_progs
-* kselftest/bpf_test_select_reuseport
-* kselftest/bpf_test_socket_cookie
-* kselftest/bpf_test_sock_fields
-* kselftest/bpf_test_sockmap
-* kselftest/bpf_test_sysctl
-* kselftest/bpf_test_tag
-* kselftest/bpf_test_tc_edt.sh
-* kselftest/bpf_test_tcpbpf_user
-* kselftest/bpf_test_tcp_check_syncookie.sh
-* kselftest/bpf_test_tcpnotify_user
-* kselftest/bpf_test_tc_tunnel.sh
-* kselftest/bpf_test_tunnel.sh
-* kselftest/bpf_test_verifier
-* kselftest/bpf_test_xdping.sh
-* kselftest/bpf_xdping
-* kselftest/cgroup_test_freezer
-* kselftest/cpufreq_main.sh
-* kselftest/firmware_fw_run_tests.sh
-* kselftest/kvm_clear_dirty_log_test
-* kselftest/kvm_cr4_cpuid_sync_test
-* kselftest/kvm_dirty_log_test
-* kselftest/kvm_evmcs_test
-* kselftest/kvm_hyperv_cpuid
-* kselftest/kvm_kvm_create_max_vcpus
-* kselftest/kvm_mmio_warning_test
-* kselftest/kvm_platform_info_test
-* kselftest/kvm_set_sregs_test
-* kselftest/kvm_smm_test
-* kselftest/kvm_state_test
-* kselftest/kvm_sync_regs_test
-* kselftest/kvm_vmx_close_while_nested_test
-* kselftest/kvm_vmx_dirty_log_test
-* kselftest/kvm_vmx_set_nested_state_test
-* kselftest/kvm_vmx_tsc_adjust_test
-* kselftest/lib_bitmap.sh
-* kselftest/lib_prime_numbers.sh
-* kselftest/lib_printf.sh
-* kselftest/lib_strscpy.sh
-* kselftest/net_fib-onlink-tests.sh
-* kselftest/net_fib_rule_tests.sh
-* kselftest/net_fib_tests.sh
-* kselftest/netfilter_conntrack_icmp_related.sh
-* kselftest/netfilter_nft_nat.sh
-* kselftest/net_ip_defrag.sh
-* kselftest/net_l2tp.sh
-* kselftest/net_pmtu.sh
-* kselftest/net_psock_snd.sh
-* kselftest/net_reuseport_bpf_numa
-* kselftest/net_run_netsocktests
-* kselftest/net_so_txtime.sh
-* kselftest/net_tcp_fastopen_backup_key.sh
-* kselftest/net_test_vxlan_under_vrf.sh
-* kselftest/net_udpgso_bench.sh
-* kselftest/pidfd_pidfd_open_test
-* kselftest/pidfd_pidfd_poll_test
-* kselftest/pidfd_pidfd_test
-* kselftest/proc_proc-self-map-files-002
-* kselftest/proc_proc-self-syscall
-* kselftest/pstore_pstore_tests
-* kselftest/rseq_basic_percpu_ops_test
-* kselftest/rtc_rtctest
-* kselftest/seccomp_seccomp_benchmark
-* kselftest/timers_set-timer-lat
-* kselftest/timestamping_txtimestamp.sh
-* kselftest/tpm2_test_smoke.sh
-
-x86:
-
-x15:
-* kselftest/bpf_get_cgroup_id_user
-* kselftest/bpf_test_bpftool_build.sh
-* kselftest/bpf_test_dev_cgroup
-* kselftest/bpf_test_flow_dissector.sh
-* kselftest/bpf_test_hashmap
-* kselftest/bpf_test_kmod.sh
-* kselftest/bpf_test_libbpf.sh
-* kselftest/bpf_test_lwt_ip_encap.sh
-* kselftest/bpf_test_lwt_seg6local.sh
-* kselftest/bpf_test_maps
-* kselftest/bpf_test_netcnt
-* kselftest/bpf_test_progs
-* kselftest/bpf_test_select_reuseport
-* kselftest/bpf_test_sock_addr.sh
-* kselftest/bpf_test_socket_cookie
-* kselftest/bpf_test_sock_fields
-* kselftest/bpf_test_sockmap
-* kselftest/bpf_test_sysctl
-* kselftest/bpf_test_tag
-* kselftest/bpf_test_tc_edt.sh
-* kselftest/bpf_test_tcpbpf_user
-* kselftest/bpf_test_tcp_check_syncookie.sh
-* kselftest/bpf_test_tcpnotify_user
-* kselftest/bpf_test_tc_tunnel.sh
-* kselftest/bpf_test_tunnel.sh
-* kselftest/bpf_test_verifier
-* kselftest/bpf_test_xdping.sh
-* kselftest/bpf_xdping
-* kselftest/epoll_epoll_wakeup_test
-* kselftest/firmware_fw_run_tests.sh
-* kselftest/kvm_clear_dirty_log_test
-* kselftest/kvm_cr4_cpuid_sync_test
-* kselftest/kvm_dirty_log_test
-* kselftest/kvm_evmcs_test
-* kselftest/kvm_hyperv_cpuid
-* kselftest/kvm_kvm_create_max_vcpus
-* kselftest/kvm_mmio_warning_test
-* kselftest/kvm_platform_info_test
-* kselftest/kvm_set_sregs_test
-* kselftest/kvm_smm_test
-* kselftest/kvm_state_test
-* kselftest/kvm_sync_regs_test
-* kselftest/kvm_vmx_close_while_nested_test
-* kselftest/kvm_vmx_dirty_log_test
-* kselftest/kvm_vmx_set_nested_state_test
-* kselftest/kvm_vmx_tsc_adjust_test
-* kselftest/lib_bitmap.sh
-* kselftest/lib_prime_numbers.sh
-* kselftest/lib_printf.sh
-* kselftest/lib_strscpy.sh
-* kselftest/net_fib-onlink-tests.sh
-* kselftest/net_fib_rule_tests.sh
-* kselftest/net_fib_tests.sh
-* kselftest/netfilter_conntrack_icmp_related.sh
-* kselftest/netfilter_nft_nat.sh
-* kselftest/net_ip_defrag.sh
-* kselftest/net_l2tp.sh
-* kselftest/net_pmtu.sh
-* kselftest/net_psock_snd.sh
-* kselftest/net_reuseport_bpf_numa
-* kselftest/net_run_netsocktests
-* kselftest/net_tcp_fastopen_backup_key.sh
-* kselftest/net_test_vxlan_under_vrf.sh
-* kselftest/net_udpgso_bench.sh
-* kselftest/pidfd_pidfd_open_test
-* kselftest/pidfd_pidfd_poll_test
-* kselftest/pidfd_pidfd_test
-* kselftest/proc_proc-self-map-files-002
-* kselftest/proc_proc-self-syscall
-* kselftest/pstore_pstore_tests
-* kselftest/rseq_basic_percpu_ops_test
-* kselftest/rtc_rtctest
-* kselftest/seccomp_seccomp_benchmark
-* kselftest/timers_set-timer-lat
-* kselftest/timestamping_txtimestamp.sh
-
-hi6220-hikey:
-* kselftest/bpf_get_cgroup_id_user
-* kselftest/bpf_test_bpftool_build.sh
-* kselftest/bpf_test_flow_dissector.sh
-* kselftest/bpf_test_kmod.sh
-* kselftest/bpf_test_libbpf.sh
-* kselftest/bpf_test_lpm_map
-* kselftest/bpf_test_lwt_ip_encap.sh
-* kselftest/bpf_test_lwt_seg6local.sh
-* kselftest/bpf_test_maps
-* kselftest/bpf_test_netcnt
-* kselftest/bpf_test_progs
-* kselftest/bpf_test_select_reuseport
-* kselftest/bpf_test_sock_addr.sh
-* kselftest/bpf_test_socket_cookie
-* kselftest/bpf_test_sock_fields
-* kselftest/bpf_test_sockmap
-* kselftest/bpf_test_tag
-* kselftest/bpf_test_tc_edt.sh
-* kselftest/bpf_test_tcpbpf_user
-* kselftest/bpf_test_tcp_check_syncookie.sh
-* kselftest/bpf_test_tcpnotify_user
-* kselftest/bpf_test_tc_tunnel.sh
-* kselftest/bpf_test_tunnel.sh
-* kselftest/bpf_test_verifier
-* kselftest/bpf_test_xdping.sh
-* kselftest/bpf_xdping
-* kselftest/kvm_clear_dirty_log_test
-* kselftest/kvm_cr4_cpuid_sync_test
-* kselftest/kvm_dirty_log_test
-* kselftest/kvm_evmcs_test
-* kselftest/kvm_hyperv_cpuid
-* kselftest/kvm_kvm_create_max_vcpus
-* kselftest/kvm_mmio_warning_test
-* kselftest/kvm_platform_info_test
-* kselftest/kvm_set_sregs_test
-* kselftest/kvm_smm_test
-* kselftest/kvm_state_test
-* kselftest/kvm_sync_regs_test
-* kselftest/kvm_vmx_close_while_nested_test
-* kselftest/kvm_vmx_dirty_log_test
-* kselftest/kvm_vmx_set_nested_state_test
-* kselftest/kvm_vmx_tsc_adjust_test
-* kselftest/lib_bitmap.sh
-* kselftest/lib_prime_numbers.sh
-* kselftest/lib_printf.sh
-* kselftest/lib_strscpy.sh
-* kselftest/net_fib-onlink-tests.sh
-* kselftest/net_fib_rule_tests.sh
-* kselftest/net_fib_tests.sh
-* kselftest/netfilter_conntrack_icmp_related.sh
-* kselftest/netfilter_nft_nat.sh
-* kselftest/net_ip_defrag.sh
-* kselftest/net_l2tp.sh
-* kselftest/net_pmtu.sh
-* kselftest/net_psock_snd.sh
-* kselftest/net_run_netsocktests
-* kselftest/net_tcp_fastopen_backup_key.sh
-* kselftest/net_test_vxlan_under_vrf.sh
-* kselftest/net_udpgso_bench.sh
-* kselftest/pidfd_pidfd_open_test
-* kselftest/pidfd_pidfd_poll_test
-* kselftest/pidfd_pidfd_test
-* kselftest/pidfd_pidfd_wait
-* kselftest/pstore_pstore_tests
-* kselftest/rseq_basic_percpu_ops_test
-* kselftest/rtc_rtctest
-* kselftest/seccomp_seccomp_benchmark
-* kselftest/timers_set-timer-lat
-* kselftest/timestamping_txtimestamp.sh
-* kselftest/tpm2_test_smoke.sh
-* kselftest/tpm2_test_space.sh
-* kselftest/user_test_user_copy.sh
-
-juno-r2:
-
-i386:
-* kselftest/bpf_get_cgroup_id_user
-* kselftest/bpf_test_bpftool_build.sh
-* kselftest/bpf_test_dev_cgroup
-* kselftest/bpf_test_flow_dissector.sh
-* kselftest/bpf_test_hashmap
-* kselftest/bpf_test_libbpf.sh
-* kselftest/bpf_test_lwt_ip_encap.sh
-* kselftest/bpf_test_lwt_seg6local.sh
-* kselftest/bpf_test_maps
-* kselftest/bpf_test_netcnt
-* kselftest/bpf_test_progs
-* kselftest/bpf_test_select_reuseport
-* kselftest/bpf_test_socket_cookie
-* kselftest/bpf_test_sock_fields
-* kselftest/bpf_test_sockmap
-* kselftest/bpf_test_sysctl
-* kselftest/bpf_test_tc_edt.sh
-* kselftest/bpf_test_tcpbpf_user
-* kselftest/bpf_test_tcpnotify_user
-* kselftest/bpf_test_tc_tunnel.sh
-* kselftest/bpf_test_tunnel.sh
-* kselftest/bpf_test_xdping.sh
-* kselftest/bpf_xdping
-* kselftest/firmware_fw_run_tests.sh
-* kselftest/intel_pstate_run.sh
-* kselftest/kvm_clear_dirty_log_test
-* kselftest/kvm_cr4_cpuid_sync_test
-* kselftest/kvm_dirty_log_test
-* kselftest/kvm_evmcs_test
-* kselftest/kvm_hyperv_cpuid
-* kselftest/kvm_kvm_create_max_vcpus
-* kselftest/kvm_mmio_warning_test
-* kselftest/kvm_platform_info_test
-* kselftest/kvm_set_sregs_test
-* kselftest/kvm_smm_test
-* kselftest/kvm_state_test
-* kselftest/kvm_sync_regs_test
-* kselftest/kvm_vmx_close_while_nested_test
-* kselftest/kvm_vmx_dirty_log_test
-* kselftest/kvm_vmx_set_nested_state_test
-* kselftest/kvm_vmx_tsc_adjust_test
-* kselftest/lib_bitmap.sh
-* kselftest/lib_prime_numbers.sh
-* kselftest/lib_printf.sh
-* kselftest/lib_strscpy.sh
-* kselftest/mqueue_mq_perf_tests
-* kselftest/net_fib-onlink-tests.sh
-* kselftest/net_fib_tests.sh
-* kselftest/net_ip_defrag.sh
-* kselftest/net_l2tp.sh
-* kselftest/net_pmtu.sh
-* kselftest/net_psock_snd.sh
-* kselftest/net_run_netsocktests
-* kselftest/net_tcp_fastopen_backup_key.sh
-* kselftest/net_test_vxlan_under_vrf.sh
-* kselftest/net_udpgso_bench.sh
-* kselftest/pidfd_pidfd_open_test
-* kselftest/pidfd_pidfd_poll_test
-* kselftest/pidfd_pidfd_test
-* kselftest/proc_proc-self-map-files-002
-* kselftest/proc_proc-self-syscall
-* kselftest/pstore_pstore_tests
-* kselftest/rseq_run_param_test.sh
-* kselftest/rtc_rtctest
-* kselftest/size_get_size
-* kselftest/timers_set-timer-lat
-* kselftest/timestamping_txtimestamp.sh
-* kselftest/tpm2_test_smoke.sh
-* kselftest/tpm2_test_space.sh
-* kselftest/vm_run_vmtests
-* kselftest/x86_ldt_gdt_32
-* kselftest/x86_sigreturn_32
-
-dragonboard-410c:
-* kselftest/bpf_get_cgroup_id_user
-* kselftest/bpf_test_bpftool_build.sh
-* kselftest/bpf_test_flow_dissector.sh
-* kselftest/bpf_test_kmod.sh
-* kselftest/bpf_test_libbpf.sh
-* kselftest/bpf_test_lpm_map
-* kselftest/bpf_test_lwt_ip_encap.sh
-* kselftest/bpf_test_lwt_seg6local.sh
-* kselftest/bpf_test_maps
-* kselftest/bpf_test_netcnt
-* kselftest/bpf_test_progs
-* kselftest/bpf_test_select_reuseport
-* kselftest/bpf_test_socket_cookie
-* kselftest/bpf_test_sock_fields
-* kselftest/bpf_test_sockmap
-* kselftest/bpf_test_tag
-* kselftest/bpf_test_tcpbpf_user
-* kselftest/bpf_test_tcp_check_syncookie.sh
-* kselftest/bpf_test_tcpnotify_user
-* kselftest/bpf_test_tc_tunnel.sh
-* kselftest/bpf_test_tunnel.sh
-* kselftest/bpf_test_verifier
-* kselftest/bpf_test_xdping.sh
-* kselftest/bpf_xdping
-* kselftest/firmware_fw_run_tests.sh
-* kselftest/kvm_clear_dirty_log_test
-* kselftest/kvm_cr4_cpuid_sync_test
-* kselftest/kvm_dirty_log_test
-* kselftest/kvm_evmcs_test
-* kselftest/kvm_hyperv_cpuid
-* kselftest/kvm_kvm_create_max_vcpus
-* kselftest/kvm_mmio_warning_test
-* kselftest/kvm_platform_info_test
-* kselftest/kvm_set_sregs_test
-* kselftest/kvm_smm_test
-* kselftest/kvm_state_test
-* kselftest/kvm_sync_regs_test
-* kselftest/kvm_vmx_close_while_nested_test
-* kselftest/kvm_vmx_dirty_log_test
-* kselftest/kvm_vmx_set_nested_state_test
-* kselftest/kvm_vmx_tsc_adjust_test
-* kselftest/lib_bitmap.sh
-* kselftest/lib_prime_numbers.sh
-* kselftest/lib_printf.sh
-* kselftest/lib_strscpy.sh
-* kselftest/net_fib-onlink-tests.sh
-* kselftest/net_fib_rule_tests.sh
-* kselftest/net_fib_tests.sh
-* kselftest/netfilter_conntrack_icmp_related.sh
-* kselftest/netfilter_nft_nat.sh
-* kselftest/net_ip_defrag.sh
-* kselftest/net_l2tp.sh
-* kselftest/net_pmtu.sh
-* kselftest/net_psock_snd.sh
-* kselftest/net_run_netsocktests
-* kselftest/net_tcp_fastopen_backup_key.sh
-* kselftest/net_test_vxlan_under_vrf.sh
-* kselftest/net_udpgso_bench.sh
-* kselftest/pidfd_pidfd_open_test
-* kselftest/pidfd_pidfd_poll_test
-* kselftest/pidfd_pidfd_test
-* kselftest/pidfd_pidfd_wait
-* kselftest/pstore_pstore_tests
-* kselftest/rseq_basic_percpu_ops_test
-* kselftest/rtc_rtctest
-* kselftest/seccomp_seccomp_benchmark
-* kselftest/timers_rtcpie
-* kselftest/timers_set-timer-lat
-* kselftest/timestamping_txtimestamp.sh
-* kselftest/tpm2_test_smoke.sh
-* kselftest/tpm2_test_space.sh
-* kselftest/user_test_user_copy.sh
-
-
-Skips
-------------------------------------------------------------------------
-No skips
-
+> 
+> - Paul
+> 
+> 
+> On Fri, 4 Oct 2019, Paul Walmsley wrote:
+> 
+> > Hello Shuah,
+> > 
+> > On Thu, 22 Aug 2019, David Abdurachmanov wrote:
+> > 
+> > > This patch was extensively tested on Fedora/RISCV (applied by default on
+> > > top of 5.2-rc7 kernel for <2 months). The patch was also tested with 5.3-rc
+> > > on QEMU and SiFive Unleashed board.
+> > > 
+> > > libseccomp (userspace) was rebased:
+> > > https://github.com/seccomp/libseccomp/pull/134
+> > > 
+> > > Fully passes libseccomp regression testing (simulation and live).
+> > > 
+> > > There is one failing kernel selftest: global.user_notification_signal
+> > > 
+> > > v1 -> v2:
+> > >   - return immediatly if secure_computing(NULL) returns -1
+> > >   - fixed whitespace issues
+> > >   - add missing seccomp.h
+> > >   - remove patch #2 (solved now)
+> > >   - add riscv to seccomp kernel selftest
+> > > 
+> > > Cc: keescook@chromium.org
+> > > Cc: me@carlosedp.com
+> > > 
+> > > Signed-off-by: David Abdurachmanov <david.abdurachmanov@sifive.com>
+> > 
+> > We'd like to merge this patch through the RISC-V tree.
+> > Care to ack the change to tools/testing/selftests/seccomp/seccomp_bpf.c ?  
+> > 
+> > Kees has already reviewed it:
+> > 
+> > https://lore.kernel.org/linux-riscv/CAJr-aD=UnCN9E_mdVJ2H5nt=6juRSWikZnA5HxDLQxXLbsRz-w@mail.gmail.com/
+> > 
+> > 
+> > - Paul
+> > 
+> > 
+> > > ---
+> > >  arch/riscv/Kconfig                            | 14 ++++++++++
+> > >  arch/riscv/include/asm/seccomp.h              | 10 +++++++
+> > >  arch/riscv/include/asm/thread_info.h          |  5 +++-
+> > >  arch/riscv/kernel/entry.S                     | 27 +++++++++++++++++--
+> > >  arch/riscv/kernel/ptrace.c                    | 10 +++++++
+> > >  tools/testing/selftests/seccomp/seccomp_bpf.c |  8 +++++-
+> > >  6 files changed, 70 insertions(+), 4 deletions(-)
+> > >  create mode 100644 arch/riscv/include/asm/seccomp.h
+> > > 
+> > > diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+> > > index 59a4727ecd6c..441e63ff5adc 100644
+> > > --- a/arch/riscv/Kconfig
+> > > +++ b/arch/riscv/Kconfig
+> > > @@ -31,6 +31,7 @@ config RISCV
+> > >  	select GENERIC_SMP_IDLE_THREAD
+> > >  	select GENERIC_ATOMIC64 if !64BIT
+> > >  	select HAVE_ARCH_AUDITSYSCALL
+> > > +	select HAVE_ARCH_SECCOMP_FILTER
+> > >  	select HAVE_MEMBLOCK_NODE_MAP
+> > >  	select HAVE_DMA_CONTIGUOUS
+> > >  	select HAVE_FUTEX_CMPXCHG if FUTEX
+> > > @@ -235,6 +236,19 @@ menu "Kernel features"
+> > >  
+> > >  source "kernel/Kconfig.hz"
+> > >  
+> > > +config SECCOMP
+> > > +	bool "Enable seccomp to safely compute untrusted bytecode"
+> > > +	help
+> > > +	  This kernel feature is useful for number crunching applications
+> > > +	  that may need to compute untrusted bytecode during their
+> > > +	  execution. By using pipes or other transports made available to
+> > > +	  the process as file descriptors supporting the read/write
+> > > +	  syscalls, it's possible to isolate those applications in
+> > > +	  their own address space using seccomp. Once seccomp is
+> > > +	  enabled via prctl(PR_SET_SECCOMP), it cannot be disabled
+> > > +	  and the task is only allowed to execute a few safe syscalls
+> > > +	  defined by each seccomp mode.
+> > > +
+> > >  endmenu
+> > >  
+> > >  menu "Boot options"
+> > > diff --git a/arch/riscv/include/asm/seccomp.h b/arch/riscv/include/asm/seccomp.h
+> > > new file mode 100644
+> > > index 000000000000..bf7744ee3b3d
+> > > --- /dev/null
+> > > +++ b/arch/riscv/include/asm/seccomp.h
+> > > @@ -0,0 +1,10 @@
+> > > +/* SPDX-License-Identifier: GPL-2.0 */
+> > > +
+> > > +#ifndef _ASM_SECCOMP_H
+> > > +#define _ASM_SECCOMP_H
+> > > +
+> > > +#include <asm/unistd.h>
+> > > +
+> > > +#include <asm-generic/seccomp.h>
+> > > +
+> > > +#endif /* _ASM_SECCOMP_H */
+> > > diff --git a/arch/riscv/include/asm/thread_info.h b/arch/riscv/include/asm/thread_info.h
+> > > index 905372d7eeb8..a0b2a29a0da1 100644
+> > > --- a/arch/riscv/include/asm/thread_info.h
+> > > +++ b/arch/riscv/include/asm/thread_info.h
+> > > @@ -75,6 +75,7 @@ struct thread_info {
+> > >  #define TIF_MEMDIE		5	/* is terminating due to OOM killer */
+> > >  #define TIF_SYSCALL_TRACEPOINT  6       /* syscall tracepoint instrumentation */
+> > >  #define TIF_SYSCALL_AUDIT	7	/* syscall auditing */
+> > > +#define TIF_SECCOMP		8	/* syscall secure computing */
+> > >  
+> > >  #define _TIF_SYSCALL_TRACE	(1 << TIF_SYSCALL_TRACE)
+> > >  #define _TIF_NOTIFY_RESUME	(1 << TIF_NOTIFY_RESUME)
+> > > @@ -82,11 +83,13 @@ struct thread_info {
+> > >  #define _TIF_NEED_RESCHED	(1 << TIF_NEED_RESCHED)
+> > >  #define _TIF_SYSCALL_TRACEPOINT	(1 << TIF_SYSCALL_TRACEPOINT)
+> > >  #define _TIF_SYSCALL_AUDIT	(1 << TIF_SYSCALL_AUDIT)
+> > > +#define _TIF_SECCOMP		(1 << TIF_SECCOMP)
+> > >  
+> > >  #define _TIF_WORK_MASK \
+> > >  	(_TIF_NOTIFY_RESUME | _TIF_SIGPENDING | _TIF_NEED_RESCHED)
+> > >  
+> > >  #define _TIF_SYSCALL_WORK \
+> > > -	(_TIF_SYSCALL_TRACE | _TIF_SYSCALL_TRACEPOINT | _TIF_SYSCALL_AUDIT)
+> > > +	(_TIF_SYSCALL_TRACE | _TIF_SYSCALL_TRACEPOINT | _TIF_SYSCALL_AUDIT | \
+> > > +	 _TIF_SECCOMP )
+> > >  
+> > >  #endif /* _ASM_RISCV_THREAD_INFO_H */
+> > > diff --git a/arch/riscv/kernel/entry.S b/arch/riscv/kernel/entry.S
+> > > index bc7a56e1ca6f..0bbedfa3e47d 100644
+> > > --- a/arch/riscv/kernel/entry.S
+> > > +++ b/arch/riscv/kernel/entry.S
+> > > @@ -203,8 +203,25 @@ check_syscall_nr:
+> > >  	/* Check to make sure we don't jump to a bogus syscall number. */
+> > >  	li t0, __NR_syscalls
+> > >  	la s0, sys_ni_syscall
+> > > -	/* Syscall number held in a7 */
+> > > -	bgeu a7, t0, 1f
+> > > +	/*
+> > > +	 * The tracer can change syscall number to valid/invalid value.
+> > > +	 * We use syscall_set_nr helper in syscall_trace_enter thus we
+> > > +	 * cannot trust the current value in a7 and have to reload from
+> > > +	 * the current task pt_regs.
+> > > +	 */
+> > > +	REG_L a7, PT_A7(sp)
+> > > +	/*
+> > > +	 * Syscall number held in a7.
+> > > +	 * If syscall number is above allowed value, redirect to ni_syscall.
+> > > +	 */
+> > > +	bge a7, t0, 1f
+> > > +	/*
+> > > +	 * Check if syscall is rejected by tracer or seccomp, i.e., a7 == -1.
+> > > +	 * If yes, we pretend it was executed.
+> > > +	 */
+> > > +	li t1, -1
+> > > +	beq a7, t1, ret_from_syscall_rejected
+> > > +	/* Call syscall */
+> > >  	la s0, sys_call_table
+> > >  	slli t0, a7, RISCV_LGPTR
+> > >  	add s0, s0, t0
+> > > @@ -215,6 +232,12 @@ check_syscall_nr:
+> > >  ret_from_syscall:
+> > >  	/* Set user a0 to kernel a0 */
+> > >  	REG_S a0, PT_A0(sp)
+> > > +	/*
+> > > +	 * We didn't execute the actual syscall.
+> > > +	 * Seccomp already set return value for the current task pt_regs.
+> > > +	 * (If it was configured with SECCOMP_RET_ERRNO/TRACE)
+> > > +	 */
+> > > +ret_from_syscall_rejected:
+> > >  	/* Trace syscalls, but only if requested by the user. */
+> > >  	REG_L t0, TASK_TI_FLAGS(tp)
+> > >  	andi t0, t0, _TIF_SYSCALL_WORK
+> > > diff --git a/arch/riscv/kernel/ptrace.c b/arch/riscv/kernel/ptrace.c
+> > > index 368751438366..63e47c9f85f0 100644
+> > > --- a/arch/riscv/kernel/ptrace.c
+> > > +++ b/arch/riscv/kernel/ptrace.c
+> > > @@ -154,6 +154,16 @@ void do_syscall_trace_enter(struct pt_regs *regs)
+> > >  		if (tracehook_report_syscall_entry(regs))
+> > >  			syscall_set_nr(current, regs, -1);
+> > >  
+> > > +	/*
+> > > +	 * Do the secure computing after ptrace; failures should be fast.
+> > > +	 * If this fails we might have return value in a0 from seccomp
+> > > +	 * (via SECCOMP_RET_ERRNO/TRACE).
+> > > +	 */
+> > > +	if (secure_computing(NULL) == -1) {
+> > > +		syscall_set_nr(current, regs, -1);
+> > > +		return;
+> > > +	}
+> > > +
+> > >  #ifdef CONFIG_HAVE_SYSCALL_TRACEPOINTS
+> > >  	if (test_thread_flag(TIF_SYSCALL_TRACEPOINT))
+> > >  		trace_sys_enter(regs, syscall_get_nr(current, regs));
+> > > diff --git a/tools/testing/selftests/seccomp/seccomp_bpf.c b/tools/testing/selftests/seccomp/seccomp_bpf.c
+> > > index 6ef7f16c4cf5..492e0adad9d3 100644
+> > > --- a/tools/testing/selftests/seccomp/seccomp_bpf.c
+> > > +++ b/tools/testing/selftests/seccomp/seccomp_bpf.c
+> > > @@ -112,6 +112,8 @@ struct seccomp_data {
+> > >  #  define __NR_seccomp 383
+> > >  # elif defined(__aarch64__)
+> > >  #  define __NR_seccomp 277
+> > > +# elif defined(__riscv)
+> > > +#  define __NR_seccomp 277
+> > >  # elif defined(__hppa__)
+> > >  #  define __NR_seccomp 338
+> > >  # elif defined(__powerpc__)
+> > > @@ -1582,6 +1584,10 @@ TEST_F(TRACE_poke, getpid_runs_normally)
+> > >  # define ARCH_REGS	struct user_pt_regs
+> > >  # define SYSCALL_NUM	regs[8]
+> > >  # define SYSCALL_RET	regs[0]
+> > > +#elif defined(__riscv) && __riscv_xlen == 64
+> > > +# define ARCH_REGS	struct user_regs_struct
+> > > +# define SYSCALL_NUM	a7
+> > > +# define SYSCALL_RET	a0
+> > >  #elif defined(__hppa__)
+> > >  # define ARCH_REGS	struct user_regs_struct
+> > >  # define SYSCALL_NUM	gr[20]
+> > > @@ -1671,7 +1677,7 @@ void change_syscall(struct __test_metadata *_metadata,
+> > >  	EXPECT_EQ(0, ret) {}
+> > >  
+> > >  #if defined(__x86_64__) || defined(__i386__) || defined(__powerpc__) || \
+> > > -    defined(__s390__) || defined(__hppa__)
+> > > +    defined(__s390__) || defined(__hppa__) || defined(__riscv)
+> > >  	{
+> > >  		regs.SYSCALL_NUM = syscall;
+> > >  	}
+> > > -- 
+> > > 2.21.0
+> > > 
+> > > 
+> > 
+> > 
+> > - Paul
+> > 
+> 
+> 
 
 -- 
-Linaro LKFT
-https://lkft.linaro.org
-------=_Part_7442_384134017.1571155236851--
+Kees Cook
