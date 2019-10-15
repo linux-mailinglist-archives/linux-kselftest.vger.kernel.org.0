@@ -2,156 +2,112 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C193D75CA
-	for <lists+linux-kselftest@lfdr.de>; Tue, 15 Oct 2019 14:08:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 59EF1D7705
+	for <lists+linux-kselftest@lfdr.de>; Tue, 15 Oct 2019 15:04:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730047AbfJOMIJ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 15 Oct 2019 08:08:09 -0400
-Received: from mx2.suse.de ([195.135.220.15]:56142 "EHLO mx1.suse.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726540AbfJOMII (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 15 Oct 2019 08:08:08 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id 0D9E7B12C;
-        Tue, 15 Oct 2019 12:08:06 +0000 (UTC)
-Subject: Re: [PATCH] kernel-doc: rename the kernel-doc directive 'functions'
- to 'specific'
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     Tim.Bird@sony.com, jani.nikula@linux.intel.com,
-        changbin.du@gmail.com, corbet@lwn.net, linux-doc@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-fpga@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-wireless@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-mm@kvack.org, linux-crypto@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, intel-gfx@lists.freedesktop.org
-References: <20191013055359.23312-1-changbin.du@gmail.com>
- <875zkrd7nq.fsf@intel.com>
- <ECADFF3FD767C149AD96A924E7EA6EAF977CAF09@USCULXMSG01.am.sony.com>
- <7e7557b5-469f-3e63-6254-53dab2d7234a@suse.de>
- <20191015115439.GE32665@bombadil.infradead.org>
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-Autocrypt: addr=tzimmermann@suse.de; keydata=
- mQENBFs50uABCADEHPidWt974CaxBVbrIBwqcq/WURinJ3+2WlIrKWspiP83vfZKaXhFYsdg
- XH47fDVbPPj+d6tQrw5lPQCyqjwrCPYnq3WlIBnGPJ4/jreTL6V+qfKRDlGLWFjZcsrPJGE0
- BeB5BbqP5erN1qylK9i3gPoQjXGhpBpQYwRrEyQyjuvk+Ev0K1Jc5tVDeJAuau3TGNgah4Yc
- hdHm3bkPjz9EErV85RwvImQ1dptvx6s7xzwXTgGAsaYZsL8WCwDaTuqFa1d1jjlaxg6+tZsB
- 9GluwvIhSezPgnEmimZDkGnZRRSFiGP8yjqTjjWuf0bSj5rUnTGiyLyRZRNGcXmu6hjlABEB
- AAG0J1Rob21hcyBaaW1tZXJtYW5uIDx0emltbWVybWFubkBzdXNlLmRlPokBVAQTAQgAPhYh
- BHIX+6yM6c9jRKFo5WgNwR1TC3ojBQJbOdLgAhsDBQkDwmcABQsJCAcCBhUKCQgLAgQWAgMB
- Ah4BAheAAAoJEGgNwR1TC3ojR80H/jH+vYavwQ+TvO8ksXL9JQWc3IFSiGpuSVXLCdg62AmR
- irxW+qCwNncNQyb9rd30gzdectSkPWL3KSqEResBe24IbA5/jSkPweJasgXtfhuyoeCJ6PXo
- clQQGKIoFIAEv1s8l0ggPZswvCinegl1diyJXUXmdEJRTWYAtxn/atut1o6Giv6D2qmYbXN7
- mneMC5MzlLaJKUtoH7U/IjVw1sx2qtxAZGKVm4RZxPnMCp9E1MAr5t4dP5gJCIiqsdrVqI6i
- KupZstMxstPU//azmz7ZWWxT0JzgJqZSvPYx/SATeexTYBP47YFyri4jnsty2ErS91E6H8os
- Bv6pnSn7eAq5AQ0EWznS4AEIAMYmP4M/V+T5RY5at/g7rUdNsLhWv1APYrh9RQefODYHrNRH
- UE9eosYbT6XMryR9hT8XlGOYRwKWwiQBoWSDiTMo/Xi29jUnn4BXfI2px2DTXwc22LKtLAgT
- RjP+qbU63Y0xnQN29UGDbYgyyK51DW3H0If2a3JNsheAAK+Xc9baj0LGIc8T9uiEWHBnCH+R
- dhgATnWWGKdDegUR5BkDfDg5O/FISymJBHx2Dyoklv5g4BzkgqTqwmaYzsl8UxZKvbaxq0zb
- ehDda8lvhFXodNFMAgTLJlLuDYOGLK2AwbrS3Sp0AEbkpdJBb44qVlGm5bApZouHeJ/+n+7r
- 12+lqdsAEQEAAYkBPAQYAQgAJhYhBHIX+6yM6c9jRKFo5WgNwR1TC3ojBQJbOdLgAhsMBQkD
- wmcAAAoJEGgNwR1TC3ojpfcIAInwP5OlcEKokTnHCiDTz4Ony4GnHRP2fXATQZCKxmu4AJY2
- h9ifw9Nf2TjCZ6AMvC3thAN0rFDj55N9l4s1CpaDo4J+0fkrHuyNacnT206CeJV1E7NYntxU
- n+LSiRrOdywn6erjxRi9EYTVLCHcDhBEjKmFZfg4AM4GZMWX1lg0+eHbd5oL1as28WvvI/uI
- aMyV8RbyXot1r/8QLlWldU3NrTF5p7TMU2y3ZH2mf5suSKHAMtbE4jKJ8ZHFOo3GhLgjVrBW
- HE9JXO08xKkgD+w6v83+nomsEuf6C6LYrqY/tsZvyEX6zN8CtirPdPWu/VXNRYAl/lat7lSI
- 3H26qrE=
-Message-ID: <f4157a18-6c2e-9854-40a2-dd78c9bde5ea@suse.de>
-Date:   Tue, 15 Oct 2019 14:08:04 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.1.1
+        id S1728769AbfJONER (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 15 Oct 2019 09:04:17 -0400
+Received: from userp2130.oracle.com ([156.151.31.86]:44174 "EHLO
+        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728607AbfJONER (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 15 Oct 2019 09:04:17 -0400
+Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
+        by userp2130.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x9FCxFp8017107;
+        Tue, 15 Oct 2019 13:04:08 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=subject : to : cc :
+ references : from : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=corp-2019-08-05;
+ bh=B+OJC8Ug/Ek7xA9g9VxKoa781wb0U8WVw+Q3swW2fgQ=;
+ b=ENmNQgfSc+2bbdt2kVAY+UzDI68fL+6pDk3VCouynQ5ACoq4n3wiBvTsgzUKOc+CBkfC
+ Y4WdcoJen49p8VFbl+U9k57ynNfTN2245VS41Chn3ITeCsXHgB9SZ0a45ib6mS8FaYqn
+ nKY3n5rcp6dPLEqviQ3bftvG06Gdu+Ygz4sPHk6x1SOmFUFi5+wbi1GXM5M5vscK7mR9
+ 2s06KHjGl94CnHhj32S9JrdYy0HHkgb6NL+zFQy0qhXJqCRa65cK1W90hEsT/MlOvF3y
+ En1qdxcS6a/62vTFNYLHgm5GS4c6Du6F6nm8gbOYNmYeM9dpf1aozmbyLMl4tqvrS6hx 4w== 
+Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
+        by userp2130.oracle.com with ESMTP id 2vk68uftvv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 15 Oct 2019 13:04:08 +0000
+Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
+        by userp3030.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x9FD3rCm190545;
+        Tue, 15 Oct 2019 13:04:07 GMT
+Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
+        by userp3030.oracle.com with ESMTP id 2vn8en1av3-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 15 Oct 2019 13:04:07 +0000
+Received: from abhmp0018.oracle.com (abhmp0018.oracle.com [141.146.116.24])
+        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id x9FD458J016523;
+        Tue, 15 Oct 2019 13:04:05 GMT
+Received: from [10.152.35.77] (/10.152.35.77)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Tue, 15 Oct 2019 13:04:05 +0000
+Subject: Re: [Automated-testing] syzkaller reproducers
+To:     Dmitry Vyukov <dvyukov@google.com>, Cyril Hrubis <chrubis@suse.cz>
+Cc:     shuah <shuah@kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        automated-testing@yoctoproject.org, kernelci@groups.io,
+        Dhaval Giani <dhaval.giani@gmail.com>,
+        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Jan Setje-Eilers <jan.setjeeilers@oracle.com>,
+        syzkaller <syzkaller@googlegroups.com>
+References: <CACT4Y+YjOxmOzzPt_xaYE44QNZfq9haNfbnVBrTnPXe7zuSEfA@mail.gmail.com>
+ <CACT4Y+ZaN900gwx=PHS10hrKofZib7HA7JFxE_DkwChyttYW+A@mail.gmail.com>
+ <876a2abe-41ab-5819-4ae8-ad26186d0d1c@kernel.org>
+ <226099bc-9763-3a73-e26a-b292f601494c@kernel.org>
+ <20191011180248.GA24089@rei.lan>
+ <b715f3d7-547f-9a43-dc41-2e46ec3bfd51@kernel.org>
+ <20191014085414.GB31760@rei.lan>
+ <CACT4Y+aKbgT=i8C5aZvp8ZV52PamGm=GdnR6kQecczLQOQSGqA@mail.gmail.com>
+From:   George Kennedy <george.kennedy@oracle.com>
+Organization: Oracle Corporation
+Message-ID: <62903a33-8ffc-56b6-de1a-539f10b5de2a@oracle.com>
+Date:   Tue, 15 Oct 2019 09:04:01 -0400
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-In-Reply-To: <20191015115439.GE32665@bombadil.infradead.org>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="xXjpgUbLDdBAUlDObA57HUQXDHzBsVHcH"
+In-Reply-To: <CACT4Y+aKbgT=i8C5aZvp8ZV52PamGm=GdnR6kQecczLQOQSGqA@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9410 signatures=668684
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
+ phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=999
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.0.1-1908290000 definitions=main-1910150119
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9410 signatures=668684
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
+ suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1031
+ lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1908290000
+ definitions=main-1910150119
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---xXjpgUbLDdBAUlDObA57HUQXDHzBsVHcH
-Content-Type: multipart/mixed; boundary="z434XuCeAEdMMPGCrDECpwMF4D7beqFx1";
- protected-headers="v1"
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: Matthew Wilcox <willy@infradead.org>
-Cc: Tim.Bird@sony.com, jani.nikula@linux.intel.com, changbin.du@gmail.com,
- corbet@lwn.net, linux-doc@vger.kernel.org, linux-pci@vger.kernel.org,
- linux-fpga@vger.kernel.org, linux-usb@vger.kernel.org,
- linux-wireless@vger.kernel.org, linux-kernel@vger.kernel.org,
- dri-devel@lists.freedesktop.org, linux-mm@kvack.org,
- linux-crypto@vger.kernel.org, linux-kselftest@vger.kernel.org,
- intel-gfx@lists.freedesktop.org
-Message-ID: <f4157a18-6c2e-9854-40a2-dd78c9bde5ea@suse.de>
-Subject: Re: [PATCH] kernel-doc: rename the kernel-doc directive 'functions'
- to 'specific'
-References: <20191013055359.23312-1-changbin.du@gmail.com>
- <875zkrd7nq.fsf@intel.com>
- <ECADFF3FD767C149AD96A924E7EA6EAF977CAF09@USCULXMSG01.am.sony.com>
- <7e7557b5-469f-3e63-6254-53dab2d7234a@suse.de>
- <20191015115439.GE32665@bombadil.infradead.org>
-In-Reply-To: <20191015115439.GE32665@bombadil.infradead.org>
-
---z434XuCeAEdMMPGCrDECpwMF4D7beqFx1
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: quoted-printable
-
-Hi
-
-Am 15.10.19 um 13:54 schrieb Matthew Wilcox:
-> On Tue, Oct 15, 2019 at 11:25:53AM +0200, Thomas Zimmermann wrote:
->>> My preference would be to use 'symbols'.  I tried to come up with som=
-ething
->>> but 'symbols' is better than anything I came up with.
->>
->> Maybe 'interfaces' or 'artifacts'. The term 'symbols' is just as
->> imprecise as 'functions'.
->=20
-> I suggested 'identifier' because that's the term used in the C spec (6.=
-2.1):
->=20
-> : An identifier can denote an object; a function; a tag or a member
-> : of a structure, union, or enumeration; a typedef name; a label name;
-> : a macro name; or a macro parameter.
->=20
-> We don't allow documenting all those things separately, but it does cov=
-er
-> all the things we do allow to be individually documented.
->=20
-
-Yeah, makes sense.
-
-Best regards
-Thomas
-
---=20
-Thomas Zimmermann
-Graphics Driver Developer
-SUSE Software Solutions Germany GmbH
-Maxfeldstr. 5, 90409 N=C3=BCrnberg, Germany
-(HRB 36809, AG N=C3=BCrnberg)
-Gesch=C3=A4ftsf=C3=BChrer: Felix Imend=C3=B6rffer
 
 
---z434XuCeAEdMMPGCrDECpwMF4D7beqFx1--
+On 10/14/2019 7:19 AM, Dmitry Vyukov wrote:
+> On Mon, Oct 14, 2019 at 10:54 AM Cyril Hrubis <chrubis@suse.cz> wrote:
+>> Hi!
+>>>> You are suposed to run the run.sh script in the bin directory.
+>>> Yeah that does work.
+>>>
+>>> Would be helpful to have usage instructions instead of failing. :)
+>> I do not think that these scripts are ever supposed to be the used in
+>> production testing, you need much more than this to produce results
+>> reliably. I would expect that they are supposed to be a form of very
+>> minimal documentation.
+> Yes, I just added them as quick hints: some repros are 32-bits; each
+> needs a new dir; some external timeout is needed for each test.
+Thank you again for the collection of repro C programs!
 
---xXjpgUbLDdBAUlDObA57HUQXDHzBsVHcH
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="signature.asc"
+Hitting a lot more crashes with the collection of repro C programs than 
+in all the hours of running Syzkaller. Wonder why? Any idea? This is 
+with the same kernel and VM that Syzkaller is run on.
 
------BEGIN PGP SIGNATURE-----
+George
 
-iQEzBAEBCAAdFiEEchf7rIzpz2NEoWjlaA3BHVMLeiMFAl2ltqUACgkQaA3BHVML
-eiO7bAf8DqpVa41x8h+LyR771/7XD6R9SM1oSqopIn1EaGndzepL2obOpvv7TM8J
-xdFUMac1FMD7pBfjtTfs6Ax/+KSIBGMJQxiiiGhsZ2Z9RXIiNMJpVV0pFwkEBCic
-Xwxmem2Hn+LhB98tlmtb1rUid5ZEWIqxJn0HEfOht/Y7iu+RZUfVre1GHP2W5OG+
-KSJSTG5ZwTIBzXvMS++NOh0kJWyzTiKY7Gaxl0ck76UKp34bdsTqFNVlOqNgfdiW
-tEmx0i6R/9ZZp3HGgsbN7waSqxjcYWI4M8sPApl7aPDDpTZC2ydWX1J5qzmp9/LF
-uRn+WrOCEMHCMSPfYsv/311cYx9oLw==
-=fbgk
------END PGP SIGNATURE-----
 
---xXjpgUbLDdBAUlDObA57HUQXDHzBsVHcH--
