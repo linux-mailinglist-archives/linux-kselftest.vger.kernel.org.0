@@ -2,51 +2,106 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 46B88D8068
-	for <lists+linux-kselftest@lfdr.de>; Tue, 15 Oct 2019 21:39:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BFCCCD80CF
+	for <lists+linux-kselftest@lfdr.de>; Tue, 15 Oct 2019 22:14:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731960AbfJOTjB (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 15 Oct 2019 15:39:01 -0400
-Received: from youngberry.canonical.com ([91.189.89.112]:48542 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727856AbfJOTjB (ORCPT
+        id S1728639AbfJOUON (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 15 Oct 2019 16:14:13 -0400
+Received: from smtp1.linuxfoundation.org ([140.211.169.13]:50444 "EHLO
+        smtp1.linuxfoundation.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727962AbfJOUOM (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 15 Oct 2019 15:39:01 -0400
-Received: from [213.220.153.21] (helo=localhost)
-        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.86_2)
-        (envelope-from <christian.brauner@ubuntu.com>)
-        id 1iKSep-00038e-V2; Tue, 15 Oct 2019 19:38:59 +0000
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-In-Reply-To: <20191015165531.27469-1-ckellner@redhat.com>
-Date:   Tue, 15 Oct 2019 21:38:59 +0200
-Cc:     "Christian Kellner" <christian@kellner.me>,
-        "Christian Brauner" <christian@brauner.io>,
-        "Shuah Khan" <shuah@kernel.org>, <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH v2] pidfd: avoid linux/wait.h and sys/wait.h name
- clashes
-From:   "Christian Brauner" <christian.brauner@ubuntu.com>
-To:     "Christian Kellner" <ckellner@redhat.com>,
-        <linux-kernel@vger.kernel.org>
-Message-Id: <BXQCOYS7J0NU.363NAWEEPN3GH@wittgenstein>
+        Tue, 15 Oct 2019 16:14:12 -0400
+Received: from rt.cvo.linuxfoundation.org (rt.cvo.linuxfoundation.org [172.17.192.131])
+        by smtp1.linuxfoundation.org (Postfix) with ESMTPS id D9EC76CE;
+        Tue, 15 Oct 2019 20:14:11 +0000 (UTC)
+Received: by rt.cvo.linuxfoundation.org (Postfix, from userid 48)
+        id CE9EF6FD; Tue, 15 Oct 2019 20:14:11 +0000 (UTC)
+Subject: [Kernel.org Helpdesk #80110] Bugzilla Component for KUnit?
+From:   "Konstantin Ryabitsev via RT" 
+        <kernel-helpdesk@rt.linuxfoundation.org>
+Reply-To: kernel-helpdesk@rt.linuxfoundation.org
+In-Reply-To: <rt-4.4.0-14627-1570483310-1693.80110-6-0@linuxfoundation>
+References: <RT-Ticket-80110@linuxfoundation>
+ <20191002215351.GA177672@google.com>
+ <rt-4.4.0-12639-1570215347-1334.80110-6-0@linuxfoundation>
+ <CAFd5g45OmXTpUubLv9kwNXGc0+KNLjLj9tmw=qoEzvQVsWqGkw@mail.gmail.com>
+ <rt-4.4.0-14627-1570483310-1693.80110-6-0@linuxfoundation>
+Message-ID: <rt-4.4.0-13264-1571170451-794.80110-6-0@linuxfoundation>
+X-RT-Loop-Prevention: linuxfoundation.org
+X-RT-Ticket: linuxfoundation.org #80110
+X-Managed-BY: RT 4.4.0 (http://www.bestpractical.com/rt/)
+X-RT-Originator: konstantin@linuxfoundation.org
+To:     brendanhiggins@google.com
+CC:     kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="utf-8"
+X-RT-Original-Encoding: utf-8
+Date:   Tue, 15 Oct 2019 16:14:11 -0400
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue Oct 15, 2019 at 6:55 PM Christian Kellner wrote:
-> From: Christian Kellner <christian@kellner.me>
->=20
-> Both linux/wait.h and sys/wait.h contain values for the first argument
-> of 'waitid' (P_ALL, P_PID, ...).  While the former uses defines the
-> latter uses an enum. When linux/wait.h is included before sys/wait.h
-> this will lead to an error, because P_ALL, P_PID, ... will already
-> have been substituted to 0, 1, ... respectively and this the resulting
-> code will be 'typedef enum {0, 1, ...'.
-> Remove 'linux/wait.h' and rename P_PIDFD to avoid a future clash, in
-> case P_PIDFD gets added to the idtype_t enum in sys/wait.h.
->=20
-> Signed-off-by: Christian Kellner <christian@kellner.me>
+On 2019-10-07 17:21:50, brendanhiggins@google.com wrote:
+> On Fri, Oct 4, 2019 at 11:55 AM Konstantin Ryabitsev via RT
+> <kernel-helpdesk@rt.linuxfoundation.org> wrote:
+> >
+> > On 2019-10-02 17:53:58, brendanhiggins@google.com wrote:
+> > > Hi,
+> > >
+> > > I am thinking about requesting a Bugzilla component for my kernel
+> > > project KUnit. I am not sure if this is the right place for it.
+> > > Some
+> > > background on KUnit: We are working on adding unit testing for the
+> > > Linux
+> > > kernel[1][2]. We have our initial patchset that introduces the
+> > > subsystem
+> > > in the process of being merged (Linus sent our PR back to us for a
+> > > minor
+> > > fix[3], so it should be in either 5.4-rc2 or 5.5, but is
+> > > nevertheless
+> > > in
+> > > linux-next). However, we also have a staging repo that people are
+> > > using
+> > > and some supporting code that lives outside of the kernel.
+> > >
+> > > So I am trying to figure out:
+> > >
+> > > 1. Is it appropriate to request a Bugzilla component before our
+> > >    subsystem has been merged into torvalds/master? I would just
+> > > wait,
+> > >    but I have some users looking to file issues, so I would prefer
+> > > to
+> > >    provide them something sooner rather than later.
+> > >
+> > > 2. Is it appropriate to use the kernel's Bugzilla to track issues
+> > >    outside of the Linux kernel? As I mention above, we have code
+> > > that
+> > >    lives outside of the kernel; is it appropriate to use
+> > > kernel.org's
+> > >    Bugzilla for this?
+> > >
+> > > 3. Does Bugzilla match my planned usage model? It doesn't look like
+> > >    Bugzilla get's much usage aside from reporting bugs. I want to
+> > > use
+> > >    it for tracking feature progress and things like that. Is that
+> > > okay?
+> >
+> > Yes, we can certainly host this on bugzilla.kernel.org. Would you be
+> > okay with Tools/KUnit as product/category?
+> 
+> Cool, well as long as none of my above points are an issue for you.
+> Then yes, can you create me a component? I am fine with Tools/KUnit as
+> the product/category.
 
-Reviewed-by: Christian Brauner <christian.brauner@ubuntu.com>
+Apologies for the delay, mostly due to Thanksgiving in Canada. You should be able to start using Tools/KUnit now. It uses a default virtual assignee tools_kunit@kernel-bugs.kernel.org, so to start receiving bugmail for it, please follow instructions on this page:
+
+https://korg.wiki.kernel.org/userdoc/bugzilla#to_start_getting_bug_reports_for_a_component
+
+Best regards,
+-- 
+Konstantin Ryabitsev
+Director, LF Projects IT
+The Linux Foundation
