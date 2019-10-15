@@ -2,196 +2,64 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id ADA42D7824
-	for <lists+linux-kselftest@lfdr.de>; Tue, 15 Oct 2019 16:14:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 22012D787B
+	for <lists+linux-kselftest@lfdr.de>; Tue, 15 Oct 2019 16:28:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732500AbfJOONx (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 15 Oct 2019 10:13:53 -0400
-Received: from youngberry.canonical.com ([91.189.89.112]:39661 "EHLO
+        id S1732637AbfJOO2u (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 15 Oct 2019 10:28:50 -0400
+Received: from youngberry.canonical.com ([91.189.89.112]:40211 "EHLO
         youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732546AbfJOONl (ORCPT
+        with ESMTP id S1732087AbfJOO2u (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 15 Oct 2019 10:13:41 -0400
-Received: from [213.220.153.21] (helo=localhost.localdomain)
+        Tue, 15 Oct 2019 10:28:50 -0400
+Received: from [213.220.153.21] (helo=wittgenstein)
         by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
         (Exim 4.86_2)
         (envelope-from <christian.brauner@ubuntu.com>)
-        id 1iKNZz-0004YA-8W; Tue, 15 Oct 2019 14:13:39 +0000
+        id 1iKNoe-0005gW-JJ; Tue, 15 Oct 2019 14:28:48 +0000
+Date:   Tue, 15 Oct 2019 16:28:48 +0200
 From:   Christian Brauner <christian.brauner@ubuntu.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Shuah Khan <shuah@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>, Michal Hocko <mhocko@suse.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Elena Reshetova <elena.reshetova@intel.com>,
+To:     Christian Kellner <ckellner@redhat.com>
+Cc:     linux-kernel@vger.kernel.org,
         Christian Kellner <christian@kellner.me>,
-        Roman Gushchin <guro@fb.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Aleksa Sarai <cyphar@cyphar.com>,
-        "Dmitry V. Levin" <ldv@altlinux.org>,
-        linux-kselftest@vger.kernel.org,
-        Christian Brauner <christian.brauner@ubuntu.com>
-Subject: [PATCH 2/2] test: verify fdinfo for pidfd of reaped process
-Date:   Tue, 15 Oct 2019 16:13:32 +0200
-Message-Id: <20191015141332.4055-2-christian.brauner@ubuntu.com>
-X-Mailer: git-send-email 2.23.0
-In-Reply-To: <20191015141332.4055-1-christian.brauner@ubuntu.com>
-References: <20191015141332.4055-1-christian.brauner@ubuntu.com>
+        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH] pidfd: fix selftest compilation by removing linux/wait.h
+Message-ID: <20191015142847.fa5ypv2qrocbuifd@wittgenstein>
+References: <20191011163811.8607-1-ckellner@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20191011163811.8607-1-ckellner@redhat.com>
+User-Agent: NeoMutt/20180716
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Test that the fdinfo field of a pidfd referring to a dead process
-correctly shows Pid: -1 and NSpid: -1.
+On Fri, Oct 11, 2019 at 06:38:11PM +0200, Christian Kellner wrote:
+> From: Christian Kellner <christian@kellner.me>
+> 
+> The pidfd_{open,poll}_test.c files both include `linux/wait.h` and
+> later `sys/wait.h`. The former has `#define P_ALL 0`, but in the
+> latter P_ALL is part of idtype_t enum, where it gets substituted
+> due to the aforementioned define to be `0`, which then results in
+> `typedef enum {0, ...`, which then results into a compiler error:
+> "error: expected identifier before numeric constant".
+> Since we need `sys/wait.h` for waitpid, drop `linux/wait.h`.
+> 
+> Signed-off-by: Christian Kellner <christian@kellner.me>
 
-Cc: Christian Kellner <christian@kellner.me>
-Signed-off-by: Christian Brauner <christian.brauner@ubuntu.com>
----
- .../selftests/pidfd/pidfd_fdinfo_test.c       | 59 ++++++++++++++-----
- 1 file changed, 45 insertions(+), 14 deletions(-)
+Sorry, I missed this patch.
+This is problematic and your patch would only temporarily fix it.
+If glibc adds a P_PIDFD to the enum we'll run into the same issue.
+So please:
+- remove the linux/wait.h header (as you've already done here)
+- add a custom define for P_PIDFD under a different name, e.g.:
+  #ifndef __P_PIDFD
+  #define __P_PIDFD 3
+  #endif
+  and add a comment above it explaining the reason for this mess.
 
-diff --git a/tools/testing/selftests/pidfd/pidfd_fdinfo_test.c b/tools/testing/selftests/pidfd/pidfd_fdinfo_test.c
-index 3721be994abd..22558524f71c 100644
---- a/tools/testing/selftests/pidfd/pidfd_fdinfo_test.c
-+++ b/tools/testing/selftests/pidfd/pidfd_fdinfo_test.c
-@@ -113,11 +113,15 @@ static struct child clone_newns(int (*fn)(void *), void *args,
- 	return ret;
- }
- 
-+static inline void child_close(struct child *child)
-+{
-+	close(child->fd);
-+}
-+
- static inline int child_join(struct child *child, struct error *err)
- {
- 	int r;
- 
--	(void)close(child->fd);
- 	r = wait_for_pid(child->pid);
- 	if (r < 0)
- 		error_set(err, PIDFD_ERROR, "waitpid failed (ret %d, errno %d)",
-@@ -128,6 +132,12 @@ static inline int child_join(struct child *child, struct error *err)
- 	return r;
- }
- 
-+static inline int child_join_close(struct child *child, struct error *err)
-+{
-+	child_close(child);
-+	return child_join(child, err);
-+}
-+
- static inline void trim_newline(char *str)
- {
- 	char *pos = strrchr(str, '\n');
-@@ -136,8 +146,8 @@ static inline void trim_newline(char *str)
- 		*pos = '\0';
- }
- 
--static int verify_fdinfo_nspid(int pidfd, struct error *err,
--			       const char *expect, ...)
-+static int verify_fdinfo(int pidfd, struct error *err, const char *prefix,
-+			 size_t prefix_len, const char *expect, ...)
- {
- 	char buffer[512] = {0, };
- 	char path[512] = {0, };
-@@ -160,17 +170,20 @@ static int verify_fdinfo_nspid(int pidfd, struct error *err,
- 				 pidfd);
- 
- 	while (getline(&line, &n, f) != -1) {
--		if (strncmp(line, "NSpid:", 6))
-+		char *val;
-+
-+		if (strncmp(line, prefix, prefix_len))
- 			continue;
- 
- 		found = 1;
- 
--		r = strcmp(line + 6, buffer);
-+		val = line + prefix_len;
-+		r = strcmp(val, buffer);
- 		if (r != 0) {
- 			trim_newline(line);
- 			trim_newline(buffer);
--			error_set(err, PIDFD_FAIL, "NSpid: '%s' != '%s'",
--				  line + 6, buffer);
-+			error_set(err, PIDFD_FAIL, "%s '%s' != '%s'",
-+				  prefix, val, buffer);
- 		}
- 		break;
- 	}
-@@ -179,8 +192,8 @@ static int verify_fdinfo_nspid(int pidfd, struct error *err,
- 	fclose(f);
- 
- 	if (found == 0)
--		return error_set(err, PIDFD_FAIL, "NSpid not found for fd %d",
--				 pidfd);
-+		return error_set(err, PIDFD_FAIL, "%s not found for fd %d",
-+				 prefix, pidfd);
- 
- 	return PIDFD_PASS;
- }
-@@ -213,7 +226,7 @@ static int child_fdinfo_nspid_test(void *args)
- 	}
- 
- 	pidfd = *(int *)args;
--	r = verify_fdinfo_nspid(pidfd, &err, "\t0\n");
-+	r = verify_fdinfo(pidfd, &err, "NSpid:", 6, "\t0\n");
- 
- 	if (r != PIDFD_PASS)
- 		ksft_print_msg("NSpid fdinfo check failed: %s\n", err.msg);
-@@ -242,24 +255,42 @@ static void test_pidfd_fdinfo_nspid(void)
- 	/* The children will have pid 1 in the new pid namespace,
- 	 * so the line must be 'NSPid:\t<pid>\t1'.
- 	 */
--	verify_fdinfo_nspid(a.fd, &err, "\t%d\t%d\n", a.pid, 1);
--	verify_fdinfo_nspid(b.fd, &err, "\t%d\t%d\n", b.pid, 1);
-+	verify_fdinfo(a.fd, &err, "NSpid:", 6, "\t%d\t%d\n", a.pid, 1);
-+	verify_fdinfo(b.fd, &err, "NSpid:", 6, "\t%d\t%d\n", b.pid, 1);
- 
- 	/* wait for the process, check the exit status and set
- 	 * 'err' accordingly, if it is not already set.
- 	 */
-+	child_join_close(&a, &err);
-+	child_join_close(&b, &err);
-+
-+	error_report(&err, test_name);
-+}
-+
-+static void test_pidfd_dead_fdinfo(void)
-+{
-+	struct child a;
-+	struct error err = {0, };
-+	const char *test_name = "pidfd check fdinfo for dead process";
-+
-+	/* Create a new child in a new pid and mount namespace */
-+	a = clone_newns(child_fdinfo_nspid_test, NULL, &err);
-+	error_check(&err, test_name);
- 	child_join(&a, &err);
--	child_join(&b, &err);
- 
-+	verify_fdinfo(a.fd, &err, "Pid:", 4, "\t-1\n");
-+	verify_fdinfo(a.fd, &err, "NSpid:", 6, "\t-1\n");
-+	child_close(&a);
- 	error_report(&err, test_name);
- }
- 
- int main(int argc, char **argv)
- {
- 	ksft_print_header();
--	ksft_set_plan(1);
-+	ksft_set_plan(2);
- 
- 	test_pidfd_fdinfo_nspid();
-+	test_pidfd_dead_fdinfo();
- 
- 	return ksft_exit_pass();
- }
--- 
-2.23.0
 
+Thanks and (_ugh_)
+Christian
