@@ -2,58 +2,59 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 71CB7D9C2E
-	for <lists+linux-kselftest@lfdr.de>; Wed, 16 Oct 2019 23:04:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7AA1D9C37
+	for <lists+linux-kselftest@lfdr.de>; Wed, 16 Oct 2019 23:05:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2437362AbfJPVEr (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 16 Oct 2019 17:04:47 -0400
-Received: from mail-pf1-f193.google.com ([209.85.210.193]:41730 "EHLO
-        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2437357AbfJPVEr (ORCPT
+        id S2437363AbfJPVF5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 16 Oct 2019 17:05:57 -0400
+Received: from mail-pg1-f193.google.com ([209.85.215.193]:32988 "EHLO
+        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2437357AbfJPVF5 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 16 Oct 2019 17:04:47 -0400
-Received: by mail-pf1-f193.google.com with SMTP id q7so153330pfh.8
-        for <linux-kselftest@vger.kernel.org>; Wed, 16 Oct 2019 14:04:47 -0700 (PDT)
+        Wed, 16 Oct 2019 17:05:57 -0400
+Received: by mail-pg1-f193.google.com with SMTP id i76so15026948pgc.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 16 Oct 2019 14:05:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc:content-transfer-encoding;
-        bh=5DXDICv1BrxMLav/y/sfl9xCxyyzw1drlgwbHD31nnY=;
-        b=FWkoFloQxqdaQka3gkSOdU2FjYC82UVpcLvBPA+LhkTGD2zoh1EqJ/NJcg/VuM9xMw
-         LQPtwTu+DqbdtcrjLCaLgAIgngoW3vpTVInKU4Me3dquBIDQVLnrR1YVrcsQWXKT5X+O
-         ikZFC1UaNa2r2IIfJ+3essGQck5FXh05KI35c0sB3QbhKUv6vvAgjQBSWzi3zeYMKf95
-         zm5enTgoOz1Zvs20nQiB1aR9xElr4/PVPH8CKY5o5xJxFcb+l0LUquBzHNbJguy0Raqa
-         V0ycfJlE3eTprsS9bV7plvSkSZ7suja7XE+xfhYJlAYp08QaF2I5SH3ANkzK/cNFui+N
-         AMzQ==
+        bh=qjV7EM47JVSinM4boRo6vuSJwIoQAUJUWrKIe+pEDW4=;
+        b=eelzKIWFNh+gRNtHdk+7M1530iFhX/BUMRNjgmGFuj0gJJ/VrL+bK3BIsLxL6pl4hu
+         JHget8koKzZYtiHF+05Uc2XF7+SndTigrr6/ZWOoXA6ltstxbL9uHBvTHAJ+pVnWW7Vm
+         nal7K3cBXYbIdwQwBz1yV8ApWRP17VQyd+1DW2q5l55Mc8E8NqP8Y2Hfx3TUQFeiYkTP
+         K/WDR8zNQJTw0/dAiu+amP4ZFIotK1dfR2Ts+vfV5pJwdTdoyTbKv4dybETlwMlkTnNJ
+         OOvwuRldl689rJQ4djTKiCPARCAEVN0iS83eC6FBzn7AqR6XYFqhgkwmS/KPbw0Ms5dZ
+         L8qg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc:content-transfer-encoding;
-        bh=5DXDICv1BrxMLav/y/sfl9xCxyyzw1drlgwbHD31nnY=;
-        b=PUGgYQAstc5fyotkJaZfMJaJJ+s/qs2sTY+mzwwGSWfZyJyUyXmcBCzkFL7bEL9qxB
-         zFG1wrVnhzHe2J+dNq0GwmFLm8PkqIv2+9zlfprtPyxCS8W4/f9fEm7DgcMmsOrxfN4h
-         yGKskArIoUnCNJ3SnFx6zOGCkpaEnYkjGfV5iJXe8Eln48mvSb+iOaeBhJgXDcB81qK2
-         uPdUGC1+qoFwJ2Ld1+zO/RNLAXhprAxsUsa6fO3ePM+3inVlI3HFpkFAJjUEwZkMqmx5
-         FxjCo5l/1GqCX/LeqU2zEGv04ZZh7st+IeVQ2IYS1OXo4nxJnFq2hkMEggit6Hgd0byC
-         Hvog==
-X-Gm-Message-State: APjAAAXlk6K0WGD+RCn3I1wvbuR6ohyzgYO+/Q1MsW44t5KujdagoILC
-        RFOo8Wg/Vf86EjqXIAfeXV47LNraaF7WIU0DpixA2A==
-X-Google-Smtp-Source: APXvYqyiqxKyVbkEVFmDCthHWZQr49t/vJ4HZGux1rVCJ7ndOOvolG1P3fk1rEx5g5l1l+wu/M/J8MojP//24p2Kwrk=
-X-Received: by 2002:a63:5516:: with SMTP id j22mr136267pgb.201.1571259886189;
- Wed, 16 Oct 2019 14:04:46 -0700 (PDT)
+        bh=qjV7EM47JVSinM4boRo6vuSJwIoQAUJUWrKIe+pEDW4=;
+        b=QAdRM+POdksjohDQxUYIsw2aHIemlVD/KOB0gH/ukRhTO5t0tNe5P1c1+XvKz7e1X+
+         xijzfFTnQrqVLP/Lx4ZdgX/beQtynWxJChiT7SlmM6WAoQFP/oSEhZk19su77zl4/AO3
+         /W8awyn7FQJDLd0hWtiSpivfrrsm6fSZhKbEJVeSrnrk9W/aKknf0ufvpArXpw8xFJwU
+         v09YQ4GzlE0czG179d2HZzsKYGWyUOzxSqKCsr1htd1HAFV/EanjwHZ9H09jjVhoV2Yl
+         XSjY1RQK5rKSPdcGUW2ItlnrGPkfwbGnGwxpMMdLe+TDZJq1uHxBcwQbSr4BFzb9kaq/
+         ymIA==
+X-Gm-Message-State: APjAAAUVqTSZp9esVUyTv0KaybTTE9IDINs6TzkHZZukdvQYBM9Ey0V9
+        Eb1ZG1NPqMC5wm7UIcIvuevN22y+TJsN4nddUxdduT/1H8I=
+X-Google-Smtp-Source: APXvYqxIZNjmNb+rFuHuwUF2SY13oQd0no+yF6+IiLGl5QlSFcoE6N7wBF0xI74HJ05LKRrIsIG8J004PljLzwpxVUA=
+X-Received: by 2002:a17:90a:2451:: with SMTP id h75mr7570869pje.131.1571259956064;
+ Wed, 16 Oct 2019 14:05:56 -0700 (PDT)
 MIME-Version: 1.0
-References: <c99604e5-2ea4-4075-9a39-470104298368@googlegroups.com>
- <CAFd5g46+OMmP8mYsH8vcpMpdOeYryp=1Lsab4Hy6pAhWjX5-4Q@mail.gmail.com> <291f012c-0ffd-599e-0dac-a6b4e05ebb97@infradead.org>
-In-Reply-To: <291f012c-0ffd-599e-0dac-a6b4e05ebb97@infradead.org>
+References: <RT-Ticket-80110@linuxfoundation> <20191002215351.GA177672@google.com>
+ <rt-4.4.0-12639-1570215347-1334.80110-6-0@linuxfoundation>
+ <CAFd5g45OmXTpUubLv9kwNXGc0+KNLjLj9tmw=qoEzvQVsWqGkw@mail.gmail.com>
+ <rt-4.4.0-14627-1570483310-1693.80110-6-0@linuxfoundation> <rt-4.4.0-13264-1571170451-794.80110-6-0@linuxfoundation>
+In-Reply-To: <rt-4.4.0-13264-1571170451-794.80110-6-0@linuxfoundation>
 From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Wed, 16 Oct 2019 14:04:35 -0700
-Message-ID: <CAFd5g455KciviPA50cVDxK8XMB8ufcLrRq9DPA0d=f-1qXezWg@mail.gmail.com>
-Subject: Re: kunit.py should default to --build_dir=.kunit
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     "Theodore Ts'o" <theodore.tso@gmail.com>,
+Date:   Wed, 16 Oct 2019 14:05:44 -0700
+Message-ID: <CAFd5g44=MXf+nnYwaRg4eHYPQtfTo-KgH2z2+G=FA16xoUf-hg@mail.gmail.com>
+Subject: Re: [Kernel.org Helpdesk #80110] Bugzilla Component for KUnit?
+To:     kernel-helpdesk@rt.linuxfoundation.org
+Cc:     KUnit Development <kunit-dev@googlegroups.com>,
         "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        KUnit Development <kunit-dev@googlegroups.com>
+        <linux-kselftest@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 Sender: linux-kselftest-owner@vger.kernel.org
@@ -61,63 +62,70 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Oct 11, 2019 at 7:56 AM Randy Dunlap <rdunlap@infradead.org> wrote:
+On Tue, Oct 15, 2019 at 1:14 PM Konstantin Ryabitsev via RT
+<kernel-helpdesk@rt.linuxfoundation.org> wrote:
 >
-> On 10/11/19 4:19 AM, Brendan Higgins wrote:
-> > +open list:KERNEL SELFTEST FRAMEWORK In case anyone in kselftest has
-> > any thoughts.
+> On 2019-10-07 17:21:50, brendanhiggins@google.com wrote:
+> > On Fri, Oct 4, 2019 at 11:55 AM Konstantin Ryabitsev via RT
+> > <kernel-helpdesk@rt.linuxfoundation.org> wrote:
+> > >
+> > > On 2019-10-02 17:53:58, brendanhiggins@google.com wrote:
+> > > > Hi,
+> > > >
+> > > > I am thinking about requesting a Bugzilla component for my kernel
+> > > > project KUnit. I am not sure if this is the right place for it.
+> > > > Some
+> > > > background on KUnit: We are working on adding unit testing for the
+> > > > Linux
+> > > > kernel[1][2]. We have our initial patchset that introduces the
+> > > > subsystem
+> > > > in the process of being merged (Linus sent our PR back to us for a
+> > > > minor
+> > > > fix[3], so it should be in either 5.4-rc2 or 5.5, but is
+> > > > nevertheless
+> > > > in
+> > > > linux-next). However, we also have a staging repo that people are
+> > > > using
+> > > > and some supporting code that lives outside of the kernel.
+> > > >
+> > > > So I am trying to figure out:
+> > > >
+> > > > 1. Is it appropriate to request a Bugzilla component before our
+> > > >    subsystem has been merged into torvalds/master? I would just
+> > > > wait,
+> > > >    but I have some users looking to file issues, so I would prefer
+> > > > to
+> > > >    provide them something sooner rather than later.
+> > > >
+> > > > 2. Is it appropriate to use the kernel's Bugzilla to track issues
+> > > >    outside of the Linux kernel? As I mention above, we have code
+> > > > that
+> > > >    lives outside of the kernel; is it appropriate to use
+> > > > kernel.org's
+> > > >    Bugzilla for this?
+> > > >
+> > > > 3. Does Bugzilla match my planned usage model? It doesn't look like
+> > > >    Bugzilla get's much usage aside from reporting bugs. I want to
+> > > > use
+> > > >    it for tracking feature progress and things like that. Is that
+> > > > okay?
+> > >
+> > > Yes, we can certainly host this on bugzilla.kernel.org. Would you be
+> > > okay with Tools/KUnit as product/category?
 > >
-> > On Thu, Oct 10, 2019 at 7:05 PM Theodore Ts'o <theodore.tso@gmail.com> =
-wrote:
-> >>
-> >> I've been experimenting with the ext4 kunit test case, and something t=
-hat would be really helpful is if the default is to store the object files =
-for the ARCM=3Dum kernel and its .config file in the top-level directory .k=
-unit.   That is, that the default for --build_dir should be .kunit.
-> >>
-> >> Why does this important?  Because  the kernel developer will want to b=
-e running unit tests as well as building kernels that can be run under what=
-ever architecture they are normally developing for (for example, an x86 ker=
-nel that can be run using kvm; or a arm64 kernel that gets run on an Androi=
-d device by using the "fastboot" command).   So that means we don't want to=
- be overwriting the object files and .config files for building the kernel =
-for x86 when building the kunit kernel using the um arch.   For example, fo=
-r ext4, my ideal workflow might go something like this:
-> >
-> > That's a good point.
-> >
-> >> <hack hack hack>
-> >> % ./tools/testing/kunit/kunit.py  run
-> >> <watch to see that unit tests succeed, and since most of the object fi=
-les have already been built for the kunit kernel in be stored in the .kunit=
- directory, this will be fast, since only the modified files will need to b=
-e recompiled>
-> >> % kbuild
-> >> <this is a script that builds an x86 kernel in /build/ext4-64 that is =
-designed to be run under either kvm or in a GCE VM; since the kunit object =
-files are stored in /build/ext4-kunit, the pre-existing files when building=
- for x86_64 haven't been disturbed, so this build is fast as well>
-> >> % kvm-xfstests smoke
-> >> <this will run xfstests using the kernel plucked from /build/ext-64, u=
-sing kvm>
-> >>
-> >> The point is when I'm developing an ext4 feature, or reviewing and mer=
-ging ext4 commits, I need to be able to maintain separate build trees and s=
-eparate config files for ARCH=3Dum as well as ARCH=3Dx86_64, and if the ARC=
-H=3Dum are stored in the kernel sources, then building with O=3D... doesn't=
- work:
-> >>
-> >> <tytso@lambda> {/usr/projects/linux/kunit}   (kunit)
-> >> 1084% make O=3D/build/test-dir
-> >> make[1]: Entering directory '/build/test-dir'
-> >> ***
-> >> *** The source tree is not clean, please run 'make mrproper'
-> >> *** in /usr/projects/linux/kunit
-> >> ***
-> >
-> > Should we maybe drop `--build_dir` in favor of `O`?
+> > Cool, well as long as none of my above points are an issue for you.
+> > Then yes, can you create me a component? I am fine with Tools/KUnit as
+> > the product/category.
 >
-> Yes, preferably be consistent with the rest of the kernel makefiles.
+> Apologies for the delay, mostly due to Thanksgiving in Canada. You should=
+ be able to start using Tools/KUnit now. It uses a default virtual assignee=
+ tools_kunit@kernel-bugs.kernel.org, so to start receiving bugmail for it, =
+please follow instructions on this page:
 
-Alright, probably a good idea to make this change fairly soon then
-before we have to worry about backwards compatibility and such.
+No worries.
+
+>
+> https://korg.wiki.kernel.org/userdoc/bugzilla#to_start_getting_bug_report=
+s_for_a_component
+
+Thanks!
