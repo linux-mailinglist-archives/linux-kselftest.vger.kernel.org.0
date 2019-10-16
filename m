@@ -2,172 +2,97 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EED4D9ABC
-	for <lists+linux-kselftest@lfdr.de>; Wed, 16 Oct 2019 22:04:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82312D9BEC
+	for <lists+linux-kselftest@lfdr.de>; Wed, 16 Oct 2019 22:48:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725797AbfJPUDM (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 16 Oct 2019 16:03:12 -0400
-Received: from mail-pl1-f194.google.com ([209.85.214.194]:37071 "EHLO
-        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725965AbfJPUDM (ORCPT
+        id S2437191AbfJPUsp (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 16 Oct 2019 16:48:45 -0400
+Received: from mail-pf1-f193.google.com ([209.85.210.193]:40943 "EHLO
+        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727156AbfJPUsp (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 16 Oct 2019 16:03:12 -0400
-Received: by mail-pl1-f194.google.com with SMTP id u20so11781950plq.4
-        for <linux-kselftest@vger.kernel.org>; Wed, 16 Oct 2019 13:03:11 -0700 (PDT)
+        Wed, 16 Oct 2019 16:48:45 -0400
+Received: by mail-pf1-f193.google.com with SMTP id x127so129677pfb.7
+        for <linux-kselftest@vger.kernel.org>; Wed, 16 Oct 2019 13:48:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=JX36bcoVDvGPpKT56L/IQCmfHofuMF7ewkrGUc48K60=;
-        b=S3OzJHvQ/jbpxi+w4ta2h9fuet9pvzKeCJL/BynoxfdCTszapvphYqKUAxEJt4Cd5P
-         77hBJAdR88NJF9AO6qHNN6jh7/++8jN4UsdbfxPRjTWpyMZi5iyAS7rWev1SQw2d7yYI
-         kuG3OrjiHzpESxZQ/iPDl081NMpXfB3a6wsSaNu5kzRRJMJe75IdPD4S1MqQFxRHmNvo
-         BWoNTGhf2QuZcTi1dIT6tYHVaJJYgmVU1v2rz8bHTY8KNM8+S/Tws2j4g11lCIqy53Ks
-         G5aLCHdQCvYR6Ty6V9+QIsfWa6h/vdf7QPEkXLR/8KncVAvV/62MTbqVzeiJTbLWCjYQ
-         3hqg==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=tYN7JdwSAE7xHzfhopvvAQjdWh/Lx0v9lAUmGnJ0U1A=;
+        b=P5dHrRuDil3iEngAsHPxvi7wPnXTBVbAKDphzKs+M9AZWEGI5ynkR9mKkQuLOMdM/k
+         Q+QyZbfTgoAeHyWXBRG0hq/B18WnurwtIETFwXPagudINItfLFP5YZBuZk1RRYJ+K08j
+         u5BSYVcQb7HcAewSUaAnCMAv9xUw6sJYVmDPgcFxltqeA/n1DkAEF/dh8/GUhI4Oop6U
+         cYIDoQuzxiShYw8bHKyQcZ3V326qmXQq7VM3V1ICt7VQIqz6JtU9sp5Do1Xfwh0X4Z3/
+         ZQze6T1VnxdRcdz1jWS2Bj9LJFcg74up8LnbChXBEwT9nK2fmR+WaU8IGXF+wYXs6oqz
+         pEpQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=JX36bcoVDvGPpKT56L/IQCmfHofuMF7ewkrGUc48K60=;
-        b=EZ9syRCp1ZGY+f/c2JSglJbnNZplqpAaLqT/aaEIJgiyXaGFNy5tLGuAjrZlH7TKi+
-         U67zqpVt++7oS5WLl2dYbKwQzjuBbtnbGIE+Pu6rG+wYJaCQilW0j/NFgUOMHZOLVyn6
-         qQYHjXqz7dzVJgIInzudmfZtyANushO121Fur6YHWQFxJnc2B2gm7Jmbc+zPc0gw2zhS
-         QCwGb6SPOQCq33UlMexmd3do/liUUhAM1Fm9LClPvY/2lPcsWCxqpXqqXh6ltOlxcEtW
-         8APhTqUpayNXTqOxcaIbog1nfr68+Ndv6G0LKagZqRurGEmeAIKYkxNCqnQc/qUrvVoE
-         Lx9Q==
-X-Gm-Message-State: APjAAAUyKbFWGB8vEqCafMt7pLONVH0hP+WQF9Fg1shG5VoEsnhdJKLr
-        bflY9YbCFsoBbU57VPJiymlB+uZbfLuxvg==
-X-Google-Smtp-Source: APXvYqwzim77PSt3IxfBaBfc7aTaUod4a/+aKNQfcA6ooJ2eV6CEcz5FOdV2/3P065W6TYl7blQqDA==
-X-Received: by 2002:a17:902:a581:: with SMTP id az1mr42046269plb.311.1571256190227;
-        Wed, 16 Oct 2019 13:03:10 -0700 (PDT)
-Received: from google.com ([2620:15c:2cb:1:e90c:8e54:c2b4:29e7])
-        by smtp.gmail.com with ESMTPSA id y144sm29943397pfb.188.2019.10.16.13.03.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Oct 2019 13:03:08 -0700 (PDT)
-Date:   Wed, 16 Oct 2019 13:03:04 -0700
-From:   Brendan Higgins <brendanhiggins@google.com>
-To:     Iurii Zaikin <yzaikin@google.com>
-Cc:     linux-kselftest@vger.kernel.org, linux-ext4@vger.kernel.org,
-        skhan@linuxfoundation.org, tytso@mit.edu, adilger.kernel@dilger.ca,
-        Tim.Bird@sony.com, kunit-dev@googlegroups.com
-Subject: Re: [PATCH linux-kselftest/test v4] ext4: add kunit test for
- decoding extended timestamps
-Message-ID: <20191016200304.GA49718@google.com>
-References: <20191012023757.172770-1-yzaikin@google.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=tYN7JdwSAE7xHzfhopvvAQjdWh/Lx0v9lAUmGnJ0U1A=;
+        b=d4Ws1JrmUtcfO4zpFdRGo2COVqH9Qk6ViOcvW0GJpEXhh8uTKSFXvPyy/gP9apqcOF
+         qx9FeZ2av3Hncyn0UhghXQYJiMg050SbQjRZKXCYZTiXjcMPlCy58Bc7vIbkjl9m0vbo
+         pcIQgnMQwvWgsVD4ZtydvjGET/PLGDYE0/XbVRV4XzLtfZWWwk9uI5y0fxXxa0swRken
+         cH3XIy+vf/2C+D7GcnFEzaU4XDq1wo21TYgedRlcCDseb4XOoeWhHVOOxkK76qZcAvM9
+         zBFXMfAFpEKcTpEYMI2TGBLzV7bsKhmXFE+BmF7mg6O1roPpR8f2zWkYEkjMvdSUJiyJ
+         XDIw==
+X-Gm-Message-State: APjAAAXtF4/50cRRt8rzv8nqvUEmEydxo05x98/UM+9hyQYbvLLzuR9p
+        SST1DEKThkZS3SZzXmiIrgUpAB+vdkxrH5C3IaaZbg==
+X-Google-Smtp-Source: APXvYqwEyDaRLVpiAaixXq0Yn5GYXEushNQETJprRuecNWkYQysHPXYClGXXGmgv1luDfirwbBvejTJl5+GqGtbIH44=
+X-Received: by 2002:a65:6091:: with SMTP id t17mr81764pgu.159.1571258924311;
+ Wed, 16 Oct 2019 13:48:44 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191012023757.172770-1-yzaikin@google.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20191010185631.26541-1-davidgow@google.com> <20191011140727.49160042fafa20d5867f8df7@linux-foundation.org>
+ <CABVgOS=UwWxwD97c6y-XzbLWVhznPjBO3qvQEzX=8jTJ-gBi3A@mail.gmail.com> <20191011145519.7b7a1d16ecdead9bec212c01@linux-foundation.org>
+In-Reply-To: <20191011145519.7b7a1d16ecdead9bec212c01@linux-foundation.org>
+From:   Brendan Higgins <brendanhiggins@google.com>
+Date:   Wed, 16 Oct 2019 13:48:33 -0700
+Message-ID: <CAFd5g46tNs=E5+_H4H9_aSwPJ7XVbCLTUSH6JYmmFK3QxW6Vdg@mail.gmail.com>
+Subject: Re: [PATCH linux-kselftest/test v2] lib/list-test: add a test for the
+ 'list' doubly linked list
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     David Gow <davidgow@google.com>, Shuah Khan <shuah@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Oct 11, 2019 at 07:37:57PM -0700, Iurii Zaikin wrote:
-> KUnit tests for decoding extended 64 bit timestamps
-> that verify the seconds part of [a/c/m]
-> timestamps in ext4 inode structs are decoded correctly.
-> KUnit tests, which run on boot and output
-> the results to the debug log in TAP format (http://testanything.org/).
-> are only useful for kernel devs running KUnit test harness. Not for
-> inclusion into a production build.
-> Test data is derive from the table under
-nit:                ^
-Should be:     derived from ...
-
-> Documentation/filesystems/ext4/inodes.rst Inode Timestamps.
-> 
-> Signed-off-by: Iurii Zaikin <yzaikin@google.com>
-
-Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
-Tested-by: Brendan Higgins <brendanhiggins@google.com>
-
-> ---
->  fs/ext4/Kconfig      |  14 +++
->  fs/ext4/Makefile     |   1 +
->  fs/ext4/inode-test.c | 239 +++++++++++++++++++++++++++++++++++++++++++
->  3 files changed, 254 insertions(+)
->  create mode 100644 fs/ext4/inode-test.c
+On Fri, Oct 11, 2019 at 2:55 PM Andrew Morton <akpm@linux-foundation.org> wrote:
 >
-[...]
-> diff --git a/fs/ext4/inode-test.c b/fs/ext4/inode-test.c
-> new file mode 100644
-> index 000000000000..3b3a453ff382
-> --- /dev/null
-> +++ b/fs/ext4/inode-test.c
-> @@ -0,0 +1,239 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * KUnit test of ext4 inode that verify the seconds part of [a/c/m]
-> + * timestamps in ext4 inode structs are decoded correctly.
-> + */
-> +
-> +#include <kunit/test.h>
-> +#include <linux/kernel.h>
-> +#include <linux/time64.h>
-> +
-> +#include "ext4.h"
-> +
-> +/* binary: 00000000 00000000 00000000 00000000 */
-> +#define LOWER_MSB_0 0L
-> +/* binary: 01111111 11111111 11111111 11111111 */
-> +#define UPPER_MSB_0 0x7fffffffL
-> +/* binary: 10000000 00000000 00000000 00000000 */
-> +#define LOWER_MSB_1 (-0x80000000L)
-> +/* binary: 11111111 11111111 11111111 11111111 */
-> +#define UPPER_MSB_1 (-1L)
-> +/* binary: 00111111 11111111 11111111 11111111 */
-> +#define MAX_NANOSECONDS ((1L << 30) - 1)
-> +
-> +#define CASE_NAME_FORMAT "%s: msb:%x lower_bound:%x extra_bits: %x"
-> +
-> +struct timestamp_expectation {
-> +	const char *test_case_name;
-> +	struct timespec64 expected;
-> +	u32 extra_bits;
-> +	bool msb_set;
-> +	bool lower_bound;
-> +};
-> +
-> +static time64_t get_32bit_time(const struct timestamp_expectation * const test)
-> +{
-> +	if (test->msb_set) {
-> +		if (test->lower_bound)
-> +			return LOWER_MSB_1;
-> +
-> +		return UPPER_MSB_1;
-> +	}
-> +
-> +	if (test->lower_bound)
-> +		return LOWER_MSB_0;
-> +	return UPPER_MSB_0;
-> +}
-> +
-> +
-> +/*
-> + * These tests are derived from the table under
-> + * Documentation/filesystems/ext4/inodes.rst Inode Timestamps
-> + */
-> +static void inode_test_xtimestamp_decoding(struct kunit *test)
-> +{
-> +	const struct timestamp_expectation test_data[] = {
-> +		{
-> +			.test_case_name =
-> +		"1901-12-13 Lower bound of 32bit < 0 timestamp, no extra bits.",
+> On Fri, 11 Oct 2019 14:37:25 -0700 David Gow <davidgow@google.com> wrote:
+>
+> > On Fri, Oct 11, 2019 at 2:05 PM Andrew Morton <akpm@linux-foundation.org> wrote:
+> > >
+> > > <looks at kunit>
+> > >
+> > > Given that everything runs at late_initcall time, shouldn't everything
+> > > be __init, __initdata etc so all the code and data doesn't hang around
+> > > for ever?
+> > >
+> >
+> > That's an interesting point. We haven't done this for KUnit tests to
+> > date, and there is certainly a possibility down the line that we may
+> > want to be able to run these tests in other circumstances. (There's
+> > some work being done to allow KUnit and KUnit tests to be built as
+> > modules here: https://lkml.org/lkml/2019/10/8/628 for example.) Maybe
+> > it'd be worth having macros which wrap __init/__initdata etc as a way
+> > of futureproofing tests against such a change?
+> >
+> > Either way, I suspect this is something that should probably be
+> > considered for KUnit as a whole, rather than on a test-by-test basis.
+>
+> Sure, a new set of macros for this makes sense.  Can be retrofitted any
+> time.
+>
+> There might be a way of loading all of list_test.o into a discardable
+> section at link time instead of sprinkling annotation all over the .c
+> code.
 
-nit: Maybe drop the period at the end (here and elsewhere)? Otherwise if
-the test fails you have a period right next to a colon and it looks a
-bit off.
-
-> +			.msb_set = true,
-> +			.lower_bound = true,
-> +			.extra_bits = 0,
-> +			.expected = {.tv_sec = -0x80000000LL, .tv_nsec = 0L},
-> +		},
-
-Feel free to ignore my nits if you don't need to send another version.
-Also note that Ted has given a Reviewed-by on an earlier revision.
-
-Thanks!
+I created a bug to track this here:
+https://bugzilla.kernel.org/show_bug.cgi?id=205217
