@@ -2,60 +2,71 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FDFFD9468
-	for <lists+linux-kselftest@lfdr.de>; Wed, 16 Oct 2019 16:55:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41736D948C
+	for <lists+linux-kselftest@lfdr.de>; Wed, 16 Oct 2019 16:58:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727054AbfJPOzL (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 16 Oct 2019 10:55:11 -0400
-Received: from outgoing-auth-1.mit.edu ([18.9.28.11]:34631 "EHLO
-        outgoing.mit.edu" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S2404825AbfJPOzL (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 16 Oct 2019 10:55:11 -0400
-Received: from callcc.thunk.org (guestnat-104-133-0-98.corp.google.com [104.133.0.98] (may be forged))
-        (authenticated bits=0)
-        (User authenticated as tytso@ATHENA.MIT.EDU)
-        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id x9GEswGM010588
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 16 Oct 2019 10:54:59 -0400
-Received: by callcc.thunk.org (Postfix, from userid 15806)
-        id 7064D420458; Wed, 16 Oct 2019 10:54:58 -0400 (EDT)
-Date:   Wed, 16 Oct 2019 10:54:58 -0400
-From:   "Theodore Y. Ts'o" <tytso@mit.edu>
-To:     Iurii Zaikin <yzaikin@google.com>
-Cc:     linux-kselftest@vger.kernel.org, linux-ext4@vger.kernel.org,
-        skhan@linuxfoundation.org, adilger.kernel@dilger.ca,
-        Tim.Bird@sony.com, kunit-dev@googlegroups.com,
-        brendanhiggins@google.com
-Subject: Re: [PATCH linux-kselftest/test v3] ext4: add kunit test for
- decoding extended timestamps
-Message-ID: <20191016145458.GA11103@mit.edu>
-References: <20191010235030.143567-1-yzaikin@google.com>
+        id S1731569AbfJPO6T (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 16 Oct 2019 10:58:19 -0400
+Received: from mail.kernel.org ([198.145.29.99]:36996 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2404400AbfJPO6R (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 16 Oct 2019 10:58:17 -0400
+Received: from gandalf.local.home (cpe-66-24-58-225.stny.res.rr.com [66.24.58.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 62DE121A49;
+        Wed, 16 Oct 2019 14:58:16 +0000 (UTC)
+Date:   Wed, 16 Oct 2019 10:58:14 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Miroslav Benes <mbenes@suse.cz>
+Cc:     mingo@redhat.com, jpoimboe@redhat.com, jikos@kernel.org,
+        pmladek@suse.com, joe.lawrence@redhat.com,
+        linux-kernel@vger.kernel.org, live-patching@vger.kernel.org,
+        shuah@kernel.org, kamalesh@linux.vnet.ibm.com,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v3 0/3] ftrace: Introduce PERMANENT ftrace_ops flag
+Message-ID: <20191016105814.2061a106@gandalf.local.home>
+In-Reply-To: <20191016113316.13415-1-mbenes@suse.cz>
+References: <20191016113316.13415-1-mbenes@suse.cz>
+X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191010235030.143567-1-yzaikin@google.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Oct 10, 2019 at 04:50:30PM -0700, Iurii Zaikin wrote:
-> KUnit tests for decoding extended 64 bit timestamps
-> that verify the seconds part of [a/c/m]
-> timestamps in ext4 inode structs are decoded correctly.
-> KUnit tests, which run on boot and output
-> the results to the debug log in TAP format (http://testanything.org/).
-> are only useful for kernel devs running KUnit test harness. Not for
-> inclusion into a production build.
-> Test data is derive from the table under
-> Documentation/filesystems/ext4/inodes.rst Inode Timestamps.
+On Wed, 16 Oct 2019 13:33:12 +0200
+Miroslav Benes <mbenes@suse.cz> wrote:
+
+> Livepatch uses ftrace for redirection to new patched functions. It means
+> that if ftrace is disabled, all live patched functions are disabled as
+> well. Toggling global 'ftrace_enabled' sysctl thus affect it directly.
+> It is not a problem per se, because only administrator can set sysctl
+> values, but it still may be surprising.
 > 
-> Signed-off-by: Iurii Zaikin <yzaikin@google.com>
+> Introduce PERMANENT ftrace_ops flag to amend this. If the
+> FTRACE_OPS_FL_PERMANENT is set on any ftrace ops, the tracing cannot be
+> disabled by disabling ftrace_enabled. Equally, a callback with the flag
+> set cannot be registered if ftrace_enabled is disabled.
+> 
+> v2->v3:
+> - ftrace_enabled explicitly set to true
+> - selftest from Joe Lawrence (I just split it to two patches)
+> - typo fix
+> 
+> v1->v2:
+> - different logic, proposed by Joe Lawrence
+> 
+> Joe Lawrence (2):
+>   selftests/livepatch: Make dynamic debug setup and restore generic
+>   selftests/livepatch: Test interaction with ftrace_enabled
+> 
+> Miroslav Benes (1):
+>   ftrace: Introduce PERMANENT ftrace_ops flag
+> 
 
-This looks good.  Thanks, Iurii!
+Would you like me to take all three patches through my tree?
 
-Reviewed-by: Theodore Ts'o <tytso@mit.edu>
-
-					- Ted
+-- Steve
