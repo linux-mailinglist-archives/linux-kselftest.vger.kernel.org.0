@@ -2,182 +2,94 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5040DD8FA1
-	for <lists+linux-kselftest@lfdr.de>; Wed, 16 Oct 2019 13:33:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6367D9068
+	for <lists+linux-kselftest@lfdr.de>; Wed, 16 Oct 2019 14:07:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2392794AbfJPLd1 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 16 Oct 2019 07:33:27 -0400
-Received: from mx2.suse.de ([195.135.220.15]:35654 "EHLO mx1.suse.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S2391089AbfJPLdW (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 16 Oct 2019 07:33:22 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id 0EBDCB18D;
-        Wed, 16 Oct 2019 11:33:20 +0000 (UTC)
-From:   Miroslav Benes <mbenes@suse.cz>
-To:     rostedt@goodmis.org, mingo@redhat.com, jpoimboe@redhat.com,
-        jikos@kernel.org, pmladek@suse.com, joe.lawrence@redhat.com
-Cc:     linux-kernel@vger.kernel.org, live-patching@vger.kernel.org,
-        shuah@kernel.org, kamalesh@linux.vnet.ibm.com,
-        linux-kselftest@vger.kernel.org, Miroslav Benes <mbenes@suse.cz>
-Subject: [PATCH v3 3/3] selftests/livepatch: Test interaction with ftrace_enabled
-Date:   Wed, 16 Oct 2019 13:33:15 +0200
-Message-Id: <20191016113316.13415-4-mbenes@suse.cz>
-X-Mailer: git-send-email 2.23.0
-In-Reply-To: <20191016113316.13415-1-mbenes@suse.cz>
-References: <20191016113316.13415-1-mbenes@suse.cz>
+        id S2389712AbfJPMHS (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 16 Oct 2019 08:07:18 -0400
+Received: from new4-smtp.messagingengine.com ([66.111.4.230]:38415 "EHLO
+        new4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2389706AbfJPMHS (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 16 Oct 2019 08:07:18 -0400
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 910045D69;
+        Wed, 16 Oct 2019 08:07:17 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute3.internal (MEProxy); Wed, 16 Oct 2019 08:07:17 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kellner.me; h=
+        message-id:subject:from:to:cc:date:in-reply-to:references
+        :content-type:mime-version:content-transfer-encoding; s=mesmtp;
+         bh=OecV6gEzkWN5e1WerUgpDBIBDyqRf7tuFxLChH5uBYw=; b=HBG1SF8OlVit
+        2UIicSdz+6lkUbWl1NWuVxBo/frtAILVRN6DsBSBSyipekvI7tdpLk1pKwie27Xe
+        lZwr+2gY89ueiL2bvAUdfRncA8lGiHxG46I7bO80jF4PcOMlo3sgxruSRMJLBBeC
+        F3/d8nqKyPxPDlfLXncdnPPgZSOcrbY=
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-transfer-encoding:content-type
+        :date:from:in-reply-to:message-id:mime-version:references
+        :subject:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm1; bh=OecV6gEzkWN5e1WerUgpDBIBDyqRf7tuFxLChH5uB
+        Yw=; b=xcBo9jroejYl8mY6mIa9PIgLuAH3RJdgrcsr2nV4iOi+SHHA1aZs/DVFe
+        fFlC+RJ7IT+NJe9dKor3usAYDLK0TVVWxJE7xk0QQbK8yluzb1UIUBHnqX3thZYq
+        Ek8Gva+22OPbe9vQD0OSMgDUv01FitwVXCTtHVcvbs1XFAZqcbc/FNdVqOKbV7cc
+        FvTKFkow+I0H9KPAQ5YqFisddeszKwRvAhxoj4S5qDEKinRWVrpm28VU1m+2RBDn
+        YoepRMPifEokVPvJKORPI4xae5V1rv/odA9+1q/PMd+1ADiI8wVd2ez+4bTxmvQR
+        ltn6qpb94hlx8QRFqjMIY2CS9/JIA==
+X-ME-Sender: <xms:8wenXe68nw3GkRUZ3RmkWMRud10T6gs6LbEi2HFXMxFDTvF8HOpmiw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedufedrjeehgdeglecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefkuffhvfffjghftggfggfgsehtjeertddtreejnecuhfhrohhmpeevhhhrihhs
+    thhirghnucfmvghllhhnvghruceotghhrhhishhtihgrnheskhgvlhhlnhgvrhdrmhgvqe
+    enucfkphepkeelrdduiedrudehfedrudelieenucfrrghrrghmpehmrghilhhfrhhomhep
+    tghhrhhishhtihgrnheskhgvlhhlnhgvrhdrmhgvnecuvehluhhsthgvrhfuihiivgeptd
+X-ME-Proxy: <xmx:8wenXeqV7GIbEj9Bjq-JgNkvIJxa3uAUdV-a7YEU9hbrWWDj8g-t1g>
+    <xmx:8wenXfPw1_8JK3KdLDKfLt-vQZ4rDJntqfpROI47BxHplqq3R9Dr_Q>
+    <xmx:8wenXW2-jVJmeFlvwns0njsG4-Uk2wGahg6j_v6HVWm1lSBLmSGMYA>
+    <xmx:9QenXX1DKwvL2wT8M0aRRGUwtOWvLN9i8a42jzN5bykKjqErZlZ5Qw>
+Received: from hanada.local (cable-89-16-153-196.cust.telecolumbus.net [89.16.153.196])
+        by mail.messagingengine.com (Postfix) with ESMTPA id 965F8D6006C;
+        Wed, 16 Oct 2019 08:07:13 -0400 (EDT)
+Message-ID: <94543e4cc5d8474fd1c534d598bcf277df311690.camel@kellner.me>
+Subject: Re: [PATCH 2/2] test: verify fdinfo for pidfd of reaped process
+From:   Christian Kellner <christian@kellner.me>
+To:     Christian Brauner <christian.brauner@ubuntu.com>,
+        linux-kernel@vger.kernel.org
+Cc:     Shuah Khan <shuah@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>, Michal Hocko <mhocko@suse.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Elena Reshetova <elena.reshetova@intel.com>,
+        Roman Gushchin <guro@fb.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Aleksa Sarai <cyphar@cyphar.com>,
+        "Dmitry V. Levin" <ldv@altlinux.org>,
+        linux-kselftest@vger.kernel.org
+Date:   Wed, 16 Oct 2019 14:07:10 +0200
+In-Reply-To: <20191015141332.4055-2-christian.brauner@ubuntu.com>
+References: <20191015141332.4055-1-christian.brauner@ubuntu.com>
+         <20191015141332.4055-2-christian.brauner@ubuntu.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.32.4 (3.32.4-1.fc30) 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Joe Lawrence <joe.lawrence@redhat.com>
+On Tue, 2019-10-15 at 16:13 +0200, Christian Brauner wrote:
+> Test that the fdinfo field of a pidfd referring to a dead process
+> correctly shows Pid: -1 and NSpid: -1.
+> 
+> Cc: Christian Kellner <christian@kellner.me>
+> Signed-off-by: Christian Brauner <christian.brauner@ubuntu.com>
 
-Since livepatching depends upon ftrace handlers to implement "patched"
-code functionality, verify that the ftrace_enabled sysctl value
-interacts with livepatch registration as expected.  At the same time,
-ensure that ftrace_enabled is set and part of the test environment
-configuration that is saved and restored when running the selftests.
+Looks good to me.
 
-Signed-off-by: Joe Lawrence <joe.lawrence@redhat.com>
-Signed-off-by: Miroslav Benes <mbenes@suse.cz>
----
- tools/testing/selftests/livepatch/Makefile    |  3 +-
- .../testing/selftests/livepatch/functions.sh  | 14 +++-
- .../selftests/livepatch/test-ftrace.sh        | 65 +++++++++++++++++++
- 3 files changed, 80 insertions(+), 2 deletions(-)
- create mode 100755 tools/testing/selftests/livepatch/test-ftrace.sh
+Reviewed-by: Christian Kellner <christian@kellner.me>
 
-diff --git a/tools/testing/selftests/livepatch/Makefile b/tools/testing/selftests/livepatch/Makefile
-index fd405402c3ff..1886d9d94b88 100644
---- a/tools/testing/selftests/livepatch/Makefile
-+++ b/tools/testing/selftests/livepatch/Makefile
-@@ -4,6 +4,7 @@ TEST_PROGS_EXTENDED := functions.sh
- TEST_PROGS := \
- 	test-livepatch.sh \
- 	test-callbacks.sh \
--	test-shadow-vars.sh
-+	test-shadow-vars.sh \
-+	test-ftrace.sh
- 
- include ../lib.mk
-diff --git a/tools/testing/selftests/livepatch/functions.sh b/tools/testing/selftests/livepatch/functions.sh
-index b7e5a67ae434..31eb09e38729 100644
---- a/tools/testing/selftests/livepatch/functions.sh
-+++ b/tools/testing/selftests/livepatch/functions.sh
-@@ -32,12 +32,16 @@ function die() {
- function push_config() {
- 	DYNAMIC_DEBUG=$(grep '^kernel/livepatch' /sys/kernel/debug/dynamic_debug/control | \
- 			awk -F'[: ]' '{print "file " $1 " line " $2 " " $4}')
-+	FTRACE_ENABLED=$(sysctl --values kernel.ftrace_enabled)
- }
- 
- function pop_config() {
- 	if [[ -n "$DYNAMIC_DEBUG" ]]; then
- 		echo -n "$DYNAMIC_DEBUG" > /sys/kernel/debug/dynamic_debug/control
- 	fi
-+	if [[ -n "$FTRACE_ENABLED" ]]; then
-+		sysctl kernel.ftrace_enabled="$FTRACE_ENABLED" &> /dev/null
-+	fi
- }
- 
- function set_dynamic_debug() {
-@@ -47,12 +51,20 @@ function set_dynamic_debug() {
- 		EOF
- }
- 
-+function set_ftrace_enabled() {
-+	local sysctl="$1"
-+	result=$(sysctl kernel.ftrace_enabled="$1" 2>&1 | paste --serial --delimiters=' ')
-+	echo "livepatch: $result" > /dev/kmsg
-+}
-+
- # setup_config - save the current config and set a script exit trap that
- #		 restores the original config.  Setup the dynamic debug
--#		 for verbose livepatching output.
-+#		 for verbose livepatching output and turn on
-+#		 the ftrace_enabled sysctl.
- function setup_config() {
- 	push_config
- 	set_dynamic_debug
-+	set_ftrace_enabled 1
- 	trap pop_config EXIT INT TERM HUP
- }
- 
-diff --git a/tools/testing/selftests/livepatch/test-ftrace.sh b/tools/testing/selftests/livepatch/test-ftrace.sh
-new file mode 100755
-index 000000000000..e2a76887f40a
---- /dev/null
-+++ b/tools/testing/selftests/livepatch/test-ftrace.sh
-@@ -0,0 +1,65 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
-+# Copyright (C) 2019 Joe Lawrence <joe.lawrence@redhat.com>
-+
-+. $(dirname $0)/functions.sh
-+
-+MOD_LIVEPATCH=test_klp_livepatch
-+
-+setup_config
-+
-+
-+# TEST: livepatch interaction with ftrace_enabled sysctl
-+# - turn ftrace_enabled OFF and verify livepatches can't load
-+# - turn ftrace_enabled ON and verify livepatch can load
-+# - verify that ftrace_enabled can't be turned OFF while a livepatch is loaded
-+
-+echo -n "TEST: livepatch interaction with ftrace_enabled sysctl ... "
-+dmesg -C
-+
-+set_ftrace_enabled 0
-+load_failing_mod $MOD_LIVEPATCH
-+
-+set_ftrace_enabled 1
-+load_lp $MOD_LIVEPATCH
-+if [[ "$(cat /proc/cmdline)" != "$MOD_LIVEPATCH: this has been live patched" ]] ; then
-+	echo -e "FAIL\n\n"
-+	die "livepatch kselftest(s) failed"
-+fi
-+
-+set_ftrace_enabled 0
-+if [[ "$(cat /proc/cmdline)" != "$MOD_LIVEPATCH: this has been live patched" ]] ; then
-+	echo -e "FAIL\n\n"
-+	die "livepatch kselftest(s) failed"
-+fi
-+disable_lp $MOD_LIVEPATCH
-+unload_lp $MOD_LIVEPATCH
-+
-+check_result "livepatch: kernel.ftrace_enabled = 0
-+% modprobe $MOD_LIVEPATCH
-+livepatch: enabling patch '$MOD_LIVEPATCH'
-+livepatch: '$MOD_LIVEPATCH': initializing patching transition
-+livepatch: failed to register ftrace handler for function 'cmdline_proc_show' (-16)
-+livepatch: failed to patch object 'vmlinux'
-+livepatch: failed to enable patch '$MOD_LIVEPATCH'
-+livepatch: '$MOD_LIVEPATCH': canceling patching transition, going to unpatch
-+livepatch: '$MOD_LIVEPATCH': completing unpatching transition
-+livepatch: '$MOD_LIVEPATCH': unpatching complete
-+modprobe: ERROR: could not insert '$MOD_LIVEPATCH': Device or resource busy
-+livepatch: kernel.ftrace_enabled = 1
-+% modprobe $MOD_LIVEPATCH
-+livepatch: enabling patch '$MOD_LIVEPATCH'
-+livepatch: '$MOD_LIVEPATCH': initializing patching transition
-+livepatch: '$MOD_LIVEPATCH': starting patching transition
-+livepatch: '$MOD_LIVEPATCH': completing patching transition
-+livepatch: '$MOD_LIVEPATCH': patching complete
-+livepatch: sysctl: setting key \"kernel.ftrace_enabled\": Device or resource busy kernel.ftrace_enabled = 0
-+% echo 0 > /sys/kernel/livepatch/$MOD_LIVEPATCH/enabled
-+livepatch: '$MOD_LIVEPATCH': initializing unpatching transition
-+livepatch: '$MOD_LIVEPATCH': starting unpatching transition
-+livepatch: '$MOD_LIVEPATCH': completing unpatching transition
-+livepatch: '$MOD_LIVEPATCH': unpatching complete
-+% rmmod $MOD_LIVEPATCH"
-+
-+
-+exit 0
--- 
-2.23.0
+
 
