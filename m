@@ -2,61 +2,45 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E7AA1D9C37
-	for <lists+linux-kselftest@lfdr.de>; Wed, 16 Oct 2019 23:05:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B9583D9C38
+	for <lists+linux-kselftest@lfdr.de>; Wed, 16 Oct 2019 23:06:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2437363AbfJPVF5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 16 Oct 2019 17:05:57 -0400
-Received: from mail-pg1-f193.google.com ([209.85.215.193]:32988 "EHLO
-        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2437357AbfJPVF5 (ORCPT
+        id S2437364AbfJPVGA (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 16 Oct 2019 17:06:00 -0400
+Received: from smtp1.linuxfoundation.org ([140.211.169.13]:43434 "EHLO
+        smtp1.linuxfoundation.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2437357AbfJPVGA (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 16 Oct 2019 17:05:57 -0400
-Received: by mail-pg1-f193.google.com with SMTP id i76so15026948pgc.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 16 Oct 2019 14:05:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=qjV7EM47JVSinM4boRo6vuSJwIoQAUJUWrKIe+pEDW4=;
-        b=eelzKIWFNh+gRNtHdk+7M1530iFhX/BUMRNjgmGFuj0gJJ/VrL+bK3BIsLxL6pl4hu
-         JHget8koKzZYtiHF+05Uc2XF7+SndTigrr6/ZWOoXA6ltstxbL9uHBvTHAJ+pVnWW7Vm
-         nal7K3cBXYbIdwQwBz1yV8ApWRP17VQyd+1DW2q5l55Mc8E8NqP8Y2Hfx3TUQFeiYkTP
-         K/WDR8zNQJTw0/dAiu+amP4ZFIotK1dfR2Ts+vfV5pJwdTdoyTbKv4dybETlwMlkTnNJ
-         OOvwuRldl689rJQ4djTKiCPARCAEVN0iS83eC6FBzn7AqR6XYFqhgkwmS/KPbw0Ms5dZ
-         L8qg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=qjV7EM47JVSinM4boRo6vuSJwIoQAUJUWrKIe+pEDW4=;
-        b=QAdRM+POdksjohDQxUYIsw2aHIemlVD/KOB0gH/ukRhTO5t0tNe5P1c1+XvKz7e1X+
-         xijzfFTnQrqVLP/Lx4ZdgX/beQtynWxJChiT7SlmM6WAoQFP/oSEhZk19su77zl4/AO3
-         /W8awyn7FQJDLd0hWtiSpivfrrsm6fSZhKbEJVeSrnrk9W/aKknf0ufvpArXpw8xFJwU
-         v09YQ4GzlE0czG179d2HZzsKYGWyUOzxSqKCsr1htd1HAFV/EanjwHZ9H09jjVhoV2Yl
-         XSjY1RQK5rKSPdcGUW2ItlnrGPkfwbGnGwxpMMdLe+TDZJq1uHxBcwQbSr4BFzb9kaq/
-         ymIA==
-X-Gm-Message-State: APjAAAUVqTSZp9esVUyTv0KaybTTE9IDINs6TzkHZZukdvQYBM9Ey0V9
-        Eb1ZG1NPqMC5wm7UIcIvuevN22y+TJsN4nddUxdduT/1H8I=
-X-Google-Smtp-Source: APXvYqxIZNjmNb+rFuHuwUF2SY13oQd0no+yF6+IiLGl5QlSFcoE6N7wBF0xI74HJ05LKRrIsIG8J004PljLzwpxVUA=
-X-Received: by 2002:a17:90a:2451:: with SMTP id h75mr7570869pje.131.1571259956064;
- Wed, 16 Oct 2019 14:05:56 -0700 (PDT)
-MIME-Version: 1.0
-References: <RT-Ticket-80110@linuxfoundation> <20191002215351.GA177672@google.com>
+        Wed, 16 Oct 2019 17:06:00 -0400
+Received: from rt.cvo.linuxfoundation.org (rt.cvo.linuxfoundation.org [172.17.192.131])
+        by smtp1.linuxfoundation.org (Postfix) with ESMTPS id 4CEBD8A9;
+        Wed, 16 Oct 2019 21:05:59 +0000 (UTC)
+Received: by rt.cvo.linuxfoundation.org (Postfix, from userid 48)
+        id 463EEE57; Wed, 16 Oct 2019 21:05:59 +0000 (UTC)
+Subject: Re: [Kernel.org Helpdesk #80110] Bugzilla Component for KUnit?
+From:   "brendanhiggins@google.com via RT" 
+        <kernel-helpdesk@rt.linuxfoundation.org>
+Reply-To: kernel-helpdesk@rt.linuxfoundation.org
+In-Reply-To: <CAFd5g44=MXf+nnYwaRg4eHYPQtfTo-KgH2z2+G=FA16xoUf-hg@mail.gmail.com>
+References: <RT-Ticket-80110@linuxfoundation>
+ <20191002215351.GA177672@google.com>
  <rt-4.4.0-12639-1570215347-1334.80110-6-0@linuxfoundation>
  <CAFd5g45OmXTpUubLv9kwNXGc0+KNLjLj9tmw=qoEzvQVsWqGkw@mail.gmail.com>
- <rt-4.4.0-14627-1570483310-1693.80110-6-0@linuxfoundation> <rt-4.4.0-13264-1571170451-794.80110-6-0@linuxfoundation>
-In-Reply-To: <rt-4.4.0-13264-1571170451-794.80110-6-0@linuxfoundation>
-From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Wed, 16 Oct 2019 14:05:44 -0700
-Message-ID: <CAFd5g44=MXf+nnYwaRg4eHYPQtfTo-KgH2z2+G=FA16xoUf-hg@mail.gmail.com>
-Subject: Re: [Kernel.org Helpdesk #80110] Bugzilla Component for KUnit?
-To:     kernel-helpdesk@rt.linuxfoundation.org
-Cc:     KUnit Development <kunit-dev@googlegroups.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+ <rt-4.4.0-14627-1570483310-1693.80110-6-0@linuxfoundation>
+ <rt-4.4.0-13264-1571170451-794.80110-6-0@linuxfoundation>
+ <CAFd5g44=MXf+nnYwaRg4eHYPQtfTo-KgH2z2+G=FA16xoUf-hg@mail.gmail.com>
+Message-ID: <rt-4.4.0-13264-1571259959-1468.80110-6-0@linuxfoundation>
+X-RT-Loop-Prevention: linuxfoundation.org
+X-RT-Ticket: linuxfoundation.org #80110
+X-Managed-BY: RT 4.4.0 (http://www.bestpractical.com/rt/)
+X-RT-Originator: brendanhiggins@google.com
+CC:     kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="utf-8"
+X-RT-Original-Encoding: utf-8
+Date:   Wed, 16 Oct 2019 17:05:59 -0400
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
@@ -117,15 +101,12 @@ On Tue, Oct 15, 2019 at 1:14 PM Konstantin Ryabitsev via RT
 > > Then yes, can you create me a component? I am fine with Tools/KUnit as
 > > the product/category.
 >
-> Apologies for the delay, mostly due to Thanksgiving in Canada. You should=
- be able to start using Tools/KUnit now. It uses a default virtual assignee=
- tools_kunit@kernel-bugs.kernel.org, so to start receiving bugmail for it, =
-please follow instructions on this page:
+> Apologies for the delay, mostly due to Thanksgiving in Canada. You should be able to start using Tools/KUnit now. It uses a default virtual assignee tools_kunit@kernel-bugs.kernel.org, so to start receiving bugmail for it, please follow instructions on this page:
 
 No worries.
 
 >
-> https://korg.wiki.kernel.org/userdoc/bugzilla#to_start_getting_bug_report=
-s_for_a_component
+> https://korg.wiki.kernel.org/userdoc/bugzilla#to_start_getting_bug_reports_for_a_component
 
 Thanks!
+
