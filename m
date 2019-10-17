@@ -2,44 +2,44 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B680ADB592
-	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Oct 2019 20:09:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 24866DB589
+	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Oct 2019 20:08:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2437997AbfJQSJ0 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 17 Oct 2019 14:09:26 -0400
-Received: from aserp2120.oracle.com ([141.146.126.78]:58382 "EHLO
-        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2395417AbfJQSJZ (ORCPT
+        id S2395430AbfJQSIQ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 17 Oct 2019 14:08:16 -0400
+Received: from userp2130.oracle.com ([156.151.31.86]:33952 "EHLO
+        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2395417AbfJQSIQ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 17 Oct 2019 14:09:25 -0400
-Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
-        by aserp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x9HI4A6o143655;
-        Thu, 17 Oct 2019 18:08:03 GMT
+        Thu, 17 Oct 2019 14:08:16 -0400
+Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
+        by userp2130.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x9HI4cTL161556;
+        Thu, 17 Oct 2019 18:07:59 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references; s=corp-2019-08-05;
- bh=R7ga5CIYQVpUkfRKUAEufFb82t96tNzBlSD59pwtVOo=;
- b=q1nmY7kgncqSrJdGS/gSa00vifHZBQhk0fZ8oUVWKM+kfp8EvWeKVNqFNQ9lu+i0RJpu
- QxcmB7rieEhAC0kpMBuDvRnJjRvKF0BxcamuIrwluSP+/Xdh0uCjqtP2xYHg0uwGh3iy
- 450envKAK+HrXueDLwtkoY1FzjnDXYkzw0k4JLOsyY86DAP0ewjPGB+GkolMMq903DEZ
- 2I2NHisWyV/wlbHvn9HNv3iGZWW80Kmb3KWPX2N5AZAZ/OYRrPQgw3liteNGx7+MjfWE
- lWUMaQ3JejjYhfJpZtNkKF/xmhNB/D4dyFarfIH+cfPpsn3BC9VFmvQOkY46ixBzZxiQ kQ== 
-Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
-        by aserp2120.oracle.com with ESMTP id 2vk6sr051p-1
+ bh=uSEqo1vwzdjctc96LUNCD5ybeWnPpZ9dSMDULQK9zAI=;
+ b=ChcLJCkVNG6Ap9oj9/s302DKsvV+w8wUg/0Wq7hNc+kLy4O48SwF3b0eFkzqHquudFjH
+ AQvaAGi1+KWhR0FBqRK5C67kByMYd0jsTfdWXpHm/UIhpDuuqnwrem2vAODL/k3TPuJB
+ bu2X65hLP0+Z3AjbOHO1Je/X/ii0p4a65pt3BMpmAJzGAUFhbLm5y8Ty6XgN+Knn9nQR
+ Uf3vMuU3pO4y+xl4dIEmxrYJ5t58M7wgfxBO0a4dF5Mn+7F9+VDv3r86tHrze2j6wXRQ
+ VsyJtRAnwjvTuogtpiMDN8kHbNiKh1Y94DQiSEQBvAMcspVZO/tiXYSVM8Jr37GrPcW1 Hw== 
+Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
+        by userp2130.oracle.com with ESMTP id 2vk68v052g-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 17 Oct 2019 18:08:03 +0000
-Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
-        by aserp3030.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x9HI80kh178282;
-        Thu, 17 Oct 2019 18:08:02 GMT
+        Thu, 17 Oct 2019 18:07:59 +0000
+Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
+        by userp3020.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x9HI7uSV041991;
+        Thu, 17 Oct 2019 18:07:59 GMT
 Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
-        by aserp3030.oracle.com with ESMTP id 2vpcm3bvpx-1
+        by userp3020.oracle.com with ESMTP id 2vpf14dv69-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 17 Oct 2019 18:08:02 +0000
+        Thu, 17 Oct 2019 18:07:58 +0000
 Received: from abhmp0002.oracle.com (abhmp0002.oracle.com [141.146.116.8])
-        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id x9HI7mWV021886;
-        Thu, 17 Oct 2019 18:07:48 GMT
+        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id x9HI7rFx021918;
+        Thu, 17 Oct 2019 18:07:53 GMT
 Received: from dhcp-10-175-161-223.vpn.oracle.com (/10.175.161.223)
         by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Thu, 17 Oct 2019 18:07:44 +0000
+        with ESMTP ; Thu, 17 Oct 2019 18:07:53 +0000
 From:   Alan Maguire <alan.maguire@oracle.com>
 To:     brendanhiggins@google.com, linux-kselftest@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
@@ -49,22 +49,23 @@ Cc:     linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
         penguin-kernel@i-love.sakura.ne.jp, schowdary@nvidia.com,
         urezki@gmail.com, andriy.shevchenko@linux.intel.com,
         corbet@lwn.net, linux-doc@vger.kernel.org,
-        Alan Maguire <alan.maguire@oracle.com>
-Subject: [PATCH v3 linux-kselftest-test 2/6] kunit: hide unexported try-catch interface in try-catch-impl.h
-Date:   Thu, 17 Oct 2019 19:07:15 +0100
-Message-Id: <1571335639-21675-3-git-send-email-alan.maguire@oracle.com>
+        Alan Maguire <alan.maguire@oracle.com>,
+        Knut Omang <knut.omang@oracle.com>
+Subject: [PATCH v3 linux-kselftest-test 3/6] kunit: add kunit_find_symbol() function for symbol lookup
+Date:   Thu, 17 Oct 2019 19:07:16 +0100
+Message-Id: <1571335639-21675-4-git-send-email-alan.maguire@oracle.com>
 X-Mailer: git-send-email 1.8.3.1
 In-Reply-To: <1571335639-21675-1-git-send-email-alan.maguire@oracle.com>
 References: <1571335639-21675-1-git-send-email-alan.maguire@oracle.com>
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9413 signatures=668684
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=3 malwarescore=0
- phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=999
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=11 malwarescore=0
+ phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=774
  adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.0.1-1908290000 definitions=main-1910170164
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9413 signatures=668684
 X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
- suspectscore=3 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
- lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
+ suspectscore=11 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
+ lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=851 adultscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1908290000
  definitions=main-1910170163
 Sender: linux-kselftest-owner@vger.kernel.org
@@ -72,109 +73,115 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-also remove unused kunit_generic_try_catch
+In preparation for module support for kunit and kunit tests,
+we need a way of retrieving non-exported symbols from the
+core kernel and modules.  kunit_find_symbol() supports this.
 
 Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
+Signed-off-by: Knut Omang <knut.omang@oracle.com>
 ---
- include/kunit/try-catch.h  | 10 ----------
- lib/kunit/test-test.c      |  1 +
- lib/kunit/test.c           |  1 +
- lib/kunit/try-catch-impl.h | 23 +++++++++++++++++++++++
- lib/kunit/try-catch.c      |  1 +
- 5 files changed, 26 insertions(+), 10 deletions(-)
- create mode 100644 lib/kunit/try-catch-impl.h
+ include/kunit/test.h  |  8 ++++++++
+ lib/kunit/test-test.c | 19 +++++++++++++++++++
+ lib/kunit/test.c      | 36 ++++++++++++++++++++++++++++++++++++
+ 3 files changed, 63 insertions(+)
 
-diff --git a/include/kunit/try-catch.h b/include/kunit/try-catch.h
-index 404f336..c507dd4 100644
---- a/include/kunit/try-catch.h
-+++ b/include/kunit/try-catch.h
-@@ -53,11 +53,6 @@ struct kunit_try_catch {
- 	void *context;
- };
+diff --git a/include/kunit/test.h b/include/kunit/test.h
+index dba4830..c645d18 100644
+--- a/include/kunit/test.h
++++ b/include/kunit/test.h
+@@ -339,6 +339,14 @@ static inline void *kunit_kzalloc(struct kunit *test, size_t size, gfp_t gfp)
  
--void kunit_try_catch_init(struct kunit_try_catch *try_catch,
--			  struct kunit *test,
--			  kunit_try_catch_func_t try,
--			  kunit_try_catch_func_t catch);
--
- void kunit_try_catch_run(struct kunit_try_catch *try_catch, void *context);
+ void kunit_cleanup(struct kunit *test);
  
- void __noreturn kunit_try_catch_throw(struct kunit_try_catch *try_catch);
-@@ -67,9 +62,4 @@ static inline int kunit_try_catch_get_result(struct kunit_try_catch *try_catch)
- 	return try_catch->try_result;
- }
++/**
++ * kunit_find_symbol() - lookup un-exported symbol in kernel or modules.
++ * @sym: symbol name.
++ *
++ * Returns symbol or ERR_PTR value on error.
++ */
++void *kunit_find_symbol(const char *sym);
++
+ #define kunit_printk(lvl, test, fmt, ...) \
+ 	printk(lvl "\t# %s: " fmt, (test)->name, ##__VA_ARGS__)
  
--/*
-- * Exposed for testing only.
-- */
--void kunit_generic_try_catch_init(struct kunit_try_catch *try_catch);
--
- #endif /* _KUNIT_TRY_CATCH_H */
 diff --git a/lib/kunit/test-test.c b/lib/kunit/test-test.c
-index 5ebe059..c4162a9 100644
+index c4162a9..7f09dd0 100644
 --- a/lib/kunit/test-test.c
 +++ b/lib/kunit/test-test.c
-@@ -6,6 +6,7 @@
-  * Author: Brendan Higgins <brendanhiggins@google.com>
-  */
- #include <kunit/test.h>
-+#include "try-catch-impl.h"
- 
- struct kunit_try_catch_test_context {
- 	struct kunit_try_catch *try_catch;
+@@ -330,3 +330,22 @@ static void kunit_resource_test_exit(struct kunit *test)
+ 	.test_cases = kunit_resource_test_cases,
+ };
+ kunit_test_suite(kunit_resource_test_suite);
++
++/*
++ * Find non-exported kernel symbol; we use the modules list as a safe
++ * choice that should always be present.
++ */
++static void kunit_find_symbol_kernel(struct kunit *test)
++{
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, kunit_find_symbol("modules"));
++}
++
++static struct kunit_case kunit_find_symbol_test_cases[] = {
++	KUNIT_CASE(kunit_find_symbol_kernel),
++};
++
++static struct kunit_suite kunit_find_symbol_test_suite = {
++	.name = "kunit-find-symbol",
++	.test_cases = kunit_find_symbol_test_cases,
++};
++kunit_test_suite(kunit_find_symbol_test_suite);
 diff --git a/lib/kunit/test.c b/lib/kunit/test.c
-index 017d4fb..49ac5fe 100644
+index 49ac5fe..a2b1b46 100644
 --- a/lib/kunit/test.c
 +++ b/lib/kunit/test.c
-@@ -11,6 +11,7 @@
+@@ -8,6 +8,7 @@
+ 
+ #include <kunit/test.h>
+ #include <kunit/try-catch.h>
++#include <linux/kallsyms.h>
  #include <linux/kernel.h>
  #include <linux/sched/debug.h>
  #include "string-stream-impl.h"
-+#include "try-catch-impl.h"
- 
- static void kunit_set_failure(struct kunit *test)
- {
-diff --git a/lib/kunit/try-catch-impl.h b/lib/kunit/try-catch-impl.h
-new file mode 100644
-index 0000000..aa11e46
---- /dev/null
-+++ b/lib/kunit/try-catch-impl.h
-@@ -0,0 +1,23 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
+@@ -478,3 +479,38 @@ void kunit_cleanup(struct kunit *test)
+ 		kunit_resource_free(test, resource);
+ 	}
+ }
++
 +/*
-+ * An API to allow a function, that may fail, to be executed, and recover in a
-+ * controlled manner.
-+ *
-+ * Copyright (C) 2019, Google LLC.
-+ * Author: Brendan Higgins <brendanhiggins@google.com>
++ * Support for looking up kernel/module internal symbols to enable testing.
 + */
++void *kunit_find_symbol(const char *sym)
++{
++	unsigned long (*modlookup)(const char *name);
++	unsigned long addr = 0;
 +
-+#ifndef _KUNIT_TRY_CATCH_IMPL_H
-+#define _KUNIT_TRY_CATCH_IMPL_H
++	if (!sym || strlen(sym) > KSYM_NAME_LEN)
++		return ERR_PTR(-EINVAL);
 +
-+#include <kunit/try-catch.h>
-+#include <linux/types.h>
++	/*
++	 * Try for kernel-internal symbol first; fall back to modules
++	 * if that fails.
++	 */
++	addr = kallsyms_lookup_name(sym);
++	if (addr)
++		return (void *)addr;
++	modlookup = (void *)kallsyms_lookup_name("module_kallsyms_lookup_name");
++	if (modlookup)
++		addr = modlookup(sym);
++	if (addr)
++		return (void *)addr;
 +
-+struct kunit;
-+
-+void kunit_try_catch_init(struct kunit_try_catch *try_catch,
-+			  struct kunit *test,
-+			  kunit_try_catch_func_t try,
-+			  kunit_try_catch_func_t catch);
-+
-+#endif /* _KUNIT_TRY_CATCH_IMPL_H */
-diff --git a/lib/kunit/try-catch.c b/lib/kunit/try-catch.c
-index 55686839..0c4c90c 100644
---- a/lib/kunit/try-catch.c
-+++ b/lib/kunit/try-catch.c
-@@ -13,6 +13,7 @@
- #include <linux/kernel.h>
- #include <linux/kthread.h>
- #include <linux/sched/sysctl.h>
-+#include "try-catch-impl.h"
- 
- void __noreturn kunit_try_catch_throw(struct kunit_try_catch *try_catch)
- {
++#ifndef CONFIG_KALLSYMS_ALL
++	WARN_ONCE(true,
++		  "CONFIG_KALLSYMS_ALL is not set, so unexported symbols like '%s' are not available\n",
++		  sym);
++	return ERR_PTR(-ENOTSUPP);
++#else
++	WARN_ONCE(true, "symbol '%s' is not available\n", sym);
++#endif
++	return ERR_PTR(-ENOENT);
++}
 -- 
 1.8.3.1
 
