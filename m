@@ -2,21 +2,21 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 18D59DA9B3
-	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Oct 2019 12:19:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1564CDA9C6
+	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Oct 2019 12:19:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2408771AbfJQKTE (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 17 Oct 2019 06:19:04 -0400
-Received: from youngberry.canonical.com ([91.189.89.112]:36455 "EHLO
+        id S2501940AbfJQKTY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 17 Oct 2019 06:19:24 -0400
+Received: from youngberry.canonical.com ([91.189.89.112]:36454 "EHLO
         youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2408768AbfJQKTE (ORCPT
+        with ESMTP id S1731515AbfJQKTE (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
         Thu, 17 Oct 2019 06:19:04 -0400
 Received: from [185.81.136.22] (helo=localhost.localdomain)
         by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
         (Exim 4.86_2)
         (envelope-from <christian.brauner@ubuntu.com>)
-        id 1iL2ry-0007tP-TL; Thu, 17 Oct 2019 10:18:59 +0000
+        id 1iL2s0-0007tP-S3; Thu, 17 Oct 2019 10:19:01 +0000
 From:   Christian Brauner <christian.brauner@ubuntu.com>
 To:     oleg@redhat.com, linux-kernel@vger.kernel.org
 Cc:     aarcange@redhat.com, akpm@linux-foundation.org,
@@ -26,12 +26,13 @@ Cc:     aarcange@redhat.com, akpm@linux-foundation.org,
         mhocko@suse.com, mingo@kernel.org, peterz@infradead.org,
         shuah@kernel.org, tglx@linutronix.de, viro@zeniv.linux.org.uk,
         Christian Brauner <christian.brauner@ubuntu.com>
-Subject: [PATCH v3 1/5] pidfd: check pid has attached task in fdinfo
-Date:   Thu, 17 Oct 2019 12:18:28 +0200
-Message-Id: <20191017101832.5985-1-christian.brauner@ubuntu.com>
+Subject: [PATCH v3 2/5] test: verify fdinfo for pidfd of reaped process
+Date:   Thu, 17 Oct 2019 12:18:29 +0200
+Message-Id: <20191017101832.5985-2-christian.brauner@ubuntu.com>
 X-Mailer: git-send-email 2.23.0
-In-Reply-To: <20191016153606.2326-1-christian.brauner@ubuntu.com>
+In-Reply-To: <20191017101832.5985-1-christian.brauner@ubuntu.com>
 References: <20191016153606.2326-1-christian.brauner@ubuntu.com>
+ <20191017101832.5985-1-christian.brauner@ubuntu.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
@@ -39,112 +40,167 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Currently, when a task is dead we still print the pid it used to use in
-the fdinfo files of its pidfds. This doesn't make much sense since the
-pid may have already been reused. So verify that the task is still alive
-by introducing the pid_has_task() helper which will be used by other
-callers in follow-up patches.
-If the task is not alive anymore, we will print -1. This allows us to
-differentiate between a task not being present in a given pid namespace
-- in which case we already print 0 - and a task having been reaped.
+Test that the fdinfo field of a pidfd referring to a dead process
+correctly shows Pid: -1 and NSpid: -1.
 
-Note that this uses PIDTYPE_PID for the check. Technically, we could've
-checked PIDTYPE_TGID since pidfds currently only refer to thread-group
-leaders but if they won't anymore in the future then this check becomes
-problematic without it being immediately obvious to non-experts imho. If
-a thread is created via clone(CLONE_THREAD) than struct pid has a single
-non-empty list pid->tasks[PIDTYPE_PID] and this pid can't be used as a
-PIDTYPE_TGID meaning pid->tasks[PIDTYPE_TGID] will return NULL even
-though the thread-group leader might still be very much alive. So
-checking PIDTYPE_PID is fine and is easier to maintain should we ever
-allow pidfds to refer to threads.
-
-Cc: Jann Horn <jannh@google.com>
 Cc: Christian Kellner <christian@kellner.me>
-Cc: linux-api@vger.kernel.org
+Cc: linux-kselftest@vger.kernel.org
+Reviewed-by: Christian Kellner <christian@kellner.me>
 Signed-off-by: Christian Brauner <christian.brauner@ubuntu.com>
-Reviewed-by: Oleg Nesterov <oleg@redhat.com>
 ---
 /* pidfd selftests */
 passed
 
 /* v1 */
-Link: https://lore.kernel.org/r/20191015141332.4055-1-christian.brauner@ubuntu.com
+Link: https://lore.kernel.org/r/20191015141332.4055-2-christian.brauner@ubuntu.com
 
 /* v2 */
-Link: https://lore.kernel.org/r/20191016153606.2326-1-christian.brauner@ubuntu.com
-- Oleg Nesterov <oleg@redhat.com>:
-  - simplify check whether task is still alive to hlist_empty()
-  - optionally introduce generic helper to replace open coded
-    hlist_emtpy() checks whether or not a task is alive
-- Christian Brauner <christian.brauner@ubuntu.com>:
-  - introduce task_alive() helper and use in pidfd_show_fdinfo()
+Link: https://lore.kernel.org/r/20191016153606.2326-2-christian.brauner@ubuntu.com
+unchanged
 
 /* v3 */
-- Oleg Nesterov <oleg@redhat.com>:
-  - s/task_alive/pid_has_task/g
-- Christian Brauner <christian.brauner@ubuntu.com>:
-  - reword commit message to better reflect naming switch from
-    task_alive() to pid_has_task()
+unchanged
 ---
- include/linux/pid.h |  4 ++++
- kernel/fork.c       | 17 +++++++++++------
- 2 files changed, 15 insertions(+), 6 deletions(-)
+ .../selftests/pidfd/pidfd_fdinfo_test.c       | 59 ++++++++++++++-----
+ 1 file changed, 45 insertions(+), 14 deletions(-)
 
-diff --git a/include/linux/pid.h b/include/linux/pid.h
-index 9645b1194c98..034e3cd60dc0 100644
---- a/include/linux/pid.h
-+++ b/include/linux/pid.h
-@@ -85,6 +85,10 @@ static inline struct pid *get_pid(struct pid *pid)
+diff --git a/tools/testing/selftests/pidfd/pidfd_fdinfo_test.c b/tools/testing/selftests/pidfd/pidfd_fdinfo_test.c
+index 3721be994abd..22558524f71c 100644
+--- a/tools/testing/selftests/pidfd/pidfd_fdinfo_test.c
++++ b/tools/testing/selftests/pidfd/pidfd_fdinfo_test.c
+@@ -113,11 +113,15 @@ static struct child clone_newns(int (*fn)(void *), void *args,
+ 	return ret;
+ }
  
- extern void put_pid(struct pid *pid);
- extern struct task_struct *pid_task(struct pid *pid, enum pid_type);
-+static inline bool pid_has_task(struct pid *pid, enum pid_type type)
++static inline void child_close(struct child *child)
 +{
-+	return !hlist_empty(&pid->tasks[type]);
++	close(child->fd);
 +}
- extern struct task_struct *get_pid_task(struct pid *pid, enum pid_type);
- 
- extern struct pid *get_task_pid(struct task_struct *task, enum pid_type type);
-diff --git a/kernel/fork.c b/kernel/fork.c
-index 782986962d47..ffa314838b43 100644
---- a/kernel/fork.c
-+++ b/kernel/fork.c
-@@ -1732,15 +1732,20 @@ static int pidfd_release(struct inode *inode, struct file *file)
-  */
- static void pidfd_show_fdinfo(struct seq_file *m, struct file *f)
- {
--	struct pid_namespace *ns = proc_pid_ns(file_inode(m->file));
- 	struct pid *pid = f->private_data;
--	pid_t nr = pid_nr_ns(pid, ns);
-+	struct pid_namespace *ns;
-+	pid_t nr = -1;
- 
--	seq_put_decimal_ull(m, "Pid:\t", nr);
-+	if (likely(pid_has_task(pid, PIDTYPE_PID))) {
-+		ns = proc_pid_ns(file_inode(m->file));
-+		nr = pid_nr_ns(pid, ns);
-+	}
 +
-+	seq_put_decimal_ll(m, "Pid:\t", nr);
+ static inline int child_join(struct child *child, struct error *err)
+ {
+ 	int r;
  
- #ifdef CONFIG_PID_NS
--	seq_put_decimal_ull(m, "\nNSpid:\t", nr);
--	if (nr) {
-+	seq_put_decimal_ll(m, "\nNSpid:\t", nr);
-+	if (nr > 0) {
- 		int i;
+-	(void)close(child->fd);
+ 	r = wait_for_pid(child->pid);
+ 	if (r < 0)
+ 		error_set(err, PIDFD_ERROR, "waitpid failed (ret %d, errno %d)",
+@@ -128,6 +132,12 @@ static inline int child_join(struct child *child, struct error *err)
+ 	return r;
+ }
  
- 		/* If nr is non-zero it means that 'pid' is valid and that
-@@ -1749,7 +1754,7 @@ static void pidfd_show_fdinfo(struct seq_file *m, struct file *f)
- 		 * Start at one below the already printed level.
- 		 */
- 		for (i = ns->level + 1; i <= pid->level; i++)
--			seq_put_decimal_ull(m, "\t", pid->numbers[i].nr);
-+			seq_put_decimal_ll(m, "\t", pid->numbers[i].nr);
++static inline int child_join_close(struct child *child, struct error *err)
++{
++	child_close(child);
++	return child_join(child, err);
++}
++
+ static inline void trim_newline(char *str)
+ {
+ 	char *pos = strrchr(str, '\n');
+@@ -136,8 +146,8 @@ static inline void trim_newline(char *str)
+ 		*pos = '\0';
+ }
+ 
+-static int verify_fdinfo_nspid(int pidfd, struct error *err,
+-			       const char *expect, ...)
++static int verify_fdinfo(int pidfd, struct error *err, const char *prefix,
++			 size_t prefix_len, const char *expect, ...)
+ {
+ 	char buffer[512] = {0, };
+ 	char path[512] = {0, };
+@@ -160,17 +170,20 @@ static int verify_fdinfo_nspid(int pidfd, struct error *err,
+ 				 pidfd);
+ 
+ 	while (getline(&line, &n, f) != -1) {
+-		if (strncmp(line, "NSpid:", 6))
++		char *val;
++
++		if (strncmp(line, prefix, prefix_len))
+ 			continue;
+ 
+ 		found = 1;
+ 
+-		r = strcmp(line + 6, buffer);
++		val = line + prefix_len;
++		r = strcmp(val, buffer);
+ 		if (r != 0) {
+ 			trim_newline(line);
+ 			trim_newline(buffer);
+-			error_set(err, PIDFD_FAIL, "NSpid: '%s' != '%s'",
+-				  line + 6, buffer);
++			error_set(err, PIDFD_FAIL, "%s '%s' != '%s'",
++				  prefix, val, buffer);
+ 		}
+ 		break;
  	}
- #endif
- 	seq_putc(m, '\n');
+@@ -179,8 +192,8 @@ static int verify_fdinfo_nspid(int pidfd, struct error *err,
+ 	fclose(f);
+ 
+ 	if (found == 0)
+-		return error_set(err, PIDFD_FAIL, "NSpid not found for fd %d",
+-				 pidfd);
++		return error_set(err, PIDFD_FAIL, "%s not found for fd %d",
++				 prefix, pidfd);
+ 
+ 	return PIDFD_PASS;
+ }
+@@ -213,7 +226,7 @@ static int child_fdinfo_nspid_test(void *args)
+ 	}
+ 
+ 	pidfd = *(int *)args;
+-	r = verify_fdinfo_nspid(pidfd, &err, "\t0\n");
++	r = verify_fdinfo(pidfd, &err, "NSpid:", 6, "\t0\n");
+ 
+ 	if (r != PIDFD_PASS)
+ 		ksft_print_msg("NSpid fdinfo check failed: %s\n", err.msg);
+@@ -242,24 +255,42 @@ static void test_pidfd_fdinfo_nspid(void)
+ 	/* The children will have pid 1 in the new pid namespace,
+ 	 * so the line must be 'NSPid:\t<pid>\t1'.
+ 	 */
+-	verify_fdinfo_nspid(a.fd, &err, "\t%d\t%d\n", a.pid, 1);
+-	verify_fdinfo_nspid(b.fd, &err, "\t%d\t%d\n", b.pid, 1);
++	verify_fdinfo(a.fd, &err, "NSpid:", 6, "\t%d\t%d\n", a.pid, 1);
++	verify_fdinfo(b.fd, &err, "NSpid:", 6, "\t%d\t%d\n", b.pid, 1);
+ 
+ 	/* wait for the process, check the exit status and set
+ 	 * 'err' accordingly, if it is not already set.
+ 	 */
++	child_join_close(&a, &err);
++	child_join_close(&b, &err);
++
++	error_report(&err, test_name);
++}
++
++static void test_pidfd_dead_fdinfo(void)
++{
++	struct child a;
++	struct error err = {0, };
++	const char *test_name = "pidfd check fdinfo for dead process";
++
++	/* Create a new child in a new pid and mount namespace */
++	a = clone_newns(child_fdinfo_nspid_test, NULL, &err);
++	error_check(&err, test_name);
+ 	child_join(&a, &err);
+-	child_join(&b, &err);
+ 
++	verify_fdinfo(a.fd, &err, "Pid:", 4, "\t-1\n");
++	verify_fdinfo(a.fd, &err, "NSpid:", 6, "\t-1\n");
++	child_close(&a);
+ 	error_report(&err, test_name);
+ }
+ 
+ int main(int argc, char **argv)
+ {
+ 	ksft_print_header();
+-	ksft_set_plan(1);
++	ksft_set_plan(2);
+ 
+ 	test_pidfd_fdinfo_nspid();
++	test_pidfd_dead_fdinfo();
+ 
+ 	return ksft_exit_pass();
+ }
 -- 
 2.23.0
 
