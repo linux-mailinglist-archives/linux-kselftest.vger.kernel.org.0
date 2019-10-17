@@ -2,167 +2,176 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A5E66DB9E7
-	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Oct 2019 00:51:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6287EDB9F0
+	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Oct 2019 00:56:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2441619AbfJQWvb (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 17 Oct 2019 18:51:31 -0400
-Received: from mail-il1-f196.google.com ([209.85.166.196]:37577 "EHLO
-        mail-il1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2438612AbfJQWva (ORCPT
+        id S2438181AbfJQW4v (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 17 Oct 2019 18:56:51 -0400
+Received: from outgoing-auth-1.mit.edu ([18.9.28.11]:45783 "EHLO
+        outgoing.mit.edu" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S2389846AbfJQW4v (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 17 Oct 2019 18:51:30 -0400
-Received: by mail-il1-f196.google.com with SMTP id l12so3746688ilq.4
-        for <linux-kselftest@vger.kernel.org>; Thu, 17 Oct 2019 15:51:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=/eF/L3m73e+e1oQsDpVEkuWHj3baK6hMXuTSH0BtWMA=;
-        b=VOnh4QxHOkSB/aw6xuc4s2CW/EmlVg6shi8Vepao5j5TUeNZ/0Q6MBunp97DOYuO8Z
-         lqRSovVOI8nWSlUE2Xcc+jOs8iCqdhc7QQwhAVGO92Bywg8YWmUJNfgeMbQ4TZalYuHZ
-         H1ZrclA8HFOcApR60QFv7rgaOjdHkJ7JvGw1Q=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=/eF/L3m73e+e1oQsDpVEkuWHj3baK6hMXuTSH0BtWMA=;
-        b=QfuXCSQ47YjF3dq+Rut1cXj6d1SZ54OmNZo1lOqb9JTEaQmnfZKfBq805b2MvqVHS8
-         bgPuKcxMMBQH/MXf8Wp9fPjZI3n3Mcv6XsPXj5/rxHGRbjAXyjSKBJPB6+5nvHjRxRBs
-         uJKvBCAPXOo4WxVn9hE1b0KRLjVhgsRE6t7NcObtpOUbdVF67I5b3YwAwWqi0axOaBhF
-         TAI+PSiinxSIGD8sWAwtjlzk+XwLWXUHXQuxYxEMLIH/Xq5OqO6TghMW2ZiIfzWl4wFC
-         hDPRJRpJjWyZLnLW/1fZ0dccIUaioZ5jUs6G6CmI4AQWYtbbv3GS7DVtt8ssnFmm1vsN
-         y6uA==
-X-Gm-Message-State: APjAAAW1/xOXKC2IXXfI+9hfA4Xt7fnA8Gs1mE2N+2eKB+d/NoiIFJAq
-        OUvWdmiO02c+H+JgCzuM5pVckw==
-X-Google-Smtp-Source: APXvYqwg26CF9upmlevG8JNy+vFcQXWOUpGE5JAzgz0/XPmngcr3LqkRmJOakfbKR22lkLCFEB48ww==
-X-Received: by 2002:a92:1d5c:: with SMTP id d89mr6407901ild.94.1571352689406;
-        Thu, 17 Oct 2019 15:51:29 -0700 (PDT)
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id m9sm1677403ilc.44.2019.10.17.15.51.28
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 17 Oct 2019 15:51:28 -0700 (PDT)
-Subject: Re: [PATCH v2] selftests: Add kselftest-all and kselftest-install
- targets
-To:     Michael Ellerman <mpe@ellerman.id.au>,
-        yamada.masahiro@socionext.com, michal.lkml@markovi.net,
-        shuah@kernel.org
-Cc:     linux-kbuild@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20190926224014.28910-1-skhan@linuxfoundation.org>
- <87sgnttpoq.fsf@mpe.ellerman.id.au>
- <adcfcda4-c36e-c222-4964-f83b5f3d0097@linuxfoundation.org>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <7d8056fe-ddb3-1831-d18f-deed4e0d3a76@linuxfoundation.org>
-Date:   Thu, 17 Oct 2019 16:51:27 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        Thu, 17 Oct 2019 18:56:51 -0400
+Received: from callcc.thunk.org (guestnat-104-133-0-98.corp.google.com [104.133.0.98] (may be forged))
+        (authenticated bits=0)
+        (User authenticated as tytso@ATHENA.MIT.EDU)
+        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id x9HMub5s002010
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 17 Oct 2019 18:56:38 -0400
+Received: by callcc.thunk.org (Postfix, from userid 15806)
+        id 6D338420458; Thu, 17 Oct 2019 18:56:37 -0400 (EDT)
+Date:   Thu, 17 Oct 2019 18:56:37 -0400
+From:   "Theodore Y. Ts'o" <tytso@mit.edu>
+To:     Tim.Bird@sony.com
+Cc:     skhan@linuxfoundation.org, brendanhiggins@google.com,
+        yzaikin@google.com, linux-kselftest@vger.kernel.org,
+        linux-ext4@vger.kernel.org, adilger.kernel@dilger.ca,
+        kunit-dev@googlegroups.com
+Subject: Re: [PATCH linux-kselftest/test v2] ext4: add kunit test for
+ decoding extended timestamps
+Message-ID: <20191017225637.GB6371@mit.edu>
+References: <20191010023931.230475-1-yzaikin@google.com>
+ <2f2ea7b0-f683-1cdd-f3f2-ecdf44cb4a97@linuxfoundation.org>
+ <CAAXuY3qtSHENgy3S168_03ju_JwAucOAt5WEJGQ+pi5PfurP6g@mail.gmail.com>
+ <CAFd5g46RcFV0FACuoF=jCSLzf7UFmEYn4gddaijUZ+zR_CFZBQ@mail.gmail.com>
+ <20191011131902.GC16225@mit.edu>
+ <CAFd5g45s1-=Z4JwJn4A1VDGu4oEGBisQ_0RFp4otUU3rKf1XpQ@mail.gmail.com>
+ <1e6611e6-2fa6-6f7d-bc7f-0bc2243d9342@linuxfoundation.org>
+ <20191017120833.GA25548@mit.edu>
+ <ECADFF3FD767C149AD96A924E7EA6EAF977D0023@USCULXMSG01.am.sony.com>
 MIME-Version: 1.0
-In-Reply-To: <adcfcda4-c36e-c222-4964-f83b5f3d0097@linuxfoundation.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ECADFF3FD767C149AD96A924E7EA6EAF977D0023@USCULXMSG01.am.sony.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 10/16/19 10:08 AM, Shuah Khan wrote:
-> On 10/15/19 8:00 PM, Michael Ellerman wrote:
->> Hi Shuah,
->>
->> I know this has been merged already, so this is just FYI and in case it
->> helps anyone else who's tracking down build failures.
->>
+On Thu, Oct 17, 2019 at 10:25:35PM +0000, Tim.Bird@sony.com wrote:
 > 
-> Thanks for letting me know. I have been sending updates about
-> breakages. Will send an update with this info.
+> I'm not sure I have the entire context here, but I think deterministic
+> might not be the right word, or it might not capture the exact meaning
+> intended.
 > 
->> Sorry I didn't reply before you merged it, I was on leave.
->>
->> Shuah Khan <skhan@linuxfoundation.org> writes:
->>> Add kselftest-all target to build tests from the top level
->>> Makefile. This is to simplify kselftest use-cases for CI and
->>> distributions where build and test systems are different.
->>>
->>> Current kselftest target builds and runs tests on a development
->>> system which is a developer use-case.
->>>
->>> Add kselftest-install target to install tests from the top level
->>> Makefile. This is to simplify kselftest use-cases for CI and
->>> distributions where build and test systems are different.
->>>
->>> This change addresses requests from developers and testers to add
->>> support for installing kselftest from the main Makefile.
->>>
->>> In addition, make the install directory the same when install is
->>> run using "make kselftest-install" or by running kselftest_install.sh.
->>> Also fix the INSTALL_PATH variable conflict between main Makefile and
->>> selftests Makefile.
->> ...
->>> diff --git a/tools/testing/selftests/Makefile 
->>> b/tools/testing/selftests/Makefile
->>> index c3feccb99ff5..bad18145ed1a 100644
->>> --- a/tools/testing/selftests/Makefile
->>> +++ b/tools/testing/selftests/Makefile
->>> @@ -171,9 +171,12 @@ run_pstore_crash:
->>>   # 1. output_dir=kernel_src
->>>   # 2. a separate output directory is specified using O= KBUILD_OUTPUT
->>>   # 3. a separate output directory is specified using KBUILD_OUTPUT
->>> +# Avoid conflict with INSTALL_PATH set by the main Makefile
->>>   #
->>> -INSTALL_PATH ?= $(BUILD)/install
->>> -INSTALL_PATH := $(abspath $(INSTALL_PATH))
->>> +KSFT_INSTALL_PATH ?= $(BUILD)/kselftest_install
->>
->> This change broke all my CI, because the tests no longer install in the
->> place it's expecting them :/
->>
-> 
-> Sorry about that.
-> 
->> I can fix it by explicitly specifying the install path in my CI scripts.
->>
->>> +KSFT_INSTALL_PATH := $(abspath $(KSFT_INSTALL_PATH))
->>> +# Avoid changing the rest of the logic here and lib.mk.
->>> +INSTALL_PATH := $(KSFT_INSTALL_PATH)
->>
-> 
-> 
-> I searched all the selftests Makefiles for it and convinced myself that,
-> the above would take care of it for these cases. I searched powerpc
-> Makefiles so this doesn't break it. Didn't think about the CI.
-> 
-> android/Makefile:    mkdir -p $(INSTALL_PATH)
-> android/Makefile:    install -t $(INSTALL_PATH) $(TEST_PROGS) 
-> $(TEST_PROGS_EXTENDED) $(TEST_FILES)
-> android/Makefile:        $(MAKE) OUTPUT=$$BUILD_TARGET -C $$SUBDIR 
-> INSTALL_PATH=$(INSTALL_PATH)/$$SUBDIR install; \
-> futex/Makefile:    mkdir -p $(INSTALL_PATH)
-> futex/Makefile:    install -t $(INSTALL_PATH) $(TEST_PROGS) 
-> $(TEST_PROGS_EXTENDED) $(TEST_FILES)
-> futex/Makefile:        $(MAKE) OUTPUT=$$BUILD_TARGET -C $$SUBDIR 
-> INSTALL_PATH=$(INSTALL_PATH)/$$SUBDIR install; \
-> sparc64/Makefile:    mkdir -p $(INSTALL_PATH)
-> sparc64/Makefile:    install -t $(INSTALL_PATH) $(TEST_PROGS) 
-> $(TEST_PROGS_EXTENDED) $(TEST_FILES)
-> sparc64/Makefile:        $(MAKE) OUTPUT=$$BUILD_TARGET -C $$SUBDIR 
-> INSTALL_PATH=$(INSTALL_PATH)/$$SUBDIR install; \
-> 
-> 
->> But because the over-rideable variable changed from INSTALL_PATH to
->> KSFT_INSTALL_PATH I will need to export both of them in order for my CI
->> to work with old and new kernels.
-> 
-> My mistake. I overlooked that this could be overridden and could
-> be in used in CI scripts.
-> 
->>
+> I think there are multiple issues here:
+>  1. Does the test enclose all its data, including working data and expected results?
+> Or, does the test allow someone to provide working data?  This
+> alternative implies that either the some of testcases or the results
+> might be different depending on the data that is provided.  IMHO the
+> test would be deterministic if it always produced the same results
+> based on the same data inputs.  And if the input data was
+> deterministic.  I would call this a data-driven test.
 
-Can you send me your CI script for testing my changes? I also want
-to make sure I don't break your CI again.
+Do you mean that the tester would provide the test data at the time
+when they launch the test?  I don't think that would *ever* be
+considered a unit test.
 
-thanks,
--- Shuah
+My definition of a unit test is something which runs quickly so you
+can do make some quick edits, and then run something like "make
+check", and find out whether or not you've made any screw ups.  Or it
+might get used in an automated way, such that immediately after I push
+to a Gerrit server, tests *automatically* get run, and within a minute
+or two, I get notified if there are any test failures, and a -1 review
+is automatically posted to the proposed change in the Web UI.
+
+So this is not the sort of thing where the human will be providing
+working data to change how the test behaves.  The idea is that you
+type "make check", and hundreds of tests run, sanity checking basic
+functional soundness of the changes which were just made.
+
+Unit tests also tend to run on small pieces of code --- for example,
+in how we encode 64-bit timestamps in ext4, to provide both 100ns
+granularity timestamps as well as post-2038 encoding, where the "low"
+32-bits are backwards compatible with traditional 32-bit time_t's.  It
+turns doing this is complicated, and it's easy to screw it up (and in
+fact, we have).  So now we have a set of unit tests for it.
+
+The unit tests use a lot of reusable infrastructure, so that while
+there are a series of tests to test each of the various different
+boundary conditions, they are *driven* by test data.  So for example,
+this is a test...
+
+		{
+			.test_case_name =
+	  "2174-02-25 Lower bound of 32bit <0 timestamp, hi extra sec bit on.",
+			.msb_set = true,
+			.lower_bound = true,
+			.extra_bits =  2,
+			.expected = {.tv_sec = 0x180000000LL, .tv_nsec = 0L},
+		},
+
+
+... and this is a different test....
+
+		{
+			.test_case_name =
+"2310-04-04 Upper bound of 32bit>=0 timestamp, hi extra sec bit 1. 1 ns bit 1.",
+			.msb_set = false,
+			.lower_bound = false,
+			.extra_bits = 6,
+			.expected = {.tv_sec = 0x27fffffffLL, .tv_nsec = 1L},
+		},
+
+So yes, it's very data-driven.  *But* all of the code, data, and
+expected results are all encapsulated in fs/ext4/inode-test.c.
+
+So when you say, "does the test allow someone to provide working
+data", it's unclear what you mean by that.  How do you expect a user
+to provide the working data?  And how do you make the test easy to
+run?
+
+> 2. Does the test automatically detect some attribute of the system,
+> and adjust its operation based on that (does the test probe?)  This
+> is actually quite common if you include things like when a test
+> requires root access to run.  Sometimes such tests, when run without
+> root privilege, run as many testcases as possible not as root, and
+> skip the testcases that require root.
+
+And if the test needs to do this, it's *automatically* not a unit
+test.  It might be an integration test.  xfstests fall very squarely
+into into that category.  Integration tests are heavier-weight.
+You're not going to run them as lightly as you run unit tests, because
+they take more resources, and more wall clock time before you get
+results.
+
+One of the main point of unit tests is that they are testing units of
+code smaller than "the whole kernel".  When I'm testing how 64-bit
+timestamps are encoding, "root" has no meaning, because the scope of
+the test doesn't even really include the concept of a process, or user
+privileges.
+
+One of the other advantages of unit tests is that sometimes it's much
+easier to test the corner cases of some internal abstraction because
+you can have test mocks which are can simulate conditions which would
+be very hard to simulate if you are running userspace code which can
+talk to the kernel only via the system call interface.
+
+> The reason I want get clarity on the issue of data-driven tests is
+> that I think data-driven tests and tests that probe are very much
+> desirable.  This allows a test to be able to be more generalized and
+> allows for specialization of the test for more scenarios without
+> re-coding it.  I'm not sure if this still qualifies as unit testing,
+> but it's very useful as a means to extend the value of a test.  We
+> haven't trod into the mocking parts of kunit, but I'm hoping that it
+> may be possible to have that be data-driven (depending on what's
+> being mocked), to make it easier to test more things using the same
+> code.
+
+So does this distinction help?
+
+If you need to do things which involve system calls and whether the
+system calls are run as root, it seems to me that the existing
+kselftest infrastructure is the right thing to do.  If you are
+interested in testing code below (and in some cases *well* below) the
+system call interface, then kunit is the right approach.
+
+I'd encourage you to take a look at Iiuri's fs/ext4/inode-test.c.  As
+you can see, it is very data-driven.  But it is also, at the same
+time, very self-contained, and which can be easily run, and run very
+quickly.
+
+Cheers,
+
+						- Ted
