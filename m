@@ -2,125 +2,77 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A340DCAE7
-	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Oct 2019 18:21:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19677DCAF6
+	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Oct 2019 18:25:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2394122AbfJRQVk (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 18 Oct 2019 12:21:40 -0400
-Received: from mail-pf1-f195.google.com ([209.85.210.195]:33645 "EHLO
-        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727154AbfJRQVk (ORCPT
+        id S2437274AbfJRQZq (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 18 Oct 2019 12:25:46 -0400
+Received: from outgoing-auth-1.mit.edu ([18.9.28.11]:59526 "EHLO
+        outgoing.mit.edu" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S2395015AbfJRQZq (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 18 Oct 2019 12:21:40 -0400
-Received: by mail-pf1-f195.google.com with SMTP id q10so4214045pfl.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 18 Oct 2019 09:21:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=c9JZSN8H5620nC3cCVnr8OExnXCrnEqW30bH/LbdEfE=;
-        b=DgdGU2GAaFqAGEyR6yogfhMtyiU68YPIS/csqCeEevD9VGx73H6IkY/qviecY9dqMd
-         ITbjbFn45CElylafIln2kjPFW3CQq0Lll9BQgGQdIBHSwE2wYqUA9/v5dAcW8xrYKrCw
-         x5uMd0yIWCJHwvseujAAeRvHoxsK9MEhLtd7k=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=c9JZSN8H5620nC3cCVnr8OExnXCrnEqW30bH/LbdEfE=;
-        b=Za9SVUri2CWSxfPv7HH4ELyv8BWaj1L8BLAMo2X0zZ+0G79AMG88XUc2rXCRFmujZ/
-         Fpx+tIhnBjqFc8U5ZaSAT1k5DWKYrySgUYzitjACHJ+i+noKiomIbPi7tPOJbFeCPU6p
-         6rGQmcaleaqw38XGBlk5HiDBj0/2eRH3T9mYyPkBYZKoZobVKmgYR69Vbg3UqNYxqmIX
-         KAqg0jqsYIk9U/Aw62ojJSbtznBWOgr0Au8AJ4O5UN637ymOS8nF6r+xbMBnVFU64LQB
-         u4VjL7HP6qp8W/F2IZcfDwL/ZDorDYdVayz6hXrA2TaCy31OF4e8Ger6N0se7YnyTUcs
-         wtlg==
-X-Gm-Message-State: APjAAAUjQE8al+DFJPr6n5Puv6HRZSErFB+QvPFTHvvW/lJeoBEAg9U4
-        2qAMGaRqm2J8I7gHMRrTaxmD8Pt3/a4=
-X-Google-Smtp-Source: APXvYqy6qfro9wiwqwP6E9JIe01QZjE+u/6bN8FlTN/OpmnGLQFMB1X7f/Fy45W0Z9yAU592vaaBUw==
-X-Received: by 2002:aa7:87d9:: with SMTP id i25mr7945294pfo.244.1571415699752;
-        Fri, 18 Oct 2019 09:21:39 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id i6sm7008102pfq.20.2019.10.18.09.21.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Oct 2019 09:21:38 -0700 (PDT)
-Date:   Fri, 18 Oct 2019 09:21:37 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Liu Yiding <liuyd.fnst@cn.fujitsu.com>
-Cc:     linux-kselftest@vger.kernel.org,
-        Prabhakar Kushwaha <prabhakar.pkin@gmail.com>,
-        Shuah Khan <skhan@linuxfoundation.org>
-Subject: Re: [Bug report] "make run_tests -C bpf" hanging forever
-Message-ID: <201910180919.B3D3618@keescook>
-References: <d08b43ee-6a21-c9aa-ea7b-9465ecbad772@cn.fujitsu.com>
+        Fri, 18 Oct 2019 12:25:46 -0400
+Received: from callcc.thunk.org (guestnat-104-133-0-98.corp.google.com [104.133.0.98] (may be forged))
+        (authenticated bits=0)
+        (User authenticated as tytso@ATHENA.MIT.EDU)
+        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id x9IGPKlL018043
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 18 Oct 2019 12:25:20 -0400
+Received: by callcc.thunk.org (Postfix, from userid 15806)
+        id D1513420458; Fri, 18 Oct 2019 12:25:19 -0400 (EDT)
+Date:   Fri, 18 Oct 2019 12:25:19 -0400
+From:   "Theodore Y. Ts'o" <tytso@mit.edu>
+To:     Brendan Higgins <brendanhiggins@google.com>
+Cc:     shuah@kernel.org, john.johansen@canonical.com, jmorris@namei.org,
+        serge@hallyn.com, keescook@chromium.org, alan.maguire@oracle.com,
+        yzaikin@google.com, davidgow@google.com, mcgrof@kernel.org,
+        linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-kselftest@vger.kernel.org,
+        Mike Salvatore <mike.salvatore@canonical.com>
+Subject: Re: [PATCH linux-kselftest/test v1] apparmor: add AppArmor KUnit
+ tests for policy unpack
+Message-ID: <20191018162519.GH21137@mit.edu>
+References: <20191018001816.94460-1-brendanhiggins@google.com>
+ <20191018004307.GA95597@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <d08b43ee-6a21-c9aa-ea7b-9465ecbad772@cn.fujitsu.com>
+In-Reply-To: <20191018004307.GA95597@google.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Oct 18, 2019 at 02:32:15PM +0800, Liu Yiding wrote:
-> Hi All.
+On Thu, Oct 17, 2019 at 05:43:07PM -0700, Brendan Higgins wrote:
+> > +config SECURITY_APPARMOR_TEST
+> > +	bool "Build KUnit tests for policy_unpack.c"
+> > +	default n
+> > +	depends on KUNIT && SECURITY_APPARMOR
 > 
-> The patch 5c069b6dedef "selftests: Move test output to diagnostic lines"
-> from Apr 24, 2019,
-> 
-> leads to `make run_tests -C bpf` hanging forever.
+> Ted, here is an example where doing select on direct dependencies is
+> tricky because SECURITY_APPARMOR has a number of indirect dependencies.
 
-I can't even run this, the autodetection seems broken. I have BPF and
-libelf installed....
+Well, that could be solved by adding a select on all of the indirect
+dependencies.  I did get your point about the fact that we could have
+cases where the indirect dependencies might conflict with one another.
+That's going to be a tough situation regardless of whether we have a
+sat-solver or a human who has to struggle with that situation.
 
-$ make run_tests -C bpf
-[...]
+It's also going to be a bit sad because it means that we won't be able
+to create a single config that could be used to run all the kunit
+tests when a user pushes a change to a Gerrit server for review.  :-/
 
-Auto-detecting system features:
-...                        libelf: [ OFF ]
-...                           bpf: [ OFF ]
+I suppose that if we use a strict definition of "unit tests", and we
+assume that all of the tests impacted by a change in foo/bar/baz.c
+will be found in foo/bar/baz-test.c, or maybe foo/bar/*-test.c, we can
+automate the generation of the kunitconfig file, perhaps?
 
+The other sad bit about having mutually exclusive config options is
+that we can't easily "run all KUinit tests" for some kind of test
+spinner or zero-day bot.
 
-Auto-detecting system features:
-...                        libelf: [ OFF ]
-...                           bpf: [ OFF ]
+I'm not sure there's a good solution to that issue, though.
 
-No libelf found
-Makefile:269: recipe for target 'elfdep' failed
-make[2]: *** [elfdep] Error 1
-Makefile:154: recipe for target 'all' failed
-make[1]: *** [all] Error 2
-
-
-> Bpf includes many subtest, when cmd `make run_tests -C bpf` runs to
-> test_lwt_seg6local.sh, task will hang and runner.sh never run next task. I
-> checked ps aux, prefix.pl will never exit.
-> 
-> ```
-> 
-> 91058 [  811.451584] # [25] VAR __license type_id=24 linkage=1
-> 91059 [  811.451586]-
-> 91060 [  811.455365] # [26] DATASEC license size=0 vlen=1 size == 0
-> 91061 [  811.455367]-
-> 91062 [  811.457424] #-
-> 91063 [  811.457425]-
-> 91064 [  811.460912] # selftests: test_lwt_seg6local [PASS]
-> 91065 [  811.460914]-
-> 91066 [ 3620.461986] Thu Oct 17 14:54:05 CST 2019 detected soft_timeout
-> 
-> ```
-> 
-> Ignore test_lwt_seg6local and run `make run_tests -C bpf` again, task will
-> hang on test_tc_tunnel.sh.
-> 
-> 
-> Kushwaha also meet this issue, `make run_tests -C bpf` hang on
-> test_lwt_ip_encap.sh (This test failed on my localhost).
-
-If it keeps hanging on progressively later tests, it sounds like some
-kind of stdout/stderr flushing (or reading) is missing. This is hard for
-me to debug without understanding how to have the kernel tree notice my
-installed libraries, though.
-
--- 
-Kees Cook
+    	     	       	    	     - Ted
