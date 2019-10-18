@@ -2,88 +2,129 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D369FDC537
-	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Oct 2019 14:43:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B2BEDC7FE
+	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Oct 2019 17:02:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2633905AbfJRMnt (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 18 Oct 2019 08:43:49 -0400
-Received: from mail-pf1-f194.google.com ([209.85.210.194]:36655 "EHLO
-        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2633904AbfJRMnt (ORCPT
+        id S2634269AbfJRPCB (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 18 Oct 2019 11:02:01 -0400
+Received: from mail-io1-f66.google.com ([209.85.166.66]:40875 "EHLO
+        mail-io1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2392463AbfJRPCB (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 18 Oct 2019 08:43:49 -0400
-Received: by mail-pf1-f194.google.com with SMTP id y22so3836557pfr.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 18 Oct 2019 05:43:49 -0700 (PDT)
+        Fri, 18 Oct 2019 11:02:01 -0400
+Received: by mail-io1-f66.google.com with SMTP id h144so7803232iof.7
+        for <linux-kselftest@vger.kernel.org>; Fri, 18 Oct 2019 08:01:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=rf1k4aH6pGXHyw4Vf7G+DEOsQsspC5wAfrN8l4/WXa8=;
+        b=QsE45iLwbEbjm9alKUoHQ5KiBWFNeKHvGC7MZoo5QK6TF5RZrm7qDugjwK+QBXEP9f
+         SYPTiOkbl2geZsidXbZ+EBLPBxevhnIO5BYDJ5mTmgRTMze5xlTrJZuh68wk5zjQv7Qj
+         feeLhcjEvxhNe/SyZT0iDD5fZck38SR6YvxnM=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=QQzOsGAK4+NWRE1MfYzxWb4i0nQItqLfWq1omSmlY+M=;
-        b=S4m2zamdEsmGWbOSp9a/obpn8N7A1A6sl+wRozGOI2P0jpnCWVx2CzSrz91lke5gKK
-         6euGkvPUbS21lEoX4mZ1qQvvBY3lq9upUE+3rmSKji418eB+kUvtG7mZZCaiJLwRrOkg
-         eOPu+NbeKxg7Y09nMnPLwmF36Bd2igrPeFZ7Lw1PFooBlgAXSj6mhhKdoAO/ieENuMU2
-         W1kzpFeGPzRBil2qjVOx/x3qEvkqe8aMAT5teOycOg4Iel79fk6obf2QxMMTl8hNxU4x
-         Iw6BxpIxmo/+Kp0DbFReDsOxZlvFYXerEn6DdSuYHZbIlzvcPmitQLsvWE4Gp49xjczl
-         lRFA==
-X-Gm-Message-State: APjAAAUR+x4r/isohrse1LS1ViJplVZJ1iQtwLNmUnvEXHH1mGBwAV4z
-        lHD/eDCC2zpw7olvEy3FzNU=
-X-Google-Smtp-Source: APXvYqw0l2AIHK35ndyzROwxrQboKcI8M2I/H805JYZoPs0fQhFkYoYOvMsYRq4xhzxcX0npnbinXw==
-X-Received: by 2002:a63:6581:: with SMTP id z123mr10112023pgb.367.1571402628511;
-        Fri, 18 Oct 2019 05:43:48 -0700 (PDT)
-Received: from 42.do-not-panic.com (42.do-not-panic.com. [157.230.128.187])
-        by smtp.gmail.com with ESMTPSA id v2sm5673459pgf.39.2019.10.18.05.43.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Oct 2019 05:43:47 -0700 (PDT)
-Received: by 42.do-not-panic.com (Postfix, from userid 1000)
-        id 8EF9D4042C; Fri, 18 Oct 2019 12:43:46 +0000 (UTC)
-Date:   Fri, 18 Oct 2019 12:43:46 +0000
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Brendan Higgins <brendanhiggins@google.com>
-Cc:     Theodore Ts'o <theodore.tso@gmail.com>, shuah <shuah@kernel.org>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>, David Gow <davidgow@google.com>
-Subject: Re: kunit.py should default to --build_dir=.kunit
-Message-ID: <20191018124346.GE11244@42.do-not-panic.com>
-References: <c99604e5-2ea4-4075-9a39-470104298368@googlegroups.com>
- <CAFd5g46+OMmP8mYsH8vcpMpdOeYryp=1Lsab4Hy6pAhWjX5-4Q@mail.gmail.com>
- <551223d0-7712-41df-90f2-3ca3da301435@googlegroups.com>
- <CAFd5g44EE3A3kXOFQD5vMOXZoJ_PzD=h9dac+KJmgxeXUycJGQ@mail.gmail.com>
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=rf1k4aH6pGXHyw4Vf7G+DEOsQsspC5wAfrN8l4/WXa8=;
+        b=f1CEEIw62ux8WT/riNheIyEojeUAZsTrelFIneJwAfR8Q9vwe8KH1uE3d+90TZbBBS
+         UQbt5y1XqiJ9maOwa6APQ24Mazkwj+y6hLvztBt7zQd8ZmLSoDMGkzmBXku0yLJcEl/Z
+         zWO2f8C8ThJMKHp2vpaPlHcvOjQkSgNvoKGJnuPI436vinMRtBH/2UM00eXHMPEDgcXa
+         3odDNQX0AENa23k+4z41IWpu3e3KrW6nZB4BCDW/0VHqXkJXXBXcEI8K9bSU80xFN3ly
+         yCdQZ9+y7wf438hSRV8wO8CKN3YBTPd5B2irduFNd6MtjG6bHfIfeZyg3gw8I1Wz6ZLr
+         E27w==
+X-Gm-Message-State: APjAAAWL8Aqae0xqbQHCVsZRuWM3LBd3jiHxHfwejKAr6MhsiIncgDuf
+        hJ2EOMFAIy0A2FKbRhYiUAKmpg==
+X-Google-Smtp-Source: APXvYqyVggSKLFN0a9z2oDMfhpqptfLGN/5xX+9itsUizTIAYkCHFppAOyZ+3kDUaSs1/6sfbdH70Q==
+X-Received: by 2002:a5d:8d8f:: with SMTP id b15mr6827219ioj.296.1571410919279;
+        Fri, 18 Oct 2019 08:01:59 -0700 (PDT)
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
+        by smtp.gmail.com with ESMTPSA id a26sm1857968iot.46.2019.10.18.08.01.57
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 18 Oct 2019 08:01:58 -0700 (PDT)
+Subject: Re: [Bug report] "make run_tests -C bpf" hanging forever
+To:     Prabhakar Kushwaha <prabhakar.pkin@gmail.com>,
+        Liu Yiding <liuyd.fnst@cn.fujitsu.com>,
+        Kees Cook <keescook@chromium.org>
+Cc:     linux-kselftest@vger.kernel.org, Philip Li <philip.li@intel.com>,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <d08b43ee-6a21-c9aa-ea7b-9465ecbad772@cn.fujitsu.com>
+ <05dbae1d-05de-8360-5f3c-a698d4dc3226@cn.fujitsu.com>
+ <CAJ2QiJKvUXjC+Ejad3eGiaY8F-UVSnWUPyvbZ46LkE7k0kaZZQ@mail.gmail.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <5a1ffb6f-7c1e-42d9-5927-f46f9b41bc4f@linuxfoundation.org>
+Date:   Fri, 18 Oct 2019 09:01:57 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAFd5g44EE3A3kXOFQD5vMOXZoJ_PzD=h9dac+KJmgxeXUycJGQ@mail.gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <CAJ2QiJKvUXjC+Ejad3eGiaY8F-UVSnWUPyvbZ46LkE7k0kaZZQ@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Oct 16, 2019 at 02:02:52PM -0700, Brendan Higgins wrote:
-> Shuah's solution was just to use CONFIG fragments in the meantime
-> similar to what kselftest already does. I was leaning in that
-> direction since kselftest already does that and we know that it works.
+On 10/18/19 12:56 AM, Prabhakar Kushwaha wrote:
+> On Fri, Oct 18, 2019 at 12:12 PM Liu Yiding <liuyd.fnst@cn.fujitsu.com> wrote:
+>>
+>> CC LKP mainter
+>>
+>>
+>> On 10/18/19 2:32 PM, Liu Yiding wrote:
+>>> Hi All.
+>>>
+>>> The patch 5c069b6dedef "selftests: Move test output to diagnostic
+>>> lines" from Apr 24, 2019,
+>>>
+>>> leads to `make run_tests -C bpf` hanging forever.
+>>>
+>>>
+>>> Bpf includes many subtest, when cmd `make run_tests -C bpf` runs to
+>>> test_lwt_seg6local.sh, task will hang and runner.sh never run next
+>>> task. I checked ps aux, prefix.pl will never exit.
+>>>
+>>> ```
+>>>
+>>> 91058 [  811.451584] # [25] VAR __license type_id=24 linkage=1
+>>> 91059 [  811.451586]-
+>>> 91060 [  811.455365] # [26] DATASEC license size=0 vlen=1 size == 0
+>>> 91061 [  811.455367]-
+>>> 91062 [  811.457424] #-
+>>> 91063 [  811.457425]-
+>>> 91064 [  811.460912] # selftests: test_lwt_seg6local [PASS]
+>>> 91065 [  811.460914]-
+>>> 91066 [ 3620.461986] Thu Oct 17 14:54:05 CST 2019 detected soft_timeout
+>>>
+>>> ```
+>>>
+>>> Ignore test_lwt_seg6local and run `make run_tests -C bpf` again, task
+>>> will hang on test_tc_tunnel.sh.
+>>>
+>>>
+>>> Kushwaha also meet this issue, `make run_tests -C bpf` hang on
+>>> test_lwt_ip_encap.sh (This test failed on my localhost).
+>>>
 > 
-> Shuah, Luis, does this still match what you have been thinking?
+> Yes, i also faced this issue on Linux-5.3. if i kill prefix.pl or add
+> timeout in prefix.pl, test move ahead.
+> 
+> somehow this issue is not present on Linux 5.4-rc3+. It could be by
+> chance and may show on any other version.
+> 
 
-I personally never use the selftest full config thing myself, however I
-do use subcomponent selftests configs as hints to edit my .config to add
-what I need and then run 'make menuconfig', in hopes that that leaves a
-.config with all that is needed.
+Kees added timeout in this commit and this went into 5.4-rc3, if recall
+correctly.
 
-So indeed, I believe ethis works well for now, and it works for me.
+commit 852c8cbf34d3b3130a05c38064dd98614f97d3a8
+Author: Kees Cook <keescook@chromium.org>
 
-I've hinted elsewhere that there is a difference between what kernel
-features you have enabled Vs what components are needed / should we
-built to test the current target kernel .config. And even then, what we
-test in userspace is in my view different than what should be configured
-in the kernel. To scale this I think a respective .config for userspace
-and respective symbols for testing may be in order, this way the
-userspace tests can only be visible say if you enabled certain features
-in your kernel.  How this gets exposed, etc, is a separate question,
-however I think this can be addressed later, and I believe Knut will
-likely be dealing with it during the KTF merge to kunit work as
-currently it addresses this via generic netlink, and we want something
-simple to start off with.
+     selftests/kselftest/runner.sh: Add 45 second timeout per test
 
-   Luis
+Do you see a timed out message from this test though. The test needs
+to fixed probably, but this timeout helps bail out.
+
+thanks,
+-- Shuah
