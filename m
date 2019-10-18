@@ -2,87 +2,78 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AFCE6DC493
-	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Oct 2019 14:21:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B99A7DC4E6
+	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Oct 2019 14:30:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390470AbfJRMVq (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 18 Oct 2019 08:21:46 -0400
-Received: from mail-pg1-f193.google.com ([209.85.215.193]:37076 "EHLO
+        id S2408086AbfJRM34 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 18 Oct 2019 08:29:56 -0400
+Received: from mail-pg1-f193.google.com ([209.85.215.193]:40921 "EHLO
         mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387570AbfJRMVp (ORCPT
+        with ESMTP id S2389585AbfJRM3z (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 18 Oct 2019 08:21:45 -0400
-Received: by mail-pg1-f193.google.com with SMTP id p1so3301533pgi.4;
-        Fri, 18 Oct 2019 05:21:45 -0700 (PDT)
+        Fri, 18 Oct 2019 08:29:55 -0400
+Received: by mail-pg1-f193.google.com with SMTP id e13so3302010pga.7;
+        Fri, 18 Oct 2019 05:29:54 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=VcukdS+h2wwJ3/U/N/4m0S2AoPCXUWoZLLc3DYniW2I=;
-        b=Q1msBJ3e099t2nSvYex7Z+jTlpopRllh6mguFZOeeE/m7DMYYYL/lcy4zZY7iravmh
-         8j9vf+/tlXDsLORK298oltaRNxfF6CBcQjtLOArMJyzbhA1ZpLrJj+BWFWS0IaN728eQ
-         xsZTBwLn41uMv4KqA9pw3hGXllxMNnqTCEfew/8Ly4k0XbdwWGAsB0ok7BAxw4iljEiI
-         5EfWa71cpcSoM2uC4hAwdkGO+KeoRuRoxAprpIkCUPs+fJsU67Zbd8bT1GGV6QHGEgFe
-         3cHE1udYLTIJQU0ttyl5AdAJ1iPS/qYkGW4cGlDVS7GwZ2hewbDQkTTVImp9LzkWg0TI
-         /4Kw==
-X-Gm-Message-State: APjAAAUsMEl/Ik/gBhxQlSpCpK7vgio3BMcbFr7GADiKQz94GQjNiD+J
-        TJvpz7wziqUL4cdVqnxVlc4=
-X-Google-Smtp-Source: APXvYqx1rmDV8Tbar4XUzXvi4MjLnC0zwf0LcXubUrDJ70/UhX+bBzy1YlAwSw1OAw5siYTwcytnzg==
-X-Received: by 2002:a62:ae06:: with SMTP id q6mr6445843pff.96.1571401304946;
-        Fri, 18 Oct 2019 05:21:44 -0700 (PDT)
+        bh=288Pc59lRoS3fTQSgHjqYaeNRECTkwE7sqDzfLhbInk=;
+        b=tgTBt4GJ/POV5hcHCQCb0YtrRxdKN2/JJgZcfOgJ1dh/QM8ZRHcSCJ13o7k4DkwfUB
+         DpPgxmiGCRW97wFtG0rk8gDJqrJ1BNj6e/A26zh9lBrww2PLlK1tOyJ+09Tcnf+mpqq/
+         wenvCfaHz+9hdkzgfMlRgF9j2nPC6yDWeHqb7KgOm8y2n3NLaUyHZ/T4Uu8Apz6mUg0Z
+         UyNwYmc705OCG43Jjia7ZDD2FD6Hs/X5WLpvKkvDfb17Bp/9sz/n7m9jxwr70AbaYTBo
+         fY/heRXdZvteZPy96Qf6IfqCz/UXKFX/7YfYfC17FoB5KkCpOpDOhKQi2EmeS8jUg9KI
+         VQwg==
+X-Gm-Message-State: APjAAAXAWti8fL1fKQKWrDsjOyu+mdlGSOUIaOf0umuxDjmk1K9PeHMe
+        tLTPsPR8IlqWfgsRStoeZNk=
+X-Google-Smtp-Source: APXvYqyU19z0Xj8JJM7pjylF4zyrZhqpa+ZWU/DJy10UMIdreem6ukIh9uAUDKQz52Pnc+nuZA4exQ==
+X-Received: by 2002:a17:90a:6283:: with SMTP id d3mr11196594pjj.27.1571401794127;
+        Fri, 18 Oct 2019 05:29:54 -0700 (PDT)
 Received: from 42.do-not-panic.com (42.do-not-panic.com. [157.230.128.187])
-        by smtp.gmail.com with ESMTPSA id r24sm6749355pfh.69.2019.10.18.05.21.43
+        by smtp.gmail.com with ESMTPSA id v68sm6390357pfv.47.2019.10.18.05.29.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Oct 2019 05:21:43 -0700 (PDT)
+        Fri, 18 Oct 2019 05:29:50 -0700 (PDT)
 Received: by 42.do-not-panic.com (Postfix, from userid 1000)
-        id 843DE4042C; Fri, 18 Oct 2019 12:21:42 +0000 (UTC)
-Date:   Fri, 18 Oct 2019 12:21:42 +0000
+        id B9F394042C; Fri, 18 Oct 2019 12:29:49 +0000 (UTC)
+Date:   Fri, 18 Oct 2019 12:29:49 +0000
 From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Alan Maguire <alan.maguire@oracle.com>,
+To:     Brendan Higgins <brendanhiggins@google.com>,
         Matthias Maennich <maennich@google.com>
-Cc:     Brendan Higgins <brendanhiggins@google.com>,
-        Kees Cook <keescook@chromium.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Iurii Zaikin <yzaikin@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Masahiro Yamada <yamada.masahiro@socionext.com>,
-        catalin.marinas@arm.com, joe.lawrence@redhat.com,
-        penguin-kernel@i-love.sakura.ne.jp, schowdary@nvidia.com,
-        urezki@gmail.com, andriy.shevchenko@linux.intel.com,
-        changbin.du@intel.com, kunit-dev@googlegroups.com,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        Knut Omang <knut.omang@oracle.com>
-Subject: Re: [PATCH v2 linux-kselftest-test 1/3] kunit: allow kunit tests to
- be loaded as a module
-Message-ID: <20191018122142.GC11244@42.do-not-panic.com>
-References: <1570546546-549-1-git-send-email-alan.maguire@oracle.com>
- <1570546546-549-2-git-send-email-alan.maguire@oracle.com>
- <20191008213535.GB186342@google.com>
- <alpine.LRH.2.20.1910091726010.2517@dhcp-10-175-191-127.vpn.oracle.com>
- <CAFd5g46_6McK06XSrX=EZ9AaYYitQzd2CTvPMX+rPymisDq5uQ@mail.gmail.com>
- <alpine.LRH.2.20.1910111105350.21459@dhcp-10-175-191-48.vpn.oracle.com>
- <20191016230116.GA82401@google.com>
- <alpine.LRH.2.20.1910171930410.21739@dhcp-10-175-161-223.vpn.oracle.com>
+Cc:     shuah@kernel.org, john.johansen@canonical.com, jmorris@namei.org,
+        serge@hallyn.com, keescook@chromium.org, alan.maguire@oracle.com,
+        yzaikin@google.com, davidgow@google.com, tytso@mit.edu,
+        linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-kselftest@vger.kernel.org,
+        Mike Salvatore <mike.salvatore@canonical.com>
+Subject: Re: [PATCH linux-kselftest/test v1] apparmor: add AppArmor KUnit
+ tests for policy unpack
+Message-ID: <20191018122949.GD11244@42.do-not-panic.com>
+References: <20191018001816.94460-1-brendanhiggins@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <alpine.LRH.2.20.1910171930410.21739@dhcp-10-175-161-223.vpn.oracle.com>
+In-Reply-To: <20191018001816.94460-1-brendanhiggins@google.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Oct 17, 2019 at 07:32:18PM +0100, Alan Maguire wrote:
-> kunit needs a non-exported global kernel symbol 
-> (sysctl_hung_task_timeout_secs).
+On Thu, Oct 17, 2019 at 05:18:16PM -0700, Brendan Higgins wrote:
+> From: Mike Salvatore <mike.salvatore@canonical.com>
+> 
+> In order to write the tests against the policy unpacking code, some
+> static functions needed to be exposed for testing purposes. One of the
+> goals of this patch is to establish a pattern for which testing these
+> kinds of functions should be done in the future.
 
-Sounds like a perfect use case for the new symbol namespaces [0]. We
-wouldn't want random drivers importing this namespace, but for kunit it
-would seem reasonable.
+And you'd run into the same situation expressed elsewhere with kunit of
+an issue of the kunit test as built-in working but if built as a module
+then it would not work, given the lack of exports. Symbols namespaces
+should resolve this [0], and we'd be careful where a driver imports this
+namespace.
 
 [0] https://lwn.net/Articles/798254/
 
