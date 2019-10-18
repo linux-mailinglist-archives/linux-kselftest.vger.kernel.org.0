@@ -2,157 +2,110 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F3DB4DD4C9
-	for <lists+linux-kselftest@lfdr.de>; Sat, 19 Oct 2019 00:28:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD1F0DD437
+	for <lists+linux-kselftest@lfdr.de>; Sat, 19 Oct 2019 00:23:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2406440AbfJRW11 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 18 Oct 2019 18:27:27 -0400
-Received: from mail.kernel.org ([198.145.29.99]:35586 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727554AbfJRWD7 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 18 Oct 2019 18:03:59 -0400
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id D7D6720679;
-        Fri, 18 Oct 2019 22:03:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1571436238;
-        bh=+WX7nYZPnUOZdA4Nj3pS3DRAfu9FBRsMfLNZ9gGK/k4=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=n7XtvDN53gqHs/VUMELXCNp//JS9u0kmdn3+2hSQa3NdIBOJ6W3qhMjTmAei5DF0e
-         cM6fXMGsS9pyeyRGXq4/9Su35oVMKtwG7K7iVdN8FUnn2t2XslcAFjpGRIo63SmAKx
-         DfGlzuOJ87TAcLCOsx88mPuJw5veN7ALO8OeDnpw=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Kees Cook <keescook@chromium.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Sasha Levin <sashal@kernel.org>,
-        linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.3 23/89] selftests/kselftest/runner.sh: Add 45 second timeout per test
-Date:   Fri, 18 Oct 2019 18:02:18 -0400
-Message-Id: <20191018220324.8165-23-sashal@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20191018220324.8165-1-sashal@kernel.org>
-References: <20191018220324.8165-1-sashal@kernel.org>
+        id S1729482AbfJRWXP (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 18 Oct 2019 18:23:15 -0400
+Received: from mail-pg1-f195.google.com ([209.85.215.195]:43411 "EHLO
+        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2405141AbfJRWXM (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 18 Oct 2019 18:23:12 -0400
+Received: by mail-pg1-f195.google.com with SMTP id i32so4082682pgl.10
+        for <linux-kselftest@vger.kernel.org>; Fri, 18 Oct 2019 15:23:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ZzFjkJfCdQsvvmn45ej4PRYX2Ksv6KlFlj/T0OsJ77A=;
+        b=DPS5OmboH+PIYPvZyGOMW4WJhPyyVwcaEaBk8/R4rLtVZxmgChmNmKIb1HEI8oPUqt
+         CIGwqsk8TCJMmzsKmIhkmX7woXewN5gVb9A6sQr3mmsjKB98eCe9o4K/xf2Wi9zoB2Wf
+         gYlCc0655Bvh8aRaMknPb/ujYQmw3cYru6pKSueyr9eotSSB4axmk7fqKc7BRQfqVCrL
+         +G+RmvtgwaHUAsJ8IBgWko31DBrqFBgQG9Er27RmzjAqvEKjDLnwfMKNiJFlsWH6oqWs
+         ED6ThJeVV7UW0BNzVkPM4siRhvuT9fCkJUTNvixR2/OdaVQl1SjE8F8H+iNOqmontUGx
+         gSog==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ZzFjkJfCdQsvvmn45ej4PRYX2Ksv6KlFlj/T0OsJ77A=;
+        b=bvyyfPjpVF44UZmb2+nf29TB0EUy824hffty5yBo9pAjl2AQj5jl4YKwBiuv0Mpj2K
+         Dnu8Xrcsiqdn9d0Kk3lk3BZ46scYssHI3SZ2oO41PkVNXDEn1zgyO05h/3RBnf8cB2Fo
+         qUHd4pKZKNUwOLiUrYOUNvPraQgar6lcoevY6Bu+yN4GqeeUoqAwcJdIBOuj6+wyHUhk
+         PxfSWiNcGf64Tk50HbPbUJFCcSCNB4RD8Gr0B9oBd4s7Aw0sAhpe5tsklHQCT+z9SVMw
+         lrkyzMs/PVrdr2iroNk972Tf69CfBuISmx1od0IJA7/p1msMyXEMxuK9K9cbwpPABf4y
+         //ag==
+X-Gm-Message-State: APjAAAVJniwTwApOMueZdJHLuQcy3r8Y2Dq4pnwjzdamZDwhrxbjMlpk
+        KCqiRotk8J5ZWjK0Yc+Gk7oncCWHwD6XY2c6P+MPAQ==
+X-Google-Smtp-Source: APXvYqyzFqJJU+jMrmX1uODKhYjq6xcohFfDpDnVmwORCsbOF2gUtUeX/haJkfYX0w0qFiN7iCBERYot8KqrDxfVbBY=
+X-Received: by 2002:a17:90a:2451:: with SMTP id h75mr13928203pje.131.1571437390713;
+ Fri, 18 Oct 2019 15:23:10 -0700 (PDT)
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+References: <c99604e5-2ea4-4075-9a39-470104298368@googlegroups.com>
+ <CAFd5g46+OMmP8mYsH8vcpMpdOeYryp=1Lsab4Hy6pAhWjX5-4Q@mail.gmail.com>
+ <551223d0-7712-41df-90f2-3ca3da301435@googlegroups.com> <CAFd5g44EE3A3kXOFQD5vMOXZoJ_PzD=h9dac+KJmgxeXUycJGQ@mail.gmail.com>
+ <20191018124346.GE11244@42.do-not-panic.com>
+In-Reply-To: <20191018124346.GE11244@42.do-not-panic.com>
+From:   Brendan Higgins <brendanhiggins@google.com>
+Date:   Fri, 18 Oct 2019 15:22:59 -0700
+Message-ID: <CAFd5g44kumsD1W0uj_pgq7GVfuQWV2tiJ-PRBrOKOJ=oaEuung@mail.gmail.com>
+Subject: Re: kunit.py should default to --build_dir=.kunit
+To:     Luis Chamberlain <mcgrof@kernel.org>
+Cc:     "Theodore Ts'o" <theodore.tso@gmail.com>, shuah <shuah@kernel.org>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, David Gow <davidgow@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Kees Cook <keescook@chromium.org>
+On Fri, Oct 18, 2019 at 5:43 AM Luis Chamberlain <mcgrof@kernel.org> wrote:
+>
+> On Wed, Oct 16, 2019 at 02:02:52PM -0700, Brendan Higgins wrote:
+> > Shuah's solution was just to use CONFIG fragments in the meantime
+> > similar to what kselftest already does. I was leaning in that
+> > direction since kselftest already does that and we know that it works.
+> >
+> > Shuah, Luis, does this still match what you have been thinking?
+>
+> I personally never use the selftest full config thing myself, however I
+> do use subcomponent selftests configs as hints to edit my .config to add
+> what I need and then run 'make menuconfig', in hopes that that leaves a
+> .config with all that is needed.
+>
+> So indeed, I believe ethis works well for now, and it works for me.
 
-[ Upstream commit 852c8cbf34d3b3130a05c38064dd98614f97d3a8 ]
+Okay, good to know. So that is probably the right thing to do until we
+can come up with a good solution to the dynamically generating an
+allconfig problem.
 
-Commit a745f7af3cbd ("selftests/harness: Add 30 second timeout per
-test") solves the problem of kselftest_harness.h-using binary tests
-possibly hanging forever. However, scripts and other binaries can still
-hang forever. This adds a global timeout to each test script run.
+> I've hinted elsewhere that there is a difference between what kernel
+> features you have enabled Vs what components are needed / should we
+> built to test the current target kernel .config. And even then, what we
+> test in userspace is in my view different than what should be configured
+> in the kernel. To scale this I think a respective .config for userspace
 
-To make this configurable (e.g. as needed in the "rtc" test case),
-include a new per-test-directory "settings" file (similar to "config")
-that can contain kselftest-specific settings. The first recognized field
-is "timeout".
+Sure.
 
-Additionally, this splits the reporting for timeouts into a specific
-"TIMEOUT" not-ok (and adds exit code reporting in the remaining case).
+> and respective symbols for testing may be in order, this way the
+> userspace tests can only be visible say if you enabled certain features
+> in your kernel.  How this gets exposed, etc, is a separate question,
 
-Signed-off-by: Kees Cook <keescook@chromium.org>
-Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- tools/testing/selftests/kselftest/runner.sh | 36 +++++++++++++++++++--
- tools/testing/selftests/rtc/settings        |  1 +
- 2 files changed, 34 insertions(+), 3 deletions(-)
- create mode 100644 tools/testing/selftests/rtc/settings
+I think that is a reasonable idea, but I don't think that really
+applies here. I don't think it really makes sense to have the `make
+kunit` that Ted is describing here do anything involving userspace.
+That should just run the KUnit tests in the kernel. In anycase, I
+expressed my ideas on the matter in more detail on the hybrid testing
+thread[1].
 
-diff --git a/tools/testing/selftests/kselftest/runner.sh b/tools/testing/selftests/kselftest/runner.sh
-index 00c9020bdda8b..84de7bc74f2cf 100644
---- a/tools/testing/selftests/kselftest/runner.sh
-+++ b/tools/testing/selftests/kselftest/runner.sh
-@@ -3,9 +3,14 @@
- #
- # Runs a set of tests in a given subdirectory.
- export skip_rc=4
-+export timeout_rc=124
- export logfile=/dev/stdout
- export per_test_logging=
- 
-+# Defaults for "settings" file fields:
-+# "timeout" how many seconds to let each test run before failing.
-+export kselftest_default_timeout=45
-+
- # There isn't a shell-agnostic way to find the path of a sourced file,
- # so we must rely on BASE_DIR being set to find other tools.
- if [ -z "$BASE_DIR" ]; then
-@@ -24,6 +29,16 @@ tap_prefix()
- 	fi
- }
- 
-+tap_timeout()
-+{
-+	# Make sure tests will time out if utility is available.
-+	if [ -x /usr/bin/timeout ] ; then
-+		/usr/bin/timeout "$kselftest_timeout" "$1"
-+	else
-+		"$1"
-+	fi
-+}
-+
- run_one()
- {
- 	DIR="$1"
-@@ -32,6 +47,18 @@ run_one()
- 
- 	BASENAME_TEST=$(basename $TEST)
- 
-+	# Reset any "settings"-file variables.
-+	export kselftest_timeout="$kselftest_default_timeout"
-+	# Load per-test-directory kselftest "settings" file.
-+	settings="$BASE_DIR/$DIR/settings"
-+	if [ -r "$settings" ] ; then
-+		while read line ; do
-+			field=$(echo "$line" | cut -d= -f1)
-+			value=$(echo "$line" | cut -d= -f2-)
-+			eval "kselftest_$field"="$value"
-+		done < "$settings"
-+	fi
-+
- 	TEST_HDR_MSG="selftests: $DIR: $BASENAME_TEST"
- 	echo "# $TEST_HDR_MSG"
- 	if [ ! -x "$TEST" ]; then
-@@ -44,14 +71,17 @@ run_one()
- 		echo "not ok $test_num $TEST_HDR_MSG"
- 	else
- 		cd `dirname $TEST` > /dev/null
--		(((((./$BASENAME_TEST 2>&1; echo $? >&3) |
-+		((((( tap_timeout ./$BASENAME_TEST 2>&1; echo $? >&3) |
- 			tap_prefix >&4) 3>&1) |
- 			(read xs; exit $xs)) 4>>"$logfile" &&
- 		echo "ok $test_num $TEST_HDR_MSG") ||
--		(if [ $? -eq $skip_rc ]; then	\
-+		(rc=$?;	\
-+		if [ $rc -eq $skip_rc ]; then	\
- 			echo "not ok $test_num $TEST_HDR_MSG # SKIP"
-+		elif [ $rc -eq $timeout_rc ]; then \
-+			echo "not ok $test_num $TEST_HDR_MSG # TIMEOUT"
- 		else
--			echo "not ok $test_num $TEST_HDR_MSG"
-+			echo "not ok $test_num $TEST_HDR_MSG # exit=$rc"
- 		fi)
- 		cd - >/dev/null
- 	fi
-diff --git a/tools/testing/selftests/rtc/settings b/tools/testing/selftests/rtc/settings
-new file mode 100644
-index 0000000000000..ba4d85f74cd6b
---- /dev/null
-+++ b/tools/testing/selftests/rtc/settings
-@@ -0,0 +1 @@
-+timeout=90
--- 
-2.20.1
+> however I think this can be addressed later, and I believe Knut will
+> likely be dealing with it during the KTF merge to kunit work as
+> currently it addresses this via generic netlink, and we want something
+> simple to start off with.
 
+Cheers!
+
+[1] https://lore.kernel.org/linux-kselftest/CAFd5g459xmO+=QPhnnXVO8+dB_t1PViXxK-Fz6Zp+sp5suJZ2w@mail.gmail.com/
