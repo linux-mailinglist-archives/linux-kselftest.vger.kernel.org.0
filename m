@@ -2,106 +2,125 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 43BA7DC86D
-	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Oct 2019 17:28:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A340DCAE7
+	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Oct 2019 18:21:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2410505AbfJRP2B (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 18 Oct 2019 11:28:01 -0400
-Received: from outgoing-auth-1.mit.edu ([18.9.28.11]:37286 "EHLO
-        outgoing.mit.edu" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S2394233AbfJRP2A (ORCPT
+        id S2394122AbfJRQVk (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 18 Oct 2019 12:21:40 -0400
+Received: from mail-pf1-f195.google.com ([209.85.210.195]:33645 "EHLO
+        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727154AbfJRQVk (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 18 Oct 2019 11:28:00 -0400
-Received: from callcc.thunk.org (guestnat-104-133-0-98.corp.google.com [104.133.0.98] (may be forged))
-        (authenticated bits=0)
-        (User authenticated as tytso@ATHENA.MIT.EDU)
-        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id x9IFRk2g032466
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 18 Oct 2019 11:27:47 -0400
-Received: by callcc.thunk.org (Postfix, from userid 15806)
-        id A1830420458; Fri, 18 Oct 2019 11:27:46 -0400 (EDT)
-Date:   Fri, 18 Oct 2019 11:27:46 -0400
-From:   "Theodore Y. Ts'o" <tytso@mit.edu>
-To:     Tim.Bird@sony.com
-Cc:     skhan@linuxfoundation.org, brendanhiggins@google.com,
-        yzaikin@google.com, linux-kselftest@vger.kernel.org,
-        linux-ext4@vger.kernel.org, adilger.kernel@dilger.ca,
-        kunit-dev@googlegroups.com
-Subject: Re: [PATCH linux-kselftest/test v2] ext4: add kunit test for
- decoding extended timestamps
-Message-ID: <20191018152746.GF21137@mit.edu>
-References: <CAFd5g46RcFV0FACuoF=jCSLzf7UFmEYn4gddaijUZ+zR_CFZBQ@mail.gmail.com>
- <20191011131902.GC16225@mit.edu>
- <CAFd5g45s1-=Z4JwJn4A1VDGu4oEGBisQ_0RFp4otUU3rKf1XpQ@mail.gmail.com>
- <1e6611e6-2fa6-6f7d-bc7f-0bc2243d9342@linuxfoundation.org>
- <20191017120833.GA25548@mit.edu>
- <ECADFF3FD767C149AD96A924E7EA6EAF977D0023@USCULXMSG01.am.sony.com>
- <20191017225637.GB6371@mit.edu>
- <ECADFF3FD767C149AD96A924E7EA6EAF977D00A4@USCULXMSG01.am.sony.com>
- <20191018014027.GA21137@mit.edu>
- <ECADFF3FD767C149AD96A924E7EA6EAF977D01DC@USCULXMSG01.am.sony.com>
+        Fri, 18 Oct 2019 12:21:40 -0400
+Received: by mail-pf1-f195.google.com with SMTP id q10so4214045pfl.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 18 Oct 2019 09:21:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=c9JZSN8H5620nC3cCVnr8OExnXCrnEqW30bH/LbdEfE=;
+        b=DgdGU2GAaFqAGEyR6yogfhMtyiU68YPIS/csqCeEevD9VGx73H6IkY/qviecY9dqMd
+         ITbjbFn45CElylafIln2kjPFW3CQq0Lll9BQgGQdIBHSwE2wYqUA9/v5dAcW8xrYKrCw
+         x5uMd0yIWCJHwvseujAAeRvHoxsK9MEhLtd7k=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=c9JZSN8H5620nC3cCVnr8OExnXCrnEqW30bH/LbdEfE=;
+        b=Za9SVUri2CWSxfPv7HH4ELyv8BWaj1L8BLAMo2X0zZ+0G79AMG88XUc2rXCRFmujZ/
+         Fpx+tIhnBjqFc8U5ZaSAT1k5DWKYrySgUYzitjACHJ+i+noKiomIbPi7tPOJbFeCPU6p
+         6rGQmcaleaqw38XGBlk5HiDBj0/2eRH3T9mYyPkBYZKoZobVKmgYR69Vbg3UqNYxqmIX
+         KAqg0jqsYIk9U/Aw62ojJSbtznBWOgr0Au8AJ4O5UN637ymOS8nF6r+xbMBnVFU64LQB
+         u4VjL7HP6qp8W/F2IZcfDwL/ZDorDYdVayz6hXrA2TaCy31OF4e8Ger6N0se7YnyTUcs
+         wtlg==
+X-Gm-Message-State: APjAAAUjQE8al+DFJPr6n5Puv6HRZSErFB+QvPFTHvvW/lJeoBEAg9U4
+        2qAMGaRqm2J8I7gHMRrTaxmD8Pt3/a4=
+X-Google-Smtp-Source: APXvYqy6qfro9wiwqwP6E9JIe01QZjE+u/6bN8FlTN/OpmnGLQFMB1X7f/Fy45W0Z9yAU592vaaBUw==
+X-Received: by 2002:aa7:87d9:: with SMTP id i25mr7945294pfo.244.1571415699752;
+        Fri, 18 Oct 2019 09:21:39 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id i6sm7008102pfq.20.2019.10.18.09.21.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 18 Oct 2019 09:21:38 -0700 (PDT)
+Date:   Fri, 18 Oct 2019 09:21:37 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Liu Yiding <liuyd.fnst@cn.fujitsu.com>
+Cc:     linux-kselftest@vger.kernel.org,
+        Prabhakar Kushwaha <prabhakar.pkin@gmail.com>,
+        Shuah Khan <skhan@linuxfoundation.org>
+Subject: Re: [Bug report] "make run_tests -C bpf" hanging forever
+Message-ID: <201910180919.B3D3618@keescook>
+References: <d08b43ee-6a21-c9aa-ea7b-9465ecbad772@cn.fujitsu.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <ECADFF3FD767C149AD96A924E7EA6EAF977D01DC@USCULXMSG01.am.sony.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <d08b43ee-6a21-c9aa-ea7b-9465ecbad772@cn.fujitsu.com>
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Oct 18, 2019 at 02:40:50AM +0000, Tim.Bird@sony.com wrote:
-> We're just talking past each other.  My original e-mail was a rebuttal
-> to your assertion that any test that was data-driven or non-deterministic
-> was a fuzzer.  I still believe that's just not the case.  This is independent
-> of the mechanics or speed of how the data is input.
+On Fri, Oct 18, 2019 at 02:32:15PM +0800, Liu Yiding wrote:
+> Hi All.
+> 
+> The patch 5c069b6dedef "selftests: Move test output to diagnostic lines"
+> from Apr 24, 2019,
+> 
+> leads to `make run_tests -C bpf` hanging forever.
 
-Apologies, I was still focused on the original context of this thread,
-which was about suggested improvements to Iurii's ext4 kunit test, or
-perhaps adding new features to Kunit.
+I can't even run this, the autodetection seems broken. I have BPF and
+libelf installed....
 
-> I also conceded (multiple times) that externally data-driven
-> techniques are probably more aptly applied to non-unit tests. I've
-> heard your pitch about speed, and I'm sympathetic.  My point is that
-> I believe there is a place for data-driven tests.
+$ make run_tests -C bpf
+[...]
 
-I guess I would put it differently.  The key goal is it should be
-really easy for developers to run, create, and extend tests.
-Data-driven tests is certainly one technique to make it easier to
-extend tests, and indeed fs/ext4/inode-test.c is data-driven with the
-goal to make it easier to add additional tests.
+Auto-detecting system features:
+...                        libelf: [ OFF ]
+...                           bpf: [ OFF ]
 
-Having the data for the test be external is certainly one option, and
-there will be cases where it will make sense.  However, the overhead
-in creating the parser for the data, and additional complexity
-required to get the test data to be fed to the test program means that
-that benefits need to be pretty large in order to balance the
-additional costs of having an external data file, especially for
-Kunit.
 
-In terms of the abstract question, is there a place for data-driven
-tests, I'm in complete agreement with you.  I've used this many times
-personally, especially when writing tests which are implemented in
-terms of shell scripts.  Examples of this include e2fsprogs's
-regression test suite and xfstests.  I don't consider that a terribly
-interesting question though; I view that as on the same order as "is
-the sky blue?" or "are apple pies yummy?"
+Auto-detecting system features:
+...                        libelf: [ OFF ]
+...                           bpf: [ OFF ]
 
-The more interesting, and more concrete question is whether there is a
-place for external data-driven tests in Kunit, and there I am *much*
-more skeptical.  Sure, I could imagine adding some infrastructure
-where user-mode linux could read files from its "host" system.  But
-there are those people who want to run KUnit tests by cross-compiling
-an ARM kernel and then shipping the resulting kernel to an test board,
-and then reading the output from the ARM board's serial console.  In
-that case, we can't make the assumption that Kunit tests will be
-running under user-mode linux, so the complexity of how we get the
-external data file into the KUnit test just went up by another order
-of magnitude.  It's going to be ***so*** much simpler if the test data
-is embedded in the kernel built by KUnit.  That way, it works both in
-the ARCH=um case, and in the "build an ARM kernel and push it to a
-test board" case.
+No libelf found
+Makefile:269: recipe for target 'elfdep' failed
+make[2]: *** [elfdep] Error 1
+Makefile:154: recipe for target 'all' failed
+make[1]: *** [all] Error 2
 
-Cheers,
 
-					- Ted
+> Bpf includes many subtest, when cmd `make run_tests -C bpf` runs to
+> test_lwt_seg6local.sh, task will hang and runner.sh never run next task. I
+> checked ps aux, prefix.pl will never exit.
+> 
+> ```
+> 
+> 91058 [  811.451584] # [25] VAR __license type_id=24 linkage=1
+> 91059 [  811.451586]-
+> 91060 [  811.455365] # [26] DATASEC license size=0 vlen=1 size == 0
+> 91061 [  811.455367]-
+> 91062 [  811.457424] #-
+> 91063 [  811.457425]-
+> 91064 [  811.460912] # selftests: test_lwt_seg6local [PASS]
+> 91065 [  811.460914]-
+> 91066 [ 3620.461986] Thu Oct 17 14:54:05 CST 2019 detected soft_timeout
+> 
+> ```
+> 
+> Ignore test_lwt_seg6local and run `make run_tests -C bpf` again, task will
+> hang on test_tc_tunnel.sh.
+> 
+> 
+> Kushwaha also meet this issue, `make run_tests -C bpf` hang on
+> test_lwt_ip_encap.sh (This test failed on my localhost).
+
+If it keeps hanging on progressively later tests, it sounds like some
+kind of stdout/stderr flushing (or reading) is missing. This is hard for
+me to debug without understanding how to have the kernel tree notice my
+installed libraries, though.
+
+-- 
+Kees Cook
