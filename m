@@ -2,79 +2,88 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B99A7DC4E6
-	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Oct 2019 14:30:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D369FDC537
+	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Oct 2019 14:43:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2408086AbfJRM34 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 18 Oct 2019 08:29:56 -0400
-Received: from mail-pg1-f193.google.com ([209.85.215.193]:40921 "EHLO
-        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2389585AbfJRM3z (ORCPT
+        id S2633905AbfJRMnt (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 18 Oct 2019 08:43:49 -0400
+Received: from mail-pf1-f194.google.com ([209.85.210.194]:36655 "EHLO
+        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2633904AbfJRMnt (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 18 Oct 2019 08:29:55 -0400
-Received: by mail-pg1-f193.google.com with SMTP id e13so3302010pga.7;
-        Fri, 18 Oct 2019 05:29:54 -0700 (PDT)
+        Fri, 18 Oct 2019 08:43:49 -0400
+Received: by mail-pf1-f194.google.com with SMTP id y22so3836557pfr.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 18 Oct 2019 05:43:49 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=288Pc59lRoS3fTQSgHjqYaeNRECTkwE7sqDzfLhbInk=;
-        b=tgTBt4GJ/POV5hcHCQCb0YtrRxdKN2/JJgZcfOgJ1dh/QM8ZRHcSCJ13o7k4DkwfUB
-         DpPgxmiGCRW97wFtG0rk8gDJqrJ1BNj6e/A26zh9lBrww2PLlK1tOyJ+09Tcnf+mpqq/
-         wenvCfaHz+9hdkzgfMlRgF9j2nPC6yDWeHqb7KgOm8y2n3NLaUyHZ/T4Uu8Apz6mUg0Z
-         UyNwYmc705OCG43Jjia7ZDD2FD6Hs/X5WLpvKkvDfb17Bp/9sz/n7m9jxwr70AbaYTBo
-         fY/heRXdZvteZPy96Qf6IfqCz/UXKFX/7YfYfC17FoB5KkCpOpDOhKQi2EmeS8jUg9KI
-         VQwg==
-X-Gm-Message-State: APjAAAXAWti8fL1fKQKWrDsjOyu+mdlGSOUIaOf0umuxDjmk1K9PeHMe
-        tLTPsPR8IlqWfgsRStoeZNk=
-X-Google-Smtp-Source: APXvYqyU19z0Xj8JJM7pjylF4zyrZhqpa+ZWU/DJy10UMIdreem6ukIh9uAUDKQz52Pnc+nuZA4exQ==
-X-Received: by 2002:a17:90a:6283:: with SMTP id d3mr11196594pjj.27.1571401794127;
-        Fri, 18 Oct 2019 05:29:54 -0700 (PDT)
+        bh=QQzOsGAK4+NWRE1MfYzxWb4i0nQItqLfWq1omSmlY+M=;
+        b=S4m2zamdEsmGWbOSp9a/obpn8N7A1A6sl+wRozGOI2P0jpnCWVx2CzSrz91lke5gKK
+         6euGkvPUbS21lEoX4mZ1qQvvBY3lq9upUE+3rmSKji418eB+kUvtG7mZZCaiJLwRrOkg
+         eOPu+NbeKxg7Y09nMnPLwmF36Bd2igrPeFZ7Lw1PFooBlgAXSj6mhhKdoAO/ieENuMU2
+         W1kzpFeGPzRBil2qjVOx/x3qEvkqe8aMAT5teOycOg4Iel79fk6obf2QxMMTl8hNxU4x
+         Iw6BxpIxmo/+Kp0DbFReDsOxZlvFYXerEn6DdSuYHZbIlzvcPmitQLsvWE4Gp49xjczl
+         lRFA==
+X-Gm-Message-State: APjAAAUR+x4r/isohrse1LS1ViJplVZJ1iQtwLNmUnvEXHH1mGBwAV4z
+        lHD/eDCC2zpw7olvEy3FzNU=
+X-Google-Smtp-Source: APXvYqw0l2AIHK35ndyzROwxrQboKcI8M2I/H805JYZoPs0fQhFkYoYOvMsYRq4xhzxcX0npnbinXw==
+X-Received: by 2002:a63:6581:: with SMTP id z123mr10112023pgb.367.1571402628511;
+        Fri, 18 Oct 2019 05:43:48 -0700 (PDT)
 Received: from 42.do-not-panic.com (42.do-not-panic.com. [157.230.128.187])
-        by smtp.gmail.com with ESMTPSA id v68sm6390357pfv.47.2019.10.18.05.29.50
+        by smtp.gmail.com with ESMTPSA id v2sm5673459pgf.39.2019.10.18.05.43.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Oct 2019 05:29:50 -0700 (PDT)
+        Fri, 18 Oct 2019 05:43:47 -0700 (PDT)
 Received: by 42.do-not-panic.com (Postfix, from userid 1000)
-        id B9F394042C; Fri, 18 Oct 2019 12:29:49 +0000 (UTC)
-Date:   Fri, 18 Oct 2019 12:29:49 +0000
+        id 8EF9D4042C; Fri, 18 Oct 2019 12:43:46 +0000 (UTC)
+Date:   Fri, 18 Oct 2019 12:43:46 +0000
 From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Brendan Higgins <brendanhiggins@google.com>,
-        Matthias Maennich <maennich@google.com>
-Cc:     shuah@kernel.org, john.johansen@canonical.com, jmorris@namei.org,
-        serge@hallyn.com, keescook@chromium.org, alan.maguire@oracle.com,
-        yzaikin@google.com, davidgow@google.com, tytso@mit.edu,
-        linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kselftest@vger.kernel.org,
-        Mike Salvatore <mike.salvatore@canonical.com>
-Subject: Re: [PATCH linux-kselftest/test v1] apparmor: add AppArmor KUnit
- tests for policy unpack
-Message-ID: <20191018122949.GD11244@42.do-not-panic.com>
-References: <20191018001816.94460-1-brendanhiggins@google.com>
+To:     Brendan Higgins <brendanhiggins@google.com>
+Cc:     Theodore Ts'o <theodore.tso@gmail.com>, shuah <shuah@kernel.org>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, David Gow <davidgow@google.com>
+Subject: Re: kunit.py should default to --build_dir=.kunit
+Message-ID: <20191018124346.GE11244@42.do-not-panic.com>
+References: <c99604e5-2ea4-4075-9a39-470104298368@googlegroups.com>
+ <CAFd5g46+OMmP8mYsH8vcpMpdOeYryp=1Lsab4Hy6pAhWjX5-4Q@mail.gmail.com>
+ <551223d0-7712-41df-90f2-3ca3da301435@googlegroups.com>
+ <CAFd5g44EE3A3kXOFQD5vMOXZoJ_PzD=h9dac+KJmgxeXUycJGQ@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20191018001816.94460-1-brendanhiggins@google.com>
+In-Reply-To: <CAFd5g44EE3A3kXOFQD5vMOXZoJ_PzD=h9dac+KJmgxeXUycJGQ@mail.gmail.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Oct 17, 2019 at 05:18:16PM -0700, Brendan Higgins wrote:
-> From: Mike Salvatore <mike.salvatore@canonical.com>
+On Wed, Oct 16, 2019 at 02:02:52PM -0700, Brendan Higgins wrote:
+> Shuah's solution was just to use CONFIG fragments in the meantime
+> similar to what kselftest already does. I was leaning in that
+> direction since kselftest already does that and we know that it works.
 > 
-> In order to write the tests against the policy unpacking code, some
-> static functions needed to be exposed for testing purposes. One of the
-> goals of this patch is to establish a pattern for which testing these
-> kinds of functions should be done in the future.
+> Shuah, Luis, does this still match what you have been thinking?
 
-And you'd run into the same situation expressed elsewhere with kunit of
-an issue of the kunit test as built-in working but if built as a module
-then it would not work, given the lack of exports. Symbols namespaces
-should resolve this [0], and we'd be careful where a driver imports this
-namespace.
+I personally never use the selftest full config thing myself, however I
+do use subcomponent selftests configs as hints to edit my .config to add
+what I need and then run 'make menuconfig', in hopes that that leaves a
+.config with all that is needed.
 
-[0] https://lwn.net/Articles/798254/
+So indeed, I believe ethis works well for now, and it works for me.
 
-  Luis
+I've hinted elsewhere that there is a difference between what kernel
+features you have enabled Vs what components are needed / should we
+built to test the current target kernel .config. And even then, what we
+test in userspace is in my view different than what should be configured
+in the kernel. To scale this I think a respective .config for userspace
+and respective symbols for testing may be in order, this way the
+userspace tests can only be visible say if you enabled certain features
+in your kernel.  How this gets exposed, etc, is a separate question,
+however I think this can be addressed later, and I believe Knut will
+likely be dealing with it during the KTF merge to kunit work as
+currently it addresses this via generic netlink, and we want something
+simple to start off with.
+
+   Luis
