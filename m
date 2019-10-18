@@ -2,143 +2,79 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A058DDD28F
-	for <lists+linux-kselftest@lfdr.de>; Sat, 19 Oct 2019 00:13:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 68EC7DD4CA
+	for <lists+linux-kselftest@lfdr.de>; Sat, 19 Oct 2019 00:28:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391555AbfJRWMW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 18 Oct 2019 18:12:22 -0400
-Received: from mail-pg1-f176.google.com ([209.85.215.176]:34745 "EHLO
-        mail-pg1-f176.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2390014AbfJRWMV (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 18 Oct 2019 18:12:21 -0400
-Received: by mail-pg1-f176.google.com with SMTP id k20so4099681pgi.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 18 Oct 2019 15:12:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=FetT0tM90HzfRfVTAG8wVUH3dQZzL8bvcOngJje+KGw=;
-        b=WnrDxsWzJJwxHbiiIfa09p4bEU4DQfRBT7AWtxciDnIv9oJcigQ3pARQuskaaOpR8p
-         8bOvewqd2WzUtfvVO8iBfvXm+71jI9Zc+JTCKBo9UHaLMUYnZKUg3eYtIuMvjla3KYUC
-         xYYbaKJGthpm/CeQR3lMgszKBYU/wABo7HdjlLiv2EGV6Wwb3HfiDTKl7DfhtGCD/WGp
-         zLqTbQ1lSwPawuCL48IrPVSkg5YeaPwzuI5aSv9cfObKK8kMiKgasWgparTM8mpgBJxb
-         Nb4PrUyTHGN+gE3N12FTw2kN22/GqCjRhDYTfJEiCzzzraB3ch3SDBbd6CwJC9jb2PqM
-         MHcQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=FetT0tM90HzfRfVTAG8wVUH3dQZzL8bvcOngJje+KGw=;
-        b=V3g/W1/bCRVds1A22OmayrQNcmVm3fzEvAanvkZVvKYG/AaECVngf0H7OEGMtUnBfP
-         qTarJhLIwW5kUK0+kLrQMMOvVBYgP3nurHLdBbnjVrNVf48LecnvRg9QmmiSEe6fS/ZQ
-         xqEKfZJTMj8aXwgH2it1zPXT3wOFnTkmQZaoSNQkJFFAsi25ih0rsullHV+FaYJ3v/wD
-         6dYaTLD2SygJMwtyuL9JDmbWfTqdr3KsiLvwOzKYx8j1HFpbAOZmk6ITeCONq5rkVFGX
-         sHkcsU5NMywc/TSSmEgQjVF/vyIuAWA42i89EiVoQlWFtoLPfE4W2IJl7DaQ+61ZoN2Q
-         v9mg==
-X-Gm-Message-State: APjAAAXp5al4g5t7vl5h3Zh4KWPLtxHMZXUQEiAsyUbBmmv/mczIt/yM
-        L3v73GBod2tlOUXpjp/a/l54z8yfk07jxJDFyWIa0OT8fKM5kA==
-X-Google-Smtp-Source: APXvYqxsStNw5zwJcR42wzIqJ1DfFlpzcZjKfVaJEpI7uDytoBDXZfBpO1vAWTeTWT77tn01nd9lxJ5T/NCD0zuH1/k=
-X-Received: by 2002:a63:3044:: with SMTP id w65mr12080314pgw.384.1571436740160;
- Fri, 18 Oct 2019 15:12:20 -0700 (PDT)
+        id S2406461AbfJRW11 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 18 Oct 2019 18:27:27 -0400
+Received: from mail.kernel.org ([198.145.29.99]:35550 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727521AbfJRWD6 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 18 Oct 2019 18:03:58 -0400
+Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 73ACD22467;
+        Fri, 18 Oct 2019 22:03:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1571436237;
+        bh=j4NMKFZCEhXHqiCHNdvO7vjenNr3RiF8my1Dx+JIa0Q=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=GF21DK0CgQFtCx+W56It068F5uPeCmYzz6UyjsA/XHWrq/jSzo8VXjGPlu/IgR3O8
+         sUpMJjo4ertgNz2UrZv+LcPtMd5WhHXcd+EE/EMcEkuLmDDwvhZ70K1Xn7gQVPHZYe
+         s4gCeTKiJU04/RQMX/HN8DXETbLtVao0+wDQG2QQ=
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Cristian Marussi <cristian.marussi@arm.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Sasha Levin <sashal@kernel.org>,
+        linux-kselftest@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.3 22/89] kselftest: exclude failed TARGETS from runlist
+Date:   Fri, 18 Oct 2019 18:02:17 -0400
+Message-Id: <20191018220324.8165-22-sashal@kernel.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20191018220324.8165-1-sashal@kernel.org>
+References: <20191018220324.8165-1-sashal@kernel.org>
 MIME-Version: 1.0
-References: <c99604e5-2ea4-4075-9a39-470104298368@googlegroups.com>
- <CAFd5g46+OMmP8mYsH8vcpMpdOeYryp=1Lsab4Hy6pAhWjX5-4Q@mail.gmail.com>
- <291f012c-0ffd-599e-0dac-a6b4e05ebb97@infradead.org> <CAFd5g455KciviPA50cVDxK8XMB8ufcLrRq9DPA0d=f-1qXezWg@mail.gmail.com>
- <20191017125154.GD25548@mit.edu>
-In-Reply-To: <20191017125154.GD25548@mit.edu>
-From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Fri, 18 Oct 2019 15:12:08 -0700
-Message-ID: <CAFd5g45S57PsghpOiL2+6qcEjUdMG1XSzU97fUqCvEV7XvOGQA@mail.gmail.com>
-Subject: Re: kunit.py should default to --build_dir=.kunit
-To:     "Theodore Y. Ts'o" <tytso@mit.edu>
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        "Theodore Ts'o" <theodore.tso@gmail.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        KUnit Development <kunit-dev@googlegroups.com>
-Content-Type: text/plain; charset="UTF-8"
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Oct 17, 2019 at 5:51 AM Theodore Y. Ts'o <tytso@mit.edu> wrote:
->
-> On Wed, Oct 16, 2019 at 02:04:35PM -0700, Brendan Higgins wrote:
-> > > > Should we maybe drop `--build_dir` in favor of `O`?
-> > >
-> > > Yes, preferably be consistent with the rest of the kernel makefiles.
-> >
-> > Alright, probably a good idea to make this change fairly soon then
-> > before we have to worry about backwards compatibility and such.
->
-> I'm not sure how this would work; so something like:
->
->     .../kunit.py run O=/build_dir
+From: Cristian Marussi <cristian.marussi@arm.com>
 
-Seems reasonable to me.
+[ Upstream commit 131b30c94fbc0adb15f911609884dd39dada8f00 ]
 
-> Should other flags we can pass in via the makefile processing, such as
-> V=1, etc., also work?  What other things can we pass in via after the
-> "run" command?
+A TARGET which failed to be built/installed should not be included in the
+runlist generated inside the run_kselftest.sh script.
 
-Hmmm...that's a good point. I don't know about V; probably need to
-improve how kunit_tool displays build information for that to be
-useful. I don't think that W is likely to be useful since I think that
-is semantically a different operation than just running KUnit tests.
+Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
+Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ tools/testing/selftests/Makefile | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-Probably don't want to forward ARCH, or CROSS_COMPILE or any of those.
+diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
+index 25b43a8c2b159..1779923d7a7b8 100644
+--- a/tools/testing/selftests/Makefile
++++ b/tools/testing/selftests/Makefile
+@@ -198,8 +198,12 @@ ifdef INSTALL_PATH
+ 	echo "  cat /dev/null > \$$logfile" >> $(ALL_SCRIPT)
+ 	echo "fi" >> $(ALL_SCRIPT)
+ 
++	@# While building run_kselftest.sh skip also non-existent TARGET dirs:
++	@# they could be the result of a build failure and should NOT be
++	@# included in the generated runlist.
+ 	for TARGET in $(TARGETS); do \
+ 		BUILD_TARGET=$$BUILD/$$TARGET;	\
++		[ ! -d $$INSTALL_PATH/$$TARGET ] && echo "Skipping non-existent dir: $$TARGET" && continue; \
+ 		echo "[ -w /dev/kmsg ] && echo \"kselftest: Running tests in $$TARGET\" >> /dev/kmsg" >> $(ALL_SCRIPT); \
+ 		echo "cd $$TARGET" >> $(ALL_SCRIPT); \
+ 		echo -n "run_many" >> $(ALL_SCRIPT); \
+-- 
+2.20.1
 
-Supporting some of these[1] seems useful.
-
-> And if we're going to go this far, maybe we should make "make kunit"
-> run tools/testing/kunit/kunit.py?
-
-That seems reasonable. I was holding off on that initially because I
-thought it might be a bridge too far in terms of putting KUnit in a
-highly visible place. However, in hindsight, I think we crossed that
-bridge a long time ago with putting tests is very visible places. So
-yeah, now is probably a good time to do that.
-
-> Some minor other nits if you're going to be making changes to
-> kunit.py's CLI parsing:
->
-> 1) It would be nice if there was a help command so that "kunit.py
->    help" does what kunit.py -h does.
-
-Seems reasonable.
-
-> 2) The top-level help message should indicate that "kunit.py run"
->    takes various optional arguments and the way to find them is
->    "kunit.py run -h".  This was *not* obvious, and the way I figured
->    out there was even --build_dir option was via purusing the source
->    code.  (It wasn't in the documentation that I could find.)
-
-Also reasonable.
-
-> 3) And maybe then "kunit.py help run" should display the help message
->    for "kunit.py urn".  This would make it consistent with other tools
->    that some of us might be familiar with (e.g., gcloud, gsutil, etc.)
-
-That's reasonable, but also a little harder. At that point, I think we
-might need to write our own flag library to support all this. So, I
-will put this as a TODO, but we probably won't get to it for a while.
-
-> Of course, if the front entry for kunit starts being "make kunit" as
-> opposed to ./tools/testing/kunit/kunit.py, then we really need to
-> figure out how to pass in the equivalent of --timeout.  (Maybe
-
-Yeah, that's true. We should probably also by default set --timeout to
-a reasonable default instead of infinite.
-
-> --raw_output is enabled if we run make kunit V=1?).  And of course,
-
-Hmmm...that seems like a good idea.
-
-> all of this would need to be documented.
-
-Yeah, we very much need to improve our documentation, especially for
-the kunit_tool. That is very high on our TODO list.
-
-[1] https://www.gnu.org/software/make/manual/html_node/Options-Summary.html
