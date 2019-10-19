@@ -2,1420 +2,224 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D9F93DD6B9
-	for <lists+linux-kselftest@lfdr.de>; Sat, 19 Oct 2019 07:03:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 982A8DD75E
+	for <lists+linux-kselftest@lfdr.de>; Sat, 19 Oct 2019 10:27:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727421AbfJSFD0 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 19 Oct 2019 01:03:26 -0400
-Received: from mail-wm1-f49.google.com ([209.85.128.49]:32790 "EHLO
-        mail-wm1-f49.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726004AbfJSFDZ (ORCPT
+        id S1726706AbfJSI1v (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 19 Oct 2019 04:27:51 -0400
+Received: from userp2120.oracle.com ([156.151.31.85]:54096 "EHLO
+        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725616AbfJSI1u (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 19 Oct 2019 01:03:25 -0400
-Received: by mail-wm1-f49.google.com with SMTP id r17so10630398wme.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 18 Oct 2019 22:03:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:date:to:message-id:in-reply-to:references:subject:mime-version;
-        bh=JAEvgned3BkSDkZXLsbuWc8dx2M58NlvkhIl2DbUbpk=;
-        b=mOBtO3Ivwg8ozDrnD/Yj5XIFLOvNhqQJoGpP6+7TaBn/Xbbab8nawN//tPaHOghE+y
-         VY9mcexit2zU6YGT7U+sErEXgSpPeazv6JbF+fAK2mu2QZSSGjESMMw2PmHb23/zC3SF
-         amXQWD77/W/hkUzsfLzjAL7CxqqbM/taSjiwQpTIB7O90ekfMNzq6gXw2BDYzEgdhlQD
-         t/EEF6cN+x6wSqnnkdiCnDYa4XIi7z79vcTQaoHPSQJcRQ++GUuP5wv6VY1dDu3xEcl9
-         KYiTYNBD4KwwJ1ZiS1q78mUJBXUgasMPzH8b2b/xizq9HVXSLjnKULD+5kF9WRNRtJnp
-         eEYA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:date:to:message-id:in-reply-to:references
-         :subject:mime-version;
-        bh=JAEvgned3BkSDkZXLsbuWc8dx2M58NlvkhIl2DbUbpk=;
-        b=cbxS8RWPsJ1hF+IBwVy0g4Oaztap4N/KXBpGUQC7AXryiwX1HQI8Vyi7kyDaRyxTqb
-         9sJ3Wv/Vxd3IUFTQNABvx4fzUkBMkAslRqCUbZY5OCDMn6q+g8bs8ZuWgYYjhBwyrq36
-         Q6hUnmf8nJNlhI80RbvloxrNvBcA3xqzg2EI6mgFuiaKj+juB+cWh7mZIPOcGipsFHl6
-         tS+jOk8jXIxwNqrReBhOHbrPwldFnnzOo9p+qK656k942ik1MmrszeTCtNdbtIfpT84P
-         rbjP3xuHm1uoP++AZ+1IDWMSiSBulVMe8SaLOVzhZmV7NmlUKeV1aoP17bPqINt+1Mmt
-         gVMA==
-X-Gm-Message-State: APjAAAWDdChrtcExGL8sjxJxQBwqGIoYtp84o3n/z6eG1BqYsZOBQ2KA
-        dyIr9dJVISIPNBWmAxEtl4DSig==
-X-Google-Smtp-Source: APXvYqwhRVUPw0CSWsjseBAEVPuj0o3Wb5Lo+1KCfZd1jPNVHzrvlsI3xQyxxvvT/tltnN9njYqo2w==
-X-Received: by 2002:a1c:35c3:: with SMTP id c186mr4343064wma.94.1571461398240;
-        Fri, 18 Oct 2019 22:03:18 -0700 (PDT)
-Received: from 172.17.0.4 (ci.linaro.org. [88.99.136.175])
-        by smtp.gmail.com with ESMTPSA id y5sm7924761wma.14.2019.10.18.22.03.17
-        (version=TLS1 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
-        Fri, 18 Oct 2019 22:03:17 -0700 (PDT)
-From:   ci_notify@linaro.org
-X-Google-Original-From: linaro-infrastructure-errors@lists.linaro.org
-Date:   Sat, 19 Oct 2019 05:03:17 +0000 (UTC)
-To:     lkft-triage@lists.linaro.org, dan.rue@linaro.org,
-        anders.roxell@linaro.org, naresh.kamboju@linaro.org,
-        shuah@kernel.org, linux-kselftest@vger.kernel.org
-Message-ID: <834073458.8388.1571461397612.JavaMail.javamailuser@localhost>
-In-Reply-To: <849691089.8172.1571364229859.JavaMail.javamailuser@localhost>
-References: <849691089.8172.1571364229859.JavaMail.javamailuser@localhost>
-Subject: next-20191018 kselftest results
+        Sat, 19 Oct 2019 04:27:50 -0400
+Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
+        by userp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x9J8NfeA089970;
+        Sat, 19 Oct 2019 08:27:43 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=corp-2019-08-05;
+ bh=Oz64Q6r7thn7CZ3zAYkWauQrO9/H12CT413GOLuk17Q=;
+ b=KuMhEHRzecAqh4nBJd65WIPwfeuB5H9gykK4SJMbb8VHuYsoqsjEVAM6R5lj6lDNJrMo
+ G1eIbKP8rH/RPuEGWXMArNSCk95CJGN1VwFwkVj9ALOfosD+9hR0xtGq+q+xUhwgfPv6
+ 62PGupnzsljR4MmOFzakU5k5RdhumzXG37z5LrBCODEtka9Ft6eNXsbiPBQLT0s2CdB5
+ 8SVlK0PyrvUxL+NojUxJ2PAs+gMeCHMaqABC9fzmdpnPRgonQdyEMsgFO20RkemJG+Mr
+ yAPlCwWJuNO8S9TDeyRZ+R6V6k8WCbxO6hFputUwnb2UF1BikHFIkP012AuiUFe9miui RA== 
+Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
+        by userp2120.oracle.com with ESMTP id 2vqu4q8ce5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Sat, 19 Oct 2019 08:27:43 +0000
+Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
+        by userp3030.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x9J8NDIu043324;
+        Sat, 19 Oct 2019 08:27:42 GMT
+Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
+        by userp3030.oracle.com with ESMTP id 2vqqmh7m3f-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Sat, 19 Oct 2019 08:27:42 +0000
+Received: from abhmp0001.oracle.com (abhmp0001.oracle.com [141.146.116.7])
+        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id x9J8Rf8w020082;
+        Sat, 19 Oct 2019 08:27:41 GMT
+Received: from kadam (/41.57.98.10)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Sat, 19 Oct 2019 08:27:40 +0000
+Date:   Sat, 19 Oct 2019 11:27:31 +0300
+From:   Dan Carpenter <dan.carpenter@oracle.com>
+To:     David Gow <davidgow@google.com>
+Cc:     shuah@kernel.org, brendanhiggins@google.com,
+        akpm@linux-foundation.org, keescook@chromium.org,
+        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH linux-kselftest/test v4] lib/list-test: add a test for
+ the 'list' doubly linked list
+Message-ID: <20191019082731.GM21344@kadam>
+References: <20191018215549.65000-1-davidgow@google.com>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; 
-        boundary="----=_Part_8387_90588155.1571461397251"
-X-Jenkins-Job: LKFT Notify kselftest on next
-X-Jenkins-Result: SUCCESS
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20191018215549.65000-1-davidgow@google.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9414 signatures=668684
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
+ phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=999
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.0.1-1908290000 definitions=main-1910190072
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9414 signatures=668684
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
+ suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1011
+ lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1908290000
+ definitions=main-1910190072
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-------=_Part_8387_90588155.1571461397251
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+On Fri, Oct 18, 2019 at 02:55:49PM -0700, David Gow wrote:
+> Add a KUnit test for the kernel doubly linked list implementation in
+> include/linux/list.h
+> 
+> Each test case (list_test_x) is focused on testing the behaviour of the
+> list function/macro 'x'. None of the tests pass invalid lists to these
+> macros, and so should behave identically with DEBUG_LIST enabled and
+> disabled.
+> 
+> Note that, at present, it only tests the list_ types (not the
+> singly-linked hlist_), and does not yet test all of the
+> list_for_each_entry* macros (and some related things like
+> list_prepare_entry).
+> 
+> Signed-off-by: David Gow <davidgow@google.com>
+> ---
+> 
+> The changes from v3 are mostly to do with naming:
+> - The Kconfig entry has been renamed from LIST_TEST to LIST_KUNIT_TEST,
+>   which matches the SYSCTL_KUNIT_TEST entry,
+> - The Kconfig description was updated to better match other KUnit tests,
+>   specifying that the test is not intended for use in a production
+>   kernel. A now-redundant mention of the test running a boot was
+>   removed.
+> - The MAINTAINERS entry refers to a "KUNIT TEST" rather than a "UNIT
+>   TEST"
+> - The module name has changed from "list-test" to "list-kunit-test".
+> 
+> Earlier versions of the test can be found:
+> v3:
+> https://lore.kernel.org/linux-kselftest/20191016215707.95317-1-davidgow@google.com/
+> v2:
+> https://lore.kernel.org/linux-kselftest/20191010185631.26541-1-davidgow@google.com/
+> v1:
+> https://lore.kernel.org/linux-kselftest/20191007213633.92565-1-davidgow@google.com/
+> 
+>  MAINTAINERS       |   5 +
+>  lib/Kconfig.debug |  18 ++
+>  lib/Makefile      |   3 +
+>  lib/list-test.c   | 740 ++++++++++++++++++++++++++++++++++++++++++++++
+>  4 files changed, 766 insertions(+)
+>  create mode 100644 lib/list-test.c
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 7ef985e01457..7ced1b69a3d3 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -9504,6 +9504,11 @@ F:	Documentation/misc-devices/lis3lv02d.rst
+>  F:	drivers/misc/lis3lv02d/
+>  F:	drivers/platform/x86/hp_accel.c
+>  
+> +LIST KUNIT TEST
+> +M:	David Gow <davidgow@google.com>
+> +S:	Maintained
+> +F:	lib/list-test.c
+> +
+>  LIVE PATCHING
+>  M:	Josh Poimboeuf <jpoimboe@redhat.com>
+>  M:	Jiri Kosina <jikos@kernel.org>
+> diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+> index a3017a5dadcd..7991b78eb1f3 100644
+> --- a/lib/Kconfig.debug
+> +++ b/lib/Kconfig.debug
+> @@ -1961,6 +1961,24 @@ config SYSCTL_KUNIT_TEST
+>  
+>  	  If unsure, say N.
+>  
+> +config LIST_KUNIT_TEST
+> +	bool "KUnit Test for Kernel Linked-list structures"
+> +	depends on KUNIT
+> +	help
+> +	  This builds the linked list KUnit test suite.
+> +	  It tests that the API and basic functionality of the list_head type
+> +	  and associated macros.
+> +	
+> +	  KUnit tests run during boot and output the results to the debug log
+> +	  in TAP format (http://testanything.org/). Only useful for kernel devs
+> +	  running the KUnit test harness, and not intended for inclusion into a
+> +	  production build.
+> +
+> +	  For more information on KUnit and unit tests in general please refer
+> +	  to the KUnit documentation in Documentation/dev-tools/kunit/.
+> +
+> +	  If unsure, say N.
+> +
+>  config TEST_UDELAY
+>  	tristate "udelay test driver"
+>  	help
+> diff --git a/lib/Makefile b/lib/Makefile
+> index bba1fd5485f7..890e581d00c4 100644
+> --- a/lib/Makefile
+> +++ b/lib/Makefile
+> @@ -292,3 +292,6 @@ obj-$(CONFIG_GENERIC_LIB_MULDI3) += muldi3.o
+>  obj-$(CONFIG_GENERIC_LIB_CMPDI2) += cmpdi2.o
+>  obj-$(CONFIG_GENERIC_LIB_UCMPDI2) += ucmpdi2.o
+>  obj-$(CONFIG_OBJAGG) += objagg.o
+> +
+> +# KUnit tests
+> +obj-$(CONFIG_LIST_KUNIT_TEST) += list-test.o
+> diff --git a/lib/list-test.c b/lib/list-test.c
+> new file mode 100644
+> index 000000000000..75ba3ddac959
+> --- /dev/null
+> +++ b/lib/list-test.c
+> @@ -0,0 +1,740 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * KUnit test for the Kernel Linked-list structures.
+> + *
+> + * Copyright (C) 2019, Google LLC.
+> + * Author: David Gow <davidgow@google.com>
+> + */
+> +#include <kunit/test.h>
+> +
+> +#include <linux/list.h>
+> +
+> +struct list_test_struct {
+> +	int data;
+> +	struct list_head list;
+> +};
+> +
+> +static void list_test_list_init(struct kunit *test)
+> +{
+> +	/* Test the different ways of initialising a list. */
+> +	struct list_head list1 = LIST_HEAD_INIT(list1);
+> +	struct list_head list2;
+> +	LIST_HEAD(list3);
+> +	struct list_head *list4;
+> +	struct list_head *list5;
+> +
+> +	INIT_LIST_HEAD(&list2);
+> +
+> +	list4 = kzalloc(sizeof(*list4), GFP_KERNEL);
+> +	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, list4);
 
-Summary
-------------------------------------------------------------------------
-kernel: 5.4.0-rc3
-git repo: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-git branch: master
-git commit: c4b9850b3676869ac0def5885d781d17f64b3a86
-git describe: next-20191018
-Test details: https://qa-reports.linaro.org/lkft/linux-next-oe/build/next-20191018
+Why not just use GFP_KERNEL | GFP_NOFAIL and remove the check?
 
-Regressions (compared to build next-20191017)
-------------------------------------------------------------------------
-x86_64:                                                                                                      
- kselftest:                                                                                         
-    * bpf_test_skb_cgroup_id.sh                                                                                                         
-                                                                                         
-    * bpf_test_sock_addr.sh                                                                                                         
-                                                                                         
-    * bpf_test_sysctl                                                                                                         
-                                                                                         
-    * bpf_test_tcp_check_syncookie.sh                                                                                                         
-                                                                                         
-    * bpf_test_xdp_meta.sh                                                                                                         
-                                                                                         
-    * bpf_test_xdp_redirect.sh                                                                                                         
-                                                                                         
-    * bpf_test_xdp_vlan_mode_generic.sh                                                                                                         
-                                                                                         
-    * bpf_test_xdp_vlan_mode_native.sh                                                                                                         
-                                                                                         
-    * net_udpgro.sh                                                                                                         
-                                                                                         
-    * net_udpgro_bench.sh                                                                                                         
-                                                                                                      
- kselftest-vsyscall-mode-native:                                                                                         
-    * bpf_test_skb_cgroup_id.sh                                                                                                         
-                                                                                         
-    * bpf_test_sock_addr.sh                                                                                                         
-                                                                                         
-    * bpf_test_tcp_check_syncookie.sh                                                                                                         
-                                                                                         
-    * bpf_test_xdp_meta.sh                                                                                                         
-                                                                                         
-    * bpf_test_xdp_redirect.sh                                                                                                         
-                                                                                         
-    * bpf_test_xdp_vlan_mode_generic.sh                                                                                                         
-                                                                                         
-    * bpf_test_xdp_vlan_mode_native.sh                                                                                                         
-                                                                                         
-    * net_udpgro.sh                                                                                                         
-                                                                                         
-    * net_udpgro_bench.sh                                                                                                         
-                                                                                                      
- kselftest-vsyscall-mode-none:                                                                                         
-    * bpf_test_sysctl                                                                                                         
-                                                                                         
-    * bpf_test_tcp_check_syncookie.sh                                                                                                         
-                                                                                         
-    * bpf_test_xdp_meta.sh                                                                                                         
-                                                                                         
-    * bpf_test_xdp_redirect.sh                                                                                                         
-                                                                                         
-    * bpf_test_xdp_vlan_mode_generic.sh                                                                                                         
-                                                                                         
-    * bpf_test_xdp_vlan_mode_native.sh                                                                                                         
-                                                                                         
-    * net_udpgro.sh                                                                                                         
-                                                                                         
-    * net_udpgro_bench.sh                                                                                                         
-x86_64:                                                                                                      
- kselftest:                                                                                         
-    * bpf_test_skb_cgroup_id.sh                                                                                                         
-                                                                                         
-    * bpf_test_sock_addr.sh                                                                                                         
-                                                                                         
-    * bpf_test_sysctl                                                                                                         
-                                                                                         
-    * bpf_test_tcp_check_syncookie.sh                                                                                                         
-                                                                                         
-    * bpf_test_xdp_meta.sh                                                                                                         
-                                                                                         
-    * bpf_test_xdp_redirect.sh                                                                                                         
-                                                                                         
-    * bpf_test_xdp_vlan_mode_generic.sh                                                                                                         
-                                                                                         
-    * bpf_test_xdp_vlan_mode_native.sh                                                                                                         
-                                                                                         
-    * net_udpgro.sh                                                                                                         
-                                                                                         
-    * net_udpgro_bench.sh                                                                                                         
-                                                                                                      
- kselftest-vsyscall-mode-native:                                                                                         
-    * bpf_test_skb_cgroup_id.sh                                                                                                         
-                                                                                         
-    * bpf_test_sock_addr.sh                                                                                                         
-                                                                                         
-    * bpf_test_tcp_check_syncookie.sh                                                                                                         
-                                                                                         
-    * bpf_test_xdp_meta.sh                                                                                                         
-                                                                                         
-    * bpf_test_xdp_redirect.sh                                                                                                         
-                                                                                         
-    * bpf_test_xdp_vlan_mode_generic.sh                                                                                                         
-                                                                                         
-    * bpf_test_xdp_vlan_mode_native.sh                                                                                                         
-                                                                                         
-    * net_udpgro.sh                                                                                                         
-                                                                                         
-    * net_udpgro_bench.sh                                                                                                         
-                                                                                                      
- kselftest-vsyscall-mode-none:                                                                                         
-    * bpf_test_sysctl                                                                                                         
-                                                                                         
-    * bpf_test_tcp_check_syncookie.sh                                                                                                         
-                                                                                         
-    * bpf_test_xdp_meta.sh                                                                                                         
-                                                                                         
-    * bpf_test_xdp_redirect.sh                                                                                                         
-                                                                                         
-    * bpf_test_xdp_vlan_mode_generic.sh                                                                                                         
-                                                                                         
-    * bpf_test_xdp_vlan_mode_native.sh                                                                                                         
-                                                                                         
-    * net_udpgro.sh                                                                                                         
-                                                                                         
-    * net_udpgro_bench.sh                                                                                                         
-x86_64:                                                                                                      
- kselftest:                                                                                         
-    * bpf_test_skb_cgroup_id.sh                                                                                                         
-                                                                                         
-    * bpf_test_sock_addr.sh                                                                                                         
-                                                                                         
-    * bpf_test_sysctl                                                                                                         
-                                                                                         
-    * bpf_test_tcp_check_syncookie.sh                                                                                                         
-                                                                                         
-    * bpf_test_xdp_meta.sh                                                                                                         
-                                                                                         
-    * bpf_test_xdp_redirect.sh                                                                                                         
-                                                                                         
-    * bpf_test_xdp_vlan_mode_generic.sh                                                                                                         
-                                                                                         
-    * bpf_test_xdp_vlan_mode_native.sh                                                                                                         
-                                                                                         
-    * net_udpgro.sh                                                                                                         
-                                                                                         
-    * net_udpgro_bench.sh                                                                                                         
-                                                                                                      
- kselftest-vsyscall-mode-native:                                                                                         
-    * bpf_test_skb_cgroup_id.sh                                                                                                         
-                                                                                         
-    * bpf_test_sock_addr.sh                                                                                                         
-                                                                                         
-    * bpf_test_tcp_check_syncookie.sh                                                                                                         
-                                                                                         
-    * bpf_test_xdp_meta.sh                                                                                                         
-                                                                                         
-    * bpf_test_xdp_redirect.sh                                                                                                         
-                                                                                         
-    * bpf_test_xdp_vlan_mode_generic.sh                                                                                                         
-                                                                                         
-    * bpf_test_xdp_vlan_mode_native.sh                                                                                                         
-                                                                                         
-    * net_udpgro.sh                                                                                                         
-                                                                                         
-    * net_udpgro_bench.sh                                                                                                         
-                                                                                                      
- kselftest-vsyscall-mode-none:                                                                                         
-    * bpf_test_sysctl                                                                                                         
-                                                                                         
-    * bpf_test_tcp_check_syncookie.sh                                                                                                         
-                                                                                         
-    * bpf_test_xdp_meta.sh                                                                                                         
-                                                                                         
-    * bpf_test_xdp_redirect.sh                                                                                                         
-                                                                                         
-    * bpf_test_xdp_vlan_mode_generic.sh                                                                                                         
-                                                                                         
-    * bpf_test_xdp_vlan_mode_native.sh                                                                                                         
-                                                                                         
-    * net_udpgro.sh                                                                                                         
-                                                                                         
-    * net_udpgro_bench.sh                                                                                                         
-dragonboard-410c - arm64:                                                                                                      
- kselftest:                                                                                         
-    * bpf_test_dev_cgroup                                                                                                         
-                                                                                         
-    * bpf_test_skb_cgroup_id.sh                                                                                                         
-                                                                                         
-    * bpf_test_sysctl                                                                                                         
-                                                                                         
-    * bpf_test_xdp_meta.sh                                                                                                         
-                                                                                         
-    * bpf_test_xdp_redirect.sh                                                                                                         
-                                                                                         
-    * bpf_test_xdp_vlan_mode_generic.sh                                                                                                         
-                                                                                         
-    * bpf_test_xdp_vlan_mode_native.sh                                                                                                         
-                                                                                         
-    * net_udpgro.sh                                                                                                         
-                                                                                         
-    * net_udpgro_bench.sh                                                                                                         
-i386:                                                                                                      
- kselftest:                                                                                         
-    * bpf_test_skb_cgroup_id.sh                                                                                                         
-                                                                                         
-    * bpf_test_sock_addr.sh                                                                                                         
-                                                                                         
-    * bpf_test_tcp_check_syncookie.sh                                                                                                         
-                                                                                         
-    * bpf_test_xdp_meta.sh                                                                                                         
-                                                                                         
-    * bpf_test_xdp_redirect.sh                                                                                                         
-                                                                                         
-    * bpf_test_xdp_vlan_mode_native.sh                                                                                                         
-                                                                                         
-    * net_udpgro_bench.sh                                                                                                         
-                                                                                         
-    * pidfd_pidfd_test                                                                                                         
-qemu_i386:                                                                                                      
- kselftest:                                                                                         
-    * bpf_test_skb_cgroup_id.sh                                                                                                         
-                                                                                         
-    * bpf_test_sock_addr.sh                                                                                                         
-                                                                                         
-    * bpf_test_tcp_check_syncookie.sh                                                                                                         
-                                                                                         
-    * bpf_test_xdp_meta.sh                                                                                                         
-                                                                                         
-    * bpf_test_xdp_redirect.sh                                                                                                         
-                                                                                         
-    * bpf_test_xdp_vlan_mode_generic.sh                                                                                                         
-                                                                                         
-    * bpf_test_xdp_vlan_mode_native.sh                                                                                                         
-                                                                                         
-    * net_udpgro.sh                                                                                                         
-                                                                                         
-    * net_udpgro_bench.sh                                                                                                         
-qemu_arm64:                                                                                                      
- kselftest:                                                                                         
-    * bpf_test_dev_cgroup                                                                                                         
-                                                                                         
-    * bpf_test_skb_cgroup_id.sh                                                                                                         
-                                                                                         
-    * bpf_test_sysctl                                                                                                         
-                                                                                         
-    * bpf_test_xdp_meta.sh                                                                                                         
-                                                                                         
-    * bpf_test_xdp_redirect.sh                                                                                                         
-                                                                                         
-    * bpf_test_xdp_vlan_mode_generic.sh                                                                                                         
-                                                                                         
-    * bpf_test_xdp_vlan_mode_native.sh                                                                                                         
-                                                                                         
-    * net_udpgro.sh                                                                                                         
-                                                                                         
-    * net_udpgro_bench.sh                                                                                                         
-hi6220-hikey - arm64:                                                                                                      
- kselftest:                                                                                         
-    * bpf_test_dev_cgroup                                                                                                         
-                                                                                         
-    * bpf_test_skb_cgroup_id.sh                                                                                                         
-                                                                                         
-    * bpf_test_sysctl                                                                                                         
-                                                                                         
-    * bpf_test_xdp_meta.sh                                                                                                         
-                                                                                         
-    * bpf_test_xdp_redirect.sh                                                                                                         
-                                                                                         
-    * bpf_test_xdp_vlan_mode_generic.sh                                                                                                         
-                                                                                         
-    * bpf_test_xdp_vlan_mode_native.sh                                                                                                         
-                                                                                         
-    * net_udpgro.sh                                                                                                         
-                                                                                         
-    * net_udpgro_bench.sh                                                                                                         
-                                                                                         
-    * seccomp_seccomp_benchmark                                                                                                         
-x15 - arm:                                                                                                      
- kselftest:                                                                                         
-    * bpf_test_skb_cgroup_id.sh                                                                                                         
-                                                                                         
-    * bpf_test_xdp_meta.sh                                                                                                         
-                                                                                         
-    * bpf_test_xdp_redirect.sh                                                                                                         
-                                                                                         
-    * bpf_test_xdp_vlan_mode_generic.sh                                                                                                         
-                                                                                         
-    * bpf_test_xdp_vlan_mode_native.sh                                                                                                         
-                                                                                         
-    * net_udpgro.sh                                                                                                         
-                                                                                         
-    * net_udpgro_bench.sh                                                                                                         
-qemu_x86_64:                                                                                                      
- kselftest:                                                                                         
-    * bpf_test_skb_cgroup_id.sh                                                                                                         
-                                                                                         
-    * bpf_test_sysctl                                                                                                         
-                                                                                         
-    * bpf_test_tcp_check_syncookie.sh                                                                                                         
-                                                                                         
-    * bpf_test_xdp_meta.sh                                                                                                         
-                                                                                         
-    * bpf_test_xdp_redirect.sh                                                                                                         
-                                                                                         
-    * bpf_test_xdp_vlan_mode_generic.sh                                                                                                         
-                                                                                         
-    * bpf_test_xdp_vlan_mode_native.sh                                                                                                         
-                                                                                         
-    * net_udpgro.sh                                                                                                         
-                                                                                         
-    * net_udpgro_bench.sh                                                                                                         
-qemu_arm:                                                                                                      
- kselftest:                                                                                         
-    * bpf_test_skb_cgroup_id.sh                                                                                                         
-                                                                                         
-    * bpf_test_sock_addr.sh                                                                                                         
-                                                                                         
-    * bpf_test_xdp_meta.sh                                                                                                         
-                                                                                         
-    * bpf_test_xdp_redirect.sh                                                                                                         
-                                                                                         
-    * bpf_test_xdp_vlan_mode_generic.sh                                                                                                         
-                                                                                         
-    * bpf_test_xdp_vlan_mode_native.sh                                                                                                         
-                                                                                         
-    * cgroup_test_freezer                                                                                                         
-                                                                                         
-    * net_udpgro.sh                                                                                                         
-                                                                                         
-    * net_udpgro_bench.sh                                                                                                         
-juno-r2 - arm64:                                                                                                      
- kselftest:                                                                                         
-    * bpf_test_dev_cgroup                                                                                                         
-                                                                                         
-    * bpf_test_skb_cgroup_id.sh                                                                                                         
-                                                                                         
-    * bpf_test_sock_addr.sh                                                                                                         
-                                                                                         
-    * bpf_test_sysctl                                                                                                         
-                                                                                         
-    * bpf_test_xdp_meta.sh                                                                                                         
-                                                                                         
-    * bpf_test_xdp_redirect.sh                                                                                                         
-                                                                                         
-    * bpf_test_xdp_vlan_mode_generic.sh                                                                                                         
-                                                                                         
-    * bpf_test_xdp_vlan_mode_native.sh                                                                                                         
-                                                                                         
-    * net_udpgro.sh                                                                                                         
-                                                                                         
-    * net_udpgro_bench.sh                                                                                                         
-                                                                                                          
-                                                                                                                       
-Fixes (compared to build next-20191017)                                                                   
-------------------------------------------------------------------------                                               
-x86_64:                                                                                                      
- kselftest:                                                                                         
-    * pidfd_pidfd_test                                                                                                         
-                                                                                         
-    * x86_fsgsbase_64                                                                                                         
-                                                                                                      
- kselftest-vsyscall-mode-none:                                                                                         
-    * pidfd_pidfd_test                                                                                                         
-x86_64:                                                                                                      
- kselftest:                                                                                         
-    * pidfd_pidfd_test                                                                                                         
-                                                                                         
-    * x86_fsgsbase_64                                                                                                         
-                                                                                                      
- kselftest-vsyscall-mode-none:                                                                                         
-    * pidfd_pidfd_test                                                                                                         
-i386:                                                                                                      
- kselftest:                                                                                         
-    * seccomp_seccomp_benchmark                                                                                                         
-juno-r2 - arm64:                                                                                                      
- kselftest:                                                                                         
-    * net_rtnetlink.sh                                                                                                         
+kzalloc() can't return error pointers.  If this were an IS_ERR_OR_NULL()
+check then it would generate a static checker warning, but static
+checkers don't know about KUNIT_ASSERT_NOT_ERR_OR_NULL() yet so you're
+safe.
 
+But generally NULL is a special case of success.  A common situation is
+where the user deliberately disables a feature, that means it's not an
+error but we also don't have a valid pointer to return because it's
+disabled.
 
-In total:
-------------------------------------------------------------------------
-Ran 2277 total tests in the following environments and test suites.
-pass 1188
-fail 911
-xfail 0
-skip 178
+regards,
+dan carpenter
 
-Environments
---------------
-- dragonboard-410c - arm64
-- hi6220-hikey - arm64
-- i386
-- juno-r2 - arm64
-- qemu_arm
-- qemu_arm64
-- qemu_i386
-- qemu_x86_64
-- x15 - arm
-- x86_64
-
-Test Suites
------------
-* kselftest
-* kselftest-vsyscall-mode-native
-* kselftest-vsyscall-mode-none
-
-
-Failures
-------------------------------------------------------------------------
-
-qemu_x86_64:
-* kselftest/bpf_get_cgroup_id_user
-* kselftest/bpf_test_bpftool_build.sh
-* kselftest/bpf_test_dev_cgroup
-* kselftest/bpf_test_flow_dissector.sh
-* kselftest/bpf_test_lwt_ip_encap.sh
-* kselftest/bpf_test_lwt_seg6local.sh
-* kselftest/bpf_test_maps
-* kselftest/bpf_test_netcnt
-* kselftest/bpf_test_progs
-* kselftest/bpf_test_select_reuseport
-* kselftest/bpf_test_skb_cgroup_id.sh
-* kselftest/bpf_test_sock_addr.sh
-* kselftest/bpf_test_socket_cookie
-* kselftest/bpf_test_sock_fields
-* kselftest/bpf_test_sockmap
-* kselftest/bpf_test_sysctl
-* kselftest/bpf_test_tc_edt.sh
-* kselftest/bpf_test_tcpbpf_user
-* kselftest/bpf_test_tcp_check_syncookie.sh
-* kselftest/bpf_test_tcpnotify_user
-* kselftest/bpf_test_tc_tunnel.sh
-* kselftest/bpf_test_tunnel.sh
-* kselftest/bpf_test_xdping.sh
-* kselftest/bpf_test_xdp_meta.sh
-* kselftest/bpf_test_xdp_redirect.sh
-* kselftest/bpf_test_xdp_vlan_mode_generic.sh
-* kselftest/bpf_test_xdp_vlan_mode_native.sh
-* kselftest/bpf_xdping
-* kselftest/cpufreq_main.sh
-* kselftest/firmware_fw_run_tests.sh
-* kselftest/kvm_clear_dirty_log_test
-* kselftest/kvm_cr4_cpuid_sync_test
-* kselftest/kvm_dirty_log_test
-* kselftest/kvm_evmcs_test
-* kselftest/kvm_hyperv_cpuid
-* kselftest/kvm_kvm_create_max_vcpus
-* kselftest/kvm_platform_info_test
-* kselftest/kvm_set_sregs_test
-* kselftest/kvm_smm_test
-* kselftest/kvm_state_test
-* kselftest/kvm_sync_regs_test
-* kselftest/kvm_vmx_dirty_log_test
-* kselftest/lib_bitmap.sh
-* kselftest/lib_prime_numbers.sh
-* kselftest/lib_printf.sh
-* kselftest/lib_strscpy.sh
-* kselftest/mqueue_mq_perf_tests
-* kselftest/net_fib-onlink-tests.sh
-* kselftest/net_fib_tests.sh
-* kselftest/net_ip_defrag.sh
-* kselftest/net_l2tp.sh
-* kselftest/net_pmtu.sh
-* kselftest/net_psock_snd.sh
-* kselftest/net_run_netsocktests
-* kselftest/net_tcp_fastopen_backup_key.sh
-* kselftest/net_test_vxlan_under_vrf.sh
-* kselftest/net_udpgro_bench.sh
-* kselftest/net_udpgro.sh
-* kselftest/net_udpgso_bench.sh
-* kselftest/net_xfrm_policy.sh
-* kselftest/pstore_pstore_tests
-* kselftest/rseq_run_param_test.sh
-* kselftest/rtc_rtctest
-* kselftest/timers_set-timer-lat
-* kselftest/timestamping_txtimestamp.sh
-* kselftest/tpm2_test_smoke.sh
-* kselftest/tpm2_test_space.sh
-* kselftest/vm_run_vmtests
-* kselftest/x86_fsgsbase_64
-
-x86:
-* kselftest-vsyscall-mode-native/bpf_get_cgroup_id_user
-* kselftest-vsyscall-mode-native/bpf_test_dev_cgroup
-* kselftest-vsyscall-mode-native/bpf_test_flow_dissector.sh
-* kselftest-vsyscall-mode-native/bpf_test_lwt_ip_encap.sh
-* kselftest-vsyscall-mode-native/bpf_test_lwt_seg6local.sh
-* kselftest-vsyscall-mode-native/bpf_test_maps
-* kselftest-vsyscall-mode-native/bpf_test_netcnt
-* kselftest-vsyscall-mode-native/bpf_test_progs
-* kselftest-vsyscall-mode-native/bpf_test_select_reuseport
-* kselftest-vsyscall-mode-native/bpf_test_skb_cgroup_id.sh
-* kselftest-vsyscall-mode-native/bpf_test_sock_addr.sh
-* kselftest-vsyscall-mode-native/bpf_test_socket_cookie
-* kselftest-vsyscall-mode-native/bpf_test_sock_fields
-* kselftest-vsyscall-mode-native/bpf_test_sockmap
-* kselftest-vsyscall-mode-native/bpf_test_sysctl
-* kselftest-vsyscall-mode-native/bpf_test_tc_edt.sh
-* kselftest-vsyscall-mode-native/bpf_test_tcpbpf_user
-* kselftest-vsyscall-mode-native/bpf_test_tcp_check_syncookie.sh
-* kselftest-vsyscall-mode-native/bpf_test_tcpnotify_user
-* kselftest-vsyscall-mode-native/bpf_test_tc_tunnel.sh
-* kselftest-vsyscall-mode-native/bpf_test_tunnel.sh
-* kselftest-vsyscall-mode-native/bpf_test_xdping.sh
-* kselftest-vsyscall-mode-native/bpf_test_xdp_meta.sh
-* kselftest-vsyscall-mode-native/bpf_test_xdp_redirect.sh
-* kselftest-vsyscall-mode-native/bpf_test_xdp_vlan_mode_generic.sh
-* kselftest-vsyscall-mode-native/bpf_test_xdp_vlan_mode_native.sh
-* kselftest-vsyscall-mode-native/bpf_xdping
-* kselftest-vsyscall-mode-native/firmware_fw_run_tests.sh
-* kselftest-vsyscall-mode-native/intel_pstate_run.sh
-* kselftest-vsyscall-mode-native/kvm_clear_dirty_log_test
-* kselftest-vsyscall-mode-native/kvm_cr4_cpuid_sync_test
-* kselftest-vsyscall-mode-native/kvm_dirty_log_test
-* kselftest-vsyscall-mode-native/kvm_evmcs_test
-* kselftest-vsyscall-mode-native/kvm_hyperv_cpuid
-* kselftest-vsyscall-mode-native/kvm_kvm_create_max_vcpus
-* kselftest-vsyscall-mode-native/kvm_platform_info_test
-* kselftest-vsyscall-mode-native/kvm_set_sregs_test
-* kselftest-vsyscall-mode-native/kvm_smm_test
-* kselftest-vsyscall-mode-native/kvm_state_test
-* kselftest-vsyscall-mode-native/kvm_sync_regs_test
-* kselftest-vsyscall-mode-native/kvm_vmx_close_while_nested_test
-* kselftest-vsyscall-mode-native/kvm_vmx_set_nested_state_test
-* kselftest-vsyscall-mode-native/kvm_vmx_tsc_adjust_test
-* kselftest-vsyscall-mode-native/lib_bitmap.sh
-* kselftest-vsyscall-mode-native/lib_prime_numbers.sh
-* kselftest-vsyscall-mode-native/lib_printf.sh
-* kselftest-vsyscall-mode-native/lib_strscpy.sh
-* kselftest-vsyscall-mode-native/mqueue_mq_perf_tests
-* kselftest-vsyscall-mode-native/net_fib_tests.sh
-* kselftest-vsyscall-mode-native/net_ip_defrag.sh
-* kselftest-vsyscall-mode-native/net_l2tp.sh
-* kselftest-vsyscall-mode-native/net_pmtu.sh
-* kselftest-vsyscall-mode-native/net_psock_snd.sh
-* kselftest-vsyscall-mode-native/net_run_netsocktests
-* kselftest-vsyscall-mode-native/net_tcp_fastopen_backup_key.sh
-* kselftest-vsyscall-mode-native/net_test_vxlan_under_vrf.sh
-* kselftest-vsyscall-mode-native/net_udpgro_bench.sh
-* kselftest-vsyscall-mode-native/net_udpgro.sh
-* kselftest-vsyscall-mode-native/net_udpgso_bench.sh
-* kselftest-vsyscall-mode-native/net_xfrm_policy.sh
-* kselftest-vsyscall-mode-native/pidfd_pidfd_test
-* kselftest-vsyscall-mode-native/pstore_pstore_tests
-* kselftest-vsyscall-mode-native/rseq_run_param_test.sh
-* kselftest-vsyscall-mode-native/rtc_rtctest
-* kselftest-vsyscall-mode-native/seccomp_seccomp_benchmark
-* kselftest-vsyscall-mode-native/timers_set-timer-lat
-* kselftest-vsyscall-mode-native/timestamping_txtimestamp.sh
-* kselftest-vsyscall-mode-native/tpm2_test_smoke.sh
-* kselftest-vsyscall-mode-native/tpm2_test_space.sh
-* kselftest-vsyscall-mode-native/vm_run_vmtests
-* kselftest-vsyscall-mode-none/bpf_get_cgroup_id_user
-* kselftest-vsyscall-mode-none/bpf_test_bpftool_build.sh
-* kselftest-vsyscall-mode-none/bpf_test_dev_cgroup
-* kselftest-vsyscall-mode-none/bpf_test_flow_dissector.sh
-* kselftest-vsyscall-mode-none/bpf_test_lwt_ip_encap.sh
-* kselftest-vsyscall-mode-none/bpf_test_lwt_seg6local.sh
-* kselftest-vsyscall-mode-none/bpf_test_maps
-* kselftest-vsyscall-mode-none/bpf_test_netcnt
-* kselftest-vsyscall-mode-none/bpf_test_progs
-* kselftest-vsyscall-mode-none/bpf_test_select_reuseport
-* kselftest-vsyscall-mode-none/bpf_test_sock_addr.sh
-* kselftest-vsyscall-mode-none/bpf_test_socket_cookie
-* kselftest-vsyscall-mode-none/bpf_test_sock_fields
-* kselftest-vsyscall-mode-none/bpf_test_sockmap
-* kselftest-vsyscall-mode-none/bpf_test_sysctl
-* kselftest-vsyscall-mode-none/bpf_test_tc_edt.sh
-* kselftest-vsyscall-mode-none/bpf_test_tcpbpf_user
-* kselftest-vsyscall-mode-none/bpf_test_tcp_check_syncookie.sh
-* kselftest-vsyscall-mode-none/bpf_test_tcpnotify_user
-* kselftest-vsyscall-mode-none/bpf_test_tc_tunnel.sh
-* kselftest-vsyscall-mode-none/bpf_test_tunnel.sh
-* kselftest-vsyscall-mode-none/bpf_test_xdping.sh
-* kselftest-vsyscall-mode-none/bpf_test_xdp_meta.sh
-* kselftest-vsyscall-mode-none/bpf_test_xdp_redirect.sh
-* kselftest-vsyscall-mode-none/bpf_test_xdp_vlan_mode_generic.sh
-* kselftest-vsyscall-mode-none/bpf_test_xdp_vlan_mode_native.sh
-* kselftest-vsyscall-mode-none/bpf_xdping
-* kselftest-vsyscall-mode-none/firmware_fw_run_tests.sh
-* kselftest-vsyscall-mode-none/intel_pstate_run.sh
-* kselftest-vsyscall-mode-none/kvm_clear_dirty_log_test
-* kselftest-vsyscall-mode-none/kvm_cr4_cpuid_sync_test
-* kselftest-vsyscall-mode-none/kvm_dirty_log_test
-* kselftest-vsyscall-mode-none/kvm_evmcs_test
-* kselftest-vsyscall-mode-none/kvm_hyperv_cpuid
-* kselftest-vsyscall-mode-none/kvm_kvm_create_max_vcpus
-* kselftest-vsyscall-mode-none/kvm_platform_info_test
-* kselftest-vsyscall-mode-none/kvm_set_sregs_test
-* kselftest-vsyscall-mode-none/kvm_smm_test
-* kselftest-vsyscall-mode-none/kvm_state_test
-* kselftest-vsyscall-mode-none/kvm_sync_regs_test
-* kselftest-vsyscall-mode-none/kvm_vmx_close_while_nested_test
-* kselftest-vsyscall-mode-none/kvm_vmx_dirty_log_test
-* kselftest-vsyscall-mode-none/kvm_vmx_set_nested_state_test
-* kselftest-vsyscall-mode-none/kvm_vmx_tsc_adjust_test
-* kselftest-vsyscall-mode-none/lib_bitmap.sh
-* kselftest-vsyscall-mode-none/lib_prime_numbers.sh
-* kselftest-vsyscall-mode-none/lib_printf.sh
-* kselftest-vsyscall-mode-none/lib_strscpy.sh
-* kselftest-vsyscall-mode-none/mqueue_mq_perf_tests
-* kselftest-vsyscall-mode-none/net_fib-onlink-tests.sh
-* kselftest-vsyscall-mode-none/net_fib_tests.sh
-* kselftest-vsyscall-mode-none/net_ip_defrag.sh
-* kselftest-vsyscall-mode-none/net_l2tp.sh
-* kselftest-vsyscall-mode-none/net_pmtu.sh
-* kselftest-vsyscall-mode-none/net_psock_snd.sh
-* kselftest-vsyscall-mode-none/net_run_netsocktests
-* kselftest-vsyscall-mode-none/net_tcp_fastopen_backup_key.sh
-* kselftest-vsyscall-mode-none/net_test_vxlan_under_vrf.sh
-* kselftest-vsyscall-mode-none/net_udpgro_bench.sh
-* kselftest-vsyscall-mode-none/net_udpgro.sh
-* kselftest-vsyscall-mode-none/net_udpgso_bench.sh
-* kselftest-vsyscall-mode-none/net_xfrm_policy.sh
-* kselftest-vsyscall-mode-none/pstore_pstore_tests
-* kselftest-vsyscall-mode-none/rseq_run_param_test.sh
-* kselftest-vsyscall-mode-none/rtc_rtctest
-* kselftest-vsyscall-mode-none/seccomp_seccomp_benchmark
-* kselftest-vsyscall-mode-none/timers_set-timer-lat
-* kselftest-vsyscall-mode-none/timestamping_txtimestamp.sh
-* kselftest-vsyscall-mode-none/tpm2_test_smoke.sh
-* kselftest-vsyscall-mode-none/tpm2_test_space.sh
-* kselftest-vsyscall-mode-none/vm_run_vmtests
-* kselftest/bpf_get_cgroup_id_user
-* kselftest/bpf_test_bpftool_build.sh
-* kselftest/bpf_test_dev_cgroup
-* kselftest/bpf_test_flow_dissector.sh
-* kselftest/bpf_test_lwt_ip_encap.sh
-* kselftest/bpf_test_lwt_seg6local.sh
-* kselftest/bpf_test_maps
-* kselftest/bpf_test_netcnt
-* kselftest/bpf_test_progs
-* kselftest/bpf_test_select_reuseport
-* kselftest/bpf_test_skb_cgroup_id.sh
-* kselftest/bpf_test_sock_addr.sh
-* kselftest/bpf_test_socket_cookie
-* kselftest/bpf_test_sock_fields
-* kselftest/bpf_test_sockmap
-* kselftest/bpf_test_sysctl
-* kselftest/bpf_test_tc_edt.sh
-* kselftest/bpf_test_tcpbpf_user
-* kselftest/bpf_test_tcp_check_syncookie.sh
-* kselftest/bpf_test_tcpnotify_user
-* kselftest/bpf_test_tc_tunnel.sh
-* kselftest/bpf_test_tunnel.sh
-* kselftest/bpf_test_xdping.sh
-* kselftest/bpf_test_xdp_meta.sh
-* kselftest/bpf_test_xdp_redirect.sh
-* kselftest/bpf_test_xdp_vlan_mode_generic.sh
-* kselftest/bpf_test_xdp_vlan_mode_native.sh
-* kselftest/bpf_xdping
-* kselftest/firmware_fw_run_tests.sh
-* kselftest/intel_pstate_run.sh
-* kselftest/kvm_clear_dirty_log_test
-* kselftest/kvm_cr4_cpuid_sync_test
-* kselftest/kvm_dirty_log_test
-* kselftest/kvm_evmcs_test
-* kselftest/kvm_hyperv_cpuid
-* kselftest/kvm_kvm_create_max_vcpus
-* kselftest/kvm_platform_info_test
-* kselftest/kvm_set_sregs_test
-* kselftest/kvm_smm_test
-* kselftest/kvm_state_test
-* kselftest/kvm_sync_regs_test
-* kselftest/kvm_vmx_close_while_nested_test
-* kselftest/kvm_vmx_dirty_log_test
-* kselftest/kvm_vmx_set_nested_state_test
-* kselftest/kvm_vmx_tsc_adjust_test
-* kselftest/lib_bitmap.sh
-* kselftest/lib_prime_numbers.sh
-* kselftest/lib_printf.sh
-* kselftest/lib_strscpy.sh
-* kselftest/mqueue_mq_perf_tests
-* kselftest/net_fib-onlink-tests.sh
-* kselftest/net_fib_tests.sh
-* kselftest/net_ip_defrag.sh
-* kselftest/net_l2tp.sh
-* kselftest/net_pmtu.sh
-* kselftest/net_psock_snd.sh
-* kselftest/net_run_netsocktests
-* kselftest/net_tcp_fastopen_backup_key.sh
-* kselftest/net_test_vxlan_under_vrf.sh
-* kselftest/net_udpgro_bench.sh
-* kselftest/net_udpgro.sh
-* kselftest/net_udpgso_bench.sh
-* kselftest/net_xfrm_policy.sh
-* kselftest/pstore_pstore_tests
-* kselftest/rseq_run_param_test.sh
-* kselftest/rtc_rtctest
-* kselftest/seccomp_seccomp_benchmark
-* kselftest/timers_set-timer-lat
-* kselftest/timestamping_txtimestamp.sh
-* kselftest/tpm2_test_smoke.sh
-* kselftest/tpm2_test_space.sh
-* kselftest/vm_run_vmtests
-
-qemu_arm:
-* kselftest/bpf_get_cgroup_id_user
-* kselftest/bpf_test_bpftool_build.sh
-* kselftest/bpf_test_dev_cgroup
-* kselftest/bpf_test_flow_dissector.sh
-* kselftest/bpf_test_hashmap
-* kselftest/bpf_test_kmod.sh
-* kselftest/bpf_test_lwt_ip_encap.sh
-* kselftest/bpf_test_lwt_seg6local.sh
-* kselftest/bpf_test_maps
-* kselftest/bpf_test_netcnt
-* kselftest/bpf_test_progs
-* kselftest/bpf_test_select_reuseport
-* kselftest/bpf_test_skb_cgroup_id.sh
-* kselftest/bpf_test_sock_addr.sh
-* kselftest/bpf_test_socket_cookie
-* kselftest/bpf_test_sock_fields
-* kselftest/bpf_test_sockmap
-* kselftest/bpf_test_sysctl
-* kselftest/bpf_test_tag
-* kselftest/bpf_test_tc_edt.sh
-* kselftest/bpf_test_tcpbpf_user
-* kselftest/bpf_test_tcp_check_syncookie.sh
-* kselftest/bpf_test_tcpnotify_user
-* kselftest/bpf_test_tc_tunnel.sh
-* kselftest/bpf_test_tunnel.sh
-* kselftest/bpf_test_verifier
-* kselftest/bpf_test_xdping.sh
-* kselftest/bpf_test_xdp_meta.sh
-* kselftest/bpf_test_xdp_redirect.sh
-* kselftest/bpf_test_xdp_vlan_mode_generic.sh
-* kselftest/bpf_test_xdp_vlan_mode_native.sh
-* kselftest/bpf_xdping
-* kselftest/cgroup_test_freezer
-* kselftest/cpufreq_main.sh
-* kselftest/firmware_fw_run_tests.sh
-* kselftest/kvm_clear_dirty_log_test
-* kselftest/kvm_cr4_cpuid_sync_test
-* kselftest/kvm_dirty_log_test
-* kselftest/kvm_evmcs_test
-* kselftest/kvm_hyperv_cpuid
-* kselftest/kvm_kvm_create_max_vcpus
-* kselftest/kvm_mmio_warning_test
-* kselftest/kvm_platform_info_test
-* kselftest/kvm_set_sregs_test
-* kselftest/kvm_smm_test
-* kselftest/kvm_state_test
-* kselftest/kvm_sync_regs_test
-* kselftest/kvm_vmx_close_while_nested_test
-* kselftest/kvm_vmx_dirty_log_test
-* kselftest/kvm_vmx_set_nested_state_test
-* kselftest/kvm_vmx_tsc_adjust_test
-* kselftest/lib_bitmap.sh
-* kselftest/lib_prime_numbers.sh
-* kselftest/lib_printf.sh
-* kselftest/lib_strscpy.sh
-* kselftest/net_fib-onlink-tests.sh
-* kselftest/net_fib_rule_tests.sh
-* kselftest/net_fib_tests.sh
-* kselftest/netfilter_conntrack_icmp_related.sh
-* kselftest/netfilter_nft_nat.sh
-* kselftest/net_ip_defrag.sh
-* kselftest/net_l2tp.sh
-* kselftest/net_pmtu.sh
-* kselftest/net_psock_snd.sh
-* kselftest/net_reuseport_bpf_numa
-* kselftest/net_run_netsocktests
-* kselftest/net_tcp_fastopen_backup_key.sh
-* kselftest/net_test_vxlan_under_vrf.sh
-* kselftest/net_udpgro_bench.sh
-* kselftest/net_udpgro.sh
-* kselftest/net_udpgso_bench.sh
-* kselftest/pidfd_pidfd_test
-* kselftest/proc_proc-self-map-files-002
-* kselftest/proc_proc-self-syscall
-* kselftest/pstore_pstore_tests
-* kselftest/rseq_basic_percpu_ops_test
-* kselftest/rtc_rtctest
-* kselftest/timers_set-timer-lat
-* kselftest/timestamping_txtimestamp.sh
-* kselftest/tpm2_test_smoke.sh
-* kselftest/tpm2_test_space.sh
-
-x15:
-* kselftest/bpf_get_cgroup_id_user
-* kselftest/bpf_test_bpftool_build.sh
-* kselftest/bpf_test_dev_cgroup
-* kselftest/bpf_test_flow_dissector.sh
-* kselftest/bpf_test_hashmap
-* kselftest/bpf_test_kmod.sh
-* kselftest/bpf_test_lwt_ip_encap.sh
-* kselftest/bpf_test_lwt_seg6local.sh
-* kselftest/bpf_test_maps
-* kselftest/bpf_test_netcnt
-* kselftest/bpf_test_progs
-* kselftest/bpf_test_select_reuseport
-* kselftest/bpf_test_skb_cgroup_id.sh
-* kselftest/bpf_test_sock_addr.sh
-* kselftest/bpf_test_socket_cookie
-* kselftest/bpf_test_sock_fields
-* kselftest/bpf_test_sockmap
-* kselftest/bpf_test_sysctl
-* kselftest/bpf_test_tag
-* kselftest/bpf_test_tc_edt.sh
-* kselftest/bpf_test_tcpbpf_user
-* kselftest/bpf_test_tcp_check_syncookie.sh
-* kselftest/bpf_test_tcpnotify_user
-* kselftest/bpf_test_tc_tunnel.sh
-* kselftest/bpf_test_tunnel.sh
-* kselftest/bpf_test_verifier
-* kselftest/bpf_test_xdping.sh
-* kselftest/bpf_test_xdp_meta.sh
-* kselftest/bpf_test_xdp_redirect.sh
-* kselftest/bpf_test_xdp_vlan_mode_generic.sh
-* kselftest/bpf_test_xdp_vlan_mode_native.sh
-* kselftest/bpf_xdping
-* kselftest/epoll_epoll_wakeup_test
-* kselftest/firmware_fw_run_tests.sh
-* kselftest/kvm_clear_dirty_log_test
-* kselftest/kvm_cr4_cpuid_sync_test
-* kselftest/kvm_dirty_log_test
-* kselftest/kvm_evmcs_test
-* kselftest/kvm_hyperv_cpuid
-* kselftest/kvm_kvm_create_max_vcpus
-* kselftest/kvm_mmio_warning_test
-* kselftest/kvm_platform_info_test
-* kselftest/kvm_set_sregs_test
-* kselftest/kvm_smm_test
-* kselftest/kvm_state_test
-* kselftest/kvm_sync_regs_test
-* kselftest/kvm_vmx_close_while_nested_test
-* kselftest/kvm_vmx_dirty_log_test
-* kselftest/kvm_vmx_set_nested_state_test
-* kselftest/kvm_vmx_tsc_adjust_test
-* kselftest/lib_bitmap.sh
-* kselftest/lib_prime_numbers.sh
-* kselftest/lib_printf.sh
-* kselftest/lib_strscpy.sh
-* kselftest/net_fib-onlink-tests.sh
-* kselftest/net_fib_rule_tests.sh
-* kselftest/net_fib_tests.sh
-* kselftest/netfilter_conntrack_icmp_related.sh
-* kselftest/netfilter_nft_nat.sh
-* kselftest/net_ip_defrag.sh
-* kselftest/net_l2tp.sh
-* kselftest/net_pmtu.sh
-* kselftest/net_psock_snd.sh
-* kselftest/net_reuseport_bpf_numa
-* kselftest/net_run_netsocktests
-* kselftest/net_tcp_fastopen_backup_key.sh
-* kselftest/net_test_vxlan_under_vrf.sh
-* kselftest/net_udpgro_bench.sh
-* kselftest/net_udpgro.sh
-* kselftest/net_udpgso_bench.sh
-* kselftest/pidfd_pidfd_test
-* kselftest/proc_proc-self-map-files-002
-* kselftest/proc_proc-self-syscall
-* kselftest/pstore_pstore_tests
-* kselftest/rseq_basic_percpu_ops_test
-* kselftest/rtc_rtctest
-* kselftest/seccomp_seccomp_benchmark
-* kselftest/timers_set-timer-lat
-* kselftest/timestamping_txtimestamp.sh
-* kselftest/tpm2_test_smoke.sh
-* kselftest/tpm2_test_space.sh
-
-dragonboard-410c:
-* kselftest/bpf_get_cgroup_id_user
-* kselftest/bpf_test_bpftool_build.sh
-* kselftest/bpf_test_dev_cgroup
-* kselftest/bpf_test_flow_dissector.sh
-* kselftest/bpf_test_kmod.sh
-* kselftest/bpf_test_lpm_map
-* kselftest/bpf_test_lwt_ip_encap.sh
-* kselftest/bpf_test_lwt_seg6local.sh
-* kselftest/bpf_test_maps
-* kselftest/bpf_test_netcnt
-* kselftest/bpf_test_progs
-* kselftest/bpf_test_select_reuseport
-* kselftest/bpf_test_skb_cgroup_id.sh
-* kselftest/bpf_test_sock_addr.sh
-* kselftest/bpf_test_socket_cookie
-* kselftest/bpf_test_sock_fields
-* kselftest/bpf_test_sockmap
-* kselftest/bpf_test_sysctl
-* kselftest/bpf_test_tag
-* kselftest/bpf_test_tc_edt.sh
-* kselftest/bpf_test_tcpbpf_user
-* kselftest/bpf_test_tcp_check_syncookie.sh
-* kselftest/bpf_test_tcpnotify_user
-* kselftest/bpf_test_tc_tunnel.sh
-* kselftest/bpf_test_tunnel.sh
-* kselftest/bpf_test_verifier
-* kselftest/bpf_test_xdping.sh
-* kselftest/bpf_test_xdp_meta.sh
-* kselftest/bpf_test_xdp_redirect.sh
-* kselftest/bpf_test_xdp_vlan_mode_generic.sh
-* kselftest/bpf_test_xdp_vlan_mode_native.sh
-* kselftest/bpf_xdping
-* kselftest/firmware_fw_run_tests.sh
-* kselftest/kvm_clear_dirty_log_test
-* kselftest/kvm_cr4_cpuid_sync_test
-* kselftest/kvm_dirty_log_test
-* kselftest/kvm_evmcs_test
-* kselftest/kvm_hyperv_cpuid
-* kselftest/kvm_kvm_create_max_vcpus
-* kselftest/kvm_mmio_warning_test
-* kselftest/kvm_platform_info_test
-* kselftest/kvm_set_sregs_test
-* kselftest/kvm_smm_test
-* kselftest/kvm_state_test
-* kselftest/kvm_sync_regs_test
-* kselftest/kvm_vmx_close_while_nested_test
-* kselftest/kvm_vmx_dirty_log_test
-* kselftest/kvm_vmx_set_nested_state_test
-* kselftest/kvm_vmx_tsc_adjust_test
-* kselftest/lib_bitmap.sh
-* kselftest/lib_prime_numbers.sh
-* kselftest/lib_printf.sh
-* kselftest/lib_strscpy.sh
-* kselftest/net_fib-onlink-tests.sh
-* kselftest/net_fib_rule_tests.sh
-* kselftest/net_fib_tests.sh
-* kselftest/netfilter_conntrack_icmp_related.sh
-* kselftest/netfilter_nft_nat.sh
-* kselftest/net_ip_defrag.sh
-* kselftest/net_l2tp.sh
-* kselftest/net_pmtu.sh
-* kselftest/net_psock_snd.sh
-* kselftest/net_run_netsocktests
-* kselftest/net_tcp_fastopen_backup_key.sh
-* kselftest/net_test_vxlan_under_vrf.sh
-* kselftest/net_udpgro_bench.sh
-* kselftest/net_udpgro.sh
-* kselftest/net_udpgso_bench.sh
-* kselftest/pidfd_pidfd_fdinfo_test
-* kselftest/pidfd_pidfd_test
-* kselftest/pidfd_pidfd_wait
-* kselftest/pstore_pstore_tests
-* kselftest/rseq_basic_percpu_ops_test
-* kselftest/rtc_rtctest
-* kselftest/timers_rtcpie
-* kselftest/timers_set-timer-lat
-* kselftest/timestamping_txtimestamp.sh
-* kselftest/tpm2_test_smoke.sh
-* kselftest/tpm2_test_space.sh
-
-qemu_arm64:
-* kselftest/bpf_get_cgroup_id_user
-* kselftest/bpf_test_bpftool_build.sh
-* kselftest/bpf_test_dev_cgroup
-* kselftest/bpf_test_flow_dissector.sh
-* kselftest/bpf_test_kmod.sh
-* kselftest/bpf_test_lpm_map
-* kselftest/bpf_test_lwt_ip_encap.sh
-* kselftest/bpf_test_lwt_seg6local.sh
-* kselftest/bpf_test_maps
-* kselftest/bpf_test_netcnt
-* kselftest/bpf_test_progs
-* kselftest/bpf_test_select_reuseport
-* kselftest/bpf_test_skb_cgroup_id.sh
-* kselftest/bpf_test_sock_addr.sh
-* kselftest/bpf_test_socket_cookie
-* kselftest/bpf_test_sock_fields
-* kselftest/bpf_test_sockmap
-* kselftest/bpf_test_sysctl
-* kselftest/bpf_test_tag
-* kselftest/bpf_test_tc_edt.sh
-* kselftest/bpf_test_tcpbpf_user
-* kselftest/bpf_test_tcp_check_syncookie.sh
-* kselftest/bpf_test_tcpnotify_user
-* kselftest/bpf_test_tc_tunnel.sh
-* kselftest/bpf_test_tunnel.sh
-* kselftest/bpf_test_verifier
-* kselftest/bpf_test_xdping.sh
-* kselftest/bpf_test_xdp_meta.sh
-* kselftest/bpf_test_xdp_redirect.sh
-* kselftest/bpf_test_xdp_vlan_mode_generic.sh
-* kselftest/bpf_test_xdp_vlan_mode_native.sh
-* kselftest/bpf_xdping
-* kselftest/cgroup_test_freezer
-* kselftest/cpufreq_main.sh
-* kselftest/firmware_fw_run_tests.sh
-* kselftest/kvm_clear_dirty_log_test
-* kselftest/kvm_cr4_cpuid_sync_test
-* kselftest/kvm_dirty_log_test
-* kselftest/kvm_evmcs_test
-* kselftest/kvm_hyperv_cpuid
-* kselftest/kvm_kvm_create_max_vcpus
-* kselftest/kvm_mmio_warning_test
-* kselftest/kvm_platform_info_test
-* kselftest/kvm_set_sregs_test
-* kselftest/kvm_smm_test
-* kselftest/kvm_state_test
-* kselftest/kvm_sync_regs_test
-* kselftest/kvm_vmx_close_while_nested_test
-* kselftest/kvm_vmx_dirty_log_test
-* kselftest/kvm_vmx_set_nested_state_test
-* kselftest/kvm_vmx_tsc_adjust_test
-* kselftest/lib_bitmap.sh
-* kselftest/lib_prime_numbers.sh
-* kselftest/lib_printf.sh
-* kselftest/lib_strscpy.sh
-* kselftest/net_fib-onlink-tests.sh
-* kselftest/net_fib_rule_tests.sh
-* kselftest/net_fib_tests.sh
-* kselftest/netfilter_conntrack_icmp_related.sh
-* kselftest/netfilter_nft_nat.sh
-* kselftest/net_ip_defrag.sh
-* kselftest/net_l2tp.sh
-* kselftest/net_pmtu.sh
-* kselftest/net_psock_snd.sh
-* kselftest/net_run_netsocktests
-* kselftest/net_tcp_fastopen_backup_key.sh
-* kselftest/net_test_vxlan_under_vrf.sh
-* kselftest/net_udpgro_bench.sh
-* kselftest/net_udpgro.sh
-* kselftest/net_udpgso_bench.sh
-* kselftest/pidfd_pidfd_fdinfo_test
-* kselftest/pidfd_pidfd_test
-* kselftest/pidfd_pidfd_wait
-* kselftest/pstore_pstore_tests
-* kselftest/rseq_basic_percpu_ops_test
-* kselftest/rtc_rtctest
-* kselftest/timers_set-timer-lat
-* kselftest/timestamping_txtimestamp.sh
-* kselftest/tpm2_test_smoke.sh
-* kselftest/tpm2_test_space.sh
-
-qemu_i386:
-* kselftest/bpf_get_cgroup_id_user
-* kselftest/bpf_test_bpftool_build.sh
-* kselftest/bpf_test_dev_cgroup
-* kselftest/bpf_test_flow_dissector.sh
-* kselftest/bpf_test_hashmap
-* kselftest/bpf_test_lwt_ip_encap.sh
-* kselftest/bpf_test_lwt_seg6local.sh
-* kselftest/bpf_test_maps
-* kselftest/bpf_test_netcnt
-* kselftest/bpf_test_progs
-* kselftest/bpf_test_select_reuseport
-* kselftest/bpf_test_skb_cgroup_id.sh
-* kselftest/bpf_test_sock_addr.sh
-* kselftest/bpf_test_socket_cookie
-* kselftest/bpf_test_sock_fields
-* kselftest/bpf_test_sockmap
-* kselftest/bpf_test_sysctl
-* kselftest/bpf_test_tc_edt.sh
-* kselftest/bpf_test_tcpbpf_user
-* kselftest/bpf_test_tcp_check_syncookie.sh
-* kselftest/bpf_test_tcpnotify_user
-* kselftest/bpf_test_tc_tunnel.sh
-* kselftest/bpf_test_tunnel.sh
-* kselftest/bpf_test_xdping.sh
-* kselftest/bpf_test_xdp_meta.sh
-* kselftest/bpf_test_xdp_redirect.sh
-* kselftest/bpf_test_xdp_vlan_mode_generic.sh
-* kselftest/bpf_test_xdp_vlan_mode_native.sh
-* kselftest/bpf_xdping
-* kselftest/cpufreq_main.sh
-* kselftest/firmware_fw_run_tests.sh
-* kselftest/kvm_clear_dirty_log_test
-* kselftest/kvm_cr4_cpuid_sync_test
-* kselftest/kvm_dirty_log_test
-* kselftest/kvm_evmcs_test
-* kselftest/kvm_hyperv_cpuid
-* kselftest/kvm_kvm_create_max_vcpus
-* kselftest/kvm_mmio_warning_test
-* kselftest/kvm_platform_info_test
-* kselftest/kvm_set_sregs_test
-* kselftest/kvm_smm_test
-* kselftest/kvm_state_test
-* kselftest/kvm_sync_regs_test
-* kselftest/kvm_vmx_close_while_nested_test
-* kselftest/kvm_vmx_dirty_log_test
-* kselftest/kvm_vmx_set_nested_state_test
-* kselftest/kvm_vmx_tsc_adjust_test
-* kselftest/lib_bitmap.sh
-* kselftest/lib_prime_numbers.sh
-* kselftest/lib_printf.sh
-* kselftest/lib_strscpy.sh
-* kselftest/mqueue_mq_perf_tests
-* kselftest/net_fib-onlink-tests.sh
-* kselftest/net_fib_tests.sh
-* kselftest/netfilter_conntrack_icmp_related.sh
-* kselftest/netfilter_nft_nat.sh
-* kselftest/net_ip_defrag.sh
-* kselftest/net_l2tp.sh
-* kselftest/net_pmtu.sh
-* kselftest/net_psock_snd.sh
-* kselftest/net_run_netsocktests
-* kselftest/net_tcp_fastopen_backup_key.sh
-* kselftest/net_test_vxlan_under_vrf.sh
-* kselftest/net_udpgro_bench.sh
-* kselftest/net_udpgro.sh
-* kselftest/net_udpgso_bench.sh
-* kselftest/net_xfrm_policy.sh
-* kselftest/proc_proc-self-map-files-002
-* kselftest/proc_proc-self-syscall
-* kselftest/pstore_pstore_tests
-* kselftest/rseq_run_param_test.sh
-* kselftest/rtc_rtctest
-* kselftest/size_get_size
-* kselftest/timers_set-timer-lat
-* kselftest/timestamping_txtimestamp.sh
-* kselftest/tpm2_test_smoke.sh
-* kselftest/tpm2_test_space.sh
-* kselftest/vm_run_vmtests
-* kselftest/x86_ldt_gdt_32
-* kselftest/x86_sigreturn_32
-
-juno-r2:
-* kselftest/bpf_get_cgroup_id_user
-* kselftest/bpf_test_bpftool_build.sh
-* kselftest/bpf_test_dev_cgroup
-* kselftest/bpf_test_flow_dissector.sh
-* kselftest/bpf_test_lwt_ip_encap.sh
-* kselftest/bpf_test_lwt_seg6local.sh
-* kselftest/bpf_test_maps
-* kselftest/bpf_test_netcnt
-* kselftest/bpf_test_progs
-* kselftest/bpf_test_select_reuseport
-* kselftest/bpf_test_skb_cgroup_id.sh
-* kselftest/bpf_test_sock_addr.sh
-* kselftest/bpf_test_socket_cookie
-* kselftest/bpf_test_sock_fields
-* kselftest/bpf_test_sockmap
-* kselftest/bpf_test_sysctl
-* kselftest/bpf_test_tag
-* kselftest/bpf_test_tc_edt.sh
-* kselftest/bpf_test_tcpbpf_user
-* kselftest/bpf_test_tcp_check_syncookie.sh
-* kselftest/bpf_test_tcpnotify_user
-* kselftest/bpf_test_tc_tunnel.sh
-* kselftest/bpf_test_tunnel.sh
-* kselftest/bpf_test_verifier
-* kselftest/bpf_test_xdping.sh
-* kselftest/bpf_test_xdp_meta.sh
-* kselftest/bpf_test_xdp_redirect.sh
-* kselftest/bpf_test_xdp_vlan_mode_generic.sh
-* kselftest/bpf_test_xdp_vlan_mode_native.sh
-* kselftest/bpf_xdping
-* kselftest/cpufreq_main.sh
-* kselftest/firmware_fw_run_tests.sh
-* kselftest/kvm_clear_dirty_log_test
-* kselftest/kvm_cr4_cpuid_sync_test
-* kselftest/kvm_dirty_log_test
-* kselftest/kvm_evmcs_test
-* kselftest/kvm_hyperv_cpuid
-* kselftest/kvm_kvm_create_max_vcpus
-* kselftest/kvm_mmio_warning_test
-* kselftest/kvm_platform_info_test
-* kselftest/kvm_set_sregs_test
-* kselftest/kvm_smm_test
-* kselftest/kvm_state_test
-* kselftest/kvm_sync_regs_test
-* kselftest/kvm_vmx_close_while_nested_test
-* kselftest/kvm_vmx_dirty_log_test
-* kselftest/kvm_vmx_set_nested_state_test
-* kselftest/kvm_vmx_tsc_adjust_test
-* kselftest/lib_bitmap.sh
-* kselftest/lib_prime_numbers.sh
-* kselftest/lib_printf.sh
-* kselftest/lib_strscpy.sh
-* kselftest/net_fib-onlink-tests.sh
-* kselftest/net_fib_rule_tests.sh
-* kselftest/net_fib_tests.sh
-* kselftest/netfilter_conntrack_icmp_related.sh
-* kselftest/netfilter_nft_nat.sh
-* kselftest/net_ip_defrag.sh
-* kselftest/net_l2tp.sh
-* kselftest/net_pmtu.sh
-* kselftest/net_psock_snd.sh
-* kselftest/net_run_netsocktests
-* kselftest/net_tcp_fastopen_backup_key.sh
-* kselftest/net_test_vxlan_under_vrf.sh
-* kselftest/net_udpgro_bench.sh
-* kselftest/net_udpgro.sh
-* kselftest/net_udpgso_bench.sh
-* kselftest/pidfd_pidfd_fdinfo_test
-* kselftest/pidfd_pidfd_test
-* kselftest/pidfd_pidfd_wait
-* kselftest/pstore_pstore_tests
-* kselftest/rseq_basic_percpu_ops_test
-* kselftest/rtc_rtctest
-* kselftest/timers_set-timer-lat
-* kselftest/timestamping_txtimestamp.sh
-* kselftest/tpm2_test_smoke.sh
-* kselftest/tpm2_test_space.sh
-
-i386:
-* kselftest/bpf_get_cgroup_id_user
-* kselftest/bpf_test_flow_dissector.sh
-* kselftest/bpf_test_hashmap
-* kselftest/bpf_test_lwt_ip_encap.sh
-* kselftest/bpf_test_lwt_seg6local.sh
-* kselftest/bpf_test_maps
-* kselftest/bpf_test_netcnt
-* kselftest/bpf_test_progs
-* kselftest/bpf_test_select_reuseport
-* kselftest/bpf_test_skb_cgroup_id.sh
-* kselftest/bpf_test_sock_addr.sh
-* kselftest/bpf_test_socket_cookie
-* kselftest/bpf_test_sock_fields
-* kselftest/bpf_test_sockmap
-* kselftest/bpf_test_sysctl
-* kselftest/bpf_test_tc_edt.sh
-* kselftest/bpf_test_tcpbpf_user
-* kselftest/bpf_test_tcp_check_syncookie.sh
-* kselftest/bpf_test_tcpnotify_user
-* kselftest/bpf_test_tc_tunnel.sh
-* kselftest/bpf_test_tunnel.sh
-* kselftest/bpf_test_xdping.sh
-* kselftest/bpf_test_xdp_meta.sh
-* kselftest/bpf_test_xdp_redirect.sh
-* kselftest/bpf_test_xdp_vlan_mode_generic.sh
-* kselftest/bpf_test_xdp_vlan_mode_native.sh
-* kselftest/bpf_xdping
-* kselftest/firmware_fw_run_tests.sh
-* kselftest/intel_pstate_run.sh
-* kselftest/kvm_clear_dirty_log_test
-* kselftest/kvm_cr4_cpuid_sync_test
-* kselftest/kvm_evmcs_test
-* kselftest/kvm_hyperv_cpuid
-* kselftest/kvm_kvm_create_max_vcpus
-* kselftest/kvm_mmio_warning_test
-* kselftest/kvm_platform_info_test
-* kselftest/kvm_set_sregs_test
-* kselftest/kvm_smm_test
-* kselftest/kvm_state_test
-* kselftest/kvm_sync_regs_test
-* kselftest/kvm_vmx_dirty_log_test
-* kselftest/kvm_vmx_set_nested_state_test
-* kselftest/kvm_vmx_tsc_adjust_test
-* kselftest/lib_bitmap.sh
-* kselftest/lib_prime_numbers.sh
-* kselftest/lib_printf.sh
-* kselftest/lib_strscpy.sh
-* kselftest/mqueue_mq_perf_tests
-* kselftest/net_fib-onlink-tests.sh
-* kselftest/net_fib_tests.sh
-* kselftest/net_ip_defrag.sh
-* kselftest/net_l2tp.sh
-* kselftest/net_pmtu.sh
-* kselftest/net_psock_snd.sh
-* kselftest/net_run_netsocktests
-* kselftest/net_tcp_fastopen_backup_key.sh
-* kselftest/net_test_vxlan_under_vrf.sh
-* kselftest/net_udpgro_bench.sh
-* kselftest/net_udpgso_bench.sh
-* kselftest/pidfd_pidfd_test
-* kselftest/proc_proc-self-map-files-002
-* kselftest/proc_proc-self-syscall
-* kselftest/pstore_pstore_tests
-* kselftest/rseq_run_param_test.sh
-* kselftest/rtc_rtctest
-* kselftest/size_get_size
-* kselftest/timers_set-timer-lat
-* kselftest/timestamping_txtimestamp.sh
-* kselftest/tpm2_test_smoke.sh
-* kselftest/tpm2_test_space.sh
-* kselftest/vm_run_vmtests
-* kselftest/x86_ldt_gdt_32
-* kselftest/x86_sigreturn_32
-
-hi6220-hikey:
-* kselftest/bpf_get_cgroup_id_user
-* kselftest/bpf_test_bpftool_build.sh
-* kselftest/bpf_test_dev_cgroup
-* kselftest/bpf_test_flow_dissector.sh
-* kselftest/bpf_test_kmod.sh
-* kselftest/bpf_test_lpm_map
-* kselftest/bpf_test_lwt_ip_encap.sh
-* kselftest/bpf_test_lwt_seg6local.sh
-* kselftest/bpf_test_maps
-* kselftest/bpf_test_netcnt
-* kselftest/bpf_test_progs
-* kselftest/bpf_test_select_reuseport
-* kselftest/bpf_test_skb_cgroup_id.sh
-* kselftest/bpf_test_sock_addr.sh
-* kselftest/bpf_test_socket_cookie
-* kselftest/bpf_test_sock_fields
-* kselftest/bpf_test_sockmap
-* kselftest/bpf_test_sysctl
-* kselftest/bpf_test_tag
-* kselftest/bpf_test_tc_edt.sh
-* kselftest/bpf_test_tcpbpf_user
-* kselftest/bpf_test_tcp_check_syncookie.sh
-* kselftest/bpf_test_tcpnotify_user
-* kselftest/bpf_test_tc_tunnel.sh
-* kselftest/bpf_test_tunnel.sh
-* kselftest/bpf_test_verifier
-* kselftest/bpf_test_xdping.sh
-* kselftest/bpf_test_xdp_meta.sh
-* kselftest/bpf_test_xdp_redirect.sh
-* kselftest/bpf_test_xdp_vlan_mode_generic.sh
-* kselftest/bpf_test_xdp_vlan_mode_native.sh
-* kselftest/bpf_xdping
-* kselftest/kvm_clear_dirty_log_test
-* kselftest/kvm_cr4_cpuid_sync_test
-* kselftest/kvm_dirty_log_test
-* kselftest/kvm_evmcs_test
-* kselftest/kvm_hyperv_cpuid
-* kselftest/kvm_kvm_create_max_vcpus
-* kselftest/kvm_mmio_warning_test
-* kselftest/kvm_platform_info_test
-* kselftest/kvm_set_sregs_test
-* kselftest/kvm_smm_test
-* kselftest/kvm_state_test
-* kselftest/kvm_sync_regs_test
-* kselftest/kvm_vmx_close_while_nested_test
-* kselftest/kvm_vmx_dirty_log_test
-* kselftest/kvm_vmx_set_nested_state_test
-* kselftest/kvm_vmx_tsc_adjust_test
-* kselftest/lib_bitmap.sh
-* kselftest/lib_prime_numbers.sh
-* kselftest/lib_printf.sh
-* kselftest/lib_strscpy.sh
-* kselftest/net_fib-onlink-tests.sh
-* kselftest/net_fib_rule_tests.sh
-* kselftest/net_fib_tests.sh
-* kselftest/netfilter_conntrack_icmp_related.sh
-* kselftest/netfilter_nft_nat.sh
-* kselftest/net_ip_defrag.sh
-* kselftest/net_l2tp.sh
-* kselftest/net_pmtu.sh
-* kselftest/net_psock_snd.sh
-* kselftest/net_run_netsocktests
-* kselftest/net_tcp_fastopen_backup_key.sh
-* kselftest/net_test_vxlan_under_vrf.sh
-* kselftest/net_udpgro_bench.sh
-* kselftest/net_udpgro.sh
-* kselftest/net_udpgso_bench.sh
-* kselftest/pidfd_pidfd_fdinfo_test
-* kselftest/pidfd_pidfd_test
-* kselftest/pidfd_pidfd_wait
-* kselftest/pstore_pstore_tests
-* kselftest/rseq_basic_percpu_ops_test
-* kselftest/rtc_rtctest
-* kselftest/seccomp_seccomp_benchmark
-* kselftest/timers_set-timer-lat
-* kselftest/timestamping_txtimestamp.sh
-* kselftest/tpm2_test_smoke.sh
-* kselftest/tpm2_test_space.sh
-
-
-Skips
-------------------------------------------------------------------------
-No skips
-
-
--- 
-Linaro LKFT
-https://lkft.linaro.org
-------=_Part_8387_90588155.1571461397251--
