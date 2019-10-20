@@ -2,188 +2,159 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AF260DDE95
-	for <lists+linux-kselftest@lfdr.de>; Sun, 20 Oct 2019 15:17:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5FE0DDEBB
+	for <lists+linux-kselftest@lfdr.de>; Sun, 20 Oct 2019 15:48:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726349AbfJTNRm (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 20 Oct 2019 09:17:42 -0400
-Received: from mail-wr1-f67.google.com ([209.85.221.67]:42312 "EHLO
-        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726296AbfJTNRl (ORCPT
+        id S1726307AbfJTNsJ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 20 Oct 2019 09:48:09 -0400
+Received: from mail-pg1-f196.google.com ([209.85.215.196]:45077 "EHLO
+        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726298AbfJTNsJ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 20 Oct 2019 09:17:41 -0400
-Received: by mail-wr1-f67.google.com with SMTP id r1so1047633wrs.9;
-        Sun, 20 Oct 2019 06:17:38 -0700 (PDT)
+        Sun, 20 Oct 2019 09:48:09 -0400
+Received: by mail-pg1-f196.google.com with SMTP id r1so5997997pgj.12
+        for <linux-kselftest@vger.kernel.org>; Sun, 20 Oct 2019 06:48:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=WBsUqs8jqBvSIFfpE9lf40jZypisanH4mwM2peO1OfA=;
-        b=Ui3zDKwE8mZ777YswsWFDM41503cR/Au164MXSpukz7I9tzle0EewBrGeDlCbIWZ6i
-         vQGRLB7rFK3sIW/etfrouDUQ+qrHkcDcadtR0ZQ9HzGRaNYnPYJc/4+OyAsM/VOxN+Oc
-         HhyA8n7OBsUpzXdHgYIk0lM914nUHAh3gTUE6eY6n7e8HSz0zMXqthiDCNOM64hSIwMW
-         IhP15NY/qvRK6hcBXOyVlt4tn9nF9t4D2/6uJhPaSGivQ8i/BX9NCQSWYM3P0jbo9/yd
-         o7497MqB6WuUgiaDY67aSfuB69dn85j+JFCyaJ8er33uESicycKqiePQKnGb5URCnKMt
-         hpCA==
+        h=to:from:subject:message-id:date:user-agent:mime-version
+         :content-language:content-transfer-encoding;
+        bh=YbZJtbBn212YfofzuyIr+q6nNXooEsiDp3NOJmUzGgo=;
+        b=Fd206ECqMc22daDNFciXCMJp76Ue1kqmK5GXbDBGwN4+qziPuN+iAQvnpkl6ps1Xzo
+         fGBBP7GM6uYRof6SzeIvsyEIhCj7V7rarRu4M4MCnfrIXai5mvVCVA9hjwTp5YuvA0U9
+         gCXVzw98+PQBxzg9YiD68MynxLx67smhVlNtsOMjpkNpU8/mQHDadwxRFw3nVzPKtXFK
+         1HbDEQq38VEjkJp3mk+SBMGt5YLlk5PGrsnFDaFXGyKpWnhLX1Ui5i5hXNw3z9mM8Lpt
+         TKvsHfup1T7K+dPOU/j5DMHqQV4XzTZMkV780dRtFNbRZuLmvZOQ2nbkrygehq99z3Tv
+         pVmA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=WBsUqs8jqBvSIFfpE9lf40jZypisanH4mwM2peO1OfA=;
-        b=eb4+5ibLa0FbFcwks/6ZgY9+wTXUmpTe5QEB5SpV+3DB3ImKKqeeviLRdVaC+ui2b3
-         FUoSmtOfBTkT/QZx5ozewTFOX8O9NqP26W4i0TYIZalxQ+2HkqiHlln0Icj4St6CHtQ3
-         4I59P4HNbH9/X+L0iVCzzs5jYnoIDTE7RiYsCkjaRdZtCDvG36BZsZutdvXqRtW81lPP
-         0qOzSA0R3wcQuaxtd0toZQ2+1qViMsLpEx4dZ3AaFs0Yk+ZmM8rBDZHKzBfOerOW4LWy
-         hxM2/m6uVBR//XjQJYqR77Iju1wYcoMYyPvbAAriUV9Gs4CXEE8NpqNW0F87T+c8HHkw
-         pSUA==
-X-Gm-Message-State: APjAAAXOwT5rIMRn1bgUGzgRHTva6EkWUjxbzRiVVL81un7X+9HbmY4O
-        IAe84bpeXSQypRIcfb/XISFg8o8AaZk=
-X-Google-Smtp-Source: APXvYqxe9wBz7AvNQplFig0s8Ty42QjBm2sUBHVRMHsK3/4gvqgaFlt4aDECnevElIJZlxJGpTDrIg==
-X-Received: by 2002:adf:da42:: with SMTP id r2mr14944541wrl.383.1571577457611;
-        Sun, 20 Oct 2019 06:17:37 -0700 (PDT)
-Received: from localhost.localdomain ([104.238.174.53])
-        by smtp.gmail.com with ESMTPSA id y3sm20177657wro.36.2019.10.20.06.17.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 20 Oct 2019 06:17:36 -0700 (PDT)
-From:   Changbin Du <changbin.du@gmail.com>
-To:     Jonathan Corbet <corbet@lwn.net>
-Cc:     linux-pci@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-crypto@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-wireless@vger.kernel.org, linux-fpga@vger.kernel.org,
-        linux-usb@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        intel-gfx@lists.freedesktop.org,
-        Matthew Wilcox <willy@infradead.org>,
-        jani.nikula@linux.intel.com,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Changbin Du <changbin.du@gmail.com>
-Subject: [PATCH v2] kernel-doc: rename the kernel-doc directive 'functions' to 'identifiers'
-Date:   Sun, 20 Oct 2019 21:17:17 +0800
-Message-Id: <20191020131717.28990-1-changbin.du@gmail.com>
-X-Mailer: git-send-email 2.20.1
+        h=x-gm-message-state:to:from:subject:message-id:date:user-agent
+         :mime-version:content-language:content-transfer-encoding;
+        bh=YbZJtbBn212YfofzuyIr+q6nNXooEsiDp3NOJmUzGgo=;
+        b=j8sKbS/znsRg29XQzEzSb2qiK0cAyjpY4C9o1iZR6Lefv9e3m60pVwrkWxTBaUBmrX
+         1qS+Wq1KpyKQ6PzOZtuB7B63O+8L5VOrOqEcU45ss5ZxT25jZ8UUb7IBHsvdi2cdkJwx
+         xK2eXfAogllBZRPuPzf5zIT80nKmzLPNxG9nFUFm0EIuvJ9LyfUuLJygKfL+1yLHwR45
+         9tYyIja3qykcFhB+V6y/12U4qrBv7ixj1LELOm57Wap+WbQ2RyeEjYRv1sxSmc8Fli4L
+         zbcZphlIHhq3gb2t8CPV2uBdDoi8ND+ag0tBXT3TRJwjZQ7zNAFdPdee1SxZKBgAm7w/
+         Lj0g==
+X-Gm-Message-State: APjAAAV16amUsx8XJmdcWl1VD3a3ielx+YBi7udOYNOGdqq4xJoppgqf
+        FA9YDqb+w0Cne3xdrKakHjQXhMrd
+X-Google-Smtp-Source: APXvYqzW4a5tApHDuyaRmr5Iu4hwkshdAqgqapbjBKMzXOxqp/jbnUL/Q1sQBM3/x1dCdMadrXrN6g==
+X-Received: by 2002:a17:90a:c406:: with SMTP id i6mr22394045pjt.98.1571579288419;
+        Sun, 20 Oct 2019 06:48:08 -0700 (PDT)
+Received: from [192.168.43.140] ([157.45.251.251])
+        by smtp.gmail.com with ESMTPSA id x10sm11128453pgl.53.2019.10.20.06.48.06
+        for <linux-kselftest@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 20 Oct 2019 06:48:08 -0700 (PDT)
+To:     linux-kselftest@vger.kernel.org
+From:   Prabhakar Kushwaha <prabhakar.pkin@gmail.com>
+Subject: Linux-5.4: bpf: test_core_reloc_arrays.o: Segmentation fault with llc
+ -march=bpf
+Message-ID: <aed8eda7-df20-069b-ea14-f06628984566@gmail.com>
+Date:   Sun, 20 Oct 2019 19:17:57 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.1.2
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The 'functions' directive is not only for functions, but also works for
-structs/unions. So the name is misleading. This patch renames it to
-'identifiers', which specific the functions/types to be included in
-documentation. We keep the old name as an alias of the new one before
-all documentation are updated.
 
-Signed-off-by: Changbin Du <changbin.du@gmail.com>
+Hi All,
 
----
-v2:
-  o use 'identifiers' as the new directive name.
----
- Documentation/doc-guide/kernel-doc.rst | 29 ++++++++++++++------------
- Documentation/sphinx/kerneldoc.py      | 19 ++++++++++-------
- 2 files changed, 28 insertions(+), 20 deletions(-)
+I am trying to build kselftest on Linux-5.4 on ubuntu 18.04. I installed
+LLVM-9.0.0 and Clang-9.0.0 from below links after following steps from
+[1] because of discussion [2]
 
-diff --git a/Documentation/doc-guide/kernel-doc.rst b/Documentation/doc-guide/kernel-doc.rst
-index 192c36af39e2..fff6604631ea 100644
---- a/Documentation/doc-guide/kernel-doc.rst
-+++ b/Documentation/doc-guide/kernel-doc.rst
-@@ -476,6 +476,22 @@ internal: *[source-pattern ...]*
-     .. kernel-doc:: drivers/gpu/drm/i915/intel_audio.c
-        :internal:
- 
-+identifiers: *[ function/type ...]*
-+  Include documentation for each *function* and *type* in *source*.
-+  If no *function* is specified, the documentation for all functions
-+  and types in the *source* will be included.
-+
-+  Examples::
-+
-+    .. kernel-doc:: lib/bitmap.c
-+       :identifiers: bitmap_parselist bitmap_parselist_user
-+
-+    .. kernel-doc:: lib/idr.c
-+       :identifiers:
-+
-+functions: *[ function/type ...]*
-+  This is an alias of the 'identifiers' directive and deprecated.
-+
- doc: *title*
-   Include documentation for the ``DOC:`` paragraph identified by *title* in
-   *source*. Spaces are allowed in *title*; do not quote the *title*. The *title*
-@@ -488,19 +504,6 @@ doc: *title*
-     .. kernel-doc:: drivers/gpu/drm/i915/intel_audio.c
-        :doc: High Definition Audio over HDMI and Display Port
- 
--functions: *[ function ...]*
--  Include documentation for each *function* in *source*.
--  If no *function* is specified, the documentation for all functions
--  and types in the *source* will be included.
--
--  Examples::
--
--    .. kernel-doc:: lib/bitmap.c
--       :functions: bitmap_parselist bitmap_parselist_user
--
--    .. kernel-doc:: lib/idr.c
--       :functions:
--
- Without options, the kernel-doc directive includes all documentation comments
- from the source file.
- 
-diff --git a/Documentation/sphinx/kerneldoc.py b/Documentation/sphinx/kerneldoc.py
-index 1159405cb920..0689f9c37f1e 100644
---- a/Documentation/sphinx/kerneldoc.py
-+++ b/Documentation/sphinx/kerneldoc.py
-@@ -59,9 +59,10 @@ class KernelDocDirective(Directive):
-     optional_arguments = 4
-     option_spec = {
-         'doc': directives.unchanged_required,
--        'functions': directives.unchanged,
-         'export': directives.unchanged,
-         'internal': directives.unchanged,
-+        'identifiers': directives.unchanged,
-+        'functions': directives.unchanged,  # alias of 'identifiers'
-     }
-     has_content = False
- 
-@@ -71,6 +72,7 @@ class KernelDocDirective(Directive):
- 
-         filename = env.config.kerneldoc_srctree + '/' + self.arguments[0]
-         export_file_patterns = []
-+        identifiers = None
- 
-         # Tell sphinx of the dependency
-         env.note_dependency(os.path.abspath(filename))
-@@ -86,19 +88,22 @@ class KernelDocDirective(Directive):
-             export_file_patterns = str(self.options.get('internal')).split()
-         elif 'doc' in self.options:
-             cmd += ['-function', str(self.options.get('doc'))]
-+        elif 'identifiers' in self.options:
-+            identifiers = self.options.get('identifiers').split()
-         elif 'functions' in self.options:
--            functions = self.options.get('functions').split()
--            if functions:
--                for f in functions:
--                    cmd += ['-function', f]
--            else:
--                cmd += ['-no-doc-sections']
-+            identifiers = self.options.get('functions').split()
- 
-         for pattern in export_file_patterns:
-             for f in glob.glob(env.config.kerneldoc_srctree + '/' + pattern):
-                 env.note_dependency(os.path.abspath(f))
-                 cmd += ['-export-file', f]
- 
-+        if identifiers:
-+            for i in identifiers:
-+                cmd += ['-function', i]
-+        elif identifiers is not None:
-+            cmd += ['-no-doc-sections']
-+
-         cmd += [filename]
- 
-         try:
--- 
-2.20.1
+ https://releases.llvm.org/9.0.0/llvm-9.0.0.src.tar.xz
+ https://releases.llvm.org/9.0.0/clang-tools-extra-9.0.0.src.tar.xz
+ https://releases.llvm.org/9.0.0/cfe-9.0.0.src.tar.xz
 
+
+Now, i am trying with llc -march=bpf, with this segmentation fault is
+coming as below:
+
+
+gcc -g -Wall -O2 -I../../../include/uapi -I../../../lib
+-I../../../lib/bpf -I../../../../include/generated -DHAVE_GENHDR
+-I../../../include -Dbpf_prog_load=bpf_prog_test_load
+-Dbpf_load_program=bpf_test_load_program    test_flow_dissector.c
+/usr/src/tovards/linux/tools/testing/selftests/bpf/test_stub.o
+/usr/src/tovards/linux/tools/testing/selftests/bpf/libbpf.a -lcap -lelf
+-lrt -lpthread -o
+/usr/src/tovards/linux/tools/testing/selftests/bpf/test_flow_dissector
+gcc -g -Wall -O2 -I../../../include/uapi -I../../../lib
+-I../../../lib/bpf -I../../../../include/generated -DHAVE_GENHDR
+-I../../../include -Dbpf_prog_load=bpf_prog_test_load
+-Dbpf_load_program=bpf_test_load_program
+test_tcp_check_syncookie_user.c
+/usr/src/tovards/linux/tools/testing/selftests/bpf/test_stub.o
+/usr/src/tovards/linux/tools/testing/selftests/bpf/libbpf.a -lcap -lelf
+-lrt -lpthread -o
+/usr/src/tovards/linux/tools/testing/selftests/bpf/test_tcp_check_syncookie_user
+gcc -g -Wall -O2 -I../../../include/uapi -I../../../lib
+-I../../../lib/bpf -I../../../../include/generated -DHAVE_GENHDR
+-I../../../include -Dbpf_prog_load=bpf_prog_test_load
+-Dbpf_load_program=bpf_test_load_program    test_lirc_mode2_user.c
+/usr/src/tovards/linux/tools/testing/selftests/bpf/test_stub.o
+/usr/src/tovards/linux/tools/testing/selftests/bpf/libbpf.a -lcap -lelf
+-lrt -lpthread -o
+/usr/src/tovards/linux/tools/testing/selftests/bpf/test_lirc_mode2_user
+(clang -I. -I./include/uapi -I../../../include/uapi
+-I/usr/src/tovards/linux/tools/testing/selftests/bpf/../usr/include
+-D__TARGET_ARCH_arm64 -g -idirafter /usr/local/include -idirafter
+/usr/local/lib/clang/9.0.0/include -idirafter
+/usr/include/aarch64-linux-gnu -idirafter /usr/include
+-Wno-compare-distinct-pointer-types -O2 -target bpf -emit-llvm \
+	-c progs/test_core_reloc_arrays.c -o - || echo "clang failed") | \
+llc -march=bpf -mcpu=probe  -filetype=obj -o
+/usr/src/tovards/linux/tools/testing/selftests/bpf/test_core_reloc_arrays.o
+Stack dump:
+0.	Program arguments: llc -march=bpf -mcpu=probe -filetype=obj -o
+/usr/src/tovards/linux/tools/testing/selftests/bpf/test_core_reloc_arrays.o
+1.	Running pass 'Function Pass Manager' on module '<stdin>'.
+2.	Running pass 'BPF Assembly Printer' on function '@test_core_arrays'
+#0 0x0000aaaac618db08 llvm::sys::PrintStackTrace(llvm::raw_ostream&)
+(/usr/local/bin/llc+0x152eb08)
+Segmentation fault
+Makefile:260: recipe for target
+'/usr/src/tovards/linux/tools/testing/selftests/bpf/test_core_reloc_arrays.o'
+failed
+make[1]: ***
+[/usr/src/tovards/linux/tools/testing/selftests/bpf/test_core_reloc_arrays.o]
+Error 139
+
+
+
+Please suggest!!
+
+
+--prabhakar(pk)
+
+[1]
+https://stackoverflow.com/questions/47255526/how-to-build-the-latest-clang-tidy
+
+[2] https://www.mail-archive.com/netdev@vger.kernel.org/msg315096.html
+
+
+Linux top-commit
+----------------
+commit bc88f85c6c09306bd21917e1ae28205e9cd775a7 (HEAD -> master,
+origin/master, origin/HEAD)
+Author: Ben Dooks <ben.dooks@codethink.co.uk>
+Date:   Wed Oct 16 12:24:58 2019 +0100
+
+    kthread: make __kthread_queue_delayed_work static
+
+    The __kthread_queue_delayed_work is not exported so
+    make it static, to avoid the following sparse warning:
+
+      kernel/kthread.c:869:6: warning: symbol
+'__kthread_queue_delayed_work' was not declared. Should it be static?
+
+    Signed-off-by: Ben Dooks <ben.dooks@codethink.co.uk>
+    Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
