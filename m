@@ -2,87 +2,201 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 64920DDA83
-	for <lists+linux-kselftest@lfdr.de>; Sat, 19 Oct 2019 20:45:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BEAA0DDE27
+	for <lists+linux-kselftest@lfdr.de>; Sun, 20 Oct 2019 12:53:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726112AbfJSSox (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 19 Oct 2019 14:44:53 -0400
-Received: from mail-pl1-f193.google.com ([209.85.214.193]:36030 "EHLO
-        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726092AbfJSSox (ORCPT
+        id S1726275AbfJTKxO (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 20 Oct 2019 06:53:14 -0400
+Received: from mail-pf1-f194.google.com ([209.85.210.194]:36174 "EHLO
+        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726272AbfJTKxN (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 19 Oct 2019 14:44:53 -0400
-Received: by mail-pl1-f193.google.com with SMTP id j11so4482868plk.3
-        for <linux-kselftest@vger.kernel.org>; Sat, 19 Oct 2019 11:44:53 -0700 (PDT)
+        Sun, 20 Oct 2019 06:53:13 -0400
+Received: by mail-pf1-f194.google.com with SMTP id y22so6527447pfr.3
+        for <linux-kselftest@vger.kernel.org>; Sun, 20 Oct 2019 03:53:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=to:from:subject:message-id:date:user-agent:mime-version
+         :content-language:content-transfer-encoding;
+        bh=bKM5y0FSlBDTRr4/tWOB4YlFlxcPulNfGqtH/1E2b/0=;
+        b=ZzgoWVszIhuWBfbzlPnhpcMCcDkdDAsDGP2KB7us4QGZiADkIBYH8ySql5++8OZ25i
+         0eCCHpjBgDv6vKEoMCSuZO99Dj6S7O7iyEoqXmzE6FbGe+bxvt5p9MOwe21MSp8aZrXL
+         C82XBL2woLEQL2MCpuyUPA9Se/73iJwrFtuCRS8aqu7S/ZGUbW0olXB6RdJG7wmxrEd5
+         TcileZwqVgl6j/Ia7qQGpCMk/kAG2I7F515EHB72JVxL+XdVLUIqj8y9E0K3W6/A55to
+         vDsnKWzUHZyrAlCBb6yvKrUbKcU9lSm55mXskpw4lOsvPiUKsTxe4/IfsL90OTnQ3ugp
+         mjEw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=r/P/9gjKXByrgJIBzuB+JRS7LPY4d6mkIypKNMQXW+I=;
-        b=VLw5AbU9Xn9QzsKrFHjbQvRNU/aaJhuwP431NVd4Bf73bh5H4KNo0WS2gFoPTuz6k0
-         6X6fCyT7PSdyBZc2EUTLU2k1gybGb0lHQ3DiM6fa68V/Ak1AayMzRb4uACLYlkxcl3RW
-         /BmKRnDXGjyQM8A/O5VB2dpl6HE8wVj6wWM694ybmCrOh8+snK8E3VLIdNGfArGrmIXh
-         erzhfOig7w1SNRNAcFkz/ciPK8kzLo300f486iOmF/iZwlgDNorPnLHKr1A7r/+uJnwm
-         CLAkYKCaSEk6PwyPO4V8pvI2yQgWw8ALdBCwXLdqMH6nMOixg3M8gzYEgPmh/QacUZUs
-         vS8Q==
-X-Gm-Message-State: APjAAAXqqZ0My16lofjLbmrZD6yI/hYzvtLQC8nsY/oczPxCeWFiNyet
-        jJx9RRFWFQiCy2+eZGiEJ5U=
-X-Google-Smtp-Source: APXvYqxlaj6Cst28rVIVJBlR3dgB+Pn3YrsRH5vCgRMS2JoR/4eoQSEUYcPaU68LIbNfkNdmlUfLoA==
-X-Received: by 2002:a17:902:b94b:: with SMTP id h11mr16288539pls.21.1571510692749;
-        Sat, 19 Oct 2019 11:44:52 -0700 (PDT)
-Received: from 42.do-not-panic.com (42.do-not-panic.com. [157.230.128.187])
-        by smtp.gmail.com with ESMTPSA id r18sm12225876pfc.3.2019.10.19.11.44.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 19 Oct 2019 11:44:51 -0700 (PDT)
-Received: by 42.do-not-panic.com (Postfix, from userid 1000)
-        id E216340256; Sat, 19 Oct 2019 18:44:50 +0000 (UTC)
-Date:   Sat, 19 Oct 2019 18:44:50 +0000
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Brendan Higgins <brendanhiggins@google.com>
-Cc:     Knut Omang <knut.omang@oracle.com>, shuah <shuah@kernel.org>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Alan Maguire <alan.maguire@oracle.com>
-Subject: Re: Plan for hybrid testing
-Message-ID: <20191019184450.GH11244@42.do-not-panic.com>
-References: <20191014104243.GD16384@42.do-not-panic.com>
- <9212e0fb58683df4781c52e6ad0abd8eb496a452.camel@oracle.com>
- <869165ea-f7d6-10cf-c74a-14a33b584938@kernel.org>
- <40941b19855134b5032379ab4b8023a3299bd06a.camel@oracle.com>
- <20191016130857.GJ16384@42.do-not-panic.com>
- <345333a20601355202749b1e7de23360dc93126c.camel@oracle.com>
- <20191018094738.GA11244@42.do-not-panic.com>
- <CAFd5g46GXwUGYNe==-JN9duRfArQDrgXgepGOGXsmO5SQYo3HQ@mail.gmail.com>
- <20191018192257.GF11244@42.do-not-panic.com>
- <CAFd5g459xmO+=QPhnnXVO8+dB_t1PViXxK-Fz6Zp+sp5suJZ2w@mail.gmail.com>
+        h=x-gm-message-state:to:from:subject:message-id:date:user-agent
+         :mime-version:content-language:content-transfer-encoding;
+        bh=bKM5y0FSlBDTRr4/tWOB4YlFlxcPulNfGqtH/1E2b/0=;
+        b=V2heSJaYTGqfEKeBkXPZl1pPu09nDKe/cVPlS8cNjKuhFQeyJmTX4pw+F5OIZ5+dvW
+         uQ178wbAztO6uu32tFZ2AbgSpXKNrgJUvoE1zyCTwDV4nOEjV1NZMXEpCwkOdkesgrc4
+         aXEVmZ+Ws/T0nG1X2M8Z96IbC2TXiaaE/NrhWCjrrf36cmlO62b6XDo+mBduJy3TpYGW
+         1WF0CMMBCZqRB/cfdGpGX7bsCJZID/y5+e1SHbWeK+CRs3a5pIwpgU5Cuv6E07q0Hxl3
+         5ug5+kxxiXISyFMoJ/yhNLoWrx5Slz3Atf3u+umOFjekGpf1j0rzvVqxkvEXDMoEGn4E
+         ZJQg==
+X-Gm-Message-State: APjAAAWkKFUGUYKxgkT/QcPr+jpeaPPHLxdvy/7TFoSxUlI6JuDloNnJ
+        3EOd4wyYGGC60wCofyPyQVAOgBkQ
+X-Google-Smtp-Source: APXvYqzeqj8J1aVqsDqvyxspCwRYpaBM7WLbBr4KKeh2hXWzp+DYUbrD3/geReaMqhd16K5hjQVquQ==
+X-Received: by 2002:a63:5909:: with SMTP id n9mr20276062pgb.101.1571568792510;
+        Sun, 20 Oct 2019 03:53:12 -0700 (PDT)
+Received: from [192.168.43.140] ([157.45.233.6])
+        by smtp.gmail.com with ESMTPSA id m34sm10344390pgb.91.2019.10.20.03.53.10
+        for <linux-kselftest@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 20 Oct 2019 03:53:12 -0700 (PDT)
+To:     linux-kselftest@vger.kernel.org
+From:   Prabhakar Kushwaha <prabhakar.pkin@gmail.com>
+Subject: Linux-5.4-rc3+: bpf: progs/test_core_reloc_ints.c:32:6: error: using
+ builtin_preserve_access_index() without -g
+Message-ID: <ba21e159-5560-73c1-ce66-b224b3a3300a@gmail.com>
+Date:   Sun, 20 Oct 2019 16:23:06 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.1.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAFd5g459xmO+=QPhnnXVO8+dB_t1PViXxK-Fz6Zp+sp5suJZ2w@mail.gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Oct 18, 2019 at 12:58:01PM -0700, Brendan Higgins wrote:
-> On Fri, Oct 18, 2019 at 12:23 PM Luis Chamberlain <mcgrof@kernel.org> wrote:
-> > >
-> > > Do we really want to focus on this point now? I think it's better to
-> > > start off with something simple and evolve it.
-> >
-> > Addressing it can help simplfiy things long term, as perhaps we really
-> > don't need something like generic netlink to orchestrate.
-> 
-> Sure, I just think it sounds like we don't need it for a lot of
-> things, so if something significantly simpler exists, maybe we should
-> just start there. But yeah, starting that discussion here and now
-> doesn't hurt as long as we don't lose sight of something concrete in
-> the short term.
-> 
-> Cool, sounds like we are on the same page then.
+Hi All,
 
-Indeed.
+I am trying to build kselftest on Linux-5.4-rc3+ on ubuntu 18.04. I 
+installed LLVM-9.0.0 and Clang-9.0.0 from below links after following 
+steps from [1] because of discussion [2]
 
-  Luis
+  https://releases.llvm.org/9.0.0/llvm-9.0.0.src.tar.xz
+  https://releases.llvm.org/9.0.0/clang-tools-extra-9.0.0.src.tar.xz
+  https://releases.llvm.org/9.0.0/cfe-9.0.0.src.tar.xz
+
+
+After that I started this error.
+make[2]: Leaving directory '/usr/src/tovards/linux/tools/lib/bpf'
+(clang -I. -I./include/uapi -I../../../include/uapi 
+-I/usr/src/tovards/linux/tools/testing/selftests/bpf/../usr/include 
+-D__TARGET_ARCH_arm64 -idirafter /usr/local/include -idirafter 
+/usr/local/lib/clang/9.0.0/include -idirafter 
+/usr/include/aarch64-linux-gnu -idirafter /usr/include 
+-Wno-compare-distinct-pointer-types -O2 -target bpf -emit-llvm \
+	-c progs/test_core_reloc_ints.c -o - || echo "clang failed") | \
+llc -march=arm64 -mcpu=generic  -filetype=obj -o 
+/usr/src/tovards/linux/tools/testing/selftests/bpf/test_core_reloc_ints.o
+progs/test_core_reloc_ints.c:32:6: error: using 
+builtin_preserve_access_index() without -g
+         if (BPF_CORE_READ(&out->u8_field, &in->u8_field) ||
+             ^
+./bpf_helpers.h:533:10: note: expanded from macro 'BPF_CORE_READ'
+                        __builtin_preserve_access_index(src))
+                        ^
+progs/test_core_reloc_ints.c:33:6: error: using 
+builtin_preserve_access_index() without -g
+             BPF_CORE_READ(&out->s8_field, &in->s8_field) ||
+             ^
+./bpf_helpers.h:533:10: note: expanded from macro 'BPF_CORE_READ'
+                        __builtin_preserve_access_index(src))
+                        ^
+progs/test_core_reloc_ints.c:34:6: error: using 
+builtin_preserve_access_index() without -g
+             BPF_CORE_READ(&out->u16_field, &in->u16_field) ||
+             ^
+./bpf_helpers.h:533:10: note: expanded from macro 'BPF_CORE_READ'
+                        __builtin_preserve_access_index(src))
+                        ^
+progs/test_core_reloc_ints.c:35:6: error: using 
+builtin_preserve_access_index() without -g
+             BPF_CORE_READ(&out->s16_field, &in->s16_field) ||
+             ^
+./bpf_helpers.h:533:10: note: expanded from macro 'BPF_CORE_READ'
+                        __builtin_preserve_access_index(src))
+                        ^
+progs/test_core_reloc_ints.c:36:6: error: using 
+builtin_preserve_access_index() without -g
+             BPF_CORE_READ(&out->u32_field, &in->u32_field) ||
+             ^
+./bpf_helpers.h:533:10: note: expanded from macro 'BPF_CORE_READ'
+                        __builtin_preserve_access_index(src))
+                        ^
+progs/test_core_reloc_ints.c:37:6: error: using 
+builtin_preserve_access_index() without -g
+             BPF_CORE_READ(&out->s32_field, &in->s32_field) ||
+             ^
+./bpf_helpers.h:533:10: note: expanded from macro 'BPF_CORE_READ'
+                        __builtin_preserve_access_index(src))
+                        ^
+progs/test_core_reloc_ints.c:38:6: error: using 
+builtin_preserve_access_index() without -g
+             BPF_CORE_READ(&out->u64_field, &in->u64_field) ||
+             ^
+./bpf_helpers.h:533:10: note: expanded from macro 'BPF_CORE_READ'
+                        __builtin_preserve_access_index(src))
+                        ^
+progs/test_core_reloc_ints.c:39:6: error: using 
+builtin_preserve_access_index() without -g
+             BPF_CORE_READ(&out->s64_field, &in->s64_field))
+             ^
+./bpf_helpers.h:533:10: note: expanded from macro 'BPF_CORE_READ'
+                        __builtin_preserve_access_index(src))
+                        ^
+8 errors generated.
+llc: error: llc: <stdin>:1:1: error: expected top-level entity
+clang failed
+
+
+In order to solve this error, I modifed bpf/Makefile as
+  CLANG_CFLAGS = $(CLANG_SYS_INCLUDES) \
+-              -Wno-compare-distinct-pointer-types
++              -Wno-compare-distinct-pointer-types -g
+
+
+Now I am getting this error
+
+(clang -I. -I./include/uapi -I../../../include/uapi 
+-I/usr/src/tovards/linux/tools/testing/selftests/bpf/../usr/include 
+-D__TARGET_ARCH_arm64 -idirafter /usr/local/include -idirafter 
+/usr/local/lib/clang/9.0.0/include -idirafter 
+/usr/include/aarch64-linux-gnu -idirafter /usr/include 
+-Wno-compare-distinct-pointer-types -g -O2 -target bpf -emit-llvm \
+	-c progs/test_core_reloc_ints.c -o - || echo "clang failed") | \
+llc -march=arm64 -mcpu=generic  -filetype=obj -o 
+/usr/src/tovards/linux/tools/testing/selftests/bpf/test_core_reloc_ints.o
+LLVM ERROR: Cannot select: intrinsic %llvm.preserve.struct.access.index
+Makefile:267: recipe for target 
+'/usr/src/tovards/linux/tools/testing/selftests/bpf/test_core_reloc_ints.o' 
+failed
+make[1]: *** 
+[/usr/src/tovards/linux/tools/testing/selftests/bpf/test_core_reloc_ints.o] 
+Error 1
+
+
+Please suggest!!
+
+
+--prabhakar(pk)
+
+[1] 
+https://stackoverflow.com/questions/47255526/how-to-build-the-latest-clang-tidy
+
+[2] https://www.mail-archive.com/netdev@vger.kernel.org/msg315096.html
+
+
+Linux top-commit
+----------------
+commit bc88f85c6c09306bd21917e1ae28205e9cd775a7 (HEAD -> master, 
+origin/master, origin/HEAD)
+Author: Ben Dooks <ben.dooks@codethink.co.uk>
+Date:   Wed Oct 16 12:24:58 2019 +0100
+
+     kthread: make __kthread_queue_delayed_work static
+
+     The __kthread_queue_delayed_work is not exported so
+     make it static, to avoid the following sparse warning:
+
+       kernel/kthread.c:869:6: warning: symbol 
+'__kthread_queue_delayed_work' was not declared. Should it be static?
+
+     Signed-off-by: Ben Dooks <ben.dooks@codethink.co.uk>
+     Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
