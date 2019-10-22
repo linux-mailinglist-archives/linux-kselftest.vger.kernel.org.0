@@ -2,129 +2,102 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E779DFD7A
-	for <lists+linux-kselftest@lfdr.de>; Tue, 22 Oct 2019 08:02:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C28FCE00CF
+	for <lists+linux-kselftest@lfdr.de>; Tue, 22 Oct 2019 11:32:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727943AbfJVGCO (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 22 Oct 2019 02:02:14 -0400
-Received: from mail-wm1-f66.google.com ([209.85.128.66]:36436 "EHLO
-        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725788AbfJVGCN (ORCPT
+        id S1731261AbfJVJcQ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 22 Oct 2019 05:32:16 -0400
+Received: from youngberry.canonical.com ([91.189.89.112]:33745 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728182AbfJVJcQ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 22 Oct 2019 02:02:13 -0400
-Received: by mail-wm1-f66.google.com with SMTP id c22so5758566wmd.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 21 Oct 2019 23:02:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:date:to:message-id:subject:mime-version;
-        bh=SmI564QOmdpEwJRxSB7zX1NlTUlETOy44lKeLKokdXY=;
-        b=sB9ECPB/VbhddZCiKxVzXgMzxpUW+mcH1qUU5EH88yS0jJPdkpopTOcnZ5iOQ0IbJw
-         UZvLcz5XDAN025mMBJd08Qn8A3uYmbR2q3P+gPgeBRq1I8EG9wqSVcWvgEoRb6m+7luz
-         BgYJw3ASj0hFLbK35dH+kKPAd/7csyXQVpTYfqLS/FWx8iJHjmPvPInyzaQVUA5MLCjl
-         pJ69TO1jm7kveqJtXA576AKAgKkjYgnx04fC2Sl89vP7nk33jt+Iuyft7HLSETV6zEtk
-         AAIwMgLhz/YpwtV+4HHmgaGsT7ENcxZTfW+aC2kybPU9IH5Ho73PvAWjJiH+Uz+frp9M
-         wf+g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:date:to:message-id:subject:mime-version;
-        bh=SmI564QOmdpEwJRxSB7zX1NlTUlETOy44lKeLKokdXY=;
-        b=ifFTWaQwhVxkARsuwCaef2pRMZutUF24wl7p6UcLEoVXTvs5AbvF5hBuTtrpyBCCiu
-         pZO+rjz5z5zZfQ9q942yLppARe9B4RLPWFhdxncVrtVLy5BPn5z6B2Hpimcx72U8HVzi
-         lvXk0yfMkI4JKZOTq6P/7lF3XohT4Nugzelz7ghr2CL1MNe5Hqq3BRMo7bnihQ41ZGP1
-         0tbPyDaqS7rlSH29TelmAP/wnRFZT2wZIUH2Jyub2MQ5HX0MJrlWkNMECOIz2jtWjsSu
-         JNFtYzSPyK6aXnsXSItD24WYK0NgVd4X0EowvazW4d+oYSDxoNTVWcLImt+CEZ4QEKJT
-         TC9Q==
-X-Gm-Message-State: APjAAAXRqVkeithB0pA8WscnQFxCF9pxXthYMj9ZPWQ/8Sb3Zk4OwnQF
-        QjnKPzrfj/hoJvaHbmG9tmb4HCHEqYs=
-X-Google-Smtp-Source: APXvYqzJOQ4Rich0YixxyHR/N0GHiu1NiqzTcSuTD8/mFKWq3qzrJu5HcOJdQLKsN+1D/8yZkGW6Pw==
-X-Received: by 2002:a1c:6308:: with SMTP id x8mr1315720wmb.140.1571724132375;
-        Mon, 21 Oct 2019 23:02:12 -0700 (PDT)
-Received: from 172.17.0.4 (ci.linaro.org. [88.99.136.175])
-        by smtp.gmail.com with ESMTPSA id y186sm21390341wmb.41.2019.10.21.23.02.11
-        (version=TLS1 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
-        Mon, 21 Oct 2019 23:02:11 -0700 (PDT)
-From:   ci_notify@linaro.org
-X-Google-Original-From: linaro-infrastructure-errors@lists.linaro.org
-Date:   Tue, 22 Oct 2019 06:02:11 +0000 (UTC)
-To:     lkft-triage@lists.linaro.org, dan.rue@linaro.org,
-        anders.roxell@linaro.org, naresh.kamboju@linaro.org,
-        shuah@kernel.org, linux-kselftest@vger.kernel.org
-Message-ID: <1644951908.10113.1571724131784.JavaMail.javamailuser@localhost>
-Subject: next-20191022 kselftest results
+        Tue, 22 Oct 2019 05:32:16 -0400
+Received: from [213.220.153.21] (helo=localhost.localdomain)
+        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.86_2)
+        (envelope-from <christian.brauner@ubuntu.com>)
+        id 1iMqWT-0004c2-Uv; Tue, 22 Oct 2019 09:32:14 +0000
+From:   Christian Brauner <christian.brauner@ubuntu.com>
+To:     kernel-team@lists.ubuntu.com
+Cc:     stefan.bader@canonical.com, stgraber@ubuntu.com,
+        seth.forshee@canonical.com,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        kernel test robot <rong.a.chen@intel.com>,
+        linux-kselftest@vger.kernel.org, Tycho Andersen <tycho@tycho.ws>
+Subject: [PATCH 2/2][SRU][DISCO][EOAN] UBUNTU: SAUCE: seccomp: fix SECCOMP_USER_NOTIF_FLAG_CONTINUE test
+Date:   Tue, 22 Oct 2019 11:32:10 +0200
+Message-Id: <20191022093210.26663-3-christian.brauner@ubuntu.com>
+X-Mailer: git-send-email 2.23.0
+In-Reply-To: <20191022093210.26663-1-christian.brauner@ubuntu.com>
+References: <20191022093210.26663-1-christian.brauner@ubuntu.com>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; 
-        boundary="----=_Part_10112_856267118.1571724131109"
-X-Jenkins-Job: LKFT Notify kselftest on next
-X-Jenkins-Result: SUCCESS
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-------=_Part_10112_856267118.1571724131109
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+BugLink: https://bugs.launchpad.net/bugs/1849281
 
-Summary
-------------------------------------------------------------------------
-kernel: 5.4.0-rc4
-git repo: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-git branch: master
-git commit: a722f75b2923b4fd44c17e7255e822ac48fe85f0
-git describe: next-20191022
-Test details: https://qa-reports.linaro.org/lkft/linux-next-oe/build/next-20191022
+The ifndef for SECCOMP_USER_NOTIF_FLAG_CONTINUE was placed under the
+ifndef for the SECCOMP_FILTER_FLAG_NEW_LISTENER feature. This will not
+work on systems that do support SECCOMP_FILTER_FLAG_NEW_LISTENER but do not
+support SECCOMP_USER_NOTIF_FLAG_CONTINUE. So move the latter ifndef out of
+the former ifndef's scope.
 
-Regressions (compared to build next-20191018)
-------------------------------------------------------------------------
-No regressions                                                                                                          
-                                                                                                                       
-Fixes (compared to build next-20191018)                                                                   
-------------------------------------------------------------------------                                               
-No fixes
+2019-10-20 11:14:01 make run_tests -C seccomp
+make: Entering directory '/usr/src/perf_selftests-x86_64-rhel-7.6-0eebfed2954f152259cae0ad57b91d3ea92968e8/tools/testing/selftests/seccomp'
+gcc -Wl,-no-as-needed -Wall  seccomp_bpf.c -lpthread -o seccomp_bpf
+seccomp_bpf.c: In function ‘user_notification_continue’:
+seccomp_bpf.c:3562:15: error: ‘SECCOMP_USER_NOTIF_FLAG_CONTINUE’ undeclared (first use in this function)
+  resp.flags = SECCOMP_USER_NOTIF_FLAG_CONTINUE;
+               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+seccomp_bpf.c:3562:15: note: each undeclared identifier is reported only once for each function it appears in
+Makefile:12: recipe for target 'seccomp_bpf' failed
+make: *** [seccomp_bpf] Error 1
+make: Leaving directory '/usr/src/perf_selftests-x86_64-rhel-7.6-0eebfed2954f152259cae0ad57b91d3ea92968e8/tools/testing/selftests/seccomp'
 
-In total:
-------------------------------------------------------------------------
-Ran 0 total tests in the following environments and test suites.
-pass 0
-fail 0
-xfail 0
-skip 0
+Reported-by: kernel test robot <rong.a.chen@intel.com>
+Fixes: 0eebfed2954f ("seccomp: test SECCOMP_USER_NOTIF_FLAG_CONTINUE")
+Cc: linux-kselftest@vger.kernel.org
+Signed-off-by: Christian Brauner <christian.brauner@ubuntu.com>
+Reviewed-by: Tycho Andersen <tycho@tycho.ws>
+Link: https://lore.kernel.org/r/20191021091055.4644-1-christian.brauner@ubuntu.com
+Signed-off-by: Kees Cook <keescook@chromium.org>
+(cherry picked from commit 2aa8d8d04ca29c3269154e1d48855e498be8882f
+ https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git)
+Signed-off-by: Christian Brauner <christian.brauner@ubuntu.com>
+---
+ tools/testing/selftests/seccomp/seccomp_bpf.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-Environments
---------------
-- dragonboard-410c - arm64
-- hi6220-hikey - arm64
-- i386
-- juno-r2 - arm64
-- x15 - arm
-- x86_64
-
-Test Suites
------------
-
-
-Failures
-------------------------------------------------------------------------
-
-i386:
-
-x86:
-
-x15:
-
-dragonboard-410c:
-
-juno-r2:
-
-hi6220-hikey:
-
-
-Skips
-------------------------------------------------------------------------
-No skips
-
-
+diff --git a/tools/testing/selftests/seccomp/seccomp_bpf.c b/tools/testing/selftests/seccomp/seccomp_bpf.c
+index 6021baecb386..bf834ee02b69 100644
+--- a/tools/testing/selftests/seccomp/seccomp_bpf.c
++++ b/tools/testing/selftests/seccomp/seccomp_bpf.c
+@@ -167,10 +167,6 @@ struct seccomp_metadata {
+ 
+ #define SECCOMP_RET_USER_NOTIF 0x7fc00000U
+ 
+-#ifndef SECCOMP_USER_NOTIF_FLAG_CONTINUE
+-#define SECCOMP_USER_NOTIF_FLAG_CONTINUE 0x00000001
+-#endif
+-
+ #define SECCOMP_IOC_MAGIC		'!'
+ #define SECCOMP_IO(nr)			_IO(SECCOMP_IOC_MAGIC, nr)
+ #define SECCOMP_IOR(nr, type)		_IOR(SECCOMP_IOC_MAGIC, nr, type)
+@@ -209,6 +205,10 @@ struct seccomp_notif_sizes {
+ #define PTRACE_EVENTMSG_SYSCALL_EXIT	2
+ #endif
+ 
++#ifndef SECCOMP_USER_NOTIF_FLAG_CONTINUE
++#define SECCOMP_USER_NOTIF_FLAG_CONTINUE 0x00000001
++#endif
++
+ #ifndef seccomp
+ int seccomp(unsigned int op, unsigned int flags, void *args)
+ {
 -- 
-Linaro LKFT
-https://lkft.linaro.org
-------=_Part_10112_856267118.1571724131109--
+2.23.0
+
