@@ -2,113 +2,125 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B448ADF768
-	for <lists+linux-kselftest@lfdr.de>; Mon, 21 Oct 2019 23:24:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4224DFC4C
+	for <lists+linux-kselftest@lfdr.de>; Tue, 22 Oct 2019 05:52:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730289AbfJUVYi (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 21 Oct 2019 17:24:38 -0400
-Received: from hqemgate16.nvidia.com ([216.228.121.65]:9072 "EHLO
-        hqemgate16.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728943AbfJUVYi (ORCPT
+        id S2387593AbfJVDwi (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 21 Oct 2019 23:52:38 -0400
+Received: from mail-io1-f68.google.com ([209.85.166.68]:38061 "EHLO
+        mail-io1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2387535AbfJVDwh (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 21 Oct 2019 17:24:38 -0400
-Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqemgate16.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5dae22190000>; Mon, 21 Oct 2019 14:24:41 -0700
-Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate101.nvidia.com (PGP Universal service);
-  Mon, 21 Oct 2019 14:24:37 -0700
-X-PGP-Universal: processed;
-        by hqpgpgate101.nvidia.com on Mon, 21 Oct 2019 14:24:37 -0700
-Received: from HQMAIL111.nvidia.com (172.20.187.18) by HQMAIL107.nvidia.com
- (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Mon, 21 Oct
- 2019 21:24:37 +0000
-Received: from hqnvemgw03.nvidia.com (10.124.88.68) by HQMAIL111.nvidia.com
- (172.20.187.18) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
- Transport; Mon, 21 Oct 2019 21:24:37 +0000
-Received: from blueforge.nvidia.com (Not Verified[10.110.48.28]) by hqnvemgw03.nvidia.com with Trustwave SEG (v7,5,8,10121)
-        id <B5dae22150002>; Mon, 21 Oct 2019 14:24:37 -0700
-From:   John Hubbard <jhubbard@nvidia.com>
-To:     Andrew Morton <akpm@linux-foundation.org>
-CC:     Keith Busch <keith.busch@intel.com>,
-        LKML <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>,
-        <linux-kselftest@vger.kernel.org>,
-        John Hubbard <jhubbard@nvidia.com>
-Subject: [PATCH 1/1] mm/gup_benchmark: fix MAP_HUGETLB case
-Date:   Mon, 21 Oct 2019 14:24:35 -0700
-Message-ID: <20191021212435.398153-2-jhubbard@nvidia.com>
-X-Mailer: git-send-email 2.23.0
-In-Reply-To: <20191021212435.398153-1-jhubbard@nvidia.com>
-References: <20191021212435.398153-1-jhubbard@nvidia.com>
+        Mon, 21 Oct 2019 23:52:37 -0400
+Received: by mail-io1-f68.google.com with SMTP id u8so18660723iom.5
+        for <linux-kselftest@vger.kernel.org>; Mon, 21 Oct 2019 20:52:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=FxtP6LHW6dqlss4EwQUZ1wXN2G3RpiQ3MS6NIo0dknE=;
+        b=E3pvzofUR8jbkd6Cf5EjS720xDvKqbPCki8egQnEhlPQ3g1A6HO/aJSnOY9/H7oFsp
+         rqNEIvOE06i9Hkv3QbDwt7Mrl+DKNQ3was1B4q/+wPc/2Ct3PairkLjbugJLNevL/2X2
+         mIXQ4cjYCkK0nHot+7rzfGf8PeIsE0W9fBH4/lJFPC1ww0Ue8hBtEGsnaUJ9Gqn31gZp
+         mSEYbT8KECqjLq5d6J/AsZwhH9LYL3OtL+VDmpSZ/RSNXt77jBPPqPbU51TRPXRn6Yj6
+         CiWZ7CeB6qtMEqp5yWHNkhQb49fl3p7/rA1xdQ7pJLjl1UYr8DulJ9DO+kCtQVVwYqKD
+         XFlg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=FxtP6LHW6dqlss4EwQUZ1wXN2G3RpiQ3MS6NIo0dknE=;
+        b=IvrFVZgYVrvPD6vWpl5gXlSCkAhfldD5FC35wdVnfeHpAhcqvz/MaOc5ioH2qLlwf8
+         4iTcMDAm6UPcJ0zAOZkwah1evdKuozbqp0yrPiTIGfMbKjsDkapI/lPiiOwhRWrMFPyw
+         2cJJ+AJNCPjCvNmJyMC8sTaM+EoKF/PhISq1w5wOfENn/muoKNcHPN78vnmtaj7xvns7
+         kJnemBo/v1xqlNoDDHfCHRqab2fssM6N36dfAboqGIy4wdtZnJVou9oUKYzxZLeSt5Wh
+         YxtJoUyQIhbbyikxYUCnu3V7i8olGdriSxv5gsESpg9b5VBmhW6JCC0z0FdpFXMEh/Ve
+         AjOg==
+X-Gm-Message-State: APjAAAW/wBe170xQwK2JFt8/mMjpfWhcP/UMlpbuMF4tZGIZSU32u4Cy
+        6xRX/mHiVfutRUnfNXjnTXx0hXU7EyFkjs/SM3E=
+X-Google-Smtp-Source: APXvYqxr6ujhlwYycsD/1DFkuLfSPKGd0cD8Fx7AsG52cgnE6UUtL6p0JMVeQ2C6m4lOdQJCzjZ4aB0Fhn9ZdqdIzI4=
+X-Received: by 2002:a02:77c4:: with SMTP id g187mr1684888jac.83.1571716355529;
+ Mon, 21 Oct 2019 20:52:35 -0700 (PDT)
 MIME-Version: 1.0
-X-NVConfidentiality: public
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1571693081; bh=Ia7+yGVPadcQzuPA7gW008zSE+NH1nISNCbcuj3+bIA=;
-        h=X-PGP-Universal:From:To:CC:Subject:Date:Message-ID:X-Mailer:
-         In-Reply-To:References:MIME-Version:X-NVConfidentiality:
-         Content-Transfer-Encoding:Content-Type;
-        b=OTC8d3ZE9fJ0Hb2v8pEfvXND3hp78cAKhSqr+KUCHRl9piPHKBIHMod7VkMRG/V07
-         YiSuKsdFJN/DtpDmHBNAjg0SY/+yw6EZVbEBBRcY5hKDPY2cwJi4Yy17qhEwozgbXp
-         jD2oUyt7AENs2BEp1SMVn3lETH6pAEsDl/oDEcIUTKXYkUka0rUy3UXtxBZdCe2Fhs
-         9YL7rBPNlFbNtFy9br7US89E0IFpJiaTELl5vPfnQioCelddiyfHAyOHRjNZks6g4s
-         lPQfDa1Mgyz+bDNtzAbOYex69TebqWe0OaW+5qZRnZrgQmhswsnaA2NIMik4bxbUW5
-         i3YmawSo4o7Hg==
+References: <20191020122452.3345-1-prabhakar.pkin@gmail.com> <09db8f9d-98b9-e3ae-9eea-ae45e94d3053@arm.com>
+In-Reply-To: <09db8f9d-98b9-e3ae-9eea-ae45e94d3053@arm.com>
+From:   Prabhakar Kushwaha <prabhakar.pkin@gmail.com>
+Date:   Tue, 22 Oct 2019 09:22:24 +0530
+Message-ID: <CAJ2QiJ+PORAhUQHnbnG3mKKU6WAF6rxrWZhLrQ2_1fYeOxv-9A@mail.gmail.com>
+Subject: Re: [PATCH] kselftest: Fix NULL INSTALL_PATH for TARGETS runlist
+To:     Cristian Marussi <cristian.marussi@arm.com>
+Cc:     linux-kselftest@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Prabhakar Kushwaha <pkushwaha@marvell.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The MAP_HUGETLB ("-H" option) of gup_benchmark fails:
+Dear Cristian,
 
-$ sudo ./gup_benchmark -H
-mmap: Invalid argument
+On Mon, Oct 21, 2019 at 4:15 PM Cristian Marussi
+<cristian.marussi@arm.com> wrote:
+>
+> Hi
+>
+> On 20/10/2019 13:24, Prabhakar Kushwaha wrote:
+> > As per commit 131b30c94fbc ("kselftest: exclude failed TARGETS from
+> > runlist") failed targets were excluded from the runlist. But value
+> > $$INSTALL_PATH is always NULL. It should be $INSTALL_PATH instead
+> > $$INSTALL_PATH.
+> >
+> > So, fix Makefile to use $INSTALL_PATH.
+> >
+>
+> I was a bit puzzled at first since I never saw the NULLified value while testing
+> the original patch. Looking at it closely today, I realized that I used to test it
+> like:
+>
+> $ rm -rf $HOME/KSFT_TEST && make -C tools/testing/selftests/ INSTALL_PATH=$HOME/KSFT_TEST install
+>
+> which in fact causes INSTALL_PATH to be exported down to the subshell in the recipe, so that even
+> referring it as $$INSTALL_PATH from the recipe line make it work fine.
+>
+> Instead, using the default Makefile provided value (unexported) by invoking like:
+>
+> $ rm -rf $HOME/KSFT_TEST && make -C tools/testing/selftests/ install
+>
+> exposes the error you mentioned, being INSTALL_PATH not accessible form the subshell and so NULL.
+> Moreover it's anyway certainly better to refer with $(INSTALL_PATH) being it a strict Makefile var.
+> So it's fine for me, thanks to have spotted this.
+>
+> Reviewed-by: cristian.marussi@arm.com
+>
 
-This is because gup_benchmark.c is passing in a file descriptor to
-mmap(), but the fd came from opening up the /dev/zero file. This
-confuses the mmap syscall implementation, which thinks that, if the
-caller did not specify MAP_ANONYMOUS, then the file must be a huge
-page file. So it attempts to verify that the file really is a huge
-page file, as you can see here:
+Thanks for Reviewing.
 
-ksys_mmap_pgoff()
-{
-    if (!(flags & MAP_ANONYMOUS)) {
-        retval =3D -EINVAL;
-        if (unlikely(flags & MAP_HUGETLB && !is_file_hugepages(file)))
-            goto out_fput; /* THIS IS WHERE WE END UP */
+I have to send v2 patch with author mail id fix. I will keep your Reviewed-by.
 
-    else if (flags & MAP_HUGETLB) {
-        ...proceed normally, /dev/zero is ok here...
+--prabhakar (pk)
 
-...and of course is_file_hugepages() returns "false" for the /dev/zero
-file.
 
-The problem is that the user space program, gup_benchmark.c, really just
-wants anonymous memory here. The simplest way to get that is to pass
-MAP_ANONYMOUS whenever MAP_HUGETLB is specified, so that's what this
-patch does.
-
-Cc: Keith Busch <keith.busch@intel.com>
-Signed-off-by: John Hubbard <jhubbard@nvidia.com>
----
- tools/testing/selftests/vm/gup_benchmark.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/vm/gup_benchmark.c b/tools/testing/sel=
-ftests/vm/gup_benchmark.c
-index cb3fc09645c4..485cf06ef013 100644
---- a/tools/testing/selftests/vm/gup_benchmark.c
-+++ b/tools/testing/selftests/vm/gup_benchmark.c
-@@ -71,7 +71,7 @@ int main(int argc, char **argv)
- 			flags |=3D MAP_SHARED;
- 			break;
- 		case 'H':
--			flags |=3D MAP_HUGETLB;
-+			flags |=3D (MAP_HUGETLB | MAP_ANONYMOUS);
- 			break;
- 		default:
- 			return -1;
---=20
-2.23.0
-
+>
+> > Signed-off-by: Prabhakar Kushwaha <pkushwaha@marvell.com>
+> > Signed-off-by: Prabhakar Kushwaha <prabhakar.pkin@gmail.com>
+> > CC: Cristian Marussi <cristian.marussi@arm.com>
+> > ---
+> >  tools/testing/selftests/Makefile | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
+> > index 4cdbae6f4e61..612f6757015d 100644
+> > --- a/tools/testing/selftests/Makefile
+> > +++ b/tools/testing/selftests/Makefile
+> > @@ -213,7 +213,7 @@ ifdef INSTALL_PATH
+> >       @# included in the generated runlist.
+> >       for TARGET in $(TARGETS); do \
+> >               BUILD_TARGET=$$BUILD/$$TARGET;  \
+> > -             [ ! -d $$INSTALL_PATH/$$TARGET ] && echo "Skipping non-existent dir: $$TARGET" && continue; \
+> > +             [ ! -d $(INSTALL_PATH)/$$TARGET ] && echo "Skipping non-existent dir: $$TARGET" && continue; \
+> >               echo "[ -w /dev/kmsg ] && echo \"kselftest: Running tests in $$TARGET\" >> /dev/kmsg" >> $(ALL_SCRIPT); \
+> >               echo "cd $$TARGET" >> $(ALL_SCRIPT); \
+> >               echo -n "run_many" >> $(ALL_SCRIPT); \
+> >
+>
