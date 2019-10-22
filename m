@@ -2,110 +2,101 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E856AE0A39
-	for <lists+linux-kselftest@lfdr.de>; Tue, 22 Oct 2019 19:13:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3B75E0A43
+	for <lists+linux-kselftest@lfdr.de>; Tue, 22 Oct 2019 19:15:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732552AbfJVRM7 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 22 Oct 2019 13:12:59 -0400
-Received: from mail-wm1-f51.google.com ([209.85.128.51]:52164 "EHLO
-        mail-wm1-f51.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1733193AbfJVRM7 (ORCPT
+        id S1731883AbfJVRPA (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 22 Oct 2019 13:15:00 -0400
+Received: from us-smtp-1.mimecast.com ([205.139.110.61]:57489 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1731795AbfJVRPA (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 22 Oct 2019 13:12:59 -0400
-Received: by mail-wm1-f51.google.com with SMTP id q70so11013477wme.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 22 Oct 2019 10:12:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tessares-net.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=CsdgsMcU3HKx96SXZpLXR9PuPe4fAaa7s6eLfWcojk4=;
-        b=Y1HBxO8V5Y0iD5fKeN0sXhVG1pO538VxcgM0gQN/f/tb3jMldemzDiw2VyXoMlUOog
-         W5H8zhpQqCB47YU39tMe0iF98cF3KJyWYleFX8CKPXMMWQ1GbCVcc+eausOwwkbmbM8X
-         WfK5WjScKPTxKjc8Nq+J7eYWmzTM9baIG96WCQxH8U9WX9dKJJMQO8nUZrPvZurbjmwI
-         75bQCcPI+/WN5Q9BfB4dVVgV2P/vBF6tzQ2gIQtpSElOn/KBKTEbjOuxBkL8EEBbOtQj
-         l/9iB50Ke55wMMpqX48bKv0jBGvyauZ3IyV41yqfxLG1tYr/eSM9AqXAIpMNwjsZ67rE
-         NqNA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=CsdgsMcU3HKx96SXZpLXR9PuPe4fAaa7s6eLfWcojk4=;
-        b=m3Nyp+3pT2Zo8/pv7jLwpFM5Qpv5DDk65+LBTis6LcQZ1s9U8l3K7KrK+qKbBe/M/f
-         1ZSENZJBjv0QtT7i6UYkg2R4vvwo3BmNdb+Jg279t4E9nk5q3eIpYy+EZK5tzKglUzT4
-         z7+ah5UPh6FsxHR0xQxO+lsgK8j8sY/RrEWTOSEE1t6FvVZbCAeXHSivjdRS/35MtYyX
-         yeJKfsoNITIBbHcbniH+Ul8UZmGbWufbzo5ak0FTGIsULnxWXq2n4sV/N5+zt4UO4ZuD
-         Wm5mTYB/CX8Y6/wuonYtSZqAq/yPSpUe9gmLsBgqEtwU6wnP5AiVF2og9aVJ1GrBfSCY
-         LKuw==
-X-Gm-Message-State: APjAAAUZhGCdqwFrWWBx2moMd6PqqBuJFzPEXjl0l5AjVfbTYG8QfbA/
-        CRBq6kOWM3/8lq+BPu9BKW0EeJ6P3K+itg==
-X-Google-Smtp-Source: APXvYqyBjSpq14ScGELyVv252XLFhNfBPEZJpet8FWhwaC7umORhfRibmOExBWNszeZwotRWlmluyA==
-X-Received: by 2002:a1c:5458:: with SMTP id p24mr3786077wmi.32.1571764376501;
-        Tue, 22 Oct 2019 10:12:56 -0700 (PDT)
-Received: from tsr-vdi-mbaerts.nix.tessares.net (static.23.216.130.94.clients.your-server.de. [94.130.216.23])
-        by smtp.gmail.com with ESMTPSA id y13sm28309810wrg.8.2019.10.22.10.12.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Oct 2019 10:12:55 -0700 (PDT)
-From:   Matthieu Baerts <matthieu.baerts@tessares.net>
-To:     Shuah Khan <shuah@kernel.org>
-Cc:     Matthieu Baerts <matthieu.baerts@tessares.net>,
-        Kees Cook <keescook@chromium.org>,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] selftests: settings: tests can be in subsubdirs
-Date:   Tue, 22 Oct 2019 19:12:20 +0200
-Message-Id: <20191022171223.27934-1-matthieu.baerts@tessares.net>
-X-Mailer: git-send-email 2.20.1
+        Tue, 22 Oct 2019 13:15:00 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1571764499;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ZnqQpohuKQ9uYTM7VPMOk3S+s+Sz5MTWH/R9yn2bwqA=;
+        b=TFkUSbsNVm4sJEeniTyKuwOl1q6F6Tb9jK4Ixg1Jmc9cQqDY7+7GCEhFZGvbrRhLLmxKa/
+        VFilB51CO47MYlIxEpSRiHhXU1atIWTD+u+8d2+KGatEbWi9Z+1zWf/guIRvwGa4jmGgxn
+        QqrEG0cx+J/M+AYwxlsTGhMUZzdESWU=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-40-Jldqq01BOAOUQbEbYa4rKg-1; Tue, 22 Oct 2019 13:14:56 -0400
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id E80591005509;
+        Tue, 22 Oct 2019 17:14:54 +0000 (UTC)
+Received: from redhat.com (unknown [10.20.6.178])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 557C71001B22;
+        Tue, 22 Oct 2019 17:14:54 +0000 (UTC)
+Date:   Tue, 22 Oct 2019 13:14:52 -0400
+From:   Jerome Glisse <jglisse@redhat.com>
+To:     John Hubbard <jhubbard@nvidia.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Keith Busch <keith.busch@intel.com>,
+        LKML <linux-kernel@vger.kernel.org>, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH 1/1] mm/gup_benchmark: fix MAP_HUGETLB case
+Message-ID: <20191022171452.GA5169@redhat.com>
+References: <20191021212435.398153-1-jhubbard@nvidia.com>
+ <20191021212435.398153-2-jhubbard@nvidia.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20191021212435.398153-2-jhubbard@nvidia.com>
+User-Agent: Mutt/1.12.1 (2019-06-15)
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
+X-MC-Unique: Jldqq01BOAOUQbEbYa4rKg-1
+X-Mimecast-Spam-Score: 0
+Content-Type: text/plain; charset=WINDOWS-1252
+Content-Transfer-Encoding: quoted-printable
+Content-Disposition: inline
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Commit 852c8cbf34d3 (selftests/kselftest/runner.sh: Add 45 second
-timeout per test) adds support for a new per-test-directory "settings"
-file. But this only works for tests not in a sub-subdirectories, e.g.
+On Mon, Oct 21, 2019 at 02:24:35PM -0700, John Hubbard wrote:
+> The MAP_HUGETLB ("-H" option) of gup_benchmark fails:
+>=20
+> $ sudo ./gup_benchmark -H
+> mmap: Invalid argument
+>=20
+> This is because gup_benchmark.c is passing in a file descriptor to
+> mmap(), but the fd came from opening up the /dev/zero file. This
+> confuses the mmap syscall implementation, which thinks that, if the
+> caller did not specify MAP_ANONYMOUS, then the file must be a huge
+> page file. So it attempts to verify that the file really is a huge
+> page file, as you can see here:
+>=20
+> ksys_mmap_pgoff()
+> {
+>     if (!(flags & MAP_ANONYMOUS)) {
+>         retval =3D -EINVAL;
+>         if (unlikely(flags & MAP_HUGETLB && !is_file_hugepages(file)))
+>             goto out_fput; /* THIS IS WHERE WE END UP */
+>=20
+>     else if (flags & MAP_HUGETLB) {
+>         ...proceed normally, /dev/zero is ok here...
+>=20
+> ...and of course is_file_hugepages() returns "false" for the /dev/zero
+> file.
+>=20
+> The problem is that the user space program, gup_benchmark.c, really just
+> wants anonymous memory here. The simplest way to get that is to pass
+> MAP_ANONYMOUS whenever MAP_HUGETLB is specified, so that's what this
+> patch does.
 
- - tools/testing/selftests/rtc (rtc) is OK,
- - tools/testing/selftests/net/mptcp (net/mptcp) is not.
+This looks wrong, MAP_HUGETLB should only be use to create vma
+for hugetlbfs. If you want anonymous private vma do not set the
+MAP_HUGETLB. If you want huge page inside your anonymous vma
+there is nothing to do at the mmap time, this is the job of the
+transparent huge page code (THP).
 
-We have to increase the timeout for net/mptcp tests which are not
-upstreamed yet but this fix is valid for other tests if they need to add
-a "settings" file, see the full list with:
+NAK as misleading
 
-  tools/testing/selftests/*/*/**/Makefile
-
-Note that this patch changes the text header message printed at the end
-of the execution but this text is modified only for the tests that are
-in sub-subdirectories, e.g.
-
-  ok 1 selftests: net/mptcp: mptcp_connect.sh
-
-Before we had:
-
-  ok 1 selftests: mptcp: mptcp_connect.sh
-
-But showing the full target name is probably better, just in case a
-subsubdir has the same name as another one in another subdirectory.
-
-Fixes: 852c8cbf34d3 (selftests/kselftest/runner.sh: Add 45 second timeout per test)
-Signed-off-by: Matthieu Baerts <matthieu.baerts@tessares.net>
----
- tools/testing/selftests/kselftest/runner.sh | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/kselftest/runner.sh b/tools/testing/selftests/kselftest/runner.sh
-index 84de7bc74f2c..0d7a89901ef7 100644
---- a/tools/testing/selftests/kselftest/runner.sh
-+++ b/tools/testing/selftests/kselftest/runner.sh
-@@ -90,7 +90,7 @@ run_one()
- run_many()
- {
- 	echo "TAP version 13"
--	DIR=$(basename "$PWD")
-+	DIR="${PWD#${BASE_DIR}/}"
- 	test_num=0
- 	total=$(echo "$@" | wc -w)
- 	echo "1..$total"
--- 
-2.20.1
+Cheers,
+J=E9r=F4me
 
