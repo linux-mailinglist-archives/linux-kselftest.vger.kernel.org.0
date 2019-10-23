@@ -2,108 +2,239 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 686D1E253E
-	for <lists+linux-kselftest@lfdr.de>; Wed, 23 Oct 2019 23:26:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C015E260D
+	for <lists+linux-kselftest@lfdr.de>; Thu, 24 Oct 2019 00:02:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2392354AbfJWV0F (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 23 Oct 2019 17:26:05 -0400
-Received: from mail-pf1-f195.google.com ([209.85.210.195]:46387 "EHLO
-        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2392252AbfJWV0D (ORCPT
+        id S2405764AbfJWWCz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 23 Oct 2019 18:02:55 -0400
+Received: from mail-pl1-f194.google.com ([209.85.214.194]:35967 "EHLO
+        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2405676AbfJWWCz (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 23 Oct 2019 17:26:03 -0400
-Received: by mail-pf1-f195.google.com with SMTP id q5so13699531pfg.13
-        for <linux-kselftest@vger.kernel.org>; Wed, 23 Oct 2019 14:26:01 -0700 (PDT)
+        Wed, 23 Oct 2019 18:02:55 -0400
+Received: by mail-pl1-f194.google.com with SMTP id j11so10766023plk.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 23 Oct 2019 15:02:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=rv4Nqh5d+/cF2RpTBWJWh8crG9DJ9LN8rUEiLCVkDCI=;
-        b=oxa7Yq/pKC6Rtd8OTFkXDgv+sg58exGMNevQgY3cd/UoqcmGNae53c+vJ/Gv3HMIDe
-         1InEbVJhTKBH1sdxN5bLgjnNQnl4tnly+ZsYiPj+aTVPQ/ilgn3tCucka8j02OQpoMOh
-         VBXes1Krr5ikefRmE0ryyaFKvRch5oAe274i6gFt3LgvAo6HN7DvKw9VsP85ADeX83oi
-         rYGxAHbLzViqTLFA9btg/bC/cwBeo3cATsyFEwMvrFgHAhfdJd/u+tZjLqcl7uDWIJ3W
-         ZQbJARrMZozIZVsGBfy40SIYNTP9S7OBcEa7ipxSKyYkngWATCFBqYQg7qcgzNT6/jjH
-         d90A==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=1thfPODjnoKymh0RHqmcX+0PR8e0dlYfkmxouB7h5+4=;
+        b=EBIXqB0eDakGs+f2oqaOdh0DVPTJntdeDdTuy7Qyze61blnzpx/S0EuI6IQg9zNqU/
+         mo5XmnPuP2T/I+ytUYgMpYp9tv+5PKWWZC+KUAV//Fi19hVvaK/rWwS58ctEEkf1hD3y
+         TWhvnCWq/AzuaYt9bN/Rmgr9kxJo0kSOMt3mIPa9F57dcNFaiVDvPWDpwRttQwEvDUsZ
+         1sq04F7uOPn7s1UvC2/wtb4aPUuHnE1b3iMetMbm5GeekeCt0IOLqTwftPD03AkmbxE2
+         BM8fH0g5Yb3A3AGNn8ZtXaLORy6sf3e9yReq4EuyMu8P+SVhIdph7pr4nJZ/34FnFmB7
+         t1wA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=rv4Nqh5d+/cF2RpTBWJWh8crG9DJ9LN8rUEiLCVkDCI=;
-        b=eUSO+Cmclcz5Q6CjvAxnxD85Kf7rtbLB8NdOFFvhc+BJgiQbLx82jgQ4ToGeJG5MQ+
-         ourmI3JyGhMgFONq5RZZxEzUczvPeFNTX3vG1G2vBde0hZ7PmtXx4/gunM/GSZ9E2eQu
-         gKC7gcOi7THgRTrOYgYoc8W5UTu13evw3wgkZ2+J7azlzEHBGh5OouJdaIJohQDrXvnR
-         QT0pxIKsPFltHB1voGbaVwjESPaze37maTGaltX0r+HDW1dgzy0ubD8AcmZj7DX/6Gk0
-         yQAMliP4I3mejKtIJ9K1tACNbmMdalL0hrDChGzQ6Qb+YZG1yNHeKQqCGRSb/yg38FSg
-         f9SQ==
-X-Gm-Message-State: APjAAAX3h8Wxad4W05STrh387iy2t4qDbWlsUZ8kPLJO7ETsBQq/s2Ta
-        zJqOD0R/KzVK3g7PRYeNVeYtR8H9aF02lUWynM7ADQ==
-X-Google-Smtp-Source: APXvYqxtwcSKP3dxNcBOousSaiPma55QN+uHm54W5IwsX3gK7duaFgAkFXHm+eMI1oaF/mQ8CtDYgxMTVBxaFGpzq8w=
-X-Received: by 2002:a62:61c4:: with SMTP id v187mr13349382pfb.23.1571865960644;
- Wed, 23 Oct 2019 14:26:00 -0700 (PDT)
-MIME-Version: 1.0
-References: <20191018215549.65000-1-davidgow@google.com> <20191019082731.GM21344@kadam>
- <CABVgOSkegmhmeRa=7Qcx3MnX88wLy9qZx97CMhk4NvWb-pgpYQ@mail.gmail.com>
-In-Reply-To: <CABVgOSkegmhmeRa=7Qcx3MnX88wLy9qZx97CMhk4NvWb-pgpYQ@mail.gmail.com>
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=1thfPODjnoKymh0RHqmcX+0PR8e0dlYfkmxouB7h5+4=;
+        b=RQE6UjQ2Ueg92kir5s14aZ8dWkgAHA6Je6Z27aUsXcWgTXJi5cBRvJPXrosfcmXMNe
+         NZSNx8icOQS2McQcffY3va7BStOAdcUegEj1mtpsxOZzU3YhS/+n7iDdlXVJXJI53b2h
+         hLtfk8K6bZU1Xhh9c9XSryI8LQBpN7CeiZIBNRvQ95vHQ6FX1VAOAQbqTeOmvegibLGs
+         K70vmgkL6fiWcL/gRMNtyJehYhwcXEs5GOSFxSPhLp4hiZonaOWdPItT+OzhIx+dclZU
+         hsBuk+noq3SBOdCufzmi0Ae/bDdkD9PuiRBNr8H6qMF1P4eVkKM+x2nauXsbWWINvdyh
+         0O3A==
+X-Gm-Message-State: APjAAAVZmHWNujxUJ/ORcYGclIztTfihWROOKzbbd+2RXVwb7NPpQi2l
+        bZHkLiXgAQaYnQL7mYEjkC2Bow==
+X-Google-Smtp-Source: APXvYqyy14/T26jgC0nr0nn9U8HgSJ/w8mZFfiA4lnyO9LtHupuU21wg9L7JhPjg5S3O/lZEIQ/wCA==
+X-Received: by 2002:a17:902:8b81:: with SMTP id ay1mr868026plb.79.1571868174092;
+        Wed, 23 Oct 2019 15:02:54 -0700 (PDT)
+Received: from google.com ([2620:15c:2cb:1:e90c:8e54:c2b4:29e7])
+        by smtp.gmail.com with ESMTPSA id a6sm5789436pfn.99.2019.10.23.15.02.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 23 Oct 2019 15:02:53 -0700 (PDT)
+Date:   Wed, 23 Oct 2019 15:02:48 -0700
 From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Wed, 23 Oct 2019 14:25:49 -0700
-Message-ID: <CAFd5g46BuY02M_QBD3PVFnbsvO7fuuS+ZOBmfFBmmGy3xSMXbQ@mail.gmail.com>
-Subject: Re: [PATCH linux-kselftest/test v4] lib/list-test: add a test for the
- 'list' doubly linked list
 To:     David Gow <davidgow@google.com>
-Cc:     Dan Carpenter <dan.carpenter@oracle.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Kees Cook <keescook@chromium.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Cc:     shuah@kernel.org, akpm@linux-foundation.org, keescook@chromium.org,
+        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-kernel@vger.kernel.org, dan.carpenter@oracle.com
+Subject: Re: [PATCH linux-kselftest/test v5] lib/list-test: add a test for
+ the 'list' doubly linked list
+Message-ID: <20191023220248.GA55483@google.com>
+References: <20191022221322.122788-1-davidgow@google.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20191022221322.122788-1-davidgow@google.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Oct 22, 2019 at 3:13 PM David Gow <davidgow@google.com> wrote:
->
-> On Sat, Oct 19, 2019 at 1:27 AM Dan Carpenter <dan.carpenter@oracle.com> wrote:
-> >
-> > On Fri, Oct 18, 2019 at 02:55:49PM -0700, David Gow wrote:
-> > > +     list4 = kzalloc(sizeof(*list4), GFP_KERNEL);
-> > > +     KUNIT_ASSERT_NOT_ERR_OR_NULL(test, list4);
-> >
-> > Why not just use GFP_KERNEL | GFP_NOFAIL and remove the check?
->
-> I've sent a new version of the patch out (v5) which uses __GFP_NOFAIL instead.
->
-> The idea had been to exercise KUnit's assertion functionality, in the
-> hope that it'd allow the test to fail (but potentially allow other
-> tests to still run) in the case of allocation failure. Given that
-> we're only allocating enough to store ~4 pointers in total, though,
-> that's probably of little use.
->
-> > kzalloc() can't return error pointers.  If this were an IS_ERR_OR_NULL()
-> > check then it would generate a static checker warning, but static
-> > checkers don't know about KUNIT_ASSERT_NOT_ERR_OR_NULL() yet so you're
-> > safe.
->
-> Alas, KUnit doesn't have a KUNIT_ASSERT_NOT_NULL() macro, and I'd
-> assumed it was not dangerous (even if not ideal) to check for error
-> pointers, even if kzalloc() can't return them.
+On Tue, Oct 22, 2019 at 03:13:22PM -0700, 'David Gow' via KUnit Development wrote:
+> Add a KUnit test for the kernel doubly linked list implementation in
+> include/linux/list.h
+> 
+> Each test case (list_test_x) is focused on testing the behaviour of the
+> list function/macro 'x'. None of the tests pass invalid lists to these
+> macros, and so should behave identically with DEBUG_LIST enabled and
+> disabled.
+> 
+> Note that, at present, it only tests the list_ types (not the
+> singly-linked hlist_), and does not yet test all of the
+> list_for_each_entry* macros (and some related things like
+> list_prepare_entry).
+> 
+> Signed-off-by: David Gow <davidgow@google.com>
 
-Maybe it would be good for us (not in this case, just generally
-speaking) to add a KUNIT_ASSERT_NOT_NULL() and friends?
+Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
+Tested-by: Brendan Higgins <brendanhiggins@google.com>
 
-> Perhaps it'd make sense to add a convenient way of checking the
-> NULL-ness of pointers to KUnit (it's possible with the
-> KUNIT_ASSERT_PTR_EQ(), but requires a bit of casting to make the type
-> checker happy) in the future. Once KUnit is properly upstream, it may
-> be worth teaching the static analysis tools about these functions to
-> avoid having warnings in these sorts of tests.
->
-> For now, though, (and for this test in particular), I agree with the
-> suggestion of just using __GFP_NOFAIL.
->
-> Thanks a lot for the comments,
-> -- David
+I think I already had a "Reviewed-by and a Tested-by" on this patch.
+Please make sure to apply the footers to subsequent versions of a patch
+in the future.
+
+> ---
+> v5 replaces the use of KUNIT_ASSERT_NOT_ERR_OR_NULL() -- to check the
+> return value from kzalloc() and kmalloc() -- with the __GFP_NOFAIL
+> arugment. (Both in the list_test_list_init test.)
+> 
+> Earlier versions of the test can be found:
+> v4: https://lore.kernel.org/linux-kselftest/20191018215549.65000-1-davidgow@google.com/
+> v3: https://lore.kernel.org/linux-kselftest/20191016215707.95317-1-davidgow@google.com/
+> v2: https://lore.kernel.org/linux-kselftest/20191010185631.26541-1-davidgow@google.com/
+> v1: https://lore.kernel.org/linux-kselftest/20191007213633.92565-1-davidgow@google.com/
+> 
+> 
+>  MAINTAINERS       |   5 +
+>  lib/Kconfig.debug |  18 ++
+>  lib/Makefile      |   3 +
+>  lib/list-test.c   | 738 ++++++++++++++++++++++++++++++++++++++++++++++
+>  4 files changed, 764 insertions(+)
+>  create mode 100644 lib/list-test.c
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 7ef985e01457..7ced1b69a3d3 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -9504,6 +9504,11 @@ F:	Documentation/misc-devices/lis3lv02d.rst
+>  F:	drivers/misc/lis3lv02d/
+>  F:	drivers/platform/x86/hp_accel.c
+>  
+> +LIST KUNIT TEST
+> +M:	David Gow <davidgow@google.com>
+> +S:	Maintained
+> +F:	lib/list-test.c
+
+Probably want to have a "mailing list" line. Something like:
+"""
+L:	linux-kselftest@vger.kernel.org
+L:	kunit-dev@googlegroups.com
+"""
+
+> +
+>  LIVE PATCHING
+>  M:	Josh Poimboeuf <jpoimboe@redhat.com>
+>  M:	Jiri Kosina <jikos@kernel.org>
+> diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+> index a3017a5dadcd..7991b78eb1f3 100644
+> --- a/lib/Kconfig.debug
+> +++ b/lib/Kconfig.debug
+> @@ -1961,6 +1961,24 @@ config SYSCTL_KUNIT_TEST
+>  
+>  	  If unsure, say N.
+>  
+> +config LIST_KUNIT_TEST
+> +	bool "KUnit Test for Kernel Linked-list structures"
+> +	depends on KUNIT
+> +	help
+> +	  This builds the linked list KUnit test suite.
+> +	  It tests that the API and basic functionality of the list_head type
+> +	  and associated macros.
+> +	
+
+nit: unnecessary tab.
+
+> +	  KUnit tests run during boot and output the results to the debug log
+> +	  in TAP format (http://testanything.org/). Only useful for kernel devs
+> +	  running the KUnit test harness, and not intended for inclusion into a
+> +	  production build.
+> +
+> +	  For more information on KUnit and unit tests in general please refer
+> +	  to the KUnit documentation in Documentation/dev-tools/kunit/.
+> +
+> +	  If unsure, say N.
+> +
+>  config TEST_UDELAY
+>  	tristate "udelay test driver"
+>  	help
+[...]
+> diff --git a/lib/list-test.c b/lib/list-test.c
+> new file mode 100644
+> index 000000000000..a6d17647e309
+> --- /dev/null
+> +++ b/lib/list-test.c
+[...]
+> +static void list_test_list_entry(struct kunit *test)
+> +{
+> +	struct list_test_struct test_struct;
+> +
+> +	KUNIT_EXPECT_PTR_EQ(test, &test_struct, list_entry(&(test_struct.list), struct list_test_struct, list));
+
+nit: here and elsewhere: over 80 chars.
+
+> +}
+> +
+> +static void list_test_list_first_entry(struct kunit *test)
+> +{
+> +	struct list_test_struct test_struct1, test_struct2;
+> +	LIST_HEAD(list);
+> +
+> +	list_add_tail(&test_struct1.list, &list);
+> +	list_add_tail(&test_struct2.list, &list);
+> +
+> +
+> +	KUNIT_EXPECT_PTR_EQ(test, &test_struct1, list_first_entry(&list, struct list_test_struct, list));
+> +}
+[...]
+> +static void list_test_list_for_each_entry(struct kunit *test)
+> +{
+> +	struct list_test_struct entries[5], *cur;
+> +	static LIST_HEAD(list);
+> +	int i = 0;
+> +
+> +	for (i = 0; i < 5; ++i) {
+> +		entries[i].data = i;
+> +		list_add_tail(&entries[i].list, &list);
+> +	}
+> +
+> +	i = 0;
+> +
+> +	list_for_each_entry(cur, &list, list) {
+> +		KUNIT_EXPECT_EQ(test, cur->data, i);
+> +		i++;
+> +	}
+> +	
+
+nit: another unnecessary tab. Looks like you should probably run checkpatch.
+
+> +	KUNIT_EXPECT_EQ(test, i, 5);
+> +}
+> +
+> +static void list_test_list_for_each_entry_reverse(struct kunit *test)
+> +{
+> +	struct list_test_struct entries[5], *cur;
+> +	static LIST_HEAD(list);
+> +	int i = 0;
+> +
+> +	for (i = 0; i < 5; ++i) {
+> +		entries[i].data = i;
+> +		list_add_tail(&entries[i].list, &list);
+> +	}
+> +
+> +	i = 4;
+> +
+> +	list_for_each_entry_reverse(cur, &list, list) {
+> +		KUNIT_EXPECT_EQ(test, cur->data, i);
+> +		i--;
+> +	}
+> +	
+> +	KUNIT_EXPECT_EQ(test, i, -1);
+> +}
+[...]
+
+Cheers
