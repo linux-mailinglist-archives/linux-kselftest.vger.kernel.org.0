@@ -2,186 +2,82 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 70590E0FB5
-	for <lists+linux-kselftest@lfdr.de>; Wed, 23 Oct 2019 03:35:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CE5CE0FD5
+	for <lists+linux-kselftest@lfdr.de>; Wed, 23 Oct 2019 03:56:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733217AbfJWBfQ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 22 Oct 2019 21:35:16 -0400
-Received: from mail-pf1-f196.google.com ([209.85.210.196]:36164 "EHLO
-        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732328AbfJWBfQ (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 22 Oct 2019 21:35:16 -0400
-Received: by mail-pf1-f196.google.com with SMTP id y22so11832097pfr.3;
-        Tue, 22 Oct 2019 18:35:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=to:from:subject:message-id:date:user-agent:mime-version
-         :content-language:content-transfer-encoding;
-        bh=sVxBR4j3UbPCGxSucg6YKBL4mZZkWsBKL7S+CBlzoj4=;
-        b=UNwzboz1mUdLpVOtkcq9tNY6KSjXVug3okwsDTDIySbu8dQTtsxxqn50agPXUqaR3S
-         OZhQ0G40mtQAWQLbM0EIMUPd7rT7MELl51wjxQOsbI2hqV+rZwwdA0+kq9Bq1W6R7h2J
-         i6XU1IhzGh5zvVV0rc24v+eAA+RMW9E03zInWgQjBwhub2AodCWdbQyolK6JzBaMZMld
-         Ku8m9AYhFnO+c+KR1npe96ROsYAHLQ79+6IZKqRCjxJye0fLar7Tldjv3TO5al4mVNLC
-         sFbdC+TKrATW1l/S9QxhH0hkMZxAHi8cqQEiU4cdtOUoMvmobPZikzaPtzLx7GFyVL8T
-         ggbQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:to:from:subject:message-id:date:user-agent
-         :mime-version:content-language:content-transfer-encoding;
-        bh=sVxBR4j3UbPCGxSucg6YKBL4mZZkWsBKL7S+CBlzoj4=;
-        b=FteSLRwlR8c0X/hUBr1G7U+TEB2GgJfBhSYoMoyvjcyeB+mEdafXwqkM1G9EG8mUlC
-         Q14IkjXLxitQ5r32OupObTjnrc6wxPQ2E1R1XNCxLqH6tpxK0w9E3MMhtzf74RMRid+x
-         ReQeqjUz7VLP/xAaOHk1zCg4dge6hBaAh2QXy7bp+ZIf8e3NtrmsJLcLzH3aTcBQzSJx
-         GGps5sRSBDXvwnV4juKNXHDssKkuVnHz+9f+P9InemihhH0ocyMIghDS7HxuHnqnJOeR
-         GKKBO7Ki1QOxTt96KUzzXlogxLfl4FNOvqKjh0mgRotM+fOHxqglBkev7beMVmzoVsD2
-         oCSQ==
-X-Gm-Message-State: APjAAAUqhcaS8I9ECOlalA4RoZziTDZyokTMdmpEkHMlDZ0CJhoN6P2s
-        zpomfHejbgq4M98aVIJlQi8Lwdte
-X-Google-Smtp-Source: APXvYqxWdU7vwCZTpqi4gKdDzclKCvarcZjw+RngLyJixn/yMXyttLyD/cnOJSl42MwV+53qWKeIIw==
-X-Received: by 2002:a17:90a:24ab:: with SMTP id i40mr8320800pje.121.1571794515106;
-        Tue, 22 Oct 2019 18:35:15 -0700 (PDT)
-Received: from [192.168.31.113] ([43.224.157.60])
-        by smtp.gmail.com with ESMTPSA id q2sm29867893pfg.144.2019.10.22.18.35.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 22 Oct 2019 18:35:14 -0700 (PDT)
-To:     yhs@fb.com, ast@kernel.org, daniel@iogearbox.net,
-        netdev@vger.kernel.org, linux-kselftest@vger.kernel.org
-From:   Prabhakar Kushwaha <prabhakar.pkin@gmail.com>
-Subject: Linux-5.4: bpf: test_core_reloc_arrays.o: Segmentation fault with llc
- -march=bpf
-Message-ID: <8080a9a2-82f1-20b5-8d5d-778536f91780@gmail.com>
-Date:   Wed, 23 Oct 2019 07:05:05 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.1.2
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
+        id S2388033AbfJWB4X (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 22 Oct 2019 21:56:23 -0400
+Received: from mail.kernel.org ([198.145.29.99]:38770 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727582AbfJWB4X (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 22 Oct 2019 21:56:23 -0400
+Received: from devnote2 (NE2965lan1.rev.em-net.ne.jp [210.141.244.193])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id D82B52064A;
+        Wed, 23 Oct 2019 01:56:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1571795782;
+        bh=7K4aAK3LqRh8jXXyar1/Xb/Z6TWqqFQnOKm4QUrFieo=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=pC4WKRsLT4Eq3kgZaw8DuTmD/QC0WMjYDHLMLBOcyBV8tMKHYe5I7oRo0gXqtL3GA
+         1mxLLvmFtnJHwDXBEWwHlckTDa7n+aqrUUjFfRGNQGgjDUVub3S8ArioIFjeDnI9I6
+         OyTtxz0s5jjxPXA04EmhWdMmpSjAm5IPBVQ469TA=
+Date:   Wed, 23 Oct 2019 10:56:18 +0900
+From:   Masami Hiramatsu <mhiramat@kernel.org>
+To:     Alexey Dobriyan <adobriyan@gmail.com>
+Cc:     Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, jaswinder.singh@linaro.org
+Subject: Re: [BUGFIX PATCH v2 1/5] selftests: proc: Make va_max 1GB on 32bit
+ arch
+Message-Id: <20191023105618.48a8fcee869fbae8ead31cee@kernel.org>
+In-Reply-To: <20191021173053.GB5355@avx2>
+References: <157164647813.17692.3834082082658965225.stgit@devnote2>
+        <157164648909.17692.6080553792829040898.stgit@devnote2>
+        <20191021173053.GB5355@avx2>
+X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+On Mon, 21 Oct 2019 20:30:53 +0300
+Alexey Dobriyan <adobriyan@gmail.com> wrote:
 
- Adding other mailing list, folks...
+> On Mon, Oct 21, 2019 at 05:28:09PM +0900, Masami Hiramatsu wrote:
+> > Currently proc-self-map-files-002.c sets va_max (max test address
+> > of user virtual address) to 4GB, but it is too big for 32bit
+> > arch and 1UL << 32 is overflow on 32bit long.
+> > 
+> > Make va_max 1GB on 32bit arch like i386 and arm.
+> 
+> > +#if __BITS_PER_LONG == 32
+> > +# define VA_MAX (1UL << 30)
+> > +#elif __BITS_PER_LONG == 64
+> > +# define VA_MAX (1UL << 32)
+> > +#else
+> > +# define VA_MAX 0
+> > +#endif
+> > +
+> >  int main(void)
+> >  {
+> >  	const int PAGE_SIZE = sysconf(_SC_PAGESIZE);
+> > -	const unsigned long va_max = 1UL << 32;
+> > +	const unsigned long va_max = VA_MAX;
+> 
+> No, just make it like 1MB unconditionally.
 
-Hi All,
+Ah, I sse. BTW, would you mean 1GB?
 
-I am trying to build kselftest on Linux-5.4 on ubuntu 18.04. I installed
-LLVM-9.0.0 and Clang-9.0.0 from below links after following steps from
-[1] because of discussion [2]
+> This is not intended to cover all address space, just large enough part
+> (larger than reasonable vm.mmap_min_addr)
 
- https://releases.llvm.org/9.0.0/llvm-9.0.0.src.tar.xz
- https://releases.llvm.org/9.0.0/clang-tools-extra-9.0.0.src.tar.xz
- https://releases.llvm.org/9.0.0/cfe-9.0.0.src.tar.xz
+Then, should we better to check the /proc/sys/vm/mmap_min_addr?
 
-Now, i am trying with llc -march=bpf, with this segmentation fault is
-coming as below:
+Thank you,
 
-gcc -g -Wall -O2 -I../../../include/uapi -I../../../lib
--I../../../lib/bpf -I../../../../include/generated -DHAVE_GENHDR
--I../../../include -Dbpf_prog_load=bpf_prog_test_load
--Dbpf_load_program=bpf_test_load_program    test_flow_dissector.c
-/usr/src/tovards/linux/tools/testing/selftests/bpf/test_stub.o
-/usr/src/tovards/linux/tools/testing/selftests/bpf/libbpf.a -lcap -lelf
--lrt -lpthread -o
-/usr/src/tovards/linux/tools/testing/selftests/bpf/test_flow_dissector
-gcc -g -Wall -O2 -I../../../include/uapi -I../../../lib
--I../../../lib/bpf -I../../../../include/generated -DHAVE_GENHDR
--I../../../include -Dbpf_prog_load=bpf_prog_test_load
--Dbpf_load_program=bpf_test_load_program
-test_tcp_check_syncookie_user.c
-/usr/src/tovards/linux/tools/testing/selftests/bpf/test_stub.o
-/usr/src/tovards/linux/tools/testing/selftests/bpf/libbpf.a -lcap -lelf
--lrt -lpthread -o
-/usr/src/tovards/linux/tools/testing/selftests/bpf/test_tcp_check_syncookie_user
-gcc -g -Wall -O2 -I../../../include/uapi -I../../../lib
--I../../../lib/bpf -I../../../../include/generated -DHAVE_GENHDR
--I../../../include -Dbpf_prog_load=bpf_prog_test_load
--Dbpf_load_program=bpf_test_load_program    test_lirc_mode2_user.c
-/usr/src/tovards/linux/tools/testing/selftests/bpf/test_stub.o
-/usr/src/tovards/linux/tools/testing/selftests/bpf/libbpf.a -lcap -lelf
--lrt -lpthread -o
-/usr/src/tovards/linux/tools/testing/selftests/bpf/test_lirc_mode2_user
-(clang -I. -I./include/uapi -I../../../include/uapi
--I/usr/src/tovards/linux/tools/testing/selftests/bpf/../usr/include
--D__TARGET_ARCH_arm64 -g -idirafter /usr/local/include -idirafter
-/usr/local/lib/clang/9.0.0/include -idirafter
-/usr/include/aarch64-linux-gnu -idirafter /usr/include
--Wno-compare-distinct-pointer-types -O2 -target bpf -emit-llvm \
--c progs/test_core_reloc_arrays.c -o - || echo "clang failed") | \
-llc -march=bpf -mcpu=probe  -filetype=obj -o
-/usr/src/tovards/linux/tools/testing/selftests/bpf/test_core_reloc_arrays.o
-Stack dump:
-0. Program arguments: llc -march=bpf -mcpu=probe -filetype=obj -o
-/usr/src/tovards/linux/tools/testing/selftests/bpf/test_core_reloc_arrays.o
-1. Running pass 'Function Pass Manager' on module '<stdin>'.
-2. Running pass 'BPF Assembly Printer' on function '@test_core_arrays'
-#0 0x0000aaaac618db08 llvm::sys::PrintStackTrace(llvm::raw_ostream&)
-(/usr/local/bin/llc+0x152eb08)
-Segmentation fault
-Makefile:260: recipe for target
-'/usr/src/tovards/linux/tools/testing/selftests/bpf/test_core_reloc_arrays.o'
-failed
-make[1]: ***
-[/usr/src/tovards/linux/tools/testing/selftests/bpf/test_core_reloc_arrays.o]
-Error 139
-
-To add more details,
-Commenting following lines in bpf/progs/test_core_reloc_arrays.c
-removes the segmentation fault.
-
---- a/tools/testing/selftests/bpf/progs/test_core_reloc_arrays.c
-+++ b/tools/testing/selftests/bpf/progs/test_core_reloc_arrays.c
-@@ -41,15 +41,14 @@ int test_core_arrays(void *ctx)
-        if (BPF_CORE_READ(&out->a2, &in->a[2]))
-                return 1;
-        /* in->b[1][2][3] */
--       if (BPF_CORE_READ(&out->b123, &in->b[1][2][3]))
--               return 1;
-+//     if (BPF_CORE_READ(&out->b123, &in->b[1][2][3]))
-+//             return 1;
-        /* in->c[1].c */
-        if (BPF_CORE_READ(&out->c1c, &in->c[1].c))
-                return 1;
-        /* in->d[0][0].d */
--       if (BPF_CORE_READ(&out->d00d, &in->d[0][0].d))
--               return 1;
--
-+//     if (BPF_CORE_READ(&out->d00d, &in->d[0][0].d))
-+//             return 1;
-        return 0;
- }
-
-It looks to be something related llc and more than 1 dimension array.
-has anyone faced such error.
-
-Please suggest!!
-
---prabhakar(pk)
-
-[1]
-https://stackoverflow.com/questions/47255526/how-to-build-the-latest-clang-tidy
-
-[2] https://www.mail-archive.com/netdev@vger.kernel.org/msg315096.html
-
-
-Linux top-commit
-----------------
-commit bc88f85c6c09306bd21917e1ae28205e9cd775a7 (HEAD -> master,
-origin/master, origin/HEAD)
-Author: Ben Dooks <ben.dooks@codethink.co.uk>
-Date:   Wed Oct 16 12:24:58 2019 +0100
-
-    kthread: make __kthread_queue_delayed_work static
-
-    The __kthread_queue_delayed_work is not exported so
-    make it static, to avoid the following sparse warning:
-
-      kernel/kthread.c:869:6: warning: symbol
-'__kthread_queue_delayed_work' was not declared. Should it be static?
-
-    Signed-off-by: Ben Dooks <ben.dooks@codethink.co.uk>
-    Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
-
+-- 
+Masami Hiramatsu <mhiramat@kernel.org>
