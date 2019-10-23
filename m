@@ -2,98 +2,94 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 23F85E113A
-	for <lists+linux-kselftest@lfdr.de>; Wed, 23 Oct 2019 06:51:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E604AE114D
+	for <lists+linux-kselftest@lfdr.de>; Wed, 23 Oct 2019 06:57:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731220AbfJWEvp (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 23 Oct 2019 00:51:45 -0400
-Received: from mail.kernel.org ([198.145.29.99]:59434 "EHLO mail.kernel.org"
+        id S1732261AbfJWE5g (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 23 Oct 2019 00:57:36 -0400
+Received: from mail.kernel.org ([198.145.29.99]:60346 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731061AbfJWEvp (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 23 Oct 2019 00:51:45 -0400
-Received: from devnote2 (NE2965lan1.rev.em-net.ne.jp [210.141.244.193])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S1731908AbfJWE5g (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 23 Oct 2019 00:57:36 -0400
+Received: from localhost.localdomain (NE2965lan1.rev.em-net.ne.jp [210.141.244.193])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 0EE9A2173B;
-        Wed, 23 Oct 2019 04:51:42 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id EB2062173B;
+        Wed, 23 Oct 2019 04:57:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1571806304;
-        bh=3zYRXJ+SRu8zwNp7IKIn6lBjU9+RRMxgTC+0RDpFeyw=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=BV0cPNPy2Q/sISCUnkyYc4xqyMqagc5n9bVOGmRs4FCgplAi8B5jNG2GAgs2Wwnci
-         EXNIbgRP65rKiXXIhRYlPkrQygRh8bZAQuRgCo3Cp3ujANxBJWoA7pRqJpD39VXj6t
-         hS+69V/yugQ0tsr7FBN1hvtbcazoJGDI2i0wQY1U=
-Date:   Wed, 23 Oct 2019 13:51:41 +0900
+        s=default; t=1571806655;
+        bh=ZKnZR5T+XG1YX0k0j8s6+LQ+jV5cZicG1XzIkUKu2AM=;
+        h=From:To:Cc:Subject:Date:From;
+        b=QBqkaOfeOvvBsn4bIPXXINBz6HEGGq+VfRAE45pIwePwb5JSrxET/LePVGkW+y9zu
+         xJORslY9xjrjfxYRunkm1lgoE9+N2qW8zbhDG+VQKX6Rey6zLVNftspalLQWZVztZT
+         I7KL7ll8qXun02cduKboYRCry2+657A3O+WevirQ=
 From:   Masami Hiramatsu <mhiramat@kernel.org>
-To:     Masami Hiramatsu <mhiramat@kernel.org>
-Cc:     Alexey Dobriyan <adobriyan@gmail.com>,
-        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, jaswinder.singh@linaro.org
-Subject: Re: [BUGFIX PATCH v2 1/5] selftests: proc: Make va_max 1GB on 32bit
- arch
-Message-Id: <20191023135141.77aef5dc41182e069676d27e@kernel.org>
-In-Reply-To: <20191023105618.48a8fcee869fbae8ead31cee@kernel.org>
-References: <157164647813.17692.3834082082658965225.stgit@devnote2>
-        <157164648909.17692.6080553792829040898.stgit@devnote2>
-        <20191021173053.GB5355@avx2>
-        <20191023105618.48a8fcee869fbae8ead31cee@kernel.org>
-X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+To:     Shuah Khan <shuah@kernel.org>
+Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        jaswinder.singh@linaro.org, Alexey Dobriyan <adobriyan@gmail.com>,
+        Anshuman Khandual <khandual@linux.vnet.ibm.com>,
+        "Aneesh Kumar K . V" <aneesh.kumar@linux.vnet.ibm.com>,
+        Eric Dumazet <edumazet@google.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Willem de Bruijn <willemb@google.com>,
+        Emilio =?utf-8?b?TMOzcGV6?= <emilio.lopez@collabora.co.uk>
+Subject: [BUGFIX PATCH v3 0/5] selftests: Fixes for 32bit arch
+Date:   Wed, 23 Oct 2019 13:57:30 +0900
+Message-Id: <157180665007.17298.907392422924029261.stgit@devnote2>
+X-Mailer: git-send-email 2.20.1
+User-Agent: StGit/0.17.1-dirty
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, 23 Oct 2019 10:56:18 +0900
-Masami Hiramatsu <mhiramat@kernel.org> wrote:
+Hi,
 
-> On Mon, 21 Oct 2019 20:30:53 +0300
-> Alexey Dobriyan <adobriyan@gmail.com> wrote:
-> 
-> > On Mon, Oct 21, 2019 at 05:28:09PM +0900, Masami Hiramatsu wrote:
-> > > Currently proc-self-map-files-002.c sets va_max (max test address
-> > > of user virtual address) to 4GB, but it is too big for 32bit
-> > > arch and 1UL << 32 is overflow on 32bit long.
-> > > 
-> > > Make va_max 1GB on 32bit arch like i386 and arm.
-> > 
-> > > +#if __BITS_PER_LONG == 32
-> > > +# define VA_MAX (1UL << 30)
-> > > +#elif __BITS_PER_LONG == 64
-> > > +# define VA_MAX (1UL << 32)
-> > > +#else
-> > > +# define VA_MAX 0
-> > > +#endif
-> > > +
-> > >  int main(void)
-> > >  {
-> > >  	const int PAGE_SIZE = sysconf(_SC_PAGESIZE);
-> > > -	const unsigned long va_max = 1UL << 32;
-> > > +	const unsigned long va_max = VA_MAX;
-> > 
-> > No, just make it like 1MB unconditionally.
-> 
-> Ah, I sse. BTW, would you mean 1GB?
+Here are the 3rd version of kselftest fixes some on 32bit arch
+(e.g. arm)
 
-I understand that 1MB will be good enough, since vm.mmap_min_addr is
-64KB by default (except for arm/arm64 which is 32KB).
-OK, I'll update and resend.
+In this version, I updated [1/5] to make va_max 1MB unconditionally
+according to Alexey's comment.
+
+When I built the ksefltest on arm, I hit some 32bit related warnings.
+Here are the patches to fix those issues.
+
+
+ - [1/5] va_max was set 2^32 even on 32bit arch. This can make
+        va_max == 0 and always fail. Make it 1GB unconditionally.
+ - [2/5] Some VM tests requires 64bit user space, which should
+        not run on 32bit arch.
+ - [3/5] For counting the size of large file, we should use
+        size_t instead of unsinged long.
+ - [4/5] Gcc warns printf format for size_t and int64_t on
+        32bit arch. Use %llu and cast it.
+ - [5/5] Gcc warns __u64 and pointer type castings. It should
+        once translated to unsigned long.
 
 Thank you,
 
-> 
-> > This is not intended to cover all address space, just large enough part
-> > (larger than reasonable vm.mmap_min_addr)
-> 
-> Then, should we better to check the /proc/sys/vm/mmap_min_addr?
-> 
-> Thank you,
-> 
-> -- 
-> Masami Hiramatsu <mhiramat@kernel.org>
+---
+
+Masami Hiramatsu (5):
+      selftests: proc: Make va_max 1MB
+      selftests: vm: Build/Run 64bit tests only on 64bit arch
+      selftests: net: Use size_t and ssize_t for counting file size
+      selftests: net: Fix printf format warnings on arm
+      selftests: sync: Fix cast warnings on arm
 
 
--- 
-Masami Hiramatsu <mhiramat@kernel.org>
+ tools/testing/selftests/net/so_txtime.c            |    4 ++--
+ tools/testing/selftests/net/tcp_mmap.c             |    8 ++++----
+ tools/testing/selftests/net/udpgso.c               |    3 ++-
+ tools/testing/selftests/net/udpgso_bench_tx.c      |    3 ++-
+ .../selftests/proc/proc-self-map-files-002.c       |    6 +++++-
+ tools/testing/selftests/sync/sync.c                |    6 +++---
+ tools/testing/selftests/vm/Makefile                |    5 +++++
+ tools/testing/selftests/vm/run_vmtests             |   10 ++++++++++
+ 8 files changed, 33 insertions(+), 12 deletions(-)
+
+--
+Masami Hiramatsu (Linaro) <mhiramat@kernel.org>
