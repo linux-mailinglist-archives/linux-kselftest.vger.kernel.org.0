@@ -2,122 +2,95 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E268E14AF
-	for <lists+linux-kselftest@lfdr.de>; Wed, 23 Oct 2019 10:50:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A4BF6E1C72
+	for <lists+linux-kselftest@lfdr.de>; Wed, 23 Oct 2019 15:24:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390552AbfJWIuF (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 23 Oct 2019 04:50:05 -0400
-Received: from mail-io1-f65.google.com ([209.85.166.65]:37530 "EHLO
-        mail-io1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2390034AbfJWIuF (ORCPT
+        id S2405266AbfJWNYa (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 23 Oct 2019 09:24:30 -0400
+Received: from mail-qk1-f180.google.com ([209.85.222.180]:40957 "EHLO
+        mail-qk1-f180.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2404607AbfJWNYa (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 23 Oct 2019 04:50:05 -0400
-Received: by mail-io1-f65.google.com with SMTP id 1so12620973iou.4;
-        Wed, 23 Oct 2019 01:50:04 -0700 (PDT)
+        Wed, 23 Oct 2019 09:24:30 -0400
+Received: by mail-qk1-f180.google.com with SMTP id y81so15815911qkb.7
+        for <linux-kselftest@vger.kernel.org>; Wed, 23 Oct 2019 06:24:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
+        d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=0hIzN5HFHwPOImmBdq7LkFsdyBlAk23Qhvjgx/Ct5Nw=;
-        b=E0aVRSyFVDTbGH0GGXiaF1VO2bWh5525i8pepFFnqnmPD/L5ugBcaAy+CqFkn5ktmV
-         FndoAt5eUgedUagQVvN1ASrfjlDHBsHqIzRU3MLm7Eb/cHQn7JkhnKRavYB/N0VGV3CX
-         wX3KYj2af8Rl5v7/FUkacqU2I8MgHXbx9pamAmT/t5dYbEw0bzKyO/bzHNlhDOiT3NrZ
-         26NHJVW5iXtWjkXxdQztamZGtsRKgTGGcvh8TXEQ+yazH5jm1oLLOYbXM8vTeHdkYxH9
-         nbkJj29XxLNdPmXKY3P2Tk952iNMYcNZfLzYFwlWjHE04IYMBRzRs0MZkmxhHYSgdGF2
-         ouyA==
+         :cc;
+        bh=a1I0pWUfYUgrXRcgSgVyPgnqp+oKuHpScMNhUln3N88=;
+        b=YPdXmdGb3bPYgrtIISkPhTK3td1GoZV3DZmvVHmPN8TvXObYtL/COamsZvjOD0AdeM
+         SaCVUdQs8615qQOS1ykocnB0s9TMh3ArIfx82IUNqlfYe4wvyzz46EgRVZvrV3pVmqBQ
+         zkxUicsMa2ift64sHb/xc8TA72/aKXdJAL7FW/49gxUUVNK3/nSwghtP2liopfBzYqV0
+         HZ/Typ/o3FbjXc3hHFJSNJkDJMtCLWAMPaiDQIM0yZU9GNfXLn378kpHIfzJSDcsfh2O
+         yL4FraEBmLSrJ1zY69J66TKIcNwriVl6e3ZX+t6bwT6ZnSNyNnoE1/Fsj7HwUeeXxVH0
+         h70w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=0hIzN5HFHwPOImmBdq7LkFsdyBlAk23Qhvjgx/Ct5Nw=;
-        b=YNY7kHQ1ulk1myjmFPGAROeYi/0wXjogIbL9odrH3aPVyrSIvFam79oids+pSTi5Ry
-         urXdi4X2nJjCxpR2G87A/6uCz1wVw6kz8LH3r/M5s7ivuDy3vp4En3QfPGQvM9U1AOIt
-         Bnfx0YP354gB20rTXyl+vwMA9PeUViGzbP5qW1nlFEXjl9sQbFTwxUOBAv24BRVv4L0R
-         nnGuL1iBMf3Akp4jFfoMW4ZLPYgoagBuIC3algK0kd+RIWc2zE/VfSAdX8eMlwgT9k/b
-         n00K9zeskFkW/5Oo6r931LYUxaGhjw3a4NKlxgSEO6H6Wi6Xgx+lRrAlPXPOzZJYGUpp
-         gBMQ==
-X-Gm-Message-State: APjAAAUx0lUQ9BwnATx7vkTBxTGoJutG0yx9nZiGON0NZsF8pdPEAzWn
-        1BT3+2ZIDM+8o5VhuV0Eh6rvOEKVxdOEzO0dNeA=
-X-Google-Smtp-Source: APXvYqyKP6o3polGJrn+yHmC9wL5Ygfjkzr5H+6Cugp8XI6oOVjTJpwNUMvOWQ45ebbfxxCyoTerkjpbkx2X1uO/MJE=
-X-Received: by 2002:a5d:9a98:: with SMTP id c24mr2158623iom.203.1571820604517;
- Wed, 23 Oct 2019 01:50:04 -0700 (PDT)
+         :message-id:subject:to:cc;
+        bh=a1I0pWUfYUgrXRcgSgVyPgnqp+oKuHpScMNhUln3N88=;
+        b=AAWad00cFQUm84rTkM8OdocDP/XUyEnIGXUA2JrbLCGSRmnoJP0jaTpz58jxNYNGpU
+         m0OkKPYfzcZSk/K1sU2iyJAQNJxTaLNemf9bn5RJKjkdgbkxiAyR6Ep7M1R8VnZiKN86
+         GXqtUAPd2gprs38JGeyT3erwvDoT75Sqa0LfUrY6BPTUveEcdvUdTRXhhKXp8fMcdneq
+         D/x9griyTdkjXRAa8qccCluA9faL7XWOvELe4a7rJN48ZHADKAnQcsoIMtHPkEc9YKZo
+         a57BxnGILDCzUOM4vgQr8Xt6un+tJwjMuaa3hgxuNlKVLxG0PRX4kQ8oYvcNE08QUVEp
+         ln9w==
+X-Gm-Message-State: APjAAAXyT4VkpRLoLDP9FApLfYKlSaOe62Vd4SI2xq/SEXXxPivpbxUA
+        HpQhOW9lma/A9oHpKg3dhGpxD+ycy8j+3gspmi5fJQ==
+X-Google-Smtp-Source: APXvYqzhTeVXJx2TMFzjxF3vak3/WfQeQkq5QLdY1QN85PWJc1hUKLZZX0BMJR1TOB0q8IPAS2DTAoBoE2PO5V7nxYM=
+X-Received: by 2002:a05:620a:16a6:: with SMTP id s6mr7591354qkj.407.1571837068783;
+ Wed, 23 Oct 2019 06:24:28 -0700 (PDT)
 MIME-Version: 1.0
-References: <8080a9a2-82f1-20b5-8d5d-778536f91780@gmail.com>
- <6fddbb7c-50e4-2d1f-6f88-1d97107e816f@fb.com> <CAJ2QiJLONfJKdMVGu6J-BHnfNKA3R+ZZWfJV2RNrmUO90LPWPQ@mail.gmail.com>
- <c854894e-6c0a-6d49-4d7f-ae81a34b5711@fb.com>
-In-Reply-To: <c854894e-6c0a-6d49-4d7f-ae81a34b5711@fb.com>
-From:   Prabhakar Kushwaha <prabhakar.pkin@gmail.com>
-Date:   Wed, 23 Oct 2019 14:19:53 +0530
-Message-ID: <CAJ2QiJKqU5GDNa4YHggboy4YUJHB_rr6x_dXWy0hK+jD5Sv29g@mail.gmail.com>
-Subject: Re: Linux-5.4: bpf: test_core_reloc_arrays.o: Segmentation fault with
- llc -march=bpf
-To:     Yonghong Song <yhs@fb.com>
-Cc:     "ast@kernel.org" <ast@kernel.org>,
-        "daniel@iogearbox.net" <daniel@iogearbox.net>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>
+References: <CACT4Y+YjOxmOzzPt_xaYE44QNZfq9haNfbnVBrTnPXe7zuSEfA@mail.gmail.com>
+ <CACT4Y+ZaN900gwx=PHS10hrKofZib7HA7JFxE_DkwChyttYW+A@mail.gmail.com>
+ <876a2abe-41ab-5819-4ae8-ad26186d0d1c@kernel.org> <226099bc-9763-3a73-e26a-b292f601494c@kernel.org>
+ <20191011180248.GA24089@rei.lan> <b715f3d7-547f-9a43-dc41-2e46ec3bfd51@kernel.org>
+ <20191014085414.GB31760@rei.lan> <CACT4Y+aKbgT=i8C5aZvp8ZV52PamGm=GdnR6kQecczLQOQSGqA@mail.gmail.com>
+ <62903a33-8ffc-56b6-de1a-539f10b5de2a@oracle.com> <20191015134407.GA12523@rei.lan>
+In-Reply-To: <20191015134407.GA12523@rei.lan>
+From:   Dmitry Vyukov <dvyukov@google.com>
+Date:   Wed, 23 Oct 2019 15:24:17 +0200
+Message-ID: <CACT4Y+azc_6aoEf4GaVFwwZgLp9QcCk3jJB-spM9s5BUB8Gxqg@mail.gmail.com>
+Subject: Re: [Automated-testing] syzkaller reproducers
+To:     Cyril Hrubis <chrubis@suse.cz>
+Cc:     George Kennedy <george.kennedy@oracle.com>,
+        shuah <shuah@kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        automated-testing@yoctoproject.org, kernelci@groups.io,
+        Dhaval Giani <dhaval.giani@gmail.com>,
+        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Jan Setje-Eilers <jan.setjeeilers@oracle.com>,
+        syzkaller <syzkaller@googlegroups.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Oct 23, 2019 at 10:12 AM Yonghong Song <yhs@fb.com> wrote:
+On Tue, Oct 15, 2019 at 3:44 PM Cyril Hrubis <chrubis@suse.cz> wrote:
 >
->
->
-> On 10/22/19 8:29 PM, Prabhakar Kushwaha wrote:
-> > Thanks Yonghong for replying.
+> Hi!
+> > >> I do not think that these scripts are ever supposed to be the used in
+> > >> production testing, you need much more than this to produce results
+> > >> reliably. I would expect that they are supposed to be a form of very
+> > >> minimal documentation.
+> > > Yes, I just added them as quick hints: some repros are 32-bits; each
+> > > needs a new dir; some external timeout is needed for each test.
+> > Thank you again for the collection of repro C programs!
 > >
-> >
-> >
-> > On Wed, Oct 23, 2019 at 8:04 AM Yonghong Song <yhs@fb.com> wrote:
-> >>
-> >>
-> >>
-> >> On 10/22/19 6:35 PM, Prabhakar Kushwaha wrote:
-> >>>
-> >>>    Adding other mailing list, folks...
-> >>>
-> >>> Hi All,
-> >>>
-> >>> I am trying to build kselftest on Linux-5.4 on ubuntu 18.04. I instal=
-led
-> >>> LLVM-9.0.0 and Clang-9.0.0 from below links after following steps fro=
-m
-> >>> [1] because of discussion [2]
-> >>
-> >> Could you try latest llvm trunk (pre-release 10.0.0)?
-> >> LLVM 9.0.0 has some codes for CORE, but it is not fully supported and
-> >> has some bugs which are only fixed in LLVM 10.0.0. We intend to make
-> >> llvm 10 as the one we claim we have support. Indeed CORE related
-> >> changes are mostly added during 10.0.0 development period.
-> >>
-> >
-> > can you please help me the link to download as
-> > "https://urldefense.proofpoint.com/v2/url?u=3Dhttps-3A__prereleases.llv=
-m.org_&d=3DDwIBaQ&c=3D5VD0RTtNlTh3ycd41b3MUw&r=3DDA8e1B5r073vIqRrFz7MRA&m=
-=3D-6k0f7iKZO54kHLKBjYdU_7pDlCh61HdtyWQ-d43zwU&s=3D7fbobFiC619_9Pr5b1FbrKvo=
-Hl6sg79NZc3rQgNWa1Q&e=3D " does not have LLVM-10.0.0 packages.
+> > Hitting a lot more crashes with the collection of repro C programs than
+> > in all the hours of running Syzkaller. Wonder why? Any idea? This is
+> > with the same kernel and VM that Syzkaller is run on.
 >
-> llvm 10 has not been released.
-> Could you follow LLVM source build insn at
-> https://github.com/iovisor/bcc/blob/master/INSTALL.md?
->
-> Specifically:
-> git clone http://llvm.org/git/llvm.git
-> cd llvm/tools; git clone http://llvm.org/git/clang.git
-> cd ..; mkdir -p build/install; cd build
-> cmake -G "Unix Makefiles" -DLLVM_TARGETS_TO_BUILD=3D"BPF;X86" \
->    -DCMAKE_BUILD_TYPE=3DRelease -DCMAKE_INSTALL_PREFIX=3D$PWD/install ..
-> make
-> make install
-> export PATH=3D$PWD/install/bin:$PATH
->
+> I would guess that these reproducers are product of countless hours of
+> fuzzing, so it's about to be expected...
 
-Thanks Yonghong..
 
-after following above steps no more segmentation fault are there.
-
---pk
+Probably. Hard to say.
+If you used KCOV, KCOV_ENABLE_COMPARISONS, KASAN, LOCKDEP,
+FAULT_INJECTION, all other debugging configs, compat instance and some
+required image/cmdline features, then the only reason for difference
+that I see is indeed longer fuzzing time.
