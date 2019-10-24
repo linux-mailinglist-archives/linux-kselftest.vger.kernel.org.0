@@ -2,239 +2,142 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C015E260D
-	for <lists+linux-kselftest@lfdr.de>; Thu, 24 Oct 2019 00:02:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AEABE276F
+	for <lists+linux-kselftest@lfdr.de>; Thu, 24 Oct 2019 02:42:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2405764AbfJWWCz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 23 Oct 2019 18:02:55 -0400
-Received: from mail-pl1-f194.google.com ([209.85.214.194]:35967 "EHLO
-        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2405676AbfJWWCz (ORCPT
+        id S2408094AbfJXAmb (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 23 Oct 2019 20:42:31 -0400
+Received: from mail-pf1-f196.google.com ([209.85.210.196]:40832 "EHLO
+        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2408091AbfJXAmb (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 23 Oct 2019 18:02:55 -0400
-Received: by mail-pl1-f194.google.com with SMTP id j11so10766023plk.3
-        for <linux-kselftest@vger.kernel.org>; Wed, 23 Oct 2019 15:02:55 -0700 (PDT)
+        Wed, 23 Oct 2019 20:42:31 -0400
+Received: by mail-pf1-f196.google.com with SMTP id x127so13969201pfb.7
+        for <linux-kselftest@vger.kernel.org>; Wed, 23 Oct 2019 17:42:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=1thfPODjnoKymh0RHqmcX+0PR8e0dlYfkmxouB7h5+4=;
-        b=EBIXqB0eDakGs+f2oqaOdh0DVPTJntdeDdTuy7Qyze61blnzpx/S0EuI6IQg9zNqU/
-         mo5XmnPuP2T/I+ytUYgMpYp9tv+5PKWWZC+KUAV//Fi19hVvaK/rWwS58ctEEkf1hD3y
-         TWhvnCWq/AzuaYt9bN/Rmgr9kxJo0kSOMt3mIPa9F57dcNFaiVDvPWDpwRttQwEvDUsZ
-         1sq04F7uOPn7s1UvC2/wtb4aPUuHnE1b3iMetMbm5GeekeCt0IOLqTwftPD03AkmbxE2
-         BM8fH0g5Yb3A3AGNn8ZtXaLORy6sf3e9yReq4EuyMu8P+SVhIdph7pr4nJZ/34FnFmB7
-         t1wA==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=LUXGEETBvCcBLZu+5N1PADlLxqK4jppDWqJHP95xhoM=;
+        b=hgo1tTqyRFfyzQv2OcL/tBjhnyeaQkOXCW1UdFe54sVVt5yCbNBd2/b4dA+vHazekb
+         zDu3uTT2j/++aRlvyk5c2Zm8C1nybWUVOHVDllkDsMyNhNSIpdo2aF3WTz33RtrFer3I
+         pnh6GFpGx2LdS2hXJo/Wcm06srTtUZodnYmvTqp+2b0CV/xMEu5QtJnpEHsY7SkSCZah
+         yPbwwyIiuPEsvqgV8mKW+3pv7EssjoDq1val32jBsYbkQ6gfiYLdCVWMqp9GoOmST5hB
+         Mej6locdjzzG0iS/6EXDCZrQ7DPIVwKc6/QDKzVKdz8K57eAhQJesOJY/CvT7YG8GMdG
+         kTFw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=1thfPODjnoKymh0RHqmcX+0PR8e0dlYfkmxouB7h5+4=;
-        b=RQE6UjQ2Ueg92kir5s14aZ8dWkgAHA6Je6Z27aUsXcWgTXJi5cBRvJPXrosfcmXMNe
-         NZSNx8icOQS2McQcffY3va7BStOAdcUegEj1mtpsxOZzU3YhS/+n7iDdlXVJXJI53b2h
-         hLtfk8K6bZU1Xhh9c9XSryI8LQBpN7CeiZIBNRvQ95vHQ6FX1VAOAQbqTeOmvegibLGs
-         K70vmgkL6fiWcL/gRMNtyJehYhwcXEs5GOSFxSPhLp4hiZonaOWdPItT+OzhIx+dclZU
-         hsBuk+noq3SBOdCufzmi0Ae/bDdkD9PuiRBNr8H6qMF1P4eVkKM+x2nauXsbWWINvdyh
-         0O3A==
-X-Gm-Message-State: APjAAAVZmHWNujxUJ/ORcYGclIztTfihWROOKzbbd+2RXVwb7NPpQi2l
-        bZHkLiXgAQaYnQL7mYEjkC2Bow==
-X-Google-Smtp-Source: APXvYqyy14/T26jgC0nr0nn9U8HgSJ/w8mZFfiA4lnyO9LtHupuU21wg9L7JhPjg5S3O/lZEIQ/wCA==
-X-Received: by 2002:a17:902:8b81:: with SMTP id ay1mr868026plb.79.1571868174092;
-        Wed, 23 Oct 2019 15:02:54 -0700 (PDT)
-Received: from google.com ([2620:15c:2cb:1:e90c:8e54:c2b4:29e7])
-        by smtp.gmail.com with ESMTPSA id a6sm5789436pfn.99.2019.10.23.15.02.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Oct 2019 15:02:53 -0700 (PDT)
-Date:   Wed, 23 Oct 2019 15:02:48 -0700
-From:   Brendan Higgins <brendanhiggins@google.com>
-To:     David Gow <davidgow@google.com>
-Cc:     shuah@kernel.org, akpm@linux-foundation.org, keescook@chromium.org,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org, dan.carpenter@oracle.com
-Subject: Re: [PATCH linux-kselftest/test v5] lib/list-test: add a test for
- the 'list' doubly linked list
-Message-ID: <20191023220248.GA55483@google.com>
-References: <20191022221322.122788-1-davidgow@google.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=LUXGEETBvCcBLZu+5N1PADlLxqK4jppDWqJHP95xhoM=;
+        b=YMUOGn6gE7d/1xW7BYJfXeNiUZ76qzoVaDpVqxLiLpqzSIpWP98Zzw1MSibr1cMMPO
+         Mjs7/SV4sqiHIt0Z0KK9+O1HeA/tyQMg9AxOwvF5ZJKXBCoxgGIvJW+XTpAXLoCvYN+g
+         nzSb2Ao9WlAZb22f0RbhOzGk/78tpUqwcon5OGr99o0XI5Et7Hwzf8sDqsO/SJzswC9z
+         8qMCRyBUvZAMzspgVsg48xPxWfpcagZSasOhTxdFJVofCe36cNAYl2wTSHZpjbE1bUS0
+         3tkb+CTki9Vav4CiCoRPN+lTEXTyAc0gpk0DJ3nkNzcVKLvIaEhthIIcXJ1sWbS7zSJQ
+         9WhQ==
+X-Gm-Message-State: APjAAAW9g3xA2MuKaeQoIM5W4VltB2cFFn97jHgMcFAlghqG52DgPvca
+        RrAr9IWu4TVi4vpydo/9WUCIMkSXo+SnCMlCVnLOIg==
+X-Google-Smtp-Source: APXvYqz5EEvMyrSqzS9/KwMWlOiRt8rJspvtoU1gthEpc2kJiPfEtOw5QdDcyKeHJCEZ5I/WGgPeoJndy4X6dFc6i5s=
+X-Received: by 2002:a63:3044:: with SMTP id w65mr12961228pgw.384.1571877749882;
+ Wed, 23 Oct 2019 17:42:29 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191022221322.122788-1-davidgow@google.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20191018001816.94460-1-brendanhiggins@google.com>
+ <20191018122949.GD11244@42.do-not-panic.com> <alpine.LRH.2.20.1910191348280.11804@dhcp-10-175-221-34.vpn.oracle.com>
+In-Reply-To: <alpine.LRH.2.20.1910191348280.11804@dhcp-10-175-221-34.vpn.oracle.com>
+From:   Brendan Higgins <brendanhiggins@google.com>
+Date:   Wed, 23 Oct 2019 17:42:18 -0700
+Message-ID: <CAFd5g46aO4jwyo32DSz4L8GdhP6t38+Qb9NB+3fev3u4G6sg4w@mail.gmail.com>
+Subject: Re: [PATCH linux-kselftest/test v1] apparmor: add AppArmor KUnit
+ tests for policy unpack
+To:     Alan Maguire <alan.maguire@oracle.com>
+Cc:     Luis Chamberlain <mcgrof@kernel.org>,
+        Matthias Maennich <maennich@google.com>,
+        shuah <shuah@kernel.org>,
+        John Johansen <john.johansen@canonical.com>, jmorris@namei.org,
+        serge@hallyn.com, Kees Cook <keescook@chromium.org>,
+        Iurii Zaikin <yzaikin@google.com>,
+        David Gow <davidgow@google.com>,
+        "Theodore Ts'o" <tytso@mit.edu>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-security-module@vger.kernel.org,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Mike Salvatore <mike.salvatore@canonical.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Oct 22, 2019 at 03:13:22PM -0700, 'David Gow' via KUnit Development wrote:
-> Add a KUnit test for the kernel doubly linked list implementation in
-> include/linux/list.h
-> 
-> Each test case (list_test_x) is focused on testing the behaviour of the
-> list function/macro 'x'. None of the tests pass invalid lists to these
-> macros, and so should behave identically with DEBUG_LIST enabled and
-> disabled.
-> 
-> Note that, at present, it only tests the list_ types (not the
-> singly-linked hlist_), and does not yet test all of the
-> list_for_each_entry* macros (and some related things like
-> list_prepare_entry).
-> 
-> Signed-off-by: David Gow <davidgow@google.com>
+On Sat, Oct 19, 2019 at 5:56 AM Alan Maguire <alan.maguire@oracle.com> wrote:
+>
+> On Fri, 18 Oct 2019, Luis Chamberlain wrote:
+>
+> > On Thu, Oct 17, 2019 at 05:18:16PM -0700, Brendan Higgins wrote:
+> > > From: Mike Salvatore <mike.salvatore@canonical.com>
+> > >
+> > > In order to write the tests against the policy unpacking code, some
+> > > static functions needed to be exposed for testing purposes. One of the
+> > > goals of this patch is to establish a pattern for which testing these
+> > > kinds of functions should be done in the future.
+> >
+> > And you'd run into the same situation expressed elsewhere with kunit of
+> > an issue of the kunit test as built-in working but if built as a module
+> > then it would not work, given the lack of exports. Symbols namespaces
+> > should resolve this [0], and we'd be careful where a driver imports this
+> > namespace.
+> >
+> > [0] https://lwn.net/Articles/798254/
 
-Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
-Tested-by: Brendan Higgins <brendanhiggins@google.com>
+Maybe I am not understanding how the symbol namespaces work, but it
+seems that it doesn't actually solve our problem, at least not all of
+it.
 
-I think I already had a "Reviewed-by and a Tested-by" on this patch.
-Please make sure to apply the footers to subsequent versions of a patch
-in the future.
+First off this doesn't solve the problem for when a piece of code is
+included as a module; it also does not address the problem for symbols
+that would not normally be exported. Also, I think we still expect a
+symbol that is not static to have an appropriate prefix, right? As in,
+it is *not* okay to have a non-static symbol in apparmor called
+"inbounds", correct?
 
-> ---
-> v5 replaces the use of KUNIT_ASSERT_NOT_ERR_OR_NULL() -- to check the
-> return value from kzalloc() and kmalloc() -- with the __GFP_NOFAIL
-> arugment. (Both in the list_test_list_init test.)
-> 
-> Earlier versions of the test can be found:
-> v4: https://lore.kernel.org/linux-kselftest/20191018215549.65000-1-davidgow@google.com/
-> v3: https://lore.kernel.org/linux-kselftest/20191016215707.95317-1-davidgow@google.com/
-> v2: https://lore.kernel.org/linux-kselftest/20191010185631.26541-1-davidgow@google.com/
-> v1: https://lore.kernel.org/linux-kselftest/20191007213633.92565-1-davidgow@google.com/
-> 
-> 
->  MAINTAINERS       |   5 +
->  lib/Kconfig.debug |  18 ++
->  lib/Makefile      |   3 +
->  lib/list-test.c   | 738 ++++++++++++++++++++++++++++++++++++++++++++++
->  4 files changed, 764 insertions(+)
->  create mode 100644 lib/list-test.c
-> 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 7ef985e01457..7ced1b69a3d3 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -9504,6 +9504,11 @@ F:	Documentation/misc-devices/lis3lv02d.rst
->  F:	drivers/misc/lis3lv02d/
->  F:	drivers/platform/x86/hp_accel.c
->  
-> +LIST KUNIT TEST
-> +M:	David Gow <davidgow@google.com>
-> +S:	Maintained
-> +F:	lib/list-test.c
+> WRT adding tests, I think what we're aiming at is a set of best practices
+> to advise test developers using KUnit, while attempting to minimize
+> side-effects of any changes we need to make to support testability.
+>
+> One aspect of this we probably have to consider is inlining of code. For
+> cases like this where the functions are small and are called in a small
+> number of cases, any testability changes we make may push a
+> previously-inlined function to not be inlined, with potential performance
+> side-effects for the subsystem.  In such cases, I wonder if the right
+> answer would be to suggest actually defining the functions as
+> inline in the header file? That way the compiler still gets to decide (as
+> opposed to __always_inline), and we don't perturb performance too much.
 
-Probably want to have a "mailing list" line. Something like:
-"""
-L:	linux-kselftest@vger.kernel.org
-L:	kunit-dev@googlegroups.com
-"""
+That's a really good point. Okay, so it seems that making the symbols
+public when not testing is probably not okay on its own. If we are
+going to do that, we probably need to do something like what you are
+suggesting.
 
-> +
->  LIVE PATCHING
->  M:	Josh Poimboeuf <jpoimboe@redhat.com>
->  M:	Jiri Kosina <jikos@kernel.org>
-> diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-> index a3017a5dadcd..7991b78eb1f3 100644
-> --- a/lib/Kconfig.debug
-> +++ b/lib/Kconfig.debug
-> @@ -1961,6 +1961,24 @@ config SYSCTL_KUNIT_TEST
->  
->  	  If unsure, say N.
->  
-> +config LIST_KUNIT_TEST
-> +	bool "KUnit Test for Kernel Linked-list structures"
-> +	depends on KUNIT
-> +	help
-> +	  This builds the linked list KUnit test suite.
-> +	  It tests that the API and basic functionality of the list_head type
-> +	  and associated macros.
-> +	
+With that, I think the best solution in this case will be the
+"__visible_for_testing" route. It has no overhead when testing is
+turned off (in fact it is no different in anyway when testing is
+turned off). The downsides I see are:
 
-nit: unnecessary tab.
+1) You may not be able to test non-module code not compiled for
+testing later with the test modules that Alan is working on (But the
+only way I think that will work is by preventing the symbol from being
+inlined, right?).
 
-> +	  KUnit tests run during boot and output the results to the debug log
-> +	  in TAP format (http://testanything.org/). Only useful for kernel devs
-> +	  running the KUnit test harness, and not intended for inclusion into a
-> +	  production build.
-> +
-> +	  For more information on KUnit and unit tests in general please refer
-> +	  to the KUnit documentation in Documentation/dev-tools/kunit/.
-> +
-> +	  If unsure, say N.
-> +
->  config TEST_UDELAY
->  	tristate "udelay test driver"
->  	help
-[...]
-> diff --git a/lib/list-test.c b/lib/list-test.c
-> new file mode 100644
-> index 000000000000..a6d17647e309
-> --- /dev/null
-> +++ b/lib/list-test.c
-[...]
-> +static void list_test_list_entry(struct kunit *test)
-> +{
-> +	struct list_test_struct test_struct;
-> +
-> +	KUNIT_EXPECT_PTR_EQ(test, &test_struct, list_entry(&(test_struct.list), struct list_test_struct, list));
+2) I think "__visible_for_testing" will be prone to abuse. Here, I
+think there are reasons why we might want to expose these symbols for
+testing, but not otherwise. Nevertheless, I think most symbols that
+should be tested should probably be made visible by default. Since you
+usually only want to test your public interfaces. I could very well
+see this getting used as a kludge that gets used far too frequently.
 
-nit: here and elsewhere: over 80 chars.
+Nevertheless, based on Alan's point, I suspect it, for this case at
+least, will likely be the least painful.
 
-> +}
-> +
-> +static void list_test_list_first_entry(struct kunit *test)
-> +{
-> +	struct list_test_struct test_struct1, test_struct2;
-> +	LIST_HEAD(list);
-> +
-> +	list_add_tail(&test_struct1.list, &list);
-> +	list_add_tail(&test_struct2.list, &list);
-> +
-> +
-> +	KUNIT_EXPECT_PTR_EQ(test, &test_struct1, list_first_entry(&list, struct list_test_struct, list));
-> +}
-[...]
-> +static void list_test_list_for_each_entry(struct kunit *test)
-> +{
-> +	struct list_test_struct entries[5], *cur;
-> +	static LIST_HEAD(list);
-> +	int i = 0;
-> +
-> +	for (i = 0; i < 5; ++i) {
-> +		entries[i].data = i;
-> +		list_add_tail(&entries[i].list, &list);
-> +	}
-> +
-> +	i = 0;
-> +
-> +	list_for_each_entry(cur, &list, list) {
-> +		KUNIT_EXPECT_EQ(test, cur->data, i);
-> +		i++;
-> +	}
-> +	
-
-nit: another unnecessary tab. Looks like you should probably run checkpatch.
-
-> +	KUNIT_EXPECT_EQ(test, i, 5);
-> +}
-> +
-> +static void list_test_list_for_each_entry_reverse(struct kunit *test)
-> +{
-> +	struct list_test_struct entries[5], *cur;
-> +	static LIST_HEAD(list);
-> +	int i = 0;
-> +
-> +	for (i = 0; i < 5; ++i) {
-> +		entries[i].data = i;
-> +		list_add_tail(&entries[i].list, &list);
-> +	}
-> +
-> +	i = 4;
-> +
-> +	list_for_each_entry_reverse(cur, &list, list) {
-> +		KUNIT_EXPECT_EQ(test, cur->data, i);
-> +		i--;
-> +	}
-> +	
-> +	KUNIT_EXPECT_EQ(test, i, -1);
-> +}
-[...]
-
-Cheers
+How do people feel about that?
