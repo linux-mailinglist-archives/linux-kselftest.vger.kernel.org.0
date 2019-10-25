@@ -2,775 +2,225 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 98607E5603
-	for <lists+linux-kselftest@lfdr.de>; Fri, 25 Oct 2019 23:37:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FCC8E5623
+	for <lists+linux-kselftest@lfdr.de>; Fri, 25 Oct 2019 23:50:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725977AbfJYVhQ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 25 Oct 2019 17:37:16 -0400
-Received: from userp2130.oracle.com ([156.151.31.86]:53390 "EHLO
-        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725811AbfJYVhQ (ORCPT
+        id S1725811AbfJYVup (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 25 Oct 2019 17:50:45 -0400
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:19620 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725801AbfJYVuo (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 25 Oct 2019 17:37:16 -0400
-Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
-        by userp2130.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x9PLYRh4195487;
-        Fri, 25 Oct 2019 21:37:01 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=subject : to : cc :
- references : from : message-id : date : mime-version : in-reply-to :
- content-type : content-transfer-encoding; s=corp-2019-08-05;
- bh=WNnSXd5s0TXGsssu5MSZz0Isp1xrnMcgXh6gcq4jSBc=;
- b=NMOZY8nePfw8xBWeqqZ/bChAca7VbH5paeOeLWAcFX5sDEuaXJJ+S7orr4TYHqRKstH5
- KqP019juUi4WvT7dPsT45Lq9a0fu31UpIthjGNIj9ALf7CVXh5UGTGi+mhu5me3S9Spg
- gLfDbxOYUHT4f+zRD4UZ6EaCbKwcoE8wNyfHfgGBOmhHd168yCJeX5EAiLZb/J10mzNU
- yg8zxaMiF//F/iwadD5OEb7gX61YPlIBH0R1IPI7yUighw2Y9UNWaPCZx7ygNXD+oCZf
- YiwBNUB7bawIeiu3BwJBxXk6E7JiILt3UWWCXKRv4R6WCYfGK2IRFT0ST/FlMmruxkez Iw== 
-Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
-        by userp2130.oracle.com with ESMTP id 2vqswu5ttv-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 25 Oct 2019 21:37:01 +0000
-Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
-        by userp3020.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x9PLWvku041952;
-        Fri, 25 Oct 2019 21:37:01 GMT
-Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
-        by userp3020.oracle.com with ESMTP id 2vuun294te-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 25 Oct 2019 21:37:00 +0000
-Received: from abhmp0004.oracle.com (abhmp0004.oracle.com [141.146.116.10])
-        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id x9PLawol023211;
-        Fri, 25 Oct 2019 21:36:59 GMT
-Received: from [192.168.1.222] (/71.63.128.209)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Fri, 25 Oct 2019 14:36:58 -0700
-Subject: Re: [PATCH v7 5/9] hugetlb: disable region_add file_region coalescing
-To:     Mina Almasry <almasrymina@google.com>
-Cc:     shuah@kernel.org, rientjes@google.com, shakeelb@google.com,
-        gthelen@google.com, akpm@linux-foundation.org,
-        khalid.aziz@oracle.com, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        cgroups@vger.kernel.org, aneesh.kumar@linux.vnet.ibm.com,
-        mkoutny@suse.com
-References: <20191024202858.95342-1-almasrymina@google.com>
- <20191024202858.95342-5-almasrymina@google.com>
-From:   Mike Kravetz <mike.kravetz@oracle.com>
-Message-ID: <c3d9f0aa-3d9b-f46e-ecb1-bdea99be82c7@oracle.com>
-Date:   Fri, 25 Oct 2019 14:36:56 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.1.1
-MIME-Version: 1.0
-In-Reply-To: <20191024202858.95342-5-almasrymina@google.com>
-Content-Type: text/plain; charset=utf-8
+        Fri, 25 Oct 2019 17:50:44 -0400
+Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id x9PLoOe5000928;
+        Fri, 25 Oct 2019 14:50:29 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : references : in-reply-to : content-type : content-id
+ : content-transfer-encoding : mime-version; s=facebook;
+ bh=O8jypHNH/8nvoQ7sSn022ipPkg5DhkRVk8Kzkq0ZdZw=;
+ b=gLmZUzcpY/f2e4mLLK9YWop8a7E0VhKzoSCJaAW2twN4W1csx7+SQfUuUHpnZb0Hptmo
+ tMcLR/yUlB1EdniC/5BvM47GkTCX8M0nqNXHhGDIFPVZ/zvn4KyPkzhAMHQAbr14Yc2m
+ k+DgihW+M9m3C1WSlzyU/hzm7pr1ykw9Dq8= 
+Received: from mail.thefacebook.com (mailout.thefacebook.com [199.201.64.23])
+        by mx0a-00082601.pphosted.com with ESMTP id 2vv3dd9xq4-7
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
+        Fri, 25 Oct 2019 14:50:28 -0700
+Received: from prn-hub03.TheFacebook.com (2620:10d:c081:35::127) by
+ prn-hub03.TheFacebook.com (2620:10d:c081:35::127) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.1.1713.5; Fri, 25 Oct 2019 14:50:19 -0700
+Received: from NAM05-CO1-obe.outbound.protection.outlook.com (192.168.54.28)
+ by o365-in.thefacebook.com (192.168.16.27) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.1.1713.5
+ via Frontend Transport; Fri, 25 Oct 2019 14:50:19 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=MRGtNcnd+S2ZrlxWVRcFH21DINifcxEHyh3sve4rxYXGhQWeGzShmTscMq1OHMFffSAB0IGfdZDxSZmYKcb5ReIWdxBuzUN9vUosdwzOmUTc1jWYwrC5KO0UXh1ugvJ9CEPRTJOY/55aCpQ2WZjQPAZ0AsdRxiVJ0Yr8s/9jPQ0C6ZVVYukZ5OKalfNX28aDfZpm/habw7tjP1WUz/BJ6MDGi++BENNbgPtUCD1+xN/TI8jYyW4ThzATZbumgwQnZvtz4g3r8HKfMxuiKDKXYA/s5IyM9YxGAlmpKSvHKuJEBYu5P/j4++HnzxE+iXKIClwnBhVji/BI10KEzgm6kw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=O8jypHNH/8nvoQ7sSn022ipPkg5DhkRVk8Kzkq0ZdZw=;
+ b=Xbg0jmmDdFq4QaxyR1S3uocnMzCauiDz96vRKoAFZ7GpE7sx5JPoQBD670+B3wLhRs396Tp8mpIeE4PV9O+EkoRt3PnA+rsXtr0y0DHsQZ98YNfvSLE1Dan6kBjrEWiv8VOcneiGPIXVWh+OPr1vAzXfaqKW3BpBA+HJ3rnvkdA8ULGQtajBhmScptR4KOfaV7YVkRspVjgSpBvEAsHiH/soxcYjSPop9aZcigAGUQWNU1yJD740xrmWXPT9stcmQmHLz1WN/QYSDh15fgqL70t0gIk+BZ4G9VUArP2DncnB2C4OBsasFr5zrvYO/nn50J1xK4fSOXzLxO9PVfUQsA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
+ header.d=fb.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.onmicrosoft.com;
+ s=selector2-fb-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=O8jypHNH/8nvoQ7sSn022ipPkg5DhkRVk8Kzkq0ZdZw=;
+ b=A2Y2kTp7E8IOFq1qW9foKfoYmxWY2/1413WPiRGnATfwzwg1qadW5dXRhNSh/P7YLFOrZKQIuJU/Ubxg/pwVjFZ+z4oc25bKH+gaMaeDmFsXr2RgudGH/ah47Inkat+l1/S2ajXmGWwXNY1gm/Qw+aenVDsHgz4E8wflaMoIJ54=
+Received: from BYAPR15MB3384.namprd15.prod.outlook.com (20.179.60.27) by
+ BYAPR15MB3367.namprd15.prod.outlook.com (20.179.56.220) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2367.24; Fri, 25 Oct 2019 21:50:18 +0000
+Received: from BYAPR15MB3384.namprd15.prod.outlook.com
+ ([fe80::b92c:ebd2:58dc:6b8d]) by BYAPR15MB3384.namprd15.prod.outlook.com
+ ([fe80::b92c:ebd2:58dc:6b8d%5]) with mapi id 15.20.2387.021; Fri, 25 Oct 2019
+ 21:50:18 +0000
+From:   Yonghong Song <yhs@fb.com>
+To:     Ilya Leoshkevich <iii@linux.ibm.com>
+CC:     Prabhakar Kushwaha <prabhakar.pkin@gmail.com>,
+        "ast@kernel.org" <ast@kernel.org>,
+        "daniel@iogearbox.net" <daniel@iogearbox.net>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>
+Subject: Re: Linux-5.4: bpf: test_core_reloc_arrays.o: Segmentation fault with
+ llc -march=bpf
+Thread-Topic: Linux-5.4: bpf: test_core_reloc_arrays.o: Segmentation fault
+ with llc -march=bpf
+Thread-Index: AQHVioSri4sk0mO0YEWOHQh6nT3c5adqEbOAgAALsgCAAcnnAA==
+Date:   Fri, 25 Oct 2019 21:50:18 +0000
+Message-ID: <62f8d90b-35e0-a97e-952e-7beb71ad29b7@fb.com>
+References: <8080a9a2-82f1-20b5-8d5d-778536f91780@gmail.com>
+ <C47F20A9-D34A-43C9-AAB5-6F125C73FA16@linux.ibm.com>
+ <5d2cf6b8-a634-62ea-0b80-1d499aa3c693@fb.com>
+ <85F5C807-EDAF-4A85-A5D4-D72FBFFD0A26@linux.ibm.com>
+In-Reply-To: <85F5C807-EDAF-4A85-A5D4-D72FBFFD0A26@linux.ibm.com>
+Accept-Language: en-US
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9421 signatures=668683
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=2 malwarescore=0
- phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=999
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.0.1-1908290000 definitions=main-1910250194
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9421 signatures=668683
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
- suspectscore=2 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
- lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1908290000
- definitions=main-1910250194
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-clientproxiedby: MWHPR0201CA0041.namprd02.prod.outlook.com
+ (2603:10b6:301:73::18) To BYAPR15MB3384.namprd15.prod.outlook.com
+ (2603:10b6:a03:112::27)
+x-ms-exchange-messagesentrepresentingtype: 1
+x-originating-ip: [2620:10d:c090:200::1:3057]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 36638806-ff93-4e26-2878-08d759955353
+x-ms-traffictypediagnostic: BYAPR15MB3367:
+x-ms-exchange-purlcount: 4
+x-microsoft-antispam-prvs: <BYAPR15MB33673EA4B63D27832091C84DD3650@BYAPR15MB3367.namprd15.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:1443;
+x-forefront-prvs: 02015246A9
+x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(136003)(366004)(396003)(346002)(39860400002)(376002)(189003)(199004)(53754006)(2616005)(11346002)(186003)(386003)(486006)(53546011)(6506007)(46003)(446003)(25786009)(6916009)(476003)(8676002)(4326008)(102836004)(8936002)(5660300002)(81166006)(36756003)(81156014)(6436002)(6486002)(54906003)(229853002)(14444005)(6246003)(6306002)(478600001)(316002)(99286004)(14454004)(966005)(256004)(66946007)(31696002)(71190400001)(71200400001)(305945005)(7736002)(86362001)(66476007)(2906002)(66556008)(66446008)(64756008)(52116002)(6116002)(6512007)(31686004)(76176011);DIR:OUT;SFP:1102;SCL:1;SRVR:BYAPR15MB3367;H:BYAPR15MB3384.namprd15.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+received-spf: None (protection.outlook.com: fb.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: OUtFVIJUXNXwHRyxjaP5LjKnLTz+BWUgUMeOdgbelh5DzmeP3wXcFmYjLFcGnDchlvhf0cXgNDNVPhFoWdp3ClWTmwAbh/pAVXYDkZ98/mYPtnbkv72bT/VfNFg+0OP9h5hdQZ3eLHoJ0UQupKT8iohj9nixlyNfa26piN4SXZIaPbOj+q+/iC6Kw+/oH0t04MubWCtZ4HYUmpDv6xyXC5thndm5GhkQFOATMTZqHC9d4sB3X363dQaGTnlmhdMXRIdFAtXvKanw4Ni5ZbrXuAwSxS9Xz//kOtJrDU0K5ZkEHmGDRG/+NkERY3DUxigFGSOap/97U8J3pq48v9Z4PStXQ3NsadZ20cpqE7Zo9zaHg297Xa9wV9lDZvWC+J3/QuGIODlOsnZZOEyknU2m5icRJEF+DhOSBP/pIJSBDJIVanexlz/FkRB7q61WYE9oIcNjNhEE2QRvNEbpjStVS/oerqyEUFLqDAQ1ZhcmhkY=
+x-ms-exchange-transport-forked: True
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <CFB78560852B0C43B87F539D886CE224@namprd15.prod.outlook.com>
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-MS-Exchange-CrossTenant-Network-Message-Id: 36638806-ff93-4e26-2878-08d759955353
+X-MS-Exchange-CrossTenant-originalarrivaltime: 25 Oct 2019 21:50:18.1291
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: g0HGcIKXvHXBgsK962HTqG9N/m5oOtLyz2aUoUKAZLNiOXenxdJJx4CQjwFV3PV/
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR15MB3367
+X-OriginatorOrg: fb.com
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,1.0.8
+ definitions=2019-10-25_10:2019-10-25,2019-10-25 signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 suspectscore=0 mlxscore=0
+ phishscore=0 impostorscore=0 spamscore=0 mlxlogscore=999 bulkscore=0
+ lowpriorityscore=0 clxscore=1015 adultscore=0 malwarescore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-1908290000 definitions=main-1910250197
+X-FB-Internal: deliver
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 10/24/19 1:28 PM, Mina Almasry wrote:
-> A follow up patch in this series adds hugetlb cgroup uncharge info the
-> file_region entries in resv->regions. The cgroup uncharge info may
-> differ for different regions, so they can no longer be coalesced at
-> region_add time. So, disable region coalescing in region_add in this
-> patch.
-> 
-> Behavior change:
-> 
-> Say a resv_map exists like this [0->1], [2->3], and [5->6].
-> 
-> Then a region_chg/add call comes in region_chg/add(f=0, t=5).
-> 
-> Old code would generate resv->regions: [0->5], [5->6].
-> New code would generate resv->regions: [0->1], [1->2], [2->3], [3->5],
-> [5->6].
-> 
-> Special care needs to be taken to handle the resv->adds_in_progress
-> variable correctly. In the past, only 1 region would be added for every
-> region_chg and region_add call. But now, each call may add multiple
-> regions, so we can no longer increment adds_in_progress by 1 in region_chg,
-> or decrement adds_in_progress by 1 after region_add or region_abort. Instead,
-> region_chg calls add_reservation_in_range() to count the number of regions
-> needed and allocates those, and that info is passed to region_add and
-> region_abort to decrement adds_in_progress correctly.
-> 
-> Signed-off-by: Mina Almasry <almasrymina@google.com>
-> 
-
-Once again focusing on the core changes first as they impact existing
-hugetlbfs users as well.
-
-> ---
-> 
-> Changes in v7:
-> - region_chg no longer allocates (t-f) / 2 file_region entries.
-> Changes in v6:
-> - Fix bug in number of region_caches allocated by region_chg
-> 
-> ---
->  mm/hugetlb.c | 327 ++++++++++++++++++++++++++++++++-------------------
->  1 file changed, 205 insertions(+), 122 deletions(-)
-> 
-> diff --git a/mm/hugetlb.c b/mm/hugetlb.c
-> index 8d8aa89a9928e..3d98e1b771390 100644
-> --- a/mm/hugetlb.c
-> +++ b/mm/hugetlb.c
-> @@ -244,107 +244,138 @@ struct file_region {
->  	long to;
->  };
-> 
-> +/* Helper that removes a struct file_region from the resv_map cache and returns
-> + * it for use.
-> + */
-> +static struct file_region *
-> +get_file_region_entry_from_cache(struct resv_map *resv, long from, long to);
-> +
->  /* Must be called with resv->lock held. Calling this with count_only == true
->   * will count the number of pages to be added but will not modify the linked
-> - * list.
-> + * list. If regions_needed != NULL and count_only == true, then regions_needed
-> + * will indicate the number of file_regions needed in the cache to carry out to
-> + * add the regions for this range.
->   */
->  static long add_reservation_in_range(struct resv_map *resv, long f, long t,
-> -				     bool count_only)
-> +				     long *regions_needed, bool count_only)
->  {
-> -	long chg = 0;
-> +	long add = 0;
->  	struct list_head *head = &resv->regions;
-> +	long last_accounted_offset = f;
->  	struct file_region *rg = NULL, *trg = NULL, *nrg = NULL;
-> 
-> -	/* Locate the region we are before or in. */
-> -	list_for_each_entry (rg, head, link)
-> -		if (f <= rg->to)
-> -			break;
-> -
-> -	/* Round our left edge to the current segment if it encloses us. */
-> -	if (f > rg->from)
-> -		f = rg->from;
-> +	if (regions_needed)
-> +		*regions_needed = 0;
-> 
-> -	chg = t - f;
-> +	/* In this loop, we essentially handle an entry for the range
-> +	 * last_accounted_offset -> rg->from, at every iteration, with some
-> +	 * bounds checking.
-> +	 */
-> +	list_for_each_entry_safe(rg, trg, head, link) {
-> +		/* Skip irrelevant regions that start before our range. */
-> +		if (rg->from < f) {
-> +			/* If this region ends after the last accounted offset,
-> +			 * then we need to update last_accounted_offset.
-> +			 */
-> +			if (rg->to > last_accounted_offset)
-> +				last_accounted_offset = rg->to;
-> +			continue;
-> +		}
-> 
-> -	/* Check for and consume any regions we now overlap with. */
-> -	nrg = rg;
-> -	list_for_each_entry_safe (rg, trg, rg->link.prev, link) {
-> -		if (&rg->link == head)
-> -			break;
-> +		/* When we find a region that starts beyond our range, we've
-> +		 * finished.
-> +		 */
->  		if (rg->from > t)
->  			break;
-> 
-> -		/* We overlap with this area, if it extends further than
-> -		 * us then we must extend ourselves.  Account for its
-> -		 * existing reservation.
-> +		/* Add an entry for last_accounted_offset -> rg->from, and
-> +		 * update last_accounted_offset.
->  		 */
-> -		if (rg->to > t) {
-> -			chg += rg->to - t;
-> -			t = rg->to;
-> +		if (rg->from > last_accounted_offset) {
-
-After the above checks, can this condition ever be false?
-
-> +			add += rg->from - last_accounted_offset;
-> +			if (!count_only) {
-> +				nrg = get_file_region_entry_from_cache(
-> +					resv, last_accounted_offset, rg->from);
-> +				list_add(&nrg->link, rg->link.prev);
-> +			} else if (regions_needed)
-> +				*regions_needed += 1;
->  		}
-> -		chg -= rg->to - rg->from;
-> 
-> -		if (!count_only && rg != nrg) {
-> -			list_del(&rg->link);
-> -			kfree(rg);
-> -		}
-> +		last_accounted_offset = rg->to;
->  	}
-> 
-> -	if (!count_only) {
-> -		nrg->from = f;
-> -		nrg->to = t;
-> +	/* Handle the case where our range extends beyond
-> +	 * last_accounted_offset.
-> +	 */
-> +	if (last_accounted_offset < t) {
-> +		add += t - last_accounted_offset;
-> +		if (!count_only) {
-> +			nrg = get_file_region_entry_from_cache(
-> +				resv, last_accounted_offset, t);
-> +			list_add(&nrg->link, rg->link.prev);
-> +		} else if (regions_needed)
-> +			*regions_needed += 1;
-> +		last_accounted_offset = t;
->  	}
-> 
-> -	return chg;
-> +	return add;
->  }
-> 
->  /*
->   * Add the huge page range represented by [f, t) to the reserve
-> - * map.  Existing regions will be expanded to accommodate the specified
-> - * range, or a region will be taken from the cache.  Sufficient regions
-> - * must exist in the cache due to the previous call to region_chg with
-> - * the same range.
-> + * map.  Regions will be taken from the cache to fill in this range.
-> + * Sufficient regions should exist in the cache due to the previous
-> + * call to region_chg with the same range, but in some cases the cache will not
-> + * have sufficient entries.  The extra needed entries will be allocated.
-> + *
-> + * regions_needed is the out value provided by a previous call to region_chg.
->   *
-> - * Return the number of new huge pages added to the map.  This
-> - * number is greater than or equal to zero.
-> + * Return the number of new huge pages added to the map.  This number is greater
-> + * than or equal to zero.  If file_region entries needed to be allocated for
-> + * this operation and we were not able to allocate, it ruturns -ENOMEM.
-> + * region_add of regions of length 1 never allocate file_regions and cannot
-> + * fail.
->   */
-> -static long region_add(struct resv_map *resv, long f, long t)
-> +static long region_add(struct resv_map *resv, long f, long t,
-> +		       long in_regions_needed)
->  {
-> -	struct list_head *head = &resv->regions;
-> -	struct file_region *rg, *nrg;
-> -	long add = 0;
-> +	long add = 0, actual_regions_needed = 0;
-> +	struct file_region *trg = NULL;
-> 
->  	spin_lock(&resv->lock);
-> -	/* Locate the region we are either in or before. */
-> -	list_for_each_entry(rg, head, link)
-> -		if (f <= rg->to)
-> -			break;
-> +retry:
-> +
-> +	/* Count how many regions are actually needed to execute this add. */
-> +	add_reservation_in_range(resv, f, t, &actual_regions_needed, true);
-> 
->  	/*
-> -	 * If no region exists which can be expanded to include the
-> -	 * specified range, pull a region descriptor from the cache
-> -	 * and use it for this range.
-> +	 * Check for sufficient descriptors in the cache to accommodate
-> +	 * this add operation.
->  	 */
-> -	if (&rg->link == head || t < rg->from) {
-> -		VM_BUG_ON(resv->region_cache_count <= 0);
-> -
-> -		resv->region_cache_count--;
-> -		nrg = list_first_entry(&resv->region_cache, struct file_region,
-> -					link);
-> -		list_del(&nrg->link);
-> -
-> -		nrg->from = f;
-> -		nrg->to = t;
-> -		list_add(&nrg->link, rg->link.prev);
-> +	if (resv->region_cache_count < actual_regions_needed) {
-> +		/* region_add operation of range 1 should never need to
-> +		 * allocate file_region entries.
-> +		 */
-> +		VM_BUG_ON(t - f <= 1);
-
-Should we instead compare actual_regions_needed to in_regions_needed and
-allocate if more regions are actually needed?  If not, the loop below only
-brings the cache up to the number of regions needed for this operation.
-There could be an operation with range of one in progress and this operation
-will consume all operation in the cache which will cause us to hit the BUG.
-
-> +		while (resv->region_cache_count < actual_regions_needed) {
-> +			/* Must drop lock to allocate a new descriptor. */
-
-It would be better to drop the lock,  try to allocate all the needed
-descriptors, and then reacquire lock instead of dropping and acquiring
-lock in a loop.
-
-> +			spin_unlock(&resv->lock);
-> +			trg = kmalloc(sizeof(*trg), GFP_KERNEL);
-> +			if (!trg)
-> +				return -ENOMEM;
-> +
-> +			spin_lock(&resv->lock);
-> +			list_add(&trg->link, &resv->region_cache);
-> +			resv->region_cache_count++;
-> +		}
-> 
-> -		add += t - f;
-> -		goto out_locked;
-> +		goto retry;
->  	}
-> 
-> -	add = add_reservation_in_range(resv, f, t, false);
-> +	add = add_reservation_in_range(resv, f, t, NULL, false);
-> +
-> +	resv->adds_in_progress -= in_regions_needed;
-
-Ok, so adds_in_progress really becomes regions in the process of being added.
-I think we would then like to keep number of entries in the cache equal to
-adds_in_progress?
-
-> 
-> -out_locked:
-> -	resv->adds_in_progress--;
->  	spin_unlock(&resv->lock);
->  	VM_BUG_ON(add < 0);
->  	return add;
-> @@ -361,31 +392,38 @@ static long region_add(struct resv_map *resv, long f, long t)
->   * as a placeholder, so that the subsequent region_add
->   * call will have all the regions it needs and will not fail.
-
-The above comment in region_chg description is no longer true.
-
->   *
-> + * out_regions_needed is the number of regions added to the
-> + * resv->adds_in_progress.  This value needs to be provided to a follow up call
-> + * to region_add or region_abort for proper accounting.
-> + *
->   * Returns the number of huge pages that need to be added to the existing
->   * reservation map for the range [f, t).  This number is greater or equal to
->   * zero.  -ENOMEM is returned if a new file_region structure or cache entry
->   * is needed and can not be allocated.
->   */
-> -static long region_chg(struct resv_map *resv, long f, long t)
-> +static long region_chg(struct resv_map *resv, long f, long t,
-> +		       long *out_regions_needed)
->  {
-> +	struct file_region *trg = NULL;
->  	long chg = 0;
-> 
->  	spin_lock(&resv->lock);
-> -retry_locked:
-> -	resv->adds_in_progress++;
-> +
-> +	/* Count how many hugepages in this range are NOT respresented. */
-> +	chg = add_reservation_in_range(resv, f, t, out_regions_needed, true);
-> +
-> +	if (*out_regions_needed < 1)
-> +		*out_regions_needed = 1;
-> +
-> +	resv->adds_in_progress += *out_regions_needed;
-> 
->  	/*
->  	 * Check for sufficient descriptors in the cache to accommodate
->  	 * the number of in progress add operations.
->  	 */
-> -	if (resv->adds_in_progress > resv->region_cache_count) {
-> -		struct file_region *trg;
-> -
-> -		VM_BUG_ON(resv->adds_in_progress - resv->region_cache_count > 1);
-> +	while (resv->region_cache_count < resv->adds_in_progress) {
-
-I think we always want to add out_regions_needed to the cache?
-
->  		/* Must drop lock to allocate a new descriptor. */
-
-Again, try to change to only drop/acquire lock once.
-
-> -		resv->adds_in_progress--;
->  		spin_unlock(&resv->lock);
-> -
->  		trg = kmalloc(sizeof(*trg), GFP_KERNEL);
->  		if (!trg)
->  			return -ENOMEM;
-> @@ -393,11 +431,8 @@ static long region_chg(struct resv_map *resv, long f, long t)
->  		spin_lock(&resv->lock);
->  		list_add(&trg->link, &resv->region_cache);
->  		resv->region_cache_count++;
-> -		goto retry_locked;
->  	}
-> 
-> -	chg = add_reservation_in_range(resv, f, t, true);
-> -
->  	spin_unlock(&resv->lock);
->  	return chg;
->  }
-> @@ -407,17 +442,20 @@ static long region_chg(struct resv_map *resv, long f, long t)
->   * of the resv_map keeps track of the operations in progress between
->   * calls to region_chg and region_add.  Operations are sometimes
->   * aborted after the call to region_chg.  In such cases, region_abort
-> - * is called to decrement the adds_in_progress counter.
-> + * is called to decrement the adds_in_progress counter. regions_needed
-> + * is the value returned by the region_chg call, it is used to decrement
-> + * the adds_in_progress counter.
->   *
->   * NOTE: The range arguments [f, t) are not needed or used in this
->   * routine.  They are kept to make reading the calling code easier as
->   * arguments will match the associated region_chg call.
->   */
-> -static void region_abort(struct resv_map *resv, long f, long t)
-> +static void region_abort(struct resv_map *resv, long f, long t,
-> +			 long regions_needed)
->  {
->  	spin_lock(&resv->lock);
->  	VM_BUG_ON(!resv->region_cache_count);
-> -	resv->adds_in_progress--;
-> +	resv->adds_in_progress -= regions_needed;
-
-It might be a good idea to try and keep the number of cache entries in sync
-with adds_in_progress?  If so, we would free here.  We need to ensure that
-entries in cache is always >= adds_in_progress which is noted in comments
-elsewhere.
-
->  	spin_unlock(&resv->lock);
->  }
-> 
-> @@ -1897,9 +1935,10 @@ enum vma_resv_mode {
->  	VMA_END_RESV,
->  	VMA_ADD_RESV,
->  };
-> -static long __vma_reservation_common(struct hstate *h,
-> -				struct vm_area_struct *vma, unsigned long addr,
-> -				enum vma_resv_mode mode)
-> +static long
-> +__vma_reservation_common(struct hstate *h, struct vm_area_struct *vma,
-> +			 unsigned long addr, enum vma_resv_mode mode,
-> +			 long *out_regions_needed, long in_regions_needed)
-
-All of the vma_*_reservation routines operate on a single page.  As a result,
-region_chg will always set out_regions_needed to 1 and in_regions_needed
-will always be 1.  With this in mind, can we just hard code the value 1 in
-these calls within __vma_reservation_common and avoid any changes to the
-vma_*_reservation routines?  If yes, let's put a big fat comment in
-region_chg/region_add about the assumptions and a reminder to change this
-code if those assumptions change.
-
->  {
->  	struct resv_map *resv;
->  	pgoff_t idx;
-> @@ -1912,20 +1951,28 @@ static long __vma_reservation_common(struct hstate *h,
->  	idx = vma_hugecache_offset(h, vma, addr);
->  	switch (mode) {
->  	case VMA_NEEDS_RESV:
-> -		ret = region_chg(resv, idx, idx + 1);
-> +		VM_BUG_ON(!out_regions_needed);
-> +		ret = region_chg(resv, idx, idx + 1, out_regions_needed);
->  		break;
->  	case VMA_COMMIT_RESV:
-> -		ret = region_add(resv, idx, idx + 1);
-> +		VM_BUG_ON(in_regions_needed == -1);
-> +		ret = region_add(resv, idx, idx + 1, in_regions_needed);
-> +		/* region_add calls of range 1 should never fail. */
-> +		VM_BUG_ON(ret < 0);
->  		break;
->  	case VMA_END_RESV:
-> -		region_abort(resv, idx, idx + 1);
-> +		VM_BUG_ON(in_regions_needed == -1);
-> +		region_abort(resv, idx, idx + 1, in_regions_needed);
->  		ret = 0;
->  		break;
->  	case VMA_ADD_RESV:
-> -		if (vma->vm_flags & VM_MAYSHARE)
-> -			ret = region_add(resv, idx, idx + 1);
-> -		else {
-> -			region_abort(resv, idx, idx + 1);
-> +		VM_BUG_ON(in_regions_needed == -1);
-> +		if (vma->vm_flags & VM_MAYSHARE) {
-> +			ret = region_add(resv, idx, idx + 1, in_regions_needed);
-> +			/* region_add calls of range 1 should never fail. */
-> +			VM_BUG_ON(ret < 0);
-> +		} else {
-> +			region_abort(resv, idx, idx + 1, in_regions_needed);
->  			ret = region_del(resv, idx, idx + 1);
->  		}
->  		break;
-> @@ -1958,28 +2005,32 @@ static long __vma_reservation_common(struct hstate *h,
->  		return ret < 0 ? ret : 0;
->  }
-> 
-> -static long vma_needs_reservation(struct hstate *h,
-> -			struct vm_area_struct *vma, unsigned long addr)
-> +static long vma_needs_reservation(struct hstate *h, struct vm_area_struct *vma,
-> +				  unsigned long addr, long *out_regions_needed)
->  {
-> -	return __vma_reservation_common(h, vma, addr, VMA_NEEDS_RESV);
-> +	return __vma_reservation_common(h, vma, addr, VMA_NEEDS_RESV,
-> +					out_regions_needed, -1);
->  }
-> 
-> -static long vma_commit_reservation(struct hstate *h,
-> -			struct vm_area_struct *vma, unsigned long addr)
-> +static long vma_commit_reservation(struct hstate *h, struct vm_area_struct *vma,
-> +				   unsigned long addr, long regions_needed)
->  {
-> -	return __vma_reservation_common(h, vma, addr, VMA_COMMIT_RESV);
-> +	return __vma_reservation_common(h, vma, addr, VMA_COMMIT_RESV, NULL,
-> +					regions_needed);
->  }
-> 
-> -static void vma_end_reservation(struct hstate *h,
-> -			struct vm_area_struct *vma, unsigned long addr)
-> +static void vma_end_reservation(struct hstate *h, struct vm_area_struct *vma,
-> +				unsigned long addr, long regions_needed)
->  {
-> -	(void)__vma_reservation_common(h, vma, addr, VMA_END_RESV);
-> +	(void)__vma_reservation_common(h, vma, addr, VMA_END_RESV, NULL,
-> +				       regions_needed);
->  }
-> 
-> -static long vma_add_reservation(struct hstate *h,
-> -			struct vm_area_struct *vma, unsigned long addr)
-> +static long vma_add_reservation(struct hstate *h, struct vm_area_struct *vma,
-> +				unsigned long addr, long regions_needed)
->  {
-> -	return __vma_reservation_common(h, vma, addr, VMA_ADD_RESV);
-> +	return __vma_reservation_common(h, vma, addr, VMA_ADD_RESV, NULL,
-> +					regions_needed);
->  }
-> 
->  /*
-> @@ -1997,8 +2048,10 @@ static void restore_reserve_on_error(struct hstate *h,
->  			struct vm_area_struct *vma, unsigned long address,
->  			struct page *page)
->  {
-> +	long regions_needed = 0;
->  	if (unlikely(PagePrivate(page))) {
-> -		long rc = vma_needs_reservation(h, vma, address);
-> +		long rc =
-> +			vma_needs_reservation(h, vma, address, &regions_needed);
-> 
->  		if (unlikely(rc < 0)) {
->  			/*
-> @@ -2014,7 +2067,8 @@ static void restore_reserve_on_error(struct hstate *h,
->  			 */
->  			ClearPagePrivate(page);
->  		} else if (rc) {
-> -			rc = vma_add_reservation(h, vma, address);
-> +			rc = vma_add_reservation(h, vma, address,
-> +						 regions_needed);
->  			if (unlikely(rc < 0))
->  				/*
->  				 * See above comment about rare out of
-> @@ -2022,7 +2076,7 @@ static void restore_reserve_on_error(struct hstate *h,
->  				 */
->  				ClearPagePrivate(page);
->  		} else
-> -			vma_end_reservation(h, vma, address);
-> +			vma_end_reservation(h, vma, address, regions_needed);
->  	}
->  }
-> 
-> @@ -2036,6 +2090,7 @@ struct page *alloc_huge_page(struct vm_area_struct *vma,
->  	long gbl_chg;
->  	int ret, idx;
->  	struct hugetlb_cgroup *h_cg;
-> +	long regions_needed = 0;
-> 
->  	idx = hstate_index(h);
->  	/*
-> @@ -2043,7 +2098,8 @@ struct page *alloc_huge_page(struct vm_area_struct *vma,
->  	 * has a reservation for the page to be allocated.  A return
->  	 * code of zero indicates a reservation exists (no change).
->  	 */
-> -	map_chg = gbl_chg = vma_needs_reservation(h, vma, addr);
-> +	map_chg = gbl_chg =
-> +		vma_needs_reservation(h, vma, addr, &regions_needed);
->  	if (map_chg < 0)
->  		return ERR_PTR(-ENOMEM);
-> 
-> @@ -2057,7 +2113,7 @@ struct page *alloc_huge_page(struct vm_area_struct *vma,
->  	if (map_chg || avoid_reserve) {
->  		gbl_chg = hugepage_subpool_get_pages(spool, 1);
->  		if (gbl_chg < 0) {
-> -			vma_end_reservation(h, vma, addr);
-> +			vma_end_reservation(h, vma, addr, regions_needed);
->  			return ERR_PTR(-ENOSPC);
->  		}
-> 
-> @@ -2104,7 +2160,7 @@ struct page *alloc_huge_page(struct vm_area_struct *vma,
-> 
->  	set_page_private(page, (unsigned long)spool);
-> 
-> -	map_commit = vma_commit_reservation(h, vma, addr);
-> +	map_commit = vma_commit_reservation(h, vma, addr, regions_needed);
->  	if (unlikely(map_chg > map_commit)) {
->  		/*
->  		 * The page was added to the reservation map between
-> @@ -2128,7 +2184,7 @@ struct page *alloc_huge_page(struct vm_area_struct *vma,
->  out_subpool_put:
->  	if (map_chg || avoid_reserve)
->  		hugepage_subpool_put_pages(spool, 1);
-> -	vma_end_reservation(h, vma, addr);
-> +	vma_end_reservation(h, vma, addr, regions_needed);
->  	return ERR_PTR(-ENOSPC);
->  }
-> 
-> @@ -3849,6 +3905,7 @@ static vm_fault_t hugetlb_no_page(struct mm_struct *mm,
->  	spinlock_t *ptl;
->  	unsigned long haddr = address & huge_page_mask(h);
->  	bool new_page = false;
-> +	long regions_needed = 0;
-> 
->  	/*
->  	 * Currently, we are forced to kill the process in the event the
-> @@ -3966,12 +4023,12 @@ static vm_fault_t hugetlb_no_page(struct mm_struct *mm,
->  	 * the spinlock.
->  	 */
->  	if ((flags & FAULT_FLAG_WRITE) && !(vma->vm_flags & VM_SHARED)) {
-> -		if (vma_needs_reservation(h, vma, haddr) < 0) {
-> +		if (vma_needs_reservation(h, vma, haddr, &regions_needed) < 0) {
->  			ret = VM_FAULT_OOM;
->  			goto backout_unlocked;
->  		}
->  		/* Just decrements count, does not deallocate */
-> -		vma_end_reservation(h, vma, haddr);
-> +		vma_end_reservation(h, vma, haddr, regions_needed);
->  	}
-> 
->  	ptl = huge_pte_lock(h, mm, ptep);
-> @@ -4061,6 +4118,7 @@ vm_fault_t hugetlb_fault(struct mm_struct *mm, struct vm_area_struct *vma,
->  	struct address_space *mapping;
->  	int need_wait_lock = 0;
->  	unsigned long haddr = address & huge_page_mask(h);
-> +	long regions_needed = 0;
-> 
->  	ptep = huge_pte_offset(mm, haddr, huge_page_size(h));
->  	if (ptep) {
-> @@ -4115,12 +4173,12 @@ vm_fault_t hugetlb_fault(struct mm_struct *mm, struct vm_area_struct *vma,
->  	 * consumed.
->  	 */
->  	if ((flags & FAULT_FLAG_WRITE) && !huge_pte_write(entry)) {
-> -		if (vma_needs_reservation(h, vma, haddr) < 0) {
-> +		if (vma_needs_reservation(h, vma, haddr, &regions_needed) < 0) {
->  			ret = VM_FAULT_OOM;
->  			goto out_mutex;
->  		}
->  		/* Just decrements count, does not deallocate */
-> -		vma_end_reservation(h, vma, haddr);
-> +		vma_end_reservation(h, vma, haddr, regions_needed);
-> 
->  		if (!(vma->vm_flags & VM_MAYSHARE))
->  			pagecache_page = hugetlbfs_pagecache_page(h,
-> @@ -4578,12 +4636,12 @@ int hugetlb_reserve_pages(struct inode *inode,
->  					struct vm_area_struct *vma,
->  					vm_flags_t vm_flags)
->  {
-> -	long ret, chg;
-> +	long ret, chg, add;
-
-add needs to be initialized, as a goto out_err can happen before region_add.
-Or, the code after out_err is wrong (see below).
-
->  	struct hstate *h = hstate_inode(inode);
->  	struct hugepage_subpool *spool = subpool_inode(inode);
->  	struct resv_map *resv_map;
->  	struct hugetlb_cgroup *h_cg;
-> -	long gbl_reserve;
-> +	long gbl_reserve, regions_needed = 0;
-> 
->  	/* This should never happen */
->  	if (from > to) {
-> @@ -4613,7 +4671,7 @@ int hugetlb_reserve_pages(struct inode *inode,
->  		 */
->  		resv_map = inode_resv_map(inode);
-> 
-> -		chg = region_chg(resv_map, from, to);
-> +		chg = region_chg(resv_map, from, to, &regions_needed);
-> 
->  	} else {
->  		/* Private mapping. */
-> @@ -4683,9 +4741,14 @@ int hugetlb_reserve_pages(struct inode *inode,
->  	 * else has to be done for private mappings here
->  	 */
->  	if (!vma || vma->vm_flags & VM_MAYSHARE) {
-> -		long add = region_add(resv_map, from, to);
-> -
-> -		if (unlikely(chg > add)) {
-> +		add = region_add(resv_map, from, to, regions_needed);
-> +
-> +		if (unlikely(add < 0)) {
-> +			hugetlb_acct_memory(h, -gbl_reserve);
-> +			/* put back original number of pages, chg */
-> +			(void)hugepage_subpool_put_pages(spool, chg);
-> +			goto out_err;
-> +		} else if (unlikely(chg > add)) {
->  			/*
->  			 * pages in this range were added to the reserve
->  			 * map between region_chg and region_add.  This
-> @@ -4703,9 +4766,11 @@ int hugetlb_reserve_pages(struct inode *inode,
->  	return 0;
->  out_err:
->  	if (!vma || vma->vm_flags & VM_MAYSHARE)
-> -		/* Don't call region_abort if region_chg failed */
-> -		if (chg >= 0)
-> -			region_abort(resv_map, from, to);
-> +		/* Only call region_abort if the region_chg succeeded but the
-> +		 * region_add failed.
-
-This is incorrect, you certainly do want to call region_abort if we got
-here before region_add.
-
-This makes me wonder if a region_add failure should clean up and implicitly
-do a region_abort?
-
-> +		 */
-> +		if (chg >= 0 && add < 0)
-> +			region_abort(resv_map, from, to, regions_needed);
->  	if (vma && is_vma_resv_set(vma, HPAGE_RESV_OWNER))
->  		kref_put(&resv_map->refs, resv_map_release);
->  	return ret;
-> @@ -5129,3 +5194,21 @@ void move_hugetlb_state(struct page *oldpage, struct page *newpage, int reason)
->  		spin_unlock(&hugetlb_lock);
->  	}
->  }
-
-I would prefer that this helper move above the region_* routines that use it
-and eliminate the forward declaration at the start of this patch.
-
-> +
-> +static struct file_region *
-> +get_file_region_entry_from_cache(struct resv_map *resv, long from, long to)
-> +{
-> +	struct file_region *nrg = NULL;
-> +
-> +	VM_BUG_ON(resv->region_cache_count <= 0);
-> +
-> +	resv->region_cache_count--;
-> +	nrg = list_first_entry(&resv->region_cache, struct file_region, link);
-> +	VM_BUG_ON(!nrg);
-> +	list_del(&nrg->link);
-> +
-> +	nrg->from = from;
-> +	nrg->to = to;
-> +
-> +	return nrg;
-> +}
-> --
-> 2.24.0.rc0.303.g954a862665-goog
-> 
-
-
--- 
-Mike Kravetz
+DQoNCk9uIDEwLzI0LzE5IDExOjMxIEFNLCBJbHlhIExlb3Noa2V2aWNoIHdyb3RlOg0KPj4gQW0g
+MjQuMTAuMjAxOSB1bSAxOTo0OSBzY2hyaWViIFlvbmdob25nIFNvbmcgPHloc0BmYi5jb20+Og0K
+Pj4NCj4+DQo+Pg0KPj4gT24gMTAvMjQvMTkgOTowNCBBTSwgSWx5YSBMZW9zaGtldmljaCB3cm90
+ZToNCj4+Pj4gQW0gMjMuMTAuMjAxOSB1bSAwMzozNSBzY2hyaWViIFByYWJoYWthciBLdXNod2Fo
+YSA8cHJhYmhha2FyLnBraW5AZ21haWwuY29tPjoNCj4+Pj4NCj4+Pj4NCj4+Pj4gQWRkaW5nIG90
+aGVyIG1haWxpbmcgbGlzdCwgZm9sa3MuLi4NCj4+Pj4NCj4+Pj4gSGkgQWxsLA0KPj4+Pg0KPj4+
+PiBJIGFtIHRyeWluZyB0byBidWlsZCBrc2VsZnRlc3Qgb24gTGludXgtNS40IG9uIHVidW50dSAx
+OC4wNC4gSSBpbnN0YWxsZWQNCj4+Pj4gTExWTS05LjAuMCBhbmQgQ2xhbmctOS4wLjAgZnJvbSBi
+ZWxvdyBsaW5rcyBhZnRlciBmb2xsb3dpbmcgc3RlcHMgZnJvbQ0KPj4+PiBbMV0gYmVjYXVzZSBv
+ZiBkaXNjdXNzaW9uIFsyXQ0KPj4+Pg0KPj4+PiBodHRwczovL3VybGRlZmVuc2UucHJvb2Zwb2lu
+dC5jb20vdjIvdXJsP3U9aHR0cHMtM0FfX3JlbGVhc2VzLmxsdm0ub3JnXzkuMC4wX2xsdm0tMkQ5
+LjAuMC5zcmMudGFyLnh6JmQ9RHdJRkFnJmM9NVZEMFJUdE5sVGgzeWNkNDFiM01VdyZyPURBOGUx
+QjVyMDczdklxUnJGejdNUkEmbT1zZThwVjZPbERBZUYyZzVpRUF2U0IycWhMQkpHUGFIQUR2M05R
+Vk5GeDZVJnM9SXpCeE5oQXZjSUxmQURfWGNTQjd0MHM2LUItd0ZZM1RCb1ZHSDZXaFJLOCZlPQ0K
+Pj4+PiBodHRwczovL3VybGRlZmVuc2UucHJvb2Zwb2ludC5jb20vdjIvdXJsP3U9aHR0cHMtM0Ff
+X3JlbGVhc2VzLmxsdm0ub3JnXzkuMC4wX2NsYW5nLTJEdG9vbHMtMkRleHRyYS0yRDkuMC4wLnNy
+Yy50YXIueHomZD1Ed0lGQWcmYz01VkQwUlR0TmxUaDN5Y2Q0MWIzTVV3JnI9REE4ZTFCNXIwNzN2
+SXFSckZ6N01SQSZtPXNlOHBWNk9sREFlRjJnNWlFQXZTQjJxaExCSkdQYUhBRHYzTlFWTkZ4NlUm
+cz1La2pDaldtX3EyaU1mRmg1MHJUS3RGcVFFTWJSQlZoVDlPaDhLTWZnd1c0JmU9DQo+Pj4+IGh0
+dHBzOi8vdXJsZGVmZW5zZS5wcm9vZnBvaW50LmNvbS92Mi91cmw/dT1odHRwcy0zQV9fcmVsZWFz
+ZXMubGx2bS5vcmdfOS4wLjBfY2ZlLTJEOS4wLjAuc3JjLnRhci54eiZkPUR3SUZBZyZjPTVWRDBS
+VHRObFRoM3ljZDQxYjNNVXcmcj1EQThlMUI1cjA3M3ZJcVJyRno3TVJBJm09c2U4cFY2T2xEQWVG
+Mmc1aUVBdlNCMnFoTEJKR1BhSEFEdjNOUVZORng2VSZzPVR2a045c2I1clNCNUJOeEpQMjdVbUNz
+Zk5Ic1JRZGFWZUFuQmExVGt5ak0mZT0NCj4+Pj4NCj4+Pj4gTm93LCBpIGFtIHRyeWluZyB3aXRo
+IGxsYyAtbWFyY2g9YnBmLCB3aXRoIHRoaXMgc2VnbWVudGF0aW9uIGZhdWx0IGlzDQo+Pj4+IGNv
+bWluZyBhcyBiZWxvdzoNCj4+Pj4NCj4+Pj4gZ2NjIC1nIC1XYWxsIC1PMiAtSS4uLy4uLy4uL2lu
+Y2x1ZGUvdWFwaSAtSS4uLy4uLy4uL2xpYg0KPj4+PiAtSS4uLy4uLy4uL2xpYi9icGYgLUkuLi8u
+Li8uLi8uLi9pbmNsdWRlL2dlbmVyYXRlZCAtREhBVkVfR0VOSERSDQo+Pj4+IC1JLi4vLi4vLi4v
+aW5jbHVkZSAtRGJwZl9wcm9nX2xvYWQ9YnBmX3Byb2dfdGVzdF9sb2FkDQo+Pj4+IC1EYnBmX2xv
+YWRfcHJvZ3JhbT1icGZfdGVzdF9sb2FkX3Byb2dyYW0gICAgdGVzdF9mbG93X2Rpc3NlY3Rvci5j
+DQo+Pj4+IC91c3Ivc3JjL3RvdmFyZHMvbGludXgvdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMvYnBm
+L3Rlc3Rfc3R1Yi5vDQo+Pj4+IC91c3Ivc3JjL3RvdmFyZHMvbGludXgvdG9vbHMvdGVzdGluZy9z
+ZWxmdGVzdHMvYnBmL2xpYmJwZi5hIC1sY2FwIC1sZWxmDQo+Pj4+IC1scnQgLWxwdGhyZWFkIC1v
+DQo+Pj4+IC91c3Ivc3JjL3RvdmFyZHMvbGludXgvdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMvYnBm
+L3Rlc3RfZmxvd19kaXNzZWN0b3INCj4+Pj4gZ2NjIC1nIC1XYWxsIC1PMiAtSS4uLy4uLy4uL2lu
+Y2x1ZGUvdWFwaSAtSS4uLy4uLy4uL2xpYg0KPj4+PiAtSS4uLy4uLy4uL2xpYi9icGYgLUkuLi8u
+Li8uLi8uLi9pbmNsdWRlL2dlbmVyYXRlZCAtREhBVkVfR0VOSERSDQo+Pj4+IC1JLi4vLi4vLi4v
+aW5jbHVkZSAtRGJwZl9wcm9nX2xvYWQ9YnBmX3Byb2dfdGVzdF9sb2FkDQo+Pj4+IC1EYnBmX2xv
+YWRfcHJvZ3JhbT1icGZfdGVzdF9sb2FkX3Byb2dyYW0NCj4+Pj4gdGVzdF90Y3BfY2hlY2tfc3lu
+Y29va2llX3VzZXIuYw0KPj4+PiAvdXNyL3NyYy90b3ZhcmRzL2xpbnV4L3Rvb2xzL3Rlc3Rpbmcv
+c2VsZnRlc3RzL2JwZi90ZXN0X3N0dWIubw0KPj4+PiAvdXNyL3NyYy90b3ZhcmRzL2xpbnV4L3Rv
+b2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL2JwZi9saWJicGYuYSAtbGNhcCAtbGVsZg0KPj4+PiAtbHJ0
+IC1scHRocmVhZCAtbw0KPj4+PiAvdXNyL3NyYy90b3ZhcmRzL2xpbnV4L3Rvb2xzL3Rlc3Rpbmcv
+c2VsZnRlc3RzL2JwZi90ZXN0X3RjcF9jaGVja19zeW5jb29raWVfdXNlcg0KPj4+PiBnY2MgLWcg
+LVdhbGwgLU8yIC1JLi4vLi4vLi4vaW5jbHVkZS91YXBpIC1JLi4vLi4vLi4vbGliDQo+Pj4+IC1J
+Li4vLi4vLi4vbGliL2JwZiAtSS4uLy4uLy4uLy4uL2luY2x1ZGUvZ2VuZXJhdGVkIC1ESEFWRV9H
+RU5IRFINCj4+Pj4gLUkuLi8uLi8uLi9pbmNsdWRlIC1EYnBmX3Byb2dfbG9hZD1icGZfcHJvZ190
+ZXN0X2xvYWQNCj4+Pj4gLURicGZfbG9hZF9wcm9ncmFtPWJwZl90ZXN0X2xvYWRfcHJvZ3JhbSAg
+ICB0ZXN0X2xpcmNfbW9kZTJfdXNlci5jDQo+Pj4+IC91c3Ivc3JjL3RvdmFyZHMvbGludXgvdG9v
+bHMvdGVzdGluZy9zZWxmdGVzdHMvYnBmL3Rlc3Rfc3R1Yi5vDQo+Pj4+IC91c3Ivc3JjL3RvdmFy
+ZHMvbGludXgvdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMvYnBmL2xpYmJwZi5hIC1sY2FwIC1sZWxm
+DQo+Pj4+IC1scnQgLWxwdGhyZWFkIC1vDQo+Pj4+IC91c3Ivc3JjL3RvdmFyZHMvbGludXgvdG9v
+bHMvdGVzdGluZy9zZWxmdGVzdHMvYnBmL3Rlc3RfbGlyY19tb2RlMl91c2VyDQo+Pj4+IChjbGFu
+ZyAtSS4gLUkuL2luY2x1ZGUvdWFwaSAtSS4uLy4uLy4uL2luY2x1ZGUvdWFwaQ0KPj4+PiAtSS91
+c3Ivc3JjL3RvdmFyZHMvbGludXgvdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMvYnBmLy4uL3Vzci9p
+bmNsdWRlDQo+Pj4+IC1EX19UQVJHRVRfQVJDSF9hcm02NCAtZyAtaWRpcmFmdGVyIC91c3IvbG9j
+YWwvaW5jbHVkZSAtaWRpcmFmdGVyDQo+Pj4+IC91c3IvbG9jYWwvbGliL2NsYW5nLzkuMC4wL2lu
+Y2x1ZGUgLWlkaXJhZnRlcg0KPj4+PiAvdXNyL2luY2x1ZGUvYWFyY2g2NC1saW51eC1nbnUgLWlk
+aXJhZnRlciAvdXNyL2luY2x1ZGUNCj4+Pj4gLVduby1jb21wYXJlLWRpc3RpbmN0LXBvaW50ZXIt
+dHlwZXMgLU8yIC10YXJnZXQgYnBmIC1lbWl0LWxsdm0gXA0KPj4+PiAtYyBwcm9ncy90ZXN0X2Nv
+cmVfcmVsb2NfYXJyYXlzLmMgLW8gLSB8fCBlY2hvICJjbGFuZyBmYWlsZWQiKSB8IFwNCj4+Pj4g
+bGxjIC1tYXJjaD1icGYgLW1jcHU9cHJvYmUgIC1maWxldHlwZT1vYmogLW8NCj4+Pj4gL3Vzci9z
+cmMvdG92YXJkcy9saW51eC90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9icGYvdGVzdF9jb3JlX3Jl
+bG9jX2FycmF5cy5vDQo+Pj4+IFN0YWNrIGR1bXA6DQo+Pj4+IDAuIFByb2dyYW0gYXJndW1lbnRz
+OiBsbGMgLW1hcmNoPWJwZiAtbWNwdT1wcm9iZSAtZmlsZXR5cGU9b2JqIC1vDQo+Pj4+IC91c3Iv
+c3JjL3RvdmFyZHMvbGludXgvdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMvYnBmL3Rlc3RfY29yZV9y
+ZWxvY19hcnJheXMubw0KPj4+PiAxLiBSdW5uaW5nIHBhc3MgJ0Z1bmN0aW9uIFBhc3MgTWFuYWdl
+cicgb24gbW9kdWxlICc8c3RkaW4+Jy4NCj4+Pj4gMi4gUnVubmluZyBwYXNzICdCUEYgQXNzZW1i
+bHkgUHJpbnRlcicgb24gZnVuY3Rpb24gJ0B0ZXN0X2NvcmVfYXJyYXlzJw0KPj4+PiAjMCAweDAw
+MDBhYWFhYzYxOGRiMDggbGx2bTo6c3lzOjpQcmludFN0YWNrVHJhY2UobGx2bTo6cmF3X29zdHJl
+YW0mKQ0KPj4+PiAoL3Vzci9sb2NhbC9iaW4vbGxjKzB4MTUyZWIwOCkNCj4+Pj4gU2VnbWVudGF0
+aW9uIGZhdWx0DQo+Pj4NCj4+PiBIaSwNCj4+Pg0KPj4+IEZXSVcgSSBjYW4gY29uZmlybSB0aGF0
+IHRoaXMgaXMgaGFwcGVuaW5nIG9uIHMzOTAgdG9vIHdpdGggbGx2bS1wcm9qZWN0DQo+Pj4gY29t
+bWl0IDk1MGI4MDBjNDUxZi4NCj4+Pg0KPj4+IEhlcmUgaXMgdGhlIHJlZHVjZWQgc2FtcGxlIHRo
+YXQgdHJpZ2dlcnMgdGhpcyAod2l0aCAtbWFyY2g9YnBmDQo+Pj4gLW1hdHRyPSthbHUzMik6DQo+
+Pj4NCj4+PiBzdHJ1Y3QgYiB7DQo+Pj4gICAgaW50IGU7DQo+Pj4gfSBjOw0KPj4+IGludCBmKCkg
+ew0KPj4+ICAgIHJldHVybiBfX2J1aWx0aW5fcHJlc2VydmVfZmllbGRfaW5mbyhjLmUsIDApOw0K
+Pj4+IH0NCj4+Pg0KPj4+IFRoaXMgaXMgY29tcGlsZWQgaW50bzoNCj4+Pg0KPj4+IDBCICAgICAg
+YmIuMCAoJWlyLWJsb2NrLjApOg0KPj4+IDE2QiAgICAgICAlMDpncHIgPSBMRF9pbW02NCBAImI6
+MDowJDA6MCINCj4+PiAzMkIgICAgICAgJHcwID0gQ09QWSAlMDpncHIsIGRlYnVnLWxvY2F0aW9u
+ICExNzsgMS1FLmM6NTozDQo+Pj4gNDhCICAgICAgIFJFVCBpbXBsaWNpdCBraWxsZWQgJHcwLCBk
+ZWJ1Zy1sb2NhdGlvbiAhMTc7IDEtRS5jOjU6Mw0KPj4+DQo+Pj4gYW5kIHRoZW4gQlBGSW5zdHJJ
+bmZvOjpjb3B5UGh5c1JlZyBjaG9rZXMgb24gQ09QWSwgc2luY2UgJHcwIGFuZCAlMCBhcmUNCj4+
+PiBpbiBkaWZmZXJlbnQgcmVnaXN0ZXIgY2xhc3Nlcy4NCj4+DQo+PiBJbHlhLA0KPj4NCj4+IFRo
+YW5rcyBmb3IgcmVwb3J0aW5nLiBJIGNhbiByZXByb2R1Y2UgdGhlIGlzc3VlIHdpdGggbGF0ZXN0
+IHRydW5rLg0KPj4gSSB3aWxsIGludmVzdGlnYXRlIGFuZCBmaXggdGhlIHByb2JsZW0gc29vbi4N
+Cj4+DQo+PiBZb25naG9uZw0KPiANCj4gVGhhbmtzIGZvciB0YWtpbmcgY2FyZSBvZiB0aGlzISBK
+dXN0IEZZSSwgYmlzZWN0IHBvaW50ZWQgdG8gMDVlNDY5NzlkMmY0DQo+ICgiW0JQRl0gZG8gY29t
+cGlsZS1vbmNlIHJ1bi1ldmVyeXdoZXJlIHJlbG9jYXRpb24gZm9yIGJpdGZpZWxkcyIpLg0KPiAN
+Cj4gQ291bGQgeW91IHBsZWFzZSBhZGQgbWUgdG8gUGhhYnJpY2F0b3IgcmV2aWV3PyBJJ20gY3Vy
+aW91cyB3aGF0IHRoZQ0KDQpJIGRpZCBhZGQgeW91IGluIHRoZSBkaWZmIGh0dHBzOi8vcmV2aWV3
+cy5sbHZtLm9yZy9ENjk0MzguDQoNCj4gcHJvcGVyIHNvbHV0aW9uIGlzIGdvaW5nIHRvIGJlLCBh
+cyBJJ20gc3RpbGwgbm90IHN1cmUgd2hldGhlciBoYW5kbGluZw0KPiBhc3ltbWV0cmljIGNvcGll
+cyBpcyB0aGUgcmlnaHQgYXBwcm9hY2gsIG9yIHdoZXRoZXIgdGhleSBzaG91bGQgcmF0aGVyDQo+
+IGJlIHByZXZlbnRlZCBmcm9tIG9jY3VyaW5nIGluIHRoZSBmaXJzdCBwbGFjZS4NCg0KVGhlIGNo
+YW5nZSBoYXMgYmVlbiBwdXNoZWQgaW50byB0aGUgdHJ1bmsuDQpXZSBpbmRlZWQgdXNlZCBhc3lt
+bWV0cmljIGNvcHkuIFBsZWFzZSBkbyBsZXQgbWUga25vdyBpZiB5b3UgdGhpbmsNCnRoZXJlIGlz
+IGEgYmV0dGVyIHdheSB0byBkbyB0aGF0LiBUaGFua3MhDQoNCj4gDQo+IEJlc3QgcmVnYXJkcywN
+Cj4gSWx5YQ0KPiANCg==
