@@ -2,126 +2,139 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 11983E43E0
-	for <lists+linux-kselftest@lfdr.de>; Fri, 25 Oct 2019 08:58:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DD1FE47ED
+	for <lists+linux-kselftest@lfdr.de>; Fri, 25 Oct 2019 11:56:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2394139AbfJYG6E (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 25 Oct 2019 02:58:04 -0400
-Received: from mga12.intel.com ([192.55.52.136]:27447 "EHLO mga12.intel.com"
+        id S2408923AbfJYJ4m (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 25 Oct 2019 05:56:42 -0400
+Received: from foss.arm.com ([217.140.110.172]:38110 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727595AbfJYG6E (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 25 Oct 2019 02:58:04 -0400
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 24 Oct 2019 23:58:03 -0700
-X-IronPort-AV: E=Sophos;i="5.68,227,1569308400"; 
-   d="scan'208";a="192446754"
-Received: from jnikula-mobl3.fi.intel.com (HELO localhost) ([10.237.66.161])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 24 Oct 2019 23:57:52 -0700
-From:   Jani Nikula <jani.nikula@linux.intel.com>
-To:     Jonathan Corbet <corbet@lwn.net>,
-        Changbin Du <changbin.du@gmail.com>
-Cc:     linux-pci@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-crypto@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-wireless@vger.kernel.org, linux-fpga@vger.kernel.org,
-        linux-usb@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        intel-gfx@lists.freedesktop.org,
-        Matthew Wilcox <willy@infradead.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>
-Subject: Re: [PATCH v2] kernel-doc: rename the kernel-doc directive 'functions' to 'identifiers'
-In-Reply-To: <20191024121940.1d6a64df@lwn.net>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-References: <20191020131717.28990-1-changbin.du@gmail.com> <20191024121940.1d6a64df@lwn.net>
-Date:   Fri, 25 Oct 2019 09:57:48 +0300
-Message-ID: <87woctb9cj.fsf@intel.com>
+        id S2408917AbfJYJ4m (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 25 Oct 2019 05:56:42 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id AC1EF28;
+        Fri, 25 Oct 2019 02:56:41 -0700 (PDT)
+Received: from [10.1.197.50] (e120937-lin.cambridge.arm.com [10.1.197.50])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C24D23F6C4;
+        Fri, 25 Oct 2019 02:56:40 -0700 (PDT)
+Subject: Re: [PATCH v9 02/12] kselftest: arm64:
+ mangle_pstate_invalid_compat_toggle and common utils
+To:     Suzuki K Poulose <suzuki.poulose@arm.com>,
+        linux-kselftest@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, shuah@kernel.org
+Cc:     amit.kachhap@arm.com, andreyknvl@google.com, dave.martin@arm.com
+References: <20191009120459.21805-1-cristian.marussi@arm.com>
+ <20191009120459.21805-3-cristian.marussi@arm.com>
+ <dde06d83-4c3b-0be4-db98-e740a1dd327e@arm.com>
+From:   Cristian Marussi <cristian.marussi@arm.com>
+Message-ID: <d098f030-f3b7-82b6-8489-fa8985870237@arm.com>
+Date:   Fri, 25 Oct 2019 10:56:39 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-Content-Type: text/plain
+In-Reply-To: <dde06d83-4c3b-0be4-db98-e740a1dd327e@arm.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, 24 Oct 2019, Jonathan Corbet <corbet@lwn.net> wrote:
-> On Sun, 20 Oct 2019 21:17:17 +0800
-> Changbin Du <changbin.du@gmail.com> wrote:
->
->> The 'functions' directive is not only for functions, but also works for
->> structs/unions. So the name is misleading. This patch renames it to
->> 'identifiers', which specific the functions/types to be included in
->> documentation. We keep the old name as an alias of the new one before
->> all documentation are updated.
->> 
->> Signed-off-by: Changbin Du <changbin.du@gmail.com>
->
-> So I think this is basically OK, but I have one more request...
->
+On 24/10/2019 23:41, Suzuki K Poulose wrote:
+> Hi Cristian,
+> 
+> On 10/09/2019 01:04 PM, Cristian Marussi wrote:
+>> Add some arm64/signal specific boilerplate and utility code to help
+>> further testcases' development.
+>>
+>> Introduce also one simple testcase mangle_pstate_invalid_compat_toggle
+>> and some related helpers: it is a simple mangle testcase which messes
+>> with the ucontext_t from within the signal handler, trying to toggle
+>> PSTATE state bits to switch the system between 32bit/64bit execution
+>> state. Expects SIGSEGV on test PASS.
+>>
+>> Reviewed-by: Dave Martin <Dave.Martin@arm.com>
+>> Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
+> 
 > [...]
->
->> diff --git a/Documentation/sphinx/kerneldoc.py b/Documentation/sphinx/kerneldoc.py
->> index 1159405cb920..0689f9c37f1e 100644
->> --- a/Documentation/sphinx/kerneldoc.py
->> +++ b/Documentation/sphinx/kerneldoc.py
->> @@ -59,9 +59,10 @@ class KernelDocDirective(Directive):
->>      optional_arguments = 4
->>      option_spec = {
->>          'doc': directives.unchanged_required,
->> -        'functions': directives.unchanged,
->>          'export': directives.unchanged,
->>          'internal': directives.unchanged,
->> +        'identifiers': directives.unchanged,
->> +        'functions': directives.unchanged,  # alias of 'identifiers'
->>      }
->>      has_content = False
->>  
->> @@ -71,6 +72,7 @@ class KernelDocDirective(Directive):
->>  
->>          filename = env.config.kerneldoc_srctree + '/' + self.arguments[0]
->>          export_file_patterns = []
->> +        identifiers = None
->>  
->>          # Tell sphinx of the dependency
->>          env.note_dependency(os.path.abspath(filename))
->> @@ -86,19 +88,22 @@ class KernelDocDirective(Directive):
->>              export_file_patterns = str(self.options.get('internal')).split()
->>          elif 'doc' in self.options:
->>              cmd += ['-function', str(self.options.get('doc'))]
->> +        elif 'identifiers' in self.options:
->> +            identifiers = self.options.get('identifiers').split()
->>          elif 'functions' in self.options:
->> -            functions = self.options.get('functions').split()
->> -            if functions:
->> -                for f in functions:
->> -                    cmd += ['-function', f]
->> -            else:
->> -                cmd += ['-no-doc-sections']
->> +            identifiers = self.options.get('functions').split()
->
-> Rather than do this, can you just change the elif line to read:
->
->     elif ('identifiers' in self.options) or ('functions' in self.options):
->
-> ...then leave the rest of the code intact?  It keeps the logic together,
-> and avoids the confusing distinction between identifiers=='' and
-> identifiers==None .
+> 
+>> +
+>> +#define get_regval(regname, out)			\
+>> +{							\
+>> +	asm volatile("mrs %0, " __stringify(regname)	\
+>> +	: "=r" (out)					\
+>> +	:						\
+>> +	: "memory");					\
+>> +}
+>> +
+>> +/* Regs encoding and masks naming copied in from sysreg.h */
+>> +#define SYS_ID_AA64MMFR1_EL1	S3_0_C0_C7_1	/* MRS Emulated */
+>> +#define SYS_ID_AA64MMFR2_EL1	S3_0_C0_C7_2	/* MRS Emulated */
+>> +#define ID_AA64MMFR1_PAN_SHIFT	20
+>> +#define ID_AA64MMFR2_UAO_SHIFT	4
+>> +
+>> +/* Local Helpers */
+>> +#define ID_AA64MMFR1_EL1_PAN_SUPPORTED(val) \
+>> +	(!!((val) & (0xfUL << ID_AA64MMFR1_PAN_SHIFT)))
+>> +#define ID_AA64MMFR2_EL1_UAO_SUPPORTED(val) \
+>> +	(!!((val) & (0xfUL << ID_AA64MMFR2_UAO_SHIFT)))
+>> +
+>> +/*
+>> + * Feature flags used in tdescr.feats_required to specify
+>> + * any feature by the test
+>> + */
+>> +enum {
+>> +	FSSBS_BIT,
+>> +	FPAN_BIT,
+>> +	FUAO_BIT,
+>> +	FMAX_END
+>> +};
+>> +
+>> +#define FEAT_SSBS		(1UL << FSSBS_BIT)
+>> +#define FEAT_PAN		(1UL << FPAN_BIT)
+>> +#define FEAT_UAO		(1UL << FUAO_BIT)
+>> +
+> 
+> [...]
+> 
+>> +static int test_init(struct tdescr *td)
+>> +{
+>> +	td->minsigstksz = getauxval(AT_MINSIGSTKSZ);
+>> +	if (!td->minsigstksz)
+>> +		td->minsigstksz = MINSIGSTKSZ;
+>> +	fprintf(stderr, "Detected MINSTKSIGSZ:%d\n", td->minsigstksz);
+>> +
+>> +	if (td->feats_required) {
+>> +		td->feats_supported = 0;
+>> +		/*
+>> +		 * Checking for CPU required features using both the
+>> +		 * auxval and the arm64 MRS Emulation to read sysregs.
+>> +		 */
+>> +		if (getauxval(AT_HWCAP) & HWCAP_SSBS)
+>> +			td->feats_supported |= FEAT_SSBS;
+>> +		if (getauxval(AT_HWCAP) & HWCAP_CPUID) {
+>> +			uint64_t val = 0;
+>> +
+>> +			/* Uses MRS emulation to check capability */
+>> +			get_regval(SYS_ID_AA64MMFR1_EL1, val);
+>> +			if (ID_AA64MMFR1_EL1_PAN_SUPPORTED(val))
+>> +				td->feats_supported |= FEAT_PAN;
+>> +			/* Uses MRS emulation to check capability */
+>> +			get_regval(SYS_ID_AA64MMFR2_EL1, val);
+>> +			if (ID_AA64MMFR2_EL1_UAO_SUPPORTED(val))
+>> +				td->feats_supported |= FEAT_UAO;
+> 
+> As discussed, these fields are never exposed to userspace via mrs. So
+> you may as well drop these features.
+> 
 
-I think the problem is you still need to distinguish between the two for
-the get('functions') part.
+Yes I'm going to drop this code in v10 (which is also un-needed in fact by the current testcases)
 
-One option is to rename 'functions' to 'identifiers' in the above block,
-and put something like this above the whole if ladder (untested):
+Thanks
 
-        # backward compat
-        if 'functions' in self.options:
-            if 'identifiers' in self.options:
-                kernellog.warn(env.app, "fail")
-            else:
-                self.options.set('identifiers', self.options.get('functions'))
+Cristian
+> Cheers
+> Suzuki
+> 
 
-BR,
-Jani.
-
-
--- 
-Jani Nikula, Intel Open Source Graphics Center
