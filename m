@@ -2,139 +2,111 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DD1FE47ED
-	for <lists+linux-kselftest@lfdr.de>; Fri, 25 Oct 2019 11:56:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03A87E4A28
+	for <lists+linux-kselftest@lfdr.de>; Fri, 25 Oct 2019 13:42:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2408923AbfJYJ4m (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 25 Oct 2019 05:56:42 -0400
-Received: from foss.arm.com ([217.140.110.172]:38110 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2408917AbfJYJ4m (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 25 Oct 2019 05:56:42 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id AC1EF28;
-        Fri, 25 Oct 2019 02:56:41 -0700 (PDT)
-Received: from [10.1.197.50] (e120937-lin.cambridge.arm.com [10.1.197.50])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C24D23F6C4;
-        Fri, 25 Oct 2019 02:56:40 -0700 (PDT)
-Subject: Re: [PATCH v9 02/12] kselftest: arm64:
- mangle_pstate_invalid_compat_toggle and common utils
-To:     Suzuki K Poulose <suzuki.poulose@arm.com>,
-        linux-kselftest@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, shuah@kernel.org
-Cc:     amit.kachhap@arm.com, andreyknvl@google.com, dave.martin@arm.com
-References: <20191009120459.21805-1-cristian.marussi@arm.com>
- <20191009120459.21805-3-cristian.marussi@arm.com>
- <dde06d83-4c3b-0be4-db98-e740a1dd327e@arm.com>
-From:   Cristian Marussi <cristian.marussi@arm.com>
-Message-ID: <d098f030-f3b7-82b6-8489-fa8985870237@arm.com>
-Date:   Fri, 25 Oct 2019 10:56:39 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S2410345AbfJYLm1 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 25 Oct 2019 07:42:27 -0400
+Received: from mail-oi1-f195.google.com ([209.85.167.195]:35962 "EHLO
+        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730125AbfJYLm1 (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 25 Oct 2019 07:42:27 -0400
+Received: by mail-oi1-f195.google.com with SMTP id j7so1444038oib.3;
+        Fri, 25 Oct 2019 04:42:26 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=BcGJu1l7UIRQ0EFIw5C2ACnhv/97dGEXhKfxlqmxdJM=;
+        b=onf2xCiF2+pRsnMG0g5fgBcDzdZh7UkmCitcHxvyAp2Oc71bM73NJ0rhWYwKQNm0ys
+         IykUwHE6qSwO1r0qqeq1Jm0pL6Qpv7KfcfyjznX/+M4ux/Ayou7ek5MFaoORhqZMBpKc
+         U4ZiTqs0PvLcPEZiLTvSGREwFg3SZqa66I0Txqh8lH0RQHarIcVzICmz2whJOmu1UwAC
+         rQii8gUvSFiOsqRXeRQdgp7KkCQG6sbsItjg6j4sm02EzdC3UcxJliCEHUWPiX7sokSO
+         8DFapfXfdWPyCdYLn9EUqexzesERmOvRIMHchkzh+ATu5VmypQCi2qrdZn588bmjKdMr
+         M/uQ==
+X-Gm-Message-State: APjAAAX6DlLLz3FwcnrrB/JublBT84AQZrm4ugNhcE6lAWRJbhzDLGAV
+        WyUbOi0Xw48a1rB/5KQ2EfcjW9ekDu83Sz8tMPw=
+X-Google-Smtp-Source: APXvYqx2AE+sN8UHL3sRoH6FX9kL2APsqTSX1ZwdK3PcIXZcG4Q4tRECEJxY7lT0jOw3NzCSETNK6NJH/5K0P+dzPf8=
+X-Received: by 2002:a05:6808:3b4:: with SMTP id n20mr2516418oie.131.1572003745968;
+ Fri, 25 Oct 2019 04:42:25 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <dde06d83-4c3b-0be4-db98-e740a1dd327e@arm.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <20190621095252.32307-1-vincenzo.frascino@arm.com>
+ <alpine.DEB.2.21.1906240142000.32342@nanos.tec.linutronix.de>
+ <alpine.DEB.2.21.1906241613280.32342@nanos.tec.linutronix.de>
+ <20190624142346.pxljv3m4npatdiyk@shell.armlinux.org.uk> <20190624144924.GE29120@arrakis.emea.arm.com>
+In-Reply-To: <20190624144924.GE29120@arrakis.emea.arm.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Fri, 25 Oct 2019 13:42:14 +0200
+Message-ID: <CAMuHMdX_KzP9n=H4vL4J9ijT=2GYy9X1BBpAdomkchoxnCcjfA@mail.gmail.com>
+Subject: Re: [PATCH v7 00/25] Unify vDSOs across more architectures
+To:     Catalin Marinas <catalin.marinas@arm.com>
+Cc:     Russell King - ARM Linux admin <linux@armlinux.org.uk>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Will Deacon <will.deacon@arm.com>, linux-mips@vger.kernel.org,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, Shuah Khan <shuah@kernel.org>,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        Dmitry Safonov <dima@arista.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Sasha Levin <sashal@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Andre Przywara <andre.przywara@arm.com>,
+        Dmitry Safonov <0x7f454c46@gmail.com>,
+        Michael Kelley <mikelley@microsoft.com>,
+        Peter Collingbourne <pcc@google.com>,
+        LAK <linux-arm-kernel@lists.infradead.org>,
+        Andrei Vagin <avagin@openvz.org>,
+        Huw Davies <huw@codeweavers.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Mark Salyzyn <salyzyn@android.com>,
+        Paul Burton <paul.burton@mips.com>,
+        Shijith Thotton <sthotton@marvell.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 24/10/2019 23:41, Suzuki K Poulose wrote:
-> Hi Cristian,
-> 
-> On 10/09/2019 01:04 PM, Cristian Marussi wrote:
->> Add some arm64/signal specific boilerplate and utility code to help
->> further testcases' development.
->>
->> Introduce also one simple testcase mangle_pstate_invalid_compat_toggle
->> and some related helpers: it is a simple mangle testcase which messes
->> with the ucontext_t from within the signal handler, trying to toggle
->> PSTATE state bits to switch the system between 32bit/64bit execution
->> state. Expects SIGSEGV on test PASS.
->>
->> Reviewed-by: Dave Martin <Dave.Martin@arm.com>
->> Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
-> 
-> [...]
-> 
->> +
->> +#define get_regval(regname, out)			\
->> +{							\
->> +	asm volatile("mrs %0, " __stringify(regname)	\
->> +	: "=r" (out)					\
->> +	:						\
->> +	: "memory");					\
->> +}
->> +
->> +/* Regs encoding and masks naming copied in from sysreg.h */
->> +#define SYS_ID_AA64MMFR1_EL1	S3_0_C0_C7_1	/* MRS Emulated */
->> +#define SYS_ID_AA64MMFR2_EL1	S3_0_C0_C7_2	/* MRS Emulated */
->> +#define ID_AA64MMFR1_PAN_SHIFT	20
->> +#define ID_AA64MMFR2_UAO_SHIFT	4
->> +
->> +/* Local Helpers */
->> +#define ID_AA64MMFR1_EL1_PAN_SUPPORTED(val) \
->> +	(!!((val) & (0xfUL << ID_AA64MMFR1_PAN_SHIFT)))
->> +#define ID_AA64MMFR2_EL1_UAO_SUPPORTED(val) \
->> +	(!!((val) & (0xfUL << ID_AA64MMFR2_UAO_SHIFT)))
->> +
->> +/*
->> + * Feature flags used in tdescr.feats_required to specify
->> + * any feature by the test
->> + */
->> +enum {
->> +	FSSBS_BIT,
->> +	FPAN_BIT,
->> +	FUAO_BIT,
->> +	FMAX_END
->> +};
->> +
->> +#define FEAT_SSBS		(1UL << FSSBS_BIT)
->> +#define FEAT_PAN		(1UL << FPAN_BIT)
->> +#define FEAT_UAO		(1UL << FUAO_BIT)
->> +
-> 
-> [...]
-> 
->> +static int test_init(struct tdescr *td)
->> +{
->> +	td->minsigstksz = getauxval(AT_MINSIGSTKSZ);
->> +	if (!td->minsigstksz)
->> +		td->minsigstksz = MINSIGSTKSZ;
->> +	fprintf(stderr, "Detected MINSTKSIGSZ:%d\n", td->minsigstksz);
->> +
->> +	if (td->feats_required) {
->> +		td->feats_supported = 0;
->> +		/*
->> +		 * Checking for CPU required features using both the
->> +		 * auxval and the arm64 MRS Emulation to read sysregs.
->> +		 */
->> +		if (getauxval(AT_HWCAP) & HWCAP_SSBS)
->> +			td->feats_supported |= FEAT_SSBS;
->> +		if (getauxval(AT_HWCAP) & HWCAP_CPUID) {
->> +			uint64_t val = 0;
->> +
->> +			/* Uses MRS emulation to check capability */
->> +			get_regval(SYS_ID_AA64MMFR1_EL1, val);
->> +			if (ID_AA64MMFR1_EL1_PAN_SUPPORTED(val))
->> +				td->feats_supported |= FEAT_PAN;
->> +			/* Uses MRS emulation to check capability */
->> +			get_regval(SYS_ID_AA64MMFR2_EL1, val);
->> +			if (ID_AA64MMFR2_EL1_UAO_SUPPORTED(val))
->> +				td->feats_supported |= FEAT_UAO;
-> 
-> As discussed, these fields are never exposed to userspace via mrs. So
-> you may as well drop these features.
-> 
+Hi Catalin,
 
-Yes I'm going to drop this code in v10 (which is also un-needed in fact by the current testcases)
+On Mon, Jun 24, 2019 at 4:51 PM Catalin Marinas <catalin.marinas@arm.com> wrote:
+> On Mon, Jun 24, 2019 at 03:23:46PM +0100, Russell King wrote:
+> > On Mon, Jun 24, 2019 at 04:18:28PM +0200, Thomas Gleixner wrote:
+> > > I talked to Russell King and he suggested to file the ARM parts into his
+> > > patch system and he'll pick them up after 5.3-rc1.
+> > >
+> > >    https://www.arm.linux.org.uk/developer/patches/
+> > >
+> > > I paged out how to deal with it, but you'll surely manage :)
+> >
+> > Easy way: ask git to add the "KernelVersion" tag as a header to the
+> > email using --add-header to e.g. git format-patch, and just mail them
+> > to patches@armlinux.org.uk
+>
+> Although I haven't send patches to Russell in a while, I still have a
+> git alias in my .gitconfig (only works with one patch at a time IIRC,
+> sending multiple patches may arrive in a different order):
+>
+> [alias]
+>         send-rmk-email = !git send-email --add-header=\"KernelVersion: $(git describe --abbrev=0)\" --no-thread --suppress-cc=all --to="patches@arm.linux.org.uk"
 
-Thanks
+Doesn't seem to work: no header was added, and my patch was rejected.
+There does seem to be a "--add-header" option for git-format-patch, but
+it adds the header at the top, just below the "Subject:"-header, instead
+of below the "---", so that needs manual editing, too.
 
-Cristian
-> Cheers
-> Suzuki
-> 
+Gr{oetje,eeting}s,
 
+                        Geert
+
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
