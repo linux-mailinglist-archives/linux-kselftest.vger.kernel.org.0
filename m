@@ -2,92 +2,166 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id ADBC2E4EB6
-	for <lists+linux-kselftest@lfdr.de>; Fri, 25 Oct 2019 16:14:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD7F5E4F79
+	for <lists+linux-kselftest@lfdr.de>; Fri, 25 Oct 2019 16:48:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728496AbfJYOOV (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 25 Oct 2019 10:14:21 -0400
-Received: from us-smtp-2.mimecast.com ([207.211.31.81]:24859 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1729132AbfJYOOT (ORCPT
+        id S2395098AbfJYOsK (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 25 Oct 2019 10:48:10 -0400
+Received: from mail-wr1-f65.google.com ([209.85.221.65]:47056 "EHLO
+        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2394082AbfJYOsJ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 25 Oct 2019 10:14:19 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1572012858;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=uhDkBYOFq3jbygFGSDnq7Gmuiq8UNYdSN3p8z01Ac/4=;
-        b=eC3yRupqpQIzsFg66+vgkedON5sB21NSr31aOAru3hVmlCqf7zaGLC+76Qzhua63zNQkr4
-        XF8lBw+cWqkBrbJZR60RD5l624B2T0TSQaSLcZKbltXdcj4NIlCYXKh0MZTmznuNvpl5ph
-        Ktv2xLbriGmWWA0ulA03h7mPv62rnXw=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-165-z-_ddz5kOFS9YuvQA4lyKw-1; Fri, 25 Oct 2019 10:14:15 -0400
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 1071F1005509;
-        Fri, 25 Oct 2019 14:14:14 +0000 (UTC)
-Received: from redhat.com (dhcp-17-119.bos.redhat.com [10.18.17.119])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 36BEE60852;
-        Fri, 25 Oct 2019 14:14:13 +0000 (UTC)
-Date:   Fri, 25 Oct 2019 10:14:11 -0400
-From:   Joe Lawrence <joe.lawrence@redhat.com>
-To:     Miroslav Benes <mbenes@suse.cz>
-Cc:     jpoimboe@redhat.com, jikos@kernel.org, pmladek@suse.com,
-        shuah@kernel.org, linux-kernel@vger.kernel.org,
-        live-patching@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH] selftests/livepatch: Disable the timeout
-Message-ID: <20191025141411.GA17156@redhat.com>
-References: <20191025115041.23186-1-mbenes@suse.cz>
+        Fri, 25 Oct 2019 10:48:09 -0400
+Received: by mail-wr1-f65.google.com with SMTP id n15so2619858wrw.13;
+        Fri, 25 Oct 2019 07:48:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=bIQBfe8sGIHTcc6sIk8ML0XGqqJRWtOG/huxYjSxgWs=;
+        b=ReQEnplZs6d9r7FMszuAt1KQpVhgBAK8HrNTFjUqY3S/9APV1+HGvrsZ9waq7e63YU
+         qE3MBI4hqWqVJcX+VWmtAW85YKN71otDbfGbheixnIP6tSrWow7JIdFnGpXtiV+mVJW2
+         1p2ctbskyMZMfpkAuSXvh/NwSIRIncEVf4MMrb16d505nLujE9HTPHxu4LuAIaDSZ+Jc
+         KyD8GrKirgOQpcezDEDjZuvpDgE4yTBKNJS+69u7yUoDohsPtX/u+wyEaGIbvTZHormM
+         1LsppGHi80Arm2rQS0fl8o4nF9UjLZIsJPeKNNAtOJQk0Dc1AvH/QKIDvuZYoU6aXOrF
+         VoIA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=bIQBfe8sGIHTcc6sIk8ML0XGqqJRWtOG/huxYjSxgWs=;
+        b=WhjmwmWapfeXRhBFDu8d/qB3iUL7FMy4Wmydi93rBjYhG76MuJzdhD1YBvnFpqn+FT
+         dnX1SPbAXdowQVjjLZ+PqE9XjWUTj7cBZ2C9J0A893jqHyFjK92Qe13U96MLx1G1pOwG
+         PBQSyMyHBmFHa2yDun/xTUbO+NGzQrr3GRrjcmsuSpz2sL25yvVbnZqYtNqwM7Be2yYH
+         OCDASejiZWOiX9FKPv8Tiks7hJ01jRkXje/Q8dos2EmV2bmNZQNZ5/tG40AH/3rL9J2t
+         u9erg18cDwkQEn4r8M0SikS0zulAneJ7JtYvOZ9qCwlNq4lcWi2VsKBEtXRAGqNNtYAG
+         +6AQ==
+X-Gm-Message-State: APjAAAWZNH4H1w0uNfv5R1aM2gEXSdL2eSET9aaMn/otQwKNyejaYNI8
+        8TKPgpP8f+WA/IbQ274TcbI=
+X-Google-Smtp-Source: APXvYqxsX3C8tseMrdTDPvXw+m20Jy/sW7m38w3vpts8ZabQ38lGcQ4VQLB8VI+iJPUaxLQS52CZqA==
+X-Received: by 2002:a5d:4847:: with SMTP id n7mr3349140wrs.398.1572014885771;
+        Fri, 25 Oct 2019 07:48:05 -0700 (PDT)
+Received: from mail.google.com ([104.238.174.53])
+        by smtp.gmail.com with ESMTPSA id 26sm2126489wmf.20.2019.10.25.07.48.04
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Fri, 25 Oct 2019 07:48:05 -0700 (PDT)
+Date:   Fri, 25 Oct 2019 14:48:03 +0000
+From:   Changbin Du <changbin.du@gmail.com>
+To:     Jani Nikula <jani.nikula@linux.intel.com>
+Cc:     Jonathan Corbet <corbet@lwn.net>,
+        Changbin Du <changbin.du@gmail.com>, linux-pci@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-crypto@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-wireless@vger.kernel.org,
+        linux-fpga@vger.kernel.org, linux-usb@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
+        Matthew Wilcox <willy@infradead.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>
+Subject: Re: [PATCH v2] kernel-doc: rename the kernel-doc directive
+ 'functions' to 'identifiers'
+Message-ID: <20191025144802.uixg2crhw6h7gghq@mail.google.com>
+References: <20191020131717.28990-1-changbin.du@gmail.com>
+ <20191024121940.1d6a64df@lwn.net>
+ <87woctb9cj.fsf@intel.com>
 MIME-Version: 1.0
-In-Reply-To: <20191025115041.23186-1-mbenes@suse.cz>
-User-Agent: Mutt/1.12.1 (2019-06-15)
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
-X-MC-Unique: z-_ddz5kOFS9YuvQA4lyKw-1
-X-Mimecast-Spam-Score: 0
-Content-Type: text/plain; charset=WINDOWS-1252
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <87woctb9cj.fsf@intel.com>
+User-Agent: NeoMutt/20180716-508-7c9a6d
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Oct 25, 2019 at 01:50:41PM +0200, Miroslav Benes wrote:
-> Commit 852c8cbf34d3 ("selftests/kselftest/runner.sh: Add 45 second
-> timeout per test") introduced a timeout per test. Livepatch tests could
-> run longer than 45 seconds, especially on slower machines. They do not
-> hang and they detect if something goes awry with internal accounting.
->=20
-> Better than looking for an arbitrary value, just disable the timeout for
-> livepatch selftests.
->=20
-> Signed-off-by: Miroslav Benes <mbenes@suse.cz>
-> ---
->  tools/testing/selftests/livepatch/settings | 1 +
->  1 file changed, 1 insertion(+)
->  create mode 100644 tools/testing/selftests/livepatch/settings
->=20
-> diff --git a/tools/testing/selftests/livepatch/settings b/tools/testing/s=
-elftests/livepatch/settings
-> new file mode 100644
-> index 000000000000..e7b9417537fb
-> --- /dev/null
-> +++ b/tools/testing/selftests/livepatch/settings
-> @@ -0,0 +1 @@
-> +timeout=3D0
-> --=20
-> 2.23.0
->=20
+On Fri, Oct 25, 2019 at 09:57:48AM +0300, Jani Nikula wrote:
+> On Thu, 24 Oct 2019, Jonathan Corbet <corbet@lwn.net> wrote:
+> > On Sun, 20 Oct 2019 21:17:17 +0800
+> > Changbin Du <changbin.du@gmail.com> wrote:
+> >
+> >> The 'functions' directive is not only for functions, but also works for
+> >> structs/unions. So the name is misleading. This patch renames it to
+> >> 'identifiers', which specific the functions/types to be included in
+> >> documentation. We keep the old name as an alias of the new one before
+> >> all documentation are updated.
+> >> 
+> >> Signed-off-by: Changbin Du <changbin.du@gmail.com>
+> >
+> > So I think this is basically OK, but I have one more request...
+> >
+> > [...]
+> >
+> >> diff --git a/Documentation/sphinx/kerneldoc.py b/Documentation/sphinx/kerneldoc.py
+> >> index 1159405cb920..0689f9c37f1e 100644
+> >> --- a/Documentation/sphinx/kerneldoc.py
+> >> +++ b/Documentation/sphinx/kerneldoc.py
+> >> @@ -59,9 +59,10 @@ class KernelDocDirective(Directive):
+> >>      optional_arguments = 4
+> >>      option_spec = {
+> >>          'doc': directives.unchanged_required,
+> >> -        'functions': directives.unchanged,
+> >>          'export': directives.unchanged,
+> >>          'internal': directives.unchanged,
+> >> +        'identifiers': directives.unchanged,
+> >> +        'functions': directives.unchanged,  # alias of 'identifiers'
+> >>      }
+> >>      has_content = False
+> >>  
+> >> @@ -71,6 +72,7 @@ class KernelDocDirective(Directive):
+> >>  
+> >>          filename = env.config.kerneldoc_srctree + '/' + self.arguments[0]
+> >>          export_file_patterns = []
+> >> +        identifiers = None
+> >>  
+> >>          # Tell sphinx of the dependency
+> >>          env.note_dependency(os.path.abspath(filename))
+> >> @@ -86,19 +88,22 @@ class KernelDocDirective(Directive):
+> >>              export_file_patterns = str(self.options.get('internal')).split()
+> >>          elif 'doc' in self.options:
+> >>              cmd += ['-function', str(self.options.get('doc'))]
+> >> +        elif 'identifiers' in self.options:
+> >> +            identifiers = self.options.get('identifiers').split()
+> >>          elif 'functions' in self.options:
+> >> -            functions = self.options.get('functions').split()
+> >> -            if functions:
+> >> -                for f in functions:
+> >> -                    cmd += ['-function', f]
+> >> -            else:
+> >> -                cmd += ['-no-doc-sections']
+> >> +            identifiers = self.options.get('functions').split()
+> >
+> > Rather than do this, can you just change the elif line to read:
+> >
+> >     elif ('identifiers' in self.options) or ('functions' in self.options):
+> >
+> > ...then leave the rest of the code intact?  It keeps the logic together,
+> > and avoids the confusing distinction between identifiers=='' and
+> > identifiers==None .
+> 
+> I think the problem is you still need to distinguish between the two for
+> the get('functions') part.
+> 
+> One option is to rename 'functions' to 'identifiers' in the above block,
+> and put something like this above the whole if ladder (untested):
+> 
+>         # backward compat
+>         if 'functions' in self.options:
+>             if 'identifiers' in self.options:
+>                 kernellog.warn(env.app, "fail")
+This will miss the content of 'functions' directive if both exist in
+same doc.
 
-Yes, disabling the timeout for our tests makes sense since they already
-have internal checking.  Tested this in a VM and looks good to me,
-thanks.
+>             else:
+>                 self.options.set('identifiers', self.options.get('functions'))
+> 
+> BR,
+> Jani.
+>
+After comparing, I still perfer my original code which is simpler. :)
 
-Reviewed-by: Joe Lawrence <joe.lawrence@redhat.com>
+> 
+> -- 
+> Jani Nikula, Intel Open Source Graphics Center
 
--- Joe
-
+-- 
+Cheers,
+Changbin Du
