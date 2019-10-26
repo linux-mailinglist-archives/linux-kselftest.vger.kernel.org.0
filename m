@@ -2,45 +2,38 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FC27E5AED
-	for <lists+linux-kselftest@lfdr.de>; Sat, 26 Oct 2019 15:19:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 98907E5D3F
+	for <lists+linux-kselftest@lfdr.de>; Sat, 26 Oct 2019 15:36:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728087AbfJZNS5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 26 Oct 2019 09:18:57 -0400
-Received: from mail.kernel.org ([198.145.29.99]:40768 "EHLO mail.kernel.org"
+        id S1727015AbfJZNQ4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 26 Oct 2019 09:16:56 -0400
+Received: from mail.kernel.org ([198.145.29.99]:38484 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728066AbfJZNSx (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 26 Oct 2019 09:18:53 -0400
+        id S1727001AbfJZNQz (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Sat, 26 Oct 2019 09:16:55 -0400
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id E9011222BE;
-        Sat, 26 Oct 2019 13:18:51 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id E2C0321E6F;
+        Sat, 26 Oct 2019 13:16:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1572095933;
-        bh=8rI5UOEw6DaLu75RfzL3/QkaHNW9D5ayHlsc7k0R+E0=;
+        s=default; t=1572095814;
+        bh=n8LV+Zy/n4u8Rf26UdYHsaoqWPPxw9wALgq1SRMH8WM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=nB4B6sbpRhydkVitsxmPrMUdY1iJANVh9encbH+CFfStAv0scFnru9QuTLM1+iEy2
-         ReRvXnnOq7pwiJnZLXkL/+mXruBjjhQjrT7kWUWvEgNufqXBubw8fDmjXCTmCh5nxO
-         OT8ujYh7bmcCvEdtdwXYOaoohKNkTsjqZPTC7SuI=
+        b=1a/0ZsceQky8W6QCWEgW84LbJjDzi3JLya3BftgEBM4OaYTkikAA+q6GeL1WsraKl
+         hljfG3VypbqlVymWI/DStb+Cqn3Tfe/EbjqUWASmV7dNgD7+ik1yMvEgRucMmFiF8x
+         kpTHUmWV1kAltRsEZSPFQluEeWzXeTd3COMdQgmE=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     John Hubbard <jhubbard@nvidia.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Keith Busch <keith.busch@intel.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        "Aneesh Kumar K . V" <aneesh.kumar@linux.ibm.com>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Christoph Hellwig <hch@lst.de>,
-        kbuild test robot <lkp@intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
+Cc:     Jiri Benc <jbenc@redhat.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Petar Penkov <ppenkov@google.com>,
         Sasha Levin <sashal@kernel.org>,
-        linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.3 96/99] mm/gup_benchmark: add a missing "w" to getopt string
-Date:   Sat, 26 Oct 2019 09:15:57 -0400
-Message-Id: <20191026131600.2507-96-sashal@kernel.org>
+        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.3 29/99] selftests/bpf: Set rp_filter in test_flow_dissector
+Date:   Sat, 26 Oct 2019 09:14:50 -0400
+Message-Id: <20191026131600.2507-29-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20191026131600.2507-1-sashal@kernel.org>
 References: <20191026131600.2507-1-sashal@kernel.org>
@@ -53,51 +46,41 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: John Hubbard <jhubbard@nvidia.com>
+From: Jiri Benc <jbenc@redhat.com>
 
-[ Upstream commit 6f24c8d30d08f270b54f4c2cb9b08dfccbe59c57 ]
+[ Upstream commit fd418b01fe26c2430b1091675cceb3ab2b52e1e0 ]
 
-Even though gup_benchmark.c has code to handle the -w command-line option,
-the "w" is not part of the getopt string.  It looks as if it has been
-missing the whole time.
+Many distributions enable rp_filter. However, the flow dissector test
+generates packets that have 1.1.1.1 set as (inner) source address without
+this address being reachable. This causes the selftest to fail.
 
-On my machine, this leads naturally to the following predictable result:
+The selftests should not assume a particular initial configuration. Switch
+off rp_filter.
 
-  $ sudo ./gup_benchmark -w
-  ./gup_benchmark: invalid option -- 'w'
-
-...which is fixed with this commit.
-
-Link: http://lkml.kernel.org/r/20191014184639.1512873-2-jhubbard@nvidia.com
-Signed-off-by: John Hubbard <jhubbard@nvidia.com>
-Acked-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-Cc: Keith Busch <keith.busch@intel.com>
-Cc: Shuah Khan <shuah@kernel.org>
-Cc: Christoph Hellwig <hch@infradead.org>
-Cc: "Aneesh Kumar K . V" <aneesh.kumar@linux.ibm.com>
-Cc: Ira Weiny <ira.weiny@intel.com>
-Cc: Christoph Hellwig <hch@lst.de>
-Cc: kbuild test robot <lkp@intel.com>
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+Fixes: 50b3ed57dee9 ("selftests/bpf: test bpf flow dissection")
+Signed-off-by: Jiri Benc <jbenc@redhat.com>
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+Acked-by: Petar Penkov <ppenkov@google.com>
+Link: https://lore.kernel.org/bpf/513a298f53e99561d2f70b2e60e2858ea6cda754.1570539863.git.jbenc@redhat.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/testing/selftests/vm/gup_benchmark.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/testing/selftests/bpf/test_flow_dissector.sh | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/tools/testing/selftests/vm/gup_benchmark.c b/tools/testing/selftests/vm/gup_benchmark.c
-index c0534e298b512..cb3fc09645c48 100644
---- a/tools/testing/selftests/vm/gup_benchmark.c
-+++ b/tools/testing/selftests/vm/gup_benchmark.c
-@@ -37,7 +37,7 @@ int main(int argc, char **argv)
- 	char *file = "/dev/zero";
- 	char *p;
+diff --git a/tools/testing/selftests/bpf/test_flow_dissector.sh b/tools/testing/selftests/bpf/test_flow_dissector.sh
+index d23d4da66b834..e2d06191bd35c 100755
+--- a/tools/testing/selftests/bpf/test_flow_dissector.sh
++++ b/tools/testing/selftests/bpf/test_flow_dissector.sh
+@@ -63,6 +63,9 @@ fi
  
--	while ((opt = getopt(argc, argv, "m:r:n:f:tTLUSH")) != -1) {
-+	while ((opt = getopt(argc, argv, "m:r:n:f:tTLUwSH")) != -1) {
- 		switch (opt) {
- 		case 'm':
- 			size = atoi(optarg) * MB;
+ # Setup
+ tc qdisc add dev lo ingress
++echo 0 > /proc/sys/net/ipv4/conf/default/rp_filter
++echo 0 > /proc/sys/net/ipv4/conf/all/rp_filter
++echo 0 > /proc/sys/net/ipv4/conf/lo/rp_filter
+ 
+ echo "Testing IPv4..."
+ # Drops all IP/UDP packets coming from port 9
 -- 
 2.20.1
 
