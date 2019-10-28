@@ -2,146 +2,150 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B4DEBE63CD
-	for <lists+linux-kselftest@lfdr.de>; Sun, 27 Oct 2019 16:42:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C1524E6F02
+	for <lists+linux-kselftest@lfdr.de>; Mon, 28 Oct 2019 10:24:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727255AbfJ0Plz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 27 Oct 2019 11:41:55 -0400
-Received: from mout-p-201.mailbox.org ([80.241.56.171]:27440 "EHLO
-        mout-p-201.mailbox.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727056AbfJ0Plz (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 27 Oct 2019 11:41:55 -0400
-Received: from smtp2.mailbox.org (smtp2.mailbox.org [IPv6:2001:67c:2050:105:465:1:2:0])
-        (using TLSv1.2 with cipher ECDHE-RSA-CHACHA20-POLY1305 (256/256 bits))
-        (No client certificate requested)
-        by mout-p-201.mailbox.org (Postfix) with ESMTPS id 471MXZ3cz5zQl8s;
-        Sun, 27 Oct 2019 16:41:50 +0100 (CET)
-X-Virus-Scanned: amavisd-new at heinlein-support.de
-Received: from smtp2.mailbox.org ([80.241.60.241])
-        by spamfilter01.heinlein-hosting.de (spamfilter01.heinlein-hosting.de [80.241.56.115]) (amavisd-new, port 10030)
-        with ESMTP id HKUBceS7i6hF; Sun, 27 Oct 2019 16:41:40 +0100 (CET)
-Date:   Mon, 28 Oct 2019 02:41:15 +1100
-From:   Aleksa Sarai <cyphar@cyphar.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Al Viro <viro@zeniv.linux.org.uk>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J. Bruce Fields" <bfields@fieldses.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        David Howells <dhowells@redhat.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Jann Horn <jannh@google.com>, Tycho Andersen <tycho@tycho.ws>,
-        David Drysdale <drysdale@google.com>,
-        Chanho Min <chanho.min@lge.com>,
-        Oleg Nesterov <oleg@redhat.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Christian Brauner <christian@brauner.io>,
-        Aleksa Sarai <asarai@suse.de>,
-        Linux Containers <containers@lists.linux-foundation.org>,
-        alpha <linux-alpha@vger.kernel.org>,
-        Linux API <linux-api@vger.kernel.org>,
-        GNU C Library <libc-alpha@sourceware.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        linux-ia64@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        Linux-sh list <linux-sh@vger.kernel.org>,
-        linux-xtensa@linux-xtensa.org, sparclinux@vger.kernel.org
-Subject: Re: [PATCH RESEND v14 2/6] namei: LOOKUP_IN_ROOT: chroot-like path
- resolution
-Message-ID: <20191027154115.ex55njkysey4m6pu@yavin.dot.cyphar.com>
-References: <20191026185700.10708-1-cyphar@cyphar.com>
- <20191026185700.10708-3-cyphar@cyphar.com>
- <CAHk-=wjPPWvm5_eR4uaHJaU1isTUk-4iXQV3Z2Px9A+w6j2nHg@mail.gmail.com>
+        id S1729288AbfJ1JYc (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 28 Oct 2019 05:24:32 -0400
+Received: from mga14.intel.com ([192.55.52.115]:42059 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728194AbfJ1JYb (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 28 Oct 2019 05:24:31 -0400
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 28 Oct 2019 02:24:30 -0700
+X-IronPort-AV: E=Sophos;i="5.68,239,1569308400"; 
+   d="scan'208";a="193204146"
+Received: from jnikula-mobl3.fi.intel.com (HELO localhost) ([10.237.66.161])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 28 Oct 2019 02:24:25 -0700
+From:   Jani Nikula <jani.nikula@linux.intel.com>
+To:     Changbin Du <changbin.du@gmail.com>
+Cc:     Jonathan Corbet <corbet@lwn.net>,
+        Changbin Du <changbin.du@gmail.com>, linux-pci@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-crypto@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-wireless@vger.kernel.org,
+        linux-fpga@vger.kernel.org, linux-usb@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
+        Matthew Wilcox <willy@infradead.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>
+Subject: Re: [PATCH v2] kernel-doc: rename the kernel-doc directive 'functions' to 'identifiers'
+In-Reply-To: <20191025144802.uixg2crhw6h7gghq@mail.google.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+References: <20191020131717.28990-1-changbin.du@gmail.com> <20191024121940.1d6a64df@lwn.net> <87woctb9cj.fsf@intel.com> <20191025144802.uixg2crhw6h7gghq@mail.google.com>
+Date:   Mon, 28 Oct 2019 11:24:22 +0200
+Message-ID: <87v9s99q9l.fsf@intel.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="x254sstnuxqz6cbi"
-Content-Disposition: inline
-In-Reply-To: <CAHk-=wjPPWvm5_eR4uaHJaU1isTUk-4iXQV3Z2Px9A+w6j2nHg@mail.gmail.com>
+Content-Type: text/plain
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+On Fri, 25 Oct 2019, Changbin Du <changbin.du@gmail.com> wrote:
+> On Fri, Oct 25, 2019 at 09:57:48AM +0300, Jani Nikula wrote:
+>> On Thu, 24 Oct 2019, Jonathan Corbet <corbet@lwn.net> wrote:
+>> > On Sun, 20 Oct 2019 21:17:17 +0800
+>> > Changbin Du <changbin.du@gmail.com> wrote:
+>> >
+>> >> The 'functions' directive is not only for functions, but also works for
+>> >> structs/unions. So the name is misleading. This patch renames it to
+>> >> 'identifiers', which specific the functions/types to be included in
+>> >> documentation. We keep the old name as an alias of the new one before
+>> >> all documentation are updated.
+>> >> 
+>> >> Signed-off-by: Changbin Du <changbin.du@gmail.com>
+>> >
+>> > So I think this is basically OK, but I have one more request...
+>> >
+>> > [...]
+>> >
+>> >> diff --git a/Documentation/sphinx/kerneldoc.py b/Documentation/sphinx/kerneldoc.py
+>> >> index 1159405cb920..0689f9c37f1e 100644
+>> >> --- a/Documentation/sphinx/kerneldoc.py
+>> >> +++ b/Documentation/sphinx/kerneldoc.py
+>> >> @@ -59,9 +59,10 @@ class KernelDocDirective(Directive):
+>> >>      optional_arguments = 4
+>> >>      option_spec = {
+>> >>          'doc': directives.unchanged_required,
+>> >> -        'functions': directives.unchanged,
+>> >>          'export': directives.unchanged,
+>> >>          'internal': directives.unchanged,
+>> >> +        'identifiers': directives.unchanged,
+>> >> +        'functions': directives.unchanged,  # alias of 'identifiers'
+>> >>      }
+>> >>      has_content = False
+>> >>  
+>> >> @@ -71,6 +72,7 @@ class KernelDocDirective(Directive):
+>> >>  
+>> >>          filename = env.config.kerneldoc_srctree + '/' + self.arguments[0]
+>> >>          export_file_patterns = []
+>> >> +        identifiers = None
+>> >>  
+>> >>          # Tell sphinx of the dependency
+>> >>          env.note_dependency(os.path.abspath(filename))
+>> >> @@ -86,19 +88,22 @@ class KernelDocDirective(Directive):
+>> >>              export_file_patterns = str(self.options.get('internal')).split()
+>> >>          elif 'doc' in self.options:
+>> >>              cmd += ['-function', str(self.options.get('doc'))]
+>> >> +        elif 'identifiers' in self.options:
+>> >> +            identifiers = self.options.get('identifiers').split()
+>> >>          elif 'functions' in self.options:
+>> >> -            functions = self.options.get('functions').split()
+>> >> -            if functions:
+>> >> -                for f in functions:
+>> >> -                    cmd += ['-function', f]
+>> >> -            else:
+>> >> -                cmd += ['-no-doc-sections']
+>> >> +            identifiers = self.options.get('functions').split()
+>> >
+>> > Rather than do this, can you just change the elif line to read:
+>> >
+>> >     elif ('identifiers' in self.options) or ('functions' in self.options):
+>> >
+>> > ...then leave the rest of the code intact?  It keeps the logic together,
+>> > and avoids the confusing distinction between identifiers=='' and
+>> > identifiers==None .
+>> 
+>> I think the problem is you still need to distinguish between the two for
+>> the get('functions') part.
+>> 
+>> One option is to rename 'functions' to 'identifiers' in the above block,
+>> and put something like this above the whole if ladder (untested):
+>> 
+>>         # backward compat
+>>         if 'functions' in self.options:
+>>             if 'identifiers' in self.options:
+>>                 kernellog.warn(env.app, "fail")
+> This will miss the content of 'functions' directive if both exist in
+> same doc.
 
---x254sstnuxqz6cbi
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Did you not notice your patch does the same, except silently, while this
+would produce a warning? Which one is less surprising?
 
-On 2019-10-27, Linus Torvalds <torvalds@linux-foundation.org> wrote:
-> On Sat, Oct 26, 2019 at 2:58 PM Aleksa Sarai <cyphar@cyphar.com> wrote:
-> >
-> > +       /* LOOKUP_IN_ROOT treats absolute paths as being relative-to-di=
-rfd. */
-> > +       if (flags & LOOKUP_IN_ROOT)
-> > +               while (*s =3D=3D '/')
-> > +                       s++;
-> > +
-> >         /* Figure out the starting path and root (if needed). */
-> >         if (*s =3D=3D '/') {
-> >                 error =3D nd_jump_root(nd);
->=20
-> So I'm still hung up on this.
->=20
-> I guess I can't help it, but I look at the above, and it makes me go
-> "whoever wrote those tests wasn't thinking".
->=20
-> It just annoys me how it tests for '/' completely unnecessarily.
->=20
-> If LOOKUP_IN_ROOT is true, we know the subsequent test for '/' is not
-> going to match, because we just removed it. So I look at that code and
-> go "that code is doing stupid things".
+>
+>>             else:
+>>                 self.options.set('identifiers', self.options.get('functions'))
+>> 
+>> BR,
+>> Jani.
+>>
+> After comparing, I still perfer my original code which is simpler. :)
 
-Okay, fair enough.
+But is it, really? I agree with Jon about the distinction between None
+and '' being confusing.
 
-> That's why I suggested moving the LOOKUP_IN_ROOT check inside the '/' tes=
-t.
->=20
-> Alternatively, just make the logic be
->=20
->         if (flags & LOOKUP_IN_ROOT) {
->                .. remove '/'s ...
->         } else if (*s =3D=3D '/') {
->                 .. handl;e root ..
->=20
-> and remove the next "else" clause
 
-I've gone with the latter since I think it reads better.
+BR,
+Jani.
 
---=20
-Aleksa Sarai
-Senior Software Engineer (Containers)
-SUSE Linux GmbH
-<https://www.cyphar.com/>
 
---x254sstnuxqz6cbi
-Content-Type: application/pgp-signature; name="signature.asc"
 
------BEGIN PGP SIGNATURE-----
+>
+>> 
+>> -- 
+>> Jani Nikula, Intel Open Source Graphics Center
 
-iHUEABYIAB0WIQSxZm6dtfE8gxLLfYqdlLljIbnQEgUCXbW6lwAKCRCdlLljIbnQ
-EoPNAP0TH7raCw5NCLFnqJEAJ2bl+pDz8oGtxQKGtoXC7HohOQEAqFv71cuFJjle
-mvHPyKwhvNv8coIv55o8qUxny+XxIAg=
-=0iVb
------END PGP SIGNATURE-----
-
---x254sstnuxqz6cbi--
+-- 
+Jani Nikula, Intel Open Source Graphics Center
