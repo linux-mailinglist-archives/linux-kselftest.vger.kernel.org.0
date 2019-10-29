@@ -2,91 +2,48 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D57A1E8772
-	for <lists+linux-kselftest@lfdr.de>; Tue, 29 Oct 2019 12:49:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C7C42E87D3
+	for <lists+linux-kselftest@lfdr.de>; Tue, 29 Oct 2019 13:13:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729682AbfJ2Lt1 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 29 Oct 2019 07:49:27 -0400
-Received: from mga03.intel.com ([134.134.136.65]:49218 "EHLO mga03.intel.com"
+        id S1729861AbfJ2MNx convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 29 Oct 2019 08:13:53 -0400
+Received: from s0090.ppsmtp.net ([91.90.154.91]:51478 "EHLO s0090.ppsmtp.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728317AbfJ2Lt1 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 29 Oct 2019 07:49:27 -0400
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga103.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 29 Oct 2019 04:49:25 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.68,243,1569308400"; 
-   d="scan'208";a="401121904"
-Received: from jsakkine-mobl1.tm.intel.com (HELO localhost) ([10.237.50.122])
-  by fmsmga006.fm.intel.com with ESMTP; 29 Oct 2019 04:49:23 -0700
-Date:   Tue, 29 Oct 2019 13:49:22 +0200
-From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-To:     Mimi Zohar <zohar@linux.ibm.com>
-Cc:     David Howells <dhowells@redhat.com>, Petr Vorel <pvorel@suse.cz>,
-        shuah <shuah@kernel.org>,
-        James Bottomley <James.Bottomley@HansenPartnership.com>,
-        linux-integrity@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1] selftest/trustedkeys: TPM 1.2 trusted keys test
-Message-ID: <20191029114922.GA12825@linux.intel.com>
-References: <1571944467-13097-1-git-send-email-zohar@linux.ibm.com>
- <20191028203014.GA8279@linux.intel.com>
- <1572295513.4532.270.camel@linux.ibm.com>
- <20191029091535.GB9896@linux.intel.com>
- <20191029092516.GA13848@linux.intel.com>
- <20191029114535.GA12272@linux.intel.com>
+        id S1727082AbfJ2MNx (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 29 Oct 2019 08:13:53 -0400
+X-Greylist: delayed 19136 seconds by postgrey-1.27 at vger.kernel.org; Tue, 29 Oct 2019 08:13:51 EDT
+Received: from pps.filterd (s0090.ppsmtp.net [127.0.0.1])
+        by s0090.ppsmtp.net (8.16.0.27/8.16.0.27) with SMTP id x9T6h4GR016609;
+        Tue, 29 Oct 2019 07:54:21 +0100
+Received: from mail.schuetz.net ([212.185.169.233])
+        by s0090.ppsmtp.net with ESMTP id 2vx8bh8a08-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 29 Oct 2019 07:54:21 +0100
+Received: from julia02 (localhost [127.0.0.1])
+        by mail.schuetz.net (Postfix) with ESMTP id 917C820221A4;
+        Tue, 29 Oct 2019 07:52:54 +0100 (CET)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191029114535.GA12272@linux.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Subject: Dear Friend,
+To:     Recipients <infocarfer1@aim.com>
+From:   "Mr.R.C" <infocarfer1@aim.com>
+Date:   Tue, 29 Oct 2019 06:52:38 +0000
+Reply-To: infocarfer@aim.com
+X-TNEFEvaluated: 1
+Message-ID: <OFB6DE1564.0A7EAD44-ON882584A2.0025CD2E@schuetz.net>
+Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Description: Mail message body
+X-Proofpoint-ID: SID=2vx8bh8a08 QID=2vx8bh8a08-1
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-10-29_03:,,
+ signatures=0
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Oct 29, 2019 at 01:45:35PM +0200, Jarkko Sakkinen wrote:
-> On Tue, Oct 29, 2019 at 11:25:16AM +0200, Jarkko Sakkinen wrote:
-> > I'll anyway try to setup user space with TrouSerS so that I can try
-> > it out. BuildRoot has recipe for that but not for IBM TSS 2.0 so I'll
-> > skip that and use my own test script for TPM2 trusted keys.
-> 
-> Busybox version of mktemp gives this error message:
-> 
->   mktemp: Invalid argument
-> 
-> I get that three times.
-> 
-> Then I get non-existent directory error from line 65 but it is probably
-> consequence of the previous errors.
-> 
-> This the help for mktemp:
-> 
-> "
-> Usage: mktemp [-dt] [-p DIR] [TEMPLATE]
-> 
-> Create a temporary file with name based on TEMPLATE and print its name.
-> TEMPLATE must end with XXXXXX (e.g. [/dir/]nameXXXXXX).
-> Without TEMPLATE, -t tmp.XXXXXX is assumed.
-> 
-> 	-d	Make directory, not file
-> 	-q	Fail silently on errors
-> 	-t	Prepend base directory name to TEMPLATE
-> 	-p DIR	Use DIR as a base directory (implies -t)
-> 	-u	Do not create anything; print a name
-> 
-> Base directory is: -p DIR, else $TMPDIR, else /tmp
-> "
-> 
-> Use total six X's seems to fix the problem.
+Dear Friend,
 
-OK, I fixes that issue and then I end up with:
-
-  [INFO] add_key: No such device
-
-Anyway, got further.
-
-/Jarkko
+I am Vice Chairman of Hang Seng Bank, I have Important Matter to Discuss with you concerning my late client, Died without a NEXT OF KIN. Send me your private email for full details information. email me at (infocarfer@aim.com)
+Mail:
+Regards
