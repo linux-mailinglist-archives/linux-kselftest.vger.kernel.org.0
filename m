@@ -2,53 +2,53 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 17649EA45F
-	for <lists+linux-kselftest@lfdr.de>; Wed, 30 Oct 2019 20:45:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D8095EA464
+	for <lists+linux-kselftest@lfdr.de>; Wed, 30 Oct 2019 20:46:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726415AbfJ3Tpk (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 30 Oct 2019 15:45:40 -0400
-Received: from mail-pf1-f195.google.com ([209.85.210.195]:43523 "EHLO
-        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726261AbfJ3Tpj (ORCPT
+        id S1726620AbfJ3TqM (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 30 Oct 2019 15:46:12 -0400
+Received: from mail-pg1-f177.google.com ([209.85.215.177]:33007 "EHLO
+        mail-pg1-f177.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726619AbfJ3TqM (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 30 Oct 2019 15:45:39 -0400
-Received: by mail-pf1-f195.google.com with SMTP id 3so2309677pfb.10
-        for <linux-kselftest@vger.kernel.org>; Wed, 30 Oct 2019 12:45:38 -0700 (PDT)
+        Wed, 30 Oct 2019 15:46:12 -0400
+Received: by mail-pg1-f177.google.com with SMTP id u23so2187160pgo.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 30 Oct 2019 12:46:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
-        bh=ecEFNwt5xPuwITAtTejJ0X5tM716GMmwbwC2dfiZh24=;
-        b=MIrjMvo4u9InYKJTysSQ4H4hlW9oSNtKSJwWcuUnG9O9ydVw8+wCy5EE2iqN1qMLjw
-         i/gGPcGSIbtJyjZgCtunv3Hsb3iUHehe4sUcxpdqDvWh1ZM6ahgyGMrxgneayUZjNozx
-         JI0Ahle/4EVd+ySOdvsXBKMrJlJn5VnKsriPk=
+        bh=OIB8MUeepnBEqJHi5o92E72wbixYphv5GT0gK00OFSA=;
+        b=FrK9GvB9O35lJy0vJxpqNu4eyXyMD3fGENafGrq/LWj4guwsvn+D+0JMnpTWUU5pWp
+         HfvdTfPTR/GOmBKOVBvvVZV+/hAJxPQO0kQo8Mr/4kdJQpjrCwHezx1RgPwPqU5NuFHz
+         svPpZ9dAAlxN2v8APQWt71P/tME8MxkwzELwE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
          :content-disposition;
-        bh=ecEFNwt5xPuwITAtTejJ0X5tM716GMmwbwC2dfiZh24=;
-        b=nlY47W9adVBNT1mpBcJtmTVLiQBoBck98/+qu7UpGMcnZXoeD99vZuehBTGuQv21E0
-         PCYdvpSu4OkYpqothG7TdRAexLEppBIXQfgDF0ikWutiXVeWNszNfm7do7MuXyyQzHbZ
-         HRrrPSATC3vXD5urpuUBnwXstgfV0TQm2szKx6dheP2+d6pvVPswe8ibXm2O6wiZLG+g
-         sIigrQyypot1zNQQ0OsHBWpUb8cBtgjXT3l+BvMZuVmBnSn9XMnYMb5nml/OwsbK5daR
-         IgkHTsH12Ii3OO/+P/t8u0HGWJ3YqLYEaGQF5BRgSa8NEdd73nldyKU5CmapWiZ1b6DL
-         BqXQ==
-X-Gm-Message-State: APjAAAXYi3aDw1KxsRYCskHj7MTsaR8OIzYtCTrbsNSOCVjmuJDAT+eB
-        XuorOQNPE1ZxCXihvt8439CsXw==
-X-Google-Smtp-Source: APXvYqwQwIOOAwbO7wqCPgQ0DuL1rXe7sUOljeIAB+l6bc7EcLz2bFf7Vk0k9/6ldUGgPBK3Reb65g==
-X-Received: by 2002:a17:90a:8a0a:: with SMTP id w10mr1230293pjn.68.1572464738493;
-        Wed, 30 Oct 2019 12:45:38 -0700 (PDT)
+        bh=OIB8MUeepnBEqJHi5o92E72wbixYphv5GT0gK00OFSA=;
+        b=LDBa4Z9xGhmUJ8E9HrU904nUG/T+2lH6vA6B/o+v++VmqmP6dYQnZCdnPMqPrJc+vO
+         fEIIBdmzawVygX+NbtvQGWZH5OACq6N6imbc1PanJ7mKGUVhidrxEHbIDa22IiLpSR2j
+         5FJ4ytwyyJjVL1yAsBWIWoAcoZbN1yq6kGI654a/zZREjFqgTx2q4ocPuKwhkklUiu4j
+         jfoxIeXHEMQHod+SVA2vMvEH/KjvB9jzMnMoSC8R85PX+CCLvwmevKpmOQ7IcO2arZk9
+         czsAJEOeNQSK8XjtIFyEvfYEsevqKbi3sz6BYX2kfxJZ/oSBSzirmhtnVX2ybsDQRGnV
+         +urg==
+X-Gm-Message-State: APjAAAXqk3dqMoyRW3k0m1IzbTsscXedxm6HV9zungrV07AvD6ydE22C
+        piNVSKeSg2JNrIaGCmdS6MdkFQ==
+X-Google-Smtp-Source: APXvYqxWrVluhWtAhBjxCK6osV9JUJjYhg3tBUoCXfJ6ylx8j+sWdxaFV+WOaWF8iEvY7Byt5/D0tA==
+X-Received: by 2002:a63:f743:: with SMTP id f3mr1274786pgk.410.1572464770329;
+        Wed, 30 Oct 2019 12:46:10 -0700 (PDT)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id d14sm783122pfh.36.2019.10.30.12.45.37
+        by smtp.gmail.com with ESMTPSA id o185sm705916pfg.136.2019.10.30.12.46.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 30 Oct 2019 12:45:37 -0700 (PDT)
-Date:   Wed, 30 Oct 2019 12:45:36 -0700
+        Wed, 30 Oct 2019 12:46:09 -0700 (PDT)
+Date:   Wed, 30 Oct 2019 12:46:08 -0700
 From:   Kees Cook <keescook@chromium.org>
 To:     Shuah Khan <shuah@kernel.org>
 Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
         "Tobin C. Harding" <tobin@kernel.org>,
         linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] selftests: Move kselftest_module.sh into kselftest/
-Message-ID: <201910301244.9C3CABCA0@keescook>
+Subject: [PATCH] selftests: gen_kselftest_tar.sh: Do not clobber kselftest/
+Message-ID: <201910301245.33CFECF216@keescook>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
@@ -57,79 +57,100 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The kselftest_module.sh file was not being installed by the Makefile
-"install" target, rendering the lib/*.sh tests nonfunction. This fixes
-that and takes the opportunity to move it into the kselftest/ subdirectory
-which is where the kselftest infrastructure bits are collecting.
+The default installation location for gen_kselftest_tar.sh was still
+"kselftest/" which collides with the existing directory. Instead, this
+moves the installation target into "kselftest_install/kselftest/" and
+adjusts the tar creation accordingly. This also adjusts indentation and
+logic to be consistent.
 
-Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
-Link: https://lore.kernel.org/lkml/CA+G9fYsfJpXQvOvHdjtg8z4a89dSStOQZOKa9zMjjQgWKng1aw@mail.gmail.com
-Fixes: d3460527706e ("kselftest: Add test runner creation script")
+Fixes: 42d46e57ec97 ("selftests: Extract single-test shell logic from lib.mk")
 Signed-off-by: Kees Cook <keescook@chromium.org>
 ---
- tools/testing/selftests/Makefile                                | 1 +
- .../selftests/{kselftest_module.sh => kselftest/module.sh}      | 0
- tools/testing/selftests/lib/bitmap.sh                           | 2 +-
- tools/testing/selftests/lib/prime_numbers.sh                    | 2 +-
- tools/testing/selftests/lib/printf.sh                           | 2 +-
- tools/testing/selftests/lib/strscpy.sh                          | 2 +-
- 6 files changed, 5 insertions(+), 4 deletions(-)
- rename tools/testing/selftests/{kselftest_module.sh => kselftest/module.sh} (100%)
+ tools/testing/selftests/gen_kselftest_tar.sh | 21 ++++++++++-------
+ tools/testing/selftests/kselftest_install.sh | 24 ++++++++++----------
+ 2 files changed, 25 insertions(+), 20 deletions(-)
 
-diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-index d65f59669f7c..9ff31ec4277a 100644
---- a/tools/testing/selftests/Makefile
-+++ b/tools/testing/selftests/Makefile
-@@ -193,6 +193,7 @@ install: all
- ifdef INSTALL_PATH
- 	@# Ask all targets to install their files
- 	mkdir -p $(INSTALL_PATH)/kselftest
-+	install -m 744 kselftest/module.sh $(INSTALL_PATH)/kselftest/
- 	install -m 744 kselftest/runner.sh $(INSTALL_PATH)/kselftest/
- 	install -m 744 kselftest/prefix.pl $(INSTALL_PATH)/kselftest/
- 	@for TARGET in $(TARGETS); do \
-diff --git a/tools/testing/selftests/kselftest_module.sh b/tools/testing/selftests/kselftest/module.sh
-similarity index 100%
-rename from tools/testing/selftests/kselftest_module.sh
-rename to tools/testing/selftests/kselftest/module.sh
-diff --git a/tools/testing/selftests/lib/bitmap.sh b/tools/testing/selftests/lib/bitmap.sh
-index 5511dddc5c2d..00a416fbc0ef 100755
---- a/tools/testing/selftests/lib/bitmap.sh
-+++ b/tools/testing/selftests/lib/bitmap.sh
-@@ -1,3 +1,3 @@
- #!/bin/sh
- # SPDX-License-Identifier: GPL-2.0
--$(dirname $0)/../kselftest_module.sh "bitmap" test_bitmap
-+$(dirname $0)/../kselftest/module.sh "bitmap" test_bitmap
-diff --git a/tools/testing/selftests/lib/prime_numbers.sh b/tools/testing/selftests/lib/prime_numbers.sh
-index 43b28f24e453..370b79a9cb2e 100755
---- a/tools/testing/selftests/lib/prime_numbers.sh
-+++ b/tools/testing/selftests/lib/prime_numbers.sh
-@@ -1,4 +1,4 @@
- #!/bin/sh
- # SPDX-License-Identifier: GPL-2.0
- # Checks fast/slow prime_number generation for inconsistencies
--$(dirname $0)/../kselftest_module.sh "prime numbers" prime_numbers selftest=65536
-+$(dirname $0)/../kselftest/module.sh "prime numbers" prime_numbers selftest=65536
-diff --git a/tools/testing/selftests/lib/printf.sh b/tools/testing/selftests/lib/printf.sh
-index 2ffa61da0296..05f4544e87f9 100755
---- a/tools/testing/selftests/lib/printf.sh
-+++ b/tools/testing/selftests/lib/printf.sh
-@@ -1,4 +1,4 @@
- #!/bin/sh
- # SPDX-License-Identifier: GPL-2.0
- # Tests the printf infrastructure using test_printf kernel module.
--$(dirname $0)/../kselftest_module.sh "printf" test_printf
-+$(dirname $0)/../kselftest/module.sh "printf" test_printf
-diff --git a/tools/testing/selftests/lib/strscpy.sh b/tools/testing/selftests/lib/strscpy.sh
-index 71f2be6afba6..be60ef6e1a7f 100755
---- a/tools/testing/selftests/lib/strscpy.sh
-+++ b/tools/testing/selftests/lib/strscpy.sh
-@@ -1,3 +1,3 @@
- #!/bin/sh
- # SPDX-License-Identifier: GPL-2.0+
--$(dirname $0)/../kselftest_module.sh "strscpy*" test_strscpy
-+$(dirname $0)/../kselftest/module.sh "strscpy*" test_strscpy
+diff --git a/tools/testing/selftests/gen_kselftest_tar.sh b/tools/testing/selftests/gen_kselftest_tar.sh
+index a27e2eec3586..8b2b6088540d 100755
+--- a/tools/testing/selftests/gen_kselftest_tar.sh
++++ b/tools/testing/selftests/gen_kselftest_tar.sh
+@@ -38,16 +38,21 @@ main()
+ 	esac
+ 	fi
+ 
+-	install_dir=./kselftest
++	# Create working directory.
++	dest=`pwd`
++	install_work="$dest"/kselftest_install
++	install_name=kselftest
++	install_dir="$install_work"/"$install_name"
++	mkdir -p "$install_dir"
+ 
+-# Run install using INSTALL_KSFT_PATH override to generate install
+-# directory
+-./kselftest_install.sh
+-tar $copts kselftest${ext} $install_dir
+-echo "Kselftest archive kselftest${ext} created!"
++	# Run install using INSTALL_KSFT_PATH override to generate install
++	# directory
++	./kselftest_install.sh "$install_dir"
++	(cd "$install_work"; tar $copts "$dest"/kselftest${ext} $install_name)
++	echo "Kselftest archive kselftest${ext} created!"
+ 
+-# clean up install directory
+-rm -rf kselftest
++	# clean up top-level install work directory
++	rm -rf "$install_work"
+ }
+ 
+ main "$@"
+diff --git a/tools/testing/selftests/kselftest_install.sh b/tools/testing/selftests/kselftest_install.sh
+index e2e1911d62d5..407af7da7037 100755
+--- a/tools/testing/selftests/kselftest_install.sh
++++ b/tools/testing/selftests/kselftest_install.sh
+@@ -6,30 +6,30 @@
+ # Author: Shuah Khan <shuahkh@osg.samsung.com>
+ # Copyright (C) 2015 Samsung Electronics Co., Ltd.
+ 
+-install_loc=`pwd`
+-
+ main()
+ {
+-	if [ $(basename $install_loc) !=  "selftests" ]; then
++	base_dir=`pwd`
++	install_dir="$base_dir"/kselftest_install
++
++	# Make sure we're in the selftests top-level directory.
++	if [ $(basename "$base_dir") !=  "selftests" ]; then
+ 		echo "$0: Please run it in selftests directory ..."
+ 		exit 1;
+ 	fi
++
++	# Only allow installation into an existing location.
+ 	if [ "$#" -eq 0 ]; then
+-		echo "$0: Installing in default location - $install_loc ..."
++		echo "$0: Installing in default location - $install_dir ..."
+ 	elif [ ! -d "$1" ]; then
+ 		echo "$0: $1 doesn't exist!!"
+ 		exit 1;
+ 	else
+-		install_loc=$1
+-		echo "$0: Installing in specified location - $install_loc ..."
++		install_dir="$1"
++		echo "$0: Installing in specified location - $install_dir ..."
+ 	fi
+ 
+-	install_dir=$install_loc/kselftest_install
+-
+-# Create install directory
+-	mkdir -p $install_dir
+-# Build tests
+-	KSFT_INSTALL_PATH=$install_dir make install
++	# Build tests
++	KSFT_INSTALL_PATH="$install_dir" make install
+ }
+ 
+ main "$@"
 -- 
 2.17.1
 
