@@ -2,149 +2,95 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 95E45EA3EA
-	for <lists+linux-kselftest@lfdr.de>; Wed, 30 Oct 2019 20:16:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 20E6EEA40D
+	for <lists+linux-kselftest@lfdr.de>; Wed, 30 Oct 2019 20:23:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726777AbfJ3TQo (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 30 Oct 2019 15:16:44 -0400
-Received: from mail-pf1-f193.google.com ([209.85.210.193]:41008 "EHLO
-        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726259AbfJ3TQn (ORCPT
+        id S1726643AbfJ3TX5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 30 Oct 2019 15:23:57 -0400
+Received: from smtprelay0162.hostedemail.com ([216.40.44.162]:39650 "EHLO
+        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726268AbfJ3TX5 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 30 Oct 2019 15:16:43 -0400
-Received: by mail-pf1-f193.google.com with SMTP id p26so2249249pfq.8
-        for <linux-kselftest@vger.kernel.org>; Wed, 30 Oct 2019 12:16:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=SkNeb7N/RtOHBRU9IGeZjCb9lUHhzMvIRm1lPkdmY94=;
-        b=Wmz4BN9I7WolTdUk59TZOxzjMRRja95bL9zO5kOJ57UJdIVxIrDaZMbHW4erd4Fros
-         2hPOZirzIw1BFU5a69eAT/lwCab1RZEA7hAgyA5U3O0Nm8S/HI/c6oEUtgJbTHYu6Fbg
-         su7wV2pd4MglPXtDzkpNzhd21Spi3W0VbfdXI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=SkNeb7N/RtOHBRU9IGeZjCb9lUHhzMvIRm1lPkdmY94=;
-        b=T0j1J+iR2hCxCZzEtHvTHDQsYojks/LFahxlStSdFWpNAFJPlnmpoeoiZKe7dxe2dZ
-         qMQZN6tv9KexLLAbYABkulvni6EPiEGRKdBnGsZTw3z71ySp5tWmJObI/BAZ0S42Gl+i
-         trc1vHe83J7bqFcAGi5eUYb0RYKMWWjCFVukxICEMyzF8aqXMJduVdjyYi4SyShV6L04
-         1290AmRqlIlvZi/LaaEjCTjMusQTkKp/r+bP3mc5Oxv3a9CosgaQ91soEW4dk4M33edV
-         gRafql9aKBUVfq5jUM01JsBO4jYPiwuB3NVhMdQG9jvlFbZQFRYi/o+iJ4vQ0PCzSHGg
-         5vDw==
-X-Gm-Message-State: APjAAAXHublEPeh3DLVf38oKOkwz1b1JhBHOgxlPl9jnEHliKizZD26A
-        ZRMYBM0Yk7d5K5gnBvHuXfKvYw==
-X-Google-Smtp-Source: APXvYqxfh9ztLk2WfEQDJ7irJePRmGVvoJEr3DPY5+qzc1/dbiyg9erl6+par2Vm529nXY8KHdViig==
-X-Received: by 2002:aa7:9157:: with SMTP id 23mr982679pfi.73.1572463001813;
-        Wed, 30 Oct 2019 12:16:41 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id e17sm719419pfh.121.2019.10.30.12.16.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 30 Oct 2019 12:16:41 -0700 (PDT)
-Date:   Wed, 30 Oct 2019 12:16:39 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc:     "Tobin C. Harding" <tobin@kernel.org>,
-        Shuah Khan <shuah@kernel.org>, Jann Horn <jannh@google.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Daniel Micay <danielmicay@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        kernel-hardening@lists.openwall.com,
+        Wed, 30 Oct 2019 15:23:57 -0400
+Received: from filter.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
+        by smtprelay04.hostedemail.com (Postfix) with ESMTP id E1847180A8153;
+        Wed, 30 Oct 2019 19:23:55 +0000 (UTC)
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Spam-Summary: 2,0,0,,d41d8cd98f00b204,joe@perches.com,:::::::::::::::::,RULES_HIT:41:355:379:599:982:988:989:1260:1277:1311:1313:1314:1345:1359:1437:1515:1516:1518:1534:1541:1593:1594:1711:1730:1747:1777:1792:2393:2553:2559:2562:2693:2828:3138:3139:3140:3141:3142:3353:3622:3865:3867:3868:3870:3871:3872:3873:3874:4321:5007:6691:7903:8700:9012:10004:10400:11232:11658:11914:12109:12297:12740:12760:12895:13069:13095:13255:13311:13357:13439:14096:14097:14659:21080:21433:21627:21740:30012:30054:30090:30091,0,RBL:47.151.135.224:@perches.com:.lbl8.mailshell.net-62.8.0.100 64.201.201.201,CacheIP:none,Bayesian:0.5,0.5,0.5,Netcheck:none,DomainCache:0,MSF:not bulk,SPF:fn,MSBL:0,DNSBL:neutral,Custom_rules:0:0:0,LFtime:24,LUA_SUMMARY:none
+X-HE-Tag: straw99_3f32d4013c734
+X-Filterd-Recvd-Size: 2714
+Received: from XPS-9350.home (unknown [47.151.135.224])
+        (Authenticated sender: joe@perches.com)
+        by omf07.hostedemail.com (Postfix) with ESMTPA;
+        Wed, 30 Oct 2019 19:23:54 +0000 (UTC)
+Message-ID: <f665ec7b21527c7095a61dd5c2f48fd00df0d5c9.camel@perches.com>
+Subject: Re: [PATCH linux-kselftest/test v6] lib/list-test: add a test for
+ the 'list' doubly linked list
+From:   Joe Perches <joe@perches.com>
+To:     Dan Carpenter <dan.carpenter@oracle.com>, shuah <shuah@kernel.org>
+Cc:     David Gow <davidgow@google.com>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Kees Cook <keescook@chromium.org>,
         "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v4 2/6] kselftest: Add test runner creation script
-Message-ID: <201910301216.5C3F9BA010@keescook>
-References: <20190405015859.32755-1-tobin@kernel.org>
- <20190405015859.32755-3-tobin@kernel.org>
- <CA+G9fYsfJpXQvOvHdjtg8z4a89dSStOQZOKa9zMjjQgWKng1aw@mail.gmail.com>
+        <linux-kselftest@vger.kernel.org>, kunit-dev@googlegroups.com,
+        linux-kernel@vger.kernel.org
+Date:   Wed, 30 Oct 2019 12:23:45 -0700
+In-Reply-To: <20191030191255.GD18421@kadam>
+References: <20191024224631.118656-1-davidgow@google.com>
+         <0cb1d948-0da3-eb0f-c58f-ae3a785dd0dd@kernel.org>
+         <CABVgOSmCHbGjZBjeWSbPEZbJw22SaBQnoO77xxNzN_ugAwzNiQ@mail.gmail.com>
+         <20191030104217.GA18421@kadam>
+         <42a8270d-ed6f-d29f-5e71-7b76a074b63e@kernel.org>
+         <20191030191255.GD18421@kadam>
+Content-Type: text/plain; charset="ISO-8859-1"
+User-Agent: Evolution 3.34.1-2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CA+G9fYsfJpXQvOvHdjtg8z4a89dSStOQZOKa9zMjjQgWKng1aw@mail.gmail.com>
+Content-Transfer-Encoding: 7bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Oct 30, 2019 at 06:15:22PM +0530, Naresh Kamboju wrote:
-> Hi Tobin,
+On Wed, 2019-10-30 at 22:12 +0300, Dan Carpenter wrote:
+> On Wed, Oct 30, 2019 at 10:27:12AM -0600, shuah wrote:
+> > > It's better to ignore checkpatch and other scripts when they are wrong.
+> > > (unless the warning message inspires you to make the code more readable
+> > > for humans).
+> > > 
+> > 
+> > It gets confusing when to ignore and when not to. It takes work to
+> > figure out and it is subjective.
+> > 
 > 
-> On Fri, 5 Apr 2019 at 07:30, Tobin C. Harding <tobin@kernel.org> wrote:
-> >
-> > Currently if we wish to use kselftest to run tests within a kernel
-> > module we write a small script to load/unload and do error reporting.
-> > There are a bunch of these under tools/testing/selftests/lib/ that are
-> > all identical except for the test name.  We can reduce code duplication
-> > and improve maintainability if we have one version of this.  However
-> > kselftest requires an executable for each test.  We can move all the
-> > script logic to a central script then have each individual test script
-> > call the main script.
-> >
-> > Oneliner to call kselftest_module.sh courtesy of Kees, thanks!
-> >
-> > Add test runner creation script.  Convert
-> > tools/testing/selftests/lib/*.sh to use new test creation script.
-> >
-> > Testing
-> > -------
-> >
-> > Configure kselftests for lib/ then build and boot kernel.  Then run
-> > kselftests as follows:
-> >
-> >   $ cd /path/to/kernel/tree
-> >   $ sudo make O=$output_path -C tools/testing/selftests TARGETS="lib" run_tests
-> 
-> We are missing "kselftest_module.sh" file when we do "make install"
-> and followed by generating a tar file "gen_kselftest_tar.sh" and
-> copying that on to target device and running tests by using
-> "run_kselftest.sh" script file on the target.
+> In this case, it's not subjective because checkpatch is clearly not
+> working as intended.
 
-Yikes -- there's a problem with gen_kselftest_tar.sh using the wrong
-directory. I'll send a patch...
+checkpatch _is_ working as intended.
+It was never intended to be perfect.
 
--Kees
+checkpatch _always_ depended on a reviewer deciding
+whether its output was appropriate.
 
-> 
-> Could you install the supporting script file "kselftest_module.sh" ?
-> 
-> Error log,
-> -------------
-> # selftests lib printf.sh
-> lib: printf.sh_ #
-> # ./printf.sh line 4 ./../kselftest_module.sh No such file or directory
-> line: 4_./../kselftest_module.sh #
-> [FAIL] 1 selftests lib printf.sh # exit=127
-> selftests: lib_printf.sh [FAIL]
-> # selftests lib bitmap.sh
-> lib: bitmap.sh_ #
-> # ./bitmap.sh line 3 ./../kselftest_module.sh No such file or directory
-> line: 3_./../kselftest_module.sh #
-> [FAIL] 2 selftests lib bitmap.sh # exit=127
-> selftests: lib_bitmap.sh [FAIL]
-> # selftests lib prime_numbers.sh
-> lib: prime_numbers.sh_ #
-> # ./prime_numbers.sh line 4 ./../kselftest_module.sh No such file or directory
-> line: 4_./../kselftest_module.sh #
-> [FAIL] 3 selftests lib prime_numbers.sh # exit=127
-> selftests: lib_prime_numbers.sh [FAIL]
-> # selftests lib strscpy.sh
-> lib: strscpy.sh_ #
-> # ./strscpy.sh line 3 ./../kselftest_module.sh No such file or directory
-> line: 3_./../kselftest_module.sh #
-> [FAIL] 4 selftests lib strscpy.sh # exit=127
-> selftests: lib_strscpy.sh [FAIL]
-> 
-> - Naresh
+> I don't feel like "checkpatch clean" is a useful criteria for applying
+> patches.
 
--- 
-Kees Cook
+Nor do I.
+
+> The other things about warnings is that I always encourage people to
+> just ignore old warnings.  If you're running Smatch and you see a
+> warning in ancient code that means I saw it five years ago and didn't
+> fix it so it's a false positive.  Old warnings are always 100% false
+> positives.
+
+That'd be not absolute either because it depended on your
+historical judgment as to whether an old warning was in fact
+a defect or not.
+
+People make mistakes.
+Regex based scripts are by design stupid and untrustworthy.
+
+Mistakes will be made.
+Just fix the actual defects in code as soon as possible.
+
+
