@@ -2,54 +2,55 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E592EA3B0
-	for <lists+linux-kselftest@lfdr.de>; Wed, 30 Oct 2019 19:59:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 82003EA3B5
+	for <lists+linux-kselftest@lfdr.de>; Wed, 30 Oct 2019 20:02:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726687AbfJ3S7D (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 30 Oct 2019 14:59:03 -0400
-Received: from mail-pg1-f193.google.com ([209.85.215.193]:41547 "EHLO
-        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726665AbfJ3S7C (ORCPT
+        id S1726951AbfJ3TCc (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 30 Oct 2019 15:02:32 -0400
+Received: from mail-pf1-f193.google.com ([209.85.210.193]:40624 "EHLO
+        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726272AbfJ3TCb (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 30 Oct 2019 14:59:02 -0400
-Received: by mail-pg1-f193.google.com with SMTP id l3so2074169pgr.8
-        for <linux-kselftest@vger.kernel.org>; Wed, 30 Oct 2019 11:59:02 -0700 (PDT)
+        Wed, 30 Oct 2019 15:02:31 -0400
+Received: by mail-pf1-f193.google.com with SMTP id r4so2218779pfl.7
+        for <linux-kselftest@vger.kernel.org>; Wed, 30 Oct 2019 12:02:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=lydW9atQW2RqhX2w9FQSYN22+fl/dNiMF69085WMHtM=;
-        b=ngQ4YsXEu3hNnNn3MSw8hh8vZ5syLFrqYQcNZ6AnbPi7LDobSUUnL9sWE4OlkQghF8
-         yYdjVJJ6Detmtfk4AntUsuUYUFDP9MTXrG+RdAPrgHZXXDqgzoakrJw1DnjVbg19fYzo
-         z/kw/vK6g7IcWfCMXQ03sOl7rkKhj5iGdxf9k=
+        bh=oGDBahFoMPSIZ29sHXhe1mehZlhHuZjEGPvioRijuyg=;
+        b=ITHLhKwYHLawxDKJoXVFazyKfWfmJx5VWQYSzCXI3uwCtcs0q7fLyaj9SL04wb9vsM
+         RlSKIzlfu4E7whMcthOGZ0RckEeTvwu4OzrBanTEIRe9aOYcmYXOA8e4hm7V0kDaVqJU
+         d50WeQX+Habf5zhjgR6kw/cCCYQZ5jn9IttQk=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=lydW9atQW2RqhX2w9FQSYN22+fl/dNiMF69085WMHtM=;
-        b=fkWLy/fAhy2iR3Cathv2zNwG/fZERrnppxdK7wthSYGSXZZkqKCOUvrYhvEUTHwHo5
-         mY20mhVrX/97xQXPXYrJdoPo/ERgMg0Y6zAF2TJTynrEcIG5ELsGOQQrqB3grwgiGEoo
-         YlwPhPy2A2SN1FHf1TVse46NPAC3jZs+lgsXIjvALuqL8MVSCNyt57fhoroZ2h07yGX6
-         vXNO5XPNygEU1uU1ItDCQsj43usnbipyRLXNhSbQlLvRFe5nZ77k6CEOKLRaJ9bAHk3y
-         rDSIrGJ0tMlZgQZpAC8HnwOgE7imAahgJjKPl/ceVZadFmpwPW0fUw1kQiSyYJrDpHIM
-         E7Ew==
-X-Gm-Message-State: APjAAAW2IGzmJaN4G8F0SawcFYzkI8nhYVMHAByoERGL/AzfzBaaD3XE
-        eUUZWQzIo1+kAvQbRhvdxZpiJA==
-X-Google-Smtp-Source: APXvYqyi6mqapjcTlpY6OS6+c0zNuBWc9Fp5Tnew7VwPk6+TzOYM8OkMJvisUME8Culvm6LoCo8NTg==
-X-Received: by 2002:aa7:8ad9:: with SMTP id b25mr932975pfd.168.1572461942183;
-        Wed, 30 Oct 2019 11:59:02 -0700 (PDT)
+        bh=oGDBahFoMPSIZ29sHXhe1mehZlhHuZjEGPvioRijuyg=;
+        b=W7A0IJXO5cRcPkDsn1g0GYzLSKOk6036j7aY+v8M2lhgzH5Q6zPaspNvwlHcC0gqlx
+         taQXJ7cWKz7WxbFz6CrRjXoV5i4NdvglMHUB5vFd2AqGrD/PKmBfV5OxIjOmaU8JhEFw
+         3JmgmQroy8NOWik8ciTsUQq91B/hpk/+O0K7UnPcjtYUhsO55HH+9YlSjfTVgNcKmyYm
+         PnEDgCCn0B0sT47rDLgd5jsQ1hRnV7gx8xHZ5PK1YrMEuyUb6RhArSAKLE0hKQU27fQ/
+         Y3aGuLcKFbsNcPZvEn7R64dAVfZ8kniyJBuQZjoxUECFL07OhZnC5kUonU8K9gKIGdX7
+         hzNA==
+X-Gm-Message-State: APjAAAWVUiLaQWunnMIQIeCE+z1TVjHRgSjPg9dtq8jV7xyvh+9QN98M
+        YWj2+OrsBLc8vw/mm+lAX+1ISQ==
+X-Google-Smtp-Source: APXvYqzota95kx11bi1wNxwIZc9AQEa/YsaYDEtNJUaPGRly4YWFB/enVi4ZfTsIfFi/BRYxa1QUGQ==
+X-Received: by 2002:a62:83c6:: with SMTP id h189mr892782pfe.213.1572462149354;
+        Wed, 30 Oct 2019 12:02:29 -0700 (PDT)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id c1sm3936091pjc.23.2019.10.30.11.59.01
+        by smtp.gmail.com with ESMTPSA id j26sm508386pgi.92.2019.10.30.12.02.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 30 Oct 2019 11:59:01 -0700 (PDT)
-Date:   Wed, 30 Oct 2019 11:59:00 -0700
+        Wed, 30 Oct 2019 12:02:28 -0700 (PDT)
+Date:   Wed, 30 Oct 2019 12:02:27 -0700
 From:   Kees Cook <keescook@chromium.org>
-To:     Iurii Zaikin <yzaikin@google.com>
-Cc:     Brendan Higgins <brendanhiggins@google.com>,
-        shuah <shuah@kernel.org>, john.johansen@canonical.com,
-        jmorris@namei.org, serge@hallyn.com, alan.maguire@oracle.com,
-        davidgow@google.com, Luis Chamberlain <mcgrof@kernel.org>,
-        Theodore Ts'o <tytso@mit.edu>,
+To:     Brendan Higgins <brendanhiggins@google.com>
+Cc:     "Theodore Y. Ts'o" <tytso@mit.edu>, shuah <shuah@kernel.org>,
+        John Johansen <john.johansen@canonical.com>, jmorris@namei.org,
+        serge@hallyn.com, Alan Maguire <alan.maguire@oracle.com>,
+        Iurii Zaikin <yzaikin@google.com>,
+        David Gow <davidgow@google.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         linux-security-module@vger.kernel.org,
         KUnit Development <kunit-dev@googlegroups.com>,
@@ -58,54 +59,47 @@ Cc:     Brendan Higgins <brendanhiggins@google.com>,
         Mike Salvatore <mike.salvatore@canonical.com>
 Subject: Re: [PATCH linux-kselftest/test v1] apparmor: add AppArmor KUnit
  tests for policy unpack
-Message-ID: <201910301157.58D0CE4D3@keescook>
+Message-ID: <201910301201.404F0E3BB@keescook>
 References: <20191018001816.94460-1-brendanhiggins@google.com>
- <CAAXuY3rLEt9nqOBSNaWjLMHNg6pDHdjtg7hFiYx-KCDhyfnkcg@mail.gmail.com>
+ <20191018004307.GA95597@google.com>
+ <20191018162519.GH21137@mit.edu>
+ <CAFd5g45LmnbD7L4LqdbfBV5YR377e81m61+z==RKCGjWBFqDGQ@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAAXuY3rLEt9nqOBSNaWjLMHNg6pDHdjtg7hFiYx-KCDhyfnkcg@mail.gmail.com>
+In-Reply-To: <CAFd5g45LmnbD7L4LqdbfBV5YR377e81m61+z==RKCGjWBFqDGQ@mail.gmail.com>
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Oct 17, 2019 at 05:33:56PM -0700, Iurii Zaikin wrote:
-> On Thu, Oct 17, 2019 at 5:19 PM Brendan Higgins
-> <brendanhiggins@google.com> wrote:
-> 
-> > +config SECURITY_APPARMOR_TEST
-> > +       bool "Build KUnit tests for policy_unpack.c"
-> > +       default n
-
-New options already already default n, this can be left off.
-
-> > +       depends on KUNIT && SECURITY_APPARMOR
-> > +       help
+On Fri, Oct 18, 2019 at 02:41:38PM -0700, Brendan Higgins wrote:
+> On Fri, Oct 18, 2019 at 9:25 AM Theodore Y. Ts'o <tytso@mit.edu> wrote:
 > >
-> select SECURITY_APPARMOR ?
+> > On Thu, Oct 17, 2019 at 05:43:07PM -0700, Brendan Higgins wrote:
+> > > > +config SECURITY_APPARMOR_TEST
+> > > > +   bool "Build KUnit tests for policy_unpack.c"
+> > > > +   default n
+> > > > +   depends on KUNIT && SECURITY_APPARMOR
+> > >
+> > > Ted, here is an example where doing select on direct dependencies is
+> > > tricky because SECURITY_APPARMOR has a number of indirect dependencies.
+> >
+> > Well, that could be solved by adding a select on all of the indirect
+> > dependencies.  I did get your point about the fact that we could have
+> 
+> In this particular case that would work.
+> 
+> > cases where the indirect dependencies might conflict with one another.
+> > That's going to be a tough situation regardless of whether we have a
+> > sat-solver or a human who has to struggle with that situation.
+> 
+> But yeah, that's the real problem.
 
-"select" doesn't enforce dependencies, so just a "depends ..." is
-correct.
-
-> > +       KUNIT_EXPECT_EQ(test, size, TEST_BLOB_DATA_SIZE);
-> > +       KUNIT_EXPECT_TRUE(test,
-> > +               memcmp(blob, TEST_BLOB_DATA, TEST_BLOB_DATA_SIZE) == 0);
-> I think this must be  KUNIT_ASSERT_EQ(test, size, TEST_BLOB_DATA_SIZE);,
-> otherwise there could be a buffer overflow in memcmp. All tests that
-> follow such pattern
-
-Agreed.
-
-> are suspect. Also, not sure about your stylistic preference for
-> KUNIT_EXPECT_TRUE(test,
->                memcmp(blob, TEST_BLOB_DATA, TEST_BLOB_DATA_SIZE) == 0);
-> vs
-> KUNIT_EXPECT_EQ(test,
->                0,
->                memcmp(blob, TEST_BLOB_DATA, TEST_BLOB_DATA_SIZE));
-
-I like == 0.
+I think at this stage we want to make it _possible_ to write tests
+sanely without causing all kinds of headaches. I think "build all the
+tests" can just be a function of "allmodconfig" and leave it at that
+until we have cases we really need to deal with.
 
 -- 
 Kees Cook
