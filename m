@@ -2,135 +2,111 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 42207E9BBA
-	for <lists+linux-kselftest@lfdr.de>; Wed, 30 Oct 2019 13:45:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D9E94EA1BB
+	for <lists+linux-kselftest@lfdr.de>; Wed, 30 Oct 2019 17:27:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726411AbfJ3Mph (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 30 Oct 2019 08:45:37 -0400
-Received: from mail-lf1-f67.google.com ([209.85.167.67]:43421 "EHLO
-        mail-lf1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726137AbfJ3Mpg (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 30 Oct 2019 08:45:36 -0400
-Received: by mail-lf1-f67.google.com with SMTP id j5so1434848lfh.10
-        for <linux-kselftest@vger.kernel.org>; Wed, 30 Oct 2019 05:45:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Z/lBvgj2tEa3ewK9stecrJwWbqYMjUJzw11XHWG5FOU=;
-        b=rTgsJpzWI5VRDYzYA8OK+NMiiwUWn+nXQxhEXl702L+YTP/w8CrLC81P0JJEIstmBR
-         1CwT5RWxJkiYre2CpQ3vgohfeSR+vd0HmESrAN+Pc8K3Pp+ldKsr2ITBANimBtbruOqp
-         fUhw/5Pu/rRI1CsSEc/1avDvKOGppY2Pvel+6OsYVyIp4EpQ1rlJS3APYLqEY/MrQ4PJ
-         gvOlJloA0E5eSPhtgMyesfaO9SmwcFsZxjHpurmfcKYl8F7mt4tS0gGLKD2vDi3aWhPZ
-         zF8mfNYh1u7i3D+o/kdwc53E/0Fsr57dp+xD9DqF4w6uJlx8zqhDNoxTgpbYTFpqAQ+w
-         x8cw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Z/lBvgj2tEa3ewK9stecrJwWbqYMjUJzw11XHWG5FOU=;
-        b=RbsHi5CaJRXulvtqZbs29quk7WpwZNrFRys9wi0r/pC/8EeNSPyO4hjKG8RxVNrtID
-         zUJmHjQmVP81dcbAaJy6q7goFpDdG2ugK/d7u3bsTG2uKiaqz7OsLbSGeyWJBIKib3PL
-         ZERWQUTF/L81tOmjqMrTrtimjb/jR2pVsknXslMRqcbHXpGZrxFlKKtfkJ8LRiVXVkYB
-         n7AqyFC5cMnCypmaM+Sl8cZZerxXHasMU1bUhBL0q46n3JCv7GjTz0fIYo0xP3GsMie2
-         cXsmbTkmNglJx0cLP5kuz/K2jRpm7dN1PFSDwh9iu8lqRxRV3pyn50zViwKwoFxf0Se8
-         WuZA==
-X-Gm-Message-State: APjAAAXYQg2tlB45yJStPokR0icK7UE+4779m0jjb3r9i9Uy9uMWmWqZ
-        Xs/5BGFrTsKOtkLOhFDT7t290zSRJwWXjWspoT9g4Q==
-X-Google-Smtp-Source: APXvYqzCnpzso0Psg3jJulXH2mRfwtdawfmefqJGiB+XfZIOBEFwhCwPfWOmE5n9Iqbz9Ejbwbc6JT9xQ6haKiRivgw=
-X-Received: by 2002:a19:3f0a:: with SMTP id m10mr6181421lfa.67.1572439534595;
- Wed, 30 Oct 2019 05:45:34 -0700 (PDT)
-MIME-Version: 1.0
-References: <20190405015859.32755-1-tobin@kernel.org> <20190405015859.32755-3-tobin@kernel.org>
-In-Reply-To: <20190405015859.32755-3-tobin@kernel.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Wed, 30 Oct 2019 18:15:22 +0530
-Message-ID: <CA+G9fYsfJpXQvOvHdjtg8z4a89dSStOQZOKa9zMjjQgWKng1aw@mail.gmail.com>
-Subject: Re: [PATCH v4 2/6] kselftest: Add test runner creation script
-To:     "Tobin C. Harding" <tobin@kernel.org>
-Cc:     Shuah Khan <shuah@kernel.org>, Kees Cook <keescook@chromium.org>,
-        Jann Horn <jannh@google.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Daniel Micay <danielmicay@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        kernel-hardening@lists.openwall.com,
+        id S1727391AbfJ3Q1o (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 30 Oct 2019 12:27:44 -0400
+Received: from mail.kernel.org ([198.145.29.99]:42144 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726261AbfJ3Q1o (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 30 Oct 2019 12:27:44 -0400
+Received: from [172.20.52.151] (unknown [91.217.168.176])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 9A5E120717;
+        Wed, 30 Oct 2019 16:27:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1572452863;
+        bh=SNeRKTTlIPVnDUCxC0bSPsIHj4Io4ehDm7wcAEYJjtk=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=OpBHO7ouoTeY0DhFV/9oJyVVEW4ok/e2kh/S/DlErORuYtBL2PonN7fC+EJQw0IcR
+         9PqqMkFDhj+eSzB+LqXckqjXLJh0R4adehDhmwWqf2tt9kkdfNS3EM0oqGSa7PVmbl
+         /lfqcDbiawl2Xiu2I+wIKSAxBafBjIltvN6+DPAI=
+Subject: Re: [PATCH linux-kselftest/test v6] lib/list-test: add a test for the
+ 'list' doubly linked list
+To:     Dan Carpenter <dan.carpenter@oracle.com>,
+        David Gow <davidgow@google.com>
+Cc:     Brendan Higgins <brendanhiggins@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Kees Cook <keescook@chromium.org>,
         "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        <linux-kselftest@vger.kernel.org>, kunit-dev@googlegroups.com,
+        linux-kernel@vger.kernel.org, shuah <shuah@kernel.org>
+References: <20191024224631.118656-1-davidgow@google.com>
+ <0cb1d948-0da3-eb0f-c58f-ae3a785dd0dd@kernel.org>
+ <CABVgOSmCHbGjZBjeWSbPEZbJw22SaBQnoO77xxNzN_ugAwzNiQ@mail.gmail.com>
+ <20191030104217.GA18421@kadam>
+From:   shuah <shuah@kernel.org>
+Message-ID: <42a8270d-ed6f-d29f-5e71-7b76a074b63e@kernel.org>
+Date:   Wed, 30 Oct 2019 10:27:12 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
+MIME-Version: 1.0
+In-Reply-To: <20191030104217.GA18421@kadam>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Tobin,
+On 10/30/19 4:42 AM, Dan Carpenter wrote:
+> On Wed, Oct 30, 2019 at 01:02:11AM -0700, David Gow wrote:
+>>> ERROR: that open brace { should be on the previous line
+>>> #869: FILE: lib/list-test.c:680:
+>>> +static void list_test_list_for_each_entry_reverse(struct kunit *test)
+>>> +{
+>>>
+>>>
+>>> I am seeing these error and warns. As per our hallway conversation, the
+>>> "for_each*" in the test naming is tripping up checkpatch.pl
+>>>
+>>> For now you can change the name a bit to not trip checkpatch and maybe
+>>> explore fixing checkpatch to differentiate between function names
+>>> with "for_each" in them vs. the actual for_each usages in the code.
+>>
+>> Thanks, Shuah.
+>>
+>> Yes, the problem here is that checkpatch.pl believes that anything
+>> with "for_each" in its name must be a loop, so expects that the open
+>> brace is placed on the same line as for a for loop.
+>>
+>> Longer term, I think it'd be nicer, naming-wise, to fix or work around
+>> this issue in checkpatch.pl itself, as that'd allow the tests to
+>> continue to follow a naming pattern of "list_test_[x]", where [x] is
+>> the name of the function/macro being tested. Of course, short of
+>> trying to fit a whole C parser in checkpatch.pl, that's going to
+>> involve some compromises as well.
+> 
+> Just make it a black list of the 5 most common for_each macros.
+> 
 
-On Fri, 5 Apr 2019 at 07:30, Tobin C. Harding <tobin@kernel.org> wrote:
->
-> Currently if we wish to use kselftest to run tests within a kernel
-> module we write a small script to load/unload and do error reporting.
-> There are a bunch of these under tools/testing/selftests/lib/ that are
-> all identical except for the test name.  We can reduce code duplication
-> and improve maintainability if we have one version of this.  However
-> kselftest requires an executable for each test.  We can move all the
-> script logic to a central script then have each individual test script
-> call the main script.
->
-> Oneliner to call kselftest_module.sh courtesy of Kees, thanks!
->
-> Add test runner creation script.  Convert
-> tools/testing/selftests/lib/*.sh to use new test creation script.
->
-> Testing
-> -------
->
-> Configure kselftests for lib/ then build and boot kernel.  Then run
-> kselftests as follows:
->
->   $ cd /path/to/kernel/tree
->   $ sudo make O=$output_path -C tools/testing/selftests TARGETS="lib" run_tests
+How does black listing work in the context of checkpatch.pl?
 
-We are missing "kselftest_module.sh" file when we do "make install"
-and followed by generating a tar file "gen_kselftest_tar.sh" and
-copying that on to target device and running tests by using
-"run_kselftest.sh" script file on the target.
+>>
+>> In the meantime, I'm sending out v7 which replaces "for_each" with
+>> "for__each" (adding the extra underscore), so that checkpatch is
+>> happy.
 
-Could you install the supporting script file "kselftest_module.sh" ?
+This change is required just to quiet checkpatch and I am not happy
+about asking for this change. At the same time, I am concerned about
+git hooks failing on this patch.
 
-Error log,
--------------
-# selftests lib printf.sh
-lib: printf.sh_ #
-# ./printf.sh line 4 ./../kselftest_module.sh No such file or directory
-line: 4_./../kselftest_module.sh #
-[FAIL] 1 selftests lib printf.sh # exit=127
-selftests: lib_printf.sh [FAIL]
-# selftests lib bitmap.sh
-lib: bitmap.sh_ #
-# ./bitmap.sh line 3 ./../kselftest_module.sh No such file or directory
-line: 3_./../kselftest_module.sh #
-[FAIL] 2 selftests lib bitmap.sh # exit=127
-selftests: lib_bitmap.sh [FAIL]
-# selftests lib prime_numbers.sh
-lib: prime_numbers.sh_ #
-# ./prime_numbers.sh line 4 ./../kselftest_module.sh No such file or directory
-line: 4_./../kselftest_module.sh #
-[FAIL] 3 selftests lib prime_numbers.sh # exit=127
-selftests: lib_prime_numbers.sh [FAIL]
-# selftests lib strscpy.sh
-lib: strscpy.sh_ #
-# ./strscpy.sh line 3 ./../kselftest_module.sh No such file or directory
-line: 3_./../kselftest_module.sh #
-[FAIL] 4 selftests lib strscpy.sh # exit=127
-selftests: lib_strscpy.sh [FAIL]
+> 
+> It's better to ignore checkpatch and other scripts when they are wrong.
+> (unless the warning message inspires you to make the code more readable
+> for humans).
+> 
 
-- Naresh
+It gets confusing when to ignore and when not to. It takes work to
+figure out and it is subjective.
+
+It would be great if we can consistently rely on a tool that is used as
+a criteria for patches to accept patches.
+
+thanks,
+-- Shuah
+
+
