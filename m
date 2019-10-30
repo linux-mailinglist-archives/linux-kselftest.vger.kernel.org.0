@@ -2,557 +2,257 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F122EA5E3
-	for <lists+linux-kselftest@lfdr.de>; Wed, 30 Oct 2019 23:01:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C0D89EA73B
+	for <lists+linux-kselftest@lfdr.de>; Wed, 30 Oct 2019 23:53:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727041AbfJ3WB6 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 30 Oct 2019 18:01:58 -0400
-Received: from mail-wm1-f50.google.com ([209.85.128.50]:40550 "EHLO
-        mail-wm1-f50.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726826AbfJ3WB6 (ORCPT
+        id S1727597AbfJ3Wto (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 30 Oct 2019 18:49:44 -0400
+Received: from hqemgate15.nvidia.com ([216.228.121.64]:5214 "EHLO
+        hqemgate15.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727064AbfJ3Wtn (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 30 Oct 2019 18:01:58 -0400
-Received: by mail-wm1-f50.google.com with SMTP id w9so3845720wmm.5
-        for <linux-kselftest@vger.kernel.org>; Wed, 30 Oct 2019 15:01:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:date:to:message-id:in-reply-to:references:subject:mime-version;
-        bh=ILSIi2itjkFrHQVWcQyX4oszxdWg+0MAk/cX1Rsa/Tk=;
-        b=ujFTDbmGz4lF9cEZcPuikZCnmE2w2/6L40NC1ebFqcwTuCW2ckjng/8rFP8+a++3Ea
-         seX8CfPVMni5uoygvyVTk3YzwoBvWcuuXHatfTbUk0ReaPNJepHz6gVSl90Bj2Hd8Pm/
-         vycXSIBmEVn84lTebQ6vSWBZRSOZA7HnB8ZmhhJ02fMw+SnSxLiMFdGRnQVi0tRdhcTL
-         pPabqis9yu3KYF/vxNZ2mEmgha05QZDvQGEG2QOXVHcu/St4HU4MRE1lP3v2eJqohlyD
-         TZOwGeu5xZyNlMYCi28dUqfLJZSzj8HzhZq7BoDT1pX+xTkgLbmjDrGnDdc1UFtNz441
-         c4Dw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:date:to:message-id:in-reply-to:references
-         :subject:mime-version;
-        bh=ILSIi2itjkFrHQVWcQyX4oszxdWg+0MAk/cX1Rsa/Tk=;
-        b=Nwdque3vLCLXbBvdET0iAKHe5u97D1OQJ5TQTKONWmTUJgLANNJYtDoV+Du8M+g6mC
-         ByNR5YUbY6TIT9rO/dVoiqOLLiKIKD3KuzO9Ph0BNKrVPUVz/Pt51dQUH4RjswRAzr4t
-         LocCdWM9f534B5sRIn2nCtusXQ4wkvliim4yAb2zsA7tDdiXGcLIes7quHOsViSZ4lvU
-         zUZPbVMm7YDCiPUjFFFVysUhRp/xjeLRHf0DpiyDDzC5YHZsrw9PNc0sKzinvRMEqUqT
-         lMPoOxx9MfS7oEZ/VyXu2Sz72Ab9heWl04Qf+FTV5ec2uRzkH2n0vP2EIyqMRgyYA8bL
-         YYtQ==
-X-Gm-Message-State: APjAAAVa3uWX9czm7gfICm4NREd9cFhM4cUw15tB1CUabBpb6l04Mac7
-        G83t51khsdjpFUeCejJ1VGxP5A==
-X-Google-Smtp-Source: APXvYqzvho7x0+Y+d10NoVcPg9wDP/f12FWBIjePLlWiBIs21+gAZ6heSxeGca8/gtunqBZFxeELXQ==
-X-Received: by 2002:a05:600c:2488:: with SMTP id 8mr1557616wms.31.1572472913086;
-        Wed, 30 Oct 2019 15:01:53 -0700 (PDT)
-Received: from 172.17.0.4 (ci.linaro.org. [88.99.136.175])
-        by smtp.gmail.com with ESMTPSA id v10sm1704942wmg.48.2019.10.30.15.01.52
-        (version=TLS1 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
-        Wed, 30 Oct 2019 15:01:52 -0700 (PDT)
-From:   ci_notify@linaro.org
-X-Google-Original-From: linaro-infrastructure-errors@lists.linaro.org
-Date:   Wed, 30 Oct 2019 22:01:52 +0000 (UTC)
-To:     lkft-triage@lists.linaro.org, dan.rue@linaro.org,
-        anders.roxell@linaro.org, naresh.kamboju@linaro.org,
-        shuah@kernel.org, linux-kselftest@vger.kernel.org
-Message-ID: <1879759396.10937.1572472912570.JavaMail.javamailuser@localhost>
-In-Reply-To: <1464355271.10875.1572422434751.JavaMail.javamailuser@localhost>
-References: <1464355271.10875.1572422434751.JavaMail.javamailuser@localhost>
-Subject: next-20191029 kselftest results
+        Wed, 30 Oct 2019 18:49:43 -0400
+Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqemgate15.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5dba13850001>; Wed, 30 Oct 2019 15:49:41 -0700
+Received: from hqmail.nvidia.com ([172.20.161.6])
+  by hqpgpgate101.nvidia.com (PGP Universal service);
+  Wed, 30 Oct 2019 15:49:34 -0700
+X-PGP-Universal: processed;
+        by hqpgpgate101.nvidia.com on Wed, 30 Oct 2019 15:49:34 -0700
+Received: from HQMAIL109.nvidia.com (172.20.187.15) by HQMAIL111.nvidia.com
+ (172.20.187.18) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Wed, 30 Oct
+ 2019 22:49:34 +0000
+Received: from rnnvemgw01.nvidia.com (10.128.109.123) by HQMAIL109.nvidia.com
+ (172.20.187.15) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
+ Transport; Wed, 30 Oct 2019 22:49:33 +0000
+Received: from blueforge.nvidia.com (Not Verified[10.110.48.28]) by rnnvemgw01.nvidia.com with Trustwave SEG (v7,5,8,10121)
+        id <B5dba137b0002>; Wed, 30 Oct 2019 15:49:32 -0700
+From:   John Hubbard <jhubbard@nvidia.com>
+To:     Andrew Morton <akpm@linux-foundation.org>
+CC:     Al Viro <viro@zeniv.linux.org.uk>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn.topel@intel.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Dave Chinner <david@fromorbit.com>,
+        David Airlie <airlied@linux.ie>,
+        "David S . Miller" <davem@davemloft.net>,
+        Ira Weiny <ira.weiny@intel.com>, Jan Kara <jack@suse.cz>,
+        Jason Gunthorpe <jgg@ziepe.ca>, Jens Axboe <axboe@kernel.dk>,
+        Jonathan Corbet <corbet@lwn.net>,
+        =?UTF-8?q?J=C3=A9r=C3=B4me=20Glisse?= <jglisse@redhat.com>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Michal Hocko <mhocko@suse.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Paul Mackerras <paulus@samba.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Vlastimil Babka <vbabka@suse.cz>, <bpf@vger.kernel.org>,
+        <dri-devel@lists.freedesktop.org>, <kvm@vger.kernel.org>,
+        <linux-block@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+        <linux-fsdevel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+        <linux-media@vger.kernel.org>, <linux-rdma@vger.kernel.org>,
+        <linuxppc-dev@lists.ozlabs.org>, <netdev@vger.kernel.org>,
+        <linux-mm@kvack.org>, LKML <linux-kernel@vger.kernel.org>,
+        John Hubbard <jhubbard@nvidia.com>
+Subject: [PATCH 00/19] mm/gup: track dma-pinned pages: FOLL_PIN, FOLL_LONGTERM
+Date:   Wed, 30 Oct 2019 15:49:11 -0700
+Message-ID: <20191030224930.3990755-1-jhubbard@nvidia.com>
+X-Mailer: git-send-email 2.23.0
 MIME-Version: 1.0
-Content-Type: multipart/mixed; 
-        boundary="----=_Part_10936_638559500.1572472912051"
-X-Jenkins-Job: LKFT Notify kselftest on next
-X-Jenkins-Result: SUCCESS
+X-NVConfidentiality: public
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1572475781; bh=hGPWt3QMTkMrTVgcNxptwRVsRQFog4chezBSn5RrX48=;
+        h=X-PGP-Universal:From:To:CC:Subject:Date:Message-ID:X-Mailer:
+         MIME-Version:X-NVConfidentiality:Content-Type:
+         Content-Transfer-Encoding;
+        b=oSHxJf1EatQQbMkaqcITETA6JEtlVNEdgum3xhm5ffOxR+XNpeSZn2n8WTQHBmpXQ
+         XlkO24RsW/LfP+8EN9BTaQwIJCQeS6tAdSrqh0UNPmHthTKHhTKpacZ0s3MALr4vP4
+         itdh7PP+CYbjuibtGti4rkBun1FGTraZnTUXeqaBCjMHeV5JXay6xNR7ZezCZ5Svft
+         FFN/X5vLeUp/Ci4mFUSlT4/inZ55UOWuZDRaqx1HBrshBWu8j4oFc9DE2XSBK2JNQX
+         6Jh4/4uKc510NHecCig4JLuKjY+bJQdP2CLVRpOkMVKoGbX2eD/Zh91jJYPyPfFHGf
+         vWCpcQszWYTnQ==
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-------=_Part_10936_638559500.1572472912051
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Hi,
 
-Summary
-------------------------------------------------------------------------
-kernel: 5.4.0-rc5
-git repo: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-git branch: master
-git commit: c57cf3833c66cd86c9bdee7112fc992377143f74
-git describe: next-20191029
-Test details: https://qa-reports.linaro.org/lkft/linux-next-oe/build/next-20191029
+This applies cleanly to linux-next and mmotm, and also to linux.git if
+linux-next's commit 20cac10710c9 ("mm/gup_benchmark: fix MAP_HUGETLB
+case") is first applied there.
 
-Regressions (compared to build next-20191025)
-------------------------------------------------------------------------
-dragonboard-410c - arm64:                                                                                                      
- kselftest:                                                                                         
-    * net_rtnetlink.sh                                                                                                         
-                                                                                                          
-                                                                                                                       
-Fixes (compared to build next-20191025)                                                                   
-------------------------------------------------------------------------                                               
-x86_64:                                                                                                      
- kselftest:                                                                                         
-    * net_fib-onlink-tests.sh                                                                                                         
-                                                                                                      
- kselftest-vsyscall-mode-native:                                                                                         
-    * net_fib-onlink-tests.sh                                                                                                         
-x86_64:                                                                                                      
- kselftest:                                                                                         
-    * net_fib-onlink-tests.sh                                                                                                         
-                                                                                                      
- kselftest-vsyscall-mode-native:                                                                                         
-    * net_fib-onlink-tests.sh                                                                                                         
+This provides tracking of dma-pinned pages. This is a prerequisite to
+solving the larger problem of proper interactions between file-backed
+pages, and [R]DMA activities, as discussed in [1], [2], [3], and in
+a remarkable number of email threads since about 2017. :)
 
+A new internal gup flag, FOLL_PIN is introduced, and thoroughly
+documented in the last patch's Documentation/vm/pin_user_pages.rst.
 
-In total:
-------------------------------------------------------------------------
-Ran 814 total tests in the following environments and test suites.
-pass 334
-fail 404
-xfail 0
-skip 76
+I believe that this will provide a good starting point for doing the
+layout lease work that Ira Weiny has been working on. That's because
+these new wrapper functions provide a clean, constrained, systematically
+named set of functionality that, again, is required in order to even
+know if a page is "dma-pinned".
 
-Environments
---------------
-- dragonboard-410c - arm64
-- hi6220-hikey - arm64
-- i386
-- juno-r2 - arm64
-- qemu_arm64
-- qemu_i386
-- qemu_x86_64
-- x15 - arm
-- x86_64
+In contrast to earlier approaches, the page tracking can be
+incrementally applied to the kernel call sites that, until now, have
+been simply calling get_user_pages() ("gup"). In other words, opt-in by
+changing from this:
 
-Test Suites
------------
-* kselftest
-* kselftest-vsyscall-mode-native
-* kselftest-vsyscall-mode-none
+    get_user_pages() (sets FOLL_GET)
+    put_page()
 
+to this:
+    pin_user_pages() (sets FOLL_PIN)
+    put_user_page()
 
-Failures
-------------------------------------------------------------------------
+Because there are interdependencies with FOLL_LONGTERM, a similar
+conversion as for FOLL_PIN, was applied. The change was from this:
 
-x15:
+    get_user_pages(FOLL_LONGTERM) (also sets FOLL_GET)
+    put_page()
 
-dragonboard-410c:
-* kselftest/bpf_get_cgroup_id_user
-* kselftest/bpf_test_bpftool_build.sh
-* kselftest/bpf_test_dev_cgroup
-* kselftest/bpf_test_flow_dissector.sh
-* kselftest/bpf_test_kmod.sh
-* kselftest/bpf_test_lpm_map
-* kselftest/bpf_test_lwt_ip_encap.sh
-* kselftest/bpf_test_lwt_seg6local.sh
-* kselftest/bpf_test_maps
-* kselftest/bpf_test_netcnt
-* kselftest/bpf_test_progs
-* kselftest/bpf_test_progs-no_alu32
-* kselftest/bpf_test_select_reuseport
-* kselftest/bpf_test_skb_cgroup_id.sh
-* kselftest/bpf_test_sock_addr.sh
-* kselftest/bpf_test_socket_cookie
-* kselftest/bpf_test_sock_fields
-* kselftest/bpf_test_sockmap
-* kselftest/bpf_test_sysctl
-* kselftest/bpf_test_tag
-* kselftest/bpf_test_tc_edt.sh
-* kselftest/bpf_test_tcpbpf_user
-* kselftest/bpf_test_tcp_check_syncookie.sh
-* kselftest/bpf_test_tcpnotify_user
-* kselftest/bpf_test_tc_tunnel.sh
-* kselftest/bpf_test_tunnel.sh
-* kselftest/bpf_test_verifier
-* kselftest/bpf_test_xdping.sh
-* kselftest/bpf_test_xdp_meta.sh
-* kselftest/bpf_test_xdp_redirect.sh
-* kselftest/bpf_test_xdp_vlan_mode_generic.sh
-* kselftest/bpf_test_xdp_vlan_mode_native.sh
-* kselftest/bpf_xdping
-* kselftest/clone3_clone3_clear_sighand
-* kselftest/firmware_fw_run_tests.sh
-* kselftest/kvm_clear_dirty_log_test
-* kselftest/kvm_cr4_cpuid_sync_test
-* kselftest/kvm_dirty_log_test
-* kselftest/kvm_evmcs_test
-* kselftest/kvm_hyperv_cpuid
-* kselftest/kvm_kvm_create_max_vcpus
-* kselftest/kvm_mmio_warning_test
-* kselftest/kvm_platform_info_test
-* kselftest/kvm_set_sregs_test
-* kselftest/kvm_smm_test
-* kselftest/kvm_state_test
-* kselftest/kvm_sync_regs_test
-* kselftest/kvm_vmx_close_while_nested_test
-* kselftest/kvm_vmx_dirty_log_test
-* kselftest/kvm_vmx_set_nested_state_test
-* kselftest/kvm_vmx_tsc_adjust_test
-* kselftest/lib_bitmap.sh
-* kselftest/lib_prime_numbers.sh
-* kselftest/lib_printf.sh
-* kselftest/lib_strscpy.sh
-* kselftest/net_fib-onlink-tests.sh
-* kselftest/net_fib_tests.sh
-* kselftest/net_ip_defrag.sh
-* kselftest/net_pmtu.sh
-* kselftest/net_rtnetlink.sh
-* kselftest/net_run_netsocktests
-* kselftest/net_udpgso_bench.sh
+to this:
+    pin_longterm_pages() (sets FOLL_PIN | FOLL_LONGTERM)
+    put_user_page()
 
-i386:
-* kselftest/bpf_get_cgroup_id_user
-* kselftest/bpf_test_bpftool_build.sh
-* kselftest/bpf_test_dev_cgroup
-* kselftest/bpf_test_flow_dissector.sh
-* kselftest/bpf_test_hashmap
-* kselftest/bpf_test_lwt_ip_encap.sh
-* kselftest/bpf_test_lwt_seg6local.sh
-* kselftest/bpf_test_maps
-* kselftest/bpf_test_netcnt
-* kselftest/bpf_test_progs-no_alu32
-* kselftest/bpf_test_select_reuseport
-* kselftest/bpf_test_skb_cgroup_id.sh
-* kselftest/bpf_test_sock_addr.sh
-* kselftest/bpf_test_socket_cookie
-* kselftest/bpf_test_sockmap
-* kselftest/bpf_test_sysctl
-* kselftest/bpf_test_tc_edt.sh
-* kselftest/bpf_test_tcpbpf_user
-* kselftest/bpf_test_tcp_check_syncookie.sh
-* kselftest/bpf_test_tcpnotify_user
-* kselftest/bpf_test_tc_tunnel.sh
-* kselftest/bpf_test_tunnel.sh
-* kselftest/bpf_test_xdping.sh
-* kselftest/bpf_test_xdp_meta.sh
-* kselftest/bpf_test_xdp_redirect.sh
-* kselftest/bpf_test_xdp_vlan_mode_generic.sh
-* kselftest/bpf_test_xdp_vlan_mode_native.sh
-* kselftest/bpf_xdping
-* kselftest/firmware_fw_run_tests.sh
-* kselftest/intel_pstate_run.sh
-* kselftest/kvm_clear_dirty_log_test
-* kselftest/kvm_cr4_cpuid_sync_test
-* kselftest/kvm_dirty_log_test
-* kselftest/kvm_evmcs_test
-* kselftest/kvm_hyperv_cpuid
-* kselftest/kvm_kvm_create_max_vcpus
-* kselftest/kvm_mmio_warning_test
-* kselftest/kvm_platform_info_test
-* kselftest/kvm_set_sregs_test
-* kselftest/kvm_smm_test
-* kselftest/kvm_state_test
-* kselftest/kvm_sync_regs_test
-* kselftest/kvm_vmx_close_while_nested_test
-* kselftest/kvm_vmx_dirty_log_test
-* kselftest/kvm_vmx_set_nested_state_test
-* kselftest/kvm_vmx_tsc_adjust_test
-* kselftest/lib_bitmap.sh
-* kselftest/lib_prime_numbers.sh
-* kselftest/lib_printf.sh
-* kselftest/lib_strscpy.sh
-* kselftest/mqueue_mq_perf_tests
-* kselftest/net_fib-onlink-tests.sh
-* kselftest/net_fib_tests.sh
-* kselftest/net_ip_defrag.sh
-* kselftest/net_pmtu.sh
-* kselftest/net_run_netsocktests
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+Patch summary:
 
-x86:
-* kselftest/bpf_get_cgroup_id_user
-* kselftest/bpf_test_bpftool_build.sh
-* kselftest/bpf_test_dev_cgroup
-* kselftest/bpf_test_flow_dissector.sh
-* kselftest/bpf_test_lwt_ip_encap.sh
-* kselftest/bpf_test_lwt_seg6local.sh
-* kselftest/bpf_test_maps
-* kselftest/bpf_test_netcnt
-* kselftest/bpf_test_progs
-* kselftest/bpf_test_progs-no_alu32
-* kselftest/bpf_test_select_reuseport
-* kselftest/bpf_test_skb_cgroup_id.sh
-* kselftest/bpf_test_sock_addr.sh
-* kselftest/bpf_test_socket_cookie
-* kselftest/bpf_test_sock_fields
-* kselftest/bpf_test_sockmap
-* kselftest/bpf_test_sysctl
-* kselftest/bpf_test_tc_edt.sh
-* kselftest/bpf_test_tcpbpf_user
-* kselftest/bpf_test_tcp_check_syncookie.sh
-* kselftest/bpf_test_tcpnotify_user
-* kselftest/bpf_test_tc_tunnel.sh
-* kselftest/bpf_test_tunnel.sh
-* kselftest/bpf_test_xdping.sh
-* kselftest/bpf_test_xdp_meta.sh
-* kselftest/bpf_test_xdp_redirect.sh
-* kselftest/bpf_test_xdp_vlan_mode_generic.sh
-* kselftest/bpf_test_xdp_vlan_mode_native.sh
-* kselftest/bpf_xdping
-* kselftest/firmware_fw_run_tests.sh
-* kselftest/intel_pstate_run.sh
-* kselftest/kvm_clear_dirty_log_test
-* kselftest/kvm_cr4_cpuid_sync_test
-* kselftest/kvm_dirty_log_test
-* kselftest/kvm_evmcs_test
-* kselftest/kvm_hyperv_cpuid
-* kselftest/kvm_kvm_create_max_vcpus
-* kselftest/kvm_platform_info_test
-* kselftest/kvm_set_sregs_test
-* kselftest/kvm_smm_test
-* kselftest/kvm_state_test
-* kselftest/kvm_sync_regs_test
-* kselftest/kvm_vmx_close_while_nested_test
-* kselftest/kvm_vmx_dirty_log_test
-* kselftest/kvm_vmx_set_nested_state_test
-* kselftest/kvm_vmx_tsc_adjust_test
-* kselftest/lib_bitmap.sh
-* kselftest/lib_prime_numbers.sh
-* kselftest/lib_printf.sh
-* kselftest/lib_strscpy.sh
-* kselftest/mqueue_mq_perf_tests
-* kselftest/net_fib_tests.sh
-* kselftest/net_ip_defrag.sh
-* kselftest/net_pmtu.sh
-* kselftest/net_run_netsocktests
-* kselftest/net_xfrm_policy.sh
-* kselftest-vsyscall-mode-native/bpf_get_cgroup_id_user
-* kselftest-vsyscall-mode-native/bpf_test_bpftool_build.sh
-* kselftest-vsyscall-mode-native/bpf_test_flow_dissector.sh
-* kselftest-vsyscall-mode-native/bpf_test_lwt_ip_encap.sh
-* kselftest-vsyscall-mode-native/bpf_test_lwt_seg6local.sh
-* kselftest-vsyscall-mode-native/bpf_test_maps
-* kselftest-vsyscall-mode-native/bpf_test_netcnt
-* kselftest-vsyscall-mode-native/bpf_test_progs
-* kselftest-vsyscall-mode-native/bpf_test_progs-no_alu32
-* kselftest-vsyscall-mode-native/bpf_test_select_reuseport
-* kselftest-vsyscall-mode-native/bpf_test_skb_cgroup_id.sh
-* kselftest-vsyscall-mode-native/bpf_test_sock_addr.sh
-* kselftest-vsyscall-mode-native/bpf_test_sock_fields
-* kselftest-vsyscall-mode-native/bpf_test_sockmap
-* kselftest-vsyscall-mode-native/bpf_test_sysctl
-* kselftest-vsyscall-mode-native/bpf_test_tc_edt.sh
-* kselftest-vsyscall-mode-native/bpf_test_tcpbpf_user
-* kselftest-vsyscall-mode-native/bpf_test_tcp_check_syncookie.sh
-* kselftest-vsyscall-mode-native/bpf_test_tcpnotify_user
-* kselftest-vsyscall-mode-native/bpf_test_tc_tunnel.sh
-* kselftest-vsyscall-mode-native/bpf_test_tunnel.sh
-* kselftest-vsyscall-mode-native/bpf_test_xdping.sh
-* kselftest-vsyscall-mode-native/bpf_test_xdp_meta.sh
-* kselftest-vsyscall-mode-native/bpf_test_xdp_redirect.sh
-* kselftest-vsyscall-mode-native/bpf_test_xdp_vlan_mode_generic.sh
-* kselftest-vsyscall-mode-native/bpf_test_xdp_vlan_mode_native.sh
-* kselftest-vsyscall-mode-native/bpf_xdping
-* kselftest-vsyscall-mode-native/firmware_fw_run_tests.sh
-* kselftest-vsyscall-mode-native/kvm_clear_dirty_log_test
-* kselftest-vsyscall-mode-native/kvm_cr4_cpuid_sync_test
-* kselftest-vsyscall-mode-native/kvm_dirty_log_test
-* kselftest-vsyscall-mode-native/kvm_evmcs_test
-* kselftest-vsyscall-mode-native/kvm_hyperv_cpuid
-* kselftest-vsyscall-mode-native/kvm_kvm_create_max_vcpus
-* kselftest-vsyscall-mode-native/kvm_platform_info_test
-* kselftest-vsyscall-mode-native/kvm_set_sregs_test
-* kselftest-vsyscall-mode-native/kvm_smm_test
-* kselftest-vsyscall-mode-native/kvm_state_test
-* kselftest-vsyscall-mode-native/kvm_sync_regs_test
-* kselftest-vsyscall-mode-native/kvm_vmx_close_while_nested_test
-* kselftest-vsyscall-mode-native/kvm_vmx_dirty_log_test
-* kselftest-vsyscall-mode-native/kvm_vmx_set_nested_state_test
-* kselftest-vsyscall-mode-native/kvm_vmx_tsc_adjust_test
-* kselftest-vsyscall-mode-native/lib_bitmap.sh
-* kselftest-vsyscall-mode-native/lib_prime_numbers.sh
-* kselftest-vsyscall-mode-native/lib_printf.sh
-* kselftest-vsyscall-mode-native/lib_strscpy.sh
-* kselftest-vsyscall-mode-native/mqueue_mq_perf_tests
-* kselftest-vsyscall-mode-native/net_fib_tests.sh
-* kselftest-vsyscall-mode-native/net_ip_defrag.sh
-* kselftest-vsyscall-mode-native/net_pmtu.sh
-* kselftest-vsyscall-mode-native/net_run_netsocktests
-* kselftest-vsyscall-mode-native/net_xfrm_policy.sh
-* kselftest-vsyscall-mode-none/bpf_get_cgroup_id_user
-* kselftest-vsyscall-mode-none/bpf_test_bpftool_build.sh
-* kselftest-vsyscall-mode-none/bpf_test_dev_cgroup
-* kselftest-vsyscall-mode-none/bpf_test_flow_dissector.sh
-* kselftest-vsyscall-mode-none/bpf_test_lwt_ip_encap.sh
-* kselftest-vsyscall-mode-none/bpf_test_lwt_seg6local.sh
-* kselftest-vsyscall-mode-none/bpf_test_maps
-* kselftest-vsyscall-mode-none/bpf_test_netcnt
-* kselftest-vsyscall-mode-none/bpf_test_progs
-* kselftest-vsyscall-mode-none/bpf_test_progs-no_alu32
-* kselftest-vsyscall-mode-none/bpf_test_select_reuseport
-* kselftest-vsyscall-mode-none/bpf_test_skb_cgroup_id.sh
-* kselftest-vsyscall-mode-none/bpf_test_sock_addr.sh
-* kselftest-vsyscall-mode-none/bpf_test_socket_cookie
-* kselftest-vsyscall-mode-none/bpf_test_sock_fields
-* kselftest-vsyscall-mode-none/bpf_test_sockmap
-* kselftest-vsyscall-mode-none/bpf_test_sysctl
-* kselftest-vsyscall-mode-none/bpf_test_tc_edt.sh
-* kselftest-vsyscall-mode-none/bpf_test_tcpbpf_user
-* kselftest-vsyscall-mode-none/bpf_test_tcp_check_syncookie.sh
-* kselftest-vsyscall-mode-none/bpf_test_tcpnotify_user
-* kselftest-vsyscall-mode-none/bpf_test_tc_tunnel.sh
-* kselftest-vsyscall-mode-none/bpf_test_tunnel.sh
-* kselftest-vsyscall-mode-none/bpf_test_xdping.sh
-* kselftest-vsyscall-mode-none/bpf_test_xdp_meta.sh
-* kselftest-vsyscall-mode-none/bpf_test_xdp_redirect.sh
-* kselftest-vsyscall-mode-none/bpf_test_xdp_vlan_mode_generic.sh
-* kselftest-vsyscall-mode-none/bpf_test_xdp_vlan_mode_native.sh
-* kselftest-vsyscall-mode-none/bpf_xdping
-* kselftest-vsyscall-mode-none/firmware_fw_run_tests.sh
-* kselftest-vsyscall-mode-none/intel_pstate_run.sh
-* kselftest-vsyscall-mode-none/kvm_clear_dirty_log_test
-* kselftest-vsyscall-mode-none/kvm_cr4_cpuid_sync_test
-* kselftest-vsyscall-mode-none/kvm_dirty_log_test
-* kselftest-vsyscall-mode-none/kvm_evmcs_test
-* kselftest-vsyscall-mode-none/kvm_hyperv_cpuid
-* kselftest-vsyscall-mode-none/kvm_kvm_create_max_vcpus
-* kselftest-vsyscall-mode-none/kvm_platform_info_test
-* kselftest-vsyscall-mode-none/kvm_set_sregs_test
-* kselftest-vsyscall-mode-none/kvm_smm_test
-* kselftest-vsyscall-mode-none/kvm_state_test
-* kselftest-vsyscall-mode-none/kvm_sync_regs_test
-* kselftest-vsyscall-mode-none/kvm_vmx_close_while_nested_test
-* kselftest-vsyscall-mode-none/kvm_vmx_dirty_log_test
-* kselftest-vsyscall-mode-none/kvm_vmx_set_nested_state_test
-* kselftest-vsyscall-mode-none/kvm_vmx_tsc_adjust_test
-* kselftest-vsyscall-mode-none/lib_bitmap.sh
-* kselftest-vsyscall-mode-none/lib_prime_numbers.sh
-* kselftest-vsyscall-mode-none/lib_printf.sh
-* kselftest-vsyscall-mode-none/lib_strscpy.sh
-* kselftest-vsyscall-mode-none/mqueue_mq_perf_tests
-* kselftest-vsyscall-mode-none/net_fib-onlink-tests.sh
-* kselftest-vsyscall-mode-none/net_fib_tests.sh
-* kselftest-vsyscall-mode-none/net_ip_defrag.sh
-* kselftest-vsyscall-mode-none/net_pmtu.sh
-* kselftest-vsyscall-mode-none/net_run_netsocktests
-* kselftest-vsyscall-mode-none/net_xfrm_policy.sh
+* Patches 1-4: refactoring and preparatory cleanup, independent fixes
+    (Patch 4: V4L2-core bug fix (can be separately applied))
 
-qemu_arm64:
-* kselftest/bpf_get_cgroup_id_user
-* kselftest/bpf_test_bpftool_build.sh
-* kselftest/bpf_test_dev_cgroup
-* kselftest/bpf_test_flow_dissector.sh
-* kselftest/bpf_test_kmod.sh
-* kselftest/bpf_test_lpm_map
-* kselftest/bpf_test_lwt_ip_encap.sh
-* kselftest/bpf_test_lwt_seg6local.sh
-* kselftest/bpf_test_maps
-* kselftest/bpf_test_netcnt
-* kselftest/bpf_test_progs
-* kselftest/bpf_test_progs-no_alu32
-* kselftest/bpf_test_select_reuseport
-* kselftest/bpf_test_skb_cgroup_id.sh
-* kselftest/bpf_test_sock_addr.sh
-* kselftest/bpf_test_socket_cookie
-* kselftest/bpf_test_sock_fields
-* kselftest/bpf_test_sockmap
-* kselftest/bpf_test_sysctl
-* kselftest/bpf_test_tag
-* kselftest/bpf_test_tc_edt.sh
-* kselftest/bpf_test_tcpbpf_user
-* kselftest/bpf_test_tcp_check_syncookie.sh
-* kselftest/bpf_test_tcpnotify_user
-* kselftest/bpf_test_tc_tunnel.sh
-* kselftest/bpf_test_tunnel.sh
-* kselftest/bpf_test_verifier
-* kselftest/bpf_test_xdping.sh
-* kselftest/bpf_test_xdp_meta.sh
-* kselftest/bpf_test_xdp_redirect.sh
-* kselftest/bpf_test_xdp_vlan_mode_generic.sh
-* kselftest/bpf_test_xdp_vlan_mode_native.sh
-* kselftest/bpf_xdping
-* kselftest/clone3_clone3_clear_sighand
-* kselftest/cpufreq_main.sh
-* kselftest/firmware_fw_run_tests.sh
-* kselftest/kvm_clear_dirty_log_test
-* kselftest/kvm_cr4_cpuid_sync_test
-* kselftest/kvm_dirty_log_test
-* kselftest/kvm_evmcs_test
-* kselftest/kvm_hyperv_cpuid
-* kselftest/kvm_kvm_create_max_vcpus
-* kselftest/kvm_mmio_warning_test
-* kselftest/kvm_platform_info_test
-* kselftest/kvm_set_sregs_test
-* kselftest/kvm_smm_test
-* kselftest/kvm_state_test
-* kselftest/kvm_sync_regs_test
-* kselftest/kvm_vmx_close_while_nested_test
-* kselftest/kvm_vmx_dirty_log_test
-* kselftest/kvm_vmx_set_nested_state_test
-* kselftest/kvm_vmx_tsc_adjust_test
-* kselftest/lib_bitmap.sh
-* kselftest/lib_prime_numbers.sh
-* kselftest/lib_printf.sh
-* kselftest/lib_strscpy.sh
-* kselftest/net_fib-onlink-tests.sh
-* kselftest/net_fib_tests.sh
-* kselftest/net_ip_defrag.sh
-* kselftest/net_pmtu.sh
-* kselftest/net_run_netsocktests
+* Patch 5: introduce pin_user_pages(), FOLL_PIN, but no functional
+           changes yet
+* Patches 6-11: Convert existing put_user_page() callers, to use the
+                new pin*()
+* Patch 12: Activate tracking of FOLL_PIN pages.
+* Patches 13-15: convert FOLL_LONGTERM callers
+* Patches: 16-17: gup_benchmark and run_vmtests support
+* Patch 18: enforce FOLL_LONGTERM as a gup-internal (only) flag
+* Patch 19: Documentation/vm/pin_user_pages.rst
 
-hi6220-hikey:
-* kselftest/bpf_get_cgroup_id_user
-* kselftest/bpf_test_bpftool_build.sh
-* kselftest/bpf_test_dev_cgroup
-* kselftest/bpf_test_flow_dissector.sh
-* kselftest/bpf_test_kmod.sh
-* kselftest/bpf_test_lpm_map
-* kselftest/bpf_test_lwt_ip_encap.sh
-* kselftest/bpf_test_lwt_seg6local.sh
-* kselftest/bpf_test_maps
-* kselftest/bpf_test_netcnt
-* kselftest/bpf_test_progs
-* kselftest/bpf_test_progs-no_alu32
-* kselftest/bpf_test_select_reuseport
-* kselftest/bpf_test_skb_cgroup_id.sh
-* kselftest/bpf_test_sock_addr.sh
-* kselftest/bpf_test_socket_cookie
-* kselftest/bpf_test_sock_fields
-* kselftest/bpf_test_sockmap
-* kselftest/bpf_test_sysctl
-* kselftest/bpf_test_tag
-* kselftest/bpf_test_tc_edt.sh
-* kselftest/bpf_test_tcpbpf_user
-* kselftest/bpf_test_tcp_check_syncookie.sh
-* kselftest/bpf_test_tcpnotify_user
-* kselftest/bpf_test_tc_tunnel.sh
-* kselftest/bpf_test_tunnel.sh
-* kselftest/bpf_test_verifier
-* kselftest/bpf_test_xdping.sh
-* kselftest/bpf_test_xdp_meta.sh
-* kselftest/bpf_test_xdp_redirect.sh
-* kselftest/bpf_test_xdp_vlan_mode_generic.sh
-* kselftest/bpf_test_xdp_vlan_mode_native.sh
-* kselftest/bpf_xdping
-* kselftest/clone3_clone3_clear_sighand
-* kselftest/kvm_clear_dirty_log_test
-* kselftest/kvm_cr4_cpuid_sync_test
-* kselftest/kvm_dirty_log_test
-* kselftest/kvm_evmcs_test
-* kselftest/kvm_hyperv_cpuid
-* kselftest/kvm_kvm_create_max_vcpus
-* kselftest/kvm_mmio_warning_test
-* kselftest/kvm_platform_info_test
-* kselftest/kvm_set_sregs_test
-* kselftest/kvm_smm_test
-* kselftest/kvm_state_test
-* kselftest/kvm_sync_regs_test
-* kselftest/kvm_vmx_close_while_nested_test
-* kselftest/kvm_vmx_dirty_log_test
-* kselftest/kvm_vmx_set_nested_state_test
-* kselftest/kvm_vmx_tsc_adjust_test
-* kselftest/lib_bitmap.sh
-* kselftest/lib_prime_numbers.sh
-* kselftest/lib_printf.sh
-* kselftest/lib_strscpy.sh
-* kselftest/net_fib-onlink-tests.sh
-* kselftest/net_fib_tests.sh
-* kselftest/net_ip_defrag.sh
-* kselftest/net_pmtu.sh
-* kselftest/net_run_netsocktests
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+Testing:
 
+* I've done some overall kernel testing (LTP, and a few other goodies),
+  and some directed testing to exercise some of the changes. And as you
+  can see, gup_benchmark is enhanced to exercise this. Basically, I've been
+  able to runtime test the core get_user_pages() and pin_user_pages() and
+  related routines, but not so much on several of the call sites--but those
+  are generally just a couple of lines changed, each.
 
-Skips
-------------------------------------------------------------------------
-No skips
+  Not much of the kernel is actually using this, which on one hand
+  reduces risk quite a lot. But on the other hand, testing coverage
+  is low. So I'd love it if, in particular, the Infiniband and PowerPC
+  folks could do a smoke test of this series for me.
 
+  Also, my runtime testing for the call sites so far is very weak:
 
--- 
-Linaro LKFT
-https://lkft.linaro.org
-------=_Part_10936_638559500.1572472912051--
+    * io_uring: Some directed tests from liburing exercise this, and they p=
+ass.
+    * process_vm_access.c: A small directed test passes.
+    * gup_benchmark: the enhanced version hits the new gup.c code, and pass=
+es.
+    * infiniband (still only have crude "IB pingpong" working, on a
+                  good day: it's not exercising my conversions at runtime..=
+.)
+    * VFIO: compiles (I'm vowing to set up a run time test soon, but it's
+                      not ready just yet)
+    * powerpc: it compiles...
+    * drm/via: compiles...
+    * goldfish: compiles...
+    * net/xdp: compiles...
+    * media/v4l2: compiles...
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+Next:
+
+* Get the block/bio_vec sites converted to use pin_user_pages().
+
+* Work with Ira and Dave Chinner to weave this together with the
+  layout lease stuff.
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+
+[1] Some slow progress on get_user_pages() (Apr 2, 2019): https://lwn.net/A=
+rticles/784574/
+[2] DMA and get_user_pages() (LPC: Dec 12, 2018): https://lwn.net/Articles/=
+774411/
+[3] The trouble with get_user_pages() (Apr 30, 2018): https://lwn.net/Artic=
+les/753027/
+
+John Hubbard (19):
+  mm/gup: pass flags arg to __gup_device_* functions
+  mm/gup: factor out duplicate code from four routines
+  goldish_pipe: rename local pin_user_pages() routine
+  media/v4l2-core: set pages dirty upon releasing DMA buffers
+  mm/gup: introduce pin_user_pages*() and FOLL_PIN
+  goldish_pipe: convert to pin_user_pages() and put_user_page()
+  infiniband: set FOLL_PIN, FOLL_LONGTERM via pin_longterm_pages*()
+  mm/process_vm_access: set FOLL_PIN via pin_user_pages_remote()
+  drm/via: set FOLL_PIN via pin_user_pages_fast()
+  fs/io_uring: set FOLL_PIN via pin_user_pages()
+  net/xdp: set FOLL_PIN via pin_user_pages()
+  mm/gup: track FOLL_PIN pages
+  media/v4l2-core: pin_longterm_pages (FOLL_PIN) and put_user_page()
+    conversion
+  vfio, mm: pin_longterm_pages (FOLL_PIN) and put_user_page() conversion
+  powerpc: book3s64: convert to pin_longterm_pages() and put_user_page()
+  mm/gup_benchmark: support pin_user_pages() and related calls
+  selftests/vm: run_vmtests: invoke gup_benchmark with basic FOLL_PIN
+    coverage
+  mm/gup: remove support for gup(FOLL_LONGTERM)
+  Documentation/vm: add pin_user_pages.rst
+
+ Documentation/vm/index.rst                  |   1 +
+ Documentation/vm/pin_user_pages.rst         | 213 +++++++
+ arch/powerpc/mm/book3s64/iommu_api.c        |  15 +-
+ drivers/gpu/drm/via/via_dmablit.c           |   2 +-
+ drivers/infiniband/core/umem.c              |   5 +-
+ drivers/infiniband/core/umem_odp.c          |  10 +-
+ drivers/infiniband/hw/hfi1/user_pages.c     |   4 +-
+ drivers/infiniband/hw/mthca/mthca_memfree.c |   3 +-
+ drivers/infiniband/hw/qib/qib_user_pages.c  |   8 +-
+ drivers/infiniband/hw/qib/qib_user_sdma.c   |   2 +-
+ drivers/infiniband/hw/usnic/usnic_uiom.c    |   9 +-
+ drivers/infiniband/sw/siw/siw_mem.c         |   5 +-
+ drivers/media/v4l2-core/videobuf-dma-sg.c   |  10 +-
+ drivers/platform/goldfish/goldfish_pipe.c   |  35 +-
+ drivers/vfio/vfio_iommu_type1.c             |  15 +-
+ fs/io_uring.c                               |   5 +-
+ include/linux/mm.h                          | 133 ++++-
+ include/linux/mmzone.h                      |   2 +
+ include/linux/page_ref.h                    |  10 +
+ mm/gup.c                                    | 622 ++++++++++++++++----
+ mm/gup_benchmark.c                          |  81 ++-
+ mm/huge_memory.c                            |  32 +-
+ mm/hugetlb.c                                |  28 +-
+ mm/memremap.c                               |   4 +-
+ mm/process_vm_access.c                      |  28 +-
+ mm/vmstat.c                                 |   2 +
+ net/xdp/xdp_umem.c                          |   4 +-
+ tools/testing/selftests/vm/gup_benchmark.c  |  28 +-
+ tools/testing/selftests/vm/run_vmtests      |  22 +
+ 29 files changed, 1066 insertions(+), 272 deletions(-)
+ create mode 100644 Documentation/vm/pin_user_pages.rst
+
+--=20
+2.23.0
+
