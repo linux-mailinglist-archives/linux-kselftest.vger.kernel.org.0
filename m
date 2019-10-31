@@ -2,119 +2,80 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B89BEAC8D
-	for <lists+linux-kselftest@lfdr.de>; Thu, 31 Oct 2019 10:33:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D5488EAD0F
+	for <lists+linux-kselftest@lfdr.de>; Thu, 31 Oct 2019 11:07:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727091AbfJaJdp (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 31 Oct 2019 05:33:45 -0400
-Received: from mail-pf1-f194.google.com ([209.85.210.194]:40218 "EHLO
-        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727041AbfJaJdp (ORCPT
+        id S1726884AbfJaKHY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 31 Oct 2019 06:07:24 -0400
+Received: from smtprelay0006.hostedemail.com ([216.40.44.6]:41733 "EHLO
+        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726193AbfJaKHY (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 31 Oct 2019 05:33:45 -0400
-Received: by mail-pf1-f194.google.com with SMTP id r4so3970202pfl.7
-        for <linux-kselftest@vger.kernel.org>; Thu, 31 Oct 2019 02:33:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=UfGWBZAudfaqT290q3OdOipHzfk3TijoCmN+3Jz803Q=;
-        b=XhDF1lefotT2UASMthSJUxNnb0mHTBcOYfkwpTSAY+w/HCQvebzTSdG9rU5FoZT5jB
-         7yGt6KeTaVrur2O+wQU1bqQTugrJbB69piT163uph4YXe867ADk73jYvYgJdMCASsaqO
-         jJoZ9FwT67M6PC6GOB7CEWQH/Vaam0LdsvMGqVy4R2FyYjny8XLnDljIsrzwlWUecIxm
-         lAAUkGPSwFcHfQ42lhykC7lDHXvf9WRF8TUolfSlHkao3dOb5o/E4oz1kPLmbIMJMZph
-         1nluWoVD9/ou08jb121tFfVKxG0vlpu9296vSX3JQpwJ0QYKoASioMWRqKHvSqwmsNB9
-         Skag==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=UfGWBZAudfaqT290q3OdOipHzfk3TijoCmN+3Jz803Q=;
-        b=kIsH+/oPPMrhIP6Hxf4NBSZFI8FR1BC7uq6TVrllu5NmWrg5WzDriYn7l9WDccgTgv
-         hADMeSP59BisBhbfkKAaU/iusaXobJkef/3trZVPVrksiJXw8fAsy5JpVJdpQb02nOzs
-         /Ce4Gz6fTweChFc5MeGsUztfi+wMUjk/IT9ODKZJ4vlmfi/dzgIUjHvIK1K2w6Rt14JD
-         4Ej/MKNRhuxGrbtOIPSZRydbI3Nrc4qfVEzpEe1y0mA/spN11/wMAuVgtkbczYHp2PEM
-         oJABXMAWoLShmkO5sdQDVUkQRe69UU4Xsu7h6Rlx+bgvCfpxgabXE7Xg6XV815LuAKxF
-         hWew==
-X-Gm-Message-State: APjAAAX/VP1kNWIozdbTDoGEZJbp8BTmQJnO/4/SE7Mpw744u+f6PTyB
-        8R612sX7LvaQT+0qqe1/C9QdkY/iJU1L/4NYogPogQ==
-X-Google-Smtp-Source: APXvYqwBk6uPqm3VmykJcnsaeX9RA5YnvlcvEM+HRhk1ugxAFt3mcM3t+eszNFAN+ts86FuqPlbKTwge7YK0Mt6Chag=
-X-Received: by 2002:a65:664e:: with SMTP id z14mr5281693pgv.201.1572514424176;
- Thu, 31 Oct 2019 02:33:44 -0700 (PDT)
-MIME-Version: 1.0
-References: <20191018001816.94460-1-brendanhiggins@google.com>
- <20191018122949.GD11244@42.do-not-panic.com> <alpine.LRH.2.20.1910191348280.11804@dhcp-10-175-221-34.vpn.oracle.com>
- <CAFd5g46aO4jwyo32DSz4L8GdhP6t38+Qb9NB+3fev3u4G6sg4w@mail.gmail.com>
- <20191024101529.GK11244@42.do-not-panic.com> <201910301205.74EC2A226D@keescook>
- <CAAXuY3o31iCJwZ+WGHMaK1MgpC0qv=JkJWnzv8Lhym9TnZQvcQ@mail.gmail.com>
-In-Reply-To: <CAAXuY3o31iCJwZ+WGHMaK1MgpC0qv=JkJWnzv8Lhym9TnZQvcQ@mail.gmail.com>
-From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Thu, 31 Oct 2019 02:33:32 -0700
-Message-ID: <CAFd5g446cyijzgap9r8nm_202zkUsfdZXrn5E1_Mfe-R+eFb_g@mail.gmail.com>
-Subject: Re: [PATCH linux-kselftest/test v1] apparmor: add AppArmor KUnit
- tests for policy unpack
-To:     Iurii Zaikin <yzaikin@google.com>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Alan Maguire <alan.maguire@oracle.com>,
-        Matthias Maennich <maennich@google.com>,
-        shuah <shuah@kernel.org>,
-        John Johansen <john.johansen@canonical.com>, jmorris@namei.org,
-        serge@hallyn.com, David Gow <davidgow@google.com>,
-        "Theodore Ts'o" <tytso@mit.edu>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-security-module@vger.kernel.org,
-        KUnit Development <kunit-dev@googlegroups.com>,
+        Thu, 31 Oct 2019 06:07:24 -0400
+Received: from filter.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
+        by smtprelay04.hostedemail.com (Postfix) with ESMTP id 66010180A5AFF;
+        Thu, 31 Oct 2019 10:07:22 +0000 (UTC)
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Spam-Summary: 2,0,0,,d41d8cd98f00b204,joe@perches.com,:::::::::::::::::,RULES_HIT:41:355:379:599:973:988:989:1260:1277:1311:1313:1314:1345:1359:1437:1515:1516:1518:1534:1541:1593:1594:1711:1730:1747:1777:1792:2393:2553:2559:2562:2692:2828:3138:3139:3140:3141:3142:3352:3622:3865:3866:3867:3868:3870:3871:3872:3873:3874:4321:5007:9012:10004:10226:10400:10848:11026:11232:11658:11914:12043:12109:12297:12438:12740:12760:12895:13069:13255:13311:13357:13439:14096:14097:14659:14721:21080:21433:21451:21627:21740:30054:30060:30090:30091,0,RBL:47.151.135.224:@perches.com:.lbl8.mailshell.net-62.14.0.100 64.201.201.201,CacheIP:none,Bayesian:0.5,0.5,0.5,Netcheck:none,DomainCache:0,MSF:not bulk,SPF:fn,MSBL:0,DNSBL:neutral,Custom_rules:0:0:0,LFtime:24,LUA_SUMMARY:none
+X-HE-Tag: kite22_402863056ff25
+X-Filterd-Recvd-Size: 2589
+Received: from XPS-9350.home (unknown [47.151.135.224])
+        (Authenticated sender: joe@perches.com)
+        by omf04.hostedemail.com (Postfix) with ESMTPA;
+        Thu, 31 Oct 2019 10:07:20 +0000 (UTC)
+Message-ID: <bd76d5c22f389f3e6ecc2575e32c906f79647765.camel@perches.com>
+Subject: Re: [PATCH linux-kselftest/test v6] lib/list-test: add a test for
+ the 'list' doubly linked list
+From:   Joe Perches <joe@perches.com>
+To:     Brendan Higgins <brendanhiggins@google.com>
+Cc:     shuah <shuah@kernel.org>, Dan Carpenter <dan.carpenter@oracle.com>,
+        David Gow <davidgow@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Kees Cook <keescook@chromium.org>,
         "open list:KERNEL SELFTEST FRAMEWORK" 
         <linux-kselftest@vger.kernel.org>,
-        Mike Salvatore <mike.salvatore@canonical.com>
-Content-Type: text/plain; charset="UTF-8"
+        KUnit Development <kunit-dev@googlegroups.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Date:   Thu, 31 Oct 2019 03:07:12 -0700
+In-Reply-To: <20191031085129.GA217570@google.com>
+References: <20191024224631.118656-1-davidgow@google.com>
+         <0cb1d948-0da3-eb0f-c58f-ae3a785dd0dd@kernel.org>
+         <CABVgOSmCHbGjZBjeWSbPEZbJw22SaBQnoO77xxNzN_ugAwzNiQ@mail.gmail.com>
+         <20191030104217.GA18421@kadam>
+         <42a8270d-ed6f-d29f-5e71-7b76a074b63e@kernel.org>
+         <CAFd5g47OZ8x9=etJUj4Sgsw38VQb0j=omOUsubc7+pb2rJi0bQ@mail.gmail.com>
+         <fad58e4f48237894de0d511adf1d663a42a2eee7.camel@perches.com>
+         <20191031085129.GA217570@google.com>
+Content-Type: text/plain; charset="ISO-8859-1"
+User-Agent: Evolution 3.34.1-2 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Oct 30, 2019 at 1:12 PM Iurii Zaikin <yzaikin@google.com> wrote:
->
-> > Why can't unit tests live with the code they're testing? They're already
-> > logically tied together; what's the harm there? This needn't be the case
-> > for ALL tests, etc. The test driver could still live externally. The
-> > test in the other .c would just have exported functions... ?
-> >
-> Curiously enough, this approach has been adopted by D 2.0 where unittests are
-> members of the class under test:  https://digitalmars.com/d/2.0/unittest.html
+On Thu, 2019-10-31 at 01:51 -0700, Brendan Higgins wrote:
+> On Wed, Oct 30, 2019 at 10:18:44AM -0700, Joe Perches wrote:
+> > On Wed, 2019-10-30 at 09:35 -0700, Brendan Higgins wrote:
+> > > Agreed. I can see the point of not wanting to write an exception into
+> > > checkpatch for every exception of it's general rules; however, it
+> > > would be nice if there was a way to maybe have a special comment or
+> > > something that could turn off a checkpatch error. That way, a
+> > > checkpatch error/warning always means some action should be taken, and
+> > > if a rule is being ignored, there is always documentation as to why.
+> > 
+> > That couldn't work when a comment which may exist
+> > in a file is out of scope of the patch context.
+> 
+> Sorry, I don't understand exactly what you mean. Can you elaborate?
 
-Thanks for pointing this out, Iurii, that actually looks pretty cool.
-I still personally prefer keeping tests and code separate, but if we
-decide to go the route of mixing tests and code, maybe we might want
-to use this as a model.
+checkpatch works on patch contexts.
+If the comment is not within the patch context,
+checkpatch cannot ignore various test.
 
-> but such approach is not mainstream.
-> I personally like the idea of testing the lowest level bits in isolation even if
-> they are not a part of any interface. I think that specifying the
-> interface using
-> unit tests and ensuring implementation correctness are complementary but
-> I haven't had much luck arguing this with our esteemed colleagues.
+> static void list_test_list_for_each_prev(struct kunit *test) /* checkpatch: disable=for-each-format */
 
-So I think this is a very subtle point which is very widely
-misunderstood. Most people write code and then write their tests,
-following this practice along with only testing public interfaces
-often causes people to just not test all of their code, which is
-wrong.
+Long line, now what?
 
-The idea of only testing public interfaces is supposed to make people
-think more carefully about what the composite layers of the program
-is. If you are having difficulty getting decent coverage by only
-testing your public interfaces, then it likely tells you that you have
-one of two problems:
 
-1) You have code that you don't need, and you should remove it.
-
-2) One of the layers in your program is too think, and you should
-introduce a new layer with a new public interface that you can test
-through.
-
-I think the second point here is problematic with how C is written in
-the kernel. We don't really have any concept of public vs. private
-inside the kernel outside of static vs. not static, which is much more
-restricted.
