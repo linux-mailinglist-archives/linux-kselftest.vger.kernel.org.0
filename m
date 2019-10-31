@@ -2,182 +2,151 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6730CEA77D
-	for <lists+linux-kselftest@lfdr.de>; Thu, 31 Oct 2019 00:05:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F863EA8E0
+	for <lists+linux-kselftest@lfdr.de>; Thu, 31 Oct 2019 02:41:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727414AbfJ3XF2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 30 Oct 2019 19:05:28 -0400
-Received: from hqemgate14.nvidia.com ([216.228.121.143]:17582 "EHLO
-        hqemgate14.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727064AbfJ3XF2 (ORCPT
+        id S1726554AbfJaBhu (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 30 Oct 2019 21:37:50 -0400
+Received: from youngberry.canonical.com ([91.189.89.112]:35886 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726345AbfJaBhu (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 30 Oct 2019 19:05:28 -0400
-Received: from hqpgpgate102.nvidia.com (Not Verified[216.228.121.13]) by hqemgate14.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5dba17390001>; Wed, 30 Oct 2019 16:05:29 -0700
-Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate102.nvidia.com (PGP Universal service);
-  Wed, 30 Oct 2019 16:05:23 -0700
-X-PGP-Universal: processed;
-        by hqpgpgate102.nvidia.com on Wed, 30 Oct 2019 16:05:23 -0700
-Received: from [10.110.48.28] (10.124.1.5) by HQMAIL107.nvidia.com
- (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Wed, 30 Oct
- 2019 23:05:22 +0000
-Subject: Re: [PATCH 14/19] vfio, mm: pin_longterm_pages (FOLL_PIN) and
- put_user_page() conversion
-To:     Andrew Morton <akpm@linux-foundation.org>
-CC:     Al Viro <viro@zeniv.linux.org.uk>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Dave Chinner <david@fromorbit.com>,
-        David Airlie <airlied@linux.ie>,
-        "David S . Miller" <davem@davemloft.net>,
-        Ira Weiny <ira.weiny@intel.com>, Jan Kara <jack@suse.cz>,
-        Jason Gunthorpe <jgg@ziepe.ca>, Jens Axboe <axboe@kernel.dk>,
-        Jonathan Corbet <corbet@lwn.net>,
-        =?UTF-8?B?SsOpcsO0bWUgR2xpc3Nl?= <jglisse@redhat.com>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Michal Hocko <mhocko@suse.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Paul Mackerras <paulus@samba.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Vlastimil Babka <vbabka@suse.cz>, <bpf@vger.kernel.org>,
-        <dri-devel@lists.freedesktop.org>, <kvm@vger.kernel.org>,
-        <linux-block@vger.kernel.org>, <linux-doc@vger.kernel.org>,
-        <linux-fsdevel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-        <linux-media@vger.kernel.org>, <linux-rdma@vger.kernel.org>,
-        <linuxppc-dev@lists.ozlabs.org>, <netdev@vger.kernel.org>,
-        <linux-mm@kvack.org>, LKML <linux-kernel@vger.kernel.org>
-References: <20191030224930.3990755-1-jhubbard@nvidia.com>
- <20191030224930.3990755-15-jhubbard@nvidia.com>
-From:   John Hubbard <jhubbard@nvidia.com>
-X-Nvconfidentiality: public
-Message-ID: <cfa579f0-999c-9712-494a-9d519bbc4314@nvidia.com>
-Date:   Wed, 30 Oct 2019 16:05:22 -0700
+        Wed, 30 Oct 2019 21:37:50 -0400
+Received: from static-50-53-33-191.bvtn.or.frontiernet.net ([50.53.33.191] helo=[10.8.192.10])
+        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.86_2)
+        (envelope-from <john.johansen@canonical.com>)
+        id 1iPzPG-0006Iq-FN; Thu, 31 Oct 2019 01:37:46 +0000
+Subject: Re: [PATCH linux-kselftest/test v1] apparmor: add AppArmor KUnit
+ tests for policy unpack
+To:     Kees Cook <keescook@chromium.org>,
+        Luis Chamberlain <mcgrof@kernel.org>
+Cc:     Brendan Higgins <brendanhiggins@google.com>,
+        Alan Maguire <alan.maguire@oracle.com>,
+        Matthias Maennich <maennich@google.com>,
+        shuah <shuah@kernel.org>, jmorris@namei.org, serge@hallyn.com,
+        Iurii Zaikin <yzaikin@google.com>,
+        David Gow <davidgow@google.com>, Theodore Ts'o <tytso@mit.edu>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-security-module@vger.kernel.org,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Mike Salvatore <mike.salvatore@canonical.com>
+References: <20191018001816.94460-1-brendanhiggins@google.com>
+ <20191018122949.GD11244@42.do-not-panic.com>
+ <alpine.LRH.2.20.1910191348280.11804@dhcp-10-175-221-34.vpn.oracle.com>
+ <CAFd5g46aO4jwyo32DSz4L8GdhP6t38+Qb9NB+3fev3u4G6sg4w@mail.gmail.com>
+ <20191024101529.GK11244@42.do-not-panic.com>
+ <201910301205.74EC2A226D@keescook>
+From:   John Johansen <john.johansen@canonical.com>
+Openpgp: preference=signencrypt
+Autocrypt: addr=john.johansen@canonical.com; prefer-encrypt=mutual; keydata=
+ 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
+Organization: Canonical
+Message-ID: <f6673ccf-30e3-449f-dd8b-7b71fe829f43@canonical.com>
+Date:   Wed, 30 Oct 2019 18:37:24 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-In-Reply-To: <20191030224930.3990755-15-jhubbard@nvidia.com>
-X-Originating-IP: [10.124.1.5]
-X-ClientProxiedBy: HQMAIL105.nvidia.com (172.20.187.12) To
- HQMAIL107.nvidia.com (172.20.187.13)
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
+In-Reply-To: <201910301205.74EC2A226D@keescook>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-GB
 Content-Transfer-Encoding: 7bit
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1572476729; bh=53l+EYxovXaJJmkDDYPwp5PBwN0eKGoaifL7qKM0Mds=;
-        h=X-PGP-Universal:Subject:To:CC:References:From:X-Nvconfidentiality:
-         Message-ID:Date:User-Agent:MIME-Version:In-Reply-To:
-         X-Originating-IP:X-ClientProxiedBy:Content-Type:Content-Language:
-         Content-Transfer-Encoding;
-        b=md/zgeBc2zml8TuAaTKRK2oyv1Btng0H6ozq8zn2sRJiXmTfxKbYsvkGcjK6gQS+q
-         3nPYnJq+1Eps5VG6ooIJSjGzkjOCMYIGUlSFcOJoUyjFNZ1H0vd+dWvWBSOqDkH5Uc
-         dvFo63nthImmg9iCDmU6xj0EE8b8pgUM6g95EetFKN1/r0QnPl5BygVRpoyVLlCyiH
-         iCMwhme/pZSwh1q5oOeHae8CYEOAkIwb1y6ebulV3/7WSgE5bb3SmwuYCg/xWfmbmX
-         iPDY0K1xyswztlMvQmBw8+uJFpl2scC5scONZ/nlQeN+ZcWegNbDORlz6y4lLuTxuj
-         WJ+vmX9yZfaww==
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 10/30/19 3:49 PM, John Hubbard wrote:
-> This also fixes one or two likely bugs.
-
-Well, actually just one...
-
+On 10/30/19 12:09 PM, Kees Cook wrote:
+> On Thu, Oct 24, 2019 at 10:15:29AM +0000, Luis Chamberlain wrote:
+>> On Wed, Oct 23, 2019 at 05:42:18PM -0700, Brendan Higgins wrote:
+>>> With that, I think the best solution in this case will be the
+>>> "__visible_for_testing" route. It has no overhead when testing is
+>>> turned off (in fact it is no different in anyway when testing is
+>>> turned off). The downsides I see are:
+>>>
+>>> 1) You may not be able to test non-module code not compiled for
+>>> testing later with the test modules that Alan is working on (But the
+>>> only way I think that will work is by preventing the symbol from being
+>>> inlined, right?).
+>>>
+>>> 2) I think "__visible_for_testing" will be prone to abuse. Here, I
+>>> think there are reasons why we might want to expose these symbols for
+>>> testing, but not otherwise. Nevertheless, I think most symbols that
+>>> should be tested should probably be made visible by default. Since you
+>>> usually only want to test your public interfaces. I could very well
+>>> see this getting used as a kludge that gets used far too frequently.
+>>
+>> There are two parts to your statement on 2):
+>>
+>>   a) possible abuse of say __visible_for_testing
 > 
-> 1. Change vfio from get_user_pages(FOLL_LONGTERM), to
-> pin_longterm_pages(), which sets both FOLL_LONGTERM and FOLL_PIN.
+> I really don't like the idea of littering the kernel with these. It'll
+> also require chunks in header files wrapped in #ifdefs. This is really
+> ugly.
 > 
-> Note that this is a change in behavior, because the
-> get_user_pages_remote() call was not setting FOLL_LONGTERM, but the
-> new pin_user_pages_remote() call that replaces it, *is* setting
-> FOLL_LONGTERM. It is important to set FOLL_LONGTERM, because the
-> DMA case requires it. Please see the FOLL_PIN documentation in
-> include/linux/mm.h, and Documentation/pin_user_pages.rst for details.
+>>   b) you typically only want to test your public interfaces
+>
+I would disagree with this. Helper/lib functions benefit from testing,
+and ensuring they work as expected. Having tests on these helps catch
+errors when you fix bugs or make improvements. If you want its indirect
+testing of public interfaces.
 
-Correction: the above comment is stale and wrong. I wrote it before 
-getting further into the details, and the patch doesn't do this. 
+> True, but being able to test the little helper functions is a nice
+> starting point and a good building block.
+> 
+yeah its a nice building block
 
-Instead, it keeps exactly the old behavior: pin_longterm_pages_remote()
-is careful to avoid setting FOLL_LONGTERM. Instead of setting that flag,
-it drops in a "TODO" comment nearby. :)
+> Why can't unit tests live with the code they're testing? They're already
+> logically tied together; what's the harm there? This needn't be the case
+> for ALL tests, etc. The test driver could still live externally. The
+> test in the other .c would just have exported functions... ?
+> 
 
-I'll update the commit description in the next version of the series.
+they can, its my preference too. Or if the tests must live separate I
+don't even mind the abomination of including a test .c that contains
+the tests for the private fns only.
 
-
-thanks,
-
-John Hubbard
-NVIDIA
-
-> 
-> 2. Because all FOLL_PIN-acquired pages must be released via
-> put_user_page(), also convert the put_page() call over to
-> put_user_pages().
-> 
-> Note that this effectively changes the code's behavior in
-> vfio_iommu_type1.c: put_pfn(): it now ultimately calls
-> set_page_dirty_lock(), instead of set_page_dirty(). This is
-> probably more accurate.
-> 
-> As Christoph Hellwig put it, "set_page_dirty() is only safe if we are
-> dealing with a file backed page where we have reference on the inode it
-> hangs off." [1]
-> 
-> [1] https://lore.kernel.org/r/20190723153640.GB720@lst.de
-> 
-> Cc: Alex Williamson <alex.williamson@redhat.com>
-> Signed-off-by: John Hubbard <jhubbard@nvidia.com>
-> ---
->  drivers/vfio/vfio_iommu_type1.c | 15 +++++++--------
->  1 file changed, 7 insertions(+), 8 deletions(-)
-> 
-> diff --git a/drivers/vfio/vfio_iommu_type1.c b/drivers/vfio/vfio_iommu_type1.c
-> index d864277ea16f..795e13f3ef08 100644
-> --- a/drivers/vfio/vfio_iommu_type1.c
-> +++ b/drivers/vfio/vfio_iommu_type1.c
-> @@ -327,9 +327,8 @@ static int put_pfn(unsigned long pfn, int prot)
->  {
->  	if (!is_invalid_reserved_pfn(pfn)) {
->  		struct page *page = pfn_to_page(pfn);
-> -		if (prot & IOMMU_WRITE)
-> -			SetPageDirty(page);
-> -		put_page(page);
-> +
-> +		put_user_pages_dirty_lock(&page, 1, prot & IOMMU_WRITE);
->  		return 1;
->  	}
->  	return 0;
-> @@ -349,11 +348,11 @@ static int vaddr_get_pfn(struct mm_struct *mm, unsigned long vaddr,
->  
->  	down_read(&mm->mmap_sem);
->  	if (mm == current->mm) {
-> -		ret = get_user_pages(vaddr, 1, flags | FOLL_LONGTERM, page,
-> -				     vmas);
-> +		ret = pin_longterm_pages(vaddr, 1, flags, page, vmas);
->  	} else {
-> -		ret = get_user_pages_remote(NULL, mm, vaddr, 1, flags, page,
-> -					    vmas, NULL);
-> +		ret = pin_longterm_pages_remote(NULL, mm, vaddr, 1,
-> +						flags, page, vmas,
-> +						NULL);
->  		/*
->  		 * The lifetime of a vaddr_get_pfn() page pin is
->  		 * userspace-controlled. In the fs-dax case this could
-> @@ -363,7 +362,7 @@ static int vaddr_get_pfn(struct mm_struct *mm, unsigned long vaddr,
->  		 */
->  		if (ret > 0 && vma_is_fsdax(vmas[0])) {
->  			ret = -EOPNOTSUPP;
-> -			put_page(page[0]);
-> +			put_user_page(page[0]);
->  		}
->  	}
->  	up_read(&mm->mmap_sem);
-> 
+In the end though, I just want to see more unit testing and will happily
+take what ever the community decides is the way to go.
