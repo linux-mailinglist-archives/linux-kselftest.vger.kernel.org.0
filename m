@@ -2,122 +2,100 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4681DEB71C
-	for <lists+linux-kselftest@lfdr.de>; Thu, 31 Oct 2019 19:37:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 20350EB759
+	for <lists+linux-kselftest@lfdr.de>; Thu, 31 Oct 2019 19:41:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729351AbfJaShA (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 31 Oct 2019 14:37:00 -0400
-Received: from mga14.intel.com ([192.55.52.115]:53184 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729027AbfJaSg7 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 31 Oct 2019 14:36:59 -0400
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 31 Oct 2019 11:36:58 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.68,252,1569308400"; 
-   d="scan'208";a="212547050"
-Received: from iweiny-desk2.sc.intel.com ([10.3.52.157])
-  by orsmga002.jf.intel.com with ESMTP; 31 Oct 2019 11:36:56 -0700
-Date:   Thu, 31 Oct 2019 11:36:56 -0700
-From:   Ira Weiny <ira.weiny@intel.com>
-To:     John Hubbard <jhubbard@nvidia.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn.topel@intel.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Dave Chinner <david@fromorbit.com>,
-        David Airlie <airlied@linux.ie>,
-        "David S . Miller" <davem@davemloft.net>, Jan Kara <jack@suse.cz>,
-        Jason Gunthorpe <jgg@ziepe.ca>, Jens Axboe <axboe@kernel.dk>,
-        Jonathan Corbet <corbet@lwn.net>,
-        =?iso-8859-1?B?Suly9G1l?= Glisse <jglisse@redhat.com>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Michal Hocko <mhocko@suse.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Paul Mackerras <paulus@samba.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Vlastimil Babka <vbabka@suse.cz>, bpf@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, kvm@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-rdma@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, netdev@vger.kernel.org,
-        linux-mm@kvack.org, LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 03/19] goldish_pipe: rename local pin_user_pages() routine
-Message-ID: <20191031183656.GD14771@iweiny-DESK2.sc.intel.com>
-References: <20191030224930.3990755-1-jhubbard@nvidia.com>
- <20191030224930.3990755-4-jhubbard@nvidia.com>
+        id S1729347AbfJaSki (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 31 Oct 2019 14:40:38 -0400
+Received: from mail-pl1-f194.google.com ([209.85.214.194]:41081 "EHLO
+        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729251AbfJaSki (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 31 Oct 2019 14:40:38 -0400
+Received: by mail-pl1-f194.google.com with SMTP id t10so3073459plr.8
+        for <linux-kselftest@vger.kernel.org>; Thu, 31 Oct 2019 11:40:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=4ZF1W1bG/Rl8CChrQFOeusHspeNIEyvicA7XRZyNais=;
+        b=ToKg4woxb646iL0UBTpW7kOzBulVyPZE8eDKGJRbGidQmuB1kSZuXXGKQrlmhVqoG/
+         6mqlKlPwwHbv30/kmrxykMo2JifdPmff3G7Vcjm5igE3zt+aH+NuABmoc8V6qYyGdAUo
+         73/woDqeWba6Ad8QQ0T/3wSFBcBSEsb+D3la0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=4ZF1W1bG/Rl8CChrQFOeusHspeNIEyvicA7XRZyNais=;
+        b=H2mukumumc5Tpi9UygdEOPyGsnfPAtBiCDMnKB3nrmc+ZCmD6Ro13ARHzgcopQqeZ0
+         7W5zS1b49vlxPPfwU5o0fl3Z1UVLqpjPBDOb3d0zsa+rNhd5KGEqi3wtEc9769lKmzgv
+         mrIRkF5CNOfkJjw4ReJMtEXqZnAEKMcxKW8lkJTLNYas0iyTO27Ivl1DnhXYjhmHDl5t
+         WL8I4IAKyklvvzT/RyHMsGoIiMvilJhzCV+uwd/nwZgqZJGnQ/nf6/BBDBwdytc4sc/b
+         nBPDA41PmCeLhEnnNCYyejylPdWBRpFwkIPnhaQ3a9LquCVIPuqpsABqxASINq5I3fYb
+         QH9w==
+X-Gm-Message-State: APjAAAXwIKpMi7VPnm7DqrkFpHsaW7FLnOwRiM9oWrua7Qgwc7yTyfER
+        Lwr0JUZI7iRakvc1m8X8ZNGcSA==
+X-Google-Smtp-Source: APXvYqzTiXUhiopZUISbbRLvil8rhHffcEWWEBYAGxeX2kHSa42od+2QUV+X5ZsC/43T4hltLWmqWA==
+X-Received: by 2002:a17:902:326:: with SMTP id 35mr8047584pld.248.1572547237564;
+        Thu, 31 Oct 2019 11:40:37 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id j14sm3913682pfi.168.2019.10.31.11.40.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 31 Oct 2019 11:40:36 -0700 (PDT)
+Date:   Thu, 31 Oct 2019 11:40:35 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Brendan Higgins <brendanhiggins@google.com>
+Cc:     Iurii Zaikin <yzaikin@google.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Alan Maguire <alan.maguire@oracle.com>,
+        Matthias Maennich <maennich@google.com>,
+        shuah <shuah@kernel.org>,
+        John Johansen <john.johansen@canonical.com>, jmorris@namei.org,
+        serge@hallyn.com, David Gow <davidgow@google.com>,
+        Theodore Ts'o <tytso@mit.edu>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-security-module@vger.kernel.org,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Mike Salvatore <mike.salvatore@canonical.com>
+Subject: Re: [PATCH linux-kselftest/test v1] apparmor: add AppArmor KUnit
+ tests for policy unpack
+Message-ID: <201910311136.BBC4C70B@keescook>
+References: <20191018001816.94460-1-brendanhiggins@google.com>
+ <20191018122949.GD11244@42.do-not-panic.com>
+ <alpine.LRH.2.20.1910191348280.11804@dhcp-10-175-221-34.vpn.oracle.com>
+ <CAFd5g46aO4jwyo32DSz4L8GdhP6t38+Qb9NB+3fev3u4G6sg4w@mail.gmail.com>
+ <20191024101529.GK11244@42.do-not-panic.com>
+ <201910301205.74EC2A226D@keescook>
+ <CAAXuY3o31iCJwZ+WGHMaK1MgpC0qv=JkJWnzv8Lhym9TnZQvcQ@mail.gmail.com>
+ <CAFd5g446cyijzgap9r8nm_202zkUsfdZXrn5E1_Mfe-R+eFb_g@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20191030224930.3990755-4-jhubbard@nvidia.com>
-User-Agent: Mutt/1.11.1 (2018-12-01)
+In-Reply-To: <CAFd5g446cyijzgap9r8nm_202zkUsfdZXrn5E1_Mfe-R+eFb_g@mail.gmail.com>
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Oct 30, 2019 at 03:49:14PM -0700, John Hubbard wrote:
-> 1. Avoid naming conflicts: rename local static function from
-> "pin_user_pages()" to "pin_goldfish_pages()".
+On Thu, Oct 31, 2019 at 02:33:32AM -0700, Brendan Higgins wrote:
+> 2) One of the layers in your program is too think, and you should
+> introduce a new layer with a new public interface that you can test
+> through.
 > 
-> An upcoming patch will introduce a global pin_user_pages()
-> function.
-> 
+> I think the second point here is problematic with how C is written in
+> the kernel. We don't really have any concept of public vs. private
+> inside the kernel outside of static vs. not static, which is much more
+> restricted.
 
-Reviewed-by: Ira Weiny <ira.weiny@intel.com>
+I don't find "2" to be a convincing argument (as you hint a bit at in
+the next paragraph)_. There are lots of things code is depending on
+(especially given the kernel's coding style guides about breaking up
+large functions into little ones), that you want to test to make sure
+is working correctly that has no public exposure, and you want to test
+those helper's corner cases which might be hard to (currently) reach via
+the higher level public APIs.
 
-> Signed-off-by: John Hubbard <jhubbard@nvidia.com>
-> ---
->  drivers/platform/goldfish/goldfish_pipe.c | 18 +++++++++---------
->  1 file changed, 9 insertions(+), 9 deletions(-)
-> 
-> diff --git a/drivers/platform/goldfish/goldfish_pipe.c b/drivers/platform/goldfish/goldfish_pipe.c
-> index cef0133aa47a..7ed2a21a0bac 100644
-> --- a/drivers/platform/goldfish/goldfish_pipe.c
-> +++ b/drivers/platform/goldfish/goldfish_pipe.c
-> @@ -257,12 +257,12 @@ static int goldfish_pipe_error_convert(int status)
->  	}
->  }
->  
-> -static int pin_user_pages(unsigned long first_page,
-> -			  unsigned long last_page,
-> -			  unsigned int last_page_size,
-> -			  int is_write,
-> -			  struct page *pages[MAX_BUFFERS_PER_COMMAND],
-> -			  unsigned int *iter_last_page_size)
-> +static int pin_goldfish_pages(unsigned long first_page,
-> +			      unsigned long last_page,
-> +			      unsigned int last_page_size,
-> +			      int is_write,
-> +			      struct page *pages[MAX_BUFFERS_PER_COMMAND],
-> +			      unsigned int *iter_last_page_size)
->  {
->  	int ret;
->  	int requested_pages = ((last_page - first_page) >> PAGE_SHIFT) + 1;
-> @@ -354,9 +354,9 @@ static int transfer_max_buffers(struct goldfish_pipe *pipe,
->  	if (mutex_lock_interruptible(&pipe->lock))
->  		return -ERESTARTSYS;
->  
-> -	pages_count = pin_user_pages(first_page, last_page,
-> -				     last_page_size, is_write,
-> -				     pipe->pages, &iter_last_page_size);
-> +	pages_count = pin_goldfish_pages(first_page, last_page,
-> +					 last_page_size, is_write,
-> +					 pipe->pages, &iter_last_page_size);
->  	if (pages_count < 0) {
->  		mutex_unlock(&pipe->lock);
->  		return pages_count;
-> -- 
-> 2.23.0
-> 
-> 
+-- 
+Kees Cook
