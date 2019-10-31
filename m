@@ -2,100 +2,92 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E3BC6EAAE2
-	for <lists+linux-kselftest@lfdr.de>; Thu, 31 Oct 2019 08:12:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E4675EAB17
+	for <lists+linux-kselftest@lfdr.de>; Thu, 31 Oct 2019 08:44:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726686AbfJaHMg (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 31 Oct 2019 03:12:36 -0400
-Received: from mail-wr1-f68.google.com ([209.85.221.68]:45178 "EHLO
-        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726575AbfJaHMg (ORCPT
+        id S1726937AbfJaHoZ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 31 Oct 2019 03:44:25 -0400
+Received: from userp2130.oracle.com ([156.151.31.86]:47878 "EHLO
+        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726776AbfJaHoZ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 31 Oct 2019 03:12:36 -0400
-Received: by mail-wr1-f68.google.com with SMTP id q13so4970420wrs.12
-        for <linux-kselftest@vger.kernel.org>; Thu, 31 Oct 2019 00:12:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=tp3Ez8VC0XFbaT+hgR6CPrD+SWbALo91LUbFh4nLv2I=;
-        b=BWc9Lgb4ffE/c6zKH93LKOotgFgvzrf7Iiqx5peY+b+phsQPhNRoSKurM7+SOk6tXd
-         lGdIiobByRKpNPxkENxN0xzPlZzsmj0GfjRlUHaNz/KxMjdB/VaGd8jc0+PMoqUN+8ie
-         Y5YAXsNluRkWlsBv5eO9bueZtKTFLROkx8kNoHnKREeD/ScZwnNxJeIbKtufpihY2U/d
-         7tft9dDX3FxSR+eTX+ZHMf848+ZYfw/fdj9rdvCxKuxsfNk0y2mqUP5By6oNjf9QkzFU
-         34/WlKPOQq8eWyxuJYaKCWGKVPaHdSyaTHT5STGCZo6FRCOZrQ3m7hWhxcwU2bh/ArHs
-         fEHw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=tp3Ez8VC0XFbaT+hgR6CPrD+SWbALo91LUbFh4nLv2I=;
-        b=PKh+RPeIch02mMcRcokiiR9943dWfl1CTGMXR2hT+S7/jUb8EzS8TUd9AY4/X8CZcR
-         URFNS9Be4zj6b2f/5fuuu/QRROH9W0ky+A+xNab4mSsst3nJ2CDNerGktqmAtRV3aoZW
-         SiPc7QXNOthvVfmxQnTYp4fb1ll3BLu117lnO9q8dsGrOYfpy2rwVo+lYht+wB+K7y6y
-         xm865zD7DX9D4BdcWz3zdjcF3myYxjlP+a8pPth8lFXea+LcwuKhVhOJxlZk6m1GhG1V
-         Zp4/8Jd0PpqstS5JagakMk5QwMsih37zluCGm3arBhDASpnyjf9pkPus95E0lOdZkWx7
-         fxbg==
-X-Gm-Message-State: APjAAAU/k0qlbojH+sQWgWiu5+Cg7THmf6LWgQJajZDQr7SC9opZBU7C
-        vIgbgZ29X6gK3AvewKDK5/7pBzkpzm4KDxgcPgyDciCIj3Si6g==
-X-Google-Smtp-Source: APXvYqx48Sm/Pjqigtw0m+ZRHtBWYpse3AxLPAsfUZ1r9FmyFacpaSNqXi6jIvay0nhWPZqFnokYv/fVf0lF8NoF3IM=
-X-Received: by 2002:a05:6000:101:: with SMTP id o1mr4001921wrx.394.1572505954230;
- Thu, 31 Oct 2019 00:12:34 -0700 (PDT)
-MIME-Version: 1.0
-References: <20191024224631.118656-1-davidgow@google.com> <0cb1d948-0da3-eb0f-c58f-ae3a785dd0dd@kernel.org>
- <CABVgOSmCHbGjZBjeWSbPEZbJw22SaBQnoO77xxNzN_ugAwzNiQ@mail.gmail.com>
- <20191030104217.GA18421@kadam> <42a8270d-ed6f-d29f-5e71-7b76a074b63e@kernel.org>
- <20191030191255.GD18421@kadam> <f665ec7b21527c7095a61dd5c2f48fd00df0d5c9.camel@perches.com>
-In-Reply-To: <f665ec7b21527c7095a61dd5c2f48fd00df0d5c9.camel@perches.com>
-From:   David Gow <davidgow@google.com>
-Date:   Thu, 31 Oct 2019 00:12:22 -0700
-Message-ID: <CABVgOSkKCXodwi=RcmRpB+t157surmEjq2b+92VQQD2Cy0WTvA@mail.gmail.com>
-Subject: Re: [PATCH linux-kselftest/test v6] lib/list-test: add a test for the
- 'list' doubly linked list
-To:     Joe Perches <joe@perches.com>
-Cc:     Dan Carpenter <dan.carpenter@oracle.com>, shuah <shuah@kernel.org>,
+        Thu, 31 Oct 2019 03:44:25 -0400
+Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
+        by userp2130.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x9V7i7Re029589;
+        Thu, 31 Oct 2019 07:44:15 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=corp-2019-08-05;
+ bh=UJq0GuSeiAGq0pMGkmaU4zIL7MNZOdSl8Rq18xN+PfQ=;
+ b=iI4lBDdyIAzBxP0cileGIQzISELbfAoNv23ij4kqk+CtjgML0U2FdpE5LzklOiUlmcrl
+ HGG++KbBrFe5QcgWfujcAsEyO0Ci0VYI8jBlZRBQ2NNtUf9F5rV6u31dx5STvIAaBZgA
+ Pd9vsYF5KkANXB/DPTFVA/KmXwqCHc+sB46BYztcra7GteAbAsWLZlxZLWnUVIqq6uxE
+ 2HIyttXLMjoa0WzoItKjGMukhkHD3e8++zV3gepFkOeuGi6/+R8fnbXeT6TBnCOqcZVZ
+ U1IT1qxXr/OB2IDBtbPHRSgWlwN7YJ4U8ml5rwi/nec6Mr/03FPnYlXh1vZMRsRwbGKU Yw== 
+Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
+        by userp2130.oracle.com with ESMTP id 2vxwhfsb8j-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 31 Oct 2019 07:44:15 +0000
+Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
+        by aserp3020.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x9V7i2E5058050;
+        Thu, 31 Oct 2019 07:44:14 GMT
+Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
+        by aserp3020.oracle.com with ESMTP id 2vysbtnwu7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 31 Oct 2019 07:44:14 +0000
+Received: from abhmp0008.oracle.com (abhmp0008.oracle.com [141.146.116.14])
+        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id x9V7h7jb028429;
+        Thu, 31 Oct 2019 07:43:07 GMT
+Received: from kadam (/41.57.98.10)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Thu, 31 Oct 2019 00:43:06 -0700
+Date:   Thu, 31 Oct 2019 10:42:56 +0300
+From:   Dan Carpenter <dan.carpenter@oracle.com>
+To:     David Gow <davidgow@google.com>
+Cc:     Joe Perches <joe@perches.com>, shuah <shuah@kernel.org>,
         Brendan Higgins <brendanhiggins@google.com>,
         Andrew Morton <akpm@linux-foundation.org>,
         Kees Cook <keescook@chromium.org>,
         "open list:KERNEL SELFTEST FRAMEWORK" 
         <linux-kselftest@vger.kernel.org>, kunit-dev@googlegroups.com,
         linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: [PATCH linux-kselftest/test v6] lib/list-test: add a test for
+ the 'list' doubly linked list
+Message-ID: <20191031074256.GE18421@kadam>
+References: <20191024224631.118656-1-davidgow@google.com>
+ <0cb1d948-0da3-eb0f-c58f-ae3a785dd0dd@kernel.org>
+ <CABVgOSmCHbGjZBjeWSbPEZbJw22SaBQnoO77xxNzN_ugAwzNiQ@mail.gmail.com>
+ <20191030104217.GA18421@kadam>
+ <42a8270d-ed6f-d29f-5e71-7b76a074b63e@kernel.org>
+ <20191030191255.GD18421@kadam>
+ <f665ec7b21527c7095a61dd5c2f48fd00df0d5c9.camel@perches.com>
+ <CABVgOSkKCXodwi=RcmRpB+t157surmEjq2b+92VQQD2Cy0WTvA@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CABVgOSkKCXodwi=RcmRpB+t157surmEjq2b+92VQQD2Cy0WTvA@mail.gmail.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9426 signatures=668685
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
+ phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=952
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.0.1-1908290000 definitions=main-1910310077
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9426 signatures=668685
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
+ suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
+ lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1908290000
+ definitions=main-1910310077
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-I tend to agree that it's better to either fix or ignore checkpatch
-than to arbitrarily change things in cases like this where checkpatch
-is obviously wrong. Equally, it certainly seems that there isn't an
-obvious way of modifying checkpatch that will both not cause other
-problems and not add another arbitrary name check. The main concern
-about just leaving the checkpatch errors in is that people might be
-automatically rejecting changes (or worse, the whole kselftest/test
-pull request) if checkpatch errors are present. I'm not sure how
-likely that is, but I can understand the desire to be careful, since
-relatively minor changes have delayed KUnit changes before.
+David, this is an easy question to answer.  I think Shuah is the
+maintainer here?  You don't have to make everyone happy, you just have
+to make Shuah happy.  Joe and I have very little emotional investment in
+this code and we don't care what you do and even if we did, it wouldn't
+matter.
 
-So, there are a few options, I guess:
-- Hack around the issue in the patch (as this v7 is doing). Ugly, but
-does at least mean that this change won't trigger any automated
-rejection-of-checkpatch-errors people might be doing. (Even if, I
-think we agree, automatically rejecting anything with checkpatch
-warnings is not really correct.)
-- Accept that tests (and other functions) with "for_each" in the name
-like this are rare enough that it's not worth the complexity of
-supporting it in checkpatch, and taking v6 as-is with the checkpatch
-errors.
-- Modify checkpatch to handle this in some other way (e.g., only if
-the name doesn't include "test"): I don't think there's a perfectly
-clean way of doing this.
-- Modify checkpatch to make this ERROR a WARNING instead, since we
-know this check has some flaws in this test, and potentially future
-tests.
-- Re-send v6 with a note about the checkpatch warning in the
-description, so that it's easier to tell if one or more of these
-
-Is there some combination of the above that sounds good?
-
--- David
+regards,
+dan carpenter
