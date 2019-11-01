@@ -2,75 +2,109 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 061C3EC5F3
-	for <lists+linux-kselftest@lfdr.de>; Fri,  1 Nov 2019 16:55:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F393EEC711
+	for <lists+linux-kselftest@lfdr.de>; Fri,  1 Nov 2019 17:50:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729245AbfKAPzv (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 1 Nov 2019 11:55:51 -0400
-Received: from mail-il1-f195.google.com ([209.85.166.195]:37422 "EHLO
-        mail-il1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729155AbfKAPzu (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 1 Nov 2019 11:55:50 -0400
-Received: by mail-il1-f195.google.com with SMTP id t9so6804865ils.4
-        for <linux-kselftest@vger.kernel.org>; Fri, 01 Nov 2019 08:55:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=KqYLJklOErTzrVm5Bzbb6HQh9gI4PrbbORQE30GcC5Y=;
-        b=pUJIzGj/MPv1EKc2k3aNehKVojTiwbi36zg1sckIL11PdqXfau1yGsXj1t9CSJeyKL
-         3i/jp/TX/JDBG+iju9GRvxcye9SA9yiSTdccj7/EyUgYmTSSLRFNkcsvQASN37kQDgQc
-         jnResb6aJSg07Bq5suGRVdOqTkrlyY1YMgTmHgQc7tz+apzSU8zlfJ8cqPEt/z1Bd3OE
-         3WNB6qm/Pkg8xI5aHgZ1XzvGw6eZK1PwDo4winMpdBi8I/fqM1G/oYqHCv2wNxwHhj5m
-         N0Nph5NSOfE5c8csPVkAAUkUAiHHdFA9X2wHOboX58ouCDBOqdL9C38hXp5o3eU3+tNB
-         N8dw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=KqYLJklOErTzrVm5Bzbb6HQh9gI4PrbbORQE30GcC5Y=;
-        b=AZDl6cnsRcZja5qo0b0gXm/SYNswPPDx2l9rAmJTm7ToMhcowAD6w9VCggxThOrZd2
-         6Zls5gKIFFFmq4ZnGCrpS5T/yBCt0aFkjfs9VvfpqtrvfrEXH5l/F9xXhlw+aRGilVJf
-         8txBj+0ZAMeJr1tEuPmofV2NWdoIVlSH6l8OWqcOiEs/UpEiS6O9sWHucM+N1hr/3PYn
-         FLlX/4hiJOt9e3tXMMdeutVjnbDzeY66qMkzIKszPrCMnlDCoW8GHAOemKIrol7SSnv4
-         UTBPhBlf96sQn8UXEbG/ro2rGwexqjFX7Nq3QSUlJGpF5rlKVhH9RmVG4wEwpEGe9gNL
-         +sMg==
-X-Gm-Message-State: APjAAAUFA41f/DhsQravZed7xpC9zjGasRi1froMIBvJVUjHBB84sXKC
-        dtQLNMR7V9Dtr47aFk2F34kg5LIGI+CoiCb5pw==
-X-Google-Smtp-Source: APXvYqwNtyKjT0pXbrd92BXP7Yur4/d12tLIQphfDkWOJF9bZR6SLYcfNyjCPNgVxkpA0mTQo/BiL8Zaftdd9XRgWqY=
-X-Received: by 2002:a92:1d8d:: with SMTP id g13mr8826976ile.35.1572623748630;
- Fri, 01 Nov 2019 08:55:48 -0700 (PDT)
+        id S1728121AbfKAQuN (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 1 Nov 2019 12:50:13 -0400
+Received: from mail.kernel.org ([198.145.29.99]:55056 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726825AbfKAQuN (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 1 Nov 2019 12:50:13 -0400
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net [24.9.64.241])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 15D052080F;
+        Fri,  1 Nov 2019 16:50:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1572627012;
+        bh=BUpvPIgCiek5J4CeLj4ca43Fs+r3iHsHbPYrxAmt2wE=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=psFXQRDbxkTKxYUj7eTf2Omjo3astwoXfflW1bYkNIZmTuZD+EtesRws9UOkeYe91
+         IFZOcdy87wphXGkpuiDJs8rspxU3g4InAIWj8GjQJ6G/4herpdB9aV2dqStRjNlC9x
+         ow6EgmD3OczIPTgaA4qoa5ZVWNCdPZpOmHt5oMAI=
+Subject: Re: [PATCH linux-kselftest/test v6] lib/list-test: add a test for the
+ 'list' doubly linked list
+To:     Joe Perches <joe@perches.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>
+Cc:     David Gow <davidgow@google.com>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Kees Cook <keescook@chromium.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, kunit-dev@googlegroups.com,
+        linux-kernel@vger.kernel.org, shuah <shuah@kernel.org>
+References: <20191024224631.118656-1-davidgow@google.com>
+ <0cb1d948-0da3-eb0f-c58f-ae3a785dd0dd@kernel.org>
+ <CABVgOSmCHbGjZBjeWSbPEZbJw22SaBQnoO77xxNzN_ugAwzNiQ@mail.gmail.com>
+ <20191030104217.GA18421@kadam>
+ <42a8270d-ed6f-d29f-5e71-7b76a074b63e@kernel.org>
+ <20191030191255.GD18421@kadam>
+ <f665ec7b21527c7095a61dd5c2f48fd00df0d5c9.camel@perches.com>
+From:   shuah <shuah@kernel.org>
+Message-ID: <a127aeaa-e5ba-2d8d-0894-936e05637508@kernel.org>
+Date:   Fri, 1 Nov 2019 10:49:51 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-Received: by 2002:a02:7749:0:0:0:0:0 with HTTP; Fri, 1 Nov 2019 08:55:48 -0700 (PDT)
-Reply-To: moneygram.1820@outlook.fr
-From:   "Mary Coster, I.M.F director-Benin" 
-        <info.zennitbankplcnigerian@gmail.com>
-Date:   Fri, 1 Nov 2019 16:55:48 +0100
-Message-ID: <CABHzvrmPdjgy_vBxQMfJ2YwGwj1RyCvQt1Oy5GJczarHTQb=pg@mail.gmail.com>
-Subject: Contact Money Gram international service-Benin to receive your
- payment funds US$2.500,000 Million
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <f665ec7b21527c7095a61dd5c2f48fd00df0d5c9.camel@perches.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Attn Dear,Funds Beneficiary.
-Contact Money Gram international service-Benin to receive your payment
-funds US$2.500,000 Million approved this morning through the UN
-payment settlement organization.
-Contact Person, Mr. John Dave.
-Official Director.Money Gram-Benin
-Email: moneygram.1820@outlook.fr
-Telephone +229 62619517
-Once you get intouch with Mr. John Dave, Money Gram Director, send to
-him your address including your phone numbers. He will be sending the
-transfer to you  $5000.00 USD daily until you received your complete
-payment $2.5m from the office.
-Note,I have paid the whole service fees for you but only small money
-you been required to send to this office is $23.00 only via Money Gram
-transfer.
-God bless
-Mary Coster, I.M.F director-Benin
-m.coster@aol.com
+On 10/30/19 1:23 PM, Joe Perches wrote:
+> On Wed, 2019-10-30 at 22:12 +0300, Dan Carpenter wrote:
+>> On Wed, Oct 30, 2019 at 10:27:12AM -0600, shuah wrote:
+>>>> It's better to ignore checkpatch and other scripts when they are wrong.
+>>>> (unless the warning message inspires you to make the code more readable
+>>>> for humans).
+>>>>
+>>>
+>>> It gets confusing when to ignore and when not to. It takes work to
+>>> figure out and it is subjective.
+>>>
+>>
+>> In this case, it's not subjective because checkpatch is clearly not
+>> working as intended.
+> 
+> checkpatch _is_ working as intended.
+> It was never intended to be perfect.
+> 
+> checkpatch _always_ depended on a reviewer deciding
+> whether its output was appropriate.
+> 
+>> I don't feel like "checkpatch clean" is a useful criteria for applying
+>> patches.
+> 
+> Nor do I.
+> 
+>> The other things about warnings is that I always encourage people to
+>> just ignore old warnings.  If you're running Smatch and you see a
+>> warning in ancient code that means I saw it five years ago and didn't
+>> fix it so it's a false positive.  Old warnings are always 100% false
+>> positives.
+> 
+> That'd be not absolute either because it depended on your
+> historical judgment as to whether an old warning was in fact
+> a defect or not.
+> 
+> People make mistakes.
+> Regex based scripts are by design stupid and untrustworthy.
+> 
+> Mistakes will be made.
+> Just fix the actual defects in code as soon as possible.
+> 
+> 
+> 
+
+
+Thanks all for chiming in. I am taking v6 as is and adding an update
+to commit log capture the spurious errors from checkpath.pl for this
+specific case.
+
+thanks,
+-- Shuah
