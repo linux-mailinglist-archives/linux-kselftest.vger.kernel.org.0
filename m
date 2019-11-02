@@ -2,108 +2,76 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9954BECF28
-	for <lists+linux-kselftest@lfdr.de>; Sat,  2 Nov 2019 15:34:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B6B7ECF5F
+	for <lists+linux-kselftest@lfdr.de>; Sat,  2 Nov 2019 16:08:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726454AbfKBOeR (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 2 Nov 2019 10:34:17 -0400
-Received: from mail-il1-f195.google.com ([209.85.166.195]:37741 "EHLO
-        mail-il1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726430AbfKBOeR (ORCPT
+        id S1726623AbfKBPIw (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 2 Nov 2019 11:08:52 -0400
+Received: from mail-qt1-f195.google.com ([209.85.160.195]:46470 "EHLO
+        mail-qt1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726574AbfKBPIw (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 2 Nov 2019 10:34:17 -0400
-Received: by mail-il1-f195.google.com with SMTP id s5so828478iln.4;
-        Sat, 02 Nov 2019 07:34:17 -0700 (PDT)
+        Sat, 2 Nov 2019 11:08:52 -0400
+Received: by mail-qt1-f195.google.com with SMTP id u22so17143770qtq.13
+        for <linux-kselftest@vger.kernel.org>; Sat, 02 Nov 2019 08:08:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:references:from:message-id:date:user-agent:mime-version
-         :in-reply-to:content-language:content-transfer-encoding;
-        bh=QqxgrxraiNr6QGsrgDTomSVloF/MS9ElgqG76PnzehY=;
-        b=r/mfm+mWDrzuVQG/CuFZG/XSqiDA5eaAoi0rvCSicKpZKr+P8To1mRqKRETXj66KQi
-         gDpYv7MSZ8Reh8XoMdkjefThjk3J3nrRfpgKF29ldlv7RSEkFIph7k4J8iRGOxxPa6qE
-         +QZS9GIXyxOYhbUyaw3OeD/7FQngsn26IjEGyIvPr38wY1yCvgXYaY5+U77oS1GRH5SO
-         5GDys2nCsvJ3mfcAslrHRsYnC3HJgTAhALWY6PilAdgebYsA164BhOE6ahNoLBh+HTBw
-         kSjrMlUF0ZSivAU2YlI2y8UDZyQ4sft+M2rjAOQvYc5SbZ7VfIv9HKv2GR3iPswX9aLF
-         6sLw==
+        d=arista.com; s=googlenew;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Mcyjyeo5WD7WfTXx5Ng2X1so4evuHV4V8GiglpDl1VQ=;
+        b=XmN6x7X/6p6GWDZ4C4LAFG+DZtShPzLwGySyhtUf47HD6Gg+kjSJXVo9ieA+awfL6y
+         KXpGd3TcdpJ8EQQbKdeWxzD8GY4dooWC2BudrcnBjYnyLSCgFXhXSEFA1XOZdFNa48Qr
+         QErBYKpXEs8hxgxjM/6oWGziPCJEQ6a7J+FdsmbKcdU0RkxOpmbEQI+40YaXQSSIKcUm
+         LKXia5WzKCmTnfMmV3mYR0I3gJFY5Utep6jCeN9sGBVkdXr/9rtpPnJWDxu/elTf0VR0
+         qqyrBLtRId/vacL4VePmGS+kC6k3y+1z6DU0wf91tDnD+l/oQjPWdEypG/euW7f2+NwN
+         8toQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=QqxgrxraiNr6QGsrgDTomSVloF/MS9ElgqG76PnzehY=;
-        b=dCNAShXw7jsljrsirDcDm4ug8b1bPYImgU/TUV3H4Bs1KB4gYujhG/CjNB2I8A+T1M
-         61nbzrFIxbl7dfWD5eWGRm+ltwCd9UgXqxl2hrCFqHrSf81pP0EXWD8K781S7yhx+idw
-         +9Sq9IeBzKvBG28ZirW8/W7hNy6X9TiLTvvGKheoqQJEgrbWz5Wq1+1Gq/mAWW61mTRQ
-         44EEiD6ljVSg6ckCnhwfgpqm1mUdMgvNxbWF0u+NJ5ct3AlSPAqdPuTAijP3CpBm3ObM
-         zmK6yfy/+g1EZIO9ZMuijlzJfaTQ4f4fuk5/Weg74mpnivjllaH/wMrwxPyLvVyMWhsw
-         +VIg==
-X-Gm-Message-State: APjAAAUrUWVsp+95wDqGGqD07joubu94mf4YdiTQJhhG778SBiQ+AUGy
-        BqkjM/lUBH5+xCetTPJb7pcugzAr
-X-Google-Smtp-Source: APXvYqwNH5hBBbCUltn6ko4oDbi192evu5qEPmqOOiFdwrpxkIMxdwMqCuAQRy1jhUdykTFas6m5nw==
-X-Received: by 2002:a92:1642:: with SMTP id r63mr19452726ill.83.1572705256328;
-        Sat, 02 Nov 2019 07:34:16 -0700 (PDT)
-Received: from dahern-DO-MB.local ([2601:282:800:fd80:d194:3543:ed5:37ec])
-        by smtp.googlemail.com with ESMTPSA id e13sm98378iom.50.2019.11.02.07.34.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 02 Nov 2019 07:34:15 -0700 (PDT)
-Subject: Re: [PATCH net-next 2/2] selftest: net: add icmp reply address test
-To:     Francesco Ruggeri <fruggeri@arista.com>, davem@davemloft.net,
-        shuah@kernel.org, netdev@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-References: <20191101233408.BC15495C0902@us180.sjc.aristanetworks.com>
-From:   David Ahern <dsahern@gmail.com>
-Message-ID: <0a03def6-3ea0-090f-048f-877700836df2@gmail.com>
-Date:   Sat, 2 Nov 2019 08:34:14 -0600
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.14; rv:68.0)
- Gecko/20100101 Thunderbird/68.2.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Mcyjyeo5WD7WfTXx5Ng2X1so4evuHV4V8GiglpDl1VQ=;
+        b=DB7iWweA0ynq2kRfs3d/2uXF3dWmsTLlLhosRet8EdTJH1jle8maXAjGOQCiV9lSm6
+         w153rn3RUxZYdQF1pTS3ILrLDl1fBFRGd+SqHl8X1rlhPL6MDbjD2DvDwk3WlWwCD/x1
+         3SOPVZtjM98NvULgT4VM21mK1LjDUcB9Bb8D0pSPofsWtcA2h5qa5+tTZLyjXIPU9wyY
+         60Ta3hWeDzAV6k22X2+MMSvvq7O3bWhhWZhF89yFA4KQ4ql/HAlO8/qdBVCe5a6KV+wU
+         zXOpqvQpTxKPFOYL+VlfVNCGGb4WMci7vFv876wTGGwj6hz0cwI4r6epu3gTjJlyAcu7
+         eyfg==
+X-Gm-Message-State: APjAAAVKm+7FeXNcDuEFdQA8bwWI+Mq0bxC83HifooGUvspPWzKWaG0D
+        76nGExcgiGQ/tN1thEIO6MVdSjbIFU7j/fTJaOK38C9j
+X-Google-Smtp-Source: APXvYqwlaOxZ+q/nRUGFIKOc0JJqqfAJQD7KYK1D1hqyIzwTOjKsvx+jZDKnZ4er2bXZRNoCmvkgrMmIKFXi/CxGFh8=
+X-Received: by 2002:ac8:109:: with SMTP id e9mr5054431qtg.233.1572707331375;
+ Sat, 02 Nov 2019 08:08:51 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20191101233408.BC15495C0902@us180.sjc.aristanetworks.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <20191101233408.BC15495C0902@us180.sjc.aristanetworks.com> <0a03def6-3ea0-090f-048f-877700836df2@gmail.com>
+In-Reply-To: <0a03def6-3ea0-090f-048f-877700836df2@gmail.com>
+From:   Francesco Ruggeri <fruggeri@arista.com>
+Date:   Sat, 2 Nov 2019 08:08:40 -0700
+Message-ID: <CA+HUmGgDrY9A7kz7268ycAOhExA3Y1h-QhBS6xwbWYxpUODDWw@mail.gmail.com>
+Subject: Re: [PATCH net-next 2/2] selftest: net: add icmp reply address test
+To:     David Ahern <dsahern@gmail.com>
+Cc:     David Miller <davem@davemloft.net>, shuah@kernel.org,
+        netdev <netdev@vger.kernel.org>, linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 11/1/19 5:34 PM, Francesco Ruggeri wrote:
-> Verify that in this scenario
-> 
->                    1.0.3.1/24
-> ---- 1.0.1.3/24    1.0.1.1/24 ---- 1.0.2.1/24    1.0.2.4/24 ----
-> |H1|--------------------------|R1|--------------------------|H2|
-> ----            N1            ----            N2            ----
-> 
-> where 1.0.3.1/24 and 1.0.1.1/24 are respectively R1's primary and
-> secondary address on N1, traceroute from H1 to H2 show 1.0.1.1
-> 
-> Signed-off-by: Francesco Ruggeri <fruggeri@arista.com>
-> ---
->  tools/testing/selftests/net/Makefile          |   2 +-
->  .../testing/selftests/net/icmp_reply_addr.sh  | 106 ++++++++++++++++++
->  2 files changed, 107 insertions(+), 1 deletion(-)
->  create mode 100755 tools/testing/selftests/net/icmp_reply_addr.sh
-> 
+On Sat, Nov 2, 2019 at 7:34 AM David Ahern <dsahern@gmail.com> wrote:
+>
+> It would be better to combine both of these into a single test script;
+> the topology and setup are very similar and the scripts share a lot of
+> common code.
 
-Hi:
+Sure, I can do that.
 
-It would be better to combine both of these into a single test script;
-the topology and setup are very similar and the scripts share a lot of
-common code.
+> Also, you still have these using macvlan devices. The intent is to use
+> network namespaces to mimic nodes in a network. As such veth pairs are a
+> better option for this intent.
+>
 
-The script can be a generic traceroute.sh and then contain 2 tests:
-1. IPv4 - verify reply address test,
-2. IPv6 - verify reply address test.
+I am only using macvlans for N1 in the ipv6 test, where there are 3 nodes.
+How do I use veths for that?
 
-Making 1 script with multiple tests allows other tests to be added in
-the future with less overhead. This is how other tests under net are done.
-
-Also, you still have these using macvlan devices. The intent is to use
-network namespaces to mimic nodes in a network. As such veth pairs are a
-better option for this intent.
-
-There are 2 scripts under net (l2tp.sh and fcnal-test.sh) that contain
-functions -- create_ns and connect_ns  -- that really reduce the
-overhead of creating tests like this. Actually you could copy l2tp.sh to
-traceroute.sh and quickly update it for these tests.
-
+Thanks,
+Francesco
