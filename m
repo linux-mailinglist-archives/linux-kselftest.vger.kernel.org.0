@@ -2,97 +2,108 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CF96ECE37
-	for <lists+linux-kselftest@lfdr.de>; Sat,  2 Nov 2019 12:02:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9954BECF28
+	for <lists+linux-kselftest@lfdr.de>; Sat,  2 Nov 2019 15:34:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726454AbfKBLBz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 2 Nov 2019 07:01:55 -0400
-Received: from mga18.intel.com ([134.134.136.126]:24973 "EHLO mga18.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726163AbfKBLBz (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 2 Nov 2019 07:01:55 -0400
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga106.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 02 Nov 2019 04:01:53 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.68,259,1569308400"; 
-   d="scan'208";a="206632673"
-Received: from mohseni-mobl2.ger.corp.intel.com (HELO btopel-mobl.ger.intel.com) ([10.252.42.93])
-  by FMSMGA003.fm.intel.com with ESMTP; 02 Nov 2019 04:01:44 -0700
-Subject: Re: [PATCH 11/19] net/xdp: set FOLL_PIN via pin_user_pages()
-To:     John Hubbard <jhubbard@nvidia.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Al Viro <viro@zeniv.linux.org.uk>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Dave Chinner <david@fromorbit.com>,
-        David Airlie <airlied@linux.ie>,
-        "David S . Miller" <davem@davemloft.net>,
-        Ira Weiny <ira.weiny@intel.com>, Jan Kara <jack@suse.cz>,
-        Jason Gunthorpe <jgg@ziepe.ca>, Jens Axboe <axboe@kernel.dk>,
-        Jonathan Corbet <corbet@lwn.net>,
-        =?UTF-8?B?SsOpcsO0bWUgR2xpc3Nl?= <jglisse@redhat.com>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Michal Hocko <mhocko@suse.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Paul Mackerras <paulus@samba.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Vlastimil Babka <vbabka@suse.cz>, bpf@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, kvm@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-rdma@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, netdev@vger.kernel.org,
-        linux-mm@kvack.org, LKML <linux-kernel@vger.kernel.org>
-References: <20191030224930.3990755-1-jhubbard@nvidia.com>
- <20191030224930.3990755-12-jhubbard@nvidia.com>
-From:   =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>
-Message-ID: <67cd4960-bc17-9603-8d4d-b7b2f68bb373@intel.com>
-Date:   Sat, 2 Nov 2019 12:01:43 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.1.2
+        id S1726454AbfKBOeR (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 2 Nov 2019 10:34:17 -0400
+Received: from mail-il1-f195.google.com ([209.85.166.195]:37741 "EHLO
+        mail-il1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726430AbfKBOeR (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Sat, 2 Nov 2019 10:34:17 -0400
+Received: by mail-il1-f195.google.com with SMTP id s5so828478iln.4;
+        Sat, 02 Nov 2019 07:34:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:references:from:message-id:date:user-agent:mime-version
+         :in-reply-to:content-language:content-transfer-encoding;
+        bh=QqxgrxraiNr6QGsrgDTomSVloF/MS9ElgqG76PnzehY=;
+        b=r/mfm+mWDrzuVQG/CuFZG/XSqiDA5eaAoi0rvCSicKpZKr+P8To1mRqKRETXj66KQi
+         gDpYv7MSZ8Reh8XoMdkjefThjk3J3nrRfpgKF29ldlv7RSEkFIph7k4J8iRGOxxPa6qE
+         +QZS9GIXyxOYhbUyaw3OeD/7FQngsn26IjEGyIvPr38wY1yCvgXYaY5+U77oS1GRH5SO
+         5GDys2nCsvJ3mfcAslrHRsYnC3HJgTAhALWY6PilAdgebYsA164BhOE6ahNoLBh+HTBw
+         kSjrMlUF0ZSivAU2YlI2y8UDZyQ4sft+M2rjAOQvYc5SbZ7VfIv9HKv2GR3iPswX9aLF
+         6sLw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=QqxgrxraiNr6QGsrgDTomSVloF/MS9ElgqG76PnzehY=;
+        b=dCNAShXw7jsljrsirDcDm4ug8b1bPYImgU/TUV3H4Bs1KB4gYujhG/CjNB2I8A+T1M
+         61nbzrFIxbl7dfWD5eWGRm+ltwCd9UgXqxl2hrCFqHrSf81pP0EXWD8K781S7yhx+idw
+         +9Sq9IeBzKvBG28ZirW8/W7hNy6X9TiLTvvGKheoqQJEgrbWz5Wq1+1Gq/mAWW61mTRQ
+         44EEiD6ljVSg6ckCnhwfgpqm1mUdMgvNxbWF0u+NJ5ct3AlSPAqdPuTAijP3CpBm3ObM
+         zmK6yfy/+g1EZIO9ZMuijlzJfaTQ4f4fuk5/Weg74mpnivjllaH/wMrwxPyLvVyMWhsw
+         +VIg==
+X-Gm-Message-State: APjAAAUrUWVsp+95wDqGGqD07joubu94mf4YdiTQJhhG778SBiQ+AUGy
+        BqkjM/lUBH5+xCetTPJb7pcugzAr
+X-Google-Smtp-Source: APXvYqwNH5hBBbCUltn6ko4oDbi192evu5qEPmqOOiFdwrpxkIMxdwMqCuAQRy1jhUdykTFas6m5nw==
+X-Received: by 2002:a92:1642:: with SMTP id r63mr19452726ill.83.1572705256328;
+        Sat, 02 Nov 2019 07:34:16 -0700 (PDT)
+Received: from dahern-DO-MB.local ([2601:282:800:fd80:d194:3543:ed5:37ec])
+        by smtp.googlemail.com with ESMTPSA id e13sm98378iom.50.2019.11.02.07.34.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 02 Nov 2019 07:34:15 -0700 (PDT)
+Subject: Re: [PATCH net-next 2/2] selftest: net: add icmp reply address test
+To:     Francesco Ruggeri <fruggeri@arista.com>, davem@davemloft.net,
+        shuah@kernel.org, netdev@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+References: <20191101233408.BC15495C0902@us180.sjc.aristanetworks.com>
+From:   David Ahern <dsahern@gmail.com>
+Message-ID: <0a03def6-3ea0-090f-048f-877700836df2@gmail.com>
+Date:   Sat, 2 Nov 2019 08:34:14 -0600
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.14; rv:68.0)
+ Gecko/20100101 Thunderbird/68.2.1
 MIME-Version: 1.0
-In-Reply-To: <20191030224930.3990755-12-jhubbard@nvidia.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
+In-Reply-To: <20191101233408.BC15495C0902@us180.sjc.aristanetworks.com>
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 2019-10-30 23:49, John Hubbard wrote:
-> Convert net/xdp to use the new pin_longterm_pages() call, which sets
-> FOLL_PIN. Setting FOLL_PIN is now required for code that requires
-> tracking of pinned pages.
+On 11/1/19 5:34 PM, Francesco Ruggeri wrote:
+> Verify that in this scenario
 > 
-> Signed-off-by: John Hubbard <jhubbard@nvidia.com>
-
-Acked-by: Björn Töpel <bjorn.topel@intel.com>
-
+>                    1.0.3.1/24
+> ---- 1.0.1.3/24    1.0.1.1/24 ---- 1.0.2.1/24    1.0.2.4/24 ----
+> |H1|--------------------------|R1|--------------------------|H2|
+> ----            N1            ----            N2            ----
+> 
+> where 1.0.3.1/24 and 1.0.1.1/24 are respectively R1's primary and
+> secondary address on N1, traceroute from H1 to H2 show 1.0.1.1
+> 
+> Signed-off-by: Francesco Ruggeri <fruggeri@arista.com>
 > ---
->   net/xdp/xdp_umem.c | 4 ++--
->   1 file changed, 2 insertions(+), 2 deletions(-)
+>  tools/testing/selftests/net/Makefile          |   2 +-
+>  .../testing/selftests/net/icmp_reply_addr.sh  | 106 ++++++++++++++++++
+>  2 files changed, 107 insertions(+), 1 deletion(-)
+>  create mode 100755 tools/testing/selftests/net/icmp_reply_addr.sh
 > 
-> diff --git a/net/xdp/xdp_umem.c b/net/xdp/xdp_umem.c
-> index 16d5f353163a..4d56dfb1139a 100644
-> --- a/net/xdp/xdp_umem.c
-> +++ b/net/xdp/xdp_umem.c
-> @@ -285,8 +285,8 @@ static int xdp_umem_pin_pages(struct xdp_umem *umem)
->   		return -ENOMEM;
->   
->   	down_read(&current->mm->mmap_sem);
-> -	npgs = get_user_pages(umem->address, umem->npgs,
-> -			      gup_flags | FOLL_LONGTERM, &umem->pgs[0], NULL);
-> +	npgs = pin_longterm_pages(umem->address, umem->npgs, gup_flags,
-> +				  &umem->pgs[0], NULL);
->   	up_read(&current->mm->mmap_sem);
->   
->   	if (npgs != umem->npgs) {
-> 
+
+Hi:
+
+It would be better to combine both of these into a single test script;
+the topology and setup are very similar and the scripts share a lot of
+common code.
+
+The script can be a generic traceroute.sh and then contain 2 tests:
+1. IPv4 - verify reply address test,
+2. IPv6 - verify reply address test.
+
+Making 1 script with multiple tests allows other tests to be added in
+the future with less overhead. This is how other tests under net are done.
+
+Also, you still have these using macvlan devices. The intent is to use
+network namespaces to mimic nodes in a network. As such veth pairs are a
+better option for this intent.
+
+There are 2 scripts under net (l2tp.sh and fcnal-test.sh) that contain
+functions -- create_ns and connect_ns  -- that really reduce the
+overhead of creating tests like this. Actually you could copy l2tp.sh to
+traceroute.sh and quickly update it for these tests.
+
