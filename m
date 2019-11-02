@@ -2,189 +2,97 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E9FF7ECC02
-	for <lists+linux-kselftest@lfdr.de>; Sat,  2 Nov 2019 00:43:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CF96ECE37
+	for <lists+linux-kselftest@lfdr.de>; Sat,  2 Nov 2019 12:02:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726913AbfKAXnB (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 1 Nov 2019 19:43:01 -0400
-Received: from mx.aristanetworks.com ([162.210.129.12]:26202 "EHLO
-        smtp.aristanetworks.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726230AbfKAXnB (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 1 Nov 2019 19:43:01 -0400
-Received: from us180.sjc.aristanetworks.com (us180.sjc.aristanetworks.com [172.25.230.4])
-        by smtp.aristanetworks.com (Postfix) with ESMTP id CC8EC1E742;
-        Fri,  1 Nov 2019 16:34:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arista.com;
-        s=Arista-A; t=1572651248;
-        bh=2XCvakWmESeZHxE1C5rWSzip2TUf8ygBqL9J00vt+x8=;
-        h=Date:To:Subject:From:From;
-        b=bCS26NdFIoBH1Al3ZOBk5nanmlWphPSGrv+ef60zvrqC+yIGY9rZExefsfmDQty/R
-         6wg5N6wFQNF7+X2FCmHd4kydo1/bhLQ0ejTq9uHBxcjTeP4+7lAnOsxeNafL/zL05Z
-         BXqMYewN7pHHwFnPjAvhFoeEitKcBPav7F6tjppCVWj6mog7xWklCjIiQwZ8d4Y0T6
-         e9XE0f8M815+G0BCTD/VXh60Vd98OfA/Lo1luAoYTuJy4RE2KtNk9wBRjJcmNrmY5b
-         FsZ39HGobpFSguzxjFZt7IhcKBGVo/6ZyMl9dOHlyT87/2oYm0zScWCpHrEjRZiJ7n
-         hSf+gjhNjn52A==
-Received: by us180.sjc.aristanetworks.com (Postfix, from userid 10189)
-        id BC15495C0902; Fri,  1 Nov 2019 16:34:08 -0700 (PDT)
-Date:   Fri, 01 Nov 2019 16:34:08 -0700
-To:     fruggeri@arista.com, dsahern@gmail.com, davem@davemloft.net,
-        shuah@kernel.org, netdev@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: [PATCH net-next 2/2] selftest: net: add icmp reply address test
-User-Agent: Heirloom mailx 12.5 7/5/10
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-Message-Id: <20191101233408.BC15495C0902@us180.sjc.aristanetworks.com>
-From:   fruggeri@arista.com (Francesco Ruggeri)
+        id S1726454AbfKBLBz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 2 Nov 2019 07:01:55 -0400
+Received: from mga18.intel.com ([134.134.136.126]:24973 "EHLO mga18.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726163AbfKBLBz (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Sat, 2 Nov 2019 07:01:55 -0400
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga106.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 02 Nov 2019 04:01:53 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.68,259,1569308400"; 
+   d="scan'208";a="206632673"
+Received: from mohseni-mobl2.ger.corp.intel.com (HELO btopel-mobl.ger.intel.com) ([10.252.42.93])
+  by FMSMGA003.fm.intel.com with ESMTP; 02 Nov 2019 04:01:44 -0700
+Subject: Re: [PATCH 11/19] net/xdp: set FOLL_PIN via pin_user_pages()
+To:     John Hubbard <jhubbard@nvidia.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Al Viro <viro@zeniv.linux.org.uk>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Dave Chinner <david@fromorbit.com>,
+        David Airlie <airlied@linux.ie>,
+        "David S . Miller" <davem@davemloft.net>,
+        Ira Weiny <ira.weiny@intel.com>, Jan Kara <jack@suse.cz>,
+        Jason Gunthorpe <jgg@ziepe.ca>, Jens Axboe <axboe@kernel.dk>,
+        Jonathan Corbet <corbet@lwn.net>,
+        =?UTF-8?B?SsOpcsO0bWUgR2xpc3Nl?= <jglisse@redhat.com>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Michal Hocko <mhocko@suse.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Paul Mackerras <paulus@samba.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Vlastimil Babka <vbabka@suse.cz>, bpf@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, kvm@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-rdma@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, netdev@vger.kernel.org,
+        linux-mm@kvack.org, LKML <linux-kernel@vger.kernel.org>
+References: <20191030224930.3990755-1-jhubbard@nvidia.com>
+ <20191030224930.3990755-12-jhubbard@nvidia.com>
+From:   =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>
+Message-ID: <67cd4960-bc17-9603-8d4d-b7b2f68bb373@intel.com>
+Date:   Sat, 2 Nov 2019 12:01:43 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.1.2
+MIME-Version: 1.0
+In-Reply-To: <20191030224930.3990755-12-jhubbard@nvidia.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Verify that in this scenario
+On 2019-10-30 23:49, John Hubbard wrote:
+> Convert net/xdp to use the new pin_longterm_pages() call, which sets
+> FOLL_PIN. Setting FOLL_PIN is now required for code that requires
+> tracking of pinned pages.
+> 
+> Signed-off-by: John Hubbard <jhubbard@nvidia.com>
 
-                   1.0.3.1/24
----- 1.0.1.3/24    1.0.1.1/24 ---- 1.0.2.1/24    1.0.2.4/24 ----
-|H1|--------------------------|R1|--------------------------|H2|
-----            N1            ----            N2            ----
+Acked-by: Björn Töpel <bjorn.topel@intel.com>
 
-where 1.0.3.1/24 and 1.0.1.1/24 are respectively R1's primary and
-secondary address on N1, traceroute from H1 to H2 show 1.0.1.1
-
-Signed-off-by: Francesco Ruggeri <fruggeri@arista.com>
----
- tools/testing/selftests/net/Makefile          |   2 +-
- .../testing/selftests/net/icmp_reply_addr.sh  | 106 ++++++++++++++++++
- 2 files changed, 107 insertions(+), 1 deletion(-)
- create mode 100755 tools/testing/selftests/net/icmp_reply_addr.sh
-
-diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selftests/net/Makefile
-index daeaeb59d5ca..3a90084feee4 100644
---- a/tools/testing/selftests/net/Makefile
-+++ b/tools/testing/selftests/net/Makefile
-@@ -11,7 +11,7 @@ TEST_PROGS += udpgso_bench.sh fib_rule_tests.sh msg_zerocopy.sh psock_snd.sh
- TEST_PROGS += udpgro_bench.sh udpgro.sh test_vxlan_under_vrf.sh reuseport_addr_any.sh
- TEST_PROGS += test_vxlan_fdb_changelink.sh so_txtime.sh ipv6_flowlabel.sh
- TEST_PROGS += tcp_fastopen_backup_key.sh fcnal-test.sh l2tp.sh
--TEST_PROGS += icmp6_reply_addr.sh
-+TEST_PROGS += icmp6_reply_addr.sh icmp_reply_addr.sh
- TEST_PROGS_EXTENDED := in_netns.sh
- TEST_GEN_FILES =  socket nettest
- TEST_GEN_FILES += psock_fanout psock_tpacket msg_zerocopy reuseport_addr_any
-diff --git a/tools/testing/selftests/net/icmp_reply_addr.sh b/tools/testing/selftests/net/icmp_reply_addr.sh
-new file mode 100755
-index 000000000000..3c0ff3c26c07
---- /dev/null
-+++ b/tools/testing/selftests/net/icmp_reply_addr.sh
-@@ -0,0 +1,106 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
-+#
-+# Verify that in this scenario
-+#
-+#                    1.0.3.1/24
-+# ---- 1.0.1.3/24    1.0.1.1/24 ---- 1.0.2.1/24    1.0.2.4/24 ----
-+# |H1|--------------------------|R1|--------------------------|H2|
-+# ----            N1            ----            N2            ----
-+#
-+# where 1.0.3.1/24 and 1.0.1.1/24 are respectively R1's primary and
-+# secondary address on N1, traceroute from H1 to H2 show 1.0.1.1
-+#
-+
-+####################################################################
-+# helpers
-+# 
-+# Interface on network <net> in node <node> is called <node><net>
-+#
-+
-+node()
-+{
-+	host=$1
-+	shift
-+	ip netns exec ${host} $*
-+}
-+
-+create_nodes()
-+{
-+	for n in $*; do
-+		ip netns add $n
-+		node $n ip link set lo up
-+	done
-+}
-+
-+delete_nodes()
-+{
-+	for n in $*; do
-+		ip netns del $n
-+	done
-+}
-+
-+create_veth_net()
-+{
-+	net=$1
-+	h1=$2
-+	h2=$3
-+
-+	ip link add ${h1}${net} type veth peer name ${h2}${net}
-+	ip link set ${h1}${net} netns ${h1}
-+	node ${h1} ip link set ${h1}${net} up
-+	ip link set ${h2}${net} netns ${h2}
-+	node ${h2} ip link set ${h2}${net} up
-+}
-+
-+# end helpers
-+####################################################################
-+
-+if [ "$(id -u)" -ne 0 ]; then
-+        echo "SKIP: Need root privileges"
-+        exit 0
-+fi
-+
-+if [ ! -x "$(command -v traceroute)" ]; then
-+        echo "SKIP: Could not run test without traceroute"
-+        exit 0
-+fi
-+
-+create_nodes host1 rtr1 host2
-+
-+create_veth_net net1 host1 rtr1
-+create_veth_net net2 rtr1 host2
-+
-+# Configure interfaces and routes in host1
-+node host1 ip addr add 1.0.1.3/24 dev host1net1
-+node host1 ip route add default via 1.0.1.1
-+
-+# Configure interfaces and routes in rtr1
-+node rtr1 ip addr add 1.0.3.1/24 dev rtr1net1
-+node rtr1 ip addr add 1.0.1.1/24 dev rtr1net1
-+node rtr1 ip addr add 1.0.2.1/24 dev rtr1net2
-+node rtr1 sysctl net.ipv4.ip_forward=1 >/dev/null
-+node rtr1 sysctl net.ipv4.icmp_errors_use_inbound_ifaddr=1 >/dev/null
-+
-+# Configure interfaces and routes in host2
-+node host2 ip addr add 1.0.2.4/24 dev host2net2
-+node host2 ip route add default via 1.0.2.1
-+
-+# Ping host2 from host1
-+echo "Priming the network"
-+node host1 ping -c5 1.0.2.4 >/dev/null
-+
-+# Traceroute host2 from host1
-+echo "Running traceroute (will take a while)"
-+if node host1 traceroute 1.0.2.4 | grep -q 1.0.1.1; then
-+	ret=0
-+	echo "Found 1.0.1.1. Test passed."
-+else
-+	ret=1
-+	echo "Did not find 1.0.1.1. Test failed."
-+fi
-+
-+delete_nodes host1 rtr1 host2
-+
-+exit ${ret}
-+
--- 
-2.19.1
-
-
+> ---
+>   net/xdp/xdp_umem.c | 4 ++--
+>   1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/net/xdp/xdp_umem.c b/net/xdp/xdp_umem.c
+> index 16d5f353163a..4d56dfb1139a 100644
+> --- a/net/xdp/xdp_umem.c
+> +++ b/net/xdp/xdp_umem.c
+> @@ -285,8 +285,8 @@ static int xdp_umem_pin_pages(struct xdp_umem *umem)
+>   		return -ENOMEM;
+>   
+>   	down_read(&current->mm->mmap_sem);
+> -	npgs = get_user_pages(umem->address, umem->npgs,
+> -			      gup_flags | FOLL_LONGTERM, &umem->pgs[0], NULL);
+> +	npgs = pin_longterm_pages(umem->address, umem->npgs, gup_flags,
+> +				  &umem->pgs[0], NULL);
+>   	up_read(&current->mm->mmap_sem);
+>   
+>   	if (npgs != umem->npgs) {
+> 
