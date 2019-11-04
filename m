@@ -2,364 +2,216 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 00E50EE0D7
-	for <lists+linux-kselftest@lfdr.de>; Mon,  4 Nov 2019 14:19:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BCFEEE4DB
+	for <lists+linux-kselftest@lfdr.de>; Mon,  4 Nov 2019 17:39:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727454AbfKDNTJ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 4 Nov 2019 08:19:09 -0500
-Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:49034 "EHLO
+        id S1729216AbfKDQji (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 4 Nov 2019 11:39:38 -0500
+Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:35268 "EHLO
         us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1727430AbfKDNTJ (ORCPT
+        with ESMTP id S1729076AbfKDQjh (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 4 Nov 2019 08:19:09 -0500
+        Mon, 4 Nov 2019 11:39:37 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1572873546;
+        s=mimecast20190719; t=1572885575;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=xL1c5yWHlmNgn8UfJhR2tbzkAdQMb4IMQtfsSSpu4zw=;
-        b=Sv1OUIAr5Zunkg5YEzAd6kAUXO0B+WrlzUIcRWTHTP+oPPJoL5rFr1DoBExU2/1EN+yRv8
-        uyHdZdZvHSXsP0flMdQJiAAtwPEjdiKCLVf8JJen0eX0XKqLv3aHbHk29QCZXbcszNnly9
-        cbFR9A8dwSAEwz2xfxeabit86Hoehoc=
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ZKRtyHtWqxotoMRVCD2L231GIf5CzzOu6K7yMpGCV1E=;
+        b=EISj5KjZrUl3kZNHgeVxg9gzAbcLy4Tpe15p04ZJX+1X/PP0zhFi/jqdDWYjMDEhoU+i0C
+        JuU/cWz6scDZOZMQlwE2N2QuxICFFYXRzNVTjImH796mEQWD/wjXHkzq8BvJ4gOxbXcJlq
+        N9g+v2tQVhedXU+Lsqq3rbwA789furQ=
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-68-GE9xVdCHMGaT-MW0gM8SxQ-1; Mon, 04 Nov 2019 08:19:02 -0500
+ us-mta-368-XcpsC-lSP4a7ehsn9d2sxg-1; Mon, 04 Nov 2019 11:39:31 -0500
 Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 70D1B107ACC2;
-        Mon,  4 Nov 2019 13:19:01 +0000 (UTC)
-Received: from dcbz.redhat.com (ovpn-116-108.ams2.redhat.com [10.36.116.108])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 855B05C553;
-        Mon,  4 Nov 2019 13:18:57 +0000 (UTC)
-From:   Adrian Reber <areber@redhat.com>
-To:     Christian Brauner <christian.brauner@ubuntu.com>,
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 1D6C88017DD;
+        Mon,  4 Nov 2019 16:39:27 +0000 (UTC)
+Received: from redhat.com (unknown [10.20.6.178])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id F0A6F5C240;
+        Mon,  4 Nov 2019 16:39:20 +0000 (UTC)
+Date:   Mon, 4 Nov 2019 11:39:19 -0500
+From:   Jerome Glisse <jglisse@redhat.com>
+To:     John Hubbard <jhubbard@nvidia.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn.topel@intel.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Dave Chinner <david@fromorbit.com>,
+        David Airlie <airlied@linux.ie>,
+        "David S . Miller" <davem@davemloft.net>,
+        Ira Weiny <ira.weiny@intel.com>, Jan Kara <jack@suse.cz>,
+        Jason Gunthorpe <jgg@ziepe.ca>, Jens Axboe <axboe@kernel.dk>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Michal Hocko <mhocko@suse.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Paul Mackerras <paulus@samba.org>,
         Shuah Khan <shuah@kernel.org>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        linux-kselftest@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, Adrian Reber <areber@redhat.com>
-Subject: [PATCH v2] selftests: add tests for clone3()
-Date:   Mon,  4 Nov 2019 14:18:46 +0100
-Message-Id: <20191104131846.1076814-1-areber@redhat.com>
+        Vlastimil Babka <vbabka@suse.cz>, bpf@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, kvm@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-rdma@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, netdev@vger.kernel.org,
+        linux-mm@kvack.org, LKML <linux-kernel@vger.kernel.org>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
+Subject: Re: [PATCH v2 01/18] mm/gup: pass flags arg to __gup_device_*
+ functions
+Message-ID: <20191104163919.GA5134@redhat.com>
+References: <20191103211813.213227-1-jhubbard@nvidia.com>
+ <20191103211813.213227-2-jhubbard@nvidia.com>
 MIME-Version: 1.0
+In-Reply-To: <20191103211813.213227-2-jhubbard@nvidia.com>
+User-Agent: Mutt/1.12.1 (2019-06-15)
 X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
-X-MC-Unique: GE9xVdCHMGaT-MW0gM8SxQ-1
+X-MC-Unique: XcpsC-lSP4a7ehsn9d2sxg-1
 X-Mimecast-Spam-Score: 0
 Content-Type: text/plain; charset=WINDOWS-1252
 Content-Transfer-Encoding: quoted-printable
+Content-Disposition: inline
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This adds tests for clone3() with different values and sizes
-of struct clone_args.
+On Sun, Nov 03, 2019 at 01:17:56PM -0800, John Hubbard wrote:
+> A subsequent patch requires access to gup flags, so
+> pass the flags argument through to the __gup_device_*
+> functions.
+>=20
+> Also placate checkpatch.pl by shortening a nearby line.
+>=20
+> Reviewed-by: Ira Weiny <ira.weiny@intel.com>
+> Cc: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+> Signed-off-by: John Hubbard <jhubbard@nvidia.com>
 
-This selftest was initially part of of the clone3() with PID selftest.
-After that patch was almost merged Eugene sent out a couple of patches
-to fix problems with these test.
+Reviewed-by: J=E9r=F4me Glisse <jglisse@redhat.com>
 
-This commit now only contains the clone3() selftest after the LPC
-decision to rework clone3() with PID to allow setting the PID in
-multiple PID namespaces including all of Eugene's patches.
-
-Signed-off-by: Eugene Syromiatnikov <esyr@redhat.com>
-Signed-off-by: Adrian Reber <areber@redhat.com>
----
-v2:
- - Applied Christian's suggestions
- - Skip root-only tests when running as non-root
----
- MAINTAINERS                               |   1 +
- tools/testing/selftests/Makefile          |   1 +
- tools/testing/selftests/clone3/.gitignore |   1 +
- tools/testing/selftests/clone3/Makefile   |   7 +
- tools/testing/selftests/clone3/clone3.c   | 225 ++++++++++++++++++++++
- 5 files changed, 235 insertions(+)
- create mode 100644 tools/testing/selftests/clone3/.gitignore
- create mode 100644 tools/testing/selftests/clone3/Makefile
- create mode 100644 tools/testing/selftests/clone3/clone3.c
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index cba1095547fd..0040b7a6410b 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -12829,6 +12829,7 @@ S:=09Maintained
- T:=09git git://git.kernel.org/pub/scm/linux/kernel/git/brauner/linux.git
- F:=09samples/pidfd/
- F:=09tools/testing/selftests/pidfd/
-+F:=09tools/testing/selftests/clone3/
- K:=09(?i)pidfd
- K:=09(?i)clone3
- K:=09\b(clone_args|kernel_clone_args)\b
-diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Mak=
-efile
-index 4cdbae6f4e61..ad442364218a 100644
---- a/tools/testing/selftests/Makefile
-+++ b/tools/testing/selftests/Makefile
-@@ -4,6 +4,7 @@ TARGETS +=3D bpf
- TARGETS +=3D breakpoints
- TARGETS +=3D capabilities
- TARGETS +=3D cgroup
-+TARGETS +=3D clone3
- TARGETS +=3D cpufreq
- TARGETS +=3D cpu-hotplug
- TARGETS +=3D drivers/dma-buf
-diff --git a/tools/testing/selftests/clone3/.gitignore b/tools/testing/self=
-tests/clone3/.gitignore
-new file mode 100644
-index 000000000000..85d9d3ba2524
---- /dev/null
-+++ b/tools/testing/selftests/clone3/.gitignore
-@@ -0,0 +1 @@
-+clone3
-diff --git a/tools/testing/selftests/clone3/Makefile b/tools/testing/selfte=
-sts/clone3/Makefile
-new file mode 100644
-index 000000000000..ea922c014ae4
---- /dev/null
-+++ b/tools/testing/selftests/clone3/Makefile
-@@ -0,0 +1,7 @@
-+# SPDX-License-Identifier: GPL-2.0
-+
-+CFLAGS +=3D -I../../../../usr/include/
-+
-+TEST_GEN_PROGS :=3D clone3
-+
-+include ../lib.mk
-diff --git a/tools/testing/selftests/clone3/clone3.c b/tools/testing/selfte=
-sts/clone3/clone3.c
-new file mode 100644
-index 000000000000..a982d95189bf
---- /dev/null
-+++ b/tools/testing/selftests/clone3/clone3.c
-@@ -0,0 +1,225 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+/* Based on Christian Brauner's clone3() example */
-+
-+#define _GNU_SOURCE
-+#include <errno.h>
-+#include <inttypes.h>
-+#include <linux/types.h>
-+#include <linux/sched.h>
-+#include <stdint.h>
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <sys/syscall.h>
-+#include <sys/types.h>
-+#include <sys/un.h>
-+#include <sys/wait.h>
-+#include <unistd.h>
-+#include <sched.h>
-+
-+#include "../kselftest.h"
-+
-+/*
-+ * Different sizes of struct clone_args
-+ */
-+#ifndef CLONE3_ARGS_SIZE_V0
-+#define CLONE3_ARGS_SIZE_V0 64
-+#endif
-+
-+enum test_mode {
-+=09CLONE3_ARGS_NO_TEST,
-+=09CLONE3_ARGS_ALL_0,
-+=09CLONE3_ARGS_ALL_1,
-+=09CLONE3_ARGS_INVAL_EXIT_SIGNAL_BIG,
-+=09CLONE3_ARGS_INVAL_EXIT_SIGNAL_NEG,
-+=09CLONE3_ARGS_INVAL_EXIT_SIGNAL_CSIG,
-+=09CLONE3_ARGS_INVAL_EXIT_SIGNAL_NSIG,
-+};
-+
-+static pid_t raw_clone(struct clone_args *args, size_t size)
-+{
-+=09return syscall(__NR_clone3, args, size);
-+}
-+
-+static int call_clone3(uint64_t flags, size_t size, enum test_mode test_mo=
-de)
-+{
-+=09struct clone_args args =3D {
-+=09=09.flags =3D flags,
-+=09=09.exit_signal =3D SIGCHLD,
-+=09};
-+
-+=09struct clone_args_extended {
-+=09=09struct clone_args args;
-+=09=09__aligned_u64 excess_space[2];
-+=09} args_ext;
-+
-+=09pid_t pid =3D -1;
-+=09int status;
-+
-+=09memset(&args_ext, 0, sizeof(args_ext));
-+=09if (size > sizeof(struct clone_args))
-+=09=09args_ext.excess_space[1] =3D 1;
-+
-+=09if (size =3D=3D 0)
-+=09=09size =3D sizeof(struct clone_args);
-+
-+=09switch (test_mode) {
-+=09case CLONE3_ARGS_ALL_0:
-+=09=09args.flags =3D 0;
-+=09=09args.exit_signal =3D 0;
-+=09=09break;
-+=09case CLONE3_ARGS_ALL_1:
-+=09=09args.flags =3D 1;
-+=09=09args.pidfd =3D 1;
-+=09=09args.child_tid =3D 1;
-+=09=09args.parent_tid =3D 1;
-+=09=09args.exit_signal =3D 1;
-+=09=09args.stack =3D 1;
-+=09=09args. stack_size =3D 1;
-+=09=09args.tls =3D 1;
-+=09=09break;
-+=09case CLONE3_ARGS_INVAL_EXIT_SIGNAL_BIG:
-+=09=09args.exit_signal =3D 0xbadc0ded00000000ULL;
-+=09=09break;
-+=09case CLONE3_ARGS_INVAL_EXIT_SIGNAL_NEG:
-+=09=09args.exit_signal =3D 0x0000000080000000ULL;
-+=09=09break;
-+=09case CLONE3_ARGS_INVAL_EXIT_SIGNAL_CSIG:
-+=09=09args.exit_signal =3D 0x0000000000000100ULL;
-+=09=09break;
-+=09case CLONE3_ARGS_INVAL_EXIT_SIGNAL_NSIG:
-+=09=09args.exit_signal =3D 0x00000000000000f0ULL;
-+=09=09break;
-+=09}
-+
-+=09memcpy(&args_ext.args, &args, sizeof(struct clone_args));
-+
-+=09pid =3D raw_clone((struct clone_args *)&args_ext, size);
-+=09if (pid < 0) {
-+=09=09ksft_print_msg("%s - Failed to create new process\n",
-+=09=09=09=09strerror(errno));
-+=09=09return -errno;
-+=09}
-+
-+=09if (pid =3D=3D 0) {
-+=09=09ksft_print_msg("I am the child, my PID is %d\n", getpid());
-+=09=09_exit(EXIT_SUCCESS);
-+=09}
-+
-+=09ksft_print_msg("I am the parent (%d). My child's pid is %d\n",
-+=09=09=09getpid(), pid);
-+
-+=09if (wait(&status) < 0) {
-+=09=09ksft_print_msg("Child returned %s\n", strerror(errno));
-+=09=09return -errno;
-+=09}
-+=09if (WEXITSTATUS(status))
-+=09=09return WEXITSTATUS(status);
-+
-+=09return 0;
-+}
-+
-+static void test_clone3(uint64_t flags, size_t size, int expected,
-+=09=09       enum test_mode test_mode)
-+{
-+=09int ret;
-+
-+=09ksft_print_msg(
-+=09=09"[%d] Trying clone3() with flags %#" PRIx64 " (size %zu)\n",
-+=09=09getpid(), flags, size);
-+=09ret =3D call_clone3(flags, size, test_mode);
-+=09ksft_print_msg("[%d] clone3() with flags says: %d expected %d\n",
-+=09=09=09getpid(), ret, expected);
-+=09if (ret !=3D expected)
-+=09=09ksft_test_result_fail(
-+=09=09=09"[%d] Result (%d) is different than expected (%d)\n",
-+=09=09=09getpid(), ret, expected);
-+=09else
-+=09=09ksft_test_result_pass(
-+=09=09=09"[%d] Result (%d) matches expectation (%d)\n",
-+=09=09=09getpid(), ret, expected);
-+}
-+int main(int argc, char *argv[])
-+{
-+=09pid_t pid;
-+
-+=09uid_t uid =3D getuid();
-+
-+=09ksft_print_header();
-+=09ksft_set_plan(17);
-+
-+=09/* Just a simple clone3() should return 0.*/
-+=09test_clone3(0, 0, 0, CLONE3_ARGS_NO_TEST);
-+
-+=09/* Do a clone3() in a new PID NS.*/
-+=09if (uid =3D=3D 0)
-+=09=09test_clone3(CLONE_NEWPID, 0, 0, CLONE3_ARGS_NO_TEST);
-+=09else
-+=09=09ksft_test_result_skip("Skipping clone3() with CLONE_NEWPID\n");
-+
-+=09/* Do a clone3() with CLONE3_ARGS_SIZE_V0. */
-+=09test_clone3(0, CLONE3_ARGS_SIZE_V0, 0, CLONE3_ARGS_NO_TEST);
-+
-+=09/* Do a clone3() with CLONE3_ARGS_SIZE_V0 - 8 */
-+=09test_clone3(0, CLONE3_ARGS_SIZE_V0 - 8, -EINVAL, CLONE3_ARGS_NO_TEST);
-+
-+=09/* Do a clone3() with sizeof(struct clone_args) + 8 */
-+=09test_clone3(0, sizeof(struct clone_args) + 8, 0, CLONE3_ARGS_NO_TEST);
-+
-+=09/* Do a clone3() with all members set to 1 */
-+=09test_clone3(0, 0, -EINVAL, CLONE3_ARGS_ALL_1);
-+
-+=09/* Do a clone3() with exit_signal having highest 32 bits non-zero */
-+=09test_clone3(0, 0, -EINVAL, CLONE3_ARGS_INVAL_EXIT_SIGNAL_BIG);
-+
-+=09/* Do a clone3() with negative 32-bit exit_signal */
-+=09test_clone3(0, 0, -EINVAL, CLONE3_ARGS_INVAL_EXIT_SIGNAL_NEG);
-+
-+=09/* Do a clone3() with exit_signal not fitting into CSIGNAL mask */
-+=09test_clone3(0, 0, -EINVAL, CLONE3_ARGS_INVAL_EXIT_SIGNAL_CSIG);
-+
-+=09/* Do a clone3() with NSIG < exit_signal < CSIG */
-+=09test_clone3(0, 0, -EINVAL, CLONE3_ARGS_INVAL_EXIT_SIGNAL_NSIG);
-+
-+=09/*
-+=09 * Do a clone3() with sizeof(struct clone_args) + 8
-+=09 * and all members set to 0. This resets exit_signal and wait()
-+=09 * will not get a result.
-+=09 */
-+=09test_clone3(0, sizeof(struct clone_args) + 8, -ECHILD,
-+=09=09=09CLONE3_ARGS_ALL_0);
-+
-+=09/*
-+=09 * Do a clone3() with sizeof(struct clone_args) + 8
-+=09 * and all members set to 0.
-+=09 */
-+=09test_clone3(0, sizeof(struct clone_args) + 8, -EINVAL,
-+=09=09=09CLONE3_ARGS_ALL_1);
-+
-+=09/* Do a clone3() with > page size */
-+=09test_clone3(0, getpagesize() + 8, -E2BIG, CLONE3_ARGS_NO_TEST);
-+
-+=09/* Do a clone3() with CLONE3_ARGS_SIZE_V0 in a new PID NS. */
-+=09if (uid =3D=3D 0)
-+=09=09test_clone3(CLONE_NEWPID, CLONE3_ARGS_SIZE_V0, 0,
-+=09=09=09=09CLONE3_ARGS_NO_TEST);
-+=09else
-+=09=09ksft_test_result_skip("Skipping clone3() with CLONE_NEWPID\n");
-+
-+=09/* Do a clone3() with CLONE3_ARGS_SIZE_V0 - 8 in a new PID NS */
-+=09test_clone3(CLONE_NEWPID, CLONE3_ARGS_SIZE_V0 - 8, -EINVAL,
-+=09=09=09CLONE3_ARGS_NO_TEST);
-+
-+=09/* Do a clone3() with sizeof(struct clone_args) + 8 in a new PID NS */
-+=09if (uid =3D=3D 0)
-+=09=09test_clone3(CLONE_NEWPID, sizeof(struct clone_args) + 8, 0,
-+=09=09=09=09CLONE3_ARGS_NO_TEST);
-+=09else
-+=09=09ksft_test_result_skip("Skipping clone3() with CLONE_NEWPID\n");
-+
-+=09/* Do a clone3() with > page size in a new PID NS */
-+=09test_clone3(CLONE_NEWPID, getpagesize() + 8, -E2BIG,
-+=09=09=09CLONE3_ARGS_NO_TEST);
-+
-+=09return !ksft_get_fail_cnt() ? ksft_exit_pass() : ksft_exit_fail();
-+}
---=20
-2.23.0
+> ---
+>  mm/gup.c | 28 ++++++++++++++++++----------
+>  1 file changed, 18 insertions(+), 10 deletions(-)
+>=20
+> diff --git a/mm/gup.c b/mm/gup.c
+> index 8f236a335ae9..85caf76b3012 100644
+> --- a/mm/gup.c
+> +++ b/mm/gup.c
+> @@ -1890,7 +1890,8 @@ static int gup_pte_range(pmd_t pmd, unsigned long a=
+ddr, unsigned long end,
+> =20
+>  #if defined(CONFIG_ARCH_HAS_PTE_DEVMAP) && defined(CONFIG_TRANSPARENT_HU=
+GEPAGE)
+>  static int __gup_device_huge(unsigned long pfn, unsigned long addr,
+> -=09=09unsigned long end, struct page **pages, int *nr)
+> +=09=09=09     unsigned long end, unsigned int flags,
+> +=09=09=09     struct page **pages, int *nr)
+>  {
+>  =09int nr_start =3D *nr;
+>  =09struct dev_pagemap *pgmap =3D NULL;
+> @@ -1916,13 +1917,14 @@ static int __gup_device_huge(unsigned long pfn, u=
+nsigned long addr,
+>  }
+> =20
+>  static int __gup_device_huge_pmd(pmd_t orig, pmd_t *pmdp, unsigned long =
+addr,
+> -=09=09unsigned long end, struct page **pages, int *nr)
+> +=09=09=09=09 unsigned long end, unsigned int flags,
+> +=09=09=09=09 struct page **pages, int *nr)
+>  {
+>  =09unsigned long fault_pfn;
+>  =09int nr_start =3D *nr;
+> =20
+>  =09fault_pfn =3D pmd_pfn(orig) + ((addr & ~PMD_MASK) >> PAGE_SHIFT);
+> -=09if (!__gup_device_huge(fault_pfn, addr, end, pages, nr))
+> +=09if (!__gup_device_huge(fault_pfn, addr, end, flags, pages, nr))
+>  =09=09return 0;
+> =20
+>  =09if (unlikely(pmd_val(orig) !=3D pmd_val(*pmdp))) {
+> @@ -1933,13 +1935,14 @@ static int __gup_device_huge_pmd(pmd_t orig, pmd_=
+t *pmdp, unsigned long addr,
+>  }
+> =20
+>  static int __gup_device_huge_pud(pud_t orig, pud_t *pudp, unsigned long =
+addr,
+> -=09=09unsigned long end, struct page **pages, int *nr)
+> +=09=09=09=09 unsigned long end, unsigned int flags,
+> +=09=09=09=09 struct page **pages, int *nr)
+>  {
+>  =09unsigned long fault_pfn;
+>  =09int nr_start =3D *nr;
+> =20
+>  =09fault_pfn =3D pud_pfn(orig) + ((addr & ~PUD_MASK) >> PAGE_SHIFT);
+> -=09if (!__gup_device_huge(fault_pfn, addr, end, pages, nr))
+> +=09if (!__gup_device_huge(fault_pfn, addr, end, flags, pages, nr))
+>  =09=09return 0;
+> =20
+>  =09if (unlikely(pud_val(orig) !=3D pud_val(*pudp))) {
+> @@ -1950,14 +1953,16 @@ static int __gup_device_huge_pud(pud_t orig, pud_=
+t *pudp, unsigned long addr,
+>  }
+>  #else
+>  static int __gup_device_huge_pmd(pmd_t orig, pmd_t *pmdp, unsigned long =
+addr,
+> -=09=09unsigned long end, struct page **pages, int *nr)
+> +=09=09=09=09 unsigned long end, unsigned int flags,
+> +=09=09=09=09 struct page **pages, int *nr)
+>  {
+>  =09BUILD_BUG();
+>  =09return 0;
+>  }
+> =20
+>  static int __gup_device_huge_pud(pud_t pud, pud_t *pudp, unsigned long a=
+ddr,
+> -=09=09unsigned long end, struct page **pages, int *nr)
+> +=09=09=09=09 unsigned long end, unsigned int flags,
+> +=09=09=09=09 struct page **pages, int *nr)
+>  {
+>  =09BUILD_BUG();
+>  =09return 0;
+> @@ -2062,7 +2067,8 @@ static int gup_huge_pmd(pmd_t orig, pmd_t *pmdp, un=
+signed long addr,
+>  =09if (pmd_devmap(orig)) {
+>  =09=09if (unlikely(flags & FOLL_LONGTERM))
+>  =09=09=09return 0;
+> -=09=09return __gup_device_huge_pmd(orig, pmdp, addr, end, pages, nr);
+> +=09=09return __gup_device_huge_pmd(orig, pmdp, addr, end, flags,
+> +=09=09=09=09=09     pages, nr);
+>  =09}
+> =20
+>  =09refs =3D 0;
+> @@ -2092,7 +2098,8 @@ static int gup_huge_pmd(pmd_t orig, pmd_t *pmdp, un=
+signed long addr,
+>  }
+> =20
+>  static int gup_huge_pud(pud_t orig, pud_t *pudp, unsigned long addr,
+> -=09=09unsigned long end, unsigned int flags, struct page **pages, int *n=
+r)
+> +=09=09=09unsigned long end, unsigned int flags,
+> +=09=09=09struct page **pages, int *nr)
+>  {
+>  =09struct page *head, *page;
+>  =09int refs;
+> @@ -2103,7 +2110,8 @@ static int gup_huge_pud(pud_t orig, pud_t *pudp, un=
+signed long addr,
+>  =09if (pud_devmap(orig)) {
+>  =09=09if (unlikely(flags & FOLL_LONGTERM))
+>  =09=09=09return 0;
+> -=09=09return __gup_device_huge_pud(orig, pudp, addr, end, pages, nr);
+> +=09=09return __gup_device_huge_pud(orig, pudp, addr, end, flags,
+> +=09=09=09=09=09     pages, nr);
+>  =09}
+> =20
+>  =09refs =3D 0;
+> --=20
+> 2.23.0
+>=20
 
