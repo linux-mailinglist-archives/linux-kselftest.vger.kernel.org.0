@@ -2,200 +2,91 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AA032EF1D9
-	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Nov 2019 01:19:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AE4AEF317
+	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Nov 2019 02:58:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387500AbfKEASi (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 4 Nov 2019 19:18:38 -0500
-Received: from hqemgate14.nvidia.com ([216.228.121.143]:17961 "EHLO
-        hqemgate14.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387415AbfKEASh (ORCPT
+        id S1729765AbfKEB6w (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 4 Nov 2019 20:58:52 -0500
+Received: from mail-pg1-f196.google.com ([209.85.215.196]:46869 "EHLO
+        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729597AbfKEB6w (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 4 Nov 2019 19:18:37 -0500
-Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqemgate14.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5dc0bfe10001>; Mon, 04 Nov 2019 16:18:41 -0800
-Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate101.nvidia.com (PGP Universal service);
-  Mon, 04 Nov 2019 16:18:35 -0800
-X-PGP-Universal: processed;
-        by hqpgpgate101.nvidia.com on Mon, 04 Nov 2019 16:18:35 -0800
-Received: from [10.110.48.28] (10.124.1.5) by HQMAIL107.nvidia.com
- (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Tue, 5 Nov
- 2019 00:18:34 +0000
-Subject: Re: [PATCH v2 12/18] mm/gup: track FOLL_PIN pages
-To:     Jerome Glisse <jglisse@redhat.com>
-CC:     Andrew Morton <akpm@linux-foundation.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Dave Chinner <david@fromorbit.com>,
-        David Airlie <airlied@linux.ie>,
-        "David S . Miller" <davem@davemloft.net>,
-        Ira Weiny <ira.weiny@intel.com>, Jan Kara <jack@suse.cz>,
-        Jason Gunthorpe <jgg@ziepe.ca>, Jens Axboe <axboe@kernel.dk>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Michal Hocko <mhocko@suse.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Paul Mackerras <paulus@samba.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Vlastimil Babka <vbabka@suse.cz>, <bpf@vger.kernel.org>,
-        <dri-devel@lists.freedesktop.org>, <kvm@vger.kernel.org>,
-        <linux-block@vger.kernel.org>, <linux-doc@vger.kernel.org>,
-        <linux-fsdevel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-        <linux-media@vger.kernel.org>, <linux-rdma@vger.kernel.org>,
-        <linuxppc-dev@lists.ozlabs.org>, <netdev@vger.kernel.org>,
-        <linux-mm@kvack.org>, LKML <linux-kernel@vger.kernel.org>
-References: <20191103211813.213227-1-jhubbard@nvidia.com>
- <20191103211813.213227-13-jhubbard@nvidia.com>
- <20191104185238.GG5134@redhat.com>
- <7821cf87-75a8-45e2-cf28-f85b62192416@nvidia.com>
- <20191104234920.GA18515@redhat.com>
-X-Nvconfidentiality: public
-From:   John Hubbard <jhubbard@nvidia.com>
-Message-ID: <f587647d-83dc-5bde-d244-f522ec5bda60@nvidia.com>
-Date:   Mon, 4 Nov 2019 16:18:33 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
-MIME-Version: 1.0
-In-Reply-To: <20191104234920.GA18515@redhat.com>
-X-Originating-IP: [10.124.1.5]
-X-ClientProxiedBy: HQMAIL105.nvidia.com (172.20.187.12) To
- HQMAIL107.nvidia.com (172.20.187.13)
-Content-Type: text/plain; charset="windows-1252"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1572913121; bh=it/avAzbdjbPt9c7ZhR3SugLAHDAeo7qSUQnTa8Gd0Y=;
-        h=X-PGP-Universal:Subject:To:CC:References:X-Nvconfidentiality:From:
-         Message-ID:Date:User-Agent:MIME-Version:In-Reply-To:
-         X-Originating-IP:X-ClientProxiedBy:Content-Type:Content-Language:
-         Content-Transfer-Encoding;
-        b=nx62lGrPMlwQBcqF9vYxqUTNBIlMwnY3v4vXnUqcAbCO2/xdO7aUYp8qclkmts9z7
-         gtH9Ov6maSgTLFms+gOL/dE2dCoQ1xMQpdGQy9Akbo7N7NyETXXQXZTJZqjI7N8kF+
-         n3RQEPIGAaiZBh6nvWW7FoLz32nqtlJ71DClIb0EMAf4xWjkAmpFYtedbKPVLxdf/b
-         tlQKPTEISDGthKQTi64XGZlvQXC4V843TbV9Pv5FMwu9POX8T7Ox5OlQOI/t1RVVuU
-         ehgOt7zOUTQcQRd6bK+4WI3VER1yK/cV2GljR29nekSSEXFENv8o9uy5i0m+683Ub0
-         piAG/LY3Z7DNw==
+        Mon, 4 Nov 2019 20:58:52 -0500
+Received: by mail-pg1-f196.google.com with SMTP id f19so12843358pgn.13
+        for <linux-kselftest@vger.kernel.org>; Mon, 04 Nov 2019 17:58:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=sifive.com; s=google;
+        h=from:to:cc:subject:date:message-id;
+        bh=yDR8sFGCxzSbjaGfi7fJTFdISWAnA8kL7phBjUnjsmc=;
+        b=es4eEqoPagR8E/lry95E2F3gxz83tQk8Mzac/EeG6yQOAJIQfhnJo+hpDlzpy6AaVA
+         n422XIto0oJRZyxuCuTLUlQ+bN+L4+tz85XHO9yNMoh6xaA0Tl0nVkTaIkAdjag4Xm/I
+         9HBVRLHDDfGXXSd9d2yYw0Em0GA2HIpvMyKNUgYouwWwx6lxnZyBcQXM6Yex2POicfK0
+         BRrbGet9w3HDhP/TQ5CWqaX5sl2UhYIbzL8IfQJeidDIqoCcTL+JeA8CUM2Z/ccoBwWd
+         4MILq1p+IHi0T80tzyAilhv1wX6C+jlnmj3I+AFi6XMipIZ3UeLfeqAhzi0cMHjv69Rc
+         nLpw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=yDR8sFGCxzSbjaGfi7fJTFdISWAnA8kL7phBjUnjsmc=;
+        b=Nh9gKautmCDd0rZL7lySzbGyfBlo1+Z8duC0dBZ1gW7+6CUNyJkLpeYoP4nMKprThM
+         1k8woOy/1Ht1AkzZDRNz46SGPGuy/+WHtgVG1TOT8VbcoQlodjWWnUfRKpXzrTAItuch
+         y/BGzK1xhbKfscocHCt34wcruUK/JqXNS4CzPWrhCoyfiTPlh52B9tGqjvswemN/KuE+
+         FIJoRV7vJ1jtHCRAhS2yEG0NPYASOSwbj21PxjUqecg4XX9erIJgJRhBcdUtkrwgqh4c
+         w3SFq9urf33mBsaMX9Z1yO/iYQ+n5sH11p1BbwGN3dMzJZ+i5LPyAda7up+xB+TXqB8i
+         5O7Q==
+X-Gm-Message-State: APjAAAWTDxrWOGHc8Fd1xXDGndbyrmYpKnGLTKLkAwdVRtarIGSePhnq
+        3D/d7zhcbK9qg17lrDhj/LXNvQ==
+X-Google-Smtp-Source: APXvYqxY0gl45ufDEtzxOuUDKjdr/YfO4k2ic/wiDE5ZXmwujUNVBcIIGaBSr53zAPGnILDB/9E05w==
+X-Received: by 2002:a17:90a:b88f:: with SMTP id o15mr3041825pjr.5.1572919130944;
+        Mon, 04 Nov 2019 17:58:50 -0800 (PST)
+Received: from localhost.localdomain (220-132-236-182.HINET-IP.hinet.net. [220.132.236.182])
+        by smtp.gmail.com with ESMTPSA id j6sm16484444pfa.124.2019.11.04.17.58.49
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
+        Mon, 04 Nov 2019 17:58:50 -0800 (PST)
+From:   Vincent Chen <vincent.chen@sifive.com>
+To:     paul.walmsley@sifive.com, mathieu.desnoyers@efficios.com
+Cc:     linux-riscv@lists.infradead.org, linux-kselftest@vger.kernel.org,
+        vincent.chen@sifive.com
+Subject: [PATCH 0/3] riscv: add support for restartable sequence 
+Date:   Tue,  5 Nov 2019 09:58:31 +0800
+Message-Id: <1572919114-3886-1-git-send-email-vincent.chen@sifive.com>
+X-Mailer: git-send-email 2.7.4
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Dan, there is a question for you further down:
+Add RSEQ, restartable sequence, support and related selftest to RISCV.
+The Kconfig option HAVE_REGS_AND_STACK_ACCESS_API is also required by
+RSEQ because RSEQ will modify the content of pt_regs.sepc through
+instruction_pointer_set() during the fixup procedure. In order to select
+the config HAVE_REGS_AND_STACK_ACCESS_API, the missing APIs for accessing
+pt_regs are also added in this patch set.
+  
+The relevant RSEQ tests in kselftest require the Binutils patch "RISC-V:
+Fix linker problems with TLS copy relocs" to avoid placing
+PREINIT_ARRAY and TLS variable of librseq.so at the same address.
+https://sourceware.org/git/gitweb.cgi?p=binutils-gdb.git;a=commit;h=3e7bd7f24146f162565edf878840449f36a8d974
+A segmental fault will happen if the Binutils misses this patch.
 
 
-On 11/4/19 3:49 PM, Jerome Glisse wrote:
-> On Mon, Nov 04, 2019 at 02:49:18PM -0800, John Hubbard wrote:
-...
->>> Maybe add a small comment about wrap around :)
->>
->>
->> I don't *think* the count can wrap around, due to the checks in user_page_ref_inc().
->>
->> But it's true that the documentation is a little light here...What did you have 
->> in mind?
-> 
-> About false positive case (and how unlikely they are) and that wrap
-> around is properly handle. Maybe just a pointer to the documentation
-> so that people know they can go look there for details. I know my
-> brain tend to forget where to look for things so i like to be constantly
-> reminded hey the doc is Documentations/foobar :)
-> 
 
-I see. OK, here's a version with a thoroughly overhauled comment header:
+Vincent Chen (3):
+  riscv: add required functions to enable HAVE_REGS_AND_STACK_ACCESS_API
+  riscv: Add support for restartable sequence
+  rseq/selftests: Add support for riscv
 
-/**
- * page_dma_pinned() - report if a page is pinned for DMA.
- *
- * This function checks if a page has been pinned via a call to
- * pin_user_pages*() or pin_longterm_pages*().
- *
- * The return value is partially fuzzy: false is not fuzzy, because it means
- * "definitely not pinned for DMA", but true means "probably pinned for DMA, but
- * possibly a false positive due to having at least GUP_PIN_COUNTING_BIAS worth
- * of normal page references".
- *
- * False positives are OK, because: a) it's unlikely for a page to get that many
- * refcounts, and b) all the callers of this routine are expected to be able to
- * deal gracefully with a false positive.
- *
- * For more information, please see Documentation/vm/pin_user_pages.rst.
- *
- * @page:	pointer to page to be queried.
- * @Return:	True, if it is likely that the page has been "dma-pinned".
- *		False, if the page is definitely not dma-pinned.
- */
-static inline bool page_dma_pinned(struct page *page)
+ arch/riscv/Kconfig                        |   2 +
+ arch/riscv/include/asm/ptrace.h           |  29 +-
+ arch/riscv/kernel/entry.S                 |   4 +
+ arch/riscv/kernel/ptrace.c                |  99 +++++
+ arch/riscv/kernel/signal.c                |   3 +
+ tools/testing/selftests/rseq/param_test.c |  23 ++
+ tools/testing/selftests/rseq/rseq-riscv.h | 622 ++++++++++++++++++++++++++++++
+ tools/testing/selftests/rseq/rseq.h       |   2 +
+ 8 files changed, 783 insertions(+), 1 deletion(-)
+ create mode 100644 tools/testing/selftests/rseq/rseq-riscv.h
 
+-- 
+2.7.4
 
->>> [...]
->>>
->>>> @@ -1930,12 +2028,20 @@ static int __gup_device_huge(unsigned long pfn, unsigned long addr,
->>>>  
->>>>  		pgmap = get_dev_pagemap(pfn, pgmap);
->>>>  		if (unlikely(!pgmap)) {
->>>> -			undo_dev_pagemap(nr, nr_start, pages);
->>>> +			undo_dev_pagemap(nr, nr_start, flags, pages);
->>>>  			return 0;
->>>>  		}
->>>>  		SetPageReferenced(page);
->>>>  		pages[*nr] = page;
->>>> -		get_page(page);
->>>> +
->>>> +		if (flags & FOLL_PIN) {
->>>> +			if (unlikely(!user_page_ref_inc(page))) {
->>>> +				undo_dev_pagemap(nr, nr_start, flags, pages);
->>>> +				return 0;
->>>> +			}
->>>
->>> Maybe add a comment about a case that should never happens ie
->>> user_page_ref_inc() fails after the second iteration of the
->>> loop as it would be broken and a bug to call undo_dev_pagemap()
->>> after the first iteration of that loop.
->>>
->>> Also i believe that this should never happens as if first
->>> iteration succeed than __page_cache_add_speculative() will
->>> succeed for all the iterations.
->>>
->>> Note that the pgmap case above follows that too ie the call to
->>> get_dev_pagemap() can only fail on first iteration of the loop,
->>> well i assume you can never have a huge device page that span
->>> different pgmap ie different devices (which is a reasonable
->>> assumption). So maybe this code needs fixing ie :
->>>
->>> 		pgmap = get_dev_pagemap(pfn, pgmap);
->>> 		if (unlikely(!pgmap))
->>> 			return 0;
->>>
->>>
->>
->> OK, yes that does make sense. And I think a comment is adequate,
->> no need to check for bugs during every tail page iteration. So how 
->> about this, as a preliminary patch:
-> 
-> Actualy i thought about it and i think that there is pgmap
-> per section and thus maybe one device can have multiple pgmap
-> and that would be an issue for page bigger than section size
-> (ie bigger than 128MB iirc). I will go double check that, but
-> maybe Dan can chime in.
-> 
-> In any case my comment above is correct for the page ref
-> increment, if the first one succeed than others will too
-> or otherwise it means someone is doing too many put_page()/
-> put_user_page() which is _bad_ :)
-> 
-
-I'll wait to hear from Dan before doing anything rash. :)
-
-
-thanks,
-
-John Hubbard
-NVIDIA
