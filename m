@@ -2,179 +2,427 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D96CF0591
-	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Nov 2019 20:00:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 13287F05C7
+	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Nov 2019 20:18:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390783AbfKETAM (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 5 Nov 2019 14:00:12 -0500
-Received: from hqemgate15.nvidia.com ([216.228.121.64]:13342 "EHLO
-        hqemgate15.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2390404AbfKETAL (ORCPT
+        id S2390759AbfKETSQ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 5 Nov 2019 14:18:16 -0500
+Received: from mx.aristanetworks.com ([162.210.129.12]:24289 "EHLO
+        smtp.aristanetworks.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2389724AbfKETSQ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 5 Nov 2019 14:00:11 -0500
-Received: from hqpgpgate102.nvidia.com (Not Verified[216.228.121.13]) by hqemgate15.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5dc1c6bc0000>; Tue, 05 Nov 2019 11:00:12 -0800
-Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate102.nvidia.com (PGP Universal service);
-  Tue, 05 Nov 2019 11:00:07 -0800
-X-PGP-Universal: processed;
-        by hqpgpgate102.nvidia.com on Tue, 05 Nov 2019 11:00:07 -0800
-Received: from [10.110.48.28] (10.124.1.5) by HQMAIL107.nvidia.com
- (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Tue, 5 Nov
- 2019 19:00:07 +0000
-Subject: Re: [PATCH v2 05/18] mm/gup: introduce pin_user_pages*() and FOLL_PIN
-To:     Mike Rapoport <rppt@kernel.org>
-CC:     Andrew Morton <akpm@linux-foundation.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Dave Chinner <david@fromorbit.com>,
-        David Airlie <airlied@linux.ie>,
-        "David S . Miller" <davem@davemloft.net>,
-        Ira Weiny <ira.weiny@intel.com>, Jan Kara <jack@suse.cz>,
-        Jason Gunthorpe <jgg@ziepe.ca>, Jens Axboe <axboe@kernel.dk>,
-        Jonathan Corbet <corbet@lwn.net>,
-        =?UTF-8?B?SsOpcsO0bWUgR2xpc3Nl?= <jglisse@redhat.com>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Michal Hocko <mhocko@suse.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Paul Mackerras <paulus@samba.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Vlastimil Babka <vbabka@suse.cz>, <bpf@vger.kernel.org>,
-        <dri-devel@lists.freedesktop.org>, <kvm@vger.kernel.org>,
-        <linux-block@vger.kernel.org>, <linux-doc@vger.kernel.org>,
-        <linux-fsdevel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-        <linux-media@vger.kernel.org>, <linux-rdma@vger.kernel.org>,
-        <linuxppc-dev@lists.ozlabs.org>, <netdev@vger.kernel.org>,
-        <linux-mm@kvack.org>, LKML <linux-kernel@vger.kernel.org>
-References: <20191103211813.213227-1-jhubbard@nvidia.com>
- <20191103211813.213227-6-jhubbard@nvidia.com>
- <20191105131032.GG25005@rapoport-lnx>
-X-Nvconfidentiality: public
-From:   John Hubbard <jhubbard@nvidia.com>
-Message-ID: <9ac948a4-59bf-2427-2007-e460aad2848a@nvidia.com>
-Date:   Tue, 5 Nov 2019 11:00:06 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
-MIME-Version: 1.0
-In-Reply-To: <20191105131032.GG25005@rapoport-lnx>
-X-Originating-IP: [10.124.1.5]
-X-ClientProxiedBy: HQMAIL105.nvidia.com (172.20.187.12) To
- HQMAIL107.nvidia.com (172.20.187.13)
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
+        Tue, 5 Nov 2019 14:18:16 -0500
+Received: from us180.sjc.aristanetworks.com (us180.sjc.aristanetworks.com [172.25.230.4])
+        by smtp.aristanetworks.com (Postfix) with ESMTP id BBC711E742;
+        Tue,  5 Nov 2019 11:18:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arista.com;
+        s=Arista-A; t=1572981494;
+        bh=CJP4L7MI6TCjlgeFYJ/KGXplRCIXkyxur551/TKYSNY=;
+        h=Date:To:Subject:From:From;
+        b=YrSybkHafpt4phNG3at6GmOjNPH8QcfNoVDHkxIelYA7YAmzxP9ha18axbkLL7wk2
+         hzQrPCa88j2y5LI8lecmq5mgHNhM3iDNMJyPDOcvkOLVy29KBlghk42gCUThYjfgA+
+         fRzbflMvfiRjoawqyG1xUXYhwiPiFbjpgr7oEmcFajdlOQkG9Y5muzE1Bx8vlVGqB4
+         0LhP7ecLc31yxr2lf+nUVvZaogW460yEbEeDhT1IXmBrthfsTTE2/j8dx5SR3nLMKZ
+         O3XhBbep8W672h85wuF4jQw1Yz8qTDi4R6+SfURUQh0bvZOQXLLFD67weo9MJPxtAm
+         Zp2os43DjPvxA==
+Received: by us180.sjc.aristanetworks.com (Postfix, from userid 10189)
+        id 2788F95C0C16; Tue,  5 Nov 2019 11:18:13 -0800 (PST)
+Date:   Tue, 05 Nov 2019 11:18:13 -0800
+To:     dsahern@gmail.com, davem@davemloft.net, shuah@kernel.org,
+        netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        fruggeri@arista.com
+Subject: [PATCH net-next] selftest: net: add some traceroute tests
+User-Agent: Heirloom mailx 12.5 7/5/10
+Content-Type: text/plain; charset=us-ascii
 Content-Transfer-Encoding: 7bit
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1572980412; bh=ojXJL7Jf2vtMqYP0b7gLz2fp+ItJt4NPdkhylbujo04=;
-        h=X-PGP-Universal:Subject:To:CC:References:X-Nvconfidentiality:From:
-         Message-ID:Date:User-Agent:MIME-Version:In-Reply-To:
-         X-Originating-IP:X-ClientProxiedBy:Content-Type:Content-Language:
-         Content-Transfer-Encoding;
-        b=BS0Skgz5RbNv7FRT3SjRhdwpwr0ecQ8AOgMazMsduNtoC93TjDB3sb+UV4BVm8kS1
-         e2YIxx2R9GvEAZtEOkrlW3cAbcdFl/wyRSANMj//120w5PZgTkX7MC1O13jzRSXm0k
-         KFRmKs+Z0OYFmlbRMapMiylU4RVjtXOt6K/rgWvnwLDQgPciqV1nCOSRX3qgMUJrsh
-         MPxa2/es4pKZhwzhaTFebsG3i4fLxzYnNXRQBChEYKYp2xONV3pwMnS3x1UJtQUm9p
-         dbWIIJyjFTTd1aKcwIBzPf2GKUh34tHy3QJ9j5720Clm3FqPmta2g3ZZa8fKcxJoAO
-         rGK6L5pnX3YOQ==
+Message-Id: <20191105191814.2788F95C0C16@us180.sjc.aristanetworks.com>
+From:   fruggeri@arista.com (Francesco Ruggeri)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 11/5/19 5:10 AM, Mike Rapoport wrote:
-...
->> ---
->>  Documentation/vm/index.rst          |   1 +
->>  Documentation/vm/pin_user_pages.rst | 212 ++++++++++++++++++++++
-> 
-> I think it belongs to Documentation/core-api.
+Added the following traceroute tests.
 
-Done:
+IPV6:
+Verify that in this scenario
 
-diff --git a/Documentation/core-api/index.rst b/Documentation/core-api/index.rst
-index ab0eae1c153a..413f7d7c8642 100644
---- a/Documentation/core-api/index.rst
-+++ b/Documentation/core-api/index.rst
-@@ -31,6 +31,7 @@ Core utilities
-    generic-radix-tree
-    memory-allocation
-    mm-api
-+   pin_user_pages
-    gfp_mask-from-fs-io
-    timekeeping
-    boot-time-mm
+       ------------------------ N2
+        |                    |
+      ------              ------  N3  ----
+      | R1 |              | R2 |------|H2|
+      ------              ------      ----
+        |                    |
+       ------------------------ N1
+                 |
+                ----
+                |H1|
+                ----
 
+where H1's default route goes through R1 and R1's default route goes
+through R2 over N2, traceroute6 from H1 to H2 reports R2's address
+on N2 and not N1.
 
-...
->> diff --git a/Documentation/vm/pin_user_pages.rst b/Documentation/vm/pin_user_pages.rst
->> new file mode 100644
->> index 000000000000..3910f49ca98c
->> --- /dev/null
->> +++ b/Documentation/vm/pin_user_pages.rst
->> @@ -0,0 +1,212 @@
->> +.. SPDX-License-Identifier: GPL-2.0
->> +
->> +====================================================
->> +pin_user_pages() and related calls
->> +====================================================
-> 
-> I know this is too much to ask, but having pin_user_pages() a part of more
-> general GUP description would be really great :)
-> 
+IPV4:
+Verify that traceroute from H1 to H2 shows 1.0.1.1 in this scenario
 
-Yes, definitely. But until I saw the reaction to the pin_user_pages() API
-family, I didn't want to write too much--it could have all been tossed out
-in favor of a whole different API. But now that we've had some initial
-reviews, I'm much more confident in being able to write about the larger 
-API set.
+                   1.0.3.1/24
+---- 1.0.1.3/24    1.0.1.1/24 ---- 1.0.2.1/24    1.0.2.4/24 ----
+|H1|--------------------------|R1|--------------------------|H2|
+----            N1            ----            N2            ----
 
-So yes, I'll put that on my pending list.
+where net.ipv4.icmp_errors_use_inbound_ifaddr is set on R1 and
+1.0.3.1/24 and 1.0.1.1/24 are respectively R1's primary and secondary
+address on N1.
 
+Signed-off-by: Francesco Ruggeri <fruggeri@arista.com>
+---
+ tools/testing/selftests/net/Makefile      |   2 +-
+ tools/testing/selftests/net/traceroute.sh | 322 ++++++++++++++++++++++
+ 2 files changed, 323 insertions(+), 1 deletion(-)
+ create mode 100755 tools/testing/selftests/net/traceroute.sh
 
-...
->> +This document describes the following functions: ::
->> +
->> + pin_user_pages
->> + pin_user_pages_fast
->> + pin_user_pages_remote
->> +
->> + pin_longterm_pages
->> + pin_longterm_pages_fast
->> + pin_longterm_pages_remote
->> +
->> +Basic description of FOLL_PIN
->> +=============================
->> +
->> +A new flag for get_user_pages ("gup") has been added: FOLL_PIN. FOLL_PIN has
-> 
-> Consider reading this after, say, half a year ;-)
-> 
+diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selftests/net/Makefile
+index 0bd6b23c97ef..a8e04d665b69 100644
+--- a/tools/testing/selftests/net/Makefile
++++ b/tools/testing/selftests/net/Makefile
+@@ -10,7 +10,7 @@ TEST_PROGS += fib_tests.sh fib-onlink-tests.sh pmtu.sh udpgso.sh ip_defrag.sh
+ TEST_PROGS += udpgso_bench.sh fib_rule_tests.sh msg_zerocopy.sh psock_snd.sh
+ TEST_PROGS += udpgro_bench.sh udpgro.sh test_vxlan_under_vrf.sh reuseport_addr_any.sh
+ TEST_PROGS += test_vxlan_fdb_changelink.sh so_txtime.sh ipv6_flowlabel.sh
+-TEST_PROGS += tcp_fastopen_backup_key.sh fcnal-test.sh l2tp.sh
++TEST_PROGS += tcp_fastopen_backup_key.sh fcnal-test.sh l2tp.sh traceroute.sh
+ TEST_PROGS_EXTENDED := in_netns.sh
+ TEST_GEN_FILES =  socket nettest
+ TEST_GEN_FILES += psock_fanout psock_tpacket msg_zerocopy reuseport_addr_any
+diff --git a/tools/testing/selftests/net/traceroute.sh b/tools/testing/selftests/net/traceroute.sh
+new file mode 100755
+index 000000000000..51a2838dc77e
+--- /dev/null
++++ b/tools/testing/selftests/net/traceroute.sh
+@@ -0,0 +1,322 @@
++#!/bin/bash
++# SPDX-License-Identifier: GPL-2.0
++#
++# Run traceroute/traceroute6 tests
++#
++
++VERBOSE=0
++PAUSE_ON_FAIL=no
++
++################################################################################
++#
++log_test()
++{
++	local rc=$1
++	local expected=$2
++	local msg="$3"
++
++	if [ ${rc} -eq ${expected} ]; then
++		printf "TEST: %-60s  [ OK ]\n" "${msg}"
++		nsuccess=$((nsuccess+1))
++	else
++		ret=1
++		nfail=$((nfail+1))
++		printf "TEST: %-60s  [FAIL]\n" "${msg}"
++		if [ "${PAUSE_ON_FAIL}" = "yes" ]; then
++			echo
++			echo "hit enter to continue, 'q' to quit"
++			read a
++			[ "$a" = "q" ] && exit 1
++		fi
++	fi
++}
++
++run_cmd()
++{
++	local ns
++	local cmd
++	local out
++	local rc
++
++	ns="$1"
++	shift
++	cmd="$*"
++
++	if [ "$VERBOSE" = "1" ]; then
++		printf "    COMMAND: $cmd\n"
++	fi
++
++	out=$(eval ip netns exec ${ns} ${cmd} 2>&1)
++	rc=$?
++	if [ "$VERBOSE" = "1" -a -n "$out" ]; then
++		echo "    $out"
++	fi
++
++	[ "$VERBOSE" = "1" ] && echo
++
++	return $rc
++}
++
++################################################################################
++# create namespaces and interconnects
++
++create_ns()
++{
++	local ns=$1
++	local addr=$2
++	local addr6=$3
++
++	[ -z "${addr}" ] && addr="-"
++	[ -z "${addr6}" ] && addr6="-"
++
++	ip netns add ${ns}
++
++	ip netns exec ${ns} ip link set lo up
++	if [ "${addr}" != "-" ]; then
++		ip netns exec ${ns} ip addr add dev lo ${addr}
++	fi
++	if [ "${addr6}" != "-" ]; then
++		ip netns exec ${ns} ip -6 addr add dev lo ${addr6}
++	fi
++
++	ip netns exec ${ns} ip ro add unreachable default metric 8192
++	ip netns exec ${ns} ip -6 ro add unreachable default metric 8192
++
++	ip netns exec ${ns} sysctl -qw net.ipv4.ip_forward=1
++	ip netns exec ${ns} sysctl -qw net.ipv6.conf.all.keep_addr_on_down=1
++	ip netns exec ${ns} sysctl -qw net.ipv6.conf.all.forwarding=1
++	ip netns exec ${ns} sysctl -qw net.ipv6.conf.default.forwarding=1
++	ip netns exec ${ns} sysctl -qw net.ipv6.conf.default.accept_dad=0
++}
++
++# create veth pair to connect namespaces and apply addresses.
++connect_ns()
++{
++	local ns1=$1
++	local ns1_dev=$2
++	local ns1_addr=$3
++	local ns1_addr6=$4
++	local ns2=$5
++	local ns2_dev=$6
++	local ns2_addr=$7
++	local ns2_addr6=$8
++
++	ip netns exec ${ns1} ip li add ${ns1_dev} type veth peer name tmp
++	ip netns exec ${ns1} ip li set ${ns1_dev} up
++	ip netns exec ${ns1} ip li set tmp netns ${ns2} name ${ns2_dev}
++	ip netns exec ${ns2} ip li set ${ns2_dev} up
++
++	if [ "${ns1_addr}" != "-" ]; then
++		ip netns exec ${ns1} ip addr add dev ${ns1_dev} ${ns1_addr}
++	fi
++
++	if [ "${ns2_addr}" != "-" ]; then
++		ip netns exec ${ns2} ip addr add dev ${ns2_dev} ${ns2_addr}
++	fi
++
++	if [ "${ns1_addr6}" != "-" ]; then
++		ip netns exec ${ns1} ip addr add dev ${ns1_dev} ${ns1_addr6}
++	fi
++
++	if [ "${ns2_addr6}" != "-" ]; then
++		ip netns exec ${ns2} ip addr add dev ${ns2_dev} ${ns2_addr6}
++	fi
++}
++
++################################################################################
++# traceroute6 test
++#
++# Verify that in this scenario
++#
++#        ------------------------ N2
++#         |                    |
++#       ------              ------  N3  ----
++#       | R1 |              | R2 |------|H2|
++#       ------              ------      ----
++#         |                    |
++#        ------------------------ N1
++#                  |
++#                 ----
++#                 |H1|
++#                 ----
++#
++# where H1's default route goes through R1 and R1's default route goes
++# through R2 over N2, traceroute6 from H1 to H2 reports R2's address
++# on N2 and not N1.
++#
++# Addresses are assigned as follows:
++#
++# N1: 2000:101::/64
++# N2: 2000:102::/64
++# N3: 2000:103::/64
++#
++# R1's host part of address: 1
++# R2's host part of address: 2
++# H1's host part of address: 3
++# H2's host part of address: 4
++#
++# For example:
++# the IPv6 address of R1's interface on N2 is 2000:102::1/64
++
++cleanup_traceroute6()
++{
++	local ns
++
++	for ns in host-1 host-2 router-1 router-2
++	do
++		ip netns del ${ns} 2>/dev/null
++	done
++}
++
++setup_traceroute6()
++{
++	brdev=br0
++
++	# start clean
++	cleanup_traceroute6
++
++	set -e
++	create_ns host-1
++	create_ns host-2
++	create_ns router-1
++	create_ns router-2
++
++	# Setup N3
++	connect_ns router-2 eth3 - 2000:103::2/64 host-2 eth3 - 2000:103::4/64
++	ip netns exec host-2 ip route add default via 2000:103::2
++
++	# Setup N2
++	connect_ns router-1 eth2 - 2000:102::1/64 router-2 eth2 - 2000:102::2/64
++	ip netns exec router-1 ip route add default via 2000:102::2
++
++	# Setup N1. host-1 and router-1 connect to a bridge in router-2.
++	ip netns exec router-2 ip link add name ${brdev} type bridge
++	ip netns exec router-2 ip link set ${brdev} up
++	ip netns exec router-2 ip addr add 2000:101::2/64 dev ${brdev}
++
++	connect_ns host-1 eth0 - 2000:101::3/63 router-2 eth0 - -
++	ip netns exec router-2 ip link set dev eth0 master ${brdev}
++	ip netns exec host-1 ip route add default via 2000:101::1
++
++	connect_ns router-1 eth1 - 2000:101::1 router-2 eth1 - -
++	ip netns exec router-2 ip link set dev eth1 master ${brdev}
++
++	# Prime the network
++	ip netns exec host-1 ping6 -c5 2000:103::4 >/dev/null 2>&1
++
++	set +e
++}
++
++run_traceroute6()
++{
++	if [ ! -x "$(command -v traceroute6)" ]; then
++		echo "SKIP: Could not run IPV6 test without traceroute6"
++		return
++	fi
++
++	setup_traceroute6
++
++	# traceroute6 host-2 from host-1 (expects 2000:102::2)
++	run_cmd host-1 "traceroute6 2000:103::4 | grep -q 2000:102::2"
++	log_test $? 0 "IPV6 traceroute"
++
++	cleanup_traceroute6
++}
++
++################################################################################
++# traceroute test
++#
++# Verify that traceroute from H1 to H2 shows 1.0.1.1 in this scenario
++#
++#                    1.0.3.1/24
++# ---- 1.0.1.3/24    1.0.1.1/24 ---- 1.0.2.1/24    1.0.2.4/24 ----
++# |H1|--------------------------|R1|--------------------------|H2|
++# ----            N1            ----            N2            ----
++#
++# where net.ipv4.icmp_errors_use_inbound_ifaddr is set on R1 and
++# 1.0.3.1/24 and 1.0.1.1/24 are respectively R1's primary and secondary
++# address on N1.
++#
++
++cleanup_traceroute()
++{
++	local ns
++
++	for ns in host-1 host-2 router
++	do
++		ip netns del ${ns} 2>/dev/null
++	done
++}
++
++setup_traceroute()
++{
++	# start clean
++	cleanup_traceroute
++
++	set -e
++	create_ns host-1
++	create_ns host-2
++	create_ns router
++
++	connect_ns host-1 eth0 1.0.1.3/24 - \
++	           router eth1 1.0.3.1/24 -
++	ip netns exec host-1 ip route add default via 1.0.1.1
++
++	ip netns exec router ip addr add 1.0.1.1/24 dev eth1
++	ip netns exec router sysctl -qw \
++				net.ipv4.icmp_errors_use_inbound_ifaddr=1
++
++	connect_ns host-2 eth0 1.0.2.4/24 - \
++	           router eth2 1.0.2.1/24 -
++	ip netns exec host-2 ip route add default via 1.0.2.1
++
++	# Prime the network
++	ip netns exec host-1 ping -c5 1.0.2.4 >/dev/null 2>&1
++
++	set +e
++}
++
++run_traceroute()
++{
++	if [ ! -x "$(command -v traceroute)" ]; then
++		echo "SKIP: Could not run IPV4 test without traceroute"
++		return
++	fi
++
++	setup_traceroute
++
++	# traceroute host-2 from host-1 (expects 1.0.1.1). Takes a while.
++	run_cmd host-1 "traceroute 1.0.2.4 | grep -q 1.0.1.1"
++	log_test $? 0 "IPV4 traceroute"
++
++	cleanup_traceroute
++}
++
++################################################################################
++# Run tests
++
++run_tests()
++{
++	run_traceroute6
++	run_traceroute
++}
++
++################################################################################
++# main
++
++declare -i nfail=0
++declare -i nsuccess=0
++
++while getopts :pv o
++do
++	case $o in
++		p) PAUSE_ON_FAIL=yes;;
++		v) VERBOSE=$(($VERBOSE + 1));;
++		*) exit 1;;
++	esac
++done
++
++run_tests
++
++printf "\nTests passed: %3d\n" ${nsuccess}
++printf "Tests failed: %3d\n"   ${nfail}
+-- 
+2.19.1
 
-OK, OK. I knew when I wrote that that it was not going to stay new forever, but
-somehow failed to write the right thing anyway. :) 
-
-Here's a revised set of paragraphs:
-
-Basic description of FOLL_PIN
-=============================
-
-FOLL_PIN and FOLL_LONGTERM are flags that can be passed to the get_user_pages*()
-("gup") family of functions. FOLL_PIN has significant interactions and
-interdependencies with FOLL_LONGTERM, so both are covered here.
-
-Both FOLL_PIN and FOLL_LONGTERM are internal to gup, meaning that neither
-FOLL_PIN nor FOLL_LONGTERM should not appear at the gup call sites. This allows
-the associated wrapper functions  (pin_user_pages() and others) to set the
-correct combination of these flags, and to check for problems as well.
-
-
-thanks,
-
-John Hubbard
-NVIDIA
