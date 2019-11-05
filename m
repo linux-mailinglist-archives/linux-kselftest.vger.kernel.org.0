@@ -2,127 +2,66 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8250CEF840
-	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Nov 2019 10:10:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0413FEF9BF
+	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Nov 2019 10:41:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730742AbfKEJJ6 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 5 Nov 2019 04:09:58 -0500
-Received: from mout-p-201.mailbox.org ([80.241.56.171]:9604 "EHLO
-        mout-p-201.mailbox.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730555AbfKEJJ5 (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 5 Nov 2019 04:09:57 -0500
-Received: from smtp2.mailbox.org (smtp2.mailbox.org [IPv6:2001:67c:2050:105:465:1:2:0])
-        (using TLSv1.2 with cipher ECDHE-RSA-CHACHA20-POLY1305 (256/256 bits))
-        (No client certificate requested)
-        by mout-p-201.mailbox.org (Postfix) with ESMTPS id 476kQ90KYtzQlBP;
-        Tue,  5 Nov 2019 10:09:53 +0100 (CET)
-X-Virus-Scanned: amavisd-new at heinlein-support.de
-Received: from smtp2.mailbox.org ([80.241.60.241])
-        by spamfilter02.heinlein-hosting.de (spamfilter02.heinlein-hosting.de [80.241.56.116]) (amavisd-new, port 10030)
-        with ESMTP id fOLl1hihmqMD; Tue,  5 Nov 2019 10:09:46 +0100 (CET)
-From:   Aleksa Sarai <cyphar@cyphar.com>
-To:     Al Viro <viro@zeniv.linux.org.uk>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J. Bruce Fields" <bfields@fieldses.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        David Howells <dhowells@redhat.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>
-Cc:     Aleksa Sarai <cyphar@cyphar.com>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Jann Horn <jannh@google.com>, Tycho Andersen <tycho@tycho.ws>,
-        David Drysdale <drysdale@google.com>,
-        Chanho Min <chanho.min@lge.com>,
-        Oleg Nesterov <oleg@redhat.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Christian Brauner <christian@brauner.io>,
-        Aleksa Sarai <asarai@suse.de>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        containers@lists.linux-foundation.org, linux-alpha@vger.kernel.org,
-        linux-api@vger.kernel.org, libc-alpha@sourceware.org,
-        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-fsdevel@vger.kernel.org, linux-ia64@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        linux-xtensa@linux-xtensa.org, sparclinux@vger.kernel.org
-Subject: [PATCH v15 9/9] Documentation: path-lookup: mention LOOKUP_MAGICLINK_JUMPED
-Date:   Tue,  5 Nov 2019 20:05:53 +1100
-Message-Id: <20191105090553.6350-10-cyphar@cyphar.com>
-In-Reply-To: <20191105090553.6350-1-cyphar@cyphar.com>
-References: <20191105090553.6350-1-cyphar@cyphar.com>
+        id S1730692AbfKEJlJ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 5 Nov 2019 04:41:09 -0500
+Received: from m12-14.163.com ([220.181.12.14]:40039 "EHLO m12-14.163.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1730537AbfKEJlJ (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 5 Nov 2019 04:41:09 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=oTfm9
+        nHSTYeQdNmpFEU/ZEk19olGK2tJWTcVpXVi3yU=; b=AkZHwEbHwM87b+irIKTjf
+        5mnzcHkiC+EkGjjt0EFeFfa1I6mcqujyU4hFm7Tk7uEOHL+nC5w9iJ/LkDpyDFtC
+        js+KofdLckbXzFAisfIIeEm2tZtbZ78JJ0UALPQ99ZO53X7jXp1+leJGm+Ss+BJS
+        a9IYXlSiFHpCPnPH+NQv8U=
+Received: from localhost.localdomain (unknown [112.25.212.39])
+        by smtp10 (Coremail) with SMTP id DsCowAD3_JiaQ8FdeNDtBg--.147S2;
+        Tue, 05 Nov 2019 17:40:44 +0800 (CST)
+From:   Xiao Yang <ice_yangxiao@163.com>
+To:     john.stultz@linaro.org, shuah@kernel.org
+Cc:     linux-kselftest@vger.kernel.org, Xiao Yang <ice_yangxiao@163.com>,
+        kernel test robot <lkp@intel.com>
+Subject: [PATCH] dmabuf-heaps/dmabuf-heap.c: Initialize features variable to avoid compiler warning
+Date:   Tue,  5 Nov 2019 17:40:29 +0800
+Message-Id: <20191105094029.21213-1-ice_yangxiao@163.com>
+X-Mailer: git-send-email 2.21.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: DsCowAD3_JiaQ8FdeNDtBg--.147S2
+X-Coremail-Antispam: 1Uf129KBjvdXoWrZFWxKry3KrWkGr45WrWfKrg_yoW3ZFXEvF
+        Z5tFZ7urZ5AFyqkr15Xas8Wrs7Xay5WF48G34rJ3W3Krs8AFWYyFWDZF4UJFnagrn8uFW2
+        vFZrKr9xGw12yjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7IUUL0eJUUUUU==
+X-Originating-IP: [112.25.212.39]
+X-CM-SenderInfo: 5lfhs5xdqj5xldr6il2tof0z/1tbiTB1kXlSIi09rhwAAsf
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Now that we have a special flag to signify magic-link jumps, mention it
-within the path-lookup docs. And now that "magic link" is the correct
-term for nd_jump_link()-style symlinks, clean up references to this type
-of "symlink".
-
-Signed-off-by: Aleksa Sarai <cyphar@cyphar.com>
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Xiao Yang <ice_yangxiao@163.com>
 ---
- Documentation/filesystems/path-lookup.rst | 18 ++++++++++++------
- 1 file changed, 12 insertions(+), 6 deletions(-)
+ tools/testing/selftests/dmabuf-heaps/dmabuf-heap.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/Documentation/filesystems/path-lookup.rst b/Documentation/filesystems/path-lookup.rst
-index 434a07b0002b..2c32795389bd 100644
---- a/Documentation/filesystems/path-lookup.rst
-+++ b/Documentation/filesystems/path-lookup.rst
-@@ -405,6 +405,10 @@ is requested.  Keeping a reference in the ``nameidata`` ensures that
- only one root is in effect for the entire path walk, even if it races
- with a ``chroot()`` system call.
+diff --git a/tools/testing/selftests/dmabuf-heaps/dmabuf-heap.c b/tools/testing/selftests/dmabuf-heaps/dmabuf-heap.c
+index ec47901ef2e2..5e3eeec299b2 100644
+--- a/tools/testing/selftests/dmabuf-heaps/dmabuf-heap.c
++++ b/tools/testing/selftests/dmabuf-heaps/dmabuf-heap.c
+@@ -154,7 +154,7 @@ static int do_test(char *heap_name)
+ 	int heap_fd = -1, dmabuf_fd = -1, importer_fd = -1;
+ 	uint32_t handle = 0;
+ 	void *p = NULL;
+-	unsigned long long features;
++	unsigned long long features = 0;
+ 	int ret;
  
-+It should be noted that in the case of ``LOOKUP_IN_ROOT`` or
-+``LOOKUP_BENEATH``, the effective root becomes the directory file descriptor
-+passed to ``openat2()`` (which exposes these ``LOOKUP_`` flags).
-+
- The root is needed when either of two conditions holds: (1) either the
- pathname or a symbolic link starts with a "'/'", or (2) a "``..``"
- component is being handled, since "``..``" from the root must always stay
-@@ -1149,7 +1153,7 @@ so ``NULL`` is returned to indicate that the symlink can be released and
- the stack frame discarded.
- 
- The other case involves things in ``/proc`` that look like symlinks but
--aren't really::
-+aren't really (and are therefore commonly referred to as "magic-links")::
- 
-      $ ls -l /proc/self/fd/1
-      lrwx------ 1 neilb neilb 64 Jun 13 10:19 /proc/self/fd/1 -> /dev/pts/4
-@@ -1310,12 +1314,14 @@ longer needed.
- ``LOOKUP_JUMPED`` means that the current dentry was chosen not because
- it had the right name but for some other reason.  This happens when
- following "``..``", following a symlink to ``/``, crossing a mount point
--or accessing a "``/proc/$PID/fd/$FD``" symlink.  In this case the
--filesystem has not been asked to revalidate the name (with
--``d_revalidate()``).  In such cases the inode may still need to be
--revalidated, so ``d_op->d_weak_revalidate()`` is called if
-+or accessing a "``/proc/$PID/fd/$FD``" symlink (also known as a "magic
-+link"). In this case the filesystem has not been asked to revalidate the
-+name (with ``d_revalidate()``).  In such cases the inode may still need
-+to be revalidated, so ``d_op->d_weak_revalidate()`` is called if
- ``LOOKUP_JUMPED`` is set when the look completes - which may be at the
--final component or, when creating, unlinking, or renaming, at the penultimate component.
-+final component or, when creating, unlinking, or renaming, at the
-+penultimate component. ``LOOKUP_MAGICLINK_JUMPED`` is set alongside
-+``LOOKUP_JUMPED`` if a magic-link was traversed.
- 
- Final-component flags
- ~~~~~~~~~~~~~~~~~~~~~
+ 	printf("Testing heap: %s\n", heap_name);
 -- 
-2.23.0
+2.21.0
+
 
