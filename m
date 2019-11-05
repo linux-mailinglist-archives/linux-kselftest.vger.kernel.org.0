@@ -2,429 +2,283 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F41CF09CE
-	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Nov 2019 23:48:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 519A7F0A59
+	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Nov 2019 00:44:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730523AbfKEWsj (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 5 Nov 2019 17:48:39 -0500
-Received: from mx.aristanetworks.com ([162.210.129.12]:41617 "EHLO
-        smtp.aristanetworks.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730192AbfKEWsj (ORCPT
+        id S1729688AbfKEXon (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 5 Nov 2019 18:44:43 -0500
+Received: from mail-pl1-f195.google.com ([209.85.214.195]:38364 "EHLO
+        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728965AbfKEXok (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 5 Nov 2019 17:48:39 -0500
-Received: from us180.sjc.aristanetworks.com (us180.sjc.aristanetworks.com [172.25.230.4])
-        by smtp.aristanetworks.com (Postfix) with ESMTP id E8F861E742;
-        Tue,  5 Nov 2019 14:48:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arista.com;
-        s=Arista-A; t=1572994115;
-        bh=ZmXdS/0E5DdRcvuILjROV///j083rRu2nYDsZL6zL0k=;
-        h=Date:To:Subject:From:From;
-        b=VfcsFzNhAj6hm9r7kjLNrepFM/E3rflLRG9ARRc8NMXSWThwMFGSpEoJ0wBIa3PvM
-         AdrNX/JlplHuazC6OmxblmQJde5q/CdHMBHQmEKIoAQZooSo+Wa95Fzlk8ghXYzIzR
-         eRmUsJyJSo4DQBKP4MIIcsi6xRRTCJXlhMdApRh6VQLmGgTChroVQLtGYOJu7CS+Fu
-         a4RFANv1sZ0vlUdcuJkY5P+5Vpc/hfigOlemwE+SbfYB4Opfi+qB0RcPBuRTn+2Abp
-         KQMRv8CHQMSbV2p5Bqev4DdP2vB5qEcuKyLkwAddT2WJ1Jv/jrgE+qI11T7QQMMZF0
-         XjljCPZSW553w==
-Received: by us180.sjc.aristanetworks.com (Postfix, from userid 10189)
-        id D134F95C0C6F; Tue,  5 Nov 2019 14:48:35 -0800 (PST)
-Date:   Tue, 05 Nov 2019 14:48:35 -0800
-To:     dsahern@gmail.com, davem@davemloft.net, shuah@kernel.org,
-        netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        fruggeri@arista.com
-Subject: [PATCH net-next v2] selftest: net: add some traceroute tests
-User-Agent: Heirloom mailx 12.5 7/5/10
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-Message-Id: <20191105224835.D134F95C0C6F@us180.sjc.aristanetworks.com>
-From:   fruggeri@arista.com (Francesco Ruggeri)
+        Tue, 5 Nov 2019 18:44:40 -0500
+Received: by mail-pl1-f195.google.com with SMTP id w8so10488496plq.5
+        for <linux-kselftest@vger.kernel.org>; Tue, 05 Nov 2019 15:44:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Um9/qfCrgZQ1WrP8N3q635iXaQT9L9NZqcD9xzyqjhM=;
+        b=m00rGWWyIBgUYfI0QN893mlVLSmeXOwzg7GcqkNFGQQZos7nfhjD+GJyP5XiGGvtfe
+         jndgqjdkc8Qnbcp0cwruho0cEPYZ/2v+G5j7kC9ctfuh0rvGyynZVF49Fs42BvbGVuq3
+         8tv+uhlF+yYWzMdnXTQIRmcwfTqXEoKJJPIu0hbQwOuj7VCLslthywlJT56/VzfsAaEr
+         Sp5b2usbNudPlZ9FwnogiNaWQx21Ao+nNY6rA7jlrfkAcE/vORzVG9BbBMjZtPmNVAfg
+         cvawCcLWuH99pXRuuD7Wlf+LvpZDOjabTvsjfcjYOwfM226DYIVsvTPTabKQCy7ZheDd
+         JfJQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Um9/qfCrgZQ1WrP8N3q635iXaQT9L9NZqcD9xzyqjhM=;
+        b=XDJDdArw/LE9R8D53l6/gI0riu/5KUBjV1mBNAd+8uT/3qJlwRzH8yBOzcGRdYVG52
+         gvOVdi4tKAcOqFHJPJULHEvfd4Aqum5f1MRgS6Bqe4oPmU9+HfYt3JDaSHw0QdW1YIST
+         7A07NL9FRoLoZtCqRMQ6GO7Rj8uHvKCX0vuxuSO/kSRbmWlWKmIOgNFrVUWhdWhQZ/Ii
+         wiAi3EztBlYBQ+vBkhiVZtRrF2WQ6KR8DE4pZhdpcEQkq0yqC8AKuGb3a28obxc0vwjh
+         vZ1kuDkJuQepE0Zt1VSFm6oaJGAXr4pbu0bRL5C+9NZa3pWVy8I1KOYjkSVBUptuAJhw
+         3K5g==
+X-Gm-Message-State: APjAAAUsDJVb06ZAfPg9q685+zEk88k8qci5I0k00ZH9wMolS2v1DZI/
+        Qn0o0qEKa6V7PtTvz1p+2IzeaibdcV3PJXZVpZmqHA==
+X-Google-Smtp-Source: APXvYqzCFV7KRMTLsbE7bEb+T05qapNLIwRw+TgsIRHszTdTe9Vcmq+K/1l3DcTczC5gtBYOrrlyzWqtn8ldUatIhnY=
+X-Received: by 2002:a17:902:b685:: with SMTP id c5mr34580955pls.297.1572997478784;
+ Tue, 05 Nov 2019 15:44:38 -0800 (PST)
+MIME-Version: 1.0
+References: <20191018001816.94460-1-brendanhiggins@google.com>
+ <20191018122949.GD11244@42.do-not-panic.com> <alpine.LRH.2.20.1910191348280.11804@dhcp-10-175-221-34.vpn.oracle.com>
+ <CAFd5g46aO4jwyo32DSz4L8GdhP6t38+Qb9NB+3fev3u4G6sg4w@mail.gmail.com>
+ <20191024101529.GK11244@42.do-not-panic.com> <201910301205.74EC2A226D@keescook>
+ <CAFd5g45V-iYaAhHwoaUPoPYUBud-5vxbBkApp-h5O6J8trnPRA@mail.gmail.com> <alpine.LRH.2.20.1911011142160.15982@dhcp-10-175-177-231.vpn.oracle.com>
+In-Reply-To: <alpine.LRH.2.20.1911011142160.15982@dhcp-10-175-177-231.vpn.oracle.com>
+From:   Brendan Higgins <brendanhiggins@google.com>
+Date:   Tue, 5 Nov 2019 15:44:27 -0800
+Message-ID: <CAFd5g44C4y=M3goRgaXeOzh=T=+y03Natfyut+ojrKOf+4HSWw@mail.gmail.com>
+Subject: Re: [PATCH linux-kselftest/test v1] apparmor: add AppArmor KUnit
+ tests for policy unpack
+To:     Alan Maguire <alan.maguire@oracle.com>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Matthias Maennich <maennich@google.com>,
+        shuah <shuah@kernel.org>,
+        John Johansen <john.johansen@canonical.com>, jmorris@namei.org,
+        serge@hallyn.com, Iurii Zaikin <yzaikin@google.com>,
+        David Gow <davidgow@google.com>,
+        "Theodore Ts'o" <tytso@mit.edu>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-security-module@vger.kernel.org,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Mike Salvatore <mike.salvatore@canonical.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Added the following traceroute tests.
+On Fri, Nov 1, 2019 at 5:30 AM Alan Maguire <alan.maguire@oracle.com> wrote:
+>
+> On Thu, 31 Oct 2019, Brendan Higgins wrote:
+>
+> > On Wed, Oct 30, 2019 at 12:09 PM Kees Cook <keescook@chromium.org> wrote:
+> > >
+> > > On Thu, Oct 24, 2019 at 10:15:29AM +0000, Luis Chamberlain wrote:
+> > > > On Wed, Oct 23, 2019 at 05:42:18PM -0700, Brendan Higgins wrote:
+> > > > > With that, I think the best solution in this case will be the
+> > > > > "__visible_for_testing" route. It has no overhead when testing is
+> > > > > turned off (in fact it is no different in anyway when testing is
+> > > > > turned off). The downsides I see are:
+> > > > >
+> > > > > 1) You may not be able to test non-module code not compiled for
+> > > > > testing later with the test modules that Alan is working on (But the
+> > > > > only way I think that will work is by preventing the symbol from being
+> > > > > inlined, right?).
+> > > > >
+> > > > > 2) I think "__visible_for_testing" will be prone to abuse. Here, I
+> > > > > think there are reasons why we might want to expose these symbols for
+> > > > > testing, but not otherwise. Nevertheless, I think most symbols that
+> > > > > should be tested should probably be made visible by default. Since you
+> > > > > usually only want to test your public interfaces. I could very well
+> > > > > see this getting used as a kludge that gets used far too frequently.
+> > > >
+> > > > There are two parts to your statement on 2):
+> > > >
+> > > >   a) possible abuse of say __visible_for_testing
+> > >
+> > > I really don't like the idea of littering the kernel with these. It'll
+> >
+> > Yeah, I kind of hope that it would make people think more
+> > intentionally about what is a public interface so that they wouldn't
+> > litter the kernel with those. But I agree that in the world where
+> > people *didn't* do that. Lots of these sprinkled around would be
+> > annoying.
+> >
+> > > also require chunks in header files wrapped in #ifdefs. This is really
+> >
+> > Why would it require header files wrapped in #ifdefs?
+> >
+> > We could put all the ifdeffery logic in the __visible_for_testing
+> > macro so that nothing in the original code has to change except for
+> > adding an #include and replacing a couple of `static`s with
+> > `__visible_for_testing`.
+> >
+>
+> FWIW I think this approach, if used sparingly, is fine.  However I'd
+> propose a hierarchy of options when looking to expose interfaces for
+> testing.
+>
+> 1. For small, largely self-contained functions, move their definitions
+> from .c files to a .h file where those functions are defined as "static
+> inline".  That way the original code and tests can included them and we
+> have solved function availability for both the cases where the tests are
+> built-in and compiled as a module.  The apparmor interfaces here seem to
+> be candidates for that approach.
+>
+> 2. For more complex cases, __visible_for_testing (for built-in visbility)
+> and some sort of equivalent EXPORT_FOR_TESTING (for module
+> visibility) would work, or the kunit_find_symbol() based lookup approach I
+> suggested in the module patches.  Either of these allows for building
+> tests as modules or builtin.
+>
+> 3. For some cases, module support will probably be impossible or difficult
+> to maintain.  In such cases, builtin tests make most sense so any
+> questions about symbol visibility would largely concern changing static
+> definitions to be __visibile_for_testing, with no need for any symbol
+> export for module visibility.
 
-IPV6:
-Verify that in this scenario
+Very well said, I think this sums up a lot of good points. Basically,
+I think you illustrate that it's not just one of the ways that were
+proposed is the most appropriate for all cases, but really several are
+valid strategies in different instances.
 
-       ------------------------ N2
-        |                    |
-      ------              ------  N3  ----
-      | R1 |              | R2 |------|H2|
-      ------              ------      ----
-        |                    |
-       ------------------------ N1
-                 |
-                ----
-                |H1|
-                ----
+> > > ugly.
+> > >
+> > > >   b) you typically only want to test your public interfaces
+> > >
+> > > True, but being able to test the little helper functions is a nice
+> > > starting point and a good building block.
+> >
+> > Yeah, I think I have come to accept that. We can argue about how this
+> > should change and how people need to learn to be more intentional
+> > about which interfaces are public and many other high minded ideas,
+> > but when it comes down to it, we need to provide a starting point that
+> > is easy.
+> >
+> > If our nice starting point becomes a problem, we can always improve it later.
+> >
+> > > Why can't unit tests live with the code they're testing? They're already
+> > > logically tied together; what's the harm there? This needn't be the case
+> > > for ALL tests, etc. The test driver could still live externally. The
+> > > test in the other .c would just have exported functions... ?
+> >
+> > Well, for one, it totally tanks certain cases for building KUnit tests
+> > as modules. I don't care about this point *too* much personally, but I
+> > accept that there are others that want this, and I don't want to make
+> > these people's lives too difficult.
+> >
+>
+> Appreciated.  I think at this point it might be useful to lay out my
+> thinking on why being able to build tests as modules may be helpful moving
+> forward.
+>
+> - First and foremost, if the functionality itself is predominantly
+> delivered in module form, or indeed is simply tristate, having a way to
+> test kernel code when built as a module seems to me to be necessary. To
+> test module code with built-in test code seems broken, and even if it
+> could be made to work we'd end up having to invent a bunch of the mechanisms
+> we'd need for building tests as modules anyway.
 
-where H1's default route goes through R1 and R1's default route goes
-through R2 over N2, traceroute6 from H1 to H2 reports R2's address
-on N2 and not N1.
+I think that is a fair point. I think I was thinking of it as an all
+or nothing type thing. I know that we had moved past it in words, but
+I think I was still hung up on the idea that we were going to try to
+aggressively make tests buildable as modules. Here, and combined with
+what Mike said (in a later email), I think I realized that a better
+metric is what the code under test does.
 
-IPV4:
-Verify that traceroute from H1 to H2 shows 1.0.1.1 in this scenario
+It's probably not a big deal to make *everything* available as a
+module. The right thing is probably that, if the code is available as
+a module, the test should probably be available as a module. If the
+code is not available as a module, it is not necessary to provide the
+test as a module.
 
-                   1.0.3.1/24
----- 1.0.1.3/24    1.0.1.1/24 ---- 1.0.2.1/24    1.0.2.4/24 ----
-|H1|--------------------------|R1|--------------------------|H2|
-----            N1            ----            N2            ----
+But that and what Mike said, I think, gets at something deeper. Each
+subsystem has its own way of doing things, and that is a reality we
+have to deal with. As long as there is some way to "run all the tests"
+what conventions we enforce at the outset may not really be all that
+important. Sure, some amount of consistency is important, but what is
+more important is that we make something that is easy to use. We can
+always go back and clean things up later.
 
-where net.ipv4.icmp_errors_use_inbound_ifaddr is set on R1 and
-1.0.3.1/24 and 1.0.1.1/24 are respectively R1's primary and secondary
-address on N1.
+After writing this, it sounds kind of obvious and like things that
+people have said already; nevertheless, I think it is still worthwhile
+to say, if nothing else to show that I think we are all on the same
+page.
 
-v2: fixed some typos, and have bridge in R1 instead of R2 in IPV6 test.
+So yeah, I think that optionally including tests in the code under
+test is fine (if that is what works best for the developer), I think
+that __visible_for_testing is fine if that's what works best, and
+testing through public interfaces is also fine. We might want to
+gently push people in one direction or another over time, but all seem
+like things that are reasonable to support now. In this case, since
+people seem to be more in favor of including tests in source, that's
+probably the right thing to do here.
 
-Signed-off-by: Francesco Ruggeri <fruggeri@arista.com>
----
- tools/testing/selftests/net/Makefile      |   2 +-
- tools/testing/selftests/net/traceroute.sh | 322 ++++++++++++++++++++++
- 2 files changed, 323 insertions(+), 1 deletion(-)
- create mode 100755 tools/testing/selftests/net/traceroute.sh
+I will make the __visible_for_testing thing available in a separate
+patch at some point. Someone can pick it up if they want to use it.
 
-diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selftests/net/Makefile
-index 0bd6b23c97ef..a8e04d665b69 100644
---- a/tools/testing/selftests/net/Makefile
-+++ b/tools/testing/selftests/net/Makefile
-@@ -10,7 +10,7 @@ TEST_PROGS += fib_tests.sh fib-onlink-tests.sh pmtu.sh udpgso.sh ip_defrag.sh
- TEST_PROGS += udpgso_bench.sh fib_rule_tests.sh msg_zerocopy.sh psock_snd.sh
- TEST_PROGS += udpgro_bench.sh udpgro.sh test_vxlan_under_vrf.sh reuseport_addr_any.sh
- TEST_PROGS += test_vxlan_fdb_changelink.sh so_txtime.sh ipv6_flowlabel.sh
--TEST_PROGS += tcp_fastopen_backup_key.sh fcnal-test.sh l2tp.sh
-+TEST_PROGS += tcp_fastopen_backup_key.sh fcnal-test.sh l2tp.sh traceroute.sh
- TEST_PROGS_EXTENDED := in_netns.sh
- TEST_GEN_FILES =  socket nettest
- TEST_GEN_FILES += psock_fanout psock_tpacket msg_zerocopy reuseport_addr_any
-diff --git a/tools/testing/selftests/net/traceroute.sh b/tools/testing/selftests/net/traceroute.sh
-new file mode 100755
-index 000000000000..de9ca97abc30
---- /dev/null
-+++ b/tools/testing/selftests/net/traceroute.sh
-@@ -0,0 +1,322 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
-+#
-+# Run traceroute/traceroute6 tests
-+#
-+
-+VERBOSE=0
-+PAUSE_ON_FAIL=no
-+
-+################################################################################
-+#
-+log_test()
-+{
-+	local rc=$1
-+	local expected=$2
-+	local msg="$3"
-+
-+	if [ ${rc} -eq ${expected} ]; then
-+		printf "TEST: %-60s  [ OK ]\n" "${msg}"
-+		nsuccess=$((nsuccess+1))
-+	else
-+		ret=1
-+		nfail=$((nfail+1))
-+		printf "TEST: %-60s  [FAIL]\n" "${msg}"
-+		if [ "${PAUSE_ON_FAIL}" = "yes" ]; then
-+			echo
-+			echo "hit enter to continue, 'q' to quit"
-+			read a
-+			[ "$a" = "q" ] && exit 1
-+		fi
-+	fi
-+}
-+
-+run_cmd()
-+{
-+	local ns
-+	local cmd
-+	local out
-+	local rc
-+
-+	ns="$1"
-+	shift
-+	cmd="$*"
-+
-+	if [ "$VERBOSE" = "1" ]; then
-+		printf "    COMMAND: $cmd\n"
-+	fi
-+
-+	out=$(eval ip netns exec ${ns} ${cmd} 2>&1)
-+	rc=$?
-+	if [ "$VERBOSE" = "1" -a -n "$out" ]; then
-+		echo "    $out"
-+	fi
-+
-+	[ "$VERBOSE" = "1" ] && echo
-+
-+	return $rc
-+}
-+
-+################################################################################
-+# create namespaces and interconnects
-+
-+create_ns()
-+{
-+	local ns=$1
-+	local addr=$2
-+	local addr6=$3
-+
-+	[ -z "${addr}" ] && addr="-"
-+	[ -z "${addr6}" ] && addr6="-"
-+
-+	ip netns add ${ns}
-+
-+	ip netns exec ${ns} ip link set lo up
-+	if [ "${addr}" != "-" ]; then
-+		ip netns exec ${ns} ip addr add dev lo ${addr}
-+	fi
-+	if [ "${addr6}" != "-" ]; then
-+		ip netns exec ${ns} ip -6 addr add dev lo ${addr6}
-+	fi
-+
-+	ip netns exec ${ns} ip ro add unreachable default metric 8192
-+	ip netns exec ${ns} ip -6 ro add unreachable default metric 8192
-+
-+	ip netns exec ${ns} sysctl -qw net.ipv4.ip_forward=1
-+	ip netns exec ${ns} sysctl -qw net.ipv6.conf.all.keep_addr_on_down=1
-+	ip netns exec ${ns} sysctl -qw net.ipv6.conf.all.forwarding=1
-+	ip netns exec ${ns} sysctl -qw net.ipv6.conf.default.forwarding=1
-+	ip netns exec ${ns} sysctl -qw net.ipv6.conf.default.accept_dad=0
-+}
-+
-+# create veth pair to connect namespaces and apply addresses.
-+connect_ns()
-+{
-+	local ns1=$1
-+	local ns1_dev=$2
-+	local ns1_addr=$3
-+	local ns1_addr6=$4
-+	local ns2=$5
-+	local ns2_dev=$6
-+	local ns2_addr=$7
-+	local ns2_addr6=$8
-+
-+	ip netns exec ${ns1} ip li add ${ns1_dev} type veth peer name tmp
-+	ip netns exec ${ns1} ip li set ${ns1_dev} up
-+	ip netns exec ${ns1} ip li set tmp netns ${ns2} name ${ns2_dev}
-+	ip netns exec ${ns2} ip li set ${ns2_dev} up
-+
-+	if [ "${ns1_addr}" != "-" ]; then
-+		ip netns exec ${ns1} ip addr add dev ${ns1_dev} ${ns1_addr}
-+	fi
-+
-+	if [ "${ns2_addr}" != "-" ]; then
-+		ip netns exec ${ns2} ip addr add dev ${ns2_dev} ${ns2_addr}
-+	fi
-+
-+	if [ "${ns1_addr6}" != "-" ]; then
-+		ip netns exec ${ns1} ip addr add dev ${ns1_dev} ${ns1_addr6}
-+	fi
-+
-+	if [ "${ns2_addr6}" != "-" ]; then
-+		ip netns exec ${ns2} ip addr add dev ${ns2_dev} ${ns2_addr6}
-+	fi
-+}
-+
-+################################################################################
-+# traceroute6 test
-+#
-+# Verify that in this scenario
-+#
-+#        ------------------------ N2
-+#         |                    |
-+#       ------              ------  N3  ----
-+#       | R1 |              | R2 |------|H2|
-+#       ------              ------      ----
-+#         |                    |
-+#        ------------------------ N1
-+#                  |
-+#                 ----
-+#                 |H1|
-+#                 ----
-+#
-+# where H1's default route goes through R1 and R1's default route goes
-+# through R2 over N2, traceroute6 from H1 to H2 reports R2's address
-+# on N2 and not N1.
-+#
-+# Addresses are assigned as follows:
-+#
-+# N1: 2000:101::/64
-+# N2: 2000:102::/64
-+# N3: 2000:103::/64
-+#
-+# R1's host part of address: 1
-+# R2's host part of address: 2
-+# H1's host part of address: 3
-+# H2's host part of address: 4
-+#
-+# For example:
-+# the IPv6 address of R1's interface on N2 is 2000:102::1/64
-+
-+cleanup_traceroute6()
-+{
-+	local ns
-+
-+	for ns in host-1 host-2 router-1 router-2
-+	do
-+		ip netns del ${ns} 2>/dev/null
-+	done
-+}
-+
-+setup_traceroute6()
-+{
-+	brdev=br0
-+
-+	# start clean
-+	cleanup_traceroute6
-+
-+	set -e
-+	create_ns host-1
-+	create_ns host-2
-+	create_ns router-1
-+	create_ns router-2
-+
-+	# Setup N3
-+	connect_ns router-2 eth3 - 2000:103::2/64 host-2 eth3 - 2000:103::4/64
-+	ip netns exec host-2 ip route add default via 2000:103::2
-+
-+	# Setup N2
-+	connect_ns router-1 eth2 - 2000:102::1/64 router-2 eth2 - 2000:102::2/64
-+	ip netns exec router-1 ip route add default via 2000:102::2
-+
-+	# Setup N1. host-1 and router-2 connect to a bridge in router-1.
-+	ip netns exec router-1 ip link add name ${brdev} type bridge
-+	ip netns exec router-1 ip link set ${brdev} up
-+	ip netns exec router-1 ip addr add 2000:101::1/64 dev ${brdev}
-+
-+	connect_ns host-1 eth0 - 2000:101::3/64 router-1 eth0 - -
-+	ip netns exec router-1 ip link set dev eth0 master ${brdev}
-+	ip netns exec host-1 ip route add default via 2000:101::1
-+
-+	connect_ns router-2 eth1 - 2000:101::2/64 router-1 eth1 - -
-+	ip netns exec router-1 ip link set dev eth1 master ${brdev}
-+
-+	# Prime the network
-+	ip netns exec host-1 ping6 -c5 2000:103::4 >/dev/null 2>&1
-+
-+	set +e
-+}
-+
-+run_traceroute6()
-+{
-+	if [ ! -x "$(command -v traceroute6)" ]; then
-+		echo "SKIP: Could not run IPV6 test without traceroute6"
-+		return
-+	fi
-+
-+	setup_traceroute6
-+
-+	# traceroute6 host-2 from host-1 (expects 2000:102::2)
-+	run_cmd host-1 "traceroute6 2000:103::4 | grep -q 2000:102::2"
-+	log_test $? 0 "IPV6 traceroute"
-+
-+	cleanup_traceroute6
-+}
-+
-+################################################################################
-+# traceroute test
-+#
-+# Verify that traceroute from H1 to H2 shows 1.0.1.1 in this scenario
-+#
-+#                    1.0.3.1/24
-+# ---- 1.0.1.3/24    1.0.1.1/24 ---- 1.0.2.1/24    1.0.2.4/24 ----
-+# |H1|--------------------------|R1|--------------------------|H2|
-+# ----            N1            ----            N2            ----
-+#
-+# where net.ipv4.icmp_errors_use_inbound_ifaddr is set on R1 and
-+# 1.0.3.1/24 and 1.0.1.1/24 are respectively R1's primary and secondary
-+# address on N1.
-+#
-+
-+cleanup_traceroute()
-+{
-+	local ns
-+
-+	for ns in host-1 host-2 router
-+	do
-+		ip netns del ${ns} 2>/dev/null
-+	done
-+}
-+
-+setup_traceroute()
-+{
-+	# start clean
-+	cleanup_traceroute
-+
-+	set -e
-+	create_ns host-1
-+	create_ns host-2
-+	create_ns router
-+
-+	connect_ns host-1 eth0 1.0.1.3/24 - \
-+	           router eth1 1.0.3.1/24 -
-+	ip netns exec host-1 ip route add default via 1.0.1.1
-+
-+	ip netns exec router ip addr add 1.0.1.1/24 dev eth1
-+	ip netns exec router sysctl -qw \
-+				net.ipv4.icmp_errors_use_inbound_ifaddr=1
-+
-+	connect_ns host-2 eth0 1.0.2.4/24 - \
-+	           router eth2 1.0.2.1/24 -
-+	ip netns exec host-2 ip route add default via 1.0.2.1
-+
-+	# Prime the network
-+	ip netns exec host-1 ping -c5 1.0.2.4 >/dev/null 2>&1
-+
-+	set +e
-+}
-+
-+run_traceroute()
-+{
-+	if [ ! -x "$(command -v traceroute)" ]; then
-+		echo "SKIP: Could not run IPV4 test without traceroute"
-+		return
-+	fi
-+
-+	setup_traceroute
-+
-+	# traceroute host-2 from host-1 (expects 1.0.1.1). Takes a while.
-+	run_cmd host-1 "traceroute 1.0.2.4 | grep -q 1.0.1.1"
-+	log_test $? 0 "IPV4 traceroute"
-+
-+	cleanup_traceroute
-+}
-+
-+################################################################################
-+# Run tests
-+
-+run_tests()
-+{
-+	run_traceroute6
-+	run_traceroute
-+}
-+
-+################################################################################
-+# main
-+
-+declare -i nfail=0
-+declare -i nsuccess=0
-+
-+while getopts :pv o
-+do
-+	case $o in
-+		p) PAUSE_ON_FAIL=yes;;
-+		v) VERBOSE=$(($VERBOSE + 1));;
-+		*) exit 1;;
-+	esac
-+done
-+
-+run_tests
-+
-+printf "\nTests passed: %3d\n" ${nsuccess}
-+printf "Tests failed: %3d\n"   ${nfail}
--- 
-2.19.1
+> - Running tests on demand.  From previous discussions, I think this is
+> wanted for kselftest, and if we have a set of modules with a conventional
+> prefix (e.g. kunit-*), running tests becomes simply a "find + modprobe" in
+> the kernel module tree.  Results could be harvested from debugfs (I have a
+> WIP patch to store logging data in the per-test data structures such that
+> "cat /sys/kernel/debug/kunit-results/kunit-foo" will display results for
+> that test suite).  There are other ways to achieve this goal, and it's
+> a crude method without any test selection beyond which modules are
+> loaded, but this path is noticeably shorter to having a simple way to
+> execute tests in a kselftest-friendly way I think.
 
+Yep, I think we are all in agreement here. Shuah, Knut, and myself all
+agreed at LPC that running tests on demand via kselftest was a
+worthwhile goal. I am not strongly opposed to the common prefix idea.
+I think that is something we might want to run past Linus though, as
+he has not been a fan of certain file prefixes that he considers to
+convey redundant information.
+
+> - Developing tests. I've also found this model to be neat for test
+> development; add a test, build, load the module to test the test, add
+> another test, build, unload/load etc.
+
+Not really sure what you mean here. I suspect that I probably won't
+agree, as I have found that rebuilding the kernel for every test is
+not overly burdensome. Nevertheless, I also don't see any reason to
+oppose you here. If some developer likes that model (even if I don't),
+it is best to support it if possible, as we should ideally make things
+easier for every development flow.
+
+> - The late_initcall() initialization of tests may not always be appropriate
+> for subsystems under test, and as the number of tests grow (a good
+> problem to have!), it will likely become infeasible.
+
+Agreed. I just went with it for now because it was easy and
+uncontroversial. I already have some WIP patches to get rid of it (I
+am not sure how that will affect what you are doing, but I suspect
+your module patches will be done first - since they already look close
+- so I will probably try to figure that out after your module patches
+get merged).
+
+> Anyway I'm not sure if any of the above resonates with others as being
+> useful, but hopefully it clarifies why module support might matter moving
+> forward.
+
+I definitely agree with the point about supporting building tests as
+modules if the code under test builds as modules, especially if the
+developers want it. So yes, it does resonate with me! :-)
+
+> If it makes sense, I can look at tweaking the module patchset to remove
+> the kunit_find_symbol() stuff so that we can punt on specific mechanisms
+> for now; my main aim at this point is to ensure we're thinking about
+> providing mechanisms for testing modules.
+
+Yeah, I started looking at the latest version of your patches (sorry
+for the late follow up), and yeah, I think it probably makes sense to
+split that out into a separate patch/patchset.
+
+Thanks for the comments! They really helped clear some things up for me!
