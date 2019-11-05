@@ -2,153 +2,150 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DA13F0333
-	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Nov 2019 17:43:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ACA72F04D8
+	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Nov 2019 19:16:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390156AbfKEQnX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 5 Nov 2019 11:43:23 -0500
-Received: from youngberry.canonical.com ([91.189.89.112]:52527 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2390060AbfKEQnW (ORCPT
+        id S2390661AbfKESQb (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 5 Nov 2019 13:16:31 -0500
+Received: from hqemgate14.nvidia.com ([216.228.121.143]:11085 "EHLO
+        hqemgate14.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2390476AbfKESQb (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 5 Nov 2019 11:43:22 -0500
-Received: from c-73-130-187-69.hsd1.pa.comcast.net ([73.130.187.69] helo=[172.25.50.30])
-        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.86_2)
-        (envelope-from <mike.salvatore@canonical.com>)
-        id 1iS1vL-00023X-4x; Tue, 05 Nov 2019 16:43:19 +0000
-Subject: Re: [PATCH linux-kselftest/test v1] apparmor: add AppArmor KUnit
- tests for policy unpack
-To:     Brendan Higgins <brendanhiggins@google.com>,
-        Iurii Zaikin <yzaikin@google.com>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Alan Maguire <alan.maguire@oracle.com>,
-        Matthias Maennich <maennich@google.com>,
-        shuah <shuah@kernel.org>,
-        John Johansen <john.johansen@canonical.com>, jmorris@namei.org,
-        serge@hallyn.com, David Gow <davidgow@google.com>,
-        Theodore Ts'o <tytso@mit.edu>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-security-module@vger.kernel.org,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>
-References: <20191018001816.94460-1-brendanhiggins@google.com>
- <20191018122949.GD11244@42.do-not-panic.com>
- <alpine.LRH.2.20.1910191348280.11804@dhcp-10-175-221-34.vpn.oracle.com>
- <CAFd5g46aO4jwyo32DSz4L8GdhP6t38+Qb9NB+3fev3u4G6sg4w@mail.gmail.com>
- <20191024101529.GK11244@42.do-not-panic.com>
- <201910301205.74EC2A226D@keescook>
- <CAAXuY3o31iCJwZ+WGHMaK1MgpC0qv=JkJWnzv8Lhym9TnZQvcQ@mail.gmail.com>
- <CAFd5g446cyijzgap9r8nm_202zkUsfdZXrn5E1_Mfe-R+eFb_g@mail.gmail.com>
-From:   Mike Salvatore <mike.salvatore@canonical.com>
-Openpgp: preference=signencrypt
-Autocrypt: addr=mike.salvatore@canonical.com; keydata=
- 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
-Message-ID: <205525ba-dc2f-34a9-b7dc-4421285535d7@canonical.com>
-Date:   Tue, 5 Nov 2019 11:43:16 -0500
+        Tue, 5 Nov 2019 13:16:31 -0500
+Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqemgate14.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5dc1bc810000>; Tue, 05 Nov 2019 10:16:33 -0800
+Received: from hqmail.nvidia.com ([172.20.161.6])
+  by hqpgpgate101.nvidia.com (PGP Universal service);
+  Tue, 05 Nov 2019 10:16:27 -0800
+X-PGP-Universal: processed;
+        by hqpgpgate101.nvidia.com on Tue, 05 Nov 2019 10:16:27 -0800
+Received: from [10.110.48.28] (10.124.1.5) by HQMAIL107.nvidia.com
+ (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Tue, 5 Nov
+ 2019 18:16:25 +0000
+Subject: Re: [PATCH 09/19] drm/via: set FOLL_PIN via pin_user_pages_fast()
+To:     Ira Weiny <ira.weiny@intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Dave Chinner <david@fromorbit.com>,
+        David Airlie <airlied@linux.ie>,
+        "David S . Miller" <davem@davemloft.net>, Jan Kara <jack@suse.cz>,
+        Jason Gunthorpe <jgg@ziepe.ca>, Jens Axboe <axboe@kernel.dk>,
+        Jonathan Corbet <corbet@lwn.net>,
+        =?UTF-8?B?SsOpcsO0bWUgR2xpc3Nl?= <jglisse@redhat.com>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Michal Hocko <mhocko@suse.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Paul Mackerras <paulus@samba.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Vlastimil Babka <vbabka@suse.cz>, <bpf@vger.kernel.org>,
+        <dri-devel@lists.freedesktop.org>, <kvm@vger.kernel.org>,
+        <linux-block@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+        <linux-fsdevel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+        <linux-media@vger.kernel.org>, <linux-rdma@vger.kernel.org>,
+        <linuxppc-dev@lists.ozlabs.org>, <netdev@vger.kernel.org>,
+        <linux-mm@kvack.org>, LKML <linux-kernel@vger.kernel.org>
+References: <20191030224930.3990755-1-jhubbard@nvidia.com>
+ <20191030224930.3990755-10-jhubbard@nvidia.com>
+ <20191031233628.GI14771@iweiny-DESK2.sc.intel.com>
+ <20191104181055.GP10326@phenom.ffwll.local>
+ <48d22c77-c313-59ff-4847-bc9a9813b8a7@nvidia.com>
+ <20191105094936.GZ10326@phenom.ffwll.local>
+From:   John Hubbard <jhubbard@nvidia.com>
+X-Nvconfidentiality: public
+Message-ID: <9b9637f4-34e0-a665-a9c8-8fd59ff71063@nvidia.com>
+Date:   Tue, 5 Nov 2019 10:16:25 -0800
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-In-Reply-To: <CAFd5g446cyijzgap9r8nm_202zkUsfdZXrn5E1_Mfe-R+eFb_g@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
+In-Reply-To: <20191105094936.GZ10326@phenom.ffwll.local>
+X-Originating-IP: [10.124.1.5]
+X-ClientProxiedBy: HQMAIL105.nvidia.com (172.20.187.12) To
+ HQMAIL107.nvidia.com (172.20.187.13)
+Content-Type: text/plain; charset="utf-8"
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1572977793; bh=R0RxaBiDFTq2JKu4s4y6dD52czu96JnYA/nMzL9A6aE=;
+        h=X-PGP-Universal:Subject:To:References:From:X-Nvconfidentiality:
+         Message-ID:Date:User-Agent:MIME-Version:In-Reply-To:
+         X-Originating-IP:X-ClientProxiedBy:Content-Type:Content-Language:
+         Content-Transfer-Encoding;
+        b=ZSBhPlkU00U2SId5ohXT4qfb7S3CRfF2QxUJyZ0MYASa23SxluEpDZf1THjnsB9k6
+         3RTrsq64bDaJH6/fLXRNFkXaPhRm5A6gkx6RZdlDie0bGzD/RBx0po9cAdeDcz/1hI
+         lKGfT57a8xEYWihKfruZKPu2iv+9HpU34riNOb6hU1aeKe+Fw0TM0CdzQuEAMyVnn3
+         zPBLdfbRqsxHTlb9Dt1LPnE+4oLXwLOgCALb/FxR0bVQqL9MMuMnHnx6cwBXcGJC2q
+         423PWzhyAI/MHMUhEHpOr+pguDR21zYFt0jsH+WX73ZsVIDhQ9aKqbWLguXDJ6ZEPH
+         qkWctNU3sUmkw==
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
->> but such approach is not mainstream.
->> I personally like the idea of testing the lowest level bits in isolation even if
->> they are not a part of any interface. I think that specifying the
->> interface using
->> unit tests and ensuring implementation correctness are complementary but
->> I haven't had much luck arguing this with our esteemed colleagues.
-
-In general, testing public interfaces is preferable, however, I think it's
-important to avoid becoming dogmatic. IMHO, it's more important to have tests
-that are clear in what they test than to not write tests (or write confusing
-tests) in order to adhere to a generalized principle.
-
-> So I think this is a very subtle point which is very widely
-> misunderstood. Most people write code and then write their tests,
-> following this practice along with only testing public interfaces
-> often causes people to just not test all of their code, which is
-> wrong.
-
-The very nature of this situation is that the code was written before the tests.
-
-> The idea of only testing public interfaces is supposed to make people
-> think more carefully about what the composite layers of the program
-> is. If you are having difficulty getting decent coverage by only
-> testing your public interfaces, then it likely tells you that you have
-> one of two problems:
+On 11/5/19 1:49 AM, Daniel Vetter wrote:
+> On Mon, Nov 04, 2019 at 11:20:38AM -0800, John Hubbard wrote:
+>> On 11/4/19 10:10 AM, Daniel Vetter wrote:
+>>> On Thu, Oct 31, 2019 at 04:36:28PM -0700, Ira Weiny wrote:
+>>>> On Wed, Oct 30, 2019 at 03:49:20PM -0700, John Hubbard wrote:
+>>>>> Convert drm/via to use the new pin_user_pages_fast() call, which sets
+>>>>> FOLL_PIN. Setting FOLL_PIN is now required for code that requires
+>>>>> tracking of pinned pages, and therefore for any code that calls
+>>>>> put_user_page().
+>>>>>
+>>>>
+>>>> Reviewed-by: Ira Weiny <ira.weiny@intel.com>
+>>>
+>>> No one's touching the via driver anymore, so feel free to merge this
+>>> through whatever tree suits best (aka I'll drop this on the floor and
+>>> forget about it now).
+>>>
+>>> Acked-by: Daniel Vetter <daniel.vetter@ffwll.ch>
+>>>
+>>
+>> OK, great. Yes, in fact, I'm hoping Andrew can just push the whole series
+>> in through the mm tree, because that would allow it to be done in one 
+>> shot, in 5.5
 > 
-> 1) You have code that you don't need, and you should remove it.
-> 
-> 2) One of the layers in your program is too think, and you should
-> introduce a new layer with a new public interface that you can test
-> through.
-> 
-> I think the second point here is problematic with how C is written in
-> the kernel. We don't really have any concept of public vs. private
-> inside the kernel outside of static vs. not static, which is much more
-> restricted.
+> btw is there more? We should have a bunch more userptr stuff in various
+> drivers, so was really surprised that drm/via is the only thing in your
+> series.
 
-I don't think we can expect developers to refactor large portions of complex
-kernel code in order to improve its testability. I imagine this will happen
-naturally over time, but I think we need to allow for developers to test
-"private" code in the meanwhile.
 
-My opinion is that it's more important to have tests than not. As evidence, I
-submit the following commit:
-https://github.com/torvalds/linux/commit/156e42996bd84eccb6acf319f19ce0cb140d00e3.
+There is more, but:
 
-While not a major bug, this bug was discovered as a direct result of writing
-these unit tests. So, in summary, I see value in "testing the lowest level bits
-in isolation", even if it doesn't necessarily represent the Gold Standard in
-Unit Testing.
+1) Fortunately, the opt-in nature of FOLL_PIN allows converting a few call
+sites at a time. And so this patchset limits itself to converting the bare
+minimum required to get started, which is: 
 
+    a) calls sites that have already been converted to put_user_page(), 
+       and
+
+    b) call sites that set FOLL_LONGTERM.
+
+So yes, follow-up patches will be required. This is not everything.
+In fact, if I can fix this series up quickly enough that it makes it into
+mmotm soon-ish, then there may be time to get some follow-patches on top
+of it, in time for 5.5.
+
+
+2) If I recall correctly, Jerome and maybe others are working to remove
+as many get_user_pages() callers from drm as possible, and instead use
+a non-pinned page approach, with mmu notifiers instead.  I'm not sure of
+the exact status of that work, but I see that etnaviv, amdgpu, i915, and
+radeon still call gup() in linux-next.
+
+Anyway, some of those call sites will disappear. Although I'd expect a 
+few to remain, because I doubt the simpler GPUs can support page faulting.
+
+
+
+thanks,
+
+John Hubbard
+NVIDIA
