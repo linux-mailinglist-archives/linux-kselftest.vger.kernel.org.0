@@ -2,767 +2,366 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3641CF10BE
-	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Nov 2019 09:05:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 63342F1A77
+	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Nov 2019 16:53:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729896AbfKFIFl (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 6 Nov 2019 03:05:41 -0500
-Received: from youngberry.canonical.com ([91.189.89.112]:46345 "EHLO
+        id S1727206AbfKFPxt (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 6 Nov 2019 10:53:49 -0500
+Received: from youngberry.canonical.com ([91.189.89.112]:56847 "EHLO
         youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729818AbfKFIFl (ORCPT
+        with ESMTP id S1727192AbfKFPxt (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 6 Nov 2019 03:05:41 -0500
-Received: from static-50-53-33-191.bvtn.or.frontiernet.net ([50.53.33.191] helo=[192.168.192.153])
+        Wed, 6 Nov 2019 10:53:49 -0500
+Received: from [213.220.153.21] (helo=wittgenstein)
         by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
         (Exim 4.86_2)
-        (envelope-from <john.johansen@canonical.com>)
-        id 1iSGJp-0002gY-0g; Wed, 06 Nov 2019 08:05:33 +0000
-Subject: Re: [PATCH linux-kselftest/test v2] apparmor: add AppArmor KUnit
- tests for policy unpack
-To:     Brendan Higgins <brendanhiggins@google.com>, shuah@kernel.org,
-        jmorris@namei.org, serge@hallyn.com, keescook@chromium.org,
-        alan.maguire@oracle.com, yzaikin@google.com, davidgow@google.com,
-        mcgrof@kernel.org, tytso@mit.edu
-Cc:     linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kselftest@vger.kernel.org,
-        Mike Salvatore <mike.salvatore@canonical.com>
-References: <20191106004329.16991-1-brendanhiggins@google.com>
-From:   John Johansen <john.johansen@canonical.com>
-Openpgp: preference=signencrypt
-Autocrypt: addr=john.johansen@canonical.com; prefer-encrypt=mutual; keydata=
- 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
-Organization: Canonical
-Message-ID: <68930b26-b103-ab42-fcf4-b85451b97ce5@canonical.com>
-Date:   Wed, 6 Nov 2019 00:05:29 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        (envelope-from <christian.brauner@ubuntu.com>)
+        id 1iSNcv-0002fh-51; Wed, 06 Nov 2019 15:53:45 +0000
+Date:   Wed, 6 Nov 2019 16:53:44 +0100
+From:   Christian Brauner <christian.brauner@ubuntu.com>
+To:     Adrian Reber <areber@redhat.com>
+Cc:     Shuah Khan <shuah@kernel.org>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] selftests: add tests for clone3()
+Message-ID: <20191106155343.zeq46rbnodkhh53a@wittgenstein>
+References: <20191104131846.1076814-1-areber@redhat.com>
 MIME-Version: 1.0
-In-Reply-To: <20191106004329.16991-1-brendanhiggins@google.com>
 Content-Type: text/plain; charset=utf-8
-Content-Language: en-GB
-Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+In-Reply-To: <20191104131846.1076814-1-areber@redhat.com>
+User-Agent: NeoMutt/20180716
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 11/5/19 4:43 PM, Brendan Higgins wrote:
-> From: Mike Salvatore <mike.salvatore@canonical.com>
+On Mon, Nov 04, 2019 at 02:18:46PM +0100, Adrian Reber wrote:
+> This adds tests for clone3() with different values and sizes
+> of struct clone_args.
 > 
-> Add KUnit tests to test AppArmor unpacking of userspace policies.
-> AppArmor uses a serialized binary format for loading policies. To find
-> policy format documentation see
-> Documentation/admin-guide/LSM/apparmor.rst.
+> This selftest was initially part of of the clone3() with PID selftest.
+> After that patch was almost merged Eugene sent out a couple of patches
+> to fix problems with these test.
 > 
-> In order to write the tests against the policy unpacking code, some
-> static functions needed to be exposed for testing purposes. One of the
-> goals of this patch is to establish a pattern for which testing these
-> kinds of functions should be done in the future.
+> This commit now only contains the clone3() selftest after the LPC
+> decision to rework clone3() with PID to allow setting the PID in
+> multiple PID namespaces including all of Eugene's patches.
 > 
-> Signed-off-by: Brendan Higgins <brendanhiggins@google.com>
-> Signed-off-by: Mike Salvatore <mike.salvatore@canonical.com>
-
-LGTM
-
-Acked-by: John Johansen <john.johansen@canonical.com>
-
-
+> Signed-off-by: Eugene Syromiatnikov <esyr@redhat.com>
+> Signed-off-by: Adrian Reber <areber@redhat.com>
+> 
+> A few more comments below.
+> 
+> Also, would you be open to adding tests here for the newly added .stack
+> and .stack_size API (cf. [1])?
+> 
+> [1]: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=fa729c4df558936b4a1a7b3e2234011f44ede28b 
+> 
 > ---
->  security/apparmor/Kconfig              |  16 +
->  security/apparmor/policy_unpack.c      |   4 +
->  security/apparmor/policy_unpack_test.c | 607 +++++++++++++++++++++++++
->  3 files changed, 627 insertions(+)
->  create mode 100644 security/apparmor/policy_unpack_test.c
+> v2:
+>  - Applied Christian's suggestions
+>  - Skip root-only tests when running as non-root
+> ---
+>  MAINTAINERS                               |   1 +
+>  tools/testing/selftests/Makefile          |   1 +
+>  tools/testing/selftests/clone3/.gitignore |   1 +
+>  tools/testing/selftests/clone3/Makefile   |   7 +
+>  tools/testing/selftests/clone3/clone3.c   | 225 ++++++++++++++++++++++
+>  5 files changed, 235 insertions(+)
+>  create mode 100644 tools/testing/selftests/clone3/.gitignore
+>  create mode 100644 tools/testing/selftests/clone3/Makefile
+>  create mode 100644 tools/testing/selftests/clone3/clone3.c
 > 
-> diff --git a/security/apparmor/Kconfig b/security/apparmor/Kconfig
-> index d8b1a360a6368..78a33ccac2574 100644
-> --- a/security/apparmor/Kconfig
-> +++ b/security/apparmor/Kconfig
-> @@ -66,3 +66,19 @@ config SECURITY_APPARMOR_DEBUG_MESSAGES
->  	  Set the default value of the apparmor.debug kernel parameter.
->  	  When enabled, various debug messages will be logged to
->  	  the kernel message buffer.
-> +
-> +config SECURITY_APPARMOR_KUNIT_TEST
-> +	bool "Build KUnit tests for policy_unpack.c"
-> +	depends on KUNIT && SECURITY_APPARMOR
-> +	help
-> +	  This builds the AppArmor KUnit tests.
-> +
-> +	  KUnit tests run during boot and output the results to the debug log
-> +	  in TAP format (http://testanything.org/). Only useful for kernel devs
-> +	  running KUnit test harness and are not for inclusion into a
-> +	  production build.
-> +
-> +	  For more information on KUnit and unit tests in general please refer
-> +	  to the KUnit documentation in Documentation/dev-tools/kunit/.
-> +
-> +	  If unsure, say N.
-> diff --git a/security/apparmor/policy_unpack.c b/security/apparmor/policy_unpack.c
-> index 8cfc9493eefc7..37c1dd3178fc0 100644
-> --- a/security/apparmor/policy_unpack.c
-> +++ b/security/apparmor/policy_unpack.c
-> @@ -1120,3 +1120,7 @@ int aa_unpack(struct aa_loaddata *udata, struct list_head *lh,
->  
->  	return error;
->  }
-> +
-> +#ifdef CONFIG_SECURITY_APPARMOR_KUNIT_TEST
-> +#include "policy_unpack_test.c"
-> +#endif /* CONFIG_SECURITY_APPARMOR_KUNIT_TEST */
-> diff --git a/security/apparmor/policy_unpack_test.c b/security/apparmor/policy_unpack_test.c
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index cba1095547fd..0040b7a6410b 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -12829,6 +12829,7 @@ S:	Maintained
+>  T:	git git://git.kernel.org/pub/scm/linux/kernel/git/brauner/linux.git
+>  F:	samples/pidfd/
+>  F:	tools/testing/selftests/pidfd/
+> +F:	tools/testing/selftests/clone3/
+>  K:	(?i)pidfd
+>  K:	(?i)clone3
+>  K:	\b(clone_args|kernel_clone_args)\b
+> diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
+> index 4cdbae6f4e61..ad442364218a 100644
+> --- a/tools/testing/selftests/Makefile
+> +++ b/tools/testing/selftests/Makefile
+> @@ -4,6 +4,7 @@ TARGETS += bpf
+>  TARGETS += breakpoints
+>  TARGETS += capabilities
+>  TARGETS += cgroup
+> +TARGETS += clone3
+>  TARGETS += cpufreq
+>  TARGETS += cpu-hotplug
+>  TARGETS += drivers/dma-buf
+> diff --git a/tools/testing/selftests/clone3/.gitignore b/tools/testing/selftests/clone3/.gitignore
 > new file mode 100644
-> index 0000000000000..533137f45361c
+> index 000000000000..85d9d3ba2524
 > --- /dev/null
-> +++ b/security/apparmor/policy_unpack_test.c
-> @@ -0,0 +1,607 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
+> +++ b/tools/testing/selftests/clone3/.gitignore
+> @@ -0,0 +1 @@
+> +clone3
+> diff --git a/tools/testing/selftests/clone3/Makefile b/tools/testing/selftests/clone3/Makefile
+> new file mode 100644
+> index 000000000000..ea922c014ae4
+> --- /dev/null
+> +++ b/tools/testing/selftests/clone3/Makefile
+> @@ -0,0 +1,7 @@
+> +# SPDX-License-Identifier: GPL-2.0
+> +
+> +CFLAGS += -I../../../../usr/include/
+> +
+> +TEST_GEN_PROGS := clone3
+> +
+> +include ../lib.mk
+> diff --git a/tools/testing/selftests/clone3/clone3.c b/tools/testing/selftests/clone3/clone3.c
+> new file mode 100644
+> index 000000000000..a982d95189bf
+> --- /dev/null
+> +++ b/tools/testing/selftests/clone3/clone3.c
+> @@ -0,0 +1,225 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +
+> +/* Based on Christian Brauner's clone3() example */
+> +
+> +#define _GNU_SOURCE
+> +#include <errno.h>
+> +#include <inttypes.h>
+> +#include <linux/types.h>
+> +#include <linux/sched.h>
+> +#include <stdint.h>
+> +#include <stdio.h>
+> +#include <stdlib.h>
+> +#include <sys/syscall.h>
+> +#include <sys/types.h>
+> +#include <sys/un.h>
+> +#include <sys/wait.h>
+> +#include <unistd.h>
+> +#include <sched.h>
+> +
+> +#include "../kselftest.h"
+> +
 > +/*
-> + * KUnit tests for AppArmor's policy unpack.
+> + * Different sizes of struct clone_args
 > + */
+> +#ifndef CLONE3_ARGS_SIZE_V0
+> +#define CLONE3_ARGS_SIZE_V0 64
+> +#endif
 > +
-> +#include <kunit/test.h>
-> +
-> +#include "include/policy.h"
-> +#include "include/policy_unpack.h"
-> +
-> +#define TEST_STRING_NAME "TEST_STRING"
-> +#define TEST_STRING_DATA "testing"
-> +#define TEST_STRING_BUF_OFFSET \
-> +	(3 + strlen(TEST_STRING_NAME) + 1)
-> +
-> +#define TEST_U32_NAME "U32_TEST"
-> +#define TEST_U32_DATA ((u32)0x01020304)
-> +#define TEST_NAMED_U32_BUF_OFFSET \
-> +	(TEST_STRING_BUF_OFFSET + 3 + strlen(TEST_STRING_DATA) + 1)
-> +#define TEST_U32_BUF_OFFSET \
-> +	(TEST_NAMED_U32_BUF_OFFSET + 3 + strlen(TEST_U32_NAME) + 1)
-> +
-> +#define TEST_U16_OFFSET (TEST_U32_BUF_OFFSET + 3)
-> +#define TEST_U16_DATA ((u16)(TEST_U32_DATA >> 16))
-> +
-> +#define TEST_U64_NAME "U64_TEST"
-> +#define TEST_U64_DATA ((u64)0x0102030405060708)
-> +#define TEST_NAMED_U64_BUF_OFFSET (TEST_U32_BUF_OFFSET + sizeof(u32) + 1)
-> +#define TEST_U64_BUF_OFFSET \
-> +	(TEST_NAMED_U64_BUF_OFFSET + 3 + strlen(TEST_U64_NAME) + 1)
-> +
-> +#define TEST_BLOB_NAME "BLOB_TEST"
-> +#define TEST_BLOB_DATA "\xde\xad\x00\xbe\xef"
-> +#define TEST_BLOB_DATA_SIZE (ARRAY_SIZE(TEST_BLOB_DATA))
-> +#define TEST_NAMED_BLOB_BUF_OFFSET (TEST_U64_BUF_OFFSET + sizeof(u64) + 1)
-> +#define TEST_BLOB_BUF_OFFSET \
-> +	(TEST_NAMED_BLOB_BUF_OFFSET + 3 + strlen(TEST_BLOB_NAME) + 1)
-> +
-> +#define TEST_ARRAY_NAME "ARRAY_TEST"
-> +#define TEST_ARRAY_SIZE 16
-> +#define TEST_NAMED_ARRAY_BUF_OFFSET \
-> +	(TEST_BLOB_BUF_OFFSET + 5 + TEST_BLOB_DATA_SIZE)
-> +#define TEST_ARRAY_BUF_OFFSET \
-> +	(TEST_NAMED_ARRAY_BUF_OFFSET + 3 + strlen(TEST_ARRAY_NAME) + 1)
-> +
-> +struct policy_unpack_fixture {
-> +	struct aa_ext *e;
-> +	size_t e_size;
+> +enum test_mode {
+> +	CLONE3_ARGS_NO_TEST,
+> +	CLONE3_ARGS_ALL_0,
+> +	CLONE3_ARGS_ALL_1,
+> +	CLONE3_ARGS_INVAL_EXIT_SIGNAL_BIG,
+> +	CLONE3_ARGS_INVAL_EXIT_SIGNAL_NEG,
+> +	CLONE3_ARGS_INVAL_EXIT_SIGNAL_CSIG,
+> +	CLONE3_ARGS_INVAL_EXIT_SIGNAL_NSIG,
 > +};
 > +
-> +struct aa_ext *build_aa_ext_struct(struct policy_unpack_fixture *puf,
-> +				   struct kunit *test, size_t buf_size)
+> +static pid_t raw_clone(struct clone_args *args, size_t size)
 > +{
-> +	char *buf;
-> +	struct aa_ext *e;
-> +
-> +	buf = kunit_kzalloc(test, buf_size, GFP_USER);
-> +	KUNIT_EXPECT_NOT_ERR_OR_NULL(test, buf);
-> +
-> +	e = kunit_kmalloc(test, sizeof(*e), GFP_USER);
-> +	KUNIT_EXPECT_NOT_ERR_OR_NULL(test, e);
-> +
-> +	e->start = buf;
-> +	e->end = e->start + buf_size;
-> +	e->pos = e->start;
-> +
-> +	*buf = AA_NAME;
-> +	*(buf + 1) = strlen(TEST_STRING_NAME) + 1;
-> +	strcpy(buf + 3, TEST_STRING_NAME);
-> +
-> +	buf = e->start + TEST_STRING_BUF_OFFSET;
-> +	*buf = AA_STRING;
-> +	*(buf + 1) = strlen(TEST_STRING_DATA) + 1;
-> +	strcpy(buf + 3, TEST_STRING_DATA);
-> +
-> +	buf = e->start + TEST_NAMED_U32_BUF_OFFSET;
-> +	*buf = AA_NAME;
-> +	*(buf + 1) = strlen(TEST_U32_NAME) + 1;
-> +	strcpy(buf + 3, TEST_U32_NAME);
-> +	*(buf + 3 + strlen(TEST_U32_NAME) + 1) = AA_U32;
-> +	*((u32 *)(buf + 3 + strlen(TEST_U32_NAME) + 2)) = TEST_U32_DATA;
-> +
-> +	buf = e->start + TEST_NAMED_U64_BUF_OFFSET;
-> +	*buf = AA_NAME;
-> +	*(buf + 1) = strlen(TEST_U64_NAME) + 1;
-> +	strcpy(buf + 3, TEST_U64_NAME);
-> +	*(buf + 3 + strlen(TEST_U64_NAME) + 1) = AA_U64;
-> +	*((u64 *)(buf + 3 + strlen(TEST_U64_NAME) + 2)) = TEST_U64_DATA;
-> +
-> +	buf = e->start + TEST_NAMED_BLOB_BUF_OFFSET;
-> +	*buf = AA_NAME;
-> +	*(buf + 1) = strlen(TEST_BLOB_NAME) + 1;
-> +	strcpy(buf + 3, TEST_BLOB_NAME);
-> +	*(buf + 3 + strlen(TEST_BLOB_NAME) + 1) = AA_BLOB;
-> +	*(buf + 3 + strlen(TEST_BLOB_NAME) + 2) = TEST_BLOB_DATA_SIZE;
-> +	memcpy(buf + 3 + strlen(TEST_BLOB_NAME) + 6,
-> +		TEST_BLOB_DATA, TEST_BLOB_DATA_SIZE);
-> +
-> +	buf = e->start + TEST_NAMED_ARRAY_BUF_OFFSET;
-> +	*buf = AA_NAME;
-> +	*(buf + 1) = strlen(TEST_ARRAY_NAME) + 1;
-> +	strcpy(buf + 3, TEST_ARRAY_NAME);
-> +	*(buf + 3 + strlen(TEST_ARRAY_NAME) + 1) = AA_ARRAY;
-> +	*((u16 *)(buf + 3 + strlen(TEST_ARRAY_NAME) + 2)) = TEST_ARRAY_SIZE;
-> +
-> +	return e;
+> +	return syscall(__NR_clone3, args, size);
 > +}
 > +
-> +static int policy_unpack_test_init(struct kunit *test)
+> +static int call_clone3(uint64_t flags, size_t size, enum test_mode test_mode)
 > +{
-> +	size_t e_size = TEST_ARRAY_BUF_OFFSET + sizeof(u16) + 1;
-> +	struct policy_unpack_fixture *puf;
+> +	struct clone_args args = {
+> +		.flags = flags,
+> +		.exit_signal = SIGCHLD,
+> +	};
 > +
-> +	puf = kunit_kmalloc(test, sizeof(*puf), GFP_USER);
-> +	KUNIT_EXPECT_NOT_ERR_OR_NULL(test, puf);
+> +	struct clone_args_extended {
+> +		struct clone_args args;
+> +		__aligned_u64 excess_space[2];
+> +	} args_ext;
 > +
-> +	puf->e_size = e_size;
-> +	puf->e = build_aa_ext_struct(puf, test, e_size);
+> +	pid_t pid = -1;
+> +	int status;
 > +
-> +	test->priv = puf;
+> +	memset(&args_ext, 0, sizeof(args_ext));
+> +	if (size > sizeof(struct clone_args))
+> +		args_ext.excess_space[1] = 1;
+> +
+> +	if (size == 0)
+> +		size = sizeof(struct clone_args);
+> +
+> +	switch (test_mode) {
+> +	case CLONE3_ARGS_ALL_0:
+> +		args.flags = 0;
+> +		args.exit_signal = 0;
+> +		break;
+> +	case CLONE3_ARGS_ALL_1:
+> 
+> I don't fully understand this test case. What is this for exactly?
+> 
+> +		args.flags = 1;
+> +		args.pidfd = 1;
+> +		args.child_tid = 1;
+> +		args.parent_tid = 1;
+> +		args.exit_signal = 1;
+> +		args.stack = 1;
+> +		args.tls = 1;
+> +		break;
+> +	case CLONE3_ARGS_INVAL_EXIT_SIGNAL_BIG:
+> +		args.exit_signal = 0xbadc0ded00000000ULL;
+> +		break;
+> +	case CLONE3_ARGS_INVAL_EXIT_SIGNAL_NEG:
+> +		args.exit_signal = 0x0000000080000000ULL;
+> +		break;
+> +	case CLONE3_ARGS_INVAL_EXIT_SIGNAL_CSIG:
+> +		args.exit_signal = 0x0000000000000100ULL;
+> +		break;
+> +	case CLONE3_ARGS_INVAL_EXIT_SIGNAL_NSIG:
+> +		args.exit_signal = 0x00000000000000f0ULL;
+> +		break;
+> +	}
+> +
+> +	memcpy(&args_ext.args, &args, sizeof(struct clone_args));
+> +
+> +	pid = raw_clone((struct clone_args *)&args_ext, size);
+> +	if (pid < 0) {
+> +		ksft_print_msg("%s - Failed to create new process\n",
+> +				strerror(errno));
+> +		return -errno;
+> +	}
+> +
+> +	if (pid == 0) {
+> +		ksft_print_msg("I am the child, my PID is %d\n", getpid());
+> +		_exit(EXIT_SUCCESS);
+> +	}
+> +
+> +	ksft_print_msg("I am the parent (%d). My child's pid is %d\n",
+> +			getpid(), pid);
+> +
+> +	if (wait(&status) < 0) {
+> +		ksft_print_msg("Child returned %s\n", strerror(errno));
+> +		return -errno;
+> +	}
+> +	if (WEXITSTATUS(status))
+> +		return WEXITSTATUS(status);
+> +
 > +	return 0;
 > +}
 > +
-> +static void policy_unpack_test_inbounds_when_inbounds(struct kunit *test)
+> +static void test_clone3(uint64_t flags, size_t size, int expected,
+> +		       enum test_mode test_mode)
 > +{
-> +	struct policy_unpack_fixture *puf = test->priv;
+> +	int ret;
 > +
-> +	KUNIT_EXPECT_TRUE(test, inbounds(puf->e, 0));
-> +	KUNIT_EXPECT_TRUE(test, inbounds(puf->e, puf->e_size / 2));
-> +	KUNIT_EXPECT_TRUE(test, inbounds(puf->e, puf->e_size));
+> +	ksft_print_msg(
+> +		"[%d] Trying clone3() with flags %#" PRIx64 " (size %zu)\n",
+> +		getpid(), flags, size);
+> +	ret = call_clone3(flags, size, test_mode);
+> +	ksft_print_msg("[%d] clone3() with flags says: %d expected %d\n",
+> +			getpid(), ret, expected);
+> +	if (ret != expected)
+> +		ksft_test_result_fail(
+> +			"[%d] Result (%d) is different than expected (%d)\n",
+> +			getpid(), ret, expected);
+> +	else
+> +		ksft_test_result_pass(
+> +			"[%d] Result (%d) matches expectation (%d)\n",
+> +			getpid(), ret, expected);
 > +}
-> +
-> +static void policy_unpack_test_inbounds_when_out_of_bounds(struct kunit *test)
+> +int main(int argc, char *argv[])
 > +{
-> +	struct policy_unpack_fixture *puf = test->priv;
+> +	pid_t pid;
 > +
-> +	KUNIT_EXPECT_FALSE(test, inbounds(puf->e, puf->e_size + 1));
-> +}
+> +	uid_t uid = getuid();
 > +
-> +static void policy_unpack_test_unpack_array_with_null_name(struct kunit *test)
-> +{
-> +	struct policy_unpack_fixture *puf = test->priv;
-> +	u16 array_size;
+> +	ksft_print_header();
+> +	ksft_set_plan(17);
 > +
-> +	puf->e->pos += TEST_ARRAY_BUF_OFFSET;
+> +	/* Just a simple clone3() should return 0.*/
+> +	test_clone3(0, 0, 0, CLONE3_ARGS_NO_TEST);
 > +
-> +	array_size = unpack_array(puf->e, NULL);
+> +	/* Do a clone3() in a new PID NS.*/
+> +	if (uid == 0)
+> +		test_clone3(CLONE_NEWPID, 0, 0, CLONE3_ARGS_NO_TEST);
+> +	else
+> +		ksft_test_result_skip("Skipping clone3() with CLONE_NEWPID\n");
 > +
-> +	KUNIT_EXPECT_EQ(test, array_size, (u16)TEST_ARRAY_SIZE);
-> +	KUNIT_EXPECT_PTR_EQ(test, puf->e->pos,
-> +		puf->e->start + TEST_ARRAY_BUF_OFFSET + sizeof(u16) + 1);
-> +}
+> +	/* Do a clone3() with CLONE3_ARGS_SIZE_V0. */
+> +	test_clone3(0, CLONE3_ARGS_SIZE_V0, 0, CLONE3_ARGS_NO_TEST);
 > +
-> +static void policy_unpack_test_unpack_array_with_name(struct kunit *test)
-> +{
-> +	struct policy_unpack_fixture *puf = test->priv;
-> +	const char name[] = TEST_ARRAY_NAME;
-> +	u16 array_size;
+> +	/* Do a clone3() with CLONE3_ARGS_SIZE_V0 - 8 */
+> +	test_clone3(0, CLONE3_ARGS_SIZE_V0 - 8, -EINVAL, CLONE3_ARGS_NO_TEST);
 > +
-> +	puf->e->pos += TEST_NAMED_ARRAY_BUF_OFFSET;
+> +	/* Do a clone3() with sizeof(struct clone_args) + 8 */
+> +	test_clone3(0, sizeof(struct clone_args) + 8, 0, CLONE3_ARGS_NO_TEST);
 > +
-> +	array_size = unpack_array(puf->e, name);
+> +	/* Do a clone3() with all members set to 1 */
+> +	test_clone3(0, 0, -EINVAL, CLONE3_ARGS_ALL_1);
 > +
-> +	KUNIT_EXPECT_EQ(test, array_size, (u16)TEST_ARRAY_SIZE);
-> +	KUNIT_EXPECT_PTR_EQ(test, puf->e->pos,
-> +		puf->e->start + TEST_ARRAY_BUF_OFFSET + sizeof(u16) + 1);
-> +}
+> +	/* Do a clone3() with exit_signal having highest 32 bits non-zero */
+> +	test_clone3(0, 0, -EINVAL, CLONE3_ARGS_INVAL_EXIT_SIGNAL_BIG);
 > +
-> +static void policy_unpack_test_unpack_array_out_of_bounds(struct kunit *test)
-> +{
-> +	struct policy_unpack_fixture *puf = test->priv;
-> +	const char name[] = TEST_ARRAY_NAME;
-> +	u16 array_size;
+> +	/* Do a clone3() with negative 32-bit exit_signal */
+> +	test_clone3(0, 0, -EINVAL, CLONE3_ARGS_INVAL_EXIT_SIGNAL_NEG);
 > +
-> +	puf->e->pos += TEST_NAMED_ARRAY_BUF_OFFSET;
-> +	puf->e->end = puf->e->start + TEST_ARRAY_BUF_OFFSET + sizeof(u16);
+> +	/* Do a clone3() with exit_signal not fitting into CSIGNAL mask */
+> +	test_clone3(0, 0, -EINVAL, CLONE3_ARGS_INVAL_EXIT_SIGNAL_CSIG);
 > +
-> +	array_size = unpack_array(puf->e, name);
+> +	/* Do a clone3() with NSIG < exit_signal < CSIG */
+> +	test_clone3(0, 0, -EINVAL, CLONE3_ARGS_INVAL_EXIT_SIGNAL_NSIG);
 > +
-> +	KUNIT_EXPECT_EQ(test, array_size, (u16)0);
-> +	KUNIT_EXPECT_PTR_EQ(test, puf->e->pos,
-> +		puf->e->start + TEST_NAMED_ARRAY_BUF_OFFSET);
-> +}
-> +
-> +static void policy_unpack_test_unpack_blob_with_null_name(struct kunit *test)
-> +{
-> +	struct policy_unpack_fixture *puf = test->priv;
-> +	char *blob = NULL;
-> +	size_t size;
-> +
-> +	puf->e->pos += TEST_BLOB_BUF_OFFSET;
-> +	size = unpack_blob(puf->e, &blob, NULL);
-> +
-> +	KUNIT_ASSERT_EQ(test, size, TEST_BLOB_DATA_SIZE);
-> +	KUNIT_EXPECT_TRUE(test,
-> +		memcmp(blob, TEST_BLOB_DATA, TEST_BLOB_DATA_SIZE) == 0);
-> +}
-> +
-> +static void policy_unpack_test_unpack_blob_with_name(struct kunit *test)
-> +{
-> +	struct policy_unpack_fixture *puf = test->priv;
-> +	char *blob = NULL;
-> +	size_t size;
-> +
-> +	puf->e->pos += TEST_NAMED_BLOB_BUF_OFFSET;
-> +	size = unpack_blob(puf->e, &blob, TEST_BLOB_NAME);
-> +
-> +	KUNIT_ASSERT_EQ(test, size, TEST_BLOB_DATA_SIZE);
-> +	KUNIT_EXPECT_TRUE(test,
-> +		memcmp(blob, TEST_BLOB_DATA, TEST_BLOB_DATA_SIZE) == 0);
-> +}
-> +
-> +static void policy_unpack_test_unpack_blob_out_of_bounds(struct kunit *test)
-> +{
-> +	struct policy_unpack_fixture *puf = test->priv;
-> +	char *blob = NULL;
-> +	void *start;
-> +	int size;
-> +
-> +	puf->e->pos += TEST_NAMED_BLOB_BUF_OFFSET;
-> +	start = puf->e->pos;
-> +	puf->e->end = puf->e->start + TEST_BLOB_BUF_OFFSET
-> +		+ TEST_BLOB_DATA_SIZE - 1;
-> +
-> +	size = unpack_blob(puf->e, &blob, TEST_BLOB_NAME);
-> +
-> +	KUNIT_EXPECT_EQ(test, size, 0);
-> +	KUNIT_EXPECT_PTR_EQ(test, puf->e->pos, start);
-> +}
-> +
-> +static void policy_unpack_test_unpack_str_with_null_name(struct kunit *test)
-> +{
-> +	struct policy_unpack_fixture *puf = test->priv;
-> +	const char *string = NULL;
-> +	size_t size;
-> +
-> +	puf->e->pos += TEST_STRING_BUF_OFFSET;
-> +	size = unpack_str(puf->e, &string, NULL);
-> +
-> +	KUNIT_EXPECT_EQ(test, size, strlen(TEST_STRING_DATA) + 1);
-> +	KUNIT_EXPECT_STREQ(test, string, TEST_STRING_DATA);
-> +}
-> +
-> +static void policy_unpack_test_unpack_str_with_name(struct kunit *test)
-> +{
-> +	struct policy_unpack_fixture *puf = test->priv;
-> +	const char *string = NULL;
-> +	size_t size;
-> +
-> +	size = unpack_str(puf->e, &string, TEST_STRING_NAME);
-> +
-> +	KUNIT_EXPECT_EQ(test, size, strlen(TEST_STRING_DATA) + 1);
-> +	KUNIT_EXPECT_STREQ(test, string, TEST_STRING_DATA);
-> +}
-> +
-> +static void policy_unpack_test_unpack_str_out_of_bounds(struct kunit *test)
-> +{
-> +	struct policy_unpack_fixture *puf = test->priv;
-> +	const char *string = NULL;
-> +	void *start = puf->e->pos;
-> +	int size;
-> +
-> +	puf->e->end = puf->e->pos + TEST_STRING_BUF_OFFSET
-> +		+ strlen(TEST_STRING_DATA) - 1;
-> +
-> +	size = unpack_str(puf->e, &string, TEST_STRING_NAME);
-> +
-> +	KUNIT_EXPECT_EQ(test, size, 0);
-> +	KUNIT_EXPECT_PTR_EQ(test, puf->e->pos, start);
-> +}
-> +
-> +static void policy_unpack_test_unpack_strdup_with_null_name(struct kunit *test)
-> +{
-> +	struct policy_unpack_fixture *puf = test->priv;
-> +	char *string = NULL;
-> +	size_t size;
-> +
-> +	puf->e->pos += TEST_STRING_BUF_OFFSET;
-> +	size = unpack_strdup(puf->e, &string, NULL);
-> +
-> +	KUNIT_EXPECT_EQ(test, size, strlen(TEST_STRING_DATA) + 1);
-> +	KUNIT_EXPECT_FALSE(test,
-> +			   ((uintptr_t)puf->e->start <= (uintptr_t)string)
-> +			   && ((uintptr_t)string <= (uintptr_t)puf->e->end));
-> +	KUNIT_EXPECT_STREQ(test, string, TEST_STRING_DATA);
-> +}
-> +
-> +static void policy_unpack_test_unpack_strdup_with_name(struct kunit *test)
-> +{
-> +	struct policy_unpack_fixture *puf = test->priv;
-> +	char *string = NULL;
-> +	size_t size;
-> +
-> +	size = unpack_strdup(puf->e, &string, TEST_STRING_NAME);
-> +
-> +	KUNIT_EXPECT_EQ(test, size, strlen(TEST_STRING_DATA) + 1);
-> +	KUNIT_EXPECT_FALSE(test,
-> +			   ((uintptr_t)puf->e->start <= (uintptr_t)string)
-> +			   && ((uintptr_t)string <= (uintptr_t)puf->e->end));
-> +	KUNIT_EXPECT_STREQ(test, string, TEST_STRING_DATA);
-> +}
-> +
-> +static void policy_unpack_test_unpack_strdup_out_of_bounds(struct kunit *test)
-> +{
-> +	struct policy_unpack_fixture *puf = test->priv;
-> +	void *start = puf->e->pos;
-> +	char *string = NULL;
-> +	int size;
-> +
-> +	puf->e->end = puf->e->pos + TEST_STRING_BUF_OFFSET
-> +		+ strlen(TEST_STRING_DATA) - 1;
-> +
-> +	size = unpack_strdup(puf->e, &string, TEST_STRING_NAME);
-> +
-> +	KUNIT_EXPECT_EQ(test, size, 0);
-> +	KUNIT_EXPECT_PTR_EQ(test, string, (char *)NULL);
-> +	KUNIT_EXPECT_PTR_EQ(test, puf->e->pos, start);
-> +}
-> +
-> +static void policy_unpack_test_unpack_nameX_with_null_name(struct kunit *test)
-> +{
-> +	struct policy_unpack_fixture *puf = test->priv;
-> +	bool success;
-> +
-> +	puf->e->pos += TEST_U32_BUF_OFFSET;
-> +
-> +	success = unpack_nameX(puf->e, AA_U32, NULL);
-> +
-> +	KUNIT_EXPECT_TRUE(test, success);
-> +	KUNIT_EXPECT_PTR_EQ(test, puf->e->pos,
-> +			    puf->e->start + TEST_U32_BUF_OFFSET + 1);
-> +}
-> +
-> +static void policy_unpack_test_unpack_nameX_with_wrong_code(struct kunit *test)
-> +{
-> +	struct policy_unpack_fixture *puf = test->priv;
-> +	bool success;
-> +
-> +	puf->e->pos += TEST_U32_BUF_OFFSET;
-> +
-> +	success = unpack_nameX(puf->e, AA_BLOB, NULL);
-> +
-> +	KUNIT_EXPECT_FALSE(test, success);
-> +	KUNIT_EXPECT_PTR_EQ(test, puf->e->pos,
-> +			    puf->e->start + TEST_U32_BUF_OFFSET);
-> +}
-> +
-> +static void policy_unpack_test_unpack_nameX_with_name(struct kunit *test)
-> +{
-> +	struct policy_unpack_fixture *puf = test->priv;
-> +	const char name[] = TEST_U32_NAME;
-> +	bool success;
-> +
-> +	puf->e->pos += TEST_NAMED_U32_BUF_OFFSET;
-> +
-> +	success = unpack_nameX(puf->e, AA_U32, name);
-> +
-> +	KUNIT_EXPECT_TRUE(test, success);
-> +	KUNIT_EXPECT_PTR_EQ(test, puf->e->pos,
-> +			    puf->e->start + TEST_U32_BUF_OFFSET + 1);
-> +}
-> +
-> +static void policy_unpack_test_unpack_nameX_with_wrong_name(struct kunit *test)
-> +{
-> +	struct policy_unpack_fixture *puf = test->priv;
-> +	static const char name[] = "12345678";
-> +	bool success;
-> +
-> +	puf->e->pos += TEST_NAMED_U32_BUF_OFFSET;
-> +
-> +	success = unpack_nameX(puf->e, AA_U32, name);
-> +
-> +	KUNIT_EXPECT_FALSE(test, success);
-> +	KUNIT_EXPECT_PTR_EQ(test, puf->e->pos,
-> +			    puf->e->start + TEST_NAMED_U32_BUF_OFFSET);
-> +}
-> +
-> +static void policy_unpack_test_unpack_u16_chunk_basic(struct kunit *test)
-> +{
-> +	struct policy_unpack_fixture *puf = test->priv;
-> +	char *chunk = NULL;
-> +	size_t size;
-> +
-> +	puf->e->pos += TEST_U16_OFFSET;
 > +	/*
-> +	 * WARNING: For unit testing purposes, we're pushing puf->e->end past
-> +	 * the end of the allocated memory. Doing anything other than comparing
-> +	 * memory addresses is dangerous.
+> +	 * Do a clone3() with sizeof(struct clone_args) + 8
+> +	 * and all members set to 0. This resets exit_signal and wait()
+> +	 * will not get a result.
 > +	 */
-> +	puf->e->end += TEST_U16_DATA;
-> +
-> +	size = unpack_u16_chunk(puf->e, &chunk);
-> +
-> +	KUNIT_EXPECT_PTR_EQ(test, (void *)chunk,
-> +			    puf->e->start + TEST_U16_OFFSET + 2);
-> +	KUNIT_EXPECT_EQ(test, size, (size_t)TEST_U16_DATA);
-> +	KUNIT_EXPECT_PTR_EQ(test, puf->e->pos, (void *)(chunk + TEST_U16_DATA));
-> +}
-> +
-> +static void policy_unpack_test_unpack_u16_chunk_out_of_bounds_1(
-> +		struct kunit *test)
-> +{
-> +	struct policy_unpack_fixture *puf = test->priv;
-> +	char *chunk = NULL;
-> +	size_t size;
-> +
-> +	puf->e->pos = puf->e->end - 1;
-> +
-> +	size = unpack_u16_chunk(puf->e, &chunk);
-> +
-> +	KUNIT_EXPECT_EQ(test, size, (size_t)0);
-> +	KUNIT_EXPECT_PTR_EQ(test, chunk, (char *)NULL);
-> +	KUNIT_EXPECT_PTR_EQ(test, puf->e->pos, puf->e->end - 1);
-> +}
-> +
-> +static void policy_unpack_test_unpack_u16_chunk_out_of_bounds_2(
-> +		struct kunit *test)
-> +{
-> +	struct policy_unpack_fixture *puf = test->priv;
-> +	char *chunk = NULL;
-> +	size_t size;
-> +
-> +	puf->e->pos += TEST_U16_OFFSET;
-> +	/*
-> +	 * WARNING: For unit testing purposes, we're pushing puf->e->end past
-> +	 * the end of the allocated memory. Doing anything other than comparing
-> +	 * memory addresses is dangerous.
-> +	 */
-> +	puf->e->end = puf->e->pos + TEST_U16_DATA - 1;
-> +
-> +	size = unpack_u16_chunk(puf->e, &chunk);
-> +
-> +	KUNIT_EXPECT_EQ(test, size, (size_t)0);
-> +	KUNIT_EXPECT_PTR_EQ(test, chunk, (char *)NULL);
-> +	KUNIT_EXPECT_PTR_EQ(test, puf->e->pos, puf->e->start + TEST_U16_OFFSET);
-> +}
-> +
-> +static void policy_unpack_test_unpack_u32_with_null_name(struct kunit *test)
-> +{
-> +	struct policy_unpack_fixture *puf = test->priv;
-> +	bool success;
-> +	u32 data;
-> +
-> +	puf->e->pos += TEST_U32_BUF_OFFSET;
-> +
-> +	success = unpack_u32(puf->e, &data, NULL);
-> +
-> +	KUNIT_EXPECT_TRUE(test, success);
-> +	KUNIT_EXPECT_EQ(test, data, TEST_U32_DATA);
-> +	KUNIT_EXPECT_PTR_EQ(test, puf->e->pos,
-> +			puf->e->start + TEST_U32_BUF_OFFSET + sizeof(u32) + 1);
-> +}
-> +
-> +static void policy_unpack_test_unpack_u32_with_name(struct kunit *test)
-> +{
-> +	struct policy_unpack_fixture *puf = test->priv;
-> +	const char name[] = TEST_U32_NAME;
-> +	bool success;
-> +	u32 data;
-> +
-> +	puf->e->pos += TEST_NAMED_U32_BUF_OFFSET;
-> +
-> +	success = unpack_u32(puf->e, &data, name);
-> +
-> +	KUNIT_EXPECT_TRUE(test, success);
-> +	KUNIT_EXPECT_EQ(test, data, TEST_U32_DATA);
-> +	KUNIT_EXPECT_PTR_EQ(test, puf->e->pos,
-> +			puf->e->start + TEST_U32_BUF_OFFSET + sizeof(u32) + 1);
-> +}
-> +
-> +static void policy_unpack_test_unpack_u32_out_of_bounds(struct kunit *test)
-> +{
-> +	struct policy_unpack_fixture *puf = test->priv;
-> +	const char name[] = TEST_U32_NAME;
-> +	bool success;
-> +	u32 data;
-> +
-> +	puf->e->pos += TEST_NAMED_U32_BUF_OFFSET;
-> +	puf->e->end = puf->e->start + TEST_U32_BUF_OFFSET + sizeof(u32);
-> +
-> +	success = unpack_u32(puf->e, &data, name);
-> +
-> +	KUNIT_EXPECT_FALSE(test, success);
-> +	KUNIT_EXPECT_PTR_EQ(test, puf->e->pos,
-> +			puf->e->start + TEST_NAMED_U32_BUF_OFFSET);
-> +}
-> +
-> +static void policy_unpack_test_unpack_u64_with_null_name(struct kunit *test)
-> +{
-> +	struct policy_unpack_fixture *puf = test->priv;
-> +	bool success;
-> +	u64 data;
-> +
-> +	puf->e->pos += TEST_U64_BUF_OFFSET;
-> +
-> +	success = unpack_u64(puf->e, &data, NULL);
-> +
-> +	KUNIT_EXPECT_TRUE(test, success);
-> +	KUNIT_EXPECT_EQ(test, data, TEST_U64_DATA);
-> +	KUNIT_EXPECT_PTR_EQ(test, puf->e->pos,
-> +			puf->e->start + TEST_U64_BUF_OFFSET + sizeof(u64) + 1);
-> +}
-> +
-> +static void policy_unpack_test_unpack_u64_with_name(struct kunit *test)
-> +{
-> +	struct policy_unpack_fixture *puf = test->priv;
-> +	const char name[] = TEST_U64_NAME;
-> +	bool success;
-> +	u64 data;
-> +
-> +	puf->e->pos += TEST_NAMED_U64_BUF_OFFSET;
-> +
-> +	success = unpack_u64(puf->e, &data, name);
-> +
-> +	KUNIT_EXPECT_TRUE(test, success);
-> +	KUNIT_EXPECT_EQ(test, data, TEST_U64_DATA);
-> +	KUNIT_EXPECT_PTR_EQ(test, puf->e->pos,
-> +			puf->e->start + TEST_U64_BUF_OFFSET + sizeof(u64) + 1);
-> +}
-> +
-> +static void policy_unpack_test_unpack_u64_out_of_bounds(struct kunit *test)
-> +{
-> +	struct policy_unpack_fixture *puf = test->priv;
-> +	const char name[] = TEST_U64_NAME;
-> +	bool success;
-> +	u64 data;
-> +
-> +	puf->e->pos += TEST_NAMED_U64_BUF_OFFSET;
-> +	puf->e->end = puf->e->start + TEST_U64_BUF_OFFSET + sizeof(u64);
-> +
-> +	success = unpack_u64(puf->e, &data, name);
-> +
-> +	KUNIT_EXPECT_FALSE(test, success);
-> +	KUNIT_EXPECT_PTR_EQ(test, puf->e->pos,
-> +			puf->e->start + TEST_NAMED_U64_BUF_OFFSET);
-> +}
-> +
-> +static void policy_unpack_test_unpack_X_code_match(struct kunit *test)
-> +{
-> +	struct policy_unpack_fixture *puf = test->priv;
-> +	bool success = unpack_X(puf->e, AA_NAME);
-> +
-> +	KUNIT_EXPECT_TRUE(test, success);
-> +	KUNIT_EXPECT_TRUE(test, puf->e->pos == puf->e->start + 1);
-> +}
-> +
-> +static void policy_unpack_test_unpack_X_code_mismatch(struct kunit *test)
-> +{
-> +	struct policy_unpack_fixture *puf = test->priv;
-> +	bool success = unpack_X(puf->e, AA_STRING);
-> +
-> +	KUNIT_EXPECT_FALSE(test, success);
-> +	KUNIT_EXPECT_TRUE(test, puf->e->pos == puf->e->start);
-> +}
-> +
-> +static void policy_unpack_test_unpack_X_out_of_bounds(struct kunit *test)
-> +{
-> +	struct policy_unpack_fixture *puf = test->priv;
-> +	bool success;
-> +
-> +	puf->e->pos = puf->e->end;
-> +	success = unpack_X(puf->e, AA_NAME);
-> +
-> +	KUNIT_EXPECT_FALSE(test, success);
-> +}
-> +
-> +static struct kunit_case apparmor_policy_unpack_test_cases[] = {
-> +	KUNIT_CASE(policy_unpack_test_inbounds_when_inbounds),
-> +	KUNIT_CASE(policy_unpack_test_inbounds_when_out_of_bounds),
-> +	KUNIT_CASE(policy_unpack_test_unpack_array_with_null_name),
-> +	KUNIT_CASE(policy_unpack_test_unpack_array_with_name),
-> +	KUNIT_CASE(policy_unpack_test_unpack_array_out_of_bounds),
-> +	KUNIT_CASE(policy_unpack_test_unpack_blob_with_null_name),
-> +	KUNIT_CASE(policy_unpack_test_unpack_blob_with_name),
-> +	KUNIT_CASE(policy_unpack_test_unpack_blob_out_of_bounds),
-> +	KUNIT_CASE(policy_unpack_test_unpack_nameX_with_null_name),
-> +	KUNIT_CASE(policy_unpack_test_unpack_nameX_with_wrong_code),
-> +	KUNIT_CASE(policy_unpack_test_unpack_nameX_with_name),
-> +	KUNIT_CASE(policy_unpack_test_unpack_nameX_with_wrong_name),
-> +	KUNIT_CASE(policy_unpack_test_unpack_str_with_null_name),
-> +	KUNIT_CASE(policy_unpack_test_unpack_str_with_name),
-> +	KUNIT_CASE(policy_unpack_test_unpack_str_out_of_bounds),
-> +	KUNIT_CASE(policy_unpack_test_unpack_strdup_with_null_name),
-> +	KUNIT_CASE(policy_unpack_test_unpack_strdup_with_name),
-> +	KUNIT_CASE(policy_unpack_test_unpack_strdup_out_of_bounds),
-> +	KUNIT_CASE(policy_unpack_test_unpack_u16_chunk_basic),
-> +	KUNIT_CASE(policy_unpack_test_unpack_u16_chunk_out_of_bounds_1),
-> +	KUNIT_CASE(policy_unpack_test_unpack_u16_chunk_out_of_bounds_2),
-> +	KUNIT_CASE(policy_unpack_test_unpack_u32_with_null_name),
-> +	KUNIT_CASE(policy_unpack_test_unpack_u32_with_name),
-> +	KUNIT_CASE(policy_unpack_test_unpack_u32_out_of_bounds),
-> +	KUNIT_CASE(policy_unpack_test_unpack_u64_with_null_name),
-> +	KUNIT_CASE(policy_unpack_test_unpack_u64_with_name),
-> +	KUNIT_CASE(policy_unpack_test_unpack_u64_out_of_bounds),
-> +	KUNIT_CASE(policy_unpack_test_unpack_X_code_match),
-> +	KUNIT_CASE(policy_unpack_test_unpack_X_code_mismatch),
-> +	KUNIT_CASE(policy_unpack_test_unpack_X_out_of_bounds),
-> +	{},
-> +};
-> +
-> +static struct kunit_suite apparmor_policy_unpack_test_module = {
-> +	.name = "apparmor_policy_unpack",
-> +	.init = policy_unpack_test_init,
-> +	.test_cases = apparmor_policy_unpack_test_cases,
-> +};
-> +
-> +kunit_test_suite(apparmor_policy_unpack_test_module);
+> +	test_clone3(0, sizeof(struct clone_args) + 8, -ECHILD,
+> +			CLONE3_ARGS_ALL_0);
 > 
-
+> Ah, I haven't caught this during the first review. No, that's not
+> correct. You don't get a signal since exit_signal is 0, that's correct
+> _but_ you still need to wait on the child. You don't see the child
+> because the kernel will by default not wait on clone()-children aka
+> processes created with exit_signal != SIGCHLD. To wait on
+> clone()-children as well,  you need to set __WCLONE or __WALL in the
+> options argument for wait{p}id(2).
+> 
+> +
+> +	/*
+> +	 * Do a clone3() with sizeof(struct clone_args) + 8
+> +	 * and all members set to 0.
+> +	 */
+> +	test_clone3(0, sizeof(struct clone_args) + 8, -EINVAL,
+> +			CLONE3_ARGS_ALL_1);
+> 
+> The comment and the test don't line up. :)
+> 
+> +
+> +	/* Do a clone3() with > page size */
+> +	test_clone3(0, getpagesize() + 8, -E2BIG, CLONE3_ARGS_NO_TEST);
+> +
+> +	/* Do a clone3() with CLONE3_ARGS_SIZE_V0 in a new PID NS. */
+> +	if (uid == 0)
+> +		test_clone3(CLONE_NEWPID, CLONE3_ARGS_SIZE_V0, 0,
+> +				CLONE3_ARGS_NO_TEST);
+> +	else
+> +		ksft_test_result_skip("Skipping clone3() with CLONE_NEWPID\n");
+> +
+> +	/* Do a clone3() with CLONE3_ARGS_SIZE_V0 - 8 in a new PID NS */
+> +	test_clone3(CLONE_NEWPID, CLONE3_ARGS_SIZE_V0 - 8, -EINVAL,
+> +			CLONE3_ARGS_NO_TEST);
+> +
+> +	/* Do a clone3() with sizeof(struct clone_args) + 8 in a new PID NS */
+> +	if (uid == 0)
+> +		test_clone3(CLONE_NEWPID, sizeof(struct clone_args) + 8, 0,
+> +				CLONE3_ARGS_NO_TEST);
+> +	else
+> +		ksft_test_result_skip("Skipping clone3() with CLONE_NEWPID\n");
+> +
+> +	/* Do a clone3() with > page size in a new PID NS */
+> +	test_clone3(CLONE_NEWPID, getpagesize() + 8, -E2BIG,
+> +			CLONE3_ARGS_NO_TEST);
+> +
+> +	return !ksft_get_fail_cnt() ? ksft_exit_pass() : ksft_exit_fail();
+> +}
+> -- 
+> 2.23.0
+> 
