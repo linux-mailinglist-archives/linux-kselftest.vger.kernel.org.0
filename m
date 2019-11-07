@@ -2,170 +2,81 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CCD2FF28B5
-	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Nov 2019 09:07:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A1112F296D
+	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Nov 2019 09:42:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727544AbfKGIHW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 7 Nov 2019 03:07:22 -0500
-Received: from mail.kernel.org ([198.145.29.99]:60672 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726791AbfKGIHV (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 7 Nov 2019 03:07:21 -0500
-Received: from rapoport-lnx (nesher1.haifa.il.ibm.com [195.110.40.7])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 14F2F2077C;
-        Thu,  7 Nov 2019 08:07:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1573114040;
-        bh=Vs0vmuJFZJfCdBWbcef1JshwZZc9l+YrjwUdtsaNu3k=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=KypO2u9qQZOpCT97PagoJmJ05jNzzAwEOh5TQuJtaHcnw290kuyiCyRgXcpTDgoff
-         yL2r3/5Nv3OxL5iW1vDTUMldS7lvQVWUl8vBPDTErZIqUCYXU5EvD9rUB9CL4lekw9
-         M70s0IBFr/3wdhsUYXeg/j3kPNjd4MGq8LMTqoAU=
-Date:   Thu, 7 Nov 2019 10:07:07 +0200
-From:   Mike Rapoport <rppt@kernel.org>
-To:     John Hubbard <jhubbard@nvidia.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn.topel@intel.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Dave Chinner <david@fromorbit.com>,
-        David Airlie <airlied@linux.ie>,
-        "David S . Miller" <davem@davemloft.net>,
-        Ira Weiny <ira.weiny@intel.com>, Jan Kara <jack@suse.cz>,
-        Jason Gunthorpe <jgg@ziepe.ca>, Jens Axboe <axboe@kernel.dk>,
-        Jonathan Corbet <corbet@lwn.net>,
-        =?iso-8859-1?B?Suly9G1l?= Glisse <jglisse@redhat.com>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Michal Hocko <mhocko@suse.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Paul Mackerras <paulus@samba.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Vlastimil Babka <vbabka@suse.cz>, bpf@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, kvm@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-rdma@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, netdev@vger.kernel.org,
-        linux-mm@kvack.org, LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 05/18] mm/gup: introduce pin_user_pages*() and FOLL_PIN
-Message-ID: <20191107080706.GB3239@rapoport-lnx>
-References: <20191103211813.213227-1-jhubbard@nvidia.com>
- <20191103211813.213227-6-jhubbard@nvidia.com>
- <20191105131032.GG25005@rapoport-lnx>
- <9ac948a4-59bf-2427-2007-e460aad2848a@nvidia.com>
+        id S1727609AbfKGIm1 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 7 Nov 2019 03:42:27 -0500
+Received: from mx2.suse.de ([195.135.220.15]:46760 "EHLO mx1.suse.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1727120AbfKGIm1 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 7 Nov 2019 03:42:27 -0500
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx1.suse.de (Postfix) with ESMTP id 699D2B279;
+        Thu,  7 Nov 2019 08:42:25 +0000 (UTC)
+Date:   Thu, 7 Nov 2019 09:42:24 +0100 (CET)
+From:   Miroslav Benes <mbenes@suse.cz>
+To:     Joe Lawrence <joe.lawrence@redhat.com>
+cc:     live-patching@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        shuah@kernel.org
+Subject: Re: [PATCH] selftests/livepatch: filter 'taints' from dmesg
+ comparison
+In-Reply-To: <20191106222801.7541-1-joe.lawrence@redhat.com>
+Message-ID: <alpine.LSU.2.21.1911070939040.7917@pobox.suse.cz>
+References: <20191106222801.7541-1-joe.lawrence@redhat.com>
+User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <9ac948a4-59bf-2427-2007-e460aad2848a@nvidia.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
+Content-Type: text/plain; charset=US-ASCII
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Nov 05, 2019 at 11:00:06AM -0800, John Hubbard wrote:
-> On 11/5/19 5:10 AM, Mike Rapoport wrote:
-> ...
-> >> ---
-> >>  Documentation/vm/index.rst          |   1 +
-> >>  Documentation/vm/pin_user_pages.rst | 212 ++++++++++++++++++++++
-> > 
-> > I think it belongs to Documentation/core-api.
-> 
-> Done:
-> 
-> diff --git a/Documentation/core-api/index.rst b/Documentation/core-api/index.rst
-> index ab0eae1c153a..413f7d7c8642 100644
-> --- a/Documentation/core-api/index.rst
-> +++ b/Documentation/core-api/index.rst
-> @@ -31,6 +31,7 @@ Core utilities
->     generic-radix-tree
->     memory-allocation
->     mm-api
-> +   pin_user_pages
->     gfp_mask-from-fs-io
->     timekeeping
->     boot-time-mm
+On Wed, 6 Nov 2019, Joe Lawrence wrote:
 
-Thanks!
+> The livepatch selftests compare expected dmesg output to verify kernel
+> behavior.  They currently filter out "tainting kernel with
+> TAINT_LIVEPATCH" messages which may be logged when loading livepatch
+> modules.
+> 
+> Further filter the log to also drop "loading out-of-tree module taints
+> kernel" messages in case the klp_test modules have been build without
+> the in-tree module flag.
+
+That is true, but "tainting kernel with TAINT_LIVEPATCH" should be printed 
+out even in this case. check_modinfo_livepatch() is called for all modules 
+and relies on MODINFO(livepatch, Y).
+
+So either the bug is elsewhere or I need one more cup of tea.
+
+Miroslav
  
-> ...
-> >> diff --git a/Documentation/vm/pin_user_pages.rst b/Documentation/vm/pin_user_pages.rst
-> >> new file mode 100644
-> >> index 000000000000..3910f49ca98c
-> >> --- /dev/null
-> >> +++ b/Documentation/vm/pin_user_pages.rst
-> >> @@ -0,0 +1,212 @@
-> >> +.. SPDX-License-Identifier: GPL-2.0
-> >> +
-> >> +====================================================
-> >> +pin_user_pages() and related calls
-> >> +====================================================
-> > 
-> > I know this is too much to ask, but having pin_user_pages() a part of more
-> > general GUP description would be really great :)
-> > 
+> Signed-off-by: Joe Lawrence <joe.lawrence@redhat.com>
+> ---
 > 
-> Yes, definitely. But until I saw the reaction to the pin_user_pages() API
-> family, I didn't want to write too much--it could have all been tossed out
-> in favor of a whole different API. But now that we've had some initial
-> reviews, I'm much more confident in being able to write about the larger 
-> API set.
+> Note: I stumbled across this in a testing scenario and thought it might
+> be generally useful to extend this admittedly fragile mechanism.  Since
+> there are no related livepatch-core changes, this can go through Shuah's
+> kselftest tree if she prefers.  -- Joe
 > 
-> So yes, I'll put that on my pending list.
+>  tools/testing/selftests/livepatch/functions.sh | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
+> diff --git a/tools/testing/selftests/livepatch/functions.sh b/tools/testing/selftests/livepatch/functions.sh
+> index 79b0affd21fb..57975c323542 100644
+> --- a/tools/testing/selftests/livepatch/functions.sh
+> +++ b/tools/testing/selftests/livepatch/functions.sh
+> @@ -221,7 +221,7 @@ function check_result {
+>  	local expect="$*"
+>  	local result
+>  
+> -	result=$(dmesg | grep -v 'tainting' | grep -e 'livepatch:' -e 'test_klp' | sed 's/^\[[ 0-9.]*\] //')
+> +	result=$(dmesg | grep -ve '\<taints\>' -ve '\<tainting\>' | grep -e 'livepatch:' -e 'test_klp' | sed 's/^\[[ 0-9.]*\] //')
+>  
+>  	if [[ "$expect" == "$result" ]] ; then
+>  		echo "ok"
+> -- 
+> 2.21.0
 > 
-> ...
-> >> +This document describes the following functions: ::
-> >> +
-> >> + pin_user_pages
-> >> + pin_user_pages_fast
-> >> + pin_user_pages_remote
-> >> +
-> >> + pin_longterm_pages
-> >> + pin_longterm_pages_fast
-> >> + pin_longterm_pages_remote
-> >> +
-> >> +Basic description of FOLL_PIN
-> >> +=============================
-> >> +
-> >> +A new flag for get_user_pages ("gup") has been added: FOLL_PIN. FOLL_PIN has
-> > 
-> > Consider reading this after, say, half a year ;-)
-> > 
-> 
-> OK, OK. I knew when I wrote that that it was not going to stay new forever, but
-> somehow failed to write the right thing anyway. :) 
-> 
-> Here's a revised set of paragraphs:
-> 
-> Basic description of FOLL_PIN
-> =============================
-> 
-> FOLL_PIN and FOLL_LONGTERM are flags that can be passed to the get_user_pages*()
-> ("gup") family of functions. FOLL_PIN has significant interactions and
-> interdependencies with FOLL_LONGTERM, so both are covered here.
-> 
-> Both FOLL_PIN and FOLL_LONGTERM are internal to gup, meaning that neither
-> FOLL_PIN nor FOLL_LONGTERM should not appear at the gup call sites. This allows
-> the associated wrapper functions  (pin_user_pages() and others) to set the
-> correct combination of these flags, and to check for problems as well.
 
-Great, thanks! 
- 
-> thanks,
-> 
-> John Hubbard
-> NVIDIA
-
--- 
-Sincerely yours,
-Mike.
