@@ -2,79 +2,112 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DB382F2456
-	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Nov 2019 02:36:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 45CC4F2554
+	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Nov 2019 03:25:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728415AbfKGBgJ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 6 Nov 2019 20:36:09 -0500
-Received: from shards.monkeyblade.net ([23.128.96.9]:59328 "EHLO
-        shards.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728306AbfKGBgI (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 6 Nov 2019 20:36:08 -0500
-Received: from localhost (unknown [IPv6:2601:601:9f00:1e2::d71])
-        (using TLSv1 with cipher AES256-SHA (256/256 bits))
-        (Client did not present a certificate)
-        (Authenticated sender: davem-davemloft)
-        by shards.monkeyblade.net (Postfix) with ESMTPSA id 0F6E9150301AD;
-        Wed,  6 Nov 2019 17:36:08 -0800 (PST)
-Date:   Wed, 06 Nov 2019 17:36:07 -0800 (PST)
-Message-Id: <20191106.173607.54986119128433453.davem@davemloft.net>
-To:     fruggeri@arista.com
-Cc:     dsahern@gmail.com, shuah@kernel.org, netdev@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net-next v2] selftest: net: add some traceroute tests
-From:   David Miller <davem@davemloft.net>
-In-Reply-To: <20191105224835.D134F95C0C6F@us180.sjc.aristanetworks.com>
-References: <20191105224835.D134F95C0C6F@us180.sjc.aristanetworks.com>
-X-Mailer: Mew version 6.8 on Emacs 26.1
-Mime-Version: 1.0
-Content-Type: Text/Plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.5.12 (shards.monkeyblade.net [149.20.54.216]); Wed, 06 Nov 2019 17:36:08 -0800 (PST)
+        id S1732876AbfKGCZK (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 6 Nov 2019 21:25:10 -0500
+Received: from mga12.intel.com ([192.55.52.136]:35901 "EHLO mga12.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727778AbfKGCZK (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 6 Nov 2019 21:25:10 -0500
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 06 Nov 2019 18:25:09 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.68,276,1569308400"; 
+   d="scan'208";a="227685020"
+Received: from iweiny-desk2.sc.intel.com ([10.3.52.157])
+  by fmsmga004.fm.intel.com with ESMTP; 06 Nov 2019 18:25:08 -0800
+Date:   Wed, 6 Nov 2019 18:25:08 -0800
+From:   Ira Weiny <ira.weiny@intel.com>
+To:     John Hubbard <jhubbard@nvidia.com>
+Cc:     Mike Rapoport <rppt@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn.topel@intel.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Dave Chinner <david@fromorbit.com>,
+        David Airlie <airlied@linux.ie>,
+        "David S . Miller" <davem@davemloft.net>, Jan Kara <jack@suse.cz>,
+        Jason Gunthorpe <jgg@ziepe.ca>, Jens Axboe <axboe@kernel.dk>,
+        Jonathan Corbet <corbet@lwn.net>,
+        =?iso-8859-1?B?Suly9G1l?= Glisse <jglisse@redhat.com>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Michal Hocko <mhocko@suse.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Paul Mackerras <paulus@samba.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Vlastimil Babka <vbabka@suse.cz>, bpf@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, kvm@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-rdma@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, netdev@vger.kernel.org,
+        linux-mm@kvack.org, LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 05/18] mm/gup: introduce pin_user_pages*() and FOLL_PIN
+Message-ID: <20191107022508.GB32084@iweiny-DESK2.sc.intel.com>
+References: <20191103211813.213227-1-jhubbard@nvidia.com>
+ <20191103211813.213227-6-jhubbard@nvidia.com>
+ <20191105131032.GG25005@rapoport-lnx>
+ <9ac948a4-59bf-2427-2007-e460aad2848a@nvidia.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <9ac948a4-59bf-2427-2007-e460aad2848a@nvidia.com>
+User-Agent: Mutt/1.11.1 (2018-12-01)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: fruggeri@arista.com (Francesco Ruggeri)
-Date: Tue, 05 Nov 2019 14:48:35 -0800
+> 
+> 
+> ...
+> >> +This document describes the following functions: ::
+> >> +
+> >> + pin_user_pages
+> >> + pin_user_pages_fast
+> >> + pin_user_pages_remote
+> >> +
+> >> + pin_longterm_pages
+> >> + pin_longterm_pages_fast
+> >> + pin_longterm_pages_remote
+> >> +
+> >> +Basic description of FOLL_PIN
+> >> +=============================
+> >> +
+> >> +A new flag for get_user_pages ("gup") has been added: FOLL_PIN. FOLL_PIN has
+> > 
+> > Consider reading this after, say, half a year ;-)
+> > 
+> 
+> OK, OK. I knew when I wrote that that it was not going to stay new forever, but
+> somehow failed to write the right thing anyway. :) 
+> 
+> Here's a revised set of paragraphs:
+> 
+> Basic description of FOLL_PIN
+> =============================
+> 
+> FOLL_PIN and FOLL_LONGTERM are flags that can be passed to the get_user_pages*()
+> ("gup") family of functions. FOLL_PIN has significant interactions and
+> interdependencies with FOLL_LONGTERM, so both are covered here.
+> 
+> Both FOLL_PIN and FOLL_LONGTERM are internal to gup, meaning that neither
+> FOLL_PIN nor FOLL_LONGTERM should not appear at the gup call sites. This allows
+> the associated wrapper functions  (pin_user_pages() and others) to set the
+> correct combination of these flags, and to check for problems as well.
 
-> Added the following traceroute tests.
-> 
-> IPV6:
-> Verify that in this scenario
-> 
->        ------------------------ N2
->         |                    |
->       ------              ------  N3  ----
->       | R1 |              | R2 |------|H2|
->       ------              ------      ----
->         |                    |
->        ------------------------ N1
->                  |
->                 ----
->                 |H1|
->                 ----
-> 
-> where H1's default route goes through R1 and R1's default route goes
-> through R2 over N2, traceroute6 from H1 to H2 reports R2's address
-> on N2 and not N1.
-> 
-> IPV4:
-> Verify that traceroute from H1 to H2 shows 1.0.1.1 in this scenario
-> 
->                    1.0.3.1/24
-> ---- 1.0.1.3/24    1.0.1.1/24 ---- 1.0.2.1/24    1.0.2.4/24 ----
-> |H1|--------------------------|R1|--------------------------|H2|
-> ----            N1            ----            N2            ----
-> 
-> where net.ipv4.icmp_errors_use_inbound_ifaddr is set on R1 and
-> 1.0.3.1/24 and 1.0.1.1/24 are respectively R1's primary and secondary
-> address on N1.
-> 
-> v2: fixed some typos, and have bridge in R1 instead of R2 in IPV6 test.
-> 
-> Signed-off-by: Francesco Ruggeri <fruggeri@arista.com>
+I like this revision as well.
 
-Applied, thank you.
+Ira
+
