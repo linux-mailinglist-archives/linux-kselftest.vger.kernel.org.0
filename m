@@ -2,163 +2,212 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 10C97F3C40
-	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Nov 2019 00:33:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F0574F3C49
+	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Nov 2019 00:42:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726094AbfKGXdo (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 7 Nov 2019 18:33:44 -0500
-Received: from mail-pf1-f196.google.com ([209.85.210.196]:43750 "EHLO
-        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725928AbfKGXdo (ORCPT
+        id S1726094AbfKGXma (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 7 Nov 2019 18:42:30 -0500
+Received: from userp2120.oracle.com ([156.151.31.85]:58898 "EHLO
+        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725930AbfKGXm3 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 7 Nov 2019 18:33:44 -0500
-Received: by mail-pf1-f196.google.com with SMTP id 3so3469601pfb.10
-        for <linux-kselftest@vger.kernel.org>; Thu, 07 Nov 2019 15:33:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=U9LCQzLECFkJez50E4J6R+X6khDWEPIZnHrW73R9i5E=;
-        b=VCSF0q3YAX7JfT36ea1mW70HVF+YkyVrrVNTW2SZ4JLxyAeawqVF5Rdh/9rH2i6SAG
-         FoQiW4BL2Au/RpCOeuFpBTfOXv4RQtMPCBLk6e6QZxC/urZTkrbpLiC+YEq9NmzAG5cv
-         F+3JZZa34J+jp5deo2+K4zBb9HUa7wRMlJQsvk8KX9STNPJBMoHbGn/Q46TMgSZ3qeLo
-         ngTvyzyK3mDIAm6PbpO9h1Beh1EI6Xb9/jJ3eovQN+C9cXnxaZQ1izArK9tovZRpWLOD
-         tLEtBET4eAM8hFBHeMHotaYpbI6I69R5joMhIlXZrcEQGsztakOvy2J+1ogM7Gq4/lfG
-         d6oA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=U9LCQzLECFkJez50E4J6R+X6khDWEPIZnHrW73R9i5E=;
-        b=AdhOXJwWMwuv0oHszRi2njQrvmIfK1Lol+w0q8R+ZOcL/252R7PmkMhLXfeCHCwoB0
-         MnrPYm564PWc20n19LMzFo293SPlzvqjc/LopFEIGZnNCBOzdIJ4zGxRi+nrmFMZojXZ
-         IFL5qafO/c/vylCY8rCe5k0NSgHBl3wTbImk0Qp315y6QdH78r4qhielvEv6z2jDGA5u
-         pesH29Fn3DXtFSBK4U0zy/TATV2fiy9n8v33GKSjfZudcTJTrfcqpul4pV1itGpT9pIS
-         aIjzgMO6DdcNqzo8TGBOFL/Y6agH7uwr2dVw2uOTg8YGLV3SfeomZsUqFr8gGwlSXIRN
-         ehyw==
-X-Gm-Message-State: APjAAAUZkY7Bi8jY5QV1xv1WWoEubGPoZIX/PSWFLbZMEs3vUrjU8fHO
-        KDlpAE13AmDlLchy/hqmY7iSug==
-X-Google-Smtp-Source: APXvYqxZsw+8wS5vW5TZg88AZWSvd3uOCaJzI81XZmIohq0NEHnExqON51fuwGRb5S8Qgc5fO9qnzg==
-X-Received: by 2002:aa7:9aa9:: with SMTP id x9mr7834759pfi.207.1573169622713;
-        Thu, 07 Nov 2019 15:33:42 -0800 (PST)
-Received: from google.com ([2620:15c:2cb:1:e90c:8e54:c2b4:29e7])
-        by smtp.gmail.com with ESMTPSA id u3sm3438966pgp.51.2019.11.07.15.33.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Nov 2019 15:33:41 -0800 (PST)
-Date:   Thu, 7 Nov 2019 15:33:37 -0800
-From:   Brendan Higgins <brendanhiggins@google.com>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     shuah@kernel.org, john.johansen@canonical.com, jmorris@namei.org,
-        serge@hallyn.com, alan.maguire@oracle.com, yzaikin@google.com,
-        davidgow@google.com, mcgrof@kernel.org, tytso@mit.edu,
-        linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kselftest@vger.kernel.org,
-        Mike Salvatore <mike.salvatore@canonical.com>
-Subject: Re: [PATCH linux-kselftest/test v2] apparmor: add AppArmor KUnit
- tests for policy unpack
-Message-ID: <20191107233337.GA191231@google.com>
-References: <20191106004329.16991-1-brendanhiggins@google.com>
- <201911060916.AC9E14B@keescook>
+        Thu, 7 Nov 2019 18:42:29 -0500
+Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
+        by userp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id xA7NdUKP102136;
+        Thu, 7 Nov 2019 23:42:17 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=subject : to : cc :
+ references : from : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=corp-2019-08-05;
+ bh=InetN9fzWsCQ0YpEFg6c78mbU6HXpKe5KOlB6t943pA=;
+ b=ApVBk5eGbpVHOMv4eaD+JuWf3N29yB4PpVpD5vlkrJiRi8StN6GXZ6i9vLxu8uUx+9bo
+ NZSQp3OSjEh5Hot/K9xp9xT6+SiKCyAzGclg5UOBJFjFo8rl6qsP6RA9mKPcsmGELrhR
+ ljtq+F/1MKlwZ4ljxtfUQFcby8BQNFgn9OmhxceStcd1E4uo3JbHnIEHdf78a/udDkWl
+ AhUXF3qcWS+DfRzS4U05HAqgq/pKY9rlGexkZIzEwD145tRoJI4vV8rzrPr9fZzqDfqt
+ iBTfXWDUP5bpUEJvxseGNS5taKYXdMMt7bHuJddpumGzcq+tkdhciCTbs5b8bigQk/wy hw== 
+Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
+        by userp2120.oracle.com with ESMTP id 2w41w11pwq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 07 Nov 2019 23:42:17 +0000
+Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
+        by userp3030.oracle.com (8.16.0.27/8.16.0.27) with SMTP id xA7NdSLv048866;
+        Thu, 7 Nov 2019 23:42:17 GMT
+Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
+        by userp3030.oracle.com with ESMTP id 2w41wb37kc-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 07 Nov 2019 23:42:16 +0000
+Received: from abhmp0003.oracle.com (abhmp0003.oracle.com [141.146.116.9])
+        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id xA7NgEdu024447;
+        Thu, 7 Nov 2019 23:42:14 GMT
+Received: from [192.168.1.206] (/71.63.128.209)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Thu, 07 Nov 2019 15:42:14 -0800
+Subject: Re: [PATCH v8 1/9] hugetlb_cgroup: Add hugetlb_cgroup reservation
+ counter
+To:     Mina Almasry <almasrymina@google.com>
+Cc:     shuah@kernel.org, linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org, cgroups@vger.kernel.org,
+        aneesh.kumar@linux.vnet.ibm.com, Hillf Danton <hdanton@sina.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+References: <20191030013701.39647-1-almasrymina@google.com>
+From:   Mike Kravetz <mike.kravetz@oracle.com>
+Message-ID: <78f07acf-47ba-4fa5-34c2-78a17eb7c16f@oracle.com>
+Date:   Thu, 7 Nov 2019 15:42:12 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.2.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <201911060916.AC9E14B@keescook>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20191030013701.39647-1-almasrymina@google.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9434 signatures=668685
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
+ phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=999
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.0.1-1910280000 definitions=main-1911070218
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9434 signatures=668685
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
+ suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1011
+ lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1910280000
+ definitions=main-1911070218
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Nov 06, 2019 at 09:18:27AM -0800, Kees Cook wrote:
-> On Tue, Nov 05, 2019 at 04:43:29PM -0800, Brendan Higgins wrote:
-> > From: Mike Salvatore <mike.salvatore@canonical.com>
-> > 
-> > Add KUnit tests to test AppArmor unpacking of userspace policies.
-> > AppArmor uses a serialized binary format for loading policies. To find
-> > policy format documentation see
-> > Documentation/admin-guide/LSM/apparmor.rst.
-> > 
-> > In order to write the tests against the policy unpacking code, some
-> > static functions needed to be exposed for testing purposes. One of the
-> > goals of this patch is to establish a pattern for which testing these
-> > kinds of functions should be done in the future.
-> > 
-> > Signed-off-by: Brendan Higgins <brendanhiggins@google.com>
-> > Signed-off-by: Mike Salvatore <mike.salvatore@canonical.com>
-> > ---
-> >  security/apparmor/Kconfig              |  16 +
-> >  security/apparmor/policy_unpack.c      |   4 +
-> >  security/apparmor/policy_unpack_test.c | 607 +++++++++++++++++++++++++
-> >  3 files changed, 627 insertions(+)
-> >  create mode 100644 security/apparmor/policy_unpack_test.c
-> > 
-> > diff --git a/security/apparmor/Kconfig b/security/apparmor/Kconfig
-> > index d8b1a360a6368..78a33ccac2574 100644
-> > --- a/security/apparmor/Kconfig
-> > +++ b/security/apparmor/Kconfig
-> > @@ -66,3 +66,19 @@ config SECURITY_APPARMOR_DEBUG_MESSAGES
-> >  	  Set the default value of the apparmor.debug kernel parameter.
-> >  	  When enabled, various debug messages will be logged to
-> >  	  the kernel message buffer.
-> > +
-> > +config SECURITY_APPARMOR_KUNIT_TEST
-> > +	bool "Build KUnit tests for policy_unpack.c"
-> > +	depends on KUNIT && SECURITY_APPARMOR
-> > +	help
-> > +	  This builds the AppArmor KUnit tests.
-> > +
-> > +	  KUnit tests run during boot and output the results to the debug log
-> > +	  in TAP format (http://testanything.org/). Only useful for kernel devs
-> > +	  running KUnit test harness and are not for inclusion into a
-> > +	  production build.
-> > +
-> > +	  For more information on KUnit and unit tests in general please refer
-> > +	  to the KUnit documentation in Documentation/dev-tools/kunit/.
-> > +
-> > +	  If unsure, say N.
-> > diff --git a/security/apparmor/policy_unpack.c b/security/apparmor/policy_unpack.c
-> > index 8cfc9493eefc7..37c1dd3178fc0 100644
-> > --- a/security/apparmor/policy_unpack.c
-> > +++ b/security/apparmor/policy_unpack.c
-> > @@ -1120,3 +1120,7 @@ int aa_unpack(struct aa_loaddata *udata, struct list_head *lh,
-> >  
-> >  	return error;
-> >  }
-> > +
-> > +#ifdef CONFIG_SECURITY_APPARMOR_KUNIT_TEST
-> > +#include "policy_unpack_test.c"
-> > +#endif /* CONFIG_SECURITY_APPARMOR_KUNIT_TEST */
+Cc: Andrew
+This series is getting closer to consideration for the mm tree.
+Mina,
+Be sure to cc Andrew with next version of series.
+
+On 10/29/19 6:36 PM, Mina Almasry wrote:
+> These counters will track hugetlb reservations rather than hugetlb
+> memory faulted in. This patch only adds the counter, following patches
+> add the charging and uncharging of the counter.
+
+I honestly am not sure the preferred method for including the overall
+design in a commit message.  Certainly it should be in the first patch.
+Perhaps, say this is patch 1 of a 9 patch series here.
+
+> Problem:
+> Currently tasks attempting to allocate more hugetlb memory than is available get
+> a failure at mmap/shmget time. This is thanks to Hugetlbfs Reservations [1].
+> However, if a task attempts to allocate hugetlb memory only more than its
+> hugetlb_cgroup limit allows, the kernel will allow the mmap/shmget call,
+> but will SIGBUS the task when it attempts to fault the memory in.
 > 
-> To make this even LESS intrusive, the ifdefs could live in ..._test.c.
+> We have developers interested in using hugetlb_cgroups, and they have expressed
+> dissatisfaction regarding this behavior. We'd like to improve this
+> behavior such that tasks violating the hugetlb_cgroup limits get an error on
+> mmap/shmget time, rather than getting SIGBUS'd when they try to fault
+> the excess memory in.
+> 
+> The underlying problem is that today's hugetlb_cgroup accounting happens
+> at hugetlb memory *fault* time, rather than at *reservation* time.
+> Thus, enforcing the hugetlb_cgroup limit only happens at fault time, and
+> the offending task gets SIGBUS'd.
+> 
+> Proposed Solution:
+> A new page counter named hugetlb.xMB.reservation_[limit|usage]_in_bytes. This
+> counter has slightly different semantics than
+> hugetlb.xMB.[limit|usage]_in_bytes:
+> 
+> - While usage_in_bytes tracks all *faulted* hugetlb memory,
+> reservation_usage_in_bytes tracks all *reserved* hugetlb memory and
+> hugetlb memory faulted in without a prior reservation.
+> 
+> - If a task attempts to reserve more memory than limit_in_bytes allows,
+> the kernel will allow it to do so. But if a task attempts to reserve
+> more memory than reservation_limit_in_bytes, the kernel will fail this
+> reservation.
+> 
+> This proposal is implemented in this patch series, with tests to verify
+> functionality and show the usage. We also added cgroup-v2 support to
+> hugetlb_cgroup so that the new use cases can be extended to v2.
+> 
+> Alternatives considered:
+> 1. A new cgroup, instead of only a new page_counter attached to
+>    the existing hugetlb_cgroup. Adding a new cgroup seemed like a lot of code
+>    duplication with hugetlb_cgroup. Keeping hugetlb related page counters under
+>    hugetlb_cgroup seemed cleaner as well.
+> 
+> 2. Instead of adding a new counter, we considered adding a sysctl that modifies
+>    the behavior of hugetlb.xMB.[limit|usage]_in_bytes, to do accounting at
+>    reservation time rather than fault time. Adding a new page_counter seems
+>    better as userspace could, if it wants, choose to enforce different cgroups
+>    differently: one via limit_in_bytes, and another via
+>    reservation_limit_in_bytes. This could be very useful if you're
+>    transitioning how hugetlb memory is partitioned on your system one
+>    cgroup at a time, for example. Also, someone may find usage for both
+>    limit_in_bytes and reservation_limit_in_bytes concurrently, and this
+>    approach gives them the option to do so.
+> 
+> Testing:
 
-Less intrusive, yes, but I think I actually like the ifdef here; it
-makes it clear from the source that the test is only a part of the build
-when configured to do so. Nevertheless, I will change it if anyone feels
-strongly about it.
+I think that simply mentioning the use of hugetlbfs for regression testing
+would be sufficient here.
 
-> Also, while I *think* the kernel build system will correctly track this
-> dependency, can you double-check that changes to ..._test.c correctly
-> trigger a recompile of policy_unpack.c?
+> - Added tests passing.
+> - libhugetlbfs tests mostly passing, but some tests have trouble with and
+>   without this patch series. Seems environment issue rather than code:
+>   - Overall results:
+>     ********** TEST SUMMARY
+>     *                      2M
+>     *                      32-bit 64-bit
+>     *     Total testcases:    84      0
+>     *             Skipped:     0      0
+>     *                PASS:    66      0
+>     *                FAIL:    14      0
+>     *    Killed by signal:     0      0
+>     *   Bad configuration:     4      0
+>     *       Expected FAIL:     0      0
+>     *     Unexpected PASS:     0      0
+>     *    Test not present:     0      0
+>     * Strange test result:     0      0
+>     **********
 
-Yep, just verified, first I ran the tests and everything passed. Then I
-applied the following diff:
+It is curious that you only ran the tests for 32 bit applications.  Certainly
+the more common case today is 64 bit.  I don't think there are any surprises
+for you as I also have been running hugetlbfs on this series.
+-- 
+Mike Kravetz
 
-diff --git a/security/apparmor/policy_unpack_test.c b/security/apparmor/policy_unpack_test.c
-index 533137f45361c..e1b0670dbdc27 100644
---- a/security/apparmor/policy_unpack_test.c
-+++ b/security/apparmor/policy_unpack_test.c
-@@ -161,7 +161,7 @@ static void policy_unpack_test_unpack_array_with_name(struct kunit *test)
- 
- 	array_size = unpack_array(puf->e, name);
- 
--	KUNIT_EXPECT_EQ(test, array_size, (u16)TEST_ARRAY_SIZE);
-+	KUNIT_EXPECT_EQ(test, array_size + 1, (u16)TEST_ARRAY_SIZE);
- 	KUNIT_EXPECT_PTR_EQ(test, puf->e->pos,
- 		puf->e->start + TEST_ARRAY_BUF_OFFSET + sizeof(u16) + 1);
- }
-
-and reran the tests (to trigger an incremental build) and the test
-failed as expected indicating that the dependency is properly tracked.
-
-Cheers!
+>   - Failing tests:
+>     - elflink_rw_and_share_test("linkhuge_rw") segfaults with and without this
+>       patch series.
+>     - LD_PRELOAD=libhugetlbfs.so HUGETLB_MORECORE=yes malloc (2M: 32):
+>       FAIL    Address is not hugepage
+>     - LD_PRELOAD=libhugetlbfs.so HUGETLB_RESTRICT_EXE=unknown:malloc
+>       HUGETLB_MORECORE=yes malloc (2M: 32):
+>       FAIL    Address is not hugepage
+>     - LD_PRELOAD=libhugetlbfs.so HUGETLB_MORECORE=yes malloc_manysmall (2M: 32):
+>       FAIL    Address is not hugepage
+>     - GLIBC_TUNABLES=glibc.malloc.tcache_count=0 LD_PRELOAD=libhugetlbfs.so
+>       HUGETLB_MORECORE=yes heapshrink (2M: 32):
+>       FAIL    Heap not on hugepages
+>     - GLIBC_TUNABLES=glibc.malloc.tcache_count=0 LD_PRELOAD=libhugetlbfs.so
+>       libheapshrink.so HUGETLB_MORECORE=yes heapshrink (2M: 32):
+>       FAIL    Heap not on hugepages
+>     - HUGETLB_ELFMAP=RW linkhuge_rw (2M: 32): FAIL    small_data is not hugepage
+>     - HUGETLB_ELFMAP=RW HUGETLB_MINIMAL_COPY=no linkhuge_rw (2M: 32):
+>       FAIL    small_data is not hugepage
+>     - alloc-instantiate-race shared (2M: 32):
+>       Bad configuration: sched_setaffinity(cpu1): Invalid argument -
+>       FAIL    Child 1 killed by signal Killed
+>     - shmoverride_linked (2M: 32):
+>       FAIL    shmget failed size 2097152 from line 176: Invalid argument
+>     - HUGETLB_SHM=yes shmoverride_linked (2M: 32):
+>       FAIL    shmget failed size 2097152 from line 176: Invalid argument
+>     - shmoverride_linked_static (2M: 32):
+>       FAIL shmget failed size 2097152 from line 176: Invalid argument
+>     - HUGETLB_SHM=yes shmoverride_linked_static (2M: 32):
+>       FAIL shmget failed size 2097152 from line 176: Invalid argument
+>     - LD_PRELOAD=libhugetlbfs.so shmoverride_unlinked (2M: 32):
+>       FAIL shmget failed size 2097152 from line 176: Invalid argument
+>     - LD_PRELOAD=libhugetlbfs.so HUGETLB_SHM=yes shmoverride_unlinked (2M: 32):
+>       FAIL    shmget failed size 2097152 from line 176: Invalid argument
+> 
+> [1]: https://www.kernel.org/doc/html/latest/vm/hugetlbfs_reserv.html
+> 
+> Signed-off-by: Mina Almasry <almasrymina@google.com>
+> Acked-by: Hillf Danton <hdanton@sina.com>
