@@ -2,75 +2,71 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C572F39A6
-	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Nov 2019 21:39:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BA9C5F3A1C
+	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Nov 2019 22:10:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725916AbfKGUji (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 7 Nov 2019 15:39:38 -0500
-Received: from mail-ot1-f68.google.com ([209.85.210.68]:39104 "EHLO
-        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725868AbfKGUji (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 7 Nov 2019 15:39:38 -0500
-Received: by mail-ot1-f68.google.com with SMTP id e17so3227198otk.6
-        for <linux-kselftest@vger.kernel.org>; Thu, 07 Nov 2019 12:39:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=iYuXSkdrHbi6HQVkPYIcJyzI96fCgmbEDSoPSr5PtAU=;
-        b=nPXrCLUCJhTEuU5vgEEZJ1aS0zcIQgJmkRVeozdy8exHWSC4KYRbhvwRXmp6SqvHxe
-         Lx9yQnA1QBDF/nWtotrnGqV6e3+7I2bU7X9TUpdaYskGKfTqKtAgBF3RDiecDuFXv39t
-         uM6S2IDu/epNa5sZLi4T+tODVOUTki70jZPNT0tT7s8vou+srvtj6lN6x9HVs0LLV9wr
-         HDExD5R16jO+LpObb8xAbhqr0fh6UEnygWGVd1UGV6vyiRUNbhSdgAAQcjgNPiAOtVnf
-         vYomHu/Mz+BpH/FDNCGqG9m0KUgQ7a/SnneurWGIQF2bAWGtD7ND6fU/vOzq/g90EgLC
-         aXMg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=iYuXSkdrHbi6HQVkPYIcJyzI96fCgmbEDSoPSr5PtAU=;
-        b=pdjfov/0RHLyzX+J+kvXS7o4u3eQC6bzfWAHBx6MhrCICoVGnilwaFjPPfjmMSrOtg
-         AVfa9OlzeUC0Qplq/cmPzjyZ9yeGRDlVGTQXRarEvqL7MmxIUCVq0m/224oghjgBjiWc
-         yQdS7hDW9cRQvXUS1pvsNtwXGkzO/hHHMSUEzRhfBIDZ+Uf9eyPqqnPlZUjLSwnr/TZa
-         ytYSUYtiHYzxhLG6MdsCh3qRnj7PwTRsk2LdCKlysOzI77eNr20xMYokWWf0bTtXw3jR
-         gWlYoW7nB9JFFtS9bfzIPoaXO+Bw3YyqaPLH5AfzQ0BWbxvhEr8L9baJ+Hb3/VvB8InI
-         kLsw==
-X-Gm-Message-State: APjAAAXCWJzhmp17CLGZsbZgPRVQeMxIUwMkO3HXZQNSQsvxbzVz997b
-        8LbFuwrIfBXzolSKXW/GTh6nEHvPtQ3zNKrFbQxqnA==
-X-Google-Smtp-Source: APXvYqwSsiN54Jb7GeTFajAhyV4TNhAtB1IZayinm7Pmx7VZhhFSZvSspRGlSx9JS6J8v3DKHm+Djw1yV2JrVAFWfuU=
-X-Received: by 2002:a9d:630c:: with SMTP id q12mr4702206otk.332.1573159175637;
- Thu, 07 Nov 2019 12:39:35 -0800 (PST)
-MIME-Version: 1.0
-References: <20191101020450.12948-1-ice_yangxiao@163.com> <e343dbf7-323f-c513-50ca-feda4f0ab6ec@163.com>
- <1386a7d3-1114-d0e5-65b0-d81c032ac657@kernel.org>
-In-Reply-To: <1386a7d3-1114-d0e5-65b0-d81c032ac657@kernel.org>
-From:   John Stultz <john.stultz@linaro.org>
-Date:   Thu, 7 Nov 2019 12:39:24 -0800
-Message-ID: <CALAqxLU=fwt77mC0CJRgtVAzLhAUHou01J_cDSoc2kx5=ArrGw@mail.gmail.com>
-Subject: Re: [PATCH] kselftests/dmabuf-heaps: Fix compiler error in one condition
-To:     shuah <shuah@kernel.org>
+        id S1725912AbfKGVKa (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 7 Nov 2019 16:10:30 -0500
+Received: from mail.kernel.org ([198.145.29.99]:45324 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725893AbfKGVK3 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 7 Nov 2019 16:10:29 -0500
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net [24.9.64.241])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 0DE8D20869;
+        Thu,  7 Nov 2019 21:10:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1573161029;
+        bh=Smshkf4bpuB9OzX8GhkdOLFzAGkF60wT47h/fzpfwKY=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=mYOfvann0nGvFTLrOfANUBmsNGQAXdDD8djVAXBskTgPzqNcw8L4fzqNLigqDOzeM
+         qrIJzIisz+zZwkHkLnsbXsMaXU9JpzT2u9eSyqIQ+mYABD+Zj6tbTYFoA8yrd/1JEP
+         NBLEJJcdmHcxy3PBopVt2tQYLdQgiyeJX9Cxk7W0=
+Subject: Re: [PATCH] kselftests/dmabuf-heaps: Fix compiler error in one
+ condition
+To:     John Stultz <john.stultz@linaro.org>
 Cc:     Xiao Yang <ice_yangxiao@163.com>, linux-kselftest@vger.kernel.org,
-        philip.li@intel.com
-Content-Type: text/plain; charset="UTF-8"
+        philip.li@intel.com, shuah <shuah@kernel.org>
+References: <20191101020450.12948-1-ice_yangxiao@163.com>
+ <e343dbf7-323f-c513-50ca-feda4f0ab6ec@163.com>
+ <1386a7d3-1114-d0e5-65b0-d81c032ac657@kernel.org>
+ <CALAqxLU=fwt77mC0CJRgtVAzLhAUHou01J_cDSoc2kx5=ArrGw@mail.gmail.com>
+From:   shuah <shuah@kernel.org>
+Message-ID: <456379e0-9c7f-212c-c275-afac67cd5943@kernel.org>
+Date:   Thu, 7 Nov 2019 14:10:28 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
+MIME-Version: 1.0
+In-Reply-To: <CALAqxLU=fwt77mC0CJRgtVAzLhAUHou01J_cDSoc2kx5=ArrGw@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Nov 7, 2019 at 12:37 PM shuah <shuah@kernel.org> wrote:
->
-> On 10/31/19 8:25 PM, Xiao Yang wrote:
-> > Hi,
-> >
-> > If you fix the issue, kindly add following tag
-> > Reported-by: kernel test robot <lkp@intel.com>
-> >
-> Do you plan to send another patch? I don't understand
-> if this meant you think this patch doesn't fix the
-> problem?
+On 11/7/19 1:39 PM, John Stultz wrote:
+> On Thu, Nov 7, 2019 at 12:37 PM shuah <shuah@kernel.org> wrote:
+>>
+>> On 10/31/19 8:25 PM, Xiao Yang wrote:
+>>> Hi,
+>>>
+>>> If you fix the issue, kindly add following tag
+>>> Reported-by: kernel test robot <lkp@intel.com>
+>>>
+>> Do you plan to send another patch? I don't understand
+>> if this meant you think this patch doesn't fix the
+>> problem?
+> 
+> I've actually folded in the fix into my patches.
+> 
+> thanks
+> -john
+> 
 
-I've actually folded in the fix into my patches.
+Thanks for the clarification.
 
-thanks
--john
+-- Shuah
+
