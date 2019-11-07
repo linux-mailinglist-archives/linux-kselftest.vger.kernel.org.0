@@ -2,89 +2,79 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D0B1AF21B2
-	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Nov 2019 23:28:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB382F2456
+	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Nov 2019 02:36:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727154AbfKFW2I (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 6 Nov 2019 17:28:08 -0500
-Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:41228 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726817AbfKFW2I (ORCPT
+        id S1728415AbfKGBgJ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 6 Nov 2019 20:36:09 -0500
+Received: from shards.monkeyblade.net ([23.128.96.9]:59328 "EHLO
+        shards.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728306AbfKGBgI (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 6 Nov 2019 17:28:08 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1573079287;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=OaCfCwRffXSl+3ViahqGn4EpovGGgu/EbhfMP+EYy0E=;
-        b=Rwqp/rLbD55mLPUbjnWLUimzSjEtNP5Jw+evBT150cGi95pJKSkEjyPtGe+yFLJ0kNcCXz
-        CuPEDfsvsbrJDEzl2diqmei7mHgF4lRrrgL+7zYfifBmYWh4jTTtv4LVLtcai0gnDDoJvl
-        bOyBgK/jhVrhx0YWrzASkIbCF3FpFnI=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-227-ACruvKVuPtyL9jLRdIE6Ow-1; Wed, 06 Nov 2019 17:28:05 -0500
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 3C09E800C73;
-        Wed,  6 Nov 2019 22:28:04 +0000 (UTC)
-Received: from jlaw-desktop.bos.redhat.com (dhcp-17-119.bos.redhat.com [10.18.17.119])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id C3FAA19757;
-        Wed,  6 Nov 2019 22:28:03 +0000 (UTC)
-From:   Joe Lawrence <joe.lawrence@redhat.com>
-To:     live-patching@vger.kernel.org, linux-kselftest@vger.kernel.org
-Cc:     shuah@kernel.org
-Subject: [PATCH] selftests/livepatch: filter 'taints' from dmesg comparison
-Date:   Wed,  6 Nov 2019 17:28:01 -0500
-Message-Id: <20191106222801.7541-1-joe.lawrence@redhat.com>
-MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
-X-MC-Unique: ACruvKVuPtyL9jLRdIE6Ow-1
-X-Mimecast-Spam-Score: 0
-Content-Type: text/plain; charset=WINDOWS-1252
-Content-Transfer-Encoding: quoted-printable
+        Wed, 6 Nov 2019 20:36:08 -0500
+Received: from localhost (unknown [IPv6:2601:601:9f00:1e2::d71])
+        (using TLSv1 with cipher AES256-SHA (256/256 bits))
+        (Client did not present a certificate)
+        (Authenticated sender: davem-davemloft)
+        by shards.monkeyblade.net (Postfix) with ESMTPSA id 0F6E9150301AD;
+        Wed,  6 Nov 2019 17:36:08 -0800 (PST)
+Date:   Wed, 06 Nov 2019 17:36:07 -0800 (PST)
+Message-Id: <20191106.173607.54986119128433453.davem@davemloft.net>
+To:     fruggeri@arista.com
+Cc:     dsahern@gmail.com, shuah@kernel.org, netdev@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH net-next v2] selftest: net: add some traceroute tests
+From:   David Miller <davem@davemloft.net>
+In-Reply-To: <20191105224835.D134F95C0C6F@us180.sjc.aristanetworks.com>
+References: <20191105224835.D134F95C0C6F@us180.sjc.aristanetworks.com>
+X-Mailer: Mew version 6.8 on Emacs 26.1
+Mime-Version: 1.0
+Content-Type: Text/Plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.5.12 (shards.monkeyblade.net [149.20.54.216]); Wed, 06 Nov 2019 17:36:08 -0800 (PST)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The livepatch selftests compare expected dmesg output to verify kernel
-behavior.  They currently filter out "tainting kernel with
-TAINT_LIVEPATCH" messages which may be logged when loading livepatch
-modules.
+From: fruggeri@arista.com (Francesco Ruggeri)
+Date: Tue, 05 Nov 2019 14:48:35 -0800
 
-Further filter the log to also drop "loading out-of-tree module taints
-kernel" messages in case the klp_test modules have been build without
-the in-tree module flag.
+> Added the following traceroute tests.
+> 
+> IPV6:
+> Verify that in this scenario
+> 
+>        ------------------------ N2
+>         |                    |
+>       ------              ------  N3  ----
+>       | R1 |              | R2 |------|H2|
+>       ------              ------      ----
+>         |                    |
+>        ------------------------ N1
+>                  |
+>                 ----
+>                 |H1|
+>                 ----
+> 
+> where H1's default route goes through R1 and R1's default route goes
+> through R2 over N2, traceroute6 from H1 to H2 reports R2's address
+> on N2 and not N1.
+> 
+> IPV4:
+> Verify that traceroute from H1 to H2 shows 1.0.1.1 in this scenario
+> 
+>                    1.0.3.1/24
+> ---- 1.0.1.3/24    1.0.1.1/24 ---- 1.0.2.1/24    1.0.2.4/24 ----
+> |H1|--------------------------|R1|--------------------------|H2|
+> ----            N1            ----            N2            ----
+> 
+> where net.ipv4.icmp_errors_use_inbound_ifaddr is set on R1 and
+> 1.0.3.1/24 and 1.0.1.1/24 are respectively R1's primary and secondary
+> address on N1.
+> 
+> v2: fixed some typos, and have bridge in R1 instead of R2 in IPV6 test.
+> 
+> Signed-off-by: Francesco Ruggeri <fruggeri@arista.com>
 
-Signed-off-by: Joe Lawrence <joe.lawrence@redhat.com>
----
-
-Note: I stumbled across this in a testing scenario and thought it might
-be generally useful to extend this admittedly fragile mechanism.  Since
-there are no related livepatch-core changes, this can go through Shuah's
-kselftest tree if she prefers.  -- Joe
-
- tools/testing/selftests/livepatch/functions.sh | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/livepatch/functions.sh b/tools/testing=
-/selftests/livepatch/functions.sh
-index 79b0affd21fb..57975c323542 100644
---- a/tools/testing/selftests/livepatch/functions.sh
-+++ b/tools/testing/selftests/livepatch/functions.sh
-@@ -221,7 +221,7 @@ function check_result {
- =09local expect=3D"$*"
- =09local result
-=20
--=09result=3D$(dmesg | grep -v 'tainting' | grep -e 'livepatch:' -e 'test_k=
-lp' | sed 's/^\[[ 0-9.]*\] //')
-+=09result=3D$(dmesg | grep -ve '\<taints\>' -ve '\<tainting\>' | grep -e '=
-livepatch:' -e 'test_klp' | sed 's/^\[[ 0-9.]*\] //')
-=20
- =09if [[ "$expect" =3D=3D "$result" ]] ; then
- =09=09echo "ok"
---=20
-2.21.0
-
+Applied, thank you.
