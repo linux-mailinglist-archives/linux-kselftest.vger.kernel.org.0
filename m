@@ -2,97 +2,89 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B8A5DF3345
-	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Nov 2019 16:33:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B384EF3656
+	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Nov 2019 18:55:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729954AbfKGPds (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 7 Nov 2019 10:33:48 -0500
-Received: from us-smtp-1.mimecast.com ([207.211.31.81]:23192 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1727020AbfKGPds (ORCPT
+        id S2387473AbfKGRzK (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 7 Nov 2019 12:55:10 -0500
+Received: from mail-lf1-f68.google.com ([209.85.167.68]:43498 "EHLO
+        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730510AbfKGRzK (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 7 Nov 2019 10:33:48 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1573140827;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=YvX43Yt8f1KmhrSO4MMUnXCam2xLej1oS+7lZhjHYoc=;
-        b=BtiFxPji7C3YbKAlCeyIUAv0q+lR2PWPWt3uCMLWyJ15a6XdOHSUZe+L2dqwsQD1scoIFR
-        1sH9WjsNcOlyxBMKBZus87klOHfhM5KNtgsfY7rwUAgQQ6zde7MB17jSMTl7PI0zgUoufd
-        xkTvvT7I6gp45Dcj/BgUnZAdD70mef8=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-353-DCCGyLk3Pu2aRJgQRH16_g-1; Thu, 07 Nov 2019 10:33:46 -0500
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 017FC800C61;
-        Thu,  7 Nov 2019 15:33:45 +0000 (UTC)
-Received: from [10.18.17.119] (dhcp-17-119.bos.redhat.com [10.18.17.119])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 8B002608B3;
-        Thu,  7 Nov 2019 15:33:44 +0000 (UTC)
-Subject: Re: [PATCH] selftests/livepatch: filter 'taints' from dmesg
- comparison
-To:     Miroslav Benes <mbenes@suse.cz>
-Cc:     live-patching@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        shuah@kernel.org
-References: <20191106222801.7541-1-joe.lawrence@redhat.com>
- <alpine.LSU.2.21.1911070939040.7917@pobox.suse.cz>
- <b0502d77-7f80-0d9b-d829-12a1039b89fe@redhat.com>
- <alpine.LSU.2.21.1911071549340.21726@pobox.suse.cz>
- <c84834ae-2382-f1e7-6924-268e05df1bf3@redhat.com>
- <alpine.LSU.2.21.1911071619380.21726@pobox.suse.cz>
-From:   Joe Lawrence <joe.lawrence@redhat.com>
-Message-ID: <d7518cc0-2166-a5cc-9d3f-f70bbbfc3725@redhat.com>
-Date:   Thu, 7 Nov 2019 10:33:43 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.1.1
+        Thu, 7 Nov 2019 12:55:10 -0500
+Received: by mail-lf1-f68.google.com with SMTP id j5so2268589lfh.10;
+        Thu, 07 Nov 2019 09:55:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=prR1UZMSOAIrk4Kkrqgk3cxz5XFMU7J1f+HLAmadmHc=;
+        b=k75OSHpXO01QPTNNrLLjcYsPg4Lq1iLJ5pUFGKwsVISN6U88T+jICyzwrViqzUD6SN
+         RLUj8YwJ1vaafHNz3LLrSfZc+K9Pb39jEmAshvPYYoKGwZthzMcwUJtJloCF6qj0F6pE
+         f9v2iCHusvJkCuhsLI/S1e3Pn1pFBj0uSNzCrr7XQFt88RZm51Cfq/9t2OIRtZy6aNto
+         AeEhcsN2ene/7REGpIRR17I5DzWAz55YgC4aPx+1GwaCQnhcGRnkyFXJxriQn0Mz8SiQ
+         G2NylxlyYe8lKFBGyh6EMfIh7GdpPqR/lbMxxc/g1A49ger/q5xZHN2GaSpJ3fYHMhRt
+         +ZhA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=prR1UZMSOAIrk4Kkrqgk3cxz5XFMU7J1f+HLAmadmHc=;
+        b=CwOb6vSvofIw6hqN6eo41agi7xHATmhhi0E1a9xqr6fDzuaVluOy2obP88/mCgUOKo
+         e48EIQ1esOwh85jP2znKZ5EokVggOXAcS3lb0t+8cj3MoXjcVPfqBEUaZHKgnAn3gtZN
+         cy+Y2xqk6XZ9s1cUbiE0SHGWCCbqChqbOBgQIWYFl8HrDbar+e8DSh5OPt4m8MSrmNv6
+         OFiPfRnq/ztWL/Tp4S0hPmcrN/rmUV2xmARchkUWrssTOPuwlgYdOTLQxrLa1kScyTIK
+         J0bsyrEVmsFM4aEp0iA04LoGYW2oqU52lKv3qYzK8b072LGxgIO017stMI5tWfgUC0tv
+         fPdA==
+X-Gm-Message-State: APjAAAUf4M8EttAZHhaqiT7ArLsXaaGRGH9L+rSDjpipDHhmCAI7HiaG
+        ZkFwo6nGX5mq4xFHR/YR4u5ef2J6ejSXso4FnbIbzP9x
+X-Google-Smtp-Source: APXvYqygRVVB9PzC/Yvc/jx8dk3X3dFH27ADz1C3x4fCebkohaUkCT0r8xkMa+S4mRPGUaKaD+a7MrbpcQ0EU4Jkjtg=
+X-Received: by 2002:ac2:5c1b:: with SMTP id r27mr3194178lfp.172.1573149308049;
+ Thu, 07 Nov 2019 09:55:08 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <alpine.LSU.2.21.1911071619380.21726@pobox.suse.cz>
-Content-Language: en-US
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
-X-MC-Unique: DCCGyLk3Pu2aRJgQRH16_g-1
-X-Mimecast-Spam-Score: 0
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
+References: <20191107125224.29616-1-anders.roxell@linaro.org>
+In-Reply-To: <20191107125224.29616-1-anders.roxell@linaro.org>
+From:   Song Liu <liu.song.a23@gmail.com>
+Date:   Thu, 7 Nov 2019 09:54:56 -0800
+Message-ID: <CAPhsuW4B_Y+xOTaSFPWm0szn1exjucwL5KBsExWxq4tn_3NSbQ@mail.gmail.com>
+Subject: Re: [PATCH 1/2] selftests: bpf: test_lwt_ip_encap: add missing object
+ file to TEST_FILES
+To:     Anders Roxell <anders.roxell@linaro.org>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        "David S . Miller" <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        linux-kselftest@vger.kernel.org,
+        open list <linux-kernel@vger.kernel.org>,
+        Shuah Khan <shuah@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 11/7/19 10:24 AM, Miroslav Benes wrote:
->> In my test, I had a kernel tree, but only wanted to build the test modul=
-es.
->> Once I did a 'make modules SUBDIR=3D' or 'make M=3D ...' KBUILD_EXTMOD g=
-ot flipped
->> on and the modules lost in-tree status.  No amount of googling could tel=
-l me
->> how to build a single in-tree directory of modules :(
->=20
-> "make lib/livepatch/test_klp_livepatch.ko" should do the trick. "make
-> lib/livepatch/" only builds the object files and I haven't found a way to
-> make it link .ko modules other than specifying them one by one directly.
->=20
+On Thu, Nov 7, 2019 at 4:53 AM Anders Roxell <anders.roxell@linaro.org> wrote:
+>
+> When installing kselftests to its own directory and running the
+> test_lwt_ip_encap.sh it will complain that test_lwt_ip_encap.o can't be
+> find.
+>
+> $ ./test_lwt_ip_encap.sh
+> starting egress IPv4 encap test
+> Error opening object test_lwt_ip_encap.o: No such file or directory
+> Object hashing failed!
+> Cannot initialize ELF context!
+> Failed to parse eBPF program: Invalid argument
+>
+> Rework to add test_lwt_ip_encap.o to TEST_FILES so the object file gets
+> installed when installing kselftest.
+>
+> Fixes: 74b5a5968fe8 ("selftests/bpf: Replace test_progs and test_maps w/ general rule")
+> Signed-off-by: Anders Roxell <anders.roxell@linaro.org>
 
-Forgot to mention that this works too, but I was looking to script it=20
-and not have each .ko hardcoded in a series of make commands.  Anyway,=20
-it's a strange use-case and it was something I was only cooking up for=20
-an in-house continuous testing scenario.
+Please highlight that this set is on top of bpf-next tree with
+"[PATCH bpf-next 1/2]".
 
->> And then it seemed that
->> opening the tests for OOT modules was reasonable anyway.
->=20
-> That's an interesting idea. If a module is in tree, it is under our
-> control. So we know what "testing capabilities" it offers. I guess that
-> with OOT testing modules the selftests would have to be smarter.
->=20
+Otherwise, looks good to me.
 
-It would probably go hand in hand with custom test scripts that would=20
-understand the OOT module capabilities, I think.  I doubt anyone will=20
-try it (besides me), but the grep filter was there and it was an easy tweak=
-.
-
--- Joe
-
+Acked-by: Song Liu <songliubraving@fb.com>
