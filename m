@@ -2,60 +2,74 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 62E7CF4067
-	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Nov 2019 07:33:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B1A50F4071
+	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Nov 2019 07:37:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725900AbfKHGdJ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 8 Nov 2019 01:33:09 -0500
-Received: from bombadil.infradead.org ([198.137.202.133]:46636 "EHLO
-        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725372AbfKHGdI (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 8 Nov 2019 01:33:08 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=qCauJZ5vwFE0q6fN8aq4sFtrLeNJgvenOfvg0GpdMWM=; b=sG/5Iy/R93fNdCNserw/hcK8F
-        I/tl7i3svTZIlLBYVvm+NfxSZjsLxC51ymu9r87M1bcceDqDqzElzGH4E21ZuKNGpCjCF2a3WhE5/
-        aHceB75r4dDQHPWrsnertyu9LhreTunp6OttSkF3mfFAFB8UyZHLgY4VlFe3F3U+gU9tQP8euB1Al
-        O41BzkChjzsSrgPwft5xFbCUSfvSdd+z5qjlvYD27PHjVupeohgKhz9l3sivmFUVj3CAW0v4MZZGa
-        Nf+34EHDPZULFBQZufZmCw7CMWdZ50dwzhOF3TIDn5MlfUdXwaS3r5KB7jI4r0l0IBTjIaUgXcyRl
-        SUM4IXUpw==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1iSxpU-0004vC-5h; Fri, 08 Nov 2019 06:33:08 +0000
-Date:   Thu, 7 Nov 2019 22:33:08 -0800
-From:   Christoph Hellwig <hch@infradead.org>
-To:     "Joel Fernandes (Google)" <joel@joelfernandes.org>
-Cc:     linux-kernel@vger.kernel.org,
+        id S1725730AbfKHGhT (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 8 Nov 2019 01:37:19 -0500
+Received: from mail.kernel.org ([198.145.29.99]:57496 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725372AbfKHGhT (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 8 Nov 2019 01:37:19 -0500
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id D6CA421882;
+        Fri,  8 Nov 2019 06:37:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1573195038;
+        bh=sXe/lKnHWXWz0aIej4oPyDwjQIRvSAnRd4dPdmDpkII=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=LlvNmAWEIFV3DOIrxKnv8p/Io0xVltpUHrWIziebLbV98yw0fcsZwyxSmE25Af5V8
+         lCAriWwM88CjnNik4h37rJD5I1XjJYSR0YIZdq/vgelAa8ihvdPvFW8FOf3VIdZNCg
+         QIjP4MEv3UaTX2KWtlJdvJUdrv5bRc0tOXixTUxM=
+Date:   Fri, 8 Nov 2019 07:37:15 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Joel Fernandes <joel@joelfernandes.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org,
         Nicolas Geoffray <ngeoffray@google.com>,
-        kernel-team@android.com, Andrew Morton <akpm@linux-foundation.org>,
-        Hugh Dickins <hughd@google.com>,
+        kernel-team@android.com, Hugh Dickins <hughd@google.com>,
         linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
         Shuah Khan <shuah@kernel.org>
 Subject: Re: [PATCH 1/2] memfd: Fix COW issue on MAP_PRIVATE and
  F_SEAL_FUTURE_WRITE mappings
-Message-ID: <20191108063308.GB18778@infradead.org>
+Message-ID: <20191108063715.GA513315@kroah.com>
 References: <20191107195355.80608-1-joel@joelfernandes.org>
+ <20191107170023.0695732bb67eb80acd4caee5@linux-foundation.org>
+ <20191108020614.GA99567@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20191107195355.80608-1-joel@joelfernandes.org>
-User-Agent: Mutt/1.12.1 (2019-06-15)
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+In-Reply-To: <20191108020614.GA99567@google.com>
+User-Agent: Mutt/1.12.2 (2019-09-21)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-> -		 * Since the F_SEAL_FUTURE_WRITE seals allow for a MAP_SHARED
-> -		 * read-only mapping, take care to not allow mprotect to revert
-> -		 * protections.
-> +		 * Since an F_SEAL_FUTURE_WRITE sealed memfd can be mapped as
-> +		 * MAP_SHARED and read-only, take care to not allow mprotect to
-> +		 * revert protections on such mappings. Do this only for shared
-> +		 * mappings. For private mappings, don't need to mask VM_MAYWRITE
+On Thu, Nov 07, 2019 at 09:06:14PM -0500, Joel Fernandes wrote:
+> On Thu, Nov 07, 2019 at 05:00:23PM -0800, Andrew Morton wrote:
+> > On Thu,  7 Nov 2019 14:53:54 -0500 "Joel Fernandes (Google)" <joel@joelfernandes.org> wrote:
+> > 
+> > > F_SEAL_FUTURE_WRITE has unexpected behavior when used with MAP_PRIVATE:
+> > > A private mapping created after the memfd file that gets sealed with
+> > > F_SEAL_FUTURE_WRITE loses the copy-on-write at fork behavior, meaning
+> > > children and parent share the same memory, even though the mapping is
+> > > private.
+> > 
+> > That sounds fairly serious.  Should this be backported into -stable kernels?
+> 
+> Yes, it should be. The F_SEAL_FUTURE_WRITE feature was introduced in v5.1 so
+> v5.3.x stable kernels would need a backport. I can submit a backport tomorrow
+> unless we are Ok with stable automatically picking it up (I believe the
+> stable folks "auto select" fixes which should detect this is a fix since I
+> have said it is a fix in the subject line).
 
-This adds an > 80 char line.
+Never rely on "auto select" to pick up a patch for stable if you already
+know it should go to stable.  Just mark it as such, or tell stable@vger
+after the fact.
+
+thanks,
+
+greg k-h
