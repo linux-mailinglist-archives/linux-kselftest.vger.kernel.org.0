@@ -2,53 +2,53 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 53485F3D36
-	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Nov 2019 02:07:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C0F7F3D63
+	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Nov 2019 02:24:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726504AbfKHBHn (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 7 Nov 2019 20:07:43 -0500
-Received: from mail-pl1-f195.google.com ([209.85.214.195]:41580 "EHLO
-        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726219AbfKHBHn (ORCPT
+        id S1726094AbfKHBYe (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 7 Nov 2019 20:24:34 -0500
+Received: from mail-pf1-f194.google.com ([209.85.210.194]:39720 "EHLO
+        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725928AbfKHBYd (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 7 Nov 2019 20:07:43 -0500
-Received: by mail-pl1-f195.google.com with SMTP id d29so2841905plj.8
-        for <linux-kselftest@vger.kernel.org>; Thu, 07 Nov 2019 17:07:43 -0800 (PST)
+        Thu, 7 Nov 2019 20:24:33 -0500
+Received: by mail-pf1-f194.google.com with SMTP id x28so3613008pfo.6
+        for <linux-kselftest@vger.kernel.org>; Thu, 07 Nov 2019 17:24:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=vNYHIxb4w5wh5OJ2UcsY/rxFSYSM5NjM0g5yCBahmMM=;
-        b=o1RBKYxFeem3vQdmMcb09c/Czaur5BjspbdukbuDfCPWavGuCZYv2d5eYk3lzUh5zm
-         64GDst1itnU6KFqzbvLptz0a7TprmbEIfrVlckuFFjVVhbFLt4noKjbjPsr0C2VT7zs7
-         oCXWMnTKo7jhXWG8Azi4vgX7U037o0KWgXiqfqk324fSvD+XVtYNGMlNsvtdRQlFlnzx
-         XhjuZEhaqpSLjag1ZJGKxsH9Alr304AWYK1hlAREjI/7pwZH/cCON+gJC3eoMzy5jIvC
-         XO2TvoGVoVH9G7xuHsfnddVQJF6HiX0rJKy4qOrdLFUwO9ViLCySgdXxB6CKMgB7DQ+x
-         zuWQ==
+        bh=fARBDWwNTT6jT5EhjTe8Lj8RdP+sxXD4YhlXUehOu+w=;
+        b=u6NiituZ4gJAngALm2Ceb+veH0GCGvTP3iMM0TWVojT6zqDvkU3+nSyLxF5Bh3CjI9
+         kveET2xCthvDfHV8PF/U6yEoC6B9JNRoRugHviJu/aQBZ4T2Ed34Mt6yBHnRbbCL90Bi
+         SxEMw+hfd2ExQ/KHIqDXZZHFAtlNJI8wdx3YT3nOOyDjFgGZZdKeROd640GdnImC91iu
+         eAOQksB8hI256CzeLfcZMm5OAjHM2wZ9yJBNNMaKUVflwqacV03AwXqKzDRwgI6354Jv
+         bsh9+Br3tK69PxyYO13EyBn/oIYOSuxRr17cREL4OVgowia9K3HnLY7CVRwBgztI5WR/
+         fx0A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=vNYHIxb4w5wh5OJ2UcsY/rxFSYSM5NjM0g5yCBahmMM=;
-        b=fXQiqDmO85qrBSeWNrLBeJe8NQH2X+0NmQRXx/GUo64OP+fNqOGcjmfZfyAY70Aymn
-         Epkwshlx9U+41CVOGgt4+/aFJS3kkXS6nooOnUSJKNUhjOO1FOyKgJJKrbqh0Y8p74eY
-         RDrGBjXbHDJLEVrHePDYikqM6OV7Y/8hymK77Z5fJaI8P96n5D1OQIyrOr7sEQSmJgCN
-         QX3zZ7yu7AXvPNELAQCgRpykpLKq4Ps5oopASDDx2ASahZvjwYt4VDCAXcgbwSIPoTGZ
-         533yzkuI8uxVsBSPYT4gtPxWEzsaKI6Ds5trsiUhjkn+HuwFOOEwadpElvoWzYa5Nf0b
-         EATg==
-X-Gm-Message-State: APjAAAV7u2OO5mwZnbYZZi0uR7IvryOQCdSOo5/kAWg8JcFmdKHthQ0H
-        0oUvIDu3cklo3B0iBwYVlh2LLjtpvQ8HtlkpoyzffDl9leY=
-X-Google-Smtp-Source: APXvYqw+LoU/IiQ8hdHb0R4rY4nc0yI7TqoKto/BO3EMbJDNKkiWiBcBbg8Rvg4gxblStWoydjQcOZFgytKxwL5aXKY=
-X-Received: by 2002:a17:90a:252d:: with SMTP id j42mr9572203pje.131.1573175262439;
- Thu, 07 Nov 2019 17:07:42 -0800 (PST)
+        bh=fARBDWwNTT6jT5EhjTe8Lj8RdP+sxXD4YhlXUehOu+w=;
+        b=kuXtr/U24wakS3VU3KucOju6Ctg3LwUOvxwuGfviIBhxVldr6L+RE0U6l/8kfgDQKT
+         3HBBZqM8dVbtPY/Zd+f/TgEBRLUShW4M9PFQL3d1BQzvwdhtYVhIsztDiE5A8U7OnEeJ
+         BlI5bII8F5XftWw+WqiyddZKL6RPJeRTfzQ9MvU136tt0NZLV6dPEhS1T1zVEXmHxRMA
+         FoVDSd0eJ/Mb7I4ANa24bMTRny0YgOIt9hcVqKVxQHZ19p7Pz1QAR023itfzUGkQmU2g
+         K4uYCEXGkjkSVhiRlqJk/gSLoAFo2qE0Mk7h1tu5r+ECWXSnVYE9w/QQ5sWZw1iGc7GY
+         +pkA==
+X-Gm-Message-State: APjAAAVqYYbp3TwyZGfwEDee9dvh+vJkxc8yt/Ytl/woLCeIkfQHO6za
+        tOarOdBbi1sElRahqOJN/CW0Ru+mIJPA75nTnSHJrA==
+X-Google-Smtp-Source: APXvYqzGujOAvUTcF0qo1Y8Zaf9OqgTljDoiGnRaCMwuBJj2U1UfGVK7ai9s/7BkaMWvUrVSBPiiM19eE9AJ+dBTQLM=
+X-Received: by 2002:a63:234c:: with SMTP id u12mr8210833pgm.384.1573176272237;
+ Thu, 07 Nov 2019 17:24:32 -0800 (PST)
 MIME-Version: 1.0
-References: <1571335639-21675-1-git-send-email-alan.maguire@oracle.com> <1571335639-21675-3-git-send-email-alan.maguire@oracle.com>
-In-Reply-To: <1571335639-21675-3-git-send-email-alan.maguire@oracle.com>
+References: <1571335639-21675-1-git-send-email-alan.maguire@oracle.com> <1571335639-21675-4-git-send-email-alan.maguire@oracle.com>
+In-Reply-To: <1571335639-21675-4-git-send-email-alan.maguire@oracle.com>
 From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Thu, 7 Nov 2019 17:07:31 -0800
-Message-ID: <CAFd5g45qUkKMHizkmM6O54a3_zOjTN_PxDbD+bwHkgvr1wPrcg@mail.gmail.com>
-Subject: Re: [PATCH v3 linux-kselftest-test 2/6] kunit: hide unexported
- try-catch interface in try-catch-impl.h
+Date:   Thu, 7 Nov 2019 17:24:21 -0800
+Message-ID: <CAFd5g46s=zgJXKRKj8iw5Bng=a06wb-PmDs_7-c7c-MiryrnAg@mail.gmail.com>
+Subject: Re: [PATCH v3 linux-kselftest-test 3/6] kunit: add
+ kunit_find_symbol() function for symbol lookup
 To:     Alan Maguire <alan.maguire@oracle.com>
 Cc:     "open list:KERNEL SELFTEST FRAMEWORK" 
         <linux-kselftest@vger.kernel.org>,
@@ -62,7 +62,8 @@ Cc:     "open list:KERNEL SELFTEST FRAMEWORK"
         penguin-kernel@i-love.sakura.ne.jp, schowdary@nvidia.com,
         urezki@gmail.com, andriy.shevchenko@linux.intel.com,
         Jonathan Corbet <corbet@lwn.net>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Knut Omang <knut.omang@oracle.com>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
@@ -71,24 +72,134 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 On Thu, Oct 17, 2019 at 11:08 AM Alan Maguire <alan.maguire@oracle.com> wrote:
 >
-> also remove unused kunit_generic_try_catch
+> In preparation for module support for kunit and kunit tests,
+> we need a way of retrieving non-exported symbols from the
+> core kernel and modules.  kunit_find_symbol() supports this.
 >
 > Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
+> Signed-off-by: Knut Omang <knut.omang@oracle.com>
 
-Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
+I think you suggested on another thread that splitting this patch out
+of this patchset might be a good idea. I agree with that. Can you send
+this patch separately?
 
 > ---
->  include/kunit/try-catch.h  | 10 ----------
->  lib/kunit/test-test.c      |  1 +
->  lib/kunit/test.c           |  1 +
->  lib/kunit/try-catch-impl.h | 23 +++++++++++++++++++++++
+>  include/kunit/test.h  |  8 ++++++++
+>  lib/kunit/test-test.c | 19 +++++++++++++++++++
+>  lib/kunit/test.c      | 36 ++++++++++++++++++++++++++++++++++++
+>  3 files changed, 63 insertions(+)
+>
+> diff --git a/include/kunit/test.h b/include/kunit/test.h
+> index dba4830..c645d18 100644
+> --- a/include/kunit/test.h
+> +++ b/include/kunit/test.h
+> @@ -339,6 +339,14 @@ static inline void *kunit_kzalloc(struct kunit *test, size_t size, gfp_t gfp)
+>
+>  void kunit_cleanup(struct kunit *test);
+>
+> +/**
+> + * kunit_find_symbol() - lookup un-exported symbol in kernel or modules.
+> + * @sym: symbol name.
+> + *
+> + * Returns symbol or ERR_PTR value on error.
 
-Just wanted to say that I *am* happy with the *-impl.h naming scheme
-here since there is a public header file with almost the same name. So
-everything looks good to me with this patch.
+Can you document which ERR_PTRs it returns?
 
->  lib/kunit/try-catch.c      |  1 +
->  5 files changed, 26 insertions(+), 10 deletions(-)
->  create mode 100644 lib/kunit/try-catch-impl.h
+> + */
+> +void *kunit_find_symbol(const char *sym);
+> +
+>  #define kunit_printk(lvl, test, fmt, ...) \
+>         printk(lvl "\t# %s: " fmt, (test)->name, ##__VA_ARGS__)
+>
+> diff --git a/lib/kunit/test-test.c b/lib/kunit/test-test.c
+> index c4162a9..7f09dd0 100644
+> --- a/lib/kunit/test-test.c
+> +++ b/lib/kunit/test-test.c
+> @@ -330,3 +330,22 @@ static void kunit_resource_test_exit(struct kunit *test)
+>         .test_cases = kunit_resource_test_cases,
+>  };
+>  kunit_test_suite(kunit_resource_test_suite);
+> +
+> +/*
+> + * Find non-exported kernel symbol; we use the modules list as a safe
+> + * choice that should always be present.
+> + */
+> +static void kunit_find_symbol_kernel(struct kunit *test)
+> +{
+> +       KUNIT_ASSERT_NOT_ERR_OR_NULL(test, kunit_find_symbol("modules"));
 
-Thanks for the patch!
+I think this should be a KUNIT_EXPECT_... here since nothing in this
+test case depends on this check passing.
+
+> +}
+> +
+> +static struct kunit_case kunit_find_symbol_test_cases[] = {
+> +       KUNIT_CASE(kunit_find_symbol_kernel),
+> +};
+> +
+> +static struct kunit_suite kunit_find_symbol_test_suite = {
+> +       .name = "kunit-find-symbol",
+> +       .test_cases = kunit_find_symbol_test_cases,
+> +};
+> +kunit_test_suite(kunit_find_symbol_test_suite);
+> diff --git a/lib/kunit/test.c b/lib/kunit/test.c
+> index 49ac5fe..a2b1b46 100644
+> --- a/lib/kunit/test.c
+> +++ b/lib/kunit/test.c
+> @@ -8,6 +8,7 @@
+>
+>  #include <kunit/test.h>
+>  #include <kunit/try-catch.h>
+> +#include <linux/kallsyms.h>
+>  #include <linux/kernel.h>
+>  #include <linux/sched/debug.h>
+>  #include "string-stream-impl.h"
+> @@ -478,3 +479,38 @@ void kunit_cleanup(struct kunit *test)
+>                 kunit_resource_free(test, resource);
+>         }
+>  }
+> +
+> +/*
+> + * Support for looking up kernel/module internal symbols to enable testing.
+> + */
+> +void *kunit_find_symbol(const char *sym)
+> +{
+> +       unsigned long (*modlookup)(const char *name);
+> +       unsigned long addr = 0;
+> +
+> +       if (!sym || strlen(sym) > KSYM_NAME_LEN)
+> +               return ERR_PTR(-EINVAL);
+> +
+> +       /*
+> +        * Try for kernel-internal symbol first; fall back to modules
+> +        * if that fails.
+> +        */
+> +       addr = kallsyms_lookup_name(sym);
+> +       if (addr)
+> +               return (void *)addr;
+
+nit: please add a newline here.
+
+> +       modlookup = (void *)kallsyms_lookup_name("module_kallsyms_lookup_name");
+
+Can you add a comment here explaining what module_kallsyms_lookup_name
+is and why you need to look it up this way?
+
+> +       if (modlookup)
+> +               addr = modlookup(sym);
+> +       if (addr)
+> +               return (void *)addr;
+> +
+> +#ifndef CONFIG_KALLSYMS_ALL
+> +       WARN_ONCE(true,
+> +                 "CONFIG_KALLSYMS_ALL is not set, so unexported symbols like '%s' are not available\n",
+> +                 sym);
+> +       return ERR_PTR(-ENOTSUPP);
+> +#else
+> +       WARN_ONCE(true, "symbol '%s' is not available\n", sym);
+> +#endif
+> +       return ERR_PTR(-ENOENT);
+> +}
+> --
+> 1.8.3.1
+>
