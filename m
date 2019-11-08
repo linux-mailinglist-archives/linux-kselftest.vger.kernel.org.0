@@ -2,345 +2,215 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 38FE7F545C
-	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Nov 2019 19:59:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 090F2F5BD7
+	for <lists+linux-kselftest@lfdr.de>; Sat,  9 Nov 2019 00:36:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388379AbfKHS4o (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 8 Nov 2019 13:56:44 -0500
-Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:31645 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1731684AbfKHS4m (ORCPT
+        id S1726843AbfKHXgI (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 8 Nov 2019 18:36:08 -0500
+Received: from mail-oi1-f195.google.com ([209.85.167.195]:34673 "EHLO
+        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726394AbfKHXgI (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 8 Nov 2019 13:56:42 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1573239401;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=CXeheEvNkBpf+BJwcDdKt8DoNtaIV9EI+XPEuMx45wQ=;
-        b=ReAVFiJJEeX7guDFSru1FRAzzL5FFnpa2x8QGXaQyDoe4n9SrLxF+sFD2a0H+2tbRXs0h8
-        tm78DwQwPTTgQvRQBdZ0BAwPhRIaGixt+MJwTRHQQjHHph+l/YwEpx+DbrK+PbSQy0ny7E
-        DvunUOK/H1a/yQEckT1bw8EB2qFB5lM=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-331-PS6RtgLeMnWfCwbohRiSPA-1; Fri, 08 Nov 2019 13:56:38 -0500
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 122A6477;
-        Fri,  8 Nov 2019 18:56:37 +0000 (UTC)
-Received: from dcbz.redhat.com (ovpn-116-182.ams2.redhat.com [10.36.116.182])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 388471001B35;
-        Fri,  8 Nov 2019 18:56:35 +0000 (UTC)
-From:   Adrian Reber <areber@redhat.com>
-To:     Christian Brauner <christian.brauner@ubuntu.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        linux-kselftest@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, Adrian Reber <areber@redhat.com>
-Subject: [PATCH v3] selftests: add tests for clone3()
-Date:   Fri,  8 Nov 2019 19:56:29 +0100
-Message-Id: <20191108185629.309414-1-areber@redhat.com>
+        Fri, 8 Nov 2019 18:36:08 -0500
+Received: by mail-oi1-f195.google.com with SMTP id l202so6804704oig.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 08 Nov 2019 15:36:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=iDoGjHfNdP7CEHEDPPCtVFhc3W4zkYgSKdJEK3JXJd0=;
+        b=qRfysVkEgETlDzoUQQSvtUASI7EhYk4fThC5U9CCPg2HA60AvRpiM+eIJuvxwJatts
+         Tt29h6e4CWwvEhnG0fQZe40G9jvAXzWnDzTDI64eIgPGJvok2bmvbQfVR9/3sVp9QX9p
+         FfCY41q4VHptJUL4iGEQz51Ho4eDYl8fICsTixxXqRpFm8sSEwIGBYgdkaefai/km3QD
+         HcYJD51fKf/gyEDlKrnkkWmeUA0hDDJhvA5HE9PoEVdK/raVrX9QAb9kuOIErEQe+T21
+         dHIPeBGlWj5RDGkH5INfq9PqIyUVyi/GfcpijHghJlEa2m5M7u0ogxH17Hk9vGJmaSLn
+         VgJw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=iDoGjHfNdP7CEHEDPPCtVFhc3W4zkYgSKdJEK3JXJd0=;
+        b=FfikWO769pxlF85Ib2Jp+Kqi3/w4ixXfnuErRM78m6nN6SLpsf3oO8emfRzDAimSAP
+         AUqUr/IbuVZi1696T2ReGGglgO35gNodCp12zoDZTqojc/VPmyaRMOaiki7xdhpNpH4B
+         ykbIDGAOFgArjmrLgbq9WmyZJDjFm2bByddzaRxyKRqQdai5tCVAQQjvPAt+l8YKeVnM
+         WXsbAPLFmQ9uOr0gRFBA4LjvGLeAMo+hEA6FUSx8ooRmdLCLZx0gZ76FEqA7LW/VKwyU
+         W5nwkxA3CAeyVzu27BAXW6j0e0izvzdmthRslgTvjbby0T1wEKm6W44i/wnyLEwPnca9
+         gBaw==
+X-Gm-Message-State: APjAAAWBgaeSXLbdzEDwkoHU25HlwNOP6kLpRt2NSzXAOiEpQm57XPu7
+        WOGAVIzCaep9JUDWC9sEqS90lnWZsQtb+3TQAxi9Uw==
+X-Google-Smtp-Source: APXvYqx5lVByzI30bfOZKF+9P00wWxnRqtrwswlwA7cd4uf7yQSeCTKB5Ykql4XWeoS0urkg89cB/9USVEYDE4mteLw=
+X-Received: by 2002:aca:1101:: with SMTP id 1mr12627382oir.103.1573256166162;
+ Fri, 08 Nov 2019 15:36:06 -0800 (PST)
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
-X-MC-Unique: PS6RtgLeMnWfCwbohRiSPA-1
-X-Mimecast-Spam-Score: 0
-Content-Type: text/plain; charset=WINDOWS-1252
-Content-Transfer-Encoding: quoted-printable
+References: <20191030013701.39647-1-almasrymina@google.com> <78f07acf-47ba-4fa5-34c2-78a17eb7c16f@oracle.com>
+In-Reply-To: <78f07acf-47ba-4fa5-34c2-78a17eb7c16f@oracle.com>
+From:   Mina Almasry <almasrymina@google.com>
+Date:   Fri, 8 Nov 2019 15:35:55 -0800
+Message-ID: <CAHS8izPp9aW=uxA2z6BLmRXgaiDVyKYvAbnrH0rcirN4wTD55g@mail.gmail.com>
+Subject: Re: [PATCH v8 1/9] hugetlb_cgroup: Add hugetlb_cgroup reservation counter
+To:     Mike Kravetz <mike.kravetz@oracle.com>
+Cc:     shuah <shuah@kernel.org>, open list <linux-kernel@vger.kernel.org>,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        cgroups@vger.kernel.org,
+        Aneesh Kumar <aneesh.kumar@linux.vnet.ibm.com>,
+        Hillf Danton <hdanton@sina.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This adds tests for clone3() with different values and sizes
-of struct clone_args.
+On Thu, Nov 7, 2019 at 3:42 PM Mike Kravetz <mike.kravetz@oracle.com> wrote:
+>
+> Cc: Andrew
+> This series is getting closer to consideration for the mm tree.
+> Mina,
+> Be sure to cc Andrew with next version of series.
+>
 
-This selftest was initially part of of the clone3() with PID selftest.
-After that patch was almost merged Eugene sent out a couple of patches
-to fix problems with these test.
+Absolutely!
 
-This commit now only contains the clone3() selftest after the LPC
-decision to rework clone3() with PID to allow setting the PID in
-multiple PID namespaces including all of Eugene's patches.
+> On 10/29/19 6:36 PM, Mina Almasry wrote:
+> > These counters will track hugetlb reservations rather than hugetlb
+> > memory faulted in. This patch only adds the counter, following patches
+> > add the charging and uncharging of the counter.
+>
+> I honestly am not sure the preferred method for including the overall
+> design in a commit message.  Certainly it should be in the first patch.
+> Perhaps, say this is patch 1 of a 9 patch series here.
+>
 
-Signed-off-by: Eugene Syromiatnikov <esyr@redhat.com>
-Signed-off-by: Adrian Reber <areber@redhat.com>
----
-v2:
- - Applied Christian's suggestions
- - Skip root-only tests when running as non-root
-v3:
- - Removed unnecessary test case (everything set to 1)
- - Correctly handle children without SIGCHLD
----
- MAINTAINERS                               |   1 +
- tools/testing/selftests/Makefile          |   1 +
- tools/testing/selftests/clone3/.gitignore |   1 +
- tools/testing/selftests/clone3/Makefile   |   7 +
- tools/testing/selftests/clone3/clone3.c   | 203 ++++++++++++++++++++++
- 5 files changed, 213 insertions(+)
- create mode 100644 tools/testing/selftests/clone3/.gitignore
- create mode 100644 tools/testing/selftests/clone3/Makefile
- create mode 100644 tools/testing/selftests/clone3/clone3.c
+Will do. I read somewhere I can't find right now it's better this way
+so that the useful information becomes part of the git log. If anyone
+has strong opinions on this I'll just go back to putting it into a
+cover letter.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index cba1095547fd..0040b7a6410b 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -12829,6 +12829,7 @@ S:=09Maintained
- T:=09git git://git.kernel.org/pub/scm/linux/kernel/git/brauner/linux.git
- F:=09samples/pidfd/
- F:=09tools/testing/selftests/pidfd/
-+F:=09tools/testing/selftests/clone3/
- K:=09(?i)pidfd
- K:=09(?i)clone3
- K:=09\b(clone_args|kernel_clone_args)\b
-diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Mak=
-efile
-index 4cdbae6f4e61..ad442364218a 100644
---- a/tools/testing/selftests/Makefile
-+++ b/tools/testing/selftests/Makefile
-@@ -4,6 +4,7 @@ TARGETS +=3D bpf
- TARGETS +=3D breakpoints
- TARGETS +=3D capabilities
- TARGETS +=3D cgroup
-+TARGETS +=3D clone3
- TARGETS +=3D cpufreq
- TARGETS +=3D cpu-hotplug
- TARGETS +=3D drivers/dma-buf
-diff --git a/tools/testing/selftests/clone3/.gitignore b/tools/testing/self=
-tests/clone3/.gitignore
-new file mode 100644
-index 000000000000..85d9d3ba2524
---- /dev/null
-+++ b/tools/testing/selftests/clone3/.gitignore
-@@ -0,0 +1 @@
-+clone3
-diff --git a/tools/testing/selftests/clone3/Makefile b/tools/testing/selfte=
-sts/clone3/Makefile
-new file mode 100644
-index 000000000000..ea922c014ae4
---- /dev/null
-+++ b/tools/testing/selftests/clone3/Makefile
-@@ -0,0 +1,7 @@
-+# SPDX-License-Identifier: GPL-2.0
-+
-+CFLAGS +=3D -I../../../../usr/include/
-+
-+TEST_GEN_PROGS :=3D clone3
-+
-+include ../lib.mk
-diff --git a/tools/testing/selftests/clone3/clone3.c b/tools/testing/selfte=
-sts/clone3/clone3.c
-new file mode 100644
-index 000000000000..ca9ac31abbe6
---- /dev/null
-+++ b/tools/testing/selftests/clone3/clone3.c
-@@ -0,0 +1,203 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+/* Based on Christian Brauner's clone3() example */
-+
-+#define _GNU_SOURCE
-+#include <errno.h>
-+#include <inttypes.h>
-+#include <linux/types.h>
-+#include <linux/sched.h>
-+#include <stdint.h>
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <sys/syscall.h>
-+#include <sys/types.h>
-+#include <sys/un.h>
-+#include <sys/wait.h>
-+#include <unistd.h>
-+#include <sched.h>
-+
-+#include "../kselftest.h"
-+
-+/*
-+ * Different sizes of struct clone_args
-+ */
-+#ifndef CLONE3_ARGS_SIZE_V0
-+#define CLONE3_ARGS_SIZE_V0 64
-+#endif
-+
-+enum test_mode {
-+=09CLONE3_ARGS_NO_TEST,
-+=09CLONE3_ARGS_ALL_0,
-+=09CLONE3_ARGS_INVAL_EXIT_SIGNAL_BIG,
-+=09CLONE3_ARGS_INVAL_EXIT_SIGNAL_NEG,
-+=09CLONE3_ARGS_INVAL_EXIT_SIGNAL_CSIG,
-+=09CLONE3_ARGS_INVAL_EXIT_SIGNAL_NSIG,
-+};
-+
-+static pid_t raw_clone(struct clone_args *args, size_t size)
-+{
-+=09return syscall(__NR_clone3, args, size);
-+}
-+
-+static int call_clone3(uint64_t flags, size_t size, enum test_mode test_mo=
-de)
-+{
-+=09struct clone_args args =3D {
-+=09=09.flags =3D flags,
-+=09=09.exit_signal =3D SIGCHLD,
-+=09};
-+
-+=09struct clone_args_extended {
-+=09=09struct clone_args args;
-+=09=09__aligned_u64 excess_space[2];
-+=09} args_ext;
-+
-+=09pid_t pid =3D -1;
-+=09int status;
-+
-+=09memset(&args_ext, 0, sizeof(args_ext));
-+=09if (size > sizeof(struct clone_args))
-+=09=09args_ext.excess_space[1] =3D 1;
-+
-+=09if (size =3D=3D 0)
-+=09=09size =3D sizeof(struct clone_args);
-+
-+=09switch (test_mode) {
-+=09case CLONE3_ARGS_ALL_0:
-+=09=09args.flags =3D 0;
-+=09=09args.exit_signal =3D 0;
-+=09=09break;
-+=09case CLONE3_ARGS_INVAL_EXIT_SIGNAL_BIG:
-+=09=09args.exit_signal =3D 0xbadc0ded00000000ULL;
-+=09=09break;
-+=09case CLONE3_ARGS_INVAL_EXIT_SIGNAL_NEG:
-+=09=09args.exit_signal =3D 0x0000000080000000ULL;
-+=09=09break;
-+=09case CLONE3_ARGS_INVAL_EXIT_SIGNAL_CSIG:
-+=09=09args.exit_signal =3D 0x0000000000000100ULL;
-+=09=09break;
-+=09case CLONE3_ARGS_INVAL_EXIT_SIGNAL_NSIG:
-+=09=09args.exit_signal =3D 0x00000000000000f0ULL;
-+=09=09break;
-+=09}
-+
-+=09memcpy(&args_ext.args, &args, sizeof(struct clone_args));
-+
-+=09pid =3D raw_clone((struct clone_args *)&args_ext, size);
-+=09if (pid < 0) {
-+=09=09ksft_print_msg("%s - Failed to create new process\n",
-+=09=09=09=09strerror(errno));
-+=09=09return -errno;
-+=09}
-+
-+=09if (pid =3D=3D 0) {
-+=09=09ksft_print_msg("I am the child, my PID is %d\n", getpid());
-+=09=09_exit(EXIT_SUCCESS);
-+=09}
-+
-+=09ksft_print_msg("I am the parent (%d). My child's pid is %d\n",
-+=09=09=09getpid(), pid);
-+
-+=09if (waitpid(-1, &status, __WALL) < 0) {
-+=09=09ksft_print_msg("Child returned %s\n", strerror(errno));
-+=09=09return -errno;
-+=09}
-+=09if (WEXITSTATUS(status))
-+=09=09return WEXITSTATUS(status);
-+
-+=09return 0;
-+}
-+
-+static void test_clone3(uint64_t flags, size_t size, int expected,
-+=09=09       enum test_mode test_mode)
-+{
-+=09int ret;
-+
-+=09ksft_print_msg(
-+=09=09"[%d] Trying clone3() with flags %#" PRIx64 " (size %zu)\n",
-+=09=09getpid(), flags, size);
-+=09ret =3D call_clone3(flags, size, test_mode);
-+=09ksft_print_msg("[%d] clone3() with flags says: %d expected %d\n",
-+=09=09=09getpid(), ret, expected);
-+=09if (ret !=3D expected)
-+=09=09ksft_test_result_fail(
-+=09=09=09"[%d] Result (%d) is different than expected (%d)\n",
-+=09=09=09getpid(), ret, expected);
-+=09else
-+=09=09ksft_test_result_pass(
-+=09=09=09"[%d] Result (%d) matches expectation (%d)\n",
-+=09=09=09getpid(), ret, expected);
-+}
-+int main(int argc, char *argv[])
-+{
-+=09pid_t pid;
-+
-+=09uid_t uid =3D getuid();
-+
-+=09ksft_print_header();
-+=09ksft_set_plan(15);
-+
-+=09/* Just a simple clone3() should return 0.*/
-+=09test_clone3(0, 0, 0, CLONE3_ARGS_NO_TEST);
-+
-+=09/* Do a clone3() in a new PID NS.*/
-+=09if (uid =3D=3D 0)
-+=09=09test_clone3(CLONE_NEWPID, 0, 0, CLONE3_ARGS_NO_TEST);
-+=09else
-+=09=09ksft_test_result_skip("Skipping clone3() with CLONE_NEWPID\n");
-+
-+=09/* Do a clone3() with CLONE3_ARGS_SIZE_V0. */
-+=09test_clone3(0, CLONE3_ARGS_SIZE_V0, 0, CLONE3_ARGS_NO_TEST);
-+
-+=09/* Do a clone3() with CLONE3_ARGS_SIZE_V0 - 8 */
-+=09test_clone3(0, CLONE3_ARGS_SIZE_V0 - 8, -EINVAL, CLONE3_ARGS_NO_TEST);
-+
-+=09/* Do a clone3() with sizeof(struct clone_args) + 8 */
-+=09test_clone3(0, sizeof(struct clone_args) + 8, 0, CLONE3_ARGS_NO_TEST);
-+
-+=09/* Do a clone3() with exit_signal having highest 32 bits non-zero */
-+=09test_clone3(0, 0, -EINVAL, CLONE3_ARGS_INVAL_EXIT_SIGNAL_BIG);
-+
-+=09/* Do a clone3() with negative 32-bit exit_signal */
-+=09test_clone3(0, 0, -EINVAL, CLONE3_ARGS_INVAL_EXIT_SIGNAL_NEG);
-+
-+=09/* Do a clone3() with exit_signal not fitting into CSIGNAL mask */
-+=09test_clone3(0, 0, -EINVAL, CLONE3_ARGS_INVAL_EXIT_SIGNAL_CSIG);
-+
-+=09/* Do a clone3() with NSIG < exit_signal < CSIG */
-+=09test_clone3(0, 0, -EINVAL, CLONE3_ARGS_INVAL_EXIT_SIGNAL_NSIG);
-+
-+=09/*
-+=09 * Do a clone3() with sizeof(struct clone_args) + 8
-+=09 * and all members set to 0. This resets exit_signal and wait()
-+=09 * will not get a result.
-+=09 */
-+=09test_clone3(0, sizeof(struct clone_args) + 8, 0, CLONE3_ARGS_ALL_0);
-+
-+=09/* Do a clone3() with > page size */
-+=09test_clone3(0, getpagesize() + 8, -E2BIG, CLONE3_ARGS_NO_TEST);
-+
-+=09/* Do a clone3() with CLONE3_ARGS_SIZE_V0 in a new PID NS. */
-+=09if (uid =3D=3D 0)
-+=09=09test_clone3(CLONE_NEWPID, CLONE3_ARGS_SIZE_V0, 0,
-+=09=09=09=09CLONE3_ARGS_NO_TEST);
-+=09else
-+=09=09ksft_test_result_skip("Skipping clone3() with CLONE_NEWPID\n");
-+
-+=09/* Do a clone3() with CLONE3_ARGS_SIZE_V0 - 8 in a new PID NS */
-+=09test_clone3(CLONE_NEWPID, CLONE3_ARGS_SIZE_V0 - 8, -EINVAL,
-+=09=09=09CLONE3_ARGS_NO_TEST);
-+
-+=09/* Do a clone3() with sizeof(struct clone_args) + 8 in a new PID NS */
-+=09if (uid =3D=3D 0)
-+=09=09test_clone3(CLONE_NEWPID, sizeof(struct clone_args) + 8, 0,
-+=09=09=09=09CLONE3_ARGS_NO_TEST);
-+=09else
-+=09=09ksft_test_result_skip("Skipping clone3() with CLONE_NEWPID\n");
-+
-+=09/* Do a clone3() with > page size in a new PID NS */
-+=09test_clone3(CLONE_NEWPID, getpagesize() + 8, -E2BIG,
-+=09=09=09CLONE3_ARGS_NO_TEST);
-+
-+=09return !ksft_get_fail_cnt() ? ksft_exit_pass() : ksft_exit_fail();
-+}
---=20
-2.23.0
+> > Problem:
+> > Currently tasks attempting to allocate more hugetlb memory than is available get
+> > a failure at mmap/shmget time. This is thanks to Hugetlbfs Reservations [1].
+> > However, if a task attempts to allocate hugetlb memory only more than its
+> > hugetlb_cgroup limit allows, the kernel will allow the mmap/shmget call,
+> > but will SIGBUS the task when it attempts to fault the memory in.
+> >
+> > We have developers interested in using hugetlb_cgroups, and they have expressed
+> > dissatisfaction regarding this behavior. We'd like to improve this
+> > behavior such that tasks violating the hugetlb_cgroup limits get an error on
+> > mmap/shmget time, rather than getting SIGBUS'd when they try to fault
+> > the excess memory in.
+> >
+> > The underlying problem is that today's hugetlb_cgroup accounting happens
+> > at hugetlb memory *fault* time, rather than at *reservation* time.
+> > Thus, enforcing the hugetlb_cgroup limit only happens at fault time, and
+> > the offending task gets SIGBUS'd.
+> >
+> > Proposed Solution:
+> > A new page counter named hugetlb.xMB.reservation_[limit|usage]_in_bytes. This
+> > counter has slightly different semantics than
+> > hugetlb.xMB.[limit|usage]_in_bytes:
+> >
+> > - While usage_in_bytes tracks all *faulted* hugetlb memory,
+> > reservation_usage_in_bytes tracks all *reserved* hugetlb memory and
+> > hugetlb memory faulted in without a prior reservation.
+> >
+> > - If a task attempts to reserve more memory than limit_in_bytes allows,
+> > the kernel will allow it to do so. But if a task attempts to reserve
+> > more memory than reservation_limit_in_bytes, the kernel will fail this
+> > reservation.
+> >
+> > This proposal is implemented in this patch series, with tests to verify
+> > functionality and show the usage. We also added cgroup-v2 support to
+> > hugetlb_cgroup so that the new use cases can be extended to v2.
+> >
+> > Alternatives considered:
+> > 1. A new cgroup, instead of only a new page_counter attached to
+> >    the existing hugetlb_cgroup. Adding a new cgroup seemed like a lot of code
+> >    duplication with hugetlb_cgroup. Keeping hugetlb related page counters under
+> >    hugetlb_cgroup seemed cleaner as well.
+> >
+> > 2. Instead of adding a new counter, we considered adding a sysctl that modifies
+> >    the behavior of hugetlb.xMB.[limit|usage]_in_bytes, to do accounting at
+> >    reservation time rather than fault time. Adding a new page_counter seems
+> >    better as userspace could, if it wants, choose to enforce different cgroups
+> >    differently: one via limit_in_bytes, and another via
+> >    reservation_limit_in_bytes. This could be very useful if you're
+> >    transitioning how hugetlb memory is partitioned on your system one
+> >    cgroup at a time, for example. Also, someone may find usage for both
+> >    limit_in_bytes and reservation_limit_in_bytes concurrently, and this
+> >    approach gives them the option to do so.
+> >
+> > Testing:
+>
+> I think that simply mentioning the use of hugetlbfs for regression testing
+> would be sufficient here.
+>
 
+Will do.
+
+> > - Added tests passing.
+> > - libhugetlbfs tests mostly passing, but some tests have trouble with and
+> >   without this patch series. Seems environment issue rather than code:
+> >   - Overall results:
+> >     ********** TEST SUMMARY
+> >     *                      2M
+> >     *                      32-bit 64-bit
+> >     *     Total testcases:    84      0
+> >     *             Skipped:     0      0
+> >     *                PASS:    66      0
+> >     *                FAIL:    14      0
+> >     *    Killed by signal:     0      0
+> >     *   Bad configuration:     4      0
+> >     *       Expected FAIL:     0      0
+> >     *     Unexpected PASS:     0      0
+> >     *    Test not present:     0      0
+> >     * Strange test result:     0      0
+> >     **********
+>
+> It is curious that you only ran the tests for 32 bit applications.  Certainly
+> the more common case today is 64 bit.  I don't think there are any surprises
+> for you as I also have been running hugetlbfs on this series.
+
+I did run them, with similar results. I'll add them.
+
+> --
+> Mike Kravetz
+>
+> >   - Failing tests:
+> >     - elflink_rw_and_share_test("linkhuge_rw") segfaults with and without this
+> >       patch series.
+> >     - LD_PRELOAD=libhugetlbfs.so HUGETLB_MORECORE=yes malloc (2M: 32):
+> >       FAIL    Address is not hugepage
+> >     - LD_PRELOAD=libhugetlbfs.so HUGETLB_RESTRICT_EXE=unknown:malloc
+> >       HUGETLB_MORECORE=yes malloc (2M: 32):
+> >       FAIL    Address is not hugepage
+> >     - LD_PRELOAD=libhugetlbfs.so HUGETLB_MORECORE=yes malloc_manysmall (2M: 32):
+> >       FAIL    Address is not hugepage
+> >     - GLIBC_TUNABLES=glibc.malloc.tcache_count=0 LD_PRELOAD=libhugetlbfs.so
+> >       HUGETLB_MORECORE=yes heapshrink (2M: 32):
+> >       FAIL    Heap not on hugepages
+> >     - GLIBC_TUNABLES=glibc.malloc.tcache_count=0 LD_PRELOAD=libhugetlbfs.so
+> >       libheapshrink.so HUGETLB_MORECORE=yes heapshrink (2M: 32):
+> >       FAIL    Heap not on hugepages
+> >     - HUGETLB_ELFMAP=RW linkhuge_rw (2M: 32): FAIL    small_data is not hugepage
+> >     - HUGETLB_ELFMAP=RW HUGETLB_MINIMAL_COPY=no linkhuge_rw (2M: 32):
+> >       FAIL    small_data is not hugepage
+> >     - alloc-instantiate-race shared (2M: 32):
+> >       Bad configuration: sched_setaffinity(cpu1): Invalid argument -
+> >       FAIL    Child 1 killed by signal Killed
+> >     - shmoverride_linked (2M: 32):
+> >       FAIL    shmget failed size 2097152 from line 176: Invalid argument
+> >     - HUGETLB_SHM=yes shmoverride_linked (2M: 32):
+> >       FAIL    shmget failed size 2097152 from line 176: Invalid argument
+> >     - shmoverride_linked_static (2M: 32):
+> >       FAIL shmget failed size 2097152 from line 176: Invalid argument
+> >     - HUGETLB_SHM=yes shmoverride_linked_static (2M: 32):
+> >       FAIL shmget failed size 2097152 from line 176: Invalid argument
+> >     - LD_PRELOAD=libhugetlbfs.so shmoverride_unlinked (2M: 32):
+> >       FAIL shmget failed size 2097152 from line 176: Invalid argument
+> >     - LD_PRELOAD=libhugetlbfs.so HUGETLB_SHM=yes shmoverride_unlinked (2M: 32):
+> >       FAIL    shmget failed size 2097152 from line 176: Invalid argument
+> >
+> > [1]: https://www.kernel.org/doc/html/latest/vm/hugetlbfs_reserv.html
+> >
+> > Signed-off-by: Mina Almasry <almasrymina@google.com>
+> > Acked-by: Hillf Danton <hdanton@sina.com>
