@@ -2,124 +2,98 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E4F8F6232
-	for <lists+linux-kselftest@lfdr.de>; Sun, 10 Nov 2019 03:40:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE288F680E
+	for <lists+linux-kselftest@lfdr.de>; Sun, 10 Nov 2019 10:15:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727104AbfKJCkv (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 9 Nov 2019 21:40:51 -0500
-Received: from mail.kernel.org ([198.145.29.99]:34370 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727097AbfKJCkv (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 9 Nov 2019 21:40:51 -0500
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 2409321019;
-        Sun, 10 Nov 2019 02:40:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1573353650;
-        bh=SXNKvy0fhdk/59LQap0bFKFWEbNXfleA9TbgtbVruJo=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=aUgvQYh+fuRLDOri81VJlLlITr8Ko/e1d5ZKURvdnBHMuXmOn7RvmNbj0Hu8+6z98
-         uw7EmyknBukMbHmZdJuqng9pMphRqAXplgUOLnaaLZPnZ/RCIu66vKU6/td88FDv2S
-         2/tSRyoW14r3C6+4xh7yT7cYUD0ZziPviZ8rjhqg=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Breno Leitao <leitao@debian.org>,
-        Gustavo Romero <gromero@linux.ibm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Sasha Levin <sashal@kernel.org>, linuxppc-dev@lists.ozlabs.org,
-        linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 027/191] selftests/powerpc: Do not fail with reschedule
-Date:   Sat,  9 Nov 2019 21:37:29 -0500
-Message-Id: <20191110024013.29782-27-sashal@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20191110024013.29782-1-sashal@kernel.org>
-References: <20191110024013.29782-1-sashal@kernel.org>
+        id S1726720AbfKJJPg (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 10 Nov 2019 04:15:36 -0500
+Received: from mail-lj1-f196.google.com ([209.85.208.196]:39339 "EHLO
+        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726710AbfKJJPf (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Sun, 10 Nov 2019 04:15:35 -0500
+Received: by mail-lj1-f196.google.com with SMTP id p18so10585431ljc.6
+        for <linux-kselftest@vger.kernel.org>; Sun, 10 Nov 2019 01:15:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=NC4UaOmYyxeIYsdJnwAcb1vsEQuxwDoopSMGqewgnV8=;
+        b=rFUVjZIEf9PrQVws+tLtevu6eyP7v8OsQL/Q29XOm6BX84QyzqMZhrW6W0k/xeXoWo
+         r8oqpFZfQREpK8sj3G9QVV5leWBV269iimFaEVG/T8qOQmAp86AAtx2wwnwuORA3Mw3L
+         qYm8bFey9WLxat/L3VsWYyZxz5t4NOju6O7a/i7tsieTasaP31zUSh9+p33FC5QQ/Z8s
+         /AIC3hqHOSh9eesW4purKkM1MfVpxBlkeZdofa3IcyFiEwNy3pzltptGlKgvJwEccnGe
+         S8MWXxojuSkGzs/f6Lvs3k+Y1rB81USF2T3mESoh8c/KeX8I9xFgxOGgPk0yCw+1XHuB
+         jnlg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=NC4UaOmYyxeIYsdJnwAcb1vsEQuxwDoopSMGqewgnV8=;
+        b=eWRmlSTdJLSGpI4ibcZKXzxf4ymIEBpRENeEbE6i19DaTDoqJ81lvKkImypXEvUWCi
+         i4tLK85B6rLwVSoKopwqBoyuJhd23NzfPFIxInRSAiwvjcrY/sEcgGGTZeVe8aDx/95c
+         7dFwPnzbU23GUEX+qur+wkU8t+G2QMyYQWZMdSP3eoyY7wvKRgtqQcBtGzEE3JnBdz/w
+         3RNEYi5KSh3ZAEwyonAOtFNs9TnUF67h/kvAxXda0HrX9GigpJDDIIZ3dMAFDOPg0wAM
+         2J2B+1B6Wddl7GRamF6K87VviDIajjdqxyB2dPBtF3LnppZljGDs6vHJ76LlvkQxuGCC
+         dKvQ==
+X-Gm-Message-State: APjAAAUD8tyFVunJKQdAf+rqxuG+Fc32GBvfUWhH8tBkv6tLJxqAmk2N
+        6BQEBAuWdHaiNq8LnbNF2XxMA26FVx1GlRvONUNZHQ==
+X-Google-Smtp-Source: APXvYqxz55BmM0SWVm6sXfhi2GSM8RkM7Fh+UOIM9slJGxqaWfsLQAS1EULfkatYUI0DjuzroQWDufaxhHsv1EDNQzU=
+X-Received: by 2002:a2e:9b4b:: with SMTP id o11mr12505739ljj.252.1573377333791;
+ Sun, 10 Nov 2019 01:15:33 -0800 (PST)
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+References: <20191107125224.29616-1-anders.roxell@linaro.org> <CAPhsuW4B_Y+xOTaSFPWm0szn1exjucwL5KBsExWxq4tn_3NSbQ@mail.gmail.com>
+In-Reply-To: <CAPhsuW4B_Y+xOTaSFPWm0szn1exjucwL5KBsExWxq4tn_3NSbQ@mail.gmail.com>
+From:   Anders Roxell <anders.roxell@linaro.org>
+Date:   Sun, 10 Nov 2019 10:15:22 +0100
+Message-ID: <CADYN=9KJ0tFhfkqVvKN9EtHf1RUnj4=g+ufX18s9xANn-ig33w@mail.gmail.com>
+Subject: Re: [PATCH 1/2] selftests: bpf: test_lwt_ip_encap: add missing object
+ file to TEST_FILES
+To:     Song Liu <liu.song.a23@gmail.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        "David S . Miller" <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Shuah Khan <shuah@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Breno Leitao <leitao@debian.org>
+On Thu, 7 Nov 2019 at 18:55, Song Liu <liu.song.a23@gmail.com> wrote:
+>
+> On Thu, Nov 7, 2019 at 4:53 AM Anders Roxell <anders.roxell@linaro.org> wrote:
+> >
+> > When installing kselftests to its own directory and running the
+> > test_lwt_ip_encap.sh it will complain that test_lwt_ip_encap.o can't be
+> > find.
+> >
+> > $ ./test_lwt_ip_encap.sh
+> > starting egress IPv4 encap test
+> > Error opening object test_lwt_ip_encap.o: No such file or directory
+> > Object hashing failed!
+> > Cannot initialize ELF context!
+> > Failed to parse eBPF program: Invalid argument
+> >
+> > Rework to add test_lwt_ip_encap.o to TEST_FILES so the object file gets
+> > installed when installing kselftest.
+> >
+> > Fixes: 74b5a5968fe8 ("selftests/bpf: Replace test_progs and test_maps w/ general rule")
+> > Signed-off-by: Anders Roxell <anders.roxell@linaro.org>
+>
+> Please highlight that this set is on top of bpf-next tree with
+> "[PATCH bpf-next 1/2]".
 
-[ Upstream commit 44d947eff19d64384efc06069509db7a0a1103b0 ]
+Oh right, I'll send out that shortly
 
-There are cases where the test is not expecting to have the transaction
-aborted, but, the test process might have been rescheduled, either in the
-OS level or by KVM (if it is running on a KVM guest machine). The process
-reschedule will cause a treclaim/recheckpoint which will cause the
-transaction to doom, aborting the transaction as soon as the process is
-rescheduled back to the CPU. This might cause the test to fail, but this is
-not a failure in essence.
+Cheers,
+Anders
 
-If that is the case, TEXASR[FC] is indicated with either
-TM_CAUSE_RESCHEDULE or TM_CAUSE_KVM_RESCHEDULE for KVM interruptions.
-
-In this scenario, ignore these two failures and avoid the whole test to
-return failure.
-
-Signed-off-by: Breno Leitao <leitao@debian.org>
-Reviewed-by: Gustavo Romero <gromero@linux.ibm.com>
-Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- tools/testing/selftests/powerpc/tm/tm-unavailable.c | 9 ++++++---
- tools/testing/selftests/powerpc/tm/tm.h             | 9 +++++++++
- 2 files changed, 15 insertions(+), 3 deletions(-)
-
-diff --git a/tools/testing/selftests/powerpc/tm/tm-unavailable.c b/tools/testing/selftests/powerpc/tm/tm-unavailable.c
-index 156c8e750259b..09894f4ff62e6 100644
---- a/tools/testing/selftests/powerpc/tm/tm-unavailable.c
-+++ b/tools/testing/selftests/powerpc/tm/tm-unavailable.c
-@@ -236,7 +236,8 @@ void *tm_una_ping(void *input)
- 	}
- 
- 	/* Check if we were not expecting a failure and a it occurred. */
--	if (!expecting_failure() && is_failure(cr_)) {
-+	if (!expecting_failure() && is_failure(cr_) &&
-+	    !failure_is_reschedule()) {
- 		printf("\n\tUnexpected transaction failure 0x%02lx\n\t",
- 			failure_code());
- 		return (void *) -1;
-@@ -244,9 +245,11 @@ void *tm_una_ping(void *input)
- 
- 	/*
- 	 * Check if TM failed due to the cause we were expecting. 0xda is a
--	 * TM_CAUSE_FAC_UNAV cause, otherwise it's an unexpected cause.
-+	 * TM_CAUSE_FAC_UNAV cause, otherwise it's an unexpected cause, unless
-+	 * it was caused by a reschedule.
- 	 */
--	if (is_failure(cr_) && !failure_is_unavailable()) {
-+	if (is_failure(cr_) && !failure_is_unavailable() &&
-+	    !failure_is_reschedule()) {
- 		printf("\n\tUnexpected failure cause 0x%02lx\n\t",
- 			failure_code());
- 		return (void *) -1;
-diff --git a/tools/testing/selftests/powerpc/tm/tm.h b/tools/testing/selftests/powerpc/tm/tm.h
-index df4204247d45c..5518b1d4ef8b2 100644
---- a/tools/testing/selftests/powerpc/tm/tm.h
-+++ b/tools/testing/selftests/powerpc/tm/tm.h
-@@ -52,6 +52,15 @@ static inline bool failure_is_unavailable(void)
- 	return (failure_code() & TM_CAUSE_FAC_UNAV) == TM_CAUSE_FAC_UNAV;
- }
- 
-+static inline bool failure_is_reschedule(void)
-+{
-+	if ((failure_code() & TM_CAUSE_RESCHED) == TM_CAUSE_RESCHED ||
-+	    (failure_code() & TM_CAUSE_KVM_RESCHED) == TM_CAUSE_KVM_RESCHED)
-+		return true;
-+
-+	return false;
-+}
-+
- static inline bool failure_is_nesting(void)
- {
- 	return (__builtin_get_texasru() & 0x400000);
--- 
-2.20.1
-
+>
+> Otherwise, looks good to me.
+>
+> Acked-by: Song Liu <songliubraving@fb.com>
