@@ -2,210 +2,138 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CAAD3F825F
-	for <lists+linux-kselftest@lfdr.de>; Mon, 11 Nov 2019 22:41:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3909DF827B
+	for <lists+linux-kselftest@lfdr.de>; Mon, 11 Nov 2019 22:46:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727440AbfKKVlw (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 11 Nov 2019 16:41:52 -0500
-Received: from mail-pf1-f196.google.com ([209.85.210.196]:38805 "EHLO
-        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727389AbfKKVlv (ORCPT
+        id S1727755AbfKKVqV (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 11 Nov 2019 16:46:21 -0500
+Received: from hqemgate15.nvidia.com ([216.228.121.64]:9442 "EHLO
+        hqemgate15.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727121AbfKKVqU (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 11 Nov 2019 16:41:51 -0500
-Received: by mail-pf1-f196.google.com with SMTP id c13so11617301pfp.5
-        for <linux-kselftest@vger.kernel.org>; Mon, 11 Nov 2019 13:41:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=3he+QtfifQ3bgJ/yyvcxgVo2dz6VZH6CuJDagxiiqO0=;
-        b=YK0y7OEXAYek4HKT2x2A9HNewczn8bgLVljRK6e4KmPjx4AqMZIvtBam+zJFOT2l+2
-         C2pjfCq8g4vfa4HJoCjQPQhHmsM/kllaeSAjPbCZ5uSdhRnwJtZW8XPxvh+yrj5Y2eVm
-         SDfw0p9t4EBgCGs9SaDPGasYcX77jUscvVv7C/u+vELVsmZccSYTOqf7E7nOuIf6kCeg
-         u+zr3b4JWLm5EhI/cH/UZhJTJn7MGeE3e+OoBui2rDS2XFhLFQL3aRb4drS+YfW4MAP/
-         y2PLKLByUnJK3/wROWHrKpDXCC15u8JV4ZT0+3NnJVYT/yezNGl+cUHhOlsD02L8Lkz5
-         grzQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=3he+QtfifQ3bgJ/yyvcxgVo2dz6VZH6CuJDagxiiqO0=;
-        b=d/rP666Jytdi8yBbPZJdHqaGUqKCqtBBDyvpF5mC8ysYnypjjkvDd+q1s2n5+pDLTO
-         48P/dj1AsLdfd2hGJbHF3jdPcEUSEbPDCsuCLn1lSUwae7YdM1WIfsF0IRe/Vbc0rCmJ
-         075nFZSZj33E/JiBic3IbkdTKyxXX7cFYjhnrXyMv67pV2AhrH+ZFdpF1DfXJBC2h6fe
-         aykK3WZqLU/BMWyysiuoCdvxoVzsVPDax68NBfOVh4xkzT5JXDt3W8RdTV58z0WS4LYq
-         wR3d49Xy+mwO0qcUWsI0oZmZw2X0YCilamsBvOueaV2z9ZenHr4ft1tg75dsHVlIX2tD
-         rukA==
-X-Gm-Message-State: APjAAAVVosaEhVACiuRYDDTPMQjJeQ8n1tbKuzBeF9KIrUDPR4vjgCB0
-        4RFivhdj6UIXGYs0BR95PGqJkTOC4p7V0gPu86wE/w==
-X-Google-Smtp-Source: APXvYqzy/af2x31SqiZ0T4qLxwoFESxbRuTnuVa7dS8IFhRlfQ+werW7nPW6tbVH+2zxkAxDA/t/GlVa72LeUDHx9dI=
-X-Received: by 2002:a63:712:: with SMTP id 18mr20831195pgh.384.1573508510293;
- Mon, 11 Nov 2019 13:41:50 -0800 (PST)
-MIME-Version: 1.0
-References: <1571335639-21675-1-git-send-email-alan.maguire@oracle.com>
- <1571335639-21675-6-git-send-email-alan.maguire@oracle.com>
- <CAFd5g46s4eY4qEB5UZPeOKNdZXm4+sA9N=4g8gDYAhyhMahZKw@mail.gmail.com> <alpine.LRH.2.20.1911081520550.24027@dhcp-10-175-178-67.vpn.oracle.com>
-In-Reply-To: <alpine.LRH.2.20.1911081520550.24027@dhcp-10-175-178-67.vpn.oracle.com>
-From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Mon, 11 Nov 2019 13:41:38 -0800
-Message-ID: <CAFd5g44vYUkLQmJFq_vQ5ruvBC_1vrkSd9DeW3oQ_vLzrNcpgQ@mail.gmail.com>
-Subject: Re: [PATCH v3 linux-kselftest-test 5/6] kunit: allow kunit to be
- loaded as a module
-To:     Alan Maguire <alan.maguire@oracle.com>,
-        Stephen Boyd <sboyd@kernel.org>
-Cc:     "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        Kees Cook <keescook@chromium.org>,
-        Iurii Zaikin <yzaikin@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Masahiro Yamada <yamada.masahiro@socionext.com>,
-        catalin.marinas@arm.com, joe.lawrence@redhat.com,
-        penguin-kernel@i-love.sakura.ne.jp, schowdary@nvidia.com,
-        urezki@gmail.com, andriy.shevchenko@linux.intel.com,
+        Mon, 11 Nov 2019 16:46:20 -0500
+Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqemgate15.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5dc9d66d0000>; Mon, 11 Nov 2019 13:45:17 -0800
+Received: from hqmail.nvidia.com ([172.20.161.6])
+  by hqpgpgate101.nvidia.com (PGP Universal service);
+  Mon, 11 Nov 2019 13:46:18 -0800
+X-PGP-Universal: processed;
+        by hqpgpgate101.nvidia.com on Mon, 11 Nov 2019 13:46:18 -0800
+Received: from [10.110.48.28] (10.124.1.5) by HQMAIL107.nvidia.com
+ (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Mon, 11 Nov
+ 2019 21:46:18 +0000
+Subject: Re: [PATCH v2 04/18] media/v4l2-core: set pages dirty upon releasing
+ DMA buffers
+To:     Hans Verkuil <hverkuil@xs4all.nl>,
+        Andrew Morton <akpm@linux-foundation.org>
+CC:     Al Viro <viro@zeniv.linux.org.uk>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Dave Chinner <david@fromorbit.com>,
+        David Airlie <airlied@linux.ie>,
+        "David S . Miller" <davem@davemloft.net>,
+        Ira Weiny <ira.weiny@intel.com>, Jan Kara <jack@suse.cz>,
+        Jason Gunthorpe <jgg@ziepe.ca>, Jens Axboe <axboe@kernel.dk>,
         Jonathan Corbet <corbet@lwn.net>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        Knut Omang <knut.omang@oracle.com>
-Content-Type: text/plain; charset="UTF-8"
+        =?UTF-8?B?SsOpcsO0bWUgR2xpc3Nl?= <jglisse@redhat.com>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Michal Hocko <mhocko@suse.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Paul Mackerras <paulus@samba.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Vlastimil Babka <vbabka@suse.cz>, <bpf@vger.kernel.org>,
+        <dri-devel@lists.freedesktop.org>, <kvm@vger.kernel.org>,
+        <linux-block@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+        <linux-fsdevel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+        <linux-media@vger.kernel.org>, <linux-rdma@vger.kernel.org>,
+        <linuxppc-dev@lists.ozlabs.org>, <netdev@vger.kernel.org>,
+        <linux-mm@kvack.org>, LKML <linux-kernel@vger.kernel.org>
+References: <20191103211813.213227-1-jhubbard@nvidia.com>
+ <20191103211813.213227-5-jhubbard@nvidia.com>
+ <4b2337f6-102d-ae9d-e690-4331d77660c4@xs4all.nl>
+From:   John Hubbard <jhubbard@nvidia.com>
+X-Nvconfidentiality: public
+Message-ID: <5846f15d-f03b-cd1a-051c-42b1519c4c48@nvidia.com>
+Date:   Mon, 11 Nov 2019 13:46:18 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
+MIME-Version: 1.0
+In-Reply-To: <4b2337f6-102d-ae9d-e690-4331d77660c4@xs4all.nl>
+X-Originating-IP: [10.124.1.5]
+X-ClientProxiedBy: HQMAIL105.nvidia.com (172.20.187.12) To
+ HQMAIL107.nvidia.com (172.20.187.13)
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1573508717; bh=JgFNDA0v0XtnqpGBZO9zS12edBVCSHH4nhh2s8SsfW8=;
+        h=X-PGP-Universal:Subject:To:CC:References:From:X-Nvconfidentiality:
+         Message-ID:Date:User-Agent:MIME-Version:In-Reply-To:
+         X-Originating-IP:X-ClientProxiedBy:Content-Type:Content-Language:
+         Content-Transfer-Encoding;
+        b=KJdHonRoY4lGZsGGXFA+s6C9dAs+F+pw/0M4pYcPJTv8UjN4AOAtOKwCMIML32E4J
+         r1oa+qdIiwIStrqpxJM1Ivl0+B4WzoS3hMuEMwbOHFQnWENnyAiOG7rxglRiMPOsG2
+         P1hEnkWRlMLt+KFRHY1ADSR7l9DzNOzOUd8zjn8ytb8H6XjFU3HR0TMaYulAaIN8Ej
+         W15iUuEbFCS+gYNQ7bbS2hBGFlr0gEiNZEHH94kd699lxQXaw52Pbe2bTEp8/kn2Gi
+         RR0P48w8xGu3BkU/HHy5EhGqoz+wSP++cOtfAjoHUddj6CK5tYXuhTndLB24+KM9Al
+         oii/NsVBT+BQA==
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-+Stephen Boyd - since he is more of an expert on the hung task timer than I am.
+On 11/10/19 2:10 AM, Hans Verkuil wrote:
+> On 11/3/19 10:17 PM, John Hubbard wrote:
+>> After DMA is complete, and the device and CPU caches are synchronized,
+>> it's still required to mark the CPU pages as dirty, if the data was
+>> coming from the device. However, this driver was just issuing a
+>> bare put_page() call, without any set_page_dirty*() call.
+>>
+>> Fix the problem, by calling set_page_dirty_lock() if the CPU pages
+>> were potentially receiving data from the device.
+>>
+>> Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
+>> Signed-off-by: John Hubbard <jhubbard@nvidia.com>
+> 
+> Acked-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+> 
+> Looks good, thanks!
+> 
 
-On Fri, Nov 8, 2019 at 7:30 AM Alan Maguire <alan.maguire@oracle.com> wrote:
->
-> On Thu, 7 Nov 2019, Brendan Higgins wrote:
->
-> > On Thu, Oct 17, 2019 at 11:09 AM Alan Maguire <alan.maguire@oracle.com> wrote:
-> > >
-> > > Making kunit itself buildable as a module allows for "always-on"
-> > > kunit configuration; specifying CONFIG_KUNIT=m means the module
-> > > is built but only used when loaded.  Kunit test modules will load
-> > > kunit.ko as an implicit dependency, so simply running
-> > > "modprobe my-kunit-tests" will load the tests along with the kunit
-> > > module and run them.
-> > >
-> > > Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
-> > > Signed-off-by: Knut Omang <knut.omang@oracle.com>
-> > > ---
-> > >  lib/kunit/Kconfig     | 2 +-
-> > >  lib/kunit/Makefile    | 4 +++-
-> > >  lib/kunit/test.c      | 2 ++
-> > >  lib/kunit/try-catch.c | 3 +++
-> > >  4 files changed, 9 insertions(+), 2 deletions(-)
-> > >
-> > > diff --git a/lib/kunit/Kconfig b/lib/kunit/Kconfig
-> > > index 9ebd5e6..065aa16 100644
-> > > --- a/lib/kunit/Kconfig
-> > > +++ b/lib/kunit/Kconfig
-> > > @@ -3,7 +3,7 @@
-> > >  #
-> > >
-> > >  menuconfig KUNIT
-> > > -       bool "KUnit - Enable support for unit tests"
-> > > +       tristate "KUnit - Enable support for unit tests"
-> > >         help
-> > >           Enables support for kernel unit tests (KUnit), a lightweight unit
-> > >           testing and mocking framework for the Linux kernel. These tests are
-> > > diff --git a/lib/kunit/Makefile b/lib/kunit/Makefile
-> > > index 769d940..8e2635a 100644
-> > > --- a/lib/kunit/Makefile
-> > > +++ b/lib/kunit/Makefile
-> > > @@ -1,4 +1,6 @@
-> > > -obj-$(CONFIG_KUNIT) +=                 test.o \
-> > > +obj-$(CONFIG_KUNIT) +=                 kunit.o
-> > > +
-> > > +kunit-objs +=                          test.o \
-> > >                                         string-stream.o \
-> > >                                         assert.o \
-> > >                                         try-catch.o
-> > > diff --git a/lib/kunit/test.c b/lib/kunit/test.c
-> > > index e8b2443..c0ace36 100644
-> > > --- a/lib/kunit/test.c
-> > > +++ b/lib/kunit/test.c
-> > > @@ -523,3 +523,5 @@ void *kunit_find_symbol(const char *sym)
-> > >         return ERR_PTR(-ENOENT);
-> > >  }
-> > >  EXPORT_SYMBOL(kunit_find_symbol);
-> > > +
-> > > +MODULE_LICENSE("GPL");
-> > > diff --git a/lib/kunit/try-catch.c b/lib/kunit/try-catch.c
-> > > index 1c1e9af..72fc8ed 100644
-> > > --- a/lib/kunit/try-catch.c
-> > > +++ b/lib/kunit/try-catch.c
-> > > @@ -31,6 +31,8 @@ static int kunit_generic_run_threadfn_adapter(void *data)
-> > >         complete_and_exit(try_catch->try_completion, 0);
-> > >  }
-> > >
-> > > +KUNIT_VAR_SYMBOL(sysctl_hung_task_timeout_secs, unsigned long);
-> >
-> > Can you just export sysctl_hung_task_timeout_secs?
-> >
-> > I don't mean to make you redo all this work for one symbol twice, but
-> > I thought we agreed on just exposing this symbol, but in a namespace.
-> > It seemed like a good use case for that namespaced exporting thing
-> > that Luis was talking about. As I understood it, you would have to
-> > export it in the module that defines it, and then use the new
-> > MODULE_IMPORT_NS() macro here.
-> >
->
-> Sure, I can certainly look into that, though I wonder if we should
-> consider another possibility - should kunit have its own sysctl table for
-> things like configuring timeouts? I can look at adding a patch for that
+Hi Hans, it's great that you could take a look at this and the other v4l2 
+patch, much appreciated.
 
-So on the one hand, yes, I would like to have configurable test
-timeouts for KUnit, but that is not what the parameter check is for
-here. This is to make sure KUnit times a test case out before the hung
-task timer does.
 
-> prior to the module patch so the issues with exporting the hung task
-> timeout would go away. Now the reason I suggest this isn't as much a hack
-> to solve this specific problem, rather it seems to fit better with the
-> longer-term intent expressed by the comment around use of the field (at
-> least as I read it, I may be wrong).
-
-Not really. Although I do agree that adding configurability here might
-be a good idea, I believe we would need to clamp such a value by
-sysctl_hung_task_timeout_secs regardless since we don't want to be
-killed by the hung task timer; thus, we still need access to
-sysctl_hung_task_timeout_secs either way, and so doing what you are
-proposing would be off topic.
-
-> Exporting the symbol does allow us to piggy-back on an existing value, but
-> maybe we should support out our own tunable "kunit_timeout_secs" here?
-> Doing so would also lay the groundwork for supporting other kunit
-> tunables in the future if needed. What do you think?
-
-The goal is not to piggy back on the value as I mentioned above.
-Stephen, do you have any thoughts on this? Do you see any other
-preferable solution to what Alan is trying to do?
-
-> Many thanks for the review! I've got an updated patchset almost
-> ready with the symbol lookup stuff removed; the above is the last issue
-> outstanding from my side.
-
-Awesome! No thanks necessary, I appreciate the work you are doing!
-There were some other people who mentioned that they wanted this in
-the past, so it is a really big help having you do this. I feel bad
-that I couldn't get the review back to you faster. :-)
-
->
-> > > +
-> > >  static unsigned long kunit_test_timeout(void)
-> > >  {
-> > >         unsigned long timeout_msecs;
-> > > @@ -52,6 +54,7 @@ static unsigned long kunit_test_timeout(void)
-> > >          * For more background on this topic, see:
-> > >          * https://mike-bland.com/2011/11/01/small-medium-large.html
-> > >          */
-> > > +       KUNIT_INIT_VAR_SYMBOL(NULL, sysctl_hung_task_timeout_secs);
-> > >         if (sysctl_hung_task_timeout_secs) {
-> > >                 /*
-> > >                  * If sysctl_hung_task is active, just set the timeout to some
-> > > --
-> > > 1.8.3.1
-> > >
-> >
+thanks,
+-- 
+John Hubbard
+NVIDIA
+>> ---
+>>  drivers/media/v4l2-core/videobuf-dma-sg.c | 5 ++++-
+>>  1 file changed, 4 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/media/v4l2-core/videobuf-dma-sg.c b/drivers/media/v4l2-core/videobuf-dma-sg.c
+>> index 66a6c6c236a7..28262190c3ab 100644
+>> --- a/drivers/media/v4l2-core/videobuf-dma-sg.c
+>> +++ b/drivers/media/v4l2-core/videobuf-dma-sg.c
+>> @@ -349,8 +349,11 @@ int videobuf_dma_free(struct videobuf_dmabuf *dma)
+>>  	BUG_ON(dma->sglen);
+>>  
+>>  	if (dma->pages) {
+>> -		for (i = 0; i < dma->nr_pages; i++)
+>> +		for (i = 0; i < dma->nr_pages; i++) {
+>> +			if (dma->direction == DMA_FROM_DEVICE)
+>> +				set_page_dirty_lock(dma->pages[i]);
+>>  			put_page(dma->pages[i]);
+>> +		}
+>>  		kfree(dma->pages);
+>>  		dma->pages = NULL;
+>>  	}
+>>
+> 
