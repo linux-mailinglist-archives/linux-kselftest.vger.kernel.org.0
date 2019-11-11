@@ -2,51 +2,68 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A5B8AF7ABA
-	for <lists+linux-kselftest@lfdr.de>; Mon, 11 Nov 2019 19:25:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 891AFF8254
+	for <lists+linux-kselftest@lfdr.de>; Mon, 11 Nov 2019 22:37:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726928AbfKKSZ6 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 11 Nov 2019 13:25:58 -0500
-Received: from foss.arm.com ([217.140.110.172]:49022 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726821AbfKKSZ5 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 11 Nov 2019 13:25:57 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3E2421FB;
-        Mon, 11 Nov 2019 10:25:57 -0800 (PST)
-Received: from arrakis.emea.arm.com (arrakis.cambridge.arm.com [10.1.197.42])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3B31A3F534;
-        Mon, 11 Nov 2019 10:25:56 -0800 (PST)
-Date:   Mon, 11 Nov 2019 18:25:54 +0000
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     Colin King <colin.king@canonical.com>
-Cc:     Shuah Khan <shuah@kernel.org>,
-        Cristian Marussi <cristian.marussi@arm.com>,
-        Dave Martin <Dave.Martin@arm.com>,
+        id S1727064AbfKKVhB (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 11 Nov 2019 16:37:01 -0500
+Received: from www62.your-server.de ([213.133.104.62]:54922 "EHLO
+        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726910AbfKKVhB (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 11 Nov 2019 16:37:01 -0500
+Received: from sslproxy05.your-server.de ([78.46.172.2])
+        by www62.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
+        (Exim 4.89_1)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1iUHMf-0001Ar-Nt; Mon, 11 Nov 2019 22:36:49 +0100
+Received: from [178.197.248.27] (helo=pc-9.home)
+        by sslproxy05.your-server.de with esmtpsa (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384:256)
+        (Exim 4.89)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1iUHMf-000UDU-8u; Mon, 11 Nov 2019 22:36:49 +0100
+Subject: Re: [PATCH] selftests: bpf: add missing object file to TEST_FILES
+To:     Anders Roxell <anders.roxell@linaro.org>, ast@kernel.org,
+        davem@davemloft.net
+Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
         linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-janitors@vger.kernel.org
-Subject: Re: [PATCH][next] kselftest: arm64: fix spelling mistake "contiguos"
- -> "contiguous"
-Message-ID: <20191111182553.GB60539@arrakis.emea.arm.com>
-References: <20191111091236.37165-1-colin.king@canonical.com>
+        shuah@kernel.org, songliubraving@fb.com, simon.horman@netronome.com
+References: <20191111161728.8854-1-anders.roxell@linaro.org>
+From:   Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <17957196-a9a3-e7d5-c881-a240d33e0a82@iogearbox.net>
+Date:   Mon, 11 Nov 2019 22:36:48 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191111091236.37165-1-colin.king@canonical.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20191111161728.8854-1-anders.roxell@linaro.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.101.4/25630/Mon Nov 11 10:59:49 2019)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Nov 11, 2019 at 09:12:36AM +0000, Colin King wrote:
-> From: Colin Ian King <colin.king@canonical.com>
+On 11/11/19 5:17 PM, Anders Roxell wrote:
+> When installing kselftests to its own directory and run the
+> test_lwt_ip_encap.sh it will complain that test_lwt_ip_encap.o can't be
+> found. Same with the test_tc_edt.sh test it will complain that
+> test_tc_edt.o can't be found.
 > 
-> There is a spelling mistake in an error message literal string. Fix it.
+> $ ./test_lwt_ip_encap.sh
+> starting egress IPv4 encap test
+> Error opening object test_lwt_ip_encap.o: No such file or directory
+> Object hashing failed!
+> Cannot initialize ELF context!
+> Failed to parse eBPF program: Invalid argument
 > 
-> Signed-off-by: Colin Ian King <colin.king@canonical.com>
+> Rework to add test_lwt_ip_encap.o and test_tc_edt.o to TEST_FILES so the
+> object file gets installed when installing kselftest.
+> 
+> Fixes: 74b5a5968fe8 ("selftests/bpf: Replace test_progs and test_maps w/ general rule")
+> Signed-off-by: Anders Roxell <anders.roxell@linaro.org>
+> Acked-by: Song Liu <songliubraving@fb.com>
 
-Queued for 5.5. Thanks.
-
--- 
-Catalin
+Applied, thanks!
