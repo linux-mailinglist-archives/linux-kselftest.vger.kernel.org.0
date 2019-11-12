@@ -2,791 +2,974 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 55CCAF88C9
-	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Nov 2019 07:51:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B8F5F893F
+	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Nov 2019 08:00:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727032AbfKLGvU (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 12 Nov 2019 01:51:20 -0500
-Received: from mail.kernel.org ([198.145.29.99]:50172 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725775AbfKLGvT (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 12 Nov 2019 01:51:19 -0500
-Received: from rapoport-lnx (unknown [195.57.117.247])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 123CD2084F;
-        Tue, 12 Nov 2019 06:51:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1573541477;
-        bh=Xrd0YnKaYbVVFQLPrYOT47qBaf64xGATzmWkzzpLmiA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=B8jDkQZ6Yaop7bTCojs7RpRcs7qzAYkt7UQtAShffH1VroOthzb0lxXZ+Uqi9E2C9
-         L+fU7mWBQog4EI8R3urhYTrKWVhcrv1YybqFVDmiAVLKq35FK2BQV3cS+FpmDp9EJt
-         Prf9mTDXl8/QHBhyteLCU6UJyRMnvTcnUn7JMsuk=
-Date:   Tue, 12 Nov 2019 07:51:05 +0100
-From:   Mike Rapoport <rppt@kernel.org>
-To:     John Hubbard <jhubbard@nvidia.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn.topel@intel.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Dave Chinner <david@fromorbit.com>,
-        David Airlie <airlied@linux.ie>,
-        "David S . Miller" <davem@davemloft.net>,
-        Ira Weiny <ira.weiny@intel.com>, Jan Kara <jack@suse.cz>,
-        Jason Gunthorpe <jgg@ziepe.ca>, Jens Axboe <axboe@kernel.dk>,
-        Jonathan Corbet <corbet@lwn.net>,
-        =?iso-8859-1?B?Suly9G1l?= Glisse <jglisse@redhat.com>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Michal Hocko <mhocko@suse.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Paul Mackerras <paulus@samba.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Vlastimil Babka <vbabka@suse.cz>, bpf@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, kvm@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-rdma@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, netdev@vger.kernel.org,
-        linux-mm@kvack.org, LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v3 09/23] mm/gup: introduce pin_user_pages*() and FOLL_PIN
-Message-ID: <20191112065103.GA1209@rapoport-lnx>
-References: <20191112000700.3455038-1-jhubbard@nvidia.com>
- <20191112000700.3455038-10-jhubbard@nvidia.com>
+        id S1725835AbfKLHAt (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 12 Nov 2019 02:00:49 -0500
+Received: from mail-wr1-f68.google.com ([209.85.221.68]:39432 "EHLO
+        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725811AbfKLHAt (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 12 Nov 2019 02:00:49 -0500
+Received: by mail-wr1-f68.google.com with SMTP id l7so5629689wrp.6
+        for <linux-kselftest@vger.kernel.org>; Mon, 11 Nov 2019 23:00:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:date:to:message-id:subject:mime-version;
+        bh=iGiTU4RECQbujcBjsQ+mushYxfGcDA27bnIFWThiS64=;
+        b=okuvVJ7jdTyqRxiYPl1DPq5aYy2BmsqDmh8RT5Qh1mzOCSFs1yskQyU/a7oj7gMYH/
+         0pVZmijRx8EwpShqmwVEPZS2TFdlQ8hcE6rZ7l7VxQBNigMrnfgHJBN5GEyRmc998Xkv
+         QmboMgFMDC3ehYOkMX5Latf//IisyDntyGCcOOUVpJ7JE/+EHr+0Umje5VoCouc7M4uf
+         whjb78gnn8QZ0xC1JBUZ7W0oGeYYGUec//Zd3y+ut53AT8BtcelriFVqwdwUCqW5N+zg
+         nJaNiRpbv5Y4KO5uJ8fgFlVXhG8C4699EChqjgtg+j4MWQ1gk8+pEGSAHu7JYbtKgRv0
+         YedA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:date:to:message-id:subject:mime-version;
+        bh=iGiTU4RECQbujcBjsQ+mushYxfGcDA27bnIFWThiS64=;
+        b=gKsQmqz5SY0AK9vsxQGytPqqLGQ/WPTS8y6JbyIyMStocEIb7Aez64zoJqrC5ivkJ6
+         1g07plKJRf/TeC/VnCfL/jOfM1k2wO1MC7cQ/ExRnW8ODENNPrOjS+NKYghocZNIq/+I
+         64CnG+rmkdMaDGx399iu94noYtF1qoIdxGoYxjHhKVKkqcK/aUw3v8SPfK8Rw3oNUqMD
+         cPHPvPjVlp7Zok6Gzw23PGmfr3XpjE1gicut01BV1XHfAhmD8NRM8qfyDRa3gASTrG67
+         bBYm/HwiFPevwwikZomuKRX0ZXMN+XjzvYHB1OLvnpP61b9dIcBO6qBw1SL5OHrDX+XG
+         4mRg==
+X-Gm-Message-State: APjAAAUhqRnkLSmZJmQCGyrcEwvSiK36uzWDzmX/UIsQ9OY6aO+pgQTR
+        f6q69m2y9q8tdxs+pDtdU4Ih3Q==
+X-Google-Smtp-Source: APXvYqz/rc1nWFTyCKBGwnCInAaTr77B9Q7v5IUoZ4FGcv/EWiGC4vLuoGR3PVcUTuKqbYWYz2wArQ==
+X-Received: by 2002:adf:94a6:: with SMTP id 35mr10835714wrr.108.1573542041595;
+        Mon, 11 Nov 2019 23:00:41 -0800 (PST)
+Received: from 172.17.0.4 (ci.linaro.org. [88.99.136.175])
+        by smtp.gmail.com with ESMTPSA id t29sm24701712wrb.53.2019.11.11.23.00.40
+        (version=TLS1 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
+        Mon, 11 Nov 2019 23:00:40 -0800 (PST)
+From:   ci_notify@linaro.org
+X-Google-Original-From: linaro-infrastructure-errors@lists.linaro.org
+Date:   Tue, 12 Nov 2019 07:00:39 +0000 (UTC)
+To:     lkft-triage@lists.linaro.org, dan.rue@linaro.org,
+        anders.roxell@linaro.org, naresh.kamboju@linaro.org,
+        shuah@kernel.org, linux-kselftest@vger.kernel.org
+Message-ID: <1116308198.389.1573542040574.JavaMail.javamailuser@localhost>
+Subject: next-20191111 kselftest results
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20191112000700.3455038-10-jhubbard@nvidia.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
+Content-Type: multipart/mixed; 
+        boundary="----=_Part_388_1407819902.1573542039686"
+X-Jenkins-Job: LKFT Notify kselftest on next
+X-Jenkins-Result: SUCCESS
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Nov 11, 2019 at 04:06:46PM -0800, John Hubbard wrote:
-> Introduce pin_user_pages*() variations of get_user_pages*() calls,
-> and also pin_longterm_pages*() variations.
-> 
-> These variants all set FOLL_PIN, which is also introduced, and
-> thoroughly documented.
-> 
-> The pin_longterm*() variants also set FOLL_LONGTERM, in addition
-> to FOLL_PIN:
-> 
->     pin_user_pages()
->     pin_user_pages_remote()
->     pin_user_pages_fast()
-> 
->     pin_longterm_pages()
->     pin_longterm_pages_remote()
->     pin_longterm_pages_fast()
-> 
-> All pages that are pinned via the above calls, must be unpinned via
-> put_user_page().
-> 
-> The underlying rules are:
-> 
-> * These are gup-internal flags, so the call sites should not directly
-> set FOLL_PIN nor FOLL_LONGTERM. That behavior is enforced with
-> assertions, for the new FOLL_PIN flag. However, for the pre-existing
-> FOLL_LONGTERM flag, which has some call sites that still directly
-> set FOLL_LONGTERM, there is no assertion yet.
-> 
-> * Call sites that want to indicate that they are going to do DirectIO
->   ("DIO") or something with similar characteristics, should call a
->   get_user_pages()-like wrapper call that sets FOLL_PIN. These wrappers
->   will:
->         * Start with "pin_user_pages" instead of "get_user_pages". That
->           makes it easy to find and audit the call sites.
->         * Set FOLL_PIN
-> 
-> * For pages that are received via FOLL_PIN, those pages must be returned
->   via put_user_page().
-> 
-> Thanks to Jan Kara and Vlastimil Babka for explaining the 4 cases
-> in this documentation. (I've reworded it and expanded upon it.)
-> 
-> Reviewed-by: Jérôme Glisse <jglisse@redhat.com>
-> Cc: Mike Rapoport <rppt@kernel.org>
-> Cc: Jonathan Corbet <corbet@lwn.net>
-> Cc: Ira Weiny <ira.weiny@intel.com>
-> Signed-off-by: John Hubbard <jhubbard@nvidia.com>
-> ---
+------=_Part_388_1407819902.1573542039686
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Reviewed-by: Mike Rapoport <rppt@linux.ibm.com>  # Documentation
+Summary
+------------------------------------------------------------------------
+kernel: 5.4.0-rc6
+git repo: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+git branch: master
+git commit: 6980b7f6f9db7d5f344ae202012460e9d8869d89
+git describe: next-20191111
+Test details: https://qa-reports.linaro.org/lkft/linux-next-oe/build/next-20191111
 
->  Documentation/core-api/index.rst          |   1 +
->  Documentation/core-api/pin_user_pages.rst | 218 ++++++++++++++++++
->  include/linux/mm.h                        |  62 +++++-
->  mm/gup.c                                  | 260 ++++++++++++++++++++--
->  4 files changed, 514 insertions(+), 27 deletions(-)
->  create mode 100644 Documentation/core-api/pin_user_pages.rst
-> 
-> diff --git a/Documentation/core-api/index.rst b/Documentation/core-api/index.rst
-> index ab0eae1c153a..413f7d7c8642 100644
-> --- a/Documentation/core-api/index.rst
-> +++ b/Documentation/core-api/index.rst
-> @@ -31,6 +31,7 @@ Core utilities
->     generic-radix-tree
->     memory-allocation
->     mm-api
-> +   pin_user_pages
->     gfp_mask-from-fs-io
->     timekeeping
->     boot-time-mm
-> diff --git a/Documentation/core-api/pin_user_pages.rst b/Documentation/core-api/pin_user_pages.rst
-> new file mode 100644
-> index 000000000000..ce819e709435
-> --- /dev/null
-> +++ b/Documentation/core-api/pin_user_pages.rst
-> @@ -0,0 +1,218 @@
-> +.. SPDX-License-Identifier: GPL-2.0
-> +
-> +====================================================
-> +pin_user_pages() and related calls
-> +====================================================
-> +
-> +.. contents:: :local:
-> +
-> +Overview
-> +========
-> +
-> +This document describes the following functions: ::
-> +
-> + pin_user_pages
-> + pin_user_pages_fast
-> + pin_user_pages_remote
-> +
-> + pin_longterm_pages
-> + pin_longterm_pages_fast
-> + pin_longterm_pages_remote
-> +
-> +Basic description of FOLL_PIN
-> +=============================
-> +
-> +FOLL_PIN and FOLL_LONGTERM are flags that can be passed to the get_user_pages*()
-> +("gup") family of functions. FOLL_PIN has significant interactions and
-> +interdependencies with FOLL_LONGTERM, so both are covered here.
-> +
-> +Both FOLL_PIN and FOLL_LONGTERM are internal to gup, meaning that neither
-> +FOLL_PIN nor FOLL_LONGTERM should not appear at the gup call sites. This allows
-> +the associated wrapper functions  (pin_user_pages() and others) to set the
-> +correct combination of these flags, and to check for problems as well.
-> +
-> +FOLL_PIN and FOLL_GET are mutually exclusive for a given gup call. However,
-> +multiple threads and call sites are free to pin the same struct pages, via both
-> +FOLL_PIN and FOLL_GET. It's just the call site that needs to choose one or the
-> +other, not the struct page(s).
-> +
-> +The FOLL_PIN implementation is nearly the same as FOLL_GET, except that FOLL_PIN
-> +uses a different reference counting technique.
-> +
-> +FOLL_PIN is a prerequisite to FOLL_LONGTGERM. Another way of saying that is,
-> +FOLL_LONGTERM is a specific case, more restrictive case of FOLL_PIN.
-> +
-> +Which flags are set by each wrapper
-> +===================================
-> +
-> +Only FOLL_PIN and FOLL_LONGTERM are covered here. These flags are added to
-> +whatever flags the caller provides::
-> +
-> + Function                    gup flags (FOLL_PIN or FOLL_LONGTERM only)
-> + --------                    ------------------------------------------
-> + pin_user_pages              FOLL_PIN
-> + pin_user_pages_fast         FOLL_PIN
-> + pin_user_pages_remote       FOLL_PIN
-> +
-> + pin_longterm_pages          FOLL_PIN | FOLL_LONGTERM
-> + pin_longterm_pages_fast     FOLL_PIN | FOLL_LONGTERM
-> + pin_longterm_pages_remote   FOLL_PIN | FOLL_LONGTERM
-> +
-> +Tracking dma-pinned pages
-> +=========================
-> +
-> +Some of the key design constraints, and solutions, for tracking dma-pinned
-> +pages:
-> +
-> +* An actual reference count, per struct page, is required. This is because
-> +  multiple processes may pin and unpin a page.
-> +
-> +* False positives (reporting that a page is dma-pinned, when in fact it is not)
-> +  are acceptable, but false negatives are not.
-> +
-> +* struct page may not be increased in size for this, and all fields are already
-> +  used.
-> +
-> +* Given the above, we can overload the page->_refcount field by using, sort of,
-> +  the upper bits in that field for a dma-pinned count. "Sort of", means that,
-> +  rather than dividing page->_refcount into bit fields, we simple add a medium-
-> +  large value (GUP_PIN_COUNTING_BIAS, initially chosen to be 1024: 10 bits) to
-> +  page->_refcount. This provides fuzzy behavior: if a page has get_page() called
-> +  on it 1024 times, then it will appear to have a single dma-pinned count.
-> +  And again, that's acceptable.
-> +
-> +This also leads to limitations: there are only 31-10==21 bits available for a
-> +counter that increments 10 bits at a time.
-> +
-> +TODO: for 1GB and larger huge pages, this is cutting it close. That's because
-> +when pin_user_pages() follows such pages, it increments the head page by "1"
-> +(where "1" used to mean "+1" for get_user_pages(), but now means "+1024" for
-> +pin_user_pages()) for each tail page. So if you have a 1GB huge page:
-> +
-> +* There are 256K (18 bits) worth of 4 KB tail pages.
-> +* There are 21 bits available to count up via GUP_PIN_COUNTING_BIAS (that is,
-> +  10 bits at a time)
-> +* There are 21 - 18 == 3 bits available to count. Except that there aren't,
-> +  because you need to allow for a few normal get_page() calls on the head page,
-> +  as well. Fortunately, the approach of using addition, rather than "hard"
-> +  bitfields, within page->_refcount, allows for sharing these bits gracefully.
-> +  But we're still looking at about 8 references.
-> +
-> +This, however, is a missing feature more than anything else, because it's easily
-> +solved by addressing an obvious inefficiency in the original get_user_pages()
-> +approach of retrieving pages: stop treating all the pages as if they were
-> +PAGE_SIZE. Retrieve huge pages as huge pages. The callers need to be aware of
-> +this, so some work is required. Once that's in place, this limitation mostly
-> +disappears from view, because there will be ample refcounting range available.
-> +
-> +* Callers must specifically request "dma-pinned tracking of pages". In other
-> +  words, just calling get_user_pages() will not suffice; a new set of functions,
-> +  pin_user_page() and related, must be used.
-> +
-> +FOLL_PIN, FOLL_GET, FOLL_LONGTERM: when to use which flags
-> +==========================================================
-> +
-> +Thanks to Jan Kara, Vlastimil Babka and several other -mm people, for describing
-> +these categories:
-> +
-> +CASE 1: Direct IO (DIO)
-> +-----------------------
-> +There are GUP references to pages that are serving
-> +as DIO buffers. These buffers are needed for a relatively short time (so they
-> +are not "long term"). No special synchronization with page_mkclean() or
-> +munmap() is provided. Therefore, flags to set at the call site are: ::
-> +
-> +    FOLL_PIN
-> +
-> +...but rather than setting FOLL_PIN directly, call sites should use one of
-> +the pin_user_pages*() routines that set FOLL_PIN.
-> +
-> +CASE 2: RDMA
-> +------------
-> +There are GUP references to pages that are serving as DMA
-> +buffers. These buffers are needed for a long time ("long term"). No special
-> +synchronization with page_mkclean() or munmap() is provided. Therefore, flags
-> +to set at the call site are: ::
-> +
-> +    FOLL_PIN | FOLL_LONGTERM
-> +
-> +NOTE: Some pages, such as DAX pages, cannot be pinned with longterm pins. That's
-> +because DAX pages do not have a separate page cache, and so "pinning" implies
-> +locking down file system blocks, which is not (yet) supported in that way.
-> +
-> +CASE 3: Hardware with page faulting support
-> +-------------------------------------------
-> +Here, a well-written driver doesn't normally need to pin pages at all. However,
-> +if the driver does choose to do so, it can register MMU notifiers for the range,
-> +and will be called back upon invalidation. Either way (avoiding page pinning, or
-> +using MMU notifiers to unpin upon request), there is proper synchronization with
-> +both filesystem and mm (page_mkclean(), munmap(), etc).
-> +
-> +Therefore, neither flag needs to be set.
-> +
-> +In this case, ideally, neither get_user_pages() nor pin_user_pages() should be
-> +called. Instead, the software should be written so that it does not pin pages.
-> +This allows mm and filesystems to operate more efficiently and reliably.
-> +
-> +CASE 4: Pinning for struct page manipulation only
-> +-------------------------------------------------
-> +Here, normal GUP calls are sufficient, so neither flag needs to be set.
-> +
-> +page_dma_pinned(): the whole point of pinning
-> +=============================================
-> +
-> +The whole point of marking pages as "DMA-pinned" or "gup-pinned" is to be able
-> +to query, "is this page DMA-pinned?" That allows code such as page_mkclean()
-> +(and file system writeback code in general) to make informed decisions about
-> +what to do when a page cannot be unmapped due to such pins.
-> +
-> +What to do in those cases is the subject of a years-long series of discussions
-> +and debates (see the References at the end of this document). It's a TODO item
-> +here: fill in the details once that's worked out. Meanwhile, it's safe to say
-> +that having this available: ::
-> +
-> +        static inline bool page_dma_pinned(struct page *page)
-> +
-> +...is a prerequisite to solving the long-running gup+DMA problem.
-> +
-> +Another way of thinking about FOLL_GET, FOLL_PIN, and FOLL_LONGTERM
-> +===================================================================
-> +
-> +Another way of thinking about these flags is as a progression of restrictions:
-> +FOLL_GET is for struct page manipulation, without affecting the data that the
-> +struct page refers to. FOLL_PIN is a *replacement* for FOLL_GET, and is for
-> +short term pins on pages whose data *will* get accessed. As such, FOLL_PIN is
-> +a "more severe" form of pinning. And finally, FOLL_LONGTERM is an even more
-> +restrictive case that has FOLL_PIN as a prerequisite: this is for pages that
-> +will be pinned longterm, and whose data will be accessed.
-> +
-> +Unit testing
-> +============
-> +This file::
-> +
-> + tools/testing/selftests/vm/gup_benchmark.c
-> +
-> +has the following new calls to exercise the new pin*() wrapper functions:
-> +
-> +* PIN_FAST_BENCHMARK (./gup_benchmark -a)
-> +* PIN_LONGTERM_BENCHMARK (./gup_benchmark -a)
-> +* PIN_BENCHMARK (./gup_benchmark -a)
-> +
-> +You can monitor how many total dma-pinned pages have been acquired and released
-> +since the system was booted, via two new /proc/vmstat entries: ::
-> +
-> +    /proc/vmstat/nr_foll_pin_requested
-> +    /proc/vmstat/nr_foll_pin_requested
-> +
-> +Those are both going to show zero, unless CONFIG_DEBUG_VM is set. This is
-> +because there is a noticeable performance drop in put_user_page(), when they
-> +are activated.
-> +
-> +References
-> +==========
-> +
-> +* `Some slow progress on get_user_pages() (Apr 2, 2019) <https://lwn.net/Articles/784574/>`_
-> +* `DMA and get_user_pages() (LPC: Dec 12, 2018) <https://lwn.net/Articles/774411/>`_
-> +* `The trouble with get_user_pages() (Apr 30, 2018) <https://lwn.net/Articles/753027/>`_
-> +
-> +John Hubbard, October, 2019
-> diff --git a/include/linux/mm.h b/include/linux/mm.h
-> index 96228376139c..11e0086d64a4 100644
-> --- a/include/linux/mm.h
-> +++ b/include/linux/mm.h
-> @@ -1542,9 +1542,23 @@ long get_user_pages_remote(struct task_struct *tsk, struct mm_struct *mm,
->  			    unsigned long start, unsigned long nr_pages,
->  			    unsigned int gup_flags, struct page **pages,
->  			    struct vm_area_struct **vmas, int *locked);
-> +long pin_user_pages_remote(struct task_struct *tsk, struct mm_struct *mm,
-> +			   unsigned long start, unsigned long nr_pages,
-> +			   unsigned int gup_flags, struct page **pages,
-> +			   struct vm_area_struct **vmas, int *locked);
-> +long pin_longterm_pages_remote(struct task_struct *tsk, struct mm_struct *mm,
-> +			       unsigned long start, unsigned long nr_pages,
-> +			       unsigned int gup_flags, struct page **pages,
-> +			       struct vm_area_struct **vmas, int *locked);
->  long get_user_pages(unsigned long start, unsigned long nr_pages,
->  			    unsigned int gup_flags, struct page **pages,
->  			    struct vm_area_struct **vmas);
-> +long pin_user_pages(unsigned long start, unsigned long nr_pages,
-> +		    unsigned int gup_flags, struct page **pages,
-> +		    struct vm_area_struct **vmas);
-> +long pin_longterm_pages(unsigned long start, unsigned long nr_pages,
-> +			unsigned int gup_flags, struct page **pages,
-> +			struct vm_area_struct **vmas);
->  long get_user_pages_locked(unsigned long start, unsigned long nr_pages,
->  		    unsigned int gup_flags, struct page **pages, int *locked);
->  long get_user_pages_unlocked(unsigned long start, unsigned long nr_pages,
-> @@ -1552,6 +1566,10 @@ long get_user_pages_unlocked(unsigned long start, unsigned long nr_pages,
->  
->  int get_user_pages_fast(unsigned long start, int nr_pages,
->  			unsigned int gup_flags, struct page **pages);
-> +int pin_user_pages_fast(unsigned long start, int nr_pages,
-> +			unsigned int gup_flags, struct page **pages);
-> +int pin_longterm_pages_fast(unsigned long start, int nr_pages,
-> +			    unsigned int gup_flags, struct page **pages);
->  
->  int account_locked_vm(struct mm_struct *mm, unsigned long pages, bool inc);
->  int __account_locked_vm(struct mm_struct *mm, unsigned long pages, bool inc,
-> @@ -2610,13 +2628,15 @@ struct page *follow_page(struct vm_area_struct *vma, unsigned long address,
->  #define FOLL_ANON	0x8000	/* don't do file mappings */
->  #define FOLL_LONGTERM	0x10000	/* mapping lifetime is indefinite: see below */
->  #define FOLL_SPLIT_PMD	0x20000	/* split huge pmd before returning */
-> +#define FOLL_PIN	0x40000	/* pages must be released via put_user_page() */
->  
->  /*
-> - * NOTE on FOLL_LONGTERM:
-> + * FOLL_PIN and FOLL_LONGTERM may be used in various combinations with each
-> + * other. Here is what they mean, and how to use them:
->   *
->   * FOLL_LONGTERM indicates that the page will be held for an indefinite time
-> - * period _often_ under userspace control.  This is contrasted with
-> - * iov_iter_get_pages() where usages which are transient.
-> + * period _often_ under userspace control.  This is in contrast to
-> + * iov_iter_get_pages(), where usages which are transient.
->   *
->   * FIXME: For pages which are part of a filesystem, mappings are subject to the
->   * lifetime enforced by the filesystem and we need guarantees that longterm
-> @@ -2631,11 +2651,41 @@ struct page *follow_page(struct vm_area_struct *vma, unsigned long address,
->   * Currently only get_user_pages() and get_user_pages_fast() support this flag
->   * and calls to get_user_pages_[un]locked are specifically not allowed.  This
->   * is due to an incompatibility with the FS DAX check and
-> - * FAULT_FLAG_ALLOW_RETRY
-> + * FAULT_FLAG_ALLOW_RETRY.
->   *
-> - * In the CMA case: longterm pins in a CMA region would unnecessarily fragment
-> - * that region.  And so CMA attempts to migrate the page before pinning when
-> + * In the CMA case: long term pins in a CMA region would unnecessarily fragment
-> + * that region.  And so, CMA attempts to migrate the page before pinning, when
->   * FOLL_LONGTERM is specified.
-> + *
-> + * FOLL_PIN indicates that a special kind of tracking (not just page->_refcount,
-> + * but an additional pin counting system) will be invoked. This is intended for
-> + * anything that gets a page reference and then touches page data (for example,
-> + * Direct IO). This lets the filesystem know that some non-file-system entity is
-> + * potentially changing the pages' data. In contrast to FOLL_GET (whose pages
-> + * are released via put_page()), FOLL_PIN pages must be released, ultimately, by
-> + * a call to put_user_page().
-> + *
-> + * FOLL_PIN is similar to FOLL_GET: both of these pin pages. They use different
-> + * and separate refcounting mechanisms, however, and that means that each has
-> + * its own acquire and release mechanisms:
-> + *
-> + *     FOLL_GET: get_user_pages*() to acquire, and put_page() to release.
-> + *
-> + *     FOLL_PIN: pin_user_pages*() or pin_longterm_pages*() to acquire, and
-> + *               put_user_pages to release.
-> + *
-> + * FOLL_PIN and FOLL_GET are mutually exclusive for a given function call.
-> + * (The underlying pages may experience both FOLL_GET-based and FOLL_PIN-based
-> + * calls applied to them, and that's perfectly OK. This is a constraint on the
-> + * callers, not on the pages.)
-> + *
-> + * FOLL_PIN and FOLL_LONGTERM should be set internally by the pin_user_page*()
-> + * and pin_longterm_*() APIs, never directly by the caller. That's in order to
-> + * help avoid mismatches when releasing pages: get_user_pages*() pages must be
-> + * released via put_page(), while pin_user_pages*() pages must be released via
-> + * put_user_page().
-> + *
-> + * Please see Documentation/vm/pin_user_pages.rst for more information.
->   */
->  
->  static inline int vm_fault_to_errno(vm_fault_t vm_fault, int foll_flags)
-> diff --git a/mm/gup.c b/mm/gup.c
-> index cfe6dc5fc343..ea31810da828 100644
-> --- a/mm/gup.c
-> +++ b/mm/gup.c
-> @@ -194,6 +194,10 @@ static struct page *follow_page_pte(struct vm_area_struct *vma,
->  	spinlock_t *ptl;
->  	pte_t *ptep, pte;
->  
-> +	/* FOLL_GET and FOLL_PIN are mutually exclusive. */
-> +	if (WARN_ON_ONCE((flags & (FOLL_PIN | FOLL_GET)) ==
-> +			 (FOLL_PIN | FOLL_GET)))
-> +		return ERR_PTR(-EINVAL);
->  retry:
->  	if (unlikely(pmd_bad(*pmd)))
->  		return no_page_table(vma, flags);
-> @@ -805,7 +809,7 @@ static long __get_user_pages(struct task_struct *tsk, struct mm_struct *mm,
->  
->  	start = untagged_addr(start);
->  
-> -	VM_BUG_ON(!!pages != !!(gup_flags & FOLL_GET));
-> +	VM_BUG_ON(!!pages != !!(gup_flags & (FOLL_GET | FOLL_PIN)));
->  
->  	/*
->  	 * If FOLL_FORCE is set then do not force a full fault as the hinting
-> @@ -1029,7 +1033,16 @@ static __always_inline long __get_user_pages_locked(struct task_struct *tsk,
->  		BUG_ON(*locked != 1);
->  	}
->  
-> -	if (pages)
-> +	/*
-> +	 * FOLL_PIN and FOLL_GET are mutually exclusive. Traditional behavior
-> +	 * is to set FOLL_GET if the caller wants pages[] filled in (but has
-> +	 * carelessly failed to specify FOLL_GET), so keep doing that, but only
-> +	 * for FOLL_GET, not for the newer FOLL_PIN.
-> +	 *
-> +	 * FOLL_PIN always expects pages to be non-null, but no need to assert
-> +	 * that here, as any failures will be obvious enough.
-> +	 */
-> +	if (pages && !(flags & FOLL_PIN))
->  		flags |= FOLL_GET;
->  
->  	pages_done = 0;
-> @@ -1166,6 +1179,14 @@ long get_user_pages_remote(struct task_struct *tsk, struct mm_struct *mm,
->  		unsigned int gup_flags, struct page **pages,
->  		struct vm_area_struct **vmas, int *locked)
->  {
-> +	/*
-> +	 * FOLL_PIN must only be set internally by the pin_user_page*() and
-> +	 * pin_longterm_*() APIs, never directly by the caller, so enforce that
-> +	 * with an assertion:
-> +	 */
-> +	if (WARN_ON_ONCE(gup_flags & FOLL_PIN))
-> +		return -EINVAL;
-> +
->  	/*
->  	 * Current FOLL_LONGTERM behavior is incompatible with
->  	 * FAULT_FLAG_ALLOW_RETRY because of the FS DAX check requirement on
-> @@ -1626,6 +1647,14 @@ long get_user_pages(unsigned long start, unsigned long nr_pages,
->  		unsigned int gup_flags, struct page **pages,
->  		struct vm_area_struct **vmas)
->  {
-> +	/*
-> +	 * FOLL_PIN must only be set internally by the pin_user_page*() and
-> +	 * pin_longterm_*() APIs, never directly by the caller, so enforce that
-> +	 * with an assertion:
-> +	 */
-> +	if (WARN_ON_ONCE(gup_flags & FOLL_PIN))
-> +		return -EINVAL;
-> +
->  	return __gup_longterm_locked(current, current->mm, start, nr_pages,
->  				     pages, vmas, gup_flags | FOLL_TOUCH);
->  }
-> @@ -2377,29 +2406,14 @@ static int __gup_longterm_unlocked(unsigned long start, int nr_pages,
->  	return ret;
->  }
->  
-> -/**
-> - * get_user_pages_fast() - pin user pages in memory
-> - * @start:	starting user address
-> - * @nr_pages:	number of pages from start to pin
-> - * @gup_flags:	flags modifying pin behaviour
-> - * @pages:	array that receives pointers to the pages pinned.
-> - *		Should be at least nr_pages long.
-> - *
-> - * Attempt to pin user pages in memory without taking mm->mmap_sem.
-> - * If not successful, it will fall back to taking the lock and
-> - * calling get_user_pages().
-> - *
-> - * Returns number of pages pinned. This may be fewer than the number
-> - * requested. If nr_pages is 0 or negative, returns 0. If no pages
-> - * were pinned, returns -errno.
-> - */
-> -int get_user_pages_fast(unsigned long start, int nr_pages,
-> -			unsigned int gup_flags, struct page **pages)
-> +static int internal_get_user_pages_fast(unsigned long start, int nr_pages,
-> +					unsigned int gup_flags,
-> +					struct page **pages)
->  {
->  	unsigned long addr, len, end;
->  	int nr = 0, ret = 0;
->  
-> -	if (WARN_ON_ONCE(gup_flags & ~(FOLL_WRITE | FOLL_LONGTERM)))
-> +	if (WARN_ON_ONCE(gup_flags & ~(FOLL_WRITE | FOLL_LONGTERM | FOLL_PIN)))
->  		return -EINVAL;
->  
->  	start = untagged_addr(start) & PAGE_MASK;
-> @@ -2439,4 +2453,208 @@ int get_user_pages_fast(unsigned long start, int nr_pages,
->  
->  	return ret;
->  }
-> +
-> +/**
-> + * get_user_pages_fast() - pin user pages in memory
-> + * @start:	starting user address
-> + * @nr_pages:	number of pages from start to pin
-> + * @gup_flags:	flags modifying pin behaviour
-> + * @pages:	array that receives pointers to the pages pinned.
-> + *		Should be at least nr_pages long.
-> + *
-> + * Attempt to pin user pages in memory without taking mm->mmap_sem.
-> + * If not successful, it will fall back to taking the lock and
-> + * calling get_user_pages().
-> + *
-> + * Returns number of pages pinned. This may be fewer than the number requested.
-> + * If nr_pages is 0 or negative, returns 0. If no pages were pinned, returns
-> + * -errno.
-> + */
-> +int get_user_pages_fast(unsigned long start, int nr_pages,
-> +			unsigned int gup_flags, struct page **pages)
-> +{
-> +	/*
-> +	 * FOLL_PIN must only be set internally by the pin_user_page*() and
-> +	 * pin_longterm_*() APIs, never directly by the caller, so enforce that:
-> +	 */
-> +	if (WARN_ON_ONCE(gup_flags & FOLL_PIN))
-> +		return -EINVAL;
-> +
-> +	return internal_get_user_pages_fast(start, nr_pages, gup_flags, pages);
-> +}
->  EXPORT_SYMBOL_GPL(get_user_pages_fast);
-> +
-> +/**
-> + * pin_user_pages_fast() - pin user pages in memory without taking locks
-> + *
-> + * Nearly the same as get_user_pages_fast(), except that FOLL_PIN is set. See
-> + * get_user_pages_fast() for documentation on the function arguments, because
-> + * the arguments here are identical.
-> + *
-> + * FOLL_PIN means that the pages must be released via put_user_page(). Please
-> + * see Documentation/vm/pin_user_pages.rst for further details.
-> + *
-> + * This is intended for Case 1 (DIO) in Documentation/vm/pin_user_pages.rst. It
-> + * is NOT intended for Case 2 (RDMA: long-term pins).
-> + */
-> +int pin_user_pages_fast(unsigned long start, int nr_pages,
-> +			unsigned int gup_flags, struct page **pages)
-> +{
-> +	/* FOLL_GET and FOLL_PIN are mutually exclusive. */
-> +	if (WARN_ON_ONCE(gup_flags & FOLL_GET))
-> +		return -EINVAL;
-> +
-> +	gup_flags |= FOLL_PIN;
-> +	return internal_get_user_pages_fast(start, nr_pages, gup_flags, pages);
-> +}
-> +EXPORT_SYMBOL_GPL(pin_user_pages_fast);
-> +
-> +/**
-> + * pin_longterm_pages_fast() - pin user pages in memory without taking locks
-> + *
-> + * Nearly the same as get_user_pages_fast(), except that FOLL_PIN and
-> + * FOLL_LONGTERM are set. See get_user_pages_fast() for documentation on the
-> + * function arguments, because the arguments here are identical.
-> + *
-> + * FOLL_PIN means that the pages must be released via put_user_page(). Please
-> + * see Documentation/vm/pin_user_pages.rst for further details.
-> + *
-> + * FOLL_LONGTERM means that the pages are being pinned for "long term" use,
-> + * typically by a non-CPU device, and we cannot be sure that waiting for a
-> + * pinned page to become unpin will be effective.
-> + *
-> + * This is intended for Case 2 (RDMA: long-term pins) of the FOLL_PIN
-> + * documentation.
-> + */
-> +int pin_longterm_pages_fast(unsigned long start, int nr_pages,
-> +			    unsigned int gup_flags, struct page **pages)
-> +{
-> +	/* FOLL_GET and FOLL_PIN are mutually exclusive. */
-> +	if (WARN_ON_ONCE(gup_flags & FOLL_GET))
-> +		return -EINVAL;
-> +
-> +	gup_flags |= (FOLL_PIN | FOLL_LONGTERM);
-> +	return internal_get_user_pages_fast(start, nr_pages, gup_flags, pages);
-> +}
-> +EXPORT_SYMBOL_GPL(pin_longterm_pages_fast);
-> +
-> +/**
-> + * pin_user_pages_remote() - pin pages of a remote process (task != current)
-> + *
-> + * Nearly the same as get_user_pages_remote(), except that FOLL_PIN is set. See
-> + * get_user_pages_remote() for documentation on the function arguments, because
-> + * the arguments here are identical.
-> + *
-> + * FOLL_PIN means that the pages must be released via put_user_page(). Please
-> + * see Documentation/vm/pin_user_pages.rst for details.
-> + *
-> + * This is intended for Case 1 (DIO) in Documentation/vm/pin_user_pages.rst. It
-> + * is NOT intended for Case 2 (RDMA: long-term pins).
-> + */
-> +long pin_user_pages_remote(struct task_struct *tsk, struct mm_struct *mm,
-> +			   unsigned long start, unsigned long nr_pages,
-> +			   unsigned int gup_flags, struct page **pages,
-> +			   struct vm_area_struct **vmas, int *locked)
-> +{
-> +	/* FOLL_GET and FOLL_PIN are mutually exclusive. */
-> +	if (WARN_ON_ONCE(gup_flags & FOLL_GET))
-> +		return -EINVAL;
-> +
-> +	gup_flags |= FOLL_TOUCH | FOLL_REMOTE | FOLL_PIN;
-> +
-> +	return __get_user_pages_locked(tsk, mm, start, nr_pages, pages, vmas,
-> +				       locked, gup_flags);
-> +}
-> +EXPORT_SYMBOL(pin_user_pages_remote);
-> +
-> +/**
-> + * pin_longterm_pages_remote() - pin pages of a remote process (task != current)
-> + *
-> + * Nearly the same as get_user_pages_remote(), but note that FOLL_TOUCH is not
-> + * set, and FOLL_PIN and FOLL_LONGTERM are set. See get_user_pages_remote() for
-> + * documentation on the function arguments, because the arguments here are
-> + * identical.
-> + *
-> + * FOLL_PIN means that the pages must be released via put_user_page(). Please
-> + * see Documentation/vm/pin_user_pages.rst for further details.
-> + *
-> + * FOLL_LONGTERM means that the pages are being pinned for "long term" use,
-> + * typically by a non-CPU device, and we cannot be sure that waiting for a
-> + * pinned page to become unpin will be effective.
-> + *
-> + * This is intended for Case 2 (RDMA: long-term pins) in
-> + * Documentation/vm/pin_user_pages.rst.
-> + */
-> +long pin_longterm_pages_remote(struct task_struct *tsk, struct mm_struct *mm,
-> +			       unsigned long start, unsigned long nr_pages,
-> +			       unsigned int gup_flags, struct page **pages,
-> +			       struct vm_area_struct **vmas, int *locked)
-> +{
-> +	/* FOLL_GET and FOLL_PIN are mutually exclusive. */
-> +	if (WARN_ON_ONCE(gup_flags & FOLL_GET))
-> +		return -EINVAL;
-> +
-> +	gup_flags |= FOLL_LONGTERM | FOLL_REMOTE | FOLL_PIN;
-> +
-> +	return __get_user_pages_locked(tsk, mm, start, nr_pages, pages, vmas,
-> +				       locked, gup_flags);
-> +}
-> +EXPORT_SYMBOL(pin_longterm_pages_remote);
-> +
-> +/**
-> + * pin_user_pages() - pin user pages in memory for use by other devices
-> + *
-> + * Nearly the same as get_user_pages(), except that FOLL_TOUCH is not set, and
-> + * FOLL_PIN is set.
-> + *
-> + * FOLL_PIN means that the pages must be released via put_user_page(). Please
-> + * see Documentation/vm/pin_user_pages.rst for details.
-> + *
-> + * This is intended for Case 1 (DIO) in Documentation/vm/pin_user_pages.rst. It
-> + * is NOT intended for Case 2 (RDMA: long-term pins).
-> + */
-> +long pin_user_pages(unsigned long start, unsigned long nr_pages,
-> +		    unsigned int gup_flags, struct page **pages,
-> +		    struct vm_area_struct **vmas)
-> +{
-> +	/* FOLL_GET and FOLL_PIN are mutually exclusive. */
-> +	if (WARN_ON_ONCE(gup_flags & FOLL_GET))
-> +		return -EINVAL;
-> +
-> +	gup_flags |= FOLL_PIN;
-> +	return __gup_longterm_locked(current, current->mm, start, nr_pages,
-> +				     pages, vmas, gup_flags);
-> +}
-> +EXPORT_SYMBOL(pin_user_pages);
-> +
-> +/**
-> + * pin_longterm_pages() - pin user pages in memory for long-term use (RDMA,
-> + * typically)
-> + *
-> + * Nearly the same as get_user_pages(), except that FOLL_PIN and FOLL_LONGTERM
-> + * are set. See get_user_pages_fast() for documentation on the function
-> + * arguments, because the arguments here are identical.
-> + *
-> + * FOLL_PIN means that the pages must be released via put_user_page(). Please
-> + * see Documentation/vm/pin_user_pages.rst for further details.
-> + *
-> + * FOLL_LONGTERM means that the pages are being pinned for "long term" use,
-> + * typically by a non-CPU device, and we cannot be sure that waiting for a
-> + * pinned page to become unpin will be effective.
-> + *
-> + * This is intended for Case 2 (RDMA: long-term pins) in
-> + * Documentation/vm/pin_user_pages.rst.
-> + */
-> +long pin_longterm_pages(unsigned long start, unsigned long nr_pages,
-> +			unsigned int gup_flags, struct page **pages,
-> +			struct vm_area_struct **vmas)
-> +{
-> +	/* FOLL_GET and FOLL_PIN are mutually exclusive. */
-> +	if (WARN_ON_ONCE(gup_flags & FOLL_GET))
-> +		return -EINVAL;
-> +
-> +	gup_flags |= FOLL_PIN | FOLL_LONGTERM;
-> +	return __gup_longterm_locked(current, current->mm, start, nr_pages,
-> +				     pages, vmas, gup_flags);
-> +}
-> +EXPORT_SYMBOL(pin_longterm_pages);
-> -- 
-> 2.24.0
-> 
+Regressions (compared to build next-20191108)
+------------------------------------------------------------------------
+qemu_arm:                                                                                                      
+ kselftest:                                                                                         
+    * net_so_txtime.sh                                                                                                         
+qemu_x86_64:                                                                                                      
+ kselftest:                                                                                         
+    * epoll_epoll_wakeup_test                                                                                                         
+                                                                                         
+    * livepatch_test-callbacks.sh                                                                                                         
+                                                                                                          
+                                                                                                                       
+Fixes (compared to build next-20191108)                                                                   
+------------------------------------------------------------------------                                               
+qemu_arm64:                                                                                                      
+ kselftest:                                                                                         
+    * lib_bitmap.sh                                                                                                         
+                                                                                         
+    * lib_printf.sh                                                                                                         
+                                                                                         
+    * lib_strscpy.sh                                                                                                         
+x15 - arm:                                                                                                      
+ kselftest:                                                                                         
+    * lib_printf.sh                                                                                                         
+                                                                                         
+    * lib_strscpy.sh                                                                                                         
+                                                                                         
+    * net_so_txtime.sh                                                                                                         
+                                                                                         
+    * proc_proc-self-map-files-002                                                                                                         
+qemu_arm:                                                                                                      
+ kselftest:                                                                                         
+    * cgroup_test_freezer                                                                                                         
+                                                                                         
+    * lib_printf.sh                                                                                                         
+                                                                                         
+    * lib_strscpy.sh                                                                                                         
+                                                                                         
+    * proc_proc-self-map-files-002                                                                                                         
+qemu_x86_64:                                                                                                      
+ kselftest:                                                                                         
+    * lib_bitmap.sh                                                                                                         
+                                                                                         
+    * lib_printf.sh                                                                                                         
+                                                                                         
+    * lib_strscpy.sh                                                                                                         
+x86_64:                                                                                                      
+ kselftest:                                                                                         
+    * lib_bitmap.sh                                                                                                         
+                                                                                         
+    * lib_printf.sh                                                                                                         
+                                                                                         
+    * lib_strscpy.sh                                                                                                         
+                                                                                                      
+ kselftest-vsyscall-mode-native:                                                                                         
+    * lib_bitmap.sh                                                                                                         
+                                                                                         
+    * lib_printf.sh                                                                                                         
+                                                                                         
+    * lib_strscpy.sh                                                                                                         
+                                                                                                      
+ kselftest-vsyscall-mode-none:                                                                                         
+    * lib_bitmap.sh                                                                                                         
+                                                                                         
+    * lib_printf.sh                                                                                                         
+                                                                                         
+    * lib_strscpy.sh                                                                                                         
+                                                                                         
+    * x86_fsgsbase_64                                                                                                         
+x86_64:                                                                                                      
+ kselftest:                                                                                         
+    * lib_bitmap.sh                                                                                                         
+                                                                                         
+    * lib_printf.sh                                                                                                         
+                                                                                         
+    * lib_strscpy.sh                                                                                                         
+                                                                                                      
+ kselftest-vsyscall-mode-native:                                                                                         
+    * lib_bitmap.sh                                                                                                         
+                                                                                         
+    * lib_printf.sh                                                                                                         
+                                                                                         
+    * lib_strscpy.sh                                                                                                         
+                                                                                                      
+ kselftest-vsyscall-mode-none:                                                                                         
+    * lib_bitmap.sh                                                                                                         
+                                                                                         
+    * lib_printf.sh                                                                                                         
+                                                                                         
+    * lib_strscpy.sh                                                                                                         
+                                                                                         
+    * x86_fsgsbase_64                                                                                                         
+x86_64:                                                                                                      
+ kselftest:                                                                                         
+    * lib_bitmap.sh                                                                                                         
+                                                                                         
+    * lib_printf.sh                                                                                                         
+                                                                                         
+    * lib_strscpy.sh                                                                                                         
+                                                                                                      
+ kselftest-vsyscall-mode-native:                                                                                         
+    * lib_bitmap.sh                                                                                                         
+                                                                                         
+    * lib_printf.sh                                                                                                         
+                                                                                         
+    * lib_strscpy.sh                                                                                                         
+                                                                                                      
+ kselftest-vsyscall-mode-none:                                                                                         
+    * lib_bitmap.sh                                                                                                         
+                                                                                         
+    * lib_printf.sh                                                                                                         
+                                                                                         
+    * lib_strscpy.sh                                                                                                         
+                                                                                         
+    * x86_fsgsbase_64                                                                                                         
+dragonboard-410c - arm64:                                                                                                      
+ kselftest:                                                                                         
+    * lib_bitmap.sh                                                                                                         
+                                                                                         
+    * lib_printf.sh                                                                                                         
+                                                                                         
+    * lib_strscpy.sh                                                                                                         
+                                                                                         
+    * net_so_txtime.sh                                                                                                         
+qemu_i386:                                                                                                      
+ kselftest:                                                                                         
+    * lib_printf.sh                                                                                                         
+                                                                                         
+    * lib_strscpy.sh                                                                                                         
+                                                                                         
+    * proc_proc-self-map-files-002                                                                                                         
+
+
+In total:
+------------------------------------------------------------------------
+Ran 1776 total tests in the following environments and test suites.
+pass 924
+fail 707
+xfail 0
+skip 145
+
+Environments
+--------------
+- dragonboard-410c - arm64
+- hi6220-hikey - arm64
+- i386
+- juno-r2 - arm64
+- qemu_arm
+- qemu_arm64
+- qemu_i386
+- qemu_x86_64
+- x15 - arm
+- x86_64
+
+Test Suites
+-----------
+* kselftest
+* kselftest-vsyscall-mode-native
+* kselftest-vsyscall-mode-none
+
+
+Failures
+------------------------------------------------------------------------
+
+qemu_x86_64:
+* kselftest/bpf_get_cgroup_id_user
+* kselftest/bpf_test_bpftool_build.sh
+* kselftest/bpf_test_dev_cgroup
+* kselftest/bpf_test_flow_dissector.sh
+* kselftest/bpf_test_lwt_ip_encap.sh
+* kselftest/bpf_test_lwt_seg6local.sh
+* kselftest/bpf_test_maps
+* kselftest/bpf_test_netcnt
+* kselftest/bpf_test_progs
+* kselftest/bpf_test_progs-no_alu32
+* kselftest/bpf_test_select_reuseport
+* kselftest/bpf_test_skb_cgroup_id.sh
+* kselftest/bpf_test_sock_addr.sh
+* kselftest/bpf_test_socket_cookie
+* kselftest/bpf_test_sock_fields
+* kselftest/bpf_test_sockmap
+* kselftest/bpf_test_sysctl
+* kselftest/bpf_test_tc_edt.sh
+* kselftest/bpf_test_tcpbpf_user
+* kselftest/bpf_test_tcp_check_syncookie.sh
+* kselftest/bpf_test_tcpnotify_user
+* kselftest/bpf_test_tc_tunnel.sh
+* kselftest/bpf_test_tunnel.sh
+* kselftest/bpf_test_xdping.sh
+* kselftest/bpf_test_xdp_meta.sh
+* kselftest/bpf_test_xdp_redirect.sh
+* kselftest/bpf_test_xdp_vlan_mode_generic.sh
+* kselftest/bpf_test_xdp_vlan_mode_native.sh
+* kselftest/bpf_xdping
+* kselftest/cpufreq_main.sh
+* kselftest/epoll_epoll_wakeup_test
+* kselftest/firmware_fw_run_tests.sh
+* kselftest/kvm_clear_dirty_log_test
+* kselftest/kvm_cr4_cpuid_sync_test
+* kselftest/kvm_dirty_log_test
+* kselftest/kvm_evmcs_test
+* kselftest/kvm_hyperv_cpuid
+* kselftest/kvm_kvm_create_max_vcpus
+* kselftest/kvm_platform_info_test
+* kselftest/kvm_set_sregs_test
+* kselftest/kvm_smm_test
+* kselftest/kvm_state_test
+* kselftest/kvm_sync_regs_test
+* kselftest/livepatch_test-callbacks.sh
+* kselftest/mqueue_mq_perf_tests
+* kselftest/net_fib-onlink-tests.sh
+* kselftest/net_fib_tests.sh
+* kselftest/net_ip_defrag.sh
+* kselftest/net_l2tp.sh
+* kselftest/net_pmtu.sh
+* kselftest/net_psock_snd.sh
+* kselftest/net_run_netsocktests
+* kselftest/net_test_vxlan_under_vrf.sh
+* kselftest/net_traceroute.sh
+* kselftest/net_udpgro_bench.sh
+* kselftest/net_udpgro.sh
+* kselftest/net_udpgso_bench.sh
+* kselftest/net_xfrm_policy.sh
+* kselftest/pidfd_pidfd_open_test
+* kselftest/pidfd_pidfd_poll_test
+* kselftest/pstore_pstore_tests
+* kselftest/rseq_run_param_test.sh
+* kselftest/rtc_rtctest
+* kselftest/timers_set-timer-lat
+* kselftest/timestamping_txtimestamp.sh
+* kselftest/tpm2_test_smoke.sh
+* kselftest/tpm2_test_space.sh
+* kselftest/vm_run_vmtests
+* kselftest/x86_fsgsbase_64
+
+qemu_arm64:
+* kselftest/arm64_fake_sigreturn_bad_magic
+* kselftest/arm64_fake_sigreturn_bad_size
+* kselftest/arm64_fake_sigreturn_bad_size_for_magic0
+* kselftest/arm64_fake_sigreturn_duplicated_fpsimd
+* kselftest/arm64_fake_sigreturn_misaligned_sp
+* kselftest/arm64_fake_sigreturn_missing_fpsimd
+* kselftest/arm64_mangle_pstate_invalid_compat_toggle
+* kselftest/arm64_mangle_pstate_invalid_daif_bits
+* kselftest/arm64_mangle_pstate_invalid_mode_el1h
+* kselftest/arm64_mangle_pstate_invalid_mode_el1t
+* kselftest/arm64_mangle_pstate_invalid_mode_el2h
+* kselftest/arm64_mangle_pstate_invalid_mode_el2t
+* kselftest/arm64_mangle_pstate_invalid_mode_el3h
+* kselftest/arm64_mangle_pstate_invalid_mode_el3t
+* kselftest/bpf_get_cgroup_id_user
+* kselftest/bpf_test_bpftool_build.sh
+* kselftest/bpf_test_dev_cgroup
+* kselftest/bpf_test_flow_dissector.sh
+* kselftest/bpf_test_kmod.sh
+* kselftest/bpf_test_lpm_map
+* kselftest/bpf_test_lwt_ip_encap.sh
+* kselftest/bpf_test_lwt_seg6local.sh
+* kselftest/bpf_test_maps
+* kselftest/bpf_test_netcnt
+* kselftest/bpf_test_progs
+* kselftest/bpf_test_progs-no_alu32
+* kselftest/bpf_test_select_reuseport
+* kselftest/bpf_test_skb_cgroup_id.sh
+* kselftest/bpf_test_sock_addr.sh
+* kselftest/bpf_test_socket_cookie
+* kselftest/bpf_test_sock_fields
+* kselftest/bpf_test_sockmap
+* kselftest/bpf_test_sysctl
+* kselftest/bpf_test_tag
+* kselftest/bpf_test_tc_edt.sh
+* kselftest/bpf_test_tcpbpf_user
+* kselftest/bpf_test_tcp_check_syncookie.sh
+* kselftest/bpf_test_tcpnotify_user
+* kselftest/bpf_test_tc_tunnel.sh
+* kselftest/bpf_test_tunnel.sh
+* kselftest/bpf_test_verifier
+* kselftest/bpf_test_xdping.sh
+* kselftest/bpf_test_xdp_meta.sh
+* kselftest/bpf_test_xdp_redirect.sh
+* kselftest/bpf_test_xdp_vlan_mode_generic.sh
+* kselftest/bpf_test_xdp_vlan_mode_native.sh
+* kselftest/bpf_xdping
+* kselftest/clone3_clone3_clear_sighand
+* kselftest/cpufreq_main.sh
+* kselftest/firmware_fw_run_tests.sh
+* kselftest/kvm_clear_dirty_log_test
+* kselftest/kvm_cr4_cpuid_sync_test
+* kselftest/kvm_dirty_log_test
+* kselftest/kvm_evmcs_test
+* kselftest/kvm_hyperv_cpuid
+* kselftest/kvm_kvm_create_max_vcpus
+* kselftest/kvm_mmio_warning_test
+* kselftest/kvm_platform_info_test
+* kselftest/kvm_set_sregs_test
+* kselftest/kvm_smm_test
+* kselftest/kvm_state_test
+* kselftest/kvm_sync_regs_test
+* kselftest/kvm_vmx_close_while_nested_test
+* kselftest/kvm_vmx_dirty_log_test
+* kselftest/kvm_vmx_set_nested_state_test
+* kselftest/kvm_vmx_tsc_adjust_test
+* kselftest/net_fib-onlink-tests.sh
+* kselftest/net_fib_rule_tests.sh
+* kselftest/net_fib_tests.sh
+* kselftest/netfilter_conntrack_icmp_related.sh
+* kselftest/netfilter_nft_nat.sh
+* kselftest/net_ip_defrag.sh
+* kselftest/net_l2tp.sh
+* kselftest/net_pmtu.sh
+* kselftest/net_psock_snd.sh
+* kselftest/net_run_netsocktests
+* kselftest/net_tcp_fastopen_backup_key.sh
+* kselftest/net_test_vxlan_under_vrf.sh
+* kselftest/net_udpgro_bench.sh
+* kselftest/net_udpgro.sh
+* kselftest/net_udpgso_bench.sh
+* kselftest/pidfd_pidfd_fdinfo_test
+* kselftest/pidfd_pidfd_open_test
+* kselftest/pidfd_pidfd_poll_test
+* kselftest/pidfd_pidfd_test
+* kselftest/pidfd_pidfd_wait
+* kselftest/pstore_pstore_tests
+* kselftest/rseq_basic_percpu_ops_test
+* kselftest/rtc_rtctest
+* kselftest/timers_set-timer-lat
+* kselftest/timestamping_txtimestamp.sh
+* kselftest/tpm2_test_smoke.sh
+* kselftest/tpm2_test_space.sh
+
+qemu_arm:
+* kselftest/bpf_get_cgroup_id_user
+* kselftest/bpf_test_bpftool_build.sh
+* kselftest/bpf_test_dev_cgroup
+* kselftest/bpf_test_flow_dissector.sh
+* kselftest/bpf_test_hashmap
+* kselftest/bpf_test_kmod.sh
+* kselftest/bpf_test_lwt_ip_encap.sh
+* kselftest/bpf_test_lwt_seg6local.sh
+* kselftest/bpf_test_maps
+* kselftest/bpf_test_netcnt
+* kselftest/bpf_test_progs
+* kselftest/bpf_test_progs-no_alu32
+* kselftest/bpf_test_select_reuseport
+* kselftest/bpf_test_skb_cgroup_id.sh
+* kselftest/bpf_test_sock_addr.sh
+* kselftest/bpf_test_socket_cookie
+* kselftest/bpf_test_sock_fields
+* kselftest/bpf_test_sockmap
+* kselftest/bpf_test_sysctl
+* kselftest/bpf_test_tag
+* kselftest/bpf_test_tc_edt.sh
+* kselftest/bpf_test_tcpbpf_user
+* kselftest/bpf_test_tcp_check_syncookie.sh
+* kselftest/bpf_test_tcpnotify_user
+* kselftest/bpf_test_tc_tunnel.sh
+* kselftest/bpf_test_tunnel.sh
+* kselftest/bpf_test_verifier
+* kselftest/bpf_test_xdping.sh
+* kselftest/bpf_test_xdp_meta.sh
+* kselftest/bpf_test_xdp_redirect.sh
+* kselftest/bpf_test_xdp_vlan_mode_generic.sh
+* kselftest/bpf_test_xdp_vlan_mode_native.sh
+* kselftest/bpf_xdping
+* kselftest/clone3_clone3_clear_sighand
+* kselftest/cpufreq_main.sh
+* kselftest/firmware_fw_run_tests.sh
+* kselftest/kvm_clear_dirty_log_test
+* kselftest/kvm_cr4_cpuid_sync_test
+* kselftest/kvm_dirty_log_test
+* kselftest/kvm_evmcs_test
+* kselftest/kvm_hyperv_cpuid
+* kselftest/kvm_kvm_create_max_vcpus
+* kselftest/kvm_mmio_warning_test
+* kselftest/kvm_platform_info_test
+* kselftest/kvm_set_sregs_test
+* kselftest/kvm_smm_test
+* kselftest/kvm_state_test
+* kselftest/kvm_sync_regs_test
+* kselftest/kvm_vmx_close_while_nested_test
+* kselftest/kvm_vmx_dirty_log_test
+* kselftest/kvm_vmx_set_nested_state_test
+* kselftest/kvm_vmx_tsc_adjust_test
+* kselftest/lib_bitmap.sh
+* kselftest/net_fib-onlink-tests.sh
+* kselftest/net_fib_rule_tests.sh
+* kselftest/net_fib_tests.sh
+* kselftest/netfilter_conntrack_icmp_related.sh
+* kselftest/netfilter_nft_nat.sh
+* kselftest/net_ip_defrag.sh
+* kselftest/net_l2tp.sh
+* kselftest/net_pmtu.sh
+* kselftest/net_psock_snd.sh
+* kselftest/net_reuseport_bpf_numa
+* kselftest/net_run_netsocktests
+* kselftest/net_so_txtime.sh
+* kselftest/net_tcp_fastopen_backup_key.sh
+* kselftest/net_test_vxlan_under_vrf.sh
+* kselftest/net_udpgro_bench.sh
+* kselftest/net_udpgro.sh
+* kselftest/net_udpgso_bench.sh
+* kselftest/pidfd_pidfd_open_test
+* kselftest/pidfd_pidfd_poll_test
+* kselftest/pidfd_pidfd_test
+* kselftest/proc_proc-self-syscall
+* kselftest/pstore_pstore_tests
+* kselftest/rseq_basic_percpu_ops_test
+* kselftest/rtc_rtctest
+* kselftest/timers_set-timer-lat
+* kselftest/timestamping_txtimestamp.sh
+* kselftest/tpm2_test_smoke.sh
+* kselftest/tpm2_test_space.sh
+
+qemu_i386:
+* kselftest/bpf_get_cgroup_id_user
+* kselftest/bpf_test_bpftool_build.sh
+* kselftest/bpf_test_dev_cgroup
+* kselftest/bpf_test_flow_dissector.sh
+* kselftest/bpf_test_hashmap
+* kselftest/bpf_test_lwt_ip_encap.sh
+* kselftest/bpf_test_lwt_seg6local.sh
+* kselftest/bpf_test_maps
+* kselftest/bpf_test_netcnt
+* kselftest/bpf_test_progs
+* kselftest/bpf_test_progs-no_alu32
+* kselftest/bpf_test_select_reuseport
+* kselftest/bpf_test_skb_cgroup_id.sh
+* kselftest/bpf_test_sock_addr.sh
+* kselftest/bpf_test_socket_cookie
+* kselftest/bpf_test_sock_fields
+* kselftest/bpf_test_sockmap
+* kselftest/bpf_test_sysctl
+* kselftest/bpf_test_tc_edt.sh
+* kselftest/bpf_test_tcpbpf_user
+* kselftest/bpf_test_tcp_check_syncookie.sh
+* kselftest/bpf_test_tcpnotify_user
+* kselftest/bpf_test_tc_tunnel.sh
+* kselftest/bpf_test_tunnel.sh
+* kselftest/bpf_test_xdping.sh
+* kselftest/bpf_test_xdp_meta.sh
+* kselftest/bpf_test_xdp_redirect.sh
+* kselftest/bpf_test_xdp_vlan_mode_generic.sh
+* kselftest/bpf_test_xdp_vlan_mode_native.sh
+* kselftest/bpf_xdping
+* kselftest/clone3_clone3_clear_sighand
+* kselftest/cpufreq_main.sh
+* kselftest/firmware_fw_run_tests.sh
+* kselftest/kvm_clear_dirty_log_test
+* kselftest/kvm_cr4_cpuid_sync_test
+* kselftest/kvm_dirty_log_test
+* kselftest/kvm_evmcs_test
+* kselftest/kvm_hyperv_cpuid
+* kselftest/kvm_kvm_create_max_vcpus
+* kselftest/kvm_mmio_warning_test
+* kselftest/kvm_platform_info_test
+* kselftest/kvm_set_sregs_test
+* kselftest/kvm_smm_test
+* kselftest/kvm_state_test
+* kselftest/kvm_sync_regs_test
+* kselftest/kvm_vmx_close_while_nested_test
+* kselftest/kvm_vmx_dirty_log_test
+* kselftest/kvm_vmx_set_nested_state_test
+* kselftest/kvm_vmx_tsc_adjust_test
+* kselftest/lib_bitmap.sh
+* kselftest/mqueue_mq_perf_tests
+* kselftest/net_fib-onlink-tests.sh
+* kselftest/net_fib_tests.sh
+* kselftest/netfilter_conntrack_icmp_related.sh
+* kselftest/netfilter_nft_nat.sh
+* kselftest/net_ip_defrag.sh
+* kselftest/net_l2tp.sh
+* kselftest/net_pmtu.sh
+* kselftest/net_psock_snd.sh
+* kselftest/net_run_netsocktests
+* kselftest/net_test_vxlan_under_vrf.sh
+* kselftest/net_traceroute.sh
+* kselftest/net_udpgro_bench.sh
+* kselftest/net_udpgro.sh
+* kselftest/net_udpgso_bench.sh
+* kselftest/net_xfrm_policy.sh
+* kselftest/pidfd_pidfd_open_test
+* kselftest/pidfd_pidfd_poll_test
+* kselftest/proc_proc-self-syscall
+* kselftest/pstore_pstore_tests
+* kselftest/rseq_run_param_test.sh
+* kselftest/rtc_rtctest
+* kselftest/size_get_size
+* kselftest/timers_set-timer-lat
+* kselftest/timestamping_txtimestamp.sh
+* kselftest/tpm2_test_smoke.sh
+* kselftest/tpm2_test_space.sh
+* kselftest/vm_run_vmtests
+* kselftest/x86_ldt_gdt_32
+* kselftest/x86_sigreturn_32
+
+x15:
+* kselftest/bpf_get_cgroup_id_user
+* kselftest/bpf_test_bpftool_build.sh
+* kselftest/bpf_test_dev_cgroup
+* kselftest/bpf_test_flow_dissector.sh
+* kselftest/bpf_test_hashmap
+* kselftest/bpf_test_kmod.sh
+* kselftest/bpf_test_lwt_ip_encap.sh
+* kselftest/bpf_test_lwt_seg6local.sh
+* kselftest/bpf_test_maps
+* kselftest/bpf_test_netcnt
+* kselftest/bpf_test_progs
+* kselftest/bpf_test_progs-no_alu32
+* kselftest/bpf_test_select_reuseport
+* kselftest/bpf_test_skb_cgroup_id.sh
+* kselftest/bpf_test_sock_addr.sh
+* kselftest/bpf_test_socket_cookie
+* kselftest/bpf_test_sock_fields
+* kselftest/bpf_test_sockmap
+* kselftest/bpf_test_sysctl
+* kselftest/bpf_test_tag
+* kselftest/bpf_test_tc_edt.sh
+* kselftest/bpf_test_tcpbpf_user
+* kselftest/bpf_test_tcp_check_syncookie.sh
+* kselftest/bpf_test_tcpnotify_user
+* kselftest/bpf_test_tc_tunnel.sh
+* kselftest/bpf_test_tunnel.sh
+* kselftest/bpf_test_verifier
+* kselftest/bpf_test_xdping.sh
+* kselftest/bpf_test_xdp_meta.sh
+* kselftest/bpf_test_xdp_redirect.sh
+* kselftest/bpf_test_xdp_vlan_mode_generic.sh
+* kselftest/bpf_test_xdp_vlan_mode_native.sh
+* kselftest/bpf_xdping
+* kselftest/clone3_clone3_clear_sighand
+* kselftest/epoll_epoll_wakeup_test
+* kselftest/firmware_fw_run_tests.sh
+* kselftest/kvm_clear_dirty_log_test
+* kselftest/kvm_cr4_cpuid_sync_test
+* kselftest/kvm_dirty_log_test
+* kselftest/kvm_evmcs_test
+* kselftest/kvm_hyperv_cpuid
+* kselftest/kvm_kvm_create_max_vcpus
+* kselftest/kvm_mmio_warning_test
+* kselftest/kvm_platform_info_test
+* kselftest/kvm_set_sregs_test
+* kselftest/kvm_smm_test
+* kselftest/kvm_state_test
+* kselftest/kvm_sync_regs_test
+* kselftest/kvm_vmx_close_while_nested_test
+* kselftest/kvm_vmx_dirty_log_test
+* kselftest/kvm_vmx_set_nested_state_test
+* kselftest/kvm_vmx_tsc_adjust_test
+* kselftest/lib_bitmap.sh
+* kselftest/net_fib-onlink-tests.sh
+* kselftest/net_fib_rule_tests.sh
+* kselftest/net_fib_tests.sh
+* kselftest/netfilter_conntrack_icmp_related.sh
+* kselftest/netfilter_nft_nat.sh
+* kselftest/net_ip_defrag.sh
+* kselftest/net_l2tp.sh
+* kselftest/net_pmtu.sh
+* kselftest/net_psock_snd.sh
+* kselftest/net_reuseport_bpf_numa
+* kselftest/net_run_netsocktests
+* kselftest/net_tcp_fastopen_backup_key.sh
+* kselftest/net_test_vxlan_under_vrf.sh
+* kselftest/net_udpgro_bench.sh
+* kselftest/net_udpgro.sh
+* kselftest/net_udpgso_bench.sh
+* kselftest/pidfd_pidfd_open_test
+* kselftest/pidfd_pidfd_poll_test
+* kselftest/pidfd_pidfd_test
+* kselftest/proc_proc-self-syscall
+* kselftest/pstore_pstore_tests
+* kselftest/rseq_basic_percpu_ops_test
+* kselftest/rtc_rtctest
+* kselftest/seccomp_seccomp_benchmark
+* kselftest/timers_set-timer-lat
+* kselftest/timestamping_txtimestamp.sh
+* kselftest/tpm2_test_smoke.sh
+* kselftest/tpm2_test_space.sh
+
+dragonboard-410c:
+* kselftest/arm64_fake_sigreturn_bad_magic
+* kselftest/arm64_fake_sigreturn_bad_size
+* kselftest/arm64_fake_sigreturn_bad_size_for_magic0
+* kselftest/arm64_fake_sigreturn_duplicated_fpsimd
+* kselftest/arm64_fake_sigreturn_misaligned_sp
+* kselftest/arm64_fake_sigreturn_missing_fpsimd
+* kselftest/arm64_mangle_pstate_invalid_compat_toggle
+* kselftest/arm64_mangle_pstate_invalid_daif_bits
+* kselftest/arm64_mangle_pstate_invalid_mode_el1h
+* kselftest/arm64_mangle_pstate_invalid_mode_el1t
+* kselftest/arm64_mangle_pstate_invalid_mode_el2h
+* kselftest/arm64_mangle_pstate_invalid_mode_el2t
+* kselftest/arm64_mangle_pstate_invalid_mode_el3h
+* kselftest/arm64_mangle_pstate_invalid_mode_el3t
+* kselftest/bpf_get_cgroup_id_user
+* kselftest/bpf_test_bpftool_build.sh
+* kselftest/bpf_test_dev_cgroup
+* kselftest/bpf_test_flow_dissector.sh
+* kselftest/bpf_test_kmod.sh
+* kselftest/bpf_test_lpm_map
+* kselftest/bpf_test_lwt_ip_encap.sh
+* kselftest/bpf_test_lwt_seg6local.sh
+* kselftest/bpf_test_maps
+* kselftest/bpf_test_netcnt
+* kselftest/bpf_test_progs
+* kselftest/bpf_test_progs-no_alu32
+* kselftest/bpf_test_select_reuseport
+* kselftest/bpf_test_skb_cgroup_id.sh
+* kselftest/bpf_test_sock_addr.sh
+* kselftest/bpf_test_socket_cookie
+* kselftest/bpf_test_sock_fields
+* kselftest/bpf_test_sockmap
+* kselftest/bpf_test_sysctl
+* kselftest/bpf_test_tag
+* kselftest/bpf_test_tc_edt.sh
+* kselftest/bpf_test_tcpbpf_user
+* kselftest/bpf_test_tcp_check_syncookie.sh
+* kselftest/bpf_test_tcpnotify_user
+* kselftest/bpf_test_tc_tunnel.sh
+* kselftest/bpf_test_tunnel.sh
+* kselftest/bpf_test_verifier
+* kselftest/bpf_test_xdping.sh
+* kselftest/bpf_test_xdp_meta.sh
+* kselftest/bpf_test_xdp_redirect.sh
+* kselftest/bpf_test_xdp_vlan_mode_generic.sh
+* kselftest/bpf_test_xdp_vlan_mode_native.sh
+* kselftest/bpf_xdping
+* kselftest/clone3_clone3_clear_sighand
+* kselftest/firmware_fw_run_tests.sh
+* kselftest/kvm_clear_dirty_log_test
+* kselftest/kvm_cr4_cpuid_sync_test
+* kselftest/kvm_dirty_log_test
+* kselftest/kvm_evmcs_test
+* kselftest/kvm_hyperv_cpuid
+* kselftest/kvm_kvm_create_max_vcpus
+* kselftest/kvm_mmio_warning_test
+* kselftest/kvm_platform_info_test
+* kselftest/kvm_set_sregs_test
+* kselftest/kvm_smm_test
+* kselftest/kvm_state_test
+* kselftest/kvm_sync_regs_test
+* kselftest/kvm_vmx_close_while_nested_test
+* kselftest/kvm_vmx_dirty_log_test
+* kselftest/kvm_vmx_set_nested_state_test
+* kselftest/kvm_vmx_tsc_adjust_test
+* kselftest/net_fib-onlink-tests.sh
+* kselftest/net_fib_rule_tests.sh
+* kselftest/net_fib_tests.sh
+* kselftest/netfilter_conntrack_icmp_related.sh
+* kselftest/netfilter_nft_nat.sh
+* kselftest/net_ip_defrag.sh
+* kselftest/net_l2tp.sh
+* kselftest/net_pmtu.sh
+* kselftest/net_psock_snd.sh
+* kselftest/net_run_netsocktests
+* kselftest/net_tcp_fastopen_backup_key.sh
+* kselftest/net_test_vxlan_under_vrf.sh
+* kselftest/net_udpgro_bench.sh
+* kselftest/net_udpgro.sh
+* kselftest/net_udpgso_bench.sh
+* kselftest/pidfd_pidfd_fdinfo_test
+* kselftest/pidfd_pidfd_open_test
+* kselftest/pidfd_pidfd_poll_test
+* kselftest/pidfd_pidfd_test
+* kselftest/pidfd_pidfd_wait
+* kselftest/pstore_pstore_tests
+* kselftest/rseq_basic_percpu_ops_test
+* kselftest/rtc_rtctest
+* kselftest/timers_rtcpie
+* kselftest/timers_set-timer-lat
+* kselftest/timestamping_txtimestamp.sh
+* kselftest/tpm2_test_smoke.sh
+* kselftest/tpm2_test_space.sh
+
+hi6220-hikey:
+
+i386:
+
+x86:
+* kselftest/bpf_get_cgroup_id_user
+* kselftest/bpf_test_bpftool_build.sh
+* kselftest/bpf_test_dev_cgroup
+* kselftest/bpf_test_flow_dissector.sh
+* kselftest/bpf_test_lwt_ip_encap.sh
+* kselftest/bpf_test_lwt_seg6local.sh
+* kselftest/bpf_test_maps
+* kselftest/bpf_test_netcnt
+* kselftest/bpf_test_progs
+* kselftest/bpf_test_progs-no_alu32
+* kselftest/bpf_test_select_reuseport
+* kselftest/bpf_test_skb_cgroup_id.sh
+* kselftest/bpf_test_sock_addr.sh
+* kselftest/bpf_test_socket_cookie
+* kselftest/bpf_test_sock_fields
+* kselftest/bpf_test_sockmap
+* kselftest/bpf_test_sysctl
+* kselftest/bpf_test_tc_edt.sh
+* kselftest/bpf_test_tcpbpf_user
+* kselftest/bpf_test_tcp_check_syncookie.sh
+* kselftest/bpf_test_tcpnotify_user
+* kselftest/bpf_test_tc_tunnel.sh
+* kselftest/bpf_test_tunnel.sh
+* kselftest/bpf_test_xdping.sh
+* kselftest/bpf_test_xdp_meta.sh
+* kselftest/bpf_test_xdp_redirect.sh
+* kselftest/bpf_test_xdp_vlan_mode_generic.sh
+* kselftest/bpf_test_xdp_vlan_mode_native.sh
+* kselftest/bpf_xdping
+* kselftest/firmware_fw_run_tests.sh
+* kselftest/intel_pstate_run.sh
+* kselftest/kvm_clear_dirty_log_test
+* kselftest/kvm_cr4_cpuid_sync_test
+* kselftest/kvm_dirty_log_test
+* kselftest/kvm_evmcs_test
+* kselftest/kvm_hyperv_cpuid
+* kselftest/kvm_kvm_create_max_vcpus
+* kselftest/kvm_platform_info_test
+* kselftest/kvm_set_sregs_test
+* kselftest/kvm_smm_test
+* kselftest/kvm_state_test
+* kselftest/kvm_sync_regs_test
+* kselftest/kvm_vmx_close_while_nested_test
+* kselftest/kvm_vmx_dirty_log_test
+* kselftest/kvm_vmx_set_nested_state_test
+* kselftest/kvm_vmx_tsc_adjust_test
+* kselftest/mqueue_mq_perf_tests
+* kselftest/net_fib-onlink-tests.sh
+* kselftest/net_fib_tests.sh
+* kselftest/net_ip_defrag.sh
+* kselftest/net_l2tp.sh
+* kselftest/net_pmtu.sh
+* kselftest/net_psock_snd.sh
+* kselftest/net_run_netsocktests
+* kselftest/net_test_vxlan_under_vrf.sh
+* kselftest/net_traceroute.sh
+* kselftest/net_udpgro_bench.sh
+* kselftest/net_udpgro.sh
+* kselftest/net_udpgso_bench.sh
+* kselftest/net_xfrm_policy.sh
+* kselftest/pidfd_pidfd_open_test
+* kselftest/pidfd_pidfd_poll_test
+* kselftest/pstore_pstore_tests
+* kselftest/rseq_run_param_test.sh
+* kselftest/rtc_rtctest
+* kselftest/seccomp_seccomp_benchmark
+* kselftest/timers_set-timer-lat
+* kselftest/timestamping_txtimestamp.sh
+* kselftest/tpm2_test_smoke.sh
+* kselftest/tpm2_test_space.sh
+* kselftest/vm_run_vmtests
+* kselftest-vsyscall-mode-none/bpf_get_cgroup_id_user
+* kselftest-vsyscall-mode-none/bpf_test_bpftool_build.sh
+* kselftest-vsyscall-mode-none/bpf_test_dev_cgroup
+* kselftest-vsyscall-mode-none/bpf_test_flow_dissector.sh
+* kselftest-vsyscall-mode-none/bpf_test_lwt_ip_encap.sh
+* kselftest-vsyscall-mode-none/bpf_test_lwt_seg6local.sh
+* kselftest-vsyscall-mode-none/bpf_test_maps
+* kselftest-vsyscall-mode-none/bpf_test_netcnt
+* kselftest-vsyscall-mode-none/bpf_test_progs
+* kselftest-vsyscall-mode-none/bpf_test_progs-no_alu32
+* kselftest-vsyscall-mode-none/bpf_test_select_reuseport
+* kselftest-vsyscall-mode-none/bpf_test_skb_cgroup_id.sh
+* kselftest-vsyscall-mode-none/bpf_test_sock_addr.sh
+* kselftest-vsyscall-mode-none/bpf_test_socket_cookie
+* kselftest-vsyscall-mode-none/bpf_test_sock_fields
+* kselftest-vsyscall-mode-none/bpf_test_sockmap
+* kselftest-vsyscall-mode-none/bpf_test_sysctl
+* kselftest-vsyscall-mode-none/bpf_test_tc_edt.sh
+* kselftest-vsyscall-mode-none/bpf_test_tcpbpf_user
+* kselftest-vsyscall-mode-none/bpf_test_tcp_check_syncookie.sh
+* kselftest-vsyscall-mode-none/bpf_test_tcpnotify_user
+* kselftest-vsyscall-mode-none/bpf_test_tc_tunnel.sh
+* kselftest-vsyscall-mode-none/bpf_test_tunnel.sh
+* kselftest-vsyscall-mode-none/bpf_test_xdping.sh
+* kselftest-vsyscall-mode-none/bpf_test_xdp_meta.sh
+* kselftest-vsyscall-mode-none/bpf_test_xdp_redirect.sh
+* kselftest-vsyscall-mode-none/bpf_test_xdp_vlan_mode_generic.sh
+* kselftest-vsyscall-mode-none/bpf_test_xdp_vlan_mode_native.sh
+* kselftest-vsyscall-mode-none/bpf_xdping
+* kselftest-vsyscall-mode-none/firmware_fw_run_tests.sh
+* kselftest-vsyscall-mode-none/intel_pstate_run.sh
+* kselftest-vsyscall-mode-none/kvm_clear_dirty_log_test
+* kselftest-vsyscall-mode-none/kvm_cr4_cpuid_sync_test
+* kselftest-vsyscall-mode-none/kvm_dirty_log_test
+* kselftest-vsyscall-mode-none/kvm_hyperv_cpuid
+* kselftest-vsyscall-mode-none/kvm_kvm_create_max_vcpus
+* kselftest-vsyscall-mode-none/kvm_platform_info_test
+* kselftest-vsyscall-mode-none/kvm_smm_test
+* kselftest-vsyscall-mode-none/kvm_state_test
+* kselftest-vsyscall-mode-none/kvm_sync_regs_test
+* kselftest-vsyscall-mode-none/kvm_vmx_close_while_nested_test
+* kselftest-vsyscall-mode-none/kvm_vmx_dirty_log_test
+* kselftest-vsyscall-mode-none/kvm_vmx_set_nested_state_test
+* kselftest-vsyscall-mode-none/kvm_vmx_tsc_adjust_test
+* kselftest-vsyscall-mode-none/mqueue_mq_perf_tests
+* kselftest-vsyscall-mode-none/net_fib-onlink-tests.sh
+* kselftest-vsyscall-mode-none/net_fib_tests.sh
+* kselftest-vsyscall-mode-none/net_ip_defrag.sh
+* kselftest-vsyscall-mode-none/net_l2tp.sh
+* kselftest-vsyscall-mode-none/net_pmtu.sh
+* kselftest-vsyscall-mode-none/net_psock_snd.sh
+* kselftest-vsyscall-mode-none/net_run_netsocktests
+* kselftest-vsyscall-mode-none/net_test_vxlan_under_vrf.sh
+* kselftest-vsyscall-mode-none/net_traceroute.sh
+* kselftest-vsyscall-mode-none/net_udpgro_bench.sh
+* kselftest-vsyscall-mode-none/net_udpgro.sh
+* kselftest-vsyscall-mode-none/net_udpgso_bench.sh
+* kselftest-vsyscall-mode-none/net_xfrm_policy.sh
+* kselftest-vsyscall-mode-none/pidfd_pidfd_open_test
+* kselftest-vsyscall-mode-none/pidfd_pidfd_poll_test
+* kselftest-vsyscall-mode-none/pstore_pstore_tests
+* kselftest-vsyscall-mode-none/rseq_run_param_test.sh
+* kselftest-vsyscall-mode-none/rtc_rtctest
+* kselftest-vsyscall-mode-none/seccomp_seccomp_benchmark
+* kselftest-vsyscall-mode-none/timers_set-timer-lat
+* kselftest-vsyscall-mode-none/timestamping_txtimestamp.sh
+* kselftest-vsyscall-mode-none/tpm2_test_smoke.sh
+* kselftest-vsyscall-mode-none/tpm2_test_space.sh
+* kselftest-vsyscall-mode-none/vm_run_vmtests
+* kselftest-vsyscall-mode-native/bpf_get_cgroup_id_user
+* kselftest-vsyscall-mode-native/bpf_test_bpftool_build.sh
+* kselftest-vsyscall-mode-native/bpf_test_dev_cgroup
+* kselftest-vsyscall-mode-native/bpf_test_flow_dissector.sh
+* kselftest-vsyscall-mode-native/bpf_test_lwt_ip_encap.sh
+* kselftest-vsyscall-mode-native/bpf_test_lwt_seg6local.sh
+* kselftest-vsyscall-mode-native/bpf_test_maps
+* kselftest-vsyscall-mode-native/bpf_test_netcnt
+* kselftest-vsyscall-mode-native/bpf_test_progs
+* kselftest-vsyscall-mode-native/bpf_test_progs-no_alu32
+* kselftest-vsyscall-mode-native/bpf_test_select_reuseport
+* kselftest-vsyscall-mode-native/bpf_test_skb_cgroup_id.sh
+* kselftest-vsyscall-mode-native/bpf_test_sock_addr.sh
+* kselftest-vsyscall-mode-native/bpf_test_socket_cookie
+* kselftest-vsyscall-mode-native/bpf_test_sock_fields
+* kselftest-vsyscall-mode-native/bpf_test_sockmap
+* kselftest-vsyscall-mode-native/bpf_test_sysctl
+* kselftest-vsyscall-mode-native/bpf_test_tc_edt.sh
+* kselftest-vsyscall-mode-native/bpf_test_tcpbpf_user
+* kselftest-vsyscall-mode-native/bpf_test_tcp_check_syncookie.sh
+* kselftest-vsyscall-mode-native/bpf_test_tcpnotify_user
+* kselftest-vsyscall-mode-native/bpf_test_tc_tunnel.sh
+* kselftest-vsyscall-mode-native/bpf_test_tunnel.sh
+* kselftest-vsyscall-mode-native/bpf_test_xdping.sh
+* kselftest-vsyscall-mode-native/bpf_test_xdp_meta.sh
+* kselftest-vsyscall-mode-native/bpf_test_xdp_redirect.sh
+* kselftest-vsyscall-mode-native/bpf_test_xdp_vlan_mode_generic.sh
+* kselftest-vsyscall-mode-native/bpf_test_xdp_vlan_mode_native.sh
+* kselftest-vsyscall-mode-native/bpf_xdping
+* kselftest-vsyscall-mode-native/firmware_fw_run_tests.sh
+* kselftest-vsyscall-mode-native/intel_pstate_run.sh
+* kselftest-vsyscall-mode-native/kvm_clear_dirty_log_test
+* kselftest-vsyscall-mode-native/kvm_cr4_cpuid_sync_test
+* kselftest-vsyscall-mode-native/kvm_dirty_log_test
+* kselftest-vsyscall-mode-native/kvm_evmcs_test
+* kselftest-vsyscall-mode-native/kvm_hyperv_cpuid
+* kselftest-vsyscall-mode-native/kvm_kvm_create_max_vcpus
+* kselftest-vsyscall-mode-native/kvm_platform_info_test
+* kselftest-vsyscall-mode-native/kvm_set_sregs_test
+* kselftest-vsyscall-mode-native/kvm_smm_test
+* kselftest-vsyscall-mode-native/kvm_state_test
+* kselftest-vsyscall-mode-native/kvm_sync_regs_test
+* kselftest-vsyscall-mode-native/kvm_vmx_close_while_nested_test
+* kselftest-vsyscall-mode-native/kvm_vmx_dirty_log_test
+* kselftest-vsyscall-mode-native/kvm_vmx_set_nested_state_test
+* kselftest-vsyscall-mode-native/kvm_vmx_tsc_adjust_test
+* kselftest-vsyscall-mode-native/mqueue_mq_perf_tests
+* kselftest-vsyscall-mode-native/net_fib_tests.sh
+* kselftest-vsyscall-mode-native/net_ip_defrag.sh
+* kselftest-vsyscall-mode-native/net_l2tp.sh
+* kselftest-vsyscall-mode-native/net_pmtu.sh
+* kselftest-vsyscall-mode-native/net_psock_snd.sh
+* kselftest-vsyscall-mode-native/net_run_netsocktests
+* kselftest-vsyscall-mode-native/net_test_vxlan_under_vrf.sh
+* kselftest-vsyscall-mode-native/net_traceroute.sh
+* kselftest-vsyscall-mode-native/net_udpgro_bench.sh
+* kselftest-vsyscall-mode-native/net_udpgro.sh
+* kselftest-vsyscall-mode-native/net_udpgso_bench.sh
+* kselftest-vsyscall-mode-native/net_xfrm_policy.sh
+* kselftest-vsyscall-mode-native/pidfd_pidfd_open_test
+* kselftest-vsyscall-mode-native/pidfd_pidfd_poll_test
+* kselftest-vsyscall-mode-native/pstore_pstore_tests
+* kselftest-vsyscall-mode-native/rseq_run_param_test.sh
+* kselftest-vsyscall-mode-native/rtc_rtctest
+* kselftest-vsyscall-mode-native/seccomp_seccomp_benchmark
+* kselftest-vsyscall-mode-native/timers_set-timer-lat
+* kselftest-vsyscall-mode-native/timestamping_txtimestamp.sh
+* kselftest-vsyscall-mode-native/tpm2_test_smoke.sh
+* kselftest-vsyscall-mode-native/tpm2_test_space.sh
+* kselftest-vsyscall-mode-native/vm_run_vmtests
+
+
+Skips
+------------------------------------------------------------------------
+No skips
+
 
 -- 
-Sincerely yours,
-Mike.
+Linaro LKFT
+https://lkft.linaro.org
+------=_Part_388_1407819902.1573542039686--
