@@ -2,152 +2,105 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BFE7F9CAE
-	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Nov 2019 22:57:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BA205F9CE5
+	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Nov 2019 23:21:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726376AbfKLV5j (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 12 Nov 2019 16:57:39 -0500
-Received: from mail-ot1-f68.google.com ([209.85.210.68]:37055 "EHLO
-        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726906AbfKLV5j (ORCPT
+        id S1726969AbfKLWVX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 12 Nov 2019 17:21:23 -0500
+Received: from hqemgate15.nvidia.com ([216.228.121.64]:14448 "EHLO
+        hqemgate15.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726896AbfKLWVW (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 12 Nov 2019 16:57:39 -0500
-Received: by mail-ot1-f68.google.com with SMTP id d5so15752417otp.4
-        for <linux-kselftest@vger.kernel.org>; Tue, 12 Nov 2019 13:57:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=intel-com.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=GVsjPqJbGl0vB/+Gk+mdS3wPD6eGzXnfLsFoQJ3IvwY=;
-        b=Xi5VpxURlOvKgdnc2CCM8ogRa/H5/0k5sFmSuFB8dP7mdDgr87G2ihgcoAULaWG/WG
-         Hj8o+3+ie5rrJujDRUeLRQcOeiNzn8YKMM2VBeVNBKVsnBN0FQns+w7w3PsW4i65s8a5
-         N+VULX92Qszd6uoAo9krZIME0J3xIfL4gJiRjCsCskWvVjLpfyuINcuFYSor/+iuZuqF
-         2TY8xkdKZQu+VBpockLjH+8q98S3mNVqmKjCD+wTD8kkFuDZ2LtRYTFByjXSsRxruC6f
-         SXuVKXEgsV4rmu18ICvQbVomOgOwxUGMXKdLYloN5hq1WNlcDitiNl2/AmVQ4Ykyplh2
-         IsGw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=GVsjPqJbGl0vB/+Gk+mdS3wPD6eGzXnfLsFoQJ3IvwY=;
-        b=UutBYRqlQXDoDtDdvsQn6Vj6Ug1I//5HvmtwQYiriRQQ/0c0ulMk4yFcEOXH2OPIKe
-         pCvLWSqQAJNOcJkCINQ+Oo3EOuluUCV9Cq6Zk6QU+Mps+S0a8p4lqviwRdYh43HH/EaV
-         mEY3nqyom47IEpN6teI8fVzAzoCiWz3vDrRrlcQxXdGxnTXPNMn9uicJ7jyNrFqc4sg6
-         0UdQbZUFgi2PQf+4CFgBEPvxJlczf232oj+AXMIozJ6sdTNLSbhLuuXT5dvRcOViga5L
-         FZRst6/T3k5E91TYwA4TIg+ULrgKJ5IYg6M0rXBFrcPSc4dhzzbWy6X+8PyXa/9sJ/+W
-         wVqQ==
-X-Gm-Message-State: APjAAAWjec1Eou4Sz8ihjfc41dk483AiNNBhVaNOcdh3O/wUIX78aptE
-        NFu/X/txJ7NePsJalRrdPmgqVTp8shNqVDMuqZp2/A==
-X-Google-Smtp-Source: APXvYqzkEVRCSmKc+X1f3BY1LRLo7eG1sZvx8YX/MxrMpGOBy0kbPmD/k6U1Bv0DnK/agC4LCbQG5TvJ1BrQq2DF3mo=
-X-Received: by 2002:a9d:5f11:: with SMTP id f17mr5454287oti.207.1573595857896;
- Tue, 12 Nov 2019 13:57:37 -0800 (PST)
+        Tue, 12 Nov 2019 17:21:22 -0500
+Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqemgate15.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5dcb30620000>; Tue, 12 Nov 2019 14:21:22 -0800
+Received: from hqmail.nvidia.com ([172.20.161.6])
+  by hqpgpgate101.nvidia.com (PGP Universal service);
+  Tue, 12 Nov 2019 14:21:22 -0800
+X-PGP-Universal: processed;
+        by hqpgpgate101.nvidia.com on Tue, 12 Nov 2019 14:21:22 -0800
+Received: from rcampbell-dev.nvidia.com (10.124.1.5) by HQMAIL107.nvidia.com
+ (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Tue, 12 Nov
+ 2019 22:21:19 +0000
+Subject: Re: [PATCH v4 1/2] mm/hmm: make full use of walk_page_range()
+To:     Christoph Hellwig <hch@lst.de>
+CC:     Jerome Glisse <jglisse@redhat.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Jason Gunthorpe <jgg@mellanox.com>,
+        Shuah Khan <shuah@kernel.org>, <linux-rdma@vger.kernel.org>,
+        <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
+        <linux-kselftest@vger.kernel.org>
+References: <20191104222141.5173-1-rcampbell@nvidia.com>
+ <20191104222141.5173-2-rcampbell@nvidia.com> <20191112151856.GB12550@lst.de>
+X-Nvconfidentiality: public
+From:   Ralph Campbell <rcampbell@nvidia.com>
+Message-ID: <3e2da09f-a305-14b7-c116-77e4d1b9e3f2@nvidia.com>
+Date:   Tue, 12 Nov 2019 14:21:19 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.1.0
 MIME-Version: 1.0
-References: <20191112000700.3455038-1-jhubbard@nvidia.com> <20191112000700.3455038-9-jhubbard@nvidia.com>
-In-Reply-To: <20191112000700.3455038-9-jhubbard@nvidia.com>
-From:   Dan Williams <dan.j.williams@intel.com>
-Date:   Tue, 12 Nov 2019 13:57:27 -0800
-Message-ID: <CAPcyv4hgKEqoxeQJH9R=YiZosvazj308Kk7jJA1NLxJkNenDcQ@mail.gmail.com>
-Subject: Re: [PATCH v3 08/23] vfio, mm: fix get_user_pages_remote() and FOLL_LONGTERM
-To:     John Hubbard <jhubbard@nvidia.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Dave Chinner <david@fromorbit.com>,
-        David Airlie <airlied@linux.ie>,
-        "David S . Miller" <davem@davemloft.net>,
-        Ira Weiny <ira.weiny@intel.com>, Jan Kara <jack@suse.cz>,
-        Jason Gunthorpe <jgg@ziepe.ca>, Jens Axboe <axboe@kernel.dk>,
-        Jonathan Corbet <corbet@lwn.net>,
-        =?UTF-8?B?SsOpcsO0bWUgR2xpc3Nl?= <jglisse@redhat.com>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Michal Hocko <mhocko@suse.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Paul Mackerras <paulus@samba.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Vlastimil Babka <vbabka@suse.cz>, bpf@vger.kernel.org,
-        Maling list - DRI developers 
-        <dri-devel@lists.freedesktop.org>, KVM list <kvm@vger.kernel.org>,
-        linux-block@vger.kernel.org,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        linux-kselftest@vger.kernel.org,
-        "Linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
-        linux-rdma <linux-rdma@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        Netdev <netdev@vger.kernel.org>, Linux MM <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20191112151856.GB12550@lst.de>
+X-Originating-IP: [10.124.1.5]
+X-ClientProxiedBy: HQMAIL111.nvidia.com (172.20.187.18) To
+ HQMAIL107.nvidia.com (172.20.187.13)
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1573597282; bh=Mjsgzq4tTY1ttPXWj4o1nKG2G54sIpqkFXsKMyN1ai4=;
+        h=X-PGP-Universal:Subject:To:CC:References:X-Nvconfidentiality:From:
+         Message-ID:Date:User-Agent:MIME-Version:In-Reply-To:
+         X-Originating-IP:X-ClientProxiedBy:Content-Type:Content-Language:
+         Content-Transfer-Encoding;
+        b=n3+rgoO7Cosk1b8j0LFmjpqfy8vh/1vgXoyo1ZFsHWrDwoNjbxshEcMMFtJooukY+
+         T7fDLY+vAopGHZ/4qpGFIhxkA194rJAuMM41B4/euZtC0I/pznU+Ne28KxNiQIcFK3
+         Faf6R0IaXpEGuTlifVRQBbuUAKsUmrmUDs7OSQOnPR1KyJI5m+wBQBetYH6lUuXlDa
+         nC68T3zwoJ2tzJq6kUVOW/4U2KMqyYcHufw9VRZOIX60Um0xspk9k3555KmBo+KGar
+         speu/qs92JpbwFBiJYqP5q+w7GIbTcxVibLgBIOdtJsy1GoVW6I9WqRRBVh/dmnQlV
+         bzOKy1bGxsOSQ==
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Nov 11, 2019 at 4:07 PM John Hubbard <jhubbard@nvidia.com> wrote:
->
-> As it says in the updated comment in gup.c: current FOLL_LONGTERM
-> behavior is incompatible with FAULT_FLAG_ALLOW_RETRY because of the
-> FS DAX check requirement on vmas.
->
-> However, the corresponding restriction in get_user_pages_remote() was
-> slightly stricter than is actually required: it forbade all
-> FOLL_LONGTERM callers, but we can actually allow FOLL_LONGTERM callers
-> that do not set the "locked" arg.
->
-> Update the code and comments accordingly, and update the VFIO caller
-> to take advantage of this, fixing a bug as a result: the VFIO caller
-> is logically a FOLL_LONGTERM user.
->
-> Thanks to Jason Gunthorpe for pointing out a clean way to fix this.
->
-> Suggested-by: Jason Gunthorpe <jgg@ziepe.ca>
-> Cc: Jerome Glisse <jglisse@redhat.com>
-> Cc: Ira Weiny <ira.weiny@intel.com>
-> Signed-off-by: John Hubbard <jhubbard@nvidia.com>
-> ---
->  drivers/vfio/vfio_iommu_type1.c | 30 +++++++++++++-----------------
->  mm/gup.c                        | 13 ++++++++-----
->  2 files changed, 21 insertions(+), 22 deletions(-)
->
-> diff --git a/drivers/vfio/vfio_iommu_type1.c b/drivers/vfio/vfio_iommu_type1.c
-> index d864277ea16f..017689b7c32b 100644
-> --- a/drivers/vfio/vfio_iommu_type1.c
-> +++ b/drivers/vfio/vfio_iommu_type1.c
-> @@ -348,24 +348,20 @@ static int vaddr_get_pfn(struct mm_struct *mm, unsigned long vaddr,
->                 flags |= FOLL_WRITE;
->
->         down_read(&mm->mmap_sem);
-> -       if (mm == current->mm) {
-> -               ret = get_user_pages(vaddr, 1, flags | FOLL_LONGTERM, page,
-> -                                    vmas);
-> -       } else {
-> -               ret = get_user_pages_remote(NULL, mm, vaddr, 1, flags, page,
-> -                                           vmas, NULL);
-> -               /*
-> -                * The lifetime of a vaddr_get_pfn() page pin is
-> -                * userspace-controlled. In the fs-dax case this could
-> -                * lead to indefinite stalls in filesystem operations.
-> -                * Disallow attempts to pin fs-dax pages via this
-> -                * interface.
-> -                */
-> -               if (ret > 0 && vma_is_fsdax(vmas[0])) {
-> -                       ret = -EOPNOTSUPP;
-> -                       put_page(page[0]);
-> -               }
-> +       ret = get_user_pages_remote(NULL, mm, vaddr, 1, flags | FOLL_LONGTERM,
-> +                                   page, vmas, NULL);
 
-Hmm, what's the point of passing FOLL_LONGTERM to
-get_user_pages_remote() if get_user_pages_remote() is not going to
-check the vma? I think we got to this code state because the
-get_user_pages() vs get_user_pages_remote() split predated the
-introduction of FOLL_LONGTERM.
+On 11/12/19 7:18 AM, Christoph Hellwig wrote:
+> Looks good,
+> 
+> Reviewed-by: Christoph Hellwig <hch@lst.de>
+> 
+> Although we could clean this up a tidbit more by removing the start
+> variable:
+> 
+> diff --git a/mm/hmm.c b/mm/hmm.c
+> index d4984a08ed9b..b5b1ed646c2f 100644
+> --- a/mm/hmm.c
+> +++ b/mm/hmm.c
+> @@ -667,10 +667,9 @@ static const struct mm_walk_ops hmm_walk_ops = {
+>    */
+>   long hmm_range_fault(struct hmm_range *range, unsigned int flags)
+>   {
+> -	unsigned long start = range->start;
+>   	struct hmm_vma_walk hmm_vma_walk = {
+>   		.range = range,
+> -		.last = start,
+> +		.last = range->start,
+>   		.flags = flags,
+>   	};
+>   	struct mm_struct *mm = range->notifier->mm;
+> @@ -682,9 +681,8 @@ long hmm_range_fault(struct hmm_range *range, unsigned int flags)
+>   		/* If range is no longer valid force retry. */
+>   		if (mmu_range_check_retry(range->notifier, range->notifier_seq))
+>   			return -EBUSY;
+> -		ret = walk_page_range(mm, start, range->end, &hmm_walk_ops,
+> -				      &hmm_vma_walk);
+> -		start = hmm_vma_walk.last;
+> +		ret = walk_page_range(mm, hmm_vma_walk.last, range->end,
+> +				      &hmm_walk_ops, &hmm_vma_walk);
+>   	} while (ret == -EBUSY);
+>   
+>   	if (ret)
+> 
 
-I think check_vma_flags() should do the ((FOLL_LONGTERM | FOLL_GET) &&
-vma_is_fsdax()) check and that would also remove the need for
-__gup_longterm_locked.
+Thanks for the review.
+I'll add this to patch 1 since I need to send a v5 for patch 2.
