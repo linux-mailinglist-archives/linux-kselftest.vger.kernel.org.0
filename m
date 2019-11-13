@@ -2,70 +2,134 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F97CF9EDC
-	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Nov 2019 01:08:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 86117F9F84
+	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Nov 2019 01:47:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727065AbfKMAIj (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 12 Nov 2019 19:08:39 -0500
-Received: from mail.kernel.org ([198.145.29.99]:49868 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726957AbfKMAIj (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 12 Nov 2019 19:08:39 -0500
-Received: from localhost.localdomain (c-73-231-172-41.hsd1.ca.comcast.net [73.231.172.41])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S1727109AbfKMArM (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 12 Nov 2019 19:47:12 -0500
+Received: from mout-p-101.mailbox.org ([80.241.56.151]:17516 "EHLO
+        mout-p-101.mailbox.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726969AbfKMArM (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 12 Nov 2019 19:47:12 -0500
+Received: from smtp2.mailbox.org (smtp2.mailbox.org [IPv6:2001:67c:2050:105:465:1:2:0])
+        (using TLSv1.2 with cipher ECDHE-RSA-CHACHA20-POLY1305 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 273AA2196E;
-        Wed, 13 Nov 2019 00:08:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1573603718;
-        bh=KjzzTcYnHTbPiZHHU3oiNXK2IO0S++IshKJ56E3fWIM=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=LOiGsvx+c2husp91s1WCl9gljHVh7c5xjNQNDyeBqhxPkRhboXxQqmqoTBCQPqQZ1
-         V2L9yuouLTv+rFxK1urn3WJ2bX10DDbmxjicANXYOddYCrZUMzv4RI1uer5JQH180k
-         Lv+aNCMejDxus+4oUYACPPj8wFzi6MgoCQydwG18=
-Date:   Tue, 12 Nov 2019 16:08:35 -0800
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Ralph Campbell <rcampbell@nvidia.com>
-Cc:     Christoph Hellwig <hch@lst.de>, Jerome Glisse <jglisse@redhat.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Jason Gunthorpe <jgg@mellanox.com>,
-        Shuah Khan <shuah@kernel.org>, <linux-rdma@vger.kernel.org>,
-        <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
-        <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH v4 2/2] mm/hmm/test: add self tests for HMM
-Message-Id: <20191112160835.9bfa58cf756683ddc8d470fd@linux-foundation.org>
-In-Reply-To: <07589a71-3984-b2a6-b24b-6b9a23e1b60d@nvidia.com>
-References: <20191104222141.5173-1-rcampbell@nvidia.com>
-        <20191104222141.5173-3-rcampbell@nvidia.com>
-        <20191112152521.GC12550@lst.de>
-        <07589a71-3984-b2a6-b24b-6b9a23e1b60d@nvidia.com>
-X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.31; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+        by mout-p-101.mailbox.org (Postfix) with ESMTPS id 47CQtM1PgvzKm9q;
+        Wed, 13 Nov 2019 01:47:07 +0100 (CET)
+X-Virus-Scanned: amavisd-new at heinlein-support.de
+Received: from smtp2.mailbox.org ([80.241.60.241])
+        by spamfilter04.heinlein-hosting.de (spamfilter04.heinlein-hosting.de [80.241.56.122]) (amavisd-new, port 10030)
+        with ESMTP id rfbcH-n--HBG; Wed, 13 Nov 2019 01:47:00 +0100 (CET)
+Date:   Wed, 13 Nov 2019 11:46:34 +1100
+From:   Aleksa Sarai <cyphar@cyphar.com>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Al Viro <viro@zeniv.linux.org.uk>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J. Bruce Fields" <bfields@fieldses.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        David Howells <dhowells@redhat.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Jann Horn <jannh@google.com>, Tycho Andersen <tycho@tycho.ws>,
+        David Drysdale <drysdale@google.com>,
+        Chanho Min <chanho.min@lge.com>,
+        Oleg Nesterov <oleg@redhat.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Christian Brauner <christian@brauner.io>,
+        Aleksa Sarai <asarai@suse.de>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        containers@lists.linux-foundation.org, linux-alpha@vger.kernel.org,
+        linux-api@vger.kernel.org, libc-alpha@sourceware.org,
+        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-ia64@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        linux-xtensa@linux-xtensa.org, sparclinux@vger.kernel.org
+Subject: Re: [PATCH v15 0/9] open: introduce openat2(2) syscall
+Message-ID: <20191113004634.tz7geloshltkafwj@yavin.dot.cyphar.com>
+References: <20191105090553.6350-1-cyphar@cyphar.com>
+ <20191111132404.y523iqicbn6fivx5@yavin.dot.cyphar.com>
+ <201911121457.7D02692@keescook>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="7ndczamgwxls6q65"
+Content-Disposition: inline
+In-Reply-To: <201911121457.7D02692@keescook>
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, 12 Nov 2019 13:51:11 -0800 Ralph Campbell <rcampbell@nvidia.com> wrote:
 
-> On 11/12/19 7:25 AM, Christoph Hellwig wrote:
-> > Shouldn't this go into mm/ instead? It certainly doesn't seem
-> > like a library.
-> 
-> I was following the convention for the other vm test kernel modules.
-> I see a couple of modules in mm/ but I don't have a personal
-> preference for where to place it.
-> 
-> Andrew, do you have a preference?
+--7ndczamgwxls6q65
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-q:/usr/src/25> ls -l lib/test_*.c|wc 
-     33     297    2051
+On 2019-11-12, Kees Cook <keescook@chromium.org> wrote:
+> On Tue, Nov 12, 2019 at 12:24:04AM +1100, Aleksa Sarai wrote:
+> > On 2019-11-05, Aleksa Sarai <cyphar@cyphar.com> wrote:
+> > > This patchset is being developed here:
+> > >   <https://github.com/cyphar/linux/tree/openat2/master>
+> > >=20
+> > > Patch changelog:
+> > >  v15:
+> > >   * Fix code style for LOOKUP_IN_ROOT handling in path_init(). [Linus=
+ Torvalds]
+> > >   * Split out patches for each individual LOOKUP flag.
+> > >   * Reword commit messages to give more background information about =
+the
+> > >     series, as well as mention the semantics of each flag in more det=
+ail.
+> > > [...]
+> >=20
+> > Ping -- this patch hasn't been touched for a week. Thanks.
+>=20
+> If I've been following correctly, everyone is happy with this series.
+> (i.e. Linus's comment appear to have been addressed.)
+>=20
+> Perhaps the next question is should this go via a pull request by you to
+> Linus directly during the v5.5 merge window, via akpm, via akpm, via
+> Christian, or some other path? Besides Linus, it's not been clear who
+> should "claim" this series. :)
 
-lib/ is a somewhat strange place, but I'd use that for now.
+Given the namei changes, I wanted to avoid stepping on Al's toes. Though
+he did review the series a few versions ago, the discussion didn't focus
+on the openat2(2) semantics (which have also changed since then). I'm
+not sure whether to interpret the silence to mean he's satisfied with
+things as they are, or if he hasn't had more time to look at the series.
 
-Presumably one day someone will (pointlessly) move these into
-lib/test-modules/.
+As for which tree it should be routed to, I don't mind -- Christian is
+the most straight-forward choice (but if Al wants to route it, that's
+fine with me too).
 
-Then into lib/test-modules/mm/, etc..
+--=20
+Aleksa Sarai
+Senior Software Engineer (Containers)
+SUSE Linux GmbH
+<https://www.cyphar.com/>
+
+--7ndczamgwxls6q65
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQSxZm6dtfE8gxLLfYqdlLljIbnQEgUCXctSZgAKCRCdlLljIbnQ
+Ej+PAP0UBMczq8p/OLMeyIryF0EfQ+noWktKHkfgvrRf7bKN7AEAiW1OItA5gtV4
+HiJnADyDHQw1h7livSSrD2X7HKS2BAA=
+=yOzJ
+-----END PGP SIGNATURE-----
+
+--7ndczamgwxls6q65--
