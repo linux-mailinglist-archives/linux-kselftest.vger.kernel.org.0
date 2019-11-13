@@ -2,22 +2,22 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FA46FAEF4
-	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Nov 2019 11:51:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C556FAF7A
+	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Nov 2019 12:15:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727528AbfKMKuz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 13 Nov 2019 05:50:55 -0500
-Received: from mx2.suse.de ([195.135.220.15]:34046 "EHLO mx1.suse.de"
+        id S1727869AbfKMLP2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 13 Nov 2019 06:15:28 -0500
+Received: from mx2.suse.de ([195.135.220.15]:47422 "EHLO mx1.suse.de"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726339AbfKMKuz (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 13 Nov 2019 05:50:55 -0500
+        id S1727316AbfKMLP1 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 13 Nov 2019 06:15:27 -0500
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id 6B1ACB13C;
-        Wed, 13 Nov 2019 10:50:51 +0000 (UTC)
+        by mx1.suse.de (Postfix) with ESMTP id 69351B4F8;
+        Wed, 13 Nov 2019 11:15:23 +0000 (UTC)
 Received: by quack2.suse.cz (Postfix, from userid 1000)
-        id 23C1B1E1498; Wed, 13 Nov 2019 11:50:51 +0100 (CET)
-Date:   Wed, 13 Nov 2019 11:50:51 +0100
+        id D45001E1498; Wed, 13 Nov 2019 12:15:21 +0100 (CET)
+Date:   Wed, 13 Nov 2019 12:15:21 +0100
 From:   Jan Kara <jack@suse.cz>
 To:     John Hubbard <jhubbard@nvidia.com>
 Cc:     Andrew Morton <akpm@linux-foundation.org>,
@@ -49,145 +49,91 @@ Cc:     Andrew Morton <akpm@linux-foundation.org>,
         linux-media@vger.kernel.org, linux-rdma@vger.kernel.org,
         linuxppc-dev@lists.ozlabs.org, netdev@vger.kernel.org,
         linux-mm@kvack.org, LKML <linux-kernel@vger.kernel.org>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
-Subject: Re: [PATCH v4 01/23] mm/gup: pass flags arg to __gup_device_*
- functions
-Message-ID: <20191113105051.GH6367@quack2.suse.cz>
+        Christoph Hellwig <hch@lst.de>,
+        "Aneesh Kumar K . V" <aneesh.kumar@linux.ibm.com>
+Subject: Re: [PATCH v4 02/23] mm/gup: factor out duplicate code from four
+ routines
+Message-ID: <20191113111521.GI6367@quack2.suse.cz>
 References: <20191113042710.3997854-1-jhubbard@nvidia.com>
- <20191113042710.3997854-2-jhubbard@nvidia.com>
+ <20191113042710.3997854-3-jhubbard@nvidia.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20191113042710.3997854-2-jhubbard@nvidia.com>
+In-Reply-To: <20191113042710.3997854-3-jhubbard@nvidia.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue 12-11-19 20:26:48, John Hubbard wrote:
-> A subsequent patch requires access to gup flags, so
-> pass the flags argument through to the __gup_device_*
-> functions.
+On Tue 12-11-19 20:26:49, John Hubbard wrote:
+> There are four locations in gup.c that have a fair amount of code
+> duplication. This means that changing one requires making the same
+> changes in four places, not to mention reading the same code four
+> times, and wondering if there are subtle differences.
 > 
-> Also placate checkpatch.pl by shortening a nearby line.
+> Factor out the common code into static functions, thus reducing the
+> overall line count and the code's complexity.
+> 
+> Also, take the opportunity to slightly improve the efficiency of the
+> error cases, by doing a mass subtraction of the refcount, surrounded
+> by get_page()/put_page().
+> 
+> Also, further simplify (slightly), by waiting until the the successful
+> end of each routine, to increment *nr.
 > 
 > Reviewed-by: Jérôme Glisse <jglisse@redhat.com>
-> Reviewed-by: Ira Weiny <ira.weiny@intel.com>
-> Cc: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+> Cc: Ira Weiny <ira.weiny@intel.com>
+> Cc: Christoph Hellwig <hch@lst.de>
+> Cc: Aneesh Kumar K.V <aneesh.kumar@linux.ibm.com>
 > Signed-off-by: John Hubbard <jhubbard@nvidia.com>
 
-Looks good! You can add:
-
-Reviewed-by: Jan Kara <jack@suse.cz>
-
-								Honza
-
-> ---
->  mm/gup.c | 28 ++++++++++++++++++----------
->  1 file changed, 18 insertions(+), 10 deletions(-)
-> 
 > diff --git a/mm/gup.c b/mm/gup.c
-> index 8f236a335ae9..85caf76b3012 100644
+> index 85caf76b3012..199da99e8ffc 100644
 > --- a/mm/gup.c
 > +++ b/mm/gup.c
-> @@ -1890,7 +1890,8 @@ static int gup_pte_range(pmd_t pmd, unsigned long addr, unsigned long end,
->  
->  #if defined(CONFIG_ARCH_HAS_PTE_DEVMAP) && defined(CONFIG_TRANSPARENT_HUGEPAGE)
->  static int __gup_device_huge(unsigned long pfn, unsigned long addr,
-> -		unsigned long end, struct page **pages, int *nr)
-> +			     unsigned long end, unsigned int flags,
-> +			     struct page **pages, int *nr)
->  {
->  	int nr_start = *nr;
->  	struct dev_pagemap *pgmap = NULL;
-> @@ -1916,13 +1917,14 @@ static int __gup_device_huge(unsigned long pfn, unsigned long addr,
+> @@ -1969,6 +1969,34 @@ static int __gup_device_huge_pud(pud_t pud, pud_t *pudp, unsigned long addr,
 >  }
+>  #endif
 >  
->  static int __gup_device_huge_pmd(pmd_t orig, pmd_t *pmdp, unsigned long addr,
-> -		unsigned long end, struct page **pages, int *nr)
-> +				 unsigned long end, unsigned int flags,
-> +				 struct page **pages, int *nr)
->  {
->  	unsigned long fault_pfn;
->  	int nr_start = *nr;
->  
->  	fault_pfn = pmd_pfn(orig) + ((addr & ~PMD_MASK) >> PAGE_SHIFT);
-> -	if (!__gup_device_huge(fault_pfn, addr, end, pages, nr))
-> +	if (!__gup_device_huge(fault_pfn, addr, end, flags, pages, nr))
->  		return 0;
->  
->  	if (unlikely(pmd_val(orig) != pmd_val(*pmdp))) {
-> @@ -1933,13 +1935,14 @@ static int __gup_device_huge_pmd(pmd_t orig, pmd_t *pmdp, unsigned long addr,
->  }
->  
->  static int __gup_device_huge_pud(pud_t orig, pud_t *pudp, unsigned long addr,
-> -		unsigned long end, struct page **pages, int *nr)
-> +				 unsigned long end, unsigned int flags,
-> +				 struct page **pages, int *nr)
->  {
->  	unsigned long fault_pfn;
->  	int nr_start = *nr;
->  
->  	fault_pfn = pud_pfn(orig) + ((addr & ~PUD_MASK) >> PAGE_SHIFT);
-> -	if (!__gup_device_huge(fault_pfn, addr, end, pages, nr))
-> +	if (!__gup_device_huge(fault_pfn, addr, end, flags, pages, nr))
->  		return 0;
->  
->  	if (unlikely(pud_val(orig) != pud_val(*pudp))) {
-> @@ -1950,14 +1953,16 @@ static int __gup_device_huge_pud(pud_t orig, pud_t *pudp, unsigned long addr,
->  }
->  #else
->  static int __gup_device_huge_pmd(pmd_t orig, pmd_t *pmdp, unsigned long addr,
-> -		unsigned long end, struct page **pages, int *nr)
-> +				 unsigned long end, unsigned int flags,
-> +				 struct page **pages, int *nr)
->  {
->  	BUILD_BUG();
->  	return 0;
->  }
->  
->  static int __gup_device_huge_pud(pud_t pud, pud_t *pudp, unsigned long addr,
-> -		unsigned long end, struct page **pages, int *nr)
-> +				 unsigned long end, unsigned int flags,
-> +				 struct page **pages, int *nr)
->  {
->  	BUILD_BUG();
->  	return 0;
-> @@ -2062,7 +2067,8 @@ static int gup_huge_pmd(pmd_t orig, pmd_t *pmdp, unsigned long addr,
->  	if (pmd_devmap(orig)) {
->  		if (unlikely(flags & FOLL_LONGTERM))
->  			return 0;
-> -		return __gup_device_huge_pmd(orig, pmdp, addr, end, pages, nr);
-> +		return __gup_device_huge_pmd(orig, pmdp, addr, end, flags,
-> +					     pages, nr);
->  	}
->  
->  	refs = 0;
-> @@ -2092,7 +2098,8 @@ static int gup_huge_pmd(pmd_t orig, pmd_t *pmdp, unsigned long addr,
->  }
->  
->  static int gup_huge_pud(pud_t orig, pud_t *pudp, unsigned long addr,
-> -		unsigned long end, unsigned int flags, struct page **pages, int *nr)
-> +			unsigned long end, unsigned int flags,
-> +			struct page **pages, int *nr)
->  {
->  	struct page *head, *page;
->  	int refs;
-> @@ -2103,7 +2110,8 @@ static int gup_huge_pud(pud_t orig, pud_t *pudp, unsigned long addr,
->  	if (pud_devmap(orig)) {
->  		if (unlikely(flags & FOLL_LONGTERM))
->  			return 0;
-> -		return __gup_device_huge_pud(orig, pudp, addr, end, pages, nr);
-> +		return __gup_device_huge_pud(orig, pudp, addr, end, flags,
-> +					     pages, nr);
->  	}
->  
->  	refs = 0;
-> -- 
-> 2.24.0
-> 
+> +static int __record_subpages(struct page *page, unsigned long addr,
+> +			     unsigned long end, struct page **pages, int nr)
+> +{
+> +	int nr_recorded_pages = 0;
+> +
+> +	do {
+> +		pages[nr] = page;
+> +		nr++;
+> +		page++;
+> +		nr_recorded_pages++;
+> +	} while (addr += PAGE_SIZE, addr != end);
+> +	return nr_recorded_pages;
+> +}
+
+Why don't you pass in already pages + nr?
+
+> +
+> +static void put_compound_head(struct page *page, int refs)
+> +{
+> +	/* Do a get_page() first, in case refs == page->_refcount */
+> +	get_page(page);
+> +	page_ref_sub(page, refs);
+> +	put_page(page);
+> +}
+> +
+> +static void __huge_pt_done(struct page *head, int nr_recorded_pages, int *nr)
+> +{
+> +	*nr += nr_recorded_pages;
+> +	SetPageReferenced(head);
+> +}
+
+I don't find this last helper very useful. It seems to muddy water more
+than necessary...
+
+Other than that the cleanup looks nice to me.
+
+								Honza
 -- 
 Jan Kara <jack@suse.com>
 SUSE Labs, CR
