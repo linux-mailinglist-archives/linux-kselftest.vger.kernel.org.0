@@ -2,861 +2,191 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CDBE4FB47C
-	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Nov 2019 17:00:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2433EFB70E
+	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Nov 2019 19:12:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727216AbfKMQAe (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 13 Nov 2019 11:00:34 -0500
-Received: from mail-wr1-f68.google.com ([209.85.221.68]:44091 "EHLO
-        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728209AbfKMQAe (ORCPT
+        id S1728120AbfKMSMn (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 13 Nov 2019 13:12:43 -0500
+Received: from mail-wm1-f65.google.com ([209.85.128.65]:54677 "EHLO
+        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726564AbfKMSMn (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 13 Nov 2019 11:00:34 -0500
-Received: by mail-wr1-f68.google.com with SMTP id f2so2959876wrs.11
-        for <linux-kselftest@vger.kernel.org>; Wed, 13 Nov 2019 08:00:31 -0800 (PST)
+        Wed, 13 Nov 2019 13:12:43 -0500
+Received: by mail-wm1-f65.google.com with SMTP id z26so3008856wmi.4
+        for <linux-kselftest@vger.kernel.org>; Wed, 13 Nov 2019 10:12:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:date:to:message-id:subject:mime-version;
-        bh=G6Oh/+DT8h1ypj+ORyB5vuPuojkwNzKK4Gevi9Fz8JM=;
-        b=g1j0n/IS7udOB5WiXNbrQL7Pdb3tFvFi1v97qUZIFgxun6UR+x3vIaedX1eJ5dNZ6O
-         qF/JHKCARSNrOaJyT2gB7SaA3IuUdLE/VxzlDo1eNYxJK6wAW0db2nXENDwhOxoKXbQK
-         NqoooUYYJYbOdR+bW7ljkPDbZZrTmRABVFQnBvYP3LOPUheNlUFMqsrG8GiU/7AREare
-         A/Ad5h8M51Mmf4LH4wY9BfOwSDfqhfictPFjd9kf+1eX5++gbn6AiuCIlhz8ciwzC9iz
-         E4nYnF1/OZbTVkINGEeHhuUBZomNU+YUAyHeWW+m/wgxQYuR+82XCBqC4YIzn+mwqD5+
-         oMTQ==
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ki25gnbpyN00Iv5cdTY8OhdgRYpiq6GuA0iUi2qS8JY=;
+        b=Fs57GyBC4KqL9mwZ7pz4er+6yTwZnzeC3f6ecarogyGItcOt761IC74Ow/Fy4yemVK
+         RUqp9/aQEupFLjbQgv1Is7jI9ME2ZM1Urs3WpBzkHiD8m8wVSpaj4qR2HT8NktQ9aIDh
+         83PGyCiMELKFkPAAJ4oKSoHJYw+BxXeDVZHwA+/1F1FsDEdMj437l2T1zBZvMvvheHvL
+         fdLJ8urtUQhsyRrrfXAVw/DhaY2VeUzbmsUBTotErPCNPW/7n17mK4ajJuqRCwV0CKYj
+         W+Zp1BcViOgwN1fFLrhobVuOpXFZhmczbXyYlTzP7butXBzzN7km9hK2nXnGXCXaobqM
+         5tig==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:date:to:message-id:subject:mime-version;
-        bh=G6Oh/+DT8h1ypj+ORyB5vuPuojkwNzKK4Gevi9Fz8JM=;
-        b=nguD5/O7tsS+woFXpgQXPlfVtf0GX4UKAPzN8qhMIuQ1rwEJqbOWDmoUyeA81XGBKi
-         yArL4bUZ9tyhCf0GnryCar8oAKuzYqX4qFk/uRt1RiktuAGpBwQ/rsMSf8ShWO33kDkb
-         vsB2N3dm6dpWsEO9EbkQq1nP8YVJ+K9c7m9x42cDxR3t49HtgegB7oFpK00de3u1C31v
-         nm6l4Cj9dtrjVz3KV7mw3iocQkpGEI4MHwEG+vpwowXDMNSRyQxNzbFLyyMItEnjE0Lo
-         L7pZIip5HUO41ditpHWsOEbAJv2zu9kfIKOMBXvEeBuCCujHGF5I4e5y16iK6X2usEmH
-         7+Rg==
-X-Gm-Message-State: APjAAAUPilVHG1EGfIGvQEyNRBj5emuWgjGN3lUnGWrTziindyUjzOMZ
-        7/fVTWSxnCs8cOzfWW9U7shfzA==
-X-Google-Smtp-Source: APXvYqzyXgO4wk3q8lNv/92V0f6EQ4HOz/QucteB/uIaDznKXSuxx+vLRPhZHkoR2OzGuLTcpbSuOw==
-X-Received: by 2002:adf:f744:: with SMTP id z4mr3557598wrp.205.1573660830543;
-        Wed, 13 Nov 2019 08:00:30 -0800 (PST)
-Received: from 172.17.0.4 (ci.linaro.org. [88.99.136.175])
-        by smtp.gmail.com with ESMTPSA id j67sm2975451wmb.43.2019.11.13.08.00.29
-        (version=TLS1 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
-        Wed, 13 Nov 2019 08:00:30 -0800 (PST)
-From:   ci_notify@linaro.org
-X-Google-Original-From: linaro-infrastructure-errors@lists.linaro.org
-Date:   Wed, 13 Nov 2019 16:00:29 +0000 (UTC)
-To:     lkft-triage@lists.linaro.org, dan.rue@linaro.org,
-        anders.roxell@linaro.org, naresh.kamboju@linaro.org,
-        shuah@kernel.org, linux-kselftest@vger.kernel.org
-Message-ID: <1834012051.579.1573660830019.JavaMail.javamailuser@localhost>
-Subject: next-20191113 kselftest results
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ki25gnbpyN00Iv5cdTY8OhdgRYpiq6GuA0iUi2qS8JY=;
+        b=pSZcJrVyaXFyOadsLKgrs8AVxLKukgDBTTFOBjOEJlCaxBnKaAqLLE0podds4BZvnk
+         yElk8xzqtYlGQXENx4A3HxLX+y/vGKq95rD84NUyF09PyaAYoXJEqCYbFZAH3Y07yHbq
+         iEp5penIQDUq6Wy3+C9I5cj5umL6ag9C7aS/tUGlFjRgB7fk3lTJoMh4L74VCcVALE1A
+         DLVeXpWfo2mEFKb4QVzEU+mmayQk0pf4ORakKlI+gXeFjOOcj+PchCxagGCqNb79ZfHm
+         Fi3wq3BU8QLj89HCX3F7m4TmGnRBMvPFbfgA0+BXLrrOA9JOYUtdRnWPxZIQji9CND4A
+         qn/w==
+X-Gm-Message-State: APjAAAV0BfbAJELfI9Y8T+ws0YhuwDg2YlsJO9GqOHtQPaYJ0kj7JlAQ
+        v0bkFwhr+N+ZgeAVSwZvXGZm9Lu+Lp7FvWgNrM7BBw==
+X-Google-Smtp-Source: APXvYqyS2MWVz9Gjs48JrwIYbsO/Nl6/uoy1ID+PXy7Cl0PgKvCG4CClUBfmff8XpKrw/24ncJDArH9Sw7hQb50yikE=
+X-Received: by 2002:a05:600c:295:: with SMTP id 21mr3864373wmk.43.1573668760287;
+ Wed, 13 Nov 2019 10:12:40 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/mixed; 
-        boundary="----=_Part_578_524522762.1573660829229"
-X-Jenkins-Job: LKFT Notify kselftest on next
-X-Jenkins-Result: SUCCESS
+References: <20191113012746.52804-1-brendanhiggins@google.com>
+In-Reply-To: <20191113012746.52804-1-brendanhiggins@google.com>
+From:   David Gow <davidgow@google.com>
+Date:   Wed, 13 Nov 2019 10:12:28 -0800
+Message-ID: <CABVgOS=3AXS1=rpGyNiNYu8hU+t=gQG9JongHXir=76ENnrnnA@mail.gmail.com>
+Subject: Re: [PATCH linux-kselftest/test v1] Documentation: kunit: add
+ documentation for kunit_tool
+To:     Brendan Higgins <brendanhiggins@google.com>
+Cc:     Shuah Khan <shuah@kernel.org>, kunit-dev@googlegroups.com,
+        linux-kernel@vger.kernel.org,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, linux-doc@vger.kernel.org,
+        corbet@lwn.net, tytso@mit.edu
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-------=_Part_578_524522762.1573660829229
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+On Tue, Nov 12, 2019 at 5:28 PM Brendan Higgins
+<brendanhiggins@google.com> wrote:
+>
+> Add documentation for the Python script used to build, run, and collect
+> results from the kernel known as kunit_tool. kunit_tool
+> (tools/testing/kunit/kunit.py) was already added in previous commits.
+>
+> Signed-off-by: Brendan Higgins <brendanhiggins@google.com>
+> ---
+>  Documentation/dev-tools/kunit/index.rst      |  1 +
+>  Documentation/dev-tools/kunit/kunit-tool.rst | 57 ++++++++++++++++++++
+>  Documentation/dev-tools/kunit/start.rst      |  3 ++
+>  3 files changed, 61 insertions(+)
+>  create mode 100644 Documentation/dev-tools/kunit/kunit-tool.rst
+>
+> diff --git a/Documentation/dev-tools/kunit/index.rst b/Documentation/dev-tools/kunit/index.rst
+> index 26ffb46bdf99d..c60d760a0eed1 100644
+> --- a/Documentation/dev-tools/kunit/index.rst
+> +++ b/Documentation/dev-tools/kunit/index.rst
+> @@ -9,6 +9,7 @@ KUnit - Unit Testing for the Linux Kernel
+>
+>         start
+>         usage
+> +       kunit-tool
+>         api/index
+>         faq
+>
+> diff --git a/Documentation/dev-tools/kunit/kunit-tool.rst b/Documentation/dev-tools/kunit/kunit-tool.rst
+> new file mode 100644
+> index 0000000000000..aa1a93649a45a
+> --- /dev/null
+> +++ b/Documentation/dev-tools/kunit/kunit-tool.rst
+> @@ -0,0 +1,57 @@
+> +.. SPDX-License-Identifier: GPL-2.0
+> +
+> +=================
+> +kunit_tool How-To
+> +=================
+> +
+> +What is kunit_tool?
+> +===================
+> +
+> +kunit_tool is a set of scripts that aid in building the Linux kernel as UML
+> +(`User Mode Linux <http://user-mode-linux.sourceforge.net/old/>`_), running
+> +KUnit tests, parsing the test results and displaying them in a user friendly
+> +manner.
 
-Summary
-------------------------------------------------------------------------
-kernel: 5.4.0-rc7
-git repo: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-git branch: master
-git commit: 4e8f108c3af2d6922a64df9f3d3d488c74f6009d
-git describe: next-20191113
-Test details: https://qa-reports.linaro.org/lkft/linux-next-oe/build/next-20191113
+Calling this a "set of scripts" is a bit confusing, as the only script
+described is tools/testing/kunit/kunit.py, which isn't mentioned in
+this section.
 
-Regressions (compared to build next-20191112)
-------------------------------------------------------------------------
-x86:                                                                                                      
- kselftest-vsyscall-mode-native:                                                                                         
-    * net_so_txtime.sh                                                                                                         
-qemu_i386:                                                                                                      
- kselftest:                                                                                         
-    * net_so_txtime.sh                                                                                                         
-qemu_arm:                                                                                                      
- kselftest:                                                                                         
-    * cgroup_test_freezer                                                                                                         
-                                                                                         
-    * net_so_txtime.sh                                                                                                         
-i386:                                                                                                      
- kselftest:                                                                                         
-    * net_fib-onlink-tests.sh                                                                                                         
-                                                                                         
-    * net_so_txtime.sh                                                                                                         
-                                                                                                          
-                                                                                                                       
-Fixes (compared to build next-20191112)                                                                   
-------------------------------------------------------------------------                                               
-x86:                                                                                                      
- kselftest:                                                                                         
-    * net_fib-onlink-tests.sh                                                                                                         
-                                                                                                      
- kselftest-vsyscall-mode-none:                                                                                         
-    * net_fib-onlink-tests.sh                                                                                                         
-x86:                                                                                                      
- kselftest:                                                                                         
-    * net_fib-onlink-tests.sh                                                                                                         
-                                                                                                      
- kselftest-vsyscall-mode-none:                                                                                         
-    * net_fib-onlink-tests.sh                                                                                                         
-qemu_i386:                                                                                                      
- kselftest:                                                                                         
-    * net_fib-onlink-tests.sh                                                                                                         
-i386:                                                                                                      
- kselftest:                                                                                         
-    * net_tcp_fastopen_backup_key.sh                                                                                                         
-                                                                                         
-    * seccomp_seccomp_benchmark                                                                                                         
-qemu_arm64:                                                                                                      
- kselftest:                                                                                         
-    * net_traceroute.sh                                                                                                         
+Also, it may be worth linking to the new version of the UML website
+(even if the old one has more content).
 
+> +
+> +What is a kunitconfig?
+> +======================
+> +
+> +It's just a defconfig that kunit_tool looks for in the base directory.
+> +kunit_tool uses it to generate a .config as you might expect. In addition, it
+> +verifies that the generated .config contains the CONFIG options in the
+> +kunitconfig; the reason it does this is so that it is easy to be sure that a
+> +CONFIG that enables a test actually ends up in the .config.
+> +
+> +How do I use kunit_tool?
+> +=================================
+> +
+> +If a kunitconfig is present at the root directory, all you have to do is:
+> +
+> +.. code-block:: bash
+> +
+> +       ./tools/testing/kunit/kunit.py run
+> +
+> +However, you most likely want to use it with the following options:
+> +
+> +.. code-block:: bash
+> +
+> +       ./tools/testing/kunit/kunit.py run --timeout=30 --jobs=8
+> +
+> +- ``--timeout`` sets a maximum amount of time to allow tests to run.
+> +- ``--jobs`` sets the number of threads to use to build the kernel.
+> +
 
-In total:
-------------------------------------------------------------------------
-Ran 1695 total tests in the following environments and test suites.
-pass 883
-fail 680
-xfail 0
-skip 132
+Not directly an issue with the documentation, but this does raise the
+question of why we don't have better defaults. Alternatively, maybe
+this doc could suggest --jobs=`nproc` or similar?
 
-Environments
---------------
-- dragonboard-410c - arm64
-- hi6220-hikey - arm64
-- i386
-- juno-r2 - arm64
-- qemu_arm
-- qemu_arm64
-- qemu_i386
-- qemu_x86_64
-- x15 - arm
-- x86_64
+> +If you just want to use the defconfig that ships with the kernel, you can
+> +append the ``--defconfig`` flag as well:
+> +
+> +.. code-block:: bash
+> +
+> +       ./tools/testing/kunit/kunit.py run --timeout=30 --jobs=8 --defconfig
+> +
+> +.. note::
+> +       This command is particularly helpful for getting started because it
+> +       just works. No kunitconfig needs to be present.
+> +
 
-Test Suites
------------
-* kselftest
-* kselftest-vsyscall-mode-native
-* kselftest-vsyscall-mode-none
+Should we use this in the getting started section below, then?
+Particularly since we're already going over kunitconfigs there
+separately.
 
+> +For a list of all the flags supported by kunit_tool, you can run:
+> +
+> +.. code-block:: bash
+> +
 
-Failures
-------------------------------------------------------------------------
+Do you think it's worth documenting the remaining two (--build_dir and
+--raw_output) here too?
 
-qemu_i386:
-* kselftest/bpf_get_cgroup_id_user
-* kselftest/bpf_test_bpftool_build.sh
-* kselftest/bpf_test_dev_cgroup
-* kselftest/bpf_test_flow_dissector.sh
-* kselftest/bpf_test_hashmap
-* kselftest/bpf_test_lwt_ip_encap.sh
-* kselftest/bpf_test_lwt_seg6local.sh
-* kselftest/bpf_test_maps
-* kselftest/bpf_test_netcnt
-* kselftest/bpf_test_progs
-* kselftest/bpf_test_progs-no_alu32
-* kselftest/bpf_test_select_reuseport
-* kselftest/bpf_test_skb_cgroup_id.sh
-* kselftest/bpf_test_sock_addr.sh
-* kselftest/bpf_test_socket_cookie
-* kselftest/bpf_test_sock_fields
-* kselftest/bpf_test_sockmap
-* kselftest/bpf_test_sysctl
-* kselftest/bpf_test_tc_edt.sh
-* kselftest/bpf_test_tcpbpf_user
-* kselftest/bpf_test_tcp_check_syncookie.sh
-* kselftest/bpf_test_tcpnotify_user
-* kselftest/bpf_test_tc_tunnel.sh
-* kselftest/bpf_test_tunnel.sh
-* kselftest/bpf_test_xdping.sh
-* kselftest/bpf_test_xdp_meta.sh
-* kselftest/bpf_test_xdp_redirect.sh
-* kselftest/bpf_test_xdp_vlan_mode_generic.sh
-* kselftest/bpf_test_xdp_vlan_mode_native.sh
-* kselftest/bpf_xdping
-* kselftest/clone3_clone3_clear_sighand
-* kselftest/cpufreq_main.sh
-* kselftest/firmware_fw_run_tests.sh
-* kselftest/kvm_clear_dirty_log_test
-* kselftest/kvm_cr4_cpuid_sync_test
-* kselftest/kvm_dirty_log_test
-* kselftest/kvm_evmcs_test
-* kselftest/kvm_hyperv_cpuid
-* kselftest/kvm_kvm_create_max_vcpus
-* kselftest/kvm_mmio_warning_test
-* kselftest/kvm_platform_info_test
-* kselftest/kvm_set_sregs_test
-* kselftest/kvm_smm_test
-* kselftest/kvm_state_test
-* kselftest/kvm_sync_regs_test
-* kselftest/kvm_vmx_close_while_nested_test
-* kselftest/kvm_vmx_dirty_log_test
-* kselftest/kvm_vmx_set_nested_state_test
-* kselftest/kvm_vmx_tsc_adjust_test
-* kselftest/lib_bitmap.sh
-* kselftest/mqueue_mq_perf_tests
-* kselftest/net_fib_tests.sh
-* kselftest/netfilter_conntrack_icmp_related.sh
-* kselftest/netfilter_nft_nat.sh
-* kselftest/net_ip_defrag.sh
-* kselftest/net_l2tp.sh
-* kselftest/net_pmtu.sh
-* kselftest/net_psock_snd.sh
-* kselftest/net_run_netsocktests
-* kselftest/net_so_txtime.sh
-* kselftest/net_test_vxlan_under_vrf.sh
-* kselftest/net_traceroute.sh
-* kselftest/net_udpgro_bench.sh
-* kselftest/net_udpgro.sh
-* kselftest/net_udpgso_bench.sh
-* kselftest/net_xfrm_policy.sh
-* kselftest/pidfd_pidfd_open_test
-* kselftest/pidfd_pidfd_poll_test
-* kselftest/proc_proc-self-syscall
-* kselftest/pstore_pstore_tests
-* kselftest/rseq_run_param_test.sh
-* kselftest/rtc_rtctest
-* kselftest/size_get_size
-* kselftest/timers_set-timer-lat
-* kselftest/timestamping_txtimestamp.sh
-* kselftest/tpm2_test_smoke.sh
-* kselftest/tpm2_test_space.sh
-* kselftest/vm_run_vmtests
-* kselftest/x86_ldt_gdt_32
-* kselftest/x86_sigreturn_32
-
-qemu_arm64:
-* kselftest/arm64_fake_sigreturn_bad_magic
-* kselftest/arm64_fake_sigreturn_bad_size
-* kselftest/arm64_fake_sigreturn_bad_size_for_magic0
-* kselftest/arm64_fake_sigreturn_duplicated_fpsimd
-* kselftest/arm64_fake_sigreturn_misaligned_sp
-* kselftest/arm64_fake_sigreturn_missing_fpsimd
-* kselftest/arm64_mangle_pstate_invalid_compat_toggle
-* kselftest/arm64_mangle_pstate_invalid_daif_bits
-* kselftest/arm64_mangle_pstate_invalid_mode_el1h
-* kselftest/arm64_mangle_pstate_invalid_mode_el1t
-* kselftest/arm64_mangle_pstate_invalid_mode_el2h
-* kselftest/arm64_mangle_pstate_invalid_mode_el2t
-* kselftest/arm64_mangle_pstate_invalid_mode_el3h
-* kselftest/arm64_mangle_pstate_invalid_mode_el3t
-* kselftest/bpf_get_cgroup_id_user
-* kselftest/bpf_test_bpftool_build.sh
-* kselftest/bpf_test_dev_cgroup
-* kselftest/bpf_test_flow_dissector.sh
-* kselftest/bpf_test_kmod.sh
-* kselftest/bpf_test_lpm_map
-* kselftest/bpf_test_lwt_ip_encap.sh
-* kselftest/bpf_test_lwt_seg6local.sh
-* kselftest/bpf_test_maps
-* kselftest/bpf_test_netcnt
-* kselftest/bpf_test_progs
-* kselftest/bpf_test_progs-no_alu32
-* kselftest/bpf_test_select_reuseport
-* kselftest/bpf_test_skb_cgroup_id.sh
-* kselftest/bpf_test_sock_addr.sh
-* kselftest/bpf_test_socket_cookie
-* kselftest/bpf_test_sock_fields
-* kselftest/bpf_test_sockmap
-* kselftest/bpf_test_sysctl
-* kselftest/bpf_test_tag
-* kselftest/bpf_test_tc_edt.sh
-* kselftest/bpf_test_tcpbpf_user
-* kselftest/bpf_test_tcp_check_syncookie.sh
-* kselftest/bpf_test_tcpnotify_user
-* kselftest/bpf_test_tc_tunnel.sh
-* kselftest/bpf_test_tunnel.sh
-* kselftest/bpf_test_verifier
-* kselftest/bpf_test_xdping.sh
-* kselftest/bpf_test_xdp_meta.sh
-* kselftest/bpf_test_xdp_redirect.sh
-* kselftest/bpf_test_xdp_vlan_mode_generic.sh
-* kselftest/bpf_test_xdp_vlan_mode_native.sh
-* kselftest/bpf_xdping
-* kselftest/clone3_clone3
-* kselftest/clone3_clone3_clear_sighand
-* kselftest/cpufreq_main.sh
-* kselftest/firmware_fw_run_tests.sh
-* kselftest/kvm_clear_dirty_log_test
-* kselftest/kvm_cr4_cpuid_sync_test
-* kselftest/kvm_dirty_log_test
-* kselftest/kvm_evmcs_test
-* kselftest/kvm_hyperv_cpuid
-* kselftest/kvm_kvm_create_max_vcpus
-* kselftest/kvm_mmio_warning_test
-* kselftest/kvm_platform_info_test
-* kselftest/kvm_set_sregs_test
-* kselftest/kvm_smm_test
-* kselftest/kvm_state_test
-* kselftest/kvm_sync_regs_test
-* kselftest/kvm_vmx_close_while_nested_test
-* kselftest/kvm_vmx_dirty_log_test
-* kselftest/kvm_vmx_set_nested_state_test
-* kselftest/kvm_vmx_tsc_adjust_test
-* kselftest/net_fib-onlink-tests.sh
-* kselftest/net_fib_rule_tests.sh
-* kselftest/net_fib_tests.sh
-* kselftest/netfilter_conntrack_icmp_related.sh
-* kselftest/netfilter_nft_nat.sh
-* kselftest/net_ip_defrag.sh
-* kselftest/net_l2tp.sh
-* kselftest/net_pmtu.sh
-* kselftest/net_psock_snd.sh
-* kselftest/net_rtnetlink.sh
-* kselftest/net_run_netsocktests
-* kselftest/net_so_txtime.sh
-* kselftest/net_tcp_fastopen_backup_key.sh
-* kselftest/net_test_vxlan_under_vrf.sh
-* kselftest/net_udpgro_bench.sh
-* kselftest/net_udpgro.sh
-* kselftest/net_udpgso_bench.sh
-* kselftest/pidfd_pidfd_fdinfo_test
-* kselftest/pidfd_pidfd_open_test
-* kselftest/pidfd_pidfd_poll_test
-* kselftest/pidfd_pidfd_test
-* kselftest/pidfd_pidfd_wait
-* kselftest/proc_read
-* kselftest/pstore_pstore_tests
-* kselftest/rseq_basic_percpu_ops_test
-* kselftest/rtc_rtctest
-* kselftest/sync_sync_test
-* kselftest/timers_set-timer-lat
-* kselftest/timestamping_txtimestamp.sh
-* kselftest/tpm2_test_smoke.sh
-* kselftest/tpm2_test_space.sh
-
-x86:
-* kselftest-vsyscall-mode-none/bpf_get_cgroup_id_user
-* kselftest-vsyscall-mode-native/bpf_get_cgroup_id_user
-* kselftest-vsyscall-mode-none/bpf_test_bpftool_build.sh
-* kselftest-vsyscall-mode-native/bpf_test_bpftool_build.sh
-* kselftest-vsyscall-mode-none/bpf_test_dev_cgroup
-* kselftest-vsyscall-mode-native/bpf_test_dev_cgroup
-* kselftest-vsyscall-mode-native/bpf_test_flow_dissector.sh
-* kselftest-vsyscall-mode-none/bpf_test_flow_dissector.sh
-* kselftest-vsyscall-mode-native/bpf_test_lwt_ip_encap.sh
-* kselftest-vsyscall-mode-none/bpf_test_lwt_ip_encap.sh
-* kselftest-vsyscall-mode-native/bpf_test_lwt_seg6local.sh
-* kselftest-vsyscall-mode-none/bpf_test_lwt_seg6local.sh
-* kselftest-vsyscall-mode-none/bpf_test_maps
-* kselftest-vsyscall-mode-native/bpf_test_maps
-* kselftest-vsyscall-mode-native/bpf_test_netcnt
-* kselftest-vsyscall-mode-none/bpf_test_netcnt
-* kselftest-vsyscall-mode-none/bpf_test_progs
-* kselftest-vsyscall-mode-native/bpf_test_progs
-* kselftest-vsyscall-mode-none/bpf_test_progs-no_alu32
-* kselftest-vsyscall-mode-native/bpf_test_progs-no_alu32
-* kselftest-vsyscall-mode-native/bpf_test_select_reuseport
-* kselftest-vsyscall-mode-none/bpf_test_select_reuseport
-* kselftest-vsyscall-mode-none/bpf_test_skb_cgroup_id.sh
-* kselftest-vsyscall-mode-native/bpf_test_skb_cgroup_id.sh
-* kselftest-vsyscall-mode-none/bpf_test_sock_addr.sh
-* kselftest-vsyscall-mode-native/bpf_test_sock_addr.sh
-* kselftest-vsyscall-mode-native/bpf_test_socket_cookie
-* kselftest-vsyscall-mode-none/bpf_test_socket_cookie
-* kselftest-vsyscall-mode-none/bpf_test_sock_fields
-* kselftest-vsyscall-mode-native/bpf_test_sock_fields
-* kselftest-vsyscall-mode-native/bpf_test_sockmap
-* kselftest-vsyscall-mode-none/bpf_test_sockmap
-* kselftest-vsyscall-mode-native/bpf_test_sysctl
-* kselftest-vsyscall-mode-none/bpf_test_sysctl
-* kselftest-vsyscall-mode-native/bpf_test_tc_edt.sh
-* kselftest-vsyscall-mode-none/bpf_test_tc_edt.sh
-* kselftest-vsyscall-mode-native/bpf_test_tcpbpf_user
-* kselftest-vsyscall-mode-none/bpf_test_tcpbpf_user
-* kselftest-vsyscall-mode-none/bpf_test_tcp_check_syncookie.sh
-* kselftest-vsyscall-mode-native/bpf_test_tcp_check_syncookie.sh
-* kselftest-vsyscall-mode-native/bpf_test_tcpnotify_user
-* kselftest-vsyscall-mode-none/bpf_test_tcpnotify_user
-* kselftest-vsyscall-mode-native/bpf_test_tc_tunnel.sh
-* kselftest-vsyscall-mode-none/bpf_test_tc_tunnel.sh
-* kselftest-vsyscall-mode-none/bpf_test_tunnel.sh
-* kselftest-vsyscall-mode-native/bpf_test_tunnel.sh
-* kselftest-vsyscall-mode-native/bpf_test_xdping.sh
-* kselftest-vsyscall-mode-none/bpf_test_xdping.sh
-* kselftest-vsyscall-mode-native/bpf_test_xdp_meta.sh
-* kselftest-vsyscall-mode-none/bpf_test_xdp_meta.sh
-* kselftest-vsyscall-mode-none/bpf_test_xdp_redirect.sh
-* kselftest-vsyscall-mode-native/bpf_test_xdp_redirect.sh
-* kselftest-vsyscall-mode-none/bpf_test_xdp_vlan_mode_generic.sh
-* kselftest-vsyscall-mode-native/bpf_test_xdp_vlan_mode_generic.sh
-* kselftest-vsyscall-mode-native/bpf_test_xdp_vlan_mode_native.sh
-* kselftest-vsyscall-mode-none/bpf_test_xdp_vlan_mode_native.sh
-* kselftest-vsyscall-mode-none/bpf_xdping
-* kselftest-vsyscall-mode-native/bpf_xdping
-* kselftest-vsyscall-mode-none/firmware_fw_run_tests.sh
-* kselftest-vsyscall-mode-native/firmware_fw_run_tests.sh
-* kselftest-vsyscall-mode-native/intel_pstate_run.sh
-* kselftest-vsyscall-mode-native/kvm_clear_dirty_log_test
-* kselftest-vsyscall-mode-none/kvm_clear_dirty_log_test
-* kselftest-vsyscall-mode-none/kvm_cr4_cpuid_sync_test
-* kselftest-vsyscall-mode-native/kvm_cr4_cpuid_sync_test
-* kselftest-vsyscall-mode-native/kvm_dirty_log_test
-* kselftest-vsyscall-mode-none/kvm_dirty_log_test
-* kselftest-vsyscall-mode-none/kvm_evmcs_test
-* kselftest-vsyscall-mode-native/kvm_evmcs_test
-* kselftest-vsyscall-mode-none/kvm_hyperv_cpuid
-* kselftest-vsyscall-mode-native/kvm_kvm_create_max_vcpus
-* kselftest-vsyscall-mode-none/kvm_kvm_create_max_vcpus
-* kselftest-vsyscall-mode-none/kvm_platform_info_test
-* kselftest-vsyscall-mode-native/kvm_platform_info_test
-* kselftest-vsyscall-mode-none/kvm_set_sregs_test
-* kselftest-vsyscall-mode-native/kvm_set_sregs_test
-* kselftest-vsyscall-mode-none/kvm_smm_test
-* kselftest-vsyscall-mode-native/kvm_smm_test
-* kselftest-vsyscall-mode-native/kvm_state_test
-* kselftest-vsyscall-mode-none/kvm_state_test
-* kselftest-vsyscall-mode-native/kvm_sync_regs_test
-* kselftest-vsyscall-mode-none/kvm_sync_regs_test
-* kselftest-vsyscall-mode-native/kvm_vmx_close_while_nested_test
-* kselftest-vsyscall-mode-none/kvm_vmx_close_while_nested_test
-* kselftest-vsyscall-mode-none/kvm_vmx_dirty_log_test
-* kselftest-vsyscall-mode-native/kvm_vmx_dirty_log_test
-* kselftest-vsyscall-mode-none/kvm_vmx_set_nested_state_test
-* kselftest-vsyscall-mode-native/kvm_vmx_set_nested_state_test
-* kselftest-vsyscall-mode-none/kvm_vmx_tsc_adjust_test
-* kselftest-vsyscall-mode-native/kvm_vmx_tsc_adjust_test
-* kselftest-vsyscall-mode-native/mqueue_mq_perf_tests
-* kselftest-vsyscall-mode-none/mqueue_mq_perf_tests
-* kselftest-vsyscall-mode-native/net_fib-onlink-tests.sh
-* kselftest-vsyscall-mode-native/net_fib_tests.sh
-* kselftest-vsyscall-mode-none/net_fib_tests.sh
-* kselftest-vsyscall-mode-native/net_ip_defrag.sh
-* kselftest-vsyscall-mode-none/net_ip_defrag.sh
-* kselftest-vsyscall-mode-none/net_l2tp.sh
-* kselftest-vsyscall-mode-native/net_l2tp.sh
-* kselftest-vsyscall-mode-native/net_pmtu.sh
-* kselftest-vsyscall-mode-none/net_pmtu.sh
-* kselftest-vsyscall-mode-none/net_psock_snd.sh
-* kselftest-vsyscall-mode-none/net_run_netsocktests
-* kselftest-vsyscall-mode-native/net_run_netsocktests
-* kselftest-vsyscall-mode-native/net_so_txtime.sh
-* kselftest-vsyscall-mode-none/net_test_vxlan_under_vrf.sh
-* kselftest-vsyscall-mode-native/net_test_vxlan_under_vrf.sh
-* kselftest-vsyscall-mode-native/net_traceroute.sh
-* kselftest-vsyscall-mode-none/net_traceroute.sh
-* kselftest-vsyscall-mode-native/net_udpgro_bench.sh
-* kselftest-vsyscall-mode-none/net_udpgro_bench.sh
-* kselftest-vsyscall-mode-none/net_udpgro.sh
-* kselftest-vsyscall-mode-native/net_udpgro.sh
-* kselftest-vsyscall-mode-native/net_udpgso_bench.sh
-* kselftest-vsyscall-mode-none/net_udpgso_bench.sh
-* kselftest-vsyscall-mode-none/net_xfrm_policy.sh
-* kselftest-vsyscall-mode-native/net_xfrm_policy.sh
-* kselftest-vsyscall-mode-none/pidfd_pidfd_open_test
-* kselftest-vsyscall-mode-native/pidfd_pidfd_open_test
-* kselftest-vsyscall-mode-none/pidfd_pidfd_poll_test
-* kselftest-vsyscall-mode-native/pidfd_pidfd_poll_test
-* kselftest-vsyscall-mode-none/pstore_pstore_tests
-* kselftest-vsyscall-mode-native/pstore_pstore_tests
-* kselftest-vsyscall-mode-none/rseq_run_param_test.sh
-* kselftest-vsyscall-mode-native/rseq_run_param_test.sh
-* kselftest-vsyscall-mode-none/rtc_rtctest
-* kselftest-vsyscall-mode-native/rtc_rtctest
-* kselftest-vsyscall-mode-none/seccomp_seccomp_benchmark
-* kselftest-vsyscall-mode-native/seccomp_seccomp_benchmark
-* kselftest-vsyscall-mode-native/timers_set-timer-lat
-* kselftest-vsyscall-mode-none/timers_set-timer-lat
-* kselftest-vsyscall-mode-none/timestamping_txtimestamp.sh
-* kselftest-vsyscall-mode-native/timestamping_txtimestamp.sh
-* kselftest-vsyscall-mode-none/tpm2_test_smoke.sh
-* kselftest-vsyscall-mode-native/tpm2_test_smoke.sh
-* kselftest-vsyscall-mode-native/tpm2_test_space.sh
-* kselftest-vsyscall-mode-none/tpm2_test_space.sh
-* kselftest-vsyscall-mode-native/vm_run_vmtests
-* kselftest-vsyscall-mode-none/vm_run_vmtests
-* kselftest/bpf_get_cgroup_id_user
-* kselftest/bpf_test_bpftool_build.sh
-* kselftest/bpf_test_dev_cgroup
-* kselftest/bpf_test_flow_dissector.sh
-* kselftest/bpf_test_lwt_ip_encap.sh
-* kselftest/bpf_test_lwt_seg6local.sh
-* kselftest/bpf_test_maps
-* kselftest/bpf_test_netcnt
-* kselftest/bpf_test_progs
-* kselftest/bpf_test_progs-no_alu32
-* kselftest/bpf_test_select_reuseport
-* kselftest/bpf_test_skb_cgroup_id.sh
-* kselftest/bpf_test_sock_addr.sh
-* kselftest/bpf_test_socket_cookie
-* kselftest/bpf_test_sock_fields
-* kselftest/bpf_test_sockmap
-* kselftest/bpf_test_sysctl
-* kselftest/bpf_test_tc_edt.sh
-* kselftest/bpf_test_tcpbpf_user
-* kselftest/bpf_test_tcp_check_syncookie.sh
-* kselftest/bpf_test_tcpnotify_user
-* kselftest/bpf_test_tc_tunnel.sh
-* kselftest/bpf_test_tunnel.sh
-* kselftest/bpf_test_xdping.sh
-* kselftest/bpf_test_xdp_meta.sh
-* kselftest/bpf_test_xdp_redirect.sh
-* kselftest/bpf_test_xdp_vlan_mode_generic.sh
-* kselftest/bpf_test_xdp_vlan_mode_native.sh
-* kselftest/bpf_xdping
-* kselftest/firmware_fw_run_tests.sh
-* kselftest/ftrace_ftracetest
-* kselftest/intel_pstate_run.sh
-* kselftest/kvm_clear_dirty_log_test
-* kselftest/kvm_cr4_cpuid_sync_test
-* kselftest/kvm_dirty_log_test
-* kselftest/kvm_evmcs_test
-* kselftest/kvm_hyperv_cpuid
-* kselftest/kvm_kvm_create_max_vcpus
-* kselftest/kvm_platform_info_test
-* kselftest/kvm_set_sregs_test
-* kselftest/kvm_smm_test
-* kselftest/kvm_state_test
-* kselftest/kvm_sync_regs_test
-* kselftest/kvm_vmx_close_while_nested_test
-* kselftest/kvm_vmx_dirty_log_test
-* kselftest/kvm_vmx_set_nested_state_test
-* kselftest/kvm_vmx_tsc_adjust_test
-* kselftest/mqueue_mq_perf_tests
-* kselftest/net_fib_tests.sh
-* kselftest/net_ip_defrag.sh
-* kselftest/net_l2tp.sh
-* kselftest/net_pmtu.sh
-* kselftest/net_psock_snd.sh
-* kselftest/net_run_netsocktests
-* kselftest/net_test_vxlan_under_vrf.sh
-* kselftest/net_traceroute.sh
-* kselftest/net_udpgro_bench.sh
-* kselftest/net_udpgro.sh
-* kselftest/net_udpgso_bench.sh
-* kselftest/net_xfrm_policy.sh
-* kselftest/pidfd_pidfd_open_test
-* kselftest/pidfd_pidfd_poll_test
-* kselftest/pstore_pstore_tests
-* kselftest/rseq_run_param_test.sh
-* kselftest/rtc_rtctest
-* kselftest/seccomp_seccomp_benchmark
-* kselftest/timers_set-timer-lat
-* kselftest/timestamping_txtimestamp.sh
-* kselftest/tpm2_test_smoke.sh
-* kselftest/tpm2_test_space.sh
-* kselftest/vm_run_vmtests
-
-i386:
-* kselftest/bpf_get_cgroup_id_user
-* kselftest/bpf_test_bpftool_build.sh
-* kselftest/bpf_test_dev_cgroup
-* kselftest/bpf_test_flow_dissector.sh
-* kselftest/bpf_test_hashmap
-* kselftest/bpf_test_lwt_ip_encap.sh
-* kselftest/bpf_test_lwt_seg6local.sh
-* kselftest/bpf_test_maps
-* kselftest/bpf_test_netcnt
-* kselftest/bpf_test_progs
-* kselftest/bpf_test_progs-no_alu32
-* kselftest/bpf_test_select_reuseport
-* kselftest/bpf_test_skb_cgroup_id.sh
-* kselftest/bpf_test_sock_addr.sh
-* kselftest/bpf_test_socket_cookie
-* kselftest/bpf_test_sock_fields
-* kselftest/bpf_test_sockmap
-* kselftest/bpf_test_sysctl
-* kselftest/bpf_test_tc_edt.sh
-* kselftest/bpf_test_tcpbpf_user
-* kselftest/bpf_test_tcp_check_syncookie.sh
-* kselftest/bpf_test_tcpnotify_user
-* kselftest/bpf_test_tc_tunnel.sh
-* kselftest/bpf_test_tunnel.sh
-* kselftest/bpf_test_xdping.sh
-* kselftest/bpf_test_xdp_meta.sh
-* kselftest/bpf_test_xdp_redirect.sh
-* kselftest/bpf_test_xdp_vlan_mode_generic.sh
-* kselftest/bpf_test_xdp_vlan_mode_native.sh
-* kselftest/bpf_xdping
-* kselftest/clone3_clone3_clear_sighand
-* kselftest/firmware_fw_run_tests.sh
-* kselftest/intel_pstate_run.sh
-* kselftest/kvm_clear_dirty_log_test
-* kselftest/kvm_cr4_cpuid_sync_test
-* kselftest/kvm_dirty_log_test
-* kselftest/kvm_evmcs_test
-* kselftest/kvm_hyperv_cpuid
-* kselftest/kvm_kvm_create_max_vcpus
-* kselftest/kvm_mmio_warning_test
-* kselftest/kvm_platform_info_test
-* kselftest/kvm_set_sregs_test
-* kselftest/kvm_smm_test
-* kselftest/kvm_state_test
-* kselftest/kvm_sync_regs_test
-* kselftest/kvm_vmx_close_while_nested_test
-* kselftest/kvm_vmx_dirty_log_test
-* kselftest/kvm_vmx_set_nested_state_test
-* kselftest/kvm_vmx_tsc_adjust_test
-* kselftest/lib_bitmap.sh
-* kselftest/mqueue_mq_perf_tests
-* kselftest/net_fib-onlink-tests.sh
-* kselftest/net_fib_tests.sh
-* kselftest/net_ip_defrag.sh
-* kselftest/net_l2tp.sh
-* kselftest/net_pmtu.sh
-* kselftest/net_psock_snd.sh
-* kselftest/net_run_netsocktests
-* kselftest/net_so_txtime.sh
-* kselftest/net_test_vxlan_under_vrf.sh
-* kselftest/net_traceroute.sh
-* kselftest/net_udpgro_bench.sh
-* kselftest/net_udpgso_bench.sh
-* kselftest/pidfd_pidfd_open_test
-* kselftest/pidfd_pidfd_poll_test
-* kselftest/proc_proc-self-syscall
-* kselftest/pstore_pstore_tests
-* kselftest/rseq_run_param_test.sh
-* kselftest/rtc_rtctest
-* kselftest/size_get_size
-* kselftest/timers_set-timer-lat
-* kselftest/timestamping_txtimestamp.sh
-* kselftest/tpm2_test_smoke.sh
-* kselftest/tpm2_test_space.sh
-* kselftest/vm_run_vmtests
-* kselftest/x86_ldt_gdt_32
-* kselftest/x86_sigreturn_32
-
-qemu_x86_64:
-* kselftest/bpf_get_cgroup_id_user
-* kselftest/bpf_test_bpftool_build.sh
-* kselftest/bpf_test_dev_cgroup
-* kselftest/bpf_test_flow_dissector.sh
-* kselftest/bpf_test_lwt_ip_encap.sh
-* kselftest/bpf_test_lwt_seg6local.sh
-* kselftest/bpf_test_maps
-* kselftest/bpf_test_netcnt
-* kselftest/bpf_test_progs
-* kselftest/bpf_test_progs-no_alu32
-* kselftest/bpf_test_select_reuseport
-* kselftest/bpf_test_skb_cgroup_id.sh
-* kselftest/bpf_test_sock_addr.sh
-* kselftest/bpf_test_socket_cookie
-* kselftest/bpf_test_sock_fields
-* kselftest/bpf_test_sockmap
-* kselftest/bpf_test_sysctl
-* kselftest/bpf_test_tc_edt.sh
-* kselftest/bpf_test_tcpbpf_user
-* kselftest/bpf_test_tcp_check_syncookie.sh
-* kselftest/bpf_test_tcpnotify_user
-* kselftest/bpf_test_tc_tunnel.sh
-* kselftest/bpf_test_tunnel.sh
-* kselftest/bpf_test_xdping.sh
-* kselftest/bpf_test_xdp_meta.sh
-* kselftest/bpf_test_xdp_redirect.sh
-* kselftest/bpf_test_xdp_vlan_mode_generic.sh
-* kselftest/bpf_test_xdp_vlan_mode_native.sh
-* kselftest/bpf_xdping
-* kselftest/cpufreq_main.sh
-* kselftest/firmware_fw_run_tests.sh
-* kselftest/kvm_clear_dirty_log_test
-* kselftest/kvm_cr4_cpuid_sync_test
-* kselftest/kvm_dirty_log_test
-* kselftest/kvm_evmcs_test
-* kselftest/kvm_hyperv_cpuid
-* kselftest/kvm_kvm_create_max_vcpus
-* kselftest/kvm_platform_info_test
-* kselftest/kvm_set_sregs_test
-* kselftest/kvm_smm_test
-* kselftest/kvm_state_test
-* kselftest/kvm_sync_regs_test
-* kselftest/mqueue_mq_perf_tests
-* kselftest/net_fib-onlink-tests.sh
-* kselftest/net_fib_tests.sh
-* kselftest/net_ip_defrag.sh
-* kselftest/net_l2tp.sh
-* kselftest/net_pmtu.sh
-* kselftest/net_psock_snd.sh
-* kselftest/net_run_netsocktests
-* kselftest/net_test_vxlan_under_vrf.sh
-* kselftest/net_traceroute.sh
-* kselftest/net_udpgro_bench.sh
-* kselftest/net_udpgro.sh
-* kselftest/net_udpgso_bench.sh
-* kselftest/net_xfrm_policy.sh
-* kselftest/pidfd_pidfd_open_test
-* kselftest/pidfd_pidfd_poll_test
-* kselftest/pstore_pstore_tests
-* kselftest/rseq_run_param_test.sh
-* kselftest/rtc_rtctest
-* kselftest/timers_set-timer-lat
-* kselftest/timestamping_txtimestamp.sh
-* kselftest/tpm2_test_smoke.sh
-* kselftest/tpm2_test_space.sh
-* kselftest/vm_run_vmtests
-* kselftest/x86_fsgsbase_64
-
-qemu_arm:
-* kselftest/bpf_get_cgroup_id_user
-* kselftest/bpf_test_bpftool_build.sh
-* kselftest/bpf_test_dev_cgroup
-* kselftest/bpf_test_flow_dissector.sh
-* kselftest/bpf_test_hashmap
-* kselftest/bpf_test_kmod.sh
-* kselftest/bpf_test_lwt_ip_encap.sh
-* kselftest/bpf_test_lwt_seg6local.sh
-* kselftest/bpf_test_maps
-* kselftest/bpf_test_netcnt
-* kselftest/bpf_test_progs
-* kselftest/bpf_test_progs-no_alu32
-* kselftest/bpf_test_select_reuseport
-* kselftest/bpf_test_skb_cgroup_id.sh
-* kselftest/bpf_test_sock_addr.sh
-* kselftest/bpf_test_socket_cookie
-* kselftest/bpf_test_sock_fields
-* kselftest/bpf_test_sockmap
-* kselftest/bpf_test_sysctl
-* kselftest/bpf_test_tag
-* kselftest/bpf_test_tc_edt.sh
-* kselftest/bpf_test_tcpbpf_user
-* kselftest/bpf_test_tcp_check_syncookie.sh
-* kselftest/bpf_test_tcpnotify_user
-* kselftest/bpf_test_tc_tunnel.sh
-* kselftest/bpf_test_tunnel.sh
-* kselftest/bpf_test_verifier
-* kselftest/bpf_test_xdping.sh
-* kselftest/bpf_test_xdp_meta.sh
-* kselftest/bpf_test_xdp_redirect.sh
-* kselftest/bpf_test_xdp_vlan_mode_generic.sh
-* kselftest/bpf_test_xdp_vlan_mode_native.sh
-* kselftest/bpf_xdping
-* kselftest/cgroup_test_freezer
-* kselftest/clone3_clone3_clear_sighand
-* kselftest/cpufreq_main.sh
-* kselftest/firmware_fw_run_tests.sh
-* kselftest/kvm_clear_dirty_log_test
-* kselftest/kvm_cr4_cpuid_sync_test
-* kselftest/kvm_dirty_log_test
-* kselftest/kvm_evmcs_test
-* kselftest/kvm_hyperv_cpuid
-* kselftest/kvm_kvm_create_max_vcpus
-* kselftest/kvm_mmio_warning_test
-* kselftest/kvm_platform_info_test
-* kselftest/kvm_set_sregs_test
-* kselftest/kvm_smm_test
-* kselftest/kvm_state_test
-* kselftest/kvm_sync_regs_test
-* kselftest/kvm_vmx_close_while_nested_test
-* kselftest/kvm_vmx_dirty_log_test
-* kselftest/kvm_vmx_set_nested_state_test
-* kselftest/kvm_vmx_tsc_adjust_test
-* kselftest/lib_bitmap.sh
-* kselftest/net_fib-onlink-tests.sh
-* kselftest/net_fib_rule_tests.sh
-* kselftest/net_fib_tests.sh
-* kselftest/netfilter_conntrack_icmp_related.sh
-* kselftest/netfilter_nft_nat.sh
-* kselftest/net_ip_defrag.sh
-* kselftest/net_l2tp.sh
-* kselftest/net_pmtu.sh
-* kselftest/net_psock_snd.sh
-* kselftest/net_reuseport_bpf_numa
-* kselftest/net_run_netsocktests
-* kselftest/net_so_txtime.sh
-* kselftest/net_tcp_fastopen_backup_key.sh
-* kselftest/net_test_vxlan_under_vrf.sh
-* kselftest/net_udpgro_bench.sh
-* kselftest/net_udpgro.sh
-* kselftest/net_udpgso_bench.sh
-* kselftest/pidfd_pidfd_open_test
-* kselftest/pidfd_pidfd_poll_test
-* kselftest/pidfd_pidfd_test
-* kselftest/proc_proc-self-syscall
-* kselftest/pstore_pstore_tests
-* kselftest/rseq_basic_percpu_ops_test
-* kselftest/rtc_rtctest
-* kselftest/timers_set-timer-lat
-* kselftest/timestamping_txtimestamp.sh
-* kselftest/tpm2_test_smoke.sh
-* kselftest/tpm2_test_space.sh
-
-x15:
-* kselftest/bpf_test_dev_cgroup
-* kselftest/bpf_test_flow_dissector.sh
-* kselftest/bpf_test_hashmap
-* kselftest/bpf_test_kmod.sh
-* kselftest/bpf_test_lwt_ip_encap.sh
-* kselftest/bpf_test_lwt_seg6local.sh
-* kselftest/bpf_test_maps
-* kselftest/bpf_test_progs
-* kselftest/bpf_test_progs-no_alu32
-* kselftest/bpf_test_select_reuseport
-* kselftest/bpf_test_skb_cgroup_id.sh
-* kselftest/bpf_test_sock_addr.sh
-* kselftest/bpf_test_sockmap
-* kselftest/bpf_test_sysctl
-* kselftest/bpf_test_tag
-* kselftest/bpf_test_tc_edt.sh
-* kselftest/bpf_test_tcpbpf_user
-* kselftest/bpf_test_tcp_check_syncookie.sh
-* kselftest/bpf_test_tc_tunnel.sh
-* kselftest/bpf_test_tunnel.sh
-* kselftest/bpf_test_verifier
-* kselftest/bpf_test_xdping.sh
-* kselftest/bpf_test_xdp_meta.sh
-* kselftest/bpf_test_xdp_redirect.sh
-* kselftest/bpf_test_xdp_vlan_mode_generic.sh
-* kselftest/bpf_test_xdp_vlan_mode_native.sh
-* kselftest/bpf_xdping
-
-hi6220-hikey:
-
-dragonboard-410c:
-* kselftest/arm64_fake_sigreturn_bad_magic
-* kselftest/arm64_fake_sigreturn_bad_size
-* kselftest/arm64_fake_sigreturn_bad_size_for_magic0
-* kselftest/arm64_fake_sigreturn_duplicated_fpsimd
-* kselftest/arm64_fake_sigreturn_misaligned_sp
-* kselftest/arm64_fake_sigreturn_missing_fpsimd
-* kselftest/arm64_mangle_pstate_invalid_compat_toggle
-* kselftest/arm64_mangle_pstate_invalid_daif_bits
-* kselftest/arm64_mangle_pstate_invalid_mode_el1h
-* kselftest/arm64_mangle_pstate_invalid_mode_el1t
-* kselftest/arm64_mangle_pstate_invalid_mode_el2h
-* kselftest/arm64_mangle_pstate_invalid_mode_el2t
-* kselftest/arm64_mangle_pstate_invalid_mode_el3h
-* kselftest/arm64_mangle_pstate_invalid_mode_el3t
-* kselftest/bpf_get_cgroup_id_user
-* kselftest/bpf_test_dev_cgroup
-* kselftest/bpf_test_flow_dissector.sh
-* kselftest/bpf_test_kmod.sh
-* kselftest/bpf_test_lpm_map
-* kselftest/bpf_test_lwt_seg6local.sh
-* kselftest/bpf_test_maps
-* kselftest/bpf_test_netcnt
-* kselftest/bpf_test_progs
-* kselftest/bpf_test_progs-no_alu32
-* kselftest/bpf_test_select_reuseport
-* kselftest/bpf_test_skb_cgroup_id.sh
-* kselftest/bpf_test_sock_addr.sh
-* kselftest/bpf_test_socket_cookie
-* kselftest/bpf_test_sock_fields
-* kselftest/bpf_test_sockmap
-* kselftest/bpf_test_sysctl
-* kselftest/bpf_test_tag
-* kselftest/bpf_test_tcpbpf_user
-* kselftest/bpf_test_tcpnotify_user
-* kselftest/bpf_test_tunnel.sh
-* kselftest/bpf_test_verifier
-* kselftest/bpf_test_xdp_meta.sh
-* kselftest/bpf_test_xdp_redirect.sh
-* kselftest/bpf_xdping
-
-
-Skips
-------------------------------------------------------------------------
-No skips
-
-
--- 
-Linaro LKFT
-https://lkft.linaro.org
-------=_Part_578_524522762.1573660829229--
+> +       ./tools/testing/kunit/kunit.py run --help
+> diff --git a/Documentation/dev-tools/kunit/start.rst b/Documentation/dev-tools/kunit/start.rst
+> index aeeddfafeea20..1535c4394cfa2 100644
+> --- a/Documentation/dev-tools/kunit/start.rst
+> +++ b/Documentation/dev-tools/kunit/start.rst
+> @@ -21,6 +21,9 @@ The wrapper can be run with:
+>
+>     ./tools/testing/kunit/kunit.py run
+>
+> +For more information on this wrapper (also called kunit_tool) checkout the
+> +:doc:`kunit-tool` page.
+> +
+>  Creating a kunitconfig
+>  ======================
+>  The Python script is a thin wrapper around Kbuild as such, it needs to be
+> --
+> 2.24.0.432.g9d3f5f5b63-goog
+>
