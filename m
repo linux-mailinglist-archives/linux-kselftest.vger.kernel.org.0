@@ -2,85 +2,91 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4685EFA4AE
-	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Nov 2019 03:19:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0327BFA46F
+	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Nov 2019 03:17:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727655AbfKMBzt (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 12 Nov 2019 20:55:49 -0500
-Received: from mail.kernel.org ([198.145.29.99]:47654 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729253AbfKMBzt (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 12 Nov 2019 20:55:49 -0500
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id C19F122473;
-        Wed, 13 Nov 2019 01:55:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1573610148;
-        bh=Nbm+0sMkxlk6HRLaRQOFwTLW1an+JMQpxxCNSerK81o=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=bVXUZWaE5NnLDtRveSoXvK0b6E6YR7GMvmQKCCpS6ObUIfVxEdm8SABdP/DacKF6y
-         oWon788sJI32rtvCC8xqtHLhpsbfqF8JwL7fw/6T1jnc9PDUWKFM+QXbyk/t0TXdna
-         mCqOF1+6UPyEw0G+uNFGXaUDosRPzYlvdfW+NGd8=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Petr Machata <petrm@mellanox.com>,
-        Ido Schimmel <idosch@mellanox.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 193/209] selftests: forwarding: Have lldpad_app_wait_set() wait for unknown, too
-Date:   Tue, 12 Nov 2019 20:50:09 -0500
-Message-Id: <20191113015025.9685-193-sashal@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20191113015025.9685-1-sashal@kernel.org>
-References: <20191113015025.9685-1-sashal@kernel.org>
+        id S1729394AbfKMB4I (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 12 Nov 2019 20:56:08 -0500
+Received: from zeniv.linux.org.uk ([195.92.253.2]:39164 "EHLO
+        ZenIV.linux.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727725AbfKMB4H (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 12 Nov 2019 20:56:07 -0500
+Received: from viro by ZenIV.linux.org.uk with local (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1iUhsc-0007v0-Hn; Wed, 13 Nov 2019 01:55:34 +0000
+Date:   Wed, 13 Nov 2019 01:55:34 +0000
+From:   Al Viro <viro@zeniv.linux.org.uk>
+To:     Aleksa Sarai <cyphar@cyphar.com>
+Cc:     Jeff Layton <jlayton@kernel.org>,
+        "J. Bruce Fields" <bfields@fieldses.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        David Howells <dhowells@redhat.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        David Drysdale <drysdale@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Jann Horn <jannh@google.com>, Tycho Andersen <tycho@tycho.ws>,
+        Chanho Min <chanho.min@lge.com>,
+        Oleg Nesterov <oleg@redhat.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Christian Brauner <christian@brauner.io>,
+        Aleksa Sarai <asarai@suse.de>,
+        containers@lists.linux-foundation.org, linux-alpha@vger.kernel.org,
+        linux-api@vger.kernel.org, libc-alpha@sourceware.org,
+        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-ia64@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        linux-xtensa@linux-xtensa.org, sparclinux@vger.kernel.org
+Subject: Re: [PATCH v15 4/9] namei: LOOKUP_BENEATH: O_BENEATH-like scoped
+ resolution
+Message-ID: <20191113015534.GA26530@ZenIV.linux.org.uk>
+References: <20191105090553.6350-1-cyphar@cyphar.com>
+ <20191105090553.6350-5-cyphar@cyphar.com>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20191105090553.6350-5-cyphar@cyphar.com>
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Petr Machata <petrm@mellanox.com>
+On Tue, Nov 05, 2019 at 08:05:48PM +1100, Aleksa Sarai wrote:
 
-[ Upstream commit 372809055f6c830ff978564e09f58bcb9e9b937c ]
+Minor nit here - I'd split "move the conditional call of set_root()
+into nd_jump_root()" into a separate patch before that one.  Makes
+for fewer distractions in this one.  I'd probably fold "and be
+ready for errors other than -ECHILD" into the same preliminary
+patch.
 
-Immediately after mlxsw module is probed and lldpad started, added APP
-entries are briefly in "unknown" state before becoming "pending". That's
-the state that lldpad_app_wait_set() typically sees, and since there are
-no pending entries at that time, it bails out. However the entries have
-not been pushed to the kernel yet at that point, and thus the test case
-fails.
+> +			/* Not currently safe for scoped-lookups. */
+> +			if (unlikely(nd->flags & LOOKUP_IS_SCOPED))
+> +				return ERR_PTR(-EXDEV);
 
-Fix by waiting for both unknown and pending entries to disappear before
-proceeding.
+Also a candidate for doing in nd_jump_link()...
 
-Fixes: d159261f3662 ("selftests: mlxsw: Add test for trust-DSCP")
-Signed-off-by: Petr Machata <petrm@mellanox.com>
-Signed-off-by: Ido Schimmel <idosch@mellanox.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- tools/testing/selftests/net/forwarding/lib.sh | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> @@ -1373,8 +1403,11 @@ static int follow_dotdot_rcu(struct nameidata *nd)
+>  	struct inode *inode = nd->inode;
+>  
+>  	while (1) {
+> -		if (path_equal(&nd->path, &nd->root))
+> +		if (path_equal(&nd->path, &nd->root)) {
+> +			if (unlikely(nd->flags & LOOKUP_BENEATH))
+> +				return -EXDEV;
 
-diff --git a/tools/testing/selftests/net/forwarding/lib.sh b/tools/testing/selftests/net/forwarding/lib.sh
-index ca53b539aa2d1..08bac6cf1bb3a 100644
---- a/tools/testing/selftests/net/forwarding/lib.sh
-+++ b/tools/testing/selftests/net/forwarding/lib.sh
-@@ -251,7 +251,7 @@ lldpad_app_wait_set()
- {
- 	local dev=$1; shift
- 
--	while lldptool -t -i $dev -V APP -c app | grep -q pending; do
-+	while lldptool -t -i $dev -V APP -c app | grep -Eq "pending|unknown"; do
- 		echo "$dev: waiting for lldpad to push pending APP updates"
- 		sleep 5
- 	done
--- 
-2.20.1
-
+Umm...  Are you sure it's not -ECHILD?
