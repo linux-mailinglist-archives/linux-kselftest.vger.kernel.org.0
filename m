@@ -2,119 +2,105 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EE8BFBC98
-	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Nov 2019 00:29:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 64671FBD1B
+	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Nov 2019 01:39:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726557AbfKMX3r (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 13 Nov 2019 18:29:47 -0500
-Received: from hqemgate15.nvidia.com ([216.228.121.64]:14354 "EHLO
-        hqemgate15.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726363AbfKMX3r (ORCPT
+        id S1726409AbfKNAjz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 13 Nov 2019 19:39:55 -0500
+Received: from userp2120.oracle.com ([156.151.31.85]:42792 "EHLO
+        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726195AbfKNAjz (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 13 Nov 2019 18:29:47 -0500
-Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqemgate15.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5dcc91e90000>; Wed, 13 Nov 2019 15:29:45 -0800
-Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate101.nvidia.com (PGP Universal service);
-  Wed, 13 Nov 2019 15:29:46 -0800
-X-PGP-Universal: processed;
-        by hqpgpgate101.nvidia.com on Wed, 13 Nov 2019 15:29:46 -0800
-Received: from [10.2.160.107] (172.20.13.39) by HQMAIL107.nvidia.com
- (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Wed, 13 Nov
- 2019 23:29:45 +0000
-Subject: Re: [PATCH v4 23/23] mm/gup: remove support for gup(FOLL_LONGTERM)
-To:     Ira Weiny <ira.weiny@intel.com>
-CC:     Andrew Morton <akpm@linux-foundation.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Dave Chinner <david@fromorbit.com>,
-        David Airlie <airlied@linux.ie>,
-        "David S . Miller" <davem@davemloft.net>, Jan Kara <jack@suse.cz>,
-        Jason Gunthorpe <jgg@ziepe.ca>, Jens Axboe <axboe@kernel.dk>,
-        Jonathan Corbet <corbet@lwn.net>,
-        =?UTF-8?B?SsOpcsO0bWUgR2xpc3Nl?= <jglisse@redhat.com>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Michal Hocko <mhocko@suse.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Paul Mackerras <paulus@samba.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Vlastimil Babka <vbabka@suse.cz>, <bpf@vger.kernel.org>,
-        <dri-devel@lists.freedesktop.org>, <kvm@vger.kernel.org>,
-        <linux-block@vger.kernel.org>, <linux-doc@vger.kernel.org>,
-        <linux-fsdevel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-        <linux-media@vger.kernel.org>, <linux-rdma@vger.kernel.org>,
-        <linuxppc-dev@lists.ozlabs.org>, <netdev@vger.kernel.org>,
-        <linux-mm@kvack.org>, LKML <linux-kernel@vger.kernel.org>
-References: <20191113042710.3997854-1-jhubbard@nvidia.com>
- <20191113042710.3997854-24-jhubbard@nvidia.com>
- <20191113190935.GD12947@iweiny-DESK2.sc.intel.com>
-From:   John Hubbard <jhubbard@nvidia.com>
-X-Nvconfidentiality: public
-Message-ID: <4e24c5af-bd96-e7c7-179b-0ca0f6abb852@nvidia.com>
-Date:   Wed, 13 Nov 2019 15:27:00 -0800
+        Wed, 13 Nov 2019 19:39:55 -0500
+Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
+        by userp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id xAE0dDrM002254;
+        Thu, 14 Nov 2019 00:39:50 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : subject : to :
+ cc : references : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=corp-2019-08-05;
+ bh=9d1esZB7SWlRya/YjnjIH7Q3Ck31LnlMXp8qkk7HO0s=;
+ b=UY2+TF3QyowqKfFKm+/y1PC64u7FJdcEUeOB7OM/BgFFN1/hEyIWE3Vw4ZL4Fg1/XDR2
+ Ya6VD5wt3MJx/+DV1uB99vbd4sEytDMlg6V0ALVEHaeAlcQoSSImX53+3BLW47q+cL4R
+ wQg2/vTtst4u/T4289vQZSN0wjFXE8XtKyaumTBeTtbCH6LguzvDCI7zLL42SiKQ50eD
+ LmlCZJOLPL1OTJ2Tmyhwcv8eNCdhEmF2T/Zy1MRexHWeoigZW2w8X5O09pRmFDxVzaon
+ y1Q9ihKP0i5FkU1lVhv5clbZKkMhPblJ1L2Q+ZV0mOTMmwSVj/UTajoq+ApkpRONCYvR Vg== 
+Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
+        by userp2120.oracle.com with ESMTP id 2w5p3qyy91-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 14 Nov 2019 00:39:50 +0000
+Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
+        by userp3030.oracle.com (8.16.0.27/8.16.0.27) with SMTP id xAE0cCl3077266;
+        Thu, 14 Nov 2019 00:39:50 GMT
+Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
+        by userp3030.oracle.com with ESMTP id 2w8g18ewpt-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 14 Nov 2019 00:39:49 +0000
+Received: from abhmp0010.oracle.com (abhmp0010.oracle.com [141.146.116.16])
+        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id xAE0dmTr026703;
+        Thu, 14 Nov 2019 00:39:49 GMT
+Received: from [10.159.235.45] (/10.159.235.45)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Wed, 13 Nov 2019 16:39:48 -0800
+From:   Krish Sadhukhan <krish.sadhukhan@oracle.com>
+Subject: Re: [PATCH] selftests: kvm: Simplify loop in kvm_create_max_vcpus
+ test
+To:     Wainer dos Santos Moschetta <wainersm@redhat.com>,
+        pbonzini@redhat.com, rkrcmar@redhat.com
+Cc:     shuah@kernel.org, kvm@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20191112142111.13528-1-wainersm@redhat.com>
+Message-ID: <c814d608-538d-1d1e-c3f2-92d53624cc06@oracle.com>
+Date:   Wed, 13 Nov 2019 16:39:47 -0800
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+ Thunderbird/60.7.0
 MIME-Version: 1.0
-In-Reply-To: <20191113190935.GD12947@iweiny-DESK2.sc.intel.com>
-X-Originating-IP: [172.20.13.39]
-X-ClientProxiedBy: HQMAIL107.nvidia.com (172.20.187.13) To
- HQMAIL107.nvidia.com (172.20.187.13)
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
+In-Reply-To: <20191112142111.13528-1-wainersm@redhat.com>
+Content-Type: text/plain; charset=windows-1252; format=flowed
 Content-Transfer-Encoding: 7bit
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1573687785; bh=9B/DbxbXL2Cu8EFiCYVZNw+MxNudIvhgmb1GMnaTmQ0=;
-        h=X-PGP-Universal:Subject:To:CC:References:From:X-Nvconfidentiality:
-         Message-ID:Date:User-Agent:MIME-Version:In-Reply-To:
-         X-Originating-IP:X-ClientProxiedBy:Content-Type:Content-Language:
-         Content-Transfer-Encoding;
-        b=rJKFgq0qWlNQhEr6LwQRM7xJTWCfLcG6jdSS31KElayO6wHx7IiwFsaXOvGhplyH1
-         tCC68KrsRIXSAjoot89gKwHpedHmflDisAxv/IoMKZRuMzvzxHIp82VaySctaPBYkQ
-         hZemWLx10v7w1crWSE8+tecZBKihDudRrciOwHkYvfyXR52KB/0+nCkX8xcEjYzOgD
-         BdrgEwqj12gUt+52wZddvynAEOXEEJldAzotyUKT84BAusYTd8IMJOcdCe+okl1UqL
-         yIUM4FRTzo2XVuGeXsCxvfWydTvgqiLWMulv4eIra/tutHomq+DAZbILc3dKig7Hd1
-         UTGu99x3VirIw==
+Content-Language: en-US
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9440 signatures=668685
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=2 malwarescore=0
+ phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=999
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.0.1-1910280000 definitions=main-1911140002
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9440 signatures=668685
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
+ suspectscore=2 phishscore=0 bulkscore=0 spamscore=0 clxscore=1011
+ lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1910280000
+ definitions=main-1911140002
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 11/13/19 11:09 AM, Ira Weiny wrote:
-...
->> diff --git a/mm/gup.c b/mm/gup.c
->> index 82e7e4ce5027..90f5f95ee7ac 100644
->> --- a/mm/gup.c
->> +++ b/mm/gup.c
->> @@ -1756,11 +1756,11 @@ long get_user_pages(unsigned long start, unsigned long nr_pages,
->>   		struct vm_area_struct **vmas)
->>   {
->>   	/*
->> -	 * FOLL_PIN must only be set internally by the pin_user_page*() and
->> -	 * pin_longterm_*() APIs, never directly by the caller, so enforce that
->> -	 * with an assertion:
->> +	 * FOLL_PIN and FOLL_LONGTERM must only be set internally by the
->> +	 * pin_user_page*() and pin_longterm_*() APIs, never directly by the
->> +	 * caller, so enforce that with an assertion:
->>   	 */
->> -	if (WARN_ON_ONCE(gup_flags & FOLL_PIN))
->> +	if (WARN_ON_ONCE(gup_flags & (FOLL_PIN | FOLL_LONGTERM)))
-> 
-> Don't we want to block FOLL_LONGTERM in get_user_pages_fast() as well after all
-> this?
-> 
 
-Yes. But with the latest idea to restore FOLL_LONGTERM to its original glory,
-that won't be an issue in the next version. heh.
-
-
-thanks,
--- 
-John Hubbard
-NVIDIA
+On 11/12/19 6:21 AM, Wainer dos Santos Moschetta wrote:
+> On kvm_create_max_vcpus test remove unneeded local
+> variable in the loop that add vcpus to the VM.
+>
+> Signed-off-by: Wainer dos Santos Moschetta<wainersm@redhat.com>
+> ---
+>   tools/testing/selftests/kvm/kvm_create_max_vcpus.c | 7 ++-----
+>   1 file changed, 2 insertions(+), 5 deletions(-)
+>
+> diff --git a/tools/testing/selftests/kvm/kvm_create_max_vcpus.c b/tools/testing/selftests/kvm/kvm_create_max_vcpus.c
+> index 231d79e57774..6f38c3dc0d56 100644
+> --- a/tools/testing/selftests/kvm/kvm_create_max_vcpus.c
+> +++ b/tools/testing/selftests/kvm/kvm_create_max_vcpus.c
+> @@ -29,12 +29,9 @@ void test_vcpu_creation(int first_vcpu_id, int num_vcpus)
+>   
+>   	vm = vm_create(VM_MODE_DEFAULT, DEFAULT_GUEST_PHY_PAGES, O_RDWR);
+>   
+> -	for (i = 0; i < num_vcpus; i++) {
+> -		int vcpu_id = first_vcpu_id + i;
+> -
+> +	for (i = first_vcpu_id; i < first_vcpu_id + num_vcpus; i++)
+>   		/* This asserts that the vCPU was created. */
+> -		vm_vcpu_add(vm, vcpu_id);
+> -	}
+> +		vm_vcpu_add(vm, i);
+>   
+>   	kvm_vm_free(vm);
+>   }
+Reviewed-by: Krish Sadhukhan <krish.sadhukhan@oracle.com>
