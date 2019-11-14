@@ -2,112 +2,179 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EFEDFC62E
-	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Nov 2019 13:17:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A3A4FC7BE
+	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Nov 2019 14:33:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726473AbfKNMQh (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 14 Nov 2019 07:16:37 -0500
-Received: from us-smtp-1.mimecast.com ([207.211.31.81]:56190 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726469AbfKNMQg (ORCPT
+        id S1727505AbfKNNdm (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 14 Nov 2019 08:33:42 -0500
+Received: from mout-p-201.mailbox.org ([80.241.56.171]:21264 "EHLO
+        mout-p-201.mailbox.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726473AbfKNNdl (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 14 Nov 2019 07:16:36 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1573733795;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=6g3FuiSmJL+Kk/iwiMI9WeS/k56NyXnRD61zjnDeFo8=;
-        b=FgUb18rJYBpY3BqjhKW2vkSvWaCTpKNXT9guGpehwwcaiv7hYeuk1mZi7QC0efACTt3+m9
-        qaftkY75WZ36J+AWHyBZS4wo4ztlnU7tTawOQ2n1hLfJAcOgu7xMMj5U/efDsAZRZGGZVb
-        BBI3QeaJYuJfnMLr2seV1WmbMrRynDE=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-73-njoMZ3CdN6eTnPgVuJ0Stg-1; Thu, 14 Nov 2019 07:16:32 -0500
-Received: by mail-wr1-f70.google.com with SMTP id q6so4303249wrv.11
-        for <linux-kselftest@vger.kernel.org>; Thu, 14 Nov 2019 04:16:32 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=wbG6hQQW5/T3L1JRr4XcKwwPNPz10SDjCnOLcci1gTs=;
-        b=Kl4msHxlzcYtcio4laRJPqEdchWw/2o2Zs6ztkhZoKLlYBMcWhXDKo2eAFzAnAVLeE
-         hxVY6bRcDLVGrRYXNKWeJNlG7Aot6I7Jygcmstd4jT+vXqPDf/f3VR1JB83kQSNzBJ/Y
-         +iIqZw47jS46dyjTTyzSnEzWx2QQwsHKbGeRJBZeuDtMZrVfKo+oHpJeG+ezheu2APv3
-         xWXVotnWycX5mgx9C1L79EYjrVJClrw9rNeg1F8+ZFz5e9S8TbQvfj6bWI0ZI2FbeJU+
-         403k6uK7Wj6a4RPDw0HRHOig4CWaFPJUabIxPlVLpN39GZ8Agfy3nIivcgXNTGdII2sj
-         jowA==
-X-Gm-Message-State: APjAAAV29n1RnMivvp3YxyUmobuoSXcK9wQEjKJg1S3ra0lEmIDjmOwh
-        6KL+OkSQxaEEB8dpn4cV0KTE3Sj8oP4SpYlgWgCawfl8LEtB6tgV2pwPTV9cK6chYV0rGmjq77d
-        gnweKpHUVzzbrNl+ftkiR256+sP9P
-X-Received: by 2002:a1c:7f94:: with SMTP id a142mr7299103wmd.33.1573733791355;
-        Thu, 14 Nov 2019 04:16:31 -0800 (PST)
-X-Google-Smtp-Source: APXvYqwm8L07aob9pGVI1BqTnXUFu0oi7C7NBJZTfOSxIoMVifSd1LDxfNMr/utRbXLIyyw76nANLw==
-X-Received: by 2002:a1c:7f94:: with SMTP id a142mr7299081wmd.33.1573733791064;
-        Thu, 14 Nov 2019 04:16:31 -0800 (PST)
-Received: from ?IPv6:2001:b07:6468:f312:a15b:f753:1ac4:56dc? ([2001:b07:6468:f312:a15b:f753:1ac4:56dc])
-        by smtp.gmail.com with ESMTPSA id w13sm6588216wrm.8.2019.11.14.04.16.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 14 Nov 2019 04:16:30 -0800 (PST)
-Subject: Re: [PATCH] selftests: kvm: Simplify loop in kvm_create_max_vcpus
- test
-To:     Wainer dos Santos Moschetta <wainersm@redhat.com>,
-        rkrcmar@redhat.com
-Cc:     shuah@kernel.org, kvm@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20191112142111.13528-1-wainersm@redhat.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-Message-ID: <70986b1a-5a04-cbd6-fe1a-fda4d97d5a72@redhat.com>
-Date:   Thu, 14 Nov 2019 13:16:31 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Thu, 14 Nov 2019 08:33:41 -0500
+Received: from smtp1.mailbox.org (smtp1.mailbox.org [IPv6:2001:67c:2050:105:465:1:1:0])
+        (using TLSv1.2 with cipher ECDHE-RSA-CHACHA20-POLY1305 (256/256 bits))
+        (No client certificate requested)
+        by mout-p-201.mailbox.org (Postfix) with ESMTPS id 47DMrH5rJDzQl9x;
+        Thu, 14 Nov 2019 14:33:35 +0100 (CET)
+X-Virus-Scanned: amavisd-new at heinlein-support.de
+Received: from smtp1.mailbox.org ([80.241.60.240])
+        by spamfilter03.heinlein-hosting.de (spamfilter03.heinlein-hosting.de [80.241.56.117]) (amavisd-new, port 10030)
+        with ESMTP id Wtrcg9lX2PUE; Thu, 14 Nov 2019 14:33:30 +0100 (CET)
+Date:   Fri, 15 Nov 2019 00:33:00 +1100
+From:   Aleksa Sarai <cyphar@cyphar.com>
+To:     Al Viro <viro@zeniv.linux.org.uk>
+Cc:     Jeff Layton <jlayton@kernel.org>,
+        "J. Bruce Fields" <bfields@fieldses.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        David Howells <dhowells@redhat.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        David Drysdale <drysdale@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Jann Horn <jannh@google.com>, Tycho Andersen <tycho@tycho.ws>,
+        Chanho Min <chanho.min@lge.com>,
+        Oleg Nesterov <oleg@redhat.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Christian Brauner <christian@brauner.io>,
+        Aleksa Sarai <asarai@suse.de>,
+        containers@lists.linux-foundation.org, linux-alpha@vger.kernel.org,
+        linux-api@vger.kernel.org, libc-alpha@sourceware.org,
+        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-fsdevel@vger.kernel.org, linux-ia64@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        linux-xtensa@linux-xtensa.org, sparclinux@vger.kernel.org
+Subject: Re: [PATCH v15 3/9] namei: LOOKUP_NO_XDEV: block mountpoint crossing
+Message-ID: <20191114133300.soxnzmufwbt2ddid@yavin.dot.cyphar.com>
+References: <20191105090553.6350-1-cyphar@cyphar.com>
+ <20191105090553.6350-4-cyphar@cyphar.com>
+ <20191113013630.GZ26530@ZenIV.linux.org.uk>
+ <20191114044945.ldedzjrb4s7i7irr@yavin.dot.cyphar.com>
+ <20191114054348.GH26530@ZenIV.linux.org.uk>
 MIME-Version: 1.0
-In-Reply-To: <20191112142111.13528-1-wainersm@redhat.com>
-Content-Language: en-US
-X-MC-Unique: njoMZ3CdN6eTnPgVuJ0Stg-1
-X-Mimecast-Spam-Score: 0
-Content-Type: text/plain; charset=WINDOWS-1252
-Content-Transfer-Encoding: quoted-printable
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="zoh3k636biknnjmo"
+Content-Disposition: inline
+In-Reply-To: <20191114054348.GH26530@ZenIV.linux.org.uk>
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 12/11/19 15:21, Wainer dos Santos Moschetta wrote:
-> On kvm_create_max_vcpus test remove unneeded local
-> variable in the loop that add vcpus to the VM.
->=20
-> Signed-off-by: Wainer dos Santos Moschetta <wainersm@redhat.com>
-> ---
->  tools/testing/selftests/kvm/kvm_create_max_vcpus.c | 7 ++-----
->  1 file changed, 2 insertions(+), 5 deletions(-)
->=20
-> diff --git a/tools/testing/selftests/kvm/kvm_create_max_vcpus.c b/tools/t=
-esting/selftests/kvm/kvm_create_max_vcpus.c
-> index 231d79e57774..6f38c3dc0d56 100644
-> --- a/tools/testing/selftests/kvm/kvm_create_max_vcpus.c
-> +++ b/tools/testing/selftests/kvm/kvm_create_max_vcpus.c
-> @@ -29,12 +29,9 @@ void test_vcpu_creation(int first_vcpu_id, int num_vcp=
-us)
-> =20
->  =09vm =3D vm_create(VM_MODE_DEFAULT, DEFAULT_GUEST_PHY_PAGES, O_RDWR);
-> =20
-> -=09for (i =3D 0; i < num_vcpus; i++) {
-> -=09=09int vcpu_id =3D first_vcpu_id + i;
-> -
-> +=09for (i =3D first_vcpu_id; i < first_vcpu_id + num_vcpus; i++)
->  =09=09/* This asserts that the vCPU was created. */
-> -=09=09vm_vcpu_add(vm, vcpu_id);
-> -=09}
-> +=09=09vm_vcpu_add(vm, i);
-> =20
->  =09kvm_vm_free(vm);
->  }
->=20
 
-Queued, thanks.
+--zoh3k636biknnjmo
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Paolo
+On 2019-11-14, Al Viro <viro@zeniv.linux.org.uk> wrote:
+> On Thu, Nov 14, 2019 at 03:49:45PM +1100, Aleksa Sarai wrote:
+> > On 2019-11-13, Al Viro <viro@zeniv.linux.org.uk> wrote:
+> > > On Tue, Nov 05, 2019 at 08:05:47PM +1100, Aleksa Sarai wrote:
+> > >=20
+> > > > @@ -862,6 +870,8 @@ static int nd_jump_root(struct nameidata *nd)
+> > > >  void nd_jump_link(struct path *path)
+> > > >  {
+> > > >  	struct nameidata *nd =3D current->nameidata;
+> > > > +
+> > > > +	nd->last_magiclink.same_mnt =3D (nd->path.mnt =3D=3D path->mnt);
+> > > >  	path_put(&nd->path);
+> > > > =20
+> > > >  	nd->path =3D *path;
+> > > > @@ -1082,6 +1092,10 @@ const char *get_link(struct nameidata *nd)
+> > > >  		if (nd->flags & LOOKUP_MAGICLINK_JUMPED) {
+> > > >  			if (unlikely(nd->flags & LOOKUP_NO_MAGICLINKS))
+> > > >  				return ERR_PTR(-ELOOP);
+> > > > +			if (unlikely(nd->flags & LOOKUP_NO_XDEV)) {
+> > > > +				if (!nd->last_magiclink.same_mnt)
+> > > > +					return ERR_PTR(-EXDEV);
+> > > > +			}
+> > > >  		}
+> > >=20
+> > > Ugh...  Wouldn't it be better to take that logics (some equivalent th=
+ereof)
+> > > into nd_jump_link()?  Or just have nd_jump_link() return an error...
+> >=20
+> > This could be done, but the reason for stashing it away in
+> > last_magiclink is because of the future magic-link re-opening patches
+> > which can't be implemented like that without putting the open_flags
+> > inside nameidata (which was decided to be too ugly a while ago).
+> >=20
+> > My point being that I could implement it this way for this series, but
+> > I'd have to implement something like last_magiclink when I end up
+> > re-posting the magic-link stuff in a few weeks.
+> >=20
+> > Looking at all the nd_jump_link() users, the other option is to just
+> > disallow magic-link crossings entirely for LOOKUP_NO_XDEV. The only
+> > thing allowing them permits is to resolve file descriptors that are
+> > pointing to the same procfs mount -- and it's unclear to me how useful
+> > that really is (apparmorfs and nsfs will always give -EXDEV because
+> > aafs_mnt and nsfs_mnt are internal kernel vfsmounts).
+>=20
+> I would rather keep the entire if (nd->flags & LOOKUP_MAGICLINK_JUMPED)
+> out of the get_link().  If you want to generate some error if
+> nd_jump_link() has been called, just do it right there.  The fewer
+> pieces of state need to be carried around, the better...
 
+Sure, I can make nd_jump_link() give -ELOOP and drop the current need
+for LOOKUP_MAGICLINK_JUMPED -- if necessary we can re-add it for the
+magic-link reopening patches.
+
+> And as for opening them...  Why would you need full open_flags in there?
+> Details, please...
+
+I was referring to [1] which has been dropped from this series. I
+misspoke -- you don't need the full open_flags, you just need acc_mode
+in nameidata -- but from memory you (understandably) weren't in favour
+of that either because it further muddled the open semantics with namei.
+
+So the solution I went with was to stash away the i_mode of the
+magiclink in nd->last_magiclink.mode (though to avoid a race which Jann
+found, you actually need to recalculate it when you call nd_jump_link()
+but that's a different topic) and then check it in trailing_magiclink().
+
+However, I've since figured out that we need to restrict things like
+bind-mounts and truncate() because they can be used to get around the
+restrictions. I dropped that patch from this series so that I could work
+on implementing the restrictions for the other relevant VFS syscalls
+separately from openat2 (upgrade_mask will be re-added to open_how with
+those patches).
+
+My point was that AFAICS we will either have to have nd->acc_mode (or
+something similar) or have nd->last_magiclink in order to implement the
+magic-link reopening hardening.
+
+[1]: https://lore.kernel.org/lkml/20190930183316.10190-2-cyphar@cyphar.com/
+
+--=20
+Aleksa Sarai
+Senior Software Engineer (Containers)
+SUSE Linux GmbH
+<https://www.cyphar.com/>
+
+--zoh3k636biknnjmo
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQSxZm6dtfE8gxLLfYqdlLljIbnQEgUCXc1XiQAKCRCdlLljIbnQ
+EgEVAQDde9bpKjJAbLEIt4D/9cw3B8CHqEBeW8SnIT4PqQNQUQD/TtE4FY5p3N1d
+gPZFRde/N3ihwtWscDvPXctFNxykJAQ=
+=TSKH
+-----END PGP SIGNATURE-----
+
+--zoh3k636biknnjmo--
