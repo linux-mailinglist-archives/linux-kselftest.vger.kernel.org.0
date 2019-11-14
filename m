@@ -2,171 +2,213 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 04F16FD05E
-	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Nov 2019 22:34:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E0BBFD0AF
+	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Nov 2019 23:05:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726613AbfKNVeK (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 14 Nov 2019 16:34:10 -0500
-Received: from mail-pg1-f195.google.com ([209.85.215.195]:44217 "EHLO
-        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726592AbfKNVeK (ORCPT
+        id S1726818AbfKNWFt (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 14 Nov 2019 17:05:49 -0500
+Received: from mail-pg1-f194.google.com ([209.85.215.194]:34928 "EHLO
+        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726812AbfKNWFs (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 14 Nov 2019 16:34:10 -0500
-Received: by mail-pg1-f195.google.com with SMTP id f19so4594993pgk.11
-        for <linux-kselftest@vger.kernel.org>; Thu, 14 Nov 2019 13:34:09 -0800 (PST)
+        Thu, 14 Nov 2019 17:05:48 -0500
+Received: by mail-pg1-f194.google.com with SMTP id q22so4669139pgk.2
+        for <linux-kselftest@vger.kernel.org>; Thu, 14 Nov 2019 14:05:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=lz+H2e4nU3DSz+GBvFyXU0p4lpCX+jG3QqyBoFeFFPY=;
-        b=jljzdW0V9SAQcSHNgJpgS6iE2qLtNO74+8EkQKoUT8UYh1OPxP4LvnCDuijszxNFYO
-         OS4rl51ihcNDJA60ScBk2mhNiUUYZBqnOrTR+NtVN91xXnFDJv2eGE0PzGLL+P6cOmj1
-         6vN2OCJP5DoaRV8hkBr8Zy09+FpnY89+KzDjbQNB7nImJM6+l5wRAHog6aRXw2usIPcZ
-         jwg/bWUT4Eed4CW+YHFRXW1W+1wjt1eizYDF/CT5sj9nGxbT9vN38dx3FDZYzQoov3PY
-         YmpL3gupF+8HYzbxyKlxELTRojf3lG7aW780sDFs3EkgTXRe+q2PYzweJiitnVkEjIul
-         nfig==
+        bh=PUB/MflXzCJMG7Y2M0r0tuE4n+oLMmgrXK9Lt9807D8=;
+        b=LvqeDdWj4/BvmlCJtUczgpCAZ/S1nczS+iFKbFLDS1G4JiiacIQh5AF3nVq1WdR/mk
+         QJK1r46xfNrokg5Pl3xNjKO+c8ITdvqKffKTEWkP4qYSo/lN6vdwR2fpu769g4FtUHEP
+         DIdSm+3HHQbqeXN5QAAA+5+W46uYGsSH1+Y7nj9MDkPomeX8CXKdjL5EKcqUHA+0UnVZ
+         JQd5IAP5Yf3yNnQmIcFycHbmE8BddReimJfqlttqMaLk3t2Y3K6nN7TllXlCGRvJFUGv
+         8+zg2TpENXotCecZPZsTMu5+MKOU9MUazHSC1VIIl3HV01YOrJlPH3DOXwk/8q8iBBMy
+         R6qQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=lz+H2e4nU3DSz+GBvFyXU0p4lpCX+jG3QqyBoFeFFPY=;
-        b=roaaUP6lgDzXFoVNP1Bml7CMOJZ7FRjMLptsZvddvaafqOX3zuFLHj/cokJWceyIZ3
-         T3O0/haOds2iVHFL4EK4eJPbNY54tKnVZTOhf/5GUsxIu5fyzNB9s+1zvlQbl1D1NeDm
-         jvyO4eP7XewpQ8GrLdlDbMPw6Q+PeZ93Mb47X+T1hGsrNTwP9psxBidIOOKwfb1ocPdg
-         XLctYWRDeBfroc28RnlqQ1Sz3guv8cr1EaeLwapG4FDtAlcf2JFyQD3bMMB2V8FDpOXc
-         a7qH1BJxRyy5zt6nBEAAsMPid1biCUoytiq5odd9QxI5rVE2qc6SdrawL873BmItcQFb
-         TBtA==
-X-Gm-Message-State: APjAAAV6VOgqNYrYNHddKfR6y14R4sbSOb/5RcID/8oh0wKLLYyq9QyC
-        3kFGHpNeitYBVNfhme3n6FF5ynKy6/dhH8yhEzO6lZty6/s=
-X-Google-Smtp-Source: APXvYqydVCNC48wS0hV/alNcKDjro8PRBVxUG7ZfEwB5jDC3stFf1Qe6lmbar2bZy9Vx0Lziu4VVN9dXRdUNRhgdWW0=
-X-Received: by 2002:a63:5163:: with SMTP id r35mr644296pgl.201.1573767248637;
- Thu, 14 Nov 2019 13:34:08 -0800 (PST)
+        bh=PUB/MflXzCJMG7Y2M0r0tuE4n+oLMmgrXK9Lt9807D8=;
+        b=pptcyZYqtzolv0t//MqLDSCrWUYe0/BmPDS/BOuhRkvGJzxLfOCDfU8cfKuGJ/ZE7I
+         gSDPDg+Jyn2LAs50irPWQ12ShByrUHCXzLfmJcGzXRFQEs8WRLqbitTBtoXsJD6uXEXh
+         vSE3rJR1Ly+d4hQhZUenalfr+bnw/iuf6ZQqc0jp/xqFTi1hSCVuk4PyEPrr9KYtV8St
+         vAmBeQyiWWDGIaO7rqOtumtf7rOaLAx71Q4sM5nZqds6GuwZ/cmh0ncS7WlUHRYF4JU4
+         N9G+9dmoiHinWuJSc93vvAIzfIIxmtFbiSVPkBQ/qg3QXeaCiT9/pfSL2DhVQSL1QJUD
+         aUSg==
+X-Gm-Message-State: APjAAAXtLuuvQPJNq56QIqWjpDujq9qwIstU00R27Bk1QUJqk4czqtoN
+        PAR149a63jtwCY04JcHMjc/3uZw2PPn0ipCg6qUekg==
+X-Google-Smtp-Source: APXvYqxeHKt2jaGM/C2bqfmau+yuCpw0lKb5aGNis1EqWTGVYXbjSOtTjbZIlvJaYLskYN1vYrwdSdEo/swVvRGXK3Y=
+X-Received: by 2002:a63:4721:: with SMTP id u33mr4321514pga.159.1573769147313;
+ Thu, 14 Nov 2019 14:05:47 -0800 (PST)
 MIME-Version: 1.0
-References: <1571335639-21675-1-git-send-email-alan.maguire@oracle.com>
- <1571335639-21675-6-git-send-email-alan.maguire@oracle.com>
- <CAFd5g46s4eY4qEB5UZPeOKNdZXm4+sA9N=4g8gDYAhyhMahZKw@mail.gmail.com>
- <alpine.LRH.2.20.1911081520550.24027@dhcp-10-175-178-67.vpn.oracle.com>
- <CAFd5g44vYUkLQmJFq_vQ5ruvBC_1vrkSd9DeW3oQ_vLzrNcpgQ@mail.gmail.com>
- <20191114063815.9403820706@mail.kernel.org> <alpine.LRH.2.20.1911140750450.8907@dhcp-10-175-202-216.vpn.oracle.com>
- <CAFd5g46hMRR8L1Yd64ypWCqs5CpFpY_BCXfSCx0uc68ZzbiPzQ@mail.gmail.com>
-In-Reply-To: <CAFd5g46hMRR8L1Yd64ypWCqs5CpFpY_BCXfSCx0uc68ZzbiPzQ@mail.gmail.com>
+References: <20191113012746.52804-1-brendanhiggins@google.com> <CABVgOS=3AXS1=rpGyNiNYu8hU+t=gQG9JongHXir=76ENnrnnA@mail.gmail.com>
+In-Reply-To: <CABVgOS=3AXS1=rpGyNiNYu8hU+t=gQG9JongHXir=76ENnrnnA@mail.gmail.com>
 From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Thu, 14 Nov 2019 13:33:57 -0800
-Message-ID: <CAFd5g44esDP6WFmkjOiH+my_4iBeqMpFoScMCm_hQ0aFwNS9qw@mail.gmail.com>
-Subject: Re: [PATCH v3 linux-kselftest-test 5/6] kunit: allow kunit to be
- loaded as a module
-To:     Alan Maguire <alan.maguire@oracle.com>
-Cc:     Stephen Boyd <sboyd@kernel.org>,
+Date:   Thu, 14 Nov 2019 14:05:36 -0800
+Message-ID: <CAFd5g45jxFgxPSaamT3EQB5W_HMbM5-FPyRppqTb-HFTn+oGow@mail.gmail.com>
+Subject: Re: [PATCH linux-kselftest/test v1] Documentation: kunit: add
+ documentation for kunit_tool
+To:     David Gow <davidgow@google.com>
+Cc:     Shuah Khan <shuah@kernel.org>,
         KUnit Development <kunit-dev@googlegroups.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>
+        <linux-kselftest@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        "Theodore Ts'o" <tytso@mit.edu>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Nov 14, 2019 at 1:31 PM Brendan Higgins
-<brendanhiggins@google.com> wrote:
+On Wed, Nov 13, 2019 at 10:12 AM David Gow <davidgow@google.com> wrote:
 >
-> +kselftest and kunit lists to document this decision.
+> On Tue, Nov 12, 2019 at 5:28 PM Brendan Higgins
+> <brendanhiggins@google.com> wrote:
+> >
+> > Add documentation for the Python script used to build, run, and collect
+> > results from the kernel known as kunit_tool. kunit_tool
+> > (tools/testing/kunit/kunit.py) was already added in previous commits.
+> >
+> > Signed-off-by: Brendan Higgins <brendanhiggins@google.com>
+> > ---
+> >  Documentation/dev-tools/kunit/index.rst      |  1 +
+> >  Documentation/dev-tools/kunit/kunit-tool.rst | 57 ++++++++++++++++++++
+> >  Documentation/dev-tools/kunit/start.rst      |  3 ++
+> >  3 files changed, 61 insertions(+)
+> >  create mode 100644 Documentation/dev-tools/kunit/kunit-tool.rst
+> >
+> > diff --git a/Documentation/dev-tools/kunit/index.rst b/Documentation/dev-tools/kunit/index.rst
+> > index 26ffb46bdf99d..c60d760a0eed1 100644
+> > --- a/Documentation/dev-tools/kunit/index.rst
+> > +++ b/Documentation/dev-tools/kunit/index.rst
+> > @@ -9,6 +9,7 @@ KUnit - Unit Testing for the Linux Kernel
+> >
+> >         start
+> >         usage
+> > +       kunit-tool
+> >         api/index
+> >         faq
+> >
+> > diff --git a/Documentation/dev-tools/kunit/kunit-tool.rst b/Documentation/dev-tools/kunit/kunit-tool.rst
+> > new file mode 100644
+> > index 0000000000000..aa1a93649a45a
+> > --- /dev/null
+> > +++ b/Documentation/dev-tools/kunit/kunit-tool.rst
+> > @@ -0,0 +1,57 @@
+> > +.. SPDX-License-Identifier: GPL-2.0
+> > +
+> > +=================
+> > +kunit_tool How-To
+> > +=================
+> > +
+> > +What is kunit_tool?
+> > +===================
+> > +
+> > +kunit_tool is a set of scripts that aid in building the Linux kernel as UML
+> > +(`User Mode Linux <http://user-mode-linux.sourceforge.net/old/>`_), running
+> > +KUnit tests, parsing the test results and displaying them in a user friendly
+> > +manner.
+>
+> Calling this a "set of scripts" is a bit confusing, as the only script
+> described is tools/testing/kunit/kunit.py, which isn't mentioned in
+> this section.
 
-Sorry for the spam. I accidentally CC'ed the doc list instead of the
-kselftest list in my previous email.
+Fair enough. Sorry, I think of it as a set of scripts since there is
+more than one file, but I guess that probably doesn't make too much
+sense to anyone else.
 
-> On Wed, Nov 13, 2019 at 11:54 PM Alan Maguire <alan.maguire@oracle.com> wrote:
-> >
-> > On Wed, 13 Nov 2019, Stephen Boyd wrote:
-> >
-> > > Quoting Brendan Higgins (2019-11-11 13:41:38)
-> > > > +Stephen Boyd - since he is more of an expert on the hung task timer than I am.
-> > > >
-> > > > On Fri, Nov 8, 2019 at 7:30 AM Alan Maguire <alan.maguire@oracle.com> wrote:
-> > > > >
-> > > > > On Thu, 7 Nov 2019, Brendan Higgins wrote:
-> > > > >
-> > > > > > On Thu, Oct 17, 2019 at 11:09 AM Alan Maguire <alan.maguire@oracle.com> wrote:
-> > > > > > > +MODULE_LICENSE("GPL");
-> > > > > > > diff --git a/lib/kunit/try-catch.c b/lib/kunit/try-catch.c
-> > > > > > > index 1c1e9af..72fc8ed 100644
-> > > > > > > --- a/lib/kunit/try-catch.c
-> > > > > > > +++ b/lib/kunit/try-catch.c
-> > > > > > > @@ -31,6 +31,8 @@ static int kunit_generic_run_threadfn_adapter(void *data)
-> > > > > > >         complete_and_exit(try_catch->try_completion, 0);
-> > > > > > >  }
-> > > > > > >
-> > > > > > > +KUNIT_VAR_SYMBOL(sysctl_hung_task_timeout_secs, unsigned long);
-> > > > > >
-> > > > > > Can you just export sysctl_hung_task_timeout_secs?
-> > > > > >
-> > > > > > I don't mean to make you redo all this work for one symbol twice, but
-> > > > > > I thought we agreed on just exposing this symbol, but in a namespace.
-> > > > > > It seemed like a good use case for that namespaced exporting thing
-> > > > > > that Luis was talking about. As I understood it, you would have to
-> > > > > > export it in the module that defines it, and then use the new
-> > > > > > MODULE_IMPORT_NS() macro here.
-> > > > > >
-> > > > >
-> > > > > Sure, I can certainly look into that, though I wonder if we should
-> > > > > consider another possibility - should kunit have its own sysctl table for
-> > > > > things like configuring timeouts? I can look at adding a patch for that
-> > > >
-> > > > So on the one hand, yes, I would like to have configurable test
-> > > > timeouts for KUnit, but that is not what the parameter check is for
-> > > > here. This is to make sure KUnit times a test case out before the hung
-> > > > task timer does.
-> > > >
-> > > > > prior to the module patch so the issues with exporting the hung task
-> > > > > timeout would go away. Now the reason I suggest this isn't as much a hack
-> > > > > to solve this specific problem, rather it seems to fit better with the
-> > > > > longer-term intent expressed by the comment around use of the field (at
-> > > > > least as I read it, I may be wrong).
-> > > >
-> > > > Not really. Although I do agree that adding configurability here might
-> > > > be a good idea, I believe we would need to clamp such a value by
-> > > > sysctl_hung_task_timeout_secs regardless since we don't want to be
-> > > > killed by the hung task timer; thus, we still need access to
-> > > > sysctl_hung_task_timeout_secs either way, and so doing what you are
-> > > > proposing would be off topic.
-> > > >
-> > > > > Exporting the symbol does allow us to piggy-back on an existing value, but
-> > > > > maybe we should support out our own tunable "kunit_timeout_secs" here?
-> > > > > Doing so would also lay the groundwork for supporting other kunit
-> > > > > tunables in the future if needed. What do you think?
-> > > >
-> > > > The goal is not to piggy back on the value as I mentioned above.
-> > > > Stephen, do you have any thoughts on this? Do you see any other
-> > > > preferable solution to what Alan is trying to do?
-> > >
-> > > One idea would be to make some sort of process flag that says "this is a
-> > > kunit task, ignore me with regards to the hung task timeout". Then we
-> > > can hardcode the 5 minute kunit timeout. I'm not sure we have any more
-> > > flags though.
-> > >
-> > > Or drop the whole timeout clamping logic, let the hung task timeout kick
-> > > in and potentially oops the kernel, but then continue to let the test
-> > > run and maybe sometimes get the kunit timeout here. This last option
-> > > doesn't sound so bad to me given that this is all a corner case anyway
-> > > where we don't expect to actually ever hit this problem so letting the
-> > > hung task detector do its job is probably fine. This nicely avoids
-> > > having to export this symbol to modules too.
-> > >
-> >
-> > Thanks for suggestions! This latter approach seems fine to me; presumably
-> > something has gone wrong if we are tripping the hung task timeout anyway,
-> > so having an oops to document that seems fine. Brendan, what do you think?
+> Also, it may be worth linking to the new version of the UML website
+> (even if the old one has more content).
+
+No complaints here. I just linked to what I thought is more helpful.
+It isn't immediately obvious to click on the old site (however, you
+probably want to since it has way more useful content), but the old
+site *is* discoverable from the new site, and the inverse is not true.
+
+> > +
+> > +What is a kunitconfig?
+> > +======================
+> > +
+> > +It's just a defconfig that kunit_tool looks for in the base directory.
+> > +kunit_tool uses it to generate a .config as you might expect. In addition, it
+> > +verifies that the generated .config contains the CONFIG options in the
+> > +kunitconfig; the reason it does this is so that it is easy to be sure that a
+> > +CONFIG that enables a test actually ends up in the .config.
+> > +
+> > +How do I use kunit_tool?
+> > +=================================
+> > +
+> > +If a kunitconfig is present at the root directory, all you have to do is:
+> > +
+> > +.. code-block:: bash
+> > +
+> > +       ./tools/testing/kunit/kunit.py run
+> > +
+> > +However, you most likely want to use it with the following options:
+> > +
+> > +.. code-block:: bash
+> > +
+> > +       ./tools/testing/kunit/kunit.py run --timeout=30 --jobs=8
+> > +
+> > +- ``--timeout`` sets a maximum amount of time to allow tests to run.
+> > +- ``--jobs`` sets the number of threads to use to build the kernel.
+> > +
 >
-> If Stephen thinks it is fine to drop the clamping logic, I think it is
-> fine too. I think it would probably be good to replace it with a
-> comment under the TODO that explains that a hung test *can* cause an
-> oops if the hung task timeout is less than the kunit timeout value. It
-> would probably be good to also select a timeout value that is less
-> than the default hung task timeout. We might also want to link to this
-> discussion. I fully expect that the timeout logic will get more
-> attention at some point in the future.
+> Not directly an issue with the documentation, but this does raise the
+> question of why we don't have better defaults. Alternatively, maybe
+
+Better defaults, yes-ish: I think Ted's suggestion that we should make
+it possible to run KUnit tests from make[1] is correct, and if I
+remember correctly, make *does* have a way to set reasonable
+system-wide defaults for this (I just don't think anybody takes
+advantage of it), so in that case, we should just respect whatever
+make wants to do. Consequently, I think the logic in the script should
+probably be pretty dumb.
+
+> this doc could suggest --jobs=`nproc` or similar?
+
+Good suggestion, although I would do --jobs=`nproc --all `.
+
+> > +If you just want to use the defconfig that ships with the kernel, you can
+> > +append the ``--defconfig`` flag as well:
+> > +
+> > +.. code-block:: bash
+> > +
+> > +       ./tools/testing/kunit/kunit.py run --timeout=30 --jobs=8 --defconfig
+> > +
+> > +.. note::
+> > +       This command is particularly helpful for getting started because it
+> > +       just works. No kunitconfig needs to be present.
+> > +
 >
-> One more thing: Alan, can you submit the commit that drops the
-> clamping logic in its own commit? I would prefer to make sure that it
-> is easy to spot in the commit history.
+> Should we use this in the getting started section below, then?
+> Particularly since we're already going over kunitconfigs there
+> separately.
+
+I think that makes sense.
+
+> > +For a list of all the flags supported by kunit_tool, you can run:
+> > +
+> > +.. code-block:: bash
+> > +
 >
-> Cheers!
+> Do you think it's worth documenting the remaining two (--build_dir and
+> --raw_output) here too?
+
+No. I don't know that I want to set the precedent to document all
+flags here. We already document the flags in the code and I don't want
+the two to get out of sync. However, it might be feasible to have the
+documentation automagically execute the --help command every time it
+is built keeping it in sync. I am not sure how much value that would
+provide.
+
+> > +       ./tools/testing/kunit/kunit.py run --help
+[...]
+
+Cheers!
+
+[1] https://bugzilla.kernel.org/show_bug.cgi?id=205535
