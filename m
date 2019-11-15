@@ -2,125 +2,127 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 185A0FDFBF
-	for <lists+linux-kselftest@lfdr.de>; Fri, 15 Nov 2019 15:09:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DD289FE0CD
+	for <lists+linux-kselftest@lfdr.de>; Fri, 15 Nov 2019 16:04:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727674AbfKOOJa (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 15 Nov 2019 09:09:30 -0500
-Received: from mail-qk1-f195.google.com ([209.85.222.195]:37665 "EHLO
-        mail-qk1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727472AbfKOOJ3 (ORCPT
+        id S1727412AbfKOPEt (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 15 Nov 2019 10:04:49 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:31978 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1727406AbfKOPEt (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 15 Nov 2019 09:09:29 -0500
-Received: by mail-qk1-f195.google.com with SMTP id e187so8179648qkf.4
-        for <linux-kselftest@vger.kernel.org>; Fri, 15 Nov 2019 06:09:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=01834Iuy8wrTkyETdgSEfcddUW82cA+Rc6Zt+MvTCwg=;
-        b=BFBIgmkk8QkntrHNjJLsvCL1a0ZURlA5X/gmLb4n3VPRP5m3aB6scRcD2DMxTLAV9P
-         UaMtjJH/lJaxRT3MaYZLNwy8cw9D1M5/6iAxnqhClJH46gGawBEotmmVwz9bc8u3IFV9
-         a3v4lMSNKHekmvWmxSCO3xS9GuPfrTZZ9gfrHLPlSSz+de3k9e1mbvTuAMlgMSg1inD0
-         htevxD4Ti62AfDMDE+osEpAwbIBY+1VPeWYkc7W/CwzYOFcM3WvoA9tt0pcZZGXm+LdO
-         O8XKMS5WarP50UJ1uTIL/tvlJnyEoGG2Ukx7eqBCtFPfW9ti43J0cbZRwFC28FPxF58w
-         Wt7Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=01834Iuy8wrTkyETdgSEfcddUW82cA+Rc6Zt+MvTCwg=;
-        b=B2PBP3fjZovfb0mVJPS6sMC6n7csZdyRJ95mih0UWe7KHrrrjV6cXVIOQ7JMR56GEU
-         FecwbwSWKz755bRmq+LqnkO1ULS9GMiW8Xd9ys8qEJU2LhHvdpOiieE24GbFNO9tT81N
-         EEhPhhi9OlA6e5mkx5ETbFm8wa7QZ/W2rJP3I+t8oXywA2e4LneU/PNXz/8Ci+7dvQRn
-         5a3zXVAm/Oy36WQi1KpJuHdvqVs3DUIg1AX6p96UZl8Zs/uUZKTqpudtXxd0caYp30co
-         fptE9js7jIpR930HaxV17Hc5Ccmz5YKCaN4L7kcOxxdRA95bqmKKPZxG+3dcV0Na9bKN
-         U1Dw==
-X-Gm-Message-State: APjAAAUxG/hfdRqdD7G2aj8Ct7GzmrveDIOkU+oHL0ZPYohP0VRUqsee
-        QOkQ6uF6bwEHLZCQPs11hiBkHQ==
-X-Google-Smtp-Source: APXvYqySuuQ0WzAKMm3kXEkiDMguUlgyvE6K/2D67jOtzEpRUEwGr7GFZW94ehFUiDC6Dq2Nm3hHug==
-X-Received: by 2002:a37:76c6:: with SMTP id r189mr11712734qkc.303.1573826968699;
-        Fri, 15 Nov 2019 06:09:28 -0800 (PST)
-Received: from ziepe.ca (hlfxns017vw-142-162-113-180.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.162.113.180])
-        by smtp.gmail.com with ESMTPSA id m65sm4836053qte.54.2019.11.15.06.09.28
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Fri, 15 Nov 2019 06:09:28 -0800 (PST)
-Received: from jgg by mlx.ziepe.ca with local (Exim 4.90_1)
-        (envelope-from <jgg@ziepe.ca>)
-        id 1iVcHv-0002xw-Lj; Fri, 15 Nov 2019 10:09:27 -0400
-Date:   Fri, 15 Nov 2019 10:09:27 -0400
-From:   Jason Gunthorpe <jgg@ziepe.ca>
-To:     John Hubbard <jhubbard@nvidia.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Dave Chinner <david@fromorbit.com>,
-        David Airlie <airlied@linux.ie>,
-        "David S . Miller" <davem@davemloft.net>,
-        Ira Weiny <ira.weiny@intel.com>, Jan Kara <jack@suse.cz>,
-        Jens Axboe <axboe@kernel.dk>, Jonathan Corbet <corbet@lwn.net>,
-        =?utf-8?B?SsOpcsO0bWU=?= Glisse <jglisse@redhat.com>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Michal Hocko <mhocko@suse.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Paul Mackerras <paulus@samba.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Vlastimil Babka <vbabka@suse.cz>, bpf@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, kvm@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-rdma@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, netdev@vger.kernel.org,
-        linux-mm@kvack.org, LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v5 12/24] IB/{core,hw,umem}: set FOLL_PIN via
- pin_user_pages*(), fix up ODP
-Message-ID: <20191115140927.GB4055@ziepe.ca>
-References: <20191115055340.1825745-1-jhubbard@nvidia.com>
- <20191115055340.1825745-13-jhubbard@nvidia.com>
+        Fri, 15 Nov 2019 10:04:49 -0500
+Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id xAFF4bLm097752
+        for <linux-kselftest@vger.kernel.org>; Fri, 15 Nov 2019 10:04:47 -0500
+Received: from e06smtp03.uk.ibm.com (e06smtp03.uk.ibm.com [195.75.94.99])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 2w9nsmkwhd-1
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-kselftest@vger.kernel.org>; Fri, 15 Nov 2019 10:04:47 -0500
+Received: from localhost
+        by e06smtp03.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-kselftest@vger.kernel.org> from <iii@linux.ibm.com>;
+        Fri, 15 Nov 2019 15:04:46 -0000
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (9.149.109.194)
+        by e06smtp03.uk.ibm.com (192.168.101.133) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
+        Fri, 15 Nov 2019 15:04:44 -0000
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id xAFF4hFF60424442
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 15 Nov 2019 15:04:43 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id EF6FBAE067;
+        Fri, 15 Nov 2019 15:04:42 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id B5660AE057;
+        Fri, 15 Nov 2019 15:04:42 +0000 (GMT)
+Received: from white.boeblingen.de.ibm.com (unknown [9.152.96.62])
+        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Fri, 15 Nov 2019 15:04:42 +0000 (GMT)
+From:   Ilya Leoshkevich <iii@linux.ibm.com>
+To:     Shuah Khan <shuah@kernel.org>
+Cc:     linux-kselftest@vger.kernel.org,
+        Heiko Carstens <heiko.carstens@de.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Ilya Leoshkevich <iii@linux.ibm.com>
+Subject: [PATCH v4] selftests: fix prepending $(OUTPUT) to $(TEST_PROGS)
+Date:   Fri, 15 Nov 2019 16:04:28 +0100
+X-Mailer: git-send-email 2.23.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191115055340.1825745-13-jhubbard@nvidia.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+x-cbid: 19111515-0012-0000-0000-00000363F438
+X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
+x-cbparentid: 19111515-0013-0000-0000-0000219F7289
+Message-Id: <20191115150428.61131-1-iii@linux.ibm.com>
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.95,18.0.572
+ definitions=2019-11-15_04:2019-11-15,2019-11-15 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 adultscore=0
+ malwarescore=0 impostorscore=0 mlxscore=0 spamscore=0 phishscore=0
+ mlxlogscore=999 suspectscore=0 priorityscore=1501 bulkscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-1910280000 definitions=main-1911150138
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Nov 14, 2019 at 09:53:28PM -0800, John Hubbard wrote:
-> Convert infiniband to use the new pin_user_pages*() calls.
-> 
-> Also, revert earlier changes to Infiniband ODP that had it using
-> put_user_page(). ODP is "Case 3" in
-> Documentation/core-api/pin_user_pages.rst, which is to say, normal
-> get_user_pages() and put_page() is the API to use there.
-> 
-> The new pin_user_pages*() calls replace corresponding get_user_pages*()
-> calls, and set the FOLL_PIN flag. The FOLL_PIN flag requires that the
-> caller must return the pages via put_user_page*() calls, but infiniband
-> was already doing that as part of an earlier commit.
-> 
-> Signed-off-by: John Hubbard <jhubbard@nvidia.com>
-> ---
->  drivers/infiniband/core/umem.c              |  2 +-
->  drivers/infiniband/core/umem_odp.c          | 13 ++++++-------
->  drivers/infiniband/hw/hfi1/user_pages.c     |  2 +-
->  drivers/infiniband/hw/mthca/mthca_memfree.c |  2 +-
->  drivers/infiniband/hw/qib/qib_user_pages.c  |  2 +-
->  drivers/infiniband/hw/qib/qib_user_sdma.c   |  2 +-
->  drivers/infiniband/hw/usnic/usnic_uiom.c    |  2 +-
->  drivers/infiniband/sw/siw/siw_mem.c         |  2 +-
->  8 files changed, 13 insertions(+), 14 deletions(-)
+Currently the following command produces an error message:
 
-Ok
+    linux# make kselftest TARGETS=bpf O=/mnt/linux-build
+    # selftests: bpf: test_libbpf.sh
+    # ./test_libbpf.sh: line 23: ./test_libbpf_open: No such file or directory
+    # test_libbpf: failed at file test_l4lb.o
+    # selftests: test_libbpf [FAILED]
 
-Reviewed-by: Jason Gunthorpe <jgg@mellanox.com>
+The error message might not affect make return code, therefore one might
+need to grep make output in order to detect it.
 
-Jason
+The current logic prepends $(OUTPUT) only to the first member of
+$(TEST_PROGS). After that, run_one() does
+
+   cd `dirname $TEST`
+
+For all tests except the first one, `dirname $TEST` is ., which means
+they cannot access the files generated in $(OUTPUT).
+
+Fix by using $(addprefix) to prepend $(OUTPUT)/ to each member of
+$(TEST_PROGS).
+
+Fixes: 1a940687e424 ("selftests: lib.mk: copy test scripts and test files for make O=dir run")
+Signed-off-by: Ilya Leoshkevich <iii@linux.ibm.com>
+---
+
+v1->v2:
+- Append / to $(OUTPUT).
+- Use $(addprefix) instead of $(foreach).
+
+v2->v3:
+- Split the patch in two.
+- Improve the commit message.
+
+v3->v4:
+- Drop the first patch.
+- Add a note regarding make return code to the commit message.
+
+ tools/testing/selftests/lib.mk | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/tools/testing/selftests/lib.mk b/tools/testing/selftests/lib.mk
+index 1c8a1963d03f..0cf510df1ee2 100644
+--- a/tools/testing/selftests/lib.mk
++++ b/tools/testing/selftests/lib.mk
+@@ -75,7 +75,8 @@ ifdef building_out_of_srctree
+ 		@rsync -aq $(TEST_PROGS) $(TEST_PROGS_EXTENDED) $(TEST_FILES) $(OUTPUT)
+ 	fi
+ 	@if [ "X$(TEST_PROGS)" != "X" ]; then
+-		$(call RUN_TESTS, $(TEST_GEN_PROGS) $(TEST_CUSTOM_PROGS) $(OUTPUT)/$(TEST_PROGS))
++		$(call RUN_TESTS, $(TEST_GEN_PROGS) $(TEST_CUSTOM_PROGS) \
++				  $(addprefix $(OUTPUT)/,$(TEST_PROGS)))
+ 	else
+ 		$(call RUN_TESTS, $(TEST_GEN_PROGS) $(TEST_CUSTOM_PROGS))
+ 	fi
+-- 
+2.23.0
+
