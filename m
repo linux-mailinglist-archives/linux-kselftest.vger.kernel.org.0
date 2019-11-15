@@ -2,53 +2,53 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 45B66FDFAE
-	for <lists+linux-kselftest@lfdr.de>; Fri, 15 Nov 2019 15:08:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 185A0FDFBF
+	for <lists+linux-kselftest@lfdr.de>; Fri, 15 Nov 2019 15:09:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727644AbfKOOIo (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 15 Nov 2019 09:08:44 -0500
-Received: from mail-qt1-f193.google.com ([209.85.160.193]:34286 "EHLO
-        mail-qt1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727635AbfKOOIo (ORCPT
+        id S1727674AbfKOOJa (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 15 Nov 2019 09:09:30 -0500
+Received: from mail-qk1-f195.google.com ([209.85.222.195]:37665 "EHLO
+        mail-qk1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727472AbfKOOJ3 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 15 Nov 2019 09:08:44 -0500
-Received: by mail-qt1-f193.google.com with SMTP id i17so10936910qtq.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 15 Nov 2019 06:08:44 -0800 (PST)
+        Fri, 15 Nov 2019 09:09:29 -0500
+Received: by mail-qk1-f195.google.com with SMTP id e187so8179648qkf.4
+        for <linux-kselftest@vger.kernel.org>; Fri, 15 Nov 2019 06:09:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=ziepe.ca; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to:user-agent;
-        bh=8ZGdiHZxf3ZHqX3I8ydxFdLkSWkpE5WrCI0dICjPpHU=;
-        b=i+UlYqHpSoy9hrCL3gQPMJUhUw3RKIgDls07tcBvdNTrD4jl5OTOMJfNN1MASvpOc/
-         n/RUaDL07zMYWDhclWHPDZnaqTZ6YdpZfzuTyA+HrehI2Ydc75hfkUNiRgV5KLUhGbZ5
-         hwJR6j62hBrGSzy1DyO8h1zN9TlzptjO0LEx4CpgETqR3CBgJNCsKnZKRcbg5KwHic/q
-         pEIdohRRBLTVk18YHW5Vi8NX67r/lGgj0cpRlIJEz6SaDVQBInMFNoQa60kFdiQzPjma
-         xgI2yhuOWu+cTXk9NFpI3of3yS1+C6h76JgFDhrvoDw5piCzGcHI/ud3iOPSS57DuCxF
-         BfMw==
+        bh=01834Iuy8wrTkyETdgSEfcddUW82cA+Rc6Zt+MvTCwg=;
+        b=BFBIgmkk8QkntrHNjJLsvCL1a0ZURlA5X/gmLb4n3VPRP5m3aB6scRcD2DMxTLAV9P
+         UaMtjJH/lJaxRT3MaYZLNwy8cw9D1M5/6iAxnqhClJH46gGawBEotmmVwz9bc8u3IFV9
+         a3v4lMSNKHekmvWmxSCO3xS9GuPfrTZZ9gfrHLPlSSz+de3k9e1mbvTuAMlgMSg1inD0
+         htevxD4Ti62AfDMDE+osEpAwbIBY+1VPeWYkc7W/CwzYOFcM3WvoA9tt0pcZZGXm+LdO
+         O8XKMS5WarP50UJ1uTIL/tvlJnyEoGG2Ukx7eqBCtFPfW9ti43J0cbZRwFC28FPxF58w
+         Wt7Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=8ZGdiHZxf3ZHqX3I8ydxFdLkSWkpE5WrCI0dICjPpHU=;
-        b=otc8lUGRF9Uzn8uW9yKFmGajS06lvj7PX9gxd8k0tLku8He6yWjTy5ASnK1PfRjjrS
-         vf2LDtH8I1IJ7YUrGXP+dW4r51kwlHZoUa6/VkgSMkpWYDkbG7hfDp9cN4Tf4DJSwGdG
-         MsU20J6qB7siWbdWfazlrzbSi9NvH8RLpA0b7Vro8Y5Al0+4daJbEkv2FDgWF6zSzxiL
-         IAWQyuoikKYxMoSwBNDQgjpdyF3iPEJ+Yxdwl0DHBVk9ctvz9ldwoezZEHnGcT1/ofD3
-         NMn3Kw4xNFAmdBHU/GUE2jxZyTbTfetYWlz08aO7ENim42Ct/qGfW5dJse8bvF01pr0w
-         TB7Q==
-X-Gm-Message-State: APjAAAU4ntv8vlF/vm42Dj/UcAeWUtAEjx1KFrRlI9oQrRECwm1EIR7r
-        UZCmPRVShddNEXM3qILhGHKmtg==
-X-Google-Smtp-Source: APXvYqyXZJAB3M+2SHRriOZec9Rfd1hMhPGpVi3+hL/5cz80ckTUMXVgMRzWDvTX6XEGdZam3s9/QQ==
-X-Received: by 2002:ac8:661a:: with SMTP id c26mr13620771qtp.317.1573826923526;
-        Fri, 15 Nov 2019 06:08:43 -0800 (PST)
+        bh=01834Iuy8wrTkyETdgSEfcddUW82cA+Rc6Zt+MvTCwg=;
+        b=B2PBP3fjZovfb0mVJPS6sMC6n7csZdyRJ95mih0UWe7KHrrrjV6cXVIOQ7JMR56GEU
+         FecwbwSWKz755bRmq+LqnkO1ULS9GMiW8Xd9ys8qEJU2LhHvdpOiieE24GbFNO9tT81N
+         EEhPhhi9OlA6e5mkx5ETbFm8wa7QZ/W2rJP3I+t8oXywA2e4LneU/PNXz/8Ci+7dvQRn
+         5a3zXVAm/Oy36WQi1KpJuHdvqVs3DUIg1AX6p96UZl8Zs/uUZKTqpudtXxd0caYp30co
+         fptE9js7jIpR930HaxV17Hc5Ccmz5YKCaN4L7kcOxxdRA95bqmKKPZxG+3dcV0Na9bKN
+         U1Dw==
+X-Gm-Message-State: APjAAAUxG/hfdRqdD7G2aj8Ct7GzmrveDIOkU+oHL0ZPYohP0VRUqsee
+        QOkQ6uF6bwEHLZCQPs11hiBkHQ==
+X-Google-Smtp-Source: APXvYqySuuQ0WzAKMm3kXEkiDMguUlgyvE6K/2D67jOtzEpRUEwGr7GFZW94ehFUiDC6Dq2Nm3hHug==
+X-Received: by 2002:a37:76c6:: with SMTP id r189mr11712734qkc.303.1573826968699;
+        Fri, 15 Nov 2019 06:09:28 -0800 (PST)
 Received: from ziepe.ca (hlfxns017vw-142-162-113-180.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.162.113.180])
-        by smtp.gmail.com with ESMTPSA id s21sm5382292qtc.12.2019.11.15.06.08.42
+        by smtp.gmail.com with ESMTPSA id m65sm4836053qte.54.2019.11.15.06.09.28
         (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Fri, 15 Nov 2019 06:08:42 -0800 (PST)
+        Fri, 15 Nov 2019 06:09:28 -0800 (PST)
 Received: from jgg by mlx.ziepe.ca with local (Exim 4.90_1)
         (envelope-from <jgg@ziepe.ca>)
-        id 1iVcHC-0002xg-A8; Fri, 15 Nov 2019 10:08:42 -0400
-Date:   Fri, 15 Nov 2019 10:08:42 -0400
+        id 1iVcHv-0002xw-Lj; Fri, 15 Nov 2019 10:09:27 -0400
+Date:   Fri, 15 Nov 2019 10:09:27 -0400
 From:   Jason Gunthorpe <jgg@ziepe.ca>
 To:     John Hubbard <jhubbard@nvidia.com>
 Cc:     Andrew Morton <akpm@linux-foundation.org>,
@@ -79,58 +79,48 @@ Cc:     Andrew Morton <akpm@linux-foundation.org>,
         linux-media@vger.kernel.org, linux-rdma@vger.kernel.org,
         linuxppc-dev@lists.ozlabs.org, netdev@vger.kernel.org,
         linux-mm@kvack.org, LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v5 09/24] vfio, mm: fix get_user_pages_remote() and
- FOLL_LONGTERM
-Message-ID: <20191115140842.GA4055@ziepe.ca>
+Subject: Re: [PATCH v5 12/24] IB/{core,hw,umem}: set FOLL_PIN via
+ pin_user_pages*(), fix up ODP
+Message-ID: <20191115140927.GB4055@ziepe.ca>
 References: <20191115055340.1825745-1-jhubbard@nvidia.com>
- <20191115055340.1825745-10-jhubbard@nvidia.com>
+ <20191115055340.1825745-13-jhubbard@nvidia.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20191115055340.1825745-10-jhubbard@nvidia.com>
+In-Reply-To: <20191115055340.1825745-13-jhubbard@nvidia.com>
 User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Nov 14, 2019 at 09:53:25PM -0800, John Hubbard wrote:
-> As it says in the updated comment in gup.c: current FOLL_LONGTERM
-> behavior is incompatible with FAULT_FLAG_ALLOW_RETRY because of the
-> FS DAX check requirement on vmas.
+On Thu, Nov 14, 2019 at 09:53:28PM -0800, John Hubbard wrote:
+> Convert infiniband to use the new pin_user_pages*() calls.
 > 
-> However, the corresponding restriction in get_user_pages_remote() was
-> slightly stricter than is actually required: it forbade all
-> FOLL_LONGTERM callers, but we can actually allow FOLL_LONGTERM callers
-> that do not set the "locked" arg.
+> Also, revert earlier changes to Infiniband ODP that had it using
+> put_user_page(). ODP is "Case 3" in
+> Documentation/core-api/pin_user_pages.rst, which is to say, normal
+> get_user_pages() and put_page() is the API to use there.
 > 
-> Update the code and comments accordingly, and update the VFIO caller
-> to take advantage of this, fixing a bug as a result: the VFIO caller
-> is logically a FOLL_LONGTERM user.
+> The new pin_user_pages*() calls replace corresponding get_user_pages*()
+> calls, and set the FOLL_PIN flag. The FOLL_PIN flag requires that the
+> caller must return the pages via put_user_page*() calls, but infiniband
+> was already doing that as part of an earlier commit.
 > 
-> Also, remove an unnessary pair of calls that were releasing and
-> reacquiring the mmap_sem. There is no need to avoid holding mmap_sem
-> just in order to call page_to_pfn().
-> 
-> Also, move the DAX check ("if a VMA is DAX, don't allow long term
-> pinning") from the VFIO call site, all the way into the internals
-> of get_user_pages_remote() and __gup_longterm_locked(). That is:
-> get_user_pages_remote() calls __gup_longterm_locked(), which in turn
-> calls check_dax_vmas(). It's lightly explained in the comments as well.
-> 
-> Thanks to Jason Gunthorpe for pointing out a clean way to fix this,
-> and to Dan Williams for helping clarify the DAX refactoring.
-> 
-> Suggested-by: Jason Gunthorpe <jgg@ziepe.ca>
-> Cc: Dan Williams <dan.j.williams@intel.com>
-> Cc: Jerome Glisse <jglisse@redhat.com>
-> Cc: Ira Weiny <ira.weiny@intel.com>
 > Signed-off-by: John Hubbard <jhubbard@nvidia.com>
 > ---
->  drivers/vfio/vfio_iommu_type1.c | 30 +++++-------------------------
->  mm/gup.c                        | 27 ++++++++++++++++++++++-----
->  2 files changed, 27 insertions(+), 30 deletions(-)
+>  drivers/infiniband/core/umem.c              |  2 +-
+>  drivers/infiniband/core/umem_odp.c          | 13 ++++++-------
+>  drivers/infiniband/hw/hfi1/user_pages.c     |  2 +-
+>  drivers/infiniband/hw/mthca/mthca_memfree.c |  2 +-
+>  drivers/infiniband/hw/qib/qib_user_pages.c  |  2 +-
+>  drivers/infiniband/hw/qib/qib_user_sdma.c   |  2 +-
+>  drivers/infiniband/hw/usnic/usnic_uiom.c    |  2 +-
+>  drivers/infiniband/sw/siw/siw_mem.c         |  2 +-
+>  8 files changed, 13 insertions(+), 14 deletions(-)
 
-Looks OK now  
+Ok
 
 Reviewed-by: Jason Gunthorpe <jgg@mellanox.com>
+
+Jason
