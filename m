@@ -2,35 +2,36 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DC19DFF2C3
-	for <lists+linux-kselftest@lfdr.de>; Sat, 16 Nov 2019 17:21:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A9DBFF2A7
+	for <lists+linux-kselftest@lfdr.de>; Sat, 16 Nov 2019 17:21:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727855AbfKPPnn (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 16 Nov 2019 10:43:43 -0500
-Received: from mail.kernel.org ([198.145.29.99]:47858 "EHLO mail.kernel.org"
+        id S1729033AbfKPPoh (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 16 Nov 2019 10:44:37 -0500
+Received: from mail.kernel.org ([198.145.29.99]:49572 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727830AbfKPPnn (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 16 Nov 2019 10:43:43 -0500
+        id S1728057AbfKPPog (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Sat, 16 Nov 2019 10:44:36 -0500
 Received: from sasha-vm.mshome.net (unknown [50.234.116.4])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 0D86720729;
-        Sat, 16 Nov 2019 15:43:41 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id D69572072D;
+        Sat, 16 Nov 2019 15:44:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1573919022;
-        bh=S3hOXPcM+w0k/7va/5THvsyB8gokQ9VS9+1IN4YV+Lg=;
+        s=default; t=1573919076;
+        bh=8NzhWQdmgAYi75Syl7w/F0X2VA0psKoEI0KYAzgnHuw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=wnMe1cMnvrWVIZatEDP+2TRffjD6G7UtdNN93bFc4YzyJQoOOOmvmr0hTmgu5iuor
-         i0bGkn84BcyWp4NKABrKCI88vSJooecDyotQ0XFensS7b11/3Sk0o7dPCoEv7ZD0+I
-         x6Zbx1bMaODo8pkYHoia68byGS7qr3JOjoOBXGHo=
+        b=wP1CN14DuR/OInosbLHgXDP39KEfTauAt26bPWm5p+LR3kI7VE2jbOO/fO/zun0du
+         Hp56NamJRhF3sDFplqkEaBq8L1Y0hcWc77t6KrFHhR6DUts2rb7Vn9wuI6qb3YUdwJ
+         ErLnNV0fGc8tzgeuM/rxqDKuRauK7c1GPvNEgcec=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Peng Hao <peng.hao2@zte.com.cn>, Shuah Khan <shuah@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, linux-fsdevel@vger.kernel.org,
+Cc:     Joel Stanley <joel@jms.id.au>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Sasha Levin <sashal@kernel.org>, linuxppc-dev@lists.ozlabs.org,
         linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 120/237] selftests: fix warning: "_GNU_SOURCE" redefined
-Date:   Sat, 16 Nov 2019 10:39:15 -0500
-Message-Id: <20191116154113.7417-120-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 144/237] selftests/powerpc/ptrace: Fix out-of-tree build
+Date:   Sat, 16 Nov 2019 10:39:39 -0500
+Message-Id: <20191116154113.7417-144-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20191116154113.7417-1-sashal@kernel.org>
 References: <20191116154113.7417-1-sashal@kernel.org>
@@ -43,47 +44,56 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Peng Hao <peng.hao2@zte.com.cn>
+From: Joel Stanley <joel@jms.id.au>
 
-[ Upstream commit 0387662d1b6c5ad2950d8e94d5e380af3f15c05c ]
+[ Upstream commit c39b79082a38a4f8c801790edecbbb4d62ed2992 ]
 
-Makefile contains -D_GNU_SOURCE. remove define "_GNU_SOURCE"
-in c files.
+We should use TEST_GEN_PROGS, not TEST_PROGS. That tells the selftests
+makefile (lib.mk) that those tests are generated (built), and so it
+adds the $(OUTPUT) prefix for us, making the out-of-tree build work
+correctly.
 
-Signed-off-by: Peng Hao <peng.hao2@zte.com.cn>
-Signed-off-by: Shuah Khan (Samsung OSG) <shuah@kernel.org>
+It also means we don't need our own clean rule, lib.mk does it.
+
+We also have to update the ptrace-pkey and core-pkey rules to use
+$(OUTPUT).
+
+Signed-off-by: Joel Stanley <joel@jms.id.au>
+Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/testing/selftests/proc/fd-001-lookup.c  | 2 +-
- tools/testing/selftests/proc/fd-003-kthread.c | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ tools/testing/selftests/powerpc/ptrace/Makefile | 13 ++++---------
+ 1 file changed, 4 insertions(+), 9 deletions(-)
 
-diff --git a/tools/testing/selftests/proc/fd-001-lookup.c b/tools/testing/selftests/proc/fd-001-lookup.c
-index a2010dfb21104..60d7948e7124f 100644
---- a/tools/testing/selftests/proc/fd-001-lookup.c
-+++ b/tools/testing/selftests/proc/fd-001-lookup.c
-@@ -14,7 +14,7 @@
-  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
-  */
- // Test /proc/*/fd lookup.
--#define _GNU_SOURCE
-+
- #undef NDEBUG
- #include <assert.h>
- #include <dirent.h>
-diff --git a/tools/testing/selftests/proc/fd-003-kthread.c b/tools/testing/selftests/proc/fd-003-kthread.c
-index 1d659d55368c2..dc591f97b63d4 100644
---- a/tools/testing/selftests/proc/fd-003-kthread.c
-+++ b/tools/testing/selftests/proc/fd-003-kthread.c
-@@ -14,7 +14,7 @@
-  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
-  */
- // Test that /proc/$KERNEL_THREAD/fd/ is empty.
--#define _GNU_SOURCE
-+
- #undef NDEBUG
- #include <sys/syscall.h>
- #include <assert.h>
+diff --git a/tools/testing/selftests/powerpc/ptrace/Makefile b/tools/testing/selftests/powerpc/ptrace/Makefile
+index 923d531265f8c..9f9423430059e 100644
+--- a/tools/testing/selftests/powerpc/ptrace/Makefile
++++ b/tools/testing/selftests/powerpc/ptrace/Makefile
+@@ -1,5 +1,5 @@
+ # SPDX-License-Identifier: GPL-2.0
+-TEST_PROGS := ptrace-gpr ptrace-tm-gpr ptrace-tm-spd-gpr \
++TEST_GEN_PROGS := ptrace-gpr ptrace-tm-gpr ptrace-tm-spd-gpr \
+               ptrace-tar ptrace-tm-tar ptrace-tm-spd-tar ptrace-vsx ptrace-tm-vsx \
+               ptrace-tm-spd-vsx ptrace-tm-spr ptrace-hwbreak ptrace-pkey core-pkey \
+               perf-hwbreak
+@@ -7,14 +7,9 @@ TEST_PROGS := ptrace-gpr ptrace-tm-gpr ptrace-tm-spd-gpr \
+ top_srcdir = ../../../../..
+ include ../../lib.mk
+ 
+-all: $(TEST_PROGS)
+-
+ CFLAGS += -m64 -I../../../../../usr/include -I../tm -mhtm -fno-pie
+ 
+-ptrace-pkey core-pkey: child.h
+-ptrace-pkey core-pkey: LDLIBS += -pthread
+-
+-$(TEST_PROGS): ../harness.c ../utils.c ../lib/reg.S ptrace.h
++$(OUTPUT)/ptrace-pkey $(OUTPUT)/core-pkey: child.h
++$(OUTPUT)/ptrace-pkey $(OUTPUT)/core-pkey: LDLIBS += -pthread
+ 
+-clean:
+-	rm -f $(TEST_PROGS) *.o
++$(TEST_GEN_PROGS): ../harness.c ../utils.c ../lib/reg.S ptrace.h
 -- 
 2.20.1
 
