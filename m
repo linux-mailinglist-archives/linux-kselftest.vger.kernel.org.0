@@ -2,38 +2,38 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C22B7FF28D
-	for <lists+linux-kselftest@lfdr.de>; Sat, 16 Nov 2019 17:20:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 20046FF13D
+	for <lists+linux-kselftest@lfdr.de>; Sat, 16 Nov 2019 17:10:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729066AbfKPPoq (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 16 Nov 2019 10:44:46 -0500
-Received: from mail.kernel.org ([198.145.29.99]:49848 "EHLO mail.kernel.org"
+        id S1730560AbfKPQKs (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 16 Nov 2019 11:10:48 -0500
+Received: from mail.kernel.org ([198.145.29.99]:56166 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729059AbfKPPop (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 16 Nov 2019 10:44:45 -0500
+        id S1728144AbfKPPst (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Sat, 16 Nov 2019 10:48:49 -0500
 Received: from sasha-vm.mshome.net (unknown [50.234.116.4])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 912A12073B;
-        Sat, 16 Nov 2019 15:44:44 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id B95E620729;
+        Sat, 16 Nov 2019 15:48:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1573919085;
-        bh=VPtjYK0w0uuloqDArLaAMixd8sNqxlmnTNrSoitDDRs=;
+        s=default; t=1573919329;
+        bh=G+bUnZIIGo0TF/ZYi61/DRntB0hbkjdnF5/2+ThSJ3w=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=y3HiT4r4jfdNC9nCFT+soqsTcb8hytpY3lfXCn0aOIvRb8+67AkmEvzfJmoRiFmf/
-         ofEZ4QCpdGWKjiif5iQII9OO6dY6Juizj432KMr5Pqk8S6ZHw28IDPJZ8LU9+9cEhA
-         eotwILpYpNfSDeOPNh15QUgWOv1VFs1ZecGWBDxw=
+        b=aJvBxZ+hh1nEjjt/ZlHfrS3zOmcYEzP2oRu9eZaPTTcHexXr7GgbG7Ywhskc6rkg+
+         T7wvBsGbWsRA7oNeusIVPePrUS7AYaRabpJBIZLVRdGlgoBk1TUsmbN2+51lMzxHmd
+         TBZE7Wt7SaZj1aA3K+dXPi4Df6okQ3045cSe1+Dw=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Michael Ellerman <mpe@ellerman.id.au>,
-        Sasha Levin <sashal@kernel.org>, linuxppc-dev@lists.ozlabs.org,
+Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
+        Shuah Khan <shuah@kernel.org>, Sasha Levin <sashal@kernel.org>,
         linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 147/237] selftests/powerpc/cache_shape: Fix out-of-tree build
-Date:   Sat, 16 Nov 2019 10:39:42 -0500
-Message-Id: <20191116154113.7417-147-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.14 071/150] selftests/ftrace: Fix to test kprobe $comm arg only if available
+Date:   Sat, 16 Nov 2019 10:46:09 -0500
+Message-Id: <20191116154729.9573-71-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20191116154113.7417-1-sashal@kernel.org>
-References: <20191116154113.7417-1-sashal@kernel.org>
+In-Reply-To: <20191116154729.9573-1-sashal@kernel.org>
+References: <20191116154729.9573-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -43,41 +43,38 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Michael Ellerman <mpe@ellerman.id.au>
+From: Masami Hiramatsu <mhiramat@kernel.org>
 
-[ Upstream commit 69f8117f17b332a68cd8f4bf8c2d0d3d5b84efc5 ]
+[ Upstream commit 2452c96e617a0ff6fb2692e55217a3fa57a7322c ]
 
-Use TEST_GEN_PROGS and don't redefine all, this makes the out-of-tree
-build work. We need to move the extra dependencies below the include
-of lib.mk, because it adds the $(OUTPUT) prefix if it's defined.
+Test $comm in kprobe-event argument syntax testcase
+only if it is supported on the kernel because
+$comm has been introduced 4.8 kernel.
+So on older stable kernel, it should be skipped.
 
-We can also drop the clean rule, lib.mk does it for us.
-
-Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
+Signed-off-by: Masami Hiramatsu <mhiramat@kernel.org>
+Signed-off-by: Shuah Khan (Samsung OSG) <shuah@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/testing/selftests/powerpc/cache_shape/Makefile | 9 ++-------
- 1 file changed, 2 insertions(+), 7 deletions(-)
+ .../selftests/ftrace/test.d/kprobe/kprobe_args_syntax.tc       | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/tools/testing/selftests/powerpc/cache_shape/Makefile b/tools/testing/selftests/powerpc/cache_shape/Makefile
-index ede4d3dae7505..689f6c8ebcd8d 100644
---- a/tools/testing/selftests/powerpc/cache_shape/Makefile
-+++ b/tools/testing/selftests/powerpc/cache_shape/Makefile
-@@ -1,12 +1,7 @@
- # SPDX-License-Identifier: GPL-2.0
--TEST_PROGS := cache_shape
--
--all: $(TEST_PROGS)
--
--$(TEST_PROGS): ../harness.c ../utils.c
-+TEST_GEN_PROGS := cache_shape
+diff --git a/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_syntax.tc b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_syntax.tc
+index 231bcd2c4eb59..1e7ac6f3362ff 100644
+--- a/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_syntax.tc
++++ b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_syntax.tc
+@@ -71,8 +71,11 @@ test_badarg "\$stackp" "\$stack0+10" "\$stack1-10"
+ echo "r ${PROBEFUNC} \$retval" > kprobe_events
+ ! echo "p ${PROBEFUNC} \$retval" > kprobe_events
  
- top_srcdir = ../../../../..
- include ../../lib.mk
++# $comm was introduced in 4.8, older kernels reject it.
++if grep -A1 "fetcharg:" README | grep -q '\$comm' ; then
+ : "Comm access"
+ test_goodarg "\$comm"
++fi
  
--clean:
--	rm -f $(TEST_PROGS) *.o
-+$(TEST_GEN_PROGS): ../harness.c ../utils.c
+ : "Indirect memory access"
+ test_goodarg "+0(${GOODREG})" "-0(${GOODREG})" "+10(\$stack)" \
 -- 
 2.20.1
 
