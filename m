@@ -2,14 +2,14 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 39D961011E5
-	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Nov 2019 04:14:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C2361011E3
+	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Nov 2019 04:14:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727862AbfKSDOG (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        id S1727505AbfKSDOG (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
         Mon, 18 Nov 2019 22:14:06 -0500
-Received: from mga02.intel.com ([134.134.136.20]:21265 "EHLO mga02.intel.com"
+Received: from mga02.intel.com ([134.134.136.20]:21257 "EHLO mga02.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727591AbfKSDM4 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        id S1727597AbfKSDM4 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
         Mon, 18 Nov 2019 22:12:56 -0500
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
@@ -17,7 +17,7 @@ Received: from orsmga002.jf.intel.com ([10.7.209.21])
   by orsmga101.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 18 Nov 2019 19:12:42 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.68,322,1569308400"; 
-   d="scan'208";a="218105717"
+   d="scan'208";a="218105720"
 Received: from sjchrist-coffee.jf.intel.com ([10.54.74.41])
   by orsmga002.jf.intel.com with ESMTP; 18 Nov 2019 19:12:42 -0800
 From:   Sean Christopherson <sean.j.christopherson@intel.com>
@@ -44,9 +44,9 @@ Cc:     "H. Peter Anvin" <hpa@zytor.com>,
         kvm@vger.kernel.org, linux-edac@vger.kernel.org,
         linux-kselftest@vger.kernel.org, Borislav Petkov <bp@suse.de>,
         Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-Subject: [PATCH v3 06/19] x86/centaur: Use common IA32_FEATURE_CONTROL MSR initialization
-Date:   Mon, 18 Nov 2019 19:12:27 -0800
-Message-Id: <20191119031240.7779-7-sean.j.christopherson@intel.com>
+Subject: [PATCH v3 07/19] x86/zhaoxin: Use common IA32_FEATURE_CONTROL MSR initialization
+Date:   Mon, 18 Nov 2019 19:12:28 -0800
+Message-Id: <20191119031240.7779-8-sean.j.christopherson@intel.com>
 X-Mailer: git-send-email 2.24.0
 In-Reply-To: <20191119031240.7779-1-sean.j.christopherson@intel.com>
 References: <20191119031240.7779-1-sean.j.christopherson@intel.com>
@@ -58,39 +58,39 @@ List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
 Use the recently added IA32_FEATURE_CONTROL MSR initialization sequence
-to opportunstically enable VMX support when running on a Centaur CPU.
+to opportunstically enable VMX support when running on a Zhaoxin CPU.
 
 Signed-off-by: Sean Christopherson <sean.j.christopherson@intel.com>
 ---
  arch/x86/Kconfig.cpu          | 2 +-
- arch/x86/kernel/cpu/centaur.c | 2 ++
+ arch/x86/kernel/cpu/zhaoxin.c | 2 ++
  2 files changed, 3 insertions(+), 1 deletion(-)
 
 diff --git a/arch/x86/Kconfig.cpu b/arch/x86/Kconfig.cpu
-index aafc14a0abf7..9e4e41424dc2 100644
+index 9e4e41424dc2..e78f39adae7b 100644
 --- a/arch/x86/Kconfig.cpu
 +++ b/arch/x86/Kconfig.cpu
 @@ -389,7 +389,7 @@ config X86_DEBUGCTLMSR
  
  config X86_FEATURE_CONTROL_MSR
  	def_bool y
--	depends on CPU_SUP_INTEL
-+	depends on CPU_SUP_INTEL || CPU_SUP_CENTAUR
+-	depends on CPU_SUP_INTEL || CPU_SUP_CENTAUR
++	depends on CPU_SUP_INTEL || CPU_SUP_CENTAUR || CPU_SUP_ZHAOXIN
  
  menuconfig PROCESSOR_SELECT
  	bool "Supported processor vendors" if EXPERT
-diff --git a/arch/x86/kernel/cpu/centaur.c b/arch/x86/kernel/cpu/centaur.c
-index 14433ff5b828..a6ca4c31c1b6 100644
---- a/arch/x86/kernel/cpu/centaur.c
-+++ b/arch/x86/kernel/cpu/centaur.c
-@@ -250,6 +250,8 @@ static void init_centaur(struct cpuinfo_x86 *c)
+diff --git a/arch/x86/kernel/cpu/zhaoxin.c b/arch/x86/kernel/cpu/zhaoxin.c
+index 8e6f2f4b4afe..01b05a4a5a85 100644
+--- a/arch/x86/kernel/cpu/zhaoxin.c
++++ b/arch/x86/kernel/cpu/zhaoxin.c
+@@ -141,6 +141,8 @@ static void init_zhaoxin(struct cpuinfo_x86 *c)
  	set_cpu_cap(c, X86_FEATURE_LFENCE_RDTSC);
  #endif
  
 +	init_feature_control_msr(c);
 +
  	if (cpu_has(c, X86_FEATURE_VMX))
- 		centaur_detect_vmx_virtcap(c);
+ 		zhaoxin_detect_vmx_virtcap(c);
  }
 -- 
 2.24.0
