@@ -2,98 +2,180 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BC8BB103040
-	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Nov 2019 00:31:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 22554103055
+	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Nov 2019 00:39:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727038AbfKSXbG (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 19 Nov 2019 18:31:06 -0500
-Received: from mail-wm1-f66.google.com ([209.85.128.66]:50383 "EHLO
-        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726874AbfKSXbF (ORCPT
+        id S1727082AbfKSXjM (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 19 Nov 2019 18:39:12 -0500
+Received: from mail-qt1-f202.google.com ([209.85.160.202]:49222 "EHLO
+        mail-qt1-f202.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726948AbfKSXjM (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 19 Nov 2019 18:31:05 -0500
-Received: by mail-wm1-f66.google.com with SMTP id l17so5113385wmh.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 19 Nov 2019 15:31:04 -0800 (PST)
+        Tue, 19 Nov 2019 18:39:12 -0500
+Received: by mail-qt1-f202.google.com with SMTP id g13so15779357qtq.16
+        for <linux-kselftest@vger.kernel.org>; Tue, 19 Nov 2019 15:39:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=mP+0iqiXj77eONbT81jP0IEP9HdwZqjxx63AWCIxHNA=;
-        b=eWt1VHPn8CeyEJkHh8wfdDoWw5EBwvsVv+ooqf2AO/Zbwx52j4WyMuZ5MnEbfn+4Gi
-         KfL/jdy4ujXa0lrrB4mryex1DzfBRrRNcJJzcXW+RNbKutYVCpwkXIY0pylxxMgWm3Ht
-         M8VIf2ub0+jN+0s3ZGOz+lYWhR8yH/TtZfTuSaO9asxRMqzuDXYlks/kEkTgE/S/P53S
-         m5fYO4xeerkaV2wpfwkPh1m2WbLZs3cvqOti+OCNs09c0s4sHlZt4JrvGQ4JXuXf5oAH
-         EiOeSSVac8ZaFvRrrRNj9ba26sS3QxpitGEk2F+ZU+USScUYVseseeZx10PO67zMRmXt
-         SLsQ==
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=v88ei6S0wJCSuWhgUCtsKkdiH3vVNQzI6rAeWB+JwIg=;
+        b=nVyamhsnnw49KvDFXJqRcw24+36HKRxF7kRHa/oYiyRG4Z8oBVaLN+xKmh9d9E1s2K
+         u6XyPFga73VtusgKNCUPU9GaT2Z5UhqrBEPQSpT5DxL1rRj6OVhxlPqtcl983/Hp5Brf
+         85amkgIoeKTSJ/s4laVzmNCzQE8/Ul36XqKaQh+P/WqbbFRethcZDT4FhcHEmsH23Yy1
+         IrVfiVnW9gkh/UIS7SgEI65s9wIcSfjTyYmrXqJRxwxoUyfkKi1PYjg+dBLltIxc1EGc
+         BeihLMykTtyCc2aaOpK9pGJ78bL3/Q2itMkh13oXTJZPDHJ8vMCc2XC0UVREqaR4YqME
+         Pwyg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=mP+0iqiXj77eONbT81jP0IEP9HdwZqjxx63AWCIxHNA=;
-        b=bCQOGtc0+2Mk4VognlWzhdeDl0CUEWLUx1WlCV2cY7P6+TCTnFqvtaSFVppPc/TcDa
-         FiZTMIzTKzd2kC8JciCCY7LDncaTM3Dxi4GWTNFvB4TZKzJsPPmKDzyiZjLFaZiR6XST
-         /iDlkkYmQ96vG0FQhYgOrbP1qYDLSzZso6R6Px8qjlhEanIMIAs7+qnhXdaRIQDfIgBh
-         cNYRN1ktTyoXckSNASVW1sEyhMb+XBA4Kylam5wHkDP6u7Bz23qGEUrUYSgd/Dw1FTER
-         NWp6NyTr7+mbr448T8lkMHLUGyaMa+P6slAmjvHbOh1Ok3UmhOmmXauf3qjk/VpTOq8N
-         PfRw==
-X-Gm-Message-State: APjAAAXW89QHyI2M85g0Gw1sEE9Lejoks5dKKCJCyF10sWa7HiBMz4qm
-        lz8jLxP8ga9KURMW2ai2v3g3tOJ4wLFvDk+qjUFcbw==
-X-Google-Smtp-Source: APXvYqwRIvQ8PKVNdixUgQnuXSHFcZZKFRs7eXQkjHRIkNkDAd3sCFPQ/jj3utQ2CUNuE+/QqniO8zwM2uAD7sAvFhM=
-X-Received: by 2002:a05:600c:295:: with SMTP id 21mr369402wmk.43.1574206263262;
- Tue, 19 Nov 2019 15:31:03 -0800 (PST)
-MIME-Version: 1.0
-References: <20191119213834.175992-1-brendanhiggins@google.com>
-In-Reply-To: <20191119213834.175992-1-brendanhiggins@google.com>
-From:   David Gow <davidgow@google.com>
-Date:   Tue, 19 Nov 2019 15:30:51 -0800
-Message-ID: <CABVgOSn6bc=Rq50Y_Av+0gXTjyHuV+UaULNHicz16hp_uRmDsg@mail.gmail.com>
-Subject: Re: [PATCH linux-kselftest/test v1] Documentation: kunit: fix typos
- and gramatical errors
-To:     Brendan Higgins <brendanhiggins@google.com>
-Cc:     Shuah Khan <shuah@kernel.org>, kunit-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>, linux-doc@vger.kernel.org,
-        corbet@lwn.net, heidifahim@google.com,
-        Patricia Alfonso <trishalfonso@google.com>,
-        Randy Dunlap <rdunlap@infradead.org>
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=v88ei6S0wJCSuWhgUCtsKkdiH3vVNQzI6rAeWB+JwIg=;
+        b=VxAN93adWBKFvL70PaGPe8TLH/jX9JIMgeJPP/cbosZr/KPRlpFJHH4/f26sjsB8Es
+         gIPhcUsmkwqoe1BNe/49HmOSDjvuF8vsyb5BGBUL5YDbf7XNrDRYIqzMuSluAvAWkZfK
+         CtZGATKrzsvL9r8UiLdkzG/vIXNviZCFNEQJOUTCM5vLlr/EYtN8LoYDZnqBNoLVvdm3
+         Dra5Gu0SsBrSS4xEMTGJZWpTcDMrmUBNGf+rPNpvroNmDS9eX5yE/QJzcdU9I7ZspzGK
+         cVlkvHwPXIfMD2u+49sIIXj7PIyJQdV7UEvZQynl0Q48xUwNTeiRwv1huyzjPoqskz5u
+         u1/A==
+X-Gm-Message-State: APjAAAW8V4T/1aylPrI627ZA3LfXyWR7jemQfCR2bjLuPJ0rXUgtT0OE
+        pZO5KPyLr33WZm8nXZfsAD+9tYSPJlCkOuo3fg0UFA==
+X-Google-Smtp-Source: APXvYqzxdP/LNyepUZH2pNvrgYeyjUNcOVDfMPsW2DGEDSpW7QzxnPjZXdfyr+lf7q8ugUYTyiDGuJP5nwG4HEvt/E8s3A==
+X-Received: by 2002:ac8:7253:: with SMTP id l19mr430821qtp.363.1574206751015;
+ Tue, 19 Nov 2019 15:39:11 -0800 (PST)
+Date:   Tue, 19 Nov 2019 15:38:10 -0800
+Message-Id: <20191119233810.207487-1-brendanhiggins@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.24.0.432.g9d3f5f5b63-goog
+Subject: [PATCH linux-kselftest/test v2] Documentation: kunit: fix typos and
+ gramatical errors
+From:   Brendan Higgins <brendanhiggins@google.com>
+To:     shuah@kernel.org, davidgow@google.com
+Cc:     kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
+        corbet@lwn.net, heidifahim@google.com, trishalfonso@google.com,
+        Brendan Higgins <brendanhiggins@google.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Rinat Ibragimov <ibragimovrinat@mail.ru>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Nov 19, 2019 at 1:39 PM 'Brendan Higgins' via KUnit
-Development <kunit-dev@googlegroups.com> wrote:
->
-> Fix typos and gramatical errors in the Getting Started and Usage guide
-> for KUnit.
->
-> Reported-by: Randy Dunlap <rdunlap@infradead.org>
-> Link: https://patchwork.kernel.org/patch/11156481/
-> Signed-off-by: Brendan Higgins <brendanhiggins@google.com>
-> ---
->  Documentation/dev-tools/kunit/start.rst |  6 +++---
->  Documentation/dev-tools/kunit/usage.rst | 22 +++++++++++-----------
->  2 files changed, 14 insertions(+), 14 deletions(-)
->
+Fix typos and gramatical errors in the Getting Started and Usage guide
+for KUnit.
 
+Reported-by: Randy Dunlap <rdunlap@infradead.org>
+Link: https://patchwork.kernel.org/patch/11156481/
+Reported-by: Rinat Ibragimov <ibragimovrinat@mail.ru>
+Link: https://github.com/google/kunit-docs/issues/1
+Signed-off-by: Brendan Higgins <brendanhiggins@google.com>
 Reviewed-by: David Gow <davidgow@google.com>
+---
+ Documentation/dev-tools/kunit/start.rst |  8 ++++----
+ Documentation/dev-tools/kunit/usage.rst | 24 ++++++++++++------------
+ 2 files changed, 16 insertions(+), 16 deletions(-)
 
-These changes look good to me.
+diff --git a/Documentation/dev-tools/kunit/start.rst b/Documentation/dev-tools/kunit/start.rst
+index f4d9a4fa914f8..9d6db892c41c0 100644
+--- a/Documentation/dev-tools/kunit/start.rst
++++ b/Documentation/dev-tools/kunit/start.rst
+@@ -26,7 +26,7 @@ For more information on this wrapper (also called kunit_tool) checkout the
+ 
+ Creating a kunitconfig
+ ======================
+-The Python script is a thin wrapper around Kbuild as such, it needs to be
++The Python script is a thin wrapper around Kbuild. As such, it needs to be
+ configured with a ``kunitconfig`` file. This file essentially contains the
+ regular Kernel config, with the specific test targets as well.
+ 
+@@ -62,8 +62,8 @@ If everything worked correctly, you should see the following:
+ followed by a list of tests that are run. All of them should be passing.
+ 
+ .. note::
+-   Because it is building a lot of sources for the first time, the ``Building
+-   kunit kernel`` step may take a while.
++	Because it is building a lot of sources for the first time, the
++	``Building KUnit kernel`` step may take a while.
+ 
+ Writing your first test
+ =======================
+@@ -162,7 +162,7 @@ Now you can run the test:
+ 
+ .. code-block:: bash
+ 
+-	./tools/testing/kunit/kunit.py
++	./tools/testing/kunit/kunit.py run
+ 
+ You should see the following failure:
+ 
+diff --git a/Documentation/dev-tools/kunit/usage.rst b/Documentation/dev-tools/kunit/usage.rst
+index c6e69634e274b..b9a065ab681ee 100644
+--- a/Documentation/dev-tools/kunit/usage.rst
++++ b/Documentation/dev-tools/kunit/usage.rst
+@@ -16,7 +16,7 @@ Organization of this document
+ =============================
+ 
+ This document is organized into two main sections: Testing and Isolating
+-Behavior. The first covers what a unit test is and how to use KUnit to write
++Behavior. The first covers what unit tests are and how to use KUnit to write
+ them. The second covers how to use KUnit to isolate code and make it possible
+ to unit test code that was otherwise un-unit-testable.
+ 
+@@ -174,13 +174,13 @@ Test Suites
+ ~~~~~~~~~~~
+ 
+ Now obviously one unit test isn't very helpful; the power comes from having
+-many test cases covering all of your behaviors. Consequently it is common to
+-have many *similar* tests; in order to reduce duplication in these closely
+-related tests most unit testing frameworks provide the concept of a *test
+-suite*, in KUnit we call it a *test suite*; all it is is just a collection of
+-test cases for a unit of code with a set up function that gets invoked before
+-every test cases and then a tear down function that gets invoked after every
+-test case completes.
++many test cases covering all of a unit's behaviors. Consequently it is common
++to have many *similar* tests; in order to reduce duplication in these closely
++related tests most unit testing frameworks - including KUnit - provide the
++concept of a *test suite*. A *test suite* is just a collection of test cases
++for a unit of code with a set up function that gets invoked before every test
++case and then a tear down function that gets invoked after every test case
++completes.
+ 
+ Example:
+ 
+@@ -211,7 +211,7 @@ KUnit test framework.
+ .. note::
+    A test case will only be run if it is associated with a test suite.
+ 
+-For a more information on these types of things see the :doc:`api/test`.
++For more information on these types of things see the :doc:`api/test`.
+ 
+ Isolating Behavior
+ ==================
+@@ -338,7 +338,7 @@ We can easily test this code by *faking out* the underlying EEPROM:
+ 		return count;
+ 	}
+ 
+-	ssize_t fake_eeprom_write(struct eeprom *this, size_t offset, const char *buffer, size_t count)
++	ssize_t fake_eeprom_write(struct eeprom *parent, size_t offset, const char *buffer, size_t count)
+ 	{
+ 		struct fake_eeprom *this = container_of(parent, struct fake_eeprom, parent);
+ 
+@@ -454,7 +454,7 @@ KUnit on non-UML architectures
+ By default KUnit uses UML as a way to provide dependencies for code under test.
+ Under most circumstances KUnit's usage of UML should be treated as an
+ implementation detail of how KUnit works under the hood. Nevertheless, there
+-are instances where being able to run architecture specific code, or test
++are instances where being able to run architecture specific code or test
+ against real hardware is desirable. For these reasons KUnit supports running on
+ other architectures.
+ 
+@@ -557,7 +557,7 @@ run your tests on your hardware setup just by compiling for your architecture.
+ .. important::
+    Always prefer tests that run on UML to tests that only run under a particular
+    architecture, and always prefer tests that run under QEMU or another easy
+-   (and monitarily free) to obtain software environment to a specific piece of
++   (and monetarily free) to obtain software environment to a specific piece of
+    hardware.
+ 
+ Nevertheless, there are still valid reasons to write an architecture or hardware
+-- 
+2.24.0.432.g9d3f5f5b63-goog
 
-
-> diff --git a/Documentation/dev-tools/kunit/start.rst b/Documentation/dev-tools/kunit/start.rst
-> index f4d9a4fa914f8..db146c7d77490 100644
-> --- a/Documentation/dev-tools/kunit/start.rst
-> +++ b/Documentation/dev-tools/kunit/start.rst
-
-Could you also fix the kunit.py invocation on line 162, which should
-have "run" passed as an argument?
-See:
-https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git/tree/Documentation/dev-tools/kunit/start.rst?h=test#n162
-
-It should read "/tools/testing/kunit/kunit.py run".
-
-Thanks,
--- David
