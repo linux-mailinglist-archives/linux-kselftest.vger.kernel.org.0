@@ -2,274 +2,98 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C7C21021EC
-	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Nov 2019 11:19:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 81CB01022B7
+	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Nov 2019 12:15:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727646AbfKSKTS (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 19 Nov 2019 05:19:18 -0500
-Received: from mx2.suse.de ([195.135.220.15]:49868 "EHLO mx1.suse.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726555AbfKSKTS (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 19 Nov 2019 05:19:18 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id 737CFAE87;
-        Tue, 19 Nov 2019 10:19:13 +0000 (UTC)
-Received: by quack2.suse.cz (Postfix, from userid 1000)
-        id D586A1E47E5; Tue, 19 Nov 2019 11:19:10 +0100 (CET)
-Date:   Tue, 19 Nov 2019 11:19:10 +0100
-From:   Jan Kara <jack@suse.cz>
-To:     John Hubbard <jhubbard@nvidia.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn.topel@intel.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Dave Chinner <david@fromorbit.com>,
-        David Airlie <airlied@linux.ie>,
-        "David S . Miller" <davem@davemloft.net>,
-        Ira Weiny <ira.weiny@intel.com>, Jan Kara <jack@suse.cz>,
-        Jason Gunthorpe <jgg@ziepe.ca>, Jens Axboe <axboe@kernel.dk>,
-        Jonathan Corbet <corbet@lwn.net>,
-        =?iso-8859-1?B?Suly9G1l?= Glisse <jglisse@redhat.com>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Michal Hocko <mhocko@suse.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Paul Mackerras <paulus@samba.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Vlastimil Babka <vbabka@suse.cz>, bpf@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, kvm@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-rdma@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, netdev@vger.kernel.org,
-        linux-mm@kvack.org, LKML <linux-kernel@vger.kernel.org>,
-        Christoph Hellwig <hch@lst.de>,
-        "Aneesh Kumar K . V" <aneesh.kumar@linux.ibm.com>
-Subject: Re: [PATCH v6 02/24] mm/gup: factor out duplicate code from four
- routines
-Message-ID: <20191119101910.GC25605@quack2.suse.cz>
-References: <20191119081643.1866232-1-jhubbard@nvidia.com>
- <20191119081643.1866232-3-jhubbard@nvidia.com>
+        id S1727627AbfKSLPP (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 19 Nov 2019 06:15:15 -0500
+Received: from mail.skyhub.de ([5.9.137.197]:50036 "EHLO mail.skyhub.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725904AbfKSLPO (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 19 Nov 2019 06:15:14 -0500
+Received: from zn.tnic (p200300EC2F0EDC00DDCC46785D6B318A.dip0.t-ipconnect.de [IPv6:2003:ec:2f0e:dc00:ddcc:4678:5d6b:318a])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id ED7521EC0CAF;
+        Tue, 19 Nov 2019 12:15:12 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1574162113;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=G8bIPI7eMqwT4OGw64KYwiD4+/Nz3AJ6bpqyvoHxzGE=;
+        b=TCAKKh4JmkRfTPQI9eYekH1jkcNRfLWs2H7MPLEUB7wha5+Lq494+gA97L1SeLaGW53dkj
+        7lYAoRjzC4VBvHeUtDK5doEfPxgW2MvVKPiGQpKSb83sxjMbFd2mMgulnY9OmgO7vGuqPs
+        5EISsFBde5P8qseJj7C9XA9+xybjNJw=
+Date:   Tue, 19 Nov 2019 12:15:08 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Sean Christopherson <sean.j.christopherson@intel.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Radim =?utf-8?B?S3LEjW3DocWZ?= <rkrcmar@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Tony Luck <tony.luck@intel.com>,
+        Tony W Wang-oc <TonyWWang-oc@zhaoxin.com>,
+        Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, linux-edac@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+Subject: Re: [PATCH v3 01/19] x86/msr-index: Clean up bit defines for
+ IA32_FEATURE_CONTROL MSR
+Message-ID: <20191119111445.GB27787@zn.tnic>
+References: <20191119031240.7779-1-sean.j.christopherson@intel.com>
+ <20191119031240.7779-2-sean.j.christopherson@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20191119081643.1866232-3-jhubbard@nvidia.com>
+In-Reply-To: <20191119031240.7779-2-sean.j.christopherson@intel.com>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue 19-11-19 00:16:21, John Hubbard wrote:
-> There are four locations in gup.c that have a fair amount of code
-> duplication. This means that changing one requires making the same
-> changes in four places, not to mention reading the same code four
-> times, and wondering if there are subtle differences.
+On Mon, Nov 18, 2019 at 07:12:22PM -0800, Sean Christopherson wrote:
+> As pointed out by Boris, the defines for bits in IA32_FEATURE_CONTROL
+> are quite a mouthful, especially the VMX bits which must differentiate
+> between enabling VMX inside and outside SMX (TXT) operation.  Rename the
+> bit defines to abbreviate FEATURE_CONTROL as FEAT_CTL so that they're a
+> little friendlier on the eyes.  Keep the full name for the MSR itself to
+> help even the most obtuse reader decipher the abbreviation, and to match
+> the name used by the Intel SDM.
 > 
-> Factor out the common code into static functions, thus reducing the
-> overall line count and the code's complexity.
+> Opportunistically fix a few other annoyances with the defines:
 > 
-> Also, take the opportunity to slightly improve the efficiency of the
-> error cases, by doing a mass subtraction of the refcount, surrounded
-> by get_page()/put_page().
-> 
-> Also, further simplify (slightly), by waiting until the the successful
-> end of each routine, to increment *nr.
-> 
-> Reviewed-by: Jérôme Glisse <jglisse@redhat.com>
-> Cc: Jan Kara <jack@suse.cz>
-> Cc: Ira Weiny <ira.weiny@intel.com>
-> Cc: Christoph Hellwig <hch@lst.de>
-> Cc: Aneesh Kumar K.V <aneesh.kumar@linux.ibm.com>
-> Signed-off-by: John Hubbard <jhubbard@nvidia.com>
+>   - Relocate the bit defines so that they immediately follow the MSR
+>     define, e.g. aren't mistaken as belonging to MISC_FEATURE_CONTROL.
+>   - Add whitespace around the block of feature control defines to make
+>     it clear that FEAT_CTL is indeed short for FEATURE_CONTROL.
+>   - Use BIT() instead of manually encoding the bit shift.
+>   - Use "VMX" instead of "VMXON" to match the SDM.
+>   - Append "_ENABLED" to the LMCE bit to be consistent with the verbiage
+>     used for all other feature control bits.  (LCME is an acronym for
+>     Local Machine Check Exception, i.e. LMCE_ENABLED is not redundant).
 
-Looks good to me now! You can add:
+Sure but SDM calls it LMCE_ON. What is our current decision on sticking
+to SDM bit names? I guess we don't...
 
-Reviewed-by: Jan Kara <jack@suse.cz>
+But above you say "to match the SDM"...
 
-								Honza
+Thx.
 
-> ---
->  mm/gup.c | 91 ++++++++++++++++++++++----------------------------------
->  1 file changed, 36 insertions(+), 55 deletions(-)
-> 
-> diff --git a/mm/gup.c b/mm/gup.c
-> index 85caf76b3012..f3c7d6625817 100644
-> --- a/mm/gup.c
-> +++ b/mm/gup.c
-> @@ -1969,6 +1969,25 @@ static int __gup_device_huge_pud(pud_t pud, pud_t *pudp, unsigned long addr,
->  }
->  #endif
->  
-> +static int __record_subpages(struct page *page, unsigned long addr,
-> +			     unsigned long end, struct page **pages)
-> +{
-> +	int nr;
-> +
-> +	for (nr = 0; addr != end; addr += PAGE_SIZE)
-> +		pages[nr++] = page++;
-> +
-> +	return nr;
-> +}
-> +
-> +static void put_compound_head(struct page *page, int refs)
-> +{
-> +	/* Do a get_page() first, in case refs == page->_refcount */
-> +	get_page(page);
-> +	page_ref_sub(page, refs);
-> +	put_page(page);
-> +}
-> +
->  #ifdef CONFIG_ARCH_HAS_HUGEPD
->  static unsigned long hugepte_addr_end(unsigned long addr, unsigned long end,
->  				      unsigned long sz)
-> @@ -1998,32 +2017,20 @@ static int gup_hugepte(pte_t *ptep, unsigned long sz, unsigned long addr,
->  	/* hugepages are never "special" */
->  	VM_BUG_ON(!pfn_valid(pte_pfn(pte)));
->  
-> -	refs = 0;
->  	head = pte_page(pte);
-> -
->  	page = head + ((addr & (sz-1)) >> PAGE_SHIFT);
-> -	do {
-> -		VM_BUG_ON(compound_head(page) != head);
-> -		pages[*nr] = page;
-> -		(*nr)++;
-> -		page++;
-> -		refs++;
-> -	} while (addr += PAGE_SIZE, addr != end);
-> +	refs = __record_subpages(page, addr, end, pages + *nr);
->  
->  	head = try_get_compound_head(head, refs);
-> -	if (!head) {
-> -		*nr -= refs;
-> +	if (!head)
->  		return 0;
-> -	}
->  
->  	if (unlikely(pte_val(pte) != pte_val(*ptep))) {
-> -		/* Could be optimized better */
-> -		*nr -= refs;
-> -		while (refs--)
-> -			put_page(head);
-> +		put_compound_head(head, refs);
->  		return 0;
->  	}
->  
-> +	*nr += refs;
->  	SetPageReferenced(head);
->  	return 1;
->  }
-> @@ -2071,28 +2078,19 @@ static int gup_huge_pmd(pmd_t orig, pmd_t *pmdp, unsigned long addr,
->  					     pages, nr);
->  	}
->  
-> -	refs = 0;
->  	page = pmd_page(orig) + ((addr & ~PMD_MASK) >> PAGE_SHIFT);
-> -	do {
-> -		pages[*nr] = page;
-> -		(*nr)++;
-> -		page++;
-> -		refs++;
-> -	} while (addr += PAGE_SIZE, addr != end);
-> +	refs = __record_subpages(page, addr, end, pages + *nr);
->  
->  	head = try_get_compound_head(pmd_page(orig), refs);
-> -	if (!head) {
-> -		*nr -= refs;
-> +	if (!head)
->  		return 0;
-> -	}
->  
->  	if (unlikely(pmd_val(orig) != pmd_val(*pmdp))) {
-> -		*nr -= refs;
-> -		while (refs--)
-> -			put_page(head);
-> +		put_compound_head(head, refs);
->  		return 0;
->  	}
->  
-> +	*nr += refs;
->  	SetPageReferenced(head);
->  	return 1;
->  }
-> @@ -2114,28 +2112,19 @@ static int gup_huge_pud(pud_t orig, pud_t *pudp, unsigned long addr,
->  					     pages, nr);
->  	}
->  
-> -	refs = 0;
->  	page = pud_page(orig) + ((addr & ~PUD_MASK) >> PAGE_SHIFT);
-> -	do {
-> -		pages[*nr] = page;
-> -		(*nr)++;
-> -		page++;
-> -		refs++;
-> -	} while (addr += PAGE_SIZE, addr != end);
-> +	refs = __record_subpages(page, addr, end, pages + *nr);
->  
->  	head = try_get_compound_head(pud_page(orig), refs);
-> -	if (!head) {
-> -		*nr -= refs;
-> +	if (!head)
->  		return 0;
-> -	}
->  
->  	if (unlikely(pud_val(orig) != pud_val(*pudp))) {
-> -		*nr -= refs;
-> -		while (refs--)
-> -			put_page(head);
-> +		put_compound_head(head, refs);
->  		return 0;
->  	}
->  
-> +	*nr += refs;
->  	SetPageReferenced(head);
->  	return 1;
->  }
-> @@ -2151,28 +2140,20 @@ static int gup_huge_pgd(pgd_t orig, pgd_t *pgdp, unsigned long addr,
->  		return 0;
->  
->  	BUILD_BUG_ON(pgd_devmap(orig));
-> -	refs = 0;
-> +
->  	page = pgd_page(orig) + ((addr & ~PGDIR_MASK) >> PAGE_SHIFT);
-> -	do {
-> -		pages[*nr] = page;
-> -		(*nr)++;
-> -		page++;
-> -		refs++;
-> -	} while (addr += PAGE_SIZE, addr != end);
-> +	refs = __record_subpages(page, addr, end, pages + *nr);
->  
->  	head = try_get_compound_head(pgd_page(orig), refs);
-> -	if (!head) {
-> -		*nr -= refs;
-> +	if (!head)
->  		return 0;
-> -	}
->  
->  	if (unlikely(pgd_val(orig) != pgd_val(*pgdp))) {
-> -		*nr -= refs;
-> -		while (refs--)
-> -			put_page(head);
-> +		put_compound_head(head, refs);
->  		return 0;
->  	}
->  
-> +	*nr += refs;
->  	SetPageReferenced(head);
->  	return 1;
->  }
-> -- 
-> 2.24.0
-> 
 -- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
