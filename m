@@ -2,27 +2,28 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A52381012E3
-	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Nov 2019 06:17:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CB20F1019EF
+	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Nov 2019 08:00:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726132AbfKSFRb (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 19 Nov 2019 00:17:31 -0500
-Received: from hqemgate14.nvidia.com ([216.228.121.143]:5661 "EHLO
-        hqemgate14.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725280AbfKSFRa (ORCPT
+        id S1727515AbfKSHAg (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 19 Nov 2019 02:00:36 -0500
+Received: from hqemgate15.nvidia.com ([216.228.121.64]:14990 "EHLO
+        hqemgate15.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726792AbfKSHAg (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 19 Nov 2019 00:17:30 -0500
-Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqemgate14.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5dd37aeb0000>; Mon, 18 Nov 2019 21:17:32 -0800
+        Tue, 19 Nov 2019 02:00:36 -0500
+Received: from hqpgpgate102.nvidia.com (Not Verified[216.228.121.13]) by hqemgate15.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5dd3930f0000>; Mon, 18 Nov 2019 23:00:32 -0800
 Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate101.nvidia.com (PGP Universal service);
-  Mon, 18 Nov 2019 21:17:29 -0800
+  by hqpgpgate102.nvidia.com (PGP Universal service);
+  Mon, 18 Nov 2019 23:00:34 -0800
 X-PGP-Universal: processed;
-        by hqpgpgate101.nvidia.com on Mon, 18 Nov 2019 21:17:29 -0800
+        by hqpgpgate102.nvidia.com on Mon, 18 Nov 2019 23:00:34 -0800
 Received: from [10.110.48.28] (10.124.1.5) by HQMAIL107.nvidia.com
  (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Tue, 19 Nov
- 2019 05:17:28 +0000
-Subject: Re: [PATCH v5 10/24] mm/gup: introduce pin_user_pages*() and FOLL_PIN
+ 2019 07:00:34 +0000
+Subject: Re: [PATCH v5 02/24] mm/gup: factor out duplicate code from four
+ routines
 To:     Jan Kara <jack@suse.cz>
 CC:     Andrew Morton <akpm@linux-foundation.org>,
         Al Viro <viro@zeniv.linux.org.uk>,
@@ -53,72 +54,111 @@ CC:     Andrew Morton <akpm@linux-foundation.org>,
         <linux-media@vger.kernel.org>, <linux-rdma@vger.kernel.org>,
         <linuxppc-dev@lists.ozlabs.org>, <netdev@vger.kernel.org>,
         <linux-mm@kvack.org>, LKML <linux-kernel@vger.kernel.org>,
-        Mike Rapoport <rppt@linux.ibm.com>
+        Christoph Hellwig <hch@lst.de>,
+        "Aneesh Kumar K . V" <aneesh.kumar@linux.ibm.com>
 References: <20191115055340.1825745-1-jhubbard@nvidia.com>
- <20191115055340.1825745-11-jhubbard@nvidia.com>
- <20191118101601.GF17319@quack2.suse.cz>
-From:   John Hubbard <jhubbard@nvidia.com>
+ <20191115055340.1825745-3-jhubbard@nvidia.com>
+ <20191118094604.GC17319@quack2.suse.cz>
 X-Nvconfidentiality: public
-Message-ID: <aa15a76f-7054-2db2-4a47-8fbe1594295a@nvidia.com>
-Date:   Mon, 18 Nov 2019 21:17:27 -0800
+From:   John Hubbard <jhubbard@nvidia.com>
+Message-ID: <152e2ea9-edd9-f868-7731-ff467d692f5f@nvidia.com>
+Date:   Mon, 18 Nov 2019 23:00:33 -0800
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.2.2
 MIME-Version: 1.0
-In-Reply-To: <20191118101601.GF17319@quack2.suse.cz>
+In-Reply-To: <20191118094604.GC17319@quack2.suse.cz>
 X-Originating-IP: [10.124.1.5]
-X-ClientProxiedBy: HQMAIL105.nvidia.com (172.20.187.12) To
+X-ClientProxiedBy: HQMAIL111.nvidia.com (172.20.187.18) To
  HQMAIL107.nvidia.com (172.20.187.13)
 Content-Type: text/plain; charset="utf-8"
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1574140652; bh=j4L4ESflFWPcWXUSa4QBFr0g8LzukvpI57j3tX0u+LI=;
-        h=X-PGP-Universal:Subject:To:CC:References:From:X-Nvconfidentiality:
+        t=1574146832; bh=u3YCRE77HsuXbqK9BxFmzDLl8JhQHMG9gXXaYRfagTQ=;
+        h=X-PGP-Universal:Subject:To:CC:References:X-Nvconfidentiality:From:
          Message-ID:Date:User-Agent:MIME-Version:In-Reply-To:
          X-Originating-IP:X-ClientProxiedBy:Content-Type:Content-Language:
          Content-Transfer-Encoding;
-        b=HbjIjhLqDGlCz9fdO9WJ5XZ1MylRhdOt3hOrXOPV4rhTnQVDZpbMvOZlSwNGJc66E
-         /dS/T8ygBehTtSzMJwZ3TOTHElFkCJKdPHvXGZaLpQt9mjPgsblK2PBNnMrg02Wmdh
-         9Qm8oCkWiYkFORrigI0hEzL7aY7iY3cHZ1DrJYjhRQ5sx+Tmm0Tw8QlCh7Z2iKTLps
-         yMslWIbYXkh6S/YZKISH7oHSmmR+hcZRdC+ZCjemhpD6kLdzSXTQ0ykjer3SCrjsmC
-         1w7ai76vYnn+iNTaSLHytmXdlQYChVn5NpYDDm4H81+ayvHDf9eTllSFjtIJNz8Xoj
-         cb1UR17mTvf1w==
+        b=OHB+eUp2jQQmHLrGYBTtAkydhQax1jgPbRIdqXv/zT7mJheOoxm2jC/o00J+31bDd
+         psR1uWZTYTlZpkmYbJIlMzoHbpxnwxoe7ZrZ8UMQNDddfR1HU1k+hUj3JCOx3ZRd5b
+         XT8Ag7PAkGX6G4pIQ7geJmQblkDOtgu1RTN+An2f8z0fTBevVuF5GINewI0N+iPfcv
+         YgagSYh5LQVW6KL8izWZSAMBRDSFlAEl3uHonusWk1CkuRAUgvh73saFcEMPgIKbUo
+         7msrJOumHG3EP3Mzt2Z3Dov3XH2Wq2MWpaj0JPNxYk4UIQaUft9LMOT0FAc0/WGi6i
+         OtciRBna4adWA==
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 11/18/19 2:16 AM, Jan Kara wrote:
-> On Thu 14-11-19 21:53:26, John Hubbard wrote:
->>  /*
->> - * NOTE on FOLL_LONGTERM:
->> + * FOLL_PIN and FOLL_LONGTERM may be used in various combinations with each
->> + * other. Here is what they mean, and how to use them:
->>   *
->>   * FOLL_LONGTERM indicates that the page will be held for an indefinite time
->> - * period _often_ under userspace control.  This is contrasted with
->> - * iov_iter_get_pages() where usages which are transient.
->> + * period _often_ under userspace control.  This is in contrast to
->> + * iov_iter_get_pages(), where usages which are transient.
->                           ^^^ when you touch this, please fix also the
-> second sentense. It doesn't quite make sense to me... I'd probably write
-> there "whose usages are transient" but maybe you can come up with something
-> even better.
+On 11/18/19 1:46 AM, Jan Kara wrote:
+> On Thu 14-11-19 21:53:18, John Hubbard wrote:
+>> There are four locations in gup.c that have a fair amount of code
+>> duplication. This means that changing one requires making the same
+>> changes in four places, not to mention reading the same code four
+>> times, and wondering if there are subtle differences.
+>>
+>> Factor out the common code into static functions, thus reducing the
+>> overall line count and the code's complexity.
+>>
+>> Also, take the opportunity to slightly improve the efficiency of the
+>> error cases, by doing a mass subtraction of the refcount, surrounded
+>> by get_page()/put_page().
+>>
+>> Also, further simplify (slightly), by waiting until the the successful
+>> end of each routine, to increment *nr.
+>>
+>> Reviewed-by: J=C3=A9r=C3=B4me Glisse <jglisse@redhat.com>
+>> Cc: Jan Kara <jack@suse.cz>
+>> Cc: Ira Weiny <ira.weiny@intel.com>
+>> Cc: Christoph Hellwig <hch@lst.de>
+>> Cc: Aneesh Kumar K.V <aneesh.kumar@linux.ibm.com>
+>> Signed-off-by: John Hubbard <jhubbard@nvidia.com>
+>> ---
+>>  mm/gup.c | 95 ++++++++++++++++++++++++--------------------------------
+>>  1 file changed, 40 insertions(+), 55 deletions(-)
+>>
+>> diff --git a/mm/gup.c b/mm/gup.c
+>> index 85caf76b3012..858541ea30ce 100644
+>> --- a/mm/gup.c
+>> +++ b/mm/gup.c
+>> @@ -1969,6 +1969,29 @@ static int __gup_device_huge_pud(pud_t pud, pud_t=
+ *pudp, unsigned long addr,
+>>  }
+>>  #endif
+>> =20
+>> +static int __record_subpages(struct page *page, unsigned long addr,
+>> +			     unsigned long end, struct page **pages)
+>> +{
+>> +	int nr =3D 0;
+>> +	int nr_recorded_pages =3D 0;
+>> +
+>> +	do {
+>> +		pages[nr] =3D page;
+>> +		nr++;
+>> +		page++;
+>> +		nr_recorded_pages++;
+>> +	} while (addr +=3D PAGE_SIZE, addr !=3D end);
+>> +	return nr_recorded_pages;
+>=20
+> nr =3D=3D nr_recorded_pages so no need for both... BTW, structuring this =
+as a
+> for loop would be probably more logical and shorter now:
+>=20
+> 	for (nr =3D 0; addr !=3D end; addr +=3D PAGE_SIZE)
+> 		pages[nr++] =3D page++;
+> 	return nr;
+>=20
 
-Fixed, using your wording, as I didn't see any obvious improvements beyond that.
-
-
+Nice touch, I've applied it.
 
 thanks,
--- 
+--=20
 John Hubbard
 NVIDIA
 
 
-> 
-> Otherwise the patch looks good to me so feel free to add:
-> 
-> Reviewed-by: Jan Kara <jack@suse.cz>
-> 
+
+> The rest of the patch looks good to me.
+>=20
 > 								Honza
-> 
+>=20
