@@ -2,22 +2,22 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 35D711011C0
-	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Nov 2019 04:13:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F1A701011D2
+	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Nov 2019 04:13:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727671AbfKSDNA (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 18 Nov 2019 22:13:00 -0500
+        id S1727777AbfKSDNe (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 18 Nov 2019 22:13:34 -0500
 Received: from mga02.intel.com ([134.134.136.20]:21246 "EHLO mga02.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727659AbfKSDNA (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 18 Nov 2019 22:13:00 -0500
+        id S1727645AbfKSDM6 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 18 Nov 2019 22:12:58 -0500
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
 Received: from orsmga002.jf.intel.com ([10.7.209.21])
   by orsmga101.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 18 Nov 2019 19:12:43 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.68,322,1569308400"; 
-   d="scan'208";a="218105754"
+   d="scan'208";a="218105757"
 Received: from sjchrist-coffee.jf.intel.com ([10.54.74.41])
   by orsmga002.jf.intel.com with ESMTP; 18 Nov 2019 19:12:43 -0800
 From:   Sean Christopherson <sean.j.christopherson@intel.com>
@@ -44,9 +44,9 @@ Cc:     "H. Peter Anvin" <hpa@zytor.com>,
         kvm@vger.kernel.org, linux-edac@vger.kernel.org,
         linux-kselftest@vger.kernel.org, Borislav Petkov <bp@suse.de>,
         Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-Subject: [PATCH v3 18/19] perf/x86: Provide stubs of KVM helpers for non-Intel CPUs
-Date:   Mon, 18 Nov 2019 19:12:39 -0800
-Message-Id: <20191119031240.7779-19-sean.j.christopherson@intel.com>
+Subject: [PATCH v3 19/19] KVM: VMX: Allow KVM_INTEL when building for Centaur and/or Zhaoxin CPUs
+Date:   Mon, 18 Nov 2019 19:12:40 -0800
+Message-Id: <20191119031240.7779-20-sean.j.christopherson@intel.com>
 X-Mailer: git-send-email 2.24.0
 In-Reply-To: <20191119031240.7779-1-sean.j.christopherson@intel.com>
 References: <20191119031240.7779-1-sean.j.christopherson@intel.com>
@@ -57,68 +57,37 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Provide stubs for perf_guest_get_msrs() and intel_pt_handle_vmx() when
-building without support for Intel CPUs, i.e. CPU_SUP_INTEL=n.  Lack of
-stubs is not currently a problem as the only user, KVM_INTEL, takes a
-dependency on CPU_SUP_INTEL=y.  Provide the stubs for all CPUs so that
-KVM_INTEL can be built for any CPU with compatible hardware support,
-e.g. Centuar and Zhaoxin CPUs.
-
-Note, the existing stub for perf_guest_get_msrs() is essentially dead
-code as KVM selects CONFIG_PERF_EVENTS, i.e. the only user guarantees
-the full implementation is built.
+Change the dependency for KVM_INTEL, i.e. KVM w/ VMX, from Intel CPUs to
+any CPU that has IA32_FEATURE_CONTROL MSR and thus VMX functionality.
+This effectively allows building KVM_INTEL for Centaur and Zhaoxin CPUs.
 
 Signed-off-by: Sean Christopherson <sean.j.christopherson@intel.com>
 ---
- arch/x86/include/asm/perf_event.h | 22 +++++++++++++++-------
- 1 file changed, 15 insertions(+), 7 deletions(-)
+ arch/x86/kvm/Kconfig | 10 ++++------
+ 1 file changed, 4 insertions(+), 6 deletions(-)
 
-diff --git a/arch/x86/include/asm/perf_event.h b/arch/x86/include/asm/perf_event.h
-index ee26e9215f18..29964b0e1075 100644
---- a/arch/x86/include/asm/perf_event.h
-+++ b/arch/x86/include/asm/perf_event.h
-@@ -322,17 +322,10 @@ struct perf_guest_switch_msr {
- 	u64 host, guest;
- };
+diff --git a/arch/x86/kvm/Kconfig b/arch/x86/kvm/Kconfig
+index 840e12583b85..f364efe324ce 100644
+--- a/arch/x86/kvm/Kconfig
++++ b/arch/x86/kvm/Kconfig
+@@ -60,13 +60,11 @@ config KVM
+ 	  If unsure, say N.
  
--extern struct perf_guest_switch_msr *perf_guest_get_msrs(int *nr);
- extern void perf_get_x86_pmu_capability(struct x86_pmu_capability *cap);
- extern void perf_check_microcode(void);
- extern int x86_perf_rdpmc_index(struct perf_event *event);
- #else
--static inline struct perf_guest_switch_msr *perf_guest_get_msrs(int *nr)
--{
--	*nr = 0;
--	return NULL;
--}
--
- static inline void perf_get_x86_pmu_capability(struct x86_pmu_capability *cap)
- {
- 	memset(cap, 0, sizeof(*cap));
-@@ -342,8 +335,23 @@ static inline void perf_events_lapic_init(void)	{ }
- static inline void perf_check_microcode(void) { }
- #endif
+ config KVM_INTEL
+-	tristate "KVM for Intel processors support"
+-	depends on KVM
+-	# for perf_guest_get_msrs():
+-	depends on CPU_SUP_INTEL
++	tristate "KVM for Intel (and compatible) processors support"
++	depends on KVM && X86_FEATURE_CONTROL_MSR
+ 	---help---
+-	  Provides support for KVM on Intel processors equipped with the VT
+-	  extensions.
++	  Provides support for KVM on processors equipped with Intel's VT
++	  extensions, a.k.a. Virtual Machine Extensions (VMX).
  
-+#if defined(CONFIG_PERF_EVENTS) && defined(CONFIG_CPU_SUP_INTEL)
-+extern struct perf_guest_switch_msr *perf_guest_get_msrs(int *nr);
-+#else
-+static inline struct perf_guest_switch_msr *perf_guest_get_msrs(int *nr)
-+{
-+	*nr = 0;
-+	return NULL;
-+}
-+#endif
-+
- #ifdef CONFIG_CPU_SUP_INTEL
-  extern void intel_pt_handle_vmx(int on);
-+#else
-+static inline void intel_pt_handle_vmx(int on)
-+{
-+
-+}
- #endif
- 
- #if defined(CONFIG_PERF_EVENTS) && defined(CONFIG_CPU_SUP_AMD)
+ 	  To compile this as a module, choose M here: the module
+ 	  will be called kvm-intel.
 -- 
 2.24.0
 
