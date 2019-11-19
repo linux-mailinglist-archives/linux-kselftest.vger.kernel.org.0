@@ -2,102 +2,123 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6764C1012C3
-	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Nov 2019 06:03:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A52381012E3
+	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Nov 2019 06:17:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726540AbfKSFDW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 19 Nov 2019 00:03:22 -0500
-Received: from mga14.intel.com ([192.55.52.115]:8390 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726170AbfKSFDW (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 19 Nov 2019 00:03:22 -0500
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 18 Nov 2019 21:03:18 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.68,322,1569308400"; 
-   d="scan'208";a="407626283"
-Received: from sjchrist-coffee.jf.intel.com (HELO linux.intel.com) ([10.54.74.41])
-  by fmsmga006.fm.intel.com with ESMTP; 18 Nov 2019 21:03:17 -0800
-Date:   Mon, 18 Nov 2019 21:03:17 -0800
-From:   Sean Christopherson <sean.j.christopherson@intel.com>
-To:     Kai Huang <kai.huang@linux.intel.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Radim =?utf-8?B?S3LEjW3DocWZ?= <rkrcmar@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Tony Luck <tony.luck@intel.com>,
-        Tony W Wang-oc <TonyWWang-oc@zhaoxin.com>,
-        Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, linux-edac@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, Borislav Petkov <bp@suse.de>,
-        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-Subject: Re: [PATCH v3 04/19] x86/intel: Initialize IA32_FEATURE_CONTROL MSR
- at boot
-Message-ID: <20191119050317.GF23085@linux.intel.com>
-References: <20191119031240.7779-1-sean.j.christopherson@intel.com>
- <20191119031240.7779-5-sean.j.christopherson@intel.com>
- <17a1831a3a72fb87ce2a35689e07ff517c4bdf99.camel@linux.intel.com>
+        id S1726132AbfKSFRb (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 19 Nov 2019 00:17:31 -0500
+Received: from hqemgate14.nvidia.com ([216.228.121.143]:5661 "EHLO
+        hqemgate14.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725280AbfKSFRa (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 19 Nov 2019 00:17:30 -0500
+Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqemgate14.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5dd37aeb0000>; Mon, 18 Nov 2019 21:17:32 -0800
+Received: from hqmail.nvidia.com ([172.20.161.6])
+  by hqpgpgate101.nvidia.com (PGP Universal service);
+  Mon, 18 Nov 2019 21:17:29 -0800
+X-PGP-Universal: processed;
+        by hqpgpgate101.nvidia.com on Mon, 18 Nov 2019 21:17:29 -0800
+Received: from [10.110.48.28] (10.124.1.5) by HQMAIL107.nvidia.com
+ (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Tue, 19 Nov
+ 2019 05:17:28 +0000
+Subject: Re: [PATCH v5 10/24] mm/gup: introduce pin_user_pages*() and FOLL_PIN
+To:     Jan Kara <jack@suse.cz>
+CC:     Andrew Morton <akpm@linux-foundation.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Dave Chinner <david@fromorbit.com>,
+        David Airlie <airlied@linux.ie>,
+        "David S . Miller" <davem@davemloft.net>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>, Jens Axboe <axboe@kernel.dk>,
+        Jonathan Corbet <corbet@lwn.net>,
+        =?UTF-8?B?SsOpcsO0bWUgR2xpc3Nl?= <jglisse@redhat.com>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Michal Hocko <mhocko@suse.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Paul Mackerras <paulus@samba.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Vlastimil Babka <vbabka@suse.cz>, <bpf@vger.kernel.org>,
+        <dri-devel@lists.freedesktop.org>, <kvm@vger.kernel.org>,
+        <linux-block@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+        <linux-fsdevel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+        <linux-media@vger.kernel.org>, <linux-rdma@vger.kernel.org>,
+        <linuxppc-dev@lists.ozlabs.org>, <netdev@vger.kernel.org>,
+        <linux-mm@kvack.org>, LKML <linux-kernel@vger.kernel.org>,
+        Mike Rapoport <rppt@linux.ibm.com>
+References: <20191115055340.1825745-1-jhubbard@nvidia.com>
+ <20191115055340.1825745-11-jhubbard@nvidia.com>
+ <20191118101601.GF17319@quack2.suse.cz>
+From:   John Hubbard <jhubbard@nvidia.com>
+X-Nvconfidentiality: public
+Message-ID: <aa15a76f-7054-2db2-4a47-8fbe1594295a@nvidia.com>
+Date:   Mon, 18 Nov 2019 21:17:27 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.2.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <17a1831a3a72fb87ce2a35689e07ff517c4bdf99.camel@linux.intel.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
+In-Reply-To: <20191118101601.GF17319@quack2.suse.cz>
+X-Originating-IP: [10.124.1.5]
+X-ClientProxiedBy: HQMAIL105.nvidia.com (172.20.187.12) To
+ HQMAIL107.nvidia.com (172.20.187.13)
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1574140652; bh=j4L4ESflFWPcWXUSa4QBFr0g8LzukvpI57j3tX0u+LI=;
+        h=X-PGP-Universal:Subject:To:CC:References:From:X-Nvconfidentiality:
+         Message-ID:Date:User-Agent:MIME-Version:In-Reply-To:
+         X-Originating-IP:X-ClientProxiedBy:Content-Type:Content-Language:
+         Content-Transfer-Encoding;
+        b=HbjIjhLqDGlCz9fdO9WJ5XZ1MylRhdOt3hOrXOPV4rhTnQVDZpbMvOZlSwNGJc66E
+         /dS/T8ygBehTtSzMJwZ3TOTHElFkCJKdPHvXGZaLpQt9mjPgsblK2PBNnMrg02Wmdh
+         9Qm8oCkWiYkFORrigI0hEzL7aY7iY3cHZ1DrJYjhRQ5sx+Tmm0Tw8QlCh7Z2iKTLps
+         yMslWIbYXkh6S/YZKISH7oHSmmR+hcZRdC+ZCjemhpD6kLdzSXTQ0ykjer3SCrjsmC
+         1w7ai76vYnn+iNTaSLHytmXdlQYChVn5NpYDDm4H81+ayvHDf9eTllSFjtIJNz8Xoj
+         cb1UR17mTvf1w==
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Nov 19, 2019 at 05:41:49PM +1300, Kai Huang wrote:
-> On Mon, 2019-11-18 at 19:12 -0800, Sean Christopherson wrote:
-> > +	/*
-> > +	 * Enable VMX if and only if the kernel may do VMXON at some point,
-> > +	 * i.e. KVM is enabled, to avoid unnecessarily adding an attack vector
-> > +	 * for the kernel, e.g. using VMX to hide malicious code.
-> > +	 */
-> > +	if (cpu_has(c, X86_FEATURE_VMX) && IS_ENABLED(CONFIG_KVM)) {
+On 11/18/19 2:16 AM, Jan Kara wrote:
+> On Thu 14-11-19 21:53:26, John Hubbard wrote:
+>>  /*
+>> - * NOTE on FOLL_LONGTERM:
+>> + * FOLL_PIN and FOLL_LONGTERM may be used in various combinations with each
+>> + * other. Here is what they mean, and how to use them:
+>>   *
+>>   * FOLL_LONGTERM indicates that the page will be held for an indefinite time
+>> - * period _often_ under userspace control.  This is contrasted with
+>> - * iov_iter_get_pages() where usages which are transient.
+>> + * period _often_ under userspace control.  This is in contrast to
+>> + * iov_iter_get_pages(), where usages which are transient.
+>                           ^^^ when you touch this, please fix also the
+> second sentense. It doesn't quite make sense to me... I'd probably write
+> there "whose usages are transient" but maybe you can come up with something
+> even better.
 
-Hmm, this should more specifically be CONFIG_KVM_INTEL.
+Fixed, using your wording, as I didn't see any obvious improvements beyond that.
 
-> > +		msr |= FEAT_CTL_VMX_ENABLED_OUTSIDE_SMX;
-> > +		if (tboot_enabled())
-> > +			msr |= FEAT_CTL_VMX_ENABLED_INSIDE_SMX;
-> > +	}
+
+
+thanks,
+-- 
+John Hubbard
+NVIDIA
+
+
 > 
-> Why not also take this chance to enable SGX? Or it will come with SGX patch
-> series?
-
-The latter.  Similar to the KVM check, this shouldn't opt in to SGX unless
-the kernel is capable of using SGX.
-
-> > +	wrmsrl(MSR_IA32_FEATURE_CONTROL, msr);
-> > +}
-> > diff --git a/arch/x86/kernel/cpu/intel.c b/arch/x86/kernel/cpu/intel.c
-> > index 4a900804a023..b7c6ed0b40b6 100644
-> > --- a/arch/x86/kernel/cpu/intel.c
-> > +++ b/arch/x86/kernel/cpu/intel.c
-> > @@ -755,6 +755,8 @@ static void init_intel(struct cpuinfo_x86 *c)
-> >  	/* Work around errata */
-> >  	srat_detect_node(c);
-> >  
-> > +	init_feature_control_msr(c);
+> Otherwise the patch looks good to me so feel free to add:
 > 
-> Will this compile if you disable CONFIG_X86_FEATURE_CONTROL_MSR?
+> Reviewed-by: Jan Kara <jack@suse.cz>
 > 
-> Provide an empty one in cpu.h if the config is not enabled?
-
-CONFIG_X86_FEATURE_CONTROL_MSR can't be disabled manually, it's selected
-by CPU_SUP_INTEL (and by Zhaoxin/Centaur for their relevant patches).
+> 								Honza
+> 
