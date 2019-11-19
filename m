@@ -2,96 +2,98 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 73B98102FDA
-	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Nov 2019 00:18:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC8BB103040
+	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Nov 2019 00:31:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727194AbfKSXSX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 19 Nov 2019 18:18:23 -0500
-Received: from mga12.intel.com ([192.55.52.136]:62268 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725978AbfKSXSX (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 19 Nov 2019 18:18:23 -0500
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 19 Nov 2019 15:18:23 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.69,219,1571727600"; 
-   d="scan'208";a="357256816"
-Received: from sjchrist-coffee.jf.intel.com (HELO linux.intel.com) ([10.54.74.41])
-  by orsmga004.jf.intel.com with ESMTP; 19 Nov 2019 15:18:22 -0800
-Date:   Tue, 19 Nov 2019 15:18:22 -0800
-From:   Sean Christopherson <sean.j.christopherson@intel.com>
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Radim =?utf-8?B?S3LEjW3DocWZ?= <rkrcmar@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Tony Luck <tony.luck@intel.com>,
-        Tony W Wang-oc <TonyWWang-oc@zhaoxin.com>,
-        Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, linux-edac@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-Subject: Re: [PATCH v3 01/19] x86/msr-index: Clean up bit defines for
- IA32_FEATURE_CONTROL MSR
-Message-ID: <20191119231822.GA6855@linux.intel.com>
-References: <20191119031240.7779-1-sean.j.christopherson@intel.com>
- <20191119031240.7779-2-sean.j.christopherson@intel.com>
- <20191119111445.GB27787@zn.tnic>
+        id S1727038AbfKSXbG (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 19 Nov 2019 18:31:06 -0500
+Received: from mail-wm1-f66.google.com ([209.85.128.66]:50383 "EHLO
+        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726874AbfKSXbF (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 19 Nov 2019 18:31:05 -0500
+Received: by mail-wm1-f66.google.com with SMTP id l17so5113385wmh.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 19 Nov 2019 15:31:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=mP+0iqiXj77eONbT81jP0IEP9HdwZqjxx63AWCIxHNA=;
+        b=eWt1VHPn8CeyEJkHh8wfdDoWw5EBwvsVv+ooqf2AO/Zbwx52j4WyMuZ5MnEbfn+4Gi
+         KfL/jdy4ujXa0lrrB4mryex1DzfBRrRNcJJzcXW+RNbKutYVCpwkXIY0pylxxMgWm3Ht
+         M8VIf2ub0+jN+0s3ZGOz+lYWhR8yH/TtZfTuSaO9asxRMqzuDXYlks/kEkTgE/S/P53S
+         m5fYO4xeerkaV2wpfwkPh1m2WbLZs3cvqOti+OCNs09c0s4sHlZt4JrvGQ4JXuXf5oAH
+         EiOeSSVac8ZaFvRrrRNj9ba26sS3QxpitGEk2F+ZU+USScUYVseseeZx10PO67zMRmXt
+         SLsQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=mP+0iqiXj77eONbT81jP0IEP9HdwZqjxx63AWCIxHNA=;
+        b=bCQOGtc0+2Mk4VognlWzhdeDl0CUEWLUx1WlCV2cY7P6+TCTnFqvtaSFVppPc/TcDa
+         FiZTMIzTKzd2kC8JciCCY7LDncaTM3Dxi4GWTNFvB4TZKzJsPPmKDzyiZjLFaZiR6XST
+         /iDlkkYmQ96vG0FQhYgOrbP1qYDLSzZso6R6Px8qjlhEanIMIAs7+qnhXdaRIQDfIgBh
+         cNYRN1ktTyoXckSNASVW1sEyhMb+XBA4Kylam5wHkDP6u7Bz23qGEUrUYSgd/Dw1FTER
+         NWp6NyTr7+mbr448T8lkMHLUGyaMa+P6slAmjvHbOh1Ok3UmhOmmXauf3qjk/VpTOq8N
+         PfRw==
+X-Gm-Message-State: APjAAAXW89QHyI2M85g0Gw1sEE9Lejoks5dKKCJCyF10sWa7HiBMz4qm
+        lz8jLxP8ga9KURMW2ai2v3g3tOJ4wLFvDk+qjUFcbw==
+X-Google-Smtp-Source: APXvYqwRIvQ8PKVNdixUgQnuXSHFcZZKFRs7eXQkjHRIkNkDAd3sCFPQ/jj3utQ2CUNuE+/QqniO8zwM2uAD7sAvFhM=
+X-Received: by 2002:a05:600c:295:: with SMTP id 21mr369402wmk.43.1574206263262;
+ Tue, 19 Nov 2019 15:31:03 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191119111445.GB27787@zn.tnic>
-User-Agent: Mutt/1.5.24 (2015-08-30)
+References: <20191119213834.175992-1-brendanhiggins@google.com>
+In-Reply-To: <20191119213834.175992-1-brendanhiggins@google.com>
+From:   David Gow <davidgow@google.com>
+Date:   Tue, 19 Nov 2019 15:30:51 -0800
+Message-ID: <CABVgOSn6bc=Rq50Y_Av+0gXTjyHuV+UaULNHicz16hp_uRmDsg@mail.gmail.com>
+Subject: Re: [PATCH linux-kselftest/test v1] Documentation: kunit: fix typos
+ and gramatical errors
+To:     Brendan Higgins <brendanhiggins@google.com>
+Cc:     Shuah Khan <shuah@kernel.org>, kunit-dev@googlegroups.com,
+        linux-kernel@vger.kernel.org,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, linux-doc@vger.kernel.org,
+        corbet@lwn.net, heidifahim@google.com,
+        Patricia Alfonso <trishalfonso@google.com>,
+        Randy Dunlap <rdunlap@infradead.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Nov 19, 2019 at 12:15:08PM +0100, Borislav Petkov wrote:
-> On Mon, Nov 18, 2019 at 07:12:22PM -0800, Sean Christopherson wrote:
-> > As pointed out by Boris, the defines for bits in IA32_FEATURE_CONTROL
-> > are quite a mouthful, especially the VMX bits which must differentiate
-> > between enabling VMX inside and outside SMX (TXT) operation.  Rename the
-> > bit defines to abbreviate FEATURE_CONTROL as FEAT_CTL so that they're a
-> > little friendlier on the eyes.  Keep the full name for the MSR itself to
-> > help even the most obtuse reader decipher the abbreviation, and to match
-> > the name used by the Intel SDM.
-> > 
-> > Opportunistically fix a few other annoyances with the defines:
-> > 
-> >   - Relocate the bit defines so that they immediately follow the MSR
-> >     define, e.g. aren't mistaken as belonging to MISC_FEATURE_CONTROL.
-> >   - Add whitespace around the block of feature control defines to make
-> >     it clear that FEAT_CTL is indeed short for FEATURE_CONTROL.
-> >   - Use BIT() instead of manually encoding the bit shift.
-> >   - Use "VMX" instead of "VMXON" to match the SDM.
-> >   - Append "_ENABLED" to the LMCE bit to be consistent with the verbiage
-> >     used for all other feature control bits.  (LCME is an acronym for
-> >     Local Machine Check Exception, i.e. LMCE_ENABLED is not redundant).
-> 
-> Sure but SDM calls it LMCE_ON. What is our current decision on sticking
-> to SDM bit names? I guess we don't...
-> 
-> But above you say "to match the SDM"...
+On Tue, Nov 19, 2019 at 1:39 PM 'Brendan Higgins' via KUnit
+Development <kunit-dev@googlegroups.com> wrote:
+>
+> Fix typos and gramatical errors in the Getting Started and Usage guide
+> for KUnit.
+>
+> Reported-by: Randy Dunlap <rdunlap@infradead.org>
+> Link: https://patchwork.kernel.org/patch/11156481/
+> Signed-off-by: Brendan Higgins <brendanhiggins@google.com>
+> ---
+>  Documentation/dev-tools/kunit/start.rst |  6 +++---
+>  Documentation/dev-tools/kunit/usage.rst | 22 +++++++++++-----------
+>  2 files changed, 14 insertions(+), 14 deletions(-)
+>
 
-Ugh.  Match the SDM unless it's obviously "wrong"?  :-)  It might literally
-be the only instance of the SDM using "on" instead of "enable(d)" for an
-MSR or CR bit.  The SDM even refers to it as an enable bit, e.g. "platform
-software has not enabled LMCE by setting IA32_FEATURE_CONTROL.LMCE_ON (bit 20)".
+Reviewed-by: David Gow <davidgow@google.com>
 
-Whining aside, I'm ok going with LMCE_ON, I have a feeling "on" was
-deliberately chosen differentiate it from IA32_MCG_EXT_CTL.LMCE_EN.
+These changes look good to me.
+
+
+> diff --git a/Documentation/dev-tools/kunit/start.rst b/Documentation/dev-tools/kunit/start.rst
+> index f4d9a4fa914f8..db146c7d77490 100644
+> --- a/Documentation/dev-tools/kunit/start.rst
+> +++ b/Documentation/dev-tools/kunit/start.rst
+
+Could you also fix the kunit.py invocation on line 162, which should
+have "run" passed as an argument?
+See:
+https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git/tree/Documentation/dev-tools/kunit/start.rst?h=test#n162
+
+It should read "/tools/testing/kunit/kunit.py run".
+
+Thanks,
+-- David
