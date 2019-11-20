@@ -2,214 +2,112 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8002910338C
-	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Nov 2019 06:13:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9616E103450
+	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Nov 2019 07:33:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727758AbfKTFM4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 20 Nov 2019 00:12:56 -0500
-Received: from mout-p-102.mailbox.org ([80.241.56.152]:55400 "EHLO
-        mout-p-102.mailbox.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727198AbfKTFMz (ORCPT
+        id S1727165AbfKTGdB (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 20 Nov 2019 01:33:01 -0500
+Received: from mail-lf1-f66.google.com ([209.85.167.66]:34265 "EHLO
+        mail-lf1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727198AbfKTGdA (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 20 Nov 2019 00:12:55 -0500
-Received: from smtp2.mailbox.org (smtp2.mailbox.org [80.241.60.241])
-        (using TLSv1.2 with cipher ECDHE-RSA-CHACHA20-POLY1305 (256/256 bits))
-        (No client certificate requested)
-        by mout-p-102.mailbox.org (Postfix) with ESMTPS id 47HrRj6dCfzKmkG;
-        Wed, 20 Nov 2019 06:12:49 +0100 (CET)
-X-Virus-Scanned: amavisd-new at heinlein-support.de
-Received: from smtp2.mailbox.org ([80.241.60.241])
-        by spamfilter04.heinlein-hosting.de (spamfilter04.heinlein-hosting.de [80.241.56.122]) (amavisd-new, port 10030)
-        with ESMTP id wcWUwKyK53h8; Wed, 20 Nov 2019 06:12:45 +0100 (CET)
-From:   Aleksa Sarai <cyphar@cyphar.com>
-To:     Al Viro <viro@zeniv.linux.org.uk>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J. Bruce Fields" <bfields@fieldses.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        David Howells <dhowells@redhat.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        Andrii Nakryiko <andriin@fb.com>,
-        Jonathan Corbet <corbet@lwn.net>
-Cc:     Aleksa Sarai <cyphar@cyphar.com>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Kees Cook <keescook@chromium.org>,
-        Jann Horn <jannh@google.com>, Tycho Andersen <tycho@tycho.ws>,
-        David Drysdale <drysdale@google.com>,
-        Chanho Min <chanho.min@lge.com>,
-        Oleg Nesterov <oleg@redhat.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Christian Brauner <christian@brauner.io>,
-        Aleksa Sarai <asarai@suse.de>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        dev@opencontainers.org, containers@lists.linux-foundation.org,
-        bpf@vger.kernel.org, netdev@vger.kernel.org,
-        linux-alpha@vger.kernel.org, linux-api@vger.kernel.org,
-        libc-alpha@sourceware.org, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-ia64@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        linux-xtensa@linux-xtensa.org, sparclinux@vger.kernel.org
-Subject: [PATCH RESEND v17 13/13] Documentation: path-lookup: include new LOOKUP flags
-Date:   Wed, 20 Nov 2019 16:06:31 +1100
-Message-Id: <20191120050631.12816-14-cyphar@cyphar.com>
-In-Reply-To: <20191120050631.12816-1-cyphar@cyphar.com>
-References: <20191120050631.12816-1-cyphar@cyphar.com>
+        Wed, 20 Nov 2019 01:33:00 -0500
+Received: by mail-lf1-f66.google.com with SMTP id l28so9710911lfj.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 19 Nov 2019 22:32:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=0IDyZkbtbPsofExaZyTr8bo/i/DLYlCIy4Kxh6/p4mo=;
+        b=tfNz7klYGx3/T8c/sG3BjN25uSxe9r0/EiM8wWNnfr0XrpRrPVflDF7GX21w1R5Rcb
+         seQ0VJ3+VODqSed608N/TyIVMsp/wPpgQai7Gk58ncg+kkfjVKPQznBExpdD73Qslv1c
+         O+oh0On/RETmcjQgkeWTCjJMKBTewfUMwFIAIO9OuRHjevxDYN98rcTBwQjXVMf/T86t
+         Ea4E2vw3fN6iH+2fv2QsmT+GFNpCW1hpp2qhOTsZ6J9PyPmQ7mOWsA4Z89fB149Htpnj
+         HjGNIe5fuKJhfQIPZPj3U+Cw5WeRV2CjvnaPD/adgHoKH7nm2uaeC3ZYciGzdfKJI/NY
+         Q7lg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=0IDyZkbtbPsofExaZyTr8bo/i/DLYlCIy4Kxh6/p4mo=;
+        b=I2ZLEkiQZ05YnQoB/ULQn3GX8tNo7RMtYAJ1EGRuyxRc3uTRrA/SF8YWLfh6PFGNHd
+         vrEvhn38g6TBMaam0RmStlB6V8YMf8dzANh3mm5Rkeghuq/rYGgnACCH5ZYMKb87SaV1
+         kOV82dysoBPoaLJTT9pbsV38b/MT27N9zHUw0BvJcVddIDVref4zYCWMSXQBCwRQVfEU
+         AwEPfojojmHdLlWlHTN9KPthn8h7+DCvX2wUipStIlb/rOLWAfwzG0wcEaHWpfGNS1Rp
+         qUfcd7lihsioFaOwq1iidQZTvhPlK0jx+KUCrZR6P40SejCmF92pURBpItNag+/pTxqd
+         xNJQ==
+X-Gm-Message-State: APjAAAVgUFGhcmizmTZBRMxczc3mXcGcp6FFTQmgdcjQ9qvlFHldVU5V
+        6IAO4MpGwFCF+thpKUHsWryJIpKIaaiW5jEfkQe2zA==
+X-Google-Smtp-Source: APXvYqz+AxPaUH+ftNhZvRr23V9kyQUIFJmZ7VGaL5adTq+g4kgW6LhOkHBcQsm6DP9hz+9mmT3nRpJLhMOX4KYgza0=
+X-Received: by 2002:ac2:4831:: with SMTP id 17mr1310851lft.67.1574231577791;
+ Tue, 19 Nov 2019 22:32:57 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <CA+G9fYsmZOf9zgo5dy2_HfPPK-0tBYfCXpZy2DneFOeiJfN=_g@mail.gmail.com>
+ <CA+FuTSd3t9fju3seZQ0OMTxSkPtysG88stMoqMAV4G1Mj3wsVA@mail.gmail.com>
+In-Reply-To: <CA+FuTSd3t9fju3seZQ0OMTxSkPtysG88stMoqMAV4G1Mj3wsVA@mail.gmail.com>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Wed, 20 Nov 2019 12:02:45 +0530
+Message-ID: <CA+G9fYu=GXCZTQHU2kX0yoUxPgWkKVF44NJhadTP07uHF9St3g@mail.gmail.com>
+Subject: Re: selftest/net: so_txtime.sh fails intermittently - read Resource
+ temporarily unavailable
+To:     Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+Cc:     "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, Netdev <netdev@vger.kernel.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Anders Roxell <anders.roxell@linaro.org>,
+        lkft-triage@lists.linaro.org,
+        "David S. Miller" <davem@davemloft.net>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Now that we have new LOOKUP flags, we should document them in the
-relevant path-walking documentation. And now that we've settled on a
-common name for nd_jump_link() style symlinks ("magic links"), use that
-term where magic-link semantics are described.
+On Fri, 15 Nov 2019 at 21:52, Willem de Bruijn
+<willemdebruijn.kernel@gmail.com> wrote:
+>
+> On Thu, Nov 14, 2019 at 3:47 AM Naresh Kamboju
 
-Signed-off-by: Aleksa Sarai <cyphar@cyphar.com>
----
- Documentation/filesystems/path-lookup.rst | 68 +++++++++++++++++++++--
- 1 file changed, 62 insertions(+), 6 deletions(-)
+> This appears to have been flaky from the start, particularly on qemu_arm.
 
-diff --git a/Documentation/filesystems/path-lookup.rst b/Documentation/filesystems/path-lookup.rst
-index 434a07b0002b..a3216979298b 100644
---- a/Documentation/filesystems/path-lookup.rst
-+++ b/Documentation/filesystems/path-lookup.rst
-@@ -13,6 +13,7 @@ It has subsequently been updated to reflect changes in the kernel
- including:
- 
- - per-directory parallel name lookup.
-+- ``openat2()`` resolution restriction flags.
- 
- Introduction to pathname lookup
- ===============================
-@@ -235,6 +236,13 @@ renamed.  If ``d_lookup`` finds that a rename happened while it
- unsuccessfully scanned a chain in the hash table, it simply tries
- again.
- 
-+``rename_lock`` is also used to detect and defend against potential attacks
-+against ``LOOKUP_BENEATH`` and ``LOOKUP_IN_ROOT`` when resolving ".." (where
-+the parent directory is moved outside the root, bypassing the ``path_equal()``
-+check). If ``rename_lock`` is updated during the lookup and the path encounters
-+a "..", a potential attack occurred and ``handle_dots()`` will bail out with
-+``-EAGAIN``.
-+
- inode->i_rwsem
- ~~~~~~~~~~~~~~
- 
-@@ -348,6 +356,13 @@ any changes to any mount points while stepping up.  This locking is
- needed to stabilize the link to the mounted-on dentry, which the
- refcount on the mount itself doesn't ensure.
- 
-+``mount_lock`` is also used to detect and defend against potential attacks
-+against ``LOOKUP_BENEATH`` and ``LOOKUP_IN_ROOT`` when resolving ".." (where
-+the parent directory is moved outside the root, bypassing the ``path_equal()``
-+check). If ``mount_lock`` is updated during the lookup and the path encounters
-+a "..", a potential attack occurred and ``handle_dots()`` will bail out with
-+``-EAGAIN``.
-+
- RCU
- ~~~
- 
-@@ -405,6 +420,10 @@ is requested.  Keeping a reference in the ``nameidata`` ensures that
- only one root is in effect for the entire path walk, even if it races
- with a ``chroot()`` system call.
- 
-+It should be noted that in the case of ``LOOKUP_IN_ROOT`` or
-+``LOOKUP_BENEATH``, the effective root becomes the directory file descriptor
-+passed to ``openat2()`` (which exposes these ``LOOKUP_`` flags).
-+
- The root is needed when either of two conditions holds: (1) either the
- pathname or a symbolic link starts with a "'/'", or (2) a "``..``"
- component is being handled, since "``..``" from the root must always stay
-@@ -1149,7 +1168,7 @@ so ``NULL`` is returned to indicate that the symlink can be released and
- the stack frame discarded.
- 
- The other case involves things in ``/proc`` that look like symlinks but
--aren't really::
-+aren't really (and are therefore commonly referred to as "magic-links")::
- 
-      $ ls -l /proc/self/fd/1
-      lrwx------ 1 neilb neilb 64 Jun 13 10:19 /proc/self/fd/1 -> /dev/pts/4
-@@ -1286,7 +1305,9 @@ A few flags
- A suitable way to wrap up this tour of pathname walking is to list
- the various flags that can be stored in the ``nameidata`` to guide the
- lookup process.  Many of these are only meaningful on the final
--component, others reflect the current state of the pathname lookup.
-+component, others reflect the current state of the pathname lookup, and some
-+apply restrictions to all path components encountered in the path lookup.
-+
- And then there is ``LOOKUP_EMPTY``, which doesn't fit conceptually with
- the others.  If this is not set, an empty pathname causes an error
- very early on.  If it is set, empty pathnames are not considered to be
-@@ -1310,13 +1331,48 @@ longer needed.
- ``LOOKUP_JUMPED`` means that the current dentry was chosen not because
- it had the right name but for some other reason.  This happens when
- following "``..``", following a symlink to ``/``, crossing a mount point
--or accessing a "``/proc/$PID/fd/$FD``" symlink.  In this case the
--filesystem has not been asked to revalidate the name (with
--``d_revalidate()``).  In such cases the inode may still need to be
--revalidated, so ``d_op->d_weak_revalidate()`` is called if
-+or accessing a "``/proc/$PID/fd/$FD``" symlink (also known as a "magic
-+link"). In this case the filesystem has not been asked to revalidate the
-+name (with ``d_revalidate()``).  In such cases the inode may still need
-+to be revalidated, so ``d_op->d_weak_revalidate()`` is called if
- ``LOOKUP_JUMPED`` is set when the look completes - which may be at the
- final component or, when creating, unlinking, or renaming, at the penultimate component.
- 
-+Resolution-restriction flags
-+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-+
-+In order to allow userspace to protect itself against certain race conditions
-+and attack scenarios involving changing path components, a series of flags are
-+available which apply restrictions to all path components encountered during
-+path lookup. These flags are exposed through ``openat2()``'s ``resolve`` field.
-+
-+``LOOKUP_NO_SYMLINKS`` blocks all symlink traversals (including magic-links).
-+This is distinctly different from ``LOOKUP_FOLLOW``, because the latter only
-+relates to restricting the following of trailing symlinks.
-+
-+``LOOKUP_NO_MAGICLINKS`` blocks all magic-link traversals. Filesystems must
-+ensure that they return errors from ``nd_jump_link()``, because that is how
-+``LOOKUP_NO_MAGICLINKS`` and other magic-link restrictions are implemented.
-+
-+``LOOKUP_NO_XDEV`` blocks all ``vfsmount`` traversals (this includes both
-+bind-mounts and ordinary mounts). Note that the ``vfsmount`` which contains the
-+lookup is determined by the first mountpoint the path lookup reaches --
-+absolute paths start with the ``vfsmount`` of ``/``, and relative paths start
-+with the ``dfd``'s ``vfsmount``. Magic-links are only permitted if the
-+``vfsmount`` of the path is unchanged.
-+
-+``LOOKUP_BENEATH`` blocks any path components which resolve outside the
-+starting point of the resolution. This is done by blocking ``nd_jump_root()``
-+as well as blocking ".." if it would jump outside the starting point.
-+``rename_lock`` and ``mount_lock`` are used to detect attacks against the
-+resolution of "..". Magic-links are also blocked.
-+
-+``LOOKUP_IN_ROOT`` resolves all path components as though the starting point
-+were the filesystem root. ``nd_jump_root()`` brings the resolution back to to
-+the starting point, and ".." at the starting point will act as a no-op. As with
-+``LOOKUP_BENEATH``, ``rename_lock`` and ``mount_lock`` are used to detect
-+attacks against ".." resolution. Magic-links are also blocked.
-+
- Final-component flags
- ~~~~~~~~~~~~~~~~~~~~~
- 
--- 
-2.24.0
+This is because of emulating 2 CPU.
+I am gonna change this to emulate 4 CPU for qemu_arm.
 
+>
+> Looking at a few runs..
+>
+> failing runs exceeds bounds:
+> https://lkft.validation.linaro.org/scheduler/job/1006586
+...
+> delay29722: expected20000_(us) #
+> # ./so_txtime exceeds variance (2000 us)
+> "
+> These are easy to suppress, by just increasing cfg_variance_us and
+> optionally also increasing the delivery time scale.
+
+Alright !
+The variance is 2000.
+static int cfg_variance_us = 2000
+
+> Naresh, when you mention "multiple boards" are there specific
+> microarchitectural details of the hosts that I should take into
+> account aside from the qemu-arm virtualized environment itself?
+
+The easy to reproduce way is running 32-bit kernel and rootfs on
+x86_64 machine.
+
+arm32 bit beagleboard x15 device.
+
+qemu-arm command line,
+qemu-system-aarch64 -cpu host,aarch64=off -machine virt-2.10,accel=kvm
+-nographic -net nic,model=virtio,macaddr=BA:DD:AD:CC:09:02 -net tap -m
+2048 -monitor none -kernel zImage --append "console=ttyAMA0
+root=/dev/vda rw" -drive
+format=raw,file=rpb-console-image-lkft-am57xx-evm-20191112073604-644.rootfs.ext4,if=virtio
+-m 4096 -smp 2 -nographic
+
+> Very nice dashboard, btw!
+
+Thanks for your valuable feedback. Great to hear this :-)
+
+- Naresh
