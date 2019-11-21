@@ -2,111 +2,151 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DF8081057BA
-	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Nov 2019 18:00:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CE081059F5
+	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Nov 2019 19:52:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726735AbfKURAP (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 21 Nov 2019 12:00:15 -0500
-Received: from mail-oi1-f195.google.com ([209.85.167.195]:35267 "EHLO
-        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726970AbfKURAL (ORCPT
+        id S1726293AbfKUSwL (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 21 Nov 2019 13:52:11 -0500
+Received: from mail-pj1-f66.google.com ([209.85.216.66]:39733 "EHLO
+        mail-pj1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726714AbfKUSwL (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 21 Nov 2019 12:00:11 -0500
-Received: by mail-oi1-f195.google.com with SMTP id n16so3857013oig.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 21 Nov 2019 09:00:10 -0800 (PST)
+        Thu, 21 Nov 2019 13:52:11 -0500
+Received: by mail-pj1-f66.google.com with SMTP id t103so1886139pjb.6
+        for <linux-kselftest@vger.kernel.org>; Thu, 21 Nov 2019 10:52:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=intel-com.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=SDymYy1Cr6msxqeKtzOvSyToG0ApR3Ly++FnBPiFfAU=;
-        b=f+VuCObIDRfrJmbTAA4m3SQhOXNZ4pbf+ZyigT8J2YciKJHX1toKS54ABD40/HbC1d
-         7Pkwsh8oyyINQzVpjfjsJLe3RxxCFvky++3gAGs9me3lgi9X2Cs94Bu46By7m8IZ2aX6
-         6VCe60NDY4cCmQm2ZZlTacWdZ6Ps9MXHsxEoPPvq4YYJFGrJauw8LzXEJJdEFg7nFNai
-         NT0xpYhDehIOprr6cUNw9YoHqOqwfQCKgM0QWVQ6U7LVeCnx2wYwSu33Ka73HmSeIHM7
-         JqrB5AsBrlMh6M533DPgzCdMMVEMlw9v2LJQn2e/uD0VclTth1B3dpfknn3iLontgkuH
-         3IWg==
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=NUALPva1YZVx3/2BQ9xkXxgM4On7BMfGtAqUM5uBBGM=;
+        b=QkkdDs9DdEZpBZNUwVByWOjPfaCLv5Fazv+T6W/jsGE/QJ22fsNVmNCKvxFOWGUM+5
+         Ub+65sE7+UddobbPy8Eo7/AE2rO56F/2Vo6vrTZXTzmY42lHLf6Gnq1WSTD9qr3kp5Bn
+         fSW0qljDPVCBYTHAaHbnZZJdXBigRahCRKtbA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=SDymYy1Cr6msxqeKtzOvSyToG0ApR3Ly++FnBPiFfAU=;
-        b=uQZOkkEC6aOy8c38HkUAzZXsbv7elKKpFBkKRJQmD2JNDxedesUWGbc0GCo4BtlAw7
-         yKhBWV+2n8FJplMq44+Zapyw0ic1NMj8GwnikB5YF4QxJxBI14E7WX2t9FMT1UI5NA7h
-         Am7VkAcx6YO2AtYuRBHkQz3L7a4/d8hp0FY8BMGI0D0oN1ZqO6K3357un4M5JlkjK9Et
-         MVO/89E3Lax3fXcqrZnw7jHSYbSjnN8M+Q0on70YCXHZ84QSBFpDWM+MvGVC7ePV5JTT
-         nXog1VuiFd0u2xrnhKE+TXjsUSt04ihZSwHUTd/4t3mMo50bz5c/3D+8EoQ/U4IFazqT
-         wpZg==
-X-Gm-Message-State: APjAAAXtl1/bGfzjPO4RfNkJRZrmBZexsWINjJyAbz6WFkYZkx7uIk9B
-        epF/aZabXZxPKn0FKkFGqZZs9qW7FEwpnjXNd6/vGg==
-X-Google-Smtp-Source: APXvYqzaKFA5sHA2BoiQUxyQp/rlYSGdVkc2qiU+T2e7CfLgs6CP/GdyTJIUkjrV/y2OAJbT5zFGq6OvhTpLAGKVq9Q=
-X-Received: by 2002:aca:ea57:: with SMTP id i84mr8187454oih.73.1574355610298;
- Thu, 21 Nov 2019 09:00:10 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=NUALPva1YZVx3/2BQ9xkXxgM4On7BMfGtAqUM5uBBGM=;
+        b=hW1zpb3NeZ1o6Hw9K2awamBt3vx88XQQ5KQK28Lny/i7nL9Ig1qpVADlzbYovW7ufa
+         TEh/IS9V73Arx8EDfiTu4tsEX+UMLtp0O+aw/rom2T4ZtGQMXA/+aKDFDs/6AWcbPa/F
+         YCgg2ALrfgQep3zIzy659jNX5xJVyGM5H3CWFSxjKN11wSKyKWoYDLYBHMVPqifnw0HE
+         shAJi00X5vglnVwYIunQocGJDVQop6wLExI+qbOTZqwkrZspNoWyNpjMZalKezlSe3oq
+         bcbmzKys/GQFXv2XlZKyiX6Y4Dck52YN8A+33OtN2+JSDFpODKXsNjeYLaZT9xlRENqC
+         QbNQ==
+X-Gm-Message-State: APjAAAXEMCOMScXAEGHJ2zLnlHHkM9oRhK2xhHGZGXvf1e/eVFNzkQ/P
+        IsryQ/cPUx/MWeRQzZONT0N8og==
+X-Google-Smtp-Source: APXvYqyK7CVdwbuMQqybLkpohnb4M7+sMWlod2tDFQzPuY7KWaq3YXComqcwID39J5WBbAezdPL/1Q==
+X-Received: by 2002:a17:90a:24ac:: with SMTP id i41mr13768023pje.11.1574362331026;
+        Thu, 21 Nov 2019 10:52:11 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id t15sm4085805pgb.0.2019.11.21.10.52.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 21 Nov 2019 10:52:09 -0800 (PST)
+Date:   Thu, 21 Nov 2019 10:52:08 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     Matthieu Baerts <matthieu.baerts@tessares.net>
+Cc:     Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] selftests: settings: tests can be in subsubdirs
+Message-ID: <201911211018.D6CD68AC5@keescook>
+References: <20191022171223.27934-1-matthieu.baerts@tessares.net>
+ <c9ce5016-9e83-67c0-ae22-2d3c46427b25@tessares.net>
 MIME-Version: 1.0
-References: <20191121071354.456618-1-jhubbard@nvidia.com> <20191121071354.456618-6-jhubbard@nvidia.com>
- <20191121080555.GC24784@lst.de> <c5f8750f-af82-8aec-ce70-116acf24fa82@nvidia.com>
-In-Reply-To: <c5f8750f-af82-8aec-ce70-116acf24fa82@nvidia.com>
-From:   Dan Williams <dan.j.williams@intel.com>
-Date:   Thu, 21 Nov 2019 08:59:57 -0800
-Message-ID: <CAPcyv4jzDfxFAnAYc6g8Zz=3DweQFEBLBQyA_tSDP2Wy-RoA4A@mail.gmail.com>
-Subject: Re: [PATCH v7 05/24] mm: devmap: refactor 1-based refcounting for
- ZONE_DEVICE pages
-To:     John Hubbard <jhubbard@nvidia.com>
-Cc:     Christoph Hellwig <hch@lst.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Dave Chinner <david@fromorbit.com>,
-        David Airlie <airlied@linux.ie>,
-        "David S . Miller" <davem@davemloft.net>,
-        Ira Weiny <ira.weiny@intel.com>, Jan Kara <jack@suse.cz>,
-        Jason Gunthorpe <jgg@ziepe.ca>, Jens Axboe <axboe@kernel.dk>,
-        Jonathan Corbet <corbet@lwn.net>,
-        =?UTF-8?B?SsOpcsO0bWUgR2xpc3Nl?= <jglisse@redhat.com>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Michal Hocko <mhocko@suse.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Paul Mackerras <paulus@samba.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Vlastimil Babka <vbabka@suse.cz>, bpf@vger.kernel.org,
-        Maling list - DRI developers 
-        <dri-devel@lists.freedesktop.org>, KVM list <kvm@vger.kernel.org>,
-        linux-block@vger.kernel.org,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        linux-kselftest@vger.kernel.org,
-        "Linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
-        linux-rdma <linux-rdma@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        Netdev <netdev@vger.kernel.org>, Linux MM <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <c9ce5016-9e83-67c0-ae22-2d3c46427b25@tessares.net>
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Nov 21, 2019 at 12:57 AM John Hubbard <jhubbard@nvidia.com> wrote:
->
-> On 11/21/19 12:05 AM, Christoph Hellwig wrote:
-> > So while this looks correct and I still really don't see the major
-> > benefit of the new code organization, especially as it bloats all
-> > put_page callers.
-> >
-> > I'd love to see code size change stats for an allyesconfig on this
-> > commit.
-> >
->
-> Right, I'm running that now, will post the results. (btw, if there is
-> a script and/or standard format I should use, I'm all ears. I'll dig
-> through lwn...)
->
+On Thu, Nov 21, 2019 at 05:32:42PM +0100, Matthieu Baerts wrote:
+> Hi Shuah,
+> 
+> First, thank you for maintaining the Kernel Selftest framework!
+> 
+> On 22/10/2019 19:12, Matthieu Baerts wrote:
+> > Commit 852c8cbf34d3 (selftests/kselftest/runner.sh: Add 45 second
+> > timeout per test) adds support for a new per-test-directory "settings"
+> > file. But this only works for tests not in a sub-subdirectories, e.g.
+> > 
+> >   - tools/testing/selftests/rtc (rtc) is OK,
+> >   - tools/testing/selftests/net/mptcp (net/mptcp) is not.
+> > 
+> > We have to increase the timeout for net/mptcp tests which are not
+> > upstreamed yet but this fix is valid for other tests if they need to add
+> > a "settings" file, see the full list with:
+> > 
+> >    tools/testing/selftests/*/*/**/Makefile
+> > 
+> > Note that this patch changes the text header message printed at the end
+> > of the execution but this text is modified only for the tests that are
+> > in sub-subdirectories, e.g.
+> > 
+> >    ok 1 selftests: net/mptcp: mptcp_connect.sh
+> > 
+> > Before we had:
+> > 
+> >    ok 1 selftests: mptcp: mptcp_connect.sh
+> > 
+> > But showing the full target name is probably better, just in case a
+> > subsubdir has the same name as another one in another subdirectory.
+> > 
+> > Fixes: 852c8cbf34d3 (selftests/kselftest/runner.sh: Add 45 second timeout per test)
+> > Signed-off-by: Matthieu Baerts <matthieu.baerts@tessares.net>
+> Sorry to bother you again with this but by chance, did you have a look at
+> the patch below? :)
+> 
+> It doesn't only fix an issue with MPTCP, not in the kernel yet. But it also
+> fixes the issue of taking the right "settings" file (if available) for any
+> other tests in a sub-directory, e.g.:
+> 
+>   drivers/dma-buf
+>   filesystems/binderfs
+>   net/forwarding
+>   networking/timestamping
+> 
+> But I guess all tests in powerpc/* dirs and others.
 
-Just run:
+Thanks for the ping! I missed this patch when you originally sent it.
+Yes, this make sense to me:
 
-    size vmlinux
+Reviewed-by: Kees Cook <keescook@chromium.org>
+
+As an improvement on this, I wonder if we need to walk all directories
+between $BASEDIR and $DIR? Actually, let me write this and send it...
+
+-Kees
+
+> 
+> Cheers,
+> Matt
+> 
+> > ---
+> >   tools/testing/selftests/kselftest/runner.sh | 2 +-
+> >   1 file changed, 1 insertion(+), 1 deletion(-)
+> > 
+> > diff --git a/tools/testing/selftests/kselftest/runner.sh b/tools/testing/selftests/kselftest/runner.sh
+> > index 84de7bc74f2c..0d7a89901ef7 100644
+> > --- a/tools/testing/selftests/kselftest/runner.sh
+> > +++ b/tools/testing/selftests/kselftest/runner.sh
+> > @@ -90,7 +90,7 @@ run_one()
+> >   run_many()
+> >   {
+> >   	echo "TAP version 13"
+> > -	DIR=$(basename "$PWD")
+> > +	DIR="${PWD#${BASE_DIR}/}"
+> >   	test_num=0
+> >   	total=$(echo "$@" | wc -w)
+> >   	echo "1..$total"
+> > 
+> 
+> -- 
+> Matthieu Baerts | R&D Engineer
+> matthieu.baerts@tessares.net
+> Tessares SA | Hybrid Access Solutions
+> www.tessares.net
+> 1 Avenue Jean Monnet, 1348 Louvain-la-Neuve, Belgium
+
+-- 
+Kees Cook
