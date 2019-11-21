@@ -2,124 +2,102 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DB9171059F9
-	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Nov 2019 19:53:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AA443105B1E
+	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Nov 2019 21:29:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726333AbfKUSxX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 21 Nov 2019 13:53:23 -0500
-Received: from mail-pf1-f196.google.com ([209.85.210.196]:35400 "EHLO
-        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726279AbfKUSxW (ORCPT
+        id S1726379AbfKUU30 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 21 Nov 2019 15:29:26 -0500
+Received: from mail-io1-f68.google.com ([209.85.166.68]:43490 "EHLO
+        mail-io1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726293AbfKUU30 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 21 Nov 2019 13:53:22 -0500
-Received: by mail-pf1-f196.google.com with SMTP id q13so2171830pff.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 21 Nov 2019 10:53:22 -0800 (PST)
+        Thu, 21 Nov 2019 15:29:26 -0500
+Received: by mail-io1-f68.google.com with SMTP id r2so5023330iot.10
+        for <linux-kselftest@vger.kernel.org>; Thu, 21 Nov 2019 12:29:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
-        bh=zVJJ43+LVeOcEOi4EKyonFDdXiCAF/3n0Lx87I78pBc=;
-        b=kHm2EwF0IVj9TsDgchy1m2gbT7WbyVlCZ8KSeFvK+X8eH8xN6reOLyWJOpAtdYNhhW
-         IbGM95/F/jPpWbYwZRetuP+YAqkDGMz7G4cp6vtaBMUzyvU2+wTcf/p1LjBqCQD06rdN
-         kx3m7nbnhizOVfYV+FnUzCnB/2kxJKyJHa08U=
+        d=sifive.com; s=google;
+        h=date:from:to:cc:subject:in-reply-to:message-id:references
+         :user-agent:mime-version;
+        bh=Y5b09/xVU/bX0tD0FXTigibid+Xx/Pyvl+yYHEA5HOM=;
+        b=dNA21vehi2G3nqXpgT02bv8ZVHJY0AgEralCfQ4EE70QzyV/DNPvLlYYjg0DOhUz/f
+         s9M8n4qmVu/EYTh+16iFweI65kIqvrEw8gfE4Yv4edd1rzUu0KijefTxd3DvM8dtHCcz
+         Fi/tGKzQMFYrFmSqR+qWtGMNRRbwc0gtvaFUxObQV0J48YwsLn2qcn2MVMppwCKCs5LF
+         fWfbaQPxzy6a/xrkj09qGgcDKozfMDOtrzn0X3d6XyEIaFbyveadBp7RnKz6sTOv+3/G
+         ++Ryc/0s0dKHu0af7jP2dCvPc5I7XZNyGQnnKLbuDUnxsyKiktXyV4xgfAVLlwiWAQvv
+         6yrQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition;
-        bh=zVJJ43+LVeOcEOi4EKyonFDdXiCAF/3n0Lx87I78pBc=;
-        b=kFLhn19uqI3j/7y5qc2gDvl4lPSonV+wzXssM6TCgNyl8kGsZBV06o0gJQw0dVbFE1
-         6qBtrXfzMdJGX1sLNSjj/e3s8NoBoyLvQ1u9ex3fyjTH9dmKbisxQomUIlihumcURDYH
-         iIYKyDhl+Wu4rBGRhvWHYB1GU7mQuKjuvtV76RarCJMQC3u88ao9JMEpw06znZyu84oC
-         TNZR75PCL5p3RvPaPIXbrSGn8Y7AS9W+7HfIE19uzHDciYJN7cUKqYhGAy0eetHV9knP
-         JM63vmdcH95Bz4E0Vt9EmPZ3ZPQPWj5zgJ0G2XWj2tZf58uPUadA/hXLESzXyX8dlLj4
-         lTbA==
-X-Gm-Message-State: APjAAAUaW8t9t4F9mOl9CG1bSDy0BAlJ5fMfc7lRtFw/e8e4ssFI73e1
-        0ydnrUJr0uosSVOhg4TJcyva++zEMdI=
-X-Google-Smtp-Source: APXvYqxlVxs5vp7h+sN1bjmy5mjuEHtYDkWvwu3os6PX75tgFr/nee7TrFdF/nA2QIdKL5dXecSngQ==
-X-Received: by 2002:a63:e216:: with SMTP id q22mr11135492pgh.362.1574362402194;
-        Thu, 21 Nov 2019 10:53:22 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id w5sm4548218pfd.31.2019.11.21.10.53.20
+        h=x-gm-message-state:date:from:to:cc:subject:in-reply-to:message-id
+         :references:user-agent:mime-version;
+        bh=Y5b09/xVU/bX0tD0FXTigibid+Xx/Pyvl+yYHEA5HOM=;
+        b=jvW5wWxD0S31JU0TeE0Acybv25Af0VI0RaY/bhXtwJ9htgLUQYubcSuoiQci3bEk/y
+         o/F/r1yNQJikBSjxjRUF+9SNSQZhdXgyw48487IC/naWZgmN/HKvhvKkP4Y6MH+T7cIU
+         OGwXP2Ha8gJHXBMq7Aofaq6vpRUB2MpLNDpY2BL94ZNAK+qHt5Lx8Q9rPc79GiBqlmbU
+         vWOZT3I+rnkKMM76pmKN5S6gSoWznxk4pHlgZxVc7cgHgxHgB6jQHwDdi7O7pZd/NUqG
+         PMV0+cyq/8ESjoqP46tkw0bJDjusLEiaoiOWCespaW/RVrqIR39x+j4wQMEIIrDZXHvy
+         bzWQ==
+X-Gm-Message-State: APjAAAUUBGRFWHNfeIwB3RMlB8PQwDdOC9LRt7J+MYyu4scRFpXvjzPv
+        YO3Mz+Qn9GUJKOmsPpuxb7WV2VTWzNc=
+X-Google-Smtp-Source: APXvYqw3drSXlwcne9WTVvj9T2b28GIAlbvI7icmVF+n8hO8XbGAtGkeJagE0NIgxKUDmDqXEKTNJg==
+X-Received: by 2002:a05:6602:187:: with SMTP id m7mr7413826ioo.16.1574368165052;
+        Thu, 21 Nov 2019 12:29:25 -0800 (PST)
+Received: from localhost (67-0-26-4.albq.qwest.net. [67.0.26.4])
+        by smtp.gmail.com with ESMTPSA id g12sm1293267ion.82.2019.11.21.12.29.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Nov 2019 10:53:21 -0800 (PST)
-Date:   Thu, 21 Nov 2019 10:53:20 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     Shuah Khan <shuah@kernel.org>
-Cc:     Matthieu Baerts <matthieu.baerts@tessares.net>,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] selftests: Load settings from subdirs
-Message-ID: <201911211052.90C65FD667@keescook>
+        Thu, 21 Nov 2019 12:29:21 -0800 (PST)
+Date:   Thu, 21 Nov 2019 12:29:19 -0800 (PST)
+From:   Paul Walmsley <paul.walmsley@sifive.com>
+X-X-Sender: paulw@viisi.sifive.com
+To:     Vincent Chen <vincent.chen@sifive.com>,
+        =?ISO-8859-15?Q?Patrick_St=E4hlin?= <me@packi.ch>
+cc:     mathieu.desnoyers@efficios.com, linux-riscv@lists.infradead.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH 1/3] riscv: add required functions to enable
+ HAVE_REGS_AND_STACK_ACCESS_API
+In-Reply-To: <1572919114-3886-2-git-send-email-vincent.chen@sifive.com>
+Message-ID: <alpine.DEB.2.21.9999.1911211225350.30580@viisi.sifive.com>
+References: <1572919114-3886-1-git-send-email-vincent.chen@sifive.com> <1572919114-3886-2-git-send-email-vincent.chen@sifive.com>
+User-Agent: Alpine 2.21.9999 (DEB 301 2018-08-15)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Type: multipart/mixed; boundary="8323329-780248285-1574368159=:30580"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-If settings files are present in upper directories of a test directory,
-load those first before the local settings. This allows a top-level
-directory to define settings for subdirectories while still allowing the
-subdirectories to override them on a per-directory basis.
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-Signed-off-by: Kees Cook <keescook@chromium.org>
----
-Note that this depends on Matt's patch:
-https://lore.kernel.org/lkml/20191022171223.27934-1-matthieu.baerts@tessares.net
----
- tools/testing/selftests/kselftest/runner.sh | 30 +++++++++++++++------
- 1 file changed, 22 insertions(+), 8 deletions(-)
+--8323329-780248285-1574368159=:30580
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: QUOTED-PRINTABLE
 
-diff --git a/tools/testing/selftests/kselftest/runner.sh b/tools/testing/selftests/kselftest/runner.sh
-index 84de7bc74f2c..666cfeaa8046 100644
---- a/tools/testing/selftests/kselftest/runner.sh
-+++ b/tools/testing/selftests/kselftest/runner.sh
-@@ -39,6 +39,27 @@ tap_timeout()
- 	fi
- }
- 
-+load_settings()
-+{
-+	local fullpath="$1"
-+	local upperpath=${fullpath%/*}
-+
-+	# Load upper path settings first.
-+	if [ "$fullpath" != "$upperpath" ] ; then
-+		load_settings "$upperpath"
-+	fi
-+
-+	# Load per-test-directory kselftest "settings" file.
-+	local settings="$BASE_DIR/$fullpath/settings"
-+	if [ -r "$settings" ] ; then
-+		while read line ; do
-+			local field=$(echo "$line" | cut -d= -f1)
-+			local value=$(echo "$line" | cut -d= -f2-)
-+			eval "kselftest_$field"="$value"
-+		done < "$settings"
-+	fi
-+}
-+
- run_one()
- {
- 	DIR="$1"
-@@ -50,14 +71,7 @@ run_one()
- 	# Reset any "settings"-file variables.
- 	export kselftest_timeout="$kselftest_default_timeout"
- 	# Load per-test-directory kselftest "settings" file.
--	settings="$BASE_DIR/$DIR/settings"
--	if [ -r "$settings" ] ; then
--		while read line ; do
--			field=$(echo "$line" | cut -d= -f1)
--			value=$(echo "$line" | cut -d= -f2-)
--			eval "kselftest_$field"="$value"
--		done < "$settings"
--	fi
-+	load_settings "$DIR"
- 
- 	TEST_HDR_MSG="selftests: $DIR: $BASENAME_TEST"
- 	echo "# $TEST_HDR_MSG"
--- 
-2.17.1
+Hi Vincent,
+
+On Tue, 5 Nov 2019, Vincent Chen wrote:
+
+> In order to select HAVE_REGS_AND_STACK_ACCESS_API, adding the APIs
+> required by kprobes to access pt_regs and stack entries to the RISC-V
+> ports.
+>=20
+> Signed-off-by: Patrick St=C3=A4hlin <me@packi.ch>
+> Signed-off-by: Vincent Chen <vincent.chen@sifive.com>
+
+As I understand it, this patch hasn't been signed off on by Patrick.
+I've sent him an E-mail asking him whether he's willing to add his=20
+Signed-off-by:, but haven't heard back from it.
+
+From=20our discussions, I understand that this patch is based partially on=
+=20
+some of his earlier, public, kprobes work.  In lieu of any response from=20
+Patrick, could you please resend this patch and just note in the commit=20
+description that it's partially based on one of his patches, add a Link:=20
+line that points to the URL of the patch that it's partially based on, and=
+=20
+replace the Signed-off-by: with a Co-developed-by: or something similar?
+
+thanks,
 
 
--- 
-Kees Cook
+- Paul
+--8323329-780248285-1574368159=:30580--
