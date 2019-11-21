@@ -2,102 +2,247 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AA443105B1E
-	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Nov 2019 21:29:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 93971105C13
+	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Nov 2019 22:36:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726379AbfKUU30 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 21 Nov 2019 15:29:26 -0500
-Received: from mail-io1-f68.google.com ([209.85.166.68]:43490 "EHLO
-        mail-io1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726293AbfKUU30 (ORCPT
+        id S1726942AbfKUVfl (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 21 Nov 2019 16:35:41 -0500
+Received: from us-smtp-1.mimecast.com ([207.211.31.81]:23877 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726922AbfKUVfl (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 21 Nov 2019 15:29:26 -0500
-Received: by mail-io1-f68.google.com with SMTP id r2so5023330iot.10
-        for <linux-kselftest@vger.kernel.org>; Thu, 21 Nov 2019 12:29:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sifive.com; s=google;
-        h=date:from:to:cc:subject:in-reply-to:message-id:references
-         :user-agent:mime-version;
-        bh=Y5b09/xVU/bX0tD0FXTigibid+Xx/Pyvl+yYHEA5HOM=;
-        b=dNA21vehi2G3nqXpgT02bv8ZVHJY0AgEralCfQ4EE70QzyV/DNPvLlYYjg0DOhUz/f
-         s9M8n4qmVu/EYTh+16iFweI65kIqvrEw8gfE4Yv4edd1rzUu0KijefTxd3DvM8dtHCcz
-         Fi/tGKzQMFYrFmSqR+qWtGMNRRbwc0gtvaFUxObQV0J48YwsLn2qcn2MVMppwCKCs5LF
-         fWfbaQPxzy6a/xrkj09qGgcDKozfMDOtrzn0X3d6XyEIaFbyveadBp7RnKz6sTOv+3/G
-         ++Ryc/0s0dKHu0af7jP2dCvPc5I7XZNyGQnnKLbuDUnxsyKiktXyV4xgfAVLlwiWAQvv
-         6yrQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:in-reply-to:message-id
-         :references:user-agent:mime-version;
-        bh=Y5b09/xVU/bX0tD0FXTigibid+Xx/Pyvl+yYHEA5HOM=;
-        b=jvW5wWxD0S31JU0TeE0Acybv25Af0VI0RaY/bhXtwJ9htgLUQYubcSuoiQci3bEk/y
-         o/F/r1yNQJikBSjxjRUF+9SNSQZhdXgyw48487IC/naWZgmN/HKvhvKkP4Y6MH+T7cIU
-         OGwXP2Ha8gJHXBMq7Aofaq6vpRUB2MpLNDpY2BL94ZNAK+qHt5Lx8Q9rPc79GiBqlmbU
-         vWOZT3I+rnkKMM76pmKN5S6gSoWznxk4pHlgZxVc7cgHgxHgB6jQHwDdi7O7pZd/NUqG
-         PMV0+cyq/8ESjoqP46tkw0bJDjusLEiaoiOWCespaW/RVrqIR39x+j4wQMEIIrDZXHvy
-         bzWQ==
-X-Gm-Message-State: APjAAAUUBGRFWHNfeIwB3RMlB8PQwDdOC9LRt7J+MYyu4scRFpXvjzPv
-        YO3Mz+Qn9GUJKOmsPpuxb7WV2VTWzNc=
-X-Google-Smtp-Source: APXvYqw3drSXlwcne9WTVvj9T2b28GIAlbvI7icmVF+n8hO8XbGAtGkeJagE0NIgxKUDmDqXEKTNJg==
-X-Received: by 2002:a05:6602:187:: with SMTP id m7mr7413826ioo.16.1574368165052;
-        Thu, 21 Nov 2019 12:29:25 -0800 (PST)
-Received: from localhost (67-0-26-4.albq.qwest.net. [67.0.26.4])
-        by smtp.gmail.com with ESMTPSA id g12sm1293267ion.82.2019.11.21.12.29.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Nov 2019 12:29:21 -0800 (PST)
-Date:   Thu, 21 Nov 2019 12:29:19 -0800 (PST)
-From:   Paul Walmsley <paul.walmsley@sifive.com>
-X-X-Sender: paulw@viisi.sifive.com
-To:     Vincent Chen <vincent.chen@sifive.com>,
-        =?ISO-8859-15?Q?Patrick_St=E4hlin?= <me@packi.ch>
-cc:     mathieu.desnoyers@efficios.com, linux-riscv@lists.infradead.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH 1/3] riscv: add required functions to enable
- HAVE_REGS_AND_STACK_ACCESS_API
-In-Reply-To: <1572919114-3886-2-git-send-email-vincent.chen@sifive.com>
-Message-ID: <alpine.DEB.2.21.9999.1911211225350.30580@viisi.sifive.com>
-References: <1572919114-3886-1-git-send-email-vincent.chen@sifive.com> <1572919114-3886-2-git-send-email-vincent.chen@sifive.com>
-User-Agent: Alpine 2.21.9999 (DEB 301 2018-08-15)
+        Thu, 21 Nov 2019 16:35:41 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1574372139;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=YslT4VlrB9mGxRqN5ZKGkdoWX+pImdvI3tx38/mJv/g=;
+        b=F3+4lkP3uqyXkGQy92eLDyAWlOZz+Dqr0YZIfkLtyHHYVwohbTEqIdCNRsxde0wfDY7knz
+        XBDvHo51Hj2F1EIeKg+VyyiD24pZJ2SWYGKVbsb+MJOoqWwlrQoTt76Qmvo17+pHXH9ajy
+        RZwA4C+3Vw5Wc333VaXIQm3zSkrXFs4=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-353-_8mqkejRPqeFlprORl3o9g-1; Thu, 21 Nov 2019 16:35:36 -0500
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 42006801E58;
+        Thu, 21 Nov 2019 21:35:30 +0000 (UTC)
+Received: from x1.home (ovpn-116-56.phx2.redhat.com [10.3.116.56])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 2C5BA6E703;
+        Thu, 21 Nov 2019 21:35:26 +0000 (UTC)
+Date:   Thu, 21 Nov 2019 14:35:25 -0700
+From:   Alex Williamson <alex.williamson@redhat.com>
+To:     John Hubbard <jhubbard@nvidia.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Dave Chinner <david@fromorbit.com>,
+        David Airlie <airlied@linux.ie>,
+        "David S . Miller" <davem@davemloft.net>,
+        Ira Weiny <ira.weiny@intel.com>, Jan Kara <jack@suse.cz>,
+        Jason Gunthorpe <jgg@ziepe.ca>, Jens Axboe <axboe@kernel.dk>,
+        Jonathan Corbet <corbet@lwn.net>,
+        =?UTF-8?B?SsOpcsO0?= =?UTF-8?B?bWU=?= Glisse 
+        <jglisse@redhat.com>, Magnus Karlsson <magnus.karlsson@intel.com>,
+        "Mauro Carvalho Chehab" <mchehab@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Michal Hocko <mhocko@suse.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        "Paul Mackerras" <paulus@samba.org>, Shuah Khan <shuah@kernel.org>,
+        Vlastimil Babka <vbabka@suse.cz>, <bpf@vger.kernel.org>,
+        <dri-devel@lists.freedesktop.org>, <kvm@vger.kernel.org>,
+        <linux-block@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+        <linux-fsdevel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+        <linux-media@vger.kernel.org>, <linux-rdma@vger.kernel.org>,
+        <linuxppc-dev@lists.ozlabs.org>, <netdev@vger.kernel.org>,
+        <linux-mm@kvack.org>, LKML <linux-kernel@vger.kernel.org>,
+        "Jason Gunthorpe" <jgg@mellanox.com>
+Subject: Re: [PATCH v7 09/24] vfio, mm: fix get_user_pages_remote() and
+ FOLL_LONGTERM
+Message-ID: <20191121143525.50deb72f@x1.home>
+In-Reply-To: <20191121071354.456618-10-jhubbard@nvidia.com>
+References: <20191121071354.456618-1-jhubbard@nvidia.com>
+        <20191121071354.456618-10-jhubbard@nvidia.com>
+Organization: Red Hat
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323329-780248285-1574368159=:30580"
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
+X-MC-Unique: _8mqkejRPqeFlprORl3o9g-1
+X-Mimecast-Spam-Score: 0
+Content-Type: text/plain; charset=WINDOWS-1252
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
+On Wed, 20 Nov 2019 23:13:39 -0800
+John Hubbard <jhubbard@nvidia.com> wrote:
 
---8323329-780248285-1574368159=:30580
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: QUOTED-PRINTABLE
-
-Hi Vincent,
-
-On Tue, 5 Nov 2019, Vincent Chen wrote:
-
-> In order to select HAVE_REGS_AND_STACK_ACCESS_API, adding the APIs
-> required by kprobes to access pt_regs and stack entries to the RISC-V
-> ports.
+> As it says in the updated comment in gup.c: current FOLL_LONGTERM
+> behavior is incompatible with FAULT_FLAG_ALLOW_RETRY because of the
+> FS DAX check requirement on vmas.
 >=20
-> Signed-off-by: Patrick St=C3=A4hlin <me@packi.ch>
-> Signed-off-by: Vincent Chen <vincent.chen@sifive.com>
+> However, the corresponding restriction in get_user_pages_remote() was
+> slightly stricter than is actually required: it forbade all
+> FOLL_LONGTERM callers, but we can actually allow FOLL_LONGTERM callers
+> that do not set the "locked" arg.
+>=20
+> Update the code and comments accordingly, and update the VFIO caller
+> to take advantage of this, fixing a bug as a result: the VFIO caller
+> is logically a FOLL_LONGTERM user.
+>=20
+> Also, remove an unnessary pair of calls that were releasing and
+> reacquiring the mmap_sem. There is no need to avoid holding mmap_sem
+> just in order to call page_to_pfn().
+>=20
+> Also, move the DAX check ("if a VMA is DAX, don't allow long term
+> pinning") from the VFIO call site, all the way into the internals
+> of get_user_pages_remote() and __gup_longterm_locked(). That is:
+> get_user_pages_remote() calls __gup_longterm_locked(), which in turn
+> calls check_dax_vmas(). It's lightly explained in the comments as well.
+>=20
+> Thanks to Jason Gunthorpe for pointing out a clean way to fix this,
+> and to Dan Williams for helping clarify the DAX refactoring.
+>=20
+> Reviewed-by: Jason Gunthorpe <jgg@mellanox.com>
+> Reviewed-by: Ira Weiny <ira.weiny@intel.com>
+> Suggested-by: Jason Gunthorpe <jgg@ziepe.ca>
+> Cc: Dan Williams <dan.j.williams@intel.com>
+> Cc: Jerome Glisse <jglisse@redhat.com>
+> Signed-off-by: John Hubbard <jhubbard@nvidia.com>
+> ---
+>  drivers/vfio/vfio_iommu_type1.c | 30 +++++-------------------------
+>  mm/gup.c                        | 27 ++++++++++++++++++++++-----
+>  2 files changed, 27 insertions(+), 30 deletions(-)
 
-As I understand it, this patch hasn't been signed off on by Patrick.
-I've sent him an E-mail asking him whether he's willing to add his=20
-Signed-off-by:, but haven't heard back from it.
+Tested with device assignment and Intel mdev vGPU assignment with QEMU
+userspace:
 
-From=20our discussions, I understand that this patch is based partially on=
-=20
-some of his earlier, public, kprobes work.  In lieu of any response from=20
-Patrick, could you please resend this patch and just note in the commit=20
-description that it's partially based on one of his patches, add a Link:=20
-line that points to the URL of the patch that it's partially based on, and=
-=20
-replace the Signed-off-by: with a Co-developed-by: or something similar?
+Tested-by: Alex Williamson <alex.williamson@redhat.com>
+Acked-by: Alex Williamson <alex.williamson@redhat.com>
 
-thanks,
+Feel free to include for 19/24 as well.  Thanks,
 
+Alex
 
-- Paul
---8323329-780248285-1574368159=:30580--
+> diff --git a/drivers/vfio/vfio_iommu_type1.c b/drivers/vfio/vfio_iommu_ty=
+pe1.c
+> index d864277ea16f..c7a111ad9975 100644
+> --- a/drivers/vfio/vfio_iommu_type1.c
+> +++ b/drivers/vfio/vfio_iommu_type1.c
+> @@ -340,7 +340,6 @@ static int vaddr_get_pfn(struct mm_struct *mm, unsign=
+ed long vaddr,
+>  {
+>  =09struct page *page[1];
+>  =09struct vm_area_struct *vma;
+> -=09struct vm_area_struct *vmas[1];
+>  =09unsigned int flags =3D 0;
+>  =09int ret;
+> =20
+> @@ -348,33 +347,14 @@ static int vaddr_get_pfn(struct mm_struct *mm, unsi=
+gned long vaddr,
+>  =09=09flags |=3D FOLL_WRITE;
+> =20
+>  =09down_read(&mm->mmap_sem);
+> -=09if (mm =3D=3D current->mm) {
+> -=09=09ret =3D get_user_pages(vaddr, 1, flags | FOLL_LONGTERM, page,
+> -=09=09=09=09     vmas);
+> -=09} else {
+> -=09=09ret =3D get_user_pages_remote(NULL, mm, vaddr, 1, flags, page,
+> -=09=09=09=09=09    vmas, NULL);
+> -=09=09/*
+> -=09=09 * The lifetime of a vaddr_get_pfn() page pin is
+> -=09=09 * userspace-controlled. In the fs-dax case this could
+> -=09=09 * lead to indefinite stalls in filesystem operations.
+> -=09=09 * Disallow attempts to pin fs-dax pages via this
+> -=09=09 * interface.
+> -=09=09 */
+> -=09=09if (ret > 0 && vma_is_fsdax(vmas[0])) {
+> -=09=09=09ret =3D -EOPNOTSUPP;
+> -=09=09=09put_page(page[0]);
+> -=09=09}
+> -=09}
+> -=09up_read(&mm->mmap_sem);
+> -
+> +=09ret =3D get_user_pages_remote(NULL, mm, vaddr, 1, flags | FOLL_LONGTE=
+RM,
+> +=09=09=09=09    page, NULL, NULL);
+>  =09if (ret =3D=3D 1) {
+>  =09=09*pfn =3D page_to_pfn(page[0]);
+> -=09=09return 0;
+> +=09=09ret =3D 0;
+> +=09=09goto done;
+>  =09}
+> =20
+> -=09down_read(&mm->mmap_sem);
+> -
+>  =09vaddr =3D untagged_addr(vaddr);
+> =20
+>  =09vma =3D find_vma_intersection(mm, vaddr, vaddr + 1);
+> @@ -384,7 +364,7 @@ static int vaddr_get_pfn(struct mm_struct *mm, unsign=
+ed long vaddr,
+>  =09=09if (is_invalid_reserved_pfn(*pfn))
+>  =09=09=09ret =3D 0;
+>  =09}
+> -
+> +done:
+>  =09up_read(&mm->mmap_sem);
+>  =09return ret;
+>  }
+> diff --git a/mm/gup.c b/mm/gup.c
+> index 14fcdc502166..cce2c9676853 100644
+> --- a/mm/gup.c
+> +++ b/mm/gup.c
+> @@ -29,6 +29,13 @@ struct follow_page_context {
+>  =09unsigned int page_mask;
+>  };
+> =20
+> +static __always_inline long __gup_longterm_locked(struct task_struct *ts=
+k,
+> +=09=09=09=09=09=09  struct mm_struct *mm,
+> +=09=09=09=09=09=09  unsigned long start,
+> +=09=09=09=09=09=09  unsigned long nr_pages,
+> +=09=09=09=09=09=09  struct page **pages,
+> +=09=09=09=09=09=09  struct vm_area_struct **vmas,
+> +=09=09=09=09=09=09  unsigned int flags);
+>  /*
+>   * Return the compound head page with ref appropriately incremented,
+>   * or NULL if that failed.
+> @@ -1167,13 +1174,23 @@ long get_user_pages_remote(struct task_struct *ts=
+k, struct mm_struct *mm,
+>  =09=09struct vm_area_struct **vmas, int *locked)
+>  {
+>  =09/*
+> -=09 * FIXME: Current FOLL_LONGTERM behavior is incompatible with
+> +=09 * Parts of FOLL_LONGTERM behavior are incompatible with
+>  =09 * FAULT_FLAG_ALLOW_RETRY because of the FS DAX check requirement on
+> -=09 * vmas.  As there are no users of this flag in this call we simply
+> -=09 * disallow this option for now.
+> +=09 * vmas. However, this only comes up if locked is set, and there are
+> +=09 * callers that do request FOLL_LONGTERM, but do not set locked. So,
+> +=09 * allow what we can.
+>  =09 */
+> -=09if (WARN_ON_ONCE(gup_flags & FOLL_LONGTERM))
+> -=09=09return -EINVAL;
+> +=09if (gup_flags & FOLL_LONGTERM) {
+> +=09=09if (WARN_ON_ONCE(locked))
+> +=09=09=09return -EINVAL;
+> +=09=09/*
+> +=09=09 * This will check the vmas (even if our vmas arg is NULL)
+> +=09=09 * and return -ENOTSUPP if DAX isn't allowed in this case:
+> +=09=09 */
+> +=09=09return __gup_longterm_locked(tsk, mm, start, nr_pages, pages,
+> +=09=09=09=09=09     vmas, gup_flags | FOLL_TOUCH |
+> +=09=09=09=09=09     FOLL_REMOTE);
+> +=09}
+> =20
+>  =09return __get_user_pages_locked(tsk, mm, start, nr_pages, pages, vmas,
+>  =09=09=09=09       locked,
+
