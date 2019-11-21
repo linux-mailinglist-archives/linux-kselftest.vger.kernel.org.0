@@ -2,148 +2,150 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 375DA105C56
-	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Nov 2019 22:52:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A6CD5105C3E
+	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Nov 2019 22:50:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726961AbfKUVwb (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 21 Nov 2019 16:52:31 -0500
-Received: from hqemgate14.nvidia.com ([216.228.121.143]:12745 "EHLO
-        hqemgate14.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726297AbfKUVwb (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 21 Nov 2019 16:52:31 -0500
-Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqemgate14.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5dd707210000>; Thu, 21 Nov 2019 13:52:33 -0800
-Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate101.nvidia.com (PGP Universal service);
-  Thu, 21 Nov 2019 13:52:30 -0800
-X-PGP-Universal: processed;
-        by hqpgpgate101.nvidia.com on Thu, 21 Nov 2019 13:52:30 -0800
-Received: from [10.2.168.213] (10.124.1.5) by HQMAIL107.nvidia.com
- (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Thu, 21 Nov
- 2019 21:52:28 +0000
-Subject: Re: [PATCH v7 09/24] vfio, mm: fix get_user_pages_remote() and
- FOLL_LONGTERM
-To:     Alex Williamson <alex.williamson@redhat.com>
-CC:     Andrew Morton <akpm@linux-foundation.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Dave Chinner <david@fromorbit.com>,
-        David Airlie <airlied@linux.ie>,
-        "David S . Miller" <davem@davemloft.net>,
-        Ira Weiny <ira.weiny@intel.com>, Jan Kara <jack@suse.cz>,
-        Jason Gunthorpe <jgg@ziepe.ca>, Jens Axboe <axboe@kernel.dk>,
-        Jonathan Corbet <corbet@lwn.net>,
-        =?UTF-8?B?SsOpcsO0bWUgR2xpc3Nl?= <jglisse@redhat.com>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Michal Hocko <mhocko@suse.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Paul Mackerras <paulus@samba.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Vlastimil Babka <vbabka@suse.cz>, <bpf@vger.kernel.org>,
-        <dri-devel@lists.freedesktop.org>, <kvm@vger.kernel.org>,
-        <linux-block@vger.kernel.org>, <linux-doc@vger.kernel.org>,
-        <linux-fsdevel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-        <linux-media@vger.kernel.org>, <linux-rdma@vger.kernel.org>,
-        <linuxppc-dev@lists.ozlabs.org>, <netdev@vger.kernel.org>,
-        <linux-mm@kvack.org>, LKML <linux-kernel@vger.kernel.org>,
-        Jason Gunthorpe <jgg@mellanox.com>
-References: <20191121071354.456618-1-jhubbard@nvidia.com>
- <20191121071354.456618-10-jhubbard@nvidia.com>
- <20191121143525.50deb72f@x1.home>
-From:   John Hubbard <jhubbard@nvidia.com>
-X-Nvconfidentiality: public
-Message-ID: <b5ae788a-58a9-de93-f65e-e4d9c0632dc9@nvidia.com>
-Date:   Thu, 21 Nov 2019 13:49:40 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.2.2
+        id S1726676AbfKUVuV (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 21 Nov 2019 16:50:21 -0500
+Received: from mga01.intel.com ([192.55.52.88]:31428 "EHLO mga01.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726329AbfKUVuV (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 21 Nov 2019 16:50:21 -0500
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 21 Nov 2019 13:50:18 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.69,227,1571727600"; 
+   d="scan'208";a="205283769"
+Received: from sjchrist-coffee.jf.intel.com (HELO linux.intel.com) ([10.54.74.41])
+  by fmsmga007.fm.intel.com with ESMTP; 21 Nov 2019 13:50:17 -0800
+Date:   Thu, 21 Nov 2019 13:50:17 -0800
+From:   Sean Christopherson <sean.j.christopherson@intel.com>
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Radim =?utf-8?B?S3LEjW3DocWZ?= <rkrcmar@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Tony Luck <tony.luck@intel.com>,
+        Tony W Wang-oc <TonyWWang-oc@zhaoxin.com>,
+        Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, linux-edac@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+Subject: Re: [PATCH v3 12/19] x86/vmx: Introduce VMX_FEATURES_*
+Message-ID: <20191121215017.GC16617@linux.intel.com>
+References: <20191119031240.7779-1-sean.j.christopherson@intel.com>
+ <20191119031240.7779-13-sean.j.christopherson@intel.com>
+ <20191121165250.GK6540@zn.tnic>
 MIME-Version: 1.0
-In-Reply-To: <20191121143525.50deb72f@x1.home>
-X-Originating-IP: [10.124.1.5]
-X-ClientProxiedBy: HQMAIL105.nvidia.com (172.20.187.12) To
- HQMAIL107.nvidia.com (172.20.187.13)
-Content-Type: text/plain; charset="windows-1252"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1574373153; bh=oGhbv3cXo8o4GZ8PnxP5Ux4y8AE3jGJR4EeVDVjoVEc=;
-        h=X-PGP-Universal:Subject:To:CC:References:From:X-Nvconfidentiality:
-         Message-ID:Date:User-Agent:MIME-Version:In-Reply-To:
-         X-Originating-IP:X-ClientProxiedBy:Content-Type:Content-Language:
-         Content-Transfer-Encoding;
-        b=KYGZRjKvtxip9P6ifb3Te8PpgvFSTRruWhwxOgXb0S114oVSZskeO+iOWdCneQvB4
-         NA5CKwViDqqMCzmcEtuXOzx5kWlGm/CdhdbD7x7k9Kx6Vh5kQFWAggEn8hm5nSetjo
-         GsuEs2bguAasb3kn7+569g/s+OYwxg2N/laFgRqUcYIkUaXO+dKZ1vX7QBvKE7iuhN
-         xdX8E7mSGSvk8taZzTl3l1tHACe5K5QgYBxfNvJAXLPet5p3Tx/OKYiHGukBzXFPA8
-         pg/kE+aDZRuWuc8KSGeIQ8zVRFi/6q/Cd2RICjjhHLzCf4ZbZMZG9XJoZELTlTOned
-         7+K+fSUD3HTWw==
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20191121165250.GK6540@zn.tnic>
+User-Agent: Mutt/1.5.24 (2015-08-30)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 11/21/19 1:35 PM, Alex Williamson wrote:
-> On Wed, 20 Nov 2019 23:13:39 -0800
-> John Hubbard <jhubbard@nvidia.com> wrote:
+On Thu, Nov 21, 2019 at 05:52:58PM +0100, Borislav Petkov wrote:
+> On Mon, Nov 18, 2019 at 07:12:33PM -0800, Sean Christopherson wrote:
+> > Define separate VMX_FEATURE flags to set the stage for enumerating VMX
+> > capabilities outside of the cpu_has() framework, and for adding
+> > functional usage of VMX_FEATURE_* to help ensure the features reported
+> > via /proc/cpuinfo is up to date with respect to kernel recognition of
+> > VMX capabilities.
 > 
->> As it says in the updated comment in gup.c: current FOLL_LONGTERM
->> behavior is incompatible with FAULT_FLAG_ALLOW_RETRY because of the
->> FS DAX check requirement on vmas.
->>
->> However, the corresponding restriction in get_user_pages_remote() was
->> slightly stricter than is actually required: it forbade all
->> FOLL_LONGTERM callers, but we can actually allow FOLL_LONGTERM callers
->> that do not set the "locked" arg.
->>
->> Update the code and comments accordingly, and update the VFIO caller
->> to take advantage of this, fixing a bug as a result: the VFIO caller
->> is logically a FOLL_LONGTERM user.
->>
->> Also, remove an unnessary pair of calls that were releasing and
->> reacquiring the mmap_sem. There is no need to avoid holding mmap_sem
->> just in order to call page_to_pfn().
->>
->> Also, move the DAX check ("if a VMA is DAX, don't allow long term
->> pinning") from the VFIO call site, all the way into the internals
->> of get_user_pages_remote() and __gup_longterm_locked(). That is:
->> get_user_pages_remote() calls __gup_longterm_locked(), which in turn
->> calls check_dax_vmas(). It's lightly explained in the comments as well.
->>
->> Thanks to Jason Gunthorpe for pointing out a clean way to fix this,
->> and to Dan Williams for helping clarify the DAX refactoring.
->>
->> Reviewed-by: Jason Gunthorpe <jgg@mellanox.com>
->> Reviewed-by: Ira Weiny <ira.weiny@intel.com>
->> Suggested-by: Jason Gunthorpe <jgg@ziepe.ca>
->> Cc: Dan Williams <dan.j.williams@intel.com>
->> Cc: Jerome Glisse <jglisse@redhat.com>
->> Signed-off-by: John Hubbard <jhubbard@nvidia.com>
->> ---
->>   drivers/vfio/vfio_iommu_type1.c | 30 +++++-------------------------
->>   mm/gup.c                        | 27 ++++++++++++++++++++++-----
->>   2 files changed, 27 insertions(+), 30 deletions(-)
-> 
-> Tested with device assignment and Intel mdev vGPU assignment with QEMU
-> userspace:
-> 
-> Tested-by: Alex Williamson <alex.williamson@redhat.com>
-> Acked-by: Alex Williamson <alex.williamson@redhat.com>
-> 
-> Feel free to include for 19/24 as well.  Thanks,
-> 
-> Alex
+> That's all fine and good but who's going to use those feature bits?
+> Or are we reporting them just for the sake of it? Because if only
+> that, then it is not worth the effort. Sure, I don't mind extending
+> the framework so that you can use cpu_has() for VMX features but the
+> /proc/cpuinfo angle is not clear to me.
 
+I actually don't want to use cpu_has() for the VMX features, which is
+why I put these in a separate array (one of the future patches).
+ 
+The motivation is purely for /proc/cpuinfo.  Currently there is no sane
+way for a user to query the capabilities of their platform.  The issue
+comes up on a fairly regular basis, e.g. when trying to find a platform
+to test a new feature or to debug an issue that has a hardware dependency.
 
-Great! Thanks for the testing and ack on those. I'm about to repackage
-(and split up as CH requested) for 5.5, and will keep you on CC, of course.
+Lack of reporting is especially annoying when the end user isn't familiar
+with VMX, e.g. the format of the MSRs is non-standard, existence of some
+MSRs is reported by bits in other MSRs, several features from KVM's point
+of view are actually enumerated as 3+ separate features by hardware, etc...
 
-thanks,
--- 
-John Hubbard
-NVIDIA
+Punting to a userspace utility isn't a viable option because all of the
+capabilities are reported via MSRs.
+
+As for why I want to keep these out of cpu_has()... VMX has a concept of
+features being fixed "on", e.g. early CPUs don't allow disabling off CR3
+interception.  A cpu_has() approach doesn't work well since it loses the
+information regarding which bits are fixed-1.  KVM also has several module
+params that can be used to disable use of features, i.e. we don't want
+cpu_has() for VMX features because the KVM-specific variables need to be
+the canonical reference.
+
+> Especially since you're hiding most of them with the "" prepended in the
+> define comment.
+> 
+> > +/* Pin-Based VM-Execution Controls, EPT/VPID, APIC and VM-Functions, word 0 */
+> > +#define VMX_FEATURE_INTR_EXITING	( 0*32+  0) /* "" VM-Exit on vectored interrupts */
+> > +#define VMX_FEATURE_NMI_EXITING		( 0*32+  3) /* "" VM-Exit on NMIs */
+> > +#define VMX_FEATURE_VIRTUAL_NMIS	( 0*32+  5) /* "vnmi" NMI virtualization */
+> > +#define VMX_FEATURE_PREEMPTION_TIMER	( 0*32+  6) /* VMX Preemption Timer */
+> 
+> You really wanna have "preemption_timer" in /proc/cpuinfo? That should
+> at least say vmx-something, if it should be visible there at all.
+
+Originally I wanted these to go in a completely separate line in
+/proc/cpuinfo, e.g. "vmx flags".  That's what I submitted in v1, but then
+found out it'd break the ABI due to handful of VMX features being
+enumerated in "flags" via synthetic cpufeature bits.
+
+Paolo suggested dropping the "vmx flags" approach as an easy solution, and
+I obviously didn't update the names to prepend vmx_.  Preprending vmx_
+would be somewhat annoying because changing the names of the synthetic
+flags would also break the ABI...
+
+Alternatively, what about adding "vmx flags" but keeping the existing
+synthetic flags?  That'd mean having duplicates for tpr_shadow, vnmi, ept,
+flexpriority, vpi and ept_ad.  On the plus side, we'd cap the pollution of
+"flags" at those six features.
+ 
+> > +#define VMX_FEATURE_POSTED_INTR		( 0*32+  7) /* Posted Interrupts */
+> 
+> Same here.
+> 
+> In general, the questions stand for all those feature bits which will be
+> visible in /proc/cpuinfo.
+> 
+> 1. Which to show and why?
+> 
+> 2. Who's going to use them?
+> 
+> 3. If show and dumping them together with the other feature flags, have
+> their name be proper (vmx-prefixed etc).
+> 
+> > +/* EPT/VPID features, scattered to bits 16-23 */
+> > +#define VMX_FEATURE_INVVPID	        ( 0*32+ 16) /* INVVPID is supported */
+> > +#define VMX_FEATURE_EPT_EXECUTE_ONLY	( 0*32+ 17) /* "ept_x_only" EPT entries can be execute only */
+> > +#define VMX_FEATURE_EPT_AD      	( 0*32+ 18) /* EPT Accessed/Dirty bits */
+> > +#define VMX_FEATURE_EPT_1GB      	( 0*32+ 19) /* 1GB EPT pages */
+> 			      ^^^^^^^^^^^^
+> 
+> There are some spaces that need to be converted to tabs here.
+
+Doh.
