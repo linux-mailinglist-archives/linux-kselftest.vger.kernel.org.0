@@ -2,33 +2,33 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C2DCE1081AC
-	for <lists+linux-kselftest@lfdr.de>; Sun, 24 Nov 2019 05:55:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F2E791081AE
+	for <lists+linux-kselftest@lfdr.de>; Sun, 24 Nov 2019 05:56:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726944AbfKXEzw (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 23 Nov 2019 23:55:52 -0500
-Received: from mail.kernel.org ([198.145.29.99]:46934 "EHLO mail.kernel.org"
+        id S1727091AbfKXE4C (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 23 Nov 2019 23:56:02 -0500
+Received: from mail.kernel.org ([198.145.29.99]:47084 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726705AbfKXEzw (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 23 Nov 2019 23:55:52 -0500
+        id S1727090AbfKXE4C (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Sat, 23 Nov 2019 23:56:02 -0500
 Received: from localhost.localdomain (NE2965lan1.rev.em-net.ne.jp [210.141.244.193])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 8835F207FD;
-        Sun, 24 Nov 2019 04:55:50 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 9FE3E2080D;
+        Sun, 24 Nov 2019 04:55:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1574571351;
-        bh=ymtaKi9IVpbZdAuAWTlDTtavINY3RKPZP8U6lntlors=;
+        s=default; t=1574571360;
+        bh=D8V8wbVGoxN0b1NKNDQiKIOw8YMH+SwZdlsI2fxNDeU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Re6yMKKVleYjjsMQg4ui1OpcYru+2QwoAYas8+VySx0gkDbztqjQy45rd/IFJXVvA
-         DNp6ZUD4+3EpbxdhGNm1Nsvbp4tjRQVAVMWnUjgNlrLCSXyrQGDZOyrytyoK0biCBM
-         qZQ+7PwmS6S1zcpMUrSDHX2ERH1PmJrctEQbnG5o=
+        b=Gsxi0qvKBxDs6yclppEstUsVw8N3pdSAQfuke1uSKvi1l0YdZfHkEC2DwsqoPjiNH
+         lbX60fsL9CNH1d+RjtfFBskibdVwHmtx8FqEVutqt3tIRHXevjaMwXBqbZDu0Zci2M
+         vXdMlBH0LrnS+ESPkw+x95dcSVLVsQXTepnteseI=
 From:   Masami Hiramatsu <mhiramat@kernel.org>
 To:     Shuah Khan <shuah@kernel.org>, Steven Rostedt <rostedt@goodmis.org>
 Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [BUGFIX PATCH 2/3] selftests/ftrace: Fix ftrace test cases to check unsupported
-Date:   Sun, 24 Nov 2019 13:55:48 +0900
-Message-Id: <157457134852.25666.7660419621672440723.stgit@devnote2>
+Subject: [BUGFIX PATCH 3/3] selftests/ftrace: Do not to use absolute debugfs path
+Date:   Sun, 24 Nov 2019 13:55:57 +0900
+Message-Id: <157457135713.25666.16389902435164296254.stgit@devnote2>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <157457133001.25666.5309062776021151107.stgit@devnote2>
 References: <157457133001.25666.5309062776021151107.stgit@devnote2>
@@ -41,43 +41,63 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Since function tracer can be disabled, set_ftrace_filter can be
-disappeared. The test cases must check whether the set_ftrace_filter
-exists or not before testing and if not, return it as unsupported.
+Use relative path to trigger file instead of absolute debugfs path,
+because if the user uses tracefs instead of debugfs, it can be
+mounted at /sys/kernel/tracing.
+Anyway, since the ftracetest is designed to be run at the tracing
+directory, user doesn't need to use absolute path.
 
 Signed-off-by: Masami Hiramatsu <mhiramat@kernel.org>
 ---
- .../ftrace/test.d/ftrace/func-filter-stacktrace.tc |    2 ++
- .../selftests/ftrace/test.d/ftrace/func_cpumask.tc |    5 +++++
- 2 files changed, 7 insertions(+)
+ .../inter-event/trigger-action-hist-xfail.tc       |    4 ++--
+ .../inter-event/trigger-onchange-action-hist.tc    |    2 +-
+ .../inter-event/trigger-snapshot-action-hist.tc    |    4 ++--
+ 3 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/tools/testing/selftests/ftrace/test.d/ftrace/func-filter-stacktrace.tc b/tools/testing/selftests/ftrace/test.d/ftrace/func-filter-stacktrace.tc
-index 36fb59f886ea..1a52f2883fe0 100644
---- a/tools/testing/selftests/ftrace/test.d/ftrace/func-filter-stacktrace.tc
-+++ b/tools/testing/selftests/ftrace/test.d/ftrace/func-filter-stacktrace.tc
-@@ -3,6 +3,8 @@
- # description: ftrace - stacktrace filter command
- # flags: instance
+diff --git a/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-action-hist-xfail.tc b/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-action-hist-xfail.tc
+index 1221240f8cf6..3f2aee115f6e 100644
+--- a/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-action-hist-xfail.tc
++++ b/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-action-hist-xfail.tc
+@@ -21,10 +21,10 @@ grep -q "snapshot()" README || exit_unsupported # version issue
  
-+[ ! -f set_ftrace_filter ] && exit_unsupported
-+
- echo _do_fork:stacktrace >> set_ftrace_filter
+ echo "Test expected snapshot action failure"
  
- grep -q "_do_fork:stacktrace:unlimited" set_ftrace_filter
-diff --git a/tools/testing/selftests/ftrace/test.d/ftrace/func_cpumask.tc b/tools/testing/selftests/ftrace/test.d/ftrace/func_cpumask.tc
-index 86a1f07ef2ca..7757b549f0b6 100644
---- a/tools/testing/selftests/ftrace/test.d/ftrace/func_cpumask.tc
-+++ b/tools/testing/selftests/ftrace/test.d/ftrace/func_cpumask.tc
-@@ -15,6 +15,11 @@ if [ $NP -eq 1 ] ;then
-   exit_unresolved
- fi
+-echo 'hist:keys=comm:onmatch(sched.sched_wakeup).snapshot()' >> /sys/kernel/debug/tracing/events/sched/sched_waking/trigger && exit_fail
++echo 'hist:keys=comm:onmatch(sched.sched_wakeup).snapshot()' >> events/sched/sched_waking/trigger && exit_fail
  
-+if ! grep -q function available_tracers ; then
-+  echo "Function trace is not enabled"
-+  exit_unsupported
-+fi
-+
- ORIG_CPUMASK=`cat tracing_cpumask`
+ echo "Test expected save action failure"
  
- do_reset() {
+-echo 'hist:keys=comm:onmatch(sched.sched_wakeup).save(comm,prio)' >> /sys/kernel/debug/tracing/events/sched/sched_waking/trigger && exit_fail
++echo 'hist:keys=comm:onmatch(sched.sched_wakeup).save(comm,prio)' >> events/sched/sched_waking/trigger && exit_fail
+ 
+ exit_xfail
+diff --git a/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-onchange-action-hist.tc b/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-onchange-action-hist.tc
+index 064a284e4e75..c80007aa9f86 100644
+--- a/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-onchange-action-hist.tc
++++ b/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-onchange-action-hist.tc
+@@ -16,7 +16,7 @@ grep -q "onchange(var)" README || exit_unsupported # version issue
+ 
+ echo "Test onchange action"
+ 
+-echo 'hist:keys=comm:newprio=prio:onchange($newprio).save(comm,prio) if comm=="ping"' >> /sys/kernel/debug/tracing/events/sched/sched_waking/trigger
++echo 'hist:keys=comm:newprio=prio:onchange($newprio).save(comm,prio) if comm=="ping"' >> events/sched/sched_waking/trigger
+ 
+ ping $LOCALHOST -c 3
+ nice -n 1 ping $LOCALHOST -c 3
+diff --git a/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-snapshot-action-hist.tc b/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-snapshot-action-hist.tc
+index 18fff69fc433..f546c1b66a9b 100644
+--- a/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-snapshot-action-hist.tc
++++ b/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-snapshot-action-hist.tc
+@@ -23,9 +23,9 @@ grep -q "snapshot()" README || exit_unsupported # version issue
+ 
+ echo "Test snapshot action"
+ 
+-echo 1 > /sys/kernel/debug/tracing/events/sched/enable
++echo 1 > events/sched/enable
+ 
+-echo 'hist:keys=comm:newprio=prio:onchange($newprio).save(comm,prio):onchange($newprio).snapshot() if comm=="ping"' >> /sys/kernel/debug/tracing/events/sched/sched_waking/trigger
++echo 'hist:keys=comm:newprio=prio:onchange($newprio).save(comm,prio):onchange($newprio).snapshot() if comm=="ping"' >> events/sched/sched_waking/trigger
+ 
+ ping $LOCALHOST -c 3
+ nice -n 1 ping $LOCALHOST -c 3
 
