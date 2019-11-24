@@ -2,102 +2,122 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F2E791081AE
-	for <lists+linux-kselftest@lfdr.de>; Sun, 24 Nov 2019 05:56:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C3E1C108258
+	for <lists+linux-kselftest@lfdr.de>; Sun, 24 Nov 2019 07:15:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727091AbfKXE4C (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 23 Nov 2019 23:56:02 -0500
-Received: from mail.kernel.org ([198.145.29.99]:47084 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727090AbfKXE4C (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 23 Nov 2019 23:56:02 -0500
-Received: from localhost.localdomain (NE2965lan1.rev.em-net.ne.jp [210.141.244.193])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 9FE3E2080D;
-        Sun, 24 Nov 2019 04:55:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1574571360;
-        bh=D8V8wbVGoxN0b1NKNDQiKIOw8YMH+SwZdlsI2fxNDeU=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Gsxi0qvKBxDs6yclppEstUsVw8N3pdSAQfuke1uSKvi1l0YdZfHkEC2DwsqoPjiNH
-         lbX60fsL9CNH1d+RjtfFBskibdVwHmtx8FqEVutqt3tIRHXevjaMwXBqbZDu0Zci2M
-         vXdMlBH0LrnS+ESPkw+x95dcSVLVsQXTepnteseI=
-From:   Masami Hiramatsu <mhiramat@kernel.org>
-To:     Shuah Khan <shuah@kernel.org>, Steven Rostedt <rostedt@goodmis.org>
-Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [BUGFIX PATCH 3/3] selftests/ftrace: Do not to use absolute debugfs path
-Date:   Sun, 24 Nov 2019 13:55:57 +0900
-Message-Id: <157457135713.25666.16389902435164296254.stgit@devnote2>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <157457133001.25666.5309062776021151107.stgit@devnote2>
-References: <157457133001.25666.5309062776021151107.stgit@devnote2>
-User-Agent: StGit/0.17.1-dirty
+        id S1726772AbfKXGPH (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 24 Nov 2019 01:15:07 -0500
+Received: from hqemgate16.nvidia.com ([216.228.121.65]:6579 "EHLO
+        hqemgate16.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725810AbfKXGPG (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Sun, 24 Nov 2019 01:15:06 -0500
+Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqemgate16.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5dda1fe40000>; Sat, 23 Nov 2019 22:15:00 -0800
+Received: from hqmail.nvidia.com ([172.20.161.6])
+  by hqpgpgate101.nvidia.com (PGP Universal service);
+  Sat, 23 Nov 2019 22:14:59 -0800
+X-PGP-Universal: processed;
+        by hqpgpgate101.nvidia.com on Sat, 23 Nov 2019 22:14:59 -0800
+Received: from [10.110.48.28] (10.124.1.5) by HQMAIL107.nvidia.com
+ (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Sun, 24 Nov
+ 2019 06:14:58 +0000
+Subject: Re: [PATCH v7 07/24] IB/umem: use get_user_pages_fast() to pin DMA
+ pages
+To:     Jason Gunthorpe <jgg@ziepe.ca>,
+        Christoph Hellwig <hch@infradead.org>
+CC:     Andrew Morton <akpm@linux-foundation.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Dave Chinner <david@fromorbit.com>,
+        David Airlie <airlied@linux.ie>,
+        "David S . Miller" <davem@davemloft.net>,
+        Ira Weiny <ira.weiny@intel.com>, Jan Kara <jack@suse.cz>,
+        Jens Axboe <axboe@kernel.dk>, Jonathan Corbet <corbet@lwn.net>,
+        =?UTF-8?B?SsOpcsO0bWUgR2xpc3Nl?= <jglisse@redhat.com>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Michal Hocko <mhocko@suse.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Paul Mackerras <paulus@samba.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Vlastimil Babka <vbabka@suse.cz>, <bpf@vger.kernel.org>,
+        <dri-devel@lists.freedesktop.org>, <kvm@vger.kernel.org>,
+        <linux-block@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+        <linux-fsdevel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+        <linux-media@vger.kernel.org>, <linux-rdma@vger.kernel.org>,
+        <linuxppc-dev@lists.ozlabs.org>, <netdev@vger.kernel.org>,
+        <linux-mm@kvack.org>, LKML <linux-kernel@vger.kernel.org>
+References: <20191121071354.456618-1-jhubbard@nvidia.com>
+ <20191121071354.456618-8-jhubbard@nvidia.com>
+ <20191121080746.GC30991@infradead.org> <20191121143643.GC7448@ziepe.ca>
+From:   John Hubbard <jhubbard@nvidia.com>
+X-Nvconfidentiality: public
+Message-ID: <17835638-d584-f981-faa3-34d57e0990de@nvidia.com>
+Date:   Sat, 23 Nov 2019 22:14:57 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.2.2
 MIME-Version: 1.0
+In-Reply-To: <20191121143643.GC7448@ziepe.ca>
+X-Originating-IP: [10.124.1.5]
+X-ClientProxiedBy: HQMAIL105.nvidia.com (172.20.187.12) To
+ HQMAIL107.nvidia.com (172.20.187.13)
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1574576100; bh=+mbCPa34GHo19rkSZ8X28MZHFxfKXj0JDCmoAoUgPhA=;
+        h=X-PGP-Universal:Subject:To:CC:References:From:X-Nvconfidentiality:
+         Message-ID:Date:User-Agent:MIME-Version:In-Reply-To:
+         X-Originating-IP:X-ClientProxiedBy:Content-Type:Content-Language:
+         Content-Transfer-Encoding;
+        b=Lxyt3fX3SLobwlYOgojx5q/tcPHCRvrfdyk3qwBay6+crwzq9cmBDOL2v1A93d2/F
+         znbsTdahsKcfBLC3ExDVRiR4xyNb8wuF+IY4tVg2BRT+CWxuHL+tde5mqs3Sjaqc2H
+         pQhchVsKtIHXazVW0nKuBUtZ85yMnPL1fDCuL8YyEbTuF/FrqtWCNE9nir7lTMKyjf
+         tlQWOABZBTB1lSxY5uwVrlwTat+xx62yAomSXn+CUgkL0jIrOlvTsDh31691ux/R3U
+         ne8BFF7YaXlkXhz8ZhdLSUDwwh/yLz0H7gzsTDkDINVi3pBPVt9mKwVrX7BgK6Om2D
+         P0YwnWGSjqBhw==
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Use relative path to trigger file instead of absolute debugfs path,
-because if the user uses tracefs instead of debugfs, it can be
-mounted at /sys/kernel/tracing.
-Anyway, since the ftracetest is designed to be run at the tracing
-directory, user doesn't need to use absolute path.
+On 11/21/19 6:36 AM, Jason Gunthorpe wrote:
+> On Thu, Nov 21, 2019 at 12:07:46AM -0800, Christoph Hellwig wrote:
+>> On Wed, Nov 20, 2019 at 11:13:37PM -0800, John Hubbard wrote:
+>>> And get rid of the mmap_sem calls, as part of that. Note
+>>> that get_user_pages_fast() will, if necessary, fall back to
+>>> __gup_longterm_unlocked(), which takes the mmap_sem as needed.
+>>>
+>>> Reviewed-by: Jan Kara <jack@suse.cz>
+>>> Reviewed-by: Jason Gunthorpe <jgg@mellanox.com>
+>>> Reviewed-by: Ira Weiny <ira.weiny@intel.com>
+>>> Signed-off-by: John Hubbard <jhubbard@nvidia.com>
+>>
+>> Looks fine,
+>>
+>> Reviewed-by: Christoph Hellwig <hch@lst.de>
+>>
+>> Jason, can you queue this up for 5.5 to reduce this patch stack a bit?
+> 
+> Yes, I said I'd do this in an earlier revision. Now that it is clear this
+> won't go through Andrew's tree, applied to rdma for-next
+> 
 
-Signed-off-by: Masami Hiramatsu <mhiramat@kernel.org>
----
- .../inter-event/trigger-action-hist-xfail.tc       |    4 ++--
- .../inter-event/trigger-onchange-action-hist.tc    |    2 +-
- .../inter-event/trigger-snapshot-action-hist.tc    |    4 ++--
- 3 files changed, 5 insertions(+), 5 deletions(-)
+Great, I'll plan on it going up through that tree. To be clear, is it headed 
+for:
 
-diff --git a/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-action-hist-xfail.tc b/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-action-hist-xfail.tc
-index 1221240f8cf6..3f2aee115f6e 100644
---- a/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-action-hist-xfail.tc
-+++ b/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-action-hist-xfail.tc
-@@ -21,10 +21,10 @@ grep -q "snapshot()" README || exit_unsupported # version issue
- 
- echo "Test expected snapshot action failure"
- 
--echo 'hist:keys=comm:onmatch(sched.sched_wakeup).snapshot()' >> /sys/kernel/debug/tracing/events/sched/sched_waking/trigger && exit_fail
-+echo 'hist:keys=comm:onmatch(sched.sched_wakeup).snapshot()' >> events/sched/sched_waking/trigger && exit_fail
- 
- echo "Test expected save action failure"
- 
--echo 'hist:keys=comm:onmatch(sched.sched_wakeup).save(comm,prio)' >> /sys/kernel/debug/tracing/events/sched/sched_waking/trigger && exit_fail
-+echo 'hist:keys=comm:onmatch(sched.sched_wakeup).save(comm,prio)' >> events/sched/sched_waking/trigger && exit_fail
- 
- exit_xfail
-diff --git a/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-onchange-action-hist.tc b/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-onchange-action-hist.tc
-index 064a284e4e75..c80007aa9f86 100644
---- a/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-onchange-action-hist.tc
-+++ b/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-onchange-action-hist.tc
-@@ -16,7 +16,7 @@ grep -q "onchange(var)" README || exit_unsupported # version issue
- 
- echo "Test onchange action"
- 
--echo 'hist:keys=comm:newprio=prio:onchange($newprio).save(comm,prio) if comm=="ping"' >> /sys/kernel/debug/tracing/events/sched/sched_waking/trigger
-+echo 'hist:keys=comm:newprio=prio:onchange($newprio).save(comm,prio) if comm=="ping"' >> events/sched/sched_waking/trigger
- 
- ping $LOCALHOST -c 3
- nice -n 1 ping $LOCALHOST -c 3
-diff --git a/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-snapshot-action-hist.tc b/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-snapshot-action-hist.tc
-index 18fff69fc433..f546c1b66a9b 100644
---- a/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-snapshot-action-hist.tc
-+++ b/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-snapshot-action-hist.tc
-@@ -23,9 +23,9 @@ grep -q "snapshot()" README || exit_unsupported # version issue
- 
- echo "Test snapshot action"
- 
--echo 1 > /sys/kernel/debug/tracing/events/sched/enable
-+echo 1 > events/sched/enable
- 
--echo 'hist:keys=comm:newprio=prio:onchange($newprio).save(comm,prio):onchange($newprio).snapshot() if comm=="ping"' >> /sys/kernel/debug/tracing/events/sched/sched_waking/trigger
-+echo 'hist:keys=comm:newprio=prio:onchange($newprio).save(comm,prio):onchange($newprio).snapshot() if comm=="ping"' >> events/sched/sched_waking/trigger
- 
- ping $LOCALHOST -c 3
- nice -n 1 ping $LOCALHOST -c 3
+    git://git.kernel.org/pub/scm/linux/kernel/git/rdma/rdma.git for-next
 
+?
+
+
+thanks,
+-- 
+John Hubbard
+NVIDIA
