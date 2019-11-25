@@ -2,133 +2,85 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AAFA1108A63
-	for <lists+linux-kselftest@lfdr.de>; Mon, 25 Nov 2019 09:59:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 86ACA108C83
+	for <lists+linux-kselftest@lfdr.de>; Mon, 25 Nov 2019 12:03:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727008AbfKYI7V (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 25 Nov 2019 03:59:21 -0500
-Received: from mx2.suse.de ([195.135.220.15]:56606 "EHLO mx1.suse.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725793AbfKYI7V (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 25 Nov 2019 03:59:21 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id F1475B308;
-        Mon, 25 Nov 2019 08:59:16 +0000 (UTC)
-Received: by quack2.suse.cz (Postfix, from userid 1000)
-        id 1906B1E0A57; Mon, 25 Nov 2019 09:59:15 +0100 (CET)
-Date:   Mon, 25 Nov 2019 09:59:15 +0100
-From:   Jan Kara <jack@suse.cz>
-To:     John Hubbard <jhubbard@nvidia.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn.topel@intel.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Dave Chinner <david@fromorbit.com>,
-        David Airlie <airlied@linux.ie>,
-        "David S . Miller" <davem@davemloft.net>,
-        Ira Weiny <ira.weiny@intel.com>, Jan Kara <jack@suse.cz>,
-        Jason Gunthorpe <jgg@ziepe.ca>, Jens Axboe <axboe@kernel.dk>,
-        Jonathan Corbet <corbet@lwn.net>,
-        =?iso-8859-1?B?Suly9G1l?= Glisse <jglisse@redhat.com>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Michal Hocko <mhocko@suse.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Paul Mackerras <paulus@samba.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Vlastimil Babka <vbabka@suse.cz>, bpf@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, kvm@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-rdma@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, netdev@vger.kernel.org,
-        linux-mm@kvack.org, LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 17/19] powerpc: book3s64: convert to pin_user_pages() and
- put_user_page()
-Message-ID: <20191125085915.GB1797@quack2.suse.cz>
-References: <20191125042011.3002372-1-jhubbard@nvidia.com>
- <20191125042011.3002372-18-jhubbard@nvidia.com>
+        id S1727519AbfKYLDs (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 25 Nov 2019 06:03:48 -0500
+Received: from mail.kernel.org ([198.145.29.99]:35398 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727278AbfKYLDs (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 25 Nov 2019 06:03:48 -0500
+Received: from localhost.localdomain (NE2965lan1.rev.em-net.ne.jp [210.141.244.193])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id C79E32064B;
+        Mon, 25 Nov 2019 11:03:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1574679827;
+        bh=SOT5ZFxPv+2om65CDItvSOpiG90G77QO9zjRpy0Q/Lk=;
+        h=From:To:Cc:Subject:Date:From;
+        b=nPx47EmPBYy7o82pEWET+QADNGXcDg0mCrAmS9Q31srgCS/uOKYZSruuW5BovnyzG
+         aKsQlhSVNxX1gQWuxuYUmJrmPdbfDGs/w06JfYC3xAhgzqWZAj1r/V7lnviyay8DsZ
+         mNsIHRNq3sqhSqYp61H7hpDEgr9qn6juXg+1rRP4=
+From:   Masami Hiramatsu <mhiramat@kernel.org>
+To:     Shuah Khan <shuah@kernel.org>
+Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        jaswinder.singh@linaro.org
+Subject: [BUGFIX PATCH] selftests/x86: Check the availablity of sys/syscall.h
+Date:   Mon, 25 Nov 2019 20:03:44 +0900
+Message-Id: <157467982420.24866.4375165389279465782.stgit@devnote2>
+X-Mailer: git-send-email 2.20.1
+User-Agent: StGit/0.17.1-dirty
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191125042011.3002372-18-jhubbard@nvidia.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sun 24-11-19 20:20:09, John Hubbard wrote:
-> 1. Convert from get_user_pages() to pin_user_pages().
-> 
-> 2. As required by pin_user_pages(), release these pages via
-> put_user_page(). In this case, do so via put_user_pages_dirty_lock().
-> 
-> That has the side effect of calling set_page_dirty_lock(), instead
-> of set_page_dirty(). This is probably more accurate.
-> 
-> As Christoph Hellwig put it, "set_page_dirty() is only safe if we are
-> dealing with a file backed page where we have reference on the inode it
-> hangs off." [1]
-> 
-> 3. Release each page in mem->hpages[] (instead of mem->hpas[]), because
-> that is the array that pin_longterm_pages() filled in. This is more
-> accurate and should be a little safer from a maintenance point of
-> view.
+Since single_step_syscall.c depends on sys/syscall.h and
+its include, asm/unistd.h, we should check the availability
+of those headers.
+Without this fix, if gcc-multilib is not installed but
+libc6-dev-i386 is installed, kselftest tries to build 32bit
+binary and failed with following error message.
 
-Except that this breaks the code. hpages is unioned with hpas...
+In file included from single_step_syscall.c:18:
+/usr/include/sys/syscall.h:24:10: fatal error: asm/unistd.h: No such file or directory
+ #include <asm/unistd.h>
+          ^~~~~~~~~~~~~~
+compilation terminated.
 
-> [1] https://lore.kernel.org/r/20190723153640.GB720@lst.de
-> 
-> Signed-off-by: John Hubbard <jhubbard@nvidia.com>
-> ---
->  arch/powerpc/mm/book3s64/iommu_api.c | 12 +++++-------
->  1 file changed, 5 insertions(+), 7 deletions(-)
-> 
-> diff --git a/arch/powerpc/mm/book3s64/iommu_api.c b/arch/powerpc/mm/book3s64/iommu_api.c
-> index 56cc84520577..196383e8e5a9 100644
-> --- a/arch/powerpc/mm/book3s64/iommu_api.c
-> +++ b/arch/powerpc/mm/book3s64/iommu_api.c
-> @@ -103,7 +103,7 @@ static long mm_iommu_do_alloc(struct mm_struct *mm, unsigned long ua,
->  	for (entry = 0; entry < entries; entry += chunk) {
->  		unsigned long n = min(entries - entry, chunk);
->  
-> -		ret = get_user_pages(ua + (entry << PAGE_SHIFT), n,
-> +		ret = pin_user_pages(ua + (entry << PAGE_SHIFT), n,
->  				FOLL_WRITE | FOLL_LONGTERM,
->  				mem->hpages + entry, NULL);
->  		if (ret == n) {
-> @@ -167,9 +167,8 @@ static long mm_iommu_do_alloc(struct mm_struct *mm, unsigned long ua,
->  	return 0;
->  
->  free_exit:
-> -	/* free the reference taken */
-> -	for (i = 0; i < pinned; i++)
-> -		put_page(mem->hpages[i]);
-> +	/* free the references taken */
-> +	put_user_pages(mem->hpages, pinned);
->  
->  	vfree(mem->hpas);
->  	kfree(mem);
-> @@ -212,10 +211,9 @@ static void mm_iommu_unpin(struct mm_iommu_table_group_mem_t *mem)
->  		if (!page)
->  			continue;
->  
-> -		if (mem->hpas[i] & MM_IOMMU_TABLE_GROUP_PAGE_DIRTY)
-> -			SetPageDirty(page);
-> +		put_user_pages_dirty_lock(&mem->hpages[i], 1,
-> +					  MM_IOMMU_TABLE_GROUP_PAGE_DIRTY);
+Signed-off-by: Masami Hiramatsu <mhiramat@kernel.org>
+---
+ .../testing/selftests/x86/trivial_32bit_program.c  |    1 +
+ .../testing/selftests/x86/trivial_64bit_program.c  |    1 +
+ 2 files changed, 2 insertions(+)
 
-And the dirtying condition is wrong here as well. Currently it is always
-true.
+diff --git a/tools/testing/selftests/x86/trivial_32bit_program.c b/tools/testing/selftests/x86/trivial_32bit_program.c
+index aa1f58c2f71c..6b455eda24f7 100644
+--- a/tools/testing/selftests/x86/trivial_32bit_program.c
++++ b/tools/testing/selftests/x86/trivial_32bit_program.c
+@@ -8,6 +8,7 @@
+ # error wrong architecture
+ #endif
+ 
++#include <sys/syscall.h>
+ #include <stdio.h>
+ 
+ int main()
+diff --git a/tools/testing/selftests/x86/trivial_64bit_program.c b/tools/testing/selftests/x86/trivial_64bit_program.c
+index 39f4b84fbf15..07ae86df18ff 100644
+--- a/tools/testing/selftests/x86/trivial_64bit_program.c
++++ b/tools/testing/selftests/x86/trivial_64bit_program.c
+@@ -8,6 +8,7 @@
+ # error wrong architecture
+ #endif
+ 
++#include <sys/syscall.h>
+ #include <stdio.h>
+ 
+ int main()
 
-								Honza
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
