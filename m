@@ -2,70 +2,47 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D0A2110861B
-	for <lists+linux-kselftest@lfdr.de>; Mon, 25 Nov 2019 01:53:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CE58108755
+	for <lists+linux-kselftest@lfdr.de>; Mon, 25 Nov 2019 05:21:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727149AbfKYAxs (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 24 Nov 2019 19:53:48 -0500
-Received: from mail-qt1-f195.google.com ([209.85.160.195]:34426 "EHLO
-        mail-qt1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726865AbfKYAxs (ORCPT
+        id S1727561AbfKYEVY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 24 Nov 2019 23:21:24 -0500
+Received: from hqemgate16.nvidia.com ([216.228.121.65]:9464 "EHLO
+        hqemgate16.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727296AbfKYEUW (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 24 Nov 2019 19:53:48 -0500
-Received: by mail-qt1-f195.google.com with SMTP id i17so15341149qtq.1
-        for <linux-kselftest@vger.kernel.org>; Sun, 24 Nov 2019 16:53:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=W5KvmIUsZXoQMVbzDoxYnt7yT+pQC9oHjmWUHowLIDE=;
-        b=bf4wQj5hUYAUJ6J+IG0+hDMiHwo0y37jHBHT8UdhIIsQlzBQ4CxdtIHJrRj51DxlRK
-         CKLiYZNarSFFj4FEgRzMNxy+kI0kMWkp2JP+w0At3xJ5awQQfKCflGDMEbLjgI1axJbX
-         hAKULgjdId2ND6JafSG19IZ76B47iyKuc//kc4PjYIOLOtUHlwtDFurR95sHJjXvaqXY
-         fGrur8LfkpaaQNAoNniODg3+dsAf2S2GrC+6cEhUlICPkA/CU1JiTx+UkO0BkI15CMLp
-         7s5O7Rwk6bHEYMLHf8Cgu9Ix5CmyXm+g4xBp1CqvpB7TPmrxsr5ItFDOP1iwxt6Ai6Gn
-         z9sA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=W5KvmIUsZXoQMVbzDoxYnt7yT+pQC9oHjmWUHowLIDE=;
-        b=qEF+Az1csB6tuEs/4Nrbu+lYW44tGYsoG9U2OyCblcfcM/k83BP7rNy4h1uVjPvA/2
-         X2nV5ILhDnsNY52y16HlZujXicyutfqfoEox7nOXpHGgRO7ujRDmVe5liZegFWyQXAHT
-         hlWfnu7n60P/W2N+xIvjBNle28xxotJvLckbTqtnTB/aoaNTIl+H/+sFrv4W+nJLBA3F
-         tG0jguvUR4jC7KzQs8H73Che7dwqFMryi8VHXteAsElgvfdryW9exDeoCUUZHbnLMx31
-         zHaA4zSI7ORSw7tGQmSYUI+/w8+KA5qAsabtKQmZgHFMLhkG28nfbId+sbDhe/DmBKRJ
-         VLFg==
-X-Gm-Message-State: APjAAAV9SWTzXqFc1tlDM8E6Yui29izk6W89Yx0R3m6LC6PhZ3ETH9+4
-        sDE4jW+4ka5QCXlIx6Q01aEpBw==
-X-Google-Smtp-Source: APXvYqyaLXo5MUyD+I9dO6HiLJFn2uWdH+8xt8jSkZ8bt7a48VQTUuqWsbmWyw/EGV6UxA2EsKJ0Ug==
-X-Received: by 2002:ac8:2209:: with SMTP id o9mr27065091qto.246.1574643226463;
-        Sun, 24 Nov 2019 16:53:46 -0800 (PST)
-Received: from ziepe.ca (hlfxns017vw-142-162-113-180.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.162.113.180])
-        by smtp.gmail.com with ESMTPSA id o124sm2535273qkf.66.2019.11.24.16.53.45
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Sun, 24 Nov 2019 16:53:45 -0800 (PST)
-Received: from jgg by mlx.ziepe.ca with local (Exim 4.90_1)
-        (envelope-from <jgg@ziepe.ca>)
-        id 1iZ2dH-00020J-3s; Sun, 24 Nov 2019 20:53:39 -0400
-Date:   Sun, 24 Nov 2019 20:53:39 -0400
-From:   Jason Gunthorpe <jgg@ziepe.ca>
-To:     John Hubbard <jhubbard@nvidia.com>
-Cc:     Leon Romanovsky <leon@kernel.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
+        Sun, 24 Nov 2019 23:20:22 -0500
+Received: from hqpgpgate102.nvidia.com (Not Verified[216.228.121.13]) by hqemgate16.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5ddb567f0000>; Sun, 24 Nov 2019 20:20:15 -0800
+Received: from hqmail.nvidia.com ([172.20.161.6])
+  by hqpgpgate102.nvidia.com (PGP Universal service);
+  Sun, 24 Nov 2019 20:20:13 -0800
+X-PGP-Universal: processed;
+        by hqpgpgate102.nvidia.com on Sun, 24 Nov 2019 20:20:13 -0800
+Received: from HQMAIL111.nvidia.com (172.20.187.18) by HQMAIL107.nvidia.com
+ (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Mon, 25 Nov
+ 2019 04:20:13 +0000
+Received: from hqnvemgw03.nvidia.com (10.124.88.68) by HQMAIL111.nvidia.com
+ (172.20.187.18) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
+ Transport; Mon, 25 Nov 2019 04:20:13 +0000
+Received: from blueforge.nvidia.com (Not Verified[10.110.48.28]) by hqnvemgw03.nvidia.com with Trustwave SEG (v7,5,8,10121)
+        id <B5ddb567c0004>; Sun, 24 Nov 2019 20:20:12 -0800
+From:   John Hubbard <jhubbard@nvidia.com>
+To:     Andrew Morton <akpm@linux-foundation.org>
+CC:     Al Viro <viro@zeniv.linux.org.uk>,
         Alex Williamson <alex.williamson@redhat.com>,
         Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>,
+        =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn.topel@intel.com>,
+        Christoph Hellwig <hch@infradead.org>,
         Dan Williams <dan.j.williams@intel.com>,
         Daniel Vetter <daniel@ffwll.ch>,
         Dave Chinner <david@fromorbit.com>,
         David Airlie <airlied@linux.ie>,
         "David S . Miller" <davem@davemloft.net>,
         Ira Weiny <ira.weiny@intel.com>, Jan Kara <jack@suse.cz>,
-        Jens Axboe <axboe@kernel.dk>, Jonathan Corbet <corbet@lwn.net>,
-        =?utf-8?B?SsOpcsO0bWU=?= Glisse <jglisse@redhat.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>, Jens Axboe <axboe@kernel.dk>,
+        Jonathan Corbet <corbet@lwn.net>,
+        =?UTF-8?q?J=C3=A9r=C3=B4me=20Glisse?= <jglisse@redhat.com>,
         Magnus Karlsson <magnus.karlsson@intel.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         Michael Ellerman <mpe@ellerman.id.au>,
@@ -73,121 +50,158 @@ Cc:     Leon Romanovsky <leon@kernel.org>,
         Mike Kravetz <mike.kravetz@oracle.com>,
         Paul Mackerras <paulus@samba.org>,
         Shuah Khan <shuah@kernel.org>,
-        Vlastimil Babka <vbabka@suse.cz>, bpf@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, kvm@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-rdma@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, netdev@vger.kernel.org,
-        linux-mm@kvack.org, LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v7 07/24] IB/umem: use get_user_pages_fast() to pin DMA
- pages
-Message-ID: <20191125005339.GC5634@ziepe.ca>
-References: <20191121071354.456618-1-jhubbard@nvidia.com>
- <20191121071354.456618-8-jhubbard@nvidia.com>
- <20191121080746.GC30991@infradead.org>
- <20191121143643.GC7448@ziepe.ca>
- <20191124100724.GH136476@unreal>
- <e8319590-a3f0-5ba4-af4c-65213358a742@nvidia.com>
+        Vlastimil Babka <vbabka@suse.cz>, <bpf@vger.kernel.org>,
+        <dri-devel@lists.freedesktop.org>, <kvm@vger.kernel.org>,
+        <linux-block@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+        <linux-fsdevel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+        <linux-media@vger.kernel.org>, <linux-rdma@vger.kernel.org>,
+        <linuxppc-dev@lists.ozlabs.org>, <netdev@vger.kernel.org>,
+        <linux-mm@kvack.org>, LKML <linux-kernel@vger.kernel.org>,
+        John Hubbard <jhubbard@nvidia.com>
+Subject: [PATCH 00/19] pin_user_pages(): reduced-risk series for Linux 5.5
+Date:   Sun, 24 Nov 2019 20:19:52 -0800
+Message-ID: <20191125042011.3002372-1-jhubbard@nvidia.com>
+X-Mailer: git-send-email 2.24.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <e8319590-a3f0-5ba4-af4c-65213358a742@nvidia.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+X-NVConfidentiality: public
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1574655615; bh=Fa0GcWCGWaf6H8ghJjmadoVQ5H4DM60WuhiwHk9NYQE=;
+        h=X-PGP-Universal:From:To:CC:Subject:Date:Message-ID:X-Mailer:
+         MIME-Version:X-NVConfidentiality:Content-Type:
+         Content-Transfer-Encoding;
+        b=AWa8smvs+trFNp2hhl6PxcctFNiNkjEPFnL7k3PRf09kncIE/1QuOINHJt/Mcs+cL
+         q46mTymRrWH5hIMQjSDcsL6l4MZjGcZ8rEBd95QdLk6OBQpItd8SHAKNmI2s8cgL9A
+         TZQx79R+51iPaHlmCxHSrFK4tWN8+/SXha4vPWAk/KUrYtR0z/7ZhQ7IWXBFOwOoWY
+         W0JiJYCm5y2Z/s4+iIPAmR7MUQyE8Vno4We33aI2zVWyTzl8693ZWHPydM0PHA73fx
+         6y5VYOaw3hqt0dvEDHJk7maQ9GNpqGigBAeOy1HQoT6CNDjnaIYlNwCoCcMA/StzjT
+         GubxucVjrnhAA==
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sun, Nov 24, 2019 at 04:05:16PM -0800, John Hubbard wrote:
- 
-> I looked into this, and I believe that the problem is in gup.c. There appears to
-> have been an oversight, in commit 817be129e6f2 ("mm: validate get_user_pages_fast
-> flags"), in filtering out FOLL_FORCE. There is nothing in the _fast() implementation
-> that requires that we avoid writing to the pages.
+Hi,
 
-I think it is too late to be doing these kinds of changes, I will
-revert the patch and this will miss this merge window.
+Here is a set of well-reviewed (expect for one patch), lower-risk  items
+that can go into Linux 5.5. The one patch that wasn't reviewed is the
+powerpc conversion, and it's still at this point a no-op, because
+tracking isn't yet activated.
 
-Jason
+This is based on linux-next: b9d3d01405061bb42358fe53f824e894a1922ced
+("Add linux-next specific files for 20191122").
 
-From ec6cb45292d21d1af9b9d95997b8cf204bbe854c Mon Sep 17 00:00:00 2001
-From: Jason Gunthorpe <jgg@mellanox.com>
-Date: Sun, 24 Nov 2019 20:47:59 -0400
-Subject: [PATCH] Revert "IB/umem: use get_user_pages_fast() to pin DMA pages"
+This is essentially a cut-down v8 of "mm/gup: track dma-pinned pages:
+FOLL_PIN" [1], and with one of the VFIO patches split into two patches.
+The idea here is to get this long list of "noise" checked into 5.5, so
+that the actual, higher-risk "track FOLL_PIN pages" (which is deferred:
+not part of this series) will be a much shorter patchset to review.
 
-This reverts commit c9a7a2ed837c563f9f89743a6db732591cb4035b.
+For the v4l2-core changes, I've left those here (instead of sending
+them separately to the -media tree), in order to get the name change
+done now (put_user_page --> unpin_user_page). However, I've added a Cc
+stable, as recommended during the last round of reviews.
 
-This was merged before enough testing was done, and it triggers a WARN_ON()
-in get_user_pages_fast():
+Here are the relevant notes from the original cover letter, edited to
+match the current situation:
 
-  WARNING: CPU: 1 PID: 2557 at mm/gup.c:2404 get_user_pages_fast+0x115/0x180
-  Call Trace:
-   ib_umem_get+0x298/0x550 [ib_uverbs]
-   mlx5_ib_db_map_user+0xad/0x130 [mlx5_ib]
-   mlx5_ib_create_cq+0x1e8/0xaa0 [mlx5_ib]
-   create_cq+0x1c8/0x2d0 [ib_uverbs]
-   ib_uverbs_create_cq+0x70/0xa0 [ib_uverbs]
-   ib_uverbs_handler_UVERBS_METHOD_INVOKE_WRITE+0xc2/0xf0 [ib_uverbs]
-   ib_uverbs_cmd_verbs.isra.6+0x5be/0xbe0 [ib_uverbs]
-   ? uverbs_disassociate_api+0xd0/0xd0 [ib_uverbs]
-   ? kvm_clock_get_cycles+0xd/0x10
-   ? kmem_cache_alloc+0x176/0x1c0
-   ? filemap_map_pages+0x18c/0x350
-   ib_uverbs_ioctl+0xc0/0x120 [ib_uverbs]
-   do_vfs_ioctl+0xa1/0x610
-   ksys_ioctl+0x70/0x80
-   __x64_sys_ioctl+0x16/0x20
-   do_syscall_64+0x42/0x110
-   entry_SYSCALL_64_after_hwframe+0x44/0xa9
+This is a prerequisite to tracking dma-pinned pages. That in turn is a
+prerequisite to solving the larger problem of proper interactions
+between file-backed pages, and [R]DMA activities, as discussed in [1],
+[2], [3], and in a remarkable number of email threads since about
+2017. :)
 
-2404         if (WARN_ON_ONCE(gup_flags & ~(FOLL_WRITE | FOLL_LONGTERM)))
-2405                 return -EINVAL;
+A new internal gup flag, FOLL_PIN is introduced, and thoroughly
+documented in the last patch's Documentation/vm/pin_user_pages.rst.
 
-While we think this WARN_ON is probably bogus, resolving this will have to
-wait.
+I believe that this will provide a good starting point for doing the
+layout lease work that Ira Weiny has been working on. That's because
+these new wrapper functions provide a clean, constrained, systematically
+named set of functionality that, again, is required in order to even
+know if a page is "dma-pinned".
 
-Signed-off-by: Jason Gunthorpe <jgg@mellanox.com>
----
- drivers/infiniband/core/umem.c | 17 +++++++++++------
- 1 file changed, 11 insertions(+), 6 deletions(-)
+In contrast to earlier approaches, the page tracking can be
+incrementally applied to the kernel call sites that, until now, have
+been simply calling get_user_pages() ("gup"). In other words, opt-in by
+changing from this:
 
-diff --git a/drivers/infiniband/core/umem.c b/drivers/infiniband/core/umem.c
-index 214e87aa609d6e..7a3b99597eada1 100644
---- a/drivers/infiniband/core/umem.c
-+++ b/drivers/infiniband/core/umem.c
-@@ -266,13 +266,16 @@ struct ib_umem *ib_umem_get(struct ib_udata *udata, unsigned long addr,
- 	sg = umem->sg_head.sgl;
- 
- 	while (npages) {
--		ret = get_user_pages_fast(cur_base,
--					  min_t(unsigned long, npages,
--						PAGE_SIZE /
--						sizeof(struct page *)),
--					  gup_flags | FOLL_LONGTERM, page_list);
--		if (ret < 0)
-+		down_read(&mm->mmap_sem);
-+		ret = get_user_pages(cur_base,
-+				     min_t(unsigned long, npages,
-+					   PAGE_SIZE / sizeof (struct page *)),
-+				     gup_flags | FOLL_LONGTERM,
-+				     page_list, NULL);
-+		if (ret < 0) {
-+			up_read(&mm->mmap_sem);
- 			goto umem_release;
-+		}
- 
- 		cur_base += ret * PAGE_SIZE;
- 		npages   -= ret;
-@@ -280,6 +283,8 @@ struct ib_umem *ib_umem_get(struct ib_udata *udata, unsigned long addr,
- 		sg = ib_umem_add_sg_table(sg, page_list, ret,
- 			dma_get_max_seg_size(context->device->dma_device),
- 			&umem->sg_nents);
-+
-+		up_read(&mm->mmap_sem);
- 	}
- 
- 	sg_mark_end(sg);
--- 
+    get_user_pages() (sets FOLL_GET)
+    put_page()
+
+to this:
+    pin_user_pages() (sets FOLL_PIN)
+    put_user_page()
+
+Because there are interdependencies with FOLL_LONGTERM, a similar
+conversion as for FOLL_PIN, was applied. The change was from this:
+
+    get_user_pages(FOLL_LONGTERM) (also sets FOLL_GET)
+    put_page()
+
+to this:
+    pin_longterm_pages() (sets FOLL_PIN | FOLL_LONGTERM)
+    put_user_page()
+
+[1] https://lore.kernel.org/r/20191121071354.456618-1-jhubbard@nvidia.com
+
+thanks,
+John Hubbard
+NVIDIA
+
+
+Dan Williams (1):
+  mm: Cleanup __put_devmap_managed_page() vs ->page_free()
+
+John Hubbard (18):
+  mm/gup: factor out duplicate code from four routines
+  mm/gup: move try_get_compound_head() to top, fix minor issues
+  goldish_pipe: rename local pin_user_pages() routine
+  mm: fix get_user_pages_remote()'s handling of FOLL_LONGTERM
+  vfio: fix FOLL_LONGTERM use, simplify get_user_pages_remote() call
+  mm/gup: introduce pin_user_pages*() and FOLL_PIN
+  goldish_pipe: convert to pin_user_pages() and put_user_page()
+  IB/{core,hw,umem}: set FOLL_PIN via pin_user_pages*(), fix up ODP
+  mm/process_vm_access: set FOLL_PIN via pin_user_pages_remote()
+  drm/via: set FOLL_PIN via pin_user_pages_fast()
+  fs/io_uring: set FOLL_PIN via pin_user_pages()
+  net/xdp: set FOLL_PIN via pin_user_pages()
+  media/v4l2-core: set pages dirty upon releasing DMA buffers
+  media/v4l2-core: pin_user_pages (FOLL_PIN) and put_user_page()
+    conversion
+  vfio, mm: pin_user_pages (FOLL_PIN) and put_user_page() conversion
+  powerpc: book3s64: convert to pin_user_pages() and put_user_page()
+  mm/gup_benchmark: use proper FOLL_WRITE flags instead of hard-coding
+    "1"
+  mm, tree-wide: rename put_user_page*() to unpin_user_page*()
+
+ Documentation/core-api/index.rst            |   1 +
+ Documentation/core-api/pin_user_pages.rst   | 233 ++++++++++++++
+ arch/powerpc/mm/book3s64/iommu_api.c        |  12 +-
+ drivers/gpu/drm/via/via_dmablit.c           |   6 +-
+ drivers/infiniband/core/umem.c              |   4 +-
+ drivers/infiniband/core/umem_odp.c          |  13 +-
+ drivers/infiniband/hw/hfi1/user_pages.c     |   4 +-
+ drivers/infiniband/hw/mthca/mthca_memfree.c |   8 +-
+ drivers/infiniband/hw/qib/qib_user_pages.c  |   4 +-
+ drivers/infiniband/hw/qib/qib_user_sdma.c   |   8 +-
+ drivers/infiniband/hw/usnic/usnic_uiom.c    |   4 +-
+ drivers/infiniband/sw/siw/siw_mem.c         |   4 +-
+ drivers/media/v4l2-core/videobuf-dma-sg.c   |   8 +-
+ drivers/nvdimm/pmem.c                       |   6 -
+ drivers/platform/goldfish/goldfish_pipe.c   |  35 +--
+ drivers/vfio/vfio_iommu_type1.c             |  35 +--
+ fs/io_uring.c                               |   6 +-
+ include/linux/mm.h                          |  77 +++--
+ mm/gup.c                                    | 332 +++++++++++++-------
+ mm/gup_benchmark.c                          |   9 +-
+ mm/memremap.c                               |  80 ++---
+ mm/process_vm_access.c                      |  28 +-
+ net/xdp/xdp_umem.c                          |   4 +-
+ tools/testing/selftests/vm/gup_benchmark.c  |   6 +-
+ 24 files changed, 642 insertions(+), 285 deletions(-)
+ create mode 100644 Documentation/core-api/pin_user_pages.rst
+
+--=20
 2.24.0
 
