@@ -2,33 +2,33 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 27F401088D7
-	for <lists+linux-kselftest@lfdr.de>; Mon, 25 Nov 2019 07:57:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 02E6C1088D9
+	for <lists+linux-kselftest@lfdr.de>; Mon, 25 Nov 2019 07:57:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725535AbfKYG5X (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 25 Nov 2019 01:57:23 -0500
-Received: from mail.kernel.org ([198.145.29.99]:32944 "EHLO mail.kernel.org"
+        id S1727173AbfKYG5b (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 25 Nov 2019 01:57:31 -0500
+Received: from mail.kernel.org ([198.145.29.99]:33144 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725823AbfKYG5X (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 25 Nov 2019 01:57:23 -0500
+        id S1725823AbfKYG5b (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 25 Nov 2019 01:57:31 -0500
 Received: from localhost.localdomain (NE2965lan1.rev.em-net.ne.jp [210.141.244.193])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 169302082F;
-        Mon, 25 Nov 2019 06:57:20 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 8FE1520835;
+        Mon, 25 Nov 2019 06:57:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1574665042;
-        bh=7KhYAgodYyb0DXk6DOmo0km58xW1FsFbLoY4aD0xgA0=;
+        s=default; t=1574665050;
+        bh=8NJZ4ecKYsAsn8f0rkIBPL4Q6ni1vDuY2huK9s6nGEQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Kxya4WQVFYLqQcfCwOY1y5+r4YNTNRNu0M2tP7MzGCvURWbUTpPwWGhb5vMqGAmCQ
-         O1kw9xp8IydAKOBYLgdOJErExulpVISkhGlLJoGftBNX/fJ1sxabeVW7po5MraqFs4
-         aSJDZZxPwGsI+e8o4qBze0WxsBblBmJnjgKyonOs=
+        b=EeXJIKBht3llg+C28rDTz8jf1qp+AoBfCKyJ+axwXorkOaaF3ZnVGhHXyjKygzTEr
+         TuodLxfwRXh4cYSzZvozSpqng3uBTjkR4dyrrPXRuo77EOWzvLIV+VABq5cd4+KcMA
+         S38BxMwnr/lM1kdgjNjjwnIzcBOgV3EC3MRsefu0=
 From:   Masami Hiramatsu <mhiramat@kernel.org>
 To:     Shuah Khan <shuah@kernel.org>, Steven Rostedt <rostedt@goodmis.org>
 Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [BUGFIX PATCH v3 3/4] selftests/ftrace: Do not to use absolute debugfs path
-Date:   Mon, 25 Nov 2019 15:57:18 +0900
-Message-Id: <157466503844.21973.6712225084846523442.stgit@devnote2>
+Subject: [BUGFIX PATCH v3 4/4] selftests/ftrace: Fix multiple kprobe testcase
+Date:   Mon, 25 Nov 2019 15:57:27 +0900
+Message-Id: <157466504736.21973.15722652829669648396.stgit@devnote2>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <157466501169.21973.31401747181477687.stgit@devnote2>
 References: <157466501169.21973.31401747181477687.stgit@devnote2>
@@ -41,64 +41,37 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Use relative path to trigger file instead of absolute debugfs path,
-because if the user uses tracefs instead of debugfs, it can be
-mounted at /sys/kernel/tracing.
-Anyway, since the ftracetest is designed to be run at the tracing
-directory, user doesn't need to use absolute path.
+Fix multiple kprobe event testcase to work it correctly.
+There are 2 bugfixes.
+ - Since `wc -l FILE` returns not only line number but also
+   FILE filename, following "if" statement always failed.
+   Fix this bug by replacing it with 'cat FILE | wc -l'
+ - Since "while do-done loop" block with pipeline becomes a
+   subshell, $N local variable is not update outside of
+   the loop.
+   Fix this bug by using actual target number (256) instead
+   of $N.
 
 Signed-off-by: Masami Hiramatsu <mhiramat@kernel.org>
-Reviewed-by: Steven Rostedt (VMware) <rostedt@goodmis.org>
 ---
- .../inter-event/trigger-action-hist-xfail.tc       |    4 ++--
- .../inter-event/trigger-onchange-action-hist.tc    |    2 +-
- .../inter-event/trigger-snapshot-action-hist.tc    |    4 ++--
- 3 files changed, 5 insertions(+), 5 deletions(-)
+ .../ftrace/test.d/kprobe/multiple_kprobes.tc       |    6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-action-hist-xfail.tc b/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-action-hist-xfail.tc
-index 1221240f8cf6..3f2aee115f6e 100644
---- a/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-action-hist-xfail.tc
-+++ b/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-action-hist-xfail.tc
-@@ -21,10 +21,10 @@ grep -q "snapshot()" README || exit_unsupported # version issue
+diff --git a/tools/testing/selftests/ftrace/test.d/kprobe/multiple_kprobes.tc b/tools/testing/selftests/ftrace/test.d/kprobe/multiple_kprobes.tc
+index 5862eee91e1d..6e3dbe5f96b7 100644
+--- a/tools/testing/selftests/ftrace/test.d/kprobe/multiple_kprobes.tc
++++ b/tools/testing/selftests/ftrace/test.d/kprobe/multiple_kprobes.tc
+@@ -20,9 +20,9 @@ while read i; do
+   test $N -eq 256 && break
+ done
  
- echo "Test expected snapshot action failure"
+-L=`wc -l kprobe_events`
+-if [ $L -ne $N ]; then
+-  echo "The number of kprobes events ($L) is not $N"
++L=`cat kprobe_events | wc -l`
++if [ $L -ne 256 ]; then
++  echo "The number of kprobes events ($L) is not 256"
+   exit_fail
+ fi
  
--echo 'hist:keys=comm:onmatch(sched.sched_wakeup).snapshot()' >> /sys/kernel/debug/tracing/events/sched/sched_waking/trigger && exit_fail
-+echo 'hist:keys=comm:onmatch(sched.sched_wakeup).snapshot()' >> events/sched/sched_waking/trigger && exit_fail
- 
- echo "Test expected save action failure"
- 
--echo 'hist:keys=comm:onmatch(sched.sched_wakeup).save(comm,prio)' >> /sys/kernel/debug/tracing/events/sched/sched_waking/trigger && exit_fail
-+echo 'hist:keys=comm:onmatch(sched.sched_wakeup).save(comm,prio)' >> events/sched/sched_waking/trigger && exit_fail
- 
- exit_xfail
-diff --git a/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-onchange-action-hist.tc b/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-onchange-action-hist.tc
-index 064a284e4e75..c80007aa9f86 100644
---- a/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-onchange-action-hist.tc
-+++ b/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-onchange-action-hist.tc
-@@ -16,7 +16,7 @@ grep -q "onchange(var)" README || exit_unsupported # version issue
- 
- echo "Test onchange action"
- 
--echo 'hist:keys=comm:newprio=prio:onchange($newprio).save(comm,prio) if comm=="ping"' >> /sys/kernel/debug/tracing/events/sched/sched_waking/trigger
-+echo 'hist:keys=comm:newprio=prio:onchange($newprio).save(comm,prio) if comm=="ping"' >> events/sched/sched_waking/trigger
- 
- ping $LOCALHOST -c 3
- nice -n 1 ping $LOCALHOST -c 3
-diff --git a/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-snapshot-action-hist.tc b/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-snapshot-action-hist.tc
-index 18fff69fc433..f546c1b66a9b 100644
---- a/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-snapshot-action-hist.tc
-+++ b/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-snapshot-action-hist.tc
-@@ -23,9 +23,9 @@ grep -q "snapshot()" README || exit_unsupported # version issue
- 
- echo "Test snapshot action"
- 
--echo 1 > /sys/kernel/debug/tracing/events/sched/enable
-+echo 1 > events/sched/enable
- 
--echo 'hist:keys=comm:newprio=prio:onchange($newprio).save(comm,prio):onchange($newprio).snapshot() if comm=="ping"' >> /sys/kernel/debug/tracing/events/sched/sched_waking/trigger
-+echo 'hist:keys=comm:newprio=prio:onchange($newprio).save(comm,prio):onchange($newprio).snapshot() if comm=="ping"' >> events/sched/sched_waking/trigger
- 
- ping $LOCALHOST -c 3
- nice -n 1 ping $LOCALHOST -c 3
 
