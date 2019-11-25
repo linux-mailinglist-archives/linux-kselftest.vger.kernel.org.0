@@ -2,129 +2,214 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 04E06109493
-	for <lists+linux-kselftest@lfdr.de>; Mon, 25 Nov 2019 21:14:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 163A810949C
+	for <lists+linux-kselftest@lfdr.de>; Mon, 25 Nov 2019 21:20:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726990AbfKYUN6 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 25 Nov 2019 15:13:58 -0500
-Received: from hqemgate14.nvidia.com ([216.228.121.143]:10773 "EHLO
-        hqemgate14.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725882AbfKYUN5 (ORCPT
+        id S1725930AbfKYUUD (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 25 Nov 2019 15:20:03 -0500
+Received: from mail-pl1-f195.google.com ([209.85.214.195]:45665 "EHLO
+        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725868AbfKYUUD (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 25 Nov 2019 15:13:57 -0500
-Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqemgate14.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5ddc36070000>; Mon, 25 Nov 2019 12:14:00 -0800
-Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate101.nvidia.com (PGP Universal service);
-  Mon, 25 Nov 2019 12:13:56 -0800
-X-PGP-Universal: processed;
-        by hqpgpgate101.nvidia.com on Mon, 25 Nov 2019 12:13:56 -0800
-Received: from [10.110.48.28] (10.124.1.5) by HQMAIL107.nvidia.com
- (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Mon, 25 Nov
- 2019 20:13:55 +0000
-Subject: Re: [PATCH 07/19] mm/gup: introduce pin_user_pages*() and FOLL_PIN
-To:     kbuild test robot <lkp@intel.com>
-CC:     <kbuild-all@lists.01.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Michal Hocko <mhocko@suse.com>, Jan Kara <jack@suse.cz>,
-        <kvm@vger.kernel.org>, <linux-doc@vger.kernel.org>,
-        David Airlie <airlied@linux.ie>,
-        Dave Chinner <david@fromorbit.com>,
-        <dri-devel@lists.freedesktop.org>,
-        LKML <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>,
-        Paul Mackerras <paulus@samba.org>,
-        <linux-kselftest@vger.kernel.org>, Ira Weiny <ira.weiny@intel.com>,
-        Jonathan Corbet <corbet@lwn.net>, <linux-rdma@vger.kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>,
-        <linux-media@vger.kernel.org>, Shuah Khan <shuah@kernel.org>,
-        <linux-block@vger.kernel.org>,
-        =?UTF-8?B?SsOpcsO0bWUgR2xpc3Nl?= <jglisse@redhat.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Jens Axboe <axboe@kernel.dk>, <netdev@vger.kernel.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        <linux-fsdevel@vger.kernel.org>, <bpf@vger.kernel.org>,
-        <linuxppc-dev@lists.ozlabs.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Mike Kravetz <mike.kravetz@oracle.com>
-References: <20191125042011.3002372-8-jhubbard@nvidia.com>
- <201911251639.UWS3hE3Y%lkp@intel.com>
-From:   John Hubbard <jhubbard@nvidia.com>
-X-Nvconfidentiality: public
-Message-ID: <3989f406-c333-59f8-027a-e3506af59028@nvidia.com>
-Date:   Mon, 25 Nov 2019 12:13:55 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.2.2
+        Mon, 25 Nov 2019 15:20:03 -0500
+Received: by mail-pl1-f195.google.com with SMTP id w7so6964077plz.12
+        for <linux-kselftest@vger.kernel.org>; Mon, 25 Nov 2019 12:20:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=xREpwucOOU4x07dlH8AS8RLhHBYoa54/pGxJzGMLh/U=;
+        b=UFI2NR3RoQ/NlQaasK7qc+w8Z8M54ZZJ0JndaolcZ1a5pjJYZnEg9KNE5L8EtqHqjt
+         w+T3GFGazVRKfyFN5Pw7OY6A4al6qV0sGYyI4l5g5UIWwfNwTIFgK+4NNz29EpMNlzkg
+         +/dwNnlMeTIzQorI688S4tur4EoYg2iYgm4bw=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=xREpwucOOU4x07dlH8AS8RLhHBYoa54/pGxJzGMLh/U=;
+        b=ABRmJ6Lp/WpQNZDs/4r2KFSSUJJJEYx2zdKZqo86NA6nMMGWCVEdO+kxP5rr4q6Ewe
+         X5kGgNwf2uQFLdFKDvSlLo8Ov45QopkPa26iwccyXn5YZTKypH+yJe0uvqEKtrAXriku
+         02bfhapmrN/ZLuLkaeWTKvUf5IZIo1VDl3BFqeaxJSn4Ma5sX6G84Gsrb7iVSh/lE5fv
+         MYasO+oQTFZJpf/jIjrhKaPRzpF4IUUvv58AYQ8/8EwZyJZHH7KYm4wCvas+RVf6lhPg
+         oE4vK3JUd0UVd/9nqXkPLHeoeibzjf0ieLUF7yu19OwSdZoxirVipK42gER4+P8MvIuZ
+         btCw==
+X-Gm-Message-State: APjAAAUhNL4N+YT2KHqyv9uQbHLoObS5m9IVb4sGW5POho7j5TAgQFgq
+        KsmZshfhpIuwSelq+ue+jTQdXg==
+X-Google-Smtp-Source: APXvYqwJUiUuCfgPZoWhn99mTCEBSQnBeCbbxZW58h1oCDGrSPmNRr3Sne4ERCwuSY4RnxDRzfm/ug==
+X-Received: by 2002:a17:90a:f00d:: with SMTP id bt13mr1084835pjb.43.1574713202310;
+        Mon, 25 Nov 2019 12:20:02 -0800 (PST)
+Received: from localhost ([2620:15c:202:1:4fff:7a6b:a335:8fde])
+        by smtp.gmail.com with ESMTPSA id a26sm9295506pff.155.2019.11.25.12.20.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 25 Nov 2019 12:20:01 -0800 (PST)
+Date:   Mon, 25 Nov 2019 12:19:59 -0800
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Leonard Crestez <leonard.crestez@nxp.com>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Artur =?utf-8?B?xZp3aWdvxYQ=?= <a.swigon@partner.samsung.com>,
+        Angus Ainslie <angus@akkea.ca>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-pm@vger.kernel.org, linux-imx@nxp.com
+Subject: Re: [PATCH v3 1/4] PM / QoS: Initial kunit test
+Message-ID: <20191125201959.GA228856@google.com>
+References: <cover.1574699610.git.leonard.crestez@nxp.com>
+ <023ab2f86445e5eb81b39fc471bebe9bc173f993.1574699610.git.leonard.crestez@nxp.com>
 MIME-Version: 1.0
-In-Reply-To: <201911251639.UWS3hE3Y%lkp@intel.com>
-X-Originating-IP: [10.124.1.5]
-X-ClientProxiedBy: HQMAIL105.nvidia.com (172.20.187.12) To
- HQMAIL107.nvidia.com (172.20.187.13)
-Content-Type: text/plain; charset="windows-1252"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1574712840; bh=xIrvhzi9FQlGBM90SU8S2M4hsd9JLL89vrPzYePQebc=;
-        h=X-PGP-Universal:Subject:To:CC:References:From:X-Nvconfidentiality:
-         Message-ID:Date:User-Agent:MIME-Version:In-Reply-To:
-         X-Originating-IP:X-ClientProxiedBy:Content-Type:Content-Language:
-         Content-Transfer-Encoding;
-        b=nLQ5e77gFGxdvd47gRiRGHQbc1wVG8bwNbuGbyST1Q+jBowT4WflUsZ9otzD54lLB
-         J2wcW1AWxZ1vtAVadAvnnzHYEB9/RMQVx2Q02xRhkx6jKeVYJqp1Vzd24M3MZT/KvC
-         2r/IXfhmoHhQNFs1s+Ijlm3sbCcfcCTqQLXfh/u6EJodBjYv13WjZ+5uA/qpRqF5KJ
-         cgfhkSAYwIIVs+guU8WDjo4g7p8fk0VqKWKusesTvojs5xnlpb4TJcK/V2onbK8LWW
-         ksqnqfXGTA8sAX8XklRUC+OhMkFBYvdHQY7BxmxtkVVkFbYIpBRqVJEp1i5QjV+FwU
-         IkbF7UmcnHQ6g==
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <023ab2f86445e5eb81b39fc471bebe9bc173f993.1574699610.git.leonard.crestez@nxp.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 11/25/19 12:44 AM, kbuild test robot wrote:
-> Hi John,
-> 
-> Thank you for the patch! Yet something to improve:
-> 
-> [auto build test ERROR on rdma/for-next]
-> [cannot apply to v5.4 next-20191122]
-> [if your patch is applied to the wrong git tree, please drop us a note to help
-> improve the system. BTW, we also suggest to use '--base' option to specify the
-> base tree in git format-patch, please see https://stackoverflow.com/a/37406982]
-> 
-> url:    https://github.com/0day-ci/linux/commits/John-Hubbard/pin_user_pages-reduced-risk-series-for-Linux-5-5/20191125-125637
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/rdma/rdma.git for-next
-> config: arm-randconfig-a001-20191125 (attached as .config)
-> compiler: arm-linux-gnueabi-gcc (GCC) 7.4.0
-> reproduce:
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # save the attached .config to linux build tree
->         GCC_VERSION=7.4.0 make.cross ARCH=arm 
-> 
-> If you fix the issue, kindly add following tag
-> Reported-by: kbuild test robot <lkp@intel.com>
-> 
-> All errors (new ones prefixed by >>):
-> 
->    mm/gup.o: In function `pin_user_pages_remote':
->>> mm/gup.c:2528: undefined reference to `get_user_pages_remote'
-> 
-> vim +2528 mm/gup.c
+On Mon, Nov 25, 2019 at 06:42:16PM +0200, Leonard Crestez wrote:
+> The pm_qos family of APIs are used in relatively difficult to reproduce
+> scenarios such as thermal throttling so they benefit from unit testing.
 
+indeed, a unit test is useful in this case!
 
-This, and the other (sh) report, is due to !CONFIG_MMU lacking a get_user_pages_remote(), 
-but pin_user_pages_remote() needs it for a (temporary) implementation. I'll post the fix, 
-in v2.
+> Start by adding basic tests from the the freq_qos APIs. It includes
+> tests for issues that were brought up on mailing lists:
+> 
+> https://patchwork.kernel.org/patch/11252425/#23017005
+> https://patchwork.kernel.org/patch/11253421/
+> 
+> Signed-off-by: Leonard Crestez <leonard.crestez@nxp.com>
+> ---
+>  drivers/base/Kconfig          |   4 ++
+>  drivers/base/power/Makefile   |   1 +
+>  drivers/base/power/qos-test.c | 116 ++++++++++++++++++++++++++++++++++
+>  3 files changed, 121 insertions(+)
+>  create mode 100644 drivers/base/power/qos-test.c
+> 
+> diff --git a/drivers/base/Kconfig b/drivers/base/Kconfig
+> index e37d37684132..d4ae1c1adf69 100644
+> --- a/drivers/base/Kconfig
+> +++ b/drivers/base/Kconfig
+> @@ -155,10 +155,14 @@ config DEBUG_TEST_DRIVER_REMOVE
+>  
+>  	  This option is expected to find errors and may render your system
+>  	  unusable. You should say N here unless you are explicitly looking to
+>  	  test this functionality.
+>  
+> +config PM_QOS_KUNIT_TEST
+> +	bool "KUnit Test for PM QoS features"
+> +	depends on KUNIT
+> +
+>  config HMEM_REPORTING
+>  	bool
+>  	default n
+>  	depends on NUMA
+>  	help
+> diff --git a/drivers/base/power/Makefile b/drivers/base/power/Makefile
+> index ec5bb190b9d0..8fdd0073eeeb 100644
+> --- a/drivers/base/power/Makefile
+> +++ b/drivers/base/power/Makefile
+> @@ -2,7 +2,8 @@
+>  obj-$(CONFIG_PM)	+= sysfs.o generic_ops.o common.o qos.o runtime.o wakeirq.o
+>  obj-$(CONFIG_PM_SLEEP)	+= main.o wakeup.o wakeup_stats.o
+>  obj-$(CONFIG_PM_TRACE_RTC)	+= trace.o
+>  obj-$(CONFIG_PM_GENERIC_DOMAINS)	+=  domain.o domain_governor.o
+>  obj-$(CONFIG_HAVE_CLK)	+= clock_ops.o
+> +obj-$(CONFIG_PM_QOS_KUNIT_TEST) += qos-test.o
+>  
+>  ccflags-$(CONFIG_DEBUG_DRIVER) := -DDEBUG
+> diff --git a/drivers/base/power/qos-test.c b/drivers/base/power/qos-test.c
+> new file mode 100644
+> index 000000000000..8267d91332a8
+> --- /dev/null
+> +++ b/drivers/base/power/qos-test.c
+> @@ -0,0 +1,116 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Copyright (C) 2019 NXP
+> + */
+> +#include <kunit/test.h>
+> +#include <linux/pm_qos.h>
+> +
+> +/* Basic test for aggregating two "min" requests */
+> +static void freq_qos_test_min(struct kunit *test)
+> +{
+> +	struct freq_constraints	qos;
+> +	struct freq_qos_request	req1, req2;
+> +	int ret;
+> +
+> +	freq_constraints_init(&qos);
+> +	memset(&req1, 0, sizeof(req1));
+> +	memset(&req2, 0, sizeof(req2));
+> +
+> +	ret = freq_qos_add_request(&qos, &req1, FREQ_QOS_MIN, 1000);
+> +	KUNIT_EXPECT_EQ(test, ret, 1);
+> +	ret = freq_qos_add_request(&qos, &req2, FREQ_QOS_MIN, 2000);
+> +	KUNIT_EXPECT_EQ(test, ret, 1);
+> +
+> +	KUNIT_EXPECT_EQ(test, freq_qos_read_value(&qos, FREQ_QOS_MIN), 2000);
+> +
+> +	freq_qos_remove_request(&req2);
+> +	KUNIT_EXPECT_EQ(test, ret, 1);
 
+This checks (again) the return value of the above freq_qos_add_request() call,
+which I suppose is not intended. Remove?
 
-thanks,
--- 
-John Hubbard
-NVIDIA
+> +	KUNIT_EXPECT_EQ(test, freq_qos_read_value(&qos, FREQ_QOS_MIN), 1000);
+> +
+> +	freq_qos_remove_request(&req1);
+> +	KUNIT_EXPECT_EQ(test, ret, 1);
+
+ditto
+
+> +	KUNIT_EXPECT_EQ(test, freq_qos_read_value(&qos, FREQ_QOS_MIN),
+> +			FREQ_QOS_MIN_DEFAULT_VALUE);
+> +}
+> +
+> +/* Test that requests for MAX_DEFAULT_VALUE have no effect */
+> +static void freq_qos_test_maxdef(struct kunit *test)
+> +{
+> +	struct freq_constraints	qos;
+> +	struct freq_qos_request	req1, req2;
+> +	int ret;
+> +
+> +	freq_constraints_init(&qos);
+> +	memset(&req1, 0, sizeof(req1));
+> +	memset(&req2, 0, sizeof(req2));
+> +	KUNIT_EXPECT_EQ(test, freq_qos_read_value(&qos, FREQ_QOS_MAX),
+> +			FREQ_QOS_MAX_DEFAULT_VALUE);
+> +
+> +	ret = freq_qos_add_request(&qos, &req1, FREQ_QOS_MAX,
+> +			FREQ_QOS_MAX_DEFAULT_VALUE);
+> +	KUNIT_EXPECT_EQ(test, ret, 0);
+> +	ret = freq_qos_add_request(&qos, &req2, FREQ_QOS_MAX,
+> +			FREQ_QOS_MAX_DEFAULT_VALUE);
+> +	KUNIT_EXPECT_EQ(test, ret, 0);
+> +
+> +	/* Add max 1000 */
+> +	ret = freq_qos_update_request(&req1, 1000);
+> +	KUNIT_EXPECT_EQ(test, ret, 1);
+> +	KUNIT_EXPECT_EQ(test, freq_qos_read_value(&qos, FREQ_QOS_MAX), 1000);
+> +
+> +	/* Add max 2000, no impact */
+> +	ret = freq_qos_update_request(&req2, 2000);
+> +	KUNIT_EXPECT_EQ(test, ret, 0);
+> +	KUNIT_EXPECT_EQ(test, freq_qos_read_value(&qos, FREQ_QOS_MAX), 1000);
+> +
+> +	/* Remove max 2000, new max 1000 */
+
+the code doesn't match the comment, max 1000 is removed
+
+> +	ret = freq_qos_remove_request(&req1);
+> +	KUNIT_EXPECT_EQ(test, ret, 1);
+> +	KUNIT_EXPECT_EQ(test, freq_qos_read_value(&qos, FREQ_QOS_MAX), 2000);
+> +}
+> +
+> +/*
+> + * Test that a freq_qos_request can be readded after removal
+
+nit: 're-added'. It took me a few secs to figure this is not a about
+'read'ing something
