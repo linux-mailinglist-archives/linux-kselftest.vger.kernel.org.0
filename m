@@ -2,124 +2,93 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A159109829
-	for <lists+linux-kselftest@lfdr.de>; Tue, 26 Nov 2019 04:57:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CA05109997
+	for <lists+linux-kselftest@lfdr.de>; Tue, 26 Nov 2019 08:31:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727315AbfKZDzO (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 25 Nov 2019 22:55:14 -0500
-Received: from mail-lj1-f194.google.com ([209.85.208.194]:34394 "EHLO
-        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727326AbfKZDzO (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 25 Nov 2019 22:55:14 -0500
-Received: by mail-lj1-f194.google.com with SMTP id m6so11083095ljc.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 25 Nov 2019 19:55:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=jpmKSRiJVeUJXgN2GyGxen55p/yccWN0FKHO19CAFVE=;
-        b=JwQ9vdguWg5+4q7zWM3b3iwlCGcQyETozpN0qTWBy1n+SIvu6IuTh4PzsmCTjlJ+0/
-         vgvWl87TrHHTQa6vC8mNoRlpPChfMs+6p22CdKCnzJhz7OXNvyk06CUt+sgaa5wmwDN/
-         HZAeuxcl4TDfonIGK2AbNGOcy8LhR7W+rHHO+yejgVi4Ae9TREnR4RefDWdX5+Fit38e
-         7pd1Ncqyf7+PeHOCsNufeDQ97KClKn7IbYIhGAEPmf044FcyAPBHip0l7jo3ntZYbHFg
-         QEq+JvMRubVcAPsrcd/C18LevU4Vc/HV5jciRxtzQLleSIWwM2cxRR4PnkIt6z7YJQiG
-         dHkw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=jpmKSRiJVeUJXgN2GyGxen55p/yccWN0FKHO19CAFVE=;
-        b=rJwQIC6po6E0DxPGUFQ1JDsHKRFMrbDul7NZ0zhKpTV+eqNr1zBdSTzWRAgL4IhyAU
-         uhMxRW+8yaUBSXTdSx9AG2jjYZYdb+o4iT9koKLq+qhbBMBC/Zdd0urTr8SwwrvgW4if
-         p692drH18j0vjXzpI4J1YgJiDKLxLdBW6hUgKyUw/GNzmp7W3wydKAZKSFxzz9A5Ta1E
-         mem4pul1+0F4EPZoiMcpq359X2wYi7J3S8D3OSGblfJpCf6k6zSF1KVHUy0DQHEXbz2A
-         Afnk9qebGINJJnFL1XI3tvKbRDK+xYMKvZnwZ2dCp+yoOtpyu98JxY0q9ChB8sOnVoVp
-         6Ouw==
-X-Gm-Message-State: APjAAAXZXMs2C3UHLhNIkp7stkDkSM+Dr8ZseG8vLS4CqMOXhk68EtgR
-        WwdVadsz0y4Y5LRwm28LL6bb5jmExJpAEgi4WrK8awtJVIA=
-X-Google-Smtp-Source: APXvYqwih9V2svwM3xs4eurIBFbf6d9bvsSgmgrySI1N9FoXlgeJnNmdzyuRtdiRGPGmNmD52iZje5jLyLG8MxDGmO8=
-X-Received: by 2002:a2e:a410:: with SMTP id p16mr24801147ljn.46.1574740511113;
- Mon, 25 Nov 2019 19:55:11 -0800 (PST)
-MIME-Version: 1.0
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Tue, 26 Nov 2019 09:25:00 +0530
-Message-ID: <CA+G9fYtgEfa=bq5C8yZeF6P563Gw3Fbs+-h_oy1e4G_1G0jrgw@mail.gmail.com>
-Subject: selftests:netfilter: nft_nat.sh: internal00-0 Error Could not open
- file \"-\" No such file or directory
-To:     "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Netdev <netdev@vger.kernel.org>
-Cc:     Shuah Khan <shuah@kernel.org>, pablo@netfilter.org, fw@strlen.de,
-        jeffrin@rajagiritech.edu.in, horms@verge.net.au,
-        yanhaishuang@cmss.chinamobile.com, lkft-triage@lists.linaro.org
-Content-Type: text/plain; charset="UTF-8"
+        id S1726231AbfKZHbh (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 26 Nov 2019 02:31:37 -0500
+Received: from mail.kernel.org ([198.145.29.99]:49900 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725862AbfKZHbh (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 26 Nov 2019 02:31:37 -0500
+Received: from devnote2 (NE2965lan1.rev.em-net.ne.jp [210.141.244.193])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 565512068E;
+        Tue, 26 Nov 2019 07:31:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1574753496;
+        bh=pZooaciT0y37+4+FI0SqHLZWxcx11LQh0Nrdh9BgFw8=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=tgbeNQIEFyY4uAeIgo1Qa7cEJNQJ8E5xq6qCJSyxMZDVJoGC/QLiJK4cNZ1XusAKB
+         rnCEaJkutjfVXn06isMyc5E3TJdl6cD0ULjfA/ip9vY4/ueIdjWuO5NdkkJqzaIGmT
+         bVj8ZNF8EWJXZuONu1DVsuu9hy2ch7MHiDQrOau0=
+Date:   Tue, 26 Nov 2019 16:31:32 +0900
+From:   Masami Hiramatsu <mhiramat@kernel.org>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [BUGFIX PATCH v3 1/4] selftests/ftrace: Fix to check the
+ existence of set_ftrace_filter
+Message-Id: <20191126163132.59a0c9811acdcf62a7431222@kernel.org>
+In-Reply-To: <20191125205429.5c9ba8c4@gandalf.local.home>
+References: <157466501169.21973.31401747181477687.stgit@devnote2>
+        <157466502067.21973.8795718044691377192.stgit@devnote2>
+        <20191125094445.03d0c8df@gandalf.local.home>
+        <20191126091345.e2eb722e2939864eeb01bc7e@kernel.org>
+        <20191125205429.5c9ba8c4@gandalf.local.home>
+X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Do you see the following error while running selftests netfilter
-nft_nat.sh test ?
-Are we missing any kernel config fragments ? We are merging configs
-from the directory.
+On Mon, 25 Nov 2019 20:54:29 -0500
+Steven Rostedt <rostedt@goodmis.org> wrote:
 
-# selftests netfilter nft_nat.sh
-netfilter: nft_nat.sh_ #
-# Cannot create namespace file \"/var/run/netns/ns1\" File exists
-create: namespace_file #
-# internal00-0 Error Could not open file \"-\" No such file or directory
-Error: Could_not #
-#
-: _ #
-#
-: _ #
-# internal00-0 Error Could not open file \"-\" No such file or directory
-Error: Could_not #
-#
-: _ #
-#
-: _ #
-# internal00-0 Error Could not open file \"-\" No such file or directory
-Error: Could_not #
-#
-: _ #
-#
-: _ #
-# <cmdline>16-12 Error syntax error, unexpected counter
-Error: syntax_error, #
-# list counter inet filter ns0in
-counter: inet_filter #
-#      ^^^^^^^
-: _ #
-# ERROR ns0in counter in ns1 has unexpected value (expected packets 1 bytes 84)
-ns0in: counter_in #
-# <cmdline>16-12 Error syntax error, unexpected counter
-Error: syntax_error, #
-# list counter inet filter ns0in
-counter: inet_filter #
-#      ^^^^^^^
-: _ #
-# <cmdline>16-12 Error syntax error, unexpected counter
+> On Tue, 26 Nov 2019 09:13:45 +0900
+> Masami Hiramatsu <mhiramat@kernel.org> wrote:
+> 
+> > > > @@ -93,7 +96,6 @@ initialize_ftrace() { # Reset ftrace to initial-state
+> > > >      disable_events
+> > > >      [ -f set_event_pid ] && echo > set_event_pid
+> > > >      [ -f set_ftrace_pid ] && echo > set_ftrace_pid
+> > > > -    [ -f set_ftrace_filter ] && echo | tee set_ftrace_*  
+> > > 
+> > > The above should be changed to:
+> > > 
+> > > 	[ -f set_ftrace_notrace ] && echo > set_ftrace_notrace  
+> > 
+> > Ah, good point! I think that should be done by another patch, since
+> > it will improve ftracetest.
+> 
+> No, it belongs in this patch, because you are removing:
+> 
+> 	[ -f set_ftrace_filter ] && echo | tee set_ftrace_*
+> 
+> which is equivalent to:
+> 
+> 	[ -f set_ftrace_filter ] && echo > set_ftrace_filter
+> 	[ -f set_ftrace_filter ] && echo > set_ftrace_notrace
+> 
+> as the "tee set_ftrace_*" covers both.
+
+Ah, I see. 
+
+> 
+> Without this change, this patch removes the update to
+> set_ftrace_notrace.
+
+OK, I'll update it.
+
+Thank you!
+
+> 
+> -- Steve
 
 
-Full test log:
-https://lkft.validation.linaro.org/scheduler/job/1021542#L14602
-https://qa-reports.linaro.org/lkft/linux-next-oe/build/next-20191125/testrun/1021542/log
-
-Dashboard link,
-https://qa-reports.linaro.org/lkft/linux-mainline-oe/tests/kselftest/netfilter_nft_nat.sh
-https://qa-reports.linaro.org/lkft/linux-next-oe/tests/kselftest/netfilter_nft_nat.sh
-
-metadata:
-  git branch: master
-  git repo: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-  git commit: c165016bac2719e05794c216f9b6da730d68d1e3
-  git describe: next-20191125
-  make_kernelversion: 5.4.0-rc8
-  kernel-config:
-http://snapshots.linaro.org/openembedded/lkft/lkft/sumo/hikey/lkft/linux-next/653/config
-  build-location:
-http://snapshots.linaro.org/openembedded/lkft/lkft/sumo/hikey/lkft/linux-next/653
-
-Best regards
-Naresh Kamboju
+-- 
+Masami Hiramatsu <mhiramat@kernel.org>
