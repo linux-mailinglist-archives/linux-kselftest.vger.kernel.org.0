@@ -2,122 +2,124 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 542F5109ECB
-	for <lists+linux-kselftest@lfdr.de>; Tue, 26 Nov 2019 14:15:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 668F410A109
+	for <lists+linux-kselftest@lfdr.de>; Tue, 26 Nov 2019 16:17:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727339AbfKZNPS (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 26 Nov 2019 08:15:18 -0500
-Received: from mail-ot1-f67.google.com ([209.85.210.67]:35692 "EHLO
-        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725995AbfKZNPS (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 26 Nov 2019 08:15:18 -0500
-Received: by mail-ot1-f67.google.com with SMTP id 23so14067882otf.2;
-        Tue, 26 Nov 2019 05:15:17 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=yOQdMjYPdVy6RkGpAIiWBTaVHjvFHI5z40O+OjylWNs=;
-        b=Y7SBgiosMNbIocrTGKprvCSws+0ObYjHUmi9MPGHi6rZX/KyiorLStVwUf5dtEzlTI
-         p+NwdZ48eEPygwn8gu2Wt0LOXDqXfT9QyZzPE6Y0e9Ke3c5qpQLEd4zJW3Au9fIJXxTs
-         JO5BF4Q+nINAZkwrisuLH1JgyvHi7eS71eqeCg60DZJCbq8cDv8WvRuj/iwjkQgWhYNj
-         9BB8S7QRvdO3d5U4OtcxoeNoNQwqD2IA8dST1rnMNx5GQPlwNKujD3jCIkeEs4Ty3sol
-         yqzl+S+LV+QuLnEhrnY9pdLQ8LJze9wNmvtedJ9QaHtkxboraU2r1kLCaX974/Mr6B+v
-         V7aQ==
-X-Gm-Message-State: APjAAAWyH87rCgrRc/y2y8FkegYqVEzCU9DYqDc1CSWbUyv9RW/enPYy
-        1HtE1rqh0qScKg3d5FCIwXFRgwLDomrbFEgU4L8=
-X-Google-Smtp-Source: APXvYqz82YvsMLNHpNEPX4+Kqba7XbryaMpz18cKmGgzjGviKvra31QS1PI2HBdwdHYm5Us9bXfm9nzi6w+g6zzmjdw=
-X-Received: by 2002:a9d:19ed:: with SMTP id k100mr1589639otk.297.1574774116545;
- Tue, 26 Nov 2019 05:15:16 -0800 (PST)
-MIME-Version: 1.0
-References: <git-mailbomb-linux-master-1cbeab1b242d16fdb22dc3dab6a7d6afe746ae6d@kernel.org>
-In-Reply-To: <git-mailbomb-linux-master-1cbeab1b242d16fdb22dc3dab6a7d6afe746ae6d@kernel.org>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 26 Nov 2019 14:15:04 +0100
-Message-ID: <CAMuHMdUoOWugmyAA3-dP=AAMYwLy7KPKpGzXwxRn_yTJugM+Ww@mail.gmail.com>
-Subject: Re: ext4: add kunit test for decoding extended timestamps
-To:     Iurii Zaikin <yzaikin@google.com>
-Cc:     Shuah Khan <skhan@linuxfoundation.org>,
+        id S1727472AbfKZPRX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 26 Nov 2019 10:17:23 -0500
+Received: from inva020.nxp.com ([92.121.34.13]:55170 "EHLO inva020.nxp.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727580AbfKZPRW (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 26 Nov 2019 10:17:22 -0500
+Received: from inva020.nxp.com (localhost [127.0.0.1])
+        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id C80E71A0396;
+        Tue, 26 Nov 2019 16:17:19 +0100 (CET)
+Received: from inva024.eu-rdc02.nxp.com (inva024.eu-rdc02.nxp.com [134.27.226.22])
+        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id B10E31A0118;
+        Tue, 26 Nov 2019 16:17:19 +0100 (CET)
+Received: from fsr-ub1864-112.ea.freescale.net (fsr-ub1864-112.ea.freescale.net [10.171.82.98])
+        by inva024.eu-rdc02.nxp.com (Postfix) with ESMTP id 2635320506;
+        Tue, 26 Nov 2019 16:17:19 +0100 (CET)
+From:   Leonard Crestez <leonard.crestez@nxp.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Chanwoo Choi <cw00.choi@samsung.com>
+Cc:     Viresh Kumar <viresh.kumar@linaro.org>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        =?UTF-8?q?Artur=20=C5=9Awigo=C5=84?= <a.swigon@partner.samsung.com>,
+        Angus Ainslie <angus@akkea.ca>,
         Brendan Higgins <brendanhiggins@google.com>,
-        Theodore Tso <tytso@mit.edu>,
-        Ext4 Developers List <linux-ext4@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-pm@vger.kernel.org, linux-imx@nxp.com
+Subject: [PATCH v4 0/4] PM / QoS: Restore DEV_PM_QOS_MIN/MAX_FREQUENCY
+Date:   Tue, 26 Nov 2019 17:17:09 +0200
+Message-Id: <cover.1574781196.git.leonard.crestez@nxp.com>
+X-Mailer: git-send-email 2.17.1
+X-Virus-Scanned: ClamAV using ClamSMTP
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Lurii,
+Support for frequency limits in dev_pm_qos was removed when cpufreq was
+switched to freq_qos, this series attempts to restore it by
+reimplementing on top of freq_qos.
 
-On Tue, Nov 26, 2019 at 3:12 AM Linux Kernel Mailing List
-<linux-kernel@vger.kernel.org> wrote:
-> Commit:     1cbeab1b242d16fdb22dc3dab6a7d6afe746ae6d
-> Parent:     d460623c5fa126dc51bb2571dd7714ca75b0116c
-> Refname:    refs/heads/master
-> Web:        https://git.kernel.org/torvalds/c/1cbeab1b242d16fdb22dc3dab6a7d6afe746ae6d
-> Author:     Iurii Zaikin <yzaikin@google.com>
-> AuthorDate: Thu Oct 17 15:12:33 2019 -0700
-> Committer:  Shuah Khan <skhan@linuxfoundation.org>
-> CommitDate: Wed Oct 23 10:28:23 2019 -0600
->
->     ext4: add kunit test for decoding extended timestamps
->
->     KUnit tests for decoding extended 64 bit timestamps that verify the
->     seconds part of [a/c/m] timestamps in ext4 inode structs are decoded
->     correctly.
->
->     Test data is derived from the table in the Inode Timestamps section of
->     Documentation/filesystems/ext4/inodes.rst.
->
->     KUnit tests run during boot and output the results to the debug log
->     in TAP format (http://testanything.org/). Only useful for kernel devs
->     running KUnit test harness and are not for inclusion into a production
->     build.
->
->     Signed-off-by: Iurii Zaikin <yzaikin@google.com>
->     Reviewed-by: Theodore Ts'o <tytso@mit.edu>
->     Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
->     Tested-by: Brendan Higgins <brendanhiggins@google.com>
->     Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
->     Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
+Discussion about removal is here:
+https://lore.kernel.org/linux-pm/VI1PR04MB7023DF47D046AEADB4E051EBEE680@VI1PR04MB7023.eurprd04.prod.outlook.com/T/#u
 
-While this test succeeds on arm64, it fails on m68k and arm32 (presumably
-all 32-bit platforms?):
+The cpufreq core switched away because it needs contraints at the level
+of a "cpufreq_policy" which cover multiple cpus so dev_pm_qos coupling
+to struct device was not useful. Cpufreq could only use dev_pm_qos by
+implementing an additional layer of aggregation anyway.
 
-# Subtest: ext4_inode_test
-1..1
-# inode_test_xtimestamp_decoding: EXPECTATION FAILED at fs/ext4/inode-test.c:250
-Expected test_data[i].expected.tv_sec == timestamp.tv_sec, but
-test_data[i].expected.tv_sec == -2147483648
-timestamp.tv_sec == 2147483648
-1901-12-13 Lower bound of 32bit < 0 timestamp, no extra bits: msb:1
-lower_bound:1 extra_bits: 0
-# inode_test_xtimestamp_decoding: EXPECTATION FAILED at fs/ext4/inode-test.c:250
-Expected test_data[i].expected.tv_sec == timestamp.tv_sec, but
-test_data[i].expected.tv_sec == 2147483648
-timestamp.tv_sec == 6442450944
-2038-01-19 Lower bound of 32bit <0 timestamp, lo extra sec bit on:
-msb:1 lower_bound:1 extra_bits: 1
-# inode_test_xtimestamp_decoding: EXPECTATION FAILED at fs/ext4/inode-test.c:250
-Expected test_data[i].expected.tv_sec == timestamp.tv_sec, but
-test_data[i].expected.tv_sec == 6442450944
-timestamp.tv_sec == 10737418240
-2174-02-25 Lower bound of 32bit <0 timestamp, hi extra sec bit on:
-msb:1 lower_bound:1 extra_bits: 2
-not ok 1 - inode_test_xtimestamp_decoding
-not ok 1 - ext4_inode_test
+However in the devfreq subsystem scaling is always performed on a per-device
+basis so dev_pm_qos is a very good match. Support for dev_pm_qos in devfreq
+core is here (latest version, no dependencies outside this series):
 
-Gr{oetje,eeting}s,
+	https://patchwork.kernel.org/cover/11252409/
 
-                        Geert
+That series is RFC mostly because it needs these PM core patches.
+Earlier versions got entangled in some locking cleanups but those are
+not strictly necessary to get dev_pm_qos functionality.
+
+In theory if freq_qos is extended to handle conflicting min/max values then
+this sharing would be valuable. Right now freq_qos just ties two unrelated
+pm_qos aggregations for min and max freq.
+
+---
+This is implemented by embeding a freq_qos_request inside dev_pm_qos_request:
+the data field was already an union in order to deal with flag requests.
+
+The internal freq_qos_apply is exported so that it can be called from
+dev_pm_qos apply_constraints.
+
+The dev_pm_qos_constraints_destroy function has no obvious equivalent in
+freq_qos and the whole approach of "removing requests" is somewhat dubios:
+request objects should be owned by consumers and the list of qos requests
+will most likely be empty when the target device is deleted. Series follows
+current pattern for dev_pm_qos.
+
+First two patches can be applied separately.
+
+Changes since v3:
+* Fix s/QOS/QoS in patch 2 title
+* Improves comments in kunit test
+* Fix assertions after freq_qos_remove_request
+* Remove (c) from NXP copyright header
+* Wrap long lines in qos.c to be under 80 chars. This fixes checkpatch but the
+rule is already broken by code in the files.
+* Collect reviews
+Link to v3: https://patchwork.kernel.org/cover/11260627/
+
+Changes since v2:
+* #define PM_QOS_MAX_FREQUENCY_DEFAULT_VALUE FREQ_QOS_MAX_DEFAULT_VALUE
+* #define FREQ_QOS_MAX_DEFAULT_VALUE S32_MAX (in new patch)
+* Add initial kunit test for freq_qos, validating the MAX_DEFAULT_VALUE found
+by Matthias and another recent fix. Testing this should be easier!
+Link to v2: https://patchwork.kernel.org/cover/11250413/
+
+Changes since v1:
+* Don't rename or EXPORT_SYMBOL_GPL the freq_qos_apply function; just
+drop the static marker.
+Link to v1: https://patchwork.kernel.org/cover/11212887/
+
+Leonard Crestez (4):
+  PM / QoS: Initial kunit test
+  PM / QoS: Redefine FREQ_QOS_MAX_DEFAULT_VALUE to S32_MAX
+  PM / QoS: Reorder pm_qos/freq_qos/dev_pm_qos structs
+  PM / QoS: Restore DEV_PM_QOS_MIN/MAX_FREQUENCY
+
+ drivers/base/Kconfig          |   4 ++
+ drivers/base/power/Makefile   |   1 +
+ drivers/base/power/qos-test.c | 117 ++++++++++++++++++++++++++++++++++
+ drivers/base/power/qos.c      |  73 +++++++++++++++++++--
+ include/linux/pm_qos.h        |  86 ++++++++++++++-----------
+ kernel/power/qos.c            |   4 +-
+ 6 files changed, 242 insertions(+), 43 deletions(-)
+ create mode 100644 drivers/base/power/qos-test.c
 
 -- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+2.17.1
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
