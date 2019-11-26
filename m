@@ -2,53 +2,52 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 78E7F1097B1
-	for <lists+linux-kselftest@lfdr.de>; Tue, 26 Nov 2019 03:15:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 168531097BF
+	for <lists+linux-kselftest@lfdr.de>; Tue, 26 Nov 2019 03:15:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727313AbfKZCPG (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 25 Nov 2019 21:15:06 -0500
-Received: from mail.kernel.org ([198.145.29.99]:52950 "EHLO mail.kernel.org"
+        id S1727937AbfKZCPi (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 25 Nov 2019 21:15:38 -0500
+Received: from mail.kernel.org ([198.145.29.99]:52964 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726970AbfKZCPG (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 25 Nov 2019 21:15:06 -0500
-Subject: Re: [GIT PULL] Kselftest fixes update for Linux 5.5.rc1
+        id S1727282AbfKZCPH (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 25 Nov 2019 21:15:07 -0500
+Subject: Re: [GIT PULL] kselftest kunit update for Linux 5.5-rc1
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1574734505;
-        bh=Yg5y6XK5exzyqkIXwlNbhLwM9M2YtuNymQUC03+OnUE=;
+        s=default; t=1574734506;
+        bh=wtE77hz7XaQGdo6/XrWXFInsy28E6omol7wveMwM4pk=;
         h=From:In-Reply-To:References:Date:To:Cc:From;
-        b=Xd2xeDfQoq5O+JD9snhyHupb1RDIRjdtKzLw/ZSEDp6s64Anur1qE8mTd4dP18O0z
-         OWfm8/N72trUrRpSoXM+l3FaE2hVEIkIOdI9KG++6BaNxqan34TfSf1uXvgxsnKqMn
-         iei0WdVnF3gH+yCQoTpEmyGvNHtAFhbNhONLhOD8=
+        b=E5oLpJIT7vyEiXH5RXBkg7QuM8rbDuM/mdySaU8LV4WwRyJZG4Kig19DSBepgJ15V
+         c3k9aG/6OCt3hhLHVLwzSa/E/KnEOzxGW/Xdny1T7ij09fk1DvgzH9U9//ZrXL+164
+         5p7tm4EFVPM8ifDvCjMz8NCNnOq7XLtJB5cRM8FQ=
 From:   pr-tracker-bot@kernel.org
-In-Reply-To: <ab38f85c-cd96-d79a-b359-32d599203c25@linuxfoundation.org>
-References: <ab38f85c-cd96-d79a-b359-32d599203c25@linuxfoundation.org>
+In-Reply-To: <0d518aea-63f4-507d-af4b-30536c156479@linuxfoundation.org>
+References: <0d518aea-63f4-507d-af4b-30536c156479@linuxfoundation.org>
 X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <ab38f85c-cd96-d79a-b359-32d599203c25@linuxfoundation.org>
+X-PR-Tracked-Message-Id: <0d518aea-63f4-507d-af4b-30536c156479@linuxfoundation.org>
 X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest
- tags/linux-kselftest-5.5-rc1-fixes
-X-PR-Tracked-Commit-Id: ed2d8fa734e7759ac3788a19f308d3243d0eb164
+ tags/linux-kselftest-5.5-rc1-kunit
+X-PR-Tracked-Commit-Id: ea2dd7c0875ed31955cda7b1b20612c8337192e5
 X-PR-Merge-Tree: torvalds/linux.git
 X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: db7d275415d774de3d2151d6885bf61c33243419
-Message-Id: <157473450562.11733.13735431578713069444.pr-tracker-bot@kernel.org>
-Date:   Tue, 26 Nov 2019 02:15:05 +0000
+X-PR-Merge-Commit-Id: e25645b181ae67753f9a48e11bb5b34dcf41187d
+Message-Id: <157473450646.11733.17128731630611051270.pr-tracker-bot@kernel.org>
+Date:   Tue, 26 Nov 2019 02:15:06 +0000
 To:     Shuah Khan <skhan@linuxfoundation.org>
 Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
         Shuah Khan <skhan@linuxfoundation.org>,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Kees Cook <keescook@chromium.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>
+        Brendan Higgins <brendanhiggins@google.com>,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The pull request you sent on Fri, 22 Nov 2019 12:41:57 -0700:
+The pull request you sent on Fri, 22 Nov 2019 21:46:50 -0700:
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest tags/linux-kselftest-5.5-rc1-fixes
+> git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest tags/linux-kselftest-5.5-rc1-kunit
 
 has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/db7d275415d774de3d2151d6885bf61c33243419
+https://git.kernel.org/torvalds/c/e25645b181ae67753f9a48e11bb5b34dcf41187d
 
 Thank you!
 
