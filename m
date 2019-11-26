@@ -2,202 +2,328 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 410D9109E0F
-	for <lists+linux-kselftest@lfdr.de>; Tue, 26 Nov 2019 13:36:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 80450109E3C
+	for <lists+linux-kselftest@lfdr.de>; Tue, 26 Nov 2019 13:48:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728547AbfKZMg2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 26 Nov 2019 07:36:28 -0500
-Received: from mail-eopbgr140071.outbound.protection.outlook.com ([40.107.14.71]:15681
-        "EHLO EUR01-VE1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1728538AbfKZMg1 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 26 Nov 2019 07:36:27 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=jhjhHxnD7Nl86nWZDxthfgZXcyaeZU2vMdDu14V9n9DVlMYHJ3l5AIF2Vz8JT5FI7pYl1CxzFlobbhDwQQwCQ7M1uD6zUFbd6qUODOQBoo+17we8+o036MTyDYbCNdQrrWZajeoxlz/sngz0UpPmTlnfPDSisCltLTb5IKtpxUkoDh9FNaa3Lrqwz6hRwBauOi5ZRuLC5OL0wJiBWa7YQJryX7VA6fG/rMQl91Prl9f5qZq+TE2FadPsqnXjuHOLAssRzSwY75zUig+H7XbRMbK3gGbSyQWwuH1l5fhVmN6aJAhwCSuRAphzqz4rPne70F0rfh/Q/zHnar7Ut5mIBA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=3Hv+YQKO3queUKgU8JRxEieQBMEfvpJIs+qr4tkZ8/o=;
- b=H+nWZi+/q1DS8vNRS5YBQ1NDnYYdd9cbDG/BOyimSLSFs3oALg6RslSUlfK94KqDWHWHMzTqyIW01ThAuXk5UTxjbPLXiE1k/f9LipY6aZlvxinuWxeda9HC8dF1l9qYNPKKlbvv46KSQYJvldKe00za57M4mQKKimxD6qW+ac9KSsvky+EI+Bf3jpPF+TzfXxYgQfbfC3DzYSCrN3eNcaP4gFFiCMjw0hAmUC38c2kBlmjZtsDZTzTri11gZvjeDjsM61U+iEW6vlAkbF6qTl5QpF1NaP33MpNgG2NXRQxvuDF88E26msvZYecAk2QUbVxRtd2rg8C2LocmbDdO1Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=3Hv+YQKO3queUKgU8JRxEieQBMEfvpJIs+qr4tkZ8/o=;
- b=f/p5RQM+/WfWsf4znCgNESz7u0VDE40NxK4rTA8AwERoY8StzJKhUbWbYBxGiWO82LL0jjYBgmlbqPG+ODjuyYXEchnuDbTe3p6jEAnIOe/dzlUdRkUB3U9f2KuEdSfdSqSwUbhUqEFuoL9qBqBNVBpClUE6MrJ5GBkizrTd4+Y=
-Received: from VI1PR04MB7023.eurprd04.prod.outlook.com (10.186.159.144) by
- VI1PR04MB4672.eurprd04.prod.outlook.com (20.177.53.159) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2474.16; Tue, 26 Nov 2019 12:36:23 +0000
-Received: from VI1PR04MB7023.eurprd04.prod.outlook.com
- ([fe80::dd0c:72dc:e462:16b3]) by VI1PR04MB7023.eurprd04.prod.outlook.com
- ([fe80::dd0c:72dc:e462:16b3%5]) with mapi id 15.20.2474.023; Tue, 26 Nov 2019
- 12:36:23 +0000
-From:   Leonard Crestez <leonard.crestez@nxp.com>
-To:     Matthias Kaehlcke <mka@chromium.org>
-CC:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        =?iso-8859-2?Q?Artur_=A6wigo=F1?= <a.swigon@partner.samsung.com>,
-        Angus Ainslie <angus@akkea.ca>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "kunit-dev@googlegroups.com" <kunit-dev@googlegroups.com>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        dl-linux-imx <linux-imx@nxp.com>
-Subject: Re: [PATCH v3 1/4] PM / QoS: Initial kunit test
-Thread-Topic: [PATCH v3 1/4] PM / QoS: Initial kunit test
-Thread-Index: AQHVo69Vkiab2WNf8Uavz0kAKoCkHQ==
-Date:   Tue, 26 Nov 2019 12:36:23 +0000
-Message-ID: <VI1PR04MB7023D1F8F0085897E55BC084EE450@VI1PR04MB7023.eurprd04.prod.outlook.com>
-References: <cover.1574699610.git.leonard.crestez@nxp.com>
- <023ab2f86445e5eb81b39fc471bebe9bc173f993.1574699610.git.leonard.crestez@nxp.com>
- <20191125201959.GA228856@google.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=leonard.crestez@nxp.com; 
-x-originating-ip: [212.146.100.6]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: 01867fed-531e-452f-96f6-08d7726d3f7a
-x-ms-traffictypediagnostic: VI1PR04MB4672:|VI1PR04MB4672:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <VI1PR04MB4672596E0091A31881F4C1C3EE450@VI1PR04MB4672.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:9508;
-x-forefront-prvs: 0233768B38
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(346002)(366004)(376002)(396003)(39860400002)(136003)(189003)(199004)(6246003)(33656002)(6506007)(6916009)(9686003)(478600001)(86362001)(25786009)(44832011)(74316002)(186003)(7696005)(102836004)(4326008)(4001150100001)(55016002)(76176011)(305945005)(7736002)(53546011)(71190400001)(71200400001)(66476007)(2906002)(66446008)(5660300002)(52536014)(54906003)(7416002)(8936002)(81166006)(81156014)(76116006)(66946007)(91956017)(6116002)(6436002)(14454004)(229853002)(99286004)(3846002)(446003)(66066001)(316002)(14444005)(8676002)(26005)(256004)(64756008)(66556008);DIR:OUT;SFP:1101;SCL:1;SRVR:VI1PR04MB4672;H:VI1PR04MB7023.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
-received-spf: None (protection.outlook.com: nxp.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: BBLc9RgLUP8fD0yNIomOJ5IlfD6hTX71WXDGYqiZtU2hOojBwfUlY2htYHMp3uDjLGaiP0Yw19DN9h20BYfqNsQ2M+g2XYyuYkrdnZLas88Cbo+F8Km4/srex0dktacVqn8qS9/GH6W6mtblrqLxjp45DNSg2+4097W/Ez87BHwpUHRrvytJROS50K0kLbX0H52dDEqqao5RZtkICJKYaZS8M2vwJuosUj5plBroprzWGhwhakHtJ81A9Pm6S9/w05o6Fmqr+4riUnQHwazpQBlWa9gnrRumQSguYVFaVTgQFDTytJxkdkSEJeYYd25LVkavq/Tik6LBFQAg7VruJ1mcuWF5Z8i6zbQBQbqQGx5wXV83lxOMqLY9TOdXRBvs2VQEA0OZ6ZnUqYEcM2M85YwVagiQVKqmzx+yYH5jZ4cgvG+H2U2TJkeqhfaY9nt8
-Content-Type: text/plain; charset="iso-8859-2"
-Content-Transfer-Encoding: quoted-printable
+        id S1726121AbfKZMsU (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 26 Nov 2019 07:48:20 -0500
+Received: from mail-qt1-f196.google.com ([209.85.160.196]:45771 "EHLO
+        mail-qt1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726049AbfKZMsU (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 26 Nov 2019 07:48:20 -0500
+Received: by mail-qt1-f196.google.com with SMTP id 30so21208853qtz.12
+        for <linux-kselftest@vger.kernel.org>; Tue, 26 Nov 2019 04:48:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=sifive.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=yP69oNOwLRKOH1bABrCf+MIfhE/Or+bR3PI8UIEOa8o=;
+        b=TCsnvbwhQ0FDfWbBUgMkKruo7ZhMBrB3n6VB+8IASb0zgRXk7/OC4pm3O9SZwQEbRI
+         MlDLR9D0gFOCjEp5/WO9Z+nxkj1UkwIZnIUbMRDkPi8ycAsWS2EUvPkI0cSk5VcoYsJU
+         2dMoe6j2ZrjkeYTMfqB8jF7Lxsc+tIjuq6sQw4rKBxq6FLEV15DW/CgrI/zlHqdygDST
+         wWUupAtODBDahuotMQPG++lLM7Oubu7X6nLJGk81oAyVamouYvjl6e+3PMNoZ0fJQFsK
+         smelWZCAkxzBBfMJY1yFeJuo20IvSV9DIkxr/Cn39LNV6KgYScwogregcpfGjl5ob/oN
+         1Zzg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=yP69oNOwLRKOH1bABrCf+MIfhE/Or+bR3PI8UIEOa8o=;
+        b=bPCycc/TitXFt8Fnp0S9Ve1w37fbAiF8ZuVrA4l8m0R51SLQu2cG80BfuFq9aXnoTq
+         An/SqSzXlxPPGyvNJLq5ZgnzKBmkw07qgZFOjrQudADi9KglZbxnHCloeClS/3vOuK4z
+         XpARoyOyr8vjDakHJdPdemq5p2EK4Vhc1OqA+h+2huAM+NW0KI1wKWwUG/o73RYNr6YH
+         7FvR0/jAJlpp5He99PHTJHMAqCzr0d4xlf3X3k1D8umAci+MOgM1R1ZN2Aps20PzDZSD
+         v8OHCUkGsPp7sCL8SEQqJTDF4TpzRyOjoYplhyk66xsWWQlvvtEaxvcZGdQ0bOyzl5dB
+         N/Fg==
+X-Gm-Message-State: APjAAAXxIGjbqptUWvOOCglJJtTici76zAbe7m2nTXEb0LRSAiCgDlqi
+        vRKC54ks5WLyoG1EOrKH1D6jJVJHH7YaKyrJOAnNSA==
+X-Google-Smtp-Source: APXvYqxqg2YuiESg5BwxtiVVFsY0/lo513Z/1OkGS1LPpw/CVw6krDI+9lMssFWGO4qeB4L8nhIXJc7F5Lt+dZcKeiw=
+X-Received: by 2002:ac8:7943:: with SMTP id r3mr35021510qtt.49.1574772499379;
+ Tue, 26 Nov 2019 04:48:19 -0800 (PST)
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 01867fed-531e-452f-96f6-08d7726d3f7a
-X-MS-Exchange-CrossTenant-originalarrivaltime: 26 Nov 2019 12:36:23.4600
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 2YElGOdlTVR0I+9gYMWuIgJ4Zjk76qjG2T3JB1koaMAbHW4dS89U2j2VDeNLYmTwX7SHmcXfdk1sR0YmPrHzhA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB4672
+References: <1572919114-3886-1-git-send-email-vincent.chen@sifive.com>
+ <1572919114-3886-2-git-send-email-vincent.chen@sifive.com>
+ <alpine.DEB.2.21.9999.1911211225350.30580@viisi.sifive.com> <alpine.DEB.2.21.9999.1911211418320.5296@viisi.sifive.com>
+In-Reply-To: <alpine.DEB.2.21.9999.1911211418320.5296@viisi.sifive.com>
+From:   Vincent Chen <vincent.chen@sifive.com>
+Date:   Tue, 26 Nov 2019 20:48:08 +0800
+Message-ID: <CABvJ_xiWWGUGTJ36_4zN+RWhrTQn1bQTAsbFR-KaCSLcPy00pw@mail.gmail.com>
+Subject: Re: [PATCH 1/3] riscv: add required functions to enable HAVE_REGS_AND_STACK_ACCESS_API
+To:     Paul Walmsley <paul.walmsley@sifive.com>
+Cc:     =?UTF-8?Q?Patrick_St=C3=A4hlin?= <me@packi.ch>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 2019-11-25 10:20 PM, Matthias Kaehlcke wrote:=0A=
-> On Mon, Nov 25, 2019 at 06:42:16PM +0200, Leonard Crestez wrote:=0A=
->> The pm_qos family of APIs are used in relatively difficult to reproduce=
-=0A=
->> scenarios such as thermal throttling so they benefit from unit testing.=
-=0A=
-> =0A=
-> indeed, a unit test is useful in this case!=0A=
-> =0A=
->> Start by adding basic tests from the the freq_qos APIs. It includes=0A=
->> tests for issues that were brought up on mailing lists:=0A=
-=0A=
->> +/* Basic test for aggregating two "min" requests */=0A=
->> +static void freq_qos_test_min(struct kunit *test)=0A=
->> +{=0A=
->> +	struct freq_constraints	qos;=0A=
->> +	struct freq_qos_request	req1, req2;=0A=
->> +	int ret;=0A=
->> +=0A=
->> +	freq_constraints_init(&qos);=0A=
->> +	memset(&req1, 0, sizeof(req1));=0A=
->> +	memset(&req2, 0, sizeof(req2));=0A=
->> +=0A=
->> +	ret =3D freq_qos_add_request(&qos, &req1, FREQ_QOS_MIN, 1000);=0A=
->> +	KUNIT_EXPECT_EQ(test, ret, 1);=0A=
->> +	ret =3D freq_qos_add_request(&qos, &req2, FREQ_QOS_MIN, 2000);=0A=
->> +	KUNIT_EXPECT_EQ(test, ret, 1);=0A=
->> +=0A=
->> +	KUNIT_EXPECT_EQ(test, freq_qos_read_value(&qos, FREQ_QOS_MIN), 2000);=
-=0A=
->> +=0A=
->> +	freq_qos_remove_request(&req2);=0A=
->> +	KUNIT_EXPECT_EQ(test, ret, 1);=0A=
-> =0A=
-> This checks (again) the return value of the above freq_qos_add_request() =
-call,=0A=
-> which I suppose is not intended. Remove?=0A=
-=0A=
-Should check the return value from freq_qos_remove_request=0A=
-=0A=
->> +	KUNIT_EXPECT_EQ(test, freq_qos_read_value(&qos, FREQ_QOS_MIN), 1000);=
-=0A=
->> +=0A=
->> +	freq_qos_remove_request(&req1);=0A=
->> +	KUNIT_EXPECT_EQ(test, ret, 1);=0A=
-> =0A=
-> ditto=0A=
-> =0A=
->> +	KUNIT_EXPECT_EQ(test, freq_qos_read_value(&qos, FREQ_QOS_MIN),=0A=
->> +			FREQ_QOS_MIN_DEFAULT_VALUE);=0A=
->> +}=0A=
->> +=0A=
->> +/* Test that requests for MAX_DEFAULT_VALUE have no effect */=0A=
->> +static void freq_qos_test_maxdef(struct kunit *test)=0A=
->> +{=0A=
->> +	struct freq_constraints	qos;=0A=
->> +	struct freq_qos_request	req1, req2;=0A=
->> +	int ret;=0A=
->> +=0A=
->> +	freq_constraints_init(&qos);=0A=
->> +	memset(&req1, 0, sizeof(req1));=0A=
->> +	memset(&req2, 0, sizeof(req2));=0A=
->> +	KUNIT_EXPECT_EQ(test, freq_qos_read_value(&qos, FREQ_QOS_MAX),=0A=
->> +			FREQ_QOS_MAX_DEFAULT_VALUE);=0A=
->> +=0A=
->> +	ret =3D freq_qos_add_request(&qos, &req1, FREQ_QOS_MAX,=0A=
->> +			FREQ_QOS_MAX_DEFAULT_VALUE);=0A=
->> +	KUNIT_EXPECT_EQ(test, ret, 0);=0A=
->> +	ret =3D freq_qos_add_request(&qos, &req2, FREQ_QOS_MAX,=0A=
->> +			FREQ_QOS_MAX_DEFAULT_VALUE);=0A=
->> +	KUNIT_EXPECT_EQ(test, ret, 0);=0A=
->> +=0A=
->> +	/* Add max 1000 */=0A=
->> +	ret =3D freq_qos_update_request(&req1, 1000);=0A=
->> +	KUNIT_EXPECT_EQ(test, ret, 1);=0A=
->> +	KUNIT_EXPECT_EQ(test, freq_qos_read_value(&qos, FREQ_QOS_MAX), 1000);=
-=0A=
->> +=0A=
->> +	/* Add max 2000, no impact */=0A=
->> +	ret =3D freq_qos_update_request(&req2, 2000);=0A=
->> +	KUNIT_EXPECT_EQ(test, ret, 0);=0A=
->> +	KUNIT_EXPECT_EQ(test, freq_qos_read_value(&qos, FREQ_QOS_MAX), 1000);=
-=0A=
->> +=0A=
->> +	/* Remove max 2000, new max 1000 */=0A=
-> =0A=
-> the code doesn't match the comment, max 1000 is removed=0A=
-=0A=
-Fixed=0A=
-=0A=
->> +	ret =3D freq_qos_remove_request(&req1);=0A=
->> +	KUNIT_EXPECT_EQ(test, ret, 1);=0A=
->> +	KUNIT_EXPECT_EQ(test, freq_qos_read_value(&qos, FREQ_QOS_MAX), 2000);=
-=0A=
->> +}=0A=
->> +=0A=
->> +/*=0A=
->> + * Test that a freq_qos_request can be readded after removal=0A=
-> =0A=
-> nit: 're-added'. It took me a few secs to figure this is not a about=0A=
-> 'read'ing something=0A=
-=0A=
-Both re-add and readd seem to be valid, I'll change to "added again".=0A=
-=0A=
---=0A=
-Regards,=0A=
-Leonard=0A=
+On Fri, Nov 22, 2019 at 6:32 AM Paul Walmsley <paul.walmsley@sifive.com> wr=
+ote:
+>
+> On Thu, 21 Nov 2019, Paul Walmsley wrote:
+>
+> > As I understand it, this patch hasn't been signed off on by Patrick.
+> > I've sent him an E-mail asking him whether he's willing to add his
+> > Signed-off-by:, but haven't heard back from it.
+> >
+> > From our discussions, I understand that this patch is based partially o=
+n
+> > some of his earlier, public, kprobes work.  In lieu of any response fro=
+m
+> > Patrick, could you please resend this patch and just note in the commit
+> > description that it's partially based on one of his patches, add a Link=
+:
+> > line that points to the URL of the patch that it's partially based on, =
+and
+> > replace the Signed-off-by: with a Co-developed-by: or something similar=
+?
+>
+> OK - just looked at the patches more closely, and I think I see what's
+> going on here.  This patch looks like a rebased version of this patch:
+>
+> https://lore.kernel.org/linux-riscv/20181113195804.22825-2-me@packi.ch/
+>
+> So let's just plan to use an updated version of Patrick's original
+> (below).  Please let me know if you have any comments on it or if I
+> missed something -
+>
+>
+> - Paul
+>
+
+Dear Paul,
+Due to the rule of mail classification, I do not find this mail in
+time. I am sorry for that.
+I think it is good for me.
+
+Thanks and regards
+Vincent
+
+
+> From: Patrick St=C3=A4hlin <me@packi.ch>
+> Date: Tue, 13 Nov 2018 20:58:03 +0100
+> Subject: [PATCH] RISC-V: Implement ptrace regs and stack API
+> MIME-Version: 1.0
+> Content-Type: text/plain; charset=3DUTF-8
+> Content-Transfer-Encoding: 8bit
+>
+> Needed for kprobes support. Copied and adapted from arm64 code.
+>
+> Signed-off-by: Patrick St=C3=A4hlin <me@packi.ch>
+> [paul.walmsley@sifive.com: updated to apply; fixed checkpatch issues;
+>  fixed regs_get_register() kerneldoc]
+> Cc: Vincent Chen <vincent.chen@sifive.com>
+> Link: https://lore.kernel.org/linux-riscv/20181113195803.CjtBCsUcG9czwiqm=
+PBGKUjvl5Ojxq2SIPaioQUHXFI0@z/
+> Link: https://lore.kernel.org/linux-riscv/1572919114-3886-1-git-send-emai=
+l-vincent.chen@sifive.com/T/#mdb346527d25ea1959ab57ff9d1c056bcd29c7172
+> Signed-off-by: Paul Walmsley <paul.walmsley@sifive.com>
+> ---
+>  arch/riscv/Kconfig              |  1 +
+>  arch/riscv/include/asm/ptrace.h | 30 ++++++++++
+>  arch/riscv/kernel/ptrace.c      | 99 +++++++++++++++++++++++++++++++++
+>  3 files changed, 130 insertions(+)
+>
+> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+> index 8eebbc8860bb..d5bbf4223fd2 100644
+> --- a/arch/riscv/Kconfig
+> +++ b/arch/riscv/Kconfig
+> @@ -61,6 +61,7 @@ config RISCV
+>         select SPARSEMEM_STATIC if 32BIT
+>         select ARCH_WANT_DEFAULT_TOPDOWN_MMAP_LAYOUT if MMU
+>         select HAVE_ARCH_MMAP_RND_BITS
+> +       select HAVE_REGS_AND_STACK_ACCESS_API
+>
+>  config ARCH_MMAP_RND_BITS_MIN
+>         default 18 if 64BIT
+> diff --git a/arch/riscv/include/asm/ptrace.h b/arch/riscv/include/asm/ptr=
+ace.h
+> index d48d1e13973c..50d37b123a61 100644
+> --- a/arch/riscv/include/asm/ptrace.h
+> +++ b/arch/riscv/include/asm/ptrace.h
+> @@ -8,6 +8,7 @@
+>
+>  #include <uapi/asm/ptrace.h>
+>  #include <asm/csr.h>
+> +#include <linux/compiler.h>
+>
+>  #ifndef __ASSEMBLY__
+>
+> @@ -60,6 +61,7 @@ struct pt_regs {
+>
+>  #define user_mode(regs) (((regs)->sstatus & SR_SPP) =3D=3D 0)
+>
+> +#define MAX_REG_OFFSET offsetof(struct pt_regs, orig_a0)
+>
+>  /* Helpers for working with the instruction pointer */
+>  static inline unsigned long instruction_pointer(struct pt_regs *regs)
+> @@ -85,6 +87,12 @@ static inline void user_stack_pointer_set(struct pt_re=
+gs *regs,
+>         regs->sp =3D  val;
+>  }
+>
+> +/* Valid only for Kernel mode traps. */
+> +static inline unsigned long kernel_stack_pointer(struct pt_regs *regs)
+> +{
+> +       return regs->sp;
+> +}
+> +
+>  /* Helpers for working with the frame pointer */
+>  static inline unsigned long frame_pointer(struct pt_regs *regs)
+>  {
+> @@ -101,6 +109,28 @@ static inline unsigned long regs_return_value(struct=
+ pt_regs *regs)
+>         return regs->a0;
+>  }
+>
+> +int regs_query_register_offset(const char *name);
+> +unsigned long regs_get_kernel_stack_nth(struct pt_regs *regs,
+> +                                       unsigned int n);
+> +
+> +/**
+> + * regs_get_register() - get register value from its offset
+> + * @regs:      pt_regs from which register value is gotten
+> + * @offset:    offset of the register.
+> + *
+> + * regs_get_register() returns the value from @regs of a register
+> + * identified by @offset.  The @offset is the offset of the register
+> + * in struct pt_regs.  If @offset is bigger than MAX_REG_OFFSET, this
+> + * returns 0.
+> + */
+> +static inline unsigned long regs_get_register(struct pt_regs *regs,
+> +                                             unsigned int offset)
+> +{
+> +       if (unlikely(offset > MAX_REG_OFFSET))
+> +               return 0;
+> +
+> +       return *(unsigned long *)((unsigned long)regs + offset);
+> +}
+>  #endif /* __ASSEMBLY__ */
+>
+>  #endif /* _ASM_RISCV_PTRACE_H */
+> diff --git a/arch/riscv/kernel/ptrace.c b/arch/riscv/kernel/ptrace.c
+> index 1252113ef8b2..5076b30fe18b 100644
+> --- a/arch/riscv/kernel/ptrace.c
+> +++ b/arch/riscv/kernel/ptrace.c
+> @@ -125,6 +125,105 @@ const struct user_regset_view *task_user_regset_vie=
+w(struct task_struct *task)
+>         return &riscv_user_native_view;
+>  }
+>
+> +struct pt_regs_offset {
+> +       const char *name;
+> +       int offset;
+> +};
+> +
+> +#define REG_OFFSET_NAME(r) {.name =3D #r, .offset =3D offsetof(struct pt=
+_regs, r)}
+> +#define REG_OFFSET_END {.name =3D NULL, .offset =3D 0}
+> +
+> +static const struct pt_regs_offset regoffset_table[] =3D {
+> +       REG_OFFSET_NAME(sepc),
+> +       REG_OFFSET_NAME(ra),
+> +       REG_OFFSET_NAME(sp),
+> +       REG_OFFSET_NAME(gp),
+> +       REG_OFFSET_NAME(tp),
+> +       REG_OFFSET_NAME(t0),
+> +       REG_OFFSET_NAME(t1),
+> +       REG_OFFSET_NAME(t2),
+> +       REG_OFFSET_NAME(s0),
+> +       REG_OFFSET_NAME(s1),
+> +       REG_OFFSET_NAME(a0),
+> +       REG_OFFSET_NAME(a1),
+> +       REG_OFFSET_NAME(a2),
+> +       REG_OFFSET_NAME(a3),
+> +       REG_OFFSET_NAME(a4),
+> +       REG_OFFSET_NAME(a5),
+> +       REG_OFFSET_NAME(a6),
+> +       REG_OFFSET_NAME(a7),
+> +       REG_OFFSET_NAME(s2),
+> +       REG_OFFSET_NAME(s3),
+> +       REG_OFFSET_NAME(s4),
+> +       REG_OFFSET_NAME(s5),
+> +       REG_OFFSET_NAME(s6),
+> +       REG_OFFSET_NAME(s7),
+> +       REG_OFFSET_NAME(s8),
+> +       REG_OFFSET_NAME(s9),
+> +       REG_OFFSET_NAME(s10),
+> +       REG_OFFSET_NAME(s11),
+> +       REG_OFFSET_NAME(t3),
+> +       REG_OFFSET_NAME(t4),
+> +       REG_OFFSET_NAME(t5),
+> +       REG_OFFSET_NAME(t6),
+> +       REG_OFFSET_NAME(sstatus),
+> +       REG_OFFSET_NAME(sbadaddr),
+> +       REG_OFFSET_NAME(scause),
+> +       REG_OFFSET_NAME(orig_a0),
+> +       REG_OFFSET_END,
+> +};
+> +
+> +/**
+> + * regs_query_register_offset() - query register offset from its name
+> + * @name:      the name of a register
+> + *
+> + * regs_query_register_offset() returns the offset of a register in stru=
+ct
+> + * pt_regs from its name. If the name is invalid, this returns -EINVAL;
+> + */
+> +int regs_query_register_offset(const char *name)
+> +{
+> +       const struct pt_regs_offset *roff;
+> +
+> +       for (roff =3D regoffset_table; roff->name; roff++)
+> +               if (!strcmp(roff->name, name))
+> +                       return roff->offset;
+> +       return -EINVAL;
+> +}
+> +
+> +/**
+> + * regs_within_kernel_stack() - check the address in the stack
+> + * @regs:      pt_regs which contains kernel stack pointer.
+> + * @addr:      address which is checked.
+> + *
+> + * regs_within_kernel_stack() checks @addr is within the kernel stack pa=
+ge(s).
+> + * If @addr is within the kernel stack, it returns true. If not, returns=
+ false.
+> + */
+> +static bool regs_within_kernel_stack(struct pt_regs *regs, unsigned long=
+ addr)
+> +{
+> +       return (addr & ~(THREAD_SIZE - 1))  =3D=3D
+> +               (kernel_stack_pointer(regs) & ~(THREAD_SIZE - 1));
+> +}
+> +
+> +/**
+> + * regs_get_kernel_stack_nth() - get Nth entry of the stack
+> + * @regs:      pt_regs which contains kernel stack pointer.
+> + * @n:         stack entry number.
+> + *
+> + * regs_get_kernel_stack_nth() returns @n th entry of the kernel stack w=
+hich
+> + * is specified by @regs. If the @n th entry is NOT in the kernel stack,
+> + * this returns 0.
+> + */
+> +unsigned long regs_get_kernel_stack_nth(struct pt_regs *regs, unsigned i=
+nt n)
+> +{
+> +       unsigned long *addr =3D (unsigned long *)kernel_stack_pointer(reg=
+s);
+> +
+> +       addr +=3D n;
+> +       if (regs_within_kernel_stack(regs, (unsigned long)addr))
+> +               return *addr;
+> +       else
+> +               return 0;
+> +}
+> +
+>  void ptrace_disable(struct task_struct *child)
+>  {
+>         clear_tsk_thread_flag(child, TIF_SYSCALL_TRACE);
+> --
+> 2.24.0.rc0
