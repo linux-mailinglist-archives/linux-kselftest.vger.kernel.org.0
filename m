@@ -2,114 +2,75 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DCEC10AE3C
-	for <lists+linux-kselftest@lfdr.de>; Wed, 27 Nov 2019 11:54:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA43110AFC0
+	for <lists+linux-kselftest@lfdr.de>; Wed, 27 Nov 2019 13:46:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726204AbfK0KyF (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 27 Nov 2019 05:54:05 -0500
-Received: from foss.arm.com ([217.140.110.172]:46132 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726194AbfK0KyF (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 27 Nov 2019 05:54:05 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9269630E;
-        Wed, 27 Nov 2019 02:54:04 -0800 (PST)
-Received: from [10.1.197.50] (e120937-lin.cambridge.arm.com [10.1.197.50])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D86DA3F6C4;
-        Wed, 27 Nov 2019 02:54:03 -0800 (PST)
-Subject: Re: kselftest: failed to build with -C tool/testing/selftests when
- KBUILD_OUTPUT is set
-To:     Michael Ellerman <mpe@ellerman.id.au>, Tim.Bird@sony.com,
-        "shuah@kernel.org" <shuah@kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>
-References: <8d34a9b9-f8f3-0e37-00bf-c342cf3d4074@arm.com>
- <8736ea2cty.fsf@mpe.ellerman.id.au>
-From:   Cristian Marussi <cristian.marussi@arm.com>
-Message-ID: <47e09faa-a3fb-04a7-4989-4443b27f47c2@arm.com>
-Date:   Wed, 27 Nov 2019 10:54:02 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S1726822AbfK0MqO (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 27 Nov 2019 07:46:14 -0500
+Received: from mail-qv1-f51.google.com ([209.85.219.51]:46975 "EHLO
+        mail-qv1-f51.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726282AbfK0MqN (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 27 Nov 2019 07:46:13 -0500
+Received: by mail-qv1-f51.google.com with SMTP id w11so8780480qvu.13
+        for <linux-kselftest@vger.kernel.org>; Wed, 27 Nov 2019 04:46:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rajagiritech-edu-in.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=zh/vBERm/TbGM+yKl5SoCFkCcaIxa+50MOn7rbgBP8Q=;
+        b=gkyvth1/Mbl64/TJUNIuUxJnbtlh5omWv1qlqK95S5J7cYBXdi05gUzZBljO3jOOcb
+         HqEHMrZG/RmkV85nz7Yx4rZl1Jt53AtzzPaneyjPwSRKTJU2syvy170bWmvbWkzdQVWa
+         DYiB77Gxhziqu90y/UTPGDggPTj7u5l6r1SZCSDOJSLMWldtA1LMX2yCGoFzxPvFGpGL
+         Iu6kTOYu347m34fMmuuKuQ6KFlXEgX1LSHGIa72Ko70Ewh0IcOplDsh2WzzpLwL392gd
+         oO7rEwZ6sun1jv2g5Qh1UzzGd+OFJydJmNRGMk+8O3HFB1dzUg2MRi34BWcKZiM1dNId
+         YYAw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=zh/vBERm/TbGM+yKl5SoCFkCcaIxa+50MOn7rbgBP8Q=;
+        b=uRYT3ry0ftoQW4L/oe/hD2+y7JSFdjwztTGfjOldAijjiNczHH1lCa0Oql5Y85uyW/
+         O+qTyE9jWOniYKGWGxUc/EKeHSuvNjrkTzBwtnX0MH8uyD3nGtLnmGrSgalREEEcEn7K
+         b1GtvkGyimRCIPRmZ1Vvip6eWYfYSQlBb0Y9gKMlHmY6VEPvORmwsOdL1T5Gde6ZxM7f
+         IDJ+RELxbc1rHwqlycO5ulkcCAlapFBtoIMLC/DuMXcFFK4FBVP5DqV7uNFZvBk0nmnd
+         FPYlrr7s/NMwmuKtRkKeo4qt+03MMBfcdYf8hqeiy2o4T9UC22SKf4VDaeOT8yUI0ufV
+         ubmQ==
+X-Gm-Message-State: APjAAAWfwKPDsFj/SxWuM7HgQhDdzDu7G/9nZfei4Q3KKU8ihWZCfeSU
+        pLpcR8JUrw+aXSfg/Qo+CgUedc+AWMMZamFxLr4Eqw==
+X-Google-Smtp-Source: APXvYqzYfa89PkENwWgrr+lbnyQptNxwjQ2eMJwZTVJ9xXPkWzFPnmQzwgOahRvkhhc1AO6G3I1PdkrXLAcRysHEqrU=
+X-Received: by 2002:a0c:9bd1:: with SMTP id g17mr4504471qvf.59.1574858770657;
+ Wed, 27 Nov 2019 04:46:10 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <8736ea2cty.fsf@mpe.ellerman.id.au>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+References: <CA+G9fYtgEfa=bq5C8yZeF6P563Gw3Fbs+-h_oy1e4G_1G0jrgw@mail.gmail.com>
+ <20191126155632.GF795@breakpoint.cc> <20191127001931.GA3717@debian>
+In-Reply-To: <20191127001931.GA3717@debian>
+From:   Jeffrin Thalakkottoor <jeffrin@rajagiritech.edu.in>
+Date:   Wed, 27 Nov 2019 18:15:34 +0530
+Message-ID: <CAG=yYwnm4vRLRpjT2VOj5fynPhBfhvpVjfbSOvPrs-bwv09mTA@mail.gmail.com>
+Subject: Re: selftests:netfilter: nft_nat.sh: internal00-0 Error Could not
+ open file \"-\" No such file or directory
+To:     Florian Westphal <fw@strlen.de>
+Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Netdev <netdev@vger.kernel.org>, Shuah Khan <shuah@kernel.org>,
+        Pablo Neira Ayuso <pablo@netfilter.org>, horms@verge.net.au,
+        yanhaishuang@cmss.chinamobile.com, lkft-triage@lists.linaro.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi
+On Wed, Nov 27, 2019 at 5:49 AM Jeffrin Jose
+<jeffrin@rajagiritech.edu.in> wrote:
+> Tested-by: Jeffrin Jose T <jeffrin@rajagiritech.edu.in>
+> Signed-off-by: Jeffrin Jose T <jeffrin@rajagiritech.edu.in>
+i do
 
-On 27/11/2019 03:54, Michael Ellerman wrote:
-> Cristian Marussi <cristian.marussi@arm.com> writes:
->> Hi
->>
->> while testing on linux-next
->>
->> I see that, when KBUILD_OUTPUT is set in the env, running something like (using TARGETS=exec as a random subsystem here...)
->>
->> $ make TARGETS=exec INSTALL_PATH=/nfs/LTP-official-debian-aarch64-rootfs/opt/KSFT_next kselftest-install
->>
->> works fine as usual, WHILE the alternative invocation (still documented in Documentation/dev-tools/kselftest.rst)
->>
->> make -C tools/testing/selftests/ TARGETS=exec INSTALL_PATH=/nfs/LTP-official-debian-aarch64-rootfs/opt/KSFT_next install
->>
->> fails miserably with:
->> ...
->> ...
->>  REMOVE  usr/include/rdma/cxgb3-abi.h usr/include/rdma/nes-abi.h
->>   HDRINST usr/include/asm/kvm.h
->>   INSTALL /kselftest/usr/include
->> mkdir: cannot create directory ‘/kselftest’: Permission denied
->> /home/crimar01/ARM/dev/src/pdsw/linux/Makefile:1187: recipe for target 'headers_install' failed
->> make[2]: *** [headers_install] Error 1
->>
->>
->> This is fixed by unsetting KBUILD_OUTPUT OR reverting: 
->>
->> 303e6218ecec (ksft/fixes) selftests: Fix O= and KBUILD_OUTPUT handling for relative paths
->>
->> since bypassing top makefile with -C, the definition of abs-objtree used by the above patch
->> is no more available.
->>
->> As a side effect when KBUILD_OUTPUT is set, this breaks also the usage kselftest_install.sh.
->>
->>  $ ./kselftest_install.sh /home/crimar01/ARM/dev/nfs/LTP-official-debian-aarch64-rootfs/opt/KSFT_full_next
->> ./kselftest_install.sh: Installing in specified location - /home/crimar01/ARM/dev/nfs/LTP-official-debian-aarch64-rootfs/opt/KSFT_full_next ...
->> make --no-builtin-rules INSTALL_HDR_PATH=$BUILD/usr \
->> 	ARCH=arm64 -C ../../.. headers_install
->> make[1]: Entering directory '/home/crimar01/ARM/dev/src/pdsw/linux'
->> make[2]: Entering directory '/home/crimar01/ARM/dev/src/pdsw/out_linux'
->>   INSTALL /kselftest/usr/include
->> mkdir: cannot create directory ‘/kselftest’: Permission denied
->> /home/crimar01/ARM/dev/src/pdsw/linux/Makefile:1187: recipe for target 'headers_install' failed
->> make[2]: *** [headers_install] Error 1
->> make[2]: Leaving directory '/home/crimar01/ARM/dev/src/pdsw/out_linux'
->> Makefile:179: recipe for target 'sub-make' failed
->> make[1]: *** [sub-make] Error 2
->> make[1]: Leaving directory '/home/crimar01/ARM/dev/src/pdsw/linux'
->> Makefile:142: recipe for target 'khdr' failed
->> make: *** [khdr] Error 2
->>
->>
-> ...
->> Any thoughts ? ... or am I missing something ?
-> 
-> You're not missing anything, this is broken.
-Thanks for the feedback !
 
-Cristian
-
-> 
->> (I think I'm starting to see this in latest CI linaro kselftest while they cross-compile for arm64)
-> 
-> It just hit my travis jobs when I merged up to master:
-> 
->   https://travis-ci.org/linuxppc/linux/jobs/617482001
-> 
-> Shuah can we please get this reverted?
-> 
-> cheers
-> 
-
+-- 
+software engineer
+rajagiri school of engineering and technology
