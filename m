@@ -2,247 +2,114 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C46A310AD1E
-	for <lists+linux-kselftest@lfdr.de>; Wed, 27 Nov 2019 11:02:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DCEC10AE3C
+	for <lists+linux-kselftest@lfdr.de>; Wed, 27 Nov 2019 11:54:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726204AbfK0KCI (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 27 Nov 2019 05:02:08 -0500
-Received: from mail-lf1-f68.google.com ([209.85.167.68]:44389 "EHLO
-        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726149AbfK0KCI (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 27 Nov 2019 05:02:08 -0500
-Received: by mail-lf1-f68.google.com with SMTP id v201so15592195lfa.11
-        for <linux-kselftest@vger.kernel.org>; Wed, 27 Nov 2019 02:02:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:from:date:message-id:subject:to:cc
-         :content-transfer-encoding;
-        bh=EY4H80pYKzfm6qV5UPHRTU6m7PSm9enhWlVJXB84wb0=;
-        b=vc9glajPpy6mgZ0yHifMD7DYC8Kd/LxZnjhzsKohQMPXjC8JLB2poLT+4eojc65qo6
-         zFcP8luSrvIiJBhkVoPq1CfCGXH2qiaCD0gljPUWa7s0a61pz3TNzDpJvCEf3h9WIYok
-         mPa+y3DvBIq2HQM2phgpWclDId8qxiBnUl4uqN7RqwXiyeSfdxlTTVNFvxhIBqtIn75v
-         w0DoYWF0CnX+LZWnf7H1plq583MEIVqEIDEQoQ7gGJvYWrFr3W0zxOSReVumlLIh3k8C
-         +Vbs51zZ1R9Bf43yxrXatmcudquBQoV7mIvjliF9Nv+g/Hr50Ndgm49yn4SVYSh6ddFE
-         0BPg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc
-         :content-transfer-encoding;
-        bh=EY4H80pYKzfm6qV5UPHRTU6m7PSm9enhWlVJXB84wb0=;
-        b=qUqHgLzTpZ9W6x2FS8g7Be8OQ8N+5Fk+2JorxRNebFKEc3BERHoXrDAIXu8Ay6hfZq
-         WGR+YycGFTkvRT0iI74zf3Wbde0Otl5QS6NHXpuh574go1JWrypACpMHPSkuc/5k61AF
-         KvEahD8NHLA0NQWju9NhvSkD+2F658Cf/+QoqdT7adiQBj+gnokXB9gDpJzc9ARguHqM
-         b1xYKTinWVx3WaBanFX70t7QtCrNOA6FILA4MedhTsSzNNj5XOCLrY4LCnKjVOwhYt3A
-         Z2PddeOXjgya3XkwHvdgk8LwxLmkyhc/QeXIjP3u5f8H14I9XUfSvdt6HPL9MX1YKyAT
-         AgUg==
-X-Gm-Message-State: APjAAAUEYwb5X7RXJD0pqD2ZpOb9zVNgB0tF1EIIu/pCZBBbOHYRV6M2
-        6NbsGiFJXj+5/203QJ0bUGO9FPatd40MW16uORQwWA==
-X-Google-Smtp-Source: APXvYqzllpI/nj+sdxunC5MqF9gCtlPe+vBQi4t9tGvv3YdmTcnl19BUY36EzMozzs8Hu4upWJFyVzfuGyngH0fH600=
-X-Received: by 2002:a19:f811:: with SMTP id a17mr27529288lff.132.1574848925236;
- Wed, 27 Nov 2019 02:02:05 -0800 (PST)
+        id S1726204AbfK0KyF (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 27 Nov 2019 05:54:05 -0500
+Received: from foss.arm.com ([217.140.110.172]:46132 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726194AbfK0KyF (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 27 Nov 2019 05:54:05 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9269630E;
+        Wed, 27 Nov 2019 02:54:04 -0800 (PST)
+Received: from [10.1.197.50] (e120937-lin.cambridge.arm.com [10.1.197.50])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D86DA3F6C4;
+        Wed, 27 Nov 2019 02:54:03 -0800 (PST)
+Subject: Re: kselftest: failed to build with -C tool/testing/selftests when
+ KBUILD_OUTPUT is set
+To:     Michael Ellerman <mpe@ellerman.id.au>, Tim.Bird@sony.com,
+        "shuah@kernel.org" <shuah@kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>
+References: <8d34a9b9-f8f3-0e37-00bf-c342cf3d4074@arm.com>
+ <8736ea2cty.fsf@mpe.ellerman.id.au>
+From:   Cristian Marussi <cristian.marussi@arm.com>
+Message-ID: <47e09faa-a3fb-04a7-4989-4443b27f47c2@arm.com>
+Date:   Wed, 27 Nov 2019 10:54:02 +0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Wed, 27 Nov 2019 15:31:53 +0530
-Message-ID: <CA+G9fYvom-=jCpGTNck+hSQm8xZgOt6EegWrJifvrbrx=rpGvg@mail.gmail.com>
-Subject: mainline-5.4.0: regressions detected in project mainline
-To:     Netdev <netdev@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>, bpf@vger.kernel.org,
-        open list <linux-kernel@vger.kernel.org>
-Cc:     Shuah Khan <shuah@kernel.org>,
-        Anders Roxell <anders.roxell@linaro.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>, kafai@fb.com,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        andriin@fb.com, lkft-triage@lists.linaro.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <8736ea2cty.fsf@mpe.ellerman.id.au>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Results from Linaro=E2=80=99s test farm.
-Regressions on arm64, arm, x86_64, and i386.
-The listed bpf tests failed. please find complete details below.
+Hi
 
-Summary
-------------------------------------------------------------------------
+On 27/11/2019 03:54, Michael Ellerman wrote:
+> Cristian Marussi <cristian.marussi@arm.com> writes:
+>> Hi
+>>
+>> while testing on linux-next
+>>
+>> I see that, when KBUILD_OUTPUT is set in the env, running something like (using TARGETS=exec as a random subsystem here...)
+>>
+>> $ make TARGETS=exec INSTALL_PATH=/nfs/LTP-official-debian-aarch64-rootfs/opt/KSFT_next kselftest-install
+>>
+>> works fine as usual, WHILE the alternative invocation (still documented in Documentation/dev-tools/kselftest.rst)
+>>
+>> make -C tools/testing/selftests/ TARGETS=exec INSTALL_PATH=/nfs/LTP-official-debian-aarch64-rootfs/opt/KSFT_next install
+>>
+>> fails miserably with:
+>> ...
+>> ...
+>>  REMOVE  usr/include/rdma/cxgb3-abi.h usr/include/rdma/nes-abi.h
+>>   HDRINST usr/include/asm/kvm.h
+>>   INSTALL /kselftest/usr/include
+>> mkdir: cannot create directory ‘/kselftest’: Permission denied
+>> /home/crimar01/ARM/dev/src/pdsw/linux/Makefile:1187: recipe for target 'headers_install' failed
+>> make[2]: *** [headers_install] Error 1
+>>
+>>
+>> This is fixed by unsetting KBUILD_OUTPUT OR reverting: 
+>>
+>> 303e6218ecec (ksft/fixes) selftests: Fix O= and KBUILD_OUTPUT handling for relative paths
+>>
+>> since bypassing top makefile with -C, the definition of abs-objtree used by the above patch
+>> is no more available.
+>>
+>> As a side effect when KBUILD_OUTPUT is set, this breaks also the usage kselftest_install.sh.
+>>
+>>  $ ./kselftest_install.sh /home/crimar01/ARM/dev/nfs/LTP-official-debian-aarch64-rootfs/opt/KSFT_full_next
+>> ./kselftest_install.sh: Installing in specified location - /home/crimar01/ARM/dev/nfs/LTP-official-debian-aarch64-rootfs/opt/KSFT_full_next ...
+>> make --no-builtin-rules INSTALL_HDR_PATH=$BUILD/usr \
+>> 	ARCH=arm64 -C ../../.. headers_install
+>> make[1]: Entering directory '/home/crimar01/ARM/dev/src/pdsw/linux'
+>> make[2]: Entering directory '/home/crimar01/ARM/dev/src/pdsw/out_linux'
+>>   INSTALL /kselftest/usr/include
+>> mkdir: cannot create directory ‘/kselftest’: Permission denied
+>> /home/crimar01/ARM/dev/src/pdsw/linux/Makefile:1187: recipe for target 'headers_install' failed
+>> make[2]: *** [headers_install] Error 1
+>> make[2]: Leaving directory '/home/crimar01/ARM/dev/src/pdsw/out_linux'
+>> Makefile:179: recipe for target 'sub-make' failed
+>> make[1]: *** [sub-make] Error 2
+>> make[1]: Leaving directory '/home/crimar01/ARM/dev/src/pdsw/linux'
+>> Makefile:142: recipe for target 'khdr' failed
+>> make: *** [khdr] Error 2
+>>
+>>
+> ...
+>> Any thoughts ? ... or am I missing something ?
+> 
+> You're not missing anything, this is broken.
+Thanks for the feedback !
 
-kernel: 5.4.0
-git repo: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.gi=
-t
-git branch: master
-git commit: 386403a115f95997c2715691226e11a7b5cffcfd
-git describe: v5.4-3419-g386403a115f9
-Test details: https://qa-reports.linaro.org/lkft/linux-mainline-oe/build/v5=
-.4-3419-g386403a115f9
-config: http://snapshots.linaro.org/openembedded/lkft/lkft/sumo/intel-corei=
-7-64/lkft/linux-mainline/2270/config
+Cristian
 
-Regressions (compared to build v5.4)
-------------------------------------------------------------------------
-  kselftest:
-    * bpf_test_dev_cgroup
-    * bpf_test_skb_cgroup_id.sh
-    * bpf_test_sysctl
-    * bpf_test_xdp_meta.sh
-    * bpf_test_xdp_redirect.sh
-    * bpf_test_xdp_vlan_mode_generic.sh
-    * bpf_test_xdp_vlan_mode_native.sh
+> 
+>> (I think I'm starting to see this in latest CI linaro kselftest while they cross-compile for arm64)
+> 
+> It just hit my travis jobs when I merged up to master:
+> 
+>   https://travis-ci.org/linuxppc/linux/jobs/617482001
+> 
+> Shuah can we please get this reverted?
+> 
+> cheers
+> 
 
-Test output log:
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-# selftests bpf test_dev_cgroup
-bpf: test_dev_cgroup_ #
-# libbpf failed to open ./dev_cgroup.o No such file or directory
-failed: to_open #
-# Failed to load DEV_CGROUP program
-to: load_DEV_CGROUP #
-[   75.524368] IPv6: ADDRCONF(NETDEV_CHANGE): test_sock_addr1: link
-becomes ready
-[FAIL] 9 selftests bpf test_dev_cgroup # exit=3D1
-selftests: bpf_test_dev_cgroup [FAIL]
-
-=3D=3D=3D
-# selftests bpf test_skb_cgroup_id.sh
-bpf: test_skb_cgroup_id.sh_ #
-# Wait for testing link-local IP to become available ... OK
-for: testing_link-local #
-# Error opening object ./test_skb_cgroup_id_kern.o No such file or director=
-y
-opening: object_./test_skb_cgroup_id_kern.o #
-# Cannot initialize ELF context!
-initialize: ELF_context! #
-# Unable to load program
-to: load_program #
-[FAIL] 33 selftests bpf test_skb_cgroup_id.sh # exit=3D1
-selftests: bpf_test_skb_cgroup_id.sh [FAIL]
-
-=3D=3D=3D
-# selftests bpf test_sysctl
-bpf: test_sysctl_ #
-# libbpf failed to open ./test_sysctl_prog.o No such file or directory
-failed: to_open #
-# (test_sysctl.c1490 errno No such file or directory) >>> Loading
-program (./test_sysctl_prog.o) error.
-errno: No_suc[   78.078283] ip (1336) used greatest stack depth: 11144
-bytes left
-h #
-#
-: _ #
-# libbpf failed to open ./test_sysctl_prog.o No such file or directory
-failed: to_open #
-# (test_sysctl.c1490 errno No such file or directory) >>> Loading
-program (./test_sysctl_prog.o) error.
-errno: No_such #
-#
-: _ #
-# libbpf failed to open ./test_sysctl_prog.o No such file or directory
-failed: to_open #
-# (test_sysctl.c1490 errno No such file or directory) >>> Loading
-program (./test_sysctl_prog.o) error.
-errno: No_such #
-
-...
-37: PASSED,_3 #
-[FAIL] 20 selftests bpf test_sysctl # exit=3D255
-selftests: bpf_test_sysctl [FAIL]
-
-=3D=3D=3D
-# selftests bpf test_xdp_meta.sh
-bpf: test_xdp_meta.sh_ #
-# Error opening object test_xdp_meta.o No such file or directory
-opening: object_test_xdp_meta.o #
-# Cannot initialize ELF context!
-initialize: ELF_context! #
-# Unable to load program
-to: load_program #
-# selftests test_xdp_meta [FAILED]
-test_xdp_meta: [FAILED]_ #
-[FAIL] 26 selftests bpf test_xdp_meta.sh # exit=3D1
-selftests: bpf_test_xdp_meta.sh [FAIL]
-
-=3D=3D=3D
-# selftests bpf test_xdp_redirect.sh
-bpf: test_xdp_redirect.sh_ #
-# Error opening object test_xdp_redirect.o No such file or directory
-opening: object_test_xdp_redirect.o #
-# Cannot initialize ELF context!
-initialize: ELF_context! #
-# selftests test_xdp_redirect [FAILED]
-test_xdp_redirect: [FAILED]_ #
-[FAIL] 25 selftests bpf test_xdp_redirect.sh # exit=3D255
-selftests: bpf_test_xdp_redirect.sh [FAIL]
-
-=3D=3D=3D
-# selftests bpf test_xdp_vlan_mode_generic.sh
-bpf: test_xdp_vlan_mode_generic.sh_ #
-# PING 100.64.41.1 (100.64.41.1) 56(84) bytes of data.
-100.64.41.1: (100.64.41.1)_56(84) #
-#
-: _ #
-# --- 100.64.41.1 ping statistics ---
-100.64.41.1: ping_statistics #
-# 1 packets transmitted, 0 received, 100% packet loss, time 0ms
-packets: transmitted,_0 #
-#
-: _ #
-# Success First ping must fail
-First: ping_must #
-# Error opening object test_xdp_vlan.o No such file or directory
-opening: object_test_xdp_vlan.o #
-# Cannot initialize ELF context!
-initialize: ELF_context! #
-# selftests xdp_vlan_mode_generic [FAILED]
-xdp_vlan_mode_generic: [FAILED]_ #
-[FAIL] 35 selftests bpf test_xdp_vlan_mode_generic.sh # exit=3D255
-selftests: bpf_test_xdp_vlan_mode_generic.sh [FAIL]
-
-=3D=3D=3D
-# selftests bpf test_xdp_vlan_mode_native.sh
-bpf: test_xdp_vlan_mode_native.sh_ #
-# PING 100.64.41.1 (100.64.41.1) 56(84) bytes of data.
-100.64.41.1: (100.64.41.1)_56(84) #
-#
-: _ #
-# --- 100.64.41.1 ping statistics ---
-100.64.41.1: ping_statistics #
-# 1 packets transmitted, 0 received, 100% packet loss, time 0ms
-packets: transmitted,_0 #
-#
-: _ #
-# Success First ping must fail
-First: ping_must #
-# Error opening object test_xdp_vlan.o No such file or directory
-opening: object_test_xdp_vlan.o #
-# Cannot initialize ELF context!
-initialize: ELF_context! #
-# selftests xdp_vlan_mode_native [FAILED]
-xdp_vlan_mode_native: [FAILED]_ #
-[FAIL] 36 selftests bpf test_xdp_vlan_mode_native.sh # exit=3D255
-selftests: bpf_test_xdp_vlan_mode_native.sh [FAIL]
-
-Ref links:
-https://lkft.validation.linaro.org/scheduler/job/1024055
-
-Dashboard link,
-https://qa-reports.linaro.org/lkft/linux-mainline-oe/tests/kselftest/bpf_te=
-st_dev_cgroup
-https://qa-reports.linaro.org/lkft/linux-mainline-oe/tests/kselftest/bpf_te=
-st_skb_cgroup_id.sh
-https://qa-reports.linaro.org/lkft/linux-mainline-oe/tests/kselftest/bpf_te=
-st_sysctl
-https://qa-reports.linaro.org/lkft/linux-mainline-oe/tests/kselftest/bpf_te=
-st_xdp_meta.sh
-https://qa-reports.linaro.org/lkft/linux-mainline-oe/tests/kselftest/bpf_te=
-st_xdp_redirect.sh
-https://qa-reports.linaro.org/lkft/linux-mainline-oe/tests/kselftest/bpf_te=
-st_xdp_vlan_mode_generic.sh
-https://qa-reports.linaro.org/lkft/linux-mainline-oe/tests/kselftest/bpf_te=
-st_xdp_vlan_mode_native.sh
-
---
-Linaro LKFT
-https://lkft.linaro.org
