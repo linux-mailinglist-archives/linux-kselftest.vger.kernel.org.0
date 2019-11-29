@@ -2,63 +2,44 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 12B2510D72C
-	for <lists+linux-kselftest@lfdr.de>; Fri, 29 Nov 2019 15:40:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7160B10DAA0
+	for <lists+linux-kselftest@lfdr.de>; Fri, 29 Nov 2019 21:41:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727026AbfK2Oj7 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 29 Nov 2019 09:39:59 -0500
-Received: from us-smtp-1.mimecast.com ([207.211.31.81]:41583 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726808AbfK2Oj7 (ORCPT
+        id S1727091AbfK2Ulu (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 29 Nov 2019 15:41:50 -0500
+Received: from shards.monkeyblade.net ([23.128.96.9]:34054 "EHLO
+        shards.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727040AbfK2Ulu (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 29 Nov 2019 09:39:59 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1575038398;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=FfyXChrBe1vZ1PcTn0iTJTc7p7Xm2eml7LrBbaxtCas=;
-        b=h2Z4p+9lzt83uKoRyK69/duN2d7B7CCKGflpZEyTTgo2nkoNVLD+di6KXGhOg32GO96F2h
-        Xumr+7698f3KvT5WzKmOO6+3xmwvcMJA1HKu+d0tsv8D5x9S4oyoflSiYjyBk7l8nZUxNS
-        hrmmNIAbDiGoaYa0qcZ616O+6ZpjHQQ=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-43-frV0228iPLGX0XOTTtzT5g-1; Fri, 29 Nov 2019 09:39:55 -0500
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id A06A9800D41;
-        Fri, 29 Nov 2019 14:39:53 +0000 (UTC)
-Received: from elisabeth (ovpn-200-40.brq.redhat.com [10.40.200.40])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 939A4600C8;
-        Fri, 29 Nov 2019 14:39:51 +0000 (UTC)
-Date:   Fri, 29 Nov 2019 15:39:45 +0100
-From:   Stefano Brivio <sbrivio@redhat.com>
-To:     Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
+        Fri, 29 Nov 2019 15:41:50 -0500
+Received: from localhost (c-73-35-209-67.hsd1.wa.comcast.net [73.35.209.67])
+        (using TLSv1 with cipher AES256-SHA (256/256 bits))
+        (Client did not present a certificate)
+        (Authenticated sender: davem-davemloft)
+        by shards.monkeyblade.net (Postfix) with ESMTPSA id 7A33114051729;
+        Fri, 29 Nov 2019 12:41:49 -0800 (PST)
+Date:   Fri, 29 Nov 2019 12:30:31 -0800 (PST)
+Message-Id: <20191129.123031.1495258469954154946.davem@davemloft.net>
+To:     cascardo@canonical.com
 Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-kselftest@vger.kernel.org, shuah@kernel.org,
-        davem@davemloft.net
+        sbrivio@redhat.com
 Subject: Re: [PATCH] selftests: pmtu: use -oneline for ip route list cache
-Message-ID: <20191129153945.03836fea@elisabeth>
+From:   David Miller <davem@davemloft.net>
 In-Reply-To: <20191128185806.23706-1-cascardo@canonical.com>
 References: <20191128185806.23706-1-cascardo@canonical.com>
-Organization: Red Hat
-MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
-X-MC-Unique: frV0228iPLGX0XOTTtzT5g-1
-X-Mimecast-Spam-Score: 0
-Content-Type: text/plain; charset=US-ASCII
+X-Mailer: Mew version 6.8 on Emacs 26.1
+Mime-Version: 1.0
+Content-Type: Text/Plain; charset=us-ascii
 Content-Transfer-Encoding: 7bit
+X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.5.12 (shards.monkeyblade.net [149.20.54.216]); Fri, 29 Nov 2019 12:41:49 -0800 (PST)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi,
-
-On Thu, 28 Nov 2019 15:58:06 -0300
-Thadeu Lima de Souza Cascardo <cascardo@canonical.com> wrote:
+From: Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
+Date: Thu, 28 Nov 2019 15:58:06 -0300
 
 > Some versions of iproute2 will output more than one line per entry, which
 > will cause the test to fail, like:
@@ -77,15 +58,9 @@ Thadeu Lima de Souza Cascardo <cascardo@canonical.com> wrote:
 > For some reason, two lines are printed for the IPv4 test no matter what
 > version of iproute2 is used. Use the same -oneline parameter there instead
 > of counting the lines twice.
-
-Thanks, it looks definitely more robust this way.
-
-Fixes: b964641e9925 ("selftests: pmtu: Make list_flush_ipv6_exception test more demanding")
-
+> 
 > Signed-off-by: Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
 
-Acked-by: Stefano Brivio <sbrivio@redhat.com>
+Applied with Fixes: tag added and queued up for -stable.
 
--- 
-Stefano
-
+Thanks.
