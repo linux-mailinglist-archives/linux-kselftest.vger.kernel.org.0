@@ -2,56 +2,59 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C1FE10E3E7
-	for <lists+linux-kselftest@lfdr.de>; Mon,  2 Dec 2019 00:26:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A4FBD10E3E9
+	for <lists+linux-kselftest@lfdr.de>; Mon,  2 Dec 2019 00:26:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727328AbfLAXZq (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 1 Dec 2019 18:25:46 -0500
-Received: from mail-wm1-f54.google.com ([209.85.128.54]:38618 "EHLO
-        mail-wm1-f54.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727279AbfLAXZp (ORCPT
+        id S1727282AbfLAXZp (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 1 Dec 2019 18:25:45 -0500
+Received: from mail-wr1-f67.google.com ([209.85.221.67]:46866 "EHLO
+        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727266AbfLAXZp (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
         Sun, 1 Dec 2019 18:25:45 -0500
-Received: by mail-wm1-f54.google.com with SMTP id p17so8261897wmi.3;
-        Sun, 01 Dec 2019 15:25:42 -0800 (PST)
+Received: by mail-wr1-f67.google.com with SMTP id z7so38468918wrl.13;
+        Sun, 01 Dec 2019 15:25:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=Nuine0dlwsDQb9vcAljbjPYMQNC3YRYMqCbVc0zfEfo=;
-        b=jvxkMi5Kn4oGzit1SjsXgIDBxGmAVjJbbDnAthzS3xLLr74s46jPUI8/PzOdq8iXo3
-         7ALDzp3JXWLhdaoY2Nht6T9HElNYGSllyYUlwvLsy3On+SqGenz4fW0j5pcMv3Ed1FbI
-         5igThj61ZbJ6TulNcFnk8xoS0i1jKHt9jAeABjcrjLiuW/4AkR3XJB1DE8zZLUlUIWYl
-         R8N0hfTrtgRjfFJUM7JU7XnYqEGJlscKaQQIufYZI9AHV1cC5YGsMkUK6FZK9/PZp4wW
-         ZqaSQyjuF4Oi0XssAs4JCXF/NuZrgbXRg/nTSNTMA/NNhrSOfOWLm8IWwIvbmu6IuDAS
-         Qi7Q==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references;
+        bh=HYMDGCEmGcRSgznIZqiDAqfjbK/Kr8elskjbFdh/a+8=;
+        b=kytsNh2AsL4R2YGin9NHm3swj8566Bw36YlupJ91/bJ8mc+KxBt8QR5TXV/bHeP30I
+         wV4NEfjSRSshzUTZG0+vnSfqN+OivW1D1lnGhe9MeRUEMTAsmT83J4OncMdik/qt8/KL
+         4SzJELjewY70o+mR+BrfzlZ1MgAZUzxw2uywZ8FJAn8Pt4aVqSx+fZywrMwpL0l5Fd/t
+         Id+DpLp+0L4UJs+y+9jaXHxMxo2+bdSqg2SJ39XATzcxG589teqqCbWvQRmICQAu6yWk
+         oOWZkPX/YSw/QNo9PJyEx6mCrmTXNvYmY9C/82BJgnaSjlfO0BMMHKZv9fmwAGjMYqgH
+         19Gw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=Nuine0dlwsDQb9vcAljbjPYMQNC3YRYMqCbVc0zfEfo=;
-        b=aBCzUcMgk3T71aMiU+1I7mYyFoKHJGRsAW1hLKtqjWzbjHI0Q2ax8YlEyqJPDAnXvG
-         xQk7hROJsOU0Jzp1MFYZ9jLl82wyzovS8qrxombMDnQJN7OIflWAB9/wiJw35dbTEMV4
-         O1+fPgIHCJENN+2IigZJq8HDxQxn0sWwooW73tl+GIMdm20dZSecQgAvjnsswvr8WhYl
-         n065kuF7SGvMCTbQ+nltsb1GaFhR+/oLZW/DLwNOAQo1Tfu1Sb6wu258StxthopgtQzt
-         1rBUgeMBQQ1BlzQBaqDcdmIw8qlCxX5nISDCXj5U6oRoPLJmVI0F90j/T1/wZaNBJ5PU
-         tK7w==
-X-Gm-Message-State: APjAAAV9yEs+ldo9GgBCoSb3bNobv5eIMd9D+Q5HBjYhstH5wS+3ChTn
-        Pxh0b8+LGj+KVPyiXDRpiR8=
-X-Google-Smtp-Source: APXvYqwiRSldoFbS1BRUYFG/Ss97kQu4OFo0/z31SQvh9IRKY72Mt9G86SXcMG6D1EQoXjJLDlfFCg==
-X-Received: by 2002:a1c:f610:: with SMTP id w16mr7218543wmc.34.1575242741560;
-        Sun, 01 Dec 2019 15:25:41 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references;
+        bh=HYMDGCEmGcRSgznIZqiDAqfjbK/Kr8elskjbFdh/a+8=;
+        b=I1bJQx5JIPrlTdYqdylASEI/cZGntVvIxioJFBq9GK2D2J7tGY7LsuoH7f9W9CC1Bs
+         kJYGQ3HLWHPfvvJWVpkuxz7sULscowy5pvIsil9asn+U+e+RBZsCWqDLmcgh5QVv25A3
+         dZk45lq3ICq8nFevbPN/z8lCcCSi+une0YeyCnecnceGm9JJtsEqVw5UToOALx98bdQT
+         uTqciBf+zSFkCIHlo933PuVE0tzIYdM4fYOudmBJCYbdgq6jZvbekovFa83K2Xb2J/5o
+         UP/aJm8CSN5m1KTSleWLMIhpb0oDyP1zo6J67rlC2GJ/uSjCru/fWrDuZWBjIoZcfMFi
+         cNcg==
+X-Gm-Message-State: APjAAAWcFy7IEcYja8HwX/yc/7GA+n/CRh47pz9ytQ/cpg/8tjNadvGF
+        Z2JXif6lsQfI/5HsHE+/9wI=
+X-Google-Smtp-Source: APXvYqy1luSgtaDxhS/XlxRiPYxiWqzgWyjAEQaSVT72yqkQysRWTNzVHpAzskZqwnYCVk/CGMQRpg==
+X-Received: by 2002:adf:8147:: with SMTP id 65mr65094833wrm.230.1575242742682;
+        Sun, 01 Dec 2019 15:25:42 -0800 (PST)
 Received: from localhost.localdomain (cable-86-56-100-90.cust.telecolumbus.net. [86.56.100.90])
-        by smtp.gmail.com with ESMTPSA id y6sm37450454wrl.17.2019.12.01.15.25.40
+        by smtp.gmail.com with ESMTPSA id y6sm37450454wrl.17.2019.12.01.15.25.41
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
-        Sun, 01 Dec 2019 15:25:40 -0800 (PST)
+        Sun, 01 Dec 2019 15:25:42 -0800 (PST)
 From:   SeongJae Park <sj38.park@gmail.com>
 To:     brendanhiggins@google.com, shuah@kernel.org
 Cc:     corbet@lwn.net, linux-kselftest@vger.kernel.org,
         kunit-dev@googlegroups.com, linux-doc@vger.kernel.org,
         linux-kernel@vger.kernel.org, SeongJae Park <sjpark@amazon.de>
-Subject: [PATCH 0/6] Fix nits in the kunit
-Date:   Mon,  2 Dec 2019 08:25:18 +0900
-Message-Id: <1575242724-4937-1-git-send-email-sj38.park@gmail.com>
+Subject: [PATCH 1/6] docs/kunit/start: Use in-tree 'kunit_defconfig'
+Date:   Mon,  2 Dec 2019 08:25:19 +0900
+Message-Id: <1575242724-4937-2-git-send-email-sj38.park@gmail.com>
 X-Mailer: git-send-email 2.7.4
+In-Reply-To: <1575242724-4937-1-git-send-email-sj38.park@gmail.com>
+References: <1575242724-4937-1-git-send-email-sj38.park@gmail.com>
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
@@ -59,22 +62,31 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 From: SeongJae Park <sjpark@amazon.de>
 
-This patchset contains trivial fixes for the kunit documentations and the
-wrapper python scripts.
+The kunit doc suggests users to get the default `kunitconfig` from an
+external git tree.  However, the file is already located under the
+`arch/um/configs/` of the kernel tree.  Because the local file is easier
+to access and maintain, this commit updates the doc to use it.
 
-SeongJae Park (6):
-  docs/kunit/start: Use in-tree 'kunit_defconfig'
-  docs/kunit/start: Skip wrapper run command
-  kunit: Remove duplicated defconfig creation
-  kunit: Create default config in 'build_dir'
-  kunit: Place 'test.log' under the 'build_dir'
-  kunit: Rename 'kunitconfig' to '.kunitconfig'
+Signed-off-by: SeongJae Park <sjpark@amazon.de>
+---
+ Documentation/dev-tools/kunit/start.rst | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
- Documentation/dev-tools/kunit/start.rst | 19 +++++--------------
- tools/testing/kunit/kunit.py            | 10 ++++++----
- tools/testing/kunit/kunit_kernel.py     |  6 +++---
- 3 files changed, 14 insertions(+), 21 deletions(-)
-
+diff --git a/Documentation/dev-tools/kunit/start.rst b/Documentation/dev-tools/kunit/start.rst
+index aeeddfa..78a0aed 100644
+--- a/Documentation/dev-tools/kunit/start.rst
++++ b/Documentation/dev-tools/kunit/start.rst
+@@ -29,9 +29,8 @@ regular Kernel config, with the specific test targets as well.
+ 
+ .. code-block:: bash
+ 
+-	git clone -b master https://kunit.googlesource.com/kunitconfig $PATH_TO_KUNITCONFIG_REPO
+ 	cd $PATH_TO_LINUX_REPO
+-	ln -s $PATH_TO_KUNIT_CONFIG_REPO/kunitconfig kunitconfig
++	cp arch/um/configs/kunit_defconfig kunitconfig
+ 
+ You may want to add kunitconfig to your local gitignore.
+ 
 -- 
 2.7.4
 
