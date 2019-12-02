@@ -2,76 +2,114 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E3FBA10EE25
-	for <lists+linux-kselftest@lfdr.de>; Mon,  2 Dec 2019 18:27:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 603EC10EFCC
+	for <lists+linux-kselftest@lfdr.de>; Mon,  2 Dec 2019 20:06:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727747AbfLBR1S (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 2 Dec 2019 12:27:18 -0500
-Received: from mail-pl1-f195.google.com ([209.85.214.195]:35497 "EHLO
-        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727493AbfLBR1S (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 2 Dec 2019 12:27:18 -0500
-Received: by mail-pl1-f195.google.com with SMTP id s10so217859plp.2
-        for <linux-kselftest@vger.kernel.org>; Mon, 02 Dec 2019 09:27:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=VefP/+cQ+dQ/UUR9SD7jeQ4+peUOMt+EfPp6hOKIcqA=;
-        b=ZL8dY8guV22Uz06jo26bIIK1QZdQXlb4Tr9ScOe/VmZzsQs3GyGUfryAVSquNR5LWc
-         xB0CotyQd3oBvrxauwgl9dJHeZUzrbCNYnPHS5lJ8BXvWdvUMn4hVGkyedG4AGdhmxYh
-         xkurDdkUv61x8mkgp9/R0YiWxaamkKstqgkncC9sBElXJWlsAbX1dJTTZU11rs1FSk9X
-         sCPbrg8hmikaRJ9r8IX+SGBxFGuEcfTPW41P3qAZxPnbSD+ANqK0jwwHNRwuWppfVFo8
-         /QNthVMcvdtDr13co0H+UXGAno6rSHwrPBZZeEdeZRM4q4OF7+tf7MXokB+6B851h+D0
-         uMkw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=VefP/+cQ+dQ/UUR9SD7jeQ4+peUOMt+EfPp6hOKIcqA=;
-        b=fU9fvHDWN+kG++E0UouCB6IzSBhsbDWZu6vY3YV07pUO66tb+/J+khbxeX/raaB3B6
-         3AJeLa/QdhLV+mzbB7OKIh7re5hjk6V8YoNY1hTIhVpYd/8gahA1ZouMBPVHXl88rF3/
-         SArNniFQLmUpnEwn0RUEOZsitLVGc1US/bTYrH9JWXGsxY19vbxQQdXGuvtwmkDsZ+FW
-         VhiX2V0Mi7ARLM08WMcGi4kosN05+nSR5hDSE2tSflPwkVr1S/Dakf72AerJhXR4Aps4
-         J3fSgIh4nKyaKX+PJhdBKEnl6Hs2rQjU086YPX8Bj/qTo/w0CM9MROAfy6aoVpCspsV7
-         zKiw==
-X-Gm-Message-State: APjAAAVlrQAVgCuv6CqEwjuL2aJEBvNIWEj1cKlo4tLthT5XUFd1Le1y
-        RkoWAsWHY576LrI5EdWze4uPGPLkwCFEJEvlKXbwSw==
-X-Google-Smtp-Source: APXvYqyo+U7FbkqdkHj8sWUhLZOOwg9M06lpZyP42lIWa4c2IcoppkM4L2SY7TH8Cos5EDfOIIj8q52YDOAY0opCjzo=
-X-Received: by 2002:a17:902:fe8d:: with SMTP id x13mr312605plm.232.1575307637383;
- Mon, 02 Dec 2019 09:27:17 -0800 (PST)
+        id S1727586AbfLBTGf (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 2 Dec 2019 14:06:35 -0500
+Received: from mga03.intel.com ([134.134.136.65]:53014 "EHLO mga03.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727580AbfLBTGf (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 2 Dec 2019 14:06:35 -0500
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga103.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 02 Dec 2019 11:06:33 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.69,270,1571727600"; 
+   d="scan'208";a="213149061"
+Received: from sjchrist-coffee.jf.intel.com (HELO linux.intel.com) ([10.54.74.41])
+  by orsmga003.jf.intel.com with ESMTP; 02 Dec 2019 11:06:33 -0800
+Date:   Mon, 2 Dec 2019 11:06:33 -0800
+From:   Sean Christopherson <sean.j.christopherson@intel.com>
+To:     kbuild test robot <lkp@intel.com>
+Cc:     kbuild-all@lists.01.org, Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Radim =?utf-8?B?S3LEjW3DocWZ?= <rkrcmar@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Tony Luck <tony.luck@intel.com>,
+        Tony W Wang-oc <TonyWWang-oc@zhaoxin.com>,
+        Len Brown <lenb@kernel.org>, Shuah Khan <shuah@kernel.org>,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-edac@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, Borislav Petkov <bp@suse.de>,
+        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+Subject: Re: [PATCH v4 01/19] x86/msr-index: Clean up bit defines for
+ IA32_FEATURE_CONTROL MSR
+Message-ID: <20191202190633.GG4063@linux.intel.com>
+References: <20191128014016.4389-2-sean.j.christopherson@intel.com>
+ <201912010347.7tMb4moN%lkp@intel.com>
 MIME-Version: 1.0
-References: <1575242724-4937-1-git-send-email-sj38.park@gmail.com> <1575242724-4937-4-git-send-email-sj38.park@gmail.com>
-In-Reply-To: <1575242724-4937-4-git-send-email-sj38.park@gmail.com>
-From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Mon, 2 Dec 2019 09:27:08 -0800
-Message-ID: <CAFd5g45ofMTq7LA8vticE5bEySD+K0MudE0v2eiTTKzodJ0TDQ@mail.gmail.com>
-Subject: Re: [PATCH 3/6] kunit: Remove duplicated defconfig creation
-To:     SeongJae Park <sj38.park@gmail.com>
-Cc:     shuah <shuah@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        SeongJae Park <sjpark@amazon.de>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <201912010347.7tMb4moN%lkp@intel.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sun, Dec 1, 2019 at 3:25 PM SeongJae Park <sj38.park@gmail.com> wrote:
->
-> From: SeongJae Park <sjpark@amazon.de>
->
-> '--defconfig' option is handled by the 'main() of the 'kunit.py' but
-> again handled in following 'run_tests()'.  This commit removes this
-> duplicated handling of the option in the 'run_tests()'.
->
-> Signed-off-by: SeongJae Park <sjpark@amazon.de>
+On Sun, Dec 01, 2019 at 04:52:53AM +0800, kbuild test robot wrote:
+> Hi Sean,
+> 
+> I love your patch! Yet something to improve:
+> 
+> [auto build test ERROR on tip/auto-latest]
+> [also build test ERROR on next-20191129]
+> [cannot apply to tip/x86/core kvm/linux-next v5.4]
+> [if your patch is applied to the wrong git tree, please drop us a note to help
+> improve the system. BTW, we also suggest to use '--base' option to specify the
+> base tree in git format-patch, please see https://stackoverflow.com/a/37406982]
+> 
+> url:    https://github.com/0day-ci/linux/commits/Sean-Christopherson/x86-cpu-Clean-up-handling-of-VMX-features/20191128-094556
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git e445033e58108a9891abfbc0dea90b066a75e4a9
+> config: x86_64-randconfig-s0-20191128 (attached as .config)
+> compiler: gcc-7 (Debian 7.4.0-14) 7.4.0
+> reproduce:
+>         # save the attached .config to linux build tree
+>         make ARCH=x86_64 
+> 
+> If you fix the issue, kindly add following tag
+> Reported-by: kbuild test robot <lkp@intel.com>
+> 
+> All errors (new ones prefixed by >>):
+> 
+>    In file included from arch/x86/include/asm/processor.h:22:0,
+>                     from arch/x86/include/asm/cpufeature.h:5,
+>                     from arch/x86/include/asm/thread_info.h:53,
+>                     from include/linux/thread_info.h:38,
+>                     from arch/x86/include/asm/preempt.h:7,
+>                     from include/linux/preempt.h:78,
+>                     from include/linux/percpu.h:6,
+>                     from include/linux/cpuidle.h:14,
+>                     from drivers/idle/intel_idle.c:45:
+>    drivers/idle/intel_idle.c: In function 'sklh_idle_state_table_update':
+> >> drivers/idle/intel_idle.c:1287:10: error: 'MSR_IA32_FEATURE_CONTROL' undeclared (first use in this function); did you mean 'MSR_MISC_FEATURE_CONTROL'?
+>       rdmsrl(MSR_IA32_FEATURE_CONTROL, msr);
+>              ^
 
-Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
+Argh, flat out missed this when doing search and replace.
 
-Thanks!
+>    arch/x86/include/asm/msr.h:279:28: note: in definition of macro 'rdmsrl'
+>      ((val) = native_read_msr((msr)))
+>                                ^~~
+>    drivers/idle/intel_idle.c:1287:10: note: each undeclared identifier is reported only once for each function it appears in
+>       rdmsrl(MSR_IA32_FEATURE_CONTROL, msr);
+>              ^
+>    arch/x86/include/asm/msr.h:279:28: note: in definition of macro 'rdmsrl'
+>      ((val) = native_read_msr((msr)))
+>                                ^~~
+> 
+> vim +1287 drivers/idle/intel_idle.c
