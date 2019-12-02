@@ -2,76 +2,80 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 264EC10EDDF
-	for <lists+linux-kselftest@lfdr.de>; Mon,  2 Dec 2019 18:09:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C397C10EDFA
+	for <lists+linux-kselftest@lfdr.de>; Mon,  2 Dec 2019 18:13:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727671AbfLBRJj (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 2 Dec 2019 12:09:39 -0500
-Received: from mail-pj1-f67.google.com ([209.85.216.67]:46751 "EHLO
+        id S1727714AbfLBRNr (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 2 Dec 2019 12:13:47 -0500
+Received: from mail-pj1-f67.google.com ([209.85.216.67]:35597 "EHLO
         mail-pj1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727493AbfLBRJj (ORCPT
+        with ESMTP id S1727655AbfLBRNr (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 2 Dec 2019 12:09:39 -0500
-Received: by mail-pj1-f67.google.com with SMTP id z21so5594012pjq.13
-        for <linux-kselftest@vger.kernel.org>; Mon, 02 Dec 2019 09:09:39 -0800 (PST)
+        Mon, 2 Dec 2019 12:13:47 -0500
+Received: by mail-pj1-f67.google.com with SMTP id s8so1390pji.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 02 Dec 2019 09:13:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=RDGGQHWpdkZIj81hxXdfawczIBgk86TVXpxZEqNBkKw=;
-        b=qy1XX0NQtaJmJIk1WSswX5pJZErX2pRnSRnoUqnlqrxvfEfIdPE2rOIZfXv4W1NZX4
-         rGki7kDJGQgC9QNz5h/BMIDI8PcBEHBAET/FtufdP8qVa+7E0j1+0gueUKOZvey7xV40
-         ipOq2+hRM8AUag4zbb8uui/TQI7YALdkbuBkUeU2jw0/LwEC5TJd2lIYmAZsEWM6h4Kz
-         ULeuV/etAnPSASnzO8ReR0Ve6D0Slh2WeHYBc634bc1ZtUxqWo9SnOYUzl/Dg+LIpiOb
-         siGdXVqIA1rMRUNUnhlfzuAqV3jyDSRhDCDSLfFBAfTM+f2wK5f7F3+WE59nxKFLE2nW
-         buHw==
+        bh=64Rtkbp5lv2QBUlTxW71SlutJl/znQZhVAhGmRkDa5A=;
+        b=Vk1wssvB/zZH8eG99umAlefNG1L3qcWJrGhvntSWhcfpVqIgNAxOidQi1rwq4EQIXn
+         bN4vLm7U3VKPpBs9sda/OGs+oyh9PNagdmFLvXdLj/BS47NPntYenQZ5La3ndeMMvSdE
+         skeX0zFDPEe2oYhEETSdTU90kbb3+PL8p4zstc5e0YlF0cKXQ92MxFz36GyVOGZ0X7/M
+         K3MrdpOuSClJ+EaJxL7s+dztJNSPhojECu28cIb0F2l3WqnCnMDfk4C/Hj49DL952BEY
+         BxZqmEm7yS/3E/w9YNyvwuwajKd5JfcTzCs/nbSRB1EuYZe1m8RWrwueCb+hlp03EFEM
+         7wcg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=RDGGQHWpdkZIj81hxXdfawczIBgk86TVXpxZEqNBkKw=;
-        b=mg+QXnEjOhuVhCDMYnmGSNVNNE02hTtlaoz5txRlaE8NkbVCxuWysPqUK9O/lpdo1i
-         gIkaQsmaVqkS3o3ayx3f5IrriVuliqk0qtDjDLEepOmVCKniV8KC4lrAtaDWYNf1XH37
-         e5BxZ/rKsfRaFkHnmtKqUDVbxqzjFnJ0KYQ54j6Z+XHwp3qZMoYvdud1p2TzzSTWSAWz
-         duLltYwW9FbS59HhrjxXfAoWjYcsNtX9+cNb/BkIrfI3wCIPdKFddBsO/4I1mnRs2XiZ
-         mjx8cRmAmlaav0vIMOJBdE0Qky83cVIIiimiRovIR5Ke6cAXDDABPj85efCmrzuWYPSN
-         wNCQ==
-X-Gm-Message-State: APjAAAWksqRbrB8PDJ1ZJmwWVeVZ1nf0s5qJuhzqW+vxkOLuIVG7P3f2
-        PmxbYh3nWsq76J/AoOSbZ/0pSi1E7ssOG7nL1ueijg==
-X-Google-Smtp-Source: APXvYqzqsLYh95mI5pQBPTRCrUh++E3DAxgln/usIn0Xc7WWl8bqC9mEjf/KwCQBB6K3knP54p0s/dChqA2Dqaj6CAI=
-X-Received: by 2002:a17:90a:ff02:: with SMTP id ce2mr264576pjb.117.1575306578192;
- Mon, 02 Dec 2019 09:09:38 -0800 (PST)
+        bh=64Rtkbp5lv2QBUlTxW71SlutJl/znQZhVAhGmRkDa5A=;
+        b=az3YIyz+WJxglD7o+yNNPnG3wi26i9QWy7AGJPDr1AkkPRufOvJTimy4OxTr05mSFx
+         eXnSO64Nd1WAHNv5mrSuFVMd0JhEAfxPhTayeo2q/f41kBP/RQYStv/CluywOPJfn6mt
+         yj4QIyedxOc5RE5aN0fdrVyh3mlc7reqi1+yxmYb5XkW8AnNgGku7oVWa888Jp0JYqz5
+         iREJsu3x2h5/kWokGTgpxcYEhKLBLK5Ynn//8ttZDPbBkCmg7T/sNoq4F69RggJjqlHY
+         awbfYxG91gs86vkmt96zBsLhfpzwX+PB0IvAB/+/xE8m8eZ9+Z3SdAo3YSU6UuClAgXW
+         aZMA==
+X-Gm-Message-State: APjAAAVAA4VelrpWjfZV9P/a/DWcwVLUJy8efKvP8keAYFOkWLT5zogy
+        VrrmJWB5t+gV1PaG8G5Lcj2FVrBBucwr1m4Y3GBuLA==
+X-Google-Smtp-Source: APXvYqw2U7Pcn6yuncEv+9Hnh2ggnupoJ+IowA3xrDVuGtbGVVpYPNpOewznFvm7KtezB3JzP8UOxrp7rkAIVpmh7PQ=
+X-Received: by 2002:a17:90a:ff02:: with SMTP id ce2mr16466pjb.117.1575306825934;
+ Mon, 02 Dec 2019 09:13:45 -0800 (PST)
 MIME-Version: 1.0
-References: <20191127231926.162437-1-heidifahim@google.com>
-In-Reply-To: <20191127231926.162437-1-heidifahim@google.com>
+References: <1575242724-4937-1-git-send-email-sj38.park@gmail.com> <1575242724-4937-2-git-send-email-sj38.park@gmail.com>
+In-Reply-To: <1575242724-4937-2-git-send-email-sj38.park@gmail.com>
 From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Mon, 2 Dec 2019 09:09:29 -0800
-Message-ID: <CAFd5g46TG-+baJE29dR8iUdBdWViO_BygKbwUQ5fHv8X3Jkpfw@mail.gmail.com>
-Subject: Re: [PATCH] kunit: testing kunit: Bug fix in test_run_timeout function
-To:     Heidi Fahim <heidifahim@google.com>
-Cc:     David Gow <davidgow@google.com>, shuah <shuah@kernel.org>,
-        SeongJae Park <sj38.park@gmail.com>,
+Date:   Mon, 2 Dec 2019 09:13:37 -0800
+Message-ID: <CAFd5g468=suYdH9No7f1qkr-oAvOFS3q4O1iW3ABs57fzsntdw@mail.gmail.com>
+Subject: Re: [PATCH 1/6] docs/kunit/start: Use in-tree 'kunit_defconfig'
+To:     SeongJae Park <sj38.park@gmail.com>
+Cc:     shuah <shuah@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
         "open list:KERNEL SELFTEST FRAMEWORK" 
         <linux-kselftest@vger.kernel.org>,
         KUnit Development <kunit-dev@googlegroups.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        SeongJae Park <sjpark@amazon.de>,
+        David Gow <davidgow@google.com>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Nov 27, 2019 at 3:19 PM Heidi Fahim <heidifahim@google.com> wrote:
+On Sun, Dec 1, 2019 at 3:25 PM SeongJae Park <sj38.park@gmail.com> wrote:
 >
-> Assert in test_run_timeout was not updated with the build_dir argument
-> and caused the following error:
-> AssertionError: Expected call: run_kernel(timeout=3453)
-> Actual call: run_kernel(build_dir=None, timeout=3453)
+> From: SeongJae Park <sjpark@amazon.de>
 >
-> Needed to update kunit_tool_test to reflect this fix
-> https://lkml.org/lkml/2019/9/6/3
->
-> Signed-off-by: Heidi Fahim <heidifahim@google.com>
-> Change-Id: I6f161c72c6a5f071a4dc31582ba08b91974502ce
+> The kunit doc suggests users to get the default `kunitconfig` from an
+> external git tree.  However, the file is already located under the
+> `arch/um/configs/` of the kernel tree.  Because the local file is easier
+> to access and maintain, this commit updates the doc to use it.
 
-Change-Id should not be used on LKML patches. Did you run checkpatch?
+I agree; this probably makes more sense.
+
+> Signed-off-by: SeongJae Park <sjpark@amazon.de>
+
+Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
+
+Thanks!
