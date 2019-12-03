@@ -2,100 +2,74 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DB06110303
-	for <lists+linux-kselftest@lfdr.de>; Tue,  3 Dec 2019 17:58:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AE991103BD
+	for <lists+linux-kselftest@lfdr.de>; Tue,  3 Dec 2019 18:42:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726819AbfLCQ6s (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 3 Dec 2019 11:58:48 -0500
-Received: from mail-qk1-f193.google.com ([209.85.222.193]:37222 "EHLO
-        mail-qk1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726190AbfLCQ6s (ORCPT
+        id S1726224AbfLCRl7 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 3 Dec 2019 12:41:59 -0500
+Received: from mail-pf1-f196.google.com ([209.85.210.196]:37403 "EHLO
+        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726075AbfLCRl7 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 3 Dec 2019 11:58:48 -0500
-Received: by mail-qk1-f193.google.com with SMTP id m188so4138345qkc.4
-        for <linux-kselftest@vger.kernel.org>; Tue, 03 Dec 2019 08:58:48 -0800 (PST)
+        Tue, 3 Dec 2019 12:41:59 -0500
+Received: by mail-pf1-f196.google.com with SMTP id s18so2204249pfm.4
+        for <linux-kselftest@vger.kernel.org>; Tue, 03 Dec 2019 09:41:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chrisdown.name; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=awAZi9esbUnXwgXhwi5bh2eBiqCu026SUTMkAv+bcuk=;
-        b=L22xBp2gKa6uy6Xb4JW/SOWjMtUgH90CP7cHfER4JiCqbsofhlGIkYBC8S714MZd0t
-         JAc4BN2VdOXH1g5oVGh8kWYTew/jD17g0YkmUCJX94s7pIYrgAg3YB0K6+gALQ/CiJJn
-         Jy3N4G13IuXQ5AfbjEVSd0l8y0VL9AoMYh7fI=
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=aPNclA55GeMuTPy00O4xA3XNidBB0rleD9eOny3IQXU=;
+        b=CA8U+ILSVCqpsw6oVcTIiykcDXOPtAQZ3dRCBFCZF1Nnq9ZRybkNiuadJE3k6L38nk
+         1nM6dfAtI1nmuq17a2w3pQeYTJcbN+0E7hZQXNu1BmYtv22ZIo+H6t8xILsvT5l3PK3F
+         jKAh96PdF5kuA3LEMjN+Mi1PK/05bdRSWUicAd9PMzhTT1G7ELE6IpqgsinlpfSopyS/
+         lODY3D32qAbzArZ+QI45bVCSRWDjJAaFswGXvQ/spe0FY5bCVUlTftGsJzDCsvmGUaqy
+         wBCVGR89Awy9K5FZunIUztSkOLIa0VchzzRL68mjE+rANibb5Yi+gTiKo9Ce0FEKX68U
+         pmBA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=awAZi9esbUnXwgXhwi5bh2eBiqCu026SUTMkAv+bcuk=;
-        b=pKCu8KiB2gquUX5vtzEY727xmtYUCTmbg3vDeJXd7HWYAViX+hslHyxbleAGyb60tI
-         YFvKL+aBZ3sixr6/+BuaTsCSAvwJYLxfpegzSeq67xvbzSWrFyJItPDchdS+vho7/y+H
-         bYBYVWAuv+CW4XwkYMqQIIffhE0enD+vDSK2kMQ2kiKyQSP/zXQutP7aMUFSHPRYjmdW
-         809DaRgzgrzhaaBQBpbZc7eMDwTqsR/T3fLjB+eqOA/FnlgkqDwrHqeqe6OsU2bzEhu0
-         LQDzzRXdSf48WP0cnjm1OAZtXmoqI77AlgMVsqgYhZGGiAOZCMZ+WcCfk+qohuDs6WiV
-         NWJQ==
-X-Gm-Message-State: APjAAAW9u9jQGn2iRhT6cIFSLnQkPKPiWNOwonWoAQ3KyOWc9X2waZ95
-        GluOsMmYzDHKmtG1JfkLwkEtQA==
-X-Google-Smtp-Source: APXvYqzPRcP0xDwFOlYh6VQJvJ3upogxLDCfmpeKQJYYXPnQMvIQnXAR62SHl+8BMMa/0Qr4zaQT0Q==
-X-Received: by 2002:a37:4782:: with SMTP id u124mr6238808qka.8.1575392327688;
-        Tue, 03 Dec 2019 08:58:47 -0800 (PST)
-Received: from localhost ([2620:10d:c091:500::2:49ea])
-        by smtp.gmail.com with ESMTPSA id y10sm1959520qky.6.2019.12.03.08.58.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Dec 2019 08:58:47 -0800 (PST)
-Date:   Tue, 3 Dec 2019 11:58:47 -0500
-From:   Chris Down <chris@chrisdown.name>
-To:     Roman Gushchin <guro@fb.com>
-Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-team@fb.com, Johannes Weiner <hannes@cmpxchg.org>
-Subject: Re: [PATCH kselftest-next 2/2] kselftests: memcg: speed up the
- memory.high test
-Message-ID: <20191203165847.GB607734@chrisdown.name>
-References: <20191202234212.4134802-1-guro@fb.com>
- <20191202234212.4134802-2-guro@fb.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=aPNclA55GeMuTPy00O4xA3XNidBB0rleD9eOny3IQXU=;
+        b=jjV5tRuxR+TDe2zA+v/UK/99wfc3cr6+hYjRFPHvQPebjFbevjSvA61mFu4ThyfVsS
+         oeWEPn5WAit4oISir4QH17k3ue8/1pZwS6mQ4ikzN8J8LQ/OMS6GmBN8z+RU8GOrk8Ff
+         7X+Vs22Cp5QRwkcTI4Ndu8OdPXiCPMBvRkoYqxvUgshpg2LOpDCX4yL8Ae0fnDXvaqpX
+         dgiWmQpnlLBakyquFnpNKCI2BARIaQI28Dvc8Unn3X7soTLVtUIv3EdmQVkjGJhIhi91
+         2YZzlUUCL++I9D62VZYkW0O1jVMi6GICqo+DjujO38FboBuMDy1KF6TOdT2m0Pij/NQf
+         uWYw==
+X-Gm-Message-State: APjAAAVHkJd3FmU/RY4ro6S50Wakt/fQixKY3ISJWoI8HCK0YXASio30
+        FXIkS/TVtrrpmZx4VEzrqYQPHUm9/g4niKzYGMqrvw==
+X-Google-Smtp-Source: APXvYqyLfrzqw76FsSf7xNdSx42vZjlHk3EqzEY2B6hdnMDa1YuE2bPl3G/so4GSGjfHNmL5z7UDa/RdVqlVulsRkzU=
+X-Received: by 2002:a62:174b:: with SMTP id 72mr6112264pfx.185.1575394918652;
+ Tue, 03 Dec 2019 09:41:58 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <20191202234212.4134802-2-guro@fb.com>
-User-Agent: Mutt/1.12.2 (2019-09-21)
+References: <1575361141-6806-1-git-send-email-sj38.park@gmail.com> <1575361141-6806-6-git-send-email-sj38.park@gmail.com>
+In-Reply-To: <1575361141-6806-6-git-send-email-sj38.park@gmail.com>
+From:   Brendan Higgins <brendanhiggins@google.com>
+Date:   Tue, 3 Dec 2019 09:41:47 -0800
+Message-ID: <CAFd5g456ZK-zZw_E2O1MOC2-vjwQ8Rpm=tuNMscks_mcOsdwxQ@mail.gmail.com>
+Subject: Re: [PATCH v2 5/5] kunit: Rename 'kunitconfig' to '.kunitconfig'
+To:     SeongJae Park <sj38.park@gmail.com>
+Cc:     shuah <shuah@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        SeongJae Park <sjpark@amazon.de>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Roman Gushchin writes:
->After commit 0e4b01df8659 ("mm, memcg: throttle allocators when
->failing reclaim over memory.high") allocating memory over memory.high
->became very time consuming. But it's exactly what the memory.high
->test from cgroup kselftests is doing: it tries to allocate 100M with
->30M memory.high value. It takes forever to complete.
+On Tue, Dec 3, 2019 at 12:19 AM SeongJae Park <sj38.park@gmail.com> wrote:
 >
->In order to keep it passing (or failing) in a reasonable amount of
->time let's try to allocate only a little over 30M: 31M to be precise.
+> From: SeongJae Park <sjpark@amazon.de>
 >
->With this change test_memcontrol finishes in a reasonable amount of
->time:
->  $ time ./test_memcontrol
->  ok 1 test_memcg_subtree_control
->  ok 2 test_memcg_current
->  ok 3 test_memcg_min
->  ok 4 test_memcg_low
->  ok 5 test_memcg_high
->  ok 6 test_memcg_max
->  ok 7 test_memcg_oom_events
->  ok 8 test_memcg_swap_max
->  ok 9 test_memcg_sock
->  ok 10 test_memcg_oom_group_leaf_events
->  ok 11 test_memcg_oom_group_parent_events
->  ok 12 test_memcg_oom_group_score_events
+> This commit renames 'kunitconfig' to '.kunitconfig' so that it can be
+> automatically ignored by git and do not disturb people who want to type
+> 'kernel/' by pressing only the 'k' and then 'tab' key.
 >
->  real	0m2.273s
->  user	0m0.064s
->  sys	0m0.739s
->
->Signed-off-by: Roman Gushchin <guro@fb.com>
->Cc: Chris Down <chris@chrisdown.name>
->Cc: Johannes Weiner <hannes@cmpxchg.org>
+> Signed-off-by: SeongJae Park <sjpark@amazon.de>
 
-Thanks, this makes sense.
-
-Reviewed-by: Chris Down <chris@chrisdown.name>
+Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
