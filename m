@@ -2,131 +2,127 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B0CF51103CD
-	for <lists+linux-kselftest@lfdr.de>; Tue,  3 Dec 2019 18:45:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B28B1103DD
+	for <lists+linux-kselftest@lfdr.de>; Tue,  3 Dec 2019 18:54:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726564AbfLCRpo (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 3 Dec 2019 12:45:44 -0500
-Received: from mail-pl1-f195.google.com ([209.85.214.195]:45063 "EHLO
-        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726449AbfLCRpo (ORCPT
+        id S1726449AbfLCRyi (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 3 Dec 2019 12:54:38 -0500
+Received: from mail-pj1-f66.google.com ([209.85.216.66]:40506 "EHLO
+        mail-pj1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726075AbfLCRyi (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 3 Dec 2019 12:45:44 -0500
-Received: by mail-pl1-f195.google.com with SMTP id w7so1962822plz.12
-        for <linux-kselftest@vger.kernel.org>; Tue, 03 Dec 2019 09:45:44 -0800 (PST)
+        Tue, 3 Dec 2019 12:54:38 -0500
+Received: by mail-pj1-f66.google.com with SMTP id s35so1808663pjb.7
+        for <linux-kselftest@vger.kernel.org>; Tue, 03 Dec 2019 09:54:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=z7N6iQZ6w+KnK1x580YAK+IgWlbj+L7z26/RNYAhP3E=;
-        b=QpxjuqLNn8DPHEmW8Mne7bHFbkHFrWcadhd3+9wt8gWJJIslzBTmim1TD5pOW0dvaA
-         bC76EQ7govwprkNb75aGyD6KHY8ymXR5N5w6Caa7L8wSLQ8o6YSIh5c8qGyJKwLNR5rV
-         6tCVzWrx/V9AD8Wf/hpe4/4M2sZYDEa5fP87n24haNU0l1cBwtmastId7QhfBbfz8tpB
-         nWWGDUBjCE44/t64p3fJ3FPUQNbKUKjxqw+zdrcFFOL8bd+Lh7WxRAF0+EazzRUNLgF8
-         4eSmnS+upC3AWrGrfZYAOw40jtAJYKZ0evSwDw4C01BQqyVmi2IWQBkkHsc/FPsTTzL+
-         PB5Q==
+        bh=vMR4WSw9F9B8/N0dfexGWtdZzcUtKJESett3rr24Dyo=;
+        b=PL7geI4O2Fegkq9yVA+r/GhMN4DROVlNgMIuRR9dEPslr5jnEu/k2ykh47MLjQ9s4B
+         A8hXLjzFm2rX9taFdenyTtLyS/xz2RqrOOdcUWfUrCem8+qIF6AxZDy0z6H3LmnqFAAC
+         StlGOh8VJ+JMbnkCwYuEEBpY9NMV0mSRNzFKIvuWc8KCD4txqAHLCMN+T8OWf+F1DGEb
+         Z3WlFR9nkh+yUbnN6ThV2BOHs9dp0Kd1ZqtPmgyfHH3VJQD1yNnnSBXo12EU1z3IZT8w
+         +QIwtR5O+j2PjTH4oYvqBdZ2L/EOAth91+DFGmi+Faliyp013UcmyJZyuujnzD3mELTy
+         tt5Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=z7N6iQZ6w+KnK1x580YAK+IgWlbj+L7z26/RNYAhP3E=;
-        b=WoRn9nzkpVFDvQNyaegN82GkCoIf3tWspGMz6ZMN3JGc4YL0l7NItV8UxuC5X2bRXt
-         Z+xb3Sqz0dbW/9VcNLFAkcCGXw28gzsxcXTXTEHk9LrooVcOdJMam2knt5tHLGSFWjYI
-         jvF1OY4o9YcCuN40xJLXu888s+mdfwbANlv+8rHcTJXYrd5+4iJSWi/wdjumJK2wYRd9
-         otesxmMLLSHNxF8HLhoxjjxID1r4cVi2W236HQ0bans721HXemX7cGfOsIXg2OrlgN5/
-         QpoiU5OBQYPckSA6KiF2wE/CDniiI/KeytXHZzDNmVTmRtDbzBjiFwBeEIqtjqc0CfGa
-         WHrA==
-X-Gm-Message-State: APjAAAVHmdlHH2b9VX7Ru5/QhVsMMe9YynxPNT/12UycQNmX2ODFOvtf
-        yHws/lDRLZbdJZ7fwC0XD4nSt2UU1uQOYPy2KykXwg==
-X-Google-Smtp-Source: APXvYqykkKXbum3SSjV3LDPg92I2gZuwgqFvaKWHVvCaYAZ8GyCh+gaXA/1WQQhyvLYBi43QZL+p4VYGPLTqotMNZac=
-X-Received: by 2002:a17:90a:ff12:: with SMTP id ce18mr4019224pjb.117.1575395143149;
- Tue, 03 Dec 2019 09:45:43 -0800 (PST)
+        bh=vMR4WSw9F9B8/N0dfexGWtdZzcUtKJESett3rr24Dyo=;
+        b=JQ5LJzsp5faz1G9nmjGx2HsHHDpAZOsXtMqCxKDjZjjQ7pY6JGUy0c9777fsS0Rl6T
+         bqA2tI5gInwLArTKA/I1W8NhLl3b7EZEJ2Ox7dT/QljFh1YBFOVGsUlf4AUYJEZQ6DZw
+         ycmZx60zAaN7eFmI3uZ5SdZ+umHagDEqmjG/aiCzPS3U4aIsENlygjDnawWQ3/wIVPKe
+         YKk0d5BoXhsbRINH5Egbveo1Uda056NpQjdewQqaLQYr1+R54uKosopc7KIdGmhaPzMP
+         i8AtbPo1d3hpCZuaWImxGpMODqiIUruaF+fszzi48tWuwNt9QLnMI2RgbAv0+ledcp5B
+         Fkzw==
+X-Gm-Message-State: APjAAAWHk3cV68kn3s0NiRaqE9ZseZWysU0LSFZUSr5wbrttEmG0XIQv
+        M52gIB+6r+48HdG4AX/3WyQxrCQmzDZBYcLuf32lGA==
+X-Google-Smtp-Source: APXvYqwzA5c1dosL6azbOI6mxwJKJwVTHQFZgXh+dkZsKqQMYvUExNucuTAYkzJJB5rdeM4ynwUTKNPgznxOPpjFWnc=
+X-Received: by 2002:a17:90a:c390:: with SMTP id h16mr6899357pjt.131.1575395677060;
+ Tue, 03 Dec 2019 09:54:37 -0800 (PST)
 MIME-Version: 1.0
-References: <1575242724-4937-1-git-send-email-sj38.park@gmail.com>
- <20191203070025.GA4206@google.com> <CAEjAshraUy20gEEaff69=b11DhB7zbz8WHT=6wOuw6C2FyJwYA@mail.gmail.com>
- <CAEjAsho98ER1RQ6=++ECmoCJxw2mMrGqV4jAgW5wgfb8eEM9eQ@mail.gmail.com>
-In-Reply-To: <CAEjAsho98ER1RQ6=++ECmoCJxw2mMrGqV4jAgW5wgfb8eEM9eQ@mail.gmail.com>
+References: <1575374868-32601-1-git-send-email-alan.maguire@oracle.com> <1575374868-32601-4-git-send-email-alan.maguire@oracle.com>
+In-Reply-To: <1575374868-32601-4-git-send-email-alan.maguire@oracle.com>
 From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Tue, 3 Dec 2019 09:45:31 -0800
-Message-ID: <CAFd5g46qPPsKJFqs07Eiea0Nim=YDWbOUndJu=JbW--VcTb-ww@mail.gmail.com>
-Subject: Re: [PATCH 0/6] Fix nits in the kunit
-To:     SeongJae Park <sj38.park@gmail.com>
-Cc:     Shuah Khan <shuah@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
+Date:   Tue, 3 Dec 2019 09:54:25 -0800
+Message-ID: <CAFd5g47dRP9HvsZD3sqzzfbAthNq8gxEdh57owo3CqVHLNOf6w@mail.gmail.com>
+Subject: Re: [PATCH v5 linux-kselftest-test 3/6] kunit: allow kunit tests to
+ be loaded as a module
+To:     Alan Maguire <alan.maguire@oracle.com>,
+        "Theodore Ts'o" <tytso@mit.edu>, Iurii Zaikin <yzaikin@google.com>,
+        David Gow <davidgow@google.com>
+Cc:     "open list:KERNEL SELFTEST FRAMEWORK" 
         <linux-kselftest@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         KUnit Development <kunit-dev@googlegroups.com>,
-        linux-doc <linux-doc@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        SeongJae Park <sjpark@amazon.de>
+        Kees Cook <keescook@chromium.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Masahiro Yamada <yamada.masahiro@socionext.com>,
+        catalin.marinas@arm.com, joe.lawrence@redhat.com,
+        penguin-kernel@i-love.sakura.ne.jp, urezki@gmail.com,
+        andriy.shevchenko@linux.intel.com,
+        Jonathan Corbet <corbet@lwn.net>, adilger.kernel@dilger.ca,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Knut Omang <knut.omang@oracle.com>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Dec 3, 2019 at 12:26 AM SeongJae Park <sj38.park@gmail.com> wrote:
+On Tue, Dec 3, 2019 at 4:08 AM Alan Maguire <alan.maguire@oracle.com> wrote:
 >
-> You're right, the error was due to the assumption of the existence of the
-> build_dir.  The "kunit: Create default config in '--build_dir'" patch made the
-> bug.  I fixed it in the second version patchset[1].
+> As tests are added to kunit, it will become less feasible to execute
+> all built tests together.  By supporting modular tests we provide
+> a simple way to do selective execution on a running system; specifying
 >
-> [1] https://lore.kernel.org/linux-doc/1575361141-6806-1-git-send-email-sj38.park@gmail.com/
+> CONFIG_KUNIT=y
+> CONFIG_KUNIT_EXAMPLE_TEST=m
+>
+> ...means we can simply "insmod example-test.ko" to run the tests.
+>
+> To achieve this we need to do the following:
+>
+> o export the required symbols in kunit
+> o string-stream tests utilize non-exported symbols so for now we skip
+>   building them when CONFIG_KUNIT_TEST=m.
+> o support a new way of declaring test suites.  Because a module cannot
+>   do multiple late_initcall()s, we provide a kunit_test_suites() macro
+>   to declare multiple suites within the same module at once.
+> o some test module names would have been too general ("test-test"
+>   and "example-test" for kunit tests, "inode-test" for ext4 tests);
+>   rename these as appropriate ("kunit-test", "kunit-example-test"
+>   and "ext4-inode-test" respectively).
+>
+> Co-developed-by: Knut Omang <knut.omang@oracle.com>
+> Signed-off-by: Knut Omang <knut.omang@oracle.com>
+> Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
 
-After trying your new patches, I am still getting the
-"FileNotFoundError" when the given build_dir has not been created.
+Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
 
-> Thanks,
-> SeongJae Park
->
-> On Tue, Dec 3, 2019 at 8:10 AM SeongJae Park <sj38.park@gmail.com> wrote:
-> >
-> > On Tue, Dec 3, 2019 at 8:00 AM Brendan Higgins
-> > <brendanhiggins@google.com> wrote:
-> > >
-> > > On Mon, Dec 02, 2019 at 08:25:18AM +0900, SeongJae Park wrote:
-> > > > From: SeongJae Park <sjpark@amazon.de>
-> > > >
-> > > > This patchset contains trivial fixes for the kunit documentations and the
-> > > > wrapper python scripts.
-> > > >
-> > > > SeongJae Park (6):
-> > > >   docs/kunit/start: Use in-tree 'kunit_defconfig'
-> > > >   docs/kunit/start: Skip wrapper run command
-> > > >   kunit: Remove duplicated defconfig creation
-> > > >   kunit: Create default config in 'build_dir'
-> > > >   kunit: Place 'test.log' under the 'build_dir'
-> > > >   kunit: Rename 'kunitconfig' to '.kunitconfig'
-> > > >
-> > > >  Documentation/dev-tools/kunit/start.rst | 19 +++++--------------
-> > > >  tools/testing/kunit/kunit.py            | 10 ++++++----
-> > > >  tools/testing/kunit/kunit_kernel.py     |  6 +++---
-> > > >  3 files changed, 14 insertions(+), 21 deletions(-)
-> > >
-> > > I applied your patchset to torvalds/master, ran the command:
-> > >
-> > > tools/testing/kunit/kunit.py run --timeout=60 --jobs=8 --defconfig --build_dir=.kunit
-> > >
-> > > and got the error:
-> > >
-> > > Traceback (most recent call last):
-> > >   File "tools/testing/kunit/kunit.py", line 140, in <module>
-> > >     main(sys.argv[1:])
-> > >   File "tools/testing/kunit/kunit.py", line 123, in main
-> > >     create_default_kunitconfig()
-> > >   File "tools/testing/kunit/kunit.py", line 36, in create_default_kunitconfig
-> > >     kunit_kernel.KUNITCONFIG_PATH)
-> > >   File "/usr/lib/python3.7/shutil.py", line 121, in copyfile
-> > >     with open(dst, 'wb') as fdst:
-> > > FileNotFoundError: [Errno 2] No such file or directory: '.kunit/.kunitconfig'
-> > >
-> > > It seems that it expects the build_dir to already exist; however, I
-> > > don't think this is clear from the error message. Would you mind
-> > > addressing that here?
-> >
-> > Thank you for sharing this.  I will take a look!
-> >
-> >
-> > Thanks,
-> > SeongJae Park
-> > >
-> > > Cheers!
+> ---
+>  fs/ext4/Kconfig                                    |  2 +-
+>  fs/ext4/Makefile                                   |  5 ++++
+>  fs/ext4/inode-test.c                               |  4 ++-
+>  include/kunit/test.h                               | 35 +++++++++++++++-------
+>  kernel/sysctl-test.c                               |  4 ++-
+>  lib/Kconfig.debug                                  |  4 +--
+>  lib/kunit/Kconfig                                  |  4 +--
+>  lib/kunit/Makefile                                 | 10 +++++--
+>  lib/kunit/assert.c                                 |  8 +++++
+>  lib/kunit/{example-test.c => kunit-example-test.c} |  4 ++-
+>  lib/kunit/{test-test.c => kunit-test.c}            |  5 ++--
+>  lib/kunit/string-stream-test.c                     |  2 +-
+>  lib/kunit/test.c                                   |  8 +++++
+>  lib/kunit/try-catch.c                              |  2 ++
+>  lib/list-test.c                                    |  4 ++-
+>  15 files changed, 76 insertions(+), 25 deletions(-)
+>  rename lib/kunit/{example-test.c => kunit-example-test.c} (97%)
+>  rename lib/kunit/{test-test.c => kunit-test.c} (98%)
+
+Ted, David, and Iurii, can you each review/ack for the bits that each
+of you own?
+
+Thanks for all your hard work on this Alan!
