@@ -2,57 +2,57 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0318211040A
+	by mail.lfdr.de (Postfix) with ESMTP id E25F311040C
 	for <lists+linux-kselftest@lfdr.de>; Tue,  3 Dec 2019 19:09:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727296AbfLCSIt (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 3 Dec 2019 13:08:49 -0500
-Received: from mail-wr1-f68.google.com ([209.85.221.68]:40864 "EHLO
-        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726763AbfLCSIs (ORCPT
+        id S1727316AbfLCSIv (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 3 Dec 2019 13:08:51 -0500
+Received: from mail-wr1-f65.google.com ([209.85.221.65]:32836 "EHLO
+        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727290AbfLCSIt (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 3 Dec 2019 13:08:48 -0500
-Received: by mail-wr1-f68.google.com with SMTP id c14so4879472wrn.7;
-        Tue, 03 Dec 2019 10:08:47 -0800 (PST)
+        Tue, 3 Dec 2019 13:08:49 -0500
+Received: by mail-wr1-f65.google.com with SMTP id b6so4967972wrq.0;
+        Tue, 03 Dec 2019 10:08:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=x54qeaA6lnhhJC5TBmsbkdVTvf2Oqp7EQuSTFX3fSbQ=;
-        b=ekwJ0ErRBR2nGmvyT1ADqbt1ZEI0OsPOrO5QN2jY86mfvc4OUIhxK+HnjPHUQZNyK7
-         vq29RaNP1XMXIFz9qZjGdI2MPO6uneY7w5VAH9RxyP5C9PoyeEjcQmnQK2lnpYbzX11A
-         g2alW1+y046jgO4LYi3w0XOG9sm+R4XhgpIRSI1DGm1eryLeZQ/upY6QgpH+TXwGcaHT
-         ADcKbNa3whGejqSgviTedUkOjqGUMabfak1qDxAOkJztOytZK7JR15POx34CsQO3mKC8
-         Oslugs2NaMNj8ZeTOWCIw5ugUKIGR9a80f6auq7x7EZLwKr5uTy1qpEZdMLbfKrHiA1U
-         F6Zw==
+        bh=3nP6VZ8Fjqwgvw9G0ddXuiCEaSnGP/358VA7wzbcUPI=;
+        b=TqWyU0JYS/1QxWfJrpgPb0N3WdqRrJMsCIXH26w2dmUVLbCq//aExSX3fVv1Z/XTiy
+         /5PtnOUdGo8/wT1ifLbawDVCAseNygP8jl0iVfnDXg9TkSPaRH29AI8dpTbZqR5nxYzO
+         19fpDGKUmizGcJAe02oKx8uRBO8e0VB/Y4z1c+kTFHk6IxwYaBwTJNAewyFlHI8RxIwQ
+         QGm2JQhy6WJoQnAJ07Q+9C3f6aX1Ltwqq6s5plp0fGCuXT7QmHaT2fbZI/05ujj2omgB
+         Lkze9Ppo4CcF5Lt6LvYrYjpuooEFlxhmNf/Hc1UFVKAhX5EJMedLVk0faDRDmHqFYcVt
+         RpCQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=x54qeaA6lnhhJC5TBmsbkdVTvf2Oqp7EQuSTFX3fSbQ=;
-        b=gb/1V74JpagK8JejpvySzYmtoVwdvVqlazB/zgE8QCqRLkqWahHfoC0XKMKfOXLuDp
-         tua7yIjsuFBdYClCBxFQNXjdvLOmzo68Xv08tY2H2V7e+q8dRR9ACkeA7ylixzId4rXC
-         LCayqxyhY/zWLGGOgUEDjDxWcWCfsRizKOLWkDDE7OzbuvA7Sg9+7bOCzgm2xQCUCsJJ
-         yk0fb8bo6Ov3w1y+Qii133fZ523X15+zwKmgJm9firKeInzG98fuLIeK8uezo6xxjrKB
-         JRmyYEdgbZniHWs3PM7q/EKl3mTg2kHmO58ASFEZWHnty58bUTyfVsoCnbohD+TEPDIQ
-         9+dA==
-X-Gm-Message-State: APjAAAX63nsmpwsj3NkA0PM2D8gBpHMILcUPJsYJcg7JM4xi1gB1NAEj
-        FBOc1Nk9XPPAaxv3fbuQR2k=
-X-Google-Smtp-Source: APXvYqxksk1sT2ZZdAJxnzOVW5/5ECpcZrfCYxKcazhIOcGu3CMRqfFJX/Xnh6ZGkKyllyN8vWnwdA==
-X-Received: by 2002:a5d:4b47:: with SMTP id w7mr6999917wrs.276.1575396526558;
-        Tue, 03 Dec 2019 10:08:46 -0800 (PST)
+        bh=3nP6VZ8Fjqwgvw9G0ddXuiCEaSnGP/358VA7wzbcUPI=;
+        b=NinNYLuwutl5MLJOn+bZnhUXxKF2V51Ijn1DXSNQ8TzlO66FsuTw3ucwW4+Y4OZHow
+         Pxijikit2cKRq2JY+x0lx/bucJTVuirPH0/rgKNt3O6NMWRnbDz4JnXc+SFuPRQjOvuA
+         9B+WqYU69XkBUzr8IKGSMsZf0S+9fMhRveqPd6LPxBUdYp/e8i80boVXWbh9RxP3uCf2
+         nWDt7L/jXYx2EChuMuJNsUVchMA1BfxMIuPuzdX7rOHPcCXuevC8zIvHa5l+DaLX/vJT
+         ZmF23CHmRYj0g5PN28RftjwYl+tXjGO6QkS8hnDcOwCLEcA+pHfe8Q7KoeX821ZKIYvJ
+         zk6A==
+X-Gm-Message-State: APjAAAUBLWUxhdiz74QgODtw4PhJQVk9YibqJj2pwhqFuHssKF5/DwvO
+        HKrroDsyrujy26n6Gm9IBwo=
+X-Google-Smtp-Source: APXvYqxunmSS3YEJs+zJB8zE7O7p6NgDz/9D7hcFGKvEsuTvUE5qFlMI3ca8sfDP1HhRV/Fb0t7tgQ==
+X-Received: by 2002:a5d:608a:: with SMTP id w10mr6229894wrt.136.1575396527796;
+        Tue, 03 Dec 2019 10:08:47 -0800 (PST)
 Received: from localhost.localdomain (cable-86-56-100-90.cust.telecolumbus.net. [86.56.100.90])
-        by smtp.gmail.com with ESMTPSA id f11sm3847641wmc.25.2019.12.03.10.08.45
+        by smtp.gmail.com with ESMTPSA id f11sm3847641wmc.25.2019.12.03.10.08.46
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
-        Tue, 03 Dec 2019 10:08:46 -0800 (PST)
+        Tue, 03 Dec 2019 10:08:47 -0800 (PST)
 From:   SeongJae Park <sj38.park@gmail.com>
 To:     brendanhiggins@google.com
 Cc:     corbet@lwn.net, kunit-dev@googlegroups.com,
         linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-kselftest@vger.kernel.org, shuah@kernel.org,
         sj38.park@gmail.com, sjpark@amazon.de
-Subject: [PATCH v3 4/5] kunit: Place 'test.log' under the 'build_dir'
-Date:   Wed,  4 Dec 2019 03:08:27 +0900
-Message-Id: <1575396508-21480-5-git-send-email-sj38.park@gmail.com>
+Subject: [PATCH v3 5/5] kunit: Rename 'kunitconfig' to '.kunitconfig'
+Date:   Wed,  4 Dec 2019 03:08:28 +0900
+Message-Id: <1575396508-21480-6-git-send-email-sj38.park@gmail.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1575396508-21480-1-git-send-email-sj38.park@gmail.com>
 References: <1575396508-21480-1-git-send-email-sj38.park@gmail.com>
@@ -63,30 +63,89 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 From: SeongJae Park <sjpark@amazon.de>
 
-'kunit' writes the 'test.log' under the kernel source directory even
-though a 'build_dir' option is given.  As users who use the option might
-expect the outputs to be placed under the specified directory, this
-commit modifies the logic to write the log file under the 'build_dir'.
+This commit renames 'kunitconfig' to '.kunitconfig' so that it can be
+automatically ignored by git and do not disturb people who want to type
+'kernel/' by pressing only the 'k' and then 'tab' key.
 
 Signed-off-by: SeongJae Park <sjpark@amazon.de>
 Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
 ---
- tools/testing/kunit/kunit_kernel.py | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ Documentation/dev-tools/kunit/start.rst | 12 +++++-------
+ tools/testing/kunit/kunit.py            |  2 +-
+ tools/testing/kunit/kunit_kernel.py     |  4 ++--
+ 3 files changed, 8 insertions(+), 10 deletions(-)
 
+diff --git a/Documentation/dev-tools/kunit/start.rst b/Documentation/dev-tools/kunit/start.rst
+index 78a0aed..faa6fa9 100644
+--- a/Documentation/dev-tools/kunit/start.rst
++++ b/Documentation/dev-tools/kunit/start.rst
+@@ -21,18 +21,16 @@ The wrapper can be run with:
+ 
+    ./tools/testing/kunit/kunit.py run
+ 
+-Creating a kunitconfig
+-======================
++Creating a .kunitconfig
++=======================
+ The Python script is a thin wrapper around Kbuild as such, it needs to be
+-configured with a ``kunitconfig`` file. This file essentially contains the
++configured with a ``.kunitconfig`` file. This file essentially contains the
+ regular Kernel config, with the specific test targets as well.
+ 
+ .. code-block:: bash
+ 
+ 	cd $PATH_TO_LINUX_REPO
+-	cp arch/um/configs/kunit_defconfig kunitconfig
+-
+-You may want to add kunitconfig to your local gitignore.
++	cp arch/um/configs/kunit_defconfig .kunitconfig
+ 
+ Verifying KUnit Works
+ ---------------------
+@@ -147,7 +145,7 @@ and the following to ``drivers/misc/Makefile``:
+ 
+ 	obj-$(CONFIG_MISC_EXAMPLE_TEST) += example-test.o
+ 
+-Now add it to your ``kunitconfig``:
++Now add it to your ``.kunitconfig``:
+ 
+ .. code-block:: none
+ 
+diff --git a/tools/testing/kunit/kunit.py b/tools/testing/kunit/kunit.py
+index 5b22241..257722f 100755
+--- a/tools/testing/kunit/kunit.py
++++ b/tools/testing/kunit/kunit.py
+@@ -108,7 +108,7 @@ def main(argv, linux=None):
+ 				type=str, default=None, metavar='build_dir')
+ 
+ 	run_parser.add_argument('--defconfig',
+-				help='Uses a default kunitconfig.',
++				help='Uses a default .kunitconfig.',
+ 				action='store_true')
+ 
+ 	cli_args = parser.parse_args(argv)
 diff --git a/tools/testing/kunit/kunit_kernel.py b/tools/testing/kunit/kunit_kernel.py
-index c04a12e..5bec97e 100644
+index 5bec97e..fca1933 100644
 --- a/tools/testing/kunit/kunit_kernel.py
 +++ b/tools/testing/kunit/kunit_kernel.py
-@@ -143,7 +143,7 @@ class LinuxSourceTree(object):
- 	def run_kernel(self, args=[], timeout=None, build_dir=None):
- 		args.extend(['mem=256M'])
- 		process = self._ops.linux_bin(args, timeout, build_dir)
--		with open('test.log', 'w') as f:
-+		with open(os.path.join(build_dir, 'test.log'), 'w') as f:
- 			for line in process.stdout:
- 				f.write(line.rstrip().decode('ascii') + '\n')
- 				yield line.rstrip().decode('ascii')
+@@ -14,7 +14,7 @@ import os
+ import kunit_config
+ 
+ KCONFIG_PATH = '.config'
+-kunitconfig_path = 'kunitconfig'
++kunitconfig_path = '.kunitconfig'
+ 
+ class ConfigError(Exception):
+ 	"""Represents an error trying to configure the Linux kernel."""
+@@ -111,7 +111,7 @@ class LinuxSourceTree(object):
+ 		return True
+ 
+ 	def build_reconfig(self, build_dir):
+-		"""Creates a new .config if it is not a subset of the kunitconfig."""
++		"""Creates a new .config if it is not a subset of the .kunitconfig."""
+ 		kconfig_path = get_kconfig_path(build_dir)
+ 		if os.path.exists(kconfig_path):
+ 			existing_kconfig = kunit_config.Kconfig()
 -- 
 2.7.4
 
