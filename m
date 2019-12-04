@@ -2,97 +2,162 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DD98112CFE
-	for <lists+linux-kselftest@lfdr.de>; Wed,  4 Dec 2019 14:55:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 32B0C112E59
+	for <lists+linux-kselftest@lfdr.de>; Wed,  4 Dec 2019 16:28:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727849AbfLDNz7 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 4 Dec 2019 08:55:59 -0500
-Received: from foss.arm.com ([217.140.110.172]:56142 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727828AbfLDNz6 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 4 Dec 2019 08:55:58 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D5E0A1FB;
-        Wed,  4 Dec 2019 05:55:57 -0800 (PST)
-Received: from [192.168.1.18] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9EB5A3F68E;
-        Wed,  4 Dec 2019 05:55:53 -0800 (PST)
-Subject: Re: [PATCH v7 16/25] arm: Add support for generic vDSO (causing
- crash)
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will.deacon@arm.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Russell King <linux@armlinux.org.uk>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Paul Burton <paul.burton@mips.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Mark Salyzyn <salyzyn@android.com>,
-        Peter Collingbourne <pcc@google.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Dmitry Safonov <0x7f454c46@gmail.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Huw Davies <huw@codeweavers.com>,
-        Shijith Thotton <sthotton@marvell.com>,
-        Andre Przywara <andre.przywara@arm.com>
-References: <20190621095252.32307-1-vincenzo.frascino@arm.com>
- <20190621095252.32307-17-vincenzo.frascino@arm.com>
- <20191204135159.GA7210@roeck-us.net>
-From:   Vincenzo Frascino <vincenzo.frascino@arm.com>
-Message-ID: <6cdf4734-4065-09c1-8623-1bf523b38c1b@arm.com>
-Date:   Wed, 4 Dec 2019 13:58:25 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
-MIME-Version: 1.0
-In-Reply-To: <20191204135159.GA7210@roeck-us.net>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+        id S1728382AbfLDP2P (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 4 Dec 2019 10:28:15 -0500
+Received: from userp2130.oracle.com ([156.151.31.86]:35452 "EHLO
+        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728296AbfLDP2M (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 4 Dec 2019 10:28:12 -0500
+Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
+        by userp2130.oracle.com (8.16.0.27/8.16.0.27) with SMTP id xB4FOIO7121531;
+        Wed, 4 Dec 2019 15:27:49 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id; s=corp-2019-08-05;
+ bh=Sw5knxvH3Jy7ccJOfoLbviBFUVTi32TL8MPDawWZ0V4=;
+ b=PmwNZwyf0Rem2ACuGe4vPpWPfqqZb2tXJtYTirXPzppAy2kHVHF5VgKlzbGhADia+NIh
+ 68GGrnkRLKFLRgm+Zg4lMZxZMJlfCBNBb6TqS46ugj8zaCCkobnXe0vwZZBkujEnVTT1
+ u8LamxZqi1alLH2mKHxw1nolRSdR2tmHued+U4waVAz4fXkuOLjiHx23VSp5ZrB3B5qT
+ 4+oXU2iOVMu5OGSKEdxu1ybrQlOThuE+zGoHgJp/SYRTifUM+IL0C41bf1Eg0Bt3yTx4
+ MTF9ZKZULCf279fnd6zmcrq6h9onWhJ7MKhkDSPl1JmeCe2hy4eXhsEShtoAchc1N4cR 9Q== 
+Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
+        by userp2130.oracle.com with ESMTP id 2wkfuuf9yp-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 04 Dec 2019 15:27:49 +0000
+Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
+        by userp3020.oracle.com (8.16.0.27/8.16.0.27) with SMTP id xB4FNaLm128969;
+        Wed, 4 Dec 2019 15:27:49 GMT
+Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
+        by userp3020.oracle.com with ESMTP id 2wnvr01afk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 04 Dec 2019 15:27:48 +0000
+Received: from abhmp0005.oracle.com (abhmp0005.oracle.com [141.146.116.11])
+        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id xB4FRgUh001216;
+        Wed, 4 Dec 2019 15:27:42 GMT
+Received: from dhcp-10-175-179-22.vpn.oracle.com (/10.175.179.22)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Wed, 04 Dec 2019 07:27:42 -0800
+From:   Alan Maguire <alan.maguire@oracle.com>
+To:     brendanhiggins@google.com, linux-kselftest@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
+        keescook@chromium.org, yzaikin@google.com,
+        akpm@linux-foundation.org, yamada.masahiro@socionext.com,
+        catalin.marinas@arm.com, joe.lawrence@redhat.com,
+        penguin-kernel@i-love.sakura.ne.jp, urezki@gmail.com,
+        andriy.shevchenko@linux.intel.com, corbet@lwn.net,
+        davidgow@google.com, adilger.kernel@dilger.ca, tytso@mit.edu,
+        mcgrof@kernel.org, linux-doc@vger.kernel.org,
+        Alan Maguire <alan.maguire@oracle.com>
+Subject: [PATCH v6 linux-kselftest-test 0/6] kunit: support building core/tests as modules
+Date:   Wed,  4 Dec 2019 15:27:08 +0000
+Message-Id: <1575473234-5443-1-git-send-email-alan.maguire@oracle.com>
+X-Mailer: git-send-email 1.8.3.1
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9461 signatures=668685
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=3 malwarescore=0
+ phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=999
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.0.1-1911140001 definitions=main-1912040128
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9461 signatures=668685
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
+ suspectscore=3 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
+ lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1911140001
+ definitions=main-1912040128
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Guenter,
+The current kunit execution model is to provide base kunit functionality
+and tests built-in to the kernel.  The aim of this series is to allow
+building kunit itself and tests as modules.  This in turn allows a
+simple form of selective execution; load the module you wish to test.
+In doing so, kunit itself (if also built as a module) will be loaded as
+an implicit dependency.
 
-On 12/4/19 1:51 PM, Guenter Roeck wrote:
-> On Fri, Jun 21, 2019 at 10:52:43AM +0100, Vincenzo Frascino wrote:
->> The arm vDSO library requires some adaptations to use to take advantage
->> of the newly introduced generic vDSO library.
->>
->> Introduce the following changes:
->>  - Modification vdso.c to be compliant with the common vdso datapage
->>  - Use of lib/vdso for gettimeofday
->>  - Implementation of elf note
->>
->> Cc: Russell King <linux@armlinux.org.uk>
->> Signed-off-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
-> 
-> This patch causes a crash with qemu's mcimx6ul-evk emulation while running
-> imx_v6_v7_defconfig.
-> 
+Because this requires a core API modification - if a module delivers
+multiple suites, they must be declared with the kunit_test_suites()
+macro - we're proposing this patch set as a candidate to be applied to the
+test tree before too many kunit consumers appear.  We attempt to deal
+with existing consumers in patch 3.
 
-Thank you for reporting this. Could you please provide some details on how I can
-reproduce the scenario you are describing?
+Changes since v5:
+ - fixed fs/ext4/Makefile to remove unneeded conditional compilation
+   (Iurii, patch 3)
+ - added Reviewed-by, Acked-by to patches 3, 4, 5 and 6
 
-> [   19.976852] Run /sbin/init as init process
-> [   20.044931] Kernel panic - not syncing: Attempted to kill init! exitcode=0x00000004
-> 
-> There is nothing else useful in the log, unfortunately.
-> 
-> Reverting the following three patches fixes the problem.
-> 
-> 74d06efb9c2f ARM: 8932/1: Add clock_gettime64 entry point
-> 052e76a31b4a ARM: 8931/1: Add clock_getres entry point
-> 20e2fc42312f ARM: 8930/1: Add support for generic vDSO
-> 
-> Guenter
-> 
+Changes since v4:
+ - fixed signoff chain to use Co-developed-by: prior to Knut's signoff
+   (Stephen, all patches)
+ - added Reviewed-by, Tested-by for patches 1, 2, 4 and 6
+ - updated comment describing try-catch-impl.h (Stephen, patch 2)
+ - fixed MODULE_LICENSEs to be GPL v2 (Stephen, patches 3, 5)
+ - added __init to kunit_init() (Stephen, patch 5)
+
+Changes since v3:
+ - removed symbol lookup patch for separate submission later
+ - removed use of sysctl_hung_task_timeout_seconds (patch 4, as discussed
+   with Brendan and Stephen)
+ - disabled build of string-stream-test when CONFIG_KUNIT_TEST=m; this
+   is to avoid having to deal with symbol lookup issues
+ - changed string-stream-impl.h back to string-stream.h (Brendan)
+ - added module build support to new list, ext4 tests
+
+Changes since v2:
+ - moved string-stream.h header to lib/kunit/string-stream-impl.h (Brendan)
+   (patch 1)
+ - split out non-exported interfaces in try-catch-impl.h (Brendan)
+   (patch 2)
+ - added kunit_find_symbol() and KUNIT_INIT_SYMBOL to lookup non-exported
+   symbols (patches 3, 4)
+ - removed #ifdef MODULE around module licenses (Randy, Brendan, Andy)
+   (patch 4)
+ - replaced kunit_test_suite() with kunit_test_suites() rather than
+   supporting both (Brendan) (patch 4)
+ - lookup sysctl_hung_task_timeout_secs as kunit may be built as a module
+   and the symbol may not be available (patch 5)
+
+
+Alan Maguire (6):
+  kunit: move string-stream.h to lib/kunit
+  kunit: hide unexported try-catch interface in try-catch-impl.h
+  kunit: allow kunit tests to be loaded as a module
+  kunit: remove timeout dependence on sysctl_hung_task_timeout_seconds
+  kunit: allow kunit to be loaded as a module
+  kunit: update documentation to describe module-based build
+
+ Documentation/dev-tools/kunit/faq.rst              |  3 +-
+ Documentation/dev-tools/kunit/index.rst            |  3 ++
+ Documentation/dev-tools/kunit/usage.rst            | 16 ++++++++++
+ fs/ext4/Kconfig                                    |  2 +-
+ fs/ext4/Makefile                                   |  3 +-
+ fs/ext4/inode-test.c                               |  4 ++-
+ include/kunit/assert.h                             |  3 +-
+ include/kunit/test.h                               | 35 ++++++++++++++------
+ include/kunit/try-catch.h                          | 10 ------
+ kernel/sysctl-test.c                               |  4 ++-
+ lib/Kconfig.debug                                  |  4 +--
+ lib/kunit/Kconfig                                  |  6 ++--
+ lib/kunit/Makefile                                 | 14 +++++---
+ lib/kunit/assert.c                                 | 10 ++++++
+ lib/kunit/{example-test.c => kunit-example-test.c} |  4 ++-
+ lib/kunit/{test-test.c => kunit-test.c}            |  7 ++--
+ lib/kunit/string-stream-test.c                     |  5 +--
+ lib/kunit/string-stream.c                          |  3 +-
+ {include => lib}/kunit/string-stream.h             |  0
+ lib/kunit/test.c                                   | 25 ++++++++++++++-
+ lib/kunit/try-catch-impl.h                         | 27 ++++++++++++++++
+ lib/kunit/try-catch.c                              | 37 +++++-----------------
+ lib/list-test.c                                    |  4 ++-
+ 23 files changed, 157 insertions(+), 72 deletions(-)
+ rename lib/kunit/{example-test.c => kunit-example-test.c} (97%)
+ rename lib/kunit/{test-test.c => kunit-test.c} (98%)
+ rename {include => lib}/kunit/string-stream.h (100%)
+ create mode 100644 lib/kunit/try-catch-impl.h
 
 -- 
-Regards,
-Vincenzo
+1.8.3.1
+
