@@ -2,103 +2,93 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F31D113619
-	for <lists+linux-kselftest@lfdr.de>; Wed,  4 Dec 2019 21:04:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D9BE0113653
+	for <lists+linux-kselftest@lfdr.de>; Wed,  4 Dec 2019 21:18:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727887AbfLDUEA (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 4 Dec 2019 15:04:00 -0500
-Received: from mail-pf1-f194.google.com ([209.85.210.194]:33437 "EHLO
-        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727033AbfLDUEA (ORCPT
+        id S1727889AbfLDUSZ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 4 Dec 2019 15:18:25 -0500
+Received: from mail-wr1-f68.google.com ([209.85.221.68]:41874 "EHLO
+        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727033AbfLDUSZ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 4 Dec 2019 15:04:00 -0500
-Received: by mail-pf1-f194.google.com with SMTP id y206so381007pfb.0;
-        Wed, 04 Dec 2019 12:03:59 -0800 (PST)
+        Wed, 4 Dec 2019 15:18:25 -0500
+Received: by mail-wr1-f68.google.com with SMTP id c9so731539wrw.8;
+        Wed, 04 Dec 2019 12:18:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=+OdMqVzUj6WvcnoNuOeLlw4Z2rBRaftuL3BvYZInvZ8=;
-        b=YZ5GJZ16ZLo8TmIpcoHWo0OH5dVqqXeCM8U+/V+JOOcoBUppCWNR+9VOLemCcFLFoO
-         B19Ejz1697SpvZq0siV/srTDU+bGp913SLV/h3TwIPeqBet/9EcIgBQHTe2yQ4/pGmmU
-         YUfBROgB7Xpi0ynDkqfQJa9uDIDnT3k47sg0UDeBeWvOF2k1nREuPfEUFb8hySmugQQQ
-         Qa4V2F0LBSS+EElrf8J/7BOxriKxwIEXqX56v1LPYbpxmNXbThqPJGhfzRJJB5aFTozV
-         W/O/Tm+bEwSaujOGTE4hAcGx+wHqe/MMvAQArBaO0h43IH8RBkMM2Koo28Vqh9XOJhjZ
-         +ddA==
+        h=from:to:cc:subject:date:message-id;
+        bh=RZERPFUWOa/lGcWiQ5EhbcD6LWlr2/Pa13KS0SVnOxA=;
+        b=mZHv7AgAuu+1nD+jQ1+38h8j7Obuk0gTv9MBzCljWz8KYZ9jaQiRDkxGnkemWC7BDf
+         Y/gPO1I2lKcvYFoHjgUy5fgtiZEW5VdRWmIdBlTer4+k2ASaxleasscXbm7ai6KT6v19
+         GvjJjQAMmZhtf5WkO3zAyfC/JTgptJ2eBsjNCo+hDyNcVS8vpUVVtg3jO+hrptqpoEWw
+         snoP3zwrJZXMlQio7lTgbrr+lcBFSnFhazyZ3gDn+ml8DgW4Li/J/OE3eng9WxK9qJ6U
+         6Sv7tqf3zS3LoeHoVrv/dYl94KoDfDcg2letRYrvu9sOI9LAjNDJynosk9vepHmbf/FB
+         6acA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=+OdMqVzUj6WvcnoNuOeLlw4Z2rBRaftuL3BvYZInvZ8=;
-        b=PjeBbxTaREdlqANVL5CwEmsBskFidQFqRCLRpY3LNFGMQQjjvvcKmOfH+tWJZe03O4
-         oatxFT5Kvqwd/5JsMPZb8+ZXKbiH7a94DH/f03kRUaLViR9xX758F5F+i50MN5wc9gbf
-         sOI5zY7H6VyR4s+xqDotOXQGMEqJHfuqR20zq8fZ5e1Yk5IPAHfCQdRS82fie9Jw8soM
-         wOE5QvW+aabH6iAL9dTaGtZg+4B3SZFSNsXGWbpKxgbBv5g4+xWg9UOB6zj6hJwI36Ii
-         GCd2gnRhXf/fd6Z+4ZSkmNH+fiBDU7jZxLEL/DM2G81Z3C+aggn3WVRU6YGqOSR99UO6
-         C6IQ==
-X-Gm-Message-State: APjAAAWIWaKBCWl4UZr3ZQ4Fo/rUzfr+6zTP6eJAQRkAOZDpb6HKMaV5
-        YujWLvuqa5UIcxi6VL2DfdE=
-X-Google-Smtp-Source: APXvYqxIhnX8thQjmt8iuhBBU6ma7W8uPSUf7YesCllGRzMI6W6eaFebhaDb+YyKeNwrbljnm4XNsw==
-X-Received: by 2002:a63:f961:: with SMTP id q33mr5403005pgk.350.1575489839279;
-        Wed, 04 Dec 2019 12:03:59 -0800 (PST)
-Received: from ?IPv6:2620:15c:2c1:200:55c7:81e6:c7d8:94b? ([2620:15c:2c1:200:55c7:81e6:c7d8:94b])
-        by smtp.gmail.com with ESMTPSA id r14sm8994697pfh.10.2019.12.04.12.03.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 04 Dec 2019 12:03:58 -0800 (PST)
-Subject: Re: [PATCH] selftests: net: ip_defrag: increase netdev_max_backlog
-To:     Thadeu Lima de Souza Cascardo <cascardo@canonical.com>,
-        netdev@vger.kernel.org
-Cc:     davem@davemloft.net, shuah@kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        posk@google.com
-References: <20191204195321.406365-1-cascardo@canonical.com>
-From:   Eric Dumazet <eric.dumazet@gmail.com>
-Message-ID: <483097a3-92ec-aedd-60d9-ab7f58b9708d@gmail.com>
-Date:   Wed, 4 Dec 2019 12:03:57 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
-MIME-Version: 1.0
-In-Reply-To: <20191204195321.406365-1-cascardo@canonical.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=RZERPFUWOa/lGcWiQ5EhbcD6LWlr2/Pa13KS0SVnOxA=;
+        b=Nn9tDTEMQmCrcmgzfp+Z+a9MRYutODTgwp1C4mCx2NgxKVyemifgcDtt/Uyfpwt0wa
+         BYEHPeBskyDvOVi8qZj6MfSVVMcT+MlcIMa793YYZEUcKAyQq5Dzt+3vsvf7w80d0D74
+         As6+4nzxhjhE5f98NnrU1fU9dSTLLJqBazRi6Xs2JKCXMKmcUOP8XMyIAMSyETM9kq1H
+         hAJXnQpwanbjvmi4O602Hn2QfDYuxDTgTFG4Hl/e1fIVX1PCxakUrpPqLV0zV5WWSv7h
+         xFl8M9SlPVR/CjBn3RwYHavV53O4WXjjvYBWOxpfQW3jPd6HpWly8UkfTHbm6IkkT9On
+         ktpA==
+X-Gm-Message-State: APjAAAVkfcs0XdWqVjH6VuvVw633ZcMeYlNvBAlyYCWZag6wsMW9I2eQ
+        6lMNvFhEvvTmtRHp6c6zbHQ=
+X-Google-Smtp-Source: APXvYqwP6lN+FX26HO0D+3bQ6kltC8zufv++XlnDc/HaLnSifJopyycs6Su36vlSHd2v9uimA5JdCw==
+X-Received: by 2002:adf:e984:: with SMTP id h4mr5937907wrm.275.1575490702578;
+        Wed, 04 Dec 2019 12:18:22 -0800 (PST)
+Received: from localhost.localdomain (cable-86-56-100-90.cust.telecolumbus.net. [86.56.100.90])
+        by smtp.gmail.com with ESMTPSA id f2sm7329254wmh.46.2019.12.04.12.18.21
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
+        Wed, 04 Dec 2019 12:18:21 -0800 (PST)
+From:   SeongJae Park <sj38.park@gmail.com>
+To:     brendanhiggins@google.com
+Cc:     corbet@lwn.net, kunit-dev@googlegroups.com,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, shuah@kernel.org,
+        sj38.park@gmail.com, sjpark@amazon.de
+Subject: [PATCH v4 0/5] Fix nits in the kunit
+Date:   Thu,  5 Dec 2019 05:17:58 +0900
+Message-Id: <1575490683-13015-1-git-send-email-sj38.park@gmail.com>
+X-Mailer: git-send-email 2.7.4
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+This patchset contains trivial fixes for the kunit documentations and the
+wrapper python scripts.
 
+Changes from v3
+(https://lore.kernel.org/linux-kselftest/20191204192141.GA247851@google.com):
+ - Fix the 4th patch, "kunit: Place 'test.log' under the 'build_dir'" to set
+   default value of 'build_dir' as '' instead of NULL so that kunit can run
+   even though '--build_dir' option is not given.
 
-On 12/4/19 11:53 AM, Thadeu Lima de Souza Cascardo wrote:
-> When using fragments with size 8 and payload larger than 8000, the backlog
-> might fill up and packets will be dropped, causing the test to fail. This
-> happens often enough when conntrack is on during the IPv6 test.
-> 
-> As the larger payload in the test is 10000, using a backlog of 1250 allow
-> the test to run repeatedly without failure. At least a 1000 runs were
-> possible with no failures, when usually less than 50 runs were good enough
-> for showing a failure.
-> 
-> As netdev_max_backlog is not a pernet setting, this sets the backlog to
-> 1000 during exit to prevent disturbing following tests.
-> 
+Changes from v2
+(https://lore.kernel.org/linux-kselftest/1575361141-6806-1-git-send-email-sj38.park@gmail.com):
+ - Make 'build_dir' if not exists (missed from v3 by mistake)
 
-Hmmm... I would prefer not changing a global setting like that.
-This is going to be flaky since we often run tests in parallel (using different netns)
+Changes from v1
+(https://lore.kernel.org/linux-doc/1575242724-4937-1-git-send-email-sj38.park@gmail.com):
+ - Remove "docs/kunit/start: Skip wrapper run command" (A similar approach is
+   ongoing)
+ - Make 'build_dir' if not exists
 
-What about adding a small delay after each sent packet ?
+SeongJae Park (5):
+  docs/kunit/start: Use in-tree 'kunit_defconfig'
+  kunit: Remove duplicated defconfig creation
+  kunit: Create default config in '--build_dir'
+  kunit: Place 'test.log' under the 'build_dir'
+  kunit: Rename 'kunitconfig' to '.kunitconfig'
 
-diff --git a/tools/testing/selftests/net/ip_defrag.c b/tools/testing/selftests/net/ip_defrag.c
-index c0c9ecb891e1d78585e0db95fd8783be31bc563a..24d0723d2e7e9b94c3e365ee2ee30e9445deafa8 100644
---- a/tools/testing/selftests/net/ip_defrag.c
-+++ b/tools/testing/selftests/net/ip_defrag.c
-@@ -198,6 +198,7 @@ static void send_fragment(int fd_raw, struct sockaddr *addr, socklen_t alen,
-                error(1, 0, "send_fragment: %d vs %d", res, frag_len);
- 
-        frag_counter++;
-+       usleep(1000);
- }
- 
- static void send_udp_frags(int fd_raw, struct sockaddr *addr,
+ Documentation/dev-tools/kunit/start.rst | 13 +++++--------
+ tools/testing/kunit/kunit.py            | 18 +++++++++++-------
+ tools/testing/kunit/kunit_kernel.py     | 10 +++++-----
+ 3 files changed, 21 insertions(+), 20 deletions(-)
+
+-- 
+2.7.4
 
