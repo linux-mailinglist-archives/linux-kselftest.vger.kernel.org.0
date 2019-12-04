@@ -2,44 +2,44 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AC8E4112E5A
-	for <lists+linux-kselftest@lfdr.de>; Wed,  4 Dec 2019 16:28:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E678112E5E
+	for <lists+linux-kselftest@lfdr.de>; Wed,  4 Dec 2019 16:28:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728399AbfLDP2T (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 4 Dec 2019 10:28:19 -0500
-Received: from userp2120.oracle.com ([156.151.31.85]:44224 "EHLO
-        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728296AbfLDP2T (ORCPT
+        id S1728296AbfLDP2f (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 4 Dec 2019 10:28:35 -0500
+Received: from userp2130.oracle.com ([156.151.31.86]:35786 "EHLO
+        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728238AbfLDP2f (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 4 Dec 2019 10:28:19 -0500
-Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
-        by userp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id xB4FOJ5A104595;
-        Wed, 4 Dec 2019 15:27:59 GMT
+        Wed, 4 Dec 2019 10:28:35 -0500
+Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
+        by userp2130.oracle.com (8.16.0.27/8.16.0.27) with SMTP id xB4FO9Hi121424;
+        Wed, 4 Dec 2019 15:28:15 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references; s=corp-2019-08-05;
- bh=K+A93ZAv9I878HBX82hzx7n9260RnjvxaGQwnMGdHIs=;
- b=lkUY9Dav4kerOEC9KMY/P5GvVCdxbcYyPXIylmma9ps4uZqMqxeIsinlazMZ6GigtVMB
- Klm0Y23rrAnJN3uAqr1YOd4wKC55zK9ygezu3D+lxEUFIuYwjo3iTPUtZKfyqbDJZw3v
- xEIoBq0h5J1DA0aoMYcI7+d/8o/b2LUOtfDBe6fXk/iprZye9wefBEg/RL3ReKmmzAI0
- srDIlMlP+YQu3S5Bqzc01i0++Dyar8a+H5PZ4ByCQQDF7J893anVlpXQdrNJw9QDfsBy
- WWGi+bZyUiHrXbgJ3fLcV0c26WxWO3ffYDpOXrnElhWqSitwGD6SbCyhph/WtY/zVuyV Kw== 
+ bh=IBHUrbxXeC6DnYcqeaqy5UWhmDj6nIM5i+OhyMX8NaM=;
+ b=Js+H1OzAY3SrE0PSbS1CbZkalQfGzgDhb2N3ksUv8l+ZDR/rjdupFXZtbYN3ba0bmhr1
+ i/b5USjF/esaxVhROjWBvUghIfNn3yaSVvCAOmNxHqScZ5AxifOxR8W7ytE4rRQ71bwM
+ ysQBGAXnXtIMsSAKk5yv1Dk3L2z5YDR4ru79WWTt9WQequNqEBL8NYswC+IUBkRi8z3f
+ dKL3Gz8PypBDoXQgPY99zmrwTaDwhHefJMcD2OiQL/qLZE5vTJLvyuHRnPFyT9GcPFni
+ 5mSVi3jYmclJ/FFdjdQhOHuYzHiAP7CoMn00vtDHr+8Oxn/smPabNqBTKZs92j/u38IB wg== 
 Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by userp2120.oracle.com with ESMTP id 2wkh2rf080-1
+        by userp2130.oracle.com with ESMTP id 2wkfuufa2k-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 04 Dec 2019 15:27:58 +0000
+        Wed, 04 Dec 2019 15:28:15 +0000
 Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.0.27/8.16.0.27) with SMTP id xB4FOBUu049700;
-        Wed, 4 Dec 2019 15:27:58 GMT
-Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
-        by aserp3020.oracle.com with ESMTP id 2wp20c5vwb-1
+        by aserp3020.oracle.com (8.16.0.27/8.16.0.27) with SMTP id xB4FOC0c049755;
+        Wed, 4 Dec 2019 15:28:14 GMT
+Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
+        by aserp3020.oracle.com with ESMTP id 2wp20c5wfg-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 04 Dec 2019 15:27:58 +0000
+        Wed, 04 Dec 2019 15:28:14 +0000
 Received: from abhmp0005.oracle.com (abhmp0005.oracle.com [141.146.116.11])
-        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id xB4FRuWh018538;
-        Wed, 4 Dec 2019 15:27:56 GMT
+        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id xB4FSCoD015435;
+        Wed, 4 Dec 2019 15:28:12 GMT
 Received: from dhcp-10-175-179-22.vpn.oracle.com (/10.175.179.22)
         by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Wed, 04 Dec 2019 07:27:56 -0800
+        with ESMTP ; Wed, 04 Dec 2019 07:28:12 -0800
 From:   Alan Maguire <alan.maguire@oracle.com>
 To:     brendanhiggins@google.com, linux-kselftest@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
@@ -52,20 +52,20 @@ Cc:     linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
         mcgrof@kernel.org, linux-doc@vger.kernel.org,
         Alan Maguire <alan.maguire@oracle.com>,
         Knut Omang <knut.omang@oracle.com>
-Subject: [PATCH v6 linux-kselftest-test 2/6] kunit: hide unexported try-catch interface in try-catch-impl.h
-Date:   Wed,  4 Dec 2019 15:27:10 +0000
-Message-Id: <1575473234-5443-3-git-send-email-alan.maguire@oracle.com>
+Subject: [PATCH v6 linux-kselftest-test 4/6] kunit: remove timeout dependence on sysctl_hung_task_timeout_seconds
+Date:   Wed,  4 Dec 2019 15:27:12 +0000
+Message-Id: <1575473234-5443-5-git-send-email-alan.maguire@oracle.com>
 X-Mailer: git-send-email 1.8.3.1
 In-Reply-To: <1575473234-5443-1-git-send-email-alan.maguire@oracle.com>
 References: <1575473234-5443-1-git-send-email-alan.maguire@oracle.com>
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9461 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=3 malwarescore=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
  phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=999
  adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.0.1-1911140001 definitions=main-1912040128
 X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9461 signatures=668685
 X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
- suspectscore=3 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
+ suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
  lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1911140001
  definitions=main-1912040128
@@ -74,146 +74,72 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Define function as static inline in try-catch-impl.h to allow it to
-be used in kunit itself and tests.  Also remove unused
-kunit_generic_try_catch
+In discussion of how to handle timeouts, it was noted that if
+sysctl_hung_task_timeout_seconds is exceeded for a kunit test,
+the test task will be killed and an oops generated.  This should
+suffice as a means of debugging such timeout issues for now.
+
+Hence remove use of sysctl_hung_task_timeout_secs, which has the
+added benefit of avoiding the need to export that symbol from
+the core kernel.
 
 Co-developed-by: Knut Omang <knut.omang@oracle.com>
 Signed-off-by: Knut Omang <knut.omang@oracle.com>
 Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
-Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
-Tested-by: Brendan Higgins <brendanhiggins@google.com>
+Reviewed-by: Stephen Boyd <sboyd@kernel.org>
+Acked-by: Brendan Higgins <brendanhiggins@google.com>
 ---
- include/kunit/try-catch.h  | 10 ----------
- lib/kunit/test-test.c      |  2 ++
- lib/kunit/test.c           |  2 +-
- lib/kunit/try-catch-impl.h | 27 +++++++++++++++++++++++++++
- lib/kunit/try-catch.c      | 13 ++-----------
- 5 files changed, 32 insertions(+), 22 deletions(-)
- create mode 100644 lib/kunit/try-catch-impl.h
+ lib/kunit/try-catch.c | 22 ++++------------------
+ 1 file changed, 4 insertions(+), 18 deletions(-)
 
-diff --git a/include/kunit/try-catch.h b/include/kunit/try-catch.h
-index 404f336..c507dd4 100644
---- a/include/kunit/try-catch.h
-+++ b/include/kunit/try-catch.h
-@@ -53,11 +53,6 @@ struct kunit_try_catch {
- 	void *context;
- };
- 
--void kunit_try_catch_init(struct kunit_try_catch *try_catch,
--			  struct kunit *test,
--			  kunit_try_catch_func_t try,
--			  kunit_try_catch_func_t catch);
--
- void kunit_try_catch_run(struct kunit_try_catch *try_catch, void *context);
- 
- void __noreturn kunit_try_catch_throw(struct kunit_try_catch *try_catch);
-@@ -67,9 +62,4 @@ static inline int kunit_try_catch_get_result(struct kunit_try_catch *try_catch)
- 	return try_catch->try_result;
- }
- 
--/*
-- * Exposed for testing only.
-- */
--void kunit_generic_try_catch_init(struct kunit_try_catch *try_catch);
--
- #endif /* _KUNIT_TRY_CATCH_H */
-diff --git a/lib/kunit/test-test.c b/lib/kunit/test-test.c
-index 5ebe059..5a6cc04 100644
---- a/lib/kunit/test-test.c
-+++ b/lib/kunit/test-test.c
-@@ -7,6 +7,8 @@
-  */
- #include <kunit/test.h>
- 
-+#include "try-catch-impl.h"
-+
- struct kunit_try_catch_test_context {
- 	struct kunit_try_catch *try_catch;
- 	bool function_called;
-diff --git a/lib/kunit/test.c b/lib/kunit/test.c
-index 36ebf47..58a6227 100644
---- a/lib/kunit/test.c
-+++ b/lib/kunit/test.c
-@@ -7,11 +7,11 @@
-  */
- 
- #include <kunit/test.h>
--#include <kunit/try-catch.h>
- #include <linux/kernel.h>
- #include <linux/sched/debug.h>
- 
- #include "string-stream.h"
-+#include "try-catch-impl.h"
- 
- static void kunit_set_failure(struct kunit *test)
- {
-diff --git a/lib/kunit/try-catch-impl.h b/lib/kunit/try-catch-impl.h
-new file mode 100644
-index 0000000..203ba6a
---- /dev/null
-+++ b/lib/kunit/try-catch-impl.h
-@@ -0,0 +1,27 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Internal kunit try catch implementation to be shared with tests.
-+ *
-+ * Copyright (C) 2019, Google LLC.
-+ * Author: Brendan Higgins <brendanhiggins@google.com>
-+ */
-+
-+#ifndef _KUNIT_TRY_CATCH_IMPL_H
-+#define _KUNIT_TRY_CATCH_IMPL_H
-+
-+#include <kunit/try-catch.h>
-+#include <linux/types.h>
-+
-+struct kunit;
-+
-+static inline void kunit_try_catch_init(struct kunit_try_catch *try_catch,
-+					struct kunit *test,
-+					kunit_try_catch_func_t try,
-+					kunit_try_catch_func_t catch)
-+{
-+	try_catch->test = test;
-+	try_catch->try = try;
-+	try_catch->catch = catch;
-+}
-+
-+#endif /* _KUNIT_TRY_CATCH_IMPL_H */
 diff --git a/lib/kunit/try-catch.c b/lib/kunit/try-catch.c
-index 55686839..4a66d16 100644
+index 0247a28..0dd434e 100644
 --- a/lib/kunit/try-catch.c
 +++ b/lib/kunit/try-catch.c
-@@ -8,12 +8,13 @@
-  */
- 
- #include <kunit/test.h>
--#include <kunit/try-catch.h>
+@@ -11,7 +11,6 @@
  #include <linux/completion.h>
  #include <linux/kernel.h>
  #include <linux/kthread.h>
- #include <linux/sched/sysctl.h>
+-#include <linux/sched/sysctl.h>
  
-+#include "try-catch-impl.h"
-+
- void __noreturn kunit_try_catch_throw(struct kunit_try_catch *try_catch)
+ #include "try-catch-impl.h"
+ 
+@@ -33,8 +32,6 @@ static int kunit_generic_run_threadfn_adapter(void *data)
+ 
+ static unsigned long kunit_test_timeout(void)
  {
- 	try_catch->try_result = -EFAULT;
-@@ -106,13 +107,3 @@ void kunit_try_catch_run(struct kunit_try_catch *try_catch, void *context)
- 
- 	try_catch->catch(try_catch->context);
- }
+-	unsigned long timeout_msecs;
 -
--void kunit_try_catch_init(struct kunit_try_catch *try_catch,
--			  struct kunit *test,
--			  kunit_try_catch_func_t try,
--			  kunit_try_catch_func_t catch)
--{
--	try_catch->test = test;
--	try_catch->try = try;
--	try_catch->catch = catch;
--}
+ 	/*
+ 	 * TODO(brendanhiggins@google.com): We should probably have some type of
+ 	 * variable timeout here. The only question is what that timeout value
+@@ -51,22 +48,11 @@ static unsigned long kunit_test_timeout(void)
+ 	 *
+ 	 * For more background on this topic, see:
+ 	 * https://mike-bland.com/2011/11/01/small-medium-large.html
++	 *
++	 * If tests timeout due to exceeding sysctl_hung_task_timeout_secs,
++	 * the task will be killed and an oops generated.
+ 	 */
+-	if (sysctl_hung_task_timeout_secs) {
+-		/*
+-		 * If sysctl_hung_task is active, just set the timeout to some
+-		 * value less than that.
+-		 *
+-		 * In regards to the above TODO, if we decide on variable
+-		 * timeouts, this logic will likely need to change.
+-		 */
+-		timeout_msecs = (sysctl_hung_task_timeout_secs - 1) *
+-				MSEC_PER_SEC;
+-	} else {
+-		timeout_msecs = 300 * MSEC_PER_SEC; /* 5 min */
+-	}
+-
+-	return timeout_msecs;
++	return 300 * MSEC_PER_SEC; /* 5 min */
+ }
+ 
+ void kunit_try_catch_run(struct kunit_try_catch *try_catch, void *context)
 -- 
 1.8.3.1
 
