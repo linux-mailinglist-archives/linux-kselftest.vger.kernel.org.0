@@ -2,111 +2,110 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C0490112BB1
-	for <lists+linux-kselftest@lfdr.de>; Wed,  4 Dec 2019 13:43:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 264E1112CEC
+	for <lists+linux-kselftest@lfdr.de>; Wed,  4 Dec 2019 14:52:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727865AbfLDMnC (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 4 Dec 2019 07:43:02 -0500
-Received: from mail-qt1-f193.google.com ([209.85.160.193]:33960 "EHLO
-        mail-qt1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727869AbfLDMnA (ORCPT
+        id S1727889AbfLDNwD (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 4 Dec 2019 08:52:03 -0500
+Received: from mail-pg1-f193.google.com ([209.85.215.193]:40695 "EHLO
+        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727792AbfLDNwD (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 4 Dec 2019 07:43:00 -0500
-Received: by mail-qt1-f193.google.com with SMTP id 5so5043082qtz.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 04 Dec 2019 04:42:59 -0800 (PST)
+        Wed, 4 Dec 2019 08:52:03 -0500
+Received: by mail-pg1-f193.google.com with SMTP id k25so3416643pgt.7;
+        Wed, 04 Dec 2019 05:52:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=SWzs3svZdfoJNhQZue5B0UPApGf3QNVhTsPQAsjB3v0=;
-        b=AkbuvF8WWOeGkFuNbpEiUPeHs0D9XYCrvYJnn3sJBPk0l/N+bAJ+lU7by52a8c0/XL
-         X5y/+uJVi5SRPzgKpD7LZp2RSO63H/dWhNB+Sgv8CnTmnW6HnNvEkrD3pvFKiHue+ji0
-         Cyct4Vs7hozR5hYKDh8cJJMkT72K9aPHj93bK1Ew++bIIM698i5hGwNXpwVN8RyOlTlg
-         ekVZP06isuUhwZwFxkLwU0Sye3HMnEDkq9yUmWZzxA1JTm8RzibEufZxYTJilauyHwzc
-         pKJFDkaXtzzvkeOyU7ajhljX9QykaA8Ur2FHYJunK1Sxosbxld4ODKAYs9j7AB06Aipc
-         jW5w==
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=TbJ9lT2HAjMyDE1SH6CunT8N4kMbxtVJWep3/Ofx1Bc=;
+        b=iQxO6lcpt1bJ5gN8Y4kXPU0dr1c6ATyxgAG3EI+vfRJjoJwHwrwXLUiEJaKIQTeWiJ
+         F3UYh0AiufKF1rKIvNQHINl9+iu83Ghb6/HciDylFzE+lqA/Y05uht95p5Ml9dMsmiBW
+         LmVhvC1WqxEHyDikQtRY5aa/DLzmEzUGP3WajcYRhfSuSWiCmhqQJofWgjUUxhimvZSn
+         izg4tZ21p1IIh8YQpHrKl/rgkij20CilbOG/R4QdRrqb9CPVgj9rh5hJ4dp5NTjNgINr
+         9RXoUsxYqHRo0g6+BYKJsFgzQZChPUtfJBJ/0BM1AuCvPjydaTIWFhouEQ4evipa6UdD
+         kFyg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=SWzs3svZdfoJNhQZue5B0UPApGf3QNVhTsPQAsjB3v0=;
-        b=pxD9tnSyqXHJNZX3nDr1LXfaQDJKVs0KFIMpb6N6dpm44i+mkiJjGbfp0qcdyJ0oNT
-         vW5UySkHftODR5lzeZ5s0nS9bIxA+wbvJ9q34zJ8IKd1qBARUKildrG8rQ6EPyFxX0rw
-         dFf9yFiBx2Naw+Uqx3t4dZsRGRFXW/cMtdTumX/U7WsvskEYGe/ebUBcFzTyXBNHLH9p
-         1xwecyqF5JuJJgmbEIJG3we8YqPNS5LRPhrGRfQkH6jrRFV0KnUQNjsGUJlvY07z5HgF
-         PZ685bpdYeAQCiyEC2I/C/pFx+/WOpjtQg76vGE+UABn2ky306viPWroKSYdIBnHGvrt
-         ro9A==
-X-Gm-Message-State: APjAAAWqbflFFDR+/uixZo4SFZejatbd6mfVzQszZTyBBdSCWQA5kRPq
-        Dog98/lc8C8xWXAU4a32+simvdCsxRs30OY8Yi8=
-X-Google-Smtp-Source: APXvYqzw3gCG5cnmI6368TWfhjS/+LLSHd6b95oZCOsPTpsAjIN23auDStB1pQ1PTnMah1qk6gl8uYsnTPaZ7k01uH0=
-X-Received: by 2002:ac8:4a81:: with SMTP id l1mr2434940qtq.357.1575463377714;
- Wed, 04 Dec 2019 04:42:57 -0800 (PST)
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to:user-agent;
+        bh=TbJ9lT2HAjMyDE1SH6CunT8N4kMbxtVJWep3/Ofx1Bc=;
+        b=r7oMuwDiRF9yLKrjGYMVAtufKB9fGrXyRdy3j0pNtD8W4lo6KjIgTucYuxMsvOFike
+         4gc6Y+FoNEYGWt+tZR8VtHPD/J6yRY4T+AmLwph9XhPCvNoyiWrcPnNHSjZBFZ8BRPbC
+         GYnQeVTqIkZdis7RCbb0fkHorqwcabyKe43aG/pQs5C2oPokkudnidh+DqNsap115iTo
+         Gz8GZ14MqdHlt38tV9qFlQE89CCrK67qWkeyfv9oi6Atuhk/AEZ/maT8SVvrswmStpAC
+         FsMlF3y/rzdgDvEZGbhLdFht7lCZTJTjEjWpkfJViJU2ijROFXaOBF5pRv9P11uzLUGh
+         OVNg==
+X-Gm-Message-State: APjAAAWvTA6murU0RSYSEoe0RCkAwwbU6pxqKmc0K1q3wxlKEnZgy0n5
+        A1DsmCF5yZJl0F7rKfXxoRI=
+X-Google-Smtp-Source: APXvYqyoPrSep/q/DUOv+zINoePEiuZB7UyBS8bmOBLu+0j65jHVO2r6iBhfr9RUckMGjFizXhOFLg==
+X-Received: by 2002:a63:66c6:: with SMTP id a189mr3327547pgc.401.1575467521937;
+        Wed, 04 Dec 2019 05:52:01 -0800 (PST)
+Received: from localhost ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id in19sm6642985pjb.11.2019.12.04.05.52.00
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Wed, 04 Dec 2019 05:52:01 -0800 (PST)
+Date:   Wed, 4 Dec 2019 05:51:59 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Vincenzo Frascino <vincenzo.frascino@arm.com>
+Cc:     linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will.deacon@arm.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Russell King <linux@armlinux.org.uk>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Paul Burton <paul.burton@mips.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Mark Salyzyn <salyzyn@android.com>,
+        Peter Collingbourne <pcc@google.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Dmitry Safonov <0x7f454c46@gmail.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Huw Davies <huw@codeweavers.com>,
+        Shijith Thotton <sthotton@marvell.com>,
+        Andre Przywara <andre.przywara@arm.com>
+Subject: Re: [PATCH v7 16/25] arm: Add support for generic vDSO (causing
+ crash)
+Message-ID: <20191204135159.GA7210@roeck-us.net>
+References: <20190621095252.32307-1-vincenzo.frascino@arm.com>
+ <20190621095252.32307-17-vincenzo.frascino@arm.com>
 MIME-Version: 1.0
-Received: by 2002:ac8:2f0c:0:0:0:0:0 with HTTP; Wed, 4 Dec 2019 04:42:57 -0800 (PST)
-Reply-To: moneygram.1820@outlook.fr
-From:   "Rev.Dr Emmanuel Okoye CEO Ecobank-benin" 
-        <westernunion.benin982@gmail.com>
-Date:   Wed, 4 Dec 2019 13:42:57 +0100
-Message-ID: <CAP=nHBJXiPmPL21x=_0BHWRk_3N3Yax+tTxcFi=t=AhN7g==1Q@mail.gmail.com>
-Subject: God has remembered your prayers I have already sent you Money Gram
- payment of $5000.00 today, MG 1029-8096
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190621095252.32307-17-vincenzo.frascino@arm.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Attn, dear Beneficiary.
+On Fri, Jun 21, 2019 at 10:52:43AM +0100, Vincenzo Frascino wrote:
+> The arm vDSO library requires some adaptations to use to take advantage
+> of the newly introduced generic vDSO library.
+> 
+> Introduce the following changes:
+>  - Modification vdso.c to be compliant with the common vdso datapage
+>  - Use of lib/vdso for gettimeofday
+>  - Implementation of elf note
+> 
+> Cc: Russell King <linux@armlinux.org.uk>
+> Signed-off-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
 
-God has remembered your prayers
-I have already sent you Money Gram payment of $5000.00 today, MG 1029-8096
-This is because we have finally concluded to effect your transfer
-funds of $4.8,000.000usd
-through MONEY GRAM International Fund transfer Service
-Each payment will be sending to you by $5000.00 daily until the
-($4.8,000.000usd) is completely transferred
-we have this morning sent  MONEY GRAM payment of $5,000.00 in your name today
-So contact the MONEY GRAM Agent to pick up this first payment of $5000 now
+This patch causes a crash with qemu's mcimx6ul-evk emulation while running
+imx_v6_v7_defconfig.
 
-Contact person Mrs. Alan Ude
-Dir. MONEY GRAM Service,Benin
-Phone number: +229 98856728
-E-mail: moneygram.1820@outlook.fr
+[   19.976852] Run /sbin/init as init process
+[   20.044931] Kernel panic - not syncing: Attempted to kill init! exitcode=0x00000004
 
-Ask him to give you the complete mtcn, sender name, question and
-answer to enable you
-pick up the $5000.00 sent today,
-Also you are instructed to re-confirm your information's
-to Mrs.Alan Ude as listed below to avoid wrong transactions.
+There is nothing else useful in the log, unfortunately.
 
-(1Your Full name:............................................
-(2 Phone number.....................................................
-(3 Contact address:.....................................
-(4 Age:..................................................................
-(5 Country..............................................
-(6) Sex .................................................................
-(7) your occupation...........................................
+Reverting the following three patches fixes the problem.
 
-(8)Passport/By Attach or Drivers License Number:
-Contact Mrs. Alan Ude for your MONEY GRAM payment of $4.8,000.000usd
-Note please: I have paid service fees for you but the only money you
-are required
-to send to Mrs. Alan Ude is $90.00 only Transfer fee before you can
-pick up your transfer today.
+74d06efb9c2f ARM: 8932/1: Add clock_gettime64 entry point
+052e76a31b4a ARM: 8931/1: Add clock_getres entry point
+20e2fc42312f ARM: 8930/1: Add support for generic vDSO
 
-Send it to via Money Gram
-Receiver's Name-----Alan Ude
-Country----------Benin
-Address-----------Cotonou
-Quest--------Honest
-Ans-----------Trust
-
-I done all my best for you to receive your transfer now ok.
-We need your urgent reply
-Best Regards
-Rev.Dr Emmanuel Okoye
-CEO Ecobank-benin
-
-If we did not receive it urgent from you today,
-I will go ahead and release you funds to Mrs. Lyndia Ppaulson as your
-representative.
+Guenter
