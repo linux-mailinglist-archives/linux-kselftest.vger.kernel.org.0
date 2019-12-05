@@ -2,100 +2,110 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 94182113D05
-	for <lists+linux-kselftest@lfdr.de>; Thu,  5 Dec 2019 09:28:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D77F113E08
+	for <lists+linux-kselftest@lfdr.de>; Thu,  5 Dec 2019 10:35:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726059AbfLEI2d (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 5 Dec 2019 03:28:33 -0500
-Received: from mail.kernel.org ([198.145.29.99]:52076 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725974AbfLEI2d (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 5 Dec 2019 03:28:33 -0500
-Received: from devnote2 (NE2965lan1.rev.em-net.ne.jp [210.141.244.193])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id BC8D220707;
-        Thu,  5 Dec 2019 08:28:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1575534513;
-        bh=/l81rifg3rXzLUo11Q36GAttbB8DKI+R9E4DG7pEnKM=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=chCMKjcpCxO62O5MnivFHjPUdtxg6+WgtEauVsar/Y9E+qBshhHXHHYEm3xzSYQtp
-         j9qCk2vZsSvQl57fNz6goAF5IZ8wLM65QreL0gu5o/TRVZicDsdEnAmAF3lJnUQ5bR
-         I9Vp2X0muh1wOLdYMKXQmpjMSIQ8QfVinlMh1ZWI=
-Date:   Thu, 5 Dec 2019 17:28:29 +0900
-From:   Masami Hiramatsu <mhiramat@kernel.org>
-To:     Masami Hiramatsu <mhiramat@kernel.org>
-Cc:     Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, jaswinder.singh@linaro.org
-Subject: Re: [BUGFIX PATCH] selftests/x86: Check the availablity of
- sys/syscall.h
-Message-Id: <20191205172829.66ec55907ac31303bbede593@kernel.org>
-In-Reply-To: <157467982420.24866.4375165389279465782.stgit@devnote2>
-References: <157467982420.24866.4375165389279465782.stgit@devnote2>
-X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+        id S1728707AbfLEJfE (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 5 Dec 2019 04:35:04 -0500
+Received: from smtp-fw-4101.amazon.com ([72.21.198.25]:55095 "EHLO
+        smtp-fw-4101.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726096AbfLEJfE (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 5 Dec 2019 04:35:04 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1575538503; x=1607074503;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=RxC7Bje5SsNNUuaS5E+bzn4jtQoV6YFXmfP4HzoaOTU=;
+  b=a8rHrlmbJBsVBl4sWTBvwsiGicNFTpIJwuJjQzWPwKZl8fBzp5lvGZUU
+   di3HVPe+qwNiWNZSyGBLhENu/MnfFMEyLSt3rz3lmMSGaSBTQrGL3jQ+h
+   3A9sS2TiJZyG+qSm5slIMyS7CcYEhLyr7vZsmbam45xJm17ppcQjcy6C2
+   s=;
+IronPort-SDR: V7Mg/SXJ7jkVaG3d9g0hm/B+m3jjIgCdQ1/U2hvisxW6mT3z8WiBz/S87Y3l9BD/mt/ZzgQb9k
+ Perbae0UofTg==
+X-IronPort-AV: E=Sophos;i="5.69,280,1571702400"; 
+   d="scan'208";a="7181310"
+Received: from iad6-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-2c-87a10be6.us-west-2.amazon.com) ([10.124.125.6])
+  by smtp-border-fw-out-4101.iad4.amazon.com with ESMTP; 05 Dec 2019 09:35:01 +0000
+Received: from EX13MTAUEA001.ant.amazon.com (pdx4-ws-svc-p6-lb7-vlan2.pdx.amazon.com [10.170.41.162])
+        by email-inbound-relay-2c-87a10be6.us-west-2.amazon.com (Postfix) with ESMTPS id BE236A20FE;
+        Thu,  5 Dec 2019 09:34:59 +0000 (UTC)
+Received: from EX13D31EUA004.ant.amazon.com (10.43.165.161) by
+ EX13MTAUEA001.ant.amazon.com (10.43.61.82) with Microsoft SMTP Server (TLS)
+ id 15.0.1367.3; Thu, 5 Dec 2019 09:34:59 +0000
+Received: from u886c93fd17d25d.ant.amazon.com (10.43.160.180) by
+ EX13D31EUA004.ant.amazon.com (10.43.165.161) with Microsoft SMTP Server (TLS)
+ id 15.0.1367.3; Thu, 5 Dec 2019 09:34:55 +0000
+From:   SeongJae Park <sjpark@amazon.com>
+To:     <brendanhiggins@google.com>
+CC:     <sj38.park@gmail.com>, <corbet@lwn.net>,
+        <kunit-dev@googlegroups.com>, <linux-doc@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+        <shuah@kernel.org>, <sjpark@amazon.de>
+Subject: [PATCH v5 0/6] Fix nits in the kunit
+Date:   Thu, 5 Dec 2019 10:34:34 +0100
+Message-ID: <20191205093440.21824-1-sjpark@amazon.com>
+X-Mailer: git-send-email 2.17.1
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Originating-IP: [10.43.160.180]
+X-ClientProxiedBy: EX13D23UWC001.ant.amazon.com (10.43.162.196) To
+ EX13D31EUA004.ant.amazon.com (10.43.165.161)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Shuah,
+From: SeongJae Park <sjpark@amazon.de>
 
-Could you pick this if there si no issue?
+This patchset contains trivial fixes for the kunit documentations and
+the wrapper python scripts.
 
-Thank you,
+This patchset is based on 'kselftest/test' branch of linux-kselftest[1]
+and depends on Heidi's patch[2].  A complete tree is available at my repo:
+https://github.com/sjp38/linux/tree/kunit_fix/20191205_v5
 
-On Mon, 25 Nov 2019 20:03:44 +0900
-Masami Hiramatsu <mhiramat@kernel.org> wrote:
+Changes from v4
+(https://lore.kernel.org/linux-doc/1575490683-13015-1-git-send-email-sj38.park@gmail.com/):
+ - Rebased on Heidi Fahim's patch[2]
+ - Fix failing kunit_tool_test test
+ - Add 'build_dir' option test in 'kunit_tool_test.py'
 
-> Since single_step_syscall.c depends on sys/syscall.h and
-> its include, asm/unistd.h, we should check the availability
-> of those headers.
-> Without this fix, if gcc-multilib is not installed but
-> libc6-dev-i386 is installed, kselftest tries to build 32bit
-> binary and failed with following error message.
-> 
-> In file included from single_step_syscall.c:18:
-> /usr/include/sys/syscall.h:24:10: fatal error: asm/unistd.h: No such file or directory
->  #include <asm/unistd.h>
->           ^~~~~~~~~~~~~~
-> compilation terminated.
-> 
-> Signed-off-by: Masami Hiramatsu <mhiramat@kernel.org>
-> ---
->  .../testing/selftests/x86/trivial_32bit_program.c  |    1 +
->  .../testing/selftests/x86/trivial_64bit_program.c  |    1 +
->  2 files changed, 2 insertions(+)
-> 
-> diff --git a/tools/testing/selftests/x86/trivial_32bit_program.c b/tools/testing/selftests/x86/trivial_32bit_program.c
-> index aa1f58c2f71c..6b455eda24f7 100644
-> --- a/tools/testing/selftests/x86/trivial_32bit_program.c
-> +++ b/tools/testing/selftests/x86/trivial_32bit_program.c
-> @@ -8,6 +8,7 @@
->  # error wrong architecture
->  #endif
->  
-> +#include <sys/syscall.h>
->  #include <stdio.h>
->  
->  int main()
-> diff --git a/tools/testing/selftests/x86/trivial_64bit_program.c b/tools/testing/selftests/x86/trivial_64bit_program.c
-> index 39f4b84fbf15..07ae86df18ff 100644
-> --- a/tools/testing/selftests/x86/trivial_64bit_program.c
-> +++ b/tools/testing/selftests/x86/trivial_64bit_program.c
-> @@ -8,6 +8,7 @@
->  # error wrong architecture
->  #endif
->  
-> +#include <sys/syscall.h>
->  #include <stdio.h>
->  
->  int main()
-> 
+Changes from v3
+(https://lore.kernel.org/linux-kselftest/20191204192141.GA247851@google.com):
+ - Fix the 4th patch, "kunit: Place 'test.log' under the 'build_dir'" to
+   set default value of 'build_dir' as '' instead of NULL so that kunit
+   can run even though '--build_dir' option is not given.
 
+Changes from v2
+(https://lore.kernel.org/linux-kselftest/1575361141-6806-1-git-send-email-sj38.park@gmail.com):
+ - Make 'build_dir' if not exists (missed from v3 by mistake)
+
+Changes from v1
+(https://lore.kernel.org/linux-doc/1575242724-4937-1-git-send-email-sj38.park@gmail.com):
+ - Remove "docs/kunit/start: Skip wrapper run command" (A similar
+   approach is ongoing)
+ - Make 'build_dir' if not exists
+
+SeongJae Park (6):
+  docs/kunit/start: Use in-tree 'kunit_defconfig'
+  kunit: Remove duplicated defconfig creation
+  kunit: Create default config in '--build_dir'
+  kunit: Place 'test.log' under the 'build_dir'
+  kunit: Rename 'kunitconfig' to '.kunitconfig'
+  kunit/kunit_tool_test: Test '--build_dir' option run
+
+ Documentation/dev-tools/kunit/start.rst | 13 +++++--------
+ tools/testing/kunit/kunit.py            | 18 +++++++++++-------
+ tools/testing/kunit/kunit_kernel.py     | 10 +++++-----
+ tools/testing/kunit/kunit_tool_test.py  | 10 +++++++++-
+ 4 files changed, 30 insertions(+), 21 deletions(-)
 
 -- 
-Masami Hiramatsu <mhiramat@kernel.org>
+
+[1] git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git
+[2] "kunit: testing kunit: Bug fix in test_run_timeout function",
+https://lore.kernel.org/linux-kselftest/CAFd5g47a7a8q7by+1ALBtepeegLvfkgwvC3nFd8n8V=hqkV+cg@mail.gmail.com/T/#t)
+
+2.17.1
+
