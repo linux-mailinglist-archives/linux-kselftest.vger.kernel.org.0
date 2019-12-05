@@ -2,76 +2,104 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 038021140C4
-	for <lists+linux-kselftest@lfdr.de>; Thu,  5 Dec 2019 13:21:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E293411431D
+	for <lists+linux-kselftest@lfdr.de>; Thu,  5 Dec 2019 15:56:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729441AbfLEMVU (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 5 Dec 2019 07:21:20 -0500
-Received: from mail.kernel.org ([198.145.29.99]:37732 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729096AbfLEMVU (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 5 Dec 2019 07:21:20 -0500
-Received: from localhost.localdomain (NE2965lan1.rev.em-net.ne.jp [210.141.244.193])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 5FD2024648;
-        Thu,  5 Dec 2019 12:21:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1575548479;
-        bh=nQdhrd7aELhldb/xa20PECJL2oSRA7hAdzZouMGzijw=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Zp/6DQPD5+nmSamf0+WXxxGdYksR3KTlW0NPjzgvNaiaBFZYEhflzIbAkYH0FfjJ0
-         s62LqD1Ap59hDC8WJjjWzI9YsIy9JgwWiCsQ+CjelffHtj3DI24ku1x2KWNNP+ql+W
-         SUKYP2wgCDBSVEhnc3bIbHfobwCw0WT+G+3CJp8I=
-From:   Masami Hiramatsu <mhiramat@kernel.org>
-To:     Shuah Khan <shuah@kernel.org>
-Cc:     Micah Morton <mortonm@chromium.org>,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        jaswinder.singh@linaro.org
-Subject: [BUGFIX PATCH v2 3/3] selftests: safesetid: Fix Makefile to set correct test program
-Date:   Thu,  5 Dec 2019 21:21:16 +0900
-Message-Id: <157554847591.11018.5631502480695471273.stgit@devnote2>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <157554844882.11018.13436399905210284553.stgit@devnote2>
-References: <157554844882.11018.13436399905210284553.stgit@devnote2>
-User-Agent: StGit/0.17.1-dirty
+        id S1729672AbfLEO42 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 5 Dec 2019 09:56:28 -0500
+Received: from mail-yb1-f193.google.com ([209.85.219.193]:38688 "EHLO
+        mail-yb1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729109AbfLEO41 (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 5 Dec 2019 09:56:27 -0500
+Received: by mail-yb1-f193.google.com with SMTP id l129so1559679ybf.5;
+        Thu, 05 Dec 2019 06:56:26 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=cTlMueSMchAhnB5c9dF6u/KNgq8yI63KJZxYO4ZHEn8=;
+        b=IytFm10AKV5KzmU+vFm+KIsFqj8iJPHI46ZQxbFP4VjpdHtxUGqcaV0VOU9yhtD0tl
+         6ykFu3PvhcIFv9WaeY5KPlwwzR2G+ozdXbi+fSvm20mDD77y0F5j/zSHac+dAGBxrs60
+         +pG0OVG0CC0mdtQoHbI1u9ZmQWemt1JECMfLW3kzx5HwTFvgqXJ5jst5FGKl/w9MzsWD
+         SPNBTHsOZkneNyGvbhCC8Y+YYlofbVvoS+M+kRx5pNUuaU7v/JboUmJ8RATWTT8gV9RG
+         mJRw/HHx+dqo0r+uuofLGxvx+wSxBA+shBI9Vyc2uGpumP2s17JK8DzGdOEIuYCL/grD
+         SxKQ==
+X-Gm-Message-State: APjAAAWiyzPta/EYk8/Zdb84ImffLvqb0ir8Jd6mNs7RHgziipncjF0N
+        tpL+tESlZSTHzLQ7J5sXxoxnlia2rRPP7dBsknQ=
+X-Google-Smtp-Source: APXvYqxJjhm3o1BQB3vkrGqzzaet9PSqTm3ZsGDjonVncS72IrzgX4OvU09qJdtZVweIfksp+ZDsbdXcT9x1M/F7SNQ=
+X-Received: by 2002:a25:5555:: with SMTP id j82mr6920179ybb.376.1575557786280;
+ Thu, 05 Dec 2019 06:56:26 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+References: <20190621095252.32307-1-vincenzo.frascino@arm.com>
+ <20190621095252.32307-17-vincenzo.frascino@arm.com> <20191204135159.GA7210@roeck-us.net>
+ <6cdf4734-4065-09c1-8623-1bf523b38c1b@arm.com> <20191204161641.GA28130@roeck-us.net>
+ <e35a7f71-2477-fa52-01e4-301199e99c2e@arm.com> <CAAdtpL71ED3zbkHMqtd1XFQwToOctWJpy2WPqahxHR81fKdTkg@mail.gmail.com>
+ <a391048e-f57c-159e-7174-d9d38d8f3825@arm.com> <CAK8P3a1krE=nOi6Dy=QaWiE9VTgNpUVbrHUVm_3Cq+JGJyuwKQ@mail.gmail.com>
+In-Reply-To: <CAK8P3a1krE=nOi6Dy=QaWiE9VTgNpUVbrHUVm_3Cq+JGJyuwKQ@mail.gmail.com>
+From:   =?UTF-8?Q?Philippe_Mathieu=2DDaud=C3=A9?= <f4bug@amsat.org>
+Date:   Thu, 5 Dec 2019 15:56:15 +0100
+Message-ID: <CAAdtpL5cMZQPa-SdMdi3SZnO=3-FkTkDCZjgjyy5Gmcqo+-MXw@mail.gmail.com>
+Subject: Re: [PATCH v7 16/25] arm: Add support for generic vDSO (causing crash)
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will.deacon@arm.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Paul Burton <paul.burton@mips.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Mark Salyzyn <salyzyn@android.com>,
+        Peter Collingbourne <pcc@google.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Dmitry Safonov <0x7f454c46@gmail.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Huw Davies <huw@codeweavers.com>,
+        Shijith Thotton <sthotton@marvell.com>,
+        Andre Przywara <andre.przywara@arm.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Fix Makefile to set safesetid-test.sh to TEST_PROGS instead
-of non existing run_tests.sh.
+On Thu, Dec 5, 2019 at 12:02 PM Arnd Bergmann <arnd@arndb.de> wrote:
+> On Thu, Dec 5, 2019 at 11:00 AM Vincenzo Frascino
+> <vincenzo.frascino@arm.com> wrote:
+> >
+> > Hi Philippe,
+> >
+> > On 05/12/2019 09:42, Philippe Mathieu-Daudé wrote:
+> > > There are only 2 "Investigated-by" vs 7k+ "Suggested-by"... Is there a
+> > > real difference?
+> >
+> > Not sure about that. My take is that Suggested-by is used when someone suggests
+> > you how to possibly implement a feature and you go and do that. Investigated-by
+> > is when there is a fix to make and someone comes to you with the exact solution
+> > like in this case Arnd did.
+>
+> It's not a standard tag, but I suggested it because it does explain
+> better what I did.
+>
+> You could also just explain in clear text that I did the analysis and then add
+> the more normal Suggested-by tag, I don't care either way.
 
-Without this fix, I got following error.
-  ----
-  TAP version 13
-  1..1
-  # selftests: safesetid: run_tests.sh
-  # Warning: file run_tests.sh is missing!
-  not ok 1 selftests: safesetid: run_tests.sh
-  ----
+No problem, I was just wondering the subtle difference between both tags.
+I don't mind which one you use, as long as this issue get fixed :)
+Thanks for the patch BTW!
 
-Fixes: c67e8ec03f3f ("LSM: SafeSetID: add selftest")
-Signed-off-by: Masami Hiramatsu <mhiramat@kernel.org>
----
- tools/testing/selftests/safesetid/Makefile |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Regards,
 
-diff --git a/tools/testing/selftests/safesetid/Makefile b/tools/testing/selftests/safesetid/Makefile
-index cac42cd36a1b..fa02c4d5ec13 100644
---- a/tools/testing/selftests/safesetid/Makefile
-+++ b/tools/testing/selftests/safesetid/Makefile
-@@ -3,7 +3,7 @@
- CFLAGS = -Wall -O2
- LDLIBS = -lcap
- 
--TEST_PROGS := run_tests.sh
-+TEST_PROGS := safesetid-test.sh
- TEST_GEN_FILES := safesetid-test
- 
- include ../lib.mk
+Phil.
 
+>       Arnd
