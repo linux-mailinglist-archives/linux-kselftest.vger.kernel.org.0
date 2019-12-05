@@ -2,97 +2,123 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 791D9113E49
-	for <lists+linux-kselftest@lfdr.de>; Thu,  5 Dec 2019 10:39:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7106A113E61
+	for <lists+linux-kselftest@lfdr.de>; Thu,  5 Dec 2019 10:42:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729018AbfLEJiz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 5 Dec 2019 04:38:55 -0500
-Received: from smtp-fw-4101.amazon.com ([72.21.198.25]:55684 "EHLO
-        smtp-fw-4101.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728707AbfLEJiw (ORCPT
+        id S1728604AbfLEJmw convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 5 Dec 2019 04:42:52 -0500
+Received: from mail-yw1-f65.google.com ([209.85.161.65]:40982 "EHLO
+        mail-yw1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726239AbfLEJmw (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 5 Dec 2019 04:38:52 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1575538733; x=1607074733;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version;
-  bh=MiFuavq5Qnjsk7KrDh/upooxJoiEUmzFTrl7IlXIUqw=;
-  b=ECN7i7g06pIiVPa7rsFuPX36xqd/va0c5Jap2E5+owf+j/KcMWwD+vZI
-   /h1ubV2jcp88QSsYxCL72+aokNrV2SgfxcTZkzQqWq77Z6RA+BtOlbrun
-   ei++Bo4XnIdhSbRkA+hBLNTbJ7qrvYY/BvXRoHIrwUAl9XBkj9Dq6bBN+
-   g=;
-IronPort-SDR: 5PPOhAW7haH6EKJQEUeZiV1/p09w4tUcgXN3MGy0udA95frYz634gZcjrchm6JYYI7SstiQM18
- XnmLmRmNJvkw==
-X-IronPort-AV: E=Sophos;i="5.69,280,1571702400"; 
-   d="scan'208";a="7181812"
-Received: from iad6-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-2a-8549039f.us-west-2.amazon.com) ([10.124.125.6])
-  by smtp-border-fw-out-4101.iad4.amazon.com with ESMTP; 05 Dec 2019 09:38:52 +0000
-Received: from EX13MTAUEA001.ant.amazon.com (pdx4-ws-svc-p6-lb7-vlan2.pdx.amazon.com [10.170.41.162])
-        by email-inbound-relay-2a-8549039f.us-west-2.amazon.com (Postfix) with ESMTPS id 1A82FA1E55;
-        Thu,  5 Dec 2019 09:38:50 +0000 (UTC)
-Received: from EX13D31EUA004.ant.amazon.com (10.43.165.161) by
- EX13MTAUEA001.ant.amazon.com (10.43.61.82) with Microsoft SMTP Server (TLS)
- id 15.0.1367.3; Thu, 5 Dec 2019 09:38:49 +0000
-Received: from u886c93fd17d25d.ant.amazon.com (10.43.160.100) by
- EX13D31EUA004.ant.amazon.com (10.43.165.161) with Microsoft SMTP Server (TLS)
- id 15.0.1367.3; Thu, 5 Dec 2019 09:38:45 +0000
-From:   SeongJae Park <sjpark@amazon.com>
-To:     <brendanhiggins@google.com>
-CC:     <sj38.park@gmail.com>, <corbet@lwn.net>,
-        <kunit-dev@googlegroups.com>, <linux-doc@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-        <shuah@kernel.org>, <sjpark@amazon.de>
-Subject: [PATCH v5 6/6] kunit/kunit_tool_test: Test '--build_dir' option run
-Date:   Thu, 5 Dec 2019 10:38:31 +0100
-Message-ID: <20191205093831.22925-1-sjpark@amazon.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20191205093440.21824-1-sjpark@amazon.com>
-References: <20191205093440.21824-1-sjpark@amazon.com>
+        Thu, 5 Dec 2019 04:42:52 -0500
+Received: by mail-yw1-f65.google.com with SMTP id l22so944168ywc.8;
+        Thu, 05 Dec 2019 01:42:51 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=kEo6iDTk72UPkuZt6wUZlPDmPtU2DQIfzehH/YGLNyo=;
+        b=GHepMebT9XToFw9eC1u3ojJY7qk38u5TOQWVeNCZcWFrIdZgCI1ZVPFZaqF0egLlOC
+         Ht5QRBBy5443ObKm8hgNMkbggolpX3boR/MoQox5B6oAsu9fDA2RZSl9KPLalqRnDSRK
+         TOWFr9nEAUQLwt7P6QVnFUdDjJIVH8qW67q7xnmqKQPTYbqWrFw//TGKfsu0PmN7Q/12
+         WZ49ouvW3Dj++2VKlbTQ4NbHr24X1vLdm77yUODybu7thZSfwcefsR9ad5p4fu41y4aI
+         QbggRwjWaKQiTKEDRzZ7WRI+eZFrU7JcgeTNspB1wckXs9tJJ5y88gXWz1niiR/zoioC
+         iVLw==
+X-Gm-Message-State: APjAAAVy16xwBZ2dRWfdEQ4C9QP+fkd26uZPISEQEMZeultQo2cDDp5s
+        GeGuBVofwaDRuvQ3T73nHbbDLh/Zd1sNaJrN78c=
+X-Google-Smtp-Source: APXvYqz4kznUSQvdv/ngOv0iEdQ0ZJNgjOnxMQ0UYbg7Gk6Wjsf6QyUquiKhub2bpXPNcu8NSv/BsISxF1Rp+Tl01Fc=
+X-Received: by 2002:a81:98c6:: with SMTP id p189mr5176776ywg.443.1575538971148;
+ Thu, 05 Dec 2019 01:42:51 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.43.160.100]
-X-ClientProxiedBy: EX13D05UWC003.ant.amazon.com (10.43.162.226) To
- EX13D31EUA004.ant.amazon.com (10.43.165.161)
+References: <20190621095252.32307-1-vincenzo.frascino@arm.com>
+ <20190621095252.32307-17-vincenzo.frascino@arm.com> <20191204135159.GA7210@roeck-us.net>
+ <6cdf4734-4065-09c1-8623-1bf523b38c1b@arm.com> <20191204161641.GA28130@roeck-us.net>
+ <e35a7f71-2477-fa52-01e4-301199e99c2e@arm.com>
+In-Reply-To: <e35a7f71-2477-fa52-01e4-301199e99c2e@arm.com>
+From:   =?UTF-8?Q?Philippe_Mathieu=2DDaud=C3=A9?= <f4bug@amsat.org>
+Date:   Thu, 5 Dec 2019 10:42:40 +0100
+Message-ID: <CAAdtpL71ED3zbkHMqtd1XFQwToOctWJpy2WPqahxHR81fKdTkg@mail.gmail.com>
+Subject: Re: [PATCH v7 16/25] arm: Add support for generic vDSO (causing crash)
+To:     Vincenzo Frascino <vincenzo.frascino@arm.com>
+Cc:     Guenter Roeck <linux@roeck-us.net>, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        linux-kselftest@vger.kernel.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will.deacon@arm.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Russell King <linux@armlinux.org.uk>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Paul Burton <paul.burton@mips.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Mark Salyzyn <salyzyn@android.com>,
+        Peter Collingbourne <pcc@google.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Dmitry Safonov <0x7f454c46@gmail.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Huw Davies <huw@codeweavers.com>,
+        Shijith Thotton <sthotton@marvell.com>,
+        Andre Przywara <andre.przywara@arm.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: SeongJae Park <sjpark@amazon.de>
+On Wed, Dec 4, 2019 at 6:23 PM Vincenzo Frascino
+<vincenzo.frascino@arm.com> wrote:
+> On 12/4/19 4:16 PM, Guenter Roeck wrote:
+[...]
+> --->8---
+>
+> Author: Vincenzo Frascino <vincenzo.frascino@arm.com>
+> Date:   Wed Dec 4 16:58:55 2019 +0000
+>
+>     arm: Fix __arch_get_hw_counter() access to CNTVCT
+>
+>     __arch_get_hw_counter() should check clock_mode to see if it can access
+>     CNTVCT. With the conversion to unified vDSO this check has been left out.
+>
+>     This causes on imx v6 and v7 (imx_v6_v7_defconfig) and other platforms to
+>     hang at boot during the execution of the init process as per below:
+>
+>     [   19.976852] Run /sbin/init as init process
+>     [   20.044931] Kernel panic - not syncing: Attempted to kill init!
+>     exitcode=0x00000004
+>
+>     Fix the problem verifying that clock_mode is set coherently before
+>     accessing CNTVCT.
+>
+>     Cc: Russell King <linux@armlinux.org.uk>
+>     Reported-by: Guenter Roeck <linux@roeck-us.net>
+>     Investigated-by: Arnd Bergmann <arnd@arndb.de>
 
-This commit adds kunit tool test for the '--build_dir' option.
+There are only 2 "Investigated-by" vs 7k+ "Suggested-by"... Is there a
+real difference?
 
-Signed-off-by: SeongJae Park <sjpark@amazon.de>
----
- tools/testing/kunit/kunit_tool_test.py | 8 ++++++++
- 1 file changed, 8 insertions(+)
+>     Signed-off-by: Vincenzo Frascino <vincenzo.frascino@arm.com>
+>
+> diff --git a/arch/arm/include/asm/vdso/gettimeofday.h
+> b/arch/arm/include/asm/vdso/gettimeofday.h
+> index 5b879ae7afc1..0ad2429c324f 100644
+> --- a/arch/arm/include/asm/vdso/gettimeofday.h
+> +++ b/arch/arm/include/asm/vdso/gettimeofday.h
+> @@ -75,6 +75,9 @@ static __always_inline u64 __arch_get_hw_counter(int clock_mode)
+>  #ifdef CONFIG_ARM_ARCH_TIMER
+>         u64 cycle_now;
+>
+> +       if (!clock_mode)
+> +               return -EINVAL;
+> +
 
-diff --git a/tools/testing/kunit/kunit_tool_test.py b/tools/testing/kunit/kunit_tool_test.py
-index 22f16e66b3c1..cba97756ac4a 100755
---- a/tools/testing/kunit/kunit_tool_test.py
-+++ b/tools/testing/kunit/kunit_tool_test.py
-@@ -174,6 +174,7 @@ class KUnitMainTest(unittest.TestCase):
- 		kunit.main(['run'], self.linux_source_mock)
- 		assert self.linux_source_mock.build_reconfig.call_count == 1
- 		assert self.linux_source_mock.run_kernel.call_count == 1
-+		self.linux_source_mock.run_kernel.assert_called_once_with(build_dir='', timeout=300)
- 		self.print_mock.assert_any_call(StrContains('Testing complete.'))
- 
- 	def test_run_passes_args_fail(self):
-@@ -202,5 +203,12 @@ class KUnitMainTest(unittest.TestCase):
- 		self.linux_source_mock.run_kernel.assert_called_once_with(build_dir='', timeout=timeout)
- 		self.print_mock.assert_any_call(StrContains('Testing complete.'))
- 
-+	def test_run_builddir(self):
-+		build_dir = '.kunit'
-+		kunit.main(['run', '--build_dir', build_dir], self.linux_source_mock)
-+		assert self.linux_source_mock.build_reconfig.call_count == 1
-+		self.linux_source_mock.run_kernel.assert_called_once_with(build_dir=build_dir, timeout=300)
-+		self.print_mock.assert_any_call(StrContains('Testing complete.'))
-+
- if __name__ == '__main__':
- 	unittest.main()
--- 
-2.17.1
+Reviewed-by: Philippe Mathieu-Daudé <f4bug@amsat.org>
 
+>         isb();
+>         cycle_now = read_sysreg(CNTVCT);
+>
+>
