@@ -2,164 +2,104 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EB063114DF1
-	for <lists+linux-kselftest@lfdr.de>; Fri,  6 Dec 2019 10:02:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2854B115035
+	for <lists+linux-kselftest@lfdr.de>; Fri,  6 Dec 2019 13:17:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726109AbfLFJBs (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 6 Dec 2019 04:01:48 -0500
-Received: from mga09.intel.com ([134.134.136.24]:50490 "EHLO mga09.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726421AbfLFJBm (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 6 Dec 2019 04:01:42 -0500
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga102.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 06 Dec 2019 01:01:41 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.69,283,1571727600"; 
-   d="scan'208";a="219395101"
-Received: from lxy-clx-4s.sh.intel.com ([10.239.43.57])
-  by fmsmga001.fm.intel.com with ESMTP; 06 Dec 2019 01:01:40 -0800
-From:   Xiaoyao Li <xiaoyao.li@intel.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <sean.j.christopherson@intel.com>,
-        Shuah Khan <shuah@kernel.org>
-Cc:     Xiaoyao Li <xiaoyao.li@intel.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: [PATCH 3/3] KVM: VMX: Fix the spelling of CPU_BASED_USE_TSC_OFFSETTING
-Date:   Fri,  6 Dec 2019 16:45:26 +0800
-Message-Id: <20191206084526.131861-4-xiaoyao.li@intel.com>
-X-Mailer: git-send-email 2.19.1
-In-Reply-To: <20191206084526.131861-1-xiaoyao.li@intel.com>
-References: <20191206084526.131861-1-xiaoyao.li@intel.com>
+        id S1726168AbfLFMRP (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 6 Dec 2019 07:17:15 -0500
+Received: from youngberry.canonical.com ([91.189.89.112]:43255 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726116AbfLFMRP (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 6 Dec 2019 07:17:15 -0500
+Received: from 1.general.cascardo.us.vpn ([10.172.70.58] helo=calabresa)
+        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.86_2)
+        (envelope-from <cascardo@canonical.com>)
+        id 1idCXo-00079d-9v; Fri, 06 Dec 2019 12:17:12 +0000
+Date:   Fri, 6 Dec 2019 09:17:07 -0300
+From:   Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
+To:     Eric Dumazet <eric.dumazet@gmail.com>
+Cc:     netdev@vger.kernel.org, davem@davemloft.net, shuah@kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        posk@google.com
+Subject: Re: [PATCH] selftests: net: ip_defrag: increase netdev_max_backlog
+Message-ID: <20191206121707.GC5083@calabresa>
+References: <20191204195321.406365-1-cascardo@canonical.com>
+ <483097a3-92ec-aedd-60d9-ab7f58b9708d@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <483097a3-92ec-aedd-60d9-ab7f58b9708d@gmail.com>
+User-Agent: Mutt/1.12.2 (2019-09-21)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The mis-spelling is found by checkpatch.pl, so fix them.
+On Wed, Dec 04, 2019 at 12:03:57PM -0800, Eric Dumazet wrote:
+> 
+> 
+> On 12/4/19 11:53 AM, Thadeu Lima de Souza Cascardo wrote:
+> > When using fragments with size 8 and payload larger than 8000, the backlog
+> > might fill up and packets will be dropped, causing the test to fail. This
+> > happens often enough when conntrack is on during the IPv6 test.
+> > 
+> > As the larger payload in the test is 10000, using a backlog of 1250 allow
+> > the test to run repeatedly without failure. At least a 1000 runs were
+> > possible with no failures, when usually less than 50 runs were good enough
+> > for showing a failure.
+> > 
+> > As netdev_max_backlog is not a pernet setting, this sets the backlog to
+> > 1000 during exit to prevent disturbing following tests.
+> > 
+> 
+> Hmmm... I would prefer not changing a global setting like that.
+> This is going to be flaky since we often run tests in parallel (using different netns)
+> 
+> What about adding a small delay after each sent packet ?
+> 
+> diff --git a/tools/testing/selftests/net/ip_defrag.c b/tools/testing/selftests/net/ip_defrag.c
+> index c0c9ecb891e1d78585e0db95fd8783be31bc563a..24d0723d2e7e9b94c3e365ee2ee30e9445deafa8 100644
+> --- a/tools/testing/selftests/net/ip_defrag.c
+> +++ b/tools/testing/selftests/net/ip_defrag.c
+> @@ -198,6 +198,7 @@ static void send_fragment(int fd_raw, struct sockaddr *addr, socklen_t alen,
+>                 error(1, 0, "send_fragment: %d vs %d", res, frag_len);
+>  
+>         frag_counter++;
+> +       usleep(1000);
+>  }
+>  
+>  static void send_udp_frags(int fd_raw, struct sockaddr *addr,
+> 
 
-Signed-off-by: Xiaoyao Li <xiaoyao.li@intel.com>
----
- arch/x86/include/asm/vmx.h                               | 2 +-
- arch/x86/kvm/vmx/nested.c                                | 8 ++++----
- arch/x86/kvm/vmx/vmx.c                                   | 6 +++---
- tools/testing/selftests/kvm/include/x86_64/vmx.h         | 2 +-
- tools/testing/selftests/kvm/x86_64/vmx_tsc_adjust_test.c | 2 +-
- 5 files changed, 10 insertions(+), 10 deletions(-)
+That won't work because the issue only shows when we using conntrack, as the
+packet will be reassembled on output, then fragmented again. When this happens,
+the fragmentation code is transmitting the fragments in a tight loop, which
+floods the backlog.
 
-diff --git a/arch/x86/include/asm/vmx.h b/arch/x86/include/asm/vmx.h
-index 06d4420508c5..d716fe938fc0 100644
---- a/arch/x86/include/asm/vmx.h
-+++ b/arch/x86/include/asm/vmx.h
-@@ -20,7 +20,7 @@
-  * Definitions of Primary Processor-Based VM-Execution Controls.
-  */
- #define CPU_BASED_INTR_WINDOW_EXITING           0x00000004
--#define CPU_BASED_USE_TSC_OFFSETING             0x00000008
-+#define CPU_BASED_USE_TSC_OFFSETTING            0x00000008
- #define CPU_BASED_HLT_EXITING                   0x00000080
- #define CPU_BASED_INVLPG_EXITING                0x00000200
- #define CPU_BASED_MWAIT_EXITING                 0x00000400
-diff --git a/arch/x86/kvm/vmx/nested.c b/arch/x86/kvm/vmx/nested.c
-index f8b9da53191e..8c215da368b7 100644
---- a/arch/x86/kvm/vmx/nested.c
-+++ b/arch/x86/kvm/vmx/nested.c
-@@ -3230,7 +3230,7 @@ enum nvmx_vmentry_status nested_vmx_enter_non_root_mode(struct kvm_vcpu *vcpu,
- 	}
- 
- 	enter_guest_mode(vcpu);
--	if (vmcs12->cpu_based_vm_exec_control & CPU_BASED_USE_TSC_OFFSETING)
-+	if (vmcs12->cpu_based_vm_exec_control & CPU_BASED_USE_TSC_OFFSETTING)
- 		vcpu->arch.tsc_offset += vmcs12->tsc_offset;
- 
- 	if (prepare_vmcs02(vcpu, vmcs12, &exit_qual))
-@@ -3294,7 +3294,7 @@ enum nvmx_vmentry_status nested_vmx_enter_non_root_mode(struct kvm_vcpu *vcpu,
- 	 * 26.7 "VM-entry failures during or after loading guest state".
- 	 */
- vmentry_fail_vmexit_guest_mode:
--	if (vmcs12->cpu_based_vm_exec_control & CPU_BASED_USE_TSC_OFFSETING)
-+	if (vmcs12->cpu_based_vm_exec_control & CPU_BASED_USE_TSC_OFFSETTING)
- 		vcpu->arch.tsc_offset -= vmcs12->tsc_offset;
- 	leave_guest_mode(vcpu);
- 
-@@ -4209,7 +4209,7 @@ void nested_vmx_vmexit(struct kvm_vcpu *vcpu, u32 exit_reason,
- 	if (nested_cpu_has_preemption_timer(vmcs12))
- 		hrtimer_cancel(&to_vmx(vcpu)->nested.preemption_timer);
- 
--	if (vmcs12->cpu_based_vm_exec_control & CPU_BASED_USE_TSC_OFFSETING)
-+	if (vmcs12->cpu_based_vm_exec_control & CPU_BASED_USE_TSC_OFFSETTING)
- 		vcpu->arch.tsc_offset -= vmcs12->tsc_offset;
- 
- 	if (likely(!vmx->fail)) {
-@@ -6016,7 +6016,7 @@ void nested_vmx_setup_ctls_msrs(struct nested_vmx_msrs *msrs, u32 ept_caps,
- 		CPU_BASED_ALWAYSON_WITHOUT_TRUE_MSR;
- 	msrs->procbased_ctls_high &=
- 		CPU_BASED_INTR_WINDOW_EXITING |
--		CPU_BASED_NMI_WINDOW_EXITING | CPU_BASED_USE_TSC_OFFSETING |
-+		CPU_BASED_NMI_WINDOW_EXITING | CPU_BASED_USE_TSC_OFFSETTING |
- 		CPU_BASED_HLT_EXITING | CPU_BASED_INVLPG_EXITING |
- 		CPU_BASED_MWAIT_EXITING | CPU_BASED_CR3_LOAD_EXITING |
- 		CPU_BASED_CR3_STORE_EXITING |
-diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-index 84ceee734e98..ec0bada57792 100644
---- a/arch/x86/kvm/vmx/vmx.c
-+++ b/arch/x86/kvm/vmx/vmx.c
-@@ -1724,7 +1724,7 @@ static u64 vmx_read_l1_tsc_offset(struct kvm_vcpu *vcpu)
- 	struct vmcs12 *vmcs12 = get_vmcs12(vcpu);
- 
- 	if (is_guest_mode(vcpu) &&
--	    (vmcs12->cpu_based_vm_exec_control & CPU_BASED_USE_TSC_OFFSETING))
-+	    (vmcs12->cpu_based_vm_exec_control & CPU_BASED_USE_TSC_OFFSETTING))
- 		return vcpu->arch.tsc_offset - vmcs12->tsc_offset;
- 
- 	return vcpu->arch.tsc_offset;
-@@ -1742,7 +1742,7 @@ static u64 vmx_write_l1_tsc_offset(struct kvm_vcpu *vcpu, u64 offset)
- 	 * to the newly set TSC to get L2's TSC.
- 	 */
- 	if (is_guest_mode(vcpu) &&
--	    (vmcs12->cpu_based_vm_exec_control & CPU_BASED_USE_TSC_OFFSETING))
-+	    (vmcs12->cpu_based_vm_exec_control & CPU_BASED_USE_TSC_OFFSETTING))
- 		g_tsc_offset = vmcs12->tsc_offset;
- 
- 	trace_kvm_write_tsc_offset(vcpu->vcpu_id,
-@@ -2363,7 +2363,7 @@ static __init int setup_vmcs_config(struct vmcs_config *vmcs_conf,
- 	      CPU_BASED_CR3_STORE_EXITING |
- 	      CPU_BASED_UNCOND_IO_EXITING |
- 	      CPU_BASED_MOV_DR_EXITING |
--	      CPU_BASED_USE_TSC_OFFSETING |
-+	      CPU_BASED_USE_TSC_OFFSETTING |
- 	      CPU_BASED_MWAIT_EXITING |
- 	      CPU_BASED_MONITOR_EXITING |
- 	      CPU_BASED_INVLPG_EXITING |
-diff --git a/tools/testing/selftests/kvm/include/x86_64/vmx.h b/tools/testing/selftests/kvm/include/x86_64/vmx.h
-index 7eb38451c359..3d27069b9ed9 100644
---- a/tools/testing/selftests/kvm/include/x86_64/vmx.h
-+++ b/tools/testing/selftests/kvm/include/x86_64/vmx.h
-@@ -19,7 +19,7 @@
-  * Definitions of Primary Processor-Based VM-Execution Controls.
-  */
- #define CPU_BASED_INTR_WINDOW_EXITING		0x00000004
--#define CPU_BASED_USE_TSC_OFFSETING		0x00000008
-+#define CPU_BASED_USE_TSC_OFFSETTING		0x00000008
- #define CPU_BASED_HLT_EXITING			0x00000080
- #define CPU_BASED_INVLPG_EXITING		0x00000200
- #define CPU_BASED_MWAIT_EXITING			0x00000400
-diff --git a/tools/testing/selftests/kvm/x86_64/vmx_tsc_adjust_test.c b/tools/testing/selftests/kvm/x86_64/vmx_tsc_adjust_test.c
-index 5590fd2bcf87..69e482a95c47 100644
---- a/tools/testing/selftests/kvm/x86_64/vmx_tsc_adjust_test.c
-+++ b/tools/testing/selftests/kvm/x86_64/vmx_tsc_adjust_test.c
-@@ -98,7 +98,7 @@ static void l1_guest_code(struct vmx_pages *vmx_pages)
- 	prepare_vmcs(vmx_pages, l2_guest_code,
- 		     &l2_guest_stack[L2_GUEST_STACK_SIZE]);
- 	control = vmreadz(CPU_BASED_VM_EXEC_CONTROL);
--	control |= CPU_BASED_USE_MSR_BITMAPS | CPU_BASED_USE_TSC_OFFSETING;
-+	control |= CPU_BASED_USE_MSR_BITMAPS | CPU_BASED_USE_TSC_OFFSETTING;
- 	vmwrite(CPU_BASED_VM_EXEC_CONTROL, control);
- 	vmwrite(TSC_OFFSET, TSC_OFFSET_VALUE);
- 
--- 
-2.19.1
+One other option is limit the number of fragments to a 1000, like the following
+patch:
 
+diff --git a/tools/testing/selftests/net/ip_defrag.c b/tools/testing/selftests/net/ip_defrag.c
+index c0c9ecb891e1..f4086ba9d16c 100644
+--- a/tools/testing/selftests/net/ip_defrag.c
++++ b/tools/testing/selftests/net/ip_defrag.c
+@@ -16,6 +16,9 @@
+ #include <time.h>
+ #include <unistd.h>
+ 
++#define ALIGN(x, sz) ((x + (sz-1)) & ~(sz-1))
++#define MAX(a, b) ((a < b) ? b : a)
++
+ static bool		cfg_do_ipv4;
+ static bool		cfg_do_ipv6;
+ static bool		cfg_verbose;
+@@ -362,6 +365,7 @@ static void run_test(struct sockaddr *addr, socklen_t alen, bool ipv6)
+ 
+ 	for (payload_len = min_frag_len; payload_len < MSG_LEN_MAX;
+ 			payload_len += (rand() % 4096)) {
++		min_frag_len = MAX(8, ALIGN(payload_len / 1000, 8));
+ 		if (cfg_verbose)
+ 			printf("payload_len: %d\n", payload_len);
+ 
