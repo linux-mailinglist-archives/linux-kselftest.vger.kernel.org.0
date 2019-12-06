@@ -2,214 +2,142 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A9D99115301
-	for <lists+linux-kselftest@lfdr.de>; Fri,  6 Dec 2019 15:20:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 021511153A1
+	for <lists+linux-kselftest@lfdr.de>; Fri,  6 Dec 2019 15:50:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726793AbfLFOUI (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 6 Dec 2019 09:20:08 -0500
-Received: from mout-p-202.mailbox.org ([80.241.56.172]:29124 "EHLO
-        mout-p-202.mailbox.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726268AbfLFOUH (ORCPT
+        id S1726234AbfLFOuR (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 6 Dec 2019 09:50:17 -0500
+Received: from youngberry.canonical.com ([91.189.89.112]:46572 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726195AbfLFOuR (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 6 Dec 2019 09:20:07 -0500
-Received: from smtp2.mailbox.org (smtp2.mailbox.org [IPv6:2001:67c:2050:105:465:1:2:0])
-        (using TLSv1.2 with cipher ECDHE-RSA-CHACHA20-POLY1305 (256/256 bits))
-        (No client certificate requested)
-        by mout-p-202.mailbox.org (Postfix) with ESMTPS id 47Tvql22RHzQkK1;
-        Fri,  6 Dec 2019 15:20:03 +0100 (CET)
-X-Virus-Scanned: amavisd-new at heinlein-support.de
-Received: from smtp2.mailbox.org ([80.241.60.241])
-        by spamfilter04.heinlein-hosting.de (spamfilter04.heinlein-hosting.de [80.241.56.122]) (amavisd-new, port 10030)
-        with ESMTP id 8G5RMpKVsMbp; Fri,  6 Dec 2019 15:19:58 +0100 (CET)
-From:   Aleksa Sarai <cyphar@cyphar.com>
-To:     Al Viro <viro@zeniv.linux.org.uk>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J. Bruce Fields" <bfields@fieldses.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        David Howells <dhowells@redhat.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        Andrii Nakryiko <andriin@fb.com>,
-        Jonathan Corbet <corbet@lwn.net>
-Cc:     Aleksa Sarai <cyphar@cyphar.com>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Kees Cook <keescook@chromium.org>,
-        Jann Horn <jannh@google.com>, Tycho Andersen <tycho@tycho.ws>,
-        David Drysdale <drysdale@google.com>,
-        Chanho Min <chanho.min@lge.com>,
-        Oleg Nesterov <oleg@redhat.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Christian Brauner <christian@brauner.io>,
-        Aleksa Sarai <asarai@suse.de>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        dev@opencontainers.org, containers@lists.linux-foundation.org,
-        bpf@vger.kernel.org, netdev@vger.kernel.org,
-        linux-alpha@vger.kernel.org, linux-api@vger.kernel.org,
-        libc-alpha@sourceware.org, linux-arch@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-ia64@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        linux-xtensa@linux-xtensa.org, sparclinux@vger.kernel.org
-Subject: [PATCH v18 13/13] Documentation: path-lookup: include new LOOKUP flags
-Date:   Sat,  7 Dec 2019 01:13:38 +1100
-Message-Id: <20191206141338.23338-14-cyphar@cyphar.com>
-In-Reply-To: <20191206141338.23338-1-cyphar@cyphar.com>
-References: <20191206141338.23338-1-cyphar@cyphar.com>
+        Fri, 6 Dec 2019 09:50:17 -0500
+Received: from 1.general.cascardo.us.vpn ([10.172.70.58] helo=calabresa)
+        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.86_2)
+        (envelope-from <cascardo@canonical.com>)
+        id 1idEvu-00034D-OY; Fri, 06 Dec 2019 14:50:15 +0000
+Date:   Fri, 6 Dec 2019 11:50:10 -0300
+From:   Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
+To:     Eric Dumazet <eric.dumazet@gmail.com>
+Cc:     netdev@vger.kernel.org, davem@davemloft.net, shuah@kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        posk@google.com
+Subject: Re: [PATCH] selftests: net: ip_defrag: increase netdev_max_backlog
+Message-ID: <20191206145010.GE5083@calabresa>
+References: <20191204195321.406365-1-cascardo@canonical.com>
+ <483097a3-92ec-aedd-60d9-ab7f58b9708d@gmail.com>
+ <20191206121707.GC5083@calabresa>
+ <d2dddb34-f126-81f8-cbf7-04635f04795a@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <d2dddb34-f126-81f8-cbf7-04635f04795a@gmail.com>
+User-Agent: Mutt/1.12.2 (2019-09-21)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Now that we have new LOOKUP flags, we should document them in the
-relevant path-walking documentation. And now that we've settled on a
-common name for nd_jump_link() style symlinks ("magic links"), use that
-term where magic-link semantics are described.
+On Fri, Dec 06, 2019 at 05:41:01AM -0800, Eric Dumazet wrote:
+> 
+> 
+> On 12/6/19 4:17 AM, Thadeu Lima de Souza Cascardo wrote:
+> > On Wed, Dec 04, 2019 at 12:03:57PM -0800, Eric Dumazet wrote:
+> >>
+> >>
+> >> On 12/4/19 11:53 AM, Thadeu Lima de Souza Cascardo wrote:
+> >>> When using fragments with size 8 and payload larger than 8000, the backlog
+> >>> might fill up and packets will be dropped, causing the test to fail. This
+> >>> happens often enough when conntrack is on during the IPv6 test.
+> >>>
+> >>> As the larger payload in the test is 10000, using a backlog of 1250 allow
+> >>> the test to run repeatedly without failure. At least a 1000 runs were
+> >>> possible with no failures, when usually less than 50 runs were good enough
+> >>> for showing a failure.
+> >>>
+> >>> As netdev_max_backlog is not a pernet setting, this sets the backlog to
+> >>> 1000 during exit to prevent disturbing following tests.
+> >>>
+> >>
+> >> Hmmm... I would prefer not changing a global setting like that.
+> >> This is going to be flaky since we often run tests in parallel (using different netns)
+> >>
+> >> What about adding a small delay after each sent packet ?
+> >>
+> >> diff --git a/tools/testing/selftests/net/ip_defrag.c b/tools/testing/selftests/net/ip_defrag.c
+> >> index c0c9ecb891e1d78585e0db95fd8783be31bc563a..24d0723d2e7e9b94c3e365ee2ee30e9445deafa8 100644
+> >> --- a/tools/testing/selftests/net/ip_defrag.c
+> >> +++ b/tools/testing/selftests/net/ip_defrag.c
+> >> @@ -198,6 +198,7 @@ static void send_fragment(int fd_raw, struct sockaddr *addr, socklen_t alen,
+> >>                 error(1, 0, "send_fragment: %d vs %d", res, frag_len);
+> >>  
+> >>         frag_counter++;
+> >> +       usleep(1000);
+> >>  }
+> >>  
+> >>  static void send_udp_frags(int fd_raw, struct sockaddr *addr,
+> >>
+> > 
+> > That won't work because the issue only shows when we using conntrack, as the
+> > packet will be reassembled on output, then fragmented again. When this happens,
+> > the fragmentation code is transmitting the fragments in a tight loop, which
+> > floods the backlog.
+> 
+> Interesting !
+> 
+> So it looks like the test is correct, and exposed a long standing problem in this code.
+> 
+> We should not adjust the test to some kernel-of-the-day-constraints, and instead fix the kernel bug ;)
+> 
+> Where is this tight loop exactly ?
+> 
+> If this is feeding/bursting ~1000 skbs via netif_rx() in a BH context, maybe we need to call a variant
+> that allows immediate processing instead of (ab)using the softnet backlog.
+> 
+> Thanks !
 
-Signed-off-by: Aleksa Sarai <cyphar@cyphar.com>
----
- Documentation/filesystems/path-lookup.rst | 68 +++++++++++++++++++++--
- 1 file changed, 62 insertions(+), 6 deletions(-)
+This is the loopback interface, so its xmit calls netif_rx. I suppose we would
+have the same problem with veth, for example.
 
-diff --git a/Documentation/filesystems/path-lookup.rst b/Documentation/filesystems/path-lookup.rst
-index 434a07b0002b..a3216979298b 100644
---- a/Documentation/filesystems/path-lookup.rst
-+++ b/Documentation/filesystems/path-lookup.rst
-@@ -13,6 +13,7 @@ It has subsequently been updated to reflect changes in the kernel
- including:
- 
- - per-directory parallel name lookup.
-+- ``openat2()`` resolution restriction flags.
- 
- Introduction to pathname lookup
- ===============================
-@@ -235,6 +236,13 @@ renamed.  If ``d_lookup`` finds that a rename happened while it
- unsuccessfully scanned a chain in the hash table, it simply tries
- again.
- 
-+``rename_lock`` is also used to detect and defend against potential attacks
-+against ``LOOKUP_BENEATH`` and ``LOOKUP_IN_ROOT`` when resolving ".." (where
-+the parent directory is moved outside the root, bypassing the ``path_equal()``
-+check). If ``rename_lock`` is updated during the lookup and the path encounters
-+a "..", a potential attack occurred and ``handle_dots()`` will bail out with
-+``-EAGAIN``.
-+
- inode->i_rwsem
- ~~~~~~~~~~~~~~
- 
-@@ -348,6 +356,13 @@ any changes to any mount points while stepping up.  This locking is
- needed to stabilize the link to the mounted-on dentry, which the
- refcount on the mount itself doesn't ensure.
- 
-+``mount_lock`` is also used to detect and defend against potential attacks
-+against ``LOOKUP_BENEATH`` and ``LOOKUP_IN_ROOT`` when resolving ".." (where
-+the parent directory is moved outside the root, bypassing the ``path_equal()``
-+check). If ``mount_lock`` is updated during the lookup and the path encounters
-+a "..", a potential attack occurred and ``handle_dots()`` will bail out with
-+``-EAGAIN``.
-+
- RCU
- ~~~
- 
-@@ -405,6 +420,10 @@ is requested.  Keeping a reference in the ``nameidata`` ensures that
- only one root is in effect for the entire path walk, even if it races
- with a ``chroot()`` system call.
- 
-+It should be noted that in the case of ``LOOKUP_IN_ROOT`` or
-+``LOOKUP_BENEATH``, the effective root becomes the directory file descriptor
-+passed to ``openat2()`` (which exposes these ``LOOKUP_`` flags).
-+
- The root is needed when either of two conditions holds: (1) either the
- pathname or a symbolic link starts with a "'/'", or (2) a "``..``"
- component is being handled, since "``..``" from the root must always stay
-@@ -1149,7 +1168,7 @@ so ``NULL`` is returned to indicate that the symlink can be released and
- the stack frame discarded.
- 
- The other case involves things in ``/proc`` that look like symlinks but
--aren't really::
-+aren't really (and are therefore commonly referred to as "magic-links")::
- 
-      $ ls -l /proc/self/fd/1
-      lrwx------ 1 neilb neilb 64 Jun 13 10:19 /proc/self/fd/1 -> /dev/pts/4
-@@ -1286,7 +1305,9 @@ A few flags
- A suitable way to wrap up this tour of pathname walking is to list
- the various flags that can be stored in the ``nameidata`` to guide the
- lookup process.  Many of these are only meaningful on the final
--component, others reflect the current state of the pathname lookup.
-+component, others reflect the current state of the pathname lookup, and some
-+apply restrictions to all path components encountered in the path lookup.
-+
- And then there is ``LOOKUP_EMPTY``, which doesn't fit conceptually with
- the others.  If this is not set, an empty pathname causes an error
- very early on.  If it is set, empty pathnames are not considered to be
-@@ -1310,13 +1331,48 @@ longer needed.
- ``LOOKUP_JUMPED`` means that the current dentry was chosen not because
- it had the right name but for some other reason.  This happens when
- following "``..``", following a symlink to ``/``, crossing a mount point
--or accessing a "``/proc/$PID/fd/$FD``" symlink.  In this case the
--filesystem has not been asked to revalidate the name (with
--``d_revalidate()``).  In such cases the inode may still need to be
--revalidated, so ``d_op->d_weak_revalidate()`` is called if
-+or accessing a "``/proc/$PID/fd/$FD``" symlink (also known as a "magic
-+link"). In this case the filesystem has not been asked to revalidate the
-+name (with ``d_revalidate()``).  In such cases the inode may still need
-+to be revalidated, so ``d_op->d_weak_revalidate()`` is called if
- ``LOOKUP_JUMPED`` is set when the look completes - which may be at the
- final component or, when creating, unlinking, or renaming, at the penultimate component.
- 
-+Resolution-restriction flags
-+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-+
-+In order to allow userspace to protect itself against certain race conditions
-+and attack scenarios involving changing path components, a series of flags are
-+available which apply restrictions to all path components encountered during
-+path lookup. These flags are exposed through ``openat2()``'s ``resolve`` field.
-+
-+``LOOKUP_NO_SYMLINKS`` blocks all symlink traversals (including magic-links).
-+This is distinctly different from ``LOOKUP_FOLLOW``, because the latter only
-+relates to restricting the following of trailing symlinks.
-+
-+``LOOKUP_NO_MAGICLINKS`` blocks all magic-link traversals. Filesystems must
-+ensure that they return errors from ``nd_jump_link()``, because that is how
-+``LOOKUP_NO_MAGICLINKS`` and other magic-link restrictions are implemented.
-+
-+``LOOKUP_NO_XDEV`` blocks all ``vfsmount`` traversals (this includes both
-+bind-mounts and ordinary mounts). Note that the ``vfsmount`` which contains the
-+lookup is determined by the first mountpoint the path lookup reaches --
-+absolute paths start with the ``vfsmount`` of ``/``, and relative paths start
-+with the ``dfd``'s ``vfsmount``. Magic-links are only permitted if the
-+``vfsmount`` of the path is unchanged.
-+
-+``LOOKUP_BENEATH`` blocks any path components which resolve outside the
-+starting point of the resolution. This is done by blocking ``nd_jump_root()``
-+as well as blocking ".." if it would jump outside the starting point.
-+``rename_lock`` and ``mount_lock`` are used to detect attacks against the
-+resolution of "..". Magic-links are also blocked.
-+
-+``LOOKUP_IN_ROOT`` resolves all path components as though the starting point
-+were the filesystem root. ``nd_jump_root()`` brings the resolution back to to
-+the starting point, and ".." at the starting point will act as a no-op. As with
-+``LOOKUP_BENEATH``, ``rename_lock`` and ``mount_lock`` are used to detect
-+attacks against ".." resolution. Magic-links are also blocked.
-+
- Final-component flags
- ~~~~~~~~~~~~~~~~~~~~~
- 
--- 
-2.24.0
+So net/ipv6/ip6_output.c:ip6_fragment has this:
 
+		for (;;) {
+			/* Prepare header of the next frame,
+			 * before previous one went down. */
+			if (iter.frag)
+				ip6_fraglist_prepare(skb, &iter);
+
+			skb->tstamp = tstamp;
+			err = output(net, sk, skb);
+			if (!err)
+				IP6_INC_STATS(net, ip6_dst_idev(&rt->dst),
+					      IPSTATS_MIB_FRAGCREATES);
+
+			if (err || !iter.frag)
+				break;
+
+			skb = ip6_fraglist_next(&iter);
+		}
+
+output is ip6_finish_output2, which will call neigh_output, which ends up
+calling dev_queue_xmit.
+
+In this case, ip6_fragment is being called probably from rawv6_send_hdrinc ->
+dst_output -> ip6_output -> ip6_finish_output -> __ip6_finish_output ->
+ip6_fragment.
+
+dst_output at rawv6_send_hdrinc is being called after netfilter
+NF_INET_LOCAL_OUT hook. That one is gathering the fragments and only accepting
+that last, reassembled skb, which causes ip6_fragment enter that loop.
+
+So, basically, the easiest way to reproduce this is using this test with
+loopback and netfilter doing the reassembly during conntrack. I see some BH
+locks here and there, but I think this is just filling up the backlog too fast
+to give any chance for softirq to kick in.
+
+I will see if I can reproduce this using routed veths.
+
+Cascardo.
+
+Cascardo.
