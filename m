@@ -2,127 +2,132 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E6057115135
-	for <lists+linux-kselftest@lfdr.de>; Fri,  6 Dec 2019 14:41:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3953C115187
+	for <lists+linux-kselftest@lfdr.de>; Fri,  6 Dec 2019 14:54:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726250AbfLFNlE (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 6 Dec 2019 08:41:04 -0500
-Received: from mail-pg1-f193.google.com ([209.85.215.193]:33763 "EHLO
-        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726245AbfLFNlE (ORCPT
+        id S1727007AbfLFNys (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 6 Dec 2019 08:54:48 -0500
+Received: from userp2120.oracle.com ([156.151.31.85]:59360 "EHLO
+        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726975AbfLFNyr (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 6 Dec 2019 08:41:04 -0500
-Received: by mail-pg1-f193.google.com with SMTP id 6so3352177pgk.0;
-        Fri, 06 Dec 2019 05:41:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:subject:to:cc:references:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=3EFCJeRV2jMf+iQ+j1NhNnzIhn47IDN/JAAO+nGlAGU=;
-        b=rn0r9y4MNjQb5vsu88mzLjNm0oUlpl/NY+ttecEbHb2mr82tElxKnFHiEE49UMuLFu
-         2GDmEqj7H+Z/pNuhLTQzgpzB1xoQ3LseCus1xviES7APeu2ZPo/piNpI70zRsqe8jYI4
-         n9lxAtkegvvyEBBZk4Tyk2RA6FpoC1ExcvjEhFnAmHWJdz558NEYdaackd3r6HQmbfDF
-         KZRF4RTuB0zhQ8uP3bmAFrKd2GSdxq5cxrmqinmkjOSmGNzRoW6S1RD1b2xpPXBDBmJL
-         X7NHGhNHXMELfqLJSSxwEikYAF97tpZD8svdq3TCzvPna+21CSwqgWUALGjWX6DcITNq
-         NZ1w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:subject:to:cc:references:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=3EFCJeRV2jMf+iQ+j1NhNnzIhn47IDN/JAAO+nGlAGU=;
-        b=FCbCzRpFvFZ2UyV8fe1kRc316Eemcs3wZuQUrOH5sb2oCrHfxe1ADOh3eHv/PYgcJc
-         7ROBvMqbolwX6Mg75pAToF+M6arEltKDfip4dIjVUBvxQoE5y4F+aAJtMXlgwHYQ/Mlx
-         e6rmOpSeLxbBOnMzlHRpBPqroRRV29O8aiVuqrLwKm9l1Z3b5R+q4hzguj0Ym8A+iJ+k
-         YW/Cp02yFXuTEtRQFuWywo0cE1KqGWlaZzvW5phtXKV36eTDdgzP6qhkMlBZQUIb62aD
-         mu0mAlGs4K2cCqcHw1dsiH9v2v3c17Mzj/ePn0u2VfaR9nvls3vCOT6EdlWg8jPMswNk
-         W18Q==
-X-Gm-Message-State: APjAAAUzSla3A49oNY0dENjHdW03fNbrIQnScPx67jNnkbJFZp4t4K+U
-        gF7Ou8E+Y1FJcI/ydStRs8k=
-X-Google-Smtp-Source: APXvYqy+STqdn3H3r8DJnP94GB2uQbw7gMpPHzPAmc32MRNlyiXZJqgSHJ+AG0RxOsAQuQNQp/BUIQ==
-X-Received: by 2002:a62:ea19:: with SMTP id t25mr14534879pfh.74.1575639663699;
-        Fri, 06 Dec 2019 05:41:03 -0800 (PST)
-Received: from [192.168.86.235] (c-73-241-150-58.hsd1.ca.comcast.net. [73.241.150.58])
-        by smtp.gmail.com with ESMTPSA id f24sm3398977pjp.12.2019.12.06.05.41.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 06 Dec 2019 05:41:02 -0800 (PST)
-From:   Eric Dumazet <eric.dumazet@gmail.com>
-Subject: Re: [PATCH] selftests: net: ip_defrag: increase netdev_max_backlog
-To:     Thadeu Lima de Souza Cascardo <cascardo@canonical.com>,
-        Eric Dumazet <eric.dumazet@gmail.com>
-Cc:     netdev@vger.kernel.org, davem@davemloft.net, shuah@kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        posk@google.com
-References: <20191204195321.406365-1-cascardo@canonical.com>
- <483097a3-92ec-aedd-60d9-ab7f58b9708d@gmail.com>
- <20191206121707.GC5083@calabresa>
-Message-ID: <d2dddb34-f126-81f8-cbf7-04635f04795a@gmail.com>
-Date:   Fri, 6 Dec 2019 05:41:01 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.2.2
+        Fri, 6 Dec 2019 08:54:47 -0500
+Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
+        by userp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id xB6DsLMA189904;
+        Fri, 6 Dec 2019 13:54:22 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : in-reply-to : message-id : references : mime-version :
+ content-type; s=corp-2019-08-05;
+ bh=mnbDjzi+t8U359ofhgGJEJTb4vIsS6/RiU9IOJRnczw=;
+ b=fQpEoIR3DU8LApVJVbMF+hPqXvUW+V9cbqH516L2mmSa6bW3kp8BByYh0G3ogenxXe8S
+ x7XuDELaCdpb6emkhLYihYZM/rG+eDe3vSaXt/X3lLo3CFXul4jxwEeHqdWEUoVDQPpz
+ LX4zdgcQdBUqJ1A+QU74pHtlU/Eo7U+inIsjcULS1xpmKy4t4UujGFGXXPlMIqEAz8f6
+ 4ZX4stfp6rC7Tfprfm1WOuO8IDyKYoXZ+T/thEZG0xaCvBpy7LiZ57nlljkbB0Gm0cOT
+ drZ3npH4TE5udLGxxLcDIVBqQUTFQ8CVSATdLnPJHLvUqFexGRA20r4344Jp/dwDep9q JQ== 
+Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
+        by userp2120.oracle.com with ESMTP id 2wkh2rv513-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 06 Dec 2019 13:54:21 +0000
+Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
+        by aserp3030.oracle.com (8.16.0.27/8.16.0.27) with SMTP id xB6Ds686156099;
+        Fri, 6 Dec 2019 13:54:21 GMT
+Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
+        by aserp3030.oracle.com with ESMTP id 2wqerahcpq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 06 Dec 2019 13:54:20 +0000
+Received: from abhmp0001.oracle.com (abhmp0001.oracle.com [141.146.116.7])
+        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id xB6DrqtH013467;
+        Fri, 6 Dec 2019 13:53:52 GMT
+Received: from dhcp-10-175-208-120.vpn.oracle.com (/10.175.208.120)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Fri, 06 Dec 2019 05:53:51 -0800
+Date:   Fri, 6 Dec 2019 13:53:38 +0000 (GMT)
+From:   Alan Maguire <alan.maguire@oracle.com>
+X-X-Sender: alan@dhcp-10-175-208-120.vpn.oracle.com
+To:     Iurii Zaikin <yzaikin@google.com>
+cc:     Alan Maguire <alan.maguire@oracle.com>,
+        "Theodore Y. Ts'o" <tytso@mit.edu>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        David Gow <davidgow@google.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        Kees Cook <keescook@chromium.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Masahiro Yamada <yamada.masahiro@socionext.com>,
+        catalin.marinas@arm.com, joe.lawrence@redhat.com,
+        penguin-kernel@i-love.sakura.ne.jp, urezki@gmail.com,
+        andriy.shevchenko@linux.intel.com,
+        Jonathan Corbet <corbet@lwn.net>, adilger.kernel@dilger.ca,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Knut Omang <knut.omang@oracle.com>
+Subject: Re: [PATCH v5 linux-kselftest-test 3/6] kunit: allow kunit tests to
+ be loaded as a module
+In-Reply-To: <CAAXuY3qekjWBUTxzAjCs+87nVXpigvzqm7TpG7MtJagTSG-xtg@mail.gmail.com>
+Message-ID: <alpine.LRH.2.20.1912061349001.28856@dhcp-10-175-208-120.vpn.oracle.com>
+References: <1575374868-32601-1-git-send-email-alan.maguire@oracle.com> <1575374868-32601-4-git-send-email-alan.maguire@oracle.com> <CAFd5g47dRP9HvsZD3sqzzfbAthNq8gxEdh57owo3CqVHLNOf6w@mail.gmail.com> <20191204003851.GF86484@mit.edu>
+ <alpine.LRH.2.20.1912041531160.5511@dhcp-10-175-179-22.vpn.oracle.com> <CAAXuY3qekjWBUTxzAjCs+87nVXpigvzqm7TpG7MtJagTSG-xtg@mail.gmail.com>
+User-Agent: Alpine 2.20 (LRH 67 2015-01-07)
 MIME-Version: 1.0
-In-Reply-To: <20191206121707.GC5083@calabresa>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=US-ASCII
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9462 signatures=668685
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=3 malwarescore=0
+ phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=999
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.0.1-1911140001 definitions=main-1912060120
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9462 signatures=668685
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
+ suspectscore=3 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
+ lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1911140001
+ definitions=main-1912060120
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
 
+On Wed, 4 Dec 2019, Iurii Zaikin wrote:
 
-On 12/6/19 4:17 AM, Thadeu Lima de Souza Cascardo wrote:
-> On Wed, Dec 04, 2019 at 12:03:57PM -0800, Eric Dumazet wrote:
->>
->>
->> On 12/4/19 11:53 AM, Thadeu Lima de Souza Cascardo wrote:
->>> When using fragments with size 8 and payload larger than 8000, the backlog
->>> might fill up and packets will be dropped, causing the test to fail. This
->>> happens often enough when conntrack is on during the IPv6 test.
->>>
->>> As the larger payload in the test is 10000, using a backlog of 1250 allow
->>> the test to run repeatedly without failure. At least a 1000 runs were
->>> possible with no failures, when usually less than 50 runs were good enough
->>> for showing a failure.
->>>
->>> As netdev_max_backlog is not a pernet setting, this sets the backlog to
->>> 1000 during exit to prevent disturbing following tests.
->>>
->>
->> Hmmm... I would prefer not changing a global setting like that.
->> This is going to be flaky since we often run tests in parallel (using different netns)
->>
->> What about adding a small delay after each sent packet ?
->>
->> diff --git a/tools/testing/selftests/net/ip_defrag.c b/tools/testing/selftests/net/ip_defrag.c
->> index c0c9ecb891e1d78585e0db95fd8783be31bc563a..24d0723d2e7e9b94c3e365ee2ee30e9445deafa8 100644
->> --- a/tools/testing/selftests/net/ip_defrag.c
->> +++ b/tools/testing/selftests/net/ip_defrag.c
->> @@ -198,6 +198,7 @@ static void send_fragment(int fd_raw, struct sockaddr *addr, socklen_t alen,
->>                 error(1, 0, "send_fragment: %d vs %d", res, frag_len);
->>  
->>         frag_counter++;
->> +       usleep(1000);
->>  }
->>  
->>  static void send_udp_frags(int fd_raw, struct sockaddr *addr,
->>
+> > I've also got a patch that I was hoping to send out soon
+> > that might help.  The idea is that each test suite would create
+> > a debugfs representation under /sys/kernel/debug/kunit;
+> > specifically:
+> >
+> > /sys/kernel/debug/kunit/results/<suite>
+> > /sys/kernel/debug/kunit/results/<suite>-tests
+> >
+> > ...where cat'ing the former shows the full set of results,
+> > and the latter is a directory within which we can display
+> > individual test results in test-case-specific files.
+> >
+> > This is all done by ensuring that when tests log information,
+> > they log to a per-test-case log buffer as well as to dmesg.
+> >
+> > If the above sounds useful, I'll try and polish up the patch
+> > for submission. Thanks!
+> What would be the best way for kunit_tool to:
+> 1. Know that the tests have completed as QEMU will be just sitting
+> there with kernel complaining about the absence of init (or running
+> whatever we give it as init)?
+> 2. Read the test results from debugfs under QEMU virtual machine while
+> the kernel is still there?
+> I think supplying an init script/binary that copies the
+> /sys/kernel/debug/kunit/results/* to a 9p shared dir set up by
+> kunit_tool would work but it would add a step of cross-compiling and
+> packaging a userspace binary.
 > 
-> That won't work because the issue only shows when we using conntrack, as the
-> packet will be reassembled on output, then fragmented again. When this happens,
-> the fragmentation code is transmitting the fragments in a tight loop, which
-> floods the backlog.
 
-Interesting !
+I confess I'd only been thinking about supporting the case of a user 
+modprobe-ing a kunit test suite module directly and wanting a clean set 
+of results separated from other dmesg output. However the scheme you 
+describe does seem workable for the UML case also.  With the 
+late_initcalls the builtin kunit suites will likely run early in boot but perhaps we could tweak the 
+semantics such that the full results debugfs file is not populated until 
+the tests have run to simplify script-based probing. I'll try some 
+experiments with the debugfs patch once it's ready. Thanks!
 
-So it looks like the test is correct, and exposed a long standing problem in this code.
+Alan 
 
-We should not adjust the test to some kernel-of-the-day-constraints, and instead fix the kernel bug ;)
-
-Where is this tight loop exactly ?
-
-If this is feeding/bursting ~1000 skbs via netif_rx() in a BH context, maybe we need to call a variant
-that allows immediate processing instead of (ab)using the softnet backlog.
-
-Thanks !
