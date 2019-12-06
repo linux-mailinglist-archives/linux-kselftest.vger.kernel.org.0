@@ -2,96 +2,103 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 394E3114A74
-	for <lists+linux-kselftest@lfdr.de>; Fri,  6 Dec 2019 02:23:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 73DBC114B59
+	for <lists+linux-kselftest@lfdr.de>; Fri,  6 Dec 2019 04:17:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726243AbfLFBXk (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 5 Dec 2019 20:23:40 -0500
-Received: from mail.kernel.org ([198.145.29.99]:37920 "EHLO mail.kernel.org"
+        id S1726097AbfLFDRt (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 5 Dec 2019 22:17:49 -0500
+Received: from ozlabs.org ([203.11.71.1]:59545 "EHLO ozlabs.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725959AbfLFBXj (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 5 Dec 2019 20:23:39 -0500
-Received: from devnote2 (unknown [180.22.253.92])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id B3B4020706;
-        Fri,  6 Dec 2019 01:23:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1575595419;
-        bh=+snBBNFYQv8xmYqi1k67brmlOE46FSD3M+ydplTWD0k=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=k8cjoOPvcX3iBd3/y/6lsJSEI91mBnpHgvQa8SMeOJplIiGkjdxAcKLes6qlLz08v
-         yD1iboa/DygvAy7yPkH4aU54IMmrAf/TFnFAnZuNNVi5y8BvKlvbJaDK2y96AMLR7o
-         h4pFnHjAHA2wgNAUsLjd6zN0L9HszCMEAZAhLx7A=
-Date:   Fri, 6 Dec 2019 10:23:34 +0900
-From:   Masami Hiramatsu <mhiramat@kernel.org>
-To:     shuah <shuah@kernel.org>
-Cc:     Micah Morton <mortonm@chromium.org>,
-        linux-kselftest@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        jaswinder.singh@linaro.org
-Subject: Re: [BUGFIX PATCH v2 0/3] selftests: safesetid: Fix some bugs in
- safesetid test
-Message-Id: <20191206102334.35f578b1e79e57740e56a5b8@kernel.org>
-In-Reply-To: <3bad79d5-eada-7e96-4210-c4888bfb710f@kernel.org>
-References: <157554844882.11018.13436399905210284553.stgit@devnote2>
-        <CAJ-EccNKk30b_wtvz=PUVmMVfF8YNagXMcy3Uhj53DzFbgmb6A@mail.gmail.com>
-        <3bad79d5-eada-7e96-4210-c4888bfb710f@kernel.org>
-X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+        id S1726076AbfLFDRt (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 5 Dec 2019 22:17:49 -0500
+Received: by ozlabs.org (Postfix, from userid 1034)
+        id 47Td7b02k6z9sPV; Fri,  6 Dec 2019 14:17:46 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ellerman.id.au;
+        s=201909; t=1575602267;
+        bh=zVhnYe3N8hue/+LbI+X1XqJYlxmNifUh7vkS/DHm2wo=;
+        h=From:To:Cc:Subject:Date:From;
+        b=KMdtSzxm8RzEsLRq4cXQcjZ817K0nGpBpsyVoJ6V+0YCxMp9KeaqwjN5VgKdG3yzl
+         i9VRuShuQ6bPdil27QbLN7tot/8eBPEyFARVY+ZpxU4CNpEV/Joskq5LTIy9e2D7PQ
+         Es3VQmhlSdTnBTCQGhmTm6cUNf0+bBwUnd6K7KNdLqVBIEfSB34KxdjqixoOS1gkOA
+         5Bj4GtlPlFfgnb1AJNE0igL1N7pqmS0J4xeVDil8gXl3lsTYaYkAJfHM8Kd4I0CdTO
+         Y4nJA4bTD2ONIxupskXZ+0tV92ggZYNuihBSYzn9T5ElGB5Eotqr4jqVuVFNbCinrJ
+         F38lVixzilF5A==
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     shuahkh@osg.samsung.com
+Cc:     linux-kselftest@vger.kernel.org, keescook@chromium.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] selftests: Fix dangling documentation references to kselftest_module.sh
+Date:   Fri,  6 Dec 2019 14:17:38 +1100
+Message-Id: <20191206031738.29641-1-mpe@ellerman.id.au>
+X-Mailer: git-send-email 2.21.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, 5 Dec 2019 09:44:52 -0700
-shuah <shuah@kernel.org> wrote:
+Commit c78fd76f2b67 ("selftests: Move kselftest_module.sh into
+kselftest/") moved kselftest_module.sh but missed updating a few
+references to the path in documentation.
 
-> On 12/5/19 9:40 AM, Micah Morton wrote:
-> > On Thu, Dec 5, 2019 at 4:20 AM Masami Hiramatsu <mhiramat@kernel.org> wrote:
-> >>
-> >> Hi,
-> >>
-> >> Here is the v2 series to fix build warnings and erorrs on
-> >> kselftest safesetid.
-> >> This version includes a fix for a runtime error.
-> >>
-> >> Thank you,
-> >>
-> >> ---
-> >>
-> >> Masami Hiramatsu (3):
-> >>        selftests: safesetid: Move link library to LDLIBS
-> >>        selftests: safesetid: Check the return value of setuid/setgid
-> >>        selftests: safesetid: Fix Makefile to set correct test program
-> > 
-> > These 3 fixes look good, thanks. Were you thinking they would go
-> > through my SafeSetID tree or is there a dedicated one for selftests? I
-> > guess if you're not sure someone else on here can chime in, or I can
-> > just take them through my tree if I don't hear anything.
-> > 
-> 
-> Yes. There is a linux-kselftest tree dedicated to selftests.
-> I can take them.
+Fixes: c78fd76f2b67 ("selftests: Move kselftest_module.sh into kselftest/")
+Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
+---
+ Documentation/dev-tools/kselftest.rst       | 8 ++++----
+ tools/testing/selftests/kselftest/module.sh | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-Thanks Micah and Shuah!
-
-> 
-> 
-> >>
-> >>
-> >>   tools/testing/selftests/safesetid/Makefile         |    5 +++--
-> >>   tools/testing/selftests/safesetid/safesetid-test.c |   15 ++++++++++-----
-> >>   2 files changed, 13 insertions(+), 7 deletions(-)
-> >>
-> >> --
-> 
-> thanks,
-> -- Shuah
-> 
-
-
+diff --git a/Documentation/dev-tools/kselftest.rst b/Documentation/dev-tools/kselftest.rst
+index ecdfdc9d4b03..61ae13c44f91 100644
+--- a/Documentation/dev-tools/kselftest.rst
++++ b/Documentation/dev-tools/kselftest.rst
+@@ -203,12 +203,12 @@ Test Module
+ Kselftest tests the kernel from userspace.  Sometimes things need
+ testing from within the kernel, one method of doing this is to create a
+ test module.  We can tie the module into the kselftest framework by
+-using a shell script test runner.  ``kselftest_module.sh`` is designed
++using a shell script test runner.  ``kselftest/module.sh`` is designed
+ to facilitate this process.  There is also a header file provided to
+ assist writing kernel modules that are for use with kselftest:
+ 
+ - ``tools/testing/kselftest/kselftest_module.h``
+-- ``tools/testing/kselftest/kselftest_module.sh``
++- ``tools/testing/kselftest/kselftest/module.sh``
+ 
+ How to use
+ ----------
+@@ -247,7 +247,7 @@ Example Module
+ 
+    #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+ 
+-   #include "../tools/testing/selftests/kselftest_module.h"
++   #include "../tools/testing/selftests/kselftest/module.h"
+ 
+    KSTM_MODULE_GLOBALS();
+ 
+@@ -276,7 +276,7 @@ Example test script
+ 
+     #!/bin/bash
+     # SPDX-License-Identifier: GPL-2.0+
+-    $(dirname $0)/../kselftest_module.sh "foo" test_foo
++    $(dirname $0)/../kselftest/module.sh "foo" test_foo
+ 
+ 
+ Test Harness
+diff --git a/tools/testing/selftests/kselftest/module.sh b/tools/testing/selftests/kselftest/module.sh
+index 18e1c7992d30..fb4733faff12 100755
+--- a/tools/testing/selftests/kselftest/module.sh
++++ b/tools/testing/selftests/kselftest/module.sh
+@@ -9,7 +9,7 @@
+ #
+ #   #!/bin/sh
+ #   SPDX-License-Identifier: GPL-2.0+
+-#   $(dirname $0)/../kselftest_module.sh "description" module_name
++#   $(dirname $0)/../kselftest/module.sh "description" module_name
+ #
+ # Example: tools/testing/selftests/lib/printf.sh
+ 
 -- 
-Masami Hiramatsu <mhiramat@kernel.org>
+2.21.0
+
