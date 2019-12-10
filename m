@@ -2,60 +2,97 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E8E9118623
-	for <lists+linux-kselftest@lfdr.de>; Tue, 10 Dec 2019 12:25:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 896A0118647
+	for <lists+linux-kselftest@lfdr.de>; Tue, 10 Dec 2019 12:28:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727149AbfLJLZC (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 10 Dec 2019 06:25:02 -0500
-Received: from youngberry.canonical.com ([91.189.89.112]:54927 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727143AbfLJLZC (ORCPT
+        id S1727162AbfLJL2M (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 10 Dec 2019 06:28:12 -0500
+Received: from mout-p-201.mailbox.org ([80.241.56.171]:57272 "EHLO
+        mout-p-201.mailbox.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726915AbfLJL2M (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 10 Dec 2019 06:25:02 -0500
-Received: from 1.general.cking.uk.vpn ([10.172.193.212] helo=localhost)
-        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.86_2)
-        (envelope-from <colin.king@canonical.com>)
-        id 1ieddP-0006XG-Ql; Tue, 10 Dec 2019 11:24:55 +0000
-From:   Colin King <colin.king@canonical.com>
-To:     Shuah Khan <shuah@kernel.org>, Al Viro <viro@zeniv.linux.org.uk>,
-        Aleksa Sarai <cyphar@cyphar.com>,
-        linux-kselftest@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH][next] selftests: fix spelling mistake "chainged" -> "chained"
-Date:   Tue, 10 Dec 2019 11:24:55 +0000
-Message-Id: <20191210112455.171482-1-colin.king@canonical.com>
-X-Mailer: git-send-email 2.24.0
+        Tue, 10 Dec 2019 06:28:12 -0500
+Received: from smtp2.mailbox.org (smtp2.mailbox.org [80.241.60.241])
+        (using TLSv1.2 with cipher ECDHE-RSA-CHACHA20-POLY1305 (256/256 bits))
+        (No client certificate requested)
+        by mout-p-201.mailbox.org (Postfix) with ESMTPS id 47XHqY5VslzQl9M;
+        Tue, 10 Dec 2019 12:28:09 +0100 (CET)
+X-Virus-Scanned: amavisd-new at heinlein-support.de
+Received: from smtp2.mailbox.org ([80.241.60.241])
+        by spamfilter01.heinlein-hosting.de (spamfilter01.heinlein-hosting.de [80.241.56.115]) (amavisd-new, port 10030)
+        with ESMTP id ORbApr3hLJrD; Tue, 10 Dec 2019 12:28:05 +0100 (CET)
+Date:   Tue, 10 Dec 2019 22:27:50 +1100
+From:   Aleksa Sarai <cyphar@cyphar.com>
+To:     Colin King <colin.king@canonical.com>
+Cc:     Shuah Khan <shuah@kernel.org>, Al Viro <viro@zeniv.linux.org.uk>,
+        linux-kselftest@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH][next] selftests: fix spelling mistake "chainged" ->
+ "chained"
+Message-ID: <20191210112750.5rfck3gnmobabhak@yavin.dot.cyphar.com>
+References: <20191210112455.171482-1-colin.king@canonical.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="l7rai3c6jadzkxag"
+Content-Disposition: inline
+In-Reply-To: <20191210112455.171482-1-colin.king@canonical.com>
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Colin Ian King <colin.king@canonical.com>
 
-There is a spelling mistake in a literal string, fix it.
+--l7rai3c6jadzkxag
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Colin Ian King <colin.king@canonical.com>
----
- tools/testing/selftests/openat2/resolve_test.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On 2019-12-10, Colin King <colin.king@canonical.com> wrote:
+> There is a spelling mistake in a literal string, fix it.
 
-diff --git a/tools/testing/selftests/openat2/resolve_test.c b/tools/testing/selftests/openat2/resolve_test.c
-index 7a94b1da8e7b..bbafad440893 100644
---- a/tools/testing/selftests/openat2/resolve_test.c
-+++ b/tools/testing/selftests/openat2/resolve_test.c
-@@ -230,7 +230,7 @@ void test_openat2_opath_tests(void)
- 		{ .name = "[in_root] garbage link to /root",
- 		  .path = "cheeky/garbageself",	.how.resolve = RESOLVE_IN_ROOT,
- 		  .out.path = "root",		.pass = true },
--		{ .name = "[in_root] chainged garbage links to /root",
-+		{ .name = "[in_root] chained garbage links to /root",
- 		  .path = "abscheeky/garbageself", .how.resolve = RESOLVE_IN_ROOT,
- 		  .out.path = "root",		.pass = true },
- 		{ .name = "[in_root] relative path to 'root'",
--- 
-2.24.0
+Yup, makes sense.
 
+Reviewed-by: Aleksa Sarai <cyphar@cyphar.com>
+
+> Signed-off-by: Colin Ian King <colin.king@canonical.com>
+> ---
+>  tools/testing/selftests/openat2/resolve_test.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>=20
+> diff --git a/tools/testing/selftests/openat2/resolve_test.c b/tools/testi=
+ng/selftests/openat2/resolve_test.c
+> index 7a94b1da8e7b..bbafad440893 100644
+> --- a/tools/testing/selftests/openat2/resolve_test.c
+> +++ b/tools/testing/selftests/openat2/resolve_test.c
+> @@ -230,7 +230,7 @@ void test_openat2_opath_tests(void)
+>  		{ .name =3D "[in_root] garbage link to /root",
+>  		  .path =3D "cheeky/garbageself",	.how.resolve =3D RESOLVE_IN_ROOT,
+>  		  .out.path =3D "root",		.pass =3D true },
+> -		{ .name =3D "[in_root] chainged garbage links to /root",
+> +		{ .name =3D "[in_root] chained garbage links to /root",
+>  		  .path =3D "abscheeky/garbageself", .how.resolve =3D RESOLVE_IN_ROOT,
+>  		  .out.path =3D "root",		.pass =3D true },
+>  		{ .name =3D "[in_root] relative path to 'root'",
+> --=20
+> 2.24.0
+>=20
+
+
+--=20
+Aleksa Sarai
+Senior Software Engineer (Containers)
+SUSE Linux GmbH
+<https://www.cyphar.com/>
+
+--l7rai3c6jadzkxag
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQSxZm6dtfE8gxLLfYqdlLljIbnQEgUCXe+BLwAKCRCdlLljIbnQ
+EubTAP9OptH6VWy5DMeb7HaGfXTnyuPkThnwOMh7lvkzgNvH4AEAtBUbCf5wSGnb
+yzCFDvF52CMUSP7Tzg5KEduILkkf+A4=
+=9MTh
+-----END PGP SIGNATURE-----
+
+--l7rai3c6jadzkxag--
