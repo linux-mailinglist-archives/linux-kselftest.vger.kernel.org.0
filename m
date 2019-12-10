@@ -2,126 +2,193 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A175D1186E7
-	for <lists+linux-kselftest@lfdr.de>; Tue, 10 Dec 2019 12:46:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 83CE41188D4
+	for <lists+linux-kselftest@lfdr.de>; Tue, 10 Dec 2019 13:50:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727326AbfLJLpP (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 10 Dec 2019 06:45:15 -0500
-Received: from foss.arm.com ([217.140.110.172]:41044 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727177AbfLJLpO (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 10 Dec 2019 06:45:14 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3A8BB1FB;
-        Tue, 10 Dec 2019 03:45:14 -0800 (PST)
-Received: from e120937-lin.cambridge.arm.com (e120937-lin.cambridge.arm.com [10.1.197.50])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8B5A93F6CF;
-        Tue, 10 Dec 2019 03:45:13 -0800 (PST)
-From:   Cristian Marussi <cristian.marussi@arm.com>
-To:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, shuah@kernel.org
-Subject: [PATCH v2] selftests: fix build behaviour on targets' failures
-Date:   Tue, 10 Dec 2019 11:44:59 +0000
-Message-Id: <20191210114459.11405-1-cristian.marussi@arm.com>
-X-Mailer: git-send-email 2.17.1
+        id S1727415AbfLJMuE (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 10 Dec 2019 07:50:04 -0500
+Received: from mx2.suse.de ([195.135.220.15]:37718 "EHLO mx1.suse.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1727131AbfLJMuE (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 10 Dec 2019 07:50:04 -0500
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx1.suse.de (Postfix) with ESMTP id E26C9AF76;
+        Tue, 10 Dec 2019 12:49:59 +0000 (UTC)
+Received: by quack2.suse.cz (Postfix, from userid 1000)
+        id 84F101E0B23; Tue, 10 Dec 2019 13:49:57 +0100 (CET)
+Date:   Tue, 10 Dec 2019 13:49:57 +0100
+From:   Jan Kara <jack@suse.cz>
+To:     John Hubbard <jhubbard@nvidia.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn.topel@intel.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Dave Chinner <david@fromorbit.com>,
+        David Airlie <airlied@linux.ie>,
+        "David S . Miller" <davem@davemloft.net>,
+        Ira Weiny <ira.weiny@intel.com>, Jan Kara <jack@suse.cz>,
+        Jason Gunthorpe <jgg@ziepe.ca>, Jens Axboe <axboe@kernel.dk>,
+        Jonathan Corbet <corbet@lwn.net>,
+        =?iso-8859-1?B?Suly9G1l?= Glisse <jglisse@redhat.com>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Michal Hocko <mhocko@suse.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Paul Mackerras <paulus@samba.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Vlastimil Babka <vbabka@suse.cz>, bpf@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, kvm@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-rdma@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, netdev@vger.kernel.org,
+        linux-mm@kvack.org, LKML <linux-kernel@vger.kernel.org>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
+Subject: Re: [PATCH v8 23/26] mm/gup: pass flags arg to __gup_device_*
+ functions
+Message-ID: <20191210124957.GG1551@quack2.suse.cz>
+References: <20191209225344.99740-1-jhubbard@nvidia.com>
+ <20191209225344.99740-24-jhubbard@nvidia.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20191209225344.99740-24-jhubbard@nvidia.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Currently, when some of the KSFT subsystems fails to build, the toplevel
-KSFT Makefile just keeps carrying on with the build process.
+On Mon 09-12-19 14:53:41, John Hubbard wrote:
+> A subsequent patch requires access to gup flags, so pass the flags
+> argument through to the __gup_device_* functions.
+> 
+> Also placate checkpatch.pl by shortening a nearby line.
+> 
+> TODO: Christoph Hellwig requested folding this into the patch the uses
+> the gup flags arguments.
 
-This behaviour is expected and desirable especially in the context of a CI
-system running KSelfTest, since it is not always easy to guarantee that the
-most recent and esoteric dependencies are respected across all KSFT TARGETS
-in a timely manner.
+You should probably implement this TODO? :)
 
-Unfortunately, as of now, this holds true only if the very last of the
-built subsystems could have been successfully compiled: if the last of
-those subsystem instead failed to build, such failure is taken as the whole
-outcome of the Makefile target and the complete build/install process halts
-even though many other preceding subsytems were in fact already built
-successfully.
+								Honza
 
-Fix the KSFT Makefile behaviour related to all/install targets in order
-to fail as a whole only when the all/install targets have failed for all
-of the requested TARGETS, while succeeding when at least one of TARGETS
-has been successfully built.
-
-Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
----
-This patch is based on ksft/fixes branch from:
-
-git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git
-
-on top of commit (~5.5-rc1):
-
-99e51aa8f701 Documentation: kunit: add documentation for kunit_tool
-
-Building with either:
-
-make kselftest-install \
-	     KSFT_INSTALL_PATH=/tmp/KSFT \
-	     TARGETS="exec arm64 bpf"
-
-make -C tools/testing/selftests  install \
-	     KSFT_INSTALL_PATH=/tmp/KSFT \
-	     TARGETS="exec arm64 bpf"
-
-(with 'bpf' not building clean on my setup in the above case)
-
-and veryfying that build/install completes if at least one of TARGETS can
-be successfully built, and any successfully built subsystem is installed.
-
-Changes:
--------
-V1 --> V2
-- rebased on 5.5-rc1
-- rewording commit message
-- dropped RFC tag
----
- tools/testing/selftests/Makefile | 18 +++++++++++-------
- 1 file changed, 11 insertions(+), 7 deletions(-)
-
-diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-index b001c602414b..86b2a3fca04d 100644
---- a/tools/testing/selftests/Makefile
-+++ b/tools/testing/selftests/Makefile
-@@ -143,11 +143,13 @@ else
- endif
- 
- all: khdr
--	@for TARGET in $(TARGETS); do		\
--		BUILD_TARGET=$$BUILD/$$TARGET;	\
--		mkdir $$BUILD_TARGET  -p;	\
--		$(MAKE) OUTPUT=$$BUILD_TARGET -C $$TARGET;\
--	done;
-+	@ret=1;							\
-+	for TARGET in $(TARGETS); do				\
-+		BUILD_TARGET=$$BUILD/$$TARGET;			\
-+		mkdir $$BUILD_TARGET  -p;			\
-+		$(MAKE) OUTPUT=$$BUILD_TARGET -C $$TARGET;	\
-+		ret=$$((ret * $$?));				\
-+	done; exit $$ret;
- 
- run_tests: all
- 	@for TARGET in $(TARGETS); do \
-@@ -196,10 +198,12 @@ ifdef INSTALL_PATH
- 	install -m 744 kselftest/module.sh $(INSTALL_PATH)/kselftest/
- 	install -m 744 kselftest/runner.sh $(INSTALL_PATH)/kselftest/
- 	install -m 744 kselftest/prefix.pl $(INSTALL_PATH)/kselftest/
--	@for TARGET in $(TARGETS); do \
-+	@ret=1;	\
-+	for TARGET in $(TARGETS); do \
- 		BUILD_TARGET=$$BUILD/$$TARGET;	\
- 		$(MAKE) OUTPUT=$$BUILD_TARGET -C $$TARGET INSTALL_PATH=$(INSTALL_PATH)/$$TARGET install; \
--	done;
-+		ret=$$((ret * $$?));		\
-+	done; exit $$ret;
- 
- 	@# Ask all targets to emit their test scripts
- 	echo "#!/bin/sh" > $(ALL_SCRIPT)
+> 
+> Reviewed-by: Jan Kara <jack@suse.cz>
+> Reviewed-by: Jérôme Glisse <jglisse@redhat.com>
+> Reviewed-by: Ira Weiny <ira.weiny@intel.com>
+> Cc: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+> Signed-off-by: John Hubbard <jhubbard@nvidia.com>
+> ---
+>  mm/gup.c | 28 ++++++++++++++++++----------
+>  1 file changed, 18 insertions(+), 10 deletions(-)
+> 
+> diff --git a/mm/gup.c b/mm/gup.c
+> index 73aedcefa4bd..687d48506f04 100644
+> --- a/mm/gup.c
+> +++ b/mm/gup.c
+> @@ -1957,7 +1957,8 @@ static int gup_pte_range(pmd_t pmd, unsigned long addr, unsigned long end,
+>  
+>  #if defined(CONFIG_ARCH_HAS_PTE_DEVMAP) && defined(CONFIG_TRANSPARENT_HUGEPAGE)
+>  static int __gup_device_huge(unsigned long pfn, unsigned long addr,
+> -		unsigned long end, struct page **pages, int *nr)
+> +			     unsigned long end, unsigned int flags,
+> +			     struct page **pages, int *nr)
+>  {
+>  	int nr_start = *nr;
+>  	struct dev_pagemap *pgmap = NULL;
+> @@ -1983,13 +1984,14 @@ static int __gup_device_huge(unsigned long pfn, unsigned long addr,
+>  }
+>  
+>  static int __gup_device_huge_pmd(pmd_t orig, pmd_t *pmdp, unsigned long addr,
+> -		unsigned long end, struct page **pages, int *nr)
+> +				 unsigned long end, unsigned int flags,
+> +				 struct page **pages, int *nr)
+>  {
+>  	unsigned long fault_pfn;
+>  	int nr_start = *nr;
+>  
+>  	fault_pfn = pmd_pfn(orig) + ((addr & ~PMD_MASK) >> PAGE_SHIFT);
+> -	if (!__gup_device_huge(fault_pfn, addr, end, pages, nr))
+> +	if (!__gup_device_huge(fault_pfn, addr, end, flags, pages, nr))
+>  		return 0;
+>  
+>  	if (unlikely(pmd_val(orig) != pmd_val(*pmdp))) {
+> @@ -2000,13 +2002,14 @@ static int __gup_device_huge_pmd(pmd_t orig, pmd_t *pmdp, unsigned long addr,
+>  }
+>  
+>  static int __gup_device_huge_pud(pud_t orig, pud_t *pudp, unsigned long addr,
+> -		unsigned long end, struct page **pages, int *nr)
+> +				 unsigned long end, unsigned int flags,
+> +				 struct page **pages, int *nr)
+>  {
+>  	unsigned long fault_pfn;
+>  	int nr_start = *nr;
+>  
+>  	fault_pfn = pud_pfn(orig) + ((addr & ~PUD_MASK) >> PAGE_SHIFT);
+> -	if (!__gup_device_huge(fault_pfn, addr, end, pages, nr))
+> +	if (!__gup_device_huge(fault_pfn, addr, end, flags, pages, nr))
+>  		return 0;
+>  
+>  	if (unlikely(pud_val(orig) != pud_val(*pudp))) {
+> @@ -2017,14 +2020,16 @@ static int __gup_device_huge_pud(pud_t orig, pud_t *pudp, unsigned long addr,
+>  }
+>  #else
+>  static int __gup_device_huge_pmd(pmd_t orig, pmd_t *pmdp, unsigned long addr,
+> -		unsigned long end, struct page **pages, int *nr)
+> +				 unsigned long end, unsigned int flags,
+> +				 struct page **pages, int *nr)
+>  {
+>  	BUILD_BUG();
+>  	return 0;
+>  }
+>  
+>  static int __gup_device_huge_pud(pud_t pud, pud_t *pudp, unsigned long addr,
+> -		unsigned long end, struct page **pages, int *nr)
+> +				 unsigned long end, unsigned int flags,
+> +				 struct page **pages, int *nr)
+>  {
+>  	BUILD_BUG();
+>  	return 0;
+> @@ -2136,7 +2141,8 @@ static int gup_huge_pmd(pmd_t orig, pmd_t *pmdp, unsigned long addr,
+>  	if (pmd_devmap(orig)) {
+>  		if (unlikely(flags & FOLL_LONGTERM))
+>  			return 0;
+> -		return __gup_device_huge_pmd(orig, pmdp, addr, end, pages, nr);
+> +		return __gup_device_huge_pmd(orig, pmdp, addr, end, flags,
+> +					     pages, nr);
+>  	}
+>  
+>  	page = pmd_page(orig) + ((addr & ~PMD_MASK) >> PAGE_SHIFT);
+> @@ -2157,7 +2163,8 @@ static int gup_huge_pmd(pmd_t orig, pmd_t *pmdp, unsigned long addr,
+>  }
+>  
+>  static int gup_huge_pud(pud_t orig, pud_t *pudp, unsigned long addr,
+> -		unsigned long end, unsigned int flags, struct page **pages, int *nr)
+> +			unsigned long end, unsigned int flags,
+> +			struct page **pages, int *nr)
+>  {
+>  	struct page *head, *page;
+>  	int refs;
+> @@ -2168,7 +2175,8 @@ static int gup_huge_pud(pud_t orig, pud_t *pudp, unsigned long addr,
+>  	if (pud_devmap(orig)) {
+>  		if (unlikely(flags & FOLL_LONGTERM))
+>  			return 0;
+> -		return __gup_device_huge_pud(orig, pudp, addr, end, pages, nr);
+> +		return __gup_device_huge_pud(orig, pudp, addr, end, flags,
+> +					     pages, nr);
+>  	}
+>  
+>  	page = pud_page(orig) + ((addr & ~PUD_MASK) >> PAGE_SHIFT);
+> -- 
+> 2.24.0
+> 
 -- 
-2.17.1
-
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
