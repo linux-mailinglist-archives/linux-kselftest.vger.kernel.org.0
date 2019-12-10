@@ -2,38 +2,36 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 82CEB119A2B
-	for <lists+linux-kselftest@lfdr.de>; Tue, 10 Dec 2019 22:53:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 483FC11972C
+	for <lists+linux-kselftest@lfdr.de>; Tue, 10 Dec 2019 22:32:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728000AbfLJVuU (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 10 Dec 2019 16:50:20 -0500
-Received: from mail.kernel.org ([198.145.29.99]:55782 "EHLO mail.kernel.org"
+        id S1728129AbfLJVJV (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 10 Dec 2019 16:09:21 -0500
+Received: from mail.kernel.org ([198.145.29.99]:57736 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726881AbfLJVIZ (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 10 Dec 2019 16:08:25 -0500
+        id S1728120AbfLJVJU (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 10 Dec 2019 16:09:20 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 272E520652;
-        Tue, 10 Dec 2019 21:08:24 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 9E6F9246B4;
+        Tue, 10 Dec 2019 21:09:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1576012105;
-        bh=ts474jo8X09F8Xjx0LlPALO9jEwtcGrtKgKurM6fb6g=;
+        s=default; t=1576012160;
+        bh=ExJa1uzw4YsyFUsIJI3vUUtRkYWOhea+6RzTG0beOdU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=SbiWEAFRjgihSzeonE53jPIa9oBruVtH9hAYd5Sk60ARdvivePTO5hHIQgXPNDRJd
-         KytqpGC/K8wMMVpKg22kkHRphpIfM5VFArpOxI6f0Ro5+svJEcDYZxr/p2WrYV6hMT
-         spaxhvLxpQ8EtCJeBp59/BaENiXqW7qKm62zvKRw=
+        b=0jF6NNBn4OL3L6PQzPZfPPeiR/Pgv5/7jqJvlgokoIULJhQGFaNE5rXDvJ/3/WKM/
+         7XigXE06yimGUYHuZsRvAJxZPgXehGtnNCFMTyxRas2zLqoVPkQiHJ32ikM+RfukBt
+         Bun9OH9RB9zI9lTJnaJS21+6Sue7aUnPdK3qokRk=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Andrii Nakryiko <andriin@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
+Cc:     Shuah Khan <skhan@linuxfoundation.org>,
+        Tim Bird <Tim.Bird@sony.com>, Tim Bird <tim.bird@sony.com>,
         Sasha Levin <sashal@kernel.org>,
-        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 079/350] selftests/bpf: Fix btf_dump padding test case
-Date:   Tue, 10 Dec 2019 16:03:04 -0500
-Message-Id: <20191210210735.9077-40-sashal@kernel.org>
+        linux-kselftest@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.4 122/350] selftests: Fix O= and KBUILD_OUTPUT handling for relative paths
+Date:   Tue, 10 Dec 2019 16:03:47 -0500
+Message-Id: <20191210210735.9077-83-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20191210210735.9077-1-sashal@kernel.org>
 References: <20191210210735.9077-1-sashal@kernel.org>
@@ -46,47 +44,72 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Andrii Nakryiko <andriin@fb.com>
+From: Shuah Khan <skhan@linuxfoundation.org>
 
-[ Upstream commit 76790c7c66ccc8695afc75e73f54c0ca86267ed2 ]
+[ Upstream commit 303e6218ecec475d5bc3e5922dec770ee5baf107 ]
 
-Existing padding test case for btf_dump has a good test that was
-supposed to test padding generation at the end of a struct, but its
-expected output was specified incorrectly. Fix this.
+Fix O= and KBUILD_OUTPUT handling for relative paths.
 
-Fixes: 2d2a3ad872f8 ("selftests/bpf: add btf_dump BTF-to-C conversion tests")
-Reported-by: John Fastabend <john.fastabend@gmail.com>
-Signed-off-by: Andrii Nakryiko <andriin@fb.com>
-Signed-off-by: Alexei Starovoitov <ast@kernel.org>
-Link: https://lore.kernel.org/bpf/20191008231009.2991130-4-andriin@fb.com
+export KBUILD_OUTPUT=../kselftest_size
+make TARGETS=size kselftest-all
+
+or
+
+make O=../kselftest_size TARGETS=size kselftest-all
+
+In both of these cases, targets get built in ../kselftest_size which is
+a one level up from the size test directory.
+
+make[1]: Entering directory '/mnt/data/lkml/kselftest_size'
+make --no-builtin-rules INSTALL_HDR_PATH=$BUILD/usr \
+        ARCH=x86 -C ../../.. headers_install
+  INSTALL ../kselftest_size/usr/include
+gcc -static -ffreestanding -nostartfiles -s    get_size.c  -o ../kselftest_size/size/get_size
+/usr/bin/ld: cannot open output file ../kselftest_size/size/get_size: No such file or directory
+collect2: error: ld returned 1 exit status
+make[3]: *** [../lib.mk:138: ../kselftest_size/size/get_size] Error 1
+make[2]: *** [Makefile:143: all] Error 2
+make[1]: *** [/mnt/data/lkml/linux_5.4/Makefile:1221: kselftest-all] Error 2
+make[1]: Leaving directory '/mnt/data/lkml/kselftest_size'
+make: *** [Makefile:179: sub-make] Error 2
+
+Use abs_objtree exported by the main Makefile.
+
+Reported-by: Tim Bird <Tim.Bird@sony.com>
+Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
+Tested-by: Tim Bird <tim.bird@sony.com>
+Acked-by: Tim Bird <tim.bird@sony.com>
+Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- .../testing/selftests/bpf/progs/btf_dump_test_case_padding.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ tools/testing/selftests/Makefile | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/progs/btf_dump_test_case_padding.c b/tools/testing/selftests/bpf/progs/btf_dump_test_case_padding.c
-index 3a62119c74986..35c512818a56b 100644
---- a/tools/testing/selftests/bpf/progs/btf_dump_test_case_padding.c
-+++ b/tools/testing/selftests/bpf/progs/btf_dump_test_case_padding.c
-@@ -62,6 +62,10 @@ struct padded_a_lot {
-  *	long: 64;
-  *	long: 64;
-  *	int b;
-+ *	long: 32;
-+ *	long: 64;
-+ *	long: 64;
-+ *	long: 64;
-  *};
-  *
-  */
-@@ -95,7 +99,6 @@ struct zone_padding {
- struct zone {
- 	int a;
- 	short b;
--	short: 16;
- 	struct zone_padding __pad__;
- };
+diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
+index 4cdbae6f4e61b..3405aa26a655a 100644
+--- a/tools/testing/selftests/Makefile
++++ b/tools/testing/selftests/Makefile
+@@ -86,10 +86,10 @@ override LDFLAGS =
+ endif
  
+ ifneq ($(O),)
+-	BUILD := $(O)
++	BUILD := $(abs_objtree)
+ else
+ 	ifneq ($(KBUILD_OUTPUT),)
+-		BUILD := $(KBUILD_OUTPUT)/kselftest
++		BUILD := $(abs_objtree)/kselftest
+ 	else
+ 		BUILD := $(shell pwd)
+ 		DEFAULT_INSTALL_HDR_PATH := 1
+@@ -102,6 +102,7 @@ include $(top_srcdir)/scripts/subarch.include
+ ARCH           ?= $(SUBARCH)
+ export KSFT_KHDR_INSTALL_DONE := 1
+ export BUILD
++#$(info abd_objtree = $(abs_objtree) BUILD = $(BUILD))
+ 
+ # build and run gpio when output directory is the src dir.
+ # gpio has dependency on tools/gpio and builds tools/gpio
 -- 
 2.20.1
 
