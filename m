@@ -2,97 +2,126 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 896A0118647
-	for <lists+linux-kselftest@lfdr.de>; Tue, 10 Dec 2019 12:28:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A175D1186E7
+	for <lists+linux-kselftest@lfdr.de>; Tue, 10 Dec 2019 12:46:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727162AbfLJL2M (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 10 Dec 2019 06:28:12 -0500
-Received: from mout-p-201.mailbox.org ([80.241.56.171]:57272 "EHLO
-        mout-p-201.mailbox.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726915AbfLJL2M (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 10 Dec 2019 06:28:12 -0500
-Received: from smtp2.mailbox.org (smtp2.mailbox.org [80.241.60.241])
-        (using TLSv1.2 with cipher ECDHE-RSA-CHACHA20-POLY1305 (256/256 bits))
-        (No client certificate requested)
-        by mout-p-201.mailbox.org (Postfix) with ESMTPS id 47XHqY5VslzQl9M;
-        Tue, 10 Dec 2019 12:28:09 +0100 (CET)
-X-Virus-Scanned: amavisd-new at heinlein-support.de
-Received: from smtp2.mailbox.org ([80.241.60.241])
-        by spamfilter01.heinlein-hosting.de (spamfilter01.heinlein-hosting.de [80.241.56.115]) (amavisd-new, port 10030)
-        with ESMTP id ORbApr3hLJrD; Tue, 10 Dec 2019 12:28:05 +0100 (CET)
-Date:   Tue, 10 Dec 2019 22:27:50 +1100
-From:   Aleksa Sarai <cyphar@cyphar.com>
-To:     Colin King <colin.king@canonical.com>
-Cc:     Shuah Khan <shuah@kernel.org>, Al Viro <viro@zeniv.linux.org.uk>,
-        linux-kselftest@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH][next] selftests: fix spelling mistake "chainged" ->
- "chained"
-Message-ID: <20191210112750.5rfck3gnmobabhak@yavin.dot.cyphar.com>
-References: <20191210112455.171482-1-colin.king@canonical.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="l7rai3c6jadzkxag"
-Content-Disposition: inline
-In-Reply-To: <20191210112455.171482-1-colin.king@canonical.com>
+        id S1727326AbfLJLpP (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 10 Dec 2019 06:45:15 -0500
+Received: from foss.arm.com ([217.140.110.172]:41044 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727177AbfLJLpO (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 10 Dec 2019 06:45:14 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3A8BB1FB;
+        Tue, 10 Dec 2019 03:45:14 -0800 (PST)
+Received: from e120937-lin.cambridge.arm.com (e120937-lin.cambridge.arm.com [10.1.197.50])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8B5A93F6CF;
+        Tue, 10 Dec 2019 03:45:13 -0800 (PST)
+From:   Cristian Marussi <cristian.marussi@arm.com>
+To:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, shuah@kernel.org
+Subject: [PATCH v2] selftests: fix build behaviour on targets' failures
+Date:   Tue, 10 Dec 2019 11:44:59 +0000
+Message-Id: <20191210114459.11405-1-cristian.marussi@arm.com>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+Currently, when some of the KSFT subsystems fails to build, the toplevel
+KSFT Makefile just keeps carrying on with the build process.
 
---l7rai3c6jadzkxag
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+This behaviour is expected and desirable especially in the context of a CI
+system running KSelfTest, since it is not always easy to guarantee that the
+most recent and esoteric dependencies are respected across all KSFT TARGETS
+in a timely manner.
 
-On 2019-12-10, Colin King <colin.king@canonical.com> wrote:
-> There is a spelling mistake in a literal string, fix it.
+Unfortunately, as of now, this holds true only if the very last of the
+built subsystems could have been successfully compiled: if the last of
+those subsystem instead failed to build, such failure is taken as the whole
+outcome of the Makefile target and the complete build/install process halts
+even though many other preceding subsytems were in fact already built
+successfully.
 
-Yup, makes sense.
+Fix the KSFT Makefile behaviour related to all/install targets in order
+to fail as a whole only when the all/install targets have failed for all
+of the requested TARGETS, while succeeding when at least one of TARGETS
+has been successfully built.
 
-Reviewed-by: Aleksa Sarai <cyphar@cyphar.com>
+Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
+---
+This patch is based on ksft/fixes branch from:
 
-> Signed-off-by: Colin Ian King <colin.king@canonical.com>
-> ---
->  tools/testing/selftests/openat2/resolve_test.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->=20
-> diff --git a/tools/testing/selftests/openat2/resolve_test.c b/tools/testi=
-ng/selftests/openat2/resolve_test.c
-> index 7a94b1da8e7b..bbafad440893 100644
-> --- a/tools/testing/selftests/openat2/resolve_test.c
-> +++ b/tools/testing/selftests/openat2/resolve_test.c
-> @@ -230,7 +230,7 @@ void test_openat2_opath_tests(void)
->  		{ .name =3D "[in_root] garbage link to /root",
->  		  .path =3D "cheeky/garbageself",	.how.resolve =3D RESOLVE_IN_ROOT,
->  		  .out.path =3D "root",		.pass =3D true },
-> -		{ .name =3D "[in_root] chainged garbage links to /root",
-> +		{ .name =3D "[in_root] chained garbage links to /root",
->  		  .path =3D "abscheeky/garbageself", .how.resolve =3D RESOLVE_IN_ROOT,
->  		  .out.path =3D "root",		.pass =3D true },
->  		{ .name =3D "[in_root] relative path to 'root'",
-> --=20
-> 2.24.0
->=20
+git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git
 
+on top of commit (~5.5-rc1):
 
---=20
-Aleksa Sarai
-Senior Software Engineer (Containers)
-SUSE Linux GmbH
-<https://www.cyphar.com/>
+99e51aa8f701 Documentation: kunit: add documentation for kunit_tool
 
---l7rai3c6jadzkxag
-Content-Type: application/pgp-signature; name="signature.asc"
+Building with either:
 
------BEGIN PGP SIGNATURE-----
+make kselftest-install \
+	     KSFT_INSTALL_PATH=/tmp/KSFT \
+	     TARGETS="exec arm64 bpf"
 
-iHUEABYIAB0WIQSxZm6dtfE8gxLLfYqdlLljIbnQEgUCXe+BLwAKCRCdlLljIbnQ
-EubTAP9OptH6VWy5DMeb7HaGfXTnyuPkThnwOMh7lvkzgNvH4AEAtBUbCf5wSGnb
-yzCFDvF52CMUSP7Tzg5KEduILkkf+A4=
-=9MTh
------END PGP SIGNATURE-----
+make -C tools/testing/selftests  install \
+	     KSFT_INSTALL_PATH=/tmp/KSFT \
+	     TARGETS="exec arm64 bpf"
 
---l7rai3c6jadzkxag--
+(with 'bpf' not building clean on my setup in the above case)
+
+and veryfying that build/install completes if at least one of TARGETS can
+be successfully built, and any successfully built subsystem is installed.
+
+Changes:
+-------
+V1 --> V2
+- rebased on 5.5-rc1
+- rewording commit message
+- dropped RFC tag
+---
+ tools/testing/selftests/Makefile | 18 +++++++++++-------
+ 1 file changed, 11 insertions(+), 7 deletions(-)
+
+diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
+index b001c602414b..86b2a3fca04d 100644
+--- a/tools/testing/selftests/Makefile
++++ b/tools/testing/selftests/Makefile
+@@ -143,11 +143,13 @@ else
+ endif
+ 
+ all: khdr
+-	@for TARGET in $(TARGETS); do		\
+-		BUILD_TARGET=$$BUILD/$$TARGET;	\
+-		mkdir $$BUILD_TARGET  -p;	\
+-		$(MAKE) OUTPUT=$$BUILD_TARGET -C $$TARGET;\
+-	done;
++	@ret=1;							\
++	for TARGET in $(TARGETS); do				\
++		BUILD_TARGET=$$BUILD/$$TARGET;			\
++		mkdir $$BUILD_TARGET  -p;			\
++		$(MAKE) OUTPUT=$$BUILD_TARGET -C $$TARGET;	\
++		ret=$$((ret * $$?));				\
++	done; exit $$ret;
+ 
+ run_tests: all
+ 	@for TARGET in $(TARGETS); do \
+@@ -196,10 +198,12 @@ ifdef INSTALL_PATH
+ 	install -m 744 kselftest/module.sh $(INSTALL_PATH)/kselftest/
+ 	install -m 744 kselftest/runner.sh $(INSTALL_PATH)/kselftest/
+ 	install -m 744 kselftest/prefix.pl $(INSTALL_PATH)/kselftest/
+-	@for TARGET in $(TARGETS); do \
++	@ret=1;	\
++	for TARGET in $(TARGETS); do \
+ 		BUILD_TARGET=$$BUILD/$$TARGET;	\
+ 		$(MAKE) OUTPUT=$$BUILD_TARGET -C $$TARGET INSTALL_PATH=$(INSTALL_PATH)/$$TARGET install; \
+-	done;
++		ret=$$((ret * $$?));		\
++	done; exit $$ret;
+ 
+ 	@# Ask all targets to emit their test scripts
+ 	echo "#!/bin/sh" > $(ALL_SCRIPT)
+-- 
+2.17.1
+
