@@ -2,204 +2,182 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D6DC118A06
-	for <lists+linux-kselftest@lfdr.de>; Tue, 10 Dec 2019 14:39:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 84DD01190F9
+	for <lists+linux-kselftest@lfdr.de>; Tue, 10 Dec 2019 20:48:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727403AbfLJNjl (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 10 Dec 2019 08:39:41 -0500
-Received: from mx2.suse.de ([195.135.220.15]:40646 "EHLO mx1.suse.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727145AbfLJNjk (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 10 Dec 2019 08:39:40 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id 816B4B016;
-        Tue, 10 Dec 2019 13:39:35 +0000 (UTC)
-Received: by quack2.suse.cz (Postfix, from userid 1000)
-        id AF0221E0B23; Tue, 10 Dec 2019 14:39:32 +0100 (CET)
-Date:   Tue, 10 Dec 2019 14:39:32 +0100
-From:   Jan Kara <jack@suse.cz>
-To:     John Hubbard <jhubbard@nvidia.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn.topel@intel.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Dave Chinner <david@fromorbit.com>,
-        David Airlie <airlied@linux.ie>,
-        "David S . Miller" <davem@davemloft.net>,
-        Ira Weiny <ira.weiny@intel.com>, Jan Kara <jack@suse.cz>,
-        Jason Gunthorpe <jgg@ziepe.ca>, Jens Axboe <axboe@kernel.dk>,
-        Jonathan Corbet <corbet@lwn.net>,
-        =?iso-8859-1?B?Suly9G1l?= Glisse <jglisse@redhat.com>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Michal Hocko <mhocko@suse.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Paul Mackerras <paulus@samba.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Vlastimil Babka <vbabka@suse.cz>, bpf@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, kvm@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-rdma@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, netdev@vger.kernel.org,
-        linux-mm@kvack.org, LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v8 24/26] mm/gup: track FOLL_PIN pages
-Message-ID: <20191210133932.GH1551@quack2.suse.cz>
-References: <20191209225344.99740-1-jhubbard@nvidia.com>
- <20191209225344.99740-25-jhubbard@nvidia.com>
+        id S1726769AbfLJTsI (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 10 Dec 2019 14:48:08 -0500
+Received: from mail-pg1-f196.google.com ([209.85.215.196]:40282 "EHLO
+        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726898AbfLJTsH (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 10 Dec 2019 14:48:07 -0500
+Received: by mail-pg1-f196.google.com with SMTP id k25so9375396pgt.7
+        for <linux-kselftest@vger.kernel.org>; Tue, 10 Dec 2019 11:48:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=hs4+jt4b4qkjnd//rQ0dpgbF0ORXyEi5ROObXi8EfqY=;
+        b=mYnRzTb5+sTStYc7Niv1gGvH8acexDCSmAR+l0KIkpgvJvO+UcpjC7yGbeRlAanOLS
+         9X2B13LZgLNohEiDdd7+igZqn9TNKmhRIY1C0B7AS+VxR1Vxl4UJ6mdA3VB6atZDX4Jn
+         NTcWbvkzGlJ0wiIQr/Bqwlnvpx8AJV8BuVDKs=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=hs4+jt4b4qkjnd//rQ0dpgbF0ORXyEi5ROObXi8EfqY=;
+        b=uRdTs5WI/XfTD3zzWrGqeofo8F/v4MvQT+FUVZdI4htSDAytbMkQcB+2+id/2YCxPG
+         bcpC8jFvDkyWXTtfL0oT3taf+9lIn+Ihvx/grnkAwHhtiscseOk2yLtdFF2hpH7E92Ec
+         7lC1XhYdOSd/Iy81Muy4jBlDsSKVnQloq32Pp/l/sewO0XEo0C4ymRCrkPprql+PNYlK
+         Hs0ZdGTi/m1/RBMTJwH8ZhV7lAWsrx+0Ka2a5fVKJgQuVfRrJmaVHKrODTs5STl00OP4
+         1LA3VP4YWUlj8xwUAN+QHYnj5gYbJvK7jnWohNyyN2MH+GWmTguuSi5kIxA+emzgOFaV
+         RUqg==
+X-Gm-Message-State: APjAAAWwEadq9hDwPigL6G3mMQWCugirDuGP5xcM1VRSqYgtPlzj1f60
+        GGbwVb3FrUi4YDU0I8VMjkTrMA==
+X-Google-Smtp-Source: APXvYqz78cU7WRPjnasXetiMClBhXKzMKxaJBk2LajotEHBGPikWJe9GXvoW0ru9xwaigCtaqSZ13Q==
+X-Received: by 2002:a63:4e47:: with SMTP id o7mr26628998pgl.332.1576007286738;
+        Tue, 10 Dec 2019 11:48:06 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id l186sm4243001pge.31.2019.12.10.11.48.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 10 Dec 2019 11:48:05 -0800 (PST)
+Date:   Tue, 10 Dec 2019 11:48:04 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     Brendan Higgins <brendanhiggins@google.com>
+Cc:     shuah <shuah@kernel.org>,
+        John Johansen <john.johansen@canonical.com>, jmorris@namei.org,
+        serge@hallyn.com, Alan Maguire <alan.maguire@oracle.com>,
+        Iurii Zaikin <yzaikin@google.com>,
+        David Gow <davidgow@google.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Theodore Ts'o <tytso@mit.edu>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-security-module@vger.kernel.org,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Mike Salvatore <mike.salvatore@canonical.com>
+Subject: Re: [PATCH linux-kselftest/test v2] apparmor: add AppArmor KUnit
+ tests for policy unpack
+Message-ID: <201912101147.7BCF728@keescook>
+References: <20191106004329.16991-1-brendanhiggins@google.com>
+ <201911060916.AC9E14B@keescook>
+ <20191107233337.GA191231@google.com>
+ <CAFd5g462jFnbPxA2Nvc_3W064kZ8t5oHNE4M_3yt84+NuoiHGQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20191209225344.99740-25-jhubbard@nvidia.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <CAFd5g462jFnbPxA2Nvc_3W064kZ8t5oHNE4M_3yt84+NuoiHGQ@mail.gmail.com>
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon 09-12-19 14:53:42, John Hubbard wrote:
-> Add tracking of pages that were pinned via FOLL_PIN.
+On Mon, Nov 18, 2019 at 04:34:53PM -0800, Brendan Higgins wrote:
+> On Thu, Nov 7, 2019 at 3:33 PM Brendan Higgins
+> <brendanhiggins@google.com> wrote:
+> >
+> > On Wed, Nov 06, 2019 at 09:18:27AM -0800, Kees Cook wrote:
+> > > On Tue, Nov 05, 2019 at 04:43:29PM -0800, Brendan Higgins wrote:
+> > > > From: Mike Salvatore <mike.salvatore@canonical.com>
+> > > >
+> > > > Add KUnit tests to test AppArmor unpacking of userspace policies.
+> > > > AppArmor uses a serialized binary format for loading policies. To find
+> > > > policy format documentation see
+> > > > Documentation/admin-guide/LSM/apparmor.rst.
+> > > >
+> > > > In order to write the tests against the policy unpacking code, some
+> > > > static functions needed to be exposed for testing purposes. One of the
+> > > > goals of this patch is to establish a pattern for which testing these
+> > > > kinds of functions should be done in the future.
+> > > >
+> > > > Signed-off-by: Brendan Higgins <brendanhiggins@google.com>
+> > > > Signed-off-by: Mike Salvatore <mike.salvatore@canonical.com>
+> > > > ---
+> > > >  security/apparmor/Kconfig              |  16 +
+> > > >  security/apparmor/policy_unpack.c      |   4 +
+> > > >  security/apparmor/policy_unpack_test.c | 607 +++++++++++++++++++++++++
+> > > >  3 files changed, 627 insertions(+)
+> > > >  create mode 100644 security/apparmor/policy_unpack_test.c
+> > > >
+> > > > diff --git a/security/apparmor/Kconfig b/security/apparmor/Kconfig
+> > > > index d8b1a360a6368..78a33ccac2574 100644
+> > > > --- a/security/apparmor/Kconfig
+> > > > +++ b/security/apparmor/Kconfig
+> > > > @@ -66,3 +66,19 @@ config SECURITY_APPARMOR_DEBUG_MESSAGES
+> > > >       Set the default value of the apparmor.debug kernel parameter.
+> > > >       When enabled, various debug messages will be logged to
+> > > >       the kernel message buffer.
+> > > > +
+> > > > +config SECURITY_APPARMOR_KUNIT_TEST
+> > > > +   bool "Build KUnit tests for policy_unpack.c"
+> > > > +   depends on KUNIT && SECURITY_APPARMOR
+> > > > +   help
+> > > > +     This builds the AppArmor KUnit tests.
+> > > > +
+> > > > +     KUnit tests run during boot and output the results to the debug log
+> > > > +     in TAP format (http://testanything.org/). Only useful for kernel devs
+> > > > +     running KUnit test harness and are not for inclusion into a
+> > > > +     production build.
+> > > > +
+> > > > +     For more information on KUnit and unit tests in general please refer
+> > > > +     to the KUnit documentation in Documentation/dev-tools/kunit/.
+> > > > +
+> > > > +     If unsure, say N.
+> > > > diff --git a/security/apparmor/policy_unpack.c b/security/apparmor/policy_unpack.c
+> > > > index 8cfc9493eefc7..37c1dd3178fc0 100644
+> > > > --- a/security/apparmor/policy_unpack.c
+> > > > +++ b/security/apparmor/policy_unpack.c
+> > > > @@ -1120,3 +1120,7 @@ int aa_unpack(struct aa_loaddata *udata, struct list_head *lh,
+> > > >
+> > > >     return error;
+> > > >  }
+> > > > +
+> > > > +#ifdef CONFIG_SECURITY_APPARMOR_KUNIT_TEST
+> > > > +#include "policy_unpack_test.c"
+> > > > +#endif /* CONFIG_SECURITY_APPARMOR_KUNIT_TEST */
+> > >
+> > > To make this even LESS intrusive, the ifdefs could live in ..._test.c.
+> >
+> > Less intrusive, yes, but I think I actually like the ifdef here; it
+> > makes it clear from the source that the test is only a part of the build
+> > when configured to do so. Nevertheless, I will change it if anyone feels
+> > strongly about it.
+> >
+> > > Also, while I *think* the kernel build system will correctly track this
+> > > dependency, can you double-check that changes to ..._test.c correctly
+> > > trigger a recompile of policy_unpack.c?
+> >
+> > Yep, just verified, first I ran the tests and everything passed. Then I
+> > applied the following diff:
+> >
+> > diff --git a/security/apparmor/policy_unpack_test.c b/security/apparmor/policy_unpack_test.c
+> > index 533137f45361c..e1b0670dbdc27 100644
+> > --- a/security/apparmor/policy_unpack_test.c
+> > +++ b/security/apparmor/policy_unpack_test.c
+> > @@ -161,7 +161,7 @@ static void policy_unpack_test_unpack_array_with_name(struct kunit *test)
+> >
+> >         array_size = unpack_array(puf->e, name);
+> >
+> > -       KUNIT_EXPECT_EQ(test, array_size, (u16)TEST_ARRAY_SIZE);
+> > +       KUNIT_EXPECT_EQ(test, array_size + 1, (u16)TEST_ARRAY_SIZE);
+> >         KUNIT_EXPECT_PTR_EQ(test, puf->e->pos,
+> >                 puf->e->start + TEST_ARRAY_BUF_OFFSET + sizeof(u16) + 1);
+> >  }
+> >
+> > and reran the tests (to trigger an incremental build) and the test
+> > failed as expected indicating that the dependency is properly tracked.
 > 
-> As mentioned in the FOLL_PIN documentation, callers who effectively set
-> FOLL_PIN are required to ultimately free such pages via unpin_user_page().
-> The effect is similar to FOLL_GET, and may be thought of as "FOLL_GET
-> for DIO and/or RDMA use".
+> Hey Kees,
 > 
-> Pages that have been pinned via FOLL_PIN are identifiable via a
-> new function call:
-> 
->    bool page_dma_pinned(struct page *page);
-> 
-> What to do in response to encountering such a page, is left to later
-> patchsets. There is discussion about this in [1], [2], and [3].
-> 
-> This also changes a BUG_ON(), to a WARN_ON(), in follow_page_mask().
-> 
-> [1] Some slow progress on get_user_pages() (Apr 2, 2019):
->     https://lwn.net/Articles/784574/
-> [2] DMA and get_user_pages() (LPC: Dec 12, 2018):
->     https://lwn.net/Articles/774411/
-> [3] The trouble with get_user_pages() (Apr 30, 2018):
->     https://lwn.net/Articles/753027/
-> 
-> Suggested-by: Jan Kara <jack@suse.cz>
-> Suggested-by: Jérôme Glisse <jglisse@redhat.com>
-> Signed-off-by: John Hubbard <jhubbard@nvidia.com>
+> Since it looks like you already took a pretty close look at this,
+> would you mind giving me a review?
 
-Looks nice, some comments below...
+Yes! Thanks for checking on those items. :)
 
-> +/*
-> + * try_grab_compound_head() - attempt to elevate a page's refcount, by a
-> + * flags-dependent amount.
-> + *
-> + * This has a default assumption of "use FOLL_GET behavior, if FOLL_PIN is not
-> + * set".
-> + *
-> + * "grab" names in this file mean, "look at flags to decide with to use FOLL_PIN
-> + * or FOLL_GET behavior, when incrementing the page's refcount.
-> + */
-> +static struct page *try_grab_compound_head(struct page *page, int refs,
-> +					   unsigned int flags)
-> +{
-> +	if (flags & FOLL_PIN)
-> +		return try_pin_compound_head(page, refs);
-> +
-> +	return try_get_compound_head(page, refs);
-> +}
-> +
-> +/**
-> + * grab_page() - elevate a page's refcount by a flag-dependent amount
-> + *
-> + * This might not do anything at all, depending on the flags argument.
-> + *
-> + * "grab" names in this file mean, "look at flags to decide with to use FOLL_PIN
-                                                               ^^^ whether
+Reviewed-by: Kees Cook <keescook@chromium.org>
 
-> + * or FOLL_GET behavior, when incrementing the page's refcount.
-> + *
-> + * @page:	pointer to page to be grabbed
-> + * @flags:	gup flags: these are the FOLL_* flag values.
-> + *
-> + * Either FOLL_PIN or FOLL_GET (or neither) may be set, but not both at the same
-> + * time. (That's true throughout the get_user_pages*() and pin_user_pages*()
-> + * APIs.) Cases:
-> + *
-> + *	FOLL_GET: page's refcount will be incremented by 1.
-> + *	FOLL_PIN: page's refcount will be incremented by GUP_PIN_COUNTING_BIAS.
-> + */
-> +void grab_page(struct page *page, unsigned int flags)
-> +{
-> +	if (flags & FOLL_GET)
-> +		get_page(page);
-> +	else if (flags & FOLL_PIN) {
-> +		get_page(page);
-> +		WARN_ON_ONCE(flags & FOLL_GET);
-> +		/*
-> +		 * Use get_page(), above, to do the refcount error
-> +		 * checking. Then just add in the remaining references:
-> +		 */
-> +		page_ref_add(page, GUP_PIN_COUNTING_BIAS - 1);
 
-This is wrong for two reasons:
-
-1) You miss compound_head() indirection from get_page() for this
-page_ref_add().
-
-2) page_ref_add() could overflow the counter without noticing.
-
-Especially with GUP_PIN_COUNTING_BIAS being non-trivial, it is realistic
-that an attacker might try to overflow the page refcount and we have to
-protect the kernel against that. So I think that all the places that would
-use grab_page() actually need to use try_grab_page() and then gracefully
-deal with the failure.
-
-> @@ -278,11 +425,23 @@ static struct page *follow_page_pte(struct vm_area_struct *vma,
->  		goto retry;
->  	}
->  
-> -	if (flags & FOLL_GET) {
-> +	if (flags & (FOLL_PIN | FOLL_GET)) {
-> +		/*
-> +		 * Allow try_get_page() to take care of error handling, for
-> +		 * both cases: FOLL_GET or FOLL_PIN:
-> +		 */
->  		if (unlikely(!try_get_page(page))) {
->  			page = ERR_PTR(-ENOMEM);
->  			goto out;
->  		}
-> +
-> +		if (flags & FOLL_PIN) {
-> +			WARN_ON_ONCE(flags & FOLL_GET);
-> +
-> +			/* We got a +1 refcount from try_get_page(), above. */
-> +			page_ref_add(page, GUP_PIN_COUNTING_BIAS - 1);
-> +			__update_proc_vmstat(page, NR_FOLL_PIN_REQUESTED, 1);
-> +		}
->  	}
-
-The same problem here as above, plus this place should use the same
-try_grab..() helper, shouldn't it?
-
-> @@ -544,8 +703,8 @@ static struct page *follow_page_mask(struct vm_area_struct *vma,
->  	/* make this handle hugepd */
->  	page = follow_huge_addr(mm, address, flags & FOLL_WRITE);
->  	if (!IS_ERR(page)) {
-> -		BUG_ON(flags & FOLL_GET);
-> -		return page;
-> +		WARN_ON_ONCE(flags & (FOLL_GET | FOLL_PIN));
-> +		return NULL;
-
-I agree with the change to WARN_ON_ONCE but why is correct the change of
-the return value? Note that this is actually a "success branch".
-
-								Honza
 -- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+Kees Cook
