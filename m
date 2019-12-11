@@ -2,105 +2,136 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6638811BA8E
-	for <lists+linux-kselftest@lfdr.de>; Wed, 11 Dec 2019 18:45:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A74FE11BEB0
+	for <lists+linux-kselftest@lfdr.de>; Wed, 11 Dec 2019 21:57:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730474AbfLKRpT (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 11 Dec 2019 12:45:19 -0500
-Received: from mail-pf1-f196.google.com ([209.85.210.196]:41351 "EHLO
-        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730456AbfLKRpS (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 11 Dec 2019 12:45:18 -0500
-Received: by mail-pf1-f196.google.com with SMTP id s18so2146270pfd.8
-        for <linux-kselftest@vger.kernel.org>; Wed, 11 Dec 2019 09:45:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=f0OGrv7lx+Zl9WZjIpgsG/9JjtlvMsK6Onor4QOzhiU=;
-        b=dSFm1czu+pm7SIs0bP6i1otiKyGyBdfhEZRT7//ic7M+oipYjchAdycG1x8Z9Lu4V+
-         CQIuES31Slfjt0oRLUO+N4wfsvQmw7z6HF0Q6B/x/jGGum093H02AtsWXp/SWE1/SZ3m
-         SOGhNmVT/p2ON2mW07FTcZt7wgkCkY2I5OW0mJHzLGmQc1yHrKBZRcMylRkRYmdHQdJp
-         ML2ECNENZdF+ZFsQaQbzGxQoMHmGMQ8O/hu7wQnu/HPzT5TQ5oK7OM/hBGBTeOyWdNxj
-         vrEkCrGLZq1wTc3b8hEXEHk5ry9DTB04uS/3b8511yyi647gaQ2rSBsvLjObpWfyL2vw
-         w+0Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=f0OGrv7lx+Zl9WZjIpgsG/9JjtlvMsK6Onor4QOzhiU=;
-        b=Pn4N0B3kJKU0OjiocaS+RWRKGmYbbjG+oPPP8RZ8LtNFx5Dp5BGXMVhZoYPysdpT2f
-         8ego3XnoS7H8rdjqQYsv1sYFW4ty6g0TrdD1FZfQ0TIzxo6i0QaczD0Kq5/GM642vxVt
-         sqKKSuz63NhohcUXRn2dtOcR7f15QlrAyVGVh6hzTqSMqwKR5m4/yTxXdJ/p8yvKABlZ
-         F9ZgzWH97nIhLhcCrDo4g9Vxci3/ra4CyIkdyJj9CPGpHIWHkeiPiyFwjR7n/zI26W21
-         1L3uwTcth+Hyhu+cy6V3l9HxK26p9YFZJFBaylGiMKOY7xkK597QpYtKAlmPT4IRPp28
-         A0ag==
-X-Gm-Message-State: APjAAAWGCojsv53MCrt8Rvm8oPd1JUnu2+NlKUMxLJtsKMtwZMYO5EBV
-        8JGfOUY8ysSO1YdPQwnw9jhba/vLBd72lOyckb8l5g==
-X-Google-Smtp-Source: APXvYqz7XjlAgHjobYmSc6XZ3IV9j5m9Gn/I2mq5n5sH6vxlj2+haEA9q7qO4eY1S7TizEeFPgB0uvoPBvBL9nZ6eVo=
-X-Received: by 2002:aa7:961b:: with SMTP id q27mr5064829pfg.23.1576086317561;
- Wed, 11 Dec 2019 09:45:17 -0800 (PST)
+        id S1726901AbfLKU5m (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 11 Dec 2019 15:57:42 -0500
+Received: from ms.lwn.net ([45.79.88.28]:58190 "EHLO ms.lwn.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726141AbfLKU5l (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 11 Dec 2019 15:57:41 -0500
+Received: from lwn.net (localhost [127.0.0.1])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ms.lwn.net (Postfix) with ESMTPSA id 7D799739;
+        Wed, 11 Dec 2019 20:57:38 +0000 (UTC)
+Date:   Wed, 11 Dec 2019 13:57:37 -0700
+From:   Jonathan Corbet <corbet@lwn.net>
+To:     John Hubbard <jhubbard@nvidia.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        =?UTF-8?B?QmrDtnJuIFQ=?= =?UTF-8?B?w7ZwZWw=?= 
+        <bjorn.topel@intel.com>, Christoph Hellwig <hch@infradead.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Dave Chinner <david@fromorbit.com>,
+        David Airlie <airlied@linux.ie>,
+        "David S . Miller" <davem@davemloft.net>,
+        Ira Weiny <ira.weiny@intel.com>, Jan Kara <jack@suse.cz>,
+        Jason Gunthorpe <jgg@ziepe.ca>, Jens Axboe <axboe@kernel.dk>,
+        =?UTF-8?B?SsOpcsO0bWU=?= Glisse <jglisse@redhat.com>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Michal Hocko <mhocko@suse.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Paul Mackerras <paulus@samba.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Vlastimil Babka <vbabka@suse.cz>, <bpf@vger.kernel.org>,
+        <dri-devel@lists.freedesktop.org>, <kvm@vger.kernel.org>,
+        <linux-block@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+        <linux-fsdevel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+        <linux-media@vger.kernel.org>, <linux-rdma@vger.kernel.org>,
+        <linuxppc-dev@lists.ozlabs.org>, <netdev@vger.kernel.org>,
+        <linux-mm@kvack.org>, LKML <linux-kernel@vger.kernel.org>,
+        Mike Rapoport <rppt@linux.ibm.com>
+Subject: Re: [PATCH v9 10/25] mm/gup: introduce pin_user_pages*() and
+ FOLL_PIN
+Message-ID: <20191211135737.581add2f@lwn.net>
+In-Reply-To: <20191211025318.457113-11-jhubbard@nvidia.com>
+References: <20191211025318.457113-1-jhubbard@nvidia.com>
+        <20191211025318.457113-11-jhubbard@nvidia.com>
+Organization: LWN.net
 MIME-Version: 1.0
-References: <20191211163310.4788-1-sj38.park@gmail.com> <3dab421e-6aa5-90e4-791e-53482f5c1fe8@kernel.org>
- <CAEjAshqjjVgtf_JxNvi3WOvkrjOp_-YjK=rY7GE0Mt40Y1EMqQ@mail.gmail.com>
-In-Reply-To: <CAEjAshqjjVgtf_JxNvi3WOvkrjOp_-YjK=rY7GE0Mt40Y1EMqQ@mail.gmail.com>
-From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Wed, 11 Dec 2019 09:45:07 -0800
-Message-ID: <CAFd5g4649_C0tSy3W-KzN05Y8K5zZtGUGVYFA9iAKvaXsPentw@mail.gmail.com>
-Subject: Re: [PATCH v5 0/6] Fix nits in the kunit
-To:     SeongJae Park <sj38.park@gmail.com>
-Cc:     shuah <shuah@kernel.org>, SeongJae Park <sjpark@amazon.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        linux-doc <linux-doc@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>, SeongJae Park <sjpark@amazon.de>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Dec 11, 2019 at 9:40 AM SeongJae Park <sj38.park@gmail.com> wrote:
->
-> On Wed, Dec 11, 2019 at 6:22 PM shuah <shuah@kernel.org> wrote:
-> >
-> > On 12/11/19 9:33 AM, SeongJae Park wrote:
-> > > May I ask some comments?
-> > >
-> > >
-> > > Thanks,
-> > > SeongJae Park
-> > >
-> >
-> > + Brendan
-> >
-> > > On Thu, 5 Dec 2019 10:34:34 +0100 SeongJae Park <sjpark@amazon.com> wrote:
-> > >
-> > >>
-> > >> This patchset contains trivial fixes for the kunit documentations and
-> > >> the wrapper python scripts.
-> > >>
-> > >> This patchset is based on 'kselftest/test' branch of linux-kselftest[1]
-> > >> and depends on Heidi's patch[2].  A complete tree is available at my repo:
-> > >> https://github.com/sjp38/linux/tree/kunit_fix/20191205_v5
-> > >>
-> > >> Changes from v4
-> > >> (https://lore.kernel.org/linux-doc/1575490683-13015-1-git-send-email-sj38.park@gmail.com/):
-> > >>   - Rebased on Heidi Fahim's patch[2]
-> > >>   - Fix failing kunit_tool_test test
-> > >>   - Add 'build_dir' option test in 'kunit_tool_test.py'
-> > >>
-> >
-> > Please include Brendana Higgins on kunit patches.
->
-> Not sure how I could forgot adding him.  I will never forget from next time.
+On Tue, 10 Dec 2019 18:53:03 -0800
+John Hubbard <jhubbard@nvidia.com> wrote:
 
-No worries. I still got the email from the list :-)
+> Introduce pin_user_pages*() variations of get_user_pages*() calls,
+> and also pin_longterm_pages*() variations.
 
-I think I reviewed all the patches in this series; I just need to test
-them. I will try to have that done later today or tomorrow.
+Just a couple of nits on the documentation patch
 
-Cheers!
+> +++ b/Documentation/core-api/pin_user_pages.rst
+> @@ -0,0 +1,232 @@
+> +.. SPDX-License-Identifier: GPL-2.0
+> +
+> +====================================================
+> +pin_user_pages() and related calls
+> +====================================================
+> +
+> +.. contents:: :local:
+> +
+> +Overview
+> +========
+> +
+> +This document describes the following functions: ::
+> +
+> + pin_user_pages
+> + pin_user_pages_fast
+> + pin_user_pages_remote
+
+You could just say "the following functions::" and get the result you're
+after with a slightly less alien plain-text reading experience.
+
+Of course, you could also just say "This document describes
+pin_user_pages(), pin_user_pages_fast(), and pin_user_pages_remote()." But
+that's a matter of personal taste, I guess.  Using the function() notation
+will cause the docs system to automatically link to the kerneldoc info,
+though.  
+
+> +Basic description of FOLL_PIN
+> +=============================
+> +
+> +FOLL_PIN and FOLL_LONGTERM are flags that can be passed to the get_user_pages*()
+> +("gup") family of functions. FOLL_PIN has significant interactions and
+> +interdependencies with FOLL_LONGTERM, so both are covered here.
+> +
+> +FOLL_PIN is internal to gup, meaning that it should not appear at the gup call
+> +sites. This allows the associated wrapper functions  (pin_user_pages*() and
+> +others) to set the correct combination of these flags, and to check for problems
+> +as well.
+> +
+> +FOLL_LONGTERM, on the other hand, *is* allowed to be set at the gup call sites.
+> +This is in order to avoid creating a large number of wrapper functions to cover
+> +all combinations of get*(), pin*(), FOLL_LONGTERM, and more. Also, the
+> +pin_user_pages*() APIs are clearly distinct from the get_user_pages*() APIs, so
+> +that's a natural dividing line, and a good point to make separate wrapper calls.
+> +In other words, use pin_user_pages*() for DMA-pinned pages, and
+> +get_user_pages*() for other cases. There are four cases described later on in
+> +this document, to further clarify that concept.
+> +
+> +FOLL_PIN and FOLL_GET are mutually exclusive for a given gup call. However,
+> +multiple threads and call sites are free to pin the same struct pages, via both
+> +FOLL_PIN and FOLL_GET. It's just the call site that needs to choose one or the
+> +other, not the struct page(s).
+> +
+> +The FOLL_PIN implementation is nearly the same as FOLL_GET, except that FOLL_PIN
+> +uses a different reference counting technique.
+> +
+> +FOLL_PIN is a prerequisite to FOLL_LONGTGERM. Another way of saying that is,
+
+FOLL_LONGTERM typoed there.
+
+Thanks,
+
+jon
