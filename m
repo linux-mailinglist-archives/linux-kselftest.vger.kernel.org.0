@@ -2,55 +2,55 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 131E411BA81
-	for <lists+linux-kselftest@lfdr.de>; Wed, 11 Dec 2019 18:40:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6638811BA8E
+	for <lists+linux-kselftest@lfdr.de>; Wed, 11 Dec 2019 18:45:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730112AbfLKRke (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 11 Dec 2019 12:40:34 -0500
-Received: from mail-lj1-f194.google.com ([209.85.208.194]:35823 "EHLO
-        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729512AbfLKRke (ORCPT
+        id S1730474AbfLKRpT (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 11 Dec 2019 12:45:19 -0500
+Received: from mail-pf1-f196.google.com ([209.85.210.196]:41351 "EHLO
+        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730456AbfLKRpS (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 11 Dec 2019 12:40:34 -0500
-Received: by mail-lj1-f194.google.com with SMTP id j6so25053238lja.2;
-        Wed, 11 Dec 2019 09:40:32 -0800 (PST)
+        Wed, 11 Dec 2019 12:45:18 -0500
+Received: by mail-pf1-f196.google.com with SMTP id s18so2146270pfd.8
+        for <linux-kselftest@vger.kernel.org>; Wed, 11 Dec 2019 09:45:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
+        d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=xHNe/Yqfgpy3S9fO7I4bSqFvrI1vIc8c/PjlGfBZDQY=;
-        b=THkd5/sMvoWbf9UyKW0AbrpgZ9BE2d8hfLaEQB+I14Diub31RDnCRsU20R7KCaXjpN
-         UAOjbsbXLS5vCddmaHoUJXrN2NXPFIOsu7sBYiXc5Ib3PcPxoq+eQ5IPSKL+zvygoQte
-         mWKTxvhHznQClUeeCFwH7xslKJFHyMsjgun4OTRAbOwJzBOG/9KpZDARYsCr1UvAJup4
-         QleZw4JLBqlyj0GQjnavq3BU5r+sY0l20p8NurV+r0kAiJ54MxkOxKf11viGT4N96R3n
-         18BPyJ0wxWuoIi23dXYXExCYxqSRVoIbhxVxLM+9N3vUfNTiF0fFpGygn6qeJUHbvf79
-         EzEw==
+        bh=f0OGrv7lx+Zl9WZjIpgsG/9JjtlvMsK6Onor4QOzhiU=;
+        b=dSFm1czu+pm7SIs0bP6i1otiKyGyBdfhEZRT7//ic7M+oipYjchAdycG1x8Z9Lu4V+
+         CQIuES31Slfjt0oRLUO+N4wfsvQmw7z6HF0Q6B/x/jGGum093H02AtsWXp/SWE1/SZ3m
+         SOGhNmVT/p2ON2mW07FTcZt7wgkCkY2I5OW0mJHzLGmQc1yHrKBZRcMylRkRYmdHQdJp
+         ML2ECNENZdF+ZFsQaQbzGxQoMHmGMQ8O/hu7wQnu/HPzT5TQ5oK7OM/hBGBTeOyWdNxj
+         vrEkCrGLZq1wTc3b8hEXEHk5ry9DTB04uS/3b8511yyi647gaQ2rSBsvLjObpWfyL2vw
+         w+0Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=xHNe/Yqfgpy3S9fO7I4bSqFvrI1vIc8c/PjlGfBZDQY=;
-        b=MKRPwwt0Z6FaWdhealTGgLGpbWKnOQ8ZgtYtIOVrfC2H+IuY+pnmeSE/kCvGDNxuFe
-         oisbiWQW6t8CIdaCXvUktZfdQH/yf9tOE0LYeWBYYkAEuHJKHt1woozebXTj2vhg1WcG
-         MIqDudR6+qcQyBulX9lCwOP33oMBC+/0oBH9yDZBW7XnIh/7U6izx8imzOb7THkOh2VP
-         6Sr4HinJxUlaTmbMhGqVSGBQ2sQG0Nj5EyAXAvnFcyrsIujTLKyeLH9YJ+o8+PIgyoPe
-         XElbEZzeR4zEyavxNtvQMv+i0YPBuv5orlAZIlgIzhYYg0x7sDOv2eN2rlOf8wktb0X3
-         aKyg==
-X-Gm-Message-State: APjAAAXREzyCDw+POTaRZslkZAT5kjIFzehXUe9JgSuNC6MGQwEZ8lBg
-        iRe8Z6nCqGiNf3XB1XYH6dzLlDcWfOff5LQekfNHsp3u
-X-Google-Smtp-Source: APXvYqwXYcdWREeEGLWMl6g/WmqXcAKn/eRGAxh1th5CLy4FEjntZLJeZTgM4oiKx6bx8e6DUwt8aWT9Opg0rNNrWZk=
-X-Received: by 2002:a05:651c:152:: with SMTP id c18mr2972027ljd.146.1576086031635;
- Wed, 11 Dec 2019 09:40:31 -0800 (PST)
+        bh=f0OGrv7lx+Zl9WZjIpgsG/9JjtlvMsK6Onor4QOzhiU=;
+        b=Pn4N0B3kJKU0OjiocaS+RWRKGmYbbjG+oPPP8RZ8LtNFx5Dp5BGXMVhZoYPysdpT2f
+         8ego3XnoS7H8rdjqQYsv1sYFW4ty6g0TrdD1FZfQ0TIzxo6i0QaczD0Kq5/GM642vxVt
+         sqKKSuz63NhohcUXRn2dtOcR7f15QlrAyVGVh6hzTqSMqwKR5m4/yTxXdJ/p8yvKABlZ
+         F9ZgzWH97nIhLhcCrDo4g9Vxci3/ra4CyIkdyJj9CPGpHIWHkeiPiyFwjR7n/zI26W21
+         1L3uwTcth+Hyhu+cy6V3l9HxK26p9YFZJFBaylGiMKOY7xkK597QpYtKAlmPT4IRPp28
+         A0ag==
+X-Gm-Message-State: APjAAAWGCojsv53MCrt8Rvm8oPd1JUnu2+NlKUMxLJtsKMtwZMYO5EBV
+        8JGfOUY8ysSO1YdPQwnw9jhba/vLBd72lOyckb8l5g==
+X-Google-Smtp-Source: APXvYqz7XjlAgHjobYmSc6XZ3IV9j5m9Gn/I2mq5n5sH6vxlj2+haEA9q7qO4eY1S7TizEeFPgB0uvoPBvBL9nZ6eVo=
+X-Received: by 2002:aa7:961b:: with SMTP id q27mr5064829pfg.23.1576086317561;
+ Wed, 11 Dec 2019 09:45:17 -0800 (PST)
 MIME-Version: 1.0
 References: <20191211163310.4788-1-sj38.park@gmail.com> <3dab421e-6aa5-90e4-791e-53482f5c1fe8@kernel.org>
-In-Reply-To: <3dab421e-6aa5-90e4-791e-53482f5c1fe8@kernel.org>
-From:   SeongJae Park <sj38.park@gmail.com>
-Date:   Wed, 11 Dec 2019 18:40:05 +0100
-Message-ID: <CAEjAshqjjVgtf_JxNvi3WOvkrjOp_-YjK=rY7GE0Mt40Y1EMqQ@mail.gmail.com>
+ <CAEjAshqjjVgtf_JxNvi3WOvkrjOp_-YjK=rY7GE0Mt40Y1EMqQ@mail.gmail.com>
+In-Reply-To: <CAEjAshqjjVgtf_JxNvi3WOvkrjOp_-YjK=rY7GE0Mt40Y1EMqQ@mail.gmail.com>
+From:   Brendan Higgins <brendanhiggins@google.com>
+Date:   Wed, 11 Dec 2019 09:45:07 -0800
+Message-ID: <CAFd5g4649_C0tSy3W-KzN05Y8K5zZtGUGVYFA9iAKvaXsPentw@mail.gmail.com>
 Subject: Re: [PATCH v5 0/6] Fix nits in the kunit
-To:     shuah <shuah@kernel.org>
-Cc:     SeongJae Park <sjpark@amazon.com>,
-        Brendan Higgins <brendanhiggins@google.com>,
+To:     SeongJae Park <sj38.park@gmail.com>
+Cc:     shuah <shuah@kernel.org>, SeongJae Park <sjpark@amazon.com>,
         Jonathan Corbet <corbet@lwn.net>,
         KUnit Development <kunit-dev@googlegroups.com>,
         linux-doc <linux-doc@vger.kernel.org>,
@@ -63,43 +63,44 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Dec 11, 2019 at 6:22 PM shuah <shuah@kernel.org> wrote:
+On Wed, Dec 11, 2019 at 9:40 AM SeongJae Park <sj38.park@gmail.com> wrote:
 >
-> On 12/11/19 9:33 AM, SeongJae Park wrote:
-> > May I ask some comments?
+> On Wed, Dec 11, 2019 at 6:22 PM shuah <shuah@kernel.org> wrote:
 > >
+> > On 12/11/19 9:33 AM, SeongJae Park wrote:
+> > > May I ask some comments?
+> > >
+> > >
+> > > Thanks,
+> > > SeongJae Park
+> > >
 > >
-> > Thanks,
-> > SeongJae Park
+> > + Brendan
 > >
->
-> + Brendan
->
-> > On Thu, 5 Dec 2019 10:34:34 +0100 SeongJae Park <sjpark@amazon.com> wrote:
+> > > On Thu, 5 Dec 2019 10:34:34 +0100 SeongJae Park <sjpark@amazon.com> wrote:
+> > >
+> > >>
+> > >> This patchset contains trivial fixes for the kunit documentations and
+> > >> the wrapper python scripts.
+> > >>
+> > >> This patchset is based on 'kselftest/test' branch of linux-kselftest[1]
+> > >> and depends on Heidi's patch[2].  A complete tree is available at my repo:
+> > >> https://github.com/sjp38/linux/tree/kunit_fix/20191205_v5
+> > >>
+> > >> Changes from v4
+> > >> (https://lore.kernel.org/linux-doc/1575490683-13015-1-git-send-email-sj38.park@gmail.com/):
+> > >>   - Rebased on Heidi Fahim's patch[2]
+> > >>   - Fix failing kunit_tool_test test
+> > >>   - Add 'build_dir' option test in 'kunit_tool_test.py'
+> > >>
 > >
-> >>
-> >> This patchset contains trivial fixes for the kunit documentations and
-> >> the wrapper python scripts.
-> >>
-> >> This patchset is based on 'kselftest/test' branch of linux-kselftest[1]
-> >> and depends on Heidi's patch[2].  A complete tree is available at my repo:
-> >> https://github.com/sjp38/linux/tree/kunit_fix/20191205_v5
-> >>
-> >> Changes from v4
-> >> (https://lore.kernel.org/linux-doc/1575490683-13015-1-git-send-email-sj38.park@gmail.com/):
-> >>   - Rebased on Heidi Fahim's patch[2]
-> >>   - Fix failing kunit_tool_test test
-> >>   - Add 'build_dir' option test in 'kunit_tool_test.py'
-> >>
+> > Please include Brendana Higgins on kunit patches.
 >
-> Please include Brendana Higgins on kunit patches.
+> Not sure how I could forgot adding him.  I will never forget from next time.
 
-Not sure how I could forgot adding him.  I will never forget from next time.
+No worries. I still got the email from the list :-)
 
+I think I reviewed all the patches in this series; I just need to test
+them. I will try to have that done later today or tomorrow.
 
-Thanks,
-SeongJae Park
-
->
-> thanks,
-> -- Shuah
+Cheers!
