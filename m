@@ -2,215 +2,479 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E09B11A9DF
-	for <lists+linux-kselftest@lfdr.de>; Wed, 11 Dec 2019 12:28:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5017A11AA69
+	for <lists+linux-kselftest@lfdr.de>; Wed, 11 Dec 2019 13:00:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728912AbfLKL2P (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 11 Dec 2019 06:28:15 -0500
-Received: from mx2.suse.de ([195.135.220.15]:60980 "EHLO mx1.suse.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727469AbfLKL2O (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 11 Dec 2019 06:28:14 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id 4E902AD0E;
-        Wed, 11 Dec 2019 11:28:10 +0000 (UTC)
-Received: by quack2.suse.cz (Postfix, from userid 1000)
-        id 63C461E0B23; Wed, 11 Dec 2019 12:28:07 +0100 (CET)
-Date:   Wed, 11 Dec 2019 12:28:07 +0100
-From:   Jan Kara <jack@suse.cz>
-To:     John Hubbard <jhubbard@nvidia.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn.topel@intel.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Dave Chinner <david@fromorbit.com>,
-        David Airlie <airlied@linux.ie>,
-        "David S . Miller" <davem@davemloft.net>,
-        Ira Weiny <ira.weiny@intel.com>, Jan Kara <jack@suse.cz>,
-        Jason Gunthorpe <jgg@ziepe.ca>, Jens Axboe <axboe@kernel.dk>,
-        Jonathan Corbet <corbet@lwn.net>,
-        =?iso-8859-1?B?Suly9G1l?= Glisse <jglisse@redhat.com>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Michal Hocko <mhocko@suse.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Paul Mackerras <paulus@samba.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Vlastimil Babka <vbabka@suse.cz>, bpf@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, kvm@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-rdma@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, netdev@vger.kernel.org,
-        linux-mm@kvack.org, LKML <linux-kernel@vger.kernel.org>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
-Subject: Re: [PATCH v9 23/25] mm/gup: track FOLL_PIN pages
-Message-ID: <20191211112807.GN1551@quack2.suse.cz>
-References: <20191211025318.457113-1-jhubbard@nvidia.com>
- <20191211025318.457113-24-jhubbard@nvidia.com>
+        id S1727888AbfLKMAk (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 11 Dec 2019 07:00:40 -0500
+Received: from mail-wm1-f68.google.com ([209.85.128.68]:39534 "EHLO
+        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727851AbfLKMAk (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 11 Dec 2019 07:00:40 -0500
+Received: by mail-wm1-f68.google.com with SMTP id d5so5136904wmb.4
+        for <linux-kselftest@vger.kernel.org>; Wed, 11 Dec 2019 04:00:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:date:to:message-id:subject:mime-version;
+        bh=hKmaOompIc4aEps1aPTYEJLyxbDzWWdkd5ayUEZ9IeE=;
+        b=C0MCQmDZZoiL/P84RwfUKtT5ElJQwPxun8wi5rs6Hk0u8nEOGxUuWVyiTimffXkhhD
+         cSEU5+QX2ksnvuPu3ktUlqJoLVL8/mOU23kGO/RRztg4DcYQAY0GjxQXIb72g8KYyFjx
+         h84DPxpnlJ8cuhAKi8oWiCRDJhqbI9MPQKCO8S0bqYRb5x//SCYRSbDOQH+JJG69Dodh
+         VNVvei0UEmdHQehXAm1OiKtJ4YniTLwHkpjki6+9UxTZYZNvOo5l8Aq4Br56mTAaFpqe
+         E2euCoqzO9Pg1TlK84uySwIrr3YoStxVWVqrNcFWX7G6NQx7NVI7lZzsfyoQbzM9g8Bj
+         8cDQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:date:to:message-id:subject:mime-version;
+        bh=hKmaOompIc4aEps1aPTYEJLyxbDzWWdkd5ayUEZ9IeE=;
+        b=hd4TGq7soLT+B/u6efCsrWrjX5VghnGI3LsS2D45zYcTgpfSbb41jar4XU8gVEPjKB
+         UodapJxVscosBIpfwdNls0abgrYxe3OAmM/BdKFfiOQ7rae5niAWOaHsOTTIL4L/+m0n
+         BuXM1JduFSbfqetZ1kJGnEvgBLmwtZ8pkS5jwwxrtfc5mgKdvx8Dxv5bxUNCESpqcrnX
+         shOKvYTIEidzJ221j5WIvD2GuupWcbFOyTnD2Wgg3SKgWx6MX9Pn6KVICSCk6m7xmk28
+         TIDsGWJZT4Nxqhcz8/lgO+dmVG6xVoJvnIsL+q/49F7+yikTEqfGgZmSA8whfwk7K/0p
+         m8VQ==
+X-Gm-Message-State: APjAAAVy4hYFvd8bMl9Q7NTJFs1TOmMxzTuhkS07ntujOs5tZhVcRisN
+        fOYEJIoPAvOrb5icR0t+gE06Pg==
+X-Google-Smtp-Source: APXvYqxc+iu4MoS/Xv95y9JCyL1AjC+U77p2UhlUii2IwLcAbbZKPfcuPXomQDHVLilPsj66phWcDQ==
+X-Received: by 2002:a7b:c246:: with SMTP id b6mr3206983wmj.75.1576065636021;
+        Wed, 11 Dec 2019 04:00:36 -0800 (PST)
+Received: from 172.17.0.4 (ci.linaro.org. [88.99.136.175])
+        by smtp.gmail.com with ESMTPSA id a184sm2076891wmf.29.2019.12.11.04.00.34
+        (version=TLS1 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
+        Wed, 11 Dec 2019 04:00:35 -0800 (PST)
+From:   ci_notify@linaro.org
+X-Google-Original-From: linaro-infrastructure-errors@lists.linaro.org
+Date:   Wed, 11 Dec 2019 12:00:33 +0000 (UTC)
+To:     lkft-triage@lists.linaro.org, dan.rue@linaro.org,
+        anders.roxell@linaro.org, naresh.kamboju@linaro.org,
+        shuah@kernel.org, linux-kselftest@vger.kernel.org
+Message-ID: <2105689517.4289.1576065635336.JavaMail.javamailuser@localhost>
+Subject: next-20191210 kselftest results
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20191211025318.457113-24-jhubbard@nvidia.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: multipart/mixed; 
+        boundary="----=_Part_4288_323108930.1576065633170"
+X-Jenkins-Job: LKFT Notify kselftest on next
+X-Jenkins-Result: SUCCESS
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue 10-12-19 18:53:16, John Hubbard wrote:
-> Add tracking of pages that were pinned via FOLL_PIN.
-> 
-> As mentioned in the FOLL_PIN documentation, callers who effectively set
-> FOLL_PIN are required to ultimately free such pages via unpin_user_page().
-> The effect is similar to FOLL_GET, and may be thought of as "FOLL_GET
-> for DIO and/or RDMA use".
-> 
-> Pages that have been pinned via FOLL_PIN are identifiable via a
-> new function call:
-> 
->    bool page_dma_pinned(struct page *page);
-> 
-> What to do in response to encountering such a page, is left to later
-> patchsets. There is discussion about this in [1], [2], and [3].
-> 
-> This also changes a BUG_ON(), to a WARN_ON(), in follow_page_mask().
-> 
-> [1] Some slow progress on get_user_pages() (Apr 2, 2019):
->     https://lwn.net/Articles/784574/
-> [2] DMA and get_user_pages() (LPC: Dec 12, 2018):
->     https://lwn.net/Articles/774411/
-> [3] The trouble with get_user_pages() (Apr 30, 2018):
->     https://lwn.net/Articles/753027/
+------=_Part_4288_323108930.1576065633170
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-The patch looks mostly good to me now. Just a few smaller comments below.
+Summary
+------------------------------------------------------------------------
+kernel: 5.5.0-rc1
+git repo: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+git branch: master
+git commit: f7768006a0d1a8580e43a406d186ad384c18bb02
+git describe: next-20191210
+Test details: https://qa-reports.linaro.org/lkft/linux-next-oe/build/next-20191210
 
-> Suggested-by: Jan Kara <jack@suse.cz>
-> Suggested-by: Jérôme Glisse <jglisse@redhat.com>
-> Reviewed-by: Jan Kara <jack@suse.cz>
-> Reviewed-by: Jérôme Glisse <jglisse@redhat.com>
-> Reviewed-by: Ira Weiny <ira.weiny@intel.com>
+Regressions (compared to build next-20191209)
+------------------------------------------------------------------------
+i386:                                                                                                      
+ kselftest:                                                                                         
+    * binderfs_binderfs_test                                                                                                         
+x86:                                                                                                      
+ kselftest:                                                                                         
+    * binderfs_binderfs_test                                                                                                         
+                                                                                                      
+ kselftest-vsyscall-mode-native:                                                                                         
+    * binderfs_binderfs_test                                                                                                         
+                                                                                                      
+ kselftest-vsyscall-mode-none:                                                                                         
+    * binderfs_binderfs_test                                                                                                         
+x86:                                                                                                      
+ kselftest:                                                                                         
+    * binderfs_binderfs_test                                                                                                         
+                                                                                                      
+ kselftest-vsyscall-mode-native:                                                                                         
+    * binderfs_binderfs_test                                                                                                         
+                                                                                                      
+ kselftest-vsyscall-mode-none:                                                                                         
+    * binderfs_binderfs_test                                                                                                         
+x86:                                                                                                      
+ kselftest:                                                                                         
+    * binderfs_binderfs_test                                                                                                         
+                                                                                                      
+ kselftest-vsyscall-mode-native:                                                                                         
+    * binderfs_binderfs_test                                                                                                         
+                                                                                                      
+ kselftest-vsyscall-mode-none:                                                                                         
+    * binderfs_binderfs_test                                                                                                         
+qemu_arm:                                                                                                      
+ kselftest:                                                                                         
+    * binderfs_binderfs_test                                                                                                         
+                                                                                                          
+                                                                                                                       
+Fixes (compared to build next-20191209)                                                                   
+------------------------------------------------------------------------                                               
+x86:                                                                                                      
+ kselftest-vsyscall-mode-native:                                                                                         
+    * cgroup_test_freezer                                                                                                         
 
-I think you inherited here the Reviewed-by tags from the "add flags" patch
-you've merged into this one but that's not really fair since this patch
-does much more... In particular I didn't give my Reviewed-by tag for this
-patch yet.
 
-> +/*
-> + * try_grab_compound_head() - attempt to elevate a page's refcount, by a
-> + * flags-dependent amount.
-> + *
-> + * This has a default assumption of "use FOLL_GET behavior, if FOLL_PIN is not
-> + * set".
-> + *
-> + * "grab" names in this file mean, "look at flags to decide whether to use
-> + * FOLL_PIN or FOLL_GET behavior, when incrementing the page's refcount.
-> + */
-> +static __maybe_unused struct page *try_grab_compound_head(struct page *page,
-> +							  int refs,
-> +							  unsigned int flags)
-> +{
-> +	if (flags & FOLL_PIN)
-> +		return try_pin_compound_head(page, refs);
-> +
-> +	return try_get_compound_head(page, refs);
-> +}
+In total:
+------------------------------------------------------------------------
+Ran 611 total tests in the following environments and test suites.
+pass 263
+fail 301
+xfail 0
+skip 47
 
-I somewhat wonder about the asymmetry of try_grab_compound_head() vs
-try_grab_page() in the treatment of 'flags'. How costly would it be to make
-them symmetric (i.e., either set FOLL_GET for try_grab_compound_head()
-callers or make sure one of FOLL_GET, FOLL_PIN is set for try_grab_page())?
+Environments
+--------------
+- dragonboard-410c - arm64
+- hi6220-hikey - arm64
+- i386
+- juno-r2 - arm64
+- qemu_arm
+- qemu_arm64
+- qemu_i386
+- qemu_x86_64
+- x15 - arm
+- x86_64
 
-Because this difference looks like a subtle catch in the long run...
+Test Suites
+-----------
+* kselftest
+* kselftest-vsyscall-mode-native
+* kselftest-vsyscall-mode-none
 
-> +
-> +/**
-> + * try_grab_page() - elevate a page's refcount by a flag-dependent amount
-> + *
-> + * This might not do anything at all, depending on the flags argument.
-> + *
-> + * "grab" names in this file mean, "look at flags to decide whether to use
-> + * FOLL_PIN or FOLL_GET behavior, when incrementing the page's refcount.
-> + *
-> + * @page:	pointer to page to be grabbed
-> + * @flags:	gup flags: these are the FOLL_* flag values.
-> + *
-> + * Either FOLL_PIN or FOLL_GET (or neither) may be set, but not both at the same
-> + * time. (That's true throughout the get_user_pages*() and pin_user_pages*()
-> + * APIs.) Cases:
-> + *
-> + *	FOLL_GET: page's refcount will be incremented by 1.
-> + *      FOLL_PIN: page's refcount will be incremented by GUP_PIN_COUNTING_BIAS.
-> + *
-> + * Return: true for success, or if no action was required (if neither FOLL_PIN
-> + * nor FOLL_GET was set, nothing is done). False for failure: FOLL_GET or
-> + * FOLL_PIN was set, but the page could not be grabbed.
-> + */
-> +bool __must_check try_grab_page(struct page *page, unsigned int flags)
-> +{
-> +	if (flags & FOLL_GET)
-> +		return try_get_page(page);
-> +	else if (flags & FOLL_PIN) {
-> +		page = compound_head(page);
-> +		WARN_ON_ONCE(flags & FOLL_GET);
-> +
-> +		if (WARN_ON_ONCE(page_ref_zero_or_close_to_bias_overflow(page)))
-> +			return false;
-> +
-> +		page_ref_add(page, GUP_PIN_COUNTING_BIAS);
-> +		__update_proc_vmstat(page, NR_FOLL_PIN_REQUESTED, 1);
-> +	}
-> +
-> +	return true;
-> +}
 
-...
+Failures
+------------------------------------------------------------------------
 
-> @@ -1522,8 +1536,8 @@ struct page *follow_trans_huge_pmd(struct vm_area_struct *vma,
->  skip_mlock:
->  	page += (addr & ~HPAGE_PMD_MASK) >> PAGE_SHIFT;
->  	VM_BUG_ON_PAGE(!PageCompound(page) && !is_zone_device_page(page), page);
-> -	if (flags & FOLL_GET)
-> -		get_page(page);
-> +	if (!try_grab_page(page, flags))
-> +		page = ERR_PTR(-EFAULT);
+hi6220-hikey:
+* kselftest/binderfs_binderfs_test
+* kselftest/bpf_test_dev_cgroup
+* kselftest/bpf_test_flow_dissector.sh
+* kselftest/bpf_test_kmod.sh
+* kselftest/bpf_test_lpm_map
+* kselftest/bpf_test_lwt_ip_encap.sh
+* kselftest/bpf_test_lwt_seg6local.sh
+* kselftest/bpf_test_maps
+* kselftest/bpf_test_netcnt
+* kselftest/bpf_test_progs
+* kselftest/bpf_test_progs-no_alu32
+* kselftest/bpf_test_skb_cgroup_id.sh
+* kselftest/bpf_test_sock_addr.sh
+* kselftest/bpf_test_socket_cookie
+* kselftest/bpf_test_sock_fields
+* kselftest/bpf_test_sysctl
+* kselftest/bpf_test_tag
+* kselftest/bpf_test_tc_edt.sh
+* kselftest/bpf_test_tcpbpf_user
+* kselftest/bpf_test_tcp_check_syncookie.sh
+* kselftest/bpf_test_tc_tunnel.sh
+* kselftest/bpf_test_tunnel.sh
+* kselftest/bpf_test_verifier
+* kselftest/bpf_test_xdping.sh
+* kselftest/bpf_test_xdp_meta.sh
+* kselftest/bpf_test_xdp_redirect.sh
+* kselftest/bpf_test_xdp_vlan_mode_generic.sh
+* kselftest/bpf_test_xdp_vlan_mode_native.sh
+* kselftest/clone3_clone3_set_tid
 
-I think you need to also move the try_grab_page() earlier in the function.
-At this point the page may be marked as mlocked and you'd need to undo that
-in case try_grab_page() fails.
+x86:
+* kselftest-vsyscall-mode-native/binderfs_binderfs_test
+* kselftest/binderfs_binderfs_test
+* kselftest-vsyscall-mode-none/binderfs_binderfs_test
+* kselftest-vsyscall-mode-native/bpf_get_cgroup_id_user
+* kselftest-vsyscall-mode-none/bpf_get_cgroup_id_user
+* kselftest/bpf_get_cgroup_id_user
+* kselftest/bpf_test_dev_cgroup
+* kselftest-vsyscall-mode-none/bpf_test_dev_cgroup
+* kselftest-vsyscall-mode-native/bpf_test_dev_cgroup
+* kselftest/bpf_test_flow_dissector.sh
+* kselftest-vsyscall-mode-none/bpf_test_flow_dissector.sh
+* kselftest-vsyscall-mode-native/bpf_test_flow_dissector.sh
+* kselftest-vsyscall-mode-none/bpf_test_lwt_ip_encap.sh
+* kselftest/bpf_test_lwt_ip_encap.sh
+* kselftest-vsyscall-mode-native/bpf_test_lwt_ip_encap.sh
+* kselftest-vsyscall-mode-native/bpf_test_lwt_seg6local.sh
+* kselftest-vsyscall-mode-none/bpf_test_lwt_seg6local.sh
+* kselftest/bpf_test_lwt_seg6local.sh
+* kselftest-vsyscall-mode-none/bpf_test_maps
+* kselftest-vsyscall-mode-native/bpf_test_maps
+* kselftest/bpf_test_maps
+* kselftest-vsyscall-mode-native/bpf_test_netcnt
+* kselftest/bpf_test_netcnt
+* kselftest-vsyscall-mode-none/bpf_test_netcnt
+* kselftest/bpf_test_progs
+* kselftest-vsyscall-mode-native/bpf_test_progs
+* kselftest-vsyscall-mode-none/bpf_test_progs
+* kselftest/bpf_test_progs-no_alu32
+* kselftest-vsyscall-mode-native/bpf_test_progs-no_alu32
+* kselftest-vsyscall-mode-none/bpf_test_progs-no_alu32
+* kselftest-vsyscall-mode-none/bpf_test_select_reuseport
+* kselftest/bpf_test_select_reuseport
+* kselftest-vsyscall-mode-native/bpf_test_select_reuseport
+* kselftest/bpf_test_skb_cgroup_id.sh
+* kselftest-vsyscall-mode-native/bpf_test_skb_cgroup_id.sh
+* kselftest-vsyscall-mode-none/bpf_test_skb_cgroup_id.sh
+* kselftest/bpf_test_sock_addr.sh
+* kselftest-vsyscall-mode-native/bpf_test_sock_addr.sh
+* kselftest-vsyscall-mode-none/bpf_test_sock_addr.sh
+* kselftest/bpf_test_socket_cookie
+* kselftest-vsyscall-mode-none/bpf_test_socket_cookie
+* kselftest-vsyscall-mode-native/bpf_test_socket_cookie
+* kselftest/bpf_test_sock_fields
+* kselftest-vsyscall-mode-native/bpf_test_sock_fields
+* kselftest-vsyscall-mode-none/bpf_test_sock_fields
+* kselftest-vsyscall-mode-native/bpf_test_sockmap
+* kselftest-vsyscall-mode-none/bpf_test_sockmap
+* kselftest/bpf_test_sockmap
+* kselftest/bpf_test_sysctl
+* kselftest-vsyscall-mode-native/bpf_test_sysctl
+* kselftest-vsyscall-mode-none/bpf_test_sysctl
+* kselftest-vsyscall-mode-native/bpf_test_tc_edt.sh
+* kselftest/bpf_test_tc_edt.sh
+* kselftest-vsyscall-mode-none/bpf_test_tc_edt.sh
+* kselftest-vsyscall-mode-none/bpf_test_tcpbpf_user
+* kselftest-vsyscall-mode-native/bpf_test_tcpbpf_user
+* kselftest/bpf_test_tcpbpf_user
+* kselftest-vsyscall-mode-native/bpf_test_tcp_check_syncookie.sh
+* kselftest-vsyscall-mode-none/bpf_test_tcp_check_syncookie.sh
+* kselftest/bpf_test_tcp_check_syncookie.sh
+* kselftest-vsyscall-mode-native/bpf_test_tcpnotify_user
+* kselftest/bpf_test_tcpnotify_user
+* kselftest-vsyscall-mode-none/bpf_test_tcpnotify_user
+* kselftest-vsyscall-mode-none/bpf_test_tc_tunnel.sh
+* kselftest-vsyscall-mode-native/bpf_test_tc_tunnel.sh
+* kselftest/bpf_test_tc_tunnel.sh
+* kselftest-vsyscall-mode-native/bpf_test_tunnel.sh
+* kselftest-vsyscall-mode-none/bpf_test_tunnel.sh
+* kselftest/bpf_test_tunnel.sh
+* kselftest-vsyscall-mode-native/bpf_test_xdping.sh
+* kselftest-vsyscall-mode-none/bpf_test_xdping.sh
+* kselftest/bpf_test_xdping.sh
+* kselftest-vsyscall-mode-native/bpf_test_xdp_meta.sh
+* kselftest-vsyscall-mode-none/bpf_test_xdp_meta.sh
+* kselftest/bpf_test_xdp_meta.sh
+* kselftest/bpf_test_xdp_redirect.sh
+* kselftest-vsyscall-mode-none/bpf_test_xdp_redirect.sh
+* kselftest-vsyscall-mode-native/bpf_test_xdp_redirect.sh
+* kselftest-vsyscall-mode-native/bpf_test_xdp_vlan_mode_generic.sh
+* kselftest-vsyscall-mode-none/bpf_test_xdp_vlan_mode_generic.sh
+* kselftest/bpf_test_xdp_vlan_mode_generic.sh
+* kselftest-vsyscall-mode-none/bpf_test_xdp_vlan_mode_native.sh
+* kselftest/bpf_test_xdp_vlan_mode_native.sh
+* kselftest-vsyscall-mode-native/bpf_test_xdp_vlan_mode_native.sh
 
-> diff --git a/mm/hugetlb.c b/mm/hugetlb.c
-> index ac65bb5e38ac..0aab6fe0072f 100644
-> --- a/mm/hugetlb.c
-> +++ b/mm/hugetlb.c
-> @@ -4356,7 +4356,13 @@ long follow_hugetlb_page(struct mm_struct *mm, struct vm_area_struct *vma,
->  same_page:
->  		if (pages) {
->  			pages[i] = mem_map_offset(page, pfn_offset);
-> -			get_page(pages[i]);
-> +			if (!try_grab_page(pages[i], flags)) {
-> +				spin_unlock(ptl);
-> +				remainder = 0;
-> +				err = -ENOMEM;
-> +				WARN_ON_ONCE(1);
-> +				break;
-> +			}
->  		}
+i386:
+* kselftest/binderfs_binderfs_test
+* kselftest/bpf_get_cgroup_id_user
+* kselftest/bpf_test_dev_cgroup
+* kselftest/bpf_test_flow_dissector.sh
+* kselftest/bpf_test_hashmap
+* kselftest/bpf_test_lwt_ip_encap.sh
+* kselftest/bpf_test_lwt_seg6local.sh
+* kselftest/bpf_test_maps
+* kselftest/bpf_test_netcnt
+* kselftest/bpf_test_progs-no_alu32
+* kselftest/bpf_test_select_reuseport
+* kselftest/bpf_test_skb_cgroup_id.sh
+* kselftest/bpf_test_sock_addr.sh
+* kselftest/bpf_test_socket_cookie
+* kselftest/bpf_test_sock_fields
+* kselftest/bpf_test_sockmap
+* kselftest/bpf_test_sysctl
+* kselftest/bpf_test_tc_edt.sh
+* kselftest/bpf_test_tcpbpf_user
+* kselftest/bpf_test_tcp_check_syncookie.sh
+* kselftest/bpf_test_tcpnotify_user
+* kselftest/bpf_test_tc_tunnel.sh
+* kselftest/bpf_test_tunnel.sh
+* kselftest/bpf_test_xdping.sh
+* kselftest/bpf_test_xdp_meta.sh
+* kselftest/bpf_test_xdp_redirect.sh
+* kselftest/bpf_test_xdp_vlan_mode_generic.sh
+* kselftest/bpf_test_xdp_vlan_mode_native.sh
+* kselftest/clone3_clone3_clear_sighand
 
-This function does a refcount overflow check early so that it doesn't have
-to do try_get_page() here. So that check can be now removed when you do
-try_grab_page() here anyway since that early check seems to be just a tiny
-optimization AFAICT.
+qemu_x86_64:
+* kselftest/bpf_get_cgroup_id_user
+* kselftest/bpf_test_dev_cgroup
+* kselftest/bpf_test_flow_dissector.sh
+* kselftest/bpf_test_lwt_ip_encap.sh
+* kselftest/bpf_test_lwt_seg6local.sh
+* kselftest/bpf_test_maps
+* kselftest/bpf_test_netcnt
+* kselftest/bpf_test_progs
+* kselftest/bpf_test_progs-no_alu32
+* kselftest/bpf_test_select_reuseport
+* kselftest/bpf_test_skb_cgroup_id.sh
+* kselftest/bpf_test_sock_addr.sh
+* kselftest/bpf_test_socket_cookie
+* kselftest/bpf_test_sock_fields
+* kselftest/bpf_test_sockmap
+* kselftest/bpf_test_sysctl
+* kselftest/bpf_test_tc_edt.sh
+* kselftest/bpf_test_tcpbpf_user
+* kselftest/bpf_test_tcp_check_syncookie.sh
+* kselftest/bpf_test_tcpnotify_user
+* kselftest/bpf_test_tc_tunnel.sh
+* kselftest/bpf_test_tunnel.sh
+* kselftest/bpf_test_xdping.sh
+* kselftest/bpf_test_xdp_meta.sh
+* kselftest/bpf_test_xdp_redirect.sh
+* kselftest/bpf_test_xdp_vlan_mode_generic.sh
+* kselftest/bpf_test_xdp_vlan_mode_native.sh
+* kselftest/cpufreq_main.sh
 
-								Honza
+x15:
+* kselftest/bpf_get_cgroup_id_user
+* kselftest/bpf_test_dev_cgroup
+* kselftest/bpf_test_flow_dissector.sh
+* kselftest/bpf_test_hashmap
+* kselftest/bpf_test_kmod.sh
+* kselftest/bpf_test_lwt_ip_encap.sh
+* kselftest/bpf_test_lwt_seg6local.sh
+* kselftest/bpf_test_maps
+* kselftest/bpf_test_netcnt
+* kselftest/bpf_test_progs
+* kselftest/bpf_test_progs-no_alu32
+* kselftest/bpf_test_select_reuseport
+* kselftest/bpf_test_skb_cgroup_id.sh
+* kselftest/bpf_test_sock_addr.sh
+* kselftest/bpf_test_socket_cookie
+* kselftest/bpf_test_sock_fields
+* kselftest/bpf_test_sockmap
+* kselftest/bpf_test_sysctl
+* kselftest/bpf_test_tag
+* kselftest/bpf_test_tc_edt.sh
+* kselftest/bpf_test_tcpbpf_user
+* kselftest/bpf_test_tcp_check_syncookie.sh
+* kselftest/bpf_test_tcpnotify_user
+* kselftest/bpf_test_tc_tunnel.sh
+* kselftest/bpf_test_tunnel.sh
+* kselftest/bpf_test_verifier
+* kselftest/bpf_test_xdping.sh
+* kselftest/bpf_test_xdp_meta.sh
+* kselftest/bpf_test_xdp_redirect.sh
+* kselftest/bpf_test_xdp_vlan_mode_generic.sh
+* kselftest/bpf_test_xdp_vlan_mode_native.sh
+* kselftest/clone3_clone3_clear_sighand
+
+qemu_i386:
+* kselftest/bpf_get_cgroup_id_user
+* kselftest/bpf_test_dev_cgroup
+* kselftest/bpf_test_flow_dissector.sh
+* kselftest/bpf_test_hashmap
+* kselftest/bpf_test_lwt_ip_encap.sh
+* kselftest/bpf_test_lwt_seg6local.sh
+* kselftest/bpf_test_maps
+* kselftest/bpf_test_netcnt
+* kselftest/bpf_test_progs
+* kselftest/bpf_test_progs-no_alu32
+* kselftest/bpf_test_select_reuseport
+* kselftest/bpf_test_skb_cgroup_id.sh
+* kselftest/bpf_test_sock_addr.sh
+* kselftest/bpf_test_socket_cookie
+* kselftest/bpf_test_sock_fields
+* kselftest/bpf_test_sockmap
+* kselftest/bpf_test_sysctl
+* kselftest/bpf_test_tc_edt.sh
+* kselftest/bpf_test_tcpbpf_user
+* kselftest/bpf_test_tcp_check_syncookie.sh
+* kselftest/bpf_test_tcpnotify_user
+* kselftest/bpf_test_tc_tunnel.sh
+* kselftest/bpf_test_tunnel.sh
+* kselftest/bpf_test_xdping.sh
+* kselftest/bpf_test_xdp_meta.sh
+* kselftest/bpf_test_xdp_redirect.sh
+* kselftest/bpf_test_xdp_vlan_mode_generic.sh
+* kselftest/bpf_test_xdp_vlan_mode_native.sh
+* kselftest/clone3_clone3_clear_sighand
+* kselftest/cpufreq_main.sh
+
+qemu_arm:
+* kselftest/binderfs_binderfs_test
+* kselftest/bpf_get_cgroup_id_user
+* kselftest/bpf_test_dev_cgroup
+* kselftest/bpf_test_flow_dissector.sh
+* kselftest/bpf_test_hashmap
+* kselftest/bpf_test_kmod.sh
+* kselftest/bpf_test_lwt_ip_encap.sh
+* kselftest/bpf_test_lwt_seg6local.sh
+* kselftest/bpf_test_maps
+* kselftest/bpf_test_netcnt
+* kselftest/bpf_test_progs
+* kselftest/bpf_test_progs-no_alu32
+* kselftest/bpf_test_select_reuseport
+* kselftest/bpf_test_skb_cgroup_id.sh
+* kselftest/bpf_test_sock_addr.sh
+* kselftest/bpf_test_socket_cookie
+* kselftest/bpf_test_sock_fields
+* kselftest/bpf_test_sockmap
+* kselftest/bpf_test_sysctl
+* kselftest/bpf_test_tag
+* kselftest/bpf_test_tc_edt.sh
+* kselftest/bpf_test_tcpbpf_user
+* kselftest/bpf_test_tcp_check_syncookie.sh
+* kselftest/bpf_test_tcpnotify_user
+* kselftest/bpf_test_tc_tunnel.sh
+* kselftest/bpf_test_tunnel.sh
+* kselftest/bpf_test_verifier
+* kselftest/bpf_test_xdping.sh
+* kselftest/bpf_test_xdp_meta.sh
+* kselftest/bpf_test_xdp_redirect.sh
+* kselftest/bpf_test_xdp_vlan_mode_generic.sh
+* kselftest/bpf_test_xdp_vlan_mode_native.sh
+* kselftest/clone3_clone3_clear_sighand
+* kselftest/cpufreq_main.sh
+
+dragonboard-410c:
+
+qemu_arm64:
+* kselftest/bpf_get_cgroup_id_user
+* kselftest/bpf_test_dev_cgroup
+* kselftest/bpf_test_flow_dissector.sh
+* kselftest/bpf_test_kmod.sh
+* kselftest/bpf_test_lpm_map
+* kselftest/bpf_test_lwt_ip_encap.sh
+* kselftest/bpf_test_lwt_seg6local.sh
+* kselftest/bpf_test_maps
+* kselftest/bpf_test_netcnt
+* kselftest/bpf_test_progs
+* kselftest/bpf_test_progs-no_alu32
+* kselftest/bpf_test_select_reuseport
+* kselftest/bpf_test_skb_cgroup_id.sh
+* kselftest/bpf_test_sock_addr.sh
+* kselftest/bpf_test_socket_cookie
+* kselftest/bpf_test_sock_fields
+* kselftest/bpf_test_sockmap
+* kselftest/bpf_test_sysctl
+* kselftest/bpf_test_tag
+* kselftest/bpf_test_tc_edt.sh
+* kselftest/bpf_test_tcpbpf_user
+* kselftest/bpf_test_tcp_check_syncookie.sh
+* kselftest/bpf_test_tcpnotify_user
+* kselftest/bpf_test_tc_tunnel.sh
+* kselftest/bpf_test_tunnel.sh
+* kselftest/bpf_test_verifier
+* kselftest/bpf_test_xdping.sh
+* kselftest/bpf_test_xdp_meta.sh
+* kselftest/bpf_test_xdp_redirect.sh
+* kselftest/bpf_test_xdp_vlan_mode_generic.sh
+* kselftest/bpf_test_xdp_vlan_mode_native.sh
+* kselftest/clone3_clone3
+* kselftest/clone3_clone3_clear_sighand
+* kselftest/clone3_clone3_set_tid
+* kselftest/cpufreq_main.sh
+
+
+Skips
+------------------------------------------------------------------------
+No skips
+
 
 -- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+Linaro LKFT
+https://lkft.linaro.org
+------=_Part_4288_323108930.1576065633170--
