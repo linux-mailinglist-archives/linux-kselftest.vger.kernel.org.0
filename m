@@ -2,96 +2,192 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A5536119FCE
-	for <lists+linux-kselftest@lfdr.de>; Wed, 11 Dec 2019 01:12:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 43E31119FE1
+	for <lists+linux-kselftest@lfdr.de>; Wed, 11 Dec 2019 01:27:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726608AbfLKAMz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 10 Dec 2019 19:12:55 -0500
-Received: from mail-il1-f193.google.com ([209.85.166.193]:45390 "EHLO
-        mail-il1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725999AbfLKAMy (ORCPT
+        id S1727050AbfLKA1F (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 10 Dec 2019 19:27:05 -0500
+Received: from hqnvemgate25.nvidia.com ([216.228.121.64]:13888 "EHLO
+        hqnvemgate25.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725999AbfLKA1F (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 10 Dec 2019 19:12:54 -0500
-Received: by mail-il1-f193.google.com with SMTP id p8so17785483iln.12
-        for <linux-kselftest@vger.kernel.org>; Tue, 10 Dec 2019 16:12:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=t2fl9QR6o36vp9A0Aj5OVE7v+t2aBYbEj7pCkzXK8nE=;
-        b=AsZ9BorgoArKzuchiMnPHv8a9XEmFlTe8j9/S+IoZiutTx2yNeoxbCDMKhg/nbYMRN
-         N+82KB06UY+qFj9v7MSue/MsPyx2Vk54g5wCvjcGKZENTZobR9n60NFZguf5lHGVXRVJ
-         X96ruQW0yk5Oy8cigduvH8H4lq6Nw1LqL7AiM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=t2fl9QR6o36vp9A0Aj5OVE7v+t2aBYbEj7pCkzXK8nE=;
-        b=JXTw2bIq9Le3LL2NtCA8nh0qNPzAY0/j2IpDLpWRFJ8FSZj4AbcEKAKxPKSzBh8Qu6
-         d2ofAQON9ies81YAhL55loNvqaWZOaHYXmPYxPCvkj11FHEKGeasv6UnNoj/W2y7F0P7
-         JbC99NlPPYRl6yK6kHV9jXWV4urH42kFMJdu5fmhxEdD+M4IeWn4ahqT7IMagL7I4k9+
-         MWLciEmNgy+SAP0XumMbtyougozFBkYMbpgT2CATMvegVop6yxYc7Gw2BoRiG/BUichL
-         5Y3XAn46mPptK4hrmIwrcRLpliOroWCGWKfj6VRWX1gkIAGbK78B2cX/Dh2u67EBkGTo
-         +wjw==
-X-Gm-Message-State: APjAAAU+0xCGhLy3o92W41r5hBPH9p8AG0bzxZT1vHPP9WF6Q9ClKXSy
-        bEJL/o9FkbMspON2eI/fKeLE4w==
-X-Google-Smtp-Source: APXvYqyOdfbfQMpzudpUr1aIIDIe4llBDz7VcMb2Q3S3pU9n1xO3zK4abinDSmnB8UvSEfLdWNt+PA==
-X-Received: by 2002:a92:4883:: with SMTP id j3mr394216ilg.272.1576023173702;
-        Tue, 10 Dec 2019 16:12:53 -0800 (PST)
-Received: from shuah-t480s.internal (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id v5sm102092iob.61.2019.12.10.16.12.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Dec 2019 16:12:52 -0800 (PST)
-From:   Shuah Khan <skhan@linuxfoundation.org>
-To:     shuah@kernel.org, r@hev.cc, rpenyaev@suse.de
-Cc:     Shuah Khan <skhan@linuxfoundation.org>, akpm@linux-foundation.org,
-        gregkh@linuxfoundation.org, christian@brauner.io,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] selftests: filesystems/epoll: fix build error
-Date:   Tue, 10 Dec 2019 17:12:33 -0700
-Message-Id: <20191211001233.15084-1-skhan@linuxfoundation.org>
-X-Mailer: git-send-email 2.20.1
+        Tue, 10 Dec 2019 19:27:05 -0500
+Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate25.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5df037d10000>; Tue, 10 Dec 2019 16:26:57 -0800
+Received: from hqmail.nvidia.com ([172.20.161.6])
+  by hqpgpgate101.nvidia.com (PGP Universal service);
+  Tue, 10 Dec 2019 16:27:03 -0800
+X-PGP-Universal: processed;
+        by hqpgpgate101.nvidia.com on Tue, 10 Dec 2019 16:27:03 -0800
+Received: from DRHQMAIL107.nvidia.com (10.27.9.16) by HQMAIL107.nvidia.com
+ (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Wed, 11 Dec
+ 2019 00:27:03 +0000
+Received: from [10.110.48.28] (10.124.1.5) by DRHQMAIL107.nvidia.com
+ (10.27.9.16) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Wed, 11 Dec
+ 2019 00:27:02 +0000
+Subject: Re: [PATCH v8 24/26] mm/gup: track FOLL_PIN pages
+To:     Jan Kara <jack@suse.cz>
+CC:     Andrew Morton <akpm@linux-foundation.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Dave Chinner <david@fromorbit.com>,
+        David Airlie <airlied@linux.ie>,
+        "David S . Miller" <davem@davemloft.net>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>, Jens Axboe <axboe@kernel.dk>,
+        Jonathan Corbet <corbet@lwn.net>,
+        =?UTF-8?B?SsOpcsO0bWUgR2xpc3Nl?= <jglisse@redhat.com>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Michal Hocko <mhocko@suse.com>,
+        "Mike Kravetz" <mike.kravetz@oracle.com>,
+        Paul Mackerras <paulus@samba.org>,
+        "Shuah Khan" <shuah@kernel.org>, Vlastimil Babka <vbabka@suse.cz>,
+        <bpf@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
+        <kvm@vger.kernel.org>, <linux-block@vger.kernel.org>,
+        <linux-doc@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>,
+        <linux-kselftest@vger.kernel.org>, <linux-media@vger.kernel.org>,
+        <linux-rdma@vger.kernel.org>, <linuxppc-dev@lists.ozlabs.org>,
+        <netdev@vger.kernel.org>, <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>
+References: <20191209225344.99740-1-jhubbard@nvidia.com>
+ <20191209225344.99740-25-jhubbard@nvidia.com>
+ <20191210133932.GH1551@quack2.suse.cz>
+From:   John Hubbard <jhubbard@nvidia.com>
+X-Nvconfidentiality: public
+Message-ID: <918e9f4b-d1bc-95b4-3768-f6a28d625d58@nvidia.com>
+Date:   Tue, 10 Dec 2019 16:27:02 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.3.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20191210133932.GH1551@quack2.suse.cz>
+X-Originating-IP: [10.124.1.5]
+X-ClientProxiedBy: HQMAIL111.nvidia.com (172.20.187.18) To
+ DRHQMAIL107.nvidia.com (10.27.9.16)
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1576024017; bh=qZMhuX1AH+ipTqKh5IOl5OAO53v7INQFJxlKSWfldSI=;
+        h=X-PGP-Universal:Subject:To:CC:References:From:X-Nvconfidentiality:
+         Message-ID:Date:User-Agent:MIME-Version:In-Reply-To:
+         X-Originating-IP:X-ClientProxiedBy:Content-Type:Content-Language:
+         Content-Transfer-Encoding;
+        b=mtQrj5I0dTbE0p+0Duy/yLLURBp189gBz9/n7w24993utz/qyGtSs7PPQAv+iIImb
+         JZ8mcjPAxzh+nh7PkxaNbrLb3BrJ2IB5TLP1oCbepwYNd9zP8BSYgamyM4DvGzILi8
+         XQkGoEiIlVo58hcTQukHAefGfROo8agytuwS+0sfjZ1Jg7ij7PU3d1I4gxsqVd70Fa
+         GkNwTpmVy0rbDSvIttlOcb1nzarUHfrPPIMHBT+ByVSSyhRxc5/lScetmOjddYAdyE
+         GT/eTQw2K0oKAfFgOT8KfXo08uqKjO85NJPryhNn/fDyZhmI4MaNcIcj91kNrcZeuR
+         Z4qb08ZWAeRjQ==
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-epoll build fails to find pthread lib. Fix Makefile to use LDLIBS
-instead of LDFLAGS. LDLIBS is the right flag to use here with -l
-option when invoking ld.
+On 12/10/19 5:39 AM, Jan Kara wrote:
+...
+>> +void grab_page(struct page *page, unsigned int flags)
+>> +{
+>> +	if (flags & FOLL_GET)
+>> +		get_page(page);
+>> +	else if (flags & FOLL_PIN) {
+>> +		get_page(page);
+>> +		WARN_ON_ONCE(flags & FOLL_GET);
+>> +		/*
+>> +		 * Use get_page(), above, to do the refcount error
+>> +		 * checking. Then just add in the remaining references:
+>> +		 */
+>> +		page_ref_add(page, GUP_PIN_COUNTING_BIAS - 1);
+> 
+> This is wrong for two reasons:
+> 
+> 1) You miss compound_head() indirection from get_page() for this
+> page_ref_add().
 
-gcc -I../../../../../usr/include/  -lpthread  epoll_wakeup_test.c  -o .../tools/testing/selftests/filesystems/epoll/epoll_wakeup_test
-/usr/bin/ld: /tmp/ccaZvJUl.o: in function `kill_timeout':
-epoll_wakeup_test.c:(.text+0x4dd): undefined reference to `pthread_kill'
-/usr/bin/ld: epoll_wakeup_test.c:(.text+0x4f2): undefined reference to `pthread_kill'
-/usr/bin/ld: /tmp/ccaZvJUl.o: in function `epoll9':
-epoll_wakeup_test.c:(.text+0x6382): undefined reference to `pthread_create'
-/usr/bin/ld: epoll_wakeup_test.c:(.text+0x64d2): undefined reference to `pthread_create'
-/usr/bin/ld: epoll_wakeup_test.c:(.text+0x6626): undefined reference to `pthread_join'
-/usr/bin/ld: epoll_wakeup_test.c:(.text+0x684c): undefined reference to `pthread_tryjoin_np'
-/usr/bin/ld: epoll_wakeup_test.c:(.text+0x6864): undefined reference to `pthread_kill'
-/usr/bin/ld: epoll_wakeup_test.c:(.text+0x6878): undefined reference to `pthread_join'
+whoops, yes that is missing.
 
-Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
----
- tools/testing/selftests/filesystems/epoll/Makefile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> 2) page_ref_add() could overflow the counter without noticing.
+> 
+> Especially with GUP_PIN_COUNTING_BIAS being non-trivial, it is realistic
+> that an attacker might try to overflow the page refcount and we have to
+> protect the kernel against that. So I think that all the places that would
+> use grab_page() actually need to use try_grab_page() and then gracefully
+> deal with the failure.
+> 
 
-diff --git a/tools/testing/selftests/filesystems/epoll/Makefile b/tools/testing/selftests/filesystems/epoll/Makefile
-index e62f3d4f68da..78ae4aaf7141 100644
---- a/tools/testing/selftests/filesystems/epoll/Makefile
-+++ b/tools/testing/selftests/filesystems/epoll/Makefile
-@@ -1,7 +1,7 @@
- # SPDX-License-Identifier: GPL-2.0
- 
- CFLAGS += -I../../../../../usr/include/
--LDFLAGS += -lpthread
-+LDLIBS += -lpthread
- TEST_GEN_PROGS := epoll_wakeup_test
- 
- include ../../lib.mk
+OK, I've replaced grab_page() everywhere with try_grab_page(), with the
+above issues fixed. The v7 patchset had error handling for grab_page() failures,
+that had been reviewed, so relevants parts of that have reappeared.
+
+I had initially hesitated to do this, but now I've gone ahead and added:
+
+#define page_ref_zero_or_close_to_bias_overflow(page) \
+	((unsigned int) page_ref_count(page) + \
+		GUP_PIN_COUNTING_BIAS <= GUP_PIN_COUNTING_BIAS)
+
+...which is used in the new try_grab_page() for protection.
+
+
+>> @@ -278,11 +425,23 @@ static struct page *follow_page_pte(struct vm_area_struct *vma,
+>>  		goto retry;
+>>  	}
+>>  
+>> -	if (flags & FOLL_GET) {
+>> +	if (flags & (FOLL_PIN | FOLL_GET)) {
+>> +		/*
+>> +		 * Allow try_get_page() to take care of error handling, for
+>> +		 * both cases: FOLL_GET or FOLL_PIN:
+>> +		 */
+>>  		if (unlikely(!try_get_page(page))) {
+>>  			page = ERR_PTR(-ENOMEM);
+>>  			goto out;
+>>  		}
+>> +
+>> +		if (flags & FOLL_PIN) {
+>> +			WARN_ON_ONCE(flags & FOLL_GET);
+>> +
+>> +			/* We got a +1 refcount from try_get_page(), above. */
+>> +			page_ref_add(page, GUP_PIN_COUNTING_BIAS - 1);
+>> +			__update_proc_vmstat(page, NR_FOLL_PIN_REQUESTED, 1);
+>> +		}
+>>  	}
+> 
+> The same problem here as above, plus this place should use the same
+> try_grab..() helper, shouldn't it?
+
+
+Yes, now that the new try_grab_page() has behavior that matches what
+this call site needs. Done.
+
+
+> 
+>> @@ -544,8 +703,8 @@ static struct page *follow_page_mask(struct vm_area_struct *vma,
+>>  	/* make this handle hugepd */
+>>  	page = follow_huge_addr(mm, address, flags & FOLL_WRITE);
+>>  	if (!IS_ERR(page)) {
+>> -		BUG_ON(flags & FOLL_GET);
+>> -		return page;
+>> +		WARN_ON_ONCE(flags & (FOLL_GET | FOLL_PIN));
+>> +		return NULL;
+> 
+> I agree with the change to WARN_ON_ONCE but why is correct the change of
+> the return value? Note that this is actually a "success branch".
+> 
+
+Good catch, thanks! I worked through the logic...correctly at first, but then I must 
+have become temporarily dazed by the raw destructive power of the pre-existing 
+BUG_ON() statement, and screwed it up after all. :)
+
+
+thanks,
 -- 
-2.20.1
+John Hubbard
+NVIDIA
 
