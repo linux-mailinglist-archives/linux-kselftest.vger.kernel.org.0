@@ -2,48 +2,48 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AC35E11C341
-	for <lists+linux-kselftest@lfdr.de>; Thu, 12 Dec 2019 03:27:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5372811C33E
+	for <lists+linux-kselftest@lfdr.de>; Thu, 12 Dec 2019 03:27:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727753AbfLLC1Z (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        id S1727773AbfLLC1Z (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
         Wed, 11 Dec 2019 21:27:25 -0500
-Received: from mail-pg1-f196.google.com ([209.85.215.196]:38588 "EHLO
-        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726793AbfLLC1X (ORCPT
+Received: from mail-pf1-f193.google.com ([209.85.210.193]:35672 "EHLO
+        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727747AbfLLC1Z (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 11 Dec 2019 21:27:23 -0500
-Received: by mail-pg1-f196.google.com with SMTP id a33so328972pgm.5;
-        Wed, 11 Dec 2019 18:27:23 -0800 (PST)
+        Wed, 11 Dec 2019 21:27:25 -0500
+Received: by mail-pf1-f193.google.com with SMTP id b19so295568pfo.2;
+        Wed, 11 Dec 2019 18:27:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=tTHS0sAFW9uPlD+AqCNYpUarFLmjwnHqD++0UeSB8hU=;
-        b=XQIaEQxpgLBwXmiYR6pgGNgeFnutK6DCycup5orLwxibF5fYc8fMjIopR0VkLtgggt
-         KjI5/JWB4bKTxcALCb0rHq8otftnAoxoX3n1GDzGxeu3qVIhu7QuYyv2+Mwp2Bry6GYp
-         tRsT+zld0GfIWiO585WuHZA0454yZ0ZgGJs/DWoR+s5cSUaAki86/LKYI3WY7ujV5P/y
-         9LeYFUV9ZeR9kqCSfnsA79SVQeHOXx76+b6UUG0MNWlaw0UIpoGkWr+D4dtHkDbATWE3
-         HIVIstSxVNQmlB/Xw2ipNa0QI8nimIhCOcMYDhKRxqwf7ry9yk2vEb1cZsQCX7t9K0N3
-         6tng==
+        bh=yFujqdF7KSTFJjQQeDlyK/5HsN3cecg9EghFg3vBGxk=;
+        b=M3TboQWYgdcx0JYFTTeu3fEYtHLHJOQTYEYOvIZodI/Fpx4OVg++6DWa1usRfgvUso
+         zYaHlPPD2LqSVzVn1P+ovu7s+EFLr+4sfQLPouxrsy+ujqGcnsPDPs50XFNucaCfYSJe
+         /f7e3+e5KIdHRg9dxiaD0kv0PCHZVkw9Kwc8ViS0R0MdMARP+FHTNH0DMXxMUXBKAtQP
+         FwAsVEhLBw3v7DBTpXwQWxlUTft2WlKvqaAzFM2HR3WO8d7BZe2ug9xvs2c+CXgGzycs
+         nyQCQZaFFcEnO/IzlvFAEFqKEP99Ws/ftwy1lY/7LoHTri/2zBvNJQChDfdYe/16UHvH
+         JO8w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=tTHS0sAFW9uPlD+AqCNYpUarFLmjwnHqD++0UeSB8hU=;
-        b=PmNkLtEK1wXiG9Ar5308zA+N2V4zsvWXX4rOjIJQY4VOKce84v5ekDAZtxudP8JQ/K
-         /3IL0eP+h0CSK/6erqWqcaFMUO02Cf3aoiGK3yUR5xXSh7Z2CSeM5LoM2QbxT8MeVBY7
-         FZ7l+S9qPwNbcpy/UKyd53lxbYL+BneIK12NzKBFznXCKJxSsMrLfNkFySRNKFD/SS5B
-         1rdn0YP1r04A0Lko2xmT7XVSF7c+BiIVKCWGlaxZI9xU8mbALVkyT+/XdH6Cid5wE+lP
-         wVUe1k5kEBPU8KJfO0G2HnPlqZVqu1jOmhvioqUiqojLrTip2ogiEmP5MN3q4zno4dVA
-         eVdA==
-X-Gm-Message-State: APjAAAUdw+RywvLGleY/vTEJJRYf+nsqqzCKhLMazbcxoFQmnJQJHcKK
-        6gI4/CRuT7vbpef30i5Tibs=
-X-Google-Smtp-Source: APXvYqyxoOoOHx1Hg7FJQOpMCtLSu31I0G7JyqkADbCfGNxEQhYGyDSTVOGeuddMmJ2QYMjHO14sMA==
-X-Received: by 2002:a63:4f59:: with SMTP id p25mr7719374pgl.230.1576117642714;
-        Wed, 11 Dec 2019 18:27:22 -0800 (PST)
+        bh=yFujqdF7KSTFJjQQeDlyK/5HsN3cecg9EghFg3vBGxk=;
+        b=cFOgAh/paEfsTmJXZNxgLxhVbGzmzwKjE87teaHDctFUPJu5qKpJvMjIKGlML9Cf4W
+         rxK77CXsjW9qJeoj/bA5BW1i3M0xTGu3kX1yTiYSB/r4CndaT6qfSGbTkiMN4W0AWExS
+         pbJpcvX3EUXYhrKAU77Fl6f5FNCguztQ1QA/nLPD+KwXKURgi27Ci+D81kO/ud/cPYXs
+         OJYg93bsfrgnoZOXGu5CtMYdkT8ifocCfZb579UQd5zqPAoiLvLSaQh1rQITW97f0/Hy
+         GgWxtjyB0XZ+hO+wIrOM/LxUP+brZqedz3RM0qPf4Ozf4s0+nKnqwxSIV1IlRhwKbzjf
+         siWw==
+X-Gm-Message-State: APjAAAXcukyn7kUiAKmao0bdg4Kc4X/cwaxEFcjNe9gkZLKQpD1J3j8g
+        //uVRJKmzrc1qIbJxWDmXdA=
+X-Google-Smtp-Source: APXvYqxITzrasjB22U3/KJWgHX9aDzdbZHo1v+SvqYboBvMwPBgGHw4iXnCWwjsOooH1JKxY8VIlfA==
+X-Received: by 2002:a63:c406:: with SMTP id h6mr8035736pgd.213.1576117644144;
+        Wed, 11 Dec 2019 18:27:24 -0800 (PST)
 Received: from localhost.localdomain ([12.176.148.120])
-        by smtp.gmail.com with ESMTPSA id d22sm4245173pgg.52.2019.12.11.18.27.21
+        by smtp.gmail.com with ESMTPSA id d22sm4245173pgg.52.2019.12.11.18.27.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 Dec 2019 18:27:21 -0800 (PST)
+        Wed, 11 Dec 2019 18:27:23 -0800 (PST)
 From:   SeongJae Park <sj38.park@gmail.com>
 X-Google-Original-From: SeongJae Park <sjpark@amazon.de>
 To:     brendanhiggins@google.com, shuah@kernel.org
@@ -51,9 +51,9 @@ Cc:     sjpark@amazon.com, corbet@lwn.net, kunit-dev@googlegroups.com,
         linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-kselftest@vger.kernel.org, sj38.park@gmail.com,
         sjpark@amazon.de
-Subject: [PATCH v6 1/6] docs/kunit/start: Use in-tree 'kunit_defconfig'
-Date:   Thu, 12 Dec 2019 02:27:06 +0000
-Message-Id: <20191212022711.10062-2-sjpark@amazon.de>
+Subject: [PATCH v6 2/6] kunit: Remove duplicated defconfig creation
+Date:   Thu, 12 Dec 2019 02:27:07 +0000
+Message-Id: <20191212022711.10062-3-sjpark@amazon.de>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20191212022711.10062-1-sjpark@amazon.de>
 References: <20191212022711.10062-1-sjpark@amazon.de>
@@ -62,33 +62,31 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The kunit doc suggests users to get the default `kunitconfig` from an
-external git tree.  However, the file is already located under the
-`arch/um/configs/` of the kernel tree.  Because the local file is easier
-to access and maintain, this commit updates the doc to use it.
+'--defconfig' option is handled by the 'main() of the 'kunit.py' but
+again handled in following 'run_tests()'.  This commit removes this
+duplicated handling of the option in the 'run_tests()'.
 
 Signed-off-by: SeongJae Park <sjpark@amazon.de>
 Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
 Tested-by: Brendan Higgins <brendanhiggins@google.com>
 ---
- Documentation/dev-tools/kunit/start.rst | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ tools/testing/kunit/kunit.py | 3 ---
+ 1 file changed, 3 deletions(-)
 
-diff --git a/Documentation/dev-tools/kunit/start.rst b/Documentation/dev-tools/kunit/start.rst
-index 9d6db892c41c..d5197f1a45cb 100644
---- a/Documentation/dev-tools/kunit/start.rst
-+++ b/Documentation/dev-tools/kunit/start.rst
-@@ -32,9 +32,8 @@ regular Kernel config, with the specific test targets as well.
+diff --git a/tools/testing/kunit/kunit.py b/tools/testing/kunit/kunit.py
+index efe06d621983..f8f26951cd1b 100755
+--- a/tools/testing/kunit/kunit.py
++++ b/tools/testing/kunit/kunit.py
+@@ -37,9 +37,6 @@ def create_default_kunitconfig():
  
- .. code-block:: bash
- 
--	git clone -b master https://kunit.googlesource.com/kunitconfig $PATH_TO_KUNITCONFIG_REPO
- 	cd $PATH_TO_LINUX_REPO
--	ln -s $PATH_TO_KUNIT_CONFIG_REPO/kunitconfig kunitconfig
-+	cp arch/um/configs/kunit_defconfig kunitconfig
- 
- You may want to add kunitconfig to your local gitignore.
- 
+ def run_tests(linux: kunit_kernel.LinuxSourceTree,
+ 	      request: KunitRequest) -> KunitResult:
+-	if request.defconfig:
+-		create_default_kunitconfig()
+-
+ 	config_start = time.time()
+ 	success = linux.build_reconfig(request.build_dir)
+ 	config_end = time.time()
 -- 
 2.17.1
 
