@@ -2,30 +2,63 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A383911D498
-	for <lists+linux-kselftest@lfdr.de>; Thu, 12 Dec 2019 18:55:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6928511D4A9
+	for <lists+linux-kselftest@lfdr.de>; Thu, 12 Dec 2019 18:57:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729883AbfLLRzO (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 12 Dec 2019 12:55:14 -0500
-Received: from mga07.intel.com ([134.134.136.100]:38099 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729771AbfLLRzO (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 12 Dec 2019 12:55:14 -0500
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga105.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 12 Dec 2019 09:55:12 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.69,306,1571727600"; 
-   d="scan'208";a="245819700"
-Received: from sjchrist-coffee.jf.intel.com (HELO linux.intel.com) ([10.54.74.202])
-  by fmsmga002.fm.intel.com with ESMTP; 12 Dec 2019 09:55:11 -0800
-Date:   Thu, 12 Dec 2019 09:55:11 -0800
-From:   Sean Christopherson <sean.j.christopherson@intel.com>
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, x86@kernel.org,
+        id S1730238AbfLLR5V (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 12 Dec 2019 12:57:21 -0500
+Received: from mail-io1-f68.google.com ([209.85.166.68]:36022 "EHLO
+        mail-io1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730198AbfLLR5U (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 12 Dec 2019 12:57:20 -0500
+Received: by mail-io1-f68.google.com with SMTP id a22so3755237ios.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 12 Dec 2019 09:57:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Z3b25UQSnY6IqzYufZw5HPv7RWsFnuJ1qSwiqH0n/5k=;
+        b=P/NXCOyuvKPRWV08VvBA1CWwjXOq2454qr5DFs1i0dx4F3LwmHgj/7p/j/+AGA99YD
+         XIWPe87cEztItjq6Zn8pXyHQMZzUEyk8kqXBqi68MgB1GzmECBjHyMdn1YF8qh4niHqF
+         15iEyVZAXPani4kohcMWSIPOP56G3yUYSGRJL25s3s84BNsfC5kk8KqEHY45RIJQ+km+
+         7nHZhB/fWqMWEC6MkyRtbCJy0SemmaaZZQ7fv7RUOd6VaANEf7I7bBZlkcwJwTtSaJyL
+         vQnVIlgojZJ3h4eqkao2clnBKHHZBF/oNu3jwsKJCm7C8CENNAUPifuciLGZ/2ZT8P21
+         DDpA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Z3b25UQSnY6IqzYufZw5HPv7RWsFnuJ1qSwiqH0n/5k=;
+        b=sP6ESMa+3j04jNGOqdSogKelsplDG5a6glxEqwkm9xn70SD9yaScVTQADmm27FVgWB
+         hFnSQEya/KWUuyEn0zpF9gBOV22RYAxHb6FMzJXBUjdaNxziOHUi5I+AO4Ffk3GK9bmK
+         sNPXXzD7XxAZ+pVU5EKbAlEoyZqLLQx3lLcjZbSpXNPAF3AK3oI34xw6MluIdWzuqG3H
+         0TewdS9b7+nUYjS9eJPYBX9VIz/+d0/7yA6oGTZgJwycBRGK+YtzFPXhk3397VL5M3MC
+         LzwtprCA6KSTH2EQqgz+MaNzjsQcpS8nYN1NPT5cxrlHVDZJX6o3PQdRlcrxeHCvOJNM
+         F4BQ==
+X-Gm-Message-State: APjAAAXrbonreINdzAQH4F38s1QbUiL3HxuoSTO7doAVM6JHmWoTisWO
+        5Ma4A/YV276SZNtgCG8s19meQhUVGQAeOyRRUTT7+w==
+X-Google-Smtp-Source: APXvYqyPE6NbezzK+SCpWx81FOcItGOWVU3L02OQJNEvkysZZsXSDO4rXcsGBPHVc3pNcmN4ZTMpi09J8E7N8GzXb0A=
+X-Received: by 2002:a5e:9b15:: with SMTP id j21mr3746698iok.108.1576173439923;
+ Thu, 12 Dec 2019 09:57:19 -0800 (PST)
+MIME-Version: 1.0
+References: <20191128014016.4389-1-sean.j.christopherson@intel.com>
+ <20191128014016.4389-12-sean.j.christopherson@intel.com> <20191212122646.GE4991@zn.tnic>
+ <d0b21e7e-69f5-09f9-3e1c-14d49fa42b9f@redhat.com> <4A24DE75-4E68-4EC6-B3F3-4ACB0EE82BF0@oracle.com>
+ <17c6569e-d0af-539c-6d63-f4c07367d8d1@redhat.com> <20191212174357.GE3163@linux.intel.com>
+ <52dd758d-a590-52a6-4248-22d6852b75cd@redhat.com> <DA429131-7A4C-4B74-A020-6CE7622ED2F8@oracle.com>
+In-Reply-To: <DA429131-7A4C-4B74-A020-6CE7622ED2F8@oracle.com>
+From:   Jim Mattson <jmattson@google.com>
+Date:   Thu, 12 Dec 2019 09:57:08 -0800
+Message-ID: <CALMp9eRAYj=dKDtnPymkUA_OOMv+9a4WdPNt4hdpFtBgzwNA9w@mail.gmail.com>
+Subject: Re: [PATCH v4 11/19] x86/cpu: Print VMX flags in /proc/cpuinfo using VMX_FEATURES_*
+To:     Liran Alon <liran.alon@oracle.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <sean.j.christopherson@intel.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
         "H. Peter Anvin" <hpa@zytor.com>,
         Peter Zijlstra <peterz@infradead.org>,
         Arnaldo Carvalho de Melo <acme@kernel.org>,
@@ -33,96 +66,31 @@ Cc:     Thomas Gleixner <tglx@linutronix.de>,
         Alexander Shishkin <alexander.shishkin@linux.intel.com>,
         Jiri Olsa <jolsa@redhat.com>,
         Namhyung Kim <namhyung@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Radim =?utf-8?B?S3LEjW3DocWZ?= <rkrcmar@redhat.com>,
+        =?UTF-8?B?UmFkaW0gS3LEjW3DocWZ?= <rkrcmar@redhat.com>,
         Vitaly Kuznetsov <vkuznets@redhat.com>,
         Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
         Joerg Roedel <joro@8bytes.org>,
         Tony Luck <tony.luck@intel.com>,
         Tony W Wang-oc <TonyWWang-oc@zhaoxin.com>,
         Len Brown <lenb@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-edac@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        kvm list <kvm@vger.kernel.org>, linux-edac@vger.kernel.org,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
         Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-Subject: Re: [PATCH v4 10/19] x86/cpu: Detect VMX features on Intel, Centaur
- and Zhaoxin CPUs
-Message-ID: <20191212175511.GG3163@linux.intel.com>
-References: <20191128014016.4389-1-sean.j.christopherson@intel.com>
- <20191128014016.4389-11-sean.j.christopherson@intel.com>
- <20191212113838.GD4991@zn.tnic>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191212113838.GD4991@zn.tnic>
-User-Agent: Mutt/1.5.24 (2015-08-30)
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Dec 12, 2019 at 12:38:38PM +0100, Borislav Petkov wrote:
-> On Wed, Nov 27, 2019 at 05:40:07PM -0800, Sean Christopherson wrote:
-> > +static void init_vmx_capabilities(struct cpuinfo_x86 *c)
-> > +{
-> > +	u32 supported, funcs, ept, vpid, ign;
-> > +
-> > +	BUILD_BUG_ON(NVMXINTS != NR_VMX_FEATURE_WORDS);
-> > +
-> > +	/*
-> > +	 * The high bits contain the allowed-1 settings, i.e. features that can
-> > +	 * be turned on.  The low bits contain the allowed-0 settings, i.e.
-> > +	 * features that can be turned off.  Ignore the allowed-0 settings,
-> > +	 * if a feature can be turned on then it's supported.
-> > +	 */
-> > +	rdmsr(MSR_IA32_VMX_PROCBASED_CTLS, ign, supported);
-> > +	c->vmx_capability[PRIMARY_PROC_CTLS] = supported;
-> > +
-> > +	rdmsr_safe(MSR_IA32_VMX_PROCBASED_CTLS2, &ign, &supported);
-> > +	c->vmx_capability[SECONDARY_PROC_CTLS] = supported;
-> > +
-> > +	rdmsr(MSR_IA32_VMX_PINBASED_CTLS, ign, supported);
-> > +	rdmsr_safe(MSR_IA32_VMX_VMFUNC, &ign, &funcs);
-> > +
-> > +	/*
-> > +	 * Except for EPT+VPID, which enumerates support for both in a single
-> > +	 * MSR, low for EPT, high for VPID.
-> > +	 */
-> > +	rdmsr_safe(MSR_IA32_VMX_EPT_VPID_CAP, &ept, &vpid);
-> 
-> Right, so this is a garden variety of rdmsr() and rdmsr_safe() and
-> the safe variant's retval needs to be checked, strictly speaking. It
-> probably doesn't matter here since you'll get 0s if it fails, which
-> means feature not supported, so all good.
-> 
-> But I guess you can still use rdmsr_safe() everywhere just so it doesn't
-> cause head scratching in the future, when one looks at that code.
+On Thu, Dec 12, 2019 at 9:53 AM Liran Alon <liran.alon@oracle.com> wrote:
 
-The reasoning behind using vanilla rdmsr() on PROC and PIN controls is that
-those MSRs should exist on any CPU that supports VMX, i.e. we want the WARN.
+> Why should CPU VMX features be treated differently than standard CPUID deduced features?
 
-The alternative would be to use rdmsr_safe() for everything and then
-explicitly disable VMX if a fault on PROC or PIN occurs, but that circles
-us back to the handling a fault on rdmsr(MSR_IA32_FEAT_CTL), i.e. is it
-really worth gracefully handling a fault that should never occur?
+Do we have the right Intel people on the recipient list to answer this
+question? Presumably, Intel felt that this information should be
+available in supervisor mode only.
 
-> 
-> > +#endif /* CONFIG_X86_VMX_FEATURE_NAMES */
-> >  
-> >  #undef pr_fmt
-> >  #define pr_fmt(fmt)	"x86/cpu: " fmt
-> > @@ -50,5 +116,9 @@ void init_ia32_feat_ctl(struct cpuinfo_x86 *c)
-> >  		pr_err_once("VMX (%s TXT) disabled by BIOS\n",
-> >  			    tboot ? "inside" : "outside");
-> >  		clear_cpu_cap(c, X86_FEATURE_VMX);
-> > +	} else {
-> > +#ifdef CONFIG_X86_VMX_FEATURE_NAMES
-> > +		init_vmx_capabilities(c);
-> > +#endif
-> 
-> Can't say that I'm happy about all that ifdeffery but I guess we need
-> to perpetuate this since X86_FEATURE_NAMES is there for embedded. In
-> practice, probably no one disables it...
-
-Ya, systemd wasn't happy when I tried booting without X86_FEATURE_NAMES.
+Sean?
