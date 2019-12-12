@@ -2,150 +2,92 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AD32211C718
-	for <lists+linux-kselftest@lfdr.de>; Thu, 12 Dec 2019 09:20:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F301911C914
+	for <lists+linux-kselftest@lfdr.de>; Thu, 12 Dec 2019 10:26:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728484AbfLLITh (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 12 Dec 2019 03:19:37 -0500
-Received: from hqnvemgate26.nvidia.com ([216.228.121.65]:4024 "EHLO
-        hqnvemgate26.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728457AbfLLITf (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 12 Dec 2019 03:19:35 -0500
-Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate26.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5df1f8040002>; Thu, 12 Dec 2019 00:19:16 -0800
-Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate101.nvidia.com (PGP Universal service);
-  Thu, 12 Dec 2019 00:19:23 -0800
-X-PGP-Universal: processed;
-        by hqpgpgate101.nvidia.com on Thu, 12 Dec 2019 00:19:23 -0800
-Received: from HQMAIL109.nvidia.com (172.20.187.15) by HQMAIL107.nvidia.com
- (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Thu, 12 Dec
- 2019 08:19:21 +0000
-Received: from HQMAIL109.nvidia.com (172.20.187.15) by HQMAIL109.nvidia.com
- (172.20.187.15) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Thu, 12 Dec
- 2019 08:19:21 +0000
-Received: from hqnvemgw03.nvidia.com (10.124.88.68) by HQMAIL109.nvidia.com
- (172.20.187.15) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
- Transport; Thu, 12 Dec 2019 08:19:21 +0000
-Received: from blueforge.nvidia.com (Not Verified[10.110.48.28]) by hqnvemgw03.nvidia.com with Trustwave SEG (v7,5,8,10121)
-        id <B5df1f8090001>; Thu, 12 Dec 2019 00:19:21 -0800
-From:   John Hubbard <jhubbard@nvidia.com>
-To:     Andrew Morton <akpm@linux-foundation.org>
-CC:     Al Viro <viro@zeniv.linux.org.uk>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn.topel@intel.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Dave Chinner <david@fromorbit.com>,
-        David Airlie <airlied@linux.ie>,
-        "David S . Miller" <davem@davemloft.net>,
-        Ira Weiny <ira.weiny@intel.com>, Jan Kara <jack@suse.cz>,
-        Jason Gunthorpe <jgg@ziepe.ca>, Jens Axboe <axboe@kernel.dk>,
-        Jonathan Corbet <corbet@lwn.net>,
-        =?UTF-8?q?J=C3=A9r=C3=B4me=20Glisse?= <jglisse@redhat.com>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        "Mauro Carvalho Chehab" <mchehab@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Michal Hocko <mhocko@suse.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        "Paul Mackerras" <paulus@samba.org>, Shuah Khan <shuah@kernel.org>,
-        Vlastimil Babka <vbabka@suse.cz>, <bpf@vger.kernel.org>,
-        <dri-devel@lists.freedesktop.org>, <kvm@vger.kernel.org>,
-        <linux-block@vger.kernel.org>, <linux-doc@vger.kernel.org>,
-        <linux-fsdevel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-        <linux-media@vger.kernel.org>, <linux-rdma@vger.kernel.org>,
-        <linuxppc-dev@lists.ozlabs.org>, <netdev@vger.kernel.org>,
-        <linux-mm@kvack.org>, LKML <linux-kernel@vger.kernel.org>,
-        John Hubbard <jhubbard@nvidia.com>
-Subject: [PATCH v10 25/25] selftests/vm: run_vmtests: invoke gup_benchmark with basic FOLL_PIN coverage
-Date:   Thu, 12 Dec 2019 00:19:17 -0800
-Message-ID: <20191212081917.1264184-26-jhubbard@nvidia.com>
-X-Mailer: git-send-email 2.24.0
-In-Reply-To: <20191212081917.1264184-1-jhubbard@nvidia.com>
-References: <20191212081917.1264184-1-jhubbard@nvidia.com>
+        id S1728365AbfLLJZQ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 12 Dec 2019 04:25:16 -0500
+Received: from mail.skyhub.de ([5.9.137.197]:47846 "EHLO mail.skyhub.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728344AbfLLJZQ (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 12 Dec 2019 04:25:16 -0500
+Received: from zn.tnic (p200300EC2F0A5A00984E1B37A4E020FA.dip0.t-ipconnect.de [IPv6:2003:ec:2f0a:5a00:984e:1b37:a4e0:20fa])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 9E4F41EC0985;
+        Thu, 12 Dec 2019 10:25:14 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1576142714;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=+dYA8drbIsiT7giIEQe7BBpW6cQ7yCAKZaHUc/zBWRM=;
+        b=K/BGdkTbgGNJ3oJxIP+zDsGaBijLUTL6eRRcQn81scGw+OHe8dzUUZE+q0t39gaKxHUqX+
+        VD4HI9lFACMrJGt79F9WU4np/Bgsd+KgljTPCLospi5QIiX4hEdaTV+g05+UjlIMz/lofV
+        F7Prs7AFNWlxF1UddZrrXLCUK9F8y9A=
+Date:   Thu, 12 Dec 2019 10:25:09 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Sean Christopherson <sean.j.christopherson@intel.com>
+Cc:     kbuild test robot <lkp@intel.com>, kbuild-all@lists.01.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Radim =?utf-8?B?S3LEjW3DocWZ?= <rkrcmar@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Tony Luck <tony.luck@intel.com>,
+        Tony W Wang-oc <TonyWWang-oc@zhaoxin.com>,
+        Len Brown <lenb@kernel.org>, Shuah Khan <shuah@kernel.org>,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-edac@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+Subject: Re: [PATCH v4 01/19] x86/msr-index: Clean up bit defines for
+ IA32_FEATURE_CONTROL MSR
+Message-ID: <20191212092509.GB4991@zn.tnic>
+References: <20191128014016.4389-2-sean.j.christopherson@intel.com>
+ <201912010347.7tMb4moN%lkp@intel.com>
+ <20191202190633.GG4063@linux.intel.com>
 MIME-Version: 1.0
-X-NVConfidentiality: public
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1576138757; bh=efjW/rF0EGuRthlOGEU05IQnyHi57jZRzyopoxtDk8c=;
-        h=X-PGP-Universal:From:To:CC:Subject:Date:Message-ID:X-Mailer:
-         In-Reply-To:References:MIME-Version:X-NVConfidentiality:
-         Content-Transfer-Encoding:Content-Type;
-        b=WWDMGVYOnHd3iWE+NQQYwhBWbPaghrkNlNIExThbsN/YXyZZxolHhixKxcf8GqE/k
-         zF9jZ17Pvol2P/BjE3xhCV/rhnk5thJMSeLFQqOfOazFqY5oolm1j6pVo0cd95tKbN
-         F31zukDFvOKYBV2dvENEhMUn1B91vbhd3i4wJGjJ4RPIwCJFToXC8m4sBIBpz2px5U
-         F9hMccp4L8YeXaEKmlNprmiR65S6O7E7EzTLOutDvfCdRwF9rvkBaMisYbAmbMtoYZ
-         vv3yw+6/SqlvDkIXoOmGW7/OgE7PrZmOTmWZH9P9/nHXXZF5hmGt2C7TTl7TTSsXNI
-         G9Ljkzb2cb+0w==
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20191202190633.GG4063@linux.intel.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-It's good to have basic unit test coverage of the new FOLL_PIN
-behavior. Fortunately, the gup_benchmark unit test is extremely
-fast (a few milliseconds), so adding it the the run_vmtests suite
-is going to cause no noticeable change in running time.
+On Mon, Dec 02, 2019 at 11:06:33AM -0800, Sean Christopherson wrote:
+> Argh, flat out missed this when doing search and replace.
 
-So, add two new invocations to run_vmtests:
+There are more. What always works reliably for me is git grep:
 
-1) Run gup_benchmark with normal get_user_pages().
+$ git grep MSR_IA32_FEATURE_CONTROL
+drivers/idle/intel_idle.c:1287:         rdmsrl(MSR_IA32_FEATURE_CONTROL, msr);
+tools/arch/x86/include/asm/msr-index.h:561:#define MSR_IA32_FEATURE_CONTROL        0x0000003a
+tools/power/x86/turbostat/turbostat.c:4502:     if (!get_msr(base_cpu, MSR_IA32_FEATURE_CONTROL, &msr))
+tools/power/x86/turbostat/turbostat.c:4503:             fprintf(outf, "cpu%d: MSR_IA32_FEATURE_CONTROL: 0x%08llx (%sLocked %s)\n",
+tools/testing/selftests/kvm/include/x86_64/processor.h:771:#define MSR_IA32_FEATURE_CONTROL        0x0000003a
+tools/testing/selftests/kvm/lib/x86_64/vmx.c:162:       feature_control = rdmsr(MSR_IA32_FEATURE_CONTROL);
+tools/testing/selftests/kvm/lib/x86_64/vmx.c:164:               wrmsr(MSR_IA32_FEATURE_CONTROL, feature_control | required);
 
-2) Run gup_benchmark with pin_user_pages(). This is much like
-the first call, except that it sets FOLL_PIN.
+those additional ones won't break the build but it is perhaps worth
+unifying them all since we're at it, anyway.
 
-Running these two in quick succession also provide a visual
-comparison of the running times, which is convenient.
+Thx.
 
-The new invocations are fairly early in the run_vmtests script,
-because with test suites, it's usually preferable to put the
-shorter, faster tests first, all other things being equal.
+-- 
+Regards/Gruss,
+    Boris.
 
-Reviewed-by: Ira Weiny <ira.weiny@intel.com>
-Signed-off-by: John Hubbard <jhubbard@nvidia.com>
----
- tools/testing/selftests/vm/run_vmtests | 22 ++++++++++++++++++++++
- 1 file changed, 22 insertions(+)
-
-diff --git a/tools/testing/selftests/vm/run_vmtests b/tools/testing/selftes=
-ts/vm/run_vmtests
-index a692ea828317..df6a6bf3f238 100755
---- a/tools/testing/selftests/vm/run_vmtests
-+++ b/tools/testing/selftests/vm/run_vmtests
-@@ -112,6 +112,28 @@ echo "NOTE: The above hugetlb tests provide minimal co=
-verage.  Use"
- echo "      https://github.com/libhugetlbfs/libhugetlbfs.git for"
- echo "      hugetlb regression testing."
-=20
-+echo "--------------------------------------------"
-+echo "running 'gup_benchmark -U' (normal/slow gup)"
-+echo "--------------------------------------------"
-+./gup_benchmark -U
-+if [ $? -ne 0 ]; then
-+	echo "[FAIL]"
-+	exitcode=3D1
-+else
-+	echo "[PASS]"
-+fi
-+
-+echo "------------------------------------------"
-+echo "running gup_benchmark -b (pin_user_pages)"
-+echo "------------------------------------------"
-+./gup_benchmark -b
-+if [ $? -ne 0 ]; then
-+	echo "[FAIL]"
-+	exitcode=3D1
-+else
-+	echo "[PASS]"
-+fi
-+
- echo "-------------------"
- echo "running userfaultfd"
- echo "-------------------"
---=20
-2.24.0
-
+https://people.kernel.org/tglx/notes-about-netiquette
