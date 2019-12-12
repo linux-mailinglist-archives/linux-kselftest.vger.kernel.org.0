@@ -2,100 +2,192 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BF4211C337
-	for <lists+linux-kselftest@lfdr.de>; Thu, 12 Dec 2019 03:27:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 69EA911C5B3
+	for <lists+linux-kselftest@lfdr.de>; Thu, 12 Dec 2019 06:56:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727843AbfLLC1e (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 11 Dec 2019 21:27:34 -0500
-Received: from mail-pj1-f49.google.com ([209.85.216.49]:36267 "EHLO
-        mail-pj1-f49.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727804AbfLLC1b (ORCPT
+        id S1727906AbfLLF4i (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 12 Dec 2019 00:56:38 -0500
+Received: from hqnvemgate26.nvidia.com ([216.228.121.65]:14305 "EHLO
+        hqnvemgate26.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726798AbfLLF4h (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 11 Dec 2019 21:27:31 -0500
-Received: by mail-pj1-f49.google.com with SMTP id n96so365760pjc.3;
-        Wed, 11 Dec 2019 18:27:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=Q9POWu9QQdjXlCxWsG8nhRyoRqIP2kXxcG0Qf/wCB4g=;
-        b=FJEuZsdm7LU6Kc4mRJBTldlXcUWbi0J3FW0GL9IJjqw+Wnq/8dEun0vCvWz4vl3iab
-         Fqq/sT9sQ37rX9j/JAClwVomNhzsmdL18W2jAgd+Rg6WWxpdAdw6UowLajZw37yYINwa
-         tRGvDS6pvwvTU32QKheCTmuEowhOTLrU/PM5BnJP/FEEZ4lvHnOOgUyAhWS5NO9rzjqE
-         ngkpugKR6Fygg0bMM7IKY4m6f2tSB1oAJ1MxffpkJUvZM/6X8ccNrDkXqQDsiwAqX4Ez
-         6Fa3zQIKWYUj4cdi+flr5uFZ+1ywX3u5nGBb/+9pyfM4bg5lsM+Q52vIomQlrUuxKi6F
-         RavQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=Q9POWu9QQdjXlCxWsG8nhRyoRqIP2kXxcG0Qf/wCB4g=;
-        b=fGRws0n7g0BFZr7zHiEKQUriyLzkBbkFt66FQIc/WJCXkoEsdpulNOtNuVLYZhdsBz
-         imxJM4zK15u1sQmNAME5J87aikjI4xmbC2Nv9RtCar0RGrkpI9ZQx2I0e4Yur4VGu9xx
-         ZgQs8M463eEeDzQD3HkTm1TptEQDzHikhGInbjFqHPPnuwHfZsgCmc9xvthEoCb9gqfA
-         QMInf/jbmaFokGoehfnKXwpvks4Fr4RZq9RW/GNe6sSaR4GYsgSmEzXjSTN4nSNrYkW0
-         +UZsBfPq5cZjfKhGpvybrM8UsdP4lkTKKNn/bkv13Ye6wka9Y6MkmHJWnXQTqtMuHgEk
-         UNlg==
-X-Gm-Message-State: APjAAAU9Bslon9fm2Uc4+gFSVyULCgHjPod51JsG11gNQOaopAUkjCrt
-        8Vf1Mq4MAE9WOfVuwDEEqRQ=
-X-Google-Smtp-Source: APXvYqxFh2T30aiJVZrwFJ4fg7UgrXfuNRbuhdW/gGfmdLi9B8wfIypK0Lxnv4bPvyGHXFEGZPL/Rw==
-X-Received: by 2002:a17:902:848a:: with SMTP id c10mr6348557plo.209.1576117650497;
-        Wed, 11 Dec 2019 18:27:30 -0800 (PST)
-Received: from localhost.localdomain ([12.176.148.120])
-        by smtp.gmail.com with ESMTPSA id d22sm4245173pgg.52.2019.12.11.18.27.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 Dec 2019 18:27:29 -0800 (PST)
-From:   SeongJae Park <sj38.park@gmail.com>
-X-Google-Original-From: SeongJae Park <sjpark@amazon.de>
-To:     brendanhiggins@google.com, shuah@kernel.org
-Cc:     sjpark@amazon.com, corbet@lwn.net, kunit-dev@googlegroups.com,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, sj38.park@gmail.com,
-        sjpark@amazon.de
-Subject: [PATCH v6 6/6] kunit/kunit_tool_test: Test '--build_dir' option run
-Date:   Thu, 12 Dec 2019 02:27:11 +0000
-Message-Id: <20191212022711.10062-7-sjpark@amazon.de>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20191212022711.10062-1-sjpark@amazon.de>
-References: <20191212022711.10062-1-sjpark@amazon.de>
+        Thu, 12 Dec 2019 00:56:37 -0500
+Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate26.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5df1d68d0000>; Wed, 11 Dec 2019 21:56:29 -0800
+Received: from hqmail.nvidia.com ([172.20.161.6])
+  by hqpgpgate101.nvidia.com (PGP Universal service);
+  Wed, 11 Dec 2019 21:56:36 -0800
+X-PGP-Universal: processed;
+        by hqpgpgate101.nvidia.com on Wed, 11 Dec 2019 21:56:36 -0800
+Received: from [10.2.165.195] (10.124.1.5) by HQMAIL107.nvidia.com
+ (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Thu, 12 Dec
+ 2019 05:56:35 +0000
+Subject: Re: [PATCH v9 23/25] mm/gup: track FOLL_PIN pages
+To:     Jan Kara <jack@suse.cz>
+CC:     Andrew Morton <akpm@linux-foundation.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Dave Chinner <david@fromorbit.com>,
+        David Airlie <airlied@linux.ie>,
+        "David S . Miller" <davem@davemloft.net>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>, Jens Axboe <axboe@kernel.dk>,
+        Jonathan Corbet <corbet@lwn.net>,
+        =?UTF-8?B?SsOpcsO0bWUgR2xpc3Nl?= <jglisse@redhat.com>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Michal Hocko <mhocko@suse.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Paul Mackerras <paulus@samba.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Vlastimil Babka <vbabka@suse.cz>, <bpf@vger.kernel.org>,
+        <dri-devel@lists.freedesktop.org>, <kvm@vger.kernel.org>,
+        <linux-block@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+        <linux-fsdevel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+        <linux-media@vger.kernel.org>, <linux-rdma@vger.kernel.org>,
+        <linuxppc-dev@lists.ozlabs.org>, <netdev@vger.kernel.org>,
+        <linux-mm@kvack.org>, LKML <linux-kernel@vger.kernel.org>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
+References: <20191211025318.457113-1-jhubbard@nvidia.com>
+ <20191211025318.457113-24-jhubbard@nvidia.com>
+ <20191211112807.GN1551@quack2.suse.cz>
+From:   John Hubbard <jhubbard@nvidia.com>
+X-Nvconfidentiality: public
+Message-ID: <f961d0b6-c660-85b9-ad01-53bce74e39e9@nvidia.com>
+Date:   Wed, 11 Dec 2019 21:53:45 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.3.0
+MIME-Version: 1.0
+In-Reply-To: <20191211112807.GN1551@quack2.suse.cz>
+X-Originating-IP: [10.124.1.5]
+X-ClientProxiedBy: HQMAIL105.nvidia.com (172.20.187.12) To
+ HQMAIL107.nvidia.com (172.20.187.13)
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: quoted-printable
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1576130189; bh=WUvMFBOwsTbLT+9CzNbxGtAponFsFsmTJOyg8MjL8ds=;
+        h=X-PGP-Universal:Subject:To:CC:References:From:X-Nvconfidentiality:
+         Message-ID:Date:User-Agent:MIME-Version:In-Reply-To:
+         X-Originating-IP:X-ClientProxiedBy:Content-Type:Content-Language:
+         Content-Transfer-Encoding;
+        b=lsWfVOx2mYuCSEqMXkqo0p3SpKqw9VwSL+20QlVcuyoMSELQtTCN0YxM6RzLVo9oa
+         uq4Hl9KFn70q6l1bzqmgaiV5HLk4+H2168Aq1l5uWc+mWWgNKPzhftF1QMyxl40GPe
+         nNNgDtbzvAru+MjxE1MbEaMe+90vfqRYKPVuX/JzejQXCe2EVI5eyYy9CwInRuqtjp
+         2idGFh4dXFAMfDwQiKAN1Pz/TUuUoswEkyfXdQEyWp7z5jAlzfpntkPH8s96FOaimZ
+         1olYa+8gPiG8ccYKitvEKwCbv3GPr0UXUD+T0zjEzw7D9d6fQ9awWSzCOfMJ4VZl20
+         16ivttgOjkh4A==
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This commit adds kunit tool test for the '--build_dir' option.
+On 12/11/19 3:28 AM, Jan Kara wrote:
+...
+>=20
+> The patch looks mostly good to me now. Just a few smaller comments below.
+>=20
+>> Suggested-by: Jan Kara <jack@suse.cz>
+>> Suggested-by: J=C3=A9r=C3=B4me Glisse <jglisse@redhat.com>
+>> Reviewed-by: Jan Kara <jack@suse.cz>
+>> Reviewed-by: J=C3=A9r=C3=B4me Glisse <jglisse@redhat.com>
+>> Reviewed-by: Ira Weiny <ira.weiny@intel.com>
+>=20
+> I think you inherited here the Reviewed-by tags from the "add flags" patc=
+h
+> you've merged into this one but that's not really fair since this patch
+> does much more... In particular I didn't give my Reviewed-by tag for this
+> patch yet.
 
-Signed-off-by: SeongJae Park <sjpark@amazon.de>
-Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
-Tested-by: Brendan Higgins <brendanhiggins@google.com>
----
- tools/testing/kunit/kunit_tool_test.py | 8 ++++++++
- 1 file changed, 8 insertions(+)
+OK, I've removed those reviewed-by's. (I felt bad about dropping them, afte=
+r
+people had devoted time to reviewing, but I do see that it's wrong to imply
+that they've reviewed this much much larger thing.)
 
-diff --git a/tools/testing/kunit/kunit_tool_test.py b/tools/testing/kunit/kunit_tool_test.py
-index 22f16e66b3c1..cba97756ac4a 100755
---- a/tools/testing/kunit/kunit_tool_test.py
-+++ b/tools/testing/kunit/kunit_tool_test.py
-@@ -174,6 +174,7 @@ class KUnitMainTest(unittest.TestCase):
- 		kunit.main(['run'], self.linux_source_mock)
- 		assert self.linux_source_mock.build_reconfig.call_count == 1
- 		assert self.linux_source_mock.run_kernel.call_count == 1
-+		self.linux_source_mock.run_kernel.assert_called_once_with(build_dir='', timeout=300)
- 		self.print_mock.assert_any_call(StrContains('Testing complete.'))
- 
- 	def test_run_passes_args_fail(self):
-@@ -202,5 +203,12 @@ class KUnitMainTest(unittest.TestCase):
- 		self.linux_source_mock.run_kernel.assert_called_once_with(build_dir='', timeout=timeout)
- 		self.print_mock.assert_any_call(StrContains('Testing complete.'))
- 
-+	def test_run_builddir(self):
-+		build_dir = '.kunit'
-+		kunit.main(['run', '--build_dir', build_dir], self.linux_source_mock)
-+		assert self.linux_source_mock.build_reconfig.call_count == 1
-+		self.linux_source_mock.run_kernel.assert_called_once_with(build_dir=build_dir, timeout=300)
-+		self.print_mock.assert_any_call(StrContains('Testing complete.'))
-+
- if __name__ == '__main__':
- 	unittest.main()
--- 
-2.17.1
+...
+>=20
+> I somewhat wonder about the asymmetry of try_grab_compound_head() vs
+> try_grab_page() in the treatment of 'flags'. How costly would it be to ma=
+ke
+> them symmetric (i.e., either set FOLL_GET for try_grab_compound_head()
+> callers or make sure one of FOLL_GET, FOLL_PIN is set for try_grab_page()=
+)?
+>=20
+> Because this difference looks like a subtle catch in the long run...
 
+Done. It is only a modest code-level change, at least the way I've done it,=
+ which is
+setting FOLL_GET for try_grab_compound_head(). In order to do that, I set
+it at the top of the internal gup fast calling stacks, which is actually a =
+good
+design anyway: gup fast is logically doing FOLL_GET in all cases. So settin=
+g
+the flag internally is accurate and consistent with the overall design.
+
+
+> ...
+>=20
+>> @@ -1522,8 +1536,8 @@ struct page *follow_trans_huge_pmd(struct vm_area_=
+struct *vma,
+>>   skip_mlock:
+>>   	page +=3D (addr & ~HPAGE_PMD_MASK) >> PAGE_SHIFT;
+>>   	VM_BUG_ON_PAGE(!PageCompound(page) && !is_zone_device_page(page), pag=
+e);
+>> -	if (flags & FOLL_GET)
+>> -		get_page(page);
+>> +	if (!try_grab_page(page, flags))
+>> +		page =3D ERR_PTR(-EFAULT);
+>=20
+> I think you need to also move the try_grab_page() earlier in the function=
+.
+> At this point the page may be marked as mlocked and you'd need to undo th=
+at
+> in case try_grab_page() fails.
+
+
+OK, I've moved it up, adding a "subpage" variable in order to make that wor=
+k.
+
+>=20
+>> diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+>> index ac65bb5e38ac..0aab6fe0072f 100644
+>> --- a/mm/hugetlb.c
+>> +++ b/mm/hugetlb.c
+>> @@ -4356,7 +4356,13 @@ long follow_hugetlb_page(struct mm_struct *mm, st=
+ruct vm_area_struct *vma,
+>>   same_page:
+>>   		if (pages) {
+>>   			pages[i] =3D mem_map_offset(page, pfn_offset);
+>> -			get_page(pages[i]);
+>> +			if (!try_grab_page(pages[i], flags)) {
+>> +				spin_unlock(ptl);
+>> +				remainder =3D 0;
+>> +				err =3D -ENOMEM;
+>> +				WARN_ON_ONCE(1);
+>> +				break;
+>> +			}
+>>   		}
+>=20
+> This function does a refcount overflow check early so that it doesn't hav=
+e
+> to do try_get_page() here. So that check can be now removed when you do
+> try_grab_page() here anyway since that early check seems to be just a tin=
+y
+> optimization AFAICT.
+>=20
+> 								Honza
+>=20
+
+Yes. I've removed it, good spot.
+
+
+thanks,
+--=20
+John Hubbard
+NVIDIA
