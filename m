@@ -2,140 +2,101 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CC3B511DF83
-	for <lists+linux-kselftest@lfdr.de>; Fri, 13 Dec 2019 09:34:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CB2D11E22B
+	for <lists+linux-kselftest@lfdr.de>; Fri, 13 Dec 2019 11:39:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725945AbfLMIeP (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 13 Dec 2019 03:34:15 -0500
-Received: from mx2.suse.de ([195.135.220.15]:35322 "EHLO mx1.suse.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725810AbfLMIeP (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 13 Dec 2019 03:34:15 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id 3DE0DAB9B;
-        Fri, 13 Dec 2019 08:34:12 +0000 (UTC)
-Date:   Fri, 13 Dec 2019 09:34:11 +0100
-From:   Petr Mladek <pmladek@suse.com>
-To:     Shuah Khan <skhan@linuxfoundation.org>
-Cc:     jpoimboe@redhat.com, jikos@kernel.org, mbenes@suse.cz,
-        joe.lawrence@redhat.com, shuah@kernel.org,
-        live-patching@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] selftests: livepatch: Fix it to do root uid check and
- skip
-Message-ID: <20191213083411.delrxditrpcdm7az@pathway.suse.cz>
-References: <20191213015617.23110-1-skhan@linuxfoundation.org>
+        id S1725928AbfLMKj3 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 13 Dec 2019 05:39:29 -0500
+Received: from youngberry.canonical.com ([91.189.89.112]:54275 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725747AbfLMKj3 (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 13 Dec 2019 05:39:29 -0500
+Received: from 1.general.cascardo.us.vpn ([10.172.70.58] helo=localhost.localdomain)
+        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.86_2)
+        (envelope-from <cascardo@canonical.com>)
+        id 1ifiM0-0000S0-7i; Fri, 13 Dec 2019 10:39:24 +0000
+From:   Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
+To:     "David S. Miller" <davem@davemloft.net>
+Cc:     Shuah Khan <shuah@kernel.org>,
+        Jakub Kicinski <jakub.kicinski@netronome.com>,
+        Simon Horman <simon.horman@netronome.com>,
+        netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Paolo Pisati <paolo.pisati@canonical.com>,
+        Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
+Subject: [PATCH] selftests: net: tls: remove recv_rcvbuf test
+Date:   Fri, 13 Dec 2019 07:39:02 -0300
+Message-Id: <20191213103903.29777-1-cascardo@canonical.com>
+X-Mailer: git-send-email 2.24.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191213015617.23110-1-skhan@linuxfoundation.org>
-User-Agent: NeoMutt/20170912 (1.9.0)
+Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu 2019-12-12 18:56:17, Shuah Khan wrote:
-> livepatch test configures the system and debug environment to run
-> tests. Some of these actions fail without root access and test
-> dumps several permission denied messages before it exits.
-> 
-> Fix it to check root uid and exit with skip code instead.
+This test only works when [1] is applied, which was rejected.
 
-It works when I run the tests directly, e.g.
+Basically, the errors are reported and cleared. In this particular case of
+tls sockets, following reads will block.
 
-$> cd tools/testing/selftests/livepatch
-$> ./test-livepatch.sh
+The test case was originally submitted with the rejected patch, but, then,
+was included as part of a different patchset, possibly by mistake.
 
-But I still get an error from the selftest framework when running
-make run_tests:
+[1] https://lore.kernel.org/netdev/20191007035323.4360-2-jakub.kicinski@netronome.com/#t
 
-$> make run_tests
-TAP version 13
-1..5
-# selftests: livepatch: test-livepatch.sh
-/mnt/kernel/linux/tools/testing/selftests/kselftest/runner.sh: line 43: /dev/stdout: Permission denied
-not ok 1 selftests: livepatch: test-livepatch.sh # exit=1
-# selftests: livepatch: test-callbacks.sh
-/mnt/kernel/linux/tools/testing/selftests/kselftest/runner.sh: line 43: /dev/stdout: Permission denied
-not ok 2 selftests: livepatch: test-callbacks.sh # exit=1
-# selftests: livepatch: test-shadow-vars.sh
-/mnt/kernel/linux/tools/testing/selftests/kselftest/runner.sh: line 43: /dev/stdout: Permission denied
-not ok 3 selftests: livepatch: test-shadow-vars.sh # exit=1
-# selftests: livepatch: test-state.sh
-/mnt/kernel/linux/tools/testing/selftests/kselftest/runner.sh: line 43: /dev/stdout: Permission denied
-not ok 4 selftests: livepatch: test-state.sh # exit=1
-# selftests: livepatch: test-ftrace.sh
-/mnt/kernel/linux/tools/testing/selftests/kselftest/runner.sh: line 43: /dev/stdout: Permission denied
-not ok 5 selftests: livepatch: test-ftrace.sh # exit=1
+Thanks Paolo Pisati for pointing out the original patchset where this
+appeared.
 
-The same problem is also in linux-next. Is this a know problem, please?
-
-
-> Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
-> ---
->  tools/testing/selftests/livepatch/functions.sh | 16 +++++++++++++++-
->  1 file changed, 15 insertions(+), 1 deletion(-)
-> 
-> diff --git a/tools/testing/selftests/livepatch/functions.sh b/tools/testing/selftests/livepatch/functions.sh
-> index 31eb09e38729..014b587692f0 100644
-> --- a/tools/testing/selftests/livepatch/functions.sh
-> +++ b/tools/testing/selftests/livepatch/functions.sh
-> @@ -45,6 +57,7 @@ function pop_config() {
->  }
->  
->  function set_dynamic_debug() {
-> +	is_root
->          cat <<-EOF > /sys/kernel/debug/dynamic_debug/control
->  		file kernel/livepatch/* +p
->  		func klp_try_switch_task -p
-
-This test is superfluous.
-
-I guess that it was added because of test-state.sh. But it calls
-set_dynamic_debug() instead of config_setup() by mistake.
-Please, use the patch below instead of the above hunk.
-
-Otherwise, this patch looks good. Thanks for fixing this.
-Without the hunk above, and with the patch below, feel free to use:
-
-Reviewed-by: Petr Mladek <pmladek@suse.com>
-
-
-Here is the fix of test-state.sh:
-
-From 01ca8fd71fc964b892e54aea198537d007d33b4f Mon Sep 17 00:00:00 2001
-From: Petr Mladek <pmladek@suse.com>
-Date: Fri, 13 Dec 2019 09:26:45 +0100
-Subject: [PATCH] selftests/livepatch: Use setup_config() also in test-state.sh
-
-The commit 35c9e74cff4c798d0 ("selftests/livepatch: Make dynamic debug
-setup and restore generic") introduced setup_config() to prepare
-the testing environment. All selftests should call it instead
-of set_dynamic_debug().
-
-test-state.sh has been developed in parallel and was not converted
-by mistake.
-
-Signed-off-by: Petr Mladek <pmladek@suse.com>
+Cc: Jakub Kicinski <jakub.kicinski@netronome.com>
+Fixes: 65190f77424d (selftests/tls: add a test for fragmented messages)
+Reported-by: Paolo Pisati <paolo.pisati@canonical.com>
+Signed-off-by: Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
 ---
- tools/testing/selftests/livepatch/test-state.sh | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/testing/selftests/net/tls.c | 28 ----------------------------
+ 1 file changed, 28 deletions(-)
 
-diff --git a/tools/testing/selftests/livepatch/test-state.sh b/tools/testing/selftests/livepatch/test-state.sh
-index dc2908c22c26..5c80e51fca55 100755
---- a/tools/testing/selftests/livepatch/test-state.sh
-+++ b/tools/testing/selftests/livepatch/test-state.sh
-@@ -8,7 +8,7 @@ MOD_LIVEPATCH=test_klp_state
- MOD_LIVEPATCH2=test_klp_state2
- MOD_LIVEPATCH3=test_klp_state3
+diff --git a/tools/testing/selftests/net/tls.c b/tools/testing/selftests/net/tls.c
+index 13e5ef615026..0ea44d975b6c 100644
+--- a/tools/testing/selftests/net/tls.c
++++ b/tools/testing/selftests/net/tls.c
+@@ -722,34 +722,6 @@ TEST_F(tls, recv_lowat)
+ 	EXPECT_EQ(memcmp(send_mem, recv_mem + 10, 5), 0);
+ }
  
--set_dynamic_debug
-+setup_config
- 
- 
- # TEST: Loading and removing a module that modifies the system state
+-TEST_F(tls, recv_rcvbuf)
+-{
+-	char send_mem[4096];
+-	char recv_mem[4096];
+-	int rcv_buf = 1024;
+-
+-	memset(send_mem, 0x1c, sizeof(send_mem));
+-
+-	EXPECT_EQ(setsockopt(self->cfd, SOL_SOCKET, SO_RCVBUF,
+-			     &rcv_buf, sizeof(rcv_buf)), 0);
+-
+-	EXPECT_EQ(send(self->fd, send_mem, 512, 0), 512);
+-	memset(recv_mem, 0, sizeof(recv_mem));
+-	EXPECT_EQ(recv(self->cfd, recv_mem, sizeof(recv_mem), 0), 512);
+-	EXPECT_EQ(memcmp(send_mem, recv_mem, 512), 0);
+-
+-	if (self->notls)
+-		return;
+-
+-	EXPECT_EQ(send(self->fd, send_mem, 4096, 0), 4096);
+-	memset(recv_mem, 0, sizeof(recv_mem));
+-	EXPECT_EQ(recv(self->cfd, recv_mem, sizeof(recv_mem), 0), -1);
+-	EXPECT_EQ(errno, EMSGSIZE);
+-
+-	EXPECT_EQ(recv(self->cfd, recv_mem, sizeof(recv_mem), 0), -1);
+-	EXPECT_EQ(errno, EMSGSIZE);
+-}
+-
+ TEST_F(tls, bidir)
+ {
+ 	char const *test_str = "test_read";
 -- 
-2.16.4
+2.24.0
 
