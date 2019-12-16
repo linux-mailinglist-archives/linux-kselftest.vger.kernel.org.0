@@ -2,27 +2,27 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D5BE121597
-	for <lists+linux-kselftest@lfdr.de>; Mon, 16 Dec 2019 19:23:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 28B341216A5
+	for <lists+linux-kselftest@lfdr.de>; Mon, 16 Dec 2019 19:30:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732090AbfLPSUa (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 16 Dec 2019 13:20:30 -0500
-Received: from mail.kernel.org ([198.145.29.99]:50750 "EHLO mail.kernel.org"
+        id S1730573AbfLPSMV (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 16 Dec 2019 13:12:21 -0500
+Received: from mail.kernel.org ([198.145.29.99]:57096 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732088AbfLPSUa (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 16 Dec 2019 13:20:30 -0500
+        id S1730924AbfLPSMS (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 16 Dec 2019 13:12:18 -0500
 Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id B5B9720717;
-        Mon, 16 Dec 2019 18:20:28 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 103EF206B7;
+        Mon, 16 Dec 2019 18:12:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1576520429;
+        s=default; t=1576519937;
         bh=EwT10ETY9MI/NdSUuESri3Es+yuKxE44eF/VBhE5Dkg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=GodSTTnSBZhzF6WptlEJxHxmtcwN4qGjGeNdbNk2h9/61X8I32euIuPj8sHacT5K2
-         /Iqmqa7bhm+FEkaoGqdpOqCCYPVTALPieMjpmZhkyLn/L/UvH5INbVrwVCGqopOCcr
-         zwG5SjOz4nhGZ2JVJuLlSHLd+3SjlVovMxgi9tcg=
+        b=uwnKulP14TAHsnlo1flBzSWOfuzC1UIbuW3qncqpJOM7EX61XfH2J/EIPWW8ymOZD
+         8xGXzXkN9TiyszGzRsEBCTFxsFEE1DO8fZYjLwpIpxA1eTFfghmPPuurW8XQhBWHL6
+         /T1E4SFCnenhJ2O3cj4zgMKsRQWthOzHwCF/deTU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -38,12 +38,12 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Tycho Andersen <tycho@tycho.ws>,
         linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
         bpf@vger.kernel.org, Kees Cook <keescook@chromium.org>
-Subject: [PATCH 5.4 151/177] seccomp: avoid overflow in implicit constant conversion
-Date:   Mon, 16 Dec 2019 18:50:07 +0100
-Message-Id: <20191216174847.985672730@linuxfoundation.org>
+Subject: [PATCH 5.3 131/180] seccomp: avoid overflow in implicit constant conversion
+Date:   Mon, 16 Dec 2019 18:49:31 +0100
+Message-Id: <20191216174841.842411126@linuxfoundation.org>
 X-Mailer: git-send-email 2.24.1
-In-Reply-To: <20191216174811.158424118@linuxfoundation.org>
-References: <20191216174811.158424118@linuxfoundation.org>
+In-Reply-To: <20191216174806.018988360@linuxfoundation.org>
+References: <20191216174806.018988360@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
