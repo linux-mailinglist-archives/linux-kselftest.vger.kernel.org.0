@@ -2,162 +2,115 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 73CD9121C64
-	for <lists+linux-kselftest@lfdr.de>; Mon, 16 Dec 2019 23:08:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C4943121CA2
+	for <lists+linux-kselftest@lfdr.de>; Mon, 16 Dec 2019 23:22:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727835AbfLPWHL (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 16 Dec 2019 17:07:11 -0500
-Received: from mail-pf1-f202.google.com ([209.85.210.202]:43092 "EHLO
-        mail-pf1-f202.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727801AbfLPWHH (ORCPT
+        id S1726769AbfLPWV4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 16 Dec 2019 17:21:56 -0500
+Received: from hqnvemgate24.nvidia.com ([216.228.121.143]:11660 "EHLO
+        hqnvemgate24.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726141AbfLPWVz (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 16 Dec 2019 17:07:07 -0500
-Received: by mail-pf1-f202.google.com with SMTP id x199so7762958pfc.10
-        for <linux-kselftest@vger.kernel.org>; Mon, 16 Dec 2019 14:07:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=Q0qe2kR+bAay0VBCKejOtYmpF3XJORWe/2Y7Sg9amhw=;
-        b=KXEdzR5sEfYW47IOMB4cZpps1PEpUNY54j1THILz0FDue58d4xDTo4xEyITzycC8WI
-         cty59wubaPPbwA/praz2PhIRWbMoNlSfJ5HI5lCRKkz8ZEl+1Q+Mgi5nnUk4hwIMFFyK
-         o9a7hgBtcB2M5nWh7oleILEiPMeC9wsSl3JvL9uyI3jcWOWl2HiNpuPS3tm/2kuzXz/2
-         ZwrcD9NIwbP+TD9B5epGkERp4xEk54xjjIh2KP3BOzg2dWatvs23FcGoe18LGv9tigsN
-         zk7enm6BbQ+IPvYpT59CVbQcLcAbQsDC1kmQ7hMOW4aOh6ehkNGuohUloJyoEOImpdB0
-         og2A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=Q0qe2kR+bAay0VBCKejOtYmpF3XJORWe/2Y7Sg9amhw=;
-        b=i/mwfLtSmouY35MAyRg0HNUWS45ifvgFwwv3H7EnC+S1YwxuDB4kS8Zb5u83Utyzab
-         wW1OTfphIfiFF4bDaXPlhIgFRxBzZDIJFkaXyz256vNt60gUSW31oyrh8+LqmHLWscB6
-         cNFHSISF/Dl6yFcj1unI/zwX6HyuTNUn+t5mchaGhDqselsYUJWBLUfrM+3WU4SiWn+P
-         kUMSQQn0fHsGhWgdr8++wjx/bzRoG5o7CGAw0YOsO8+bdBt1AMnK3qYDSY9UKg9gBtt6
-         36Xo0F5ljH1RLQUagiGAul1F4pynxK+iT3sPYGyl4nwnBqUxdtnMktFjDfa3LfeEgToL
-         fI2Q==
-X-Gm-Message-State: APjAAAVgGI0tPQi8BLYT8aqW8Pl/fTqL2qUFE5s9GMKvr3e0lSERpxx0
-        yZexcvMF2re9CnuUAmCpYYksbdJPkmy/13J3oLlRSA==
-X-Google-Smtp-Source: APXvYqxRhQSngjdpwvFolaB1SLzzXTDEa/g1lTeVrAduuwj0fvc+F3k5fBaVV1qGODXsFPGnv0IqlV0v+/1bKZjWCdvWlA==
-X-Received: by 2002:a63:9548:: with SMTP id t8mr9143009pgn.205.1576534024897;
- Mon, 16 Dec 2019 14:07:04 -0800 (PST)
-Date:   Mon, 16 Dec 2019 14:05:55 -0800
-In-Reply-To: <20191216220555.245089-1-brendanhiggins@google.com>
-Message-Id: <20191216220555.245089-7-brendanhiggins@google.com>
-Mime-Version: 1.0
-References: <20191216220555.245089-1-brendanhiggins@google.com>
-X-Mailer: git-send-email 2.24.1.735.g03f4e72817-goog
-Subject: [RFC v1 6/6] kunit: Add 'kunit_shutdown' option
-From:   Brendan Higgins <brendanhiggins@google.com>
-To:     jdike@addtoit.com, richard@nod.at, anton.ivanov@cambridgegreys.com,
-        arnd@arndb.de, keescook@chromium.org, skhan@linuxfoundation.org,
-        alan.maguire@oracle.com, yzaikin@google.com, davidgow@google.com,
-        akpm@linux-foundation.org, rppt@linux.ibm.com
-Cc:     gregkh@linuxfoundation.org, sboyd@kernel.org, logang@deltatee.com,
-        mcgrof@kernel.org, knut.omang@oracle.com,
-        linux-um@lists.infradead.org, linux-arch@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org,
-        Brendan Higgins <brendanhiggins@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        Mon, 16 Dec 2019 17:21:55 -0500
+Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate24.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5df803630000>; Mon, 16 Dec 2019 14:21:23 -0800
+Received: from hqmail.nvidia.com ([172.20.161.6])
+  by hqpgpgate101.nvidia.com (PGP Universal service);
+  Mon, 16 Dec 2019 14:21:50 -0800
+X-PGP-Universal: processed;
+        by hqpgpgate101.nvidia.com on Mon, 16 Dec 2019 14:21:50 -0800
+Received: from [10.2.165.205] (10.124.1.5) by HQMAIL107.nvidia.com
+ (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Mon, 16 Dec
+ 2019 22:21:49 +0000
+Subject: Re: [PATCH v11 23/25] mm/gup: track FOLL_PIN pages
+To:     Jan Kara <jack@suse.cz>
+CC:     Andrew Morton <akpm@linux-foundation.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Dave Chinner <david@fromorbit.com>,
+        David Airlie <airlied@linux.ie>,
+        "David S . Miller" <davem@davemloft.net>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>, Jens Axboe <axboe@kernel.dk>,
+        Jonathan Corbet <corbet@lwn.net>,
+        =?UTF-8?B?SsOpcsO0bWUgR2xpc3Nl?= <jglisse@redhat.com>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Michal Hocko <mhocko@suse.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Paul Mackerras <paulus@samba.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Vlastimil Babka <vbabka@suse.cz>, <bpf@vger.kernel.org>,
+        <dri-devel@lists.freedesktop.org>, <kvm@vger.kernel.org>,
+        <linux-block@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+        <linux-fsdevel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+        <linux-media@vger.kernel.org>, <linux-rdma@vger.kernel.org>,
+        <linuxppc-dev@lists.ozlabs.org>, <netdev@vger.kernel.org>,
+        <linux-mm@kvack.org>, LKML <linux-kernel@vger.kernel.org>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
+References: <20191212101741.GD10065@quack2.suse.cz>
+ <20191214032617.1670759-1-jhubbard@nvidia.com>
+ <20191216125353.GF22157@quack2.suse.cz>
+From:   John Hubbard <jhubbard@nvidia.com>
+X-Nvconfidentiality: public
+Message-ID: <86297621-0200-01db-923b-9f8d3ee87354@nvidia.com>
+Date:   Mon, 16 Dec 2019 14:18:59 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.3.0
+MIME-Version: 1.0
+In-Reply-To: <20191216125353.GF22157@quack2.suse.cz>
+X-Originating-IP: [10.124.1.5]
+X-ClientProxiedBy: HQMAIL105.nvidia.com (172.20.187.12) To
+ HQMAIL107.nvidia.com (172.20.187.13)
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1576534883; bh=YMhg/Haff63lefKvHJkcKDJlwsa7xb5b4lrnUemlU7g=;
+        h=X-PGP-Universal:Subject:To:CC:References:From:X-Nvconfidentiality:
+         Message-ID:Date:User-Agent:MIME-Version:In-Reply-To:
+         X-Originating-IP:X-ClientProxiedBy:Content-Type:Content-Language:
+         Content-Transfer-Encoding;
+        b=amsVlFr4hw9MYNrHr5/DYyX51JWA4Fkp/OrGL5Hbx4jMwoyI9BWBiyVnsOuxsMRIB
+         iaLSTfEX4Yqo/iVj68XTBu0YqNDpOKgLZv4iJJL9jXaVCKbZ5JRpa2udb5A5igVcw2
+         1sJ9NO2FUwaGqY/GZOYBsW4L6j0KjdlhAuITY2UHIyczf/OJ5Ld/YorqU0JPKNcd1d
+         I994/z/XcmSLl51Zt+AHfBnbzOf+k0FilaRTGpdBKRUjSH3tUdnc5ed7upp7HB/ZdP
+         yPbbF1+4hTs972ehSF2pBSOHKp1BKWsgCDOuYbNfow5D4LRa3DPocQgihOq0BFqmMR
+         WOmZ1eSWqtu/A==
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: David Gow <davidgow@google.com>
+On 12/16/19 4:53 AM, Jan Kara wrote:
+...
 
-Add a new kernel command-line option, 'kunit_shutdown', which allows the
-user to specify that the kernel poweroff, halt, or reboot after
-completing all KUnit tests; this is very handy for running KUnit tests
-on UML or a VM so that the UML/VM process exits cleanly immediately
-after running all tests without needing a special initramfs.
+> I'd move this still a bit higher - just after VM_BUG_ON_PAGE() and before
+> if (flags & FOLL_TOUCH) test. Because touch_pmd() can update page tables
+> and we don't won't that if we're going to fail the fault.
+> 
 
-Signed-off-by: David Gow <davidgow@google.com>
-Signed-off-by: Brendan Higgins <brendanhiggins@google.com>
----
- lib/kunit/executor.c                | 18 ++++++++++++++++++
- tools/testing/kunit/kunit_kernel.py |  2 +-
- tools/testing/kunit/kunit_parser.py |  2 +-
- 3 files changed, 20 insertions(+), 2 deletions(-)
+Done. I'll post a full v11 series shortly.
 
-diff --git a/lib/kunit/executor.c b/lib/kunit/executor.c
-index d5f1d07f2f817..32462ecb94eb6 100644
---- a/lib/kunit/executor.c
-+++ b/lib/kunit/executor.c
-@@ -7,7 +7,9 @@
-  */
- 
- #include <linux/init.h>
-+#include <linux/moduleparam.h>
- #include <linux/printk.h>
-+#include <linux/reboot.h>
- #include <kunit/test.h>
- 
- /*
-@@ -17,6 +19,9 @@
- extern struct kunit_suite *__kunit_suites_start[];
- extern struct kunit_suite *__kunit_suites_end[];
- 
-+static char *kunit_shutdown;
-+core_param(kunit_shutdown, kunit_shutdown, charp, 0644);
-+
- static void kunit_print_tap_header(void)
- {
- 	size_t num_of_suites;
-@@ -30,6 +35,17 @@ static void kunit_print_tap_header(void)
- 	pr_info("1..%zd\n", num_of_suites);
- }
- 
-+static void kunit_handle_shutdown(void)
-+{
-+	if (!strcmp(kunit_shutdown, "poweroff")) {
-+		kernel_power_off();
-+	} else if (!strcmp(kunit_shutdown, "halt")) {
-+		kernel_halt();
-+	} else if (!strcmp(kunit_shutdown, "reboot")) {
-+		kernel_restart(NULL);
-+	}
-+}
-+
- static bool kunit_run_all_tests(void)
- {
- 	struct kunit_suite **suite;
-@@ -44,6 +60,8 @@ static bool kunit_run_all_tests(void)
- 			has_test_failed = true;
- 	}
- 
-+	kunit_handle_shutdown();
-+
- 	return !has_test_failed;
- }
- 
-diff --git a/tools/testing/kunit/kunit_kernel.py b/tools/testing/kunit/kunit_kernel.py
-index bf38768353313..0070c6b807d2a 100644
---- a/tools/testing/kunit/kunit_kernel.py
-+++ b/tools/testing/kunit/kunit_kernel.py
-@@ -141,7 +141,7 @@ class LinuxSourceTree(object):
- 		return True
- 
- 	def run_kernel(self, args=[], timeout=None, build_dir=None):
--		args.extend(['mem=256M'])
-+		args.extend(['mem=256M', 'kunit_shutdown=halt'])
- 		process = self._ops.linux_bin(args, timeout, build_dir)
- 		with open('test.log', 'w') as f:
- 			for line in process.stdout:
-diff --git a/tools/testing/kunit/kunit_parser.py b/tools/testing/kunit/kunit_parser.py
-index 78b3bdd03b1e4..633811dd9bce8 100644
---- a/tools/testing/kunit/kunit_parser.py
-+++ b/tools/testing/kunit/kunit_parser.py
-@@ -48,7 +48,7 @@ class TestStatus(Enum):
- 	FAILURE_TO_PARSE_TESTS = auto()
- 
- kunit_start_re = re.compile(r'^TAP version [0-9]+$')
--kunit_end_re = re.compile('List of all partitions:')
-+kunit_end_re = re.compile(r'reboot: System halted')
- 
- def isolate_kunit_output(kernel_output):
- 	started = False
+> With this fixed, the patch looks good to me so you can then add:
+> 
+> Reviewed-by: Jan Kara <jack@suse.cz>
+> 
+> 								Honza
+> 
+
+btw, thanks for the thorough review of this critical patch (and for your
+patience with my mistakes). I really appreciate it, and this patchset would
+not have made it this far without your detailed help and explanations.
+
+
+thanks,
 -- 
-2.24.1.735.g03f4e72817-goog
-
+John Hubbard
+NVIDIA
