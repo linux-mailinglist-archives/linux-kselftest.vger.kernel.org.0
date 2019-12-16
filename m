@@ -2,114 +2,109 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CD6AD11FB40
-	for <lists+linux-kselftest@lfdr.de>; Sun, 15 Dec 2019 21:55:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E30611FFF7
+	for <lists+linux-kselftest@lfdr.de>; Mon, 16 Dec 2019 09:37:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726232AbfLOUz5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 15 Dec 2019 15:55:57 -0500
-Received: from mout-p-201.mailbox.org ([80.241.56.171]:53040 "EHLO
-        mout-p-201.mailbox.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726146AbfLOUz5 (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 15 Dec 2019 15:55:57 -0500
-Received: from smtp2.mailbox.org (smtp2.mailbox.org [80.241.60.241])
-        (using TLSv1.2 with cipher ECDHE-RSA-CHACHA20-POLY1305 (256/256 bits))
-        (No client certificate requested)
-        by mout-p-201.mailbox.org (Postfix) with ESMTPS id 47bcBM0DybzQlB1;
-        Sun, 15 Dec 2019 21:55:55 +0100 (CET)
-X-Virus-Scanned: amavisd-new at heinlein-support.de
-Received: from smtp2.mailbox.org ([80.241.60.241])
-        by gerste.heinlein-support.de (gerste.heinlein-support.de [91.198.250.173]) (amavisd-new, port 10030)
-        with ESMTP id 4aLf2vSWysit; Sun, 15 Dec 2019 21:55:50 +0100 (CET)
-Date:   Mon, 16 Dec 2019 07:55:39 +1100
-From:   Aleksa Sarai <cyphar@cyphar.com>
-To:     Florian Weimer <fw@deneb.enyo.de>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J. Bruce Fields" <bfields@fieldses.org>,
-        Shuah Khan <shuah@kernel.org>, dev@opencontainers.org,
-        containers@lists.linux-foundation.org, linux-api@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH] openat2: switch to __attribute__((packed)) for open_how
-Message-ID: <20191215205539.ly2ns5wglautu47u@yavin.dot.cyphar.com>
-References: <20191213222351.14071-1-cyphar@cyphar.com>
- <87o8w9bcaf.fsf@mid.deneb.enyo.de>
+        id S1726798AbfLPIh5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 16 Dec 2019 03:37:57 -0500
+Received: from mx2.suse.de ([195.135.220.15]:37312 "EHLO mx1.suse.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726722AbfLPIh5 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 16 Dec 2019 03:37:57 -0500
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx1.suse.de (Postfix) with ESMTP id 3D940ADAD;
+        Mon, 16 Dec 2019 08:37:55 +0000 (UTC)
+Date:   Mon, 16 Dec 2019 09:37:54 +0100
+From:   Petr Mladek <pmladek@suse.com>
+To:     Shuah Khan <skhan@linuxfoundation.org>
+Cc:     jpoimboe@redhat.com, jikos@kernel.org, mbenes@suse.cz,
+        joe.lawrence@redhat.com, shuah@kernel.org,
+        live-patching@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] selftests: livepatch: Fix it to do root uid check and
+ skip
+Message-ID: <20191216083754.hsmdd6jt2zzjmksz@pathway.suse.cz>
+References: <20191213015617.23110-1-skhan@linuxfoundation.org>
+ <20191213083411.delrxditrpcdm7az@pathway.suse.cz>
+ <bda9819d-a054-232b-e973-41d41dfffc5a@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="lhbbxkijknkbhl5m"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <87o8w9bcaf.fsf@mid.deneb.enyo.de>
+In-Reply-To: <bda9819d-a054-232b-e973-41d41dfffc5a@linuxfoundation.org>
+User-Agent: NeoMutt/20170912 (1.9.0)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+On Fri 2019-12-13 10:52:32, Shuah Khan wrote:
+> On 12/13/19 1:34 AM, Petr Mladek wrote:
+> > On Thu 2019-12-12 18:56:17, Shuah Khan wrote:
+> > > livepatch test configures the system and debug environment to run
+> > > tests. Some of these actions fail without root access and test
+> > > dumps several permission denied messages before it exits.
+> > > 
+> > > Fix it to check root uid and exit with skip code instead.
+> > 
+> > It works when I run the tests directly, e.g.
+> > 
+> > $> cd tools/testing/selftests/livepatch
+> > $> ./test-livepatch.sh
+> > 
+> > But I still get an error from the selftest framework when running
+> > make run_tests:
+> > 
+> > $> make run_tests
+> > TAP version 13
+> > 1..5
+> > # selftests: livepatch: test-livepatch.sh
+> > /mnt/kernel/linux/tools/testing/selftests/kselftest/runner.sh: line 43: /dev/stdout: Permission denied
+> > not ok 1 selftests: livepatch: test-livepatch.sh # exit=1
+> > # selftests: livepatch: test-callbacks.sh
+> > /mnt/kernel/linux/tools/testing/selftests/kselftest/runner.sh: line 43: /dev/stdout: Permission denied
+> > not ok 2 selftests: livepatch: test-callbacks.sh # exit=1
+> > # selftests: livepatch: test-shadow-vars.sh
+> > /mnt/kernel/linux/tools/testing/selftests/kselftest/runner.sh: line 43: /dev/stdout: Permission denied
+> > not ok 3 selftests: livepatch: test-shadow-vars.sh # exit=1
+> > # selftests: livepatch: test-state.sh
+> > /mnt/kernel/linux/tools/testing/selftests/kselftest/runner.sh: line 43: /dev/stdout: Permission denied
+> > not ok 4 selftests: livepatch: test-state.sh # exit=1
+> > # selftests: livepatch: test-ftrace.sh
+> > /mnt/kernel/linux/tools/testing/selftests/kselftest/runner.sh: line 43: /dev/stdout: Permission denied
+> > not ok 5 selftests: livepatch: test-ftrace.sh # exit=1
+> > 
+> > The same problem is also in linux-next. Is this a know problem, please?
+> > 
+> > 
+> 
+> This isn't a known issue.
+> 
+> I am not seeing this problem on 5.5-rc1 and on linux-next with top
+> commit 32b8acf85223448973ca0bf0ee8149a01410f3a0 (HEAD -> master, tag:
+> next-20191213
+> 
+> I am curious what could be diffent in your env. that is causing it.
 
---lhbbxkijknkbhl5m
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I did the test in kvm. I was connected there via ssh as "root".
+I tested the normal user with "su - user".
 
-On 2019-12-15, Florian Weimer <fw@deneb.enyo.de> wrote:
-> * Aleksa Sarai:
->=20
-> > diff --git a/tools/testing/selftests/openat2/helpers.h b/tools/testing/=
-selftests/openat2/helpers.h
-> > index 43ca5ceab6e3..eb1535c8fa2e 100644
-> > --- a/tools/testing/selftests/openat2/helpers.h
-> > +++ b/tools/testing/selftests/openat2/helpers.h
-> > @@ -32,17 +32,16 @@
-> >   * O_TMPFILE} are set.
-> >   *
-> >   * @flags: O_* flags.
-> > - * @mode: O_CREAT/O_TMPFILE file mode.
-> >   * @resolve: RESOLVE_* flags.
-> > + * @mode: O_CREAT/O_TMPFILE file mode.
-> >   */
-> >  struct open_how {
-> > -	__aligned_u64 flags;
-> > +	__u64 flags;
-> > +	__u64 resolve;
-> >  	__u16 mode;
-> > -	__u16 __padding[3]; /* must be zeroed */
-> > -	__aligned_u64 resolve;
-> > -};
-> > +} __attribute__((packed));
-> > =20
-> > -#define OPEN_HOW_SIZE_VER0	24 /* sizeof first published struct */
-> > +#define OPEN_HOW_SIZE_VER0	18 /* sizeof first published struct */
-> >  #define OPEN_HOW_SIZE_LATEST	OPEN_HOW_SIZE_VER0
->=20
-> A userspace ABI that depends on GCC extensions probably isn't a good
-> idea.  Even with GCC, it will not work well with some future
-> extensions because it pretty much rules out having arrays or other
-> members that are access through pointers.  Current GCC does not carry
-> over the packed-ness of the struct to addresses of its members.
+It seems that in this case /dev/stdout still points to a
+pseudo-terminal that is accessible only by root:
 
-Right, those are also good points.
+#> su - user
+$> echo hello >/dev/stdout
+-bash: /dev/stdout: Permission denied
+$> ls -l /dev/stdout
+lrwxrwxrwx 1 root root 15 Dec 13 16:08 /dev/stdout -> /proc/self/fd/1
+$> ls -l /proc/self/fd/1
+lrwx------. 1 user users 64 Dec 16 09:27 /proc/self/fd/1 -> /dev/pts/1
+$> ls -l /dev/pts/1
+crw--w---- 1 root tty 136, 1 Dec 16 09:27 /dev/pts/1
 
-Okay, I'm going to send a separate patch which changes the return value
-for invalid __padding to -E2BIG, and moves the padding to the end of the
-struct (along with open_how.mode). That should fix all of the warts I
-raised, without running into the numerous problems with
-__attribute__((packed)) of which I am now aware.
+I do not see this problem when I ssh to the machine as
+the normal "user".
 
---=20
-Aleksa Sarai
-Senior Software Engineer (Containers)
-SUSE Linux GmbH
-<https://www.cyphar.com/>
 
---lhbbxkijknkbhl5m
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQSxZm6dtfE8gxLLfYqdlLljIbnQEgUCXfadxgAKCRCdlLljIbnQ
-EnZkAQDEI0SqPaVjZ0DfeCNK/Oej24PSHHnlQslkzD1ijil74QD/aTyeW+1lV5OQ
-nKYasufz04VrST6LL+l0ZOId14X/AAE=
-=y9fv
------END PGP SIGNATURE-----
-
---lhbbxkijknkbhl5m--
+Best Regards,
+Petr
