@@ -2,123 +2,144 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C8ED6121BFB
-	for <lists+linux-kselftest@lfdr.de>; Mon, 16 Dec 2019 22:39:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 00BA8121C4D
+	for <lists+linux-kselftest@lfdr.de>; Mon, 16 Dec 2019 23:06:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727932AbfLPVjX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 16 Dec 2019 16:39:23 -0500
-Received: from mail-pg1-f201.google.com ([209.85.215.201]:48981 "EHLO
-        mail-pg1-f201.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727913AbfLPVjX (ORCPT
+        id S1727404AbfLPWGw (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 16 Dec 2019 17:06:52 -0500
+Received: from mail-yb1-f201.google.com ([209.85.219.201]:47460 "EHLO
+        mail-yb1-f201.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727144AbfLPWGw (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 16 Dec 2019 16:39:23 -0500
-Received: by mail-pg1-f201.google.com with SMTP id c8so5944602pgl.15
-        for <linux-kselftest@vger.kernel.org>; Mon, 16 Dec 2019 13:39:22 -0800 (PST)
+        Mon, 16 Dec 2019 17:06:52 -0500
+Received: by mail-yb1-f201.google.com with SMTP id a14so1777407ybh.14
+        for <linux-kselftest@vger.kernel.org>; Mon, 16 Dec 2019 14:06:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=rowy0fulnWlicWAYnRVZ1Dd1A8eU5tnc0eErNEZ+z80=;
-        b=MuHMhVLT/JPmloUwrLfNYvZW2n4et7Jp6otDiIOqsAgsXxhPw0pD+sf+K2Wz1bcwcE
-         umHcmexYa3XVrNTFitMJMBYyqjDaET0ivXVKpA1RqVyD8V4224NfFmieT+WL8wxCP9Uf
-         TeyVGVkrZUBRPuOJOeUyhrRYRParc+bz/foA7OITtQlAv8YjLXySbTVB+rFX/btl5eqr
-         XV2jZIQBXqTrzmvmmJ11xow6XVm8OAB0UlReGxO9v7l0id98TbLh6QDJoZETRv2fkiPo
-         RwZ+5HAYVciPWg/rBIsxuRno1YegprlFb+LVfcvaBjDfj2oNEeKU+ibtPCaeMIQ0tu6z
-         r+BQ==
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=eppmz6bMb+izn2RzN3lnlHeodL5pBLSTz1Q/CRKnTLI=;
+        b=Ka/YLRaXtmaXZjNlTNPGUBn6yNVXrLBSLTY7QlLmb+pGLBk64G75unoAUKw7ENQh6A
+         uN5BE7ghfj4hLmg93Dnjr1XOQx9sqGT0tdRhCq572hnGsODMcX8BJaKgKGcekmQHBOhO
+         AT/G6wElDlZ16v6nXSv4LBy5fVRgnz65y56kDJQ63lH+EwqP4r4UCAJCoUmp7jWabH2A
+         irCUuf+Ew8cP8BWTuuXQZ7lkAr38ls5Def/i0fnUPPezbu4E1eeS4PwFWlu2NXCQ1HUv
+         S/CgWSpEN0xx6SLk+OOe8LLXlhdyBfcgbL4oUC4VSaGDR/NZqrh+rbF0+AzVkdQDf+rM
+         tSqQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=rowy0fulnWlicWAYnRVZ1Dd1A8eU5tnc0eErNEZ+z80=;
-        b=KVnBFfS1YrI86cSYuFJb6J9EYOZmINB3WxIWQYWP/dyXActhd/G5qJU4/oggjqvTfP
-         8gyjvejlcMmlKTr3stRhe/u+jBGz+24Sq1epmEK9GL+FHDJ96U/A7Zc9ztn8lAMQOD4p
-         WQLakZGNLZ9Rp06PKi4uBtQJvBUjQFEQ3MKS8oCKOmH0PHId43oVZ2t/qawIXBHaEuN0
-         Ljbrk3NX10MPvzVuOzz5ztGjaRI1nnoP1bFleMRHFH/K9J99pT98e4A+e8eUEcdL70zU
-         4tv9I0ykoyil7TEKdTwd/paDmYJSNiWalUUErsn9vut/rgX0j6HdZvl74VmGu3by0ZLH
-         MXlw==
-X-Gm-Message-State: APjAAAVFd6xi39d+X/+I6WeGmuLf19bTy3WHXnRxKt4PRkHhg9e/A/3p
-        dOllGksRq4nYk0pPjJeiZxUzMIElTMkW
-X-Google-Smtp-Source: APXvYqzpGDXOtRuYa0WgsWK7wz+wgL2YlTBvmIVTv2h8YGbeupjQc/AMbR9FD0fpw5V/MIPOI8j2lg0uDdbH
-X-Received: by 2002:a63:1c13:: with SMTP id c19mr21194582pgc.450.1576532362335;
- Mon, 16 Dec 2019 13:39:22 -0800 (PST)
-Date:   Mon, 16 Dec 2019 13:39:01 -0800
-In-Reply-To: <20191216213901.106941-1-bgardon@google.com>
-Message-Id: <20191216213901.106941-9-bgardon@google.com>
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=eppmz6bMb+izn2RzN3lnlHeodL5pBLSTz1Q/CRKnTLI=;
+        b=A/3n67APf096FW/xvzAHYPQfDEfny6DZDrNeB+f3dRYlwKEcMvbNUZVWVBml0mKt5g
+         ozSPQdqkeECrwf+87to26lp4GhUto7TIRJcd8JAvPg+6JmfK/OWSF3ndi51H0rTydaUP
+         URtyRD6MGpVdEREnMEuVN3L4bBlPPWiFuJP+iwhyY0sfcCYjH3GrcWBg+KgA4/VmbNrT
+         QEje5JXW/10WrFQoFTZs5wquYMm5KGEusTEEe5kU5kzyG7ABYWr4JyKeE4y4wXud8mPf
+         lPvgVR2fqX1pvlEWl7Kq13T7uw5StciJhmqlpQuTPL02DakwOVNdKqDeJjQFRnvNM+1o
+         Pl3A==
+X-Gm-Message-State: APjAAAXgt4CI639XC3ONBaB2hq4BpOEKiIwxgSd4HEVpXEXBMqqiMl6A
+        Qt32bkuaGUcnB4ijErs1wRN+milSPXaeBGGd9evenw==
+X-Google-Smtp-Source: APXvYqyw/OZ9oh2P4WMQ92Laluc4AJxvHqFO1NRLPLVu6fYKpIM1zMHeoh4jp2nR813dRQsMDcwHNPAwIm/JNWREsel9rQ==
+X-Received: by 2002:a0d:ddc8:: with SMTP id g191mr21773562ywe.335.1576534009902;
+ Mon, 16 Dec 2019 14:06:49 -0800 (PST)
+Date:   Mon, 16 Dec 2019 14:05:49 -0800
+Message-Id: <20191216220555.245089-1-brendanhiggins@google.com>
 Mime-Version: 1.0
-References: <20191216213901.106941-1-bgardon@google.com>
 X-Mailer: git-send-email 2.24.1.735.g03f4e72817-goog
-Subject: [PATCH v3 8/8] KVM: selftests: Move large memslots above KVM internal
- memslots in _vm_create
-From:   Ben Gardon <bgardon@google.com>
-To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Cannon Matthews <cannonmatthews@google.com>,
-        Peter Xu <peterx@redhat.com>,
-        Andrew Jones <drjones@redhat.com>,
-        Ben Gardon <bgardon@google.com>
+Subject: [RFC v1 0/6] kunit: create a centralized executor to dispatch all
+ KUnit tests
+From:   Brendan Higgins <brendanhiggins@google.com>
+To:     jdike@addtoit.com, richard@nod.at, anton.ivanov@cambridgegreys.com,
+        arnd@arndb.de, keescook@chromium.org, skhan@linuxfoundation.org,
+        alan.maguire@oracle.com, yzaikin@google.com, davidgow@google.com,
+        akpm@linux-foundation.org, rppt@linux.ibm.com
+Cc:     gregkh@linuxfoundation.org, sboyd@kernel.org, logang@deltatee.com,
+        mcgrof@kernel.org, knut.omang@oracle.com,
+        linux-um@lists.infradead.org, linux-arch@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-kernel@vger.kernel.org,
+        Brendan Higgins <brendanhiggins@google.com>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-KVM creates internal memslots between 3 and 4 GiB paddrs on the first
-vCPU creation. If memslot 0 is large enough it collides with these
-memslots an causes vCPU creation to fail. When requesting more than 3G,
-start memslot 0 at 4G in _vm_create.
+## TL;DR
 
-Signed-off-by: Ben Gardon <bgardon@google.com>
----
- tools/testing/selftests/kvm/lib/kvm_util.c | 15 +++++++++++----
- 1 file changed, 11 insertions(+), 4 deletions(-)
+This patchset adds a centralized executor to dispatch tests rather than
+relying on late_initcall to schedule each test suite separately along
+with a couple of new features that depend on it.
 
-diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
-index 41cf45416060f..886d58e6cac39 100644
---- a/tools/testing/selftests/kvm/lib/kvm_util.c
-+++ b/tools/testing/selftests/kvm/lib/kvm_util.c
-@@ -113,6 +113,8 @@ const char * const vm_guest_mode_string[] = {
- _Static_assert(sizeof(vm_guest_mode_string)/sizeof(char *) == NUM_VM_MODES,
- 	       "Missing new mode strings?");
- 
-+#define KVM_INTERNAL_MEMSLOTS_START_PADDR (3UL << 30)
-+#define KVM_INTERNAL_MEMSLOTS_END_PADDR (4UL << 30)
- /*
-  * VM Create
-  *
-@@ -128,13 +130,16 @@ _Static_assert(sizeof(vm_guest_mode_string)/sizeof(char *) == NUM_VM_MODES,
-  *
-  * Creates a VM with the mode specified by mode (e.g. VM_MODE_P52V48_4K).
-  * When phy_pages is non-zero, a memory region of phy_pages physical pages
-- * is created and mapped starting at guest physical address 0.  The file
-- * descriptor to control the created VM is created with the permissions
-- * given by perm (e.g. O_RDWR).
-+ * is created. If phy_pages is less that 3G, it is mapped starting at guest
-+ * physical address 0. If phy_pages is greater than 3G it is mapped starting
-+ * 4G into the guest physical address space to avoid KVM internal memslots
-+ * which map the region between 3G and 4G. The file descriptor to control the
-+ * created VM is created with the permissions given by perm (e.g. O_RDWR).
-  */
- struct kvm_vm *_vm_create(enum vm_guest_mode mode, uint64_t phy_pages, int perm)
- {
- 	struct kvm_vm *vm;
-+	uint64_t guest_paddr = 0;
- 
- 	DEBUG("Testing guest mode: %s\n", vm_guest_mode_string(mode));
- 
-@@ -227,9 +232,11 @@ struct kvm_vm *_vm_create(enum vm_guest_mode mode, uint64_t phy_pages, int perm)
- 
- 	/* Allocate and setup memory for guest. */
- 	vm->vpages_mapped = sparsebit_alloc();
-+	if (guest_paddr + phy_pages > KVM_INTERNAL_MEMSLOTS_START_PADDR)
-+		guest_paddr = KVM_INTERNAL_MEMSLOTS_END_PADDR;
- 	if (phy_pages != 0)
- 		vm_userspace_mem_region_add(vm, VM_MEM_SRC_ANONYMOUS,
--					    0, 0, phy_pages, 0);
-+					    guest_paddr, 0, phy_pages, 0);
- 
- 	return vm;
- }
+## What am I trying to do?
+
+Conceptually, I am trying to provide a mechanism by which test suites
+can be grouped together so that they can be reasoned about collectively.
+The last two patches in this series add features which depend on this:
+
+RFC 5/6 Prints out a test plan right before KUnit tests are run[1]; this
+        is valuable because it makes it possible for a test harness to
+        detect whether the number of tests run matches the number of
+        tests expected to be run, ensuring that no tests silently
+        failed.
+
+RFC 6/6 Add a new kernel command-line option which allows the user to
+        specify that the kernel poweroff, halt, or reboot after
+        completing all KUnit tests; this is very handy for running KUnit
+        tests on UML or a VM so that the UML/VM process exits cleanly
+        immediately after running all tests without needing a special
+        initramfs.
+
+In addition, by dispatching tests from a single location, we can
+guarantee that all KUnit tests run after late_init is complete, which
+was a concern during the initial KUnit patchset review (this has not
+been a problem in practice, but resolving with certainty is nevertheless
+desirable).
+
+Other use cases for this exist, but the above features should provide an
+idea of the value that this could provide.
+
+## What work remains to be done?
+
+These patches were based on patches in our non-upstream branch[2], so we
+have a pretty good idea that they are useable as presented;
+nevertheless, some of the changes done in this patchset could
+*definitely* use some review by subsystem experts (linker scripts, init,
+etc), and will likely change a lot after getting feedback.
+
+The biggest thing that I know will require additional attention is
+integrating this patchset with the KUnit module support patchset[3]. I
+have not even attempted to build these patches on top of the module
+support patches as I would like to get people's initial thoughts first
+(especially Alan's :-) ). I think that making these patches work with
+module support should be fairly straight forward, nevertheless.
+
+Brendan Higgins (5):
+  vmlinux.lds.h: add linker section for KUnit test suites
+  arch: um: add linker section for KUnit test suites
+  kunit: test: create a single centralized executor for all tests
+  init: main: add KUnit to kernel init
+  kunit: test: add test plan to KUnit TAP format
+
+David Gow (1):
+  kunit: Add 'kunit_shutdown' option
+
+ arch/um/include/asm/common.lds.S              |  4 +
+ include/asm-generic/vmlinux.lds.h             |  8 ++
+ include/kunit/test.h                          | 16 ++--
+ init/main.c                                   |  4 +
+ lib/kunit/Makefile                            |  3 +-
+ lib/kunit/executor.c                          | 74 ++++++++++++++++++
+ lib/kunit/test.c                              | 11 ---
+ tools/testing/kunit/kunit_kernel.py           |  2 +-
+ tools/testing/kunit/kunit_parser.py           | 76 +++++++++++++++----
+ .../test_is_test_passed-all_passed.log        |  1 +
+ .../test_data/test_is_test_passed-crash.log   |  1 +
+ .../test_data/test_is_test_passed-failure.log |  1 +
+ 12 files changed, 170 insertions(+), 31 deletions(-)
+ create mode 100644 lib/kunit/executor.c
+
+[1]: https://github.com/isaacs/testanything.github.io/blob/tap14/tap-version-14-specification.md#the-plan
+[2]: https://kunit-review.googlesource.com/c/linux/+/1037
+[3]: https://patchwork.kernel.org/project/linux-kselftest/list/?series=211727
+
 -- 
 2.24.1.735.g03f4e72817-goog
 
