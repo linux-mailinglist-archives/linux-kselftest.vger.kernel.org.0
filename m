@@ -2,135 +2,109 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 46EAC121B6A
-	for <lists+linux-kselftest@lfdr.de>; Mon, 16 Dec 2019 22:01:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1377F121BCD
+	for <lists+linux-kselftest@lfdr.de>; Mon, 16 Dec 2019 22:37:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726743AbfLPVB2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 16 Dec 2019 16:01:28 -0500
-Received: from us-smtp-1.mimecast.com ([205.139.110.61]:26398 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726721AbfLPVB2 (ORCPT
+        id S1727549AbfLPVfs (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 16 Dec 2019 16:35:48 -0500
+Received: from mail-pg1-f201.google.com ([209.85.215.201]:40384 "EHLO
+        mail-pg1-f201.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726610AbfLPVfs (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 16 Dec 2019 16:01:28 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1576530086;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=y2YGUzKWfrJlypL5f6IAP/q6Ohy4nUi/MZaE1v/sIbk=;
-        b=SpEfYV/xOTN6evotg1IYegCzRBRWcvYOF/+yWjw8XOkhYyATs+AAh2GCxW3GnHGjn/08n9
-        u+wKqDNPW4tC9VHO541aJPTBSp7WBp5Ki9QZMyBoAxPiKfsD3HaHo6PKwhs54BsuLvc0yM
-        vHNHP1lLI1Z6m3+B7DrjSAPUAwGJTPs=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-104-7Pu4BB3xNt-Oq5fmzXLGmw-1; Mon, 16 Dec 2019 16:01:23 -0500
-X-MC-Unique: 7Pu4BB3xNt-Oq5fmzXLGmw-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 7611B801E70;
-        Mon, 16 Dec 2019 21:01:21 +0000 (UTC)
-Received: from redhat.com (dhcp-17-119.bos.redhat.com [10.18.17.119])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 7479861351;
-        Mon, 16 Dec 2019 21:01:20 +0000 (UTC)
-Date:   Mon, 16 Dec 2019 16:01:18 -0500
-From:   Joe Lawrence <joe.lawrence@redhat.com>
-To:     Shuah Khan <skhan@linuxfoundation.org>
-Cc:     jpoimboe@redhat.com, jikos@kernel.org, mbenes@suse.cz,
-        pmladek@suse.com, shuah@kernel.org, live-patching@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] selftests: livepatch: Fix it to do root uid check and
- skip
-Message-ID: <20191216210118.GA28841@redhat.com>
-References: <20191216191840.15188-1-skhan@linuxfoundation.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191216191840.15188-1-skhan@linuxfoundation.org>
-User-Agent: Mutt/1.12.1 (2019-06-15)
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
+        Mon, 16 Dec 2019 16:35:48 -0500
+Received: by mail-pg1-f201.google.com with SMTP id z12so5962816pgf.7
+        for <linux-kselftest@vger.kernel.org>; Mon, 16 Dec 2019 13:35:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=flMQx0RQ+tn1L0OZWy96vlecDFYT8pwNVqw/lok2bBY=;
+        b=cLMpQGkx99eeWLH4P/unEkS15oJ0X5gTpKr0Ot5VrGyjOzB4dA0ifIETD5xPnL915T
+         rubBQ1Z1iW4qP8ZPAFTNHDSpa1zHhugbJ2QxmSBGJ8YFQSbzxHjfKNHTdoja8vQT2IGs
+         ZJ9gn+5y5Ern0CrQyWiOXApsJgUmCFVLDPffnLDVVzBJuidyMrKqQVRQnBM8tnVfAagh
+         afrkhSTDsBVhP4jgntZuieMwkliL0ZvcoC6Mlo8Oj52LTnAulg5T+H8eQl5xK6xNjN2+
+         jtpvhLNqUrXAu9q2trjCcLueT55qoIgDlBNl9WNltONfRe97/+D2FG+d2akzZiwxjJPq
+         fs/A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=flMQx0RQ+tn1L0OZWy96vlecDFYT8pwNVqw/lok2bBY=;
+        b=AOsLSKOeM6k9qBiEZqf4VXs3u/tbb/nYt+7Aito/t67OyHlv2isEhOToJ3Kw7KH7zJ
+         b3bTjQO8tiCNnmr7D6abV0Ubi4KJmFcVPXukm+27ZlCqQBXGQn55gHhnIyhdtIcPMPE2
+         NNU90m/+XtsWmvICKmEC3GFBX0mqR73IuzyXDxfa/2hm/l9umlltABiVmIUapq0qSSa8
+         0tdaNylzoCsUvd0au1RGMeS8DrKc27gysPQuiOeXsiLPhDYzG9T4zuZmXU5DKL6fmnzs
+         FJXv2zMWidHz9QKetIGrYXiqgbjtmlIKu654iDYpyHuJ0wye2kzaaTg9K963znCPpjQv
+         8A3A==
+X-Gm-Message-State: APjAAAWBif9qrFORDSc4LNKQpi97Z6qKEfVEZX0oh34Dijo/2P//vkUZ
+        SJk2654BiRDOYwJh4ilKByTIhvs8A42b
+X-Google-Smtp-Source: APXvYqy1p58uD7ILOXRlPnATDG1C2VyIQV8EfLRJI2x+ZgT/v8x5ksiTotwGpJiUF6/nvEUtv7a0zUt3NmVO
+X-Received: by 2002:a63:b642:: with SMTP id v2mr4217832pgt.126.1576532145784;
+ Mon, 16 Dec 2019 13:35:45 -0800 (PST)
+Date:   Mon, 16 Dec 2019 13:35:23 -0800
+Message-Id: <20191216213532.91237-1-bgardon@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.24.1.735.g03f4e72817-goog
+Subject: [PATCH 0/9] Create a userfaultfd demand paging test
+From:   Ben Gardon <bgardon@google.com>
+To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Cannon Matthews <cannonmatthews@google.com>,
+        Peter Xu <peterx@redhat.com>,
+        Andrew Jones <drjones@redhat.com>,
+        Ben Gardon <bgardon@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Dec 16, 2019 at 12:18:40PM -0700, Shuah Khan wrote:
-> livepatch test configures the system and debug environment to run
-> tests. Some of these actions fail without root access and test
-> dumps several permission denied messages before it exits.
-> 
-> Fix test-state.sh to call setup_config instead of set_dynamic_debug
-> as suggested by Petr Mladek <pmladek@suse.com>
-> 
-> Fix it to check root uid and exit with skip code instead.
-> 
-> Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
-> ---
->  tools/testing/selftests/livepatch/functions.sh  | 15 ++++++++++++++-
->  tools/testing/selftests/livepatch/test-state.sh |  3 +--
->  2 files changed, 15 insertions(+), 3 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/livepatch/functions.sh b/tools/testing/selftests/livepatch/functions.sh
-> index 31eb09e38729..a6e3d5517a6f 100644
-> --- a/tools/testing/selftests/livepatch/functions.sh
-> +++ b/tools/testing/selftests/livepatch/functions.sh
-> @@ -7,6 +7,9 @@
->  MAX_RETRIES=600
->  RETRY_INTERVAL=".1"	# seconds
->  
-> +# Kselftest framework requirement - SKIP code is 4
-> +ksft_skip=4
-> +
->  # log(msg) - write message to kernel log
->  #	msg - insightful words
->  function log() {
-> @@ -18,7 +21,16 @@ function log() {
->  function skip() {
->  	log "SKIP: $1"
->  	echo "SKIP: $1" >&2
-> -	exit 4
-> +	exit $ksft_skip
-> +}
-> +
-> +# root test
-> +function is_root() {
-> +	uid=$(id -u)
-> +	if [ $uid -ne 0 ]; then
-> +		echo "skip all tests: must be run as root" >&2
-> +		exit $ksft_skip
-> +	fi
->  }
->  
->  # die(msg) - game over, man
-> @@ -62,6 +74,7 @@ function set_ftrace_enabled() {
->  #		 for verbose livepatching output and turn on
->  #		 the ftrace_enabled sysctl.
->  function setup_config() {
-> +	is_root
->  	push_config
->  	set_dynamic_debug
->  	set_ftrace_enabled 1
-> diff --git a/tools/testing/selftests/livepatch/test-state.sh b/tools/testing/selftests/livepatch/test-state.sh
-> index dc2908c22c26..a08212708115 100755
-> --- a/tools/testing/selftests/livepatch/test-state.sh
-> +++ b/tools/testing/selftests/livepatch/test-state.sh
-> @@ -8,8 +8,7 @@ MOD_LIVEPATCH=test_klp_state
->  MOD_LIVEPATCH2=test_klp_state2
->  MOD_LIVEPATCH3=test_klp_state3
->  
-> -set_dynamic_debug
-> -
-> +setup_config
->  
->  # TEST: Loading and removing a module that modifies the system state
->  
-> -- 
-> 2.20.1
-> 
+When handling page faults for many vCPUs during demand paging, KVM's MMU
+lock becomes highly contended. This series creates a test with a naive
+userfaultfd based demand paging implementation to demonstrate that
+contention. This test serves both as a functional test of userfaultfd
+and a microbenchmark of demand paging performance with a variable number
+of vCPUs and memory per vCPU.
 
-Thanks for fixing these, Shuah.
+The test creates N userfaultfd threads, N vCPUs, and a region of memory
+with M pages per vCPU. The N userfaultfd polling threads are each set up
+to serve faults on a region of memory corresponding to one of the vCPUs.
+Each of the vCPUs is then started, and touches each page of its disjoint
+memory region, sequentially. In response to faults, the userfaultfd
+threads copy a static buffer into the guest's memory. This creates a
+worst case for MMU lock contention as we have removed most of the
+contention between the userfaultfd threads and there is no time required
+to fetch the contents of guest memory.
 
-Acked-by: Joe Lawrence <joe.lawrence@redhat.com>
+This test was run successfully on Intel Haswell, Broadwell, and
+Cascadelake hosts with a variety of vCPU counts and memory sizes.
 
--- Joe
+This test was adapted from the dirty_log_test.
+
+The series can also be viewed in Gerrit here:
+https://linux-review.googlesource.com/c/virt/kvm/kvm/+/1464
+(Thanks to Dmitry Vyukov <dvyukov@google.com> for setting up the Gerrit
+instance)
+
+Ben Gardon (9):
+  KVM: selftests: Create a demand paging test
+  KVM: selftests: Add demand paging content to the demand paging test
+  KVM: selftests: Add memory size parameter to the demand paging test
+  KVM: selftests: Pass args to vCPU instead of using globals
+  KVM: selftests: Support multiple vCPUs in demand paging test
+  KVM: selftests: Time guest demand paging
+  KVM: selftests: Add parameter to _vm_create for memslot 0 base paddr
+  KVM: selftests: Support large VMs in demand paging test
+  Add static flag
+
+ tools/testing/selftests/kvm/.gitignore        |   1 +
+ tools/testing/selftests/kvm/Makefile          |   4 +-
+ .../selftests/kvm/demand_paging_test.c        | 610 ++++++++++++++++++
+ tools/testing/selftests/kvm/dirty_log_test.c  |   2 +-
+ .../testing/selftests/kvm/include/kvm_util.h  |   3 +-
+ tools/testing/selftests/kvm/lib/kvm_util.c    |   7 +-
+ 6 files changed, 621 insertions(+), 6 deletions(-)
+ create mode 100644 tools/testing/selftests/kvm/demand_paging_test.c
+
+-- 
+2.23.0.444.g18eeb5a265-goog
 
