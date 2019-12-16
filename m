@@ -2,53 +2,53 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 82FAD121BDC
-	for <lists+linux-kselftest@lfdr.de>; Mon, 16 Dec 2019 22:37:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B601D121BE3
+	for <lists+linux-kselftest@lfdr.de>; Mon, 16 Dec 2019 22:37:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727761AbfLPVgI (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 16 Dec 2019 16:36:08 -0500
-Received: from mail-pj1-f74.google.com ([209.85.216.74]:44080 "EHLO
+        id S1727224AbfLPVgM (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 16 Dec 2019 16:36:12 -0500
+Received: from mail-pj1-f74.google.com ([209.85.216.74]:56678 "EHLO
         mail-pj1-f74.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727742AbfLPVgH (ORCPT
+        with ESMTP id S1727832AbfLPVgK (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 16 Dec 2019 16:36:07 -0500
-Received: by mail-pj1-f74.google.com with SMTP id gx23so5225224pjb.11
-        for <linux-kselftest@vger.kernel.org>; Mon, 16 Dec 2019 13:36:07 -0800 (PST)
+        Mon, 16 Dec 2019 16:36:10 -0500
+Received: by mail-pj1-f74.google.com with SMTP id y7so316623pjl.23
+        for <linux-kselftest@vger.kernel.org>; Mon, 16 Dec 2019 13:36:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=uVc2axwkCnCZhi+X312ppAdnVSbc0L4toMqGqZnNMKw=;
-        b=WpvSEkDZ3zGJQkjjyek7brDRW8CLSSj/z+kyUghXynSz0CIPG/Pkh7uHpylMv+lsCV
-         TBEOmtduByp41X120yvyW+L8fCIYUmgUBI2aEGCvxzdYsI003XS4/mLtP0CVM1msY+Hk
-         5WO1bpSwfIZ7uZQCdxwxrvfo2tA7Ek7XaxrYgUxw9C2BdjXTgXH9m8uVA2BgZNxcZJ5S
-         /NOeN4RMYprVaCR06rF4KVOnuh8Dj7m4BetXNrBKpZt0L7wLeuagWrJS0QyOcKe/dODK
-         sID4umEhHdU1D/KEoA6ciVgckNKpatKM3u+B/Qu76ggC+9Fw1kJa86qkXsaUrnSxE8kA
-         XBaw==
+        bh=rowy0fulnWlicWAYnRVZ1Dd1A8eU5tnc0eErNEZ+z80=;
+        b=PsqTJlOqPYyiihmLOLIb6xAhTBSJvttAVNodws3FJbnnkfYipi8xAJuaOwtmKyQzpV
+         IFuLnz58ISep0HZjvSM64NS2Zp27Ri/mgzV8FI5s45OLWRWCs7RfCJ30GkYKJF3VG39B
+         32PeBFBUiqKu0qqajQ/mVKYHcsPnQnJnB8w+eab63fDZ5tI1IVP27ChhOjD6mhb18f6J
+         TlEGQtJHefr8CyAZHH6HxW80kFb1RJ1o7EA1mXWqzoWX7A39js6GAPJIUZp7v34dhOc6
+         WeHxvOpYbKrACctym1WFD+zuP11y2mPIyqqk2dplT8wd1ozEtHp79GU169FWnKEMwEMv
+         qGNw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=uVc2axwkCnCZhi+X312ppAdnVSbc0L4toMqGqZnNMKw=;
-        b=R7vYr+0qRlJ8KDTID7BZWpytVW2JiS57gfmZqER4KyixiDOL1eQwkVuxFe4tsPlbeq
-         UJvLtvjJhScYgY4XNvIRdZR2EKc3kGdp4b2tybkhR9mM54RaCohapJpdkv3knDmyDt2R
-         aku1TTx/tWgP9S/brFSt4uvZ75WY98W7vqB07O/SCTjrvOGdT0Giz4p66vDRrQgZQIfp
-         NU8w1ycJr3wy1XWgutovXj5IRsltwfWuRg/itupI7vcLquq9jIU/ZadSZ7d96UA0vPvi
-         xJ+KhhSGfxPV9W8brzyssS0j1n2REj5M3qCJdlsmPFWOQD4WEz49e4fGrcdDFDAHW0dk
-         9iSA==
-X-Gm-Message-State: APjAAAUmuwbKK/VQ7hdQH1uWCip0q4rZ9lvu+4zSox8kC1R0GtUeuGhv
-        Lo/HKidMx4z+/V6FwVytmlDEMEL5c8YX
-X-Google-Smtp-Source: APXvYqxAvjI7NezKNIRCnRAWCElstJUl5eVy0r8/FtYh7zCfXc8erNLof+lG3knmkBtIjjVxutbT4Tg4gE8y
-X-Received: by 2002:a63:1662:: with SMTP id 34mr20427182pgw.77.1576532166453;
- Mon, 16 Dec 2019 13:36:06 -0800 (PST)
-Date:   Mon, 16 Dec 2019 13:35:31 -0800
+        bh=rowy0fulnWlicWAYnRVZ1Dd1A8eU5tnc0eErNEZ+z80=;
+        b=VVA/QXigz7zBO6ONA33OpN+cqOyX7UxhvAuIhPqEFdsGgLzftqnReSBUapYBz6FaqC
+         Bh4RSYjrRlKeUNBjfs493wLrSRw2pIieIYeYJ+tIHthuCcsjGsj0xEZfqDyrhcvY0Vfq
+         ECROjVUCKGyD56/Gfoz29nZT4AQm6NGdbYIF9kbitin/yZ7OUz6QkPo76HhLxZ9y6SUX
+         ATCFTd8/oXtUDGxkkG9Usyw+atDBmeC6usDieo/Nj7dVw33rBpwYZM7bdPS1K1DPjRoC
+         Wo8HUyORrJ8QiWaYC5ScfOrAl8ggQkes1nIaQxKnibEsUyojniD5WRJJ1OIYWzf9J0hw
+         6SGw==
+X-Gm-Message-State: APjAAAVTLLDs1ykPNF9NxaNDeEGn4P5r3ui0rblMD3g8Qg6zu9s7rA7Z
+        m9F8XSQQINT1OWusiK+eFa2r97mTXKYg
+X-Google-Smtp-Source: APXvYqxiDfgt93rcM0223tSoye1p3mg8HWLc1oSc+SjuoE4GYYqQkL10qTfDmi9hqrbIbU4HmdRZj2Z32jnW
+X-Received: by 2002:a63:1447:: with SMTP id 7mr20829842pgu.22.1576532168726;
+ Mon, 16 Dec 2019 13:36:08 -0800 (PST)
+Date:   Mon, 16 Dec 2019 13:35:32 -0800
 In-Reply-To: <20191216213532.91237-1-bgardon@google.com>
-Message-Id: <20191216213532.91237-9-bgardon@google.com>
+Message-Id: <20191216213532.91237-10-bgardon@google.com>
 Mime-Version: 1.0
 References: <20191216213532.91237-1-bgardon@google.com>
 X-Mailer: git-send-email 2.24.1.735.g03f4e72817-goog
-Subject: [PATCH v2 8/8] KVM: selftests: Add parameter to _vm_create for
- memslot 0 base paddr
+Subject: [PATCH v2 8/8] KVM: selftests: Move large memslots above KVM internal
+ memslots in _vm_create
 From:   Ben Gardon <bgardon@google.com>
 To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
         linux-kselftest@vger.kernel.org
@@ -65,9 +65,8 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 KVM creates internal memslots between 3 and 4 GiB paddrs on the first
 vCPU creation. If memslot 0 is large enough it collides with these
-memslots an causes vCPU creation to fail. Add a paddr parameter for
-memslot 0 so that tests which support large VMs can relocate memslot 0
-above 4 GiB.
+memslots an causes vCPU creation to fail. When requesting more than 3G,
+start memslot 0 at 4G in _vm_create.
 
 Signed-off-by: Ben Gardon <bgardon@google.com>
 ---
