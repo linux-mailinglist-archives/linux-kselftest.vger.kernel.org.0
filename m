@@ -2,79 +2,104 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D3FF21225FE
-	for <lists+linux-kselftest@lfdr.de>; Tue, 17 Dec 2019 08:58:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B1AAC12264B
+	for <lists+linux-kselftest@lfdr.de>; Tue, 17 Dec 2019 09:06:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726540AbfLQH6h (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 17 Dec 2019 02:58:37 -0500
-Received: from mail.kernel.org ([198.145.29.99]:54816 "EHLO mail.kernel.org"
+        id S1727151AbfLQIF3 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 17 Dec 2019 03:05:29 -0500
+Received: from mga09.intel.com ([134.134.136.24]:26976 "EHLO mga09.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726090AbfLQH6h (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 17 Dec 2019 02:58:37 -0500
-Received: from kernel.org (unknown [104.132.0.74])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id C76942072D;
-        Tue, 17 Dec 2019 07:58:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1576569516;
-        bh=PKix5UkE1pjZ91wIWtn3Cxmm/NgC7fD1N+XCGrlerOc=;
-        h=In-Reply-To:References:Cc:To:From:Subject:Date:From;
-        b=KunVHOnJ26M+HY0Zbm7xsxRl0nadBs5iWR37RatXykPyxoODmRASWVsqKSFu9WXN7
-         i9gOOh9fLtJCgcZwWrT2yE0XXVs4xQB2pNGnlkSi9yQI/KkVwK+TIRGCmYE3RyC6Cn
-         496v2oAjGt5DZ1isIRWinAShFPZr0iljBJBiG/Kk=
-Content-Type: text/plain; charset="utf-8"
+        id S1725946AbfLQIF2 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 17 Dec 2019 03:05:28 -0500
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga102.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 17 Dec 2019 00:05:27 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.69,324,1571727600"; 
+   d="scan'208";a="247347300"
+Received: from lkp-server01.sh.intel.com (HELO lkp-server01) ([10.239.97.150])
+  by fmsmga002.fm.intel.com with ESMTP; 17 Dec 2019 00:05:21 -0800
+Received: from kbuild by lkp-server01 with local (Exim 4.89)
+        (envelope-from <lkp@intel.com>)
+        id 1ih7qn-0006kj-6U; Tue, 17 Dec 2019 16:05:01 +0800
+Date:   Tue, 17 Dec 2019 16:03:56 +0800
+From:   kbuild test robot <lkp@intel.com>
+To:     John Hubbard <jhubbard@nvidia.com>
+Cc:     kbuild-all@lists.01.org, Andrew Morton <akpm@linux-foundation.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn.topel@intel.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Dave Chinner <david@fromorbit.com>,
+        David Airlie <airlied@linux.ie>,
+        "David S . Miller" <davem@davemloft.net>,
+        Ira Weiny <ira.weiny@intel.com>, Jan Kara <jack@suse.cz>,
+        Jason Gunthorpe <jgg@ziepe.ca>, Jens Axboe <axboe@kernel.dk>,
+        Jonathan Corbet <corbet@lwn.net>,
+        =?iso-8859-1?B?Suly9G1l?= Glisse <jglisse@redhat.com>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Michal Hocko <mhocko@suse.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Paul Mackerras <paulus@samba.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Vlastimil Babka <vbabka@suse.cz>, bpf@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, kvm@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-rdma@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, netdev@vger.kernel.org,
+        linux-mm@kvack.org, LKML <linux-kernel@vger.kernel.org>,
+        John Hubbard <jhubbard@nvidia.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
+Subject: Re: [PATCH v9 23/25] mm/gup: track FOLL_PIN pages
+Message-ID: <201912171520.rTYbJvYF%lkp@intel.com>
+References: <20191211025318.457113-24-jhubbard@nvidia.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20191216220555.245089-5-brendanhiggins@google.com>
-References: <20191216220555.245089-1-brendanhiggins@google.com> <20191216220555.245089-5-brendanhiggins@google.com>
-Cc:     gregkh@linuxfoundation.org, logang@deltatee.com, mcgrof@kernel.org,
-        knut.omang@oracle.com, linux-um@lists.infradead.org,
-        linux-arch@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org,
-        Brendan Higgins <brendanhiggins@google.com>
-To:     Brendan Higgins <brendanhiggins@google.com>,
-        akpm@linux-foundation.org, alan.maguire@oracle.com,
-        anton.ivanov@cambridgegreys.com, arnd@arndb.de,
-        davidgow@google.com, jdike@addtoit.com, keescook@chromium.org,
-        richard@nod.at, rppt@linux.ibm.com, skhan@linuxfoundation.org,
-        yzaikin@google.com
-From:   Stephen Boyd <sboyd@kernel.org>
-Subject: Re: [RFC v1 4/6] init: main: add KUnit to kernel init
-User-Agent: alot/0.8.1
-Date:   Mon, 16 Dec 2019 23:58:36 -0800
-Message-Id: <20191217075836.C76942072D@mail.kernel.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20191211025318.457113-24-jhubbard@nvidia.com>
+User-Agent: NeoMutt/20170113 (1.7.2)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Quoting Brendan Higgins (2019-12-16 14:05:53)
-> Remove KUnit from init calls entirely, instead call directly from
-> kernel_init().
+Hi John,
 
-Yes, but why? Is it desired to run the unit tests earlier than opening
-the console or something?
+Thank you for the patch! Perhaps something to improve:
 
->=20
-> diff --git a/lib/kunit/executor.c b/lib/kunit/executor.c
-> index 978086cfd257d..ca880224c0bab 100644
-> --- a/lib/kunit/executor.c
-> +++ b/lib/kunit/executor.c
-> @@ -32,12 +32,10 @@ static bool kunit_run_all_tests(void)
->         return !has_test_failed;
->  }
-> =20
-> -static int kunit_executor_init(void)
-> +int kunit_executor_init(void)
+[auto build test WARNING on rdma/for-next]
+[also build test WARNING on linus/master v5.5-rc2 next-20191216]
+[cannot apply to mmotm/master vfio/next]
+[if your patch is applied to the wrong git tree, please drop us a note to help
+improve the system. BTW, we also suggest to use '--base' option to specify the
+base tree in git format-patch, please see https://stackoverflow.com/a/37406982]
 
-Should be marked __init? Even before this patch presumably.
+url:    https://github.com/0day-ci/linux/commits/John-Hubbard/mm-gup-track-dma-pinned-pages-FOLL_PIN/20191212-013238
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/rdma/rdma.git for-next
+reproduce:
+        # apt-get install sparse
+        # sparse version: v0.6.1-104-gf934193-dirty
+        make ARCH=x86_64 allmodconfig
+        make C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__'
 
->  {
->         if (kunit_run_all_tests())
->                 return 0;
->         else
->                 return -EFAULT;
->  }
-> -
-> -late_initcall(kunit_executor_init);
+If you fix the issue, kindly add following tag
+Reported-by: kbuild test robot <lkp@intel.com>
+
+
+sparse warnings: (new ones prefixed by >>)
+
+>> mm/gup.c:78:26: sparse: sparse: symbol 'try_pin_compound_head' was not declared. Should it be static?
+
+Please review and possibly fold the followup patch.
+
+---
+0-DAY kernel test infrastructure                 Open Source Technology Center
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org Intel Corporation
