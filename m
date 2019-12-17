@@ -2,114 +2,135 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 808B9122871
-	for <lists+linux-kselftest@lfdr.de>; Tue, 17 Dec 2019 11:14:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 34C9C122DD1
+	for <lists+linux-kselftest@lfdr.de>; Tue, 17 Dec 2019 15:00:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727443AbfLQKOw convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 17 Dec 2019 05:14:52 -0500
-Received: from eu-smtp-delivery-151.mimecast.com ([207.82.80.151]:21453 "EHLO
-        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727435AbfLQKOw (ORCPT
+        id S1728732AbfLQN7u (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 17 Dec 2019 08:59:50 -0500
+Received: from hqnvemgate26.nvidia.com ([216.228.121.65]:15008 "EHLO
+        hqnvemgate26.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728539AbfLQN7u (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 17 Dec 2019 05:14:52 -0500
-Received: from AcuMS.aculab.com (156.67.243.126 [156.67.243.126]) (Using
- TLS) by relay.mimecast.com with ESMTP id
- uk-mta-154-AvZdXMAZPQGpt4vWLobGDQ-1; Tue, 17 Dec 2019 10:14:49 +0000
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) with Microsoft SMTP
- Server (TLS) id 15.0.1347.2; Tue, 17 Dec 2019 10:14:48 +0000
-Received: from AcuMS.Aculab.com ([fe80::43c:695e:880f:8750]) by
- AcuMS.aculab.com ([fe80::43c:695e:880f:8750%12]) with mapi id 15.00.1347.000;
- Tue, 17 Dec 2019 10:14:48 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Aleksa Sarai' <asarai@suse.de>
-CC:     'Aleksa Sarai' <cyphar@cyphar.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        "Jeff Layton" <jlayton@kernel.org>,
-        "J. Bruce Fields" <bfields@fieldses.org>,
-        "Shuah Khan" <shuah@kernel.org>,
-        "dev@opencontainers.org" <dev@opencontainers.org>,
-        "containers@lists.linux-foundation.org" 
-        <containers@lists.linux-foundation.org>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>
-Subject: RE: [PATCH] openat2: switch to __attribute__((packed)) for open_how
-Thread-Topic: [PATCH] openat2: switch to __attribute__((packed)) for open_how
-Thread-Index: AQHVs0QYCtoODE3sD0awPNQRMi+YuKe8+0pQgADpsgCAADgwUA==
-Date:   Tue, 17 Dec 2019 10:14:48 +0000
-Message-ID: <6630d0573b5b40da8efc58fc20ac445e@AcuMS.aculab.com>
-References: <20191213222351.14071-1-cyphar@cyphar.com>
- <a328b91d-fd8f-4f27-b3c2-91a9c45f18c0@rasmusvillemoes.dk>
- <20191215123443.jmfnrtgbscdwfohc@yavin.dot.cyphar.com>
- <b26ef210ec5b42009cf09b1015065768@AcuMS.aculab.com>
- <20191217064650.cd4bfb5d2koe6j7h@yavin.dot.cyphar.com>
-In-Reply-To: <20191217064650.cd4bfb5d2koe6j7h@yavin.dot.cyphar.com>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Tue, 17 Dec 2019 08:59:50 -0500
+Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate26.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5df8df4b0000>; Tue, 17 Dec 2019 05:59:40 -0800
+Received: from hqmail.nvidia.com ([172.20.161.6])
+  by hqpgpgate101.nvidia.com (PGP Universal service);
+  Tue, 17 Dec 2019 05:59:49 -0800
+X-PGP-Universal: processed;
+        by hqpgpgate101.nvidia.com on Tue, 17 Dec 2019 05:59:49 -0800
+Received: from [10.2.165.11] (10.124.1.5) by HQMAIL107.nvidia.com
+ (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Tue, 17 Dec
+ 2019 13:59:48 +0000
+Subject: Re: [RFC PATCH] mm/gup: try_pin_compound_head() can be static
+To:     kbuild test robot <lkp@intel.com>
+CC:     <kbuild-all@lists.01.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Dave Chinner <david@fromorbit.com>,
+        David Airlie <airlied@linux.ie>,
+        "David S . Miller" <davem@davemloft.net>,
+        Ira Weiny <ira.weiny@intel.com>, Jan Kara <jack@suse.cz>,
+        Jason Gunthorpe <jgg@ziepe.ca>, Jens Axboe <axboe@kernel.dk>,
+        Jonathan Corbet <corbet@lwn.net>,
+        =?UTF-8?B?SsOpcsO0bWUgR2xpc3Nl?= <jglisse@redhat.com>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Michal Hocko <mhocko@suse.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Paul Mackerras <paulus@samba.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Vlastimil Babka <vbabka@suse.cz>, <bpf@vger.kernel.org>,
+        <dri-devel@lists.freedesktop.org>, <kvm@vger.kernel.org>,
+        <linux-block@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+        <linux-fsdevel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+        <linux-media@vger.kernel.org>, <linux-rdma@vger.kernel.org>,
+        <linuxppc-dev@lists.ozlabs.org>, <netdev@vger.kernel.org>,
+        <linux-mm@kvack.org>, LKML <linux-kernel@vger.kernel.org>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
+References: <20191211025318.457113-24-jhubbard@nvidia.com>
+ <20191217080358.q3k57ta62txvip5h@4978f4969bb8>
+From:   John Hubbard <jhubbard@nvidia.com>
+X-Nvconfidentiality: public
+Message-ID: <7828a101-e422-8e2a-ef9b-9c0285065ed5@nvidia.com>
+Date:   Tue, 17 Dec 2019 05:56:56 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.3.0
 MIME-Version: 1.0
-X-MC-Unique: AvZdXMAZPQGpt4vWLobGDQ-1
-X-Mimecast-Spam-Score: 0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+In-Reply-To: <20191217080358.q3k57ta62txvip5h@4978f4969bb8>
+X-Originating-IP: [10.124.1.5]
+X-ClientProxiedBy: HQMAIL105.nvidia.com (172.20.187.12) To
+ HQMAIL107.nvidia.com (172.20.187.13)
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1576591180; bh=+kY6WrbKA7lSfaR6JiJsMhpW0kY3DW4edAlAk5Ve1Ws=;
+        h=X-PGP-Universal:Subject:To:CC:References:From:X-Nvconfidentiality:
+         Message-ID:Date:User-Agent:MIME-Version:In-Reply-To:
+         X-Originating-IP:X-ClientProxiedBy:Content-Type:Content-Language:
+         Content-Transfer-Encoding;
+        b=GbGZzaEh7giluV7bpN/IIAOj3Mc18AXcjLeuEGsTgM8/schRNFGUqCq00YAc4ARRK
+         0PVe1s7+qdvFmh1Ttru614AJtLodM6wJzZ2UNnA1jIm2+JCvQssDVh7rwrwji91hSp
+         Dmomrx8a2mkRdKDi+zuehTjS+cK+ceZUGuV2qS+Q00TgS6unnj2J/spZ+jPwNEGl3X
+         xJTAKof+O0alRzDH3cC7VTlXjNJwIWhcBZya8mbb62MvfcrAHYE78VekfobHefcZXx
+         ueLyg5p/jxUNWHBbbcLlFxuQBAi3TiHxhM/GsO23RipjSLUTZwruxA+61/WfeUhUby
+         xcvllM2I0K27A==
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From Aleksa Sarai
-> Sent: 17 December 2019 06:47
-...
-> > Just use u64 for all the fields.
+On 12/17/19 12:03 AM, kbuild test robot wrote:
 > 
-> That is an option (and is the one that clone3 went with), but it's a bit
-> awkward because umode_t is a u16 -- and it would be a waste of 6 bytes
-> to store it as a u64. Arguably it could be extended but I personally
-> find that to be very unlikely (and lots of other syscalls would need be
-> updated).
-
-6 bytes on interface structure will make almost no difference.
-There is no reason to save more than 16 bits anywhere else.
-You could error values with high bits set.
-
-> I'm just going to move the padding to the end and change the error for
-> non-zero padding to -E2BIG.
-
-The padding had to be after the u16 field.
-
-> > Use 'flags' bits to indicate whether the additional fields should be looked at.
-> > Error if a 'flags' bit requires a value that isn't passed in the structure.
-> >
-> > Then you can add an extra field and old source code recompiled with the
-> > new headers will still work - because the 'junk' value isn't looked at.
+> Fixes: 8086d1c61970 ("mm/gup: track FOLL_PIN pages")
+> Signed-off-by: kbuild test robot <lkp@intel.com>
+> ---
+>   gup.c |    2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> This problem is already handled entirely by copy_struct_from_user().
+> diff --git a/mm/gup.c b/mm/gup.c
+> index 038b71165a761..849a6f55938e6 100644
+> --- a/mm/gup.c
+> +++ b/mm/gup.c
+> @@ -75,7 +75,7 @@ static inline struct page *try_get_compound_head(struct page *page, int refs)
+>    * @Return:	the compound head page, with ref appropriately incremented,
+>    * or NULL upon failure.
+>    */
+> -__must_check struct page *try_pin_compound_head(struct page *page, int refs)
+> +static __must_check struct page *try_pin_compound_head(struct page *page, int refs)
+>   {
+>   	struct page *head = try_get_compound_head(page,
+>   						  GUP_PIN_COUNTING_BIAS * refs);
 > 
-> It is true that for some new fields it will be necessary to add a new
-> flag (such as passing fds -- where 0 is a valid value) but for most new
-> fields (especially pointer or flag fields) it will not be necessary
-> because the 0 value is equivalent to the old behaviour. It also allows
-> us to entirely avoid accepting junk from userspace.
 
-Only if userspace is guaranteed to memset the entire structure
-before making the call - rather than just fill in all the fields it knows about.
-If it doesn't use memset() then recompiling old code with new headers
-will pass garbage to the kernel.
-copy_struct_from_user() cannot solve that problem.
-You'll never be able to guarantee that all code actually clears the
-entire structure - so at some point extending it will break recompilations
-of old code - annoying.
+Yes, it should have been declared static. And this also applies to the latest version
+(v11). The preferred fix would stay within 80 columns, like this:
 
-	David
+diff --git a/mm/gup.c b/mm/gup.c
+index c2793a86450e..39b2f683bd2e 100644
+--- a/mm/gup.c
++++ b/mm/gup.c
+@@ -75,7 +75,8 @@ static inline struct page *try_get_compound_head(struct page *page, int refs)
+   * @Return:    the compound head page, with ref appropriately incremented,
+   * or NULL upon failure.
+   */
+-__must_check struct page *try_pin_compound_head(struct page *page, int refs)
++static __must_check struct page *try_pin_compound_head(struct page *page,
++                                                      int refs)
+  {
+         struct page *head = try_get_compound_head(page,
+                                                   GUP_PIN_COUNTING_BIAS * refs);
 
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
 
+thanks,
+-- 
+John Hubbard
+NVIDIA
