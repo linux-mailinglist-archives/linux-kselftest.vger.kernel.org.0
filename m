@@ -2,83 +2,79 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D1D731225A6
-	for <lists+linux-kselftest@lfdr.de>; Tue, 17 Dec 2019 08:40:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D3FF21225FE
+	for <lists+linux-kselftest@lfdr.de>; Tue, 17 Dec 2019 08:58:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728130AbfLQHj4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 17 Dec 2019 02:39:56 -0500
-Received: from mx2.suse.de ([195.135.220.15]:45328 "EHLO mx2.suse.de"
+        id S1726540AbfLQH6h (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 17 Dec 2019 02:58:37 -0500
+Received: from mail.kernel.org ([198.145.29.99]:54816 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726072AbfLQHj4 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 17 Dec 2019 02:39:56 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx2.suse.de (Postfix) with ESMTP id CC5EBADB3;
-        Tue, 17 Dec 2019 07:39:52 +0000 (UTC)
-Received: by quack2.suse.cz (Postfix, from userid 1000)
-        id 937DF1E0B35; Tue, 17 Dec 2019 08:39:51 +0100 (CET)
-Date:   Tue, 17 Dec 2019 08:39:51 +0100
-From:   Jan Kara <jack@suse.cz>
-To:     John Hubbard <jhubbard@nvidia.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn.topel@intel.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Dave Chinner <david@fromorbit.com>,
-        David Airlie <airlied@linux.ie>,
-        "David S . Miller" <davem@davemloft.net>,
-        Ira Weiny <ira.weiny@intel.com>, Jan Kara <jack@suse.cz>,
-        Jason Gunthorpe <jgg@ziepe.ca>, Jens Axboe <axboe@kernel.dk>,
-        Jonathan Corbet <corbet@lwn.net>,
-        =?iso-8859-1?B?Suly9G1l?= Glisse <jglisse@redhat.com>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Michal Hocko <mhocko@suse.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Paul Mackerras <paulus@samba.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Vlastimil Babka <vbabka@suse.cz>, bpf@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, kvm@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-rdma@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, netdev@vger.kernel.org,
-        linux-mm@kvack.org, LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v11 00/25] mm/gup: track dma-pinned pages: FOLL_PIN
-Message-ID: <20191217073951.GC16051@quack2.suse.cz>
-References: <20191216222537.491123-1-jhubbard@nvidia.com>
+        id S1726090AbfLQH6h (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 17 Dec 2019 02:58:37 -0500
+Received: from kernel.org (unknown [104.132.0.74])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id C76942072D;
+        Tue, 17 Dec 2019 07:58:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1576569516;
+        bh=PKix5UkE1pjZ91wIWtn3Cxmm/NgC7fD1N+XCGrlerOc=;
+        h=In-Reply-To:References:Cc:To:From:Subject:Date:From;
+        b=KunVHOnJ26M+HY0Zbm7xsxRl0nadBs5iWR37RatXykPyxoODmRASWVsqKSFu9WXN7
+         i9gOOh9fLtJCgcZwWrT2yE0XXVs4xQB2pNGnlkSi9yQI/KkVwK+TIRGCmYE3RyC6Cn
+         496v2oAjGt5DZ1isIRWinAShFPZr0iljBJBiG/Kk=
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191216222537.491123-1-jhubbard@nvidia.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20191216220555.245089-5-brendanhiggins@google.com>
+References: <20191216220555.245089-1-brendanhiggins@google.com> <20191216220555.245089-5-brendanhiggins@google.com>
+Cc:     gregkh@linuxfoundation.org, logang@deltatee.com, mcgrof@kernel.org,
+        knut.omang@oracle.com, linux-um@lists.infradead.org,
+        linux-arch@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org,
+        Brendan Higgins <brendanhiggins@google.com>
+To:     Brendan Higgins <brendanhiggins@google.com>,
+        akpm@linux-foundation.org, alan.maguire@oracle.com,
+        anton.ivanov@cambridgegreys.com, arnd@arndb.de,
+        davidgow@google.com, jdike@addtoit.com, keescook@chromium.org,
+        richard@nod.at, rppt@linux.ibm.com, skhan@linuxfoundation.org,
+        yzaikin@google.com
+From:   Stephen Boyd <sboyd@kernel.org>
+Subject: Re: [RFC v1 4/6] init: main: add KUnit to kernel init
+User-Agent: alot/0.8.1
+Date:   Mon, 16 Dec 2019 23:58:36 -0800
+Message-Id: <20191217075836.C76942072D@mail.kernel.org>
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi!
+Quoting Brendan Higgins (2019-12-16 14:05:53)
+> Remove KUnit from init calls entirely, instead call directly from
+> kernel_init().
 
-On Mon 16-12-19 14:25:12, John Hubbard wrote:
-> Hi,
-> 
-> This implements an API naming change (put_user_page*() -->
-> unpin_user_page*()), and also implements tracking of FOLL_PIN pages. It
-> extends that tracking to a few select subsystems. More subsystems will
-> be added in follow up work.
+Yes, but why? Is it desired to run the unit tests earlier than opening
+the console or something?
 
-Just a note for Andrew and others watching this series: At this point I'm fine
-with the series so if someone still has some review feedback or wants to
-check the series, now is the right time. Otherwise I think Andrew can push
-the series to MM tree so that it will get wider testing exposure and is
-prepared for the next merge window.
+>=20
+> diff --git a/lib/kunit/executor.c b/lib/kunit/executor.c
+> index 978086cfd257d..ca880224c0bab 100644
+> --- a/lib/kunit/executor.c
+> +++ b/lib/kunit/executor.c
+> @@ -32,12 +32,10 @@ static bool kunit_run_all_tests(void)
+>         return !has_test_failed;
+>  }
+> =20
+> -static int kunit_executor_init(void)
+> +int kunit_executor_init(void)
 
-								Honza
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+Should be marked __init? Even before this patch presumably.
+
+>  {
+>         if (kunit_run_all_tests())
+>                 return 0;
+>         else
+>                 return -EFAULT;
+>  }
+> -
+> -late_initcall(kunit_executor_init);
