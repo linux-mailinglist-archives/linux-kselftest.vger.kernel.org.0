@@ -2,93 +2,143 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 189E7122638
-	for <lists+linux-kselftest@lfdr.de>; Tue, 17 Dec 2019 09:05:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CA91812262F
+	for <lists+linux-kselftest@lfdr.de>; Tue, 17 Dec 2019 09:04:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727007AbfLQIFF (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 17 Dec 2019 03:05:05 -0500
-Received: from mga09.intel.com ([134.134.136.24]:26948 "EHLO mga09.intel.com"
+        id S1726382AbfLQIEJ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 17 Dec 2019 03:04:09 -0500
+Received: from mail.kernel.org ([198.145.29.99]:57836 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726401AbfLQIFF (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 17 Dec 2019 03:05:05 -0500
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga102.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 17 Dec 2019 00:05:04 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.69,324,1571727600"; 
-   d="scan'208";a="217691035"
-Received: from lkp-server01.sh.intel.com (HELO lkp-server01) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 17 Dec 2019 00:04:57 -0800
-Received: from kbuild by lkp-server01 with local (Exim 4.89)
-        (envelope-from <lkp@intel.com>)
-        id 1ih7qi-0006Px-ST; Tue, 17 Dec 2019 16:04:56 +0800
-Date:   Tue, 17 Dec 2019 16:03:58 +0800
-From:   kbuild test robot <lkp@intel.com>
-To:     John Hubbard <jhubbard@nvidia.com>
-Cc:     kbuild-all@lists.01.org, Andrew Morton <akpm@linux-foundation.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn.topel@intel.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Dave Chinner <david@fromorbit.com>,
-        David Airlie <airlied@linux.ie>,
-        "David S . Miller" <davem@davemloft.net>,
-        Ira Weiny <ira.weiny@intel.com>, Jan Kara <jack@suse.cz>,
-        Jason Gunthorpe <jgg@ziepe.ca>, Jens Axboe <axboe@kernel.dk>,
-        Jonathan Corbet <corbet@lwn.net>,
-        =?iso-8859-1?B?Suly9G1l?= Glisse <jglisse@redhat.com>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Michal Hocko <mhocko@suse.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Paul Mackerras <paulus@samba.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Vlastimil Babka <vbabka@suse.cz>, bpf@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, kvm@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-rdma@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, netdev@vger.kernel.org,
-        linux-mm@kvack.org, LKML <linux-kernel@vger.kernel.org>,
-        John Hubbard <jhubbard@nvidia.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
-Subject: [RFC PATCH] mm/gup: try_pin_compound_head() can be static
-Message-ID: <20191217080358.q3k57ta62txvip5h@4978f4969bb8>
-References: <20191211025318.457113-24-jhubbard@nvidia.com>
+        id S1725975AbfLQIEJ (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 17 Dec 2019 03:04:09 -0500
+Received: from kernel.org (unknown [104.132.0.74])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 0E805207FF;
+        Tue, 17 Dec 2019 08:04:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1576569848;
+        bh=Y+8NIgqGUB5GGoVAmC1QyodloTkHrKNoE9BJ1KDgc0I=;
+        h=In-Reply-To:References:Cc:To:From:Subject:Date:From;
+        b=NtCUV3NXdw3uz6E3WWDJ/f8avNB+JW3MgzuhyTbvTeFVozCkBMA1VlwHv2Z3SNFi6
+         RfLW0D/1wbdJ8NsGI6PG+SW7IFEhnDvWvYJ0QAE1crrChc0U0DyFDqJna8T8DTxc+U
+         fFlOb8qoGap3jmz9IyfKyLMKNHRAW2V9WYKcDVp4=
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191211025318.457113-24-jhubbard@nvidia.com>
-X-Patchwork-Hint: ignore
-User-Agent: NeoMutt/20170113 (1.7.2)
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20191216220555.245089-4-brendanhiggins@google.com>
+References: <20191216220555.245089-1-brendanhiggins@google.com> <20191216220555.245089-4-brendanhiggins@google.com>
+Cc:     gregkh@linuxfoundation.org, logang@deltatee.com, mcgrof@kernel.org,
+        knut.omang@oracle.com, linux-um@lists.infradead.org,
+        linux-arch@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org,
+        Brendan Higgins <brendanhiggins@google.com>
+To:     Brendan Higgins <brendanhiggins@google.com>,
+        akpm@linux-foundation.org, alan.maguire@oracle.com,
+        anton.ivanov@cambridgegreys.com, arnd@arndb.de,
+        davidgow@google.com, jdike@addtoit.com, keescook@chromium.org,
+        richard@nod.at, rppt@linux.ibm.com, skhan@linuxfoundation.org,
+        yzaikin@google.com
+From:   Stephen Boyd <sboyd@kernel.org>
+Subject: Re: [RFC v1 3/6] kunit: test: create a single centralized executor for all tests
+User-Agent: alot/0.8.1
+Date:   Tue, 17 Dec 2019 00:04:07 -0800
+Message-Id: <20191217080408.0E805207FF@mail.kernel.org>
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+Quoting Brendan Higgins (2019-12-16 14:05:52)
+> diff --git a/include/kunit/test.h b/include/kunit/test.h
+> index dba48304b3bd3..c070798ebb765 100644
+> --- a/include/kunit/test.h
+> +++ b/include/kunit/test.h
+> @@ -217,11 +217,8 @@ int kunit_run_tests(struct kunit_suite *suite);
+>   * everything else is definitely initialized.
+>   */
+>  #define kunit_test_suite(suite)                                         =
+              \
+> -       static int kunit_suite_init##suite(void)                         =
+      \
 
-Fixes: 8086d1c61970 ("mm/gup: track FOLL_PIN pages")
-Signed-off-by: kbuild test robot <lkp@intel.com>
----
- gup.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Oh this should have been __init before.
 
-diff --git a/mm/gup.c b/mm/gup.c
-index 038b71165a761..849a6f55938e6 100644
---- a/mm/gup.c
-+++ b/mm/gup.c
-@@ -75,7 +75,7 @@ static inline struct page *try_get_compound_head(struct page *page, int refs)
-  * @Return:	the compound head page, with ref appropriately incremented,
-  * or NULL upon failure.
-  */
--__must_check struct page *try_pin_compound_head(struct page *page, int refs)
-+static __must_check struct page *try_pin_compound_head(struct page *page, int refs)
- {
- 	struct page *head = try_get_compound_head(page,
- 						  GUP_PIN_COUNTING_BIAS * refs);
+> -       {                                                                =
+      \
+> -               return kunit_run_tests(&suite);                          =
+      \
+> -       }                                                                =
+      \
+> -       late_initcall(kunit_suite_init##suite)
+> +       static struct kunit_suite *__kunit_suite_##suite                 =
+      \
+> +       __used __aligned(8) __section(.kunit_test_suites) =3D &suite
+> =20
+>  /*
+>   * Like kunit_alloc_resource() below, but returns the struct kunit_resou=
+rce
+> diff --git a/lib/kunit/executor.c b/lib/kunit/executor.c
+> new file mode 100644
+> index 0000000000000..978086cfd257d
+> --- /dev/null
+> +++ b/lib/kunit/executor.c
+> @@ -0,0 +1,43 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Base unit test (KUnit) API.
+> + *
+> + * Copyright (C) 2019, Google LLC.
+> + * Author: Brendan Higgins <brendanhiggins@google.com>
+> + */
+> +
+> +#include <linux/init.h>
+> +#include <linux/printk.h>
+> +#include <kunit/test.h>
+> +
+> +/*
+> + * These symbols point to the .kunit_test_suites section and are defined=
+ in
+> + * include/asm-generic/vmlinux.lds.h, and consequently must be extern.
+> + */
+> +extern struct kunit_suite *__kunit_suites_start[];
+> +extern struct kunit_suite *__kunit_suites_end[];
+> +
+> +static bool kunit_run_all_tests(void)
+
+Should be __init?
+
+> +{
+> +       struct kunit_suite **suite;
+
+Can this be const? And the linker references above too?
+
+> +       bool has_test_failed =3D false;
+> +
+> +       for (suite =3D __kunit_suites_start;
+> +            suite < __kunit_suites_end;
+> +            ++suite) {
+> +               if (kunit_run_tests(*suite))
+> +                       has_test_failed =3D true;
+> +       }
+> +
+> +       return !has_test_failed;
+> +}
+> +
+> +static int kunit_executor_init(void)
+
+Should be __init?
+
+> +{
+> +       if (kunit_run_all_tests())
+> +               return 0;
+> +       else
+> +               return -EFAULT;
+
+Why two functions instead of just one that is the target of the
+late_initcall? Nitpick: deindent that last return and take it out of the
+else.
+
+> +}
+> +
+> +late_initcall(kunit_executor_init);
