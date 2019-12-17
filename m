@@ -2,52 +2,52 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F742123A9E
-	for <lists+linux-kselftest@lfdr.de>; Wed, 18 Dec 2019 00:16:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BD0A7123AA8
+	for <lists+linux-kselftest@lfdr.de>; Wed, 18 Dec 2019 00:16:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726623AbfLQXQ3 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 17 Dec 2019 18:16:29 -0500
-Received: from mail-pg1-f202.google.com ([209.85.215.202]:37868 "EHLO
-        mail-pg1-f202.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726613AbfLQXQ1 (ORCPT
+        id S1726648AbfLQXQc (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 17 Dec 2019 18:16:32 -0500
+Received: from mail-pf1-f202.google.com ([209.85.210.202]:37415 "EHLO
+        mail-pf1-f202.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726656AbfLQXQc (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 17 Dec 2019 18:16:27 -0500
-Received: by mail-pg1-f202.google.com with SMTP id r2so8291997pgl.4
-        for <linux-kselftest@vger.kernel.org>; Tue, 17 Dec 2019 15:16:27 -0800 (PST)
+        Tue, 17 Dec 2019 18:16:32 -0500
+Received: by mail-pf1-f202.google.com with SMTP id 13so36323pfj.4
+        for <linux-kselftest@vger.kernel.org>; Tue, 17 Dec 2019 15:16:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=fTVIJElalvmhQcv6zCj5CfRWey5jujNpNV62myM6KqA=;
-        b=lJKGasHN1Vsxb/CCKpDadNM0XjWtPgrjSccXZB+PhyLTmYpAT7CEhD0kilSarDhwNW
-         T98dril0kPOjmk7nV85UsMRoifQEHOS61paWif5xaq2hJuN8ca5a0SbDUKpK4TYklube
-         wmaMy9FeSagZXnwkjHd6r2HM7W/k1HKLUk5A+Nvkp+BpKWkAokX/Qxo7AVekAMGjvU1B
-         nsybNtM5yqJH4bTVfxKhow4d2KGWf+kfnFPQhqN39rwvlYAxNur72wWwF6/rhu6Uei6K
-         FL9BXIVsI0/UMnrK33MAIr2YcVxuhQiVvchOIuYO17BimZVTFeG0TkGR0f6/ToX+iWtG
-         RsBw==
+        bh=m/0PEKDIs5EAE9V+LXDiU9+GrPzSxNsg2GcbnT02PzI=;
+        b=AruRn4ej2VsNuz7auIffE04SPrO2HQA+bJ01iLESyeIWTl+UGSxDMV9UfRPIUXIwr2
+         LXoggi1DeTrGzbfzXClfVcOVL/HEhvfAAl79gJq32ECO7ZMLgwIaqyAuuVInPo27HI2Y
+         fgqUoegyWUgqKh3IIrb2X9/3AHMwpNHoB15FUnr4gIDk6+mFJkv3e1NAY7zwkHnWpkH+
+         nK9B2nelvMk+JGQD5d7ZOnfweWvaYmjzAilOPsWpmzyCFyJ4NxWBIQhBYLCjWtrnwHHC
+         dU3h53W3TbZnHPeZ6tXizhVul5oTwwshnZj7zcs18PfawGfH/0kEQedHwvJDTXgXodSd
+         SShQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=fTVIJElalvmhQcv6zCj5CfRWey5jujNpNV62myM6KqA=;
-        b=r1i7ck/tUezB/w45bZP6nbMvuP748vvIKCKOEKuNy/cZwlVzXsoSPhBZaVq5AffHhC
-         5nf0n2tiH12sif6kMC2iNiEDA/F2x+BkUc216G3qkklW7tHQ516ZJw/Jr1f2k5c5XG27
-         QETsa/j7fxP6UADYZr2aItjFEc5wEV93z2FY4UswEKK7QF2Wb64kJuL92dPW7WCEpQF6
-         hQpo138NfjQ2oAdK95nXFQaP/kPGS7t6vTpoyZW72sxz/bFrMKOt5gb5qKbTX7Mhz2gG
-         ywiV/uVqKNbokXCnHHMljFY17SENt1V5IX147vQKrqJ051zD1UBFEvM/AioL9OD5a6gO
-         dvRg==
-X-Gm-Message-State: APjAAAXYx615FsKbTXIK/tVdntif7OdxOyYXNwKORjInmMoC0V4DazFl
-        0VrCFzsnYLfkhIEB0g9iewyjpQgmw479DShEbw==
-X-Google-Smtp-Source: APXvYqzu57uNnzxTX9JH0yE4G49D4D5hzS3yzb1m8FKHMcBjqfI2Amk33AVX94DI9S+exnn4bmzLlMQdRhnkskeIeQ==
-X-Received: by 2002:a63:4f59:: with SMTP id p25mr417697pgl.230.1576624586680;
- Tue, 17 Dec 2019 15:16:26 -0800 (PST)
-Date:   Tue, 17 Dec 2019 15:16:11 -0800
+        bh=m/0PEKDIs5EAE9V+LXDiU9+GrPzSxNsg2GcbnT02PzI=;
+        b=UliDiFMRcVcw1Je3s7CGPcwC3lHmjLnO/7U1JCZHx+CN6KQDT9bH1piw6f6bPenaee
+         0pKyMwa1mr9mKi9bA8wT0U1n644KE6+0sOHv3YeqQBVw0kol0D03jtnHcO5nkxLd+hZC
+         c7nf/vsM8y/M6qg+gYXXenL95x/S+cwYJt1Lnd/1sW2D6cY4AZb1PxsQR8XCgL9wth2w
+         HyXVVcol9hmu4o8LYbhcFS9hvxEclw1Q4BIoJ+VdJ/+53sxlQKUPUZ8E7gJJiWqHywL1
+         l7NJ37TMWvcsjxFXJFPcwCZxlvVPnrUJ/f7w5WvlwEiQgH1r8XEIi2ixVkC2zckaV47F
+         hPNA==
+X-Gm-Message-State: APjAAAUK0NCuMXn9jYXwBENVNKGqbOXYZ8LLTA5bWuaKhhyj6WmPPoz4
+        6lDOKqrcUvR/4A9Z7vUmOUZaH8d5OytGThT5Xw==
+X-Google-Smtp-Source: APXvYqxWhvReT2kHTN7BRR1uEs7bCMIbW3AILDIIajF2PeJU8/Ww9+TRlWFpAbhP0tCmehYnjidsBMCI68zCxxrR2g==
+X-Received: by 2002:a63:444c:: with SMTP id t12mr27326341pgk.433.1576624589150;
+ Tue, 17 Dec 2019 15:16:29 -0800 (PST)
+Date:   Tue, 17 Dec 2019 15:16:12 -0800
 In-Reply-To: <20191217231615.164161-1-almasrymina@google.com>
-Message-Id: <20191217231615.164161-4-almasrymina@google.com>
+Message-Id: <20191217231615.164161-5-almasrymina@google.com>
 Mime-Version: 1.0
 References: <20191217231615.164161-1-almasrymina@google.com>
 X-Mailer: git-send-email 2.24.1.735.g03f4e72817-goog
-Subject: [PATCH v9 4/8] hugetlb: disable region_add file_region coalescing
+Subject: [PATCH v9 5/8] hugetlb_cgroup: add accounting for shared mappings
 From:   Mina Almasry <almasrymina@google.com>
 To:     mike.kravetz@oracle.com
 Cc:     shuah@kernel.org, almasrymina@google.com, rientjes@google.com,
@@ -61,527 +61,370 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-A follow up patch in this series adds hugetlb cgroup uncharge info the
-file_region entries in resv->regions. The cgroup uncharge info may
-differ for different regions, so they can no longer be coalesced at
-region_add time. So, disable region coalescing in region_add in this
-patch.
+For shared mappings, the pointer to the hugetlb_cgroup to uncharge lives
+in the resv_map entries, in file_region->reservation_counter.
 
-Behavior change:
+After a call to region_chg, we charge the approprate hugetlb_cgroup, and if
+successful, we pass on the hugetlb_cgroup info to a follow up region_add call.
+When a file_region entry is added to the resv_map via region_add, we put the
+pointer to that cgroup in file_region->reservation_counter. If charging doesn't
+succeed, we report the error to the caller, so that the kernel fails the
+reservation.
 
-Say a resv_map exists like this [0->1], [2->3], and [5->6].
-
-Then a region_chg/add call comes in region_chg/add(f=0, t=5).
-
-Old code would generate resv->regions: [0->5], [5->6].
-New code would generate resv->regions: [0->1], [1->2], [2->3], [3->5],
-[5->6].
-
-Special care needs to be taken to handle the resv->adds_in_progress
-variable correctly. In the past, only 1 region would be added for every
-region_chg and region_add call. But now, each call may add multiple
-regions, so we can no longer increment adds_in_progress by 1 in region_chg,
-or decrement adds_in_progress by 1 after region_add or region_abort. Instead,
-region_chg calls add_reservation_in_range() to count the number of regions
-needed and allocates those, and that info is passed to region_add and
-region_abort to decrement adds_in_progress correctly.
-
-We've also modified the assumption that region_add after region_chg
-never fails. region_chg now pre-allocates at least 1 region for
-region_add. If region_add needs more regions than region_chg has
-allocated for it, then it may fail.
+On region_del, which is when the hugetlb memory is unreserved, we also uncharge
+the file_region->reservation_counter.
 
 Signed-off-by: Mina Almasry <almasrymina@google.com>
-Reviewed-by: Mike Kravetz <mike.kravetz@oracle.com>
 
 ---
 
-Changes in v9:
-- Added clarifications in the comments and addressed minor issues from
-code review.
-Changes in v7:
-- region_chg no longer allocates (t-f) / 2 file_region entries.
-Changes in v6:
-- Fix bug in number of region_caches allocated by region_chg
+Changes in V9:
+- Updated for hugetlb reservation repareting.
 
 ---
- mm/hugetlb.c | 327 +++++++++++++++++++++++++++++++++++----------------
- 1 file changed, 223 insertions(+), 104 deletions(-)
+ mm/hugetlb.c | 161 +++++++++++++++++++++++++++++++++++++++++----------
+ 1 file changed, 129 insertions(+), 32 deletions(-)
 
 diff --git a/mm/hugetlb.c b/mm/hugetlb.c
-index 7782977970301..3f70742e3aee4 100644
+index 3f70742e3aee4..39eb2fa53a420 100644
 --- a/mm/hugetlb.c
 +++ b/mm/hugetlb.c
-@@ -244,110 +244,179 @@ struct file_region {
+@@ -242,6 +242,16 @@ struct file_region {
+ 	struct list_head link;
+ 	long from;
  	long to;
++#ifdef CONFIG_CGROUP_HUGETLB
++	/*
++	 * On shared mappings, each reserved region appears as a struct
++	 * file_region in resv_map. These fields hold the info needed to
++	 * uncharge each reservation.
++	 */
++	struct page_counter *reservation_counter;
++	unsigned long pages_per_hpage;
++	struct cgroup_subsys_state *css;
++#endif
  };
 
-+/* Helper that removes a struct file_region from the resv_map cache and returns
-+ * it for use.
-+ */
-+static struct file_region *
-+get_file_region_entry_from_cache(struct resv_map *resv, long from, long to)
+ /* Helper that removes a struct file_region from the resv_map cache and returns
+@@ -265,6 +275,25 @@ get_file_region_entry_from_cache(struct resv_map *resv, long from, long to)
+ 	return nrg;
+ }
+
++/* Helper that records hugetlb_cgroup uncharge info. */
++static void record_hugetlb_cgroup_uncharge_info(struct hugetlb_cgroup *h_cg,
++						struct file_region *nrg,
++						struct hstate *h)
 +{
-+	struct file_region *nrg = NULL;
-+
-+	VM_BUG_ON(resv->region_cache_count <= 0);
-+
-+	resv->region_cache_count--;
-+	nrg = list_first_entry(&resv->region_cache, struct file_region, link);
-+	VM_BUG_ON(!nrg);
-+	list_del(&nrg->link);
-+
-+	nrg->from = from;
-+	nrg->to = to;
-+
-+	return nrg;
++#ifdef CONFIG_CGROUP_HUGETLB
++	if (h_cg) {
++		nrg->reservation_counter =
++			&h_cg->reserved_hugepage[hstate_index(h)];
++		nrg->pages_per_hpage = pages_per_huge_page(h);
++		nrg->css = &h_cg->css;
++	} else {
++		nrg->reservation_counter = NULL;
++		nrg->pages_per_hpage = 0;
++		nrg->css = NULL;
++	}
++#endif
 +}
 +
  /* Must be called with resv->lock held. Calling this with count_only == true
   * will count the number of pages to be added but will not modify the linked
-- * list.
-+ * list. If regions_needed != NULL and count_only == true, then regions_needed
-+ * will indicate the number of file_regions needed in the cache to carry out to
-+ * add the regions for this range.
+  * list. If regions_needed != NULL and count_only == true, then regions_needed
+@@ -272,7 +301,9 @@ get_file_region_entry_from_cache(struct resv_map *resv, long from, long to)
+  * add the regions for this range.
   */
  static long add_reservation_in_range(struct resv_map *resv, long f, long t,
--				     bool count_only)
-+				     long *regions_needed, bool count_only)
+-				     long *regions_needed, bool count_only)
++				     struct hugetlb_cgroup *h_cg,
++				     struct hstate *h, long *regions_needed,
++				     bool count_only)
  {
--	long chg = 0;
-+	long add = 0;
+ 	long add = 0;
  	struct list_head *head = &resv->regions;
-+	long last_accounted_offset = f;
- 	struct file_region *rg = NULL, *trg = NULL, *nrg = NULL;
-
--	/* Locate the region we are before or in. */
--	list_for_each_entry(rg, head, link)
--		if (f <= rg->to)
--			break;
--
--	/* Round our left edge to the current segment if it encloses us. */
--	if (f > rg->from)
--		f = rg->from;
-+	if (regions_needed)
-+		*regions_needed = 0;
-
--	chg = t - f;
-+	/* In this loop, we essentially handle an entry for the range
-+	 * [last_accounted_offset, rg->from), at every iteration, with some
-+	 * bounds checking.
-+	 */
-+	list_for_each_entry_safe(rg, trg, head, link) {
-+		/* Skip irrelevant regions that start before our range. */
-+		if (rg->from < f) {
-+			/* If this region ends after the last accounted offset,
-+			 * then we need to update last_accounted_offset.
-+			 */
-+			if (rg->to > last_accounted_offset)
-+				last_accounted_offset = rg->to;
-+			continue;
-+		}
-
--	/* Check for and consume any regions we now overlap with. */
--	nrg = rg;
--	list_for_each_entry_safe(rg, trg, rg->link.prev, link) {
--		if (&rg->link == head)
--			break;
-+		/* When we find a region that starts beyond our range, we've
-+		 * finished.
-+		 */
- 		if (rg->from > t)
- 			break;
-
--		/* We overlap with this area, if it extends further than
--		 * us then we must extend ourselves.  Account for its
--		 * existing reservation.
-+		/* Add an entry for last_accounted_offset -> rg->from, and
-+		 * update last_accounted_offset.
- 		 */
--		if (rg->to > t) {
--			chg += rg->to - t;
--			t = rg->to;
-+		if (rg->from > last_accounted_offset) {
-+			add += rg->from - last_accounted_offset;
-+			if (!count_only) {
-+				nrg = get_file_region_entry_from_cache(
-+					resv, last_accounted_offset, rg->from);
-+				list_add(&nrg->link, rg->link.prev);
-+			} else if (regions_needed)
-+				*regions_needed += 1;
- 		}
--		chg -= rg->to - rg->from;
-
--		if (!count_only && rg != nrg) {
--			list_del(&rg->link);
--			kfree(rg);
--		}
-+		last_accounted_offset = rg->to;
+@@ -311,6 +342,8 @@ static long add_reservation_in_range(struct resv_map *resv, long f, long t,
+ 			if (!count_only) {
+ 				nrg = get_file_region_entry_from_cache(
+ 					resv, last_accounted_offset, rg->from);
++				record_hugetlb_cgroup_uncharge_info(h_cg, nrg,
++								    h);
+ 				list_add(&nrg->link, rg->link.prev);
+ 			} else if (regions_needed)
+ 				*regions_needed += 1;
+@@ -327,11 +360,13 @@ static long add_reservation_in_range(struct resv_map *resv, long f, long t,
+ 		if (!count_only) {
+ 			nrg = get_file_region_entry_from_cache(
+ 				resv, last_accounted_offset, t);
++			record_hugetlb_cgroup_uncharge_info(h_cg, nrg, h);
+ 			list_add(&nrg->link, rg->link.prev);
+ 		} else if (regions_needed)
+ 			*regions_needed += 1;
  	}
 
--	if (!count_only) {
--		nrg->from = f;
--		nrg->to = t;
-+	/* Handle the case where our range extends beyond
-+	 * last_accounted_offset.
-+	 */
-+	if (last_accounted_offset < t) {
-+		add += t - last_accounted_offset;
-+		if (!count_only) {
-+			nrg = get_file_region_entry_from_cache(
-+				resv, last_accounted_offset, t);
-+			list_add(&nrg->link, rg->link.prev);
-+		} else if (regions_needed)
-+			*regions_needed += 1;
- 	}
-
--	return chg;
-+	return add;
- }
-
- /*
-  * Add the huge page range represented by [f, t) to the reserve
-- * map.  Existing regions will be expanded to accommodate the specified
-- * range, or a region will be taken from the cache.  Sufficient regions
-- * must exist in the cache due to the previous call to region_chg with
-- * the same range.
-+ * map.  Regions will be taken from the cache to fill in this range.
-+ * Sufficient regions should exist in the cache due to the previous
-+ * call to region_chg with the same range, but in some cases the cache will not
-+ * have sufficient entries due to races with other code doing region_add or
-+ * region_del.  The extra needed entries will be allocated.
-  *
-- * Return the number of new huge pages added to the map.  This
-- * number is greater than or equal to zero.
-+ * regions_needed is the out value provided by a previous call to region_chg.
-+ *
-+ * Return the number of new huge pages added to the map.  This number is greater
-+ * than or equal to zero.  If file_region entries needed to be allocated for
-+ * this operation and we were not able to allocate, it ruturns -ENOMEM.
-+ * region_add of regions of length 1 never allocate file_regions and cannot
-+ * fail; region_chg will always allocate at least 1 entry and a region_add for
-+ * 1 page will only require at most 1 entry.
-  */
--static long region_add(struct resv_map *resv, long f, long t)
-+static long region_add(struct resv_map *resv, long f, long t,
-+		       long in_regions_needed)
- {
--	struct list_head *head = &resv->regions;
--	struct file_region *rg, *nrg;
--	long add = 0;
-+	long add = 0, actual_regions_needed = 0, i = 0;
-+	struct file_region *trg = NULL, *rg = NULL;
-+	struct list_head allocated_regions;
-+
-+	INIT_LIST_HEAD(&allocated_regions);
-
- 	spin_lock(&resv->lock);
--	/* Locate the region we are either in or before. */
--	list_for_each_entry(rg, head, link)
--		if (f <= rg->to)
--			break;
-+retry:
-+
-+	/* Count how many regions are actually needed to execute this add. */
-+	add_reservation_in_range(resv, f, t, &actual_regions_needed, true);
-
- 	/*
--	 * If no region exists which can be expanded to include the
--	 * specified range, pull a region descriptor from the cache
--	 * and use it for this range.
-+	 * Check for sufficient descriptors in the cache to accommodate
-+	 * this add operation. Note that actual_regions_needed may be greater
-+	 * than in_regions_needed. In this case, we need to make sure that we
-+	 * allocate extra entries, such that we have enough for all the
-+	 * existing adds_in_progress, plus the excess needed for this
-+	 * operation.
- 	 */
--	if (&rg->link == head || t < rg->from) {
--		VM_BUG_ON(resv->region_cache_count <= 0);
-+	if (resv->region_cache_count <
-+	    resv->adds_in_progress +
-+		    (actual_regions_needed - in_regions_needed)) {
-+		/* region_add operation of range 1 should never need to
-+		 * allocate file_region entries.
-+		 */
-+		VM_BUG_ON(t - f <= 1);
-
--		resv->region_cache_count--;
--		nrg = list_first_entry(&resv->region_cache, struct file_region,
--					link);
--		list_del(&nrg->link);
-+		/* Must drop lock to allocate a new descriptor. */
-+		spin_unlock(&resv->lock);
-+		for (i = 0; i < (actual_regions_needed - in_regions_needed);
-+		     i++) {
-+			trg = kmalloc(sizeof(*trg), GFP_KERNEL);
-+			if (!trg)
-+				goto out_of_memory;
-+			list_add(&trg->link, &allocated_regions);
-+		}
-+		spin_lock(&resv->lock);
-
--		nrg->from = f;
--		nrg->to = t;
--		list_add(&nrg->link, rg->link.prev);
-+		list_for_each_entry_safe(rg, trg, &allocated_regions, link) {
-+			list_del(&rg->link);
-+			list_add(&rg->link, &resv->region_cache);
-+			resv->region_cache_count++;
-+		}
-
--		add += t - f;
--		goto out_locked;
-+		goto retry;
- 	}
-
--	add = add_reservation_in_range(resv, f, t, false);
-+	add = add_reservation_in_range(resv, f, t, NULL, false);
-+
-+	resv->adds_in_progress -= in_regions_needed;
-
--out_locked:
--	resv->adds_in_progress--;
- 	spin_unlock(&resv->lock);
- 	VM_BUG_ON(add < 0);
++	VM_BUG_ON(add < 0);
  	return add;
-+
-+out_of_memory:
-+	list_for_each_entry_safe(rg, trg, &allocated_regions, link) {
-+		list_del(&rg->link);
-+		kfree(rg);
-+	}
-+	return -ENOMEM;
  }
 
- /*
-@@ -357,49 +426,79 @@ static long region_add(struct resv_map *resv, long f, long t)
-  * call to region_add that will actually modify the reserve
-  * map to add the specified range [f, t).  region_chg does
-  * not change the number of huge pages represented by the
-- * map.  A new file_region structure is added to the cache
-- * as a placeholder, so that the subsequent region_add
-- * call will have all the regions it needs and will not fail.
-+ * map.  A number of new file_region structures is added to the cache as a
-+ * placeholder, for the subsequent region_add call to use. At least 1
-+ * file_region structure is added.
-+ *
-+ * out_regions_needed is the number of regions added to the
-+ * resv->adds_in_progress.  This value needs to be provided to a follow up call
-+ * to region_add or region_abort for proper accounting.
-  *
-  * Returns the number of huge pages that need to be added to the existing
-  * reservation map for the range [f, t).  This number is greater or equal to
-  * zero.  -ENOMEM is returned if a new file_region structure or cache entry
-  * is needed and can not be allocated.
+@@ -352,7 +387,8 @@ static long add_reservation_in_range(struct resv_map *resv, long f, long t,
+  * fail; region_chg will always allocate at least 1 entry and a region_add for
+  * 1 page will only require at most 1 entry.
   */
--static long region_chg(struct resv_map *resv, long f, long t)
-+static long region_chg(struct resv_map *resv, long f, long t,
-+		       long *out_regions_needed)
+-static long region_add(struct resv_map *resv, long f, long t,
++static long region_add(struct hstate *h, struct hugetlb_cgroup *h_cg,
++		       struct resv_map *resv, long f, long t,
+ 		       long in_regions_needed)
  {
--	long chg = 0;
-+	struct file_region *trg = NULL, *rg = NULL;
-+	long chg = 0, i = 0, to_allocate = 0;
-+	struct list_head allocated_regions;
-+
-+	INIT_LIST_HEAD(&allocated_regions);
+ 	long add = 0, actual_regions_needed = 0, i = 0;
+@@ -365,7 +401,8 @@ static long region_add(struct resv_map *resv, long f, long t,
+ retry:
 
- 	spin_lock(&resv->lock);
--retry_locked:
--	resv->adds_in_progress++;
-+
-+	/* Count how many hugepages in this range are NOT respresented. */
-+	chg = add_reservation_in_range(resv, f, t, out_regions_needed, true);
-+
-+	if (*out_regions_needed == 0)
-+		*out_regions_needed = 1;
-+
-+	resv->adds_in_progress += *out_regions_needed;
+ 	/* Count how many regions are actually needed to execute this add. */
+-	add_reservation_in_range(resv, f, t, &actual_regions_needed, true);
++	add_reservation_in_range(resv, f, t, NULL, NULL, &actual_regions_needed,
++				 true);
 
  	/*
  	 * Check for sufficient descriptors in the cache to accommodate
- 	 * the number of in progress add operations.
- 	 */
--	if (resv->adds_in_progress > resv->region_cache_count) {
--		struct file_region *trg;
--
--		VM_BUG_ON(resv->adds_in_progress - resv->region_cache_count > 1);
--		/* Must drop lock to allocate a new descriptor. */
--		resv->adds_in_progress--;
-+	while (resv->region_cache_count < resv->adds_in_progress) {
-+		to_allocate = resv->adds_in_progress - resv->region_cache_count;
-+
-+		/* Must drop lock to allocate a new descriptor. Note that even
-+		 * though we drop the lock here, we do not make another call to
-+		 * add_reservation_in_range after re-acquiring the lock.
-+		 * Essentially this branch makes sure that we have enough
-+		 * descriptors in the cache as suggested by the first call to
-+		 * add_reservation_in_range. If more regions turn out to be
-+		 * required, region_add will deal with it.
-+		 */
- 		spin_unlock(&resv->lock);
--
--		trg = kmalloc(sizeof(*trg), GFP_KERNEL);
--		if (!trg)
--			return -ENOMEM;
-+		for (i = 0; i < to_allocate; i++) {
-+			trg = kmalloc(sizeof(*trg), GFP_KERNEL);
-+			if (!trg)
-+				goto out_of_memory;
-+			list_add(&trg->link, &allocated_regions);
-+		}
+@@ -403,7 +440,7 @@ static long region_add(struct resv_map *resv, long f, long t,
+ 		goto retry;
+ 	}
 
- 		spin_lock(&resv->lock);
--		list_add(&trg->link, &resv->region_cache);
--		resv->region_cache_count++;
--		goto retry_locked;
--	}
+-	add = add_reservation_in_range(resv, f, t, NULL, false);
++	add = add_reservation_in_range(resv, f, t, h_cg, h, NULL, false);
 
--	chg = add_reservation_in_range(resv, f, t, true);
-+		list_for_each_entry_safe(rg, trg, &allocated_regions, link) {
-+			list_del(&rg->link);
-+			list_add(&rg->link, &resv->region_cache);
-+			resv->region_cache_count++;
-+		}
-+	}
+ 	resv->adds_in_progress -= in_regions_needed;
 
- 	spin_unlock(&resv->lock);
- 	return chg;
-+
-+out_of_memory:
-+	list_for_each_entry_safe(rg, trg, &allocated_regions, link) {
-+		list_del(&rg->link);
-+		kfree(rg);
-+	}
-+	return -ENOMEM;
- }
-
- /*
-@@ -407,17 +506,20 @@ static long region_chg(struct resv_map *resv, long f, long t)
-  * of the resv_map keeps track of the operations in progress between
-  * calls to region_chg and region_add.  Operations are sometimes
-  * aborted after the call to region_chg.  In such cases, region_abort
-- * is called to decrement the adds_in_progress counter.
-+ * is called to decrement the adds_in_progress counter. regions_needed
-+ * is the value returned by the region_chg call, it is used to decrement
-+ * the adds_in_progress counter.
-  *
-  * NOTE: The range arguments [f, t) are not needed or used in this
-  * routine.  They are kept to make reading the calling code easier as
-  * arguments will match the associated region_chg call.
-  */
--static void region_abort(struct resv_map *resv, long f, long t)
-+static void region_abort(struct resv_map *resv, long f, long t,
-+			 long regions_needed)
- {
+@@ -451,7 +488,8 @@ static long region_chg(struct resv_map *resv, long f, long t,
  	spin_lock(&resv->lock);
- 	VM_BUG_ON(!resv->region_cache_count);
--	resv->adds_in_progress--;
-+	resv->adds_in_progress -= regions_needed;
+
+ 	/* Count how many hugepages in this range are NOT respresented. */
+-	chg = add_reservation_in_range(resv, f, t, out_regions_needed, true);
++	chg = add_reservation_in_range(resv, f, t, NULL, NULL,
++				       out_regions_needed, true);
+
+ 	if (*out_regions_needed == 0)
+ 		*out_regions_needed = 1;
+@@ -523,6 +561,25 @@ static void region_abort(struct resv_map *resv, long f, long t,
  	spin_unlock(&resv->lock);
  }
 
-@@ -1834,6 +1936,7 @@ static long __vma_reservation_common(struct hstate *h,
- 	struct resv_map *resv;
- 	pgoff_t idx;
- 	long ret;
-+	long dummy_out_regions_needed;
++static void uncharge_cgroup_if_shared_mapping(struct resv_map *resv,
++					      struct file_region *rg,
++					      unsigned long nr_pages)
++{
++#ifdef CONFIG_CGROUP_HUGETLB
++	/*
++	 * If resv->reservation_counter is NULL, then this is shared
++	 * reservation, and the reserved memory is tracked in the file_struct
++	 * entries inside of resv_map. So we need to uncharge the memory here.
++	 */
++	if (rg->reservation_counter && rg->pages_per_hpage && nr_pages > 0 &&
++	    !resv->reservation_counter) {
++		hugetlb_cgroup_uncharge_counter(rg->reservation_counter,
++						nr_pages * rg->pages_per_hpage,
++						rg->css);
++	}
++#endif
++}
++
+ /*
+  * Delete the specified range [f, t) from the reserve map.  If the
+  * t parameter is LONG_MAX, this indicates that ALL regions after f
+@@ -587,11 +644,20 @@ static long region_del(struct resv_map *resv, long f, long t)
+ 			/* New entry for end of split region */
+ 			nrg->from = t;
+ 			nrg->to = rg->to;
++
++			nrg->reservation_counter = rg->reservation_counter;
++			nrg->pages_per_hpage = rg->pages_per_hpage;
++			nrg->css = rg->css;
++			css_get(rg->css);
++
+ 			INIT_LIST_HEAD(&nrg->link);
 
- 	resv = vma_resv_map(vma);
- 	if (!resv)
-@@ -1842,20 +1945,29 @@ static long __vma_reservation_common(struct hstate *h,
- 	idx = vma_hugecache_offset(h, vma, addr);
- 	switch (mode) {
- 	case VMA_NEEDS_RESV:
--		ret = region_chg(resv, idx, idx + 1);
-+		ret = region_chg(resv, idx, idx + 1, &dummy_out_regions_needed);
-+		/* We assume that vma_reservation_* routines always operate on
-+		 * 1 page, and that adding to resv map a 1 page entry can only
-+		 * ever require 1 region.
-+		 */
-+		VM_BUG_ON(dummy_out_regions_needed != 1);
+ 			/* Original entry is trimmed */
+ 			rg->to = f;
+
++			uncharge_cgroup_if_shared_mapping(resv, rg,
++							  nrg->to - nrg->from);
++
+ 			list_add(&nrg->link, &rg->link);
+ 			nrg = NULL;
+ 			break;
+@@ -599,6 +665,8 @@ static long region_del(struct resv_map *resv, long f, long t)
+
+ 		if (f <= rg->from && t >= rg->to) { /* Remove entire region */
+ 			del += rg->to - rg->from;
++			uncharge_cgroup_if_shared_mapping(resv, rg,
++							  rg->to - rg->from);
+ 			list_del(&rg->link);
+ 			kfree(rg);
+ 			continue;
+@@ -607,14 +675,20 @@ static long region_del(struct resv_map *resv, long f, long t)
+ 		if (f <= rg->from) {	/* Trim beginning of region */
+ 			del += t - rg->from;
+ 			rg->from = t;
++
++			uncharge_cgroup_if_shared_mapping(resv, rg,
++							  t - rg->from);
+ 		} else {		/* Trim end of region */
+ 			del += rg->to - f;
+ 			rg->to = f;
++
++			uncharge_cgroup_if_shared_mapping(resv, rg, rg->to - f);
+ 		}
+ 	}
+
+ 	spin_unlock(&resv->lock);
+ 	kfree(nrg);
++
+ 	return del;
+ }
+
+@@ -1953,7 +2027,7 @@ static long __vma_reservation_common(struct hstate *h,
+ 		VM_BUG_ON(dummy_out_regions_needed != 1);
  		break;
  	case VMA_COMMIT_RESV:
--		ret = region_add(resv, idx, idx + 1);
-+		ret = region_add(resv, idx, idx + 1, 1);
-+		/* region_add calls of range 1 should never fail. */
-+		VM_BUG_ON(ret < 0);
+-		ret = region_add(resv, idx, idx + 1, 1);
++		ret = region_add(NULL, NULL, resv, idx, idx + 1, 1);
+ 		/* region_add calls of range 1 should never fail. */
+ 		VM_BUG_ON(ret < 0);
  		break;
- 	case VMA_END_RESV:
--		region_abort(resv, idx, idx + 1);
-+		region_abort(resv, idx, idx + 1, 1);
- 		ret = 0;
+@@ -1963,7 +2037,7 @@ static long __vma_reservation_common(struct hstate *h,
  		break;
  	case VMA_ADD_RESV:
--		if (vma->vm_flags & VM_MAYSHARE)
--			ret = region_add(resv, idx, idx + 1);
--		else {
--			region_abort(resv, idx, idx + 1);
-+		if (vma->vm_flags & VM_MAYSHARE) {
-+			ret = region_add(resv, idx, idx + 1, 1);
-+			/* region_add calls of range 1 should never fail. */
-+			VM_BUG_ON(ret < 0);
-+		} else {
-+			region_abort(resv, idx, idx + 1, 1);
- 			ret = region_del(resv, idx, idx + 1);
- 		}
- 		break;
-@@ -4523,12 +4635,12 @@ int hugetlb_reserve_pages(struct inode *inode,
- 					struct vm_area_struct *vma,
- 					vm_flags_t vm_flags)
- {
--	long ret, chg;
-+	long ret, chg, add = -1;
+ 		if (vma->vm_flags & VM_MAYSHARE) {
+-			ret = region_add(resv, idx, idx + 1, 1);
++			ret = region_add(NULL, NULL, resv, idx, idx + 1, 1);
+ 			/* region_add calls of range 1 should never fail. */
+ 			VM_BUG_ON(ret < 0);
+ 		} else {
+@@ -4639,7 +4713,7 @@ int hugetlb_reserve_pages(struct inode *inode,
  	struct hstate *h = hstate_inode(inode);
  	struct hugepage_subpool *spool = subpool_inode(inode);
  	struct resv_map *resv_map;
- 	struct hugetlb_cgroup *h_cg;
--	long gbl_reserve;
-+	long gbl_reserve, regions_needed = 0;
+-	struct hugetlb_cgroup *h_cg;
++	struct hugetlb_cgroup *h_cg = NULL;
+ 	long gbl_reserve, regions_needed = 0;
 
  	/* This should never happen */
- 	if (from > to) {
-@@ -4558,7 +4670,7 @@ int hugetlb_reserve_pages(struct inode *inode,
- 		 */
- 		resv_map = inode_resv_map(inode);
+@@ -4680,23 +4754,6 @@ int hugetlb_reserve_pages(struct inode *inode,
 
--		chg = region_chg(resv_map, from, to);
-+		chg = region_chg(resv_map, from, to, &regions_needed);
+ 		chg = to - from;
 
- 	} else {
- 		/* Private mapping. */
-@@ -4628,9 +4740,14 @@ int hugetlb_reserve_pages(struct inode *inode,
+-		if (hugetlb_cgroup_charge_cgroup(hstate_index(h),
+-						 chg * pages_per_huge_page(h),
+-						 &h_cg, true)) {
+-			kref_put(&resv_map->refs, resv_map_release);
+-			return -ENOMEM;
+-		}
+-
+-#ifdef CONFIG_CGROUP_HUGETLB
+-		/*
+-		 * Since this branch handles private mappings, we attach the
+-		 * counter to uncharge for this reservation off resv_map.
+-		 */
+-		resv_map->reservation_counter =
+-			&h_cg->reserved_hugepage[hstate_index(h)];
+-		resv_map->pages_per_hpage = pages_per_huge_page(h);
+-#endif
+-
+ 		set_vma_resv_map(vma, resv_map);
+ 		set_vma_resv_flags(vma, HPAGE_RESV_OWNER);
+ 	}
+@@ -4706,6 +4763,26 @@ int hugetlb_reserve_pages(struct inode *inode,
+ 		goto out_err;
+ 	}
+
++	ret = hugetlb_cgroup_charge_cgroup(
++		hstate_index(h), chg * pages_per_huge_page(h), &h_cg, true);
++
++	if (ret < 0) {
++		ret = -ENOMEM;
++		goto out_err;
++	}
++
++#ifdef CONFIG_CGROUP_HUGETLB
++	if (vma && !(vma->vm_flags & VM_MAYSHARE)) {
++		/* For private mappings, the hugetlb_cgroup uncharge info hangs
++		 * of the resv_map.
++		 */
++		resv_map->reservation_counter =
++			&h_cg->reserved_hugepage[hstate_index(h)];
++		resv_map->pages_per_hpage = pages_per_huge_page(h);
++		resv_map->css = &h_cg->css;
++	}
++#endif
++
+ 	/*
+ 	 * There must be enough pages in the subpool for the mapping. If
+ 	 * the subpool has a minimum size, there may be some global
+@@ -4714,7 +4791,7 @@ int hugetlb_reserve_pages(struct inode *inode,
+ 	gbl_reserve = hugepage_subpool_get_pages(spool, chg);
+ 	if (gbl_reserve < 0) {
+ 		ret = -ENOSPC;
+-		goto out_err;
++		goto out_uncharge_cgroup;
+ 	}
+
+ 	/*
+@@ -4723,9 +4800,7 @@ int hugetlb_reserve_pages(struct inode *inode,
+ 	 */
+ 	ret = hugetlb_acct_memory(h, gbl_reserve);
+ 	if (ret < 0) {
+-		/* put back original number of pages, chg */
+-		(void)hugepage_subpool_put_pages(spool, chg);
+-		goto out_err;
++		goto out_put_pages;
+ 	}
+
+ 	/*
+@@ -4740,7 +4815,7 @@ int hugetlb_reserve_pages(struct inode *inode,
  	 * else has to be done for private mappings here
  	 */
  	if (!vma || vma->vm_flags & VM_MAYSHARE) {
--		long add = region_add(resv_map, from, to);
--
--		if (unlikely(chg > add)) {
-+		add = region_add(resv_map, from, to, regions_needed);
+-		add = region_add(resv_map, from, to, regions_needed);
++		add = region_add(h, h_cg, resv_map, from, to, regions_needed);
+
+ 		if (unlikely(add < 0)) {
+ 			hugetlb_acct_memory(h, -gbl_reserve);
+@@ -4757,12 +4832,34 @@ int hugetlb_reserve_pages(struct inode *inode,
+ 			 */
+ 			long rsv_adjust;
+
+-			rsv_adjust = hugepage_subpool_put_pages(spool,
+-								chg - add);
++			hugetlb_cgroup_uncharge_cgroup(
++				hstate_index(h),
++				(chg - add) * pages_per_huge_page(h), h_cg,
++				true);
 +
-+		if (unlikely(add < 0)) {
-+			hugetlb_acct_memory(h, -gbl_reserve);
-+			/* put back original number of pages, chg */
-+			(void)hugepage_subpool_put_pages(spool, chg);
-+			goto out_err;
-+		} else if (unlikely(chg > add)) {
- 			/*
- 			 * pages in this range were added to the reserve
- 			 * map between region_chg and region_add.  This
-@@ -4648,9 +4765,11 @@ int hugetlb_reserve_pages(struct inode *inode,
++			rsv_adjust =
++				hugepage_subpool_put_pages(spool, chg - add);
+ 			hugetlb_acct_memory(h, -rsv_adjust);
+ 		}
++	} else {
++#ifdef CONFIG_CGROUP_HUGETLB
++		/*
++		 * Since this branch handles private mappings, we attach the
++		 * counter to uncharge for this reservation off resv_map.
++		 */
++		resv_map->reservation_counter =
++			&h_cg->reserved_hugepage[hstate_index(h)];
++		resv_map->pages_per_hpage = pages_per_huge_page(h);
++		resv_map->css = &h_cg->css;
++#endif
+ 	}
  	return 0;
++out_put_pages:
++	/* put back original number of pages, chg */
++	(void)hugepage_subpool_put_pages(spool, chg);
++out_uncharge_cgroup:
++	hugetlb_cgroup_uncharge_cgroup(
++		hstate_index(h), chg * pages_per_huge_page(h), h_cg, true);
  out_err:
  	if (!vma || vma->vm_flags & VM_MAYSHARE)
--		/* Don't call region_abort if region_chg failed */
--		if (chg >= 0)
--			region_abort(resv_map, from, to);
-+		/* Only call region_abort if the region_chg succeeded but the
-+		 * region_add failed or didn't run.
-+		 */
-+		if (chg >= 0 && add < 0)
-+			region_abort(resv_map, from, to, regions_needed);
- 	if (vma && is_vma_resv_set(vma, HPAGE_RESV_OWNER))
- 		kref_put(&resv_map->refs, resv_map_release);
- 	return ret;
+ 		/* Only call region_abort if the region_chg succeeded but the
 --
 2.24.1.735.g03f4e72817-goog
