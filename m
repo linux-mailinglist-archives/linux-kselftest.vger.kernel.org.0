@@ -2,194 +2,398 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E690124F5C
-	for <lists+linux-kselftest@lfdr.de>; Wed, 18 Dec 2019 18:32:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CD3D124F74
+	for <lists+linux-kselftest@lfdr.de>; Wed, 18 Dec 2019 18:38:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726985AbfLRRcJ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 18 Dec 2019 12:32:09 -0500
-Received: from mout-p-201.mailbox.org ([80.241.56.171]:33640 "EHLO
-        mout-p-201.mailbox.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726939AbfLRRcJ (ORCPT
+        id S1727289AbfLRRiD (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 18 Dec 2019 12:38:03 -0500
+Received: from youngberry.canonical.com ([91.189.89.112]:40839 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727185AbfLRRiC (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 18 Dec 2019 12:32:09 -0500
-Received: from smtp2.mailbox.org (smtp2.mailbox.org [IPv6:2001:67c:2050:105:465:1:2:0])
-        (using TLSv1.2 with cipher ECDHE-RSA-CHACHA20-POLY1305 (256/256 bits))
-        (No client certificate requested)
-        by mout-p-201.mailbox.org (Postfix) with ESMTPS id 47dMWp47D3zQl8w;
-        Wed, 18 Dec 2019 18:32:06 +0100 (CET)
-X-Virus-Scanned: amavisd-new at heinlein-support.de
-Received: from smtp2.mailbox.org ([80.241.60.241])
-        by spamfilter01.heinlein-hosting.de (spamfilter01.heinlein-hosting.de [80.241.56.115]) (amavisd-new, port 10030)
-        with ESMTP id lKAwrDRV6l4X; Wed, 18 Dec 2019 18:31:58 +0100 (CET)
-Date:   Thu, 19 Dec 2019 04:31:45 +1100
-From:   Aleksa Sarai <cyphar@cyphar.com>
-To:     David Laight <David.Laight@ACULAB.COM>
-Cc:     'Aleksa Sarai' <asarai@suse.de>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J. Bruce Fields" <bfields@fieldses.org>,
-        Shuah Khan <shuah@kernel.org>,
-        "dev@opencontainers.org" <dev@opencontainers.org>,
-        "containers@lists.linux-foundation.org" 
-        <containers@lists.linux-foundation.org>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH] openat2: switch to __attribute__((packed)) for open_how
-Message-ID: <20191218173145.zodaxjctesjolinp@yavin.dot.cyphar.com>
-References: <20191213222351.14071-1-cyphar@cyphar.com>
- <a328b91d-fd8f-4f27-b3c2-91a9c45f18c0@rasmusvillemoes.dk>
- <20191215123443.jmfnrtgbscdwfohc@yavin.dot.cyphar.com>
- <b26ef210ec5b42009cf09b1015065768@AcuMS.aculab.com>
- <20191217064650.cd4bfb5d2koe6j7h@yavin.dot.cyphar.com>
- <6630d0573b5b40da8efc58fc20ac445e@AcuMS.aculab.com>
+        Wed, 18 Dec 2019 12:38:02 -0500
+Received: from host.242.234.23.62.rev.coltfrance.com ([62.23.234.242] helo=localhost.localdomain)
+        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.86_2)
+        (envelope-from <christian.brauner@ubuntu.com>)
+        id 1ihdGp-00046Q-Ki; Wed, 18 Dec 2019 17:37:59 +0000
+From:   Christian Brauner <christian.brauner@ubuntu.com>
+To:     linux-api@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Tejun Heo <tj@kernel.org>
+Cc:     Christian Brauner <christian.brauner@ubuntu.com>,
+        Roman Gushchin <guro@fb.com>, Shuah Khan <shuah@kernel.org>,
+        cgroups@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: [PATCH 3/3] selftests/cgroup: add tests for cloning into cgroups
+Date:   Wed, 18 Dec 2019 18:35:16 +0100
+Message-Id: <20191218173516.7875-4-christian.brauner@ubuntu.com>
+X-Mailer: git-send-email 2.24.0
+In-Reply-To: <20191218173516.7875-1-christian.brauner@ubuntu.com>
+References: <20191218173516.7875-1-christian.brauner@ubuntu.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="nmokspy2icgpi2pg"
-Content-Disposition: inline
-In-Reply-To: <6630d0573b5b40da8efc58fc20ac445e@AcuMS.aculab.com>
+Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+Expand the cgroup test-suite to include tests for CLONE_INTO_CGROUP.
+This adds the following tests:
+- CLONE_INTO_CGROUP manages to clone a process directly into a correctly
+  delegated cgroup
+- CLONE_INTO_CGROUP fails to clone a process into a cgroup that has been
+  removed after we've opened an fd to it
+- CLONE_INTO_CGROUP fails to clone a process into an invalid domain
+  cgroup
+- CLONE_INTO_CGROUP adheres to the no internal process constraint
+- CLONE_INTO_CGROUP works with the freezer feature
 
---nmokspy2icgpi2pg
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Cc: Roman Gushchin <guro@fb.com>
+Cc: Tejun Heo <tj@kernel.org>
+Cc: Shuah Khan <shuah@kernel.org>
+Cc: cgroups@vger.kernel.org
+Cc: linux-kselftest@vger.kernel.org
+Signed-off-by: Christian Brauner <christian.brauner@ubuntu.com>
+---
+ tools/testing/selftests/cgroup/Makefile       |   6 +-
+ tools/testing/selftests/cgroup/cgroup_util.c  | 126 ++++++++++++++++++
+ tools/testing/selftests/cgroup/cgroup_util.h  |   4 +
+ tools/testing/selftests/cgroup/test_core.c    |  67 ++++++++++
+ .../selftests/clone3/clone3_selftests.h       |  19 ++-
+ 5 files changed, 217 insertions(+), 5 deletions(-)
 
-On 2019-12-17, David Laight <David.Laight@ACULAB.COM> wrote:
-> From Aleksa Sarai
-> > Sent: 17 December 2019 06:47
-> ...
-> > > Just use u64 for all the fields.
-> >=20
-> > That is an option (and is the one that clone3 went with), but it's a bit
-> > awkward because umode_t is a u16 -- and it would be a waste of 6 bytes
-> > to store it as a u64. Arguably it could be extended but I personally
-> > find that to be very unlikely (and lots of other syscalls would need be
-> > updated).
->=20
-> 6 bytes on interface structure will make almost no difference.
-> There is no reason to save more than 16 bits anywhere else.
+diff --git a/tools/testing/selftests/cgroup/Makefile b/tools/testing/selftests/cgroup/Makefile
+index 66aafe1f5746..967f268fde74 100644
+--- a/tools/testing/selftests/cgroup/Makefile
++++ b/tools/testing/selftests/cgroup/Makefile
+@@ -11,6 +11,6 @@ TEST_GEN_PROGS += test_freezer
+ 
+ include ../lib.mk
+ 
+-$(OUTPUT)/test_memcontrol: cgroup_util.c
+-$(OUTPUT)/test_core: cgroup_util.c
+-$(OUTPUT)/test_freezer: cgroup_util.c
++$(OUTPUT)/test_memcontrol: cgroup_util.c ../clone3/clone3_selftests.h
++$(OUTPUT)/test_core: cgroup_util.c ../clone3/clone3_selftests.h
++$(OUTPUT)/test_freezer: cgroup_util.c ../clone3/clone3_selftests.h
+diff --git a/tools/testing/selftests/cgroup/cgroup_util.c b/tools/testing/selftests/cgroup/cgroup_util.c
+index 8f7131dcf1ff..8a637ca7d73a 100644
+--- a/tools/testing/selftests/cgroup/cgroup_util.c
++++ b/tools/testing/selftests/cgroup/cgroup_util.c
+@@ -15,6 +15,7 @@
+ #include <unistd.h>
+ 
+ #include "cgroup_util.h"
++#include "../clone3/clone3_selftests.h"
+ 
+ static ssize_t read_text(const char *path, char *buf, size_t max_len)
+ {
+@@ -331,12 +332,112 @@ int cg_run(const char *cgroup,
+ 	}
+ }
+ 
++pid_t clone_into_cgroup(int cgroup_fd)
++{
++#ifdef CLONE_ARGS_SIZE_VER2
++	pid_t pid;
++
++	struct clone_args args = {
++		.flags = CLONE_INTO_CGROUP,
++		.exit_signal = SIGCHLD,
++		.cgroup = cgroup_fd,
++	};
++
++	pid = sys_clone3(&args, sizeof(struct clone_args));
++	/*
++	 * Verify that this is a genuine test failure:
++	 * ENOSYS -> clone3() not available
++	 * E2BIG  -> CLONE_INTO_CGROUP not available
++	 */
++	if (pid < 0 && (errno == ENOSYS || errno == E2BIG))
++		goto pretend_enosys;
++
++	return pid;
++
++pretend_enosys:
++#endif
++	errno = ENOSYS;
++	return -ENOSYS;
++}
++
++int clone_reap(pid_t pid, int options)
++{
++	int ret;
++	siginfo_t info = {
++		.si_signo = 0,
++	};
++
++again:
++	ret = waitid(P_PID, pid, &info, options | __WALL | __WNOTHREAD);
++	if (ret < 0) {
++		if (errno == EINTR)
++			goto again;
++		return -1;
++	}
++
++	if (options & WEXITED) {
++		if (WIFEXITED(info.si_status))
++			return WEXITSTATUS(info.si_status);
++	}
++
++	if (options & WSTOPPED) {
++		if (WIFSTOPPED(info.si_status))
++			return WSTOPSIG(info.si_status);
++	}
++
++	if (options & WCONTINUED) {
++		if (WIFCONTINUED(info.si_status))
++			return 0;
++	}
++
++	return -1;
++}
++
++int dirfd_open_opath(const char *dir)
++{
++	return open(dir, O_DIRECTORY | O_CLOEXEC | O_NOFOLLOW | O_PATH);
++}
++
++#define close_prot_errno(fd)                                                   \
++	if (fd >= 0) {                                                         \
++		int _e_ = errno;                                               \
++		close(fd);                                                     \
++		errno = _e_;                                                   \
++	}
++
++static int clone_into_cgroup_run_nowait(const char *cgroup,
++					int (*fn)(const char *cgroup, void *arg),
++					void *arg)
++{
++	int cgroup_fd;
++	pid_t pid;
++
++	cgroup_fd =  dirfd_open_opath(cgroup);
++	if (cgroup_fd < 0)
++		return -1;
++
++	pid = clone_into_cgroup(cgroup_fd);
++	close_prot_errno(cgroup_fd);
++	if (pid == 0)
++		exit(fn(cgroup, arg));
++
++	return pid;
++}
++
+ int cg_run_nowait(const char *cgroup,
+ 		  int (*fn)(const char *cgroup, void *arg),
+ 		  void *arg)
+ {
+ 	int pid;
+ 
++	pid = clone_into_cgroup_run_nowait(cgroup, fn, arg);
++	if (pid > 0)
++		return pid;
++
++	/* Genuine test failure. */
++	if (pid < 0 && errno != ENOSYS)
++		return -1;
++
+ 	pid = fork();
+ 	if (pid == 0) {
+ 		char buf[64];
+@@ -450,3 +551,28 @@ int proc_read_strstr(int pid, bool thread, const char *item, const char *needle)
+ 
+ 	return strstr(buf, needle) ? 0 : -1;
+ }
++
++int clone_into_cgroup_run_wait(const char *cgroup)
++{
++	int cgroup_fd;
++	pid_t pid;
++
++	cgroup_fd =  dirfd_open_opath(cgroup);
++	if (cgroup_fd < 0)
++		return -1;
++
++	pid = clone_into_cgroup(cgroup_fd);
++	close_prot_errno(cgroup_fd);
++	if (pid < 0)
++		return -1;
++
++	if (pid == 0)
++		exit(EXIT_SUCCESS);
++
++	/*
++	 * We don't care whether this fails. We only care whether the initial
++	 * clone succeeded.
++	 */
++	(void)clone_reap(pid, WEXITED);
++	return 0;
++}
+diff --git a/tools/testing/selftests/cgroup/cgroup_util.h b/tools/testing/selftests/cgroup/cgroup_util.h
+index 49c54fbdb229..5a1305dd1f0b 100644
+--- a/tools/testing/selftests/cgroup/cgroup_util.h
++++ b/tools/testing/selftests/cgroup/cgroup_util.h
+@@ -50,3 +50,7 @@ extern int cg_wait_for_proc_count(const char *cgroup, int count);
+ extern int cg_killall(const char *cgroup);
+ extern ssize_t proc_read_text(int pid, bool thread, const char *item, char *buf, size_t size);
+ extern int proc_read_strstr(int pid, bool thread, const char *item, const char *needle);
++extern pid_t clone_into_cgroup(int cgroup_fd);
++extern int clone_reap(pid_t pid, int options);
++extern int clone_into_cgroup_run_wait(const char *cgroup);
++extern int dirfd_open_opath(const char *dir);
+diff --git a/tools/testing/selftests/cgroup/test_core.c b/tools/testing/selftests/cgroup/test_core.c
+index c5ca669feb2b..eea53a86c4b3 100644
+--- a/tools/testing/selftests/cgroup/test_core.c
++++ b/tools/testing/selftests/cgroup/test_core.c
+@@ -25,8 +25,11 @@
+ static int test_cgcore_populated(const char *root)
+ {
+ 	int ret = KSFT_FAIL;
++	int err;
+ 	char *cg_test_a = NULL, *cg_test_b = NULL;
+ 	char *cg_test_c = NULL, *cg_test_d = NULL;
++	int cgroup_fd = -EBADF;
++	pid_t pid;
+ 
+ 	cg_test_a = cg_name(root, "cg_test_a");
+ 	cg_test_b = cg_name(root, "cg_test_a/cg_test_b");
+@@ -78,6 +81,52 @@ static int test_cgcore_populated(const char *root)
+ 	if (cg_read_strcmp(cg_test_d, "cgroup.events", "populated 0\n"))
+ 		goto cleanup;
+ 
++	/* Test that we can directly clone into a new cgroup. */
++	cgroup_fd = dirfd_open_opath(cg_test_d);
++	if (cgroup_fd < 0)
++		goto cleanup;
++
++	pid = clone_into_cgroup(cgroup_fd);
++	if (pid < 0) {
++		if (errno == ENOSYS)
++			goto cleanup_pass;
++		goto cleanup;
++	}
++
++	if (pid == 0) {
++		if (raise(SIGSTOP))
++			exit(EXIT_FAILURE);
++		exit(EXIT_SUCCESS);
++	}
++
++	err = cg_read_strcmp(cg_test_d, "cgroup.events", "populated 1\n");
++
++	(void)clone_reap(pid, WSTOPPED);
++	(void)kill(pid, SIGCONT);
++	(void)clone_reap(pid, WEXITED);
++
++	if (err)
++		goto cleanup;
++
++	if (cg_read_strcmp(cg_test_d, "cgroup.events", "populated 0\n"))
++		goto cleanup;
++
++	/* Remove cgroup. */
++	if (cg_test_d) {
++		cg_destroy(cg_test_d);
++		free(cg_test_d);
++		cg_test_d = NULL;
++	}
++
++	pid = clone_into_cgroup(cgroup_fd);
++	if (pid < 0)
++		goto cleanup_pass;
++	if (pid == 0)
++		exit(EXIT_SUCCESS);
++	(void)clone_reap(pid, WEXITED);
++	goto cleanup;
++
++cleanup_pass:
+ 	ret = KSFT_PASS;
+ 
+ cleanup:
+@@ -93,6 +142,8 @@ static int test_cgcore_populated(const char *root)
+ 	free(cg_test_c);
+ 	free(cg_test_b);
+ 	free(cg_test_a);
++	if (cgroup_fd >= 0)
++		close(cgroup_fd);
+ 	return ret;
+ }
+ 
+@@ -136,6 +187,16 @@ static int test_cgcore_invalid_domain(const char *root)
+ 	if (errno != EOPNOTSUPP)
+ 		goto cleanup;
+ 
++	if (!clone_into_cgroup_run_wait(child))
++		goto cleanup;
++
++	if (errno == ENOSYS)
++		goto cleanup_pass;
++
++	if (errno != EOPNOTSUPP)
++		goto cleanup;
++
++cleanup_pass:
+ 	ret = KSFT_PASS;
+ 
+ cleanup:
+@@ -345,6 +406,12 @@ static int test_cgcore_internal_process_constraint(const char *root)
+ 	if (!cg_enter_current(parent))
+ 		goto cleanup;
+ 
++	if (!clone_into_cgroup_run_wait(parent))
++		goto cleanup;
++
++	if (errno == ENOSYS)
++		goto cleanup;
++
+ 	ret = KSFT_PASS;
+ 
+ cleanup:
+diff --git a/tools/testing/selftests/clone3/clone3_selftests.h b/tools/testing/selftests/clone3/clone3_selftests.h
+index a3f2c8ad8bcc..91c1a78ddb39 100644
+--- a/tools/testing/selftests/clone3/clone3_selftests.h
++++ b/tools/testing/selftests/clone3/clone3_selftests.h
+@@ -5,12 +5,24 @@
+ 
+ #define _GNU_SOURCE
+ #include <sched.h>
++#include <linux/sched.h>
++#include <linux/types.h>
+ #include <stdint.h>
+ #include <syscall.h>
+-#include <linux/types.h>
++#include <sys/wait.h>
++
++#include "../kselftest.h"
+ 
+ #define ptr_to_u64(ptr) ((__u64)((uintptr_t)(ptr)))
+ 
++#ifndef CLONE_INTO_CGROUP
++#define CLONE_INTO_CGROUP 0x200000000ULL /* Clone into a specific cgroup given the right permissions. */
++#endif
++
++#ifndef CLONE_ARGS_SIZE_VER0
++#define CLONE_ARGS_SIZE_VER0 64
++#endif
++
+ #ifndef __NR_clone3
+ #define __NR_clone3 -1
+ struct clone_args {
+@@ -22,10 +34,13 @@ struct clone_args {
+ 	__aligned_u64 stack;
+ 	__aligned_u64 stack_size;
+ 	__aligned_u64 tls;
++#define CLONE_ARGS_SIZE_VER1 80
+ 	__aligned_u64 set_tid;
+ 	__aligned_u64 set_tid_size;
++#define CLONE_ARGS_SIZE_VER2 88
++	__aligned_u64 cgroup;
+ };
+-#endif
++#endif /* __NR_clone3 */
+ 
+ static pid_t sys_clone3(struct clone_args *args, size_t size)
+ {
+-- 
+2.24.0
 
-You have a point, and clone3's way of dealing with it does make life
-easier. It also removes the need to care about explicit padding and
-padding holes entirely.
-
-> You could error values with high bits set.
-
-Of course we'll give -EINVAL with invalid values, that's one of the
-reasons openat2(2) exists after all. :P
-
-> > I'm just going to move the padding to the end and change the error for
-> > non-zero padding to -E2BIG.
->=20
-> The padding had to be after the u16 field.
-
-Right, I was suggesting to move the u16 field later in the struct too.
-But after thinking about it some more, it doesn't help with
-extensibility at all (a subsequent non-u16 extension will leave holes).
-So I'm probably just going to go with either the -E2BIG patch or switch
-to u64s.
-
-> > > Use 'flags' bits to indicate whether the additional fields should be =
-looked at.
-> > > Error if a 'flags' bit requires a value that isn't passed in the stru=
-cture.
-> > >
-> > > Then you can add an extra field and old source code recompiled with t=
-he
-> > > new headers will still work - because the 'junk' value isn't looked a=
-t.
-> >=20
-> > This problem is already handled entirely by copy_struct_from_user().
-> >=20
-> > It is true that for some new fields it will be necessary to add a new
-> > flag (such as passing fds -- where 0 is a valid value) but for most new
-> > fields (especially pointer or flag fields) it will not be necessary
-> > because the 0 value is equivalent to the old behaviour. It also allows
-> > us to entirely avoid accepting junk from userspace.
->=20
-> Only if userspace is guaranteed to memset the entire structure before
-> making the call - rather than just fill in all the fields it knows
-> about. If it doesn't use memset() then recompiling old code with new
-> headers will pass garbage to the kernel. copy_struct_from_user()
-> cannot solve that problem.
-
-You don't need to /explicitly/ memset(), since
-
-	struct open_how how =3D { .flags =3D O_RDWR, .resolve =3D RESOLVE_IN_ROOT =
-};
-
-or even
-
-	struct open_how how =3D {}; /* or { 0 } if you prefer. */
-
-will clear all of the unused fields.
-
-But, I can add a NOTE to the man-page to clarify that this is how users
-should fill their structs (or rather, that they should zero-fill them
-somehow to avoid this problem).
-
-While this might be a little annoying, I would argue that given the
-openat2(2) man page explains how extensions work (in great detail) and
-mentions several times that the structure may have new fields added to
-it in the future -- programs which don't zero-fill the struct should be
-simply seen as buggy. Note that those buggy programs *will still work*
-on new kernels -- until you recompile them with new headers (because
-they made an incorrect assumption about the structures they were using).
-
-As an aside, the other downside from the uapi side is that we would
-probably have to spend flag bits *that are shared with openat(2)* for
-such extensions, so I'd like to avoid that as much as necessary.
-
-> You'll never be able to guarantee that all code actually clears the
-> entire structure - so at some point extending it will break recompilations
-> of old code - annoying.
-
-Only if they're explicitly doing something like
-
-	struct open_how how;
-	how.flags =3D O_RDWR;
-	how.resolve =3D RESOLVE_IN_ROOT;
-	memset(how.__padding, 0, sizeof(how.__padding));
-
-As above, given the description of extensions in the man-page, I would
-consider that style of struct initialisation to be eyebrow-raising at
-best.
-
-I'm sorry, but I'm simply against the idea of silently ignoring garbage
-that userspace passes to the kernel -- even if it's tied to a flag. That
-has proven to be an awful idea and in fact openat2(2) was written
-precisely to fix this problem. To be honest, this reminds me of
-(hypothetical) code like:
-
-   int flags;
-   flags |=3D O_PATH | O_CLOEXEC;
-   open("foo", flags); /* yay, mystery fds! */
-
-IMHO that shouldn't have ever worked, and the only way to stop userspace
-=66rom passing garbage is to always reject it.
-
---=20
-Aleksa Sarai
-Senior Software Engineer (Containers)
-SUSE Linux GmbH
-<https://www.cyphar.com/>
-
---nmokspy2icgpi2pg
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQSxZm6dtfE8gxLLfYqdlLljIbnQEgUCXfpifgAKCRCdlLljIbnQ
-Est0AP47j3JQq9ySzEvvRuIka0X8+XXJ3dLYcrDTnDjxITFEpAEA8fVcg4Srx8wz
-g3pOu+chAYboEw16UO88cozjNw4Sqw8=
-=VMrr
------END PGP SIGNATURE-----
-
---nmokspy2icgpi2pg--
