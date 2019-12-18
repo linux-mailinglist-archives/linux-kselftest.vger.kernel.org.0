@@ -2,188 +2,194 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B3720124D03
-	for <lists+linux-kselftest@lfdr.de>; Wed, 18 Dec 2019 17:19:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E690124F5C
+	for <lists+linux-kselftest@lfdr.de>; Wed, 18 Dec 2019 18:32:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727260AbfLRQTS (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 18 Dec 2019 11:19:18 -0500
-Received: from mail-lj1-f193.google.com ([209.85.208.193]:41146 "EHLO
-        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727337AbfLRQTL (ORCPT
+        id S1726985AbfLRRcJ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 18 Dec 2019 12:32:09 -0500
+Received: from mout-p-201.mailbox.org ([80.241.56.171]:33640 "EHLO
+        mout-p-201.mailbox.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726939AbfLRRcJ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 18 Dec 2019 11:19:11 -0500
-Received: by mail-lj1-f193.google.com with SMTP id h23so2782594ljc.8
-        for <linux-kselftest@vger.kernel.org>; Wed, 18 Dec 2019 08:19:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=shutemov-name.20150623.gappssmtp.com; s=20150623;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=1DGAjM55vpYX9DGiWQ7jC+BuPBEROaJ1QWpfbgzGOAs=;
-        b=14CMCeLAINpm3ZV8MtR1RG8xV/J5WqHqe0M9oWFTC4pD19UGdVdMY13F8IIsMksm4W
-         kTSNndEmcYcPmybyvjsTv6xtEW7+tkkinAcC1MDXkXKoNmZ1SK85nBC+tIiOZGHxYiSE
-         ErROILC6IQXrJTMN8gfAw4y8jZgbQsFPr7JEAK4l0hFz0/VKc6BkApPPjq40gufHusUR
-         6UvR7LXBYwDS6pUFn7B3nlXBgDLzdcTNFffWkV/qNFz0/kIOhSYmssrziSjQPxEtyx0c
-         rJwD1MmUSyQUt9cbhZNcLHY8CW2D/VtVF58ATc7Qb2ieL8bMuLSSx8+04+/1y1quw4DP
-         qbvA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=1DGAjM55vpYX9DGiWQ7jC+BuPBEROaJ1QWpfbgzGOAs=;
-        b=b5H+Ha4dde7qO9cGn8aTw0KMLRz9LVpFd55iUYhJSakaH7CH9FI8KfXVFNL9DWitrv
-         aVVr3oNyxaufpI617/GD/Jn/HLqBfrJE/ueLe1bKYxU4ePin8UGwrsi82l5ZyKa4tTUf
-         9KWDIWc3SrJO9r3jbymx1tA1cnlTx7B4OoUiV0YMEGKMFdGJ6Pzg6whfb0Ybs7ew4mbF
-         nMElLF+2Z1CRzSz+ibQarrckHDSsd0yXzCmp4qgOo2Ur8vy3zwsC1ZM1dccchOaOEJGt
-         FRsnyvLUMMEYHOSjXot/Buh8ZWcqvm+8kpS5Ws9cU0eVL0HZz38Yx7dr+RjyWFnYuDrp
-         TYuQ==
-X-Gm-Message-State: APjAAAVaWZeOfA/3DoG/jaZk/K9k1uSuypEOORtivzQ+Vmy5uoZ/JGLe
-        0AlQSSY/D9GVjPWEqZunfrBWaw==
-X-Google-Smtp-Source: APXvYqy8ptrsSDx1m4BazaV2cUqif19xWrwH+lZkkh3fZ2X5vIkCH+jyW+1oGFguRAmcQm5RYV3mLw==
-X-Received: by 2002:a2e:b4e7:: with SMTP id s7mr2195072ljm.58.1576685948274;
-        Wed, 18 Dec 2019 08:19:08 -0800 (PST)
-Received: from box.localdomain ([86.57.175.117])
-        by smtp.gmail.com with ESMTPSA id 2sm1412292ljq.38.2019.12.18.08.19.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 Dec 2019 08:19:07 -0800 (PST)
-Received: by box.localdomain (Postfix, from userid 1000)
-        id E28BB1012CF; Wed, 18 Dec 2019 19:19:07 +0300 (+03)
-Date:   Wed, 18 Dec 2019 19:19:07 +0300
-From:   "Kirill A. Shutemov" <kirill@shutemov.name>
-To:     John Hubbard <jhubbard@nvidia.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Dave Chinner <david@fromorbit.com>,
-        David Airlie <airlied@linux.ie>,
-        "David S . Miller" <davem@davemloft.net>,
-        Ira Weiny <ira.weiny@intel.com>, Jan Kara <jack@suse.cz>,
-        Jason Gunthorpe <jgg@ziepe.ca>, Jens Axboe <axboe@kernel.dk>,
-        Jonathan Corbet <corbet@lwn.net>,
-        =?utf-8?B?SsOpcsO0bWU=?= Glisse <jglisse@redhat.com>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Michal Hocko <mhocko@suse.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Paul Mackerras <paulus@samba.org>,
+        Wed, 18 Dec 2019 12:32:09 -0500
+Received: from smtp2.mailbox.org (smtp2.mailbox.org [IPv6:2001:67c:2050:105:465:1:2:0])
+        (using TLSv1.2 with cipher ECDHE-RSA-CHACHA20-POLY1305 (256/256 bits))
+        (No client certificate requested)
+        by mout-p-201.mailbox.org (Postfix) with ESMTPS id 47dMWp47D3zQl8w;
+        Wed, 18 Dec 2019 18:32:06 +0100 (CET)
+X-Virus-Scanned: amavisd-new at heinlein-support.de
+Received: from smtp2.mailbox.org ([80.241.60.241])
+        by spamfilter01.heinlein-hosting.de (spamfilter01.heinlein-hosting.de [80.241.56.115]) (amavisd-new, port 10030)
+        with ESMTP id lKAwrDRV6l4X; Wed, 18 Dec 2019 18:31:58 +0100 (CET)
+Date:   Thu, 19 Dec 2019 04:31:45 +1100
+From:   Aleksa Sarai <cyphar@cyphar.com>
+To:     David Laight <David.Laight@ACULAB.COM>
+Cc:     'Aleksa Sarai' <asarai@suse.de>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J. Bruce Fields" <bfields@fieldses.org>,
         Shuah Khan <shuah@kernel.org>,
-        Vlastimil Babka <vbabka@suse.cz>, bpf@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, kvm@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-rdma@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, netdev@vger.kernel.org,
-        linux-mm@kvack.org, LKML <linux-kernel@vger.kernel.org>,
-        Jason Gunthorpe <jgg@mellanox.com>
-Subject: Re: [PATCH v11 06/25] mm: fix get_user_pages_remote()'s handling of
- FOLL_LONGTERM
-Message-ID: <20191218161907.yczbijr3ngm7wwnj@box>
-References: <20191216222537.491123-1-jhubbard@nvidia.com>
- <20191216222537.491123-7-jhubbard@nvidia.com>
+        "dev@opencontainers.org" <dev@opencontainers.org>,
+        "containers@lists.linux-foundation.org" 
+        <containers@lists.linux-foundation.org>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>
+Subject: Re: [PATCH] openat2: switch to __attribute__((packed)) for open_how
+Message-ID: <20191218173145.zodaxjctesjolinp@yavin.dot.cyphar.com>
+References: <20191213222351.14071-1-cyphar@cyphar.com>
+ <a328b91d-fd8f-4f27-b3c2-91a9c45f18c0@rasmusvillemoes.dk>
+ <20191215123443.jmfnrtgbscdwfohc@yavin.dot.cyphar.com>
+ <b26ef210ec5b42009cf09b1015065768@AcuMS.aculab.com>
+ <20191217064650.cd4bfb5d2koe6j7h@yavin.dot.cyphar.com>
+ <6630d0573b5b40da8efc58fc20ac445e@AcuMS.aculab.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="nmokspy2icgpi2pg"
 Content-Disposition: inline
-In-Reply-To: <20191216222537.491123-7-jhubbard@nvidia.com>
-User-Agent: NeoMutt/20180716
+In-Reply-To: <6630d0573b5b40da8efc58fc20ac445e@AcuMS.aculab.com>
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Dec 16, 2019 at 02:25:18PM -0800, John Hubbard wrote:
-> As it says in the updated comment in gup.c: current FOLL_LONGTERM
-> behavior is incompatible with FAULT_FLAG_ALLOW_RETRY because of the
-> FS DAX check requirement on vmas.
-> 
-> However, the corresponding restriction in get_user_pages_remote() was
-> slightly stricter than is actually required: it forbade all
-> FOLL_LONGTERM callers, but we can actually allow FOLL_LONGTERM callers
-> that do not set the "locked" arg.
-> 
-> Update the code and comments to loosen the restriction, allowing
-> FOLL_LONGTERM in some cases.
-> 
-> Also, copy the DAX check ("if a VMA is DAX, don't allow long term
-> pinning") from the VFIO call site, all the way into the internals
-> of get_user_pages_remote() and __gup_longterm_locked(). That is:
-> get_user_pages_remote() calls __gup_longterm_locked(), which in turn
-> calls check_dax_vmas(). This check will then be removed from the VFIO
-> call site in a subsequent patch.
-> 
-> Thanks to Jason Gunthorpe for pointing out a clean way to fix this,
-> and to Dan Williams for helping clarify the DAX refactoring.
-> 
-> Tested-by: Alex Williamson <alex.williamson@redhat.com>
-> Acked-by: Alex Williamson <alex.williamson@redhat.com>
-> Reviewed-by: Jason Gunthorpe <jgg@mellanox.com>
-> Reviewed-by: Ira Weiny <ira.weiny@intel.com>
-> Suggested-by: Jason Gunthorpe <jgg@ziepe.ca>
-> Cc: Dan Williams <dan.j.williams@intel.com>
-> Cc: Jerome Glisse <jglisse@redhat.com>
-> Signed-off-by: John Hubbard <jhubbard@nvidia.com>
-> ---
->  mm/gup.c | 27 ++++++++++++++++++++++-----
->  1 file changed, 22 insertions(+), 5 deletions(-)
-> 
-> diff --git a/mm/gup.c b/mm/gup.c
-> index 3ecce297a47f..c0c56888e7cc 100644
-> --- a/mm/gup.c
-> +++ b/mm/gup.c
-> @@ -29,6 +29,13 @@ struct follow_page_context {
->  	unsigned int page_mask;
->  };
->  
-> +static __always_inline long __gup_longterm_locked(struct task_struct *tsk,
-> +						  struct mm_struct *mm,
-> +						  unsigned long start,
-> +						  unsigned long nr_pages,
-> +						  struct page **pages,
-> +						  struct vm_area_struct **vmas,
-> +						  unsigned int flags);
 
-Any particular reason for the forward declaration? Maybe move
-get_user_pages_remote() down?
+--nmokspy2icgpi2pg
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
->  /*
->   * Return the compound head page with ref appropriately incremented,
->   * or NULL if that failed.
-> @@ -1179,13 +1186,23 @@ long get_user_pages_remote(struct task_struct *tsk, struct mm_struct *mm,
->  		struct vm_area_struct **vmas, int *locked)
->  {
->  	/*
-> -	 * FIXME: Current FOLL_LONGTERM behavior is incompatible with
-> +	 * Parts of FOLL_LONGTERM behavior are incompatible with
->  	 * FAULT_FLAG_ALLOW_RETRY because of the FS DAX check requirement on
-> -	 * vmas.  As there are no users of this flag in this call we simply
-> -	 * disallow this option for now.
-> +	 * vmas. However, this only comes up if locked is set, and there are
-> +	 * callers that do request FOLL_LONGTERM, but do not set locked. So,
-> +	 * allow what we can.
->  	 */
-> -	if (WARN_ON_ONCE(gup_flags & FOLL_LONGTERM))
-> -		return -EINVAL;
-> +	if (gup_flags & FOLL_LONGTERM) {
-> +		if (WARN_ON_ONCE(locked))
-> +			return -EINVAL;
-> +		/*
-> +		 * This will check the vmas (even if our vmas arg is NULL)
-> +		 * and return -ENOTSUPP if DAX isn't allowed in this case:
-> +		 */
-> +		return __gup_longterm_locked(tsk, mm, start, nr_pages, pages,
-> +					     vmas, gup_flags | FOLL_TOUCH |
-> +					     FOLL_REMOTE);
-> +	}
->  
->  	return __get_user_pages_locked(tsk, mm, start, nr_pages, pages, vmas,
->  				       locked,
-> -- 
-> 2.24.1
-> 
+On 2019-12-17, David Laight <David.Laight@ACULAB.COM> wrote:
+> From Aleksa Sarai
+> > Sent: 17 December 2019 06:47
+> ...
+> > > Just use u64 for all the fields.
+> >=20
+> > That is an option (and is the one that clone3 went with), but it's a bit
+> > awkward because umode_t is a u16 -- and it would be a waste of 6 bytes
+> > to store it as a u64. Arguably it could be extended but I personally
+> > find that to be very unlikely (and lots of other syscalls would need be
+> > updated).
+>=20
+> 6 bytes on interface structure will make almost no difference.
+> There is no reason to save more than 16 bits anywhere else.
 
--- 
- Kirill A. Shutemov
+You have a point, and clone3's way of dealing with it does make life
+easier. It also removes the need to care about explicit padding and
+padding holes entirely.
+
+> You could error values with high bits set.
+
+Of course we'll give -EINVAL with invalid values, that's one of the
+reasons openat2(2) exists after all. :P
+
+> > I'm just going to move the padding to the end and change the error for
+> > non-zero padding to -E2BIG.
+>=20
+> The padding had to be after the u16 field.
+
+Right, I was suggesting to move the u16 field later in the struct too.
+But after thinking about it some more, it doesn't help with
+extensibility at all (a subsequent non-u16 extension will leave holes).
+So I'm probably just going to go with either the -E2BIG patch or switch
+to u64s.
+
+> > > Use 'flags' bits to indicate whether the additional fields should be =
+looked at.
+> > > Error if a 'flags' bit requires a value that isn't passed in the stru=
+cture.
+> > >
+> > > Then you can add an extra field and old source code recompiled with t=
+he
+> > > new headers will still work - because the 'junk' value isn't looked a=
+t.
+> >=20
+> > This problem is already handled entirely by copy_struct_from_user().
+> >=20
+> > It is true that for some new fields it will be necessary to add a new
+> > flag (such as passing fds -- where 0 is a valid value) but for most new
+> > fields (especially pointer or flag fields) it will not be necessary
+> > because the 0 value is equivalent to the old behaviour. It also allows
+> > us to entirely avoid accepting junk from userspace.
+>=20
+> Only if userspace is guaranteed to memset the entire structure before
+> making the call - rather than just fill in all the fields it knows
+> about. If it doesn't use memset() then recompiling old code with new
+> headers will pass garbage to the kernel. copy_struct_from_user()
+> cannot solve that problem.
+
+You don't need to /explicitly/ memset(), since
+
+	struct open_how how =3D { .flags =3D O_RDWR, .resolve =3D RESOLVE_IN_ROOT =
+};
+
+or even
+
+	struct open_how how =3D {}; /* or { 0 } if you prefer. */
+
+will clear all of the unused fields.
+
+But, I can add a NOTE to the man-page to clarify that this is how users
+should fill their structs (or rather, that they should zero-fill them
+somehow to avoid this problem).
+
+While this might be a little annoying, I would argue that given the
+openat2(2) man page explains how extensions work (in great detail) and
+mentions several times that the structure may have new fields added to
+it in the future -- programs which don't zero-fill the struct should be
+simply seen as buggy. Note that those buggy programs *will still work*
+on new kernels -- until you recompile them with new headers (because
+they made an incorrect assumption about the structures they were using).
+
+As an aside, the other downside from the uapi side is that we would
+probably have to spend flag bits *that are shared with openat(2)* for
+such extensions, so I'd like to avoid that as much as necessary.
+
+> You'll never be able to guarantee that all code actually clears the
+> entire structure - so at some point extending it will break recompilations
+> of old code - annoying.
+
+Only if they're explicitly doing something like
+
+	struct open_how how;
+	how.flags =3D O_RDWR;
+	how.resolve =3D RESOLVE_IN_ROOT;
+	memset(how.__padding, 0, sizeof(how.__padding));
+
+As above, given the description of extensions in the man-page, I would
+consider that style of struct initialisation to be eyebrow-raising at
+best.
+
+I'm sorry, but I'm simply against the idea of silently ignoring garbage
+that userspace passes to the kernel -- even if it's tied to a flag. That
+has proven to be an awful idea and in fact openat2(2) was written
+precisely to fix this problem. To be honest, this reminds me of
+(hypothetical) code like:
+
+   int flags;
+   flags |=3D O_PATH | O_CLOEXEC;
+   open("foo", flags); /* yay, mystery fds! */
+
+IMHO that shouldn't have ever worked, and the only way to stop userspace
+=66rom passing garbage is to always reject it.
+
+--=20
+Aleksa Sarai
+Senior Software Engineer (Containers)
+SUSE Linux GmbH
+<https://www.cyphar.com/>
+
+--nmokspy2icgpi2pg
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQSxZm6dtfE8gxLLfYqdlLljIbnQEgUCXfpifgAKCRCdlLljIbnQ
+Est0AP47j3JQq9ySzEvvRuIka0X8+XXJ3dLYcrDTnDjxITFEpAEA8fVcg4Srx8wz
+g3pOu+chAYboEw16UO88cozjNw4Sqw8=
+=VMrr
+-----END PGP SIGNATURE-----
+
+--nmokspy2icgpi2pg--
