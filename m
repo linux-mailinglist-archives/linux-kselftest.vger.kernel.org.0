@@ -2,116 +2,102 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 05A8412591B
-	for <lists+linux-kselftest@lfdr.de>; Thu, 19 Dec 2019 02:13:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 00533125950
+	for <lists+linux-kselftest@lfdr.de>; Thu, 19 Dec 2019 02:38:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726701AbfLSBM4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 18 Dec 2019 20:12:56 -0500
-Received: from mail.kernel.org ([198.145.29.99]:39382 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726536AbfLSBM4 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 18 Dec 2019 20:12:56 -0500
-Received: from localhost.localdomain (c-73-231-172-41.hsd1.ca.comcast.net [73.231.172.41])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 2E2C52176D;
-        Thu, 19 Dec 2019 01:12:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1576717975;
-        bh=EnDbUNs/vALEvcA8Z9IMx3LTjG39IibUT3Ww5yvhwFY=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=Vt7ZmhZL4/z+GEPYZsGwvLn9s0Enyv8//u9UmcZY0C7jMBx40N5FHa7TnUecE/lUS
-         3CkvMLNFZ7D13BfI9AeDbJK8xptCUiHyeApiQsLcjvk2ZKhKTmC6HdRP1msxv00ol5
-         /W+nVAbaoumyeUvxDFGy4GSPw4QXqEnoA7n2e90w=
-Date:   Wed, 18 Dec 2019 17:12:54 -0800
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Mina Almasry <almasrymina@google.com>
-Cc:     mike.kravetz@oracle.com, shuah@kernel.org, rientjes@google.com,
-        shakeelb@google.com, gthelen@google.com,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org, cgroups@vger.kernel.org,
-        aneesh.kumar@linux.vnet.ibm.com, mkoutny@suse.com,
-        Hillf Danton <hdanton@sina.com>,
-        Giuseppe Scrivano <gscrivan@redhat.com>,
-        Tejun Heo <tj@kernel.org>
+        id S1726700AbfLSBiA (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 18 Dec 2019 20:38:00 -0500
+Received: from userp2120.oracle.com ([156.151.31.85]:55424 "EHLO
+        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726463AbfLSBh7 (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 18 Dec 2019 20:37:59 -0500
+Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
+        by userp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id xBJ1TBZk188547;
+        Thu, 19 Dec 2019 01:37:42 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=subject : to : cc :
+ references : from : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=corp-2019-08-05;
+ bh=TESIcPkdV4iqOIUQl0IYI/d2iDoSjKThzSi7PjRQeX4=;
+ b=opXrPL1VX9xpx2kpCFKgaXvY5VlJZGU/WOowBs9R9TNvFsZ9dkmHgMCf1W79ij6cjtkq
+ BJjiBSRf7VF5bHt5QUpGtfnaQwlwxXy63R8Gjj/gUJ9kCnPg/Fk8NqAhaRlBwwGq2ros
+ Axc8lqgv8uZoy6Bt+uuOMN3PawaN2yTgKmkzHOlpiXRXg0cOtd0exrPfYuT9uPhe5vZP
+ 2SXP+1IpjmI1+h/WPUPoR7zItwpthJIvnOlFfMVDeG5xZ6TCPFUpAaaNJWUww4kmL8Pc
+ dKcFVYvb+1SoWn9Ft0BFg5F0abH1kAL5cRl3CeVt84xfRbHlm/JB1C09KYOXuuJOWswJ Wg== 
+Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
+        by userp2120.oracle.com with ESMTP id 2wvrcrh1fs-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 19 Dec 2019 01:37:42 +0000
+Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
+        by aserp3030.oracle.com (8.16.0.27/8.16.0.27) with SMTP id xBJ1Xx7o016034;
+        Thu, 19 Dec 2019 01:37:41 GMT
+Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
+        by aserp3030.oracle.com with ESMTP id 2wyut4hr4m-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 19 Dec 2019 01:37:41 +0000
+Received: from abhmp0013.oracle.com (abhmp0013.oracle.com [141.146.116.19])
+        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id xBJ1bdtD032332;
+        Thu, 19 Dec 2019 01:37:40 GMT
+Received: from [192.168.1.206] (/71.63.128.209)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Wed, 18 Dec 2019 17:37:39 -0800
 Subject: Re: [PATCH v9 1/8] hugetlb_cgroup: Add hugetlb_cgroup reservation
  counter
-Message-Id: <20191218171254.79664a964c0c61e6054dff64@linux-foundation.org>
-In-Reply-To: <20191217231615.164161-1-almasrymina@google.com>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Mina Almasry <almasrymina@google.com>
+Cc:     shuah@kernel.org, rientjes@google.com, shakeelb@google.com,
+        gthelen@google.com, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        cgroups@vger.kernel.org, aneesh.kumar@linux.vnet.ibm.com,
+        mkoutny@suse.com, Hillf Danton <hdanton@sina.com>,
+        Giuseppe Scrivano <gscrivan@redhat.com>,
+        Tejun Heo <tj@kernel.org>
 References: <20191217231615.164161-1-almasrymina@google.com>
-X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.31; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+ <20191218171254.79664a964c0c61e6054dff64@linux-foundation.org>
+From:   Mike Kravetz <mike.kravetz@oracle.com>
+Message-ID: <4d11fb25-5036-6c78-5328-10a0c14e8edc@oracle.com>
+Date:   Wed, 18 Dec 2019 17:37:37 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.2.2
+MIME-Version: 1.0
+In-Reply-To: <20191218171254.79664a964c0c61e6054dff64@linux-foundation.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9475 signatures=668685
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
+ phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=999
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.0.1-1911140001 definitions=main-1912190010
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9475 signatures=668685
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
+ suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1011
+ lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1911140001
+ definitions=main-1912190010
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, 17 Dec 2019 15:16:08 -0800 Mina Almasry <almasrymina@google.com> wrote:
+On 12/18/19 5:12 PM, Andrew Morton wrote:
+> On Tue, 17 Dec 2019 15:16:08 -0800 Mina Almasry <almasrymina@google.com> wrote:
+<snip>
+>> This proposal is implemented in this patch series, with tests to verify
+>> functionality and show the usage. We also added cgroup-v2 support to
+>> hugetlb_cgroup so that the new use cases can be extended to v2.
+> 
+> This would make
+> http://lkml.kernel.org/r/20191216193831.540953-1-gscrivan@redhat.com
+> obsolete?
 
-> These counters will track hugetlb reservations rather than hugetlb
-> memory faulted in. This patch only adds the counter, following patches
-> add the charging and uncharging of the counter.
-> 
-> This is patch 1 of an 8 patch series.
-> 
-> Problem:
-> Currently tasks attempting to allocate more hugetlb memory than is available get
-> a failure at mmap/shmget time. This is thanks to Hugetlbfs Reservations [1].
-> However, if a task attempts to allocate hugetlb memory only more than its
-> hugetlb_cgroup limit allows, the kernel will allow the mmap/shmget call,
-> but will SIGBUS the task when it attempts to fault the memory in.
-> 
-> We have developers interested in using hugetlb_cgroups, and they have expressed
-> dissatisfaction regarding this behavior. We'd like to improve this
-> behavior such that tasks violating the hugetlb_cgroup limits get an error on
-> mmap/shmget time, rather than getting SIGBUS'd when they try to fault
-> the excess memory in.
-> 
-> The underlying problem is that today's hugetlb_cgroup accounting happens
-> at hugetlb memory *fault* time, rather than at *reservation* time.
-> Thus, enforcing the hugetlb_cgroup limit only happens at fault time, and
-> the offending task gets SIGBUS'd.
-> 
-> Proposed Solution:
-> A new page counter named hugetlb.xMB.reservation_[limit|usage]_in_bytes. This
-> counter has slightly different semantics than
-> hugetlb.xMB.[limit|usage]_in_bytes:
-> 
-> - While usage_in_bytes tracks all *faulted* hugetlb memory,
-> reservation_usage_in_bytes tracks all *reserved* hugetlb memory and
-> hugetlb memory faulted in without a prior reservation.
-> 
-> - If a task attempts to reserve more memory than limit_in_bytes allows,
-> the kernel will allow it to do so. But if a task attempts to reserve
-> more memory than reservation_limit_in_bytes, the kernel will fail this
-> reservation.
-> 
-> This proposal is implemented in this patch series, with tests to verify
-> functionality and show the usage. We also added cgroup-v2 support to
-> hugetlb_cgroup so that the new use cases can be extended to v2.
+I haven't started looking at this series yet.  However, since Mina was
+involved in the discussion of that patch (hugetlb controller for cgroups v2)
+my assumption is that this patch would simply build on that v2 support?
+Seems like the above patch would be a prereq for this series.
 
-This would make
-http://lkml.kernel.org/r/20191216193831.540953-1-gscrivan@redhat.com
-obsolete?
-
-
-> Alternatives considered:
-> 1. A new cgroup, instead of only a new page_counter attached to
->    the existing hugetlb_cgroup. Adding a new cgroup seemed like a lot of code
->    duplication with hugetlb_cgroup. Keeping hugetlb related page counters under
->    hugetlb_cgroup seemed cleaner as well.
-> 
-> 2. Instead of adding a new counter, we considered adding a sysctl that modifies
->    the behavior of hugetlb.xMB.[limit|usage]_in_bytes, to do accounting at
->    reservation time rather than fault time. Adding a new page_counter seems
->    better as userspace could, if it wants, choose to enforce different cgroups
->    differently: one via limit_in_bytes, and another via
->    reservation_limit_in_bytes. This could be very useful if you're
->    transitioning how hugetlb memory is partitioned on your system one
->    cgroup at a time, for example. Also, someone may find usage for both
->    limit_in_bytes and reservation_limit_in_bytes concurrently, and this
->    approach gives them the option to do so.
-> 
-
+Mina, are those assumptions correct and perhaps this is an old/obsolete
+comment?  Does this series apply 'on top' of the above patch?  That patch
+is already in Andrew's tree.
+-- 
+Mike Kravetz
