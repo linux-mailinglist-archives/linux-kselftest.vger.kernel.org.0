@@ -2,97 +2,226 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BB43312596A
-	for <lists+linux-kselftest@lfdr.de>; Thu, 19 Dec 2019 02:59:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 746CE125AC3
+	for <lists+linux-kselftest@lfdr.de>; Thu, 19 Dec 2019 06:28:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726725AbfLSB7a (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 18 Dec 2019 20:59:30 -0500
-Received: from mail-ot1-f67.google.com ([209.85.210.67]:33676 "EHLO
-        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726518AbfLSB73 (ORCPT
+        id S1726877AbfLSF2D (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 19 Dec 2019 00:28:03 -0500
+Received: from mail-ot1-f68.google.com ([209.85.210.68]:38224 "EHLO
+        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726906AbfLSF1z (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 18 Dec 2019 20:59:29 -0500
-Received: by mail-ot1-f67.google.com with SMTP id b18so5034885otp.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 18 Dec 2019 17:59:29 -0800 (PST)
+        Thu, 19 Dec 2019 00:27:55 -0500
+Received: by mail-ot1-f68.google.com with SMTP id d7so1233552otf.5
+        for <linux-kselftest@vger.kernel.org>; Wed, 18 Dec 2019 21:27:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
+        d=intel-com.20150623.gappssmtp.com; s=20150623;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=TQOUWeuTEyIUZEEQ2jTpgmNLbvpJOv+XxTa7wYSNX3g=;
-        b=OvFqvh8YdAzV55/KDAESLZTnpZ9T/+xm2NNdL3mtyu1mL1Ber7NA3Ncg6I6b7iipv/
-         87+tC1A2QDAE4hEaupil/r5OgnOAU0+LIexdh4XDQlJ5PBsHVM39PSrtZl+WeVzBuZny
-         6kGu+jbsvpGz8aZPi8Ne1veypupNUpV2ZlQG9SlklJQRVHIPyapP0sLjfUYrK1yPN9g8
-         XAWgXdrzAfdnGfaUrLVhKsvUO0epe+i4E2S+uTxfmEQWjHer1Cua9iTKw82qgNrlfn7X
-         ito3480sINFyoXjWIBRX75+wF64wksHkV3bEmsaHR9fp9gjzkFdjPPjPQ3k35CqUyLDa
-         ABrA==
+         :cc:content-transfer-encoding;
+        bh=YiNT2OwN1PC5xiClJXvmIxtU8FKdWcajydHQPOKowMQ=;
+        b=dqorifJ4f+v2Gylbu8oAiFDcKa1F8skIpz6V3IgWOqRB33n7U59EJyePbqvuTj6Vy4
+         uOPeG7Kob1GhJUtITzia2N5iO6b+FgQt0PfBLv1SShdXtnPTkzPXC4wv8NlfHewxSVCr
+         BWaS5xgO+C3htMgxe5c7ubvEmgYEe4TsZt+Zn5XRlxBQhxFahwlW/Mo0S+TgOXqQ/47k
+         mtfOMZwImte59GAX6ig1VEn2mK8lUBxmhPPLTpVmIFFbH4EVvah9nw+1Oh0aFp9cBJiW
+         sz8ohgGLCmoNne0NYqks6igeYI3pnrq7++p4oBryH4HFQcsawtXKY12nyEVckq37Q8q+
+         63BQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=TQOUWeuTEyIUZEEQ2jTpgmNLbvpJOv+XxTa7wYSNX3g=;
-        b=H56biEzeS3qcLmHOkMYc09UvB8l8TVmOAc00uaZI7SxxLqGih6ULYqJcJcrmsug8O3
-         /Zrc9qhNnrTV48YtdVB/7/qCjg8QAAdxMaAkmfx4g5zx0jayVNezw1hEw+FuxRaLZd8B
-         kO9GtgUeOfQQOvB3xAMcUEvXebHksfY693R6zrAygeP4GOwts7fcf4WTCP1MyE4DaIbV
-         wg1dgGAjAdv5GSN5+OX3mVqBjnYaw3dzEG1NI41XJwRpYDNLNlul++N7ujTHViuht9tR
-         HwX1Bi1JW9zUWjwjd3mCDtzLuf0V+OxU08WRaT2oDghcLiP/1auxvbE/9uEdnD6wCJyU
-         TVAg==
-X-Gm-Message-State: APjAAAXhWiRb1xRMbONZiIcP+dlwOpoueEDIULSeyusotOsHYAy0QIjD
-        puxaWPqGup09iYXkFgdu5FWacVSwM0hp3d/FuIyHZA==
-X-Google-Smtp-Source: APXvYqz1ha9qc+r4oDyIBgGQt/Isc2y55K20/dwEtbJTlEEWs6r5FLMbK9py0Kzjg45819sYbwm3CtqEmDDBcaTRo3Q=
-X-Received: by 2002:a9d:2028:: with SMTP id n37mr6290845ota.127.1576720768716;
- Wed, 18 Dec 2019 17:59:28 -0800 (PST)
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=YiNT2OwN1PC5xiClJXvmIxtU8FKdWcajydHQPOKowMQ=;
+        b=OvQfz3oW/nteR8JTNAR8N5xRmhZGvh6lWjIGRAnoxsy6GWJ6LLB95R/+LOtncda7Vw
+         9+aXmVMP4+KRFTpKjza3ki+PTOL1yFRhXLtBZpTeHMRUY2qKt3CrWX1G+yqhrQSXgxYy
+         g94YiUClZ9lwTgq1DM7AbWtMSUWQyx1V6qig4RO7rMCz88WW04QIZZ6fILKIXqNO0I1t
+         I+4H2siYyxz0oC7kh1/DQAkkRCf4AIGw9bNMSQYWCvVGV5NTLrdUWqqUuU3+YzghtSW5
+         aS4gT+RM5iCpJIqYRK6iteGLTnKyyrUpbgUgz1KSBLffNuMbjo2TbLtwYc1z2Ep5AuOt
+         F/oQ==
+X-Gm-Message-State: APjAAAWLuaf7ImSbPhiUPF3QPz2E27a4v6K19NFgPngBJKdNvcqbBGdF
+        wKUxazDfy6a9wfziCG3m6M/JxK2nmTbC6dotqFEPgQ==
+X-Google-Smtp-Source: APXvYqzIho60C4tgIgH4FPSEG3bP2Gra7VUCaG88r8S6eX3efYPsOK7esN+4WGhr8L+TiHfEgJwBcHps0ms7QGyGe6Y=
+X-Received: by 2002:a05:6830:1744:: with SMTP id 4mr6583360otz.71.1576733274234;
+ Wed, 18 Dec 2019 21:27:54 -0800 (PST)
 MIME-Version: 1.0
-References: <20191217231615.164161-1-almasrymina@google.com>
- <20191218171254.79664a964c0c61e6054dff64@linux-foundation.org> <4d11fb25-5036-6c78-5328-10a0c14e8edc@oracle.com>
-In-Reply-To: <4d11fb25-5036-6c78-5328-10a0c14e8edc@oracle.com>
-From:   Mina Almasry <almasrymina@google.com>
-Date:   Wed, 18 Dec 2019 17:59:17 -0800
-Message-ID: <CAHS8izMSjyMGTCH-tffiPam_yG9=10v+O617E2cpxWx8SETt3w@mail.gmail.com>
-Subject: Re: [PATCH v9 1/8] hugetlb_cgroup: Add hugetlb_cgroup reservation counter
-To:     Mike Kravetz <mike.kravetz@oracle.com>
+References: <20191216222537.491123-1-jhubbard@nvidia.com> <20191216222537.491123-5-jhubbard@nvidia.com>
+In-Reply-To: <20191216222537.491123-5-jhubbard@nvidia.com>
+From:   Dan Williams <dan.j.williams@intel.com>
+Date:   Wed, 18 Dec 2019 21:27:43 -0800
+Message-ID: <CAPcyv4hQBMxYMurxG=Vwh0=FKWoT3z-Kf=dqES1-icRV5bLwKg@mail.gmail.com>
+Subject: Re: [PATCH v11 04/25] mm: devmap: refactor 1-based refcounting for
+ ZONE_DEVICE pages
+To:     John Hubbard <jhubbard@nvidia.com>
 Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        shuah <shuah@kernel.org>, David Rientjes <rientjes@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Greg Thelen <gthelen@google.com>,
-        open list <linux-kernel@vger.kernel.org>, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org, cgroups@vger.kernel.org,
-        Aneesh Kumar <aneesh.kumar@linux.vnet.ibm.com>,
-        =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>,
-        Hillf Danton <hdanton@sina.com>,
-        Giuseppe Scrivano <gscrivan@redhat.com>,
-        Tejun Heo <tj@kernel.org>
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Dave Chinner <david@fromorbit.com>,
+        David Airlie <airlied@linux.ie>,
+        "David S . Miller" <davem@davemloft.net>,
+        Ira Weiny <ira.weiny@intel.com>, Jan Kara <jack@suse.cz>,
+        Jason Gunthorpe <jgg@ziepe.ca>, Jens Axboe <axboe@kernel.dk>,
+        Jonathan Corbet <corbet@lwn.net>,
+        =?UTF-8?B?SsOpcsO0bWUgR2xpc3Nl?= <jglisse@redhat.com>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Michal Hocko <mhocko@suse.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Paul Mackerras <paulus@samba.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Vlastimil Babka <vbabka@suse.cz>, bpf@vger.kernel.org,
+        Maling list - DRI developers 
+        <dri-devel@lists.freedesktop.org>, KVM list <kvm@vger.kernel.org>,
+        linux-block@vger.kernel.org,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        linux-kselftest@vger.kernel.org,
+        "Linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
+        linux-rdma <linux-rdma@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        Netdev <netdev@vger.kernel.org>, Linux MM <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Christoph Hellwig <hch@lst.de>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Dec 18, 2019 at 5:37 PM Mike Kravetz <mike.kravetz@oracle.com> wrote:
+On Mon, Dec 16, 2019 at 2:26 PM John Hubbard <jhubbard@nvidia.com> wrote:
 >
-> On 12/18/19 5:12 PM, Andrew Morton wrote:
-> > On Tue, 17 Dec 2019 15:16:08 -0800 Mina Almasry <almasrymina@google.com> wrote:
-> <snip>
-> >> This proposal is implemented in this patch series, with tests to verify
-> >> functionality and show the usage. We also added cgroup-v2 support to
-> >> hugetlb_cgroup so that the new use cases can be extended to v2.
-> >
-> > This would make
-> > http://lkml.kernel.org/r/20191216193831.540953-1-gscrivan@redhat.com
-> > obsolete?
+> An upcoming patch changes and complicates the refcounting and
+> especially the "put page" aspects of it. In order to keep
+> everything clean, refactor the devmap page release routines:
 >
-> I haven't started looking at this series yet.  However, since Mina was
-> involved in the discussion of that patch (hugetlb controller for cgroups v2)
-> my assumption is that this patch would simply build on that v2 support?
-> Seems like the above patch would be a prereq for this series.
+> * Rename put_devmap_managed_page() to page_is_devmap_managed(),
+>   and limit the functionality to "read only": return a bool,
+>   with no side effects.
 >
-> Mina, are those assumptions correct and perhaps this is an old/obsolete
-> comment?  Does this series apply 'on top' of the above patch?  That patch
-> is already in Andrew's tree.
+> * Add a new routine, put_devmap_managed_page(), to handle checking
+>   what kind of page it is, and what kind of refcount handling it
+>   requires.
+>
+> * Rename __put_devmap_managed_page() to free_devmap_managed_page(),
+>   and limit the functionality to unconditionally freeing a devmap
+>   page.
+>
+> This is originally based on a separate patch by Ira Weiny, which
+> applied to an early version of the put_user_page() experiments.
+> Since then, J=C3=A9r=C3=B4me Glisse suggested the refactoring described a=
+bove.
+>
+> Cc: Christoph Hellwig <hch@lst.de>
+> Suggested-by: J=C3=A9r=C3=B4me Glisse <jglisse@redhat.com>
+> Reviewed-by: Dan Williams <dan.j.williams@intel.com>
+> Reviewed-by: Jan Kara <jack@suse.cz>
+> Signed-off-by: Ira Weiny <ira.weiny@intel.com>
+> Signed-off-by: John Hubbard <jhubbard@nvidia.com>
+> ---
+>  include/linux/mm.h | 17 +++++++++++++----
+>  mm/memremap.c      | 16 ++--------------
+>  mm/swap.c          | 24 ++++++++++++++++++++++++
+>  3 files changed, 39 insertions(+), 18 deletions(-)
+>
+> diff --git a/include/linux/mm.h b/include/linux/mm.h
+> index c97ea3b694e6..77a4df06c8a7 100644
+> --- a/include/linux/mm.h
+> +++ b/include/linux/mm.h
+> @@ -952,9 +952,10 @@ static inline bool is_zone_device_page(const struct =
+page *page)
+>  #endif
+>
+>  #ifdef CONFIG_DEV_PAGEMAP_OPS
+> -void __put_devmap_managed_page(struct page *page);
+> +void free_devmap_managed_page(struct page *page);
+>  DECLARE_STATIC_KEY_FALSE(devmap_managed_key);
+> -static inline bool put_devmap_managed_page(struct page *page)
+> +
+> +static inline bool page_is_devmap_managed(struct page *page)
+>  {
+>         if (!static_branch_unlikely(&devmap_managed_key))
+>                 return false;
+> @@ -963,7 +964,6 @@ static inline bool put_devmap_managed_page(struct pag=
+e *page)
+>         switch (page->pgmap->type) {
+>         case MEMORY_DEVICE_PRIVATE:
+>         case MEMORY_DEVICE_FS_DAX:
+> -               __put_devmap_managed_page(page);
+>                 return true;
+>         default:
+>                 break;
+> @@ -971,7 +971,14 @@ static inline bool put_devmap_managed_page(struct pa=
+ge *page)
+>         return false;
+>  }
+>
+> +bool put_devmap_managed_page(struct page *page);
+> +
+>  #else /* CONFIG_DEV_PAGEMAP_OPS */
+> +static inline bool page_is_devmap_managed(struct page *page)
+> +{
+> +       return false;
+> +}
+> +
+>  static inline bool put_devmap_managed_page(struct page *page)
+>  {
+>         return false;
+> @@ -1028,8 +1035,10 @@ static inline void put_page(struct page *page)
+>          * need to inform the device driver through callback. See
+>          * include/linux/memremap.h and HMM for details.
+>          */
+> -       if (put_devmap_managed_page(page))
+> +       if (page_is_devmap_managed(page)) {
+> +               put_devmap_managed_page(page);
+>                 return;
+> +       }
+>
+>         if (put_page_testzero(page))
+>                 __put_page(page);
+> diff --git a/mm/memremap.c b/mm/memremap.c
+> index e899fa876a62..2ba773859031 100644
+> --- a/mm/memremap.c
+> +++ b/mm/memremap.c
+> @@ -411,20 +411,8 @@ struct dev_pagemap *get_dev_pagemap(unsigned long pf=
+n,
+>  EXPORT_SYMBOL_GPL(get_dev_pagemap);
+>
+>  #ifdef CONFIG_DEV_PAGEMAP_OPS
+> -void __put_devmap_managed_page(struct page *page)
+> +void free_devmap_managed_page(struct page *page)
+>  {
+> -       int count =3D page_ref_dec_return(page);
+> -
+> -       /* still busy */
+> -       if (count > 1)
+> -               return;
+> -
+> -       /* only triggered by the dev_pagemap shutdown path */
+> -       if (count =3D=3D 0) {
+> -               __put_page(page);
+> -               return;
+> -       }
+> -
+>         /* notify page idle for dax */
+>         if (!is_device_private_page(page)) {
+>                 wake_up_var(&page->_refcount);
+> @@ -461,5 +449,5 @@ void __put_devmap_managed_page(struct page *page)
+>         page->mapping =3D NULL;
+>         page->pgmap->ops->page_free(page);
+>  }
+> -EXPORT_SYMBOL(__put_devmap_managed_page);
+> +EXPORT_SYMBOL(free_devmap_managed_page);
 
-Gah, I just forgot to update this commit message. This patch series is
-indeed on top of Giuseppe's v2 support and doesn't conflict or
-duplicate that functionality. Sorry for the confusion. I'll fix the
-commit message in the next iteration.
+This patch does not have a module consumer for
+free_devmap_managed_page(), so the export should move to the patch
+that needs the new export.
 
-> --
-> Mike Kravetz
+Also the only reason that put_devmap_managed_page() is EXPORT_SYMBOL
+instead of EXPORT_SYMBOL_GPL is that there was no practical way to
+hide the devmap details from evey module in the kernel that did
+put_page(). I would expect free_devmap_managed_page() to
+EXPORT_SYMBOL_GPL if it is not inlined into an existing exported
+static inline api.
