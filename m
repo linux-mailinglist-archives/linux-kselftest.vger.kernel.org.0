@@ -2,48 +2,48 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DF7B21274FE
-	for <lists+linux-kselftest@lfdr.de>; Fri, 20 Dec 2019 06:14:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 59C35127503
+	for <lists+linux-kselftest@lfdr.de>; Fri, 20 Dec 2019 06:14:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725874AbfLTFO1 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 20 Dec 2019 00:14:27 -0500
-Received: from mail-wr1-f65.google.com ([209.85.221.65]:34844 "EHLO
-        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727229AbfLTFOZ (ORCPT
+        id S1727283AbfLTFOb (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 20 Dec 2019 00:14:31 -0500
+Received: from mail-wr1-f41.google.com ([209.85.221.41]:41335 "EHLO
+        mail-wr1-f41.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727235AbfLTFO0 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 20 Dec 2019 00:14:25 -0500
-Received: by mail-wr1-f65.google.com with SMTP id g17so8154899wro.2;
-        Thu, 19 Dec 2019 21:14:24 -0800 (PST)
+        Fri, 20 Dec 2019 00:14:26 -0500
+Received: by mail-wr1-f41.google.com with SMTP id c9so8136500wrw.8;
+        Thu, 19 Dec 2019 21:14:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=inbP6pGKtJxItdKOeeuDolxjjunfcHjYuKaxBqpxDrE=;
-        b=IVWfBjRJRqaIGCacBEb+txUGuYGchEc3SzdoOwUuW4r4HzAzPgRYpIzG7vjyVGxLwK
-         wwTH0nM3J2KCGbCnpq0+nBO0xNfwjK/yDSBETHIs40P6rK5vkDaC/NLojfesofJTL/lS
-         WjL2w3AttGgKAFRIDP8VbkpDZwWBHgSFVQHIo3jKmFhe/cXj4tUvfRPTurZt5oY+sQqU
-         8bBkodbhLWPNPykLOi3v10kjkoFe37f35Gf3NGHFJ+8oL3zck7DV3VnY01ppqhVT+B45
-         iXVKzMSGdGgyZem3A/6FwuCk2ddb70RJgRgO6mop9CETKXkwApPXcwMZXZyt8PbGvOe1
-         WsVw==
+        bh=wvc6mp8TpYnIrD2kv/SKRsGHLV9BbyYFN352NxRckX0=;
+        b=CPvicxW9ofjoU9RfDadM9o6pV/o7TIeOb7amdLqoW7zVXt7a8iWmfEw/USKNBoLotT
+         SN6+a8nBjwd9H3rD14fcR2In5tc+SyPy0m+Wit28PlEJ+B7shdkrizIfKNXkI1RF/dSp
+         bkRxZbMUQEkVfJ/XTsbt15fMvuaq8AycVp2RG8wTeuAyo5vzLhXvDY32QLRhdwkQtrAY
+         B/kEaxyXDrCj+HmlgPq7Tr99t5dpXl600taZWePd+7KB8CHfiPGSJVeN8sHMxzjEDyW4
+         bjPYSy3141YPvyBLFYMWXEe66kZ+aA/TX72hikxnDbaN0VSivx3/vXh7nEByqZqyFGdt
+         oMJQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=inbP6pGKtJxItdKOeeuDolxjjunfcHjYuKaxBqpxDrE=;
-        b=t1xaIBGyA6Z17ElKBKavr+4iPGmYgDECDIQL6rL+uapi3LXDVWciqKP3DWfOakwnov
-         hJg3RcNedmEWF/rDQLR5Kdb0Xi79ycGDqsAsVso3siLOHFh1JOAWlxbh0ZkITIhb+FXI
-         h44eLtJ56yJacqHEmOyxcmOsZtx4Pa8sxIMxk+xOC+Wl4G3hfCF+QJD+mwSJsMs+o4pL
-         6JlnTUBfnCNMq2TbVSetrGsPIMO4uCUiqRTQmeT23QuPZmRcO9nxNgakP1dXPB+adBtI
-         WUHbwd+FTOhy8NRAaJ6OqexZScixilT+7Jug9LEhE4jWyPBidFwhvH/Ki/eC2rKFq2wU
-         8vPg==
-X-Gm-Message-State: APjAAAXuJA8QRSfrjTE8c995dSluFsIOB4SZC9e5CN0bOW8HNaBytqAV
-        4TCfk8hjFdaAf+rpWAY8byk=
-X-Google-Smtp-Source: APXvYqxfFKBom/UlscLNj/eyveSar2ly0Z+JmQKMrrOd6TKgCR6aBNnyx3dPWgaNrdfsG6pVoEgW0A==
-X-Received: by 2002:adf:fd84:: with SMTP id d4mr13025748wrr.211.1576818863463;
-        Thu, 19 Dec 2019 21:14:23 -0800 (PST)
+        bh=wvc6mp8TpYnIrD2kv/SKRsGHLV9BbyYFN352NxRckX0=;
+        b=e5ruXRYFG/wP1HDCqnHLgrQMdpav0CxOMKJtk/qa+kb5HDi3EOjH7Ozb10bLe3l9+M
+         IczuZ1fuCjztCAz5EE0onu1XBjJS5V88QqPQrfEL0ItRrmJWPMrS7kHem/24H4+p747g
+         9HJY/ixe0Z1FJLMDjA0uiE08I/xu5Ogr6xx/8zgx9FzGOXXE1JwEfgwTQj/WPqzWk4r/
+         9QGtLUqjYe+IAQaNhARbDIXfPFxaTtxyJ47MYB/YRYyhRDMPfn2l7/ppBjmgRpEQzXV9
+         bKpx6R6AsEiCsWm9UiT7ETM6wLzab3oDEV6dHJUmTLYAqvWP7ays4rOitD/VKD1zWD81
+         3inA==
+X-Gm-Message-State: APjAAAV+aF8woP4JQzCj+Rq9NKsPxBOxiPpMM8k3sHkk7a2bhaGrQ/8x
+        +1w6gtpeDrPUqmCOIQXXixY=
+X-Google-Smtp-Source: APXvYqxBnPAvPA9JEkJThZNdOy1K1asm1Hw77D3N+Npjpi6OIwkyCiYRLJzJXr9mB0JzRciXSaLOBw==
+X-Received: by 2002:a5d:4984:: with SMTP id r4mr12462934wrq.137.1576818864742;
+        Thu, 19 Dec 2019 21:14:24 -0800 (PST)
 Received: from localhost.localdomain (cable-86-56-100-90.cust.telecolumbus.net. [86.56.100.90])
-        by smtp.gmail.com with ESMTPSA id j12sm8703863wrt.55.2019.12.19.21.14.22
+        by smtp.gmail.com with ESMTPSA id j12sm8703863wrt.55.2019.12.19.21.14.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Dec 2019 21:14:22 -0800 (PST)
+        Thu, 19 Dec 2019 21:14:24 -0800 (PST)
 From:   sj38.park@gmail.com
 X-Google-Original-From: sjpark@amazon.de
 To:     shuah@kernel.org
@@ -51,9 +51,9 @@ Cc:     brendanhiggins@google.com, corbet@lwn.net,
         kunit-dev@googlegroups.com, linux-doc@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
         sj38.park@gmail.com, sjpark@amazon.com, sjpark@amazon.de
-Subject: [PATCH v7 5/6] kunit: Rename 'kunitconfig' to '.kunitconfig'
-Date:   Fri, 20 Dec 2019 05:14:07 +0000
-Message-Id: <20191220051408.3591-6-sjpark@amazon.de>
+Subject: [PATCH v7 6/6] kunit/kunit_tool_test: Test '--build_dir' option run
+Date:   Fri, 20 Dec 2019 05:14:08 +0000
+Message-Id: <20191220051408.3591-7-sjpark@amazon.de>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20191220051408.3591-1-sjpark@amazon.de>
 References: <20191220051408.3591-1-sjpark@amazon.de>
@@ -64,90 +64,40 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 From: SeongJae Park <sjpark@amazon.de>
 
-This commit renames 'kunitconfig' to '.kunitconfig' so that it can be
-automatically ignored by git and do not disturb people who want to type
-'kernel/' by pressing only the 'k' and then 'tab' key.
+This commit adds kunit tool test for the '--build_dir' option.
 
 Signed-off-by: SeongJae Park <sjpark@amazon.de>
 Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
 Tested-by: Brendan Higgins <brendanhiggins@google.com>
 ---
- Documentation/dev-tools/kunit/start.rst | 12 +++++-------
- tools/testing/kunit/kunit.py            |  2 +-
- tools/testing/kunit/kunit_kernel.py     |  4 ++--
- 3 files changed, 8 insertions(+), 10 deletions(-)
+ tools/testing/kunit/kunit_tool_test.py | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/Documentation/dev-tools/kunit/start.rst b/Documentation/dev-tools/kunit/start.rst
-index d5197f1a45cb..4e1d24db6b13 100644
---- a/Documentation/dev-tools/kunit/start.rst
-+++ b/Documentation/dev-tools/kunit/start.rst
-@@ -24,18 +24,16 @@ The wrapper can be run with:
- For more information on this wrapper (also called kunit_tool) checkout the
- :doc:`kunit-tool` page.
+diff --git a/tools/testing/kunit/kunit_tool_test.py b/tools/testing/kunit/kunit_tool_test.py
+index 22f16e66b3c1..cba97756ac4a 100755
+--- a/tools/testing/kunit/kunit_tool_test.py
++++ b/tools/testing/kunit/kunit_tool_test.py
+@@ -174,6 +174,7 @@ class KUnitMainTest(unittest.TestCase):
+ 		kunit.main(['run'], self.linux_source_mock)
+ 		assert self.linux_source_mock.build_reconfig.call_count == 1
+ 		assert self.linux_source_mock.run_kernel.call_count == 1
++		self.linux_source_mock.run_kernel.assert_called_once_with(build_dir='', timeout=300)
+ 		self.print_mock.assert_any_call(StrContains('Testing complete.'))
  
--Creating a kunitconfig
--======================
-+Creating a .kunitconfig
-+=======================
- The Python script is a thin wrapper around Kbuild. As such, it needs to be
--configured with a ``kunitconfig`` file. This file essentially contains the
-+configured with a ``.kunitconfig`` file. This file essentially contains the
- regular Kernel config, with the specific test targets as well.
+ 	def test_run_passes_args_fail(self):
+@@ -202,5 +203,12 @@ class KUnitMainTest(unittest.TestCase):
+ 		self.linux_source_mock.run_kernel.assert_called_once_with(build_dir='', timeout=timeout)
+ 		self.print_mock.assert_any_call(StrContains('Testing complete.'))
  
- .. code-block:: bash
- 
- 	cd $PATH_TO_LINUX_REPO
--	cp arch/um/configs/kunit_defconfig kunitconfig
--
--You may want to add kunitconfig to your local gitignore.
-+	cp arch/um/configs/kunit_defconfig .kunitconfig
- 
- Verifying KUnit Works
- ---------------------
-@@ -150,7 +148,7 @@ and the following to ``drivers/misc/Makefile``:
- 
- 	obj-$(CONFIG_MISC_EXAMPLE_TEST) += example-test.o
- 
--Now add it to your ``kunitconfig``:
-+Now add it to your ``.kunitconfig``:
- 
- .. code-block:: none
- 
-diff --git a/tools/testing/kunit/kunit.py b/tools/testing/kunit/kunit.py
-index e4250c4b06fb..e59eb9e7f923 100755
---- a/tools/testing/kunit/kunit.py
-+++ b/tools/testing/kunit/kunit.py
-@@ -108,7 +108,7 @@ def main(argv, linux=None):
- 				type=str, default='', metavar='build_dir')
- 
- 	run_parser.add_argument('--defconfig',
--				help='Uses a default kunitconfig.',
-+				help='Uses a default .kunitconfig.',
- 				action='store_true')
- 
- 	cli_args = parser.parse_args(argv)
-diff --git a/tools/testing/kunit/kunit_kernel.py b/tools/testing/kunit/kunit_kernel.py
-index a10c0c787bc1..cc5d844ecca1 100644
---- a/tools/testing/kunit/kunit_kernel.py
-+++ b/tools/testing/kunit/kunit_kernel.py
-@@ -14,7 +14,7 @@ import os
- import kunit_config
- 
- KCONFIG_PATH = '.config'
--kunitconfig_path = 'kunitconfig'
-+kunitconfig_path = '.kunitconfig'
- 
- class ConfigError(Exception):
- 	"""Represents an error trying to configure the Linux kernel."""
-@@ -111,7 +111,7 @@ class LinuxSourceTree(object):
- 		return True
- 
- 	def build_reconfig(self, build_dir):
--		"""Creates a new .config if it is not a subset of the kunitconfig."""
-+		"""Creates a new .config if it is not a subset of the .kunitconfig."""
- 		kconfig_path = get_kconfig_path(build_dir)
- 		if os.path.exists(kconfig_path):
- 			existing_kconfig = kunit_config.Kconfig()
++	def test_run_builddir(self):
++		build_dir = '.kunit'
++		kunit.main(['run', '--build_dir', build_dir], self.linux_source_mock)
++		assert self.linux_source_mock.build_reconfig.call_count == 1
++		self.linux_source_mock.run_kernel.assert_called_once_with(build_dir=build_dir, timeout=300)
++		self.print_mock.assert_any_call(StrContains('Testing complete.'))
++
+ if __name__ == '__main__':
+ 	unittest.main()
 -- 
 2.17.1
 
