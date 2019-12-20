@@ -2,36 +2,34 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 40EC4128267
-	for <lists+linux-kselftest@lfdr.de>; Fri, 20 Dec 2019 19:48:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8658712856C
+	for <lists+linux-kselftest@lfdr.de>; Sat, 21 Dec 2019 00:14:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727505AbfLTSs2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 20 Dec 2019 13:48:28 -0500
-Received: from mail.kernel.org ([198.145.29.99]:43514 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727394AbfLTSs1 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 20 Dec 2019 13:48:27 -0500
-Received: from localhost (unknown [5.29.147.182])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 6D0FC20866;
-        Fri, 20 Dec 2019 18:48:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1576867705;
-        bh=9uwZwW8nPS+75031v8hDGC7HtDf+0EIn7DmGn/ZPhLI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=LWTpeDghlapT7e9QeowMyEsKots1GGKoA5cxDBWPKxcsMa8afpvj3TIhg42NfecMr
-         n4GpE+h71j//kE94YhR/cIu0AoNi6vRxas1Bt4JmzW5rS36c/LVw4EGx6UtAXWnHfJ
-         xwyw4vcYCuXeNv4Wj/Dw3P5l12jwtULyC7zQzCys=
-Date:   Fri, 20 Dec 2019 20:48:21 +0200
-From:   Leon Romanovsky <leon@kernel.org>
-To:     John Hubbard <jhubbard@nvidia.com>
-Cc:     Jason Gunthorpe <jgg@ziepe.ca>,
+        id S1726634AbfLTXOL (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 20 Dec 2019 18:14:11 -0500
+Received: from hqnvemgate24.nvidia.com ([216.228.121.143]:9006 "EHLO
+        hqnvemgate24.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726470AbfLTXOL (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 20 Dec 2019 18:14:11 -0500
+Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate24.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5dfd55980001>; Fri, 20 Dec 2019 15:13:29 -0800
+Received: from hqmail.nvidia.com ([172.20.161.6])
+  by hqpgpgate101.nvidia.com (PGP Universal service);
+  Fri, 20 Dec 2019 15:14:00 -0800
+X-PGP-Universal: processed;
+        by hqpgpgate101.nvidia.com on Fri, 20 Dec 2019 15:14:00 -0800
+Received: from [10.110.48.28] (10.124.1.5) by HQMAIL107.nvidia.com
+ (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Fri, 20 Dec
+ 2019 23:13:58 +0000
+Subject: Re: [PATCH v11 00/25] mm/gup: track dma-pinned pages: FOLL_PIN
+To:     Leon Romanovsky <leon@kernel.org>
+CC:     Jason Gunthorpe <jgg@ziepe.ca>,
         Andrew Morton <akpm@linux-foundation.org>,
         Al Viro <viro@zeniv.linux.org.uk>,
         Alex Williamson <alex.williamson@redhat.com>,
         Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn.topel@intel.com>,
+        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>,
         Christoph Hellwig <hch@infradead.org>,
         Dan Williams <dan.j.williams@intel.com>,
         Daniel Vetter <daniel@ffwll.ch>,
@@ -40,7 +38,7 @@ Cc:     Jason Gunthorpe <jgg@ziepe.ca>,
         "David S . Miller" <davem@davemloft.net>,
         Ira Weiny <ira.weiny@intel.com>, Jan Kara <jack@suse.cz>,
         Jens Axboe <axboe@kernel.dk>, Jonathan Corbet <corbet@lwn.net>,
-        =?iso-8859-1?B?Suly9G1l?= Glisse <jglisse@redhat.com>,
+        =?UTF-8?B?SsOpcsO0bWUgR2xpc3Nl?= <jglisse@redhat.com>,
         Magnus Karlsson <magnus.karlsson@intel.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         Michael Ellerman <mpe@ellerman.id.au>,
@@ -48,149 +46,183 @@ Cc:     Jason Gunthorpe <jgg@ziepe.ca>,
         Mike Kravetz <mike.kravetz@oracle.com>,
         Paul Mackerras <paulus@samba.org>,
         Shuah Khan <shuah@kernel.org>,
-        Vlastimil Babka <vbabka@suse.cz>, bpf@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, kvm@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-rdma@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, netdev@vger.kernel.org,
-        linux-mm@kvack.org, LKML <linux-kernel@vger.kernel.org>,
+        Vlastimil Babka <vbabka@suse.cz>, <bpf@vger.kernel.org>,
+        <dri-devel@lists.freedesktop.org>, <kvm@vger.kernel.org>,
+        <linux-block@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+        <linux-fsdevel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+        <linux-media@vger.kernel.org>, <linux-rdma@vger.kernel.org>,
+        <linuxppc-dev@lists.ozlabs.org>, <netdev@vger.kernel.org>,
+        <linux-mm@kvack.org>, LKML <linux-kernel@vger.kernel.org>,
         Maor Gottlieb <maorg@mellanox.com>
-Subject: Re: [PATCH v11 00/25] mm/gup: track dma-pinned pages: FOLL_PIN
-Message-ID: <20191220184821.GB10944@unreal>
 References: <20191216222537.491123-1-jhubbard@nvidia.com>
  <20191219132607.GA410823@unreal>
  <a4849322-8e17-119e-a664-80d9f95d850b@nvidia.com>
  <20191219210743.GN17227@ziepe.ca>
  <f10b2a18-a109-d87d-f156-2e5941cbf4a0@nvidia.com>
+ <20191220184821.GB10944@unreal>
+From:   John Hubbard <jhubbard@nvidia.com>
+X-Nvconfidentiality: public
+Message-ID: <b70ac328-2dc0-efe3-05c2-3e040b662256@nvidia.com>
+Date:   Fri, 20 Dec 2019 15:13:57 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.3.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f10b2a18-a109-d87d-f156-2e5941cbf4a0@nvidia.com>
+In-Reply-To: <20191220184821.GB10944@unreal>
+X-Originating-IP: [10.124.1.5]
+X-ClientProxiedBy: HQMAIL111.nvidia.com (172.20.187.18) To
+ HQMAIL107.nvidia.com (172.20.187.13)
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1576883609; bh=YyPKn1pTUo9maui0Cl8wPUC9pCaG4pozfEeSM/q2Xuw=;
+        h=X-PGP-Universal:Subject:To:CC:References:From:X-Nvconfidentiality:
+         Message-ID:Date:User-Agent:MIME-Version:In-Reply-To:
+         X-Originating-IP:X-ClientProxiedBy:Content-Type:Content-Language:
+         Content-Transfer-Encoding;
+        b=BbpbjMRADbiieG0wZwg7/MNcvb0htkXoIVaUqVfL2cVFSq6P/VSfqRlwCWpnneJfD
+         xftzXoBcLiTWuqMXsQ7t6AWCT71WLO1xkGZrhrOn0tcyM5yAfm54j70C7fBwcgnofn
+         b/9H8aCfEVq0LawCERbdcQV3VCGhVN60vVxhAFwFbbDtIhnnLa+AeJbbNjJrpU3Dje
+         2yRq6wb9M/4s8MWJ9EJb7rqgBCMp3VCFwcIApBLsdFacXnYn6jAEGhJxMH7ZmKJPOr
+         2JhGFatda38gjZx3YL2suxRK7cjyk0lHKZiEYew9WUnhSKJKmAtAm3lHA3ArKec7HY
+         TMeZ1MUC9Bnkw==
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Dec 19, 2019 at 02:58:43PM -0800, John Hubbard wrote:
-> On 12/19/19 1:07 PM, Jason Gunthorpe wrote:
-> ...
-> > > 3. It would be nice if I could reproduce this. I have a two-node mlx5 Infiniband
-> > > test setup, but I have done only the tiniest bit of user space IB coding, so
-> > > if you have any test programs that aren't too hard to deal with that could
-> > > possibly hit this, or be tweaked to hit it, I'd be grateful. Keeping in mind
-> > > that I'm not an advanced IB programmer. At all. :)
-> >
-> > Clone this:
-> >
-> > https://github.com/linux-rdma/rdma-core.git
-> >
-> > Install all the required deps to build it (notably cython), see the README.md
-> >
-> > $ ./build.sh
-> > $ build/bin/run_tests.py
-> >
-> > If you get things that far I think Leon can get a reproduction for you
-> >
->
-> Cool, it's up and running (1 failure, 3 skipped, out of 67 tests).
->
-> This is a great test suite to have running, I'll add it to my scripts. Here's the
-> full output in case the failure or skip cases are a problem:
->
-> $ sudo ./build/bin/run_tests.py --verbose
->
-> test_create_ah (tests.test_addr.AHTest) ... ok
-> test_create_ah_roce (tests.test_addr.AHTest) ... skipped "Can't run RoCE tests on IB link layer"
-> test_destroy_ah (tests.test_addr.AHTest) ... ok
-> test_create_comp_channel (tests.test_cq.CCTest) ... ok
-> test_destroy_comp_channel (tests.test_cq.CCTest) ... ok
-> test_create_cq_ex (tests.test_cq.CQEXTest) ... ok
-> test_create_cq_ex_bad_flow (tests.test_cq.CQEXTest) ... ok
-> test_destroy_cq_ex (tests.test_cq.CQEXTest) ... ok
-> test_create_cq (tests.test_cq.CQTest) ... ok
-> test_create_cq_bad_flow (tests.test_cq.CQTest) ... ok
-> test_destroy_cq (tests.test_cq.CQTest) ... ok
-> test_rc_traffic_cq_ex (tests.test_cqex.CqExTestCase) ... ok
-> test_ud_traffic_cq_ex (tests.test_cqex.CqExTestCase) ... ok
-> test_xrc_traffic_cq_ex (tests.test_cqex.CqExTestCase) ... ok
-> test_create_dm (tests.test_device.DMTest) ... ok
-> test_create_dm_bad_flow (tests.test_device.DMTest) ... ok
-> test_destroy_dm (tests.test_device.DMTest) ... ok
-> test_destroy_dm_bad_flow (tests.test_device.DMTest) ... ok
-> test_dm_read (tests.test_device.DMTest) ... ok
-> test_dm_write (tests.test_device.DMTest) ... ok
-> test_dm_write_bad_flow (tests.test_device.DMTest) ... ok
-> test_dev_list (tests.test_device.DeviceTest) ... ok
-> test_open_dev (tests.test_device.DeviceTest) ... ok
-> test_query_device (tests.test_device.DeviceTest) ... ok
-> test_query_device_ex (tests.test_device.DeviceTest) ... ok
-> test_query_gid (tests.test_device.DeviceTest) ... ok
-> test_query_port (tests.test_device.DeviceTest) ... FAIL
-> test_query_port_bad_flow (tests.test_device.DeviceTest) ... ok
-> test_create_dm_mr (tests.test_mr.DMMRTest) ... ok
-> test_destroy_dm_mr (tests.test_mr.DMMRTest) ... ok
-> test_buffer (tests.test_mr.MRTest) ... ok
-> test_dereg_mr (tests.test_mr.MRTest) ... ok
-> test_dereg_mr_twice (tests.test_mr.MRTest) ... ok
-> test_lkey (tests.test_mr.MRTest) ... ok
-> test_read (tests.test_mr.MRTest) ... ok
-> test_reg_mr (tests.test_mr.MRTest) ... ok
-> test_reg_mr_bad_flags (tests.test_mr.MRTest) ... ok
-> test_reg_mr_bad_flow (tests.test_mr.MRTest) ... ok
-> test_rkey (tests.test_mr.MRTest) ... ok
-> test_write (tests.test_mr.MRTest) ... ok
-> test_dereg_mw_type1 (tests.test_mr.MWTest) ... ok
-> test_dereg_mw_type2 (tests.test_mr.MWTest) ... ok
-> test_reg_mw_type1 (tests.test_mr.MWTest) ... ok
-> test_reg_mw_type2 (tests.test_mr.MWTest) ... ok
-> test_reg_mw_wrong_type (tests.test_mr.MWTest) ... ok
-> test_odp_rc_traffic (tests.test_odp.OdpTestCase) ... ok
-> test_odp_ud_traffic (tests.test_odp.OdpTestCase) ... skipped 'ODP is not supported - ODP recv not supported'
-> test_odp_xrc_traffic (tests.test_odp.OdpTestCase) ... ok
-> test_default_allocators (tests.test_parent_domain.ParentDomainTestCase) ... ok
-> test_mem_align_allocators (tests.test_parent_domain.ParentDomainTestCase) ... ok
-> test_without_allocators (tests.test_parent_domain.ParentDomainTestCase) ... ok
-> test_alloc_pd (tests.test_pd.PDTest) ... ok
-> test_create_pd_none_ctx (tests.test_pd.PDTest) ... ok
-> test_dealloc_pd (tests.test_pd.PDTest) ... ok
-> test_destroy_pd_twice (tests.test_pd.PDTest) ... ok
-> test_multiple_pd_creation (tests.test_pd.PDTest) ... ok
-> test_create_qp_ex_no_attr (tests.test_qp.QPTest) ... ok
-> test_create_qp_ex_no_attr_connected (tests.test_qp.QPTest) ... ok
-> test_create_qp_ex_with_attr (tests.test_qp.QPTest) ... ok
-> test_create_qp_ex_with_attr_connected (tests.test_qp.QPTest) ... ok
-> test_create_qp_no_attr (tests.test_qp.QPTest) ... ok
-> test_create_qp_no_attr_connected (tests.test_qp.QPTest) ... ok
-> test_create_qp_with_attr (tests.test_qp.QPTest) ... ok
-> test_create_qp_with_attr_connected (tests.test_qp.QPTest) ... ok
-> test_modify_qp (tests.test_qp.QPTest) ... ok
-> test_query_qp (tests.test_qp.QPTest) ... ok
-> test_rdmacm_sync_traffic (tests.test_rdmacm.CMTestCase) ... skipped 'No devices with net interface'
->
-> ======================================================================
-> FAIL: test_query_port (tests.test_device.DeviceTest)
-> ----------------------------------------------------------------------
-> Traceback (most recent call last):
->   File "/kernel_work/rdma-core/tests/test_device.py", line 129, in test_query_port
->     self.verify_port_attr(port_attr)
->   File "/kernel_work/rdma-core/tests/test_device.py", line 113, in verify_port_attr
->     assert 'Invalid' not in d.speed_to_str(attr.active_speed)
-> AssertionError
+On 12/20/19 10:48 AM, Leon Romanovsky wrote:
+...
+>> test_query_qp (tests.test_qp.QPTest) ... ok
+>> test_rdmacm_sync_traffic (tests.test_rdmacm.CMTestCase) ... skipped 'No devices with net interface'
+>>
+>> ======================================================================
+>> FAIL: test_query_port (tests.test_device.DeviceTest)
+>> ----------------------------------------------------------------------
+>> Traceback (most recent call last):
+>>   File "/kernel_work/rdma-core/tests/test_device.py", line 129, in test_query_port
+>>     self.verify_port_attr(port_attr)
+>>   File "/kernel_work/rdma-core/tests/test_device.py", line 113, in verify_port_attr
+>>     assert 'Invalid' not in d.speed_to_str(attr.active_speed)
+>> AssertionError
+> 
+> I'm very curious how did you get this assert "d.speed_to_str" covers all
+> known speeds according to the IBTA.
+> 
 
-I'm very curious how did you get this assert "d.speed_to_str" covers all
-known speeds according to the IBTA.
+Hi Leon,
 
-Thanks
+Short answer: I can make that one pass, with a small fix the the rdma-core test
+suite:
 
->
-> ----------------------------------------------------------------------
-> Ran 67 tests in 10.058s
->
-> FAILED (failures=1, skipped=3)
->
->
-> thanks,
-> --
-> John Hubbard
-> NVIDIA
+commit a1b9fb0846e1b2356d7a16f4fbdd1960cf8dcbe5 (HEAD -> fix_speed_to_str)
+Author: John Hubbard <jhubbard@nvidia.com>
+Date:   Fri Dec 20 15:07:47 2019 -0800
+
+    device: fix speed_to_str(), to handle disabled links
+    
+    For disabled links, the raw speed token is 0. However,
+    speed_to_str() doesn't have that in the list. This leads
+    to an assertion when running tests (test_query_port) when
+    one link is down and other link(s) are up.
+    
+    Fix this by returning '(Disabled/down)' for the zero speed
+    case.
+
+diff --git a/pyverbs/device.pyx b/pyverbs/device.pyx
+index 33d133fd..f8b7826b 100755
+--- a/pyverbs/device.pyx
++++ b/pyverbs/device.pyx
+@@ -923,8 +923,8 @@ def width_to_str(width):
+ 
+ 
+ def speed_to_str(speed):
+-    l = {1: '2.5 Gbps', 2: '5.0 Gbps', 4: '5.0 Gbps', 8: '10.0 Gbps',
+-         16: '14.0 Gbps', 32: '25.0 Gbps', 64: '50.0 Gbps'}
++    l = {0: '(Disabled/down)', 1: '2.5 Gbps', 2: '5.0 Gbps', 4: '5.0 Gbps',
++         8: '10.0 Gbps', 16: '14.0 Gbps', 32: '25.0 Gbps', 64: '50.0 Gbps'}
+     try:
+         return '{s} ({n})'.format(s=l[speed], n=speed)
+     except KeyError:
+
+
+Longer answer:
+==============
+
+It looks like this test suite assumes that every link is connected! (Probably
+in most test systems, they are.) But in my setup, the ConnectX cards each have
+two slots, and I only have (and only need) one cable. So one link is up, and
+the other is disabled. 
+
+This leads to the other problem, which is that if a link is disabled, the
+test suite finds a "0" token for attr.active_speed. That token is not in the
+approved list, and so d.speed_to_str() asserts.
+
+With some diagnostics added, I can see it checking each link: one passes, and
+the other asserts:
+
+diff --git a/tests/test_device.py b/tests/test_device.py
+index 524e0e89..7b33d7db 100644
+--- a/tests/test_device.py
++++ b/tests/test_device.py
+@@ -110,6 +110,12 @@ class DeviceTest(unittest.TestCase):
+         assert 'Invalid' not in d.translate_mtu(attr.max_mtu)
+         assert 'Invalid' not in d.translate_mtu(attr.active_mtu)
+         assert 'Invalid' not in d.width_to_str(attr.active_width)
++        print("")
++        print('Diagnostics ===========================================')
++        print('phys_state:    ', d.phys_state_to_str(attr.phys_state))
++        print('active_width): ', d.width_to_str(attr.active_width))
++        print('active_speed:  ',   d.speed_to_str(attr.active_speed))
++        print('END of Diagnostics ====================================')
+         assert 'Invalid' not in d.speed_to_str(attr.active_speed)
+         assert 'Invalid' not in d.translate_link_layer(attr.link_layer)
+         assert attr.max_msg_sz > 0x1000
+
+         assert attr.max_msg_sz > 0x1000
+
+...and the test run from that is:
+
+# ./build/bin/run_tests.py --verbose tests.test_device.DeviceTest
+test_dev_list (tests.test_device.DeviceTest) ... ok
+test_open_dev (tests.test_device.DeviceTest) ... ok
+test_query_device (tests.test_device.DeviceTest) ... ok
+test_query_device_ex (tests.test_device.DeviceTest) ... ok
+test_query_gid (tests.test_device.DeviceTest) ... ok
+test_query_port (tests.test_device.DeviceTest) ... 
+Diagnostics ===========================================
+phys_state:     Link up (5)
+active_width):  4X (2)
+active_speed:   25.0 Gbps (32)
+END of Diagnostics ====================================
+
+Diagnostics ===========================================
+phys_state:     Disabled (3)
+active_width):  4X (2)
+active_speed:   Invalid speed
+END of Diagnostics ====================================
+FAIL
+test_query_port_bad_flow (tests.test_device.DeviceTest) ... ok
+
+======================================================================
+FAIL: test_query_port (tests.test_device.DeviceTest)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/kernel_work/rdma-core/tests/test_device.py", line 135, in test_query_port
+    self.verify_port_attr(port_attr)
+  File "/kernel_work/rdma-core/tests/test_device.py", line 119, in verify_port_attr
+    assert 'Invalid' not in d.speed_to_str(attr.active_speed)
+AssertionError
+
+----------------------------------------------------------------------
+Ran 7 tests in 0.055s
+
+FAILED (failures=1)
+
+
+
+thanks,
+-- 
+John Hubbard
+NVIDIA
+
