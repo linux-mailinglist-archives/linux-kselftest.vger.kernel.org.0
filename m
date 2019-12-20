@@ -2,233 +2,139 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7178D127D69
-	for <lists+linux-kselftest@lfdr.de>; Fri, 20 Dec 2019 15:37:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DAD1C12823D
+	for <lists+linux-kselftest@lfdr.de>; Fri, 20 Dec 2019 19:29:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728075AbfLTOdt convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 20 Dec 2019 09:33:49 -0500
-Received: from mail-wm1-f65.google.com ([209.85.128.65]:35516 "EHLO
-        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727780AbfLTOds (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 20 Dec 2019 09:33:48 -0500
-Received: by mail-wm1-f65.google.com with SMTP id p17so9478556wmb.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 20 Dec 2019 06:33:46 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:user-agent:in-reply-to:references
-         :mime-version:content-transfer-encoding:subject:to:cc:from
-         :message-id;
-        bh=V6peUYVw+8q1XalOpqZ1ayFyqbTEFtfcEYX2FP9pROo=;
-        b=iOirvIPuu8vjEFlxkbaIqzWupYxLYypt2qciFktMAfV7fYouFWoPewqX/PNcbm+TcY
-         1hAf6fOcR4h5WjmtGmgd/MDrSL+ONSjWGUUDlJlpIXqg/+UJW+XcBikqR4rGeOEnWZvc
-         UJJkM07rChL/D/Sxg9nK0xMMFJ+jZwSZD8oRGwOiT7/M0VXnCdmZCukaBC7N/Qp3EuW/
-         Uah5CF74feEYNkocFPjYfpmSGdpxry7OjBNhSlK4cYXDzR8WhtHPD4a/xaC/zOl9GyBq
-         Qhq3ENnKhBAqwoPhGVlxB1ieosra/sdmukQTzSfNZYRT5sRGST46L2k1IDmWOva6Ilf+
-         aNZw==
-X-Gm-Message-State: APjAAAXt6UBldMW/ZG4oaMH+NXfziRfZNIcPsEMDOZrlViQ8A/NtvqOz
-        wniYtlgwBQUYz7ZQJfRHiRIW5g==
-X-Google-Smtp-Source: APXvYqxVS8YAU3RLQWiNFWWhq3mf++gLHMleVdt7qSTwX9NrqFbPr8TqBrxxQzLMRWsCwz0CaURhTQ==
-X-Received: by 2002:a7b:c851:: with SMTP id c17mr17423248wml.71.1576852426193;
-        Fri, 20 Dec 2019 06:33:46 -0800 (PST)
-Received: from [10.140.78.238] ([46.114.38.238])
-        by smtp.gmail.com with ESMTPSA id l15sm9907506wrv.39.2019.12.20.06.33.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 20 Dec 2019 06:33:43 -0800 (PST)
-Date:   Fri, 20 Dec 2019 15:33:39 +0100
-User-Agent: K-9 Mail for Android
-In-Reply-To: <20191220140328.20907-2-cyphar@cyphar.com>
-References: <20191220140328.20907-1-cyphar@cyphar.com> <20191220140328.20907-2-cyphar@cyphar.com>
+        id S1727425AbfLTS3p (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 20 Dec 2019 13:29:45 -0500
+Received: from mail.kernel.org ([198.145.29.99]:38688 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727390AbfLTS3p (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 20 Dec 2019 13:29:45 -0500
+Received: from localhost (unknown [5.29.147.182])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id D2FAC21655;
+        Fri, 20 Dec 2019 18:29:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1576866584;
+        bh=ezMyUTqia+8GWq7yY+wOcF0j+RT4zhZQ09PnQwqq4KE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=xtlhJ22m9XyJ5lWO10q+7J5Sk6+9idLwARTLc3T4M1a05GuHRH5id2sNGPiPWkdyw
+         F5aNzJNH2Vp2YMQKi9OPbULXNoF3GMWuF3AVswdPVwVKkqEUvRJYUZgE627DNdfVQF
+         4AwRtEvppRShBI0d5vgFOARlPmzYXsKhecOZipAc=
+Date:   Fri, 20 Dec 2019 20:29:39 +0200
+From:   Leon Romanovsky <leon@kernel.org>
+To:     Jason Gunthorpe <jgg@ziepe.ca>
+Cc:     John Hubbard <jhubbard@nvidia.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn.topel@intel.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Dave Chinner <david@fromorbit.com>,
+        David Airlie <airlied@linux.ie>,
+        "David S . Miller" <davem@davemloft.net>,
+        Ira Weiny <ira.weiny@intel.com>, Jan Kara <jack@suse.cz>,
+        Jens Axboe <axboe@kernel.dk>, Jonathan Corbet <corbet@lwn.net>,
+        =?iso-8859-1?B?Suly9G1l?= Glisse <jglisse@redhat.com>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Michal Hocko <mhocko@suse.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Paul Mackerras <paulus@samba.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Vlastimil Babka <vbabka@suse.cz>, bpf@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, kvm@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-rdma@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, netdev@vger.kernel.org,
+        linux-mm@kvack.org, LKML <linux-kernel@vger.kernel.org>,
+        Maor Gottlieb <maorg@mellanox.com>
+Subject: Re: [PATCH v11 00/25] mm/gup: track dma-pinned pages: FOLL_PIN
+Message-ID: <20191220182939.GA10944@unreal>
+References: <20191216222537.491123-1-jhubbard@nvidia.com>
+ <20191219132607.GA410823@unreal>
+ <a4849322-8e17-119e-a664-80d9f95d850b@nvidia.com>
+ <20191219210743.GN17227@ziepe.ca>
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: 8BIT
-Subject: Re: [PATCH v2 1/2] openat2: drop open_how->__padding field
-To:     containers@lists.linux-foundation.org,
-        Aleksa Sarai <cyphar@cyphar.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J. Bruce Fields" <bfields@fieldses.org>,
-        Shuah Khan <shuah@kernel.org>, Arnd Bergmann <arnd@arndb.de>
-CC:     libc-alpha@sourceware.org, linux-api@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dev@opencontainers.org,
-        David Laight <david.laight@aculab.com>,
-        linux-kselftest@vger.kernel.org, linux-fsdevel@vger.kernel.org
-From:   Christian Brauner <christian.brauner@ubuntu.com>
-Message-ID: <88F5533A-9C91-41D1-A2E6-3622FCEEEDB1@ubuntu.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20191219210743.GN17227@ziepe.ca>
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-[Cc Arnd for struct layout sanity checking]
+On Thu, Dec 19, 2019 at 05:07:43PM -0400, Jason Gunthorpe wrote:
+> On Thu, Dec 19, 2019 at 12:30:31PM -0800, John Hubbard wrote:
+> > On 12/19/19 5:26 AM, Leon Romanovsky wrote:
+> > > On Mon, Dec 16, 2019 at 02:25:12PM -0800, John Hubbard wrote:
+> > > > Hi,
+> > > >
+> > > > This implements an API naming change (put_user_page*() -->
+> > > > unpin_user_page*()), and also implements tracking of FOLL_PIN pages. It
+> > > > extends that tracking to a few select subsystems. More subsystems will
+> > > > be added in follow up work.
+> > >
+> > > Hi John,
+> > >
+> > > The patchset generates kernel panics in our IB testing. In our tests, we
+> > > allocated single memory block and registered multiple MRs using the single
+> > > block.
+> > >
+> > > The possible bad flow is:
+> > >   ib_umem_geti() ->
+> > >    pin_user_pages_fast(FOLL_WRITE) ->
+> > >     internal_get_user_pages_fast(FOLL_WRITE) ->
+> > >      gup_pgd_range() ->
+> > >       gup_huge_pd() ->
+> > >        gup_hugepte() ->
+> > >         try_grab_compound_head() ->
+> >
+> > Hi Leon,
+> >
+> > Thanks very much for the detailed report! So we're overflowing...
+> >
+> > At first look, this seems likely to be hitting a weak point in the
+> > GUP_PIN_COUNTING_BIAS-based design, one that I believed could be deferred
+> > (there's a writeup in Documentation/core-api/pin_user_page.rst, lines
+> > 99-121). Basically it's pretty easy to overflow the page->_refcount
+> > with huge pages if the pages have a *lot* of subpages.
+> >
+> > We can only do about 7 pins on 1GB huge pages that use 4KB subpages.
+>
+> Considering that establishing these pins is entirely under user
+> control, we can't have a limit here.
+>
+> If the number of allowed pins are exhausted then the
+> pin_user_pages_fast() must fail back to the user.
+>
+> > 3. It would be nice if I could reproduce this. I have a two-node mlx5 Infiniband
+> > test setup, but I have done only the tiniest bit of user space IB coding, so
+> > if you have any test programs that aren't too hard to deal with that could
+> > possibly hit this, or be tweaked to hit it, I'd be grateful. Keeping in mind
+> > that I'm not an advanced IB programmer. At all. :)
+>
+> Clone this:
+>
+> https://github.com/linux-rdma/rdma-core.git
+>
+> Install all the required deps to build it (notably cython), see the README.md
+>
+> $ ./build.sh
+> $ build/bin/run_tests.py
+>
+> If you get things that far I think Leon can get a reproduction for you
 
-On December 20, 2019 3:03:27 PM GMT+01:00, Aleksa Sarai <cyphar@cyphar.com> wrote:
->The purpose of explicit padding was to allow us to use the space in the
->future (C provides no guarantee about the value of padding bytes and
->thus userspace could've provided garbage).
->
->However, the downside of explicit padding is that any extension we wish
->to add should fit the space exactly (otherwise we may end up with a u16
->which will never be used). In addition, the correct error to return for
->non-zero padding is not clear (-EINVAL doesn't imply "you're using an
->extension field unsupported by this kernel", but -E2BIG seems a bit odd
->if the structure size isn't different).
->
->The simplest solution is to just match the design of clone3(2) -- use
->u64s for all fields. The extra few-bytes cost of extra fields is not
->significant (it's unlikely configuration structs will ever be extremely
->large) and it allows for more flag space if necessary. There is also no
->need to align the u64s because we will not permit any padding in the
->structure.
->
->As openat2(2) is not yet in Linus's tree, we can iron out these minor
->warts before we commit to this as a stable ABI.
->
->Acked-by: Christian Brauner <christian.brauner@ubuntu.com>
->Suggested-by: David Laight <david.laight@aculab.com>
->Signed-off-by: Aleksa Sarai <cyphar@cyphar.com>
->---
-> fs/open.c                                     |  2 --
-> include/uapi/linux/fcntl.h                    | 17 +++++++------
-> tools/testing/selftests/openat2/helpers.h     |  7 +++---
-> .../testing/selftests/openat2/openat2_test.c  | 24 +++++++------------
-> 4 files changed, 19 insertions(+), 31 deletions(-)
->
->diff --git a/fs/open.c b/fs/open.c
->index 50a46501bcc9..8cdb2b675867 100644
->--- a/fs/open.c
->+++ b/fs/open.c
->@@ -993,8 +993,6 @@ static inline int build_open_flags(const struct
->open_how *how,
-> 		return -EINVAL;
-> 	if (how->resolve & ~VALID_RESOLVE_FLAGS)
-> 		return -EINVAL;
->-	if (memchr_inv(how->__padding, 0, sizeof(how->__padding)))
->-		return -EINVAL;
-> 
-> 	/* Deal with the mode. */
-> 	if (WILL_CREATE(flags)) {
->diff --git a/include/uapi/linux/fcntl.h b/include/uapi/linux/fcntl.h
->index d886bdb585e4..5aaadfd79dd5 100644
->--- a/include/uapi/linux/fcntl.h
->+++ b/include/uapi/linux/fcntl.h
->@@ -101,22 +101,21 @@
-> #define AT_RECURSIVE		0x8000	/* Apply to the entire subtree */
-> 
-> /*
->- * Arguments for how openat2(2) should open the target path. If
->@resolve is
->- * zero, then openat2(2) operates very similarly to openat(2).
->+ * Arguments for how openat2(2) should open the target path. If only
->@flags and
->+ * @mode are non-zero, then openat2(2) operates very similarly to
->openat(2).
->  *
->- * However, unlike openat(2), unknown bits in @flags result in -EINVAL
->rather
->- * than being silently ignored. @mode must be zero unless one of
->{O_CREAT,
->- * O_TMPFILE} are set.
->+ * However, unlike openat(2), unknown or invalid bits in @flags result
->in
->+ * -EINVAL rather than being silently ignored. @mode must be zero
->unless one of
->+ *  {O_CREAT, O_TMPFILE} are set.
->  *
->  * @flags: O_* flags.
->  * @mode: O_CREAT/O_TMPFILE file mode.
->  * @resolve: RESOLVE_* flags.
->  */
-> struct open_how {
->-	__aligned_u64 flags;
->-	__u16 mode;
->-	__u16 __padding[3]; /* must be zeroed */
->-	__aligned_u64 resolve;
->+	__u64 flags;
->+	__u64 mode;
->+	__u64 resolve;
-> };
-> 
-> #define OPEN_HOW_SIZE_VER0	24 /* sizeof first published struct */
->diff --git a/tools/testing/selftests/openat2/helpers.h
->b/tools/testing/selftests/openat2/helpers.h
->index 43ca5ceab6e3..a6ea27344db2 100644
->--- a/tools/testing/selftests/openat2/helpers.h
->+++ b/tools/testing/selftests/openat2/helpers.h
->@@ -36,10 +36,9 @@
->  * @resolve: RESOLVE_* flags.
->  */
-> struct open_how {
->-	__aligned_u64 flags;
->-	__u16 mode;
->-	__u16 __padding[3]; /* must be zeroed */
->-	__aligned_u64 resolve;
->+	__u64 flags;
->+	__u64 mode;
->+	__u64 resolve;
-> };
-> 
-> #define OPEN_HOW_SIZE_VER0	24 /* sizeof first published struct */
->diff --git a/tools/testing/selftests/openat2/openat2_test.c
->b/tools/testing/selftests/openat2/openat2_test.c
->index 0b64fedc008b..b386367c606b 100644
->--- a/tools/testing/selftests/openat2/openat2_test.c
->+++ b/tools/testing/selftests/openat2/openat2_test.c
->@@ -40,7 +40,7 @@ struct struct_test {
-> 	int err;
-> };
-> 
->-#define NUM_OPENAT2_STRUCT_TESTS 10
->+#define NUM_OPENAT2_STRUCT_TESTS 7
-> #define NUM_OPENAT2_STRUCT_VARIATIONS 13
-> 
-> void test_openat2_struct(void)
->@@ -57,20 +57,6 @@ void test_openat2_struct(void)
-> 		  .arg.inner.flags = O_RDONLY,
-> 		  .size = sizeof(struct open_how_ext) },
-> 
->-		/* Normal struct with broken padding. */
->-		{ .name = "normal struct (non-zero padding[0])",
->-		  .arg.inner.flags = O_RDONLY,
->-		  .arg.inner.__padding = {0xa0, 0x00, 0x00},
->-		  .size = sizeof(struct open_how_ext), .err = -EINVAL },
->-		{ .name = "normal struct (non-zero padding[1])",
->-		  .arg.inner.flags = O_RDONLY,
->-		  .arg.inner.__padding = {0x00, 0x1a, 0x00},
->-		  .size = sizeof(struct open_how_ext), .err = -EINVAL },
->-		{ .name = "normal struct (non-zero padding[2])",
->-		  .arg.inner.flags = O_RDONLY,
->-		  .arg.inner.__padding = {0x00, 0x00, 0xef},
->-		  .size = sizeof(struct open_how_ext), .err = -EINVAL },
->-
-> 		/* TODO: Once expanded, check zero-padding. */
-> 
-> 		/* Smaller than version-0 struct. */
->@@ -169,7 +155,7 @@ struct flag_test {
-> 	int err;
-> };
-> 
->-#define NUM_OPENAT2_FLAG_TESTS 21
->+#define NUM_OPENAT2_FLAG_TESTS 23
-> 
-> void test_openat2_flags(void)
-> {
->@@ -214,9 +200,15 @@ void test_openat2_flags(void)
-> 		{ .name = "invalid how.mode and O_CREAT",
-> 		  .how.flags = O_CREAT,
-> 		  .how.mode = 0xFFFF, .err = -EINVAL },
->+		{ .name = "invalid (very large) how.mode and O_CREAT",
->+		  .how.flags = O_CREAT,
->+		  .how.mode = 0xC000000000000000ULL, .err = -EINVAL },
-> 		{ .name = "invalid how.mode and O_TMPFILE",
-> 		  .how.flags = O_TMPFILE | O_RDWR,
-> 		  .how.mode = 0x1337, .err = -EINVAL },
->+		{ .name = "invalid (very large) how.mode and O_TMPFILE",
->+		  .how.flags = O_TMPFILE | O_RDWR,
->+		  .how.mode = 0x0000A00000000000ULL, .err = -EINVAL },
-> 
-> 		/* ->resolve must only contain RESOLVE_* flags. */
-> 		{ .name = "invalid how.resolve and O_RDONLY",
+I'm not so optimistic about that.
 
+Thanks
+
+>
+> Jason
