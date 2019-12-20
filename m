@@ -2,48 +2,48 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 22566127508
-	for <lists+linux-kselftest@lfdr.de>; Fri, 20 Dec 2019 06:14:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D500212750A
+	for <lists+linux-kselftest@lfdr.de>; Fri, 20 Dec 2019 06:14:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727362AbfLTFOl (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        id S1727378AbfLTFOl (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
         Fri, 20 Dec 2019 00:14:41 -0500
-Received: from mail-wm1-f67.google.com ([209.85.128.67]:36936 "EHLO
-        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727177AbfLTFOW (ORCPT
+Received: from mail-wr1-f67.google.com ([209.85.221.67]:46327 "EHLO
+        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727201AbfLTFOY (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 20 Dec 2019 00:14:22 -0500
-Received: by mail-wm1-f67.google.com with SMTP id f129so7877238wmf.2;
-        Thu, 19 Dec 2019 21:14:21 -0800 (PST)
+        Fri, 20 Dec 2019 00:14:24 -0500
+Received: by mail-wr1-f67.google.com with SMTP id z7so8094346wrl.13;
+        Thu, 19 Dec 2019 21:14:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=yEihcqRjJqHrf9Dkz24+7uPB1xqJDuWaD0UNYMAzXH4=;
-        b=Oey+1Lh1vua7bwuLqvnioSrUimFGSdjDvUm++wJZMdPMXLEFIb0HagR7AZ3NA7fmPV
-         xA1hQH2L45QcmZOWSYJTcObaT4lLyLyqKN7YGRDluiqgm/ctu+5nZfD59tdB0SH/GZuZ
-         m1iYChIarzCu99KU3wmasSMH4Q+AYmDYPZXK3EAiBd6KClkzu9Dy3LGlSOsAwlI6IVO5
-         0hAQx4On0+YPHrlOyaz3IoH1wTgMhzyNoHYsrTxkgfv2PsOeMh9+Oypwk/KSMwFzAjwz
-         OIVtC+KRIKkDJnXweOZ0AaCsuf9/PtyLXlqsxC6crx8fODrTCR43uNt2b07nsmSgEF2F
-         4Y6w==
+        bh=tsoM+tENaiFBqsqZQ09FDA9C5Ccx/Wof1Q5+yXLoE5Y=;
+        b=iDO3yFxxCOo8POg0aFkAFvfoNDhtjvMJFMaj9+uqvzl4IgLx5GGs1QW51zl0EURVqP
+         8nwdXuIQhdDjwrMPq43HuJ7f0dhKm4xITkc2NSXPd+zVI96Df3RmhY68ZDvSJ0UFjqNs
+         +0RPbokS2VSMmSrlLz3pcOYTneQY/9CFciQ/4JcJYucW1QlJVzX1FdG5GkMVaBsFyOeU
+         QzuREpEv6lLEVDWY2tH+ui+umv6mIsQe5JIY4t+yINpONTi5Pj33/+HDtJKgYWDmnRn3
+         dzWhGlZcpwoXDxK6r9AH/2KkflYwYXKVMbVt5KVIx+Q8UtrjtvlA5zxb5GjFFk7dfnPT
+         KGew==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=yEihcqRjJqHrf9Dkz24+7uPB1xqJDuWaD0UNYMAzXH4=;
-        b=YjJ5+22AWCNBpa9BmClDHdbCEOd5rvSE2AhfaZsvIeuv2O2+rivUetTcC975ITS4Vm
-         UzuO+w+l/C5hnEVGlC5RVkxX13uDrrPxMeWUsKeLA+eUttDiaBBRJ8nqDsJbCKCsv/Fz
-         Rcg9G2Ng2FbfX4MiX2HYh8WEh6r5sCHHGnWnx1/zBwu2vkZigYxBXhJAiIo5VRdnL6OK
-         /D5or8ueM2zOXY2WpKo8C35XrXFk9FXHaofJHT2+S8J4OOgt8zVTx3CtSnYcot8x91Pg
-         VLFqCsg4OHm4Ae4Q0HslennsEwohpoU5zW/z08EC3pUTLgJoeBNdBhyIQq0LAqAeKz9a
-         Gt8w==
-X-Gm-Message-State: APjAAAVluo1UcMUlb8sNSef3nDqHKaonYlIblE2rZwPfuoHY8oYStadV
-        x2xVUzXMoziOlt/wkXdn4vM=
-X-Google-Smtp-Source: APXvYqygnBhWMk6eRkP7fEJeqrMQVSoKmmWXhGHJpnJdKEGFIcuWLPUEVGU0DCoNEjmFkykgGkUSFQ==
-X-Received: by 2002:a7b:c190:: with SMTP id y16mr14256880wmi.107.1576818861122;
-        Thu, 19 Dec 2019 21:14:21 -0800 (PST)
+        bh=tsoM+tENaiFBqsqZQ09FDA9C5Ccx/Wof1Q5+yXLoE5Y=;
+        b=ulKl2IT+xT5bfVtRMEaunsq6AGEy8+pbVnMUc0LCoHf6WX7FIvA6AuYNBSWKorMPRc
+         HbWzzBrdNL5VTLcvEHgX26t+XERuL06EKWQ/MT0ZuELAPvyziqTDv1yZdsJ+bjV6w0+L
+         +gdaieZtcy23CDtU9zN0IoMdAju+sDJbg8tfxU/4p0R68XJpBQ2Hgv3or/xtRchzK2rx
+         45h66Wxe5C3xHpkXvf1w1g7KDxSd+T5Mgs3/aMYiBxTLr3LBZ2gI+wb+frCLZuz91euu
+         Fa7XlfVLKg+Gf9zFbkDuL/4/YUGphI1QEXkOOxZ0M17sLawA+dIGDE9gPVpDNhvrizEZ
+         0cQw==
+X-Gm-Message-State: APjAAAVCTflxZle0iaO8d20uIXgIQWpRVbBTRLVipeHhWKMYKaTOB8E6
+        pJu77upHxh0vYIdsUYKvo8nGgIVZ
+X-Google-Smtp-Source: APXvYqwhKvQyCeqRH856GG4jVzX/chAb6GCO6SK9wi0Gwf4bHpFjmSwt3YAEys0Hoc9rUU43wZnilg==
+X-Received: by 2002:a5d:690e:: with SMTP id t14mr12921320wru.65.1576818862279;
+        Thu, 19 Dec 2019 21:14:22 -0800 (PST)
 Received: from localhost.localdomain (cable-86-56-100-90.cust.telecolumbus.net. [86.56.100.90])
-        by smtp.gmail.com with ESMTPSA id j12sm8703863wrt.55.2019.12.19.21.14.20
+        by smtp.gmail.com with ESMTPSA id j12sm8703863wrt.55.2019.12.19.21.14.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Dec 2019 21:14:20 -0800 (PST)
+        Thu, 19 Dec 2019 21:14:21 -0800 (PST)
 From:   sj38.park@gmail.com
 X-Google-Original-From: sjpark@amazon.de
 To:     shuah@kernel.org
@@ -51,9 +51,9 @@ Cc:     brendanhiggins@google.com, corbet@lwn.net,
         kunit-dev@googlegroups.com, linux-doc@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
         sj38.park@gmail.com, sjpark@amazon.com, sjpark@amazon.de
-Subject: [PATCH v7 3/6] kunit: Create default config in '--build_dir'
-Date:   Fri, 20 Dec 2019 05:14:05 +0000
-Message-Id: <20191220051408.3591-4-sjpark@amazon.de>
+Subject: [PATCH v7 4/6] kunit: Place 'test.log' under the 'build_dir'
+Date:   Fri, 20 Dec 2019 05:14:06 +0000
+Message-Id: <20191220051408.3591-5-sjpark@amazon.de>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20191220051408.3591-1-sjpark@amazon.de>
 References: <20191220051408.3591-1-sjpark@amazon.de>
@@ -64,72 +64,63 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 From: SeongJae Park <sjpark@amazon.de>
 
-If both '--build_dir' and '--defconfig' are given, the handling of
-'--defconfig' ignores '--build_dir' option.  This commit modifies the
-behavior to respect '--build_dir' option.
+'kunit' writes the 'test.log' under the kernel source directory even
+though a 'build_dir' option is given.  As users who use the option might
+expect the outputs to be placed under the specified directory, this
+commit modifies the logic to write the log file under the 'build_dir'.
 
-Reported-by: Brendan Higgins <brendanhiggins@google.com>
-Suggested-by: Brendan Higgins <brendanhiggins@google.com>
 Signed-off-by: SeongJae Park <sjpark@amazon.de>
 Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
 Tested-by: Brendan Higgins <brendanhiggins@google.com>
 ---
- tools/testing/kunit/kunit.py        | 11 +++++++++--
- tools/testing/kunit/kunit_kernel.py |  4 ++--
- 2 files changed, 11 insertions(+), 4 deletions(-)
+ tools/testing/kunit/kunit.py           | 2 +-
+ tools/testing/kunit/kunit_kernel.py    | 4 ++--
+ tools/testing/kunit/kunit_tool_test.py | 2 +-
+ 3 files changed, 4 insertions(+), 4 deletions(-)
 
 diff --git a/tools/testing/kunit/kunit.py b/tools/testing/kunit/kunit.py
-index f8f26951cd1b..5b222418eacd 100755
+index 5b222418eacd..e4250c4b06fb 100755
 --- a/tools/testing/kunit/kunit.py
 +++ b/tools/testing/kunit/kunit.py
-@@ -31,9 +31,9 @@ class KunitStatus(Enum):
- 	TEST_FAILURE = auto()
+@@ -105,7 +105,7 @@ def main(argv, linux=None):
+ 	run_parser.add_argument('--build_dir',
+ 				help='As in the make command, it specifies the build '
+ 				'directory.',
+-				type=str, default=None, metavar='build_dir')
++				type=str, default='', metavar='build_dir')
  
- def create_default_kunitconfig():
--	if not os.path.exists(kunit_kernel.KUNITCONFIG_PATH):
-+	if not os.path.exists(kunit_kernel.kunitconfig_path):
- 		shutil.copyfile('arch/um/configs/kunit_defconfig',
--				kunit_kernel.KUNITCONFIG_PATH)
-+				kunit_kernel.kunitconfig_path)
- 
- def run_tests(linux: kunit_kernel.LinuxSourceTree,
- 	      request: KunitRequest) -> KunitResult:
-@@ -114,6 +114,13 @@ def main(argv, linux=None):
- 	cli_args = parser.parse_args(argv)
- 
- 	if cli_args.subcommand == 'run':
-+		if cli_args.build_dir:
-+			if not os.path.exists(cli_args.build_dir):
-+				os.mkdir(cli_args.build_dir)
-+			kunit_kernel.kunitconfig_path = os.path.join(
-+				cli_args.build_dir,
-+				kunit_kernel.kunitconfig_path)
-+
- 		if cli_args.defconfig:
- 			create_default_kunitconfig()
- 
+ 	run_parser.add_argument('--defconfig',
+ 				help='Uses a default kunitconfig.',
 diff --git a/tools/testing/kunit/kunit_kernel.py b/tools/testing/kunit/kunit_kernel.py
-index bf3876835331..c04a12e2f711 100644
+index c04a12e2f711..a10c0c787bc1 100644
 --- a/tools/testing/kunit/kunit_kernel.py
 +++ b/tools/testing/kunit/kunit_kernel.py
-@@ -14,7 +14,7 @@ import os
- import kunit_config
+@@ -140,10 +140,10 @@ class LinuxSourceTree(object):
+ 			return False
+ 		return True
  
- KCONFIG_PATH = '.config'
--KUNITCONFIG_PATH = 'kunitconfig'
-+kunitconfig_path = 'kunitconfig'
+-	def run_kernel(self, args=[], timeout=None, build_dir=None):
++	def run_kernel(self, args=[], timeout=None, build_dir=''):
+ 		args.extend(['mem=256M'])
+ 		process = self._ops.linux_bin(args, timeout, build_dir)
+-		with open('test.log', 'w') as f:
++		with open(os.path.join(build_dir, 'test.log'), 'w') as f:
+ 			for line in process.stdout:
+ 				f.write(line.rstrip().decode('ascii') + '\n')
+ 				yield line.rstrip().decode('ascii')
+diff --git a/tools/testing/kunit/kunit_tool_test.py b/tools/testing/kunit/kunit_tool_test.py
+index a2a8ea6beae3..22f16e66b3c1 100755
+--- a/tools/testing/kunit/kunit_tool_test.py
++++ b/tools/testing/kunit/kunit_tool_test.py
+@@ -199,7 +199,7 @@ class KUnitMainTest(unittest.TestCase):
+ 		timeout = 3453
+ 		kunit.main(['run', '--timeout', str(timeout)], self.linux_source_mock)
+ 		assert self.linux_source_mock.build_reconfig.call_count == 1
+-		self.linux_source_mock.run_kernel.assert_called_once_with(build_dir=None, timeout=timeout)
++		self.linux_source_mock.run_kernel.assert_called_once_with(build_dir='', timeout=timeout)
+ 		self.print_mock.assert_any_call(StrContains('Testing complete.'))
  
- class ConfigError(Exception):
- 	"""Represents an error trying to configure the Linux kernel."""
-@@ -82,7 +82,7 @@ class LinuxSourceTree(object):
- 
- 	def __init__(self):
- 		self._kconfig = kunit_config.Kconfig()
--		self._kconfig.read_from_file(KUNITCONFIG_PATH)
-+		self._kconfig.read_from_file(kunitconfig_path)
- 		self._ops = LinuxSourceTreeOperations()
- 
- 	def clean(self):
+ if __name__ == '__main__':
 -- 
 2.17.1
 
