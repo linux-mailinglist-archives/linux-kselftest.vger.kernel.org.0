@@ -2,24 +2,24 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A27A2128709
-	for <lists+linux-kselftest@lfdr.de>; Sat, 21 Dec 2019 05:46:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 960FD1286F6
+	for <lists+linux-kselftest@lfdr.de>; Sat, 21 Dec 2019 05:46:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727266AbfLUEqn (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 20 Dec 2019 23:46:43 -0500
-Received: from mga03.intel.com ([134.134.136.65]:31837 "EHLO mga03.intel.com"
+        id S1727264AbfLUEqH (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 20 Dec 2019 23:46:07 -0500
+Received: from mga03.intel.com ([134.134.136.65]:31838 "EHLO mga03.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727190AbfLUEqF (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 20 Dec 2019 23:46:05 -0500
+        id S1727215AbfLUEqG (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 20 Dec 2019 23:46:06 -0500
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
 Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga103.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 20 Dec 2019 20:46:03 -0800
+  by orsmga103.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 20 Dec 2019 20:46:04 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.69,338,1571727600"; 
-   d="scan'208";a="222620119"
+   d="scan'208";a="222620123"
 Received: from sjchrist-coffee.jf.intel.com ([10.54.74.202])
-  by fmsmga001.fm.intel.com with ESMTP; 20 Dec 2019 20:46:03 -0800
+  by fmsmga001.fm.intel.com with ESMTP; 20 Dec 2019 20:46:04 -0800
 From:   Sean Christopherson <sean.j.christopherson@intel.com>
 To:     Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
@@ -46,9 +46,9 @@ Cc:     "H. Peter Anvin" <hpa@zytor.com>,
         linux-edac@vger.kernel.org, linux-pm@vger.kernel.org,
         linux-kselftest@vger.kernel.org, Borislav Petkov <bp@suse.de>,
         Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-Subject: [PATCH v5 14/19] KVM: VMX: Drop initialization of IA32_FEAT_CTL MSR
-Date:   Fri, 20 Dec 2019 20:45:08 -0800
-Message-Id: <20191221044513.21680-15-sean.j.christopherson@intel.com>
+Subject: [PATCH v5 15/19] KVM: VMX: Use VMX feature flag to query BIOS enabling
+Date:   Fri, 20 Dec 2019 20:45:09 -0800
+Message-Id: <20191221044513.21680-16-sean.j.christopherson@intel.com>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <20191221044513.21680-1-sean.j.christopherson@intel.com>
 References: <20191221044513.21680-1-sean.j.christopherson@intel.com>
@@ -59,98 +59,56 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Remove KVM's code to initialize IA32_FEAT_CTL MSR when KVM is loaded now
-that the MSR is initialized during boot on all CPUs that support VMX,
-i.e. on all CPUs that can possibly load kvm_intel.
+Replace KVM's manual checks on IA32_FEAT_CTL with a query on the boot
+CPU's MSR_IA32_FEAT_CTL and VMX feature flags.  The MSR_IA32_FEAT_CTL
+indicates that IA32_FEAT_CTL has been configured and that dependent
+features are accurately reflected in cpufeatures, e.g. the VMX flag is
+now cleared during boot if VMX isn't fully enabled via IA32_FEAT_CTL,
+including the case where the MSR isn't supported.
 
-Note, don't WARN if IA32_FEAT_CTL is unlocked, even though the MSR is
-unconditionally locked by init_ia32_feat_ctl().  KVM isn't tied directly
-to a CPU vendor detection, whereas init_ia32_feat_ctl() is invoked if
-and only if the CPU vendor is recognized and known to support VMX.  As a
-result, vmx_disabled_by_bios() may be reached without going through
-init_ia32_feat_ctl() and thus without locking IA32_FEAT_CTL.  This quirk
-will be eliminated in a future patch.
-
-Reviewed-by: Jim Mattson <jmattson@google.com>
 Signed-off-by: Sean Christopherson <sean.j.christopherson@intel.com>
 ---
- arch/x86/kvm/vmx/vmx.c | 48 +++++++++++++++++-------------------------
- 1 file changed, 19 insertions(+), 29 deletions(-)
+ arch/x86/kvm/vmx/vmx.c | 27 ++-------------------------
+ 1 file changed, 2 insertions(+), 25 deletions(-)
 
 diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-index 91b2517e3b62..a026334ffc58 100644
+index a026334ffc58..06e0e5262704 100644
 --- a/arch/x86/kvm/vmx/vmx.c
 +++ b/arch/x86/kvm/vmx/vmx.c
-@@ -2207,24 +2207,26 @@ static __init int vmx_disabled_by_bios(void)
- 	u64 msr;
+@@ -2204,31 +2204,8 @@ static __init int cpu_has_kvm_support(void)
  
- 	rdmsrl(MSR_IA32_FEAT_CTL, msr);
--	if (msr & FEAT_CTL_LOCKED) {
--		/* launched w/ TXT and VMX disabled */
--		if (!(msr & FEAT_CTL_VMX_ENABLED_INSIDE_SMX)
--			&& tboot_enabled())
--			return 1;
--		/* launched w/o TXT and VMX only enabled w/ TXT */
--		if (!(msr & FEAT_CTL_VMX_ENABLED_OUTSIDE_SMX)
--			&& (msr & FEAT_CTL_VMX_ENABLED_INSIDE_SMX)
--			&& !tboot_enabled()) {
--			printk(KERN_WARNING "kvm: disable TXT in the BIOS or "
--				"activate TXT before enabling KVM\n");
--			return 1;
--		}
--		/* launched w/o TXT and VMX disabled */
--		if (!(msr & FEAT_CTL_VMX_ENABLED_OUTSIDE_SMX)
--			&& !tboot_enabled())
--			return 1;
-+
-+	if (unlikely(!(msr & FEAT_CTL_LOCKED)))
-+		return 1;
-+
-+	/* launched w/ TXT and VMX disabled */
-+	if (!(msr & FEAT_CTL_VMX_ENABLED_INSIDE_SMX) &&
-+	    tboot_enabled())
-+		return 1;
-+	/* launched w/o TXT and VMX only enabled w/ TXT */
-+	if (!(msr & FEAT_CTL_VMX_ENABLED_OUTSIDE_SMX) &&
-+	    (msr & FEAT_CTL_VMX_ENABLED_INSIDE_SMX) &&
-+	    !tboot_enabled()) {
-+		pr_warn("kvm: disable TXT in the BIOS or "
-+			"activate TXT before enabling KVM\n");
-+		return 1;
- 	}
-+	/* launched w/o TXT and VMX disabled */
-+	if (!(msr & FEAT_CTL_VMX_ENABLED_OUTSIDE_SMX) &&
-+	    !tboot_enabled())
-+		return 1;
- 
- 	return 0;
- }
-@@ -2241,7 +2243,6 @@ static int hardware_enable(void)
+ static __init int vmx_disabled_by_bios(void)
  {
- 	int cpu = raw_smp_processor_id();
- 	u64 phys_addr = __pa(per_cpu(vmxarea, cpu));
--	u64 old, test_bits;
- 
- 	if (cr4_read_shadow() & X86_CR4_VMXE)
- 		return -EBUSY;
-@@ -2269,17 +2270,6 @@ static int hardware_enable(void)
- 	 */
- 	crash_enable_local_vmclear(cpu);
- 
--	rdmsrl(MSR_IA32_FEAT_CTL, old);
+-	u64 msr;
 -
--	test_bits = FEAT_CTL_LOCKED;
--	test_bits |= FEAT_CTL_VMX_ENABLED_OUTSIDE_SMX;
--	if (tboot_enabled())
--		test_bits |= FEAT_CTL_VMX_ENABLED_INSIDE_SMX;
+-	rdmsrl(MSR_IA32_FEAT_CTL, msr);
 -
--	if ((old & test_bits) != test_bits) {
--		/* enable and lock */
--		wrmsrl(MSR_IA32_FEAT_CTL, old | test_bits);
+-	if (unlikely(!(msr & FEAT_CTL_LOCKED)))
+-		return 1;
+-
+-	/* launched w/ TXT and VMX disabled */
+-	if (!(msr & FEAT_CTL_VMX_ENABLED_INSIDE_SMX) &&
+-	    tboot_enabled())
+-		return 1;
+-	/* launched w/o TXT and VMX only enabled w/ TXT */
+-	if (!(msr & FEAT_CTL_VMX_ENABLED_OUTSIDE_SMX) &&
+-	    (msr & FEAT_CTL_VMX_ENABLED_INSIDE_SMX) &&
+-	    !tboot_enabled()) {
+-		pr_warn("kvm: disable TXT in the BIOS or "
+-			"activate TXT before enabling KVM\n");
+-		return 1;
 -	}
- 	kvm_cpu_vmxon(phys_addr);
- 	if (enable_ept)
- 		ept_sync_global();
+-	/* launched w/o TXT and VMX disabled */
+-	if (!(msr & FEAT_CTL_VMX_ENABLED_OUTSIDE_SMX) &&
+-	    !tboot_enabled())
+-		return 1;
+-
+-	return 0;
++	return !boot_cpu_has(X86_FEATURE_MSR_IA32_FEAT_CTL) ||
++	       !boot_cpu_has(X86_FEATURE_VMX);
+ }
+ 
+ static void kvm_cpu_vmxon(u64 addr)
 -- 
 2.24.1
 
