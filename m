@@ -2,29 +2,29 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5ABCE1286CD
-	for <lists+linux-kselftest@lfdr.de>; Sat, 21 Dec 2019 04:44:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6121D1286D6
+	for <lists+linux-kselftest@lfdr.de>; Sat, 21 Dec 2019 04:48:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726783AbfLUDo6 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 20 Dec 2019 22:44:58 -0500
-Received: from mga06.intel.com ([134.134.136.31]:51368 "EHLO mga06.intel.com"
+        id S1726671AbfLUDsR (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 20 Dec 2019 22:48:17 -0500
+Received: from mga09.intel.com ([134.134.136.24]:11964 "EHLO mga09.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726613AbfLUDo5 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 20 Dec 2019 22:44:57 -0500
+        id S1726598AbfLUDsR (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 20 Dec 2019 22:48:17 -0500
 X-Amp-Result: UNKNOWN
 X-Amp-Original-Verdict: FILE UNKNOWN
 X-Amp-File-Uploaded: False
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga104.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 20 Dec 2019 19:44:54 -0800
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga102.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 20 Dec 2019 19:48:16 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.69,338,1571727600"; 
-   d="scan'208";a="228789519"
+   d="scan'208";a="206729201"
 Received: from sjchrist-coffee.jf.intel.com (HELO linux.intel.com) ([10.54.74.202])
-  by orsmga002.jf.intel.com with ESMTP; 20 Dec 2019 19:44:54 -0800
-Date:   Fri, 20 Dec 2019 19:44:54 -0800
+  by orsmga007.jf.intel.com with ESMTP; 20 Dec 2019 19:48:16 -0800
+Date:   Fri, 20 Dec 2019 19:48:16 -0800
 From:   Sean Christopherson <sean.j.christopherson@intel.com>
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Borislav Petkov <bp@alien8.de>,
         Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>, x86@kernel.org,
         "H. Peter Anvin" <hpa@zytor.com>,
@@ -46,38 +46,36 @@ Cc:     Paolo Bonzini <pbonzini@redhat.com>,
         linux-edac@vger.kernel.org, linux-pm@vger.kernel.org,
         linux-kselftest@vger.kernel.org,
         Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-Subject: Re: [PATCH v4 00/19] x86/cpu: Clean up handling of VMX features
-Message-ID: <20191221034454.GB22351@linux.intel.com>
+Subject: Re: [PATCH v4 11/19] x86/cpu: Print VMX flags in /proc/cpuinfo using
+ VMX_FEATURES_*
+Message-ID: <20191221034816.GC22351@linux.intel.com>
 References: <20191128014016.4389-1-sean.j.christopherson@intel.com>
- <20191212140755.GF4991@zn.tnic>
+ <20191128014016.4389-12-sean.j.christopherson@intel.com>
+ <20191212122646.GE4991@zn.tnic>
+ <d0b21e7e-69f5-09f9-3e1c-14d49fa42b9f@redhat.com>
+ <20191212181802.GH3163@linux.intel.com>
+ <2d6c0344-ccfa-13fc-695b-1e69298507dc@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20191212140755.GF4991@zn.tnic>
+In-Reply-To: <2d6c0344-ccfa-13fc-695b-1e69298507dc@redhat.com>
 User-Agent: Mutt/1.5.24 (2015-08-30)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Dec 12, 2019 at 03:07:55PM +0100, Borislav Petkov wrote:
-> On Wed, Nov 27, 2019 at 05:39:57PM -0800, Sean Christopherson wrote:
-> > Clean up a handful of interrelated warts in the kernel's handling of VMX:
+On Thu, Dec 12, 2019 at 07:23:46PM +0100, Paolo Bonzini wrote:
+> On 12/12/19 19:18, Sean Christopherson wrote:
+> > Using v<feature> across the board makes sense to keep things consistent,
+> > i.e. vnmi, vtpr, vapic, etc...
 > > 
-> >   - Enable VMX in IA32_FEATURE_CONTROL during boot instead of on-demand
-> >     during KVM load to avoid future contention over IA32_FEATURE_CONTROL.
-> > 
-> >   - Rework VMX feature reporting so that it is accurate and up-to-date,
-> >     now and in the future.
-> > 
-> >   - Consolidate code across CPUs that support VMX.
+> > Anyone have thoughts on how to shorten "APIC-register virtualization"
+> > without colliding with vapic or apicv?  I currently have apic_reg_virt,
+> > which is a bit wordy.  apic_regv isn't awful, but I don't love it.
 > 
-> Ok, this is shaping up slowly to be upstream-ready, AFAICT.
-> 
-> How are we merging the next revision, after the minor things have been
-> taken care of? Through tip?
-> 
-> Paolo?
+> Perhaps vapic_access and vapic_register?
 
-Tip would be my preference, we'll need to rebase the SGX series on this
-and tip would probably be slightly more convenient for that. 
+I ended up going with vapic and vapic_reg, figured everyone looking at
+this knows what "reg" is short for, and I like the progression shown by
+vapic -> vapic_reg.
