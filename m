@@ -2,24 +2,24 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E956128718
-	for <lists+linux-kselftest@lfdr.de>; Sat, 21 Dec 2019 05:47:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EC39D128713
+	for <lists+linux-kselftest@lfdr.de>; Sat, 21 Dec 2019 05:47:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727529AbfLUEq5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 20 Dec 2019 23:46:57 -0500
+        id S1727511AbfLUEqt (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 20 Dec 2019 23:46:49 -0500
 Received: from mga03.intel.com ([134.134.136.65]:31837 "EHLO mga03.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727138AbfLUEqD (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 20 Dec 2019 23:46:03 -0500
+        id S1727175AbfLUEqE (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 20 Dec 2019 23:46:04 -0500
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
 Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga103.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 20 Dec 2019 20:46:01 -0800
+  by orsmga103.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 20 Dec 2019 20:46:02 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.69,338,1571727600"; 
-   d="scan'208";a="222620108"
+   d="scan'208";a="222620115"
 Received: from sjchrist-coffee.jf.intel.com ([10.54.74.202])
-  by fmsmga001.fm.intel.com with ESMTP; 20 Dec 2019 20:46:01 -0800
+  by fmsmga001.fm.intel.com with ESMTP; 20 Dec 2019 20:46:02 -0800
 From:   Sean Christopherson <sean.j.christopherson@intel.com>
 To:     Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
@@ -46,9 +46,9 @@ Cc:     "H. Peter Anvin" <hpa@zytor.com>,
         linux-edac@vger.kernel.org, linux-pm@vger.kernel.org,
         linux-kselftest@vger.kernel.org, Borislav Petkov <bp@suse.de>,
         Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-Subject: [PATCH v5 12/19] x86/cpu: Set synthetic VMX cpufeatures during init_ia32_feat_ctl()
-Date:   Fri, 20 Dec 2019 20:45:06 -0800
-Message-Id: <20191221044513.21680-13-sean.j.christopherson@intel.com>
+Subject: [PATCH v5 13/19] x86/cpufeatures: Add flag to track whether MSR IA32_FEAT_CTL is configured
+Date:   Fri, 20 Dec 2019 20:45:07 -0800
+Message-Id: <20191221044513.21680-14-sean.j.christopherson@intel.com>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <20191221044513.21680-1-sean.j.christopherson@intel.com>
 References: <20191221044513.21680-1-sean.j.christopherson@intel.com>
@@ -59,230 +59,57 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Set the synthetic VMX cpufeatures, which need to be kept to preserve
-/proc/cpuinfo's ABI, in the common IA32_FEAT_CTL initialization code.
-Remove the vendor code that manually sets the synthetic flags.
+Add a new feature flag, X86_FEATURE_MSR_IA32_FEAT_CTL, to track whether
+IA32_FEAT_CTL has been initialized.  This will allow KVM, and any future
+subsystems that depend on IA32_FEAT_CTL, to rely purely on cpufeatures
+to query platform support, e.g. allows a future patch to remove KVM's
+manual IA32_FEAT_CTL MSR checks.
+
+Various features (on platforms that support IA32_FEAT_CTL) are dependent
+on IA32_FEAT_CTL being configured and locked, e.g. VMX and LMCE.  The
+MSR is always configured during boot, but only if the CPU vendor is
+recognized by the kernel.  Because CPUID doesn't incorporate the current
+IA32_FEAT_CTL value in its reporting of relevant features, it's possible
+for a feature to be reported as supported in cpufeatures but not truly
+enabled, e.g. if the CPU supports VMX but the kernel doesn't recognize
+the CPU.
+
+As a result, without the flag, KVM would see VMX as supported even if
+IA32_FEAT_CTL hasn't been initialized, and so would need to manually
+read the MSR and check the various enabling bits to avoid taking an
+unexpected #GP on VMXON.
 
 Signed-off-by: Sean Christopherson <sean.j.christopherson@intel.com>
 ---
- arch/x86/kernel/cpu/centaur.c  | 35 ------------------------
- arch/x86/kernel/cpu/feat_ctl.c | 14 ++++++++++
- arch/x86/kernel/cpu/intel.c    | 49 ----------------------------------
- arch/x86/kernel/cpu/zhaoxin.c  | 35 ------------------------
- 4 files changed, 14 insertions(+), 119 deletions(-)
+ arch/x86/include/asm/cpufeatures.h | 1 +
+ arch/x86/kernel/cpu/feat_ctl.c     | 2 ++
+ 2 files changed, 3 insertions(+)
 
-diff --git a/arch/x86/kernel/cpu/centaur.c b/arch/x86/kernel/cpu/centaur.c
-index 084f6040b4df..02d99feb333e 100644
---- a/arch/x86/kernel/cpu/centaur.c
-+++ b/arch/x86/kernel/cpu/centaur.c
-@@ -18,13 +18,6 @@
- #define RNG_ENABLED	(1 << 3)
- #define RNG_ENABLE	(1 << 6)	/* MSR_VIA_RNG */
+diff --git a/arch/x86/include/asm/cpufeatures.h b/arch/x86/include/asm/cpufeatures.h
+index e9b62498fe75..67d21b25ff78 100644
+--- a/arch/x86/include/asm/cpufeatures.h
++++ b/arch/x86/include/asm/cpufeatures.h
+@@ -220,6 +220,7 @@
+ #define X86_FEATURE_ZEN			( 7*32+28) /* "" CPU is AMD family 0x17 (Zen) */
+ #define X86_FEATURE_L1TF_PTEINV		( 7*32+29) /* "" L1TF workaround PTE inversion */
+ #define X86_FEATURE_IBRS_ENHANCED	( 7*32+30) /* Enhanced IBRS */
++#define X86_FEATURE_MSR_IA32_FEAT_CTL	( 7*32+31) /* "" MSR IA32_FEAT_CTL configured */
  
--#define X86_VMX_FEATURE_PROC_CTLS_TPR_SHADOW	0x00200000
--#define X86_VMX_FEATURE_PROC_CTLS_VNMI		0x00400000
--#define X86_VMX_FEATURE_PROC_CTLS_2ND_CTLS	0x80000000
--#define X86_VMX_FEATURE_PROC_CTLS2_VIRT_APIC	0x00000001
--#define X86_VMX_FEATURE_PROC_CTLS2_EPT		0x00000002
--#define X86_VMX_FEATURE_PROC_CTLS2_VPID		0x00000020
--
- static void init_c3(struct cpuinfo_x86 *c)
- {
- 	u32  lo, hi;
-@@ -119,31 +112,6 @@ static void early_init_centaur(struct cpuinfo_x86 *c)
- 	}
- }
- 
--static void centaur_detect_vmx_virtcap(struct cpuinfo_x86 *c)
--{
--	u32 vmx_msr_low, vmx_msr_high, msr_ctl, msr_ctl2;
--
--	rdmsr(MSR_IA32_VMX_PROCBASED_CTLS, vmx_msr_low, vmx_msr_high);
--	msr_ctl = vmx_msr_high | vmx_msr_low;
--
--	if (msr_ctl & X86_VMX_FEATURE_PROC_CTLS_TPR_SHADOW)
--		set_cpu_cap(c, X86_FEATURE_TPR_SHADOW);
--	if (msr_ctl & X86_VMX_FEATURE_PROC_CTLS_VNMI)
--		set_cpu_cap(c, X86_FEATURE_VNMI);
--	if (msr_ctl & X86_VMX_FEATURE_PROC_CTLS_2ND_CTLS) {
--		rdmsr(MSR_IA32_VMX_PROCBASED_CTLS2,
--		      vmx_msr_low, vmx_msr_high);
--		msr_ctl2 = vmx_msr_high | vmx_msr_low;
--		if ((msr_ctl2 & X86_VMX_FEATURE_PROC_CTLS2_VIRT_APIC) &&
--		    (msr_ctl & X86_VMX_FEATURE_PROC_CTLS_TPR_SHADOW))
--			set_cpu_cap(c, X86_FEATURE_FLEXPRIORITY);
--		if (msr_ctl2 & X86_VMX_FEATURE_PROC_CTLS2_EPT)
--			set_cpu_cap(c, X86_FEATURE_EPT);
--		if (msr_ctl2 & X86_VMX_FEATURE_PROC_CTLS2_VPID)
--			set_cpu_cap(c, X86_FEATURE_VPID);
--	}
--}
--
- static void init_centaur(struct cpuinfo_x86 *c)
- {
- #ifdef CONFIG_X86_32
-@@ -251,9 +219,6 @@ static void init_centaur(struct cpuinfo_x86 *c)
- #endif
- 
- 	init_ia32_feat_ctl(c);
--
--	if (cpu_has(c, X86_FEATURE_VMX))
--		centaur_detect_vmx_virtcap(c);
- }
- 
- #ifdef CONFIG_X86_32
+ /* Virtualization flags: Linux defined, word 8 */
+ #define X86_FEATURE_TPR_SHADOW		( 8*32+ 0) /* Intel TPR Shadow */
 diff --git a/arch/x86/kernel/cpu/feat_ctl.c b/arch/x86/kernel/cpu/feat_ctl.c
-index cbd8bfe9b87b..fcbb35533cef 100644
+index fcbb35533cef..24a4fdc1ab51 100644
 --- a/arch/x86/kernel/cpu/feat_ctl.c
 +++ b/arch/x86/kernel/cpu/feat_ctl.c
-@@ -75,6 +75,20 @@ static void init_vmx_capabilities(struct cpuinfo_x86 *c)
- 	    (c->vmx_capability[SECONDARY_CTLS] & VMX_F(VIRT_INTR_DELIVERY)) &&
- 	    (c->vmx_capability[MISC_FEATURES] & VMX_F(POSTED_INTR)))
- 		c->vmx_capability[MISC_FEATURES] |= VMX_F(APICV);
+@@ -126,6 +126,8 @@ void init_ia32_feat_ctl(struct cpuinfo_x86 *c)
+ 	wrmsrl(MSR_IA32_FEAT_CTL, msr);
+ 
+ update_caps:
++	set_cpu_cap(c, X86_FEATURE_MSR_IA32_FEAT_CTL);
 +
-+	/* Set the synthetic cpufeatures to preserve /proc/cpuinfo's ABI. */
-+	if (c->vmx_capability[PRIMARY_CTLS] & VMX_F(VIRTUAL_TPR))
-+		set_cpu_cap(c, X86_FEATURE_TPR_SHADOW);
-+	if (c->vmx_capability[MISC_FEATURES] & VMX_F(FLEXPRIORITY))
-+		set_cpu_cap(c, X86_FEATURE_FLEXPRIORITY);
-+	if (c->vmx_capability[MISC_FEATURES] & VMX_F(VIRTUAL_NMIS))
-+		set_cpu_cap(c, X86_FEATURE_VNMI);
-+	if (c->vmx_capability[SECONDARY_CTLS] & VMX_F(EPT))
-+		set_cpu_cap(c, X86_FEATURE_EPT);
-+	if (c->vmx_capability[MISC_FEATURES] & VMX_F(EPT_AD))
-+		set_cpu_cap(c, X86_FEATURE_EPT_AD);
-+	if (c->vmx_capability[MISC_FEATURES] & VMX_F(VPID))
-+		set_cpu_cap(c, X86_FEATURE_VPID);
- }
- #endif /* CONFIG_X86_VMX_FEATURE_NAMES */
+ 	if (!cpu_has(c, X86_FEATURE_VMX))
+ 		return;
  
-diff --git a/arch/x86/kernel/cpu/intel.c b/arch/x86/kernel/cpu/intel.c
-index 9129c170ea11..57473e2c0869 100644
---- a/arch/x86/kernel/cpu/intel.c
-+++ b/arch/x86/kernel/cpu/intel.c
-@@ -494,52 +494,6 @@ static void srat_detect_node(struct cpuinfo_x86 *c)
- #endif
- }
- 
--static void detect_vmx_virtcap(struct cpuinfo_x86 *c)
--{
--	/* Intel VMX MSR indicated features */
--#define X86_VMX_FEATURE_PROC_CTLS_TPR_SHADOW	0x00200000
--#define X86_VMX_FEATURE_PROC_CTLS_VNMI		0x00400000
--#define X86_VMX_FEATURE_PROC_CTLS_2ND_CTLS	0x80000000
--#define X86_VMX_FEATURE_PROC_CTLS2_VIRT_APIC	0x00000001
--#define X86_VMX_FEATURE_PROC_CTLS2_EPT		0x00000002
--#define X86_VMX_FEATURE_PROC_CTLS2_VPID		0x00000020
--#define x86_VMX_FEATURE_EPT_CAP_AD		0x00200000
--
--	u32 vmx_msr_low, vmx_msr_high, msr_ctl, msr_ctl2;
--	u32 msr_vpid_cap, msr_ept_cap;
--
--	clear_cpu_cap(c, X86_FEATURE_TPR_SHADOW);
--	clear_cpu_cap(c, X86_FEATURE_VNMI);
--	clear_cpu_cap(c, X86_FEATURE_FLEXPRIORITY);
--	clear_cpu_cap(c, X86_FEATURE_EPT);
--	clear_cpu_cap(c, X86_FEATURE_VPID);
--	clear_cpu_cap(c, X86_FEATURE_EPT_AD);
--
--	rdmsr(MSR_IA32_VMX_PROCBASED_CTLS, vmx_msr_low, vmx_msr_high);
--	msr_ctl = vmx_msr_high | vmx_msr_low;
--	if (msr_ctl & X86_VMX_FEATURE_PROC_CTLS_TPR_SHADOW)
--		set_cpu_cap(c, X86_FEATURE_TPR_SHADOW);
--	if (msr_ctl & X86_VMX_FEATURE_PROC_CTLS_VNMI)
--		set_cpu_cap(c, X86_FEATURE_VNMI);
--	if (msr_ctl & X86_VMX_FEATURE_PROC_CTLS_2ND_CTLS) {
--		rdmsr(MSR_IA32_VMX_PROCBASED_CTLS2,
--		      vmx_msr_low, vmx_msr_high);
--		msr_ctl2 = vmx_msr_high | vmx_msr_low;
--		if ((msr_ctl2 & X86_VMX_FEATURE_PROC_CTLS2_VIRT_APIC) &&
--		    (msr_ctl & X86_VMX_FEATURE_PROC_CTLS_TPR_SHADOW))
--			set_cpu_cap(c, X86_FEATURE_FLEXPRIORITY);
--		if (msr_ctl2 & X86_VMX_FEATURE_PROC_CTLS2_EPT) {
--			set_cpu_cap(c, X86_FEATURE_EPT);
--			rdmsr(MSR_IA32_VMX_EPT_VPID_CAP,
--			      msr_ept_cap, msr_vpid_cap);
--			if (msr_ept_cap & x86_VMX_FEATURE_EPT_CAP_AD)
--				set_cpu_cap(c, X86_FEATURE_EPT_AD);
--		}
--		if (msr_ctl2 & X86_VMX_FEATURE_PROC_CTLS2_VPID)
--			set_cpu_cap(c, X86_FEATURE_VPID);
--	}
--}
--
- #define MSR_IA32_TME_ACTIVATE		0x982
- 
- /* Helpers to access TME_ACTIVATE MSR */
-@@ -757,9 +711,6 @@ static void init_intel(struct cpuinfo_x86 *c)
- 
- 	init_ia32_feat_ctl(c);
- 
--	if (cpu_has(c, X86_FEATURE_VMX))
--		detect_vmx_virtcap(c);
--
- 	if (cpu_has(c, X86_FEATURE_TME))
- 		detect_tme(c);
- 
-diff --git a/arch/x86/kernel/cpu/zhaoxin.c b/arch/x86/kernel/cpu/zhaoxin.c
-index 630a1450ea70..6b2d3b0a63e6 100644
---- a/arch/x86/kernel/cpu/zhaoxin.c
-+++ b/arch/x86/kernel/cpu/zhaoxin.c
-@@ -16,13 +16,6 @@
- #define RNG_ENABLED	(1 << 3)
- #define RNG_ENABLE	(1 << 8)	/* MSR_ZHAOXIN_RNG */
- 
--#define X86_VMX_FEATURE_PROC_CTLS_TPR_SHADOW	0x00200000
--#define X86_VMX_FEATURE_PROC_CTLS_VNMI		0x00400000
--#define X86_VMX_FEATURE_PROC_CTLS_2ND_CTLS	0x80000000
--#define X86_VMX_FEATURE_PROC_CTLS2_VIRT_APIC	0x00000001
--#define X86_VMX_FEATURE_PROC_CTLS2_EPT		0x00000002
--#define X86_VMX_FEATURE_PROC_CTLS2_VPID		0x00000020
--
- static void init_zhaoxin_cap(struct cpuinfo_x86 *c)
- {
- 	u32  lo, hi;
-@@ -89,31 +82,6 @@ static void early_init_zhaoxin(struct cpuinfo_x86 *c)
- 
- }
- 
--static void zhaoxin_detect_vmx_virtcap(struct cpuinfo_x86 *c)
--{
--	u32 vmx_msr_low, vmx_msr_high, msr_ctl, msr_ctl2;
--
--	rdmsr(MSR_IA32_VMX_PROCBASED_CTLS, vmx_msr_low, vmx_msr_high);
--	msr_ctl = vmx_msr_high | vmx_msr_low;
--
--	if (msr_ctl & X86_VMX_FEATURE_PROC_CTLS_TPR_SHADOW)
--		set_cpu_cap(c, X86_FEATURE_TPR_SHADOW);
--	if (msr_ctl & X86_VMX_FEATURE_PROC_CTLS_VNMI)
--		set_cpu_cap(c, X86_FEATURE_VNMI);
--	if (msr_ctl & X86_VMX_FEATURE_PROC_CTLS_2ND_CTLS) {
--		rdmsr(MSR_IA32_VMX_PROCBASED_CTLS2,
--		      vmx_msr_low, vmx_msr_high);
--		msr_ctl2 = vmx_msr_high | vmx_msr_low;
--		if ((msr_ctl2 & X86_VMX_FEATURE_PROC_CTLS2_VIRT_APIC) &&
--		    (msr_ctl & X86_VMX_FEATURE_PROC_CTLS_TPR_SHADOW))
--			set_cpu_cap(c, X86_FEATURE_FLEXPRIORITY);
--		if (msr_ctl2 & X86_VMX_FEATURE_PROC_CTLS2_EPT)
--			set_cpu_cap(c, X86_FEATURE_EPT);
--		if (msr_ctl2 & X86_VMX_FEATURE_PROC_CTLS2_VPID)
--			set_cpu_cap(c, X86_FEATURE_VPID);
--	}
--}
--
- static void init_zhaoxin(struct cpuinfo_x86 *c)
- {
- 	early_init_zhaoxin(c);
-@@ -142,9 +110,6 @@ static void init_zhaoxin(struct cpuinfo_x86 *c)
- #endif
- 
- 	init_ia32_feat_ctl(c);
--
--	if (cpu_has(c, X86_FEATURE_VMX))
--		zhaoxin_detect_vmx_virtcap(c);
- }
- 
- #ifdef CONFIG_X86_32
 -- 
 2.24.1
 
