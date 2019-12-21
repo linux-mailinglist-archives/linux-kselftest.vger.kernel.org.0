@@ -2,24 +2,24 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 33DF3128733
+	by mail.lfdr.de (Postfix) with ESMTP id A6B82128734
 	for <lists+linux-kselftest@lfdr.de>; Sat, 21 Dec 2019 05:47:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726885AbfLUEp5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 20 Dec 2019 23:45:57 -0500
-Received: from mga03.intel.com ([134.134.136.65]:31827 "EHLO mga03.intel.com"
+        id S1727605AbfLUEr3 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 20 Dec 2019 23:47:29 -0500
+Received: from mga03.intel.com ([134.134.136.65]:31834 "EHLO mga03.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726705AbfLUEpz (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 20 Dec 2019 23:45:55 -0500
+        id S1726861AbfLUEp5 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 20 Dec 2019 23:45:57 -0500
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
 Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga103.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 20 Dec 2019 20:45:53 -0800
+  by orsmga103.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 20 Dec 2019 20:45:54 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.69,338,1571727600"; 
-   d="scan'208";a="222620067"
+   d="scan'208";a="222620071"
 Received: from sjchrist-coffee.jf.intel.com ([10.54.74.202])
-  by fmsmga001.fm.intel.com with ESMTP; 20 Dec 2019 20:45:53 -0800
+  by fmsmga001.fm.intel.com with ESMTP; 20 Dec 2019 20:45:54 -0800
 From:   Sean Christopherson <sean.j.christopherson@intel.com>
 To:     Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
@@ -46,9 +46,9 @@ Cc:     "H. Peter Anvin" <hpa@zytor.com>,
         linux-edac@vger.kernel.org, linux-pm@vger.kernel.org,
         linux-kselftest@vger.kernel.org, Borislav Petkov <bp@suse.de>,
         Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-Subject: [PATCH v5 03/19] tools arch x86: Sync msr-index.h from kernel sources
-Date:   Fri, 20 Dec 2019 20:44:57 -0800
-Message-Id: <20191221044513.21680-4-sean.j.christopherson@intel.com>
+Subject: [PATCH v5 04/19] x86/intel: Initialize IA32_FEAT_CTL MSR at boot
+Date:   Fri, 20 Dec 2019 20:44:58 -0800
+Message-Id: <20191221044513.21680-5-sean.j.christopherson@intel.com>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <20191221044513.21680-1-sean.j.christopherson@intel.com>
 References: <20191221044513.21680-1-sean.j.christopherson@intel.com>
@@ -59,93 +59,140 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Sync msr-index.h to pull in recent renames of the IA32_FEATURE_CONTROL
-MSR definitions.  Update KVM's VMX selftest and turbostat accordingly.
-Keep the full name in turbostat's output to avoid breaking someone's
-workflow, e.g. if a script is looking for the full name.
+Opportunistically initialize IA32_FEAT_CTL to enable VMX when the MSR is
+left unlocked by BIOS.  Configuring feature control at boot time paves
+the way for similar enabling of other features, e.g. Software Guard
+Extensions (SGX).
 
-While using the renamed defines is by no means necessary, do the sync
-now to avoid leaving a landmine that will get stepped on the next time
-msr-index.h needs to be refreshed for some other reason.
+Temporarily leave equivalent KVM code in place in order to avoid
+introducing a regression on Centaur and Zhaoxin CPUs, e.g. removing
+KVM's code would leave the MSR unlocked on those CPUs and would break
+existing functionality if people are loading kvm_intel on Centaur and/or
+Zhaoxin.  Defer enablement of the boot-time configuration on Centaur and
+Zhaoxin to future patches to aid bisection.
 
-No functional change intended.
+Note, Local Machine Check Exceptions (LMCE) are also supported by the
+kernel and enabled via feature control, but the kernel currently uses
+LMCE if and and only if the feature is explicitly enabled by BIOS.  Keep
+the current behavior to avoid introducing bugs, future patches can opt
+in to opportunistic enabling if it's deemed desirable to do so.
 
+Always lock IA32_FEAT_CTL if it exists, even if the CPU doesn't support
+VMX, so that other existing and future kernel code that queries the MSR
+can assume it's locked.
+
+Start from a clean slate when constructing the value to write to
+IA32_FEAT_CTL, i.e. ignore whatever value BIOS left in the MSR so as not
+to enable random features or fault on the WRMSR.
+
+Suggested-by: Borislav Petkov <bp@suse.de>
+Cc: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
 Signed-off-by: Sean Christopherson <sean.j.christopherson@intel.com>
 ---
- tools/arch/x86/include/asm/msr-index.h       | 14 ++++++++------
- tools/power/x86/turbostat/turbostat.c        |  4 ++--
- tools/testing/selftests/kvm/lib/x86_64/vmx.c |  8 ++++----
- 3 files changed, 14 insertions(+), 12 deletions(-)
+ arch/x86/Kconfig.cpu           |  4 ++++
+ arch/x86/kernel/cpu/Makefile   |  1 +
+ arch/x86/kernel/cpu/cpu.h      |  4 ++++
+ arch/x86/kernel/cpu/feat_ctl.c | 37 ++++++++++++++++++++++++++++++++++
+ arch/x86/kernel/cpu/intel.c    |  2 ++
+ 5 files changed, 48 insertions(+)
+ create mode 100644 arch/x86/kernel/cpu/feat_ctl.c
 
-diff --git a/tools/arch/x86/include/asm/msr-index.h b/tools/arch/x86/include/asm/msr-index.h
-index 084e98da04a7..ebe1685e92dd 100644
---- a/tools/arch/x86/include/asm/msr-index.h
-+++ b/tools/arch/x86/include/asm/msr-index.h
-@@ -558,7 +558,14 @@
- #define MSR_IA32_EBL_CR_POWERON		0x0000002a
- #define MSR_EBC_FREQUENCY_ID		0x0000002c
- #define MSR_SMI_COUNT			0x00000034
--#define MSR_IA32_FEATURE_CONTROL        0x0000003a
+diff --git a/arch/x86/Kconfig.cpu b/arch/x86/Kconfig.cpu
+index af9c967782f6..98be76fa2978 100644
+--- a/arch/x86/Kconfig.cpu
++++ b/arch/x86/Kconfig.cpu
+@@ -387,6 +387,10 @@ config X86_DEBUGCTLMSR
+ 	def_bool y
+ 	depends on !(MK6 || MWINCHIPC6 || MWINCHIP3D || MCYRIXIII || M586MMX || M586TSC || M586 || M486SX || M486) && !UML
+ 
++config IA32_FEAT_CTL
++	def_bool y
++	depends on CPU_SUP_INTEL
 +
-+/* Referred to as IA32_FEATURE_CONTROL in Intel's SDM. */
-+#define MSR_IA32_FEAT_CTL		0x0000003a
-+#define FEAT_CTL_LOCKED				BIT(0)
-+#define FEAT_CTL_VMX_ENABLED_INSIDE_SMX		BIT(1)
-+#define FEAT_CTL_VMX_ENABLED_OUTSIDE_SMX	BIT(2)
-+#define FEAT_CTL_LMCE_ENABLED			BIT(20)
+ menuconfig PROCESSOR_SELECT
+ 	bool "Supported processor vendors" if EXPERT
+ 	---help---
+diff --git a/arch/x86/kernel/cpu/Makefile b/arch/x86/kernel/cpu/Makefile
+index a704fb9ee98e..4173b0de7a2f 100644
+--- a/arch/x86/kernel/cpu/Makefile
++++ b/arch/x86/kernel/cpu/Makefile
+@@ -32,6 +32,7 @@ obj-y			+= umwait.o
+ obj-$(CONFIG_PROC_FS)	+= proc.o
+ obj-$(CONFIG_X86_FEATURE_NAMES) += capflags.o powerflags.o
+ 
++obj-$(CONFIG_IA32_FEAT_CTL) += feat_ctl.o
+ ifdef CONFIG_CPU_SUP_INTEL
+ obj-y			+= intel.o intel_pconfig.o tsx.o
+ obj-$(CONFIG_PM)	+= intel_epb.o
+diff --git a/arch/x86/kernel/cpu/cpu.h b/arch/x86/kernel/cpu/cpu.h
+index 38ab6e115eac..37fdefd14f28 100644
+--- a/arch/x86/kernel/cpu/cpu.h
++++ b/arch/x86/kernel/cpu/cpu.h
+@@ -80,4 +80,8 @@ extern void x86_spec_ctrl_setup_ap(void);
+ 
+ extern u64 x86_read_arch_cap_msr(void);
+ 
++#ifdef CONFIG_IA32_FEAT_CTL
++void init_ia32_feat_ctl(struct cpuinfo_x86 *c);
++#endif
 +
- #define MSR_IA32_TSC_ADJUST             0x0000003b
- #define MSR_IA32_BNDCFGS		0x00000d90
+ #endif /* ARCH_X86_CPU_H */
+diff --git a/arch/x86/kernel/cpu/feat_ctl.c b/arch/x86/kernel/cpu/feat_ctl.c
+new file mode 100644
+index 000000000000..c4f8f767853b
+--- /dev/null
++++ b/arch/x86/kernel/cpu/feat_ctl.c
+@@ -0,0 +1,37 @@
++// SPDX-License-Identifier: GPL-2.0
++#include <linux/tboot.h>
++
++#include <asm/cpufeature.h>
++#include <asm/msr-index.h>
++#include <asm/processor.h>
++
++void init_ia32_feat_ctl(struct cpuinfo_x86 *c)
++{
++	u64 msr;
++
++	if (rdmsrl_safe(MSR_IA32_FEAT_CTL, &msr))
++		return;
++
++	if (msr & FEAT_CTL_LOCKED)
++		return;
++
++	/*
++	 * Ignore whatever value BIOS left in the MSR to avoid enabling random
++	 * features or faulting on the WRMSR.
++	 */
++	msr = FEAT_CTL_LOCKED;
++
++	/*
++	 * Enable VMX if and only if the kernel may do VMXON at some point,
++	 * i.e. KVM is enabled, to avoid unnecessarily adding an attack vector
++	 * for the kernel, e.g. using VMX to hide malicious code.
++	 */
++	if (cpu_has(c, X86_FEATURE_VMX) && IS_ENABLED(CONFIG_KVM_INTEL)) {
++		msr |= FEAT_CTL_VMX_ENABLED_OUTSIDE_SMX;
++
++		if (tboot_enabled())
++			msr |= FEAT_CTL_VMX_ENABLED_INSIDE_SMX;
++	}
++
++	wrmsrl(MSR_IA32_FEAT_CTL, msr);
++}
+diff --git a/arch/x86/kernel/cpu/intel.c b/arch/x86/kernel/cpu/intel.c
+index 4a900804a023..9129c170ea11 100644
+--- a/arch/x86/kernel/cpu/intel.c
++++ b/arch/x86/kernel/cpu/intel.c
+@@ -755,6 +755,8 @@ static void init_intel(struct cpuinfo_x86 *c)
+ 	/* Work around errata */
+ 	srat_detect_node(c);
  
-@@ -566,11 +573,6 @@
++	init_ia32_feat_ctl(c);
++
+ 	if (cpu_has(c, X86_FEATURE_VMX))
+ 		detect_vmx_virtcap(c);
  
- #define MSR_IA32_XSS			0x00000da0
- 
--#define FEATURE_CONTROL_LOCKED				(1<<0)
--#define FEATURE_CONTROL_VMXON_ENABLED_INSIDE_SMX	(1<<1)
--#define FEATURE_CONTROL_VMXON_ENABLED_OUTSIDE_SMX	(1<<2)
--#define FEATURE_CONTROL_LMCE				(1<<20)
--
- #define MSR_IA32_APICBASE		0x0000001b
- #define MSR_IA32_APICBASE_BSP		(1<<8)
- #define MSR_IA32_APICBASE_ENABLE	(1<<11)
-diff --git a/tools/power/x86/turbostat/turbostat.c b/tools/power/x86/turbostat/turbostat.c
-index 5d0fddda842c..31c1ca0bb3ee 100644
---- a/tools/power/x86/turbostat/turbostat.c
-+++ b/tools/power/x86/turbostat/turbostat.c
-@@ -4499,10 +4499,10 @@ void decode_feature_control_msr(void)
- {
- 	unsigned long long msr;
- 
--	if (!get_msr(base_cpu, MSR_IA32_FEATURE_CONTROL, &msr))
-+	if (!get_msr(base_cpu, MSR_IA32_FEAT_CTL, &msr))
- 		fprintf(outf, "cpu%d: MSR_IA32_FEATURE_CONTROL: 0x%08llx (%sLocked %s)\n",
- 			base_cpu, msr,
--			msr & FEATURE_CONTROL_LOCKED ? "" : "UN-",
-+			msr & FEAT_CTL_LOCKED ? "" : "UN-",
- 			msr & (1 << 18) ? "SGX" : "");
- }
- 
-diff --git a/tools/testing/selftests/kvm/lib/x86_64/vmx.c b/tools/testing/selftests/kvm/lib/x86_64/vmx.c
-index f6ec97b7eaef..85064baf5e97 100644
---- a/tools/testing/selftests/kvm/lib/x86_64/vmx.c
-+++ b/tools/testing/selftests/kvm/lib/x86_64/vmx.c
-@@ -157,11 +157,11 @@ bool prepare_for_vmx_operation(struct vmx_pages *vmx)
- 	 *  Bit 2: Enables VMXON outside of SMX operation. If clear, VMXON
- 	 *    outside of SMX causes a #GP.
- 	 */
--	required = FEATURE_CONTROL_VMXON_ENABLED_OUTSIDE_SMX;
--	required |= FEATURE_CONTROL_LOCKED;
--	feature_control = rdmsr(MSR_IA32_FEATURE_CONTROL);
-+	required = FEAT_CTL_VMX_ENABLED_OUTSIDE_SMX;
-+	required |= FEAT_CTL_LOCKED;
-+	feature_control = rdmsr(MSR_IA32_FEAT_CTL);
- 	if ((feature_control & required) != required)
--		wrmsr(MSR_IA32_FEATURE_CONTROL, feature_control | required);
-+		wrmsr(MSR_IA32_FEAT_CTL, feature_control | required);
- 
- 	/* Enter VMX root operation. */
- 	*(uint32_t *)(vmx->vmxon) = vmcs_revision();
 -- 
 2.24.1
 
