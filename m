@@ -2,280 +2,498 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A06E12A62A
-	for <lists+linux-kselftest@lfdr.de>; Wed, 25 Dec 2019 06:26:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B2A5E12AEED
+	for <lists+linux-kselftest@lfdr.de>; Thu, 26 Dec 2019 22:27:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726397AbfLYF0S (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 25 Dec 2019 00:26:18 -0500
-Received: from mail.kernel.org ([198.145.29.99]:54772 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725784AbfLYF0R (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 25 Dec 2019 00:26:17 -0500
-Received: from localhost (unknown [5.29.147.182])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 1B55D2071E;
-        Wed, 25 Dec 2019 05:26:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1577251576;
-        bh=XecFfsaVDZ9xwmzIy/JIRjF1C/8kAWJZBoR2IY+F2RA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=bq/liqXfuKDGJm/bGg4q9hFXMmE+Y/AuB7AQqgBxYhO1C6nmQsQelIzCX1v5I5WAy
-         wsBPrYaZwpLUi6WCN7S+YTK/tktc66fQ/jur1rAeqVmCtqwwKEWcnC46thxPwqkyMA
-         SXjSVJZNN56CsSF4ioskprUfCvid80SsCXRVwzPk=
-Date:   Wed, 25 Dec 2019 07:26:12 +0200
-From:   Leon Romanovsky <leon@kernel.org>
-To:     John Hubbard <jhubbard@nvidia.com>
-Cc:     Jason Gunthorpe <jgg@ziepe.ca>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn.topel@intel.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Dave Chinner <david@fromorbit.com>,
-        David Airlie <airlied@linux.ie>,
-        "David S . Miller" <davem@davemloft.net>,
-        Ira Weiny <ira.weiny@intel.com>, Jan Kara <jack@suse.cz>,
-        Jens Axboe <axboe@kernel.dk>, Jonathan Corbet <corbet@lwn.net>,
-        =?iso-8859-1?B?Suly9G1l?= Glisse <jglisse@redhat.com>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Michal Hocko <mhocko@suse.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Paul Mackerras <paulus@samba.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Vlastimil Babka <vbabka@suse.cz>, bpf@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, kvm@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-rdma@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, netdev@vger.kernel.org,
-        linux-mm@kvack.org, LKML <linux-kernel@vger.kernel.org>,
-        Maor Gottlieb <maorg@mellanox.com>,
-        Ran Rozenstein <ranro@mellanox.com>
-Subject: Re: [PATCH v11 00/25] mm/gup: track dma-pinned pages: FOLL_PIN
-Message-ID: <20191225052612.GA212002@unreal>
-References: <20191216222537.491123-1-jhubbard@nvidia.com>
- <20191219132607.GA410823@unreal>
- <a4849322-8e17-119e-a664-80d9f95d850b@nvidia.com>
- <20191219210743.GN17227@ziepe.ca>
- <20191220182939.GA10944@unreal>
- <1001a5fc-a71d-9c0f-1090-546c4913d8a2@nvidia.com>
- <20191222132357.GF13335@unreal>
- <49d57efe-85e1-6910-baf5-c18df1382206@nvidia.com>
+        id S1726653AbfLZV1a (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 26 Dec 2019 16:27:30 -0500
+Received: from mail-il1-f176.google.com ([209.85.166.176]:33324 "EHLO
+        mail-il1-f176.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726442AbfLZV1a (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 26 Dec 2019 16:27:30 -0500
+Received: by mail-il1-f176.google.com with SMTP id v15so21060902iln.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 26 Dec 2019 13:27:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=to:cc:from:subject:message-id:date:user-agent:mime-version
+         :content-language;
+        bh=RJfOZVN3TcBH/XoG7lR9pBKxEzz5CfXs+3B1l1UJr7E=;
+        b=UqDWb8YVtmGQvN8GJubn52OpDj1ZVlmzR1rR7m12O3v2Po6DFFYswjVXchxBcFZGqO
+         EkYo4oRUNRDQcPEyTBIYrVJAPqUMXynsZrossTkvmtph/lfZFwT73MRkee0kItAgcNr6
+         Sww6/UHREE/RdgVk8aBstAO172+a5cYEk/x6Y=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:to:cc:from:subject:message-id:date:user-agent
+         :mime-version:content-language;
+        bh=RJfOZVN3TcBH/XoG7lR9pBKxEzz5CfXs+3B1l1UJr7E=;
+        b=icdSrf7sh53OjQ77/pkmaJl+MRoVzVSPAH0EgLxkU6E3qdc4RoHTdcOGpZHvSyKa0j
+         b+lV7ty5FWDwpoqNWrl6vvX5ES2gXDXQp5s+mliRv89SlyaZjhcVYKGAV8IhxWu/yOwS
+         V+umZxvgT0cPy2DRlfNGw0VVwZefTlEVMdKxjg9PjrX8HXav32GBwIoJaGKessweFy7X
+         xOl0TpTrnw4DJhvLhFUjhGnKajiOSKKxcZM1JebuD+mgYILqUjzbaiu94glnVSctVN0g
+         BEQvoOcf5KWOo+qucl7j8QTI8eiQLyZaa4kuh+Y0pz5f6vvnHbJOHhIDsSl3XYVj6k3x
+         DF0A==
+X-Gm-Message-State: APjAAAXumgx/HDIKHAqoClZVEH0yxW3eqBz2xJf/2QlMTaiLII47BFxO
+        b+Y3F8yeuPWQbAsH+FlzhVLR1i/YPJAfAQ==
+X-Google-Smtp-Source: APXvYqzWUg2n2pN+z+v/hTdS+jwBFLs35CJTChgHy57q8YvMl088pnXweXzLfJcg0RE1LUxWbfuPJg==
+X-Received: by 2002:a92:838f:: with SMTP id p15mr40517033ilk.91.1577395649597;
+        Thu, 26 Dec 2019 13:27:29 -0800 (PST)
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
+        by smtp.gmail.com with ESMTPSA id z81sm11505744ilc.17.2019.12.26.13.27.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 26 Dec 2019 13:27:28 -0800 (PST)
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Shuah Khan <skhan@linuxfoundation.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        SeongJae Park <sjpark@amazon.de>, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Subject: [GIT PULL] Kselftest fixes update for Linux 5.5-rc4
+Message-ID: <ff093d74-a232-8dfc-d632-196a7a13b611@linuxfoundation.org>
+Date:   Thu, 26 Dec 2019 14:27:27 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.2.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <49d57efe-85e1-6910-baf5-c18df1382206@nvidia.com>
+Content-Type: multipart/mixed;
+ boundary="------------F2659E4A04661FD971CD5793"
+Content-Language: en-US
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Dec 24, 2019 at 06:03:50PM -0800, John Hubbard wrote:
-> On 12/22/19 5:23 AM, Leon Romanovsky wrote:
-> > On Fri, Dec 20, 2019 at 03:54:55PM -0800, John Hubbard wrote:
-> > > On 12/20/19 10:29 AM, Leon Romanovsky wrote:
-> > > ...
-> > > > > $ ./build.sh
-> > > > > $ build/bin/run_tests.py
-> > > > >
-> > > > > If you get things that far I think Leon can get a reproduction for you
-> > > >
-> > > > I'm not so optimistic about that.
-> > > >
-> > >
-> > > OK, I'm going to proceed for now on the assumption that I've got an overflow
-> > > problem that happens when huge pages are pinned. If I can get more information,
-> > > great, otherwise it's probably enough.
-> > >
-> > > One thing: for your repro, if you know the huge page size, and the system
-> > > page size for that case, that would really help. Also the number of pins per
-> > > page, more or less, that you'd expect. Because Jason says that only 2M huge
-> > > pages are used...
-> > >
-> > > Because the other possibility is that the refcount really is going negative,
-> > > likely due to a mismatched pin/unpin somehow.
-> > >
-> > > If there's not an obvious repro case available, but you do have one (is it easy
-> > > to repro, though?), then *if* you have the time, I could point you to a github
-> > > branch that reduces GUP_PIN_COUNTING_BIAS by, say, 4x, by applying this:
-> > >
-> > > diff --git a/include/linux/mm.h b/include/linux/mm.h
-> > > index bb44c4d2ada7..8526fd03b978 100644
-> > > --- a/include/linux/mm.h
-> > > +++ b/include/linux/mm.h
-> > > @@ -1077,7 +1077,7 @@ static inline void put_page(struct page *page)
-> > >    * get_user_pages and page_mkclean and other calls that race to set up page
-> > >    * table entries.
-> > >    */
-> > > -#define GUP_PIN_COUNTING_BIAS (1U << 10)
-> > > +#define GUP_PIN_COUNTING_BIAS (1U << 8)
-> > >
-> > >   void unpin_user_page(struct page *page);
-> > >   void unpin_user_pages_dirty_lock(struct page **pages, unsigned long npages,
-> > >
-> > > If that fails to repro, then we would be zeroing in on the root cause.
-> > >
-> > > The branch is here (I just tested it and it seems healthy):
-> > >
-> > > git@github.com:johnhubbard/linux.git  pin_user_pages_tracking_v11_with_diags
-> >
-> > Hi,
-> >
-> > We tested the following branch and here comes results:
->
-> Thanks for this testing run!
->
-> > [root@server consume_mtts]# (master) $ grep foll_pin /proc/vmstat
-> > nr_foll_pin_requested 0
-> > nr_foll_pin_returned 0
-> >
->
-> Zero pinned pages!
+This is a multi-part message in MIME format.
+--------------F2659E4A04661FD971CD5793
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Maybe we are missing some CONFIG_* option?
-https://lore.kernel.org/linux-rdma/12a28917-f8c9-5092-2f01-92bb74714cae@nvidia.com/T/#mf900896f5dfc86cdee9246219990c632ed77115f
+Hi Linus,
 
->
-> ...now I'm confused. Somehow FOLL_PIN and pin_user_pages*() calls are
-> not happening. And although the backtraces below show some of my new
-> routines (like try_grab_page), they also confirm the above: there is no
-> pin_user_page*() call in the stack.
->
-> In particular, it looks like ib_umem_get() is calling through to
-> get_user_pages*(), rather than pin_user_pages*(). I don't see how this
-> is possible, because the code on my screen shows ib_umem_get() calling
-> pin_user_pages_fast().
->
-> Any thoughts or ideas are welcome here.
->
-> However, glossing over all of that and assuming that the new
-> GUP_PIN_COUNTING_BIAS of 256 is applied, it's interesting that we still
-> see any overflow. I'm less confident now that this is a true refcount
-> overflow.
+Please pull the following Kselftest update for Linux 5.5-rc4.
 
-Earlier in this email thread, I posted possible function call chain which
-doesn't involve refcount overflow, but for some reason the refcount
-overflow was chosen as a way to explore.
+This Kselftest update for Linux 5.5-rc4 consists of:
 
->
-> Also, any information that would get me closer to being able to attempt
-> my own reproduction of the problem are *very* welcome. :)
+-- rseq build failures fixes related to glibc 2.30 compatibility
+    from Mathieu Desnoyers
+-- Kunit fixes and cleanups from SeongJae Park
+-- Fixes to filesystems/epoll, firmware, and livepatch build failures
+    and skip handling.
 
-It is ancient verification test (~10y) which is not an easy task to
-make it understandable and standalone :).
+diff is attached.
 
->
-> thanks,
-> --
-> John Hubbard
-> NVIDIA
->
-> > [root@serer consume_mtts]# (master) $ dmesg
-> > [  425.221459] ------------[ cut here ]------------
-> > [  425.225894] WARNING: CPU: 1 PID: 6738 at mm/gup.c:61 try_grab_compound_head+0x90/0xa0
-> > [  425.228021] Modules linked in: mlx5_ib mlx5_core mlxfw mlx4_ib mlx4_en ptp pps_core mlx4_core bonding ip6_gre ip6_tunnel tunnel6 ip_gre gre ip_tunnel rdma_rxe ip6_udp_tunnel udp_tunnel rdma_ucm ib_uverbs ib_ipoib ib_umad ib_srp scsi_transport_srp rpcrdma ib_iser libiscsi scsi_transport_iscsi rdma_cm iw_cm ib_cm ib_core [last unloaded: mlxfw]
-> > [  425.235266] CPU: 1 PID: 6738 Comm: consume_mtts Tainted: G           O      5.5.0-rc2+ #1
-> > [  425.237480] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.10.2-1ubuntu1 04/01/2014
-> > [  425.239738] RIP: 0010:try_grab_compound_head+0x90/0xa0
-> > [  425.241170] Code: 06 48 8d 4f 34 f0 0f b1 57 34 74 cd 85 c0 74 cf 8d 14 06 f0 0f b1 11 74 c0 eb f1 8d 14 06 f0 0f b1 11 74 b5 85 c0 75 f3 eb b5 <0f> 0b 31 c0 c3 90 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 41
-> > [  425.245739] RSP: 0018:ffffc900006878a8 EFLAGS: 00010082
-> > [  425.247124] RAX: 0000000080000001 RBX: 00007f780488a000 RCX: 0000000000000bb0
-> > [  425.248956] RDX: ffffea000e031087 RSI: 0000000000008a00 RDI: ffffea000dc58000
-> > [  425.250761] RBP: ffffea000e031080 R08: ffffc90000687974 R09: 000fffffffe00000
-> > [  425.252661] R10: 0000000000000000 R11: ffff888362560000 R12: 000000000000008a
-> > [  425.254487] R13: 80000003716000e7 R14: 00007f780488a000 R15: ffffc90000687974
-> > [  425.256309] FS:  00007f780d9d3740(0000) GS:ffff8883b1c80000(0000) knlGS:0000000000000000
-> > [  425.258401] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> > [  425.259949] CR2: 0000000002334048 CR3: 000000039c68c001 CR4: 00000000001606a0
-> > [  425.261884] Call Trace:
-> > [  425.262735]  gup_pgd_range+0x517/0x5a0
-> > [  425.263819]  internal_get_user_pages_fast+0x210/0x250
-> > [  425.265193]  ib_umem_get+0x298/0x550 [ib_uverbs]
-> > [  425.266476]  mr_umem_get+0xc9/0x260 [mlx5_ib]
-> > [  425.267699]  mlx5_ib_reg_user_mr+0xcc/0x7e0 [mlx5_ib]
-> > [  425.269134]  ? xas_load+0x8/0x80
-> > [  425.270074]  ? xa_load+0x48/0x90
-> > [  425.271038]  ? lookup_get_idr_uobject.part.10+0x12/0x70 [ib_uverbs]
-> > [  425.272757]  ib_uverbs_reg_mr+0x127/0x280 [ib_uverbs]
-> > [  425.274120]  ib_uverbs_handler_UVERBS_METHOD_INVOKE_WRITE+0xc2/0xf0 [ib_uverbs]
-> > [  425.276058]  ib_uverbs_cmd_verbs.isra.6+0x5be/0xbe0 [ib_uverbs]
-> > [  425.277657]  ? uverbs_disassociate_api+0xd0/0xd0 [ib_uverbs]
-> > [  425.279155]  ? __alloc_pages_nodemask+0x148/0x2b0
-> > [  425.280445]  ib_uverbs_ioctl+0xc0/0x120 [ib_uverbs]
-> > [  425.281755]  do_vfs_ioctl+0x9d/0x650
-> > [  425.282766]  ksys_ioctl+0x70/0x80
-> > [  425.283745]  __x64_sys_ioctl+0x16/0x20
-> > [  425.284912]  do_syscall_64+0x42/0x130
-> > [  425.285973]  entry_SYSCALL_64_after_hwframe+0x44/0xa9
-> > [  425.287377] RIP: 0033:0x7f780d2df267
-> > [  425.288449] Code: b3 66 90 48 8b 05 19 3c 2c 00 64 c7 00 26 00 00 00 48 c7 c0 ff ff ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 b8 10 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 8b 0d e9 3b 2c 00 f7 d8 64 89 01 48
-> > [  425.293073] RSP: 002b:00007ffce49a88a8 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
-> > [  425.295034] RAX: ffffffffffffffda RBX: 00007ffce49a8938 RCX: 00007f780d2df267
-> > [  425.296895] RDX: 00007ffce49a8920 RSI: 00000000c0181b01 RDI: 0000000000000003
-> > [  425.298689] RBP: 00007ffce49a8900 R08: 0000000000000003 R09: 00007f780d9a1010
-> > [  425.300480] R10: 00000000ffffffff R11: 0000000000000246 R12: 00007f780d9a1150
-> > [  425.302290] R13: 00007ffce49a8900 R14: 00007ffce49a8ad8 R15: 00007f780468a000
-> > [  425.304113] ---[ end trace 1ecbefdb403190dd ]---
-> > [  425.305434] ------------[ cut here ]------------
-> > [  425.307147] WARNING: CPU: 1 PID: 6738 at mm/gup.c:150 try_grab_page+0x56/0x60
-> > [  425.309111] Modules linked in: mlx5_ib mlx5_core mlxfw mlx4_ib mlx4_en ptp pps_core mlx4_core bonding ip6_gre ip6_tunnel tunnel6 ip_gre gre ip_tunnel rdma_rxe ip6_udp_tunnel udp_tunnel rdma_ucm ib_uverbs ib_ipoib ib_umad ib_srp scsi_transport_srp rpcrdma ib_iser libiscsi scsi_transport_iscsi rdma_cm iw_cm ib_cm ib_core [last unloaded: mlxfw]
-> > [  425.316461] CPU: 1 PID: 6738 Comm: consume_mtts Tainted: G        W  O      5.5.0-rc2+ #1
-> > [  425.318582] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.10.2-1ubuntu1 04/01/2014
-> > [  425.320958] RIP: 0010:try_grab_page+0x56/0x60
-> > [  425.322167] Code: 7e 28 f0 81 47 34 00 01 00 00 c3 48 8b 47 08 48 8d 50 ff a8 01 48 0f 45 fa 8b 47 34 85 c0 7e 0f f0 ff 47 34 b8 01 00 00 00 c3 <0f> 0b 31 c0 c3 0f 0b 31 c0 c3 0f 1f 44 00 00 41 57 41 56 41 55 41
-> > [  425.326814] RSP: 0018:ffffc90000687830 EFLAGS: 00010282
-> > [  425.328226] RAX: 0000000000000001 RBX: ffffea000dc58000 RCX: ffffea000e031087
-> > [  425.330104] RDX: 0000000080000001 RSI: 0000000000040000 RDI: ffffea000dc58000
-> > [  425.331980] RBP: 00007f7804800000 R08: 000ffffffffff000 R09: 80000003716000e7
-> > [  425.333898] R10: ffff88834af80120 R11: ffff8883ac16f000 R12: ffff88834af80120
-> > [  425.335704] R13: ffff88837c0915c0 R14: 0000000000050201 R15: 00007f7804800000
-> > [  425.337638] FS:  00007f780d9d3740(0000) GS:ffff8883b1c80000(0000) knlGS:0000000000000000
-> > [  425.339734] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> > [  425.341369] CR2: 0000000002334048 CR3: 000000039c68c001 CR4: 00000000001606a0
-> > [  425.343160] Call Trace:
-> > [  425.343967]  follow_trans_huge_pmd+0x16f/0x2e0
-> > [  425.345263]  follow_p4d_mask+0x51c/0x630
-> > [  425.346344]  __get_user_pages+0x1a1/0x6c0
-> > [  425.347463]  internal_get_user_pages_fast+0x17b/0x250
-> > [  425.348918]  ib_umem_get+0x298/0x550 [ib_uverbs]
-> > [  425.350174]  mr_umem_get+0xc9/0x260 [mlx5_ib]
-> > [  425.351383]  mlx5_ib_reg_user_mr+0xcc/0x7e0 [mlx5_ib]
-> > [  425.352849]  ? xas_load+0x8/0x80
-> > [  425.353776]  ? xa_load+0x48/0x90
-> > [  425.354730]  ? lookup_get_idr_uobject.part.10+0x12/0x70 [ib_uverbs]
-> > [  425.356410]  ib_uverbs_reg_mr+0x127/0x280 [ib_uverbs]
-> > [  425.357843]  ib_uverbs_handler_UVERBS_METHOD_INVOKE_WRITE+0xc2/0xf0 [ib_uverbs]
-> > [  425.359749]  ib_uverbs_cmd_verbs.isra.6+0x5be/0xbe0 [ib_uverbs]
-> > [  425.361405]  ? uverbs_disassociate_api+0xd0/0xd0 [ib_uverbs]
-> > [  425.362898]  ? __alloc_pages_nodemask+0x148/0x2b0
-> > [  425.364206]  ib_uverbs_ioctl+0xc0/0x120 [ib_uverbs]
-> > [  425.365564]  do_vfs_ioctl+0x9d/0x650
-> > [  425.366567]  ksys_ioctl+0x70/0x80
-> > [  425.367537]  __x64_sys_ioctl+0x16/0x20
-> > [  425.368698]  do_syscall_64+0x42/0x130
-> > [  425.369782]  entry_SYSCALL_64_after_hwframe+0x44/0xa9
-> > [  425.371117] RIP: 0033:0x7f780d2df267
-> > [  425.372159] Code: b3 66 90 48 8b 05 19 3c 2c 00 64 c7 00 26 00 00 00 48 c7 c0 ff ff ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 b8 10 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 8b 0d e9 3b 2c 00 f7 d8 64 89 01 48
-> > [  425.376774] RSP: 002b:00007ffce49a88a8 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
-> > [  425.378740] RAX: ffffffffffffffda RBX: 00007ffce49a8938 RCX: 00007f780d2df267
-> > [  425.380598] RDX: 00007ffce49a8920 RSI: 00000000c0181b01 RDI: 0000000000000003
-> > [  425.382411] RBP: 00007ffce49a8900 R08: 0000000000000003 R09: 00007f780d9a1010
-> > [  425.384312] R10: 00000000ffffffff R11: 0000000000000246 R12: 00007f780d9a1150
-> > [  425.386132] R13: 00007ffce49a8900 R14: 00007ffce49a8ad8 R15: 00007f780468a000
-> > [  425.387964] ---[ end trace 1ecbefdb403190de ]---
-> >
-> > Thanks
-> >
-> > >
-> > >
-> > >
-> > > thanks,
-> > > --
-> > > John Hubbard
-> > > NVIDIA
+thanks,
+-- Shuah
+
+----------------------------------------------------------------
+
+The following changes since commit 46cf053efec6a3a5f343fead837777efe8252a46:
+
+   Linux 5.5-rc3 (2019-12-22 17:02:23 -0800)
+
+are available in the Git repository at:
+
+   git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest 
+tags/linux-kselftest-5.5-rc4
+
+for you to fetch changes up to 2a1f40adfb54ca65dc4c93bad444dd23b800a76e:
+
+   rseq/selftests: Clarify rseq_prepare_unload() helper requirements 
+(2019-12-23 10:52:41 -0700)
+
+----------------------------------------------------------------
+linux-kselftest-5.5-rc4
+
+This Kselftest update for Linux 5.5-rc4 consists of:
+
+-- rseq build failures fixes related to glibc 2.30 compatibility
+    from Mathieu Desnoyers
+-- Kunit fixes and cleanups from SeongJae Park
+-- Fixes to filesystems/epoll, firmware, and livepatch build failures
+    and skip handling.
+
+----------------------------------------------------------------
+Mathieu Desnoyers (3):
+       rseq/selftests: Turn off timeout setting
+       rseq/selftests: Fix: Namespace gettid() for compatibility with 
+glibc 2.30
+       rseq/selftests: Clarify rseq_prepare_unload() helper requirements
+
+SeongJae Park (6):
+       docs/kunit/start: Use in-tree 'kunit_defconfig'
+       kunit: Remove duplicated defconfig creation
+       kunit: Create default config in '--build_dir'
+       kunit: Place 'test.log' under the 'build_dir'
+       kunit: Rename 'kunitconfig' to '.kunitconfig'
+       kunit/kunit_tool_test: Test '--build_dir' option run
+
+Shuah Khan (3):
+       selftests: filesystems/epoll: fix build error
+       selftests: firmware: Fix it to do root uid check and skip
+       selftests: livepatch: Fix it to do root uid check and skip
+
+  Documentation/dev-tools/kunit/start.rst            | 13 +++++--------
+  tools/testing/kunit/kunit.py                       | 18 +++++++++++-------
+  tools/testing/kunit/kunit_kernel.py                | 10 +++++-----
+  tools/testing/kunit/kunit_tool_test.py             | 10 +++++++++-
+  tools/testing/selftests/filesystems/epoll/Makefile |  2 +-
+  tools/testing/selftests/firmware/fw_lib.sh         |  6 ++++++
+  tools/testing/selftests/livepatch/functions.sh     | 15 ++++++++++++++-
+  tools/testing/selftests/livepatch/test-state.sh    |  3 +--
+  tools/testing/selftests/rseq/param_test.c          | 18 ++++++++++--------
+  tools/testing/selftests/rseq/rseq.h                | 12 +++++++-----
+  tools/testing/selftests/rseq/settings              |  1 +
+  11 files changed, 70 insertions(+), 38 deletions(-)
+  create mode 100644 tools/testing/selftests/rseq/settings
+
+----------------------------------------------------------------
+
+--------------F2659E4A04661FD971CD5793
+Content-Type: text/x-patch; charset=UTF-8;
+ name="linux-kselftest-5.5-rc4.diff"
+Content-Transfer-Encoding: 7bit
+Content-Disposition: attachment;
+ filename="linux-kselftest-5.5-rc4.diff"
+
+diff --git a/Documentation/dev-tools/kunit/start.rst b/Documentation/dev-tools/kunit/start.rst
+index 9d6db892c41c..4e1d24db6b13 100644
+--- a/Documentation/dev-tools/kunit/start.rst
++++ b/Documentation/dev-tools/kunit/start.rst
+@@ -24,19 +24,16 @@ The wrapper can be run with:
+ For more information on this wrapper (also called kunit_tool) checkout the
+ :doc:`kunit-tool` page.
+ 
+-Creating a kunitconfig
+-======================
++Creating a .kunitconfig
++=======================
+ The Python script is a thin wrapper around Kbuild. As such, it needs to be
+-configured with a ``kunitconfig`` file. This file essentially contains the
++configured with a ``.kunitconfig`` file. This file essentially contains the
+ regular Kernel config, with the specific test targets as well.
+ 
+ .. code-block:: bash
+ 
+-	git clone -b master https://kunit.googlesource.com/kunitconfig $PATH_TO_KUNITCONFIG_REPO
+ 	cd $PATH_TO_LINUX_REPO
+-	ln -s $PATH_TO_KUNIT_CONFIG_REPO/kunitconfig kunitconfig
+-
+-You may want to add kunitconfig to your local gitignore.
++	cp arch/um/configs/kunit_defconfig .kunitconfig
+ 
+ Verifying KUnit Works
+ ---------------------
+@@ -151,7 +148,7 @@ and the following to ``drivers/misc/Makefile``:
+ 
+ 	obj-$(CONFIG_MISC_EXAMPLE_TEST) += example-test.o
+ 
+-Now add it to your ``kunitconfig``:
++Now add it to your ``.kunitconfig``:
+ 
+ .. code-block:: none
+ 
+diff --git a/tools/testing/kunit/kunit.py b/tools/testing/kunit/kunit.py
+index efe06d621983..e59eb9e7f923 100755
+--- a/tools/testing/kunit/kunit.py
++++ b/tools/testing/kunit/kunit.py
+@@ -31,15 +31,12 @@ class KunitStatus(Enum):
+ 	TEST_FAILURE = auto()
+ 
+ def create_default_kunitconfig():
+-	if not os.path.exists(kunit_kernel.KUNITCONFIG_PATH):
++	if not os.path.exists(kunit_kernel.kunitconfig_path):
+ 		shutil.copyfile('arch/um/configs/kunit_defconfig',
+-				kunit_kernel.KUNITCONFIG_PATH)
++				kunit_kernel.kunitconfig_path)
+ 
+ def run_tests(linux: kunit_kernel.LinuxSourceTree,
+ 	      request: KunitRequest) -> KunitResult:
+-	if request.defconfig:
+-		create_default_kunitconfig()
+-
+ 	config_start = time.time()
+ 	success = linux.build_reconfig(request.build_dir)
+ 	config_end = time.time()
+@@ -108,15 +105,22 @@ def main(argv, linux=None):
+ 	run_parser.add_argument('--build_dir',
+ 				help='As in the make command, it specifies the build '
+ 				'directory.',
+-				type=str, default=None, metavar='build_dir')
++				type=str, default='', metavar='build_dir')
+ 
+ 	run_parser.add_argument('--defconfig',
+-				help='Uses a default kunitconfig.',
++				help='Uses a default .kunitconfig.',
+ 				action='store_true')
+ 
+ 	cli_args = parser.parse_args(argv)
+ 
+ 	if cli_args.subcommand == 'run':
++		if cli_args.build_dir:
++			if not os.path.exists(cli_args.build_dir):
++				os.mkdir(cli_args.build_dir)
++			kunit_kernel.kunitconfig_path = os.path.join(
++				cli_args.build_dir,
++				kunit_kernel.kunitconfig_path)
++
+ 		if cli_args.defconfig:
+ 			create_default_kunitconfig()
+ 
+diff --git a/tools/testing/kunit/kunit_kernel.py b/tools/testing/kunit/kunit_kernel.py
+index bf3876835331..cc5d844ecca1 100644
+--- a/tools/testing/kunit/kunit_kernel.py
++++ b/tools/testing/kunit/kunit_kernel.py
+@@ -14,7 +14,7 @@ import os
+ import kunit_config
+ 
+ KCONFIG_PATH = '.config'
+-KUNITCONFIG_PATH = 'kunitconfig'
++kunitconfig_path = '.kunitconfig'
+ 
+ class ConfigError(Exception):
+ 	"""Represents an error trying to configure the Linux kernel."""
+@@ -82,7 +82,7 @@ class LinuxSourceTree(object):
+ 
+ 	def __init__(self):
+ 		self._kconfig = kunit_config.Kconfig()
+-		self._kconfig.read_from_file(KUNITCONFIG_PATH)
++		self._kconfig.read_from_file(kunitconfig_path)
+ 		self._ops = LinuxSourceTreeOperations()
+ 
+ 	def clean(self):
+@@ -111,7 +111,7 @@ class LinuxSourceTree(object):
+ 		return True
+ 
+ 	def build_reconfig(self, build_dir):
+-		"""Creates a new .config if it is not a subset of the kunitconfig."""
++		"""Creates a new .config if it is not a subset of the .kunitconfig."""
+ 		kconfig_path = get_kconfig_path(build_dir)
+ 		if os.path.exists(kconfig_path):
+ 			existing_kconfig = kunit_config.Kconfig()
+@@ -140,10 +140,10 @@ class LinuxSourceTree(object):
+ 			return False
+ 		return True
+ 
+-	def run_kernel(self, args=[], timeout=None, build_dir=None):
++	def run_kernel(self, args=[], timeout=None, build_dir=''):
+ 		args.extend(['mem=256M'])
+ 		process = self._ops.linux_bin(args, timeout, build_dir)
+-		with open('test.log', 'w') as f:
++		with open(os.path.join(build_dir, 'test.log'), 'w') as f:
+ 			for line in process.stdout:
+ 				f.write(line.rstrip().decode('ascii') + '\n')
+ 				yield line.rstrip().decode('ascii')
+diff --git a/tools/testing/kunit/kunit_tool_test.py b/tools/testing/kunit/kunit_tool_test.py
+index a2a8ea6beae3..cba97756ac4a 100755
+--- a/tools/testing/kunit/kunit_tool_test.py
++++ b/tools/testing/kunit/kunit_tool_test.py
+@@ -174,6 +174,7 @@ class KUnitMainTest(unittest.TestCase):
+ 		kunit.main(['run'], self.linux_source_mock)
+ 		assert self.linux_source_mock.build_reconfig.call_count == 1
+ 		assert self.linux_source_mock.run_kernel.call_count == 1
++		self.linux_source_mock.run_kernel.assert_called_once_with(build_dir='', timeout=300)
+ 		self.print_mock.assert_any_call(StrContains('Testing complete.'))
+ 
+ 	def test_run_passes_args_fail(self):
+@@ -199,7 +200,14 @@ class KUnitMainTest(unittest.TestCase):
+ 		timeout = 3453
+ 		kunit.main(['run', '--timeout', str(timeout)], self.linux_source_mock)
+ 		assert self.linux_source_mock.build_reconfig.call_count == 1
+-		self.linux_source_mock.run_kernel.assert_called_once_with(build_dir=None, timeout=timeout)
++		self.linux_source_mock.run_kernel.assert_called_once_with(build_dir='', timeout=timeout)
++		self.print_mock.assert_any_call(StrContains('Testing complete.'))
++
++	def test_run_builddir(self):
++		build_dir = '.kunit'
++		kunit.main(['run', '--build_dir', build_dir], self.linux_source_mock)
++		assert self.linux_source_mock.build_reconfig.call_count == 1
++		self.linux_source_mock.run_kernel.assert_called_once_with(build_dir=build_dir, timeout=300)
+ 		self.print_mock.assert_any_call(StrContains('Testing complete.'))
+ 
+ if __name__ == '__main__':
+diff --git a/tools/testing/selftests/filesystems/epoll/Makefile b/tools/testing/selftests/filesystems/epoll/Makefile
+index e62f3d4f68da..78ae4aaf7141 100644
+--- a/tools/testing/selftests/filesystems/epoll/Makefile
++++ b/tools/testing/selftests/filesystems/epoll/Makefile
+@@ -1,7 +1,7 @@
+ # SPDX-License-Identifier: GPL-2.0
+ 
+ CFLAGS += -I../../../../../usr/include/
+-LDFLAGS += -lpthread
++LDLIBS += -lpthread
+ TEST_GEN_PROGS := epoll_wakeup_test
+ 
+ include ../../lib.mk
+diff --git a/tools/testing/selftests/firmware/fw_lib.sh b/tools/testing/selftests/firmware/fw_lib.sh
+index b879305a766d..5b8c0fedee76 100755
+--- a/tools/testing/selftests/firmware/fw_lib.sh
++++ b/tools/testing/selftests/firmware/fw_lib.sh
+@@ -34,6 +34,12 @@ test_modprobe()
+ 
+ check_mods()
+ {
++	local uid=$(id -u)
++	if [ $uid -ne 0 ]; then
++		echo "skip all tests: must be run as root" >&2
++		exit $ksft_skip
++	fi
++
+ 	trap "test_modprobe" EXIT
+ 	if [ ! -d $DIR ]; then
+ 		modprobe test_firmware
+diff --git a/tools/testing/selftests/livepatch/functions.sh b/tools/testing/selftests/livepatch/functions.sh
+index 31eb09e38729..a6e3d5517a6f 100644
+--- a/tools/testing/selftests/livepatch/functions.sh
++++ b/tools/testing/selftests/livepatch/functions.sh
+@@ -7,6 +7,9 @@
+ MAX_RETRIES=600
+ RETRY_INTERVAL=".1"	# seconds
+ 
++# Kselftest framework requirement - SKIP code is 4
++ksft_skip=4
++
+ # log(msg) - write message to kernel log
+ #	msg - insightful words
+ function log() {
+@@ -18,7 +21,16 @@ function log() {
+ function skip() {
+ 	log "SKIP: $1"
+ 	echo "SKIP: $1" >&2
+-	exit 4
++	exit $ksft_skip
++}
++
++# root test
++function is_root() {
++	uid=$(id -u)
++	if [ $uid -ne 0 ]; then
++		echo "skip all tests: must be run as root" >&2
++		exit $ksft_skip
++	fi
+ }
+ 
+ # die(msg) - game over, man
+@@ -62,6 +74,7 @@ function set_ftrace_enabled() {
+ #		 for verbose livepatching output and turn on
+ #		 the ftrace_enabled sysctl.
+ function setup_config() {
++	is_root
+ 	push_config
+ 	set_dynamic_debug
+ 	set_ftrace_enabled 1
+diff --git a/tools/testing/selftests/livepatch/test-state.sh b/tools/testing/selftests/livepatch/test-state.sh
+index dc2908c22c26..a08212708115 100755
+--- a/tools/testing/selftests/livepatch/test-state.sh
++++ b/tools/testing/selftests/livepatch/test-state.sh
+@@ -8,8 +8,7 @@ MOD_LIVEPATCH=test_klp_state
+ MOD_LIVEPATCH2=test_klp_state2
+ MOD_LIVEPATCH3=test_klp_state3
+ 
+-set_dynamic_debug
+-
++setup_config
+ 
+ # TEST: Loading and removing a module that modifies the system state
+ 
+diff --git a/tools/testing/selftests/rseq/param_test.c b/tools/testing/selftests/rseq/param_test.c
+index eec2663261f2..e8a657a5f48a 100644
+--- a/tools/testing/selftests/rseq/param_test.c
++++ b/tools/testing/selftests/rseq/param_test.c
+@@ -15,7 +15,7 @@
+ #include <errno.h>
+ #include <stddef.h>
+ 
+-static inline pid_t gettid(void)
++static inline pid_t rseq_gettid(void)
+ {
+ 	return syscall(__NR_gettid);
+ }
+@@ -373,11 +373,12 @@ void *test_percpu_spinlock_thread(void *arg)
+ 		rseq_percpu_unlock(&data->lock, cpu);
+ #ifndef BENCHMARK
+ 		if (i != 0 && !(i % (reps / 10)))
+-			printf_verbose("tid %d: count %lld\n", (int) gettid(), i);
++			printf_verbose("tid %d: count %lld\n",
++				       (int) rseq_gettid(), i);
+ #endif
+ 	}
+ 	printf_verbose("tid %d: number of rseq abort: %d, signals delivered: %u\n",
+-		       (int) gettid(), nr_abort, signals_delivered);
++		       (int) rseq_gettid(), nr_abort, signals_delivered);
+ 	if (!opt_disable_rseq && thread_data->reg &&
+ 	    rseq_unregister_current_thread())
+ 		abort();
+@@ -454,11 +455,12 @@ void *test_percpu_inc_thread(void *arg)
+ 		} while (rseq_unlikely(ret));
+ #ifndef BENCHMARK
+ 		if (i != 0 && !(i % (reps / 10)))
+-			printf_verbose("tid %d: count %lld\n", (int) gettid(), i);
++			printf_verbose("tid %d: count %lld\n",
++				       (int) rseq_gettid(), i);
+ #endif
+ 	}
+ 	printf_verbose("tid %d: number of rseq abort: %d, signals delivered: %u\n",
+-		       (int) gettid(), nr_abort, signals_delivered);
++		       (int) rseq_gettid(), nr_abort, signals_delivered);
+ 	if (!opt_disable_rseq && thread_data->reg &&
+ 	    rseq_unregister_current_thread())
+ 		abort();
+@@ -605,7 +607,7 @@ void *test_percpu_list_thread(void *arg)
+ 	}
+ 
+ 	printf_verbose("tid %d: number of rseq abort: %d, signals delivered: %u\n",
+-		       (int) gettid(), nr_abort, signals_delivered);
++		       (int) rseq_gettid(), nr_abort, signals_delivered);
+ 	if (!opt_disable_rseq && rseq_unregister_current_thread())
+ 		abort();
+ 
+@@ -796,7 +798,7 @@ void *test_percpu_buffer_thread(void *arg)
+ 	}
+ 
+ 	printf_verbose("tid %d: number of rseq abort: %d, signals delivered: %u\n",
+-		       (int) gettid(), nr_abort, signals_delivered);
++		       (int) rseq_gettid(), nr_abort, signals_delivered);
+ 	if (!opt_disable_rseq && rseq_unregister_current_thread())
+ 		abort();
+ 
+@@ -1011,7 +1013,7 @@ void *test_percpu_memcpy_buffer_thread(void *arg)
+ 	}
+ 
+ 	printf_verbose("tid %d: number of rseq abort: %d, signals delivered: %u\n",
+-		       (int) gettid(), nr_abort, signals_delivered);
++		       (int) rseq_gettid(), nr_abort, signals_delivered);
+ 	if (!opt_disable_rseq && rseq_unregister_current_thread())
+ 		abort();
+ 
+diff --git a/tools/testing/selftests/rseq/rseq.h b/tools/testing/selftests/rseq/rseq.h
+index d40d60e7499e..3f63eb362b92 100644
+--- a/tools/testing/selftests/rseq/rseq.h
++++ b/tools/testing/selftests/rseq/rseq.h
+@@ -149,11 +149,13 @@ static inline void rseq_clear_rseq_cs(void)
+ /*
+  * rseq_prepare_unload() should be invoked by each thread executing a rseq
+  * critical section at least once between their last critical section and
+- * library unload of the library defining the rseq critical section
+- * (struct rseq_cs). This also applies to use of rseq in code generated by
+- * JIT: rseq_prepare_unload() should be invoked at least once by each
+- * thread executing a rseq critical section before reclaim of the memory
+- * holding the struct rseq_cs.
++ * library unload of the library defining the rseq critical section (struct
++ * rseq_cs) or the code referred to by the struct rseq_cs start_ip and
++ * post_commit_offset fields. This also applies to use of rseq in code
++ * generated by JIT: rseq_prepare_unload() should be invoked at least once by
++ * each thread executing a rseq critical section before reclaim of the memory
++ * holding the struct rseq_cs or reclaim of the code pointed to by struct
++ * rseq_cs start_ip and post_commit_offset fields.
+  */
+ static inline void rseq_prepare_unload(void)
+ {
+diff --git a/tools/testing/selftests/rseq/settings b/tools/testing/selftests/rseq/settings
+new file mode 100644
+index 000000000000..e7b9417537fb
+--- /dev/null
++++ b/tools/testing/selftests/rseq/settings
+@@ -0,0 +1 @@
++timeout=0
+
+--------------F2659E4A04661FD971CD5793--
