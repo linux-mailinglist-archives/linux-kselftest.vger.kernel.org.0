@@ -2,138 +2,138 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 25EA512B4C3
-	for <lists+linux-kselftest@lfdr.de>; Fri, 27 Dec 2019 14:08:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A56A512B4E0
+	for <lists+linux-kselftest@lfdr.de>; Fri, 27 Dec 2019 14:35:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726354AbfL0NIn (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 27 Dec 2019 08:08:43 -0500
-Received: from smtp-fw-6001.amazon.com ([52.95.48.154]:45941 "EHLO
-        smtp-fw-6001.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726053AbfL0NIn (ORCPT
+        id S1726342AbfL0NfS (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 27 Dec 2019 08:35:18 -0500
+Received: from esgaroth.petrovitsch.at ([78.47.184.11]:2542 "EHLO
+        esgaroth.tuxoid.at" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726053AbfL0NfS (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 27 Dec 2019 08:08:43 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1577452123; x=1608988123;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   in-reply-to:content-transfer-encoding;
-  bh=Q5c4P1klft40yJ0p29MuVtu83VklnTxjifywTVem2zo=;
-  b=IM9vqOEuoP5sO3iDcz+CFkjlFWFto7VY9A+EyWf5Yuaa5MoDRLBRNJZ2
-   +PnOtDZlydnd4k/nM7n0HizAqikq0vZKaBP51V1aKgOCW+Y27YiJm6Kox
-   Hg1mRyvRkfwxiNQPhQzrZAOdKNGNBtXH1lT+82+xos8dk3vysWF/ESnpw
-   I=;
-IronPort-SDR: Pk8K7OzuhYrfSsahFWe24b9NEPtZcqwRMxX/tWmi/oPpMJAW1Fd/EBBJBdwvp809wg3MDZgg5D
- dgpU9+MjN18w==
-X-IronPort-AV: E=Sophos;i="5.69,363,1571702400"; 
-   d="scan'208";a="10736271"
-Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-2a-22cc717f.us-west-2.amazon.com) ([10.43.8.6])
-  by smtp-border-fw-out-6001.iad6.amazon.com with ESMTP; 27 Dec 2019 13:08:41 +0000
-Received: from EX13MTAUEA001.ant.amazon.com (pdx4-ws-svc-p6-lb7-vlan3.pdx.amazon.com [10.170.41.166])
-        by email-inbound-relay-2a-22cc717f.us-west-2.amazon.com (Postfix) with ESMTPS id C80EAA0701;
-        Fri, 27 Dec 2019 13:08:39 +0000 (UTC)
-Received: from EX13D31EUA001.ant.amazon.com (10.43.165.15) by
- EX13MTAUEA001.ant.amazon.com (10.43.61.243) with Microsoft SMTP Server (TLS)
- id 15.0.1367.3; Fri, 27 Dec 2019 13:08:39 +0000
-Received: from u886c93fd17d25d.ant.amazon.com (10.43.160.44) by
- EX13D31EUA001.ant.amazon.com (10.43.165.15) with Microsoft SMTP Server (TLS)
- id 15.0.1367.3; Fri, 27 Dec 2019 13:08:32 +0000
-From:   SeongJae Park <sjpark@amazon.com>
-To:     Bernd Petrovitsch <bernd@petrovitsch.priv.at>
-CC:     SeongJae Park <sjpark@amazon.com>, <joe@perches.com>,
-        <brendanhiggins@google.com>, <linux-kselftest@vger.kernel.org>,
-        <kunit-dev@googlegroups.com>, <linux-kernel@vger.kernel.org>,
+        Fri, 27 Dec 2019 08:35:18 -0500
+X-Greylist: delayed 2548 seconds by postgrey-1.27 at vger.kernel.org; Fri, 27 Dec 2019 08:35:17 EST
+Received: from [10.68.100.236] (h10-gesig.woeg.acw.at [217.116.178.11] (may be forged))
+        (authenticated bits=0)
+        by esgaroth.tuxoid.at (8.15.2/8.15.2) with ESMTPSA id xBRCqS4g015370
+        (version=TLSv1 cipher=AES128-SHA bits=128 verify=NO);
+        Fri, 27 Dec 2019 13:52:28 +0100
+Subject: Re: What is the best way to compare an unsigned and a constant?
+To:     SeongJae Park <sjpark@amazon.com>
+Cc:     brendanhiggins@google.com, linux-kselftest@vger.kernel.org,
+        kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org,
         SeongJae Park <sj38.park@gmail.com>
-Subject: Re: Re: What is the best way to compare an unsigned and a constant?
-Date:   Fri, 27 Dec 2019 14:08:11 +0100
-Message-ID: <20191227130811.12839-1-sjpark@amazon.com>
-X-Mailer: git-send-email 2.17.1
+References: <20191227123938.5271-1-sjpark@amazon.com>
+From:   Bernd Petrovitsch <bernd@petrovitsch.priv.at>
+Message-ID: <688d8f4b-266f-2c47-d4e9-d0336316a0a9@petrovitsch.priv.at>
+Date:   Fri, 27 Dec 2019 13:52:27 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-In-Reply-To: <688d8f4b-266f-2c47-d4e9-d0336316a0a9@petrovitsch.priv.at>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.43.160.44]
-X-ClientProxiedBy: EX13D03UWC001.ant.amazon.com (10.43.162.136) To
- EX13D31EUA001.ant.amazon.com (10.43.165.15)
+In-Reply-To: <20191227123938.5271-1-sjpark@amazon.com>
+Content-Type: multipart/mixed;
+ boundary="------------D98A0A31D62B0BC2939BAEE9"
+Content-Language: en-US
+X-DCC--Metrics: esgaroth.tuxoid.at 1480; Body=6 Fuz1=6 Fuz2=6
+X-Virus-Scanned: clamav-milter 0.97 at esgaroth.tuxoid.at
+X-Virus-Status: Clean
+X-Spam-Status: No, score=-0.6 required=5.0 tests=ALL_TRUSTED,AWL
+        autolearn=unavailable version=3.3.1
+X-Spam-Report: * -1.0 ALL_TRUSTED Passed through trusted hosts only via SMTP
+        *  0.4 AWL AWL: Adjusted score from AWL reputation of From: address
+X-Spam-Checker-Version: SpamAssassin 3.3.1 (2010-03-16) on esgaroth.tuxoid.at
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, 27 Dec 2019 13:52:27 +0100 Bernd Petrovitsch <bernd@petrovitsch.priv.at> wrote:
+This is a multi-part message in MIME format.
+--------------D98A0A31D62B0BC2939BAEE9
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-> --------------D98A0A31D62B0BC2939BAEE9
-> Content-Type: text/plain; charset="utf-8"
-> Content-Transfer-Encoding: quoted-printable
-> 
-> Hi all!
-> 
-> On 27/12/2019 13:39, SeongJae Park wrote:
-> [...]
-> > I have a function returning 'unsigned long', and would like to write a ku=
-> nit
-> > test for the function, as below.
-> >=20
-> >     unsigned long foo(void)
-> >     {
-> >     	return 42;
-> >     }
-> >=20
-> >     static void foo_test(struct kunit *test)
-> >     {
-> >         KUNIT_EXPECT_EQ(test, 42, foo());
-> >     }
-> 
-> For this case: shouldn't=20
-> ----  snip  ----
-> static void foo_test(struct kunit *test)
-> {
->      KUNIT_EXPECT_EQ(test, 42ul, foo());
-> }
-> ----  snip  ----
-> do the trick?
+Hi all!
 
-Thank you for quick answer :)
-That makes 'checkpatch.pl' be silent, but unfortunately, not kunit.
+On 27/12/2019 13:39, SeongJae Park wrote:
+[...]
+> I have a function returning 'unsigned long', and would like to write a =
+kunit
+> test for the function, as below.
+>=20
+>     unsigned long foo(void)
+>     {
+>     	return 42;
+>     }
+>=20
+>     static void foo_test(struct kunit *test)
+>     {
+>         KUNIT_EXPECT_EQ(test, 42, foo());
+>     }
 
-    [13:04:58] Building KUnit Kernel ...
-    In file included from /.../linux/include/linux/list.h:9:0,
-                     from /.../linux/include/linux/wait.h:7,
-                     from /.../linux/include/linux/wait_bit.h:8,
-                     from /.../linux/include/linux/fs.h:6,
-                     from /.../linux/include/linux/debugfs.h:15,
-                     from /.../linux/mm/damon.c:12:
-    /.../linux/mm/damon-test.h: In function ‘damon_test_foo’:
-    /.../linux/include/linux/kernel.h:842:29: warning: comparison of distinct pointer types lacks a cast
-       (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
-                                 ^
-    /.../linux/include/kunit/test.h:493:9: note: in expansion of macro ‘__typecheck’
-      ((void)__typecheck(__left, __right));           \
-             ^~~~~~~~~~~
-    /.../linux/include/kunit/test.h:517:2: note: in expansion of macro ‘KUNIT_BASE_BINARY_ASSERTION’
-      KUNIT_BASE_BINARY_ASSERTION(test,           \
-      ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-    /.../linux/include/kunit/test.h:606:2: note: in expansion of macro ‘KUNIT_BASE_EQ_MSG_ASSERTION’
-      KUNIT_BASE_EQ_MSG_ASSERTION(test,           \
-      ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-    /.../linux/include/kunit/test.h:616:2: note: in expansion of macro ‘KUNIT_BINARY_EQ_MSG_ASSERTION’
-      KUNIT_BINARY_EQ_MSG_ASSERTION(test,           \
-      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    /.../linux/include/kunit/test.h:979:2: note: in expansion of macro ‘KUNIT_BINARY_EQ_ASSERTION’
-      KUNIT_BINARY_EQ_ASSERTION(test, KUNIT_EXPECTATION, left, right)
-      ^~~~~~~~~~~~~~~~~~~~~~~~~
-    /.../linux/mm/damon-test.h:565:2: note: in expansion of macro ‘KUNIT_EXPECT_EQ’
-      KUNIT_EXPECT_EQ(test, 42ul, (int)foo());
-      ^~~~~~~~~~~~~~~
+For this case: shouldn't=20
+----  snip  ----
+static void foo_test(struct kunit *test)
+{
+     KUNIT_EXPECT_EQ(test, 42ul, foo());
+}
+----  snip  ----
+do the trick?
 
-Thanks,
-SeongJae Park
+MfG,
+	Bernd
+--=20
+"I dislike type abstraction if it has no real reason. And saving
+on typing is not a good reason - if your typing speed is the main
+issue when you're coding, you're doing something seriously wrong."
+    - Linus Torvalds
 
-> 
-> MfG,
-> 	Bernd
-> --=20
-> "I dislike type abstraction if it has no real reason. And saving
-> on typing is not a good reason - if your typing speed is the main
-> issue when you're coding, you're doing something seriously wrong."
->     - Linus Torvalds
-> 
+--------------D98A0A31D62B0BC2939BAEE9
+Content-Type: application/pgp-keys;
+ name="pEpkey.asc"
+Content-Transfer-Encoding: quoted-printable
+Content-Disposition: attachment;
+ filename="pEpkey.asc"
+
+-----BEGIN PGP PUBLIC KEY BLOCK-----
+
+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3D=3D
+=3DGX6K
+-----END PGP PUBLIC KEY BLOCK-----
+
+--------------D98A0A31D62B0BC2939BAEE9--
