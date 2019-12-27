@@ -2,36 +2,36 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B8C812B89C
-	for <lists+linux-kselftest@lfdr.de>; Fri, 27 Dec 2019 18:57:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9754512B885
+	for <lists+linux-kselftest@lfdr.de>; Fri, 27 Dec 2019 18:57:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727015AbfL0R44 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 27 Dec 2019 12:56:56 -0500
-Received: from mail.kernel.org ([198.145.29.99]:38406 "EHLO mail.kernel.org"
+        id S1727687AbfL0RmA (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 27 Dec 2019 12:42:00 -0500
+Received: from mail.kernel.org ([198.145.29.99]:38532 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727636AbfL0Rly (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 27 Dec 2019 12:41:54 -0500
+        id S1727673AbfL0Rl7 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 27 Dec 2019 12:41:59 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 29FFC218AC;
-        Fri, 27 Dec 2019 17:41:53 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 9BC2A218AC;
+        Fri, 27 Dec 2019 17:41:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1577468513;
-        bh=7rwKNQPuyOvNkbJa8xITK69Gi8xyKc1iP/xJ7pOhLxU=;
+        s=default; t=1577468518;
+        bh=BS+mAXFvlqflThf7F1mV4aixoBzjq1S/IWPEOHRCS/0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fNpZHnPvsjr15yMJTvIgUhdmdQzuSxYdZUd11EJnwPdn+3ez2jBy/DA932wjqHBwP
-         pn5Iqs79iuu+RsLVdONijMfQDt5fZ7hAR8jtP/hsLVUK7MnclSmIolbXT48AqUGIHt
-         DjXDujJThfbuKlel75RnJRc5854agj66S4I6JIP4=
+        b=fkeqlLy+MhHMm5bCSGAtzRveE9gc8FAQUL0+xG0Nh/OdVQwyKWzDE+hEFvioPslsI
+         tVs4sjb8Ggna4F66rJoyy+tutCD/Geb4hrzl7ci+AdJDwyWzsPeZ+1R2PRvgs6tBaa
+         zQBmYugWt3sQa35j0k+pmhLhyAwGqJZ8C3/9DAWQ=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Sasha Levin <sashal@kernel.org>,
+Cc:     Ido Schimmel <idosch@mellanox.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
         linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 046/187] selftests: safesetid: Fix Makefile to set correct test program
-Date:   Fri, 27 Dec 2019 12:38:34 -0500
-Message-Id: <20191227174055.4923-46-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4 050/187] selftests: forwarding: Delete IPv6 address at the end
+Date:   Fri, 27 Dec 2019 12:38:38 -0500
+Message-Id: <20191227174055.4923-50-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20191227174055.4923-1-sashal@kernel.org>
 References: <20191227174055.4923-1-sashal@kernel.org>
@@ -44,43 +44,47 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Masami Hiramatsu <mhiramat@kernel.org>
+From: Ido Schimmel <idosch@mellanox.com>
 
-[ Upstream commit 8ef1ec0ca32c6f8a87f5b4c24b1db26da67c5609 ]
+[ Upstream commit 65cb13986229cec02635a1ecbcd1e2dd18353201 ]
 
-Fix Makefile to set safesetid-test.sh to TEST_PROGS instead
-of non existing run_tests.sh.
+When creating the second host in h2_create(), two addresses are assigned
+to the interface, but only one is deleted. When running the test twice
+in a row the following error is observed:
 
-Without this fix, I got following error.
-  ----
-  TAP version 13
-  1..1
-  # selftests: safesetid: run_tests.sh
-  # Warning: file run_tests.sh is missing!
-  not ok 1 selftests: safesetid: run_tests.sh
-  ----
+$ ./router_bridge_vlan.sh
+TEST: ping                                                          [ OK ]
+TEST: ping6                                                         [ OK ]
+TEST: vlan                                                          [ OK ]
+$ ./router_bridge_vlan.sh
+RTNETLINK answers: File exists
+TEST: ping                                                          [ OK ]
+TEST: ping6                                                         [ OK ]
+TEST: vlan                                                          [ OK ]
 
-Fixes: c67e8ec03f3f ("LSM: SafeSetID: add selftest")
-Signed-off-by: Masami Hiramatsu <mhiramat@kernel.org>
-Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
+Fix this by deleting the address during cleanup.
+
+Fixes: 5b1e7f9ebd56 ("selftests: forwarding: Test routed bridge interface")
+Signed-off-by: Ido Schimmel <idosch@mellanox.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/testing/selftests/safesetid/Makefile | 2 +-
+ tools/testing/selftests/net/forwarding/router_bridge_vlan.sh | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/safesetid/Makefile b/tools/testing/selftests/safesetid/Makefile
-index cac42cd36a1b..fa02c4d5ec13 100644
---- a/tools/testing/selftests/safesetid/Makefile
-+++ b/tools/testing/selftests/safesetid/Makefile
-@@ -3,7 +3,7 @@
- CFLAGS = -Wall -O2
- LDLIBS = -lcap
+diff --git a/tools/testing/selftests/net/forwarding/router_bridge_vlan.sh b/tools/testing/selftests/net/forwarding/router_bridge_vlan.sh
+index fef88eb4b873..fa6a88c50750 100755
+--- a/tools/testing/selftests/net/forwarding/router_bridge_vlan.sh
++++ b/tools/testing/selftests/net/forwarding/router_bridge_vlan.sh
+@@ -36,7 +36,7 @@ h2_destroy()
+ {
+ 	ip -6 route del 2001:db8:1::/64 vrf v$h2
+ 	ip -4 route del 192.0.2.0/28 vrf v$h2
+-	simple_if_fini $h2 192.0.2.130/28
++	simple_if_fini $h2 192.0.2.130/28 2001:db8:2::2/64
+ }
  
--TEST_PROGS := run_tests.sh
-+TEST_PROGS := safesetid-test.sh
- TEST_GEN_FILES := safesetid-test
- 
- include ../lib.mk
+ router_create()
 -- 
 2.20.1
 
