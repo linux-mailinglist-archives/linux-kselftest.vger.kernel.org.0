@@ -2,27 +2,27 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 83C7B1300A3
-	for <lists+linux-kselftest@lfdr.de>; Sat,  4 Jan 2020 04:38:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CC0D130086
+	for <lists+linux-kselftest@lfdr.de>; Sat,  4 Jan 2020 04:37:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727850AbgADDhL (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 3 Jan 2020 22:37:11 -0500
-Received: from mail.kernel.org ([198.145.29.99]:38682 "EHLO mail.kernel.org"
+        id S1727900AbgADDhP (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 3 Jan 2020 22:37:15 -0500
+Received: from mail.kernel.org ([198.145.29.99]:38870 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727835AbgADDhJ (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 3 Jan 2020 22:37:09 -0500
+        id S1727889AbgADDhO (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 3 Jan 2020 22:37:14 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 1168F2465D;
-        Sat,  4 Jan 2020 03:37:06 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id C81152464B;
+        Sat,  4 Jan 2020 03:37:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1578109028;
+        s=default; t=1578109034;
         bh=p9B0uT2oHpZTVWWgC2Fc08MdyScnRBmnaT96Qf13I7I=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=iYcDRncJMFdX0INstuD6zjhDugKVZTmQcxaWpdSdcP7ridBID0JYqNkBaBN96IIbu
-         QLMAoc8y4LcuyEPzMziTCnnSE2E1cSN+S0rcBdTCUfZ3AURcJFeosXDWHJjVyn+V2P
-         p+vpWibTSVlUp/oeGijLoUo2oBdyR4melIo20hxg=
+        b=bAYdyXFG3nv6NrLRCLcjFxI1pdIBeLQfvtSZr1AFvwbT3UdzpMc8zLaQeRHM/Eqfe
+         UdDsJbPxEprODVBqMTvc7UkGziXQDa4wIW37K7s9Pxl/Jkif5n0H7XiqfxfmTyt9nF
+         2u2lFNhCmRE1xZsz7quZu43HUobZXCZioV4nqlKY=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
@@ -35,12 +35,12 @@ Cc:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
         Dmitry Vyukov <dvyukov@google.com>,
         Sasha Levin <sashal@kernel.org>,
         linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.9 4/4] rseq/selftests: Turn off timeout setting
-Date:   Fri,  3 Jan 2020 22:37:02 -0500
-Message-Id: <20200104033702.11304-4-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.4 2/2] rseq/selftests: Turn off timeout setting
+Date:   Fri,  3 Jan 2020 22:37:10 -0500
+Message-Id: <20200104033710.11393-2-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200104033702.11304-1-sashal@kernel.org>
-References: <20200104033702.11304-1-sashal@kernel.org>
+In-Reply-To: <20200104033710.11393-1-sashal@kernel.org>
+References: <20200104033710.11393-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
