@@ -2,101 +2,99 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C06C912FD8E
-	for <lists+linux-kselftest@lfdr.de>; Fri,  3 Jan 2020 21:19:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B6F19130070
+	for <lists+linux-kselftest@lfdr.de>; Sat,  4 Jan 2020 04:37:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728730AbgACUTu (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 3 Jan 2020 15:19:50 -0500
-Received: from mail-vk1-f196.google.com ([209.85.221.196]:33377 "EHLO
-        mail-vk1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728676AbgACUTr (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 3 Jan 2020 15:19:47 -0500
-Received: by mail-vk1-f196.google.com with SMTP id i78so11024969vke.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 03 Jan 2020 12:19:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:from:date:message-id:subject:to;
-        bh=40ACnQIUnpge54Cj+EODMXbGQ2AM0yGbootCDBdgIh0=;
-        b=AWCc/ylFmQ91zZEJrbKovcmODhKduqUVkKGxHK8uCtVvWppAnjCzAVhlqtuTB6Zv3H
-         fwGfadWPG5OWx3vtouAanI9rAb4+nCSTS9ougZHH94RmFVRXusGOhSeq6LcZbXUbpYke
-         LecHuReAxOHZIAlNr0puF8IN10taJseJbu/8dZmgE65qy44VHc90CsjCbMPz9YIW56uc
-         KAocddCq9fbTe+4eLEe4ukQAx3KuF/S8Bs/5ss0PU18bAsmodPObJCziaNGvW+fW97nj
-         vqPpR6NvW2UHqccwDYrcuioTdRRCTX8F5vGOe97A6Uj5iUQG4sbm5c76feOsNIPb/J8O
-         nOKQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=40ACnQIUnpge54Cj+EODMXbGQ2AM0yGbootCDBdgIh0=;
-        b=P8tDpt4KyFNTnMrTFBJnzHdZ+RVAoXnuDDDlUYE0o+NVJOP5A51CDBm5AMTIsV9/PY
-         qRlWuzvH4Cf9s4hks23p4uAlBKMjKF7sUEjOgCu2I84CK0HrapNTNryTw1dvWg7CRMlj
-         7zcz2n4A3K8cJYbubLRGOoCNtv5BeHO3SVhdiuttLnxX+Nq+RmJE3Gcx7s5B2/lBTT65
-         e+xS9SRoy6Rtct8wytYAbh8PI7jCngpldep57CSN3nXxVhzedufyyDH6BexLaIxuHpqL
-         jZZVoJaTbFQCX/vbjTkOJYh6vZKxMTiBli7wAuAFo3c0kcyTJrsC92phlhQAjp2ldFGo
-         T4RQ==
-X-Gm-Message-State: APjAAAV5rAXnAhhjMz22JGIwZRxSZCNqxZPVy22drRsc8aZqe24ccZU6
-        PGa2Rrdmth/xge7ND8VKu6bvL2XZbpbim6a38d+SJe84ksg=
-X-Google-Smtp-Source: APXvYqwTD0MzQRfSqMjBdpNUeZAJzfDvhrEGhXGCrMyvXGb//+N8M9ASxsqTbkQfP5NbaV7n6hKI5gEfY+hOjDS6Fyg=
-X-Received: by 2002:ad4:478b:: with SMTP id z11mr69635758qvy.185.1578082785331;
- Fri, 03 Jan 2020 12:19:45 -0800 (PST)
+        id S1727522AbgADDgc (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 3 Jan 2020 22:36:32 -0500
+Received: from mail.kernel.org ([198.145.29.99]:37164 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727514AbgADDgb (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 3 Jan 2020 22:36:31 -0500
+Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 138E821734;
+        Sat,  4 Jan 2020 03:36:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1578108990;
+        bh=CasMzY3yE/z02l19UuHHZrfvowP4z2p5CrjSbNYM8L8=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=SWL4IK58XeyujlNTgVLkEb/OfKoyGWJ7zaAaUTZXRJKK/iJcbHgSqSoYsgq4y652/
+         nkM99wIsQPtjyiZPme+U5C7IXjdC/guPImZHvTqrktDGhyMYLWErq56Fe75Ynl/Qls
+         so/0GxFNEb0SiLpBMQVC/9oIyDCYO072kJZ36RuM=
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Shuah Khan <skhan@linuxfoundation.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Sasha Levin <sashal@kernel.org>,
+        linux-kselftest@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.4 08/10] selftests: firmware: Fix it to do root uid check and skip
+Date:   Fri,  3 Jan 2020 22:36:17 -0500
+Message-Id: <20200104033620.10977-8-sashal@kernel.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20200104033620.10977-1-sashal@kernel.org>
+References: <20200104033620.10977-1-sashal@kernel.org>
 MIME-Version: 1.0
-Received: by 2002:ac8:4410:0:0:0:0:0 with HTTP; Fri, 3 Jan 2020 12:19:45 -0800 (PST)
-From:   "Rev.Dr Emmanuel Okoye CEO Ecobank-benin" 
-        <westernunion.benin982@gmail.com>
-Date:   Fri, 3 Jan 2020 21:19:45 +0100
-Message-ID: <CAP=nHBKxfmbdRg7q4-1jdSUL6+zok9agasMSrXV5CsEJEmZz3A@mail.gmail.com>
-Subject: I promise you must be happy today, God has uplifted you and your
- family ok
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Dear Friend
+From: Shuah Khan <skhan@linuxfoundation.org>
 
-i hope all is well with you,if so, glory be to God almighty. I'm very
-happy to inform you, about my success in getting payment funds under
-the cooperation of a new partner from United States of
-America.Presently I am in uk for investment projects with my own share
-of the total sum. I didn't forget your past efforts. IMF finally
-approved your compensation payment funds this morning by prepaid (ATM)
-Debit card of US$12,500.000.00Million Dollars, Since you not received
-this payment yet, I was not certified
-but it is not your fault and not my fault, I hold nothing against
-you.than bank official whom has been detaining the transfer in the
-bank, trying to claim your funds by themselves.
+[ Upstream commit c65e41538b04e0d64a673828745a00cb68a24371 ]
 
-Therefore, in appreciation of your effort I have raised an
-International prepaid (ATM) Debit card of US$12,500.000.00 in your
-favor as compensation to you.
+firmware attempts to load test modules that require root access
+and fail. Fix it to check for root uid and exit with skip code
+instead.
 
-Now, i want you to contact my Diplomatic Agent, His name is Mike Benz
-on His  e-mail Address (mikebenz550@aol.com
+Before this fix:
 
-ask Him to send the Prepaid (ATM) Debit card to you. Bear in mind that
-the money is in Prepaid (ATM) Debit card, not cash, so you need to
-send to him,
-your full name
-address  where the prepaid (ATM) Debit card will be delivered to you,
-including your cell phone number. Finally, I left explicit
-instructions with him, on how to send the (ATM CARD) to you.
+selftests: firmware: fw_run_tests.sh
+modprobe: ERROR: could not insert 'test_firmware': Operation not permitted
+You must have the following enabled in your kernel:
+CONFIG_TEST_FIRMWARE=y
+CONFIG_FW_LOADER=y
+CONFIG_FW_LOADER_USER_HELPER=y
+CONFIG_IKCONFIG=y
+CONFIG_IKCONFIG_PROC=y
+not ok 1 selftests: firmware: fw_run_tests.sh # SKIP
 
-The Prepaid (ATM) Debit card, will be send to you through my
-Diplomatic Agent Mr. Mike Benz immediately you contact him. So contact
-my Diplomatic Agent Mr. Mike Benz immediately you receive this letter.
-Below is his contact information:
+With this fix:
 
-NAME : MIKE BENZ
-EMAIL ADDRESS: mikebenz550@aol.com
-Text Him, (256) 284-4886
+selftests: firmware: fw_run_tests.sh
+skip all tests: must be run as root
+not ok 1 selftests: firmware: fw_run_tests.sh # SKIP
 
-Request for Delivery of the Prepaid (ATM) Debit card  to you today.
-Note, please I have paid for the whole service fees for you, so the
-only money you will send to my Diplomatic Agent Mr. Mike Benz is
-$50.00 for your prepaid (ATM) Debit card DELIVERY FEE to your address
-ok.
-Let me know once you receive this Card at your address.
-Best regards,
-Rev.Dr, George Adadar
+Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
+Reviwed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ tools/testing/selftests/firmware/fw_lib.sh | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/tools/testing/selftests/firmware/fw_lib.sh b/tools/testing/selftests/firmware/fw_lib.sh
+index b879305a766d..5b8c0fedee76 100755
+--- a/tools/testing/selftests/firmware/fw_lib.sh
++++ b/tools/testing/selftests/firmware/fw_lib.sh
+@@ -34,6 +34,12 @@ test_modprobe()
+ 
+ check_mods()
+ {
++	local uid=$(id -u)
++	if [ $uid -ne 0 ]; then
++		echo "skip all tests: must be run as root" >&2
++		exit $ksft_skip
++	fi
++
+ 	trap "test_modprobe" EXIT
+ 	if [ ! -d $DIR ]; then
+ 		modprobe test_firmware
+-- 
+2.20.1
+
