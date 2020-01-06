@@ -2,536 +2,160 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EFB8131B79
-	for <lists+linux-kselftest@lfdr.de>; Mon,  6 Jan 2020 23:30:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 24BFC131BA5
+	for <lists+linux-kselftest@lfdr.de>; Mon,  6 Jan 2020 23:40:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727046AbgAFWaW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 6 Jan 2020 17:30:22 -0500
-Received: from aserp2120.oracle.com ([141.146.126.78]:51536 "EHLO
-        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726731AbgAFWaW (ORCPT
+        id S1727088AbgAFWkZ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 6 Jan 2020 17:40:25 -0500
+Received: from mail-pj1-f66.google.com ([209.85.216.66]:36615 "EHLO
+        mail-pj1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726742AbgAFWkZ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 6 Jan 2020 17:30:22 -0500
-Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
-        by aserp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id 006MJXx7024482;
-        Mon, 6 Jan 2020 22:29:02 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references; s=corp-2019-08-05;
- bh=4BqdBd9ZGTADtabO363Xd1QXkKgwbMdYacFmLSEosQI=;
- b=pnOTEkSe5N2kGBSNxNA/khFYweFyDJS0qqPC+cnMRFyGXfilJ/8C94XNXkUQZlJ3sY99
- zMELf0vD9TXAY/7JTXD720EbIMQUyjbJxPjBKsivo2lpvE0PMRAbhBdBA2AZzHJcovB7
- Od90mTpnKEqECTzaMym4Vz8ymQdABCZFev9zfClGYc7hf6z9THt+o8PNcI/SCaHYV1Wu
- CN2ED8uL8jcif6FjhL6qXaBH7hZZ1pR+9i0NiWDgAdtWpRC3EdxWgzgEOOP3cngSJzHT
- wevq+DB9HXVEm/NIwhcpd+DwLSf+oI7UznjL5hUqiJg3xzSKQfJjvju7PueZT0KgVxj/ Vw== 
-Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
-        by aserp2120.oracle.com with ESMTP id 2xajnpsygc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 06 Jan 2020 22:29:01 +0000
-Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
-        by userp3030.oracle.com (8.16.0.27/8.16.0.27) with SMTP id 006MJMhs182861;
-        Mon, 6 Jan 2020 22:29:01 GMT
-Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
-        by userp3030.oracle.com with ESMTP id 2xb467jcup-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 06 Jan 2020 22:29:01 +0000
-Received: from abhmp0010.oracle.com (abhmp0010.oracle.com [141.146.116.16])
-        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 006MSxcp005211;
-        Mon, 6 Jan 2020 22:28:59 GMT
-Received: from dhcp-10-175-162-40.vpn.oracle.com (/10.175.162.40)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Mon, 06 Jan 2020 14:28:59 -0800
-From:   Alan Maguire <alan.maguire@oracle.com>
-To:     shuah@kernel.org, brendanhiggins@google.com,
-        linux-kselftest@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
-        keescook@chromium.org, yzaikin@google.com,
-        akpm@linux-foundation.org, yamada.masahiro@socionext.com,
-        catalin.marinas@arm.com, joe.lawrence@redhat.com,
-        penguin-kernel@i-love.sakura.ne.jp, urezki@gmail.com,
-        andriy.shevchenko@linux.intel.com, corbet@lwn.net,
-        davidgow@google.com, adilger.kernel@dilger.ca, tytso@mit.edu,
-        mcgrof@kernel.org, linux-doc@vger.kernel.org,
-        Alan Maguire <alan.maguire@oracle.com>,
-        Knut Omang <knut.omang@oracle.com>
-Subject: [RESEND PATCH v7 linux-kselftest-test 3/6] kunit: allow kunit tests to be loaded as a module
-Date:   Mon,  6 Jan 2020 22:28:20 +0000
-Message-Id: <1578349703-15650-4-git-send-email-alan.maguire@oracle.com>
-X-Mailer: git-send-email 1.8.3.1
-In-Reply-To: <1578349703-15650-1-git-send-email-alan.maguire@oracle.com>
-References: <1578349703-15650-1-git-send-email-alan.maguire@oracle.com>
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9492 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=11 malwarescore=0
- phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=999
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.0.1-1911140001 definitions=main-2001060185
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9492 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
- suspectscore=11 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
- lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1911140001
- definitions=main-2001060185
+        Mon, 6 Jan 2020 17:40:25 -0500
+Received: by mail-pj1-f66.google.com with SMTP id n59so8360559pjb.1;
+        Mon, 06 Jan 2020 14:40:25 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=J3SHa4E3cS4gmRhRrRRBbMGMmQ7Swg+W9fTvK+8fgbo=;
+        b=QghAxNwbOpNWeCKcrY4MMLZJDUQrnsxywtSSfQVR5bQV7M+M7rv++XgA1gpLo82bsC
+         u59y/+LWBBr9YFYFfA0mH9/w8rXC9HyccLw7jQp1J7tS35SiY0zVscJ0WDjuRV3leyD4
+         gL7MRC+3jEgMXXSKVfKqFERRppct64iAp9BqPkRDLllU/3i/SQVahZ8MyMZnOCe8gWpI
+         pwViZWkaAakjgW4Lj3ptsQwvM5CuqwpE6TNYNxu8TvOUMrN43V41cpBlf/3zhVQUrpav
+         kJ8xa9NBgUxpisaayWNgqQY/brAFzqZHpAiXaRRAxoPcS86fWZhQPq/IXG5TFMiHDUaQ
+         +dQg==
+X-Gm-Message-State: APjAAAUUxReqDbtdTWKNz8LmFT/p55tdw/2g+BT6Uew853S8b2jW/y6l
+        HCj1Ra1T5PvtDw6BNNbhl6k=
+X-Google-Smtp-Source: APXvYqzL/Or94L+UYrmZszgXQkyK1iniMt70cGilBDndaFa7eg0lzxl/eodRL6mwFRsCXTaDCoazNg==
+X-Received: by 2002:a17:902:8f85:: with SMTP id z5mr108553143plo.43.1578350424536;
+        Mon, 06 Jan 2020 14:40:24 -0800 (PST)
+Received: from 42.do-not-panic.com (42.do-not-panic.com. [157.230.128.187])
+        by smtp.gmail.com with ESMTPSA id s24sm81687763pfd.161.2020.01.06.14.40.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Jan 2020 14:40:23 -0800 (PST)
+Received: by 42.do-not-panic.com (Postfix, from userid 1000)
+        id 9822040321; Mon,  6 Jan 2020 22:40:22 +0000 (UTC)
+Date:   Mon, 6 Jan 2020 22:40:22 +0000
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Brendan Higgins <brendanhiggins@google.com>
+Cc:     jdike@addtoit.com, richard@nod.at, anton.ivanov@cambridgegreys.com,
+        arnd@arndb.de, keescook@chromium.org, skhan@linuxfoundation.org,
+        alan.maguire@oracle.com, yzaikin@google.com, davidgow@google.com,
+        akpm@linux-foundation.org, rppt@linux.ibm.com,
+        gregkh@linuxfoundation.org, sboyd@kernel.org, logang@deltatee.com,
+        knut.omang@oracle.com, linux-um@lists.infradead.org,
+        linux-arch@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org
+Subject: Re: [RFC v1 0/6] kunit: create a centralized executor to dispatch
+ all KUnit tests
+Message-ID: <20200106224022.GX11244@42.do-not-panic.com>
+References: <20191216220555.245089-1-brendanhiggins@google.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20191216220555.245089-1-brendanhiggins@google.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-As tests are added to kunit, it will become less feasible to execute
-all built tests together.  By supporting modular tests we provide
-a simple way to do selective execution on a running system; specifying
+On Mon, Dec 16, 2019 at 02:05:49PM -0800, Brendan Higgins wrote:
+> ## TL;DR
+> 
+> This patchset adds a centralized executor to dispatch tests rather than
+> relying on late_initcall to schedule each test suite separately along
+> with a couple of new features that depend on it.
+> 
+> ## What am I trying to do?
+> 
+> Conceptually, I am trying to provide a mechanism by which test suites
+> can be grouped together so that they can be reasoned about collectively.
+> The last two patches in this series add features which depend on this:
+> 
+> RFC 5/6 Prints out a test plan right before KUnit tests are run[1]; this
+>         is valuable because it makes it possible for a test harness to
+>         detect whether the number of tests run matches the number of
+>         tests expected to be run, ensuring that no tests silently
+>         failed.
+> 
+> RFC 6/6 Add a new kernel command-line option which allows the user to
+>         specify that the kernel poweroff, halt, or reboot after
+>         completing all KUnit tests; this is very handy for running KUnit
+>         tests on UML or a VM so that the UML/VM process exits cleanly
+>         immediately after running all tests without needing a special
+>         initramfs.
 
-CONFIG_KUNIT=y
-CONFIG_KUNIT_EXAMPLE_TEST=m
+The approach seems sensible to me given that it separates from a
+semantics perspective kernel subsystem init work from *testing*, and
+so we are sure we'd run the *test* stuff *after* all subsystem init
+stuff.
 
-...means we can simply "insmod example-test.ko" to run the tests.
+Dispatching, however is still immediate, and with a bit of work, this
+dispatcher could be configurable to run at an arbirary time after boot.
+If there are not immediate use cases for that though, then I suppose
+this is not a requirement for the dispatcher. But since there exists
+another modular test framework with its own dispatcher and it seems the
+goal is to merge the work long term, this might preempt the requirement
+to define how and when we can dispatch tests post boot.
 
-To achieve this we need to do the following:
+And, if we're going to do that, I can suggest that a data structure
+instead of just a function init call be used to describe tests to be
+placed into an ELF section. With my linker table work this would be
+easy, I define section ranges for code describing only executable
+routines, but it defines linker tables for when a component in the
+kernel would define a data structure, part of which can be a callback.
+Such data structure stuffed into an ELF section could allow dynamic
+configuration of the dipsatching, even post boot.
 
-o export the required symbols in kunit
-o string-stream tests utilize non-exported symbols so for now we skip
-  building them when CONFIG_KUNIT_TEST=m.
-o drivers/base/power/qos-test.c contains a few unexported interface
-  references, namely freq_qos_read_value() and freq_constraints_init().
-  Both of these could be potentially defined as static inline functions
-  in include/linux/pm_qos.h, but for now we simply avoid supporting
-  module build for that test suite.
-o support a new way of declaring test suites.  Because a module cannot
-  do multiple late_initcall()s, we provide a kunit_test_suites() macro
-  to declare multiple suites within the same module at once.
-o some test module names would have been too general ("test-test"
-  and "example-test" for kunit tests, "inode-test" for ext4 tests);
-  rename these as appropriate ("kunit-test", "kunit-example-test"
-  and "ext4-inode-test" respectively).
+I think this is a good stepping stone forward then, and to allow
+dynamic configuration of the dispatcher could mean eventual extensions
+to kunit's init stuff to stuff init calls into a data structure which
+can then allow configuration of the dispatching. One benefit that the
+linker table work *may* be able to help here with is that it allows
+an easy way to create kunit specific ordering, at linker time.
+There is also an example of addressing / generalizing dynamic / run time
+changes of ordering, by using the x86 IOMMU initialization as an
+example case. We don't have an easy way to do this today, but if kunit
+could benefit from such framework, it'd be another use case for
+the linker table work. That is, the ability to easilly allow
+dynamically modifying run time ordering of code through ELF sections.
 
-Also define kunit_test_suite() via kunit_test_suites()
-as callers in other trees may need the old definition.
+> In addition, by dispatching tests from a single location, we can
+> guarantee that all KUnit tests run after late_init is complete, which
+> was a concern during the initial KUnit patchset review (this has not
+> been a problem in practice, but resolving with certainty is nevertheless
+> desirable).
 
-Co-developed-by: Knut Omang <knut.omang@oracle.com>
-Signed-off-by: Knut Omang <knut.omang@oracle.com>
-Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
-Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
-Acked-by: Theodore Ts'o <tytso@mit.edu> # for ext4 bits
-Acked-by: David Gow <davidgow@google.com> # For list-test
-Reported-by: kbuild test robot <lkp@intel.com>
----
- drivers/base/power/qos-test.c                      |  2 +-
- fs/ext4/Kconfig                                    |  2 +-
- fs/ext4/Makefile                                   |  3 +-
- fs/ext4/inode-test.c                               |  4 ++-
- include/kunit/test.h                               | 37 ++++++++++++++++------
- kernel/sysctl-test.c                               |  4 ++-
- lib/Kconfig.debug                                  |  4 +--
- lib/kunit/Kconfig                                  |  4 +--
- lib/kunit/Makefile                                 | 10 ++++--
- lib/kunit/assert.c                                 |  8 +++++
- lib/kunit/{example-test.c => kunit-example-test.c} |  4 ++-
- lib/kunit/{test-test.c => kunit-test.c}            |  5 +--
- lib/kunit/string-stream-test.c                     |  2 +-
- lib/kunit/test.c                                   |  8 +++++
- lib/kunit/try-catch.c                              |  2 ++
- lib/list-test.c                                    |  4 ++-
- 16 files changed, 76 insertions(+), 27 deletions(-)
- rename lib/kunit/{example-test.c => kunit-example-test.c} (97%)
- rename lib/kunit/{test-test.c => kunit-test.c} (98%)
+Indeed, the concern is just a real semantics limitations. With the tests
+*always* running after all subsystem init stuff, we know we'd have a
+real full kernel ready.
 
-diff --git a/drivers/base/power/qos-test.c b/drivers/base/power/qos-test.c
-index 3115db0..79fc6c4 100644
---- a/drivers/base/power/qos-test.c
-+++ b/drivers/base/power/qos-test.c
-@@ -114,4 +114,4 @@ static void freq_qos_test_readd(struct kunit *test)
- 	.name = "qos-kunit-test",
- 	.test_cases = pm_qos_test_cases,
- };
--kunit_test_suite(pm_qos_test_module);
-+kunit_test_suites(&pm_qos_test_module);
-diff --git a/fs/ext4/Kconfig b/fs/ext4/Kconfig
-index ef42ab0..435510f 100644
---- a/fs/ext4/Kconfig
-+++ b/fs/ext4/Kconfig
-@@ -108,7 +108,7 @@ config EXT4_DEBUG
- 		echo 1 > /sys/module/ext4/parameters/mballoc_debug
- 
- config EXT4_KUNIT_TESTS
--	bool "KUnit tests for ext4"
-+	tristate "KUnit tests for ext4"
- 	select EXT4_FS
- 	depends on KUNIT
- 	help
-diff --git a/fs/ext4/Makefile b/fs/ext4/Makefile
-index 840b91d..4ccb3c9 100644
---- a/fs/ext4/Makefile
-+++ b/fs/ext4/Makefile
-@@ -13,5 +13,6 @@ ext4-y	:= balloc.o bitmap.o block_validity.o dir.o ext4_jbd2.o extents.o \
- 
- ext4-$(CONFIG_EXT4_FS_POSIX_ACL)	+= acl.o
- ext4-$(CONFIG_EXT4_FS_SECURITY)		+= xattr_security.o
--ext4-$(CONFIG_EXT4_KUNIT_TESTS)		+= inode-test.o
-+ext4-inode-test-objs			+= inode-test.o
-+obj-$(CONFIG_EXT4_KUNIT_TESTS)		+= ext4-inode-test.o
- ext4-$(CONFIG_FS_VERITY)		+= verity.o
-diff --git a/fs/ext4/inode-test.c b/fs/ext4/inode-test.c
-index 92a9da1..95620bf 100644
---- a/fs/ext4/inode-test.c
-+++ b/fs/ext4/inode-test.c
-@@ -269,4 +269,6 @@ static void inode_test_xtimestamp_decoding(struct kunit *test)
- 	.test_cases = ext4_inode_test_cases,
- };
- 
--kunit_test_suite(ext4_inode_test_suite);
-+kunit_test_suites(&ext4_inode_test_suite);
-+
-+MODULE_LICENSE("GPL v2");
-diff --git a/include/kunit/test.h b/include/kunit/test.h
-index dba4830..2dfb550 100644
---- a/include/kunit/test.h
-+++ b/include/kunit/test.h
-@@ -12,6 +12,7 @@
- #include <kunit/assert.h>
- #include <kunit/try-catch.h>
- #include <linux/kernel.h>
-+#include <linux/module.h>
- #include <linux/slab.h>
- #include <linux/types.h>
- 
-@@ -197,31 +198,47 @@ struct kunit {
- int kunit_run_tests(struct kunit_suite *suite);
- 
- /**
-- * kunit_test_suite() - used to register a &struct kunit_suite with KUnit.
-+ * kunit_test_suites() - used to register one or more &struct kunit_suite
-+ *			 with KUnit.
-  *
-- * @suite: a statically allocated &struct kunit_suite.
-+ * @suites: a statically allocated list of &struct kunit_suite.
-  *
-- * Registers @suite with the test framework. See &struct kunit_suite for
-+ * Registers @suites with the test framework. See &struct kunit_suite for
-  * more information.
-  *
-- * NOTE: Currently KUnit tests are all run as late_initcalls; this means
-+ * When builtin,  KUnit tests are all run as late_initcalls; this means
-  * that they cannot test anything where tests must run at a different init
-  * phase. One significant restriction resulting from this is that KUnit
-  * cannot reliably test anything that is initialize in the late_init phase;
-  * another is that KUnit is useless to test things that need to be run in
-  * an earlier init phase.
-  *
-+ * An alternative is to build the tests as a module.  Because modules
-+ * do not support multiple late_initcall()s, we need to initialize an
-+ * array of suites for a module.
-+ *
-  * TODO(brendanhiggins@google.com): Don't run all KUnit tests as
-  * late_initcalls.  I have some future work planned to dispatch all KUnit
-  * tests from the same place, and at the very least to do so after
-  * everything else is definitely initialized.
-  */
--#define kunit_test_suite(suite)						       \
--	static int kunit_suite_init##suite(void)			       \
--	{								       \
--		return kunit_run_tests(&suite);				       \
--	}								       \
--	late_initcall(kunit_suite_init##suite)
-+#define kunit_test_suites(...)						\
-+	static struct kunit_suite *suites[] = { __VA_ARGS__, NULL};	\
-+	static int kunit_test_suites_init(void)				\
-+	{								\
-+		unsigned int i;						\
-+		for (i = 0; suites[i] != NULL; i++)			\
-+			kunit_run_tests(suites[i]);			\
-+		return 0;						\
-+	}								\
-+	late_initcall(kunit_test_suites_init);				\
-+	static void __exit kunit_test_suites_exit(void)			\
-+	{								\
-+		return;							\
-+	}								\
-+	module_exit(kunit_test_suites_exit)
-+
-+#define kunit_test_suite(suite)	kunit_test_suites(&suite)
- 
- /*
-  * Like kunit_alloc_resource() below, but returns the struct kunit_resource
-diff --git a/kernel/sysctl-test.c b/kernel/sysctl-test.c
-index 2a63241..ccb7850 100644
---- a/kernel/sysctl-test.c
-+++ b/kernel/sysctl-test.c
-@@ -389,4 +389,6 @@ static void sysctl_test_api_dointvec_write_single_greater_int_max(
- 	.test_cases = sysctl_test_cases,
- };
- 
--kunit_test_suite(sysctl_test_suite);
-+kunit_test_suites(&sysctl_test_suite);
-+
-+MODULE_LICENSE("GPL v2");
-diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-index d1842fe..e23c923 100644
---- a/lib/Kconfig.debug
-+++ b/lib/Kconfig.debug
-@@ -1980,7 +1980,7 @@ config TEST_SYSCTL
- 	  If unsure, say N.
- 
- config SYSCTL_KUNIT_TEST
--	bool "KUnit test for sysctl"
-+	tristate "KUnit test for sysctl"
- 	depends on KUNIT
- 	help
- 	  This builds the proc sysctl unit test, which runs on boot.
-@@ -1991,7 +1991,7 @@ config SYSCTL_KUNIT_TEST
- 	  If unsure, say N.
- 
- config LIST_KUNIT_TEST
--	bool "KUnit Test for Kernel Linked-list structures"
-+	tristate "KUnit Test for Kernel Linked-list structures"
- 	depends on KUNIT
- 	help
- 	  This builds the linked list KUnit test suite.
-diff --git a/lib/kunit/Kconfig b/lib/kunit/Kconfig
-index af37016..9ebd5e6 100644
---- a/lib/kunit/Kconfig
-+++ b/lib/kunit/Kconfig
-@@ -15,7 +15,7 @@ menuconfig KUNIT
- if KUNIT
- 
- config KUNIT_TEST
--	bool "KUnit test for KUnit"
-+	tristate "KUnit test for KUnit"
- 	help
- 	  Enables the unit tests for the KUnit test framework. These tests test
- 	  the KUnit test framework itself; the tests are both written using
-@@ -24,7 +24,7 @@ config KUNIT_TEST
- 	  expected.
- 
- config KUNIT_EXAMPLE_TEST
--	bool "Example test for KUnit"
-+	tristate "Example test for KUnit"
- 	help
- 	  Enables an example unit test that illustrates some of the basic
- 	  features of KUnit. This test only exists to help new users understand
-diff --git a/lib/kunit/Makefile b/lib/kunit/Makefile
-index 769d940..bc6e5e54 100644
---- a/lib/kunit/Makefile
-+++ b/lib/kunit/Makefile
-@@ -3,7 +3,11 @@ obj-$(CONFIG_KUNIT) +=			test.o \
- 					assert.o \
- 					try-catch.o
- 
--obj-$(CONFIG_KUNIT_TEST) +=		test-test.o \
--					string-stream-test.o
-+obj-$(CONFIG_KUNIT_TEST) +=		kunit-test.o
- 
--obj-$(CONFIG_KUNIT_EXAMPLE_TEST) +=	example-test.o
-+# string-stream-test compiles built-in only.
-+ifeq ($(CONFIG_KUNIT_TEST),y)
-+obj-$(CONFIG_KUNIT_TEST) +=		string-stream-test.o
-+endif
-+
-+obj-$(CONFIG_KUNIT_EXAMPLE_TEST) +=	kunit-example-test.o
-diff --git a/lib/kunit/assert.c b/lib/kunit/assert.c
-index 9aca71c..b24bebc 100644
---- a/lib/kunit/assert.c
-+++ b/lib/kunit/assert.c
-@@ -26,6 +26,7 @@ void kunit_base_assert_format(const struct kunit_assert *assert,
- 	string_stream_add(stream, "%s FAILED at %s:%d\n",
- 			 expect_or_assert, assert->file, assert->line);
- }
-+EXPORT_SYMBOL_GPL(kunit_base_assert_format);
- 
- void kunit_assert_print_msg(const struct kunit_assert *assert,
- 			    struct string_stream *stream)
-@@ -33,6 +34,7 @@ void kunit_assert_print_msg(const struct kunit_assert *assert,
- 	if (assert->message.fmt)
- 		string_stream_add(stream, "\n%pV", &assert->message);
- }
-+EXPORT_SYMBOL_GPL(kunit_assert_print_msg);
- 
- void kunit_fail_assert_format(const struct kunit_assert *assert,
- 			      struct string_stream *stream)
-@@ -40,6 +42,7 @@ void kunit_fail_assert_format(const struct kunit_assert *assert,
- 	kunit_base_assert_format(assert, stream);
- 	string_stream_add(stream, "%pV", &assert->message);
- }
-+EXPORT_SYMBOL_GPL(kunit_fail_assert_format);
- 
- void kunit_unary_assert_format(const struct kunit_assert *assert,
- 			       struct string_stream *stream)
-@@ -58,6 +61,7 @@ void kunit_unary_assert_format(const struct kunit_assert *assert,
- 				 unary_assert->condition);
- 	kunit_assert_print_msg(assert, stream);
- }
-+EXPORT_SYMBOL_GPL(kunit_unary_assert_format);
- 
- void kunit_ptr_not_err_assert_format(const struct kunit_assert *assert,
- 				     struct string_stream *stream)
-@@ -78,6 +82,7 @@ void kunit_ptr_not_err_assert_format(const struct kunit_assert *assert,
- 	}
- 	kunit_assert_print_msg(assert, stream);
- }
-+EXPORT_SYMBOL_GPL(kunit_ptr_not_err_assert_format);
- 
- void kunit_binary_assert_format(const struct kunit_assert *assert,
- 				struct string_stream *stream)
-@@ -99,6 +104,7 @@ void kunit_binary_assert_format(const struct kunit_assert *assert,
- 			 binary_assert->right_value);
- 	kunit_assert_print_msg(assert, stream);
- }
-+EXPORT_SYMBOL_GPL(kunit_binary_assert_format);
- 
- void kunit_binary_ptr_assert_format(const struct kunit_assert *assert,
- 				    struct string_stream *stream)
-@@ -120,6 +126,7 @@ void kunit_binary_ptr_assert_format(const struct kunit_assert *assert,
- 			 binary_assert->right_value);
- 	kunit_assert_print_msg(assert, stream);
- }
-+EXPORT_SYMBOL_GPL(kunit_binary_ptr_assert_format);
- 
- void kunit_binary_str_assert_format(const struct kunit_assert *assert,
- 				    struct string_stream *stream)
-@@ -141,3 +148,4 @@ void kunit_binary_str_assert_format(const struct kunit_assert *assert,
- 			 binary_assert->right_value);
- 	kunit_assert_print_msg(assert, stream);
- }
-+EXPORT_SYMBOL_GPL(kunit_binary_str_assert_format);
-diff --git a/lib/kunit/example-test.c b/lib/kunit/kunit-example-test.c
-similarity index 97%
-rename from lib/kunit/example-test.c
-rename to lib/kunit/kunit-example-test.c
-index f64a829..be1164e 100644
---- a/lib/kunit/example-test.c
-+++ b/lib/kunit/kunit-example-test.c
-@@ -85,4 +85,6 @@ static int example_test_init(struct kunit *test)
-  * This registers the above test suite telling KUnit that this is a suite of
-  * tests that need to be run.
-  */
--kunit_test_suite(example_test_suite);
-+kunit_test_suites(&example_test_suite);
-+
-+MODULE_LICENSE("GPL v2");
-diff --git a/lib/kunit/test-test.c b/lib/kunit/kunit-test.c
-similarity index 98%
-rename from lib/kunit/test-test.c
-rename to lib/kunit/kunit-test.c
-index 5a6cc04..ccb8d2e 100644
---- a/lib/kunit/test-test.c
-+++ b/lib/kunit/kunit-test.c
-@@ -102,7 +102,6 @@ static int kunit_try_catch_test_init(struct kunit *test)
- 	.init = kunit_try_catch_test_init,
- 	.test_cases = kunit_try_catch_test_cases,
- };
--kunit_test_suite(kunit_try_catch_test_suite);
- 
- /*
-  * Context for testing test managed resources
-@@ -330,4 +329,6 @@ static void kunit_resource_test_exit(struct kunit *test)
- 	.exit = kunit_resource_test_exit,
- 	.test_cases = kunit_resource_test_cases,
- };
--kunit_test_suite(kunit_resource_test_suite);
-+kunit_test_suites(&kunit_try_catch_test_suite, &kunit_resource_test_suite);
-+
-+MODULE_LICENSE("GPL v2");
-diff --git a/lib/kunit/string-stream-test.c b/lib/kunit/string-stream-test.c
-index 6c70dc8..110f3a9 100644
---- a/lib/kunit/string-stream-test.c
-+++ b/lib/kunit/string-stream-test.c
-@@ -50,4 +50,4 @@ static void string_stream_test_get_string(struct kunit *test)
- 	.name = "string-stream-test",
- 	.test_cases = string_stream_test_cases
- };
--kunit_test_suite(string_stream_test_suite);
-+kunit_test_suites(&string_stream_test_suite);
-diff --git a/lib/kunit/test.c b/lib/kunit/test.c
-index 58a6227..87b5cf1 100644
---- a/lib/kunit/test.c
-+++ b/lib/kunit/test.c
-@@ -173,6 +173,7 @@ void kunit_do_assertion(struct kunit *test,
- 	if (assert->type == KUNIT_ASSERTION)
- 		kunit_abort(test);
- }
-+EXPORT_SYMBOL_GPL(kunit_do_assertion);
- 
- void kunit_init_test(struct kunit *test, const char *name)
- {
-@@ -181,6 +182,7 @@ void kunit_init_test(struct kunit *test, const char *name)
- 	test->name = name;
- 	test->success = true;
- }
-+EXPORT_SYMBOL_GPL(kunit_init_test);
- 
- /*
-  * Initializes and runs test case. Does not clean up or do post validations.
-@@ -319,6 +321,7 @@ int kunit_run_tests(struct kunit_suite *suite)
- 
- 	return 0;
- }
-+EXPORT_SYMBOL_GPL(kunit_run_tests);
- 
- struct kunit_resource *kunit_alloc_and_get_resource(struct kunit *test,
- 						    kunit_resource_init_t init,
-@@ -344,6 +347,7 @@ struct kunit_resource *kunit_alloc_and_get_resource(struct kunit *test,
- 
- 	return res;
- }
-+EXPORT_SYMBOL_GPL(kunit_alloc_and_get_resource);
- 
- static void kunit_resource_free(struct kunit *test, struct kunit_resource *res)
- {
-@@ -402,6 +406,7 @@ int kunit_resource_destroy(struct kunit *test,
- 	kunit_resource_free(test, resource);
- 	return 0;
- }
-+EXPORT_SYMBOL_GPL(kunit_resource_destroy);
- 
- struct kunit_kmalloc_params {
- 	size_t size;
-@@ -437,6 +442,7 @@ void *kunit_kmalloc(struct kunit *test, size_t size, gfp_t gfp)
- 				    gfp,
- 				    &params);
- }
-+EXPORT_SYMBOL_GPL(kunit_kmalloc);
- 
- void kunit_kfree(struct kunit *test, const void *ptr)
- {
-@@ -449,6 +455,7 @@ void kunit_kfree(struct kunit *test, const void *ptr)
- 
- 	WARN_ON(rc);
- }
-+EXPORT_SYMBOL_GPL(kunit_kfree);
- 
- void kunit_cleanup(struct kunit *test)
- {
-@@ -478,3 +485,4 @@ void kunit_cleanup(struct kunit *test)
- 		kunit_resource_free(test, resource);
- 	}
- }
-+EXPORT_SYMBOL_GPL(kunit_cleanup);
-diff --git a/lib/kunit/try-catch.c b/lib/kunit/try-catch.c
-index 4a66d16..0247a28 100644
---- a/lib/kunit/try-catch.c
-+++ b/lib/kunit/try-catch.c
-@@ -20,6 +20,7 @@ void __noreturn kunit_try_catch_throw(struct kunit_try_catch *try_catch)
- 	try_catch->try_result = -EFAULT;
- 	complete_and_exit(try_catch->try_completion, -EFAULT);
- }
-+EXPORT_SYMBOL_GPL(kunit_try_catch_throw);
- 
- static int kunit_generic_run_threadfn_adapter(void *data)
- {
-@@ -107,3 +108,4 @@ void kunit_try_catch_run(struct kunit_try_catch *try_catch, void *context)
- 
- 	try_catch->catch(try_catch->context);
- }
-+EXPORT_SYMBOL_GPL(kunit_try_catch_run);
-diff --git a/lib/list-test.c b/lib/list-test.c
-index 363c600..76babb1 100644
---- a/lib/list-test.c
-+++ b/lib/list-test.c
-@@ -743,4 +743,6 @@ static void list_test_list_for_each_entry_reverse(struct kunit *test)
- 	.test_cases = list_test_cases,
- };
- 
--kunit_test_suite(list_test_module);
-+kunit_test_suites(&list_test_module);
-+
-+MODULE_LICENSE("GPL v2");
--- 
-1.8.3.1
+It does beg the question if this means kunit is happy to not be a tool
+to test pre basic setup stuff (terminology used in init.c, meaning prior
+to running all init levels). I suspect this is the case.
 
+> Other use cases for this exist, but the above features should provide an
+> idea of the value that this could provide.
+> 
+> ## What work remains to be done?
+> 
+> These patches were based on patches in our non-upstream branch[2], so we
+> have a pretty good idea that they are useable as presented;
+> nevertheless, some of the changes done in this patchset could
+> *definitely* use some review by subsystem experts (linker scripts, init,
+> etc), and will likely change a lot after getting feedback.
+> 
+> The biggest thing that I know will require additional attention is
+> integrating this patchset with the KUnit module support patchset[3]. I
+> have not even attempted to build these patches on top of the module
+> support patches as I would like to get people's initial thoughts first
+> (especially Alan's :-) ). I think that making these patches work with
+> module support should be fairly straight forward, nevertheless.
+
+Modules just have their own sections too. That's all. So it'd be a
+matter of extending the linker script for modules too. But a module's
+init is different than the core kernel's for vmlinux.
+
+  Luis
