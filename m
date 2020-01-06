@@ -2,160 +2,117 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 24BFC131BA5
-	for <lists+linux-kselftest@lfdr.de>; Mon,  6 Jan 2020 23:40:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 217BB131BC3
+	for <lists+linux-kselftest@lfdr.de>; Mon,  6 Jan 2020 23:47:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727088AbgAFWkZ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 6 Jan 2020 17:40:25 -0500
-Received: from mail-pj1-f66.google.com ([209.85.216.66]:36615 "EHLO
-        mail-pj1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726742AbgAFWkZ (ORCPT
+        id S1726721AbgAFWqz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 6 Jan 2020 17:46:55 -0500
+Received: from mail-vk1-f195.google.com ([209.85.221.195]:42013 "EHLO
+        mail-vk1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726731AbgAFWqz (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 6 Jan 2020 17:40:25 -0500
-Received: by mail-pj1-f66.google.com with SMTP id n59so8360559pjb.1;
-        Mon, 06 Jan 2020 14:40:25 -0800 (PST)
+        Mon, 6 Jan 2020 17:46:55 -0500
+Received: by mail-vk1-f195.google.com with SMTP id s142so12928641vkd.9
+        for <linux-kselftest@vger.kernel.org>; Mon, 06 Jan 2020 14:46:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=mziUzibu7VLVDwY8yEp20Vq+KwzBjLeq76cwdTMo5x4=;
+        b=azrNAJ/0EtMbREH1NtA0iDE9tkgz+lezr6yJohafJy+P8F+wCOpe5etiWW5zbeenJ8
+         BuUxEouYLUyZamI6Sj/f7QE7Do55ZUW5U1nbPK0JY+m4cgfaVZ5Ua3yhylQ7vHbM/LDP
+         rEDv6PYjAEDVr0CZXi10Ou2j3P0KGuClTRSWAE3/Nate8bvsUsFTodfIeRQYyInfqjxO
+         BJV2lH8lf3na4nwz7QYAPpWRRuPhBPR+Hei/s1G/JBLAru3SvRfatYHmqBZ+VQFrcu7j
+         NcNJrRGiB8g1SMnEZQFMCIjaXG7+JowagU8FQW7gv2gxE4/WZT5ef9WhsSsnAUomthRc
+         nekw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=J3SHa4E3cS4gmRhRrRRBbMGMmQ7Swg+W9fTvK+8fgbo=;
-        b=QghAxNwbOpNWeCKcrY4MMLZJDUQrnsxywtSSfQVR5bQV7M+M7rv++XgA1gpLo82bsC
-         u59y/+LWBBr9YFYFfA0mH9/w8rXC9HyccLw7jQp1J7tS35SiY0zVscJ0WDjuRV3leyD4
-         gL7MRC+3jEgMXXSKVfKqFERRppct64iAp9BqPkRDLllU/3i/SQVahZ8MyMZnOCe8gWpI
-         pwViZWkaAakjgW4Lj3ptsQwvM5CuqwpE6TNYNxu8TvOUMrN43V41cpBlf/3zhVQUrpav
-         kJ8xa9NBgUxpisaayWNgqQY/brAFzqZHpAiXaRRAxoPcS86fWZhQPq/IXG5TFMiHDUaQ
-         +dQg==
-X-Gm-Message-State: APjAAAUUxReqDbtdTWKNz8LmFT/p55tdw/2g+BT6Uew853S8b2jW/y6l
-        HCj1Ra1T5PvtDw6BNNbhl6k=
-X-Google-Smtp-Source: APXvYqzL/Or94L+UYrmZszgXQkyK1iniMt70cGilBDndaFa7eg0lzxl/eodRL6mwFRsCXTaDCoazNg==
-X-Received: by 2002:a17:902:8f85:: with SMTP id z5mr108553143plo.43.1578350424536;
-        Mon, 06 Jan 2020 14:40:24 -0800 (PST)
-Received: from 42.do-not-panic.com (42.do-not-panic.com. [157.230.128.187])
-        by smtp.gmail.com with ESMTPSA id s24sm81687763pfd.161.2020.01.06.14.40.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Jan 2020 14:40:23 -0800 (PST)
-Received: by 42.do-not-panic.com (Postfix, from userid 1000)
-        id 9822040321; Mon,  6 Jan 2020 22:40:22 +0000 (UTC)
-Date:   Mon, 6 Jan 2020 22:40:22 +0000
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Brendan Higgins <brendanhiggins@google.com>
-Cc:     jdike@addtoit.com, richard@nod.at, anton.ivanov@cambridgegreys.com,
-        arnd@arndb.de, keescook@chromium.org, skhan@linuxfoundation.org,
-        alan.maguire@oracle.com, yzaikin@google.com, davidgow@google.com,
-        akpm@linux-foundation.org, rppt@linux.ibm.com,
-        gregkh@linuxfoundation.org, sboyd@kernel.org, logang@deltatee.com,
-        knut.omang@oracle.com, linux-um@lists.infradead.org,
-        linux-arch@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org
-Subject: Re: [RFC v1 0/6] kunit: create a centralized executor to dispatch
- all KUnit tests
-Message-ID: <20200106224022.GX11244@42.do-not-panic.com>
-References: <20191216220555.245089-1-brendanhiggins@google.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=mziUzibu7VLVDwY8yEp20Vq+KwzBjLeq76cwdTMo5x4=;
+        b=qxml5DEDdAzb0VKwUOHhfqkHBdX36LUcGQy1YiXmBjddrnM/FcHLVBrdp5FEg+q/OS
+         XSkGcZ07tG/vgTC/ZO7cNsjvLFQi9zS0sRjjL8I0s1SlZ9cqGPs7spJp/ce0Y8tP9sG5
+         O823dGWQBoEO8kACn8GLSBFiAwHQYrS4epGv/Z25XfY3SuPOfKcX2FQcV4+QJG1Wekqz
+         mp8o5DhknqPDKdTffmWGnBa8v/L0OakN5OGhMXFV8hBdbxD22whUtog8FvLOWzuZrXpG
+         7bEiIuvmnJJjXGK4Wa8QB2VGepZDDd0zgKfQBYMb/t0A5SyLTj9H8TXkZTR4fbejCslZ
+         4j5w==
+X-Gm-Message-State: APjAAAX1EkAKwxKxyw2tGGDjFmHy+ap0LPSDwulMxKNprvrvqPQ4iyzm
+        LPGIWenh7tspYJI5QxjVvV0Vc3HyTeAOHEfWZaTVXJNx
+X-Google-Smtp-Source: APXvYqxrbtzAinZlDXcCjYPK6LBCByV8b5PSRzrqMiqxqAMCfpyAe3z+ilcUjrsjXoMao63ZvkkvzsfE1n1YT0zDASA=
+X-Received: by 2002:a1f:1fd1:: with SMTP id f200mr3881672vkf.21.1578350813834;
+ Mon, 06 Jan 2020 14:46:53 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191216220555.245089-1-brendanhiggins@google.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20191216213901.106941-1-bgardon@google.com>
+In-Reply-To: <20191216213901.106941-1-bgardon@google.com>
+From:   Ben Gardon <bgardon@google.com>
+Date:   Mon, 6 Jan 2020 14:46:42 -0800
+Message-ID: <CANgfPd-vDhHeBxCeJNfT7m75KYvGZTi+wHTAuZKO3ZchxMsBxw@mail.gmail.com>
+Subject: Re: [PATCH v3 0/8] Create a userfaultfd demand paging test
+To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Cannon Matthews <cannonmatthews@google.com>,
+        Peter Xu <peterx@redhat.com>, Andrew Jones <drjones@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Dec 16, 2019 at 02:05:49PM -0800, Brendan Higgins wrote:
-> ## TL;DR
-> 
-> This patchset adds a centralized executor to dispatch tests rather than
-> relying on late_initcall to schedule each test suite separately along
-> with a couple of new features that depend on it.
-> 
-> ## What am I trying to do?
-> 
-> Conceptually, I am trying to provide a mechanism by which test suites
-> can be grouped together so that they can be reasoned about collectively.
-> The last two patches in this series add features which depend on this:
-> 
-> RFC 5/6 Prints out a test plan right before KUnit tests are run[1]; this
->         is valuable because it makes it possible for a test harness to
->         detect whether the number of tests run matches the number of
->         tests expected to be run, ensuring that no tests silently
->         failed.
-> 
-> RFC 6/6 Add a new kernel command-line option which allows the user to
->         specify that the kernel poweroff, halt, or reboot after
->         completing all KUnit tests; this is very handy for running KUnit
->         tests on UML or a VM so that the UML/VM process exits cleanly
->         immediately after running all tests without needing a special
->         initramfs.
+If anyone has a chance to re-review this test patch series I'd be
+grateful. I responded to most of the feedback I received in the first
+series, and believe this test will be a useful performance benchmark
+for future development.
 
-The approach seems sensible to me given that it separates from a
-semantics perspective kernel subsystem init work from *testing*, and
-so we are sure we'd run the *test* stuff *after* all subsystem init
-stuff.
-
-Dispatching, however is still immediate, and with a bit of work, this
-dispatcher could be configurable to run at an arbirary time after boot.
-If there are not immediate use cases for that though, then I suppose
-this is not a requirement for the dispatcher. But since there exists
-another modular test framework with its own dispatcher and it seems the
-goal is to merge the work long term, this might preempt the requirement
-to define how and when we can dispatch tests post boot.
-
-And, if we're going to do that, I can suggest that a data structure
-instead of just a function init call be used to describe tests to be
-placed into an ELF section. With my linker table work this would be
-easy, I define section ranges for code describing only executable
-routines, but it defines linker tables for when a component in the
-kernel would define a data structure, part of which can be a callback.
-Such data structure stuffed into an ELF section could allow dynamic
-configuration of the dipsatching, even post boot.
-
-I think this is a good stepping stone forward then, and to allow
-dynamic configuration of the dispatcher could mean eventual extensions
-to kunit's init stuff to stuff init calls into a data structure which
-can then allow configuration of the dispatching. One benefit that the
-linker table work *may* be able to help here with is that it allows
-an easy way to create kunit specific ordering, at linker time.
-There is also an example of addressing / generalizing dynamic / run time
-changes of ordering, by using the x86 IOMMU initialization as an
-example case. We don't have an easy way to do this today, but if kunit
-could benefit from such framework, it'd be another use case for
-the linker table work. That is, the ability to easilly allow
-dynamically modifying run time ordering of code through ELF sections.
-
-> In addition, by dispatching tests from a single location, we can
-> guarantee that all KUnit tests run after late_init is complete, which
-> was a concern during the initial KUnit patchset review (this has not
-> been a problem in practice, but resolving with certainty is nevertheless
-> desirable).
-
-Indeed, the concern is just a real semantics limitations. With the tests
-*always* running after all subsystem init stuff, we know we'd have a
-real full kernel ready.
-
-It does beg the question if this means kunit is happy to not be a tool
-to test pre basic setup stuff (terminology used in init.c, meaning prior
-to running all init levels). I suspect this is the case.
-
-> Other use cases for this exist, but the above features should provide an
-> idea of the value that this could provide.
-> 
-> ## What work remains to be done?
-> 
-> These patches were based on patches in our non-upstream branch[2], so we
-> have a pretty good idea that they are useable as presented;
-> nevertheless, some of the changes done in this patchset could
-> *definitely* use some review by subsystem experts (linker scripts, init,
-> etc), and will likely change a lot after getting feedback.
-> 
-> The biggest thing that I know will require additional attention is
-> integrating this patchset with the KUnit module support patchset[3]. I
-> have not even attempted to build these patches on top of the module
-> support patches as I would like to get people's initial thoughts first
-> (especially Alan's :-) ). I think that making these patches work with
-> module support should be fairly straight forward, nevertheless.
-
-Modules just have their own sections too. That's all. So it'd be a
-matter of extending the linker script for modules too. But a module's
-init is different than the core kernel's for vmlinux.
-
-  Luis
+On Mon, Dec 16, 2019 at 1:39 PM Ben Gardon <bgardon@google.com> wrote:
+>
+> When handling page faults for many vCPUs during demand paging, KVM's MMU
+> lock becomes highly contended. This series creates a test with a naive
+> userfaultfd based demand paging implementation to demonstrate that
+> contention. This test serves both as a functional test of userfaultfd
+> and a microbenchmark of demand paging performance with a variable number
+> of vCPUs and memory per vCPU.
+>
+> The test creates N userfaultfd threads, N vCPUs, and a region of memory
+> with M pages per vCPU. The N userfaultfd polling threads are each set up
+> to serve faults on a region of memory corresponding to one of the vCPUs.
+> Each of the vCPUs is then started, and touches each page of its disjoint
+> memory region, sequentially. In response to faults, the userfaultfd
+> threads copy a static buffer into the guest's memory. This creates a
+> worst case for MMU lock contention as we have removed most of the
+> contention between the userfaultfd threads and there is no time required
+> to fetch the contents of guest memory.
+>
+> This test was run successfully on Intel Haswell, Broadwell, and
+> Cascadelake hosts with a variety of vCPU counts and memory sizes.
+>
+> This test was adapted from the dirty_log_test.
+>
+> The series can also be viewed in Gerrit here:
+> https://linux-review.googlesource.com/c/virt/kvm/kvm/+/1464
+> (Thanks to Dmitry Vyukov <dvyukov@google.com> for setting up the Gerrit
+> instance)
+>
+> Ben Gardon (9):
+>   KVM: selftests: Create a demand paging test
+>   KVM: selftests: Add demand paging content to the demand paging test
+>   KVM: selftests: Add memory size parameter to the demand paging test
+>   KVM: selftests: Pass args to vCPU instead of using globals
+>   KVM: selftests: Support multiple vCPUs in demand paging test
+>   KVM: selftests: Time guest demand paging
+>   KVM: selftests: Add parameter to _vm_create for memslot 0 base paddr
+>   KVM: selftests: Support large VMs in demand paging test
+>   Add static flag
+>
+>  tools/testing/selftests/kvm/.gitignore        |   1 +
+>  tools/testing/selftests/kvm/Makefile          |   4 +-
+>  .../selftests/kvm/demand_paging_test.c        | 610 ++++++++++++++++++
+>  tools/testing/selftests/kvm/dirty_log_test.c  |   2 +-
+>  .../testing/selftests/kvm/include/kvm_util.h  |   3 +-
+>  tools/testing/selftests/kvm/lib/kvm_util.c    |   7 +-
+>  6 files changed, 621 insertions(+), 6 deletions(-)
+>  create mode 100644 tools/testing/selftests/kvm/demand_paging_test.c
+>
+> --
+> 2.23.0.444.g18eeb5a265-goog
+>
