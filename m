@@ -2,54 +2,54 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E161E133361
-	for <lists+linux-kselftest@lfdr.de>; Tue,  7 Jan 2020 22:18:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 319B31333C0
+	for <lists+linux-kselftest@lfdr.de>; Tue,  7 Jan 2020 22:21:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728992AbgAGVS2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 7 Jan 2020 16:18:28 -0500
-Received: from mail-vk1-f193.google.com ([209.85.221.193]:35312 "EHLO
-        mail-vk1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729068AbgAGVSV (ORCPT
+        id S1728856AbgAGVVH (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 7 Jan 2020 16:21:07 -0500
+Received: from mail-vs1-f66.google.com ([209.85.217.66]:40221 "EHLO
+        mail-vs1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728362AbgAGVVF (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 7 Jan 2020 16:18:21 -0500
-Received: by mail-vk1-f193.google.com with SMTP id o187so388503vka.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 07 Jan 2020 13:18:20 -0800 (PST)
+        Tue, 7 Jan 2020 16:21:05 -0500
+Received: by mail-vs1-f66.google.com with SMTP id g23so479158vsr.7
+        for <linux-kselftest@vger.kernel.org>; Tue, 07 Jan 2020 13:21:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=fWHlfsIIqdm4CbdrtbAbeq2yRN1pjIyOoBGlDv3Smng=;
-        b=jvwFbmReRt9SroYc8ybUNmLn1tiPYK6p8ILrC7V9oODm6acKcSC0C5Z8srJwQzhEky
-         mK9jaymqbeaX8fnhrt09ztan8PSQq6YqcFBdPcbK4IN+2+f9zMXdtieX3/PL5TN4ul+E
-         3PNCrM9CpCXg8SplB7jDlsZzz42uDf4zq2EsO9Z7NsGjZEkZn0FawYvjONzy/AVNfqoF
-         HEeV4oUbrc4kC1PgQ0mkJS53oPISOckpJv5VRNmxgSFZUsXnwulO9dFrFATaYD8Vawi1
-         6tIjCJa4UGyZFPHI9PjWHvd6UTWXCXwNmKYZ71udv3gZzFJ2eEOpRdzT3vETXRFDwKcn
-         3NKQ==
+        bh=xSRU4qb0ZOTzAyNx1lTLU2yX2h3B/4YPYeMRUYoNUNw=;
+        b=B2c24VErfFgKcj+Y8pK4fduvG+1fQI+hXYgNkXJGbBRFwaKnQ/dBzAG8TezMb3/Q9Q
+         m6031Hs6rCtZUh7bmDnZFhiSnSqShiG0SN6iRp876eP4eOImfeY0uKJ9ZWeLETLyWqfs
+         ZvEaJ5UebA6DyfgEHhVXrAEmr3UFLR1V8Z7y4lbVghEPUprT3u9Ns75q6VXY3IBNTYmA
+         rzqG9reCI0/e6EHRkRd7LSyHIGjW03TyI6y8ltFpSP5HkFFf9fyin3FuJdsuef5nzQ4Q
+         QIreO53IIKEtcmoXxH6F+iIuZEQXYkKGC4vyb6gpMMULXGdvg7fWB2J2Zgp84mdF7ZPM
+         ofag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=fWHlfsIIqdm4CbdrtbAbeq2yRN1pjIyOoBGlDv3Smng=;
-        b=r5pMMA5UaN2qO3GRA+6Xqv3XNFrQ+vNgyYTvtH98/PXH7EA6vyQpSlU/6cDfQ8GYZV
-         sbH4xzUYbV5YPbDrj7FWjLYallkR2bFI6T16opuo/YvfTcmfMxoGP1eGBKWOVG2CbhdE
-         /54Cm0W3yMJxeSFQTU44L/TqDs1l7RMUHTp3SXd/C4z1jhEyKsoW51fAwRKmSqd84zG8
-         xQ61uoZdV50/5p9Vmb6rF8Z5c+wfjjkLRAejNM1JhdfwueZHgBilZTt6jyNhyGxa3MHd
-         qIyeVI537/Qt1mQBQBd7SN9y+Ue/uu2Oz2ePHxFAXUJ4+35mk/pGTKGR3HxnDLC3EYF7
-         Nw+g==
-X-Gm-Message-State: APjAAAWXZ4Mei+8R9dx7JcOS0r+KH+U0nL1zQkRGM2u7vqGhA8LKHbMe
-        OSx2BxR4BRHITeaStQwARV5nICCEJQczCpYVwUksDw==
-X-Google-Smtp-Source: APXvYqxumwkbw/b3bQhS1QzSVsUSdF39aqCErT/H6DqIdEW/GJF4vkawveLg6w1NU6pRre6WHkV6HbdXHk9+c9kEkTU=
-X-Received: by 2002:a1f:1fd1:: with SMTP id f200mr957892vkf.21.1578431899872;
- Tue, 07 Jan 2020 13:18:19 -0800 (PST)
+        bh=xSRU4qb0ZOTzAyNx1lTLU2yX2h3B/4YPYeMRUYoNUNw=;
+        b=ntqEHNojFZJRHRiCCUYaybU2hMIhnNRLDkFiQCimLa8pjq/Zz2qvhWZlUB1ir+PWGl
+         Vz3sI+5o0ka5fhQR4pwY6PM/T/hA6WuAJEtY/pTrKuZEPWMW42B3cif3Y3IkEEzt3112
+         DkyJI4YjKhneJeEj9bVwopYumi8GjTrbDYBarGErIpHj4dzXky0X1lJXNXFPQHheT03c
+         Gr2tnei0n5shNn0W3+dGrujtXceotVnq7KCI185jxzLfwk0IKNmsLhHeEMcvLfeM+x1V
+         TCOiR7vuaA5D0chE3THHpGScziI1LAqeWEeHM/bxZQPRkmQdFYMcyYKKv2RdimLCotwM
+         htIw==
+X-Gm-Message-State: APjAAAX0iHdOyyiU3lUEHho8WDCzaQ6gOG4ioFXAaXhnIW88cKH5Fok3
+        yi47zNOm2xz01YY9UcQWorQzaM1CvynNbbnW7L/PmQ==
+X-Google-Smtp-Source: APXvYqyENOKFRASsBlhAPSr8XO5DU0ppABR3JIJu+k4Fe6D6fkhlIMmdJuGT0juY1Iv+IXC4K3kUX9+MYDhqzMADc7Y=
+X-Received: by 2002:a67:6f46:: with SMTP id k67mr906097vsc.2.1578432064703;
+ Tue, 07 Jan 2020 13:21:04 -0800 (PST)
 MIME-Version: 1.0
-References: <20191216213901.106941-1-bgardon@google.com> <20191216213901.106941-5-bgardon@google.com>
- <20200107150245.cblsqirr5mu4fqoo@kamzik.brq.redhat.com>
-In-Reply-To: <20200107150245.cblsqirr5mu4fqoo@kamzik.brq.redhat.com>
+References: <20191216213901.106941-1-bgardon@google.com> <20191216213901.106941-9-bgardon@google.com>
+ <20200107154227.tvex5natt7a64nzj@kamzik.brq.redhat.com>
+In-Reply-To: <20200107154227.tvex5natt7a64nzj@kamzik.brq.redhat.com>
 From:   Ben Gardon <bgardon@google.com>
-Date:   Tue, 7 Jan 2020 13:18:08 -0800
-Message-ID: <CANgfPd-CiO-HmY0Hit4101EQR8YMqAPUe80n-g6EjQys7x69Gw@mail.gmail.com>
-Subject: Re: [PATCH v3 4/8] KVM: selftests: Add memory size parameter to the
- demand paging test
+Date:   Tue, 7 Jan 2020 13:20:53 -0800
+Message-ID: <CANgfPd9VxvJYAw_cqG9X2GUAkZ9vumF8mZ1+P==mJoZgShR_rg@mail.gmail.com>
+Subject: Re: [PATCH v3 8/8] KVM: selftests: Move large memslots above KVM
+ internal memslots in _vm_create
 To:     Andrew Jones <drjones@redhat.com>
 Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
         linux-kselftest@vger.kernel.org,
@@ -62,173 +62,79 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Jan 7, 2020 at 7:02 AM Andrew Jones <drjones@redhat.com> wrote:
+Would it be viable to allocate at 4G be default and then add another
+interface for allocations at low memory addresses? For most tests, I
+don't think there's any value to having the backing paddrs below 3G.
+
+On Tue, Jan 7, 2020 at 7:42 AM Andrew Jones <drjones@redhat.com> wrote:
 >
-> On Mon, Dec 16, 2019 at 01:38:57PM -0800, Ben Gardon wrote:
-> > Add an argument to allow the demand paging test to work on larger and
-> > smaller guest sizes.
+> On Mon, Dec 16, 2019 at 01:39:01PM -0800, Ben Gardon wrote:
+> > KVM creates internal memslots between 3 and 4 GiB paddrs on the first
+> > vCPU creation. If memslot 0 is large enough it collides with these
+> > memslots an causes vCPU creation to fail. When requesting more than 3G,
+> > start memslot 0 at 4G in _vm_create.
 > >
 > > Signed-off-by: Ben Gardon <bgardon@google.com>
 > > ---
-> >  .../selftests/kvm/demand_paging_test.c        | 56 ++++++++++++-------
-> >  1 file changed, 35 insertions(+), 21 deletions(-)
+> >  tools/testing/selftests/kvm/lib/kvm_util.c | 15 +++++++++++----
+> >  1 file changed, 11 insertions(+), 4 deletions(-)
 > >
-> > diff --git a/tools/testing/selftests/kvm/demand_paging_test.c b/tools/testing/selftests/kvm/demand_paging_test.c
-> > index 11de5b58995fb..4aa90a3fce99c 100644
-> > --- a/tools/testing/selftests/kvm/demand_paging_test.c
-> > +++ b/tools/testing/selftests/kvm/demand_paging_test.c
-> > @@ -32,6 +32,8 @@
-> >  /* Default guest test virtual memory offset */
-> >  #define DEFAULT_GUEST_TEST_MEM               0xc0000000
+> > diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
+> > index 41cf45416060f..886d58e6cac39 100644
+> > --- a/tools/testing/selftests/kvm/lib/kvm_util.c
+> > +++ b/tools/testing/selftests/kvm/lib/kvm_util.c
+> > @@ -113,6 +113,8 @@ const char * const vm_guest_mode_string[] = {
+> >  _Static_assert(sizeof(vm_guest_mode_string)/sizeof(char *) == NUM_VM_MODES,
+> >              "Missing new mode strings?");
 > >
-> > +#define DEFAULT_GUEST_TEST_MEM_SIZE (1 << 30) /* 1G */
-> > +
+> > +#define KVM_INTERNAL_MEMSLOTS_START_PADDR (3UL << 30)
+> > +#define KVM_INTERNAL_MEMSLOTS_END_PADDR (4UL << 30)
 > >  /*
-> >   * Guest/Host shared variables. Ensure addr_gva2hva() and/or
-> >   * sync_global_to/from_guest() are used when accessing from
-> > @@ -264,11 +266,10 @@ static int setup_demand_paging(struct kvm_vm *vm,
-> >       return 0;
-> >  }
-> >
-> > -#define GUEST_MEM_SHIFT 30 /* 1G */
-> >  #define PAGE_SHIFT_4K  12
-> >
-> >  static void run_test(enum vm_guest_mode mode, bool use_uffd,
-> > -                  useconds_t uffd_delay)
-> > +                  useconds_t uffd_delay, uint64_t guest_memory_bytes)
+> >   * VM Create
+> >   *
+> > @@ -128,13 +130,16 @@ _Static_assert(sizeof(vm_guest_mode_string)/sizeof(char *) == NUM_VM_MODES,
+> >   *
+> >   * Creates a VM with the mode specified by mode (e.g. VM_MODE_P52V48_4K).
+> >   * When phy_pages is non-zero, a memory region of phy_pages physical pages
+> > - * is created and mapped starting at guest physical address 0.  The file
+> > - * descriptor to control the created VM is created with the permissions
+> > - * given by perm (e.g. O_RDWR).
+> > + * is created. If phy_pages is less that 3G, it is mapped starting at guest
+> > + * physical address 0. If phy_pages is greater than 3G it is mapped starting
+> > + * 4G into the guest physical address space to avoid KVM internal memslots
+> > + * which map the region between 3G and 4G. The file descriptor to control the
+> > + * created VM is created with the permissions given by perm (e.g. O_RDWR).
+> >   */
+> >  struct kvm_vm *_vm_create(enum vm_guest_mode mode, uint64_t phy_pages, int perm)
 > >  {
-> >       pthread_t vcpu_thread;
-> >       pthread_t uffd_handler_thread;
-> > @@ -276,33 +277,40 @@ static void run_test(enum vm_guest_mode mode, bool use_uffd,
-> >       int r;
+> >       struct kvm_vm *vm;
+> > +     uint64_t guest_paddr = 0;
 > >
-> >       /*
-> > -      * We reserve page table for 2 times of extra dirty mem which
-> > -      * will definitely cover the original (1G+) test range.  Here
-> > -      * we do the calculation with 4K page size which is the
-> > -      * smallest so the page number will be enough for all archs
-> > -      * (e.g., 64K page size guest will need even less memory for
-> > -      * page tables).
-> > +      * We reserve page table for twice the ammount of memory we intend
-> > +      * to use in the test region for demand paging. Here we do the
-> > +      * calculation with 4K page size which is the smallest so the page
-> > +      * number will be enough for all archs. (e.g., 64K page size guest
-> > +      * will need even less memory for page tables).
-> >        */
-> >       vm = create_vm(mode, VCPU_ID,
-> > -                    2ul << (GUEST_MEM_SHIFT - PAGE_SHIFT_4K),
-> > +                    (2 * guest_memory_bytes) >> PAGE_SHIFT_4K,
-> >                      guest_code);
+> >       DEBUG("Testing guest mode: %s\n", vm_guest_mode_string(mode));
 > >
-> >       guest_page_size = vm_get_page_size(vm);
-> > -     /*
-> > -      * A little more than 1G of guest page sized pages.  Cover the
-> > -      * case where the size is not aligned to 64 pages.
-> > -      */
-> > -     guest_num_pages = (1ul << (GUEST_MEM_SHIFT -
-> > -                                vm_get_page_shift(vm))) + 16;
-> > +
-> > +     TEST_ASSERT(guest_memory_bytes % guest_page_size == 0,
-> > +                 "Guest memory size is not guest page size aligned.");
-> > +
-> > +     guest_num_pages = guest_memory_bytes / guest_page_size;
-> > +
-> >  #ifdef __s390x__
-> >       /* Round up to multiple of 1M (segment size) */
-> >       guest_num_pages = (guest_num_pages + 0xff) & ~0xffUL;
-> >  #endif
-> > +     /*
-> > +      * If there should be more memory in the guest test region than there
-> > +      * can be pages in the guest, it will definitely cause problems.
-> > +      */
-> > +     TEST_ASSERT(guest_num_pages < vm_get_max_gfn(vm),
-> > +                 "Requested more guest memory than address space allows.\n"
-> > +                 "    guest pages: %lx max gfn: %lx\n",
-> > +                 guest_num_pages, vm_get_max_gfn(vm));
+> > @@ -227,9 +232,11 @@ struct kvm_vm *_vm_create(enum vm_guest_mode mode, uint64_t phy_pages, int perm)
 > >
-> >       host_page_size = getpagesize();
-> > -     host_num_pages = (guest_num_pages * guest_page_size) / host_page_size +
-> > -                      !!((guest_num_pages * guest_page_size) %
-> > -                         host_page_size);
-> > +     TEST_ASSERT(guest_memory_bytes % host_page_size == 0,
-> > +                 "Guest memory size is not host page size aligned.");
-> > +     host_num_pages = guest_memory_bytes / host_page_size;
+> >       /* Allocate and setup memory for guest. */
+> >       vm->vpages_mapped = sparsebit_alloc();
+> > +     if (guest_paddr + phy_pages > KVM_INTERNAL_MEMSLOTS_START_PADDR)
+> > +             guest_paddr = KVM_INTERNAL_MEMSLOTS_END_PADDR;
+> >       if (phy_pages != 0)
+> >               vm_userspace_mem_region_add(vm, VM_MEM_SRC_ANONYMOUS,
+> > -                                         0, 0, phy_pages, 0);
+> > +                                         guest_paddr, 0, phy_pages, 0);
 > >
-> >       guest_test_phys_mem = (vm_get_max_gfn(vm) - guest_num_pages) *
-> >                             guest_page_size;
-> > @@ -381,7 +389,8 @@ static void help(char *name)
-> >       int i;
-> >
-> >       puts("");
-> > -     printf("usage: %s [-h] [-m mode] [-u] [-d uffd_delay_usec]\n", name);
-> > +     printf("usage: %s [-h] [-m mode] [-u] [-d uffd_delay_usec]\n"
-> > +            "          [-b bytes test memory]\n", name);
-> >       printf(" -m: specify the guest mode ID to test\n"
-> >              "     (default: test all supported modes)\n"
-> >              "     This option may be used multiple times.\n"
-> > @@ -395,6 +404,8 @@ static void help(char *name)
-> >       printf(" -d: add a delay in usec to the User Fault\n"
-> >              "     FD handler to simulate demand paging\n"
-> >              "     overheads. Ignored without -u.\n");
-> > +     printf(" -b: specify the number of bytes of memory which should be\n"
-> > +            "     allocated to the guest.\n");
->
-> Can we input in megabytes instead? And also it might be nice to output the
-> default size here.
-
-I added a little function to parse size arguments so users can specify
-2M or 7G. I also changed this to print the default value.
-
->
-> >       puts("");
-> >       exit(0);
+> >       return vm;
 > >  }
-> > @@ -402,6 +413,7 @@ static void help(char *name)
-> >  int main(int argc, char *argv[])
-> >  {
-> >       bool mode_selected = false;
-> > +     uint64_t guest_memory_bytes = DEFAULT_GUEST_TEST_MEM_SIZE;
-> >       unsigned int mode;
-> >       int opt, i;
-> >       bool use_uffd = false;
-> > @@ -414,7 +426,7 @@ int main(int argc, char *argv[])
-> >       vm_guest_mode_params_init(VM_MODE_P40V48_4K, true, true);
-> >  #endif
-> >
-> > -     while ((opt = getopt(argc, argv, "hm:ud:")) != -1) {
-> > +     while ((opt = getopt(argc, argv, "hm:ud:b:")) != -1) {
-> >               switch (opt) {
-> >               case 'm':
-> >                       if (!mode_selected) {
-> > @@ -435,6 +447,8 @@ int main(int argc, char *argv[])
-> >                       TEST_ASSERT(uffd_delay >= 0,
-> >                                   "A negative UFFD delay is not supported.");
-> >                       break;
-> > +             case 'b':
-> > +                     guest_memory_bytes = strtoull(optarg, NULL, 0);
->
-> Missing break. So it doesn't look like this was tested.
-
-Woops, you're right, I must not have tested this commit. The break is
-added in commit 6/8 and I only tested at the end of the series.
-I'll have the break in this commit in the next version of this series.
-
->
-> >               case 'h':
-> >               default:
-> >                       help(argv[0]);
-> > @@ -448,7 +462,7 @@ int main(int argc, char *argv[])
-> >               TEST_ASSERT(vm_guest_mode_params[i].supported,
-> >                           "Guest mode ID %d (%s) not supported.",
-> >                           i, vm_guest_mode_string(i));
-> > -             run_test(i, use_uffd, uffd_delay);
-> > +             run_test(i, use_uffd, uffd_delay, guest_memory_bytes);
-> >       }
-> >
-> >       return 0;
 > > --
 > > 2.24.1.735.g03f4e72817-goog
 > >
+>
+> I feel like this function is becoming too magic and it'll be more
+> complicated for tests that need to add additional memory regions
+> to know what physical addresses are available. Maybe we should assert
+> if we can't allocate more than 3G at offset zero and also provide
+> another interface for allocating at an offset input by the user,
+> as long as the offset is 4G or above (asserting when it isn't)?
 >
 > Thanks,
 > drew
