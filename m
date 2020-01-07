@@ -2,179 +2,145 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AA04D132811
-	for <lists+linux-kselftest@lfdr.de>; Tue,  7 Jan 2020 14:49:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C553132853
+	for <lists+linux-kselftest@lfdr.de>; Tue,  7 Jan 2020 15:02:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727952AbgAGNto (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 7 Jan 2020 08:49:44 -0500
-Received: from smtp-fw-9102.amazon.com ([207.171.184.29]:17623 "EHLO
-        smtp-fw-9102.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727944AbgAGNtn (ORCPT
+        id S1728248AbgAGOB0 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 7 Jan 2020 09:01:26 -0500
+Received: from aserp2120.oracle.com ([141.146.126.78]:33790 "EHLO
+        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727993AbgAGOBZ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 7 Jan 2020 08:49:43 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1578404984; x=1609940984;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   mime-version;
-  bh=b7YvakxQUDhIYxvaIP9AWgD21Q+/Dpc5za+Ll0cvmyA=;
-  b=dT99APbDX8WMAzafx3B8f95/9xO4fvleBjqyIk6v96dvO6PO52gjVvPk
-   fRhhuA4cKDye1YfFrj70R5lTw62V0W6T3TvwxpNWrMoeCizEDVxphcWgS
-   U8ExARa4Bcw1TrbvWmprHDJ0MxIO30zr65nVPg+SkIo+Ujg/CSGh+PQvo
-   8=;
-IronPort-SDR: +Orc/lmc0ipZQOdDDcYTpgvJiEqgvHzto1KG0KJliFle6CUe+TAtUYAMMz6jQWJnzCEk4rpOsE
- ncanrSeUR9wg==
-X-IronPort-AV: E=Sophos;i="5.69,406,1571702400"; 
-   d="scan'208";a="17221127"
-Received: from sea32-co-svc-lb4-vlan3.sea.corp.amazon.com (HELO email-inbound-relay-1e-57e1d233.us-east-1.amazon.com) ([10.47.23.38])
-  by smtp-border-fw-out-9102.sea19.amazon.com with ESMTP; 07 Jan 2020 13:49:32 +0000
-Received: from EX13MTAUEA002.ant.amazon.com (iad55-ws-svc-p15-lb9-vlan3.iad.amazon.com [10.40.159.166])
-        by email-inbound-relay-1e-57e1d233.us-east-1.amazon.com (Postfix) with ESMTPS id B2780141623;
-        Tue,  7 Jan 2020 13:49:27 +0000 (UTC)
-Received: from EX13D31EUA001.ant.amazon.com (10.43.165.15) by
- EX13MTAUEA002.ant.amazon.com (10.43.61.77) with Microsoft SMTP Server (TLS)
- id 15.0.1236.3; Tue, 7 Jan 2020 13:49:27 +0000
-Received: from u886c93fd17d25d.ant.amazon.com (10.43.161.244) by
- EX13D31EUA001.ant.amazon.com (10.43.165.15) with Microsoft SMTP Server (TLS)
- id 15.0.1367.3; Tue, 7 Jan 2020 13:49:23 +0000
-From:   SeongJae Park <sjpark@amazon.com>
-To:     Brendan Higgins <brendanhiggins@google.com>
-CC:     SeongJae Park <sjpark@amazon.com>,
-        Bernd Petrovitsch <bernd@petrovitsch.priv.at>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        SeongJae Park <sj38.park@gmail.com>
-Subject: Re: Re: Re: What is the best way to compare an unsigned and a constant?
-Date:   Tue, 7 Jan 2020 14:49:10 +0100
-Message-ID: <20200107134910.20347-1-sjpark@amazon.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <CAFd5g47-wi0duBAVxvevDKT7eb7WGT9JMFoKgCJQQSa0P0h9Jw@mail.gmail.com>
+        Tue, 7 Jan 2020 09:01:25 -0500
+Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
+        by aserp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id 007Di967122841;
+        Tue, 7 Jan 2020 14:01:23 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : mime-version : content-type; s=corp-2019-08-05;
+ bh=LKUBemU6FsVp0N8ztTeBVUASyvI64fguo+7yxurR9H0=;
+ b=BiorenIt8K0fpfJk3aeJZ+xqig61OjKlyShd9klSmmLEupa9IvMM/sW2epjzF6nGn+UJ
+ WZqRWXLLg67u0Pqn2a9IyNiAMVWPWzd6fijSs4Q7wBCAdkGzyCf1iZE21RFsmvfVo8/U
+ 4DF1xqBWgL3qGYuCSYN79lssbvbJtVcUw0H6/eOzCja6hZL7N0ZVjUVB7GuoE2W3QGVg
+ siX+2Nlqx5IBpbR+W6hhn2wFM5gBQbquGFqXgKlPLN6efE0SdGtFY8pWecjI64cbLlaE
+ 1Do+fn01F/UNy0s36bV8CukG9ZqH6fsKXfvFUVlTTPX8zI8sG0Ox7aOOPRwdmWrOQf23 Kw== 
+Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
+        by aserp2120.oracle.com with ESMTP id 2xajnpwm7v-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 07 Jan 2020 14:01:22 +0000
+Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
+        by aserp3030.oracle.com (8.16.0.27/8.16.0.27) with SMTP id 007Di5Zb114157;
+        Tue, 7 Jan 2020 14:01:22 GMT
+Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
+        by aserp3030.oracle.com with ESMTP id 2xcpamjyj8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 07 Jan 2020 14:01:22 +0000
+Received: from abhmp0002.oracle.com (abhmp0002.oracle.com [141.146.116.8])
+        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 007E1LGG014686;
+        Tue, 7 Jan 2020 14:01:21 GMT
+Received: from kili.mountain (/129.205.23.165)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Tue, 07 Jan 2020 06:01:18 -0800
+Date:   Tue, 7 Jan 2020 17:01:06 +0300
+From:   Dan Carpenter <dan.carpenter@oracle.com>
+To:     Kees Cook <keescook@chromium.org>,
+        Jakub Kicinski <jakub.kicinski@netronome.com>
+Cc:     linux-kselftest@vger.kernel.org
+Subject: [bug report] selftests/tls: add a test for fragmented messages
+Message-ID: <20200107140106.ejj4zgeiu4fauatn@kili.mountain>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.43.161.244]
-X-ClientProxiedBy: EX13D06UWC004.ant.amazon.com (10.43.162.97) To
- EX13D31EUA001.ant.amazon.com (10.43.165.15)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: NeoMutt/20170113 (1.7.2)
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9492 signatures=668685
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=2 malwarescore=0
+ phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=993
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.0.1-1911140001 definitions=main-2001070115
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9492 signatures=668685
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
+ suspectscore=2 phishscore=0 bulkscore=0 spamscore=0 clxscore=1011
+ lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1911140001
+ definitions=main-2001070115
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On   Tue, 7 Jan 2020 05:35:21 -0800   Brendan Higgins <brendanhiggins@google.com> wrote:
+Hello self test developers,
 
-> Sorry for the delay, I was on vacation. (I still am, but I was too ;-).)
+I feel like I reported this years ago but I forget what is going on
+here?
 
-Happy new year, Brendan :)
+The patch 65190f77424d: "selftests/tls: add a test for fragmented
+messages" from Nov 27, 2019, leads to the following static checker
+warning:
 
-> 
-> On Tue, Jan 7, 2020 at 3:52 AM SeongJae Park <sjpark@amazon.com> wrote:
-> >
-> > On   Fri, 27 Dec 2019 13:52:27 +0100   Bernd Petrovitsch <bernd@petrovits=
-> ch.priv.at> wrote:
-> >
-> > > This is a multi-part message in MIME format.
-> > > --------------D98A0A31D62B0BC2939BAEE9
-> > > Content-Type: text/plain; charset=3Dutf-8
-> > > Content-Transfer-Encoding: quoted-printable
-> > >
-> > > Hi all!
-> > >
-> > > On 27/12/2019 13:39, SeongJae Park wrote:
-> > > [...]
-> > > > I have a function returning 'unsigned long', and would like to write =
-> a =3D
-> > > kunit
-> > > > test for the function, as below.
-> > > >=3D20
-> > > >     unsigned long foo(void)
-> > > >     {
-> > > >             return 42;
-> > > >     }
-> > > >=3D20
-> > > >     static void foo_test(struct kunit *test)
-> > > >     {
-> > > >         KUNIT_EXPECT_EQ(test, 42, foo());
-> > > >     }
-> > >
-> > > For this case: shouldn't=3D20
-> > > ----  snip  ----
-> > > static void foo_test(struct kunit *test)
-> > > {
-> > >      KUNIT_EXPECT_EQ(test, 42ul, foo());
-> > > }
-> > > ----  snip  ----
-> > > do the trick?
-> >
-> > Unfortunately, it doesn't works.
-> >
-> >     [13:04:58] Building KUnit Kernel ...
-> >     In file included from /.../linux/include/linux/list.h:9:0,
-> >                      from /.../linux/include/linux/wait.h:7,
-> >                      from /.../linux/include/linux/wait_bit.h:8,
-> >                      from /.../linux/include/linux/fs.h:6,
-> >                      from /.../linux/include/linux/debugfs.h:15,
-> >                      from /.../linux/mm/damon.c:12:
-> >     /.../linux/mm/damon-test.h: In function =E2=80=98damon_test_foo=E2=80=
-> =99:
-> >     /.../linux/include/linux/kernel.h:842:29: warning: comparison of dist=
-> inct pointer types lacks a cast
-> >        (!!(sizeof((typeof(x) *)1 =3D=3D (typeof(y) *)1)))
-> >                                  ^
-> >     /.../linux/include/kunit/test.h:493:9: note: in expansion of macro =
-> =E2=80=98__typecheck=E2=80=99
-> >       ((void)__typecheck(__left, __right));           \
-> >              ^~~~~~~~~~~
-> >     /.../linux/include/kunit/test.h:517:2: note: in expansion of macro =
-> =E2=80=98KUNIT_BASE_BINARY_ASSERTION=E2=80=99
-> >       KUNIT_BASE_BINARY_ASSERTION(test,           \
-> >       ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-> >     /.../linux/include/kunit/test.h:606:2: note: in expansion of macro =
-> =E2=80=98KUNIT_BASE_EQ_MSG_ASSERTION=E2=80=99
-> >       KUNIT_BASE_EQ_MSG_ASSERTION(test,           \
-> >       ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-> >     /.../linux/include/kunit/test.h:616:2: note: in expansion of macro =
-> =E2=80=98KUNIT_BINARY_EQ_MSG_ASSERTION=E2=80=99
-> >       KUNIT_BINARY_EQ_MSG_ASSERTION(test,           \
-> >       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> >     /.../linux/include/kunit/test.h:979:2: note: in expansion of macro =
-> =E2=80=98KUNIT_BINARY_EQ_ASSERTION=E2=80=99
-> >       KUNIT_BINARY_EQ_ASSERTION(test, KUNIT_EXPECTATION, left, right)
-> >       ^~~~~~~~~~~~~~~~~~~~~~~~~
-> >     /.../linux/mm/damon-test.h:565:2: note: in expansion of macro =E2=80=
-> =98KUNIT_EXPECT_EQ=E2=80=99
-> >       KUNIT_EXPECT_EQ(test, 42ul, (int)foo());
-> >       ^~~~~~~~~~~~~~~
-> 
-> Isn't the issue here that you fixed the 42, but are now casting the
-> result of foo() to an int?
+	tools/testing/selftests/net/tls.c:292 tls_sendmsg_fragmented()
+	warn: curly braces intended?
 
-Oh, right...  Removing the non-sense casting fixed the problem.  Thanks,
-Brendan!
+tools/testing/selftests/net/tls.c
+   299  TEST_F(tls, sendmsg_large)
+   300  {
+   301          void *mem = malloc(16384);
+   302          size_t send_len = 16384;
+   303          size_t sends = 128;
+   304          struct msghdr msg;
+   305          size_t recvs = 0;
+   306          size_t sent = 0;
+   307  
+   308          memset(&msg, 0, sizeof(struct msghdr));
+   309          while (sent++ < sends) {
+   310                  struct iovec vec = { (void *)mem, send_len };
+   311  
+   312                  msg.msg_iov = &vec;
+   313                  msg.msg_iovlen = 1;
+   314                  EXPECT_EQ(sendmsg(self->cfd, &msg, 0), send_len);
+   315          }
+   316  
+   317          while (recvs++ < sends)
+   318                  EXPECT_NE(recv(self->fd, mem, send_len, 0), -1);
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+This is a macro (below).
 
+   319  
+   320          free(mem);
+   321  }
 
-Thanks,
-SeongJae Park
+tools/testing/selftests/kselftest_harness.h
+   592  /* Support an optional handler after and ASSERT_* or EXPECT_*.  The approach is
+   593   * not thread-safe, but it should be fine in most sane test scenarios.
+   594   *
+   595   * Using __bail(), which optionally abort()s, is the easiest way to early
+   596   * return while still providing an optional block to the API consumer.
+   597   */
+   598  #define OPTIONAL_HANDLER(_assert) \
+   599          for (; _metadata->trigger; _metadata->trigger = \
+   600                          __bail(_assert, _metadata->no_print, _metadata->step))
+   601  
+   602  #define __INC_STEP(_metadata) \
+   603          if (_metadata->passed && _metadata->step < 255) \
+   604                  _metadata->step++;
+   605  
+   606  #define __EXPECT(_expected, _expected_str, _seen, _seen_str, _t, _assert) do { \
+   607          /* Avoid multiple evaluation of the cases */ \
+   608          __typeof__(_expected) __exp = (_expected); \
+   609          __typeof__(_seen) __seen = (_seen); \
+   610          if (_assert) __INC_STEP(_metadata); \
+   611          if (!(__exp _t __seen)) { \
+   612                  unsigned long long __exp_print = (uintptr_t)__exp; \
+   613                  unsigned long long __seen_print = (uintptr_t)__seen; \
+   614                  __TH_LOG("Expected %s (%llu) %s %s (%llu)", \
+   615                           _expected_str, __exp_print, #_t, \
+   616                           _seen_str, __seen_print); \
+   617                  _metadata->passed = 0; \
+   618                  /* Ensure the optional handler is triggered */ \
+   619                  _metadata->trigger = 1; \
+   620          } \
+   621  } while (0); OPTIONAL_HANDLER(_assert)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+The problem is the OPTIONAL_HANDLER().  Smatch thinks it should be
+included inside the do {} while(0) loop.
 
-> 
-> Or have you fixed that now too?
-> 
-> Worst case (gross) scenario, you could just cast 42 to whatever type
-> foo() returns.
-> 
-> > Some other thoughts?
-> >
-> >
-> > Thanks,
-> > SeongJae Park
-> >
-> >
-> > >
-> > > MfG,
-> > >       Bernd
-> > > --=3D20
-> > > "I dislike type abstraction if it has no real reason. And saving
-> > > on typing is not a good reason - if your typing speed is the main
-> > > issue when you're coding, you're doing something seriously wrong."
-> > >     - Linus Torvalds
-> 
+regards,
+dan carpenter
