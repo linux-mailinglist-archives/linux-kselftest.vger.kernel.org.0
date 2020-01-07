@@ -2,96 +2,140 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EE4CF1321D0
-	for <lists+linux-kselftest@lfdr.de>; Tue,  7 Jan 2020 10:03:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B26CD13253F
+	for <lists+linux-kselftest@lfdr.de>; Tue,  7 Jan 2020 12:52:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726558AbgAGJCz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 7 Jan 2020 04:02:55 -0500
-Received: from youngberry.canonical.com ([91.189.89.112]:46478 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726327AbgAGJCz (ORCPT
+        id S1726690AbgAGLwp (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 7 Jan 2020 06:52:45 -0500
+Received: from smtp-fw-6002.amazon.com ([52.95.49.90]:8834 "EHLO
+        smtp-fw-6002.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727963AbgAGLwo (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 7 Jan 2020 04:02:55 -0500
-Received: from ip-109-41-1-227.web.vodafone.de ([109.41.1.227] helo=wittgenstein)
-        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.86_2)
-        (envelope-from <christian.brauner@ubuntu.com>)
-        id 1ioklG-0004Nl-2G; Tue, 07 Jan 2020 09:02:50 +0000
-Date:   Tue, 7 Jan 2020 10:02:27 +0100
-From:   Christian Brauner <christian.brauner@ubuntu.com>
-To:     Amanieu d'Antras <amanieu@gmail.com>
-Cc:     Will Deacon <will@kernel.org>, Will Deacon <will.deacon@arm.com>,
-        linux-kernel@vger.kernel.org,
-        Christian Brauner <christian@brauner.io>,
-        "# 3.4.x" <stable@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        keescook@chromium.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH 2/7] arm64: Implement copy_thread_tls
-Message-ID: <20200107090219.jl4py4u2zvofwnbh@wittgenstein>
-References: <20200102172413.654385-1-amanieu@gmail.com>
- <20200102172413.654385-3-amanieu@gmail.com>
- <20200102180130.hmpipoiiu3zsl2d6@wittgenstein>
- <20200106173953.GB9676@willie-the-truck>
- <CA+y5pbSBYLvZ46nJP0pSYZnRohtPxHitOHPEaLXq23-QrPKk2g@mail.gmail.com>
+        Tue, 7 Jan 2020 06:52:44 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1578397965; x=1609933965;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   in-reply-to:content-transfer-encoding;
+  bh=M87RnN37XgwXCD+GEsg/u8hPt4iEW8Ew/QPEy5zhFjc=;
+  b=WUm+TZCIN8JyIo+4P1Wg/Q8pD46hMvNdHThqLY0Na62VWJVy2aR+hBTR
+   tCnA4/lRCWSNH+B1gtO0yNUm7V9CkF8ZwozQeaqTpjqzCHCBitQ1s8QWP
+   6AjaRbZu4SDYGYlXRzyevVKOkbMTsHpc0IcMROeEuB+FI/5oZlfgJTbRS
+   c=;
+IronPort-SDR: 9QW/w+s9Ty8UIMq8ZXzz9RtmmatTtG46bWiI0BW3qfPCmLMb8lsJBYJTfSKsyz+Ts+Ge3lJETh
+ vKyf0SJ9FXSw==
+X-IronPort-AV: E=Sophos;i="5.69,406,1571702400"; 
+   d="scan'208";a="10389039"
+Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-2b-8cc5d68b.us-west-2.amazon.com) ([10.43.8.6])
+  by smtp-border-fw-out-6002.iad6.amazon.com with ESMTP; 07 Jan 2020 11:52:43 +0000
+Received: from EX13MTAUEA001.ant.amazon.com (pdx4-ws-svc-p6-lb7-vlan3.pdx.amazon.com [10.170.41.166])
+        by email-inbound-relay-2b-8cc5d68b.us-west-2.amazon.com (Postfix) with ESMTPS id 0609FA1F9C;
+        Tue,  7 Jan 2020 11:52:41 +0000 (UTC)
+Received: from EX13D31EUA001.ant.amazon.com (10.43.165.15) by
+ EX13MTAUEA001.ant.amazon.com (10.43.61.243) with Microsoft SMTP Server (TLS)
+ id 15.0.1367.3; Tue, 7 Jan 2020 11:52:41 +0000
+Received: from u886c93fd17d25d.ant.amazon.com (10.43.162.119) by
+ EX13D31EUA001.ant.amazon.com (10.43.165.15) with Microsoft SMTP Server (TLS)
+ id 15.0.1367.3; Tue, 7 Jan 2020 11:52:37 +0000
+From:   SeongJae Park <sjpark@amazon.com>
+To:     Bernd Petrovitsch <bernd@petrovitsch.priv.at>
+CC:     SeongJae Park <sjpark@amazon.com>, <brendanhiggins@google.com>,
+        <linux-kselftest@vger.kernel.org>, <kunit-dev@googlegroups.com>,
+        <linux-kernel@vger.kernel.org>, SeongJae Park <sj38.park@gmail.com>
+Subject: Re: Re: What is the best way to compare an unsigned and a constant?
+Date:   Tue, 7 Jan 2020 12:52:20 +0100
+Message-ID: <20200107115220.25574-1-sjpark@amazon.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CA+y5pbSBYLvZ46nJP0pSYZnRohtPxHitOHPEaLXq23-QrPKk2g@mail.gmail.com>
-User-Agent: NeoMutt/20180716
+In-Reply-To: <688d8f4b-266f-2c47-d4e9-d0336316a0a9@petrovitsch.priv.at>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.43.162.119]
+X-ClientProxiedBy: EX13D33UWB004.ant.amazon.com (10.43.161.225) To
+ EX13D31EUA001.ant.amazon.com (10.43.165.15)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-[Cc Kees in case he knows something about where arch specific tests live
- or whether we have a framework for this]
+On   Fri, 27 Dec 2019 13:52:27 +0100   Bernd Petrovitsch <bernd@petrovitsch.priv.at> wrote:
 
-On Mon, Jan 06, 2020 at 07:03:32PM +0100, Amanieu d'Antras wrote:
-> On Mon, Jan 6, 2020 at 6:39 PM Will Deacon <will@kernel.org> wrote:
-> > I also ran the native and compat selftests but, unfortunately, they all
-> > pass even without this patch. Do you reckon it would be possible to update
-> > them to check the tls pointer?
+> This is a multi-part message in MIME format.
+> --------------D98A0A31D62B0BC2939BAEE9
+> Content-Type: text/plain; charset=utf-8
+> Content-Transfer-Encoding: quoted-printable
 > 
-> Here's the program I used for testing on arm64. I considered adding it
-> to the selftests but there is no portable way of reading the TLS
-> register on all architectures.
-
-I'm not saying you need to do this right now.
-It feels like we must've run into the "this is architecture
-specific"-and-we-want-to-test-this issue before... Do we have a place
-where architecture specific selftests live?
-
+> Hi all!
 > 
-> #include <sys/syscall.h>
-> #include <unistd.h>
-> #include <stdio.h>
-> #include <stdint.h>
+> On 27/12/2019 13:39, SeongJae Park wrote:
+> [...]
+> > I have a function returning 'unsigned long', and would like to write a =
+> kunit
+> > test for the function, as below.
+> >=20
+> >     unsigned long foo(void)
+> >     {
+> >     	return 42;
+> >     }
+> >=20
+> >     static void foo_test(struct kunit *test)
+> >     {
+> >         KUNIT_EXPECT_EQ(test, 42, foo());
+> >     }
 > 
-> #define __NR_clone3 435
-> struct clone_args {
->     uint64_t flags;
->     uint64_t pidfd;
->     uint64_t child_tid;
->     uint64_t parent_tid;
->     uint64_t exit_signal;
->     uint64_t stack;
->     uint64_t stack_size;
->     uint64_t tls;
-> };
-> 
-> #define USE_CLONE3
-> 
-> int main() {
->     printf("Before fork: tp = %p\n", __builtin_thread_pointer());
-> #ifdef USE_CLONE3
->     struct clone_args args = {
->         .flags = CLONE_SETTLS,
->         .tls = (uint64_t)__builtin_thread_pointer(),
->     };
->     int ret = syscall(__NR_clone3, &args, sizeof(args));
-> #else
->     int ret = syscall(__NR_clone, CLONE_SETTLS, 0, 0,
-> __builtin_thread_pointer(), 0);
-> #endif
->     printf("Fork returned %d, tp = %p\n", ret, __builtin_thread_pointer());
+> For this case: shouldn't=20
+> ----  snip  ----
+> static void foo_test(struct kunit *test)
+> {
+>      KUNIT_EXPECT_EQ(test, 42ul, foo());
 > }
+> ----  snip  ----
+> do the trick?
+
+Unfortunately, it doesn't works.
+
+    [13:04:58] Building KUnit Kernel ...
+    In file included from /.../linux/include/linux/list.h:9:0,
+                     from /.../linux/include/linux/wait.h:7,
+                     from /.../linux/include/linux/wait_bit.h:8,
+                     from /.../linux/include/linux/fs.h:6,
+                     from /.../linux/include/linux/debugfs.h:15,
+                     from /.../linux/mm/damon.c:12:
+    /.../linux/mm/damon-test.h: In function ‘damon_test_foo’:
+    /.../linux/include/linux/kernel.h:842:29: warning: comparison of distinct pointer types lacks a cast
+       (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
+                                 ^
+    /.../linux/include/kunit/test.h:493:9: note: in expansion of macro ‘__typecheck’
+      ((void)__typecheck(__left, __right));           \
+             ^~~~~~~~~~~
+    /.../linux/include/kunit/test.h:517:2: note: in expansion of macro ‘KUNIT_BASE_BINARY_ASSERTION’
+      KUNIT_BASE_BINARY_ASSERTION(test,           \
+      ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+    /.../linux/include/kunit/test.h:606:2: note: in expansion of macro ‘KUNIT_BASE_EQ_MSG_ASSERTION’
+      KUNIT_BASE_EQ_MSG_ASSERTION(test,           \
+      ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+    /.../linux/include/kunit/test.h:616:2: note: in expansion of macro ‘KUNIT_BINARY_EQ_MSG_ASSERTION’
+      KUNIT_BINARY_EQ_MSG_ASSERTION(test,           \
+      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    /.../linux/include/kunit/test.h:979:2: note: in expansion of macro ‘KUNIT_BINARY_EQ_ASSERTION’
+      KUNIT_BINARY_EQ_ASSERTION(test, KUNIT_EXPECTATION, left, right)
+      ^~~~~~~~~~~~~~~~~~~~~~~~~
+    /.../linux/mm/damon-test.h:565:2: note: in expansion of macro ‘KUNIT_EXPECT_EQ’
+      KUNIT_EXPECT_EQ(test, 42ul, (int)foo());
+      ^~~~~~~~~~~~~~~
+
+Some other thoughts?
+
+
+Thanks,
+SeongJae Park
+
+
+> 
+> MfG,
+> 	Bernd
+> --=20
+> "I dislike type abstraction if it has no real reason. And saving
+> on typing is not a good reason - if your typing speed is the main
+> issue when you're coding, you're doing something seriously wrong."
+>     - Linus Torvalds
