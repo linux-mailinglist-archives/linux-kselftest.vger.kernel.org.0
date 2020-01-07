@@ -2,140 +2,276 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 319B31333C0
-	for <lists+linux-kselftest@lfdr.de>; Tue,  7 Jan 2020 22:21:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 000271336B5
+	for <lists+linux-kselftest@lfdr.de>; Tue,  7 Jan 2020 23:49:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728856AbgAGVVH (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 7 Jan 2020 16:21:07 -0500
-Received: from mail-vs1-f66.google.com ([209.85.217.66]:40221 "EHLO
-        mail-vs1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728362AbgAGVVF (ORCPT
+        id S1728392AbgAGWsx (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 7 Jan 2020 17:48:53 -0500
+Received: from hqnvemgate25.nvidia.com ([216.228.121.64]:5120 "EHLO
+        hqnvemgate25.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727174AbgAGWqF (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 7 Jan 2020 16:21:05 -0500
-Received: by mail-vs1-f66.google.com with SMTP id g23so479158vsr.7
-        for <linux-kselftest@vger.kernel.org>; Tue, 07 Jan 2020 13:21:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=xSRU4qb0ZOTzAyNx1lTLU2yX2h3B/4YPYeMRUYoNUNw=;
-        b=B2c24VErfFgKcj+Y8pK4fduvG+1fQI+hXYgNkXJGbBRFwaKnQ/dBzAG8TezMb3/Q9Q
-         m6031Hs6rCtZUh7bmDnZFhiSnSqShiG0SN6iRp876eP4eOImfeY0uKJ9ZWeLETLyWqfs
-         ZvEaJ5UebA6DyfgEHhVXrAEmr3UFLR1V8Z7y4lbVghEPUprT3u9Ns75q6VXY3IBNTYmA
-         rzqG9reCI0/e6EHRkRd7LSyHIGjW03TyI6y8ltFpSP5HkFFf9fyin3FuJdsuef5nzQ4Q
-         QIreO53IIKEtcmoXxH6F+iIuZEQXYkKGC4vyb6gpMMULXGdvg7fWB2J2Zgp84mdF7ZPM
-         ofag==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=xSRU4qb0ZOTzAyNx1lTLU2yX2h3B/4YPYeMRUYoNUNw=;
-        b=ntqEHNojFZJRHRiCCUYaybU2hMIhnNRLDkFiQCimLa8pjq/Zz2qvhWZlUB1ir+PWGl
-         Vz3sI+5o0ka5fhQR4pwY6PM/T/hA6WuAJEtY/pTrKuZEPWMW42B3cif3Y3IkEEzt3112
-         DkyJI4YjKhneJeEj9bVwopYumi8GjTrbDYBarGErIpHj4dzXky0X1lJXNXFPQHheT03c
-         Gr2tnei0n5shNn0W3+dGrujtXceotVnq7KCI185jxzLfwk0IKNmsLhHeEMcvLfeM+x1V
-         TCOiR7vuaA5D0chE3THHpGScziI1LAqeWEeHM/bxZQPRkmQdFYMcyYKKv2RdimLCotwM
-         htIw==
-X-Gm-Message-State: APjAAAX0iHdOyyiU3lUEHho8WDCzaQ6gOG4ioFXAaXhnIW88cKH5Fok3
-        yi47zNOm2xz01YY9UcQWorQzaM1CvynNbbnW7L/PmQ==
-X-Google-Smtp-Source: APXvYqyENOKFRASsBlhAPSr8XO5DU0ppABR3JIJu+k4Fe6D6fkhlIMmdJuGT0juY1Iv+IXC4K3kUX9+MYDhqzMADc7Y=
-X-Received: by 2002:a67:6f46:: with SMTP id k67mr906097vsc.2.1578432064703;
- Tue, 07 Jan 2020 13:21:04 -0800 (PST)
+        Tue, 7 Jan 2020 17:46:05 -0500
+Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate25.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5e150a160001>; Tue, 07 Jan 2020 14:45:42 -0800
+Received: from hqmail.nvidia.com ([172.20.161.6])
+  by hqpgpgate101.nvidia.com (PGP Universal service);
+  Tue, 07 Jan 2020 14:46:00 -0800
+X-PGP-Universal: processed;
+        by hqpgpgate101.nvidia.com on Tue, 07 Jan 2020 14:46:00 -0800
+Received: from HQMAIL105.nvidia.com (172.20.187.12) by HQMAIL101.nvidia.com
+ (172.20.187.10) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Tue, 7 Jan
+ 2020 22:45:59 +0000
+Received: from hqnvemgw03.nvidia.com (10.124.88.68) by HQMAIL105.nvidia.com
+ (172.20.187.12) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
+ Transport; Tue, 7 Jan 2020 22:45:59 +0000
+Received: from blueforge.nvidia.com (Not Verified[10.110.48.28]) by hqnvemgw03.nvidia.com with Trustwave SEG (v7,5,8,10121)
+        id <B5e150a270002>; Tue, 07 Jan 2020 14:45:59 -0800
+From:   John Hubbard <jhubbard@nvidia.com>
+To:     Andrew Morton <akpm@linux-foundation.org>
+CC:     Al Viro <viro@zeniv.linux.org.uk>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn.topel@intel.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Dave Chinner <david@fromorbit.com>,
+        David Airlie <airlied@linux.ie>,
+        "David S . Miller" <davem@davemloft.net>,
+        Ira Weiny <ira.weiny@intel.com>, Jan Kara <jack@suse.cz>,
+        Jason Gunthorpe <jgg@ziepe.ca>, Jens Axboe <axboe@kernel.dk>,
+        Jonathan Corbet <corbet@lwn.net>,
+        =?UTF-8?q?J=C3=A9r=C3=B4me=20Glisse?= <jglisse@redhat.com>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Michal Hocko <mhocko@suse.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Paul Mackerras <paulus@samba.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Vlastimil Babka <vbabka@suse.cz>, <bpf@vger.kernel.org>,
+        <dri-devel@lists.freedesktop.org>, <kvm@vger.kernel.org>,
+        <linux-block@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+        <linux-fsdevel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+        <linux-media@vger.kernel.org>, <linux-rdma@vger.kernel.org>,
+        <linuxppc-dev@lists.ozlabs.org>, <netdev@vger.kernel.org>,
+        <linux-mm@kvack.org>, LKML <linux-kernel@vger.kernel.org>,
+        John Hubbard <jhubbard@nvidia.com>
+Subject: [PATCH v12 00/22] mm/gup: prereqs to track dma-pinned pages: FOLL_PIN
+Date:   Tue, 7 Jan 2020 14:45:36 -0800
+Message-ID: <20200107224558.2362728-1-jhubbard@nvidia.com>
+X-Mailer: git-send-email 2.24.1
 MIME-Version: 1.0
-References: <20191216213901.106941-1-bgardon@google.com> <20191216213901.106941-9-bgardon@google.com>
- <20200107154227.tvex5natt7a64nzj@kamzik.brq.redhat.com>
-In-Reply-To: <20200107154227.tvex5natt7a64nzj@kamzik.brq.redhat.com>
-From:   Ben Gardon <bgardon@google.com>
-Date:   Tue, 7 Jan 2020 13:20:53 -0800
-Message-ID: <CANgfPd9VxvJYAw_cqG9X2GUAkZ9vumF8mZ1+P==mJoZgShR_rg@mail.gmail.com>
-Subject: Re: [PATCH v3 8/8] KVM: selftests: Move large memslots above KVM
- internal memslots in _vm_create
-To:     Andrew Jones <drjones@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Cannon Matthews <cannonmatthews@google.com>,
-        Peter Xu <peterx@redhat.com>
+X-NVConfidentiality: public
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1578437143; bh=e35VbuH+5Gvq6hzdX1wkd7Gwo0Ev1/RydrM5ojZBtqQ=;
+        h=X-PGP-Universal:From:To:CC:Subject:Date:Message-ID:X-Mailer:
+         MIME-Version:X-NVConfidentiality:Content-Type:
+         Content-Transfer-Encoding;
+        b=q07jqBkOQ+8W+FWIGxHzDq9+K2aqK0l1baYh9tHJ5YgbVqzpzGrCVUbh8IIOz9ivr
+         N8DeNKRxsksmaQmBj8DLUTfJNvVvliRP3A7UvdrQSBrUtqohAPvBbP6gW+d+uir7zj
+         N71u+jUUFG3a29ne3zY3zxuWMeCOBJOlbx0/C+htFPSQNDX+WeFBXBUo/FQBTcKPK+
+         fsKaVOXRA1UshywnsPhWCDuIhCymH6YPuMQwJ7/7x7UJimvasG4+G3pmoTyD3poYdy
+         39n4NbY3ownCfiBLFE6x3ANsClgsjxgyIpUe1k8mz3p84SQo7eboSdCD6jky2z1c7L
+         WmXHM0fQFkghw==
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Would it be viable to allocate at 4G be default and then add another
-interface for allocations at low memory addresses? For most tests, I
-don't think there's any value to having the backing paddrs below 3G.
+Hi,
 
-On Tue, Jan 7, 2020 at 7:42 AM Andrew Jones <drjones@redhat.com> wrote:
->
-> On Mon, Dec 16, 2019 at 01:39:01PM -0800, Ben Gardon wrote:
-> > KVM creates internal memslots between 3 and 4 GiB paddrs on the first
-> > vCPU creation. If memslot 0 is large enough it collides with these
-> > memslots an causes vCPU creation to fail. When requesting more than 3G,
-> > start memslot 0 at 4G in _vm_create.
-> >
-> > Signed-off-by: Ben Gardon <bgardon@google.com>
-> > ---
-> >  tools/testing/selftests/kvm/lib/kvm_util.c | 15 +++++++++++----
-> >  1 file changed, 11 insertions(+), 4 deletions(-)
-> >
-> > diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
-> > index 41cf45416060f..886d58e6cac39 100644
-> > --- a/tools/testing/selftests/kvm/lib/kvm_util.c
-> > +++ b/tools/testing/selftests/kvm/lib/kvm_util.c
-> > @@ -113,6 +113,8 @@ const char * const vm_guest_mode_string[] = {
-> >  _Static_assert(sizeof(vm_guest_mode_string)/sizeof(char *) == NUM_VM_MODES,
-> >              "Missing new mode strings?");
-> >
-> > +#define KVM_INTERNAL_MEMSLOTS_START_PADDR (3UL << 30)
-> > +#define KVM_INTERNAL_MEMSLOTS_END_PADDR (4UL << 30)
-> >  /*
-> >   * VM Create
-> >   *
-> > @@ -128,13 +130,16 @@ _Static_assert(sizeof(vm_guest_mode_string)/sizeof(char *) == NUM_VM_MODES,
-> >   *
-> >   * Creates a VM with the mode specified by mode (e.g. VM_MODE_P52V48_4K).
-> >   * When phy_pages is non-zero, a memory region of phy_pages physical pages
-> > - * is created and mapped starting at guest physical address 0.  The file
-> > - * descriptor to control the created VM is created with the permissions
-> > - * given by perm (e.g. O_RDWR).
-> > + * is created. If phy_pages is less that 3G, it is mapped starting at guest
-> > + * physical address 0. If phy_pages is greater than 3G it is mapped starting
-> > + * 4G into the guest physical address space to avoid KVM internal memslots
-> > + * which map the region between 3G and 4G. The file descriptor to control the
-> > + * created VM is created with the permissions given by perm (e.g. O_RDWR).
-> >   */
-> >  struct kvm_vm *_vm_create(enum vm_guest_mode mode, uint64_t phy_pages, int perm)
-> >  {
-> >       struct kvm_vm *vm;
-> > +     uint64_t guest_paddr = 0;
-> >
-> >       DEBUG("Testing guest mode: %s\n", vm_guest_mode_string(mode));
-> >
-> > @@ -227,9 +232,11 @@ struct kvm_vm *_vm_create(enum vm_guest_mode mode, uint64_t phy_pages, int perm)
-> >
-> >       /* Allocate and setup memory for guest. */
-> >       vm->vpages_mapped = sparsebit_alloc();
-> > +     if (guest_paddr + phy_pages > KVM_INTERNAL_MEMSLOTS_START_PADDR)
-> > +             guest_paddr = KVM_INTERNAL_MEMSLOTS_END_PADDR;
-> >       if (phy_pages != 0)
-> >               vm_userspace_mem_region_add(vm, VM_MEM_SRC_ANONYMOUS,
-> > -                                         0, 0, phy_pages, 0);
-> > +                                         guest_paddr, 0, phy_pages, 0);
-> >
-> >       return vm;
-> >  }
-> > --
-> > 2.24.1.735.g03f4e72817-goog
-> >
->
-> I feel like this function is becoming too magic and it'll be more
-> complicated for tests that need to add additional memory regions
-> to know what physical addresses are available. Maybe we should assert
-> if we can't allocate more than 3G at offset zero and also provide
-> another interface for allocating at an offset input by the user,
-> as long as the offset is 4G or above (asserting when it isn't)?
->
-> Thanks,
-> drew
->
+The "track FOLL_PIN pages" would have been the very next patch, but it is
+not included here because I'm still debugging a bug report from Leon.
+Let's get all of the prerequisite work (it's been reviewed) into the tree
+so that future reviews are easier. It's clear that any fixes that are
+required to the tracking patch, won't affect these patches here.
+
+This implements an API naming change (put_user_page*() -->
+unpin_user_page*()), and also adds FOLL_PIN page support, up to
+*but not including* actually tracking FOLL_PIN pages. It extends
+the FOLL_PIN support to a few select subsystems. More subsystems will
+be added in follow up work.
+
+Christoph Hellwig, a point of interest:
+
+a) I've moved the bulk of the code out of the inline functions, as
+   requested, for the devmap changes (patch 4: "mm: devmap: refactor
+   1-based refcounting for ZONE_DEVICE pages").
+
+Changes since v11: Fixes resulting from Kirill Shutemov's review, plus
+a fix for a kbuild robot-reported warning.
+
+* Only include the first 22 patches: up to, but not including, the "track
+  FOLL_PIN pages" patch.
+
+* Improved the efficiency of put_compound_head(), by avoiding get_page()
+  entirely, and instead doing the mass subtraction on one less than
+  refs, followed by a final put_page().
+
+* Got rid of the forward declaration of __gup_longterm_locked(), by
+  moving get_user_pages_remote() further down in gup.c
+
+* Got rid of a redundant page_is_devmap_managed() call, and simplified
+  put_devmap_managed_page() as part of that small cleanup.
+
+* Changed put_devmap_managed_page() to do an early out if the page is
+  not devmap managed. This saves an indentation level.
+
+* Applied the same type of change to __unpin_devmap_managed_user_page(),
+  which has the same checks.
+
+* Changed release_pages() to handle the changed put_devmap_managed_page()
+  API.
+
+* Removed EXPORT_SYMBOL(free_devmap_managed_page), as it is not required,
+  after the other refactoring.
+
+* Fixed a kbuild robot sparse warning: added "static" to
+  try_pin_compound_head()'s declaration.
+
+There is a git repo and branch, for convenience:
+
+    git@github.com:johnhubbard/linux.git pin_user_pages_tracking_v8
+
+For the remaining list of "changes since version N", those are all in
+v11, which is here:
+
+  https://lore.kernel.org/r/20191216222537.491123-1-jhubbard@nvidia.com
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+Overview:
+
+This is a prerequisite to solving the problem of proper interactions
+between file-backed pages, and [R]DMA activities, as discussed in [1],
+[2], [3], and in a remarkable number of email threads since about
+2017. :)
+
+A new internal gup flag, FOLL_PIN is introduced, and thoroughly
+documented in the last patch's Documentation/vm/pin_user_pages.rst.
+
+I believe that this will provide a good starting point for doing the
+layout lease work that Ira Weiny has been working on. That's because
+these new wrapper functions provide a clean, constrained, systematically
+named set of functionality that, again, is required in order to even
+know if a page is "dma-pinned".
+
+In contrast to earlier approaches, the page tracking can be
+incrementally applied to the kernel call sites that, until now, have
+been simply calling get_user_pages() ("gup"). In other words, opt-in by
+changing from this:
+
+    get_user_pages() (sets FOLL_GET)
+    put_page()
+
+to this:
+    pin_user_pages() (sets FOLL_PIN)
+    unpin_user_page()
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+Testing:
+
+* I've done some overall kernel testing (LTP, and a few other goodies),
+  and some directed testing to exercise some of the changes. And as you
+  can see, gup_benchmark is enhanced to exercise this. Basically, I've
+  been able to runtime test the core get_user_pages() and
+  pin_user_pages() and related routines, but not so much on several of
+  the call sites--but those are generally just a couple of lines
+  changed, each.
+
+  Not much of the kernel is actually using this, which on one hand
+  reduces risk quite a lot. But on the other hand, testing coverage
+  is low. So I'd love it if, in particular, the Infiniband and PowerPC
+  folks could do a smoke test of this series for me.
+
+  Runtime testing for the call sites so far is pretty light:
+
+    * io_uring: Some directed tests from liburing exercise this, and
+                they pass.
+    * process_vm_access.c: A small directed test passes.
+    * gup_benchmark: the enhanced version hits the new gup.c code, and
+                     passes.
+    * infiniband: Ran rdma-core tests: rdma-core/build/bin/run_tests.py
+    * VFIO: compiles (I'm vowing to set up a run time test soon, but it's
+                      not ready just yet)
+    * powerpc: it compiles...
+    * drm/via: compiles...
+    * goldfish: compiles...
+    * net/xdp: compiles...
+    * media/v4l2: compiles...
+
+[1] Some slow progress on get_user_pages() (Apr 2, 2019): https://lwn.net/A=
+rticles/784574/
+[2] DMA and get_user_pages() (LPC: Dec 12, 2018): https://lwn.net/Articles/=
+774411/
+[3] The trouble with get_user_pages() (Apr 30, 2018): https://lwn.net/Artic=
+les/753027/
+
+
+Dan Williams (1):
+  mm: Cleanup __put_devmap_managed_page() vs ->page_free()
+
+John Hubbard (21):
+  mm/gup: factor out duplicate code from four routines
+  mm/gup: move try_get_compound_head() to top, fix minor issues
+  mm: devmap: refactor 1-based refcounting for ZONE_DEVICE pages
+  goldish_pipe: rename local pin_user_pages() routine
+  mm: fix get_user_pages_remote()'s handling of FOLL_LONGTERM
+  vfio: fix FOLL_LONGTERM use, simplify get_user_pages_remote() call
+  mm/gup: allow FOLL_FORCE for get_user_pages_fast()
+  IB/umem: use get_user_pages_fast() to pin DMA pages
+  media/v4l2-core: set pages dirty upon releasing DMA buffers
+  mm/gup: introduce pin_user_pages*() and FOLL_PIN
+  goldish_pipe: convert to pin_user_pages() and put_user_page()
+  IB/{core,hw,umem}: set FOLL_PIN via pin_user_pages*(), fix up ODP
+  mm/process_vm_access: set FOLL_PIN via pin_user_pages_remote()
+  drm/via: set FOLL_PIN via pin_user_pages_fast()
+  fs/io_uring: set FOLL_PIN via pin_user_pages()
+  net/xdp: set FOLL_PIN via pin_user_pages()
+  media/v4l2-core: pin_user_pages (FOLL_PIN) and put_user_page()
+    conversion
+  vfio, mm: pin_user_pages (FOLL_PIN) and put_user_page() conversion
+  powerpc: book3s64: convert to pin_user_pages() and put_user_page()
+  mm/gup_benchmark: use proper FOLL_WRITE flags instead of hard-coding
+    "1"
+  mm, tree-wide: rename put_user_page*() to unpin_user_page*()
+
+ Documentation/core-api/index.rst            |   1 +
+ Documentation/core-api/pin_user_pages.rst   | 232 +++++++++
+ arch/powerpc/mm/book3s64/iommu_api.c        |  10 +-
+ drivers/gpu/drm/via/via_dmablit.c           |   6 +-
+ drivers/infiniband/core/umem.c              |  19 +-
+ drivers/infiniband/core/umem_odp.c          |  13 +-
+ drivers/infiniband/hw/hfi1/user_pages.c     |   4 +-
+ drivers/infiniband/hw/mthca/mthca_memfree.c |   8 +-
+ drivers/infiniband/hw/qib/qib_user_pages.c  |   4 +-
+ drivers/infiniband/hw/qib/qib_user_sdma.c   |   8 +-
+ drivers/infiniband/hw/usnic/usnic_uiom.c    |   4 +-
+ drivers/infiniband/sw/siw/siw_mem.c         |   4 +-
+ drivers/media/v4l2-core/videobuf-dma-sg.c   |   8 +-
+ drivers/nvdimm/pmem.c                       |   6 -
+ drivers/platform/goldfish/goldfish_pipe.c   |  35 +-
+ drivers/vfio/vfio_iommu_type1.c             |  35 +-
+ fs/io_uring.c                               |   6 +-
+ include/linux/mm.h                          |  95 +++-
+ mm/gup.c                                    | 495 ++++++++++++--------
+ mm/gup_benchmark.c                          |   9 +-
+ mm/memremap.c                               |  75 ++-
+ mm/process_vm_access.c                      |  28 +-
+ mm/swap.c                                   |  27 +-
+ net/xdp/xdp_umem.c                          |   4 +-
+ tools/testing/selftests/vm/gup_benchmark.c  |   6 +-
+ 25 files changed, 762 insertions(+), 380 deletions(-)
+ create mode 100644 Documentation/core-api/pin_user_pages.rst
+
+--=20
+2.24.1
+
