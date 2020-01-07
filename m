@@ -2,73 +2,79 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B7F5D132F84
-	for <lists+linux-kselftest@lfdr.de>; Tue,  7 Jan 2020 20:32:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6ECC613300C
+	for <lists+linux-kselftest@lfdr.de>; Tue,  7 Jan 2020 20:56:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728802AbgAGTa5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 7 Jan 2020 14:30:57 -0500
-Received: from youngberry.canonical.com ([91.189.89.112]:35054 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728307AbgAGTa5 (ORCPT
+        id S1728607AbgAGT4j (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 7 Jan 2020 14:56:39 -0500
+Received: from mail-ed1-f66.google.com ([209.85.208.66]:35354 "EHLO
+        mail-ed1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728708AbgAGT4j (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 7 Jan 2020 14:30:57 -0500
-Received: from ip-109-41-1-29.web.vodafone.de ([109.41.1.29] helo=wittgenstein)
-        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.86_2)
-        (envelope-from <christian.brauner@ubuntu.com>)
-        id 1iouZ2-0004Mw-9L; Tue, 07 Jan 2020 19:30:52 +0000
-Date:   Tue, 7 Jan 2020 20:30:54 +0100
-From:   Christian Brauner <christian.brauner@ubuntu.com>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Will Deacon <will@kernel.org>,
-        Amanieu d'Antras <amanieu@gmail.com>,
-        Will Deacon <will.deacon@arm.com>,
-        linux-kernel@vger.kernel.org,
-        Christian Brauner <christian@brauner.io>,
-        "# 3.4.x" <stable@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH 2/7] arm64: Implement copy_thread_tls
-Message-ID: <20200107193054.t2d4txgz3fnrw3gn@wittgenstein>
-References: <20200102172413.654385-1-amanieu@gmail.com>
- <20200102172413.654385-3-amanieu@gmail.com>
- <20200102180130.hmpipoiiu3zsl2d6@wittgenstein>
- <20200106173953.GB9676@willie-the-truck>
- <CA+y5pbSBYLvZ46nJP0pSYZnRohtPxHitOHPEaLXq23-QrPKk2g@mail.gmail.com>
- <20200107090219.jl4py4u2zvofwnbh@wittgenstein>
- <20200107174508.GC32009@willie-the-truck>
- <202001071011.9517D9C0D@keescook>
+        Tue, 7 Jan 2020 14:56:39 -0500
+Received: by mail-ed1-f66.google.com with SMTP id f8so650437edv.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 07 Jan 2020 11:56:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=lUsTd9lJYwK928kai9reachpHe0HC9Hv8/gDLGwtaBI=;
+        b=m/Udengj3famfT4AeeQ1IRW+yMW7VasUnASahB37i/PoeHrkRBk2CGyFKYNukmjW7S
+         L8SRka5Jakx3oOkJPsG2IofN9vOqI+MJeZI3Q0YE0hhIfxJgla/Mvi4GlBIJ0+PXKJyR
+         fGhtIsUmeS9lphgKJPwASTV0Wis5x+akjvA6FztTMBR/K8fgi7sOjdtLa1OeTeeGw/oC
+         WuhGv+1qsxod0shrSr56iRhzuujf6ypC8mQV8JosjFfNeYtuq3xDGNFupimiXFOQL0SO
+         8SxYRsEAywqZcf7WmcQRmN/Qkf20W+/a6rRSJl252WjsQoa/SZxLvQ4mGRJVkfZ3ex9s
+         ABpA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=lUsTd9lJYwK928kai9reachpHe0HC9Hv8/gDLGwtaBI=;
+        b=rqPb+Jdq4o9sUwGypRZsJJECZb5eCS3xb1jeFJudAk8Y8UIWJRy+wRE9rFkR12vAjI
+         /mc8BEoZ5th86bFrdfC2lqZcIVaWF8eCvdM1KnsuXK8IDn9E3ig0rzL0Rg2ZcxI67VC2
+         IZB0MEnI8fdIhzLnSK3b1J4VJPrakCM6buV9I1OrqXQI+B/vaYa2QlsVzkO9S9fz8eJe
+         onfyBwN1RzGyfNCyt46k+peuTbsnWsoCJHV95O+1uURVAIxtHEuny3thZ/EtNXU8Of6y
+         QzZpsJFMoHLtbNEW9KhCLPn6pFIRlLi45CHmDqnR2u9MrxvzlaJ6ccxQcKAgm+/vk4RG
+         lXyg==
+X-Gm-Message-State: APjAAAUefSuFnqIEjqY6VtfXUJMHKW+0/EI7gnO0Wtbb00HqUBarbDio
+        WJ7shV+ltANgSuGPu77BCj5lIR6op95ldjhX1FY=
+X-Google-Smtp-Source: APXvYqzNbcT08PcgNHBR6CjdjGMonF1aREtl3FixKkalZzLFfyP3YZsjOtPyVn2SjFoUiZ8TzNVIEuitC7fnDU0d3Kk=
+X-Received: by 2002:a17:907:20ef:: with SMTP id rh15mr1111482ejb.325.1578426995176;
+ Tue, 07 Jan 2020 11:56:35 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <202001071011.9517D9C0D@keescook>
-User-Agent: NeoMutt/20180716
+Received: by 2002:a17:906:72c6:0:0:0:0 with HTTP; Tue, 7 Jan 2020 11:56:34
+ -0800 (PST)
+Reply-To: dhlexpresscouriercompany.nyusa@gmail.com
+From:   "Dr. William Johnson" <currency1000000@gmail.com>
+Date:   Tue, 7 Jan 2020 20:56:34 +0100
+Message-ID: <CAPqfnSEyU1pBR_7HT2g1KK7i8caLMBQ8yPA8KRDVm+MN-K_Z4w@mail.gmail.com>
+Subject: contact Dhl office New York to receive your Prepaid ATM Master Card
+ worth $15.8Million US DOLLARS now.
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Jan 07, 2020 at 10:12:39AM -0800, Kees Cook wrote:
-> On Tue, Jan 07, 2020 at 05:45:09PM +0000, Will Deacon wrote:
-> > On Tue, Jan 07, 2020 at 10:02:27AM +0100, Christian Brauner wrote:
-> > > [Cc Kees in case he knows something about where arch specific tests live
-> > >  or whether we have a framework for this]
-> > > [...]
-> > > It feels like we must've run into the "this is architecture
-> > > specific"-and-we-want-to-test-this issue before... Do we have a place
-> > > where architecture specific selftests live?
-> > 
-> > For arch-specific selftests there are tools/testing/selftests/$ARCH
-> > directories, although in this case maybe it's better to have an #ifdef
-> > in a header so that architectures with __builtin_thread_pointer can use
-> > that.
-> 
-> Yup, I agree: that's the current best-practice for arch-specific
-> selftests.
-
-Thanks! I think using #ifdef in this case with __builtin_thread_pointer
-sounds good.
-So the tests can be moved into the clone3() test-suite for those
-architectures.
-
-Christian
+ATTN Dear Beneficiary.
+Goodnews
+I have Registered your Prepaid ATM Master Card
+worth $15.800,000.00 US DOLLARS with Courier company
+asigned to deliver it to you today.
+So contact Dhl office New York to receive your Prepaid ATM Master Card
+worth $15.8Million US DOLLARS now.
+Contact Person: Mrs. Mary Michael, Director, DHL Courier Company-NY USA. 10218
+Email. dhlexpresscouriercompany.nyusa@gmail.com
+Call the office +(202) 890-8752
+Rec-Confirmed your mailing address to the office as I listed below.
+Your Full Name--------------
+House Address-----------
+Your working Phone Number----------------
+ID copy-------------------------
+Sex-----------------------------
+Note,delivery fee to your address is only $25.00. send it to this
+company urgent on itunes card today so that DHL will deliver this
+Prepaid ATM Master Card to you today according to our finally
+agreement.
+Thanks for coperations,
+Dr. William Johnson
