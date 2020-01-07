@@ -2,297 +2,102 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 07DC5132E59
-	for <lists+linux-kselftest@lfdr.de>; Tue,  7 Jan 2020 19:27:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F3AA8132EA0
+	for <lists+linux-kselftest@lfdr.de>; Tue,  7 Jan 2020 19:42:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728563AbgAGS0Y (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 7 Jan 2020 13:26:24 -0500
-Received: from mail-vs1-f67.google.com ([209.85.217.67]:38570 "EHLO
-        mail-vs1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727925AbgAGS0Y (ORCPT
+        id S1728567AbgAGSmI (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 7 Jan 2020 13:42:08 -0500
+Received: from mail-ua1-f67.google.com ([209.85.222.67]:45146 "EHLO
+        mail-ua1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728451AbgAGSmI (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 7 Jan 2020 13:26:24 -0500
-Received: by mail-vs1-f67.google.com with SMTP id v12so136044vsv.5
-        for <linux-kselftest@vger.kernel.org>; Tue, 07 Jan 2020 10:26:23 -0800 (PST)
+        Tue, 7 Jan 2020 13:42:08 -0500
+Received: by mail-ua1-f67.google.com with SMTP id 59so83593uap.12
+        for <linux-kselftest@vger.kernel.org>; Tue, 07 Jan 2020 10:42:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=180HQDGZyjA3825E1ybbAgS73yQoWTFqKE6iODg5bn4=;
-        b=kz5j+01kye8wJBsHY0lsrDc02IJK8yj8NouSr3PjL4rhatokFqmtPTKBpkEOoKCbk5
-         07DXnzBJGFjyWXYHJ0ZnsagSHIRkoLWfAG1lIhwn7RD0nYa21mxUy9W344TDDyc5hOoJ
-         oj+jLds8pDjR1as1vZtgZU+BaU5LD1EeS/E1+4vdbBH9Iasjp6j9gT09gbOKRckF83Zl
-         4gn4j/NuNlFWjGIedpSzoM3D3mIt/Lv95EZx7s/tArTee9Ow3rcdHQJ2KAuYMganEE+t
-         gkL0Xf65n/vWGbSl304pSWPqC8hguj71i8m+r6PODrQ2uVhuH6MxS/2tG9aDiFbny4X9
-         OhkA==
+        bh=sye9ja+Z6ohzCWbDeJ8pZ/COtcElyYSL6CVp6XpyU78=;
+        b=f9NW4rN6AaM5yq0rvBItoFOKNN1gKYR4c0i61f+5WTLqZP+BtdbOil6R+kQBrvdIiD
+         8hdIu3X5KafVL+GqeGO8VcmwTjF9RgIvzr8SMUWHxpie36qSSc2imJg3KAd0HWSK5Vaq
+         PlOsx4cLbaClCfGjUPEhxlR5dSbFKDg39Mpa1548n4VpAxmGHEJQNoqboL4N6JmvP+kS
+         v+gD+YcFa3QRE5fDp2UQuwE4QgLlXJL2/ySTyBpJSuYUJqiWdJtmML5SNi06pZFZgT9O
+         4YltS9Rc8uO2A7OGGo7ORM1NaAokPTRAu/z5LKzetDljqhQV7j1Ocu6Jjv39AUospHkg
+         KWhg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=180HQDGZyjA3825E1ybbAgS73yQoWTFqKE6iODg5bn4=;
-        b=VnfElMraqeVl4jzJNeZ7oAwHwDdnk0xlakojLSNRc6sdgabYs2lMbb6QR+LXCr09B+
-         gmuQAY1YO6mv1SrpIiTX/EXjlb6ZusIUffwUqWtObD+COM08mSio0blwWEkjghxGar58
-         6qwS+IEOnNiMpLnLZoJ/nfQwXcFu2nuomWqr7I0Fi0/w8uiZcAL89gyygKJr7aV2timG
-         vm7knf9foeMOVlfGrAInHqVZLFz9QK1/KgWZdD9lkZg6ogUY/3NteuAEJZGtukuf3CS2
-         JL53L0PCtJ8VAL8AIBumYl7s8o42+AlZJ6zvRq53KidDnVPY3qVfMglhsGG9QR4FkfTT
-         ihqg==
-X-Gm-Message-State: APjAAAV8xUC/EL0SbxJ+ofrWbuvUTroOPe2idyZWw8aZBjkKAFUgCg5Z
-        AVyNjmXGs0DN86iROrKKWp9MpmKn9+YQ4xwwpZrXZw==
-X-Google-Smtp-Source: APXvYqzkXi0wXOwP//CKn0kWO+Wgdv1M2iTHL07U2YSncefx4C6YPC5Jja38MLtT3ns+OFLPEsILPqyaF1cG8ZNjEMY=
-X-Received: by 2002:a67:f054:: with SMTP id q20mr365066vsm.17.1578421582246;
- Tue, 07 Jan 2020 10:26:22 -0800 (PST)
+        bh=sye9ja+Z6ohzCWbDeJ8pZ/COtcElyYSL6CVp6XpyU78=;
+        b=JJuhmyykH7iKTsUxgB6gLKVpwz6Ix202Hv0BJq2QrWhhZABZ/JG+7LbVZuSnSNwfFS
+         iqlmaX0z9rvgCCkdaetZABXz9ShDdRZRrMRwHo3o5vkyBlugIEnUwWYBHP4CqA9TJeIj
+         3v1DvMGRfL+vHPRZb6kcEouXrj4QR1TUp0Ae0XH0mvnbl+4xE53SmqQ4tGr0BHMSrHRy
+         lhVi/PnbfLLpz4jUogFBIFUVSIk+mYcGBGlqQ7FikIaXx8CeEAThF0GZdPklZxQlH9lj
+         l/cNjajE6XgDHSUVIAcTdGl8VM4ZYH4mbzdBzbWgWxEEaRBCEqsnWciEXm9RXOAKVnx+
+         0K+w==
+X-Gm-Message-State: APjAAAWzCWc0MEKkqsesCpDRWJT8REPtDC88U3SMz3XUpIbNIPw4DECN
+        75kGk9HPEGWfKgPArZLjRHUD0vP6mBzKqXju/GdvcQ==
+X-Google-Smtp-Source: APXvYqzfc8R93dZiw4D5zmB8i08TDfL3o8J/5bGzeySK76LYYv4EUV2Nspl/gyKXw/KUcq4w03bVAnUFpato+/SY0cE=
+X-Received: by 2002:ab0:74c8:: with SMTP id f8mr516035uaq.114.1578422526431;
+ Tue, 07 Jan 2020 10:42:06 -0800 (PST)
 MIME-Version: 1.0
-References: <20191216213901.106941-1-bgardon@google.com> <20191216213901.106941-6-bgardon@google.com>
- <20200107152341.rtfmciob5ly6nnjj@kamzik.brq.redhat.com>
-In-Reply-To: <20200107152341.rtfmciob5ly6nnjj@kamzik.brq.redhat.com>
+References: <20191216213901.106941-1-bgardon@google.com> <20191216213901.106941-2-bgardon@google.com>
+ <20200107143334.GF219677@xz-x1> <20200107145608.ogi34nkyh2abdgrq@kamzik.brq.redhat.com>
+In-Reply-To: <20200107145608.ogi34nkyh2abdgrq@kamzik.brq.redhat.com>
 From:   Ben Gardon <bgardon@google.com>
-Date:   Tue, 7 Jan 2020 10:26:10 -0800
-Message-ID: <CANgfPd9aCcN8BJDkkDuC2=3Po3f6BQ6q7JkQfL7n+giDCySu7A@mail.gmail.com>
-Subject: Re: [PATCH v3 5/8] KVM: selftests: Pass args to vCPU instead of using globals
+Date:   Tue, 7 Jan 2020 10:41:55 -0800
+Message-ID: <CANgfPd8_ei0WdF7t73TPveCAh1ifSp9p1B6BOkL32A+499nz=Q@mail.gmail.com>
+Subject: Re: [PATCH v3 1/8] KVM: selftests: Create a demand paging test
 To:     Andrew Jones <drjones@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
+Cc:     Peter Xu <peterx@redhat.com>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
         Paolo Bonzini <pbonzini@redhat.com>,
-        Cannon Matthews <cannonmatthews@google.com>,
-        Peter Xu <peterx@redhat.com>
+        Cannon Matthews <cannonmatthews@google.com>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Jan 7, 2020 at 7:23 AM Andrew Jones <drjones@redhat.com> wrote:
->
-> On Mon, Dec 16, 2019 at 01:38:58PM -0800, Ben Gardon wrote:
-> > In preparation for supporting multiple vCPUs in the demand paging test,
-> > pass arguments to the vCPU instead of syncing globals to it.
->
-> This will only work if we don't spill parameters onto the stack and all
-> data we want to pass fit in registers.
+I'll try to implement Drew's suggestion re: syncing global variables
+and then looking up CPU ID. If I can do that I'll upload another patch
+set for s390, aarch64, and x86. If I can't I'll move this test to the
+x86 subdirectory.
 
-That's a great point. I'll see about using globals and deriving the
-cpu ID to look up args. In your pseudocode below I see you use
-arch_get_cpu_id, but I don't believe this function exists in selftests
-and I don't have the knowledge off the top of my head to implement it
-for s390 and aarch64. Do you have any pointers for implementing such a
-function?
+I apologize for not responding to the comments on the previous version
+of this patch set. I'm still learning the mailing list etiquette. In
+the future is it preferable that I reply to those comments when I
+upload a new patch set addressing them, or should I add a note in the
+new patch emails about the comments I addressed in that update?
 
-> I've used multiple VCPUs in tests
-> before and stuck with the global syncing. I simply used arrays like this
->
->  static my_type_t my_data[NR_VCPUS];
->
->  static void guest_code(void)
->  {
->      int cpu = arch_get_cpu_id();
->
->      // do something with my_data[cpu]
->  }
->
->  int main(void)
->  {
->      for (i = 0; i < NR_VCPUS; ++i) {
->          // prepare my_data[i]
->          sync_global_to_guest(vm, my_data[i]);
->      }
->
->      // run vcpus
->
->     for (i = 0; i < NR_VCPUS; ++i) {
->          sync_global_from_guest(vm, my_data[i]);
->          // do something with my_data[i]
->     }
->  }
->
-> >
-> > Signed-off-by: Ben Gardon <bgardon@google.com>
-> > ---
-> >  .../selftests/kvm/demand_paging_test.c        | 61 +++++++++++--------
-> >  1 file changed, 37 insertions(+), 24 deletions(-)
-> >
-> > diff --git a/tools/testing/selftests/kvm/demand_paging_test.c b/tools/testing/selftests/kvm/demand_paging_test.c
-> > index 4aa90a3fce99c..8ede26e088ab6 100644
-> > --- a/tools/testing/selftests/kvm/demand_paging_test.c
-> > +++ b/tools/testing/selftests/kvm/demand_paging_test.c
-> > @@ -42,7 +42,6 @@
-> >   */
-> >  static uint64_t host_page_size;
-> >  static uint64_t guest_page_size;
-> > -static uint64_t guest_num_pages;
-> >
-> >  static char *guest_data_prototype;
-> >
-> > @@ -63,14 +62,13 @@ static uint64_t guest_test_virt_mem = DEFAULT_GUEST_TEST_MEM;
-> >   * Continuously write to the first 8 bytes of each page in the demand paging
-> >   * memory region.
-> >   */
-> > -static void guest_code(void)
-> > +static void guest_code(uint64_t gva, uint64_t pages)
-> >  {
-> >       int i;
-> >
-> > -     for (i = 0; i < guest_num_pages; i++) {
-> > -             uint64_t addr = guest_test_virt_mem;
-> > +     for (i = 0; i < pages; i++) {
-> > +             uint64_t addr = gva + (i * guest_page_size);
-> >
-> > -             addr += i * guest_page_size;
-> >               addr &= ~(host_page_size - 1);
-> >               *(uint64_t *)addr = 0x0123456789ABCDEF;
-> >       }
-> > @@ -82,18 +80,31 @@ static void guest_code(void)
-> >  static void *host_test_mem;
-> >  static uint64_t host_num_pages;
-> >
-> > +struct vcpu_thread_args {
-> > +     uint64_t gva;
-> > +     uint64_t pages;
-> > +     struct kvm_vm *vm;
-> > +     int vcpu_id;
-> > +};
-> > +
-> >  static void *vcpu_worker(void *data)
-> >  {
-> >       int ret;
-> > -     struct kvm_vm *vm = data;
-> > +     struct vcpu_thread_args *args = (struct vcpu_thread_args *)data;
-> > +     struct kvm_vm *vm = args->vm;
-> > +     int vcpu_id = args->vcpu_id;
-> > +     uint64_t gva = args->gva;
-> > +     uint64_t pages = args->pages;
-> >       struct kvm_run *run;
-> >
-> > -     run = vcpu_state(vm, VCPU_ID);
-> > +     vcpu_args_set(vm, vcpu_id, 2, gva, pages);
->
-> vcpu_args_set() is currently only implemented by x86, so that's a good
-> reason for this to be an x86-only test for now. Well, unless this is
-> switched back to using global sync.
->
-> > +
-> > +     run = vcpu_state(vm, vcpu_id);
-> >
-> >       /* Let the guest access its memory */
-> > -     ret = _vcpu_run(vm, VCPU_ID);
-> > +     ret = _vcpu_run(vm, vcpu_id);
-> >       TEST_ASSERT(ret == 0, "vcpu_run failed: %d\n", ret);
-> > -     if (get_ucall(vm, VCPU_ID, NULL) != UCALL_SYNC) {
-> > +     if (get_ucall(vm, vcpu_id, NULL) != UCALL_SYNC) {
-> >               TEST_ASSERT(false,
-> >                           "Invalid guest sync status: exit_reason=%s\n",
-> >                           exit_reason_str(run->exit_reason));
-> > @@ -269,11 +280,13 @@ static int setup_demand_paging(struct kvm_vm *vm,
-> >  #define PAGE_SHIFT_4K  12
-> >
-> >  static void run_test(enum vm_guest_mode mode, bool use_uffd,
-> > -                  useconds_t uffd_delay, uint64_t guest_memory_bytes)
-> > +                  useconds_t uffd_delay, uint64_t vcpu_wss)
->
-> Not sure why guest_memory_bytes was renamed to vcpu_wss. What is wss?
-> Working set size?
+I don't have any aarch64 or s390 hardware handy to test on so I'll try
+to move support for those architectures to separate commits at the end
+of the series, and mark them untested.
 
-wss indeed stands for working set size, but I agree there's no reason
-to use it. I'll change guest_memory_bytes to vcpu_memory_bytes
-instead.
+Thank you for your quick responses!
 
+On Tue, Jan 7, 2020 at 6:56 AM Andrew Jones <drjones@redhat.com> wrote:
 >
-> >  {
-> >       pthread_t vcpu_thread;
-> >       pthread_t uffd_handler_thread;
-> >       struct kvm_vm *vm;
-> > +     struct vcpu_thread_args vcpu_args;
-> > +     uint64_t guest_num_pages;
-> >       int r;
+> On Tue, Jan 07, 2020 at 09:33:34AM -0500, Peter Xu wrote:
+> > On Mon, Dec 16, 2019 at 01:38:54PM -0800, Ben Gardon wrote:
+> > > While userfaultfd, KVM's demand paging implementation, is not specific
+> > > to KVM, having a benchmark for its performance will be useful for
+> > > guiding performance improvements to KVM. As a first step towards creating
+> > > a userfaultfd demand paging test, create a simple memory access test,
+> > > based on dirty_log_test.
+> > >
+> > > Signed-off-by: Ben Gardon <bgardon@google.com>
 > >
-> >       /*
-> > @@ -283,16 +296,15 @@ static void run_test(enum vm_guest_mode mode, bool use_uffd,
-> >        * number will be enough for all archs. (e.g., 64K page size guest
-> >        * will need even less memory for page tables).
-> >        */
-> > -     vm = create_vm(mode, VCPU_ID,
-> > -                    (2 * guest_memory_bytes) >> PAGE_SHIFT_4K,
-> > +     vm = create_vm(mode, VCPU_ID, (2 * vcpu_wss) >> PAGE_SHIFT_4K,
-> >                      guest_code);
-> >
-> >       guest_page_size = vm_get_page_size(vm);
-> >
-> > -     TEST_ASSERT(guest_memory_bytes % guest_page_size == 0,
-> > +     TEST_ASSERT(vcpu_wss % guest_page_size == 0,
-> >                   "Guest memory size is not guest page size aligned.");
-> >
-> > -     guest_num_pages = guest_memory_bytes / guest_page_size;
-> > +     guest_num_pages = vcpu_wss / guest_page_size;
-> >
-> >  #ifdef __s390x__
-> >       /* Round up to multiple of 1M (segment size) */
-> > @@ -308,9 +320,9 @@ static void run_test(enum vm_guest_mode mode, bool use_uffd,
-> >                   guest_num_pages, vm_get_max_gfn(vm));
-> >
-> >       host_page_size = getpagesize();
-> > -     TEST_ASSERT(guest_memory_bytes % host_page_size == 0,
-> > +     TEST_ASSERT(vcpu_wss % host_page_size == 0,
-> >                   "Guest memory size is not host page size aligned.");
-> > -     host_num_pages = guest_memory_bytes / host_page_size;
-> > +     host_num_pages = vcpu_wss / host_page_size;
-> >
-> >       guest_test_phys_mem = (vm_get_max_gfn(vm) - guest_num_pages) *
-> >                             guest_page_size;
-> > @@ -354,10 +366,12 @@ static void run_test(enum vm_guest_mode mode, bool use_uffd,
-> >       /* Export the shared variables to the guest */
-> >       sync_global_to_guest(vm, host_page_size);
-> >       sync_global_to_guest(vm, guest_page_size);
-> > -     sync_global_to_guest(vm, guest_test_virt_mem);
-> > -     sync_global_to_guest(vm, guest_num_pages);
-> >
-> > -     pthread_create(&vcpu_thread, NULL, vcpu_worker, vm);
-> > +     vcpu_args.vm = vm;
-> > +     vcpu_args.vcpu_id = VCPU_ID;
-> > +     vcpu_args.gva = guest_test_virt_mem;
-> > +     vcpu_args.pages = guest_num_pages;
-> > +     pthread_create(&vcpu_thread, NULL, vcpu_worker, &vcpu_args);
-> >
-> >       /* Wait for the vcpu thread to quit */
-> >       pthread_join(vcpu_thread, NULL);
-> > @@ -404,8 +418,7 @@ static void help(char *name)
-> >       printf(" -d: add a delay in usec to the User Fault\n"
-> >              "     FD handler to simulate demand paging\n"
-> >              "     overheads. Ignored without -u.\n");
-> > -     printf(" -b: specify the number of bytes of memory which should be\n"
-> > -            "     allocated to the guest.\n");
-> > +     printf(" -b: specify the working set size, in bytes for each vCPU.\n");
-> >       puts("");
-> >       exit(0);
-> >  }
-> > @@ -413,7 +426,7 @@ static void help(char *name)
-> >  int main(int argc, char *argv[])
-> >  {
-> >       bool mode_selected = false;
-> > -     uint64_t guest_memory_bytes = DEFAULT_GUEST_TEST_MEM_SIZE;
-> > +     uint64_t vcpu_wss = DEFAULT_GUEST_TEST_MEM_SIZE;
-> >       unsigned int mode;
-> >       int opt, i;
-> >       bool use_uffd = false;
-> > @@ -448,7 +461,7 @@ int main(int argc, char *argv[])
-> >                                   "A negative UFFD delay is not supported.");
-> >                       break;
-> >               case 'b':
-> > -                     guest_memory_bytes = strtoull(optarg, NULL, 0);
-> > +                     vcpu_wss = strtoull(optarg, NULL, 0);
-> >               case 'h':
-> >               default:
-> >                       help(argv[0]);
-> > @@ -462,7 +475,7 @@ int main(int argc, char *argv[])
-> >               TEST_ASSERT(vm_guest_mode_params[i].supported,
-> >                           "Guest mode ID %d (%s) not supported.",
-> >                           i, vm_guest_mode_string(i));
-> > -             run_test(i, use_uffd, uffd_delay, guest_memory_bytes);
-> > +             run_test(i, use_uffd, uffd_delay, vcpu_wss);
-> >       }
-> >
-> >       return 0;
-> > --
-> > 2.24.1.735.g03f4e72817-goog
-> >
+> > It's fine to start with x86-only for this test, but imho it would be
+> > better to mention that in cover letter, or reply to reviewer comments
+> > on that you removed aarch64 from previous post.
+>
+> I'd also prefer that if it's x86-only that it be put in the x86_64
+> subdirectory and drop the arch #ifdefs. The question is why is it
+> x86-only for now though? Will it take a lot of work to port it to
+> other architectures? Or does it just need testing by someone with
+> the hardware?
 >
 > Thanks,
 > drew
