@@ -2,103 +2,83 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F3AA8132EA0
-	for <lists+linux-kselftest@lfdr.de>; Tue,  7 Jan 2020 19:42:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F648132F70
+	for <lists+linux-kselftest@lfdr.de>; Tue,  7 Jan 2020 20:30:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728567AbgAGSmI (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 7 Jan 2020 13:42:08 -0500
-Received: from mail-ua1-f67.google.com ([209.85.222.67]:45146 "EHLO
-        mail-ua1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728451AbgAGSmI (ORCPT
+        id S1728364AbgAGTaG (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 7 Jan 2020 14:30:06 -0500
+Received: from youngberry.canonical.com ([91.189.89.112]:35007 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728307AbgAGTaG (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 7 Jan 2020 13:42:08 -0500
-Received: by mail-ua1-f67.google.com with SMTP id 59so83593uap.12
-        for <linux-kselftest@vger.kernel.org>; Tue, 07 Jan 2020 10:42:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=sye9ja+Z6ohzCWbDeJ8pZ/COtcElyYSL6CVp6XpyU78=;
-        b=f9NW4rN6AaM5yq0rvBItoFOKNN1gKYR4c0i61f+5WTLqZP+BtdbOil6R+kQBrvdIiD
-         8hdIu3X5KafVL+GqeGO8VcmwTjF9RgIvzr8SMUWHxpie36qSSc2imJg3KAd0HWSK5Vaq
-         PlOsx4cLbaClCfGjUPEhxlR5dSbFKDg39Mpa1548n4VpAxmGHEJQNoqboL4N6JmvP+kS
-         v+gD+YcFa3QRE5fDp2UQuwE4QgLlXJL2/ySTyBpJSuYUJqiWdJtmML5SNi06pZFZgT9O
-         4YltS9Rc8uO2A7OGGo7ORM1NaAokPTRAu/z5LKzetDljqhQV7j1Ocu6Jjv39AUospHkg
-         KWhg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=sye9ja+Z6ohzCWbDeJ8pZ/COtcElyYSL6CVp6XpyU78=;
-        b=JJuhmyykH7iKTsUxgB6gLKVpwz6Ix202Hv0BJq2QrWhhZABZ/JG+7LbVZuSnSNwfFS
-         iqlmaX0z9rvgCCkdaetZABXz9ShDdRZRrMRwHo3o5vkyBlugIEnUwWYBHP4CqA9TJeIj
-         3v1DvMGRfL+vHPRZb6kcEouXrj4QR1TUp0Ae0XH0mvnbl+4xE53SmqQ4tGr0BHMSrHRy
-         lhVi/PnbfLLpz4jUogFBIFUVSIk+mYcGBGlqQ7FikIaXx8CeEAThF0GZdPklZxQlH9lj
-         l/cNjajE6XgDHSUVIAcTdGl8VM4ZYH4mbzdBzbWgWxEEaRBCEqsnWciEXm9RXOAKVnx+
-         0K+w==
-X-Gm-Message-State: APjAAAWzCWc0MEKkqsesCpDRWJT8REPtDC88U3SMz3XUpIbNIPw4DECN
-        75kGk9HPEGWfKgPArZLjRHUD0vP6mBzKqXju/GdvcQ==
-X-Google-Smtp-Source: APXvYqzfc8R93dZiw4D5zmB8i08TDfL3o8J/5bGzeySK76LYYv4EUV2Nspl/gyKXw/KUcq4w03bVAnUFpato+/SY0cE=
-X-Received: by 2002:ab0:74c8:: with SMTP id f8mr516035uaq.114.1578422526431;
- Tue, 07 Jan 2020 10:42:06 -0800 (PST)
+        Tue, 7 Jan 2020 14:30:06 -0500
+Received: from ip-109-41-1-29.web.vodafone.de ([109.41.1.29] helo=wittgenstein)
+        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.86_2)
+        (envelope-from <christian.brauner@ubuntu.com>)
+        id 1iouYD-0004D8-2A; Tue, 07 Jan 2020 19:30:01 +0000
+Date:   Tue, 7 Jan 2020 20:30:03 +0100
+From:   Christian Brauner <christian.brauner@ubuntu.com>
+To:     Will Deacon <will@kernel.org>
+Cc:     Amanieu d'Antras <amanieu@gmail.com>,
+        Will Deacon <will.deacon@arm.com>,
+        linux-kernel@vger.kernel.org,
+        Christian Brauner <christian@brauner.io>,
+        "# 3.4.x" <stable@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        keescook@chromium.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH 2/7] arm64: Implement copy_thread_tls
+Message-ID: <20200107193002.qr4c7oeb5qae4n6d@wittgenstein>
+References: <20200102172413.654385-1-amanieu@gmail.com>
+ <20200102172413.654385-3-amanieu@gmail.com>
+ <20200102180130.hmpipoiiu3zsl2d6@wittgenstein>
+ <20200106173953.GB9676@willie-the-truck>
+ <CA+y5pbSBYLvZ46nJP0pSYZnRohtPxHitOHPEaLXq23-QrPKk2g@mail.gmail.com>
+ <20200107090219.jl4py4u2zvofwnbh@wittgenstein>
+ <20200107174508.GC32009@willie-the-truck>
 MIME-Version: 1.0
-References: <20191216213901.106941-1-bgardon@google.com> <20191216213901.106941-2-bgardon@google.com>
- <20200107143334.GF219677@xz-x1> <20200107145608.ogi34nkyh2abdgrq@kamzik.brq.redhat.com>
-In-Reply-To: <20200107145608.ogi34nkyh2abdgrq@kamzik.brq.redhat.com>
-From:   Ben Gardon <bgardon@google.com>
-Date:   Tue, 7 Jan 2020 10:41:55 -0800
-Message-ID: <CANgfPd8_ei0WdF7t73TPveCAh1ifSp9p1B6BOkL32A+499nz=Q@mail.gmail.com>
-Subject: Re: [PATCH v3 1/8] KVM: selftests: Create a demand paging test
-To:     Andrew Jones <drjones@redhat.com>
-Cc:     Peter Xu <peterx@redhat.com>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Cannon Matthews <cannonmatthews@google.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20200107174508.GC32009@willie-the-truck>
+User-Agent: NeoMutt/20180716
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-I'll try to implement Drew's suggestion re: syncing global variables
-and then looking up CPU ID. If I can do that I'll upload another patch
-set for s390, aarch64, and x86. If I can't I'll move this test to the
-x86 subdirectory.
+On Tue, Jan 07, 2020 at 05:45:09PM +0000, Will Deacon wrote:
+> On Tue, Jan 07, 2020 at 10:02:27AM +0100, Christian Brauner wrote:
+> > [Cc Kees in case he knows something about where arch specific tests live
+> >  or whether we have a framework for this]
+> > 
+> > On Mon, Jan 06, 2020 at 07:03:32PM +0100, Amanieu d'Antras wrote:
+> > > On Mon, Jan 6, 2020 at 6:39 PM Will Deacon <will@kernel.org> wrote:
+> > > > I also ran the native and compat selftests but, unfortunately, they all
+> > > > pass even without this patch. Do you reckon it would be possible to update
+> > > > them to check the tls pointer?
+> > > 
+> > > Here's the program I used for testing on arm64. I considered adding it
+> > > to the selftests but there is no portable way of reading the TLS
+> > > register on all architectures.
+> > 
+> > I'm not saying you need to do this right now.
+> 
+> Agreed, these patches should be merged in their current state and my ack
+> stands for that.
 
-I apologize for not responding to the comments on the previous version
-of this patch set. I'm still learning the mailing list etiquette. In
-the future is it preferable that I reply to those comments when I
-upload a new patch set addressing them, or should I add a note in the
-new patch emails about the comments I addressed in that update?
+Oh yeah, that's how I took your Ack.
+Thanks! :)
 
-I don't have any aarch64 or s390 hardware handy to test on so I'll try
-to move support for those architectures to separate commits at the end
-of the series, and mark them untested.
+> 
+> > It feels like we must've run into the "this is architecture
+> > specific"-and-we-want-to-test-this issue before... Do we have a place
+> > where architecture specific selftests live?
+> 
+> For arch-specific selftests there are tools/testing/selftests/$ARCH
+> directories, although in this case maybe it's better to have an #ifdef
+> in a header so that architectures with __builtin_thread_pointer can use
+> that.
 
-Thank you for your quick responses!
+Yeah, I think the #ifdef approach might make the most sense.
 
-On Tue, Jan 7, 2020 at 6:56 AM Andrew Jones <drjones@redhat.com> wrote:
->
-> On Tue, Jan 07, 2020 at 09:33:34AM -0500, Peter Xu wrote:
-> > On Mon, Dec 16, 2019 at 01:38:54PM -0800, Ben Gardon wrote:
-> > > While userfaultfd, KVM's demand paging implementation, is not specific
-> > > to KVM, having a benchmark for its performance will be useful for
-> > > guiding performance improvements to KVM. As a first step towards creating
-> > > a userfaultfd demand paging test, create a simple memory access test,
-> > > based on dirty_log_test.
-> > >
-> > > Signed-off-by: Ben Gardon <bgardon@google.com>
-> >
-> > It's fine to start with x86-only for this test, but imho it would be
-> > better to mention that in cover letter, or reply to reviewer comments
-> > on that you removed aarch64 from previous post.
->
-> I'd also prefer that if it's x86-only that it be put in the x86_64
-> subdirectory and drop the arch #ifdefs. The question is why is it
-> x86-only for now though? Will it take a lot of work to port it to
-> other architectures? Or does it just need testing by someone with
-> the hardware?
->
-> Thanks,
-> drew
->
+Christian
