@@ -2,38 +2,38 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B3221329F0
-	for <lists+linux-kselftest@lfdr.de>; Tue,  7 Jan 2020 16:23:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F774132A04
+	for <lists+linux-kselftest@lfdr.de>; Tue,  7 Jan 2020 16:28:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728103AbgAGPXw (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 7 Jan 2020 10:23:52 -0500
-Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:43705 "EHLO
+        id S1728103AbgAGP2E (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 7 Jan 2020 10:28:04 -0500
+Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:36103 "EHLO
         us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1728052AbgAGPXw (ORCPT
+        with ESMTP id S1728060AbgAGP2D (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 7 Jan 2020 10:23:52 -0500
+        Tue, 7 Jan 2020 10:28:03 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1578410630;
+        s=mimecast20190719; t=1578410881;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=ObryUJ+YHFjoiVoshbRcx17aC5SBcb7cBxKyuAtSgQI=;
-        b=RPe0A3TCWHW5myWM5WZVrKAzSWxhMkyu5k9PAJLDcHdOXGWEQN8lB6w1gIWWVLaejfyS2N
-        QArE+kLjyKq4DsgD4jXvk6mN3pGwY9VnZd/iYJYS7TeV1gfpU2C9KiIX3bemy38AbcxQxI
-        jGXrWd8CU71muNb2z82eYpvNY0ikaMs=
+        bh=qm299QUixuaaBgBwxzYETjvXK86HrilknWdcDk9AtjE=;
+        b=a/9xXvy43UGCaFG3CTPbnbflIjz6Ou8fWJhjZ4MexAnysLY5qhBuwWDw2wtsIvW5KZD8r8
+        YpoCkBrd6j+Uq5oV4K4+HqjnWv2dIKdhK7VNepZj6LotJqjCt7z8+oP8LgUPogmPUygdLY
+        uIlUyDUROkPyBZ5aS45vTMC2Wlpw+oQ=
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-214-9xeyJXvfOJKQ-eof7EmcSg-1; Tue, 07 Jan 2020 10:23:49 -0500
-X-MC-Unique: 9xeyJXvfOJKQ-eof7EmcSg-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
+ us-mta-154-gJWaBtf4P4WITUnTiEQHVg-1; Tue, 07 Jan 2020 10:27:58 -0500
+X-MC-Unique: gJWaBtf4P4WITUnTiEQHVg-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id EC560477;
-        Tue,  7 Jan 2020 15:23:47 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 097391052177;
+        Tue,  7 Jan 2020 15:27:57 +0000 (UTC)
 Received: from kamzik.brq.redhat.com (unknown [10.43.2.160])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id CEC9B5D9E1;
-        Tue,  7 Jan 2020 15:23:43 +0000 (UTC)
-Date:   Tue, 7 Jan 2020 16:23:41 +0100
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 65B145C1BB;
+        Tue,  7 Jan 2020 15:27:52 +0000 (UTC)
+Date:   Tue, 7 Jan 2020 16:27:49 +0100
 From:   Andrew Jones <drjones@redhat.com>
 To:     Ben Gardon <bgardon@google.com>
 Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
@@ -41,231 +41,389 @@ Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
         Paolo Bonzini <pbonzini@redhat.com>,
         Cannon Matthews <cannonmatthews@google.com>,
         Peter Xu <peterx@redhat.com>
-Subject: Re: [PATCH v3 5/8] KVM: selftests: Pass args to vCPU instead of
- using globals
-Message-ID: <20200107152341.rtfmciob5ly6nnjj@kamzik.brq.redhat.com>
+Subject: Re: [PATCH v3 6/8] KVM: selftests: Support multiple vCPUs in demand
+ paging test
+Message-ID: <20200107152749.nlh7cehr3yicijxv@kamzik.brq.redhat.com>
 References: <20191216213901.106941-1-bgardon@google.com>
- <20191216213901.106941-6-bgardon@google.com>
+ <20191216213901.106941-7-bgardon@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20191216213901.106941-6-bgardon@google.com>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
+In-Reply-To: <20191216213901.106941-7-bgardon@google.com>
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Dec 16, 2019 at 01:38:58PM -0800, Ben Gardon wrote:
-> In preparation for supporting multiple vCPUs in the demand paging test,
-> pass arguments to the vCPU instead of syncing globals to it.
-
-This will only work if we don't spill parameters onto the stack and all
-data we want to pass fit in registers. I've used multiple VCPUs in tests
-before and stuck with the global syncing. I simply used arrays like this
-
- static my_type_t my_data[NR_VCPUS];
-
- static void guest_code(void)
- {
-     int cpu = arch_get_cpu_id();
-     
-     // do something with my_data[cpu]
- }
-
- int main(void)
- {
-     for (i = 0; i < NR_VCPUS; ++i) {
-         // prepare my_data[i]
-         sync_global_to_guest(vm, my_data[i]);
-     }
-
-     // run vcpus
-
-    for (i = 0; i < NR_VCPUS; ++i) {
-         sync_global_from_guest(vm, my_data[i]);
-         // do something with my_data[i]
-    }
- }
-
+On Mon, Dec 16, 2019 at 01:38:59PM -0800, Ben Gardon wrote:
+> Most VMs have multiple vCPUs, the concurrent execution of which has a
+> substantial impact on demand paging performance. Add an option to create
+> multiple vCPUs to each access disjoint regions of memory.
 > 
 > Signed-off-by: Ben Gardon <bgardon@google.com>
 > ---
->  .../selftests/kvm/demand_paging_test.c        | 61 +++++++++++--------
->  1 file changed, 37 insertions(+), 24 deletions(-)
+>  .../selftests/kvm/demand_paging_test.c        | 199 ++++++++++++------
+>  1 file changed, 136 insertions(+), 63 deletions(-)
 > 
 > diff --git a/tools/testing/selftests/kvm/demand_paging_test.c b/tools/testing/selftests/kvm/demand_paging_test.c
-> index 4aa90a3fce99c..8ede26e088ab6 100644
+> index 8ede26e088ab6..2b80f614dd537 100644
 > --- a/tools/testing/selftests/kvm/demand_paging_test.c
 > +++ b/tools/testing/selftests/kvm/demand_paging_test.c
-> @@ -42,7 +42,6 @@
->   */
->  static uint64_t host_page_size;
->  static uint64_t guest_page_size;
-> -static uint64_t guest_num_pages;
+> @@ -24,8 +24,6 @@
+>  #include "kvm_util.h"
+>  #include "processor.h"
 >  
->  static char *guest_data_prototype;
+> -#define VCPU_ID				1
+> -
+>  /* The memory slot index demand page */
+>  #define TEST_MEM_SLOT_INDEX		1
 >  
-> @@ -63,14 +62,13 @@ static uint64_t guest_test_virt_mem = DEFAULT_GUEST_TEST_MEM;
->   * Continuously write to the first 8 bytes of each page in the demand paging
->   * memory region.
->   */
-> -static void guest_code(void)
-> +static void guest_code(uint64_t gva, uint64_t pages)
->  {
->  	int i;
+> @@ -34,6 +32,12 @@
 >  
-> -	for (i = 0; i < guest_num_pages; i++) {
-> -		uint64_t addr = guest_test_virt_mem;
-> +	for (i = 0; i < pages; i++) {
-> +		uint64_t addr = gva + (i * guest_page_size);
+>  #define DEFAULT_GUEST_TEST_MEM_SIZE (1 << 30) /* 1G */
 >  
-> -		addr += i * guest_page_size;
->  		addr &= ~(host_page_size - 1);
->  		*(uint64_t *)addr = 0x0123456789ABCDEF;
->  	}
-> @@ -82,18 +80,31 @@ static void guest_code(void)
->  static void *host_test_mem;
->  static uint64_t host_num_pages;
->  
-> +struct vcpu_thread_args {
-> +	uint64_t gva;
-> +	uint64_t pages;
-> +	struct kvm_vm *vm;
-> +	int vcpu_id;
-> +};
+> +#ifdef PRINT_PER_VCPU_UPDATES
+> +#define PER_VCPU_DEBUG(...) DEBUG(__VA_ARGS__)
+> +#else
+> +#define PER_VCPU_DEBUG(...)
+> +#endif
 > +
->  static void *vcpu_worker(void *data)
->  {
->  	int ret;
-> -	struct kvm_vm *vm = data;
-> +	struct vcpu_thread_args *args = (struct vcpu_thread_args *)data;
-> +	struct kvm_vm *vm = args->vm;
-> +	int vcpu_id = args->vcpu_id;
-> +	uint64_t gva = args->gva;
-> +	uint64_t pages = args->pages;
->  	struct kvm_run *run;
+>  /*
+>   * Guest/Host shared variables. Ensure addr_gva2hva() and/or
+>   * sync_global_to/from_guest() are used when accessing from
+> @@ -76,10 +80,6 @@ static void guest_code(uint64_t gva, uint64_t pages)
+>  	GUEST_SYNC(1);
+>  }
 >  
-> -	run = vcpu_state(vm, VCPU_ID);
-> +	vcpu_args_set(vm, vcpu_id, 2, gva, pages);
-
-vcpu_args_set() is currently only implemented by x86, so that's a good
-reason for this to be an x86-only test for now. Well, unless this is
-switched back to using global sync.
-
+> -/* Points to the test VM memory region on which we are doing demand paging */
+> -static void *host_test_mem;
+> -static uint64_t host_num_pages;
+> -
+>  struct vcpu_thread_args {
+>  	uint64_t gva;
+>  	uint64_t pages;
+> @@ -113,18 +113,32 @@ static void *vcpu_worker(void *data)
+>  	return NULL;
+>  }
+>  
+> -static struct kvm_vm *create_vm(enum vm_guest_mode mode, uint32_t vcpuid,
+> -				uint64_t extra_mem_pages, void *guest_code)
+> +#define PAGE_SHIFT_4K  12
+> +#define PTES_PER_PT 512
 > +
-> +	run = vcpu_state(vm, vcpu_id);
->  
->  	/* Let the guest access its memory */
-> -	ret = _vcpu_run(vm, VCPU_ID);
-> +	ret = _vcpu_run(vm, vcpu_id);
->  	TEST_ASSERT(ret == 0, "vcpu_run failed: %d\n", ret);
-> -	if (get_ucall(vm, VCPU_ID, NULL) != UCALL_SYNC) {
-> +	if (get_ucall(vm, vcpu_id, NULL) != UCALL_SYNC) {
->  		TEST_ASSERT(false,
->  			    "Invalid guest sync status: exit_reason=%s\n",
->  			    exit_reason_str(run->exit_reason));
-> @@ -269,11 +280,13 @@ static int setup_demand_paging(struct kvm_vm *vm,
->  #define PAGE_SHIFT_4K  12
->  
->  static void run_test(enum vm_guest_mode mode, bool use_uffd,
-> -		     useconds_t uffd_delay, uint64_t guest_memory_bytes)
-> +		     useconds_t uffd_delay, uint64_t vcpu_wss)
-
-Not sure why guest_memory_bytes was renamed to vcpu_wss. What is wss?
-Working set size?
-
+> +static struct kvm_vm *create_vm(enum vm_guest_mode mode, int vcpus,
+> +				uint64_t vcpu_wss)
 >  {
->  	pthread_t vcpu_thread;
->  	pthread_t uffd_handler_thread;
 >  	struct kvm_vm *vm;
-> +	struct vcpu_thread_args vcpu_args;
-> +	uint64_t guest_num_pages;
+> -	uint64_t extra_pg_pages = extra_mem_pages / 512 * 2;
+> +	uint64_t pages = DEFAULT_GUEST_PHY_PAGES;
+>  
+> -	vm = _vm_create(mode, DEFAULT_GUEST_PHY_PAGES + extra_pg_pages, O_RDWR);
+> +	/* Account for a few pages per-vCPU for stacks */
+> +	pages += DEFAULT_STACK_PGS * vcpus;
+> +
+> +	/*
+> +	 * Reserve twice the ammount of memory needed to map the test region and
+> +	 * the page table / stacks region, at 4k, for page tables. Do the
+> +	 * calculation with 4K page size: the smallest of all archs. (e.g., 64K
+> +	 * page size guest will need even less memory for page tables).
+> +	 */
+> +	pages += (2 * pages) / PTES_PER_PT;
+> +	pages += ((2 * vcpus * vcpu_wss) >> PAGE_SHIFT_4K) / PTES_PER_PT;
+> +
+> +	vm = _vm_create(mode, pages, O_RDWR);
+>  	kvm_vm_elf_load(vm, program_invocation_name, 0, 0);
+>  #ifdef __x86_64__
+>  	vm_create_irqchip(vm);
+>  #endif
+> -	vm_vcpu_add_default(vm, vcpuid, guest_code);
+>  	return vm;
+>  }
+>  
+> @@ -232,15 +246,13 @@ static void *uffd_handler_thread_fn(void *arg)
+>  
+>  static int setup_demand_paging(struct kvm_vm *vm,
+>  			       pthread_t *uffd_handler_thread,
+> -			       useconds_t uffd_delay)
+> +			       useconds_t uffd_delay,
+> +			       struct uffd_handler_args *uffd_args,
+> +			       void *hva, uint64_t len)
+>  {
+>  	int uffd;
+>  	struct uffdio_api uffdio_api;
+>  	struct uffdio_register uffdio_register;
+> -	struct uffd_handler_args uffd_args;
+> -
+> -	guest_data_prototype = malloc(host_page_size);
+> -	memset(guest_data_prototype, 0xAB, host_page_size);
+>  
+>  	uffd = syscall(__NR_userfaultfd, O_CLOEXEC | O_NONBLOCK);
+>  	if (uffd == -1) {
+> @@ -255,8 +267,8 @@ static int setup_demand_paging(struct kvm_vm *vm,
+>  		return -1;
+>  	}
+>  
+> -	uffdio_register.range.start = (uint64_t)host_test_mem;
+> -	uffdio_register.range.len = host_num_pages * host_page_size;
+> +	uffdio_register.range.start = (uint64_t)hva;
+> +	uffdio_register.range.len = len;
+>  	uffdio_register.mode = UFFDIO_REGISTER_MODE_MISSING;
+>  	if (ioctl(uffd, UFFDIO_REGISTER, &uffdio_register) == -1) {
+>  		DEBUG("ioctl uffdio_register failed\n");
+> @@ -269,42 +281,37 @@ static int setup_demand_paging(struct kvm_vm *vm,
+>  		return -1;
+>  	}
+>  
+> -	uffd_args.uffd = uffd;
+> -	uffd_args.delay = uffd_delay;
+> +	uffd_args->uffd = uffd;
+> +	uffd_args->delay = uffd_delay;
+>  	pthread_create(uffd_handler_thread, NULL, uffd_handler_thread_fn,
+> -		       &uffd_args);
+> +		       uffd_args);
+> +
+> +	PER_VCPU_DEBUG("Created uffd thread for HVA range [%p, %p)\n",
+> +		       hva, hva + len);
+>  
+>  	return 0;
+>  }
+>  
+> -#define PAGE_SHIFT_4K  12
+> -
+>  static void run_test(enum vm_guest_mode mode, bool use_uffd,
+> -		     useconds_t uffd_delay, uint64_t vcpu_wss)
+> +		     useconds_t uffd_delay, int vcpus, uint64_t vcpu_wss)
+>  {
+> -	pthread_t vcpu_thread;
+> -	pthread_t uffd_handler_thread;
+> +	pthread_t *vcpu_threads;
+> +	pthread_t *uffd_handler_threads = NULL;
+> +	struct uffd_handler_args *uffd_args = NULL;
+>  	struct kvm_vm *vm;
+> -	struct vcpu_thread_args vcpu_args;
+> +	struct vcpu_thread_args *vcpu_args;
+>  	uint64_t guest_num_pages;
+> +	int vcpu_id;
 >  	int r;
 >  
->  	/*
-> @@ -283,16 +296,15 @@ static void run_test(enum vm_guest_mode mode, bool use_uffd,
->  	 * number will be enough for all archs. (e.g., 64K page size guest
->  	 * will need even less memory for page tables).
->  	 */
-> -	vm = create_vm(mode, VCPU_ID,
-> -		       (2 * guest_memory_bytes) >> PAGE_SHIFT_4K,
-> +	vm = create_vm(mode, VCPU_ID, (2 * vcpu_wss) >> PAGE_SHIFT_4K,
->  		       guest_code);
+> -	/*
+> -	 * We reserve page table for twice the ammount of memory we intend
+> -	 * to use in the test region for demand paging. Here we do the
+> -	 * calculation with 4K page size which is the smallest so the page
+> -	 * number will be enough for all archs. (e.g., 64K page size guest
+> -	 * will need even less memory for page tables).
+> -	 */
+> -	vm = create_vm(mode, VCPU_ID, (2 * vcpu_wss) >> PAGE_SHIFT_4K,
+> -		       guest_code);
+> +	vm = create_vm(mode, vcpus, vcpu_wss);
 >  
 >  	guest_page_size = vm_get_page_size(vm);
 >  
-> -	TEST_ASSERT(guest_memory_bytes % guest_page_size == 0,
-> +	TEST_ASSERT(vcpu_wss % guest_page_size == 0,
+>  	TEST_ASSERT(vcpu_wss % guest_page_size == 0,
 >  		    "Guest memory size is not guest page size aligned.");
 >  
-> -	guest_num_pages = guest_memory_bytes / guest_page_size;
-> +	guest_num_pages = vcpu_wss / guest_page_size;
+> -	guest_num_pages = vcpu_wss / guest_page_size;
+> +	guest_num_pages = (vcpus * vcpu_wss) / guest_page_size;
 >  
 >  #ifdef __s390x__
 >  	/* Round up to multiple of 1M (segment size) */
-> @@ -308,9 +320,9 @@ static void run_test(enum vm_guest_mode mode, bool use_uffd,
->  		    guest_num_pages, vm_get_max_gfn(vm));
+> @@ -316,13 +323,12 @@ static void run_test(enum vm_guest_mode mode, bool use_uffd,
+>  	 */
+>  	TEST_ASSERT(guest_num_pages < vm_get_max_gfn(vm),
+>  		    "Requested more guest memory than address space allows.\n"
+> -		    "    guest pages: %lx max gfn: %lx\n",
+> -		    guest_num_pages, vm_get_max_gfn(vm));
+> +		    "    guest pages: %lx max gfn: %lx vcpus: %d wss: %lx]\n",
+> +		    guest_num_pages, vm_get_max_gfn(vm), vcpus, vcpu_wss);
 >  
 >  	host_page_size = getpagesize();
-> -	TEST_ASSERT(guest_memory_bytes % host_page_size == 0,
-> +	TEST_ASSERT(vcpu_wss % host_page_size == 0,
+>  	TEST_ASSERT(vcpu_wss % host_page_size == 0,
 >  		    "Guest memory size is not host page size aligned.");
-> -	host_num_pages = guest_memory_bytes / host_page_size;
-> +	host_num_pages = vcpu_wss / host_page_size;
+> -	host_num_pages = vcpu_wss / host_page_size;
 >  
 >  	guest_test_phys_mem = (vm_get_max_gfn(vm) - guest_num_pages) *
 >  			      guest_page_size;
-> @@ -354,10 +366,12 @@ static void run_test(enum vm_guest_mode mode, bool use_uffd,
->  	/* Export the shared variables to the guest */
->  	sync_global_to_guest(vm, host_page_size);
->  	sync_global_to_guest(vm, guest_page_size);
-> -	sync_global_to_guest(vm, guest_test_virt_mem);
-> -	sync_global_to_guest(vm, guest_num_pages);
+> @@ -347,43 +353,102 @@ static void run_test(enum vm_guest_mode mode, bool use_uffd,
+>  	virt_map(vm, guest_test_virt_mem, guest_test_phys_mem,
+>  		 guest_num_pages * guest_page_size, 0);
 >  
-> -	pthread_create(&vcpu_thread, NULL, vcpu_worker, vm);
-> +	vcpu_args.vm = vm;
-> +	vcpu_args.vcpu_id = VCPU_ID;
-> +	vcpu_args.gva = guest_test_virt_mem;
-> +	vcpu_args.pages = guest_num_pages;
-> +	pthread_create(&vcpu_thread, NULL, vcpu_worker, &vcpu_args);
+> -	/* Cache the HVA pointer of the region */
+> -	host_test_mem = addr_gpa2hva(vm, (vm_paddr_t)guest_test_phys_mem);
+> +	/* Export the shared variables to the guest */
+> +	sync_global_to_guest(vm, host_page_size);
+> +	sync_global_to_guest(vm, guest_page_size);
+> +
+> +	guest_data_prototype = malloc(host_page_size);
+> +	TEST_ASSERT(guest_data_prototype, "Memory allocation failed");
+> +	memset(guest_data_prototype, 0xAB, host_page_size);
+> +
+> +	vcpu_threads = malloc(vcpus * sizeof(*vcpu_threads));
+> +	TEST_ASSERT(vcpu_threads, "Memory allocation failed");
 >  
->  	/* Wait for the vcpu thread to quit */
->  	pthread_join(vcpu_thread, NULL);
-> @@ -404,8 +418,7 @@ static void help(char *name)
->  	printf(" -d: add a delay in usec to the User Fault\n"
+>  	if (use_uffd) {
+> -		/* Set up user fault fd to handle demand paging requests. */
+>  		quit_uffd_thread = false;
+> -		r = setup_demand_paging(vm, &uffd_handler_thread,
+> -					uffd_delay);
+> -		if (r < 0)
+> -			exit(-r);
+> +
+> +		uffd_handler_threads =
+> +			malloc(vcpus * sizeof(*uffd_handler_threads));
+> +		TEST_ASSERT(uffd_handler_threads, "Memory allocation failed");
+> +
+> +		uffd_args = malloc(vcpus * sizeof(*uffd_args));
+> +		TEST_ASSERT(uffd_args, "Memory allocation failed");
+>  	}
+>  
+> +	vcpu_args = malloc(vcpus * sizeof(*vcpu_args));
+> +	TEST_ASSERT(vcpu_args, "Memory allocation failed");
+> +
+> +	for (vcpu_id = 0; vcpu_id < vcpus; vcpu_id++) {
+> +		vm_paddr_t vcpu_gpa;
+> +		void *vcpu_hva;
+> +
+> +		vm_vcpu_add_default(vm, vcpu_id, guest_code);
+> +
+> +		vcpu_gpa = guest_test_phys_mem + (vcpu_id * vcpu_wss);
+> +		PER_VCPU_DEBUG("Added VCPU %d with test mem gpa [%lx, %lx)\n",
+> +			       vcpu_id, vcpu_gpa, vcpu_gpa + vcpu_wss);
+> +
+> +		/* Cache the HVA pointer of the region */
+> +		vcpu_hva = addr_gpa2hva(vm, vcpu_gpa);
+> +
+> +		if (use_uffd) {
+> +			/*
+> +			 * Set up user fault fd to handle demand paging
+> +			 * requests.
+> +			 */
+> +			r = setup_demand_paging(vm,
+> +						&uffd_handler_threads[vcpu_id],
+> +						uffd_delay, &uffd_args[vcpu_id],
+> +						vcpu_hva, vcpu_wss);
+> +			if (r < 0)
+> +				exit(-r);
+> +		}
+> +
+>  #ifdef __x86_64__
+> -	vcpu_set_cpuid(vm, VCPU_ID, kvm_get_supported_cpuid());
+> +		vcpu_set_cpuid(vm, vcpu_id, kvm_get_supported_cpuid());
+>  #endif
+>  
+> -	/* Export the shared variables to the guest */
+> -	sync_global_to_guest(vm, host_page_size);
+> -	sync_global_to_guest(vm, guest_page_size);
+> +		vcpu_args[vcpu_id].vm = vm;
+> +		vcpu_args[vcpu_id].vcpu_id = vcpu_id;
+> +		vcpu_args[vcpu_id].gva = guest_test_virt_mem +
+> +					 (vcpu_id * vcpu_wss);
+> +		vcpu_args[vcpu_id].pages = vcpu_wss / guest_page_size;
+> +	}
+> +
+> +	DEBUG("Finished creating vCPUs and starting uffd threads\n");
+> +
+> +	for (vcpu_id = 0; vcpu_id < vcpus; vcpu_id++) {
+> +		pthread_create(&vcpu_threads[vcpu_id], NULL, vcpu_worker,
+> +			       &vcpu_args[vcpu_id]);
+> +	}
+> +
+> +	DEBUG("Started all vCPUs\n");
+>  
+> -	vcpu_args.vm = vm;
+> -	vcpu_args.vcpu_id = VCPU_ID;
+> -	vcpu_args.gva = guest_test_virt_mem;
+> -	vcpu_args.pages = guest_num_pages;
+> -	pthread_create(&vcpu_thread, NULL, vcpu_worker, &vcpu_args);
+> +	/* Wait for the vcpu threads to quit */
+> +	for (vcpu_id = 0; vcpu_id < vcpus; vcpu_id++) {
+> +		pthread_join(vcpu_threads[vcpu_id], NULL);
+> +		PER_VCPU_DEBUG("Joined thread for vCPU %d\n", vcpu_id);
+> +	}
+>  
+> -	/* Wait for the vcpu thread to quit */
+> -	pthread_join(vcpu_thread, NULL);
+> +	DEBUG("All vCPU threads joined\n");
+>  
+>  	if (use_uffd) {
+> -		/* Tell the user fault fd handler thread to quit */
+> +		/* Tell the user fault fd handler threads to quit */
+>  		quit_uffd_thread = true;
+> -		pthread_join(uffd_handler_thread, NULL);
+> +		for (vcpu_id = 0; vcpu_id < vcpus; vcpu_id++)
+> +			pthread_join(uffd_handler_threads[vcpu_id], NULL);
+>  	}
+>  
+>  	ucall_uninit(vm);
+>  	kvm_vm_free(vm);
+> +
+> +	free(guest_data_prototype);
+> +	free(vcpu_threads);
+> +	if (use_uffd) {
+> +		free(uffd_handler_threads);
+> +		free(uffd_args);
+> +	}
+> +	free(vcpu_args);
+>  }
+>  
+>  struct vm_guest_mode_params {
+> @@ -404,7 +469,7 @@ static void help(char *name)
+>  
+>  	puts("");
+>  	printf("usage: %s [-h] [-m mode] [-u] [-d uffd_delay_usec]\n"
+> -	       "          [-b bytes test memory]\n", name);
+> +	       "          [-b bytes test memory] [-v vcpus]\n", name);
+>  	printf(" -m: specify the guest mode ID to test\n"
+>  	       "     (default: test all supported modes)\n"
+>  	       "     This option may be used multiple times.\n"
+> @@ -419,6 +484,7 @@ static void help(char *name)
 >  	       "     FD handler to simulate demand paging\n"
 >  	       "     overheads. Ignored without -u.\n");
-> -	printf(" -b: specify the number of bytes of memory which should be\n"
-> -	       "     allocated to the guest.\n");
-> +	printf(" -b: specify the working set size, in bytes for each vCPU.\n");
+>  	printf(" -b: specify the working set size, in bytes for each vCPU.\n");
+> +	printf(" -v: specify the number of vCPUs to run.\n");
 >  	puts("");
 >  	exit(0);
 >  }
-> @@ -413,7 +426,7 @@ static void help(char *name)
->  int main(int argc, char *argv[])
+> @@ -427,6 +493,7 @@ int main(int argc, char *argv[])
 >  {
 >  	bool mode_selected = false;
-> -	uint64_t guest_memory_bytes = DEFAULT_GUEST_TEST_MEM_SIZE;
-> +	uint64_t vcpu_wss = DEFAULT_GUEST_TEST_MEM_SIZE;
+>  	uint64_t vcpu_wss = DEFAULT_GUEST_TEST_MEM_SIZE;
+> +	int vcpus = 1;
 >  	unsigned int mode;
 >  	int opt, i;
 >  	bool use_uffd = false;
-> @@ -448,7 +461,7 @@ int main(int argc, char *argv[])
->  				    "A negative UFFD delay is not supported.");
+> @@ -439,7 +506,7 @@ int main(int argc, char *argv[])
+>  	vm_guest_mode_params_init(VM_MODE_P40V48_4K, true, true);
+>  #endif
+>  
+> -	while ((opt = getopt(argc, argv, "hm:ud:b:")) != -1) {
+> +	while ((opt = getopt(argc, argv, "hm:ud:b:v:")) != -1) {
+>  		switch (opt) {
+>  		case 'm':
+>  			if (!mode_selected) {
+> @@ -462,6 +529,12 @@ int main(int argc, char *argv[])
 >  			break;
 >  		case 'b':
-> -			guest_memory_bytes = strtoull(optarg, NULL, 0);
-> +			vcpu_wss = strtoull(optarg, NULL, 0);
+>  			vcpu_wss = strtoull(optarg, NULL, 0);
+> +			break;
+
+There's that missing break. It's good to test each patch to ensure
+bisectability.
+
+> +		case 'v':
+> +			vcpus = atoi(optarg);
+> +			TEST_ASSERT(vcpus > 0,
+> +				    "Must have a positive number of vCPUs");
+> +			break;
 >  		case 'h':
 >  		default:
 >  			help(argv[0]);
-> @@ -462,7 +475,7 @@ int main(int argc, char *argv[])
+> @@ -475,7 +548,7 @@ int main(int argc, char *argv[])
 >  		TEST_ASSERT(vm_guest_mode_params[i].supported,
 >  			    "Guest mode ID %d (%s) not supported.",
 >  			    i, vm_guest_mode_string(i));
-> -		run_test(i, use_uffd, uffd_delay, guest_memory_bytes);
-> +		run_test(i, use_uffd, uffd_delay, vcpu_wss);
+> -		run_test(i, use_uffd, uffd_delay, vcpu_wss);
+> +		run_test(i, use_uffd, uffd_delay, vcpus, vcpu_wss);
 >  	}
 >  
 >  	return 0;
@@ -274,5 +432,5 @@ Working set size?
 >
 
 Thanks,
-drew
+drew 
 
