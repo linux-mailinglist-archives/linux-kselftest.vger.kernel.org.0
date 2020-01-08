@@ -2,76 +2,125 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A0D9133F12
-	for <lists+linux-kselftest@lfdr.de>; Wed,  8 Jan 2020 11:17:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E3F813443C
+	for <lists+linux-kselftest@lfdr.de>; Wed,  8 Jan 2020 14:46:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727486AbgAHKRZ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 8 Jan 2020 05:17:25 -0500
-Received: from mx2.suse.de ([195.135.220.15]:44898 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726368AbgAHKRZ (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 8 Jan 2020 05:17:25 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx2.suse.de (Postfix) with ESMTP id C179EAE44;
-        Wed,  8 Jan 2020 10:17:23 +0000 (UTC)
-Date:   Wed, 8 Jan 2020 11:17:19 +0100
-From:   Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
-To:     Dan Carpenter <dan.carpenter@oracle.com>
-Cc:     Shuah Khan <shuah@kernel.org>, Tejun Heo <tj@kernel.org>,
-        Roman Gushchin <guro@fb.com>,
-        Alex Shi <alex.shi@linux.alibaba.com>,
-        linux-kselftest@vger.kernel.org, kernel-janitors@vger.kernel.org
-Subject: Re: [PATCH] selftests: Uninitialized variable in
- test_cgcore_proc_migration()
-Message-ID: <20200108101719.GA9281@blackbody.suse.cz>
-References: <20200108054629.jtq36feyhxsfhf6u@kili.mountain>
+        id S1726186AbgAHNpb (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 8 Jan 2020 08:45:31 -0500
+Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:51413 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1727221AbgAHNpb (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 8 Jan 2020 08:45:31 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1578491129;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=dG3i7yuSZ3ug5whVQjbMvnjTRjDpvRHXJetJ3lD56EE=;
+        b=N3TS9AjqM8uIVPjkito7dT+fJXqhfHDfNRMjXlcPDta56ptjS5BXxqqRoPfNnHHgpVLHBB
+        lVjznGD4WDrSEerDJDaNuTuRa7+qh4qIRr0maXxUhqZ33KEM9XWnSWrZoiBq3MqKqtJCsi
+        XZzcZHW4kW2SzmE9wS8cTuZV97CpP44=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-227-D-99LmD1OlaSQU5Xry_7AQ-1; Wed, 08 Jan 2020 08:45:28 -0500
+X-MC-Unique: D-99LmD1OlaSQU5Xry_7AQ-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 31D8E107ACC4;
+        Wed,  8 Jan 2020 13:45:27 +0000 (UTC)
+Received: from kamzik.brq.redhat.com (unknown [10.43.2.160])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 99FC47C34A;
+        Wed,  8 Jan 2020 13:45:22 +0000 (UTC)
+Date:   Wed, 8 Jan 2020 14:45:20 +0100
+From:   Andrew Jones <drjones@redhat.com>
+To:     Ben Gardon <bgardon@google.com>
+Cc:     Peter Xu <peterx@redhat.com>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Cannon Matthews <cannonmatthews@google.com>
+Subject: Re: [PATCH v3 1/8] KVM: selftests: Create a demand paging test
+Message-ID: <20200108134520.zcrg6bx6urv4zxea@kamzik.brq.redhat.com>
+References: <20191216213901.106941-1-bgardon@google.com>
+ <20191216213901.106941-2-bgardon@google.com>
+ <20200107143334.GF219677@xz-x1>
+ <20200107145608.ogi34nkyh2abdgrq@kamzik.brq.redhat.com>
+ <CANgfPd8_ei0WdF7t73TPveCAh1ifSp9p1B6BOkL32A+499nz=Q@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="UlVJffcvxoiEqYs2"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200108054629.jtq36feyhxsfhf6u@kili.mountain>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <CANgfPd8_ei0WdF7t73TPveCAh1ifSp9p1B6BOkL32A+499nz=Q@mail.gmail.com>
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+On Tue, Jan 07, 2020 at 10:41:55AM -0800, Ben Gardon wrote:
+> I'll try to implement Drew's suggestion re: syncing global variables
+> and then looking up CPU ID. If I can do that I'll upload another patch
+> set for s390, aarch64, and x86. If I can't I'll move this test to the
+> x86 subdirectory.
+> 
+> I apologize for not responding to the comments on the previous version
+> of this patch set. I'm still learning the mailing list etiquette. In
+> the future is it preferable that I reply to those comments when I
+> upload a new patch set addressing them, or should I add a note in the
+> new patch emails about the comments I addressed in that update?
 
---UlVJffcvxoiEqYs2
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+It's typically enough to just create a changelog in the cover letter.
+E.g.
 
-On Wed, Jan 08, 2020 at 08:46:29AM +0300, Dan Carpenter <dan.carpenter@orac=
-le.com> wrote:
-> The "c_threads" variable is used in the error handling code before it
-> has been initialized
-Thank you for fixing this.
+v3:
+ - Added ...
+ - Dropped ...
+ - Fixed ...
+ - Picked up r-b's
 
-Acked-by: Michal Koutn=FD <mkoutny@suse.com>
+v2:
+ - Added ...
+ - Dropped ...
+ - Fixed ...
+ - Picked up r-b's
 
-Michal
+> 
+> I don't have any aarch64 or s390 hardware handy to test on so I'll try
+> to move support for those architectures to separate commits at the end
+> of the series, and mark them untested.
 
---UlVJffcvxoiEqYs2
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: Digital signature
+I'll test on aarch64, and I can also provide fixes if necessary.
 
------BEGIN PGP SIGNATURE-----
+Thanks,
+drew
 
-iQIzBAEBCAAdFiEEEoQaUCWq8F2Id1tNia1+riC5qSgFAl4VrCsACgkQia1+riC5
-qSgepg//at1PmnH0lpT7396h7qrWalZ4jjmOy4BAYL9bIz/HPJL3CLWMCkCC1Dmv
-Egja2j6GHvgEiOpHkOlFlgqrOyz0oFpt3p0VfBlhPNtRoy4LtjniopYgO4vQj6eM
-tr7AsHEpwaGTYSgxxs5RtSwA/Ddn7N3pnrB8VdSsJ396HffBMK4yIjYfLsGCVRst
-0l6z5pRW1eiS4BKjbk3FSJ7ga6e0+Fgb+YcLBjEQ9W1rOYTjpxOt4RC5+Dd6SosS
-P4HT80ftJw71aljyjLp5gdR3Pvc/wubw2IQf5EwFvre/k20Ct8a5osGNXlAo5a+h
-ElNvs/6fHarqR4BSrX4J+IhDv42pIvyTZtBw8oXudN0wft5li6qWzKQH18Cwrfp/
-6rSaE2ArTGRsM1A9IFGsKmi808OHEZfTcR/PcLDt2J19F918dgi8ymseOgzHFr94
-NV4sUiTq7pu7SmUGL7NeAq9yUl1gJGKFIn6qyWq5U7q9dK1Au8krQ5wmtrI65hRT
-Gs+jWygma54Vb7jdKYKC6SZGvrC2DN8iuQdzY+NoqrSNirZv9+C5O+3hib2+DX7x
-90GYj7j0jbCueAswzsAnS0o5vuPWjFffKizeTvH8m4WoN4HbcBpu/8qR7y+m+2P6
-PCvttwIx9lfv/W7MW+W0Y5xJUjD7XI1Bdnhr1YUPAguhb0sLW7k=
-=40fW
------END PGP SIGNATURE-----
+> 
+> Thank you for your quick responses!
+> 
+> On Tue, Jan 7, 2020 at 6:56 AM Andrew Jones <drjones@redhat.com> wrote:
+> >
+> > On Tue, Jan 07, 2020 at 09:33:34AM -0500, Peter Xu wrote:
+> > > On Mon, Dec 16, 2019 at 01:38:54PM -0800, Ben Gardon wrote:
+> > > > While userfaultfd, KVM's demand paging implementation, is not specific
+> > > > to KVM, having a benchmark for its performance will be useful for
+> > > > guiding performance improvements to KVM. As a first step towards creating
+> > > > a userfaultfd demand paging test, create a simple memory access test,
+> > > > based on dirty_log_test.
+> > > >
+> > > > Signed-off-by: Ben Gardon <bgardon@google.com>
+> > >
+> > > It's fine to start with x86-only for this test, but imho it would be
+> > > better to mention that in cover letter, or reply to reviewer comments
+> > > on that you removed aarch64 from previous post.
+> >
+> > I'd also prefer that if it's x86-only that it be put in the x86_64
+> > subdirectory and drop the arch #ifdefs. The question is why is it
+> > x86-only for now though? Will it take a lot of work to port it to
+> > other architectures? Or does it just need testing by someone with
+> > the hardware?
+> >
+> > Thanks,
+> > drew
+> >
+> 
 
---UlVJffcvxoiEqYs2--
