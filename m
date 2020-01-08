@@ -2,125 +2,93 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E3F813443C
-	for <lists+linux-kselftest@lfdr.de>; Wed,  8 Jan 2020 14:46:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DCBCB13446F
+	for <lists+linux-kselftest@lfdr.de>; Wed,  8 Jan 2020 15:00:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726186AbgAHNpb (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 8 Jan 2020 08:45:31 -0500
-Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:51413 "EHLO
+        id S1727744AbgAHOAI (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 8 Jan 2020 09:00:08 -0500
+Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:53433 "EHLO
         us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1727221AbgAHNpb (ORCPT
+        with ESMTP id S1727546AbgAHOAI (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 8 Jan 2020 08:45:31 -0500
+        Wed, 8 Jan 2020 09:00:08 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1578491129;
+        s=mimecast20190719; t=1578492007;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=dG3i7yuSZ3ug5whVQjbMvnjTRjDpvRHXJetJ3lD56EE=;
-        b=N3TS9AjqM8uIVPjkito7dT+fJXqhfHDfNRMjXlcPDta56ptjS5BXxqqRoPfNnHHgpVLHBB
-        lVjznGD4WDrSEerDJDaNuTuRa7+qh4qIRr0maXxUhqZ33KEM9XWnSWrZoiBq3MqKqtJCsi
-        XZzcZHW4kW2SzmE9wS8cTuZV97CpP44=
+        bh=LhAq3h7VQwMWx8ihMD40ZfIUUirmqsJ+eD0EacS+0NE=;
+        b=i3TvIquN1rV4CZ+Z5sPbo3z49AHeU7kPhM4a4Jpyx7L5xbYt3NiSeSkfb9bzAiEBeLWxYN
+        rKiIyKqDseuT1onpmN8Fpu61vboNMu7z6x1eSfOoGv1AZzi4oCTofX4TQJjCGSfVvhRPKZ
+        FAkZWlT90ys1KDDFm8OOGdZhaWmFkwQ=
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-227-D-99LmD1OlaSQU5Xry_7AQ-1; Wed, 08 Jan 2020 08:45:28 -0500
-X-MC-Unique: D-99LmD1OlaSQU5Xry_7AQ-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
+ us-mta-276-ztw0LAM0O3qaF-sYDtfooQ-1; Wed, 08 Jan 2020 09:00:06 -0500
+X-MC-Unique: ztw0LAM0O3qaF-sYDtfooQ-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 31D8E107ACC4;
-        Wed,  8 Jan 2020 13:45:27 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id C5C6F100550E;
+        Wed,  8 Jan 2020 14:00:04 +0000 (UTC)
 Received: from kamzik.brq.redhat.com (unknown [10.43.2.160])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 99FC47C34A;
-        Wed,  8 Jan 2020 13:45:22 +0000 (UTC)
-Date:   Wed, 8 Jan 2020 14:45:20 +0100
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 7222D5D9E5;
+        Wed,  8 Jan 2020 14:00:00 +0000 (UTC)
+Date:   Wed, 8 Jan 2020 14:59:57 +0100
 From:   Andrew Jones <drjones@redhat.com>
 To:     Ben Gardon <bgardon@google.com>
-Cc:     Peter Xu <peterx@redhat.com>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
         Paolo Bonzini <pbonzini@redhat.com>,
-        Cannon Matthews <cannonmatthews@google.com>
-Subject: Re: [PATCH v3 1/8] KVM: selftests: Create a demand paging test
-Message-ID: <20200108134520.zcrg6bx6urv4zxea@kamzik.brq.redhat.com>
+        Cannon Matthews <cannonmatthews@google.com>,
+        Peter Xu <peterx@redhat.com>
+Subject: Re: [PATCH v3 5/8] KVM: selftests: Pass args to vCPU instead of
+ using globals
+Message-ID: <20200108135957.4milt3brij7lvfd3@kamzik.brq.redhat.com>
 References: <20191216213901.106941-1-bgardon@google.com>
- <20191216213901.106941-2-bgardon@google.com>
- <20200107143334.GF219677@xz-x1>
- <20200107145608.ogi34nkyh2abdgrq@kamzik.brq.redhat.com>
- <CANgfPd8_ei0WdF7t73TPveCAh1ifSp9p1B6BOkL32A+499nz=Q@mail.gmail.com>
+ <20191216213901.106941-6-bgardon@google.com>
+ <20200107152341.rtfmciob5ly6nnjj@kamzik.brq.redhat.com>
+ <CANgfPd9aCcN8BJDkkDuC2=3Po3f6BQ6q7JkQfL7n+giDCySu7A@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CANgfPd8_ei0WdF7t73TPveCAh1ifSp9p1B6BOkL32A+499nz=Q@mail.gmail.com>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
+In-Reply-To: <CANgfPd9aCcN8BJDkkDuC2=3Po3f6BQ6q7JkQfL7n+giDCySu7A@mail.gmail.com>
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Jan 07, 2020 at 10:41:55AM -0800, Ben Gardon wrote:
-> I'll try to implement Drew's suggestion re: syncing global variables
-> and then looking up CPU ID. If I can do that I'll upload another patch
-> set for s390, aarch64, and x86. If I can't I'll move this test to the
-> x86 subdirectory.
+On Tue, Jan 07, 2020 at 10:26:10AM -0800, Ben Gardon wrote:
+> On Tue, Jan 7, 2020 at 7:23 AM Andrew Jones <drjones@redhat.com> wrote:
+> >
+> > On Mon, Dec 16, 2019 at 01:38:58PM -0800, Ben Gardon wrote:
+> > > In preparation for supporting multiple vCPUs in the demand paging test,
+> > > pass arguments to the vCPU instead of syncing globals to it.
+> >
+> > This will only work if we don't spill parameters onto the stack and all
+> > data we want to pass fit in registers.
 > 
-> I apologize for not responding to the comments on the previous version
-> of this patch set. I'm still learning the mailing list etiquette. In
-> the future is it preferable that I reply to those comments when I
-> upload a new patch set addressing them, or should I add a note in the
-> new patch emails about the comments I addressed in that update?
+> That's a great point. I'll see about using globals and deriving the
+> cpu ID to look up args. In your pseudocode below I see you use
+> arch_get_cpu_id, but I don't believe this function exists in selftests
+> and I don't have the knowledge off the top of my head to implement it
+> for s390 and aarch64. Do you have any pointers for implementing such a
+> function?
 
-It's typically enough to just create a changelog in the cover letter.
-E.g.
+Yeah, I never posted the patches that I used this approach on. For aarch64
+my "arch_get_cpu_id", which was actually just open-coded in guest_code,
+was something similar to this
 
-v3:
- - Added ...
- - Dropped ...
- - Fixed ...
- - Picked up r-b's
-
-v2:
- - Added ...
- - Dropped ...
- - Fixed ...
- - Picked up r-b's
-
-> 
-> I don't have any aarch64 or s390 hardware handy to test on so I'll try
-> to move support for those architectures to separate commits at the end
-> of the series, and mark them untested.
-
-I'll test on aarch64, and I can also provide fixes if necessary.
+ /* We only look at the first two affinity levels for now. */
+ int arch_get_cpu_id(void)
+ {
+     uint64_t mpidr_el1, aff1, aff0;
+     asm volatile("mrs %0, mpidr_el1" : "=r" (mpidr_el1));
+     aff0 = mpidr_el1 & 0xf;
+     aff1 = (mpidr_el1 >> 8) & 0xff;
+     return aff1 * 16 + aff0;
+ }
 
 Thanks,
 drew
-
-> 
-> Thank you for your quick responses!
-> 
-> On Tue, Jan 7, 2020 at 6:56 AM Andrew Jones <drjones@redhat.com> wrote:
-> >
-> > On Tue, Jan 07, 2020 at 09:33:34AM -0500, Peter Xu wrote:
-> > > On Mon, Dec 16, 2019 at 01:38:54PM -0800, Ben Gardon wrote:
-> > > > While userfaultfd, KVM's demand paging implementation, is not specific
-> > > > to KVM, having a benchmark for its performance will be useful for
-> > > > guiding performance improvements to KVM. As a first step towards creating
-> > > > a userfaultfd demand paging test, create a simple memory access test,
-> > > > based on dirty_log_test.
-> > > >
-> > > > Signed-off-by: Ben Gardon <bgardon@google.com>
-> > >
-> > > It's fine to start with x86-only for this test, but imho it would be
-> > > better to mention that in cover letter, or reply to reviewer comments
-> > > on that you removed aarch64 from previous post.
-> >
-> > I'd also prefer that if it's x86-only that it be put in the x86_64
-> > subdirectory and drop the arch #ifdefs. The question is why is it
-> > x86-only for now though? Will it take a lot of work to port it to
-> > other architectures? Or does it just need testing by someone with
-> > the hardware?
-> >
-> > Thanks,
-> > drew
-> >
-> 
 
