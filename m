@@ -2,111 +2,390 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EF32D136C45
-	for <lists+linux-kselftest@lfdr.de>; Fri, 10 Jan 2020 12:50:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A3C2C136E64
+	for <lists+linux-kselftest@lfdr.de>; Fri, 10 Jan 2020 14:44:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727791AbgAJLuR (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 10 Jan 2020 06:50:17 -0500
-Received: from userp2120.oracle.com ([156.151.31.85]:59924 "EHLO
-        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727710AbgAJLuR (ORCPT
+        id S1727557AbgAJNoD (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 10 Jan 2020 08:44:03 -0500
+Received: from mout.kundenserver.de ([212.227.17.13]:36583 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727427AbgAJNoC (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 10 Jan 2020 06:50:17 -0500
-Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
-        by userp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id 00ABmBed144146;
-        Fri, 10 Jan 2020 11:49:50 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id; s=corp-2019-08-05;
- bh=JJW3trWejl6ezxgJ10nAdxvNTgv9rAAla3xEGRMdP/E=;
- b=b+v985lPgbUpnmfYLSAPubgGWtiRnldTf21hB3pSq9Qbeu9oQnG1ZYcEbanBpuwa1qK8
- XCvzQ9JFHAHC33/FF0YupPXg5/yNA1mdAUL/9b37kJ3CD9Pnp967WAza78LPOyd7xxYc
- nWZv9qrnuKJ0BkYnsxUZxqQjHtkgcqTAwUq75KMX84OU+lryMLegyaqRYd63GdUT27Sx
- UP0x6QUNwWrq6fC1DCj5nkqpJFqBeReAR7ryeJwAZqLkwSrPES9bgGdV9WdyWGD+aQOG
- 1lXA2DvG0mlTexMwz+hSjWK1VoWwKtUl1d692rFOSBpD174U1iUaUZy7um6b1ZXrdTle ig== 
-Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
-        by userp2120.oracle.com with ESMTP id 2xakbr9hue-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 10 Jan 2020 11:49:50 +0000
-Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
-        by userp3030.oracle.com (8.16.0.27/8.16.0.27) with SMTP id 00ABmuCB051763;
-        Fri, 10 Jan 2020 11:49:50 GMT
-Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
-        by userp3030.oracle.com with ESMTP id 2xeh90k0kn-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 10 Jan 2020 11:49:49 +0000
-Received: from abhmp0004.oracle.com (abhmp0004.oracle.com [141.146.116.10])
-        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 00ABnk8O019563;
-        Fri, 10 Jan 2020 11:49:48 GMT
-Received: from dhcp-10-175-222-124.vpn.oracle.com (/10.175.222.124)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Fri, 10 Jan 2020 03:49:46 -0800
-From:   Alan Maguire <alan.maguire@oracle.com>
-To:     skhan@linuxfoundation.org, brendanhiggins@google.com,
-        gregkh@linuxfoundation.org
-Cc:     rafael@kernel.org, jmorris@namei.org, serge@hallyn.com,
-        knut.omang@oracle.com, linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kselftest@vger.kernel.org, sfr@canb.auug.org.au,
-        Alan Maguire <alan.maguire@oracle.com>
-Subject: [PATCH kunit] kunit: building kunit as a module breaks allmodconfig
-Date:   Fri, 10 Jan 2020 11:49:25 +0000
-Message-Id: <1578656965-2993-1-git-send-email-alan.maguire@oracle.com>
-X-Mailer: git-send-email 1.8.3.1
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9495 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=3 malwarescore=0
- phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=799
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.0.1-1911140001 definitions=main-2001100101
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9495 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
- suspectscore=3 phishscore=0 bulkscore=0 spamscore=0 clxscore=1011
- lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=860 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1911140001
- definitions=main-2001100101
+        Fri, 10 Jan 2020 08:44:02 -0500
+Received: from threadripper.lan ([149.172.19.189]) by mrelayeu.kundenserver.de
+ (mreue108 [212.227.15.145]) with ESMTPA (Nemesis) id
+ 1MGQf5-1itQ9q2QKD-00Gosa; Fri, 10 Jan 2020 14:43:43 +0100
+From:   Arnd Bergmann <arnd@arndb.de>
+To:     Brendan Higgins <brendanhiggins@google.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Kees Cook <keescook@chromium.org>,
+        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] [RFC] kunit: move binary assertion out of line
+Date:   Fri, 10 Jan 2020 14:43:12 +0100
+Message-Id: <20200110134337.1752000-1-arnd@arndb.de>
+X-Mailer: git-send-email 2.20.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Provags-ID: V03:K1:HcATK1ifbGpJ7hVrQRVqUF1GGCPpwH+Qs6NYk7NUoE6K6NUlYXY
+ KI2KpnEmRJyDoOOY6+Stoi19S7wP14CzpY7ELeYXS8fDtU7eUjpBL8rX91K2W17HfLWaRtg
+ 7NJ2AKPomKLERhmIjef6tYAmV+gB6diN7dTpkBVIusux5xzj6vzGdrfX6cFj/717npRo9dp
+ vPZSxjSVBOI/X5UnN1bYw==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:JpeaIPdukI0=:ojZzAxIQDeHJB1zkZdySlW
+ 0cZQ4J5ewrnHDab4HGCjsQ28kNXhs87bFYetzx0PSEUiQDNO0U7z2EhOMyEMwwOXGEBpAhlDt
+ dSzWPzOHY7QMGG0Qsd8q2m++039+nIr97jJnJR9VK6ipu1uAajelYxBVlUCUdrAKmEshbLtEz
+ 2Z4A5VgRZvGcL3X7aU0S/cXDmanBXOtpZxTQU8xRi3Dtw7K08e/Io9H8DYii0vD7/dE3MpB7/
+ XEOf49mPbZZxXxPBmFBu2VLJsQ4tGWBB0EKdtXoJZRPOBTiNg13ll2RO9pfBCncPqMxfWlTM6
+ 3HwjslaAKQoeltUoioPV1Ac8mi8VOVgrBlUY7ug1hg/s40+IvSw0npO0vyqlZv0RYIBs/puQq
+ mKstwY4ooDTAQe9m9b5ph2MsUaELcfDsnISwZl2zc8MtHcdOEWQXDpr4zfEbwa2FhvNFZ33W1
+ sHv6JWld9gVTA0qkVi3u9EO+CTexIlt2CQWt/kGd6pgAOuiDO7ou3kgLwYrwq24VtQBRuigbF
+ yT1BbJ0TJlOdCO4P5YI6RXroKAOFSSQVJ65jznKON5nNHs0EL3XldxhmdxLnPzXYpWUJQgOM3
+ Pr2gACegaNTzQBC/J7z4yrsDwnIgHZT5lpGll/xsDz7FUxj6gfnEDKam7eLHodBDvsJMWHb4E
+ Cg0g7bTft83Qzjo9CxIp83z4BL6aIm6iu1hatUiGt0DTqKlbgIjnM5BCI3/Wimk7yp8deS7zo
+ NWh7diOifsweaZu2ai/3zKU5IeipXQDqmU6LNfpvXssUg09Wm1uROi5aGbHNmd5kkdXTGD31d
+ 4L9Rukle2zix6Ri5/yl1MS7MUlX0PNyTu2jnnb4NW/LhtOV/72JT8bwnW02T4qaij/7LCERFy
+ WoFvS35rqw6u8BFxy8Ug==
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-kunit tests that do not support module build should depend
-on KUNIT=y rather than just KUNIT in Kconfig, otherwise
-they will trigger compilation errors for "make allmodconfig"
-builds.
+In combination with the structleak gcc plugin, kunit can lead to excessive
+stack usage when each assertion adds another structure to the stack from
+of the calling function:
 
-Fixes: 9fe124bf1b77 ("kunit: allow kunit to be loaded as a module")
-Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
-Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+base/test/property-entry-test.c:99:1: error: the frame size of 3032 bytes is larger than 2048 bytes [-Werror=frame-larger-than=]
+
+As most assertions are binary, change those over to a direct function
+call that does not have this problem.  This can probably be improved
+further, I just went for a straightforward conversion, but a function
+call with 12 fixed arguments plus varargs it not great either.
+
+Cc: Kees Cook <keescook@chromium.org>
+Cc: Ard Biesheuvel <ard.biesheuvel@linaro.org>
+Cc: Brendan Higgins <brendanhiggins@google.com>
+Cc: Stephen Boyd <sboyd@kernel.org>
+Cc: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc: linux-kselftest@vger.kernel.org
+Cc: kunit-dev@googlegroups.com
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- drivers/base/Kconfig      | 2 +-
- security/apparmor/Kconfig | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+I think improving the compiler or the plugin to not force the
+allocation of these structs would be better, as it avoids the
+whack-a-mole game of fixing up each time it hits us, but this
+may not be possible using the current plugin infrastructure.
+---
+ include/kunit/test.h | 155 ++++++++++++-------------------------------
+ lib/kunit/assert.c   |   8 +--
+ lib/kunit/test.c     |  42 ++++++++++++
+ 3 files changed, 90 insertions(+), 115 deletions(-)
 
-diff --git a/drivers/base/Kconfig b/drivers/base/Kconfig
-index c3b3b5c..5f0bc74 100644
---- a/drivers/base/Kconfig
-+++ b/drivers/base/Kconfig
-@@ -150,7 +150,7 @@ config DEBUG_TEST_DRIVER_REMOVE
+diff --git a/include/kunit/test.h b/include/kunit/test.h
+index dba48304b3bd..76eadd4a8b77 100644
+--- a/include/kunit/test.h
++++ b/include/kunit/test.h
+@@ -391,6 +391,16 @@ void kunit_do_assertion(struct kunit *test,
+ 			bool pass,
+ 			const char *fmt, ...);
  
- config PM_QOS_KUNIT_TEST
- 	bool "KUnit Test for PM QoS features"
--	depends on KUNIT
-+	depends on KUNIT=y
++void kunit_do_binary_assertion(struct kunit *test, bool pass,
++			       enum kunit_assert_type type,
++			       int line, const char *file,
++			       const char *operation,
++			       const char *left_text, long long left_value,
++			       const char *right_text, long long right_value,
++			       void (*format)(const struct kunit_assert *assert,
++					       struct string_stream *stream),
++			       const char *fmt, ...);
++
+ #define KUNIT_ASSERTION(test, pass, assert_class, INITIALIZER, fmt, ...) do {  \
+ 	struct assert_class __assertion = INITIALIZER;			       \
+ 	kunit_do_assertion(test,					       \
+@@ -491,19 +501,32 @@ do {									       \
+ 	typeof(left) __left = (left);					       \
+ 	typeof(right) __right = (right);				       \
+ 	((void)__typecheck(__left, __right));				       \
+-									       \
+-	KUNIT_ASSERTION(test,						       \
+-			__left op __right,				       \
+-			assert_class,					       \
+-			ASSERT_CLASS_INIT(test,				       \
+-					  assert_type,			       \
+-					  #op,				       \
+-					  #left,			       \
+-					  __left,			       \
+-					  #right,			       \
+-					  __right),			       \
+-			fmt,						       \
+-			##__VA_ARGS__);					       \
++	kunit_do_binary_assertion(test, left op right, assert_type, 	       \
++				  __LINE__, __FILE__,  #op, #left, __left,     \
++				  #right, __right,			       \
++				  kunit_binary_assert_format,		       \
++				  fmt, ##__VA_ARGS__);			       \
++} while (0)
++
++#define KUNIT_BASE_POINTER_ASSERTION(test,				       \
++				     assert_class,			       \
++				     ASSERT_CLASS_INIT,			       \
++				     assert_type,			       \
++				     left,				       \
++				     op,				       \
++				     right,				       \
++				     fmt,				       \
++				     ...)				       \
++do {									       \
++	typeof(left) __left = (left);					       \
++	typeof(right) __right = (right);				       \
++	((void)__typecheck(__left, __right));				       \
++	kunit_do_binary_assertion(test, left op right, assert_type, 	       \
++				  __LINE__, __FILE__,  #op,		       \
++				  #left, (uintptr_t)__left,     	       \
++				  #right, (uintptr_t)__right,		       \
++				  kunit_binary_ptr_assert_format,	       \
++				  fmt, ##__VA_ARGS__);			       \
+ } while (0)
  
- config HMEM_REPORTING
- 	bool
-diff --git a/security/apparmor/Kconfig b/security/apparmor/Kconfig
-index d547930..0fe3368 100644
---- a/security/apparmor/Kconfig
-+++ b/security/apparmor/Kconfig
-@@ -71,7 +71,7 @@ config SECURITY_APPARMOR_DEBUG_MESSAGES
+ #define KUNIT_BASE_EQ_MSG_ASSERTION(test,				       \
+@@ -625,12 +648,11 @@ do {									       \
+ 					  right,			       \
+ 					  fmt,				       \
+ 					  ...)				       \
+-	KUNIT_BASE_EQ_MSG_ASSERTION(test,				       \
+-				    kunit_binary_ptr_assert,		       \
+-				    KUNIT_INIT_BINARY_PTR_ASSERT_STRUCT,       \
++	KUNIT_BASE_POINTER_ASSERTION(test,				       \
++				    assert_class,			       \
++				    ASSERT_CLASS_INIT,			       \
+ 				    assert_type,			       \
+-				    left,				       \
+-				    right,				       \
++				    left, ==, right,			       \
+ 				    fmt,				       \
+ 				    ##__VA_ARGS__)
  
- config SECURITY_APPARMOR_KUNIT_TEST
- 	bool "Build KUnit tests for policy_unpack.c"
--	depends on KUNIT && SECURITY_APPARMOR
-+	depends on KUNIT=y && SECURITY_APPARMOR
- 	help
- 	  This builds the AppArmor KUnit tests.
+@@ -664,12 +686,11 @@ do {									       \
+ 					  right,			       \
+ 					  fmt,				       \
+ 					  ...)				       \
+-	KUNIT_BASE_NE_MSG_ASSERTION(test,				       \
+-				    kunit_binary_ptr_assert,		       \
+-				    KUNIT_INIT_BINARY_PTR_ASSERT_STRUCT,       \
++	KUNIT_BASE_POINTER_ASSERTION(test,				       \
++				    assert_class,			       \
++				    ASSERT_CLASS_INIT,			       \
+ 				    assert_type,			       \
+-				    left,				       \
+-				    right,				       \
++				    left, !=, right,			       \
+ 				    fmt,				       \
+ 				    ##__VA_ARGS__)
  
+@@ -697,28 +718,6 @@ do {									       \
+ 				      right,				       \
+ 				      NULL)
+ 
+-#define KUNIT_BINARY_PTR_LT_MSG_ASSERTION(test,				       \
+-					  assert_type,			       \
+-					  left,				       \
+-					  right,			       \
+-					  fmt,				       \
+-					  ...)				       \
+-	KUNIT_BASE_LT_MSG_ASSERTION(test,				       \
+-				    kunit_binary_ptr_assert,		       \
+-				    KUNIT_INIT_BINARY_PTR_ASSERT_STRUCT,       \
+-				    assert_type,			       \
+-				    left,				       \
+-				    right,				       \
+-				    fmt,				       \
+-				    ##__VA_ARGS__)
+-
+-#define KUNIT_BINARY_PTR_LT_ASSERTION(test, assert_type, left, right)	       \
+-	KUNIT_BINARY_PTR_LT_MSG_ASSERTION(test,				       \
+-					  assert_type,			       \
+-					  left,				       \
+-					  right,			       \
+-					  NULL)
+-
+ #define KUNIT_BINARY_LE_MSG_ASSERTION(test, assert_type, left, right, fmt, ...)\
+ 	KUNIT_BASE_LE_MSG_ASSERTION(test,				       \
+ 				    kunit_binary_assert,		       \
+@@ -736,28 +735,6 @@ do {									       \
+ 				      right,				       \
+ 				      NULL)
+ 
+-#define KUNIT_BINARY_PTR_LE_MSG_ASSERTION(test,				       \
+-					  assert_type,			       \
+-					  left,				       \
+-					  right,			       \
+-					  fmt,				       \
+-					  ...)				       \
+-	KUNIT_BASE_LE_MSG_ASSERTION(test,				       \
+-				    kunit_binary_ptr_assert,		       \
+-				    KUNIT_INIT_BINARY_PTR_ASSERT_STRUCT,       \
+-				    assert_type,			       \
+-				    left,				       \
+-				    right,				       \
+-				    fmt,				       \
+-				    ##__VA_ARGS__)
+-
+-#define KUNIT_BINARY_PTR_LE_ASSERTION(test, assert_type, left, right)	       \
+-	KUNIT_BINARY_PTR_LE_MSG_ASSERTION(test,				       \
+-					  assert_type,			       \
+-					  left,				       \
+-					  right,			       \
+-					  NULL)
+-
+ #define KUNIT_BINARY_GT_MSG_ASSERTION(test, assert_type, left, right, fmt, ...)\
+ 	KUNIT_BASE_GT_MSG_ASSERTION(test,				       \
+ 				    kunit_binary_assert,		       \
+@@ -775,28 +752,6 @@ do {									       \
+ 				      right,				       \
+ 				      NULL)
+ 
+-#define KUNIT_BINARY_PTR_GT_MSG_ASSERTION(test,				       \
+-					  assert_type,			       \
+-					  left,				       \
+-					  right,			       \
+-					  fmt,				       \
+-					  ...)				       \
+-	KUNIT_BASE_GT_MSG_ASSERTION(test,				       \
+-				    kunit_binary_ptr_assert,		       \
+-				    KUNIT_INIT_BINARY_PTR_ASSERT_STRUCT,       \
+-				    assert_type,			       \
+-				    left,				       \
+-				    right,				       \
+-				    fmt,				       \
+-				    ##__VA_ARGS__)
+-
+-#define KUNIT_BINARY_PTR_GT_ASSERTION(test, assert_type, left, right)	       \
+-	KUNIT_BINARY_PTR_GT_MSG_ASSERTION(test,				       \
+-					  assert_type,			       \
+-					  left,				       \
+-					  right,			       \
+-					  NULL)
+-
+ #define KUNIT_BINARY_GE_MSG_ASSERTION(test, assert_type, left, right, fmt, ...)\
+ 	KUNIT_BASE_GE_MSG_ASSERTION(test,				       \
+ 				    kunit_binary_assert,		       \
+@@ -814,28 +769,6 @@ do {									       \
+ 				      right,				       \
+ 				      NULL)
+ 
+-#define KUNIT_BINARY_PTR_GE_MSG_ASSERTION(test,				       \
+-					  assert_type,			       \
+-					  left,				       \
+-					  right,			       \
+-					  fmt,				       \
+-					  ...)				       \
+-	KUNIT_BASE_GE_MSG_ASSERTION(test,				       \
+-				    kunit_binary_ptr_assert,		       \
+-				    KUNIT_INIT_BINARY_PTR_ASSERT_STRUCT,       \
+-				    assert_type,			       \
+-				    left,				       \
+-				    right,				       \
+-				    fmt,				       \
+-				    ##__VA_ARGS__)
+-
+-#define KUNIT_BINARY_PTR_GE_ASSERTION(test, assert_type, left, right)	       \
+-	KUNIT_BINARY_PTR_GE_MSG_ASSERTION(test,				       \
+-					  assert_type,			       \
+-					  left,				       \
+-					  right,			       \
+-					  NULL)
+-
+ #define KUNIT_BINARY_STR_ASSERTION(test,				       \
+ 				   assert_type,				       \
+ 				   left,				       \
+diff --git a/lib/kunit/assert.c b/lib/kunit/assert.c
+index 86013d4cf891..abb6c70de925 100644
+--- a/lib/kunit/assert.c
++++ b/lib/kunit/assert.c
+@@ -101,8 +101,8 @@ void kunit_binary_assert_format(const struct kunit_assert *assert,
+ void kunit_binary_ptr_assert_format(const struct kunit_assert *assert,
+ 				    struct string_stream *stream)
+ {
+-	struct kunit_binary_ptr_assert *binary_assert = container_of(
+-			assert, struct kunit_binary_ptr_assert, assert);
++	struct kunit_binary_assert *binary_assert = container_of(
++			assert, struct kunit_binary_assert, assert);
+ 
+ 	kunit_base_assert_format(assert, stream);
+ 	string_stream_add(stream,
+@@ -112,10 +112,10 @@ void kunit_binary_ptr_assert_format(const struct kunit_assert *assert,
+ 			 binary_assert->right_text);
+ 	string_stream_add(stream, "\t\t%s == %pK\n",
+ 			 binary_assert->left_text,
+-			 binary_assert->left_value);
++			 (void *)(uintptr_t)binary_assert->left_value);
+ 	string_stream_add(stream, "\t\t%s == %pK",
+ 			 binary_assert->right_text,
+-			 binary_assert->right_value);
++			 (void *)(uintptr_t)binary_assert->right_value);
+ 	kunit_assert_print_msg(assert, stream);
+ }
+ 
+diff --git a/lib/kunit/test.c b/lib/kunit/test.c
+index c83c0fa59cbd..937f3fbe5ecc 100644
+--- a/lib/kunit/test.c
++++ b/lib/kunit/test.c
+@@ -172,6 +172,48 @@ void kunit_do_assertion(struct kunit *test,
+ 		kunit_abort(test);
+ }
+ 
++void kunit_do_binary_assertion(struct kunit *test, bool pass,
++				enum kunit_assert_type type,
++				int line, const char *file,
++				const char *operation,
++				const char *left_text, long long left_value,
++				const char *right_text, long long right_value,
++				void (*format)(const struct kunit_assert *assert,
++						struct string_stream *stream),
++				const char *fmt, ...)
++{
++	va_list args;
++	struct kunit_binary_assert assert = {
++		.assert = {
++			.test = test,
++			.type = type,
++			.file = file,
++			.line = line,
++			.message.fmt = fmt,
++			.format = format,
++		},
++		.operation = operation,
++		.left_text = left_text,
++		.left_value = left_value,
++		.right_text = right_text,
++		.right_value = right_value,
++	};
++
++	if (pass)
++		return;
++
++	va_start(args, fmt);
++
++	assert.assert.message.va = &args;
++
++	kunit_fail(test, &assert.assert);
++
++	va_end(args);
++
++	if (type == KUNIT_ASSERTION)
++		kunit_abort(test);
++}
++
+ void kunit_init_test(struct kunit *test, const char *name)
+ {
+ 	spin_lock_init(&test->lock);
 -- 
-1.8.3.1
+2.20.0
 
