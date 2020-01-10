@@ -2,184 +2,108 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id ADE3E137507
-	for <lists+linux-kselftest@lfdr.de>; Fri, 10 Jan 2020 18:41:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 36B1D137594
+	for <lists+linux-kselftest@lfdr.de>; Fri, 10 Jan 2020 18:57:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727815AbgAJRlQ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 10 Jan 2020 12:41:16 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:60402 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727181AbgAJRlQ (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 10 Jan 2020 12:41:16 -0500
-Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 00AHXAMf034354;
-        Fri, 10 Jan 2020 12:39:04 -0500
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 2xemacjcup-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 10 Jan 2020 12:39:03 -0500
-Received: from m0098394.ppops.net (m0098394.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 00AHd3FU085853;
-        Fri, 10 Jan 2020 12:39:03 -0500
-Received: from ppma04dal.us.ibm.com (7a.29.35a9.ip4.static.sl-reverse.com [169.53.41.122])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 2xemacjcu7-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 10 Jan 2020 12:39:03 -0500
-Received: from pps.filterd (ppma04dal.us.ibm.com [127.0.0.1])
-        by ppma04dal.us.ibm.com (8.16.0.27/8.16.0.27) with SMTP id 00AHcZCU005453;
-        Fri, 10 Jan 2020 17:39:02 GMT
-Received: from b01cxnp22036.gho.pok.ibm.com (b01cxnp22036.gho.pok.ibm.com [9.57.198.26])
-        by ppma04dal.us.ibm.com with ESMTP id 2xajb7pqb5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 10 Jan 2020 17:39:02 +0000
-Received: from b01ledav002.gho.pok.ibm.com (b01ledav002.gho.pok.ibm.com [9.57.199.107])
-        by b01cxnp22036.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 00AHd1LY22020566
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 10 Jan 2020 17:39:01 GMT
-Received: from b01ledav002.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 3CC23124053;
-        Fri, 10 Jan 2020 17:39:01 +0000 (GMT)
-Received: from b01ledav002.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 3FB3B124052;
-        Fri, 10 Jan 2020 17:38:56 +0000 (GMT)
-Received: from skywalker.linux.ibm.com (unknown [9.199.36.244])
-        by b01ledav002.gho.pok.ibm.com (Postfix) with ESMTP;
-        Fri, 10 Jan 2020 17:38:55 +0000 (GMT)
-X-Mailer: emacs 26.3 (via feedmail 11-beta-1 I)
-From:   "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>
-To:     Sandipan Das <sandipan@linux.ibm.com>, shuahkh@osg.samsung.com,
-        linux-kselftest@vger.kernel.org
-Cc:     linux-arch@vger.kernel.org, fweimer@redhat.com,
-        dave.hansen@intel.com, x86@kernel.org, linuxram@us.ibm.com,
-        mhocko@kernel.org, linux-mm@kvack.org, mingo@redhat.com,
-        bauerman@linux.ibm.com, msuchanek@suse.de,
-        linuxppc-dev@lists.ozlabs.org, mpe@ellerman.id.au
+        id S1728490AbgAJR56 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 10 Jan 2020 12:57:58 -0500
+Received: from mga09.intel.com ([134.134.136.24]:12106 "EHLO mga09.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728248AbgAJR56 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 10 Jan 2020 12:57:58 -0500
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga102.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 10 Jan 2020 09:57:43 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.69,417,1571727600"; 
+   d="scan'208";a="223851475"
+Received: from ray.jf.intel.com (HELO [10.24.8.199]) ([10.24.8.199])
+  by orsmga006.jf.intel.com with ESMTP; 10 Jan 2020 09:57:43 -0800
 Subject: Re: [PATCH v15 00/24] selftests, powerpc, x86: Memory Protection Keys
-In-Reply-To: <cover.1576645161.git.sandipan@linux.ibm.com>
+To:     "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+        Sandipan Das <sandipan@linux.ibm.com>, shuahkh@osg.samsung.com,
+        linux-kselftest@vger.kernel.org
+Cc:     linux-arch@vger.kernel.org, fweimer@redhat.com, x86@kernel.org,
+        linuxram@us.ibm.com, mhocko@kernel.org, linux-mm@kvack.org,
+        mingo@redhat.com, bauerman@linux.ibm.com, msuchanek@suse.de,
+        linuxppc-dev@lists.ozlabs.org, mpe@ellerman.id.au
 References: <cover.1576645161.git.sandipan@linux.ibm.com>
-Date:   Fri, 10 Jan 2020 23:08:53 +0530
-Message-ID: <87y2ufxlci.fsf@linux.ibm.com>
+ <87y2ufxlci.fsf@linux.ibm.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+Openpgp: preference=signencrypt
+Autocrypt: addr=dave.hansen@intel.com; keydata=
+ mQINBE6HMP0BEADIMA3XYkQfF3dwHlj58Yjsc4E5y5G67cfbt8dvaUq2fx1lR0K9h1bOI6fC
+ oAiUXvGAOxPDsB/P6UEOISPpLl5IuYsSwAeZGkdQ5g6m1xq7AlDJQZddhr/1DC/nMVa/2BoY
+ 2UnKuZuSBu7lgOE193+7Uks3416N2hTkyKUSNkduyoZ9F5twiBhxPJwPtn/wnch6n5RsoXsb
+ ygOEDxLEsSk/7eyFycjE+btUtAWZtx+HseyaGfqkZK0Z9bT1lsaHecmB203xShwCPT49Blxz
+ VOab8668QpaEOdLGhtvrVYVK7x4skyT3nGWcgDCl5/Vp3TWA4K+IofwvXzX2ON/Mj7aQwf5W
+ iC+3nWC7q0uxKwwsddJ0Nu+dpA/UORQWa1NiAftEoSpk5+nUUi0WE+5DRm0H+TXKBWMGNCFn
+ c6+EKg5zQaa8KqymHcOrSXNPmzJuXvDQ8uj2J8XuzCZfK4uy1+YdIr0yyEMI7mdh4KX50LO1
+ pmowEqDh7dLShTOif/7UtQYrzYq9cPnjU2ZW4qd5Qz2joSGTG9eCXLz5PRe5SqHxv6ljk8mb
+ ApNuY7bOXO/A7T2j5RwXIlcmssqIjBcxsRRoIbpCwWWGjkYjzYCjgsNFL6rt4OL11OUF37wL
+ QcTl7fbCGv53KfKPdYD5hcbguLKi/aCccJK18ZwNjFhqr4MliQARAQABtEVEYXZpZCBDaHJp
+ c3RvcGhlciBIYW5zZW4gKEludGVsIFdvcmsgQWRkcmVzcykgPGRhdmUuaGFuc2VuQGludGVs
+ LmNvbT6JAjgEEwECACIFAlQ+9J0CGwMGCwkIBwMCBhUIAgkKCwQWAgMBAh4BAheAAAoJEGg1
+ lTBwyZKwLZUP/0dnbhDc229u2u6WtK1s1cSd9WsflGXGagkR6liJ4um3XCfYWDHvIdkHYC1t
+ MNcVHFBwmQkawxsYvgO8kXT3SaFZe4ISfB4K4CL2qp4JO+nJdlFUbZI7cz/Td9z8nHjMcWYF
+ IQuTsWOLs/LBMTs+ANumibtw6UkiGVD3dfHJAOPNApjVr+M0P/lVmTeP8w0uVcd2syiaU5jB
+ aht9CYATn+ytFGWZnBEEQFnqcibIaOrmoBLu2b3fKJEd8Jp7NHDSIdrvrMjYynmc6sZKUqH2
+ I1qOevaa8jUg7wlLJAWGfIqnu85kkqrVOkbNbk4TPub7VOqA6qG5GCNEIv6ZY7HLYd/vAkVY
+ E8Plzq/NwLAuOWxvGrOl7OPuwVeR4hBDfcrNb990MFPpjGgACzAZyjdmYoMu8j3/MAEW4P0z
+ F5+EYJAOZ+z212y1pchNNauehORXgjrNKsZwxwKpPY9qb84E3O9KYpwfATsqOoQ6tTgr+1BR
+ CCwP712H+E9U5HJ0iibN/CDZFVPL1bRerHziuwuQuvE0qWg0+0SChFe9oq0KAwEkVs6ZDMB2
+ P16MieEEQ6StQRlvy2YBv80L1TMl3T90Bo1UUn6ARXEpcbFE0/aORH/jEXcRteb+vuik5UGY
+ 5TsyLYdPur3TXm7XDBdmmyQVJjnJKYK9AQxj95KlXLVO38lcuQINBFRjzmoBEACyAxbvUEhd
+ GDGNg0JhDdezyTdN8C9BFsdxyTLnSH31NRiyp1QtuxvcqGZjb2trDVuCbIzRrgMZLVgo3upr
+ MIOx1CXEgmn23Zhh0EpdVHM8IKx9Z7V0r+rrpRWFE8/wQZngKYVi49PGoZj50ZEifEJ5qn/H
+ Nsp2+Y+bTUjDdgWMATg9DiFMyv8fvoqgNsNyrrZTnSgoLzdxr89FGHZCoSoAK8gfgFHuO54B
+ lI8QOfPDG9WDPJ66HCodjTlBEr/Cwq6GruxS5i2Y33YVqxvFvDa1tUtl+iJ2SWKS9kCai2DR
+ 3BwVONJEYSDQaven/EHMlY1q8Vln3lGPsS11vSUK3QcNJjmrgYxH5KsVsf6PNRj9mp8Z1kIG
+ qjRx08+nnyStWC0gZH6NrYyS9rpqH3j+hA2WcI7De51L4Rv9pFwzp161mvtc6eC/GxaiUGuH
+ BNAVP0PY0fqvIC68p3rLIAW3f97uv4ce2RSQ7LbsPsimOeCo/5vgS6YQsj83E+AipPr09Caj
+ 0hloj+hFoqiticNpmsxdWKoOsV0PftcQvBCCYuhKbZV9s5hjt9qn8CE86A5g5KqDf83Fxqm/
+ vXKgHNFHE5zgXGZnrmaf6resQzbvJHO0Fb0CcIohzrpPaL3YepcLDoCCgElGMGQjdCcSQ+Ci
+ FCRl0Bvyj1YZUql+ZkptgGjikQARAQABiQIfBBgBAgAJBQJUY85qAhsMAAoJEGg1lTBwyZKw
+ l4IQAIKHs/9po4spZDFyfDjunimEhVHqlUt7ggR1Hsl/tkvTSze8pI1P6dGp2XW6AnH1iayn
+ yRcoyT0ZJ+Zmm4xAH1zqKjWplzqdb/dO28qk0bPso8+1oPO8oDhLm1+tY+cOvufXkBTm+whm
+ +AyNTjaCRt6aSMnA/QHVGSJ8grrTJCoACVNhnXg/R0g90g8iV8Q+IBZyDkG0tBThaDdw1B2l
+ asInUTeb9EiVfL/Zjdg5VWiF9LL7iS+9hTeVdR09vThQ/DhVbCNxVk+DtyBHsjOKifrVsYep
+ WpRGBIAu3bK8eXtyvrw1igWTNs2wazJ71+0z2jMzbclKAyRHKU9JdN6Hkkgr2nPb561yjcB8
+ sIq1pFXKyO+nKy6SZYxOvHxCcjk2fkw6UmPU6/j/nQlj2lfOAgNVKuDLothIxzi8pndB8Jju
+ KktE5HJqUUMXePkAYIxEQ0mMc8Po7tuXdejgPMwgP7x65xtfEqI0RuzbUioFltsp1jUaRwQZ
+ MTsCeQDdjpgHsj+P2ZDeEKCbma4m6Ez/YWs4+zDm1X8uZDkZcfQlD9NldbKDJEXLIjYWo1PH
+ hYepSffIWPyvBMBTW2W5FRjJ4vLRrJSUoEfJuPQ3vW9Y73foyo/qFoURHO48AinGPZ7PC7TF
+ vUaNOTjKedrqHkaOcqB185ahG2had0xnFsDPlx5y
+Message-ID: <4a35bf48-d191-4e42-ea47-f419895ed876@intel.com>
+Date:   Fri, 10 Jan 2020 09:57:43 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-Content-Type: text/plain
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.572
- definitions=2020-01-10_01:2020-01-10,2020-01-09 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 clxscore=1011
- malwarescore=0 priorityscore=1501 adultscore=0 phishscore=0 suspectscore=0
- spamscore=0 bulkscore=0 mlxscore=0 impostorscore=0 lowpriorityscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-1910280000
- definitions=main-2001100142
+In-Reply-To: <87y2ufxlci.fsf@linux.ibm.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Sandipan Das <sandipan@linux.ibm.com> writes:
+On 1/10/20 9:38 AM, Aneesh Kumar K.V wrote:
+>> v15:
+>> 	(1) Rebased on top of latest master.
+>> 	(2) Addressed review comments from Dave Hansen.
+>> 	(3) Moved code for getting or setting pkey bits to new
+>> 	    helpers. These changes replace patch 7 of v14.
+>> 	(4) Added a fix which ensures that the correct count of
+>> 	    reserved keys is used across different platforms.
+>> 	(5) Added a fix which ensures that the correct page size
+>> 	    is used as powerpc supports both 4K and 64K pages.
+>>
+> Any update on merging this series? Can Intel help with testing this
+> series on Skylake server? Possibly merging to -next will result in
+> automated 01.org tests?
 
-> Memory protection keys enables an application to protect its address
-> space from inadvertent access by its own code.
->
-> This feature is now enabled on powerpc and has been available since
-> 4.16-rc1. The patches move the selftests to arch neutral directory
-> and enhance their test coverage.
->
-> Testing
-> -------
-> Verified for correctness on powerpc. Need help with x86 testing as I
-> do not have access to a Skylake server. Client platforms like Coffee
-> Lake do not have the required feature bits set in CPUID.
->
-> Changelog
-> ---------
-> Link to previous version (v14):
-> https://patchwork.ozlabs.org/project/linuxppc-dev/list/?series=55981&state=*
->
-> v15:
-> 	(1) Rebased on top of latest master.
-> 	(2) Addressed review comments from Dave Hansen.
-> 	(3) Moved code for getting or setting pkey bits to new
-> 	    helpers. These changes replace patch 7 of v14.
-> 	(4) Added a fix which ensures that the correct count of
-> 	    reserved keys is used across different platforms.
-> 	(5) Added a fix which ensures that the correct page size
-> 	    is used as powerpc supports both 4K and 64K pages.
->
-
-Any update on merging this series? Can Intel help with testing this
-series on Skylake server? Possibly merging to -next will result in
-automated 01.org tests?
-
-
-> v14:
-> 	(1) Incorporated another round of comments from Dave Hansen.
->
-> v13:
-> 	(1) Incorporated comments for Dave Hansen.
-> 	(2) Added one more test for correct pkey-0 behavior.
->
-> v12:
-> 	(1) Fixed the offset of pkey field in the siginfo structure for
-> 	    x86_64 and powerpc. And tries to use the actual field
-> 	    if the headers have it defined.
->
-> v11:
-> 	(1) Fixed a deadlock in the ptrace testcase.
->
-> v10 and prior:
-> 	(1) Moved the testcase to arch neutral directory.
-> 	(2) Split the changes into incremental patches.
->
-> Desnes A. Nunes do Rosario (1):
->   selftests/vm/pkeys: Fix number of reserved powerpc pkeys
->
-> Ram Pai (17):
->   selftests/x86/pkeys: Move selftests to arch-neutral directory
->   selftests/vm/pkeys: Rename all references to pkru to a generic name
->   selftests/vm/pkeys: Move generic definitions to header file
->   selftests/vm/pkeys: Typecast the pkey register
->   selftests/vm/pkeys: Fix pkey_disable_clear()
->   selftests/vm/pkeys: Fix assertion in pkey_disable_set/clear()
->   selftests/vm/pkeys: Fix alloc_random_pkey() to make it really random
->   selftests/vm/pkeys: Introduce generic pkey abstractions
->   selftests/vm/pkeys: Introduce powerpc support
->   selftests/vm/pkeys: Fix assertion in test_pkey_alloc_exhaust()
->   selftests/vm/pkeys: Improve checks to determine pkey support
->   selftests/vm/pkeys: Associate key on a mapped page and detect access
->     violation
->   selftests/vm/pkeys: Associate key on a mapped page and detect write
->     violation
->   selftests/vm/pkeys: Detect write violation on a mapped
->     access-denied-key page
->   selftests/vm/pkeys: Introduce a sub-page allocator
->   selftests/vm/pkeys: Test correct behaviour of pkey-0
->   selftests/vm/pkeys: Override access right definitions on powerpc
->
-> Sandipan Das (3):
->   selftests: vm: pkeys: Add helpers for pkey bits
->   selftests: vm: pkeys: Use the correct huge page size
->   selftests: vm: pkeys: Use the correct page size on powerpc
->
-> Thiago Jung Bauermann (2):
->   selftests/vm/pkeys: Move some definitions to arch-specific header
->   selftests/vm/pkeys: Make gcc check arguments of sigsafe_printf()
->
->  tools/testing/selftests/vm/.gitignore         |   1 +
->  tools/testing/selftests/vm/Makefile           |   5 +
->  tools/testing/selftests/vm/pkey-helpers.h     | 226 ++++++
->  tools/testing/selftests/vm/pkey-powerpc.h     | 138 ++++
->  tools/testing/selftests/vm/pkey-x86.h         | 183 +++++
->  .../selftests/{x86 => vm}/protection_keys.c   | 688 ++++++++++--------
->  tools/testing/selftests/x86/.gitignore        |   1 -
->  tools/testing/selftests/x86/pkey-helpers.h    | 219 ------
->  8 files changed, 931 insertions(+), 530 deletions(-)
->  create mode 100644 tools/testing/selftests/vm/pkey-helpers.h
->  create mode 100644 tools/testing/selftests/vm/pkey-powerpc.h
->  create mode 100644 tools/testing/selftests/vm/pkey-x86.h
->  rename tools/testing/selftests/{x86 => vm}/protection_keys.c (74%)
->  delete mode 100644 tools/testing/selftests/x86/pkey-helpers.h
->
-> -- 
-> 2.17.1
-
--aneesh
+Could you dump these in a git tree, please?  It will make it a wee bit
+easier for me to ship the resulting tree around to a couple different
+systems.
