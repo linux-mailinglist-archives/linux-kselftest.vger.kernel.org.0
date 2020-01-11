@@ -2,86 +2,95 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E517137896
-	for <lists+linux-kselftest@lfdr.de>; Fri, 10 Jan 2020 22:39:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 909F5138289
+	for <lists+linux-kselftest@lfdr.de>; Sat, 11 Jan 2020 17:50:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727133AbgAJVjN (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 10 Jan 2020 16:39:13 -0500
-Received: from mail-io1-f68.google.com ([209.85.166.68]:34681 "EHLO
-        mail-io1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727124AbgAJVjM (ORCPT
+        id S1730382AbgAKQuq (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 11 Jan 2020 11:50:46 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:65106 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1730369AbgAKQuq (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 10 Jan 2020 16:39:12 -0500
-Received: by mail-io1-f68.google.com with SMTP id z193so3665201iof.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 10 Jan 2020 13:39:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=r4PmeZ/898aGumdPWOcSK9D1hCv5M+BfhsqeoQLug0k=;
-        b=ML7g1aGMVB7Qp8hywr4osLv4e9aIFPmirYd1vE8lV2zZG0jw6MHA7xk2G5/1QBpB9A
-         lsFCYoibZbW4Yg+U+lVU8nWRGcQlf5nbru+soLWJxXYIFsF/Qg+8PBBOXz4j+XtgtDS/
-         zIeEaBxxVesBv1PbkWOCVFJp5lJnAbmVRRK1s=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=r4PmeZ/898aGumdPWOcSK9D1hCv5M+BfhsqeoQLug0k=;
-        b=D6xDmt7sAkr24hzcATXMDr7HAclhAwdudhu5MjN6n4uVlkdoqRHPcBr7nOeehT4S/I
-         Vx9+h0y7NRbzlEFgocugp2GQE8H7i1qsWLFhgkwfEBXdOHqi9M/VcBAROgwu0Lf+FnGA
-         GFrSTmdujgPewsb3PYDKje795XeTcZZe3u24Sk0uYDeu03nUVoHsIeB4fUQFLfxO0tw0
-         kNismKzDF81YwbW3Ad4Q+6SUTiZ8psC7Vn9LK/0ys04dTED/5Y91Lydoyk8S6o2m+Ku+
-         m5Vkqpeph41CuRRwyByg1XTh9yfMcluLMQ6qjpyaY5Ouan8G0g5HILk/f6oMyY5FVX7r
-         XHxg==
-X-Gm-Message-State: APjAAAUxcnsxWCRQL/fJHgR4cruy+2F17iq3KJw80PM/3MxgS52NQFid
-        15Y34tXU/YKki+zPHhWXQGVB/5WqA9A=
-X-Google-Smtp-Source: APXvYqzSdoMLMiGIeDogdzlJjB5mKTqBKEmCoffAq0etf1KN36GTMK3ghL0iHprY4NA340RAOTssng==
-X-Received: by 2002:a5e:9907:: with SMTP id t7mr4335773ioj.72.1578692352205;
-        Fri, 10 Jan 2020 13:39:12 -0800 (PST)
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id v10sm825497iot.12.2020.01.10.13.39.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 10 Jan 2020 13:39:11 -0800 (PST)
-Subject: Re: [PATCH kunit] kunit: building kunit as a module breaks
- allmodconfig
-To:     Alan Maguire <alan.maguire@oracle.com>, brendanhiggins@google.com,
-        gregkh@linuxfoundation.org
-Cc:     rafael@kernel.org, jmorris@namei.org, serge@hallyn.com,
-        knut.omang@oracle.com, linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kselftest@vger.kernel.org, sfr@canb.auug.org.au,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <1578656965-2993-1-git-send-email-alan.maguire@oracle.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <bb27a03b-1c3d-567b-caf3-7b0e4a039f6d@linuxfoundation.org>
-Date:   Fri, 10 Jan 2020 14:39:10 -0700
+        Sat, 11 Jan 2020 11:50:46 -0500
+Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 00BGnpAN038572
+        for <linux-kselftest@vger.kernel.org>; Sat, 11 Jan 2020 11:50:45 -0500
+Received: from e06smtp07.uk.ibm.com (e06smtp07.uk.ibm.com [195.75.94.103])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 2xfb7w93aj-1
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-kselftest@vger.kernel.org>; Sat, 11 Jan 2020 11:50:45 -0500
+Received: from localhost
+        by e06smtp07.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-kselftest@vger.kernel.org> from <sandipan@linux.ibm.com>;
+        Sat, 11 Jan 2020 16:50:44 -0000
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (9.149.109.194)
+        by e06smtp07.uk.ibm.com (192.168.101.137) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
+        Sat, 11 Jan 2020 16:50:40 -0000
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 00BGochb1048904
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Sat, 11 Jan 2020 16:50:38 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id B33EDAE045;
+        Sat, 11 Jan 2020 16:50:38 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 4257CAE051;
+        Sat, 11 Jan 2020 16:50:35 +0000 (GMT)
+Received: from [9.199.42.197] (unknown [9.199.42.197])
+        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Sat, 11 Jan 2020 16:50:34 +0000 (GMT)
+Subject: Re: [PATCH v15 00/24] selftests, powerpc, x86: Memory Protection Keys
+To:     Dave Hansen <dave.hansen@intel.com>
+Cc:     "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+        shuahkh@osg.samsung.com, linux-kselftest@vger.kernel.org,
+        linux-arch@vger.kernel.org, fweimer@redhat.com, x86@kernel.org,
+        linuxram@us.ibm.com, mhocko@kernel.org, linux-mm@kvack.org,
+        mingo@redhat.com, bauerman@linux.ibm.com, msuchanek@suse.de,
+        linuxppc-dev@lists.ozlabs.org, mpe@ellerman.id.au
+References: <cover.1576645161.git.sandipan@linux.ibm.com>
+ <87y2ufxlci.fsf@linux.ibm.com>
+ <4a35bf48-d191-4e42-ea47-f419895ed876@intel.com>
+From:   Sandipan Das <sandipan@linux.ibm.com>
+Date:   Sat, 11 Jan 2020 22:20:34 +0530
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.2.2
+ Thunderbird/68.3.1
 MIME-Version: 1.0
-In-Reply-To: <1578656965-2993-1-git-send-email-alan.maguire@oracle.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
+In-Reply-To: <4a35bf48-d191-4e42-ea47-f419895ed876@intel.com>
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+x-cbid: 20011116-0028-0000-0000-000003D0407E
+X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
+x-cbparentid: 20011116-0029-0000-0000-000024945B25
+Message-Id: <3a6280fe-6b0f-7e3c-08a9-8186a9c3ea46@linux.ibm.com>
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.572
+ definitions=2020-01-11_05:2020-01-10,2020-01-11 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 suspectscore=0
+ clxscore=1015 mlxscore=0 phishscore=0 lowpriorityscore=0 adultscore=0
+ mlxlogscore=882 impostorscore=0 bulkscore=0 spamscore=0 priorityscore=1501
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-1910280000
+ definitions=main-2001110147
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Alan,
+Hi Dave,
 
-On 1/10/20 4:49 AM, Alan Maguire wrote:
-> kunit tests that do not support module build should depend
-> on KUNIT=y rather than just KUNIT in Kconfig, otherwise
-> they will trigger compilation errors for "make allmodconfig"
-> builds.
+On 10/01/20 11:27 pm, Dave Hansen wrote:
 > 
-> Fixes: 9fe124bf1b77 ("kunit: allow kunit to be loaded as a module")
-> Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
-> Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+> Could you dump these in a git tree, please?  It will make it a wee bit
+> easier for me to ship the resulting tree around to a couple different
+> systems.
+> 
 
-Thanks for fixing this quickly. For future reference, Signed-off-by
-should be last. I fixed it and applied the patch.
+I have pushed a version of this series that uses u64 for all references
+to the pkey register irrespective of architecture. This is available at:
 
-thanks,
--- Shuah
+https://github.com/sandip4n/linux/tree/pkey-selftests
+
+
+- Sandipan
+
