@@ -2,95 +2,73 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 909F5138289
-	for <lists+linux-kselftest@lfdr.de>; Sat, 11 Jan 2020 17:50:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F934138B34
+	for <lists+linux-kselftest@lfdr.de>; Mon, 13 Jan 2020 06:52:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730382AbgAKQuq (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 11 Jan 2020 11:50:46 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:65106 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1730369AbgAKQuq (ORCPT
+        id S1733272AbgAMFw0 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 13 Jan 2020 00:52:26 -0500
+Received: from mail-oi1-f195.google.com ([209.85.167.195]:32876 "EHLO
+        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732651AbgAMFw0 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 11 Jan 2020 11:50:46 -0500
-Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 00BGnpAN038572
-        for <linux-kselftest@vger.kernel.org>; Sat, 11 Jan 2020 11:50:45 -0500
-Received: from e06smtp07.uk.ibm.com (e06smtp07.uk.ibm.com [195.75.94.103])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 2xfb7w93aj-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-kselftest@vger.kernel.org>; Sat, 11 Jan 2020 11:50:45 -0500
-Received: from localhost
-        by e06smtp07.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-kselftest@vger.kernel.org> from <sandipan@linux.ibm.com>;
-        Sat, 11 Jan 2020 16:50:44 -0000
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (9.149.109.194)
-        by e06smtp07.uk.ibm.com (192.168.101.137) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Sat, 11 Jan 2020 16:50:40 -0000
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 00BGochb1048904
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sat, 11 Jan 2020 16:50:38 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id B33EDAE045;
-        Sat, 11 Jan 2020 16:50:38 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 4257CAE051;
-        Sat, 11 Jan 2020 16:50:35 +0000 (GMT)
-Received: from [9.199.42.197] (unknown [9.199.42.197])
-        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Sat, 11 Jan 2020 16:50:34 +0000 (GMT)
-Subject: Re: [PATCH v15 00/24] selftests, powerpc, x86: Memory Protection Keys
-To:     Dave Hansen <dave.hansen@intel.com>
-Cc:     "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        shuahkh@osg.samsung.com, linux-kselftest@vger.kernel.org,
-        linux-arch@vger.kernel.org, fweimer@redhat.com, x86@kernel.org,
-        linuxram@us.ibm.com, mhocko@kernel.org, linux-mm@kvack.org,
-        mingo@redhat.com, bauerman@linux.ibm.com, msuchanek@suse.de,
-        linuxppc-dev@lists.ozlabs.org, mpe@ellerman.id.au
-References: <cover.1576645161.git.sandipan@linux.ibm.com>
- <87y2ufxlci.fsf@linux.ibm.com>
- <4a35bf48-d191-4e42-ea47-f419895ed876@intel.com>
-From:   Sandipan Das <sandipan@linux.ibm.com>
-Date:   Sat, 11 Jan 2020 22:20:34 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.3.1
+        Mon, 13 Jan 2020 00:52:26 -0500
+Received: by mail-oi1-f195.google.com with SMTP id v140so7227292oie.0
+        for <linux-kselftest@vger.kernel.org>; Sun, 12 Jan 2020 21:52:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=Rjbe3pVeMfYVPdmVklZ4b2stSqI32LIYp+bn/8NyJvk=;
+        b=El5YZgtDEXJCHEtZrRB1ujEJT5GnrR9nqQvx3oNXkD1KXWKAy5lE4fahagwXmNRBuY
+         Z373bCStdjZZAvrcMmyjZhqXNYKD7qS8gpQ1uKt4Zm/CJYofbOmd6y2KCfdaIf8lu4gx
+         e04Qq2Wd5k0QzXhgODgXLh9+BTAbr7mIJG1kvrHD2cB5892G2QaMtoQjZ8YbwAsn/v/R
+         qN1ulSwy8kLJzDOOwwvDkEa6g0paOaNUUW6lO8NcaOsOsQMTh2eV34LXY/bnRxfyDcL+
+         OFIAYoYpyWTxvo4nB11oXa8J2BNLiFXnr18VfN4DCPOmpXqWPT8f/9GzmZX8VWLxs4VK
+         s+8g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=Rjbe3pVeMfYVPdmVklZ4b2stSqI32LIYp+bn/8NyJvk=;
+        b=GmOxGy1b/R6wdlHOwVjvJJ5N+3MSNrOMFtVM+zKMn5HOyHjG0MXNmzMh3efj5FR3LA
+         GC2XKRLjZ/J4m0MDbyzZ7pWCppIlazlYll65RKhZf9nGbAQsrH2J8KTEz3KpDNCoU8+b
+         g+JvRdhrl4Y+fRXa+lWFp6KVGi4MWU9zn4DB7gFznzB5LPq9YSV3pwZmOB4eTstCsiKE
+         1as0kBYkpbss+wM0333ur1AHtfwL7iWtF4UnfbutXwn6H+CaV2r9zpfBfIAFcDJLyhlG
+         RxQEo44OaZym4bAncNXcRrAH88rSlWv5Hk3ZAHzQVr8mIxjfVVd1nLzrT6g+GDV4EJKs
+         HTvQ==
+X-Gm-Message-State: APjAAAX+TTrwUm+3VboOw+YhcCxxeZrqONXFC4/Mp7y60n9hUByWAwKz
+        /QjK2dVyi0PJNkmR8H8tFaP6bDgIoyyFG0Psf05K5/iK
+X-Google-Smtp-Source: APXvYqy7JhGBt0ZjJ/1t4CT74GIhTuvbOMnCynReBbsGRcTAfZPwoiLBCe9XiPA9xaK1JAPmy14eucUMWI9DLkbKsUo=
+X-Received: by 2002:a54:4713:: with SMTP id k19mr11513430oik.113.1578894745174;
+ Sun, 12 Jan 2020 21:52:25 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <4a35bf48-d191-4e42-ea47-f419895ed876@intel.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-x-cbid: 20011116-0028-0000-0000-000003D0407E
-X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 20011116-0029-0000-0000-000024945B25
-Message-Id: <3a6280fe-6b0f-7e3c-08a9-8186a9c3ea46@linux.ibm.com>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.572
- definitions=2020-01-11_05:2020-01-10,2020-01-11 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 suspectscore=0
- clxscore=1015 mlxscore=0 phishscore=0 lowpriorityscore=0 adultscore=0
- mlxlogscore=882 impostorscore=0 bulkscore=0 spamscore=0 priorityscore=1501
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-1910280000
- definitions=main-2001110147
+Received: by 2002:a4a:41cb:0:0:0:0:0 with HTTP; Sun, 12 Jan 2020 21:52:24
+ -0800 (PST)
+Reply-To: rickschaech@gmail.com
+From:   Rick Schaech <cathben72@gmail.com>
+Date:   Mon, 13 Jan 2020 01:52:24 -0400
+Message-ID: <CAEcBxO=TAnFn5LzizHa22hUC0Db5FuiZJF28m=yX3_9m--jRqg@mail.gmail.com>
+Subject: I wait for your swift response,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Dave,
+Dear, I'm Mr Rick Schaech, I am the General Account Auditor, Though i
+know we have not meet each other before but sometimes in life God have
+a reason of bringing two people from two different countries together
+as business partners or life partners.
 
-On 10/01/20 11:27 pm, Dave Hansen wrote:
-> 
-> Could you dump these in a git tree, please?  It will make it a wee bit
-> easier for me to ship the resulting tree around to a couple different
-> systems.
-> 
+My dear friend, I have the sum of 15.7 Million USD i wish to put in
+your name due to the death of my late client who died several years
+ago as his next of kin column still remain blank. Though the internet
+medium is highly abuse these days but am assuring you that this
+transaction is legitimate and I am contacting you that we may have a
+deal, note for your cooperation and collaboration 40% of the sum will
+be for you while the other 60% will be for me as well. I wait for your
+swift response for more details. please forward your response to my
+personal E-mail: rickschaech@gmail.com
 
-I have pushed a version of this series that uses u64 for all references
-to the pkey register irrespective of architecture. This is available at:
-
-https://github.com/sandip4n/linux/tree/pkey-selftests
-
-
-- Sandipan
-
+Yours sincerely,
+Rick Schaech.
