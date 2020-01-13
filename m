@@ -2,90 +2,84 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 42327139C57
-	for <lists+linux-kselftest@lfdr.de>; Mon, 13 Jan 2020 23:21:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CB23B139C6C
+	for <lists+linux-kselftest@lfdr.de>; Mon, 13 Jan 2020 23:28:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728933AbgAMWVp (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 13 Jan 2020 17:21:45 -0500
-Received: from mail-ot1-f67.google.com ([209.85.210.67]:40353 "EHLO
-        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728935AbgAMWVp (ORCPT
+        id S1728848AbgAMW2l convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 13 Jan 2020 17:28:41 -0500
+Received: from Galois.linutronix.de ([193.142.43.55]:40483 "EHLO
+        Galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728819AbgAMW2l (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 13 Jan 2020 17:21:45 -0500
-Received: by mail-ot1-f67.google.com with SMTP id w21so10558778otj.7
-        for <linux-kselftest@vger.kernel.org>; Mon, 13 Jan 2020 14:21:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ex3UFTMAEfhKx0guG0nwsJE0zOFUmspUTiiCdQZAYOo=;
-        b=AZkS3aHZwBxsqylTsn1eEWpbfT0deg5vrOTs7LiyGB8g1lnK6FH2+UfYXBWvkY6ULv
-         L2AahUncm3u08u2KnFq3IkcZNVLL+0q4Df/VS2nMgtdTEfhMV6UmkKoHEo30LFduORFW
-         lNtWDDlPGuB18xsIfzirjOzb5FUEr8JVFbQ9lixTPZk9w8y2vYfwtQWfryXPkGPPJmEo
-         tw1PmN8C9ibxP8UQDb/8CkVIA+vS9SZrs1AqtZyUwsA44pNP5dS4Vm06VWqn+YiWccoj
-         7cM9PqJcK+T1kfuzzQlB+nt4mJ/rZmLAEFfmiWh12bHooq+Vhe2YKTYhcZvmM4l2p4UK
-         Lc6w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ex3UFTMAEfhKx0guG0nwsJE0zOFUmspUTiiCdQZAYOo=;
-        b=JVRmBeLt6kNn3kAFWJZ5VT3Cr1p0moPjdtn6jQEJwYomykGljSkhZyrk7d+YJ2BXv/
-         kG6U1HwK0GRbVfDzX+wE69wX85xBWfzbLQ1E+0a80qZm+DCPjnzS3KjaUmkxMZjJoaIh
-         Ej4T/IFlEZtjQxiFKK99xJiWH3ZKZRDsqQjrlXRbN+a2pO0uHZ3gPUp9R5eciHCRK94D
-         BfAsdLCSUMAVAALUjsigfNlCHaLsPWNyHFqqjCm9pVsm+7/+7HY7W15jODy6p9hgSNDD
-         sht9lq2TG0fzrQsZgmgDh0BNPFU5G5mCkrdj/76fHBX+oP2A50sxasXA4JSlI2Is9Ezf
-         jGPg==
-X-Gm-Message-State: APjAAAUVFv4qhkWQjqWzl+yIYhjOJgTu5IxJKduqPiZkD3ASm7HIpMch
-        qUi50dPScpoTNIMg3RXP5jo1oBnljbjt1tnBhjb41Q==
-X-Google-Smtp-Source: APXvYqyrwZQq75+I2BdkZCiafYfDDHWMS1tOXED+Q+CkQ89ZkgEcOJ+i4XsDk7VSWnoOQlqxRkrnw6Hl75zqF784lYs=
-X-Received: by 2002:a9d:2c68:: with SMTP id f95mr15033850otb.33.1578954104459;
- Mon, 13 Jan 2020 14:21:44 -0800 (PST)
+        Mon, 13 Jan 2020 17:28:41 -0500
+Received: from p5b06da22.dip0.t-ipconnect.de ([91.6.218.34] helo=nanos.tec.linutronix.de)
+        by Galois.linutronix.de with esmtpsa (TLS1.2:DHE_RSA_AES_256_CBC_SHA256:256)
+        (Exim 4.80)
+        (envelope-from <tglx@linutronix.de>)
+        id 1ir8CG-0004Yk-9j; Mon, 13 Jan 2020 23:28:32 +0100
+Received: by nanos.tec.linutronix.de (Postfix, from userid 1000)
+        id 40F6F105BE6; Mon, 13 Jan 2020 23:28:31 +0100 (CET)
+From:   Thomas Gleixner <tglx@linutronix.de>
+To:     Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Cc:     catalin.marinas@arm.com, will@kernel.org, paul.burton@mips.com,
+        salyzyn@android.com, 0x7f454c46@gmail.com, luto@kernel.org
+Subject: Re: [PATCH v2 2/8] lib: vdso: Build 32 bit specific functions in the right context
+In-Reply-To: <20190830135902.20861-3-vincenzo.frascino@arm.com>
+References: <20190830135902.20861-1-vincenzo.frascino@arm.com> <20190830135902.20861-3-vincenzo.frascino@arm.com>
+Date:   Mon, 13 Jan 2020 23:28:31 +0100
+Message-ID: <87tv4zq9dc.fsf@nanos.tec.linutronix.de>
 MIME-Version: 1.0
-References: <20191217231615.164161-1-almasrymina@google.com>
- <817e2c4b-4c72-09f9-22ea-bbaf97584161@oracle.com> <CAHS8izNs24KOaRuQkVUuZZUh42rvkyBXJEJYrHNf9bLFnZEXCg@mail.gmail.com>
- <a78595a8-448c-14bb-a54b-9be685f36388@oracle.com>
-In-Reply-To: <a78595a8-448c-14bb-a54b-9be685f36388@oracle.com>
-From:   Mina Almasry <almasrymina@google.com>
-Date:   Mon, 13 Jan 2020 14:21:33 -0800
-Message-ID: <CAHS8izMT2vNASsR2H+3-4XN=+EkAEpS-LJ_UouaAa7iUfbLBhQ@mail.gmail.com>
-Subject: Re: [PATCH v9 1/8] hugetlb_cgroup: Add hugetlb_cgroup reservation counter
-To:     Mike Kravetz <mike.kravetz@oracle.com>
-Cc:     shuah <shuah@kernel.org>, David Rientjes <rientjes@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Greg Thelen <gthelen@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        open list <linux-kernel@vger.kernel.org>, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org, cgroups@vger.kernel.org,
-        Aneesh Kumar <aneesh.kumar@linux.vnet.ibm.com>,
-        =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>,
-        Hillf Danton <hdanton@sina.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8BIT
+X-Linutronix-Spam-Score: -1.0
+X-Linutronix-Spam-Level: -
+X-Linutronix-Spam-Status: No , -1.0 points, 5.0 required,  ALL_TRUSTED=-1,SHORTCIRCUIT=-0.0001
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-> >> On 12/17/19 3:16 PM, Mina Almasry wrote:
-> >
-> > The design we went with based on previous discussions is as follows:
-> > hugetlb pages faulted without a prior reservation get accounted at
-> > fault time, rather than reservation time, and if the fault causes the
-> > counter to cross the limit, the charge fails, hence the fault fails,
-> > hence the process gets sigbus'd.
->
-> Ok, sorry I did not recall the design discussion.
->
+Vincenzo Frascino <vincenzo.frascino@arm.com> writes:
 
-No worries! It has indeed been a while since that discussion.
-
-> > This means that one counter I'm adding here can cover both use cases:
-> > if the userspace uses MAP_NORESERVE, then their memory is accounted at
-> > fault time and they may get sigbus'd.
+> clock_gettime32 and clock_getres_time32 should be compiled only with a
+> 32 bit vdso library.
 >
-> Let's make sure this is clearly documented.  Someone could be surprised
-> if their application not using reserves gets a SIGBUS because there is a
-> reserve limit.
+> Exclude these symbols when BUILD_VDSO32 is not defined.
 
-I have some stuff on that already in the docs patch, but I'll beef
-that section up to ensure there is no confusion.
+This breaks the ARM build with:
+
+arch/arm/vdso/vgettimeofday.c: In function ‘__vdso_clock_gettime’:
+arch/arm/vdso/vgettimeofday.c:15:9: error: implicit declaration of function ‘__cvdso_clock_gettime32’; did you mean ‘__cvdso_clock_gettime’? [-Werror=implicit-function-declaration]
+  return __cvdso_clock_gettime32(clock, ts);
+         ^~~~~~~~~~~~~~~~~~~~~~~
+         __cvdso_clock_gettime
+arch/arm/vdso/vgettimeofday.c: In function ‘__vdso_clock_getres’:
+arch/arm/vdso/vgettimeofday.c:33:9: error: implicit declaration of function ‘__cvdso_clock_getres_time32’; did you mean ‘__cvdso_clock_getres_common’? [-Werror=implicit-function-declaration]
+  return __cvdso_clock_getres_time32(clock_id, res);
+         ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+         __cvdso_clock_getres_common
+cc1: some warnings being treated as errors
+
+The patch below 'fixes' at least the build. Can someone please confirm
+the correctness?
+
+Thanks,
+
+        tglx
+
+8<----------------
+--- a/arch/arm/vdso/Makefile
++++ b/arch/arm/vdso/Makefile
+@@ -14,7 +14,7 @@ targets := $(obj-vdso) vdso.so vdso.so.d
+ obj-vdso := $(addprefix $(obj)/, $(obj-vdso))
+ 
+ ccflags-y := -fPIC -fno-common -fno-builtin -fno-stack-protector
+-ccflags-y += -DDISABLE_BRANCH_PROFILING
++ccflags-y += -DDISABLE_BRANCH_PROFILING -DBUILD_VDSO32
+ 
+ ldflags-$(CONFIG_CPU_ENDIAN_BE8) := --be8
+ ldflags-y := -Bsymbolic --no-undefined -soname=linux-vdso.so.1 \
