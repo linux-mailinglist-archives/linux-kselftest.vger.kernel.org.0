@@ -2,133 +2,92 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C477C13B383
-	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Jan 2020 21:15:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BBCED13B55F
+	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Jan 2020 23:43:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728757AbgANUPM (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 14 Jan 2020 15:15:12 -0500
-Received: from hqnvemgate25.nvidia.com ([216.228.121.64]:13500 "EHLO
-        hqnvemgate25.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726839AbgANUPL (ORCPT
+        id S1727102AbgANWn4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 14 Jan 2020 17:43:56 -0500
+Received: from cloudserver094114.home.pl ([79.96.170.134]:54463 "EHLO
+        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727073AbgANWnz (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 14 Jan 2020 15:15:11 -0500
-Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate25.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5e1e21390001>; Tue, 14 Jan 2020 12:14:49 -0800
-Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate101.nvidia.com (PGP Universal service);
-  Tue, 14 Jan 2020 12:15:09 -0800
-X-PGP-Universal: processed;
-        by hqpgpgate101.nvidia.com on Tue, 14 Jan 2020 12:15:09 -0800
-Received: from [10.110.48.28] (10.124.1.5) by HQMAIL107.nvidia.com
- (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Tue, 14 Jan
- 2020 20:15:09 +0000
-Subject: Re: [PATCH v12 00/22] mm/gup: prereqs to track dma-pinned pages:
- FOLL_PIN
-From:   John Hubbard <jhubbard@nvidia.com>
-To:     Andrew Morton <akpm@linux-foundation.org>
-CC:     Al Viro <viro@zeniv.linux.org.uk>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Dave Chinner <david@fromorbit.com>,
-        David Airlie <airlied@linux.ie>,
-        "David S . Miller" <davem@davemloft.net>,
-        Ira Weiny <ira.weiny@intel.com>, Jan Kara <jack@suse.cz>,
-        Jason Gunthorpe <jgg@ziepe.ca>, Jens Axboe <axboe@kernel.dk>,
-        Jonathan Corbet <corbet@lwn.net>,
-        =?UTF-8?B?SsOpcsO0bWUgR2xpc3Nl?= <jglisse@redhat.com>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Michal Hocko <mhocko@suse.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Paul Mackerras <paulus@samba.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Vlastimil Babka <vbabka@suse.cz>, <bpf@vger.kernel.org>,
-        <dri-devel@lists.freedesktop.org>, <kvm@vger.kernel.org>,
-        <linux-block@vger.kernel.org>, <linux-doc@vger.kernel.org>,
-        <linux-fsdevel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-        <linux-media@vger.kernel.org>, <linux-rdma@vger.kernel.org>,
-        <linuxppc-dev@lists.ozlabs.org>, <netdev@vger.kernel.org>,
-        <linux-mm@kvack.org>, LKML <linux-kernel@vger.kernel.org>
-References: <20200107224558.2362728-1-jhubbard@nvidia.com>
- <2a9145d4-586e-6489-64e4-0c54f47afaa1@nvidia.com>
-X-Nvconfidentiality: public
-Message-ID: <9d7f3c1a-6020-bdec-c513-80c5399e55d7@nvidia.com>
-Date:   Tue, 14 Jan 2020 12:15:08 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.1
+        Tue, 14 Jan 2020 17:43:55 -0500
+Received: from 79.184.255.90.ipv4.supernova.orange.pl (79.184.255.90) (HELO kreacher.localnet)
+ by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.320)
+ id 4d21a5c1f3213161; Tue, 14 Jan 2020 23:43:54 +0100
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Randy Dunlap <rdunlap@infradead.org>,
+        Alan Maguire <alan.maguire@oracle.com>
+Cc:     brendanhiggins@google.com, gregkh@linuxfoundation.org,
+        dmitry.torokhov@gmail.com, sfr@canb.auug.org.au,
+        linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, skhan@linuxfoundation.org
+Subject: Re: [PATCH] software node: introduce CONFIG_KUNIT_DRIVER_PE_TEST
+Date:   Tue, 14 Jan 2020 23:43:53 +0100
+Message-ID: <1973062.CA44Rh9njY@kreacher>
+In-Reply-To: <51d7d427-2ef6-b0cd-ad23-2fb75b06b763@infradead.org>
+References: <1579018183-14879-1-git-send-email-alan.maguire@oracle.com> <alpine.LRH.2.20.2001141639240.15464@dhcp-10-175-171-251.vpn.oracle.com> <51d7d427-2ef6-b0cd-ad23-2fb75b06b763@infradead.org>
 MIME-Version: 1.0
-In-Reply-To: <2a9145d4-586e-6489-64e4-0c54f47afaa1@nvidia.com>
-X-Originating-IP: [10.124.1.5]
-X-ClientProxiedBy: HQMAIL111.nvidia.com (172.20.187.18) To
- HQMAIL107.nvidia.com (172.20.187.13)
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1579032890; bh=wLxNzNFRStaOZ7jAQIV4tH1wBKaWmBKZBOUdkq/PVGQ=;
-        h=X-PGP-Universal:Subject:From:To:CC:References:X-Nvconfidentiality:
-         Message-ID:Date:User-Agent:MIME-Version:In-Reply-To:
-         X-Originating-IP:X-ClientProxiedBy:Content-Type:Content-Language:
-         Content-Transfer-Encoding;
-        b=bNQcHd+kt2S6qArSD90PMkNX5LSRoo2toPf1fdY/D3ysgVjnnuMPbcBLvU4mGjBbT
-         LR4uZiIEi3/mAViybdXB1PH001dny/ndD230xDMGlhs7NAYpQR6mGLaj5Fl0H44uol
-         s/WH8SaFGbiYHrC+Jf2F7bChe3A2NqguquLvhseggPHll2epR/FoT6c0YMA6JGSKkp
-         eSDWR40pps95gbxdKKvy2DClT3lBSMdUwcemTQnf2Jrxy6nLuQLIDhcegQ+kyGcscI
-         uknj/1R1Mw2ETSzcXASW/vo/Q3g+SHupTZUPph9j3ZAnq/QlpAxhi10ckpA46Ke/0I
-         HjefW3dJ5Akvg==
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 1/9/20 2:07 PM, John Hubbard wrote:
-> On 1/7/20 2:45 PM, John Hubbard wrote:
->> Hi,
->>
->> The "track FOLL_PIN pages" would have been the very next patch, but it is
->> not included here because I'm still debugging a bug report from Leon.
->> Let's get all of the prerequisite work (it's been reviewed) into the tree
->> so that future reviews are easier. It's clear that any fixes that are
->> required to the tracking patch, won't affect these patches here.
->>
->> This implements an API naming change (put_user_page*() -->
->> unpin_user_page*()), and also adds FOLL_PIN page support, up to
->> *but not including* actually tracking FOLL_PIN pages. It extends
->> the FOLL_PIN support to a few select subsystems. More subsystems will
->> be added in follow up work.
->>
+On Tuesday, January 14, 2020 5:45:56 PM CET Randy Dunlap wrote:
+> On 1/14/20 8:42 AM, Alan Maguire wrote:
+> > On Tue, 14 Jan 2020, Randy Dunlap wrote:
+> > 
+> >> Hi Alan,
+> >>
+> >> On 1/14/20 8:09 AM, Alan Maguire wrote:
+> >>> currently the property entry kunit tests are built if CONFIG_KUNIT=y.
+> >>> This will cause warnings when merged with the kunit tree that now
+> >>> supports tristate CONFIG_KUNIT.  While the tests appear to compile
+> >>> as a module, we get a warning about missing module license.
+> >>>
+> >>> It's better to have a per-test suite CONFIG variable so that
+> >>> we can do selective building of kunit-based suites, and can
+> >>> also avoid merge issues like this.
+> >>>
+> >>> Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+> >>
+> >> Reported-by: Randy Dunlap <rdunlap@infradead.org>
+> >>
+> > 
+> > Apologies for missing you out here.
+> >  
+> >>> Fixes: c032ace71c29 ("software node: add basic tests for property entries")
+> >>> Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
+> >>> ---
+> >>>  drivers/base/test/Kconfig  | 3 +++
+> >>>  drivers/base/test/Makefile | 2 +-
+> >>>  2 files changed, 4 insertions(+), 1 deletion(-)
+> >>>
+> >>> diff --git a/drivers/base/test/Kconfig b/drivers/base/test/Kconfig
+> >>> index 86e85da..d29ae95 100644
+> >>> --- a/drivers/base/test/Kconfig
+> >>> +++ b/drivers/base/test/Kconfig
+> >>> @@ -8,3 +8,6 @@ config TEST_ASYNC_DRIVER_PROBE
+> >>>  	  The module name will be test_async_driver_probe.ko
+> >>>  
+> >>>  	  If unsure say N.
+> >>> +config KUNIT_DRIVER_PE_TEST
+> >>> +	bool "KUnit Tests for property entry API"
+> >>> +	depends on KUNIT
+> >>
+> >> Why is this bool instead of tristate?
+> >>
+> > 
+> > The support for building kunit and kunit tests as modules has not merged 
+> > into linux-next yet, so if we set the option to tristate the build would
+> > fail for allmodconfig builds.   Once it's merged we can revisit though; I 
+> > should have mentioned this, thanks for reminding me!
 > 
-> Hi Andrew and all,
-> 
-> To clarify: I'm hoping that this series can go into 5.6.
-> 
-> Meanwhile, I'm working on tracking down and solving the problem that Leon
-> reported, in the "track FOLL_PIN pages" patch, and that patch is not part of
-> this series.
-> 
+> Oh. I see.  Thanks.
 
-Hi Andrew and all,
-
-Any thoughts on this?
-
-As for the not-included-yet tracking patch, my local testing still suggests the
-need to allow for larger refcounts of huge pages (in other words, I can write a test
-to pin huge pages many times, and overflow with the same backtrace that Leon has
-reported).
-
-The second struct page (I recall Jan suggested) can hold those, so I'm going to proceed
-with that approach, while waiting to see if Leon has any more test data for me.
-
-Again, I think this series is worth getting out of the way, in the meantime.
+Patch applied, thanks!
 
 
-thanks,
--- 
-John Hubbard
-NVIDIA
+
