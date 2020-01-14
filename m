@@ -2,21 +2,21 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BB3713A795
-	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Jan 2020 11:41:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ABD3113A81B
+	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Jan 2020 12:15:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729417AbgANKlI (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 14 Jan 2020 05:41:08 -0500
-Received: from foss.arm.com ([217.140.110.172]:50584 "EHLO foss.arm.com"
+        id S1728876AbgANLP1 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 14 Jan 2020 06:15:27 -0500
+Received: from foss.arm.com ([217.140.110.172]:50978 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729112AbgANKlI (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 14 Jan 2020 05:41:08 -0500
+        id S1725956AbgANLP1 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 14 Jan 2020 06:15:27 -0500
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 87B09142F;
-        Tue, 14 Jan 2020 02:41:07 -0800 (PST)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2D7791435;
+        Tue, 14 Jan 2020 03:15:26 -0800 (PST)
 Received: from [10.1.196.72] (e119884-lin.cambridge.arm.com [10.1.196.72])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D0F1A3F6C4;
-        Tue, 14 Jan 2020 02:41:05 -0800 (PST)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8D16E3F6C4;
+        Tue, 14 Jan 2020 03:15:24 -0800 (PST)
 Subject: Re: [PATCH v2 2/8] lib: vdso: Build 32 bit specific functions in the
  right context
 To:     Thomas Gleixner <tglx@linutronix.de>, linux-arch@vger.kernel.org,
@@ -32,14 +32,14 @@ References: <20190830135902.20861-1-vincenzo.frascino@arm.com>
  <87muaqqq62.fsf@nanos.tec.linutronix.de>
 From:   Vincenzo Frascino <vincenzo.frascino@arm.com>
 X-Pep-Version: 2.0
-Message-ID: <95103401-1f2a-556a-2caa-97befcaeb7fc@arm.com>
-Date:   Tue, 14 Jan 2020 10:41:04 +0000
+Message-ID: <7453d44d-9901-d826-b19d-f7ff22d5b89d@arm.com>
+Date:   Tue, 14 Jan 2020 11:15:23 +0000
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.2.2
 MIME-Version: 1.0
 In-Reply-To: <87muaqqq62.fsf@nanos.tec.linutronix.de>
 Content-Type: multipart/mixed;
- boundary="------------894EA0BE4258C82B3E17C6A9"
+ boundary="------------694AF95E0FDE2369CA71804F"
 Content-Language: en-US
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
@@ -47,7 +47,7 @@ List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
 This is a multi-part message in MIME format.
---------------894EA0BE4258C82B3E17C6A9
+--------------694AF95E0FDE2369CA71804F
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 
@@ -73,17 +73,62 @@ e
 > missing.
 >=20
 > The patch below makes it build again.
->=20
+I completed the testing and everything seems fine. For completeness I am
+reporting the test results below:
 
-I agree. I am testing it now :) Do you prefer to create the patch or shal=
-l I do
-it once I finish testing?
+clock-gettime-monotonic: syscall: 938 nsec/call
+clock-gettime-monotonic:    libc: 278 nsec/call
+clock-gettime-monotonic:    vdso: 270 nsec/call
+clock-getres-monotonic: syscall: 678 nsec/call
+clock-getres-monotonic:    libc: 692 nsec/call
+clock-getres-monotonic:    vdso: 33 nsec/call
+clock-gettime-monotonic-coarse: syscall: 840 nsec/call
+clock-gettime-monotonic-coarse:    libc: 184 nsec/call
+clock-gettime-monotonic-coarse:    vdso: 172 nsec/call
+clock-getres-monotonic-coarse: syscall: 710 nsec/call
+clock-getres-monotonic-coarse:    libc: 733 nsec/call
+clock-getres-monotonic-coarse:    vdso: 35 nsec/call
+clock-gettime-monotonic-raw: syscall: 894 nsec/call
+clock-gettime-monotonic-raw:    libc: 278 nsec/call
+clock-gettime-monotonic-raw:    vdso: 270 nsec/call
+clock-getres-monotonic-raw: syscall: 669 nsec/call
+clock-getres-monotonic-raw:    libc: 696 nsec/call
+clock-getres-monotonic-raw:    vdso: 35 nsec/call
+clock-gettime-tai: syscall: 933 nsec/call
+clock-gettime-tai:    libc: 277 nsec/call
+clock-gettime-tai:    vdso: 264 nsec/call
+clock-getres-tai: syscall: 674 nsec/call
+clock-getres-tai:    libc: 696 nsec/call
+clock-getres-tai:    vdso: 33 nsec/call
+clock-gettime-boottime: syscall: 934 nsec/call
+clock-gettime-boottime:    libc: 278 nsec/call
+clock-gettime-boottime:    vdso: 270 nsec/call
+clock-getres-boottime: syscall: 677 nsec/call
+clock-getres-boottime:    libc: 690 nsec/call
+clock-getres-boottime:    vdso: 33 nsec/call
+clock-gettime-realtime: syscall: 901 nsec/call
+clock-gettime-realtime:    libc: 278 nsec/call
+clock-gettime-realtime:    vdso: 272 nsec/call
+clock-getres-realtime: syscall: 677 nsec/call
+clock-getres-realtime:    libc: 701 nsec/call
+clock-getres-realtime:    vdso: 33 nsec/call
+clock-gettime-realtime-coarse: syscall: 838 nsec/call
+clock-gettime-realtime-coarse:    libc: 184 nsec/call
+clock-gettime-realtime-coarse:    vdso: 172 nsec/call
+clock-getres-realtime-coarse: syscall: 713 nsec/call
+clock-getres-realtime-coarse:    libc: 736 nsec/call
+clock-getres-realtime-coarse:    vdso: 35 nsec/call
+getcpu: syscall: 620 nsec/call
+getcpu:    libc: 648 nsec/call
+gettimeofday: syscall: 1022 nsec/call
+gettimeofday:    libc: 280 nsec/call
+gettimeofday:    vdso: 272 nsec/call
 
 --=20
 Regards,
 Vincenzo
 
---------------894EA0BE4258C82B3E17C6A9
+--------------694AF95E0FDE2369CA71804F
 Content-Type: application/pgp-keys;
  name="pEpkey.asc"
 Content-Transfer-Encoding: quoted-printable
@@ -311,4 +356,4 @@ GrFxzNOCDuNG1w=3D=3D
 =3DVSiF
 -----END PGP PUBLIC KEY BLOCK-----
 
---------------894EA0BE4258C82B3E17C6A9--
+--------------694AF95E0FDE2369CA71804F--
