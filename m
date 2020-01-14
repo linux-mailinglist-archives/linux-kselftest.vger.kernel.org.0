@@ -2,102 +2,133 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C1CA213B0DA
-	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Jan 2020 18:28:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C477C13B383
+	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Jan 2020 21:15:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728753AbgANR1x (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 14 Jan 2020 12:27:53 -0500
-Received: from mga17.intel.com ([192.55.52.151]:60281 "EHLO mga17.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726270AbgANR1x (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 14 Jan 2020 12:27:53 -0500
-X-Amp-Result: UNSCANNABLE
-X-Amp-File-Uploaded: False
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 14 Jan 2020 09:27:52 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.70,433,1574150400"; 
-   d="scan'208";a="256380937"
-Received: from sjchrist-coffee.jf.intel.com (HELO linux.intel.com) ([10.54.74.202])
-  by fmsmga002.fm.intel.com with ESMTP; 14 Jan 2020 09:27:51 -0800
-Date:   Tue, 14 Jan 2020 09:27:51 -0800
-From:   Sean Christopherson <sean.j.christopherson@intel.com>
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Radim =?utf-8?B?S3LEjW3DocWZ?= <rkrcmar@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Tony Luck <tony.luck@intel.com>,
-        Tony W Wang-oc <TonyWWang-oc@zhaoxin.com>,
-        Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        Len Brown <lenb@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-edac@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-Subject: Re: [PATCH] KVM: VMX: Rename define to CPU_BASED_USE_TSC_OFFSETTING
-Message-ID: <20200114172751.GD16784@linux.intel.com>
-References: <20191221044513.21680-1-sean.j.christopherson@intel.com>
- <20191221044513.21680-18-sean.j.christopherson@intel.com>
- <20200113183228.GO13310@zn.tnic>
- <20200113183705.GL1175@linux.intel.com>
- <20200113183823.GP13310@zn.tnic>
- <20200113184217.GA2216@linux.intel.com>
- <20200113185216.GQ13310@zn.tnic>
- <20200113201610.GE2322@linux.intel.com>
- <20200114093138.GB31032@zn.tnic>
+        id S1728757AbgANUPM (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 14 Jan 2020 15:15:12 -0500
+Received: from hqnvemgate25.nvidia.com ([216.228.121.64]:13500 "EHLO
+        hqnvemgate25.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726839AbgANUPL (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 14 Jan 2020 15:15:11 -0500
+Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate25.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5e1e21390001>; Tue, 14 Jan 2020 12:14:49 -0800
+Received: from hqmail.nvidia.com ([172.20.161.6])
+  by hqpgpgate101.nvidia.com (PGP Universal service);
+  Tue, 14 Jan 2020 12:15:09 -0800
+X-PGP-Universal: processed;
+        by hqpgpgate101.nvidia.com on Tue, 14 Jan 2020 12:15:09 -0800
+Received: from [10.110.48.28] (10.124.1.5) by HQMAIL107.nvidia.com
+ (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Tue, 14 Jan
+ 2020 20:15:09 +0000
+Subject: Re: [PATCH v12 00/22] mm/gup: prereqs to track dma-pinned pages:
+ FOLL_PIN
+From:   John Hubbard <jhubbard@nvidia.com>
+To:     Andrew Morton <akpm@linux-foundation.org>
+CC:     Al Viro <viro@zeniv.linux.org.uk>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Dave Chinner <david@fromorbit.com>,
+        David Airlie <airlied@linux.ie>,
+        "David S . Miller" <davem@davemloft.net>,
+        Ira Weiny <ira.weiny@intel.com>, Jan Kara <jack@suse.cz>,
+        Jason Gunthorpe <jgg@ziepe.ca>, Jens Axboe <axboe@kernel.dk>,
+        Jonathan Corbet <corbet@lwn.net>,
+        =?UTF-8?B?SsOpcsO0bWUgR2xpc3Nl?= <jglisse@redhat.com>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Michal Hocko <mhocko@suse.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Paul Mackerras <paulus@samba.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Vlastimil Babka <vbabka@suse.cz>, <bpf@vger.kernel.org>,
+        <dri-devel@lists.freedesktop.org>, <kvm@vger.kernel.org>,
+        <linux-block@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+        <linux-fsdevel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+        <linux-media@vger.kernel.org>, <linux-rdma@vger.kernel.org>,
+        <linuxppc-dev@lists.ozlabs.org>, <netdev@vger.kernel.org>,
+        <linux-mm@kvack.org>, LKML <linux-kernel@vger.kernel.org>
+References: <20200107224558.2362728-1-jhubbard@nvidia.com>
+ <2a9145d4-586e-6489-64e4-0c54f47afaa1@nvidia.com>
+X-Nvconfidentiality: public
+Message-ID: <9d7f3c1a-6020-bdec-c513-80c5399e55d7@nvidia.com>
+Date:   Tue, 14 Jan 2020 12:15:08 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200114093138.GB31032@zn.tnic>
-User-Agent: Mutt/1.5.24 (2015-08-30)
+In-Reply-To: <2a9145d4-586e-6489-64e4-0c54f47afaa1@nvidia.com>
+X-Originating-IP: [10.124.1.5]
+X-ClientProxiedBy: HQMAIL111.nvidia.com (172.20.187.18) To
+ HQMAIL107.nvidia.com (172.20.187.13)
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1579032890; bh=wLxNzNFRStaOZ7jAQIV4tH1wBKaWmBKZBOUdkq/PVGQ=;
+        h=X-PGP-Universal:Subject:From:To:CC:References:X-Nvconfidentiality:
+         Message-ID:Date:User-Agent:MIME-Version:In-Reply-To:
+         X-Originating-IP:X-ClientProxiedBy:Content-Type:Content-Language:
+         Content-Transfer-Encoding;
+        b=bNQcHd+kt2S6qArSD90PMkNX5LSRoo2toPf1fdY/D3ysgVjnnuMPbcBLvU4mGjBbT
+         LR4uZiIEi3/mAViybdXB1PH001dny/ndD230xDMGlhs7NAYpQR6mGLaj5Fl0H44uol
+         s/WH8SaFGbiYHrC+Jf2F7bChe3A2NqguquLvhseggPHll2epR/FoT6c0YMA6JGSKkp
+         eSDWR40pps95gbxdKKvy2DClT3lBSMdUwcemTQnf2Jrxy6nLuQLIDhcegQ+kyGcscI
+         uknj/1R1Mw2ETSzcXASW/vo/Q3g+SHupTZUPph9j3ZAnq/QlpAxhi10ckpA46Ke/0I
+         HjefW3dJ5Akvg==
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Jan 14, 2020 at 10:31:38AM +0100, Borislav Petkov wrote:
-> On Mon, Jan 13, 2020 at 12:16:10PM -0800, Sean Christopherson wrote:
-> > On Mon, Jan 13, 2020 at 07:52:16PM +0100, Borislav Petkov wrote:
-> > > On Mon, Jan 13, 2020 at 10:42:17AM -0800, Sean Christopherson wrote:
-> > > > > Doesn't bother me, I could do it in a patch ontop. But your call.
-> > > > 
-> > > > No objection here.
-> > > 
-> > > Something like this:
-> > > 
-> > > ---
-> > > From: Borislav Petkov <bp@suse.de>
-> > > 
-> > > ... so that "offsetting" is spelled the same as the respective VMX feature
-> > > bit VMX_FEATURE_TSC_OFFSETTING.
-> > > 
-> > > No functional changes.
-> > > 
-> > > Signed-off-by: Borislav Petkov <bp@suse.de>
-> > > ---
-> > 
-> > Reviewed-and-tested-by: Sean Christopherson <sean.j.christopherson@intel.com>
+On 1/9/20 2:07 PM, John Hubbard wrote:
+> On 1/7/20 2:45 PM, John Hubbard wrote:
+>> Hi,
+>>
+>> The "track FOLL_PIN pages" would have been the very next patch, but it is
+>> not included here because I'm still debugging a bug report from Leon.
+>> Let's get all of the prerequisite work (it's been reviewed) into the tree
+>> so that future reviews are easier. It's clear that any fixes that are
+>> required to the tracking patch, won't affect these patches here.
+>>
+>> This implements an API naming change (put_user_page*() -->
+>> unpin_user_page*()), and also adds FOLL_PIN page support, up to
+>> *but not including* actually tracking FOLL_PIN pages. It extends
+>> the FOLL_PIN support to a few select subsystems. More subsystems will
+>> be added in follow up work.
+>>
 > 
-> Yah, so I tried to do a test-merge with linux-next to see what surprises should
-> I be prepared for and there's the first one:
+> Hi Andrew and all,
 > 
-> 5e3d394fdd9e ("KVM: VMX: Fix the spelling of CPU_BASED_USE_TSC_OFFSETTING")
+> To clarify: I'm hoping that this series can go into 5.6.
 > 
-> which is already in Paolo's tree. Dropping it on my side.
+> Meanwhile, I'm working on tracking down and solving the problem that Leon
+> reported, in the "track FOLL_PIN pages" patch, and that patch is not part of
+> this series.
+> 
 
-Doh, now that you point it out, I remember that patch going by.  Sorry I
-didn't recall it earlier.
+Hi Andrew and all,
 
-Thanks for your help!
+Any thoughts on this?
+
+As for the not-included-yet tracking patch, my local testing still suggests the
+need to allow for larger refcounts of huge pages (in other words, I can write a test
+to pin huge pages many times, and overflow with the same backtrace that Leon has
+reported).
+
+The second struct page (I recall Jan suggested) can hold those, so I'm going to proceed
+with that approach, while waiting to see if Leon has any more test data for me.
+
+Again, I think this series is worth getting out of the way, in the meantime.
+
+
+thanks,
+-- 
+John Hubbard
+NVIDIA
