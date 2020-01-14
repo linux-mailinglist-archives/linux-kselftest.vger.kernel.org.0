@@ -2,133 +2,104 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B4FD13AEF2
-	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Jan 2020 17:15:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C93113AF5F
+	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Jan 2020 17:30:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727073AbgANQOw (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 14 Jan 2020 11:14:52 -0500
-Received: from userp2130.oracle.com ([156.151.31.86]:52306 "EHLO
-        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726839AbgANQOv (ORCPT
+        id S1726270AbgANQaJ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 14 Jan 2020 11:30:09 -0500
+Received: from bombadil.infradead.org ([198.137.202.133]:48408 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726195AbgANQaI (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 14 Jan 2020 11:14:51 -0500
-Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
-        by userp2130.oracle.com (8.16.0.27/8.16.0.27) with SMTP id 00EG9OZK070392;
-        Tue, 14 Jan 2020 16:14:36 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : in-reply-to : message-id : references : mime-version :
- content-type; s=corp-2019-08-05;
- bh=Yno/8o3VD6Dg4efinphoYmptXGewwjphjyePJ/y+XUI=;
- b=jUqcROsPqrvy/K6MNQ9jmLIppBKSZG1NxL4fv7NUh1zoelNu9I0jZPD0/7sjPtmiv1RZ
- AZHuSEmtdOEspgBbGHAVPzt8b/XMqcZHVTK1vNktP0RMm7Wx+sQzqZ57B4pcg8C8lweY
- mDvAOhFBW0SugJp/z9WzB8oAm3gpN1OA8aVbWIw84RzrZp+nqWIhohCYkBcGnAuhpgha
- FmF0dGrVI7h3AzAkFmDOK7nDPoNXRRSzeqoWqQAfAchLlflEkDHPXtWETXZ0/4Qtbuf2
- nsOvM8q8aR4bPr6V264xnI0ZNP/TR39fp7jkquos0R93XY5Ga+v/CAg8YM3YUqFr5902 0w== 
-Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
-        by userp2130.oracle.com with ESMTP id 2xf74s70h7-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 14 Jan 2020 16:14:36 +0000
-Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
-        by aserp3030.oracle.com (8.16.0.27/8.16.0.27) with SMTP id 00EG9RFh111084;
-        Tue, 14 Jan 2020 16:14:35 GMT
-Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
-        by aserp3030.oracle.com with ESMTP id 2xh2tny7fg-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 14 Jan 2020 16:14:35 +0000
-Received: from abhmp0010.oracle.com (abhmp0010.oracle.com [141.146.116.16])
-        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 00EGEYEP007786;
-        Tue, 14 Jan 2020 16:14:34 GMT
-Received: from dhcp-10-175-171-251.vpn.oracle.com (/10.175.171.251)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Tue, 14 Jan 2020 08:14:34 -0800
-Date:   Tue, 14 Jan 2020 16:14:22 +0000 (GMT)
-From:   Alan Maguire <alan.maguire@oracle.com>
-X-X-Sender: alan@dhcp-10-175-171-251.vpn.oracle.com
-To:     Brendan Higgins <brendanhiggins@google.com>
-cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Alan Maguire <alan.maguire@oracle.com>
-Subject: Re: linux-next: Tree for Jan 13
- (drivers/base/test/property-entry-test.o)
-In-Reply-To: <CAFd5g454Xgb-tnG-rBQ3fkCe2bsO7M8_dauOTpG3bxDjnxOX9A@mail.gmail.com>
-Message-ID: <alpine.LRH.2.20.2001141612110.14991@dhcp-10-175-171-251.vpn.oracle.com>
-References: <20200113181457.209ab4a5@canb.auug.org.au> <eddaa93c-3bde-a9ed-5ee7-766f3cd51a43@infradead.org> <20200114104049.5244f612@canb.auug.org.au> <CAFd5g454Xgb-tnG-rBQ3fkCe2bsO7M8_dauOTpG3bxDjnxOX9A@mail.gmail.com>
-User-Agent: Alpine 2.20 (LRH 67 2015-01-07)
+        Tue, 14 Jan 2020 11:30:08 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:
+        Subject:Sender:Reply-To:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=nus/i78kK3SpGp2U2Esf2bTqwzBG98LRZpZBiWVKPiw=; b=NY2FUl3vLOtb2XkzeXGzvfcdD
+        wtXkCRAhj01IpPwNLvBWCdHKSi8O/O5hU3EK364oV+TvbT3AIfOHbU4KslE8M/+dDnRABVZJP5f5B
+        nVvTsa8LWYGSOM4Oe7kfhNQEltOWrhWo+7kRk9Llr41SG9QswSNS3DxpJl/yUQI1nebSvFALhUcIS
+        vJ+ZOUgj+FHvTLHw1fjZZePBqe9BkaeHhw9VUw8c9Wk96Y7kLx4tcHHpbYSy6IGE0XgHVfRiu20CZ
+        qMG7VTxBe4ODOw9Z0TzIDX77HXwwVphYKSsiA08DUnJaFhEkYlDZI5z9AAdC6jAzZ5WSOFcgXLb8r
+        TCDe/lYqw==;
+Received: from [2601:1c0:6280:3f0::ed68]
+        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1irP4x-00072m-VB; Tue, 14 Jan 2020 16:30:08 +0000
+Subject: Re: [PATCH] software node: introduce CONFIG_KUNIT_DRIVER_PE_TEST
+To:     Alan Maguire <alan.maguire@oracle.com>, brendanhiggins@google.com,
+        gregkh@linuxfoundation.org, rjw@rjwysocki.net,
+        dmitry.torokhov@gmail.com
+Cc:     sfr@canb.auug.org.au, linux-kernel@vger.kernel.org,
+        linux-next@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        skhan@linuxfoundation.org
+References: <1579018183-14879-1-git-send-email-alan.maguire@oracle.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+Message-ID: <2242e184-93a5-147d-d603-4017ca86eba9@infradead.org>
+Date:   Tue, 14 Jan 2020 08:30:07 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.3.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9499 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
- phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=999
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.0.1-1911140001 definitions=main-2001140137
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9499 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
- suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
- lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1911140001
- definitions=main-2001140137
+In-Reply-To: <1579018183-14879-1-git-send-email-alan.maguire@oracle.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, 13 Jan 2020, Brendan Higgins wrote:
+Hi Alan,
 
-> +KUnit Development
-> +open list:KERNEL SELFTEST FRAMEWORK
+On 1/14/20 8:09 AM, Alan Maguire wrote:
+> currently the property entry kunit tests are built if CONFIG_KUNIT=y.
+> This will cause warnings when merged with the kunit tree that now
+> supports tristate CONFIG_KUNIT.  While the tests appear to compile
+> as a module, we get a warning about missing module license.
 > 
-> On Mon, Jan 13, 2020 at 3:40 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
-> >
-> > Hi Randy,
-> >
-> > On Mon, 13 Jan 2020 14:59:54 -0800 Randy Dunlap <rdunlap@infradead.org> wrote:
-> > >
-> > > on i386:
-> > >
-> > > WARNING: modpost: missing MODULE_LICENSE() in drivers/base/test/property-entry-test.o
-> > > see include/linux/module.h for more information
-> >
-> > Sorry, I missed that yesterday.
-> >
-> > Caused by commit
-> >
-> >   c032ace71c29 ("software node: add basic tests for property entries")
-> >
-> > from the pm tree interacting with commit
-> >
-> >   9fe124bf1b77 ("kunit: allow kunit to be loaded as a module")
-> >
-> > from the kunit-next tree.
+> It's better to have a per-test suite CONFIG variable so that
+> we can do selective building of kunit-based suites, and can
+> also avoid merge issues like this.
 > 
-> Yes, the problem seems to be that the property-entry-test is turned on
-> when CONFIG_KUNIT is y or m.
+> Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+
+Reported-by: Randy Dunlap <rdunlap@infradead.org>
+
+> Fixes: c032ace71c29 ("software node: add basic tests for property entries")
+> Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
+> ---
+>  drivers/base/test/Kconfig  | 3 +++
+>  drivers/base/test/Makefile | 2 +-
+>  2 files changed, 4 insertions(+), 1 deletion(-)
 > 
-> From drivers/base/test/Makefile:
-> ...
-> obj-$(CONFIG_KUNIT) += property-entry-test.o
-> 
-> It seems we can fix it just by adding the missing MODULE_LICENSE, but
-> I think there is a bigger question of whether we should let people do
-> this. Do we want to just let people have their tests run whenever
-> CONFIG_KUNIT is enabled? I am inclined to think no. It should be
-> possible for people to run their test and their test only.
+> diff --git a/drivers/base/test/Kconfig b/drivers/base/test/Kconfig
+> index 86e85da..d29ae95 100644
+> --- a/drivers/base/test/Kconfig
+> +++ b/drivers/base/test/Kconfig
+> @@ -8,3 +8,6 @@ config TEST_ASYNC_DRIVER_PROBE
+>  	  The module name will be test_async_driver_probe.ko
+>  
+>  	  If unsure say N.
+> +config KUNIT_DRIVER_PE_TEST
+> +	bool "KUnit Tests for property entry API"
+> +	depends on KUNIT
+
+Why is this bool instead of tristate?
+
+> diff --git a/drivers/base/test/Makefile b/drivers/base/test/Makefile
+> index 2214310..3ca5636 100644
+> --- a/drivers/base/test/Makefile
+> +++ b/drivers/base/test/Makefile
+> @@ -1,4 +1,4 @@
+>  # SPDX-License-Identifier: GPL-2.0
+>  obj-$(CONFIG_TEST_ASYNC_DRIVER_PROBE)	+= test_async_driver_probe.o
+>  
+> -obj-$(CONFIG_KUNIT) += property-entry-test.o
+> +obj-$(CONFIG_KUNIT_DRIVER_PE_TEST) += property-entry-test.o
 > 
 
-I agree completely, CONFIG_KUNIT is too big a switch I
-think, aside from the merge issues caused here. I've posted
-a patch which introduces a per-test-suite CONFIG option:
+thanks.
+-- 
+~Randy
 
-https://lore.kernel.org/lkml/1579018183-14879-1-git-send-email-alan.maguire@oracle.com/T/#u
-
-Brendan, do let me know if you want me to amend it to add a Suggested-by 
-from you (didn't want to add it without your permission). Thanks!
-
-Alan
