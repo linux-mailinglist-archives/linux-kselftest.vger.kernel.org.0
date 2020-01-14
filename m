@@ -2,101 +2,106 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BA92A13A322
-	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Jan 2020 09:42:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CBA313A3D7
+	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Jan 2020 10:31:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725904AbgANIm0 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 14 Jan 2020 03:42:26 -0500
-Received: from mout.kundenserver.de ([212.227.126.134]:45133 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725842AbgANImZ (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 14 Jan 2020 03:42:25 -0500
-Received: from mail-qv1-f47.google.com ([209.85.219.47]) by
- mrelayeu.kundenserver.de (mreue009 [212.227.15.129]) with ESMTPSA (Nemesis)
- id 1N5G1V-1jpXMb0r8X-011DMH; Tue, 14 Jan 2020 09:42:24 +0100
-Received: by mail-qv1-f47.google.com with SMTP id dp13so5288694qvb.7;
-        Tue, 14 Jan 2020 00:42:23 -0800 (PST)
-X-Gm-Message-State: APjAAAWlw9t3c2G9F62XI6aneaxBdeKfPLh9jknZL4cVsYbgtg2xEHKB
-        rjAK/PwouSN3VMVUDWLqKSV+1wnQaJNUfzhvKcU=
-X-Google-Smtp-Source: APXvYqzHlEAuow8J7sfEaKx0vXugFGGudqVBX74JnJkLjytKVNtvs5tT0fUcCXq4SrHOE5kJOWfUX/v75TtgCYRAp54=
-X-Received: by 2002:a0c:e7c7:: with SMTP id c7mr15837659qvo.222.1578991342846;
- Tue, 14 Jan 2020 00:42:22 -0800 (PST)
+        id S1726156AbgANJbn (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 14 Jan 2020 04:31:43 -0500
+Received: from mail.skyhub.de ([5.9.137.197]:46818 "EHLO mail.skyhub.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725820AbgANJbn (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 14 Jan 2020 04:31:43 -0500
+Received: from zn.tnic (p200300EC2F0C7700ADC3CAC9BB95AB92.dip0.t-ipconnect.de [IPv6:2003:ec:2f0c:7700:adc3:cac9:bb95:ab92])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id A64AF1EC0C76;
+        Tue, 14 Jan 2020 10:31:41 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1578994301;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=oVOv19JYih/7QBdhQIDrcxH7dJf1wRTSDlsNoAXaOY4=;
+        b=Op5S07B1bBe9uvsJbhwmhBQEjTQO/NCR8xUCHou3ZSrFKAX+wG5Tf6vbvL+7qyFBL/OmxC
+        PHOEsU9albCCnI2LsgCfGkS94dnIF/pSH1b+TKBWi8bA+gpaWrVZWGaixC6QAc9QstNw5e
+        AZNv5TI9m4WNJxduf+OlljIIB6zhMPk=
+Date:   Tue, 14 Jan 2020 10:31:38 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Sean Christopherson <sean.j.christopherson@intel.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Radim =?utf-8?B?S3LEjW3DocWZ?= <rkrcmar@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Tony Luck <tony.luck@intel.com>,
+        Tony W Wang-oc <TonyWWang-oc@zhaoxin.com>,
+        Jacob Pan <jacob.jun.pan@linux.intel.com>,
+        Len Brown <lenb@kernel.org>, Shuah Khan <shuah@kernel.org>,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-edac@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+Subject: Re: [PATCH] KVM: VMX: Rename define to CPU_BASED_USE_TSC_OFFSETTING
+Message-ID: <20200114093138.GB31032@zn.tnic>
+References: <20191221044513.21680-1-sean.j.christopherson@intel.com>
+ <20191221044513.21680-18-sean.j.christopherson@intel.com>
+ <20200113183228.GO13310@zn.tnic>
+ <20200113183705.GL1175@linux.intel.com>
+ <20200113183823.GP13310@zn.tnic>
+ <20200113184217.GA2216@linux.intel.com>
+ <20200113185216.GQ13310@zn.tnic>
+ <20200113201610.GE2322@linux.intel.com>
 MIME-Version: 1.0
-References: <20200110134337.1752000-1-arnd@arndb.de> <CAFd5g47+_oyqsS0o0kQ+CaLNtjqbvOmQc-n0Ch1jAT6P6RSFiw@mail.gmail.com>
-In-Reply-To: <CAFd5g47+_oyqsS0o0kQ+CaLNtjqbvOmQc-n0Ch1jAT6P6RSFiw@mail.gmail.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Tue, 14 Jan 2020 09:42:06 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a2YJuUvZnK4DEYoCrj=DZwvXKnN1Y2bLkAKd7gp1us3eQ@mail.gmail.com>
-Message-ID: <CAK8P3a2YJuUvZnK4DEYoCrj=DZwvXKnN1Y2bLkAKd7gp1us3eQ@mail.gmail.com>
-Subject: Re: [PATCH] [RFC] kunit: move binary assertion out of line
-To:     Brendan Higgins <brendanhiggins@google.com>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Ard Biesheuvel <ard.biesheuvel@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:9547x2bVt3blggZ1UxBmuWeDc52ZrKwp9cZzwP3O+Z0QxT2vzbn
- p2YrZZllygUR5/yhEMbPoqz1Iv7dLM1SiMQPKZh/nXEk3gYzvEen2UqczXxNJKcOhbY8+cu
- PTNWMURzNUctheXmbrcQoJ0WzEMzpmNpkC+ERLgRCFSw0LBY9kj5qwWQs6Ps4MjYDTMljIH
- VCM7uy+67v6q/UhZQyyVA==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:bHcbYbgWn2g=:McvsmWOR1P9y2FOt5ylA3t
- aPn2KuyOFoaeODWp/Xo3jzzX/04V92SO1itz1WaVpSajr+WVf1R8hc/qBGnfiM3Fexb0iipdH
- 1CkwsZRSC5VZHH3j8mG2gx00UTGYnUKjAHWjiWwcAYyY5sPcpRGIegwrDxUotVH+zZh3Vh+qT
- 0nGrqYzwdqQ0LeCqcNcg6Sz4zSajTffSt1SVSA+TAnPg3H4R80pLisDS6evjqOtS5kDXHfMtr
- FVLF/HRCL/3Xrf/qhj9tsxG9P5fuA/BIiBrTUZWyaRxpLGuZ64i6mhJv/BEHMlpB62EetxB9Z
- 01iR0NHzZ/VXCE3SfJKJUQAOEpPeOEKw/g6pcxicG/ugf6bmzIJt65XtLCMIUehy7q+DUQx9l
- luRl9m7i5yebqtDpb4WXGPVj3psACHEvviJ6tKAcb7KhXL584dQ6Gv8gp2xQOqyp5Vnwq0eHn
- idc36T6fRKV+0JBot6DasVUxmkmw831Ri3/NY1lSwr/GWD0rV/E4WPue7bJt/LwgSNtQQOiEb
- aFD9iCP06P8J4BuwrNnXfAD75YAOd+nEi4xo999HeqS8i8xUuglGfw5i0x84oiOfMR/wweAYE
- 12MzcBiBni5EBjGWVC12oyFumj7be9a3FRj3JXs7SHYQkqyijmbvAnlxVtHbg06emzKAUnkML
- b5EF2udYSCwYj23WYCkYizyh092x9o/WiOJ9RI6n1L+ev4jfmctTogTZ50Ff2FzQ6wFlU/jrs
- fUBdsNiNCwMtBhIRqt/zsJatUZahBJ2IQ+vOi7n2Twq8wxS8TidO2vPpieTr5AY8e234whtS+
- AuIyfLKkYQabVlHWQz5lvluV+ZVEIbLviOHf2itXIjFGeF7qp4EYw+bvJaEp/vdmP8Fycaf7n
- bf7s9rQ0wfGpLZITPuuw==
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20200113201610.GE2322@linux.intel.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Jan 14, 2020 at 3:13 AM Brendan Higgins
-<brendanhiggins@google.com> wrote:
->
-> On Fri, Jan 10, 2020 at 5:43 AM Arnd Bergmann <arnd@arndb.de> wrote:
-> >
-> > In combination with the structleak gcc plugin, kunit can lead to excessive
-> > stack usage when each assertion adds another structure to the stack from
-> > of the calling function:
-> >
-> > base/test/property-entry-test.c:99:1: error: the frame size of 3032 bytes is larger than 2048 bytes [-Werror=frame-larger-than=]
-> >
-> > As most assertions are binary, change those over to a direct function
-> > call that does not have this problem.  This can probably be improved
-> > further, I just went for a straightforward conversion, but a function
-> > call with 12 fixed arguments plus varargs it not great either.
->
-> Yeah, I am not exactly excited by maintaining such a set of functions.
+On Mon, Jan 13, 2020 at 12:16:10PM -0800, Sean Christopherson wrote:
+> On Mon, Jan 13, 2020 at 07:52:16PM +0100, Borislav Petkov wrote:
+> > On Mon, Jan 13, 2020 at 10:42:17AM -0800, Sean Christopherson wrote:
+> > > > Doesn't bother me, I could do it in a patch ontop. But your call.
+> > > 
+> > > No objection here.
+> > 
+> > Something like this:
+> > 
+> > ---
+> > From: Borislav Petkov <bp@suse.de>
+> > 
+> > ... so that "offsetting" is spelled the same as the respective VMX feature
+> > bit VMX_FEATURE_TSC_OFFSETTING.
+> > 
+> > No functional changes.
+> > 
+> > Signed-off-by: Borislav Petkov <bp@suse.de>
+> > ---
+> 
+> Reviewed-and-tested-by: Sean Christopherson <sean.j.christopherson@intel.com>
 
-Ok.
+Yah, so I tried to do a test-merge with linux-next to see what surprises should
+I be prepared for and there's the first one:
 
-> I don't think anyone wants to go with the heap allocation route.
->
-> Along the lines of the union/single copy idea[1]. What if we just put
-> a union of all the assertion types in the kunit struct? One is already
-> allocated for every test case and we only need one assertion object
-> for each test case at a time, so I imagine that sould work.
+5e3d394fdd9e ("KVM: VMX: Fix the spelling of CPU_BASED_USE_TSC_OFFSETTING")
 
-Ah right, that should work fine, and may also lead to better object
-code if the compiler can avoid repeated assignments of the same
-values, e.g. ".file = __FILE__".
+which is already in Paolo's tree. Dropping it on my side.
 
-          Arnd
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
