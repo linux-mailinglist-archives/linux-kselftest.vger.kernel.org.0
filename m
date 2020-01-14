@@ -2,106 +2,102 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E7CC913AFBA
-	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Jan 2020 17:46:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C1CA213B0DA
+	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Jan 2020 18:28:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728753AbgANQp7 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 14 Jan 2020 11:45:59 -0500
-Received: from bombadil.infradead.org ([198.137.202.133]:33284 "EHLO
-        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728739AbgANQp7 (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 14 Jan 2020 11:45:59 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:
-        Subject:Sender:Reply-To:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=Flw8yamdhbUI/Y8isJM9I81gkbm2so+Fjah3kdZccsI=; b=d2OVa2oiSFbtq1TKQwTTOGbix
-        +J7m6UjsOOPGsrC7vja9rBloPfhe00FEHIT2QzGCRF3/8hg290T8McF7EA/HHhSz8ovVYDTk9AoYw
-        PuLWKu7sggYQj7lxpZUbRHHsmLhv85btRed/hc55TtkxEekUY4XmMHozA3Fm6pPgm0UGYpXNg30lu
-        3WczxIg7RBeglC/yD3ZQvBgDHrjkEKoqLLiG2DcEQfKzEgj+jpMj0jIlav9pLkiSqiFxxWJzaatiR
-        n4EOUYy93yNWtzTH2Blz7OcnE3+7BcitVKqeNU2fxJ5bziallXXPHLAkE1RRhSAp3GLI1pfqZXg3M
-        GVvDl87eQ==;
-Received: from [2601:1c0:6280:3f0::ed68]
-        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1irPKI-0007IP-Gy; Tue, 14 Jan 2020 16:45:58 +0000
-Subject: Re: [PATCH] software node: introduce CONFIG_KUNIT_DRIVER_PE_TEST
-To:     Alan Maguire <alan.maguire@oracle.com>
-Cc:     brendanhiggins@google.com, gregkh@linuxfoundation.org,
-        rjw@rjwysocki.net, dmitry.torokhov@gmail.com, sfr@canb.auug.org.au,
-        linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, skhan@linuxfoundation.org
-References: <1579018183-14879-1-git-send-email-alan.maguire@oracle.com>
- <2242e184-93a5-147d-d603-4017ca86eba9@infradead.org>
- <alpine.LRH.2.20.2001141639240.15464@dhcp-10-175-171-251.vpn.oracle.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-Message-ID: <51d7d427-2ef6-b0cd-ad23-2fb75b06b763@infradead.org>
-Date:   Tue, 14 Jan 2020 08:45:56 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.3.0
+        id S1728753AbgANR1x (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 14 Jan 2020 12:27:53 -0500
+Received: from mga17.intel.com ([192.55.52.151]:60281 "EHLO mga17.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726270AbgANR1x (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 14 Jan 2020 12:27:53 -0500
+X-Amp-Result: UNSCANNABLE
+X-Amp-File-Uploaded: False
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 14 Jan 2020 09:27:52 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.70,433,1574150400"; 
+   d="scan'208";a="256380937"
+Received: from sjchrist-coffee.jf.intel.com (HELO linux.intel.com) ([10.54.74.202])
+  by fmsmga002.fm.intel.com with ESMTP; 14 Jan 2020 09:27:51 -0800
+Date:   Tue, 14 Jan 2020 09:27:51 -0800
+From:   Sean Christopherson <sean.j.christopherson@intel.com>
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Radim =?utf-8?B?S3LEjW3DocWZ?= <rkrcmar@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Tony Luck <tony.luck@intel.com>,
+        Tony W Wang-oc <TonyWWang-oc@zhaoxin.com>,
+        Jacob Pan <jacob.jun.pan@linux.intel.com>,
+        Len Brown <lenb@kernel.org>, Shuah Khan <shuah@kernel.org>,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-edac@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+Subject: Re: [PATCH] KVM: VMX: Rename define to CPU_BASED_USE_TSC_OFFSETTING
+Message-ID: <20200114172751.GD16784@linux.intel.com>
+References: <20191221044513.21680-1-sean.j.christopherson@intel.com>
+ <20191221044513.21680-18-sean.j.christopherson@intel.com>
+ <20200113183228.GO13310@zn.tnic>
+ <20200113183705.GL1175@linux.intel.com>
+ <20200113183823.GP13310@zn.tnic>
+ <20200113184217.GA2216@linux.intel.com>
+ <20200113185216.GQ13310@zn.tnic>
+ <20200113201610.GE2322@linux.intel.com>
+ <20200114093138.GB31032@zn.tnic>
 MIME-Version: 1.0
-In-Reply-To: <alpine.LRH.2.20.2001141639240.15464@dhcp-10-175-171-251.vpn.oracle.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200114093138.GB31032@zn.tnic>
+User-Agent: Mutt/1.5.24 (2015-08-30)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 1/14/20 8:42 AM, Alan Maguire wrote:
-> On Tue, 14 Jan 2020, Randy Dunlap wrote:
+On Tue, Jan 14, 2020 at 10:31:38AM +0100, Borislav Petkov wrote:
+> On Mon, Jan 13, 2020 at 12:16:10PM -0800, Sean Christopherson wrote:
+> > On Mon, Jan 13, 2020 at 07:52:16PM +0100, Borislav Petkov wrote:
+> > > On Mon, Jan 13, 2020 at 10:42:17AM -0800, Sean Christopherson wrote:
+> > > > > Doesn't bother me, I could do it in a patch ontop. But your call.
+> > > > 
+> > > > No objection here.
+> > > 
+> > > Something like this:
+> > > 
+> > > ---
+> > > From: Borislav Petkov <bp@suse.de>
+> > > 
+> > > ... so that "offsetting" is spelled the same as the respective VMX feature
+> > > bit VMX_FEATURE_TSC_OFFSETTING.
+> > > 
+> > > No functional changes.
+> > > 
+> > > Signed-off-by: Borislav Petkov <bp@suse.de>
+> > > ---
+> > 
+> > Reviewed-and-tested-by: Sean Christopherson <sean.j.christopherson@intel.com>
 > 
->> Hi Alan,
->>
->> On 1/14/20 8:09 AM, Alan Maguire wrote:
->>> currently the property entry kunit tests are built if CONFIG_KUNIT=y.
->>> This will cause warnings when merged with the kunit tree that now
->>> supports tristate CONFIG_KUNIT.  While the tests appear to compile
->>> as a module, we get a warning about missing module license.
->>>
->>> It's better to have a per-test suite CONFIG variable so that
->>> we can do selective building of kunit-based suites, and can
->>> also avoid merge issues like this.
->>>
->>> Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
->>
->> Reported-by: Randy Dunlap <rdunlap@infradead.org>
->>
+> Yah, so I tried to do a test-merge with linux-next to see what surprises should
+> I be prepared for and there's the first one:
 > 
-> Apologies for missing you out here.
->  
->>> Fixes: c032ace71c29 ("software node: add basic tests for property entries")
->>> Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
->>> ---
->>>  drivers/base/test/Kconfig  | 3 +++
->>>  drivers/base/test/Makefile | 2 +-
->>>  2 files changed, 4 insertions(+), 1 deletion(-)
->>>
->>> diff --git a/drivers/base/test/Kconfig b/drivers/base/test/Kconfig
->>> index 86e85da..d29ae95 100644
->>> --- a/drivers/base/test/Kconfig
->>> +++ b/drivers/base/test/Kconfig
->>> @@ -8,3 +8,6 @@ config TEST_ASYNC_DRIVER_PROBE
->>>  	  The module name will be test_async_driver_probe.ko
->>>  
->>>  	  If unsure say N.
->>> +config KUNIT_DRIVER_PE_TEST
->>> +	bool "KUnit Tests for property entry API"
->>> +	depends on KUNIT
->>
->> Why is this bool instead of tristate?
->>
+> 5e3d394fdd9e ("KVM: VMX: Fix the spelling of CPU_BASED_USE_TSC_OFFSETTING")
 > 
-> The support for building kunit and kunit tests as modules has not merged 
-> into linux-next yet, so if we set the option to tristate the build would
-> fail for allmodconfig builds.   Once it's merged we can revisit though; I 
-> should have mentioned this, thanks for reminding me!
+> which is already in Paolo's tree. Dropping it on my side.
 
-Oh. I see.  Thanks.
+Doh, now that you point it out, I remember that patch going by.  Sorry I
+didn't recall it earlier.
 
--- 
-~Randy
-
+Thanks for your help!
