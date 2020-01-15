@@ -2,89 +2,189 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 81CA113CFFC
-	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Jan 2020 23:18:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 42ED813D024
+	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Jan 2020 23:34:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730052AbgAOWRz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 15 Jan 2020 17:17:55 -0500
-Received: from mail.kernel.org ([198.145.29.99]:37364 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728899AbgAOWRz (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 15 Jan 2020 17:17:55 -0500
-Received: from devnote2 (NE2965lan1.rev.em-net.ne.jp [210.141.244.193])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id B31C32187F;
-        Wed, 15 Jan 2020 22:17:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1579126674;
-        bh=KRACwXXWKO/EznwyzDu7lnYus4D5z0F5HFebQ6mV67A=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=vQDz4L3I+zNXlHoV/yl0mng1PqZTdqI34xdNfY1tpzXxo7DwkfhndIBNVHQSuk5eS
-         bxE1ZS1d7WJnGwLZyKWeRL2QjzRf8jLzTN1R5FgFEY9cfNOCrkzdXaiKM2RS3tyd3U
-         Et/ca6hqUoSBV4mLJ/Y7o52mj9EGSwqjE4zs3zqQ=
-Date:   Thu, 16 Jan 2020 07:17:50 +0900
-From:   Masami Hiramatsu <mhiramat@kernel.org>
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, jaswinder.singh@linaro.org,
-        bpf@vger.kernel.org, daniel@iogearbox.net
-Subject: Re: [BUGFIX PATCH] selftests: Fix pthread link option
-Message-Id: <20200116071750.0bde391266ea7637ee041d8c@kernel.org>
-In-Reply-To: <20200115192528.kq44bg24ezsgo5hm@ast-mbp.dhcp.thefacebook.com>
-References: <157907976750.14189.12829891067375600434.stgit@devnote2>
-        <20200115192528.kq44bg24ezsgo5hm@ast-mbp.dhcp.thefacebook.com>
-X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+        id S1729638AbgAOWbu (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 15 Jan 2020 17:31:50 -0500
+Received: from mail-qk1-f193.google.com ([209.85.222.193]:36467 "EHLO
+        mail-qk1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728899AbgAOWbu (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 15 Jan 2020 17:31:50 -0500
+Received: by mail-qk1-f193.google.com with SMTP id a203so17355080qkc.3;
+        Wed, 15 Jan 2020 14:31:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=m3ykeEiv2DWhC3YDv/3M+ztOkLKwpMGFjEqD6cnUt4s=;
+        b=cNt51iDcDZI6zelQEGvFbm8lPIlIGnZldM0f2rIq1AgcoCCdkQIbVvR19pY8xHwYlP
+         7R2OMxb5sfqI39LAluJjBuUlrFm8jXcFHwHzpQsVk9IHMN/xpCMK491szpikUKk8RT8X
+         m7307OpYrbxFQJI8OakwrfTa3HGJZ4eJBfI86Xby5q50ox6WVd4PzkYEVcAciFBIwS8u
+         f7mRKTLIgkBP65rlD0vn09o9FPFOgGm1EUGPVidZ+W/ZFmk+dDe2ZjwrZvCB++dEJ8sV
+         SkthSvzz+nTTMBTamfNnFkYTRMY01cXfsbE7dr+lHGbkVSn+2SSSqgQh18vnIuXka7P3
+         jZ8Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=m3ykeEiv2DWhC3YDv/3M+ztOkLKwpMGFjEqD6cnUt4s=;
+        b=cK76LIAP5ynqr0Qta/8qtkniBiwY6z2LvYl36KzJhC160HWZAgWe7jrqSs6rdz51KO
+         jvOYzc5iDZ5jEMidCg5GTs6O4px3Y9vBjWG95814auLdEtPiisD6EOzE4jAM7pZ/if06
+         Y73rLUhWf5YehK9/0knabFTx+SmCHoRVm0XkuQh9SeHo7s/9OBXRisdV1InonIhgnHvY
+         kvxy66xTcUm0LeQKyHsjwPbDFOeJueNg0/TXS9c/A/cnPj84VMNww/UfbaRJatW8cJtH
+         Mte43cYFkUJjnqhSIxlzcsWwulykNHHh+yVSJd6j9xHx2a9ykwKoTYMCxPM9qh21vYh7
+         XOIg==
+X-Gm-Message-State: APjAAAVLiYLb8203H9f0aSWU+jQBOW6ieGh/6E8+TWrMNMJgtQICPqfV
+        ZOGrpVd0Z2SQwg49NYDkGtG7+lsqO9IdXO45MaU=
+X-Google-Smtp-Source: APXvYqzukFfHfNkIeKb+uK+DszszlveC2wPehwk6e8vAwphJhtnuhVoFPfjcvFFmRoCVVG49lShaKmldjnY1Y1hDegY=
+X-Received: by 2002:ae9:e809:: with SMTP id a9mr13631663qkg.92.1579127508368;
+ Wed, 15 Jan 2020 14:31:48 -0800 (PST)
+MIME-Version: 1.0
+References: <157909756858.1192265.6657542187065456112.stgit@toke.dk>
+ <157909757089.1192265.9038866294345740126.stgit@toke.dk> <CAEf4BzbqY8zivZy637Xy=iTECzBAYQ7vo=M7TvsLM2Yp12bJpg@mail.gmail.com>
+ <87v9pctlvn.fsf@toke.dk>
+In-Reply-To: <87v9pctlvn.fsf@toke.dk>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Wed, 15 Jan 2020 14:31:37 -0800
+Message-ID: <CAEf4BzZpGe-1S5_iwS8GBw9iiyFJmDUkOaO+2qaftRn_iy5cNA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2 02/10] tools/bpf/runqslower: Fix override
+ option for VMLINUX_BTF
+To:     =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        Andrii Nakryiko <andriin@fb.com>,
+        Doug Ledford <dledford@redhat.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <jakub.kicinski@netronome.com>,
+        Jesper Dangaard Brouer <brouer@redhat.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        linux-rdma@vger.kernel.org,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        clang-built-linux@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, 15 Jan 2020 11:25:30 -0800
-Alexei Starovoitov <alexei.starovoitov@gmail.com> wrote:
+On Wed, Jan 15, 2020 at 2:06 PM Toke H=C3=B8iland-J=C3=B8rgensen <toke@redh=
+at.com> wrote:
+>
+> Andrii Nakryiko <andrii.nakryiko@gmail.com> writes:
+>
+> > On Wed, Jan 15, 2020 at 6:13 AM Toke H=C3=B8iland-J=C3=B8rgensen <toke@=
+redhat.com> wrote:
+> >>
+> >> From: Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com>
+> >>
+> >> The runqslower tool refuses to build without a file to read vmlinux BT=
+F
+> >> from. The build fails with an error message to override the location b=
+y
+> >> setting the VMLINUX_BTF variable if autodetection fails. However, the
+> >> Makefile doesn't actually work with that override - the error message =
+is
+> >> still emitted.
+> >
+> > Do you have example command with VMLINUX_BTF override that didn't work
+> > (and what error message was emitted)?
+>
+> Before this patch:
+>
+> $ cd ~/build/linux/tools/bpf/runqslower
+> $ make
+> Makefile:18: *** "Can't detect kernel BTF, use VMLINUX_BTF to specify it =
+explicitly".  Stop.
+>
+> $ make VMLINUX_BTF=3D~/build/linux/vmlinux
+> Makefile:18: *** "Can't detect kernel BTF, use VMLINUX_BTF to specify it =
+explicitly".  Stop.
 
-> On Wed, Jan 15, 2020 at 06:16:07PM +0900, Masami Hiramatsu wrote:
-> > To support pthread correctly, it is better to use -pthread
-> > instead of -lpthread.
-> > 
-> > Signed-off-by: Masami Hiramatsu <mhiramat@kernel.org>
-> > ---
-> >  tools/testing/selftests/bpf/Makefile               |    2 +-
-> >  tools/testing/selftests/membarrier/Makefile        |    2 +-
-> >  tools/testing/selftests/mqueue/Makefile            |    2 +-
-> >  tools/testing/selftests/net/Makefile               |    4 ++--
-> >  .../testing/selftests/powerpc/benchmarks/Makefile  |    4 ++--
-> >  tools/testing/selftests/powerpc/dscr/Makefile      |    2 +-
-> >  tools/testing/selftests/powerpc/mm/Makefile        |    2 +-
-> >  tools/testing/selftests/rseq/Makefile              |    2 +-
-> >  tools/testing/selftests/rtc/Makefile               |    2 +-
-> >  tools/testing/selftests/seccomp/Makefile           |    2 +-
-> >  tools/testing/selftests/timers/Makefile            |    2 +-
-> >  tools/testing/selftests/vm/Makefile                |    2 +-
-> >  12 files changed, 14 insertions(+), 14 deletions(-)
-> > 
-> > diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-> > index e2fd6f8d579c..419f58c53d12 100644
-> > --- a/tools/testing/selftests/bpf/Makefile
-> > +++ b/tools/testing/selftests/bpf/Makefile
-> > @@ -22,7 +22,7 @@ CFLAGS += -g -Wall -O2 $(GENFLAGS) -I$(APIDIR) -I$(LIBDIR) -I$(BPFDIR)	\
-> >  	  -I$(GENDIR) -I$(TOOLSDIR) -I$(CURDIR)				\
-> >  	  -Dbpf_prog_load=bpf_prog_test_load				\
-> >  	  -Dbpf_load_program=bpf_test_load_program
-> > -LDLIBS += -lcap -lelf -lrt -lpthread
-> > +LDLIBS += -lcap -lelf -lrt -pthread
-> 
-> Please split this bit into separate patch and send it to bpf@vger targeting
-> bpf-next. selftests/bpf are going through a lot of changes and I'd like to
-> avoid any chance of conflicts.
+Ok, so this is strange. Try make clean and run with V=3D1, it might help
+to debug this. This could happen if ~/build/linux/vmlinux doesn't
+exist, but I assume you double-checked that. It works for me just fine
+(Makefile won't do VMLINUX_BTF :=3D assignment, if it's defined through
+make invocation, so your change should be a no-op in that regard):
 
-OK, I'll split it.
+$ make clean
+$ make VMLINUX_BTF=3D~/linux-build/default/vmlinux V=3D1
+...
+.output/sbin/bpftool btf dump file ~/linux-build/default/vmlinux
+format c > .output/vmlinux.h
+...
 
-Thank you,
+Wonder what your output looks like?
+
+>
+> >> Fix this by only doing auto-detection if no override is set. And while
+> >> we're at it, also look for a vmlinux file in the current kernel build =
+dir
+> >> if none if found on the running kernel.
+> >>
+> >> Fixes: 9c01546d26d2 ("tools/bpf: Add runqslower tool to tools/bpf")
+> >> Signed-off-by: Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com>
+> >> ---
+> >>  tools/bpf/runqslower/Makefile |   16 ++++++++++------
+> >>  1 file changed, 10 insertions(+), 6 deletions(-)
+> >>
+> >> diff --git a/tools/bpf/runqslower/Makefile b/tools/bpf/runqslower/Make=
+file
+> >> index cff2fbcd29a8..fb93ce2bf2fe 100644
+> >> --- a/tools/bpf/runqslower/Makefile
+> >> +++ b/tools/bpf/runqslower/Makefile
+> >> @@ -10,12 +10,16 @@ CFLAGS :=3D -g -Wall
+> >>
+> >>  # Try to detect best kernel BTF source
+> >>  KERNEL_REL :=3D $(shell uname -r)
+> >> -ifneq ("$(wildcard /sys/kernel/btf/vmlinux)","")
+> >> -VMLINUX_BTF :=3D /sys/kernel/btf/vmlinux
+> >> -else ifneq ("$(wildcard /boot/vmlinux-$(KERNEL_REL))","")
+> >> -VMLINUX_BTF :=3D /boot/vmlinux-$(KERNEL_REL)
+> >> -else
+> >> -$(error "Can't detect kernel BTF, use VMLINUX_BTF to specify it expli=
+citly")
+> >> +ifeq ("$(VMLINUX_BTF)","")
+> >> +  ifneq ("$(wildcard /sys/kernel/btf/vmlinux)","")
+> >> +  VMLINUX_BTF :=3D /sys/kernel/btf/vmlinux
+> >> +  else ifneq ("$(wildcard /boot/vmlinux-$(KERNEL_REL))","")
+> >> +  VMLINUX_BTF :=3D /boot/vmlinux-$(KERNEL_REL)
+> >> +  else ifneq ("$(wildcard $(abspath ../../../vmlinux))","")
+> >> +  VMLINUX_BTF :=3D $(abspath ../../../vmlinux)
+> >
+> > I'm planning to mirror runqslower into libbpf Github repo and this
+> > ../../../vmlinux piece will be completely out of place in that
+> > context. Also it only will help when building kernel in-tree. So I'd
+> > rather not add this.
+>
+> Well building the kernel in-tree is something people sometimes want to do=
+ ;)
+>
+> Specifically, the selftests depend on this, so we should at least fix
+> those; but I guess it could work to just pass in VMLINUX_BTF as part of
+> the make -C from the selftests dir? I'll try that...
+
+Yes, it can be handled through VMLINUX_BTF override for selftests. As
+I said, this will be a self-contained example in libbpf's Github repo,
+so this "in kernel tree" assumption doesn't stand there.
 
 
--- 
-Masami Hiramatsu <mhiramat@kernel.org>
+>
+> -Toke
+>
