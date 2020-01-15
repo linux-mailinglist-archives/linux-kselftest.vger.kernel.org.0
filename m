@@ -2,161 +2,89 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C783213CFDD
-	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Jan 2020 23:11:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 81CA113CFFC
+	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Jan 2020 23:18:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730590AbgAOWKg (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 15 Jan 2020 17:10:36 -0500
-Received: from us-smtp-2.mimecast.com ([205.139.110.61]:45533 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1729160AbgAOWKe (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 15 Jan 2020 17:10:34 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1579126232;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=LWQgt+DnfJs1UobRSdbBwxSCnfmXDMiH/Jey6CvGz7s=;
-        b=OaRv6SAkpYDpRFht+xtVrulUMxOjOfz/SZykAPzpw26kCEVr16fYkXJFbHrzcq9Rjui2T/
-        yGErWNoBEbKLOMs+scxO0gnkAtL1oOCiMt11glfJelV/QcQQkrx9J2OwguJL0cxXSJsEMI
-        8Yb2AjS58/fslAcOw9nbmufS6APtZGg=
-Received: from mail-lj1-f197.google.com (mail-lj1-f197.google.com
- [209.85.208.197]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-336-8k6nsn4oNOaqOZm2VEjp7w-1; Wed, 15 Jan 2020 17:10:31 -0500
-X-MC-Unique: 8k6nsn4oNOaqOZm2VEjp7w-1
-Received: by mail-lj1-f197.google.com with SMTP id z17so4454916ljz.2
-        for <linux-kselftest@vger.kernel.org>; Wed, 15 Jan 2020 14:10:31 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version:content-transfer-encoding;
-        bh=LWQgt+DnfJs1UobRSdbBwxSCnfmXDMiH/Jey6CvGz7s=;
-        b=cRApXVdYQGijyF79O6v6vFqM4AsYPdob+44FOtRskpOOhDggLkUv/srwotJtSHBaPQ
-         cPCRnN3ocf8AtHikZQbdsuRxgcLDH7Z+hk7wYWzAL4odJXBr87n4FGD2UfPEgK5T8Swd
-         0v1KeEq4hQ5yv5HYPDotLTjNrAuSI6j5FiF4ZsL2yITavh8aXJjM7wXWMoeeLAS7dCp9
-         hyIF5Ha/pmkWBwLx+MwrlfrS8U7KbyVD0u2MkdOjHkVdzf/MF1NBqytaOqFCbYsU28pl
-         F9pyClqIjMEnyUuOSw+ET1t73EnJ0rEBGPJLlDFUyT+HbL/xmiZwm3G6isbNzUpDxPT1
-         VvgQ==
-X-Gm-Message-State: APjAAAX8NZNxmb+DmcZCbY/rZCVr+7B4gDC92Kt62Vp8q1v1+iS0Bt3T
-        Wl2swRSiD8ntyBZ3rhpNuEfxF6XDiZVPSsvK629J1xVOpb6K4R9aSbd+ueWQCwYld6O5zPYL5Vl
-        mshly5dotzgD5JcP+tcaCfFmPIUg4
-X-Received: by 2002:a05:651c:102c:: with SMTP id w12mr309537ljm.53.1579126230101;
-        Wed, 15 Jan 2020 14:10:30 -0800 (PST)
-X-Google-Smtp-Source: APXvYqwrMe2Yt2YfYiFKeLwwCIZhiM2ePXslA9DkgAL9gm4Pt7dVBs/ecmLwBp5r7JQsjiefGPMruw==
-X-Received: by 2002:a05:651c:102c:: with SMTP id w12mr309523ljm.53.1579126229909;
-        Wed, 15 Jan 2020 14:10:29 -0800 (PST)
-Received: from alrua-x1.borgediget.toke.dk ([2a0c:4d80:42:443::2])
-        by smtp.gmail.com with ESMTPSA id y1sm9734405ljm.12.2020.01.15.14.10.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Jan 2020 14:10:29 -0800 (PST)
-Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-        id A09761804D6; Wed, 15 Jan 2020 23:10:28 +0100 (CET)
-From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        Andrii Nakryiko <andriin@fb.com>,
-        Doug Ledford <dledford@redhat.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <jakub.kicinski@netronome.com>,
-        Jesper Dangaard Brouer <brouer@redhat.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        linux-rdma@vger.kernel.org,
-        "open list\:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        clang-built-linux@googlegroups.com
-Subject: Re: [PATCH bpf-next v2 00/10] tools: Use consistent libbpf include paths everywhere
-In-Reply-To: <CAEf4Bza+dNoD7HbVQGtXBq=raz4DQg0yTShKZHRbCo+zHYfoSA@mail.gmail.com>
-References: <157909756858.1192265.6657542187065456112.stgit@toke.dk> <CAEf4Bza+dNoD7HbVQGtXBq=raz4DQg0yTShKZHRbCo+zHYfoSA@mail.gmail.com>
-X-Clacks-Overhead: GNU Terry Pratchett
-Date:   Wed, 15 Jan 2020 23:10:28 +0100
-Message-ID: <87o8v4tlpn.fsf@toke.dk>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+        id S1730052AbgAOWRz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 15 Jan 2020 17:17:55 -0500
+Received: from mail.kernel.org ([198.145.29.99]:37364 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728899AbgAOWRz (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 15 Jan 2020 17:17:55 -0500
+Received: from devnote2 (NE2965lan1.rev.em-net.ne.jp [210.141.244.193])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id B31C32187F;
+        Wed, 15 Jan 2020 22:17:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1579126674;
+        bh=KRACwXXWKO/EznwyzDu7lnYus4D5z0F5HFebQ6mV67A=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=vQDz4L3I+zNXlHoV/yl0mng1PqZTdqI34xdNfY1tpzXxo7DwkfhndIBNVHQSuk5eS
+         bxE1ZS1d7WJnGwLZyKWeRL2QjzRf8jLzTN1R5FgFEY9cfNOCrkzdXaiKM2RS3tyd3U
+         Et/ca6hqUoSBV4mLJ/Y7o52mj9EGSwqjE4zs3zqQ=
+Date:   Thu, 16 Jan 2020 07:17:50 +0900
+From:   Masami Hiramatsu <mhiramat@kernel.org>
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, jaswinder.singh@linaro.org,
+        bpf@vger.kernel.org, daniel@iogearbox.net
+Subject: Re: [BUGFIX PATCH] selftests: Fix pthread link option
+Message-Id: <20200116071750.0bde391266ea7637ee041d8c@kernel.org>
+In-Reply-To: <20200115192528.kq44bg24ezsgo5hm@ast-mbp.dhcp.thefacebook.com>
+References: <157907976750.14189.12829891067375600434.stgit@devnote2>
+        <20200115192528.kq44bg24ezsgo5hm@ast-mbp.dhcp.thefacebook.com>
+X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Andrii Nakryiko <andrii.nakryiko@gmail.com> writes:
+On Wed, 15 Jan 2020 11:25:30 -0800
+Alexei Starovoitov <alexei.starovoitov@gmail.com> wrote:
 
-> On Wed, Jan 15, 2020 at 6:13 AM Toke H=C3=B8iland-J=C3=B8rgensen <toke@re=
-dhat.com> wrote:
->>
->> The recent commit 6910d7d3867a ("selftests/bpf: Ensure bpf_helper_defs.h=
- are
->> taken from selftests dir") broke compilation against libbpf if it is ins=
-talled
->> on the system, and $INCLUDEDIR/bpf is not in the include path.
->>
->> Since having the bpf/ subdir of $INCLUDEDIR in the include path has neve=
-r been a
->> requirement for building against libbpf before, this needs to be fixed. =
-One
->> option is to just revert the offending commit and figure out a different=
- way to
->> achieve what it aims for. However, this series takes a different approac=
-h:
->> Changing all in-tree users of libbpf to consistently use a bpf/ prefix in
->> #include directives for header files from libbpf.
->>
->> This turns out to be a somewhat invasive change in the number of files t=
-ouched;
->> however, the actual changes to files are fairly trivial (most of them ar=
-e simply
->> made with 'sed'). Also, this approach has the advantage that it makes ex=
-ternal
->> and internal users consistent with each other, and ensures no future cha=
-nges
->> breaks things in the same way as the commit referenced above.
->>
->> The series is split to make the change for one tool subdir at a time, wh=
-ile
->> trying not to break the build along the way. It is structured like this:
->>
->> - Patch 1-2: Trivial fixes to Makefiles for issues I discovered while ch=
-anging
->>   the include paths.
->>
->> - Patch 3-7: Change the include directives to use the bpf/ prefix, and u=
-pdates
->>   Makefiles to make sure tools/lib/ is part of the include path, but wit=
-hout
->>   removing tools/lib/bpf
->>
->> - Patch 8: Change the bpf_helpers file in libbpf itself to use the bpf/ =
-prefix
->>   when including (the original source of breakage).
->>
->> - Patch 9-10: Remove tools/lib/bpf from include paths to make sure we do=
-n't
->>   inadvertently re-introduce includes without the bpf/ prefix.
->>
->> ---
->
-> Thanks, Toke, for this clean up! I tested it locally for my set up:
-> runqslower, bpftool, libbpf, and selftests all build fine, so it looks
-> good. My only concern is with selftests/bpf Makefile, we shouldn't
-> build anything outside of selftests/bpf. Let's fix that. Thanks!
+> On Wed, Jan 15, 2020 at 06:16:07PM +0900, Masami Hiramatsu wrote:
+> > To support pthread correctly, it is better to use -pthread
+> > instead of -lpthread.
+> > 
+> > Signed-off-by: Masami Hiramatsu <mhiramat@kernel.org>
+> > ---
+> >  tools/testing/selftests/bpf/Makefile               |    2 +-
+> >  tools/testing/selftests/membarrier/Makefile        |    2 +-
+> >  tools/testing/selftests/mqueue/Makefile            |    2 +-
+> >  tools/testing/selftests/net/Makefile               |    4 ++--
+> >  .../testing/selftests/powerpc/benchmarks/Makefile  |    4 ++--
+> >  tools/testing/selftests/powerpc/dscr/Makefile      |    2 +-
+> >  tools/testing/selftests/powerpc/mm/Makefile        |    2 +-
+> >  tools/testing/selftests/rseq/Makefile              |    2 +-
+> >  tools/testing/selftests/rtc/Makefile               |    2 +-
+> >  tools/testing/selftests/seccomp/Makefile           |    2 +-
+> >  tools/testing/selftests/timers/Makefile            |    2 +-
+> >  tools/testing/selftests/vm/Makefile                |    2 +-
+> >  12 files changed, 14 insertions(+), 14 deletions(-)
+> > 
+> > diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+> > index e2fd6f8d579c..419f58c53d12 100644
+> > --- a/tools/testing/selftests/bpf/Makefile
+> > +++ b/tools/testing/selftests/bpf/Makefile
+> > @@ -22,7 +22,7 @@ CFLAGS += -g -Wall -O2 $(GENFLAGS) -I$(APIDIR) -I$(LIBDIR) -I$(BPFDIR)	\
+> >  	  -I$(GENDIR) -I$(TOOLSDIR) -I$(CURDIR)				\
+> >  	  -Dbpf_prog_load=bpf_prog_test_load				\
+> >  	  -Dbpf_load_program=bpf_test_load_program
+> > -LDLIBS += -lcap -lelf -lrt -lpthread
+> > +LDLIBS += -lcap -lelf -lrt -pthread
+> 
+> Please split this bit into separate patch and send it to bpf@vger targeting
+> bpf-next. selftests/bpf are going through a lot of changes and I'd like to
+> avoid any chance of conflicts.
 
-Great, thanks for testing! I'll fix up your comments (and Alexei's) and
-submit another version tomorrow.
+OK, I'll split it.
 
--Toke
+Thank you,
 
+
+-- 
+Masami Hiramatsu <mhiramat@kernel.org>
