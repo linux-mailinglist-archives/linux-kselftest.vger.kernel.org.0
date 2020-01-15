@@ -2,28 +2,28 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EC5E013CECB
-	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Jan 2020 22:20:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 878AE13CF2F
+	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Jan 2020 22:34:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729976AbgAOVTp (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 15 Jan 2020 16:19:45 -0500
-Received: from hqnvemgate25.nvidia.com ([216.228.121.64]:11075 "EHLO
-        hqnvemgate25.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729263AbgAOVTo (ORCPT
+        id S1729465AbgAOVeW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 15 Jan 2020 16:34:22 -0500
+Received: from hqnvemgate24.nvidia.com ([216.228.121.143]:14312 "EHLO
+        hqnvemgate24.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726187AbgAOVeV (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 15 Jan 2020 16:19:44 -0500
-Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate25.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5e1f81da0000>; Wed, 15 Jan 2020 13:19:22 -0800
+        Wed, 15 Jan 2020 16:34:21 -0500
+Received: from hqpgpgate102.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate24.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5e1f85210000>; Wed, 15 Jan 2020 13:33:21 -0800
 Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate101.nvidia.com (PGP Universal service);
-  Wed, 15 Jan 2020 13:19:42 -0800
+  by hqpgpgate102.nvidia.com (PGP Universal service);
+  Wed, 15 Jan 2020 13:34:16 -0800
 X-PGP-Universal: processed;
-        by hqpgpgate101.nvidia.com on Wed, 15 Jan 2020 13:19:42 -0800
+        by hqpgpgate102.nvidia.com on Wed, 15 Jan 2020 13:34:16 -0800
 Received: from [10.110.48.28] (10.124.1.5) by HQMAIL107.nvidia.com
  (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Wed, 15 Jan
- 2020 21:19:42 +0000
-Subject: Re: [PATCH v12 04/22] mm: devmap: refactor 1-based refcounting for
- ZONE_DEVICE pages
+ 2020 21:34:16 +0000
+Subject: Re: [PATCH v12 11/22] mm/gup: introduce pin_user_pages*() and
+ FOLL_PIN
 To:     Christoph Hellwig <hch@infradead.org>
 CC:     Andrew Morton <akpm@linux-foundation.org>,
         Al Viro <viro@zeniv.linux.org.uk>,
@@ -54,118 +54,76 @@ CC:     Andrew Morton <akpm@linux-foundation.org>,
         <linux-media@vger.kernel.org>, <linux-rdma@vger.kernel.org>,
         <linuxppc-dev@lists.ozlabs.org>, <netdev@vger.kernel.org>,
         <linux-mm@kvack.org>, LKML <linux-kernel@vger.kernel.org>,
-        Christoph Hellwig <hch@lst.de>
+        Mike Rapoport <rppt@linux.ibm.com>
 References: <20200107224558.2362728-1-jhubbard@nvidia.com>
- <20200107224558.2362728-5-jhubbard@nvidia.com>
- <20200115152306.GA19546@infradead.org>
+ <20200107224558.2362728-12-jhubbard@nvidia.com>
+ <20200115153020.GF19546@infradead.org>
 X-Nvconfidentiality: public
 From:   John Hubbard <jhubbard@nvidia.com>
-Message-ID: <4707f191-86f8-db4a-c3de-0a84b415b658@nvidia.com>
-Date:   Wed, 15 Jan 2020 13:19:41 -0800
+Message-ID: <1a0ee1db-5528-86a8-0713-3d820fbdf4ad@nvidia.com>
+Date:   Wed, 15 Jan 2020 13:34:16 -0800
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.4.1
 MIME-Version: 1.0
-In-Reply-To: <20200115152306.GA19546@infradead.org>
+In-Reply-To: <20200115153020.GF19546@infradead.org>
 X-Originating-IP: [10.124.1.5]
-X-ClientProxiedBy: HQMAIL105.nvidia.com (172.20.187.12) To
+X-ClientProxiedBy: HQMAIL111.nvidia.com (172.20.187.18) To
  HQMAIL107.nvidia.com (172.20.187.13)
 Content-Type: text/plain; charset="utf-8"
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1579123162; bh=GeG6npnwyerPXrXB3bHbzqY7iBJ1oGmlF7ZkUct1x7k=;
+        t=1579124001; bh=87Rlq6x45ruVW7JTVYUJt0mWD3kN4xgsTUgpHaSTwOs=;
         h=X-PGP-Universal:Subject:To:CC:References:X-Nvconfidentiality:From:
          Message-ID:Date:User-Agent:MIME-Version:In-Reply-To:
          X-Originating-IP:X-ClientProxiedBy:Content-Type:Content-Language:
          Content-Transfer-Encoding;
-        b=jj9z8sItAejAXuqLJp407Y0oGvSfSmMgC2Khnl/UaD4X75Jfs+E4VVRGeSQsgj4wP
-         14n675+NVsxapYKvaJVbv9kK8eZuWxvO3Y6Z1FaTdzbTeZYm8ghKmuNIE5C0gACdNX
-         GRKd75x36rcOJr0kw/HdaVzIwMxuti46gF1ZGWWpciXiVKzpgvI3qlfJhfyWO1skXq
-         uplmy/sgWDjhYQkuOFvVaYpZjSy0ueb1q0Sh/SzXH1k9SEC0ZieDiM/hkNzj/S5EwR
-         OOf7dWtMC6wOQv1+ifMLfIwYfX7dbiwP1/6cV/7beAaEJMsZqU2lquKgjSAKnqyNBE
-         3XR6j/+C8nurA==
+        b=dbP5SmA0QfbUlmT548bubiJAkEQguNXb+B22BE0nnic910e/52B3pTFYwo0R9gnOk
+         /mlFxNBraLMyXPTecP1trRDknv0CWyUqRUhn8AvgRKQEt/OrYnrlJ5ltQrtwu2/iZG
+         uXyWe/Tp3/8o2BssD5h12JhA8/Qf+tvLIUVBAfdgHpiHf/vpXBUQ/a29w86sKWsdhS
+         xLP+ysLSXK1OimxyU8GqDxRUN80ueCmWM+W82ScjqhN2l7u6YLSbkEfUVc40jSw+4n
+         1alFBQ4/aOAizIIaeTPZN6p/1uIoYyQqWqSWRALwuOXb5xR9ZMfEIX7FqzbdBDPZRO
+         IYaka2FAJgWiw==
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 1/15/20 7:23 AM, Christoph Hellwig wrote:
-...
+On 1/15/20 7:30 AM, Christoph Hellwig wrote:
+> On Tue, Jan 07, 2020 at 02:45:47PM -0800, John Hubbard wrote:
+>> Introduce pin_user_pages*() variations of get_user_pages*() calls,
+>> and also pin_longterm_pages*() variations.
+>>
+>> For now, these are placeholder calls, until the various call sites
+>> are converted to use the correct get_user_pages*() or
+>> pin_user_pages*() API.
 > 
-> I'm really not sold on this scheme.  Note that I think it is
-> particularly bad, but it also doesn't seem any better than what
-> we had before, and it introduced quite a bit more code.
+> What do the pure placeholders buy us?  The API itself looks ok,
+> but until it actually is properly implemented it doesn't help at
+> all, and we've had all kinds of bad experiences with these sorts
+> of stub APIs.
 > 
 
 Hi Christoph,
 
-All by itself, yes. But the very next patch (which needs a little 
-rework for other reasons, so not included here) needs to reuse some of 
-these functions within __unpin_devmap_managed_user_page():
+Absolutely agreed, and in fact, after spending some time in this area I 
+am getting a much better understanding of just how problematic "this will 
+be used soon" APIs really are. However, this is not quite that case.
 
-    page_is_devmap_managed()
-    free_devmap_managed_page()
+The following things make this different from a "pure placeholder" API:
 
-That patch was posted as part of the v11 series [1], and it did this:
+1) These APIs are all exercised in the following patches in this series, 
+unless I've overlooked one, and
 
-+#ifdef CONFIG_DEV_PAGEMAP_OPS
-+static bool __unpin_devmap_managed_user_page(struct page *page)
-+{
-+	int count;
-+
-+	if (!page_is_devmap_managed(page))
-+		return false;
-+
-+	count = page_ref_sub_return(page, GUP_PIN_COUNTING_BIAS);
-+
-+	__update_proc_vmstat(page, NR_FOLL_PIN_RETURNED, 1);
-+	/*
-+	 * devmap page refcounts are 1-based, rather than 0-based: if
-+	 * refcount is 1, then the page is free and the refcount is
-+	 * stable because nobody holds a reference on the page.
-+	 */
-+	if (count == 1)
-+		free_devmap_managed_page(page);
-+	else if (!count)
-+		__put_page(page);
-+
-+	return true;
-+}
-+#else
-+static bool __unpin_devmap_managed_user_page(struct page *page)
-+{
-+	return false;
-+}
-+#endif /* CONFIG_DEV_PAGEMAP_OPS */
-+
-+/**
-+ * unpin_user_page() - release a dma-pinned page
-+ * @page:            pointer to page to be released
-+ *
-+ * Pages that were pinned via pin_user_pages*() must be released via either
-+ * unpin_user_page(), or one of the unpin_user_pages*() routines. This is so
-+ * that such pages can be separately tracked and uniquely handled. In
-+ * particular, interactions with RDMA and filesystems need special handling.
-+ */
-+void unpin_user_page(struct page *page)
-+{
-+	page = compound_head(page);
-+
-+	/*
-+	 * For devmap managed pages we need to catch refcount transition from
-+	 * GUP_PIN_COUNTING_BIAS to 1, when refcount reach one it means the
-+	 * page is free and we need to inform the device driver through
-+	 * callback. See include/linux/memremap.h and HMM for details.
-+	 */
-+	if (__unpin_devmap_managed_user_page(page))
-+		return;
-+
-+	if (page_ref_sub_and_test(page, GUP_PIN_COUNTING_BIAS))
-+		__put_page(page);
-+
-+	__update_proc_vmstat(page, NR_FOLL_PIN_RETURNED, 1);
-+}
-+EXPORT_SYMBOL(unpin_user_page);
+2) The pages are actually tracked in the very next patch that I want to
+post. That patch was posted as part of the v11 series [1], but 
+Leon Romanovsky reported a problem with it, and so I'm going to add in
+the ability to handle larger "pin" refcounts for the huge page cases.
+
+Meanwhile, I wanted to get these long-simmering simpler preparatory
+patches submitted, because it's clear that the API is unaffected by the
+huge page refcount fix. (That fix will likely use the second struct page of
+the compound page, to count up higher.)
 
 
 [1] https://lore.kernel.org/r/20191216222537.491123-24-jhubbard@nvidia.com  
