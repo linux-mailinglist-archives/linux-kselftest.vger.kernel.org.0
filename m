@@ -2,62 +2,43 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F38413C523
-	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Jan 2020 15:13:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7822513C737
+	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Jan 2020 16:18:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729409AbgAOONI (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 15 Jan 2020 09:13:08 -0500
-Received: from us-smtp-1.mimecast.com ([205.139.110.61]:47458 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1729580AbgAOONG (ORCPT
+        id S1729005AbgAOPS7 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 15 Jan 2020 10:18:59 -0500
+Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:46591 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1728912AbgAOPS7 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 15 Jan 2020 09:13:06 -0500
+        Wed, 15 Jan 2020 10:18:59 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1579097586;
+        s=mimecast20190719; t=1579101538;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=oPe3kFF2Bb1O7X4SloqQNMyAocrzl53edv79XqrSw8w=;
-        b=ecBo0l/ApDxo5jskInlvIudhYPOCMZgJSO4LeG/S0THfea4uw3hNlwdjBKYgAFwWnUbIpk
-        gwVLZPfsqaDGdQWqAcPmthr6sRLPBhmsMUuMU0FBlehrkG2OY2QZPRvgHsDWMQROZOHqYK
-        +mNq1G9LVABbBerX4sBQ8A1NJ2k2Z60=
-Received: from mail-lf1-f69.google.com (mail-lf1-f69.google.com
- [209.85.167.69]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-100-MNY9EbaSPcmA_a9fIgKt8Q-1; Wed, 15 Jan 2020 09:13:04 -0500
-X-MC-Unique: MNY9EbaSPcmA_a9fIgKt8Q-1
-Received: by mail-lf1-f69.google.com with SMTP id q16so3254969lfa.13
-        for <linux-kselftest@vger.kernel.org>; Wed, 15 Jan 2020 06:13:03 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:from:to:cc:date:message-id:in-reply-to
-         :references:user-agent:mime-version:content-transfer-encoding;
-        bh=oPe3kFF2Bb1O7X4SloqQNMyAocrzl53edv79XqrSw8w=;
-        b=GCRvyYzmIEgpX90zv2x7TIBS2fzrfe9dmhUKVj9K+U/rA3HgrZLJPtaCjBvNvJxyUU
-         NPBZXR30FWAqsxVA2fr4Rv3r7Do1sRilj/M1gP8DupCid5ajCURi0pYZtnru8zKVpn/F
-         uHSUBl/0hDs4kEy+CCtjUFyTu40ZaPk9GDDnBVmO7Qi6NzhqfVxxjqu+q6fqUGQTelJX
-         kUYYLKDOvo6bfIfZPz0kZ3rydJBMImsyNs/tfKpQWvLykPkbK5v8ueuWUakHDEcVTwx6
-         0A2A+RR0TGL3WsQ/t9ewu183xNpYFhcUlbcUzZ5tyTEWmHBsUhtlrNyfXDjuOqL3j0zb
-         kJKQ==
-X-Gm-Message-State: APjAAAX6Rh9kRJW/cYB17DiggETOfkSt0Qq6LAOzgYvJIzCr4q95kg2Q
-        UasM0Q830ipbicxubRxvBM+iGrFzAG0DZ4E+cscnOETnnNwIhocI8mo0kjGtdUN0os06z39kbua
-        UFZlVRk1J3aLbTz0uJsD5zTcnyEDl
-X-Received: by 2002:a2e:8145:: with SMTP id t5mr2055261ljg.144.1579097582557;
-        Wed, 15 Jan 2020 06:13:02 -0800 (PST)
-X-Google-Smtp-Source: APXvYqwrg/AW4KpvxAvki+r+HLehAl3nNAsz0zEr6ykcSYmLONYcH6h74z5xLROKfDYU1h5kzRfemw==
-X-Received: by 2002:a2e:8145:: with SMTP id t5mr2055217ljg.144.1579097582258;
-        Wed, 15 Jan 2020 06:13:02 -0800 (PST)
-Received: from alrua-x1.borgediget.toke.dk ([45.145.92.2])
-        by smtp.gmail.com with ESMTPSA id h24sm9348451ljc.84.2020.01.15.06.13.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Jan 2020 06:13:01 -0800 (PST)
-Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-        id BC5CA1808D8; Wed, 15 Jan 2020 15:12:59 +0100 (CET)
-Subject: [PATCH bpf-next v2 10/10] tools/runqslower: Remove tools/lib/bpf from
- include path
-From:   =?utf-8?q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
-To:     Alexei Starovoitov <ast@kernel.org>
-Cc:     Daniel Borkmann <daniel@iogearbox.net>,
+        bh=O28pugdE3ji8Z7d58Dp1KejMSWnJ7EsYgUczW6n+9NY=;
+        b=F69sbxVl2NEsx/ned4ezVnMKCxGPSrNFIiYJ/XZoSnTdymVkEJF/LdY0lMfcbTVUobZo3g
+        H0OWjArCJGolmqd/hXkUbqyvFEWjap7E+Cnue/czGNmt5tFitwkBxSErAeB+mmtFKIYLvV
+        u381+/3cNNLHk0FNETQoFkxhZATMfqw=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-177-q6bYgGs4Pb6_ldebLaXl3g-1; Wed, 15 Jan 2020 10:18:54 -0500
+X-MC-Unique: q6bYgGs4Pb6_ldebLaXl3g-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id F20318F8A0F;
+        Wed, 15 Jan 2020 15:18:49 +0000 (UTC)
+Received: from carbon (ovpn-200-25.brq.redhat.com [10.40.200.25])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id A1E6A66842;
+        Wed, 15 Jan 2020 15:18:26 +0000 (UTC)
+Date:   Wed, 15 Jan 2020 16:18:25 +0100
+From:   Jesper Dangaard Brouer <brouer@redhat.com>
+To:     Toke =?UTF-8?B?SMO4aWxhbmQtSsO4cmdlbnNlbg==?= <toke@redhat.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
         Martin KaFai Lau <kafai@fb.com>,
         Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
         Andrii Nakryiko <andriin@fb.com>,
@@ -65,7 +46,6 @@ Cc:     Daniel Borkmann <daniel@iogearbox.net>,
         Jason Gunthorpe <jgg@ziepe.ca>,
         "David S. Miller" <davem@davemloft.net>,
         Jakub Kicinski <jakub.kicinski@netronome.com>,
-        Jesper Dangaard Brouer <brouer@redhat.com>,
         John Fastabend <john.fastabend@gmail.com>,
         Peter Zijlstra <peterz@infradead.org>,
         Ingo Molnar <mingo@redhat.com>,
@@ -77,42 +57,54 @@ Cc:     Daniel Borkmann <daniel@iogearbox.net>,
         Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org,
         bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-rdma@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        clang-built-linux@googlegroups.com
-Date:   Wed, 15 Jan 2020 15:12:59 +0100
-Message-ID: <157909757970.1192265.2735388097487906951.stgit@toke.dk>
-In-Reply-To: <157909756858.1192265.6657542187065456112.stgit@toke.dk>
+        clang-built-linux@googlegroups.com, brouer@redhat.com
+Subject: Re: [PATCH bpf-next v2 07/10] samples/bpf: Use consistent include
+ paths for libbpf
+Message-ID: <20200115161825.351ebf23@carbon>
+In-Reply-To: <157909757639.1192265.16930011370158657444.stgit@toke.dk>
 References: <157909756858.1192265.6657542187065456112.stgit@toke.dk>
-User-Agent: StGit/0.21
+        <157909757639.1192265.16930011370158657444.stgit@toke.dk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Toke Høiland-Jørgensen <toke@redhat.com>
+On Wed, 15 Jan 2020 15:12:56 +0100
+Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com> wrote:
 
-Since we are now consistently using the bpf/ prefix on #include directives,
-we don't need to include tools/lib/bpf in the include path. Remove it to
-make sure we don't inadvertently introduce new includes without the prefix.
+> From: Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com>
+>=20
+> Fix all files in samples/bpf to include libbpf header files with the bpf/
+> prefix, to be consistent with external users of the library. Also ensure
+> that all includes of exported libbpf header files (those that are exported
+> on 'make install' of the library) use bracketed includes instead of quote=
+d.
+>=20
+> To make sure no new files are introduced that doesn't include the bpf/
+> prefix in its include, remove tools/lib/bpf from the include path entirel=
+y,
+> and use tools/lib instead.
+>=20
+> Fixes: 6910d7d3867a ("selftests/bpf: Ensure bpf_helper_defs.h are taken f=
+rom selftests dir")
+> Signed-off-by: Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com>
 
-Signed-off-by: Toke Høiland-Jørgensen <toke@redhat.com>
----
- tools/bpf/runqslower/Makefile |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+I like this change. Maybe the reason so many samples/bpf/ files
+still included "libbpf.h" was that once-upon-a-time we had a "eBPF mini
+library" in the file samples/bpf/libbpf.h that were included.
 
-diff --git a/tools/bpf/runqslower/Makefile b/tools/bpf/runqslower/Makefile
-index 3b7ae76c8ec4..89338cd16fd2 100644
---- a/tools/bpf/runqslower/Makefile
-+++ b/tools/bpf/runqslower/Makefile
-@@ -5,7 +5,7 @@ LLC := llc
- LLVM_STRIP := llvm-strip
- DEFAULT_BPFTOOL := $(OUTPUT)/sbin/bpftool
- BPFTOOL ?= $(DEFAULT_BPFTOOL)
--LIBBPF_INCLUDE := -I$(abspath ../../lib) -I$(abspath ../../lib/bpf)
-+LIBBPF_INCLUDE := -I$(abspath ../../lib)
- LIBBPF_SRC := $(abspath ../../lib/bpf)
- CFLAGS := -g -Wall
- 
+The file was removed/renamed in:
+ https://git.kernel.org/torvalds/c/8d93045077ae
+
+Acked-by: Jesper Dangaard Brouer <brouer@redhat.com>
+
+--=20
+Best regards,
+  Jesper Dangaard Brouer
+  MSc.CS, Principal Kernel Engineer at Red Hat
+  LinkedIn: http://www.linkedin.com/in/brouer
 
