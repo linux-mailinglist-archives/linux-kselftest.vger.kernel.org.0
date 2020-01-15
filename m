@@ -2,114 +2,209 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D431413BA51
-	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Jan 2020 08:29:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4865213BC33
+	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Jan 2020 10:16:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726100AbgAOH37 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 15 Jan 2020 02:29:59 -0500
-Received: from ozlabs.org ([203.11.71.1]:33237 "EHLO ozlabs.org"
+        id S1729270AbgAOJQM (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 15 Jan 2020 04:16:12 -0500
+Received: from mail.kernel.org ([198.145.29.99]:59300 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726075AbgAOH37 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 15 Jan 2020 02:29:59 -0500
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        id S1726472AbgAOJQM (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 15 Jan 2020 04:16:12 -0500
+Received: from localhost.localdomain (NE2965lan1.rev.em-net.ne.jp [210.141.244.193])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 47yJr25hjfz9sQp;
-        Wed, 15 Jan 2020 18:29:54 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ellerman.id.au;
-        s=201909; t=1579073395;
-        bh=bcwwULLU5QXf1vsaknN6wE7OuZQiR3iZQInThNA9XWw=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=pvTFMpB+5aKR5SALGkOvbL/teJwAOoD2l/jjWjJ/xX8792ket3BJZLD9jGsuRnHZr
-         EXW5kTYkhjpbfWLwL8hObaXzbSKuq+BujBD/YN7XToQ11fjC49y5ICez5dtEHbKTHN
-         0aue/5sMaGE1ITcaVWrDbWaGeGbRfhwc16SzVe+A3vLEpy6MvsGs067t6v6Uc1labb
-         lbecgrBZfjmYFFXTcBznyZhUvDnfIKAnMME63oK81gq1TeDnobAwEe8cOVYG610rLL
-         GANE+n8FSscfk0ZpGUrV/B55FOAzEDSus2r3hCAV37acBo2Gakx4aQJyWHiEcmK2W9
-         EZmXLNs+5JN3Q==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     Sandipan Das <sandipan@linux.ibm.com>, shuahkh@osg.samsung.com,
-        linux-kselftest@vger.kernel.org
-Cc:     linux-arch@vger.kernel.org, fweimer@redhat.com, linux-mm@kvack.org,
-        aneesh.kumar@linux.ibm.com, x86@kernel.org, linuxram@us.ibm.com,
-        mhocko@kernel.org, dave.hansen@intel.com, mingo@redhat.com,
-        msuchanek@suse.de, linuxppc-dev@lists.ozlabs.org,
-        bauerman@linux.ibm.com
-Subject: Re: [PATCH v15 14/23] selftests/vm/pkeys: Fix assertion in test_pkey_alloc_exhaust()
-In-Reply-To: <d82e1652135569cfc38b289f88e39e94d55308ff.1576645161.git.sandipan@linux.ibm.com>
-References: <cover.1576645161.git.sandipan@linux.ibm.com> <d82e1652135569cfc38b289f88e39e94d55308ff.1576645161.git.sandipan@linux.ibm.com>
-Date:   Wed, 15 Jan 2020 17:30:01 +1000
-Message-ID: <87a76p9nye.fsf@mpe.ellerman.id.au>
+        by mail.kernel.org (Postfix) with ESMTPSA id 3EBA820728;
+        Wed, 15 Jan 2020 09:16:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1579079771;
+        bh=pDZYvNJw5rq9PdxCZs8JHhdti04GWgmSBcd5XeHO+hs=;
+        h=From:To:Cc:Subject:Date:From;
+        b=BUHvcob1Z0wPBd7o+iWe2NZAEcTHARM9IfMOK1UX9x6mDSI3tD70Is+m/tB+9P9Dy
+         +96l5EJ+gsdthVNOlhk3sMjPkV65vJijVo4CeHUPQifVG18cLkjtpylzhojDBjnSVj
+         G6E7qvg+qErZh8+EbWB3mcTrXbY6iYxcB5xBn/pI=
+From:   Masami Hiramatsu <mhiramat@kernel.org>
+To:     Shuah Khan <shuah@kernel.org>
+Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        jaswinder.singh@linaro.org, mhiramat@kernel.org
+Subject: [BUGFIX PATCH] selftests: Fix pthread link option
+Date:   Wed, 15 Jan 2020 18:16:07 +0900
+Message-Id: <157907976750.14189.12829891067375600434.stgit@devnote2>
+X-Mailer: git-send-email 2.20.1
+User-Agent: StGit/0.17.1-dirty
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Sandipan Das <sandipan@linux.ibm.com> writes:
-> From: Ram Pai <linuxram@us.ibm.com>
->
-> Some pkeys which are valid on the hardware are reserved
-> and not available for application use. These keys cannot
-> be allocated.
->
-> test_pkey_alloc_exhaust() tries to account for these and
-> has an assertion which validates if all available pkeys
-> have been exahaustively allocated. However, the expression
-> that is currently used is only valid for x86. On powerpc,
-> a pkey is additionally reserved as compared to x86. Hence,
-> the assertion is made to use an arch-specific helper to
-> get the correct count of reserved pkeys.
+To support pthread correctly, it is better to use -pthread
+instead of -lpthread.
 
-The number of reserved keys is at the whim of the
-firmware/hypervisor/kernel.
+Signed-off-by: Masami Hiramatsu <mhiramat@kernel.org>
+---
+ tools/testing/selftests/bpf/Makefile               |    2 +-
+ tools/testing/selftests/membarrier/Makefile        |    2 +-
+ tools/testing/selftests/mqueue/Makefile            |    2 +-
+ tools/testing/selftests/net/Makefile               |    4 ++--
+ .../testing/selftests/powerpc/benchmarks/Makefile  |    4 ++--
+ tools/testing/selftests/powerpc/dscr/Makefile      |    2 +-
+ tools/testing/selftests/powerpc/mm/Makefile        |    2 +-
+ tools/testing/selftests/rseq/Makefile              |    2 +-
+ tools/testing/selftests/rtc/Makefile               |    2 +-
+ tools/testing/selftests/seccomp/Makefile           |    2 +-
+ tools/testing/selftests/timers/Makefile            |    2 +-
+ tools/testing/selftests/vm/Makefile                |    2 +-
+ 12 files changed, 14 insertions(+), 14 deletions(-)
 
-I'm not sure it makes sense to test this exhaustion behaviour, it's
-likely going to break in future.
+diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+index e2fd6f8d579c..419f58c53d12 100644
+--- a/tools/testing/selftests/bpf/Makefile
++++ b/tools/testing/selftests/bpf/Makefile
+@@ -22,7 +22,7 @@ CFLAGS += -g -Wall -O2 $(GENFLAGS) -I$(APIDIR) -I$(LIBDIR) -I$(BPFDIR)	\
+ 	  -I$(GENDIR) -I$(TOOLSDIR) -I$(CURDIR)				\
+ 	  -Dbpf_prog_load=bpf_prog_test_load				\
+ 	  -Dbpf_load_program=bpf_test_load_program
+-LDLIBS += -lcap -lelf -lrt -lpthread
++LDLIBS += -lcap -lelf -lrt -pthread
+ 
+ # Order correspond to 'make run_tests' order
+ TEST_GEN_PROGS = test_verifier test_tag test_maps test_lru_map test_lpm_map test_progs \
+diff --git a/tools/testing/selftests/membarrier/Makefile b/tools/testing/selftests/membarrier/Makefile
+index 34d1c81a2324..19d657d966e3 100644
+--- a/tools/testing/selftests/membarrier/Makefile
++++ b/tools/testing/selftests/membarrier/Makefile
+@@ -1,6 +1,6 @@
+ # SPDX-License-Identifier: GPL-2.0-only
+ CFLAGS += -g -I../../../../usr/include/
+-LDLIBS += -lpthread
++LDLIBS += -pthread
+ 
+ TEST_GEN_PROGS := membarrier_test_single_thread \
+ 		membarrier_test_multi_thread
+diff --git a/tools/testing/selftests/mqueue/Makefile b/tools/testing/selftests/mqueue/Makefile
+index 8a58055fc1f5..9986b778b8b3 100644
+--- a/tools/testing/selftests/mqueue/Makefile
++++ b/tools/testing/selftests/mqueue/Makefile
+@@ -1,6 +1,6 @@
+ # SPDX-License-Identifier: GPL-2.0
+ CFLAGS += -O2
+-LDLIBS = -lrt -lpthread -lpopt
++LDLIBS = -lrt -pthread -lpopt
+ 
+ TEST_GEN_PROGS := mq_open_tests mq_perf_tests
+ 
+diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selftests/net/Makefile
+index a8e04d665b69..6ad8571bb0ed 100644
+--- a/tools/testing/selftests/net/Makefile
++++ b/tools/testing/selftests/net/Makefile
+@@ -25,5 +25,5 @@ KSFT_KHDR_INSTALL := 1
+ include ../lib.mk
+ 
+ $(OUTPUT)/reuseport_bpf_numa: LDLIBS += -lnuma
+-$(OUTPUT)/tcp_mmap: LDFLAGS += -lpthread
+-$(OUTPUT)/tcp_inq: LDFLAGS += -lpthread
++$(OUTPUT)/tcp_mmap: LDFLAGS += -pthread
++$(OUTPUT)/tcp_inq: LDFLAGS += -pthread
+diff --git a/tools/testing/selftests/powerpc/benchmarks/Makefile b/tools/testing/selftests/powerpc/benchmarks/Makefile
+index d40300a65b42..0d7c82d520ce 100644
+--- a/tools/testing/selftests/powerpc/benchmarks/Makefile
++++ b/tools/testing/selftests/powerpc/benchmarks/Makefile
+@@ -11,8 +11,8 @@ $(TEST_GEN_PROGS): ../harness.c
+ 
+ $(OUTPUT)/context_switch: ../utils.c
+ $(OUTPUT)/context_switch: CFLAGS += -maltivec -mvsx -mabi=altivec
+-$(OUTPUT)/context_switch: LDLIBS += -lpthread
++$(OUTPUT)/context_switch: LDLIBS += -pthread
+ 
+-$(OUTPUT)/fork: LDLIBS += -lpthread
++$(OUTPUT)/fork: LDLIBS += -pthread
+ 
+ $(OUTPUT)/exec_target: CFLAGS += -static -nostartfiles
+diff --git a/tools/testing/selftests/powerpc/dscr/Makefile b/tools/testing/selftests/powerpc/dscr/Makefile
+index 5df476364b4d..90c744592d1b 100644
+--- a/tools/testing/selftests/powerpc/dscr/Makefile
++++ b/tools/testing/selftests/powerpc/dscr/Makefile
+@@ -6,6 +6,6 @@ TEST_GEN_PROGS := dscr_default_test dscr_explicit_test dscr_user_test	\
+ top_srcdir = ../../../../..
+ include ../../lib.mk
+ 
+-$(OUTPUT)/dscr_default_test: LDLIBS += -lpthread
++$(OUTPUT)/dscr_default_test: LDLIBS += -pthread
+ 
+ $(TEST_GEN_PROGS): ../harness.c
+diff --git a/tools/testing/selftests/powerpc/mm/Makefile b/tools/testing/selftests/powerpc/mm/Makefile
+index ed1565809d2b..4cda9b0b3dd4 100644
+--- a/tools/testing/selftests/powerpc/mm/Makefile
++++ b/tools/testing/selftests/powerpc/mm/Makefile
+@@ -20,4 +20,4 @@ $(OUTPUT)/large_vm_fork_separation: CFLAGS += -m64
+ $(OUTPUT)/tempfile:
+ 	dd if=/dev/zero of=$@ bs=64k count=1
+ 
+-$(OUTPUT)/tlbie_test: LDLIBS += -lpthread
++$(OUTPUT)/tlbie_test: LDLIBS += -pthread
+diff --git a/tools/testing/selftests/rseq/Makefile b/tools/testing/selftests/rseq/Makefile
+index d6469535630a..3a17f5b74b9c 100644
+--- a/tools/testing/selftests/rseq/Makefile
++++ b/tools/testing/selftests/rseq/Makefile
+@@ -6,7 +6,7 @@ endif
+ 
+ CFLAGS += -O2 -Wall -g -I./ -I../../../../usr/include/ -L./ -Wl,-rpath=./ \
+ 	  $(CLANG_FLAGS)
+-LDLIBS += -lpthread
++LDLIBS += -pthread
+ 
+ # Own dependencies because we only want to build against 1st prerequisite, but
+ # still track changes to header files and depend on shared object.
+diff --git a/tools/testing/selftests/rtc/Makefile b/tools/testing/selftests/rtc/Makefile
+index de9c8566672a..d075ecfbe846 100644
+--- a/tools/testing/selftests/rtc/Makefile
++++ b/tools/testing/selftests/rtc/Makefile
+@@ -1,6 +1,6 @@
+ # SPDX-License-Identifier: GPL-2.0
+ CFLAGS += -O3 -Wl,-no-as-needed -Wall
+-LDFLAGS += -lrt -lpthread -lm
++LDFLAGS += -lrt -pthread -lm
+ 
+ TEST_GEN_PROGS = rtctest
+ 
+diff --git a/tools/testing/selftests/seccomp/Makefile b/tools/testing/selftests/seccomp/Makefile
+index 1760b3e39730..3e35159f709a 100644
+--- a/tools/testing/selftests/seccomp/Makefile
++++ b/tools/testing/selftests/seccomp/Makefile
+@@ -9,7 +9,7 @@ BINARIES := seccomp_bpf seccomp_benchmark
+ CFLAGS += -Wl,-no-as-needed -Wall
+ 
+ seccomp_bpf: seccomp_bpf.c ../kselftest_harness.h
+-	$(CC) $(CFLAGS) $(LDFLAGS) $< -lpthread -o $@
++	$(CC) $(CFLAGS) $(LDFLAGS) $< -pthread -o $@
+ 
+ TEST_PROGS += $(BINARIES)
+ EXTRA_CLEAN := $(BINARIES)
+diff --git a/tools/testing/selftests/timers/Makefile b/tools/testing/selftests/timers/Makefile
+index 7656c7ce79d9..70461befa338 100644
+--- a/tools/testing/selftests/timers/Makefile
++++ b/tools/testing/selftests/timers/Makefile
+@@ -1,6 +1,6 @@
+ # SPDX-License-Identifier: GPL-2.0
+ CFLAGS += -O3 -Wl,-no-as-needed -Wall
+-LDLIBS += -lrt -lpthread -lm
++LDLIBS += -lrt -pthread -lm
+ 
+ # these are all "safe" tests that don't modify
+ # system time or require escalated privileges
+diff --git a/tools/testing/selftests/vm/Makefile b/tools/testing/selftests/vm/Makefile
+index 7f9a8a8c31da..afb35febd7b6 100644
+--- a/tools/testing/selftests/vm/Makefile
++++ b/tools/testing/selftests/vm/Makefile
+@@ -31,6 +31,6 @@ TEST_FILES := test_vmalloc.sh
+ KSFT_KHDR_INSTALL := 1
+ include ../lib.mk
+ 
+-$(OUTPUT)/userfaultfd: LDLIBS += -lpthread
++$(OUTPUT)/userfaultfd: LDLIBS += -pthread
+ 
+ $(OUTPUT)/mlock-random-test: LDLIBS += -lcap
 
-If you do want to test it you should at least move patch 21 prior to
-this one.
-
-cheers
-
-> cc: Dave Hansen <dave.hansen@intel.com>
-> cc: Florian Weimer <fweimer@redhat.com>
-> Signed-off-by: Ram Pai <linuxram@us.ibm.com>
-> Signed-off-by: Sandipan Das <sandipan@linux.ibm.com>
-> ---
->  tools/testing/selftests/vm/protection_keys.c | 11 ++++++++++-
->  1 file changed, 10 insertions(+), 1 deletion(-)
->
-> diff --git a/tools/testing/selftests/vm/protection_keys.c b/tools/testing/selftests/vm/protection_keys.c
-> index 1920bca84def..8d90cfe2c9bd 100644
-> --- a/tools/testing/selftests/vm/protection_keys.c
-> +++ b/tools/testing/selftests/vm/protection_keys.c
-> @@ -1152,6 +1152,7 @@ void test_pkey_alloc_exhaust(int *ptr, u16 pkey)
->  	dprintf3("%s()::%d\n", __func__, __LINE__);
->  
->  	/*
-> +	 * On x86:
->  	 * There are 16 pkeys supported in hardware.  Three are
->  	 * allocated by the time we get here:
->  	 *   1. The default key (0)
-> @@ -1159,8 +1160,16 @@ void test_pkey_alloc_exhaust(int *ptr, u16 pkey)
->  	 *   3. One allocated by the test code and passed in via
->  	 *      'pkey' to this function.
->  	 * Ensure that we can allocate at least another 13 (16-3).
-> +	 *
-> +	 * On powerpc:
-> +	 * There are either 5 or 32 pkeys supported in hardware
-> +	 * depending on the page size (4K or 64K). Four are
-> +	 * allocated by the time we get here. This includes
-> +	 * pkey-0, pkey-1, exec-only pkey and the one allocated
-> +	 * by the test code.
-> +	 * Ensure that we can allocate the remaining.
->  	 */
-> -	pkey_assert(i >= NR_PKEYS-3);
-> +	pkey_assert(i >= (NR_PKEYS - get_arch_reserved_keys() - 1));
->  
->  	for (i = 0; i < nr_allocated_pkeys; i++) {
->  		err = sys_pkey_free(allocated_pkeys[i]);
-> -- 
-> 2.17.1
