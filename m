@@ -2,203 +2,161 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AC84813CFCE
-	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Jan 2020 23:11:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C783213CFDD
+	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Jan 2020 23:11:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729878AbgAOWJu (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 15 Jan 2020 17:09:50 -0500
-Received: from hqnvemgate24.nvidia.com ([216.228.121.143]:18556 "EHLO
-        hqnvemgate24.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729016AbgAOWJu (ORCPT
+        id S1730590AbgAOWKg (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 15 Jan 2020 17:10:36 -0500
+Received: from us-smtp-2.mimecast.com ([205.139.110.61]:45533 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1729160AbgAOWKe (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 15 Jan 2020 17:09:50 -0500
-Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate24.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5e1f8d750000>; Wed, 15 Jan 2020 14:08:53 -0800
-Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate101.nvidia.com (PGP Universal service);
-  Wed, 15 Jan 2020 14:09:49 -0800
-X-PGP-Universal: processed;
-        by hqpgpgate101.nvidia.com on Wed, 15 Jan 2020 14:09:49 -0800
-Received: from rcampbell-dev.nvidia.com (10.124.1.5) by HQMAIL107.nvidia.com
- (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Wed, 15 Jan
- 2020 22:09:47 +0000
-Subject: Re: [PATCH v6 5/6] nouveau: use new mmu interval notifiers
-To:     Jason Gunthorpe <jgg@mellanox.com>
-CC:     "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "nouveau@lists.freedesktop.org" <nouveau@lists.freedesktop.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        Jerome Glisse <jglisse@redhat.com>,
-        "John Hubbard" <jhubbard@nvidia.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Ben Skeggs <bskeggs@redhat.com>, Shuah Khan <shuah@kernel.org>
-References: <20200113224703.5917-1-rcampbell@nvidia.com>
- <20200113224703.5917-6-rcampbell@nvidia.com>
- <20200114125957.GO20978@mellanox.com>
-X-Nvconfidentiality: public
-From:   Ralph Campbell <rcampbell@nvidia.com>
-Message-ID: <5845f50e-8bc0-8068-ee21-4f910beb1255@nvidia.com>
-Date:   Wed, 15 Jan 2020 14:09:47 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.1.0
+        Wed, 15 Jan 2020 17:10:34 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1579126232;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=LWQgt+DnfJs1UobRSdbBwxSCnfmXDMiH/Jey6CvGz7s=;
+        b=OaRv6SAkpYDpRFht+xtVrulUMxOjOfz/SZykAPzpw26kCEVr16fYkXJFbHrzcq9Rjui2T/
+        yGErWNoBEbKLOMs+scxO0gnkAtL1oOCiMt11glfJelV/QcQQkrx9J2OwguJL0cxXSJsEMI
+        8Yb2AjS58/fslAcOw9nbmufS6APtZGg=
+Received: from mail-lj1-f197.google.com (mail-lj1-f197.google.com
+ [209.85.208.197]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-336-8k6nsn4oNOaqOZm2VEjp7w-1; Wed, 15 Jan 2020 17:10:31 -0500
+X-MC-Unique: 8k6nsn4oNOaqOZm2VEjp7w-1
+Received: by mail-lj1-f197.google.com with SMTP id z17so4454916ljz.2
+        for <linux-kselftest@vger.kernel.org>; Wed, 15 Jan 2020 14:10:31 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version:content-transfer-encoding;
+        bh=LWQgt+DnfJs1UobRSdbBwxSCnfmXDMiH/Jey6CvGz7s=;
+        b=cRApXVdYQGijyF79O6v6vFqM4AsYPdob+44FOtRskpOOhDggLkUv/srwotJtSHBaPQ
+         cPCRnN3ocf8AtHikZQbdsuRxgcLDH7Z+hk7wYWzAL4odJXBr87n4FGD2UfPEgK5T8Swd
+         0v1KeEq4hQ5yv5HYPDotLTjNrAuSI6j5FiF4ZsL2yITavh8aXJjM7wXWMoeeLAS7dCp9
+         hyIF5Ha/pmkWBwLx+MwrlfrS8U7KbyVD0u2MkdOjHkVdzf/MF1NBqytaOqFCbYsU28pl
+         F9pyClqIjMEnyUuOSw+ET1t73EnJ0rEBGPJLlDFUyT+HbL/xmiZwm3G6isbNzUpDxPT1
+         VvgQ==
+X-Gm-Message-State: APjAAAX8NZNxmb+DmcZCbY/rZCVr+7B4gDC92Kt62Vp8q1v1+iS0Bt3T
+        Wl2swRSiD8ntyBZ3rhpNuEfxF6XDiZVPSsvK629J1xVOpb6K4R9aSbd+ueWQCwYld6O5zPYL5Vl
+        mshly5dotzgD5JcP+tcaCfFmPIUg4
+X-Received: by 2002:a05:651c:102c:: with SMTP id w12mr309537ljm.53.1579126230101;
+        Wed, 15 Jan 2020 14:10:30 -0800 (PST)
+X-Google-Smtp-Source: APXvYqwrMe2Yt2YfYiFKeLwwCIZhiM2ePXslA9DkgAL9gm4Pt7dVBs/ecmLwBp5r7JQsjiefGPMruw==
+X-Received: by 2002:a05:651c:102c:: with SMTP id w12mr309523ljm.53.1579126229909;
+        Wed, 15 Jan 2020 14:10:29 -0800 (PST)
+Received: from alrua-x1.borgediget.toke.dk ([2a0c:4d80:42:443::2])
+        by smtp.gmail.com with ESMTPSA id y1sm9734405ljm.12.2020.01.15.14.10.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Jan 2020 14:10:29 -0800 (PST)
+Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
+        id A09761804D6; Wed, 15 Jan 2020 23:10:28 +0100 (CET)
+From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        Andrii Nakryiko <andriin@fb.com>,
+        Doug Ledford <dledford@redhat.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <jakub.kicinski@netronome.com>,
+        Jesper Dangaard Brouer <brouer@redhat.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        linux-rdma@vger.kernel.org,
+        "open list\:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        clang-built-linux@googlegroups.com
+Subject: Re: [PATCH bpf-next v2 00/10] tools: Use consistent libbpf include paths everywhere
+In-Reply-To: <CAEf4Bza+dNoD7HbVQGtXBq=raz4DQg0yTShKZHRbCo+zHYfoSA@mail.gmail.com>
+References: <157909756858.1192265.6657542187065456112.stgit@toke.dk> <CAEf4Bza+dNoD7HbVQGtXBq=raz4DQg0yTShKZHRbCo+zHYfoSA@mail.gmail.com>
+X-Clacks-Overhead: GNU Terry Pratchett
+Date:   Wed, 15 Jan 2020 23:10:28 +0100
+Message-ID: <87o8v4tlpn.fsf@toke.dk>
 MIME-Version: 1.0
-In-Reply-To: <20200114125957.GO20978@mellanox.com>
-X-Originating-IP: [10.124.1.5]
-X-ClientProxiedBy: HQMAIL101.nvidia.com (172.20.187.10) To
- HQMAIL107.nvidia.com (172.20.187.13)
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1579126133; bh=MrPAo3JYk8FBujvLNtKq6DWwwZ/JG+mRPmzFu/yBjJw=;
-        h=X-PGP-Universal:Subject:To:CC:References:X-Nvconfidentiality:From:
-         Message-ID:Date:User-Agent:MIME-Version:In-Reply-To:
-         X-Originating-IP:X-ClientProxiedBy:Content-Type:Content-Language:
-         Content-Transfer-Encoding;
-        b=KCgZjjbOGVCpUcfnChF384KmkaGikg8T6aZB4wVHsbXn2C1/0pliAetYAxMgTQMxD
-         B8vI2r9Qjv0bebJ9qS1kn0pd8cz4DE+kdv8w/JUkHof0rlVOouItkJRdwz8sjDOF9J
-         yHHiUVDAENAhVABED5w96PCfcvNcGIMS1+C8RqSjhzNhSXeBFRLndK7yGHhnP0hxEB
-         RPu6UY+B29DHxqrWT8mmwyVbptzp3vhtO3RRPBv8epmEnBWwFC5TCvJGTK+5KMOZmP
-         y1by/vT2WwyWkWLuhsg5hHukOep6w2LcD2b6p4l2Tx2rrjqpELpD9l7ehajJyG8mG0
-         CojieB3MGsX5g==
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+Andrii Nakryiko <andrii.nakryiko@gmail.com> writes:
 
-On 1/14/20 5:00 AM, Jason Gunthorpe wrote:
-> On Mon, Jan 13, 2020 at 02:47:02PM -0800, Ralph Campbell wrote:
->>   void
->>   nouveau_svmm_fini(struct nouveau_svmm **psvmm)
->>   {
->>   	struct nouveau_svmm *svmm = *psvmm;
->> +	struct mmu_interval_notifier *mni;
->> +
->>   	if (svmm) {
->>   		mutex_lock(&svmm->mutex);
->> +		while (true) {
->> +			mni = mmu_interval_notifier_find(svmm->mm,
->> +					&nouveau_svm_mni_ops, 0UL, ~0UL);
->> +			if (!mni)
->> +				break;
->> +			mmu_interval_notifier_put(mni);
-> 
-> Oh, now I really don't like the name 'put'. It looks like mni is
-> refcounted here, and it isn't. put should be called 'remove_deferred'
+> On Wed, Jan 15, 2020 at 6:13 AM Toke H=C3=B8iland-J=C3=B8rgensen <toke@re=
+dhat.com> wrote:
+>>
+>> The recent commit 6910d7d3867a ("selftests/bpf: Ensure bpf_helper_defs.h=
+ are
+>> taken from selftests dir") broke compilation against libbpf if it is ins=
+talled
+>> on the system, and $INCLUDEDIR/bpf is not in the include path.
+>>
+>> Since having the bpf/ subdir of $INCLUDEDIR in the include path has neve=
+r been a
+>> requirement for building against libbpf before, this needs to be fixed. =
+One
+>> option is to just revert the offending commit and figure out a different=
+ way to
+>> achieve what it aims for. However, this series takes a different approac=
+h:
+>> Changing all in-tree users of libbpf to consistently use a bpf/ prefix in
+>> #include directives for header files from libbpf.
+>>
+>> This turns out to be a somewhat invasive change in the number of files t=
+ouched;
+>> however, the actual changes to files are fairly trivial (most of them ar=
+e simply
+>> made with 'sed'). Also, this approach has the advantage that it makes ex=
+ternal
+>> and internal users consistent with each other, and ensures no future cha=
+nges
+>> breaks things in the same way as the commit referenced above.
+>>
+>> The series is split to make the change for one tool subdir at a time, wh=
+ile
+>> trying not to break the build along the way. It is structured like this:
+>>
+>> - Patch 1-2: Trivial fixes to Makefiles for issues I discovered while ch=
+anging
+>>   the include paths.
+>>
+>> - Patch 3-7: Change the include directives to use the bpf/ prefix, and u=
+pdates
+>>   Makefiles to make sure tools/lib/ is part of the include path, but wit=
+hout
+>>   removing tools/lib/bpf
+>>
+>> - Patch 8: Change the bpf_helpers file in libbpf itself to use the bpf/ =
+prefix
+>>   when including (the original source of breakage).
+>>
+>> - Patch 9-10: Remove tools/lib/bpf from include paths to make sure we do=
+n't
+>>   inadvertently re-introduce includes without the bpf/ prefix.
+>>
+>> ---
+>
+> Thanks, Toke, for this clean up! I tested it locally for my set up:
+> runqslower, bpftool, libbpf, and selftests all build fine, so it looks
+> good. My only concern is with selftests/bpf Makefile, we shouldn't
+> build anything outside of selftests/bpf. Let's fix that. Thanks!
 
-OK.
+Great, thanks for testing! I'll fix up your comments (and Alexei's) and
+submit another version tomorrow.
 
-> And then you also need a way to barrier this scheme on driver unload.
-
-Good point. I can add something like
-void mmu_interval_notifier_synchronize(struct mm_struct *mm)
-that waits for deferred operations to complete similar to
-mmu_interval_read_begin().
-
->> +		}
->>   		svmm->vmm = NULL;
->>   		mutex_unlock(&svmm->mutex);
->> -		mmu_notifier_put(&svmm->notifier);
-> 
-> While here it was actually a refcount.
-> 
->> +static void nouveau_svmm_do_unmap(struct mmu_interval_notifier *mni,
->> +				 const struct mmu_notifier_range *range)
->> +{
->> +	struct svmm_interval *smi =
->> +		container_of(mni, struct svmm_interval, notifier);
->> +	struct nouveau_svmm *svmm = smi->svmm;
->> +	unsigned long start = mmu_interval_notifier_start(mni);
->> +	unsigned long last = mmu_interval_notifier_last(mni);
-> 
-> This whole algorithm only works if it is protected by the read side of
-> the interval tree lock. Deserves at least a comment if not an
-> assertion too.
-
-This is called from the invalidate() callback and while holding the
-driver page table lock so the struct mmu_interval_notifier and
-the interval tree can't change.
-I will add comments for v7.
-
->>   static int nouveau_range_fault(struct nouveau_svmm *svmm,
->>   			       struct nouveau_drm *drm, void *data, u32 size,
->> -			       u64 *pfns, struct svm_notifier *notifier)
->> +			       u64 *pfns, u64 start, u64 end)
->>   {
->>   	unsigned long timeout =
->>   		jiffies + msecs_to_jiffies(HMM_RANGE_DEFAULT_TIMEOUT);
->>   	/* Have HMM fault pages within the fault window to the GPU. */
->>   	struct hmm_range range = {
->> -		.notifier = &notifier->notifier,
->> -		.start = notifier->notifier.interval_tree.start,
->> -		.end = notifier->notifier.interval_tree.last + 1,
->> +		.start = start,
->> +		.end = end,
->>   		.pfns = pfns,
->>   		.flags = nouveau_svm_pfn_flags,
->>   		.values = nouveau_svm_pfn_values,
->> +		.default_flags = 0,
->> +		.pfn_flags_mask = ~0UL,
->>   		.pfn_shift = NVIF_VMM_PFNMAP_V0_ADDR_SHIFT,
->>   	};
->> -	struct mm_struct *mm = notifier->notifier.mm;
->> +	struct mm_struct *mm = svmm->mm;
->>   	long ret;
->>   
->>   	while (true) {
->>   		if (time_after(jiffies, timeout))
->>   			return -EBUSY;
->>   
->> -		range.notifier_seq = mmu_interval_read_begin(range.notifier);
->> -		range.default_flags = 0;
->> -		range.pfn_flags_mask = -1UL;
->>   		down_read(&mm->mmap_sem);
-> 
-> mmap sem doesn't have to be held for the interval search, and again we
-> have lifetime issues with the membership here.
-
-I agree mmap_sem isn't needed for the interval search, it is needed if
-the search doesn't find a registered interval and one needs to be created
-to cover the underlying VMA. If an arbitrary size interval was created
-instead, then mmap_sem wouldn't be needed.
-I don't understand the lifetime/membership issue. The driver is the only thing
-that allocates, inserts, or removes struct mmu_interval_notifier and thus
-completely controls the lifetime.
-
->> +		ret = nouveau_svmm_interval_find(svmm, &range);
->> +		if (ret) {
->> +			up_read(&mm->mmap_sem);
->> +			return ret;
->> +		}
->> +		range.notifier_seq = mmu_interval_read_begin(range.notifier);
->>   		ret = hmm_range_fault(&range, 0);
->>   		up_read(&mm->mmap_sem);
->>   		if (ret <= 0) {
-> 
-> I'm still not sure this is a better approach than what ODP does. It
-> looks very expensive on the fault path..
-> 
-> Jason
-> 
-
-ODP doesn't have this problem because users have to call ib_reg_mr()
-before any I/O can happen to the process address space. That is when
-mmu_interval_notifier_insert() / mmu_interval_notifier_remove() can
-be called and the driver doesn't have to worry about the interval
-changing sizes or being removed while I/O is happening.
-For GPU like devices, I'm trying to allow hardware access to any user
-level address without pre-registering it. That means inserting mmu
-interval notifiers for the ranges the GPU page faults on and updating
-the intervals as munmap() calls remove parts of the address space.
-I don't want to register an interval per page so the logical range
-is the underlying VMA.
-
-It isn't that expensive, there is an extra driver lock/unlock as
-part of the lookup and possibly a find_vma() and kmalloc(GFP_ATOMIC)
-for new intervals. Also, the deferred interval updates for munmap().
-Compared to the cost of updating PTEs in the device and GPU fault
-handling, this is minimal overhead.
+-Toke
 
