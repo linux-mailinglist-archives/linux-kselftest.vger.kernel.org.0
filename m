@@ -2,195 +2,95 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8201C13B961
-	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Jan 2020 07:14:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C8DE13BA19
+	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Jan 2020 08:07:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726473AbgAOGOP (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 15 Jan 2020 01:14:15 -0500
-Received: from mail-yw1-f66.google.com ([209.85.161.66]:42774 "EHLO
-        mail-yw1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725962AbgAOGOP (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 15 Jan 2020 01:14:15 -0500
-Received: by mail-yw1-f66.google.com with SMTP id l14so10578022ywj.9
-        for <linux-kselftest@vger.kernel.org>; Tue, 14 Jan 2020 22:14:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=VEBiEWWczDCOsezp9xBUmXOvLcrB5S1wxD0g5MzN8aA=;
-        b=YECmlLyEJydlZuQRbc4ygVEZ22HwLEJpx9ImEnLFgfMbG12BYqnWQll5imuGXxorWz
-         O83fsaCcuui1Mm27iQQNAFiAO3s/g25ffSvXoiUcbkF6eEdOo9wlvn59YGJ9wcbBiEJR
-         lZcIjNCU6E0EaQeX9RKRYXW3WKu6/qoaejM8dqk2N+xtr4wydJGMRcYqGvyr6+asqXsf
-         YaSblQBtelLSJwf/rBW5GHAShS4zueLC6ygBAE4NxbuV2F56z2QesIjjtRdwI0+9bvqv
-         +Mt0sSHhC5C1e3wXp1+SHxhaaIL/W+HRymGNyNI10x1z/4b9W6djbnqxXgOAdqMP7MVm
-         Jk+A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=VEBiEWWczDCOsezp9xBUmXOvLcrB5S1wxD0g5MzN8aA=;
-        b=e9CJ9shONmEPZvkEjnhmBGhoSSDxCISU6jKNJ1hBieMCrT2ODFY3tv8RWqbcuOzAXr
-         kiyYd4UxHyQqR6XZVnTbY+QeHeUSKZ1fdEhugrKDyMJ2BcJbZXXy2are8Oo5jfkE0D7n
-         PtoF683LRXeyB1JhlBKY7B2DwkY1Tn1Ua20buEVSDFlkBbVlpLqucuzvZwXQgjIUsRNE
-         p4UynHIxSIUEFd1F9f8uZPBbjLm6+0SO0GT+h99h2m/ce8c1xlzAZSmrFCB/Uxh4dW0D
-         5kmfgLz2IcA4Zdpa9naiIejRkplxVo2twNm43t35FlVC4CuJ8elg7VnK9YbaWt3MtDnQ
-         barQ==
-X-Gm-Message-State: APjAAAVEGZiB0QZaE8kf7pcYZF6+nvwmxySxVsqPYI7XBA9uCZv4hTVu
-        wfBxsSlIyGodUmRrxl3HJSvwoOlBniCGbaebCUxErA==
-X-Google-Smtp-Source: APXvYqyIDJGALzUv2jU87wWn412aAc+Hx6yOxAeVZDKZ9ZgzmBjJ3rI//zWGDtDwWehLrjS1KViM467Xeg474lIfklc=
-X-Received: by 2002:a81:2782:: with SMTP id n124mr20570754ywn.444.1579068853832;
- Tue, 14 Jan 2020 22:14:13 -0800 (PST)
+        id S1728895AbgAOHHg (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 15 Jan 2020 02:07:36 -0500
+Received: from bilbo.ozlabs.org ([203.11.71.1]:50577 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726018AbgAOHHg (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 15 Jan 2020 02:07:36 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 47yJLF03hhz9sPn;
+        Wed, 15 Jan 2020 18:07:32 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ellerman.id.au;
+        s=201909; t=1579072054;
+        bh=L9kSLWKQN9Ac7O0n5HFysdI80JqMt0iOH/uyGGioEIw=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=AVbfvsFXFRwa09UmcuPkgwIDA7TNQ1eBHvd9Ce6ndrU8rB/wRPcogx9X8FzT0oeEy
+         W8rM5IfWS7D52dLKXAxB8Ogy4lr129v2VrRjEbNXy3/DgoZPFiRTLbXsFHqI6Tw/J4
+         0PC5r/aLohSIGBUksmI94VwWNrJtyakj8NL32vGlkXX98zoK/mo2c8+XPHXTJCrP9h
+         z8Avxt6xTmG+rgLRUVkfRoeq9tLg1FS598zG97hjZBxM2C3w8igr4szN9MtRXM2A82
+         /1ZaaiUsGZmZolS08V6p8VeUNVi1dchG8gPQK+wmLUyvxUmjxoIHixlYZHt2ZGZgwe
+         PD03ywRTmcYUQ==
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     Sandipan Das <sandipan@linux.ibm.com>, shuahkh@osg.samsung.com,
+        linux-kselftest@vger.kernel.org
+Cc:     linux-arch@vger.kernel.org, fweimer@redhat.com, linux-mm@kvack.org,
+        aneesh.kumar@linux.ibm.com, x86@kernel.org, linuxram@us.ibm.com,
+        mhocko@kernel.org, dave.hansen@intel.com, mingo@redhat.com,
+        msuchanek@suse.de, linuxppc-dev@lists.ozlabs.org,
+        bauerman@linux.ibm.com
+Subject: Re: [PATCH v15 23/23] selftests: vm: pkeys: Use the correct page size on powerpc
+In-Reply-To: <ff7c288e2a88ccfb3b79be30967646fe5b869683.1576645161.git.sandipan@linux.ibm.com>
+References: <cover.1576645161.git.sandipan@linux.ibm.com> <ff7c288e2a88ccfb3b79be30967646fe5b869683.1576645161.git.sandipan@linux.ibm.com>
+Date:   Wed, 15 Jan 2020 17:07:36 +1000
+Message-ID: <87h80x9ozr.fsf@mpe.ellerman.id.au>
 MIME-Version: 1.0
-References: <20200113164158.15803-1-siddhesh@gotplt.org>
-In-Reply-To: <20200113164158.15803-1-siddhesh@gotplt.org>
-From:   Masami Hiramatsu <masami.hiramatsu@linaro.org>
-Date:   Wed, 15 Jan 2020 15:14:02 +0900
-Message-ID: <CAA93ih1KXO5oSKAB6PmQc6xOw4fX5T+2+zx91BD18YUxL+nWzQ@mail.gmail.com>
-Subject: Re: [PATCH] kselftest: Minimise dependency of get_size on C library interfaces
-To:     Siddhesh Poyarekar <siddhesh@gotplt.org>
-Cc:     linux-kselftest@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
-        Linux kernel mailing list <linux-kernel@vger.kernel.org>,
-        Tim Bird <tim.bird@sony.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi,
+Sandipan Das <sandipan@linux.ibm.com> writes:
+> Both 4K and 64K pages are supported on powerpc. Parts of
+> the selftest code perform alignment computations based on
+> the PAGE_SIZE macro which is currently hardcoded to 64K
+> for powerpc. This causes some test failures on kernels
+> configured with 4K page size.
+>
+> This problem is solved by determining the correct page
+> size during the build process rather than hardcoding it
+> in the header file.
 
-[Cc: Tim Bird]
+Doing it at build time is wrong, the test could be built on a 4K system
+and then run on a 64K system, or vice versa.
 
-2020=E5=B9=B41=E6=9C=8814=E6=97=A5(=E7=81=AB) 1:43 Siddhesh Poyarekar <sidd=
-hesh@gotplt.org>:
+You should just use getpagesize() at runtime.
 
->
-> It was observed[1] on arm64 that __builtin_strlen led to an infinite
-> loop in the get_size selftest.  This is because __builtin_strlen (and
-> other builtins) may sometimes result in a call to the C library
-> function.  The C library implementation of strlen uses an IFUNC
-> resolver to load the most efficient strlen implementation for the
-> underlying machine and hence has a PLT indirection even for static
-> binaries.  Because this binary avoids the C library startup routines,
-> the PLT initialization never happens and hence the program gets stuck
-> in an infinite loop.
->
-> On x86_64 the __builtin_strlen just happens to expand inline and avoid
-> the call but that is not always guaranteed.
->
-> Further, while testing on x86_64 (Fedora 31), it was observed that the
-> test also failed with a segfault inside write() because the generated
-> code for the write function in glibc seems to access TLS before the
-> syscall (probably due to the cancellation point check) and fails
-> because TLS is not initialised.
->
-> To mitigate these problems, this patch reduces the interface with the
-> C library to just the syscall function.  The syscall function still
-> sets errno on failure, which is undesirable but for now it only
-> affects cases where syscalls fail.
->
-> [1] https://bugs.linaro.org/show_bug.cgi?id=3D5479
->
+cheers
 
-Thank you for the fix! I confirmed this fixes the issue.
-
-----
-root@devnote2:/opt/kselftest/size# ./get_size
-TAP version 13
-# Testing system size.
-ok 1 get runtime memory use
-# System runtime memory report (units in Kilobytes):
- ---
- Total:  16085116
- Free:   2042880
- Buffer: 814052
- In use: 13228184
- ...
-1..1
-----
-
-Tested-by: Masami Hiramatsu <masami.hiramatsu@linaro.org>
-
-
-> Signed-off-by: Siddhesh Poyarekar <siddhesh@gotplt.org>
-> Reported-by: Masami Hiramatsu <masami.hiramatsu@linaro.org>
-> ---
->  tools/testing/selftests/size/get_size.c | 24 ++++++++++++++++++------
->  1 file changed, 18 insertions(+), 6 deletions(-)
->
-> diff --git a/tools/testing/selftests/size/get_size.c b/tools/testing/self=
-tests/size/get_size.c
-> index d4b59ab979a0..f55943b6d1e2 100644
-> --- a/tools/testing/selftests/size/get_size.c
-> +++ b/tools/testing/selftests/size/get_size.c
-> @@ -12,23 +12,35 @@
->   * own execution.  It also attempts to have as few dependencies
->   * on kernel features as possible.
->   *
-> - * It should be statically linked, with startup libs avoided.
-> - * It uses no library calls, and only the following 3 syscalls:
-> + * It should be statically linked, with startup libs avoided.  It uses
-> + * no library calls except the syscall() function for the following 3
-> + * syscalls:
->   *   sysinfo(), write(), and _exit()
->   *
->   * For output, it avoids printf (which in some C libraries
->   * has large external dependencies) by  implementing it's own
->   * number output and print routines, and using __builtin_strlen()
-> + *
-> + * The test may crash if any of the above syscalls fails because in some
-> + * libc implementations (e.g. the GNU C Library) errno is saved in
-> + * thread-local storage, which does not get initialized due to avoiding
-> + * startup libs.
->   */
->
->  #include <sys/sysinfo.h>
->  #include <unistd.h>
-> +#include <sys/syscall.h>
->
->  #define STDOUT_FILENO 1
->
->  static int print(const char *s)
->  {
-> -       return write(STDOUT_FILENO, s, __builtin_strlen(s));
-> +       size_t len =3D 0;
+> diff --git a/tools/testing/selftests/vm/Makefile b/tools/testing/selftests/vm/Makefile
+> index 4e9c741be6af..ada3a67eaac6 100644
+> --- a/tools/testing/selftests/vm/Makefile
+> +++ b/tools/testing/selftests/vm/Makefile
+> @@ -4,6 +4,10 @@ uname_M := $(shell uname -m 2>/dev/null || echo not)
+>  ARCH ?= $(shell echo $(uname_M) | sed -e 's/aarch64.*/arm64/')
+>  
+>  CFLAGS = -Wall -I ../../../../usr/include $(EXTRA_CFLAGS)
+> +ifneq (,$(filter $(ARCH), ppc64 ppc64le))
+> +protection_keys: EXTRA_CFLAGS += -DPAGE_SIZE=$(shell getconf PAGESIZE)
+> +endif
 > +
-> +       while (s[len] !=3D '\0')
-> +               len++;
-> +
-> +       return syscall(SYS_write, STDOUT_FILENO, s, len);
->  }
->
->  static inline char *num_to_str(unsigned long num, char *buf, int len)
-> @@ -80,12 +92,12 @@ void _start(void)
->         print("TAP version 13\n");
->         print("# Testing system size.\n");
->
-> -       ccode =3D sysinfo(&info);
-> +       ccode =3D syscall(SYS_sysinfo, &info);
->         if (ccode < 0) {
->                 print("not ok 1");
->                 print(test_name);
->                 print(" ---\n reason: \"could not get sysinfo\"\n ...\n")=
-;
-> -               _exit(ccode);
-> +               syscall(SYS_exit, ccode);
->         }
->         print("ok 1");
->         print(test_name);
-> @@ -101,5 +113,5 @@ void _start(void)
->         print(" ...\n");
->         print("1..1\n");
->
-> -       _exit(0);
-> +       syscall(SYS_exit, 0);
->  }
-> --
-> 2.24.1
->
-
-
---
-Masami Hiramatsu
+>  LDLIBS = -lrt
+>  TEST_GEN_FILES = compaction_test
+>  TEST_GEN_FILES += gup_benchmark
+> diff --git a/tools/testing/selftests/vm/pkey-powerpc.h b/tools/testing/selftests/vm/pkey-powerpc.h
+> index 3cd8e03fd640..07fa9f529014 100644
+> --- a/tools/testing/selftests/vm/pkey-powerpc.h
+> +++ b/tools/testing/selftests/vm/pkey-powerpc.h
+> @@ -36,7 +36,6 @@
+>  					     pkey-31 and exec-only key */
+>  #define PKEY_BITS_PER_PKEY	2
+>  #define HPAGE_SIZE		(1UL << 24)
+> -#define PAGE_SIZE		(1UL << 16)
+>  #define pkey_reg_t		u64
+>  #define PKEY_REG_FMT		"%016lx"
+>  
+> -- 
+> 2.17.1
