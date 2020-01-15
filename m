@@ -2,53 +2,53 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EC8013CAD5
-	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Jan 2020 18:22:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E448413CB3D
+	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Jan 2020 18:44:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727016AbgAORWO (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 15 Jan 2020 12:22:14 -0500
-Received: from mail-qk1-f193.google.com ([209.85.222.193]:46686 "EHLO
-        mail-qk1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726574AbgAORWO (ORCPT
+        id S1728896AbgAORof (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 15 Jan 2020 12:44:35 -0500
+Received: from mail-qk1-f196.google.com ([209.85.222.196]:42857 "EHLO
+        mail-qk1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726574AbgAORoe (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 15 Jan 2020 12:22:14 -0500
-Received: by mail-qk1-f193.google.com with SMTP id r14so16340078qke.13;
-        Wed, 15 Jan 2020 09:22:13 -0800 (PST)
+        Wed, 15 Jan 2020 12:44:34 -0500
+Received: by mail-qk1-f196.google.com with SMTP id z14so16438752qkg.9;
+        Wed, 15 Jan 2020 09:44:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc:content-transfer-encoding;
-        bh=c+q9bObKfV/TNxL1HH2wA5LqldoKCgE44YTN9MzEObM=;
-        b=GrMEzUhQn0zT6crSejZhHzxJ565zwTFsxUR9ki86EyRy2cx7HvDN74IZyaV6aroql8
-         K3fgFCmV1hnJaRrk6iJf0Tg94tPjQrxxg4vuKsRva69odUjEQ4f4j2772ygYz+WmMFhL
-         cjrTGWoirgaXuP/24safNCO032yWaugbswo5hvRBFFN/4Ck+Dc1U7D+bf2ToYXx6Josa
-         W3ljqEgmBLdUSYqIwoM7CATcCYyJqse5xecvkBpyk5y2UoWJKzXNJU9v8zFVtbs8/AbH
-         ctM1VPLWN5+dHqy0WrXYem4qJXV+5LScvIQix21l+e/GP2j4mnZa2P2a72TqKUP5PgvQ
-         vx0Q==
+        bh=m6xoPR2neNY7jGKcJU1Zrb+VdDyMT3eChB1zKABN77U=;
+        b=Lydwo7gZw7DHX1UX8PkZjddlzWtbrHgVeBQKfmcbrQQ2zg8nr/TdBbQ0YxU/giO6aR
+         0TtxdBx4nVycooprexn/hDVNpFgiO3kl/AZtSSRBWfN8PJBDtoAaGV8NXDjphuCPPBxp
+         sZ3t/cssjIigtX52RPxYRbfFD/41u4kxFdKs3hbXB5G3TAUn1bWfkWEXLxEMmvxxZtHH
+         +hOLJto3HpzQxG8aOR1mIKwluA8te3ndO6L3iXF0XJAVtm/APh5WX5pLxsKq8VzJ9HmM
+         x43V4757USzVgJFMzq0KU3H6VMStTxObsDnscBV90st+SHjNON+mpEBnSv8/WF2CaojS
+         7vbQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc:content-transfer-encoding;
-        bh=c+q9bObKfV/TNxL1HH2wA5LqldoKCgE44YTN9MzEObM=;
-        b=tDXIFNgiMY6acOiV1NpgEXjQR6zYvEA0TSOfdkFhAxyGbodDwF7z41CrrMr9e3ReXw
-         Mgo8bR9mHKY2JW/A37gx7kteRqcMm2xkmLCe8/qvec1Vl9992g4oH0CNmHUdGvR42FL9
-         Lwpp63vjegzdjtX+pIzWxI0qUIENRreYVTHrClAB71T0ZR77+mKUv1gdABwJAWlxyVgD
-         6XbAxrG5p6EIB0Dgv2Qa6Xll7Zw4L1uJdKYXwPJzg8klzXjp1SejJErhoXE1ef+woECI
-         wNPU6ZyczaePQE4s5bnyN27rBh4UW3D0ujaRMNrV22ubQNRwzvDDG7/TuwfTHwBVzZUm
-         vggA==
-X-Gm-Message-State: APjAAAVmrvtqVMgfGrycNLtD1ciZttIyyrvkVL0sTroVprZAzeXsQiQP
-        4gb/HUOdp5SZ18k0sD2yn3CSrZRLdK06Cm3ASlY=
-X-Google-Smtp-Source: APXvYqyScdlmdVrGF9w3giFftAWTK3e0Gn2ZeH9X7LVvi8//1y3KSjgGhLXpszFvMNhgWxx4uor59cXxWZRukp51R/I=
-X-Received: by 2002:a05:620a:5ae:: with SMTP id q14mr24418928qkq.437.1579108932557;
- Wed, 15 Jan 2020 09:22:12 -0800 (PST)
+        bh=m6xoPR2neNY7jGKcJU1Zrb+VdDyMT3eChB1zKABN77U=;
+        b=o/xVT8Tj9vMo44AepvlwbW84JKFRXKlHle20cu1RGpjPqxwSSxmhTGIVDbBmmPAE8M
+         YqLnr50OQ8+15ahAVFyuesLbYDEgyGod7qDtKlXMx3FcPWOs3vr01pEhRtlHw97abq+2
+         3dWcRG5BM70GeIn/zEdwinSsQD4uc0a4pkkdpdSxIW3+Aiif5pK+0ySfeojeIBdkV6xg
+         +NbQxNKxYbvtFFX3nuXnhyHtIVlCAuxI0i8K6peI+9OSvHfdcLNRCEnJKC8X4WP01oXI
+         GUJakXeasojiyDHmv7+E9HLrW1vGAthEWpSOyix9vnZLfwLsc2CCBce18tqPmFQrGY6S
+         oqSA==
+X-Gm-Message-State: APjAAAVko4lL37oIC5cdyysbTEBK6RFFd1Ue3ij6jRvLC1baA/TtEc2d
+        L1dgd2u5l2LEDtGH8gRUrw1VSvgjtmDRqW08MDA=
+X-Google-Smtp-Source: APXvYqzVE7hG98oGxZ/GsYNMIScGI3tkchCjPm5Bw57HzNx39uCyOLh6ur5DFPK7G8zjO1kCh1N9vis1zB3NdNxq8Vw=
+X-Received: by 2002:a05:620a:14a2:: with SMTP id x2mr28882285qkj.36.1579110273560;
+ Wed, 15 Jan 2020 09:44:33 -0800 (PST)
 MIME-Version: 1.0
-References: <157909756858.1192265.6657542187065456112.stgit@toke.dk> <157909757860.1192265.1725940708658939712.stgit@toke.dk>
-In-Reply-To: <157909757860.1192265.1725940708658939712.stgit@toke.dk>
+References: <157909756858.1192265.6657542187065456112.stgit@toke.dk> <157909757421.1192265.7677168164515639742.stgit@toke.dk>
+In-Reply-To: <157909757421.1192265.7677168164515639742.stgit@toke.dk>
 From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Wed, 15 Jan 2020 09:22:01 -0800
-Message-ID: <CAEf4BzZ2jAQPKzzp+NhWXbUFcfdcXs+akFSY4O0JhabJy=9vag@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 09/10] selftests: Remove tools/lib/bpf from
- include path
+Date:   Wed, 15 Jan 2020 09:44:22 -0800
+Message-ID: <CAEf4BzZO4yV61zwjiU5fhARCSBqDDtVx+GmLfRueXFS43BPAhw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2 05/10] bpftool: Use consistent include paths
+ for libbpf
 To:     =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>
 Cc:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
@@ -82,130 +82,90 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Jan 15, 2020 at 6:16 AM Toke H=C3=B8iland-J=C3=B8rgensen <toke@redh=
+On Wed, Jan 15, 2020 at 6:14 AM Toke H=C3=B8iland-J=C3=B8rgensen <toke@redh=
 at.com> wrote:
 >
 > From: Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com>
 >
-> To make sure no new files are introduced that doesn't include the bpf/
-> prefix in its #include, remove tools/lib/bpf from the include path
-> entirely, and use tools/lib instead. To fix the original issue with
-> bpf_helper_defs.h being stale, change the Makefile rule to regenerate the
-> file in the lib/bpf dir instead of having a local copy in selftests.
+> Fix bpftool to include libbpf header files with the bpf/ prefix, to be
+> consistent with external users of the library. Also ensure that all
+> includes of exported libbpf header files (those that are exported on 'mak=
+e
+> install' of the library) use bracketed includes instead of quoted.
 >
+> To make sure no new files are introduced that doesn't include the bpf/
+> prefix in its include, remove tools/lib/bpf from the include path entirel=
+y,
+> and use tools/lib instead.
+>
+> Fixes: 6910d7d3867a ("selftests/bpf: Ensure bpf_helper_defs.h are taken f=
+rom selftests dir")
 > Signed-off-by: Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com>
 > ---
->  tools/testing/selftests/bpf/.gitignore |    3 ++-
->  tools/testing/selftests/bpf/Makefile   |   16 ++++++++--------
->  2 files changed, 10 insertions(+), 9 deletions(-)
+>  tools/bpf/bpftool/Documentation/bpftool-gen.rst |    2 +-
+>  tools/bpf/bpftool/Makefile                      |    2 +-
+>  tools/bpf/bpftool/btf.c                         |    8 ++++----
+>  tools/bpf/bpftool/btf_dumper.c                  |    2 +-
+>  tools/bpf/bpftool/cgroup.c                      |    2 +-
+>  tools/bpf/bpftool/common.c                      |    4 ++--
+>  tools/bpf/bpftool/feature.c                     |    4 ++--
+>  tools/bpf/bpftool/gen.c                         |   10 +++++-----
+>  tools/bpf/bpftool/jit_disasm.c                  |    2 +-
+>  tools/bpf/bpftool/main.c                        |    4 ++--
+>  tools/bpf/bpftool/map.c                         |    4 ++--
+>  tools/bpf/bpftool/map_perf_ring.c               |    4 ++--
+>  tools/bpf/bpftool/net.c                         |    8 ++++----
+>  tools/bpf/bpftool/netlink_dumper.c              |    4 ++--
+>  tools/bpf/bpftool/perf.c                        |    2 +-
+>  tools/bpf/bpftool/prog.c                        |    6 +++---
+>  tools/bpf/bpftool/xlated_dumper.c               |    2 +-
+>  17 files changed, 35 insertions(+), 35 deletions(-)
 >
-> diff --git a/tools/testing/selftests/bpf/.gitignore b/tools/testing/selft=
-ests/bpf/.gitignore
-> index 1d14e3ab70be..17dd02651dee 100644
-> --- a/tools/testing/selftests/bpf/.gitignore
-> +++ b/tools/testing/selftests/bpf/.gitignore
-> @@ -33,10 +33,11 @@ libbpf.pc
->  libbpf.so.*
->  test_hashmap
->  test_btf_dump
-> +test_cgroup_attach
-> +test_select_reuseport
 
-These were moved into test_progs, they are not independent binaries
-anymore, you probably just had old leftovers lying in your
-selftests/bpf directory. Let's not re-add them.
+[...]
 
->  xdping
->  test_cpp
->  *.skel.h
->  /no_alu32
->  /bpf_gcc
->  /tools
-> -bpf_helper_defs.h
-> diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftes=
-ts/bpf/Makefile
-> index cd98ae875e30..4889cc3ead4b 100644
-> --- a/tools/testing/selftests/bpf/Makefile
-> +++ b/tools/testing/selftests/bpf/Makefile
-> @@ -21,7 +21,7 @@ LLC           ?=3D llc
->  LLVM_OBJCOPY   ?=3D llvm-objcopy
->  BPF_GCC                ?=3D $(shell command -v bpf-gcc;)
->  CFLAGS +=3D -g -Wall -O2 $(GENFLAGS) -I$(CURDIR) -I$(APIDIR) -I$(LIBDIR)=
-  \
-> -         -I$(BPFDIR) -I$(GENDIR) -I$(TOOLSINCDIR)                      \
-> +         -I$(GENDIR) -I$(TOOLSINCDIR)                  \
->           -Dbpf_prog_load=3Dbpf_prog_test_load                           =
- \
->           -Dbpf_load_program=3Dbpf_test_load_program
->  LDLIBS +=3D -lcap -lelf -lz -lrt -lpthread
-> @@ -129,7 +129,7 @@ $(OUTPUT)/runqslower: force
->         $(Q)$(MAKE) $(submake_extras) -C $(TOOLSDIR)/bpf/runqslower      =
-     \
->                     OUTPUT=3D$(CURDIR)/tools/
+> diff --git a/tools/bpf/bpftool/gen.c b/tools/bpf/bpftool/gen.c
+> index 7ce09a9a6999..b0695aa543d2 100644
+> --- a/tools/bpf/bpftool/gen.c
+> +++ b/tools/bpf/bpftool/gen.c
+> @@ -12,15 +12,15 @@
+>  #include <stdio.h>
+>  #include <string.h>
+>  #include <unistd.h>
+> -#include <bpf.h>
+> -#include <libbpf.h>
+> +#include <bpf/bpf.h>
+> +#include <bpf/libbpf.h>
+>  #include <sys/types.h>
+>  #include <sys/stat.h>
+>  #include <sys/mman.h>
+>  #include <unistd.h>
+> +#include <bpf/btf.h>
 >
-> -BPFOBJ :=3D $(OUTPUT)/libbpf.a
-> +BPFOBJ :=3D $(BPFDIR)/libbpf.a
+> -#include "btf.h"
+> -#include "libbpf_internal.h"
+> +#include "bpf/libbpf_internal.h"
+>  #include "json_writer.h"
+>  #include "main.h"
+>
+> @@ -333,7 +333,7 @@ static int do_skeleton(int argc, char **argv)
+>                 #define %2$s                                             =
+   \n\
+>                                                                          =
+   \n\
+>                 #include <stdlib.h>                                      =
+   \n\
+> -               #include <libbpf.h>                                      =
+   \n\
+> +               #include <bpf/libbpf.h>                             \n\
 
-We can't do that. See fa633a0f8919 ("libbpf: Fix build on read-only
-filesystems") for why and why we have this problem with
-bpf_helper_defs.h in the first place.
+please fix \n\ alignment
 
->
->  $(TEST_GEN_PROGS) $(TEST_GEN_PROGS_EXTENDED): $(OUTPUT)/test_stub.o $(BP=
-FOBJ)
->
-> @@ -155,17 +155,17 @@ force:
->  DEFAULT_BPFTOOL :=3D $(OUTPUT)/tools/sbin/bpftool
->  BPFTOOL ?=3D $(DEFAULT_BPFTOOL)
->
-> -$(DEFAULT_BPFTOOL): force
-> +$(DEFAULT_BPFTOOL): force $(BPFOBJ)
+>                                                                          =
+   \n\
+>                 struct %1$s {                                            =
+   \n\
+>                         struct bpf_object_skeleton *skeleton;            =
+   \n\
 
-do we need this? bpftool's makefile will build its own libbpf.a
-independently. We can probably optimize that, but see above, we need
-to ensure that we build only within selftest/bpf dirs.
-
-This "read-only outside of selftests/bpf" requirement actually made me
-realize that we probably need to specify OUTPUT pointing somewhere
-inside selftests/bpf/tools subdir to build entire bpftool within
-selftests/bpf directory and not touch anything outside. Do you mind
-fixing that while you are at it?
-
->         $(Q)$(MAKE) $(submake_extras)  -C $(BPFTOOLDIR)                  =
-     \
->                     prefix=3D DESTDIR=3D$(OUTPUT)/tools/ install
->
->  $(BPFOBJ): force
-> -       $(Q)$(MAKE) $(submake_extras) -C $(BPFDIR) OUTPUT=3D$(OUTPUT)/
-> +       $(Q)$(MAKE) $(submake_extras) -C $(BPFDIR) OUTPUT=3D$(BPFDIR)/ $(=
-BPFOBJ)
->
-> -BPF_HELPERS :=3D $(OUTPUT)/bpf_helper_defs.h $(wildcard $(BPFDIR)/bpf_*.=
-h)
-> -$(OUTPUT)/bpf_helper_defs.h: $(BPFOBJ)
-> +BPF_HELPERS :=3D $(BPFDIR)/bpf_helper_defs.h $(wildcard $(BPFDIR)/bpf_*.=
-h)
-> +$(BPFDIR)/bpf_helper_defs.h: $(BPFOBJ)
->         $(Q)$(MAKE) $(submake_extras) -C $(BPFDIR)                       =
-     \
-> -                   OUTPUT=3D$(OUTPUT)/ $(OUTPUT)/bpf_helper_defs.h
-> +               OUTPUT=3D$(BPFDIR)/ $(BPFDIR)/bpf_helper_defs.h
->
->  # Get Clang's default includes on this system, as opposed to those seen =
-by
->  # '-target bpf'. This fixes "missing" files on some architectures/distro=
-s,
-> @@ -186,7 +186,7 @@ MENDIAN=3D$(if $(IS_LITTLE_ENDIAN),-mlittle-endian,-m=
-big-endian)
->  CLANG_SYS_INCLUDES =3D $(call get_sys_includes,$(CLANG))
->  BPF_CFLAGS =3D -g -D__TARGET_ARCH_$(SRCARCH) $(MENDIAN)                 =
- \
->              -I$(OUTPUT) -I$(CURDIR) -I$(CURDIR)/include/uapi           \
-> -            -I$(APIDIR) -I$(LIBDIR) -I$(BPFDIR) -I$(abspath $(OUTPUT)/..=
-/usr/include)
-> +            -I$(APIDIR) -I$(LIBDIR) -I$(abspath $(OUTPUT)/../usr/include=
-)
->
->  CLANG_CFLAGS =3D $(CLANG_SYS_INCLUDES) \
->                -Wno-compare-distinct-pointer-types
->
+[...]
