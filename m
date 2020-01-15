@@ -2,136 +2,169 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id ACFB213CFB2
-	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Jan 2020 23:07:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6273D13CFC0
+	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Jan 2020 23:07:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729320AbgAOWFa (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 15 Jan 2020 17:05:30 -0500
-Received: from hqnvemgate24.nvidia.com ([216.228.121.143]:18143 "EHLO
-        hqnvemgate24.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729103AbgAOWF3 (ORCPT
+        id S1730056AbgAOWHB (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 15 Jan 2020 17:07:01 -0500
+Received: from us-smtp-1.mimecast.com ([207.211.31.81]:41295 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1729992AbgAOWG7 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 15 Jan 2020 17:05:29 -0500
-Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate24.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5e1f8c710000>; Wed, 15 Jan 2020 14:04:33 -0800
-Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate101.nvidia.com (PGP Universal service);
-  Wed, 15 Jan 2020 14:05:29 -0800
-X-PGP-Universal: processed;
-        by hqpgpgate101.nvidia.com on Wed, 15 Jan 2020 14:05:29 -0800
-Received: from rcampbell-dev.nvidia.com (10.124.1.5) by HQMAIL107.nvidia.com
- (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Wed, 15 Jan
- 2020 22:05:24 +0000
-Subject: Re: [PATCH v6 4/6] mm/mmu_notifier: add mmu_interval_notifier_find()
-To:     Jason Gunthorpe <jgg@mellanox.com>
-CC:     "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "nouveau@lists.freedesktop.org" <nouveau@lists.freedesktop.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        Jerome Glisse <jglisse@redhat.com>,
-        "John Hubbard" <jhubbard@nvidia.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Ben Skeggs <bskeggs@redhat.com>, Shuah Khan <shuah@kernel.org>
-References: <20200113224703.5917-1-rcampbell@nvidia.com>
- <20200113224703.5917-5-rcampbell@nvidia.com>
- <20200114124956.GN20978@mellanox.com>
-X-Nvconfidentiality: public
-From:   Ralph Campbell <rcampbell@nvidia.com>
-Message-ID: <528c1cff-608c-d342-1e72-90d780555204@nvidia.com>
-Date:   Wed, 15 Jan 2020 14:05:24 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.1.0
+        Wed, 15 Jan 2020 17:06:59 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1579126017;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=2oZ0/KEDQ6dTwiAcIr2E5jK3OjJKgPjKG2s+1U8IzDY=;
+        b=F7CD6zPgqEcj45Vc3Y5yVQs1h8jAohsbwZat45fNNg8W5YBLs8phGcT6ceCgxiQ2IlQNuo
+        D3Lj1pBPbhno8r1eEJ4A+4959bU9tatNcFHf1P4ajQ9tsMeGI+PG6haZY7XONT0fEZL8HZ
+        R3EJy18qylTINOJcIa+5ctd5b/t+Tf4=
+Received: from mail-lj1-f198.google.com (mail-lj1-f198.google.com
+ [209.85.208.198]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-37-LMweYziXNYe0-tJYYYeEEg-1; Wed, 15 Jan 2020 17:06:56 -0500
+X-MC-Unique: LMweYziXNYe0-tJYYYeEEg-1
+Received: by mail-lj1-f198.google.com with SMTP id s25so4464690ljm.9
+        for <linux-kselftest@vger.kernel.org>; Wed, 15 Jan 2020 14:06:56 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version:content-transfer-encoding;
+        bh=2oZ0/KEDQ6dTwiAcIr2E5jK3OjJKgPjKG2s+1U8IzDY=;
+        b=HBxbRaDp2JP38ESNwZ00g9MawSO4P1fptxV4v4ZUQVeKVNB0hE4DEmsHFX1Qnjl2Pj
+         c+JGor0HCBrVivikbVn4GAd8hVwu98tIKyGXzCAO/DlrLj9AN6VJKIpi6zoDSp5y2tAm
+         bmwL0TNnrYsYss9zfwtbFv2yz2ILOSUV5W86StUzLLSutqjg3UkIIpKetLZJAlpJIKez
+         fYwLvFHyYqkpmQggmaREo29ZF7Rr6DQfEMcsiVbVDlgYY5QNJIA57YjnVen6B6vchWBG
+         rQAXrTBcNLOgy07euwPLPCjnJGBSY0kYa449gs+L0JCIWdEVywgJvdA9oG2c2gwOaw3u
+         c4GA==
+X-Gm-Message-State: APjAAAV8E+Wwq4VlB3uAet5RalyCD7ndscBxFLWqtgLJ7tENXwKyqI2z
+        iNxvcYmACtAoBU/zqo/SrCHN+h/IOH+abNWbjffpYOik8+wLrOvX5UNWtNw19sncdxlIo6VOMH7
+        aOOap58EJICTCJ6O6d2htN7tT+oJx
+X-Received: by 2002:a2e:3e03:: with SMTP id l3mr298596lja.237.1579126015010;
+        Wed, 15 Jan 2020 14:06:55 -0800 (PST)
+X-Google-Smtp-Source: APXvYqyICy0H3yi0QO3D1AnqbT83z5lYl+AEoYsdeygh7OdbhjgdnK2+SYcwTz5CjSsgq/x/PPJOpQ==
+X-Received: by 2002:a2e:3e03:: with SMTP id l3mr298563lja.237.1579126014662;
+        Wed, 15 Jan 2020 14:06:54 -0800 (PST)
+Received: from alrua-x1.borgediget.toke.dk ([2a0c:4d80:42:443::2])
+        by smtp.gmail.com with ESMTPSA id k5sm9561045lfd.86.2020.01.15.14.06.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Jan 2020 14:06:53 -0800 (PST)
+Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
+        id BEFA11804D6; Wed, 15 Jan 2020 23:06:52 +0100 (CET)
+From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        Andrii Nakryiko <andriin@fb.com>,
+        Doug Ledford <dledford@redhat.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <jakub.kicinski@netronome.com>,
+        Jesper Dangaard Brouer <brouer@redhat.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        linux-rdma@vger.kernel.org,
+        "open list\:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        clang-built-linux@googlegroups.com
+Subject: Re: [PATCH bpf-next v2 02/10] tools/bpf/runqslower: Fix override option for VMLINUX_BTF
+In-Reply-To: <CAEf4BzbqY8zivZy637Xy=iTECzBAYQ7vo=M7TvsLM2Yp12bJpg@mail.gmail.com>
+References: <157909756858.1192265.6657542187065456112.stgit@toke.dk> <157909757089.1192265.9038866294345740126.stgit@toke.dk> <CAEf4BzbqY8zivZy637Xy=iTECzBAYQ7vo=M7TvsLM2Yp12bJpg@mail.gmail.com>
+X-Clacks-Overhead: GNU Terry Pratchett
+Date:   Wed, 15 Jan 2020 23:06:52 +0100
+Message-ID: <87v9pctlvn.fsf@toke.dk>
 MIME-Version: 1.0
-In-Reply-To: <20200114124956.GN20978@mellanox.com>
-X-Originating-IP: [10.124.1.5]
-X-ClientProxiedBy: HQMAIL101.nvidia.com (172.20.187.10) To
- HQMAIL107.nvidia.com (172.20.187.13)
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1579125873; bh=THfPEihvnXha/ZAsoeHLMyQALJLZvNsiB8lapA3uV7s=;
-        h=X-PGP-Universal:Subject:To:CC:References:X-Nvconfidentiality:From:
-         Message-ID:Date:User-Agent:MIME-Version:In-Reply-To:
-         X-Originating-IP:X-ClientProxiedBy:Content-Type:Content-Language:
-         Content-Transfer-Encoding;
-        b=aK0r0qzRe3LL4PZNNQF34X9swSBE5W0PHzaJ16joN7727655IDaVZCMY7EekgCaUu
-         1RFbSpx/YbAPzUYrwRhZIng2dmhPiu/9QTQAjShtmI96eN6fTIEMxqZX/c+XJMLHrL
-         kh+A0oXsJioOBNrZZN5C1D4GRmuVf4DsYTs7lGO+OvdEqbiMZdXyjSWf4ouXIwfy46
-         whLa+qWHzzwdEkWxOIm8KdlGeh1keYvkMXk1LUeHqZseIwAo19ZOveJVl0bIu0zGnY
-         psGlkKBjVp9U9sYpKqnKMB3qpI8EgEprrf1FYOxFEWiDVE/nUIe0g2m9UN8F4A5E/X
-         53r6K6Lc6ZTVA==
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+Andrii Nakryiko <andrii.nakryiko@gmail.com> writes:
 
-On 1/14/20 4:49 AM, Jason Gunthorpe wrote:
-> On Mon, Jan 13, 2020 at 02:47:01PM -0800, Ralph Campbell wrote:
->> diff --git a/mm/mmu_notifier.c b/mm/mmu_notifier.c
->> index 47ad9cc89aab..4efecc0f13cb 100644
->> +++ b/mm/mmu_notifier.c
->> @@ -1171,6 +1171,39 @@ void mmu_interval_notifier_update(struct mmu_interval_notifier *mni,
->>   }
->>   EXPORT_SYMBOL_GPL(mmu_interval_notifier_update);
->>   
->> +struct mmu_interval_notifier *mmu_interval_notifier_find(struct mm_struct *mm,
->> +				const struct mmu_interval_notifier_ops *ops,
->> +				unsigned long start, unsigned long last)
->> +{
->> +	struct mmu_notifier_mm *mmn_mm = mm->mmu_notifier_mm;
->> +	struct interval_tree_node *node;
->> +	struct mmu_interval_notifier *mni;
->> +	struct mmu_interval_notifier *res = NULL;
->> +
->> +	spin_lock(&mmn_mm->lock);
->> +	node = interval_tree_iter_first(&mmn_mm->itree, start, last);
->> +	if (node) {
->> +		mni = container_of(node, struct mmu_interval_notifier,
->> +				   interval_tree);
->> +		while (true) {
->> +			if (mni->ops == ops) {
->> +				res = mni;
->> +				break;
->> +			}
->> +			node = interval_tree_iter_next(&mni->interval_tree,
->> +						       start, last);
->> +			if (!node)
->> +				break;
->> +			mni = container_of(node, struct mmu_interval_notifier,
->> +					   interval_tree);
->> +		}
->> +	}
->> +	spin_unlock(&mmn_mm->lock);
-> 
-> This doesn't seem safe at all, here we are returning a pointer to
-> memory from the interval tree with out any kind of lifetime
-> protection.
+> On Wed, Jan 15, 2020 at 6:13 AM Toke H=C3=B8iland-J=C3=B8rgensen <toke@re=
+dhat.com> wrote:
+>>
+>> From: Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com>
+>>
+>> The runqslower tool refuses to build without a file to read vmlinux BTF
+>> from. The build fails with an error message to override the location by
+>> setting the VMLINUX_BTF variable if autodetection fails. However, the
+>> Makefile doesn't actually work with that override - the error message is
+>> still emitted.
+>
+> Do you have example command with VMLINUX_BTF override that didn't work
+> (and what error message was emitted)?
 
-It is memory that the driver has allocated and has full control over
-the lifetime since the driver does all the insertions and removals.
-The driver does have to hold the HW page table lock so lookups are
-synchronized with interval insertions and removals and page table
-entry insertions and removals.
+Before this patch:
 
-> If the interval tree is read it must be left in the read lock state
-> until the caller is done with the pointer.
-> 
-> .. and this poses all sorts of questions about consistency with items
-> on the deferred list. Should find return an item undergoing deletion?
+$ cd ~/build/linux/tools/bpf/runqslower
+$ make
+Makefile:18: *** "Can't detect kernel BTF, use VMLINUX_BTF to specify it ex=
+plicitly".  Stop.
 
-I don't think so. The deferred operations are all complete when
-mmu_interval_read_begin() returns, and the sequence number check
-with mmu_interval_read_retry() guarantees there have been no changes
-while not holding the driver page table lock and calling hmm_range_fault().
+$ make VMLINUX_BTF=3D~/build/linux/vmlinux
+Makefile:18: *** "Can't detect kernel BTF, use VMLINUX_BTF to specify it ex=
+plicitly".  Stop.
 
-> Should find return items using the old interval tree values or their
-> new updated values?
-> 
-> Jason
+>> Fix this by only doing auto-detection if no override is set. And while
+>> we're at it, also look for a vmlinux file in the current kernel build dir
+>> if none if found on the running kernel.
+>>
+>> Fixes: 9c01546d26d2 ("tools/bpf: Add runqslower tool to tools/bpf")
+>> Signed-off-by: Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com>
+>> ---
+>>  tools/bpf/runqslower/Makefile |   16 ++++++++++------
+>>  1 file changed, 10 insertions(+), 6 deletions(-)
+>>
+>> diff --git a/tools/bpf/runqslower/Makefile b/tools/bpf/runqslower/Makefi=
+le
+>> index cff2fbcd29a8..fb93ce2bf2fe 100644
+>> --- a/tools/bpf/runqslower/Makefile
+>> +++ b/tools/bpf/runqslower/Makefile
+>> @@ -10,12 +10,16 @@ CFLAGS :=3D -g -Wall
+>>
+>>  # Try to detect best kernel BTF source
+>>  KERNEL_REL :=3D $(shell uname -r)
+>> -ifneq ("$(wildcard /sys/kernel/btf/vmlinux)","")
+>> -VMLINUX_BTF :=3D /sys/kernel/btf/vmlinux
+>> -else ifneq ("$(wildcard /boot/vmlinux-$(KERNEL_REL))","")
+>> -VMLINUX_BTF :=3D /boot/vmlinux-$(KERNEL_REL)
+>> -else
+>> -$(error "Can't detect kernel BTF, use VMLINUX_BTF to specify it explici=
+tly")
+>> +ifeq ("$(VMLINUX_BTF)","")
+>> +  ifneq ("$(wildcard /sys/kernel/btf/vmlinux)","")
+>> +  VMLINUX_BTF :=3D /sys/kernel/btf/vmlinux
+>> +  else ifneq ("$(wildcard /boot/vmlinux-$(KERNEL_REL))","")
+>> +  VMLINUX_BTF :=3D /boot/vmlinux-$(KERNEL_REL)
+>> +  else ifneq ("$(wildcard $(abspath ../../../vmlinux))","")
+>> +  VMLINUX_BTF :=3D $(abspath ../../../vmlinux)
+>
+> I'm planning to mirror runqslower into libbpf Github repo and this
+> ../../../vmlinux piece will be completely out of place in that
+> context. Also it only will help when building kernel in-tree. So I'd
+> rather not add this.
 
-I think it should only look at the old interval tree and not the deferred
-insert/remove/updates as explained above.
+Well building the kernel in-tree is something people sometimes want to do ;)
+
+Specifically, the selftests depend on this, so we should at least fix
+those; but I guess it could work to just pass in VMLINUX_BTF as part of
+the make -C from the selftests dir? I'll try that...
+
+-Toke
+
