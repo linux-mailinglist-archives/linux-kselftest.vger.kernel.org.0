@@ -2,159 +2,99 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8426E13CBA6
-	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Jan 2020 19:06:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED6C713CD08
+	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Jan 2020 20:25:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729252AbgAOSGO (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 15 Jan 2020 13:06:14 -0500
-Received: from mail-qt1-f193.google.com ([209.85.160.193]:42042 "EHLO
-        mail-qt1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729092AbgAOSGN (ORCPT
+        id S1726527AbgAOTZd (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 15 Jan 2020 14:25:33 -0500
+Received: from mail-pf1-f193.google.com ([209.85.210.193]:33992 "EHLO
+        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726018AbgAOTZc (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 15 Jan 2020 13:06:13 -0500
-Received: by mail-qt1-f193.google.com with SMTP id j5so16546955qtq.9;
-        Wed, 15 Jan 2020 10:06:13 -0800 (PST)
+        Wed, 15 Jan 2020 14:25:32 -0500
+Received: by mail-pf1-f193.google.com with SMTP id i6so8974718pfc.1;
+        Wed, 15 Jan 2020 11:25:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=ELr/XxVqul6D20WrUY/+l7F3oFFhw69GAu+JHpk3Rbk=;
-        b=mSPCnteKMSkRqwiFoHYESYY9gfGWLfp6Wj/BRJUP4Q4KxvpnfSxnw0X2O3+zDKrdi2
-         ekhtzKXCQeB5Bs/+1KwVMaTkntDXBIcn8z87XMb0VBhZ9vRds4BnOJ1RRijlj0bhsXHM
-         MZqAwB0pn1lfKVRjzfD44HEDbEIJxlOANTTPhWK6WNDmflh7dEDPIboreBKEPBUAh3kE
-         IAx9DqhXMDYiSV+XZ3WFIbmx316U4AmPfTEFqArYRwMbcAj7g7BvaI+9n4mjdfVvUFP2
-         s0RQjCh/hK3MfGFEow+MTXJv1aobh9vIOraqaNtR1Kin1ku2oqwOpZ5jPUKyq+siMEgq
-         +tWQ==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=6Ov9Uf/cEYbZ4uqilqp6lDBn9/aIskYayGhgPiWt6D0=;
+        b=aGjxu4xM7wsOhmdVbow3prGI6Jlt/rpu2qQBxEHWXMRfYiKVEPFEmAmXm4QXNz4KVh
+         E4tWoOdMtJYEP8j+PQUnIOW3QYkvpOvl202I64RJk95BZiShYv5HkPR80vWKad8e9wZc
+         0RTn69LYOoOMUPPEhioxcDzMj+2nS+0cUKPfOkZywhkObDWerXGOEWnaZlQQt7uRWmgG
+         MUCRn5sIbTsqcp5omyiHZZau5Wsu2lffV+cxPNAP8QDmw8Jl9GE9xnxjUkD1rE7X1qNK
+         5n3LNTxL2e5UAnobkVGq5f1vojLntqEYVB6hXX5BxWQf18SnifStLKufHV+qSooAPdlZ
+         maBQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=ELr/XxVqul6D20WrUY/+l7F3oFFhw69GAu+JHpk3Rbk=;
-        b=o6P6EnTCuaZSr0tBobB7yb1CyQJQy+i75avetHdcLfLvhSlZRIPhgBTGLNZGWXUEVr
-         qCDwXRkx+sH557gWzBs3EK0drowdhqEIDCxtr0yVP2SzHahmy/Mxg0bxzYvAYMCYxLco
-         p27Bj7E3a9t/ylAGFj/sKqlgLuTELBlXhearyl1/RrgRQr5lYQNZa2+diHptJompcdUP
-         yBz9tom61Edd6dNQrIYt55Drgg9N5S08cE6chlzxllccxzGpszm1+jymDdIew/qyfola
-         HwqJPy2oO3LsaI7ZcWD0Zyf4aoanOHGtwSkIfFfCyOAT43Tk49gK7wWGDq6k9JEnNw9L
-         CosA==
-X-Gm-Message-State: APjAAAX1Y7CClWRwDv/055D8SB80n6uC+hQcEJjArGkuseilKvYokLLx
-        U7skErymyYvvFUjiopK35x5LtoU1GblZjvbSWsg=
-X-Google-Smtp-Source: APXvYqyxmKUFZijBXdkuTtHh/L21hbP+2dYNdVYZ+ehzOljvqjBV6f2i6/sb3FoGBrunVSLpiVTX+WlgbzOZ4rbNNQg=
-X-Received: by 2002:ac8:1385:: with SMTP id h5mr4640404qtj.59.1579111572469;
- Wed, 15 Jan 2020 10:06:12 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=6Ov9Uf/cEYbZ4uqilqp6lDBn9/aIskYayGhgPiWt6D0=;
+        b=nNvQbmkg30ukv19Smbd0lehIfdfIlaGq2doPGXguUX2yg8huKdKyj6DLefPvHawsrX
+         ZZmjafo07UpPN8BoeOp4xVFFjxAYieBuu3ZXaClHeibcSEqiKSCUNjMFGj0ZKm4YDqMB
+         11vI6mUZenuQAochsMvDJ8XW5o5jv3M1dZ+rzwh4zJ9EXmndVz9PedUGZcIi8lhIivhh
+         aQc7tINdgyhK3ZYJyhqPyIHJ2BmyPgXFoao7GlWk06MBxsPSfV9wPC77C6ywDyeJ5Vya
+         wzTlttwnaf9SamAVwIdWDIqq8dXJ09zKpyjDHWzV3RkpZmQLfuCwrsojJwDmSy9Y40Qf
+         CuEA==
+X-Gm-Message-State: APjAAAUsOsGaVMsjrTZ4hxsAL601tdmJNMdfvzGRIu3OK5p2a6i+gqUm
+        ftUisi3wysaptuIQ9Z37vfbsKHHG
+X-Google-Smtp-Source: APXvYqwh4E360ZNUAsV0e5bP29q70BTJhnvA9UjIib4FFM6PlwrsH5Kg25qsi6unPahL/zixzz4qtg==
+X-Received: by 2002:a63:6c03:: with SMTP id h3mr32975375pgc.19.1579116332208;
+        Wed, 15 Jan 2020 11:25:32 -0800 (PST)
+Received: from ast-mbp.dhcp.thefacebook.com ([2620:10d:c090:200::3:e760])
+        by smtp.gmail.com with ESMTPSA id j8sm604063pjb.4.2020.01.15.11.25.31
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 15 Jan 2020 11:25:31 -0800 (PST)
+Date:   Wed, 15 Jan 2020 11:25:30 -0800
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To:     Masami Hiramatsu <mhiramat@kernel.org>
+Cc:     Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, jaswinder.singh@linaro.org,
+        bpf@vger.kernel.org, daniel@iogearbox.net
+Subject: Re: [BUGFIX PATCH] selftests: Fix pthread link option
+Message-ID: <20200115192528.kq44bg24ezsgo5hm@ast-mbp.dhcp.thefacebook.com>
+References: <157907976750.14189.12829891067375600434.stgit@devnote2>
 MIME-Version: 1.0
-References: <157909756858.1192265.6657542187065456112.stgit@toke.dk>
-In-Reply-To: <157909756858.1192265.6657542187065456112.stgit@toke.dk>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Wed, 15 Jan 2020 10:06:01 -0800
-Message-ID: <CAEf4Bza+dNoD7HbVQGtXBq=raz4DQg0yTShKZHRbCo+zHYfoSA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 00/10] tools: Use consistent libbpf include
- paths everywhere
-To:     =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        Andrii Nakryiko <andriin@fb.com>,
-        Doug Ledford <dledford@redhat.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <jakub.kicinski@netronome.com>,
-        Jesper Dangaard Brouer <brouer@redhat.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        linux-rdma@vger.kernel.org,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        clang-built-linux@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <157907976750.14189.12829891067375600434.stgit@devnote2>
+User-Agent: NeoMutt/20180223
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Jan 15, 2020 at 6:13 AM Toke H=C3=B8iland-J=C3=B8rgensen <toke@redh=
-at.com> wrote:
->
-> The recent commit 6910d7d3867a ("selftests/bpf: Ensure bpf_helper_defs.h =
-are
-> taken from selftests dir") broke compilation against libbpf if it is inst=
-alled
-> on the system, and $INCLUDEDIR/bpf is not in the include path.
->
-> Since having the bpf/ subdir of $INCLUDEDIR in the include path has never=
- been a
-> requirement for building against libbpf before, this needs to be fixed. O=
-ne
-> option is to just revert the offending commit and figure out a different =
-way to
-> achieve what it aims for. However, this series takes a different approach=
-:
-> Changing all in-tree users of libbpf to consistently use a bpf/ prefix in
-> #include directives for header files from libbpf.
->
-> This turns out to be a somewhat invasive change in the number of files to=
-uched;
-> however, the actual changes to files are fairly trivial (most of them are=
- simply
-> made with 'sed'). Also, this approach has the advantage that it makes ext=
-ernal
-> and internal users consistent with each other, and ensures no future chan=
-ges
-> breaks things in the same way as the commit referenced above.
->
-> The series is split to make the change for one tool subdir at a time, whi=
-le
-> trying not to break the build along the way. It is structured like this:
->
-> - Patch 1-2: Trivial fixes to Makefiles for issues I discovered while cha=
-nging
->   the include paths.
->
-> - Patch 3-7: Change the include directives to use the bpf/ prefix, and up=
-dates
->   Makefiles to make sure tools/lib/ is part of the include path, but with=
-out
->   removing tools/lib/bpf
->
-> - Patch 8: Change the bpf_helpers file in libbpf itself to use the bpf/ p=
-refix
->   when including (the original source of breakage).
->
-> - Patch 9-10: Remove tools/lib/bpf from include paths to make sure we don=
-'t
->   inadvertently re-introduce includes without the bpf/ prefix.
->
+On Wed, Jan 15, 2020 at 06:16:07PM +0900, Masami Hiramatsu wrote:
+> To support pthread correctly, it is better to use -pthread
+> instead of -lpthread.
+> 
+> Signed-off-by: Masami Hiramatsu <mhiramat@kernel.org>
 > ---
+>  tools/testing/selftests/bpf/Makefile               |    2 +-
+>  tools/testing/selftests/membarrier/Makefile        |    2 +-
+>  tools/testing/selftests/mqueue/Makefile            |    2 +-
+>  tools/testing/selftests/net/Makefile               |    4 ++--
+>  .../testing/selftests/powerpc/benchmarks/Makefile  |    4 ++--
+>  tools/testing/selftests/powerpc/dscr/Makefile      |    2 +-
+>  tools/testing/selftests/powerpc/mm/Makefile        |    2 +-
+>  tools/testing/selftests/rseq/Makefile              |    2 +-
+>  tools/testing/selftests/rtc/Makefile               |    2 +-
+>  tools/testing/selftests/seccomp/Makefile           |    2 +-
+>  tools/testing/selftests/timers/Makefile            |    2 +-
+>  tools/testing/selftests/vm/Makefile                |    2 +-
+>  12 files changed, 14 insertions(+), 14 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+> index e2fd6f8d579c..419f58c53d12 100644
+> --- a/tools/testing/selftests/bpf/Makefile
+> +++ b/tools/testing/selftests/bpf/Makefile
+> @@ -22,7 +22,7 @@ CFLAGS += -g -Wall -O2 $(GENFLAGS) -I$(APIDIR) -I$(LIBDIR) -I$(BPFDIR)	\
+>  	  -I$(GENDIR) -I$(TOOLSDIR) -I$(CURDIR)				\
+>  	  -Dbpf_prog_load=bpf_prog_test_load				\
+>  	  -Dbpf_load_program=bpf_test_load_program
+> -LDLIBS += -lcap -lelf -lrt -lpthread
+> +LDLIBS += -lcap -lelf -lrt -pthread
 
-Thanks, Toke, for this clean up! I tested it locally for my set up:
-runqslower, bpftool, libbpf, and selftests all build fine, so it looks
-good. My only concern is with selftests/bpf Makefile, we shouldn't
-build anything outside of selftests/bpf. Let's fix that. Thanks!
-
->
-> Toke H=C3=B8iland-J=C3=B8rgensen (10):
->       samples/bpf: Don't try to remove user's homedir on clean
->       tools/bpf/runqslower: Fix override option for VMLINUX_BTF
->       tools/runqslower: Use consistent include paths for libbpf
->       selftests: Use consistent include paths for libbpf
->       bpftool: Use consistent include paths for libbpf
->       perf: Use consistent include paths for libbpf
->       samples/bpf: Use consistent include paths for libbpf
->       libbpf: Fix include of bpf_helpers.h when libbpf is installed on sy=
-stem
->       selftests: Remove tools/lib/bpf from include path
->       tools/runqslower: Remove tools/lib/bpf from include path
->
->
-
-[...]
+Please split this bit into separate patch and send it to bpf@vger targeting
+bpf-next. selftests/bpf are going through a lot of changes and I'd like to
+avoid any chance of conflicts.
