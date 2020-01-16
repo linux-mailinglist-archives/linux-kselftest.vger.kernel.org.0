@@ -2,52 +2,52 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9944D13FBCC
-	for <lists+linux-kselftest@lfdr.de>; Thu, 16 Jan 2020 22:58:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 958BB13FC16
+	for <lists+linux-kselftest@lfdr.de>; Thu, 16 Jan 2020 23:22:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387718AbgAPV5r (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 16 Jan 2020 16:57:47 -0500
-Received: from mail-qt1-f194.google.com ([209.85.160.194]:37576 "EHLO
-        mail-qt1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729153AbgAPV5r (ORCPT
+        id S1731061AbgAPWVX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 16 Jan 2020 17:21:23 -0500
+Received: from mail-qk1-f193.google.com ([209.85.222.193]:36377 "EHLO
+        mail-qk1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730287AbgAPWVW (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 16 Jan 2020 16:57:47 -0500
-Received: by mail-qt1-f194.google.com with SMTP id w47so20219877qtk.4;
-        Thu, 16 Jan 2020 13:57:46 -0800 (PST)
+        Thu, 16 Jan 2020 17:21:22 -0500
+Received: by mail-qk1-f193.google.com with SMTP id a203so20846246qkc.3;
+        Thu, 16 Jan 2020 14:21:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc:content-transfer-encoding;
-        bh=BKup+mN+yNw5E+RKZ+Bk6trS4fw29oa/jBU1SsMkNjo=;
-        b=rpyy3YyC3pc4ZrmsAjEayWTY6S5fFW2TfftXYZ9zA9d0TT+4oeNbZxyRWO7jd3qmqV
-         lAt0czVSnh36YxNThoGHWF2iAql/35TiHCv2iP6EJBeK1TrbRGU4rpH69mZsD05z4Z1d
-         dlFJDBgbbuQS6Cu6d8S8eCrtQ4UrFd3IXvEEFk83ElJTcQcjeUfr9+KT8o5nl0+dUuUt
-         P6D6IOLXb3m4P0jLT0OMi2S+EFsOQq0K5B6ELOgQVk8AxoysQv/LW9noMMP71kb5icEM
-         F3yct2QlOrcAuUM8yGI33B5Vzu/+4UKugaTww0OrhRh4f+owRPKpt/Os7T0PnnI06jeg
-         5z7g==
+        bh=vpbQOrapjlYcWs3bkrcm05Gp66rOZ9x8yOYklUO+LHY=;
+        b=YrLfshsTZMEaoaurtJbcwzSaoRcapaMk5aQ6Vcf1sdNXNja9QAeeNF8VJykNeVUgZo
+         xlwzKaZakSt5Y9bZy4IKR7MGJ/wOLaZ3+2QmM0lNILTzox9tYpZfca9fg0+M+HlevJFX
+         xzgPEils0QPrNad+MFBheww0mG7T12Yqk0h4nTkLYPtMRRRDQjXS0mJVrw3a9j43ReCZ
+         L92rwv39vWk3qhIze8qmfWjrg5jwEWQuAIftG3eCuafKT9/GgqAiwkQBO0GVo8PkMwVZ
+         NTU9QcrL4KkQEUIYYs960+BeIsImrg+fed1Srq8py9vwMf2x3KljpdXshqJdeSZ7aMYN
+         haTg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc:content-transfer-encoding;
-        bh=BKup+mN+yNw5E+RKZ+Bk6trS4fw29oa/jBU1SsMkNjo=;
-        b=LL3MAg8qOpuj41z6Cf0TImjeXYYUFrQDC2Ww79zilC+c/SCa2Ebiyxc+61CyGZ2IwD
-         ltAeT/uj3wmtX1TiCEQl9VWZ3JWCdbkmeUO3cwLrxftmKTbzlUUVMR5U2m8J9mU3846h
-         QUO8NPALQ5GLxMUr6CPZ8X+hbz3/N2WhQwfHiqUctlP5lepOKmuC6HethQmKGeBYHCUl
-         ehvdibtKCVRjqIADTQYlzboWOVEBOTNSJT+1DN+C3yaEJEY8lfIskbtwKc257IA7ugxU
-         JFfkiHcU1fmZ5yS/9QS1EsTmpRtGFNV8g8KWj0crKOyU4ZyjQ0iWKTWGf/N35JYgv/Tz
-         u1eQ==
-X-Gm-Message-State: APjAAAXeYoxFqikVDH05iHELuEehHGapMYAOo8IVRvFfQAFzX2owTG1r
-        +6bGXBkH3cJTURGH0qe+iw/BD9r4FTXOAfIKqJk=
-X-Google-Smtp-Source: APXvYqz6W4hGwAmtkVgT6A+/5UfZjE9EHGHzPkk6ExiU4zKRnlOidUa4twJjkynIyaiQT4AhpX3h1OBlBvadSgKQco8=
-X-Received: by 2002:ac8:4050:: with SMTP id j16mr4515795qtl.171.1579211866008;
- Thu, 16 Jan 2020 13:57:46 -0800 (PST)
+        bh=vpbQOrapjlYcWs3bkrcm05Gp66rOZ9x8yOYklUO+LHY=;
+        b=BD6WgfC4q0UKEpuPlbiSSR6XRBH4sW833wWLL5jdACUtHXh2B3aZZWtnf1xNTGbAw6
+         /qbT8wNCFZbti0CTf5RYGLjNiSPUyvjzZXo/shRRZnaeHGa/gc4hdJin6OThcn9m8yaG
+         aIr3YWg+nWt++JncIfIO+0KzcdHhwxnujezKjvX716mbeC2WZzA9sE/abgVVO6yCIMJA
+         y+0o03rBxPobhwndrfPuk3795WRoeSgtezlxF/R8Z0g6cKy1o7M3nGKLyIsCapwveW/J
+         6/6+HOQNczCDNhC7U2ku26XrU13nYj6xvRJefkJGYLEyjj7cbnJFpguc5r5NKWvyXpvg
+         wqmA==
+X-Gm-Message-State: APjAAAV/CpXdbkZGZc8SkYIHHVHsGwJzaGtCT79JfHHE7pShRvnxxFdY
+        J3JBxx8RmyiL6+0+P/vHL2PV7WK7NjoVCshdzT8=
+X-Google-Smtp-Source: APXvYqz1i/WEP6x/rLAeNoVBbsK0G1LZrffElunve4gOl5pxTl+wMdcs1VSidF8QuuZXFAgkfUU7ExMVAZrIPvhsrL8=
+X-Received: by 2002:a05:620a:5ae:: with SMTP id q14mr31315590qkq.437.1579213281433;
+ Thu, 16 Jan 2020 14:21:21 -0800 (PST)
 MIME-Version: 1.0
-References: <157918093154.1357254.7616059374996162336.stgit@toke.dk> <157918093723.1357254.4296174077488807255.stgit@toke.dk>
-In-Reply-To: <157918093723.1357254.4296174077488807255.stgit@toke.dk>
+References: <157918093154.1357254.7616059374996162336.stgit@toke.dk> <157918093839.1357254.16574794899249700991.stgit@toke.dk>
+In-Reply-To: <157918093839.1357254.16574794899249700991.stgit@toke.dk>
 From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Thu, 16 Jan 2020 13:57:34 -0800
-Message-ID: <CAEf4BzbA6TZHvQ-7YoHbf1wNn3OcpTEgUMh6uzwJnGOX0yDSDg@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v3 05/11] selftests: Use consistent include paths
+Date:   Thu, 16 Jan 2020 14:21:10 -0800
+Message-ID: <CAEf4BzZep26Y50ER5x9FLsxu0_yW-sG5abxE2RZLBT-JhRnqbg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v3 06/11] bpftool: Use consistent include paths
  for libbpf
 To:     =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>
 Cc:     Alexei Starovoitov <ast@kernel.org>,
@@ -87,15 +87,16 @@ at.com> wrote:
 >
 > From: Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com>
 >
-> Fix all selftests to include libbpf header files with the bpf/ prefix, to
-> be consistent with external users of the library. Also ensure that all
+> Fix bpftool to include libbpf header files with the bpf/ prefix, to be
+> consistent with external users of the library. Also ensure that all
 > includes of exported libbpf header files (those that are exported on 'mak=
 e
 > install' of the library) use bracketed includes instead of quoted.
 >
-> To not break the build, keep the old include path until everything has be=
-en
-> changed to the new one; a subsequent patch will remove that.
+> To make sure no new files are introduced that doesn't include the bpf/
+> prefix in its include, remove tools/lib/bpf from the include path entirel=
+y,
+> and use tools/lib instead.
 >
 > Fixes: 6910d7d3867a ("selftests/bpf: Ensure bpf_helper_defs.h are taken f=
 rom selftests dir")
