@@ -2,189 +2,224 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 42ED813D024
-	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Jan 2020 23:34:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1970D13D23E
+	for <lists+linux-kselftest@lfdr.de>; Thu, 16 Jan 2020 03:38:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729638AbgAOWbu (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 15 Jan 2020 17:31:50 -0500
-Received: from mail-qk1-f193.google.com ([209.85.222.193]:36467 "EHLO
-        mail-qk1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728899AbgAOWbu (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 15 Jan 2020 17:31:50 -0500
-Received: by mail-qk1-f193.google.com with SMTP id a203so17355080qkc.3;
-        Wed, 15 Jan 2020 14:31:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=m3ykeEiv2DWhC3YDv/3M+ztOkLKwpMGFjEqD6cnUt4s=;
-        b=cNt51iDcDZI6zelQEGvFbm8lPIlIGnZldM0f2rIq1AgcoCCdkQIbVvR19pY8xHwYlP
-         7R2OMxb5sfqI39LAluJjBuUlrFm8jXcFHwHzpQsVk9IHMN/xpCMK491szpikUKk8RT8X
-         m7307OpYrbxFQJI8OakwrfTa3HGJZ4eJBfI86Xby5q50ox6WVd4PzkYEVcAciFBIwS8u
-         f7mRKTLIgkBP65rlD0vn09o9FPFOgGm1EUGPVidZ+W/ZFmk+dDe2ZjwrZvCB++dEJ8sV
-         SkthSvzz+nTTMBTamfNnFkYTRMY01cXfsbE7dr+lHGbkVSn+2SSSqgQh18vnIuXka7P3
-         jZ8Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=m3ykeEiv2DWhC3YDv/3M+ztOkLKwpMGFjEqD6cnUt4s=;
-        b=cK76LIAP5ynqr0Qta/8qtkniBiwY6z2LvYl36KzJhC160HWZAgWe7jrqSs6rdz51KO
-         jvOYzc5iDZ5jEMidCg5GTs6O4px3Y9vBjWG95814auLdEtPiisD6EOzE4jAM7pZ/if06
-         Y73rLUhWf5YehK9/0knabFTx+SmCHoRVm0XkuQh9SeHo7s/9OBXRisdV1InonIhgnHvY
-         kvxy66xTcUm0LeQKyHsjwPbDFOeJueNg0/TXS9c/A/cnPj84VMNww/UfbaRJatW8cJtH
-         Mte43cYFkUJjnqhSIxlzcsWwulykNHHh+yVSJd6j9xHx2a9ykwKoTYMCxPM9qh21vYh7
-         XOIg==
-X-Gm-Message-State: APjAAAVLiYLb8203H9f0aSWU+jQBOW6ieGh/6E8+TWrMNMJgtQICPqfV
-        ZOGrpVd0Z2SQwg49NYDkGtG7+lsqO9IdXO45MaU=
-X-Google-Smtp-Source: APXvYqzukFfHfNkIeKb+uK+DszszlveC2wPehwk6e8vAwphJhtnuhVoFPfjcvFFmRoCVVG49lShaKmldjnY1Y1hDegY=
-X-Received: by 2002:ae9:e809:: with SMTP id a9mr13631663qkg.92.1579127508368;
- Wed, 15 Jan 2020 14:31:48 -0800 (PST)
-MIME-Version: 1.0
-References: <157909756858.1192265.6657542187065456112.stgit@toke.dk>
- <157909757089.1192265.9038866294345740126.stgit@toke.dk> <CAEf4BzbqY8zivZy637Xy=iTECzBAYQ7vo=M7TvsLM2Yp12bJpg@mail.gmail.com>
- <87v9pctlvn.fsf@toke.dk>
-In-Reply-To: <87v9pctlvn.fsf@toke.dk>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Wed, 15 Jan 2020 14:31:37 -0800
-Message-ID: <CAEf4BzZpGe-1S5_iwS8GBw9iiyFJmDUkOaO+2qaftRn_iy5cNA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 02/10] tools/bpf/runqslower: Fix override
- option for VMLINUX_BTF
-To:     =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        Andrii Nakryiko <andriin@fb.com>,
-        Doug Ledford <dledford@redhat.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <jakub.kicinski@netronome.com>,
-        Jesper Dangaard Brouer <brouer@redhat.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        linux-rdma@vger.kernel.org,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        clang-built-linux@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        id S1729346AbgAPCiA (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 15 Jan 2020 21:38:00 -0500
+Received: from mail.kernel.org ([198.145.29.99]:47878 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729043AbgAPCiA (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 15 Jan 2020 21:38:00 -0500
+Received: from devnote2 (NE2965lan1.rev.em-net.ne.jp [210.141.244.193])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 387642084D;
+        Thu, 16 Jan 2020 02:37:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1579142278;
+        bh=vacKQWKRT4moqnpN5dBJ+7DYc1ik3c3rNIubWECBtk0=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=M2Q9yLy6x27d7jJZuSYEBlI+q0wkTmQEqP63PDJo10kpXcDEzV3TVjfxJk9SO+itl
+         +wvAkQ9xGY4ugd6YxhnH/n4raklHRTb7R4U7analnjp42m2yZXoTEG0iAIklfrFL+B
+         lYEH1ailn+5v3RlWf+JWDQIymazllURnCDeLnrNU=
+Date:   Thu, 16 Jan 2020 11:37:49 +0900
+From:   Masami Hiramatsu <mhiramat@kernel.org>
+To:     Masami Hiramatsu <mhiramat@kernel.org>
+Cc:     Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, jaswinder.singh@linaro.org
+Subject: Re: [BUGFIX PATCH] selftests: Fix pthread link option
+Message-Id: <20200116113749.3a815c124dce18028d3d7f8a@kernel.org>
+In-Reply-To: <157907976750.14189.12829891067375600434.stgit@devnote2>
+References: <157907976750.14189.12829891067375600434.stgit@devnote2>
+X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Jan 15, 2020 at 2:06 PM Toke H=C3=B8iland-J=C3=B8rgensen <toke@redh=
-at.com> wrote:
->
-> Andrii Nakryiko <andrii.nakryiko@gmail.com> writes:
->
-> > On Wed, Jan 15, 2020 at 6:13 AM Toke H=C3=B8iland-J=C3=B8rgensen <toke@=
-redhat.com> wrote:
-> >>
-> >> From: Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com>
-> >>
-> >> The runqslower tool refuses to build without a file to read vmlinux BT=
-F
-> >> from. The build fails with an error message to override the location b=
-y
-> >> setting the VMLINUX_BTF variable if autodetection fails. However, the
-> >> Makefile doesn't actually work with that override - the error message =
-is
-> >> still emitted.
-> >
-> > Do you have example command with VMLINUX_BTF override that didn't work
-> > (and what error message was emitted)?
->
-> Before this patch:
->
-> $ cd ~/build/linux/tools/bpf/runqslower
-> $ make
-> Makefile:18: *** "Can't detect kernel BTF, use VMLINUX_BTF to specify it =
-explicitly".  Stop.
->
-> $ make VMLINUX_BTF=3D~/build/linux/vmlinux
-> Makefile:18: *** "Can't detect kernel BTF, use VMLINUX_BTF to specify it =
-explicitly".  Stop.
+On Wed, 15 Jan 2020 18:16:07 +0900
+Masami Hiramatsu <mhiramat@kernel.org> wrote:
 
-Ok, so this is strange. Try make clean and run with V=3D1, it might help
-to debug this. This could happen if ~/build/linux/vmlinux doesn't
-exist, but I assume you double-checked that. It works for me just fine
-(Makefile won't do VMLINUX_BTF :=3D assignment, if it's defined through
-make invocation, so your change should be a no-op in that regard):
+> To support pthread correctly, it is better to use -pthread
+> instead of -lpthread.
 
-$ make clean
-$ make VMLINUX_BTF=3D~/linux-build/default/vmlinux V=3D1
-...
-.output/sbin/bpftool btf dump file ~/linux-build/default/vmlinux
-format c > .output/vmlinux.h
-...
+Oops, this should be refined, since LDLIBS will not be
+passed when compiling. -pthread is complier option but
+-lpthread is linker option.
 
-Wonder what your output looks like?
+Thank you,
 
->
-> >> Fix this by only doing auto-detection if no override is set. And while
-> >> we're at it, also look for a vmlinux file in the current kernel build =
-dir
-> >> if none if found on the running kernel.
-> >>
-> >> Fixes: 9c01546d26d2 ("tools/bpf: Add runqslower tool to tools/bpf")
-> >> Signed-off-by: Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com>
-> >> ---
-> >>  tools/bpf/runqslower/Makefile |   16 ++++++++++------
-> >>  1 file changed, 10 insertions(+), 6 deletions(-)
-> >>
-> >> diff --git a/tools/bpf/runqslower/Makefile b/tools/bpf/runqslower/Make=
-file
-> >> index cff2fbcd29a8..fb93ce2bf2fe 100644
-> >> --- a/tools/bpf/runqslower/Makefile
-> >> +++ b/tools/bpf/runqslower/Makefile
-> >> @@ -10,12 +10,16 @@ CFLAGS :=3D -g -Wall
-> >>
-> >>  # Try to detect best kernel BTF source
-> >>  KERNEL_REL :=3D $(shell uname -r)
-> >> -ifneq ("$(wildcard /sys/kernel/btf/vmlinux)","")
-> >> -VMLINUX_BTF :=3D /sys/kernel/btf/vmlinux
-> >> -else ifneq ("$(wildcard /boot/vmlinux-$(KERNEL_REL))","")
-> >> -VMLINUX_BTF :=3D /boot/vmlinux-$(KERNEL_REL)
-> >> -else
-> >> -$(error "Can't detect kernel BTF, use VMLINUX_BTF to specify it expli=
-citly")
-> >> +ifeq ("$(VMLINUX_BTF)","")
-> >> +  ifneq ("$(wildcard /sys/kernel/btf/vmlinux)","")
-> >> +  VMLINUX_BTF :=3D /sys/kernel/btf/vmlinux
-> >> +  else ifneq ("$(wildcard /boot/vmlinux-$(KERNEL_REL))","")
-> >> +  VMLINUX_BTF :=3D /boot/vmlinux-$(KERNEL_REL)
-> >> +  else ifneq ("$(wildcard $(abspath ../../../vmlinux))","")
-> >> +  VMLINUX_BTF :=3D $(abspath ../../../vmlinux)
-> >
-> > I'm planning to mirror runqslower into libbpf Github repo and this
-> > ../../../vmlinux piece will be completely out of place in that
-> > context. Also it only will help when building kernel in-tree. So I'd
-> > rather not add this.
->
-> Well building the kernel in-tree is something people sometimes want to do=
- ;)
->
-> Specifically, the selftests depend on this, so we should at least fix
-> those; but I guess it could work to just pass in VMLINUX_BTF as part of
-> the make -C from the selftests dir? I'll try that...
+> 
+> Signed-off-by: Masami Hiramatsu <mhiramat@kernel.org>
+> ---
+>  tools/testing/selftests/bpf/Makefile               |    2 +-
+>  tools/testing/selftests/membarrier/Makefile        |    2 +-
+>  tools/testing/selftests/mqueue/Makefile            |    2 +-
+>  tools/testing/selftests/net/Makefile               |    4 ++--
+>  .../testing/selftests/powerpc/benchmarks/Makefile  |    4 ++--
+>  tools/testing/selftests/powerpc/dscr/Makefile      |    2 +-
+>  tools/testing/selftests/powerpc/mm/Makefile        |    2 +-
+>  tools/testing/selftests/rseq/Makefile              |    2 +-
+>  tools/testing/selftests/rtc/Makefile               |    2 +-
+>  tools/testing/selftests/seccomp/Makefile           |    2 +-
+>  tools/testing/selftests/timers/Makefile            |    2 +-
+>  tools/testing/selftests/vm/Makefile                |    2 +-
+>  12 files changed, 14 insertions(+), 14 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+> index e2fd6f8d579c..419f58c53d12 100644
+> --- a/tools/testing/selftests/bpf/Makefile
+> +++ b/tools/testing/selftests/bpf/Makefile
+> @@ -22,7 +22,7 @@ CFLAGS += -g -Wall -O2 $(GENFLAGS) -I$(APIDIR) -I$(LIBDIR) -I$(BPFDIR)	\
+>  	  -I$(GENDIR) -I$(TOOLSDIR) -I$(CURDIR)				\
+>  	  -Dbpf_prog_load=bpf_prog_test_load				\
+>  	  -Dbpf_load_program=bpf_test_load_program
+> -LDLIBS += -lcap -lelf -lrt -lpthread
+> +LDLIBS += -lcap -lelf -lrt -pthread
+>  
+>  # Order correspond to 'make run_tests' order
+>  TEST_GEN_PROGS = test_verifier test_tag test_maps test_lru_map test_lpm_map test_progs \
+> diff --git a/tools/testing/selftests/membarrier/Makefile b/tools/testing/selftests/membarrier/Makefile
+> index 34d1c81a2324..19d657d966e3 100644
+> --- a/tools/testing/selftests/membarrier/Makefile
+> +++ b/tools/testing/selftests/membarrier/Makefile
+> @@ -1,6 +1,6 @@
+>  # SPDX-License-Identifier: GPL-2.0-only
+>  CFLAGS += -g -I../../../../usr/include/
+> -LDLIBS += -lpthread
+> +LDLIBS += -pthread
+>  
+>  TEST_GEN_PROGS := membarrier_test_single_thread \
+>  		membarrier_test_multi_thread
+> diff --git a/tools/testing/selftests/mqueue/Makefile b/tools/testing/selftests/mqueue/Makefile
+> index 8a58055fc1f5..9986b778b8b3 100644
+> --- a/tools/testing/selftests/mqueue/Makefile
+> +++ b/tools/testing/selftests/mqueue/Makefile
+> @@ -1,6 +1,6 @@
+>  # SPDX-License-Identifier: GPL-2.0
+>  CFLAGS += -O2
+> -LDLIBS = -lrt -lpthread -lpopt
+> +LDLIBS = -lrt -pthread -lpopt
+>  
+>  TEST_GEN_PROGS := mq_open_tests mq_perf_tests
+>  
+> diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selftests/net/Makefile
+> index a8e04d665b69..6ad8571bb0ed 100644
+> --- a/tools/testing/selftests/net/Makefile
+> +++ b/tools/testing/selftests/net/Makefile
+> @@ -25,5 +25,5 @@ KSFT_KHDR_INSTALL := 1
+>  include ../lib.mk
+>  
+>  $(OUTPUT)/reuseport_bpf_numa: LDLIBS += -lnuma
+> -$(OUTPUT)/tcp_mmap: LDFLAGS += -lpthread
+> -$(OUTPUT)/tcp_inq: LDFLAGS += -lpthread
+> +$(OUTPUT)/tcp_mmap: LDFLAGS += -pthread
+> +$(OUTPUT)/tcp_inq: LDFLAGS += -pthread
+> diff --git a/tools/testing/selftests/powerpc/benchmarks/Makefile b/tools/testing/selftests/powerpc/benchmarks/Makefile
+> index d40300a65b42..0d7c82d520ce 100644
+> --- a/tools/testing/selftests/powerpc/benchmarks/Makefile
+> +++ b/tools/testing/selftests/powerpc/benchmarks/Makefile
+> @@ -11,8 +11,8 @@ $(TEST_GEN_PROGS): ../harness.c
+>  
+>  $(OUTPUT)/context_switch: ../utils.c
+>  $(OUTPUT)/context_switch: CFLAGS += -maltivec -mvsx -mabi=altivec
+> -$(OUTPUT)/context_switch: LDLIBS += -lpthread
+> +$(OUTPUT)/context_switch: LDLIBS += -pthread
+>  
+> -$(OUTPUT)/fork: LDLIBS += -lpthread
+> +$(OUTPUT)/fork: LDLIBS += -pthread
+>  
+>  $(OUTPUT)/exec_target: CFLAGS += -static -nostartfiles
+> diff --git a/tools/testing/selftests/powerpc/dscr/Makefile b/tools/testing/selftests/powerpc/dscr/Makefile
+> index 5df476364b4d..90c744592d1b 100644
+> --- a/tools/testing/selftests/powerpc/dscr/Makefile
+> +++ b/tools/testing/selftests/powerpc/dscr/Makefile
+> @@ -6,6 +6,6 @@ TEST_GEN_PROGS := dscr_default_test dscr_explicit_test dscr_user_test	\
+>  top_srcdir = ../../../../..
+>  include ../../lib.mk
+>  
+> -$(OUTPUT)/dscr_default_test: LDLIBS += -lpthread
+> +$(OUTPUT)/dscr_default_test: LDLIBS += -pthread
+>  
+>  $(TEST_GEN_PROGS): ../harness.c
+> diff --git a/tools/testing/selftests/powerpc/mm/Makefile b/tools/testing/selftests/powerpc/mm/Makefile
+> index ed1565809d2b..4cda9b0b3dd4 100644
+> --- a/tools/testing/selftests/powerpc/mm/Makefile
+> +++ b/tools/testing/selftests/powerpc/mm/Makefile
+> @@ -20,4 +20,4 @@ $(OUTPUT)/large_vm_fork_separation: CFLAGS += -m64
+>  $(OUTPUT)/tempfile:
+>  	dd if=/dev/zero of=$@ bs=64k count=1
+>  
+> -$(OUTPUT)/tlbie_test: LDLIBS += -lpthread
+> +$(OUTPUT)/tlbie_test: LDLIBS += -pthread
+> diff --git a/tools/testing/selftests/rseq/Makefile b/tools/testing/selftests/rseq/Makefile
+> index d6469535630a..3a17f5b74b9c 100644
+> --- a/tools/testing/selftests/rseq/Makefile
+> +++ b/tools/testing/selftests/rseq/Makefile
+> @@ -6,7 +6,7 @@ endif
+>  
+>  CFLAGS += -O2 -Wall -g -I./ -I../../../../usr/include/ -L./ -Wl,-rpath=./ \
+>  	  $(CLANG_FLAGS)
+> -LDLIBS += -lpthread
+> +LDLIBS += -pthread
+>  
+>  # Own dependencies because we only want to build against 1st prerequisite, but
+>  # still track changes to header files and depend on shared object.
+> diff --git a/tools/testing/selftests/rtc/Makefile b/tools/testing/selftests/rtc/Makefile
+> index de9c8566672a..d075ecfbe846 100644
+> --- a/tools/testing/selftests/rtc/Makefile
+> +++ b/tools/testing/selftests/rtc/Makefile
+> @@ -1,6 +1,6 @@
+>  # SPDX-License-Identifier: GPL-2.0
+>  CFLAGS += -O3 -Wl,-no-as-needed -Wall
+> -LDFLAGS += -lrt -lpthread -lm
+> +LDFLAGS += -lrt -pthread -lm
+>  
+>  TEST_GEN_PROGS = rtctest
+>  
+> diff --git a/tools/testing/selftests/seccomp/Makefile b/tools/testing/selftests/seccomp/Makefile
+> index 1760b3e39730..3e35159f709a 100644
+> --- a/tools/testing/selftests/seccomp/Makefile
+> +++ b/tools/testing/selftests/seccomp/Makefile
+> @@ -9,7 +9,7 @@ BINARIES := seccomp_bpf seccomp_benchmark
+>  CFLAGS += -Wl,-no-as-needed -Wall
+>  
+>  seccomp_bpf: seccomp_bpf.c ../kselftest_harness.h
+> -	$(CC) $(CFLAGS) $(LDFLAGS) $< -lpthread -o $@
+> +	$(CC) $(CFLAGS) $(LDFLAGS) $< -pthread -o $@
+>  
+>  TEST_PROGS += $(BINARIES)
+>  EXTRA_CLEAN := $(BINARIES)
+> diff --git a/tools/testing/selftests/timers/Makefile b/tools/testing/selftests/timers/Makefile
+> index 7656c7ce79d9..70461befa338 100644
+> --- a/tools/testing/selftests/timers/Makefile
+> +++ b/tools/testing/selftests/timers/Makefile
+> @@ -1,6 +1,6 @@
+>  # SPDX-License-Identifier: GPL-2.0
+>  CFLAGS += -O3 -Wl,-no-as-needed -Wall
+> -LDLIBS += -lrt -lpthread -lm
+> +LDLIBS += -lrt -pthread -lm
+>  
+>  # these are all "safe" tests that don't modify
+>  # system time or require escalated privileges
+> diff --git a/tools/testing/selftests/vm/Makefile b/tools/testing/selftests/vm/Makefile
+> index 7f9a8a8c31da..afb35febd7b6 100644
+> --- a/tools/testing/selftests/vm/Makefile
+> +++ b/tools/testing/selftests/vm/Makefile
+> @@ -31,6 +31,6 @@ TEST_FILES := test_vmalloc.sh
+>  KSFT_KHDR_INSTALL := 1
+>  include ../lib.mk
+>  
+> -$(OUTPUT)/userfaultfd: LDLIBS += -lpthread
+> +$(OUTPUT)/userfaultfd: LDLIBS += -pthread
+>  
+>  $(OUTPUT)/mlock-random-test: LDLIBS += -lcap
+> 
 
-Yes, it can be handled through VMLINUX_BTF override for selftests. As
-I said, this will be a self-contained example in libbpf's Github repo,
-so this "in kernel tree" assumption doesn't stand there.
 
-
->
-> -Toke
->
+-- 
+Masami Hiramatsu <mhiramat@kernel.org>
