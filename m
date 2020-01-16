@@ -2,40 +2,39 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 63C9D13F8E9
-	for <lists+linux-kselftest@lfdr.de>; Thu, 16 Jan 2020 20:21:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 501EC13F604
+	for <lists+linux-kselftest@lfdr.de>; Thu, 16 Jan 2020 20:00:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2437733AbgAPTVZ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 16 Jan 2020 14:21:25 -0500
-Received: from mail.kernel.org ([198.145.29.99]:37632 "EHLO mail.kernel.org"
+        id S2389004AbgAPTAy (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 16 Jan 2020 14:00:54 -0500
+Received: from mail.kernel.org ([198.145.29.99]:35986 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729339AbgAPQxl (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 16 Jan 2020 11:53:41 -0500
+        id S2388481AbgAPRGJ (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 16 Jan 2020 12:06:09 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 18DF42464B;
-        Thu, 16 Jan 2020 16:53:39 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id A403122522;
+        Thu, 16 Jan 2020 17:06:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1579193620;
-        bh=oUriMmdjKAgjJA7UfRp6wzz4Hoy6yBgLI1byKSxEiV4=;
+        s=default; t=1579194368;
+        bh=DIN3t0CL3qc9oQivN4pyYzvvL2OYzqK+JGu7m+2wO8M=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Q60BqtQqZzSQHr2VUTSl+YFnQqQJOAh31b0rqKQM0HLX5rTP2tbhaNRPMP50VfeOi
-         WqzihGbPtbYHxhvJyvEbzqTUgJ+v8kxSWVQArLI38pkPxE2kyRsjA0IdBSA8QLAE/Q
-         Hr+bK2GMZJmfDA7uwOezbmXWBTffT/N66hwjewTg=
+        b=ffdNfVSH0xKwPk6evCnL/w9ZxtSx4/AI3Hqy3ZTrzqX+X3CFKC4MxxtbJV+mqiFma
+         4ITk3wIOvaSNXh7ZAzfBruALNB4013PNaOIz77zzrHsuSmmKVbD2oswda2mAmLCjOI
+         NMG7pLNhuE+S+vtSxLCvUTmlicf5f60j3LW+XdHE=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Andrii Nakryiko <andriin@fb.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Yonghong Song <yhs@fb.com>, Sasha Levin <sashal@kernel.org>,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
+Cc:     Kees Cook <keescook@chromium.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Sasha Levin <sashal@kernel.org>,
         linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 155/205] libbpf: Fix call relocation offset calculation bug
-Date:   Thu, 16 Jan 2020 11:42:10 -0500
-Message-Id: <20200116164300.6705-155-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 302/671] selftests/ipc: Fix msgque compiler warnings
+Date:   Thu, 16 Jan 2020 11:59:00 -0500
+Message-Id: <20200116170509.12787-39-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200116164300.6705-1-sashal@kernel.org>
-References: <20200116164300.6705-1-sashal@kernel.org>
+In-Reply-To: <20200116170509.12787-1-sashal@kernel.org>
+References: <20200116170509.12787-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -45,236 +44,74 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Andrii Nakryiko <andriin@fb.com>
+From: Kees Cook <keescook@chromium.org>
 
-[ Upstream commit a0d7da26ce86a25e97ae191cb90574ada6daea98 ]
+[ Upstream commit a147faa96f832f76e772b1e448e94ea84c774081 ]
 
-When relocating subprogram call, libbpf doesn't take into account
-relo->text_off, which comes from symbol's value. This generally works fine for
-subprograms implemented as static functions, but breaks for global functions.
+This fixes the various compiler warnings when building the msgque
+selftest. The primary change is using sys/msg.h instead of linux/msg.h
+directly to gain the API declarations.
 
-Taking a simplified test_pkt_access.c as an example:
-
-__attribute__ ((noinline))
-static int test_pkt_access_subprog1(volatile struct __sk_buff *skb)
-{
-        return skb->len * 2;
-}
-
-__attribute__ ((noinline))
-static int test_pkt_access_subprog2(int val, volatile struct __sk_buff *skb)
-{
-        return skb->len + val;
-}
-
-SEC("classifier/test_pkt_access")
-int test_pkt_access(struct __sk_buff *skb)
-{
-        if (test_pkt_access_subprog1(skb) != skb->len * 2)
-                return TC_ACT_SHOT;
-        if (test_pkt_access_subprog2(2, skb) != skb->len + 2)
-                return TC_ACT_SHOT;
-        return TC_ACT_UNSPEC;
-}
-
-When compiled, we get two relocations, pointing to '.text' symbol. .text has
-st_value set to 0 (it points to the beginning of .text section):
-
-0000000000000008  000000050000000a R_BPF_64_32            0000000000000000 .text
-0000000000000040  000000050000000a R_BPF_64_32            0000000000000000 .text
-
-test_pkt_access_subprog1 and test_pkt_access_subprog2 offsets (targets of two
-calls) are encoded within call instruction's imm32 part as -1 and 2,
-respectively:
-
-0000000000000000 test_pkt_access_subprog1:
-       0:       61 10 00 00 00 00 00 00 r0 = *(u32 *)(r1 + 0)
-       1:       64 00 00 00 01 00 00 00 w0 <<= 1
-       2:       95 00 00 00 00 00 00 00 exit
-
-0000000000000018 test_pkt_access_subprog2:
-       3:       61 10 00 00 00 00 00 00 r0 = *(u32 *)(r1 + 0)
-       4:       04 00 00 00 02 00 00 00 w0 += 2
-       5:       95 00 00 00 00 00 00 00 exit
-
-0000000000000000 test_pkt_access:
-       0:       bf 16 00 00 00 00 00 00 r6 = r1
-===>   1:       85 10 00 00 ff ff ff ff call -1
-       2:       bc 01 00 00 00 00 00 00 w1 = w0
-       3:       b4 00 00 00 02 00 00 00 w0 = 2
-       4:       61 62 00 00 00 00 00 00 r2 = *(u32 *)(r6 + 0)
-       5:       64 02 00 00 01 00 00 00 w2 <<= 1
-       6:       5e 21 08 00 00 00 00 00 if w1 != w2 goto +8 <LBB0_3>
-       7:       bf 61 00 00 00 00 00 00 r1 = r6
-===>   8:       85 10 00 00 02 00 00 00 call 2
-       9:       bc 01 00 00 00 00 00 00 w1 = w0
-      10:       61 62 00 00 00 00 00 00 r2 = *(u32 *)(r6 + 0)
-      11:       04 02 00 00 02 00 00 00 w2 += 2
-      12:       b4 00 00 00 ff ff ff ff w0 = -1
-      13:       1e 21 01 00 00 00 00 00 if w1 == w2 goto +1 <LBB0_3>
-      14:       b4 00 00 00 02 00 00 00 w0 = 2
-0000000000000078 LBB0_3:
-      15:       95 00 00 00 00 00 00 00 exit
-
-Now, if we compile example with global functions, the setup changes.
-Relocations are now against specifically test_pkt_access_subprog1 and
-test_pkt_access_subprog2 symbols, with test_pkt_access_subprog2 pointing 24
-bytes into its respective section (.text), i.e., 3 instructions in:
-
-0000000000000008  000000070000000a R_BPF_64_32            0000000000000000 test_pkt_access_subprog1
-0000000000000048  000000080000000a R_BPF_64_32            0000000000000018 test_pkt_access_subprog2
-
-Calls instructions now encode offsets relative to function symbols and are both
-set ot -1:
-
-0000000000000000 test_pkt_access_subprog1:
-       0:       61 10 00 00 00 00 00 00 r0 = *(u32 *)(r1 + 0)
-       1:       64 00 00 00 01 00 00 00 w0 <<= 1
-       2:       95 00 00 00 00 00 00 00 exit
-
-0000000000000018 test_pkt_access_subprog2:
-       3:       61 20 00 00 00 00 00 00 r0 = *(u32 *)(r2 + 0)
-       4:       0c 10 00 00 00 00 00 00 w0 += w1
-       5:       95 00 00 00 00 00 00 00 exit
-
-0000000000000000 test_pkt_access:
-       0:       bf 16 00 00 00 00 00 00 r6 = r1
-===>   1:       85 10 00 00 ff ff ff ff call -1
-       2:       bc 01 00 00 00 00 00 00 w1 = w0
-       3:       b4 00 00 00 02 00 00 00 w0 = 2
-       4:       61 62 00 00 00 00 00 00 r2 = *(u32 *)(r6 + 0)
-       5:       64 02 00 00 01 00 00 00 w2 <<= 1
-       6:       5e 21 09 00 00 00 00 00 if w1 != w2 goto +9 <LBB2_3>
-       7:       b4 01 00 00 02 00 00 00 w1 = 2
-       8:       bf 62 00 00 00 00 00 00 r2 = r6
-===>   9:       85 10 00 00 ff ff ff ff call -1
-      10:       bc 01 00 00 00 00 00 00 w1 = w0
-      11:       61 62 00 00 00 00 00 00 r2 = *(u32 *)(r6 + 0)
-      12:       04 02 00 00 02 00 00 00 w2 += 2
-      13:       b4 00 00 00 ff ff ff ff w0 = -1
-      14:       1e 21 01 00 00 00 00 00 if w1 == w2 goto +1 <LBB2_3>
-      15:       b4 00 00 00 02 00 00 00 w0 = 2
-0000000000000080 LBB2_3:
-      16:       95 00 00 00 00 00 00 00 exit
-
-Thus the right formula to calculate target call offset after relocation should
-take into account relocation's target symbol value (offset within section),
-call instruction's imm32 offset, and (subtracting, to get relative instruction
-offset) instruction index of call instruction itself. All that is shifted by
-number of instructions in main program, given all sub-programs are copied over
-after main program.
-
-Convert few selftests relying on bpf-to-bpf calls to use global functions
-instead of static ones.
-
-Fixes: 48cca7e44f9f ("libbpf: add support for bpf_call")
-Reported-by: Alexei Starovoitov <ast@kernel.org>
-Signed-off-by: Andrii Nakryiko <andriin@fb.com>
-Acked-by: Yonghong Song <yhs@fb.com>
-Signed-off-by: Alexei Starovoitov <ast@kernel.org>
-Link: https://lore.kernel.org/bpf/20191119224447.3781271-1-andriin@fb.com
+Fixes: 3a665531a3b7 ("selftests: IPC message queue copy feature test")
+Signed-off-by: Kees Cook <keescook@chromium.org>
+Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/lib/bpf/libbpf.c                             | 8 ++++++--
- tools/testing/selftests/bpf/progs/test_btf_haskv.c | 4 ++--
- tools/testing/selftests/bpf/progs/test_btf_newkv.c | 4 ++--
- tools/testing/selftests/bpf/progs/test_btf_nokv.c  | 4 ++--
- 4 files changed, 12 insertions(+), 8 deletions(-)
+ tools/testing/selftests/ipc/msgque.c | 11 ++++++-----
+ 1 file changed, 6 insertions(+), 5 deletions(-)
 
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index d98838c5820c..de2be6b2a748 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -1791,9 +1791,13 @@ bpf_program__collect_reloc(struct bpf_program *prog, GElf_Shdr *shdr,
- 				pr_warning("incorrect bpf_call opcode\n");
- 				return -LIBBPF_ERRNO__RELOC;
- 			}
-+			if (sym.st_value % 8) {
-+				pr_warn("bad call relo offset: %lu\n", sym.st_value);
-+				return -LIBBPF_ERRNO__RELOC;
-+			}
- 			prog->reloc_desc[i].type = RELO_CALL;
- 			prog->reloc_desc[i].insn_idx = insn_idx;
--			prog->reloc_desc[i].text_off = sym.st_value;
-+			prog->reloc_desc[i].text_off = sym.st_value / 8;
- 			obj->has_pseudo_calls = true;
- 			continue;
- 		}
-@@ -3239,7 +3243,7 @@ bpf_program__reloc_text(struct bpf_program *prog, struct bpf_object *obj,
- 			 prog->section_name);
- 	}
- 	insn = &prog->insns[relo->insn_idx];
--	insn->imm += prog->main_prog_cnt - relo->insn_idx;
-+	insn->imm += relo->text_off + prog->main_prog_cnt - relo->insn_idx;
+diff --git a/tools/testing/selftests/ipc/msgque.c b/tools/testing/selftests/ipc/msgque.c
+index dac927e82336..4c156aeab6b8 100644
+--- a/tools/testing/selftests/ipc/msgque.c
++++ b/tools/testing/selftests/ipc/msgque.c
+@@ -1,9 +1,10 @@
+ // SPDX-License-Identifier: GPL-2.0
++#define _GNU_SOURCE
+ #include <stdlib.h>
+ #include <stdio.h>
+ #include <string.h>
+ #include <errno.h>
+-#include <linux/msg.h>
++#include <sys/msg.h>
+ #include <fcntl.h>
+ 
+ #include "../kselftest.h"
+@@ -73,7 +74,7 @@ int restore_queue(struct msgque_data *msgque)
  	return 0;
+ 
+ destroy:
+-	if (msgctl(id, IPC_RMID, 0))
++	if (msgctl(id, IPC_RMID, NULL))
+ 		printf("Failed to destroy queue: %d\n", -errno);
+ 	return ret;
  }
+@@ -120,7 +121,7 @@ int check_and_destroy_queue(struct msgque_data *msgque)
  
-diff --git a/tools/testing/selftests/bpf/progs/test_btf_haskv.c b/tools/testing/selftests/bpf/progs/test_btf_haskv.c
-index e5c79fe0ffdb..d65c61e64df2 100644
---- a/tools/testing/selftests/bpf/progs/test_btf_haskv.c
-+++ b/tools/testing/selftests/bpf/progs/test_btf_haskv.c
-@@ -25,7 +25,7 @@ struct dummy_tracepoint_args {
- };
+ 	ret = 0;
+ err:
+-	if (msgctl(msgque->msq_id, IPC_RMID, 0)) {
++	if (msgctl(msgque->msq_id, IPC_RMID, NULL)) {
+ 		printf("Failed to destroy queue: %d\n", -errno);
+ 		return -errno;
+ 	}
+@@ -129,7 +130,7 @@ int check_and_destroy_queue(struct msgque_data *msgque)
  
- __attribute__((noinline))
--static int test_long_fname_2(struct dummy_tracepoint_args *arg)
-+int test_long_fname_2(struct dummy_tracepoint_args *arg)
+ int dump_queue(struct msgque_data *msgque)
  {
- 	struct ipv_counts *counts;
- 	int key = 0;
-@@ -43,7 +43,7 @@ static int test_long_fname_2(struct dummy_tracepoint_args *arg)
- }
+-	struct msqid64_ds ds;
++	struct msqid_ds ds;
+ 	int kern_id;
+ 	int i, ret;
  
- __attribute__((noinline))
--static int test_long_fname_1(struct dummy_tracepoint_args *arg)
-+int test_long_fname_1(struct dummy_tracepoint_args *arg)
- {
- 	return test_long_fname_2(arg);
- }
-diff --git a/tools/testing/selftests/bpf/progs/test_btf_newkv.c b/tools/testing/selftests/bpf/progs/test_btf_newkv.c
-index 5ee3622ddebb..8e83317db841 100644
---- a/tools/testing/selftests/bpf/progs/test_btf_newkv.c
-+++ b/tools/testing/selftests/bpf/progs/test_btf_newkv.c
-@@ -33,7 +33,7 @@ struct dummy_tracepoint_args {
- };
+@@ -245,7 +246,7 @@ int main(int argc, char **argv)
+ 	return ksft_exit_pass();
  
- __attribute__((noinline))
--static int test_long_fname_2(struct dummy_tracepoint_args *arg)
-+int test_long_fname_2(struct dummy_tracepoint_args *arg)
- {
- 	struct ipv_counts *counts;
- 	int key = 0;
-@@ -56,7 +56,7 @@ static int test_long_fname_2(struct dummy_tracepoint_args *arg)
- }
- 
- __attribute__((noinline))
--static int test_long_fname_1(struct dummy_tracepoint_args *arg)
-+int test_long_fname_1(struct dummy_tracepoint_args *arg)
- {
- 	return test_long_fname_2(arg);
- }
-diff --git a/tools/testing/selftests/bpf/progs/test_btf_nokv.c b/tools/testing/selftests/bpf/progs/test_btf_nokv.c
-index 434188c37774..3f4422044759 100644
---- a/tools/testing/selftests/bpf/progs/test_btf_nokv.c
-+++ b/tools/testing/selftests/bpf/progs/test_btf_nokv.c
-@@ -23,7 +23,7 @@ struct dummy_tracepoint_args {
- };
- 
- __attribute__((noinline))
--static int test_long_fname_2(struct dummy_tracepoint_args *arg)
-+int test_long_fname_2(struct dummy_tracepoint_args *arg)
- {
- 	struct ipv_counts *counts;
- 	int key = 0;
-@@ -41,7 +41,7 @@ static int test_long_fname_2(struct dummy_tracepoint_args *arg)
- }
- 
- __attribute__((noinline))
--static int test_long_fname_1(struct dummy_tracepoint_args *arg)
-+int test_long_fname_1(struct dummy_tracepoint_args *arg)
- {
- 	return test_long_fname_2(arg);
- }
+ err_destroy:
+-	if (msgctl(msgque.msq_id, IPC_RMID, 0)) {
++	if (msgctl(msgque.msq_id, IPC_RMID, NULL)) {
+ 		printf("Failed to destroy queue: %d\n", -errno);
+ 		return ksft_exit_fail();
+ 	}
 -- 
 2.20.1
 
