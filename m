@@ -2,164 +2,170 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F35CA13DF6D
-	for <lists+linux-kselftest@lfdr.de>; Thu, 16 Jan 2020 17:00:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CC4613E57B
+	for <lists+linux-kselftest@lfdr.de>; Thu, 16 Jan 2020 18:15:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726559AbgAPQAN (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 16 Jan 2020 11:00:13 -0500
-Received: from mail-eopbgr20079.outbound.protection.outlook.com ([40.107.2.79]:20230
-        "EHLO EUR02-VE1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726410AbgAPQAN (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 16 Jan 2020 11:00:13 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=H7iuwfJMW/KTuiV1yeKh2Z7kplBtIe4fTUSSO0HHsRPCkOzA/xkGYD4Rr/ahoEj9Yfx9sI5Nliyc3OQB4DGkImx19cBH/X91jNllo+bhbPclMH5hsmEAxxOoYw5KxMjRyjEjdDXHlzM6/xrF7IIfJiCO+Ku20X1XzmEFHn0qwazJjWm5Yo2ai7sTKxuUlvn0NXPHY+ekScVkDC6CrfPh53OmNknhJKcGcLoJqyU39v6ESd0fHeQ8Y2+o+6o4SSdSqMuhBGGEWkFqzRqa41NvCqAkikNEniNmFFDz7/R5DHSa2hkVbgW1k+3m+05ZJEdoiamdS8stWUpGb+TjibKMSA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=z3tizVRyq4GUFAfNZmbiLXUnh733M/F+zveIQUtZh9o=;
- b=LQBA1LGzHXUtAs7ZH8Y0iLJY047XHSXtqpQLfl+s+16nvh0BFhG8IifrDzzEj1Tbv4iKgcT6XS7FICPTFcosbXjOOcVnOYHPklcr6QIiAKlnA10M4jqXJy39Z3U23F3EioOr2eqqj9c5mWc2MzLDDHbW/x//8Ztluej/y1rGx9kduJ921+2KAH4V3meaM1f0E3gDKpL424/1MGu7pEz5KDLxqmZK0IWVM5VnvqFpx0+zyfhDH9kJVwKN1mqYpeDQzkzqGzaADVUt7I4TmFAc0hIU5fZ6eFz9z580ExHWyfas0kzrdJfaLOtGgKM/l6BLXCkohyHbNjSQfMmuIgRQ9w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=mellanox.com; dmarc=pass action=none header.from=mellanox.com;
- dkim=pass header.d=mellanox.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Mellanox.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=z3tizVRyq4GUFAfNZmbiLXUnh733M/F+zveIQUtZh9o=;
- b=nEBNDEmLL4utovFupHHfBAyxNQTrdAFDVy+U7z2HSF31naKLiUROZGEqgH2AlU0Lkqo+BvnBHf9M9639SZLNXxYLq+0nWNJjTlu7iTXE5ahSdSQJMAwLbaKSUri6Xp2GjTdVHoU0ySntb38+qmVt5l1QPENVFfxoXBVsjlLK7Gw=
-Received: from VI1PR05MB4141.eurprd05.prod.outlook.com (52.133.14.15) by
- VI1PR05MB6768.eurprd05.prod.outlook.com (10.186.162.152) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2644.18; Thu, 16 Jan 2020 16:00:07 +0000
-Received: from VI1PR05MB4141.eurprd05.prod.outlook.com
- ([fe80::1c00:7925:d5c6:d60d]) by VI1PR05MB4141.eurprd05.prod.outlook.com
- ([fe80::1c00:7925:d5c6:d60d%7]) with mapi id 15.20.2644.015; Thu, 16 Jan 2020
- 16:00:07 +0000
-Received: from mlx.ziepe.ca (142.68.57.212) by BN6PR14CA0029.namprd14.prod.outlook.com (2603:10b6:404:13f::15) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2644.18 via Frontend Transport; Thu, 16 Jan 2020 16:00:06 +0000
-Received: from jgg by mlx.ziepe.ca with local (Exim 4.90_1)     (envelope-from <jgg@mellanox.com>)      id 1is7Yw-0006Jf-JR; Thu, 16 Jan 2020 12:00:02 -0400
-From:   Jason Gunthorpe <jgg@mellanox.com>
-To:     Ralph Campbell <rcampbell@nvidia.com>
-CC:     "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "nouveau@lists.freedesktop.org" <nouveau@lists.freedesktop.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        Jerome Glisse <jglisse@redhat.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Ben Skeggs <bskeggs@redhat.com>, Shuah Khan <shuah@kernel.org>
-Subject: Re: [PATCH v6 5/6] nouveau: use new mmu interval notifiers
-Thread-Topic: [PATCH v6 5/6] nouveau: use new mmu interval notifiers
-Thread-Index: AQHVymNqjXzbt52uukWssUL4CQa1/qfqIESAgAIr9ICAASsGAA==
-Date:   Thu, 16 Jan 2020 16:00:06 +0000
-Message-ID: <20200116160002.GL20978@mellanox.com>
-References: <20200113224703.5917-1-rcampbell@nvidia.com>
- <20200113224703.5917-6-rcampbell@nvidia.com>
- <20200114125957.GO20978@mellanox.com>
- <5845f50e-8bc0-8068-ee21-4f910beb1255@nvidia.com>
-In-Reply-To: <5845f50e-8bc0-8068-ee21-4f910beb1255@nvidia.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-clientproxiedby: BN6PR14CA0029.namprd14.prod.outlook.com
- (2603:10b6:404:13f::15) To VI1PR05MB4141.eurprd05.prod.outlook.com
- (2603:10a6:803:44::15)
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=jgg@mellanox.com; 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-originating-ip: [142.68.57.212]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: 7e34af3e-9c2a-4b8f-7dfa-08d79a9d2809
-x-ms-traffictypediagnostic: VI1PR05MB6768:
-x-microsoft-antispam-prvs: <VI1PR05MB6768856DE0040FF47E7CC132CF360@VI1PR05MB6768.eurprd05.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:10000;
-x-forefront-prvs: 02843AA9E0
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(366004)(396003)(136003)(346002)(376002)(39860400002)(199004)(189003)(2616005)(2906002)(1076003)(52116002)(86362001)(33656002)(316002)(36756003)(26005)(81166006)(5660300002)(8676002)(186003)(4326008)(81156014)(66946007)(9786002)(6916009)(66476007)(66556008)(64756008)(66446008)(54906003)(71200400001)(7416002)(8936002)(9746002)(478600001)(24400500001);DIR:OUT;SFP:1101;SCL:1;SRVR:VI1PR05MB6768;H:VI1PR05MB4141.eurprd05.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
-received-spf: None (protection.outlook.com: mellanox.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: iDLgVCiLs+MqFDOwVfDiBXIGC09Ym7bo5DZw3ENsAUQfm5JiV+JBCqp+UiUAG2i+8lgizT8mVQlKOLGC/AmEUL2PI38NHdpGIOYuPYmp7Etins/V/J+GswH//CGYxspz/vRt65BgsPVfhCVzuuYiNZEf3ZvdG9nXATpbRouoOaUrM2mnEceSKq32krSDQwTnTdtxX5NudpsiOkFf77319St+1E0KYuBxawAJLmLBD2HJlM99YUu/gQS0IYAFBiHK78j4a4tB2kh3FmoI2g8QNQC2pGSTI138IekihHc3txY+qzuDuCnRpkAu2oShRkWXPmnavqNnr+UF66rYRuOP729Ixx3XkXFBcu5dZrAuOO6bcKft0blNeEl+l3uQzSQXZiVjtsyMfAEDNvbkTRKKbJME6eBZX/2LjIvMr4u3pN7QhZTNwPS7ENFhcfpdDy8EziM//Naws42hbdRkSRwxulCyfOposaeqGYuboL/sR0fuZV6RLCjOwz71mMu4V71J
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <ECF78F37AB44F842AECF3474CA80857C@eurprd05.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
+        id S2391105AbgAPRPA (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 16 Jan 2020 12:15:00 -0500
+Received: from mail-qk1-f196.google.com ([209.85.222.196]:43600 "EHLO
+        mail-qk1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2391101AbgAPRO7 (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 16 Jan 2020 12:14:59 -0500
+Received: by mail-qk1-f196.google.com with SMTP id t129so19796598qke.10;
+        Thu, 16 Jan 2020 09:14:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=qbPesbI6+o4JGTWaTpLZljTSTXaCbDPO7M6CK9Z7jy0=;
+        b=DujDkG5W3ILpYM8qyT0dAcZJClk1ACfv/flsghX/egJkq4WsWkCtz+kypqB1mcFslN
+         uDXKIvfdULD4F80JGgtROcDeW1eHH825VujncNlxJoLvi91ZMb7rGYi6KoVPXitLX6ty
+         u90XUpHcsUCTK0dKYWhkjIb6zzFW7fRHX5we0nzj8d/clbEcl4H3OrL3VGB1gXmxorEK
+         KYfP0As9yW35L0kqcdFLDRmRNbtk0tdGhY5Dkni8Pv2sjPewW92s1Vl0SKCEQiEkkYZI
+         aQEnAchcYdP+TGnVTg0I81U5jTnEQj3onFKb9erpdMhab2+L4nNJXpnIewRzpj+eFbsQ
+         0CLQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=qbPesbI6+o4JGTWaTpLZljTSTXaCbDPO7M6CK9Z7jy0=;
+        b=EdVXhet3OBYS+raDRU+w0vw7BHT6JkYr+Z/760/yxGUPWp1S+vvd9sA40D3i2FaDJr
+         0MxD19pPOdSBjmj1cfSVPt2stTGenOZxrUMh2c8YEJGVGN5EFXy9U6uvuhN0SrngvVvl
+         ecvly5J14MBF9XeR9gWtYAlMbyljGc+dPULe3aCFfi6BRBribLPv/uthlHKw97X2S3lc
+         Wbj0K2lWAdshNLLtxFmCCG5LsQuchA7TbYlVn8yI0DzHo/HuWwP66ifekuVAImQAPJZL
+         mm6vDiJzxiNhHmrVr0clRaS6R3+X16Jf8IVU7eLY+j1Tz3hLlNWF/V/JbkLyMtQNLTCz
+         C8gg==
+X-Gm-Message-State: APjAAAUBNF+Ur4sOO6yAvDQr2mKsdWlAIx5t/V9o9xO97pgKhn8O5pWf
+        PVAQKdsZVq6i6QUM1bvwOyYHWonPacr+ITcD+j0=
+X-Google-Smtp-Source: APXvYqye2xzTJ5xPc92metlBwExlrGUNWRrkmB/ybM14ARqiI3YrIFXjSAmln3PIxwPT0fU+QKgzeO269EhwuJ8/F3g=
+X-Received: by 2002:a05:620a:5ae:: with SMTP id q14mr29954210qkq.437.1579194898228;
+ Thu, 16 Jan 2020 09:14:58 -0800 (PST)
 MIME-Version: 1.0
-X-OriginatorOrg: Mellanox.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7e34af3e-9c2a-4b8f-7dfa-08d79a9d2809
-X-MS-Exchange-CrossTenant-originalarrivaltime: 16 Jan 2020 16:00:07.0367
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: a652971c-7d2e-4d9b-a6a4-d149256f461b
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: RFDusbytEkvVty7t1+keIrbzmOcOzhKbDwfejR/hlCLC6PyH+WGWJgHbxr+RmU/pLu0YlJki9Yd14H8BJm6XhA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR05MB6768
+References: <157909756858.1192265.6657542187065456112.stgit@toke.dk>
+ <157909757089.1192265.9038866294345740126.stgit@toke.dk> <CAEf4BzbqY8zivZy637Xy=iTECzBAYQ7vo=M7TvsLM2Yp12bJpg@mail.gmail.com>
+ <87v9pctlvn.fsf@toke.dk> <CAEf4BzZpGe-1S5_iwS8GBw9iiyFJmDUkOaO+2qaftRn_iy5cNA@mail.gmail.com>
+ <87a76nu5yo.fsf@toke.dk>
+In-Reply-To: <87a76nu5yo.fsf@toke.dk>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Thu, 16 Jan 2020 09:14:47 -0800
+Message-ID: <CAEf4BzYLycZb+DBkao-jt+5sGgi3vbmzQ4Ogq9eRXZ+Jvew-ZA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2 02/10] tools/bpf/runqslower: Fix override
+ option for VMLINUX_BTF
+To:     =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        Andrii Nakryiko <andriin@fb.com>,
+        Doug Ledford <dledford@redhat.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <jakub.kicinski@netronome.com>,
+        Jesper Dangaard Brouer <brouer@redhat.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        linux-rdma@vger.kernel.org,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        clang-built-linux@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Jan 15, 2020 at 02:09:47PM -0800, Ralph Campbell wrote:
+On Thu, Jan 16, 2020 at 1:05 AM Toke H=C3=B8iland-J=C3=B8rgensen <toke@redh=
+at.com> wrote:
+>
+> Andrii Nakryiko <andrii.nakryiko@gmail.com> writes:
+>
+> > On Wed, Jan 15, 2020 at 2:06 PM Toke H=C3=B8iland-J=C3=B8rgensen <toke@=
+redhat.com> wrote:
+> >>
+> >> Andrii Nakryiko <andrii.nakryiko@gmail.com> writes:
+> >>
+> >> > On Wed, Jan 15, 2020 at 6:13 AM Toke H=C3=B8iland-J=C3=B8rgensen <to=
+ke@redhat.com> wrote:
+> >> >>
+> >> >> From: Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com>
+> >> >>
+> >> >> The runqslower tool refuses to build without a file to read vmlinux=
+ BTF
+> >> >> from. The build fails with an error message to override the locatio=
+n by
+> >> >> setting the VMLINUX_BTF variable if autodetection fails. However, t=
+he
+> >> >> Makefile doesn't actually work with that override - the error messa=
+ge is
+> >> >> still emitted.
+> >> >
+> >> > Do you have example command with VMLINUX_BTF override that didn't wo=
+rk
+> >> > (and what error message was emitted)?
+> >>
+> >> Before this patch:
+> >>
+> >> $ cd ~/build/linux/tools/bpf/runqslower
+> >> $ make
+> >> Makefile:18: *** "Can't detect kernel BTF, use VMLINUX_BTF to specify =
+it explicitly".  Stop.
+> >>
+> >> $ make VMLINUX_BTF=3D~/build/linux/vmlinux
+> >> Makefile:18: *** "Can't detect kernel BTF, use VMLINUX_BTF to specify =
+it explicitly".  Stop.
+> >
+> > Ok, so this is strange. Try make clean and run with V=3D1, it might hel=
+p
+> > to debug this. This could happen if ~/build/linux/vmlinux doesn't
+> > exist, but I assume you double-checked that. It works for me just fine
+> > (Makefile won't do VMLINUX_BTF :=3D assignment, if it's defined through
+> > make invocation, so your change should be a no-op in that regard):
+> >
+> > $ make clean
+> > $ make VMLINUX_BTF=3D~/linux-build/default/vmlinux V=3D1
+> > ...
+> > .output/sbin/bpftool btf dump file ~/linux-build/default/vmlinux
+> > format c > .output/vmlinux.h
+> > ...
+> >
+> > Wonder what your output looks like?
+>
+> $ make clean
+> Makefile:18: *** "Can't detect kernel BTF, use VMLINUX_BTF to specify it =
+explicitly".  Stop.
+> $ make VMLINUX_BTF=3D~/build/linux/vmlinux V=3D1
+> Makefile:18: *** "Can't detect kernel BTF, use VMLINUX_BTF to specify it =
+explicitly".  Stop.
+>
+> Take another look at the relevant part of the makefile:
+>
+>   ifneq ("$(wildcard /sys/kernel/btf/vmlinux)","")
+>   VMLINUX_BTF :=3D /sys/kernel/btf/vmlinux
+>   else ifneq ("$(wildcard /boot/vmlinux-$(KERNEL_REL))","")
+>   VMLINUX_BTF :=3D /boot/vmlinux-$(KERNEL_REL)
+>   else
+>   $(error "Can't detect kernel BTF, use VMLINUX_BTF to specify it explici=
+tly")
+>   endif
+>
+> That if/else doesn't actually consider the value of VMLINUX_BTF; so the
+> override only works if one of the files being considered by the
+> auto-detection actually exists... :)
 
-> I don't understand the lifetime/membership issue. The driver is the only =
-thing
-> that allocates, inserts, or removes struct mmu_interval_notifier and thus
-> completely controls the lifetime.
+Ah, right, unconditional $(error), completely missed that few times, thanks=
+!
 
-If the returned value is on the defered list it could be freed at any
-moment. The existing locks do not prevent it.
-
-> > > +		ret =3D nouveau_svmm_interval_find(svmm, &range);
-> > > +		if (ret) {
-> > > +			up_read(&mm->mmap_sem);
-> > > +			return ret;
-> > > +		}
-> > > +		range.notifier_seq =3D mmu_interval_read_begin(range.notifier);
-> > >   		ret =3D hmm_range_fault(&range, 0);
-> > >   		up_read(&mm->mmap_sem);
-> > >   		if (ret <=3D 0) {
-> >=20
-> > I'm still not sure this is a better approach than what ODP does. It
-> > looks very expensive on the fault path..
-> >=20
-> > Jason
-> >=20
->=20
-> ODP doesn't have this problem because users have to call ib_reg_mr()
-> before any I/O can happen to the process address space.
-
-ODP supports a single 'full VA' call at process startup, just like
-these cases.
-
-> That is when mmu_interval_notifier_insert() /
-> mmu_interval_notifier_remove() can be called and the driver doesn't
-> have to worry about the interval changing sizes or being removed
-> while I/O is happening. =20
-
-No, for the 'ODP full process VA' (aka implicit ODP) mode it
-dynamically maintains a list of intervals. ODP chooses the align the
-dynamic intervals to it's HW page table levels, and not to SW VMAs.
-This is much simpler to manage and faster to fault, at the cost of
-capturing more VA for invalidations which have to be probed against
-the HW shadow PTEs.
-
-> It isn't that expensive, there is an extra driver lock/unlock as
-> part of the lookup and possibly a find_vma() and kmalloc(GFP_ATOMIC)
-> for new intervals. Also, the deferred interval updates for munmap().
-> Compared to the cost of updating PTEs in the device and GPU fault
-> handling, this is minimal overhead.
-
-Well, compared to ODP which does a single xa lookup with no lock to
-find its interval, this looks very expensive and not parallel.
-
-I think if there is merit in having ranges cover the vmas and track
-changes then there is probably merit in having the core code provide
-much of that logic, not the driver.
-
-But it would be interesting to see some kind of analysis on the two
-methods to decide if the complexity is worthwhile.
-
-Jason
+>
+> -Toke
+>
