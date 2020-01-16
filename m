@@ -2,132 +2,170 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F61313FAAE
-	for <lists+linux-kselftest@lfdr.de>; Thu, 16 Jan 2020 21:33:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 30F7C13FB49
+	for <lists+linux-kselftest@lfdr.de>; Thu, 16 Jan 2020 22:22:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731117AbgAPUdY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 16 Jan 2020 15:33:24 -0500
-Received: from hqnvemgate24.nvidia.com ([216.228.121.143]:3910 "EHLO
-        hqnvemgate24.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729067AbgAPUdY (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 16 Jan 2020 15:33:24 -0500
-Received: from hqpgpgate102.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate24.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5e20c8570000>; Thu, 16 Jan 2020 12:32:23 -0800
-Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate102.nvidia.com (PGP Universal service);
-  Thu, 16 Jan 2020 12:33:20 -0800
-X-PGP-Universal: processed;
-        by hqpgpgate102.nvidia.com on Thu, 16 Jan 2020 12:33:20 -0800
-Received: from [10.2.160.8] (10.124.1.5) by HQMAIL107.nvidia.com
- (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Thu, 16 Jan
- 2020 20:33:19 +0000
-Subject: Re: [PATCH v12 04/22] mm: devmap: refactor 1-based refcounting for
- ZONE_DEVICE pages
-To:     Christoph Hellwig <hch@infradead.org>
-CC:     Andrew Morton <akpm@linux-foundation.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Dave Chinner <david@fromorbit.com>,
-        David Airlie <airlied@linux.ie>,
-        "David S . Miller" <davem@davemloft.net>,
-        Ira Weiny <ira.weiny@intel.com>, Jan Kara <jack@suse.cz>,
-        Jason Gunthorpe <jgg@ziepe.ca>, Jens Axboe <axboe@kernel.dk>,
-        Jonathan Corbet <corbet@lwn.net>,
-        =?UTF-8?B?SsOpcsO0bWUgR2xpc3Nl?= <jglisse@redhat.com>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Michal Hocko <mhocko@suse.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Paul Mackerras <paulus@samba.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Vlastimil Babka <vbabka@suse.cz>, <bpf@vger.kernel.org>,
-        <dri-devel@lists.freedesktop.org>, <kvm@vger.kernel.org>,
-        <linux-block@vger.kernel.org>, <linux-doc@vger.kernel.org>,
-        <linux-fsdevel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-        <linux-media@vger.kernel.org>, <linux-rdma@vger.kernel.org>,
-        <linuxppc-dev@lists.ozlabs.org>, <netdev@vger.kernel.org>,
-        <linux-mm@kvack.org>, LKML <linux-kernel@vger.kernel.org>,
-        Christoph Hellwig <hch@lst.de>
-References: <20200107224558.2362728-1-jhubbard@nvidia.com>
- <20200107224558.2362728-5-jhubbard@nvidia.com>
- <20200115152306.GA19546@infradead.org>
- <4707f191-86f8-db4a-c3de-0a84b415b658@nvidia.com>
- <20200116093712.GA11011@infradead.org>
-From:   John Hubbard <jhubbard@nvidia.com>
-X-Nvconfidentiality: public
-Message-ID: <ccf2723a-dcce-57d3-f63d-ee96dbf6653a@nvidia.com>
-Date:   Thu, 16 Jan 2020 12:30:26 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.1
-MIME-Version: 1.0
-In-Reply-To: <20200116093712.GA11011@infradead.org>
-X-Originating-IP: [10.124.1.5]
-X-ClientProxiedBy: HQMAIL111.nvidia.com (172.20.187.18) To
- HQMAIL107.nvidia.com (172.20.187.13)
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1579206743; bh=EQpRDmAadXrYPrWI0G8MSYR7uqZas3jC8zZTGB2Hfnk=;
-        h=X-PGP-Universal:Subject:To:CC:References:From:X-Nvconfidentiality:
-         Message-ID:Date:User-Agent:MIME-Version:In-Reply-To:
-         X-Originating-IP:X-ClientProxiedBy:Content-Type:Content-Language:
-         Content-Transfer-Encoding;
-        b=B3a+nJMY1e/PvYKAT7LBGlwa/kugx+AfoqbMvj/EyT3hxrpeJ7sQMsWMdJQlxzKho
-         jy2YJ47pzKLca9QqrMI2qpXvMA46wU1dfzb3yzBY8NTIGraOJl+bg0Pq/59xdUBLNS
-         /bnG7fSxkcGgsGNzlzCgQWOOUXWSDOgkuZxsp+8IlbnfinKUcliv6MqWXSulEsNyXv
-         EIh2GmNEud9hkIp72ZuHMkWrhgwhMDnw4xjgxdJ2+W90cT6UoDxxzOl8PDPrjhQ9p0
-         IklTRq4Mlrg+UVduRNOxi7jCeWI/98S5JYFUwVk8qaaNzULyUj0q2zlHy86g76FXcR
-         ZxTytDejWJDcw==
+        id S2387808AbgAPVWI (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 16 Jan 2020 16:22:08 -0500
+Received: from mga02.intel.com ([134.134.136.20]:38728 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1730134AbgAPVWI (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 16 Jan 2020 16:22:08 -0500
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga101.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 16 Jan 2020 13:22:07 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.70,327,1574150400"; 
+   d="scan'208";a="226870921"
+Received: from romley-ivt3.sc.intel.com ([172.25.110.60])
+  by orsmga006.jf.intel.com with ESMTP; 16 Jan 2020 13:22:07 -0800
+From:   Fenghua Yu <fenghua.yu@intel.com>
+To:     "Shuah Khan" <shuah@kernel.org>,
+        "linux-kselftest" <linux-kselftest@vger.kernel.org>
+Cc:     "Thomas Gleixner" <tglx@linutronix.de>,
+        "Ingo Molnar" <mingo@redhat.com>, "Borislav Petkov" <bp@alien8.de>,
+        "Tony Luck" <tony.luck@intel.com>,
+        "Reinette Chatre" <reinette.chatre@intel.com>,
+        "Sai Praneeth Prakhya" <sai.praneeth.prakhya@intel.com>,
+        "Babu Moger" <babu.moger@amd.com>,
+        "James Morse" <james.morse@arm.com>,
+        "Ravi V Shankar" <ravi.v.shankar@intel.com>,
+        "x86" <x86@kernel.org>, Fenghua Yu <fenghua.yu@intel.com>
+Subject: [RESEND PATCH v9 00/13] selftests/resctrl: Add resctrl selftest
+Date:   Thu, 16 Jan 2020 13:32:33 -0800
+Message-Id: <1579210366-55429-1-git-send-email-fenghua.yu@intel.com>
+X-Mailer: git-send-email 2.5.0
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 1/16/20 1:37 AM, Christoph Hellwig wrote:
-> On Wed, Jan 15, 2020 at 01:19:41PM -0800, John Hubbard wrote:
->> On 1/15/20 7:23 AM, Christoph Hellwig wrote:
->> ...
->>>
->>> I'm really not sold on this scheme.  Note that I think it is
->>> particularly bad, but it also doesn't seem any better than what
->>> we had before, and it introduced quite a bit more code.
->>>
->>
->> Hi Christoph,
->>
->> All by itself, yes. But the very next patch (which needs a little
->> rework for other reasons, so not included here) needs to reuse some of
->> these functions within __unpin_devmap_managed_user_page():
-> 
-> Well, then combine it with the series that actually does the change.
+[Resend the v9 patch set to Shuah Khan and linux-kselftest mailing list.
+No code and commit message change.]
 
+With more and more resctrl features are being added by Intel, AMD
+and ARM, a test tool is becoming more and more useful to validate
+that both hardware and software functionalities work as expected.
 
-OK, that makes sense. I just double-checked with a quick test run, that it
-doesn't have dependencies with the rest of this series, and it came out clean,
-so:
+We introduce resctrl selftest to cover resctrl features on X86, AMD
+and ARM architectures. It first implements MBM (Memory Bandwidth
+Monitoring), MBA (Memory Bandwidth Allocation), L3 CAT (Cache Allocation
+Technology), and CQM (Cache QoS Monitoring)  tests. We will enhance
+the selftest tool to include more functionality tests in the future.
 
-Andrew, could you please remove just this one patch from mmotm and linux-next?
+The tool has been tested on Intel RDT, AMD QoS and ARM MPAM and is
+in tools/testing/selftests/resctrl in order to have generic test code
+base for all architectures.
 
+The selftest tool we are introducing here provides a convenient
+tool which does automatic resctrl testing, is easily available in kernel
+tree, and covers Intel RDT, AMD QoS and ARM MPAM.
 
-> 
-> Also my vaguely recollection is that we had some idea on how to get rid
-> of the off by one refcounting for the zone device pages, which would be
-> a much better outcome.
-> 
+There is an existing resctrl test suite 'intel_cmt_cat'. But its major
+purpose is to test Intel RDT hardware via writing and reading MSR
+registers. It does access resctrl file system; but the functionalities
+are very limited. And it doesn't support automatic test and a lot of
+manual verifications are involved.
 
-Yes, I recall that Dan Williams mentioned it, but I don't think he provided
-any details yet.
+Changelog:
+v9:
+- Per Boris suggestion, add Co-developed-by in each patch to make it
+  clear who contributed to the patch set.
 
+v8:
+Update code per comments from Andre Przywara from ARM:
+- Change Makefile and remove inline assembly code to build and test the
+  tool on ARM
+- Change the output to TAP format because the format is both readable by
+  human and other test tools.
+- Detect resctrl feature from /proc/cpuinfo instead of dmesg to support
+  generic detection on all architectures.
+- Fix a few coding issues.
 
-thanks,
+v7:
+- Fix a few warnings when compiling patches separately, pointed by Babu 
+
+v6:
+- Fix a benchmark reading optimized out issue in newer GCC.
+- Fix a few coding style issues.
+- Re-arrange code among patches to make cleaner code. No change in patches
+structure.
+
+v5:
+- Based the v4 patches submitted by Fenghua Yu and added changes to support
+  AMD.
+- Changed the function name get_sock_num to get_resource_id. Intel uses
+  socket number for schemata and AMD uses l3 index id. To generalize,
+  changed the function name to get_resource_id.
+- Added the code to detect vendor.
+- Disabled the few tests for AMD where the test results are not clear.
+  Also AMD does not have IMC.
+- Fixed few compile issues.
+- Some cleanup to make each patch independent.
+- Tested the patches on AMD system. Fenghua, Need your help to test on
+  Intel box. Please feel free to change and resubmit if something
+   broken.
+
+v4:
+- address comments from Balu and Randy
+- Add CAT and CQM tests
+
+v3:
+- Change code based on comments from Babu Moger
+- Remove some unnessary code and use pipe to communicate b/w processes
+
+v2:
+- Change code based on comments from Babu Moger
+- Clean up other places.
+
+Babu Moger (3):
+  selftests/resctrl: Add vendor detection mechanism
+  selftests/resctrl: Use cache index3 id for AMD schemata masks
+  selftests/resctrl: Disable MBA and MBM tests for AMD
+
+Fenghua Yu (6):
+  selftests/resctrl: Add README for resctrl tests
+  selftests/resctrl: Add MBM test
+  selftests/resctrl: Add MBA test
+  selftests/resctrl: Add Cache QoS Monitoring (CQM) selftest
+  selftests/resctrl: Add Cache Allocation Technology (CAT) selftest
+  selftests/resctrl: Add the test in MAINTAINERS
+
+Sai Praneeth Prakhya (4):
+  selftests/resctrl: Add basic resctrl file system operations and data
+  selftests/resctrl: Read memory bandwidth from perf IMC counter and
+    from resctrl file system
+  selftests/resctrl: Add callback to start a benchmark
+  selftests/resctrl: Add built in benchmark
+
+ MAINTAINERS                                   |   1 +
+ tools/testing/selftests/resctrl/Makefile      |  17 +
+ tools/testing/selftests/resctrl/README        |  53 ++
+ tools/testing/selftests/resctrl/cache.c       | 272 +++++++
+ tools/testing/selftests/resctrl/cat_test.c    | 250 ++++++
+ tools/testing/selftests/resctrl/cqm_test.c    | 176 +++++
+ tools/testing/selftests/resctrl/fill_buf.c    | 213 +++++
+ tools/testing/selftests/resctrl/mba_test.c    | 171 ++++
+ tools/testing/selftests/resctrl/mbm_test.c    | 145 ++++
+ tools/testing/selftests/resctrl/resctrl.h     | 107 +++
+ .../testing/selftests/resctrl/resctrl_tests.c | 202 +++++
+ tools/testing/selftests/resctrl/resctrl_val.c | 744 ++++++++++++++++++
+ tools/testing/selftests/resctrl/resctrlfs.c   | 722 +++++++++++++++++
+ 13 files changed, 3073 insertions(+)
+ create mode 100644 tools/testing/selftests/resctrl/Makefile
+ create mode 100644 tools/testing/selftests/resctrl/README
+ create mode 100644 tools/testing/selftests/resctrl/cache.c
+ create mode 100644 tools/testing/selftests/resctrl/cat_test.c
+ create mode 100644 tools/testing/selftests/resctrl/cqm_test.c
+ create mode 100644 tools/testing/selftests/resctrl/fill_buf.c
+ create mode 100644 tools/testing/selftests/resctrl/mba_test.c
+ create mode 100644 tools/testing/selftests/resctrl/mbm_test.c
+ create mode 100644 tools/testing/selftests/resctrl/resctrl.h
+ create mode 100644 tools/testing/selftests/resctrl/resctrl_tests.c
+ create mode 100644 tools/testing/selftests/resctrl/resctrl_val.c
+ create mode 100644 tools/testing/selftests/resctrl/resctrlfs.c
+
 -- 
-John Hubbard
-NVIDIA
+2.19.1
+
