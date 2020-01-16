@@ -2,224 +2,215 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1970D13D23E
-	for <lists+linux-kselftest@lfdr.de>; Thu, 16 Jan 2020 03:38:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 51EA713D32C
+	for <lists+linux-kselftest@lfdr.de>; Thu, 16 Jan 2020 05:36:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729346AbgAPCiA (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 15 Jan 2020 21:38:00 -0500
-Received: from mail.kernel.org ([198.145.29.99]:47878 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729043AbgAPCiA (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 15 Jan 2020 21:38:00 -0500
-Received: from devnote2 (NE2965lan1.rev.em-net.ne.jp [210.141.244.193])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 387642084D;
-        Thu, 16 Jan 2020 02:37:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1579142278;
-        bh=vacKQWKRT4moqnpN5dBJ+7DYc1ik3c3rNIubWECBtk0=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=M2Q9yLy6x27d7jJZuSYEBlI+q0wkTmQEqP63PDJo10kpXcDEzV3TVjfxJk9SO+itl
-         +wvAkQ9xGY4ugd6YxhnH/n4raklHRTb7R4U7analnjp42m2yZXoTEG0iAIklfrFL+B
-         lYEH1ailn+5v3RlWf+JWDQIymazllURnCDeLnrNU=
-Date:   Thu, 16 Jan 2020 11:37:49 +0900
-From:   Masami Hiramatsu <mhiramat@kernel.org>
-To:     Masami Hiramatsu <mhiramat@kernel.org>
-Cc:     Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, jaswinder.singh@linaro.org
-Subject: Re: [BUGFIX PATCH] selftests: Fix pthread link option
-Message-Id: <20200116113749.3a815c124dce18028d3d7f8a@kernel.org>
-In-Reply-To: <157907976750.14189.12829891067375600434.stgit@devnote2>
-References: <157907976750.14189.12829891067375600434.stgit@devnote2>
-X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        id S1730879AbgAPEgR (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 15 Jan 2020 23:36:17 -0500
+Received: from mail-pg1-f202.google.com ([209.85.215.202]:38050 "EHLO
+        mail-pg1-f202.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730635AbgAPEgR (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 15 Jan 2020 23:36:17 -0500
+Received: by mail-pg1-f202.google.com with SMTP id l13so11598973pgt.5
+        for <linux-kselftest@vger.kernel.org>; Wed, 15 Jan 2020 20:36:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=iNg4g6cNRZYUNuBsTO74IwcH6tuAcaZ/nzmuUCgI7YQ=;
+        b=fN56Jr4nvW06HTQ13RJneqj6X8lflgmq6jlCoKsIPmknMl26RPKWCz8YEw1tHa1jYz
+         2FHoKNebeuIlL6IVX9VRKW/oUm9eaZqm+8btqLQ+Nlcd1VZiHbmg/BoKSpmF3FoJIoqo
+         6288KMRzjyYttljMBr1z60uAlr8s/UoWzpL6nPgZWUat7AqhnKexYi5cfsk+npyXYqtZ
+         3A+h/dAOOUB0LJrFQh2qEQP/OiXhnOm9Q9/zvYNeu8l66371mJxlH2QimcYGjNM3gCyf
+         QWaNg/ehOECHaLWi6uhhJ/vhW8Z0wBC8Td+0KrpsYSt+KrXhE1CCQbHvIvlrocKve+JL
+         vPIA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=iNg4g6cNRZYUNuBsTO74IwcH6tuAcaZ/nzmuUCgI7YQ=;
+        b=Fcy1MZZWbk/4e9dvJ66+93R3bymHpp9mmSdGua+MDCGTay/SlU3bIOgAFqwSOF7xtx
+         YkqwmpbwedHIJ+qg9O29TzhqGdDuJxA9038juCfrNX57EXYDMCDje/gY/3L7j/FsE6wR
+         0Crj8WcqIi/KrR8pFL63Zi2b691r3cYGSQdfBAJS6C7wn4qz14qIyDSyd6VPDd7Hg53c
+         TRgA15hxP8MyBU+a9mHFZL28dEcxxrPaQUq5KCNN9ba4Pfmq7CK6Jxa/Go4WkLURD/qN
+         lIf24324VXbJtQ+Nfr+2EcP1zUjqMkl9lNmjPE82dE7jRPtCe8ZH0kXP6vGiGjiZ9ENj
+         R/8g==
+X-Gm-Message-State: APjAAAXNhXxUY9fWJNnQYtdpNATQdr89B6dIFe0VsZFNxp9N3ZkUTR+X
+        ADzOu1ZygoN7LVc2tDa4OhzEFvNkk/M=
+X-Google-Smtp-Source: APXvYqzkI7+HJc2DBEcUiBL1OG8evclCeD08SK626xi0qNNGMKZfjols95ySgh76BxNKtrvJ3r6rUEDzoXM=
+X-Received: by 2002:a63:f202:: with SMTP id v2mr36549471pgh.420.1579149376256;
+ Wed, 15 Jan 2020 20:36:16 -0800 (PST)
+Date:   Wed, 15 Jan 2020 20:36:11 -0800
+Message-Id: <20200116043612.52782-1-surenb@google.com>
 Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+X-Mailer: git-send-email 2.25.0.rc1.283.g88dfdc4193-goog
+Subject: [PATCH 1/2] cgroup: allow deletion of cgroups containing only dying processes
+From:   Suren Baghdasaryan <surenb@google.com>
+To:     surenb@google.com
+Cc:     tj@kernel.org, lizefan@huawei.com, hannes@cmpxchg.org,
+        matthias.bgg@gmail.com, cgroups@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, shuah@kernel.org, guro@fb.com,
+        alex.shi@linux.alibaba.com, mkoutny@suse.com,
+        linux-kselftest@vger.kernel.org, linger.lee@mediatek.com,
+        tomcherry@google.com, kernel-team@android.com
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, 15 Jan 2020 18:16:07 +0900
-Masami Hiramatsu <mhiramat@kernel.org> wrote:
+A cgroup containing only dying tasks will be seen as empty when a userspace
+process reads its cgroup.procs or cgroup.tasks files. It should be safe to
+delete such a cgroup as it is considered empty. However if one of the dying
+tasks did not reach cgroup_exit then an attempt to delete the cgroup will
+fail with EBUSY because cgroup_is_populated() will not consider it empty
+until all tasks reach cgroup_exit. Such a condition can be triggered when
+a task consumes large amounts of memory and spends enough time in exit_mm
+to create delay between the moment it is flagged as PF_EXITING and the
+moment it reaches cgroup_exit.
+Fix this by detecting cgroups containing only dying tasks during cgroup
+destruction and proceeding with it while postponing the final step of
+releasing the last reference until the last task reaches cgroup_exit.
 
-> To support pthread correctly, it is better to use -pthread
-> instead of -lpthread.
+Signed-off-by: Suren Baghdasaryan <surenb@google.com>
+Reported-by: JeiFeng Lee <linger.lee@mediatek.com>
+Fixes: c03cd7738a83 ("cgroup: Include dying leaders with live threads in PROCS iterations")
+---
+ include/linux/cgroup-defs.h |  3 ++
+ kernel/cgroup/cgroup.c      | 65 +++++++++++++++++++++++++++++++++----
+ 2 files changed, 61 insertions(+), 7 deletions(-)
 
-Oops, this should be refined, since LDLIBS will not be
-passed when compiling. -pthread is complier option but
--lpthread is linker option.
-
-Thank you,
-
-> 
-> Signed-off-by: Masami Hiramatsu <mhiramat@kernel.org>
-> ---
->  tools/testing/selftests/bpf/Makefile               |    2 +-
->  tools/testing/selftests/membarrier/Makefile        |    2 +-
->  tools/testing/selftests/mqueue/Makefile            |    2 +-
->  tools/testing/selftests/net/Makefile               |    4 ++--
->  .../testing/selftests/powerpc/benchmarks/Makefile  |    4 ++--
->  tools/testing/selftests/powerpc/dscr/Makefile      |    2 +-
->  tools/testing/selftests/powerpc/mm/Makefile        |    2 +-
->  tools/testing/selftests/rseq/Makefile              |    2 +-
->  tools/testing/selftests/rtc/Makefile               |    2 +-
->  tools/testing/selftests/seccomp/Makefile           |    2 +-
->  tools/testing/selftests/timers/Makefile            |    2 +-
->  tools/testing/selftests/vm/Makefile                |    2 +-
->  12 files changed, 14 insertions(+), 14 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-> index e2fd6f8d579c..419f58c53d12 100644
-> --- a/tools/testing/selftests/bpf/Makefile
-> +++ b/tools/testing/selftests/bpf/Makefile
-> @@ -22,7 +22,7 @@ CFLAGS += -g -Wall -O2 $(GENFLAGS) -I$(APIDIR) -I$(LIBDIR) -I$(BPFDIR)	\
->  	  -I$(GENDIR) -I$(TOOLSDIR) -I$(CURDIR)				\
->  	  -Dbpf_prog_load=bpf_prog_test_load				\
->  	  -Dbpf_load_program=bpf_test_load_program
-> -LDLIBS += -lcap -lelf -lrt -lpthread
-> +LDLIBS += -lcap -lelf -lrt -pthread
->  
->  # Order correspond to 'make run_tests' order
->  TEST_GEN_PROGS = test_verifier test_tag test_maps test_lru_map test_lpm_map test_progs \
-> diff --git a/tools/testing/selftests/membarrier/Makefile b/tools/testing/selftests/membarrier/Makefile
-> index 34d1c81a2324..19d657d966e3 100644
-> --- a/tools/testing/selftests/membarrier/Makefile
-> +++ b/tools/testing/selftests/membarrier/Makefile
-> @@ -1,6 +1,6 @@
->  # SPDX-License-Identifier: GPL-2.0-only
->  CFLAGS += -g -I../../../../usr/include/
-> -LDLIBS += -lpthread
-> +LDLIBS += -pthread
->  
->  TEST_GEN_PROGS := membarrier_test_single_thread \
->  		membarrier_test_multi_thread
-> diff --git a/tools/testing/selftests/mqueue/Makefile b/tools/testing/selftests/mqueue/Makefile
-> index 8a58055fc1f5..9986b778b8b3 100644
-> --- a/tools/testing/selftests/mqueue/Makefile
-> +++ b/tools/testing/selftests/mqueue/Makefile
-> @@ -1,6 +1,6 @@
->  # SPDX-License-Identifier: GPL-2.0
->  CFLAGS += -O2
-> -LDLIBS = -lrt -lpthread -lpopt
-> +LDLIBS = -lrt -pthread -lpopt
->  
->  TEST_GEN_PROGS := mq_open_tests mq_perf_tests
->  
-> diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selftests/net/Makefile
-> index a8e04d665b69..6ad8571bb0ed 100644
-> --- a/tools/testing/selftests/net/Makefile
-> +++ b/tools/testing/selftests/net/Makefile
-> @@ -25,5 +25,5 @@ KSFT_KHDR_INSTALL := 1
->  include ../lib.mk
->  
->  $(OUTPUT)/reuseport_bpf_numa: LDLIBS += -lnuma
-> -$(OUTPUT)/tcp_mmap: LDFLAGS += -lpthread
-> -$(OUTPUT)/tcp_inq: LDFLAGS += -lpthread
-> +$(OUTPUT)/tcp_mmap: LDFLAGS += -pthread
-> +$(OUTPUT)/tcp_inq: LDFLAGS += -pthread
-> diff --git a/tools/testing/selftests/powerpc/benchmarks/Makefile b/tools/testing/selftests/powerpc/benchmarks/Makefile
-> index d40300a65b42..0d7c82d520ce 100644
-> --- a/tools/testing/selftests/powerpc/benchmarks/Makefile
-> +++ b/tools/testing/selftests/powerpc/benchmarks/Makefile
-> @@ -11,8 +11,8 @@ $(TEST_GEN_PROGS): ../harness.c
->  
->  $(OUTPUT)/context_switch: ../utils.c
->  $(OUTPUT)/context_switch: CFLAGS += -maltivec -mvsx -mabi=altivec
-> -$(OUTPUT)/context_switch: LDLIBS += -lpthread
-> +$(OUTPUT)/context_switch: LDLIBS += -pthread
->  
-> -$(OUTPUT)/fork: LDLIBS += -lpthread
-> +$(OUTPUT)/fork: LDLIBS += -pthread
->  
->  $(OUTPUT)/exec_target: CFLAGS += -static -nostartfiles
-> diff --git a/tools/testing/selftests/powerpc/dscr/Makefile b/tools/testing/selftests/powerpc/dscr/Makefile
-> index 5df476364b4d..90c744592d1b 100644
-> --- a/tools/testing/selftests/powerpc/dscr/Makefile
-> +++ b/tools/testing/selftests/powerpc/dscr/Makefile
-> @@ -6,6 +6,6 @@ TEST_GEN_PROGS := dscr_default_test dscr_explicit_test dscr_user_test	\
->  top_srcdir = ../../../../..
->  include ../../lib.mk
->  
-> -$(OUTPUT)/dscr_default_test: LDLIBS += -lpthread
-> +$(OUTPUT)/dscr_default_test: LDLIBS += -pthread
->  
->  $(TEST_GEN_PROGS): ../harness.c
-> diff --git a/tools/testing/selftests/powerpc/mm/Makefile b/tools/testing/selftests/powerpc/mm/Makefile
-> index ed1565809d2b..4cda9b0b3dd4 100644
-> --- a/tools/testing/selftests/powerpc/mm/Makefile
-> +++ b/tools/testing/selftests/powerpc/mm/Makefile
-> @@ -20,4 +20,4 @@ $(OUTPUT)/large_vm_fork_separation: CFLAGS += -m64
->  $(OUTPUT)/tempfile:
->  	dd if=/dev/zero of=$@ bs=64k count=1
->  
-> -$(OUTPUT)/tlbie_test: LDLIBS += -lpthread
-> +$(OUTPUT)/tlbie_test: LDLIBS += -pthread
-> diff --git a/tools/testing/selftests/rseq/Makefile b/tools/testing/selftests/rseq/Makefile
-> index d6469535630a..3a17f5b74b9c 100644
-> --- a/tools/testing/selftests/rseq/Makefile
-> +++ b/tools/testing/selftests/rseq/Makefile
-> @@ -6,7 +6,7 @@ endif
->  
->  CFLAGS += -O2 -Wall -g -I./ -I../../../../usr/include/ -L./ -Wl,-rpath=./ \
->  	  $(CLANG_FLAGS)
-> -LDLIBS += -lpthread
-> +LDLIBS += -pthread
->  
->  # Own dependencies because we only want to build against 1st prerequisite, but
->  # still track changes to header files and depend on shared object.
-> diff --git a/tools/testing/selftests/rtc/Makefile b/tools/testing/selftests/rtc/Makefile
-> index de9c8566672a..d075ecfbe846 100644
-> --- a/tools/testing/selftests/rtc/Makefile
-> +++ b/tools/testing/selftests/rtc/Makefile
-> @@ -1,6 +1,6 @@
->  # SPDX-License-Identifier: GPL-2.0
->  CFLAGS += -O3 -Wl,-no-as-needed -Wall
-> -LDFLAGS += -lrt -lpthread -lm
-> +LDFLAGS += -lrt -pthread -lm
->  
->  TEST_GEN_PROGS = rtctest
->  
-> diff --git a/tools/testing/selftests/seccomp/Makefile b/tools/testing/selftests/seccomp/Makefile
-> index 1760b3e39730..3e35159f709a 100644
-> --- a/tools/testing/selftests/seccomp/Makefile
-> +++ b/tools/testing/selftests/seccomp/Makefile
-> @@ -9,7 +9,7 @@ BINARIES := seccomp_bpf seccomp_benchmark
->  CFLAGS += -Wl,-no-as-needed -Wall
->  
->  seccomp_bpf: seccomp_bpf.c ../kselftest_harness.h
-> -	$(CC) $(CFLAGS) $(LDFLAGS) $< -lpthread -o $@
-> +	$(CC) $(CFLAGS) $(LDFLAGS) $< -pthread -o $@
->  
->  TEST_PROGS += $(BINARIES)
->  EXTRA_CLEAN := $(BINARIES)
-> diff --git a/tools/testing/selftests/timers/Makefile b/tools/testing/selftests/timers/Makefile
-> index 7656c7ce79d9..70461befa338 100644
-> --- a/tools/testing/selftests/timers/Makefile
-> +++ b/tools/testing/selftests/timers/Makefile
-> @@ -1,6 +1,6 @@
->  # SPDX-License-Identifier: GPL-2.0
->  CFLAGS += -O3 -Wl,-no-as-needed -Wall
-> -LDLIBS += -lrt -lpthread -lm
-> +LDLIBS += -lrt -pthread -lm
->  
->  # these are all "safe" tests that don't modify
->  # system time or require escalated privileges
-> diff --git a/tools/testing/selftests/vm/Makefile b/tools/testing/selftests/vm/Makefile
-> index 7f9a8a8c31da..afb35febd7b6 100644
-> --- a/tools/testing/selftests/vm/Makefile
-> +++ b/tools/testing/selftests/vm/Makefile
-> @@ -31,6 +31,6 @@ TEST_FILES := test_vmalloc.sh
->  KSFT_KHDR_INSTALL := 1
->  include ../lib.mk
->  
-> -$(OUTPUT)/userfaultfd: LDLIBS += -lpthread
-> +$(OUTPUT)/userfaultfd: LDLIBS += -pthread
->  
->  $(OUTPUT)/mlock-random-test: LDLIBS += -lcap
-> 
-
-
+diff --git a/include/linux/cgroup-defs.h b/include/linux/cgroup-defs.h
+index 63097cb243cb..f9bcccbac8dd 100644
+--- a/include/linux/cgroup-defs.h
++++ b/include/linux/cgroup-defs.h
+@@ -71,6 +71,9 @@ enum {
+ 
+ 	/* Cgroup is frozen. */
+ 	CGRP_FROZEN,
++
++	/* Cgroup is dead. */
++	CGRP_DEAD,
+ };
+ 
+ /* cgroup_root->flags */
+diff --git a/kernel/cgroup/cgroup.c b/kernel/cgroup/cgroup.c
+index 735af8f15f95..a99ebddd37d9 100644
+--- a/kernel/cgroup/cgroup.c
++++ b/kernel/cgroup/cgroup.c
+@@ -795,10 +795,11 @@ static bool css_set_populated(struct css_set *cset)
+  * that the content of the interface file has changed.  This can be used to
+  * detect when @cgrp and its descendants become populated or empty.
+  */
+-static void cgroup_update_populated(struct cgroup *cgrp, bool populated)
++static bool cgroup_update_populated(struct cgroup *cgrp, bool populated)
+ {
+ 	struct cgroup *child = NULL;
+ 	int adj = populated ? 1 : -1;
++	bool state_change = false;
+ 
+ 	lockdep_assert_held(&css_set_lock);
+ 
+@@ -817,6 +818,7 @@ static void cgroup_update_populated(struct cgroup *cgrp, bool populated)
+ 		if (was_populated == cgroup_is_populated(cgrp))
+ 			break;
+ 
++		state_change = true;
+ 		cgroup1_check_for_release(cgrp);
+ 		TRACE_CGROUP_PATH(notify_populated, cgrp,
+ 				  cgroup_is_populated(cgrp));
+@@ -825,6 +827,21 @@ static void cgroup_update_populated(struct cgroup *cgrp, bool populated)
+ 		child = cgrp;
+ 		cgrp = cgroup_parent(cgrp);
+ 	} while (cgrp);
++
++	return state_change;
++}
++
++static void cgroup_prune_dead(struct cgroup *cgrp)
++{
++	lockdep_assert_held(&css_set_lock);
++
++	do {
++		/* put the base reference if cgroup was already destroyed */
++		if (!cgroup_is_populated(cgrp) &&
++		    test_bit(CGRP_DEAD, &cgrp->flags))
++			percpu_ref_kill(&cgrp->self.refcnt);
++		cgrp = cgroup_parent(cgrp);
++	} while (cgrp);
+ }
+ 
+ /**
+@@ -838,11 +855,15 @@ static void cgroup_update_populated(struct cgroup *cgrp, bool populated)
+ static void css_set_update_populated(struct css_set *cset, bool populated)
+ {
+ 	struct cgrp_cset_link *link;
++	bool state_change;
+ 
+ 	lockdep_assert_held(&css_set_lock);
+ 
+-	list_for_each_entry(link, &cset->cgrp_links, cgrp_link)
+-		cgroup_update_populated(link->cgrp, populated);
++	list_for_each_entry(link, &cset->cgrp_links, cgrp_link) {
++		state_change = cgroup_update_populated(link->cgrp, populated);
++		if (state_change && !populated)
++			cgroup_prune_dead(link->cgrp);
++	}
+ }
+ 
+ /*
+@@ -5458,8 +5479,26 @@ static int cgroup_destroy_locked(struct cgroup *cgrp)
+ 	 * Only migration can raise populated from zero and we're already
+ 	 * holding cgroup_mutex.
+ 	 */
+-	if (cgroup_is_populated(cgrp))
+-		return -EBUSY;
++	if (cgroup_is_populated(cgrp)) {
++		struct css_task_iter it;
++		struct task_struct *task;
++
++		/*
++		 * cgroup_is_populated does not account for exiting tasks
++		 * that did not reach cgroup_exit yet. Check if all the tasks
++		 * in this cgroup are exiting.
++		 */
++		css_task_iter_start(&cgrp->self, 0, &it);
++		do {
++			task = css_task_iter_next(&it);
++		} while (task && (task->flags & PF_EXITING));
++		css_task_iter_end(&it);
++
++		if (task) {
++			/* cgroup is indeed populated */
++			return -EBUSY;
++		}
++	}
+ 
+ 	/*
+ 	 * Make sure there's no live children.  We can't test emptiness of
+@@ -5510,8 +5549,20 @@ static int cgroup_destroy_locked(struct cgroup *cgrp)
+ 
+ 	cgroup_bpf_offline(cgrp);
+ 
+-	/* put the base reference */
+-	percpu_ref_kill(&cgrp->self.refcnt);
++	/*
++	 * Take css_set_lock because of the possible race with
++	 * cgroup_update_populated.
++	 */
++	spin_lock_irq(&css_set_lock);
++	/* The last task might have died since we last checked */
++	if (cgroup_is_populated(cgrp)) {
++		/* mark cgroup for future destruction */
++		set_bit(CGRP_DEAD, &cgrp->flags);
++	} else {
++		/* put the base reference */
++		percpu_ref_kill(&cgrp->self.refcnt);
++	}
++	spin_unlock_irq(&css_set_lock);
+ 
+ 	return 0;
+ };
 -- 
-Masami Hiramatsu <mhiramat@kernel.org>
+2.25.0.rc1.283.g88dfdc4193-goog
+
