@@ -2,24 +2,24 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 579A713FB57
-	for <lists+linux-kselftest@lfdr.de>; Thu, 16 Jan 2020 22:22:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 967C413FB59
+	for <lists+linux-kselftest@lfdr.de>; Thu, 16 Jan 2020 22:22:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388907AbgAPVWN (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 16 Jan 2020 16:22:13 -0500
-Received: from mga02.intel.com ([134.134.136.20]:38728 "EHLO mga02.intel.com"
+        id S2388862AbgAPVWJ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 16 Jan 2020 16:22:09 -0500
+Received: from mga02.intel.com ([134.134.136.20]:38730 "EHLO mga02.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730134AbgAPVWK (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 16 Jan 2020 16:22:10 -0500
+        id S1731198AbgAPVWJ (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 16 Jan 2020 16:22:09 -0500
 X-Amp-Result: SKIPPED(no attachment in message)
 X-Amp-File-Uploaded: False
 Received: from orsmga006.jf.intel.com ([10.7.209.51])
   by orsmga101.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 16 Jan 2020 13:22:08 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.70,327,1574150400"; 
-   d="scan'208";a="226870927"
+   d="scan'208";a="226870932"
 Received: from romley-ivt3.sc.intel.com ([172.25.110.60])
-  by orsmga006.jf.intel.com with ESMTP; 16 Jan 2020 13:22:07 -0800
+  by orsmga006.jf.intel.com with ESMTP; 16 Jan 2020 13:22:08 -0800
 From:   Fenghua Yu <fenghua.yu@intel.com>
 To:     "Shuah Khan" <shuah@kernel.org>,
         "linux-kselftest" <linux-kselftest@vger.kernel.org>
@@ -32,9 +32,9 @@ Cc:     "Thomas Gleixner" <tglx@linutronix.de>,
         "James Morse" <james.morse@arm.com>,
         "Ravi V Shankar" <ravi.v.shankar@intel.com>,
         "x86" <x86@kernel.org>, Fenghua Yu <fenghua.yu@intel.com>
-Subject: [RESEND PATCH v9 02/13] selftests/resctrl: Add basic resctrl file system operations and data
-Date:   Thu, 16 Jan 2020 13:32:35 -0800
-Message-Id: <1579210366-55429-3-git-send-email-fenghua.yu@intel.com>
+Subject: [RESEND PATCH v9 03/13] selftests/resctrl: Read memory bandwidth from perf IMC counter and from resctrl file system
+Date:   Thu, 16 Jan 2020 13:32:36 -0800
+Message-Id: <1579210366-55429-4-git-send-email-fenghua.yu@intel.com>
 X-Mailer: git-send-email 2.5.0
 In-Reply-To: <1579210366-55429-1-git-send-email-fenghua.yu@intel.com>
 References: <1579210366-55429-1-git-send-email-fenghua.yu@intel.com>
@@ -45,8 +45,9 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 From: Sai Praneeth Prakhya <sai.praneeth.prakhya@intel.com>
 
-The basic resctrl file system operations and data are added for future
-usage by resctrl selftest tool.
+Total memory bandwidth can be monitored from perf IMC counter and from
+resctrl file system. Later the two will be compared to verify the total
+memory bandwidth read from resctrl is correct.
 
 Signed-off-by: Sai Praneeth Prakhya <sai.praneeth.prakhya@intel.com>
 Co-developed-by: Babu Moger <babu.moger@amd.com>
@@ -54,97 +55,19 @@ Signed-off-by: Babu Moger <babu.moger@amd.com>
 Co-developed-by: Fenghua Yu <fenghua.yu@intel.com>
 Signed-off-by: Fenghua Yu <fenghua.yu@intel.com>
 ---
- tools/testing/selftests/resctrl/Makefile    |  12 +
- tools/testing/selftests/resctrl/resctrl.h   |  50 +++
- tools/testing/selftests/resctrl/resctrlfs.c | 462 ++++++++++++++++++++
- 3 files changed, 524 insertions(+)
- create mode 100644 tools/testing/selftests/resctrl/Makefile
- create mode 100644 tools/testing/selftests/resctrl/resctrl.h
- create mode 100644 tools/testing/selftests/resctrl/resctrlfs.c
+ tools/testing/selftests/resctrl/resctrl_val.c | 117 ++++++++++++++++++
+ 1 file changed, 117 insertions(+)
+ create mode 100644 tools/testing/selftests/resctrl/resctrl_val.c
 
-diff --git a/tools/testing/selftests/resctrl/Makefile b/tools/testing/selftests/resctrl/Makefile
+diff --git a/tools/testing/selftests/resctrl/resctrl_val.c b/tools/testing/selftests/resctrl/resctrl_val.c
 new file mode 100644
-index 000000000000..76bbd6d3e4a8
+index 000000000000..0ca4c9252516
 --- /dev/null
-+++ b/tools/testing/selftests/resctrl/Makefile
-@@ -0,0 +1,12 @@
-+CC = $(CROSS_COMPILE)gcc
-+CFLAGS = -g -Wall
-+SRCS=$(wildcard *.c)
-+OBJS=$(SRCS:.c=.o)
-+
-+$(OBJS): $(SRCS)
-+	$(CC) $(CFLAGS) -c $(SRCS)
-+
-+.PHONY: clean
-+
-+clean:
-+	$(RM) $(OBJS)
-diff --git a/tools/testing/selftests/resctrl/resctrl.h b/tools/testing/selftests/resctrl/resctrl.h
-new file mode 100644
-index 000000000000..ba98cd6efc64
---- /dev/null
-+++ b/tools/testing/selftests/resctrl/resctrl.h
-@@ -0,0 +1,50 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#define _GNU_SOURCE
-+#ifndef RESCTRL_H
-+#define RESCTRL_H
-+#include <stdio.h>
-+#include <errno.h>
-+#include <sched.h>
-+#include <stdlib.h>
-+#include <unistd.h>
-+#include <string.h>
-+#include <signal.h>
-+#include <dirent.h>
-+#include <stdbool.h>
-+#include <sys/stat.h>
-+#include <sys/ioctl.h>
-+#include <sys/mount.h>
-+#include <sys/types.h>
-+#include <sys/wait.h>
-+#include <asm/unistd.h>
-+#include <linux/perf_event.h>
-+
-+#define RESCTRL_PATH		"/sys/fs/resctrl"
-+#define PHYS_ID_PATH		"/sys/devices/system/cpu/cpu"
-+
-+#define PARENT_EXIT(err_msg)			\
-+	do {					\
-+		perror(err_msg);		\
-+		kill(ppid, SIGKILL);		\
-+		exit(EXIT_FAILURE);		\
-+	} while (0)
-+
-+pid_t bm_pid, ppid;
-+
-+int remount_resctrlfs(bool mum_resctrlfs);
-+int get_resource_id(int cpu_no, int *resource_id);
-+int validate_bw_report_request(char *bw_report);
-+bool validate_resctrl_feature_request(char *resctrl_val);
-+char *fgrep(FILE *inf, const char *str);
-+int taskset_benchmark(pid_t bm_pid, int cpu_no);
-+void run_benchmark(int signum, siginfo_t *info, void *ucontext);
-+int write_schemata(char *ctrlgrp, char *schemata, int cpu_no,
-+		   char *resctrl_val);
-+int write_bm_pid_to_resctrl(pid_t bm_pid, char *ctrlgrp, char *mongrp,
-+			    char *resctrl_val);
-+int perf_event_open(struct perf_event_attr *hw_event, pid_t pid, int cpu,
-+		    int group_fd, unsigned long flags);
-+int run_fill_buf(unsigned long span, int malloc_and_init_memory, int memflush,
-+		 int op, char *resctrl_va);
-+
-+#endif /* RESCTRL_H */
-diff --git a/tools/testing/selftests/resctrl/resctrlfs.c b/tools/testing/selftests/resctrl/resctrlfs.c
-new file mode 100644
-index 000000000000..1b125f9d8e5d
---- /dev/null
-+++ b/tools/testing/selftests/resctrl/resctrlfs.c
-@@ -0,0 +1,462 @@
++++ b/tools/testing/selftests/resctrl/resctrl_val.c
+@@ -0,0 +1,117 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
-+ * Basic resctrl file system operations
++ * Memory bandwidth monitoring and allocation library
 + *
 + * Copyright (C) 2018 Intel Corporation
 + *
@@ -154,455 +77,110 @@ index 000000000000..1b125f9d8e5d
 + */
 +#include "resctrl.h"
 +
-+int tests_run;
++#define UNCORE_IMC		"uncore_imc"
++#define READ_FILE_NAME		"events/cas_count_read"
++#define WRITE_FILE_NAME		"events/cas_count_write"
++#define DYN_PMU_PATH		"/sys/bus/event_source/devices"
++#define SCALE			0.00006103515625
++#define MAX_IMCS		20
++#define MAX_TOKENS		5
++#define READ			0
++#define WRITE			1
++#define CON_MON_MBM_LOCAL_BYTES_PATH				\
++	"%s/%s/mon_groups/%s/mon_data/mon_L3_%02d/mbm_local_bytes"
 +
-+static int find_resctrl_mount(char *buffer)
++#define CON_MBM_LOCAL_BYTES_PATH		\
++	"%s/%s/mon_data/mon_L3_%02d/mbm_local_bytes"
++
++#define MON_MBM_LOCAL_BYTES_PATH		\
++	"%s/mon_groups/%s/mon_data/mon_L3_%02d/mbm_local_bytes"
++
++#define MBM_LOCAL_BYTES_PATH			\
++	"%s/mon_data/mon_L3_%02d/mbm_local_bytes"
++
++struct membw_read_format {
++	__u64 value;         /* The value of the event */
++	__u64 time_enabled;  /* if PERF_FORMAT_TOTAL_TIME_ENABLED */
++	__u64 time_running;  /* if PERF_FORMAT_TOTAL_TIME_RUNNING */
++	__u64 id;            /* if PERF_FORMAT_ID */
++};
++
++struct imc_counter_config {
++	__u32 type;
++	__u64 event;
++	__u64 umask;
++	struct perf_event_attr pe;
++	struct membw_read_format return_value;
++	int fd;
++};
++
++static struct imc_counter_config imc_counters_config[MAX_IMCS][2];
++
++void membw_initialize_perf_event_attr(int i, int j)
 +{
-+	FILE *mounts;
-+	char line[256], *fs, *mntpoint;
++	memset(&imc_counters_config[i][j].pe, 0,
++	       sizeof(struct perf_event_attr));
++	imc_counters_config[i][j].pe.type = imc_counters_config[i][j].type;
++	imc_counters_config[i][j].pe.size = sizeof(struct perf_event_attr);
++	imc_counters_config[i][j].pe.disabled = 1;
++	imc_counters_config[i][j].pe.inherit = 1;
++	imc_counters_config[i][j].pe.exclude_guest = 0;
++	imc_counters_config[i][j].pe.config =
++		imc_counters_config[i][j].umask << 8 |
++		imc_counters_config[i][j].event;
++	imc_counters_config[i][j].pe.sample_type = PERF_SAMPLE_IDENTIFIER;
++	imc_counters_config[i][j].pe.read_format =
++		PERF_FORMAT_TOTAL_TIME_ENABLED | PERF_FORMAT_TOTAL_TIME_RUNNING;
++}
 +
-+	mounts = fopen("/proc/mounts", "r");
-+	if (!mounts) {
-+		perror("/proc/mounts");
-+		return -ENXIO;
-+	}
-+	while (!feof(mounts)) {
-+		if (!fgets(line, 256, mounts))
++void membw_ioctl_perf_event_ioc_reset_enable(int i, int j)
++{
++	ioctl(imc_counters_config[i][j].fd, PERF_EVENT_IOC_RESET, 0);
++	ioctl(imc_counters_config[i][j].fd, PERF_EVENT_IOC_ENABLE, 0);
++}
++
++void membw_ioctl_perf_event_ioc_disable(int i, int j)
++{
++	ioctl(imc_counters_config[i][j].fd, PERF_EVENT_IOC_DISABLE, 0);
++}
++
++/*
++ * get_event_and_umask:	Parse config into event and umask
++ * @cas_count_cfg:	Config
++ * @count:		iMC number
++ * @op:			Operation (read/write)
++ */
++void get_event_and_umask(char *cas_count_cfg, int count, bool op)
++{
++	char *token[MAX_TOKENS];
++	int i = 0;
++
++	strcat(cas_count_cfg, ",");
++	token[0] = strtok(cas_count_cfg, "=,");
++
++	for (i = 1; i < MAX_TOKENS; i++)
++		token[i] = strtok(NULL, "=,");
++
++	for (i = 0; i < MAX_TOKENS; i++) {
++		if (!token[i])
 +			break;
-+		fs = strtok(line, " \t");
-+		if (!fs)
-+			continue;
-+		mntpoint = strtok(NULL, " \t");
-+		if (!mntpoint)
-+			continue;
-+		fs = strtok(NULL, " \t");
-+		if (!fs)
-+			continue;
-+		if (strcmp(fs, "resctrl"))
-+			continue;
-+
-+		fclose(mounts);
-+		if (buffer)
-+			strncpy(buffer, mntpoint, 256);
-+
-+		return 0;
-+	}
-+
-+	fclose(mounts);
-+
-+	return -ENOENT;
-+}
-+
-+/*
-+ * remount_resctrlfs - Remount resctrl FS at /sys/fs/resctrl
-+ * @mum_resctrlfs:	Should the resctrl FS be remounted?
-+ *
-+ * If not mounted, mount it.
-+ * If mounted and mum_resctrlfs then remount resctrl FS.
-+ * If mounted and !mum_resctrlfs then noop
-+ *
-+ * Return: 0 on success, non-zero on failure
-+ */
-+int remount_resctrlfs(bool mum_resctrlfs)
-+{
-+	char mountpoint[256];
-+	int ret;
-+
-+	ret = find_resctrl_mount(mountpoint);
-+	if (ret)
-+		strcpy(mountpoint, RESCTRL_PATH);
-+
-+	if (!ret && mum_resctrlfs && umount(mountpoint)) {
-+		printf("not ok unmounting \"%s\"\n", mountpoint);
-+		perror("# umount");
-+		tests_run++;
-+	}
-+
-+	if (!ret && !mum_resctrlfs)
-+		return 0;
-+
-+	ret = mount("resctrl", RESCTRL_PATH, "resctrl", 0, NULL);
-+	printf("%sok mounting resctrl to \"%s\"\n", ret ? "not " : "",
-+	       RESCTRL_PATH);
-+	if (ret)
-+		perror("# mount");
-+
-+	tests_run++;
-+
-+	return ret;
-+}
-+
-+int umount_resctrlfs(void)
-+{
-+	if (umount(RESCTRL_PATH)) {
-+		perror("# Unable to umount resctrl");
-+
-+		return errno;
-+	}
-+
-+	return 0;
-+}
-+
-+/*
-+ * get_resource_id - Get socket number/l3 id for a specified CPU
-+ * @cpu_no:	CPU number
-+ * @resource_id: Socket number or l3_id
-+ *
-+ * Return: >= 0 on success, < 0 on failure.
-+ */
-+int get_resource_id(int cpu_no, int *resource_id)
-+{
-+	char phys_pkg_path[1024];
-+	FILE *fp;
-+
-+	sprintf(phys_pkg_path, "%s%d/topology/physical_package_id",
-+		PHYS_ID_PATH, cpu_no);
-+	fp = fopen(phys_pkg_path, "r");
-+	if (!fp) {
-+		perror("Failed to open physical_package_id");
-+
-+		return -1;
-+	}
-+	if (fscanf(fp, "%d", resource_id) <= 0) {
-+		perror("Could not get socket number or l3 id");
-+		fclose(fp);
-+
-+		return -1;
-+	}
-+	fclose(fp);
-+
-+	return 0;
-+}
-+
-+/*
-+ * taskset_benchmark - Taskset PID (i.e. benchmark) to a specified cpu
-+ * @bm_pid:	PID that should be binded
-+ * @cpu_no:	CPU number at which the PID would be binded
-+ *
-+ * Return: 0 on success, non-zero on failure
-+ */
-+int taskset_benchmark(pid_t bm_pid, int cpu_no)
-+{
-+	cpu_set_t my_set;
-+
-+	CPU_ZERO(&my_set);
-+	CPU_SET(cpu_no, &my_set);
-+
-+	if (sched_setaffinity(bm_pid, sizeof(cpu_set_t), &my_set)) {
-+		perror("Unable to taskset benchmark");
-+
-+		return -1;
-+	}
-+
-+	return 0;
-+}
-+
-+/*
-+ * run_benchmark - Run a specified benchmark or fill_buf (default benchmark)
-+ *		   in specified signal. Direct benchmark stdio to /dev/null.
-+ * @signum:	signal number
-+ * @info:	signal info
-+ * @ucontext:	user context in signal handling
-+ *
-+ * Return: void
-+ */
-+void run_benchmark(int signum, siginfo_t *info, void *ucontext)
-+{
-+	unsigned long span;
-+	int operation, ret;
-+	char **benchmark_cmd;
-+	FILE *fp;
-+
-+	benchmark_cmd = info->si_ptr;
-+
-+	/*
-+	 * Direct stdio of child to /dev/null, so that only parent writes to
-+	 * stdio (console)
-+	 */
-+	fp = freopen("/dev/null", "w", stdout);
-+	if (!fp)
-+		PARENT_EXIT("Unable to direct benchmark status to /dev/null");
-+
-+	if (strcmp(benchmark_cmd[0], "fill_buf") == 0) {
-+		/* Execute default fill_buf benchmark */
-+		span = strtoul(benchmark_cmd[1], NULL, 10);
-+		operation = atoi(benchmark_cmd[4]);
-+		if (run_fill_buf(span, 1, 1, operation, NULL))
-+			fprintf(stderr, "Error in running fill buffer\n");
-+	} else {
-+		/* Execute specified benchmark */
-+		ret = execvp(benchmark_cmd[0], benchmark_cmd);
-+		if (ret)
-+			perror("wrong\n");
-+	}
-+
-+	fclose(stdout);
-+	PARENT_EXIT("Unable to run specified benchmark");
-+}
-+
-+/*
-+ * create_grp - Create a group only if one doesn't exist
-+ * @grp_name:	Name of the group
-+ * @grp:	Full path and name of the group
-+ * @parent_grp:	Full path and name of the parent group
-+ *
-+ * Return: 0 on success, non-zero on failure
-+ */
-+static int create_grp(const char *grp_name, char *grp, const char *parent_grp)
-+{
-+	int found_grp = 0;
-+	struct dirent *ep;
-+	DIR *dp;
-+
-+	/* Check if requested grp exists or not */
-+	dp = opendir(parent_grp);
-+	if (dp) {
-+		while ((ep = readdir(dp)) != NULL) {
-+			if (strcmp(ep->d_name, grp_name) == 0)
-+				found_grp = 1;
++		if (strcmp(token[i], "event") == 0) {
++			if (op == READ)
++				imc_counters_config[count][READ].event =
++				strtol(token[i + 1], NULL, 16);
++			else
++				imc_counters_config[count][WRITE].event =
++				strtol(token[i + 1], NULL, 16);
 +		}
-+		closedir(dp);
-+	} else {
-+		perror("Unable to open resctrl for group");
-+
-+		return -1;
-+	}
-+
-+	/* Requested grp doesn't exist, hence create it */
-+	if (found_grp == 0) {
-+		if (mkdir(grp, 0) == -1) {
-+			perror("Unable to create group");
-+
-+			return -1;
++		if (strcmp(token[i], "umask") == 0) {
++			if (op == READ)
++				imc_counters_config[count][READ].umask =
++				strtol(token[i + 1], NULL, 16);
++			else
++				imc_counters_config[count][WRITE].umask =
++				strtol(token[i + 1], NULL, 16);
 +		}
 +	}
-+
-+	return 0;
-+}
-+
-+static int write_pid_to_tasks(char *tasks, pid_t pid)
-+{
-+	FILE *fp;
-+
-+	fp = fopen(tasks, "w");
-+	if (!fp) {
-+		perror("Failed to open tasks file");
-+
-+		return -1;
-+	}
-+	if (fprintf(fp, "%d\n", pid) < 0) {
-+		perror("Failed to wr pid to tasks file");
-+		fclose(fp);
-+
-+		return -1;
-+	}
-+	fclose(fp);
-+
-+	return 0;
-+}
-+
-+/*
-+ * write_bm_pid_to_resctrl - Write a PID (i.e. benchmark) to resctrl FS
-+ * @bm_pid:		PID that should be written
-+ * @ctrlgrp:		Name of the control monitor group (con_mon grp)
-+ * @mongrp:		Name of the monitor group (mon grp)
-+ * @resctrl_val:	Resctrl feature (Eg: mbm, mba.. etc)
-+ *
-+ * If a con_mon grp is requested, create it and write pid to it, otherwise
-+ * write pid to root con_mon grp.
-+ * If a mon grp is requested, create it and write pid to it, otherwise
-+ * pid is not written, this means that pid is in con_mon grp and hence
-+ * should consult con_mon grp's mon_data directory for results.
-+ *
-+ * Return: 0 on success, non-zero on failure
-+ */
-+int write_bm_pid_to_resctrl(pid_t bm_pid, char *ctrlgrp, char *mongrp,
-+			    char *resctrl_val)
-+{
-+	char controlgroup[128], monitorgroup[512], monitorgroup_p[256];
-+	char tasks[1024];
-+	int ret = 0;
-+
-+	if (strlen(ctrlgrp))
-+		sprintf(controlgroup, "%s/%s", RESCTRL_PATH, ctrlgrp);
-+	else
-+		sprintf(controlgroup, "%s", RESCTRL_PATH);
-+
-+	/* Create control and monitoring group and write pid into it */
-+	ret = create_grp(ctrlgrp, controlgroup, RESCTRL_PATH);
-+	if (ret)
-+		goto out;
-+	sprintf(tasks, "%s/tasks", controlgroup);
-+	ret = write_pid_to_tasks(tasks, bm_pid);
-+	if (ret)
-+		goto out;
-+
-+	/* Create mon grp and write pid into it for "mbm" test */
-+	if ((strcmp(resctrl_val, "mbm") == 0)) {
-+		if (mongrp) {
-+			sprintf(monitorgroup_p, "%s/mon_groups", controlgroup);
-+			sprintf(monitorgroup, "%s/%s", monitorgroup_p, mongrp);
-+			ret = create_grp(mongrp, monitorgroup, monitorgroup_p);
-+			if (ret)
-+				goto out;
-+
-+			sprintf(tasks, "%s/mon_groups/%s/tasks",
-+				controlgroup, mongrp);
-+			ret = write_pid_to_tasks(tasks, bm_pid);
-+			if (ret)
-+				goto out;
-+		}
-+	}
-+
-+out:
-+	printf("%sok writing benchmark parameters to resctrl FS\n",
-+	       ret ? "not " : "");
-+	if (ret)
-+		perror("# writing to resctrlfs");
-+
-+	tests_run++;
-+
-+	return ret;
-+}
-+
-+/*
-+ * write_schemata - Update schemata of a con_mon grp
-+ * @ctrlgrp:		Name of the con_mon grp
-+ * @schemata:		Schemata that should be updated to
-+ * @cpu_no:		CPU number that the benchmark PID is binded to
-+ * @resctrl_val:	Resctrl feature (Eg: mbm, mba.. etc)
-+ *
-+ * Update schemata of a con_mon grp *only* if requested resctrl feature is
-+ * allocation type
-+ *
-+ * Return: 0 on success, non-zero on failure
-+ */
-+int write_schemata(char *ctrlgrp, char *schemata, int cpu_no, char *resctrl_val)
-+{
-+	char controlgroup[1024], schema[1024], reason[64];
-+	int resource_id, ret = 0;
-+	FILE *fp;
-+
-+	if (strcmp(resctrl_val, "mba") != 0)
-+		return -ENOENT;
-+
-+	if (!schemata) {
-+		printf("# Skipping empty schemata update\n");
-+
-+		return -1;
-+	}
-+
-+	if (get_resource_id(cpu_no, &resource_id) < 0) {
-+		sprintf(reason, "Failed to get resource id");
-+		ret = -1;
-+
-+		goto out;
-+	}
-+
-+	if (strlen(ctrlgrp) != 0)
-+		sprintf(controlgroup, "%s/%s/schemata", RESCTRL_PATH, ctrlgrp);
-+	else
-+		sprintf(controlgroup, "%s/schemata", RESCTRL_PATH);
-+
-+	sprintf(schema, "%s%d%c%s", "MB:", resource_id, '=', schemata);
-+
-+	fp = fopen(controlgroup, "w");
-+	if (!fp) {
-+		sprintf(reason, "Failed to open control group");
-+		ret = -1;
-+
-+		goto out;
-+	}
-+
-+	if (fprintf(fp, "%s\n", schema) < 0) {
-+		sprintf(reason, "Failed to write schemata in control group");
-+		fclose(fp);
-+		ret = -1;
-+
-+		goto out;
-+	}
-+	fclose(fp);
-+
-+out:
-+	printf("%sok Write schema \"%s\" to resctrl FS%s%s\n",
-+	       ret ? "not " : "", schema, ret ? " # " : "",
-+	       ret ? reason : "");
-+	tests_run++;
-+
-+	return ret;
-+}
-+
-+char *fgrep(FILE *inf, const char *str)
-+{
-+	char line[256];
-+	int slen = strlen(str);
-+
-+	while (!feof(inf)) {
-+		if (!fgets(line, 256, inf))
-+			break;
-+		if (strncmp(line, str, slen))
-+			continue;
-+
-+		return strdup(line);
-+	}
-+
-+	return NULL;
-+}
-+
-+/*
-+ * validate_resctrl_feature_request - Check if requested feature is valid.
-+ * @resctrl_val:	Requested feature
-+ *
-+ * Return: 0 on success, non-zero on failure
-+ */
-+bool validate_resctrl_feature_request(char *resctrl_val)
-+{
-+	FILE *inf = fopen("/proc/cpuinfo", "r");
-+	bool found = false;
-+	char *res;
-+
-+	if (!inf)
-+		return false;
-+
-+	res = fgrep(inf, "flags");
-+
-+	if (res) {
-+		char *s = strchr(res, ':');
-+
-+		found = s && !strstr(s, resctrl_val);
-+		free(res);
-+	}
-+	fclose(inf);
-+
-+	return found;
-+}
-+
-+int validate_bw_report_request(char *bw_report)
-+{
-+	if (strcmp(bw_report, "reads") == 0)
-+		return 0;
-+	if (strcmp(bw_report, "writes") == 0)
-+		return 0;
-+	if (strcmp(bw_report, "nt-writes") == 0) {
-+		strcpy(bw_report, "writes");
-+		return 0;
-+	}
-+	if (strcmp(bw_report, "total") == 0)
-+		return 0;
-+
-+	fprintf(stderr, "Requested iMC B/W report type unavailable\n");
-+
-+	return -1;
-+}
-+
-+int perf_event_open(struct perf_event_attr *hw_event, pid_t pid, int cpu,
-+		    int group_fd, unsigned long flags)
-+{
-+	int ret;
-+
-+	ret = syscall(__NR_perf_event_open, hw_event, pid, cpu,
-+		      group_fd, flags);
-+	return ret;
 +}
 -- 
 2.19.1
