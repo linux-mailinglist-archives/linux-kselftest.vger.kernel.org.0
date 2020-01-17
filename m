@@ -2,111 +2,410 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 878C314105F
-	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Jan 2020 19:02:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D3C9141082
+	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Jan 2020 19:12:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726970AbgAQSCg (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 17 Jan 2020 13:02:36 -0500
-Received: from mga12.intel.com ([192.55.52.136]:29688 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726603AbgAQSCg (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 17 Jan 2020 13:02:36 -0500
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 17 Jan 2020 10:02:35 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.70,331,1574150400"; 
-   d="scan'208";a="227286652"
-Received: from ray.jf.intel.com (HELO [10.7.201.139]) ([10.7.201.139])
-  by orsmga006.jf.intel.com with ESMTP; 17 Jan 2020 10:02:35 -0800
-Subject: Re: [PATCH v16 00/23] selftests, powerpc, x86: Memory Protection Keys
-To:     Sandipan Das <sandipan@linux.ibm.com>, shuah@kernel.org,
-        linux-kselftest@vger.kernel.org
-Cc:     linux-arch@vger.kernel.org, fweimer@redhat.com, x86@kernel.org,
-        linuxram@us.ibm.com, mhocko@kernel.org, linux-mm@kvack.org,
-        mingo@redhat.com, aneesh.kumar@linux.ibm.com,
-        bauerman@linux.ibm.com, msuchanek@suse.de, mpe@ellerman.id.au,
-        linuxppc-dev@lists.ozlabs.org
-References: <cover.1579265066.git.sandipan@linux.ibm.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-Openpgp: preference=signencrypt
-Autocrypt: addr=dave.hansen@intel.com; keydata=
- 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
-Message-ID: <3a14815c-b9cb-f5a5-630a-0bfb25356429@intel.com>
-Date:   Fri, 17 Jan 2020 10:02:35 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S1729123AbgAQSMb (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 17 Jan 2020 13:12:31 -0500
+Received: from youngberry.canonical.com ([91.189.89.112]:52152 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726603AbgAQSMb (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 17 Jan 2020 13:12:31 -0500
+Received: from ip5f5bd679.dynamic.kabel-deutschland.de ([95.91.214.121] helo=localhost.localdomain)
+        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.86_2)
+        (envelope-from <christian.brauner@ubuntu.com>)
+        id 1isW6e-0005Yu-Ga; Fri, 17 Jan 2020 18:12:28 +0000
+From:   Christian Brauner <christian.brauner@ubuntu.com>
+To:     linux-api@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Tejun Heo <tj@kernel.org>
+Cc:     Oleg Nesterov <oleg@redhat.com>,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        Roman Gushchin <guro@fb.com>, Shuah Khan <shuah@kernel.org>,
+        cgroups@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: [PATCH v4 6/6] selftests/cgroup: add tests for cloning into cgroups
+Date:   Fri, 17 Jan 2020 19:12:19 +0100
+Message-Id: <20200117181219.14542-7-christian.brauner@ubuntu.com>
+X-Mailer: git-send-email 2.25.0
+In-Reply-To: <20200117181219.14542-1-christian.brauner@ubuntu.com>
+References: <20200117181219.14542-1-christian.brauner@ubuntu.com>
 MIME-Version: 1.0
-In-Reply-To: <cover.1579265066.git.sandipan@linux.ibm.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 1/17/20 4:49 AM, Sandipan Das wrote:
-> Memory protection keys enables an application to protect its address
-> space from inadvertent access by its own code.
-> 
-> This feature is now enabled on powerpc and has been available since
-> 4.16-rc1. The patches move the selftests to arch neutral directory
-> and enhance their test coverage.
-> 
-> Tested on powerpc64 and x86_64 (Skylake-SP).
-I also tested the series.  The 64-bit binary works fine.  But,
+Expand the cgroup test-suite to include tests for CLONE_INTO_CGROUP.
+This adds the following tests:
+- CLONE_INTO_CGROUP manages to clone a process directly into a correctly
+  delegated cgroup
+- CLONE_INTO_CGROUP fails to clone a process into a cgroup that has been
+  removed after we've opened an fd to it
+- CLONE_INTO_CGROUP fails to clone a process into an invalid domain
+  cgroup
+- CLONE_INTO_CGROUP adheres to the no internal process constraint
+- CLONE_INTO_CGROUP works with the freezer feature
 
-This is failing to build the x86 selftests:
+Cc: Roman Gushchin <guro@fb.com>
+Cc: Tejun Heo <tj@kernel.org>
+Cc: Shuah Khan <shuah@kernel.org>
+Cc: cgroups@vger.kernel.org
+Cc: linux-kselftest@vger.kernel.org
+Signed-off-by: Christian Brauner <christian.brauner@ubuntu.com>
+---
+/* v1 */
+Link: https://lore.kernel.org/r/20191218173516.7875-4-christian.brauner@ubuntu.com
 
-make: *** No rule to make target 'protection_keys.c', needed by
-'/home/daveh/linux/tools/testing/selftests/x86/protection_keys_32'.  Stop.
+/* v2 */
+Link: https://lore.kernel.org/r/20191223061504.28716-4-christian.brauner@ubuntu.com
+unchanged
 
-I think you just forgot to remove the binary from the x86 Makefile.
+/* v3 */
+Link: https://lore.kernel.org/r/20200117002143.15559-6-christian.brauner@ubuntu.com
+unchanged
 
-Which reminds me: This removes the 32-bit binary.  x86 32-bit binaries
-exercise different paths than the 64-bit ones, so we like to have both.
- Although it isn't *essential* it would really be nice to keep the
-32-bit binary.
+/* v3 */
+unchanged
+---
+ tools/testing/selftests/cgroup/Makefile       |   6 +-
+ tools/testing/selftests/cgroup/cgroup_util.c  | 126 ++++++++++++++++++
+ tools/testing/selftests/cgroup/cgroup_util.h  |   4 +
+ tools/testing/selftests/cgroup/test_core.c    |  64 +++++++++
+ .../selftests/clone3/clone3_selftests.h       |  19 ++-
+ 5 files changed, 214 insertions(+), 5 deletions(-)
+
+diff --git a/tools/testing/selftests/cgroup/Makefile b/tools/testing/selftests/cgroup/Makefile
+index 66aafe1f5746..967f268fde74 100644
+--- a/tools/testing/selftests/cgroup/Makefile
++++ b/tools/testing/selftests/cgroup/Makefile
+@@ -11,6 +11,6 @@ TEST_GEN_PROGS += test_freezer
+ 
+ include ../lib.mk
+ 
+-$(OUTPUT)/test_memcontrol: cgroup_util.c
+-$(OUTPUT)/test_core: cgroup_util.c
+-$(OUTPUT)/test_freezer: cgroup_util.c
++$(OUTPUT)/test_memcontrol: cgroup_util.c ../clone3/clone3_selftests.h
++$(OUTPUT)/test_core: cgroup_util.c ../clone3/clone3_selftests.h
++$(OUTPUT)/test_freezer: cgroup_util.c ../clone3/clone3_selftests.h
+diff --git a/tools/testing/selftests/cgroup/cgroup_util.c b/tools/testing/selftests/cgroup/cgroup_util.c
+index 8f7131dcf1ff..8a637ca7d73a 100644
+--- a/tools/testing/selftests/cgroup/cgroup_util.c
++++ b/tools/testing/selftests/cgroup/cgroup_util.c
+@@ -15,6 +15,7 @@
+ #include <unistd.h>
+ 
+ #include "cgroup_util.h"
++#include "../clone3/clone3_selftests.h"
+ 
+ static ssize_t read_text(const char *path, char *buf, size_t max_len)
+ {
+@@ -331,12 +332,112 @@ int cg_run(const char *cgroup,
+ 	}
+ }
+ 
++pid_t clone_into_cgroup(int cgroup_fd)
++{
++#ifdef CLONE_ARGS_SIZE_VER2
++	pid_t pid;
++
++	struct clone_args args = {
++		.flags = CLONE_INTO_CGROUP,
++		.exit_signal = SIGCHLD,
++		.cgroup = cgroup_fd,
++	};
++
++	pid = sys_clone3(&args, sizeof(struct clone_args));
++	/*
++	 * Verify that this is a genuine test failure:
++	 * ENOSYS -> clone3() not available
++	 * E2BIG  -> CLONE_INTO_CGROUP not available
++	 */
++	if (pid < 0 && (errno == ENOSYS || errno == E2BIG))
++		goto pretend_enosys;
++
++	return pid;
++
++pretend_enosys:
++#endif
++	errno = ENOSYS;
++	return -ENOSYS;
++}
++
++int clone_reap(pid_t pid, int options)
++{
++	int ret;
++	siginfo_t info = {
++		.si_signo = 0,
++	};
++
++again:
++	ret = waitid(P_PID, pid, &info, options | __WALL | __WNOTHREAD);
++	if (ret < 0) {
++		if (errno == EINTR)
++			goto again;
++		return -1;
++	}
++
++	if (options & WEXITED) {
++		if (WIFEXITED(info.si_status))
++			return WEXITSTATUS(info.si_status);
++	}
++
++	if (options & WSTOPPED) {
++		if (WIFSTOPPED(info.si_status))
++			return WSTOPSIG(info.si_status);
++	}
++
++	if (options & WCONTINUED) {
++		if (WIFCONTINUED(info.si_status))
++			return 0;
++	}
++
++	return -1;
++}
++
++int dirfd_open_opath(const char *dir)
++{
++	return open(dir, O_DIRECTORY | O_CLOEXEC | O_NOFOLLOW | O_PATH);
++}
++
++#define close_prot_errno(fd)                                                   \
++	if (fd >= 0) {                                                         \
++		int _e_ = errno;                                               \
++		close(fd);                                                     \
++		errno = _e_;                                                   \
++	}
++
++static int clone_into_cgroup_run_nowait(const char *cgroup,
++					int (*fn)(const char *cgroup, void *arg),
++					void *arg)
++{
++	int cgroup_fd;
++	pid_t pid;
++
++	cgroup_fd =  dirfd_open_opath(cgroup);
++	if (cgroup_fd < 0)
++		return -1;
++
++	pid = clone_into_cgroup(cgroup_fd);
++	close_prot_errno(cgroup_fd);
++	if (pid == 0)
++		exit(fn(cgroup, arg));
++
++	return pid;
++}
++
+ int cg_run_nowait(const char *cgroup,
+ 		  int (*fn)(const char *cgroup, void *arg),
+ 		  void *arg)
+ {
+ 	int pid;
+ 
++	pid = clone_into_cgroup_run_nowait(cgroup, fn, arg);
++	if (pid > 0)
++		return pid;
++
++	/* Genuine test failure. */
++	if (pid < 0 && errno != ENOSYS)
++		return -1;
++
+ 	pid = fork();
+ 	if (pid == 0) {
+ 		char buf[64];
+@@ -450,3 +551,28 @@ int proc_read_strstr(int pid, bool thread, const char *item, const char *needle)
+ 
+ 	return strstr(buf, needle) ? 0 : -1;
+ }
++
++int clone_into_cgroup_run_wait(const char *cgroup)
++{
++	int cgroup_fd;
++	pid_t pid;
++
++	cgroup_fd =  dirfd_open_opath(cgroup);
++	if (cgroup_fd < 0)
++		return -1;
++
++	pid = clone_into_cgroup(cgroup_fd);
++	close_prot_errno(cgroup_fd);
++	if (pid < 0)
++		return -1;
++
++	if (pid == 0)
++		exit(EXIT_SUCCESS);
++
++	/*
++	 * We don't care whether this fails. We only care whether the initial
++	 * clone succeeded.
++	 */
++	(void)clone_reap(pid, WEXITED);
++	return 0;
++}
+diff --git a/tools/testing/selftests/cgroup/cgroup_util.h b/tools/testing/selftests/cgroup/cgroup_util.h
+index 49c54fbdb229..5a1305dd1f0b 100644
+--- a/tools/testing/selftests/cgroup/cgroup_util.h
++++ b/tools/testing/selftests/cgroup/cgroup_util.h
+@@ -50,3 +50,7 @@ extern int cg_wait_for_proc_count(const char *cgroup, int count);
+ extern int cg_killall(const char *cgroup);
+ extern ssize_t proc_read_text(int pid, bool thread, const char *item, char *buf, size_t size);
+ extern int proc_read_strstr(int pid, bool thread, const char *item, const char *needle);
++extern pid_t clone_into_cgroup(int cgroup_fd);
++extern int clone_reap(pid_t pid, int options);
++extern int clone_into_cgroup_run_wait(const char *cgroup);
++extern int dirfd_open_opath(const char *dir);
+diff --git a/tools/testing/selftests/cgroup/test_core.c b/tools/testing/selftests/cgroup/test_core.c
+index c5ca669feb2b..96e016ccafe0 100644
+--- a/tools/testing/selftests/cgroup/test_core.c
++++ b/tools/testing/selftests/cgroup/test_core.c
+@@ -25,8 +25,11 @@
+ static int test_cgcore_populated(const char *root)
+ {
+ 	int ret = KSFT_FAIL;
++	int err;
+ 	char *cg_test_a = NULL, *cg_test_b = NULL;
+ 	char *cg_test_c = NULL, *cg_test_d = NULL;
++	int cgroup_fd = -EBADF;
++	pid_t pid;
+ 
+ 	cg_test_a = cg_name(root, "cg_test_a");
+ 	cg_test_b = cg_name(root, "cg_test_a/cg_test_b");
+@@ -78,6 +81,52 @@ static int test_cgcore_populated(const char *root)
+ 	if (cg_read_strcmp(cg_test_d, "cgroup.events", "populated 0\n"))
+ 		goto cleanup;
+ 
++	/* Test that we can directly clone into a new cgroup. */
++	cgroup_fd = dirfd_open_opath(cg_test_d);
++	if (cgroup_fd < 0)
++		goto cleanup;
++
++	pid = clone_into_cgroup(cgroup_fd);
++	if (pid < 0) {
++		if (errno == ENOSYS)
++			goto cleanup_pass;
++		goto cleanup;
++	}
++
++	if (pid == 0) {
++		if (raise(SIGSTOP))
++			exit(EXIT_FAILURE);
++		exit(EXIT_SUCCESS);
++	}
++
++	err = cg_read_strcmp(cg_test_d, "cgroup.events", "populated 1\n");
++
++	(void)clone_reap(pid, WSTOPPED);
++	(void)kill(pid, SIGCONT);
++	(void)clone_reap(pid, WEXITED);
++
++	if (err)
++		goto cleanup;
++
++	if (cg_read_strcmp(cg_test_d, "cgroup.events", "populated 0\n"))
++		goto cleanup;
++
++	/* Remove cgroup. */
++	if (cg_test_d) {
++		cg_destroy(cg_test_d);
++		free(cg_test_d);
++		cg_test_d = NULL;
++	}
++
++	pid = clone_into_cgroup(cgroup_fd);
++	if (pid < 0)
++		goto cleanup_pass;
++	if (pid == 0)
++		exit(EXIT_SUCCESS);
++	(void)clone_reap(pid, WEXITED);
++	goto cleanup;
++
++cleanup_pass:
+ 	ret = KSFT_PASS;
+ 
+ cleanup:
+@@ -93,6 +142,8 @@ static int test_cgcore_populated(const char *root)
+ 	free(cg_test_c);
+ 	free(cg_test_b);
+ 	free(cg_test_a);
++	if (cgroup_fd >= 0)
++		close(cgroup_fd);
+ 	return ret;
+ }
+ 
+@@ -136,6 +187,16 @@ static int test_cgcore_invalid_domain(const char *root)
+ 	if (errno != EOPNOTSUPP)
+ 		goto cleanup;
+ 
++	if (!clone_into_cgroup_run_wait(child))
++		goto cleanup;
++
++	if (errno == ENOSYS)
++		goto cleanup_pass;
++
++	if (errno != EOPNOTSUPP)
++		goto cleanup;
++
++cleanup_pass:
+ 	ret = KSFT_PASS;
+ 
+ cleanup:
+@@ -345,6 +406,9 @@ static int test_cgcore_internal_process_constraint(const char *root)
+ 	if (!cg_enter_current(parent))
+ 		goto cleanup;
+ 
++	if (!clone_into_cgroup_run_wait(parent))
++		goto cleanup;
++
+ 	ret = KSFT_PASS;
+ 
+ cleanup:
+diff --git a/tools/testing/selftests/clone3/clone3_selftests.h b/tools/testing/selftests/clone3/clone3_selftests.h
+index a3f2c8ad8bcc..91c1a78ddb39 100644
+--- a/tools/testing/selftests/clone3/clone3_selftests.h
++++ b/tools/testing/selftests/clone3/clone3_selftests.h
+@@ -5,12 +5,24 @@
+ 
+ #define _GNU_SOURCE
+ #include <sched.h>
++#include <linux/sched.h>
++#include <linux/types.h>
+ #include <stdint.h>
+ #include <syscall.h>
+-#include <linux/types.h>
++#include <sys/wait.h>
++
++#include "../kselftest.h"
+ 
+ #define ptr_to_u64(ptr) ((__u64)((uintptr_t)(ptr)))
+ 
++#ifndef CLONE_INTO_CGROUP
++#define CLONE_INTO_CGROUP 0x200000000ULL /* Clone into a specific cgroup given the right permissions. */
++#endif
++
++#ifndef CLONE_ARGS_SIZE_VER0
++#define CLONE_ARGS_SIZE_VER0 64
++#endif
++
+ #ifndef __NR_clone3
+ #define __NR_clone3 -1
+ struct clone_args {
+@@ -22,10 +34,13 @@ struct clone_args {
+ 	__aligned_u64 stack;
+ 	__aligned_u64 stack_size;
+ 	__aligned_u64 tls;
++#define CLONE_ARGS_SIZE_VER1 80
+ 	__aligned_u64 set_tid;
+ 	__aligned_u64 set_tid_size;
++#define CLONE_ARGS_SIZE_VER2 88
++	__aligned_u64 cgroup;
+ };
+-#endif
++#endif /* __NR_clone3 */
+ 
+ static pid_t sys_clone3(struct clone_args *args, size_t size)
+ {
+-- 
+2.25.0
+
