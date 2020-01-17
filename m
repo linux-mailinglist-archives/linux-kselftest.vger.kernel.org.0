@@ -2,58 +2,95 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 21D48140FAC
-	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Jan 2020 18:13:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC82D140FD7
+	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Jan 2020 18:28:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726761AbgAQRNB convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 17 Jan 2020 12:13:01 -0500
-Received: from Galois.linutronix.de ([193.142.43.55]:56972 "EHLO
-        Galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726603AbgAQRNB (ORCPT
+        id S1727115AbgAQR2K (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 17 Jan 2020 12:28:10 -0500
+Received: from mail-qt1-f195.google.com ([209.85.160.195]:44003 "EHLO
+        mail-qt1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726684AbgAQR2K (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 17 Jan 2020 12:13:01 -0500
-Received: from p5b06da22.dip0.t-ipconnect.de ([91.6.218.34] helo=nanos.tec.linutronix.de)
-        by Galois.linutronix.de with esmtpsa (TLS1.2:DHE_RSA_AES_256_CBC_SHA256:256)
-        (Exim 4.80)
-        (envelope-from <tglx@linutronix.de>)
-        id 1isVB3-0004oZ-AA; Fri, 17 Jan 2020 18:12:57 +0100
-Received: by nanos.tec.linutronix.de (Postfix, from userid 1000)
-        id CD600100C19; Fri, 17 Jan 2020 18:12:56 +0100 (CET)
-From:   Thomas Gleixner <tglx@linutronix.de>
-To:     Daniel =?utf-8?Q?D=C3=ADaz?= <daniel.diaz@linaro.org>,
-        shuah@kernel.org
-Cc:     Daniel =?utf-8?Q?D=C3=ADaz?= <daniel.diaz@linaro.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "open list\:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 1/3] selftests/x86: Build with LDFLAGS and LDLIBS
-In-Reply-To: <20200117165330.17015-1-daniel.diaz@linaro.org>
-References: <20200117165330.17015-1-daniel.diaz@linaro.org>
-Date:   Fri, 17 Jan 2020 18:12:56 +0100
-Message-ID: <87muam0zxj.fsf@nanos.tec.linutronix.de>
+        Fri, 17 Jan 2020 12:28:10 -0500
+Received: by mail-qt1-f195.google.com with SMTP id d18so22328496qtj.10;
+        Fri, 17 Jan 2020 09:28:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to
+         :user-agent;
+        bh=YJBe+PR1JTzkbV6VdX/ClFM8UuTfYuVGKNcb10Up+LM=;
+        b=DbHiqO+e6kYuR6bMRUFqkRzJXzREnc/t8WeVUwNtwBq0US0ALqFtfBS3k8Ar5PzFae
+         jpbiR7Ax+NvFzgNUZfzP6b4KBWdJJ8us7/sDH5Tiro8mnHYZM1bos9P/GDhAcxVHXG4b
+         +CqRW+gbtb40Tq4JQ9+XfDuAtGc8xx7XWoPbLCDa9sXO0xSMc54OuWYlMPO3hMfg3xGs
+         R6SRfw70eNBH9z1vinkvQf3Pkmv//DOGZzpDO/JeaaQZKfMlTJoC34/zqw6bnCacSApd
+         hf6+skAgQQBrKH5W5od7c18HNBincCZTYsXdKlpO3ehhcjXZitzgNqPGCAFsoZlAoM4q
+         MvUg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition
+         :content-transfer-encoding:in-reply-to:user-agent;
+        bh=YJBe+PR1JTzkbV6VdX/ClFM8UuTfYuVGKNcb10Up+LM=;
+        b=dlGsDK2AVaRbvusaEwWxDibqJoeiK/AU65ivacLnjYcLGTxCD6VYhitgt2zmk+hptR
+         MfK5Oi0TydvTAPAOfCqkA0RFxuYxHppwz0DY3K8zZDAOCrmo2XSvJ/m+pMI6IwnGzJ3y
+         SGRJWwfxMcy8YdtctsVJvBwnB9dEEBhgpnYmAGhMnJEpQXDOwCUNl/gq5CnEuzmoJL0k
+         /yqZPr8pRF7NKkW8KEjAUO3/EY5/P912PucbXcLVztykPCI9Xb68AjnO9Vpc8aFwyRYI
+         jyGDqZvtzS6wVXn4eLQ8CGW9qjlt4QVINVasnkVXUJv4QvU1qyJFmUCOCtS6vNzRb+1Q
+         jRLg==
+X-Gm-Message-State: APjAAAWFfcXNO2Ha9g7lMIHhylEmtT4DU5RLAyl3XBSPtrOy+d9nyvEq
+        YV5glm5kx1vtcdMj/2m6AGU=
+X-Google-Smtp-Source: APXvYqz2O/xFh6ygdxVfF7TRwAgb6tMQGsH1goOEKwF730KRP0mdEDko+yi0ag0UIHTaUnjOw9qRYQ==
+X-Received: by 2002:aed:2150:: with SMTP id 74mr8430727qtc.323.1579282089045;
+        Fri, 17 Jan 2020 09:28:09 -0800 (PST)
+Received: from localhost ([2620:10d:c091:500::1:7d10])
+        by smtp.gmail.com with ESMTPSA id r37sm13251937qtj.44.2020.01.17.09.28.08
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 17 Jan 2020 09:28:08 -0800 (PST)
+Date:   Fri, 17 Jan 2020 09:28:06 -0800
+From:   Tejun Heo <tj@kernel.org>
+To:     Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
+Cc:     cgroups@vger.kernel.org, Johannes Weiner <hannes@cmpxchg.org>,
+        Li Zefan <lizefan@huawei.com>, alex.shi@linux.alibaba.com,
+        guro@fb.com, kernel-team@android.com, linger.lee@mediatek.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, matthias.bgg@gmail.com,
+        shuah@kernel.org, tomcherry@google.com
+Subject: Re: [PATCH 2/3] cgroup: Iterate tasks that did not finish do_exit()
+Message-ID: <20200117172806.GK2677547@devbig004.ftw2.facebook.com>
+References: <20200116043612.52782-1-surenb@google.com>
+ <20200117151533.12381-1-mkoutny@suse.com>
+ <20200117151533.12381-3-mkoutny@suse.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8BIT
-X-Linutronix-Spam-Score: -1.0
-X-Linutronix-Spam-Level: -
-X-Linutronix-Spam-Status: No , -1.0 points, 5.0 required,  ALL_TRUSTED=-1,SHORTCIRCUIT=-0.0001
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200117151533.12381-3-mkoutny@suse.com>
+User-Agent: Mutt/1.5.21 (2010-09-15)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Daniel Díaz <daniel.diaz@linaro.org> writes:
+On Fri, Jan 17, 2020 at 04:15:32PM +0100, Michal Koutn� wrote:
+> PF_EXITING is set earlier than actual removal from css_set when a task
+> is exitting. This can confuse cgroup.procs readers who see no PF_EXITING
+> tasks, however, rmdir is checking against css_set membership so it can
+> transitionally fail with EBUSY.
+> 
+> Fix this by listing tasks that weren't unlinked from css_set active
+> lists.
+> It may happen that other users of the task iterator (without
+> CSS_TASK_ITER_PROCS) spot a PF_EXITING task before cgroup_exit(). This
+> is equal to the state before commit c03cd7738a83 ("cgroup: Include dying
+> leaders with live threads in PROCS iterations") but it may be reviewed
+> later.
 
-> During cross-compilation, it was discovered that LDFLAGS and
-> LDLIBS were not being used while building binaries, leading
-> to defaults which were not necessarily correct.
->
-> OpenEmbedded reported this kind of problem:
->   ERROR: QA Issue: No GNU_HASH in the ELF binary [...], didn't pass LDFLAGS?
->
-> Signed-off-by: Daniel Díaz <daniel.diaz@linaro.org>
+Yeah, this looks fine to me.  Any chance you can order this before the
+clean up so that we can mark it for -stable.
 
-Acked-by: Thomas Gleixner <tglx@linutronix.de>
+Thanks.
+
+-- 
+tejun
