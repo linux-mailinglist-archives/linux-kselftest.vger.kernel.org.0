@@ -2,112 +2,134 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 23D5A140341
-	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Jan 2020 06:22:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 109B91405AF
+	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Jan 2020 09:57:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726812AbgAQFWW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 17 Jan 2020 00:22:22 -0500
-Received: from bonobo.elm.relay.mailchannels.net ([23.83.212.22]:12820 "EHLO
-        bonobo.elm.relay.mailchannels.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726706AbgAQFWW (ORCPT
+        id S1729317AbgAQI5p (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 17 Jan 2020 03:57:45 -0500
+Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:23765 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1727018AbgAQI5o (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 17 Jan 2020 00:22:22 -0500
-X-Sender-Id: dreamhost|x-authsender|siddhesh@gotplt.org
-Received: from relay.mailchannels.net (localhost [127.0.0.1])
-        by relay.mailchannels.net (Postfix) with ESMTP id BE1293414E3;
-        Fri, 17 Jan 2020 05:22:20 +0000 (UTC)
-Received: from pdx1-sub0-mail-a10.g.dreamhost.com (100-96-4-61.trex.outbound.svc.cluster.local [100.96.4.61])
-        (Authenticated sender: dreamhost)
-        by relay.mailchannels.net (Postfix) with ESMTPA id E605A341A31;
-        Fri, 17 Jan 2020 05:22:19 +0000 (UTC)
-X-Sender-Id: dreamhost|x-authsender|siddhesh@gotplt.org
-Received: from pdx1-sub0-mail-a10.g.dreamhost.com ([TEMPUNAVAIL].
- [64.90.62.162])
-        (using TLSv1.2 with cipher DHE-RSA-AES256-GCM-SHA384)
-        by 0.0.0.0:2500 (trex/5.18.5);
-        Fri, 17 Jan 2020 05:22:20 +0000
-X-MC-Relay: Neutral
-X-MailChannels-SenderId: dreamhost|x-authsender|siddhesh@gotplt.org
-X-MailChannels-Auth-Id: dreamhost
-X-Supply-Robust: 370d02ba34fcfd4e_1579238540479_4289310058
-X-MC-Loop-Signature: 1579238540479:1777990223
-X-MC-Ingress-Time: 1579238540479
-Received: from pdx1-sub0-mail-a10.g.dreamhost.com (localhost [127.0.0.1])
-        by pdx1-sub0-mail-a10.g.dreamhost.com (Postfix) with ESMTP id 9060B8CAEC;
-        Thu, 16 Jan 2020 21:22:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha1; c=relaxed; d=gotplt.org; h=subject:to
-        :cc:references:from:message-id:date:mime-version:in-reply-to
-        :content-type:content-transfer-encoding; s=gotplt.org; bh=Yj30kd
-        fElzmQt7WZpusShHxwZq4=; b=nM9ZbgrcosXlfUHZk83LH5gID02UM+bTsZex+w
-        yMJmbIWxJ/B7sowsTW462lJZqnewEJm5ybsjkPMUdyY63JstvK4KcgcDF8OTNDtV
-        4oYybuzlTs7kRCPjGA8NVYVNyi4Po+3r7hFJv2jUoikDhLUJlvLg2QwUkeFT2AtJ
-        PnSgc=
-Received: from [192.168.1.97] (unknown [123.252.202.172])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        Fri, 17 Jan 2020 03:57:44 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1579251462;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=5wGVm7vGifojmQs18rmKxAMnZ1ofaqDbsZAnJ2KgVM8=;
+        b=Hpa1waJg3pWgyJUUwnFoVgr+6YPLUlNAa3TUfN1efXEe9fEgcPWx6lZkQBLm74gDbjlTJn
+        h8RS9O3FJm6D0fFz9w+noq3LrNU1uf5jDZUVR/r5NKVhnIWORBTmqEu11q8NRLIV9mvJE2
+        PUo2yZGDKMleomRLLHm3MBlrgrvRzMs=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-326-bAqU4dETMIa9LQgbw4bJAg-1; Fri, 17 Jan 2020 03:57:40 -0500
+X-MC-Unique: bAqU4dETMIa9LQgbw4bJAg-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: siddhesh@gotplt.org)
-        by pdx1-sub0-mail-a10.g.dreamhost.com (Postfix) with ESMTPSA id 158898AB48;
-        Thu, 16 Jan 2020 21:22:11 -0800 (PST)
-Subject: Re: [PATCH] kselftest: Minimise dependency of get_size on C library
- interfaces
-To:     Tim.Bird@sony.com, masami.hiramatsu@linaro.org
-Cc:     linux-kselftest@vger.kernel.org, shuah@kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20200113164158.15803-1-siddhesh@gotplt.org>
- <CAA93ih1KXO5oSKAB6PmQc6xOw4fX5T+2+zx91BD18YUxL+nWzQ@mail.gmail.com>
- <ECADFF3FD767C149AD96A924E7EA6EAF982C37D2@USCULXMSG17.am.sony.com>
-X-DH-BACKEND: pdx1-sub0-mail-a10
-From:   Siddhesh Poyarekar <siddhesh@gotplt.org>
-Autocrypt: addr=siddhesh@gotplt.org; keydata=
- mQENBFMAZNMBCACeatEKl6YY9iEVxzS64bPbvJsA1mLE2XFWmKXyYzm58dFqPMa0OQQTKCxj
- FCOrc+LD2KtmypttcahKnk5Lk1lNU/lV2hCuR7jJ37sL+/TFQuMMgsLPED6XU4/AYK3VUJvg
- GYLBnMVfpAGYLB5rnPvhFNx0r2KItO/CfiSEyD4g1Wu26SUAXGOp5hbSyBRGhju+8YJlhHBB
- jn3vZfw7IpwAWDVjK0crqMhGDXoZwK+ADUFY5NERAkT3Lb7d11F6+W4558WQZCYIWa3rZ62d
- 986OE7+7xKmJUcLLWvlv5spgUmvotZ4DMzaKba+waY5ygXdGIpm5seVIEUCTaBIe6QVLABEB
- AAG0KFNpZGRoZXNoIFBveWFyZWthciA8c2lkZGhlc2hAZ290cGx0Lm9yZz6JATgEEwECACIF
- Ale0y0wCGwMGCwkIBwMCBhUIAgkKCwQWAgMBAh4BAheAAAoJEHnEPfvxzyGHUggIAJtLMvzH
- jRQi/Dg6oSMUMPtH7oEmgnk482dC4MGNl/bCtUV7VVIAtEN5TGvHxk1EKBNqj49Q+mZjef82
- iluW1RbXRY6+72yZ380yUC41SY+2hVOurJ//h3nvE+YHfO7QjV97yhIegc1kdwArVtgNNApL
- xj5Nc2epT824uaSznVhwyAS2OIHFLmiMYuIW338uXVEug1XKBHwJ9MppVblk4zapc9fRGvRG
- 72ivbTGXNgcza+Kkx1IdA0XB2dEQaAE1XR0FOshKtpeSDRERwZ17+rRT8EjmkRsR7qm1uvPS
- NW7wMTtlj8ox/XuSyG0Coy1NRgqe5bi53ha1kBoKlLaxvyW5AQ0EUwBk0wEIAKELSISlJ9rz
- 3tSBPNkpyqwIPn4//ZBuENJQfIWIWYM9r72sBRHZgiilsN7K7g6Ea7vLUVgv5+WInE4PWFQa
- qUSbMubTjshnaIAIeSU0rslwRRqu2B9HmS8marB+UYdQ+MsPVEInrB8uroFf8Jh7h+2Oqs2M
- KUMsayoFyQkVtwh3HI/AMTkmK6iun3AikOK+J9WLQx2Qqf+fLjY5/ZIjbowbd8GK3B4h4kUP
- beUI5TNg6xcKVyxVPMy8HazfaDwlUHfh07K0UFWtaFuw9v3tlaieOTLH0D0cBXyYTAqgs7C6
- 6cytxw+Qr6/+uHa8MMREDQwTEEwwick3h0h+vIhCsV0AEQEAAYkBHwQYAQIACQIbDAUCVOqz
- 3wAKCRB5xD378c8hh/UzB/0Q13oL/aS8km9sXOa8M1roQ69NUpqpMEOGBWO5naK8wZ2QKh4D
- 05DfNa7yT5FgPLI+a4kdOgWbW2fiE/wMYOMivjoFveOdlzPpsew6n2q5/cvopspriCGJWozT
- kwv1dv9gfTKB7dDJt+ICdabp7aohvNi5xeZgM4GxCiO1rfr0Jn7NAR3L5tpQsVD4eDTa9jg0
- qq/EiF+uLQH82D6bsxtS/Xre7b/sTKK3jE6sthui64w7F3X5M1qwk8XCsqCNA1Z2c+zWkLGH
- 4ZeB/Rrxapu0H0/TAhBBtbDo665GaRb3NSKzG4rJSjXSEQc4rna/Y7/s3c9uB0yjdyXX08mn HzVO
-Message-ID: <cf97c840-70ba-d9b8-6994-0a7ef67b6c0d@gotplt.org>
-Date:   Fri, 17 Jan 2020 10:51:55 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.3.1
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id F022BDB60;
+        Fri, 17 Jan 2020 08:57:36 +0000 (UTC)
+Received: from carbon (ovpn-200-25.brq.redhat.com [10.40.200.25])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 80A8219C5B;
+        Fri, 17 Jan 2020 08:57:24 +0000 (UTC)
+Date:   Fri, 17 Jan 2020 09:57:21 +0100
+From:   Jesper Dangaard Brouer <brouer@redhat.com>
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     Toke =?UTF-8?B?SMO4aWxhbmQtSsO4cmdlbnNlbg==?= <toke@redhat.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        Andrii Nakryiko <andriin@fb.com>,
+        Doug Ledford <dledford@redhat.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-rdma@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        clang-built-linux@googlegroups.com, brouer@redhat.com
+Subject: Re: [PATCH bpf-next v3 00/11] tools: Use consistent libbpf include
+ paths everywhere
+Message-ID: <20200117095721.0030f414@carbon>
+In-Reply-To: <20200117041431.h7vvc32fungenyhg@ast-mbp.dhcp.thefacebook.com>
+References: <157918093154.1357254.7616059374996162336.stgit@toke.dk>
+        <20200117041431.h7vvc32fungenyhg@ast-mbp.dhcp.thefacebook.com>
 MIME-Version: 1.0
-In-Reply-To: <ECADFF3FD767C149AD96A924E7EA6EAF982C37D2@USCULXMSG17.am.sony.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-VR-OUT-STATUS: OK
-X-VR-OUT-SCORE: 0
-X-VR-OUT-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedugedrtdeigdejkecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucggtfgfnhhsuhgsshgtrhhisggvpdfftffgtefojffquffvnecuuegrihhlohhuthemuceftddtnecunecujfgurhepuffvfhfhkffffgggjggtgfesthejredttdefjeenucfhrhhomhepufhiugguhhgvshhhucfrohihrghrvghkrghruceoshhiugguhhgvshhhsehgohhtphhlthdrohhrgheqnecukfhppeduvdefrddvhedvrddvtddvrddujedvnecurfgrrhgrmhepmhhouggvpehsmhhtphdphhgvlhhopegludelvddrudeikedruddrleejngdpihhnvghtpeduvdefrddvhedvrddvtddvrddujedvpdhrvghtuhhrnhdqphgrthhhpefuihguughhvghshhcurfhohigrrhgvkhgrrhcuoehsihguughhvghshhesghhothhplhhtrdhorhhgqedpmhgrihhlfhhrohhmpehsihguughhvghshhesghhothhplhhtrdhorhhgpdhnrhgtphhtthhopefvihhmrdeuihhrugesshhonhihrdgtohhmnecuvehluhhsthgvrhfuihiivgeptd
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 16/01/20 11:02 pm, Tim.Bird@sony.com wrote:
-> 
-> Since the code no longer uses __builtin_strlen(), this comment should
-> change also, to say something like "and string length function.
-> 
+On Thu, 16 Jan 2020 20:14:32 -0800
+Alexei Starovoitov <alexei.starovoitov@gmail.com> wrote:
 
-Oops, I had made the change (to drop the __builtin_strlen mention since
-the length is just computed inline now) and somehow dropped it in some
-copy-paste confusion.  Looks like a patchwork-bot applied my patch, so
-should I send an updated patch or just a comment fix follow-up?
+> On Thu, Jan 16, 2020 at 02:22:11PM +0100, Toke H=C3=B8iland-J=C3=B8rgense=
+n wrote:
+> > The recent commit 6910d7d3867a ("selftests/bpf: Ensure bpf_helper_defs.=
+h are
+> > taken from selftests dir") broke compilation against libbpf if it is in=
+stalled
+> > on the system, and $INCLUDEDIR/bpf is not in the include path.
+> >=20
+> > Since having the bpf/ subdir of $INCLUDEDIR in the include path has nev=
+er been a
+> > requirement for building against libbpf before, this needs to be fixed.=
+ One
+> > option is to just revert the offending commit and figure out a differen=
+t way to
+> > achieve what it aims for.  =20
+>=20
+> The offending commit has been in the tree for a week. So I applied Andrii=
+'s
+> revert of that change. It reintroduced the build dependency issue, but we=
+ lived
+> with it for long time, so we can take time to fix it cleanly.
+> I suggest to focus on that build dependency first.
+>=20
+> > However, this series takes a different approach:
+> > Changing all in-tree users of libbpf to consistently use a bpf/ prefix =
+in
+> > #include directives for header files from libbpf. =20
+>=20
+> I'm not sure it's a good idea. It feels nice, but think of a message we're
+> sending to everyone. We will get spamed with question: does bpf community
+> require all libbpf users to use bpf/ prefix ? What should be our answer?
 
-Thanks,
-Siddhesh
+The answer should be: Yes. When libbpf install the header files the are
+installed under bpf/ prefix.  It is very confusing that samples and
+selftests can include libbpf.h without this prefix. Even worse
+including "bpf.h" pickup the libbpf version bpf/bpf.h, which have
+caused confusion.  The only reason for the direct "libbpf.h" include is
+historical, as there used-to-be a local file for that.
+
+
+> Require or recommend? If require.. what for? It works as-is. If recommend=
+ then
+> why suddenly we're changing all files in selftests and samples?
+> There is no good answer here. I think we should leave the things as-is.
+
+I strongly believe we should correct this.  It doesn't make sense that
+someone copying out a sample or selftests, into a git-submodule libbpf
+(or distro installed libbpf-devel) have to understand that they have to
+update the include path for all the libbpf header files.
+
+--=20
+Best regards,
+  Jesper Dangaard Brouer
+  MSc.CS, Principal Kernel Engineer at Red Hat
+  LinkedIn: http://www.linkedin.com/in/brouer
+
