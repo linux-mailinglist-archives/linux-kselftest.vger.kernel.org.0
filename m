@@ -2,95 +2,121 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CC82D140FD7
-	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Jan 2020 18:28:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C213140FE3
+	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Jan 2020 18:30:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727115AbgAQR2K (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 17 Jan 2020 12:28:10 -0500
-Received: from mail-qt1-f195.google.com ([209.85.160.195]:44003 "EHLO
-        mail-qt1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726684AbgAQR2K (ORCPT
+        id S1726861AbgAQRa3 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 17 Jan 2020 12:30:29 -0500
+Received: from mail-wm1-f65.google.com ([209.85.128.65]:51270 "EHLO
+        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726603AbgAQRa3 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 17 Jan 2020 12:28:10 -0500
-Received: by mail-qt1-f195.google.com with SMTP id d18so22328496qtj.10;
-        Fri, 17 Jan 2020 09:28:09 -0800 (PST)
+        Fri, 17 Jan 2020 12:30:29 -0500
+Received: by mail-wm1-f65.google.com with SMTP id d73so8227265wmd.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 17 Jan 2020 09:30:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to
-         :user-agent;
-        bh=YJBe+PR1JTzkbV6VdX/ClFM8UuTfYuVGKNcb10Up+LM=;
-        b=DbHiqO+e6kYuR6bMRUFqkRzJXzREnc/t8WeVUwNtwBq0US0ALqFtfBS3k8Ar5PzFae
-         jpbiR7Ax+NvFzgNUZfzP6b4KBWdJJ8us7/sDH5Tiro8mnHYZM1bos9P/GDhAcxVHXG4b
-         +CqRW+gbtb40Tq4JQ9+XfDuAtGc8xx7XWoPbLCDa9sXO0xSMc54OuWYlMPO3hMfg3xGs
-         R6SRfw70eNBH9z1vinkvQf3Pkmv//DOGZzpDO/JeaaQZKfMlTJoC34/zqw6bnCacSApd
-         hf6+skAgQQBrKH5W5od7c18HNBincCZTYsXdKlpO3ehhcjXZitzgNqPGCAFsoZlAoM4q
-         MvUg==
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=s/Igl7jec5R8DMF3nyQFihy0XoNH7LpzgEc781wHBbE=;
+        b=IfI2V2VjiHDEyMxVeB6DJUwZfuJaVSwdWaVbiW2tG1VzG5iMe4Fmndr3Dh8Y5KaF7g
+         SbVP5Ca373H4SpjZNwlaPj0ajlmO5/0RXj4cboBUBjlynN2ihp0sj5+LxlF9hYR3Gs5D
+         5Qv2rZh4Yzvc8lS4UP3Ac5LRe5cw1v+Y0yJdR8pwwdPPusdbhjfrDBsi13y8DYwoaakI
+         cuAz6BXfPrsKPA1w9FiWbzNzE9zzgpb3Rr4pw20A0bJZFGooUMKUtslJ3QXvxVnMh650
+         IIszWgCEmch4wXJw0b3IsDeqswH27TUpZ2/KnyYvteCdFYD5butLob8faQQd6VS5iI6D
+         fZyA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition
-         :content-transfer-encoding:in-reply-to:user-agent;
-        bh=YJBe+PR1JTzkbV6VdX/ClFM8UuTfYuVGKNcb10Up+LM=;
-        b=dlGsDK2AVaRbvusaEwWxDibqJoeiK/AU65ivacLnjYcLGTxCD6VYhitgt2zmk+hptR
-         MfK5Oi0TydvTAPAOfCqkA0RFxuYxHppwz0DY3K8zZDAOCrmo2XSvJ/m+pMI6IwnGzJ3y
-         SGRJWwfxMcy8YdtctsVJvBwnB9dEEBhgpnYmAGhMnJEpQXDOwCUNl/gq5CnEuzmoJL0k
-         /yqZPr8pRF7NKkW8KEjAUO3/EY5/P912PucbXcLVztykPCI9Xb68AjnO9Vpc8aFwyRYI
-         jyGDqZvtzS6wVXn4eLQ8CGW9qjlt4QVINVasnkVXUJv4QvU1qyJFmUCOCtS6vNzRb+1Q
-         jRLg==
-X-Gm-Message-State: APjAAAWFfcXNO2Ha9g7lMIHhylEmtT4DU5RLAyl3XBSPtrOy+d9nyvEq
-        YV5glm5kx1vtcdMj/2m6AGU=
-X-Google-Smtp-Source: APXvYqz2O/xFh6ygdxVfF7TRwAgb6tMQGsH1goOEKwF730KRP0mdEDko+yi0ag0UIHTaUnjOw9qRYQ==
-X-Received: by 2002:aed:2150:: with SMTP id 74mr8430727qtc.323.1579282089045;
-        Fri, 17 Jan 2020 09:28:09 -0800 (PST)
-Received: from localhost ([2620:10d:c091:500::1:7d10])
-        by smtp.gmail.com with ESMTPSA id r37sm13251937qtj.44.2020.01.17.09.28.08
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 17 Jan 2020 09:28:08 -0800 (PST)
-Date:   Fri, 17 Jan 2020 09:28:06 -0800
-From:   Tejun Heo <tj@kernel.org>
-To:     Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
-Cc:     cgroups@vger.kernel.org, Johannes Weiner <hannes@cmpxchg.org>,
-        Li Zefan <lizefan@huawei.com>, alex.shi@linux.alibaba.com,
-        guro@fb.com, kernel-team@android.com, linger.lee@mediatek.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=s/Igl7jec5R8DMF3nyQFihy0XoNH7LpzgEc781wHBbE=;
+        b=YjN/Kx1EnxiHaZEtkynwZeN8PWMjUvp2YyfL2wXpl5DV9MWX8bf5BKycJDNsyvw7eX
+         zEqs1cLhoi9vwQBszlxoklYsCfslZj+N7zuESCUe+I4/MetXAo4N15vCPm6zGbTjW6ik
+         TiiZtk6pbkzx5K/pTddr1ccpw4s9GWOko+sP/JSmksk82CZCbYMCb8U9jhl6VZTciD5m
+         nh8RliANRuAKuhSf31oV9/UmRXJp9a5IgUQMWL1TsEDwEwyG13FuXBcvgT2hex7yHRzZ
+         d4R34+lSaALgnho64YOkzHsjGc8b0XQjkbjnM2NVPtuhD42iCGX/uEYlFCgaEYzMw4NO
+         WW9g==
+X-Gm-Message-State: APjAAAXudemrJ0NPV2WbZ3e5b+vYQCVREQMgXRQJmhricZU/wFC1OTQA
+        rN/7yJfQgtvpeT/z08M5o4HvJsqxmA8DMt4xWeAayQ==
+X-Google-Smtp-Source: APXvYqzRUf0wuugbvneoW29gNcVYmOiCM6ix6iVR1pyh/dPBzXnBInYEBfLi/RQ7RKNXoAYeNH1N+QN4jkAc1zvQ3nI=
+X-Received: by 2002:a1c:7e0b:: with SMTP id z11mr5822249wmc.88.1579282226314;
+ Fri, 17 Jan 2020 09:30:26 -0800 (PST)
+MIME-Version: 1.0
+References: <20200116043612.52782-1-surenb@google.com> <20200117151533.12381-1-mkoutny@suse.com>
+In-Reply-To: <20200117151533.12381-1-mkoutny@suse.com>
+From:   Suren Baghdasaryan <surenb@google.com>
+Date:   Fri, 17 Jan 2020 09:30:15 -0800
+Message-ID: <CAJuCfpHkOz1LmygyxC9VxXux8_TFmEGr-BsAs-EadKt=AkZyiQ@mail.gmail.com>
+Subject: Re: [PATCH 0/3] cgroup: Iterate tasks that did not finish do_exit()
+To:     =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>
+Cc:     cgroups mailinglist <cgroups@vger.kernel.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Li Zefan <lizefan@huawei.com>, Tejun Heo <tj@kernel.org>,
+        alex.shi@linux.alibaba.com, Roman Gushchin <guro@fb.com>,
+        kernel-team <kernel-team@android.com>,
+        JeiFeng Lee <linger.lee@mediatek.com>,
+        linux-arm-kernel@lists.infradead.org,
+        LKML <linux-kernel@vger.kernel.org>,
         linux-kselftest@vger.kernel.org,
         linux-mediatek@lists.infradead.org, matthias.bgg@gmail.com,
-        shuah@kernel.org, tomcherry@google.com
-Subject: Re: [PATCH 2/3] cgroup: Iterate tasks that did not finish do_exit()
-Message-ID: <20200117172806.GK2677547@devbig004.ftw2.facebook.com>
-References: <20200116043612.52782-1-surenb@google.com>
- <20200117151533.12381-1-mkoutny@suse.com>
- <20200117151533.12381-3-mkoutny@suse.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20200117151533.12381-3-mkoutny@suse.com>
-User-Agent: Mutt/1.5.21 (2010-09-15)
+        shuah@kernel.org, Tom Cherry <tomcherry@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Jan 17, 2020 at 04:15:32PM +0100, Michal Koutný wrote:
-> PF_EXITING is set earlier than actual removal from css_set when a task
-> is exitting. This can confuse cgroup.procs readers who see no PF_EXITING
-> tasks, however, rmdir is checking against css_set membership so it can
-> transitionally fail with EBUSY.
-> 
-> Fix this by listing tasks that weren't unlinked from css_set active
-> lists.
-> It may happen that other users of the task iterator (without
-> CSS_TASK_ITER_PROCS) spot a PF_EXITING task before cgroup_exit(). This
-> is equal to the state before commit c03cd7738a83 ("cgroup: Include dying
-> leaders with live threads in PROCS iterations") but it may be reviewed
-> later.
+Hi Michal,
 
-Yeah, this looks fine to me.  Any chance you can order this before the
-clean up so that we can mark it for -stable.
+On Fri, Jan 17, 2020 at 7:15 AM Michal Koutn=C3=BD <mkoutny@suse.com> wrote=
+:
+>
+> Hi,
+> I was looking into the issue and came up with an alternative solution tha=
+t
+> changes task iteration to be consistent with cgroup_is_populated() check =
+and
+> moving the responsibility to check PF_EXITING on the consumers of iterato=
+r API.
 
-Thanks.
+Yeah, that was my first thought which basically reverts a part of
+c03cd7738a83. When I first brought up this issue in the other email
+thread, Tejun's comment was "the right thing to do is allowing
+destruction of cgroups w/ only
+dead processes in it". I assumed, maybe incorrectly, that the desire
+here is not to include dying processes into cgroup.procs but to allow
+cgroups with dying processes to be deleted.
 
--- 
-tejun
+To be clear, either way is fine with me since both ways solve the
+issue and this way the code is definitely simpler. I'll rerun the
+tests with your patches just to confirm the issue is gone.
+Thanks!
+
+> I haven't check your approach thoroughly, however, it appears to me it
+> complicates (already non-trivial) cgroup destruction path. I ran your sel=
+ftest
+> on the iterators approach and it proved working.
+>
+>
+> Michal Koutn=C3=BD (2):
+>   cgroup: Unify css_set task lists
+>   cgroup: Iterate tasks that did not finish do_exit()
+>
+> Suren Baghdasaryan (1):
+>   kselftest/cgroup: add cgroup destruction test
+>
+>  include/linux/cgroup-defs.h                |  15 ++-
+>  include/linux/cgroup.h                     |   4 +-
+>  kernel/cgroup/cgroup.c                     |  86 ++++++++--------
+>  kernel/cgroup/debug.c                      |  16 ++-
+>  tools/testing/selftests/cgroup/test_core.c | 113 +++++++++++++++++++++
+>  5 files changed, 176 insertions(+), 58 deletions(-)
+>
+> --
+> 2.24.1
+>
+> --
+> To unsubscribe from this group and stop receiving emails from it, send an=
+ email to kernel-team+unsubscribe@android.com.
+>
