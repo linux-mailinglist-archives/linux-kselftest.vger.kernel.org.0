@@ -2,35 +2,61 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 68925140DA1
-	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Jan 2020 16:16:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 352ED140F5B
+	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Jan 2020 17:54:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728816AbgAQPPw (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 17 Jan 2020 10:15:52 -0500
-Received: from mx2.suse.de ([195.135.220.15]:60106 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729061AbgAQPPt (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 17 Jan 2020 10:15:49 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx2.suse.de (Postfix) with ESMTP id 09FD5AF42;
-        Fri, 17 Jan 2020 15:15:47 +0000 (UTC)
-From:   =?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>
-To:     cgroups@vger.kernel.org
-Cc:     Johannes Weiner <hannes@cmpxchg.org>,
-        Li Zefan <lizefan@huawei.com>, Tejun Heo <tj@kernel.org>,
-        alex.shi@linux.alibaba.com, guro@fb.com, kernel-team@android.com,
-        linger.lee@mediatek.com, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, matthias.bgg@gmail.com,
-        shuah@kernel.org, tomcherry@google.com
-Subject: [PATCH 3/3] kselftest/cgroup: add cgroup destruction test
-Date:   Fri, 17 Jan 2020 16:15:33 +0100
-Message-Id: <20200117151533.12381-4-mkoutny@suse.com>
-X-Mailer: git-send-email 2.24.1
-In-Reply-To: <20200117151533.12381-1-mkoutny@suse.com>
-References: <20200116043612.52782-1-surenb@google.com>
- <20200117151533.12381-1-mkoutny@suse.com>
+        id S1729050AbgAQQx7 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 17 Jan 2020 11:53:59 -0500
+Received: from mail-io1-f65.google.com ([209.85.166.65]:46219 "EHLO
+        mail-io1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726684AbgAQQx7 (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 17 Jan 2020 11:53:59 -0500
+Received: by mail-io1-f65.google.com with SMTP id t26so26751593ioi.13
+        for <linux-kselftest@vger.kernel.org>; Fri, 17 Jan 2020 08:53:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=nyGJWsyTKkrgy7HZPA+UXNCoDltHdQbF47bF/H777tA=;
+        b=U38fXrW2OxaXp4sqTsmCr4POevsntbUi7GOoCjDmm6E2Eq8+gMvI5hv6kKT2VIHhfL
+         FrG5j3Xvg01cDie2KSjwgDxmYzEYXO/L/gqboMLJYQL2Za8zv5AxYxN0XpyIh6t8Oiz1
+         4ysCZDtqNui0yNjenG2zObc4paijp5zwOGr3b8KU1ysGyp3+cd22OAjT3MyzvRkgH20V
+         8Us7MJ61BeuTsVGHZLn43PfJAFN5w096D0daUoROwzyDF+LP4JZ4fSXOs8sGE2Y3ZX7v
+         s6uNeAa3X210wej7yLVvttw1txsGSpnDmhtsUELDq8WJH3Z1jStthNAHduDsl1I0kpoE
+         hMYg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=nyGJWsyTKkrgy7HZPA+UXNCoDltHdQbF47bF/H777tA=;
+        b=iqnfZqUqnuwHPCTfSYEXC+yjzlAHbbHcinskmuMjsl7zngM4rDIPLXViFKGXgn9vfl
+         F/X9mv9Hfo2K0gNH7ChFl5QbUnqmSjpdLVbmaQc34fYKgykAu+i0Lk0EKwBAqZbZrmrL
+         BIAXyU7+Rm2RdA2cDMBcr/EraziyDoI3POzwEinMKP/YrYoDRZQcbhRw70bgTGSgbEuj
+         v9CXU4Yl4ZpbCzV2EtmyhJW2EsNCF7fKDVpJXjh6f3vt2nU+I4PWAmyJCInqwnF02hv0
+         tSBrOqoxtmtIAOaa2qKRdowqHcO52Va6P8zjbE9Gyv9OLOOaa7122HNMjgtPg4fyp9xC
+         ssAg==
+X-Gm-Message-State: APjAAAVa4NS6XaUI6LVG+QgNN6K1Y2U+25wT5qNXV3QSw5swtTnlddOH
+        6ZWxQcyLiIYEOy5KHkL+YSQjkg==
+X-Google-Smtp-Source: APXvYqzcThZp+w7bcJSuEY6nvNEKKKQwjY3iu6iKJqwym9wa4/Nlt5pRDhUAXs4Xuv2n3kLUB8BpZw==
+X-Received: by 2002:a6b:fc02:: with SMTP id r2mr20538419ioh.183.1579280038463;
+        Fri, 17 Jan 2020 08:53:58 -0800 (PST)
+Received: from alago.cortijodelrio.net (CableLink-189-219-74-147.Hosts.InterCable.net. [189.219.74.147])
+        by smtp.googlemail.com with ESMTPSA id f16sm8120662ilq.16.2020.01.17.08.53.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 17 Jan 2020 08:53:57 -0800 (PST)
+From:   =?UTF-8?q?Daniel=20D=C3=ADaz?= <daniel.diaz@linaro.org>
+To:     shuah@kernel.org
+Cc:     =?UTF-8?q?Daniel=20D=C3=ADaz?= <daniel.diaz@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        linux-kselftest@vger.kernel.org (open list:KERNEL SELFTEST FRAMEWORK),
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH 1/3] selftests/x86: Build with LDFLAGS and LDLIBS
+Date:   Fri, 17 Jan 2020 10:53:26 -0600
+Message-Id: <20200117165330.17015-1-daniel.diaz@linaro.org>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -39,158 +65,35 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Suren Baghdasaryan <surenb@google.com>
+During cross-compilation, it was discovered that LDFLAGS and
+LDLIBS were not being used while building binaries, leading
+to defaults which were not necessarily correct.
 
-Add new test to verify that a cgroup with dead processes can be destroyed.
-The test spawns a child process which allocates and touches 100MB of RAM
-to ensure prolonged exit. Subsequently it kills the child, waits until
-the cgroup containing the child is empty and destroys the cgroup.
+OpenEmbedded reported this kind of problem:
+  ERROR: QA Issue: No GNU_HASH in the ELF binary [...], didn't pass LDFLAGS?
 
-Signed-off-by: Suren Baghdasaryan <surenb@google.com>
-Signed-off-by: Michal Koutný <mkoutny@suse.com>
+Signed-off-by: Daniel Díaz <daniel.diaz@linaro.org>
 ---
- tools/testing/selftests/cgroup/test_core.c | 113 +++++++++++++++++++++
- 1 file changed, 113 insertions(+)
+ tools/testing/selftests/x86/Makefile | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/cgroup/test_core.c b/tools/testing/selftests/cgroup/test_core.c
-index c5ca669feb2b..2a5242ec1a49 100644
---- a/tools/testing/selftests/cgroup/test_core.c
-+++ b/tools/testing/selftests/cgroup/test_core.c
-@@ -2,7 +2,10 @@
+diff --git a/tools/testing/selftests/x86/Makefile b/tools/testing/selftests/x86/Makefile
+index 5d49bfec1e9a..f8360454eafd 100644
+--- a/tools/testing/selftests/x86/Makefile
++++ b/tools/testing/selftests/x86/Makefile
+@@ -71,10 +71,10 @@ all_64: $(BINARIES_64)
+ EXTRA_CLEAN := $(BINARIES_32) $(BINARIES_64)
  
- #include <linux/limits.h>
- #include <sys/types.h>
-+#include <sys/mman.h>
-+#include <sys/wait.h>
- #include <unistd.h>
-+#include <fcntl.h>
- #include <stdio.h>
- #include <errno.h>
- #include <signal.h>
-@@ -12,6 +15,115 @@
- #include "../kselftest.h"
- #include "cgroup_util.h"
+ $(BINARIES_32): $(OUTPUT)/%_32: %.c
+-	$(CC) -m32 -o $@ $(CFLAGS) $(EXTRA_CFLAGS) $^ -lrt -ldl -lm
++	$(CC) -m32 -o $@ $(CFLAGS) $(EXTRA_CFLAGS) $(LDFLAGS) $^ $(LDLIBS) -lrt -ldl -lm
  
-+static int touch_anon(char *buf, size_t size)
-+{
-+	int fd;
-+	char *pos = buf;
-+
-+	fd = open("/dev/urandom", O_RDONLY);
-+	if (fd < 0)
-+		return -1;
-+
-+	while (size > 0) {
-+		ssize_t ret = read(fd, pos, size);
-+
-+		if (ret < 0) {
-+			if (errno != EINTR) {
-+				close(fd);
-+				return -1;
-+			}
-+		} else {
-+			pos += ret;
-+			size -= ret;
-+		}
-+	}
-+	close(fd);
-+
-+	return 0;
-+}
-+
-+static int alloc_and_touch_anon_noexit(const char *cgroup, void *arg)
-+{
-+	int ppid = getppid();
-+	size_t size = (size_t)arg;
-+	void *buf;
-+
-+	buf = mmap(NULL, size, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANON,
-+		   0, 0);
-+	if (buf == MAP_FAILED)
-+		return -1;
-+
-+	if (touch_anon((char *)buf, size)) {
-+		munmap(buf, size);
-+		return -1;
-+	}
-+
-+	while (getppid() == ppid)
-+		sleep(1);
-+
-+	munmap(buf, size);
-+	return 0;
-+}
-+
-+/*
-+ * Create a child process that allocates and touches 100MB, then waits to be
-+ * killed. Wait until the child is attached to the cgroup, kill all processes
-+ * in that cgroup and wait until "cgroup.events" is empty. At this point try to
-+ * destroy the empty cgroup. The test helps detect race conditions between
-+ * dying processes leaving the cgroup and cgroup destruction path.
-+ */
-+static int test_cgcore_destroy(const char *root)
-+{
-+	int ret = KSFT_FAIL;
-+	char *cg_test = NULL;
-+	int child_pid;
-+	char buf[PAGE_SIZE];
-+
-+	cg_test = cg_name(root, "cg_test");
-+
-+	if (!cg_test)
-+		goto cleanup;
-+
-+	for (int i = 0; i < 10; i++) {
-+		if (cg_create(cg_test))
-+			goto cleanup;
-+
-+		child_pid = cg_run_nowait(cg_test, alloc_and_touch_anon_noexit,
-+					  (void *) MB(100));
-+
-+		if (child_pid < 0)
-+			goto cleanup;
-+
-+		/* wait for the child to enter cgroup */
-+		if (cg_wait_for_proc_count(cg_test, 1))
-+			goto cleanup;
-+
-+		if (cg_killall(cg_test))
-+			goto cleanup;
-+
-+		/* wait for cgroup to be empty */
-+		while (1) {
-+			if (cg_read(cg_test, "cgroup.procs", buf, sizeof(buf)))
-+				goto cleanup;
-+			if (buf[0] == '\0')
-+				break;
-+			usleep(1000);
-+		}
-+
-+		if (rmdir(cg_test))
-+			goto cleanup;
-+
-+		if (waitpid(child_pid, NULL, 0) < 0)
-+			goto cleanup;
-+	}
-+	ret = KSFT_PASS;
-+cleanup:
-+	if (cg_test)
-+		cg_destroy(cg_test);
-+	free(cg_test);
-+	return ret;
-+}
-+
- /*
-  * A(0) - B(0) - C(1)
-  *        \ D(0)
-@@ -512,6 +624,7 @@ struct corecg_test {
- 	T(test_cgcore_populated),
- 	T(test_cgcore_proc_migration),
- 	T(test_cgcore_thread_migration),
-+	T(test_cgcore_destroy),
- };
- #undef T
+ $(BINARIES_64): $(OUTPUT)/%_64: %.c
+-	$(CC) -m64 -o $@ $(CFLAGS) $(EXTRA_CFLAGS) $^ -lrt -ldl
++	$(CC) -m64 -o $@ $(CFLAGS) $(EXTRA_CFLAGS) $(LDFLAGS) $^ $(LDLIBS) -lrt -ldl
  
+ # x86_64 users should be encouraged to install 32-bit libraries
+ ifeq ($(CAN_BUILD_I386)$(CAN_BUILD_X86_64),01)
 -- 
-2.24.1
+2.20.1
 
