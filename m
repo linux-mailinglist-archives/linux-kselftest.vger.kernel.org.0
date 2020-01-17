@@ -2,109 +2,109 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 586581411A0
-	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Jan 2020 20:26:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E1D951411E3
+	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Jan 2020 20:36:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729465AbgAQT0h (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 17 Jan 2020 14:26:37 -0500
-Received: from userp2120.oracle.com ([156.151.31.85]:43424 "EHLO
-        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726897AbgAQT0h (ORCPT
+        id S1729669AbgAQTex (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 17 Jan 2020 14:34:53 -0500
+Received: from mail-oi1-f193.google.com ([209.85.167.193]:42274 "EHLO
+        mail-oi1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729690AbgAQTew (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 17 Jan 2020 14:26:37 -0500
-Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
-        by userp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id 00HJITLg023212;
-        Fri, 17 Jan 2020 19:26:30 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=subject : to : cc :
- references : from : message-id : date : mime-version : in-reply-to :
- content-type : content-transfer-encoding; s=corp-2019-08-05;
- bh=gqxK7vkCcTECVPU7G7R4kJNNecY+690ASWDWrqyibTI=;
- b=gyhaiCtu3LD4E7u6eKLrXfbj7HV8FgjP7U5WQ1j1GRZ4ss6t53H6/PHle2lZCwM29/IC
- q5Ld+v46vPot2bGzRygxoAhYGU0mBOG4ny4lwtJIVsUkqqYSqBulidxS7cmu3rvGYqrX
- +iPv00AuJ1363TlGADLBJKEIppB1not73t7IiSOWLSMaJH4hPEc703D8IDt0dHKaiKTV
- ubuAEkU/qIDLWLzRAIKLeZeFZ36bXdc38FqNFkQPBeJCYtAted+v7P86SYQPP/EoQJWG
- RJEGpPbFdSCY6drv/8PAJuTX1JsINNRVqY6eN45zIYycfs0sSBaPbth+SO5lhg9N7rXa 3g== 
-Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
-        by userp2120.oracle.com with ESMTP id 2xf7402ktr-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 17 Jan 2020 19:26:29 +0000
-Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
-        by userp3020.oracle.com (8.16.0.27/8.16.0.27) with SMTP id 00HJJieb128223;
-        Fri, 17 Jan 2020 19:26:29 GMT
-Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
-        by userp3020.oracle.com with ESMTP id 2xjxp5pdpf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 17 Jan 2020 19:26:29 +0000
-Received: from abhmp0013.oracle.com (abhmp0013.oracle.com [141.146.116.19])
-        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 00HJQR7J016478;
-        Fri, 17 Jan 2020 19:26:28 GMT
-Received: from [192.168.1.206] (/71.63.128.209)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Fri, 17 Jan 2020 11:26:27 -0800
+        Fri, 17 Jan 2020 14:34:52 -0500
+Received: by mail-oi1-f193.google.com with SMTP id 18so23207049oin.9
+        for <linux-kselftest@vger.kernel.org>; Fri, 17 Jan 2020 11:34:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=wnbjoT0j5ag9BS3W7d99gmYHDerGz9fZIduxI8d9DlM=;
+        b=TT8zNjpuzdDlDWtxUF3ROPfakHa88TVeTCCzR5vCXgxUY7gnjtDdV908bvnyE5y4oV
+         QU36Uh70B8zBcLbEC5WsV9OQuSgknaM4MnZ+6jDRyDTKzq1HngpAdAAs3mElPkgX1Ngs
+         w8RxWNVZZmLjGd/pbBFQ57NF0JHpuxd7a1wSLqAAJwqSwurny5s+HaCNXAxlSd2TrGbE
+         I0HJnlRsjj6jLQu5Cu7qeoUYEz1c4KM83fzEb63Qt4ALXNdDhAqG60fYhmckugqonIpN
+         Q31HLAuMmqxdrdOBjnJmAuE2XH93asNdBTd9rXjxonqLYa1bomCyyydoau0rPmn4pocx
+         0aNQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=wnbjoT0j5ag9BS3W7d99gmYHDerGz9fZIduxI8d9DlM=;
+        b=TQhmfClr9qkPgR0tBd0f/Vu2xOqIYM2lnpixi9X0nHOIore92zbbvgkY6T1/Hie44L
+         iR2FkIQdXGklG5zsz/Qj2usmKI+dG0itpThC5QiD34mXfuIT1wHpz3IE50fvWVnKKnWL
+         X8WQosrQvJQ3Y+kBVwaaffhmSLVko85pqrHPcv/lGhXzV7r6s/zIPWVHiqhkJGvMLzF1
+         Kxj8f5/YHmLcJkGF3TDRiarHnCB8uXEF28C7UUK7zE1peyEJ/9bma2srutANChFz7O6E
+         GR+BWXtqT3QXhF8+JpZz9T3wiwmQK+hVtQTf3Ks9RWx4r3cx/e98uUAVMc/YpXu/s5ex
+         reLw==
+X-Gm-Message-State: APjAAAXWY4AwxaCdg3FdFRLEVaSZVkzKI1vzytsw4HgU/8L3jDR0mJss
+        mGIPKlOJ/il3/Wy7wfrucH8N8VoTQVOEi07c+KVEYg==
+X-Google-Smtp-Source: APXvYqxLvi0jqyJq4c6XDMG40T2xm371zP61sFys+Wn5Kv1PErBnDGHtInooR+MBkC+FWhdeiq5hF2mMsauFR8qAt28=
+X-Received: by 2002:aca:ed57:: with SMTP id l84mr4713560oih.8.1579289689665;
+ Fri, 17 Jan 2020 11:34:49 -0800 (PST)
+MIME-Version: 1.0
+References: <20200115012651.228058-1-almasrymina@google.com>
+ <20200115012651.228058-2-almasrymina@google.com> <7e1d2c5f-3b07-4d16-9e1b-bd89d25e7fb3@oracle.com>
+In-Reply-To: <7e1d2c5f-3b07-4d16-9e1b-bd89d25e7fb3@oracle.com>
+From:   Mina Almasry <almasrymina@google.com>
+Date:   Fri, 17 Jan 2020 11:34:38 -0800
+Message-ID: <CAHS8izMRrOOMV3v3gEuFHcX-YfQ5YOywGFu+K4-9zMXrAGFYbQ@mail.gmail.com>
 Subject: Re: [PATCH v10 2/8] hugetlb_cgroup: add interface for charge/uncharge
  hugetlb reservations
-To:     Mina Almasry <almasrymina@google.com>, rientjes@google.com,
-        shakeelb@google.com
-Cc:     shuah@kernel.org, gthelen@google.com, akpm@linux-foundation.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+To:     Mike Kravetz <mike.kravetz@oracle.com>
+Cc:     David Rientjes <rientjes@google.com>,
+        Shakeel Butt <shakeelb@google.com>, shuah <shuah@kernel.org>,
+        Greg Thelen <gthelen@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        open list <linux-kernel@vger.kernel.org>, linux-mm@kvack.org,
         linux-kselftest@vger.kernel.org, cgroups@vger.kernel.org,
-        aneesh.kumar@linux.vnet.ibm.com
-References: <20200115012651.228058-1-almasrymina@google.com>
- <20200115012651.228058-2-almasrymina@google.com>
-From:   Mike Kravetz <mike.kravetz@oracle.com>
-Message-ID: <7e1d2c5f-3b07-4d16-9e1b-bd89d25e7fb3@oracle.com>
-Date:   Fri, 17 Jan 2020 11:26:24 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.3.1
-MIME-Version: 1.0
-In-Reply-To: <20200115012651.228058-2-almasrymina@google.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9503 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
- phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=999
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.0.1-1911140001 definitions=main-2001170148
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9503 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
- suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
- lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1911140001
- definitions=main-2001170148
+        Aneesh Kumar <aneesh.kumar@linux.vnet.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 1/14/20 5:26 PM, Mina Almasry wrote:
-> Augments hugetlb_cgroup_charge_cgroup to be able to charge hugetlb
-> usage or hugetlb reservation counter.
-> 
-> Adds a new interface to uncharge a hugetlb_cgroup counter via
-> hugetlb_cgroup_uncharge_counter.
-> 
-> Integrates the counter with hugetlb_cgroup, via hugetlb_cgroup_init,
-> hugetlb_cgroup_have_usage, and hugetlb_cgroup_css_offline.
-> 
-> Signed-off-by: Mina Almasry <almasrymina@google.com>
-> 
-> ---
-> 
-> Changes in v10:
-> - Added missing VM_BUG_ON
+On Fri, Jan 17, 2020 at 11:26 AM Mike Kravetz <mike.kravetz@oracle.com> wrote:
+>
+> On 1/14/20 5:26 PM, Mina Almasry wrote:
+> > Augments hugetlb_cgroup_charge_cgroup to be able to charge hugetlb
+> > usage or hugetlb reservation counter.
+> >
+> > Adds a new interface to uncharge a hugetlb_cgroup counter via
+> > hugetlb_cgroup_uncharge_counter.
+> >
+> > Integrates the counter with hugetlb_cgroup, via hugetlb_cgroup_init,
+> > hugetlb_cgroup_have_usage, and hugetlb_cgroup_css_offline.
+> >
+> > Signed-off-by: Mina Almasry <almasrymina@google.com>
+> >
+> > ---
+> >
+> > Changes in v10:
+> > - Added missing VM_BUG_ON
+>
+> Thanks for addressing my comments.
+> I see that patch 8 was updated to address David's comments.  I will also
+> review patch 8 later.
+>
+> I am again requesting that someone with more cgroup experience comment on
+> this patch.  I do not have enough experience to determine if the code to
+> not reparent/zombie cgroup is correct.
+>
 
-Thanks for addressing my comments.
-I see that patch 8 was updated to address David's comments.  I will also
-review patch 8 later.
+Thank you very much for your continued reviews and I'm sorry I'm
+having so much trouble getting anyone with cgroup experience to look
+deeply into this. My guess is that it's not very active feature and
+the patchseries is long and complex so folks are not interested.
+Nevertheless I'm continually poking David and Shakeel and they will
+hopefully continue to look into this.
 
-I am again requesting that someone with more cgroup experience comment on
-this patch.  I do not have enough experience to determine if the code to
-not reparent/zombie cgroup is correct.
+FWIW, I have a test for repartenting/counting zombies and the tests at
+least don't uncover any problems.
 
-For now,
-Acked-by: Mike Kravetz <mike.kravetz@oracle.com>
-while waiting for cgroup comments.
-
--- 
-Mike Kravetz
+> For now,
+> Acked-by: Mike Kravetz <mike.kravetz@oracle.com>
+> while waiting for cgroup comments.
+>
+> --
+> Mike Kravetz
