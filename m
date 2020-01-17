@@ -2,116 +2,112 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 105D31402D6
-	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Jan 2020 05:14:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 23D5A140341
+	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Jan 2020 06:22:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726897AbgAQEOh (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 16 Jan 2020 23:14:37 -0500
-Received: from mail-pl1-f193.google.com ([209.85.214.193]:43868 "EHLO
-        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726370AbgAQEOh (ORCPT
+        id S1726812AbgAQFWW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 17 Jan 2020 00:22:22 -0500
+Received: from bonobo.elm.relay.mailchannels.net ([23.83.212.22]:12820 "EHLO
+        bonobo.elm.relay.mailchannels.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726706AbgAQFWW (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 16 Jan 2020 23:14:37 -0500
-Received: by mail-pl1-f193.google.com with SMTP id p27so9294974pli.10;
-        Thu, 16 Jan 2020 20:14:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to
-         :user-agent;
-        bh=twnxve9B2urmxTvx/xi2EnR9KZMdG4EBxb61wIeJtkM=;
-        b=BSzmU+mWlBUNhq6SrtaJyXRUEy6MRHfr053SGujImlwUDkuFYAs9H8E6mcQR290vjD
-         gTkb0juZP5oxrBfoEOd87+w/svGn/A/inFXreV9mjAhl7aEoGj4eRM59wNO/MLVrgjNJ
-         riGtylwTCX/6wfOCQjyKXBIkHP98+yAk0g+vYB0RTWk6vXjOFKbI8eokVzykD1EDPyNZ
-         EQTN+CqC9IdV5zXcC4bORRjk1n09BZPrv1uY0+zBGGjWBq19pxkDfeRElNrY1dMG2Euc
-         7fW85AtGRAD6b5bzcXDpgN093ZheAyhL70iLvaM6EubxQnHdcQfxRKecy2BCPd/a8z9s
-         NJxQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to:user-agent;
-        bh=twnxve9B2urmxTvx/xi2EnR9KZMdG4EBxb61wIeJtkM=;
-        b=TnqRDYhbBnIO5r6UxKMGMT1HEK6ODrgPB7F2XjOMOd/KyYJbocUy/Q5KgnH5xhdHEg
-         vTa6gCI3vXuqBf7U4ZdSzAowl52SLjmJ0Ppsc5nmC3KtJiNWx6RhWjCCsuTAV1F40vXB
-         TXgGwiKD5cJF81H6urMwWH5a8/69sjr6CVFkdjLQkAHumwPrzkL3gfBCOFkZaAEXQwwi
-         eYaBS+x4NvOAuBbDbP93coYtM0lwcBVIPuozXC9zqW5JbO0ZOeJ7FPbVsZ2BAyppCi7t
-         DUyRJ0lEAY8ALcqEvjaxyNzOWjruv67o4ZzfLAaIuIYDrcF213FpHKlpTLMsbGfhDZ2z
-         NAdA==
-X-Gm-Message-State: APjAAAX1VqIvH5MuV05FJElwDegZwDaqUQDhYXOhq7cytliW26TOgCdi
-        65ixS/zz96N0LFGx6AFTGiQ=
-X-Google-Smtp-Source: APXvYqwWDzxtWtq69PKr0RljRlYADIezN3T1Qi10F9SS3lxibRUtqAla77kK4XulE5yE4gu+WGbLJQ==
-X-Received: by 2002:a17:90a:2223:: with SMTP id c32mr3474800pje.15.1579234476283;
-        Thu, 16 Jan 2020 20:14:36 -0800 (PST)
-Received: from ast-mbp.dhcp.thefacebook.com ([2620:10d:c090:180::98ac])
-        by smtp.gmail.com with ESMTPSA id h128sm28232584pfe.172.2020.01.16.20.14.33
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 16 Jan 2020 20:14:35 -0800 (PST)
-Date:   Thu, 16 Jan 2020 20:14:32 -0800
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-To:     Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        Andrii Nakryiko <andriin@fb.com>,
-        Doug Ledford <dledford@redhat.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jesper Dangaard Brouer <brouer@redhat.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-rdma@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        clang-built-linux@googlegroups.com
-Subject: Re: [PATCH bpf-next v3 00/11] tools: Use consistent libbpf include
- paths everywhere
-Message-ID: <20200117041431.h7vvc32fungenyhg@ast-mbp.dhcp.thefacebook.com>
-References: <157918093154.1357254.7616059374996162336.stgit@toke.dk>
+        Fri, 17 Jan 2020 00:22:22 -0500
+X-Sender-Id: dreamhost|x-authsender|siddhesh@gotplt.org
+Received: from relay.mailchannels.net (localhost [127.0.0.1])
+        by relay.mailchannels.net (Postfix) with ESMTP id BE1293414E3;
+        Fri, 17 Jan 2020 05:22:20 +0000 (UTC)
+Received: from pdx1-sub0-mail-a10.g.dreamhost.com (100-96-4-61.trex.outbound.svc.cluster.local [100.96.4.61])
+        (Authenticated sender: dreamhost)
+        by relay.mailchannels.net (Postfix) with ESMTPA id E605A341A31;
+        Fri, 17 Jan 2020 05:22:19 +0000 (UTC)
+X-Sender-Id: dreamhost|x-authsender|siddhesh@gotplt.org
+Received: from pdx1-sub0-mail-a10.g.dreamhost.com ([TEMPUNAVAIL].
+ [64.90.62.162])
+        (using TLSv1.2 with cipher DHE-RSA-AES256-GCM-SHA384)
+        by 0.0.0.0:2500 (trex/5.18.5);
+        Fri, 17 Jan 2020 05:22:20 +0000
+X-MC-Relay: Neutral
+X-MailChannels-SenderId: dreamhost|x-authsender|siddhesh@gotplt.org
+X-MailChannels-Auth-Id: dreamhost
+X-Supply-Robust: 370d02ba34fcfd4e_1579238540479_4289310058
+X-MC-Loop-Signature: 1579238540479:1777990223
+X-MC-Ingress-Time: 1579238540479
+Received: from pdx1-sub0-mail-a10.g.dreamhost.com (localhost [127.0.0.1])
+        by pdx1-sub0-mail-a10.g.dreamhost.com (Postfix) with ESMTP id 9060B8CAEC;
+        Thu, 16 Jan 2020 21:22:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha1; c=relaxed; d=gotplt.org; h=subject:to
+        :cc:references:from:message-id:date:mime-version:in-reply-to
+        :content-type:content-transfer-encoding; s=gotplt.org; bh=Yj30kd
+        fElzmQt7WZpusShHxwZq4=; b=nM9ZbgrcosXlfUHZk83LH5gID02UM+bTsZex+w
+        yMJmbIWxJ/B7sowsTW462lJZqnewEJm5ybsjkPMUdyY63JstvK4KcgcDF8OTNDtV
+        4oYybuzlTs7kRCPjGA8NVYVNyi4Po+3r7hFJv2jUoikDhLUJlvLg2QwUkeFT2AtJ
+        PnSgc=
+Received: from [192.168.1.97] (unknown [123.252.202.172])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: siddhesh@gotplt.org)
+        by pdx1-sub0-mail-a10.g.dreamhost.com (Postfix) with ESMTPSA id 158898AB48;
+        Thu, 16 Jan 2020 21:22:11 -0800 (PST)
+Subject: Re: [PATCH] kselftest: Minimise dependency of get_size on C library
+ interfaces
+To:     Tim.Bird@sony.com, masami.hiramatsu@linaro.org
+Cc:     linux-kselftest@vger.kernel.org, shuah@kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20200113164158.15803-1-siddhesh@gotplt.org>
+ <CAA93ih1KXO5oSKAB6PmQc6xOw4fX5T+2+zx91BD18YUxL+nWzQ@mail.gmail.com>
+ <ECADFF3FD767C149AD96A924E7EA6EAF982C37D2@USCULXMSG17.am.sony.com>
+X-DH-BACKEND: pdx1-sub0-mail-a10
+From:   Siddhesh Poyarekar <siddhesh@gotplt.org>
+Autocrypt: addr=siddhesh@gotplt.org; keydata=
+ mQENBFMAZNMBCACeatEKl6YY9iEVxzS64bPbvJsA1mLE2XFWmKXyYzm58dFqPMa0OQQTKCxj
+ FCOrc+LD2KtmypttcahKnk5Lk1lNU/lV2hCuR7jJ37sL+/TFQuMMgsLPED6XU4/AYK3VUJvg
+ GYLBnMVfpAGYLB5rnPvhFNx0r2KItO/CfiSEyD4g1Wu26SUAXGOp5hbSyBRGhju+8YJlhHBB
+ jn3vZfw7IpwAWDVjK0crqMhGDXoZwK+ADUFY5NERAkT3Lb7d11F6+W4558WQZCYIWa3rZ62d
+ 986OE7+7xKmJUcLLWvlv5spgUmvotZ4DMzaKba+waY5ygXdGIpm5seVIEUCTaBIe6QVLABEB
+ AAG0KFNpZGRoZXNoIFBveWFyZWthciA8c2lkZGhlc2hAZ290cGx0Lm9yZz6JATgEEwECACIF
+ Ale0y0wCGwMGCwkIBwMCBhUIAgkKCwQWAgMBAh4BAheAAAoJEHnEPfvxzyGHUggIAJtLMvzH
+ jRQi/Dg6oSMUMPtH7oEmgnk482dC4MGNl/bCtUV7VVIAtEN5TGvHxk1EKBNqj49Q+mZjef82
+ iluW1RbXRY6+72yZ380yUC41SY+2hVOurJ//h3nvE+YHfO7QjV97yhIegc1kdwArVtgNNApL
+ xj5Nc2epT824uaSznVhwyAS2OIHFLmiMYuIW338uXVEug1XKBHwJ9MppVblk4zapc9fRGvRG
+ 72ivbTGXNgcza+Kkx1IdA0XB2dEQaAE1XR0FOshKtpeSDRERwZ17+rRT8EjmkRsR7qm1uvPS
+ NW7wMTtlj8ox/XuSyG0Coy1NRgqe5bi53ha1kBoKlLaxvyW5AQ0EUwBk0wEIAKELSISlJ9rz
+ 3tSBPNkpyqwIPn4//ZBuENJQfIWIWYM9r72sBRHZgiilsN7K7g6Ea7vLUVgv5+WInE4PWFQa
+ qUSbMubTjshnaIAIeSU0rslwRRqu2B9HmS8marB+UYdQ+MsPVEInrB8uroFf8Jh7h+2Oqs2M
+ KUMsayoFyQkVtwh3HI/AMTkmK6iun3AikOK+J9WLQx2Qqf+fLjY5/ZIjbowbd8GK3B4h4kUP
+ beUI5TNg6xcKVyxVPMy8HazfaDwlUHfh07K0UFWtaFuw9v3tlaieOTLH0D0cBXyYTAqgs7C6
+ 6cytxw+Qr6/+uHa8MMREDQwTEEwwick3h0h+vIhCsV0AEQEAAYkBHwQYAQIACQIbDAUCVOqz
+ 3wAKCRB5xD378c8hh/UzB/0Q13oL/aS8km9sXOa8M1roQ69NUpqpMEOGBWO5naK8wZ2QKh4D
+ 05DfNa7yT5FgPLI+a4kdOgWbW2fiE/wMYOMivjoFveOdlzPpsew6n2q5/cvopspriCGJWozT
+ kwv1dv9gfTKB7dDJt+ICdabp7aohvNi5xeZgM4GxCiO1rfr0Jn7NAR3L5tpQsVD4eDTa9jg0
+ qq/EiF+uLQH82D6bsxtS/Xre7b/sTKK3jE6sthui64w7F3X5M1qwk8XCsqCNA1Z2c+zWkLGH
+ 4ZeB/Rrxapu0H0/TAhBBtbDo665GaRb3NSKzG4rJSjXSEQc4rna/Y7/s3c9uB0yjdyXX08mn HzVO
+Message-ID: <cf97c840-70ba-d9b8-6994-0a7ef67b6c0d@gotplt.org>
+Date:   Fri, 17 Jan 2020 10:51:55 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.3.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <157918093154.1357254.7616059374996162336.stgit@toke.dk>
-User-Agent: NeoMutt/20180223
+In-Reply-To: <ECADFF3FD767C149AD96A924E7EA6EAF982C37D2@USCULXMSG17.am.sony.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-VR-OUT-STATUS: OK
+X-VR-OUT-SCORE: 0
+X-VR-OUT-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedugedrtdeigdejkecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucggtfgfnhhsuhgsshgtrhhisggvpdfftffgtefojffquffvnecuuegrihhlohhuthemuceftddtnecunecujfgurhepuffvfhfhkffffgggjggtgfesthejredttdefjeenucfhrhhomhepufhiugguhhgvshhhucfrohihrghrvghkrghruceoshhiugguhhgvshhhsehgohhtphhlthdrohhrgheqnecukfhppeduvdefrddvhedvrddvtddvrddujedvnecurfgrrhgrmhepmhhouggvpehsmhhtphdphhgvlhhopegludelvddrudeikedruddrleejngdpihhnvghtpeduvdefrddvhedvrddvtddvrddujedvpdhrvghtuhhrnhdqphgrthhhpefuihguughhvghshhcurfhohigrrhgvkhgrrhcuoehsihguughhvghshhesghhothhplhhtrdhorhhgqedpmhgrihhlfhhrohhmpehsihguughhvghshhesghhothhplhhtrdhorhhgpdhnrhgtphhtthhopefvihhmrdeuihhrugesshhonhihrdgtohhmnecuvehluhhsthgvrhfuihiivgeptd
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Jan 16, 2020 at 02:22:11PM +0100, Toke Høiland-Jørgensen wrote:
-> The recent commit 6910d7d3867a ("selftests/bpf: Ensure bpf_helper_defs.h are
-> taken from selftests dir") broke compilation against libbpf if it is installed
-> on the system, and $INCLUDEDIR/bpf is not in the include path.
+On 16/01/20 11:02 pm, Tim.Bird@sony.com wrote:
 > 
-> Since having the bpf/ subdir of $INCLUDEDIR in the include path has never been a
-> requirement for building against libbpf before, this needs to be fixed. One
-> option is to just revert the offending commit and figure out a different way to
-> achieve what it aims for. 
+> Since the code no longer uses __builtin_strlen(), this comment should
+> change also, to say something like "and string length function.
+> 
 
-The offending commit has been in the tree for a week. So I applied Andrii's
-revert of that change. It reintroduced the build dependency issue, but we lived
-with it for long time, so we can take time to fix it cleanly.
-I suggest to focus on that build dependency first.
+Oops, I had made the change (to drop the __builtin_strlen mention since
+the length is just computed inline now) and somehow dropped it in some
+copy-paste confusion.  Looks like a patchwork-bot applied my patch, so
+should I send an updated patch or just a comment fix follow-up?
 
-> However, this series takes a different approach:
-> Changing all in-tree users of libbpf to consistently use a bpf/ prefix in
-> #include directives for header files from libbpf.
-
-I'm not sure it's a good idea. It feels nice, but think of a message we're
-sending to everyone. We will get spamed with question: does bpf community
-require all libbpf users to use bpf/ prefix ? What should be our answer?
-Require or recommend? If require.. what for? It works as-is. If recommend then
-why suddenly we're changing all files in selftests and samples?
-There is no good answer here. I think we should leave the things as-is.
-And fix build dep differently.
-
-Patches 1-3 are still worth doing.
+Thanks,
+Siddhesh
