@@ -2,168 +2,172 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 31B2814071F
-	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Jan 2020 10:58:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 276541409F7
+	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Jan 2020 13:50:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727012AbgAQJ6s (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 17 Jan 2020 04:58:48 -0500
-Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:22446 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726752AbgAQJ6r (ORCPT
+        id S1726566AbgAQMuO (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 17 Jan 2020 07:50:14 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:7114 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726418AbgAQMuO (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 17 Jan 2020 04:58:47 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1579255125;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Uf1keSD3DOZ8jh4mCSz+0fhQb4Z+vPKdygjWjY+hlbM=;
-        b=NZuqAMQHdmeU601OrxePBrd966BxNqTEgfw5R1mDKKlzoMCLtfBAMfdQJQcMkHc6ssNurk
-        XAJCledikqC8sM82Bx1gZE+3zf4TRc2v4ZDsm464PMe4QEMK6Jyqh+45fE4RNTpiLpNyZq
-        yxTOyKuAoXXYsyF5qUexLdNL+f1K0fM=
-Received: from mail-lj1-f199.google.com (mail-lj1-f199.google.com
- [209.85.208.199]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-400-Ho7hLlvIPoaRauKjo3Hx5g-1; Fri, 17 Jan 2020 04:58:44 -0500
-X-MC-Unique: Ho7hLlvIPoaRauKjo3Hx5g-1
-Received: by mail-lj1-f199.google.com with SMTP id y15so6039699lji.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 17 Jan 2020 01:58:44 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version:content-transfer-encoding;
-        bh=Uf1keSD3DOZ8jh4mCSz+0fhQb4Z+vPKdygjWjY+hlbM=;
-        b=DjZnOl2pPaYY/RMEQb3Zjf/yhvvFR0D7Jti/z1SXVi24NxK9OyZ8P+7VxghMl5fTJE
-         G6us0uCVW/M2097U5uUp/Sc/JGc9hfFiWXBUPGmasxgMBN7MkIiJaKlimtYwKoFKDqpL
-         Si2leshWXaNOYFGlTkM9GiXBaxKeOhD2PL9sI2hnwVEsE6KNmtP9n5MuQcLpbweiztyq
-         3pZXviIFfbE2I8SEIXmwgeT1ACBP2XWFFEet8a0uDxHtSIEDptxwQTDEa3k4gh4tiDxn
-         YyYulDVxwYwAIjUAQwrk0/AJVlfWCWBtAMw7eHJBQfPuRb2uVfbSPP2T/ulW7XHJYdET
-         b8HA==
-X-Gm-Message-State: APjAAAU7Z9zsyJI6Rh6G9njKQSvr9jUKprd344oLqijvlze/CmPxteQb
-        jCeHVHcrjmCZyZSX20W0IKqXxliY9eXkSZPz5XmH8YgemJ6J69637ovdQjvwCgeJIXvbG05dMZV
-        U0A9+jcKRPwL3czxy3accr74JVc6U
-X-Received: by 2002:ac2:4849:: with SMTP id 9mr4975734lfy.11.1579255123124;
-        Fri, 17 Jan 2020 01:58:43 -0800 (PST)
-X-Google-Smtp-Source: APXvYqzx3OTlP+sKcKqC8lWpUkR48Xy7KHR8XB1tnfvUp3Gadttkq8Vpe8cxhtUqaWxJHiUphB7sig==
-X-Received: by 2002:ac2:4849:: with SMTP id 9mr4975702lfy.11.1579255122857;
-        Fri, 17 Jan 2020 01:58:42 -0800 (PST)
-Received: from alrua-x1.borgediget.toke.dk ([2a0c:4d80:42:443::2])
-        by smtp.gmail.com with ESMTPSA id r21sm12164399ljn.64.2020.01.17.01.58.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Jan 2020 01:58:42 -0800 (PST)
-Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-        id 341A91804D6; Fri, 17 Jan 2020 10:58:41 +0100 (CET)
-From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
-To:     Jesper Dangaard Brouer <brouer@redhat.com>,
-        Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        Andrii Nakryiko <andriin@fb.com>,
-        Doug Ledford <dledford@redhat.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-rdma@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        clang-built-linux@googlegroups.com, brouer@redhat.com
-Subject: Re: [PATCH bpf-next v3 00/11] tools: Use consistent libbpf include paths everywhere
-In-Reply-To: <20200117095721.0030f414@carbon>
-References: <157918093154.1357254.7616059374996162336.stgit@toke.dk> <20200117041431.h7vvc32fungenyhg@ast-mbp.dhcp.thefacebook.com> <20200117095721.0030f414@carbon>
-X-Clacks-Overhead: GNU Terry Pratchett
-Date:   Fri, 17 Jan 2020 10:58:41 +0100
-Message-ID: <87lfq6qu9a.fsf@toke.dk>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+        Fri, 17 Jan 2020 07:50:14 -0500
+Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 00HClFfL045216
+        for <linux-kselftest@vger.kernel.org>; Fri, 17 Jan 2020 07:50:13 -0500
+Received: from e06smtp07.uk.ibm.com (e06smtp07.uk.ibm.com [195.75.94.103])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 2xk0qrm4sr-1
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-kselftest@vger.kernel.org>; Fri, 17 Jan 2020 07:50:13 -0500
+Received: from localhost
+        by e06smtp07.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-kselftest@vger.kernel.org> from <sandipan@linux.ibm.com>;
+        Fri, 17 Jan 2020 12:50:11 -0000
+Received: from b06avi18626390.portsmouth.uk.ibm.com (9.149.26.192)
+        by e06smtp07.uk.ibm.com (192.168.101.137) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
+        Fri, 17 Jan 2020 12:50:07 -0000
+Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
+        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 00HCnGHj49021200
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 17 Jan 2020 12:49:16 GMT
+Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id A834952052;
+        Fri, 17 Jan 2020 12:50:05 +0000 (GMT)
+Received: from fir03.in.ibm.com (unknown [9.121.59.65])
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id 493AF5206D;
+        Fri, 17 Jan 2020 12:50:03 +0000 (GMT)
+From:   Sandipan Das <sandipan@linux.ibm.com>
+To:     shuah@kernel.org, linux-kselftest@vger.kernel.org
+Cc:     linux-arch@vger.kernel.org, fweimer@redhat.com,
+        dave.hansen@intel.com, x86@kernel.org, linuxram@us.ibm.com,
+        mhocko@kernel.org, linux-mm@kvack.org, mingo@redhat.com,
+        aneesh.kumar@linux.ibm.com, bauerman@linux.ibm.com,
+        msuchanek@suse.de, mpe@ellerman.id.au,
+        linuxppc-dev@lists.ozlabs.org
+Subject: [PATCH v16 00/23] selftests, powerpc, x86: Memory Protection Keys
+Date:   Fri, 17 Jan 2020 18:19:39 +0530
+X-Mailer: git-send-email 2.17.1
+X-TM-AS-GCONF: 00
+x-cbid: 20011712-0028-0000-0000-000003D1FF9F
+X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
+x-cbparentid: 20011712-0029-0000-0000-000024962AF2
+Message-Id: <cover.1579265066.git.sandipan@linux.ibm.com>
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.572
+ definitions=2020-01-17_03:2020-01-16,2020-01-17 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999
+ malwarescore=0 phishscore=0 mlxscore=0 bulkscore=0 impostorscore=0
+ priorityscore=1501 clxscore=1015 lowpriorityscore=0 adultscore=0
+ spamscore=0 suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-1910280000 definitions=main-2001170102
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Jesper Dangaard Brouer <brouer@redhat.com> writes:
+Memory protection keys enables an application to protect its address
+space from inadvertent access by its own code.
 
-> On Thu, 16 Jan 2020 20:14:32 -0800
-> Alexei Starovoitov <alexei.starovoitov@gmail.com> wrote:
->
->> On Thu, Jan 16, 2020 at 02:22:11PM +0100, Toke H=C3=B8iland-J=C3=B8rgens=
-en wrote:
->> > The recent commit 6910d7d3867a ("selftests/bpf: Ensure bpf_helper_defs=
-.h are
->> > taken from selftests dir") broke compilation against libbpf if it is i=
-nstalled
->> > on the system, and $INCLUDEDIR/bpf is not in the include path.
->> >=20
->> > Since having the bpf/ subdir of $INCLUDEDIR in the include path has ne=
-ver been a
->> > requirement for building against libbpf before, this needs to be fixed=
-. One
->> > option is to just revert the offending commit and figure out a differe=
-nt way to
->> > achieve what it aims for.=20=20=20
->>=20
->> The offending commit has been in the tree for a week. So I applied Andri=
-i's
->> revert of that change. It reintroduced the build dependency issue, but w=
-e lived
->> with it for long time, so we can take time to fix it cleanly.
->> I suggest to focus on that build dependency first.
->>=20
->> > However, this series takes a different approach:
->> > Changing all in-tree users of libbpf to consistently use a bpf/ prefix=
- in
->> > #include directives for header files from libbpf.=20=20
->>=20
->> I'm not sure it's a good idea. It feels nice, but think of a message we'=
-re
->> sending to everyone. We will get spamed with question: does bpf community
->> require all libbpf users to use bpf/ prefix ? What should be our answer?
->
-> The answer should be: Yes. When libbpf install the header files the are
-> installed under bpf/ prefix.  It is very confusing that samples and
-> selftests can include libbpf.h without this prefix. Even worse
-> including "bpf.h" pickup the libbpf version bpf/bpf.h, which have
-> caused confusion.  The only reason for the direct "libbpf.h" include is
-> historical, as there used-to-be a local file for that.
+This feature is now enabled on powerpc and has been available since
+4.16-rc1. The patches move the selftests to arch neutral directory
+and enhance their test coverage.
 
-Agreed. Also, we are already telling people what the right include path
-is in at least two ways - and currently they are incompatible:
+Tested on powerpc64 and x86_64 (Skylake-SP).
 
-- The pkg-config file included with libbpf has a notion of include path;
-  which does *not* include the bpf/ subdirectory.
+Changelog
+---------
+Link to previous version (v15):
+https://patchwork.ozlabs.org/project/linuxppc-dev/list/?series=149238
 
-- The skeleton generator puts an '#include <libbpf.h>' line into the
-  generated files.
+v16:
+	(1) Rebased on top of latest master.
+	(2) Switched to u64 instead of using an arch-dependent
+	    pkey_reg_t type for references to the pkey register
+	    based on suggestions from Dave, Michal and Michael.
+	(3) Removed build time determination of page size based
+	    on suggestion from Michael.
+	(4) Fixed comment before the definition of __page_o_noops()
+	    from patch 13 ("selftests/vm/pkeys: Introduce powerpc
+	    support").
 
-With this series we'll at least be consistent.
+v15:
+	(1) Rebased on top of latest master.
+	(2) Addressed review comments from Dave Hansen.
+	(3) Moved code for getting or setting pkey bits to new
+	    helpers. These changes replace patch 7 of v14.
+	(4) Added a fix which ensures that the correct count of
+	    reserved keys is used across different platforms.
+	(5) Added a fix which ensures that the correct page size
+	    is used as powerpc supports both 4K and 64K pages.
 
->> Require or recommend? If require.. what for? It works as-is. If recommen=
-d then
->> why suddenly we're changing all files in selftests and samples?
->> There is no good answer here. I think we should leave the things as-is.
->
-> I strongly believe we should correct this.  It doesn't make sense that
-> someone copying out a sample or selftests, into a git-submodule libbpf
-> (or distro installed libbpf-devel) have to understand that they have to
-> update the include path for all the libbpf header files.
+v14:
+	(1) Incorporated another round of comments from Dave Hansen.
 
-Yeah, I think being clear and explicit about what is the recommended way
-to include libbpf is strictly an improvement. And making it possible to
-move example programs seamlessly in and out of the kernel tree will only
-make things easier for people.
+v13:
+	(1) Incorporated comments for Dave Hansen.
+	(2) Added one more test for correct pkey-0 behavior.
 
-I'll rebase and respin this series on top of the revert (and fix
-Andrii's comments).
+v12:
+	(1) Fixed the offset of pkey field in the siginfo structure for
+	    x86_64 and powerpc. And tries to use the actual field
+	    if the headers have it defined.
 
--Toke
+v11:
+	(1) Fixed a deadlock in the ptrace testcase.
+
+v10 and prior:
+	(1) Moved the testcase to arch neutral directory.
+	(2) Split the changes into incremental patches.
+
+Desnes A. Nunes do Rosario (1):
+  selftests/vm/pkeys: Fix number of reserved powerpc pkeys
+
+Ram Pai (17):
+  selftests/x86/pkeys: Move selftests to arch-neutral directory
+  selftests/vm: Rename all references to pkru to a generic name
+  selftests/vm: Move generic definitions to header file
+  selftests/vm: Typecast references to pkey register
+  selftests/vm: Fix pkey_disable_clear()
+  selftests/vm/pkeys: Fix assertion in pkey_disable_set/clear()
+  selftests/vm/pkeys: Fix alloc_random_pkey() to make it really random
+  selftests/vm/pkeys: Introduce generic pkey abstractions
+  selftests/vm/pkeys: Introduce powerpc support
+  selftests/vm/pkeys: Fix assertion in test_pkey_alloc_exhaust()
+  selftests/vm/pkeys: Improve checks to determine pkey support
+  selftests/vm/pkeys: Associate key on a mapped page and detect access
+    violation
+  selftests/vm/pkeys: Associate key on a mapped page and detect write
+    violation
+  selftests/vm/pkeys: Detect write violation on a mapped
+    access-denied-key page
+  selftests/vm/pkeys: Introduce a sub-page allocator
+  selftests/vm/pkeys: Test correct behaviour of pkey-0
+  selftests/vm/pkeys: Override access right definitions on powerpc
+
+Sandipan Das (3):
+  selftests: vm: pkeys: Add helpers for pkey bits
+  selftests: vm: pkeys: Use the correct huge page size
+  selftests: vm: pkeys: Use the correct page size on powerpc
+
+Thiago Jung Bauermann (2):
+  selftests/vm: Move some definitions to arch-specific header
+  selftests/vm: Make gcc check arguments of sigsafe_printf()
+
+ tools/testing/selftests/vm/.gitignore         |   1 +
+ tools/testing/selftests/vm/Makefile           |   1 +
+ tools/testing/selftests/vm/pkey-helpers.h     | 225 ++++++
+ tools/testing/selftests/vm/pkey-powerpc.h     | 136 ++++
+ tools/testing/selftests/vm/pkey-x86.h         | 181 +++++
+ .../selftests/{x86 => vm}/protection_keys.c   | 693 ++++++++++--------
+ tools/testing/selftests/x86/.gitignore        |   1 -
+ tools/testing/selftests/x86/pkey-helpers.h    | 219 ------
+ 8 files changed, 927 insertions(+), 530 deletions(-)
+ create mode 100644 tools/testing/selftests/vm/pkey-helpers.h
+ create mode 100644 tools/testing/selftests/vm/pkey-powerpc.h
+ create mode 100644 tools/testing/selftests/vm/pkey-x86.h
+ rename tools/testing/selftests/{x86 => vm}/protection_keys.c (74%)
+ delete mode 100644 tools/testing/selftests/x86/pkey-helpers.h
+
+-- 
+2.17.1
 
