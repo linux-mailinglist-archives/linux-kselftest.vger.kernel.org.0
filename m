@@ -2,19 +2,19 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0932614184C
-	for <lists+linux-kselftest@lfdr.de>; Sat, 18 Jan 2020 16:28:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A3651418DF
+	for <lists+linux-kselftest@lfdr.de>; Sat, 18 Jan 2020 19:09:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726407AbgARP2q (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 18 Jan 2020 10:28:46 -0500
-Received: from zeniv.linux.org.uk ([195.92.253.2]:49760 "EHLO
+        id S1726597AbgARSJz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 18 Jan 2020 13:09:55 -0500
+Received: from zeniv.linux.org.uk ([195.92.253.2]:51438 "EHLO
         ZenIV.linux.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726334AbgARP2q (ORCPT
+        with ESMTP id S1726490AbgARSJz (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 18 Jan 2020 10:28:46 -0500
+        Sat, 18 Jan 2020 13:09:55 -0500
 Received: from viro by ZenIV.linux.org.uk with local (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1isq1Z-00AxdN-Np; Sat, 18 Jan 2020 15:28:33 +0000
-Date:   Sat, 18 Jan 2020 15:28:33 +0000
+        id 1issXV-00B1Vm-HC; Sat, 18 Jan 2020 18:09:41 +0000
+Date:   Sat, 18 Jan 2020 18:09:41 +0000
 From:   Al Viro <viro@zeniv.linux.org.uk>
 To:     Aleksa Sarai <cyphar@cyphar.com>
 Cc:     Jeff Layton <jlayton@kernel.org>,
@@ -28,53 +28,83 @@ Cc:     Jeff Layton <jlayton@kernel.org>,
         linux-api@vger.kernel.org, linux-fsdevel@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
 Subject: Re: [PATCH v3 0/2] openat2: minor uapi cleanups
-Message-ID: <20200118152833.GS8904@ZenIV.linux.org.uk>
+Message-ID: <20200118180941.GT8904@ZenIV.linux.org.uk>
 References: <20200115144831.GJ8904@ZenIV.linux.org.uk>
  <20200118120800.16358-1-cyphar@cyphar.com>
+ <20200118152833.GS8904@ZenIV.linux.org.uk>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200118120800.16358-1-cyphar@cyphar.com>
+In-Reply-To: <20200118152833.GS8904@ZenIV.linux.org.uk>
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sat, Jan 18, 2020 at 11:07:58PM +1100, Aleksa Sarai wrote:
-> Patch changelog:
->   v3:
->    * Merge changes into the original patches to make Al's life easier.
->      [Al Viro]
->   v2:
->    * Add include <linux/types.h> to openat2.h. [Florian Weimer]
->    * Move OPEN_HOW_SIZE_* constants out of UAPI. [Florian Weimer]
->    * Switch from __aligned_u64 to __u64 since it isn't necessary.
->      [David Laight]
->   v1: <https://lore.kernel.org/lkml/20191219105533.12508-1-cyphar@cyphar.com/>
-> 
-> While openat2(2) is still not yet in Linus's tree, we can take this
-> opportunity to iron out some small warts that weren't noticed earlier:
-> 
->   * A fix was suggested by Florian Weimer, to separate the openat2
->     definitions so glibc can use the header directly. I've put the
->     maintainership under VFS but let me know if you'd prefer it belong
->     ot the fcntl folks.
-> 
->   * Having heterogenous field sizes in an extensible struct results in
->     "padding hole" problems when adding new fields (in addition the
->     correct error to use for non-zero padding isn't entirely clear ).
->     The simplest solution is to just copy clone(3)'s model -- always use
->     u64s. It will waste a little more space in the struct, but it
->     removes a possible future headache.
-> 
-> This patch is intended to replace the corresponding patches in Al's
-> #work.openat2 tree (and *will not* apply on Linus' tree).
-> 
-> @Al: I will send some additional patches later, but they will require
->      proper design review since they're ABI-related features (namely,
-> 	 adding a way to check what features a syscall supports as I
-> 	 outlined in my talk here[1]).
+On Sat, Jan 18, 2020 at 03:28:33PM +0000, Al Viro wrote:
 
-#work.openat2 updated, #for-next rebuilt and force-pushed.  There's
-a massive update of #work.namei as well, also pushed out; not in
-#for-next yet, will post the patch series for review later today.
+> #work.openat2 updated, #for-next rebuilt and force-pushed.  There's
+> a massive update of #work.namei as well, also pushed out; not in
+> #for-next yet, will post the patch series for review later today.
+
+BTW, looking through that code again, how could this
+static bool legitimize_root(struct nameidata *nd)
+{
+        /*
+         * For scoped-lookups (where nd->root has been zeroed), we need to
+         * restart the whole lookup from scratch -- because set_root() is wrong
+         * for these lookups (nd->dfd is the root, not the filesystem root).
+         */
+        if (!nd->root.mnt && (nd->flags & LOOKUP_IS_SCOPED))
+                return false;
+
+possibly trigger?  The only things that ever clean ->root.mnt are
+
+	1) failing legitimize_path(nd, &nd->root, nd->root_seq) in
+legitimize_root() itself.  If *ANY* legitimize_path() has failed,
+we are through - RCU pathwalk is given up.  In particular, if you
+look at the call chains leading to legitimize_root(), you'll see
+that it's called by unlazy_walk() or unlazy_child() and failure
+has either of those buggger off immediately.  The same goes for
+their callers; fail any of those and we are done; the very next
+thing that will be done with that nameidata is going to be
+terminate_walk().  We don't look at its fields, etc. - just return
+to the top level ASAP and call terminate_walk() on it.  Which is where
+we run into
+                if (nd->flags & LOOKUP_ROOT_GRABBED) {
+                        path_put(&nd->root);
+                        nd->flags &= ~LOOKUP_ROOT_GRABBED;
+                }
+paired with setting LOOKUP_ROOT_GRABBED just before the attempt
+to legitimize in legitimize_root().  The next thing *after*
+terminate_walk() is either path_init() or the end of life for
+that struct nameidata instance.
+	This is really, really fundamental for understanding the whole
+thing - a failure of unlazy_walk/unlazy_child means that we are through
+with that attempt.
+
+	2) complete_walk() doing
+                if (!(nd->flags & (LOOKUP_ROOT | LOOKUP_IS_SCOPED)))
+                        nd->root.mnt = NULL;   
+Can't happen with LOOKUP_IS_SCOPED in flags, obviously.
+
+	3) path_init().  Where it's followed either by leaving through
+        if (*s == '/' && !(flags & LOOKUP_IN_ROOT)) {
+		....
+        }
+(and LOOKUP_IS_SCOPED includes LOOKUP_IN_ROOT) or with a failure exit
+(no calls of *anything* but terminate_walk() after that or with
+        if (flags & LOOKUP_IS_SCOPED) {
+                nd->root = nd->path;
+... and that makes damn sure nd->root.mnt is not NULL.
+
+And neither of the LOOKUP_IS_SCOPED bits ever gets changed in nd->flags -
+they remain as path_init() has set them.
+
+The same, BTW, goes for the check you've added in the beginning of
+set_root() - set_root() is called only with NULL nd->root.mnt (trivial to
+prove) and that is incompatible with LOOKUP_IS_SCOPED.  I'm kinda-sorta
+OK with having WARN_ON() there for a while, but IMO the check in the
+beginning of legitimize_root() should go away - this kind of defensive
+programming only makes harder to reason about the behaviour of the
+entire thing.  And fs/namei.c is too convoluted as it is...
