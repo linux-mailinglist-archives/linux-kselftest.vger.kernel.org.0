@@ -2,56 +2,57 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 94A831428D0
-	for <lists+linux-kselftest@lfdr.de>; Mon, 20 Jan 2020 12:06:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7414C142B61
+	for <lists+linux-kselftest@lfdr.de>; Mon, 20 Jan 2020 13:57:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726642AbgATLGx (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 20 Jan 2020 06:06:53 -0500
-Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:30971 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726148AbgATLGw (ORCPT
+        id S1727990AbgATM5N (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 20 Jan 2020 07:57:13 -0500
+Received: from us-smtp-2.mimecast.com ([207.211.31.81]:47683 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726589AbgATM5N (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 20 Jan 2020 06:06:52 -0500
+        Mon, 20 Jan 2020 07:57:13 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1579518411;
+        s=mimecast20190719; t=1579525031;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=GBr/Vebb3VXffLj0Is78F4eUTgwO3xgPG3+P62qQsx8=;
-        b=i20Ka0c4AsBFvFOvz/S1g52CSj4yyOSq04XbJqRTit68W12zZ+escxoRMuTEjACV6bpKFm
-        V0SdY4qlrg7rrryr58kSXovMLkXZBlmiMB129aPFpdkO9iIar2iBeUZv/rp3aBJA6Ttike
-        WNnceN32jEQsZCqKQCq1eSkmJcprNxY=
+        bh=FEDkrujKlTJc5+7hmDpzcA7gq/UPeEUXrVOs87I/0F4=;
+        b=WjuXbSICAN7uZSPCH7rtV8tfy3wFI2BsQpuZc7/UFW0C6xwXYlWPtdjC0YkJo9gk42l7EA
+        CllhNaNboSt8JRtq4EYZR9/nLy14P+YY2YKgR0ZrLZ1x5kAOsqEuebZfv5TEJl0P9ic/C0
+        /RjMSGZOW33Y5++BPFitfN/IjZ7UaJ8=
 Received: from mail-lj1-f197.google.com (mail-lj1-f197.google.com
  [209.85.208.197]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-407-dV-XKU_uOmiAFiNY4wM7rg-1; Mon, 20 Jan 2020 06:06:48 -0500
-X-MC-Unique: dV-XKU_uOmiAFiNY4wM7rg-1
-Received: by mail-lj1-f197.google.com with SMTP id v1so7423139lja.21
-        for <linux-kselftest@vger.kernel.org>; Mon, 20 Jan 2020 03:06:47 -0800 (PST)
+ us-mta-219-NZNkD6otNaekffn2ZL_4-A-1; Mon, 20 Jan 2020 07:57:02 -0500
+X-MC-Unique: NZNkD6otNaekffn2ZL_4-A-1
+Received: by mail-lj1-f197.google.com with SMTP id t11so7528149ljo.13
+        for <linux-kselftest@vger.kernel.org>; Mon, 20 Jan 2020 04:57:02 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version;
-        bh=GBr/Vebb3VXffLj0Is78F4eUTgwO3xgPG3+P62qQsx8=;
-        b=QiZOPOmegmRCWNpFQKxK03T6GxHBz4jEq+xfDfTfUDg2DyJhnoUsoCmKlCGouXfFnA
-         vr3dB4oC455W8tmhfelCarCeYW1/xUY3tKf2noUU4jKDVAqnwDIYftcaOMRoynNJJQsm
-         lpdZNI+JQrIQVpru1aPFBpjxO525YzviHB1MTf4s2d0s8e0RU2nJUCgqsV7dgX7VyWOl
-         bIJ4IYwrr4miXyRJA6Ouc4b8hxHK6BdpnTuT7U9VqhCgp7jUdYHGsKM+Xb7zciEwayA4
-         eu5NfjL47kiTgAhvos39iZIxJLLJcy8VgF77CcvDzj0HdVVeMgGjoIwL/nKhx4Gd1Fhq
-         cUwQ==
-X-Gm-Message-State: APjAAAX6Q6gOcci6RYCsEQO2EuD3wzlMOHp25cxSIeaApcyQ28sI2s1K
-        VZl9SJOVLgbUSmwoHSeKo6Scu2cCOQfdf2IGHt2jvv7spoMgIS5lbDWD5SvjZu43zGi6A9sLeJs
-        EL/iUQW0Of3vQ20Mku4V48SdxNl55
-X-Received: by 2002:a2e:8e22:: with SMTP id r2mr12213808ljk.51.1579518406711;
-        Mon, 20 Jan 2020 03:06:46 -0800 (PST)
-X-Google-Smtp-Source: APXvYqwRHGGNFbd5H0/cF1REV/7+jcnpPn0KrgS8p2w5aL+jlmOCDTBslDcW/9arMdp3KMXCx8EM9A==
-X-Received: by 2002:a2e:8e22:: with SMTP id r2mr12213786ljk.51.1579518406456;
-        Mon, 20 Jan 2020 03:06:46 -0800 (PST)
-Received: from alrua-x1.borgediget.toke.dk ([85.204.121.218])
-        by smtp.gmail.com with ESMTPSA id p136sm16758946lfa.8.2020.01.20.03.06.45
+         :message-id:mime-version:content-transfer-encoding;
+        bh=FEDkrujKlTJc5+7hmDpzcA7gq/UPeEUXrVOs87I/0F4=;
+        b=LZCmHDDhbdeGPdKP56PJJQu0dhHBioI7nCRaNTkF33y1k8IHklPPxUGqJURvnKkyTt
+         GGriEJp+bzAKyAXcG8MdepLhTNvtKkpWOk5FzbodsMPS2WDPGDtOY6KXqkSuJ9oxTlW6
+         HfGrBYQEh++gjISw2Smw3aUiwveG0TYLsCw7UjYRjTuKh7Dc6e4Ze3nscASm4zImTZ+S
+         gY06mFurgmGi+TefBWowcL5zo4jeR3K+7HegDg/KIwRA9ti/Ht9kXnIoxCC7r8C2y+6i
+         3m56L0qzVTGzYUvblZRK3j9Y5KWcrKP4MOuHWkAgKSnSEj8YaC8J9pJ/mLjzF6cGGCzz
+         Sqow==
+X-Gm-Message-State: APjAAAV8Adk5mDQtudxrO8pajaPncNDxIk4NwL9iOx6EQDT5H3B6U+Tx
+        H5UPFVBSaYlz/rSTiEg41S7rvZFICLOHozKZ3NVwOvy0RvHq4AqBFGzMRo/D6w+zacfaDJmpZ/1
+        D+G6L190eS7b0sD9uL3LC6b6kTmLP
+X-Received: by 2002:a2e:721a:: with SMTP id n26mr13678525ljc.128.1579525021236;
+        Mon, 20 Jan 2020 04:57:01 -0800 (PST)
+X-Google-Smtp-Source: APXvYqylZwrQxfS+zP3D15CF1fcweaXgkNnfdqeyFKArvqvKbNKna0d4DC4s5krAr4PrBm9NHLxAlw==
+X-Received: by 2002:a2e:721a:: with SMTP id n26mr13678516ljc.128.1579525020966;
+        Mon, 20 Jan 2020 04:57:00 -0800 (PST)
+Received: from alrua-x1.borgediget.toke.dk ([2a0c:4d80:42:443::2])
+        by smtp.gmail.com with ESMTPSA id 2sm16813782ljq.38.2020.01.20.04.57.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Jan 2020 03:06:45 -0800 (PST)
+        Mon, 20 Jan 2020 04:57:00 -0800 (PST)
 Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-        id C1D8A1804D6; Mon, 20 Jan 2020 12:06:44 +0100 (CET)
+        id 5785F1804D6; Mon, 20 Jan 2020 13:56:59 +0100 (CET)
 From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
 To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
 Cc:     Alexei Starovoitov <ast@kernel.org>,
@@ -79,46 +80,64 @@ Cc:     Alexei Starovoitov <ast@kernel.org>,
         "open list\:KERNEL SELFTEST FRAMEWORK" 
         <linux-kselftest@vger.kernel.org>,
         clang-built-linux@googlegroups.com
-Subject: Re: [PATCH bpf-next v4 09/10] selftests: Remove tools/lib/bpf from include path
-In-Reply-To: <CAEf4Bzb9zUmhxTyYahJqySJzgfyB-zMEd+o4ybv=a8-t+iZS4w@mail.gmail.com>
-References: <157926819690.1555735.10756593211671752826.stgit@toke.dk> <157926820677.1555735.5437255599683298212.stgit@toke.dk> <CAEf4Bzb9zUmhxTyYahJqySJzgfyB-zMEd+o4ybv=a8-t+iZS4w@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v4 04/10] tools/runqslower: Use consistent include paths for libbpf
+In-Reply-To: <CAEf4BzbAV0TmEUL=62jz+RD6SPmu927z-dhGL9JHepcAOGMSJA@mail.gmail.com>
+References: <157926819690.1555735.10756593211671752826.stgit@toke.dk> <157926820131.1555735.1177228853838027248.stgit@toke.dk> <CAEf4BzbAV0TmEUL=62jz+RD6SPmu927z-dhGL9JHepcAOGMSJA@mail.gmail.com>
 X-Clacks-Overhead: GNU Terry Pratchett
-Date:   Mon, 20 Jan 2020 12:06:44 +0100
-Message-ID: <878sm2pet7.fsf@toke.dk>
+Date:   Mon, 20 Jan 2020 13:56:59 +0100
+Message-ID: <875zh6p9pg.fsf@toke.dk>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-[...]
-> I really-really didn't like this alternating dependency on directory
-> or a set of file, depending on current state of those temporary
-> directories. Then also this ugly check to avoid circular dependency.
-> All that seemed wrong. So I played a bit with how to achieve the same
-> differently, and here's what I came up with, which I like a bit
-> better. What do you think?
->
-> $(BPFOBJ): $(wildcard $(BPFDIR)/*.c $(BPFDIR)/*.h $(BPFDIR)/Makefile)          \
->            ../../../include/uapi/linux/bpf.h                                   \
->            | $(INCLUDE_DIR) $(BUILD_DIR)/libbpf
->         $(Q)$(MAKE) $(submake_extras) -C $(BPFDIR) OUTPUT=$(BUILD_DIR)/libbpf/ \
->                     DESTDIR=$(SCRATCH_DIR) prefix= all install_headers
->
-> So, essentially, just make sure that we install local copies of
-> headers whenever libbpf.a needs to be re-built.
-> ../../../include/uapi/linux/bpf.h ensures we don't miss uapi header
-> changes as well. Now anything that uses libbpf headers will need to
-> depend on $(BPFOBJ) and will automatically get up-to-date local copies
-> of headers.
->
-> This seems much simpler. Please give it a try, thanks!
+Andrii Nakryiko <andrii.nakryiko@gmail.com> writes:
 
-Yes, this is a good idea! It did actually occur to me that the $(BPFOBJ)
-rule could just include the install_headers make arg, but only after I
-sent out this latest version. Thank you for taking the time to work out
-the details, I'll fold this in :)
+> On Fri, Jan 17, 2020 at 5:37 AM Toke H=C3=B8iland-J=C3=B8rgensen <toke@re=
+dhat.com> wrote:
+>>
+>> From: Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com>
+>>
+>> Fix the runqslower tool to include libbpf header files with the bpf/
+>> prefix, to be consistent with external users of the library. Also ensure
+>> that all includes of exported libbpf header files (those that are export=
+ed
+>> on 'make install' of the library) use bracketed includes instead of quot=
+ed.
+>>
+>> To not break the build, keep the old include path until everything has b=
+een
+>> changed to the new one; a subsequent patch will remove that.
+>>
+>> Fixes: 6910d7d3867a ("selftests/bpf: Ensure bpf_helper_defs.h are taken =
+from selftests dir")
+>> Acked-by: Andrii Nakryiko <andriin@fb.com>
+>> Signed-off-by: Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com>
+>> ---
+>>  tools/bpf/runqslower/Makefile         |    5 +++--
+>>  tools/bpf/runqslower/runqslower.bpf.c |    2 +-
+>>  tools/bpf/runqslower/runqslower.c     |    4 ++--
+>>  3 files changed, 6 insertions(+), 5 deletions(-)
+>>
+>> diff --git a/tools/bpf/runqslower/Makefile b/tools/bpf/runqslower/Makefi=
+le
+>> index b62fc9646c39..9f022f7f2593 100644
+>> --- a/tools/bpf/runqslower/Makefile
+>> +++ b/tools/bpf/runqslower/Makefile
+>> @@ -5,6 +5,7 @@ LLC :=3D llc
+>>  LLVM_STRIP :=3D llvm-strip
+>>  DEFAULT_BPFTOOL :=3D $(OUTPUT)/sbin/bpftool
+>>  BPFTOOL ?=3D $(DEFAULT_BPFTOOL)
+>> +INCLUDES :=3D -I$(OUTPUT) -I$(abspath ../../lib) -I$(abspath ../../lib/=
+bpf)
+>>  LIBBPF_SRC :=3D $(abspath ../../lib/bpf)
+>
+> drop LIBBPF_SRC, it's not used anymore
+
+It is: in the rule for building libbpf there's a '-C $(LIBBPF_SRC)'
 
 -Toke
 
