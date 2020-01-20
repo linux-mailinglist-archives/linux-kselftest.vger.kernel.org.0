@@ -2,90 +2,89 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B5D33142CFB
-	for <lists+linux-kselftest@lfdr.de>; Mon, 20 Jan 2020 15:14:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 917E6142E31
+	for <lists+linux-kselftest@lfdr.de>; Mon, 20 Jan 2020 15:56:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726901AbgATOOv (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 20 Jan 2020 09:14:51 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:50456 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726885AbgATOOu (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 20 Jan 2020 09:14:50 -0500
-Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 00KED43v026518
-        for <linux-kselftest@vger.kernel.org>; Mon, 20 Jan 2020 09:14:50 -0500
-Received: from e06smtp01.uk.ibm.com (e06smtp01.uk.ibm.com [195.75.94.97])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 2xmgcnaqu2-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-kselftest@vger.kernel.org>; Mon, 20 Jan 2020 09:14:49 -0500
-Received: from localhost
-        by e06smtp01.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-kselftest@vger.kernel.org> from <kamalesh@linux.vnet.ibm.com>;
-        Mon, 20 Jan 2020 14:14:47 -0000
-Received: from b06avi18878370.portsmouth.uk.ibm.com (9.149.26.194)
-        by e06smtp01.uk.ibm.com (192.168.101.131) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Mon, 20 Jan 2020 14:14:44 -0000
-Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
-        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 00KEEhPm46268840
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 20 Jan 2020 14:14:43 GMT
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 1038011C04C;
-        Mon, 20 Jan 2020 14:14:43 +0000 (GMT)
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 1B45111C05B;
-        Mon, 20 Jan 2020 14:14:41 +0000 (GMT)
-Received: from JAVRIS.in.ibm.com (unknown [9.199.38.131])
-        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
-        Mon, 20 Jan 2020 14:14:40 +0000 (GMT)
-Subject: Re: [PATCH v2] selftests: vm: Fix 64-bit test builds for powerpc64le
-To:     Sandipan Das <sandipan@linux.ibm.com>, shuah@kernel.org,
-        linux-kselftest@vger.kernel.org
-Cc:     linux-mm@kvack.org, mhiramat@kernel.org,
-        aneesh.kumar@linux.ibm.com, mpe@ellerman.id.au,
-        linuxppc-dev@lists.ozlabs.org
-References: <20200120135954.93745-1-sandipan@linux.ibm.com>
-From:   Kamalesh Babulal <kamalesh@linux.vnet.ibm.com>
-Date:   Mon, 20 Jan 2020 19:44:39 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.3.1
+        id S1728668AbgATO44 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 20 Jan 2020 09:56:56 -0500
+Received: from mx2.suse.de ([195.135.220.15]:45734 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726860AbgATO44 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 20 Jan 2020 09:56:56 -0500
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx2.suse.de (Postfix) with ESMTP id D5B61AD00;
+        Mon, 20 Jan 2020 14:56:53 +0000 (UTC)
+Date:   Mon, 20 Jan 2020 15:56:48 +0100
+From:   Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
+To:     Suren Baghdasaryan <surenb@google.com>
+Cc:     Tejun Heo <tj@kernel.org>,
+        cgroups mailinglist <cgroups@vger.kernel.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Li Zefan <lizefan@huawei.com>, alex.shi@linux.alibaba.com,
+        Roman Gushchin <guro@fb.com>,
+        kernel-team <kernel-team@android.com>,
+        JeiFeng Lee <linger.lee@mediatek.com>,
+        linux-arm-kernel@lists.infradead.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-kselftest@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, matthias.bgg@gmail.com,
+        shuah@kernel.org, Tom Cherry <tomcherry@google.com>
+Subject: Re: [PATCH 2/3] cgroup: Iterate tasks that did not finish do_exit()
+Message-ID: <20200120145635.GA30904@blackbody.suse.cz>
+References: <20200116043612.52782-1-surenb@google.com>
+ <20200117151533.12381-1-mkoutny@suse.com>
+ <20200117151533.12381-3-mkoutny@suse.com>
+ <20200117172806.GK2677547@devbig004.ftw2.facebook.com>
+ <CAJuCfpFqEUVFXsjD8XcCKsGXKTf72r0Ek5_1yqu_k5UZAssKTw@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20200120135954.93745-1-sandipan@linux.ibm.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-x-cbid: 20012014-4275-0000-0000-000003994E56
-X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 20012014-4276-0000-0000-000038AD5458
-Message-Id: <4d4f9c3d-82a9-e994-1822-6dba86b233f8@linux.vnet.ibm.com>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.572
- definitions=2020-01-20_02:2020-01-20,2020-01-20 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=800 mlxscore=0
- phishscore=0 impostorscore=0 priorityscore=1501 bulkscore=0 adultscore=0
- spamscore=0 clxscore=1015 lowpriorityscore=0 malwarescore=0 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-1910280000
- definitions=main-2001200123
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="IiVenqGWf+H9Y6IX"
+Content-Disposition: inline
+In-Reply-To: <CAJuCfpFqEUVFXsjD8XcCKsGXKTf72r0Ek5_1yqu_k5UZAssKTw@mail.gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 1/20/20 7:29 PM, Sandipan Das wrote:
-> Some tests are built only for 64-bit systems. This makes
-> sure that these tests are built for both big and little
-> endian variants of powerpc64.
-> 
-> Fixes: 7549b3364201 ("selftests: vm: Build/Run 64bit tests only on 64bit arch")
-> Signed-off-by: Sandipan Das <sandipan@linux.ibm.com>
 
-I was about to suggest, the missing change in run_vmtests script in your V1.
+--IiVenqGWf+H9Y6IX
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Reviewed-by: Kamalesh Babulal <kamalesh@linux.vnet.ibm.com>
+On Fri, Jan 17, 2020 at 10:41:29AM -0800, Suren Baghdasaryan <surenb@google.com> wrote:
+> Tested-by: Suren Baghdasaryan <surenb@google.com>
+Thanks.
 
+> > Yeah, this looks fine to me.  Any chance you can order this before the
+> > clean up so that we can mark it for -stable.
+> +1 for reordering. Makes it easier to backport.
+The grounds still need to be prepared for css_task_iter to store
+additional information. Let me see how the preceding changes can be
+minimized.
 
--- 
-Kamalesh
+Michal
 
+--IiVenqGWf+H9Y6IX
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: Digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCAAdFiEEEoQaUCWq8F2Id1tNia1+riC5qSgFAl4lv7AACgkQia1+riC5
+qSjnlQ//WGljOTcfv0L0yWBKqXL3O0PLyuPdsN+7v3R9YLMlZy1NE0YMJjm2cbii
+cC0lB8Lr4kg8R1IuUh8Iks+eIFNGMmBRzxChxzm4DTEPkB6i775f67ELwxWw6xFD
+H/oHvQKfvQUt3r/vVfyG8bRsJvpLjVViiRq1fy6SkX0UgVuDcchKFYOUaeaJAcB/
+d7JRVvtvyV11ruAKx7nK+GTBhCLCdgcqh4ZTKEc2dtB7CWp7JCHKbyw5Y/sic/zc
+XDilupblbFI6zerlS6ojzptQbuMPdZ09dG/e2xJK9K/crVaE837opkVISg0MPzrc
+eDdXKz3j5P/koE5nvwfv+GCuZ1hIqn8asmmrn6hwl2RMeb0I6ah4hVYTEbPJ/d8v
+wB9csLCQDFJx/meZfuESumssrCofS++SQfsQR43lR8oilNefg2j+EZgcOHOfVYY/
+iHu8M3RR1ClosYvjNIs0sU/i+9s2jGZpCfA0P0WWbSLPMvMSt/Gx+TE8iiHAaztb
+G/lCm1cvWIEWcXbGvRG91YjKDWMxqTpV9ZceIyEMKQudqpYyTFQr4QBhdE+djb1r
+e6+88ykq8nYxT9G1SDcYCA03OyouKIm5TBfObcdvZptAh2szrI9cATC3lEz/Dj4f
+cfvdIA0PwZgLaccFAIc75NAY6IQJhcK/t6rqsE2fxiEofvrfiXI=
+=VU1C
+-----END PGP SIGNATURE-----
+
+--IiVenqGWf+H9Y6IX--
