@@ -2,357 +2,144 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 602EB14314C
-	for <lists+linux-kselftest@lfdr.de>; Mon, 20 Jan 2020 19:12:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8633E143188
+	for <lists+linux-kselftest@lfdr.de>; Mon, 20 Jan 2020 19:36:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726942AbgATSLs (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 20 Jan 2020 13:11:48 -0500
-Received: from mail-ua1-f68.google.com ([209.85.222.68]:39710 "EHLO
-        mail-ua1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726642AbgATSLr (ORCPT
+        id S1726982AbgATSgI (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 20 Jan 2020 13:36:08 -0500
+Received: from mail-qk1-f194.google.com ([209.85.222.194]:33601 "EHLO
+        mail-qk1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726642AbgATSgI (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 20 Jan 2020 13:11:47 -0500
-Received: by mail-ua1-f68.google.com with SMTP id 73so11143uac.6;
-        Mon, 20 Jan 2020 10:11:46 -0800 (PST)
+        Mon, 20 Jan 2020 13:36:08 -0500
+Received: by mail-qk1-f194.google.com with SMTP id d71so219404qkc.0;
+        Mon, 20 Jan 2020 10:36:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=jW+cp7LNqcTbbuUrvBwn+8fvFhUe6kdRDpQZGYJvjHc=;
-        b=SPb/umYGpxGk6RWHvpm6x51bTgih81FPWk6DxezBA2JFIXfQKbGl5DmGHc8LU6DKBJ
-         85mp9EihGTp4ANssbryiZPVWYjIq1Uf55YKhlRWfPcOhGeec1//63zMjdn6C3aXH3EYD
-         vG/4gQgWv/OYIVKTzAAd/d3qL6GS0GnOV0pGyYm3B+rN9ce5l9Wd0RH8egicwQo3+h6t
-         TSO2JUEKX9gnu/DG48KIg1CXUJYuniPCZsiOD0SvUPRYevAifi+JC8D8fSrPSlRnb7bc
-         Tw9JhPUohyz0owFxFqY2WQvKxFENkmTQCaTY4M9Q88jRHX0TetMI2ABLWspcO22bNpOo
-         U9wA==
+         :cc:content-transfer-encoding;
+        bh=nypa0fmcU1qrcDA/69y5vVyGSxEYCTlbnT0MYvisCOY=;
+        b=n6OHQmi2Lqnt+u56UyfOnq36LdLY/90AjbbbAuc8Yi+Sexy1YUz2TZnz29vuv8c1GA
+         AFxN+hfJx4ikYoOkGw7RUtlqRcJLAU/8edx7OLCcMNGYFxMzSoJpUXhWzcN0YthgGkTT
+         qEG84m7Cz0WHjv1u3YwE01A4d+lgJveFYMf0YXHdOnienwPstAziOMIilVGV9PtJIHIX
+         MWbMRgb1+F9w+EbiEoulZtnb+bSp/exAEqak/Jojul1Q2WjNv/tuHtTTmGFgrRZyJ2RA
+         GeHNnfD1qa4l6Jnpoh8S515/p62ljovXd7MmiSVhmFRm0EnrBj4naN92dsKCe9y0YJ/9
+         bxeg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=jW+cp7LNqcTbbuUrvBwn+8fvFhUe6kdRDpQZGYJvjHc=;
-        b=kx+M6+FcuB+gBe6FbRj2BuVzK3j3QPO+0sGP2/Zy3wQoILhz4MoHWdhu2JJATOAO3t
-         YcDM1mzEA0XAppPxWP3LiDDyD6woVIYTKHS8gXGUC1hwJ/7QnPYRppeQYjrf0y9f+LL+
-         jhgyOIFc4811LqHhcKVpqdoYVdoZ1dqyYvAir7It7wLtWFA6+MldukIHpix5xPjM/e3t
-         BqhSy0okUq+oc0hDDdlwmLJp5bSWsaad/F4bH17KeBZy+XWcRQNvM5D+VcQYpdvOVrAn
-         e2ydqAbBCGTAY4AES5eqHDzC1EoD31qnmsnp6v5h3ii1naPVx6x/k0m8n1MW629o2Otz
-         mBZw==
-X-Gm-Message-State: APjAAAU5xDt01y/bhYo5Zwfv6RnfVbSTdtcGqwzl5Ie+hepfRKEokNwh
-        +9Q9fpJQU3RKKIGQJpgZrllR7Bo33zJQsxnaKdc=
-X-Google-Smtp-Source: APXvYqxeep6oV+KU0SLdi/26+LsQxGeUHFFdzUBT4lj3C0+i/9+Mk/pWJmCCBPgB6FgEWpXp8+r2M0FyDZSYIJ2dyOs=
-X-Received: by 2002:ab0:77d7:: with SMTP id y23mr619002uar.4.1579543905882;
- Mon, 20 Jan 2020 10:11:45 -0800 (PST)
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=nypa0fmcU1qrcDA/69y5vVyGSxEYCTlbnT0MYvisCOY=;
+        b=AvFxy3JI4ndXddh7C+xS/Ort3iUVKd4c4uyCrMdlzI5NixWe24+LCFzTgfPNBh3H0v
+         SBj1w4QV7K768V4sX+gDOHfZyft9vcyiHrUKBiiUNrKYvvjqdHM0HGZKIdotrkx6RRSZ
+         xScC/v9cDO4kILvr4220z/Wt71CM2x2LSHle2mWvYx+PYcSNgnOvfIiwGaXwoCrxWxRH
+         oLDMUY2s1jsJMn7ZEqswtG/9gMmpb8WgjAEPp6qXVBq0sMguinP03ywXCxFe9ZmBXpp5
+         PdmTRqj266vPr1Nkcry2fWquDS4VrxURcJUHWQGA1HwstboKGgnI9SHIuAk0/xgNptwR
+         TT9w==
+X-Gm-Message-State: APjAAAWj6lBVlV5b4J1XCK/dEfr++Y6hAVW/n16lJuWMky2ggSvygR4I
+        SwecOcl818WSEgeBPrZg80n3DyLI/h2Y+On1HN0=
+X-Google-Smtp-Source: APXvYqyGHYkSXOZiJvAONUelyvaLJfv9/CZYkyPdYsL0xeUScApGmNT8/JruIuZcQj5K1GGwsZvg7mP2yjaYIUQCMas=
+X-Received: by 2002:a05:620a:5ae:: with SMTP id q14mr871914qkq.437.1579545367408;
+ Mon, 20 Jan 2020 10:36:07 -0800 (PST)
 MIME-Version: 1.0
-References: <20200118000128.15746-1-matthew.cover@stackpath.com> <5e23c773d7a67_13602b2359ea05b824@john-XPS-13-9370.notmuch>
-In-Reply-To: <5e23c773d7a67_13602b2359ea05b824@john-XPS-13-9370.notmuch>
-From:   Matt Cover <werekraken@gmail.com>
-Date:   Mon, 20 Jan 2020 11:11:34 -0700
-Message-ID: <CAGyo_hrUXWzui9FNiZpNGXjsphSreLEYYm4K7xkp+H+de=QKSA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next] bpf: add bpf_ct_lookup_{tcp,udp}() helpers
-To:     John Fastabend <john.fastabend@gmail.com>
+References: <157926819690.1555735.10756593211671752826.stgit@toke.dk>
+ <157926820131.1555735.1177228853838027248.stgit@toke.dk> <CAEf4BzbAV0TmEUL=62jz+RD6SPmu927z-dhGL9JHepcAOGMSJA@mail.gmail.com>
+ <875zh6p9pg.fsf@toke.dk>
+In-Reply-To: <875zh6p9pg.fsf@toke.dk>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Mon, 20 Jan 2020 10:35:56 -0800
+Message-ID: <CAEf4BzZ7x4F_-bjGg7TdzXcin6c1BAT6OKe53ujh1tx-GB6-ZQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v4 04/10] tools/runqslower: Use consistent
+ include paths for libbpf
+To:     =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>
 Cc:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Martin KaFai Lau <kafai@fb.com>,
         Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
         Andrii Nakryiko <andriin@fb.com>,
+        Doug Ledford <dledford@redhat.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
         "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jesper Dangaard Brouer <brouer@redhat.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
         Shuah Khan <shuah@kernel.org>,
-        Jakub Kicinski <jakub.kicinski@netronome.com>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Jakub Sitnicki <jakub@cloudflare.com>,
-        Quentin Monnet <quentin.monnet@netronome.com>,
-        Matthew Cover <matthew.cover@stackpath.com>,
-        Stanislav Fomichev <sdf@google.com>,
-        Andrey Ignatov <rdna@fb.com>,
-        Lorenz Bauer <lmb@cloudflare.com>,
-        Jiong Wang <jiong.wang@netronome.com>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        linux-rdma@vger.kernel.org,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        clang-built-linux@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sat, Jan 18, 2020 at 8:05 PM John Fastabend <john.fastabend@gmail.com> wrote:
+On Mon, Jan 20, 2020 at 4:57 AM Toke H=C3=B8iland-J=C3=B8rgensen <toke@redh=
+at.com> wrote:
 >
-> Matthew Cover wrote:
-> > Allow looking up an nf_conn. This allows eBPF programs to leverage
-> > nf_conntrack state for similar purposes to socket state use cases,
-> > as provided by the socket lookup helpers. This is particularly
-> > useful when nf_conntrack state is locally available, but socket
-> > state is not.
+> Andrii Nakryiko <andrii.nakryiko@gmail.com> writes:
+>
+> > On Fri, Jan 17, 2020 at 5:37 AM Toke H=C3=B8iland-J=C3=B8rgensen <toke@=
+redhat.com> wrote:
+> >>
+> >> From: Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com>
+> >>
+> >> Fix the runqslower tool to include libbpf header files with the bpf/
+> >> prefix, to be consistent with external users of the library. Also ensu=
+re
+> >> that all includes of exported libbpf header files (those that are expo=
+rted
+> >> on 'make install' of the library) use bracketed includes instead of qu=
+oted.
+> >>
+> >> To not break the build, keep the old include path until everything has=
+ been
+> >> changed to the new one; a subsequent patch will remove that.
+> >>
+> >> Fixes: 6910d7d3867a ("selftests/bpf: Ensure bpf_helper_defs.h are take=
+n from selftests dir")
+> >> Acked-by: Andrii Nakryiko <andriin@fb.com>
+> >> Signed-off-by: Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com>
+> >> ---
+> >>  tools/bpf/runqslower/Makefile         |    5 +++--
+> >>  tools/bpf/runqslower/runqslower.bpf.c |    2 +-
+> >>  tools/bpf/runqslower/runqslower.c     |    4 ++--
+> >>  3 files changed, 6 insertions(+), 5 deletions(-)
+> >>
+> >> diff --git a/tools/bpf/runqslower/Makefile b/tools/bpf/runqslower/Make=
+file
+> >> index b62fc9646c39..9f022f7f2593 100644
+> >> --- a/tools/bpf/runqslower/Makefile
+> >> +++ b/tools/bpf/runqslower/Makefile
+> >> @@ -5,6 +5,7 @@ LLC :=3D llc
+> >>  LLVM_STRIP :=3D llvm-strip
+> >>  DEFAULT_BPFTOOL :=3D $(OUTPUT)/sbin/bpftool
+> >>  BPFTOOL ?=3D $(DEFAULT_BPFTOOL)
+> >> +INCLUDES :=3D -I$(OUTPUT) -I$(abspath ../../lib) -I$(abspath ../../li=
+b/bpf)
+> >>  LIBBPF_SRC :=3D $(abspath ../../lib/bpf)
 > >
-> > Signed-off-by: Matthew Cover <matthew.cover@stackpath.com>
-> > ---
+> > drop LIBBPF_SRC, it's not used anymore
 >
-> Couple coding comments below. Also looks like a couple build errors
-> so fix those up. I'm still thinking over this though.
-
-Thank you for taking the time to look this over. I will be looking
-into the build issues.
-
->
-> Also I prefer the tests in their own patch. So make it a two patch
-> series.
-
-Sounds good. I will submit as a series for v2.
-
->
-> fwiw I think we could build a native xdp lib for connection tracking
-> but maybe there are reasons to pull in core conn tracking. Seems like
-> a separate discussion.
-
-Native xdp connection tracking would be cool as well. Cilium seems to
-have ebpf conntrack; perhaps it can provide some useful insights into
-that effort.
-
-Even with native xdp connection tracking available, I see value in
-these helpers, particularly when core conntrack is already in use.
-
->
-> > + * struct bpf_nf_conn *bpf_ct_lookup_udp(void *ctx, struct bpf_nf_conntrack_tuple *tuple, u32 tuple_size, u64 netns, u64 flags)
-> > + *   Description
-> > + *           Look for UDP nf_conntrack entry matching *tuple*, optionally in
-> > + *           a child network namespace *netns*. The return value must be
-> > + *           checked, and if non-**NULL**, released via
-> > + *           **bpf_ct_release**\ ().
-> > + *
-> > + *           The *ctx* should point to the context of the program, such as
-> > + *           the skb or xdp_md (depending on the hook in use). This is used
-> > + *           to determine the base network namespace for the lookup.
-> > + *
-> > + *           *tuple_size* must be one of:
-> > + *
-> > + *           **sizeof**\ (*tuple*\ **->ipv4**)
-> > + *                   Look for an IPv4 nf_conn.
-> > + *           **sizeof**\ (*tuple*\ **->ipv6**)
-> > + *                   Look for an IPv6 nf_conn.
-> > + *
-> > + *           If the *netns* is a negative signed 32-bit integer, then the
-> > + *           nf_conn lookup table in the netns associated with the *ctx* will
-> > + *           will be used. For the TC hooks, this is the netns of the device
-> > + *           in the skb. For XDP hooks, this is the netns of the device in
-> > + *           the xdp_md. If *netns* is any other signed 32-bit value greater
-> > + *           than or equal to zero then it specifies the ID of the netns
-> > + *           relative to the netns associated with the *ctx*. *netns* values
-> > + *           beyond the range of 32-bit integers are reserved for future
-> > + *           use.
->
-> I find the usage of netns a bit awkward. Its being passed as a u64 and
-> then used as a signed int with the pivot depending on negative?
->
-> How about pivot on a flag instead of the signed bit of netns here.
-
-The interface (and much of the code) is a clone of the
-bpf_sk_lookup_xxx helper functions. I figured having it match would
-both make it familiar and give this patch a better chance of being
-applied.
-
-I'd prefer not to diverge from bpf_sk_lookup_xxx helpers here. That
-is my only objection to what you propose.
-
->
-> > + *
-> > + *           All values for *flags* are reserved for future usage, and must
-> > + *           be left at zero.
-> > + *
-> > + *           This helper is available only if the kernel was compiled with
-> > + *           **CONFIG_NF_CONNTRACK=y** configuration option.
->
-> I suspect this should be,
->
-> "This helper will return NULL if the kernel was compiled with ..."
+> It is: in the rule for building libbpf there's a '-C $(LIBBPF_SRC)'
 >
 
-Good idea. I'll work this into v2 for additional clarity.
+Ah, right, missed that one. Looked a bit weird to have $(abspath
+../../lib/bpf) used in INCLUDES and then separate LIBBPF_SRC
+definition there, maybe
 
-> Same comment for the earlier _tcp helper.
->
-> > + *   Return
-> > + *           Pointer to **struct bpf_nf_conn**, or **NULL** in case of
-> > + *           failure.
-> > + *
-> > + * int bpf_ct_release(struct bpf_nf_conn *ct)
-> > + *   Description
-> > + *           Release the reference held by *ct*. *ct* must be a
-> > + *           non-**NULL** pointer that was returned from
-> > + *           **bpf_ct_lookup_xxx**\ ().
-> > + *   Return
-> > + *           0 on success, or a negative error in case of failure.
-> >   */
-> >  #define __BPF_FUNC_MAPPER(FN)                \
-> >       FN(unspec),                     \
->
-> [...]
->
-> >  /* integer value in 'imm' field of BPF_CALL instruction selects which helper
-> >   * function eBPF program intends to call
-> > @@ -3278,6 +3363,30 @@ struct bpf_sock_tuple {
-> >       };
-> >  };
-> >
-> > +struct bpf_nf_conn {
-> > +     __u32 cpu;
-> > +     __u32 mark;
-> > +     __u32 status;
-> > +     __u32 timeout;
-> > +};
-> > +
-> > +struct bpf_nf_conntrack_tuple {
-> > +     union {
-> > +             struct {
-> > +                     __be32 saddr;
-> > +                     __be32 daddr;
-> > +                     __be16 sport;
-> > +                     __be16 dport;
-> > +             } ipv4;
-> > +             struct {
-> > +                     __be32 saddr[4];
-> > +                     __be32 daddr[4];
-> > +                     __be16 sport;
-> > +                     __be16 dport;
-> > +             } ipv6;
-> > +     };
-> > +};
-> > +
->
-> [...]
->
-> > +static int check_nf_ct_access(struct bpf_verifier_env *env, int insn_idx,
-> > +                          u32 regno, int off, int size,
-> > +                          enum bpf_access_type t)
-> > +{
-> > +     struct bpf_reg_state *regs = cur_regs(env);
-> > +     struct bpf_reg_state *reg = &regs[regno];
-> > +     struct bpf_insn_access_aux info = {};
-> > +     bool valid;
-> > +
-> > +     switch (reg->type) {
-> > +     case PTR_TO_NF_CONN:
-> > +             valid = bpf_nf_conn_is_valid_access(off, size, t, &info);
-> > +             break;
-> > +     default:
-> > +             valid = false;
-> > +     }
-> > +
-> > +     if (valid) {
-> > +             env->insn_aux_data[insn_idx].ctx_field_size =
-> > +                     info.ctx_field_size;
-> > +             return 0;
-> > +     }
-> > +
-> > +     verbose(env, "R%d invalid %s access off=%d size=%d\n",
-> > +             regno, reg_type_str[reg->type], off, size);
-> > +
-> > +     return -EACCES;
->
-> nit, but this construction feels odd to me. How about,
->
->  if (reg->type != PTR_TO_NF_CONN) {
->         verbose(...)
->         return -EACCES;
->  }
->
->  env-> ...
->  return 0;
->
-> The switch sort of implies you have some ideas on future types? What would
-> those be?
+LIBBPF_SRC :=3D $(abspath ../../lib/bpf)
+INCLUDES :=3D -I$(OUTPUT) -I$(abspath ../../lib) -I$(LIBBPF_SRC)
 
-Sure, I can reduce this down if desired. I was viewing it more as
-following the pattern seen in other check access functions.
-
-I do plan to introduce a "tcp_nf_conn" as another series, akin to
-"tcp_sock". When that happens this construct may make more sense.
-
-e.g.
-       case offsetof(struct bpf_tcp_nf_conn, state):
-...
-               *insn++ = BPF_LDX_MEM(BPF_B, si->dst_reg, si->src_reg,
-                               offsetof(struct nf_conn, proto) +
-                               offsetof(union nf_conntrack_proto, tcp) +
-                               offsetof(struct ip_ct_tcp, state));
-
+> -Toke
 >
-> > +}
-> > +
-> >  static int check_sock_access(struct bpf_verifier_env *env, int insn_idx,
-> >                            u32 regno, int off, int size,
-> >                            enum bpf_access_type t)
-> > @@ -2511,6 +2556,13 @@ static bool is_ctx_reg(struct bpf_verifier_env *env, int regno)
-> >       return reg->type == PTR_TO_CTX;
-> >  }
->
-> [...]
->
->
-> > diff --git a/net/core/filter.c b/net/core/filter.c
-> > index 17de674..39ba965 100644
-> > --- a/net/core/filter.c
-> > +++ b/net/core/filter.c
-> > @@ -74,6 +74,12 @@
->
-> [...]
->
-> > +static struct nf_conn *
-> > +__bpf_ct_lookup(struct sk_buff *skb, struct bpf_nf_conntrack_tuple *tuple, u32 len,
-> > +             struct net *caller_net, u8 proto, u64 netns_id, u64 flags)
->
-> Why not just make netns an int instead of pulling a unsigned from the helper and
-> then converting it into an int?
-
-These three are mostly a question of if we want to diverge from
-__bpf_sk_lookup. If we choose to do so, then do we want to update
-__bpf_sk_lookup to match? I think there is benefit to having the
-uapi exposed interfaces match.
-
->
-> > +{
-> > +     struct nf_conn *ct = NULL;
-> > +     u8 family = AF_UNSPEC;
-> > +     struct net *net;
-> > +
-> > +     if (len == sizeof(tuple->ipv4))
-> > +             family = AF_INET;
-> > +     else if (len == sizeof(tuple->ipv6))
-> > +             family = AF_INET6;
-> > +     else
-> > +             goto out;
-> > +
-> > +     if (unlikely(family == AF_UNSPEC || flags ||
-> > +                  !((s32)netns_id < 0 || netns_id <= S32_MAX)))
->                                             ^^^^^^^^^^^^^^^^^^^^
-> If you pass an int here and use flags to set the type I think you avoid this
-> check.
-
-See previous.
-
->
-> > +             goto out;
-> > +
-> > +     if ((s32)netns_id < 0) {
->
-> I don't like this casting here again fallout from u64->int conversion.
-
-See previous.
-
->
-> > +             net = caller_net;
-> > +             ct = ct_lookup(net, tuple, family, proto);
-> > +     } else {
-> > +             net = get_net_ns_by_id(caller_net, netns_id);
-> > +             if (unlikely(!net))
-> > +                     goto out;
-> > +             ct = ct_lookup(net, tuple, family, proto);
-> > +             put_net(net);
-> > +     }
-> > +
-> > +out:
-> > +     return ct;
-> > +}
-> > +
->
-> [...]
->
-> Thanks!
-> John
