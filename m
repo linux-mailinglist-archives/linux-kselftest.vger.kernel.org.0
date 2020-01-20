@@ -2,63 +2,95 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 66FDF141F8F
-	for <lists+linux-kselftest@lfdr.de>; Sun, 19 Jan 2020 19:44:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 58A10142295
+	for <lists+linux-kselftest@lfdr.de>; Mon, 20 Jan 2020 06:06:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728932AbgASSoq (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 19 Jan 2020 13:44:46 -0500
-Received: from mail-il1-f196.google.com ([209.85.166.196]:41090 "EHLO
-        mail-il1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728900AbgASSoi (ORCPT
+        id S1725933AbgATFGT (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 20 Jan 2020 00:06:19 -0500
+Received: from mail-io1-f67.google.com ([209.85.166.67]:34444 "EHLO
+        mail-io1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725783AbgATFGT (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 19 Jan 2020 13:44:38 -0500
-Received: by mail-il1-f196.google.com with SMTP id f10so25481141ils.8
-        for <linux-kselftest@vger.kernel.org>; Sun, 19 Jan 2020 10:44:37 -0800 (PST)
+        Mon, 20 Jan 2020 00:06:19 -0500
+Received: by mail-io1-f67.google.com with SMTP id z193so32296036iof.1;
+        Sun, 19 Jan 2020 21:06:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=/o+CA7VDRA7UR3HGeT8+/tYzwEnOXwq5B8ZHP2/HeYc=;
-        b=gmKBxPx84PXNKr5CdAEsBl4o6OI0Ul1T9kdeNuOonXVMsPZvHaiVfrF6wsqmkO6amC
-         OhpUNNF3SMjaFtPDB5q+oWHWGLwTM1KQcLAEAJsxead1wkkS8vgEkLcKKIbpXv93k89C
-         Il/b6fig8uFQ2ful9dClSdBh6ES0WHCRI487g5LzaF7Sg904xrrN8vXROMW6UBU7S6v1
-         1KY36Pw5SyxrOXfagNts4/xbaFFgof1/AzREyQlil09RYVWfcnHmKvyC/eKHTr8xAdVR
-         8OHIBUIT1uRPI/WtlHnD2gmL8PhGi3ea1Do5nFE3xaprr/6eI7i7Fk2drMcN+8BwExKd
-         ZFxA==
+        h=date:from:to:cc:message-id:in-reply-to:references:subject
+         :mime-version:content-transfer-encoding;
+        bh=pVj9NDJx2/7PFFi3/u/5FAFIHJCLf3D58a8+o9p3tPU=;
+        b=WQj7dS3crFyqCVPYcu7BdZsUrcxw0MC6mUXHuP+18Eq/HzrX6w0W50Mzsuh+o+tWUf
+         twHn1yIoJERi7kGf9keO/dbYy5dMX+yCoGTNfnVzVj4v2SRaYgAil9JX/1X7DBB2TPpX
+         F8B4Qf4PmwnFYxHH2c4gTv6OzmVUHH02Vkaz5R2yKWNp3pGtez2xOJWCiL2uYvPcD76W
+         up/jJWZhBTa6q2WA0Xs5NkgO0t/ssUiBARmtfh+fWsRS0/D9sEOBRPCtgqlLBf294PlN
+         50B6y5pb5sMMPHEWjEpwHv/npSnMRxjGMoYSQ1HOjhIcKuyYj60micNGJnPkrTUAmxuf
+         gkBQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=/o+CA7VDRA7UR3HGeT8+/tYzwEnOXwq5B8ZHP2/HeYc=;
-        b=hcilOaVnMPci76xTF/s3diFAUMT0j7irbizxaWmP3UFklMPXpzMenPX44//up4+0xN
-         5QR3XV8ese+2OnGHC4pKdZESfG92mUm+GauTCkNlXIqHAvwWr3y+hZ0X9KSQLbC9tCoz
-         tFtwO7RCZsFD3CN51/5j2vl9E6bQZ0k4ymmV04RQ/Eni12mx2QzX7xMARcVdl40utUJ7
-         XAa3L+tH1JcTHrDH9A+wHYAfp1hn0bUPEvd9y7YjJ8EaNiKAKcnlvn9omVstpbQJzTNY
-         lOdQCfLXkmoubVWydjPasRS+WXjBBrubbcpp0eoSe16VnokQcZN9djI1MrxYGLKo/Nov
-         04Kg==
-X-Gm-Message-State: APjAAAVR7m1DBOkFNNXRzYNOe4ruCSSDl0O7llH2jWaRLaXtCTM2AADn
-        aTIyzGgrcBnDtafj/hpmYsfbnybIrM4kJUKcnW0PGmzCCNAVyQ==
-X-Google-Smtp-Source: APXvYqw0/+WGODIUvKkziyHBLuQsuF4sA8inGcr6D1fE0jlGptJu92UkXoVDxAQCBYSMyoJXI0/9BUQNIZC+z8C9ask=
-X-Received: by 2002:a92:5c52:: with SMTP id q79mr7225189ilb.11.1579459477506;
- Sun, 19 Jan 2020 10:44:37 -0800 (PST)
-MIME-Version: 1.0
-Received: by 2002:a02:95c8:0:0:0:0:0 with HTTP; Sun, 19 Jan 2020 10:44:37
- -0800 (PST)
-Reply-To: favordens@email.com
-From:   Favor Desmond <contecindy5@gmail.com>
-Date:   Sun, 19 Jan 2020 18:44:37 +0000
-Message-ID: <CAOfCPNxP6Zd30BF2yc=mXgSsiq_K60AW+CVH-5JzXJEsBrwaJA@mail.gmail.com>
-Subject: HELLO
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+        h=x-gm-message-state:date:from:to:cc:message-id:in-reply-to
+         :references:subject:mime-version:content-transfer-encoding;
+        bh=pVj9NDJx2/7PFFi3/u/5FAFIHJCLf3D58a8+o9p3tPU=;
+        b=X+rmP0vM9DVz+r09fySPGUPMYiKy9q7eQ8Ow/30t8tqBRcK5Pd1+bJTKuZOKOO3F45
+         3DNsxg/OEkIVixFLufYBRxr1eQAomxkQ5TVTFX+WokkuhcY8pS21wjfLaJQ2C6gSjxB7
+         mTKwb7M+XZwBMgWV+UdSQ2JESbsGQn/KKAY+bc3L/dW5WNPYYuSH1ZxterGZkSlxJteU
+         JFK2EAI/qdV77xf/nqQPhynk0RdZCP+r7kZs5UUmcfb1rf/frxTmuAEUU1pacD/ZbMqf
+         KuqJo45sW3oCUXpxOIbSaH90paouAY0gel48AcG9Bd0oNYC9TdHLI21PaYlwfpjvUKrl
+         1vzA==
+X-Gm-Message-State: APjAAAXu7TdafSYAs5zAUMoNFyfj6NZCgJrcCZmgJUVS1Gpxf5UBBZlL
+        9LEzvW42kcCTOieZ6sTuHXI=
+X-Google-Smtp-Source: APXvYqzhiB2KwqCXj4v9UXq2FBSph0My9rg5TvEMHFE4N4fVykpEPoz/JjYnicXOOgzFIWNqfFr5bw==
+X-Received: by 2002:a5e:8813:: with SMTP id l19mr41499039ioj.261.1579496778554;
+        Sun, 19 Jan 2020 21:06:18 -0800 (PST)
+Received: from localhost ([184.63.162.180])
+        by smtp.gmail.com with ESMTPSA id u20sm7051639iom.27.2020.01.19.21.06.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 19 Jan 2020 21:06:18 -0800 (PST)
+Date:   Sun, 19 Jan 2020 21:06:11 -0800
+From:   John Fastabend <john.fastabend@gmail.com>
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        =?UTF-8?B?RGFuaWVsIETDrWF6?= <daniel.diaz@linaro.org>
+Cc:     Shuah Khan <shuah@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        Andrii Nakryiko <andriin@fb.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        "open list:BPF (Safe dynamic programs and tools)" 
+        <netdev@vger.kernel.org>,
+        "open list:BPF (Safe dynamic programs and tools)" 
+        <bpf@vger.kernel.org>, open list <linux-kernel@vger.kernel.org>
+Message-ID: <5e25354342d65_3d922aba572005bc34@john-XPS-13-9370.notmuch>
+In-Reply-To: <CAEf4BzbKMJOGGv19jCakZusQ-R5pstPo0bSpns5k-mFm9b0W_Q@mail.gmail.com>
+References: <20200117165330.17015-1-daniel.diaz@linaro.org>
+ <20200117165330.17015-3-daniel.diaz@linaro.org>
+ <CAEf4BzbKMJOGGv19jCakZusQ-R5pstPo0bSpns5k-mFm9b0W_Q@mail.gmail.com>
+Subject: Re: [PATCH 3/3] selftests/bpf: Build urandom_read with LDFLAGS and
+ LDLIBS
+Mime-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hello Dear
-Greetings to you,I am Favor Desmond from Ivory coast currently living
-in  Togo Republic,I would like to know you more, so that i can tell
-you little amount myself and my photo, email address is
-favordens@email.com
-Thanks
-Favor
+Andrii Nakryiko wrote:
+> On Fri, Jan 17, 2020 at 8:55 AM Daniel D=C3=ADaz <daniel.diaz@linaro.or=
+g> wrote:
+> >
+> > During cross-compilation, it was discovered that LDFLAGS and
+> > LDLIBS were not being used while building binaries, leading
+> > to defaults which were not necessarily correct.
+> >
+> > OpenEmbedded reported this kind of problem:
+> >   ERROR: QA Issue: No GNU_HASH in the ELF binary [...], didn't pass L=
+DFLAGS?
+> >
+> > Signed-off-by: Daniel D=C3=ADaz <daniel.diaz@linaro.org>
+> > ---
+> =
+
+> Acked-by: Andrii Nakryiko <andriin@fb.com>
+Acked-by: John Fastabend <john.fastabend@gmail.com>=
