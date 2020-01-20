@@ -2,144 +2,95 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8633E143188
-	for <lists+linux-kselftest@lfdr.de>; Mon, 20 Jan 2020 19:36:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E65E143241
+	for <lists+linux-kselftest@lfdr.de>; Mon, 20 Jan 2020 20:32:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726982AbgATSgI (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 20 Jan 2020 13:36:08 -0500
-Received: from mail-qk1-f194.google.com ([209.85.222.194]:33601 "EHLO
-        mail-qk1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726642AbgATSgI (ORCPT
+        id S1726642AbgATTcD (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 20 Jan 2020 14:32:03 -0500
+Received: from mail-ed1-f66.google.com ([209.85.208.66]:42278 "EHLO
+        mail-ed1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728596AbgATTcC (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 20 Jan 2020 13:36:08 -0500
-Received: by mail-qk1-f194.google.com with SMTP id d71so219404qkc.0;
-        Mon, 20 Jan 2020 10:36:07 -0800 (PST)
+        Mon, 20 Jan 2020 14:32:02 -0500
+Received: by mail-ed1-f66.google.com with SMTP id e10so576585edv.9
+        for <linux-kselftest@vger.kernel.org>; Mon, 20 Jan 2020 11:32:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=nypa0fmcU1qrcDA/69y5vVyGSxEYCTlbnT0MYvisCOY=;
-        b=n6OHQmi2Lqnt+u56UyfOnq36LdLY/90AjbbbAuc8Yi+Sexy1YUz2TZnz29vuv8c1GA
-         AFxN+hfJx4ikYoOkGw7RUtlqRcJLAU/8edx7OLCcMNGYFxMzSoJpUXhWzcN0YthgGkTT
-         qEG84m7Cz0WHjv1u3YwE01A4d+lgJveFYMf0YXHdOnienwPstAziOMIilVGV9PtJIHIX
-         MWbMRgb1+F9w+EbiEoulZtnb+bSp/exAEqak/Jojul1Q2WjNv/tuHtTTmGFgrRZyJ2RA
-         GeHNnfD1qa4l6Jnpoh8S515/p62ljovXd7MmiSVhmFRm0EnrBj4naN92dsKCe9y0YJ/9
-         bxeg==
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=z7I/Kq2V0EnXiuoACdRbnwoAql3KZ080nwyXVjlruyU=;
+        b=kLfnsSTIjE2YEe6HI6GtqXd6cMnhTRLMcstoRngEtLrpsW8Des52P9cJGak3H8TgGi
+         7pI7x0ReUsZVA5020Qw65cEVulbgAqf7PV7Yj5z98jIQHYXuhdjNseji1wTJmoRk9owd
+         jH0nw85bxKb6JNDbbMZz77rTtrhB/lrp1T9+1Yzp1e0fAmiYnPF2y/wqE3N2vxlEpqDg
+         Q62+v45VGQo8fprIjkXGYdl8n0+0lt4RTeTWLmEirmHeh05e1zsbOQ1RyEmjVmqN0eJc
+         PRg9w7tG3wGqyiL8Rgrtjody799fKx6nbHvtMQHhCmcCncWFfzoetJS1edNfQP320vCH
+         Vilg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=nypa0fmcU1qrcDA/69y5vVyGSxEYCTlbnT0MYvisCOY=;
-        b=AvFxy3JI4ndXddh7C+xS/Ort3iUVKd4c4uyCrMdlzI5NixWe24+LCFzTgfPNBh3H0v
-         SBj1w4QV7K768V4sX+gDOHfZyft9vcyiHrUKBiiUNrKYvvjqdHM0HGZKIdotrkx6RRSZ
-         xScC/v9cDO4kILvr4220z/Wt71CM2x2LSHle2mWvYx+PYcSNgnOvfIiwGaXwoCrxWxRH
-         oLDMUY2s1jsJMn7ZEqswtG/9gMmpb8WgjAEPp6qXVBq0sMguinP03ywXCxFe9ZmBXpp5
-         PdmTRqj266vPr1Nkcry2fWquDS4VrxURcJUHWQGA1HwstboKGgnI9SHIuAk0/xgNptwR
-         TT9w==
-X-Gm-Message-State: APjAAAWj6lBVlV5b4J1XCK/dEfr++Y6hAVW/n16lJuWMky2ggSvygR4I
-        SwecOcl818WSEgeBPrZg80n3DyLI/h2Y+On1HN0=
-X-Google-Smtp-Source: APXvYqyGHYkSXOZiJvAONUelyvaLJfv9/CZYkyPdYsL0xeUScApGmNT8/JruIuZcQj5K1GGwsZvg7mP2yjaYIUQCMas=
-X-Received: by 2002:a05:620a:5ae:: with SMTP id q14mr871914qkq.437.1579545367408;
- Mon, 20 Jan 2020 10:36:07 -0800 (PST)
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=z7I/Kq2V0EnXiuoACdRbnwoAql3KZ080nwyXVjlruyU=;
+        b=cAThsJwzITjDjx4RpkJ6wqhR0UrKmlyJeaxcHftw65qSgCZmcGrcJiu3GZAlBOdndQ
+         oeIxR/neDYeN2Na5kY+RkBzBat4zgQ7ZsZy5TG9qh3Y9aHLbZR75/9KAcPgiX+GKOYAm
+         3847fFdrIbd0xJX2NHmLahEXCzVPLQepje/7Q2pIbBiH/d/mbO74x6DxqV+o47xr+35X
+         4G4A7eYyZlV+mFk1AvmThw8i1cDo7TtuXTpjw/U5Otd5WFlRlqVGGSt+ftOC2bWRsmpS
+         qj252iso7bajT2+WrRtyFSaCm4I3z/pMY19iLblmkkR55/gOWIqryG+HSPrcBBN+DdPQ
+         8Lxg==
+X-Gm-Message-State: APjAAAV4NNZ71f+QA8HMktVwCmPUn4txOy5M8ovtugubtVxIYHfDsbsX
+        hUjV4IGF9U6myIkuODEfRC3HYBHnmw0uX2EAODs=
+X-Google-Smtp-Source: APXvYqwPh6D8ihOXjaVWGs/0GLulEekGPU0xOOyxhr7PagnLX+E8xWeQy/UQ09ZNp2jZFCCt0xVGiodDu+D5No4niKg=
+X-Received: by 2002:a05:6402:505:: with SMTP id m5mr609398edv.15.1579548719077;
+ Mon, 20 Jan 2020 11:31:59 -0800 (PST)
 MIME-Version: 1.0
-References: <157926819690.1555735.10756593211671752826.stgit@toke.dk>
- <157926820131.1555735.1177228853838027248.stgit@toke.dk> <CAEf4BzbAV0TmEUL=62jz+RD6SPmu927z-dhGL9JHepcAOGMSJA@mail.gmail.com>
- <875zh6p9pg.fsf@toke.dk>
-In-Reply-To: <875zh6p9pg.fsf@toke.dk>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Mon, 20 Jan 2020 10:35:56 -0800
-Message-ID: <CAEf4BzZ7x4F_-bjGg7TdzXcin6c1BAT6OKe53ujh1tx-GB6-ZQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v4 04/10] tools/runqslower: Use consistent
- include paths for libbpf
-To:     =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        Andrii Nakryiko <andriin@fb.com>,
-        Doug Ledford <dledford@redhat.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jesper Dangaard Brouer <brouer@redhat.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        linux-rdma@vger.kernel.org,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        clang-built-linux@googlegroups.com
+Received: by 2002:a05:6402:22dc:0:0:0:0 with HTTP; Mon, 20 Jan 2020 11:31:57
+ -0800 (PST)
+Reply-To: mcclainejohn.13@gmail.com
+From:   "Prof, William Roberts" <eco.bank1204@gmail.com>
+Date:   Mon, 20 Jan 2020 20:31:57 +0100
+Message-ID: <CAOE+jAB9Cv76tHqc-hO92yWjVshCsALoX=zT1ruNmX+0-Bjyxw@mail.gmail.com>
+Subject: Contact Diplomatic Agent, Mr. Mcclaine John to receive your ATM CARD
+ valued the sum of $12.8Million United States Dollars
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Jan 20, 2020 at 4:57 AM Toke H=C3=B8iland-J=C3=B8rgensen <toke@redh=
-at.com> wrote:
->
-> Andrii Nakryiko <andrii.nakryiko@gmail.com> writes:
->
-> > On Fri, Jan 17, 2020 at 5:37 AM Toke H=C3=B8iland-J=C3=B8rgensen <toke@=
-redhat.com> wrote:
-> >>
-> >> From: Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com>
-> >>
-> >> Fix the runqslower tool to include libbpf header files with the bpf/
-> >> prefix, to be consistent with external users of the library. Also ensu=
-re
-> >> that all includes of exported libbpf header files (those that are expo=
-rted
-> >> on 'make install' of the library) use bracketed includes instead of qu=
-oted.
-> >>
-> >> To not break the build, keep the old include path until everything has=
- been
-> >> changed to the new one; a subsequent patch will remove that.
-> >>
-> >> Fixes: 6910d7d3867a ("selftests/bpf: Ensure bpf_helper_defs.h are take=
-n from selftests dir")
-> >> Acked-by: Andrii Nakryiko <andriin@fb.com>
-> >> Signed-off-by: Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com>
-> >> ---
-> >>  tools/bpf/runqslower/Makefile         |    5 +++--
-> >>  tools/bpf/runqslower/runqslower.bpf.c |    2 +-
-> >>  tools/bpf/runqslower/runqslower.c     |    4 ++--
-> >>  3 files changed, 6 insertions(+), 5 deletions(-)
-> >>
-> >> diff --git a/tools/bpf/runqslower/Makefile b/tools/bpf/runqslower/Make=
-file
-> >> index b62fc9646c39..9f022f7f2593 100644
-> >> --- a/tools/bpf/runqslower/Makefile
-> >> +++ b/tools/bpf/runqslower/Makefile
-> >> @@ -5,6 +5,7 @@ LLC :=3D llc
-> >>  LLVM_STRIP :=3D llvm-strip
-> >>  DEFAULT_BPFTOOL :=3D $(OUTPUT)/sbin/bpftool
-> >>  BPFTOOL ?=3D $(DEFAULT_BPFTOOL)
-> >> +INCLUDES :=3D -I$(OUTPUT) -I$(abspath ../../lib) -I$(abspath ../../li=
-b/bpf)
-> >>  LIBBPF_SRC :=3D $(abspath ../../lib/bpf)
-> >
-> > drop LIBBPF_SRC, it's not used anymore
->
-> It is: in the rule for building libbpf there's a '-C $(LIBBPF_SRC)'
->
+Attn: Dear Beneficiary,
 
-Ah, right, missed that one. Looked a bit weird to have $(abspath
-../../lib/bpf) used in INCLUDES and then separate LIBBPF_SRC
-definition there, maybe
+I wish to inform you that the diplomatic agent conveying your ATM CARD
+valued the sum of $12.8Million United States Dollars has misplaced
+your address and he is currently stranded at (George Bush
+International Airport) Houston Texas USA now
+We required you to reconfirm the following information's below to him
+so that he can deliver your Payment CARD to you today or tomorrow
+morning as information provided with open communications via email and
+telephone for security reasons.
+HERE IS THE DETAILS  HE NEED FROM YOU URGENT
+YOUR FULL NAME:========
+ADDRESS:========
+MOBILE NO:========
+NAME OF YOUR NEAREST AIRPORT:========
+A COPY OF YOUR IDENTIFICATION :========
 
-LIBBPF_SRC :=3D $(abspath ../../lib/bpf)
-INCLUDES :=3D -I$(OUTPUT) -I$(abspath ../../lib) -I$(LIBBPF_SRC)
+Note; do contact the diplomatic agent immediately through the
+information's listed below
+Contact Person: Diplomatic Agent, Mr. Mcclaine John
+EMAIL: mcclainejohn.13@gmail.com
+Tel:(223) 777-7518
 
-> -Toke
->
+Contact the diplomatic agent immediately
+because he is waiting to hear from you today with the needed information's.
+
+NOTE: The Diplomatic agent does not know that the content of the
+consignment box is $12.800,000,00 Million United States Dollars and on
+no circumstances should you let him know the content. The consignment
+was moved from here as family treasures, so never allow him to open
+the box. Please I have paid delivery fees for you but the only money
+you must send to Mcclaine John is your ATM CARD delivery fee $25.00
+only. text Him as you contact Him Immediately
+
+Thanks,
+with Regards.
+Prof, William Roberts
+Director DHL COURIER SERVICES-Benin
