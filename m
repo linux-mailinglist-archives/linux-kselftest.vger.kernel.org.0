@@ -2,126 +2,198 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EA343144493
-	for <lists+linux-kselftest@lfdr.de>; Tue, 21 Jan 2020 19:51:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A22BC14456D
+	for <lists+linux-kselftest@lfdr.de>; Tue, 21 Jan 2020 20:53:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729081AbgAUSvN (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 21 Jan 2020 13:51:13 -0500
-Received: from userp2120.oracle.com ([156.151.31.85]:40258 "EHLO
-        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728186AbgAUSvN (ORCPT
+        id S1727813AbgAUTxT (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 21 Jan 2020 14:53:19 -0500
+Received: from mail.efficios.com ([167.114.26.124]:42636 "EHLO
+        mail.efficios.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726926AbgAUTxT (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 21 Jan 2020 13:51:13 -0500
-Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
-        by userp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id 00LImcsQ009200;
-        Tue, 21 Jan 2020 18:51:03 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=subject : to : cc :
- references : from : message-id : date : mime-version : in-reply-to :
- content-type : content-transfer-encoding; s=corp-2019-08-05;
- bh=f6ft9tle0RFZKhACFekrVTFG0KAq5griDIXNsdbXFDs=;
- b=TxRHhCibOlH2/ma9Ipo+Q1WBFLuQRf1qCSyLLimmT1NqWMh7UFMkL+GxGY5iYsQRdOuw
- SFVEpMtEdVpjjlz4Fx5B+d27z5fpIj4s91wvbQVwPETAyZ8mRaN6+7+VlvZCEsp+T212
- JXhhPQWlfrcC2PW+x54j6BZTArq1kTkQ8xnUp/FhYSYmCgfpvrud8EqKpX3NzgJhd9p8
- Kt3kXVgYthEoK1hgLNRbG3aMQbzZtQTObJLtP6JR9MHxAMNqXA52W5vFc2TP7vrXs0kB
- 029K/1pTOASVeiCdea1r7kRtMP8sA4xZsjc6YffBtAscNSlfegSpEEAfJVVnTJ2vk3H+ uA== 
-Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
-        by userp2120.oracle.com with ESMTP id 2xktnr6x8h-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 21 Jan 2020 18:51:03 +0000
-Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
-        by aserp3030.oracle.com (8.16.0.27/8.16.0.27) with SMTP id 00LImIMt029574;
-        Tue, 21 Jan 2020 18:51:02 GMT
-Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
-        by aserp3030.oracle.com with ESMTP id 2xnpfpj9f4-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 21 Jan 2020 18:51:02 +0000
-Received: from abhmp0007.oracle.com (abhmp0007.oracle.com [141.146.116.13])
-        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 00LIp0IS011563;
-        Tue, 21 Jan 2020 18:51:01 GMT
-Received: from [192.168.1.206] (/71.63.128.209)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Tue, 21 Jan 2020 10:51:00 -0800
-Subject: Re: [PATCH v10 4/8] hugetlb: disable region_add file_region
- coalescing
-To:     Mina Almasry <almasrymina@google.com>, rientjes@google.com,
-        shakeelb@google.com
-Cc:     shuah@kernel.org, gthelen@google.com, akpm@linux-foundation.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org, cgroups@vger.kernel.org,
-        aneesh.kumar@linux.vnet.ibm.com
-References: <20200115012651.228058-1-almasrymina@google.com>
- <20200115012651.228058-4-almasrymina@google.com>
-From:   Mike Kravetz <mike.kravetz@oracle.com>
-Message-ID: <f7a07154-fba3-7ad7-7a6b-161e660a37c1@oracle.com>
-Date:   Tue, 21 Jan 2020 10:50:59 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.1
+        Tue, 21 Jan 2020 14:53:19 -0500
+X-Greylist: delayed 376 seconds by postgrey-1.27 at vger.kernel.org; Tue, 21 Jan 2020 14:53:18 EST
+Received: from localhost (localhost [127.0.0.1])
+        by mail.efficios.com (Postfix) with ESMTP id 1916D253772;
+        Tue, 21 Jan 2020 14:47:02 -0500 (EST)
+Received: from mail.efficios.com ([127.0.0.1])
+        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id jRqVdpN1xZ5t; Tue, 21 Jan 2020 14:47:01 -0500 (EST)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.efficios.com (Postfix) with ESMTP id 9F9B0253771;
+        Tue, 21 Jan 2020 14:47:01 -0500 (EST)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com 9F9B0253771
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
+        s=default; t=1579636021;
+        bh=E94cVXKf+7yBhWNrnINyP+aFkmnjtYMO3cEcciVVmD4=;
+        h=Date:From:To:Message-ID:MIME-Version;
+        b=Ti0zP5gdtHGlRjpE8NgSONpmGaMpDbXDucjZ4ML2d/FtC2sEeXRAh28boRfu3uS6h
+         jPNXgQrerGWi0PzeywmkrIQp65Q6FFreLXhYnnBnszrN9/GVy2/0D4tkS5vZGWyBoA
+         C8ig/tUIZz4Xoaddw/f9NUCJAO91qpbRyg+vmQQEuJf/pt+Eo3OxZMMMiKqNceggc6
+         c3vvJ/Z+21Oe8LxX4BuzVlAmmINPYvp+QyKs+ZSUHcUR0dCV/+/L+FoPdrA63oFGU2
+         dCATtZlTJk9mIDHutTp/5hGYYLJ5P0QY7keTfbMVqEFscLs6Q7hDlZKVpwizR2FPs3
+         1ivD13gTc8irw==
+X-Virus-Scanned: amavisd-new at efficios.com
+Received: from mail.efficios.com ([127.0.0.1])
+        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id RiHK1mtuRx4U; Tue, 21 Jan 2020 14:47:01 -0500 (EST)
+Received: from mail03.efficios.com (mail03.efficios.com [167.114.26.124])
+        by mail.efficios.com (Postfix) with ESMTP id 803732538C3;
+        Tue, 21 Jan 2020 14:47:01 -0500 (EST)
+Date:   Tue, 21 Jan 2020 14:47:01 -0500 (EST)
+From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+To:     Jann Horn <jannh@google.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Joel Fernandes <joelaf@google.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Dave Watson <davejwatson@fb.com>,
+        Will Deacon <will.deacon@arm.com>, shuah <shuah@kernel.org>,
+        Andi Kleen <andi@firstfloor.org>,
+        linux-kselftest <linux-kselftest@vger.kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>, Chris Lameter <cl@linux.com>,
+        Russell King <linux@arm.linux.org.uk>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        "Paul E . McKenney" <paulmck@linux.vnet.ibm.com>,
+        Paul Turner <pjt@google.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Josh Triplett <josh@joshtriplett.org>,
+        rostedt <rostedt@goodmis.org>, Ben Maurer <bmaurer@fb.com>,
+        linux-api <linux-api@vger.kernel.org>,
+        Andy Lutomirski <luto@amacapital.net>
+Message-ID: <430172781.596271.1579636021412.JavaMail.zimbra@efficios.com>
+In-Reply-To: <CAG48ez2bQdoT9y7HkyU06DTazysUDdPdJe+gyV-NxgQA7JWQVQ@mail.gmail.com>
+References: <20200121160312.26545-1-mathieu.desnoyers@efficios.com> <CAG48ez2bQdoT9y7HkyU06DTazysUDdPdJe+gyV-NxgQA7JWQVQ@mail.gmail.com>
+Subject: Re: [RFC PATCH v1] pin_on_cpu: Introduce thread CPU pinning system
+ call
 MIME-Version: 1.0
-In-Reply-To: <20200115012651.228058-4-almasrymina@google.com>
 Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9507 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
- phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=999
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.0.1-1911140001 definitions=main-2001210140
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9507 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
- suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
- lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1911140001
- definitions=main-2001210140
+X-Originating-IP: [167.114.26.124]
+X-Mailer: Zimbra 8.8.15_GA_3895 (ZimbraWebClient - FF72 (Linux)/8.8.15_GA_3895)
+Thread-Topic: pin_on_cpu: Introduce thread CPU pinning system call
+Thread-Index: SUS+RZAe0aLWPsHzRvXWGarIM8oqwA==
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 1/14/20 5:26 PM, Mina Almasry wrote:
-> A follow up patch in this series adds hugetlb cgroup uncharge info the
-> file_region entries in resv->regions. The cgroup uncharge info may
-> differ for different regions, so they can no longer be coalesced at
-> region_add time. So, disable region coalescing in region_add in this
-> patch.
-> 
-> Behavior change:
-> 
-> Say a resv_map exists like this [0->1], [2->3], and [5->6].
-> 
-> Then a region_chg/add call comes in region_chg/add(f=0, t=5).
-> 
-> Old code would generate resv->regions: [0->5], [5->6].
-> New code would generate resv->regions: [0->1], [1->2], [2->3], [3->5],
-> [5->6].
-> 
-> Special care needs to be taken to handle the resv->adds_in_progress
-> variable correctly. In the past, only 1 region would be added for every
-> region_chg and region_add call. But now, each call may add multiple
-> regions, so we can no longer increment adds_in_progress by 1 in region_chg,
-> or decrement adds_in_progress by 1 after region_add or region_abort. Instead,
-> region_chg calls add_reservation_in_range() to count the number of regions
-> needed and allocates those, and that info is passed to region_add and
-> region_abort to decrement adds_in_progress correctly.
-> 
-> We've also modified the assumption that region_add after region_chg
-> never fails. region_chg now pre-allocates at least 1 region for
-> region_add. If region_add needs more regions than region_chg has
-> allocated for it, then it may fail.
+----- On Jan 21, 2020, at 12:20 PM, Jann Horn jannh@google.com wrote:
 
-Some time back we briefly discussed an optimization to coalesce file
-region entries if they were from the same cgroup.  At the time, the
-thought was that such an optimization could wait.  For large mappings,
-known users will reserve the entire area.  Smaller mappings such as
-those in the commit log are not the common case and are mentioned mostly
-to illustrate what the code must handle.
+> On Tue, Jan 21, 2020 at 5:13 PM Mathieu Desnoyers
+> <mathieu.desnoyers@efficios.com> wrote:
+>> There is an important use-case which is not possible with the
+>> "rseq" (Restartable Sequences) system call, which was left as
+>> future work.
+>>
+>> That use-case is to modify user-space per-cpu data structures
+>> belonging to specific CPUs which may be brought offline and
+>> online again by CPU hotplug. This can be used by memory
+>> allocators to migrate free memory pools when CPUs are brought
+>> offline, or by ring buffer consumers to target specific per-CPU
+>> buffers, even when CPUs are brought offline.
+>>
+>> A few rather complex prior attempts were made to solve this.
+>> Those were based on in-kernel interpreters (cpu_opv, do_on_cpu).
+>> That complexity was generally frowned upon, even by their author.
+>>
+>> This patch fulfills this use-case in a refreshingly simple way:
+>> it introduces a "pin_on_cpu" system call, which allows user-space
+>> threads to pin themselves on a specific CPU (which needs to be
+>> present in the thread's allowed cpu mask), and then clear this
+>> pinned state.
+> [...]
+>> For instance, this allows implementing this userspace library API
+>> for incrementing a per-cpu counter for a specific cpu number
+>> received as parameter:
+>>
+>> static inline __attribute__((always_inline))
+>> int percpu_addv(intptr_t *v, intptr_t count, int cpu)
+>> {
+>>         int ret;
+>>
+>>         ret = rseq_addv(v, count, cpu);
+>> check:
+>>         if (rseq_unlikely(ret)) {
+>>                 pin_on_cpu_set(cpu);
+>>                 ret = rseq_addv(v, count, percpu_current_cpu());
+>>                 pin_on_cpu_clear();
+>>                 goto check;
+>>         }
+>>         return 0;
+>> }
+> 
+> What does userspace have to do if the set of allowed CPUs switches all
+> the time? For example, on Android, if you first open Chrome and then
+> look at its allowed CPUs, Chrome is allowed to use all CPU cores
+> because it's running in the foreground:
+> 
+> walleye:/ # ps -AZ | grep 'android.chrome$'
+> u:r:untrusted_app:s0:c145,c256,c512,c768 u0_a145 7845 805 1474472
+> 197868 SyS_epoll_wait f09c0194 S com.android.chrome
+> walleye:/ # grep cpuset /proc/7845/cgroup; grep Cpus_allowed_list
+> /proc/7845/status
+> 3:cpuset:/top-app
+> Cpus_allowed_list: 0-7
+> 
+> But if you then switch to the home screen, the application is moved
+> into a different cgroup, and is restricted to two CPU cores:
+> 
+> walleye:/ # grep cpuset /proc/7845/cgroup; grep Cpus_allowed_list
+> /proc/7845/status
+> 3:cpuset:/background
+> Cpus_allowed_list: 0-1
 
-However, I just remembered that for private mappings file region entries
-are allocated at page fault time: one per page.  Since we are no longer
-coalescing, there will be one file region struct for each page in a
-private mapping.  Is that correct?
+Then at that point, pin_on_cpu() would only be allowed to pin on
+CPUs 0 and 1.
 
-I honestly do not know how common private mappings are today.  But,
-this would cause excessive overhead for any large private mapping.
+> At the same time, I also wonder whether it is a good idea to allow
+> userspace to stay active on a CPU even after the task has been told to
+> move to another CPU core - that's probably not exactly a big deal, but
+> seems suboptimal to me.
+
+Do you mean the following scenario for a given task ?
+
+1) set affinity to CPU 0,1,2
+2) pin on CPU 2
+3) set affinity to CPU 0,1
+
+In the patch I propose here, step (3) is forbidden by this added check in
+__set_cpus_allowed_ptr, which is used by sched_setaffinity(2):
+
++       /* Prevent removing the currently pinned CPU from the allowed cpu mask. */
++       if (is_pinned_task(p) && !cpumask_test_cpu(p->pinned_cpu, new_mask)) {
++               ret = -EINVAL;
++               goto out;
++       }
+
+
+> I'm wondering whether it might be possible to rework this mechanism
+> such that, instead of moving the current task onto a target CPU, it
+> prevents all *other* threads of the current process from running on
+> that CPU (either entirely or in user mode). That might be the easiest
+> way to take care of issues like CPU hotplugging and changing cpusets
+> all at once? The only potential issue I see with that approach would
+> be that you wouldn't be able to use it for inter-process
+> communication; and I have no idea whether this would be good or bad
+> performance-wise.
+
+Firstly, inter-process communication over shared memory is one of my use-cases
+(for lttng-ust's ring buffer).
+
+I'm not convinced that applying constraints on all other threads belonging to
+the current process would be easier or faster than migrating the current thread
+over to the target CPU. I'm unsure how those additional constraints would
+fit with other threads already having their own cpu affinity masks (which
+could generate an empty cpumask by adding an extra constraint).
+
+Thanks for the feedback!
+
+Mathieu
 
 -- 
-Mike Kravetz
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
