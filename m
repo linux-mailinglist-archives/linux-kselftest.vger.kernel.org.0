@@ -2,103 +2,67 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B8629145AA9
-	for <lists+linux-kselftest@lfdr.de>; Wed, 22 Jan 2020 18:16:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 027F3145AB9
+	for <lists+linux-kselftest@lfdr.de>; Wed, 22 Jan 2020 18:23:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725883AbgAVRQe (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 22 Jan 2020 12:16:34 -0500
-Received: from mail.efficios.com ([167.114.26.124]:33022 "EHLO
-        mail.efficios.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725802AbgAVRQe (ORCPT
+        id S1725970AbgAVRX3 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 22 Jan 2020 12:23:29 -0500
+Received: from www62.your-server.de ([213.133.104.62]:49958 "EHLO
+        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725802AbgAVRX3 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 22 Jan 2020 12:16:34 -0500
-Received: from localhost (localhost [127.0.0.1])
-        by mail.efficios.com (Postfix) with ESMTP id 0DB0925AF86;
-        Wed, 22 Jan 2020 12:16:33 -0500 (EST)
-Received: from mail.efficios.com ([127.0.0.1])
-        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id 4stJu28RmvV4; Wed, 22 Jan 2020 12:16:32 -0500 (EST)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.efficios.com (Postfix) with ESMTP id BA38C25AEA7;
-        Wed, 22 Jan 2020 12:16:32 -0500 (EST)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com BA38C25AEA7
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
-        s=default; t=1579713392;
-        bh=9LMEjxtXO3DcVhBO+WK54vbQNVt6wfm87h8asYpsTpA=;
-        h=Date:From:To:Message-ID:MIME-Version;
-        b=rMeSQ8cXwgEJi10a+NrDWSJslrcR1JcaoqUB62X8OJYwp1iBoN1eQvqtcqcC01S+U
-         lvt9z4hldAreTc3ggArc7tcmdi/v9l33zfVBieVm/sJ5OBB/xjrPVup+2I8C9z92KR
-         jUYCOByauv7H6kHe5AIiOTkg7Yrf01Qxrzsw0ZI2PWiJzKHuAn2k4aOUzcHqSCrqd8
-         B+R6TGAAuwgZJ/Rcvbg/xxRfCzoSPWEF/YLwLlhUeo0ieRBOZ4LDjRFJqqiu6Ulm9s
-         2jLcjztV0a703bBxgymj8Iht3R0nVPVXAtKUMTDfTqnwPZC0Ri0cfFTiVWiUwqTzOr
-         TXfiS6FaLkW2A==
-X-Virus-Scanned: amavisd-new at efficios.com
-Received: from mail.efficios.com ([127.0.0.1])
-        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id QUb4Vmo1dyGh; Wed, 22 Jan 2020 12:16:32 -0500 (EST)
-Received: from mail03.efficios.com (mail03.efficios.com [167.114.26.124])
-        by mail.efficios.com (Postfix) with ESMTP id 9F5B225AEA6;
-        Wed, 22 Jan 2020 12:16:32 -0500 (EST)
-Date:   Wed, 22 Jan 2020 12:16:32 -0500 (EST)
-From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-To:     Jan Ziak <0xe2.0x9a.0x9b@gmail.com>
-Cc:     Andi Kleen <andi@firstfloor.org>, Ben Maurer <bmaurer@fb.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Chris Lameter <cl@linux.com>, Dave Watson <davejwatson@fb.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Joel Fernandes <joelaf@google.com>,
-        Josh Triplett <josh@joshtriplett.org>,
-        linux-api <linux-api@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-kselftest <linux-kselftest@vger.kernel.org>,
-        Russell King <linux@arm.linux.org.uk>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Ingo Molnar <mingo@redhat.com>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Paul <paulmck@linux.vnet.ibm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Paul Turner <pjt@google.com>, rostedt <rostedt@goodmis.org>,
-        shuah <shuah@kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
-        Will Deacon <will.deacon@arm.com>
-Message-ID: <1813399266.597377.1579713392568.JavaMail.zimbra@efficios.com>
-In-Reply-To: <CAODFU0rTLmb-Ph_n1EHaZmdOAjsa6Jmx=3zkuT8LH3No=sOk5w@mail.gmail.com>
-References: <CAODFU0rTLmb-Ph_n1EHaZmdOAjsa6Jmx=3zkuT8LH3No=sOk5w@mail.gmail.com>
-Subject: Re: [RFC PATCH v1] pin_on_cpu: Introduce thread CPU pinning system
- call
+        Wed, 22 Jan 2020 12:23:29 -0500
+Received: from sslproxy03.your-server.de ([88.198.220.132])
+        by www62.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
+        (Exim 4.89_1)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1iuJiu-0004Uq-PA; Wed, 22 Jan 2020 18:23:24 +0100
+Received: from [2001:1620:665:0:5795:5b0a:e5d5:5944] (helo=linux-3.fritz.box)
+        by sslproxy03.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1iuJiu-000NiI-DM; Wed, 22 Jan 2020 18:23:24 +0100
+Subject: Re: [PATCH 3/3] selftests/bpf: Build urandom_read with LDFLAGS and
+ LDLIBS
+To:     =?UTF-8?Q?Daniel_D=c3=adaz?= <daniel.diaz@linaro.org>,
+        shuah@kernel.org
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        Andrii Nakryiko <andriin@fb.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        "open list:BPF (Safe dynamic programs and tools)" 
+        <netdev@vger.kernel.org>,
+        "open list:BPF (Safe dynamic programs and tools)" 
+        <bpf@vger.kernel.org>, open list <linux-kernel@vger.kernel.org>
+References: <20200117165330.17015-1-daniel.diaz@linaro.org>
+ <20200117165330.17015-3-daniel.diaz@linaro.org>
+From:   Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <f2d533bc-8b6d-ecb5-2052-34c6876f2249@iogearbox.net>
+Date:   Wed, 22 Jan 2020 18:23:23 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [167.114.26.124]
-X-Mailer: Zimbra 8.8.15_GA_3895 (ZimbraWebClient - FF72 (Linux)/8.8.15_GA_3895)
-Thread-Topic: pin_on_cpu: Introduce thread CPU pinning system call
-Thread-Index: dvBLZ91ySDgPt1Gh4255dg7wp2uMvw==
+In-Reply-To: <20200117165330.17015-3-daniel.diaz@linaro.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.101.4/25703/Wed Jan 22 12:37:53 2020)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-(replying again as plain text for mailing lists)
+On 1/17/20 5:53 PM, Daniel Díaz wrote:
+> During cross-compilation, it was discovered that LDFLAGS and
+> LDLIBS were not being used while building binaries, leading
+> to defaults which were not necessarily correct.
+> 
+> OpenEmbedded reported this kind of problem:
+>    ERROR: QA Issue: No GNU_HASH in the ELF binary [...], didn't pass LDFLAGS?
+> 
+> Signed-off-by: Daniel Díaz <daniel.diaz@linaro.org>
 
------ On Jan 22, 2020, at 10:44 AM, Jan Ziak 0xe2.0x9a.0x9b@gmail.com wrote:
-
-> Hello
-
-> I would like to note that this does not help userspace to express dynamic
-> scheduling relationships among processes/threads such as "do not run processes
-> A and B on the same core" or "run processes A and B on cores sharing the same
-> L2 cache".
-
-Indeed, this is not what this system call is trying to solve. Does the name "pin_on_cpu" lead 
-to confusion here ? 
-
-I thought that cgroups was already the mechanism taking care of this kind of requirement. 
-
-Thanks, 
-
-Mathieu 
-
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+Applied, thanks!
