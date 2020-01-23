@@ -2,130 +2,100 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 52862146345
-	for <lists+linux-kselftest@lfdr.de>; Thu, 23 Jan 2020 09:19:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 337E814643B
+	for <lists+linux-kselftest@lfdr.de>; Thu, 23 Jan 2020 10:15:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726968AbgAWITf (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 23 Jan 2020 03:19:35 -0500
-Received: from us-smtp-1.mimecast.com ([207.211.31.81]:40115 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1725785AbgAWITf (ORCPT
+        id S1726260AbgAWJPr (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 23 Jan 2020 04:15:47 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:55206 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1725785AbgAWJPr (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 23 Jan 2020 03:19:35 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1579767574;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=r8G9CiUcTrvaUADmAjAIB3KCKMVrK5hIYghUAfanm1s=;
-        b=FoZFuOpIBG+mw4dSFEXvDtg/itXuFJfoMRiAySH74ydGir4rNFSGmGyiqAc07VWfY2Vf88
-        nTOBsZtWqWBvbx3chaDz+QzZo9UHXzNTBs4lPkEtJa5/E15aIv2wwlJpAT5LXMjh+SR6O8
-        lWA0NC3Z/HCtSklwh2gCm/q+yGeVTS8=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-161-GDK3HAbMObCnYJNP01EYcQ-1; Thu, 23 Jan 2020 03:19:30 -0500
-X-MC-Unique: GDK3HAbMObCnYJNP01EYcQ-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 0034A1800D48;
-        Thu, 23 Jan 2020 08:19:27 +0000 (UTC)
-Received: from oldenburg2.str.redhat.com (ovpn-116-150.ams2.redhat.com [10.36.116.150])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id B137581C0A;
-        Thu, 23 Jan 2020 08:19:20 +0000 (UTC)
-From:   Florian Weimer <fweimer@redhat.com>
-To:     "H. Peter Anvin" <hpa@zytor.com>
-Cc:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Chris Lameter <cl@linux.com>, Jann Horn <jannh@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Joel Fernandes <joelaf@google.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Dave Watson <davejwatson@fb.com>,
-        Will Deacon <will.deacon@arm.com>, shuah <shuah@kernel.org>,
-        Andi Kleen <andi@firstfloor.org>,
-        linux-kselftest <linux-kselftest@vger.kernel.org>,
-        Russell King <linux@arm.linux.org.uk>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Paul <paulmck@linux.vnet.ibm.com>, Paul Turner <pjt@google.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Josh Triplett <josh@joshtriplett.org>,
-        rostedt <rostedt@goodmis.org>, Ben Maurer <bmaurer@fb.com>,
-        linux-api <linux-api@vger.kernel.org>,
-        Andy Lutomirski <luto@amacapital.net>
-Subject: Re: [RFC PATCH v1] pin_on_cpu: Introduce thread CPU pinning system call
-References: <20200121160312.26545-1-mathieu.desnoyers@efficios.com>
-        <CAG48ez2bQdoT9y7HkyU06DTazysUDdPdJe+gyV-NxgQA7JWQVQ@mail.gmail.com>
-        <430172781.596271.1579636021412.JavaMail.zimbra@efficios.com>
-        <CAG48ez2Z5CesMfandNK+S32Rrgp_QGQHqQ1Fpd5-YTsCWGfHeg@mail.gmail.com>
-        <2049164886.596497.1579641536619.JavaMail.zimbra@efficios.com>
-        <alpine.DEB.2.21.2001212141590.1231@www.lameter.com>
-        <1648013936.596672.1579655468604.JavaMail.zimbra@efficios.com>
-        <ead7a565-9a23-a7d7-904d-c4860f63952a@zytor.com>
-Date:   Thu, 23 Jan 2020 09:19:18 +0100
-In-Reply-To: <ead7a565-9a23-a7d7-904d-c4860f63952a@zytor.com> (H. Peter
-        Anvin's message of "Wed, 22 Jan 2020 23:53:54 -0800")
-Message-ID: <87a76efuux.fsf@oldenburg2.str.redhat.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.3 (gnu/linux)
+        Thu, 23 Jan 2020 04:15:47 -0500
+Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 00N9CkBs104384
+        for <linux-kselftest@vger.kernel.org>; Thu, 23 Jan 2020 04:15:45 -0500
+Received: from e06smtp05.uk.ibm.com (e06smtp05.uk.ibm.com [195.75.94.101])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 2xp93qn587-1
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-kselftest@vger.kernel.org>; Thu, 23 Jan 2020 04:15:45 -0500
+Received: from localhost
+        by e06smtp05.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-kselftest@vger.kernel.org> from <sandipan@linux.ibm.com>;
+        Thu, 23 Jan 2020 09:15:43 -0000
+Received: from b06cxnps4076.portsmouth.uk.ibm.com (9.149.109.198)
+        by e06smtp05.uk.ibm.com (192.168.101.135) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
+        Thu, 23 Jan 2020 09:15:38 -0000
+Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
+        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 00N9FbuE41353368
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 23 Jan 2020 09:15:37 GMT
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 831D14C040;
+        Thu, 23 Jan 2020 09:15:37 +0000 (GMT)
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 90CD54C04A;
+        Thu, 23 Jan 2020 09:15:35 +0000 (GMT)
+Received: from [9.124.35.38] (unknown [9.124.35.38])
+        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Thu, 23 Jan 2020 09:15:35 +0000 (GMT)
+Subject: Re: [PATCH v10 7/8] hugetlb_cgroup: Add hugetlb_cgroup reservation
+ tests
+To:     Mina Almasry <almasrymina@google.com>
+Cc:     mike.kravetz@oracle.com, rientjes@google.com, shakeelb@google.com,
+        shuah@kernel.org, gthelen@google.com, akpm@linux-foundation.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org, cgroups@vger.kernel.org,
+        aneesh.kumar@linux.vnet.ibm.com
+References: <20200115012651.228058-1-almasrymina@google.com>
+ <20200115012651.228058-7-almasrymina@google.com>
+From:   Sandipan Das <sandipan@linux.ibm.com>
+Date:   Thu, 23 Jan 2020 14:45:34 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
+In-Reply-To: <20200115012651.228058-7-almasrymina@google.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+x-cbid: 20012309-0020-0000-0000-000003A33EF7
+X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
+x-cbparentid: 20012309-0021-0000-0000-000021FAD787
+Message-Id: <7ce6d59f-fd73-c529-2ad6-edda9937966d@linux.ibm.com>
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.572
+ definitions=2020-01-23_01:2020-01-23,2020-01-22 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 bulkscore=0
+ lowpriorityscore=0 malwarescore=0 mlxlogscore=996 suspectscore=0
+ impostorscore=0 priorityscore=1501 phishscore=0 adultscore=0 clxscore=1015
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-1910280000 definitions=main-2001230079
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-* H. Peter Anvin:
+Hi,
 
-> On 2020-01-21 17:11, Mathieu Desnoyers wrote:
->> ----- On Jan 21, 2020, at 4:44 PM, Chris Lameter cl@linux.com wrote:
->> 
->>> These scenarios are all pretty complex and will be difficult to understand
->>> for the user of these APIs.
->>>
->>> I think the easiest solution (and most comprehensible) is for the user
->>> space process that does per cpu operations to get some sort of signal. If
->>> its not able to handle that then terminate it. The code makes a basic
->>> assumption after all that the process is running on a specific cpu. If
->>> this is no longer the case then its better to abort if the process cannot
->>> handle moving to a different processor.
->> 
->> The point of pin_on_cpu() is to allow threads to access per-cpu data
->> structures belonging to a given CPU even if they cannot run on that
->> CPU (because it is offline).
->> 
->> I am not sure what scenario your signal delivery proposal aims to cover.
->> 
->> Just to try to put this into the context of a specific scenario to see
->> if I understand your point, is the following what you have in mind ?
->> 
->> 1. Thread A issues pin_on_cpu(5),
->> 2. Thread B issues sched_setaffinity removing cpu 5 from thread A's
->>    affinity mask,
->> 3. Noticing that it would generate an invalid combination, rather than
->>    failing sched_setaffinity, it would send a SIGSEGV (or other) signal
->>    to thread A.
->> 
->> Or so you have something entirely different in mind ?
->> 
->
-> I would agree that this seems like the only sane option, or you will
-> be in a world of hurt because of conflicting semantics. It is not just
-> offlining, but what happens if a policy manager calls
-> sched_setaffinity() on another thread -- and now the universe breaks
-> because a library is updated to use this new system call which
-> collides with the expectations of the policy manager.
+On 15/01/20 6:56 am, Mina Almasry wrote:
+> The tests use both shared and private mapped hugetlb memory, and
+> monitors the hugetlb usage counter as well as the hugetlb reservation
+> counter. They test different configurations such as hugetlb memory usage
+> via hugetlbfs, or MAP_HUGETLB, or shmget/shmat, and with and without
+> MAP_POPULATE.
+> 
+> Also add test for hugetlb reservation reparenting, since this is
+> a subtle issue.
+> 
+> Signed-off-by: Mina Almasry <almasrymina@google.com>
+> 
 
-Yes, this new interface seems fundamentally incompatible with how
-affinity masks are changed today.
+For powerpc64, either 16MB/16GB or 2MB/1GB huge pages are supported depending
+on the MMU type (Hash or Radix). I was just running these tests on a powerpc64
+system with Hash MMU and ran into problems because the tests assume that the
+hugepage size is always 2MB. Can you determine the huge page size at runtime?
 
-Would it be possible to make pin_on_cpu_set to use fallback
-synchronization via a futex if the CPU cannot be acquired by running on
-it?  The rseq section would need to check the futex as well, but would
-not have to acquire it.
 
-Thanks,
-Florian
+- Sandipan
 
