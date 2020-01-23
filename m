@@ -2,75 +2,112 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 53FB4147256
-	for <lists+linux-kselftest@lfdr.de>; Thu, 23 Jan 2020 21:05:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5992D147320
+	for <lists+linux-kselftest@lfdr.de>; Thu, 23 Jan 2020 22:28:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729263AbgAWUFp (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 23 Jan 2020 15:05:45 -0500
-Received: from mail-oi1-f194.google.com ([209.85.167.194]:33835 "EHLO
-        mail-oi1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728731AbgAWUFm (ORCPT
+        id S1727312AbgAWV25 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 23 Jan 2020 16:28:57 -0500
+Received: from mail-ua1-f67.google.com ([209.85.222.67]:38943 "EHLO
+        mail-ua1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726118AbgAWV25 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 23 Jan 2020 15:05:42 -0500
-Received: by mail-oi1-f194.google.com with SMTP id l136so4179420oig.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 23 Jan 2020 12:05:42 -0800 (PST)
+        Thu, 23 Jan 2020 16:28:57 -0500
+Received: by mail-ua1-f67.google.com with SMTP id 73so42904uac.6;
+        Thu, 23 Jan 2020 13:28:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
+        d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=VyznYH5jQ6Vy0xxWHMJMOnmd05+7Te8s8tuSLOem1vc=;
-        b=NEFtawHLgzySPes5yhMKn043r+gEGRFGKhG2aJibWy+YdIIw0CJVynUf/h7t5SDCAn
-         YCLGg0okwgHeebwoD2fSmlXxTPzE+8OqgOFxOfSXKIjZI6xLy+zqNphZwdd2Tl3HNdb9
-         F+bOjMFMa/rjrcxnOi4Uv4WZy/wdxN2W8Nb0aKewvUoYFlPfCCwLGvMXURaKpP3IPhAy
-         Vp7d3t7P3GCpDZy5GL/uWB/BtJVgZPiTYeU3t+OjdbL0MzYC+L/KPsM2qvjVN1iPjPEf
-         Ccr0Fq0QlZZfD85rtYSLJWpgC5B4L6fMT7Gk1Ub9GJZ/JSAOlZbDhxtdfgH8LTyMuqxP
-         +XHQ==
+        bh=YSbU1uqjZPOEO1Y+Gw50u5Z+ggq+k7efj1RntkA3E9U=;
+        b=oPAt2jQlapEzqqZVJrKArIR0wSaVYzkP6sejlZbngsxvYIPYyDxnAQpP7+80ejkcjB
+         NQQ6Vze/aeClkDRc/5difGCA92dclJVwbmwr30eJ1i/xxEe+0zUn2fOApOulJRecJRjM
+         mZbmbA3s2XDKCHWV2qjv4J1nHMvGH0pl09dTFtBMUbJiIYs82Z1gR2r3M+xjz2kdEgNt
+         Sak9EB6jELEBFm+Xat7qdGrhzEdnbAxpwbSwoWsVFtT3vezMRn2BNJUL4REgvCDveC8S
+         lOrEqONEgloVs5rrpyVO8klYyypX01Q1M8MgIzqeZoUtom+Lc7waBhR8+sAQYA81zSYy
+         ythQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=VyznYH5jQ6Vy0xxWHMJMOnmd05+7Te8s8tuSLOem1vc=;
-        b=eGokjIqcSHCwdif10zxEapkEn2YmlgFjCE5Kb+AscSGmcd814rijywLGCaKaEP1jSP
-         JWqYDFjkNmCi843YE7Ukl+oDoaLVWoEdvhg1EgB8BZPpSBZC2YvihItoLoFX3EZ0KyW1
-         SGEp9o4VAkiTj/AL6sDKCkJm5RzQ0BfbsFiNx4u2bU4q+aspdy7UzXX1XVkC71cEo+Op
-         2Ej3eGqu6rDIeZrvcgFWuK3jecdL0rJbyM0MrpD0HgtVP1wfsmuv1O1BuqfJLGc0Xk0C
-         TBef/zsK/8CrUOCS+7vJtb0wrSMXMOSmGwOwSiJ3DmFbRSrYyVmYj/XSL3TOe4bO7rbp
-         jcmw==
-X-Gm-Message-State: APjAAAXcuE18rxJTLJhdqip569eSJ2yMyFVURtgFWMgqWgU1TRIsXEXP
-        2mOSFYNZQkQT8Sm6hTbkUNvOo1ExNy9AFY0CVryDtg==
-X-Google-Smtp-Source: APXvYqwiRj0OJ5VwDvTDPamb1fxJTDNZ4OLpyrc6B4XIYJ2G1RIHK15Xy+a0L15Xtv0x5GzGRu8QZoxzo7UGUwseUng=
-X-Received: by 2002:aca:b3d6:: with SMTP id c205mr12152720oif.67.1579809941388;
- Thu, 23 Jan 2020 12:05:41 -0800 (PST)
+        bh=YSbU1uqjZPOEO1Y+Gw50u5Z+ggq+k7efj1RntkA3E9U=;
+        b=sijKP5MqIl7cIWeFlkKuQFGH8SzwsbHGapcRYkoX488ENQCXwaQ+s3nTpvXedJNe4+
+         yze2pCTw/GXeYZkR4C6QEkmEqvz+7uQufdPowepDgdtQXB2wbQ2/NAr5KfJEB4oZLFCE
+         zNF6CsEzlWcgOpUvrYdTqEec+vkFJK/KmyIJe8d5w0zuHxmJ2SyNGzvg+uXoyLo39WRE
+         fSoYYtnJq+4RKFBYOyoi3hBIsheaikkDy+I9b0KRRFQG01TDeVLUMl/bXCdzky2DIx/N
+         +LM339gSd3a1BOUJ4hKeiXCowGkzZYgvp6f353DigGgvNI8wpbvecJlwohlh31LGMryy
+         sGfw==
+X-Gm-Message-State: APjAAAVyUuQnw+XatPUIozefx+mZAjJT92KTLDO31CDKkbNbT65/18xG
+        LgPWnS3jw59gYPeDP413fdWr5JrsGFPb43mO54Y=
+X-Google-Smtp-Source: APXvYqwVZEiV2fpYrSjwSbTZs5ZwPqLIdvGiJS5S9P+hVVKDiZVc8XR0t8L+g9NhdkwSkiUOIr0hwkAGiQ+sIH7XIxY=
+X-Received: by 2002:ab0:40a3:: with SMTP id i32mr11123232uad.131.1579814935885;
+ Thu, 23 Jan 2020 13:28:55 -0800 (PST)
 MIME-Version: 1.0
-References: <20200115012651.228058-1-almasrymina@google.com>
- <20200115012651.228058-7-almasrymina@google.com> <7ce6d59f-fd73-c529-2ad6-edda9937966d@linux.ibm.com>
-In-Reply-To: <7ce6d59f-fd73-c529-2ad6-edda9937966d@linux.ibm.com>
-From:   Mina Almasry <almasrymina@google.com>
-Date:   Thu, 23 Jan 2020 12:05:30 -0800
-Message-ID: <CAHS8izNmhxja_0+b2DudpXB+1DQfpnjUu+Qak+wnsApgYrvU=Q@mail.gmail.com>
-Subject: Re: [PATCH v10 7/8] hugetlb_cgroup: Add hugetlb_cgroup reservation tests
-To:     Sandipan Das <sandipan@linux.ibm.com>
-Cc:     Mike Kravetz <mike.kravetz@oracle.com>,
-        David Rientjes <rientjes@google.com>,
-        Shakeel Butt <shakeelb@google.com>, shuah <shuah@kernel.org>,
-        Greg Thelen <gthelen@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        open list <linux-kernel@vger.kernel.org>, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org, cgroups@vger.kernel.org,
-        Aneesh Kumar <aneesh.kumar@linux.vnet.ibm.com>
+References: <20200118000128.15746-1-matthew.cover@stackpath.com>
+ <5e23c773d7a67_13602b2359ea05b824@john-XPS-13-9370.notmuch>
+ <CAGyo_hrUXWzui9FNiZpNGXjsphSreLEYYm4K7xkp+H+de=QKSA@mail.gmail.com>
+ <CAGyo_hpcO-f9uxQFDfKZNz=1t6Yux+LzxN1qLHKf6PXMAtWQ-w@mail.gmail.com> <360a11cd-2c41-159e-b92a-c7c1ec42767f@iogearbox.net>
+In-Reply-To: <360a11cd-2c41-159e-b92a-c7c1ec42767f@iogearbox.net>
+From:   Matt Cover <werekraken@gmail.com>
+Date:   Thu, 23 Jan 2020 14:28:43 -0700
+Message-ID: <CAGyo_hotjxvaWjL1VV4VMSviZcLMSmO8UQcVJFW_nV8=RTGNsQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next] bpf: add bpf_ct_lookup_{tcp,udp}() helpers
+To:     Daniel Borkmann <daniel@iogearbox.net>
+Cc:     John Fastabend <john.fastabend@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        Andrii Nakryiko <andriin@fb.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Shuah Khan <shuah@kernel.org>,
+        Jakub Kicinski <jakub.kicinski@netronome.com>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Jakub Sitnicki <jakub@cloudflare.com>,
+        Quentin Monnet <quentin.monnet@netronome.com>,
+        Matthew Cover <matthew.cover@stackpath.com>,
+        Stanislav Fomichev <sdf@google.com>,
+        Andrey Ignatov <rdna@fb.com>,
+        Lorenz Bauer <lmb@cloudflare.com>,
+        Jiong Wang <jiong.wang@netronome.com>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Jan 23, 2020 at 1:15 AM Sandipan Das <sandipan@linux.ibm.com> wrote:
+On Mon, Jan 20, 2020 at 2:11 PM Daniel Borkmann <daniel@iogearbox.net> wrote:
 >
-> For powerpc64, either 16MB/16GB or 2MB/1GB huge pages are supported depending
-> on the MMU type (Hash or Radix). I was just running these tests on a powerpc64
-> system with Hash MMU and ran into problems because the tests assume that the
-> hugepage size is always 2MB. Can you determine the huge page size at runtime?
+> On 1/20/20 9:10 PM, Matt Cover wrote:
+> > On Mon, Jan 20, 2020 at 11:11 AM Matt Cover <werekraken@gmail.com> wrote:
+> >> On Sat, Jan 18, 2020 at 8:05 PM John Fastabend <john.fastabend@gmail.com> wrote:
+> >>> Matthew Cover wrote:
+> >>>> Allow looking up an nf_conn. This allows eBPF programs to leverage
+> >>>> nf_conntrack state for similar purposes to socket state use cases,
+> >>>> as provided by the socket lookup helpers. This is particularly
+> >>>> useful when nf_conntrack state is locally available, but socket
+> >>>> state is not.
+> >>>>
+> >>>> Signed-off-by: Matthew Cover <matthew.cover@stackpath.com>
+> >>>> ---
+> >>>
+> >>> Couple coding comments below. Also looks like a couple build errors
+> >>> so fix those up. I'm still thinking over this though.
+> >>
+> >> Thank you for taking the time to look this over. I will be looking
+> >> into the build issues.
+> >
+> > Looks like I missed static inline on a couple functions when
+> > nf_conntrack isn't builtin. I'll include the fix in v2.
 >
+> One of the big issues I'd see with this integration is that literally no-one
+> will be able to use it unless they manually recompile their distro kernel with
+> ct as builtin instead of module .. Have you considered writing a tcp/udp ct in
+> plain bpf? Perhaps would make sense to have some sort of tools/lib/bpf/util/
+> with bpf prog library code that can be included.
 
-Absolutely. Let me try to reproduce this failure and it should be
-fixed in the next patchset version.
+Daniel, sorry, I missed addressing your second point in my previous
+response. I agree that plain bpf ct is of interest. However, I still
+see value in these helpers, particularly when nf_conntrack is
+already in use. Reuse of info already in nf_conntrack avoids the
+memory cost of another ct table.
