@@ -2,46 +2,46 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 466AE146ED1
-	for <lists+linux-kselftest@lfdr.de>; Thu, 23 Jan 2020 17:59:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 617C8146EDB
+	for <lists+linux-kselftest@lfdr.de>; Thu, 23 Jan 2020 18:00:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729701AbgAWQ7s (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 23 Jan 2020 11:59:48 -0500
-Received: from mail-wr1-f68.google.com ([209.85.221.68]:38704 "EHLO
-        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729787AbgAWQ7q (ORCPT
+        id S1729838AbgAWQ7y (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 23 Jan 2020 11:59:54 -0500
+Received: from mail-wr1-f65.google.com ([209.85.221.65]:41350 "EHLO
+        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729774AbgAWQ7t (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 23 Jan 2020 11:59:46 -0500
-Received: by mail-wr1-f68.google.com with SMTP id y17so3919343wrh.5
-        for <linux-kselftest@vger.kernel.org>; Thu, 23 Jan 2020 08:59:45 -0800 (PST)
+        Thu, 23 Jan 2020 11:59:49 -0500
+Received: by mail-wr1-f65.google.com with SMTP id c9so3897925wrw.8
+        for <linux-kselftest@vger.kernel.org>; Thu, 23 Jan 2020 08:59:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=cloudflare.com; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=Rb1rNawttqyIkUsUxmbdc0uUxGiYj0dD/f72ioJC76k=;
-        b=yLHzEv+AA8o4f/7cdOhZQV9l/CveX4Eviz1ROxUOGNJOdZWLcO87ssprX/3wmIjbDT
-         TbhDAlrWrjcsK7Dt3y3V6ndEobcs4+OSePOc9/42fr8PvzJXcGnCyU+jetwxkNVnV/2K
-         xyK5BE3E246zlrUr2HyFhrEi9TGkza4umntkE=
+        bh=lzJSOoo0RY3SkOVg99jXaD0hCIShOjvh87S5WEoUKHA=;
+        b=rmcV1F+uEgQl1C9Bw8jxZiHVIX5+T5T3sxYSgR7I6GG/JUWe0M8tWN2DUqqzWdoYgX
+         N2B0KivXpJcrI72myxxmd5mlC6uuOjeJuGV48CFZb+1C4xJ7slk65KxrEZJDZHcr+vJB
+         gTkFp0ARrz5plhGXPSwjmnDPxsDwOS9CKDuE8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=Rb1rNawttqyIkUsUxmbdc0uUxGiYj0dD/f72ioJC76k=;
-        b=FrRC/RX6x1X76De/h4wE3kEEFm7x8fNKCQunqtRTMhh9G9flm+rSSmSF7pS8m+Re/H
-         kMK/HtauUtT6bhO9zd7Rbryb65s0COS0UBgjz15gHZjFlNGRhqaiAQEdplhzcfDB48xH
-         bbTPei9fIRlzARWjja8VVYLkUYvRHRqgr7XEKtOsswt0rWEDnrIg0xeg1mvyXZ8jk0u0
-         uQbBVc5blBSTmbaFiE2IDQIyHnsNbfTFs3L3r8oti9I2w+q1q2ArWYVgrKMMpW2fl9KV
-         ATekaTnJAnYGXzuoKkGfaGr81SIwp2K8Sp9W645wXacWshnbHYYcY5P3k0HD3SkmKorg
-         5xQg==
-X-Gm-Message-State: APjAAAWPXSxFBLamsRqh8cSkBO8MGU5rBzNzP1TY0+z6CPj3vpWMlj4m
-        Nxy6xb3xdGLFMQZq2p/YTuJGAw==
-X-Google-Smtp-Source: APXvYqw5qClXvS6LvBmbFphDEZ37bZMMug7AGHXZjJYQNS1WAbdkaa7R9cQ+mSce0KsrQyAnYJTSYQ==
-X-Received: by 2002:adf:81c2:: with SMTP id 60mr18243517wra.8.1579798785202;
-        Thu, 23 Jan 2020 08:59:45 -0800 (PST)
+        bh=lzJSOoo0RY3SkOVg99jXaD0hCIShOjvh87S5WEoUKHA=;
+        b=AM7LW5YZRoVePNJz/aZp9eG/sE0GVH41TLo4OMW6LU0TDT+w7iwzCFxHBGXgqLSovo
+         uk01sPq6fhc/4egtekSmo89eeWtPSlGToY3LKIkwqgyhmQiSOEM3p1soJJOU13H4irkj
+         c4l5OHs6YJ7DZ5Tw/NzeEW4xxylThAZLYXPkf1RVhRkvkuXhELVhg7E26AUHNVbRXEIu
+         jHZ0AltQUnFk5s/kX+j6n/DDnMjki8qJ68lNkv4QRuqtnAn4EnkDJFh1c4tMRWP9hi7c
+         6OSUN3ZlXcFDvifKdmV/ot09VGnGW2Gkm/awPvQ29rtYWxLfJC0UAOAkhFSgb6PmI9lc
+         oWkw==
+X-Gm-Message-State: APjAAAXaRCRERg95mIbsAeo8ILUj2fVqsMjrDjqumDXT/LWPBjdX68Fy
+        THIS16o2IuomLrFJ8xuQ2rQm1vuzBGIZUA==
+X-Google-Smtp-Source: APXvYqznD+zC0q/A4MhGzomvxakH4li9R6cnks1twXRbQNsnspUm7dxAarVtPVqc3Z3Kl1zIo2bzig==
+X-Received: by 2002:adf:fc03:: with SMTP id i3mr18956626wrr.306.1579798787004;
+        Thu, 23 Jan 2020 08:59:47 -0800 (PST)
 Received: from localhost.localdomain ([2a06:98c0:1000:8250:d0a9:6cca:1210:a574])
-        by smtp.gmail.com with ESMTPSA id u1sm3217698wmc.5.2020.01.23.08.59.43
+        by smtp.gmail.com with ESMTPSA id u1sm3217698wmc.5.2020.01.23.08.59.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Jan 2020 08:59:44 -0800 (PST)
+        Thu, 23 Jan 2020 08:59:46 -0800 (PST)
 From:   Lorenz Bauer <lmb@cloudflare.com>
 To:     Shuah Khan <shuah@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
@@ -51,9 +51,9 @@ To:     Shuah Khan <shuah@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
 Cc:     Lorenz Bauer <lmb@cloudflare.com>, linux-kselftest@vger.kernel.org,
         netdev@vger.kernel.org, bpf@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH bpf 3/4] selftests: bpf: make reuseport test output more legible
-Date:   Thu, 23 Jan 2020 16:59:32 +0000
-Message-Id: <20200123165934.9584-4-lmb@cloudflare.com>
+Subject: [PATCH bpf 4/4] selftests: bpf: reset global state between reuseport test runs
+Date:   Thu, 23 Jan 2020 16:59:33 +0000
+Message-Id: <20200123165934.9584-5-lmb@cloudflare.com>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20200123165934.9584-1-lmb@cloudflare.com>
 References: <20200123165934.9584-1-lmb@cloudflare.com>
@@ -64,68 +64,42 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Include the name of the mismatching result in human readable format
-when reporting an error. The new output looks like the following:
+Currently, there is a lot of false positives if a single reuseport test
+fails. This is because expected_results and the result map are not cleared.
 
-  unexpected result
-   result: [1, 0, 0, 0, 0, 0]
-  expected: [0, 0, 0, 0, 0, 0]
-  mismatch on DROP_ERR_INNER_MAP (bpf_prog_linum:153)
-  check_results:FAIL:382
+Zero both after individual test runs, which fixes the mentioned false
+positives.
 
 Signed-off-by: Lorenz Bauer <lmb@cloudflare.com>
 ---
- .../bpf/prog_tests/select_reuseport.c         | 30 ++++++++++++++++---
- 1 file changed, 26 insertions(+), 4 deletions(-)
+ .../selftests/bpf/prog_tests/select_reuseport.c    | 14 +++++++++++++-
+ 1 file changed, 13 insertions(+), 1 deletion(-)
 
 diff --git a/tools/testing/selftests/bpf/prog_tests/select_reuseport.c b/tools/testing/selftests/bpf/prog_tests/select_reuseport.c
-index 2c37ae7dc214..09a536af139a 100644
+index 09a536af139a..0bab8b1ca1c3 100644
 --- a/tools/testing/selftests/bpf/prog_tests/select_reuseport.c
 +++ b/tools/testing/selftests/bpf/prog_tests/select_reuseport.c
-@@ -316,6 +316,28 @@ static void check_data(int type, sa_family_t family, const struct cmd *cmd,
- 		       expected.len, result.len, get_linum());
- }
+@@ -699,7 +699,19 @@ static void setup_per_test(int type, sa_family_t family, bool inany,
  
-+static const char *result_to_str(enum result res)
-+{
-+	switch (res) {
-+	case DROP_ERR_INNER_MAP:
-+		return "DROP_ERR_INNER_MAP";
-+	case DROP_ERR_SKB_DATA:
-+		return "DROP_ERR_SKB_DATA";
-+	case DROP_ERR_SK_SELECT_REUSEPORT:
-+		return "DROP_ERR_SK_SELECT_REUSEPORT";
-+	case DROP_MISC:
-+		return "DROP_MISC";
-+	case PASS:
-+		return "PASS";
-+	case PASS_ERR_SK_SELECT_REUSEPORT:
-+		return "PASS_ERR_SK_SELECT_REUSEPORT";
-+	case NR_RESULTS:
-+		return "NR_RESULTS";
-+	default:
-+		return "UNKNOWN";
-+	}
-+}
-+
- static void check_results(void)
+ static void cleanup_per_test(bool no_inner_map)
  {
- 	__u32 results[NR_RESULTS];
-@@ -351,10 +373,10 @@ static void check_results(void)
- 		printf(", %u", expected_results[i]);
- 	printf("]\n");
- 
--	RET_IF(expected_results[broken] != results[broken],
--	       "unexpected result",
--	       "expected_results[%u] != results[%u] bpf_prog_linum:%ld\n",
--	       broken, broken, get_linum());
-+	printf("mismatch on %s (bpf_prog_linum:%ld)\n", result_to_str(broken),
-+	       get_linum());
+-	int i, err;
++	int i, err, zero = 0;
 +
-+	CHECK_FAIL(true);
- }
++	memset(expected_results, 0, sizeof(expected_results));
++
++	for (i = 0; i < NR_RESULTS; i++) {
++		err = bpf_map_update_elem(result_map, &i, &zero, BPF_ANY);
++		RET_IF(err, "reset elem in result_map",
++		       "i:%u err:%d errno:%d\n", i, err, errno);
++	}
++
++	err = bpf_map_update_elem(linum_map, &zero, &zero, BPF_ANY);
++	RET_IF(err, "reset line number in linum_map", "err:%d errno:%d\n",
++	       err, errno);
  
- static int send_data(int type, sa_family_t family, void *data, size_t len,
+ 	for (i = 0; i < REUSEPORT_ARRAY_SIZE; i++)
+ 		close(sk_fds[i]);
 -- 
 2.20.1
 
