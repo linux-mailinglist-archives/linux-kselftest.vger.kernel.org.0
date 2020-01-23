@@ -2,53 +2,54 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 034201473FF
-	for <lists+linux-kselftest@lfdr.de>; Thu, 23 Jan 2020 23:45:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 82BC2147413
+	for <lists+linux-kselftest@lfdr.de>; Thu, 23 Jan 2020 23:55:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729433AbgAWWpz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 23 Jan 2020 17:45:55 -0500
-Received: from mail-pl1-f195.google.com ([209.85.214.195]:33880 "EHLO
-        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729423AbgAWWpz (ORCPT
+        id S1729546AbgAWWzH (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 23 Jan 2020 17:55:07 -0500
+Received: from mail-pj1-f68.google.com ([209.85.216.68]:40068 "EHLO
+        mail-pj1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729324AbgAWWzH (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 23 Jan 2020 17:45:55 -0500
-Received: by mail-pl1-f195.google.com with SMTP id q13so1273472pls.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 23 Jan 2020 14:45:54 -0800 (PST)
+        Thu, 23 Jan 2020 17:55:07 -0500
+Received: by mail-pj1-f68.google.com with SMTP id bg7so155113pjb.5
+        for <linux-kselftest@vger.kernel.org>; Thu, 23 Jan 2020 14:55:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=lDS+3WSPujoShC7doDseBAcn2qbrDXuKgW17o9svkCE=;
-        b=cHIAbkjiGYyGWlr3Qz9vajplT0PI/Z+8Fu/987ccE+I6XbK1j4skJ2XgVqKVyg0WCE
-         ExvFumHeQgiYha4XHUjAOLhyreLsvwM4jgACWap39lK/AWGFloVw4Hr5STe9eoFyCWUc
-         I/+yqinWGOTw/eo9zFj3l98TQryNcCi7uFIjGzyqFr3N70b0pQqrLd6TzhugV5MwVXId
-         TYgVR9BKfj5YodqfA9q20jXt0V8aXLDs8mY8TxdF9GpDTG8MsOxUgdFSjrwLlM6GvNO/
-         sBf/y2aQhew8mrLgtCJYyOsHpz8+lKJkco0uulnwq9ln9kwGFrnE61XkMVvKfbxUedwL
-         slzQ==
+        bh=bdR2VIngUyNsUGbPsP+UPl746ALnDu+ORGiYpHLsy/M=;
+        b=JYMcOHTdAKO6qaAxt2V6dRl499d2oCBChvSKIPRVWm/EJYVbbKZob8zLiyhHlveyrk
+         p+KvC/twgDmyuyPk4TqU6B4LjpV3xHxY03utbDuKBU6lhgSNxvHuoSu/JTiR4cyLZ6rk
+         9oVRRwxoX2c6oxsLLaLz9PYzd4kpQQiuYN/K2ecvoS766fFWpFNMIEYDHx8ebGAd0eir
+         OkwhLZFL4pUC0U41ljkGgZ3MUEvNQwNCk8ilet4PeJDEIZLq3ZN9SZjBVSSWs1j8sh6g
+         1mBUxNyR5Zd+s2FiiiY/8Ss9qP69I2CyNbfhQxwnpP4ttaB+8MrwJ4bst6KAhAUDRkCJ
+         7qUw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=lDS+3WSPujoShC7doDseBAcn2qbrDXuKgW17o9svkCE=;
-        b=C6EAqLZYYrpybZePjkrGnecHkIU9eCn64KAllcEpukCokzKD2/nRIE53YOEWgsRheK
-         aXEhxuNGGiilORRhL4t31oi118jFbxtrxIuPMLjfOYDWnzTqIjBr1zYa9bH9sM+mMnr6
-         Mcf4LdMarYWg+StjGJknKxUro0flsSwAMc00QphNWBzgivTP0Ccv8DiOBPmV0bFXe3Os
-         XmfWYVPES20/2/MCILIrMt5wqTwXaQaRcwks39NUzAkIsELkPp3FpSNTru0inztGsgtq
-         8Qcor6BnK4AlXOBqb/MX3ITDqL/GkeX/KN8SqtN6Htljq4wLwRS293IIBlsnvGswGB0K
-         zUyg==
-X-Gm-Message-State: APjAAAVWnQJOn/CMcle2Iepauf9BTQh+CBnHkvtMTLttsTnnrpRCI8EO
-        3RqBn0gBXrTVhgXolPn72CIXDkTUhI2Ihd03lM53Zg==
-X-Google-Smtp-Source: APXvYqw7Z3x2noRBQ2heUDMAvH6d/E7XrpibeDUNwqhuI6EQkiajmtzVh7BryjyvfCVGWCPH76TTKcMb42RHhJibjjc=
-X-Received: by 2002:a17:902:9f98:: with SMTP id g24mr393688plq.325.1579819554213;
- Thu, 23 Jan 2020 14:45:54 -0800 (PST)
+        bh=bdR2VIngUyNsUGbPsP+UPl746ALnDu+ORGiYpHLsy/M=;
+        b=ueDyNl832QLKIHwKDpQa5AoxIfUWrkVn7YAqf59BHLAn0AVbpKAJKoLaj25YZjIOIA
+         jbHgxDjK5pqeMa5vx01cysdlMRy+UTOrfXZxwWN/YHpccJ1tpJhHIRil0UuzlHC+KlTz
+         LP8uIqAe0+G5OmwZhHkNWht5t3ZHu35OSQP1fT4H9zw+5L6mZvSDM5W3gTFmZPrTcBkb
+         Dl18jKbsaseJ4LfuaR2mpPBkkpoaDEajpVIaZtUV6N4+E8Ke4L3rTXQPEEcT668Mo7DJ
+         cRVYd7ppVXLGP81QLjgY/lj6JQq+n8Hf23a10RcJdSEfQh3rwtOLIVz6ch0I9oZTgNn9
+         Oziw==
+X-Gm-Message-State: APjAAAW+AQc3ILD2FELbnKtvHVFVSAZ0GozEUwXpLN2ApYFjNclLe4Kz
+        698+XHGr/itYzKPULalyYUjPB2ptIHJ8HHWqOoiXpw==
+X-Google-Smtp-Source: APXvYqzdbpR7pO8euiReITGLrsk+/Oy+gyJrt9hmrf3x4sUM9Laf+reGcryH8NHCxinjRW4t04WOyzPtBwugde0z+ec=
+X-Received: by 2002:a17:902:9f98:: with SMTP id g24mr423318plq.325.1579820106653;
+ Thu, 23 Jan 2020 14:55:06 -0800 (PST)
 MIME-Version: 1.0
 References: <20191216220555.245089-1-brendanhiggins@google.com>
- <20191216220555.245089-5-brendanhiggins@google.com> <20191217075836.C76942072D@mail.kernel.org>
-In-Reply-To: <20191217075836.C76942072D@mail.kernel.org>
+ <20191216220555.245089-4-brendanhiggins@google.com> <20191217080408.0E805207FF@mail.kernel.org>
+In-Reply-To: <20191217080408.0E805207FF@mail.kernel.org>
 From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Thu, 23 Jan 2020 14:45:43 -0800
-Message-ID: <CAFd5g47=FxbKtm9rA3zKvnipdTdP_VR8zJ3pad-QukL5Ottrjw@mail.gmail.com>
-Subject: Re: [RFC v1 4/6] init: main: add KUnit to kernel init
+Date:   Thu, 23 Jan 2020 14:54:55 -0800
+Message-ID: <CAFd5g44Wh9kwXsY_M4GfMp0+wzN_3HhVfa360J-tF48aQ_KADg@mail.gmail.com>
+Subject: Re: [RFC v1 3/6] kunit: test: create a single centralized executor
+ for all tests
 To:     Stephen Boyd <sboyd@kernel.org>
 Cc:     Andrew Morton <akpm@linux-foundation.org>,
         Alan Maguire <alan.maguire@oracle.com>,
@@ -75,45 +76,104 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Sorry for the late reply. I sent this thinking I would check in over
-vacation, and then didn't.
-
-On Mon, Dec 16, 2019 at 11:58 PM Stephen Boyd <sboyd@kernel.org> wrote:
+On Tue, Dec 17, 2019 at 12:04 AM Stephen Boyd <sboyd@kernel.org> wrote:
 >
-> Quoting Brendan Higgins (2019-12-16 14:05:53)
-> > Remove KUnit from init calls entirely, instead call directly from
-> > kernel_init().
+> Quoting Brendan Higgins (2019-12-16 14:05:52)
+> > diff --git a/include/kunit/test.h b/include/kunit/test.h
+> > index dba48304b3bd3..c070798ebb765 100644
+> > --- a/include/kunit/test.h
+> > +++ b/include/kunit/test.h
+> > @@ -217,11 +217,8 @@ int kunit_run_tests(struct kunit_suite *suite);
+> >   * everything else is definitely initialized.
+> >   */
+> >  #define kunit_test_suite(suite)                                                       \
+> > -       static int kunit_suite_init##suite(void)                               \
 >
-> Yes, but why? Is it desired to run the unit tests earlier than opening
-> the console or something?
+> Oh this should have been __init before.
 
-I want to make sure it is called after late_init is done (so that you
-can test things initialized in late_init). And I want to make sure it
-runs before init*fs is loaded so that there is a mechanism to run
-tests without having to put a userland together.
+No, the stuff in this patch shouldn't be init. With the work that Alan
+has been doing (adding support for modules, debugfs); the test code
+can run after booting, so init in any of this code is incorrect.
 
-> > diff --git a/lib/kunit/executor.c b/lib/kunit/executor.c
-> > index 978086cfd257d..ca880224c0bab 100644
-> > --- a/lib/kunit/executor.c
-> > +++ b/lib/kunit/executor.c
-> > @@ -32,12 +32,10 @@ static bool kunit_run_all_tests(void)
-> >         return !has_test_failed;
-> >  }
+> > -       {                                                                      \
+> > -               return kunit_run_tests(&suite);                                \
+> > -       }                                                                      \
+> > -       late_initcall(kunit_suite_init##suite)
+> > +       static struct kunit_suite *__kunit_suite_##suite                       \
+> > +       __used __aligned(8) __section(.kunit_test_suites) = &suite
 > >
-> > -static int kunit_executor_init(void)
-> > +int kunit_executor_init(void)
+> >  /*
+> >   * Like kunit_alloc_resource() below, but returns the struct kunit_resource
+> > diff --git a/lib/kunit/executor.c b/lib/kunit/executor.c
+> > new file mode 100644
+> > index 0000000000000..978086cfd257d
+> > --- /dev/null
+> > +++ b/lib/kunit/executor.c
+> > @@ -0,0 +1,43 @@
+> > +// SPDX-License-Identifier: GPL-2.0
+> > +/*
+> > + * Base unit test (KUnit) API.
+> > + *
+> > + * Copyright (C) 2019, Google LLC.
+> > + * Author: Brendan Higgins <brendanhiggins@google.com>
+> > + */
+> > +
+> > +#include <linux/init.h>
+> > +#include <linux/printk.h>
+> > +#include <kunit/test.h>
+> > +
+> > +/*
+> > + * These symbols point to the .kunit_test_suites section and are defined in
+> > + * include/asm-generic/vmlinux.lds.h, and consequently must be extern.
+> > + */
+> > +extern struct kunit_suite *__kunit_suites_start[];
+> > +extern struct kunit_suite *__kunit_suites_end[];
+> > +
+> > +static bool kunit_run_all_tests(void)
 >
-> Should be marked __init? Even before this patch presumably.
+> Should be __init?
 
-Just this function? No strong opinion.
+It could be, I think. Alan's code doesn't call this, so for now we
+might as well make it __init.
 
-If by "before this patch" you mean other stuff in this patchset?
+> > +{
+> > +       struct kunit_suite **suite;
+>
+> Can this be const? And the linker references above too?
 
-> >  {
-> >         if (kunit_run_all_tests())
-> >                 return 0;
-> >         else
-> >                 return -EFAULT;
-> >  }
-> > -
-> > -late_initcall(kunit_executor_init);
+Good catch. Will fix.
+
+> > +       bool has_test_failed = false;
+> > +
+> > +       for (suite = __kunit_suites_start;
+> > +            suite < __kunit_suites_end;
+> > +            ++suite) {
+> > +               if (kunit_run_tests(*suite))
+> > +                       has_test_failed = true;
+> > +       }
+> > +
+> > +       return !has_test_failed;
+> > +}
+> > +
+> > +static int kunit_executor_init(void)
+>
+> Should be __init?
+
+Will do.
+
+> > +{
+> > +       if (kunit_run_all_tests())
+> > +               return 0;
+> > +       else
+> > +               return -EFAULT;
+>
+> Why two functions instead of just one that is the target of the
+> late_initcall? Nitpick: deindent that last return and take it out of the
+> else.
+
+Yeah, it probably makes more sense to just call kunit_run_all_tests
+and have it return an int.
+
+> > +}
+> > +
+> > +late_initcall(kunit_executor_init);
