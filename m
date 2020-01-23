@@ -2,100 +2,96 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 337E814643B
-	for <lists+linux-kselftest@lfdr.de>; Thu, 23 Jan 2020 10:15:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D560146BA9
+	for <lists+linux-kselftest@lfdr.de>; Thu, 23 Jan 2020 15:47:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726260AbgAWJPr (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 23 Jan 2020 04:15:47 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:55206 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1725785AbgAWJPr (ORCPT
+        id S1729008AbgAWOrr (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 23 Jan 2020 09:47:47 -0500
+Received: from aserp2120.oracle.com ([141.146.126.78]:47582 "EHLO
+        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727235AbgAWOro (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 23 Jan 2020 04:15:47 -0500
-Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 00N9CkBs104384
-        for <linux-kselftest@vger.kernel.org>; Thu, 23 Jan 2020 04:15:45 -0500
-Received: from e06smtp05.uk.ibm.com (e06smtp05.uk.ibm.com [195.75.94.101])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 2xp93qn587-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-kselftest@vger.kernel.org>; Thu, 23 Jan 2020 04:15:45 -0500
-Received: from localhost
-        by e06smtp05.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-kselftest@vger.kernel.org> from <sandipan@linux.ibm.com>;
-        Thu, 23 Jan 2020 09:15:43 -0000
-Received: from b06cxnps4076.portsmouth.uk.ibm.com (9.149.109.198)
-        by e06smtp05.uk.ibm.com (192.168.101.135) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Thu, 23 Jan 2020 09:15:38 -0000
-Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 00N9FbuE41353368
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 23 Jan 2020 09:15:37 GMT
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 831D14C040;
-        Thu, 23 Jan 2020 09:15:37 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 90CD54C04A;
-        Thu, 23 Jan 2020 09:15:35 +0000 (GMT)
-Received: from [9.124.35.38] (unknown [9.124.35.38])
-        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Thu, 23 Jan 2020 09:15:35 +0000 (GMT)
-Subject: Re: [PATCH v10 7/8] hugetlb_cgroup: Add hugetlb_cgroup reservation
- tests
-To:     Mina Almasry <almasrymina@google.com>
-Cc:     mike.kravetz@oracle.com, rientjes@google.com, shakeelb@google.com,
-        shuah@kernel.org, gthelen@google.com, akpm@linux-foundation.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org, cgroups@vger.kernel.org,
-        aneesh.kumar@linux.vnet.ibm.com
-References: <20200115012651.228058-1-almasrymina@google.com>
- <20200115012651.228058-7-almasrymina@google.com>
-From:   Sandipan Das <sandipan@linux.ibm.com>
-Date:   Thu, 23 Jan 2020 14:45:34 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.1
-MIME-Version: 1.0
-In-Reply-To: <20200115012651.228058-7-almasrymina@google.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-x-cbid: 20012309-0020-0000-0000-000003A33EF7
-X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 20012309-0021-0000-0000-000021FAD787
-Message-Id: <7ce6d59f-fd73-c529-2ad6-edda9937966d@linux.ibm.com>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.572
- definitions=2020-01-23_01:2020-01-23,2020-01-22 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 bulkscore=0
- lowpriorityscore=0 malwarescore=0 mlxlogscore=996 suspectscore=0
- impostorscore=0 priorityscore=1501 phishscore=0 adultscore=0 clxscore=1015
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-1910280000 definitions=main-2001230079
+        Thu, 23 Jan 2020 09:47:44 -0500
+Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
+        by aserp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id 00NERemS081753;
+        Thu, 23 Jan 2020 14:47:39 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id; s=corp-2019-08-05;
+ bh=VLBXQG3L+vQfzIALTTItUjwrNdTrwGxtWuccZS4MiYE=;
+ b=LiNGUPo1GHT9f9L0wu5LjSFhHy6zHvo6EahYGk3S/r8cdn3gAAkmWglibqW841OpJzH+
+ XEY2/CsHy6bbOQrw10B/mlffnQNZupsqJ8OlkXnYCn0ALtDug2GlbmRtfzCIdhV55Qmb
+ OYxUyl5lLDYxnbyanpIW3nT7i2Vmlfh4plC4AlYiPpdFIX0QQvF6Kq9iuaS2SOasWLTw
+ bx7DQ8zyo4jAtdD/Xe8xFGpI/eBo4FCbEnbC5UAavK/dG1vHNXaMDadJKTSVgkP030U0
+ bjOBSRvLzg+jbxJFQ4ZmZ08F33Dhe66Dp+l7IG3epb4M09tioLHeoEHrHci538C6V6r8 gw== 
+Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
+        by aserp2120.oracle.com with ESMTP id 2xksyqjpsx-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 23 Jan 2020 14:47:39 +0000
+Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
+        by userp3030.oracle.com (8.16.0.27/8.16.0.27) with SMTP id 00NET6kd007769;
+        Thu, 23 Jan 2020 14:47:38 GMT
+Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
+        by userp3030.oracle.com with ESMTP id 2xpq7mw44b-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 23 Jan 2020 14:47:38 +0000
+Received: from abhmp0006.oracle.com (abhmp0006.oracle.com [141.146.116.12])
+        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 00NElWk2001377;
+        Thu, 23 Jan 2020 14:47:32 GMT
+Received: from dhcp-10-175-173-105.vpn.oracle.com (/10.175.173.105)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Thu, 23 Jan 2020 06:47:31 -0800
+From:   Alan Maguire <alan.maguire@oracle.com>
+To:     brendanhiggins@google.com
+Cc:     corbet@lwn.net, linux-kselftest@vger.kernel.org,
+        kunit-dev@googlegroups.com, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Alan Maguire <alan.maguire@oracle.com>
+Subject: [PATCH kunit 0/3] kunit: add debugfs representation to show results/run tests
+Date:   Thu, 23 Jan 2020 14:47:17 +0000
+Message-Id: <1579790840-27009-1-git-send-email-alan.maguire@oracle.com>
+X-Mailer: git-send-email 1.8.3.1
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9508 signatures=668685
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=5 malwarescore=0
+ phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=732
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.0.1-1911140001 definitions=main-2001230124
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9508 signatures=668685
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
+ suspectscore=5 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
+ lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=797 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1911140001
+ definitions=main-2001230124
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi,
+When kunit tests are run on native (i.e. non-UML) environments, the results
+of test execution are often intermixed with dmesg output.  This patch
+series attempts to solve this by providing a debugfs representation
+of the results of the last test run, available as
 
-On 15/01/20 6:56 am, Mina Almasry wrote:
-> The tests use both shared and private mapped hugetlb memory, and
-> monitors the hugetlb usage counter as well as the hugetlb reservation
-> counter. They test different configurations such as hugetlb memory usage
-> via hugetlbfs, or MAP_HUGETLB, or shmget/shmat, and with and without
-> MAP_POPULATE.
-> 
-> Also add test for hugetlb reservation reparenting, since this is
-> a subtle issue.
-> 
-> Signed-off-by: Mina Almasry <almasrymina@google.com>
-> 
+/sys/kernel/debug/kunit/<testsuite>/results
 
-For powerpc64, either 16MB/16GB or 2MB/1GB huge pages are supported depending
-on the MMU type (Hash or Radix). I was just running these tests on a powerpc64
-system with Hash MMU and ran into problems because the tests assume that the
-hugepage size is always 2MB. Can you determine the huge page size at runtime?
+In addition, we provide a way to re-run the tests and show results via
 
+/sys/kernel/debug/kunit/<testsuite>/run
 
-- Sandipan
+Alan Maguire (3):
+  kunit: add debugfs /sys/kernel/debug/kunit/<suite>/results display
+  kunit: add "run" debugfs file to run suites, display results
+  kunit: update documentation to describe debugfs representation
+
+ Documentation/dev-tools/kunit/usage.rst |  20 +++++
+ include/kunit/test.h                    |  21 +++--
+ lib/kunit/Makefile                      |   3 +-
+ lib/kunit/debugfs.c                     | 145 ++++++++++++++++++++++++++++++++
+ lib/kunit/debugfs.h                     |  11 +++
+ lib/kunit/test.c                        |  88 ++++++++++++++-----
+ 6 files changed, 260 insertions(+), 28 deletions(-)
+ create mode 100644 lib/kunit/debugfs.c
+ create mode 100644 lib/kunit/debugfs.h
+
+-- 
+1.8.3.1
 
