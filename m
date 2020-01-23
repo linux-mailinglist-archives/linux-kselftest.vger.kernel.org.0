@@ -2,58 +2,58 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2047B146FA0
-	for <lists+linux-kselftest@lfdr.de>; Thu, 23 Jan 2020 18:27:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0129F147025
+	for <lists+linux-kselftest@lfdr.de>; Thu, 23 Jan 2020 18:57:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727296AbgAWR1B (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 23 Jan 2020 12:27:01 -0500
-Received: from mx0b-00082601.pphosted.com ([67.231.153.30]:59550 "EHLO
-        mx0b-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727022AbgAWR1B (ORCPT
+        id S1729021AbgAWR5G (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 23 Jan 2020 12:57:06 -0500
+Received: from mx0a-00082601.pphosted.com ([67.231.145.42]:12716 "EHLO
+        mx0a-00082601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728760AbgAWR5F (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 23 Jan 2020 12:27:01 -0500
-Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 00NHQ374010702;
-        Thu, 23 Jan 2020 09:26:46 -0800
+        Thu, 23 Jan 2020 12:57:05 -0500
+Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 00NHukcF009571;
+        Thu, 23 Jan 2020 09:56:49 -0800
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
  : date : message-id : references : in-reply-to : content-type : content-id
  : content-transfer-encoding : mime-version; s=facebook;
- bh=w2I/EfgPe4A752+qeGgsLz/FPeYHuUVEhtLy86+W9Ug=;
- b=fjdvtLTljw1eRjoGuv27nXD5ok6Z/YCbHFaE5s+tMfNfigOYWtXAwiAoFgGr7I1yTrbo
- cAccFvu6OzNMcMYFbD01vifsYI/3pYmGiK4ScOefkor73x9jtB0/Iq7Jbd0yu9VH6FRX
- NdDdrLVJfC9QVYbtrJZpxJMSKKn+JJzCqWc= 
-Received: from maileast.thefacebook.com ([163.114.130.16])
-        by mx0a-00082601.pphosted.com with ESMTP id 2xqemegdpx-12
+ bh=JFvD0shaGY2HvJ7Gqrji+2IYQLtSoq+CHdYPM+wq1rQ=;
+ b=A1IhVSZtA8sd/ywtaND8CULVSrLii0Iiios0z9e8tM3S58fpZEiUYNkokcfBjwXuZDec
+ gAtcpsfFGypJ2vie5pa9JBKjCZ2dPVtKjknKrJyWggQKZOH5UNDAeTCZmUrNPZzymfN/
+ ZIKNjeij/7SaLLVJLVUI09z4TKylJ8UWnP8= 
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by mx0a-00082601.pphosted.com with ESMTP id 2xqc881a54-13
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Thu, 23 Jan 2020 09:26:46 -0800
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (100.104.31.183)
- by o365-in.thefacebook.com (100.104.35.175) with Microsoft SMTP Server
+        Thu, 23 Jan 2020 09:56:49 -0800
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (100.104.98.9) by
+ o365-in.thefacebook.com (100.104.94.199) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1779.2; Thu, 23 Jan 2020 09:26:45 -0800
+ 15.1.1779.2; Thu, 23 Jan 2020 09:56:48 -0800
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=hj3ism0YksLuE4quC7t1gJUJCj+cWKoi/xBjyDQA8AlrXnbt0JpnlrtI3mk94drr7u6jmnhsnV0H2kgKL+fKpkz2vf1RGPvRa5MIsAIsMX8GzOM9AgK4rTtw4n32gLiCpQFU0RpdBZBNeOm887AfjI+EKE2c6CZCFG0udVFFvAsa/XTK5EuBPdh95ptArKUmyHoUB4bn4hriJ4NQF5LPQsF7n8FEj4crsrdrhuH5Tk5PaBw5CSitcmRx8Xrxf/CPQ+nU8sOPhtJ2YM/taSDTpbT9QiZVpxOtLqZqWIMjpDqJTYsJ7tSpT72fq3CJVkvcZKKGPq3UunG5D3CF01uBUA==
+ b=QGI5Gz2mXN5HyWQ8uFKRocY5z0vLWMQDgZtxBlo6s+obY9+TTP9fqc26qsCAjI3xjtCOwHRUOg/OmtBolzNtja9Inzlv8XD6eKSxBMa1B00pt4oPlrFpfdvonIcRAZcJ4rumPTlEJpz6fEP9dQLrJi0YgDWvqlepPOlXtI5bFa+6i4adMMS35yxvfK7WNy84/zOtj9q88z2Gu27FQndgSR2AwpTyMPqYc668k4ljOJzc328mjC7EoS8N4GYS7aQ7EZirSgJLF5NNxWyWoB21MO09QyFVBIiPYBHUabXxYv4PchMkDXoJkMJvNhx7wTXf5dVMNBdfgFk1LbOxfX7BIg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=w2I/EfgPe4A752+qeGgsLz/FPeYHuUVEhtLy86+W9Ug=;
- b=Hp6o8Jl0L/FMHw1P60wKOVxAjtLuFh8chvBdKXns7anxpHN1fe2kJDYZUumY/KsjN855a0lOCy4nlkt/UFYr1ZQEDt7IiovMDITyBpkbzEeZxD80Ql26LUa80z66wSfYZni1uLCLQmK0XhYWdFlNttlGgOQ31YLHA07fMM9g0AVJOvigjlj7fT8KvxPeMtjzdbZpoPM+YMeA+1Isbft+oGUWzuxJlkv53kC3VCJa8wdkQPyLUfdlDAq9zscOSXm/0wax3Mbyn6EZOg7R98erNwy+U4s6S1U0YZrHHQcnDOdlRe9kI52bjbQzc4C0c91YzLc3xQovKpuqH5JkMeAKHg==
+ bh=JFvD0shaGY2HvJ7Gqrji+2IYQLtSoq+CHdYPM+wq1rQ=;
+ b=n3GP0RlT9Fshv9Okg4oveQUvMuzQnEOBVKfB6MDnvI/gVswcgxaJjQGdbVLpWQbX4dbncTqlyUJlvJ6t0xoHNMwQxD7AOYTeGir5HZYj65/COR051wgr6o98d2knUSjT2lULmHrSr2IcQJhPZsvD/2DugixtNXHVB10kut1c2JSSkkO3pAnsB5ZdosaEqSsP/P9DEfU33ae+zlqwvNgmqf0LCN/GEF/QyL8NL+nFRt8glWAw+lTMdchb1XwBIVMEToGtf/Mcobg8mcBDxPAyfgLO7tthjLtUPRS3avr4+A3fVAiLLExfSwzk7F1rak0UdqvdWCwPqoP6ate28+AHmQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
  header.d=fb.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.onmicrosoft.com;
  s=selector2-fb-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=w2I/EfgPe4A752+qeGgsLz/FPeYHuUVEhtLy86+W9Ug=;
- b=fkm+ZNPeYjgl15y+x2sYuJthAQ65PKazp7z/uUnC61fmweUammQUkEX1xR23WveiZMGe5hauu7rYVhhFCSBwhVfjetWf2neJTSUtiHA8i2qahlJgVjpFtn1mjONSFa3IaxED5BsBAnfyErOsfrO07bSKw9d9/gnGX5kQ+vYNYR0=
+ bh=JFvD0shaGY2HvJ7Gqrji+2IYQLtSoq+CHdYPM+wq1rQ=;
+ b=bfwm8n350p2bucIrwFhQCbpH7GMf/sWL+fsP+BzQdEBdVLkEULAopdjhDChKD5ibBmaTpwJkAZ+EJm28tkldIMAgcIcCwUxgI3Z8j5gic2hY09i60fg6XoyqoqYVcC3stsTOD/k9/18VPIHUVj+L0Ashfi5RCdg4En5lg0COOhE=
 Received: from MN2PR15MB3213.namprd15.prod.outlook.com (20.179.21.76) by
- MN2PR15MB2672.namprd15.prod.outlook.com (20.179.145.26) with Microsoft SMTP
+ MN2PR15MB2719.namprd15.prod.outlook.com (20.179.146.160) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2644.24; Thu, 23 Jan 2020 17:26:44 +0000
+ 15.20.2644.23; Thu, 23 Jan 2020 17:56:47 +0000
 Received: from MN2PR15MB3213.namprd15.prod.outlook.com
  ([fe80::6d1e:f2f7:d36:a42f]) by MN2PR15MB3213.namprd15.prod.outlook.com
  ([fe80::6d1e:f2f7:d36:a42f%4]) with mapi id 15.20.2644.027; Thu, 23 Jan 2020
- 17:26:44 +0000
-Received: from kafai-mbp.dhcp.thefacebook.com (2620:10d:c090:200::2:d66d) by MWHPR15CA0027.namprd15.prod.outlook.com (2603:10b6:300:ad::13) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2644.19 via Frontend Transport; Thu, 23 Jan 2020 17:25:48 +0000
+ 17:56:47 +0000
+Received: from kafai-mbp.dhcp.thefacebook.com (2620:10d:c090:200::2:d66d) by CO2PR18CA0045.namprd18.prod.outlook.com (2603:10b6:104:2::13) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2665.20 via Frontend Transport; Thu, 23 Jan 2020 17:56:46 +0000
 From:   Martin Lau <kafai@fb.com>
 To:     Lorenz Bauer <lmb@cloudflare.com>
 CC:     Shuah Khan <shuah@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
@@ -64,111 +64,81 @@ CC:     Shuah Khan <shuah@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
         "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
         "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH bpf 3/4] selftests: bpf: make reuseport test output more
- legible
-Thread-Topic: [PATCH bpf 3/4] selftests: bpf: make reuseport test output more
- legible
-Thread-Index: AQHV0g6ItLyq7O8stEG8xWfq7jPWB6f4gCsA
-Date:   Thu, 23 Jan 2020 17:26:44 +0000
-Message-ID: <20200123172544.xjbcgtmaj5g3p6qp@kafai-mbp.dhcp.thefacebook.com>
+Subject: Re: [PATCH bpf 4/4] selftests: bpf: reset global state between
+ reuseport test runs
+Thread-Topic: [PATCH bpf 4/4] selftests: bpf: reset global state between
+ reuseport test runs
+Thread-Index: AQHV0g6SqqQcnu2MV0ypmzGJv4yvkaf4iNUA
+Date:   Thu, 23 Jan 2020 17:56:47 +0000
+Message-ID: <20200123175644.x3j7jhl5owi34fdo@kafai-mbp.dhcp.thefacebook.com>
 References: <20200123165934.9584-1-lmb@cloudflare.com>
- <20200123165934.9584-4-lmb@cloudflare.com>
-In-Reply-To: <20200123165934.9584-4-lmb@cloudflare.com>
+ <20200123165934.9584-5-lmb@cloudflare.com>
+In-Reply-To: <20200123165934.9584-5-lmb@cloudflare.com>
 Accept-Language: en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
-x-clientproxiedby: MWHPR15CA0027.namprd15.prod.outlook.com
- (2603:10b6:300:ad::13) To MN2PR15MB3213.namprd15.prod.outlook.com
+x-clientproxiedby: CO2PR18CA0045.namprd18.prod.outlook.com
+ (2603:10b6:104:2::13) To MN2PR15MB3213.namprd15.prod.outlook.com
  (2603:10b6:208:3d::12)
 x-ms-exchange-messagesentrepresentingtype: 1
 x-originating-ip: [2620:10d:c090:200::2:d66d]
 x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 627b6c0e-a40c-4f6e-71ae-08d7a0294a71
-x-ms-traffictypediagnostic: MN2PR15MB2672:
+x-ms-office365-filtering-correlation-id: a64cff7e-a7b2-4861-06bd-08d7a02d9da2
+x-ms-traffictypediagnostic: MN2PR15MB2719:
 x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <MN2PR15MB2672D94609714551B47314BED50F0@MN2PR15MB2672.namprd15.prod.outlook.com>
+x-microsoft-antispam-prvs: <MN2PR15MB27191905A2F83AC95DE0B941D50F0@MN2PR15MB2719.namprd15.prod.outlook.com>
 x-fb-source: Internal
-x-ms-oob-tlc-oobclassifiers: OLM:6108;
+x-ms-oob-tlc-oobclassifiers: OLM:7219;
 x-forefront-prvs: 029174C036
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(39860400002)(346002)(376002)(366004)(396003)(136003)(189003)(199004)(66946007)(8936002)(16526019)(9686003)(66446008)(66556008)(64756008)(6666004)(186003)(1076003)(66476007)(478600001)(4326008)(2906002)(5660300002)(7696005)(52116002)(55016002)(81156014)(81166006)(8676002)(6916009)(71200400001)(86362001)(54906003)(316002)(6506007);DIR:OUT;SFP:1102;SCL:1;SRVR:MN2PR15MB2672;H:MN2PR15MB3213.namprd15.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(396003)(136003)(376002)(39860400002)(366004)(346002)(189003)(199004)(9686003)(186003)(6506007)(52116002)(16526019)(2906002)(4326008)(7696005)(55016002)(86362001)(4744005)(5660300002)(66476007)(66556008)(64756008)(66946007)(1076003)(66446008)(81166006)(81156014)(8676002)(8936002)(6916009)(54906003)(478600001)(316002)(71200400001);DIR:OUT;SFP:1102;SCL:1;SRVR:MN2PR15MB2719;H:MN2PR15MB3213.namprd15.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
 received-spf: None (protection.outlook.com: fb.com does not designate
  permitted sender hosts)
 x-ms-exchange-senderadcheck: 1
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: MsPbm+IDPJcVkqqF3e+tuc2OLWKfZkUBH9SqURkRnnMedc9WYODOouxiAEh+A4IOI6WwzGHWDVDFEHGnvDAawZXneR+eIurMVuU1plPqg3G2WEAeRvqO5wSkGC8su0lYq94lw8KKurWitPPtr6JRmL0DNsBaxRtFA9OrwabdssGk3VhzDzh+hX5B4o56VLhOPXG6AAzcKEys9pGvEXQ3foES+MEcoZQrZEEpZUePLfebI0qjUGPLNIWwL1BHfOEkScYU46Pi1dhkyZJoigbsHpEQtNqFqa/nqP8FeZQRSJafis0wnIw/tg5mL9WaHlc+AP8cUu4Wu+Ri+tSlT2ZrewY1rG+vCTNjFsLjQ4Hb3DfFn6JR5t2G2oo7jq0k+Yo63SG5LrFOBwY9bczD41nztBqFRYZHuT1mBoMNV6XiRk7mwqXjLlqi0GkTHyeRPK8R
+x-microsoft-antispam-message-info: LCrlu9bZA5ID+161CfQRBUBTJrVhvjYvGPutXunDJ0LuFLDqA/WzmHq0WEZOEC+3xV710JRm8o8AU8SruEojDKWVINTwkFBF4NMaU64ISoTzgPELr04kgUjMCwIc6Ky67LjxiSzw473RASu1Hf3EcY3v4lXSU9nWv4QcVaXT9KGa786irsQ38UTZEp1qxaHAGJc5u1hxHT94i7w0tavOTbrYRCyoj6dKzuT9XLrT0Ebnc3Bi05bcZlantGIdM4Zvm8kYx/ZjUmoQOcN8g7Nb1NgIfgYUI/kn5JEmHC7U25Di7R9Iqx20iSUtkoR10aEpvWM0cRoxxTNX7TvlnHwp5lt++ZHmtbqlruZD1ozwwOeePfYk+8L+pHTFhH6kB0HIQ/J6tzQAVYb1GEqQ7+zgTRtYhLoqXDStyQHPfpSVmAkmk1MeI5hrltdrEOHBlOV/
 Content-Type: text/plain; charset="us-ascii"
-Content-ID: <578FEA970865F14B857C8A40DA8A6E20@namprd15.prod.outlook.com>
+Content-ID: <501BAC2656A9BD4B9D7F9D55BC72CCD5@namprd15.prod.outlook.com>
 Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-Network-Message-Id: 627b6c0e-a40c-4f6e-71ae-08d7a0294a71
-X-MS-Exchange-CrossTenant-originalarrivaltime: 23 Jan 2020 17:26:44.1168
+X-MS-Exchange-CrossTenant-Network-Message-Id: a64cff7e-a7b2-4861-06bd-08d7a02d9da2
+X-MS-Exchange-CrossTenant-originalarrivaltime: 23 Jan 2020 17:56:47.6877
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: Op+g3/03CrlMIP0EycOteCN7QC5dQXTMHvZN4/0iynUFiquKDnh0W0hDqIa7RzTR
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR15MB2672
+X-MS-Exchange-CrossTenant-userprincipalname: /3DhYisfttcQUHTL2uzzM1g1UqWyD+prGxpofRMT8w/OQCyuToQQSwoQnknYlbOp
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR15MB2719
 X-OriginatorOrg: fb.com
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.572
- definitions=2020-01-23_10:2020-01-23,2020-01-23 signatures=0
-X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 bulkscore=0 clxscore=1015
- priorityscore=1501 mlxscore=0 malwarescore=0 lowpriorityscore=0
- mlxlogscore=999 adultscore=0 spamscore=0 suspectscore=0 impostorscore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-1910280000 definitions=main-2001230136
+ definitions=2020-01-23_11:2020-01-23,2020-01-23 signatures=0
+X-Proofpoint-Spam-Details: rule=fb_default_notspam policy=fb_default score=0 mlxlogscore=861
+ spamscore=0 priorityscore=1501 impostorscore=0 suspectscore=0 phishscore=0
+ adultscore=0 lowpriorityscore=0 mlxscore=0 malwarescore=0 bulkscore=0
+ clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-1910280000 definitions=main-2001230139
 X-FB-Internal: deliver
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Jan 23, 2020 at 04:59:32PM +0000, Lorenz Bauer wrote:
-> Include the name of the mismatching result in human readable format
-> when reporting an error. The new output looks like the following:
->=20
->   unexpected result
->    result: [1, 0, 0, 0, 0, 0]
->   expected: [0, 0, 0, 0, 0, 0]
->   mismatch on DROP_ERR_INNER_MAP (bpf_prog_linum:153)
->   check_results:FAIL:382
->=20
-> Signed-off-by: Lorenz Bauer <lmb@cloudflare.com>
-> ---
->  .../bpf/prog_tests/select_reuseport.c         | 30 ++++++++++++++++---
->  1 file changed, 26 insertions(+), 4 deletions(-)
->=20
-> diff --git a/tools/testing/selftests/bpf/prog_tests/select_reuseport.c b/=
-tools/testing/selftests/bpf/prog_tests/select_reuseport.c
-> index 2c37ae7dc214..09a536af139a 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/select_reuseport.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/select_reuseport.c
-> @@ -316,6 +316,28 @@ static void check_data(int type, sa_family_t family,=
- const struct cmd *cmd,
->  		       expected.len, result.len, get_linum());
->  }
-> =20
-> +static const char *result_to_str(enum result res)
-> +{
-> +	switch (res) {
-> +	case DROP_ERR_INNER_MAP:
-> +		return "DROP_ERR_INNER_MAP";
-> +	case DROP_ERR_SKB_DATA:
-> +		return "DROP_ERR_SKB_DATA";
-> +	case DROP_ERR_SK_SELECT_REUSEPORT:
-> +		return "DROP_ERR_SK_SELECT_REUSEPORT";
-> +	case DROP_MISC:
-> +		return "DROP_MISC";
-> +	case PASS:
-> +		return "PASS";
-> +	case PASS_ERR_SK_SELECT_REUSEPORT:
-> +		return "PASS_ERR_SK_SELECT_REUSEPORT";
-> +	case NR_RESULTS:
-This should return "UNKNOWN" also.
+On Thu, Jan 23, 2020 at 04:59:33PM +0000, Lorenz Bauer wrote:
+> Currently, there is a lot of false positives if a single reuseport test
+> fails. This is because expected_results and the result map are not cleare=
+d.
+Ah, right.  An earlier test failure has ripple effect on the following test=
+s.
 
-> +		return "NR_RESULTS";
-> +	default:
-> +		return "UNKNOWN";
-> +	}
-> +}
-> +
+I notice another embarrassing typo.  Can you also make this change in this =
+fix?
+
+-static enum result expected_results[NR_RESULTS];
++static __u32 expected_results[NR_RESULTS];
+
+>=20
+> Zero both after individual test runs, which fixes the mentioned false
+> positives.
+Thanks for the fix!
+
+Acked-by: Martin KaFai Lau <kafai@fb.com>
