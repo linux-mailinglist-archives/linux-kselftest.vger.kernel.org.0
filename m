@@ -2,74 +2,77 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 88B331479EE
-	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Jan 2020 10:01:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DAA8F1479EF
+	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Jan 2020 10:03:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729858AbgAXJBP (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 24 Jan 2020 04:01:15 -0500
-Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:60118 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726294AbgAXJBP (ORCPT
+        id S1729093AbgAXJDP (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 24 Jan 2020 04:03:15 -0500
+Received: from us-smtp-1.mimecast.com ([207.211.31.81]:46117 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726436AbgAXJDP (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 24 Jan 2020 04:01:15 -0500
+        Fri, 24 Jan 2020 04:03:15 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1579856474;
+        s=mimecast20190719; t=1579856593;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=3iYgL1CWdHJApHD8cwe+xbLV8t0PTC6DfEHHLZgVxsM=;
-        b=Xc2fltt1BNIzjzA6mAdd0K2h0EhVy2a4tPUKLCNWtN73vXI29AAGM1ADQxUry5v7bTXAyE
-        1Bm+lCSi80AV91Ta7bll09RRSsqo4ADy5ka+cT8H+KVjN+7iYwYnxiB8EXeP5RcchxkB7l
-        lbLIeL3Tr0WmV/G/bqdaVSN20CW+V34=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-320-z4b7s3fCMc2Le6mAcApwhQ-1; Fri, 24 Jan 2020 04:01:13 -0500
-X-MC-Unique: z4b7s3fCMc2Le6mAcApwhQ-1
-Received: by mail-wm1-f71.google.com with SMTP id s25so374195wmj.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 24 Jan 2020 01:01:12 -0800 (PST)
+        bh=DWQzuLSC9rbGUSX9W5MY+bqvNOnhUYtM5PXQwvcZHL4=;
+        b=ABf0OelnwMfI60h/BmxL/T1f7ByUMYAXRTGTwAtuvztqp4+wKZIf7T1RYNSnzYHL6TaXrQ
+        /frM5xq7gsSVocAX/6e0ZVopi7gfg3fRVZ2boTG4bETfc6dFb8ocDxQuRoQu9JrZWoqcDt
+        n/0lncfe8lVMfv8bDmjjuKVaF4d28XY=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-167-8DpvduoFN1ihLXsZWGbxOw-1; Fri, 24 Jan 2020 04:03:12 -0500
+X-MC-Unique: 8DpvduoFN1ihLXsZWGbxOw-1
+Received: by mail-wm1-f72.google.com with SMTP id y24so410310wmj.8
+        for <linux-kselftest@vger.kernel.org>; Fri, 24 Jan 2020 01:03:11 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=3iYgL1CWdHJApHD8cwe+xbLV8t0PTC6DfEHHLZgVxsM=;
-        b=PZ5rxnNsqcoqf5qsVFHl+0Ptr2V+pm6dftsCMpE+CAYGrE8ZkfFDh9bCM1ZkUFxSSY
-         v0DTVYGjX7DYIfbKZtTIJgwV8adENElWHm13hTUbKPlUgNwNdwDgu5HcngZRrX0YI1cn
-         oTaC7VCSsYaGMsN02ocqqMlOTjbIoKOysk628GVnE5+wkQZu/2WqIBZ70zQGNJIbGWoO
-         FV0L15UAF/VzwnnXasCfMN+Vr0RXlxeM+MT3bqIjesLBavNPsGSZHGd2x8hQKYqNtEPB
-         NtjNhhAMhycQJhwpENUPatqnlAji8Jx34Jzg0uJtiLiPULKaER4yh3bCwmfz85A2fw8Y
-         CMcQ==
-X-Gm-Message-State: APjAAAV8oshPYsQdvojMg5LZ1Yvp7bDlFcdrTAQkOXKMspFd2ZkwG8oC
-        LEUFVxAIT170NhNlshTE6F33FumNR3iz49upI5QQ1lDwTavJOf87sfyVSJq7Q+4kfgsT4IYkgxz
-        U+zdLga5I4yK+guTzoYBlaxezRGTY
-X-Received: by 2002:a5d:534d:: with SMTP id t13mr3188301wrv.77.1579856471900;
-        Fri, 24 Jan 2020 01:01:11 -0800 (PST)
-X-Google-Smtp-Source: APXvYqws2epURdwL6t/bTe5dVjcFY3nad2m4EofmZZVw49VEywdNC8DKGv0/79MbgujGLBtB24Icxg==
-X-Received: by 2002:a5d:534d:: with SMTP id t13mr3188252wrv.77.1579856471547;
-        Fri, 24 Jan 2020 01:01:11 -0800 (PST)
+        bh=DWQzuLSC9rbGUSX9W5MY+bqvNOnhUYtM5PXQwvcZHL4=;
+        b=eOZvreVDAGi/3mfMM1rQdoqXMN4tIJBjjriTnSK029Q3xRAYJyAqbK8kd42isYJoyH
+         w+49jgjTLRuWJXrybCpuSZjZT+ZC6wWCcSPovhWfshRhpG8VKjo6kinbXIsdCW6fPj09
+         c2SFpp/c9VzdofREewt60ADYL/XQm7FakKR9bJ7Ur28SYwNA94JUzVxqaWct+4IGDB9Z
+         My/ElQx+7PUuay1UXt93GVshVhQMpJhQyQ6E+3OoApP4tzpqJVp/qa4OFN4B8i1QzcRc
+         av3QtNuriMccQQW2gGL0+B2f28xZHHzdJ82AJUvj3ixtNXBH5OVP3ltuwO4of0gbf9hg
+         3Xhg==
+X-Gm-Message-State: APjAAAWXFkxAlig7HB0qZ5VmkLvT4GOtsFrcS774CHzbqgDP9rB0TeFn
+        m6htFQ3se3sHTmaOf5msZ0j4r0nYklljNP91Tpx+dkXMwgpfoGnveS1KsiVdw5ZUKsCi0OAX7Nk
+        dmTtLt5yMHOKC0oLnq5uD+nvF/K5X
+X-Received: by 2002:a05:6000:367:: with SMTP id f7mr3012946wrf.174.1579856590911;
+        Fri, 24 Jan 2020 01:03:10 -0800 (PST)
+X-Google-Smtp-Source: APXvYqyaGN3UdvCYTbeY28CNwrJyBQf51wQAGG6tGLv/4g4kU1JLQtjF80zQAsYzfL+f+qFWL+9rYA==
+X-Received: by 2002:a05:6000:367:: with SMTP id f7mr3012903wrf.174.1579856590638;
+        Fri, 24 Jan 2020 01:03:10 -0800 (PST)
 Received: from ?IPv6:2001:b07:6468:f312:b8fe:679e:87eb:c059? ([2001:b07:6468:f312:b8fe:679e:87eb:c059])
-        by smtp.gmail.com with ESMTPSA id s139sm5962936wme.35.2020.01.24.01.01.10
+        by smtp.gmail.com with ESMTPSA id b17sm6672643wrx.15.2020.01.24.01.03.09
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 24 Jan 2020 01:01:11 -0800 (PST)
-Subject: Re: [PATCH v4 10/10] KVM: selftests: Move memslot 0 above KVM
- internal memslots
+        Fri, 24 Jan 2020 01:03:10 -0800 (PST)
+Subject: Re: [PATCH v4 06/10] KVM: selftests: Add support for vcpu_args_set to
+ aarch64 and s390x
 To:     Ben Gardon <bgardon@google.com>, linux-kernel@vger.kernel.org,
         kvm@vger.kernel.org, linux-kselftest@vger.kernel.org
 Cc:     Cannon Matthews <cannonmatthews@google.com>,
         Peter Xu <peterx@redhat.com>,
         Andrew Jones <drjones@redhat.com>,
         Peter Shier <pshier@google.com>,
-        Oliver Upton <oupton@google.com>
+        Oliver Upton <oupton@google.com>,
+        Marc Zyngier <Marc.Zyngier@arm.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Christian Borntraeger <borntraeger@de.ibm.com>
 References: <20200123180436.99487-1-bgardon@google.com>
- <20200123180436.99487-11-bgardon@google.com>
+ <20200123180436.99487-7-bgardon@google.com>
 From:   Paolo Bonzini <pbonzini@redhat.com>
-Message-ID: <aaf2afbb-1613-cc78-8b4f-6a7318acb22a@redhat.com>
-Date:   Fri, 24 Jan 2020 10:01:10 +0100
+Message-ID: <4dbb6d1b-3162-d9b3-4ebb-5e4061776bb6@redhat.com>
+Date:   Fri, 24 Jan 2020 10:03:08 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.1.1
 MIME-Version: 1.0
-In-Reply-To: <20200123180436.99487-11-bgardon@google.com>
+In-Reply-To: <20200123180436.99487-7-bgardon@google.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -78,35 +81,113 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+CCing Marc, Conny and Christian (plus Thomas and Drew who were already
+in the list) for review.
+
+Thanks,
+
+Paolo
+
 On 23/01/20 19:04, Ben Gardon wrote:
-> KVM creates internal memslots between 3 and 4 GiB paddrs on the first
-> vCPU creation. If memslot 0 is large enough it collides with these
-> memslots an causes vCPU creation to fail. Instead of creating memslot 0
-> at paddr 0, start it 4G into the guest physical address space.
+> Currently vcpu_args_set is only implemented for x86. This makes writing
+> tests with multiple vCPUs difficult as each guest vCPU must either a.)
+> do the same thing or b.) derive some kind of unique token from it's
+> registers or the architecture. To simplify the process of writing tests
+> with multiple vCPUs for s390 and aarch64, add set args functions for
+> those architectures.
 > 
 > Signed-off-by: Ben Gardon <bgardon@google.com>
 > ---
->  tools/testing/selftests/kvm/lib/kvm_util.c | 11 +++++++----
->  1 file changed, 7 insertions(+), 4 deletions(-)
-
-This breaks all tests for me:
-
-   $ ./state_test
-   Testing guest mode: PA-bits:ANY, VA-bits:48,  4K pages
-   Guest physical address width detected: 46
-   ==== Test Assertion Failure ====
-  lib/x86_64/processor.c:580: false
-  pid=4873 tid=4873 - Success
-     1	0x0000000000409996: addr_gva2gpa at processor.c:579
-     2	0x0000000000406a38: addr_gva2hva at kvm_util.c:1636
-     3	0x000000000041036c: kvm_vm_elf_load at elf.c:192
-     4	0x0000000000409ea9: vm_create_default at processor.c:829
-     5	0x0000000000400f6f: main at state_test.c:132
-     6	0x00007f21bdf90494: ?? ??:0
-     7	0x0000000000401287: _start at ??:?
-  No mapping for vm virtual address, gva: 0x400000
-
-Memslot 0 should not be too large, so this patch should not be needed.
-
-Paolo
+>  .../selftests/kvm/lib/aarch64/processor.c     | 33 +++++++++++++++++
+>  .../selftests/kvm/lib/s390x/processor.c       | 35 +++++++++++++++++++
+>  2 files changed, 68 insertions(+)
+> 
+> diff --git a/tools/testing/selftests/kvm/lib/aarch64/processor.c b/tools/testing/selftests/kvm/lib/aarch64/processor.c
+> index 86036a59a668e..a2ff90a75f326 100644
+> --- a/tools/testing/selftests/kvm/lib/aarch64/processor.c
+> +++ b/tools/testing/selftests/kvm/lib/aarch64/processor.c
+> @@ -333,3 +333,36 @@ void vm_vcpu_add_default(struct kvm_vm *vm, uint32_t vcpuid, void *guest_code)
+>  {
+>  	aarch64_vcpu_add_default(vm, vcpuid, NULL, guest_code);
+>  }
+> +
+> +/* VM VCPU Args Set
+> + *
+> + * Input Args:
+> + *   vm - Virtual Machine
+> + *   vcpuid - VCPU ID
+> + *   num - number of arguments
+> + *   ... - arguments, each of type uint64_t
+> + *
+> + * Output Args: None
+> + *
+> + * Return: None
+> + *
+> + * Sets the first num function input arguments to the values
+> + * given as variable args.  Each of the variable args is expected to
+> + * be of type uint64_t. The registers set by this function are r0-r7.
+> + */
+> +void vcpu_args_set(struct kvm_vm *vm, uint32_t vcpuid, unsigned int num, ...)
+> +{
+> +	va_list ap;
+> +
+> +	TEST_ASSERT(num >= 1 && num <= 8, "Unsupported number of args,\n"
+> +		    "  num: %u\n",
+> +		    num);
+> +
+> +	va_start(ap, num);
+> +
+> +	for (i = 0; i < num; i++)
+> +		set_reg(vm, vcpuid, ARM64_CORE_REG(regs.regs[num]),
+> +			va_arg(ap, uint64_t));
+> +
+> +	va_end(ap);
+> +}
+> diff --git a/tools/testing/selftests/kvm/lib/s390x/processor.c b/tools/testing/selftests/kvm/lib/s390x/processor.c
+> index 32a02360b1eb0..680f37be9dbc9 100644
+> --- a/tools/testing/selftests/kvm/lib/s390x/processor.c
+> +++ b/tools/testing/selftests/kvm/lib/s390x/processor.c
+> @@ -269,6 +269,41 @@ void vm_vcpu_add_default(struct kvm_vm *vm, uint32_t vcpuid, void *guest_code)
+>  	run->psw_addr = (uintptr_t)guest_code;
+>  }
+>  
+> +/* VM VCPU Args Set
+> + *
+> + * Input Args:
+> + *   vm - Virtual Machine
+> + *   vcpuid - VCPU ID
+> + *   num - number of arguments
+> + *   ... - arguments, each of type uint64_t
+> + *
+> + * Output Args: None
+> + *
+> + * Return: None
+> + *
+> + * Sets the first num function input arguments to the values
+> + * given as variable args.  Each of the variable args is expected to
+> + * be of type uint64_t. The registers set by this function are r2-r6.
+> + */
+> +void vcpu_args_set(struct kvm_vm *vm, uint32_t vcpuid, unsigned int num, ...)
+> +{
+> +	va_list ap;
+> +	struct kvm_regs regs;
+> +
+> +	TEST_ASSERT(num >= 1 && num <= 5, "Unsupported number of args,\n"
+> +		    "  num: %u\n",
+> +		    num);
+> +
+> +	va_start(ap, num);
+> +	vcpu_regs_get(vm, vcpuid, &regs);
+> +
+> +	for (i = 0; i < num; i++)
+> +		regs.gprs[i + 2] = va_arg(ap, uint64_t);
+> +
+> +	vcpu_regs_set(vm, vcpuid, &regs);
+> +	va_end(ap);
+> +}
+> +
+>  void vcpu_dump(FILE *stream, struct kvm_vm *vm, uint32_t vcpuid, uint8_t indent)
+>  {
+>  	struct vcpu *vcpu = vm->vcpu_head;
+> 
 
