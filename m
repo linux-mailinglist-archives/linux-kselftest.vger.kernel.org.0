@@ -2,91 +2,131 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 63576147EFC
-	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Jan 2020 11:49:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E2C2F1483DA
+	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Jan 2020 12:41:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729093AbgAXKtz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 24 Jan 2020 05:49:55 -0500
-Received: from us-smtp-2.mimecast.com ([205.139.110.61]:50513 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1729992AbgAXKty (ORCPT
+        id S2391843AbgAXL34 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 24 Jan 2020 06:29:56 -0500
+Received: from mail-wr1-f65.google.com ([209.85.221.65]:40220 "EHLO
+        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2404121AbgAXL3x (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 24 Jan 2020 05:49:54 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1579862993;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ewCrWzbjd/xfavGLkDFLJZm0rsCoA772YL+6ee+m1Y8=;
-        b=dAE6J2Zm8Wkm61ripTis5QyQfEDc/CHt5LzmlEutB79xi8edYLO23tppFh/zgNXcsWwfYo
-        uFYFv77+K/iZQ5wenOWcqBJXQO0M5iE8SSZaapP+9YhdQ9n0o9XS5IWRTaSYQ5tPlBJ7ai
-        ixffhUtUHb4XUc3fY9hIi6iBS4u3CNE=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-78-M3Hk-twYPbmA3PWUsqo1aQ-1; Fri, 24 Jan 2020 05:49:51 -0500
-X-MC-Unique: M3Hk-twYPbmA3PWUsqo1aQ-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 3A00010CE79E;
-        Fri, 24 Jan 2020 10:49:50 +0000 (UTC)
-Received: from kamzik.brq.redhat.com (unknown [10.43.2.160])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 2C07560BEC;
-        Fri, 24 Jan 2020 10:49:46 +0000 (UTC)
-Date:   Fri, 24 Jan 2020 11:49:43 +0100
-From:   Andrew Jones <drjones@redhat.com>
-To:     Ben Gardon <bgardon@google.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Cannon Matthews <cannonmatthews@google.com>,
-        Peter Xu <peterx@redhat.com>, Peter Shier <pshier@google.com>,
-        Oliver Upton <oupton@google.com>
-Subject: Re: [PATCH v4 07/10] KVM: selftests: Support multiple vCPUs in
- demand paging test
-Message-ID: <20200124104943.6abkjzegmewnoeiv@kamzik.brq.redhat.com>
-References: <20200123180436.99487-1-bgardon@google.com>
- <20200123180436.99487-8-bgardon@google.com>
+        Fri, 24 Jan 2020 06:29:53 -0500
+Received: by mail-wr1-f65.google.com with SMTP id c14so1546791wrn.7
+        for <linux-kselftest@vger.kernel.org>; Fri, 24 Jan 2020 03:29:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cloudflare.com; s=google;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=TKV/95Tqr8ROSRylR8JvM121PLnBe6Qd7B63cuI3StE=;
+        b=qfNpKKm07hnqLiriIGmOr8J8e8KK/BT8LiD/HbKtoVjdqQIg+L8LRXe//9Ho80yqRW
+         7AvncSW3NSitZvir1vo58IpBYDCnD/EtNFepZo3FhkZ0iiHhpaSH/KB/OO9e+S+UblOE
+         8hor5p0V7rrRFpupNxhkSJdagqdnZoRD7wTMI=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=TKV/95Tqr8ROSRylR8JvM121PLnBe6Qd7B63cuI3StE=;
+        b=GSsAhA0A/rG3IarSXtVGxTLOUm3Vb93tgyq3e5SdLwOfXDiHJ+PVVUzek4G04YHvTq
+         6SYxM5kfUApg3B0y7/rQOAKJAUmw5BTxg/jBgtAq3p3MBoFaRu1RRCikMtwDZbb4zPOO
+         l//A7Cwo8vupVlD79UirbBFiQD0i3s5pE9io23M3mFuefaqjQ+g0uzDOEei5DzkWGHv7
+         kkwQS4w9SG1b6AzRzBdcWEf+mpfeSnfGMijGkaHpRzS11WUuHdPLpVuAvdgZQYp+YutQ
+         Ojf2juj/vIFifRoKE6P+DKfSy/toRLyVwpmU/ny6A3LZfHh+S4MHXk7uKmWBelMCk3hY
+         4AiQ==
+X-Gm-Message-State: APjAAAVjC40FfWQmcGT+xnp05odTaGLsmhwGfKiNzI8iYanIdfdu/B0k
+        U9lMVtJm574+ZL8Sr5fjSLy4rQ==
+X-Google-Smtp-Source: APXvYqxbVdXusdBMhELuISik8LOouZ+0LdsP7kXq8h43aLT+jdhkf6tMvHQYoAN1zRAngTNzB02TJg==
+X-Received: by 2002:adf:dfcf:: with SMTP id q15mr3804339wrn.404.1579865392024;
+        Fri, 24 Jan 2020 03:29:52 -0800 (PST)
+Received: from antares.lan (3.a.c.b.c.e.9.a.8.e.c.d.e.4.1.6.f.f.6.2.a.5.a.7.0.b.8.0.1.0.0.2.ip6.arpa. [2001:8b0:7a5a:26ff:614e:dce8:a9ec:bca3])
+        by smtp.gmail.com with ESMTPSA id n189sm6808688wme.33.2020.01.24.03.29.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 24 Jan 2020 03:29:51 -0800 (PST)
+From:   Lorenz Bauer <lmb@cloudflare.com>
+To:     Shuah Khan <shuah@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        Andrii Nakryiko <andriin@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>
+Cc:     Lorenz Bauer <lmb@cloudflare.com>, linux-kselftest@vger.kernel.org,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH bpf-next v2 1/4] selftests: bpf: use a temporary file in test_sockmap
+Date:   Fri, 24 Jan 2020 11:27:51 +0000
+Message-Id: <20200124112754.19664-2-lmb@cloudflare.com>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20200124112754.19664-1-lmb@cloudflare.com>
+References: <20200123165934.9584-1-lmb@cloudflare.com>
+ <20200124112754.19664-1-lmb@cloudflare.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200123180436.99487-8-bgardon@google.com>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
+Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Jan 23, 2020 at 10:04:33AM -0800, Ben Gardon wrote:
-...
-> -static struct kvm_vm *create_vm(enum vm_guest_mode mode, uint32_t vcpuid,
-> -				uint64_t extra_mem_pages, void *guest_code)
-> +#define PAGE_SHIFT_4K  12
-> +#define PTES_PER_4K_PT 512
-> +
-> +static struct kvm_vm *create_vm(enum vm_guest_mode mode, int vcpus,
-> +				uint64_t vcpu_memory_bytes)
->  {
->  	struct kvm_vm *vm;
-> -	uint64_t extra_pg_pages = extra_mem_pages / 512 * 2;
-> +	uint64_t pages = DEFAULT_GUEST_PHY_PAGES;
-> +
-> +	/* Account for a few pages per-vCPU for stacks */
-> +	pages += DEFAULT_STACK_PGS * vcpus;
-> +
-> +	/*
-> +	 * Reserve twice the ammount of memory needed to map the test region and
-> +	 * the page table / stacks region, at 4k, for page tables. Do the
-> +	 * calculation with 4K page size: the smallest of all archs. (e.g., 64K
-> +	 * page size guest will need even less memory for page tables).
-> +	 */
-> +	pages += (2 * pages) / PTES_PER_4K_PT;
-> +	pages += ((2 * vcpus * vcpu_memory_bytes) >> PAGE_SHIFT_4K) /
-> +		 PTES_PER_4K_PT;
+Use a proper temporary file for sendpage tests. This means that running
+the tests doesn't clutter the working directory, and allows running the
+test on read-only filesystems.
 
-pages needs to be rounded up to the next multiple of 16 in order for this
-to work on aarch64 machines with 64k pages.
+Signed-off-by: Lorenz Bauer <lmb@cloudflare.com>
+Fixes: 16962b2404ac ("bpf: sockmap, add selftests")
+---
+ tools/testing/selftests/bpf/test_sockmap.c | 15 +++++----------
+ 1 file changed, 5 insertions(+), 10 deletions(-)
 
-Thanks,
-drew
+diff --git a/tools/testing/selftests/bpf/test_sockmap.c b/tools/testing/selftests/bpf/test_sockmap.c
+index 4a851513c842..779e11da979c 100644
+--- a/tools/testing/selftests/bpf/test_sockmap.c
++++ b/tools/testing/selftests/bpf/test_sockmap.c
+@@ -331,7 +331,7 @@ static int msg_loop_sendpage(int fd, int iov_length, int cnt,
+ 	FILE *file;
+ 	int i, fp;
+ 
+-	file = fopen(".sendpage_tst.tmp", "w+");
++	file = tmpfile();
+ 	if (!file) {
+ 		perror("create file for sendpage");
+ 		return 1;
+@@ -340,13 +340,8 @@ static int msg_loop_sendpage(int fd, int iov_length, int cnt,
+ 		fwrite(&k, sizeof(char), 1, file);
+ 	fflush(file);
+ 	fseek(file, 0, SEEK_SET);
+-	fclose(file);
+ 
+-	fp = open(".sendpage_tst.tmp", O_RDONLY);
+-	if (fp < 0) {
+-		perror("reopen file for sendpage");
+-		return 1;
+-	}
++	fp = fileno(file);
+ 
+ 	clock_gettime(CLOCK_MONOTONIC, &s->start);
+ 	for (i = 0; i < cnt; i++) {
+@@ -354,11 +349,11 @@ static int msg_loop_sendpage(int fd, int iov_length, int cnt,
+ 
+ 		if (!drop && sent < 0) {
+ 			perror("send loop error");
+-			close(fp);
++			fclose(file);
+ 			return sent;
+ 		} else if (drop && sent >= 0) {
+ 			printf("sendpage loop error expected: %i\n", sent);
+-			close(fp);
++			fclose(file);
+ 			return -EIO;
+ 		}
+ 
+@@ -366,7 +361,7 @@ static int msg_loop_sendpage(int fd, int iov_length, int cnt,
+ 			s->bytes_sent += sent;
+ 	}
+ 	clock_gettime(CLOCK_MONOTONIC, &s->end);
+-	close(fp);
++	fclose(file);
+ 	return 0;
+ }
+ 
+-- 
+2.20.1
 
