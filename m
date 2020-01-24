@@ -2,173 +2,76 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A814F149172
-	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Jan 2020 23:57:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A9A401491A3
+	for <lists+linux-kselftest@lfdr.de>; Sat, 25 Jan 2020 00:13:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729401AbgAXW5G (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 24 Jan 2020 17:57:06 -0500
-Received: from mail-wr1-f66.google.com ([209.85.221.66]:46137 "EHLO
-        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729535AbgAXW5E (ORCPT
+        id S1729255AbgAXXNo (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 24 Jan 2020 18:13:44 -0500
+Received: from mail-wr1-f44.google.com ([209.85.221.44]:33205 "EHLO
+        mail-wr1-f44.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729299AbgAXXNn (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 24 Jan 2020 17:57:04 -0500
-Received: by mail-wr1-f66.google.com with SMTP id z7so3914012wrl.13
-        for <linux-kselftest@vger.kernel.org>; Fri, 24 Jan 2020 14:57:03 -0800 (PST)
+        Fri, 24 Jan 2020 18:13:43 -0500
+Received: by mail-wr1-f44.google.com with SMTP id b6so4003606wrq.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 24 Jan 2020 15:13:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=fNqODm3MPzAsBSCY9n8l1wXAgR4AKgIMTb5pUp7NU0U=;
-        b=srTj1j2mPK8t2sakwkD7rQEbDNeFFM9BwDp93dCsDs1Q20oZf59EZmlmAzOPPdf+4y
-         YxcM9llvhHsbhRScaQhg5pfhZuQ5EK2Wiabt848H4kBft/yOeKD0KfLCT/l9W4a5Y1L4
-         Ws4qptwOggL7bhfng7gBhzPp9HhaA+aTg36WNq74YBut1qhS4L/ZTMqXR3HYzj9r7FGA
-         g3OhV0aJtCq6S5MwW9QcBqn3UQ760IxL5+/lie2pPtU7H3eL61wmjRFYGCWegua4o7px
-         G9xsghTqHOYLmfB+t0+5wgQJi9Xa2XH6e7g4cwoQw8CdIX7jxs00HjMp1GrSPYPF2HYQ
-         4/Jg==
+         :cc;
+        bh=xWxAa5bHJ6PMK9NxJf+sotV/H1bquBNTcrRDY2YcrUw=;
+        b=JFwEgiMlTVLpCCLAcgaTLVUSaehg81QYgNPM3b1Ym2b5z/nL3KqJQF88KbVz9cdk9r
+         CTzjE5+aAMbtk7ELcq2bgO9K+zAzqamtgzbJUMhCE2UtMUId4YJmmt8mZWGNI/msC6uq
+         Ib2YT51CLEO/CBYA44ZPxKkuKAAj6vBBknHK61TX41z50xOOv718Q16vwHsm9sWXlCtL
+         Wyur4nSjXjUJVz9SkntFxcVa3uFr0o7zR5qlVSxRfX4/BM8/LGrXcy5sKU76ruA40fB6
+         +iMCJl1NxAIJAt+H+0XVBK1FOWDcMk82vh+AGN1kASIytgA9VaVBpwknfn4st2dVzmG9
+         UfPQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=fNqODm3MPzAsBSCY9n8l1wXAgR4AKgIMTb5pUp7NU0U=;
-        b=SGRqRoFscbqHUNh3De0SJZBrML3G3GnjSXhkRQLhP4RmS/7hq8Bgf0SaE5cvu7bMQd
-         jriFWg1fue5qtMxXn7vCji7XkHZ+fuWNkBgf61LE2VrpZNXL43KfiDR3X91hPYuF10Bb
-         sk9ESmhYr07QEa032FPqTGqyLMlo7yraDas7rZin+zLxVXKmoG8tFRc4d62BKP/DjbsO
-         25+SY1r1aR4rrqmUGLfmwOnHS1bwPyZON3uWu00fxT0RWc90oOBXLZvrd6rHvEAc1GJx
-         s+IB3k0NE53tlLagKXJ70mWJflDpF4EFqs0TRNKx8INUHtEkAr9t2iwQ2+Quhil2+YwU
-         cJpQ==
-X-Gm-Message-State: APjAAAXKn7K+m2nVkE4dyXtEXu8Z4XefcjDo3NFECmhMT1qpoLWJHe1z
-        8h1S/SLDfxN+7MOKfSVv1cOuwFVKLjHuf7cwtVyQUg==
-X-Google-Smtp-Source: APXvYqzP4FnUZ8kt/z6sTrHwXtHilzjV/goyThoHUZqMef+SOku7Q5F6lD4mv864jnI2/qV48MsRq4J931iUvo8aLpk=
-X-Received: by 2002:adf:e887:: with SMTP id d7mr6634585wrm.162.1579906622211;
- Fri, 24 Jan 2020 14:57:02 -0800 (PST)
+         :message-id:subject:to:cc;
+        bh=xWxAa5bHJ6PMK9NxJf+sotV/H1bquBNTcrRDY2YcrUw=;
+        b=fTgh4ni+8+8cnt1ju3/DImuuO+dh4k+EkqNntOe/NF9WfL9XyQAlSbfhFugzeQleut
+         wBPfcyHL5JZi8bmhaf27wXu3XTAQOyXpGYXMcNZehT3jBLpDByN5xLKzPWVAA8XfwRSZ
+         h+maS7wsmXkFdM6XytjWy95/AQATBoplfXSZgjiou6L5PmdKuuZ84s7ROC34mOA3XQ9E
+         34J3qytaS/SNJ5Hb/ZwDiaUSZznR69Gse2H5yjyxhWpi9L6vIoAswAPk2INvHYpTjS3s
+         v/I0xQAY7gcb7KdvKEgKiStIwr6Mx5jCbtGte/7b9jpS4w7rhpOhxyJA2+ZkN3UQ8PyN
+         TtKQ==
+X-Gm-Message-State: APjAAAXN5VVRcJ4o9xNXRzCVO7dw/7r7IgveEZYHJJsQjZohjKEK0bVk
+        DU42ZOz6JZKbnctgD+x5n0MHjLvMEvkXnjiGIlDMvQ==
+X-Google-Smtp-Source: APXvYqxN872w0DTvxW+Wn3EovolGmqBFSzUcrBBwdJKbLKF5OkwRRiPnROfW46WxRCPlK/8cwRgFRMGQxMTCJGencF4=
+X-Received: by 2002:a5d:6344:: with SMTP id b4mr6722428wrw.414.1579907619941;
+ Fri, 24 Jan 2020 15:13:39 -0800 (PST)
 MIME-Version: 1.0
-References: <20200120145635.GA30904@blackbody.suse.cz> <20200124114017.8363-1-mkoutny@suse.com>
- <20200124114017.8363-2-mkoutny@suse.com>
-In-Reply-To: <20200124114017.8363-2-mkoutny@suse.com>
-From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Fri, 24 Jan 2020 14:56:51 -0800
-Message-ID: <CAJuCfpGjC=YwY=oNnYFNDp2nCuR9YhSU95=xbbeoDEheemte+Q@mail.gmail.com>
-Subject: Re: [PATCH v2 1/3] cgroup: Iterate tasks that did not finish do_exit()
-To:     =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>
-Cc:     cgroups mailinglist <cgroups@vger.kernel.org>,
-        alex.shi@linux.alibaba.com, Roman Gushchin <guro@fb.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        kernel-team <kernel-team@android.com>,
-        JeiFeng Lee <linger.lee@mediatek.com>,
-        linux-arm-kernel@lists.infradead.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-kselftest@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, Li Zefan <lizefan@huawei.com>,
-        matthias.bgg@gmail.com, shuah@kernel.org,
-        Tejun Heo <tj@kernel.org>, Tom Cherry <tomcherry@google.com>
+References: <20200124194507.34121-1-davidgow@google.com> <CAFd5g46Jym_HX+QmX8ffVYfL1KATNjs9U6sR1Qv9SoVLx5GKDg@mail.gmail.com>
+In-Reply-To: <CAFd5g46Jym_HX+QmX8ffVYfL1KATNjs9U6sR1Qv9SoVLx5GKDg@mail.gmail.com>
+From:   David Gow <davidgow@google.com>
+Date:   Fri, 24 Jan 2020 15:13:28 -0800
+Message-ID: <CABVgOSnVLyOAYMi2eFaOXtm96SdmrO8hmJ4f2gKbDJ7wS_8d5w@mail.gmail.com>
+Subject: Re: [PATCH] Fix linked-list KUnit test when run multiple times
+To:     Brendan Higgins <brendanhiggins@google.com>
+Cc:     shuah <shuah@kernel.org>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Alan Maguire <alan.maguire@oracle.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Jan 24, 2020 at 3:40 AM Michal Koutn=C3=BD <mkoutny@suse.com> wrote=
-:
->
-> PF_EXITING is set earlier than actual removal from css_set when a task
-> is exitting. This can confuse cgroup.procs readers who see no PF_EXITING
-> tasks, however, rmdir is checking against css_set membership so it can
-> transitionally fail with EBUSY.
->
-> Fix this by listing tasks that weren't unlinked from css_set active
-> lists.
-> It may happen that other users of the task iterator (without
-> CSS_TASK_ITER_PROCS) spot a PF_EXITING task before cgroup_exit(). This
-> is equal to the state before commit c03cd7738a83 ("cgroup: Include dying
-> leaders with live threads in PROCS iterations") but it may be reviewed
-> later.
->
-> Reported-by: Suren Baghdasaryan <surenb@google.com>
-> Fixes: c03cd7738a83 ("cgroup: Include dying leaders with live threads in =
-PROCS iterations")
-> Signed-off-by: Michal Koutn=C3=BD <mkoutny@suse.com>
-> ---
->  include/linux/cgroup.h |  1 +
->  kernel/cgroup/cgroup.c | 23 ++++++++++++++++-------
->  2 files changed, 17 insertions(+), 7 deletions(-)
->
-> diff --git a/include/linux/cgroup.h b/include/linux/cgroup.h
-> index d7ddebd0cdec..e75d2191226b 100644
-> --- a/include/linux/cgroup.h
-> +++ b/include/linux/cgroup.h
-> @@ -62,6 +62,7 @@ struct css_task_iter {
->         struct list_head                *mg_tasks_head;
->         struct list_head                *dying_tasks_head;
->
-> +       struct list_head                *cur_tasks_head;
->         struct css_set                  *cur_cset;
->         struct css_set                  *cur_dcset;
->         struct task_struct              *cur_task;
-> diff --git a/kernel/cgroup/cgroup.c b/kernel/cgroup/cgroup.c
-> index 735af8f15f95..a6e3619e013b 100644
-> --- a/kernel/cgroup/cgroup.c
-> +++ b/kernel/cgroup/cgroup.c
-> @@ -4404,12 +4404,16 @@ static void css_task_iter_advance_css_set(struct =
-css_task_iter *it)
->                 }
->         } while (!css_set_populated(cset) && list_empty(&cset->dying_task=
-s));
->
-> -       if (!list_empty(&cset->tasks))
-> +       if (!list_empty(&cset->tasks)) {
->                 it->task_pos =3D cset->tasks.next;
-> -       else if (!list_empty(&cset->mg_tasks))
-> +               it->cur_tasks_head =3D &cset->tasks;
-> +       } else if (!list_empty(&cset->mg_tasks)) {
->                 it->task_pos =3D cset->mg_tasks.next;
-> -       else
-> +               it->cur_tasks_head =3D &cset->mg_tasks;
-> +       } else {
->                 it->task_pos =3D cset->dying_tasks.next;
-> +               it->cur_tasks_head =3D &cset->dying_tasks;
-> +       }
->
->         it->tasks_head =3D &cset->tasks;
->         it->mg_tasks_head =3D &cset->mg_tasks;
-> @@ -4467,10 +4471,14 @@ static void css_task_iter_advance(struct css_task=
-_iter *it)
->                 else
->                         it->task_pos =3D it->task_pos->next;
->
-> -               if (it->task_pos =3D=3D it->tasks_head)
-> +               if (it->task_pos =3D=3D it->tasks_head) {
->                         it->task_pos =3D it->mg_tasks_head->next;
-> -               if (it->task_pos =3D=3D it->mg_tasks_head)
-> +                       it->cur_tasks_head =3D it->mg_tasks_head;
-> +               }
-> +               if (it->task_pos =3D=3D it->mg_tasks_head) {
->                         it->task_pos =3D it->dying_tasks_head->next;
-> +                       it->cur_tasks_head =3D it->dying_tasks_head;
-> +               }
->                 if (it->task_pos =3D=3D it->dying_tasks_head)
->                         css_task_iter_advance_css_set(it);
->         } else {
-> @@ -4489,11 +4497,12 @@ static void css_task_iter_advance(struct css_task=
-_iter *it)
->                         goto repeat;
->
->                 /* and dying leaders w/o live member threads */
-> -               if (!atomic_read(&task->signal->live))
-> +               if (it->cur_tasks_head =3D=3D it->dying_tasks_head &&
-> +                   !atomic_read(&task->signal->live))
->                         goto repeat;
->         } else {
->                 /* skip all dying ones */
-> -               if (task->flags & PF_EXITING)
-> +               if (it->cur_tasks_head =3D=3D it->dying_tasks_head)
->                         goto repeat;
->         }
->  }
-> --
-> 2.24.1
->
+On Fri, Jan 24, 2020 at 2:01 PM Brendan Higgins
+<brendanhiggins@google.com> wrote:
+> Oh good, I am glad we are getting rid of those static variables. (I
+> thought we already dropped those - whoops.) I think this drops this
+> last of them, can you confirm David?
 
-Tested-by: Suren Baghdasaryan <surenb@google.com>
+Yeah, this is the last of them.
 
-Thanks!
+I vaguely recall a suggestion that it may be worth testing that the
+LIST_HEAD() macro works with static, but as mentioned in the
+description, the for_each_entry_* tests probably aren't the best place
+to do that anyway...
+
+-- David
