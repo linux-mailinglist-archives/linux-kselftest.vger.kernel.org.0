@@ -2,19 +2,19 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 48179148417
-	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Jan 2020 12:41:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6701714841B
+	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Jan 2020 12:41:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2392072AbgAXLkk (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 24 Jan 2020 06:40:40 -0500
-Received: from mx2.suse.de ([195.135.220.15]:50850 "EHLO mx2.suse.de"
+        id S1731659AbgAXLkn (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 24 Jan 2020 06:40:43 -0500
+Received: from mx2.suse.de ([195.135.220.15]:50954 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2392056AbgAXLke (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 24 Jan 2020 06:40:34 -0500
+        id S2392074AbgAXLkm (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 24 Jan 2020 06:40:42 -0500
 X-Virus-Scanned: by amavisd-new at test-mx.suse.de
 Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx2.suse.de (Postfix) with ESMTP id E4D27AD5B;
-        Fri, 24 Jan 2020 11:40:32 +0000 (UTC)
+        by mx2.suse.de (Postfix) with ESMTP id 5475CABED;
+        Fri, 24 Jan 2020 11:40:39 +0000 (UTC)
 From:   =?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>
 To:     cgroups@vger.kernel.org
 Cc:     alex.shi@linux.alibaba.com, guro@fb.com, hannes@cmpxchg.org,
@@ -24,9 +24,9 @@ Cc:     alex.shi@linux.alibaba.com, guro@fb.com, hannes@cmpxchg.org,
         linux-mediatek@lists.infradead.org, lizefan@huawei.com,
         matthias.bgg@gmail.com, shuah@kernel.org, surenb@google.com,
         tj@kernel.org, tomcherry@google.com
-Subject: [PATCH v2 2/3] cgroup: Clean up css_set task traversal
-Date:   Fri, 24 Jan 2020 12:40:16 +0100
-Message-Id: <20200124114017.8363-3-mkoutny@suse.com>
+Subject: [PATCH v2 3/3] kselftest/cgroup: add cgroup destruction test
+Date:   Fri, 24 Jan 2020 12:40:17 +0100
+Message-Id: <20200124114017.8363-4-mkoutny@suse.com>
 X-Mailer: git-send-email 2.24.1
 In-Reply-To: <20200124114017.8363-1-mkoutny@suse.com>
 References: <20200120145635.GA30904@blackbody.suse.cz>
@@ -39,132 +39,160 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-css_task_iter stores pointer to head of each iterable list, this dates
-back to commit 0f0a2b4fa621 ("cgroup: reorganize css_task_iter") when we
-did not store cur_cset. Let us utilize list heads directly in cur_cset
-and streamline css_task_iter_advance_css_set a bit. This is no
-intentional function change.
+From: Suren Baghdasaryan <surenb@google.com>
 
+Add new test to verify that a cgroup with dead processes can be destroyed.
+The test spawns a child process which allocates and touches 100MB of RAM
+to ensure prolonged exit. Subsequently it kills the child, waits until
+the cgroup containing the child is empty and destroys the cgroup.
+
+Signed-off-by: Suren Baghdasaryan <surenb@google.com>
+[mkoutny@suse.com: Fix typo in test_cgcore_destroy comment]
+Acked-by: Michal Koutný <mkoutny@suse.com>
 Signed-off-by: Michal Koutný <mkoutny@suse.com>
 ---
- include/linux/cgroup.h |  3 ---
- kernel/cgroup/cgroup.c | 61 +++++++++++++++++++-----------------------
- 2 files changed, 28 insertions(+), 36 deletions(-)
+ tools/testing/selftests/cgroup/test_core.c | 113 +++++++++++++++++++++
+ 1 file changed, 113 insertions(+)
 
-diff --git a/include/linux/cgroup.h b/include/linux/cgroup.h
-index e75d2191226b..f1219b927817 100644
---- a/include/linux/cgroup.h
-+++ b/include/linux/cgroup.h
-@@ -58,9 +58,6 @@ struct css_task_iter {
- 	struct list_head		*tcset_head;
+diff --git a/tools/testing/selftests/cgroup/test_core.c b/tools/testing/selftests/cgroup/test_core.c
+index c5ca669feb2b..76c9dd578ba5 100644
+--- a/tools/testing/selftests/cgroup/test_core.c
++++ b/tools/testing/selftests/cgroup/test_core.c
+@@ -2,7 +2,10 @@
  
- 	struct list_head		*task_pos;
--	struct list_head		*tasks_head;
--	struct list_head		*mg_tasks_head;
--	struct list_head		*dying_tasks_head;
+ #include <linux/limits.h>
+ #include <sys/types.h>
++#include <sys/mman.h>
++#include <sys/wait.h>
+ #include <unistd.h>
++#include <fcntl.h>
+ #include <stdio.h>
+ #include <errno.h>
+ #include <signal.h>
+@@ -12,6 +15,115 @@
+ #include "../kselftest.h"
+ #include "cgroup_util.h"
  
- 	struct list_head		*cur_tasks_head;
- 	struct css_set			*cur_cset;
-diff --git a/kernel/cgroup/cgroup.c b/kernel/cgroup/cgroup.c
-index a6e3619e013b..14e0e360a2b4 100644
---- a/kernel/cgroup/cgroup.c
-+++ b/kernel/cgroup/cgroup.c
-@@ -4395,29 +4395,24 @@ static void css_task_iter_advance_css_set(struct css_task_iter *it)
- 
- 	lockdep_assert_held(&css_set_lock);
- 
--	/* Advance to the next non-empty css_set */
--	do {
--		cset = css_task_iter_next_css_set(it);
--		if (!cset) {
--			it->task_pos = NULL;
--			return;
-+	/* Advance to the next non-empty css_set and find first non-empty tasks list*/
-+	while ((cset = css_task_iter_next_css_set(it))) {
-+		if (!list_empty(&cset->tasks)) {
-+			it->cur_tasks_head = &cset->tasks;
-+			break;
-+		} else if (!list_empty(&cset->mg_tasks)) {
-+			it->cur_tasks_head = &cset->mg_tasks;
-+			break;
-+		} else if (!list_empty(&cset->dying_tasks)) {
-+			it->cur_tasks_head = &cset->dying_tasks;
-+			break;
- 		}
--	} while (!css_set_populated(cset) && list_empty(&cset->dying_tasks));
--
--	if (!list_empty(&cset->tasks)) {
--		it->task_pos = cset->tasks.next;
--		it->cur_tasks_head = &cset->tasks;
--	} else if (!list_empty(&cset->mg_tasks)) {
--		it->task_pos = cset->mg_tasks.next;
--		it->cur_tasks_head = &cset->mg_tasks;
--	} else {
--		it->task_pos = cset->dying_tasks.next;
--		it->cur_tasks_head = &cset->dying_tasks;
- 	}
--
--	it->tasks_head = &cset->tasks;
--	it->mg_tasks_head = &cset->mg_tasks;
--	it->dying_tasks_head = &cset->dying_tasks;
-+	if (!cset) {
-+		it->task_pos = NULL;
-+		return;
++static int touch_anon(char *buf, size_t size)
++{
++	int fd;
++	char *pos = buf;
++
++	fd = open("/dev/urandom", O_RDONLY);
++	if (fd < 0)
++		return -1;
++
++	while (size > 0) {
++		ssize_t ret = read(fd, pos, size);
++
++		if (ret < 0) {
++			if (errno != EINTR) {
++				close(fd);
++				return -1;
++			}
++		} else {
++			pos += ret;
++			size -= ret;
++		}
 +	}
-+	it->task_pos = it->cur_tasks_head->next;
++	close(fd);
++
++	return 0;
++}
++
++static int alloc_and_touch_anon_noexit(const char *cgroup, void *arg)
++{
++	int ppid = getppid();
++	size_t size = (size_t)arg;
++	void *buf;
++
++	buf = mmap(NULL, size, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANON,
++		   0, 0);
++	if (buf == MAP_FAILED)
++		return -1;
++
++	if (touch_anon((char *)buf, size)) {
++		munmap(buf, size);
++		return -1;
++	}
++
++	while (getppid() == ppid)
++		sleep(1);
++
++	munmap(buf, size);
++	return 0;
++}
++
++/*
++ * Create a child process that allocates and touches 100MB, then waits to be
++ * killed. Wait until the child is attached to the cgroup, kill all processes
++ * in that cgroup and wait until "cgroup.procs" is empty. At this point try to
++ * destroy the empty cgroup. The test helps detect race conditions between
++ * dying processes leaving the cgroup and cgroup destruction path.
++ */
++static int test_cgcore_destroy(const char *root)
++{
++	int ret = KSFT_FAIL;
++	char *cg_test = NULL;
++	int child_pid;
++	char buf[PAGE_SIZE];
++
++	cg_test = cg_name(root, "cg_test");
++
++	if (!cg_test)
++		goto cleanup;
++
++	for (int i = 0; i < 10; i++) {
++		if (cg_create(cg_test))
++			goto cleanup;
++
++		child_pid = cg_run_nowait(cg_test, alloc_and_touch_anon_noexit,
++					  (void *) MB(100));
++
++		if (child_pid < 0)
++			goto cleanup;
++
++		/* wait for the child to enter cgroup */
++		if (cg_wait_for_proc_count(cg_test, 1))
++			goto cleanup;
++
++		if (cg_killall(cg_test))
++			goto cleanup;
++
++		/* wait for cgroup to be empty */
++		while (1) {
++			if (cg_read(cg_test, "cgroup.procs", buf, sizeof(buf)))
++				goto cleanup;
++			if (buf[0] == '\0')
++				break;
++			usleep(1000);
++		}
++
++		if (rmdir(cg_test))
++			goto cleanup;
++
++		if (waitpid(child_pid, NULL, 0) < 0)
++			goto cleanup;
++	}
++	ret = KSFT_PASS;
++cleanup:
++	if (cg_test)
++		cg_destroy(cg_test);
++	free(cg_test);
++	return ret;
++}
++
+ /*
+  * A(0) - B(0) - C(1)
+  *        \ D(0)
+@@ -512,6 +624,7 @@ struct corecg_test {
+ 	T(test_cgcore_populated),
+ 	T(test_cgcore_proc_migration),
+ 	T(test_cgcore_thread_migration),
++	T(test_cgcore_destroy),
+ };
+ #undef T
  
- 	/*
- 	 * We don't keep css_sets locked across iteration steps and thus
-@@ -4462,24 +4457,24 @@ static void css_task_iter_advance(struct css_task_iter *it)
- repeat:
- 	if (it->task_pos) {
- 		/*
--		 * Advance iterator to find next entry.  cset->tasks is
--		 * consumed first and then ->mg_tasks.  After ->mg_tasks,
--		 * we move onto the next cset.
-+		 * Advance iterator to find next entry. We go through cset
-+		 * tasks, mg_tasks and dying_tasks, when consumed we move onto
-+		 * the next cset.
- 		 */
- 		if (it->flags & CSS_TASK_ITER_SKIPPED)
- 			it->flags &= ~CSS_TASK_ITER_SKIPPED;
- 		else
- 			it->task_pos = it->task_pos->next;
- 
--		if (it->task_pos == it->tasks_head) {
--			it->task_pos = it->mg_tasks_head->next;
--			it->cur_tasks_head = it->mg_tasks_head;
-+		if (it->task_pos == &it->cur_cset->tasks) {
-+			it->cur_tasks_head = &it->cur_cset->mg_tasks;
-+			it->task_pos = it->cur_tasks_head->next;
- 		}
--		if (it->task_pos == it->mg_tasks_head) {
--			it->task_pos = it->dying_tasks_head->next;
--			it->cur_tasks_head = it->dying_tasks_head;
-+		if (it->task_pos == &it->cur_cset->mg_tasks) {
-+			it->cur_tasks_head = &it->cur_cset->dying_tasks;
-+			it->task_pos = it->cur_tasks_head->next;
- 		}
--		if (it->task_pos == it->dying_tasks_head)
-+		if (it->task_pos == &it->cur_cset->dying_tasks)
- 			css_task_iter_advance_css_set(it);
- 	} else {
- 		/* called from start, proceed to the first cset */
-@@ -4497,12 +4492,12 @@ static void css_task_iter_advance(struct css_task_iter *it)
- 			goto repeat;
- 
- 		/* and dying leaders w/o live member threads */
--		if (it->cur_tasks_head == it->dying_tasks_head &&
-+		if (it->cur_tasks_head == &it->cur_cset->dying_tasks &&
- 		    !atomic_read(&task->signal->live))
- 			goto repeat;
- 	} else {
- 		/* skip all dying ones */
--		if (it->cur_tasks_head == it->dying_tasks_head)
-+		if (it->cur_tasks_head == &it->cur_cset->dying_tasks)
- 			goto repeat;
- 	}
- }
 -- 
 2.24.1
 
