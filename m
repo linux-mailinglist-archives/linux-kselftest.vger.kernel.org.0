@@ -2,100 +2,95 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 505A714741F
-	for <lists+linux-kselftest@lfdr.de>; Thu, 23 Jan 2020 23:56:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 34B021479E0
+	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Jan 2020 09:58:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729596AbgAWW4z (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 23 Jan 2020 17:56:55 -0500
-Received: from mail-pg1-f195.google.com ([209.85.215.195]:43087 "EHLO
-        mail-pg1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729590AbgAWW4z (ORCPT
+        id S1725787AbgAXI6g (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 24 Jan 2020 03:58:36 -0500
+Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:37887 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1727520AbgAXI6d (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 23 Jan 2020 17:56:55 -0500
-Received: by mail-pg1-f195.google.com with SMTP id u131so2128367pgc.10
-        for <linux-kselftest@vger.kernel.org>; Thu, 23 Jan 2020 14:56:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=KDyx4Ql8/Qn5VAoH2DVKut2V/mwsU6XM8Sb1jgu629k=;
-        b=tplaEJ1vep6oo8dV1s9BOPDmRx7jCDz9+N3FKj3myXdVaRz6YvIrUsNyv5jg9YToT/
-         pZ5HtpJWhlSL3p7j8WnO4gS9eQAO7GalnteaC+BCkCqtvuiTfGTnjccLM7HpIWCB1InI
-         LaOSyoyDBgKX3T9+24hjMAV1y4lFY3c6TVIa7kolWbSK0ik4lMyaCXYVWkN6X0j07Ble
-         If0fzVssdVXXYCan4YXZzy2cxyeVShgHfimuuTkLEQpPCk2agA1PzCsuD35FoTZCUhoW
-         xOKM70JQm9yXnc1Y7PNVpG78ph9b1lMuHOBlFq58zE7QvCgLLkS63be/X5VyD+GE5w3g
-         KkVQ==
+        Fri, 24 Jan 2020 03:58:33 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1579856312;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=JWz6aqGdHx35tZOwvGlucXWByVJJ94BypUpYqdf0YTw=;
+        b=duDiNRBf3n8ySGaO3KOap+FBRXDv8N2Y1/Bmg+ZIjjaHeAYseb04wVvjv0YVbj2f6YO2QW
+        AA0vOefuRcopssDx6pVYuYHnLU8haOyxzgt9vE1sIhXXWlnO/8swux29JiDoJ213o1IlSs
+        oWaFJK0ShqrA6XXPOoSwMQh+eZ6My4g=
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
+ [209.85.221.69]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-7-kU9GfcKzNgG-yPrA7P8D8w-1; Fri, 24 Jan 2020 03:58:30 -0500
+X-MC-Unique: kU9GfcKzNgG-yPrA7P8D8w-1
+Received: by mail-wr1-f69.google.com with SMTP id 90so846229wrq.6
+        for <linux-kselftest@vger.kernel.org>; Fri, 24 Jan 2020 00:58:30 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=KDyx4Ql8/Qn5VAoH2DVKut2V/mwsU6XM8Sb1jgu629k=;
-        b=XvcW+ffFpyvOPmGTTCwyfPPVLcoSEGoV324P6H/HCvitrQBQyjCjibODjFhIHX2RD/
-         GBigRGWq5efwTA8EfD+0x4MIE8E64tjSMWtIitd3UIOkjVHHWHHpzlla20hfnZ0Ye677
-         rzv8Aas+bB9f9iGjptShz56VAaBDsh6h2jccwImKvCOE72KTDGVyVonR0p7bG3J/bgFK
-         7gCHM44oE7jxO1qHAZ7gVAGcrldQrus8Uwz87Ve3FqcJkxa46ZcOSY8spFh3Kby4A1RF
-         Zowupkw4NEjrUPR622OzsjS/Uhnx49mNAxclGQ8XXCgzsq/tQclXhobnznSOdmeVU9+P
-         ny0A==
-X-Gm-Message-State: APjAAAU9vU87VAgUJN2tt6/FGxJI5WQCfthR9GDwWouRbhCuG3LZzC8D
-        U0DlsADjdldWKZ6L9O8u3zqI4onLHqOLiWnIXkusNA==
-X-Google-Smtp-Source: APXvYqyYSrlPKI5wQd9gqwUk5XMTQiSu85EU/bUZcbyAqDwHkHjIuhxEB+wv6Wrj3RCcUP6u/oi9MxoAR4RhwmZvvsg=
-X-Received: by 2002:a63:597:: with SMTP id 145mr705968pgf.384.1579820214473;
- Thu, 23 Jan 2020 14:56:54 -0800 (PST)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=JWz6aqGdHx35tZOwvGlucXWByVJJ94BypUpYqdf0YTw=;
+        b=CqRZTVxL8H9TgP/9M9LSIbagQxc7XbGHLSjiQY8ZTuhBoWKfgToBHW1Y9ByiSzybjo
+         2MKylqm1XiU4UGh7R7TOgCjk0Bbj5bGnoEBrgsAur58PE9/9CtIkl6KgW2dgP3sqiv5G
+         9Ufkv8gdJN9EzHCYv8y1mPX1l9aBAJjmthA6yxKlkQ/uypfNoRBj4zUo3mDuNuBQr/fW
+         AN6IY6cKDep+C9gW4xWI1ULhTQtgbd8XyNEhqYzq+9tIL92nbCB3OUt8ofR1CfJcoWHJ
+         nI22fn77KLoLrXn8wi+H0JK3Acmjn2vqDbNh8yV/tTHHKqRH84zv+5tEUzjJzG++oDy3
+         p4tw==
+X-Gm-Message-State: APjAAAV+qhgXW9uQ+HD8ZDPmB0LYkWeHbifv2fjnY1nbYWcviIvMDbNv
+        7xe8v52sxd5KutTPHLczMd4Iy5p6VUHLotk1nAJQYgIbrwWDjmY/NdlHDSo/X6tOj9F241gblue
+        iU0BQw9dpJoI/ApXBvsogMQxESM37
+X-Received: by 2002:a05:600c:2215:: with SMTP id z21mr2280689wml.55.1579856309503;
+        Fri, 24 Jan 2020 00:58:29 -0800 (PST)
+X-Google-Smtp-Source: APXvYqwTG/Fx0cb6GxNxRaHqdTQSp/V/QSRYrq3Q3gtSptcEB3HrPrpH3UPGtIS+5Ympfmx+cp9+QA==
+X-Received: by 2002:a05:600c:2215:: with SMTP id z21mr2280663wml.55.1579856309137;
+        Fri, 24 Jan 2020 00:58:29 -0800 (PST)
+Received: from ?IPv6:2001:b07:6468:f312:b8fe:679e:87eb:c059? ([2001:b07:6468:f312:b8fe:679e:87eb:c059])
+        by smtp.gmail.com with ESMTPSA id c5sm6219331wmb.9.2020.01.24.00.58.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 24 Jan 2020 00:58:28 -0800 (PST)
+Subject: Re: [PATCH v4 09/10] KVM: selftests: Stop memslot creation in KVM
+ internal memslot region
+To:     Ben Gardon <bgardon@google.com>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, linux-kselftest@vger.kernel.org
+Cc:     Cannon Matthews <cannonmatthews@google.com>,
+        Peter Xu <peterx@redhat.com>,
+        Andrew Jones <drjones@redhat.com>,
+        Peter Shier <pshier@google.com>,
+        Oliver Upton <oupton@google.com>
+References: <20200123180436.99487-1-bgardon@google.com>
+ <20200123180436.99487-10-bgardon@google.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+Message-ID: <92042648-e43a-d996-dc38-aded106b976b@redhat.com>
+Date:   Fri, 24 Jan 2020 09:58:27 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.1.1
 MIME-Version: 1.0
-References: <20191216220555.245089-1-brendanhiggins@google.com>
- <20191216220555.245089-7-brendanhiggins@google.com> <20191217080653.B672B2082E@mail.kernel.org>
-In-Reply-To: <20191217080653.B672B2082E@mail.kernel.org>
-From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Thu, 23 Jan 2020 14:56:43 -0800
-Message-ID: <CAFd5g45YJrrOu=kvSF9LhkCy_gxrAa3Sa6UJLRFGQtDtepe9xg@mail.gmail.com>
-Subject: Re: [RFC v1 6/6] kunit: Add 'kunit_shutdown' option
-To:     Stephen Boyd <sboyd@kernel.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Alan Maguire <alan.maguire@oracle.com>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Arnd Bergmann <arnd@arndb.de>, David Gow <davidgow@google.com>,
-        Jeff Dike <jdike@addtoit.com>,
-        Kees Cook <keescook@chromium.org>,
-        Richard Weinberger <richard@nod.at>, rppt@linux.ibm.com,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Iurii Zaikin <yzaikin@google.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Knut Omang <knut.omang@oracle.com>,
-        linux-um <linux-um@lists.infradead.org>,
-        linux-arch@vger.kernel.org,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20200123180436.99487-10-bgardon@google.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Dec 17, 2019 at 12:06 AM Stephen Boyd <sboyd@kernel.org> wrote:
->
-> Quoting Brendan Higgins (2019-12-16 14:05:55)
-> > From: David Gow <davidgow@google.com>
-> >
-> > Add a new kernel command-line option, 'kunit_shutdown', which allows the
-> > user to specify that the kernel poweroff, halt, or reboot after
-> > completing all KUnit tests; this is very handy for running KUnit tests
-> > on UML or a VM so that the UML/VM process exits cleanly immediately
-> > after running all tests without needing a special initramfs.
-> >
-> > Signed-off-by: David Gow <davidgow@google.com>
-> > Signed-off-by: Brendan Higgins <brendanhiggins@google.com>
-> > ---
-> >  lib/kunit/executor.c                | 18 ++++++++++++++++++
-> >  tools/testing/kunit/kunit_kernel.py |  2 +-
-> >  tools/testing/kunit/kunit_parser.py |  2 +-
-> >  3 files changed, 20 insertions(+), 2 deletions(-)
->
-> Can you document it in Documentation/admin-guide/kernel-parameters.txt ?
+On 23/01/20 19:04, Ben Gardon wrote:
+> KVM creates internal memslots covering the region between 3G and 4G in
+> the guest physical address space, when the first vCPU is created.
+> Mapping this region before creation of the first vCPU causes vCPU
+> creation to fail. Prohibit tests from creating such a memslot and fail
+> with a helpful warning when they try to.
+> 
+> Signed-off-by: Ben Gardon <bgardon@google.com>
+> ---
 
-Ah, yes. That would be a good idea. Sorry, I just expected to be
-shouted at loudly for doing this, and didn't want to expend the effort
-until some people told me that they didn't hate the idea.
+The internal memslots are much higher than this (0xfffbc000 and
+0xfee00000).  I'm changing the patch to block 0xfe0000000 and above,
+otherwise it breaks vmx_dirty_log_test.
+
+Paolo
+
