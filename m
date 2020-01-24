@@ -2,115 +2,94 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7870E147EAF
-	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Jan 2020 11:21:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 720BE147EF5
+	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Jan 2020 11:45:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731584AbgAXKVP (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 24 Jan 2020 05:21:15 -0500
-Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:54209 "EHLO
+        id S1730728AbgAXKpu (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 24 Jan 2020 05:45:50 -0500
+Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:36972 "EHLO
         us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1731077AbgAXKVP (ORCPT
+        with ESMTP id S1729635AbgAXKpt (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 24 Jan 2020 05:21:15 -0500
+        Fri, 24 Jan 2020 05:45:49 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1579861273;
+        s=mimecast20190719; t=1579862748;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=j5HPA+MpTJSeRz5I3KDYpYGg6n0niPqSTR8+sgUSVTs=;
-        b=L5Wp5N465d+6VX/1eGEMUkcxEJYZTUAsgcWR/Rbj+E7joInsEjWtAyKmInX1MdQkDSzW8I
-        ZB7sse+h4o5w8OfSvWspcZzEScRV4+mza3WSvJvOCLtuYILTNSdaoSNqtWJX6QWELHDbLU
-        17evA51if8mXaNfGZWoUkQ5UKW12zUU=
+        bh=enn+v7cz7QoWzDHWv3aRyENuP7ec0k47YNPibegz3Hs=;
+        b=ARs+bUtUcc9/rdZZu0XBS+d4WWZx9P8X+SFhhw03OCq6v0H+rfKqmYlQI1zsXNkd/LSKkn
+        xWrbxfFnCPdI35IyuVH/NZyps5Y0tWLG8+J5TnMr+BhImFitVshjdW87yTyMFAYcDhl4ne
+        HipGhJSsKGDWDbl41LO7ykTG7nAk9zw=
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-321-norJzSFTNNqWRa7wlsSNqg-1; Fri, 24 Jan 2020 05:21:12 -0500
-X-MC-Unique: norJzSFTNNqWRa7wlsSNqg-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
+ us-mta-142-rgmBFWfzO9WL1x97cOKOig-1; Fri, 24 Jan 2020 05:45:46 -0500
+X-MC-Unique: rgmBFWfzO9WL1x97cOKOig-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id A15778017CC;
-        Fri, 24 Jan 2020 10:21:10 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 26B151902EA4;
+        Fri, 24 Jan 2020 10:45:45 +0000 (UTC)
 Received: from kamzik.brq.redhat.com (unknown [10.43.2.160])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 5DA9E5DA7D;
-        Fri, 24 Jan 2020 10:21:06 +0000 (UTC)
-Date:   Fri, 24 Jan 2020 11:21:03 +0100
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 70EBA19C69;
+        Fri, 24 Jan 2020 10:45:40 +0000 (UTC)
+Date:   Fri, 24 Jan 2020 11:45:38 +0100
 From:   Andrew Jones <drjones@redhat.com>
-To:     Ben Gardon <bgardon@google.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Ben Gardon <bgardon@google.com>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
         Cannon Matthews <cannonmatthews@google.com>,
         Peter Xu <peterx@redhat.com>, Peter Shier <pshier@google.com>,
-        Oliver Upton <oupton@google.com>
-Subject: Re: [PATCH v4 08/10] KVM: selftests: Time guest demand paging
-Message-ID: <20200124102103.uezov62hlpzwmtny@kamzik.brq.redhat.com>
+        Oliver Upton <oupton@google.com>,
+        Marc Zyngier <Marc.Zyngier@arm.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Christian Borntraeger <borntraeger@de.ibm.com>
+Subject: Re: [PATCH v4 06/10] KVM: selftests: Add support for vcpu_args_set
+ to aarch64 and s390x
+Message-ID: <20200124104538.44i5ut5uzclz443i@kamzik.brq.redhat.com>
 References: <20200123180436.99487-1-bgardon@google.com>
- <20200123180436.99487-9-bgardon@google.com>
+ <20200123180436.99487-7-bgardon@google.com>
+ <4dbb6d1b-3162-d9b3-4ebb-5e4061776bb6@redhat.com>
+ <20200124093543.m5oqo7fnjnc2scko@kamzik.brq.redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200123180436.99487-9-bgardon@google.com>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
+In-Reply-To: <20200124093543.m5oqo7fnjnc2scko@kamzik.brq.redhat.com>
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Jan 23, 2020 at 10:04:34AM -0800, Ben Gardon wrote:
-> In order to quantify demand paging performance, time guest execution
-> during demand paging.
+On Fri, Jan 24, 2020 at 10:35:43AM +0100, Andrew Jones wrote:
+> > > +void vcpu_args_set(struct kvm_vm *vm, uint32_t vcpuid, unsigned int num, ...)
+> > > +{
+> > > +	va_list ap;
+> > > +
+> > > +	TEST_ASSERT(num >= 1 && num <= 8, "Unsupported number of args,\n"
+> > > +		    "  num: %u\n",
+> > > +		    num);
 > 
-> Signed-off-by: Ben Gardon <bgardon@google.com>
-> ---
->  .../selftests/kvm/demand_paging_test.c        | 68 +++++++++++++++++++
->  1 file changed, 68 insertions(+)
+> Weird line breaking. I see it came from the x86 implementation, but it's
+> weird there too... Personally I'd just put it all on one line, because
+> my vt100 died two decades ago.
 > 
-> diff --git a/tools/testing/selftests/kvm/demand_paging_test.c b/tools/testing/selftests/kvm/demand_paging_test.c
-> index 2002032df32cc..0dc5d04718678 100644
-> --- a/tools/testing/selftests/kvm/demand_paging_test.c
-> +++ b/tools/testing/selftests/kvm/demand_paging_test.c
-> @@ -32,6 +32,12 @@
->  
->  #define DEFAULT_GUEST_TEST_MEM_SIZE (1 << 30) /* 1G */
->  
-> +#ifdef PRINT_PER_PAGE_UPDATES
-> +#define PER_PAGE_DEBUG(...) DEBUG(__VA_ARGS__)
-> +#else
-> +#define PER_PAGE_DEBUG(...)
-> +#endif
-> +
->  #ifdef PRINT_PER_VCPU_UPDATES
->  #define PER_VCPU_DEBUG(...) DEBUG(__VA_ARGS__)
->  #else
-> @@ -64,6 +70,26 @@ static uint64_t guest_test_phys_mem;
->   */
->  static uint64_t guest_test_virt_mem = DEFAULT_GUEST_TEST_MEM;
->  
-> +int64_t to_ns(struct timespec ts)
-> +{
-> +	return (int64_t)ts.tv_nsec + 1000000000LL * (int64_t)ts.tv_sec;
-> +}
-> +
-> +struct timespec diff(struct timespec start, struct  timespec end)
-> +{
-> +	struct   timespec temp;
-> +
-> +	if ((end.tv_nsec-start.tv_nsec) < 0) {
+> > > +
+> > > +	va_start(ap, num);
+> > > +
+> > > +	for (i = 0; i < num; i++)
+> > > +		set_reg(vm, vcpuid, ARM64_CORE_REG(regs.regs[num]),
+>                                                              ^^ should be 'i'
 
-spaces around the '-' would be nice
+The declaration of 'i' is also missing.
 
-> +		temp.tv_sec = end.tv_sec - start.tv_sec - 1;
-> +		temp.tv_nsec = 1000000000 + end.tv_nsec - start.tv_nsec;
-> +	} else {
-> +		temp.tv_sec = end.tv_sec - start.tv_sec;
-> +		temp.tv_nsec = end.tv_nsec - start.tv_nsec;
-> +	}
-> +
-> +	return temp;
-> +}
-
-Could probably add these new time utilities to the new test_util.c
+> 
+> > > +			va_arg(ap, uint64_t));
+> 
+> nit: I'd use {} because of the line break. Or just not break the line and
+> bust the 80 char "limit" (RIP vt100).
+>
 
 Thanks,
-drew
+drew 
 
