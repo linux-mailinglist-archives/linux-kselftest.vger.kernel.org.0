@@ -2,95 +2,76 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 34B021479E0
-	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Jan 2020 09:58:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F35C1479E6
+	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Jan 2020 10:00:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725787AbgAXI6g (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 24 Jan 2020 03:58:36 -0500
-Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:37887 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1727520AbgAXI6d (ORCPT
+        id S1729235AbgAXJAP (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 24 Jan 2020 04:00:15 -0500
+Received: from mail-oi1-f196.google.com ([209.85.167.196]:40220 "EHLO
+        mail-oi1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726382AbgAXJAP (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 24 Jan 2020 03:58:33 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1579856312;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=JWz6aqGdHx35tZOwvGlucXWByVJJ94BypUpYqdf0YTw=;
-        b=duDiNRBf3n8ySGaO3KOap+FBRXDv8N2Y1/Bmg+ZIjjaHeAYseb04wVvjv0YVbj2f6YO2QW
-        AA0vOefuRcopssDx6pVYuYHnLU8haOyxzgt9vE1sIhXXWlnO/8swux29JiDoJ213o1IlSs
-        oWaFJK0ShqrA6XXPOoSwMQh+eZ6My4g=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-7-kU9GfcKzNgG-yPrA7P8D8w-1; Fri, 24 Jan 2020 03:58:30 -0500
-X-MC-Unique: kU9GfcKzNgG-yPrA7P8D8w-1
-Received: by mail-wr1-f69.google.com with SMTP id 90so846229wrq.6
-        for <linux-kselftest@vger.kernel.org>; Fri, 24 Jan 2020 00:58:30 -0800 (PST)
+        Fri, 24 Jan 2020 04:00:15 -0500
+Received: by mail-oi1-f196.google.com with SMTP id c77so1185824oib.7
+        for <linux-kselftest@vger.kernel.org>; Fri, 24 Jan 2020 01:00:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cloudflare.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=y5EdAX4jkVg2iEO+KKBvYFZ7L2IwmUhmxABZtxwTDV0=;
+        b=SYiA638TtjKWHVPo9XbMk9DzdWhGr1CIMjfL5RmNwAC2FuJ6BOftRJALOXEDQiOQgD
+         0fjQoQpuqFcsjWawODT6waRgT8tHbtcT5JbVS8ovS/gCJVG1G3aXBRiiXbpoEpsTruoE
+         k8771UvRA3plyOhzpLxUGm4QDuiJyGVU7AgoI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=JWz6aqGdHx35tZOwvGlucXWByVJJ94BypUpYqdf0YTw=;
-        b=CqRZTVxL8H9TgP/9M9LSIbagQxc7XbGHLSjiQY8ZTuhBoWKfgToBHW1Y9ByiSzybjo
-         2MKylqm1XiU4UGh7R7TOgCjk0Bbj5bGnoEBrgsAur58PE9/9CtIkl6KgW2dgP3sqiv5G
-         9Ufkv8gdJN9EzHCYv8y1mPX1l9aBAJjmthA6yxKlkQ/uypfNoRBj4zUo3mDuNuBQr/fW
-         AN6IY6cKDep+C9gW4xWI1ULhTQtgbd8XyNEhqYzq+9tIL92nbCB3OUt8ofR1CfJcoWHJ
-         nI22fn77KLoLrXn8wi+H0JK3Acmjn2vqDbNh8yV/tTHHKqRH84zv+5tEUzjJzG++oDy3
-         p4tw==
-X-Gm-Message-State: APjAAAV+qhgXW9uQ+HD8ZDPmB0LYkWeHbifv2fjnY1nbYWcviIvMDbNv
-        7xe8v52sxd5KutTPHLczMd4Iy5p6VUHLotk1nAJQYgIbrwWDjmY/NdlHDSo/X6tOj9F241gblue
-        iU0BQw9dpJoI/ApXBvsogMQxESM37
-X-Received: by 2002:a05:600c:2215:: with SMTP id z21mr2280689wml.55.1579856309503;
-        Fri, 24 Jan 2020 00:58:29 -0800 (PST)
-X-Google-Smtp-Source: APXvYqwTG/Fx0cb6GxNxRaHqdTQSp/V/QSRYrq3Q3gtSptcEB3HrPrpH3UPGtIS+5Ympfmx+cp9+QA==
-X-Received: by 2002:a05:600c:2215:: with SMTP id z21mr2280663wml.55.1579856309137;
-        Fri, 24 Jan 2020 00:58:29 -0800 (PST)
-Received: from ?IPv6:2001:b07:6468:f312:b8fe:679e:87eb:c059? ([2001:b07:6468:f312:b8fe:679e:87eb:c059])
-        by smtp.gmail.com with ESMTPSA id c5sm6219331wmb.9.2020.01.24.00.58.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 24 Jan 2020 00:58:28 -0800 (PST)
-Subject: Re: [PATCH v4 09/10] KVM: selftests: Stop memslot creation in KVM
- internal memslot region
-To:     Ben Gardon <bgardon@google.com>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, linux-kselftest@vger.kernel.org
-Cc:     Cannon Matthews <cannonmatthews@google.com>,
-        Peter Xu <peterx@redhat.com>,
-        Andrew Jones <drjones@redhat.com>,
-        Peter Shier <pshier@google.com>,
-        Oliver Upton <oupton@google.com>
-References: <20200123180436.99487-1-bgardon@google.com>
- <20200123180436.99487-10-bgardon@google.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-Message-ID: <92042648-e43a-d996-dc38-aded106b976b@redhat.com>
-Date:   Fri, 24 Jan 2020 09:58:27 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.1.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=y5EdAX4jkVg2iEO+KKBvYFZ7L2IwmUhmxABZtxwTDV0=;
+        b=j6q6zzOuDmz/TY6MLjxUJCWh/sFUpkCx0lnTRN7SwOL6sK+IQCO2FSUwBmkViZ13xO
+         ApOPBBGri+ZHcIBQHmZenulV6/qWsD/QVgYnKiZtakptZ5xLgIYRLUl4HHz89ssHGKBc
+         pmSRnFxFcXZlZ/7UbE0jm0OInPFsqgFayJW4J7bJSBAWqb1T2vI1OqM4EmpuLpT7TKgr
+         wXk4+vYWOp9z9DSea/5F+UO4FWfCjUPbrnfsB45wiXRMOCFuZdfoWdZbtqqQ9XtI9AjG
+         4P7Pi4egPeRLnJJVC4OcffEqUIwainRUwVJ8nmRNH0s2Et2oEjrojm9QOMSKZ9jIceBh
+         lt8Q==
+X-Gm-Message-State: APjAAAWPMBQDrhATvJUqIpB3p5SxClK9DaGZ5tNilYzguJnakYr4WRir
+        ueIANFx5xYj95A3xlrRwYMvZS11fzd2rok+diRVygQ==
+X-Google-Smtp-Source: APXvYqwCWyvS3/fUmsDI0shGPjRGN1rHYxo1MRumsxADvX5K0fx2R5oslkof/sexUronmyCand4NPkj0N/nR2Fj0XYs=
+X-Received: by 2002:aca:2419:: with SMTP id n25mr1382621oic.13.1579856414929;
+ Fri, 24 Jan 2020 01:00:14 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <20200123180436.99487-10-bgardon@google.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <20200123165934.9584-1-lmb@cloudflare.com> <20200123165934.9584-3-lmb@cloudflare.com>
+ <20200123215348.zql3d5xpg2if7v6q@kafai-mbp.dhcp.thefacebook.com>
+In-Reply-To: <20200123215348.zql3d5xpg2if7v6q@kafai-mbp.dhcp.thefacebook.com>
+From:   Lorenz Bauer <lmb@cloudflare.com>
+Date:   Fri, 24 Jan 2020 09:00:03 +0000
+Message-ID: <CACAyw9_OGBbsXepTcp=1frEHB7Q2cD9BVXTbgt7Ci_eFyV2Egg@mail.gmail.com>
+Subject: Re: [PATCH bpf 2/4] selftests: bpf: ignore RST packets for reuseport tests
+To:     Martin Lau <kafai@fb.com>
+Cc:     Shuah Khan <shuah@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        Andrii Nakryiko <andriin@fb.com>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 23/01/20 19:04, Ben Gardon wrote:
-> KVM creates internal memslots covering the region between 3G and 4G in
-> the guest physical address space, when the first vCPU is created.
-> Mapping this region before creation of the first vCPU causes vCPU
-> creation to fail. Prohibit tests from creating such a memslot and fail
-> with a helpful warning when they try to.
-> 
-> Signed-off-by: Ben Gardon <bgardon@google.com>
-> ---
+On Thu, 23 Jan 2020 at 21:54, Martin Lau <kafai@fb.com> wrote:
+>
+> btw, it needs a Fixes tag.
+>
+> Patch 4 and Patch 1 also need a Fixes tag.
 
-The internal memslots are much higher than this (0xfffbc000 and
-0xfee00000).  I'm changing the patch to block 0xfe0000000 and above,
-otherwise it breaks vmx_dirty_log_test.
+This makes me wonder, should these go via bpf or bpf-next? Do I have
+to split the series then?
 
-Paolo
+-- 
+Lorenz Bauer  |  Systems Engineer
+6th Floor, County Hall/The Riverside Building, SE1 7PB, UK
 
+www.cloudflare.com
