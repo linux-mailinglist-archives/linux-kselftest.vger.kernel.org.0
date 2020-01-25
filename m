@@ -2,136 +2,211 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 54AFC1492ED
-	for <lists+linux-kselftest@lfdr.de>; Sat, 25 Jan 2020 03:11:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AF2B149429
+	for <lists+linux-kselftest@lfdr.de>; Sat, 25 Jan 2020 10:34:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387721AbgAYCLX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 24 Jan 2020 21:11:23 -0500
-Received: from hqnvemgate24.nvidia.com ([216.228.121.143]:18992 "EHLO
-        hqnvemgate24.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387700AbgAYCLX (ORCPT
+        id S1726204AbgAYJeV (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 25 Jan 2020 04:34:21 -0500
+Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:51578 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1725710AbgAYJeV (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 24 Jan 2020 21:11:23 -0500
-Received: from hqpgpgate102.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate24.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5e2ba39a0000>; Fri, 24 Jan 2020 18:10:34 -0800
-Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate102.nvidia.com (PGP Universal service);
-  Fri, 24 Jan 2020 18:11:21 -0800
-X-PGP-Universal: processed;
-        by hqpgpgate102.nvidia.com on Fri, 24 Jan 2020 18:11:21 -0800
-Received: from HQMAIL107.nvidia.com (172.20.187.13) by HQMAIL107.nvidia.com
- (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Sat, 25 Jan
- 2020 02:11:21 +0000
-Received: from rnnvemgw01.nvidia.com (10.128.109.123) by HQMAIL107.nvidia.com
- (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
- Transport; Sat, 25 Jan 2020 02:11:20 +0000
-Received: from blueforge.nvidia.com (Not Verified[10.110.48.28]) by rnnvemgw01.nvidia.com with Trustwave SEG (v7,5,8,10121)
-        id <B5e2ba3c70000>; Fri, 24 Jan 2020 18:11:19 -0800
-From:   John Hubbard <jhubbard@nvidia.com>
-To:     Andrew Morton <akpm@linux-foundation.org>
-CC:     Al Viro <viro@zeniv.linux.org.uk>,
-        Christoph Hellwig <hch@infradead.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Dave Chinner <david@fromorbit.com>,
-        Ira Weiny <ira.weiny@intel.com>, Jan Kara <jack@suse.cz>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Jonathan Corbet <corbet@lwn.net>,
-        =?UTF-8?q?J=C3=A9r=C3=B4me=20Glisse?= <jglisse@redhat.com>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Michal Hocko <mhocko@suse.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Vlastimil Babka <vbabka@suse.cz>, <linux-doc@vger.kernel.org>,
-        <linux-fsdevel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-        <linux-rdma@vger.kernel.org>, <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        John Hubbard <jhubbard@nvidia.com>
-Subject: [PATCH 3/3] selftests/vm: run_vmtests: invoke gup_benchmark with basic FOLL_PIN coverage
-Date:   Fri, 24 Jan 2020 18:11:15 -0800
-Message-ID: <20200125021115.731629-4-jhubbard@nvidia.com>
-X-Mailer: git-send-email 2.25.0
-In-Reply-To: <20200125021115.731629-1-jhubbard@nvidia.com>
-References: <20200125021115.731629-1-jhubbard@nvidia.com>
+        Sat, 25 Jan 2020 04:34:21 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1579944860;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=799m6qKMV18ggbdbpJL4lidbUmQPUZ2uqN90WWxnXDE=;
+        b=S5AEux1EhbcpuBAEHkgWWnOXSjZ1S6Vgq5x6b/i0bLkzzHismxg6iPkPgUs3dCMMXUPny1
+        NKrAfJ3cQcqCBZ6FDEZ1tAZ4bV5mPRkyfqRT+wYTNjRwKyaTEJhRZGRlanxwukeJGQpG4c
+        M2QQ+Y6N6RDHxf3pUOTx4+fWglN9pdE=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-129-SwNAjOGDMqCQpeiIl0vtYQ-1; Sat, 25 Jan 2020 04:34:18 -0500
+X-MC-Unique: SwNAjOGDMqCQpeiIl0vtYQ-1
+Received: by mail-wr1-f71.google.com with SMTP id i9so2763350wru.1
+        for <linux-kselftest@vger.kernel.org>; Sat, 25 Jan 2020 01:34:18 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=799m6qKMV18ggbdbpJL4lidbUmQPUZ2uqN90WWxnXDE=;
+        b=hLa9l3RNjgeWunGVR1DCbON7hwX2p+Fb7dkpTP5pxA48rVyu5dtcgsrENmK2VnuUnx
+         QvUoESfwp4YXyak2LMc0zlEVHg7Cl55is+SvX83MQggUwliLvhJV33d9d5fOP+yX5Z1f
+         sHfu7jAeBClYWpZzV6oPcpf6Cuv4TUC4/hIsq0y1Z1eYRsQDD8Km7eRhVOgikXbeAse+
+         o4Hqdes86R6+CGaLTC450s5zg8nzvODALrTe0VBbk7Z7yPJ5P5kyvKN8zZrWWu1gCFWX
+         ZYLwGQEV75Yp3eOzGop8pZY/WjZhTiqusu2xpQ1YejXAI87ua/A9TZ/LpsgoheSEekK6
+         dcGg==
+X-Gm-Message-State: APjAAAXx3/qmcEa3JBhq7ilrdsxgaBOZenR8wlJP/R80F+7zcYDnfeXx
+        pd/KrsH8q8FVn/kycozdeD2s3Wj974KhFNDCczT2B03yA2rm47ay419j1VtFFhekIEhAFMZG4OM
+        O+XJjuaajduIGU3N247BIn28iNt4B
+X-Received: by 2002:adf:f308:: with SMTP id i8mr9489196wro.42.1579944857316;
+        Sat, 25 Jan 2020 01:34:17 -0800 (PST)
+X-Google-Smtp-Source: APXvYqzV+U0Zk/vBr3PYTOy2NS/UOEJyzbyAI9oNA0HJiFpizgJq7/yGvYaD+zj50Eu2svel6qBslw==
+X-Received: by 2002:adf:f308:: with SMTP id i8mr9489175wro.42.1579944857009;
+        Sat, 25 Jan 2020 01:34:17 -0800 (PST)
+Received: from [192.168.10.150] ([93.56.166.5])
+        by smtp.gmail.com with ESMTPSA id f16sm11253860wrm.65.2020.01.25.01.34.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 25 Jan 2020 01:34:16 -0800 (PST)
+Subject: Re: [PATCH v4 06/10] KVM: selftests: Add support for vcpu_args_set to
+ aarch64 and s390x
+To:     Ben Gardon <bgardon@google.com>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, linux-kselftest@vger.kernel.org
+Cc:     Cannon Matthews <cannonmatthews@google.com>,
+        Peter Xu <peterx@redhat.com>,
+        Andrew Jones <drjones@redhat.com>,
+        Peter Shier <pshier@google.com>,
+        Oliver Upton <oupton@google.com>
+References: <20200123180436.99487-1-bgardon@google.com>
+ <20200123180436.99487-7-bgardon@google.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+Message-ID: <6061cd22-59bb-c191-bd98-f14d7cd274ae@redhat.com>
+Date:   Sat, 25 Jan 2020 10:34:16 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.1.1
 MIME-Version: 1.0
-X-NVConfidentiality: public
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1579918234; bh=Q/jtf1QAQWUBdGa6x5cGwrQgIxtlzXz53YFDTgazJkU=;
-        h=X-PGP-Universal:From:To:CC:Subject:Date:Message-ID:X-Mailer:
-         In-Reply-To:References:MIME-Version:X-NVConfidentiality:
-         Content-Transfer-Encoding:Content-Type;
-        b=YRayoKwVWfcKD4eUMaQmPaMUzOn3k3p53WvmOC3mD8kcC9tG8ipSm3QY2AYmfpimP
-         G30FLgFM/n8OFc+ELkRXdpg4CVFeF4Db+7MZ8t+9rCJYTGgkgE7nkM+uQmNjjIESKv
-         K++LFcD1w8MRIanajdKRRI6TRSxoHU4sw5YS8BYyv3WuVM2X9HxdOMBb6tEUyA5q25
-         jIAaxS4VBkm7t15cy3eXQOGQyDQnb1Tj43T/DYGXJO24+gEkKxLy/uqWKL+yETfOcX
-         WELUvnoev8o4RAccDfka/sHfmg4DNthyYgpypJHix4p2C+hZDPiuNCZ+i461MllWUg
-         UFQJXN1SdQh6A==
+In-Reply-To: <20200123180436.99487-7-bgardon@google.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-It's good to have basic unit test coverage of the new FOLL_PIN
-behavior. Fortunately, the gup_benchmark unit test is extremely
-fast (a few milliseconds), so adding it the the run_vmtests suite
-is going to cause no noticeable change in running time.
+On 23/01/20 19:04, Ben Gardon wrote:
+> Currently vcpu_args_set is only implemented for x86. This makes writing
+> tests with multiple vCPUs difficult as each guest vCPU must either a.)
+> do the same thing or b.) derive some kind of unique token from it's
+> registers or the architecture. To simplify the process of writing tests
+> with multiple vCPUs for s390 and aarch64, add set args functions for
+> those architectures.
+> 
+> Signed-off-by: Ben Gardon <bgardon@google.com>
+> ---
+>  .../selftests/kvm/lib/aarch64/processor.c     | 33 +++++++++++++++++
+>  .../selftests/kvm/lib/s390x/processor.c       | 35 +++++++++++++++++++
+>  2 files changed, 68 insertions(+)
+> 
+> diff --git a/tools/testing/selftests/kvm/lib/aarch64/processor.c b/tools/testing/selftests/kvm/lib/aarch64/processor.c
+> index 86036a59a668e..a2ff90a75f326 100644
+> --- a/tools/testing/selftests/kvm/lib/aarch64/processor.c
+> +++ b/tools/testing/selftests/kvm/lib/aarch64/processor.c
+> @@ -333,3 +333,36 @@ void vm_vcpu_add_default(struct kvm_vm *vm, uint32_t vcpuid, void *guest_code)
+>  {
+>  	aarch64_vcpu_add_default(vm, vcpuid, NULL, guest_code);
+>  }
+> +
+> +/* VM VCPU Args Set
+> + *
+> + * Input Args:
+> + *   vm - Virtual Machine
+> + *   vcpuid - VCPU ID
+> + *   num - number of arguments
+> + *   ... - arguments, each of type uint64_t
+> + *
+> + * Output Args: None
+> + *
+> + * Return: None
+> + *
+> + * Sets the first num function input arguments to the values
+> + * given as variable args.  Each of the variable args is expected to
+> + * be of type uint64_t. The registers set by this function are r0-r7.
+> + */
+> +void vcpu_args_set(struct kvm_vm *vm, uint32_t vcpuid, unsigned int num, ...)
+> +{
+> +	va_list ap;
+> +
+> +	TEST_ASSERT(num >= 1 && num <= 8, "Unsupported number of args,\n"
+> +		    "  num: %u\n",
+> +		    num);
+> +
+> +	va_start(ap, num);
+> +
+> +	for (i = 0; i < num; i++)
+> +		set_reg(vm, vcpuid, ARM64_CORE_REG(regs.regs[num]),
+> +			va_arg(ap, uint64_t));
+> +
+> +	va_end(ap);
+> +}
+> diff --git a/tools/testing/selftests/kvm/lib/s390x/processor.c b/tools/testing/selftests/kvm/lib/s390x/processor.c
+> index 32a02360b1eb0..680f37be9dbc9 100644
+> --- a/tools/testing/selftests/kvm/lib/s390x/processor.c
+> +++ b/tools/testing/selftests/kvm/lib/s390x/processor.c
+> @@ -269,6 +269,41 @@ void vm_vcpu_add_default(struct kvm_vm *vm, uint32_t vcpuid, void *guest_code)
+>  	run->psw_addr = (uintptr_t)guest_code;
+>  }
+>  
+> +/* VM VCPU Args Set
+> + *
+> + * Input Args:
+> + *   vm - Virtual Machine
+> + *   vcpuid - VCPU ID
+> + *   num - number of arguments
+> + *   ... - arguments, each of type uint64_t
+> + *
+> + * Output Args: None
+> + *
+> + * Return: None
+> + *
+> + * Sets the first num function input arguments to the values
+> + * given as variable args.  Each of the variable args is expected to
+> + * be of type uint64_t. The registers set by this function are r2-r6.
+> + */
+> +void vcpu_args_set(struct kvm_vm *vm, uint32_t vcpuid, unsigned int num, ...)
+> +{
+> +	va_list ap;
+> +	struct kvm_regs regs;
+> +
+> +	TEST_ASSERT(num >= 1 && num <= 5, "Unsupported number of args,\n"
+> +		    "  num: %u\n",
+> +		    num);
+> +
+> +	va_start(ap, num);
+> +	vcpu_regs_get(vm, vcpuid, &regs);
+> +
+> +	for (i = 0; i < num; i++)
+> +		regs.gprs[i + 2] = va_arg(ap, uint64_t);
+> +
+> +	vcpu_regs_set(vm, vcpuid, &regs);
+> +	va_end(ap);
+> +}
+> +
+>  void vcpu_dump(FILE *stream, struct kvm_vm *vm, uint32_t vcpuid, uint8_t indent)
+>  {
+>  	struct vcpu *vcpu = vm->vcpu_head;
+> 
 
-So, add two new invocations to run_vmtests:
+Squashing this:
 
-1) Run gup_benchmark with normal get_user_pages().
+diff --git a/tools/testing/selftests/kvm/lib/aarch64/processor.c b/tools/testing/selftests/kvm/lib/aarch64/processor.c
+index a2ff90a75f32..839a76c96f01 100644
+--- a/tools/testing/selftests/kvm/lib/aarch64/processor.c
++++ b/tools/testing/selftests/kvm/lib/aarch64/processor.c
+@@ -353,6 +353,7 @@ void vm_vcpu_add_default(struct kvm_vm *vm, uint32_t vcpuid, void *guest_code)
+ void vcpu_args_set(struct kvm_vm *vm, uint32_t vcpuid, unsigned int num, ...)
+ {
+ 	va_list ap;
++	int i;
+ 
+ 	TEST_ASSERT(num >= 1 && num <= 8, "Unsupported number of args,\n"
+ 		    "  num: %u\n",
+diff --git a/tools/testing/selftests/kvm/lib/s390x/processor.c b/tools/testing/selftests/kvm/lib/s390x/processor.c
+index 680f37be9dbc..a0b84235c848 100644
+--- a/tools/testing/selftests/kvm/lib/s390x/processor.c
++++ b/tools/testing/selftests/kvm/lib/s390x/processor.c
+@@ -289,6 +289,7 @@ void vcpu_args_set(struct kvm_vm *vm, uint32_t vcpuid, unsigned int num, ...)
+ {
+ 	va_list ap;
+ 	struct kvm_regs regs;
++	int i;
+ 
+ 	TEST_ASSERT(num >= 1 && num <= 5, "Unsupported number of args,\n"
+ 		    "  num: %u\n",
 
-2) Run gup_benchmark with pin_user_pages(). This is much like
-the first call, except that it sets FOLL_PIN.
-
-Running these two in quick succession also provide a visual
-comparison of the running times, which is convenient.
-
-The new invocations are fairly early in the run_vmtests script,
-because with test suites, it's usually preferable to put the
-shorter, faster tests first, all other things being equal.
-
-Reviewed-by: Ira Weiny <ira.weiny@intel.com>
-Signed-off-by: John Hubbard <jhubbard@nvidia.com>
----
- tools/testing/selftests/vm/run_vmtests | 22 ++++++++++++++++++++++
- 1 file changed, 22 insertions(+)
-
-diff --git a/tools/testing/selftests/vm/run_vmtests b/tools/testing/selftes=
-ts/vm/run_vmtests
-index a692ea828317..df6a6bf3f238 100755
---- a/tools/testing/selftests/vm/run_vmtests
-+++ b/tools/testing/selftests/vm/run_vmtests
-@@ -112,6 +112,28 @@ echo "NOTE: The above hugetlb tests provide minimal co=
-verage.  Use"
- echo "      https://github.com/libhugetlbfs/libhugetlbfs.git for"
- echo "      hugetlb regression testing."
-=20
-+echo "--------------------------------------------"
-+echo "running 'gup_benchmark -U' (normal/slow gup)"
-+echo "--------------------------------------------"
-+./gup_benchmark -U
-+if [ $? -ne 0 ]; then
-+	echo "[FAIL]"
-+	exitcode=3D1
-+else
-+	echo "[PASS]"
-+fi
-+
-+echo "------------------------------------------"
-+echo "running gup_benchmark -b (pin_user_pages)"
-+echo "------------------------------------------"
-+./gup_benchmark -b
-+if [ $? -ne 0 ]; then
-+	echo "[FAIL]"
-+	exitcode=3D1
-+else
-+	echo "[PASS]"
-+fi
-+
- echo "-------------------"
- echo "running userfaultfd"
- echo "-------------------"
---=20
-2.25.0
+Paolo
 
