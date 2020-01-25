@@ -2,79 +2,189 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C7BB7149237
-	for <lists+linux-kselftest@lfdr.de>; Sat, 25 Jan 2020 01:02:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF54D1492F5
+	for <lists+linux-kselftest@lfdr.de>; Sat, 25 Jan 2020 03:11:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729368AbgAYACn (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 24 Jan 2020 19:02:43 -0500
-Received: from mail-pl1-f181.google.com ([209.85.214.181]:37126 "EHLO
-        mail-pl1-f181.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729236AbgAYACm (ORCPT
+        id S2387710AbgAYCLX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 24 Jan 2020 21:11:23 -0500
+Received: from hqnvemgate24.nvidia.com ([216.228.121.143]:18989 "EHLO
+        hqnvemgate24.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2387680AbgAYCLX (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 24 Jan 2020 19:02:42 -0500
-Received: by mail-pl1-f181.google.com with SMTP id c23so1433513plz.4
-        for <linux-kselftest@vger.kernel.org>; Fri, 24 Jan 2020 16:02:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Ynnd2SGOMXK9FL1OzGl6AxrSQz4LtuhsqKDnn7ScKAo=;
-        b=wS2WUDV/7szOKx4WVC47xljWaVANkCKfZcuv4uHhbjYz8UVMGzJv/WtL/ZUOKDQdBT
-         eYKLwXmid6jl1YRudXdCBMuqnvIseNtqbAjpFg1AAUB32FlW/sheZ1UyRwpm2Ae32/N0
-         REx3X4Shn79Y4OBsMWBOIC6Ci9/Zwn9BYqS1hkbN86VMoVePiyaNzCteKN1JK0MWbm7u
-         WkXiyWWM0y4updTQjFCJv2PU0aqyfDUWFH3MScocS5IBubO89Gzjl7AlpVBYiSN+qJyL
-         8V87+5EtGpLiSJuC9XOx18ttmdsqMY/at42xiNqJ04q7X9QND3wLHDohtF8JFIZ1jQcK
-         kvWQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Ynnd2SGOMXK9FL1OzGl6AxrSQz4LtuhsqKDnn7ScKAo=;
-        b=FtyBbnWtq9L+3qr2jPWFsuNv6pI3PsKnkvmBxZP7hAdijbLnehoh0LpqnmGvqhePd6
-         yJ4y/Jr/1WAXgAsO55b2gLXb45ugrrWmtuCxRD7JguY4TDjElcCr+zSdOE5MQGev5BKa
-         zeIrh5ddyELx/Oof+/0c+bXj5g/We85/J25PXtQXvJ/vhes8HKQuYETm4z9rwpRMxZ2C
-         D3xsp+ahNF5qHIXJKpni/FEHedOQWJjFYOo7MnmZGps1Nz+HdSkxTJc5+DHJgMHwFdK+
-         fgq8v1NoSHs4zdJ8P4/BsV9TiqntkGHWkw1oNdkrI3LZORI5tM4U0KCuxX/3ZQo6+Pqs
-         k5Kg==
-X-Gm-Message-State: APjAAAUfr8n9gWkgIGIW5y27P/wwp08t7e9G3hwss5bRbJ0cl62lGNLL
-        iF3UwUHXaX7PTo9BG5U1apK+CRjgdU2TgCJs1CgBGQ==
-X-Google-Smtp-Source: APXvYqyXmULqKveIYsTuaC/0YteujlFex6MeZFhH/+/P6TgnbeZ8qAKVrqmlm1erknjpKVF2xDqMtmfOVWrRbPLVHiU=
-X-Received: by 2002:a17:90a:c390:: with SMTP id h16mr2010910pjt.131.1579910561819;
- Fri, 24 Jan 2020 16:02:41 -0800 (PST)
+        Fri, 24 Jan 2020 21:11:23 -0500
+Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate24.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5e2ba3980000>; Fri, 24 Jan 2020 18:10:32 -0800
+Received: from hqmail.nvidia.com ([172.20.161.6])
+  by hqpgpgate101.nvidia.com (PGP Universal service);
+  Fri, 24 Jan 2020 18:11:18 -0800
+X-PGP-Universal: processed;
+        by hqpgpgate101.nvidia.com on Fri, 24 Jan 2020 18:11:18 -0800
+Received: from HQMAIL105.nvidia.com (172.20.187.12) by HQMAIL111.nvidia.com
+ (172.20.187.18) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Sat, 25 Jan
+ 2020 02:11:18 +0000
+Received: from rnnvemgw01.nvidia.com (10.128.109.123) by HQMAIL105.nvidia.com
+ (172.20.187.12) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
+ Transport; Sat, 25 Jan 2020 02:11:17 +0000
+Received: from blueforge.nvidia.com (Not Verified[10.110.48.28]) by rnnvemgw01.nvidia.com with Trustwave SEG (v7,5,8,10121)
+        id <B5e2ba3c40006>; Fri, 24 Jan 2020 18:11:17 -0800
+From:   John Hubbard <jhubbard@nvidia.com>
+To:     Andrew Morton <akpm@linux-foundation.org>
+CC:     Al Viro <viro@zeniv.linux.org.uk>,
+        Christoph Hellwig <hch@infradead.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Dave Chinner <david@fromorbit.com>,
+        Ira Weiny <ira.weiny@intel.com>, Jan Kara <jack@suse.cz>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Jonathan Corbet <corbet@lwn.net>,
+        =?UTF-8?q?J=C3=A9r=C3=B4me=20Glisse?= <jglisse@redhat.com>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        Michal Hocko <mhocko@suse.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Vlastimil Babka <vbabka@suse.cz>, <linux-doc@vger.kernel.org>,
+        <linux-fsdevel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+        <linux-rdma@vger.kernel.org>, <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        John Hubbard <jhubbard@nvidia.com>
+Subject: [PATCH 0/3] mm/gup: track FOLL_PIN pages (follow on from v12)
+Date:   Fri, 24 Jan 2020 18:11:12 -0800
+Message-ID: <20200125021115.731629-1-jhubbard@nvidia.com>
+X-Mailer: git-send-email 2.25.0
 MIME-Version: 1.0
-References: <20200124194507.34121-1-davidgow@google.com> <CAFd5g46Jym_HX+QmX8ffVYfL1KATNjs9U6sR1Qv9SoVLx5GKDg@mail.gmail.com>
- <CABVgOSnVLyOAYMi2eFaOXtm96SdmrO8hmJ4f2gKbDJ7wS_8d5w@mail.gmail.com>
-In-Reply-To: <CABVgOSnVLyOAYMi2eFaOXtm96SdmrO8hmJ4f2gKbDJ7wS_8d5w@mail.gmail.com>
-From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Fri, 24 Jan 2020 16:02:30 -0800
-Message-ID: <CAFd5g45x3A2SdbUtZfGRGmpdEoe0BYsofRogyCXigR+xT_Jy=w@mail.gmail.com>
-Subject: Re: [PATCH] Fix linked-list KUnit test when run multiple times
-To:     David Gow <davidgow@google.com>
-Cc:     shuah <shuah@kernel.org>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Alan Maguire <alan.maguire@oracle.com>
+X-NVConfidentiality: public
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1579918232; bh=aO+dKw4ULAsMvC2a/2GQFL6ozh5NX13hkCczGIcsG6k=;
+        h=X-PGP-Universal:From:To:CC:Subject:Date:Message-ID:X-Mailer:
+         MIME-Version:X-NVConfidentiality:Content-Type:
+         Content-Transfer-Encoding;
+        b=DDxhaUomnHExWYT8pAt1yawXQXzCK4+dyix9rJsaw29IklaE1thdtA+t+zrxvKAao
+         WiC+hNtu/78/C2GUytHgDZQd3P6cMMQoQy5M0U+Fa10/vJaoLn/+0YtQrtiI6ndhya
+         hKV9KWr0nT0HXWA1QhzAZ/9DnC5TFk1HO5IMNOkumjxe3vCzU4GF/SNN51+9YY78JB
+         0vA+obrXw31pfIAeEaQ8Jx2tPE1Yk8SWkUIwlGGG4RHjp7xmFU8AtrIEw7mwXn0zSz
+         LTQEaP8HwW4vtgZnD3k4KmyJ2WhK1gymFaN+uugl5Syp5TUK422DDSBlJCDpJGnDjw
+         UpDOHdvc5mCqg==
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Jan 24, 2020 at 3:13 PM David Gow <davidgow@google.com> wrote:
->
-> On Fri, Jan 24, 2020 at 2:01 PM Brendan Higgins
-> <brendanhiggins@google.com> wrote:
-> > Oh good, I am glad we are getting rid of those static variables. (I
-> > thought we already dropped those - whoops.) I think this drops this
-> > last of them, can you confirm David?
->
-> Yeah, this is the last of them.
->
-> I vaguely recall a suggestion that it may be worth testing that the
-> LIST_HEAD() macro works with static, but as mentioned in the
-> description, the for_each_entry_* tests probably aren't the best place
-> to do that anyway...
+Leon Romanovsky:
 
-Ah, I think I missed that. Makes sense.
+If you get a chance, I'd love to have this short series (or even just
+the first patch; the others are just selftests) run through your test
+suite that was previously choking on my earlier v11 patchset. The huge
+page pincount limitations are removed, so I'm expecting a perfect test
+run this time!
+
+Everyone:
+
+This activates tracking of FOLL_PIN pages. This is in support of fixing
+the get_user_pages()+DMA problem described in [1]-[4].
+
+It is based on today's (Jan 24) mmotm. There is a git repo and branch,
+for convenience in reviewing:
+
+    git@github.com:johnhubbard/linux.git track_user_pages_v1_mmotm_24Jan202=
+0
+
+FOLL_PIN support is (so far) in mmotm and linux-next. However, the
+patch to use FOLL_PIN to track pages was *not* submitted, because Leon
+saw an RDMA test suite failure that involved (I think) page refcount
+overflows when huge pages were used.
+
+This patch definitively solves that kind of overflow problem, by adding
+an exact pincount, for compound pages (of order > 1), in the 3rd struct
+page of a compound page. If available, that form of pincounting is used,
+instead of the GUP_PIN_COUNTING_BIAS approach. Thanks again to Jan Kara
+for that idea.
+
+Here's the last reviewed version of the tracking patch (v11):
+
+  https://lore.kernel.org/r/20191216222537.491123-1-jhubbard@nvidia.com
+
+Jan Kara had provided a reviewed-by tag for that, but I've had to remove
+it (again) here, due to having changed the patch "a little bit", in
+order to add the feature described above.
+
+Other interesting changes:
+
+* dump_page(): added one, or two new things to report for compound
+  pages: head refcount (for all compound pages), and map_pincount (for
+  compound pages of order > 1).
+
+* Documentation/core-api/pin_user_pages.rst: removed the "TODO" for the
+  huge page refcount upper limit problems, and added notes about how it
+  works now. Also added a note about the dump_page() enhancements.
+
+* Added some comments in gup.c and mm.h, to explain that there are two
+  ways to count pinned pages: exact (for compound pages of order > 1)
+  and fuzzy (GUP_PIN_COUNTING_BIAS: for all other pages).
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+General notes about the tracking patch:
+
+This is a prerequisite to solving the problem of proper interactions
+between file-backed pages, and [R]DMA activities, as discussed in [1],
+[2], [3], [4] and in a remarkable number of email threads since about
+2017. :)
+
+In contrast to earlier approaches, the page tracking can be
+incrementally applied to the kernel call sites that, until now, have
+been simply calling get_user_pages() ("gup"). In other words, opt-in by
+changing from this:
+
+    get_user_pages() (sets FOLL_GET)
+    put_page()
+
+to this:
+    pin_user_pages() (sets FOLL_PIN)
+    unpin_user_page()
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+Next steps:
+
+* Convert more subsystems from get_user_pages() to pin_user_pages().
+* Work with Ira and others to connect this all up with file system
+  leases.
+
+[1] Some slow progress on get_user_pages() (Apr 2, 2019): https://lwn.net/A=
+rticles/784574/
+[2] DMA and get_user_pages() (LPC: Dec 12, 2018): https://lwn.net/Articles/=
+774411/
+[3] The trouble with get_user_pages() (Apr 30, 2018): https://lwn.net/Artic=
+les/753027/
+[4] LWN kernel index: get_user_pages() https://lwn.net/Kernel/Index/#Memory=
+_management-get_user_pages
+
+John Hubbard (3):
+  mm/gup: track FOLL_PIN pages
+  mm/gup_benchmark: support pin_user_pages() and related calls
+  selftests/vm: run_vmtests: invoke gup_benchmark with basic FOLL_PIN
+    coverage
+
+ Documentation/core-api/pin_user_pages.rst  |  48 ++-
+ include/linux/mm.h                         | 109 ++++-
+ include/linux/mm_types.h                   |   7 +-
+ include/linux/mmzone.h                     |   2 +
+ include/linux/page_ref.h                   |  10 +
+ mm/debug.c                                 |  22 +-
+ mm/gup.c                                   | 467 ++++++++++++++++-----
+ mm/gup_benchmark.c                         |  70 ++-
+ mm/huge_memory.c                           |  29 +-
+ mm/hugetlb.c                               |  44 +-
+ mm/page_alloc.c                            |   2 +
+ mm/rmap.c                                  |   6 +
+ mm/vmstat.c                                |   2 +
+ tools/testing/selftests/vm/gup_benchmark.c |  15 +-
+ tools/testing/selftests/vm/run_vmtests     |  22 +
+ 15 files changed, 678 insertions(+), 177 deletions(-)
+
+--=20
+2.25.0
+
