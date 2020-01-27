@@ -2,87 +2,65 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A79D414A78F
-	for <lists+linux-kselftest@lfdr.de>; Mon, 27 Jan 2020 16:53:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C264D14A7C1
+	for <lists+linux-kselftest@lfdr.de>; Mon, 27 Jan 2020 17:05:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729146AbgA0Px2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 27 Jan 2020 10:53:28 -0500
-Received: from mga02.intel.com ([134.134.136.20]:17575 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729518AbgA0Px1 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 27 Jan 2020 10:53:27 -0500
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga101.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 27 Jan 2020 07:42:36 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.70,370,1574150400"; 
-   d="scan'208";a="231504834"
-Received: from jpolega-mobl.amr.corp.intel.com (HELO [10.251.29.252]) ([10.251.29.252])
-  by orsmga006.jf.intel.com with ESMTP; 27 Jan 2020 07:42:36 -0800
-Subject: Re: [PATCH v16 00/23] selftests, powerpc, x86: Memory Protection Keys
-To:     Sandipan Das <sandipan@linux.ibm.com>
-Cc:     shuah@kernel.org, linux-kselftest@vger.kernel.org,
-        linux-arch@vger.kernel.org, fweimer@redhat.com, x86@kernel.org,
-        linuxram@us.ibm.com, mhocko@kernel.org, linux-mm@kvack.org,
-        mingo@redhat.com, aneesh.kumar@linux.ibm.com,
-        bauerman@linux.ibm.com, msuchanek@suse.de, mpe@ellerman.id.au,
-        linuxppc-dev@lists.ozlabs.org
-References: <cover.1579507768.git.sandipan@linux.ibm.com>
- <3ceb2814-f8b0-ec6b-3c24-ec72297a99f5@intel.com>
- <8f14bee0-ab1c-fc90-dfdb-5128607b767f@linux.ibm.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-Openpgp: preference=signencrypt
-Autocrypt: addr=dave.hansen@intel.com; keydata=
- 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
-Message-ID: <3eca7a91-aa3e-cb01-47c8-5d36020993a2@intel.com>
-Date:   Mon, 27 Jan 2020 07:42:33 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S1729583AbgA0QFU (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 27 Jan 2020 11:05:20 -0500
+Received: from mail-wr1-f68.google.com ([209.85.221.68]:33215 "EHLO
+        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729146AbgA0QFT (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 27 Jan 2020 11:05:19 -0500
+Received: by mail-wr1-f68.google.com with SMTP id b6so12031817wrq.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 27 Jan 2020 08:05:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=tessares-net.20150623.gappssmtp.com; s=20150623;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=m6H46utUXqWdcEAdVv2FVcUX2Nzt6oOZWEwm5mopEtQ=;
+        b=lSrHYImJgrXOI9Xb9HdwFOlIhHOT7WlPCAHlGon94ANIEMufexCuQtRYNTeJQq6hWK
+         s9U7i+AvdS+wc7zSyt5W7VUxd/xD/Dn/aeVhcB2724gCMmkx0x/STt+zS71QDnLPfrO8
+         o0Vqb3iOw8/E7E4x8DYjqJTtTQhCYOLoA5uupr7ew2KNOrlNzkCOQfZe/Nha+VlXwxIB
+         LaN41dV3GyfgAWf2o8hNMTaZOU2oGe7UWOcTgWvgMsih1y7Awd/OM/XhzmyhcKI4pMrv
+         2otBaIHeLbmWPw1yiRKoJUXjjDBk5hLbuLiTDu9palf6il16C854zU9SD9VoMaJTJFjU
+         TImA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=m6H46utUXqWdcEAdVv2FVcUX2Nzt6oOZWEwm5mopEtQ=;
+        b=q70J56nEUnLs1CysRHNe5Yt0KwJJlMFKtKvy7CanfsbF9NZVLPGhH3uWxwu4QfdNpR
+         xHl4f2nwhSz+wwdYk0tMf7US3x9U1aAyHjrwBFKWMXj0HuxoonbMWRJXKkt3bbEhgBh9
+         R/V5aKN+CSC7L7gakAXz3jVQfyo8D9Qc1N/JOVMn7bK7kUpad+7sL38mL9pubqOeOgY5
+         zj/g3U67tsJGFxyQabu6gjDmq78QdfoyNoWVkHtVo+nGFL4slV7z7g6VQpZLFQwBPXl6
+         CO3d3v4a/qUjKFoEpNJISi2W3uNgHxm/ll+kf/OdN2nntM8NH9QaPTvgBTfcwt+9E2BF
+         Pllg==
+X-Gm-Message-State: APjAAAXbQ5rWG2Ic8MYQpD0O5Vt95mZiwEUdXi54Fhflb+zi2NBpZHrd
+        Qp8TzWinb0cW3ZnUkDf+o+U7Vg==
+X-Google-Smtp-Source: APXvYqwpYQz0VV1m6hgiBAcj+79gFn95NBwTzxj50XN2aw3gaqLikpXVbctrQJK2nyss4LiIc0hpFA==
+X-Received: by 2002:adf:d0c1:: with SMTP id z1mr24177891wrh.371.1580141117057;
+        Mon, 27 Jan 2020 08:05:17 -0800 (PST)
+Received: from tsr-lap-08.nix.tessares.net (hag0-main.tessares.net. [87.98.252.165])
+        by smtp.gmail.com with ESMTPSA id 16sm18938279wmi.0.2020.01.27.08.05.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 27 Jan 2020 08:05:16 -0800 (PST)
+Subject: Re: [PATCH] selftests: settings: tests can be in subsubdirs
+To:     Kees Cook <keescook@chromium.org>, Shuah Khan <shuah@kernel.org>
+Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        mptcp <mptcp@lists.01.org>
+References: <20191022171223.27934-1-matthieu.baerts@tessares.net>
+ <c9ce5016-9e83-67c0-ae22-2d3c46427b25@tessares.net>
+ <201911211018.D6CD68AC5@keescook>
+From:   Matthieu Baerts <matthieu.baerts@tessares.net>
+Message-ID: <602ab319-dcb9-4ac7-b2b8-f7b6072ddc03@tessares.net>
+Date:   Mon, 27 Jan 2020 17:05:15 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
 MIME-Version: 1.0
-In-Reply-To: <8f14bee0-ab1c-fc90-dfdb-5128607b767f@linux.ibm.com>
-Content-Type: text/plain; charset=utf-8
+In-Reply-To: <201911211018.D6CD68AC5@keescook>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 Sender: linux-kselftest-owner@vger.kernel.org
@@ -90,18 +68,107 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 1/27/20 2:11 AM, Sandipan Das wrote:
-> Hi Dave,
-> 
-> On 23/01/20 12:15 am, Dave Hansen wrote:
->> Still doesn't build for me:
->>
-> I have this patch that hopefully fixes this. My understanding was
-> that the vm tests are supposed to be generic but this has quite a
-> bit of x86-specific conditional code which complicates things even
-> though it is not used by any of the other tests.
-> 
-> I'm not sure if we should keep x86 multilib build support for these
-> selftests but I'll let the maintainers take a call.
+Hi Shuah, Kees,
 
-How have you tested this patch (and the whole series for that matter)?
+On 21/11/2019 19:52, Kees Cook wrote:
+> On Thu, Nov 21, 2019 at 05:32:42PM +0100, Matthieu Baerts wrote:
+>> Hi Shuah,
+>>
+>> First, thank you for maintaining the Kernel Selftest framework!
+>>
+>> On 22/10/2019 19:12, Matthieu Baerts wrote:
+>>> Commit 852c8cbf34d3 (selftests/kselftest/runner.sh: Add 45 second
+>>> timeout per test) adds support for a new per-test-directory "settings"
+>>> file. But this only works for tests not in a sub-subdirectories, e.g.
+>>>
+>>>    - tools/testing/selftests/rtc (rtc) is OK,
+>>>    - tools/testing/selftests/net/mptcp (net/mptcp) is not.
+>>>
+>>> We have to increase the timeout for net/mptcp tests which are not
+>>> upstreamed yet but this fix is valid for other tests if they need to add
+>>> a "settings" file, see the full list with:
+>>>
+>>>     tools/testing/selftests/*/*/**/Makefile
+>>>
+>>> Note that this patch changes the text header message printed at the end
+>>> of the execution but this text is modified only for the tests that are
+>>> in sub-subdirectories, e.g.
+>>>
+>>>     ok 1 selftests: net/mptcp: mptcp_connect.sh
+>>>
+>>> Before we had:
+>>>
+>>>     ok 1 selftests: mptcp: mptcp_connect.sh
+>>>
+>>> But showing the full target name is probably better, just in case a
+>>> subsubdir has the same name as another one in another subdirectory.
+>>>
+>>> Fixes: 852c8cbf34d3 (selftests/kselftest/runner.sh: Add 45 second timeout per test)
+>>> Signed-off-by: Matthieu Baerts <matthieu.baerts@tessares.net>
+>> Sorry to bother you again with this but by chance, did you have a look at
+>> the patch below? :)
+>>
+>> It doesn't only fix an issue with MPTCP, not in the kernel yet. But it also
+>> fixes the issue of taking the right "settings" file (if available) for any
+>> other tests in a sub-directory, e.g.:
+>>
+>>    drivers/dma-buf
+>>    filesystems/binderfs
+>>    net/forwarding
+>>    networking/timestamping
+>>
+>> But I guess all tests in powerpc/* dirs and others.
+> 
+> Thanks for the ping! I missed this patch when you originally sent it.
+> Yes, this make sense to me:
+> 
+> Reviewed-by: Kees Cook <keescook@chromium.org>
+
+Kees, Thank you for this review!
+
+Shuah, I am sorry to send you this new request. It is just to inform you 
+that the first selftests for MPTCP are now in "net-next" repo, ready for 
+the future Linux 5.6.
+We would then be very happy to see this patch here below for the 
+kselftest framework accepted to avoid timeouts. Locally we apply this 
+patch before running the selftests but we cannot ask everybody running 
+MPTCP' selftests to do the same :)
+
+> As an improvement on this, I wonder if we need to walk all directories
+> between $BASEDIR and $DIR? Actually, let me write this and send it...
+
+Thank you, Kees, for this improvement!
+
+Cheers,
+Matt
+
+> 
+> -Kees
+> 
+>>
+>> Cheers,
+>> Matt
+>>
+>>> ---
+>>>    tools/testing/selftests/kselftest/runner.sh | 2 +-
+>>>    1 file changed, 1 insertion(+), 1 deletion(-)
+>>>
+>>> diff --git a/tools/testing/selftests/kselftest/runner.sh b/tools/testing/selftests/kselftest/runner.sh
+>>> index 84de7bc74f2c..0d7a89901ef7 100644
+>>> --- a/tools/testing/selftests/kselftest/runner.sh
+>>> +++ b/tools/testing/selftests/kselftest/runner.sh
+>>> @@ -90,7 +90,7 @@ run_one()
+>>>    run_many()
+>>>    {
+>>>    	echo "TAP version 13"
+>>> -	DIR=$(basename "$PWD")
+>>> +	DIR="${PWD#${BASE_DIR}/}"
+>>>    	test_num=0
+>>>    	total=$(echo "$@" | wc -w)
+>>>    	echo "1..$total"
+>>> -- 
+Matthieu Baerts | R&D Engineer
+matthieu.baerts@tessares.net
+Tessares SA | Hybrid Access Solutions
+www.tessares.net
+1 Avenue Jean Monnet, 1348 Louvain-la-Neuve, Belgium
