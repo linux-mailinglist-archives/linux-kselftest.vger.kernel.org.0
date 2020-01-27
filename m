@@ -2,115 +2,102 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2437B14A72D
-	for <lists+linux-kselftest@lfdr.de>; Mon, 27 Jan 2020 16:26:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E2F814A738
+	for <lists+linux-kselftest@lfdr.de>; Mon, 27 Jan 2020 16:32:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729174AbgA0P04 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 27 Jan 2020 10:26:56 -0500
-Received: from mail-qt1-f170.google.com ([209.85.160.170]:39117 "EHLO
-        mail-qt1-f170.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729146AbgA0P04 (ORCPT
+        id S1729213AbgA0PcX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 27 Jan 2020 10:32:23 -0500
+Received: from smtp-fw-4101.amazon.com ([72.21.198.25]:54287 "EHLO
+        smtp-fw-4101.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729146AbgA0PcX (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 27 Jan 2020 10:26:56 -0500
-Received: by mail-qt1-f170.google.com with SMTP id e5so7640488qtm.6
-        for <linux-kselftest@vger.kernel.org>; Mon, 27 Jan 2020 07:26:55 -0800 (PST)
+        Mon, 27 Jan 2020 10:32:23 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Z9p1qi1i0v8biakrNGHXKDGzx+YbJBDVxIKmZtnkXoM=;
-        b=WCVC7MCmIhSEep6ULkRMqsMa1GtRWthKfO8i09zB2j6eiMqdYEJQ6JDhvqVbz8MvHs
-         euUVXGzrYhzqK2mtSB+3TrrnoG77ZemAtoqR+JJIziUzLgKOBYyzbfNoN6NSRF38Eh5E
-         NbbySwARzRwzHgoIbCtCp46zJpbP1wlpPtALJduajM4X6+5AyNiJNRqPfsE09MvvOPMR
-         4wM7gXebzVbznwogrFAdOpU/2wyQdzYzDobfdzdpvlzLjlaLhZ2Jasr7Zq/V7W6J2lNX
-         P5hf35aDGHSDBANpU3YzwK2e9W3Q4sH5MgRSQ44aAFbCNM73SMgT8DBYNl3/G1nTG5db
-         m2bA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Z9p1qi1i0v8biakrNGHXKDGzx+YbJBDVxIKmZtnkXoM=;
-        b=KaA6DWpJh84GrT98ggue2Kgs+FEnLmMlJ6d5AOexBbez1cEYQmlBYnitFnkCC3J0NE
-         tQ+ivMlLlwnsFBLP3Ogd39S5JYOI1O4fiY8zi4qh+7ED4WDCvIniRzhZEzRr1TJWnj7P
-         TaCMNR9YNHYF0sSY9bZb27zhDR4Y9dKvQlYMH4ehPTgEqGWdbBKiKbBUzJhb1ZCUg6DF
-         PAHktezBWvQW/FEo4Dmxtc6OhqsqPFbAFOWVfxTGrtwCH4Y0Kdayw6XoWTphN95sJg6K
-         4Pai+CNNED/ziaOUvwGfPnPvik0X1zSACRKMioxJAzJeMfKp9YHjcXJs0kKTYKWD23M5
-         JoZg==
-X-Gm-Message-State: APjAAAUsMV8Me862pCQTnNCh7TaWQfG5tOqeqyVCZ2K+qs9wzfVkMUmN
-        HRo82d0B1Fdm9tfgkuPdzeRp2wjfAdsoBRPlxlRWDw==
-X-Google-Smtp-Source: APXvYqxa2HxvNQurhDo3aHHjycZl/xwN3Vsfq99Rc2Zmv7N+jn9VoxAzfMNiUg+l7uuzU1iBJ2C6kuwjHNbJZc4b7jU=
-X-Received: by 2002:ac8:71d7:: with SMTP id i23mr16488532qtp.50.1580138814604;
- Mon, 27 Jan 2020 07:26:54 -0800 (PST)
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1580139143; x=1611675143;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version;
+  bh=w5hA1PF90OTjQxM6N8ucGOURntMZjlaqhctLj5i7xTA=;
+  b=nMndJjSSLCFFj860XwLv0g62Qu9YJ6BNi3Sr2zDbV2X15W4jzHduzCVX
+   X3T/+KNO4z1GaoQaxOX64TF9cprPKP9XXqYrbKNk5iu64xpG77sTrrZPV
+   zZbSmEkCsTVRu1DHH2VlxtxFyoqOtAm5pVyU+nkwWPIFXzWI/KbzsnWxA
+   A=;
+IronPort-SDR: Ds4euVgMziH+yDZ6yIO2TDL1xDyfD3I+sNhQgqD6cB5icmpdB2It3PFfH2yjWFp+m1z4mpPzmT
+ +abll6g5a2Ow==
+X-IronPort-AV: E=Sophos;i="5.70,370,1574121600"; 
+   d="scan'208";a="14323896"
+Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-2b-8cc5d68b.us-west-2.amazon.com) ([10.43.8.6])
+  by smtp-border-fw-out-4101.iad4.amazon.com with ESMTP; 27 Jan 2020 15:32:21 +0000
+Received: from EX13MTAUEA002.ant.amazon.com (pdx4-ws-svc-p6-lb7-vlan3.pdx.amazon.com [10.170.41.166])
+        by email-inbound-relay-2b-8cc5d68b.us-west-2.amazon.com (Postfix) with ESMTPS id 198F8A1F4B;
+        Mon, 27 Jan 2020 15:32:20 +0000 (UTC)
+Received: from EX13D31EUA001.ant.amazon.com (10.43.165.15) by
+ EX13MTAUEA002.ant.amazon.com (10.43.61.77) with Microsoft SMTP Server (TLS)
+ id 15.0.1236.3; Mon, 27 Jan 2020 15:32:19 +0000
+Received: from u886c93fd17d25d.ant.amazon.com (10.43.160.48) by
+ EX13D31EUA001.ant.amazon.com (10.43.165.15) with Microsoft SMTP Server (TLS)
+ id 15.0.1367.3; Mon, 27 Jan 2020 15:32:16 +0000
+From:   <sjpark@amazon.com>
+To:     <brendanhiggins@google.com>
+CC:     <linux-kselftest@vger.kernel.org>, <kunit-dev@googlegroups.com>,
+        <linux-kernel@vger.kernel.org>, SeongJae Park <sjpark@amazon.de>
+Subject: [PATCH] docs/kunit/start: Use '_KUNIT_TEST' config name suffix
+Date:   Mon, 27 Jan 2020 16:32:01 +0100
+Message-ID: <20200127153201.3908-1-sjpark@amazon.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20200126015924.4198-1-sj38.park@gmail.com>
+References: <20200126015924.4198-1-sj38.park@gmail.com>
 MIME-Version: 1.0
-References: <CACT4Y+YjOxmOzzPt_xaYE44QNZfq9haNfbnVBrTnPXe7zuSEfA@mail.gmail.com>
- <CACT4Y+ZaN900gwx=PHS10hrKofZib7HA7JFxE_DkwChyttYW+A@mail.gmail.com>
- <876a2abe-41ab-5819-4ae8-ad26186d0d1c@kernel.org> <226099bc-9763-3a73-e26a-b292f601494c@kernel.org>
- <20191011180248.GA24089@rei.lan> <b715f3d7-547f-9a43-dc41-2e46ec3bfd51@kernel.org>
- <20191014085414.GB31760@rei.lan> <CACT4Y+aKbgT=i8C5aZvp8ZV52PamGm=GdnR6kQecczLQOQSGqA@mail.gmail.com>
- <62903a33-8ffc-56b6-de1a-539f10b5de2a@oracle.com> <86bde120-e5fe-4bb1-9b93-769a444500f9@oracle.com>
- <e8b11b09-37ac-6ae2-0908-b803b4160f7c@oracle.com>
-In-Reply-To: <e8b11b09-37ac-6ae2-0908-b803b4160f7c@oracle.com>
-From:   Dmitry Vyukov <dvyukov@google.com>
-Date:   Mon, 27 Jan 2020 16:26:42 +0100
-Message-ID: <CACT4Y+bShy-3vO3ifNKVcGGNf3X9XA7zL-Ja9-T+gZv5=QNe4w@mail.gmail.com>
-Subject: Re: [Automated-testing] syzkaller reproducers
-To:     George Kennedy <george.kennedy@oracle.com>
-Cc:     Cyril Hrubis <chrubis@suse.cz>, shuah <shuah@kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        automated-testing@yoctoproject.org, kernelci@groups.io,
-        Dhaval Giani <dhaval.giani@gmail.com>,
-        Jan Setje-Eilers <jan.setjeeilers@oracle.com>,
-        syzkaller <syzkaller@googlegroups.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
+X-Originating-IP: [10.43.160.48]
+X-ClientProxiedBy: EX13D30UWB004.ant.amazon.com (10.43.161.51) To
+ EX13D31EUA001.ant.amazon.com (10.43.165.15)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi George,
+From: SeongJae Park <sjpark@amazon.de>
 
-This was still starred in my inbox, but I never got to actually do
-anything with it. Thanks for pinging me. I thought that the script to
-extract the repros won't work for some reason and that I will need to
-fix it first. But turns out it's still working as-is (I wanted to
-submit some changes that would break it, but I never go to that as
-well. Good! :)).
+It is recommended to use '_KUNIT_TEST' config name suffix for kunit
+tests but the example is using only '_TEST' suffix.  This commit fixes
+it to also use '_KUNIT_TEST' suffix.
 
-So here is a new drop in with 692 repros:
-https://github.com/dvyukov/syzkaller-repros/commit/6a06992209c328a3115c89c020f45b844b103573
-Enjoy!
+Signed-off-by: SeongJae Park <sjpark@amazon.de>
+---
+ Documentation/dev-tools/kunit/start.rst | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-Yes, we have separate managers for each version, the entries in the
-Instances table correspond to syz-manager one-to-one:
-https://syzkaller.appspot.com/upstream
-https://syzkaller.appspot.com/linux-4.19
-https://syzkaller.appspot.com/android-54
+diff --git a/Documentation/dev-tools/kunit/start.rst b/Documentation/dev-tools/kunit/start.rst
+index 4e1d24db6b13..2f8b4eda97eb 100644
+--- a/Documentation/dev-tools/kunit/start.rst
++++ b/Documentation/dev-tools/kunit/start.rst
+@@ -138,7 +138,7 @@ Now add the following to ``drivers/misc/Kconfig``:
+ 
+ .. code-block:: kconfig
+ 
+-	config MISC_EXAMPLE_TEST
++	config MISC_EXAMPLE_KUNIT_TEST
+ 		bool "Test for my example"
+ 		depends on MISC_EXAMPLE && KUNIT
+ 
+@@ -146,14 +146,14 @@ and the following to ``drivers/misc/Makefile``:
+ 
+ .. code-block:: make
+ 
+-	obj-$(CONFIG_MISC_EXAMPLE_TEST) += example-test.o
++	obj-$(CONFIG_MISC_EXAMPLE_KUNIT_TEST) += example-test.o
+ 
+ Now add it to your ``.kunitconfig``:
+ 
+ .. code-block:: none
+ 
+ 	CONFIG_MISC_EXAMPLE=y
+-	CONFIG_MISC_EXAMPLE_TEST=y
++	CONFIG_MISC_EXAMPLE_KUNIT_TEST=y
+ 
+ Now you can run the test:
+ 
+-- 
+2.17.1
 
-
-
-On Mon, Jan 27, 2020 at 3:20 PM George Kennedy
-<george.kennedy@oracle.com> wrote:
->
-> Hi Dmitry,
->
-> Re-sending this request.
->
-> Also, how do you track the Upstream branches with Syzkaller? Do you have
-> a version of Syzkaller for each (i.e. 4.14, 4.19, etc)?
->
-> Thank you,
-> George
->
-> On 12/6/2019 3:06 PM, George Kennedy wrote:
-> > Hello Dmitry,
-> >
-> > Could we get another drop of the Syzkaller C reproducers?
-> >
-> > Wonder if we could get the drop periodically (i.e. a drop/quarter or a
-> > drop to match a major linux release)?
-> >
-> > Thank you,
-> > George
->
