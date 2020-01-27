@@ -2,106 +2,198 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 64212149873
-	for <lists+linux-kselftest@lfdr.de>; Sun, 26 Jan 2020 02:59:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC02B149FF3
+	for <lists+linux-kselftest@lfdr.de>; Mon, 27 Jan 2020 09:38:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728890AbgAZB7c (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 25 Jan 2020 20:59:32 -0500
-Received: from mail-wr1-f67.google.com ([209.85.221.67]:34656 "EHLO
-        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728792AbgAZB7c (ORCPT
+        id S1729068AbgA0Iiu (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 27 Jan 2020 03:38:50 -0500
+Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:28046 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726260AbgA0Iiu (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 25 Jan 2020 20:59:32 -0500
-Received: by mail-wr1-f67.google.com with SMTP id t2so6818562wrr.1;
-        Sat, 25 Jan 2020 17:59:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=SdVs3dPIiiIIcXjoO9Xv21aA/w8JkSjwfU51yGxLE6A=;
-        b=ExoCsI3q2nebn41pv8In6nPDsjOf8kNEcVEzCYhpX30KaEJzP+/HROWaaTShwp0+7d
-         uoEOFpkFBTk7gyv6VsoZN7sDudeGPbcgxYO2RMw82uTtKXsDiaq/kiGLnrOBKzi4gFFJ
-         3Dq9pujmhPqYaCMni36tLk9wZC1y4Kt+1kk2yy+jKgCFc/uk8CpXLzw3pEjqaERqhRXb
-         MektIhtL8cgY5snjPwCptcw63Eg/u2DMxxTi9AEUueajuLewb8roEjrpNtLt5Xb/hV7A
-         uLr06yfOaLnDAiWO7idT4YN1pzNPZmCEaBmVQsw1rT7l7quRs9rcCclRHwOF6/WKqgQn
-         XiLg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=SdVs3dPIiiIIcXjoO9Xv21aA/w8JkSjwfU51yGxLE6A=;
-        b=qjG8wzfYwBKf6FXhD4R3OVCes2OFafWnGS6EiucUWVrcEVVz+v98Ox+39gD99AUoUr
-         RJ4xFeK++Fdtyafygh/SwOepBB+fbFVRd0Qqe9WWczB3G3Rf2LbnIEVJGieKZtKP62Pp
-         zfldPnvES0CkMyJ/jMDWO1FrBVwNntnmqp3p44U1fIhJj5SPCtjbLN0KcrLsuEadW6g5
-         ZGgI3hACAyBq/ZLRE9zq+8mt2WvxlbhWOUpL+AB51RRRvtHoOw5g9YrinF0FwSe6hsBf
-         AhvAu3AdQ1rTV0An4XG69EElgGoHweg3QaBaXpnXn0bVhIWrTep1j2MxBtANt631xy4b
-         aPYQ==
-X-Gm-Message-State: APjAAAU5lKBegSheQ1j3afHv5jlbcxXL2z9USeKUutyMWtNqUxRM+SCf
-        LLLCEtBPQO9wfiGR37EGeigtYJvD
-X-Google-Smtp-Source: APXvYqxIw3mhhJft1s/vf8mq7u6dtiCZPcquS1iCHkBN36p+61TVQSAcy1TBWNssgtE3EcJhReQd3w==
-X-Received: by 2002:adf:cf12:: with SMTP id o18mr12803406wrj.361.1580003969994;
-        Sat, 25 Jan 2020 17:59:29 -0800 (PST)
-Received: from localhost.localdomain (cable-86-56-10-173.cust.telecolumbus.net. [86.56.10.173])
-        by smtp.gmail.com with ESMTPSA id u16sm12542241wmj.41.2020.01.25.17.59.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 25 Jan 2020 17:59:29 -0800 (PST)
-From:   sj38.park@gmail.com
-To:     brendanhiggins@google.com
-Cc:     linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org, SeongJae Park <sjpark@amazon.de>
-Subject: [PATCH] kunit/kunit_kernel: Rebuild .config if .kunitconfig is modified
-Date:   Sun, 26 Jan 2020 01:59:24 +0000
-Message-Id: <20200126015924.4198-1-sj38.park@gmail.com>
-X-Mailer: git-send-email 2.17.1
+        Mon, 27 Jan 2020 03:38:50 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1580114328;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=6xHjqcGoKCBGKlL3qdqNz6iPbD1SCDfAlhNTZTWBwQI=;
+        b=eHeZzyJ6Kixq1gnlmegS4dheSiSHWXTpdTIbi/V8Cn/ptVqwCtyC6gMNPLxsL2yX3p0lS7
+        RvKIHwa+pWClkPwDst4fS8oGqd1K7IqTpd4jTrvuoZkzlpbPgEv7+p4my4teotGQkLKwoB
+        hDxQvNSUEINDORJIkq+4Glns/rOxu3o=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-16-7JGMZ4wYPHaLPIBsHxr0GA-1; Mon, 27 Jan 2020 03:38:47 -0500
+X-MC-Unique: 7JGMZ4wYPHaLPIBsHxr0GA-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id AFC6D1800D41;
+        Mon, 27 Jan 2020 08:38:45 +0000 (UTC)
+Received: from kamzik.brq.redhat.com (unknown [10.43.2.160])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 8CEA4863C5;
+        Mon, 27 Jan 2020 08:38:41 +0000 (UTC)
+Date:   Mon, 27 Jan 2020 09:38:38 +0100
+From:   Andrew Jones <drjones@redhat.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Ben Gardon <bgardon@google.com>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Cannon Matthews <cannonmatthews@google.com>,
+        Peter Xu <peterx@redhat.com>, Peter Shier <pshier@google.com>,
+        Oliver Upton <oupton@google.com>
+Subject: Re: [PATCH v4 06/10] KVM: selftests: Add support for vcpu_args_set
+ to aarch64 and s390x
+Message-ID: <20200127083838.u32bylca2n4om6zx@kamzik.brq.redhat.com>
+References: <20200123180436.99487-1-bgardon@google.com>
+ <20200123180436.99487-7-bgardon@google.com>
+ <6061cd22-59bb-c191-bd98-f14d7cd274ae@redhat.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <6061cd22-59bb-c191-bd98-f14d7cd274ae@redhat.com>
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: SeongJae Park <sjpark@amazon.de>
+On Sat, Jan 25, 2020 at 10:34:16AM +0100, Paolo Bonzini wrote:
+> On 23/01/20 19:04, Ben Gardon wrote:
+> > Currently vcpu_args_set is only implemented for x86. This makes writing
+> > tests with multiple vCPUs difficult as each guest vCPU must either a.)
+> > do the same thing or b.) derive some kind of unique token from it's
+> > registers or the architecture. To simplify the process of writing tests
+> > with multiple vCPUs for s390 and aarch64, add set args functions for
+> > those architectures.
+> > 
+> > Signed-off-by: Ben Gardon <bgardon@google.com>
+> > ---
+> >  .../selftests/kvm/lib/aarch64/processor.c     | 33 +++++++++++++++++
+> >  .../selftests/kvm/lib/s390x/processor.c       | 35 +++++++++++++++++++
+> >  2 files changed, 68 insertions(+)
+> > 
+> > diff --git a/tools/testing/selftests/kvm/lib/aarch64/processor.c b/tools/testing/selftests/kvm/lib/aarch64/processor.c
+> > index 86036a59a668e..a2ff90a75f326 100644
+> > --- a/tools/testing/selftests/kvm/lib/aarch64/processor.c
+> > +++ b/tools/testing/selftests/kvm/lib/aarch64/processor.c
+> > @@ -333,3 +333,36 @@ void vm_vcpu_add_default(struct kvm_vm *vm, uint32_t vcpuid, void *guest_code)
+> >  {
+> >  	aarch64_vcpu_add_default(vm, vcpuid, NULL, guest_code);
+> >  }
+> > +
+> > +/* VM VCPU Args Set
+> > + *
+> > + * Input Args:
+> > + *   vm - Virtual Machine
+> > + *   vcpuid - VCPU ID
+> > + *   num - number of arguments
+> > + *   ... - arguments, each of type uint64_t
+> > + *
+> > + * Output Args: None
+> > + *
+> > + * Return: None
+> > + *
+> > + * Sets the first num function input arguments to the values
+> > + * given as variable args.  Each of the variable args is expected to
+> > + * be of type uint64_t. The registers set by this function are r0-r7.
+> > + */
+> > +void vcpu_args_set(struct kvm_vm *vm, uint32_t vcpuid, unsigned int num, ...)
+> > +{
+> > +	va_list ap;
+> > +
+> > +	TEST_ASSERT(num >= 1 && num <= 8, "Unsupported number of args,\n"
+> > +		    "  num: %u\n",
+> > +		    num);
+> > +
+> > +	va_start(ap, num);
+> > +
+> > +	for (i = 0; i < num; i++)
+> > +		set_reg(vm, vcpuid, ARM64_CORE_REG(regs.regs[num]),
 
-Deletions of configs in the '.kunitconfig' is not applied because kunit
-rebuilds '.config' only if the '.config' is not a subset of the
-'.kunitconfig'.  To allow the deletions to applied, this commit modifies
-the '.config' rebuild condition to addtionally check the modified times
-of those files.
+For AArch64 you also need to squash s/num/i/ for this line.
 
-Signed-off-by: SeongJae Park <sjpark@amazon.de>
----
- tools/testing/kunit/kunit_kernel.py | 17 +++++++++++------
- 1 file changed, 11 insertions(+), 6 deletions(-)
+(Plus I'm still not that pleased with adding this big header to this
+file for this function, or the weird line breaks in the assert.)
 
-diff --git a/tools/testing/kunit/kunit_kernel.py b/tools/testing/kunit/kunit_kernel.py
-index cc5d844ecca1..a3a5d6c7e66d 100644
---- a/tools/testing/kunit/kunit_kernel.py
-+++ b/tools/testing/kunit/kunit_kernel.py
-@@ -111,17 +111,22 @@ class LinuxSourceTree(object):
- 		return True
- 
- 	def build_reconfig(self, build_dir):
--		"""Creates a new .config if it is not a subset of the .kunitconfig."""
-+		"""Creates a new .config if it is not a subset of, or older than the .kunitconfig."""
- 		kconfig_path = get_kconfig_path(build_dir)
- 		if os.path.exists(kconfig_path):
- 			existing_kconfig = kunit_config.Kconfig()
- 			existing_kconfig.read_from_file(kconfig_path)
--			if not self._kconfig.is_subset_of(existing_kconfig):
--				print('Regenerating .config ...')
--				os.remove(kconfig_path)
--				return self.build_config(build_dir)
--			else:
-+			subset = self._kconfig.is_subset_of(existing_kconfig)
-+
-+			kunitconfig_mtime = os.path.getmtime(kunitconfig_path)
-+			kconfig_mtime = os.path.getmtime(kconfig_path)
-+			older = kconfig_mtime < kunitconfig_mtime
-+
-+			if subset and not older:
- 				return True
-+			print('Regenerating .config ...')
-+			os.remove(kconfig_path)
-+			return self.build_config(build_dir)
- 		else:
- 			print('Generating .config ...')
- 			return self.build_config(build_dir)
--- 
-2.17.1
+> > +			va_arg(ap, uint64_t));
+> > +
+> > +	va_end(ap);
+> > +}
+> > diff --git a/tools/testing/selftests/kvm/lib/s390x/processor.c b/tools/testing/selftests/kvm/lib/s390x/processor.c
+> > index 32a02360b1eb0..680f37be9dbc9 100644
+> > --- a/tools/testing/selftests/kvm/lib/s390x/processor.c
+> > +++ b/tools/testing/selftests/kvm/lib/s390x/processor.c
+> > @@ -269,6 +269,41 @@ void vm_vcpu_add_default(struct kvm_vm *vm, uint32_t vcpuid, void *guest_code)
+> >  	run->psw_addr = (uintptr_t)guest_code;
+> >  }
+> >  
+> > +/* VM VCPU Args Set
+> > + *
+> > + * Input Args:
+> > + *   vm - Virtual Machine
+> > + *   vcpuid - VCPU ID
+> > + *   num - number of arguments
+> > + *   ... - arguments, each of type uint64_t
+> > + *
+> > + * Output Args: None
+> > + *
+> > + * Return: None
+> > + *
+> > + * Sets the first num function input arguments to the values
+> > + * given as variable args.  Each of the variable args is expected to
+> > + * be of type uint64_t. The registers set by this function are r2-r6.
+> > + */
+> > +void vcpu_args_set(struct kvm_vm *vm, uint32_t vcpuid, unsigned int num, ...)
+> > +{
+> > +	va_list ap;
+> > +	struct kvm_regs regs;
+> > +
+> > +	TEST_ASSERT(num >= 1 && num <= 5, "Unsupported number of args,\n"
+> > +		    "  num: %u\n",
+> > +		    num);
+> > +
+> > +	va_start(ap, num);
+> > +	vcpu_regs_get(vm, vcpuid, &regs);
+> > +
+> > +	for (i = 0; i < num; i++)
+> > +		regs.gprs[i + 2] = va_arg(ap, uint64_t);
+> > +
+> > +	vcpu_regs_set(vm, vcpuid, &regs);
+> > +	va_end(ap);
+> > +}
+> > +
+> >  void vcpu_dump(FILE *stream, struct kvm_vm *vm, uint32_t vcpuid, uint8_t indent)
+> >  {
+> >  	struct vcpu *vcpu = vm->vcpu_head;
+> > 
+> 
+> Squashing this:
+> 
+> diff --git a/tools/testing/selftests/kvm/lib/aarch64/processor.c b/tools/testing/selftests/kvm/lib/aarch64/processor.c
+> index a2ff90a75f32..839a76c96f01 100644
+> --- a/tools/testing/selftests/kvm/lib/aarch64/processor.c
+> +++ b/tools/testing/selftests/kvm/lib/aarch64/processor.c
+> @@ -353,6 +353,7 @@ void vm_vcpu_add_default(struct kvm_vm *vm, uint32_t vcpuid, void *guest_code)
+>  void vcpu_args_set(struct kvm_vm *vm, uint32_t vcpuid, unsigned int num, ...)
+>  {
+>  	va_list ap;
+> +	int i;
+>  
+>  	TEST_ASSERT(num >= 1 && num <= 8, "Unsupported number of args,\n"
+>  		    "  num: %u\n",
+> diff --git a/tools/testing/selftests/kvm/lib/s390x/processor.c b/tools/testing/selftests/kvm/lib/s390x/processor.c
+> index 680f37be9dbc..a0b84235c848 100644
+> --- a/tools/testing/selftests/kvm/lib/s390x/processor.c
+> +++ b/tools/testing/selftests/kvm/lib/s390x/processor.c
+> @@ -289,6 +289,7 @@ void vcpu_args_set(struct kvm_vm *vm, uint32_t vcpuid, unsigned int num, ...)
+>  {
+>  	va_list ap;
+>  	struct kvm_regs regs;
+> +	int i;
+>  
+>  	TEST_ASSERT(num >= 1 && num <= 5, "Unsupported number of args,\n"
+>  		    "  num: %u\n",
+> 
+> Paolo
+> 
 
