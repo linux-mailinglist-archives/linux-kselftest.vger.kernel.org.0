@@ -2,90 +2,115 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FC4214A681
-	for <lists+linux-kselftest@lfdr.de>; Mon, 27 Jan 2020 15:49:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2437B14A72D
+	for <lists+linux-kselftest@lfdr.de>; Mon, 27 Jan 2020 16:26:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728760AbgA0Ota (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 27 Jan 2020 09:49:30 -0500
-Received: from mail-wr1-f67.google.com ([209.85.221.67]:38504 "EHLO
-        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726635AbgA0Ota (ORCPT
+        id S1729174AbgA0P04 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 27 Jan 2020 10:26:56 -0500
+Received: from mail-qt1-f170.google.com ([209.85.160.170]:39117 "EHLO
+        mail-qt1-f170.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729146AbgA0P04 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 27 Jan 2020 09:49:30 -0500
-Received: by mail-wr1-f67.google.com with SMTP id y17so11647848wrh.5;
-        Mon, 27 Jan 2020 06:49:29 -0800 (PST)
+        Mon, 27 Jan 2020 10:26:56 -0500
+Received: by mail-qt1-f170.google.com with SMTP id e5so7640488qtm.6
+        for <linux-kselftest@vger.kernel.org>; Mon, 27 Jan 2020 07:26:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
+        d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=jX8KJNUaBZ7lPrWhJLDlZPLTmG3Da5CIo7TzdsHwbFk=;
-        b=h6foz3aEKiBRWiws9pPytTUFKgH3xDbMgDFUFTQ+9iLbz5EcCaXVdGaetsE1PaGm61
-         GUQEAcdzTq8ceWlO1UQiahsvWhsxfdKw+a8IqVDnYhtnywLmVaGQjY8nZspFrQK50mC0
-         xQTcFk3h9eLo2BX89O1XM2ca3ZIcH0Olf8fwE78AiPZf9od4WLjOUEKnjV3x6ER+/aEr
-         YhVa/28zkcj8iPJS8BuFH6o8GoErmzbQHYQ/rjJvDicev9PkZTsGc++kpl9l3g/HHFLT
-         yaOMYuxojA0AOXSl/twWBof099F5YF9mxT7UnjM7ipnpj/AcQ9CwmtE0u+yVZaSb0h2z
-         OREw==
+        bh=Z9p1qi1i0v8biakrNGHXKDGzx+YbJBDVxIKmZtnkXoM=;
+        b=WCVC7MCmIhSEep6ULkRMqsMa1GtRWthKfO8i09zB2j6eiMqdYEJQ6JDhvqVbz8MvHs
+         euUVXGzrYhzqK2mtSB+3TrrnoG77ZemAtoqR+JJIziUzLgKOBYyzbfNoN6NSRF38Eh5E
+         NbbySwARzRwzHgoIbCtCp46zJpbP1wlpPtALJduajM4X6+5AyNiJNRqPfsE09MvvOPMR
+         4wM7gXebzVbznwogrFAdOpU/2wyQdzYzDobfdzdpvlzLjlaLhZ2Jasr7Zq/V7W6J2lNX
+         P5hf35aDGHSDBANpU3YzwK2e9W3Q4sH5MgRSQ44aAFbCNM73SMgT8DBYNl3/G1nTG5db
+         m2bA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=jX8KJNUaBZ7lPrWhJLDlZPLTmG3Da5CIo7TzdsHwbFk=;
-        b=UrcJKTWjNKcvc8LDirBehYc0T4WorNMHZs9hhat5xGQUF523yBb/R5TpwEiiV800pa
-         64hPwaVDOxqizy7xRXgya6h3lZjydh3MODcKiugD/TC9IHBG6JHzzwfUwrOGynq3/pQ8
-         QK7nwlx23cDb6sWn7DukHdWYucQwqsxR9csenHSnGoVXhQhM02uU/qd0XyOIbROgErEH
-         wKmOEqHnV6fUXFz1XLlZvWpTrGvERj/p++yg64NjSX1LVmxSQHisOHjsoX4q7rTypQpS
-         o3wNoFKyxxea4RGDhGQZgaR+teoDuXZdjP4+Gy/pytMX8nVxPjGQ1oIyTdnf4JFrU+NI
-         ssgg==
-X-Gm-Message-State: APjAAAVqLKYRLdO4vXD7u1vG7WPTILxy2wEXLLJFwA7H1sakWiJ3kUq7
-        ih8KXRplmg8JAKaBWSW16JffIGKQAPHvkGiZvlE=
-X-Google-Smtp-Source: APXvYqzuUo4DzwKzx54jXhqW/mes8BlzhoUeODxdPF0kk9rT5jKBDQqoOXfDhxLh4Db25Rf8L+pxLvZgr40x5xce4uk=
-X-Received: by 2002:a5d:5708:: with SMTP id a8mr21816515wrv.79.1580136568237;
- Mon, 27 Jan 2020 06:49:28 -0800 (PST)
+        bh=Z9p1qi1i0v8biakrNGHXKDGzx+YbJBDVxIKmZtnkXoM=;
+        b=KaA6DWpJh84GrT98ggue2Kgs+FEnLmMlJ6d5AOexBbez1cEYQmlBYnitFnkCC3J0NE
+         tQ+ivMlLlwnsFBLP3Ogd39S5JYOI1O4fiY8zi4qh+7ED4WDCvIniRzhZEzRr1TJWnj7P
+         TaCMNR9YNHYF0sSY9bZb27zhDR4Y9dKvQlYMH4ehPTgEqGWdbBKiKbBUzJhb1ZCUg6DF
+         PAHktezBWvQW/FEo4Dmxtc6OhqsqPFbAFOWVfxTGrtwCH4Y0Kdayw6XoWTphN95sJg6K
+         4Pai+CNNED/ziaOUvwGfPnPvik0X1zSACRKMioxJAzJeMfKp9YHjcXJs0kKTYKWD23M5
+         JoZg==
+X-Gm-Message-State: APjAAAUsMV8Me862pCQTnNCh7TaWQfG5tOqeqyVCZ2K+qs9wzfVkMUmN
+        HRo82d0B1Fdm9tfgkuPdzeRp2wjfAdsoBRPlxlRWDw==
+X-Google-Smtp-Source: APXvYqxa2HxvNQurhDo3aHHjycZl/xwN3Vsfq99Rc2Zmv7N+jn9VoxAzfMNiUg+l7uuzU1iBJ2C6kuwjHNbJZc4b7jU=
+X-Received: by 2002:ac8:71d7:: with SMTP id i23mr16488532qtp.50.1580138814604;
+ Mon, 27 Jan 2020 07:26:54 -0800 (PST)
 MIME-Version: 1.0
-References: <20200108074043.21580-1-svens@linux.ibm.com> <20200108091155.4af8a2c5@gandalf.local.home>
- <20200127132255.GA75877@tuxmaker.boeblingen.de.ibm.com>
-In-Reply-To: <20200127132255.GA75877@tuxmaker.boeblingen.de.ibm.com>
-From:   Shuah Khan <shuahkhan@gmail.com>
-Date:   Mon, 27 Jan 2020 07:49:17 -0700
-Message-ID: <CAKocOOM1zNgzY8_LE41HpiYLWNkoWQA7z-DC2ZL1sFHpbVxkkA@mail.gmail.com>
-Subject: Re: [PATCH v3] selftests/ftrace: fix glob selftest
-To:     Sven Schnelle <svens@linux.ibm.com>, shuah@kernel.org,
-        linux-kselftest@vger.kernel.org
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        LKML <linux-kernel@vger.kernel.org>
+References: <CACT4Y+YjOxmOzzPt_xaYE44QNZfq9haNfbnVBrTnPXe7zuSEfA@mail.gmail.com>
+ <CACT4Y+ZaN900gwx=PHS10hrKofZib7HA7JFxE_DkwChyttYW+A@mail.gmail.com>
+ <876a2abe-41ab-5819-4ae8-ad26186d0d1c@kernel.org> <226099bc-9763-3a73-e26a-b292f601494c@kernel.org>
+ <20191011180248.GA24089@rei.lan> <b715f3d7-547f-9a43-dc41-2e46ec3bfd51@kernel.org>
+ <20191014085414.GB31760@rei.lan> <CACT4Y+aKbgT=i8C5aZvp8ZV52PamGm=GdnR6kQecczLQOQSGqA@mail.gmail.com>
+ <62903a33-8ffc-56b6-de1a-539f10b5de2a@oracle.com> <86bde120-e5fe-4bb1-9b93-769a444500f9@oracle.com>
+ <e8b11b09-37ac-6ae2-0908-b803b4160f7c@oracle.com>
+In-Reply-To: <e8b11b09-37ac-6ae2-0908-b803b4160f7c@oracle.com>
+From:   Dmitry Vyukov <dvyukov@google.com>
+Date:   Mon, 27 Jan 2020 16:26:42 +0100
+Message-ID: <CACT4Y+bShy-3vO3ifNKVcGGNf3X9XA7zL-Ja9-T+gZv5=QNe4w@mail.gmail.com>
+Subject: Re: [Automated-testing] syzkaller reproducers
+To:     George Kennedy <george.kennedy@oracle.com>
+Cc:     Cyril Hrubis <chrubis@suse.cz>, shuah <shuah@kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        automated-testing@yoctoproject.org, kernelci@groups.io,
+        Dhaval Giani <dhaval.giani@gmail.com>,
+        Jan Setje-Eilers <jan.setjeeilers@oracle.com>,
+        syzkaller <syzkaller@googlegroups.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Jan 27, 2020 at 6:23 AM Sven Schnelle <svens@linux.ibm.com> wrote:
+Hi George,
+
+This was still starred in my inbox, but I never got to actually do
+anything with it. Thanks for pinging me. I thought that the script to
+extract the repros won't work for some reason and that I will need to
+fix it first. But turns out it's still working as-is (I wanted to
+submit some changes that would break it, but I never go to that as
+well. Good! :)).
+
+So here is a new drop in with 692 repros:
+https://github.com/dvyukov/syzkaller-repros/commit/6a06992209c328a3115c89c020f45b844b103573
+Enjoy!
+
+Yes, we have separate managers for each version, the entries in the
+Instances table correspond to syz-manager one-to-one:
+https://syzkaller.appspot.com/upstream
+https://syzkaller.appspot.com/linux-4.19
+https://syzkaller.appspot.com/android-54
+
+
+
+On Mon, Jan 27, 2020 at 3:20 PM George Kennedy
+<george.kennedy@oracle.com> wrote:
 >
-> Hi Steve,
+> Hi Dmitry,
 >
-> On Wed, Jan 08, 2020 at 09:11:55AM -0500, Steven Rostedt wrote:
-> >
-> > Shuah,
-> >
-> > Want to take this through your tree?
-> >
-> >  https://lore.kernel.org/r/20200108074043.21580-1-svens@linux.ibm.com
-> >
-> > Reviewed-by: Steven Rostedt (VMware) <rostedt@goodmis.org>
+> Re-sending this request.
 >
-> As Shuah didn't reply, can you push that through your tree?
+> Also, how do you track the Upstream branches with Syzkaller? Do you have
+> a version of Syzkaller for each (i.e. 4.14, 4.19, etc)?
 >
-
-Hi Sven,
-
-Did you run getmaintainers of this patch? You didn't send this to my
-email address listed in the get maintainers file and also didn't cc
-linux-kselftest.
-
-I just happen to notice this now. Please resend with steve's
-Reviewed-by tag to the recipients suggested by get_maintainers.pl
-
-I will take this through ksleftest tree.
-
-thanks,
--- Shuah
+> Thank you,
+> George
+>
+> On 12/6/2019 3:06 PM, George Kennedy wrote:
+> > Hello Dmitry,
+> >
+> > Could we get another drop of the Syzkaller C reproducers?
+> >
+> > Wonder if we could get the drop periodically (i.e. a drop/quarter or a
+> > drop to match a major linux release)?
+> >
+> > Thank you,
+> > George
+>
