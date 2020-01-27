@@ -2,141 +2,129 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 42CDA14A8B5
-	for <lists+linux-kselftest@lfdr.de>; Mon, 27 Jan 2020 18:08:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BCED14A8CC
+	for <lists+linux-kselftest@lfdr.de>; Mon, 27 Jan 2020 18:17:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725955AbgA0RIj (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 27 Jan 2020 12:08:39 -0500
-Received: from userp2130.oracle.com ([156.151.31.86]:58002 "EHLO
-        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725845AbgA0RIj (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 27 Jan 2020 12:08:39 -0500
-Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
-        by userp2130.oracle.com (8.16.0.27/8.16.0.27) with SMTP id 00RGwJwm105053;
-        Mon, 27 Jan 2020 17:08:29 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=subject : to : cc :
- references : from : message-id : date : mime-version : in-reply-to :
- content-type : content-transfer-encoding; s=corp-2019-08-05;
- bh=Qpj4ANsORjwOzp6caysXOelgcN6UjYcpC95OpDEgUaw=;
- b=pL06VC9FJgJzuIr00UtZaOOqANgcglP7jSwppF+yHS7bFrhEf3ooBOOfkZSNHBvAAQEC
- dwpaRz2u09TyMknfO8U8BE2VvxDleZMojvLwrht4njVl9Gq1vDHWp/aiwXWs1MpsypBc
- aeFjwLbpDunWsdFDNcxGfBrlogxDPHe5qgdOrapNvk9+MJ7rAQgsrWl5bzPWKKFL8h4u
- uAluZcRKV1t24du2e6bB7B23v/vzDRqQvr9RxAzGeIOAXbyODBFIbw35f/AdZ4zz4crt
- vOB+cx14fjDSHkIpEbFPs9erfdoR7Dy2xnuWXuDJUTsSJHXtRnogwiaWqvcaaKYCh3e0 Jw== 
-Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
-        by userp2130.oracle.com with ESMTP id 2xrd3u0sa9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 27 Jan 2020 17:08:29 +0000
-Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
-        by userp3020.oracle.com (8.16.0.27/8.16.0.27) with SMTP id 00RH39hb054209;
-        Mon, 27 Jan 2020 17:06:29 GMT
-Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
-        by userp3020.oracle.com with ESMTP id 2xrytqdyex-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 27 Jan 2020 17:06:28 +0000
-Received: from abhmp0003.oracle.com (abhmp0003.oracle.com [141.146.116.9])
-        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 00RH6Rxe012556;
-        Mon, 27 Jan 2020 17:06:27 GMT
-Received: from [10.152.35.77] (/10.152.35.77)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Mon, 27 Jan 2020 09:06:26 -0800
-Subject: Re: [Automated-testing] syzkaller reproducers
-To:     Dmitry Vyukov <dvyukov@google.com>
-Cc:     Cyril Hrubis <chrubis@suse.cz>, shuah <shuah@kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        automated-testing@yoctoproject.org, kernelci@groups.io,
-        Dhaval Giani <dhaval.giani@gmail.com>,
-        Jan Setje-Eilers <jan.setjeeilers@oracle.com>,
-        syzkaller <syzkaller@googlegroups.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>
-References: <CACT4Y+YjOxmOzzPt_xaYE44QNZfq9haNfbnVBrTnPXe7zuSEfA@mail.gmail.com>
- <CACT4Y+ZaN900gwx=PHS10hrKofZib7HA7JFxE_DkwChyttYW+A@mail.gmail.com>
- <876a2abe-41ab-5819-4ae8-ad26186d0d1c@kernel.org>
- <226099bc-9763-3a73-e26a-b292f601494c@kernel.org>
- <20191011180248.GA24089@rei.lan>
- <b715f3d7-547f-9a43-dc41-2e46ec3bfd51@kernel.org>
- <20191014085414.GB31760@rei.lan>
- <CACT4Y+aKbgT=i8C5aZvp8ZV52PamGm=GdnR6kQecczLQOQSGqA@mail.gmail.com>
- <62903a33-8ffc-56b6-de1a-539f10b5de2a@oracle.com>
- <86bde120-e5fe-4bb1-9b93-769a444500f9@oracle.com>
- <e8b11b09-37ac-6ae2-0908-b803b4160f7c@oracle.com>
- <CACT4Y+bShy-3vO3ifNKVcGGNf3X9XA7zL-Ja9-T+gZv5=QNe4w@mail.gmail.com>
-From:   George Kennedy <george.kennedy@oracle.com>
-Organization: Oracle Corporation
-Message-ID: <8a4dbbb1-f8ba-00ba-41d2-d82a35fc0f81@oracle.com>
-Date:   Mon, 27 Jan 2020 12:06:25 -0500
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.3.1
+        id S1726155AbgA0RRA (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 27 Jan 2020 12:17:00 -0500
+Received: from mail.kernel.org ([198.145.29.99]:58396 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726049AbgA0RQ7 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 27 Jan 2020 12:16:59 -0500
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net [24.9.64.241])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 90D0721739;
+        Mon, 27 Jan 2020 17:16:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1580145418;
+        bh=PglgpVemLWFSZcqxwzUkIG2G/5M7nzcxv89bJ6SA8d4=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=DYX5oPrLNctYSgyCCGsTdEc3PYUdnRmEOpzmidU2MUIlJcpvn33jqC357LcFSefd0
+         mG7Y0FZh4EH3L2AS6dxWQ0Anp4uakN7zugQYPnXzL+1pIgwbl4lBDzxv/VlBQTnFxY
+         7i9wEL8J/66nftUmnewCagRZYzCas5ei6tn2//X4=
+Subject: Re: [PATCH] selftests: settings: tests can be in subsubdirs
+To:     Matthieu Baerts <matthieu.baerts@tessares.net>,
+        Kees Cook <keescook@chromium.org>
+Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        mptcp <mptcp@lists.01.org>, shuah <shuah@kernel.org>
+References: <20191022171223.27934-1-matthieu.baerts@tessares.net>
+ <c9ce5016-9e83-67c0-ae22-2d3c46427b25@tessares.net>
+ <201911211018.D6CD68AC5@keescook>
+ <602ab319-dcb9-4ac7-b2b8-f7b6072ddc03@tessares.net>
+From:   shuah <shuah@kernel.org>
+Message-ID: <bcce12e4-f122-10ae-dbc7-cc199d9716b6@kernel.org>
+Date:   Mon, 27 Jan 2020 10:16:57 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
 MIME-Version: 1.0
-In-Reply-To: <CACT4Y+bShy-3vO3ifNKVcGGNf3X9XA7zL-Ja9-T+gZv5=QNe4w@mail.gmail.com>
+In-Reply-To: <602ab319-dcb9-4ac7-b2b8-f7b6072ddc03@tessares.net>
 Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
 Content-Language: en-US
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9513 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
- phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=999
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.0.1-1911140001 definitions=main-2001270140
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9513 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
- suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1031
- lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1911140001
- definitions=main-2001270140
+Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-
-
-On 1/27/2020 10:26 AM, Dmitry Vyukov wrote:
-> Hi George,
->
-> This was still starred in my inbox, but I never got to actually do
-> anything with it. Thanks for pinging me. I thought that the script to
-> extract the repros won't work for some reason and that I will need to
-> fix it first. But turns out it's still working as-is (I wanted to
-> submit some changes that would break it, but I never go to that as
-> well. Good! :)).
->
-> So here is a new drop in with 692 repros:
-> https://github.com/dvyukov/syzkaller-repros/commit/6a06992209c328a3115c89c020f45b844b103573
-> Enjoy!
->
-> Yes, we have separate managers for each version, the entries in the
-> Instances table correspond to syz-manager one-to-one:
-> https://syzkaller.appspot.com/upstream
-> https://syzkaller.appspot.com/linux-4.19
-> https://syzkaller.appspot.com/android-54
-
-Thank you Dmitry!
-George
->
->
->
-> On Mon, Jan 27, 2020 at 3:20 PM George Kennedy
-> <george.kennedy@oracle.com> wrote:
->> Hi Dmitry,
->>
->> Re-sending this request.
->>
->> Also, how do you track the Upstream branches with Syzkaller? Do you have
->> a version of Syzkaller for each (i.e. 4.14, 4.19, etc)?
->>
->> Thank you,
->> George
->>
->> On 12/6/2019 3:06 PM, George Kennedy wrote:
->>> Hello Dmitry,
+On 1/27/20 9:05 AM, Matthieu Baerts wrote:
+> Hi Shuah, Kees,
+> 
+> On 21/11/2019 19:52, Kees Cook wrote:
+>> On Thu, Nov 21, 2019 at 05:32:42PM +0100, Matthieu Baerts wrote:
+>>> Hi Shuah,
 >>>
->>> Could we get another drop of the Syzkaller C reproducers?
+>>> First, thank you for maintaining the Kernel Selftest framework!
 >>>
->>> Wonder if we could get the drop periodically (i.e. a drop/quarter or a
->>> drop to match a major linux release)?
+>>> On 22/10/2019 19:12, Matthieu Baerts wrote:
+>>>> Commit 852c8cbf34d3 (selftests/kselftest/runner.sh: Add 45 second
+>>>> timeout per test) adds support for a new per-test-directory "settings"
+>>>> file. But this only works for tests not in a sub-subdirectories, e.g.
+>>>>
+>>>>    - tools/testing/selftests/rtc (rtc) is OK,
+>>>>    - tools/testing/selftests/net/mptcp (net/mptcp) is not.
+>>>>
+>>>> We have to increase the timeout for net/mptcp tests which are not
+>>>> upstreamed yet but this fix is valid for other tests if they need to 
+>>>> add
+>>>> a "settings" file, see the full list with:
+>>>>
+>>>>     tools/testing/selftests/*/*/**/Makefile
+>>>>
+>>>> Note that this patch changes the text header message printed at the end
+>>>> of the execution but this text is modified only for the tests that are
+>>>> in sub-subdirectories, e.g.
+>>>>
+>>>>     ok 1 selftests: net/mptcp: mptcp_connect.sh
+>>>>
+>>>> Before we had:
+>>>>
+>>>>     ok 1 selftests: mptcp: mptcp_connect.sh
+>>>>
+>>>> But showing the full target name is probably better, just in case a
+>>>> subsubdir has the same name as another one in another subdirectory.
+>>>>
+>>>> Fixes: 852c8cbf34d3 (selftests/kselftest/runner.sh: Add 45 second 
+>>>> timeout per test)
+>>>> Signed-off-by: Matthieu Baerts <matthieu.baerts@tessares.net>
+>>> Sorry to bother you again with this but by chance, did you have a 
+>>> look at
+>>> the patch below? :)
 >>>
->>> Thank you,
->>> George
+>>> It doesn't only fix an issue with MPTCP, not in the kernel yet. But 
+>>> it also
+>>> fixes the issue of taking the right "settings" file (if available) 
+>>> for any
+>>> other tests in a sub-directory, e.g.:
+>>>
+>>>    drivers/dma-buf
+>>>    filesystems/binderfs
+>>>    net/forwarding
+>>>    networking/timestamping
+>>>
+>>> But I guess all tests in powerpc/* dirs and others.
+>>
+>> Thanks for the ping! I missed this patch when you originally sent it.
+>> Yes, this make sense to me:
+>>
+>> Reviewed-by: Kees Cook <keescook@chromium.org>
+> 
+> Kees, Thank you for this review!
+> 
+> Shuah, I am sorry to send you this new request. It is just to inform you 
+> that the first selftests for MPTCP are now in "net-next" repo, ready for 
+> the future Linux 5.6.
+> We would then be very happy to see this patch here below for the 
+> kselftest framework accepted to avoid timeouts. Locally we apply this 
+> patch before running the selftests but we cannot ask everybody running 
+> MPTCP' selftests to do the same :)
+> 
+>
 
+I am sorry for the delay. My bad. Looks like I just missed it. I will
+make sure it gets into 5.6-rc1
+
+Thanks for your patience and ping.
+
+thanks,
+-- Shuah
