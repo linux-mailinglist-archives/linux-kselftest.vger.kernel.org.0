@@ -2,93 +2,86 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AD00614A2FA
-	for <lists+linux-kselftest@lfdr.de>; Mon, 27 Jan 2020 12:24:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E862314A31D
+	for <lists+linux-kselftest@lfdr.de>; Mon, 27 Jan 2020 12:37:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729712AbgA0LXu (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 27 Jan 2020 06:23:50 -0500
-Received: from mx2.suse.de ([195.135.220.15]:41032 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729530AbgA0LXt (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 27 Jan 2020 06:23:49 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx2.suse.de (Postfix) with ESMTP id 51770AFF0;
-        Mon, 27 Jan 2020 11:06:25 +0000 (UTC)
-Received: by quack2.suse.cz (Postfix, from userid 1000)
-        id 356041E0E4E; Mon, 27 Jan 2020 12:06:24 +0100 (CET)
-Date:   Mon, 27 Jan 2020 12:06:24 +0100
-From:   Jan Kara <jack@suse.cz>
-To:     John Hubbard <jhubbard@nvidia.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Christoph Hellwig <hch@infradead.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Dave Chinner <david@fromorbit.com>,
-        Ira Weiny <ira.weiny@intel.com>, Jan Kara <jack@suse.cz>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Jonathan Corbet <corbet@lwn.net>,
-        =?iso-8859-1?B?Suly9G1l?= Glisse <jglisse@redhat.com>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Michal Hocko <mhocko@suse.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Vlastimil Babka <vbabka@suse.cz>, linux-doc@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-rdma@vger.kernel.org, linux-mm@kvack.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
-Subject: Re: [PATCH 1/3] mm/gup: track FOLL_PIN pages
-Message-ID: <20200127110624.GD19414@quack2.suse.cz>
-References: <20200125021115.731629-1-jhubbard@nvidia.com>
- <20200125021115.731629-2-jhubbard@nvidia.com>
+        id S1729224AbgA0LhH (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 27 Jan 2020 06:37:07 -0500
+Received: from www62.your-server.de ([213.133.104.62]:50590 "EHLO
+        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725990AbgA0LhH (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 27 Jan 2020 06:37:07 -0500
+Received: from sslproxy06.your-server.de ([78.46.172.3])
+        by www62.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
+        (Exim 4.89_1)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1iw2H7-0000Fy-9E; Mon, 27 Jan 2020 12:09:49 +0100
+Received: from [2001:1620:665:0:5795:5b0a:e5d5:5944] (helo=linux-3.fritz.box)
+        by sslproxy06.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1iw2H6-00054j-PT; Mon, 27 Jan 2020 12:09:48 +0100
+Subject: Re: [PATCH] selftests/bpf: Elide a check for LLVM versions that can't
+ compile it
+To:     =?UTF-8?Q?Toke_H=c3=b8iland-J=c3=b8rgensen?= <toke@redhat.com>,
+        Palmer Dabbelt <palmerdabbelt@google.com>,
+        linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org
+Cc:     shuah@kernel.org, ast@kernel.org, kafai@fb.com,
+        songliubraving@fb.com, yhs@fb.com, andriin@fb.com,
+        john.fastabend@gmail.com, linux-kernel@vger.kernel.org,
+        clang-built-linux@googlegroups.com, kernel-team@android.com,
+        Jesper Dangaard Brouer <brouer@redhat.com>
+References: <20200124180839.185837-1-palmerdabbelt@google.com>
+ <87ftg4fvmo.fsf@toke.dk>
+From:   Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <dcbed741-a16f-0057-6589-e2d2e41e9bfc@iogearbox.net>
+Date:   Mon, 27 Jan 2020 12:09:47 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200125021115.731629-2-jhubbard@nvidia.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <87ftg4fvmo.fsf@toke.dk>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.101.4/25707/Sun Jan 26 12:40:28 2020)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri 24-01-20 18:11:13, John Hubbard wrote:
-> +static __maybe_unused struct page *try_grab_compound_head(struct page *page,
-> +							  int refs,
-> +							  unsigned int flags)
-> +{
-> +	if (flags & FOLL_GET)
-> +		return try_get_compound_head(page, refs);
-> +	else if (flags & FOLL_PIN) {
-> +		int orig_refs = refs;
-> +
-> +		/*
-> +		 * When pinning a compound page of order > 1 (which is what
-> +		 * hpage_pincount_available() checks for), use an exact count to
-> +		 * track it, via hpage_pincount_inc/_dec().
-> +		 *
-> +		 * However, be sure to *also* increment the normal page refcount
-> +		 * field at least once, so that the page really is pinned.
-> +		 */
-> +		if (!hpage_pincount_available(page))
-> +			refs *= GUP_PIN_COUNTING_BIAS;
-> +
-> +		page = try_get_compound_head(page, refs);
-> +		if (!page)
-> +			return NULL;
-> +
-> +		if (hpage_pincount_available(page))
-> +			hpage_pincount_inc(page);
+On 1/24/20 9:27 PM, Toke Høiland-Jørgensen wrote:
+> Palmer Dabbelt <palmerdabbelt@google.com> writes:
+> 
+>> The current stable LLVM BPF backend fails to compile the BPF selftests
+>> due to a compiler bug.  The bug has been fixed in trunk, but that fix
+>> hasn't landed in the binary packages I'm using yet (Fedora arm64).
+>> Without this workaround the tests don't compile for me.
+>>
+>> This patch triggers a preprocessor warning on LLVM versions that
+>> definitely have the bug.  The test may be conservative (ie, I'm not sure
+>> if 9.1 will have the fix), but it should at least make the current set
+>> of stable releases work together.
+>>
+>> See https://reviews.llvm.org/D69438 for more information on the fix.  I
+>> obtained the workaround from
+>> https://lore.kernel.org/linux-kselftest/aed8eda7-df20-069b-ea14-f06628984566@gmail.com/T/
+>>
+>> Fixes: 20a9ad2e7136 ("selftests/bpf: add CO-RE relocs array tests")
+>> Signed-off-by: Palmer Dabbelt <palmerdabbelt@google.com>
+> 
+> Having to depend on the latest trunk llvm to compile the selftests is
+> definitely unfortunate. I believe there are some tests that won't work
+> at all without trunk llvm (the fentry/fexit stuff comes to mind;
+> although I'm not sure if they'll fail to compile, just fail to run?).
+> Could we extend this type of checking to any such case?
 
-Umm, adding just 1 to pincount looks dangerous to me as
-try_grab_compound_head() would not compose - you could not release
-references acquired by try_grab_compound_head() with refs==2 by two calls
-to put_compound_head() with refs==1. So I'd rather have here:
-hpage_pincount_add(page, refs) and similarly in put_compound_head().
-Otherwise the patch looks good to me from a quick look.
+Yeah, Palmer, are you saying that with this fix you're able to run through
+all of the BPF test suite on bpf-next with clang/llvm 9.0?
 
-								Honza
-
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+So far policy has been that tests run always on latest trunk to also cover
+llvm changes in BPF backend to make sure there are no regressions there. OT:
+perhaps we should have a 'make deps' target in BPF selftests to make it easier
+for developers to spin up a latest test env to run selftests in.
