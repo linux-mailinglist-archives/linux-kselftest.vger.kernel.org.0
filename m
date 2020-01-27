@@ -2,102 +2,106 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E2F814A738
-	for <lists+linux-kselftest@lfdr.de>; Mon, 27 Jan 2020 16:32:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A79D414A78F
+	for <lists+linux-kselftest@lfdr.de>; Mon, 27 Jan 2020 16:53:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729213AbgA0PcX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 27 Jan 2020 10:32:23 -0500
-Received: from smtp-fw-4101.amazon.com ([72.21.198.25]:54287 "EHLO
-        smtp-fw-4101.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729146AbgA0PcX (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 27 Jan 2020 10:32:23 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1580139143; x=1611675143;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version;
-  bh=w5hA1PF90OTjQxM6N8ucGOURntMZjlaqhctLj5i7xTA=;
-  b=nMndJjSSLCFFj860XwLv0g62Qu9YJ6BNi3Sr2zDbV2X15W4jzHduzCVX
-   X3T/+KNO4z1GaoQaxOX64TF9cprPKP9XXqYrbKNk5iu64xpG77sTrrZPV
-   zZbSmEkCsTVRu1DHH2VlxtxFyoqOtAm5pVyU+nkwWPIFXzWI/KbzsnWxA
-   A=;
-IronPort-SDR: Ds4euVgMziH+yDZ6yIO2TDL1xDyfD3I+sNhQgqD6cB5icmpdB2It3PFfH2yjWFp+m1z4mpPzmT
- +abll6g5a2Ow==
-X-IronPort-AV: E=Sophos;i="5.70,370,1574121600"; 
-   d="scan'208";a="14323896"
-Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-2b-8cc5d68b.us-west-2.amazon.com) ([10.43.8.6])
-  by smtp-border-fw-out-4101.iad4.amazon.com with ESMTP; 27 Jan 2020 15:32:21 +0000
-Received: from EX13MTAUEA002.ant.amazon.com (pdx4-ws-svc-p6-lb7-vlan3.pdx.amazon.com [10.170.41.166])
-        by email-inbound-relay-2b-8cc5d68b.us-west-2.amazon.com (Postfix) with ESMTPS id 198F8A1F4B;
-        Mon, 27 Jan 2020 15:32:20 +0000 (UTC)
-Received: from EX13D31EUA001.ant.amazon.com (10.43.165.15) by
- EX13MTAUEA002.ant.amazon.com (10.43.61.77) with Microsoft SMTP Server (TLS)
- id 15.0.1236.3; Mon, 27 Jan 2020 15:32:19 +0000
-Received: from u886c93fd17d25d.ant.amazon.com (10.43.160.48) by
- EX13D31EUA001.ant.amazon.com (10.43.165.15) with Microsoft SMTP Server (TLS)
- id 15.0.1367.3; Mon, 27 Jan 2020 15:32:16 +0000
-From:   <sjpark@amazon.com>
-To:     <brendanhiggins@google.com>
-CC:     <linux-kselftest@vger.kernel.org>, <kunit-dev@googlegroups.com>,
-        <linux-kernel@vger.kernel.org>, SeongJae Park <sjpark@amazon.de>
-Subject: [PATCH] docs/kunit/start: Use '_KUNIT_TEST' config name suffix
-Date:   Mon, 27 Jan 2020 16:32:01 +0100
-Message-ID: <20200127153201.3908-1-sjpark@amazon.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200126015924.4198-1-sj38.park@gmail.com>
-References: <20200126015924.4198-1-sj38.park@gmail.com>
+        id S1729146AbgA0Px2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 27 Jan 2020 10:53:28 -0500
+Received: from mga02.intel.com ([134.134.136.20]:17575 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729518AbgA0Px1 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 27 Jan 2020 10:53:27 -0500
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga101.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 27 Jan 2020 07:42:36 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.70,370,1574150400"; 
+   d="scan'208";a="231504834"
+Received: from jpolega-mobl.amr.corp.intel.com (HELO [10.251.29.252]) ([10.251.29.252])
+  by orsmga006.jf.intel.com with ESMTP; 27 Jan 2020 07:42:36 -0800
+Subject: Re: [PATCH v16 00/23] selftests, powerpc, x86: Memory Protection Keys
+To:     Sandipan Das <sandipan@linux.ibm.com>
+Cc:     shuah@kernel.org, linux-kselftest@vger.kernel.org,
+        linux-arch@vger.kernel.org, fweimer@redhat.com, x86@kernel.org,
+        linuxram@us.ibm.com, mhocko@kernel.org, linux-mm@kvack.org,
+        mingo@redhat.com, aneesh.kumar@linux.ibm.com,
+        bauerman@linux.ibm.com, msuchanek@suse.de, mpe@ellerman.id.au,
+        linuxppc-dev@lists.ozlabs.org
+References: <cover.1579507768.git.sandipan@linux.ibm.com>
+ <3ceb2814-f8b0-ec6b-3c24-ec72297a99f5@intel.com>
+ <8f14bee0-ab1c-fc90-dfdb-5128607b767f@linux.ibm.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+Openpgp: preference=signencrypt
+Autocrypt: addr=dave.hansen@intel.com; keydata=
+ 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
+Message-ID: <3eca7a91-aa3e-cb01-47c8-5d36020993a2@intel.com>
+Date:   Mon, 27 Jan 2020 07:42:33 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.43.160.48]
-X-ClientProxiedBy: EX13D30UWB004.ant.amazon.com (10.43.161.51) To
- EX13D31EUA001.ant.amazon.com (10.43.165.15)
+In-Reply-To: <8f14bee0-ab1c-fc90-dfdb-5128607b767f@linux.ibm.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: SeongJae Park <sjpark@amazon.de>
+On 1/27/20 2:11 AM, Sandipan Das wrote:
+> Hi Dave,
+> 
+> On 23/01/20 12:15 am, Dave Hansen wrote:
+>> Still doesn't build for me:
+>>
+> I have this patch that hopefully fixes this. My understanding was
+> that the vm tests are supposed to be generic but this has quite a
+> bit of x86-specific conditional code which complicates things even
+> though it is not used by any of the other tests.
+> 
+> I'm not sure if we should keep x86 multilib build support for these
+> selftests but I'll let the maintainers take a call.
 
-It is recommended to use '_KUNIT_TEST' config name suffix for kunit
-tests but the example is using only '_TEST' suffix.  This commit fixes
-it to also use '_KUNIT_TEST' suffix.
-
-Signed-off-by: SeongJae Park <sjpark@amazon.de>
----
- Documentation/dev-tools/kunit/start.rst | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/Documentation/dev-tools/kunit/start.rst b/Documentation/dev-tools/kunit/start.rst
-index 4e1d24db6b13..2f8b4eda97eb 100644
---- a/Documentation/dev-tools/kunit/start.rst
-+++ b/Documentation/dev-tools/kunit/start.rst
-@@ -138,7 +138,7 @@ Now add the following to ``drivers/misc/Kconfig``:
- 
- .. code-block:: kconfig
- 
--	config MISC_EXAMPLE_TEST
-+	config MISC_EXAMPLE_KUNIT_TEST
- 		bool "Test for my example"
- 		depends on MISC_EXAMPLE && KUNIT
- 
-@@ -146,14 +146,14 @@ and the following to ``drivers/misc/Makefile``:
- 
- .. code-block:: make
- 
--	obj-$(CONFIG_MISC_EXAMPLE_TEST) += example-test.o
-+	obj-$(CONFIG_MISC_EXAMPLE_KUNIT_TEST) += example-test.o
- 
- Now add it to your ``.kunitconfig``:
- 
- .. code-block:: none
- 
- 	CONFIG_MISC_EXAMPLE=y
--	CONFIG_MISC_EXAMPLE_TEST=y
-+	CONFIG_MISC_EXAMPLE_KUNIT_TEST=y
- 
- Now you can run the test:
- 
--- 
-2.17.1
-
+How have you tested this patch (and the whole series for that matter)?
