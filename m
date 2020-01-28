@@ -2,138 +2,126 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A00C14ABAE
-	for <lists+linux-kselftest@lfdr.de>; Mon, 27 Jan 2020 22:32:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 850F514ACE5
+	for <lists+linux-kselftest@lfdr.de>; Tue, 28 Jan 2020 01:03:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726323AbgA0VcO (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 27 Jan 2020 16:32:14 -0500
-Received: from hqnvemgate26.nvidia.com ([216.228.121.65]:3437 "EHLO
-        hqnvemgate26.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725955AbgA0VcO (ORCPT
+        id S1726099AbgA1ADB (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 27 Jan 2020 19:03:01 -0500
+Received: from mail-pg1-f194.google.com ([209.85.215.194]:33810 "EHLO
+        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726083AbgA1ADB (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 27 Jan 2020 16:32:14 -0500
-Received: from hqpgpgate102.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate26.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5e2f56ce0000>; Mon, 27 Jan 2020 13:31:58 -0800
-Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate102.nvidia.com (PGP Universal service);
-  Mon, 27 Jan 2020 13:32:13 -0800
-X-PGP-Universal: processed;
-        by hqpgpgate102.nvidia.com on Mon, 27 Jan 2020 13:32:13 -0800
-Received: from [10.110.48.28] (10.124.1.5) by HQMAIL107.nvidia.com
- (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Mon, 27 Jan
- 2020 21:32:12 +0000
-Subject: Re: [PATCH 2/3] mm/gup_benchmark: support pin_user_pages() and
- related calls
-To:     Nathan Chancellor <natechancellor@gmail.com>
-CC:     Andrew Morton <akpm@linux-foundation.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Christoph Hellwig <hch@infradead.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Dave Chinner <david@fromorbit.com>,
-        Ira Weiny <ira.weiny@intel.com>, Jan Kara <jack@suse.cz>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Jonathan Corbet <corbet@lwn.net>,
-        =?UTF-8?B?SsOpcsO0bWUgR2xpc3Nl?= <jglisse@redhat.com>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Michal Hocko <mhocko@suse.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Vlastimil Babka <vbabka@suse.cz>, <linux-doc@vger.kernel.org>,
-        <linux-fsdevel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-        <linux-rdma@vger.kernel.org>, <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        <clang-built-linux@googlegroups.com>
-References: <20200125021115.731629-1-jhubbard@nvidia.com>
- <20200125021115.731629-3-jhubbard@nvidia.com>
- <20200127205247.GA578@Ryzen-7-3700X.localdomain>
-X-Nvconfidentiality: public
-From:   John Hubbard <jhubbard@nvidia.com>
-Message-ID: <f81fab20-5d01-e782-d45e-c65f3e51beec@nvidia.com>
-Date:   Mon, 27 Jan 2020 13:32:12 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.2
+        Mon, 27 Jan 2020 19:03:01 -0500
+Received: by mail-pg1-f194.google.com with SMTP id r11so6006006pgf.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 27 Jan 2020 16:03:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=l/+22tuCgv/c7pzmNa8hMOqSD4cnYp/OANcRNx6S0OE=;
+        b=gfeoTWeeEpelq2VhnCxceWKTgALWOfvaDYWNXG3I3R+mR60voLJm2xVMRyEQ61FmMG
+         /zmvCPAW3FXmZlOCpzGJmlT3H8XVJ1HNtAq7EJ+7cfVI/4/EvouJfNllrUiqfWodaVAJ
+         eoo/iwDocujDURl/NjLnM9iRzs+gDxRmV5Zxa8fEoyx+H4/wN97Jh5xDq1TdNwajO7yC
+         HyhNSs6EJ/MQlXYgYuyJ5DzA6F9gOLwQBlbSVH/56G+ERq0eF3AnCdtwZUvaHzEfHmA+
+         FvlQA0K9iI4aJBPKMxLfbGZtGcUAMKt3+R8gzNeDFGXU2HZHfLkio7yyG59acg1Q41Sw
+         n/Qg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=l/+22tuCgv/c7pzmNa8hMOqSD4cnYp/OANcRNx6S0OE=;
+        b=bqy6ncrhZChx7/njgGA1R41qozu6CRyy38Cz+lURoMW1miWjFOt0rbl+kjDXxKSX+O
+         dGpBEyIoepOpOgSGRF0mbx893/718S97XWgvWK1T2TlScEKqIKyG2ferrBEsDVZe9raz
+         Urd+/52uxuRWg76Pzu5XrvJLYYXQvlHXIy/ogv7/n95kVOGw8ocxw/XY8f30g2Sy7ldM
+         8iaV8a3xtAq5rtNCxZLahzgHIzBk8L3gTJ9HNqOl1EPrQYYX7YsRq6UT9aza6buCVK9F
+         zez9ouKjmYfLnWHiMO/jCR9vUCcmwcth6eJ/2yu89aTfI0du9ldzpvquF4uLku0j7aVi
+         MV4w==
+X-Gm-Message-State: APjAAAVIaZZqXNMqnPBSMw8SWD3D/t+hysjfnJpZyv4Z/bVPNNizAZzS
+        0LJ/+RIHQ63RJzWAiBvTPn3TLE/pSxMAbaoRzH43hgxi
+X-Google-Smtp-Source: APXvYqz/hjm742JY6RjWU2IOn2Ej9B6rcY0LoAXJ2VgFjuz+q8joZGQ/0HiGIAuKCITVgNP9RIrNn8FDBLLA1vMjcqs=
+X-Received: by 2002:aa7:961b:: with SMTP id q27mr1155291pfg.23.1580169780179;
+ Mon, 27 Jan 2020 16:03:00 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <20200127205247.GA578@Ryzen-7-3700X.localdomain>
-X-Originating-IP: [10.124.1.5]
-X-ClientProxiedBy: HQMAIL111.nvidia.com (172.20.187.18) To
- HQMAIL107.nvidia.com (172.20.187.13)
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1580160719; bh=LhTJ1/tn6kZiofE+Kr6/Zk0ukPrusIeEJQXQNfI3D4E=;
-        h=X-PGP-Universal:Subject:To:CC:References:X-Nvconfidentiality:From:
-         Message-ID:Date:User-Agent:MIME-Version:In-Reply-To:
-         X-Originating-IP:X-ClientProxiedBy:Content-Type:Content-Language:
-         Content-Transfer-Encoding;
-        b=jH/aWVkDdLxaqW2OoiDKS+BWcTzIf6yve3rYKFXwVO1AZhn0Nwy2JTWjicRhjZuY1
-         Pi+hqOq3waR9VenG24erVlsmk7iQeYRgu1pP7ltts7/OQPMIA+rvbeeTUagL2saVaE
-         FBnndluKMcXFzDAFQky/RxazS2q9KA3wBbIybB+Kfhz3tbRIuyfADdixquzqbS3/ht
-         QZfl17htJL+rpegeOpiLipRXjnoNuHjgUP9Ca/X1nMjNXf3tSK7aH/iP6Rl7FoPiAu
-         msS9jWktPmaSnhFZgoUJpbqgbu0+9u2hZHo9iNoF23i2ahh7AfJza6/gl7ruiMf2Y6
-         U6eqDh1wCGNIQ==
+References: <20200126015924.4198-1-sj38.park@gmail.com>
+In-Reply-To: <20200126015924.4198-1-sj38.park@gmail.com>
+From:   Brendan Higgins <brendanhiggins@google.com>
+Date:   Mon, 27 Jan 2020 16:02:48 -0800
+Message-ID: <CAFd5g46v-RyNMP7GROn4bUEAATOPZ=w5AyO+tvuTG25aqt6oAg@mail.gmail.com>
+Subject: Re: [PATCH] kunit/kunit_kernel: Rebuild .config if .kunitconfig is modified
+To:     SeongJae Park <sj38.park@gmail.com>
+Cc:     "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        SeongJae Park <sjpark@amazon.de>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 1/27/20 12:52 PM, Nathan Chancellor wrote:
-...
->> --- a/mm/gup_benchmark.c
->> +++ b/mm/gup_benchmark.c
->> @@ -8,6 +8,8 @@
->>  #define GUP_FAST_BENCHMARK	_IOWR('g', 1, struct gup_benchmark)
->>  #define GUP_LONGTERM_BENCHMARK	_IOWR('g', 2, struct gup_benchmark)
->>  #define GUP_BENCHMARK		_IOWR('g', 3, struct gup_benchmark)
->> +#define PIN_FAST_BENCHMARK	_IOWR('g', 4, struct gup_benchmark)
->> +#define PIN_BENCHMARK		_IOWR('g', 5, struct gup_benchmark)
->>  
->>  struct gup_benchmark {
->>  	__u64 get_delta_usec;
->> @@ -19,6 +21,47 @@ struct gup_benchmark {
->>  	__u64 expansion[10];	/* For future use */
->>  };
->>  
->> +static void put_back_pages(int cmd, struct page **pages, unsigned long nr_pages)
-> 
-> We received a Clang build report on this patch because the use of
-> PIN_FAST_BENCHMARK and PIN_BENCHMARK in the switch statement below will
-> overflow int; this should be unsigned int to match the cmd parameter in
-> the ioctls.
+On Sat, Jan 25, 2020 at 5:59 PM <sj38.park@gmail.com> wrote:
+>
+> From: SeongJae Park <sjpark@amazon.de>
+>
+> Deletions of configs in the '.kunitconfig' is not applied because kunit
+> rebuilds '.config' only if the '.config' is not a subset of the
+> '.kunitconfig'.  To allow the deletions to applied, this commit modifies
+> the '.config' rebuild condition to addtionally check the modified times
+> of those files.
 
+The reason it only checks that .kunitconfig is a subset of .config is
+because we don't want the .kunitconfig to remove options just because
+it doesn't recognize them.
 
-Thanks for the report! Yes, that should have been "unsigned int cmd", to match the
-one in the ioctls, just as you said.
+It runs `make ARCH=um olddefconfig` on the .config that it generates
+from the .kunitconfig, and most of the time that means you will get a
+.config with lots of things in it that aren't in the .kunitconfig.
+Consequently, nothing should ever be deleted from the .config just
+because it was deleted in the .kunitconfig (unless, of course, you
+change a =y to a =n or # ... is not set), so I don't see what this
+change would do.
 
-I'll apply this diff, for the next version of the series:
+Can you maybe provide an example?
 
-diff --git a/mm/gup_benchmark.c b/mm/gup_benchmark.c
-index 3d5fb765e4e6..7d5573083ab3 100644
---- a/mm/gup_benchmark.c
-+++ b/mm/gup_benchmark.c
-@@ -21,7 +21,8 @@ struct gup_benchmark {
-        __u64 expansion[10];    /* For future use */
- };
- 
--static void put_back_pages(int cmd, struct page **pages, unsigned long nr_pages)
-+static void put_back_pages(unsigned int cmd, struct page **pages,
-+                          unsigned long nr_pages)
- {
-        int i;
- 
-@@ -40,7 +41,7 @@ static void put_back_pages(int cmd, struct page **pages, unsigned long nr_pages)
-        }
- }
- 
--static void verify_dma_pinned(int cmd, struct page **pages,
-+static void verify_dma_pinned(unsigned int cmd, struct page **pages,
-                              unsigned long nr_pages)
- {
-        int i;
-
-
-
-thanks,
--- 
-John Hubbard
-NVIDIA
+> Signed-off-by: SeongJae Park <sjpark@amazon.de>
+> ---
+>  tools/testing/kunit/kunit_kernel.py | 17 +++++++++++------
+>  1 file changed, 11 insertions(+), 6 deletions(-)
+>
+> diff --git a/tools/testing/kunit/kunit_kernel.py b/tools/testing/kunit/kunit_kernel.py
+> index cc5d844ecca1..a3a5d6c7e66d 100644
+> --- a/tools/testing/kunit/kunit_kernel.py
+> +++ b/tools/testing/kunit/kunit_kernel.py
+> @@ -111,17 +111,22 @@ class LinuxSourceTree(object):
+>                 return True
+>
+>         def build_reconfig(self, build_dir):
+> -               """Creates a new .config if it is not a subset of the .kunitconfig."""
+> +               """Creates a new .config if it is not a subset of, or older than the .kunitconfig."""
+>                 kconfig_path = get_kconfig_path(build_dir)
+>                 if os.path.exists(kconfig_path):
+>                         existing_kconfig = kunit_config.Kconfig()
+>                         existing_kconfig.read_from_file(kconfig_path)
+> -                       if not self._kconfig.is_subset_of(existing_kconfig):
+> -                               print('Regenerating .config ...')
+> -                               os.remove(kconfig_path)
+> -                               return self.build_config(build_dir)
+> -                       else:
+> +                       subset = self._kconfig.is_subset_of(existing_kconfig)
+> +
+> +                       kunitconfig_mtime = os.path.getmtime(kunitconfig_path)
+> +                       kconfig_mtime = os.path.getmtime(kconfig_path)
+> +                       older = kconfig_mtime < kunitconfig_mtime
+> +
+> +                       if subset and not older:
+>                                 return True
+> +                       print('Regenerating .config ...')
+> +                       os.remove(kconfig_path)
+> +                       return self.build_config(build_dir)
+>                 else:
+>                         print('Generating .config ...')
+>                         return self.build_config(build_dir)
+> --
+> 2.17.1
+>
