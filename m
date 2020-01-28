@@ -2,217 +2,156 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 779FE14AE03
-	for <lists+linux-kselftest@lfdr.de>; Tue, 28 Jan 2020 03:15:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8496114AF50
+	for <lists+linux-kselftest@lfdr.de>; Tue, 28 Jan 2020 07:03:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727221AbgA1CPI (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 27 Jan 2020 21:15:08 -0500
-Received: from mail-pl1-f195.google.com ([209.85.214.195]:46529 "EHLO
-        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727440AbgA1CPF (ORCPT
+        id S1725799AbgA1GDK (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 28 Jan 2020 01:03:10 -0500
+Received: from mail-wm1-f66.google.com ([209.85.128.66]:50963 "EHLO
+        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725774AbgA1GDK (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 27 Jan 2020 21:15:05 -0500
-Received: by mail-pl1-f195.google.com with SMTP id y8so4464253pll.13
-        for <linux-kselftest@vger.kernel.org>; Mon, 27 Jan 2020 18:15:05 -0800 (PST)
+        Tue, 28 Jan 2020 01:03:10 -0500
+Received: by mail-wm1-f66.google.com with SMTP id a5so1161157wmb.0;
+        Mon, 27 Jan 2020 22:03:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=subject:date:message-id:mime-version:content-transfer-encoding:cc
-         :from:to:in-reply-to:references;
-        bh=LUiKWI3Cf+9+n0Mf0T0uSDtpI14DkFl6R/zPz6oE4kA=;
-        b=t6Fkbs2B6XQQ1FJjHeJszTkGjc450EaIRq1KZfmbn8O4NYMZcq6AXMS7pmHbUboObC
-         +++s+jeLdsA6RQB08P9Q5Ack/z09JhMpcwAH9ll/D/MNh2PF/l8bN+H59x2KdWIZQaGJ
-         V6rLY45e1nmA4dzti6zKLzfbfSQH01wh1Pq+jqMqsvZxpHPcSUIN8yopf38iePTDe4Fn
-         PnNN2/5p6w6AcizSaS4T/xDwCmkQr+gZ6sexRbfAK34zFGsth0Z8GT9lZrcVKfKxscsF
-         FNGp79tHt13MmqPXpQkiJlgMycGe4X09ATmdUeh59o7i1ed82t9JibgA5r1Fh0RysWRj
-         6HTw==
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:in-reply-to;
+        bh=uzw58AxJyROr8rcMN8+tQkKTP/GB1BTnbsoLW+T9bYk=;
+        b=U/XLAZmEa7FoBjgoyU8wMcZ5kvRPBBjiKtZOhlYZ3i50AyKGIhCme4LOTgNUES0zoh
+         DNsTA7p5hOqy9mpaE8Q/Z9vSC7iwRlelFsVCWaYkxc6KCkCCYQcqmB3/wpYq6iOOd+Vm
+         wRCrDdthL6nGdesnPUuxuLrV5lWHAXe6GBpZ/jypCVTGNSJkjZI3teQaFR0kys0adpFs
+         d2TkDOV0Sut3b3wmXMggXviARjCbAtsF3Ux+BHH/jQikGhJZY66CfdUdSjZvC+/4fFnQ
+         t4sfRbb6/DbFYLXMTPY98hoA72GXMlUn+ifhP5sPO0CjECVSzz4X/ddRarBwaMx2EEVg
+         FVLQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:date:message-id:mime-version
-         :content-transfer-encoding:cc:from:to:in-reply-to:references;
-        bh=LUiKWI3Cf+9+n0Mf0T0uSDtpI14DkFl6R/zPz6oE4kA=;
-        b=OtfiOLaSJ0BbOwjAaFHB3AvoUf94RvNV3g+03FPIR4oz1cfXl1oWP9IEK61+QIJkuC
-         M+GbcFbxOfw0gPbny9jvkHJwGTJ2mzY43B0zaNFS7rGIOXwxI/RrFHY84DhIy8MHfSjX
-         0vfKyxh83s28B1hHNpKEMiHR9tHpRkrGNzLytQ6KiUOW2/cFXkmG3+LWRoeoVA/5wJWu
-         iPwxEXFMhd8ZCfRyC3dzaeocPG1eEkMuznaheizOXHqPUDT6xxCEoMCbQIThBrgURMD8
-         +Y0QVYIu1tX0yf5NjWn+ihRwXBVEQoe9eDsZrpnuh0wIvTP7bbfouJ/KoDLG5Iywcdkv
-         Ui6w==
-X-Gm-Message-State: APjAAAVJ9T6bEM4RVvBzZ2nQMqzGTML87YPyBHmMvklhFBBk1TAEPtrz
-        cwyTcf4P3DqJ7qsjR+K2YeiVmA==
-X-Google-Smtp-Source: APXvYqxlXoEawlGrjKe7Dg0dTNaImpBzNfwMgpu5Qd3tYpex5PzlG+tN2FelRoSSzPaUPamCbr5Lgw==
-X-Received: by 2002:a17:902:9a09:: with SMTP id v9mr19976280plp.341.1580177704696;
-        Mon, 27 Jan 2020 18:15:04 -0800 (PST)
-Received: from localhost ([216.9.110.11])
-        by smtp.gmail.com with ESMTPSA id o17sm393828pjq.1.2020.01.27.18.15.03
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to;
+        bh=uzw58AxJyROr8rcMN8+tQkKTP/GB1BTnbsoLW+T9bYk=;
+        b=h0p9KQIQ+i8Us+Q+jqQ5U5dT6Yk7f2pR1CdWx4/KhPTuH5uk2UGYcV/LKtFDJI7n0y
+         e11OgyeKl9m149cqqpsxK6CmZNHDCbu90aUBAjJTYCbhyL5/qjPqaZGlBzAZBWYNWFzV
+         Zykm0bCzSRzvxINn9JHRL88BfB3NdLcRrFQXTrvmj3F7MdE6GPLhjYdV8ZX+ag6lW4jl
+         7vV5bsm/yxHEdttgHD70FB8MP6dHzTq9/AkyAu/YpfKOeJO38z99AkF3Kzj7utKMWuqj
+         c72QwdLt6/1qQmtIqQ7mzN1PcgLi+TegeUdy9tyEB3VRF/ODus1SixQeUfHmNUk/Oa4C
+         YM0g==
+X-Gm-Message-State: APjAAAX0qB4FLcV5xVP1cRTTuYcYCNdBFlYjoJvmiHxXh7wbrAnKaFjG
+        czDKKE5CW1AWagreCbrkMPA=
+X-Google-Smtp-Source: APXvYqzGz7ZuGFcI0BoC2X5Ts/w3Qvls5A/hK7yPgVcvXcHRKynQCnFsoiuBdQJgjo4rs+q/oVWTSQ==
+X-Received: by 2002:a05:600c:3d1:: with SMTP id z17mr2876527wmd.90.1580191387751;
+        Mon, 27 Jan 2020 22:03:07 -0800 (PST)
+Received: from localhost.localdomain ([2a02:2450:10d2:194d:841f:4795:9ca0:c33f])
+        by smtp.gmail.com with ESMTPSA id w13sm24781940wru.38.2020.01.27.22.03.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Jan 2020 18:15:04 -0800 (PST)
-Subject: [PATCH 4/4] arm64: bpf: Elide some moves to a0 after calls
-Date:   Mon, 27 Jan 2020 18:11:45 -0800
-Message-Id: <20200128021145.36774-5-palmerdabbelt@google.com>
-X-Mailer: git-send-email 2.25.0.341.g760bfbb309-goog
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Cc:     daniel@iogearbox.net, ast@kernel.org, zlim.lnx@gmail.com,
-        catalin.marinas@arm.com, will@kernel.org, kafai@fb.com,
-        songliubraving@fb.com, yhs@fb.com, andriin@fb.com,
-        shuah@kernel.org, Palmer Dabbelt <palmerdabbelt@google.com>,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        clang-built-linux@googlegroups.com, kernel-team@android.com
-From:   Palmer Dabbelt <palmerdabbelt@google.com>
-To:     Bjorn Topel <bjorn.topel@gmail.com>
-In-Reply-To: <20200128021145.36774-1-palmerdabbelt@google.com>
-References: <20200128021145.36774-1-palmerdabbelt@google.com>
+        Mon, 27 Jan 2020 22:03:07 -0800 (PST)
+From:   SeongJae Park <sj38.park@gmail.com>
+To:     Brendan Higgins <brendanhiggins@google.com>
+Cc:     SeongJae Park <sj38.park@gmail.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        SeongJae Park <sjpark@amazon.de>
+Subject: Re: Re: [PATCH] kunit/kunit_kernel: Rebuild .config if .kunitconfig is modified
+Date:   Tue, 28 Jan 2020 07:03:00 +0100
+Message-Id: <20200128060300.23989-1-sj38.park@gmail.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <CAFd5g46v-RyNMP7GROn4bUEAATOPZ=w5AyO+tvuTG25aqt6oAg@mail.gmail.com> (raw)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On arm64, the BPF function ABI doesn't match the C function ABI.  Specifically,
-arm64 encodes calls as `a0 = f(a0, a1, ...)` while BPF encodes calls as
-`BPF_REG_0 = f(BPF_REG_1, BPF_REG_2, ...)`.  This discrepancy results in
-function calls being encoded as a two operations sequence that first does a C
-ABI calls and then moves the return register into the right place.  This
-results in one extra instruction for every function call.
+On Mon, 27 Jan 2020 16:02:48 -0800 Brendan Higgins <brendanhiggins@google.com> wrote:
 
-This patch adds an optimization to the arm64 BPF JIT backend that aims to avoid
-some of these moves.
+> On Sat, Jan 25, 2020 at 5:59 PM <sj38.park@gmail.com> wrote:
+> >
+> > From: SeongJae Park <sjpark@amazon.de>
+> >
+> > Deletions of configs in the '.kunitconfig' is not applied because kunit
+> > rebuilds '.config' only if the '.config' is not a subset of the
+> > '.kunitconfig'.  To allow the deletions to applied, this commit modifies
+> > the '.config' rebuild condition to addtionally check the modified times
+> > of those files.
+> 
+> The reason it only checks that .kunitconfig is a subset of .config is
+> because we don't want the .kunitconfig to remove options just because
+> it doesn't recognize them.
+> 
+> It runs `make ARCH=um olddefconfig` on the .config that it generates
+> from the .kunitconfig, and most of the time that means you will get a
+> .config with lots of things in it that aren't in the .kunitconfig.
+> Consequently, nothing should ever be deleted from the .config just
+> because it was deleted in the .kunitconfig (unless, of course, you
+> change a =y to a =n or # ... is not set), so I don't see what this
+> change would do.
+> 
+> Can you maybe provide an example?
 
-I've done no benchmarking to determine if this is correct.  I ran the BPF
-selftests before and after the change on arm64 in QEMU and found that I had a
-single failure both before and after.  I'm not at all confident this code
-actually works as it's my first time doing anything with both ARM64 and BPF and
-I didn't even open the documentation for either of these.  I was particularly
-surprised that the code didn't fail any tests -- I was kind of assuming this
-would fail the tests, get put on the backburner, sit long enough for me to stop
-caring, and then get deleted.
+Sorry for my insufficient explanation.  I added a kunit test
+(SYSCTL_KUNIT_TEST) to '.kunitconfig', ran the added test, and then removed it
+from the file.  However, '.config' is not generated again due to the condition
+and therefore the test still runs.
 
-Signed-off-by: Palmer Dabbelt <palmerdabbelt@google.com>
----
- arch/arm64/net/bpf_jit_comp.c | 71 +++++++++++++++++++++++++++++++++--
- 1 file changed, 68 insertions(+), 3 deletions(-)
+For more detail:
 
-diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.c
-index fba5b1b00cd7..48d900cc7258 100644
---- a/arch/arm64/net/bpf_jit_comp.c
-+++ b/arch/arm64/net/bpf_jit_comp.c
-@@ -58,10 +58,14 @@ struct jit_ctx {
- 	int *offset;
- 	__le32 *image;
- 	u32 stack_size;
-+	int reg0_in_reg1;
- };
- 
- static inline int bpf2a64(struct jit_ctx *ctx, int bpf_reg)
- {
-+	if (ctx->reg0_in_reg1 && bpf_reg == BPF_REG_0)
-+		bpf_reg = BPF_REG_1;
-+
- 	return bpf2a64_default[bpf_reg];
- }
- 
-@@ -338,6 +342,47 @@ static void build_epilogue(struct jit_ctx *ctx)
- 	emit(A64_RET(A64_LR), ctx);
- }
- 
-+static int dead_register(const struct jit_ctx *ctx, int offset, int bpf_reg)
-+{
-+	const struct bpf_prog *prog = ctx->prog;
-+	int i;
-+
-+	for (i = offset; i < prog->len; ++i) {
-+		const struct bpf_insn *insn = &prog->insnsi[i];
-+		const u8 code = insn->code;
-+		const u8 bpf_dst = insn->dst_reg;
-+		const u8 bpf_src = insn->src_reg;
-+		const int writes_dst = !((code & BPF_ST) || (code & BPF_STX)
-+					 || (code & BPF_JMP32) || (code & BPF_JMP));
-+		const int reads_dst  = !((code & BPF_LD));
-+		const int reads_src  = true;
-+
-+		/* Calls are a bit special in that they clobber a bunch of regisers. */
-+		if ((code & (BPF_JMP | BPF_CALL)) || (code & (BPF_JMP | BPF_TAIL_CALL)))
-+			if ((bpf_reg >= BPF_REG_0) && (bpf_reg <= BPF_REG_5))
-+				return false;
-+
-+		/* Registers that are read before they're written are alive.
-+		 * Most opcodes are of the form DST = DEST op SRC, but there
-+		 * are some exceptions.*/
-+		if (bpf_src == bpf_reg && reads_src)
-+			return false;
-+
-+		if (bpf_dst == bpf_reg && reads_dst)
-+			return false;
-+		
-+		if (bpf_dst == bpf_reg && writes_dst)
-+			return true;
-+
-+		/* Most BPF instructions are 8 bits long, but some ar 16 bits
-+		 * long. */
-+		if (code & (BPF_LD | BPF_IMM | BPF_DW))
-+			++i;
-+	}
-+
-+	return true;
-+}
-+
- /* JITs an eBPF instruction.
-  * Returns:
-  * 0  - successfully JITed an 8-byte eBPF instruction.
-@@ -348,7 +393,7 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx,
- 		      bool extra_pass)
- {
- 	const u8 code = insn->code;
--	const u8 dstw = bpf2a64(ctx, insn->dst_reg);
-+	u8 dstw;
- 	const u8 dstr = bpf2a64(ctx, insn->dst_reg);
- 	const u8 src = bpf2a64(ctx, insn->src_reg);
- 	const u8 tmp = bpf2a64(ctx, TMP_REG_1);
-@@ -374,6 +419,27 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx,
- #define check_imm19(imm) check_imm(19, imm)
- #define check_imm26(imm) check_imm(26, imm)
- 
-+	/* Handle BPF_REG_0, which may be in the wrong place because the ARM64
-+	 * ABI doesn't match the BPF ABI for function calls. */
-+	if (ctx->reg0_in_reg1) {
-+		/* If we're writing BPF_REG_0 then we don't need to do any
-+		 * extra work to get the registers back in their correct
-+		 * locations. */
-+		if (insn->dst_reg == BPF_REG_0)
-+			ctx->reg0_in_reg1 = false;
-+
-+		/* If we're writing to BPF_REG_1 then we need to save BPF_REG_0
-+		 * into the correct location if it's still alive, as otherwise
-+		 * it will be clobbered. */
-+		if (insn->dst_reg == BPF_REG_1) {
-+			if (!dead_register(ctx, off + 1, BPF_REG_0))
-+				emit(A64_MOV(1, A64_R(7), A64_R(0)), ctx);
-+			ctx->reg0_in_reg1 = false;
-+		}
-+	}
-+
-+	dstw = bpf2a64(ctx, insn->dst_reg);
-+
- 	switch (code) {
- 	/* dst = src */
- 	case BPF_ALU | BPF_MOV | BPF_X:
-@@ -640,7 +706,6 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx,
- 	/* function call */
- 	case BPF_JMP | BPF_CALL:
- 	{
--		const u8 r0 = bpf2a64(ctx, BPF_REG_0);
- 		bool func_addr_fixed;
- 		u64 func_addr;
- 		int ret;
-@@ -651,7 +716,7 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx,
- 			return ret;
- 		emit_addr_mov_i64(tmp, func_addr, ctx);
- 		emit(A64_BLR(tmp), ctx);
--		emit(A64_MOV(1, r0, A64_R(0)), ctx);
-+		ctx->reg0_in_reg1 = true;
- 		break;
- 	}
- 	/* tail call */
--- 
-2.25.0.341.g760bfbb309-goog
+    $ ./tools/testing/kunit/kunit.py run --defconfig --build_dir ../kunit.out/
+    $ echo "CONFIG_SYSCTL_KUNIT_TEST=y" >> ../kunit.out/.kunitconfig
+    $ ./tools/testing/kunit/kunit.py run --build_dir ../kunit.out/
+    $ sed -i '4d' ../kunit.out/.kunitconfig
+    $ ./tools/testing/kunit/kunit.py run --build_dir ../kunit.out/
 
+The 2nd line command adds sysctl kunit test and the 3rd line shows it runs the
+added test as expected.  Because the default kunit config contains only 3
+lines, The 4th line command removes the sysctl kunit test from the
+.kunitconfig.  However, the 5th line still run the test.
+
+This patch is for such cases.  Of course, this might make more false positives
+but I believe it would not be a big problem because .config generation takes no
+long time.  If I missed something, please let me know.
+
+
+Thanks,
+SeongJae Park
+
+> 
+> > Signed-off-by: SeongJae Park <sjpark@amazon.de>
+> > ---
+> >  tools/testing/kunit/kunit_kernel.py | 17 +++++++++++------
+> >  1 file changed, 11 insertions(+), 6 deletions(-)
+> >
+> > diff --git a/tools/testing/kunit/kunit_kernel.py b/tools/testing/kunit/kunit_kernel.py
+> > index cc5d844ecca1..a3a5d6c7e66d 100644
+> > --- a/tools/testing/kunit/kunit_kernel.py
+> > +++ b/tools/testing/kunit/kunit_kernel.py
+> > @@ -111,17 +111,22 @@ class LinuxSourceTree(object):
+> >                 return True
+> >
+> >         def build_reconfig(self, build_dir):
+> > -               """Creates a new .config if it is not a subset of the .kunitconfig."""
+> > +               """Creates a new .config if it is not a subset of, or older than the .kunitconfig."""
+> >                 kconfig_path = get_kconfig_path(build_dir)
+> >                 if os.path.exists(kconfig_path):
+> >                         existing_kconfig = kunit_config.Kconfig()
+> >                         existing_kconfig.read_from_file(kconfig_path)
+> > -                       if not self._kconfig.is_subset_of(existing_kconfig):
+> > -                               print('Regenerating .config ...')
+> > -                               os.remove(kconfig_path)
+> > -                               return self.build_config(build_dir)
+> > -                       else:
+> > +                       subset = self._kconfig.is_subset_of(existing_kconfig)
+> > +
+> > +                       kunitconfig_mtime = os.path.getmtime(kunitconfig_path)
+> > +                       kconfig_mtime = os.path.getmtime(kconfig_path)
+> > +                       older = kconfig_mtime < kunitconfig_mtime
+> > +
+> > +                       if subset and not older:
+> >                                 return True
+> > +                       print('Regenerating .config ...')
+> > +                       os.remove(kconfig_path)
+> > +                       return self.build_config(build_dir)
+> >                 else:
+> >                         print('Generating .config ...')
+> >                         return self.build_config(build_dir)
+> > --
+> > 2.17.1
+> >
