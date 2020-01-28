@@ -2,96 +2,107 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D7F4814B04A
-	for <lists+linux-kselftest@lfdr.de>; Tue, 28 Jan 2020 08:20:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BBE514B0DB
+	for <lists+linux-kselftest@lfdr.de>; Tue, 28 Jan 2020 09:30:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726402AbgA1HUf (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 28 Jan 2020 02:20:35 -0500
-Received: from mail-pl1-f201.google.com ([209.85.214.201]:55858 "EHLO
-        mail-pl1-f201.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726383AbgA1HUe (ORCPT
+        id S1725951AbgA1Iaq (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 28 Jan 2020 03:30:46 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:2462 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725848AbgA1Iaq (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 28 Jan 2020 02:20:34 -0500
-Received: by mail-pl1-f201.google.com with SMTP id w11so896614plp.22
-        for <linux-kselftest@vger.kernel.org>; Mon, 27 Jan 2020 23:20:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=klZSQn7VqC7h7im1FGCSgAsyHBEPANhNSwWbBSFGQEg=;
-        b=QbvcI+etsqAlCV8e08VCXPOpU8eZ3t5R/0WlbHTJvxoQjpGyprnI2S+3VA6TTU6VcK
-         QX1fWLkdGx43woSE9wxtOr/nIAR3GDaX0+tn1XlmHZ/gDfsUEus8JCgUXj/7t81YSGwq
-         A1+5KuQ/mfdwKuU6SJEJcnV3OamCXXd43jahBhlSObRoHRxmuhcNwcQLh/PNROz4WbAm
-         cTrDAdcVVc6LRnp5yWQAHaMmosEmCohM+vE8NJDyUtTlY82smbWOEof+WuehV/08VE1/
-         7PHZ1+O99hDXEO3U5zm/NWDW0yicvPq5SOraPW0/CVRO6+C//tnAYf5QyggRVE/D9Iqx
-         WDkg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=klZSQn7VqC7h7im1FGCSgAsyHBEPANhNSwWbBSFGQEg=;
-        b=U0O7nss0DWLqbGAM13VoeTIHnSHwsbBil1lH6gJdfjBtaaC0YerZBWwru4F6BHZQNQ
-         Ps65GH6hdw/oQALXOEfojfjAJfAF2qH3XaH/qOqcxUzZ3t+Lcd3Io2ZXgZOajD+0XZJc
-         neDecvxOwzI/3CymmHvgd+HRBSxeFhjVywNek22E4zDhAFZBycqZ2v9Y5dhAqYfHkZD9
-         pukwFGOZJyHc8fvrzcmksgnwFB+wrvYrRTSQIX8J5xsusio+QEMB4sB7SNZcGeM3dEPT
-         UXSFQnPd4ZBJe0OLA0cx439TvTsvwioLsF9tnrQNBNS4pg6j6yadCRYQrKGDG+eGXP9G
-         5iPw==
-X-Gm-Message-State: APjAAAV9dznANeAUgvGj8u3UkFlOiVJ2CS+OHOR2W83xMjYILJaSxsZP
-        YPHMv1RfysrJCqo+Ze7vjWWqXl3QGirKvU+oj+Opug==
-X-Google-Smtp-Source: APXvYqwA5T0XsCGucJCgnj8mr7+umXSlJ/p82m0DTcBQ5anFOlb+KkNonTYUXWa6suDswZ7MNnrzg6/s9XBTLENdrlmgtA==
-X-Received: by 2002:a63:c747:: with SMTP id v7mr14107372pgg.291.1580196033243;
- Mon, 27 Jan 2020 23:20:33 -0800 (PST)
-Date:   Mon, 27 Jan 2020 23:20:02 -0800
-In-Reply-To: <20200128072002.79250-1-brendanhiggins@google.com>
-Message-Id: <20200128072002.79250-8-brendanhiggins@google.com>
-Mime-Version: 1.0
-References: <20200128072002.79250-1-brendanhiggins@google.com>
-X-Mailer: git-send-email 2.25.0.341.g760bfbb309-goog
-Subject: [PATCH v1 7/7] Documentation: Add kunit_shutdown to kernel-parameters.txt
-From:   Brendan Higgins <brendanhiggins@google.com>
-To:     jdike@addtoit.com, richard@nod.at, anton.ivanov@cambridgegreys.com,
-        arnd@arndb.de, keescook@chromium.org, skhan@linuxfoundation.org,
-        alan.maguire@oracle.com, yzaikin@google.com, davidgow@google.com,
-        akpm@linux-foundation.org, rppt@linux.ibm.com,
-        frowand.list@gmail.com
-Cc:     gregkh@linuxfoundation.org, sboyd@kernel.org, logang@deltatee.com,
-        mcgrof@kernel.org, knut.omang@oracle.com,
-        linux-um@lists.infradead.org, linux-arch@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        Brendan Higgins <brendanhiggins@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        Tue, 28 Jan 2020 03:30:46 -0500
+Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 00S8P23V144884
+        for <linux-kselftest@vger.kernel.org>; Tue, 28 Jan 2020 03:30:45 -0500
+Received: from e06smtp04.uk.ibm.com (e06smtp04.uk.ibm.com [195.75.94.100])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 2xrk3cky8b-1
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-kselftest@vger.kernel.org>; Tue, 28 Jan 2020 03:30:44 -0500
+Received: from localhost
+        by e06smtp04.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-kselftest@vger.kernel.org> from <svens@linux.ibm.com>;
+        Tue, 28 Jan 2020 08:30:42 -0000
+Received: from b06avi18878370.portsmouth.uk.ibm.com (9.149.26.194)
+        by e06smtp04.uk.ibm.com (192.168.101.134) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
+        Tue, 28 Jan 2020 08:30:40 -0000
+Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
+        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 00S8UdOE46792994
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 28 Jan 2020 08:30:39 GMT
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 280CDA4040;
+        Tue, 28 Jan 2020 08:30:39 +0000 (GMT)
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 211A0A4059;
+        Tue, 28 Jan 2020 08:30:39 +0000 (GMT)
+Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
+        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
+        Tue, 28 Jan 2020 08:30:39 +0000 (GMT)
+Received: by tuxmaker.boeblingen.de.ibm.com (Postfix, from userid 55390)
+        id C6D49E0663; Tue, 28 Jan 2020 09:30:38 +0100 (CET)
+From:   Sven Schnelle <svens@linux.ibm.com>
+To:     Shuah Khan <shuah@kernel.org>
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Sven Schnelle <svens@linux.ibm.com>
+Subject: [PATCH v4] selftests/ftrace: fix glob selftest
+Date:   Tue, 28 Jan 2020 09:30:29 +0100
+X-Mailer: git-send-email 2.17.1
+X-TM-AS-GCONF: 00
+x-cbid: 20012808-0016-0000-0000-000002E15901
+X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
+x-cbparentid: 20012808-0017-0000-0000-0000334418C9
+Message-Id: <20200128083029.34050-1-svens@linux.ibm.com>
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.572
+ definitions=2020-01-28_02:2020-01-24,2020-01-28 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ malwarescore=0 suspectscore=0 phishscore=0 priorityscore=1501 mlxscore=0
+ adultscore=0 spamscore=0 clxscore=1011 mlxlogscore=999 bulkscore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-1911200001 definitions=main-2001280069
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add kunit_shutdown, an option to specify that the kernel shutsdown after
-running KUnit tests, to the kernel-parameters.txt documentation.
+test.d/ftrace/func-filter-glob.tc is failing on s390 because it has
+ARCH_INLINE_SPIN_LOCK and friends set to 'y'. So the usual
+__raw_spin_lock symbol isn't in the ftrace function list. Change
+'*aw*lock' to '*spin*lock' which would hopefully match some of the
+locking functions on all platforms.
 
-Signed-off-by: Brendan Higgins <brendanhiggins@google.com>
+Reviewed-by: Steven Rostedt (VMware) <rostedt@goodmis.org>
+Signed-off-by: Sven Schnelle <svens@linux.ibm.com>
 ---
- Documentation/admin-guide/kernel-parameters.txt | 7 +++++++
- 1 file changed, 7 insertions(+)
 
-diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-index ade4e6ec23e03..0472b02ce16bb 100644
---- a/Documentation/admin-guide/kernel-parameters.txt
-+++ b/Documentation/admin-guide/kernel-parameters.txt
-@@ -2054,6 +2054,13 @@
- 			0: force disabled
- 			1: force enabled
+Changes in v4:
+  - rebase to latest master
+
+Changes in v3:
+  change '*spin*lock' to '*pin*lock' to not match the beginning
+
+Changes in v2:
+  use '*spin*lock' instead of '*ktime*ns'
+
+ .../testing/selftests/ftrace/test.d/ftrace/func-filter-glob.tc  | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/tools/testing/selftests/ftrace/test.d/ftrace/func-filter-glob.tc b/tools/testing/selftests/ftrace/test.d/ftrace/func-filter-glob.tc
+index 27a54a17da65..f4e92afab14b 100644
+--- a/tools/testing/selftests/ftrace/test.d/ftrace/func-filter-glob.tc
++++ b/tools/testing/selftests/ftrace/test.d/ftrace/func-filter-glob.tc
+@@ -30,7 +30,7 @@ ftrace_filter_check '*schedule*' '^.*schedule.*$'
+ ftrace_filter_check 'schedule*' '^schedule.*$'
  
-+	kunit_shutdown	[KERNEL UNIT TESTING FRAMEWORK] Shutdown kernel after
-+			running tests.
-+			Default:	(flag not present) don't shutdown
-+			poweroff:	poweroff the kernel after running tests.
-+			halt:		halt the kernel after running tests.
-+			reboot:		reboot the kernel after running tests.
-+
- 	kvm.ignore_msrs=[KVM] Ignore guest accesses to unhandled MSRs.
- 			Default is 0 (don't ignore, but inject #GP)
+ # filter by *mid*end
+-ftrace_filter_check '*aw*lock' '.*aw.*lock$'
++ftrace_filter_check '*pin*lock' '.*pin.*lock$'
  
+ # filter by start*mid*
+ ftrace_filter_check 'mutex*try*' '^mutex.*try.*'
 -- 
-2.25.0.341.g760bfbb309-goog
+2.17.1
 
