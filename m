@@ -2,363 +2,128 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 163F214D24F
-	for <lists+linux-kselftest@lfdr.de>; Wed, 29 Jan 2020 22:09:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB65A14D25E
+	for <lists+linux-kselftest@lfdr.de>; Wed, 29 Jan 2020 22:19:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727133AbgA2VJG (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 29 Jan 2020 16:09:06 -0500
-Received: from mail-pf1-f194.google.com ([209.85.210.194]:45287 "EHLO
-        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727207AbgA2VJG (ORCPT
+        id S1726648AbgA2VTI (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 29 Jan 2020 16:19:08 -0500
+Received: from mail-pf1-f196.google.com ([209.85.210.196]:42722 "EHLO
+        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726222AbgA2VTI (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 29 Jan 2020 16:09:06 -0500
-Received: by mail-pf1-f194.google.com with SMTP id 2so271553pfg.12
-        for <linux-kselftest@vger.kernel.org>; Wed, 29 Jan 2020 13:09:05 -0800 (PST)
+        Wed, 29 Jan 2020 16:19:08 -0500
+Received: by mail-pf1-f196.google.com with SMTP id 4so293772pfz.9
+        for <linux-kselftest@vger.kernel.org>; Wed, 29 Jan 2020 13:19:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
-        h=date:from:to:cc:subject:in-reply-to:message-id:references
-         :user-agent:mime-version;
-        bh=36D3DxD07HLlQ4b5Xg920trzYAA/7vy/BzURBWhUFgg=;
-        b=Rq4yUVm3lH4Kea7XC63SC0hAfC4KN/ukMQIMSIsqcWlzuSD+uk1QEfCwVPBRNohzZU
-         ruWbIUCyQlR9Qjwkd7QUCMwJor25JyzrECBr8tSJJNwci0TMotKq7wRRfjf92IYCAsy1
-         Bu1FC/lWm1X4mtf/w96iHAujur/gOIQGY13AqGfLfNdZ10vZAArBSoMOEw7PBQLp+esz
-         hBBFoKW6kPDaq7sn282Tu8pbKQijPFb3Gztrz5dApC/WUjMhZ7mbtNHafOzolOJjM4jO
-         jVFVtGPkFo0806VVOjCwPr23yNMLeAVsg8yWzo0/1Bp7We7b4cmUgaLxWX6dmU0L3Wb3
-         NDxw==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=+hDQAX34j2Scqm0cOO1CyUImmUew2WxU5247BGER7dY=;
+        b=UxSawPEjuU8FcEVTFXeV+8fPyjejUz2O2GIiBAdoDAVFy9BgrpyDdwrWW/Qw/2J7ya
+         FZ3Hx7C3W8oBpKsfbmp0gcB6UuG6HCj996xrlRomauFSWUUkw1WSDiYPt+gyeAvsDM8J
+         KOcA9yUDtsyGqXt3j9CoaEHIZjsv5vX9WRJS+1BFVxd2ZZsKZ61Y5xn2O9TyueeSevNe
+         3HynVm+hSZdJHxWhsiP6dcIrpF1AqWQTN1wm7n/YeICb9e29ywqkZW8GbIbfpGFKmKzZ
+         fBgtZeeHipIaN5zsaA1KEPpdP38j6n64hmv3cpQViCU8n8pwKNaxkHJeeBc4f/NHQRvk
+         NZJw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:in-reply-to:message-id
-         :references:user-agent:mime-version;
-        bh=36D3DxD07HLlQ4b5Xg920trzYAA/7vy/BzURBWhUFgg=;
-        b=HufsV+qRhREuMtjEKHaaxYgPjwQJPPylWWxWTdByyWzGpn/7FgAr4g0MtOBX6qmbwa
-         C5J17mhg9iYM1pKkLAdaP+DWz7RIwkKgSkGAFFmK47fp30lWSUOGmnqoEi/Vo3uFniu1
-         ZDVC/h1mIDTL4y0RmsoORYzUZ/h2Ns9y18kn+O92THO8brJAPwTeMEKd9xjnqbKGBSoF
-         Ek6owGyKF3VM1X1FCzDNRqiuj2a7AAt8Bx8DUqce5LRUmTfzinupXjXudGtmRUOqyYDI
-         WIHUX0lfyTyQcSYRbnHHRiGLCfOFeyFB685I6vZ9fhrfUERJSBta3tmN/4jY8cMn7bz3
-         1kLA==
-X-Gm-Message-State: APjAAAWPpmkNzSIm9QnUnw7FdQXN7wECDHh0NXXgEIj3BjVYIkRWZgJa
-        OUIXpn1OSIxZ1kxyOkcupF8a+A==
-X-Google-Smtp-Source: APXvYqxeCY4B2ZQtvcFojY5J9xqyZyLva8x94xZBBFyXH5POFVtEkNZwW1NuTxAwB5B2fY+Dba4I3Q==
-X-Received: by 2002:a63:7843:: with SMTP id t64mr1070867pgc.144.1580332144939;
-        Wed, 29 Jan 2020 13:09:04 -0800 (PST)
-Received: from [2620:15c:17:3:3a5:23a7:5e32:4598] ([2620:15c:17:3:3a5:23a7:5e32:4598])
-        by smtp.gmail.com with ESMTPSA id o73sm3751226pje.7.2020.01.29.13.09.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Jan 2020 13:09:04 -0800 (PST)
-Date:   Wed, 29 Jan 2020 13:09:03 -0800 (PST)
-From:   David Rientjes <rientjes@google.com>
-X-X-Sender: rientjes@chino.kir.corp.google.com
-To:     Mina Almasry <almasrymina@google.com>
-cc:     mike.kravetz@oracle.com, shakeelb@google.com, shuah@kernel.org,
-        gthelen@google.com, akpm@linux-foundation.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org, cgroups@vger.kernel.org,
-        aneesh.kumar@linux.vnet.ibm.com
-Subject: Re: [PATCH v10 1/8] hugetlb_cgroup: Add hugetlb_cgroup reservation
- counter
-In-Reply-To: <20200115012651.228058-1-almasrymina@google.com>
-Message-ID: <alpine.DEB.2.21.2001291303230.175731@chino.kir.corp.google.com>
-References: <20200115012651.228058-1-almasrymina@google.com>
-User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=+hDQAX34j2Scqm0cOO1CyUImmUew2WxU5247BGER7dY=;
+        b=FneUdsVzXiDAudkRDGZAJf6JsKNxZcUvOQ9CBXumiq0EckrXTKczaAlyX/XPhhRcZL
+         INtVwk8ZoxlV9FEqsVQTFW6p1juoJ7jiiRtRuuVBE/aN8+ZRizt7Q8e7dKJsJYmdm+yv
+         iilCxV2BXk7DxwEoJ6ckH/OOMfZ6ybGLTXfi6pVpYSOMDF4ULaUdx/3f/2oM0qxJla2+
+         hyJ/QXjFjEp9Uo7WHEGOvqvMfMRYAuN5JKYd/vIzgKvKVooL/Sh4BTYO3FxbPfz1roIh
+         0qQXYEuVB9FNlirHfb0wnBewhupfs73o6YQ5lGk8O5kzo04RROCT0dZqQDj6A+1v5kZc
+         ra3Q==
+X-Gm-Message-State: APjAAAX/esseIUdwyXu6h2c75jFWSC/S1p0WazKmfz+ch0IhC8T+qeRL
+        4m0DUMNf5pErzAKcqeweVBUl9q0v153v4QGWBzoGZQ==
+X-Google-Smtp-Source: APXvYqz8Ek9aAZM7bbtF2TInvqPq0TxdAQovVbgPfNg0x3Ic53N8b+s11tC5qEwNcBJ6IzRzAQElzR1+afYbaPQH8+4=
+X-Received: by 2002:a63:597:: with SMTP id 145mr1045907pgf.384.1580332747259;
+ Wed, 29 Jan 2020 13:19:07 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+References: <20191216220555.245089-1-brendanhiggins@google.com>
+ <20200106224022.GX11244@42.do-not-panic.com> <CAFd5g456c2Zs7rCvRPgio83G=SrtPGi25zbqAUyTBHspHwtu4w@mail.gmail.com>
+ <594b7815-0611-34ea-beb5-0642114b5d82@gmail.com> <CAFd5g469TWzrLKmQNR2i0HACJ3FEu-=4-Rk005g9szB5UsZAcw@mail.gmail.com>
+ <e801e4ac-b7c2-3d0a-71e7-f8153a3dfbc8@gmail.com> <ECADFF3FD767C149AD96A924E7EA6EAF982C9840@USCULXMSG17.am.sony.com>
+ <CAFd5g46Ut9Suptmp_bBspkp=KKt2GP+=1C5zLu0FXJY9dGJbFQ@mail.gmail.com> <dcf2d008-c044-f2d4-63b9-47151157eeb4@gmail.com>
+In-Reply-To: <dcf2d008-c044-f2d4-63b9-47151157eeb4@gmail.com>
+From:   Brendan Higgins <brendanhiggins@google.com>
+Date:   Wed, 29 Jan 2020 13:18:55 -0800
+Message-ID: <CAFd5g45g7B0HFpcxd-fjpj4h4gaxijSQ+LZb1=6v3t_u_=192w@mail.gmail.com>
+Subject: Re: [RFC v1 0/6] kunit: create a centralized executor to dispatch all
+ KUnit tests
+To:     Frank Rowand <frowand.list@gmail.com>
+Cc:     "Bird, Timothy" <Tim.Bird@sony.com>,
+        Alan Maguire <alan.maguire@oracle.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Jeff Dike <jdike@addtoit.com>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Kees Cook <keescook@chromium.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Iurii Zaikin <yzaikin@google.com>,
+        David Gow <davidgow@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>, rppt@linux.ibm.com,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Knut Omang <knut.omang@oracle.com>,
+        linux-um <linux-um@lists.infradead.org>,
+        linux-arch@vger.kernel.org,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, 14 Jan 2020, Mina Almasry wrote:
+On Tue, Jan 28, 2020 at 8:24 PM Frank Rowand <frowand.list@gmail.com> wrote:
+>
+> On 1/28/20 1:53 PM, Brendan Higgins wrote:
+> > On Tue, Jan 28, 2020 at 11:35 AM <Tim.Bird@sony.com> wrote:
+> >>
+> >>> -----Original Message-----
+> >>> From:  Frank Rowand on January 28, 2020 11:37 AM
+> >>>
+> >>> On 1/28/20 1:19 AM, Brendan Higgins wrote:
+> >>>> On Mon, Jan 27, 2020 at 9:40 AM Frank Rowand <frowand.list@gmail.com> wrote:
+> >> ...
+> >>>> we could add Kconfigs to control this, but the compiler nevertheless
+> >>>> complains because it doesn't know what phase KUnit runs in.
+> >>>>
+> >>>> Is there any way to tell the compiler that it is okay for non __init
+> >>>> code to call __init code? I would prefer not to have a duplicate
+> >>>> version of all the KUnit libraries with all the symbols marked __init.
+> >>>
+> >>> I'm not sure.  The build messages have always been useful and valid in
+> >>> my context, so I never thought to consider that possibility.
+> >>>
+> >>>> Thoughts?
+> >>
+> >> I'm not sure there's a restriction on non __init code calling __init
+> >> code.  In init/main.c arch_call_reset_init() is in __init, and it calls
+> >> rest_init which is non __init, without any special handling.
+> >>
+> >> Is the compiler complaint mentioned above related to  calling
+> >> into __init code, or with some other issue?
+> >
+> > I distinctly remember having the compiler complain at me when I was
+> > messing around with the device tree unit tests because of KUnit
+> > calling code marked as __init. Maybe it's time to start converting
+> > those to KUnit to force the issue? Frank, does that work for you?
+>
+> I have agreed to try converting the devicetree unittest to KUnit.
+>
+> Now that KUnit is in 5.5, I think there is a solid foundation for
+> me to proceed.
 
-> These counters will track hugetlb reservations rather than hugetlb
-> memory faulted in. This patch only adds the counter, following patches
-> add the charging and uncharging of the counter.
-> 
-> This is patch 1 of an 8 patch series.
-> 
-> Problem:
-> Currently tasks attempting to reserve more hugetlb memory than is available get
-> a failure at mmap/shmget time. This is thanks to Hugetlbfs Reservations [1].
-> However, if a task attempts to reserve hugetlb memory only more than its
-> hugetlb_cgroup limit allows, the kernel will allow the mmap/shmget call,
-> but will SIGBUS the task when it attempts to fault the memory in.
-> 
-> We have users hitting their hugetlb_cgroup limits and thus we've been
-> looking at this failure mode. We'd like to improve this behavior such that users
-> violating the hugetlb_cgroup limits get an error on mmap/shmget time, rather
-> than getting SIGBUS'd when they try to fault the excess memory in. This
-> gives the user an opportunity to fallback more gracefully to
-> non-hugetlbfs memory for example.
-> 
-> The underlying problem is that today's hugetlb_cgroup accounting happens
-> at hugetlb memory *fault* time, rather than at *reservation* time.
-> Thus, enforcing the hugetlb_cgroup limit only happens at fault time, and
-> the offending task gets SIGBUS'd.
-> 
-> Proposed Solution:
-> A new page counter named
-> 'hugetlb.xMB.reservation_[limit|usage|max_usage]_in_bytes'. This counter has
-> slightly different semantics than
-> 'hugetlb.xMB.[limit|usage|max_usage]_in_bytes':
-> 
-
-Changelog looks like it needs to be updated with the new resv naming.
-
-> - While usage_in_bytes tracks all *faulted* hugetlb memory,
-> reservation_usage_in_bytes tracks all *reserved* hugetlb memory and
-> hugetlb memory faulted in without a prior reservation.
-> 
-> - If a task attempts to reserve more memory than limit_in_bytes allows,
-> the kernel will allow it to do so. But if a task attempts to reserve
-> more memory than reservation_limit_in_bytes, the kernel will fail this
-> reservation.
-> 
-> This proposal is implemented in this patch series, with tests to verify
-> functionality and show the usage.
-> 
-> Alternatives considered:
-> 1. A new cgroup, instead of only a new page_counter attached to
->    the existing hugetlb_cgroup. Adding a new cgroup seemed like a lot of code
->    duplication with hugetlb_cgroup. Keeping hugetlb related page counters under
->    hugetlb_cgroup seemed cleaner as well.
-> 
-> 2. Instead of adding a new counter, we considered adding a sysctl that modifies
->    the behavior of hugetlb.xMB.[limit|usage]_in_bytes, to do accounting at
->    reservation time rather than fault time. Adding a new page_counter seems
->    better as userspace could, if it wants, choose to enforce different cgroups
->    differently: one via limit_in_bytes, and another via
->    reservation_limit_in_bytes. This could be very useful if you're
->    transitioning how hugetlb memory is partitioned on your system one
->    cgroup at a time, for example. Also, someone may find usage for both
->    limit_in_bytes and reservation_limit_in_bytes concurrently, and this
->    approach gives them the option to do so.
-> 
-> Testing:
-> - Added tests passing.
-> - Used libhugetlbfs for regression testing.
-> 
-> [1]: https://www.kernel.org/doc/html/latest/vm/hugetlbfs_reserv.html
-> 
-> Signed-off-by: Mina Almasry <almasrymina@google.com>
-> 
-> ---
-> Changes in v10:
-> - Renamed reservation_* to resv.*
-> 
-> ---
->  include/linux/hugetlb.h |   4 +-
->  mm/hugetlb_cgroup.c     | 115 +++++++++++++++++++++++++++++++++++-----
->  2 files changed, 104 insertions(+), 15 deletions(-)
-> 
-> diff --git a/include/linux/hugetlb.h b/include/linux/hugetlb.h
-> index 1e897e4168ac1..dea6143aa0685 100644
-> --- a/include/linux/hugetlb.h
-> +++ b/include/linux/hugetlb.h
-> @@ -432,8 +432,8 @@ struct hstate {
->  	unsigned int surplus_huge_pages_node[MAX_NUMNODES];
->  #ifdef CONFIG_CGROUP_HUGETLB
->  	/* cgroup control files */
-> -	struct cftype cgroup_files_dfl[5];
-> -	struct cftype cgroup_files_legacy[5];
-> +	struct cftype cgroup_files_dfl[7];
-> +	struct cftype cgroup_files_legacy[9];
->  #endif
->  	char name[HSTATE_NAME_LEN];
->  };
-> diff --git a/mm/hugetlb_cgroup.c b/mm/hugetlb_cgroup.c
-> index e434b05416c68..209f9b9604d34 100644
-> --- a/mm/hugetlb_cgroup.c
-> +++ b/mm/hugetlb_cgroup.c
-> @@ -36,6 +36,11 @@ struct hugetlb_cgroup {
->  	 */
->  	struct page_counter hugepage[HUGE_MAX_HSTATE];
-> 
-> +	/*
-> +	 * the counter to account for hugepage reservations from hugetlb.
-> +	 */
-> +	struct page_counter reserved_hugepage[HUGE_MAX_HSTATE];
-> +
->  	atomic_long_t events[HUGE_MAX_HSTATE][HUGETLB_NR_MEMORY_EVENTS];
->  	atomic_long_t events_local[HUGE_MAX_HSTATE][HUGETLB_NR_MEMORY_EVENTS];
-> 
-> @@ -55,6 +60,14 @@ struct hugetlb_cgroup {
-> 
->  static struct hugetlb_cgroup *root_h_cgroup __read_mostly;
-> 
-> +static inline struct page_counter *
-> +hugetlb_cgroup_get_counter(struct hugetlb_cgroup *h_cg, int idx, bool reserved)
-> +{
-> +	if (reserved)
-> +		return &h_cg->reserved_hugepage[idx];
-> +	return &h_cg->hugepage[idx];
-> +}
-> +
->  static inline
->  struct hugetlb_cgroup *hugetlb_cgroup_from_css(struct cgroup_subsys_state *s)
->  {
-
-Small nit: hugetlb_cgroup_get_counter(), to me, implies incrementing a 
-reference count, perhaps a better name would be in order.  No strong 
-preference.
-
-> @@ -295,28 +308,42 @@ void hugetlb_cgroup_uncharge_cgroup(int idx, unsigned long nr_pages,
-> 
->  enum {
->  	RES_USAGE,
-> +	RES_RESERVATION_USAGE,
->  	RES_LIMIT,
-> +	RES_RESERVATION_LIMIT,
->  	RES_MAX_USAGE,
-> +	RES_RESERVATION_MAX_USAGE,
->  	RES_FAILCNT,
-> +	RES_RESERVATION_FAILCNT,
->  };
-> 
->  static u64 hugetlb_cgroup_read_u64(struct cgroup_subsys_state *css,
->  				   struct cftype *cft)
->  {
->  	struct page_counter *counter;
-> +	struct page_counter *reserved_counter;
->  	struct hugetlb_cgroup *h_cg = hugetlb_cgroup_from_css(css);
-> 
->  	counter = &h_cg->hugepage[MEMFILE_IDX(cft->private)];
-> +	reserved_counter = &h_cg->reserved_hugepage[MEMFILE_IDX(cft->private)];
-> 
->  	switch (MEMFILE_ATTR(cft->private)) {
->  	case RES_USAGE:
->  		return (u64)page_counter_read(counter) * PAGE_SIZE;
-> +	case RES_RESERVATION_USAGE:
-> +		return (u64)page_counter_read(reserved_counter) * PAGE_SIZE;
->  	case RES_LIMIT:
->  		return (u64)counter->max * PAGE_SIZE;
-> +	case RES_RESERVATION_LIMIT:
-> +		return (u64)reserved_counter->max * PAGE_SIZE;
->  	case RES_MAX_USAGE:
->  		return (u64)counter->watermark * PAGE_SIZE;
-> +	case RES_RESERVATION_MAX_USAGE:
-> +		return (u64)reserved_counter->watermark * PAGE_SIZE;
->  	case RES_FAILCNT:
->  		return counter->failcnt;
-> +	case RES_RESERVATION_FAILCNT:
-> +		return reserved_counter->failcnt;
->  	default:
->  		BUG();
->  	}
-> @@ -338,10 +365,16 @@ static int hugetlb_cgroup_read_u64_max(struct seq_file *seq, void *v)
->  			   1 << huge_page_order(&hstates[idx]));
-> 
->  	switch (MEMFILE_ATTR(cft->private)) {
-> +	case RES_RESERVATION_USAGE:
-> +		counter = &h_cg->reserved_hugepage[idx];
-> +		/* Fall through. */
->  	case RES_USAGE:
->  		val = (u64)page_counter_read(counter);
->  		seq_printf(seq, "%llu\n", val * PAGE_SIZE);
->  		break;
-> +	case RES_RESERVATION_LIMIT:
-> +		counter = &h_cg->reserved_hugepage[idx];
-> +		/* Fall through. */
->  	case RES_LIMIT:
->  		val = (u64)counter->max;
->  		if (val == limit)
-> @@ -365,6 +398,7 @@ static ssize_t hugetlb_cgroup_write(struct kernfs_open_file *of,
->  	int ret, idx;
->  	unsigned long nr_pages;
->  	struct hugetlb_cgroup *h_cg = hugetlb_cgroup_from_css(of_css(of));
-> +	bool reserved = false;
-> 
->  	if (hugetlb_cgroup_is_root(h_cg)) /* Can't set limit on root */
->  		return -EINVAL;
-> @@ -378,9 +412,14 @@ static ssize_t hugetlb_cgroup_write(struct kernfs_open_file *of,
->  	nr_pages = round_down(nr_pages, 1 << huge_page_order(&hstates[idx]));
-> 
->  	switch (MEMFILE_ATTR(of_cft(of)->private)) {
-> +	case RES_RESERVATION_LIMIT:
-> +		reserved = true;
-> +		/* Fall through. */
->  	case RES_LIMIT:
->  		mutex_lock(&hugetlb_limit_mutex);
-> -		ret = page_counter_set_max(&h_cg->hugepage[idx], nr_pages);
-> +		ret = page_counter_set_max(hugetlb_cgroup_get_counter(h_cg, idx,
-> +								      reserved),
-> +					   nr_pages);
->  		mutex_unlock(&hugetlb_limit_mutex);
->  		break;
->  	default:
-> @@ -406,18 +445,26 @@ static ssize_t hugetlb_cgroup_reset(struct kernfs_open_file *of,
->  				    char *buf, size_t nbytes, loff_t off)
->  {
->  	int ret = 0;
-> -	struct page_counter *counter;
-> +	struct page_counter *counter, *reserved_counter;
->  	struct hugetlb_cgroup *h_cg = hugetlb_cgroup_from_css(of_css(of));
-> 
->  	counter = &h_cg->hugepage[MEMFILE_IDX(of_cft(of)->private)];
-> +	reserved_counter =
-> +		&h_cg->reserved_hugepage[MEMFILE_IDX(of_cft(of)->private)];
-> 
->  	switch (MEMFILE_ATTR(of_cft(of)->private)) {
->  	case RES_MAX_USAGE:
->  		page_counter_reset_watermark(counter);
->  		break;
-> +	case RES_RESERVATION_MAX_USAGE:
-> +		page_counter_reset_watermark(reserved_counter);
-> +		break;
->  	case RES_FAILCNT:
->  		counter->failcnt = 0;
->  		break;
-> +	case RES_RESERVATION_FAILCNT:
-> +		reserved_counter->failcnt = 0;
-> +		break;
->  	default:
->  		ret = -EINVAL;
->  		break;
-> @@ -472,7 +519,7 @@ static void __init __hugetlb_cgroup_file_dfl_init(int idx)
->  	struct hstate *h = &hstates[idx];
-> 
->  	/* format the size */
-> -	mem_fmt(buf, 32, huge_page_size(h));
-> +	mem_fmt(buf, sizeof(buf), huge_page_size(h));
-> 
->  	/* Add the limit file */
->  	cft = &h->cgroup_files_dfl[0];
-> @@ -482,15 +529,30 @@ static void __init __hugetlb_cgroup_file_dfl_init(int idx)
->  	cft->write = hugetlb_cgroup_write_dfl;
->  	cft->flags = CFTYPE_NOT_ON_ROOT;
-> 
-> -	/* Add the current usage file */
-> +	/* Add the reservation limit file */
->  	cft = &h->cgroup_files_dfl[1];
-> +	snprintf(cft->name, MAX_CFTYPE_NAME, "%s.resv.max", buf);
-> +	cft->private = MEMFILE_PRIVATE(idx, RES_RESERVATION_LIMIT);
-> +	cft->seq_show = hugetlb_cgroup_read_u64_max;
-> +	cft->write = hugetlb_cgroup_write_dfl;
-> +	cft->flags = CFTYPE_NOT_ON_ROOT;
-> +
-> +	/* Add the current usage file */
-> +	cft = &h->cgroup_files_dfl[2];
->  	snprintf(cft->name, MAX_CFTYPE_NAME, "%s.current", buf);
->  	cft->private = MEMFILE_PRIVATE(idx, RES_USAGE);
->  	cft->seq_show = hugetlb_cgroup_read_u64_max;
->  	cft->flags = CFTYPE_NOT_ON_ROOT;
-> 
-> +	/* Add the current reservation usage file */
-> +	cft = &h->cgroup_files_dfl[3];
-> +	snprintf(cft->name, MAX_CFTYPE_NAME, "%s.resv.current", buf);
-> +	cft->private = MEMFILE_PRIVATE(idx, RES_RESERVATION_USAGE);
-> +	cft->seq_show = hugetlb_cgroup_read_u64_max;
-> +	cft->flags = CFTYPE_NOT_ON_ROOT;
-> +
->  	/* Add the events file */
-> -	cft = &h->cgroup_files_dfl[2];
-> +	cft = &h->cgroup_files_dfl[4];
->  	snprintf(cft->name, MAX_CFTYPE_NAME, "%s.events", buf);
->  	cft->private = MEMFILE_PRIVATE(idx, 0);
->  	cft->seq_show = hugetlb_events_show;
-
-Any cleanup to __hugetlb_cgroup_file_dfl_init() and 
-__hugetlb_cgroup_file_legacy_init() that is possible would be great in a 
-follow-up patch :)
-
-Other than that, this looks very straight forward.
-
-Acked-by: David Rientjes <rientjes@google.com>
+Awesome! Last time we talked (offline), it sounded like you had a
+clear idea of what you wanted to do; nevertheless, feel free to reuse
+anything from my attempt at it, if you find anything useful, or
+otherwise rope me in if you have any questions, comments, or
+complaints.
