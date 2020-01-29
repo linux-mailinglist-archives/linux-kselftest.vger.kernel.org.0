@@ -2,136 +2,134 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DE5614C4F2
-	for <lists+linux-kselftest@lfdr.de>; Wed, 29 Jan 2020 04:25:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 82A0114C52B
+	for <lists+linux-kselftest@lfdr.de>; Wed, 29 Jan 2020 05:24:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727103AbgA2DYr (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 28 Jan 2020 22:24:47 -0500
-Received: from hqnvemgate26.nvidia.com ([216.228.121.65]:17900 "EHLO
-        hqnvemgate26.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726842AbgA2DYY (ORCPT
+        id S1726487AbgA2EY4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 28 Jan 2020 23:24:56 -0500
+Received: from mail-qt1-f195.google.com ([209.85.160.195]:46369 "EHLO
+        mail-qt1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726401AbgA2EY4 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 28 Jan 2020 22:24:24 -0500
-Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate26.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5e30fad50003>; Tue, 28 Jan 2020 19:24:05 -0800
-Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate101.nvidia.com (PGP Universal service);
-  Tue, 28 Jan 2020 19:24:20 -0800
-X-PGP-Universal: processed;
-        by hqpgpgate101.nvidia.com on Tue, 28 Jan 2020 19:24:20 -0800
-Received: from HQMAIL109.nvidia.com (172.20.187.15) by HQMAIL111.nvidia.com
- (172.20.187.18) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Wed, 29 Jan
- 2020 03:24:19 +0000
-Received: from hqnvemgw03.nvidia.com (10.124.88.68) by HQMAIL109.nvidia.com
- (172.20.187.15) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
- Transport; Wed, 29 Jan 2020 03:24:19 +0000
-Received: from blueforge.nvidia.com (Not Verified[10.110.48.28]) by hqnvemgw03.nvidia.com with Trustwave SEG (v7,5,8,10121)
-        id <B5e30fae30007>; Tue, 28 Jan 2020 19:24:19 -0800
-From:   John Hubbard <jhubbard@nvidia.com>
-To:     Andrew Morton <akpm@linux-foundation.org>
-CC:     Al Viro <viro@zeniv.linux.org.uk>,
-        Christoph Hellwig <hch@infradead.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Dave Chinner <david@fromorbit.com>,
-        Ira Weiny <ira.weiny@intel.com>, Jan Kara <jack@suse.cz>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Jonathan Corbet <corbet@lwn.net>,
-        =?UTF-8?q?J=C3=A9r=C3=B4me=20Glisse?= <jglisse@redhat.com>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Michal Hocko <mhocko@suse.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Vlastimil Babka <vbabka@suse.cz>, <linux-doc@vger.kernel.org>,
-        <linux-fsdevel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-        <linux-rdma@vger.kernel.org>, <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        John Hubbard <jhubbard@nvidia.com>
-Subject: [PATCH v2 8/8] selftests/vm: run_vmtests: invoke gup_benchmark with basic FOLL_PIN coverage
-Date:   Tue, 28 Jan 2020 19:24:17 -0800
-Message-ID: <20200129032417.3085670-9-jhubbard@nvidia.com>
-X-Mailer: git-send-email 2.25.0
-In-Reply-To: <20200129032417.3085670-1-jhubbard@nvidia.com>
-References: <20200129032417.3085670-1-jhubbard@nvidia.com>
+        Tue, 28 Jan 2020 23:24:56 -0500
+Received: by mail-qt1-f195.google.com with SMTP id e25so12228451qtr.13;
+        Tue, 28 Jan 2020 20:24:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=eakBGQ1EfxNPQBSaXqT9vlsaKAmpZ5+kMa3s4kT1JN8=;
+        b=K0eBBXdiKRQKb2Um1UxPIn+uPENTwBO73Ct4S7khM/WqZxfdTcHnuNaxp53t1tMVBo
+         l9d3d7PL0LO9ZjFmSgfo3XDYniGhORhLXPrTildO5+2rqDwAWILhln/UqIRSkQdIHgS6
+         RFERqWwekSHDpn6YcYxkPLeqfXLrfSFMKTbb14n94rOk/DKkDXyqH6sXX/GIiOeK8Bee
+         y7ZoOGVarjuJnAOVKQOr8Wu1rR9ZN759TG+xWJ0OpkZN0fiN1P/gAOqp0sajV1klhTCK
+         2SUTfP2c8RI4aVoMDN6KnBHnLgfxjgP7I8e0urSZ0UsF8pDDnSlFUjo8JTeFIBx3bJ7k
+         sW3Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=eakBGQ1EfxNPQBSaXqT9vlsaKAmpZ5+kMa3s4kT1JN8=;
+        b=lSIiJzWKTZwdiot5la8f8on9X8szk3VtWuhRkTfD70MQBgtSglyQ/sbSe0LWwoMDro
+         MQIypy5Ifr7YTrRilMoyNZBuBfBEq0QqRQ2y8VLe/Xk8Ih1OgxnPtSPhSawt/gzWuhl2
+         K5oKlLE91UAxT80Eb1LXUdVEgMIVjNc0TzdNJaJ6hCuEv3Xe3ZdOIiAgwux27C1bF5j+
+         KsS4yrQHrGPvoweEfH/QRk1C7EPIM2y+6Kx3VoHBX6rvWoCA0wjtw6H0SiOnrPNBW0tr
+         Hlbhsl/OeSu1rH1+DDJhBMQX9XBcmv7Jk0hg79wnflGvjaOaBZMkntQIAmvgSbK9NzJR
+         49ig==
+X-Gm-Message-State: APjAAAVVCupBiROmzddKrjchBTzOHVdA2C/6x/OZEPf7QQE9ONWRsJzO
+        rB5gsFgu5WZFVvysizS3AQM=
+X-Google-Smtp-Source: APXvYqznV+gAHKK6MsOz+wnZrl/QqDx4om8+h40F66lxU7UeeC31wlbnLgo/pifdnYfPWmWnjBdfHQ==
+X-Received: by 2002:ac8:6f27:: with SMTP id i7mr5201797qtv.253.1580271895195;
+        Tue, 28 Jan 2020 20:24:55 -0800 (PST)
+Received: from [192.168.1.46] (c-73-88-245-53.hsd1.tn.comcast.net. [73.88.245.53])
+        by smtp.gmail.com with ESMTPSA id o187sm405516qkf.26.2020.01.28.20.24.53
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 28 Jan 2020 20:24:54 -0800 (PST)
+Subject: Re: [RFC v1 0/6] kunit: create a centralized executor to dispatch all
+ KUnit tests
+To:     Brendan Higgins <brendanhiggins@google.com>,
+        "Bird, Timothy" <Tim.Bird@sony.com>,
+        Alan Maguire <alan.maguire@oracle.com>
+Cc:     Luis Chamberlain <mcgrof@kernel.org>,
+        Jeff Dike <jdike@addtoit.com>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Kees Cook <keescook@chromium.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Iurii Zaikin <yzaikin@google.com>,
+        David Gow <davidgow@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>, rppt@linux.ibm.com,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Knut Omang <knut.omang@oracle.com>,
+        linux-um <linux-um@lists.infradead.org>,
+        linux-arch@vger.kernel.org,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20191216220555.245089-1-brendanhiggins@google.com>
+ <20200106224022.GX11244@42.do-not-panic.com>
+ <CAFd5g456c2Zs7rCvRPgio83G=SrtPGi25zbqAUyTBHspHwtu4w@mail.gmail.com>
+ <594b7815-0611-34ea-beb5-0642114b5d82@gmail.com>
+ <CAFd5g469TWzrLKmQNR2i0HACJ3FEu-=4-Rk005g9szB5UsZAcw@mail.gmail.com>
+ <e801e4ac-b7c2-3d0a-71e7-f8153a3dfbc8@gmail.com>
+ <ECADFF3FD767C149AD96A924E7EA6EAF982C9840@USCULXMSG17.am.sony.com>
+ <CAFd5g46Ut9Suptmp_bBspkp=KKt2GP+=1C5zLu0FXJY9dGJbFQ@mail.gmail.com>
+From:   Frank Rowand <frowand.list@gmail.com>
+Message-ID: <dcf2d008-c044-f2d4-63b9-47151157eeb4@gmail.com>
+Date:   Tue, 28 Jan 2020 22:24:53 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-X-NVConfidentiality: public
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1580268245; bh=Q/jtf1QAQWUBdGa6x5cGwrQgIxtlzXz53YFDTgazJkU=;
-        h=X-PGP-Universal:From:To:CC:Subject:Date:Message-ID:X-Mailer:
-         In-Reply-To:References:MIME-Version:X-NVConfidentiality:
-         Content-Transfer-Encoding:Content-Type;
-        b=OfVxu5XUMoa0jfrsUtQqs/QQpukmxuEgszfT42NxxSVKqYrSaNN5MrNrCf47W+w92
-         E1cjqFQ7g3WZsn8M8IlIB1Kyz6hNG1HZEB2ZIOVLaHLMMSW8ijVgsyIsZ38lg1mZGx
-         5lrbYItcIYtkGSd3wbyOjDIk4TD2+kVS6hIf52HPJNcDHl9ynC+WHMvwjTNiElkEsi
-         3+cBRWTQwjf2P8hlZniohdC++khabUbbej0oUg+oQrnmB8r3yU5vJTuZRwcGwiEf7n
-         HbWfrvXGaotuOrOhDCYrkG+a7nhGHqhDjA2W8HCl6bVbTBukVt0SwL4yRpYascONOp
-         3LktvdGl4C9ng==
+In-Reply-To: <CAFd5g46Ut9Suptmp_bBspkp=KKt2GP+=1C5zLu0FXJY9dGJbFQ@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-It's good to have basic unit test coverage of the new FOLL_PIN
-behavior. Fortunately, the gup_benchmark unit test is extremely
-fast (a few milliseconds), so adding it the the run_vmtests suite
-is going to cause no noticeable change in running time.
+On 1/28/20 1:53 PM, Brendan Higgins wrote:
+> On Tue, Jan 28, 2020 at 11:35 AM <Tim.Bird@sony.com> wrote:
+>>
+>>> -----Original Message-----
+>>> From:  Frank Rowand on January 28, 2020 11:37 AM
+>>>
+>>> On 1/28/20 1:19 AM, Brendan Higgins wrote:
+>>>> On Mon, Jan 27, 2020 at 9:40 AM Frank Rowand <frowand.list@gmail.com> wrote:
+>> ...
+>>>> we could add Kconfigs to control this, but the compiler nevertheless
+>>>> complains because it doesn't know what phase KUnit runs in.
+>>>>
+>>>> Is there any way to tell the compiler that it is okay for non __init
+>>>> code to call __init code? I would prefer not to have a duplicate
+>>>> version of all the KUnit libraries with all the symbols marked __init.
+>>>
+>>> I'm not sure.  The build messages have always been useful and valid in
+>>> my context, so I never thought to consider that possibility.
+>>>
+>>>> Thoughts?
+>>
+>> I'm not sure there's a restriction on non __init code calling __init
+>> code.  In init/main.c arch_call_reset_init() is in __init, and it calls
+>> rest_init which is non __init, without any special handling.
+>>
+>> Is the compiler complaint mentioned above related to  calling
+>> into __init code, or with some other issue?
+> 
+> I distinctly remember having the compiler complain at me when I was
+> messing around with the device tree unit tests because of KUnit
+> calling code marked as __init. Maybe it's time to start converting
+> those to KUnit to force the issue? Frank, does that work for you?
 
-So, add two new invocations to run_vmtests:
+I have agreed to try converting the devicetree unittest to KUnit.
 
-1) Run gup_benchmark with normal get_user_pages().
+Now that KUnit is in 5.5, I think there is a solid foundation for
+me to proceed.
 
-2) Run gup_benchmark with pin_user_pages(). This is much like
-the first call, except that it sets FOLL_PIN.
-
-Running these two in quick succession also provide a visual
-comparison of the running times, which is convenient.
-
-The new invocations are fairly early in the run_vmtests script,
-because with test suites, it's usually preferable to put the
-shorter, faster tests first, all other things being equal.
-
-Reviewed-by: Ira Weiny <ira.weiny@intel.com>
-Signed-off-by: John Hubbard <jhubbard@nvidia.com>
----
- tools/testing/selftests/vm/run_vmtests | 22 ++++++++++++++++++++++
- 1 file changed, 22 insertions(+)
-
-diff --git a/tools/testing/selftests/vm/run_vmtests b/tools/testing/selftes=
-ts/vm/run_vmtests
-index a692ea828317..df6a6bf3f238 100755
---- a/tools/testing/selftests/vm/run_vmtests
-+++ b/tools/testing/selftests/vm/run_vmtests
-@@ -112,6 +112,28 @@ echo "NOTE: The above hugetlb tests provide minimal co=
-verage.  Use"
- echo "      https://github.com/libhugetlbfs/libhugetlbfs.git for"
- echo "      hugetlb regression testing."
-=20
-+echo "--------------------------------------------"
-+echo "running 'gup_benchmark -U' (normal/slow gup)"
-+echo "--------------------------------------------"
-+./gup_benchmark -U
-+if [ $? -ne 0 ]; then
-+	echo "[FAIL]"
-+	exitcode=3D1
-+else
-+	echo "[PASS]"
-+fi
-+
-+echo "------------------------------------------"
-+echo "running gup_benchmark -b (pin_user_pages)"
-+echo "------------------------------------------"
-+./gup_benchmark -b
-+if [ $? -ne 0 ]; then
-+	echo "[FAIL]"
-+	exitcode=3D1
-+else
-+	echo "[PASS]"
-+fi
-+
- echo "-------------------"
- echo "running userfaultfd"
- echo "-------------------"
---=20
-2.25.0
-
+-Frank
