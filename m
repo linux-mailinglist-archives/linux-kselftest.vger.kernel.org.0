@@ -2,103 +2,99 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D2B814C86B
-	for <lists+linux-kselftest@lfdr.de>; Wed, 29 Jan 2020 10:56:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A1F114C98B
+	for <lists+linux-kselftest@lfdr.de>; Wed, 29 Jan 2020 12:25:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726140AbgA2J4q (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 29 Jan 2020 04:56:46 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:37306 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726114AbgA2J4q (ORCPT
+        id S1726246AbgA2LZG (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 29 Jan 2020 06:25:06 -0500
+Received: from mail-lj1-f193.google.com ([209.85.208.193]:42121 "EHLO
+        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726184AbgA2LZG (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 29 Jan 2020 04:56:46 -0500
-Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 00T9s7E6137578
-        for <linux-kselftest@vger.kernel.org>; Wed, 29 Jan 2020 04:56:45 -0500
-Received: from e06smtp02.uk.ibm.com (e06smtp02.uk.ibm.com [195.75.94.98])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 2xtrmb4k68-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-kselftest@vger.kernel.org>; Wed, 29 Jan 2020 04:56:45 -0500
-Received: from localhost
-        by e06smtp02.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-kselftest@vger.kernel.org> from <sandipan@linux.ibm.com>;
-        Wed, 29 Jan 2020 09:56:43 -0000
-Received: from b06cxnps4074.portsmouth.uk.ibm.com (9.149.109.196)
-        by e06smtp02.uk.ibm.com (192.168.101.132) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Wed, 29 Jan 2020 09:56:39 -0000
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 00T9ucht53870796
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 29 Jan 2020 09:56:38 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 6DBC0AE045;
-        Wed, 29 Jan 2020 09:56:38 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 2DC17AE04D;
-        Wed, 29 Jan 2020 09:56:36 +0000 (GMT)
-Received: from [9.124.35.38] (unknown [9.124.35.38])
-        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Wed, 29 Jan 2020 09:56:36 +0000 (GMT)
-Subject: Re: [PATCH v16 00/23] selftests, powerpc, x86: Memory Protection Keys
-From:   Sandipan Das <sandipan@linux.ibm.com>
-To:     Dave Hansen <dave.hansen@intel.com>
-Cc:     shuah@kernel.org, linux-kselftest@vger.kernel.org,
-        linux-arch@vger.kernel.org, fweimer@redhat.com, x86@kernel.org,
-        linuxram@us.ibm.com, mhocko@kernel.org, linux-mm@kvack.org,
-        mingo@redhat.com, aneesh.kumar@linux.ibm.com,
-        bauerman@linux.ibm.com, msuchanek@suse.de, mpe@ellerman.id.au,
-        linuxppc-dev@lists.ozlabs.org
-References: <cover.1579507768.git.sandipan@linux.ibm.com>
- <3ceb2814-f8b0-ec6b-3c24-ec72297a99f5@intel.com>
- <8f14bee0-ab1c-fc90-dfdb-5128607b767f@linux.ibm.com>
- <3eca7a91-aa3e-cb01-47c8-5d36020993a2@intel.com>
- <fb83ce52-b92a-ed42-dc06-a86ca8431ff6@linux.ibm.com>
-Date:   Wed, 29 Jan 2020 15:26:35 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.1
+        Wed, 29 Jan 2020 06:25:06 -0500
+Received: by mail-lj1-f193.google.com with SMTP id d10so5590ljl.9
+        for <linux-kselftest@vger.kernel.org>; Wed, 29 Jan 2020 03:25:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=shutemov-name.20150623.gappssmtp.com; s=20150623;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=yuCTClL/pM7fgvSlPLx1qB/TzQ5SdJMl6/MOShIA1DQ=;
+        b=0W7H46FMjIQyieXPqDTdHmsnT+fVvJJD10f3x0BOMctRvL9MkeTdx4VbdbHlRTBEN3
+         b5/NawDAfyQpEhbLgT0rwOvcpevf1CHvRnfPK+nWNiUWSGyImoO0vgtrGmVKW+uZx29r
+         bBsFaVwVuNzEQGuzTVKaB1lufIwzDYjD7ErDm/9BiL+5qbFTXQ+Ady+yLKCnGSNAgMd3
+         W6mnYQvJTpgMGiYduy+scv4eX7iMsBIwYQPsUNpaNK3OyYiGdeXL9USXqvdYpFTTjSlw
+         AraHVZkw1JBmq3Op+CNUrl6EEty11YBA5pwAZqGuiTKUaRJ47uGYaNwZMdUrsfU+3Fw7
+         +BBg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=yuCTClL/pM7fgvSlPLx1qB/TzQ5SdJMl6/MOShIA1DQ=;
+        b=CWW0exwO7Ul1BTI+NVxj60Y9xESQSsVppMNiCJPBhVNMrMzHsWUNo/v1ZWQZQL7qgA
+         43MqYRtAkZt6+Aufrn+9s2lnrgZ+04ehscurDfYGHu5x79K7HkqTWjxey4gXiDw4yI6r
+         JdhSclfyFJLukaCTLKknI8AkfGWaiDCYfen7GctLn2aQRKqrHwWluDvkKOuLmaWY5Wem
+         xBz+RdCn8jyigSPP7V3vmkeCJCruUiiNcZshsGI42JGgIz+a2ZQ0CVctC8CEnwjGzcqU
+         FOighwena7H//TLQy2GbubS3BLBrW2aKqALnR6UW5XNjH/xJ0XgxG6rpPNiw9Xx6N3jX
+         ltQA==
+X-Gm-Message-State: APjAAAVomBlK1mHSZhqnRl7v1uxhlM5crPn33Hvb3Bagz0fPmsgXjwW9
+        esm4minTG/FR+nvq8tO5YIFu6g==
+X-Google-Smtp-Source: APXvYqwyL72yG90SI0NWAGgcd0insDnp1IMG7ae6YjG0JpIiyNIWobcDnM8YcTAzCUBn1pD6tZdqCQ==
+X-Received: by 2002:a2e:809a:: with SMTP id i26mr16595052ljg.108.1580297103916;
+        Wed, 29 Jan 2020 03:25:03 -0800 (PST)
+Received: from box.localdomain ([86.57.175.117])
+        by smtp.gmail.com with ESMTPSA id d9sm778410lja.73.2020.01.29.03.25.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 29 Jan 2020 03:25:03 -0800 (PST)
+Received: by box.localdomain (Postfix, from userid 1000)
+        id 04319100AFE; Wed, 29 Jan 2020 14:25:11 +0300 (+03)
+Date:   Wed, 29 Jan 2020 14:25:10 +0300
+From:   "Kirill A. Shutemov" <kirill@shutemov.name>
+To:     John Hubbard <jhubbard@nvidia.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Christoph Hellwig <hch@infradead.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Dave Chinner <david@fromorbit.com>,
+        Ira Weiny <ira.weiny@intel.com>, Jan Kara <jack@suse.cz>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Jonathan Corbet <corbet@lwn.net>,
+        =?utf-8?B?SsOpcsO0bWU=?= Glisse <jglisse@redhat.com>,
+        Michal Hocko <mhocko@suse.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Vlastimil Babka <vbabka@suse.cz>, linux-doc@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-rdma@vger.kernel.org, linux-mm@kvack.org,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 1/8] mm: dump_page: print head page's refcount, for
+ compound pages
+Message-ID: <20200129112510.ulims6u36ofk2qwa@box>
+References: <20200129032417.3085670-1-jhubbard@nvidia.com>
+ <20200129032417.3085670-2-jhubbard@nvidia.com>
 MIME-Version: 1.0
-In-Reply-To: <fb83ce52-b92a-ed42-dc06-a86ca8431ff6@linux.ibm.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-x-cbid: 20012909-0008-0000-0000-0000034DB7CA
-X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 20012909-0009-0000-0000-00004A6E343F
-Message-Id: <3c7b6d98-da08-29c7-cd5b-39d2903b24a2@linux.ibm.com>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.572
- definitions=2020-01-29_01:2020-01-28,2020-01-29 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0
- priorityscore=1501 suspectscore=0 mlxlogscore=999 bulkscore=0
- lowpriorityscore=0 malwarescore=0 clxscore=1015 adultscore=0 spamscore=0
- mlxscore=0 impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-1911200001 definitions=main-2001290081
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200129032417.3085670-2-jhubbard@nvidia.com>
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Dave,
-
-On 28/01/20 3:08 pm, Sandipan Das wrote:
-> On 27/01/20 9:12 pm, Dave Hansen wrote:
->>
->> How have you tested this patch (and the whole series for that matter)?
->>
+On Tue, Jan 28, 2020 at 07:24:10PM -0800, John Hubbard wrote:
+> When debugging a problem that involves compound pages, it is extremely
+> helpful if dump_page() reports not only the page->_refcount, but also
+> the refcount of the head page of the compound page. That's because the
+> head page collects refcounts for the entire compound page.
 > 
-> I replaced the second patch with this one and did a build test.
-> Till v16, I had tested the whole series (build + run) on both a POWER8
-> system (with 4K and 64K page sizes) and a Skylake SP system but for
-> x86_64 only. Following that, I could only do a build test locally on
-> my laptop for i386 and x86_64 on my laptop as I did not have access to
-> the Skylake system anymore.
+> Therefore, enhance dump_page() so as to print out the refcount of the
+> head page of a compound page.
 > 
-> 
+> This approach (printing information about a struct page that is not the
+> struct page that was passed into dump_page()) has a precedent:
+> compound_mapcount is already being printed.
 
-I got a chance to use the Skylake system today and tested (build + run)
-the whole series (v17 with the fixed Makefile) for both i386 and x86_64.
-Everything passed.
+refcount on a tail must always be 0. I think we should only print it when
+it is non-zero, emphasizing this fact with a standalone message.
 
-- Sandipan
-
+-- 
+ Kirill A. Shutemov
