@@ -2,80 +2,86 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 71F8614C614
-	for <lists+linux-kselftest@lfdr.de>; Wed, 29 Jan 2020 06:48:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 56EBD14C676
+	for <lists+linux-kselftest@lfdr.de>; Wed, 29 Jan 2020 07:27:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726216AbgA2FsC (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 29 Jan 2020 00:48:02 -0500
-Received: from mail.kernel.org ([198.145.29.99]:56342 "EHLO mail.kernel.org"
+        id S1725966AbgA2G1K (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 29 Jan 2020 01:27:10 -0500
+Received: from mail.kernel.org ([198.145.29.99]:44364 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726069AbgA2FsC (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 29 Jan 2020 00:48:02 -0500
-Received: from localhost (unknown [213.57.247.131])
+        id S1725858AbgA2G1K (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 29 Jan 2020 01:27:10 -0500
+Received: from kernel.org (unknown [104.132.0.74])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 221AE2071E;
-        Wed, 29 Jan 2020 05:48:00 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 5B2A22067C;
+        Wed, 29 Jan 2020 06:27:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1580276881;
-        bh=Y+9aIhN4apiy5tD4uo8NEkUkqCFQBUmX8iUUCn+SJz4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=GA4xldnrfCZ/hBa/e+u4jH+ceiMp46v485VEdcIQS+PL2onNs2Lp344hOSwut0cl5
-         kMjlKcFvkhxbeePcWEiAlqewXAYnKlDFlVtI4vZlErWp9sEeIGhuDBlR6Xyf3B/MvB
-         77hB3BnefN51UHOfzz/YcUfa9FLW3mE857JX1mzU=
-Date:   Wed, 29 Jan 2020 07:47:56 +0200
-From:   Leon Romanovsky <leon@kernel.org>
-To:     John Hubbard <jhubbard@nvidia.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Christoph Hellwig <hch@infradead.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Dave Chinner <david@fromorbit.com>,
-        Ira Weiny <ira.weiny@intel.com>, Jan Kara <jack@suse.cz>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Jonathan Corbet <corbet@lwn.net>,
-        =?iso-8859-1?B?Suly9G1l?= Glisse <jglisse@redhat.com>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Michal Hocko <mhocko@suse.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Vlastimil Babka <vbabka@suse.cz>, linux-doc@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-rdma@vger.kernel.org, linux-mm@kvack.org,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 0/3] mm/gup: track FOLL_PIN pages (follow on from v12)
-Message-ID: <20200129054756.GB3326@unreal>
-References: <20200125021115.731629-1-jhubbard@nvidia.com>
- <20200125162339.GA41770@unreal>
+        s=default; t=1580279229;
+        bh=oXTODPPEtyYViFG/qy2k/m0F+1/ivnHKdVwxHe04wKU=;
+        h=In-Reply-To:References:From:Subject:To:Cc:Date:From;
+        b=sNsNTd92426V//z/W5gIgopUCS5dFpSf6Upp8q1zU/uFDCItd0Kuk0PA5pq3kwdkE
+         GcEru2eHhJoohX9UtMCtvC7h/cvaPOTmXTwnPO6RVWIzmGBqaZSV7GchFldApPcRzD
+         Zrnd6bZFPXrdvZMGKU8JLp5IVhMfBIPkyO6Df30s=
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200125162339.GA41770@unreal>
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20200128072002.79250-8-brendanhiggins@google.com>
+References: <20200128072002.79250-1-brendanhiggins@google.com> <20200128072002.79250-8-brendanhiggins@google.com>
+From:   Stephen Boyd <sboyd@kernel.org>
+Subject: Re: [PATCH v1 7/7] Documentation: Add kunit_shutdown to kernel-parameters.txt
+To:     Brendan Higgins <brendanhiggins@google.com>,
+        akpm@linux-foundation.org, alan.maguire@oracle.com,
+        anton.ivanov@cambridgegreys.com, arnd@arndb.de,
+        davidgow@google.com, frowand.list@gmail.com, jdike@addtoit.com,
+        keescook@chromium.org, richard@nod.at, rppt@linux.ibm.com,
+        skhan@linuxfoundation.org, yzaikin@google.com
+Cc:     gregkh@linuxfoundation.org, logang@deltatee.com, mcgrof@kernel.org,
+        knut.omang@oracle.com, linux-um@lists.infradead.org,
+        linux-arch@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org,
+        Brendan Higgins <brendanhiggins@google.com>
+User-Agent: alot/0.8.1
+Date:   Tue, 28 Jan 2020 22:27:08 -0800
+Message-Id: <20200129062709.5B2A22067C@mail.kernel.org>
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sat, Jan 25, 2020 at 06:23:39PM +0200, Leon Romanovsky wrote:
-> On Fri, Jan 24, 2020 at 06:11:12PM -0800, John Hubbard wrote:
-> > Leon Romanovsky:
-> >
-> > If you get a chance, I'd love to have this short series (or even just
-> > the first patch; the others are just selftests) run through your test
-> > suite that was previously choking on my earlier v11 patchset. The huge
-> > page pincount limitations are removed, so I'm expecting a perfect test
-> > run this time!
-> >
->
-> I added those patches to our regression and I will post the in the
-> couple of days.
+Quoting Brendan Higgins (2020-01-27 23:20:02)
+> Add kunit_shutdown, an option to specify that the kernel shutsdown after
+> running KUnit tests, to the kernel-parameters.txt documentation.
+>=20
+> Signed-off-by: Brendan Higgins <brendanhiggins@google.com>
+> ---
+>  Documentation/admin-guide/kernel-parameters.txt | 7 +++++++
+>  1 file changed, 7 insertions(+)
+>=20
+> diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentat=
+ion/admin-guide/kernel-parameters.txt
+> index ade4e6ec23e03..0472b02ce16bb 100644
+> --- a/Documentation/admin-guide/kernel-parameters.txt
+> +++ b/Documentation/admin-guide/kernel-parameters.txt
+> @@ -2054,6 +2054,13 @@
+>                         0: force disabled
+>                         1: force enabled
+> =20
+> +       kunit_shutdown  [KERNEL UNIT TESTING FRAMEWORK] Shutdown kernel a=
+fter
+> +                       running tests.
+> +                       Default:        (flag not present) don't shutdown
+> +                       poweroff:       poweroff the kernel after running=
+ tests.
+> +                       halt:           halt the kernel after running tes=
+ts.
+> +                       reboot:         reboot the kernel after running t=
+ests.
 
-Hi John,
+Maybe drop the full stops on the short descriptions.
 
-The patches survived our RDMA verification night runs.
+Otherwise,
 
-Thanks
+Reviewed-by: Stephen Boyd <sboyd@kernel.org>
 
->
-> Thanks
->
