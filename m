@@ -2,120 +2,150 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AC39C14D980
-	for <lists+linux-kselftest@lfdr.de>; Thu, 30 Jan 2020 12:10:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5548214D9D1
+	for <lists+linux-kselftest@lfdr.de>; Thu, 30 Jan 2020 12:31:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727027AbgA3LKU (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 30 Jan 2020 06:10:20 -0500
-Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:58575 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1727024AbgA3LKS (ORCPT
+        id S1727103AbgA3LbX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 30 Jan 2020 06:31:23 -0500
+Received: from mail-lj1-f193.google.com ([209.85.208.193]:35859 "EHLO
+        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727107AbgA3LbX (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 30 Jan 2020 06:10:18 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1580382617;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=hl+74QNlq0Fe4UtuI+hqFs5mISin5uD8WN32HNCWFSs=;
-        b=EYSCd6s3L98gFj2AJQgNy2UG6SSaq3Yq4/Sz90Dkf3pYPH1dnOOA0pm0LFirJymjzhaCLC
-        MDJqqClO1xVj/oKDudnMvFmgGvBICcLU8L60KkzJ0309+dBK9ic7+cjvW7nVbgs1czhmPf
-        wt2sMQ6j8oybhl1pn5RBUVcGNiWzGV4=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-35-9ALw2e1pP1yEfjlHMQxp0g-1; Thu, 30 Jan 2020 06:10:13 -0500
-X-MC-Unique: 9ALw2e1pP1yEfjlHMQxp0g-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id E9C91477;
-        Thu, 30 Jan 2020 11:10:08 +0000 (UTC)
-Received: from oldenburg2.str.redhat.com (ovpn-116-29.ams2.redhat.com [10.36.116.29])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id D71891001B05;
-        Thu, 30 Jan 2020 11:10:01 +0000 (UTC)
-From:   Florian Weimer <fweimer@redhat.com>
-To:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc:     "H. Peter Anvin" <hpa@zytor.com>, Chris Lameter <cl@linux.com>,
-        Jann Horn <jannh@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Joel Fernandes <joelaf@google.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Dave Watson <davejwatson@fb.com>,
-        Will Deacon <will.deacon@arm.com>, shuah <shuah@kernel.org>,
-        Andi Kleen <andi@firstfloor.org>,
-        linux-kselftest <linux-kselftest@vger.kernel.org>,
-        Russell King <linux@arm.linux.org.uk>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Paul <paulmck@linux.vnet.ibm.com>, Paul Turner <pjt@google.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Josh Triplett <josh@joshtriplett.org>,
-        rostedt <rostedt@goodmis.org>, Ben Maurer <bmaurer@fb.com>,
-        linux-api <linux-api@vger.kernel.org>,
-        Andy Lutomirski <luto@amacapital.net>
-Subject: Re: [RFC PATCH v1] pin_on_cpu: Introduce thread CPU pinning system call
-References: <20200121160312.26545-1-mathieu.desnoyers@efficios.com>
-        <430172781.596271.1579636021412.JavaMail.zimbra@efficios.com>
-        <CAG48ez2Z5CesMfandNK+S32Rrgp_QGQHqQ1Fpd5-YTsCWGfHeg@mail.gmail.com>
-        <2049164886.596497.1579641536619.JavaMail.zimbra@efficios.com>
-        <alpine.DEB.2.21.2001212141590.1231@www.lameter.com>
-        <1648013936.596672.1579655468604.JavaMail.zimbra@efficios.com>
-        <ead7a565-9a23-a7d7-904d-c4860f63952a@zytor.com>
-        <87a76efuux.fsf@oldenburg2.str.redhat.com>
-        <134428560.600911.1580153955842.JavaMail.zimbra@efficios.com>
-Date:   Thu, 30 Jan 2020 12:10:00 +0100
-In-Reply-To: <134428560.600911.1580153955842.JavaMail.zimbra@efficios.com>
-        (Mathieu Desnoyers's message of "Mon, 27 Jan 2020 14:39:15 -0500
-        (EST)")
-Message-ID: <87blql5hfb.fsf@oldenburg2.str.redhat.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.3 (gnu/linux)
+        Thu, 30 Jan 2020 06:31:23 -0500
+Received: by mail-lj1-f193.google.com with SMTP id r19so2956231ljg.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 30 Jan 2020 03:31:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=shutemov-name.20150623.gappssmtp.com; s=20150623;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=/EN520UCUxsEUBwp+gxS6OoGlcVQKRNBVBF0BZx9y+I=;
+        b=Tsy8nAO0PvaScoyPHxQ8u0Q+uBQzLnebXEkKCAg+P2fPtHalLWm98o3bNIETmJk5Ax
+         GIRK0uSiHJ59wddWXiQye/G8OPgZv2mm0LsDsZ2nZHJirH3IYNo46TkDYqgz5CMTQ1xw
+         3wr3AseYMfQDfaItEw9mxy6wVkEHMXK3pBatYbOrO+QJm5HvMdWQdcvT4UvyPjEjlV2I
+         c7o3jEmW8+sHIEpnAt1EMA8iI5ykE01yWc3XdnCvW/XjyKW71c9UFc0YbgGm38DCjXvU
+         4b7+TJJVVG8NR6O6Z0y2TSvGBoBUJu7xGq45uwGY0olDpcFxUsT1bVJAtVtVMKT7uqdU
+         My4g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=/EN520UCUxsEUBwp+gxS6OoGlcVQKRNBVBF0BZx9y+I=;
+        b=dRxMkLw1ypzs2dD5XabVEXnKKZ4sxsDsiUo8Okgsb0GjnpQz6Bn5AaQ+v80kj5Sqn1
+         H3uHSeA7sFroMzzJV8ed232/ADIuody0p1MgtwGZBymIIAE5OF/ojxKk+Czi9yh711JR
+         YUw3OHMAH+c3BMHw/C+ph4miOsbKojqQhhHUWeNszeLEDmJr/3VmoLte+GwbM6r2l7e5
+         cg7EPmb2zkNOsDcDJzE3Am0XEmwo9JzQLjQt7iAqKQ11xupMeV0bMiRjKKnzQT6fdXO3
+         VwQ7bUzk8dI/GKVAD9n5MOSHU8MD8V39K2pHuSlcy/OYBN5EfZ0SY3QYhtBWimrfEDmE
+         wpcA==
+X-Gm-Message-State: APjAAAUgxRL9DjMyR9JeXlzvVVxPdZBa7W42yabkWnECye30zNGag53E
+        r5fSjrkdb6bv0O0URDO1SCJM6w==
+X-Google-Smtp-Source: APXvYqzOfHleShWYEZ7+vculAYaLdAq1R8IjRRLv6oV11NywrAJ0QawfN5bbH06GtSQcqK2Wevv/Xw==
+X-Received: by 2002:a2e:9218:: with SMTP id k24mr2468907ljg.262.1580383878986;
+        Thu, 30 Jan 2020 03:31:18 -0800 (PST)
+Received: from box.localdomain ([86.57.175.117])
+        by smtp.gmail.com with ESMTPSA id u25sm2683666ljj.70.2020.01.30.03.31.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 30 Jan 2020 03:31:18 -0800 (PST)
+Received: by box.localdomain (Postfix, from userid 1000)
+        id C35F8100B00; Thu, 30 Jan 2020 14:31:26 +0300 (+03)
+Date:   Thu, 30 Jan 2020 14:31:26 +0300
+From:   "Kirill A. Shutemov" <kirill@shutemov.name>
+To:     John Hubbard <jhubbard@nvidia.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Christoph Hellwig <hch@infradead.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Dave Chinner <david@fromorbit.com>,
+        Ira Weiny <ira.weiny@intel.com>, Jan Kara <jack@suse.cz>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Jonathan Corbet <corbet@lwn.net>,
+        =?utf-8?B?SsOpcsO0bWU=?= Glisse <jglisse@redhat.com>,
+        Michal Hocko <mhocko@suse.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Vlastimil Babka <vbabka@suse.cz>, linux-doc@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-rdma@vger.kernel.org, linux-mm@kvack.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
+Subject: Re: [PATCH v2 4/8] mm/gup: track FOLL_PIN pages
+Message-ID: <20200130113126.5ftq4gd5k7o7tipj@box>
+References: <20200129032417.3085670-1-jhubbard@nvidia.com>
+ <20200129032417.3085670-5-jhubbard@nvidia.com>
+ <20200129135153.knie7ptvsxcgube6@box>
+ <0be743df-e9af-6da9-c593-9e25ab194acf@nvidia.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <0be743df-e9af-6da9-c593-9e25ab194acf@nvidia.com>
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-* Mathieu Desnoyers:
+On Wed, Jan 29, 2020 at 10:44:50PM -0800, John Hubbard wrote:
+> On 1/29/20 5:51 AM, Kirill A. Shutemov wrote:
+> > > +/**
+> > > + * page_dma_pinned() - report if a page is pinned for DMA.
+> > > + *
+> > > + * This function checks if a page has been pinned via a call to
+> > > + * pin_user_pages*().
+> > > + *
+> > > + * For non-huge pages, the return value is partially fuzzy: false is not fuzzy,
+> > > + * because it means "definitely not pinned for DMA", but true means "probably
+> > > + * pinned for DMA, but possibly a false positive due to having at least
+> > > + * GUP_PIN_COUNTING_BIAS worth of normal page references".
+> > > + *
+> > > + * False positives are OK, because: a) it's unlikely for a page to get that many
+> > > + * refcounts, and b) all the callers of this routine are expected to be able to
+> > > + * deal gracefully with a false positive.
+> > 
+> > I wounder if we should reverse the logic and name -- page_not_dma_pinned()
+> > or something -- too emphasise that we can only know for sure when the page
+> > is not pinned, but not necessary when it is.
+> > 
+> 
+> This is an interesting point. I agree that it's worth maybe adding information
+> into the function name, but I'd like to keep the bool "positive", because there
+> will be a number of callers that ask "if it is possibly dma-pinned, then ...".
+> So combining that, how about this function name:
+> 
+> 	page_maybe_dma_pinned()
+> 
+> , which I could live with and I think would be acceptable?
 
-> It brings an interesting idea to the table though. Let's assume for now that
-> the only intended use of pin_on_cpu(2) would be to allow rseq(2) critical
-> sections to update per-cpu data on specific cpu number targets. In fact,
-> considering that userspace can be preempted at any point, we still need a
-> mechanism to guarantee atomicity with respect to other threads running on
-> the same runqueue, which rseq(2) provides. Therefore, that assumption does
-> not appear too far-fetched.
->
-> There are 2 scenarios we need to consider here:
->
-> A) pin_on_cpu(2) targets a CPU which is not part of the affinity mask.
->
-> This case is easy: pin_on_cpu can return an error, and the caller needs to act
-> accordingly (e.g. figure out that this is a design error and report it, or
-> decide that it really did not want to touch that per-cpu data that badly and
-> make the entire process fall-back to a mechanism which does not use per-cpu
-> data at all from that point onwards)
+I would still prefer the negative version, but up to you.
 
-Affinity masks currently are not like process memory: there is an
-expectation that they can be altered from outside the process.
+> > I see opportunity to split the patch further.
+> 
+> 
+> ah, OK. I wasn't sure how far to go before I get tagged for "excessive
+> patch splitting"! haha. Anyway, are you suggesting to put the
+> page_ref_sub_return() routine into it's own patch?
+> 
+> Another thing to split out would be adding the flags to the remaining
+> functions, such as undo_dev_pagemap(). That burns quite a few lines of
+> diff. Anything else to split out?
 
-Given that the caller may not have any ways to recover from the
-suggested pin_on_cpu behavior, that seems problematic.
+Nothing I see immediately.
 
-What I would expect is that if pin_on_cpu cannot achieve implied
-exclusion by running on the associated CPU, it acquires a lock that
-prevents others pin_on_cpu calls from entering the critical section, and
-tasks in the same task group from running on that CPU (if the CPU
-becomes available to the task group).  The second part should maintain
-exclusion of rseq sequences even if their fast path is not changed.
+> 
+> > > diff --git a/mm/huge_memory.c b/mm/huge_memory.c
+> > > index 0a55dec68925..b1079aaa6f24 100644
+> > > --- a/mm/huge_memory.c
+> > > +++ b/mm/huge_memory.c
+> > > @@ -958,6 +958,11 @@ struct page *follow_devmap_pmd(struct vm_area_struct *vma, unsigned long addr,
+> > >   	 */
+> > >   	WARN_ONCE(flags & FOLL_COW, "mm: In follow_devmap_pmd with FOLL_COW set");
+> > > +	/* FOLL_GET and FOLL_PIN are mutually exclusive. */
+> > > +	if (WARN_ON_ONCE((flags & (FOLL_PIN | FOLL_GET)) ==
+> > > +			 (FOLL_PIN | FOLL_GET)))
+> > 
+> > Too many parentheses.
+> 
+> 
+> OK, I'll remove at least one. :)
 
-(On the other hand, I'm worried that per-CPU data structures are a dead
-end for user space unless we get containerized affinity masks, so that
-contains only see resources that are actually available to them.)
+I see two.
 
-Thanks,
-Florian
-
+-- 
+ Kirill A. Shutemov
