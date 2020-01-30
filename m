@@ -2,176 +2,319 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 14CBD14D6A6
-	for <lists+linux-kselftest@lfdr.de>; Thu, 30 Jan 2020 07:38:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A619714D6B7
+	for <lists+linux-kselftest@lfdr.de>; Thu, 30 Jan 2020 07:48:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726461AbgA3Gi0 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 30 Jan 2020 01:38:26 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:47390 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726464AbgA3Gi0 (ORCPT
+        id S1726000AbgA3Grz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 30 Jan 2020 01:47:55 -0500
+Received: from hqnvemgate25.nvidia.com ([216.228.121.64]:18475 "EHLO
+        hqnvemgate25.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725847AbgA3Gry (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 30 Jan 2020 01:38:26 -0500
-Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 00U6aH8E020877
-        for <linux-kselftest@vger.kernel.org>; Thu, 30 Jan 2020 01:38:25 -0500
-Received: from e06smtp02.uk.ibm.com (e06smtp02.uk.ibm.com [195.75.94.98])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 2xtrmc6efj-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-kselftest@vger.kernel.org>; Thu, 30 Jan 2020 01:38:24 -0500
-Received: from localhost
-        by e06smtp02.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-kselftest@vger.kernel.org> from <sandipan@linux.ibm.com>;
-        Thu, 30 Jan 2020 06:38:23 -0000
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (9.149.109.194)
-        by e06smtp02.uk.ibm.com (192.168.101.132) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Thu, 30 Jan 2020 06:38:19 -0000
-Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 00U6cHr347055070
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 30 Jan 2020 06:38:17 GMT
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A2BDE4C046;
-        Thu, 30 Jan 2020 06:38:17 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 216044C040;
-        Thu, 30 Jan 2020 06:38:15 +0000 (GMT)
-Received: from fir03.in.ibm.com (unknown [9.121.59.65])
-        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Thu, 30 Jan 2020 06:38:14 +0000 (GMT)
-From:   Sandipan Das <sandipan@linux.ibm.com>
-To:     shuah@kernel.org, skhan@linuxfoundation.org,
-        linux-kselftest@vger.kernel.org
-Cc:     linux-arch@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        x86@kernel.org, linux-mm@kvack.org, fweimer@redhat.com,
-        dave.hansen@intel.com, linuxram@us.ibm.com, mhocko@kernel.org,
-        mingo@redhat.com, aneesh.kumar@linux.ibm.com,
-        bauerman@linux.ibm.com, msuchanek@suse.de, mpe@ellerman.id.au
-Subject: [PATCH v18 24/24] selftests: vm: pkeys: Fix multilib builds for x86
-Date:   Thu, 30 Jan 2020 12:07:06 +0530
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <cover.1580365432.git.sandipan@linux.ibm.com>
-References: <cover.1580365432.git.sandipan@linux.ibm.com>
-In-Reply-To: <cover.1580365432.git.sandipan@linux.ibm.com>
-References: <cover.1580365432.git.sandipan@linux.ibm.com>
-X-TM-AS-GCONF: 00
-x-cbid: 20013006-0008-0000-0000-0000034DFB01
-X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 20013006-0009-0000-0000-00004A6E7A34
-Message-Id: <25d97f793aade305356f52cf85272b5a6b170fbd.1580365432.git.sandipan@linux.ibm.com>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.572
- definitions=2020-01-30_01:2020-01-28,2020-01-30 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0
- priorityscore=1501 suspectscore=0 mlxlogscore=999 bulkscore=0
- lowpriorityscore=0 malwarescore=0 clxscore=1015 adultscore=0 spamscore=0
- mlxscore=0 impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-1911200001 definitions=main-2001300042
+        Thu, 30 Jan 2020 01:47:54 -0500
+Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate25.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5e327c020000>; Wed, 29 Jan 2020 22:47:30 -0800
+Received: from hqmail.nvidia.com ([172.20.161.6])
+  by hqpgpgate101.nvidia.com (PGP Universal service);
+  Wed, 29 Jan 2020 22:47:51 -0800
+X-PGP-Universal: processed;
+        by hqpgpgate101.nvidia.com on Wed, 29 Jan 2020 22:47:51 -0800
+Received: from [10.2.165.69] (10.124.1.5) by HQMAIL107.nvidia.com
+ (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Thu, 30 Jan
+ 2020 06:47:50 +0000
+Subject: Re: [PATCH v2 4/8] mm/gup: track FOLL_PIN pages
+To:     "Kirill A. Shutemov" <kirill@shutemov.name>
+CC:     Andrew Morton <akpm@linux-foundation.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Christoph Hellwig <hch@infradead.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Dave Chinner <david@fromorbit.com>,
+        Ira Weiny <ira.weiny@intel.com>, Jan Kara <jack@suse.cz>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Jonathan Corbet <corbet@lwn.net>,
+        =?UTF-8?B?SsOpcsO0bWUgR2xpc3Nl?= <jglisse@redhat.com>,
+        Michal Hocko <mhocko@suse.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Vlastimil Babka <vbabka@suse.cz>, <linux-doc@vger.kernel.org>,
+        <linux-fsdevel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+        <linux-rdma@vger.kernel.org>, <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
+References: <20200129032417.3085670-1-jhubbard@nvidia.com>
+ <20200129032417.3085670-5-jhubbard@nvidia.com>
+ <20200129135153.knie7ptvsxcgube6@box>
+X-Nvconfidentiality: public
+From:   John Hubbard <jhubbard@nvidia.com>
+Message-ID: <0be743df-e9af-6da9-c593-9e25ab194acf@nvidia.com>
+Date:   Wed, 29 Jan 2020 22:44:50 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.2
+MIME-Version: 1.0
+In-Reply-To: <20200129135153.knie7ptvsxcgube6@box>
+X-Originating-IP: [10.124.1.5]
+X-ClientProxiedBy: HQMAIL105.nvidia.com (172.20.187.12) To
+ HQMAIL107.nvidia.com (172.20.187.13)
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1580366850; bh=m5ZYa1RzG8BG4yZe/mCIbkE+2pLztusMpL2EcpkuwpM=;
+        h=X-PGP-Universal:Subject:To:CC:References:X-Nvconfidentiality:From:
+         Message-ID:Date:User-Agent:MIME-Version:In-Reply-To:
+         X-Originating-IP:X-ClientProxiedBy:Content-Type:Content-Language:
+         Content-Transfer-Encoding;
+        b=DfCJGZ30wx6ffwipieuAOWILh3vNbWcrGfVRxKl+9VcaTHijWuHf3Ztap0Qs/ZzSE
+         jlYYXnyHUbRrV2lLIG3EvAgRcgG4m0yKsHIuovSzaJH625Q2mqn5Yb0ttzcjFmZGOk
+         B/Hqoduzq/m38LlJP1Zs3BgosacIiHJ81R6jd7XdQ4OHZd/Olj5Hf4n78hKNKxaUpK
+         ipWOgzBybeB3ZlF50DErDdj41bRNHEh8hvu+X39l0QBHxpTY3uT9tzRex1D4Oky8zd
+         2Wfj3GnMXgsDPRofyelZncFN8qhbbhPuaiJyffDKIvdpWjhNKliClhG0xNij3oHGEy
+         MrstvvpMDWuJw==
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This ensures that both 32-bit and 64-bit binaries are generated
-when this is built on a x86_64 system. Most of the changes have
-been borrowed from tools/testing/selftests/x86/Makefile.
+On 1/29/20 5:51 AM, Kirill A. Shutemov wrote:
+> On Tue, Jan 28, 2020 at 07:24:13PM -0800, John Hubbard wrote:
+>> Add tracking of pages that were pinned via FOLL_PIN. This tracking is
+>> implemented via overloading of page->_refcount: pins are added by
+>> adding GUP_PIN_COUNTING_BIAS (1024) to the refcount. This provides a
+>> fuzzy indication of pinning, and it can have false positives (and that's
+>> OK). Please see the pre-existing
+>> Documentation/core-api/pin_user_pages.rst for details.
+>>
+>> As mentioned in pin_user_pages.rst, callers who effectively set FOLL_PIN
+>> (typically via pin_user_pages*()) are required to ultimately free such
+>> pages via unpin_user_page().
+>>
+>> Please also not the limitation, discussed in pin_user_pages.rst under
+> 
+> s/not/note/
 
-Signed-off-by: Sandipan Das <sandipan@linux.ibm.com>
----
- tools/testing/selftests/vm/Makefile | 72 +++++++++++++++++++++++++++++
- 1 file changed, 72 insertions(+)
+Fixed, thanks!
 
-diff --git a/tools/testing/selftests/vm/Makefile b/tools/testing/selftests/vm/Makefile
-index 4e9c741be6af..82031f84af21 100644
---- a/tools/testing/selftests/vm/Makefile
-+++ b/tools/testing/selftests/vm/Makefile
-@@ -18,7 +18,30 @@ TEST_GEN_FILES += on-fault-limit
- TEST_GEN_FILES += thuge-gen
- TEST_GEN_FILES += transhuge-stress
- TEST_GEN_FILES += userfaultfd
-+
-+ifeq ($(ARCH),x86_64)
-+CAN_BUILD_I386 := $(shell ./../x86/check_cc.sh $(CC) ../x86/trivial_32bit_program.c -m32)
-+CAN_BUILD_X86_64 := $(shell ./../x86/check_cc.sh $(CC) ../x86/trivial_64bit_program.c)
-+CAN_BUILD_WITH_NOPIE := $(shell ./../x86/check_cc.sh $(CC) ../x86/trivial_program.c -no-pie)
-+
-+TARGETS := protection_keys
-+BINARIES_32 := $(TARGETS:%=%_32)
-+BINARIES_64 := $(TARGETS:%=%_64)
-+
-+ifeq ($(CAN_BUILD_WITH_NOPIE),1)
-+CFLAGS += -no-pie
-+endif
-+
-+ifeq ($(CAN_BUILD_I386),1)
-+TEST_GEN_FILES += $(BINARIES_32)
-+endif
-+
-+ifeq ($(CAN_BUILD_X86_64),1)
-+TEST_GEN_FILES += $(BINARIES_64)
-+endif
-+else
- TEST_GEN_FILES += protection_keys
-+endif
- 
- ifneq (,$(filter $(ARCH),arm64 ia64 mips64 parisc64 ppc64 riscv64 s390x sh64 sparc64 x86_64))
- TEST_GEN_FILES += va_128TBswitch
-@@ -32,6 +55,55 @@ TEST_FILES := test_vmalloc.sh
- KSFT_KHDR_INSTALL := 1
- include ../lib.mk
- 
-+ifeq ($(ARCH),x86_64)
-+BINARIES_32 := $(patsubst %,$(OUTPUT)/%,$(BINARIES_32))
-+BINARIES_64 := $(patsubst %,$(OUTPUT)/%,$(BINARIES_64))
-+
-+define gen-target-rule-32
-+$(1) $(1)_32: $(OUTPUT)/$(1)_32
-+.PHONY: $(1) $(1)_32
-+endef
-+
-+define gen-target-rule-64
-+$(1) $(1)_64: $(OUTPUT)/$(1)_64
-+.PHONY: $(1) $(1)_64
-+endef
-+
-+ifeq ($(CAN_BUILD_I386),1)
-+$(BINARIES_32): CFLAGS += -m32
-+$(BINARIES_32): LDLIBS += -lrt -ldl -lm
-+$(BINARIES_32): %_32: %.c
-+	$(CC) $(CFLAGS) $(EXTRA_CFLAGS) $(notdir $^) $(LDLIBS) -o $@
-+$(foreach t,$(TARGETS),$(eval $(call gen-target-rule-32,$(t))))
-+endif
-+
-+ifeq ($(CAN_BUILD_X86_64),1)
-+$(BINARIES_64): CFLAGS += -m64
-+$(BINARIES_64): LDLIBS += -lrt -ldl
-+$(BINARIES_64): %_64: %.c
-+	$(CC) $(CFLAGS) $(EXTRA_CFLAGS) $(notdir $^) $(LDLIBS) -o $@
-+$(foreach t,$(TARGETS),$(eval $(call gen-target-rule-64,$(t))))
-+endif
-+
-+# x86_64 users should be encouraged to install 32-bit libraries
-+ifeq ($(CAN_BUILD_I386)$(CAN_BUILD_X86_64),01)
-+all: warn_32bit_failure
-+
-+warn_32bit_failure:
-+	@echo "Warning: you seem to have a broken 32-bit build" 2>&1;		\
-+	echo  "environment. This will reduce test coverage of 64-bit" 2>&1;	\
-+	echo  "kernels. If you are using a Debian-like distribution," 2>&1;	\
-+	echo  "try:"; 2>&1;							\
-+	echo  "";								\
-+	echo  "  apt-get install gcc-multilib libc6-i386 libc6-dev-i386";	\
-+	echo  "";								\
-+	echo  "If you are using a Fedora-like distribution, try:";		\
-+	echo  "";								\
-+	echo  "  yum install glibc-devel.*i686";				\
-+	exit 0;
-+endif
-+endif
-+
- $(OUTPUT)/userfaultfd: LDLIBS += -lpthread
- 
- $(OUTPUT)/mlock-random-test: LDLIBS += -lcap
+...
+>>   
+>> +/**
+>> + * page_dma_pinned() - report if a page is pinned for DMA.
+>> + *
+>> + * This function checks if a page has been pinned via a call to
+>> + * pin_user_pages*().
+>> + *
+>> + * For non-huge pages, the return value is partially fuzzy: false is not fuzzy,
+>> + * because it means "definitely not pinned for DMA", but true means "probably
+>> + * pinned for DMA, but possibly a false positive due to having at least
+>> + * GUP_PIN_COUNTING_BIAS worth of normal page references".
+>> + *
+>> + * False positives are OK, because: a) it's unlikely for a page to get that many
+>> + * refcounts, and b) all the callers of this routine are expected to be able to
+>> + * deal gracefully with a false positive.
+> 
+> I wounder if we should reverse the logic and name -- page_not_dma_pinned()
+> or something -- too emphasise that we can only know for sure when the page
+> is not pinned, but not necessary when it is.
+> 
+
+This is an interesting point. I agree that it's worth maybe adding information
+into the function name, but I'd like to keep the bool "positive", because there
+will be a number of callers that ask "if it is possibly dma-pinned, then ...".
+So combining that, how about this function name:
+
+	page_maybe_dma_pinned()
+
+, which I could live with and I think would be acceptable?
+
+>> + *
+>> + * For more information, please see Documentation/vm/pin_user_pages.rst.
+>> + *
+>> + * @page:	pointer to page to be queried.
+>> + * @Return:	True, if it is likely that the page has been "dma-pinned".
+>> + *		False, if the page is definitely not dma-pinned.
+>> + */
+>> +static inline bool page_dma_pinned(struct page *page)
+>> +{
+>> +	/*
+>> +	 * page_ref_count() is signed. If that refcount overflows, then
+>> +	 * page_ref_count() returns a negative value, and callers will avoid
+>> +	 * further incrementing the refcount.
+>> +	 *
+>> +	 * Here, for that overflow case, use the signed bit to count a little
+>> +	 * bit higher via unsigned math, and thus still get an accurate result
+>> +	 * from page_dma_pinned().
+>> +	 */
+>> +	return ((unsigned int)page_ref_count(compound_head(page))) >=
+>> +		GUP_PIN_COUNTING_BIAS;
+> 
+> Do you expect it too be called on tail pages?
+
+
+Yes, we definitely cannot rule that out.
+
+
+> 
+>> +}
+>> +
+>>   #if defined(CONFIG_SPARSEMEM) && !defined(CONFIG_SPARSEMEM_VMEMMAP)
+>>   #define SECTION_IN_PAGE_FLAGS
+>>   #endif
+>> diff --git a/include/linux/page_ref.h b/include/linux/page_ref.h
+>> index 14d14beb1f7f..b9cbe553d1e7 100644
+>> --- a/include/linux/page_ref.h
+>> +++ b/include/linux/page_ref.h
+>> @@ -102,6 +102,16 @@ static inline void page_ref_sub(struct page *page, int nr)
+>>   		__page_ref_mod(page, -nr);
+>>   }
+>>   
+>> +static inline int page_ref_sub_return(struct page *page, int nr)
+>> +{
+>> +	int ret = atomic_sub_return(nr, &page->_refcount);
+>> +
+>> +	if (page_ref_tracepoint_active(__tracepoint_page_ref_mod))
+>> +		__page_ref_mod(page, -nr);
+>> +
+>> +	return ret;
+>> +}
+>> +
+> 
+> I see opportunity to split the patch further.
+
+
+ah, OK. I wasn't sure how far to go before I get tagged for "excessive
+patch splitting"! haha. Anyway, are you suggesting to put the
+page_ref_sub_return() routine into it's own patch?
+
+Another thing to split out would be adding the flags to the remaining
+functions, such as undo_dev_pagemap(). That burns quite a few lines of
+diff. Anything else to split out?
+
+> 
+>>   static inline void page_ref_inc(struct page *page)
+>>   {
+>>   	atomic_inc(&page->_refcount);
+>> diff --git a/mm/gup.c b/mm/gup.c
+>> index 9e117998274c..7a96490dcc54 100644
+>> --- a/mm/gup.c
+>> +++ b/mm/gup.c
+>> @@ -44,6 +44,136 @@ static inline struct page *try_get_compound_head(struct page *page, int refs)
+>>   	return head;
+>>   }
+>>   
+>> +/*
+>> + * try_grab_compound_head() - attempt to elevate a page's refcount, by a
+>> + * flags-dependent amount.
+>> + *
+>> + * "grab" names in this file mean, "look at flags to decide whether to use
+>> + * FOLL_PIN or FOLL_GET behavior, when incrementing the page's refcount.
+>> + *
+>> + * Either FOLL_PIN or FOLL_GET (or neither) must be set, but not both at the
+>> + * same time. (That's true throughout the get_user_pages*() and
+>> + * pin_user_pages*() APIs.) Cases:
+>> + *
+>> + *    FOLL_GET: page's refcount will be incremented by 1.
+>> + *    FOLL_PIN: page's refcount will be incremented by GUP_PIN_COUNTING_BIAS.
+>> + *
+>> + * Return: head page (with refcount appropriately incremented) for success, or
+>> + * NULL upon failure. If neither FOLL_GET nor FOLL_PIN was set, that's
+>> + * considered failure, and furthermore, a likely bug in the caller, so a warning
+>> + * is also emitted.
+>> + */
+>> +static __maybe_unused struct page *try_grab_compound_head(struct page *page,
+>> +							  int refs,
+>> +							  unsigned int flags)
+>> +{
+>> +	if (flags & FOLL_GET)
+>> +		return try_get_compound_head(page, refs);
+>> +	else if (flags & FOLL_PIN) {
+>> +		refs *= GUP_PIN_COUNTING_BIAS;
+>> +		return try_get_compound_head(page, refs);
+> 
+> Maybe overflow detection? At least under VM_BUG_ON()?
+
+
+OK, yes I see now that there is no check to see if we're about to overflow
+the refs, in this path. I'll add one.
+
+
+...
+>> diff --git a/mm/huge_memory.c b/mm/huge_memory.c
+>> index 0a55dec68925..b1079aaa6f24 100644
+>> --- a/mm/huge_memory.c
+>> +++ b/mm/huge_memory.c
+>> @@ -958,6 +958,11 @@ struct page *follow_devmap_pmd(struct vm_area_struct *vma, unsigned long addr,
+>>   	 */
+>>   	WARN_ONCE(flags & FOLL_COW, "mm: In follow_devmap_pmd with FOLL_COW set");
+>>   
+>> +	/* FOLL_GET and FOLL_PIN are mutually exclusive. */
+>> +	if (WARN_ON_ONCE((flags & (FOLL_PIN | FOLL_GET)) ==
+>> +			 (FOLL_PIN | FOLL_GET)))
+> 
+> Too many parentheses.
+
+
+OK, I'll remove at least one. :)
+
+
+> 
+>> +		return NULL;
+>> +
+>>   	if (flags & FOLL_WRITE && !pmd_write(*pmd))
+>>   		return NULL;
+>>   
+>> @@ -973,7 +978,7 @@ struct page *follow_devmap_pmd(struct vm_area_struct *vma, unsigned long addr,
+>>   	 * device mapped pages can only be returned if the
+>>   	 * caller will manage the page reference count.
+>>   	 */
+>> -	if (!(flags & FOLL_GET))
+>> +	if (!(flags & (FOLL_GET | FOLL_PIN)))
+>>   		return ERR_PTR(-EEXIST);
+>>   
+>>   	pfn += (addr & ~PMD_MASK) >> PAGE_SHIFT;
+>> @@ -981,7 +986,8 @@ struct page *follow_devmap_pmd(struct vm_area_struct *vma, unsigned long addr,
+>>   	if (!*pgmap)
+>>   		return ERR_PTR(-EFAULT);
+>>   	page = pfn_to_page(pfn);
+>> -	get_page(page);
+>> +	if (!try_grab_page(page, flags))
+>> +		page = ERR_PTR(-ENOMEM);
+>>   
+>>   	return page;
+>>   }
+>> @@ -1101,6 +1107,11 @@ struct page *follow_devmap_pud(struct vm_area_struct *vma, unsigned long addr,
+>>   	if (flags & FOLL_WRITE && !pud_write(*pud))
+>>   		return NULL;
+>>   
+>> +	/* FOLL_GET and FOLL_PIN are mutually exclusive. */
+>> +	if (WARN_ON_ONCE((flags & (FOLL_PIN | FOLL_GET)) ==
+>> +			 (FOLL_PIN | FOLL_GET)))
+>> +		return NULL;
+>> +
+> 
+> Ditto.
+
+
+ACK.
+
+...
+>> @@ -4965,6 +4958,12 @@ follow_huge_pmd(struct mm_struct *mm, unsigned long address,
+>>   	struct page *page = NULL;
+>>   	spinlock_t *ptl;
+>>   	pte_t pte;
+>> +
+>> +	/* FOLL_GET and FOLL_PIN are mutually exclusive. */
+>> +	if (WARN_ON_ONCE((flags & (FOLL_PIN | FOLL_GET)) ==
+>> +			 (FOLL_PIN | FOLL_GET)))
+>> +		return NULL;
+>> +
+> 
+> Ditto.
+
+ACK.
+
+
+
+
+thanks,
 -- 
-2.17.1
-
+John Hubbard
+NVIDIA
