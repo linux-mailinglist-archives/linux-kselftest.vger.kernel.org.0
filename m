@@ -2,129 +2,120 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 000C514D831
-	for <lists+linux-kselftest@lfdr.de>; Thu, 30 Jan 2020 10:20:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AC39C14D980
+	for <lists+linux-kselftest@lfdr.de>; Thu, 30 Jan 2020 12:10:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726885AbgA3JUW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 30 Jan 2020 04:20:22 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:29230 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726879AbgA3JUW (ORCPT
+        id S1727027AbgA3LKU (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 30 Jan 2020 06:10:20 -0500
+Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:58575 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1727024AbgA3LKS (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 30 Jan 2020 04:20:22 -0500
-Received: from pps.filterd (m0098414.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 00U9EwFL032532
-        for <linux-kselftest@vger.kernel.org>; Thu, 30 Jan 2020 04:20:20 -0500
-Received: from e06smtp07.uk.ibm.com (e06smtp07.uk.ibm.com [195.75.94.103])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 2xubct681h-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-kselftest@vger.kernel.org>; Thu, 30 Jan 2020 04:20:20 -0500
-Received: from localhost
-        by e06smtp07.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-kselftest@vger.kernel.org> from <sandipan@linux.ibm.com>;
-        Thu, 30 Jan 2020 09:20:18 -0000
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (9.149.109.194)
-        by e06smtp07.uk.ibm.com (192.168.101.137) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Thu, 30 Jan 2020 09:20:15 -0000
-Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 00U9KD1815728656
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 30 Jan 2020 09:20:13 GMT
-Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 6E53A5205F;
-        Thu, 30 Jan 2020 09:20:13 +0000 (GMT)
-Received: from [9.124.35.38] (unknown [9.124.35.38])
-        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id 1F9B652050;
-        Thu, 30 Jan 2020 09:20:10 +0000 (GMT)
-Subject: Re: [PATCH v16 00/23] selftests, powerpc, x86: Memory Protection Keys
-From:   Sandipan Das <sandipan@linux.ibm.com>
-To:     Dave Hansen <dave.hansen@intel.com>
-Cc:     shuah@kernel.org, linux-kselftest@vger.kernel.org,
-        linux-arch@vger.kernel.org, fweimer@redhat.com, x86@kernel.org,
-        linuxram@us.ibm.com, mhocko@kernel.org, linux-mm@kvack.org,
-        mingo@redhat.com, aneesh.kumar@linux.ibm.com,
-        bauerman@linux.ibm.com, msuchanek@suse.de, mpe@ellerman.id.au,
-        linuxppc-dev@lists.ozlabs.org
-References: <cover.1579507768.git.sandipan@linux.ibm.com>
- <3ceb2814-f8b0-ec6b-3c24-ec72297a99f5@intel.com>
- <8f14bee0-ab1c-fc90-dfdb-5128607b767f@linux.ibm.com>
- <3eca7a91-aa3e-cb01-47c8-5d36020993a2@intel.com>
- <fb83ce52-b92a-ed42-dc06-a86ca8431ff6@linux.ibm.com>
- <ca6cfdeb-00f2-d926-e4e1-c1723cc25445@intel.com>
- <26f630e5-1f70-888c-4b43-30e73c9f270c@linux.ibm.com>
-Date:   Thu, 30 Jan 2020 14:50:10 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.1
+        Thu, 30 Jan 2020 06:10:18 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1580382617;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=hl+74QNlq0Fe4UtuI+hqFs5mISin5uD8WN32HNCWFSs=;
+        b=EYSCd6s3L98gFj2AJQgNy2UG6SSaq3Yq4/Sz90Dkf3pYPH1dnOOA0pm0LFirJymjzhaCLC
+        MDJqqClO1xVj/oKDudnMvFmgGvBICcLU8L60KkzJ0309+dBK9ic7+cjvW7nVbgs1czhmPf
+        wt2sMQ6j8oybhl1pn5RBUVcGNiWzGV4=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-35-9ALw2e1pP1yEfjlHMQxp0g-1; Thu, 30 Jan 2020 06:10:13 -0500
+X-MC-Unique: 9ALw2e1pP1yEfjlHMQxp0g-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id E9C91477;
+        Thu, 30 Jan 2020 11:10:08 +0000 (UTC)
+Received: from oldenburg2.str.redhat.com (ovpn-116-29.ams2.redhat.com [10.36.116.29])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id D71891001B05;
+        Thu, 30 Jan 2020 11:10:01 +0000 (UTC)
+From:   Florian Weimer <fweimer@redhat.com>
+To:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc:     "H. Peter Anvin" <hpa@zytor.com>, Chris Lameter <cl@linux.com>,
+        Jann Horn <jannh@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Joel Fernandes <joelaf@google.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Dave Watson <davejwatson@fb.com>,
+        Will Deacon <will.deacon@arm.com>, shuah <shuah@kernel.org>,
+        Andi Kleen <andi@firstfloor.org>,
+        linux-kselftest <linux-kselftest@vger.kernel.org>,
+        Russell King <linux@arm.linux.org.uk>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Paul <paulmck@linux.vnet.ibm.com>, Paul Turner <pjt@google.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Josh Triplett <josh@joshtriplett.org>,
+        rostedt <rostedt@goodmis.org>, Ben Maurer <bmaurer@fb.com>,
+        linux-api <linux-api@vger.kernel.org>,
+        Andy Lutomirski <luto@amacapital.net>
+Subject: Re: [RFC PATCH v1] pin_on_cpu: Introduce thread CPU pinning system call
+References: <20200121160312.26545-1-mathieu.desnoyers@efficios.com>
+        <430172781.596271.1579636021412.JavaMail.zimbra@efficios.com>
+        <CAG48ez2Z5CesMfandNK+S32Rrgp_QGQHqQ1Fpd5-YTsCWGfHeg@mail.gmail.com>
+        <2049164886.596497.1579641536619.JavaMail.zimbra@efficios.com>
+        <alpine.DEB.2.21.2001212141590.1231@www.lameter.com>
+        <1648013936.596672.1579655468604.JavaMail.zimbra@efficios.com>
+        <ead7a565-9a23-a7d7-904d-c4860f63952a@zytor.com>
+        <87a76efuux.fsf@oldenburg2.str.redhat.com>
+        <134428560.600911.1580153955842.JavaMail.zimbra@efficios.com>
+Date:   Thu, 30 Jan 2020 12:10:00 +0100
+In-Reply-To: <134428560.600911.1580153955842.JavaMail.zimbra@efficios.com>
+        (Mathieu Desnoyers's message of "Mon, 27 Jan 2020 14:39:15 -0500
+        (EST)")
+Message-ID: <87blql5hfb.fsf@oldenburg2.str.redhat.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.3 (gnu/linux)
 MIME-Version: 1.0
-In-Reply-To: <26f630e5-1f70-888c-4b43-30e73c9f270c@linux.ibm.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-x-cbid: 20013009-0028-0000-0000-000003D5C3C4
-X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 20013009-0029-0000-0000-0000249A11D6
-Message-Id: <880326d5-e23c-6724-1c93-7b1d0281dcbd@linux.ibm.com>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.572
- definitions=2020-01-30_02:2020-01-28,2020-01-30 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 mlxlogscore=999
- clxscore=1015 adultscore=0 phishscore=0 suspectscore=0 malwarescore=0
- priorityscore=1501 spamscore=0 mlxscore=0 lowpriorityscore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-1911200001 definitions=main-2001300066
+Content-Type: text/plain
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+* Mathieu Desnoyers:
 
+> It brings an interesting idea to the table though. Let's assume for now that
+> the only intended use of pin_on_cpu(2) would be to allow rseq(2) critical
+> sections to update per-cpu data on specific cpu number targets. In fact,
+> considering that userspace can be preempted at any point, we still need a
+> mechanism to guarantee atomicity with respect to other threads running on
+> the same runqueue, which rseq(2) provides. Therefore, that assumption does
+> not appear too far-fetched.
+>
+> There are 2 scenarios we need to consider here:
+>
+> A) pin_on_cpu(2) targets a CPU which is not part of the affinity mask.
+>
+> This case is easy: pin_on_cpu can return an error, and the caller needs to act
+> accordingly (e.g. figure out that this is a design error and report it, or
+> decide that it really did not want to touch that per-cpu data that badly and
+> make the entire process fall-back to a mechanism which does not use per-cpu
+> data at all from that point onwards)
 
-On 30/01/20 11:49 am, Sandipan Das wrote:
-> Hi Dave,
-> 
-> On 30/01/20 12:29 am, Dave Hansen wrote:
->> On 1/28/20 1:38 AM, Sandipan Das wrote:
->>> On 27/01/20 9:12 pm, Dave Hansen wrote:
->>>> How have you tested this patch (and the whole series for that matter)?
->>>>
->>> I replaced the second patch with this one and did a build test.
->>> Till v16, I had tested the whole series (build + run) on both a POWER8
->>> system (with 4K and 64K page sizes) and a Skylake SP system but for
->>> x86_64 only.
->>
->> Do you have any idea why I was seeing x86 build errors and you were not?
->>
-> 
-> There were problems with patch 2 from v17. The fixed patch is what I replied
-> with previously in this thread. The test results that I posted were with that
-> patch included. Will post out v18 today with the fix.
-> 
+Affinity masks currently are not like process memory: there is an
+expectation that they can be altered from outside the process.
 
-In patch 2 of v17, the issue was with the target names. Upon adding something
-to TEST_GEN_FILES, rules for targets like the following are expected to be
-defined.
-  <path-to-linux-source>/tools/testing/selftests/vm/protection_keys_32
-  <path-to-linux-source>/tools/testing/selftests/vm/protection_keys_64
-  <path-to-linux-source>/tools/testing/selftests/vm/protection_keys
+Given that the caller may not have any ways to recover from the
+suggested pin_on_cpu behavior, that seems problematic.
 
-But instead, I only defined rules for these.
-  protection_keys_32
-  protection_keys_64
-  protection_keys
+What I would expect is that if pin_on_cpu cannot achieve implied
+exclusion by running on the associated CPU, it acquires a lock that
+prevents others pin_on_cpu calls from entering the critical section, and
+tasks in the same task group from running on that CPU (if the CPU
+becomes available to the task group).  The second part should maintain
+exclusion of rseq sequences even if their fast path is not changed.
 
-Hence the build was failing in these cases:
-  $ make -C tools/testing/selftests
-  $ make -C tools/testing/selftests/vm
-  $ cd tools/testing/selftests/vm
-  $ make
+(On the other hand, I'm worried that per-CPU data structures are a dead
+end for user space unless we get containerized affinity masks, so that
+contains only see resources that are actually available to them.)
 
-But worked in these cases:
-  $ make -C tools/testing/selftests/vm protection_keys
-  $ cd tools/testing/selftests/vm
-  $ make protection_keys
-
-This has been addressed in v18.
-
-- Sandipan
+Thanks,
+Florian
 
