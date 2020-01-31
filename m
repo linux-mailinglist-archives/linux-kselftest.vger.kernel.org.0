@@ -2,125 +2,100 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E49614EF21
-	for <lists+linux-kselftest@lfdr.de>; Fri, 31 Jan 2020 16:06:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B01414EF2F
+	for <lists+linux-kselftest@lfdr.de>; Fri, 31 Jan 2020 16:09:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729064AbgAaPGI (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 31 Jan 2020 10:06:08 -0500
-Received: from smtp-fw-6001.amazon.com ([52.95.48.154]:5997 "EHLO
-        smtp-fw-6001.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729034AbgAaPGI (ORCPT
+        id S1729138AbgAaPJg (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 31 Jan 2020 10:09:36 -0500
+Received: from smtp-fw-33001.amazon.com ([207.171.190.10]:59720 "EHLO
+        smtp-fw-33001.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729004AbgAaPJg (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 31 Jan 2020 10:06:08 -0500
+        Fri, 31 Jan 2020 10:09:36 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1580483168; x=1612019168;
+  t=1580483376; x=1612019376;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    mime-version;
-  bh=ibAJSA6wdOg0PnzV2uto1TBRG7DetiN8T++aLxGU9cM=;
-  b=nlqgcNlb5Ri46aWcvd1OGI4bxJSL6PfmnOM2IZci9fnFgCJcPRH043PU
-   DACNs3J6jBKuXSSOD2LY4cgMXmJaZ7ubveq4fLk6yuNYdI8Usa4+1ZFUg
-   4U5HAM7lKh/PYzvub5SkKoLzDtE29sakr7wNdR8hK22fX7EzKNDX6/GIX
-   w=;
-IronPort-SDR: 5DEVMlG4yhcSitO+uhmJ3dq/t8jDoHkMcFNBoOp4aidvraLR/o9Qp1wt/QuiT57DapOb7aYI0K
- TVq76vvfQNxg==
+  bh=TWhifcpHB+dd048pcnCF4nKnIf/oG0lsDe/ax/0lEmw=;
+  b=JX/viUVYXWGUpQFjNc3f7m+0Ro8fR7SecP47z/QswizKyiFN5wEdMFI8
+   KCDFei+yqMoU4MA9UwdSgQ/XSNodLvL1zjHRfWhPt4W5oip8W0hK/YpPJ
+   z3EC2q8Wn4EGXR6SzzlH+/SMrbZWHiStttYoeb5amSNRnl/KglPUZmgvX
+   o=;
+IronPort-SDR: H6IgLyGs83Nn0RsWC4S5JdFqMKDINuBsVCNl3MoHrAyAVHYqYqtWbtvCpZXhKvSbSPEvXFTiez
+ z3fLBQw8nkNw==
 X-IronPort-AV: E=Sophos;i="5.70,386,1574121600"; 
-   d="scan'208";a="15641307"
-Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-2c-6f38efd9.us-west-2.amazon.com) ([10.43.8.6])
-  by smtp-border-fw-out-6001.iad6.amazon.com with ESMTP; 31 Jan 2020 15:06:06 +0000
+   d="scan'208";a="23625855"
+Received: from sea32-co-svc-lb4-vlan3.sea.corp.amazon.com (HELO email-inbound-relay-2c-2225282c.us-west-2.amazon.com) ([10.47.23.38])
+  by smtp-border-fw-out-33001.sea14.amazon.com with ESMTP; 31 Jan 2020 15:09:24 +0000
 Received: from EX13MTAUEA002.ant.amazon.com (pdx4-ws-svc-p6-lb7-vlan3.pdx.amazon.com [10.170.41.166])
-        by email-inbound-relay-2c-6f38efd9.us-west-2.amazon.com (Postfix) with ESMTPS id 7AF83A07D8;
-        Fri, 31 Jan 2020 15:06:04 +0000 (UTC)
+        by email-inbound-relay-2c-2225282c.us-west-2.amazon.com (Postfix) with ESMTPS id 4DD4EA25AC;
+        Fri, 31 Jan 2020 15:09:24 +0000 (UTC)
 Received: from EX13D31EUA001.ant.amazon.com (10.43.165.15) by
  EX13MTAUEA002.ant.amazon.com (10.43.61.77) with Microsoft SMTP Server (TLS)
- id 15.0.1236.3; Fri, 31 Jan 2020 15:06:03 +0000
-Received: from u886c93fd17d25d.ant.amazon.com (10.43.162.249) by
+ id 15.0.1236.3; Fri, 31 Jan 2020 15:09:24 +0000
+Received: from u886c93fd17d25d.ant.amazon.com (10.43.161.117) by
  EX13D31EUA001.ant.amazon.com (10.43.165.15) with Microsoft SMTP Server (TLS)
- id 15.0.1367.3; Fri, 31 Jan 2020 15:05:58 +0000
+ id 15.0.1367.3; Fri, 31 Jan 2020 15:09:19 +0000
 From:   <sjpark@amazon.com>
-To:     David Laight <David.Laight@ACULAB.COM>
-CC:     "'sjpark@amazon.com'" <sjpark@amazon.com>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "shuah@kernel.org" <shuah@kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "sj38.park@gmail.com" <sj38.park@gmail.com>,
-        "aams@amazon.com" <aams@amazon.com>,
-        SeongJae Park <sjpark@amazon.de>
-Subject: Re: RE: [PATCH 0/3] Fix reconnection latency caused by FIN/ACK handling race
-Date:   Fri, 31 Jan 2020 16:05:44 +0100
-Message-ID: <20200131150544.26333-1-sjpark@amazon.com>
+To:     Eric Dumazet <edumazet@google.com>
+CC:     <sjpark@amazon.com>, David Miller <davem@davemloft.net>,
+        Shuah Khan <shuah@kernel.org>, netdev <netdev@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, <sj38.park@gmail.com>,
+        <aams@amazon.com>, SeongJae Park <sjpark@amazon.de>
+Subject: Re: Re: [PATCH 1/3] net/ipv4/inet_timewait_sock: Fix inconsistent comments
+Date:   Fri, 31 Jan 2020 16:09:05 +0100
+Message-ID: <20200131150905.27132-1-sjpark@amazon.com>
 X-Mailer: git-send-email 2.17.1
-In-Reply-To: <dc37fb0dad3c4a5f9fd88eea89d81908@AcuMS.aculab.com> (raw)
+In-Reply-To: <CANn89iK3usa_bAfnD37VKvS45Qf6FH+H4fo-9zNrGGanc=7uAw@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain
-X-Originating-IP: [10.43.162.249]
-X-ClientProxiedBy: EX13D01UWA002.ant.amazon.com (10.43.160.74) To
+X-Originating-IP: [10.43.161.117]
+X-ClientProxiedBy: EX13D29UWA001.ant.amazon.com (10.43.160.187) To
  EX13D31EUA001.ant.amazon.com (10.43.165.15)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, 31 Jan 2020 14:00:27 +0000 David Laight <David.Laight@ACULAB.COM> wrote:
+On   Fri, 31 Jan 2020 06:54:53 -0800   Eric Dumazet <edumazet@google.com> wrote:
 
-> From: sjpark@amazon.com
-> > Sent: 31 January 2020 12:24
-> ...
-> > The acks in lines 6 and 8 are the acks.  If the line 8 packet is
-> > processed before the line 6 packet, it will be just ignored as it is not
-> > a expected packet, and the later process of the line 6 packet will
-> > change the status of Process A to FIN_WAIT_2, but as it has already
-> > handled line 8 packet, it will not go to TIME_WAIT and thus will not
-> > send the line 10 packet to Process B.  Thus, Process B will left in
-> > CLOSE_WAIT status, as below.
-> > 
-> > 	 00 (Process A)				(Process B)
-> > 	 01 ESTABLISHED				ESTABLISHED
-> > 	 02 close()
-> > 	 03 FIN_WAIT_1
-> > 	 04 		---FIN-->
-> > 	 05 					CLOSE_WAIT
-> > 	 06 				(<--ACK---)
-> > 	 07	  			(<--FIN/ACK---)
-> > 	 08 				(fired in right order)
-> > 	 09 		<--FIN/ACK---
-> > 	 10 		<--ACK---
-> > 	 11 		(processed in reverse order)
-> > 	 12 FIN_WAIT_2
+> On Fri, Jan 31, 2020 at 4:24 AM <sjpark@amazon.com> wrote:
+> >
+> > From: SeongJae Park <sjpark@amazon.de>
+> >
+> > Commit ec94c2696f0b ("tcp/dccp: avoid one atomic operation for timewait
+> > hashdance") mistakenly erased a comment for the second step of
+> > `inet_twsk_hashdance()`.  This commit restores it for better
+> > readability.
+> >
+> > Signed-off-by: SeongJae Park <sjpark@amazon.de>
+> > ---
+> >  net/ipv4/inet_timewait_sock.c | 1 +
+> >  1 file changed, 1 insertion(+)
+> >
+> > diff --git a/net/ipv4/inet_timewait_sock.c b/net/ipv4/inet_timewait_sock.c
+> > index c411c87ae865..fbfcd63cc170 100644
+> > --- a/net/ipv4/inet_timewait_sock.c
+> > +++ b/net/ipv4/inet_timewait_sock.c
+> > @@ -120,6 +120,7 @@ void inet_twsk_hashdance(struct inet_timewait_sock *tw, struct sock *sk,
+> >
+> >         spin_lock(lock);
+> >
+> > +       /* Step 2: Hash TW into tcp ehash chain. */
 > 
-> Why doesn't A treat the FIN/ACK (09) as valid (as if
-> the ACK had got lost) and then ignore the ACK (10) because
-> it refers to a closed socket?
-
-Because the TCP protocol (RFC 793) doesn't have such speculation.  TCP is
-stateful protocol.  Thus, packets arrived in unexpected state are not required
-to be respected, AFAIU.
-
+> This comment adds no value, please do not bring it back.
 > 
-> I presume that B sends two ACKs (06 and 07) because it can
-> sit in an intermediate state and the first ACK stops the FIN
-> being resent?
-
-I think there is no such presume in the protocol, either.
-
+> net-next is closed, now is not the time for cosmetic changes.
 > 
-> I've implemented lots of protocols in my time, but not TCP.
+> Also take a look at Documentation/networking/netdev-FAQ.rst
 
-If you find anything I'm misunderstanding, please don't hesitate to yell at me.
-Hope the previous discussion[1] regarding this issue to be helpful.
+Thank you for this kind reference.  Will drop this in next spin.
 
 
 Thanks,
 SeongJae Park
 
-[1] https://lore.kernel.org/bpf/20200129171403.3926-1-sjpark@amazon.com/
-
 > 
-> 	David
-> 
-> -
-> Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-> Registration No: 1397386 (Wales)
