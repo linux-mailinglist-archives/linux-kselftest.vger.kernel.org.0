@@ -2,115 +2,109 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DB7214E77F
-	for <lists+linux-kselftest@lfdr.de>; Fri, 31 Jan 2020 04:19:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 50AD414E794
+	for <lists+linux-kselftest@lfdr.de>; Fri, 31 Jan 2020 04:32:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727931AbgAaDTe (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 30 Jan 2020 22:19:34 -0500
-Received: from hqnvemgate24.nvidia.com ([216.228.121.143]:6618 "EHLO
-        hqnvemgate24.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727831AbgAaDTd (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 30 Jan 2020 22:19:33 -0500
-Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate24.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5e339c8e0000>; Thu, 30 Jan 2020 19:18:38 -0800
-Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate101.nvidia.com (PGP Universal service);
-  Thu, 30 Jan 2020 19:19:31 -0800
-X-PGP-Universal: processed;
-        by hqpgpgate101.nvidia.com on Thu, 30 Jan 2020 19:19:31 -0800
-Received: from [10.110.48.28] (10.124.1.5) by HQMAIL107.nvidia.com
- (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Fri, 31 Jan
- 2020 03:19:31 +0000
-Subject: Re: [PATCH v2 4/8] mm/gup: track FOLL_PIN pages
-To:     "Kirill A. Shutemov" <kirill@shutemov.name>
-CC:     Andrew Morton <akpm@linux-foundation.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Christoph Hellwig <hch@infradead.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Dave Chinner <david@fromorbit.com>,
-        Ira Weiny <ira.weiny@intel.com>, Jan Kara <jack@suse.cz>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Jonathan Corbet <corbet@lwn.net>,
-        =?UTF-8?B?SsOpcsO0bWUgR2xpc3Nl?= <jglisse@redhat.com>,
-        Michal Hocko <mhocko@suse.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Vlastimil Babka <vbabka@suse.cz>, <linux-doc@vger.kernel.org>,
-        <linux-fsdevel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-        <linux-rdma@vger.kernel.org>, <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
-References: <20200129032417.3085670-1-jhubbard@nvidia.com>
- <20200129032417.3085670-5-jhubbard@nvidia.com>
- <20200129135153.knie7ptvsxcgube6@box>
- <0be743df-e9af-6da9-c593-9e25ab194acf@nvidia.com>
- <20200130113126.5ftq4gd5k7o7tipj@box>
-From:   John Hubbard <jhubbard@nvidia.com>
-X-Nvconfidentiality: public
-Message-ID: <1037b514-30e7-c128-38c1-9c98488be337@nvidia.com>
-Date:   Thu, 30 Jan 2020 19:19:30 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.2
-MIME-Version: 1.0
-In-Reply-To: <20200130113126.5ftq4gd5k7o7tipj@box>
-X-Originating-IP: [10.124.1.5]
-X-ClientProxiedBy: HQMAIL105.nvidia.com (172.20.187.12) To
- HQMAIL107.nvidia.com (172.20.187.13)
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
+        id S1727827AbgAaDcI (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 30 Jan 2020 22:32:08 -0500
+Received: from mail.kernel.org ([198.145.29.99]:53484 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727824AbgAaDcI (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 30 Jan 2020 22:32:08 -0500
+Received: from devnote2 (NE2965lan1.rev.em-net.ne.jp [210.141.244.193])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id A520220CC7;
+        Fri, 31 Jan 2020 03:32:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1580441527;
+        bh=nlYIG3x2hYLjyk1ASRbuQlsc9A45GUN4qZZV7DWMAtU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Hlv/L6/jv5xdgwQbp30Av/aZpGDktDul8FYVSBD1MnI2rRzD7Ei8eEkVqKM2cbExb
+         EugUf+MBwTCFytyN6aEkugdnyI1suZr2OCIb57ksGgLG34vuYAcaulrIroCb8aiSUK
+         pPAxSOzpFNAXFyWaCkXZkwxlIm0ZjsF8YwTUi3q0=
+Date:   Fri, 31 Jan 2020 12:32:03 +0900
+From:   Masami Hiramatsu <mhiramat@kernel.org>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Shuah Khan <shuah@kernel.org>, LKML <linux-kernel@vger.kernel.org>,
+        linux-kselftest@vger.kernel.org,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>
+Subject: Re: [PATCH][RESEND] selftests/ftrace: Have pid filter test use
+ instance flag
+Message-Id: <20200131123203.5de85bfa6ccf946934963e86@kernel.org>
+In-Reply-To: <20200130214527.1ce9a39e@rorschach.local.home>
+References: <20200130214527.1ce9a39e@rorschach.local.home>
+X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1580440719; bh=9n3GVRH7rJT8PUMEqe1BMiXjCWR5u2839yBFWtobbC8=;
-        h=X-PGP-Universal:Subject:To:CC:References:From:X-Nvconfidentiality:
-         Message-ID:Date:User-Agent:MIME-Version:In-Reply-To:
-         X-Originating-IP:X-ClientProxiedBy:Content-Type:Content-Language:
-         Content-Transfer-Encoding;
-        b=DyboAuvvbnzLHMEIag1fx4ad2eQQcY8Jsk0DPogA1Xd5f6sbkghXewV7YQM2/iusj
-         B4T31MmPGDxl8HYQEgTzwTjtC7aXYSsBqhReBchu4rQ3x2Tg9oKG30YhyaXyxX1zNJ
-         mQXxsLzBUV1RQ6IAEVYKzDedk9H7zC8YcXryZqWQmOBJN6TCbJzzlnCBXNPqKb3tHz
-         gb7xzJ5ZNfj8tLSN3LebvHbUjchA/wB6wHtGy1YqbyoHTg/Hy4dFqQ3WNC6LGHaugE
-         phaII7jurRZGdzUGIVeJaTPP7ZEu9NHyZD6tjX5kAaACjvJbQ8wCOySgAH5vXtg5+O
-         50R/K9o+IjDKA==
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 1/30/20 3:31 AM, Kirill A. Shutemov wrote:
-...
->>>> diff --git a/mm/huge_memory.c b/mm/huge_memory.c
->>>> index 0a55dec68925..b1079aaa6f24 100644
->>>> --- a/mm/huge_memory.c
->>>> +++ b/mm/huge_memory.c
->>>> @@ -958,6 +958,11 @@ struct page *follow_devmap_pmd(struct vm_area_struct *vma, unsigned long addr,
->>>>   	 */
->>>>   	WARN_ONCE(flags & FOLL_COW, "mm: In follow_devmap_pmd with FOLL_COW set");
->>>> +	/* FOLL_GET and FOLL_PIN are mutually exclusive. */
->>>> +	if (WARN_ON_ONCE((flags & (FOLL_PIN | FOLL_GET)) ==
->>>> +			 (FOLL_PIN | FOLL_GET)))
->>>
->>> Too many parentheses.
->>
->>
->> OK, I'll remove at least one. :)
+On Thu, 30 Jan 2020 21:45:27 -0500
+Steven Rostedt <rostedt@goodmis.org> wrote:
+
 > 
-> I see two.
+> From: "Steven Rostedt (VMware)" <rostedt@goodmis.org>
+> 
+> While running the ftracetests, the pid filter test failed because the
+> instance "foo" existed, and it was using it to rerun the test under a
+> instance named foo. The collision caused the test to fail as the mkdir
+> failed as the name already existed.
+> 
+> As of commit b5b77be812de7 ("selftests: ftrace: Allow some tests to be run
+> in a tracing instance") all a selftest needs to do to be tested in an
+> instance is to set the "instance" flag. There's no reason a selftest needs
+> to create an instance to run its test in an instance directly.
+> 
+> Remove the open coded testing in an instance for the pid filter test and
+> have it set the "instance" flag instead.
+> 
 
-ah, correction: actually, the original statement has exactly the right number of parentheses.
-The relevant C precedence order is:
-	==
-	&
-	|
+This looks good to me.
 
-...which means that both "&" and "|" operations need parentheses protection from the higher
-precedence "==" operation.
+Acked-by: Masami Hiramatsu <mhiramat@kernel.org>
 
-(There are other places in the kernel that have this exact pattern, too, with the same
-pattern of parentheses that I'm using, of course.)
+Thanks!
 
-thanks,
+> Signed-off-by: Steven Rostedt (VMware) <rostedt@goodmis.org>
+> ---
+>  .../selftests/ftrace/test.d/ftrace/func-filter-pid.tc     | 8 +-------
+>  1 file changed, 1 insertion(+), 7 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/ftrace/test.d/ftrace/func-filter-pid.tc b/tools/testing/selftests/ftrace/test.d/ftrace/func-filter-pid.tc
+> index 64cfcc75e3c1..f2ee1e889e13 100644
+> --- a/tools/testing/selftests/ftrace/test.d/ftrace/func-filter-pid.tc
+> +++ b/tools/testing/selftests/ftrace/test.d/ftrace/func-filter-pid.tc
+> @@ -1,6 +1,7 @@
+>  #!/bin/sh
+>  # SPDX-License-Identifier: GPL-2.0
+>  # description: ftrace - function pid filters
+> +# flags: instance
+>  
+>  # Make sure that function pid matching filter works.
+>  # Also test it on an instance directory
+> @@ -96,13 +97,6 @@ do_test() {
+>  }
+>  
+>  do_test
+> -
+> -mkdir instances/foo
+> -cd instances/foo
+> -do_test
+> -cd ../../
+> -rmdir instances/foo
+> -
+>  do_reset
+>  
+>  exit 0
+> -- 
+> 2.20.1
+> 
+
+
 -- 
-John Hubbard
-NVIDIA
- 
+Masami Hiramatsu <mhiramat@kernel.org>
