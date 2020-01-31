@@ -2,53 +2,52 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 73FAF14EED6
-	for <lists+linux-kselftest@lfdr.de>; Fri, 31 Jan 2020 15:56:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7941A14EEEA
+	for <lists+linux-kselftest@lfdr.de>; Fri, 31 Jan 2020 16:01:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729071AbgAaO40 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 31 Jan 2020 09:56:26 -0500
-Received: from mail-yw1-f68.google.com ([209.85.161.68]:36556 "EHLO
-        mail-yw1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729012AbgAaO40 (ORCPT
+        id S1729099AbgAaPBh (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 31 Jan 2020 10:01:37 -0500
+Received: from mail-yw1-f67.google.com ([209.85.161.67]:33890 "EHLO
+        mail-yw1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729111AbgAaPBe (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 31 Jan 2020 09:56:26 -0500
-Received: by mail-yw1-f68.google.com with SMTP id n184so4942060ywc.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 31 Jan 2020 06:56:25 -0800 (PST)
+        Fri, 31 Jan 2020 10:01:34 -0500
+Received: by mail-yw1-f67.google.com with SMTP id b186so4963760ywc.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 31 Jan 2020 07:01:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=f3RC/SQifpuY8VOrKnWaTREoPKqzmE43+PbrL0jAXis=;
-        b=P54WA2PGuxfHKuFWwjrCbu/PdvMVuTnU6Dy7LvFOdRSFKsLV2oQuVF4ER8MQlrTzXG
-         BXeSJzDcUOkjj1ktcmYJEd+ANaql3n7CK1hTX1lLL/noTkNXvixZOjO1xhQKB4i7oNX/
-         Jz0RTVlQUZ6txzCjiRFNpCIY+moznMKuzZ/jwGn076BYfEQ457YobGxXeax8y9d7Sfk/
-         B2HZTKv6CE2qMyFykdxTS3+qtSqlOe24FS78clS9dvGX9mg0/TAofXrBoUqJpS+fjcQf
-         znE14zc4DrIFSnqC41wvvUaa13UJl7g0WxziSCWoLP/A7YDivoTpGwdYYNcAJzpmmvMb
-         Ollg==
+        bh=lP6TzEP91d7hLsESfdMqNdtjrOfbthLJkOU6UXoqTVs=;
+        b=JjC9sj0bkY+d7wSCXaj+o8kYk69s9tJNc3C2A70tF2dKMLJG5FFvog7iey+EBH5tkS
+         R2aSMJpoMMRCHqY17xrSS5Cr6n0aReHPNRY3UI1Q2jNoC28C+IB6ZSKLOi2Ljy3ucS8i
+         VbZ7wosy2IjQCeQQRaYpJ8CIuxVesucU1Ll0y323e9Fp4ZPxPB1VSSDMuAlFeShpoVJ2
+         Zp/zpk9vDLlIvK1X6Xrs/P5eKsJhXpaHJy4chljIaOzmj9gXt8yeNTN7HueQPSF93WJN
+         bBfbkKkvNhAGzoUiF6pP4gzT1Glae++rA5nYHhRAa1zXKG8rCazvnGSwwk+05bmdG2uG
+         PwTA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=f3RC/SQifpuY8VOrKnWaTREoPKqzmE43+PbrL0jAXis=;
-        b=ZHqBRZ0bHWNFFyuVW9s0s82aTQxv7NnuoOqL9v5E1yR7Nk9VWs/LjLPtEWgVk0+Kvu
-         By24QtzUong3uAJLGzC/0M83dM6z5gf2gOlmRYQ3qmI8igWZJ9EtGC8AZzvPrAGMnlU2
-         Q6Fyty1lMlIChVQbMDaUhlEx3NQotHjzlOdqoLphj2SurZwBedcdIL9WQuIVzWJ/iJZk
-         TeosZru+v7wOVgstpIGTALXUehPWE1Wu8y7xZgeY1Hi3jhb99MZkdGmtHL9Y2iXFNXHz
-         kjIY+DBojSYp3PODo1ntG9JhSFubYrSYP/NjTHnuJOhOPjc+s/jD7ORiH33llEBgqAYy
-         UyAQ==
-X-Gm-Message-State: APjAAAW+GwonR0oTenja1B0xrJUzpeO5TXTsbYxnXCzo9CQfVdwHAUzA
-        eFUGzXc6bNUnQbePS+cPW495LPbVeBVn6M9SSGZGIFzY
-X-Google-Smtp-Source: APXvYqxA/y+W7hbdbObbPKgxxIFfPSwtpl3SGq3C/Avbu4JwPSIPL0Zm0sJFTvez7VjM7JtzbYh23B12TQvZ1QBQ0ck=
-X-Received: by 2002:a0d:c701:: with SMTP id j1mr1163590ywd.52.1580482585227;
- Fri, 31 Jan 2020 06:56:25 -0800 (PST)
+        bh=lP6TzEP91d7hLsESfdMqNdtjrOfbthLJkOU6UXoqTVs=;
+        b=SRtLmoZ9MGn7+Af1UDZaxqRILfJsXlftxtN5hI3K04333kjbkV2a4rD6rppuN9b052
+         NanTSZxxYECvQIL2wLjo5hZYbv5wRQe2389yDVmTTWhkOMZLs0jZvjpPLHh5v1I/yU7I
+         vn04sMpGviyYmJS5k7FBGQ1pPH9bGCMEfwvazF+yhDmH0nF2lcqAa77S6Lh0LwhOK+nj
+         8f0ZVb5X2hNk9C9cA4eWvrr+jQKdnJIYLCVvO04QTbqblb14piWF+zFZPYl0vnZRPfp/
+         gCgSFqcR3sPlg8LZW/X9coD+aDaoJ95ICw+TC/VCXtpVeJR/5qakd+cv+Wa9VCziK6Qs
+         jbkw==
+X-Gm-Message-State: APjAAAXsgM040yfeu/bCwEt3f9yzxEF2/OlCPnf4pDnTEwRinCl/YG8S
+        HiH46u6XfNWSzdgL8HkQ4TSpfk9PpnOtRCahQtZrcg==
+X-Google-Smtp-Source: APXvYqzs7gtN6z+3DwxRauYOyBeJ0zMKdNI1QZWw5WgJpiiQ/ixWmcWH3ZOyJ2v3tzlLqA2ss5ytj9xF+z66rXG7cCs=
+X-Received: by 2002:a81:b38a:: with SMTP id r132mr8677745ywh.114.1580482892732;
+ Fri, 31 Jan 2020 07:01:32 -0800 (PST)
 MIME-Version: 1.0
-References: <20200131122421.23286-1-sjpark@amazon.com> <20200131122421.23286-4-sjpark@amazon.com>
-In-Reply-To: <20200131122421.23286-4-sjpark@amazon.com>
+References: <20200131122421.23286-1-sjpark@amazon.com> <20200131122421.23286-3-sjpark@amazon.com>
+In-Reply-To: <20200131122421.23286-3-sjpark@amazon.com>
 From:   Eric Dumazet <edumazet@google.com>
-Date:   Fri, 31 Jan 2020 06:56:13 -0800
-Message-ID: <CANn89iJrwVuEUHFqH1iCJd3nwTWAuXCdEJozwz6gzDV5Snm3Ug@mail.gmail.com>
-Subject: Re: [PATCH 3/3] selftests: net: Add FIN_ACK processing order related
- latency spike test
+Date:   Fri, 31 Jan 2020 07:01:21 -0800
+Message-ID: <CANn89i+rKfAhUjYLoEhyYj8OsRBtHC+ukPcE6CuTAJjb183GRQ@mail.gmail.com>
+Subject: Re: [PATCH 2/3] tcp: Reduce SYN resend delay if a suspicous ACK is received
 To:     sjpark@amazon.com
 Cc:     David Miller <davem@davemloft.net>, Shuah Khan <shuah@kernel.org>,
         netdev <netdev@vger.kernel.org>,
@@ -63,16 +62,46 @@ List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
 On Fri, Jan 31, 2020 at 4:25 AM <sjpark@amazon.com> wrote:
->
-> From: SeongJae Park <sjpark@amazon.de>
->
-> This commit adds a test for FIN_ACK process races related reconnection
-> latency spike issues.  The issue has described and solved by the
-> previous commit ("tcp: Reduce SYN resend delay if a suspicous ACK is
-> received").
->
 
-I do not know for other tests, but using a hard coded port (4242) is
-going to be flakky, since the port might be already used.
+> Signed-off-by: SeongJae Park <sjpark@amazon.de>
+> ---
+>  net/ipv4/tcp_input.c | 6 +++++-
+>  1 file changed, 5 insertions(+), 1 deletion(-)
+>
+> diff --git a/net/ipv4/tcp_input.c b/net/ipv4/tcp_input.c
+> index 2a976f57f7e7..b168e29e1ad1 100644
+> --- a/net/ipv4/tcp_input.c
+> +++ b/net/ipv4/tcp_input.c
+> @@ -5893,8 +5893,12 @@ static int tcp_rcv_synsent_state_process(struct sock *sk, struct sk_buff *skb,
+>                  *        the segment and return)"
+>                  */
+>                 if (!after(TCP_SKB_CB(skb)->ack_seq, tp->snd_una) ||
+> -                   after(TCP_SKB_CB(skb)->ack_seq, tp->snd_nxt))
+> +                   after(TCP_SKB_CB(skb)->ack_seq, tp->snd_nxt)) {
+> +                       /* Previous FIN/ACK or RST/ACK might be ignore. */
+> +                       inet_csk_reset_xmit_timer(sk, ICSK_TIME_RETRANS,
+> +                                                 TCP_ATO_MIN, TCP_RTO_MAX);
 
-Please make sure to run tests on a separate namespace.
+This is not what I suggested.
+
+I suggested implementing a strategy where only the _first_ retransmit
+would be done earlier.
+
+So you need to look at the current counter of retransmit attempts,
+then reset the timer if this SYN_SENT
+socket never resent a SYN.
+
+We do not want to trigger packet storms, if for some reason the remote
+peer constantly sends
+us the same packet.
+
+Thanks.
+
+>                         goto reset_and_undo;
+> +               }
+>
+>                 if (tp->rx_opt.saw_tstamp && tp->rx_opt.rcv_tsecr &&
+>                     !between(tp->rx_opt.rcv_tsecr, tp->retrans_stamp,
+> --
+> 2.17.1
+>
