@@ -2,101 +2,91 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 478F814EE1C
-	for <lists+linux-kselftest@lfdr.de>; Fri, 31 Jan 2020 15:00:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CA5C14EED2
+	for <lists+linux-kselftest@lfdr.de>; Fri, 31 Jan 2020 15:55:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728770AbgAaOAc convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 31 Jan 2020 09:00:32 -0500
-Received: from eu-smtp-delivery-151.mimecast.com ([207.82.80.151]:45944 "EHLO
-        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728752AbgAaOAb (ORCPT
+        id S1729113AbgAaOzG (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 31 Jan 2020 09:55:06 -0500
+Received: from mail-yw1-f65.google.com ([209.85.161.65]:46565 "EHLO
+        mail-yw1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729062AbgAaOzF (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 31 Jan 2020 09:00:31 -0500
-Received: from AcuMS.aculab.com (156.67.243.126 [156.67.243.126]) (Using
- TLS) by relay.mimecast.com with ESMTP id
- uk-mta-242-JHDjgXV-PJqc_fZ2W4bcWg-1; Fri, 31 Jan 2020 14:00:28 +0000
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) with Microsoft SMTP
- Server (TLS) id 15.0.1347.2; Fri, 31 Jan 2020 14:00:27 +0000
-Received: from AcuMS.Aculab.com ([fe80::43c:695e:880f:8750]) by
- AcuMS.aculab.com ([fe80::43c:695e:880f:8750%12]) with mapi id 15.00.1347.000;
- Fri, 31 Jan 2020 14:00:27 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     "'sjpark@amazon.com'" <sjpark@amazon.com>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "davem@davemloft.net" <davem@davemloft.net>
-CC:     "shuah@kernel.org" <shuah@kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "sj38.park@gmail.com" <sj38.park@gmail.com>,
-        "aams@amazon.com" <aams@amazon.com>,
-        SeongJae Park <sjpark@amazon.de>
-Subject: RE: [PATCH 0/3] Fix reconnection latency caused by FIN/ACK handling
- race
-Thread-Topic: [PATCH 0/3] Fix reconnection latency caused by FIN/ACK handling
- race
-Thread-Index: AQHV2DFvc3pd6ARlHUK3D8H5esqW/agEyn3w
-Date:   Fri, 31 Jan 2020 14:00:27 +0000
-Message-ID: <dc37fb0dad3c4a5f9fd88eea89d81908@AcuMS.aculab.com>
-References: <20200131122421.23286-1-sjpark@amazon.com>
-In-Reply-To: <20200131122421.23286-1-sjpark@amazon.com>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Fri, 31 Jan 2020 09:55:05 -0500
+Received: by mail-yw1-f65.google.com with SMTP id z141so4426437ywd.13
+        for <linux-kselftest@vger.kernel.org>; Fri, 31 Jan 2020 06:55:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=SDj5kNjMiLc1TNHQMyijHY5lqlqUv2q9y5ctnKAZRBM=;
+        b=bqZKRFmycIWRiGhpMQzPAIBZjoFVrYuo2SZLTiBQn9hk3BIfxPOgtiasQqrKsz2M5R
+         xcr70sdeXtlmRgqAkxi4MwwCCGAkJhHqVAsDAT18gQB8K95aCL2+v7W3tf6GiQuTk9wx
+         zSsFPc/QZmAsiQnT6xuRc+WOhhu4GLqhGs9PXg0H7dCfbwXXOUvKNyrwN6IBwhS4kjJP
+         xqgIEUk70E2YY22PIZpKwKrFtorhvE2J/tl5xnCl5++MsQJJfl74Og7nGC7EhicDGutJ
+         s6D889kI9JFG1is8ZQK56+B9Cjutnn92mtrnjX6fCu2blz9jNuBePoRzER6x6s+DTbFF
+         UPKA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=SDj5kNjMiLc1TNHQMyijHY5lqlqUv2q9y5ctnKAZRBM=;
+        b=dPvbu2fArGi3NfmFDKLMmrKF+Gxs85aOoI0xAj8hxPNdptVLEvHKaw4gk5h+E/a9Nc
+         sJDGYGQSI/YAvv2Bx2D/VAJU3qKFSnkYt9r+tHSGbalY/zE5YZkjwizA9FMVmkODR25L
+         YrqdnVEd91PqJu/SfHSFKF7Sg4zfhU21iiCmuki3hXTar2Vff41YxRKx5yXObC090895
+         esJr1PB9+RFbeu6+TTZvhDGWtctotmb89ZqUQqNe7jNn4biJcE86vC7Cl7hKRI2Ehkno
+         Cto2EoN/8A86XM/tVOXk4PVxDvZ6AtYi/yn3yQ8NdGZaoJfv9wxV2pJCFnGw9WgHvvvN
+         JhUg==
+X-Gm-Message-State: APjAAAW8M+C0uc/ug0x2WJtkeQ5dHQb8scZOVJNIIYOdZXq8gXlc1nV9
+        N7UkDyLiE7WOWGzcC+djHmS3i3BC5+1upKHA7Z77VA==
+X-Google-Smtp-Source: APXvYqyvp5cLvKH6z6kEMndeCtof01VGlsZXoDmYcGmrhf/gmPmDw9GCx5N5tQtW9+VSCDoYF9vhN4WVGMlTHp5v3c0=
+X-Received: by 2002:a25:d112:: with SMTP id i18mr8262683ybg.364.1580482504570;
+ Fri, 31 Jan 2020 06:55:04 -0800 (PST)
 MIME-Version: 1.0
-X-MC-Unique: JHDjgXV-PJqc_fZ2W4bcWg-1
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+References: <20200131122421.23286-1-sjpark@amazon.com> <20200131122421.23286-2-sjpark@amazon.com>
+In-Reply-To: <20200131122421.23286-2-sjpark@amazon.com>
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Fri, 31 Jan 2020 06:54:53 -0800
+Message-ID: <CANn89iK3usa_bAfnD37VKvS45Qf6FH+H4fo-9zNrGGanc=7uAw@mail.gmail.com>
+Subject: Re: [PATCH 1/3] net/ipv4/inet_timewait_sock: Fix inconsistent comments
+To:     sjpark@amazon.com
+Cc:     David Miller <davem@davemloft.net>, Shuah Khan <shuah@kernel.org>,
+        netdev <netdev@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, sj38.park@gmail.com,
+        aams@amazon.com, SeongJae Park <sjpark@amazon.de>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: sjpark@amazon.com
-> Sent: 31 January 2020 12:24
-...
-> The acks in lines 6 and 8 are the acks.  If the line 8 packet is
-> processed before the line 6 packet, it will be just ignored as it is not
-> a expected packet, and the later process of the line 6 packet will
-> change the status of Process A to FIN_WAIT_2, but as it has already
-> handled line 8 packet, it will not go to TIME_WAIT and thus will not
-> send the line 10 packet to Process B.  Thus, Process B will left in
-> CLOSE_WAIT status, as below.
-> 
-> 	 00 (Process A)				(Process B)
-> 	 01 ESTABLISHED				ESTABLISHED
-> 	 02 close()
-> 	 03 FIN_WAIT_1
-> 	 04 		---FIN-->
-> 	 05 					CLOSE_WAIT
-> 	 06 				(<--ACK---)
-> 	 07	  			(<--FIN/ACK---)
-> 	 08 				(fired in right order)
-> 	 09 		<--FIN/ACK---
-> 	 10 		<--ACK---
-> 	 11 		(processed in reverse order)
-> 	 12 FIN_WAIT_2
+On Fri, Jan 31, 2020 at 4:24 AM <sjpark@amazon.com> wrote:
+>
+> From: SeongJae Park <sjpark@amazon.de>
+>
+> Commit ec94c2696f0b ("tcp/dccp: avoid one atomic operation for timewait
+> hashdance") mistakenly erased a comment for the second step of
+> `inet_twsk_hashdance()`.  This commit restores it for better
+> readability.
+>
+> Signed-off-by: SeongJae Park <sjpark@amazon.de>
+> ---
+>  net/ipv4/inet_timewait_sock.c | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/net/ipv4/inet_timewait_sock.c b/net/ipv4/inet_timewait_sock.c
+> index c411c87ae865..fbfcd63cc170 100644
+> --- a/net/ipv4/inet_timewait_sock.c
+> +++ b/net/ipv4/inet_timewait_sock.c
+> @@ -120,6 +120,7 @@ void inet_twsk_hashdance(struct inet_timewait_sock *tw, struct sock *sk,
+>
+>         spin_lock(lock);
+>
+> +       /* Step 2: Hash TW into tcp ehash chain. */
 
-Why doesn't A treat the FIN/ACK (09) as valid (as if
-the ACK had got lost) and then ignore the ACK (10) because
-it refers to a closed socket?
+This comment adds no value, please do not bring it back.
 
-I presume that B sends two ACKs (06 and 07) because it can
-sit in an intermediate state and the first ACK stops the FIN
-being resent?
+net-next is closed, now is not the time for cosmetic changes.
 
-I've implemented lots of protocols in my time, but not TCP.
-
-	David
-
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
-
+Also take a look at Documentation/networking/netdev-FAQ.rst
