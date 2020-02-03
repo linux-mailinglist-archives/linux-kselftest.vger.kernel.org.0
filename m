@@ -2,86 +2,177 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 939C214FF82
-	for <lists+linux-kselftest@lfdr.de>; Sun,  2 Feb 2020 23:08:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E3FA1506B6
+	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Feb 2020 14:16:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726989AbgBBWIq (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 2 Feb 2020 17:08:46 -0500
-Received: from mail-pf1-f196.google.com ([209.85.210.196]:43916 "EHLO
-        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726967AbgBBWIq (ORCPT
+        id S1728216AbgBCNQl (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 3 Feb 2020 08:16:41 -0500
+Received: from mail-lj1-f196.google.com ([209.85.208.196]:44547 "EHLO
+        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728214AbgBCNQk (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 2 Feb 2020 17:08:46 -0500
-Received: by mail-pf1-f196.google.com with SMTP id s1so6492907pfh.10;
-        Sun, 02 Feb 2020 14:08:46 -0800 (PST)
+        Mon, 3 Feb 2020 08:16:40 -0500
+Received: by mail-lj1-f196.google.com with SMTP id q8so14551870ljj.11
+        for <linux-kselftest@vger.kernel.org>; Mon, 03 Feb 2020 05:16:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to;
-        bh=ysAyY0+DVCOS8g/ck4jYLTSjQn9KeBmlhbMhIvWcg0A=;
-        b=fxF9+j5QIWO8mTPa+ktoydLNApLIObVdOzHteDPtgSdpkTM90F2eV8fnQx9c4Mj+XT
-         Xv6ar4KTY8RMFY4J6RjiMX7hAdlmRThU9ixtcuc/D3UA9YvoT6wYWOLR+NSK7WGJ/Apr
-         sdkZZzJCaP/ZqR6ncBjQ2TB/wYV6WGhfGTVJcdPrZPwF9Co1X12F7g8H928+Egd80zef
-         p2YfdlKfLVBhMOEG18MIRhg5ANrtwmI6ueVuJSvKLQ5gT3jpiZph2y17Hmb+ejROnJ4c
-         mcLBSQgTqaIGcTStxthnXigCqzCfOO9KjgDYSOTKTp2xjPL6Yelcm3ATMvCXCCAPSDtg
-         g6lQ==
+        d=shutemov-name.20150623.gappssmtp.com; s=20150623;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=Qg71wuq+HUuLTE+gluyqJRk6R7IYzrOtEHHz+ac8ZpM=;
+        b=CC5rGlvJRzYFaVvEQmwbNC1ul7esNJjYZyLDrHnuq3t5DBbgrsp/MkjWbYCroY76KX
+         chkfamGwMrF0+DaINosh1xHU81SKo5fm1lydTwoN0uFEvTeARKthdNRLVZaL/0FlORqq
+         G7O04FeWYkPeix/e53R0JU+cuMFaRswnn3H/WM1jHREA9lX6nX8fDBJ1W8C5O/QWJ/YQ
+         +raTMUmUBx34sERgrv/+jVhVnnutHf/zLu+T67mXOkRqRbZ9OSo7rt00erNYA3JN/pla
+         YN1lA1E5sdJA3YLfVavlvfm9eN/+JNjgxwp47UfigpuPvgHtmzn9p7zFvpO/G6VzENtI
+         Cubw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to;
-        bh=ysAyY0+DVCOS8g/ck4jYLTSjQn9KeBmlhbMhIvWcg0A=;
-        b=IkAViiL2rShULjtfXjd+zQTChoKoa9sPEZxDGIU3B++0P1M3kmaQ4m7AwRAoG/c9OV
-         xwXNh0hLs38WMfLqAK2miXL4uhNia92d8XEXAyqV5OkVY+a3QpqVAxQVXmN26dnTzyZs
-         i4eF85ohhRAQOpPU8ysh82Uh3IDCDl6hwPQKWrRWAYZIWunu/mCZtsnJOeppvN6m5SmZ
-         ECvlUiG4Q7cnUZnJHgsPSfjDrmunRk/0e6GOPBm0PLN6eN55++ZRr7PijU4sQUHkjVNn
-         bHMJSaXnk+Y+csgK/2daQlo+9dYMI8AgDTEoC2zHfUacLQXzIHq2djqCFeIHA9bUXzGX
-         T+Tw==
-X-Gm-Message-State: APjAAAXeraFBzFikfHxN+m6SeJh5D+Pbokx+LxFjLzCKlkaoiYHh9Rsq
-        h3PsjIUCV5napWj+LvaLg1M=
-X-Google-Smtp-Source: APXvYqxrAUfKej9MCl3CQ8Muv6ccpPAoBMQ2hfsDy/2yKiD7WyMzsBEKNBrkdE1p0fhbnyhnRMthtA==
-X-Received: by 2002:aa7:9aa7:: with SMTP id x7mr20796924pfi.78.1580681325917;
-        Sun, 02 Feb 2020 14:08:45 -0800 (PST)
-Received: from localhost.localdomain ([61.81.192.82])
-        by smtp.gmail.com with ESMTPSA id fh24sm17568184pjb.24.2020.02.02.14.08.41
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Qg71wuq+HUuLTE+gluyqJRk6R7IYzrOtEHHz+ac8ZpM=;
+        b=cDWYmDhn/Q+3JeRuBozwJn4r96tG+6O4xYWf2hf4L9AC0VfgsDIJM3WzKwOdgT4aRr
+         BI/y99sJXgE5HyJWn/eS7EezNWDMdEi75MfzzN8hZ3t55frmjm+YfM3W2DY8JAxZe/54
+         U2V22DIqZ5uLHSFMV1TZOjrebgEKm63q51wktEm7WWuUzfCU0w8/rqiq8t59PNQPp+a9
+         pGBMCUt3igo2Bqc1lX5xM/yyojWVdj4+Y1HXts01P0MQb3hswSsrdcPNmdeqYmRjOPnz
+         FAjOpfn8H7gVptLAjeApAdsXtEqzjgrlXQblXHtLAcQMeLWSi9wYCv5PJe2sxhBhWPA0
+         qqxA==
+X-Gm-Message-State: APjAAAW7TELtQ6Flw1xqQKbuhXHmZyKRreQ1A76QfJTF2Fii3wH1u8Mk
+        zdnxvj6a4n2jGsxBzP7jaAm7FZWCFQQ=
+X-Google-Smtp-Source: APXvYqyGAMixTSCi/O2Fbmmvwq4F+Kpwzelp/ZePNtB0r7IGFSK1fy7tUEjC85bYyQIG+4m03dECqA==
+X-Received: by 2002:a2e:b4e7:: with SMTP id s7mr14513915ljm.58.1580735798292;
+        Mon, 03 Feb 2020 05:16:38 -0800 (PST)
+Received: from box.localdomain ([86.57.175.117])
+        by smtp.gmail.com with ESMTPSA id x29sm10469144lfg.45.2020.02.03.05.16.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 02 Feb 2020 14:08:44 -0800 (PST)
-From:   SeongJae Park <sj38.park@gmail.com>
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     sj38.park@gmail.com, edumazet@google.com, David.Laight@aculab.com,
-        aams@amazon.com, davem@davemloft.net, eric.dumazet@gmail.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, ncardwell@google.com,
-        shuah@kernel.org, sjpark@amazon.de
-Subject: Re: Re: [PATCH v3 0/2] Fix reconnection latency caused by FIN/ACK handling race
-Date:   Sun,  2 Feb 2020 23:08:34 +0100
-Message-Id: <20200202220834.25728-1-sj38.park@gmail.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200202134652.0e89ce89@cakuba.hsd1.ca.comcast.net> (raw)
+        Mon, 03 Feb 2020 05:16:37 -0800 (PST)
+Received: by box.localdomain (Postfix, from userid 1000)
+        id CA41C100DC8; Mon,  3 Feb 2020 16:16:49 +0300 (+03)
+Date:   Mon, 3 Feb 2020 16:16:49 +0300
+From:   "Kirill A. Shutemov" <kirill@shutemov.name>
+To:     John Hubbard <jhubbard@nvidia.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Christoph Hellwig <hch@infradead.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Dave Chinner <david@fromorbit.com>,
+        Ira Weiny <ira.weiny@intel.com>, Jan Kara <jack@suse.cz>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Jonathan Corbet <corbet@lwn.net>,
+        =?utf-8?B?SsOpcsO0bWU=?= Glisse <jglisse@redhat.com>,
+        Michal Hocko <mhocko@suse.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Matthew Wilcox <willy@infradead.org>,
+        linux-doc@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-rdma@vger.kernel.org,
+        linux-mm@kvack.org, LKML <linux-kernel@vger.kernel.org>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
+Subject: Re: [PATCH v3 01/12] mm: dump_page(): better diagnostics for
+ compound pages
+Message-ID: <20200203131649.vptndo5emkzlaiew@box>
+References: <20200201034029.4063170-1-jhubbard@nvidia.com>
+ <20200201034029.4063170-2-jhubbard@nvidia.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200201034029.4063170-2-jhubbard@nvidia.com>
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sun, 2 Feb 2020 13:46:52 -0800 Jakub Kicinski <kuba@kernel.org> wrote:
-
-> On Sun,  2 Feb 2020 03:38:25 +0000, sj38.park@gmail.com wrote:
-> > The first patch fixes the problem by adjusting the first resend delay of
-> > the SYN in the case.  The second one adds a user space test to reproduce
-> > this problem.
-> > 
-> > The patches are based on the v5.5.  You can also clone the complete git
-> > tree:
-> > 
-> >     $ git clone git://github.com/sjp38/linux -b patches/finack_lat/v3
-> > 
-> > The web is also available:
-> > https://github.com/sjp38/linux/tree/patches/finack_lat/v3
+On Fri, Jan 31, 2020 at 07:40:18PM -0800, John Hubbard wrote:
+> A compound page collects the refcount in the head page, while leaving
+> the refcount of each tail page at zero. Therefore, when debugging a
+> problem that involves compound pages, it's best to have diagnostics that
+> reflect that situation. However, dump_page() is oblivious to these
+> points.
 > 
-> Applied to net, thank you!
+> Change dump_page() as follows:
 > 
-> In the future there is no need to duplicate the info from commit
-> messages in the cover letter.
+> 1) For tail pages, print relevant head page information: refcount, in
+>    particular. But only do this if the page is not corrupted so badly
+>    that the pointer to the head page is all wrong.
+> 
+> 2) Do a separate check to catch any (rare) cases of the tail page's
+>    refcount being non-zero, and issue a separate, clear pr_warn() if
+>    that ever happens.
+> 
+> Suggested-by: Matthew Wilcox <willy@infradead.org>
+> Suggested-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+> Signed-off-by: John Hubbard <jhubbard@nvidia.com>
 
-Thank you for let me know that.  I will not duplicate from next time!
+Acked-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
 
+Few nit-picks below.
 
-Thanks,
-SeongJae Park
+> ---
+>  mm/debug.c | 34 ++++++++++++++++++++++++++++------
+>  1 file changed, 28 insertions(+), 6 deletions(-)
+> 
+> diff --git a/mm/debug.c b/mm/debug.c
+> index ecccd9f17801..beb1c59d784b 100644
+> --- a/mm/debug.c
+> +++ b/mm/debug.c
+> @@ -42,6 +42,32 @@ const struct trace_print_flags vmaflag_names[] = {
+>  	{0, NULL}
+>  };
+>  
+> +static void __dump_tail_page(struct page *page, int mapcount)
+> +{
+> +	struct page *head = compound_head(page);
+> +
+> +	if ((page < head) || (page >= head + MAX_ORDER_NR_PAGES)) {
+
+I'm not sure if we want to use compound_nr() here instead of
+MAX_ORDER_NR_PAGES. Do you have any reasonaing about it?
+
+> +		/*
+> +		 * Page is hopelessly corrupted, so limit any reporting to
+> +		 * information about the page itself. Do not attempt to look at
+> +		 * the head page.
+> +		 */
+> +		pr_warn("page:%px refcount:%d mapcount:%d mapping:%px "
+> +			"index:%#lx (corrupted tail page case)\n",
+> +			page, page_ref_count(page), mapcount, page->mapping,
+> +			page_to_pgoff(page));
+> +	} else {
+> +		pr_warn("page:%px compound refcount:%d mapcount:%d mapping:%px "
+> +			"index:%#lx compound_mapcount:%d\n",
+> +			page, page_ref_count(head), mapcount, head->mapping,
+> +			page_to_pgoff(head), compound_mapcount(page));
+> +	}
+> +
+> +	if (page_ref_count(page) != 0)
+> +		pr_warn("page:%px PROBLEM: non-zero refcount (==%d) on this "
+> +			"tail page\n", page, page_ref_count(page));
+
+Wrap into {}, please.
+
+> +}
+> +
+>  void __dump_page(struct page *page, const char *reason)
+>  {
+>  	struct address_space *mapping;
+> @@ -75,12 +101,8 @@ void __dump_page(struct page *page, const char *reason)
+>  	 */
+>  	mapcount = PageSlab(page) ? 0 : page_mapcount(page);
+>  
+> -	if (PageCompound(page))
+> -		pr_warn("page:%px refcount:%d mapcount:%d mapping:%px "
+> -			"index:%#lx compound_mapcount: %d\n",
+> -			page, page_ref_count(page), mapcount,
+> -			page->mapping, page_to_pgoff(page),
+> -			compound_mapcount(page));
+> +	if (PageTail(page))
+> +		__dump_tail_page(page, mapcount);
+>  	else
+>  		pr_warn("page:%px refcount:%d mapcount:%d mapping:%px index:%#lx\n",
+>  			page, page_ref_count(page), mapcount,
+> -- 
+> 2.25.0
+> 
+
+-- 
+ Kirill A. Shutemov
