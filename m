@@ -2,173 +2,104 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B7341512B5
-	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Feb 2020 00:09:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 94D701512CE
+	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Feb 2020 00:16:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726331AbgBCXJV (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 3 Feb 2020 18:09:21 -0500
-Received: from mail-pf1-f202.google.com ([209.85.210.202]:43156 "EHLO
-        mail-pf1-f202.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727097AbgBCXJV (ORCPT
+        id S1727124AbgBCXQe (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 3 Feb 2020 18:16:34 -0500
+Received: from mail-ot1-f66.google.com ([209.85.210.66]:40765 "EHLO
+        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727110AbgBCXQe (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 3 Feb 2020 18:09:21 -0500
-Received: by mail-pf1-f202.google.com with SMTP id x199so10281176pfc.10
-        for <linux-kselftest@vger.kernel.org>; Mon, 03 Feb 2020 15:09:20 -0800 (PST)
+        Mon, 3 Feb 2020 18:16:34 -0500
+Received: by mail-ot1-f66.google.com with SMTP id i6so15355011otr.7
+        for <linux-kselftest@vger.kernel.org>; Mon, 03 Feb 2020 15:16:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=RjINtf+1IbJq55a0Ed6ZN6M3Wb8hRnnefI63Cx3MO7Q=;
-        b=QUCkYlSNVhLhOTJ0mmNYyS24kEWPAb3E8yra1v2H8umaNEH2T+QeCUD2qC+IUDMxqX
-         37fRa7vI4Fsr31SXnZvsMb4kutN/Coz+zQzU7M6EaAdzJzo2qiIRUyZLpu8wj4svKaVe
-         VbvBJr/TvUwYhTewt4d+jJRXpQKR7XDLTTj/KZ5g9UB6eid/2yHU+gjLAsItWkaZ8aY0
-         eHZAsqvA8kRo7hh+RQVYcrjHYzderaxahHKIbgqFqufzjYChQ+He9+BLxnn6TZtFTTqN
-         36R7GTcPxPdMWo8n+y3atn/Wigamg36uD/ptLBxySNx9mF+yEXWhRroPvu02i0xfHKZZ
-         D6bg==
+        bh=Gsc+LSdKFmfEHsLu/PX4b/f2W5uTYqD7V4ZzUh0Ir80=;
+        b=PuWaEsvTmioKz64Q7uPVIOp/N9rPTq6akD7fqQtuRHWmOto7GXFjEFiiaZpfiF2Oxm
+         iiczLvMdxA7gX9/mjBZ8ZtnwN2sHqrC4OBRhqMuKo/g8CFJUF+GRekmD2R+YG1Iv8ntP
+         fvondbVEOz76kPzh9Un/lXTwJbkoWs/H0ReXrgjISGWRnNPuEoN9WDxUbtR5u29xfZkT
+         oAskXk7P2RCKYytwQ3FeJKx5ywr9hbBBXemLv/eTKuTK7Wqc8IrNS1TLr78w9ZSqkxGE
+         M2MJ58f6NMmbvet66LP8q6Ze6KZ4eCoAqPGksDNrj2NLgtH1atGYQqMO7zviLvsOv0oa
+         pnWQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=RjINtf+1IbJq55a0Ed6ZN6M3Wb8hRnnefI63Cx3MO7Q=;
-        b=Y1lz/MIu3+h7+7XY0O8+JwGeH0s4VZTTpIWTlUfyAoxPKKGXsRwqY8Sf/yz2dpe3Of
-         fGvVhkMEq51ODfholcy71c/4OiW4InbA1Afxw7tSaf/k6bTYXhj1UdU06AHW7+dPVfN8
-         vQ8bopNzshbmiW7rzohXcfY1niXnD08OCWcl9K48uXbytuZKu1FqCYC1JCY/lTkveaEc
-         9HRURSXWYU5c9aZeUdSoZrUi7hpCxODet1zWOK4YBZSKnpXPvxNPf6R/me7WDeU0Vinv
-         LXwVwVD2S+ynrADCz5bQJuN23kw6+aLZLFRBPoJwe1lODXK5jNy7umCzHu32aHXWKbnR
-         Vs0Q==
-X-Gm-Message-State: APjAAAUSYF5AK4GFytd5sFZWXrZzlkkbZrtz4cvldTgJIDG3iQPOvyxI
-        pEH6mupuKwE7u6TbNv8+yJWgwchmlZAI
-X-Google-Smtp-Source: APXvYqwB8CnUgcoaQEPeq8AOsAR7CQC2zvfiaZ9Mq/eDGhQUW4hp4wi0EUJhhdwa3V8/FBqTPUrf3IjlDIxK
-X-Received: by 2002:a63:cd15:: with SMTP id i21mr22156938pgg.453.1580771359996;
- Mon, 03 Feb 2020 15:09:19 -0800 (PST)
-Date:   Mon,  3 Feb 2020 15:09:11 -0800
-In-Reply-To: <20200203230911.39755-1-bgardon@google.com>
-Message-Id: <20200203230911.39755-3-bgardon@google.com>
-Mime-Version: 1.0
-References: <20200203230911.39755-1-bgardon@google.com>
-X-Mailer: git-send-email 2.25.0.341.g760bfbb309-goog
-Subject: [PATCH 3/3] kvm: mmu: Separate pte generation from set_spte
-From:   Ben Gardon <bgardon@google.com>
-To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, Peter Xu <peterx@redhat.com>,
-        Sean Christopherson <sean.j.christopherson@intel.com>,
-        Peter Shier <pshier@google.com>,
-        Oliver Upton <oupton@google.com>,
-        Ben Gardon <bgardon@google.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Gsc+LSdKFmfEHsLu/PX4b/f2W5uTYqD7V4ZzUh0Ir80=;
+        b=aCnR1y1Fjy6Euy6kMrZaESjiLLpOVO+Cd8R/W06M7idtcteAqTd7j3os3ph41Ktaqc
+         S+gcW+Me4PY2qCUK1N7btqqVMd6BEIjiphGlTZ3Pk6AhjRkG1F+oIrkcUPrAMMusyPbR
+         58Rx9fnqbATh/7e2ut1BsxRmg/IbzwOeui67AJk1ptKHHmt91/pW8wLvRxrdAlMtc8kB
+         Nb4kD133aPcio+iocuRHiGIybbAvcaKHPxJVpOSbKJgnk/wIi+GFf3mSwJZl+Zbz4PRu
+         aBR/A/vzC9a9qxJUZvA/8fFYhzQ1+GPUgSBoNpCRkcEuvyA6iDqj61rWGChsFylN+WIU
+         EY9Q==
+X-Gm-Message-State: APjAAAXDSC3MSjtIBclX1Vl6Wm4jk77lkGnAKYxMGhn8w4ue54Mzwg5b
+        IpMblqeld8SbJDI2ISUuAXwzicBqs92UNzEuo+N58A==
+X-Google-Smtp-Source: APXvYqxks0BGaZknNqKFAhn+gbM4R5qvozx7t1UrbqkSMA2wJouCmnamEYFBah6ouIgs/03HiorFYLE+SdLRPuvskdA=
+X-Received: by 2002:a9d:518b:: with SMTP id y11mr18610845otg.349.1580771791890;
+ Mon, 03 Feb 2020 15:16:31 -0800 (PST)
+MIME-Version: 1.0
+References: <20200115012651.228058-1-almasrymina@google.com> <alpine.DEB.2.21.2001291303230.175731@chino.kir.corp.google.com>
+In-Reply-To: <alpine.DEB.2.21.2001291303230.175731@chino.kir.corp.google.com>
+From:   Mina Almasry <almasrymina@google.com>
+Date:   Mon, 3 Feb 2020 15:16:21 -0800
+Message-ID: <CAHS8izNq17U6i-RzHZ6tCOVQza_CGngJc0X2ZmqPHTH7y4kfdg@mail.gmail.com>
+Subject: Re: [PATCH v10 1/8] hugetlb_cgroup: Add hugetlb_cgroup reservation counter
+To:     David Rientjes <rientjes@google.com>
+Cc:     Mike Kravetz <mike.kravetz@oracle.com>,
+        Shakeel Butt <shakeelb@google.com>, shuah <shuah@kernel.org>,
+        Greg Thelen <gthelen@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        open list <linux-kernel@vger.kernel.org>, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org, cgroups@vger.kernel.org,
+        Aneesh Kumar <aneesh.kumar@linux.vnet.ibm.com>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Separate the functions for generating leaf page table entries from the
-function that inserts them into the paging structure. This refactoring
-will facilitate changes to the MMU sychronization model to use atomic
-compare / exchanges (which are not guaranteed to succeed) instead of a
-monolithic MMU lock.
+> > Proposed Solution:
+> > A new page counter named
+> > 'hugetlb.xMB.reservation_[limit|usage|max_usage]_in_bytes'. This counter has
+> > slightly different semantics than
+> > 'hugetlb.xMB.[limit|usage|max_usage]_in_bytes':
+> >
+>
+> Changelog looks like it needs to be updated with the new resv naming.
+>
 
-No functional change expected.
+I updated to the rsvd naming, which you suggested earlier and Mike
+agreed was better.
 
-Tested by running kvm-unit-tests on an Intel Haswell machine. This
-commit introduced no new failures.
+> > +
+> >  static inline
+> >  struct hugetlb_cgroup *hugetlb_cgroup_from_css(struct cgroup_subsys_state *s)
+> >  {
+>
+> Small nit: hugetlb_cgroup_get_counter(), to me, implies incrementing a
+> reference count, perhaps a better name would be in order.  No strong
+> preference.
+>
 
-This commit can be viewed in Gerrit at:
-	https://linux-review.googlesource.com/c/virt/kvm/kvm/+/2360
+Changed
+> >       /* Add the events file */
+> > -     cft = &h->cgroup_files_dfl[2];
+> > +     cft = &h->cgroup_files_dfl[4];
+> >       snprintf(cft->name, MAX_CFTYPE_NAME, "%s.events", buf);
+> >       cft->private = MEMFILE_PRIVATE(idx, 0);
+> >       cft->seq_show = hugetlb_events_show;
+>
+> Any cleanup to __hugetlb_cgroup_file_dfl_init() and
+> __hugetlb_cgroup_file_legacy_init() that is possible would be great in a
+> follow-up patch :)
+>
 
-Signed-off-by: Ben Gardon <bgardon@google.com>
-Reviewed-by: Peter Shier <pshier@google.com>
----
- arch/x86/kvm/mmu/mmu.c | 52 +++++++++++++++++++++++++++---------------
- 1 file changed, 34 insertions(+), 18 deletions(-)
+Will do!
 
-diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-index b81010d0edae1..9239ad5265dc6 100644
---- a/arch/x86/kvm/mmu/mmu.c
-+++ b/arch/x86/kvm/mmu/mmu.c
-@@ -3000,20 +3000,14 @@ static bool kvm_is_mmio_pfn(kvm_pfn_t pfn)
- #define SET_SPTE_WRITE_PROTECTED_PT	BIT(0)
- #define SET_SPTE_NEED_REMOTE_TLB_FLUSH	BIT(1)
- 
--static int set_spte(struct kvm_vcpu *vcpu, u64 *sptep,
--		    unsigned int pte_access, int level,
--		    gfn_t gfn, kvm_pfn_t pfn, bool speculative,
--		    bool can_unsync, bool host_writable)
-+static u64 make_spte(struct kvm_vcpu *vcpu, unsigned int pte_access, int level,
-+		     gfn_t gfn, kvm_pfn_t pfn, u64 old_spte, bool speculative,
-+		     bool can_unsync, bool host_writable, bool ad_disabled,
-+		     int *ret)
- {
- 	u64 spte = 0;
--	int ret = 0;
--	struct kvm_mmu_page *sp;
--
--	if (set_mmio_spte(vcpu, sptep, gfn, pfn, pte_access))
--		return 0;
- 
--	sp = page_header(__pa(sptep));
--	if (sp_ad_disabled(sp))
-+	if (ad_disabled)
- 		spte |= SPTE_AD_DISABLED_MASK;
- 	else if (kvm_vcpu_ad_need_write_protect(vcpu))
- 		spte |= SPTE_AD_WRPROT_ONLY_MASK;
-@@ -3066,27 +3060,49 @@ static int set_spte(struct kvm_vcpu *vcpu, u64 *sptep,
- 		 * is responsibility of mmu_get_page / kvm_sync_page.
- 		 * Same reasoning can be applied to dirty page accounting.
- 		 */
--		if (!can_unsync && is_writable_pte(*sptep))
--			goto set_pte;
-+		if (!can_unsync && is_writable_pte(old_spte))
-+			return spte;
- 
- 		if (mmu_need_write_protect(vcpu, gfn, can_unsync)) {
- 			pgprintk("%s: found shadow page for %llx, marking ro\n",
- 				 __func__, gfn);
--			ret |= SET_SPTE_WRITE_PROTECTED_PT;
-+			*ret |= SET_SPTE_WRITE_PROTECTED_PT;
- 			pte_access &= ~ACC_WRITE_MASK;
- 			spte &= ~(PT_WRITABLE_MASK | SPTE_MMU_WRITEABLE);
- 		}
- 	}
- 
--	if (pte_access & ACC_WRITE_MASK) {
--		kvm_vcpu_mark_page_dirty(vcpu, gfn);
-+	if (pte_access & ACC_WRITE_MASK)
- 		spte |= spte_shadow_dirty_mask(spte);
--	}
- 
- 	if (speculative)
- 		spte = mark_spte_for_access_track(spte);
- 
--set_pte:
-+	return spte;
-+}
-+
-+static int set_spte(struct kvm_vcpu *vcpu, u64 *sptep,
-+		    unsigned int pte_access, int level,
-+		    gfn_t gfn, kvm_pfn_t pfn, bool speculative,
-+		    bool can_unsync, bool host_writable)
-+{
-+	u64 spte = 0;
-+	struct kvm_mmu_page *sp;
-+	int ret = 0;
-+
-+	if (set_mmio_spte(vcpu, sptep, gfn, pfn, pte_access))
-+		return 0;
-+
-+	sp = page_header(__pa(sptep));
-+
-+	spte = make_spte(vcpu, pte_access, level, gfn, pfn, *sptep, speculative,
-+			 can_unsync, host_writable, sp_ad_disabled(sp), &ret);
-+	if (!spte)
-+		return 0;
-+
-+	if (spte & PT_WRITABLE_MASK)
-+		kvm_vcpu_mark_page_dirty(vcpu, gfn);
-+
- 	if (mmu_spte_update(sptep, spte))
- 		ret |= SET_SPTE_NEED_REMOTE_TLB_FLUSH;
- 	return ret;
--- 
-2.25.0.341.g760bfbb309-goog
-
+> Other than that, this looks very straight forward.
+>
+> Acked-by: David Rientjes <rientjes@google.com>
