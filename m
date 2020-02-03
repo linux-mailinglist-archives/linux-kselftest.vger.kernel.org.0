@@ -2,108 +2,166 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9995A150A51
-	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Feb 2020 16:54:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB96A151086
+	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Feb 2020 20:51:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728193AbgBCPy4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 3 Feb 2020 10:54:56 -0500
-Received: from mail-yw1-f68.google.com ([209.85.161.68]:46142 "EHLO
-        mail-yw1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728169AbgBCPy4 (ORCPT
+        id S1726930AbgBCTvN (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 3 Feb 2020 14:51:13 -0500
+Received: from hqnvemgate26.nvidia.com ([216.228.121.65]:9009 "EHLO
+        hqnvemgate26.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725372AbgBCTvN (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 3 Feb 2020 10:54:56 -0500
-Received: by mail-yw1-f68.google.com with SMTP id z141so13590090ywd.13
-        for <linux-kselftest@vger.kernel.org>; Mon, 03 Feb 2020 07:54:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=mSZpSSrX1gkn4q4BYYE/uc6pa2MZhYOZnx1rar1JeDU=;
-        b=cNVYE3f5rZHULQiCtnVROGU8SPrQJtN5P3gwxhWiT06FesW8t8EPhhvoRdCdyRSWGD
-         Pdm5AqvZeunWdsHx3WkHzH/yGWMo3CaukRjBhNGvY0s4oYi7yQXO9/jKDr/ejy+feAZj
-         Q18KO8xrDCFpIWVDH0NWdFT0VisoIEKDtEIa62V2Z/6PAIssAAuLx9fG84Qcht4+FMaW
-         sQ+3QJdZ38zsdrj3Y9kSNmHfdQpkDUXUDpDgTTRB7EyyPip6aAlC8VvFqbVOBoHIrneI
-         4T+9ya619FEA7beV6a+gPVNNdnlitPAzMqSABGEsAvG7f6BxBosnSxi8oZbGlMWmlS50
-         n6Fg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=mSZpSSrX1gkn4q4BYYE/uc6pa2MZhYOZnx1rar1JeDU=;
-        b=MzdLWpM/xGNFzdffYcFeNISSbfiuFStl7g5Rlsi7afhatN2XZDF60xcHsr/fEmk2a9
-         KzE+nKU1O62J+i51s1vcfNVXM1diCKxeyUH4jyc5iUbI5Uqx0qCReJHuhiNiyum4m8wV
-         27Zvc7bmPPmEKwz0hG1L9wjdbIw023EIdm/IzPGYC4DWNLJSHQxfOv6wqp8jQBRXeZj4
-         ceUqyYea+kTRtTW6wKWSoAqeBlohY5r1JuFNcoXlsibAf9omxRbgr/kgBuQPw7kB7gpe
-         LtySdmAgXBu0wAJkZFsejQHC89IGWzrJt2m+sF8YLqVv8VE7y1JFXoVKtzYPgWR49Eg6
-         Jxkw==
-X-Gm-Message-State: APjAAAV5lDLpyVjTbj+zjpAGB5RHlPQ+QR9MRPn4HEtG7n/fjeyk86rH
-        kRcZ+Wpj9NdQh6oj3PxrZBGQHKhPLVXNagaQDfAv7A==
-X-Google-Smtp-Source: APXvYqw+3unlJ461KJ9W2xUNJu4MNXa9KusyuC3+9ZFbWmbq/bJ4pMvRmLrikmQvqgpZZWmCsodpVf68GMu1iwZvj3A=
-X-Received: by 2002:a25:d112:: with SMTP id i18mr18684063ybg.364.1580745294734;
- Mon, 03 Feb 2020 07:54:54 -0800 (PST)
+        Mon, 3 Feb 2020 14:51:13 -0500
+Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate26.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5e3879a10000>; Mon, 03 Feb 2020 11:50:57 -0800
+Received: from hqmail.nvidia.com ([172.20.161.6])
+  by hqpgpgate101.nvidia.com (PGP Universal service);
+  Mon, 03 Feb 2020 11:51:12 -0800
+X-PGP-Universal: processed;
+        by hqpgpgate101.nvidia.com on Mon, 03 Feb 2020 11:51:12 -0800
+Received: from [10.110.48.28] (10.124.1.5) by HQMAIL107.nvidia.com
+ (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Mon, 3 Feb
+ 2020 19:51:11 +0000
+Subject: Re: [PATCH v3 01/12] mm: dump_page(): better diagnostics for compound
+ pages
+To:     "Kirill A. Shutemov" <kirill@shutemov.name>
+CC:     Andrew Morton <akpm@linux-foundation.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Christoph Hellwig <hch@infradead.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Dave Chinner <david@fromorbit.com>,
+        Ira Weiny <ira.weiny@intel.com>, Jan Kara <jack@suse.cz>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Jonathan Corbet <corbet@lwn.net>,
+        =?UTF-8?B?SsOpcsO0bWUgR2xpc3Nl?= <jglisse@redhat.com>,
+        Michal Hocko <mhocko@suse.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Matthew Wilcox <willy@infradead.org>,
+        <linux-doc@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>,
+        <linux-kselftest@vger.kernel.org>, <linux-rdma@vger.kernel.org>,
+        <linux-mm@kvack.org>, LKML <linux-kernel@vger.kernel.org>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
+References: <20200201034029.4063170-1-jhubbard@nvidia.com>
+ <20200201034029.4063170-2-jhubbard@nvidia.com>
+ <20200203131649.vptndo5emkzlaiew@box>
+X-Nvconfidentiality: public
+From:   John Hubbard <jhubbard@nvidia.com>
+Message-ID: <a7dac2ef-8bcd-8733-538b-aaf8fd78afd0@nvidia.com>
+Date:   Mon, 3 Feb 2020 11:51:11 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.2
 MIME-Version: 1.0
-References: <20200131122421.23286-1-sjpark@amazon.com> <20200131122421.23286-3-sjpark@amazon.com>
- <CADVnQyk9xevY0kA9Sm9S9MOBNvcuiY+7YGBtGuoue+r+eizyOA@mail.gmail.com>
- <dd146bac-4e8a-4119-2d2b-ce6bf2daf7ce@gmail.com> <CADVnQy=Z0YRPY_0bxBpsZvECgamigESNKx6_-meNW5-6_N4kww@mail.gmail.com>
- <7d36a817-5519-8496-17cf-00eda5ed4ec7@gmail.com> <5a8c1658de8f49b2994d19d371c13c79@AcuMS.aculab.com>
-In-Reply-To: <5a8c1658de8f49b2994d19d371c13c79@AcuMS.aculab.com>
-From:   Eric Dumazet <edumazet@google.com>
-Date:   Mon, 3 Feb 2020 07:54:42 -0800
-Message-ID: <CANn89iLNRKGhkqDbx+Q38sB=rV8q=u8-ZsbmpHzcnJSHXdu9Lg@mail.gmail.com>
-Subject: Re: [PATCH 2/3] tcp: Reduce SYN resend delay if a suspicous ACK is received
-To:     David Laight <David.Laight@aculab.com>
-Cc:     Eric Dumazet <eric.dumazet@gmail.com>,
-        Neal Cardwell <ncardwell@google.com>,
-        "sjpark@amazon.com" <sjpark@amazon.com>,
-        David Miller <davem@davemloft.net>,
-        "shuah@kernel.org" <shuah@kernel.org>,
-        Netdev <netdev@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "sj38.park@gmail.com" <sj38.park@gmail.com>,
-        "aams@amazon.com" <aams@amazon.com>,
-        SeongJae Park <sjpark@amazon.de>,
-        Yuchung Cheng <ycheng@google.com>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20200203131649.vptndo5emkzlaiew@box>
+X-Originating-IP: [10.124.1.5]
+X-ClientProxiedBy: HQMAIL111.nvidia.com (172.20.187.18) To
+ HQMAIL107.nvidia.com (172.20.187.13)
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1580759458; bh=Om5ywZkbDxRtggdzaOXy9Ggbi/ijdQm1SzF2EbMQjvE=;
+        h=X-PGP-Universal:Subject:To:CC:References:X-Nvconfidentiality:From:
+         Message-ID:Date:User-Agent:MIME-Version:In-Reply-To:
+         X-Originating-IP:X-ClientProxiedBy:Content-Type:Content-Language:
+         Content-Transfer-Encoding;
+        b=JZ+vJMdEOrhiJ6u+ixbDu+ykSCYgGe0zfRWhBa+YB16WJUMis+trY05H4GdDlg+X7
+         IVcaOD/Hm6olIcNqlHGSt/klZCFNQZJ0vkDvije+8iTli+gA/iWIUzL68oq7b0Azgc
+         kY8aza39yGcjUOMreZRuzLuUoqDterhy9Ls4Pp5KCFcPyCIecnv9U2Ul+x+SjlyFDX
+         /jSyXFu0Da4rCeoY5CoHR3oKYl1ekQw0eTAC95imMO8NKW+XHbYotdcPEwZZVHsg/d
+         jhfIGMZ5J+zgAgFDhfPoYt2D0JL6vSoanu1gNVdEVK1SqsZLfw6OKyenfQCvn/C27O
+         J1p8xF2UtjsxA==
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Feb 3, 2020 at 7:40 AM David Laight <David.Laight@aculab.com> wrote:
->
-> From: Eric Dumazet
-> > Sent: 31 January 2020 22:54
-> > On 1/31/20 2:11 PM, Neal Cardwell wrote:
-> >
-> > > I looked into fixing this, but my quick reading of the Linux
-> > > tcp_rcv_state_process() code is that it should behave correctly and
-> > > that a connection in FIN_WAIT_1 that receives a FIN/ACK should move to
-> > > TIME_WAIT.
-> > >
-> > > SeongJae, do you happen to have a tcpdump trace of the problematic
-> > > sequence where the "process A" ends up in FIN_WAIT_2 when it should be
-> > > in TIME_WAIT?
-> > >
-> > > If I have time I will try to construct a packetdrill case to verify
-> > > the behavior in this case.
-> >
-> > Unfortunately you wont be able to reproduce the issue with packetdrill,
-> > since it involved packets being processed at the same time (race window)
->
-> You might be able to force the timing race by adding a sleep
-> in one of the code paths.
->
-> No good for a regression test, but ok for code testing.
+On 2/3/20 5:16 AM, Kirill A. Shutemov wrote:
+> On Fri, Jan 31, 2020 at 07:40:18PM -0800, John Hubbard wrote:
+>> A compound page collects the refcount in the head page, while leaving
+>> the refcount of each tail page at zero. Therefore, when debugging a
+>> problem that involves compound pages, it's best to have diagnostics that
+>> reflect that situation. However, dump_page() is oblivious to these
+>> points.
+>>
+>> Change dump_page() as follows:
+>>
+>> 1) For tail pages, print relevant head page information: refcount, in
+>>    particular. But only do this if the page is not corrupted so badly
+>>    that the pointer to the head page is all wrong.
+>>
+>> 2) Do a separate check to catch any (rare) cases of the tail page's
+>>    refcount being non-zero, and issue a separate, clear pr_warn() if
+>>    that ever happens.
+>>
+>> Suggested-by: Matthew Wilcox <willy@infradead.org>
+>> Suggested-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+>> Signed-off-by: John Hubbard <jhubbard@nvidia.com>
+> 
+> Acked-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
 
-Please take a look at packetdrill, there is no possibility for it to
-send more than one packet at a time.
+Thanks for looking through all of these!
 
-Even if we modify packetdrill adding the possibility of feeding
-packets to its tun device from multiple threads,
-the race is tiny and you would have to run the packetdrill thousands
-of times to eventually trigger the race once.
+> 
+> Few nit-picks below.
+> 
+>> ---
+>>  mm/debug.c | 34 ++++++++++++++++++++++++++++------
+>>  1 file changed, 28 insertions(+), 6 deletions(-)
+>>
+>> diff --git a/mm/debug.c b/mm/debug.c
+>> index ecccd9f17801..beb1c59d784b 100644
+>> --- a/mm/debug.c
+>> +++ b/mm/debug.c
+>> @@ -42,6 +42,32 @@ const struct trace_print_flags vmaflag_names[] = {
+>>  	{0, NULL}
+>>  };
+>>  
+>> +static void __dump_tail_page(struct page *page, int mapcount)
+>> +{
+>> +	struct page *head = compound_head(page);
+>> +
+>> +	if ((page < head) || (page >= head + MAX_ORDER_NR_PAGES)) {
+> 
+> I'm not sure if we want to use compound_nr() here instead of
+> MAX_ORDER_NR_PAGES. Do you have any reasonaing about it?
 
-While the test SeongJae provided is using two threads and regular TCP
-stack over loopback interface,
-it triggers the race more reliably.
+
+Yes: compound_nr(page) reads from the struct page, whereas MAX_ORDER_NR_PAGES
+is an independent, immutable limit. When checking a struct page for corruption,
+it's ideal to avoid relying on data within the struct page, as compound_nr()
+would have to do.
+
+
+> 
+>> +		/*
+>> +		 * Page is hopelessly corrupted, so limit any reporting to
+>> +		 * information about the page itself. Do not attempt to look at
+>> +		 * the head page.
+>> +		 */
+>> +		pr_warn("page:%px refcount:%d mapcount:%d mapping:%px "
+>> +			"index:%#lx (corrupted tail page case)\n",
+>> +			page, page_ref_count(page), mapcount, page->mapping,
+>> +			page_to_pgoff(page));
+>> +	} else {
+>> +		pr_warn("page:%px compound refcount:%d mapcount:%d mapping:%px "
+>> +			"index:%#lx compound_mapcount:%d\n",
+>> +			page, page_ref_count(head), mapcount, head->mapping,
+>> +			page_to_pgoff(head), compound_mapcount(page));
+>> +	}
+>> +
+>> +	if (page_ref_count(page) != 0)
+>> +		pr_warn("page:%px PROBLEM: non-zero refcount (==%d) on this "
+>> +			"tail page\n", page, page_ref_count(page));
+> 
+> Wrap into {}, please.
+
+
+Fixed, thanks.
+
+
+thanks,
+-- 
+John Hubbard
+NVIDIA
