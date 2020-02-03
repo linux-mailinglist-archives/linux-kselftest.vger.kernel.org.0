@@ -2,153 +2,87 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B7A21508A0
-	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Feb 2020 15:44:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A67131509EC
+	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Feb 2020 16:40:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728085AbgBCOo4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 3 Feb 2020 09:44:56 -0500
-Received: from mx2.suse.de ([195.135.220.15]:54508 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727454AbgBCOoz (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 3 Feb 2020 09:44:55 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx2.suse.de (Postfix) with ESMTP id D41F3ACA0;
-        Mon,  3 Feb 2020 14:44:48 +0000 (UTC)
-Received: by quack2.suse.cz (Postfix, from userid 1000)
-        id 52A011E0D5D; Mon,  3 Feb 2020 15:44:48 +0100 (CET)
-Date:   Mon, 3 Feb 2020 15:44:48 +0100
-From:   Jan Kara <jack@suse.cz>
-To:     John Hubbard <jhubbard@nvidia.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Christoph Hellwig <hch@infradead.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Dave Chinner <david@fromorbit.com>,
-        Ira Weiny <ira.weiny@intel.com>, Jan Kara <jack@suse.cz>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Jonathan Corbet <corbet@lwn.net>,
-        =?iso-8859-1?B?Suly9G1l?= Glisse <jglisse@redhat.com>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Michal Hocko <mhocko@suse.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Matthew Wilcox <willy@infradead.org>,
-        linux-doc@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-rdma@vger.kernel.org,
-        linux-mm@kvack.org, LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v3 09/12] mm: dump_page(): better diagnostics for huge
- pinned pages
-Message-ID: <20200203144448.GG18591@quack2.suse.cz>
-References: <20200201034029.4063170-1-jhubbard@nvidia.com>
- <20200201034029.4063170-10-jhubbard@nvidia.com>
+        id S1727606AbgBCPkJ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 3 Feb 2020 10:40:09 -0500
+Received: from eu-smtp-delivery-151.mimecast.com ([146.101.78.151]:54036 "EHLO
+        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728083AbgBCPkJ (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 3 Feb 2020 10:40:09 -0500
+Received: from AcuMS.aculab.com (156.67.243.126 [156.67.243.126]) (Using
+ TLS) by relay.mimecast.com with ESMTP id
+ uk-mta-183-INfOXLASNUmZXlA7243NPA-1; Mon, 03 Feb 2020 15:40:05 +0000
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:43c:695e:880f:8750) with Microsoft SMTP
+ Server (TLS) id 15.0.1347.2; Mon, 3 Feb 2020 15:40:04 +0000
+Received: from AcuMS.Aculab.com ([fe80::43c:695e:880f:8750]) by
+ AcuMS.aculab.com ([fe80::43c:695e:880f:8750%12]) with mapi id 15.00.1347.000;
+ Mon, 3 Feb 2020 15:40:04 +0000
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Eric Dumazet' <eric.dumazet@gmail.com>,
+        Neal Cardwell <ncardwell@google.com>
+CC:     "sjpark@amazon.com" <sjpark@amazon.com>,
+        Eric Dumazet <edumazet@google.com>,
+        David Miller <davem@davemloft.net>,
+        "shuah@kernel.org" <shuah@kernel.org>,
+        Netdev <netdev@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "sj38.park@gmail.com" <sj38.park@gmail.com>,
+        "aams@amazon.com" <aams@amazon.com>,
+        SeongJae Park <sjpark@amazon.de>,
+        Yuchung Cheng <ycheng@google.com>
+Subject: RE: [PATCH 2/3] tcp: Reduce SYN resend delay if a suspicous ACK is
+ received
+Thread-Topic: [PATCH 2/3] tcp: Reduce SYN resend delay if a suspicous ACK is
+ received
+Thread-Index: AQHV2IlPJWOIosB7x0WML/igObqFf6gJnv4A
+Date:   Mon, 3 Feb 2020 15:40:04 +0000
+Message-ID: <5a8c1658de8f49b2994d19d371c13c79@AcuMS.aculab.com>
+References: <20200131122421.23286-1-sjpark@amazon.com>
+ <20200131122421.23286-3-sjpark@amazon.com>
+ <CADVnQyk9xevY0kA9Sm9S9MOBNvcuiY+7YGBtGuoue+r+eizyOA@mail.gmail.com>
+ <dd146bac-4e8a-4119-2d2b-ce6bf2daf7ce@gmail.com>
+ <CADVnQy=Z0YRPY_0bxBpsZvECgamigESNKx6_-meNW5-6_N4kww@mail.gmail.com>
+ <7d36a817-5519-8496-17cf-00eda5ed4ec7@gmail.com>
+In-Reply-To: <7d36a817-5519-8496-17cf-00eda5ed4ec7@gmail.com>
+Accept-Language: en-GB, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200201034029.4063170-10-jhubbard@nvidia.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+X-MC-Unique: INfOXLASNUmZXlA7243NPA-1
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri 31-01-20 19:40:26, John Hubbard wrote:
-> As part of pin_user_pages() and related API calls, pages are
-> "dma-pinned". For the case of compound pages of order > 1, the per-page
-> accounting of dma pins is accomplished via the 3rd struct page in the
-> compound page. In order to support debugging of any pin_user_pages()-
-> related problems, enhance dump_page() so as to report the pin count
-> in that case.
-> 
-> Documentation/core-api/pin_user_pages.rst is also updated accordingly.
-> 
-> Signed-off-by: John Hubbard <jhubbard@nvidia.com>
+RnJvbTogRXJpYyBEdW1hemV0DQo+IFNlbnQ6IDMxIEphbnVhcnkgMjAyMCAyMjo1NA0KPiBPbiAx
+LzMxLzIwIDI6MTEgUE0sIE5lYWwgQ2FyZHdlbGwgd3JvdGU6DQo+IA0KPiA+IEkgbG9va2VkIGlu
+dG8gZml4aW5nIHRoaXMsIGJ1dCBteSBxdWljayByZWFkaW5nIG9mIHRoZSBMaW51eA0KPiA+IHRj
+cF9yY3Zfc3RhdGVfcHJvY2VzcygpIGNvZGUgaXMgdGhhdCBpdCBzaG91bGQgYmVoYXZlIGNvcnJl
+Y3RseSBhbmQNCj4gPiB0aGF0IGEgY29ubmVjdGlvbiBpbiBGSU5fV0FJVF8xIHRoYXQgcmVjZWl2
+ZXMgYSBGSU4vQUNLIHNob3VsZCBtb3ZlIHRvDQo+ID4gVElNRV9XQUlULg0KPiA+DQo+ID4gU2Vv
+bmdKYWUsIGRvIHlvdSBoYXBwZW4gdG8gaGF2ZSBhIHRjcGR1bXAgdHJhY2Ugb2YgdGhlIHByb2Js
+ZW1hdGljDQo+ID4gc2VxdWVuY2Ugd2hlcmUgdGhlICJwcm9jZXNzIEEiIGVuZHMgdXAgaW4gRklO
+X1dBSVRfMiB3aGVuIGl0IHNob3VsZCBiZQ0KPiA+IGluIFRJTUVfV0FJVD8NCj4gPg0KPiA+IElm
+IEkgaGF2ZSB0aW1lIEkgd2lsbCB0cnkgdG8gY29uc3RydWN0IGEgcGFja2V0ZHJpbGwgY2FzZSB0
+byB2ZXJpZnkNCj4gPiB0aGUgYmVoYXZpb3IgaW4gdGhpcyBjYXNlLg0KPiANCj4gVW5mb3J0dW5h
+dGVseSB5b3Ugd29udCBiZSBhYmxlIHRvIHJlcHJvZHVjZSB0aGUgaXNzdWUgd2l0aCBwYWNrZXRk
+cmlsbCwNCj4gc2luY2UgaXQgaW52b2x2ZWQgcGFja2V0cyBiZWluZyBwcm9jZXNzZWQgYXQgdGhl
+IHNhbWUgdGltZSAocmFjZSB3aW5kb3cpDQoNCllvdSBtaWdodCBiZSBhYmxlIHRvIGZvcmNlIHRo
+ZSB0aW1pbmcgcmFjZSBieSBhZGRpbmcgYSBzbGVlcA0KaW4gb25lIG9mIHRoZSBjb2RlIHBhdGhz
+Lg0KDQpObyBnb29kIGZvciBhIHJlZ3Jlc3Npb24gdGVzdCwgYnV0IG9rIGZvciBjb2RlIHRlc3Rp
+bmcuDQoNCglEYXZpZA0KDQotDQpSZWdpc3RlcmVkIEFkZHJlc3MgTGFrZXNpZGUsIEJyYW1sZXkg
+Um9hZCwgTW91bnQgRmFybSwgTWlsdG9uIEtleW5lcywgTUsxIDFQVCwgVUsNClJlZ2lzdHJhdGlv
+biBObzogMTM5NzM4NiAoV2FsZXMpDQo=
 
-Looks good to me. You can add:
-
-Reviewed-by: Jan Kara <jack@suse.cz>
-
-									Honza
-
-> ---
->  Documentation/core-api/pin_user_pages.rst |  7 +++++
->  mm/debug.c                                | 34 +++++++++++++++++------
->  2 files changed, 33 insertions(+), 8 deletions(-)
-> 
-> diff --git a/Documentation/core-api/pin_user_pages.rst b/Documentation/core-api/pin_user_pages.rst
-> index 3f72b1ea1104..dd21ea140ef4 100644
-> --- a/Documentation/core-api/pin_user_pages.rst
-> +++ b/Documentation/core-api/pin_user_pages.rst
-> @@ -215,6 +215,13 @@ Those are both going to show zero, unless CONFIG_DEBUG_VM is set. This is
->  because there is a noticeable performance drop in unpin_user_page(), when they
->  are activated.
->  
-> +Other diagnostics
-> +=================
-> +
-> +dump_page() has been enhanced slightly, to handle these new counting fields, and
-> +to better report on compound pages in general. Specifically, for compound pages
-> +with order > 1, the exact (hpage_pinned_refcount) pincount is reported.
-> +
->  References
->  ==========
->  
-> diff --git a/mm/debug.c b/mm/debug.c
-> index beb1c59d784b..db81b11345be 100644
-> --- a/mm/debug.c
-> +++ b/mm/debug.c
-> @@ -57,10 +57,20 @@ static void __dump_tail_page(struct page *page, int mapcount)
->  			page, page_ref_count(page), mapcount, page->mapping,
->  			page_to_pgoff(page));
->  	} else {
-> -		pr_warn("page:%px compound refcount:%d mapcount:%d mapping:%px "
-> -			"index:%#lx compound_mapcount:%d\n",
-> -			page, page_ref_count(head), mapcount, head->mapping,
-> -			page_to_pgoff(head), compound_mapcount(page));
-> +		if (hpage_pincount_available(page))
-> +			pr_warn("page:%px compound refcount:%d mapcount:%d "
-> +				"mapping:%px index:%#lx compound_mapcount:%d "
-> +				"compound_pincount:%d\n",
-> +				page, page_ref_count(head), mapcount,
-> +				head->mapping, page_to_pgoff(head),
-> +				compound_mapcount(page),
-> +				compound_pincount(page));
-> +		else
-> +			pr_warn("page:%px compound refcount:%d mapcount:%d "
-> +				"mapping:%px index:%#lx compound_mapcount:%d\n",
-> +				page, page_ref_count(head), mapcount,
-> +				head->mapping, page_to_pgoff(head),
-> +				compound_mapcount(page));
->  	}
->  
->  	if (page_ref_count(page) != 0)
-> @@ -103,10 +113,18 @@ void __dump_page(struct page *page, const char *reason)
->  
->  	if (PageTail(page))
->  		__dump_tail_page(page, mapcount);
-> -	else
-> -		pr_warn("page:%px refcount:%d mapcount:%d mapping:%px index:%#lx\n",
-> -			page, page_ref_count(page), mapcount,
-> -			page->mapping, page_to_pgoff(page));
-> +	else {
-> +		if (hpage_pincount_available(page))
-> +			pr_warn("page:%px refcount:%d mapcount:%d mapping:%px "
-> +				"index:%#lx compound pincount: %d\n",
-> +				page, page_ref_count(page), mapcount,
-> +				page->mapping, page_to_pgoff(page),
-> +				compound_pincount(page));
-> +		else
-> +			pr_warn("page:%px refcount:%d mapcount:%d mapping:%px "
-> +				"index:%#lx\n", page, page_ref_count(page),
-> +				mapcount, page->mapping, page_to_pgoff(page));
-> +	}
->  	if (PageKsm(page))
->  		type = "ksm ";
->  	else if (PageAnon(page))
-> -- 
-> 2.25.0
-> 
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
