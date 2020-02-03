@@ -2,117 +2,171 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 00817151237
-	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Feb 2020 23:07:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E73A51512B1
+	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Feb 2020 00:09:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727189AbgBCWHg (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 3 Feb 2020 17:07:36 -0500
-Received: from hqnvemgate25.nvidia.com ([216.228.121.64]:16172 "EHLO
-        hqnvemgate25.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726278AbgBCWHg (ORCPT
+        id S1726369AbgBCXJQ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 3 Feb 2020 18:09:16 -0500
+Received: from mail-pl1-f201.google.com ([209.85.214.201]:49305 "EHLO
+        mail-pl1-f201.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726331AbgBCXJQ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 3 Feb 2020 17:07:36 -0500
-Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate25.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5e38998e0000>; Mon, 03 Feb 2020 14:07:11 -0800
-Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate101.nvidia.com (PGP Universal service);
-  Mon, 03 Feb 2020 14:07:34 -0800
-X-PGP-Universal: processed;
-        by hqpgpgate101.nvidia.com on Mon, 03 Feb 2020 14:07:34 -0800
-Received: from [10.110.48.28] (10.124.1.5) by HQMAIL107.nvidia.com
- (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Mon, 3 Feb
- 2020 22:07:33 +0000
-Subject: Re: [PATCH v3 11/12] mm/gup_benchmark: support pin_user_pages() and
- related calls
-To:     "Kirill A. Shutemov" <kirill@shutemov.name>
-CC:     Andrew Morton <akpm@linux-foundation.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Christoph Hellwig <hch@infradead.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Dave Chinner <david@fromorbit.com>,
-        Ira Weiny <ira.weiny@intel.com>, Jan Kara <jack@suse.cz>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Jonathan Corbet <corbet@lwn.net>,
-        =?UTF-8?B?SsOpcsO0bWUgR2xpc3Nl?= <jglisse@redhat.com>,
-        Michal Hocko <mhocko@suse.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Matthew Wilcox <willy@infradead.org>,
-        <linux-doc@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>,
-        <linux-kselftest@vger.kernel.org>, <linux-rdma@vger.kernel.org>,
-        <linux-mm@kvack.org>, LKML <linux-kernel@vger.kernel.org>
-References: <20200201034029.4063170-1-jhubbard@nvidia.com>
- <20200201034029.4063170-12-jhubbard@nvidia.com>
- <20200203135845.ymfbghs7rf67awex@box>
- <b554db44-7315-b99f-1151-ba2a1b2445ce@nvidia.com>
- <20200203215553.q7zx6diprbby6ns5@box.shutemov.name>
-From:   John Hubbard <jhubbard@nvidia.com>
-X-Nvconfidentiality: public
-Message-ID: <1d89f126-91b8-bab9-0d6c-0a789581dbff@nvidia.com>
-Date:   Mon, 3 Feb 2020 14:07:33 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.2
-MIME-Version: 1.0
-In-Reply-To: <20200203215553.q7zx6diprbby6ns5@box.shutemov.name>
-X-Originating-IP: [10.124.1.5]
-X-ClientProxiedBy: HQMAIL105.nvidia.com (172.20.187.12) To
- HQMAIL107.nvidia.com (172.20.187.13)
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1580767631; bh=3g2jpP7PATIRShMbNa46mzIFlzlSWwEuhifQjWIA0qA=;
-        h=X-PGP-Universal:Subject:To:CC:References:From:X-Nvconfidentiality:
-         Message-ID:Date:User-Agent:MIME-Version:In-Reply-To:
-         X-Originating-IP:X-ClientProxiedBy:Content-Type:Content-Language:
-         Content-Transfer-Encoding;
-        b=U8QvK34EGwtcRxqHonJOikQVH8V81FSRLWwtw4MkUI7C9VjLfhrlxTzvE+w9oTS/W
-         F7AjIKlrxbA1U7WdKDvnEvXvcA9Owttra/Fa+MULA7zHQI1QiAha21jaJEOyySC98d
-         GCxJRpBcK5guEW+dpfpJriF80N83GetmAwP0rQEgK00+PAhzBSRnHMcTVhEjeQl0xH
-         c6wWwTN28IokxkfYyzrX93PaQUwEcVKotdnO8uAXY3mp2UsqKU6D5l5lXbZ1aojfEI
-         GP9AynFsKx9PKu+mi2bDIv1QFLzjxT8sgD7GSdTisaCXA3NaDhNIQoR+cmCerg3D/q
-         y2gHb76zk0kGQ==
+        Mon, 3 Feb 2020 18:09:16 -0500
+Received: by mail-pl1-f201.google.com with SMTP id w12so6998068ply.16
+        for <linux-kselftest@vger.kernel.org>; Mon, 03 Feb 2020 15:09:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=XnYm5qWPfb13s0wRqn1mpnrTwR4nnQJCgFQ13dO6/nI=;
+        b=f+ltTeOsJAty6dDVNXR6x/fkgqbS34nwR1S7fb/S8MIWpfYYBm2fIZFz3goe8MISee
+         vZNyGnXM0oagrrqp6Fg4kXeLKM5vejK8Dc++ZDSPRw3zcAuP/EWeQo162pVO6i3YCBPB
+         IJVaGCVG899JjEbedJ4bTkVCvbsaALE7QpXtogmZOM9bqAKXcq9Wfb4RxnmSX2axlB3J
+         tS5jEbcaL83lUi3DDOfWKbBZks/EzKOh7y5k/ZSW/MGgfvYnGquJBrtRfqN8XTs960K+
+         3OLgUJSt7opqlAM9aSC0EC/2GQOtIEfpqcGXIo5fKkbt6L5Nowyj/GFJbQltCI7whG94
+         A07A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=XnYm5qWPfb13s0wRqn1mpnrTwR4nnQJCgFQ13dO6/nI=;
+        b=TGrzdwtelsVgt5QYnzryyt152gajlOFIYNDyV7Qk6oqsqYYFTbFnNYIWc+0ozyW5qs
+         zzTJ+6dbnxfNWcA4diJ3pCiLHjSwUbpe7RciJdaTo4nIpB5IJAEGHkzZQmn6UrAfdn44
+         Va9rHpD2jwI0ksEKq4TZenCXXu0kk4/vGuNgjCEpoUmsGtYev6BQSsZYPJBzuls53ovE
+         pvnmvuQ/0tcUqTmZzMTKZRfwSJyfeDYlZHPH5mNZYOnnkfU5n1tzoxrZ2ivwqYP4MsAf
+         laUEzPRqF6tCBbk25qLAxkfEtsXtkTaQUkvtS6BUDpZ2q9nlkNkDcaSUlKuU1KI4/G9C
+         ZMew==
+X-Gm-Message-State: APjAAAW4CJQ9a7lxZW32//Mvxz5vOgEvafr7tqfdg1WcsSRp0RjHOlCE
+        0JT+z0ezeaL9BorhsrOssDZaNBkAJGiy
+X-Google-Smtp-Source: APXvYqwIpUOKIGZE6NcawbIowukoMFpqRz5bIJROxtcwVDgJozQwJ0dNygWwt5RTsmOYDdDiweDP4j8XLV/K
+X-Received: by 2002:a63:3c2:: with SMTP id 185mr11545877pgd.72.1580771355857;
+ Mon, 03 Feb 2020 15:09:15 -0800 (PST)
+Date:   Mon,  3 Feb 2020 15:09:09 -0800
+Message-Id: <20200203230911.39755-1-bgardon@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.25.0.341.g760bfbb309-goog
+Subject: [PATCH 1/3] kvm: mmu: Replace unsigned with unsigned int for PTE access
+From:   Ben Gardon <bgardon@google.com>
+To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, Peter Xu <peterx@redhat.com>,
+        Sean Christopherson <sean.j.christopherson@intel.com>,
+        Peter Shier <pshier@google.com>,
+        Oliver Upton <oupton@google.com>,
+        Ben Gardon <bgardon@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 2/3/20 1:55 PM, Kirill A. Shutemov wrote:
-> On Mon, Feb 03, 2020 at 01:17:40PM -0800, John Hubbard wrote:
->> On 2/3/20 5:58 AM, Kirill A. Shutemov wrote:
->> ...
->>>> @@ -19,6 +21,48 @@ struct gup_benchmark {
->>>>  	__u64 expansion[10];	/* For future use */
->>>>  };
->>>>  
->>>> +static void put_back_pages(unsigned int cmd, struct page **pages,
->>>> +			   unsigned long nr_pages)
->>>> +{
->>>> +	int i;
->>>> +
->>>> +	switch (cmd) {
->>>> +	case GUP_FAST_BENCHMARK:
->>>> +	case GUP_LONGTERM_BENCHMARK:
->>>> +	case GUP_BENCHMARK:
->>>> +		for (i = 0; i < nr_pages; i++)
->>>
->>> 'i' is 'int' and 'nr_pages' is 'unsigned long'.
->>> There's space for trouble :P
->>>
->>
->> Yes, I've changed it to "unsigned int", thanks.
-> 
-> I'm confused. If nr_pages is more than UINT_MAX, this is endless loop.
-> Hm?
-> 
+There are several functions which pass an access permission mask for
+SPTEs as an unsigned. This works, but checkpatch complains about it.
+Switch the occurrences of unsigned to unsigned int to satisfy checkpatch.
 
-Oh, I've been afflicted with 64-bit tunnel vision. OK, make that 
-"unsigned long" and "%ul". yikes. :)
+No functional change expected.
 
+Tested by running kvm-unit-tests on an Intel Haswell machine. This
+commit introduced no new failures.
 
+This commit can be viewed in Gerrit at:
+	https://linux-review.googlesource.com/c/virt/kvm/kvm/+/2358
 
-thanks,
+Signed-off-by: Ben Gardon <bgardon@google.com>
+Reviewed-by: Oliver Upton <oupton@google.com>
+---
+ arch/x86/kvm/mmu/mmu.c | 24 +++++++++++++-----------
+ 1 file changed, 13 insertions(+), 11 deletions(-)
+
+diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+index 84eeb61d06aa3..a9c593dec49bf 100644
+--- a/arch/x86/kvm/mmu/mmu.c
++++ b/arch/x86/kvm/mmu/mmu.c
+@@ -452,7 +452,7 @@ static u64 get_mmio_spte_generation(u64 spte)
+ }
+ 
+ static void mark_mmio_spte(struct kvm_vcpu *vcpu, u64 *sptep, u64 gfn,
+-			   unsigned access)
++			   unsigned int access)
+ {
+ 	u64 gen = kvm_vcpu_memslots(vcpu)->generation & MMIO_SPTE_GEN_MASK;
+ 	u64 mask = generation_mmio_spte_mask(gen);
+@@ -484,7 +484,7 @@ static unsigned get_mmio_spte_access(u64 spte)
+ }
+ 
+ static bool set_mmio_spte(struct kvm_vcpu *vcpu, u64 *sptep, gfn_t gfn,
+-			  kvm_pfn_t pfn, unsigned access)
++			  kvm_pfn_t pfn, unsigned int access)
+ {
+ 	if (unlikely(is_noslot_pfn(pfn))) {
+ 		mark_mmio_spte(vcpu, sptep, gfn, access);
+@@ -2475,7 +2475,7 @@ static struct kvm_mmu_page *kvm_mmu_get_page(struct kvm_vcpu *vcpu,
+ 					     gva_t gaddr,
+ 					     unsigned level,
+ 					     int direct,
+-					     unsigned access)
++					     unsigned int access)
+ {
+ 	union kvm_mmu_page_role role;
+ 	unsigned quadrant;
+@@ -2990,7 +2990,7 @@ static bool kvm_is_mmio_pfn(kvm_pfn_t pfn)
+ #define SET_SPTE_NEED_REMOTE_TLB_FLUSH	BIT(1)
+ 
+ static int set_spte(struct kvm_vcpu *vcpu, u64 *sptep,
+-		    unsigned pte_access, int level,
++		    unsigned int pte_access, int level,
+ 		    gfn_t gfn, kvm_pfn_t pfn, bool speculative,
+ 		    bool can_unsync, bool host_writable)
+ {
+@@ -3081,9 +3081,10 @@ static int set_spte(struct kvm_vcpu *vcpu, u64 *sptep,
+ 	return ret;
+ }
+ 
+-static int mmu_set_spte(struct kvm_vcpu *vcpu, u64 *sptep, unsigned pte_access,
+-			int write_fault, int level, gfn_t gfn, kvm_pfn_t pfn,
+-		       	bool speculative, bool host_writable)
++static int mmu_set_spte(struct kvm_vcpu *vcpu, u64 *sptep,
++			unsigned int pte_access, int write_fault, int level,
++			gfn_t gfn, kvm_pfn_t pfn, bool speculative,
++			bool host_writable)
+ {
+ 	int was_rmapped = 0;
+ 	int rmap_count;
+@@ -3165,7 +3166,7 @@ static int direct_pte_prefetch_many(struct kvm_vcpu *vcpu,
+ {
+ 	struct page *pages[PTE_PREFETCH_NUM];
+ 	struct kvm_memory_slot *slot;
+-	unsigned access = sp->role.access;
++	unsigned int access = sp->role.access;
+ 	int i, ret;
+ 	gfn_t gfn;
+ 
+@@ -3400,7 +3401,8 @@ static int kvm_handle_bad_page(struct kvm_vcpu *vcpu, gfn_t gfn, kvm_pfn_t pfn)
+ }
+ 
+ static bool handle_abnormal_pfn(struct kvm_vcpu *vcpu, gva_t gva, gfn_t gfn,
+-				kvm_pfn_t pfn, unsigned access, int *ret_val)
++				kvm_pfn_t pfn, unsigned int access,
++				int *ret_val)
+ {
+ 	/* The pfn is invalid, report the error! */
+ 	if (unlikely(is_error_pfn(pfn))) {
+@@ -4005,7 +4007,7 @@ static int handle_mmio_page_fault(struct kvm_vcpu *vcpu, u64 addr, bool direct)
+ 
+ 	if (is_mmio_spte(spte)) {
+ 		gfn_t gfn = get_mmio_spte_gfn(spte);
+-		unsigned access = get_mmio_spte_access(spte);
++		unsigned int access = get_mmio_spte_access(spte);
+ 
+ 		if (!check_mmio_spte(vcpu, spte))
+ 			return RET_PF_INVALID;
+@@ -4349,7 +4351,7 @@ static void inject_page_fault(struct kvm_vcpu *vcpu,
+ }
+ 
+ static bool sync_mmio_spte(struct kvm_vcpu *vcpu, u64 *sptep, gfn_t gfn,
+-			   unsigned access, int *nr_present)
++			   unsigned int access, int *nr_present)
+ {
+ 	if (unlikely(is_mmio_spte(*sptep))) {
+ 		if (gfn != get_mmio_spte_gfn(*sptep)) {
 -- 
-John Hubbard
-NVIDIA
+2.25.0.341.g760bfbb309-goog
+
