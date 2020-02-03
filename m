@@ -2,53 +2,23 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A58E1507D5
-	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Feb 2020 14:58:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C9329150835
+	for <lists+linux-kselftest@lfdr.de>; Mon,  3 Feb 2020 15:18:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728305AbgBCN6h (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 3 Feb 2020 08:58:37 -0500
-Received: from mail-lf1-f68.google.com ([209.85.167.68]:43877 "EHLO
-        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727494AbgBCN6g (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 3 Feb 2020 08:58:36 -0500
-Received: by mail-lf1-f68.google.com with SMTP id 9so9745034lfq.10
-        for <linux-kselftest@vger.kernel.org>; Mon, 03 Feb 2020 05:58:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=shutemov-name.20150623.gappssmtp.com; s=20150623;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Q7EhG/mHxujJqjIax+tX/L6XnMUCZchWEgmsqcRY8O4=;
-        b=qKCSEPA3x8kojnT0VGPWx1REhr2EhqE6i1LsFUAGRHw89eQpMMqBQ9S9OSvrvMREnc
-         Kqf2KRHdvRc9eNFj0Fbr8amLlQZMLRlz6zKBMg1WL7/HIA+tXPcqjLVjTQ2R7KakPHd8
-         jwLdRMJfSReB3MhMaxEKhmAyNYGue1eXm2uMQreQl/L3J3E4gO+Q1+0WudsQbAd9bkPn
-         tpo6FUUIsaQOfmxjgM5AMcQ+fxVRdOxwlQKq6LqAAqxfW9Lb9cGiXiPNFT0E2TvHmN+Z
-         vo1cDgpRnH/G5otSfVV8D6MokorSsYfD5tcRiWSrkfw8urfjsB3lWjxMQIv0hsoauceU
-         fDLQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Q7EhG/mHxujJqjIax+tX/L6XnMUCZchWEgmsqcRY8O4=;
-        b=Oor0KYRPeVyBsDxtbajNW0ms+MRM2fe+SM+xhHTeF4CZ/SZdhcABnH5iHA59P5vkvz
-         VcTwQ2jGLTC1SJBR+zvFRY7/5hrVgXMyRsDMSX7B41Ep2JxzoR/mXWtl0Eef9K2cTWP4
-         0NofpuG3ZGC7IgVsVqANYPBZrb309y1YWJtGpzK751/JdSp3R0M9PpS1XbRn1FMCxrxC
-         pWTbvR6Ba7wv2v79i66PFddWYXCqYHoGuNKSUVDIRyOnyFJZ7ZiAbUMC0Nx2aUrBV2w0
-         1z7PrIO23Ff9IS7wvZJCTtZGb3pmkF94ENwMIfONhajEhMxJ0cOYH5fIlr9BjLC2lSGf
-         w7/Q==
-X-Gm-Message-State: APjAAAUpZd6qNIk+gVI1DiiodIPMK9AvGDuNQOFwbenmk5V2dY53cze5
-        XUmPG1IE7Pvre8J0O5F+QHSdHA==
-X-Google-Smtp-Source: APXvYqwy/AMeACpJx+sRC2T4Q93xcTj2QVF/axvUST/Peo/4AOgO4Rx5SZuMTvzfMfCoqFdSX1vYAA==
-X-Received: by 2002:ac2:4246:: with SMTP id m6mr12228504lfl.165.1580738313898;
-        Mon, 03 Feb 2020 05:58:33 -0800 (PST)
-Received: from box.localdomain ([86.57.175.117])
-        by smtp.gmail.com with ESMTPSA id n2sm9868111ljj.1.2020.02.03.05.58.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Feb 2020 05:58:33 -0800 (PST)
-Received: by box.localdomain (Postfix, from userid 1000)
-        id C5259100DC8; Mon,  3 Feb 2020 16:58:45 +0300 (+03)
-Date:   Mon, 3 Feb 2020 16:58:45 +0300
-From:   "Kirill A. Shutemov" <kirill@shutemov.name>
+        id S1727930AbgBCOSR (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 3 Feb 2020 09:18:17 -0500
+Received: from mx2.suse.de ([195.135.220.15]:39328 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727542AbgBCOSQ (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 3 Feb 2020 09:18:16 -0500
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx2.suse.de (Postfix) with ESMTP id B60FAB26A;
+        Mon,  3 Feb 2020 14:18:12 +0000 (UTC)
+Received: by quack2.suse.cz (Postfix, from userid 1000)
+        id 802911E0D69; Mon,  3 Feb 2020 15:18:11 +0100 (CET)
+Date:   Mon, 3 Feb 2020 15:18:11 +0100
+From:   Jan Kara <jack@suse.cz>
 To:     John Hubbard <jhubbard@nvidia.com>
 Cc:     Andrew Morton <akpm@linux-foundation.org>,
         Al Viro <viro@zeniv.linux.org.uk>,
@@ -58,7 +28,8 @@ Cc:     Andrew Morton <akpm@linux-foundation.org>,
         Ira Weiny <ira.weiny@intel.com>, Jan Kara <jack@suse.cz>,
         Jason Gunthorpe <jgg@ziepe.ca>,
         Jonathan Corbet <corbet@lwn.net>,
-        =?utf-8?B?SsOpcsO0bWU=?= Glisse <jglisse@redhat.com>,
+        =?iso-8859-1?B?Suly9G1l?= Glisse <jglisse@redhat.com>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
         Michal Hocko <mhocko@suse.com>,
         Mike Kravetz <mike.kravetz@oracle.com>,
         Shuah Khan <shuah@kernel.org>,
@@ -67,126 +38,94 @@ Cc:     Andrew Morton <akpm@linux-foundation.org>,
         linux-doc@vger.kernel.org, linux-fsdevel@vger.kernel.org,
         linux-kselftest@vger.kernel.org, linux-rdma@vger.kernel.org,
         linux-mm@kvack.org, LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v3 11/12] mm/gup_benchmark: support pin_user_pages() and
- related calls
-Message-ID: <20200203135845.ymfbghs7rf67awex@box>
+Subject: Re: [PATCH v3 06/12] mm/gup: require FOLL_GET for
+ get_user_pages_fast()
+Message-ID: <20200203141811.GB18591@quack2.suse.cz>
 References: <20200201034029.4063170-1-jhubbard@nvidia.com>
- <20200201034029.4063170-12-jhubbard@nvidia.com>
+ <20200201034029.4063170-7-jhubbard@nvidia.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200201034029.4063170-12-jhubbard@nvidia.com>
+In-Reply-To: <20200201034029.4063170-7-jhubbard@nvidia.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Jan 31, 2020 at 07:40:28PM -0800, John Hubbard wrote:
-> Up until now, gup_benchmark supported testing of the
-> following kernel functions:
+On Fri 31-01-20 19:40:23, John Hubbard wrote:
+> Internal to mm/gup.c, require that get_user_pages_fast()
+> and __get_user_pages_fast() identify themselves, by setting
+> FOLL_GET. This is required in order to be able to make decisions
+> based on "FOLL_PIN, or FOLL_GET, or both or neither are set", in
+> upcoming patches.
 > 
-> * get_user_pages(): via the '-U' command line option
-> * get_user_pages_longterm(): via the '-L' command line option
-> * get_user_pages_fast(): as the default (no options required)
-> 
-> Add test coverage for the new corresponding pin_*() functions:
-> 
-> * pin_user_pages_fast(): via the '-a' command line option
-> * pin_user_pages():      via the '-b' command line option
-> 
-> Also, add an option for clarity: '-u' for what is now (still) the
-> default choice: get_user_pages_fast().
-> 
-> Also, for the commands that set FOLL_PIN, verify that the pages
-> really are dma-pinned, via the new is_dma_pinned() routine.
-> Those commands are:
-> 
->     PIN_FAST_BENCHMARK     : calls pin_user_pages_fast()
->     PIN_BENCHMARK          : calls pin_user_pages()
-> 
-> In between the calls to pin_*() and unpin_user_pages(),
-> check each page: if page_maybe_dma_pinned() returns false, then
-> WARN and return.
-> 
-> Do this outside of the benchmark timestamps, so that it doesn't
-> affect reported times.
-> 
-> Reviewed-by: Ira Weiny <ira.weiny@intel.com>
 > Signed-off-by: John Hubbard <jhubbard@nvidia.com>
+
+Looks good. You can add:
+
+Reviewed-by: Jan Kara <jack@suse.cz>
+
+								Honza
+
 > ---
->  mm/gup_benchmark.c                         | 71 ++++++++++++++++++++--
->  tools/testing/selftests/vm/gup_benchmark.c | 15 ++++-
->  2 files changed, 80 insertions(+), 6 deletions(-)
+>  mm/gup.c | 19 +++++++++++++++++--
+>  1 file changed, 17 insertions(+), 2 deletions(-)
 > 
-> diff --git a/mm/gup_benchmark.c b/mm/gup_benchmark.c
-> index 8dba38e79a9f..447628d0131f 100644
-> --- a/mm/gup_benchmark.c
-> +++ b/mm/gup_benchmark.c
-> @@ -8,6 +8,8 @@
->  #define GUP_FAST_BENCHMARK	_IOWR('g', 1, struct gup_benchmark)
->  #define GUP_LONGTERM_BENCHMARK	_IOWR('g', 2, struct gup_benchmark)
->  #define GUP_BENCHMARK		_IOWR('g', 3, struct gup_benchmark)
-> +#define PIN_FAST_BENCHMARK	_IOWR('g', 4, struct gup_benchmark)
-> +#define PIN_BENCHMARK		_IOWR('g', 5, struct gup_benchmark)
+> diff --git a/mm/gup.c b/mm/gup.c
+> index 83473c2165f4..e899d2e6398c 100644
+> --- a/mm/gup.c
+> +++ b/mm/gup.c
+> @@ -2390,6 +2390,14 @@ int __get_user_pages_fast(unsigned long start, int nr_pages, int write,
+>  	unsigned long len, end;
+>  	unsigned long flags;
+>  	int nr = 0;
+> +	/*
+> +	 * Internally (within mm/gup.c), gup fast variants must set FOLL_GET,
+> +	 * because gup fast is always a "pin with a +1 page refcount" request.
+> +	 */
+> +	unsigned int gup_flags = FOLL_GET;
+> +
+> +	if (write)
+> +		gup_flags |= FOLL_WRITE;
 >  
->  struct gup_benchmark {
->  	__u64 get_delta_usec;
-> @@ -19,6 +21,48 @@ struct gup_benchmark {
->  	__u64 expansion[10];	/* For future use */
->  };
+>  	start = untagged_addr(start) & PAGE_MASK;
+>  	len = (unsigned long) nr_pages << PAGE_SHIFT;
+> @@ -2415,7 +2423,7 @@ int __get_user_pages_fast(unsigned long start, int nr_pages, int write,
+>  	if (IS_ENABLED(CONFIG_HAVE_FAST_GUP) &&
+>  	    gup_fast_permitted(start, end)) {
+>  		local_irq_save(flags);
+> -		gup_pgd_range(start, end, write ? FOLL_WRITE : 0, pages, &nr);
+> +		gup_pgd_range(start, end, gup_flags, pages, &nr);
+>  		local_irq_restore(flags);
+>  	}
 >  
-> +static void put_back_pages(unsigned int cmd, struct page **pages,
-> +			   unsigned long nr_pages)
-> +{
-> +	int i;
-> +
-> +	switch (cmd) {
-> +	case GUP_FAST_BENCHMARK:
-> +	case GUP_LONGTERM_BENCHMARK:
-> +	case GUP_BENCHMARK:
-> +		for (i = 0; i < nr_pages; i++)
-
-'i' is 'int' and 'nr_pages' is 'unsigned long'.
-There's space for trouble :P
-
-> +			put_page(pages[i]);
-> +		break;
-> +
-> +	case PIN_FAST_BENCHMARK:
-> +	case PIN_BENCHMARK:
-> +		unpin_user_pages(pages, nr_pages);
-> +		break;
-> +	}
-> +}
-> +
-> +static void verify_dma_pinned(unsigned int cmd, struct page **pages,
-> +			      unsigned long nr_pages)
-> +{
-> +	int i;
-> +	struct page *page;
-> +
-> +	switch (cmd) {
-> +	case PIN_FAST_BENCHMARK:
-> +	case PIN_BENCHMARK:
-> +		for (i = 0; i < nr_pages; i++) {
-
-Ditto.
-
-> +			page = pages[i];
-> +			if (WARN(!page_maybe_dma_pinned(page),
-> +				 "pages[%d] is NOT dma-pinned\n", i)) {
-> +
-> +				dump_page(page, "gup_benchmark failure");
-> +				break;
-> +			}
-> +		}
-> +		break;
-> +	}
-> +}
-> +
->  static int __gup_benchmark_ioctl(unsigned int cmd,
->  		struct gup_benchmark *gup)
->  {
-
+> @@ -2454,7 +2462,7 @@ static int internal_get_user_pages_fast(unsigned long start, int nr_pages,
+>  	int nr = 0, ret = 0;
+>  
+>  	if (WARN_ON_ONCE(gup_flags & ~(FOLL_WRITE | FOLL_LONGTERM |
+> -				       FOLL_FORCE | FOLL_PIN)))
+> +				       FOLL_FORCE | FOLL_PIN | FOLL_GET)))
+>  		return -EINVAL;
+>  
+>  	start = untagged_addr(start) & PAGE_MASK;
+> @@ -2521,6 +2529,13 @@ int get_user_pages_fast(unsigned long start, int nr_pages,
+>  	if (WARN_ON_ONCE(gup_flags & FOLL_PIN))
+>  		return -EINVAL;
+>  
+> +	/*
+> +	 * The caller may or may not have explicitly set FOLL_GET; either way is
+> +	 * OK. However, internally (within mm/gup.c), gup fast variants must set
+> +	 * FOLL_GET, because gup fast is always a "pin with a +1 page refcount"
+> +	 * request.
+> +	 */
+> +	gup_flags |= FOLL_GET;
+>  	return internal_get_user_pages_fast(start, nr_pages, gup_flags, pages);
+>  }
+>  EXPORT_SYMBOL_GPL(get_user_pages_fast);
+> -- 
+> 2.25.0
+> 
 -- 
- Kirill A. Shutemov
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
