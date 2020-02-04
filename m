@@ -2,52 +2,52 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D34CD1520DB
-	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Feb 2020 20:13:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7377F152117
+	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Feb 2020 20:30:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727441AbgBDTNa (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 4 Feb 2020 14:13:30 -0500
-Received: from mail-qk1-f194.google.com ([209.85.222.194]:36328 "EHLO
-        mail-qk1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727308AbgBDTNa (ORCPT
+        id S1727461AbgBDTaf (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 4 Feb 2020 14:30:35 -0500
+Received: from mail-qt1-f194.google.com ([209.85.160.194]:37992 "EHLO
+        mail-qt1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727358AbgBDTaf (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 4 Feb 2020 14:13:30 -0500
-Received: by mail-qk1-f194.google.com with SMTP id w25so19138475qki.3;
-        Tue, 04 Feb 2020 11:13:29 -0800 (PST)
+        Tue, 4 Feb 2020 14:30:35 -0500
+Received: by mail-qt1-f194.google.com with SMTP id c24so15288969qtp.5;
+        Tue, 04 Feb 2020 11:30:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc:content-transfer-encoding;
-        bh=bdX909F5cI382fCwL2BmbcR0X3LXro/I1upGDSYHuzo=;
-        b=af9b04eiFve+KyP+LhZf60HCVL8lPPYPwQ3FEmqeZfugnYDSuPcWsvjoIrXPo6YCva
-         Sc1FERU+4ZaaJsFfjiA+Ilwn0S5M+WFGlLJYvVeb3SEJ91x2vP63V+QrjbzKaZ7E0Lvs
-         QYcF+eLurguVf0WwaTyU99Y9wxY/l/BcQhknatNYVhyeIGROiRm+pSTnMqL7puw8leTx
-         YHFXfMcvNO7MNPf2hmS9+TQ1OLDH3/FYxrZWfKKNdej+Bjmyi3nYUvRsQrf5jf4/i9RI
-         oHbybLHDDO4NXvJzLAlQulpZD6bxgLg2iOA6Rg9/FtpCBh34ZJ4fUOiUP+PAf/YXIMmn
-         cVJw==
+        bh=UapTR/Swn2AywRKzX/GSR/rd23O04e9h6Fgs9p2msUo=;
+        b=o/eOozhV6u7iYKKKZLmW9I9eE+A50S7MONuuj7k/cxVH+dM2FEQTnarK5ohzH6rGvj
+         0CgNbVzW529C0KjCozjxar2OsHiNfHWDnX2D253V7ISvOQqErGLlZMwIM+CvfvAk/ETr
+         kIN2VYeX2wVepBOg7pBlY3ot6HrDTlJcZar8+SV0kQAuWlb8sPSPR88RhgMETAMeMdzY
+         5OSNHeIIxUDDbrEHfmSZ+8Tu9uVC1FThvyOAscXaxa6fYkHHiOzH0GdC3vVlVJ72f7F6
+         bWTdyt9dGFRZE3xFNu6izLDDJf4wFBZDkFrHyopiOWXrfO0v+0bih6u0gyOnJ/ksyvBb
+         32Rg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc:content-transfer-encoding;
-        bh=bdX909F5cI382fCwL2BmbcR0X3LXro/I1upGDSYHuzo=;
-        b=ceqX/Ho2o3GpMXx6jY+g1mEVCxu6TtkGQXEPlpOTdu9A2UXQUbOhqcLp2JP+2ZPtYF
-         uBs3hSjMrqPCbVpcVZ+yCJ3cjmNOLFnRv50j+8/mM3bXQuhC4RVS7RqVmZaKI8XT8qOJ
-         IBZ6zPQHlLXAqWN0vjhJuOJiBzH8fBclSsCN/Dk1xF0E0Jv62opeJVBd5HVZviR7ZHvN
-         Q62fQdYueKub0dQJC7+pAFQya8addXpaMRuQfNkj8+kA48DAnWl41eirBmIbXBEmnh9R
-         Gm4DTCnhrnByd3xpfEkus+vLVzHrIfjAOjR1c4hUJlcep2YbaoKfEDrUlgXq9uy4god8
-         sQrQ==
-X-Gm-Message-State: APjAAAUnFo08sLklh9XQJ8y5zNX3+UTzUuERki4uwf2dehkCfYpe4W3u
-        JNjMnjb2L3uUVjH83xGYDtb8q9SIPqvG1Fsfvpc=
-X-Google-Smtp-Source: APXvYqzL2qBK84KG5kdgM/FLguBsVyHKuNA+SYxiM1gbwqv39K/jDfeV7q5nmkTTa6/okXiRZyHcbl5ya+Yw7DY8LmY=
-X-Received: by 2002:a37:63c7:: with SMTP id x190mr30030638qkb.232.1580843609003;
- Tue, 04 Feb 2020 11:13:29 -0800 (PST)
+        bh=UapTR/Swn2AywRKzX/GSR/rd23O04e9h6Fgs9p2msUo=;
+        b=D8/fl8ysVBYsuMreGgoJ6g9oyKGASzItM6bd0laCA9V9ifLJ4BDYo16yX+HOJ89Wx9
+         ev4OMGrQz8B3lIo+REwDINOdPyMzimBl60+YChAaY8km6mGwhkE7SRcxe+a5HJWINCET
+         /gSbzF5eq1cfIJuWr69oMbDzE1Tgku4JuCHvgcaB8wcFCc58ZDQjYi+dh2YOwSrzy4hq
+         SPB8WltlMox/Lw+h6lcbAauddvqOuA7Tk105AaHoPhObtC0SsaQUxn/sHjo7l6TC4xXB
+         0iuYu6BjVVcg5+3en8jUv1Sx5gsQAPAeyXwI2tuR+ibNpSlDq+6yPMIi/s4k57edI73i
+         t+mA==
+X-Gm-Message-State: APjAAAUwGuPR9c796TUq/CO98Ra/ZUbWeVZPmMI7j/5Ex1Mk8Z+CRWwj
+        eynK3SgXNoEVQvzqeyB+b0yDzROszrVUQ3YkluE=
+X-Google-Smtp-Source: APXvYqzynoTQgpdm/iT9SFNSo/qjNEMHfOmhlVwoEI483RemBJB+ylGnJ7qiC5IrDY/m23437c91LCoT0rOjsfwP7pU=
+X-Received: by 2002:ac8:554b:: with SMTP id o11mr30093106qtr.36.1580844634484;
+ Tue, 04 Feb 2020 11:30:34 -0800 (PST)
 MIME-Version: 1.0
-References: <20200128021145.36774-1-palmerdabbelt@google.com> <20200128021145.36774-5-palmerdabbelt@google.com>
-In-Reply-To: <20200128021145.36774-5-palmerdabbelt@google.com>
+References: <20200128021145.36774-1-palmerdabbelt@google.com>
+In-Reply-To: <20200128021145.36774-1-palmerdabbelt@google.com>
 From:   =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@gmail.com>
-Date:   Tue, 4 Feb 2020 20:13:17 +0100
-Message-ID: <CAJ+HfNjkacY-KStgGJMgvQh2=2OsMnH6Saij+nAPBqQrSJcNWw@mail.gmail.com>
-Subject: Re: [PATCH 4/4] arm64: bpf: Elide some moves to a0 after calls
+Date:   Tue, 4 Feb 2020 20:30:23 +0100
+Message-ID: <CAJ+HfNh2csyH2xZtGFXW1zwBEW4+bo_E60PWPydJkB6zZTVx3A@mail.gmail.com>
+Subject: Re: arm64: bpf: Elide some moves to a0 after calls
 To:     Palmer Dabbelt <palmerdabbelt@google.com>
 Cc:     Daniel Borkmann <daniel@iogearbox.net>,
         Alexei Starovoitov <ast@kernel.org>, zlim.lnx@gmail.com,
@@ -67,76 +67,83 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, 28 Jan 2020 at 03:15, Palmer Dabbelt <palmerdabbelt@google.com> wro=
+On Tue, 28 Jan 2020 at 03:14, Palmer Dabbelt <palmerdabbelt@google.com> wro=
 te:
 >
-> On arm64, the BPF function ABI doesn't match the C function ABI.  Specifi=
-cally,
-> arm64 encodes calls as `a0 =3D f(a0, a1, ...)` while BPF encodes calls as
-> `BPF_REG_0 =3D f(BPF_REG_1, BPF_REG_2, ...)`.  This discrepancy results i=
-n
-> function calls being encoded as a two operations sequence that first does=
- a C
-> ABI calls and then moves the return register into the right place.  This
-> results in one extra instruction for every function call.
+> There's four patches here, but only one of them actually does anything.  =
+The
+> first patch fixes a BPF selftests build failure on my machine and has alr=
+eady
+> been sent to the list separately.  The next three are just staged such th=
+at
+> there are some patches that avoid changing any functionality pulled out f=
+rom
+> the whole point of those refactorings, with two cleanups and then the ide=
+a.
+>
+> Maybe this is an odd thing to say in a cover letter, but I'm not actually=
+ sure
+> this patch set is a good idea.  The issue of extra moves after calls came=
+ up as
+> I was reviewing some unrelated performance optimizations to the RISC-V BP=
+F JIT.
+> I figured I'd take a whack at performing the optimization in the context =
+of the
+> arm64 port just to get a breath of fresh air, and I'm not convinced I lik=
+e the
+> results.
+>
+> That said, I think I would accept something like this for the RISC-V port
+> because we're already doing a multi-pass optimization for shrinking funct=
+ion
+> addresses so it's not as much extra complexity over there.  If we do that=
+ we
+> should probably start puling some of this code into the shared BPF compil=
+er,
+> but we're also opening the doors to more complicated BPF JIT optimization=
+s.
+> Given that the BPF JIT appears to have been designed explicitly to be
+> simple/fast as opposed to perform complex optimization, I'm not sure this=
+ is a
+> sane way to move forward.
 >
 
-It's a lot of extra work for one reg-to-reg move, but it always
-annoyed me in the RISC-V JIT. :-) So, if it *can* be avoided, why not.
+Obviously I can only speak for myself and the RISC-V JIT, but given
+that we already have opened the door for more advanced translations
+(branch relaxation e.g.), I think that this makes sense. At the same
+time we don't want to go all JVM on the JITs. :-P
 
-[...]
+> I figured I'd send the patch set out as more of a question than anything =
+else.
+> Specifically:
 >
-> +static int dead_register(const struct jit_ctx *ctx, int offset, int bpf_=
-reg)
+> * How should I go about measuring the performance of these sort of
+>   optimizations?  I'd like to balance the time it takes to run the JIT wi=
+th the
+>   time spent executing the program, but I don't have any feel for what re=
+al BPF
+>   programs look like or have any benchmark suite to run.  Is there someth=
+ing
+>   out there this should be benchmarked against?  (I'd also like to know t=
+hat to
+>   run those benchmarks on the RISC-V port.)
 
-Given that a lot of archs (RISC-V, arm?, MIPS?) might benefit from
-this, it would be nice if it could be made generic (it already is
-pretty much), and moved to kernel/bpf.
+If you run the selftests 'test_progs' with -v it'll measure/print the
+execution time of the programs. I'd say *most* BPF program invokes a
+helper (via call). It would be interesting to see, for say the
+selftests, how often the optimization can be performed.
 
-> +{
-> +       const struct bpf_prog *prog =3D ctx->prog;
-> +       int i;
-> +
-> +       for (i =3D offset; i < prog->len; ++i) {
-> +               const struct bpf_insn *insn =3D &prog->insnsi[i];
-> +               const u8 code =3D insn->code;
-> +               const u8 bpf_dst =3D insn->dst_reg;
-> +               const u8 bpf_src =3D insn->src_reg;
-> +               const int writes_dst =3D !((code & BPF_ST) || (code & BPF=
-_STX)
-> +                                        || (code & BPF_JMP32) || (code &=
- BPF_JMP));
-> +               const int reads_dst  =3D !((code & BPF_LD));
-> +               const int reads_src  =3D true;
-> +
-> +               /* Calls are a bit special in that they clobber a bunch o=
-f regisers. */
-> +               if ((code & (BPF_JMP | BPF_CALL)) || (code & (BPF_JMP | B=
-PF_TAIL_CALL)))
-> +                       if ((bpf_reg >=3D BPF_REG_0) && (bpf_reg <=3D BPF=
-_REG_5))
-> +                               return false;
-> +
-> +               /* Registers that are read before they're written are ali=
-ve.
-> +                * Most opcodes are of the form DST =3D DEST op SRC, but =
-there
-> +                * are some exceptions.*/
-> +               if (bpf_src =3D=3D bpf_reg && reads_src)
-> +                       return false;
-> +
-> +               if (bpf_dst =3D=3D bpf_reg && reads_dst)
-> +                       return false;
-> +
-> +               if (bpf_dst =3D=3D bpf_reg && writes_dst)
-> +                       return true;
-> +
-> +               /* Most BPF instructions are 8 bits long, but some ar 16 =
-bits
-> +                * long. */
+> * Is this the sort of thing that makes sense in a BPF JIT?  I guess I've =
+just
+>   realized I turned "review this patch" into a way bigger rabbit hole tha=
+n I
+>   really want to go down...
+>
 
-A bunch of spelling errors above.
+I'd say 'yes'. My hunch, and the workloads I've seen, BPF programs are
+usually loaded, and then resident for a long time. So, the JIT time is
+not super critical. The FB/Cilium folks can definitely provide a
+better sample point, than my hunch. ;-)
 
 
-Cheers,
 Bj=C3=B6rn
