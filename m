@@ -2,166 +2,139 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D720915225A
-	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Feb 2020 23:31:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 44A89152260
+	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Feb 2020 23:33:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727607AbgBDWbA (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 4 Feb 2020 17:31:00 -0500
-Received: from mail-pf1-f194.google.com ([209.85.210.194]:37086 "EHLO
-        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727537AbgBDWa7 (ORCPT
+        id S1727578AbgBDWdl (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 4 Feb 2020 17:33:41 -0500
+Received: from mail-ot1-f65.google.com ([209.85.210.65]:38281 "EHLO
+        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727563AbgBDWdl (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 4 Feb 2020 17:30:59 -0500
-Received: by mail-pf1-f194.google.com with SMTP id p14so83724pfn.4
-        for <linux-kselftest@vger.kernel.org>; Tue, 04 Feb 2020 14:30:59 -0800 (PST)
+        Tue, 4 Feb 2020 17:33:41 -0500
+Received: by mail-ot1-f65.google.com with SMTP id z9so75110oth.5
+        for <linux-kselftest@vger.kernel.org>; Tue, 04 Feb 2020 14:33:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=Q2uQL/PRw6ZnTDrqiiea6tiCZJLGBQe2LOHyEh5sDJ4=;
-        b=t2lvJ5eRV7fNHCyOWIUVU0qCE/DfBdKo5P3ClEetu7j6GGIg2XASjLWPCBjl+34JdE
-         6ny6Y50jnfQsvBTWE1bwkdPqA0V8rodl3y1fXWxaInCOxiDPKI5DUt82uL3CnbUIafy9
-         p08FhbQrlWgcsmJQvhAt6LDgCuDy0Fw8IFLxqHZAcrgagsyrlNbbkaF/Ii3npSR+IoUI
-         7eByhr9nXLvJjCI+LJUlnSG+u4qzSxSKnByGmAj0+1wVSggoDvkGvv2O4f68xPLPiwOn
-         Eo9phXx8Duaklg8yw1cjFIKRIWdEeopuCCSX9Kfw4oX4UghVR0PeWwCphaOK3w9JQYsP
-         2iuQ==
+        bh=r4vakGMhq6osED8dfnagmL3LnH1bwD9GWqExnkD8isg=;
+        b=nsFcX+UkIOs3W64Y+ii8sN4utrUNClWWK5j8fLw1Ozps4Upa29eosAErByGTJMMSqn
+         Uf54fKPlPvLy5rfQ9BS358JoA3gtI3jRPeOyoIzrFbZSX8/bmN5BY7kBdDXJ6C8KwkR0
+         9i8ASESnQJDGufhIdNEgD9F9netV75Xy/p+TGbhvSsb6/ewtPCOO2S64aoJ9fnpC7UKY
+         jFombvtN7ivWbvbzKzGqbC8qRE58Ytm3Yjx1iGJNsOFNfC8IrPVmU6sPiPncRg2RYTMw
+         pYaT+e7IB6zBYtbxpTG8uREOPXipUZkLdLF+1xsoG8xZvthYb28fCvuwZokw362nmqfi
+         y07g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=Q2uQL/PRw6ZnTDrqiiea6tiCZJLGBQe2LOHyEh5sDJ4=;
-        b=ElRSNaMbwGXeF53UX4zZKawlMYZcainH9VwV2vNlR3jcFBzIxEjqHgRncng1Yr0dnY
-         7OjaJhtQ97tLlpjF+vTPF9BxoQBWZytraNyN23lQ2ZbUshXgPX0/y9yaJ6vea2zQSWJk
-         TnQvpH+H882QjbcjYyyyMoVxLiSngxEJndjPgHoWmW7ZchmNU9ZP41PadL6DAjBWs5CG
-         1YAKLFS67GtVjhHHOrmSzJJPNVGs4lc7+L/vAm6EE08wYDaqT88cNb8eO0Va0m/k+Ddx
-         sGWiKi7utInGljqkT/GRNNFjkbMeNnkKioDKishkUyYK0fzZWlYiwCNppQnoaTdddC+s
-         xHaA==
-X-Gm-Message-State: APjAAAVs/VLWEcupizAZZ1mXAibRxJgnSW13I+zJPsTyzIark4nqDhOC
-        P9oubAj00p0N23C0SYMM8JMfHWy6uVbHDfSrZ76Asw==
-X-Google-Smtp-Source: APXvYqwSZaY//8PRrbH3D4/3OyG0Roy306tCq51bwzXFTdTrGyFV7FF3+o89xhSA7oOCZ+Nwi4dbqV2Jsg3SEvbuwuI=
-X-Received: by 2002:aa7:8545:: with SMTP id y5mr29917679pfn.185.1580855458475;
- Tue, 04 Feb 2020 14:30:58 -0800 (PST)
+        bh=r4vakGMhq6osED8dfnagmL3LnH1bwD9GWqExnkD8isg=;
+        b=ZYri1h26dAobT1DE9HoBstjEOX7DIU8lxjZ/2t9tNcxZ86ZSJ+ymo/JF4mA7FRt4fj
+         Tv2TtiqTfThTaCC2MVQGkLuD+/1d1F7qX3KxpvpXMy55LQ+064PBp12wuAM25eBvGlU3
+         fh0e3wyTmKdoWh4UwP5uiMPzJjabYtDE8L0CaQ03T99ToiRWqdb6lXnby56siVIEylJG
+         MtmL3CTkdBN43Z+fC1n+6pPbvW2JAozbRuO9Y2wYlkNJIZcTmXpgXw9SQOeHRPi/dC8M
+         NenXKQpshjMzx+Yox5hOKFoPRb8CDPMPT59x8+GzVwVeMOLArsOmXW0ZZeik+aIuq9CA
+         UgtQ==
+X-Gm-Message-State: APjAAAV0BaF9/Ew0HL+RQFjrnaZ6PZ93LFemhJIIjBSof7xa+fH0jANN
+        mFxMzMFvy9BBi5c0mnUT7LHmcQ1ad0PKEd+B0sLnng==
+X-Google-Smtp-Source: APXvYqwAB6r7PiMCLRtXLPkmBSmepkc4OT2+jLlJkQ9zZgPfaqu9E0ylfzzT6UFq8J3qZq5LgZpjdufN9HeUGzf+FTk=
+X-Received: by 2002:a9d:7b4e:: with SMTP id f14mr23746990oto.355.1580855620419;
+ Tue, 04 Feb 2020 14:33:40 -0800 (PST)
 MIME-Version: 1.0
-References: <20200130230812.142642-1-brendanhiggins@google.com>
- <20200130230812.142642-3-brendanhiggins@google.com> <e060bdfc-5cdb-fb62-48b0-cc54c7bc72ce@gmail.com>
-In-Reply-To: <e060bdfc-5cdb-fb62-48b0-cc54c7bc72ce@gmail.com>
-From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Tue, 4 Feb 2020 14:30:47 -0800
-Message-ID: <CAFd5g46irbQ7j_DOY+bQPoo1TWjwvu6n9iyQ7abe9pfqydeMYg@mail.gmail.com>
-Subject: Re: [PATCH v2 2/7] arch: um: add linker section for KUnit test suites
-To:     Frank Rowand <frowand.list@gmail.com>
-Cc:     Jeff Dike <jdike@addtoit.com>, Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Kees Cook <keescook@chromium.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Alan Maguire <alan.maguire@oracle.com>,
-        Iurii Zaikin <yzaikin@google.com>,
-        David Gow <davidgow@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>, rppt@linux.ibm.com,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Knut Omang <knut.omang@oracle.com>,
-        linux-um <linux-um@lists.infradead.org>,
-        linux-arch@vger.kernel.org,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
+References: <20200203232248.104733-1-almasrymina@google.com>
+ <20200203232248.104733-8-almasrymina@google.com> <0fa5d77c-d115-1e30-cb17-d6a48c916922@linux.ibm.com>
+ <CAHS8izPobKi_w8R4pTt_UyfxzBJJYuNUw+Z6hgFfvZ1Xma__YA@mail.gmail.com>
+In-Reply-To: <CAHS8izPobKi_w8R4pTt_UyfxzBJJYuNUw+Z6hgFfvZ1Xma__YA@mail.gmail.com>
+From:   Mina Almasry <almasrymina@google.com>
+Date:   Tue, 4 Feb 2020 14:33:29 -0800
+Message-ID: <CAHS8izNmSYumXpYXT1d8tAm36=-BRjXqdCDjLB6UNMwn5xhPZg@mail.gmail.com>
+Subject: Re: [PATCH v11 8/9] hugetlb_cgroup: Add hugetlb_cgroup reservation tests
+To:     Sandipan Das <sandipan@linux.ibm.com>
+Cc:     Mike Kravetz <mike.kravetz@oracle.com>, shuah <shuah@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Greg Thelen <gthelen@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        open list <linux-kernel@vger.kernel.org>, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org, cgroups@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Feb 4, 2020 at 1:59 PM Frank Rowand <frowand.list@gmail.com> wrote:
+On Tue, Feb 4, 2020 at 12:36 PM Mina Almasry <almasrymina@google.com> wrote:
 >
-> On 1/30/20 5:08 PM, Brendan Higgins wrote:
-> > Add a linker section to UML where KUnit can put references to its test
-> > suites. This patch is an early step in transitioning to dispatching all
-> > KUnit tests from a centralized executor rather than having each as its
-> > own separate late_initcall.
+> On Tue, Feb 4, 2020 at 8:26 AM Sandipan Das <sandipan@linux.ibm.com> wrote:
+> >
+> >
+> > There are still a couple of places where 2MB page size is being used.
+> > These are my workarounds to get the tests running on ppc64.
+> >
 >
-> All architectures please.
-
-I *am* supporting all architectures with this patchset.
-
-The first patch in this series adds support to all architectures
-except UML (admittedly I only tried x86 and ARM, 32 bit and 64 bit for
-both, but I am pretty sure someone tried it for POWER and something
-else, so maybe I should try it with others before submission). A patch
-specific for UML, this patch, was needed because UML is a special
-snowflake and has a bunch of special linker scripts that don't make
-the change in vmlinux.lds.h (the previous patch) sufficient.
-
-> The early versions of Kunit documented reliance on UML.  Discussion lead to
-> the conclusion that real architectures and real hardware would be supported.
-
-I am *very* aware.
-
-I would never intentionally break support for other architectures. I
-know it is very important to you, Alan, and others.
-
-> This like this are what make me reluctant to move devicetree unittests to
-> KUnit.
-
-Hopefully I can reassure you then:
-
-With Alan as a regular contributor who cares very much about non-UML
-architectures, it would be very unlikely for me to accidentally break
-support for other architectures without us finding out before a
-release.
-
-I also periodically test KUnit on linux-next on x86-64. I have gotten
-bugs for other architectures from Arnd Bergmann and one of the m86k
-maintainers who seems to play around with it as well.
-
-So yeah, other people care about this too, and I would really not want
-to make any of them unhappy.
-
-> Can you please add a section to the KUnit documentation that lists things
-> like the expectations, requirements, limitations, etc for a test case that
-> is run by KUnit?  Some examples that pop to mind from recent discussions
-> and my own experiences:
+> Thanks for the changes!
 >
->   - Each test case is invoked after late_init is complete.
->       + Exception: the possible value of being able to run a unit test
->         at a specific runlevel has been expressed.  If an actual unit
->         test can be shown to require running earlier, this restriction
->         will be re-visited.
+> > Also I had missed running charge_reserved_hugetlb.sh the last time.
+> > Right now, it stops at the following scenario.
+> >
+> > Test normal case with write.
+> > private=, populate=, method=2, reserve=
+> > nr hugepages = 10
+> > writing cgroup limit: 83886080
+> > writing reseravation limit: 83886080
+> >
+> > Starting:
+> > hugetlb_usage=0
+> > reserved_usage=0
+> > expect_failure is 0
+> > Putting task in cgroup 'hugetlb_cgroup_test'
+> > Method is 2
+> > Executing ./write_to_hugetlbfs -p /mnt/huge/test -s 83886080 -w  -m 2  -l
+> > Writing to this path: /mnt/huge/test
+> > Writing this size: 83886080
+> > Not populating.
+> > Using method=2
+> > Shared mapping.
+> > RESERVE mapping.
+> > Allocating using SHM.
+> > shmid: 0x5, shmget key:0
+> > shmaddr: 0x7dfffb000000
+> > Writing to memory.
+> > Starting the writes:
+> > .write_result is 0
+> > .After write:
+> > hugetlb_usage=16777216
+> > reserved_usage=83886080
+> > ....kiling write_to_hugetlbfs
+> > ...Received 2.
+> > Deleting the memory
+> > Done deleting the memory
+> > 16777216
+> > 83886080
+> > Memory charged to hugtlb=16777216
+> > Memory charged to reservation=83886080
+> > expected (83886080) != actual (16777216): Reserved memory charged to hugetlb cgroup.
+> > CLEANUP DONE
+> >
+> >
 >
->   - Each test case must be idempotent.  Each test case may be called
->     multiple times, and must generate the same result each time it
->     is called.
->       + Exception 1: a test case can be declared to not be idempotent
->         [[ mechanism TBD ]], in which case KUnit will not call the
->         test case a second time without the kernel rebooting.
->       + Exception 2: hardware may not be deterministic, so a test that
->         always passes or fails when run under UML may not always to
->         so on real hardware.  <--- sentence copied from
->         Documentation/dev-tools/kunit/usage.rst
->           [[ This item and 1st exception do not exist yet, but will exist
->           in some form if the proposed proc filesystem interface is
->           added. ]]
+> So the problem in this log seems to be that this log line is missing:
+>     echo Waiting for hugetlb memory to reach size $size.
 >
->   - KUnit provides a helpful wrapper to simplify building a UML kernel
->     containing the KUnit test cases, booting the UML kernel, and
->     formatting the output from the test cases.  This wrapper MUST NOT
->     be required to run the test cases or to determine a test result.
->     The formatting may provide additional analysis and improve
->     readability of a test result.
+> The way the test works is that it starts a process that writes the
+> hugetlb memory, then it *should* wait until the memory is written,
+> then it should record the cgroup accounting and kill the process. It
+> seems from your log that the wait doesn't happen, so the test
+> continues before the background process has had time to write the
+> memory properly. Essentially wait_for_hugetlb_memory_to_get_written()
+> never gets called in your log.
 >
->   - .... There is more that belongs here, but I'm getting side tracked
->     here, when I'm trying to instead convert devicetree unittests to
->     KUnit and want to get back to that.
+> Can you try this additional attached diff on top of your changes? I
+> attached the diff and pasted the same here, hopefully one works for
+> you:
+>
 
-Sure, I think that's a great start! Thanks for that. I hope you don't
-mind if I copy and paste some of it.
-
-It kind of sounds like you are talking about more of a requirements
-doc than the design doc I was imagining in my reply to you on the
-cover letter, which is fine. The documentation is primarily for people
-other than me, so whatever you and others think is useful, I will do.
+I got my hands on a machine with 16MB default hugepage size and
+charge_reserved_hugetlb.sh passes now after my changes. Please let me
+know if you still run into issues.
