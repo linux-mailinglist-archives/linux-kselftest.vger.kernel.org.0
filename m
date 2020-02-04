@@ -2,184 +2,319 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D3C43152186
-	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Feb 2020 21:33:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2ED9215218E
+	for <lists+linux-kselftest@lfdr.de>; Tue,  4 Feb 2020 21:37:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727579AbgBDUdY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 4 Feb 2020 15:33:24 -0500
-Received: from mail-pl1-f193.google.com ([209.85.214.193]:39948 "EHLO
-        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727458AbgBDUdX (ORCPT
+        id S1727482AbgBDUhL (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 4 Feb 2020 15:37:11 -0500
+Received: from mail-oi1-f193.google.com ([209.85.167.193]:46032 "EHLO
+        mail-oi1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727458AbgBDUhL (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 4 Feb 2020 15:33:23 -0500
-Received: by mail-pl1-f193.google.com with SMTP id y1so7747185plp.7;
-        Tue, 04 Feb 2020 12:33:21 -0800 (PST)
+        Tue, 4 Feb 2020 15:37:11 -0500
+Received: by mail-oi1-f193.google.com with SMTP id v19so19859765oic.12
+        for <linux-kselftest@vger.kernel.org>; Tue, 04 Feb 2020 12:37:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:message-id:in-reply-to:references:subject
-         :mime-version:content-transfer-encoding;
-        bh=4Y76WudeWCG5zXmxP2Nw4YSkfa14RC4kqB6t3Lg4X9M=;
-        b=UM63F9EXUlmTMTVYbwks5jV/yCvDqR4chYFapC5j4CVIQviDsobwExzj3GIkgPbRdq
-         //qsfAxnZ1oWlUcd0vhb6wNDUBvcZIH6/bP0reunmdDhUB2k2bkh75y4qAbG+VQgV0dp
-         59icHfEdfg/Fz/zx7NbCienbak2IANxuX84XGTEe1YxKly8z/OJi34H3uMjk7Er/HXhj
-         HGGS+RLISvXMN/aPIkoJD14ACshXu4NwMxheIOKq64mjltT9GCqP/sLbG29gRD80AuJr
-         DOLtHEeEaArGoQsmTFcUUHUWTxqxpsz5Bz5FEpdv9b884Ytw6QBnv7Vq18AdvXdoNP4B
-         yzVA==
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=6IyvgOStPbIhT6yjCRAzBxT2FlMGgx/EgK7HsJDgeo4=;
+        b=QLz9JJhBPuHe6f0G61EgXxR/Rh7pt49RfVDHpihIpKgM2B64PSACBcxasl7axt4l8D
+         jSQmdsyxNVg5mDU6HR1QncKJMFnSKUsY/7zxfCR4W+vpCXgYAJ+DXJ1e7gt6nDd7jcDd
+         KAqv+StTGFTTQxFsipvCth8LX5JnSU3pXISVp5EUx6vUR/AwJ340q+LvLGPY+dMPS8z0
+         8G9gEmrVXvqHnkNkkyg6UlIv3v5lZAOHfFGB4/QSJ/3pVmrcnAd86xsDbW7BPxbC6uLS
+         /WT430SySM05tGhc2+8I477Dw+WYArLRKXCOP6NdlISDeNyNVozCvNQ45MbDH5yGYAs9
+         k92Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:message-id:in-reply-to
-         :references:subject:mime-version:content-transfer-encoding;
-        bh=4Y76WudeWCG5zXmxP2Nw4YSkfa14RC4kqB6t3Lg4X9M=;
-        b=KGbBrcpfE0rkOen2GJ+PWg/iX6oQWVxfqxYs04qeooU2bw5y8x82Uvc4cPDvt7cW+r
-         0veNqVqL6kPPGO3dyUc9kirJCtjMUIFBcab5MA6S3ERPqQXi355pM9X+3WsomTuHouCw
-         RDKadcrHkZQrlO6gHAQ2Sq0JUTxV+6FFnk83XU7k8KIHKr71lAFrMtl9Ydk4Zb0V84ha
-         DNSrQ/ELu43w+614xbZTqGm8TY0QrNnA2wLhVB8Mw+i8MXY7aRLGzM935GFOsQZNvZDp
-         7//wfVFhKvOK/RG+n9MBdVIL9TbKGbplF/huhiLTQoZOm8wN68rLqzTGFUf9wosHASbr
-         6YqA==
-X-Gm-Message-State: APjAAAXNh44ZdYkjrf79zg4z51PogHV2rC4vOVXKyVUmQCVWPgGOb6SG
-        JsqXRi+PWBL7WXCIQ5cGoXA=
-X-Google-Smtp-Source: APXvYqzeahYF5KBgE/fLGWyNk0UEHsBipBvuQH1Ndc7tvKe17Ilwb5Vq5hgNIVuTZ9BqoQ06SyLiQQ==
-X-Received: by 2002:a17:90a:a78b:: with SMTP id f11mr1202943pjq.8.1580848401174;
-        Tue, 04 Feb 2020 12:33:21 -0800 (PST)
-Received: from localhost ([184.63.162.180])
-        by smtp.gmail.com with ESMTPSA id v9sm4620636pja.26.2020.02.04.12.33.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Feb 2020 12:33:20 -0800 (PST)
-Date:   Tue, 04 Feb 2020 12:33:13 -0800
-From:   John Fastabend <john.fastabend@gmail.com>
-To:     =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@gmail.com>,
-        Palmer Dabbelt <palmerdabbelt@google.com>
-Cc:     Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <ast@kernel.org>, zlim.lnx@gmail.com,
-        catalin.marinas@arm.com, will@kernel.org,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        Andrii Nakryiko <andriin@fb.com>,
-        Shuah Khan <shuah@kernel.org>, Netdev <netdev@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>, linux-arm-kernel@lists.infradead.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-kselftest@vger.kernel.org,
-        clang-built-linux@googlegroups.com, kernel-team@android.com
-Message-ID: <5e39d509c9edc_63882ad0d49345c08@john-XPS-13-9370.notmuch>
-In-Reply-To: <CAJ+HfNh2csyH2xZtGFXW1zwBEW4+bo_E60PWPydJkB6zZTVx3A@mail.gmail.com>
-References: <20200128021145.36774-1-palmerdabbelt@google.com>
- <CAJ+HfNh2csyH2xZtGFXW1zwBEW4+bo_E60PWPydJkB6zZTVx3A@mail.gmail.com>
-Subject: Re: arm64: bpf: Elide some moves to a0 after calls
-Mime-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=6IyvgOStPbIhT6yjCRAzBxT2FlMGgx/EgK7HsJDgeo4=;
+        b=nvhNvNJqo9s0UxdPR6BlhazZXOxDJHdp+xQ6GoRZdo/9W6ufiLtk/xHP3m//y7n4fC
+         Fyl/Rq/quLSHD5QzejluycBZYtEXTyi4gpIvPz6MtzsEbgB+rW8/kW6j5KFd9I0ZKtRx
+         CMGHQLbx8d/9xbgtBhQdfU8AwAgjdpnGchfsbymjx8m7f4njJjOSEU+Xjycaabo4PqL6
+         nfZzQSXaa/hb2/p+brQRscwE39l9AfSxiTGD3jAklZrvqMPdrqOvi/oRHUmeVcYu3wYX
+         Yc2CqFmT5U3/+lOHDXFXbwnLl73fbyWCA2rCzTwRs55bZj+DgnSND++1TT56UbOrriOK
+         F59g==
+X-Gm-Message-State: APjAAAWv9FhU0OGxMTzuIFHGQ6mRwWupbmGC6V/yiYbnhZJ2F/ZKETa0
+        xAX4vd8zVSeydrC7YN3rqjfBcLYY850y7SM1wWjz7A==
+X-Google-Smtp-Source: APXvYqyJPGQtUbcLKV30ftv+EHVGej6UEganAn2adi3OT3fx2VIaYznLhDPHHtkdJUNX5jcWHkJNRy7I9Nr/3VkZ1d0=
+X-Received: by 2002:a05:6808:7dd:: with SMTP id f29mr572486oij.67.1580848629368;
+ Tue, 04 Feb 2020 12:37:09 -0800 (PST)
+MIME-Version: 1.0
+References: <20200203232248.104733-1-almasrymina@google.com>
+ <20200203232248.104733-8-almasrymina@google.com> <0fa5d77c-d115-1e30-cb17-d6a48c916922@linux.ibm.com>
+In-Reply-To: <0fa5d77c-d115-1e30-cb17-d6a48c916922@linux.ibm.com>
+From:   Mina Almasry <almasrymina@google.com>
+Date:   Tue, 4 Feb 2020 12:36:57 -0800
+Message-ID: <CAHS8izPobKi_w8R4pTt_UyfxzBJJYuNUw+Z6hgFfvZ1Xma__YA@mail.gmail.com>
+Subject: Re: [PATCH v11 8/9] hugetlb_cgroup: Add hugetlb_cgroup reservation tests
+To:     Sandipan Das <sandipan@linux.ibm.com>
+Cc:     Mike Kravetz <mike.kravetz@oracle.com>, shuah <shuah@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Greg Thelen <gthelen@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        open list <linux-kernel@vger.kernel.org>, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org, cgroups@vger.kernel.org
+Content-Type: multipart/mixed; boundary="00000000000003c7ea059dc601fb"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Bj=C3=B6rn T=C3=B6pel wrote:
-> On Tue, 28 Jan 2020 at 03:14, Palmer Dabbelt <palmerdabbelt@google.com>=
- wrote:
-> >
-> > There's four patches here, but only one of them actually does anythin=
-g.  The
-> > first patch fixes a BPF selftests build failure on my machine and has=
- already
-> > been sent to the list separately.  The next three are just staged suc=
-h that
-> > there are some patches that avoid changing any functionality pulled o=
-ut from
-> > the whole point of those refactorings, with two cleanups and then the=
- idea.
-> >
-> > Maybe this is an odd thing to say in a cover letter, but I'm not actu=
-ally sure
-> > this patch set is a good idea.  The issue of extra moves after calls =
-came up as
-> > I was reviewing some unrelated performance optimizations to the RISC-=
-V BPF JIT.
-> > I figured I'd take a whack at performing the optimization in the cont=
-ext of the
-> > arm64 port just to get a breath of fresh air, and I'm not convinced I=
- like the
-> > results.
-> >
-> > That said, I think I would accept something like this for the RISC-V =
-port
-> > because we're already doing a multi-pass optimization for shrinking f=
-unction
-> > addresses so it's not as much extra complexity over there.  If we do =
-that we
-> > should probably start puling some of this code into the shared BPF co=
-mpiler,
-> > but we're also opening the doors to more complicated BPF JIT optimiza=
-tions.
-> > Given that the BPF JIT appears to have been designed explicitly to be=
+--00000000000003c7ea059dc601fb
+Content-Type: text/plain; charset="UTF-8"
 
-> > simple/fast as opposed to perform complex optimization, I'm not sure =
-this is a
-> > sane way to move forward.
-> >
-> =
+On Tue, Feb 4, 2020 at 8:26 AM Sandipan Das <sandipan@linux.ibm.com> wrote:
+>
+>
+> There are still a couple of places where 2MB page size is being used.
+> These are my workarounds to get the tests running on ppc64.
+>
 
-> Obviously I can only speak for myself and the RISC-V JIT, but given
-> that we already have opened the door for more advanced translations
-> (branch relaxation e.g.), I think that this makes sense. At the same
-> time we don't want to go all JVM on the JITs. :-P
+Thanks for the changes!
 
-I'm not against it although if we start to go this route I would want som=
-e
-way to quantify how we are increasing/descreasing load times.
+> Also I had missed running charge_reserved_hugetlb.sh the last time.
+> Right now, it stops at the following scenario.
+>
+> Test normal case with write.
+> private=, populate=, method=2, reserve=
+> nr hugepages = 10
+> writing cgroup limit: 83886080
+> writing reseravation limit: 83886080
+>
+> Starting:
+> hugetlb_usage=0
+> reserved_usage=0
+> expect_failure is 0
+> Putting task in cgroup 'hugetlb_cgroup_test'
+> Method is 2
+> Executing ./write_to_hugetlbfs -p /mnt/huge/test -s 83886080 -w  -m 2  -l
+> Writing to this path: /mnt/huge/test
+> Writing this size: 83886080
+> Not populating.
+> Using method=2
+> Shared mapping.
+> RESERVE mapping.
+> Allocating using SHM.
+> shmid: 0x5, shmget key:0
+> shmaddr: 0x7dfffb000000
+> Writing to memory.
+> Starting the writes:
+> .write_result is 0
+> .After write:
+> hugetlb_usage=16777216
+> reserved_usage=83886080
+> ....kiling write_to_hugetlbfs
+> ...Received 2.
+> Deleting the memory
+> Done deleting the memory
+> 16777216
+> 83886080
+> Memory charged to hugtlb=16777216
+> Memory charged to reservation=83886080
+> expected (83886080) != actual (16777216): Reserved memory charged to hugetlb cgroup.
+> CLEANUP DONE
+>
+>
 
-> =
+So the problem in this log seems to be that this log line is missing:
+    echo Waiting for hugetlb memory to reach size $size.
 
-> > I figured I'd send the patch set out as more of a question than anyth=
-ing else.
-> > Specifically:
-> >
-> > * How should I go about measuring the performance of these sort of
-> >   optimizations?  I'd like to balance the time it takes to run the JI=
-T with the
-> >   time spent executing the program, but I don't have any feel for wha=
-t real BPF
-> >   programs look like or have any benchmark suite to run.  Is there so=
-mething
-> >   out there this should be benchmarked against?  (I'd also like to kn=
-ow that to
-> >   run those benchmarks on the RISC-V port.)
-> =
+The way the test works is that it starts a process that writes the
+hugetlb memory, then it *should* wait until the memory is written,
+then it should record the cgroup accounting and kill the process. It
+seems from your log that the wait doesn't happen, so the test
+continues before the background process has had time to write the
+memory properly. Essentially wait_for_hugetlb_memory_to_get_written()
+never gets called in your log.
 
-> If you run the selftests 'test_progs' with -v it'll measure/print the
-> execution time of the programs. I'd say *most* BPF program invokes a
-> helper (via call). It would be interesting to see, for say the
-> selftests, how often the optimization can be performed.
-> =
+Can you try this additional attached diff on top of your changes? I
+attached the diff and pasted the same here, hopefully one works for
+you:
 
-> > * Is this the sort of thing that makes sense in a BPF JIT?  I guess I=
-'ve just
-> >   realized I turned "review this patch" into a way bigger rabbit hole=
- than I
-> >   really want to go down...
-> >
-> =
+diff --git a/tools/testing/selftests/vm/charge_reserved_hugetlb.sh
+b/tools/testing/selftests/vm/charge_reserved_hugetlb.sh
+index efd68093ce3e9..18d33684faade 100755
+--- a/tools/testing/selftests/vm/charge_reserved_hugetlb.sh
++++ b/tools/testing/selftests/vm/charge_reserved_hugetlb.sh
+@@ -169,19 +169,36 @@ function write_hugetlbfs_and_get_usage() {
+   echo reserved_usage="$reserved_before"
+   echo expect_failure is "$expect_failure"
 
-> I'd say 'yes'. My hunch, and the workloads I've seen, BPF programs are
-> usually loaded, and then resident for a long time. So, the JIT time is
-> not super critical. The FB/Cilium folks can definitely provide a
-> better sample point, than my hunch. ;-)
++  output=$(mktemp)
+   set +e
+   if [[ "$method" == "1" ]] || [[ "$method" == 2 ]] ||
+     [[ "$private" == "-r" ]] && [[ "$expect_failure" != 1 ]]; then
 
-In our case the JIT time can be relevant because we are effectively holdi=
-ng
-up a kubernetes pod load waiting for programs to load. However, we can
-probably work-around it by doing more aggressive dynamic linking now that=
+     bash write_hugetlb_memory.sh "$size" "$populate" "$write" \
+-      "$cgroup" "$path" "$method" "$private" "-l" "$reserve" &
++      "$cgroup" "$path" "$method" "$private" "-l" "$reserve" 2>&1 |
+tee $output &
 
-this is starting to land.
+     local write_result=$?
++    local write_pid=$!
 
-It would be interesting to have a test to measure load time in selftests
-or selftests/benchmark/ perhaps. We have some of these out of tree we
-could push in I think if there is interest.
+-    if [[ "$reserve" != "-n" ]]; then
+-      wait_for_hugetlb_memory_to_get_reserved "$cgroup" "$size"
+-    elif [[ "$populate" == "-o" ]] || [[ "$write" == "-w" ]]; then
++    until grep -q -i "DONE" $output; do
++      echo waiting for DONE signal.
++      if ! ps $write_pid > /dev/null
++      then
++        echo "FAIL: The write died"
++        cleanup
++        exit 1
++      fi
++      sleep 0.5
++    done
++
++    echo ================= write_hugetlb_memory.sh output is:
++    cat $output
++    echo ================= end output.
++
++    if [[ "$populate" == "-o" ]] || [[ "$write" == "-w" ]]; then
+       wait_for_hugetlb_memory_to_get_written "$cgroup" "$size"
++    elif [[ "$reserve" != "-n" ]]; then
++      wait_for_hugetlb_memory_to_get_reserved "$cgroup" "$size"
+     else
+       # This case doesn't produce visible effects, but we still have
+       # to wait for the async process to start and execute...
+@@ -227,7 +244,7 @@ function cleanup_hugetlb_memory() {
+   set +e
+   local cgroup="$1"
+   if [[ "$(pgrep -f write_to_hugetlbfs)" != "" ]]; then
+-    echo kiling write_to_hugetlbfs
++    echo killing write_to_hugetlbfs
+     killall -2 write_to_hugetlbfs
+     wait_for_hugetlb_memory_to_get_depleted $cgroup
+   fi
+diff --git a/tools/testing/selftests/vm/write_to_hugetlbfs.c
+b/tools/testing/selftests/vm/write_to_hugetlbfs.c
+index 85811c3384a10..7f75ad5f7b580 100644
+--- a/tools/testing/selftests/vm/write_to_hugetlbfs.c
++++ b/tools/testing/selftests/vm/write_to_hugetlbfs.c
+@@ -207,13 +207,13 @@ int main(int argc, char **argv)
+  }
+  printf("shmid: 0x%x, shmget key:%d\n", shmid, key);
 
-> =
+- shmaddr = shmat(shmid, NULL, 0);
+- if (shmaddr == (char *)-1) {
++ ptr = shmat(shmid, NULL, 0);
++ if (ptr == (int *)-1) {
+  perror("Shared memory attach failure");
+  shmctl(shmid, IPC_RMID, NULL);
+  exit(2);
+  }
+- printf("shmaddr: %p\n", shmaddr);
++ printf("shmaddr: %p\n", ptr);
 
-> =
+  break;
+  default:
+@@ -223,25 +223,7 @@ int main(int argc, char **argv)
 
-> Bj=C3=B6rn
+  if (write) {
+  printf("Writing to memory.\n");
+- if (method != SHM) {
+- memset(ptr, 1, size);
+- } else {
+- printf("Starting the writes:\n");
+- for (i = 0; i < size; i++) {
+- shmaddr[i] = (char)(i);
+- if (!(i % (1024 * 1024)))
+- printf(".");
+- }
+- printf("\n");
+-
+- printf("Starting the Check...");
+- for (i = 0; i < size; i++)
+- if (shmaddr[i] != (char)i) {
+- printf("\nIndex %lu mismatched\n", i);
+- exit(3);
+- }
+- printf("Done.\n");
+- }
++ memset(ptr, 1, size);
+  }
 
+  if (want_sleep) {
+@@ -253,7 +235,7 @@ int main(int argc, char **argv)
+  sleep(100);
+  }
 
+- switch (method == HUGETLBFS) {
++ if (method == HUGETLBFS) {
+  close(fd);
+  }
+
+--00000000000003c7ea059dc601fb
+Content-Type: text/x-patch; charset="US-ASCII"; name="fix-ppc-hugetlb-test.patch"
+Content-Disposition: attachment; filename="fix-ppc-hugetlb-test.patch"
+Content-Transfer-Encoding: base64
+Content-ID: <f_k68c6d8o0>
+X-Attachment-Id: f_k68c6d8o0
+
+ZGlmZiAtLWdpdCBhL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL3ZtL2NoYXJnZV9yZXNlcnZlZF9o
+dWdldGxiLnNoIGIvdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMvdm0vY2hhcmdlX3Jlc2VydmVkX2h1
+Z2V0bGIuc2gKaW5kZXggZWZkNjgwOTNjZTNlOS4uMThkMzM2ODRmYWFkZSAxMDA3NTUKLS0tIGEv
+dG9vbHMvdGVzdGluZy9zZWxmdGVzdHMvdm0vY2hhcmdlX3Jlc2VydmVkX2h1Z2V0bGIuc2gKKysr
+IGIvdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMvdm0vY2hhcmdlX3Jlc2VydmVkX2h1Z2V0bGIuc2gK
+QEAgLTE2OSwxOSArMTY5LDM2IEBAIGZ1bmN0aW9uIHdyaXRlX2h1Z2V0bGJmc19hbmRfZ2V0X3Vz
+YWdlKCkgewogICBlY2hvIHJlc2VydmVkX3VzYWdlPSIkcmVzZXJ2ZWRfYmVmb3JlIgogICBlY2hv
+IGV4cGVjdF9mYWlsdXJlIGlzICIkZXhwZWN0X2ZhaWx1cmUiCgorICBvdXRwdXQ9JChta3RlbXAp
+CiAgIHNldCArZQogICBpZiBbWyAiJG1ldGhvZCIgPT0gIjEiIF1dIHx8IFtbICIkbWV0aG9kIiA9
+PSAyIF1dIHx8CiAgICAgW1sgIiRwcml2YXRlIiA9PSAiLXIiIF1dICYmIFtbICIkZXhwZWN0X2Zh
+aWx1cmUiICE9IDEgXV07IHRoZW4KCiAgICAgYmFzaCB3cml0ZV9odWdldGxiX21lbW9yeS5zaCAi
+JHNpemUiICIkcG9wdWxhdGUiICIkd3JpdGUiIFwKLSAgICAgICIkY2dyb3VwIiAiJHBhdGgiICIk
+bWV0aG9kIiAiJHByaXZhdGUiICItbCIgIiRyZXNlcnZlIiAmCisgICAgICAiJGNncm91cCIgIiRw
+YXRoIiAiJG1ldGhvZCIgIiRwcml2YXRlIiAiLWwiICIkcmVzZXJ2ZSIgMj4mMSB8IHRlZSAkb3V0
+cHV0ICYKCiAgICAgbG9jYWwgd3JpdGVfcmVzdWx0PSQ/CisgICAgbG9jYWwgd3JpdGVfcGlkPSQh
+CgotICAgIGlmIFtbICIkcmVzZXJ2ZSIgIT0gIi1uIiBdXTsgdGhlbgotICAgICAgd2FpdF9mb3Jf
+aHVnZXRsYl9tZW1vcnlfdG9fZ2V0X3Jlc2VydmVkICIkY2dyb3VwIiAiJHNpemUiCi0gICAgZWxp
+ZiBbWyAiJHBvcHVsYXRlIiA9PSAiLW8iIF1dIHx8IFtbICIkd3JpdGUiID09ICItdyIgXV07IHRo
+ZW4KKyAgICB1bnRpbCBncmVwIC1xIC1pICJET05FIiAkb3V0cHV0OyBkbworICAgICAgZWNobyB3
+YWl0aW5nIGZvciBET05FIHNpZ25hbC4KKyAgICAgIGlmICEgcHMgJHdyaXRlX3BpZCA+IC9kZXYv
+bnVsbAorICAgICAgdGhlbgorICAgICAgICBlY2hvICJGQUlMOiBUaGUgd3JpdGUgZGllZCIKKyAg
+ICAgICAgY2xlYW51cAorICAgICAgICBleGl0IDEKKyAgICAgIGZpCisgICAgICBzbGVlcCAwLjUK
+KyAgICBkb25lCisKKyAgICBlY2hvID09PT09PT09PT09PT09PT09IHdyaXRlX2h1Z2V0bGJfbWVt
+b3J5LnNoIG91dHB1dCBpczoKKyAgICBjYXQgJG91dHB1dAorICAgIGVjaG8gPT09PT09PT09PT09
+PT09PT0gZW5kIG91dHB1dC4KKworICAgIGlmIFtbICIkcG9wdWxhdGUiID09ICItbyIgXV0gfHwg
+W1sgIiR3cml0ZSIgPT0gIi13IiBdXTsgdGhlbgogICAgICAgd2FpdF9mb3JfaHVnZXRsYl9tZW1v
+cnlfdG9fZ2V0X3dyaXR0ZW4gIiRjZ3JvdXAiICIkc2l6ZSIKKyAgICBlbGlmIFtbICIkcmVzZXJ2
+ZSIgIT0gIi1uIiBdXTsgdGhlbgorICAgICAgd2FpdF9mb3JfaHVnZXRsYl9tZW1vcnlfdG9fZ2V0
+X3Jlc2VydmVkICIkY2dyb3VwIiAiJHNpemUiCiAgICAgZWxzZQogICAgICAgIyBUaGlzIGNhc2Ug
+ZG9lc24ndCBwcm9kdWNlIHZpc2libGUgZWZmZWN0cywgYnV0IHdlIHN0aWxsIGhhdmUKICAgICAg
+ICMgdG8gd2FpdCBmb3IgdGhlIGFzeW5jIHByb2Nlc3MgdG8gc3RhcnQgYW5kIGV4ZWN1dGUuLi4K
+QEAgLTIyNyw3ICsyNDQsNyBAQCBmdW5jdGlvbiBjbGVhbnVwX2h1Z2V0bGJfbWVtb3J5KCkgewog
+ICBzZXQgK2UKICAgbG9jYWwgY2dyb3VwPSIkMSIKICAgaWYgW1sgIiQocGdyZXAgLWYgd3JpdGVf
+dG9faHVnZXRsYmZzKSIgIT0gIiIgXV07IHRoZW4KLSAgICBlY2hvIGtpbGluZyB3cml0ZV90b19o
+dWdldGxiZnMKKyAgICBlY2hvIGtpbGxpbmcgd3JpdGVfdG9faHVnZXRsYmZzCiAgICAga2lsbGFs
+bCAtMiB3cml0ZV90b19odWdldGxiZnMKICAgICB3YWl0X2Zvcl9odWdldGxiX21lbW9yeV90b19n
+ZXRfZGVwbGV0ZWQgJGNncm91cAogICBmaQpkaWZmIC0tZ2l0IGEvdG9vbHMvdGVzdGluZy9zZWxm
+dGVzdHMvdm0vd3JpdGVfdG9faHVnZXRsYmZzLmMgYi90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy92
+bS93cml0ZV90b19odWdldGxiZnMuYwppbmRleCA4NTgxMWMzMzg0YTEwLi43Zjc1YWQ1ZjdiNTgw
+IDEwMDY0NAotLS0gYS90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy92bS93cml0ZV90b19odWdldGxi
+ZnMuYworKysgYi90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy92bS93cml0ZV90b19odWdldGxiZnMu
+YwpAQCAtMjA3LDEzICsyMDcsMTMgQEAgaW50IG1haW4oaW50IGFyZ2MsIGNoYXIgKiphcmd2KQog
+CQl9CiAJCXByaW50Zigic2htaWQ6IDB4JXgsIHNobWdldCBrZXk6JWRcbiIsIHNobWlkLCBrZXkp
+OwoKLQkJc2htYWRkciA9IHNobWF0KHNobWlkLCBOVUxMLCAwKTsKLQkJaWYgKHNobWFkZHIgPT0g
+KGNoYXIgKiktMSkgeworCQlwdHIgPSBzaG1hdChzaG1pZCwgTlVMTCwgMCk7CisJCWlmIChwdHIg
+PT0gKGludCAqKS0xKSB7CiAJCQlwZXJyb3IoIlNoYXJlZCBtZW1vcnkgYXR0YWNoIGZhaWx1cmUi
+KTsKIAkJCXNobWN0bChzaG1pZCwgSVBDX1JNSUQsIE5VTEwpOwogCQkJZXhpdCgyKTsKIAkJfQot
+CQlwcmludGYoInNobWFkZHI6ICVwXG4iLCBzaG1hZGRyKTsKKwkJcHJpbnRmKCJzaG1hZGRyOiAl
+cFxuIiwgcHRyKTsKCiAJCWJyZWFrOwogCWRlZmF1bHQ6CkBAIC0yMjMsMjUgKzIyMyw3IEBAIGlu
+dCBtYWluKGludCBhcmdjLCBjaGFyICoqYXJndikKCiAJaWYgKHdyaXRlKSB7CiAJCXByaW50Zigi
+V3JpdGluZyB0byBtZW1vcnkuXG4iKTsKLQkJaWYgKG1ldGhvZCAhPSBTSE0pIHsKLQkJCW1lbXNl
+dChwdHIsIDEsIHNpemUpOwotCQl9IGVsc2UgewotCQkJcHJpbnRmKCJTdGFydGluZyB0aGUgd3Jp
+dGVzOlxuIik7Ci0JCQlmb3IgKGkgPSAwOyBpIDwgc2l6ZTsgaSsrKSB7Ci0JCQkJc2htYWRkcltp
+XSA9IChjaGFyKShpKTsKLQkJCQlpZiAoIShpICUgKDEwMjQgKiAxMDI0KSkpCi0JCQkJCXByaW50
+ZigiLiIpOwotCQkJfQotCQkJcHJpbnRmKCJcbiIpOwotCi0JCQlwcmludGYoIlN0YXJ0aW5nIHRo
+ZSBDaGVjay4uLiIpOwotCQkJZm9yIChpID0gMDsgaSA8IHNpemU7IGkrKykKLQkJCQlpZiAoc2ht
+YWRkcltpXSAhPSAoY2hhcilpKSB7Ci0JCQkJCXByaW50ZigiXG5JbmRleCAlbHUgbWlzbWF0Y2hl
+ZFxuIiwgaSk7Ci0JCQkJCWV4aXQoMyk7Ci0JCQkJfQotCQkJcHJpbnRmKCJEb25lLlxuIik7Ci0J
+CX0KKwkJbWVtc2V0KHB0ciwgMSwgc2l6ZSk7CiAJfQoKIAlpZiAod2FudF9zbGVlcCkgewpAQCAt
+MjUzLDcgKzIzNSw3IEBAIGludCBtYWluKGludCBhcmdjLCBjaGFyICoqYXJndikKIAkJCXNsZWVw
+KDEwMCk7CiAJfQoKLQlzd2l0Y2ggKG1ldGhvZCA9PSBIVUdFVExCRlMpIHsKKwlpZiAobWV0aG9k
+ID09IEhVR0VUTEJGUykgewogCQljbG9zZShmZCk7CiAJfQo=
+--00000000000003c7ea059dc601fb--
