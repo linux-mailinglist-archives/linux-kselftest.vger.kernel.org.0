@@ -2,23 +2,53 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 21E2215287C
-	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Feb 2020 10:37:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 23E9D1529D4
+	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Feb 2020 12:23:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728035AbgBEJhm (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 5 Feb 2020 04:37:42 -0500
-Received: from mx2.suse.de ([195.135.220.15]:60316 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728030AbgBEJhm (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 5 Feb 2020 04:37:42 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx2.suse.de (Postfix) with ESMTP id F2830AE2C;
-        Wed,  5 Feb 2020 09:37:39 +0000 (UTC)
-Received: by quack2.suse.cz (Postfix, from userid 1000)
-        id ED8431E0A51; Wed,  5 Feb 2020 10:37:33 +0100 (CET)
-Date:   Wed, 5 Feb 2020 10:37:33 +0100
-From:   Jan Kara <jack@suse.cz>
+        id S1728387AbgBELXc (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 5 Feb 2020 06:23:32 -0500
+Received: from mail-lj1-f194.google.com ([209.85.208.194]:41825 "EHLO
+        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727170AbgBELXc (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 5 Feb 2020 06:23:32 -0500
+Received: by mail-lj1-f194.google.com with SMTP id h23so1908316ljc.8
+        for <linux-kselftest@vger.kernel.org>; Wed, 05 Feb 2020 03:23:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=shutemov-name.20150623.gappssmtp.com; s=20150623;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=dh5KVm5NVZR7B6kV3CkfPxftpb+A9muCzSxY5f+by0k=;
+        b=tFQv4blGi1NukrKVKLKM9a5yWogak2ERntocChs0vWrya9lUNK3FSyatnKS1MLPDrt
+         p+3KZiUybS59AUws2x8n3rybFtHSU3qsaP38wMgFaDNTG/usGncV2+gIcDPWZaTihn2x
+         IT0s2ZIQkgy6nZw6cmza+jvP3jviAy+EvvnJ4AOSPcmWvi3H07xyPGK9XfmmYHOdOfBr
+         i64GsDmqMsxzDMDTMf2POxCYF3RjYkxUsa1AEq/CUhlFdErzLlXMxmx6vvsrYmjq/W1E
+         0uNIM8buRrHTOj7xD45gFWXrseGaMzB/dqpGKw77ntg+wPel+osm/zIX+A2PVoNrN2AX
+         dPxw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=dh5KVm5NVZR7B6kV3CkfPxftpb+A9muCzSxY5f+by0k=;
+        b=Fkf6racRkR9de9GEAy/PNwJEKg70M9a1RwQ+sw3+BwsLUsZFNJBZ+JC2jS7JHrdfZO
+         eCug2JHXeJJQAjVFGQmixb+2XmZq2YYxb8wgZUd0mehRbduWvt4nuevqdYDUrwbHM4qR
+         bffURGQ/kxxRoruXF04W/xVM2aih/1+efxMQwQAFaePpdGDSBe8a3QhNsZ82rqshYPtF
+         gK01a1X2xSPQPZ9D+PP18zULwpw+hiPfLKg+sMjEOzdBAY18GAvY3GHPtyKZ62AHj+ys
+         gR/OaxiibBMgqsM9ckgekXlwIF6k+ankNK7XTXhbxxpaL3GCIaX7LUYtJyall1zHHmcC
+         gEow==
+X-Gm-Message-State: APjAAAW+Ba4nNMYb0L3GjsyC7Fc/jWbQ1C4323+5aR5tub5zNGd5touy
+        Jec9bOlTMSOSsFZ0nxKNqLY/6g==
+X-Google-Smtp-Source: APXvYqzGnroRbFkq73Du+mrJTZV4pY9s8Imx6qAPmcft4bWsOSpmZpl02xqYNxfUrCA0UHefdOERHw==
+X-Received: by 2002:a2e:918c:: with SMTP id f12mr18604844ljg.66.1580901810333;
+        Wed, 05 Feb 2020 03:23:30 -0800 (PST)
+Received: from box.localdomain ([86.57.175.117])
+        by smtp.gmail.com with ESMTPSA id y18sm12786085ljm.93.2020.02.05.03.23.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 05 Feb 2020 03:23:29 -0800 (PST)
+Received: by box.localdomain (Postfix, from userid 1000)
+        id AE293100AF6; Wed,  5 Feb 2020 14:23:43 +0300 (+03)
+Date:   Wed, 5 Feb 2020 14:23:43 +0300
+From:   "Kirill A. Shutemov" <kirill@shutemov.name>
 To:     John Hubbard <jhubbard@nvidia.com>
 Cc:     Andrew Morton <akpm@linux-foundation.org>,
         Al Viro <viro@zeniv.linux.org.uk>,
@@ -28,8 +58,7 @@ Cc:     Andrew Morton <akpm@linux-foundation.org>,
         Ira Weiny <ira.weiny@intel.com>, Jan Kara <jack@suse.cz>,
         Jason Gunthorpe <jgg@ziepe.ca>,
         Jonathan Corbet <corbet@lwn.net>,
-        =?iso-8859-1?B?Suly9G1l?= Glisse <jglisse@redhat.com>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        =?utf-8?B?SsOpcsO0bWU=?= Glisse <jglisse@redhat.com>,
         Michal Hocko <mhocko@suse.com>,
         Mike Kravetz <mike.kravetz@oracle.com>,
         Shuah Khan <shuah@kernel.org>,
@@ -38,67 +67,61 @@ Cc:     Andrew Morton <akpm@linux-foundation.org>,
         linux-doc@vger.kernel.org, linux-fsdevel@vger.kernel.org,
         linux-kselftest@vger.kernel.org, linux-rdma@vger.kernel.org,
         linux-mm@kvack.org, LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v4 10/12] mm/gup: /proc/vmstat: pin_user_pages (FOLL_PIN)
- reporting
-Message-ID: <20200205093733.GB28058@quack2.suse.cz>
+Subject: Re: [PATCH v4 04/12] mm: introduce page_ref_sub_return()
+Message-ID: <20200205112343.e2vpcylgrobfcxlo@box>
 References: <20200204234117.2974687-1-jhubbard@nvidia.com>
- <20200204234117.2974687-11-jhubbard@nvidia.com>
+ <20200204234117.2974687-5-jhubbard@nvidia.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200204234117.2974687-11-jhubbard@nvidia.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20200204234117.2974687-5-jhubbard@nvidia.com>
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue 04-02-20 15:41:15, John Hubbard wrote:
-> Now that pages are "DMA-pinned" via pin_user_page*(), and unpinned via
-> unpin_user_pages*(), we need some visibility into whether all of this is
-> working correctly.
+On Tue, Feb 04, 2020 at 03:41:09PM -0800, John Hubbard wrote:
+> An upcoming patch requires subtracting a large chunk of refcounts from
+> a page, and checking what the resulting refcount is. This is a little
+> different than the usual "check for zero refcount" that many of the
+> page ref functions already do. However, it is similar to a few other
+> routines that (like this one) are generally useful for things such as
+> 1-based refcounting.
 > 
-> Add two new fields to /proc/vmstat:
-> 
->     nr_foll_pin_acquired
->     nr_foll_pin_released
-> 
-> These are documented in Documentation/core-api/pin_user_pages.rst.
-> They represent the number of pages (since boot time) that have been
-> pinned ("nr_foll_pin_acquired") and unpinned ("nr_foll_pin_released"),
-> via pin_user_pages*() and unpin_user_pages*().
-> 
-> In the absence of long-running DMA or RDMA operations that hold pages
-> pinned, the above two fields will normally be equal to each other.
-> 
-> Also: update Documentation/core-api/pin_user_pages.rst, to remove an
-> earlier (now confirmed untrue) claim about a performance problem with
-> /proc/vmstat.
-> 
-> Also: updated Documentation/core-api/pin_user_pages.rst to rename the
-> new /proc/vmstat entries, to the names listed here.
+> Add page_ref_sub_return(), that subtracts a chunk of refcounts
+> atomically, and returns an atomic snapshot of the result.
 > 
 > Signed-off-by: John Hubbard <jhubbard@nvidia.com>
-
-...
-
-> @@ -104,6 +106,9 @@ static __maybe_unused struct page *try_grab_compound_head(struct page *page,
->  		if (hpage_pincount_available(page))
->  			hpage_pincount_add(page, refs);
+> ---
+>  include/linux/page_ref.h | 9 +++++++++
+>  1 file changed, 9 insertions(+)
+> 
+> diff --git a/include/linux/page_ref.h b/include/linux/page_ref.h
+> index 14d14beb1f7f..a0e171265b79 100644
+> --- a/include/linux/page_ref.h
+> +++ b/include/linux/page_ref.h
+> @@ -102,6 +102,15 @@ static inline void page_ref_sub(struct page *page, int nr)
+>  		__page_ref_mod(page, -nr);
+>  }
 >  
-> +		mod_node_page_state(page_pgdat(page), NR_FOLL_PIN_ACQUIRED,
-> +				    orig_refs);
+> +static inline int page_ref_sub_return(struct page *page, int nr)
+> +{
+> +	int ret = atomic_sub_return(nr, &page->_refcount);
 > +
->  		return page;
->  	}
->  
+> +	if (page_ref_tracepoint_active(__tracepoint_page_ref_mod))
 
-It seems to me you miss mod_node_page_state() in put_compound_head(), don't
-you?
+s/__tracepoint_page_ref_mod/__tracepoint_page_ref_mod_and_return/
 
-Otherwise I like the new stat names better :).
+> +		__page_ref_mod_and_return(page, -nr, ret);
+> +	return ret;
+> +}
+> +
+>  static inline void page_ref_inc(struct page *page)
+>  {
+>  	atomic_inc(&page->_refcount);
+> -- 
+> 2.25.0
+> 
 
-								Honza
 -- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+ Kirill A. Shutemov
