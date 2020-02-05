@@ -2,118 +2,187 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E715152A25
-	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Feb 2020 12:46:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EFF15153044
+	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Feb 2020 13:00:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726810AbgBELqE (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 5 Feb 2020 06:46:04 -0500
-Received: from mail-lj1-f194.google.com ([209.85.208.194]:35054 "EHLO
-        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727081AbgBELqA (ORCPT
+        id S1727068AbgBEMAU (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 5 Feb 2020 07:00:20 -0500
+Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:28276 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726944AbgBEMAU (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 5 Feb 2020 06:46:00 -0500
-Received: by mail-lj1-f194.google.com with SMTP id q8so2001211ljb.2
-        for <linux-kselftest@vger.kernel.org>; Wed, 05 Feb 2020 03:45:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=shutemov-name.20150623.gappssmtp.com; s=20150623;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Jy6I9lCZXmqSIc0Oo7ZwAUc0APIjOD7+FskXlmNX0dE=;
-        b=fbUqiFBKKWfMvUVGayetzT7gBoVUOArtTvKe87cxlG4ADzVrq73rMKZXdR+K95XCj8
-         2tpgG6t6IONw5sP60aDQPIi6bEjTxNmgDQRNTBOF6qrPugG05rtCHYMncko/ND4Oe2J6
-         r5juTmm4ovUmOcVa1aFbKe9GkKmUd7VDww+dSp8QucR9SspUNhqp/6/XnMDjtqCOZCm+
-         qKdTR/LxfUsAecDs7AmpEc7Cuc0WG8lutxYO9rxW3DP42v5HUE+fiSgAC2sl51AiqrDI
-         7tiuH8OzxbBfsLnmX2PGY8JuKutQO0wJaxcNMEFDaSlRFOuKzWYVhw0WG5ELGFSaNkOP
-         JFWQ==
+        Wed, 5 Feb 2020 07:00:20 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1580904019;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Z9OdtqIYUBqoL66r9+oESb2jG/fvhjGyIkGlsqD7Tqs=;
+        b=Zu8GloQXevbRztiZNaiP3ZMlDOh5IxvGJjH3niQ5iF+dc1QED9yEdRTpS7N9bog1O0ZTrb
+        8VNvj5RbuBEhts5N4Ie+RDNMdxtm1YnSreomfuieRreZnDnwS9o5cX7vIT8iKREYKg7zKb
+        ss74HoNb9hXcOtCWY1pW8JXTSgKBzcE=
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
+ [209.85.221.69]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-21-F1-mmtrQNUK_F6AgANwqWg-1; Wed, 05 Feb 2020 07:00:14 -0500
+X-MC-Unique: F1-mmtrQNUK_F6AgANwqWg-1
+Received: by mail-wr1-f69.google.com with SMTP id l1so1090367wrt.4
+        for <linux-kselftest@vger.kernel.org>; Wed, 05 Feb 2020 04:00:14 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Jy6I9lCZXmqSIc0Oo7ZwAUc0APIjOD7+FskXlmNX0dE=;
-        b=XlAt1QlB0SNoCirrITzcY6eto1W7eqN6UVpJyDBELaK22aoZdHpi2FBf4r0Na3JF3n
-         xSweyq8JK/VulDPTUckmf7BG4U5Z68KkC6WnbVJ7V45nKy/I+87f1LGcs4GScVbgKMDL
-         DWD5uK4h0CWqAh6X1+UIzmBtvpriA2/a/H0kiSTu+wbvdeqAK3KzHEDZ4V6jyu4p7iLx
-         k51wUUx/HkY5BW1HSv7oerdrf6P5td1UEzzXg5+bQrqPmwauP+TUk4KaksOAnH6uRC6D
-         qwQhnYgl2exLymAJWLdbjLS5+GCTej+FdtyQ0smKu7avcM1Emj7FyHQpUMMCFCFPQkzu
-         +d9Q==
-X-Gm-Message-State: APjAAAUBjLp7BQDgmCw+AQcQ/ll1QOR0Q4DwGAvfxkrqOsQMzHeBgpwX
-        cjy1ARZkbM/8x2qjPQxudMjb6w==
-X-Google-Smtp-Source: APXvYqyYwLXyW1HUby3u5z2IhHyV0WiYO1K3JWIkU6l6dX312E3ieNWtdHp2AH5LJPi+2PXC1G4V7w==
-X-Received: by 2002:a2e:5056:: with SMTP id v22mr20108284ljd.164.1580903158629;
-        Wed, 05 Feb 2020 03:45:58 -0800 (PST)
-Received: from box.localdomain ([86.57.175.117])
-        by smtp.gmail.com with ESMTPSA id w3sm13028052ljo.66.2020.02.05.03.45.57
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version;
+        bh=Z9OdtqIYUBqoL66r9+oESb2jG/fvhjGyIkGlsqD7Tqs=;
+        b=L4spYupXaJjc5aylWYaDP6kLYwS/b+Hp8KuRr5jA6E79ID7BWjqgUzYkCNrWfqVfhc
+         ugc1qsxuI1bin5LSBz769WyltbgiXb781l+Ivn7w/LTp4XZLJhrjaQXiO63OYenRQpAC
+         ijpGn17HnWNE2+2JA1b1rgUe0Luk9+UeauRO9AwZo0VoHkMwVJGPwt+t8MkcZscOdov1
+         4y8CWoV55OXHriEhpnwgmSfNU0G44h825DbFqcd2WURH0Wd5drSFk1kZATMKLYCA1/ra
+         ojrAOxac0eyt8VS0AuCRWd6ich4qJI05YEh7fZTXJUFFOQyganlMDHfvwbKDQvYvQ7FG
+         pbJA==
+X-Gm-Message-State: APjAAAWZRzIRxhgwVXyl8Jrz4VoMf3AOmTuLUVhpSR2RMi8dfR5golD1
+        2l6nUrOBQLkDWOhYwsiWD0C6uQ+4g7BzQh+qupkdHMvZn6U3rsCpSnWWJE5RN0knxtTXGnXgG2s
+        ndJFIdn1YlFKuVKrWyBH98HklMjo/
+X-Received: by 2002:a5d:4c89:: with SMTP id z9mr22168465wrs.97.1580904013137;
+        Wed, 05 Feb 2020 04:00:13 -0800 (PST)
+X-Google-Smtp-Source: APXvYqwSvQyMeJTISB9Ag6NMPuNBbKfC47aIaLnVUfMV7jVwsDN2cT06Yn/Y71CxLRow8+0A6XsFrQ==
+X-Received: by 2002:a5d:4c89:: with SMTP id z9mr22168431wrs.97.1580904012809;
+        Wed, 05 Feb 2020 04:00:12 -0800 (PST)
+Received: from vitty.brq.redhat.com (nat-pool-brq-t.redhat.com. [213.175.37.10])
+        by smtp.gmail.com with ESMTPSA id q14sm34679205wrj.81.2020.02.05.04.00.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Feb 2020 03:45:58 -0800 (PST)
-Received: by box.localdomain (Postfix, from userid 1000)
-        id 0BF46100AF6; Wed,  5 Feb 2020 14:46:12 +0300 (+03)
-Date:   Wed, 5 Feb 2020 14:46:12 +0300
-From:   "Kirill A. Shutemov" <kirill@shutemov.name>
-To:     John Hubbard <jhubbard@nvidia.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Christoph Hellwig <hch@infradead.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Dave Chinner <david@fromorbit.com>,
-        Ira Weiny <ira.weiny@intel.com>, Jan Kara <jack@suse.cz>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Jonathan Corbet <corbet@lwn.net>,
-        =?utf-8?B?SsOpcsO0bWU=?= Glisse <jglisse@redhat.com>,
-        Michal Hocko <mhocko@suse.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Matthew Wilcox <willy@infradead.org>,
-        linux-doc@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-rdma@vger.kernel.org,
-        linux-mm@kvack.org, LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v4 11/12] mm/gup_benchmark: support pin_user_pages() and
- related calls
-Message-ID: <20200205114612.foo7zrcplgxwmylt@box>
-References: <20200204234117.2974687-1-jhubbard@nvidia.com>
- <20200204234117.2974687-12-jhubbard@nvidia.com>
+        Wed, 05 Feb 2020 04:00:12 -0800 (PST)
+From:   Vitaly Kuznetsov <vkuznets@redhat.com>
+To:     Ben Gardon <bgardon@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, Peter Xu <peterx@redhat.com>,
+        Sean Christopherson <sean.j.christopherson@intel.com>,
+        Peter Shier <pshier@google.com>,
+        Oliver Upton <oupton@google.com>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH 1/3] kvm: mmu: Replace unsigned with unsigned int for PTE access
+In-Reply-To: <20200203230911.39755-1-bgardon@google.com>
+References: <20200203230911.39755-1-bgardon@google.com>
+Date:   Wed, 05 Feb 2020 13:00:11 +0100
+Message-ID: <87v9olkzw4.fsf@vitty.brq.redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200204234117.2974687-12-jhubbard@nvidia.com>
+Content-Type: text/plain
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Feb 04, 2020 at 03:41:16PM -0800, John Hubbard wrote:
-> Up until now, gup_benchmark supported testing of the
-> following kernel functions:
-> 
-> * get_user_pages(): via the '-U' command line option
-> * get_user_pages_longterm(): via the '-L' command line option
-> * get_user_pages_fast(): as the default (no options required)
-> 
-> Add test coverage for the new corresponding pin_*() functions:
-> 
-> * pin_user_pages_fast(): via the '-a' command line option
-> * pin_user_pages():      via the '-b' command line option
-> 
-> Also, add an option for clarity: '-u' for what is now (still) the
-> default choice: get_user_pages_fast().
-> 
-> Also, for the commands that set FOLL_PIN, verify that the pages
-> really are dma-pinned, via the new is_dma_pinned() routine.
-> Those commands are:
-> 
->     PIN_FAST_BENCHMARK     : calls pin_user_pages_fast()
->     PIN_BENCHMARK          : calls pin_user_pages()
-> 
-> In between the calls to pin_*() and unpin_user_pages(),
-> check each page: if page_maybe_dma_pinned() returns false, then
-> WARN and return.
-> 
-> Do this outside of the benchmark timestamps, so that it doesn't
-> affect reported times.
-> 
-> Reviewed-by: Ira Weiny <ira.weiny@intel.com>
-> Signed-off-by: John Hubbard <jhubbard@nvidia.com>
+Ben Gardon <bgardon@google.com> writes:
 
-Acked-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+> There are several functions which pass an access permission mask for
+> SPTEs as an unsigned. This works, but checkpatch complains about it.
+> Switch the occurrences of unsigned to unsigned int to satisfy checkpatch.
+>
+> No functional change expected.
+>
+> Tested by running kvm-unit-tests on an Intel Haswell machine. This
+> commit introduced no new failures.
+>
+> This commit can be viewed in Gerrit at:
+> 	https://linux-review.googlesource.com/c/virt/kvm/kvm/+/2358
+>
+> Signed-off-by: Ben Gardon <bgardon@google.com>
+> Reviewed-by: Oliver Upton <oupton@google.com>
+> ---
+>  arch/x86/kvm/mmu/mmu.c | 24 +++++++++++++-----------
+>  1 file changed, 13 insertions(+), 11 deletions(-)
+>
+> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+> index 84eeb61d06aa3..a9c593dec49bf 100644
+> --- a/arch/x86/kvm/mmu/mmu.c
+> +++ b/arch/x86/kvm/mmu/mmu.c
+> @@ -452,7 +452,7 @@ static u64 get_mmio_spte_generation(u64 spte)
+>  }
+>  
+>  static void mark_mmio_spte(struct kvm_vcpu *vcpu, u64 *sptep, u64 gfn,
+> -			   unsigned access)
+> +			   unsigned int access)
+>  {
+>  	u64 gen = kvm_vcpu_memslots(vcpu)->generation & MMIO_SPTE_GEN_MASK;
+>  	u64 mask = generation_mmio_spte_mask(gen);
+> @@ -484,7 +484,7 @@ static unsigned get_mmio_spte_access(u64 spte)
+>  }
+>  
+>  static bool set_mmio_spte(struct kvm_vcpu *vcpu, u64 *sptep, gfn_t gfn,
+> -			  kvm_pfn_t pfn, unsigned access)
+> +			  kvm_pfn_t pfn, unsigned int access)
+>  {
+>  	if (unlikely(is_noslot_pfn(pfn))) {
+>  		mark_mmio_spte(vcpu, sptep, gfn, access);
+> @@ -2475,7 +2475,7 @@ static struct kvm_mmu_page *kvm_mmu_get_page(struct kvm_vcpu *vcpu,
+>  					     gva_t gaddr,
+>  					     unsigned level,
+>  					     int direct,
+> -					     unsigned access)
+> +					     unsigned int access)
+>  {
+>  	union kvm_mmu_page_role role;
+>  	unsigned quadrant;
+> @@ -2990,7 +2990,7 @@ static bool kvm_is_mmio_pfn(kvm_pfn_t pfn)
+>  #define SET_SPTE_NEED_REMOTE_TLB_FLUSH	BIT(1)
+>  
+>  static int set_spte(struct kvm_vcpu *vcpu, u64 *sptep,
+> -		    unsigned pte_access, int level,
+> +		    unsigned int pte_access, int level,
+>  		    gfn_t gfn, kvm_pfn_t pfn, bool speculative,
+>  		    bool can_unsync, bool host_writable)
+>  {
+> @@ -3081,9 +3081,10 @@ static int set_spte(struct kvm_vcpu *vcpu, u64 *sptep,
+>  	return ret;
+>  }
+>  
+> -static int mmu_set_spte(struct kvm_vcpu *vcpu, u64 *sptep, unsigned pte_access,
+> -			int write_fault, int level, gfn_t gfn, kvm_pfn_t pfn,
+> -		       	bool speculative, bool host_writable)
+> +static int mmu_set_spte(struct kvm_vcpu *vcpu, u64 *sptep,
+> +			unsigned int pte_access, int write_fault, int level,
+> +			gfn_t gfn, kvm_pfn_t pfn, bool speculative,
+> +			bool host_writable)
+>  {
+>  	int was_rmapped = 0;
+>  	int rmap_count;
+> @@ -3165,7 +3166,7 @@ static int direct_pte_prefetch_many(struct kvm_vcpu *vcpu,
+>  {
+>  	struct page *pages[PTE_PREFETCH_NUM];
+>  	struct kvm_memory_slot *slot;
+> -	unsigned access = sp->role.access;
+> +	unsigned int access = sp->role.access;
+>  	int i, ret;
+>  	gfn_t gfn;
+>  
+> @@ -3400,7 +3401,8 @@ static int kvm_handle_bad_page(struct kvm_vcpu *vcpu, gfn_t gfn, kvm_pfn_t pfn)
+>  }
+>  
+>  static bool handle_abnormal_pfn(struct kvm_vcpu *vcpu, gva_t gva, gfn_t gfn,
+> -				kvm_pfn_t pfn, unsigned access, int *ret_val)
+> +				kvm_pfn_t pfn, unsigned int access,
+> +				int *ret_val)
+>  {
+>  	/* The pfn is invalid, report the error! */
+>  	if (unlikely(is_error_pfn(pfn))) {
+> @@ -4005,7 +4007,7 @@ static int handle_mmio_page_fault(struct kvm_vcpu *vcpu, u64 addr, bool direct)
+>  
+>  	if (is_mmio_spte(spte)) {
+>  		gfn_t gfn = get_mmio_spte_gfn(spte);
+> -		unsigned access = get_mmio_spte_access(spte);
+> +		unsigned int access = get_mmio_spte_access(spte);
+>  
+>  		if (!check_mmio_spte(vcpu, spte))
+>  			return RET_PF_INVALID;
+> @@ -4349,7 +4351,7 @@ static void inject_page_fault(struct kvm_vcpu *vcpu,
+>  }
+>  
+>  static bool sync_mmio_spte(struct kvm_vcpu *vcpu, u64 *sptep, gfn_t gfn,
+> -			   unsigned access, int *nr_present)
+> +			   unsigned int access, int *nr_present)
+>  {
+>  	if (unlikely(is_mmio_spte(*sptep))) {
+>  		if (gfn != get_mmio_spte_gfn(*sptep)) {
+
+Reviewed-by: Vitaly Kuznetsov <vkuznets@redhat.com>
+
 -- 
- Kirill A. Shutemov
+Vitaly
+
