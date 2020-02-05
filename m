@@ -2,421 +2,141 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 14A3C1531CF
-	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Feb 2020 14:27:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 53B2E1531F7
+	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Feb 2020 14:37:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728286AbgBEN1F (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 5 Feb 2020 08:27:05 -0500
-Received: from youngberry.canonical.com ([91.189.89.112]:56968 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728072AbgBEN0u (ORCPT
+        id S1726960AbgBENhj (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 5 Feb 2020 08:37:39 -0500
+Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:33505 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726575AbgBENhj (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 5 Feb 2020 08:26:50 -0500
-Received: from ip5f5bf7ec.dynamic.kabel-deutschland.de ([95.91.247.236] helo=wittgenstein.fritz.box)
-        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.86_2)
-        (envelope-from <christian.brauner@ubuntu.com>)
-        id 1izKhb-00035h-Ch; Wed, 05 Feb 2020 13:26:47 +0000
-From:   Christian Brauner <christian.brauner@ubuntu.com>
-To:     linux-api@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Tejun Heo <tj@kernel.org>
-Cc:     Oleg Nesterov <oleg@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Christian Brauner <christian.brauner@ubuntu.com>,
-        Shuah Khan <shuah@kernel.org>, cgroups@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, Roman Gushchin <guro@fb.com>
-Subject: [PATCH v6 6/6] selftests/cgroup: add tests for cloning into cgroups
-Date:   Wed,  5 Feb 2020 14:26:23 +0100
-Message-Id: <20200205132623.670015-7-christian.brauner@ubuntu.com>
-X-Mailer: git-send-email 2.25.0
-In-Reply-To: <20200205132623.670015-1-christian.brauner@ubuntu.com>
-References: <20200205132623.670015-1-christian.brauner@ubuntu.com>
+        Wed, 5 Feb 2020 08:37:39 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1580909858;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=1ZHZKV/jKaOSLjENoe5XZtmnBOqMNMYSGhSaLDt7Q6E=;
+        b=TnSvzEoOh1sYcsWezVYdDfooDRdzywLACQixx0YAuCWdZGfFfS90J/JRl8TnGT0QxL0vWd
+        74QJV681/IlsjvEumQ2o6LuH84c8bE50Y5bCn9GTcadO+rIESOK2M/vpiWRUk21EOL7Cz8
+        p7vHu9DJyYnTwaJAMpSTPHjVMNB4Gh0=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-363-UYhcgnVjMOqT22GpKhfJYQ-1; Wed, 05 Feb 2020 08:37:28 -0500
+X-MC-Unique: UYhcgnVjMOqT22GpKhfJYQ-1
+Received: by mail-wr1-f71.google.com with SMTP id l1so1210641wrt.4
+        for <linux-kselftest@vger.kernel.org>; Wed, 05 Feb 2020 05:37:28 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version;
+        bh=1ZHZKV/jKaOSLjENoe5XZtmnBOqMNMYSGhSaLDt7Q6E=;
+        b=LblkZTernVR+99sMskw721M5kRXcfqBeyGF1RVvlfAk3QwdXUrhGN8v6QasnpgO2uV
+         WhYTlgh5625p/nX+1G7vWL0cXXwK2aCyMYSq6Bc16ewSlDLMDobg03TTlKYkpifltJZk
+         OkGkGVFyH/Nm1faL398LbfbPspvb0EqPTP/KyskZC84ERWxoMpxDP0KQ2OpdL5yp+BoF
+         LSHweDtNMsgD15NxC0Fl/dwww8L+MGEbM00gfcVqWPkgUGCrOccXBggJ66aiRydY8m3f
+         xbMSHscCcRPJHb3GJo49rfNofLkgsqb16oi4zu5ZFD/n2e82IY/WpuhKuRoWu3P5GxCL
+         rnXw==
+X-Gm-Message-State: APjAAAUqHISDWOQCl3oGi74Caco9yYkB8mFUjhEWv5sIEPUB8DFZKBCH
+        7oiHaSDj/C9wXGnrSgKdbNdSUwJE7h49CURMrs9FFq9urZO1AATylzVMnvsP9CFanbEP8uokSkJ
+        ZRkyB3AIree0qVPEesRhs9kkG3FRC
+X-Received: by 2002:a1c:9a56:: with SMTP id c83mr5908607wme.79.1580909847567;
+        Wed, 05 Feb 2020 05:37:27 -0800 (PST)
+X-Google-Smtp-Source: APXvYqwzFfXP0e0I4L4edLOhHxfXyc4Wmj97qyd8lGe4qqcytnp7OMRoH9/s3pDomwcVTc8YqdMMAg==
+X-Received: by 2002:a1c:9a56:: with SMTP id c83mr5908575wme.79.1580909847254;
+        Wed, 05 Feb 2020 05:37:27 -0800 (PST)
+Received: from vitty.brq.redhat.com (nat-pool-brq-t.redhat.com. [213.175.37.10])
+        by smtp.gmail.com with ESMTPSA id k13sm33844114wrx.59.2020.02.05.05.37.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 05 Feb 2020 05:37:26 -0800 (PST)
+From:   Vitaly Kuznetsov <vkuznets@redhat.com>
+To:     Ben Gardon <bgardon@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, Peter Xu <peterx@redhat.com>,
+        Sean Christopherson <sean.j.christopherson@intel.com>,
+        Peter Shier <pshier@google.com>,
+        Oliver Upton <oupton@google.com>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH 2/3] kvm: mmu: Separate generating and setting mmio ptes
+In-Reply-To: <20200203230911.39755-2-bgardon@google.com>
+References: <20200203230911.39755-1-bgardon@google.com> <20200203230911.39755-2-bgardon@google.com>
+Date:   Wed, 05 Feb 2020 14:37:25 +0100
+Message-ID: <87sgjpkve2.fsf@vitty.brq.redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Expand the cgroup test-suite to include tests for CLONE_INTO_CGROUP.
-This adds the following tests:
-- CLONE_INTO_CGROUP manages to clone a process directly into a correctly
-  delegated cgroup
-- CLONE_INTO_CGROUP fails to clone a process into a cgroup that has been
-  removed after we've opened an fd to it
-- CLONE_INTO_CGROUP fails to clone a process into an invalid domain
-  cgroup
-- CLONE_INTO_CGROUP adheres to the no internal process constraint
-- CLONE_INTO_CGROUP works with the freezer feature
+Ben Gardon <bgardon@google.com> writes:
 
-Cc: Tejun Heo <tj@kernel.org>
-Cc: Shuah Khan <shuah@kernel.org>
-Cc: cgroups@vger.kernel.org
-Cc: linux-kselftest@vger.kernel.org
-Acked-by: Roman Gushchin <guro@fb.com>
-Signed-off-by: Christian Brauner <christian.brauner@ubuntu.com>
----
-/* v1 */
-Link: https://lore.kernel.org/r/20191218173516.7875-4-christian.brauner@ubuntu.com
+> Separate the functions for generating MMIO page table entries from the
+> function that inserts them into the paging structure. This refactoring
+> will facilitate changes to the MMU sychronization model to use atomic
+> compare / exchanges (which are not guaranteed to succeed) instead of a
+> monolithic MMU lock.
+>
+> No functional change expected.
+>
+> Tested by running kvm-unit-tests on an Intel Haswell machine. This
+> commit introduced no new failures.
+>
+> This commit can be viewed in Gerrit at:
+> 	https://linux-review.googlesource.com/c/virt/kvm/kvm/+/2359
+>
+> Signed-off-by: Ben Gardon <bgardon@google.com>
+> Reviewed-by: Oliver Upton <oupton@google.com>
+> Reviewed-by: Peter Shier <pshier@google.com>
+> ---
+>  arch/x86/kvm/mmu/mmu.c | 15 +++++++++++++--
+>  1 file changed, 13 insertions(+), 2 deletions(-)
+>
+> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+> index a9c593dec49bf..b81010d0edae1 100644
+> --- a/arch/x86/kvm/mmu/mmu.c
+> +++ b/arch/x86/kvm/mmu/mmu.c
+> @@ -451,9 +451,9 @@ static u64 get_mmio_spte_generation(u64 spte)
+>  	return gen;
+>  }
+>  
+> -static void mark_mmio_spte(struct kvm_vcpu *vcpu, u64 *sptep, u64 gfn,
+> -			   unsigned int access)
+> +static u64 make_mmio_spte(struct kvm_vcpu *vcpu, u64 gfn, unsigned int access)
+>  {
+> +
 
-/* v2 */
-Link: https://lore.kernel.org/r/20191223061504.28716-4-christian.brauner@ubuntu.com
-unchanged
+Unneded newline.
 
-/* v3 */
-Link: https://lore.kernel.org/r/20200117002143.15559-6-christian.brauner@ubuntu.com
-unchanged
+>  	u64 gen = kvm_vcpu_memslots(vcpu)->generation & MMIO_SPTE_GEN_MASK;
+>  	u64 mask = generation_mmio_spte_mask(gen);
+>  	u64 gpa = gfn << PAGE_SHIFT;
+> @@ -464,6 +464,17 @@ static void mark_mmio_spte(struct kvm_vcpu *vcpu, u64 *sptep, u64 gfn,
+>  	mask |= (gpa & shadow_nonpresent_or_rsvd_mask)
+>  		<< shadow_nonpresent_or_rsvd_mask_len;
+>  
+> +	return mask;
+> +}
+> +
+> +static void mark_mmio_spte(struct kvm_vcpu *vcpu, u64 *sptep, u64 gfn,
+> +			   unsigned int access)
+> +{
+> +	u64 mask = make_mmio_spte(vcpu, gfn, access);
+> +	unsigned int gen = get_mmio_spte_generation(mask);
+> +
+> +	access = mask & ACC_ALL;
+> +
+>  	trace_mark_mmio_spte(sptep, gfn, access, gen);
 
-/* v4 */
-Link: https://lore.kernel.org/r/20200117181219.14542-7-christian.brauner@ubuntu.com
-unchanged
+'access' and 'gen' are only being used for tracing, would it rather make
+sense to rename&move it to the newly introduced make_mmio_spte()? Or do
+we actually need tracing for both?
 
-/* v5 */
-Link: https://lore.kernel.org/r/20200121154844.411-7-christian.brauner@ubuntu.com
-unchanged
-- Christian Brauner <christian.brauner@ubuntu.com>:
-  - add Acked-by: Roman Gushchin <guro@fb.com>
+Also, I dislike re-purposing function parameters.
 
-/* v6 */
-unchanged
----
- tools/testing/selftests/cgroup/Makefile       |   6 +-
- tools/testing/selftests/cgroup/cgroup_util.c  | 126 ++++++++++++++++++
- tools/testing/selftests/cgroup/cgroup_util.h  |   4 +
- tools/testing/selftests/cgroup/test_core.c    |  64 +++++++++
- .../selftests/clone3/clone3_selftests.h       |  19 ++-
- 5 files changed, 214 insertions(+), 5 deletions(-)
+>  	mmu_spte_set(sptep, mask);
+>  }
 
-diff --git a/tools/testing/selftests/cgroup/Makefile b/tools/testing/selftests/cgroup/Makefile
-index 66aafe1f5746..967f268fde74 100644
---- a/tools/testing/selftests/cgroup/Makefile
-+++ b/tools/testing/selftests/cgroup/Makefile
-@@ -11,6 +11,6 @@ TEST_GEN_PROGS += test_freezer
- 
- include ../lib.mk
- 
--$(OUTPUT)/test_memcontrol: cgroup_util.c
--$(OUTPUT)/test_core: cgroup_util.c
--$(OUTPUT)/test_freezer: cgroup_util.c
-+$(OUTPUT)/test_memcontrol: cgroup_util.c ../clone3/clone3_selftests.h
-+$(OUTPUT)/test_core: cgroup_util.c ../clone3/clone3_selftests.h
-+$(OUTPUT)/test_freezer: cgroup_util.c ../clone3/clone3_selftests.h
-diff --git a/tools/testing/selftests/cgroup/cgroup_util.c b/tools/testing/selftests/cgroup/cgroup_util.c
-index 8f7131dcf1ff..8a637ca7d73a 100644
---- a/tools/testing/selftests/cgroup/cgroup_util.c
-+++ b/tools/testing/selftests/cgroup/cgroup_util.c
-@@ -15,6 +15,7 @@
- #include <unistd.h>
- 
- #include "cgroup_util.h"
-+#include "../clone3/clone3_selftests.h"
- 
- static ssize_t read_text(const char *path, char *buf, size_t max_len)
- {
-@@ -331,12 +332,112 @@ int cg_run(const char *cgroup,
- 	}
- }
- 
-+pid_t clone_into_cgroup(int cgroup_fd)
-+{
-+#ifdef CLONE_ARGS_SIZE_VER2
-+	pid_t pid;
-+
-+	struct clone_args args = {
-+		.flags = CLONE_INTO_CGROUP,
-+		.exit_signal = SIGCHLD,
-+		.cgroup = cgroup_fd,
-+	};
-+
-+	pid = sys_clone3(&args, sizeof(struct clone_args));
-+	/*
-+	 * Verify that this is a genuine test failure:
-+	 * ENOSYS -> clone3() not available
-+	 * E2BIG  -> CLONE_INTO_CGROUP not available
-+	 */
-+	if (pid < 0 && (errno == ENOSYS || errno == E2BIG))
-+		goto pretend_enosys;
-+
-+	return pid;
-+
-+pretend_enosys:
-+#endif
-+	errno = ENOSYS;
-+	return -ENOSYS;
-+}
-+
-+int clone_reap(pid_t pid, int options)
-+{
-+	int ret;
-+	siginfo_t info = {
-+		.si_signo = 0,
-+	};
-+
-+again:
-+	ret = waitid(P_PID, pid, &info, options | __WALL | __WNOTHREAD);
-+	if (ret < 0) {
-+		if (errno == EINTR)
-+			goto again;
-+		return -1;
-+	}
-+
-+	if (options & WEXITED) {
-+		if (WIFEXITED(info.si_status))
-+			return WEXITSTATUS(info.si_status);
-+	}
-+
-+	if (options & WSTOPPED) {
-+		if (WIFSTOPPED(info.si_status))
-+			return WSTOPSIG(info.si_status);
-+	}
-+
-+	if (options & WCONTINUED) {
-+		if (WIFCONTINUED(info.si_status))
-+			return 0;
-+	}
-+
-+	return -1;
-+}
-+
-+int dirfd_open_opath(const char *dir)
-+{
-+	return open(dir, O_DIRECTORY | O_CLOEXEC | O_NOFOLLOW | O_PATH);
-+}
-+
-+#define close_prot_errno(fd)                                                   \
-+	if (fd >= 0) {                                                         \
-+		int _e_ = errno;                                               \
-+		close(fd);                                                     \
-+		errno = _e_;                                                   \
-+	}
-+
-+static int clone_into_cgroup_run_nowait(const char *cgroup,
-+					int (*fn)(const char *cgroup, void *arg),
-+					void *arg)
-+{
-+	int cgroup_fd;
-+	pid_t pid;
-+
-+	cgroup_fd =  dirfd_open_opath(cgroup);
-+	if (cgroup_fd < 0)
-+		return -1;
-+
-+	pid = clone_into_cgroup(cgroup_fd);
-+	close_prot_errno(cgroup_fd);
-+	if (pid == 0)
-+		exit(fn(cgroup, arg));
-+
-+	return pid;
-+}
-+
- int cg_run_nowait(const char *cgroup,
- 		  int (*fn)(const char *cgroup, void *arg),
- 		  void *arg)
- {
- 	int pid;
- 
-+	pid = clone_into_cgroup_run_nowait(cgroup, fn, arg);
-+	if (pid > 0)
-+		return pid;
-+
-+	/* Genuine test failure. */
-+	if (pid < 0 && errno != ENOSYS)
-+		return -1;
-+
- 	pid = fork();
- 	if (pid == 0) {
- 		char buf[64];
-@@ -450,3 +551,28 @@ int proc_read_strstr(int pid, bool thread, const char *item, const char *needle)
- 
- 	return strstr(buf, needle) ? 0 : -1;
- }
-+
-+int clone_into_cgroup_run_wait(const char *cgroup)
-+{
-+	int cgroup_fd;
-+	pid_t pid;
-+
-+	cgroup_fd =  dirfd_open_opath(cgroup);
-+	if (cgroup_fd < 0)
-+		return -1;
-+
-+	pid = clone_into_cgroup(cgroup_fd);
-+	close_prot_errno(cgroup_fd);
-+	if (pid < 0)
-+		return -1;
-+
-+	if (pid == 0)
-+		exit(EXIT_SUCCESS);
-+
-+	/*
-+	 * We don't care whether this fails. We only care whether the initial
-+	 * clone succeeded.
-+	 */
-+	(void)clone_reap(pid, WEXITED);
-+	return 0;
-+}
-diff --git a/tools/testing/selftests/cgroup/cgroup_util.h b/tools/testing/selftests/cgroup/cgroup_util.h
-index 49c54fbdb229..5a1305dd1f0b 100644
---- a/tools/testing/selftests/cgroup/cgroup_util.h
-+++ b/tools/testing/selftests/cgroup/cgroup_util.h
-@@ -50,3 +50,7 @@ extern int cg_wait_for_proc_count(const char *cgroup, int count);
- extern int cg_killall(const char *cgroup);
- extern ssize_t proc_read_text(int pid, bool thread, const char *item, char *buf, size_t size);
- extern int proc_read_strstr(int pid, bool thread, const char *item, const char *needle);
-+extern pid_t clone_into_cgroup(int cgroup_fd);
-+extern int clone_reap(pid_t pid, int options);
-+extern int clone_into_cgroup_run_wait(const char *cgroup);
-+extern int dirfd_open_opath(const char *dir);
-diff --git a/tools/testing/selftests/cgroup/test_core.c b/tools/testing/selftests/cgroup/test_core.c
-index c5ca669feb2b..96e016ccafe0 100644
---- a/tools/testing/selftests/cgroup/test_core.c
-+++ b/tools/testing/selftests/cgroup/test_core.c
-@@ -25,8 +25,11 @@
- static int test_cgcore_populated(const char *root)
- {
- 	int ret = KSFT_FAIL;
-+	int err;
- 	char *cg_test_a = NULL, *cg_test_b = NULL;
- 	char *cg_test_c = NULL, *cg_test_d = NULL;
-+	int cgroup_fd = -EBADF;
-+	pid_t pid;
- 
- 	cg_test_a = cg_name(root, "cg_test_a");
- 	cg_test_b = cg_name(root, "cg_test_a/cg_test_b");
-@@ -78,6 +81,52 @@ static int test_cgcore_populated(const char *root)
- 	if (cg_read_strcmp(cg_test_d, "cgroup.events", "populated 0\n"))
- 		goto cleanup;
- 
-+	/* Test that we can directly clone into a new cgroup. */
-+	cgroup_fd = dirfd_open_opath(cg_test_d);
-+	if (cgroup_fd < 0)
-+		goto cleanup;
-+
-+	pid = clone_into_cgroup(cgroup_fd);
-+	if (pid < 0) {
-+		if (errno == ENOSYS)
-+			goto cleanup_pass;
-+		goto cleanup;
-+	}
-+
-+	if (pid == 0) {
-+		if (raise(SIGSTOP))
-+			exit(EXIT_FAILURE);
-+		exit(EXIT_SUCCESS);
-+	}
-+
-+	err = cg_read_strcmp(cg_test_d, "cgroup.events", "populated 1\n");
-+
-+	(void)clone_reap(pid, WSTOPPED);
-+	(void)kill(pid, SIGCONT);
-+	(void)clone_reap(pid, WEXITED);
-+
-+	if (err)
-+		goto cleanup;
-+
-+	if (cg_read_strcmp(cg_test_d, "cgroup.events", "populated 0\n"))
-+		goto cleanup;
-+
-+	/* Remove cgroup. */
-+	if (cg_test_d) {
-+		cg_destroy(cg_test_d);
-+		free(cg_test_d);
-+		cg_test_d = NULL;
-+	}
-+
-+	pid = clone_into_cgroup(cgroup_fd);
-+	if (pid < 0)
-+		goto cleanup_pass;
-+	if (pid == 0)
-+		exit(EXIT_SUCCESS);
-+	(void)clone_reap(pid, WEXITED);
-+	goto cleanup;
-+
-+cleanup_pass:
- 	ret = KSFT_PASS;
- 
- cleanup:
-@@ -93,6 +142,8 @@ static int test_cgcore_populated(const char *root)
- 	free(cg_test_c);
- 	free(cg_test_b);
- 	free(cg_test_a);
-+	if (cgroup_fd >= 0)
-+		close(cgroup_fd);
- 	return ret;
- }
- 
-@@ -136,6 +187,16 @@ static int test_cgcore_invalid_domain(const char *root)
- 	if (errno != EOPNOTSUPP)
- 		goto cleanup;
- 
-+	if (!clone_into_cgroup_run_wait(child))
-+		goto cleanup;
-+
-+	if (errno == ENOSYS)
-+		goto cleanup_pass;
-+
-+	if (errno != EOPNOTSUPP)
-+		goto cleanup;
-+
-+cleanup_pass:
- 	ret = KSFT_PASS;
- 
- cleanup:
-@@ -345,6 +406,9 @@ static int test_cgcore_internal_process_constraint(const char *root)
- 	if (!cg_enter_current(parent))
- 		goto cleanup;
- 
-+	if (!clone_into_cgroup_run_wait(parent))
-+		goto cleanup;
-+
- 	ret = KSFT_PASS;
- 
- cleanup:
-diff --git a/tools/testing/selftests/clone3/clone3_selftests.h b/tools/testing/selftests/clone3/clone3_selftests.h
-index a3f2c8ad8bcc..91c1a78ddb39 100644
---- a/tools/testing/selftests/clone3/clone3_selftests.h
-+++ b/tools/testing/selftests/clone3/clone3_selftests.h
-@@ -5,12 +5,24 @@
- 
- #define _GNU_SOURCE
- #include <sched.h>
-+#include <linux/sched.h>
-+#include <linux/types.h>
- #include <stdint.h>
- #include <syscall.h>
--#include <linux/types.h>
-+#include <sys/wait.h>
-+
-+#include "../kselftest.h"
- 
- #define ptr_to_u64(ptr) ((__u64)((uintptr_t)(ptr)))
- 
-+#ifndef CLONE_INTO_CGROUP
-+#define CLONE_INTO_CGROUP 0x200000000ULL /* Clone into a specific cgroup given the right permissions. */
-+#endif
-+
-+#ifndef CLONE_ARGS_SIZE_VER0
-+#define CLONE_ARGS_SIZE_VER0 64
-+#endif
-+
- #ifndef __NR_clone3
- #define __NR_clone3 -1
- struct clone_args {
-@@ -22,10 +34,13 @@ struct clone_args {
- 	__aligned_u64 stack;
- 	__aligned_u64 stack_size;
- 	__aligned_u64 tls;
-+#define CLONE_ARGS_SIZE_VER1 80
- 	__aligned_u64 set_tid;
- 	__aligned_u64 set_tid_size;
-+#define CLONE_ARGS_SIZE_VER2 88
-+	__aligned_u64 cgroup;
- };
--#endif
-+#endif /* __NR_clone3 */
- 
- static pid_t sys_clone3(struct clone_args *args, size_t size)
- {
 -- 
-2.25.0
+Vitaly
 
