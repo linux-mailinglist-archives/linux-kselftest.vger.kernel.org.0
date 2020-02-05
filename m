@@ -2,53 +2,52 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AB331529FB
-	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Feb 2020 12:35:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D628152A19
+	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Feb 2020 12:43:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728316AbgBELfa (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 5 Feb 2020 06:35:30 -0500
-Received: from mail-lf1-f65.google.com ([209.85.167.65]:33180 "EHLO
-        mail-lf1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727522AbgBELfa (ORCPT
+        id S1727330AbgBELnO (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 5 Feb 2020 06:43:14 -0500
+Received: from mail-lf1-f67.google.com ([209.85.167.67]:35193 "EHLO
+        mail-lf1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727328AbgBELnO (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 5 Feb 2020 06:35:30 -0500
-Received: by mail-lf1-f65.google.com with SMTP id n25so1255797lfl.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 05 Feb 2020 03:35:28 -0800 (PST)
+        Wed, 5 Feb 2020 06:43:14 -0500
+Received: by mail-lf1-f67.google.com with SMTP id z18so1270717lfe.2
+        for <linux-kselftest@vger.kernel.org>; Wed, 05 Feb 2020 03:43:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=shutemov-name.20150623.gappssmtp.com; s=20150623;
         h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=9dzJMqCXyJ0/sQ9WqS79itnSpMjlI4okwKhRKzVm4NM=;
-        b=Cw/B6gNv6WrKuynnb0hGrn8XHxmwFGHBK6Kx3ISr6g8541JII8R/dNAUM8FBm3EG/z
-         7mldHZr7bI2tp5pBfvfOfywWE8+h25kWovFkuNAA2Cj1Nuq4GHdG+S1n6nGJL+Qkvl7u
-         DHVez+FLWMPQTo18ui7XxFbIAVT2/XZW7rBMXmKANw7Z3vjhI+/AgNja35tcKI2QrmWC
-         iB0aW7cfR8lhqyI5gnu4EX1AdRGts8kF7neLmR0wRRiDXDyyZo4cXG1dDMjDe7evtrBV
-         2VevE1g/382CgqcWrvzbCGiEIdnuWbHFIW8EwV4GVppGEzPCncLDF7f4SZMsf2BMC46d
-         Gxmg==
+         :content-disposition:in-reply-to;
+        bh=Rg7FTb2EgzwOWtOl0Xh6SbFh/TDgIq/m4oej/j7EPsc=;
+        b=xqc4RuXXK6fPykrtEKs2WWshltrhXJ8pi3DtiLilCDNoCowiBWIO11F8QV2xYxhR8b
+         T3vNBwC3lWRaITvvrEEqmM0SMQWJPa3dJbYhI51XEx8oF0CkrITqDVx8yRD0aTffPJDn
+         sdmmfHSWVSqPoliUVDy85GbYfW6ruojAgBfVZxXigpn3TqbLBDdRhyS8A1HALKtjt7fQ
+         sLqgWUx13HP8PvkDbWENV1Q7qLdBeHXkHTTFMm1c3IJcKkbYcDPWZ7K6No8QskYqARcS
+         h42YxDkYmUL75rirEZLc3ay0c2OKP0hW8yKGroN5vGefezStmjyzjwY5hJRbwIuMdmnn
+         RvWw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=9dzJMqCXyJ0/sQ9WqS79itnSpMjlI4okwKhRKzVm4NM=;
-        b=tK4RZcGRArjWswF7lKlVMResqyUWQOo7w0MESHrGIAdYd276mqcWJRgmEb/V0G5M16
-         7BKPxI8sY/Z/Tx8vAUQBu37DbOh8KwRUkBn0PZtrjxcxjotg6YIuFEq6dw950LTSWMzV
-         uAcXg2tuLXCF0Cu0BInp0XVB/0+WNHkLJJbmHG/0cWLt233jHm7Iej+hBZ9teT+YUjWB
-         LtAnzAOUhS2BR5G1zwv7VmbobPtfld7vBSVPM2wrJ5inSkByDpNTt1s9k+rzlArnuQRx
-         KE48gBO3LvTfySh13eBTMJ9I93mewxlqsRMByj9Ou3Q1iKXbqSwaUyyC/3yVcgEfsrV7
-         OzOA==
-X-Gm-Message-State: APjAAAVkQWoenZxVPZYAUSOlro/NmTcslx7MqtLo3tF0xdEskAfKMX+K
-        0Lt6y/2ZedGdClWANa/5otp1jQ==
-X-Google-Smtp-Source: APXvYqy9hnTW8jGEcTDyskMINKlFV9FjmuWaaZRQe2WXLP2287ba30lwKa4xY42Duoj0vvlh1UVC8g==
-X-Received: by 2002:a19:6b11:: with SMTP id d17mr17471991lfa.168.1580902528148;
-        Wed, 05 Feb 2020 03:35:28 -0800 (PST)
+         :mime-version:content-disposition:in-reply-to;
+        bh=Rg7FTb2EgzwOWtOl0Xh6SbFh/TDgIq/m4oej/j7EPsc=;
+        b=VGE1GkKHBux6pWOKtsyrTumcVEwBj108PHGw8qg2Nb5FEQxk7X8NqXbaSGBC6S4iCx
+         LAY7U0hkcvT1Ux/wrM01ulCK3YCA2RZuLKTmTYMPcuCLa4um8rIVbbuoaO6I96nHScfl
+         npMTQzzw4rvbH4C/5RRFEyMs5UVKqU8tr4JY20ARqxFAfem1OlpNVLoJo59xDV9yJDWo
+         ZyCnc11nXVhasnob1adjXaVkPWxGq2XdkhLc6sXNQfVzCChpak6l85L8agd0fYW41kUs
+         01V4v7T+9Ub5ZD8DFll+NxW5s/sinvEAI4iAvcsw4xK9KdTXl61INDjx3Y6seLJh6O2q
+         nTvA==
+X-Gm-Message-State: APjAAAXSr1TbOc2CkHMLyD916rTez1F+uPJ+mBla2mZKtlw9CuwHA7ip
+        FscjANoIfX2Yovgo6HQltYSd+Q==
+X-Google-Smtp-Source: APXvYqyGuiOfyYh+qTRTsP2YJUspzVgxdBbwwERcM0hZgAzWTzfcx473yxjEYxYiSHWiqrCV91FjRA==
+X-Received: by 2002:a19:5201:: with SMTP id m1mr17618504lfb.114.1580902991825;
+        Wed, 05 Feb 2020 03:43:11 -0800 (PST)
 Received: from box.localdomain ([86.57.175.117])
-        by smtp.gmail.com with ESMTPSA id f11sm14259401lfa.9.2020.02.05.03.35.27
+        by smtp.gmail.com with ESMTPSA id u23sm12011076lfg.89.2020.02.05.03.43.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Feb 2020 03:35:27 -0800 (PST)
+        Wed, 05 Feb 2020 03:43:11 -0800 (PST)
 Received: by box.localdomain (Postfix, from userid 1000)
-        id 96D43100AF6; Wed,  5 Feb 2020 14:35:41 +0300 (+03)
-Date:   Wed, 5 Feb 2020 14:35:41 +0300
+        id 42BA0100AF6; Wed,  5 Feb 2020 14:43:25 +0300 (+03)
+Date:   Wed, 5 Feb 2020 14:43:25 +0300
 From:   "Kirill A. Shutemov" <kirill@shutemov.name>
 To:     John Hubbard <jhubbard@nvidia.com>
 Cc:     Andrew Morton <akpm@linux-foundation.org>,
@@ -67,67 +66,52 @@ Cc:     Andrew Morton <akpm@linux-foundation.org>,
         Matthew Wilcox <willy@infradead.org>,
         linux-doc@vger.kernel.org, linux-fsdevel@vger.kernel.org,
         linux-kselftest@vger.kernel.org, linux-rdma@vger.kernel.org,
-        linux-mm@kvack.org, LKML <linux-kernel@vger.kernel.org>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
-Subject: Re: [PATCH v4 07/12] mm/gup: track FOLL_PIN pages
-Message-ID: <20200205113541.mi4kys5erldwxiog@box>
+        linux-mm@kvack.org, LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v4 10/12] mm/gup: /proc/vmstat: pin_user_pages (FOLL_PIN)
+ reporting
+Message-ID: <20200205114325.4e2f5aghsusihpap@box>
 References: <20200204234117.2974687-1-jhubbard@nvidia.com>
- <20200204234117.2974687-8-jhubbard@nvidia.com>
+ <20200204234117.2974687-11-jhubbard@nvidia.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20200204234117.2974687-8-jhubbard@nvidia.com>
+In-Reply-To: <20200204234117.2974687-11-jhubbard@nvidia.com>
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Feb 04, 2020 at 03:41:12PM -0800, John Hubbard wrote:
-> Add tracking of pages that were pinned via FOLL_PIN. This tracking is
-> implemented via overloading of page->_refcount: pins are added by
-> adding GUP_PIN_COUNTING_BIAS (1024) to the refcount. This provides a
-> fuzzy indication of pinning, and it can have false positives (and that's
-> OK). Please see the pre-existing
-> Documentation/core-api/pin_user_pages.rst for details.
+On Tue, Feb 04, 2020 at 03:41:15PM -0800, John Hubbard wrote:
+> Now that pages are "DMA-pinned" via pin_user_page*(), and unpinned via
+> unpin_user_pages*(), we need some visibility into whether all of this is
+> working correctly.
 > 
-> As mentioned in pin_user_pages.rst, callers who effectively set FOLL_PIN
-> (typically via pin_user_pages*()) are required to ultimately free such
-> pages via unpin_user_page().
+> Add two new fields to /proc/vmstat:
 > 
-> Please also note the limitation, discussed in pin_user_pages.rst under
-> the "TODO: for 1GB and larger huge pages" section. (That limitation will
-> be removed in a following patch.)
+>     nr_foll_pin_acquired
+>     nr_foll_pin_released
 > 
-> The effect of a FOLL_PIN flag is similar to that of FOLL_GET, and may be
-> thought of as "FOLL_GET for DIO and/or RDMA use".
+> These are documented in Documentation/core-api/pin_user_pages.rst.
+> They represent the number of pages (since boot time) that have been
+> pinned ("nr_foll_pin_acquired") and unpinned ("nr_foll_pin_released"),
+> via pin_user_pages*() and unpin_user_pages*().
 > 
-> Pages that have been pinned via FOLL_PIN are identifiable via a
-> new function call:
+> In the absence of long-running DMA or RDMA operations that hold pages
+> pinned, the above two fields will normally be equal to each other.
 > 
->    bool page_maybe_dma_pinned(struct page *page);
+> Also: update Documentation/core-api/pin_user_pages.rst, to remove an
+> earlier (now confirmed untrue) claim about a performance problem with
+> /proc/vmstat.
 > 
-> What to do in response to encountering such a page, is left to later
-> patchsets. There is discussion about this in [1], [2], [3], and [4].
+> Also: updated Documentation/core-api/pin_user_pages.rst to rename the
+> new /proc/vmstat entries, to the names listed here.
 > 
-> This also changes a BUG_ON(), to a WARN_ON(), in follow_page_mask().
-> 
-> [1] Some slow progress on get_user_pages() (Apr 2, 2019):
->     https://lwn.net/Articles/784574/
-> [2] DMA and get_user_pages() (LPC: Dec 12, 2018):
->     https://lwn.net/Articles/774411/
-> [3] The trouble with get_user_pages() (Apr 30, 2018):
->     https://lwn.net/Articles/753027/
-> [4] LWN kernel index: get_user_pages():
->     https://lwn.net/Kernel/Index/#Memory_management-get_user_pages
-> 
-> Reviewed-by: Jan Kara <jack@suse.cz>
-> Suggested-by: Jan Kara <jack@suse.cz>
-> Suggested-by: Jérôme Glisse <jglisse@redhat.com>
-> Cc: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
 > Signed-off-by: John Hubbard <jhubbard@nvidia.com>
 
-Acked-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+Please, clarify semantics for huge page. An user may want to know if we
+count huge page as one pin-acquired or by number of pages.
+
+Otherwise looks good (given Jan concern is addressed).
 
 -- 
  Kirill A. Shutemov
