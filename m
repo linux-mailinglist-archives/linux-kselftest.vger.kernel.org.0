@@ -2,187 +2,113 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EFF15153044
-	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Feb 2020 13:00:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 875E71530F2
+	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Feb 2020 13:42:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727068AbgBEMAU (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 5 Feb 2020 07:00:20 -0500
-Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:28276 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726944AbgBEMAU (ORCPT
+        id S1726386AbgBEMmu (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 5 Feb 2020 07:42:50 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:38716 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726308AbgBEMmt (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 5 Feb 2020 07:00:20 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1580904019;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Z9OdtqIYUBqoL66r9+oESb2jG/fvhjGyIkGlsqD7Tqs=;
-        b=Zu8GloQXevbRztiZNaiP3ZMlDOh5IxvGJjH3niQ5iF+dc1QED9yEdRTpS7N9bog1O0ZTrb
-        8VNvj5RbuBEhts5N4Ie+RDNMdxtm1YnSreomfuieRreZnDnwS9o5cX7vIT8iKREYKg7zKb
-        ss74HoNb9hXcOtCWY1pW8JXTSgKBzcE=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-21-F1-mmtrQNUK_F6AgANwqWg-1; Wed, 05 Feb 2020 07:00:14 -0500
-X-MC-Unique: F1-mmtrQNUK_F6AgANwqWg-1
-Received: by mail-wr1-f69.google.com with SMTP id l1so1090367wrt.4
-        for <linux-kselftest@vger.kernel.org>; Wed, 05 Feb 2020 04:00:14 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version;
-        bh=Z9OdtqIYUBqoL66r9+oESb2jG/fvhjGyIkGlsqD7Tqs=;
-        b=L4spYupXaJjc5aylWYaDP6kLYwS/b+Hp8KuRr5jA6E79ID7BWjqgUzYkCNrWfqVfhc
-         ugc1qsxuI1bin5LSBz769WyltbgiXb781l+Ivn7w/LTp4XZLJhrjaQXiO63OYenRQpAC
-         ijpGn17HnWNE2+2JA1b1rgUe0Luk9+UeauRO9AwZo0VoHkMwVJGPwt+t8MkcZscOdov1
-         4y8CWoV55OXHriEhpnwgmSfNU0G44h825DbFqcd2WURH0Wd5drSFk1kZATMKLYCA1/ra
-         ojrAOxac0eyt8VS0AuCRWd6ich4qJI05YEh7fZTXJUFFOQyganlMDHfvwbKDQvYvQ7FG
-         pbJA==
-X-Gm-Message-State: APjAAAWZRzIRxhgwVXyl8Jrz4VoMf3AOmTuLUVhpSR2RMi8dfR5golD1
-        2l6nUrOBQLkDWOhYwsiWD0C6uQ+4g7BzQh+qupkdHMvZn6U3rsCpSnWWJE5RN0knxtTXGnXgG2s
-        ndJFIdn1YlFKuVKrWyBH98HklMjo/
-X-Received: by 2002:a5d:4c89:: with SMTP id z9mr22168465wrs.97.1580904013137;
-        Wed, 05 Feb 2020 04:00:13 -0800 (PST)
-X-Google-Smtp-Source: APXvYqwSvQyMeJTISB9Ag6NMPuNBbKfC47aIaLnVUfMV7jVwsDN2cT06Yn/Y71CxLRow8+0A6XsFrQ==
-X-Received: by 2002:a5d:4c89:: with SMTP id z9mr22168431wrs.97.1580904012809;
-        Wed, 05 Feb 2020 04:00:12 -0800 (PST)
-Received: from vitty.brq.redhat.com (nat-pool-brq-t.redhat.com. [213.175.37.10])
-        by smtp.gmail.com with ESMTPSA id q14sm34679205wrj.81.2020.02.05.04.00.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Feb 2020 04:00:12 -0800 (PST)
-From:   Vitaly Kuznetsov <vkuznets@redhat.com>
-To:     Ben Gardon <bgardon@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, Peter Xu <peterx@redhat.com>,
-        Sean Christopherson <sean.j.christopherson@intel.com>,
-        Peter Shier <pshier@google.com>,
-        Oliver Upton <oupton@google.com>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH 1/3] kvm: mmu: Replace unsigned with unsigned int for PTE access
-In-Reply-To: <20200203230911.39755-1-bgardon@google.com>
-References: <20200203230911.39755-1-bgardon@google.com>
-Date:   Wed, 05 Feb 2020 13:00:11 +0100
-Message-ID: <87v9olkzw4.fsf@vitty.brq.redhat.com>
+        Wed, 5 Feb 2020 07:42:49 -0500
+Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 015CbkNi140437
+        for <linux-kselftest@vger.kernel.org>; Wed, 5 Feb 2020 07:42:47 -0500
+Received: from e06smtp07.uk.ibm.com (e06smtp07.uk.ibm.com [195.75.94.103])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 2xym4mj5tb-1
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-kselftest@vger.kernel.org>; Wed, 05 Feb 2020 07:42:47 -0500
+Received: from localhost
+        by e06smtp07.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-kselftest@vger.kernel.org> from <sandipan@linux.ibm.com>;
+        Wed, 5 Feb 2020 12:42:45 -0000
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (9.149.109.194)
+        by e06smtp07.uk.ibm.com (192.168.101.137) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
+        Wed, 5 Feb 2020 12:42:41 -0000
+Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 015CgeOC65339608
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 5 Feb 2020 12:42:40 GMT
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 5B17CA4055;
+        Wed,  5 Feb 2020 12:42:40 +0000 (GMT)
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 812F4A404D;
+        Wed,  5 Feb 2020 12:42:38 +0000 (GMT)
+Received: from [9.124.35.38] (unknown [9.124.35.38])
+        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Wed,  5 Feb 2020 12:42:38 +0000 (GMT)
+From:   Sandipan Das <sandipan@linux.ibm.com>
+Subject: Re: [PATCH v11 8/9] hugetlb_cgroup: Add hugetlb_cgroup reservation
+ tests
+To:     Mina Almasry <almasrymina@google.com>
+Cc:     Mike Kravetz <mike.kravetz@oracle.com>, shuah <shuah@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Greg Thelen <gthelen@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        open list <linux-kernel@vger.kernel.org>, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org, cgroups@vger.kernel.org
+References: <20200203232248.104733-1-almasrymina@google.com>
+ <20200203232248.104733-8-almasrymina@google.com>
+ <0fa5d77c-d115-1e30-cb17-d6a48c916922@linux.ibm.com>
+ <CAHS8izPobKi_w8R4pTt_UyfxzBJJYuNUw+Z6hgFfvZ1Xma__YA@mail.gmail.com>
+ <CAHS8izNmSYumXpYXT1d8tAm36=-BRjXqdCDjLB6UNMwn5xhPZg@mail.gmail.com>
+Date:   Wed, 5 Feb 2020 18:12:37 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
 MIME-Version: 1.0
-Content-Type: text/plain
+In-Reply-To: <CAHS8izNmSYumXpYXT1d8tAm36=-BRjXqdCDjLB6UNMwn5xhPZg@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+x-cbid: 20020512-0028-0000-0000-000003D79F6C
+X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
+x-cbparentid: 20020512-0029-0000-0000-0000249BFDDC
+Message-Id: <a980c9f7-2759-45a7-1add-89a390b79b39@linux.ibm.com>
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.572
+ definitions=2020-02-05_03:2020-02-04,2020-02-05 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 malwarescore=0
+ phishscore=0 impostorscore=0 bulkscore=0 mlxscore=0 lowpriorityscore=0
+ adultscore=0 mlxlogscore=999 spamscore=0 priorityscore=1501 suspectscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2001150001
+ definitions=main-2002050101
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Ben Gardon <bgardon@google.com> writes:
+Hi,
 
-> There are several functions which pass an access permission mask for
-> SPTEs as an unsigned. This works, but checkpatch complains about it.
-> Switch the occurrences of unsigned to unsigned int to satisfy checkpatch.
->
-> No functional change expected.
->
-> Tested by running kvm-unit-tests on an Intel Haswell machine. This
-> commit introduced no new failures.
->
-> This commit can be viewed in Gerrit at:
-> 	https://linux-review.googlesource.com/c/virt/kvm/kvm/+/2358
->
-> Signed-off-by: Ben Gardon <bgardon@google.com>
-> Reviewed-by: Oliver Upton <oupton@google.com>
-> ---
->  arch/x86/kvm/mmu/mmu.c | 24 +++++++++++++-----------
->  1 file changed, 13 insertions(+), 11 deletions(-)
->
-> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-> index 84eeb61d06aa3..a9c593dec49bf 100644
-> --- a/arch/x86/kvm/mmu/mmu.c
-> +++ b/arch/x86/kvm/mmu/mmu.c
-> @@ -452,7 +452,7 @@ static u64 get_mmio_spte_generation(u64 spte)
->  }
->  
->  static void mark_mmio_spte(struct kvm_vcpu *vcpu, u64 *sptep, u64 gfn,
-> -			   unsigned access)
-> +			   unsigned int access)
->  {
->  	u64 gen = kvm_vcpu_memslots(vcpu)->generation & MMIO_SPTE_GEN_MASK;
->  	u64 mask = generation_mmio_spte_mask(gen);
-> @@ -484,7 +484,7 @@ static unsigned get_mmio_spte_access(u64 spte)
->  }
->  
->  static bool set_mmio_spte(struct kvm_vcpu *vcpu, u64 *sptep, gfn_t gfn,
-> -			  kvm_pfn_t pfn, unsigned access)
-> +			  kvm_pfn_t pfn, unsigned int access)
->  {
->  	if (unlikely(is_noslot_pfn(pfn))) {
->  		mark_mmio_spte(vcpu, sptep, gfn, access);
-> @@ -2475,7 +2475,7 @@ static struct kvm_mmu_page *kvm_mmu_get_page(struct kvm_vcpu *vcpu,
->  					     gva_t gaddr,
->  					     unsigned level,
->  					     int direct,
-> -					     unsigned access)
-> +					     unsigned int access)
->  {
->  	union kvm_mmu_page_role role;
->  	unsigned quadrant;
-> @@ -2990,7 +2990,7 @@ static bool kvm_is_mmio_pfn(kvm_pfn_t pfn)
->  #define SET_SPTE_NEED_REMOTE_TLB_FLUSH	BIT(1)
->  
->  static int set_spte(struct kvm_vcpu *vcpu, u64 *sptep,
-> -		    unsigned pte_access, int level,
-> +		    unsigned int pte_access, int level,
->  		    gfn_t gfn, kvm_pfn_t pfn, bool speculative,
->  		    bool can_unsync, bool host_writable)
->  {
-> @@ -3081,9 +3081,10 @@ static int set_spte(struct kvm_vcpu *vcpu, u64 *sptep,
->  	return ret;
->  }
->  
-> -static int mmu_set_spte(struct kvm_vcpu *vcpu, u64 *sptep, unsigned pte_access,
-> -			int write_fault, int level, gfn_t gfn, kvm_pfn_t pfn,
-> -		       	bool speculative, bool host_writable)
-> +static int mmu_set_spte(struct kvm_vcpu *vcpu, u64 *sptep,
-> +			unsigned int pte_access, int write_fault, int level,
-> +			gfn_t gfn, kvm_pfn_t pfn, bool speculative,
-> +			bool host_writable)
->  {
->  	int was_rmapped = 0;
->  	int rmap_count;
-> @@ -3165,7 +3166,7 @@ static int direct_pte_prefetch_many(struct kvm_vcpu *vcpu,
->  {
->  	struct page *pages[PTE_PREFETCH_NUM];
->  	struct kvm_memory_slot *slot;
-> -	unsigned access = sp->role.access;
-> +	unsigned int access = sp->role.access;
->  	int i, ret;
->  	gfn_t gfn;
->  
-> @@ -3400,7 +3401,8 @@ static int kvm_handle_bad_page(struct kvm_vcpu *vcpu, gfn_t gfn, kvm_pfn_t pfn)
->  }
->  
->  static bool handle_abnormal_pfn(struct kvm_vcpu *vcpu, gva_t gva, gfn_t gfn,
-> -				kvm_pfn_t pfn, unsigned access, int *ret_val)
-> +				kvm_pfn_t pfn, unsigned int access,
-> +				int *ret_val)
->  {
->  	/* The pfn is invalid, report the error! */
->  	if (unlikely(is_error_pfn(pfn))) {
-> @@ -4005,7 +4007,7 @@ static int handle_mmio_page_fault(struct kvm_vcpu *vcpu, u64 addr, bool direct)
->  
->  	if (is_mmio_spte(spte)) {
->  		gfn_t gfn = get_mmio_spte_gfn(spte);
-> -		unsigned access = get_mmio_spte_access(spte);
-> +		unsigned int access = get_mmio_spte_access(spte);
->  
->  		if (!check_mmio_spte(vcpu, spte))
->  			return RET_PF_INVALID;
-> @@ -4349,7 +4351,7 @@ static void inject_page_fault(struct kvm_vcpu *vcpu,
->  }
->  
->  static bool sync_mmio_spte(struct kvm_vcpu *vcpu, u64 *sptep, gfn_t gfn,
-> -			   unsigned access, int *nr_present)
-> +			   unsigned int access, int *nr_present)
->  {
->  	if (unlikely(is_mmio_spte(*sptep))) {
->  		if (gfn != get_mmio_spte_gfn(*sptep)) {
+On 05/02/20 4:03 am, Mina Almasry wrote:
+> On Tue, Feb 4, 2020 at 12:36 PM Mina Almasry <almasrymina@google.com> wrote:
+>>
+>> So the problem in this log seems to be that this log line is missing:
+>>     echo Waiting for hugetlb memory to reach size $size.
+>>
+>> The way the test works is that it starts a process that writes the
+>> hugetlb memory, then it *should* wait until the memory is written,
+>> then it should record the cgroup accounting and kill the process. It
+>> seems from your log that the wait doesn't happen, so the test
+>> continues before the background process has had time to write the
+>> memory properly. Essentially wait_for_hugetlb_memory_to_get_written()
+>> never gets called in your log.
+>>
+>> Can you try this additional attached diff on top of your changes? I
+>> attached the diff and pasted the same here, hopefully one works for
+>> you:
+>> ...
+> 
+> I got my hands on a machine with 16MB default hugepage size and
+> charge_reserved_hugetlb.sh passes now after my changes. Please let me
+> know if you still run into issues.
+> 
 
-Reviewed-by: Vitaly Kuznetsov <vkuznets@redhat.com>
+With your updates, the tests are passing. Ran the tests on a ppc64 system
+that uses radix MMU (2MB hugepages) and everything passed there as well.
 
--- 
-Vitaly
+- Sandipan
 
