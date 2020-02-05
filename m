@@ -2,212 +2,156 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 15585152469
-	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Feb 2020 02:17:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8ED741524BE
+	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Feb 2020 03:14:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727763AbgBEBR1 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 4 Feb 2020 20:17:27 -0500
-Received: from mail-pf1-f196.google.com ([209.85.210.196]:37889 "EHLO
-        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727783AbgBEBR1 (ORCPT
+        id S1727745AbgBECOm (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 4 Feb 2020 21:14:42 -0500
+Received: from mail-pj1-f65.google.com ([209.85.216.65]:37064 "EHLO
+        mail-pj1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727140AbgBECOm (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 4 Feb 2020 20:17:27 -0500
-Received: by mail-pf1-f196.google.com with SMTP id x185so284872pfc.5
-        for <linux-kselftest@vger.kernel.org>; Tue, 04 Feb 2020 17:17:26 -0800 (PST)
+        Tue, 4 Feb 2020 21:14:42 -0500
+Received: by mail-pj1-f65.google.com with SMTP id m13so275085pjb.2;
+        Tue, 04 Feb 2020 18:14:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ehUZDKkbTDStuHx/pS6DuaspA135Mfd5By/OONirJ34=;
-        b=aEb2zaRNdrPfZXojfMR1qDxiSMQH7kF6i3jce+ifoVVxnFMNKmisV+hk1sz++QoJKa
-         L5UzKB7KJuV96SSbHGx+5SNdd2HWC9ad+MVsOfAINXYqjnM5ypQYBmwlXtH/H2XSzAlJ
-         U2uGA/3bAraovLBvIgxih9u02lM9cXP3Tqcqi2kluLyXyYZpt68kLMH5mZnoY1GdxD4D
-         7IeaLunIGZKPf6F4RzgL0DCN/BPTeHCSPtlsa75CkOf+PY6+oFXZp82GAl2nlushrGx7
-         P6wX1T5HSrusG/TUo0/eMswoN2VU2Q5XLghEbYdh+K6NVgYwiYRMe8jc0/W5oi3PfkKE
-         x1LA==
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:in-reply-to;
+        bh=Fegxb96WbTiaWF4amnd9jGSEj+9x/8LIWAp8pFBqKBA=;
+        b=gqD7Casksvyd+oHamPEUb2BvyGbFbSjNXGaf+aQ0ecuOtLM8AiSohvvVH5dt1rYtO6
+         uRX1RFEMfZ0BENQFxjLqT+NA0CCJoRzSuQ8zrTJ9wxasKYOFdF3CZQ8kreKB8mPtChVU
+         P3Z6bFB9yY4Bmdbwa9ovgD6QKdqDu2Rj7uC1xLnqA592NiKerultYsRIvTNRTvODW+Mf
+         NT5oqomCwi4u7D0YgqSatiAbxWM7RNq0Utsl7e/j5t/YpcCSeNaedtlJlp/oHXq18nqo
+         ARURaI2TSXG/BljTHLRENIbbhKDzA9L2X/QHhIZPqs0GS6g2kliMTdNFmeAdxL6HJWv/
+         Za6w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ehUZDKkbTDStuHx/pS6DuaspA135Mfd5By/OONirJ34=;
-        b=ECEuP6LQ/O2WQOTrgRfBHIvHHcLGTnbHJqgG/dfrKAx+ELk5bt+gxo1K173+vJfCSi
-         3fjBs+2D1hqJ+7xP+6fzvkZNTqNLPP177I9WlOggo/nZpZQZ3PSlb4MHvtcZS+7/gZD/
-         iK0ECqm1mf6BFmgmKyJYNBN97LFSvZ4uSL52kOnNv4vAy5QrhVuO4gtievMg+pINtnlS
-         6OgcUm9hDDbk+4XPTP4hGya2EzPrpBuXTAbKfGA6+qocwW73flgx2OGDy9Es9WVLuL5G
-         E2s7CTkcHThvqw1pgPlkzh0Yw+Fk7iIHuvs5PECgRpgrlGUQ4KwijEQiSVGaba+v3RBP
-         eXNA==
-X-Gm-Message-State: APjAAAXFYAb1Q4nodi9WzIpgpLnQboDdq8rMKdUhFR525zoySVo18LWP
-        WxMPsPqcaQj+f8GMCL1R41xFNOfSmDONbn64kjBQ2w==
-X-Google-Smtp-Source: APXvYqzWPWbhmPlUq6xrTvgK8Vlg/kG9jG609SLnGNNW/4fPUY+RmVKzl+2/MeVgiCT4fpy3B7gKQ1Ve7/WdQecdozw=
-X-Received: by 2002:a63:480f:: with SMTP id v15mr33530785pga.201.1580865445849;
- Tue, 04 Feb 2020 17:17:25 -0800 (PST)
-MIME-Version: 1.0
-References: <20200130230812.142642-1-brendanhiggins@google.com>
- <20200130230812.142642-3-brendanhiggins@google.com> <e060bdfc-5cdb-fb62-48b0-cc54c7bc72ce@gmail.com>
- <CAFd5g46irbQ7j_DOY+bQPoo1TWjwvu6n9iyQ7abe9pfqydeMYg@mail.gmail.com> <1da1538d-2e4c-0ed0-5fae-6f9033230c46@gmail.com>
-In-Reply-To: <1da1538d-2e4c-0ed0-5fae-6f9033230c46@gmail.com>
-From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Tue, 4 Feb 2020 17:17:14 -0800
-Message-ID: <CAFd5g45=m9Rvqf__5FW6HXjSytHJwX=mue-BO+TZMg0JP-BGmw@mail.gmail.com>
-Subject: Re: [PATCH v2 2/7] arch: um: add linker section for KUnit test suites
-To:     Frank Rowand <frowand.list@gmail.com>,
-        David Gow <davidgow@google.com>
-Cc:     Jeff Dike <jdike@addtoit.com>, Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Kees Cook <keescook@chromium.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Alan Maguire <alan.maguire@oracle.com>,
-        Iurii Zaikin <yzaikin@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>, rppt@linux.ibm.com,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Knut Omang <knut.omang@oracle.com>,
-        linux-um <linux-um@lists.infradead.org>,
-        linux-arch@vger.kernel.org,
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to;
+        bh=Fegxb96WbTiaWF4amnd9jGSEj+9x/8LIWAp8pFBqKBA=;
+        b=O8CgClCNsrmOauvx4UdMDPdV7xucrj9+Uo9ILnApLB9zASpMQ+g8zZbplMm9apKT/Z
+         me6n7Ll9+wDn1jGdJO6h9Xblreb86CvFOJtSTnc8DBDASq89vxSfLz9JbPAWAHe0ZFjQ
+         RazjQUGHCJuElKTms3GlypPd5KwFdszTFMAHxo2pIozTH8GqY4Qyk+zanXo6bO0goN0i
+         fQDOxatsOunLrBe7H0DFhbvKRH2kffzbMY/pzT9RHHz7KudFT0eBPNbk6Koyp1CnF4nL
+         hwhdPKg1bUuaJMcExpe0AoYsWsYKgjMPV6BlRXi5JE+xwrVCF2n28TNYfy8BL3kKKpra
+         7uIw==
+X-Gm-Message-State: APjAAAWBl3/DdF3Gfe8DhqT00qe/aRDMZckHwZenTjw0GWaK/y0vbpta
+        rIMA/1lGfGWTdmiuDvIE3rk=
+X-Google-Smtp-Source: APXvYqzgyXkrf5MY2V6rkPJb/lySnGevQuWU9BWrrZ0FpmwWpyQGlet0W3tueHDGlZFDd56tzRYSxA==
+X-Received: by 2002:a17:902:8a8e:: with SMTP id p14mr32705929plo.28.1580868881563;
+        Tue, 04 Feb 2020 18:14:41 -0800 (PST)
+Received: from localhost.localdomain ([211.47.96.9])
+        by smtp.gmail.com with ESMTPSA id d69sm23968818pfd.72.2020.02.04.18.14.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 04 Feb 2020 18:14:40 -0800 (PST)
+From:   SeongJae Park <sj38.park@gmail.com>
+To:     Brendan Higgins <brendanhiggins@google.com>
+Cc:     SeongJae Park <sj38.park@gmail.com>,
         "open list:KERNEL SELFTEST FRAMEWORK" 
         <linux-kselftest@vger.kernel.org>,
         KUnit Development <kunit-dev@googlegroups.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        SeongJae Park <sjpark@amazon.de>,
+        "Theodore Ts'o" <tytso@mit.edu>,
+        Bjorn Helgaas <bhelgaas@google.com>
+Subject: Re: Re: Re: [PATCH] kunit/kunit_kernel: Rebuild .config if .kunitconfig is modified
+Date:   Wed,  5 Feb 2020 03:14:28 +0100
+Message-Id: <20200205021428.8007-1-sj38.park@gmail.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <CAFd5g448555=dKFQMbjJ6G=tvtfF5oJgTtTgGx+38Ls3VqHo5g@mail.gmail.com> (raw)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Feb 4, 2020 at 3:17 PM Frank Rowand <frowand.list@gmail.com> wrote:
->
-> On 2/4/20 4:30 PM, Brendan Higgins wrote:
-> > On Tue, Feb 4, 2020 at 1:59 PM Frank Rowand <frowand.list@gmail.com> wrote:
-> >>
-> >> On 1/30/20 5:08 PM, Brendan Higgins wrote:
-> >>> Add a linker section to UML where KUnit can put references to its test
-> >>> suites. This patch is an early step in transitioning to dispatching all
-> >>> KUnit tests from a centralized executor rather than having each as its
-> >>> own separate late_initcall.
-> >>
-> >> All architectures please.
-> >
-> > I *am* supporting all architectures with this patchset.
-> >
-> > The first patch in this series adds support to all architectures
-> > except UML (admittedly I only tried x86 and ARM, 32 bit and 64 bit for
->
-> Right you are.  My mind did not span from patch 1 to patch 2. Apologies for
-> the noise.
->
->
-> > both, but I am pretty sure someone tried it for POWER and something
-> > else, so maybe I should try it with others before submission). A patch
-> > specific for UML, this patch, was needed because UML is a special
-> > snowflake and has a bunch of special linker scripts that don't make
-> > the change in vmlinux.lds.h (the previous patch) sufficient.
-> >
-> >> The early versions of Kunit documented reliance on UML.  Discussion lead to
-> >> the conclusion that real architectures and real hardware would be supported.
-> >
-> > I am *very* aware.
-> >
-> > I would never intentionally break support for other architectures. I
-> > know it is very important to you, Alan, and others.
-> >
-> >> This like this are what make me reluctant to move devicetree unittests to
-> >> KUnit.
-> >
-> > Hopefully I can reassure you then:
-> >
-> > With Alan as a regular contributor who cares very much about non-UML
-> > architectures, it would be very unlikely for me to accidentally break
-> > support for other architectures without us finding out before a
-> > release.
-> >
-> > I also periodically test KUnit on linux-next on x86-64. I have gotten
-> > bugs for other architectures from Arnd Bergmann and one of the m86k
-> > maintainers who seems to play around with it as well.
-> >
-> > So yeah, other people care about this too, and I would really not want
-> > to make any of them unhappy.
->
-> Thanks for the extra reassurance.
+On Tue, 4 Feb 2020 16:46:06 -0800 Brendan Higgins <brendanhiggins@google.com> wrote:
 
-No worries. This actually makes me think that we should probably have
-some kind of automated test that at least makes sure that popular
-KUnit architectures are not broken. Someone is currently adding KUnit
-support to KernelCI; maybe we can have KernelCI run multiple
-architecture tests after the initial support is complete.
-
-> >> Can you please add a section to the KUnit documentation that lists things
-> >> like the expectations, requirements, limitations, etc for a test case that
-> >> is run by KUnit?  Some examples that pop to mind from recent discussions
-> >> and my own experiences:
-> >>
-> >>   - Each test case is invoked after late_init is complete.
-> >>       + Exception: the possible value of being able to run a unit test
-> >>         at a specific runlevel has been expressed.  If an actual unit
-> >>         test can be shown to require running earlier, this restriction
-> >>         will be re-visited.
-> >>
-> >>   - Each test case must be idempotent.  Each test case may be called
-> >>     multiple times, and must generate the same result each time it
-> >>     is called.
-> >>       + Exception 1: a test case can be declared to not be idempotent
-> >>         [[ mechanism TBD ]], in which case KUnit will not call the
-> >>         test case a second time without the kernel rebooting.
-> >>       + Exception 2: hardware may not be deterministic, so a test that
-> >>         always passes or fails when run under UML may not always to
-> >>         so on real hardware.  <--- sentence copied from
-> >>         Documentation/dev-tools/kunit/usage.rst
-> >>           [[ This item and 1st exception do not exist yet, but will exist
-> >>           in some form if the proposed proc filesystem interface is
-> >>           added. ]]
-> >>
-> >>   - KUnit provides a helpful wrapper to simplify building a UML kernel
-> >>     containing the KUnit test cases, booting the UML kernel, and
-> >>     formatting the output from the test cases.  This wrapper MUST NOT
-> >>     be required to run the test cases or to determine a test result.
-> >>     The formatting may provide additional analysis and improve
-> >>     readability of a test result.
-> >>
-> >>   - .... There is more that belongs here, but I'm getting side tracked
-> >>     here, when I'm trying to instead convert devicetree unittests to
-> >>     KUnit and want to get back to that.
+> Sorry for the delay.
+> 
+> On Mon, Jan 27, 2020 at 10:03 PM SeongJae Park <sj38.park@gmail.com> wrote:
 > >
-> > Sure, I think that's a great start! Thanks for that. I hope you don't
-> > mind if I copy and paste some of it.
->
-> Please do.  And no need to credit me.
->
->
-> > It kind of sounds like you are talking about more of a requirements
-> > doc than the design doc I was imagining in my reply to you on the
-> > cover letter, which is fine. The documentation is primarily for people
-> > other than me, so whatever you and others think is useful, I will do.
+> > On Mon, 27 Jan 2020 16:02:48 -0800 Brendan Higgins <brendanhiggins@google.com> wrote:
 > >
->
-> I wasn't really sure what to label it as.  My inspiration was based
-> a little bit on reading through the Linux 5.5 KUnit source and
-> documentation, and trying to understand the expectations of the
-> KUnit framework and what the test cases have to either obey or
-> can expect.
->
-> I think there is a lot of history that you know, but is only visible
-> to test implementors if they read through the past couple of years
-> email threads.
+> > > On Sat, Jan 25, 2020 at 5:59 PM <sj38.park@gmail.com> wrote:
+> > > >
+> > > > From: SeongJae Park <sjpark@amazon.de>
+> > > >
+> > > > Deletions of configs in the '.kunitconfig' is not applied because kunit
+> > > > rebuilds '.config' only if the '.config' is not a subset of the
+> > > > '.kunitconfig'.  To allow the deletions to applied, this commit modifies
+> > > > the '.config' rebuild condition to addtionally check the modified times
+> > > > of those files.
+> > >
+> > > The reason it only checks that .kunitconfig is a subset of .config is
+> > > because we don't want the .kunitconfig to remove options just because
+> > > it doesn't recognize them.
+> > >
+> > > It runs `make ARCH=um olddefconfig` on the .config that it generates
+> > > from the .kunitconfig, and most of the time that means you will get a
+> > > .config with lots of things in it that aren't in the .kunitconfig.
+> > > Consequently, nothing should ever be deleted from the .config just
+> > > because it was deleted in the .kunitconfig (unless, of course, you
+> > > change a =y to a =n or # ... is not set), so I don't see what this
+> > > change would do.
+> > >
+> > > Can you maybe provide an example?
+> >
+> > Sorry for my insufficient explanation.  I added a kunit test
+> > (SYSCTL_KUNIT_TEST) to '.kunitconfig', ran the added test, and then removed it
+> > from the file.  However, '.config' is not generated again due to the condition
+> > and therefore the test still runs.
+> >
+> > For more detail:
+> >
+> >     $ ./tools/testing/kunit/kunit.py run --defconfig --build_dir ../kunit.out/
+> >     $ echo "CONFIG_SYSCTL_KUNIT_TEST=y" >> ../kunit.out/.kunitconfig
+> >     $ ./tools/testing/kunit/kunit.py run --build_dir ../kunit.out/
+> >     $ sed -i '4d' ../kunit.out/.kunitconfig
+> >     $ ./tools/testing/kunit/kunit.py run --build_dir ../kunit.out/
+> >
+> > The 2nd line command adds sysctl kunit test and the 3rd line shows it runs the
+> > added test as expected.  Because the default kunit config contains only 3
+> > lines, The 4th line command removes the sysctl kunit test from the
+> > .kunitconfig.  However, the 5th line still run the test.
+> >
+> > This patch is for such cases.  Of course, this might make more false positives
+> > but I believe it would not be a big problem because .config generation takes no
+> > long time.  If I missed something, please let me know.
+> 
+> I think I understand.
+> 
+> It is intentional - currently - that KUnit doesn't generate a new
+> .config with every invocation. The reason is basically to support
+> interaction with other methods of generating .configs. Consider that
+> you might want to use make menuconfig to turn something on. It is a
+> pretty handy interface if you work on vastly different parts of the
+> kernel. Or maybe you have a defconfig that you always use for some
+> platform, I think it is easier to run
+> 
+> make foo_config; tools/testing/kunit/kunit.py run
+> 
+> Then having to maintain both your defconfig and a .kunitconfig which
+> is a superset of the defconfig.
+> 
+> Your change would make it so that you have to have a .kunitconfig for
+> every test environment that you care about, and you could not as
+> easily take advantage of menuconfig.
 
-Yeah, that's no good. We need to provide a better experience than
-that. David has gotten deeply involved relatively recently: I suspect
-that he might have some good insight on this.
+Thank you for this kind answer.  Now I understood the intention and agree with
+that. :)
 
-David, you mentioned offline that there are some philosophical changes
-in how we think about KUnit that has happened that you feel have never
-quite been captured in the docs. Do you think this is part of what
-Frank has pointed out here? If not, do you have any thoughts about
-what we should call this documentation section?
+> 
+> I think what we do now is a bit janky, and the use cases I mentioned
+> are not super well supported. So I am sympathetic to what you are
+> trying to do, maybe we could have a config option for it?
+> 
+> I think Ted and Bjorn might have opinions on this; they had some
+> related opinions in the past.
 
-Shuah's first KUnit PR seemed to imply that KUnit was primarily for
-UML, or only fully supported under UML. So I think I might be the odd
-one out thinking that that has changed and the documentation properly
-conveys that.
+I'm ok with current state, but if related discussions continue and my opinion
+is required, I will join in.
+
+
+Thanks,
+SeongJae Park
+
+> 
