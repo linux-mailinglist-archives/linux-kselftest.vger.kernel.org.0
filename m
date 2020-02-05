@@ -2,101 +2,94 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F458153366
-	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Feb 2020 15:53:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 290D7153588
+	for <lists+linux-kselftest@lfdr.de>; Wed,  5 Feb 2020 17:46:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726933AbgBEOxu (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 5 Feb 2020 09:53:50 -0500
-Received: from us-smtp-1.mimecast.com ([205.139.110.61]:54128 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726534AbgBEOxt (ORCPT
+        id S1727390AbgBEQq3 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 5 Feb 2020 11:46:29 -0500
+Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:51660 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726359AbgBEQq3 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 5 Feb 2020 09:53:49 -0500
+        Wed, 5 Feb 2020 11:46:29 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1580914427;
+        s=mimecast20190719; t=1580921188;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=IAbY+Yr9/eO31ocuCCsfW4JHEc/zKedrcNZ590XXkuc=;
-        b=GJWrUBisWxensDopE9vYZMHLXVp+p97DMzF9VKK05gS99hBfa+rq1h9Xkg/Ff8myQRewUx
-        CKpinyXb+d/YNjtny0pgErNYXSG2AeiyfHl/6IeMw+ab3McV7L/iRZe5smMSMd96HPKzFs
-        CKoYKX1Kuypoh9XPu1Fyr0jB56TVMvg=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-366-C6JQgeMnMKul1juuNAByXg-1; Wed, 05 Feb 2020 09:53:44 -0500
-X-MC-Unique: C6JQgeMnMKul1juuNAByXg-1
-Received: by mail-wm1-f71.google.com with SMTP id l11so2055640wmi.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 05 Feb 2020 06:53:44 -0800 (PST)
+        bh=M7hFAEYpi25OZAJ3FpIbfqeOjel9eL1CL20O4yOxrIg=;
+        b=eC6umjaOAuSLHKW/0T05I9/ZlD4Qr/5KrqK4m+e8ttU929LazmbtfFnv8g8QyUszZ/PS7v
+        XJ90n8sBSZ94odsghmcpsHYQ+265cbTor2DRM49xGqIbhcCzpJc+5MGvJ42MlAfMRRqwg6
+        MM20iGBVT0+z28d1q4tIE9ORW+0P6yQ=
+Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com
+ [209.85.160.198]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-195-7neEf91gMWGjsmU_cej5rQ-1; Wed, 05 Feb 2020 11:46:22 -0500
+X-MC-Unique: 7neEf91gMWGjsmU_cej5rQ-1
+Received: by mail-qt1-f198.google.com with SMTP id m8so1709155qta.20
+        for <linux-kselftest@vger.kernel.org>; Wed, 05 Feb 2020 08:46:22 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=IAbY+Yr9/eO31ocuCCsfW4JHEc/zKedrcNZ590XXkuc=;
-        b=fIcMqBqpLNr96UP//T+ph1ObZIo01I08HNpOYSlqtatibqb31zD35I2A6mOuLWE15x
-         2mB+jCzkVSIxmEDLi/MdK9MALrbSHQ/vQ7p3hHB2ns21G5H6+ZaaOjRa2qfUZRc2hkUv
-         TCSJY1lGdq0PrAZfkthQlX1PLgGY9RYZiGAXiO2dQqrWh1plE86hMmsWpDGMsF2CEAdm
-         YXc2gIfXCuTeATYBaK7HRp2kD3f0IMyqhp5QVFEz10Zf3LSRnxHXDNufFy2v7Iu/do/u
-         d1BRsf8xYu5BLdcV3EUnEkH+UWSizntn+dK9e+xXKQ/w9s8pZTArrjvOSCbAlZRGYvSw
-         dR1A==
-X-Gm-Message-State: APjAAAU8j3OuDrJwL/58si5DKLtc9FtU283GTsOTSCUJqRcIOPwKb9E+
-        F+/Szd6LZXAHhbPa5OYEFwfX5G5zSss32ILz2NYrYd+buCfU0IJ0MHEvg4jU9bS+03G04RVWlt7
-        BKBGUQc49fRxkKMUIYWZFVFZacirS
-X-Received: by 2002:adf:ed09:: with SMTP id a9mr12568518wro.350.1580914423775;
-        Wed, 05 Feb 2020 06:53:43 -0800 (PST)
-X-Google-Smtp-Source: APXvYqz4uM/x/8RTwBkdiICJD8IV48N7CDDFK2+/pLfMxQ3+hcFqA1/YQpAgUC0SFoYYkKnZRG1C1g==
-X-Received: by 2002:adf:ed09:: with SMTP id a9mr12568501wro.350.1580914423593;
-        Wed, 05 Feb 2020 06:53:43 -0800 (PST)
-Received: from ?IPv6:2001:b07:6468:f312:a9f0:cbc3:a8a6:fc56? ([2001:b07:6468:f312:a9f0:cbc3:a8a6:fc56])
-        by smtp.gmail.com with ESMTPSA id q14sm60827wrj.81.2020.02.05.06.53.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 05 Feb 2020 06:53:43 -0800 (PST)
-Subject: Re: [PATCH 3/3] kvm: mmu: Separate pte generation from set_spte
-To:     Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Ben Gardon <bgardon@google.com>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, linux-kselftest@vger.kernel.org
-Cc:     Peter Xu <peterx@redhat.com>,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=M7hFAEYpi25OZAJ3FpIbfqeOjel9eL1CL20O4yOxrIg=;
+        b=c8k7YqPaliqmsFeZUZlKf6FrZtb6uFBsnZl2/VAqlKLw/0Sq1VxxTV0RNTucb7fZV3
+         WH6rJKK1QnYR0Qa3i5Q6rKpOuVRJrwjKz/67V4nowN1UBfBl++1htn9nnH8YeTt25yfN
+         a5bxNrH4S2mV2wJMTIuPrnBDV/fmj0yybgq+qSAD/3sU+OC2bz/Vl9c/gsEvDdDGKU9R
+         2GrBkOvpQbpnx7xkbj7tD+Rl8Y/FnCj4FLyCp7wHRsmQzCbaUNf6bLJZ8vl1GVd7FN5y
+         gVM1k2atUDBjiC2k3Bc7aFZpKkWxJnzG76pn8JS2JtdHmxrmohHvLu/R6ZQRxxwOZU/G
+         INfg==
+X-Gm-Message-State: APjAAAVTMxyDjYBTDuaxj9vur2Jg29M7yCEku0vQq1ta+s78IGv4Ij9H
+        xevsIB8zyh7a7tLdkp3BOB5ngL6x7JhUXUnnBkM7Zk+rnH/XXYH0avgRN5IbcOr0n0f3FTQXPnT
+        WP7N+BluKxzS64RdP9HjmhyV4SZqr
+X-Received: by 2002:ad4:498d:: with SMTP id t13mr31655712qvx.58.1580921182147;
+        Wed, 05 Feb 2020 08:46:22 -0800 (PST)
+X-Google-Smtp-Source: APXvYqwxzevODXBhDfMMTQorefgWoeFyo9tbv71If2hqARRkA5O2BGwW+pwMmPwOC5DMC/NssdMI3g==
+X-Received: by 2002:ad4:498d:: with SMTP id t13mr31655694qvx.58.1580921181856;
+        Wed, 05 Feb 2020 08:46:21 -0800 (PST)
+Received: from xz-x1 ([2607:9880:19c8:32::2])
+        by smtp.gmail.com with ESMTPSA id q5sm91326qkf.14.2020.02.05.08.46.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 05 Feb 2020 08:46:21 -0800 (PST)
+Date:   Wed, 5 Feb 2020 11:46:19 -0500
+From:   Peter Xu <peterx@redhat.com>
+To:     Ben Gardon <bgardon@google.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
         Sean Christopherson <sean.j.christopherson@intel.com>,
         Peter Shier <pshier@google.com>,
         Oliver Upton <oupton@google.com>
+Subject: Re: [PATCH 1/3] kvm: mmu: Replace unsigned with unsigned int for PTE
+ access
+Message-ID: <20200205164619.GC378317@xz-x1>
 References: <20200203230911.39755-1-bgardon@google.com>
- <20200203230911.39755-3-bgardon@google.com>
- <87pnetkuov.fsf@vitty.brq.redhat.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-Message-ID: <1adc4784-8567-d008-4d78-957fd33585ed@redhat.com>
-Date:   Wed, 5 Feb 2020 15:53:41 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.1.1
 MIME-Version: 1.0
-In-Reply-To: <87pnetkuov.fsf@vitty.brq.redhat.com>
 Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+In-Reply-To: <20200203230911.39755-1-bgardon@google.com>
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 05/02/20 14:52, Vitaly Kuznetsov wrote:
->> +	spte = make_spte(vcpu, pte_access, level, gfn, pfn, *sptep, speculative,
->> +			 can_unsync, host_writable, sp_ad_disabled(sp), &ret);
-> I'm probably missing something, but in make_spte() I see just one place
-> which writes to '*ret' so at the end, this is either
-> SET_SPTE_WRITE_PROTECTED_PT or 0 (which we got only because we
-> initialize it to 0 in set_spte()). Unless this is preparation to some
-> other change, I don't see much value in the complication.
+On Mon, Feb 03, 2020 at 03:09:09PM -0800, Ben Gardon wrote:
+> There are several functions which pass an access permission mask for
+> SPTEs as an unsigned. This works, but checkpatch complains about it.
+> Switch the occurrences of unsigned to unsigned int to satisfy checkpatch.
 > 
-> Can we actually reverse the logic, pass 'spte' by reference and return
-> 'ret'?
+> No functional change expected.
 > 
+> Tested by running kvm-unit-tests on an Intel Haswell machine. This
+> commit introduced no new failures.
+> 
+> This commit can be viewed in Gerrit at:
+> 	https://linux-review.googlesource.com/c/virt/kvm/kvm/+/2358
+> 
+> Signed-off-by: Ben Gardon <bgardon@google.com>
+> Reviewed-by: Oliver Upton <oupton@google.com>
 
-It gives a similar calling convention between make_spte and
-make_mmio_spte.  It's not the most beautiful thing but I think I prefer it.
+Reviewed-by: Peter Xu <peterx@redhat.com>
 
-But the overwhelming function parameters are quite ugly, especially
-old_spte.  I don't think it's an improvement, let's consider it together
-with the rest of your changes instead.
-
-Paolo
+-- 
+Peter Xu
 
