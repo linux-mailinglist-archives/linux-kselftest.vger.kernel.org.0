@@ -2,136 +2,125 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EAF64153BB4
-	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Feb 2020 00:13:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8215E153BD6
+	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Feb 2020 00:27:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727491AbgBEXNc (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 5 Feb 2020 18:13:32 -0500
-Received: from hqnvemgate25.nvidia.com ([216.228.121.64]:1635 "EHLO
-        hqnvemgate25.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727149AbgBEXNc (ORCPT
+        id S1727192AbgBEX1I (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 5 Feb 2020 18:27:08 -0500
+Received: from aserp2120.oracle.com ([141.146.126.78]:49618 "EHLO
+        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727149AbgBEX1H (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 5 Feb 2020 18:13:32 -0500
-Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate25.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5e3b4c000000>; Wed, 05 Feb 2020 15:13:04 -0800
-Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate101.nvidia.com (PGP Universal service);
-  Wed, 05 Feb 2020 15:13:28 -0800
-X-PGP-Universal: processed;
-        by hqpgpgate101.nvidia.com on Wed, 05 Feb 2020 15:13:28 -0800
-Received: from [10.110.48.28] (10.124.1.5) by HQMAIL107.nvidia.com
- (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Wed, 5 Feb
- 2020 23:13:28 +0000
-Subject: Re: [PATCH v4 10/12] mm/gup: /proc/vmstat: pin_user_pages (FOLL_PIN)
- reporting
-To:     Jan Kara <jack@suse.cz>
-CC:     Andrew Morton <akpm@linux-foundation.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Christoph Hellwig <hch@infradead.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Dave Chinner <david@fromorbit.com>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Jonathan Corbet <corbet@lwn.net>,
-        =?UTF-8?B?SsOpcsO0bWUgR2xpc3Nl?= <jglisse@redhat.com>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Michal Hocko <mhocko@suse.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Matthew Wilcox <willy@infradead.org>,
-        <linux-doc@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>,
-        <linux-kselftest@vger.kernel.org>, <linux-rdma@vger.kernel.org>,
-        <linux-mm@kvack.org>, LKML <linux-kernel@vger.kernel.org>
-References: <20200204234117.2974687-1-jhubbard@nvidia.com>
- <20200204234117.2974687-11-jhubbard@nvidia.com>
- <20200205093733.GB28058@quack2.suse.cz>
-From:   John Hubbard <jhubbard@nvidia.com>
-X-Nvconfidentiality: public
-Message-ID: <09b49b0d-85cc-87b8-9176-0963f6c8c735@nvidia.com>
-Date:   Wed, 5 Feb 2020 15:13:27 -0800
+        Wed, 5 Feb 2020 18:27:07 -0500
+Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
+        by aserp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id 015NNExA010837;
+        Wed, 5 Feb 2020 23:27:01 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=subject : to : cc :
+ references : from : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=corp-2020-01-29;
+ bh=vkChhDkW7adf/zI5HvGJVWc4OuaOabIDTSkYpTnwmPw=;
+ b=eYIjGVGUVqV5tGfbL96DvEfbYv3qu0IIayzbrpUiOrBcqQUUuX5aGJuzTwR8F45cagPc
+ K9PdXE713rljBTOIT3YXqyu+jjgQuPcsCpJShzg32/wD4tmugHCtG3iRVoxaXTFUL58Y
+ g7P2ZZvbhac9rQXJ6GyPSZk8m7XEyvbrLliWbeuGBTWYVFvht2fPs8DJdMhX40bHzR3C
+ N4yhSOJhTvzoJSI4RxzXEwXNVHTc/NhbyYfDoSQCRhkaGAqoQMMPZAkuVat13q+tP0SL
+ /RM1TmaQxg5lx9y0Erht6ykSN9oG+/nWkJMocgOkMyDRr7VN0sBlPx7J5tOmfTFT7edN eQ== 
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=subject : to : cc :
+ references : from : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=corp-2019-08-05;
+ bh=vkChhDkW7adf/zI5HvGJVWc4OuaOabIDTSkYpTnwmPw=;
+ b=ejok573A3qg8/03hB2x1meAni0sWpbmssJEut1MKvXKKRgGmOMqlQzCyEbGIw1rr5wPu
+ MglGDJ0NxdPBMqQg/y1AKhOpHKFOMAOGFzqj5xZOMie8GqdYV45ACAAYWm0+v15l3STA
+ ezg4yajpIRLxDHoG5tMQTv6W6m+aFORDLpzGitaOgMqBtrZ8IUvpGK0Qm9afwRz59XIQ
+ mcQA1bdAT6lGv3q0Zi72XXBAKHdcF1QmHWq3xFfDbTNHaCQnnGB2K4Jo64QECF5xKlW3
+ sxPYi4Y3sPyZIyz4FMT6pVTo9c20xyan6YmFsiJxo2ar86C6lPF/acPKzpmLivYNaWvq kw== 
+Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
+        by aserp2120.oracle.com with ESMTP id 2xykbp6bct-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 05 Feb 2020 23:27:00 +0000
+Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
+        by aserp3020.oracle.com (8.16.0.27/8.16.0.27) with SMTP id 015NOOk2058451;
+        Wed, 5 Feb 2020 23:27:00 GMT
+Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
+        by aserp3020.oracle.com with ESMTP id 2xykc99syn-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 05 Feb 2020 23:27:00 +0000
+Received: from abhmp0008.oracle.com (abhmp0008.oracle.com [141.146.116.14])
+        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 015NQv9D014738;
+        Wed, 5 Feb 2020 23:26:57 GMT
+Received: from [192.168.1.206] (/71.63.128.209)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Wed, 05 Feb 2020 15:26:57 -0800
+Subject: Re: [PATCH v11 3/9] hugetlb_cgroup: add reservation accounting for
+ private mappings
+To:     Mina Almasry <almasrymina@google.com>
+Cc:     shuah@kernel.org, rientjes@google.com, shakeelb@google.com,
+        gthelen@google.com, akpm@linux-foundation.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org, cgroups@vger.kernel.org
+References: <20200203232248.104733-1-almasrymina@google.com>
+ <20200203232248.104733-3-almasrymina@google.com>
+From:   Mike Kravetz <mike.kravetz@oracle.com>
+Message-ID: <5480f0ea-0e5f-30c2-7635-43b8cbbb3a73@oracle.com>
+Date:   Wed, 5 Feb 2020 15:26:56 -0800
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.2
+ Thunderbird/68.4.1
 MIME-Version: 1.0
-In-Reply-To: <20200205093733.GB28058@quack2.suse.cz>
-X-Originating-IP: [10.124.1.5]
-X-ClientProxiedBy: HQMAIL111.nvidia.com (172.20.187.18) To
- HQMAIL107.nvidia.com (172.20.187.13)
-Content-Type: text/plain; charset="utf-8"
+In-Reply-To: <20200203232248.104733-3-almasrymina@google.com>
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1580944384; bh=QZo2rYgRggJLhdhuOglfdT26CygAzcQcsm1mvo4G27A=;
-        h=X-PGP-Universal:Subject:To:CC:References:From:X-Nvconfidentiality:
-         Message-ID:Date:User-Agent:MIME-Version:In-Reply-To:
-         X-Originating-IP:X-ClientProxiedBy:Content-Type:Content-Language:
-         Content-Transfer-Encoding;
-        b=rET6ClPJ1i9ucTvvRWF/1/c462K2mCH6nZx8WiCBRBOHIYQjg+sBdCGrPEtzpJsKC
-         oKyCPZwjz3pxDIMTZQ64WUhXMxGUcmo2sbbCBiqNCUtVm8IDqmSKyYGkw81oZa918B
-         N0ScNcSKXjJywqnA2ZRAnUbR9x/eLSSwDq662e/d+ttmimG7GT1j+2mJRKDHI6zZbH
-         86HZzVIKep/0LUPMJQsvDeV54HT0Y46r7c6qo8I9SUAiapmADqg+pUsaOz9YoF0uW1
-         Jn2PUL4F9EQ2HxmAkHcoSFDySLMhNHZs2ZqJAAvZxFMlEtNxpUbGKwxFOdO35tSUdu
-         Cvzd7Xz67EEww==
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9522 signatures=668685
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=2 malwarescore=0
+ phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=999
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.0.1-1911140001 definitions=main-2002050181
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9522 signatures=668685
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
+ suspectscore=2 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
+ lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1911140001
+ definitions=main-2002050181
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 2/5/20 1:37 AM, Jan Kara wrote:
-> ...
+On 2/3/20 3:22 PM, Mina Almasry wrote:
+> Normally the pointer to the cgroup to uncharge hangs off the struct
+> page, and gets queried when it's time to free the page. With
+> hugetlb_cgroup reservations, this is not possible. Because it's possible
+> for a page to be reserved by one task and actually faulted in by another
+> task.
 > 
->> @@ -104,6 +106,9 @@ static __maybe_unused struct page *try_grab_compound_head(struct page *page,
->>  		if (hpage_pincount_available(page))
->>  			hpage_pincount_add(page, refs);
->>  
->> +		mod_node_page_state(page_pgdat(page), NR_FOLL_PIN_ACQUIRED,
->> +				    orig_refs);
->> +
->>  		return page;
->>  	}
->>  
+> The best place to put the hugetlb_cgroup pointer to uncharge for
+> reservations is in the resv_map. But, because the resv_map has different
+> semantics for private and shared mappings, the code patch to
+> charge/uncharge shared and private mappings is different. This patch
+> implements charging and uncharging for private mappings.
 > 
-> It seems to me you miss mod_node_page_state() in put_compound_head(), don't
-> you?
-
-
-Yes, that was definitely missing. I've added this for the next version:
-
-
-diff --git a/mm/gup.c b/mm/gup.c
-index 7c543849181b..ae503c51bc7f 100644
---- a/mm/gup.c
-+++ b/mm/gup.c
-@@ -2268,6 +2268,8 @@ static int record_subpages(struct page *page, unsigned long addr,
- 
- static void put_compound_head(struct page *page, int refs, unsigned int flags)
- {
-+       int orig_refs = refs;
-+
-        if (flags & FOLL_PIN) {
-                if (hpage_pincount_available(page))
-                        hpage_pincount_sub(page, refs);
-@@ -2283,6 +2285,8 @@ static void put_compound_head(struct page *page, int refs, unsigned int flags)
-        if (refs > 1)
-                page_ref_sub(page, refs - 1);
-        put_page(page);
-+
-+       mod_node_page_state(page_pgdat(page), NR_FOLL_PIN_RELEASED, orig_refs);
- }
- 
- #ifdef CONFIG_ARCH_HAS_HUGEPD
-
-
-
+> For private mappings, the counter to uncharge is in
+> resv_map->reservation_counter. On initializing the resv_map this is set
+> to NULL. On reservation of a region in private mapping, the tasks
+> hugetlb_cgroup is charged and the hugetlb_cgroup is placed is
+> resv_map->reservation_counter.
 > 
-> Otherwise I like the new stat names better :).
+> On hugetlb_vm_op_close, we uncharge resv_map->reservation_counter.
 > 
-> 								Honza
+> Signed-off-by: Mina Almasry <almasrymina@google.com>
+> Reviewed-by: Mike Kravetz <mike.kravetz@oracle.com>
+> Acked-by: David Rientjes <rientjes@google.com>
 > 
+> ---
+> 
+> Changes in v11:
+> - Refactored hugetlb_cgroup_uncharge_conuter a bit to eliminate
+> unnecessary #ifdefs.
+> - Added resv_map_set_hugetlb_cgroup_uncharge_info() to eliminate #ifdefs
+> in the middle of hugetlb logic.
 
-Glad to hear that! :)
+Thanks.
+Code looks better without the #ifdefs.
+You can keep my Reviewed-by:
 
-thanks,
 -- 
-John Hubbard
-NVIDIA
+Mike Kravetz
