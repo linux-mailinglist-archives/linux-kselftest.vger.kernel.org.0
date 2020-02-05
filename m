@@ -2,129 +2,160 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C1AE6153C2D
-	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Feb 2020 00:57:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EFE0A153C34
+	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Feb 2020 00:59:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727170AbgBEX51 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 5 Feb 2020 18:57:27 -0500
-Received: from aserp2120.oracle.com ([141.146.126.78]:43770 "EHLO
-        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727307AbgBEX50 (ORCPT
+        id S1727550AbgBEX6z (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 5 Feb 2020 18:58:55 -0500
+Received: from hqnvemgate26.nvidia.com ([216.228.121.65]:1731 "EHLO
+        hqnvemgate26.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727170AbgBEX6z (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 5 Feb 2020 18:57:26 -0500
-Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
-        by aserp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id 015NsSBe031541;
-        Wed, 5 Feb 2020 23:57:20 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=subject : to : cc :
- references : from : message-id : date : mime-version : in-reply-to :
- content-type : content-transfer-encoding; s=corp-2020-01-29;
- bh=20EhFCbhIcHFyvZXL9v1kH+4dXx2cB7lh5BIdcgVgYg=;
- b=tV5i05UsAm74oB5wBtMplQ9bRCxAZGrWG9RDTuDn/v7ZDA56FfuTZPt1nzVC+W18NAoD
- d8QGNv+GAwz7HdMQS2puNqa2vkiC00xCoJuYDtwBCaGuDqAlIwDPsxxPr00vI/Ymai1G
- XWH74yaId+jPw7TBCdy9bzGFG5ybNne8mDO5jD6stEmmG9QaSXXfxvmQm0/VqXU9Epc6
- GJMJN4jcnCEgaHUsT6cFyOdEc7n4iiL5wvr9HVEu6td4GSZJeCuuLYpYeIuWkK1mcAL+
- C0tNdnEaLahhU1I0zldtydPf6O9gY/xpkVHCNCxjdy1ZIPMf0DIbDHtuwxrQ1J+wyq56 5Q== 
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=subject : to : cc :
- references : from : message-id : date : mime-version : in-reply-to :
- content-type : content-transfer-encoding; s=corp-2019-08-05;
- bh=20EhFCbhIcHFyvZXL9v1kH+4dXx2cB7lh5BIdcgVgYg=;
- b=IXYlQMtjrp26qQLcJhlH1+yPliIpbXYSmzlrQLyf+Y4E+Y2a32Lg/DuXn94gYJzSqx6K
- 7duY2xsG5wBA8nbBVvOmMx3jrTMsMZDhz8gGWm3CaVJ3x6pKlqiwu68dK+f9f4k7HliW
- Mk0+FsiTFqEw9plVng2ySqPMtim53P+4k6sN3AkQZHV70TFOTfcIDPJe+oZxzKQebUL1
- UoaEIbHXFBCAjV4o+alZvyRLVB/MLFN6RLZeqd/4Sc0otpeTkDFe5GeO8B0KI+HbIF7h
- yBt4wyijrfeg7y+i3ypR8qwpLkfqPSgy8wT68LEIPLb9XI6OK5/B8c+Lsbtl5k5WAhdC YA== 
-Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
-        by aserp2120.oracle.com with ESMTP id 2xykbp6er8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 05 Feb 2020 23:57:20 +0000
-Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
-        by aserp3030.oracle.com (8.16.0.27/8.16.0.27) with SMTP id 015NnRvR029003;
-        Wed, 5 Feb 2020 23:57:20 GMT
-Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
-        by aserp3030.oracle.com with ESMTP id 2xykbt4c00-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 05 Feb 2020 23:57:19 +0000
-Received: from abhmp0018.oracle.com (abhmp0018.oracle.com [141.146.116.24])
-        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 015NvIxZ003008;
-        Wed, 5 Feb 2020 23:57:19 GMT
-Received: from [192.168.1.206] (/71.63.128.209)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Wed, 05 Feb 2020 15:57:18 -0800
-Subject: Re: [PATCH v11 4/9] hugetlb: disable region_add file_region
- coalescing
-To:     Mina Almasry <almasrymina@google.com>
-Cc:     shuah@kernel.org, rientjes@google.com, shakeelb@google.com,
-        gthelen@google.com, akpm@linux-foundation.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org, cgroups@vger.kernel.org
-References: <20200203232248.104733-1-almasrymina@google.com>
- <20200203232248.104733-4-almasrymina@google.com>
-From:   Mike Kravetz <mike.kravetz@oracle.com>
-Message-ID: <cd457f80-2624-f524-36ce-f11b56b30f8a@oracle.com>
-Date:   Wed, 5 Feb 2020 15:57:17 -0800
+        Wed, 5 Feb 2020 18:58:55 -0500
+Received: from hqpgpgate102.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate26.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5e3b56af0001>; Wed, 05 Feb 2020 15:58:39 -0800
+Received: from hqmail.nvidia.com ([172.20.161.6])
+  by hqpgpgate102.nvidia.com (PGP Universal service);
+  Wed, 05 Feb 2020 15:58:54 -0800
+X-PGP-Universal: processed;
+        by hqpgpgate102.nvidia.com on Wed, 05 Feb 2020 15:58:54 -0800
+Received: from [10.110.48.28] (10.124.1.5) by HQMAIL107.nvidia.com
+ (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Wed, 5 Feb
+ 2020 23:58:53 +0000
+Subject: Re: [PATCH v4 10/12] mm/gup: /proc/vmstat: pin_user_pages (FOLL_PIN)
+ reporting
+To:     "Kirill A. Shutemov" <kirill@shutemov.name>
+CC:     Andrew Morton <akpm@linux-foundation.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Christoph Hellwig <hch@infradead.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Dave Chinner <david@fromorbit.com>,
+        Ira Weiny <ira.weiny@intel.com>, Jan Kara <jack@suse.cz>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Jonathan Corbet <corbet@lwn.net>,
+        =?UTF-8?B?SsOpcsO0bWUgR2xpc3Nl?= <jglisse@redhat.com>,
+        Michal Hocko <mhocko@suse.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Matthew Wilcox <willy@infradead.org>,
+        <linux-doc@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>,
+        <linux-kselftest@vger.kernel.org>, <linux-rdma@vger.kernel.org>,
+        <linux-mm@kvack.org>, LKML <linux-kernel@vger.kernel.org>
+References: <20200204234117.2974687-1-jhubbard@nvidia.com>
+ <20200204234117.2974687-11-jhubbard@nvidia.com>
+ <20200205114325.4e2f5aghsusihpap@box>
+From:   John Hubbard <jhubbard@nvidia.com>
+X-Nvconfidentiality: public
+Message-ID: <2b0656a2-3402-f376-7440-481124485bde@nvidia.com>
+Date:   Wed, 5 Feb 2020 15:58:53 -0800
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.1
+ Thunderbird/68.4.2
 MIME-Version: 1.0
-In-Reply-To: <20200203232248.104733-4-almasrymina@google.com>
-Content-Type: text/plain; charset=utf-8
+In-Reply-To: <20200205114325.4e2f5aghsusihpap@box>
+X-Originating-IP: [10.124.1.5]
+X-ClientProxiedBy: HQMAIL105.nvidia.com (172.20.187.12) To
+ HQMAIL107.nvidia.com (172.20.187.13)
+Content-Type: text/plain; charset="utf-8"
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9522 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
- phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=904
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.0.1-1911140001 definitions=main-2002050185
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9522 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
- suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
- lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=937 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1911140001
- definitions=main-2002050185
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1580947120; bh=eQdMCwCy4bdZgoj0Xg2Rpo0F1Zl0hA5DYDsmhvn66Ys=;
+        h=X-PGP-Universal:Subject:To:CC:References:From:X-Nvconfidentiality:
+         Message-ID:Date:User-Agent:MIME-Version:In-Reply-To:
+         X-Originating-IP:X-ClientProxiedBy:Content-Type:Content-Language:
+         Content-Transfer-Encoding;
+        b=q8siZ3RTxc5+A5vd839fLbpWstbJCB342l+V3JAD86hC7sc5zMybGJEIdeHlaUU3t
+         nt8p/HHnGlgEewmi2wqwV82PDvMFaUnROFOaGq9E5VdAJm/UCuV7cJ32B4j83bSfCa
+         b0qRd+rlKh8rW1cH1wfGJX7k6E4MlDKxO8ghq9VhtIHXcXE1P9K0Vfp6hfaL7BB/yk
+         c+zr+tqiK/XwRrfuETL1mOclWclbyz8VtlwdPzJDt5tePy+r7ECX6WrKoKFwCgffdn
+         tGYMGpuSkou9GRX9fLICp7SCBSrnz4AfS/bFdxbr8zqNaT7QLqEXY/KpjurVchpJA1
+         7sHUH/d9y79qw==
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 2/3/20 3:22 PM, Mina Almasry wrote:
-> A follow up patch in this series adds hugetlb cgroup uncharge info the
-> file_region entries in resv->regions. The cgroup uncharge info may
-> differ for different regions, so they can no longer be coalesced at
-> region_add time. So, disable region coalescing in region_add in this
-> patch.
+On 2/5/20 3:43 AM, Kirill A. Shutemov wrote:
+> On Tue, Feb 04, 2020 at 03:41:15PM -0800, John Hubbard wrote:
+>> Now that pages are "DMA-pinned" via pin_user_page*(), and unpinned via
+>> unpin_user_pages*(), we need some visibility into whether all of this is
+>> working correctly.
+>>
+>> Add two new fields to /proc/vmstat:
+>>
+>>     nr_foll_pin_acquired
+>>     nr_foll_pin_released
+>>
+>> These are documented in Documentation/core-api/pin_user_pages.rst.
+>> They represent the number of pages (since boot time) that have been
+>> pinned ("nr_foll_pin_acquired") and unpinned ("nr_foll_pin_released"),
+>> via pin_user_pages*() and unpin_user_pages*().
+>>
+>> In the absence of long-running DMA or RDMA operations that hold pages
+>> pinned, the above two fields will normally be equal to each other.
+>>
+>> Also: update Documentation/core-api/pin_user_pages.rst, to remove an
+>> earlier (now confirmed untrue) claim about a performance problem with
+>> /proc/vmstat.
+>>
+>> Also: updated Documentation/core-api/pin_user_pages.rst to rename the
+>> new /proc/vmstat entries, to the names listed here.
+>>
+>> Signed-off-by: John Hubbard <jhubbard@nvidia.com>
 > 
-> Behavior change:
-> 
-> Say a resv_map exists like this [0->1], [2->3], and [5->6].
-> 
-> Then a region_chg/add call comes in region_chg/add(f=0, t=5).
-> 
-> Old code would generate resv->regions: [0->5], [5->6].
-> New code would generate resv->regions: [0->1], [1->2], [2->3], [3->5],
-> [5->6].
-> 
-> Special care needs to be taken to handle the resv->adds_in_progress
-> variable correctly. In the past, only 1 region would be added for every
-> region_chg and region_add call. But now, each call may add multiple
-> regions, so we can no longer increment adds_in_progress by 1 in region_chg,
-> or decrement adds_in_progress by 1 after region_add or region_abort. Instead,
-> region_chg calls add_reservation_in_range() to count the number of regions
-> needed and allocates those, and that info is passed to region_add and
-> region_abort to decrement adds_in_progress correctly.
-> 
-> We've also modified the assumption that region_add after region_chg
-> never fails. region_chg now pre-allocates at least 1 region for
-> region_add. If region_add needs more regions than region_chg has
-> allocated for it, then it may fail.
-> 
-> Signed-off-by: Mina Almasry <almasrymina@google.com>
-> Reviewed-by: Mike Kravetz <mike.kravetz@oracle.com>
+> Please, clarify semantics for huge page. An user may want to know if we
+> count huge page as one pin-acquired or by number of pages.
 
-This is the same as the previous version.  My late comment was that we
-need to rethink the disabling of region coalescing.  This is especially
-important for private mappings where there will be one region for huge
-page.  I know that you are working on this issue.  Please remove my
-Reviewed-by: when sending out the next version.
 
-Thanks,
+OK, I've added this for the next version:
+
+
+diff --git a/Documentation/core-api/pin_user_pages.rst b/Documentation/core-api/pin_user_pages.rst
+index 5776ad1ed5e4..2e939ff10b86 100644
+--- a/Documentation/core-api/pin_user_pages.rst
++++ b/Documentation/core-api/pin_user_pages.rst
+@@ -211,6 +211,33 @@ since the system was booted, via two new /proc/vmstat entries: ::
+     /proc/vmstat/nr_foll_pin_acquired
+     /proc/vmstat/nr_foll_pin_released
+ 
++Under normal conditions, these two values will be equal unless there are any
++long-term [R]DMA pins in place, or during pin/unpin transitions.
++
++* nr_foll_pin_acquired: This is the number of logical pins that have been
++  acquired since the system was powered on. For huge pages, the head page is
++  pinned once for each page (head page and each tail page) within the huge page.
++  This follows the same sort of behavior that get_user_pages() uses for huge
++  pages: the head page is refcounted once for each tail or head page in the huge
++  page, when get_user_pages() is applied to a huge page.
++
++* nr_foll_pin_released: The number of logical pins that have been released since
++  the system was powered on. Note that pages are released (unpinned) on a
++  PAGE_SIZE granularity, even if the original pin was applied to a huge page.
++  Becaused of the pin count behavior described above in "nr_foll_pin_acquired",
++  the accounting balances out, so that after doing this::
++
++    pin_user_pages(huge_page);
++    for (each page in huge_page)
++        unpin_user_page(page);
++
++...the following is expected::
++
++    nr_foll_pin_released == nr_foll_pin_acquired
++
++(...unless it was already out of balance due to a long-term RDMA pin being in
++place.)
++
+ Other diagnostics
+ =================
+ 
+
+
+thanks,
 -- 
-Mike Kravetz
+John Hubbard
+NVIDIA
+
+> 
+> Otherwise looks good (given Jan concern is addressed).
+> 
