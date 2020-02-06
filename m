@@ -2,108 +2,109 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 50A85154076
-	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Feb 2020 09:40:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A4F4154077
+	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Feb 2020 09:41:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727881AbgBFIk1 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 6 Feb 2020 03:40:27 -0500
-Received: from us-smtp-2.mimecast.com ([205.139.110.61]:52229 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1727768AbgBFIk1 (ORCPT
+        id S1727924AbgBFIlJ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 6 Feb 2020 03:41:09 -0500
+Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:53218 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1727780AbgBFIlJ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 6 Feb 2020 03:40:27 -0500
+        Thu, 6 Feb 2020 03:41:09 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1580978426;
+        s=mimecast20190719; t=1580978468;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc; bh=uBDHAS9jO7wL9Q7uIyEUt2jbyKsq10Ez0hgJ+7Ofl5s=;
-        b=T4rCd5TmVu/W7yc5PhzRR3S0z0WPhBINVd2H3+JxjbCt46wbsY2jasNnDpo97MwZ2iXHsZ
-        BQADfXZqKUM7MjJjO+rr5HNGXPrlum/EYlUhGa7Z/h/AlT/Y4RtiHn6jvEgRIGTI6qXCFt
-        qHR6UgUSG1T2GraDrJM+10oM02LjUqk=
+         to:to:cc:cc; bh=sWBRIqy8LX1iIGpLYev/Jsg37sChoA1EQYV7ieqtHKk=;
+        b=CIjA8FqRLkkOrWIKk2UDKB8nvhh51D2qI05uC13mkWplw2Y3NMGn87RRFabybUziaDKVTK
+        SytNy3+uuS5hDwO4FpP0ILR3mVBS20tsXseJRzF8Sj+mQiQ+smtGa8/ICT5G3xQ3Izk9HY
+        zsNt6boGEqilL6ucMLn0ZGsN/k/Hrkc=
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-214-QcwTXla6Mi2N2O6wbcztMg-1; Thu, 06 Feb 2020 03:40:24 -0500
-X-MC-Unique: QcwTXla6Mi2N2O6wbcztMg-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
+ us-mta-287-OTFRL9D9OhaSY2Gj5DEjWw-1; Thu, 06 Feb 2020 03:41:06 -0500
+X-MC-Unique: OTFRL9D9OhaSY2Gj5DEjWw-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 082978010D6;
-        Thu,  6 Feb 2020 08:40:23 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 71D3D8010F1;
+        Thu,  6 Feb 2020 08:41:05 +0000 (UTC)
 Received: from griffin.upir.cz (ovpn-204-182.brq.redhat.com [10.40.204.182])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 593148DC2C;
-        Thu,  6 Feb 2020 08:40:19 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id A0F5B38F;
+        Thu,  6 Feb 2020 08:41:01 +0000 (UTC)
 From:   Jiri Benc <jbenc@redhat.com>
 To:     linux-kselftest@vger.kernel.org
 Cc:     Shuah Khan <shuah@kernel.org>,
-        Yauheni Kaliuta <yauheni.kaliuta@redhat.com>,
-        Cristian Marussi <cristian.marussi@arm.com>
-Subject: [PATCH] selftests: allow detection of build failures
-Date:   Thu,  6 Feb 2020 09:40:00 +0100
-Message-Id: <9929e231f4a0b14e8fd86a0debbee730320b531d.1580978204.git.jbenc@redhat.com>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
+        Yauheni Kaliuta <yauheni.kaliuta@redhat.com>
+Subject: [PATCH] selftests: fix too long argument
+Date:   Thu,  6 Feb 2020 09:40:52 +0100
+Message-Id: <615569048a0ff1561962aacc947674d92d52cc9c.1580978204.git.jbenc@redhat.com>
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Commit 5f70bde26a48 ("selftests: fix build behaviour on targets' failures")
-added a logic to track failure of builds of individual targets. However, it
-does exactly the opposite of what a distro kernel needs: we create a RPM
-package with a selected set of selftests and we need the build to fail if
-build of any of the targets fail.
+With some shells, the command construed for install of bpf selftests becomes
+too large due to long list of files:
 
-Both use cases are valid. A distribution kernel is in control of what is
-included in the kernel and what is being built; any error needs to be
-flagged and acted upon. A CI system that tries to build as many tests as
-possible on the best effort basis is not really interested in a failure here
-and there.
+make[1]: execvp: /bin/sh: Argument list too long
+make[1]: *** [../lib.mk:73: install] Error 127
 
-Support both use cases by introducing a FORCE_TARGETS variable. It is
-switched off by default to make life for CI systems easier, distributions
-can easily switch it on while building their packages.
+Currently, each of the file lists is replicated three times in the command:
+in the shell 'if' condition, in the 'echo' and in the 'rsync'. Reduce that
+by one instance by using make conditionals and separate the echo and rsync
+into two shell commands. (One would be inclined to just remove the '@' at
+the beginning of the rsync command and let 'make' echo it by itself;
+unfortunately, it appears that the '@' in the front of mkdir silences output
+also for the following commands.)
+
+Also, separate handling of each of the lists to its own shell command.
+
+The semantics of the makefile is unchanged before and after the patch. The
+ability of individual test directories to override INSTALL_RULE is retained.
 
 Reported-by: Yauheni Kaliuta <yauheni.kaliuta@redhat.com>
+Tested-by: Yauheni Kaliuta <yauheni.kaliuta@redhat.com>
 Signed-off-by: Jiri Benc <jbenc@redhat.com>
 ---
- tools/testing/selftests/Makefile | 12 ++++++++++--
- 1 file changed, 10 insertions(+), 2 deletions(-)
+ tools/testing/selftests/lib.mk | 23 +++++++++++++----------
+ 1 file changed, 13 insertions(+), 10 deletions(-)
 
-diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-index 5182d6078cbc..97fca70d2cd6 100644
---- a/tools/testing/selftests/Makefile
-+++ b/tools/testing/selftests/Makefile
-@@ -74,6 +74,12 @@ ifneq ($(SKIP_TARGETS),)
- 	override TARGETS := $(TMP)
+diff --git a/tools/testing/selftests/lib.mk b/tools/testing/selftests/lib.mk
+index 1c8a1963d03f..3ed0134a764d 100644
+--- a/tools/testing/selftests/lib.mk
++++ b/tools/testing/selftests/lib.mk
+@@ -83,17 +83,20 @@ else
+ 	$(call RUN_TESTS, $(TEST_GEN_PROGS) $(TEST_CUSTOM_PROGS) $(TEST_PROGS))
  endif
  
-+# User can set FORCE_TARGETS to 1 to require all targets to be successfully
-+# built; make will fail if any of the targets cannot be built. If
-+# FORCE_TARGETS is not set (the default), make will succeed if at least one
-+# of the targets gets built.
-+FORCE_TARGETS ?=
++define INSTALL_SINGLE_RULE
++	$(if $(INSTALL_LIST),@mkdir -p $(INSTALL_PATH))
++	$(if $(INSTALL_LIST),@echo rsync -a $(INSTALL_LIST) $(INSTALL_PATH)/)
++	$(if $(INSTALL_LIST),@rsync -a $(INSTALL_LIST) $(INSTALL_PATH)/)
++endef
 +
- # Clear LDFLAGS and MAKEFLAGS if called from main
- # Makefile to avoid test build failures when test
- # Makefile doesn't have explicit build rules.
-@@ -148,7 +154,8 @@ all: khdr
- 	for TARGET in $(TARGETS); do				\
- 		BUILD_TARGET=$$BUILD/$$TARGET;			\
- 		mkdir $$BUILD_TARGET  -p;			\
--		$(MAKE) OUTPUT=$$BUILD_TARGET -C $$TARGET;	\
-+		$(MAKE) OUTPUT=$$BUILD_TARGET -C $$TARGET	\
-+				$(if $(FORCE_TARGETS),|| exit);	\
- 		ret=$$((ret * $$?));				\
- 	done; exit $$ret;
+ define INSTALL_RULE
+-	@if [ "X$(TEST_PROGS)$(TEST_PROGS_EXTENDED)$(TEST_FILES)" != "X" ]; then					\
+-		mkdir -p ${INSTALL_PATH};										\
+-		echo "rsync -a $(TEST_PROGS) $(TEST_PROGS_EXTENDED) $(TEST_FILES) $(INSTALL_PATH)/";	\
+-		rsync -a $(TEST_PROGS) $(TEST_PROGS_EXTENDED) $(TEST_FILES) $(INSTALL_PATH)/;		\
+-	fi
+-	@if [ "X$(TEST_GEN_PROGS)$(TEST_CUSTOM_PROGS)$(TEST_GEN_PROGS_EXTENDED)$(TEST_GEN_FILES)" != "X" ]; then					\
+-		mkdir -p ${INSTALL_PATH};										\
+-		echo "rsync -a $(TEST_GEN_PROGS) $(TEST_CUSTOM_PROGS) $(TEST_GEN_PROGS_EXTENDED) $(TEST_GEN_FILES) $(INSTALL_PATH)/";	\
+-		rsync -a $(TEST_GEN_PROGS) $(TEST_CUSTOM_PROGS) $(TEST_GEN_PROGS_EXTENDED) $(TEST_GEN_FILES) $(INSTALL_PATH)/;		\
+-	fi
++	$(eval INSTALL_LIST = $(TEST_PROGS)) $(INSTALL_SINGLE_RULE)
++	$(eval INSTALL_LIST = $(TEST_PROGS_EXTENDED)) $(INSTALL_SINGLE_RULE)
++	$(eval INSTALL_LIST = $(TEST_FILES)) $(INSTALL_SINGLE_RULE)
++	$(eval INSTALL_LIST = $(TEST_GEN_PROGS)) $(INSTALL_SINGLE_RULE)
++	$(eval INSTALL_LIST = $(TEST_CUSTOM_PROGS)) $(INSTALL_SINGLE_RULE)
++	$(eval INSTALL_LIST = $(TEST_GEN_PROGS_EXTENDED)) $(INSTALL_SINGLE_RULE)
++	$(eval INSTALL_LIST = $(TEST_GEN_FILES)) $(INSTALL_SINGLE_RULE)
+ endef
  
-@@ -202,7 +209,8 @@ ifdef INSTALL_PATH
- 	@ret=1;	\
- 	for TARGET in $(TARGETS); do \
- 		BUILD_TARGET=$$BUILD/$$TARGET;	\
--		$(MAKE) OUTPUT=$$BUILD_TARGET -C $$TARGET INSTALL_PATH=$(INSTALL_PATH)/$$TARGET install; \
-+		$(MAKE) OUTPUT=$$BUILD_TARGET -C $$TARGET INSTALL_PATH=$(INSTALL_PATH)/$$TARGET install \
-+				$(if $(FORCE_TARGETS),|| exit);	\
- 		ret=$$((ret * $$?));		\
- 	done; exit $$ret;
- 
+ install: all
 -- 
 2.18.1
 
