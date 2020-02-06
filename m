@@ -2,114 +2,163 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F3C81542B4
-	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Feb 2020 12:11:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D23041545C9
+	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Feb 2020 15:13:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727524AbgBFLLL (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 6 Feb 2020 06:11:11 -0500
-Received: from foss.arm.com ([217.140.110.172]:57208 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727455AbgBFLLL (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 6 Feb 2020 06:11:11 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 04F16101E;
-        Thu,  6 Feb 2020 03:11:11 -0800 (PST)
-Received: from [10.1.197.50] (e120937-lin.cambridge.arm.com [10.1.197.50])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6B1B93F52E;
-        Thu,  6 Feb 2020 03:11:10 -0800 (PST)
-Subject: Re: [PATCH] selftests: allow detection of build failures
-To:     Jiri Benc <jbenc@redhat.com>, linux-kselftest@vger.kernel.org
-Cc:     Shuah Khan <shuah@kernel.org>,
-        Yauheni Kaliuta <yauheni.kaliuta@redhat.com>
-References: <9929e231f4a0b14e8fd86a0debbee730320b531d.1580978204.git.jbenc@redhat.com>
-From:   Cristian Marussi <cristian.marussi@arm.com>
-Message-ID: <47710514-3e00-29d3-2304-a6f2aa5f7eaf@arm.com>
-Date:   Thu, 6 Feb 2020 11:11:09 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.1
+        id S1727566AbgBFONX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 6 Feb 2020 09:13:23 -0500
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:40400 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727060AbgBFONW (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 6 Feb 2020 09:13:22 -0500
+Received: from turingmachine.home (unknown [IPv6:2804:431:c7f5:7989:d711:794d:1c68:5ed3])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: tonyk)
+        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id A714729524A;
+        Thu,  6 Feb 2020 14:13:14 +0000 (GMT)
+From:   =?UTF-8?q?Andr=C3=A9=20Almeida?= <andrealmeid@collabora.com>
+To:     linux-kernel@vger.kernel.org, tglx@linutronix.de
+Cc:     kernel@collabora.com, krisman@collabora.com, shuah@kernel.org,
+        linux-kselftest@vger.kernel.org, rostedt@goodmis.org,
+        ryao@gentoo.org, peterz@infradead.org, dvhart@infradead.org,
+        mingo@redhat.com, z.figura12@gmail.com, steven@valvesoftware.com,
+        pgriffais@valvesoftware.com,
+        =?UTF-8?q?Andr=C3=A9=20Almeida?= <andrealmeid@collabora.com>
+Subject: [PATCH v2 0/4] Implement FUTEX_WAIT_MULTIPLE operation
+Date:   Thu,  6 Feb 2020 11:10:47 -0300
+Message-Id: <20200206141051.6124-1-andrealmeid@collabora.com>
+X-Mailer: git-send-email 2.25.0
 MIME-Version: 1.0
-In-Reply-To: <9929e231f4a0b14e8fd86a0debbee730320b531d.1580978204.git.jbenc@redhat.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Jiri
+Hello,
 
-On 06/02/2020 08:40, Jiri Benc wrote:
-> Commit 5f70bde26a48 ("selftests: fix build behaviour on targets' failures")
-> added a logic to track failure of builds of individual targets. However, it
-> does exactly the opposite of what a distro kernel needs: we create a RPM
-> package with a selected set of selftests and we need the build to fail if
-> build of any of the targets fail.
-> 
-> Both use cases are valid. A distribution kernel is in control of what is
-> included in the kernel and what is being built; any error needs to be
-> flagged and acted upon. A CI system that tries to build as many tests as
-> possible on the best effort basis is not really interested in a failure here
-> and there.
-> 
-> Support both use cases by introducing a FORCE_TARGETS variable. It is
-> switched off by default to make life for CI systems easier, distributions
-> can easily switch it on while building their packages.
-> 
+This patchset implements a new futex operation, called FUTEX_WAIT_MULTIPLE,
+which allows a thread to wait on several futexes at the same time, and be
+awoken by any of them.
 
-Fine for me. My concerns as you said were only for CI systems and the fact that the build
-was failing in a non-deterministic way depending on the outcome of the last built subsystem
-only: I hadn't considered the opposite needs of a package build system. Sorry for that.
+The use case lies in the Wine implementation of the Windows NT interface
+WaitMultipleObjects. This Windows API function allows a thread to sleep
+waiting on the first of a set of event sources (mutexes, timers, signal,
+console input, etc) to signal.  Considering this is a primitive
+synchronization operation for Windows applications, being able to quickly
+signal events on the producer side, and quickly go to sleep on the
+consumer side is essential for good performance of those running over Wine.
 
-Reviewed-by: Cristian Marussi <cristian.marussi@arm.com>
-Tested-by: Cristian Marussi <cristian.marussi@arm.com>
+Since this API exposes a mechanism to wait on multiple objects, and
+we might have multiple waiters for each of these events, a M->N
+relationship, the current Linux interfaces fell short on performance
+evaluation of large M,N scenarios.  We experimented, for instance, with
+eventfd, which has performance problems discussed below, but we also
+experimented with userspace solutions, like making each consumer wait on
+a condition variable guarding the entire list of objects, and then
+waking up multiple variables on the producer side, but this is
+prohibitively expensive since we either need to signal many condition
+variables or share that condition variable among multiple waiters, and
+then verify for the event being signaled in userspace, which means
+dealing with often false positive wakes ups.
 
-Regards
+The natural interface to implement the behavior we want, also
+considering that one of the waitable objects is a mutex itself, would be
+the futex interface.  Therefore, this patchset proposes a mechanism for
+a thread to wait on multiple futexes at once, and wake up on the first
+futex that was awaken.
 
-Cristian
+In particular, using futexes in our Wine use case reduced the CPU
+utilization by 4% for the game Beat Saber and by 1.5% for the game
+Shadow of Tomb Raider, both running over Proton (a Wine based solution
+for Windows emulation), when compared to the eventfd interface. This
+implementation also doesn't rely of file descriptors, so it doesn't risk
+overflowing the resource.
 
-> Reported-by: Yauheni Kaliuta <yauheni.kaliuta@redhat.com>
-> Signed-off-by: Jiri Benc <jbenc@redhat.com>
-> ---
->  tools/testing/selftests/Makefile | 12 ++++++++++--
->  1 file changed, 10 insertions(+), 2 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-> index 5182d6078cbc..97fca70d2cd6 100644
-> --- a/tools/testing/selftests/Makefile
-> +++ b/tools/testing/selftests/Makefile
-> @@ -74,6 +74,12 @@ ifneq ($(SKIP_TARGETS),)
->  	override TARGETS := $(TMP)
->  endif
->  
-> +# User can set FORCE_TARGETS to 1 to require all targets to be successfully
-> +# built; make will fail if any of the targets cannot be built. If
-> +# FORCE_TARGETS is not set (the default), make will succeed if at least one
-> +# of the targets gets built.
-> +FORCE_TARGETS ?=
-> +
->  # Clear LDFLAGS and MAKEFLAGS if called from main
->  # Makefile to avoid test build failures when test
->  # Makefile doesn't have explicit build rules.
-> @@ -148,7 +154,8 @@ all: khdr
->  	for TARGET in $(TARGETS); do				\
->  		BUILD_TARGET=$$BUILD/$$TARGET;			\
->  		mkdir $$BUILD_TARGET  -p;			\
-> -		$(MAKE) OUTPUT=$$BUILD_TARGET -C $$TARGET;	\
-> +		$(MAKE) OUTPUT=$$BUILD_TARGET -C $$TARGET	\
-> +				$(if $(FORCE_TARGETS),|| exit);	\
->  		ret=$$((ret * $$?));				\
->  	done; exit $$ret;
->  
-> @@ -202,7 +209,8 @@ ifdef INSTALL_PATH
->  	@ret=1;	\
->  	for TARGET in $(TARGETS); do \
->  		BUILD_TARGET=$$BUILD/$$TARGET;	\
-> -		$(MAKE) OUTPUT=$$BUILD_TARGET -C $$TARGET INSTALL_PATH=$(INSTALL_PATH)/$$TARGET install; \
-> +		$(MAKE) OUTPUT=$$BUILD_TARGET -C $$TARGET INSTALL_PATH=$(INSTALL_PATH)/$$TARGET install \
-> +				$(if $(FORCE_TARGETS),|| exit);	\
->  		ret=$$((ret * $$?));		\
->  	done; exit $$ret;
->  
-> 
+In time, we are also proposing modifications to glibc and libpthread to
+make this feature available for Linux native multithreaded applications
+using libpthread, which can benefit from the behavior of waiting on any
+of a group of futexes.
+
+Technically, the existing FUTEX_WAIT implementation can be easily
+reworked by using futex_wait_multiple() with a count of one, and I
+have a patch showing how it works.  I'm not proposing it, since
+futex is such a tricky code, that I'd be more comfortable to have
+FUTEX_WAIT_MULTIPLE running upstream for a couple development cycles,
+before considering modifying FUTEX_WAIT.
+
+The patch series includes an extensive set of kselftests validating
+the behavior of the interface.  We also implemented support[1] on
+Syzkaller and survived the fuzzy testing.
+
+Finally, if you'd rather pull directly a branch with this set you can
+find it here:
+
+https://gitlab.collabora.com/tonyk/linux/commits/futex-dev
+
+=== Performance of eventfd ===
+
+Polling on several eventfd contexts with semaphore semantics would
+provide us with the exact semantics we are looking for.  However, as
+shown below, in a scenario with sufficient producers and consumers, the
+eventfd interface itself becomes a bottleneck, in particular because
+each thread will compete to acquire a sequence of waitqueue locks for
+each eventfd context in the poll list. In addition, in the uncontended
+case, where the producer is ready for consumption, eventfd still
+requires going into the kernel on the consumer side.  
+
+When a write or a read operation in an eventfd file succeeds, it will try
+to wake up all threads that are waiting to perform some operation to
+the file. The lock (ctx->wqh.lock) that hold the access to the file value
+(ctx->count) is the same lock used to control access the waitqueue. When
+all those those thread woke, they will compete to get this lock. Along
+with that, the poll() also manipulates the waitqueue and need to hold
+this same lock. This lock is specially hard to acquire when poll() calls
+poll_freewait(), where it tries to free all waitqueues associated with
+this poll. While doing that, it will compete with a lot of read and
+write operations that have been waken.
+
+In our use case, with a huge number of parallel reads, writes and polls,
+this lock is a bottleneck and hurts the performance of applications. Our
+implementation of futex, however, decrease the calls of spin lock by more
+than 80% in some user applications.
+
+Finally, eventfd operates on file descriptors, which is a limited
+resource that has shown its limitation in our use cases.  Despite the
+Windows interface not waiting on more than 64 objects at once, we still
+have multiple waiters at the same time, and we were easily able to
+exhaust the FD limits on applications like games.
+
+The RFC for this patch can be found here:
+
+https://lkml.org/lkml/2019/7/30/1399
+
+Thanks,
+    André
+
+[1] https://github.com/andrealmeid/syzkaller/tree/futex-wait-multiple
+
+Gabriel Krisman Bertazi (4):
+  futex: Implement mechanism to wait on any of several futexes
+  selftests: futex: Add FUTEX_WAIT_MULTIPLE timeout test
+  selftests: futex: Add FUTEX_WAIT_MULTIPLE wouldblock test
+  selftests: futex: Add FUTEX_WAIT_MULTIPLE wake up test
+
+ include/uapi/linux/futex.h                    |  20 +
+ kernel/futex.c                                | 356 +++++++++++++++++-
+ .../selftests/futex/functional/.gitignore     |   1 +
+ .../selftests/futex/functional/Makefile       |   3 +-
+ .../futex/functional/futex_wait_multiple.c    | 173 +++++++++
+ .../futex/functional/futex_wait_timeout.c     |  38 +-
+ .../futex/functional/futex_wait_wouldblock.c  |  28 +-
+ .../testing/selftests/futex/functional/run.sh |   3 +
+ .../selftests/futex/include/futextest.h       |  22 +
+ 9 files changed, 635 insertions(+), 7 deletions(-)
+ create mode 100644 tools/testing/selftests/futex/functional/futex_wait_multiple.c
+
+-- 
+2.25.0
 
