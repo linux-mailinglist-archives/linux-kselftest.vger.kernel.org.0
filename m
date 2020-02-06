@@ -2,141 +2,114 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 96EF01540A6
-	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Feb 2020 09:51:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F3C81542B4
+	for <lists+linux-kselftest@lfdr.de>; Thu,  6 Feb 2020 12:11:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727738AbgBFIv4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 6 Feb 2020 03:51:56 -0500
-Received: from mail-pf1-f196.google.com ([209.85.210.196]:38873 "EHLO
-        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726673AbgBFIv4 (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 6 Feb 2020 03:51:56 -0500
-Received: by mail-pf1-f196.google.com with SMTP id x185so2773303pfc.5;
-        Thu, 06 Feb 2020 00:51:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=t0ZkRPw1qrQ0f8z2RbPGrKw+AhhQtmfGX+r47zBC98M=;
-        b=jFNMZpN4IFFd7xlgs1ZxDnyah6Ow817U7LGePFtJ+sgo4JsuNfZmjidc7Sj7wx6Peb
-         Sntu4XWIWJDfaZqeimicxI1mut1EltEoC+RUk0tvVrYwYZh5iQGaSRXb1fajv9u8sL5t
-         /HmZYkPtqtREnJnpgPZgX8PnTNxF26SGplC6LxkXNrqFbEI4rsCCxVxvhc0vksuFPRU0
-         93GXN9sTOZMF6apAdNSGV3JMMVc/CtRqHnaQNR4qt0l9GS6sFcYhlOGqrqhfFhCTXl18
-         uw68LhzkLbceRUHCCmnIzeaG1o88dqe5zkwS+sQC1DgN9JFTZmxiKk78PoHaJHB7r82p
-         XmXg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=t0ZkRPw1qrQ0f8z2RbPGrKw+AhhQtmfGX+r47zBC98M=;
-        b=QvgdIcU8y+lRl5bwOYrLm2QAqDtTx62LbXgGEpCTazRy9ejOtEoWvT18+oksqHGV9l
-         wf9xB7YGljZjfnq2QqkKHmBuHjNlRx4EzMWwYOxIfE+VgL/hKmpPrgW08UAYg5FTVEt3
-         qmvcb4A5htolk0/1GZIBV3FjMvByjsGXmmdCqfAoqx/Eavl8rEJBNR7HOhxINi2FWeor
-         3ldqB1sfgJw2il8VCA+Mf1PzdTpbZ3us9lk3/VnMC7lO5lXCcx/4BB8NR+0Cen1Zd6lv
-         pVnxntxCLRZ6uEopu/N9s+LDVpwRhZ0nzUl8lxCzN8Ksq1PMRfDWJtrl1eLFcISJ56m6
-         hXiQ==
-X-Gm-Message-State: APjAAAVw4Py/2Y1Q5UYJ32tMzRyjyhe+ZoZZPjxKb/gA2RbykovS6XyE
-        YECIMj3Wuqzmm8TNgFwyeYM=
-X-Google-Smtp-Source: APXvYqz7zwqjfYp7765xQJVFaYWE1h56slZ8fsZD1XutBVqtq8ln44kJyOJ1auv9oH3SAWPbyYUoUw==
-X-Received: by 2002:aa7:95a3:: with SMTP id a3mr2701203pfk.193.1580979115652;
-        Thu, 06 Feb 2020 00:51:55 -0800 (PST)
-Received: from localhost.localdomain ([106.254.212.20])
-        by smtp.gmail.com with ESMTPSA id b3sm2432450pfr.88.2020.02.06.00.51.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Feb 2020 00:51:54 -0800 (PST)
-From:   sj38.park@gmail.com
-To:     shuah@kernel.org, akpm@linux-foundation.org
-Cc:     urezki@gmail.com, mhiramat@kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        SeongJae Park <sjpark@amazon.de>
-Subject: [PATCH] selftests/vm: Add missed tests in run_vmtests
-Date:   Thu,  6 Feb 2020 08:51:44 +0000
-Message-Id: <20200206085144.29126-1-sj38.park@gmail.com>
-X-Mailer: git-send-email 2.17.1
+        id S1727524AbgBFLLL (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 6 Feb 2020 06:11:11 -0500
+Received: from foss.arm.com ([217.140.110.172]:57208 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727455AbgBFLLL (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 6 Feb 2020 06:11:11 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 04F16101E;
+        Thu,  6 Feb 2020 03:11:11 -0800 (PST)
+Received: from [10.1.197.50] (e120937-lin.cambridge.arm.com [10.1.197.50])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6B1B93F52E;
+        Thu,  6 Feb 2020 03:11:10 -0800 (PST)
+Subject: Re: [PATCH] selftests: allow detection of build failures
+To:     Jiri Benc <jbenc@redhat.com>, linux-kselftest@vger.kernel.org
+Cc:     Shuah Khan <shuah@kernel.org>,
+        Yauheni Kaliuta <yauheni.kaliuta@redhat.com>
+References: <9929e231f4a0b14e8fd86a0debbee730320b531d.1580978204.git.jbenc@redhat.com>
+From:   Cristian Marussi <cristian.marussi@arm.com>
+Message-ID: <47710514-3e00-29d3-2304-a6f2aa5f7eaf@arm.com>
+Date:   Thu, 6 Feb 2020 11:11:09 +0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
+MIME-Version: 1.0
+In-Reply-To: <9929e231f4a0b14e8fd86a0debbee730320b531d.1580978204.git.jbenc@redhat.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: SeongJae Park <sjpark@amazon.de>
+Hi Jiri
 
-The commits introducing 'mlock-random-test'[1], 'map_fiex_noreplace'[2],
-and 'thuge-gen'[3] have not added those in the 'run_vmtests' script and
-thus the 'run_tests' command of kselftests doesn't run those.  This
-commit adds those in the script.
+On 06/02/2020 08:40, Jiri Benc wrote:
+> Commit 5f70bde26a48 ("selftests: fix build behaviour on targets' failures")
+> added a logic to track failure of builds of individual targets. However, it
+> does exactly the opposite of what a distro kernel needs: we create a RPM
+> package with a selected set of selftests and we need the build to fail if
+> build of any of the targets fail.
+> 
+> Both use cases are valid. A distribution kernel is in control of what is
+> included in the kernel and what is being built; any error needs to be
+> flagged and acted upon. A CI system that tries to build as many tests as
+> possible on the best effort basis is not really interested in a failure here
+> and there.
+> 
+> Support both use cases by introducing a FORCE_TARGETS variable. It is
+> switched off by default to make life for CI systems easier, distributions
+> can easily switch it on while building their packages.
+> 
 
-'gup_benchmark' and 'transhuge-stress' are also not included in the
-'run_vmtests', but this commit does not add those because those are for
-performance measurement rather than pass/fail tests.
+Fine for me. My concerns as you said were only for CI systems and the fact that the build
+was failing in a non-deterministic way depending on the outcome of the last built subsystem
+only: I hadn't considered the opposite needs of a package build system. Sorry for that.
 
-[1] commit 26b4224d9961 ("selftests: expanding more mlock selftest")
-[2] commit 91cbacc34512 ("tools/testing/selftests/vm/map_fixed_noreplace.c: add test for MAP_FIXED_NOREPLACE")
-[3] commit fcc1f2d5dd34 ("selftests: add a test program for variable huge page sizes in mmap/shmget")
+Reviewed-by: Cristian Marussi <cristian.marussi@arm.com>
+Tested-by: Cristian Marussi <cristian.marussi@arm.com>
 
-Signed-off-by: SeongJae Park <sjpark@amazon.de>
----
- tools/testing/selftests/vm/run_vmtests | 33 ++++++++++++++++++++++++++
- 1 file changed, 33 insertions(+)
+Regards
 
-diff --git a/tools/testing/selftests/vm/run_vmtests b/tools/testing/selftests/vm/run_vmtests
-index a692ea828317..f33714843198 100755
---- a/tools/testing/selftests/vm/run_vmtests
-+++ b/tools/testing/selftests/vm/run_vmtests
-@@ -112,6 +112,17 @@ echo "NOTE: The above hugetlb tests provide minimal coverage.  Use"
- echo "      https://github.com/libhugetlbfs/libhugetlbfs.git for"
- echo "      hugetlb regression testing."
- 
-+echo "---------------------------"
-+echo "running map_fixed_noreplace"
-+echo "---------------------------"
-+./map_fixed_noreplace
-+if [ $? -ne 0 ]; then
-+	echo "[FAIL]"
-+	exitcode=1
-+else
-+	echo "[PASS]"
-+fi
-+
- echo "-------------------"
- echo "running userfaultfd"
- echo "-------------------"
-@@ -186,6 +197,17 @@ else
- 	echo "[PASS]"
- fi
- 
-+echo "-------------------------"
-+echo "running mlock-random-test"
-+echo "-------------------------"
-+./mlock-random-test
-+if [ $? -ne 0 ]; then
-+	echo "[FAIL]"
-+	exitcode=1
-+else
-+	echo "[PASS]"
-+fi
-+
- echo "--------------------"
- echo "running mlock2-tests"
- echo "--------------------"
-@@ -197,6 +219,17 @@ else
- 	echo "[PASS]"
- fi
- 
-+echo "-----------------"
-+echo "running thuge-gen"
-+echo "-----------------"
-+./thuge-gen
-+if [ $? -ne 0 ]; then
-+	echo "[FAIL]"
-+	exitcode=1
-+else
-+	echo "[PASS]"
-+fi
-+
- if [ $VADDR64 -ne 0 ]; then
- echo "-----------------------------"
- echo "running virtual_address_range"
+Cristian
 
-base-commit: d5226fa6dbae0569ee43ecfc08bdcd6770fc4755
--- 
-2.17.1
+> Reported-by: Yauheni Kaliuta <yauheni.kaliuta@redhat.com>
+> Signed-off-by: Jiri Benc <jbenc@redhat.com>
+> ---
+>  tools/testing/selftests/Makefile | 12 ++++++++++--
+>  1 file changed, 10 insertions(+), 2 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
+> index 5182d6078cbc..97fca70d2cd6 100644
+> --- a/tools/testing/selftests/Makefile
+> +++ b/tools/testing/selftests/Makefile
+> @@ -74,6 +74,12 @@ ifneq ($(SKIP_TARGETS),)
+>  	override TARGETS := $(TMP)
+>  endif
+>  
+> +# User can set FORCE_TARGETS to 1 to require all targets to be successfully
+> +# built; make will fail if any of the targets cannot be built. If
+> +# FORCE_TARGETS is not set (the default), make will succeed if at least one
+> +# of the targets gets built.
+> +FORCE_TARGETS ?=
+> +
+>  # Clear LDFLAGS and MAKEFLAGS if called from main
+>  # Makefile to avoid test build failures when test
+>  # Makefile doesn't have explicit build rules.
+> @@ -148,7 +154,8 @@ all: khdr
+>  	for TARGET in $(TARGETS); do				\
+>  		BUILD_TARGET=$$BUILD/$$TARGET;			\
+>  		mkdir $$BUILD_TARGET  -p;			\
+> -		$(MAKE) OUTPUT=$$BUILD_TARGET -C $$TARGET;	\
+> +		$(MAKE) OUTPUT=$$BUILD_TARGET -C $$TARGET	\
+> +				$(if $(FORCE_TARGETS),|| exit);	\
+>  		ret=$$((ret * $$?));				\
+>  	done; exit $$ret;
+>  
+> @@ -202,7 +209,8 @@ ifdef INSTALL_PATH
+>  	@ret=1;	\
+>  	for TARGET in $(TARGETS); do \
+>  		BUILD_TARGET=$$BUILD/$$TARGET;	\
+> -		$(MAKE) OUTPUT=$$BUILD_TARGET -C $$TARGET INSTALL_PATH=$(INSTALL_PATH)/$$TARGET install; \
+> +		$(MAKE) OUTPUT=$$BUILD_TARGET -C $$TARGET INSTALL_PATH=$(INSTALL_PATH)/$$TARGET install \
+> +				$(if $(FORCE_TARGETS),|| exit);	\
+>  		ret=$$((ret * $$?));		\
+>  	done; exit $$ret;
+>  
+> 
 
