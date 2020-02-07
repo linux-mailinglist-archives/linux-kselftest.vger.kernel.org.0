@@ -2,99 +2,221 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 44E55155C49
-	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Feb 2020 17:59:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 230AE155CD4
+	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Feb 2020 18:28:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726874AbgBGQ7s (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 7 Feb 2020 11:59:48 -0500
-Received: from aserp2120.oracle.com ([141.146.126.78]:56292 "EHLO
-        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726867AbgBGQ7s (ORCPT
+        id S1727341AbgBGR2L (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 7 Feb 2020 12:28:11 -0500
+Received: from bombadil.infradead.org ([198.137.202.133]:51326 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726901AbgBGR2K (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 7 Feb 2020 11:59:48 -0500
-Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
-        by aserp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id 017Gx1En184318;
-        Fri, 7 Feb 2020 16:59:41 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references; s=corp-2020-01-29;
- bh=K5QddFRmTuQMYU2lyff0WWiJ+/nfjpOG6cnU9AcycxQ=;
- b=fi8w0XEge6J0uKUTNxDXZB++gqWCJDCN2w6X2Yxe56p4ilPcepZK64OeqQF5GfcCppVB
- C91iX9xDD5vluCmNZ9V3Nzvpexjf/ppXLYsRDxjgOEtF6Z+NdQ08Tc8potkjNBJiGl71
- pMLW8yVc62bZQXOYGIPtqBXiiEdLRSzg1XcvJAt8EytlQ7h5RrTh4npvoHylw7GGeqcD
- iPW5VSJXFSM21cBWoBSJCaH+k80ZqtzGq+DFhxeaW0OhFbSk+AzcY4bq9VaWFib6toDB
- 6JlwQ4OKXV/6II1qA/muyZ2cqdLuqsgKpj9dlKkV0zTWL8mrLPw8aT/M9esD5nkqCfo1 nw== 
-Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
-        by aserp2120.oracle.com with ESMTP id 2xykbph6c9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 07 Feb 2020 16:59:41 +0000
-Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
-        by userp3030.oracle.com (8.16.0.27/8.16.0.27) with SMTP id 017GxVLb030169;
-        Fri, 7 Feb 2020 16:59:40 GMT
-Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
-        by userp3030.oracle.com with ESMTP id 2y0mnnyvkv-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 07 Feb 2020 16:59:39 +0000
-Received: from abhmp0003.oracle.com (abhmp0003.oracle.com [141.146.116.9])
-        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 017GwcF4004601;
-        Fri, 7 Feb 2020 16:58:39 GMT
-Received: from dhcp-10-175-205-224.vpn.oracle.com (/10.175.205.224)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Fri, 07 Feb 2020 08:58:38 -0800
-From:   Alan Maguire <alan.maguire@oracle.com>
-To:     brendanhiggins@google.com, gregkh@linuxfoundation.org,
-        shuah@kernel.org
-Cc:     linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        corbet@lwn.net, davidgow@google.com, frowand.list@gmail.com
-Subject: [PATCH v3 kunit-next 2/2] kunit: update documentation to describe debugfs representation
-Date:   Fri,  7 Feb 2020 16:58:14 +0000
-Message-Id: <1581094694-6513-3-git-send-email-alan.maguire@oracle.com>
-X-Mailer: git-send-email 1.8.3.1
-In-Reply-To: <1581094694-6513-1-git-send-email-alan.maguire@oracle.com>
-References: <1581094694-6513-1-git-send-email-alan.maguire@oracle.com>
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9523 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=3 malwarescore=0
- phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=999
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.0.1-1911140001 definitions=main-2002070125
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9523 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
- suspectscore=3 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
- lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1911140001
- definitions=main-2002070125
+        Fri, 7 Feb 2020 12:28:10 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=myivX2M64tawJU//p7NCr6Swfjc7dU+qI4Gkm/F5Jqc=; b=jsmA99uv7NiFtEqo3DAeR4gvwh
+        Th9hLO16uiY9OHU7Kw9vz7yMFE3bMq3xH4ymZ/62PDWYug/SoCdc2K3/MjcOnzliNVh5LgxBjGLGT
+        gUbjWlYInXfl9ym+ZF4osdy3erkprlCYHCRkHCl8msISCezgHexDSjHIiIN24r0IfifglrRemmjox
+        As9m6xHUi4b9H+uJrKGhH2TYdkeEqnStsyN/TF9uayWe+LwUcdwOODkVcp1pgCnJuhJgZWd1KYlvZ
+        ZP62GgD0gtCZNSB+iJw8XabBeKdEiYlL299zlcgk2HiGmYZv/d6I2SWNhRVBBxnGNyhm6Dl6mR8dv
+        S8I7TzAg==;
+Received: from willy by bombadil.infradead.org with local (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1j07Pu-0001vf-4e; Fri, 07 Feb 2020 17:27:46 +0000
+Date:   Fri, 7 Feb 2020 09:27:46 -0800
+From:   Matthew Wilcox <willy@infradead.org>
+To:     John Hubbard <jhubbard@nvidia.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Christoph Hellwig <hch@infradead.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Dave Chinner <david@fromorbit.com>,
+        Ira Weiny <ira.weiny@intel.com>, Jan Kara <jack@suse.cz>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Jonathan Corbet <corbet@lwn.net>,
+        =?iso-8859-1?B?Suly9G1l?= Glisse <jglisse@redhat.com>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        Michal Hocko <mhocko@suse.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Vlastimil Babka <vbabka@suse.cz>, linux-doc@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-rdma@vger.kernel.org, linux-mm@kvack.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
+Subject: Re: [PATCH v5 01/12] mm: dump_page(): better diagnostics for
+ compound pages
+Message-ID: <20200207172746.GE8731@bombadil.infradead.org>
+References: <20200207033735.308000-1-jhubbard@nvidia.com>
+ <20200207033735.308000-2-jhubbard@nvidia.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200207033735.308000-2-jhubbard@nvidia.com>
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Documentation should describe debugfs layout and semantics.
+On Thu, Feb 06, 2020 at 07:37:24PM -0800, John Hubbard wrote:
+> A compound page collects the refcount in the head page, while leaving
+> the refcount of each tail page at zero. Therefore, when debugging a
+> problem that involves compound pages, it's best to have diagnostics that
+> reflect that situation. However, dump_page() is oblivious to these
+> points.
+> 
+> Change dump_page() as follows:
+> 
+> 1) For tail pages, print relevant head page information: refcount, in
+>    particular. But only do this if the page is not corrupted so badly
+>    that the pointer to the head page is all wrong.
+> 
+> 2) Do a separate check to catch any (rare) cases of the tail page's
+>    refcount being non-zero, and issue a separate, clear pr_warn() if
+>    that ever happens.
+> 
+> Suggested-by: Matthew Wilcox <willy@infradead.org>
+> Suggested-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+> Acked-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+> Signed-off-by: John Hubbard <jhubbard@nvidia.com>
+> ---
+>  mm/debug.c | 35 +++++++++++++++++++++++++++++------
+>  1 file changed, 29 insertions(+), 6 deletions(-)
+> 
+> diff --git a/mm/debug.c b/mm/debug.c
+> index ecccd9f17801..f074077eee11 100644
+> --- a/mm/debug.c
+> +++ b/mm/debug.c
+> @@ -42,6 +42,33 @@ const struct trace_print_flags vmaflag_names[] = {
+>  	{0, NULL}
+>  };
+>  
+> +static void __dump_tail_page(struct page *page, int mapcount)
+> +{
+> +	struct page *head = compound_head(page);
+> +
+> +	if ((page < head) || (page >= head + MAX_ORDER_NR_PAGES)) {
+> +		/*
+> +		 * Page is hopelessly corrupted, so limit any reporting to
+> +		 * information about the page itself. Do not attempt to look at
+> +		 * the head page.
+> +		 */
+> +		pr_warn("page:%px refcount:%d mapcount:%d mapping:%px "
+> +			"index:%#lx (corrupted tail page case)\n",
+> +			page, page_ref_count(page), mapcount, page->mapping,
+> +			page_to_pgoff(page));
+> +	} else {
+> +		pr_warn("page:%px compound refcount:%d mapcount:%d mapping:%px "
+> +			"index:%#lx compound_mapcount:%d\n",
+> +			page, page_ref_count(head), mapcount, head->mapping,
+> +			page_to_pgoff(head), compound_mapcount(page));
+> +	}
+> +
+> +	if (page_ref_count(page) != 0) {
+> +		pr_warn("page:%px PROBLEM: non-zero refcount (==%d) on this "
+> +			"tail page\n", page, page_ref_count(page));
+> +	}
+> +}
+> +
+>  void __dump_page(struct page *page, const char *reason)
+>  {
+>  	struct address_space *mapping;
+> @@ -75,12 +102,8 @@ void __dump_page(struct page *page, const char *reason)
+>  	 */
+>  	mapcount = PageSlab(page) ? 0 : page_mapcount(page);
+>  
+> -	if (PageCompound(page))
+> -		pr_warn("page:%px refcount:%d mapcount:%d mapping:%px "
+> -			"index:%#lx compound_mapcount: %d\n",
+> -			page, page_ref_count(page), mapcount,
+> -			page->mapping, page_to_pgoff(page),
+> -			compound_mapcount(page));
+> +	if (PageTail(page))
+> +		__dump_tail_page(page, mapcount);
+>  	else
+>  		pr_warn("page:%px refcount:%d mapcount:%d mapping:%px index:%#lx\n",
+>  			page, page_ref_count(page), mapcount,
 
-Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
----
- Documentation/dev-tools/kunit/usage.rst | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+A definite improvement, but I think we could do better.  For example,
+you've changed PageCompound to PageTail here, whereas we really do want
+to dump some more information for PageHead pages than the plain vanilla
+order-0 page has.  Another thing is that page_mapping() calls compound_head(),
+so if the page is corrupted, we're going to get a funky pointer dereference.
 
-diff --git a/Documentation/dev-tools/kunit/usage.rst b/Documentation/dev-tools/kunit/usage.rst
-index 7cd56a1..b2b958a 100644
---- a/Documentation/dev-tools/kunit/usage.rst
-+++ b/Documentation/dev-tools/kunit/usage.rst
-@@ -590,3 +590,15 @@ able to run one test case per invocation.
+I spent a bit of time on this reimplementation ... what do you think?
+
+ - Print the mapping pointer using %p insted of %px.  The actual value of
+   the pointer can be read out of the raw page dump and using %p gives a
+   chance to correlate it to earlier printk of the mapping pointer.
+ - Add the order of the page for compound pages
+ - Dump the raw head page as well as the raw page being dumped
+
+diff --git a/mm/debug.c b/mm/debug.c
+index ecccd9f17801..0564d4cb8233 100644
+--- a/mm/debug.c
++++ b/mm/debug.c
+@@ -44,8 +44,10 @@ const struct trace_print_flags vmaflag_names[] = {
  
- .. TODO(brendanhiggins@google.com): Add an actual example of an architecture
-    dependent KUnit test.
-+
-+KUnit debugfs representation
-+============================
-+When kunit test suites are initialized, they create an associated directory
-+in /sys/kernel/debug/kunit/<test-suite>.  The directory contains one file
-+
-+- results: "cat results" displays results of last test run
-+
-+The debugfs representation is primarily of use when kunit test suites are
-+run in a native environment, either as modules or builtin.  Having a way
-+to display results like this is valuable as otherwise results can be
-+intermixed with other events in dmesg output.
--- 
-1.8.3.1
-
+ void __dump_page(struct page *page, const char *reason)
+ {
++	struct page *head = compound_head(page);
+ 	struct address_space *mapping;
+ 	bool page_poisoned = PagePoisoned(page);
++	bool compound = PageCompound(page);
+ 	/*
+ 	 * Accessing the pageblock without the zone lock. It could change to
+ 	 * "isolate" again in the meantime, but since we are just dumping the
+@@ -66,25 +68,32 @@ void __dump_page(struct page *page, const char *reason)
+ 		goto hex_only;
+ 	}
+ 
+-	mapping = page_mapping(page);
++	if (page < head || (page >= head + MAX_ORDER_NR_PAGES)) {
++		/* Corrupt page, cannot call page_mapping */
++		mapping = page->mapping;
++		head = page;
++		compound = false;
++	} else {
++		mapping = page_mapping(page);
++	}
+ 
+ 	/*
+ 	 * Avoid VM_BUG_ON() in page_mapcount().
+ 	 * page->_mapcount space in struct page is used by sl[aou]b pages to
+ 	 * encode own info.
+ 	 */
+-	mapcount = PageSlab(page) ? 0 : page_mapcount(page);
++	mapcount = PageSlab(head) ? 0 : page_mapcount(head);
+ 
+-	if (PageCompound(page))
+-		pr_warn("page:%px refcount:%d mapcount:%d mapping:%px "
+-			"index:%#lx compound_mapcount: %d\n",
+-			page, page_ref_count(page), mapcount,
++	if (compound)
++		pr_warn("page:%px head:%px refcount:%d mapcount:%d mapping:%p "
++			"index:%#lx order:%u compound_mapcount: %d\n",
++			page, head, page_ref_count(page), mapcount,
+ 			page->mapping, page_to_pgoff(page),
+-			compound_mapcount(page));
++			compound_order(head), compound_mapcount(page));
+ 	else
+-		pr_warn("page:%px refcount:%d mapcount:%d mapping:%px index:%#lx\n",
++		pr_warn("page:%px refcount:%d mapcount:%d mapping:%p index:%#lx\n",
+ 			page, page_ref_count(page), mapcount,
+-			page->mapping, page_to_pgoff(page));
++			mapping, page_to_pgoff(page));
+ 	if (PageKsm(page))
+ 		type = "ksm ";
+ 	else if (PageAnon(page))
+@@ -106,6 +115,10 @@ void __dump_page(struct page *page, const char *reason)
+ 	print_hex_dump(KERN_WARNING, "raw: ", DUMP_PREFIX_NONE, 32,
+ 			sizeof(unsigned long), page,
+ 			sizeof(struct page), false);
++	if (!page_poisoned && compound)
++		print_hex_dump(KERN_WARNING, "head: ", DUMP_PREFIX_NONE, 32,
++			sizeof(unsigned long), head,
++			sizeof(struct page), false);
+ 
+ 	if (reason)
+ 		pr_warn("page dumped because: %s\n", reason);
