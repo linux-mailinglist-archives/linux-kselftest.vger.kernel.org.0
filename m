@@ -2,94 +2,74 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DF0A156098
-	for <lists+linux-kselftest@lfdr.de>; Fri,  7 Feb 2020 22:14:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A621156321
+	for <lists+linux-kselftest@lfdr.de>; Sat,  8 Feb 2020 06:59:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727071AbgBGVOl (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 7 Feb 2020 16:14:41 -0500
-Received: from hqnvemgate24.nvidia.com ([216.228.121.143]:19037 "EHLO
-        hqnvemgate24.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727031AbgBGVOl (ORCPT
+        id S1726876AbgBHF7J (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 8 Feb 2020 00:59:09 -0500
+Received: from sonic311-15.consmr.mail.bf2.yahoo.com ([74.6.131.125]:42912
+        "EHLO sonic311-15.consmr.mail.bf2.yahoo.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726714AbgBHF7J (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 7 Feb 2020 16:14:41 -0500
-Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate24.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5e3dd3030000>; Fri, 07 Feb 2020 13:13:39 -0800
-Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate101.nvidia.com (PGP Universal service);
-  Fri, 07 Feb 2020 13:14:39 -0800
-X-PGP-Universal: processed;
-        by hqpgpgate101.nvidia.com on Fri, 07 Feb 2020 13:14:39 -0800
-Received: from [10.110.48.28] (10.124.1.5) by HQMAIL107.nvidia.com
- (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Fri, 7 Feb
- 2020 21:14:38 +0000
-Subject: Re: [PATCH v5 01/12] mm: dump_page(): better diagnostics for compound
- pages
-From:   John Hubbard <jhubbard@nvidia.com>
-To:     Matthew Wilcox <willy@infradead.org>
-CC:     Andrew Morton <akpm@linux-foundation.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Christoph Hellwig <hch@infradead.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Dave Chinner <david@fromorbit.com>,
-        Ira Weiny <ira.weiny@intel.com>, Jan Kara <jack@suse.cz>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Jonathan Corbet <corbet@lwn.net>,
-        =?UTF-8?B?SsOpcsO0bWUgR2xpc3Nl?= <jglisse@redhat.com>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Michal Hocko <mhocko@suse.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Vlastimil Babka <vbabka@suse.cz>, <linux-doc@vger.kernel.org>,
-        <linux-fsdevel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-        <linux-rdma@vger.kernel.org>, <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
-References: <20200207033735.308000-1-jhubbard@nvidia.com>
- <20200207033735.308000-2-jhubbard@nvidia.com>
- <20200207172746.GE8731@bombadil.infradead.org>
- <3477bf65-64dc-7854-6720-589f7fcdac07@nvidia.com>
-X-Nvconfidentiality: public
-Message-ID: <56cd46b1-1b11-4353-9434-78d512d50449@nvidia.com>
-Date:   Fri, 7 Feb 2020 13:14:38 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.2
+        Sat, 8 Feb 2020 00:59:09 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1581141548; bh=pa1o5VRYWWG3WgDVzwpWeoz/bqhPAQKm9h7htHGAd9k=; h=Date:From:Reply-To:Subject:References:From:Subject; b=msGp8xFmHfm71OTooC/OxL1lBTswqrmhV0qEHElrfcR6MJo3rQx2uqwEoi+GXIRk/TzreQVCoYwC9GoMj36BEfxBaV+y22Lvgn+CRtCyGD2QWbSiBPlEmo96qD4upV6fpNZI8qehBgk6kxUOPbZpo+a2XH08ASFLqLloFvVP8IgmlxBMOu2RzEVil/RUnolR/O5zljbLKLP572Y84vZmP7yKoBuyaTnKq1KUNTGLHgVdEm3PKh/H9+Rnci0v8sy63y93IWKKQdle80vfRvdKQmRLkp8H3KUL4Gifcm4w7Q2/3L0HIkpm2HOpkqefeGwMAhbk1T7DwUWyJvHRe6ROaw==
+X-YMail-OSG: njbACL4VM1lU2Rwq9T.bIUyYJeitlHIRMyNlTeJ2VSjJFNg7WcKA3Nw_ZliynWx
+ 9gd9ot3Dj_TmsDf78tbrgmBDyv83SnhmdNBl5FCQ3tWkuWyZ7TscFs0fYc1YSRqzvjb0LbMkJdUg
+ cUxRubEWn8KqBpVEivBGSBOSjKzQva2f4mvom4xV5cPKkF_8uD54h4fRwBgD2T2BW79tWLObUOjX
+ z5SU.OtCBugrsA5XaGmaEV3n0d4.vwT.QhH8uzD8U1kcwEpS3SVib7C_q7HKbNcLfx5fo97hnth7
+ RrJh5CYGScIxbr5uVqMVT_lrPxs0ehCQD9MPdBzLqe1nJSQlQVDqA8HFqeTExdvBkXx0BvoEURuJ
+ DCk6aEEGIu4oVNB.2HI19lJwA9eaNoLjngnQ5Fte8a6l_tWl2guJhuh4wKDMu1mPEy28VgUZRNDK
+ BB7KrkjvMybwbWLrBRHArVFHHWWF91BEqBwvOd1QNdkWa2vGSDUv1_DMohIGCb0FTwtYvIp29ywk
+ qc0i.3iX1Viryiepx7Xb.8fCAS5FEhrJRG4i9Njrx0VFiA.dtbNezgkgcvwKAKym74cpIuNWcLZD
+ kO0cEoD9CK1mf9fquX75rLyzgQpGMntIZYJ5I2D467n3FAiQgqA.GpIQdEu2zwa48SO8d9Gz81wj
+ PHzy8UvbKbEAPjjnQTUwzZcyHgLxGtH.MtCo2n9JL_Tixf2loatYJqs8S9ScjwxdhcxvxA7cz2aF
+ la5G25PIIak8J44p5088JQv2YZiMflb9VeXLZqpsESpK7hd8S4KPECk5NPqYescMVl47nKLTrWu9
+ L0V_xzksIry_1aws07fixhjHq0qYAKq4UhDxob2wiZo0IFMkNKvXQKrN.FOWQ4BZ4tTfgo7jhXah
+ kqniLTmVN90B35vnFVKQxsoZr1ZGiJprH3viww5.E_zug_kt.3ad0ezI.U3arxf3Lc_rL1UzydaR
+ 0b3fL4s7Y5hIqYr2ACChM1n_5l3Mid.O.A_6TTcMWeFeOWfKAJ7W6tm8Eik3rbHDb5_eKF45vRMV
+ fMMIQfe_NVOERicgB.Vnu0UpPvPxR_ePGeBoaNz5PKyma9sCn3GZo16ZX8phNDJg0TIuWpUOzqQG
+ r1uVPBpEE._v_75IS6TXO6wIbg7_6.SwXeIYoCXQr5tFBS7qqeEhlk0F.ZuT6aEIUrh7S_Jn2G.4
+ cx9zyqy6cPab9UKNF77OOUkMXYZTa0HD9MrnbVms3SComcAI5W1mSBdavvar85JnqUdzASSEAKAg
+ LTzh38XAbZZbahlX6JcHsVf0rxFpM4xiQsxFWkojoVwfERgM8n3D9aiw1gJKmZD.8t9hprStNSw-
+ -
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic311.consmr.mail.bf2.yahoo.com with HTTP; Sat, 8 Feb 2020 05:59:08 +0000
+Date:   Sat, 8 Feb 2020 05:59:06 +0000 (UTC)
+From:   "D.H.L HASSAIN" <mrsrajoysmrsrajoyshassain@gmail.com>
+Reply-To: rejoy_hassain_2020@mail.ru
+Message-ID: <506063762.70146.1581141546770@mail.yahoo.com>
+Subject: =?UTF-8?Q?Greetings=C2=A0to=C2=A0you.?=
 MIME-Version: 1.0
-In-Reply-To: <3477bf65-64dc-7854-6720-589f7fcdac07@nvidia.com>
-X-Originating-IP: [10.124.1.5]
-X-ClientProxiedBy: HQMAIL105.nvidia.com (172.20.187.12) To
- HQMAIL107.nvidia.com (172.20.187.13)
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1581110019; bh=E3GmveWPSSbsdDLhLFqFk5JXHlvotQhFoJQGu+g7DmY=;
-        h=X-PGP-Universal:Subject:From:To:CC:References:X-Nvconfidentiality:
-         Message-ID:Date:User-Agent:MIME-Version:In-Reply-To:
-         X-Originating-IP:X-ClientProxiedBy:Content-Type:Content-Language:
-         Content-Transfer-Encoding;
-        b=ZdmfPjVo/C2NEbdRItfd1rOG/JxoMZQRbFATOkrxsZjcd0aS/alUZJAljkLhNvdru
-         /JzZ7ih7vA8q+m8B/Rq2+lKKgv69kEtG5mRk1KE8e4W9Nv6kW2yY+9/+8ZhawMV2j8
-         i4/zU41iysChmRnG+ON8gqJp39Hud4XlSGZ5HaEOsrXhHq2kPMbmrvG/O8dcEyzVsS
-         T8WZoU21GJUVt+7UlEy1J/qvvv/hxPng7TNdJCsSgClrNOGQoZolNRAi67a3dq2Rvk
-         GoQINEZD+wlx0wjwR0NHK+rPBHZkD5Z7hhBXa+fRAqx+Ut61TWREleaxBKzCZ57mqO
-         Tff1t1Tt3tR2Q==
+References: <506063762.70146.1581141546770.ref@mail.yahoo.com>
+X-Mailer: WebService/1.1.15199 YMailNodin Mozilla/5.0 (Windows NT 5.1; rv:52.0) Gecko/20100101 Firefox/52.0
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 2/7/20 1:05 PM, John Hubbard wrote:
-...
+ATTENTION: DEAR BENEFICIARY CONGRATULATIONS TO YOU DEAR GOOD DAY I AM SORRY IF YOU RECEIVED THIS LETTER IN YOUR SPAM OR JUNK MAIL IT IS DUE TO A RECENT CONNECTION HERE IN MY COUNTRY.
 
-> Seeing as how I want to further enhance dump_page() slightly for this series (to 
-> include the 3rd struct page's hpage_pincount), would you care to send this as a 
-> formal patch that I could insert into this series, to replace patch 5?
-> 
+DEAR FRIEND.
 
-ahem, make that "to replace patch 1", please. Too many 5's in the subject lines for 
-me, I guess. :)
+YOU MAY BE WONDERING WHYI CONTACT YOU BUT SOMEONE LUCKY HAS TO BE CHOSEN WHICH IS YOU. I WANT YOU TO HANDLE THIS BUSINESS TRASACTION WITH ME IF CHANCE YOU TO DO INTERNATION BUSINESS I GO YOUR CONTACT FROM A RELIABLE WEB DIRECTORY.
 
-thanks,
--- 
-John Hubbard
-NVIDIA
+I RECEIVE YOUR CONTENT OF YOUR EMAIL FROM THIS DHL MASTER CARD OFFICES FUND OF $10.5 USD MILLION AFTER THE BOARD OF DIRECTORS MEETINGS, THE UNITED NATIONS GOVERNMENT HAVE DECIDED TO ISSUE YOU YOUR (ATM) VALUED AT 10.5 MILLION UNITED STATES DOLLAR.THIS IS TO BRING TO YOUR NOTICE THAT YOUR VALUED SUM OF 10.5 MILLION DOLLAR HAS BEING TODAY CREDITED INTO (ATM) MASTER CARD AND HAS BEEN HANDLE TO THE FOREIGN REMITTANCE DEPARTMENT TO SEND IT TO YOU TODAY IN YOUR FAVOR.
+
+WITH YOUR (ATM) YOU WILL HAVE ACCESS TO MAKE DAILY WITHDRAWALS OF $5000,00 UNITED STATE DOLLARS DAILIES AS ALREADY PROGRAMMED UNTIL YOU WITHDRAW YOUR TOTAL SUM IN YOUR (ATM) CARD WHICH HAS REGISTERED IN OUR SYSTEM FOR PAYMENT RECORD, AS SOON AS WE RECEIVE YOUR INFORMATIONS AND YOUR HOME ADDRESS OF YOUR COUNTRY AS ALREADY PROGRAMMED, WE WILL SEND YOUR (ATM) CARD THROUGH DHL COURIER SERVICE, WE HAVE RECEIVED A SIGNAL FROM THE SWISS WORLD BANK TO INFECT YOUR TRANSFER TO YOU WITHIN ONE WEEK,
+
+WE HAVE JUST FINISHED OUR ANNUAL GENERAL MEETING WITH THE CENTRAL BANK OF AMERICA (BOA). AT THE END OF THE BOARD OF DIRECTORS MEETING TODAY, WE HAVE CONCLUDED TO IMMEDIATELY ISSUE YOU AS SOON AS POSSIBLE,
+
+AND YOUR VALUE SUM HAS BEEN CREDITED INTO YOUR (ATM) VISA CARD
+ACCOUNT. WHICH YOU WILL USE TO WITHDRAW YOUR FUND IN ANY PART OF THE WORLD, WE HAVE ISSUED AND CREDITED YOUR (ATM) CARD IN YOUR NAME TODAY,
+
+YOUR (ATM) WILL BE INSURE BY THE INSURANCE COMPANY AND SEND TO YOU
+THROUGH ANY AVAILABLE COURIER COMPANY OF OUR CHOICE.
+
+ONCE AGAIN CONGRATULATIONS TO YOU,
+
+DIRECTOR DHL SERVICE,
+THANKS,
+SINCERELY.
+MRS. RAJOYS HASSAIN,
