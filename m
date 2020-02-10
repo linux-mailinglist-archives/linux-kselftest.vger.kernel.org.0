@@ -2,111 +2,80 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 70C131580C7
-	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Feb 2020 18:11:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 17B94158199
+	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Feb 2020 18:46:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728094AbgBJRKK (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 10 Feb 2020 12:10:10 -0500
-Received: from hqnvemgate24.nvidia.com ([216.228.121.143]:17750 "EHLO
-        hqnvemgate24.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728149AbgBJRKJ (ORCPT
+        id S1727697AbgBJRqC (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 10 Feb 2020 12:46:02 -0500
+Received: from mail-pg1-f193.google.com ([209.85.215.193]:33588 "EHLO
+        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727054AbgBJRqC (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 10 Feb 2020 12:10:09 -0500
-Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate24.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5e418e300000>; Mon, 10 Feb 2020 09:09:04 -0800
-Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate101.nvidia.com (PGP Universal service);
-  Mon, 10 Feb 2020 09:10:07 -0800
-X-PGP-Universal: processed;
-        by hqpgpgate101.nvidia.com on Mon, 10 Feb 2020 09:10:07 -0800
-Received: from [10.2.168.250] (10.124.1.5) by HQMAIL107.nvidia.com
- (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Mon, 10 Feb
- 2020 17:10:07 +0000
-Subject: Re: [PATCH v5 10/12] mm/gup: /proc/vmstat: pin_user_pages (FOLL_PIN)
- reporting
-To:     Jan Kara <jack@suse.cz>
-CC:     Andrew Morton <akpm@linux-foundation.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Christoph Hellwig <hch@infradead.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Dave Chinner <david@fromorbit.com>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Jonathan Corbet <corbet@lwn.net>,
-        =?UTF-8?B?SsOpcsO0bWUgR2xpc3Nl?= <jglisse@redhat.com>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Michal Hocko <mhocko@suse.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Matthew Wilcox <willy@infradead.org>,
-        <linux-doc@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>,
-        <linux-kselftest@vger.kernel.org>, <linux-rdma@vger.kernel.org>,
-        <linux-mm@kvack.org>, LKML <linux-kernel@vger.kernel.org>
-References: <20200207033735.308000-1-jhubbard@nvidia.com>
- <20200207033735.308000-11-jhubbard@nvidia.com>
- <20200210101629.GC12923@quack2.suse.cz>
-From:   John Hubbard <jhubbard@nvidia.com>
-X-Nvconfidentiality: public
-Message-ID: <7fcc15f4-e548-78bc-788d-f93293a1be74@nvidia.com>
-Date:   Mon, 10 Feb 2020 09:07:07 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.2
+        Mon, 10 Feb 2020 12:46:02 -0500
+Received: by mail-pg1-f193.google.com with SMTP id 6so4296945pgk.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 10 Feb 2020 09:46:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Um+KObYsAAZ4zkjy8DfPk4gMVE/AcI+tTE3voE+GiRg=;
+        b=njiKhj7QaIkkNSNQhUqILnlQOcBdfJGQikxxlQ1pEE0/84uh64gTFEhicom6s7pp4/
+         89OE0A3tM4hYe5VaOCgP7upVl/TzXwLk6l6qyg3N9FosQbbK9sHHXLDKeiUNJJ5S082M
+         GRWq7PpY65hGzS1jzrNMHEGb+6/6tx6KkKDR2itxR7qNft3ET66zfa6X1lNkaZ5I/baG
+         hmGr9Wf1wcPm1rdTIe6COWJGIlBv5edgHE2XByqeAGpajoiW/BIihixLWvWh4EY8BA2y
+         kYZ5z0Z7fGWUCnMO/js/UVGcNimazt1S5INz5Eei5FLlGCq0BPFsC+cPcWOH/f8KvdGc
+         NfIw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Um+KObYsAAZ4zkjy8DfPk4gMVE/AcI+tTE3voE+GiRg=;
+        b=Bda3TAtcQ0vK1FhXb+AJtA5tLD8RxAI1S5Xn2dsz8dRAyE+qRMTGlXI2YSrDlqABbv
+         i6JbsIIQqiP+40W39qNpvXlXhs/PdGAkrw9AxiCLEWcf6bxgdAp4CaGX3YF4EF9x9wSN
+         mw4WC+7KS3MUNK7cHB1/m/300np3TQ6axBMdR/kh7/rEmBTisee9GtEN+ClAPQImcLj6
+         AaMERbaubRT2RMQDB6i76CYFYLeqL5X3LqL+PJfGkebD2LgPzUBaPhTiGMpG/RuFe3mA
+         VbMaTUJBOoFKi3fxKazhKzMxzZQi0GLwJugai+7YgZiLpoLgT4yk7rpWd7y/mouwjSaw
+         R6NQ==
+X-Gm-Message-State: APjAAAUbuIBChcn4EzZTcxlZ/uTBAQkqf26OFBJLsrtb1D/n4o0jg4Ba
+        QQxb5hNdcYdq6CR6Vu0ccJljikDIZiFAL2ejK2cniw==
+X-Google-Smtp-Source: APXvYqxiIwOpnR4LFNHTjqhqakXmaLmWK3XOeYVT3jSb6tOBB2Wclr5JOuazRiMQs0/fmgICCXuPAx3cnyQ/c648+2A=
+X-Received: by 2002:a63:3754:: with SMTP id g20mr2660474pgn.384.1581356761468;
+ Mon, 10 Feb 2020 09:46:01 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <20200210101629.GC12923@quack2.suse.cz>
-X-Originating-IP: [10.124.1.5]
-X-ClientProxiedBy: HQMAIL105.nvidia.com (172.20.187.12) To
- HQMAIL107.nvidia.com (172.20.187.13)
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1581354545; bh=GFFwsx57sCxj2sUkp7PeUAMx5ZDz2er8KdXyQLBksyc=;
-        h=X-PGP-Universal:Subject:To:CC:References:From:X-Nvconfidentiality:
-         Message-ID:Date:User-Agent:MIME-Version:In-Reply-To:
-         X-Originating-IP:X-ClientProxiedBy:Content-Type:Content-Language:
-         Content-Transfer-Encoding;
-        b=mgiGuvh4a8/j5qP8rVJeI+8VQbHf2jVdOGqN8dzHXZ+aeb7PZyeJbMOhxY+1OUqQ5
-         e12UVW9rEfOpg4y6UBRpdDTiOg0K2Lz6Jd2BtFewg+9KyFwPzPT7AP3Wzt6s+CkwmB
-         rUuU0Q0ki0c9cXfzej3YnAfaBNDiecxV+Lx5Xmw8bNccE+px/ak0HTpJUmMOyZ0hgK
-         9nmpeudR7hWQ2f8b5IKfN1LJlE+w/bvqIwHXLJmN2ZGvt0UHj2RPFjU2kgHWUG+2cM
-         wTUjRMQp5P5znDTg5h0Rzk288BjQiK8Jkvj7oxWo3tMlHRD66hPcedX3dSQGyreutP
-         p41fLIcZHUnWg==
+References: <9e787393-703b-ce56-8258-8dcf0cd5ff11@infradead.org>
+In-Reply-To: <9e787393-703b-ce56-8258-8dcf0cd5ff11@infradead.org>
+From:   Brendan Higgins <brendanhiggins@google.com>
+Date:   Mon, 10 Feb 2020 09:45:51 -0800
+Message-ID: <CAFd5g46b7KS34c3jzJp9wxpneuEOT8BSh+jaPfnYA8DAQpH8CQ@mail.gmail.com>
+Subject: Re: [PATCH] Documentation: kunit: fix Sphinx directive warning
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Alan Maguire <alan.maguire@oracle.com>,
+        Knut Omang <knut.omang@oracle.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 2/10/20 2:16 AM, Jan Kara wrote:
-> On Thu 06-02-20 19:37:33, John Hubbard wrote:
->> @@ -2258,6 +2268,8 @@ static int record_subpages(struct page *page, unsigned long addr,
->>   
->>   static void put_compound_head(struct page *page, int refs, unsigned int flags)
->>   {
->> +	int orig_refs = refs;
->> +
->>   	if (flags & FOLL_PIN) {
->>   		if (hpage_pincount_available(page))
->>   			hpage_pincount_sub(page, refs);
->> @@ -2273,6 +2285,8 @@ static void put_compound_head(struct page *page, int refs, unsigned int flags)
->>   	if (refs > 1)
->>   		page_ref_sub(page, refs - 1);
->>   	put_page(page);
->> +
->> +	mod_node_page_state(page_pgdat(page), NR_FOLL_PIN_RELEASED, orig_refs);
->>   }
-> 
-> Still not quite happy about this :) Now you update NR_FOLL_PIN_RELEASED
-> even if 'flags' don't have FOLL_PIN set. You need to have the
-> mod_node_page_state() inside the "if (flags & FOLL_PIN)" branch above...
-> 
-> 									Honza
+On Sun, Feb 9, 2020 at 7:31 PM Randy Dunlap <rdunlap@infradead.org> wrote:
+>
+> From: Randy Dunlap <rdunlap@infradead.org>
+>
+> Fix Documentation warning due to missing a blank line after a directive:
+>
+> linux/Documentation/dev-tools/kunit/usage.rst:553: WARNING: Error in "code-block" directive:
+> maximum 1 argument(s) allowed, 3 supplied.
+> .. code-block:: bash
+>         modprobe example-test
 
-Arggh, yes that's true. Thanks for catching that, will fix in v6.
+Uh oh, sorry for wasting your time, but it looks like I already sent
+the exact same patch out already:
 
+https://patchwork.kernel.org/patch/11360711/
 
-thanks,
--- 
-John Hubbard
-NVIDIA
-  
+Shuah, can you pick one of these up and send it out in the next rc?
