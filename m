@@ -2,81 +2,80 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D0DFC156DE6
-	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Feb 2020 04:31:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BFFB81572AF
+	for <lists+linux-kselftest@lfdr.de>; Mon, 10 Feb 2020 11:16:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726958AbgBJDbQ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 9 Feb 2020 22:31:16 -0500
-Received: from bombadil.infradead.org ([198.137.202.133]:38772 "EHLO
-        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726950AbgBJDbQ (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 9 Feb 2020 22:31:16 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
-        Content-Type:MIME-Version:Date:Message-ID:Subject:From:Cc:To:Sender:Reply-To:
-        Content-ID:Content-Description:In-Reply-To:References;
-        bh=wNZXPvSuwWsk5yYj2RHLPyRevK9x31/K0sTV5UWSPow=; b=CxvI5To5PPEgPiidlqEvla5lUs
-        gLIBFhQm4ueAQuE+8lPJMBG3601xpX2S7bfDrw9ZhVGHIZtQt6kuff+apt3V1ffyVfTiLGvrud9UK
-        eOHDbk/6ZngFO5n/Y4gdjWet0KIkm/vmJzobhXMdAx6aUKZdGi34030YUbmXdJHBYExzkfP0EW4DU
-        gtrVh5ksWFhzskRkvvEtI8MOJALm25jGGv1QtSo7GWfOWo+Scfqnrjy2OX12EaYMKHmkzrhxBylk7
-        xsl+kZNEy+jOl+YJyxfXmwKkkNqZSTx9+8prsPWOXGIqSNIEasSNhPXl0DAGgGBElKCBIQxmTV6tq
-        sLlR3SfA==;
-Received: from [2601:1c0:6280:3f0::19c2]
-        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1j0zmx-0001hI-SN; Mon, 10 Feb 2020 03:31:11 +0000
-To:     LKML <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        KUnit Development <kunit-dev@googlegroups.com>
-Cc:     Brendan Higgins <brendanhiggins@google.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Alan Maguire <alan.maguire@oracle.com>,
-        Knut Omang <knut.omang@oracle.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-Subject: [PATCH] Documentation: kunit: fix Sphinx directive warning
-Message-ID: <9e787393-703b-ce56-8258-8dcf0cd5ff11@infradead.org>
-Date:   Sun, 9 Feb 2020 19:31:11 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.1
+        id S1727436AbgBJKQe (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 10 Feb 2020 05:16:34 -0500
+Received: from mx2.suse.de ([195.135.220.15]:43448 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726451AbgBJKQe (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 10 Feb 2020 05:16:34 -0500
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx2.suse.de (Postfix) with ESMTP id 570C7B17A;
+        Mon, 10 Feb 2020 10:16:31 +0000 (UTC)
+Received: by quack2.suse.cz (Postfix, from userid 1000)
+        id DE6281E0E2C; Mon, 10 Feb 2020 11:16:29 +0100 (CET)
+Date:   Mon, 10 Feb 2020 11:16:29 +0100
+From:   Jan Kara <jack@suse.cz>
+To:     John Hubbard <jhubbard@nvidia.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Christoph Hellwig <hch@infradead.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Dave Chinner <david@fromorbit.com>,
+        Ira Weiny <ira.weiny@intel.com>, Jan Kara <jack@suse.cz>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Jonathan Corbet <corbet@lwn.net>,
+        =?iso-8859-1?B?Suly9G1l?= Glisse <jglisse@redhat.com>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        Michal Hocko <mhocko@suse.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Matthew Wilcox <willy@infradead.org>,
+        linux-doc@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-rdma@vger.kernel.org,
+        linux-mm@kvack.org, LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v5 10/12] mm/gup: /proc/vmstat: pin_user_pages (FOLL_PIN)
+ reporting
+Message-ID: <20200210101629.GC12923@quack2.suse.cz>
+References: <20200207033735.308000-1-jhubbard@nvidia.com>
+ <20200207033735.308000-11-jhubbard@nvidia.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200207033735.308000-11-jhubbard@nvidia.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Randy Dunlap <rdunlap@infradead.org>
+On Thu 06-02-20 19:37:33, John Hubbard wrote:
+> @@ -2258,6 +2268,8 @@ static int record_subpages(struct page *page, unsigned long addr,
+>  
+>  static void put_compound_head(struct page *page, int refs, unsigned int flags)
+>  {
+> +	int orig_refs = refs;
+> +
+>  	if (flags & FOLL_PIN) {
+>  		if (hpage_pincount_available(page))
+>  			hpage_pincount_sub(page, refs);
+> @@ -2273,6 +2285,8 @@ static void put_compound_head(struct page *page, int refs, unsigned int flags)
+>  	if (refs > 1)
+>  		page_ref_sub(page, refs - 1);
+>  	put_page(page);
+> +
+> +	mod_node_page_state(page_pgdat(page), NR_FOLL_PIN_RELEASED, orig_refs);
+>  }
 
-Fix Documentation warning due to missing a blank line after a directive:
+Still not quite happy about this :) Now you update NR_FOLL_PIN_RELEASED
+even if 'flags' don't have FOLL_PIN set. You need to have the
+mod_node_page_state() inside the "if (flags & FOLL_PIN)" branch above...
 
-linux/Documentation/dev-tools/kunit/usage.rst:553: WARNING: Error in "code-block" directive:
-maximum 1 argument(s) allowed, 3 supplied.
-.. code-block:: bash
-        modprobe example-test
-
-Fixes: 6ae2bfd3df06 ("kunit: update documentation to describe module-based build")
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Cc: Alan Maguire <alan.maguire@oracle.com>
-Cc: Knut Omang <knut.omang@oracle.com>
-Cc: Brendan Higgins <brendanhiggins@google.com>
-Cc: linux-kselftest@vger.kernel.org
-Cc: kunit-dev@googlegroups.com
-Cc: Shuah Khan <skhan@linuxfoundation.org>
----
- Documentation/dev-tools/kunit/usage.rst |    1 +
- 1 file changed, 1 insertion(+)
-
---- lnx-56-rc1.orig/Documentation/dev-tools/kunit/usage.rst
-+++ lnx-56-rc1/Documentation/dev-tools/kunit/usage.rst
-@@ -551,6 +551,7 @@ options to your ``.config``:
- Once the kernel is built and installed, a simple
- 
- .. code-block:: bash
-+
- 	modprobe example-test
- 
- ...will run the tests.
-
+									Honza
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
