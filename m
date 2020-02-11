@@ -2,53 +2,53 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B5851159B34
-	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Feb 2020 22:32:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E7395159B1E
+	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Feb 2020 22:31:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727721AbgBKVc1 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 11 Feb 2020 16:32:27 -0500
-Received: from mail-pf1-f202.google.com ([209.85.210.202]:46536 "EHLO
-        mail-pf1-f202.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727569AbgBKVbu (ORCPT
+        id S1727043AbgBKVby (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 11 Feb 2020 16:31:54 -0500
+Received: from mail-pl1-f202.google.com ([209.85.214.202]:49158 "EHLO
+        mail-pl1-f202.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727555AbgBKVbw (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 11 Feb 2020 16:31:50 -0500
-Received: by mail-pf1-f202.google.com with SMTP id c185so18913pfb.13
-        for <linux-kselftest@vger.kernel.org>; Tue, 11 Feb 2020 13:31:49 -0800 (PST)
+        Tue, 11 Feb 2020 16:31:52 -0500
+Received: by mail-pl1-f202.google.com with SMTP id w17so5262398plq.16
+        for <linux-kselftest@vger.kernel.org>; Tue, 11 Feb 2020 13:31:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=oB/Ey/8TQSLxLE4nxrYY+XZpQi+kp38f/+tIBytEV40=;
-        b=sp6WphDYXb2X3mQBQgW3dvcrJHj8vSV5lrKYnswHU1iTTWS1In4+V5pQeYClvKpLer
-         d0BwO/zKCma7B9BnnZ3OphIRrqDXnE5kfyQjE9dS3ztTsy6bAgHP2LI2YT38Tkd3jQva
-         xT6hS13N7dUcNC41YLFkqp/FYvN1CThSOT7Z1/w5JKEuumlic131LbCF6KPyz/Usw+ua
-         RcPKq8hnVfVKouREexBbABUIiH4NlcXs3TlT80tnVidlmJYkFKa54QzreQGukT9dtaH0
-         tz6OF1cnkEvQcznXAh27Z3mcoX0TwjuPH99zONL7Qrb+fkTnKxnACNvZ8tFo0w9IQ0O2
-         hK/g==
+        bh=kGkCsRCXCke3LD6wVlrVVYkJSRxB78g6/0L4LHQ32rE=;
+        b=mUJSPgUAtI2pZ72EeYVZn1R9j3GF6Zp3ABkPoxmE5SW8nmYAfuNM9HBfLaRsfrKleC
+         okdLIMyHTLehZJ9z4e3W/9dUwlqAZ9m0JEhNOQgVt2aHlHKYBlHCDNtdQEbUa+LQKF4c
+         Bl96ZkdGFO1J87Vog3yEk7yVD3XvJH8ps3s30fsp54WV2epHKqfw44CbWhKIin3VU0N/
+         XsfXcNEIO7I4P67FLES9WXIiTGkJwFVSDIuOi1QyKdro6UZ+aghERNJ08w5oW0BYeTEL
+         dfXfl9Qv0zg+CopSbbL8HDU8ZgtCGl9uvvLAG/B4wLiYuqTTahX1W5AATD2zGj9r0JrJ
+         Q2xQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=oB/Ey/8TQSLxLE4nxrYY+XZpQi+kp38f/+tIBytEV40=;
-        b=RuDU8CTqPmdl8ZUX39CLasSYENviVtMTw+ESsuyIgCA1+FD6+Moc91vwJ9cUQYZ0DH
-         ahCNHCC4HFET/8dtunruNlpx9KNFAyEGogdZze5EyInZlsc0sV+p+dqwMEepn+VrQLP7
-         +VvGBJS0e3C76moWpCxU6LDKK6zEuFtflgy2qGgTm8jPJh2ESJ1jfUPf9g3CrIXWhaP2
-         3qeQGHQEFKSJlmV/eXXj/nZDMrXdpOK2aldLzeGjvyBk/xqiddATZZjjeGO1NQJndpBB
-         jAsh9i86sunPuEyLn12rxsfysxYZWT1U68Mx3Qv3Vl42kp2QZDdHpoI6HZb9Pn2sBu2Y
-         2zJQ==
-X-Gm-Message-State: APjAAAUAdHwts/OXGySj75ifnZlauWMc9xGYvQD4DyCg9JK+I0JWN8Eo
-        d2Ts98O89pIivxuOGPiabeM3cUz5JC6ByiaF/w==
-X-Google-Smtp-Source: APXvYqzNebfevMqBhFvJCd98JV9tuMRt4HShdr1sq3pyLR3ZFgEQaj3XK4BOsxd8u9u0t3V/Wd77eghpjxPim/0vRg==
-X-Received: by 2002:a63:5947:: with SMTP id j7mr9206537pgm.48.1581456709223;
- Tue, 11 Feb 2020 13:31:49 -0800 (PST)
-Date:   Tue, 11 Feb 2020 13:31:21 -0800
+        bh=kGkCsRCXCke3LD6wVlrVVYkJSRxB78g6/0L4LHQ32rE=;
+        b=eINGUVB8ALVeu9nJSydQjuV/jzaycgxPvwSnKkwCfkY17/AcIsOiA/SicHp5yXWKLb
+         Ii29nieYvylcHkgnAVvNTBJ/5kqKjwjJdJ8jQuK5BkPA9rLlOPoob+UuAJwqCIFyKyCu
+         9dfERPzkF9/gfYEtXG5AwFN00Y9EXHc+o6kvyvLXcQr9JKcJmuDddYlMP4ql9IuLSYvA
+         SJZxN0+yZ5iyk7wlW3mpgHXsR3u6bV8uJT4D7iHVIg9bWXYPBxKsGCNOVIF8tyQ5RmSm
+         EP0fjVmA+/HSmCFGShkyjZPg+pCQI/yE6QXKm/dr9NdkOISZDUAcVG/xLnI1VaRfoLQy
+         zeMA==
+X-Gm-Message-State: APjAAAXiR5wk/idBDkYtkQvmZP+Uq1xD6AAi6kl1J3HPGOgA0+MnmSSZ
+        ONCnIyFxy6P9gUjsRh0fDNYXa9g4yu8NJpqUZQ==
+X-Google-Smtp-Source: APXvYqwEHOt/2rgweTNtAw7GzXs+nZ2z12OsetB8YzF1D+ZxlbEjo/gmhFM07rkt+14t6EDd/yx/LhwVaNSUbhTmPw==
+X-Received: by 2002:a63:6c82:: with SMTP id h124mr8846472pgc.328.1581456711610;
+ Tue, 11 Feb 2020 13:31:51 -0800 (PST)
+Date:   Tue, 11 Feb 2020 13:31:22 -0800
 In-Reply-To: <20200211213128.73302-1-almasrymina@google.com>
-Message-Id: <20200211213128.73302-2-almasrymina@google.com>
+Message-Id: <20200211213128.73302-3-almasrymina@google.com>
 Mime-Version: 1.0
 References: <20200211213128.73302-1-almasrymina@google.com>
 X-Mailer: git-send-email 2.25.0.225.g125e21ebc7-goog
-Subject: [PATCH v12 2/9] hugetlb_cgroup: add interface for charge/uncharge
- hugetlb reservations
+Subject: [PATCH v12 3/9] hugetlb_cgroup: add reservation accounting for
+ private mappings
 From:   Mina Almasry <almasrymina@google.com>
 To:     mike.kravetz@oracle.com
 Cc:     shuah@kernel.org, almasrymina@google.com, rientjes@google.com,
@@ -61,556 +61,299 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Augments hugetlb_cgroup_charge_cgroup to be able to charge hugetlb
-usage or hugetlb reservation counter.
+Normally the pointer to the cgroup to uncharge hangs off the struct
+page, and gets queried when it's time to free the page. With
+hugetlb_cgroup reservations, this is not possible. Because it's possible
+for a page to be reserved by one task and actually faulted in by another
+task.
 
-Adds a new interface to uncharge a hugetlb_cgroup counter via
-hugetlb_cgroup_uncharge_counter.
+The best place to put the hugetlb_cgroup pointer to uncharge for
+reservations is in the resv_map. But, because the resv_map has different
+semantics for private and shared mappings, the code patch to
+charge/uncharge shared and private mappings is different. This patch
+implements charging and uncharging for private mappings.
 
-Integrates the counter with hugetlb_cgroup, via hugetlb_cgroup_init,
-hugetlb_cgroup_have_usage, and hugetlb_cgroup_css_offline.
+For private mappings, the counter to uncharge is in
+resv_map->reservation_counter. On initializing the resv_map this is set
+to NULL. On reservation of a region in private mapping, the tasks
+hugetlb_cgroup is charged and the hugetlb_cgroup is placed is
+resv_map->reservation_counter.
+
+On hugetlb_vm_op_close, we uncharge resv_map->reservation_counter.
 
 Signed-off-by: Mina Almasry <almasrymina@google.com>
+Reviewed-by: Mike Kravetz <mike.kravetz@oracle.com>
+Acked-by: David Rientjes <rientjes@google.com>
 
 ---
 
 Changes in v12:
-- Instead of true/false param for rsvd or non-rsvd calls, now there is:
-hugetlb_cgroup_*() call for non-rsvd
-hugetlb_cgroup_*_rsvd() call for rsvd
-__hugetlb_cgroup_*(, bool) for both.
-- Removed review tags as this patch changed quite a bit.
+- Very minor interface update for readability.
 
 Changes in v11:
-- Changed all 'reserved' or 'reservation' to 'rsvd' to reflect the user
-interface.
-- Expanded comment that describes tail pages usage.
-facing naming.
+- Refactored hugetlb_cgroup_uncharge_conuter a bit to eliminate
+unnecessary #ifdefs.
+- Added resv_map_set_hugetlb_cgroup_uncharge_info() to eliminate #ifdefs
+in the middle of hugetlb logic.
 
 Changes in v10:
-- Added missing VM_BUG_ON
+- Fixed cases where the mapping is private but cgroup accounting is disabled.
 
 Changes in V9:
-- Fixed HUGETLB_CGROUP_MIN_ORDER.
-- Minor variable name update.
-- Moved some init/cleanup code from later patches in the series to this
-patch.
-- Updated reparenting of reservation accounting.
+- Updated for reparenting of hugetlb reservation accounting.
 
 ---
- include/linux/hugetlb_cgroup.h | 123 +++++++++++++++++++----
- mm/hugetlb.c                   |   2 +
- mm/hugetlb_cgroup.c            | 174 +++++++++++++++++++++++++++------
- 3 files changed, 251 insertions(+), 48 deletions(-)
+ include/linux/hugetlb.h        | 10 ++++++++
+ include/linux/hugetlb_cgroup.h | 39 +++++++++++++++++++++++++---
+ mm/hugetlb.c                   | 47 +++++++++++++++++++++++++++++++---
+ mm/hugetlb_cgroup.c            | 41 +++++------------------------
+ 4 files changed, 97 insertions(+), 40 deletions(-)
 
+diff --git a/include/linux/hugetlb.h b/include/linux/hugetlb.h
+index dea6143aa0685..5491932ea5758 100644
+--- a/include/linux/hugetlb.h
++++ b/include/linux/hugetlb.h
+@@ -46,6 +46,16 @@ struct resv_map {
+ 	long adds_in_progress;
+ 	struct list_head region_cache;
+ 	long region_cache_count;
++#ifdef CONFIG_CGROUP_HUGETLB
++	/*
++	 * On private mappings, the counter to uncharge reservations is stored
++	 * here. If these fields are 0, then either the mapping is shared, or
++	 * cgroup accounting is disabled for this resv_map.
++	 */
++	struct page_counter *reservation_counter;
++	unsigned long pages_per_hpage;
++	struct cgroup_subsys_state *css;
++#endif
+ };
+ extern struct resv_map *resv_map_alloc(void);
+ void resv_map_release(struct kref *ref);
 diff --git a/include/linux/hugetlb_cgroup.h b/include/linux/hugetlb_cgroup.h
-index 063962f6dfc6a..5443f4548d523 100644
+index 5443f4548d523..9974817eb995f 100644
 --- a/include/linux/hugetlb_cgroup.h
 +++ b/include/linux/hugetlb_cgroup.h
-@@ -20,32 +20,64 @@
- struct hugetlb_cgroup;
- /*
-  * Minimum page order trackable by hugetlb cgroup.
-- * At least 3 pages are necessary for all the tracking information.
-+ * At least 4 pages are necessary for all the tracking information.
-+ * The second tail page (hpage[2]) is the fault usage cgroup.
-+ * The third tail page (hpage[3]) is the reservation usage cgroup.
-  */
+@@ -27,6 +27,33 @@ struct hugetlb_cgroup;
  #define HUGETLB_CGROUP_MIN_ORDER	2
 
  #ifdef CONFIG_CGROUP_HUGETLB
-
--static inline struct hugetlb_cgroup *hugetlb_cgroup_from_page(struct page *page)
-+static inline struct hugetlb_cgroup *
-+__hugetlb_cgroup_from_page(struct page *page, bool rsvd)
- {
- 	VM_BUG_ON_PAGE(!PageHuge(page), page);
-
- 	if (compound_order(page) < HUGETLB_CGROUP_MIN_ORDER)
- 		return NULL;
--	return (struct hugetlb_cgroup *)page[2].private;
-+	if (rsvd)
-+		return (struct hugetlb_cgroup *)page[3].private;
-+	else
-+		return (struct hugetlb_cgroup *)page[2].private;
-+}
++enum hugetlb_memory_event {
++	HUGETLB_MAX,
++	HUGETLB_NR_MEMORY_EVENTS,
++};
 +
-+static inline struct hugetlb_cgroup *hugetlb_cgroup_from_page(struct page *page)
-+{
-+	return __hugetlb_cgroup_from_page(page, false);
- }
-
--static inline
--int set_hugetlb_cgroup(struct page *page, struct hugetlb_cgroup *h_cg)
-+static inline struct hugetlb_cgroup *
-+hugetlb_cgroup_from_page_rsvd(struct page *page)
-+{
-+	return __hugetlb_cgroup_from_page(page, true);
-+}
++struct hugetlb_cgroup {
++	struct cgroup_subsys_state css;
 +
-+static inline int __set_hugetlb_cgroup(struct page *page,
-+				       struct hugetlb_cgroup *h_cg, bool rsvd)
- {
- 	VM_BUG_ON_PAGE(!PageHuge(page), page);
-
- 	if (compound_order(page) < HUGETLB_CGROUP_MIN_ORDER)
- 		return -1;
--	page[2].private	= (unsigned long)h_cg;
-+	if (rsvd)
-+		page[3].private = (unsigned long)h_cg;
-+	else
-+		page[2].private = (unsigned long)h_cg;
- 	return 0;
- }
-
-+static inline int set_hugetlb_cgroup(struct page *page,
-+				     struct hugetlb_cgroup *h_cg)
-+{
-+	return __set_hugetlb_cgroup(page, h_cg, false);
-+}
++	/*
++	 * the counter to account for hugepages from hugetlb.
++	 */
++	struct page_counter hugepage[HUGE_MAX_HSTATE];
 +
-+static inline int set_hugetlb_cgroup_rsvd(struct page *page,
-+					  struct hugetlb_cgroup *h_cg)
-+{
-+	return __set_hugetlb_cgroup(page, h_cg, true);
-+}
++	/*
++	 * the counter to account for hugepage reservations from hugetlb.
++	 */
++	struct page_counter rsvd_hugepage[HUGE_MAX_HSTATE];
 +
- static inline bool hugetlb_cgroup_disabled(void)
- {
- 	return !cgroup_subsys_enabled(hugetlb_cgrp_subsys);
-@@ -53,13 +85,27 @@ static inline bool hugetlb_cgroup_disabled(void)
++	atomic_long_t events[HUGE_MAX_HSTATE][HUGETLB_NR_MEMORY_EVENTS];
++	atomic_long_t events_local[HUGE_MAX_HSTATE][HUGETLB_NR_MEMORY_EVENTS];
++
++	/* Handle for "hugetlb.events" */
++	struct cgroup_file events_file[HUGE_MAX_HSTATE];
++
++	/* Handle for "hugetlb.events.local" */
++	struct cgroup_file events_local_file[HUGE_MAX_HSTATE];
++};
 
- extern int hugetlb_cgroup_charge_cgroup(int idx, unsigned long nr_pages,
- 					struct hugetlb_cgroup **ptr);
-+extern int hugetlb_cgroup_charge_cgroup_rsvd(int idx, unsigned long nr_pages,
-+					     struct hugetlb_cgroup **ptr);
- extern void hugetlb_cgroup_commit_charge(int idx, unsigned long nr_pages,
- 					 struct hugetlb_cgroup *h_cg,
- 					 struct page *page);
-+extern void hugetlb_cgroup_commit_charge_rsvd(int idx, unsigned long nr_pages,
-+					      struct hugetlb_cgroup *h_cg,
-+					      struct page *page);
- extern void hugetlb_cgroup_uncharge_page(int idx, unsigned long nr_pages,
- 					 struct page *page);
-+extern void hugetlb_cgroup_uncharge_page_rsvd(int idx, unsigned long nr_pages,
-+					      struct page *page);
-+
- extern void hugetlb_cgroup_uncharge_cgroup(int idx, unsigned long nr_pages,
+ static inline struct hugetlb_cgroup *
+ __hugetlb_cgroup_from_page(struct page *page, bool rsvd)
+@@ -102,9 +129,9 @@ extern void hugetlb_cgroup_uncharge_cgroup(int idx, unsigned long nr_pages,
  					   struct hugetlb_cgroup *h_cg);
-+extern void hugetlb_cgroup_uncharge_cgroup_rsvd(int idx, unsigned long nr_pages,
-+						struct hugetlb_cgroup *h_cg);
-+extern void hugetlb_cgroup_uncharge_counter(struct page_counter *p,
-+					    unsigned long nr_pages,
-+					    struct cgroup_subsys_state *css);
-+
+ extern void hugetlb_cgroup_uncharge_cgroup_rsvd(int idx, unsigned long nr_pages,
+ 						struct hugetlb_cgroup *h_cg);
+-extern void hugetlb_cgroup_uncharge_counter(struct page_counter *p,
+-					    unsigned long nr_pages,
+-					    struct cgroup_subsys_state *css);
++extern void hugetlb_cgroup_uncharge_counter(struct resv_map *resv,
++					    unsigned long start,
++					    unsigned long end);
+
  extern void hugetlb_cgroup_file_init(void) __init;
  extern void hugetlb_cgroup_migrate(struct page *oldhpage,
- 				   struct page *newhpage);
-@@ -70,8 +116,26 @@ static inline struct hugetlb_cgroup *hugetlb_cgroup_from_page(struct page *page)
- 	return NULL;
- }
-
--static inline
--int set_hugetlb_cgroup(struct page *page, struct hugetlb_cgroup *h_cg)
-+static inline struct hugetlb_cgroup *
-+hugetlb_cgroup_from_page_resv(struct page *page)
-+{
-+	return NULL;
-+}
-+
-+static inline struct hugetlb_cgroup *
-+hugetlb_cgroup_from_page_rsvd(struct page *page)
-+{
-+	return NULL;
-+}
-+
-+static inline int set_hugetlb_cgroup(struct page *page,
-+				     struct hugetlb_cgroup *h_cg)
-+{
-+	return 0;
-+}
-+
-+static inline int set_hugetlb_cgroup_rsvd(struct page *page,
-+					  struct hugetlb_cgroup *h_cg)
- {
- 	return 0;
- }
-@@ -81,28 +145,51 @@ static inline bool hugetlb_cgroup_disabled(void)
- 	return true;
- }
-
--static inline int
--hugetlb_cgroup_charge_cgroup(int idx, unsigned long nr_pages,
--			     struct hugetlb_cgroup **ptr)
-+static inline int hugetlb_cgroup_charge_cgroup(int idx, unsigned long nr_pages,
-+					       struct hugetlb_cgroup **ptr)
- {
- 	return 0;
- }
-
--static inline void
--hugetlb_cgroup_commit_charge(int idx, unsigned long nr_pages,
--			     struct hugetlb_cgroup *h_cg,
--			     struct page *page)
-+static inline int hugetlb_cgroup_charge_cgroup_rsvd(int idx,
-+						    unsigned long nr_pages,
-+						    struct hugetlb_cgroup **ptr)
-+{
-+	return 0;
-+}
-+
-+static inline void hugetlb_cgroup_commit_charge(int idx, unsigned long nr_pages,
-+						struct hugetlb_cgroup *h_cg,
-+						struct page *page)
+@@ -193,6 +220,12 @@ hugetlb_cgroup_uncharge_cgroup_rsvd(int idx, unsigned long nr_pages,
  {
  }
 
- static inline void
--hugetlb_cgroup_uncharge_page(int idx, unsigned long nr_pages, struct page *page)
-+hugetlb_cgroup_commit_charge_rsvd(int idx, unsigned long nr_pages,
-+				  struct hugetlb_cgroup *h_cg,
-+				  struct page *page)
++static inline void hugetlb_cgroup_uncharge_counter(struct resv_map *resv,
++						   unsigned long start,
++						   unsigned long end)
 +{
 +}
 +
-+static inline void hugetlb_cgroup_uncharge_page(int idx, unsigned long nr_pages,
-+						struct page *page)
-+{
-+}
-+
-+static inline void hugetlb_cgroup_uncharge_page_rsvd(int idx,
-+						     unsigned long nr_pages,
-+						     struct page *page)
-+{
-+}
-+static inline void hugetlb_cgroup_uncharge_cgroup(int idx,
-+						  unsigned long nr_pages,
-+						  struct hugetlb_cgroup *h_cg)
+ static inline void hugetlb_cgroup_file_init(void)
  {
  }
-
- static inline void
--hugetlb_cgroup_uncharge_cgroup(int idx, unsigned long nr_pages,
--			       struct hugetlb_cgroup *h_cg)
-+hugetlb_cgroup_uncharge_cgroup_rsvd(int idx, unsigned long nr_pages,
-+				    struct hugetlb_cgroup *h_cg)
- {
- }
-
 diff --git a/mm/hugetlb.c b/mm/hugetlb.c
-index dd8737a94bec4..357817e33fb34 100644
+index 357817e33fb34..ac7bab0afafe7 100644
 --- a/mm/hugetlb.c
 +++ b/mm/hugetlb.c
-@@ -1069,6 +1069,7 @@ static void update_and_free_page(struct hstate *h, struct page *page)
- 				1 << PG_writeback);
+@@ -650,6 +650,25 @@ static void set_vma_private_data(struct vm_area_struct *vma,
+ 	vma->vm_private_data = (void *)value;
+ }
+
++static void
++resv_map_set_hugetlb_cgroup_uncharge_info(struct resv_map *resv_map,
++					  struct hugetlb_cgroup *h_cg,
++					  struct hstate *h)
++{
++#ifdef CONFIG_CGROUP_HUGETLB
++	if (!h_cg || !h) {
++		resv_map->reservation_counter = NULL;
++		resv_map->pages_per_hpage = 0;
++		resv_map->css = NULL;
++	} else {
++		resv_map->reservation_counter =
++			&h_cg->rsvd_hugepage[hstate_index(h)];
++		resv_map->pages_per_hpage = pages_per_huge_page(h);
++		resv_map->css = &h_cg->css;
++	}
++#endif
++}
++
+ struct resv_map *resv_map_alloc(void)
+ {
+ 	struct resv_map *resv_map = kmalloc(sizeof(*resv_map), GFP_KERNEL);
+@@ -666,6 +685,13 @@ struct resv_map *resv_map_alloc(void)
+ 	INIT_LIST_HEAD(&resv_map->regions);
+
+ 	resv_map->adds_in_progress = 0;
++	/*
++	 * Initialize these to 0. On shared mappings, 0's here indicate these
++	 * fields don't do cgroup accounting. On private mappings, these will be
++	 * re-initialized to the proper values, to indicate that hugetlb cgroup
++	 * reservations are to be un-charged from here.
++	 */
++	resv_map_set_hugetlb_cgroup_uncharge_info(resv_map, NULL, NULL);
+
+ 	INIT_LIST_HEAD(&resv_map->region_cache);
+ 	list_add(&rg->link, &resv_map->region_cache);
+@@ -3190,9 +3216,7 @@ static void hugetlb_vm_op_close(struct vm_area_struct *vma)
+ 	end = vma_hugecache_offset(h, vma, vma->vm_end);
+
+ 	reserve = (end - start) - region_count(resv, start, end);
+-
+-	kref_put(&resv->refs, resv_map_release);
+-
++	hugetlb_cgroup_uncharge_counter(resv, start, end);
+ 	if (reserve) {
+ 		/*
+ 		 * Decrement reserve counts.  The global reserve count may be
+@@ -3201,6 +3225,8 @@ static void hugetlb_vm_op_close(struct vm_area_struct *vma)
+ 		gbl_reserve = hugepage_subpool_put_pages(spool, reserve);
+ 		hugetlb_acct_memory(h, -gbl_reserve);
  	}
- 	VM_BUG_ON_PAGE(hugetlb_cgroup_from_page(page), page);
-+	VM_BUG_ON_PAGE(hugetlb_cgroup_from_page_rsvd(page), page);
- 	set_compound_page_dtor(page, NULL_COMPOUND_DTOR);
- 	set_page_refcounted(page);
- 	if (hstate_is_gigantic(h)) {
-@@ -1254,6 +1255,7 @@ static void prep_new_huge_page(struct hstate *h, struct page *page, int nid)
- 	set_compound_page_dtor(page, HUGETLB_PAGE_DTOR);
- 	spin_lock(&hugetlb_lock);
- 	set_hugetlb_cgroup(page, NULL);
-+	set_hugetlb_cgroup_rsvd(page, NULL);
- 	h->nr_huge_pages++;
- 	h->nr_huge_pages_node[nid]++;
- 	spin_unlock(&hugetlb_lock);
++
++	kref_put(&resv->refs, resv_map_release);
+ }
+
+ static int hugetlb_vm_op_split(struct vm_area_struct *vma, unsigned long addr)
+@@ -4547,6 +4573,7 @@ int hugetlb_reserve_pages(struct inode *inode,
+ 	struct hstate *h = hstate_inode(inode);
+ 	struct hugepage_subpool *spool = subpool_inode(inode);
+ 	struct resv_map *resv_map;
++	struct hugetlb_cgroup *h_cg;
+ 	long gbl_reserve;
+
+ 	/* This should never happen */
+@@ -4580,12 +4607,26 @@ int hugetlb_reserve_pages(struct inode *inode,
+ 		chg = region_chg(resv_map, from, to);
+
+ 	} else {
++		/* Private mapping. */
+ 		resv_map = resv_map_alloc();
+ 		if (!resv_map)
+ 			return -ENOMEM;
+
+ 		chg = to - from;
+
++		if (hugetlb_cgroup_charge_cgroup_rsvd(
++			    hstate_index(h), chg * pages_per_huge_page(h),
++			    &h_cg)) {
++			kref_put(&resv_map->refs, resv_map_release);
++			return -ENOMEM;
++		}
++
++		/*
++		 * Since this branch handles private mappings, we attach the
++		 * counter to uncharge for this reservation off resv_map.
++		 */
++		resv_map_set_hugetlb_cgroup_uncharge_info(resv_map, h_cg, h);
++
+ 		set_vma_resv_map(vma, resv_map);
+ 		set_vma_resv_flags(vma, HPAGE_RESV_OWNER);
+ 	}
 diff --git a/mm/hugetlb_cgroup.c b/mm/hugetlb_cgroup.c
-index 08b2adcdb5c1c..b8246389fb153 100644
+index b8246389fb153..bae7bf6b8372f 100644
 --- a/mm/hugetlb_cgroup.c
 +++ b/mm/hugetlb_cgroup.c
-@@ -61,14 +61,26 @@ struct hugetlb_cgroup {
- static struct hugetlb_cgroup *root_h_cgroup __read_mostly;
+@@ -23,34 +23,6 @@
+ #include <linux/hugetlb.h>
+ #include <linux/hugetlb_cgroup.h>
 
- static inline struct page_counter *
--hugetlb_cgroup_counter_from_cgroup(struct hugetlb_cgroup *h_cg, int idx,
--				   bool rsvd)
-+__hugetlb_cgroup_counter_from_cgroup(struct hugetlb_cgroup *h_cg, int idx,
-+				     bool rsvd)
- {
- 	if (rsvd)
- 		return &h_cg->rsvd_hugepage[idx];
- 	return &h_cg->hugepage[idx];
- }
-
-+static inline struct page_counter *
-+hugetlb_cgroup_counter_from_cgroup(struct hugetlb_cgroup *h_cg, int idx)
-+{
-+	return __hugetlb_cgroup_counter_from_cgroup(h_cg, idx, false);
-+}
-+
-+static inline struct page_counter *
-+hugetlb_cgroup_counter_from_cgroup_rsvd(struct hugetlb_cgroup *h_cg, int idx)
-+{
-+	return __hugetlb_cgroup_counter_from_cgroup(h_cg, idx, true);
-+}
-+
- static inline
- struct hugetlb_cgroup *hugetlb_cgroup_from_css(struct cgroup_subsys_state *s)
- {
-@@ -97,8 +109,12 @@ static inline bool hugetlb_cgroup_have_usage(struct hugetlb_cgroup *h_cg)
- 	int idx;
-
- 	for (idx = 0; idx < hugetlb_max_hstate; idx++) {
--		if (page_counter_read(&h_cg->hugepage[idx]))
-+		if (page_counter_read(
-+			    hugetlb_cgroup_counter_from_cgroup(h_cg, idx)) ||
-+		    page_counter_read(hugetlb_cgroup_counter_from_cgroup_rsvd(
-+			    h_cg, idx))) {
- 			return true;
-+		}
- 	}
- 	return false;
- }
-@@ -109,18 +125,34 @@ static void hugetlb_cgroup_init(struct hugetlb_cgroup *h_cgroup,
- 	int idx;
-
- 	for (idx = 0; idx < HUGE_MAX_HSTATE; idx++) {
--		struct page_counter *counter = &h_cgroup->hugepage[idx];
--		struct page_counter *parent = NULL;
-+		struct page_counter *fault_parent = NULL;
-+		struct page_counter *rsvd_parent = NULL;
- 		unsigned long limit;
- 		int ret;
-
--		if (parent_h_cgroup)
--			parent = &parent_h_cgroup->hugepage[idx];
--		page_counter_init(counter, parent);
-+		if (parent_h_cgroup) {
-+			fault_parent = hugetlb_cgroup_counter_from_cgroup(
-+				parent_h_cgroup, idx);
-+			rsvd_parent = hugetlb_cgroup_counter_from_cgroup_rsvd(
-+				parent_h_cgroup, idx);
-+		}
-+		page_counter_init(hugetlb_cgroup_counter_from_cgroup(h_cgroup,
-+								     idx),
-+				  fault_parent);
-+		page_counter_init(
-+			hugetlb_cgroup_counter_from_cgroup_rsvd(h_cgroup, idx),
-+			rsvd_parent);
-
- 		limit = round_down(PAGE_COUNTER_MAX,
- 				   1 << huge_page_order(&hstates[idx]));
--		ret = page_counter_set_max(counter, limit);
-+
-+		ret = page_counter_set_max(
-+			hugetlb_cgroup_counter_from_cgroup(h_cgroup, idx),
-+			limit);
-+		VM_BUG_ON(ret);
-+		ret = page_counter_set_max(
-+			hugetlb_cgroup_counter_from_cgroup_rsvd(h_cgroup, idx),
-+			limit);
- 		VM_BUG_ON(ret);
- 	}
- }
-@@ -150,7 +182,6 @@ static void hugetlb_cgroup_css_free(struct cgroup_subsys_state *css)
- 	kfree(h_cgroup);
- }
-
+-enum hugetlb_memory_event {
+-	HUGETLB_MAX,
+-	HUGETLB_NR_MEMORY_EVENTS,
+-};
 -
- /*
-  * Should be called with hugetlb_lock held.
-  * Since we are holding hugetlb_lock, pages cannot get moved from
-@@ -227,8 +258,9 @@ static inline void hugetlb_event(struct hugetlb_cgroup *hugetlb, int idx,
- 		 !hugetlb_cgroup_is_root(hugetlb));
+-struct hugetlb_cgroup {
+-	struct cgroup_subsys_state css;
+-
+-	/*
+-	 * the counter to account for hugepages from hugetlb.
+-	 */
+-	struct page_counter hugepage[HUGE_MAX_HSTATE];
+-
+-	/*
+-	 * the counter to account for hugepage reservations from hugetlb.
+-	 */
+-	struct page_counter rsvd_hugepage[HUGE_MAX_HSTATE];
+-
+-	atomic_long_t events[HUGE_MAX_HSTATE][HUGETLB_NR_MEMORY_EVENTS];
+-	atomic_long_t events_local[HUGE_MAX_HSTATE][HUGETLB_NR_MEMORY_EVENTS];
+-
+-	/* Handle for "hugetlb.events" */
+-	struct cgroup_file events_file[HUGE_MAX_HSTATE];
+-
+-	/* Handle for "hugetlb.events.local" */
+-	struct cgroup_file events_local_file[HUGE_MAX_HSTATE];
+-};
+-
+ #define MEMFILE_PRIVATE(x, val)	(((x) << 16) | (val))
+ #define MEMFILE_IDX(val)	(((val) >> 16) & 0xffff)
+ #define MEMFILE_ATTR(val)	((val) & 0xffff)
+@@ -408,15 +380,16 @@ void hugetlb_cgroup_uncharge_cgroup_rsvd(int idx, unsigned long nr_pages,
+ 	__hugetlb_cgroup_uncharge_cgroup(idx, nr_pages, h_cg, true);
  }
 
--int hugetlb_cgroup_charge_cgroup(int idx, unsigned long nr_pages,
--				 struct hugetlb_cgroup **ptr)
-+static int __hugetlb_cgroup_charge_cgroup(int idx, unsigned long nr_pages,
-+					  struct hugetlb_cgroup **ptr,
-+					  bool rsvd)
+-void hugetlb_cgroup_uncharge_counter(struct page_counter *p,
+-				     unsigned long nr_pages,
+-				     struct cgroup_subsys_state *css)
++void hugetlb_cgroup_uncharge_counter(struct resv_map *resv, unsigned long start,
++				     unsigned long end)
  {
- 	int ret = 0;
- 	struct page_counter *counter;
-@@ -251,51 +283,104 @@ int hugetlb_cgroup_charge_cgroup(int idx, unsigned long nr_pages,
- 	}
- 	rcu_read_unlock();
-
--	if (!page_counter_try_charge(&h_cg->hugepage[idx], nr_pages,
--				     &counter)) {
-+	if (!page_counter_try_charge(
-+		    __hugetlb_cgroup_counter_from_cgroup(h_cg, idx, rsvd),
-+		    nr_pages, &counter)) {
- 		ret = -ENOMEM;
- 		hugetlb_event(hugetlb_cgroup_from_counter(counter, idx), idx,
- 			      HUGETLB_MAX);
-+		css_put(&h_cg->css);
-+		goto done;
- 	}
--	css_put(&h_cg->css);
-+	/* Reservations take a reference to the css because they do not get
-+	 * reparented.
-+	 */
-+	if (!rsvd)
-+		css_put(&h_cg->css);
- done:
- 	*ptr = h_cg;
- 	return ret;
- }
-
-+int hugetlb_cgroup_charge_cgroup(int idx, unsigned long nr_pages,
-+				 struct hugetlb_cgroup **ptr)
-+{
-+	return __hugetlb_cgroup_charge_cgroup(idx, nr_pages, ptr, false);
-+}
-+
-+int hugetlb_cgroup_charge_cgroup_rsvd(int idx, unsigned long nr_pages,
-+				      struct hugetlb_cgroup **ptr)
-+{
-+	return __hugetlb_cgroup_charge_cgroup(idx, nr_pages, ptr, true);
-+}
-+
- /* Should be called with hugetlb_lock held */
--void hugetlb_cgroup_commit_charge(int idx, unsigned long nr_pages,
--				  struct hugetlb_cgroup *h_cg,
--				  struct page *page)
-+static void __hugetlb_cgroup_commit_charge(int idx, unsigned long nr_pages,
-+					   struct hugetlb_cgroup *h_cg,
-+					   struct page *page, bool rsvd)
- {
- 	if (hugetlb_cgroup_disabled() || !h_cg)
+-	if (hugetlb_cgroup_disabled() || !p || !css)
++	if (hugetlb_cgroup_disabled() || !resv || !resv->reservation_counter ||
++	    !resv->css)
  		return;
 
--	set_hugetlb_cgroup(page, h_cg);
-+	__set_hugetlb_cgroup(page, h_cg, rsvd);
- 	return;
- }
-
-+void hugetlb_cgroup_commit_charge(int idx, unsigned long nr_pages,
-+				  struct hugetlb_cgroup *h_cg,
-+				  struct page *page)
-+{
-+	__hugetlb_cgroup_commit_charge(idx, nr_pages, h_cg, page, false);
-+}
-+
-+void hugetlb_cgroup_commit_charge_rsvd(int idx, unsigned long nr_pages,
-+				       struct hugetlb_cgroup *h_cg,
-+				       struct page *page)
-+{
-+	__hugetlb_cgroup_commit_charge(idx, nr_pages, h_cg, page, true);
-+}
-+
- /*
-  * Should be called with hugetlb_lock held
-  */
--void hugetlb_cgroup_uncharge_page(int idx, unsigned long nr_pages,
--				  struct page *page)
-+static void __hugetlb_cgroup_uncharge_page(int idx, unsigned long nr_pages,
-+					   struct page *page, bool rsvd)
- {
- 	struct hugetlb_cgroup *h_cg;
-
- 	if (hugetlb_cgroup_disabled())
- 		return;
- 	lockdep_assert_held(&hugetlb_lock);
--	h_cg = hugetlb_cgroup_from_page(page);
-+	h_cg = __hugetlb_cgroup_from_page(page, rsvd);
- 	if (unlikely(!h_cg))
- 		return;
--	set_hugetlb_cgroup(page, NULL);
--	page_counter_uncharge(&h_cg->hugepage[idx], nr_pages);
-+	__set_hugetlb_cgroup(page, NULL, rsvd);
-+
-+	page_counter_uncharge(__hugetlb_cgroup_counter_from_cgroup(h_cg, idx,
-+								   rsvd),
-+			      nr_pages);
-+
-+	if (rsvd)
-+		css_put(&h_cg->css);
-+
- 	return;
- }
-
--void hugetlb_cgroup_uncharge_cgroup(int idx, unsigned long nr_pages,
--				    struct hugetlb_cgroup *h_cg)
-+void hugetlb_cgroup_uncharge_page(int idx, unsigned long nr_pages,
-+				  struct page *page)
-+{
-+	__hugetlb_cgroup_uncharge_page(idx, nr_pages, page, false);
-+}
-+
-+void hugetlb_cgroup_uncharge_page_rsvd(int idx, unsigned long nr_pages,
-+				       struct page *page)
-+{
-+	__hugetlb_cgroup_uncharge_page(idx, nr_pages, page, true);
-+}
-+
-+static void __hugetlb_cgroup_uncharge_cgroup(int idx, unsigned long nr_pages,
-+					     struct hugetlb_cgroup *h_cg,
-+					     bool rsvd)
- {
- 	if (hugetlb_cgroup_disabled() || !h_cg)
- 		return;
-@@ -303,8 +388,35 @@ void hugetlb_cgroup_uncharge_cgroup(int idx, unsigned long nr_pages,
- 	if (huge_page_order(&hstates[idx]) < HUGETLB_CGROUP_MIN_ORDER)
- 		return;
-
--	page_counter_uncharge(&h_cg->hugepage[idx], nr_pages);
--	return;
-+	page_counter_uncharge(__hugetlb_cgroup_counter_from_cgroup(h_cg, idx,
-+								   rsvd),
-+			      nr_pages);
-+
-+	if (rsvd)
-+		css_put(&h_cg->css);
-+}
-+
-+void hugetlb_cgroup_uncharge_cgroup(int idx, unsigned long nr_pages,
-+				    struct hugetlb_cgroup *h_cg)
-+{
-+	__hugetlb_cgroup_uncharge_cgroup(idx, nr_pages, h_cg, false);
-+}
-+
-+void hugetlb_cgroup_uncharge_cgroup_rsvd(int idx, unsigned long nr_pages,
-+					 struct hugetlb_cgroup *h_cg)
-+{
-+	__hugetlb_cgroup_uncharge_cgroup(idx, nr_pages, h_cg, true);
-+}
-+
-+void hugetlb_cgroup_uncharge_counter(struct page_counter *p,
-+				     unsigned long nr_pages,
-+				     struct cgroup_subsys_state *css)
-+{
-+	if (hugetlb_cgroup_disabled() || !p || !css)
-+		return;
-+
-+	page_counter_uncharge(p, nr_pages);
-+	css_put(css);
+-	page_counter_uncharge(p, nr_pages);
+-	css_put(css);
++	page_counter_uncharge(resv->reservation_counter,
++			      (end - start) * resv->pages_per_hpage);
++	css_put(resv->css);
  }
 
  enum {
-@@ -419,7 +531,7 @@ static ssize_t hugetlb_cgroup_write(struct kernfs_open_file *of,
- 	case RES_LIMIT:
- 		mutex_lock(&hugetlb_limit_mutex);
- 		ret = page_counter_set_max(
--			hugetlb_cgroup_counter_from_cgroup(h_cg, idx, rsvd),
-+			__hugetlb_cgroup_counter_from_cgroup(h_cg, idx, rsvd),
- 			nr_pages);
- 		mutex_unlock(&hugetlb_limit_mutex);
- 		break;
-@@ -675,6 +787,7 @@ void __init hugetlb_cgroup_file_init(void)
- void hugetlb_cgroup_migrate(struct page *oldhpage, struct page *newhpage)
- {
- 	struct hugetlb_cgroup *h_cg;
-+	struct hugetlb_cgroup *h_cg_rsvd;
- 	struct hstate *h = page_hstate(oldhpage);
-
- 	if (hugetlb_cgroup_disabled())
-@@ -683,10 +796,11 @@ void hugetlb_cgroup_migrate(struct page *oldhpage, struct page *newhpage)
- 	VM_BUG_ON_PAGE(!PageHuge(oldhpage), oldhpage);
- 	spin_lock(&hugetlb_lock);
- 	h_cg = hugetlb_cgroup_from_page(oldhpage);
-+	h_cg_rsvd = hugetlb_cgroup_from_page_rsvd(oldhpage);
- 	set_hugetlb_cgroup(oldhpage, NULL);
-
- 	/* move the h_cg details to new cgroup */
--	set_hugetlb_cgroup(newhpage, h_cg);
-+	set_hugetlb_cgroup_rsvd(newhpage, h_cg_rsvd);
- 	list_move(&newhpage->lru, &h->hugepage_activelist);
- 	spin_unlock(&hugetlb_lock);
- 	return;
 --
 2.25.0.225.g125e21ebc7-goog
