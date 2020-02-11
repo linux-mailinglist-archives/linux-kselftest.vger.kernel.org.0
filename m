@@ -2,95 +2,116 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 23D0E158673
-	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Feb 2020 01:15:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC99C15867E
+	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Feb 2020 01:16:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727496AbgBKAPa (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 10 Feb 2020 19:15:30 -0500
-Received: from mail-pf1-f193.google.com ([209.85.210.193]:45912 "EHLO
-        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727455AbgBKAPa (ORCPT
+        id S1727716AbgBKAPm (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 10 Feb 2020 19:15:42 -0500
+Received: from hqnvemgate24.nvidia.com ([216.228.121.143]:4283 "EHLO
+        hqnvemgate24.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727669AbgBKAPm (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 10 Feb 2020 19:15:30 -0500
-Received: by mail-pf1-f193.google.com with SMTP id 2so4504937pfg.12;
-        Mon, 10 Feb 2020 16:15:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=r5ohSbrtojTxCSFCkg8rYW9zCxgtMfpQZkLpXgHPTpk=;
-        b=KQylGPxdiaGvk+7Y+4BneWCRdxmvASR00418Jv7gHTm/EZxZkAZt8Hj7qbRh3JOGFy
-         oxl2x5m6yV6iMc5YLIlOjEox0c90qBOT+fwVam8DvtExHZ1JkoYBwPjGtqNhiRcZzwQq
-         TtY0mLuruewCig3yfcTFRMCAesZI8xyGIGReVInSiRC1XvxvpQq6veSmY1sNTWCG4Fwl
-         LLMc6e0KVLz+vy3Umv/5RTzT1ubEHIv95CCcWRKM8oKJcjqI1cX1Y8UcJSx9wMbYbBi7
-         H3aZXfZWPc9EK8I+72g6uwnDPYF0MUz4QJtn6UjV0uyHk3G1avz4AXDxhznkFQy9s/5o
-         JNFg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=r5ohSbrtojTxCSFCkg8rYW9zCxgtMfpQZkLpXgHPTpk=;
-        b=BWJkqB8kaXTQ6vRF2tfYkpBrwH5Aal6vL1eAr01oX1eJZmRWaMdlXeSb+bT5Wxq0ev
-         lnD7SH0TK7edouZG0a82L94GS6l2gAz2Ls9shKGUmebYbR7m7jI+MTkaeidC9DY8wEpG
-         pTiTkiBx9KioZ4HyKMvP9bNN7bEpqUhzP8XgsBjlqh/RC//rXTR5kmyy5lKSZZCqUIcK
-         appJ9QczHPEmclmdmhUVhdF6Z7vAy7Wk/Pu7eH4x1Jh1xN3b0L8S2WP7ze8C5wUWVu87
-         jcxchbeZgZedXllDkuiwxdvOR86zNa8zoG/A+DqQnXwTI4a3FwFFz2yxM1HAq7Ghl+ZB
-         fa7Q==
-X-Gm-Message-State: APjAAAWuyuIpZdTjeu2Lf6XZxEOFiZd6kCV23/J4MXkrVK1roLjQvTLf
-        DYorImDf4/koNJ1Pv9bat+s=
-X-Google-Smtp-Source: APXvYqwaI1pmqbF0HQJmCdNPwqmI2s1WtrWOIQeTyY/IRieg6LQrDFvOhcDN4OionXTTqMh7Vs1K2g==
-X-Received: by 2002:a65:5549:: with SMTP id t9mr4124065pgr.439.1581380129926;
-        Mon, 10 Feb 2020 16:15:29 -0800 (PST)
-Received: from ast-mbp ([2620:10d:c090:200::2:685c])
-        by smtp.gmail.com with ESMTPSA id z26sm1201161pgu.80.2020.02.10.16.15.28
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 10 Feb 2020 16:15:29 -0800 (PST)
+        Mon, 10 Feb 2020 19:15:42 -0500
+Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate24.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5e41f1eb0003>; Mon, 10 Feb 2020 16:14:35 -0800
+Received: from hqmail.nvidia.com ([172.20.161.6])
+  by hqpgpgate101.nvidia.com (PGP Universal service);
+  Mon, 10 Feb 2020 16:15:38 -0800
+X-PGP-Universal: processed;
+        by hqpgpgate101.nvidia.com on Mon, 10 Feb 2020 16:15:38 -0800
+Received: from HQMAIL111.nvidia.com (172.20.187.18) by HQMAIL101.nvidia.com
+ (172.20.187.10) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Tue, 11 Feb
+ 2020 00:15:38 +0000
+Received: from hqnvemgw03.nvidia.com (10.124.88.68) by HQMAIL111.nvidia.com
+ (172.20.187.18) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
+ Transport; Tue, 11 Feb 2020 00:15:38 +0000
+Received: from blueforge.nvidia.com (Not Verified[10.110.48.28]) by hqnvemgw03.nvidia.com with Trustwave SEG (v7,5,8,10121)
+        id <B5e41f2290007>; Mon, 10 Feb 2020 16:15:37 -0800
+From:   John Hubbard <jhubbard@nvidia.com>
+To:     Andrew Morton <akpm@linux-foundation.org>
+CC:     Al Viro <viro@zeniv.linux.org.uk>,
+        Christoph Hellwig <hch@infradead.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Dave Chinner <david@fromorbit.com>,
+        Ira Weiny <ira.weiny@intel.com>, Jan Kara <jack@suse.cz>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Jonathan Corbet <corbet@lwn.net>,
+        =?UTF-8?q?J=C3=A9r=C3=B4me=20Glisse?= <jglisse@redhat.com>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        Michal Hocko <mhocko@suse.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Matthew Wilcox <willy@infradead.org>,
+        <linux-doc@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>,
+        <linux-kselftest@vger.kernel.org>, <linux-rdma@vger.kernel.org>,
+        <linux-mm@kvack.org>, LKML <linux-kernel@vger.kernel.org>,
+        John Hubbard <jhubbard@nvidia.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
+Subject: [PATCH v6 03/12] mm: introduce page_ref_sub_return()
 Date:   Mon, 10 Feb 2020 16:15:27 -0800
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-To:     Palmer Dabbelt <palmerdabbelt@google.com>
-Cc:     Bjorn Topel <bjorn.topel@gmail.com>, daniel@iogearbox.net,
-        ast@kernel.org, zlim.lnx@gmail.com, catalin.marinas@arm.com,
-        will@kernel.org, kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        andriin@fb.com, shuah@kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        clang-built-linux@googlegroups.com, kernel-team@android.com
-Subject: Re: [PATCH 4/4] arm64: bpf: Elide some moves to a0 after calls
-Message-ID: <20200211001526.xbfwdnpjqrg3ed6q@ast-mbp>
-References: <20200128021145.36774-1-palmerdabbelt@google.com>
- <20200128021145.36774-5-palmerdabbelt@google.com>
+Message-ID: <20200211001536.1027652-4-jhubbard@nvidia.com>
+X-Mailer: git-send-email 2.25.0
+In-Reply-To: <20200211001536.1027652-1-jhubbard@nvidia.com>
+References: <20200211001536.1027652-1-jhubbard@nvidia.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200128021145.36774-5-palmerdabbelt@google.com>
-User-Agent: NeoMutt/20180223
+X-NVConfidentiality: public
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1581380075; bh=Q5fLaghgFbabRh4AhaE8eo4PFQNGOCfHUCuIQWHMtww=;
+        h=X-PGP-Universal:From:To:CC:Subject:Date:Message-ID:X-Mailer:
+         In-Reply-To:References:MIME-Version:X-NVConfidentiality:
+         Content-Transfer-Encoding:Content-Type;
+        b=E4saXd/rsLx1Jd/Hqpfy2VR1S/vr6n2rRE1yCnca9yyLBq3F/vV2Uet6L0Qye+uny
+         KskQcpVdF+AdJ+aBTiA76vt9on1GhUmtZ/Yor21Z4R5H4hlfmezMPLqM7E25P+s671
+         cmmX3OaOw0WDUhKOEo0U0jtUnUlP6JPfrSXPqGjjTwLdNo90pH6CBuxc2qNtKlsM1X
+         1m5Pu0ViUqfmn/8U6Vqlw/EnO0zebRmhN7fZrn8sfVJXJv08CjeAEu+RFaEPCVYhLQ
+         XF0F2/tQt6EJyet8TXxIxsHCwyYLKXvCCEyG2wV+VjoRJaF5eKMH3ao9VPkV4HBQNS
+         ZxLBFKa29DTig==
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Jan 27, 2020 at 06:11:45PM -0800, Palmer Dabbelt wrote:
->  
-> +	/* Handle BPF_REG_0, which may be in the wrong place because the ARM64
-> +	 * ABI doesn't match the BPF ABI for function calls. */
-> +	if (ctx->reg0_in_reg1) {
-> +		/* If we're writing BPF_REG_0 then we don't need to do any
-> +		 * extra work to get the registers back in their correct
-> +		 * locations. */
-> +		if (insn->dst_reg == BPF_REG_0)
-> +			ctx->reg0_in_reg1 = false;
-> +
-> +		/* If we're writing to BPF_REG_1 then we need to save BPF_REG_0
-> +		 * into the correct location if it's still alive, as otherwise
-> +		 * it will be clobbered. */
-> +		if (insn->dst_reg == BPF_REG_1) {
-> +			if (!dead_register(ctx, off + 1, BPF_REG_0))
-> +				emit(A64_MOV(1, A64_R(7), A64_R(0)), ctx);
-> +			ctx->reg0_in_reg1 = false;
-> +		}
-> +	}
+An upcoming patch requires subtracting a large chunk of refcounts from
+a page, and checking what the resulting refcount is. This is a little
+different than the usual "check for zero refcount" that many of the
+page ref functions already do. However, it is similar to a few other
+routines that (like this one) are generally useful for things such as
+1-based refcounting.
 
-I'm not sure this is correct, since it processes insns as a linear code, but
-there could be jumps in the middle. The logic should be following the control
-flow of the program. The verifier is a better place to do such analysis.
-I don't see how JITs can do it on their own.
+Add page_ref_sub_return(), that subtracts a chunk of refcounts
+atomically, and returns an atomic snapshot of the result.
+
+Reviewed-by: Jan Kara <jack@suse.cz>
+Acked-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+Signed-off-by: John Hubbard <jhubbard@nvidia.com>
+---
+ include/linux/page_ref.h | 9 +++++++++
+ 1 file changed, 9 insertions(+)
+
+diff --git a/include/linux/page_ref.h b/include/linux/page_ref.h
+index 14d14beb1f7f..d27701199a4d 100644
+--- a/include/linux/page_ref.h
++++ b/include/linux/page_ref.h
+@@ -102,6 +102,15 @@ static inline void page_ref_sub(struct page *page, int=
+ nr)
+ 		__page_ref_mod(page, -nr);
+ }
+=20
++static inline int page_ref_sub_return(struct page *page, int nr)
++{
++	int ret =3D atomic_sub_return(nr, &page->_refcount);
++
++	if (page_ref_tracepoint_active(__tracepoint_page_ref_mod_and_return))
++		__page_ref_mod_and_return(page, -nr, ret);
++	return ret;
++}
++
+ static inline void page_ref_inc(struct page *page)
+ {
+ 	atomic_inc(&page->_refcount);
+--=20
+2.25.0
+
