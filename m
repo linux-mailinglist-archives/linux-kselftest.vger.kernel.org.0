@@ -2,129 +2,81 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B917D158877
-	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Feb 2020 04:00:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DCBDD158D94
+	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Feb 2020 12:32:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727669AbgBKDA2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 10 Feb 2020 22:00:28 -0500
-Received: from mail-wr1-f68.google.com ([209.85.221.68]:37665 "EHLO
-        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727546AbgBKDA1 (ORCPT
+        id S1727781AbgBKLc7 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 11 Feb 2020 06:32:59 -0500
+Received: from mail-pf1-f193.google.com ([209.85.210.193]:42463 "EHLO
+        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727779AbgBKLc7 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 10 Feb 2020 22:00:27 -0500
-Received: by mail-wr1-f68.google.com with SMTP id w15so10346797wru.4
-        for <linux-kselftest@vger.kernel.org>; Mon, 10 Feb 2020 19:00:25 -0800 (PST)
+        Tue, 11 Feb 2020 06:32:59 -0500
+Received: by mail-pf1-f193.google.com with SMTP id 4so5356516pfz.9;
+        Tue, 11 Feb 2020 03:32:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:date:to:message-id:subject:mime-version;
-        bh=m245zQYFHxH8WWp9ExPuUqaJ1SaKW+vA3x7eNxHC6ZE=;
-        b=RXJ6f/jDHYhGYAPMgd3dXTOFZU7DNu+kTHEAouKxgFbQ84IYdgdwUCK5MMtxlwjMBb
-         gDGbqM2yu9sBCSlVR/bHB1DPBM1eL2fyDMy0E1Zy5k68VtKunNxAHl1UsMexZ2MrYfmE
-         4MQwIpj++eMsEIPVSoYTlMZFdUJGqq1dnFLEdaPcsfGnWongb1UndcjQ6Ki9HTLym6o5
-         9tZNJjpg73jMOCsfMRqrUFktr34qtwQpXTmdwTWLhpwecQYKcQREI6BlDB1rggZBXRU/
-         te5D12MZnRAHFHZd1Fv1jXKHAJb470+q2+WL1ix3i8W7WXEhxx29/85eQ36YXtOAdsSk
-         B9Dw==
+        d=gmail.com; s=20161025;
+        h=from:to:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=R7XIwjb1NmupQsOWTxb+gUt0SoUoKsZRKZltoxsJ+0E=;
+        b=TUNLEbkwqFFXyUaExg1rcZ4cxXvBJgO0OMJCHgAQpqIUxfxxEbLICqd89J31UzbIUH
+         xw6R0MwtCWUWI5W7dMWfOSPAIdT9quhDDIwcABa8TBlQLunh2KAQVVtqfWJZCmj+w9zr
+         1bmhv/h7+Olj9CpXn9L0JB4g5Rw+gq2nvkKm8TD4/n65L0ZayZjyVlvrwc8QRx4ge551
+         md+gZAUhmh3aedgcjTUumQgVymRhjaHjJ/PmoDwT57mR/qnCb7o0y9nBdsmU+PrwHeji
+         2oTrxXmYIyMxbI9bzWwcbuWWkDjMpmiJi3Qin2lggaKoMM2vwEcHoDco4TfdnOC0Wfij
+         0xKQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:date:to:message-id:subject:mime-version;
-        bh=m245zQYFHxH8WWp9ExPuUqaJ1SaKW+vA3x7eNxHC6ZE=;
-        b=tM4ooDszwL+0ph0myln01nf2XeD8nyIfCkdZ4UokH71fkphoa0Lco53hCIUvWDQmhw
-         9EajIIoTLsvL61kzj+rVrDlA23XZeInfDABzhClO4bMTE3TfTZdRvXEHWkWx772Y8u/1
-         9NAHebT3Rb4ylLlpV/FcwwPgGsCgF74h+H48Tw+ko2/8OPGMu3dCfy7Cb91yvZe/eOxi
-         z4utBFKXabpCJ3wZoqfuqX1NOhCHzXpaJS1KJA82tp/RHHwykqyuMuUymldOWRGFf8aB
-         gsD9wcWi60MYxktq7YYNWlU79TVhAu/p7tPugstc4SeNIq8o5ilqydsfKKJOZkn98BvE
-         QWXw==
-X-Gm-Message-State: APjAAAVxflDlq7QiHnh92i0KpFxJfX6ljkDRz0rbQssPyjXHGKPErZyS
-        SDkCrza+hRwapQQJhQVhFd1IIA==
-X-Google-Smtp-Source: APXvYqw5d0Xv9ilg4y+Vf1H2PDY/LcEHGZq4svyf7HO4i1R7fbtdQ1sF4rWCp9gxAc9rCXJ4HPVi/Q==
-X-Received: by 2002:a5d:62c8:: with SMTP id o8mr5354113wrv.316.1581390024799;
-        Mon, 10 Feb 2020 19:00:24 -0800 (PST)
-Received: from 172.17.0.4 (ci.linaro.org. [88.99.136.175])
-        by smtp.gmail.com with ESMTPSA id y17sm3148157wrs.82.2020.02.10.19.00.23
-        (version=TLS1 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
-        Mon, 10 Feb 2020 19:00:24 -0800 (PST)
-From:   ci_notify@linaro.org
-X-Google-Original-From: linaro-infrastructure-errors@lists.linaro.org
-Date:   Tue, 11 Feb 2020 03:00:23 +0000 (UTC)
-To:     lkft-triage@lists.linaro.org, dan.rue@linaro.org,
-        anders.roxell@linaro.org, naresh.kamboju@linaro.org,
-        shuah@kernel.org, linux-kselftest@vger.kernel.org
-Message-ID: <311133584.738.1581390024188.JavaMail.javamailuser@localhost>
-Subject: next-20200211 kselftest results
+        h=x-gm-message-state:from:to:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=R7XIwjb1NmupQsOWTxb+gUt0SoUoKsZRKZltoxsJ+0E=;
+        b=SuiInuss+V+V6gcpBXigo4wTvbrMzKj9D5TL759QGAlbU1Mk+tO3jYNHZC/DRpHRZD
+         drjDZi87L2n+qVnziJU+N9GYQDIeHnIM9RfO2tLj5U5XQXrnqght7pfifBtb+Qp7QUk9
+         JKjcOzvYG0P/3tjC7FWqaI41A8NNtaHk9/adZEZvd+CnukJIjBtYqBctkjYKArcHwi7b
+         JE6OajOtcmXjxwhBAlXKhD6gY95viX8z0aIfSelzRMq+DccX0EjADMRyU33Pp53fulVe
+         B9Sp1Pe2PuxxOWxaMBGnw+2VP4c/r93eC9YCMQoVx9uqDmufaAmHwh6ObE2xgXJFfTqZ
+         rZRQ==
+X-Gm-Message-State: APjAAAX+QNrEhhEveWw7oHus7p+FwrlFPypl7Fe0inCsZkutlF4fVdJ9
+        APH6eObqcYhQ5fOlSW9oC7Q8omgW3SM=
+X-Google-Smtp-Source: APXvYqxPJQt/2QMW+tXXPqW8yLwcsk4nRTYq/zpCBsPECWConwDbHwxcBeM7DjrVf3AZfC0tUNpbrA==
+X-Received: by 2002:a63:7c17:: with SMTP id x23mr6367756pgc.436.1581420778563;
+        Tue, 11 Feb 2020 03:32:58 -0800 (PST)
+Received: from mentat.byu.edu ([128.187.112.29])
+        by smtp.gmail.com with ESMTPSA id x25sm4159009pfp.30.2020.02.11.03.32.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Feb 2020 03:32:57 -0800 (PST)
+From:   Isaac Young <isaac.young5@gmail.com>
+To:     shuah@kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] Removing a duplicate condition.
+Date:   Tue, 11 Feb 2020 04:32:57 -0700
+Message-Id: <20200211113257.451781-1-isaac.young5@gmail.com>
+X-Mailer: git-send-email 2.24.1
 MIME-Version: 1.0
-Content-Type: multipart/mixed; 
-        boundary="----=_Part_737_1286540830.1581390023311"
-X-Jenkins-Job: LKFT Notify kselftest on next
-X-Jenkins-Result: SUCCESS
+Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-------=_Part_737_1286540830.1581390023311
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Signed-off-by: Isaac Young <isaac.young5@gmail.com>
+---
+ tools/testing/selftests/bpf/prog_tests/select_reuseport.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Summary
-------------------------------------------------------------------------
-kernel: 5.6.0-rc1
-git repo: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-git branch: master
-git commit: ac431e2d7b1be81bfe58163b9f81ba79bc987dc3
-git describe: next-20200211
-Test details: https://qa-reports.linaro.org/lkft/linux-next-oe/build/next-20200211
-
-Regressions (compared to build next-20200117)
-------------------------------------------------------------------------
-No regressions                                                                                                          
-                                                                                                                       
-Fixes (compared to build next-20200117)                                                                   
-------------------------------------------------------------------------                                               
-No fixes
-
-In total:
-------------------------------------------------------------------------
-Ran 0 total tests in the following environments and test suites.
-pass 0
-fail 0
-xfail 0
-skip 0
-
-Environments
---------------
-- dragonboard-410c - arm64
-- hi6220-hikey - arm64
-- i386
-- juno-r2 - arm64
-- x15 - arm
-- x86_64
-
-Test Suites
------------
-
-
-Failures
-------------------------------------------------------------------------
-
-juno-r2:
-
-x15:
-
-x86:
-
-i386:
-
-hi6220-hikey:
-
-dragonboard-410c:
-
-
-Skips
-------------------------------------------------------------------------
-No skips
-
-
+diff --git a/tools/testing/selftests/bpf/prog_tests/select_reuseport.c b/tools/testing/selftests/bpf/prog_tests/select_reuseport.c
+index 098bcae5f827..0954c7a8aa08 100644
+--- a/tools/testing/selftests/bpf/prog_tests/select_reuseport.c
++++ b/tools/testing/selftests/bpf/prog_tests/select_reuseport.c
+@@ -823,7 +823,7 @@ void test_select_reuseport(void)
+ 
+ 	saved_tcp_fo = read_int_sysctl(TCP_FO_SYSCTL);
+ 	saved_tcp_syncookie = read_int_sysctl(TCP_SYNCOOKIE_SYSCTL);
+-	if (saved_tcp_syncookie < 0 || saved_tcp_syncookie < 0)
++	if (saved_tcp_syncookie < 0)
+ 		goto out;
+ 
+ 	if (enable_fastopen())
 -- 
-Linaro LKFT
-https://lkft.linaro.org
-------=_Part_737_1286540830.1581390023311--
+2.24.1
+
