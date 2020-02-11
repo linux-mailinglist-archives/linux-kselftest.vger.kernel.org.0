@@ -2,91 +2,129 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D366415886B
-	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Feb 2020 03:50:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B917D158877
+	for <lists+linux-kselftest@lfdr.de>; Tue, 11 Feb 2020 04:00:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727618AbgBKCuT (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 10 Feb 2020 21:50:19 -0500
-Received: from bilbo.ozlabs.org ([203.11.71.1]:59665 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727523AbgBKCuT (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 10 Feb 2020 21:50:19 -0500
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 48GnLx2h15z9sP7;
-        Tue, 11 Feb 2020 13:50:17 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ellerman.id.au;
-        s=201909; t=1581389417;
-        bh=BUV6k8b4/tEi4PgXiYi4XOSMaNTQi4awrwVuF6nbQKg=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=KiyG58KOvujvM95ACCeJJIpDaFgjROxtgymhz4D8vCzlr9CSrjHECEcd02zTz6mh0
-         qm4p9sZFS4aXmJt3o6Ar/UO2zEqYlPwTh2VT9kKwEBGP+KJ/9GaYEJCutIQ/00Ebit
-         qCyeh/TXMW0k4Zv11ydg02PcEc+YpCeSP1I8TvN1aDVjUMFik2gPqsTzzlQgRrtx3X
-         03QEqasOQLwgW7Lg1l+AbQt+vGy68t/+u6sUADbX6rOGefrEJS/eBfZcj66ymDMB0i
-         L38dBZcY4WJm8NlqI7096qn+FOeN7p8oNQN3EuiKiYKLSeeJD7K+26UBwwA74XmeHT
-         ov63hnh/OiWZQ==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     Sandipan Das <sandipan@linux.ibm.com>, shuah@kernel.org,
-        skhan@linuxfoundation.org, linux-kselftest@vger.kernel.org
-Cc:     linux-mm@kvack.org, linuxppc-dev@lists.ozlabs.org,
-        mhiramat@kernel.org, aneesh.kumar@linux.ibm.com,
-        kamalesh@linux.vnet.ibm.com
-Subject: Re: [PATCH 2/2] selftests: vm: Fix 64-bit test builds for powerpc64le
-In-Reply-To: <e9178d28dddfc64a23ffd51e2fecd06ad16ac92a.1580367152.git.sandipan@linux.ibm.com>
-References: <cover.1580367152.git.sandipan@linux.ibm.com> <e9178d28dddfc64a23ffd51e2fecd06ad16ac92a.1580367152.git.sandipan@linux.ibm.com>
-Date:   Tue, 11 Feb 2020 13:50:16 +1100
-Message-ID: <87imkdzvkn.fsf@mpe.ellerman.id.au>
+        id S1727669AbgBKDA2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 10 Feb 2020 22:00:28 -0500
+Received: from mail-wr1-f68.google.com ([209.85.221.68]:37665 "EHLO
+        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727546AbgBKDA1 (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Mon, 10 Feb 2020 22:00:27 -0500
+Received: by mail-wr1-f68.google.com with SMTP id w15so10346797wru.4
+        for <linux-kselftest@vger.kernel.org>; Mon, 10 Feb 2020 19:00:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:date:to:message-id:subject:mime-version;
+        bh=m245zQYFHxH8WWp9ExPuUqaJ1SaKW+vA3x7eNxHC6ZE=;
+        b=RXJ6f/jDHYhGYAPMgd3dXTOFZU7DNu+kTHEAouKxgFbQ84IYdgdwUCK5MMtxlwjMBb
+         gDGbqM2yu9sBCSlVR/bHB1DPBM1eL2fyDMy0E1Zy5k68VtKunNxAHl1UsMexZ2MrYfmE
+         4MQwIpj++eMsEIPVSoYTlMZFdUJGqq1dnFLEdaPcsfGnWongb1UndcjQ6Ki9HTLym6o5
+         9tZNJjpg73jMOCsfMRqrUFktr34qtwQpXTmdwTWLhpwecQYKcQREI6BlDB1rggZBXRU/
+         te5D12MZnRAHFHZd1Fv1jXKHAJb470+q2+WL1ix3i8W7WXEhxx29/85eQ36YXtOAdsSk
+         B9Dw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:date:to:message-id:subject:mime-version;
+        bh=m245zQYFHxH8WWp9ExPuUqaJ1SaKW+vA3x7eNxHC6ZE=;
+        b=tM4ooDszwL+0ph0myln01nf2XeD8nyIfCkdZ4UokH71fkphoa0Lco53hCIUvWDQmhw
+         9EajIIoTLsvL61kzj+rVrDlA23XZeInfDABzhClO4bMTE3TfTZdRvXEHWkWx772Y8u/1
+         9NAHebT3Rb4ylLlpV/FcwwPgGsCgF74h+H48Tw+ko2/8OPGMu3dCfy7Cb91yvZe/eOxi
+         z4utBFKXabpCJ3wZoqfuqX1NOhCHzXpaJS1KJA82tp/RHHwykqyuMuUymldOWRGFf8aB
+         gsD9wcWi60MYxktq7YYNWlU79TVhAu/p7tPugstc4SeNIq8o5ilqydsfKKJOZkn98BvE
+         QWXw==
+X-Gm-Message-State: APjAAAVxflDlq7QiHnh92i0KpFxJfX6ljkDRz0rbQssPyjXHGKPErZyS
+        SDkCrza+hRwapQQJhQVhFd1IIA==
+X-Google-Smtp-Source: APXvYqw5d0Xv9ilg4y+Vf1H2PDY/LcEHGZq4svyf7HO4i1R7fbtdQ1sF4rWCp9gxAc9rCXJ4HPVi/Q==
+X-Received: by 2002:a5d:62c8:: with SMTP id o8mr5354113wrv.316.1581390024799;
+        Mon, 10 Feb 2020 19:00:24 -0800 (PST)
+Received: from 172.17.0.4 (ci.linaro.org. [88.99.136.175])
+        by smtp.gmail.com with ESMTPSA id y17sm3148157wrs.82.2020.02.10.19.00.23
+        (version=TLS1 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
+        Mon, 10 Feb 2020 19:00:24 -0800 (PST)
+From:   ci_notify@linaro.org
+X-Google-Original-From: linaro-infrastructure-errors@lists.linaro.org
+Date:   Tue, 11 Feb 2020 03:00:23 +0000 (UTC)
+To:     lkft-triage@lists.linaro.org, dan.rue@linaro.org,
+        anders.roxell@linaro.org, naresh.kamboju@linaro.org,
+        shuah@kernel.org, linux-kselftest@vger.kernel.org
+Message-ID: <311133584.738.1581390024188.JavaMail.javamailuser@localhost>
+Subject: next-20200211 kselftest results
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: multipart/mixed; 
+        boundary="----=_Part_737_1286540830.1581390023311"
+X-Jenkins-Job: LKFT Notify kselftest on next
+X-Jenkins-Result: SUCCESS
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Sandipan Das <sandipan@linux.ibm.com> writes:
-> Some tests are built only for 64-bit systems. This makes
-> sure that these tests are built for both big and little
-> endian variants of powerpc64.
->
-> Fixes: 7549b3364201 ("selftests: vm: Build/Run 64bit tests only on 64bit arch")
-> Reviewed-by: Kamalesh Babulal <kamalesh@linux.vnet.ibm.com>
-> Signed-off-by: Sandipan Das <sandipan@linux.ibm.com>
-> ---
->  tools/testing/selftests/vm/Makefile    | 2 +-
->  tools/testing/selftests/vm/run_vmtests | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+------=_Part_737_1286540830.1581390023311
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Tested-by: Michael Ellerman <mpe@ellerman.id.au>
+Summary
+------------------------------------------------------------------------
+kernel: 5.6.0-rc1
+git repo: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+git branch: master
+git commit: ac431e2d7b1be81bfe58163b9f81ba79bc987dc3
+git describe: next-20200211
+Test details: https://qa-reports.linaro.org/lkft/linux-next-oe/build/next-20200211
 
-cheers
+Regressions (compared to build next-20200117)
+------------------------------------------------------------------------
+No regressions                                                                                                          
+                                                                                                                       
+Fixes (compared to build next-20200117)                                                                   
+------------------------------------------------------------------------                                               
+No fixes
 
-> diff --git a/tools/testing/selftests/vm/Makefile b/tools/testing/selftests/vm/Makefile
-> index 3f2e2f0ccbc9..8074340c6b3a 100644
-> --- a/tools/testing/selftests/vm/Makefile
-> +++ b/tools/testing/selftests/vm/Makefile
-> @@ -19,7 +19,7 @@ TEST_GEN_FILES += thuge-gen
->  TEST_GEN_FILES += transhuge-stress
->  TEST_GEN_FILES += userfaultfd
->  
-> -ifneq (,$(filter $(MACHINE),arm64 ia64 mips64 parisc64 ppc64 riscv64 s390x sh64 sparc64 x86_64))
-> +ifneq (,$(filter $(MACHINE),arm64 ia64 mips64 parisc64 ppc64 ppc64le riscv64 s390x sh64 sparc64 x86_64))
->  TEST_GEN_FILES += va_128TBswitch
->  TEST_GEN_FILES += virtual_address_range
->  endif
-> diff --git a/tools/testing/selftests/vm/run_vmtests b/tools/testing/selftests/vm/run_vmtests
-> index a692ea828317..db8e0d1c7b39 100755
-> --- a/tools/testing/selftests/vm/run_vmtests
-> +++ b/tools/testing/selftests/vm/run_vmtests
-> @@ -59,7 +59,7 @@ else
->  fi
->  
->  #filter 64bit architectures
-> -ARCH64STR="arm64 ia64 mips64 parisc64 ppc64 riscv64 s390x sh64 sparc64 x86_64"
-> +ARCH64STR="arm64 ia64 mips64 parisc64 ppc64 ppc64le riscv64 s390x sh64 sparc64 x86_64"
->  if [ -z $ARCH ]; then
->    ARCH=`uname -m 2>/dev/null | sed -e 's/aarch64.*/arm64/'`
->  fi
-> -- 
-> 2.17.1
+In total:
+------------------------------------------------------------------------
+Ran 0 total tests in the following environments and test suites.
+pass 0
+fail 0
+xfail 0
+skip 0
+
+Environments
+--------------
+- dragonboard-410c - arm64
+- hi6220-hikey - arm64
+- i386
+- juno-r2 - arm64
+- x15 - arm
+- x86_64
+
+Test Suites
+-----------
+
+
+Failures
+------------------------------------------------------------------------
+
+juno-r2:
+
+x15:
+
+x86:
+
+i386:
+
+hi6220-hikey:
+
+dragonboard-410c:
+
+
+Skips
+------------------------------------------------------------------------
+No skips
+
+
+-- 
+Linaro LKFT
+https://lkft.linaro.org
+------=_Part_737_1286540830.1581390023311--
