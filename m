@@ -2,72 +2,150 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D5FBD159E0C
-	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Feb 2020 01:35:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 37836159EFF
+	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Feb 2020 03:10:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728057AbgBLAfs (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 11 Feb 2020 19:35:48 -0500
-Received: from mail.kernel.org ([198.145.29.99]:38830 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728041AbgBLAfs (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 11 Feb 2020 19:35:48 -0500
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net [24.9.64.241])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 8257C2082F;
-        Wed, 12 Feb 2020 00:35:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1581467747;
-        bh=O3iLdjra2rXeebyKBMhajToC7LRorp8lLz2ui6hj++0=;
-        h=To:Cc:From:Subject:Date:From;
-        b=lwD3fjeqhBDoQuf1aHwDSaPQCGgScSjoSinHwrFf26haQ94IC8L1AK1wq2W6lo64B
-         rTj4K2o4bbpZ+z5HEWXQYE66a4LQNHMqsufLuZMkGwEchZyLk3UZOTAPopVeql6jsa
-         pqmo6xFfLYIazxktHzIOzP4vFKsQo3hwHukTG7zI=
-To:     linux-kselftest@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Dmitry Safonov <dima@arista.com>,
-        Aleksa Sarai <cyphar@cyphar.com>
-Cc:     shuah <shuah@kernel.org>
-From:   shuah <shuah@kernel.org>
-Subject: Linux 5.6-rc1 kselftest build failures
-Message-ID: <ff16537e-febc-1b98-0cf8-1aa23e0c29b0@kernel.org>
-Date:   Tue, 11 Feb 2020 17:35:46 -0700
+        id S1727556AbgBLCKy (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 11 Feb 2020 21:10:54 -0500
+Received: from hqnvemgate24.nvidia.com ([216.228.121.143]:10912 "EHLO
+        hqnvemgate24.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727535AbgBLCKy (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 11 Feb 2020 21:10:54 -0500
+Received: from hqpgpgate102.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate24.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5e435e6b0000>; Tue, 11 Feb 2020 18:09:47 -0800
+Received: from hqmail.nvidia.com ([172.20.161.6])
+  by hqpgpgate102.nvidia.com (PGP Universal service);
+  Tue, 11 Feb 2020 18:10:51 -0800
+X-PGP-Universal: processed;
+        by hqpgpgate102.nvidia.com on Tue, 11 Feb 2020 18:10:51 -0800
+Received: from [10.110.48.28] (10.124.1.5) by HQMAIL107.nvidia.com
+ (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Wed, 12 Feb
+ 2020 02:10:51 +0000
+Subject: Re: [PATCH v6 12/12] mm: dump_page(): additional diagnostics for huge
+ pinned pages
+To:     "Kirill A. Shutemov" <kirill@shutemov.name>
+CC:     Andrew Morton <akpm@linux-foundation.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Christoph Hellwig <hch@infradead.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Dave Chinner <david@fromorbit.com>,
+        Ira Weiny <ira.weiny@intel.com>, Jan Kara <jack@suse.cz>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Jonathan Corbet <corbet@lwn.net>,
+        =?UTF-8?B?SsOpcsO0bWUgR2xpc3Nl?= <jglisse@redhat.com>,
+        Michal Hocko <mhocko@suse.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Matthew Wilcox <willy@infradead.org>,
+        <linux-doc@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>,
+        <linux-kselftest@vger.kernel.org>, <linux-rdma@vger.kernel.org>,
+        <linux-mm@kvack.org>, LKML <linux-kernel@vger.kernel.org>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
+References: <20200211001536.1027652-1-jhubbard@nvidia.com>
+ <20200211001536.1027652-13-jhubbard@nvidia.com>
+ <20200211132159.pii2x5pssifemgaz@box>
+From:   John Hubbard <jhubbard@nvidia.com>
+X-Nvconfidentiality: public
+Message-ID: <909f4ad5-128f-b4bd-e4cb-787885167a97@nvidia.com>
+Date:   Tue, 11 Feb 2020 18:10:50 -0800
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.1
+ Thunderbird/68.4.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
+In-Reply-To: <20200211132159.pii2x5pssifemgaz@box>
+X-Originating-IP: [10.124.1.5]
+X-ClientProxiedBy: HQMAIL105.nvidia.com (172.20.187.12) To
+ HQMAIL107.nvidia.com (172.20.187.13)
+Content-Type: text/plain; charset="utf-8"
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1581473388; bh=zCZhatfwPo+VLNp+cEurTVm8c4ASNzi1xPIVnn9hsG4=;
+        h=X-PGP-Universal:Subject:To:CC:References:From:X-Nvconfidentiality:
+         Message-ID:Date:User-Agent:MIME-Version:In-Reply-To:
+         X-Originating-IP:X-ClientProxiedBy:Content-Type:Content-Language:
+         Content-Transfer-Encoding;
+        b=KPfg4MObEIiKHoeHFaJJrWQ8njdIGT3atUWt2b4jjTApxYejTmazQdE0YwMrBuFKU
+         3i/G5o9jjd6ioP0Qi2W/rUjSr00msSRFXATO/5rNEQ7DmoOJMKI37ZOJVs8SZHCmVU
+         blSLD+y8cV0ai0JTOpf3gRqP3613aMkN7Wiqb69HyX0DDCJPPKFj/TYL7jfNr87yWY
+         q37kkzihJidOZqNjw1XmMcIbjHjswPB2bRGry8NZkq9bXL4NReTx1MJk/Z1MLjIDdG
+         YKIMBb2eV93ApkPqaCI7R9IFDMlf3cKAs3qmM6FxY0PkH5G8/SVcHRa8M4LKHCtWB+
+         EblOFHEBRSltw==
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The following tests fail to build on x86_64
+On 2/11/20 5:21 AM, Kirill A. Shutemov wrote:
+...
+>> diff --git a/mm/debug.c b/mm/debug.c
+>> index f5ffb0784559..2189357f0987 100644
+>> --- a/mm/debug.c
+>> +++ b/mm/debug.c
+>> @@ -85,11 +85,22 @@ void __dump_page(struct page *page, const char *reason)
+>>  	mapcount = PageSlab(head) ? 0 : page_mapcount(page);
+>>  
+>>  	if (compound)
+>> -		pr_warn("page:%px refcount:%d mapcount:%d mapping:%p "
+>> -			"index:%#lx head:%px order:%u compound_mapcount:%d\n",
+>> -			page, page_ref_count(head), mapcount,
+>> -			mapping, page_to_pgoff(page), head,
+>> -			compound_order(head), compound_mapcount(page));
+>> +		if (hpage_pincount_available(page)) {
+>> +			pr_warn("page:%px refcount:%d mapcount:%d mapping:%p "
+>> +				"index:%#lx head:%px order:%u "
+>> +				"compound_mapcount:%d compound_pincount:%d\n",
+>> +				page, page_ref_count(head), mapcount,
+>> +				mapping, page_to_pgoff(page), head,
+>> +				compound_order(head), compound_mapcount(page),
+>> +				compound_pincount(page));
+>> +		} else {
+>> +			pr_warn("page:%px refcount:%d mapcount:%d mapping:%p "
+>> +				"index:%#lx head:%px order:%u "
+>> +				"compound_mapcount:%d\n",
+>> +				page, page_ref_count(head), mapcount,
+>> +				mapping, page_to_pgoff(page), head,
+>> +				compound_order(head), compound_mapcount(page));
+>> +		}
+> 
+> Have you considered using pr_cont() here. I guess it would be easier to
+> read.
 
-openat2:
+Yes, and it does have the advantage of removing some of the code duplication above. 
+On the other hand, though, it leaves the end result (the long lines being printed) 
+the same, and introduces a window in which the output can get garbled by another 
+thread that is printk'-ing. And actually, what I'd really like is to shorten the
+printed output lines, as I mentioned in [1].
 
-tools/testing/selftests/openat2'
-gcc -Wall -O2 -g -fsanitize=address -fsanitize=undefined 
-openat2_test.c helpers.c  -o tools/testing/selftests/openat2/openat2_test
-In file included from /usr/include/fcntl.h:301,
-                  from helpers.c:9:
-In function ‘openat’,
-     inlined from ‘touchat’ at helpers.c:49:11:
-/usr/include/x86_64-linux-gnu/bits/fcntl2.h:126:4: error: call to 
-‘__openat_missing_mode’ declared with attribute error: openat with 
-O_CREAT or O_TMPFILE in third argument needs 4 arguments
-   126 |    __openat_missing_mode ();
-       |    ^~~~~~~~~~~~~~~~~~~~~~~~
+So overall, given that this series has been fairly difficult to get finalized, 
+and it's now in Andrew's tree at last, I'd *really* like to leave it as-is right 
+now, and build on top of it. So I will submit a follow-on patch to formally propose
+shortening the printed lines, and that can live or die independently of this series,
+which is hopefully over now.
 
-timerns:
+> 
+> You can use my Ack anyway.
 
-tools/testing/selftests/timens'
-gcc -Wall -Werror -pthread  -lrt -ldl  timens.c  -o 
-tools/testing/selftests/timens/timens
-/usr/bin/ld: /tmp/ccGy5CST.o: in function `check_config_posix_timers':
-timens.c:(.text+0x65a): undefined reference to `timer_create'
-collect2: error: ld returned 1 exit status
+
+Thanks, and I appreciate all of your reviews and bug spotting and ideas for improvements 
+on this series, it's been really helpful.
+
+
+> 
+> 
+>>  	else
+>>  		pr_warn("page:%px refcount:%d mapcount:%d mapping:%p index:%#lx\n",
+>>  			page, page_ref_count(page), mapcount,
+>> -- 
+>> 2.25.0
+>>
+> 
+
+
+[1] https://lore.kernel.org/r/96e1f693-0e7b-2817-f13d-1946ff7654a1@nvidia.com
 
 thanks,
--- Shuah
+-- 
+John Hubbard
+NVIDIA
