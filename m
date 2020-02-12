@@ -2,112 +2,232 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BB6115A3F6
-	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Feb 2020 09:51:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FAC615A476
+	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Feb 2020 10:18:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728735AbgBLIvQ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 12 Feb 2020 03:51:16 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:33334 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728678AbgBLIvQ (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 12 Feb 2020 03:51:16 -0500
-Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 01C8ov14122479
-        for <linux-kselftest@vger.kernel.org>; Wed, 12 Feb 2020 03:51:15 -0500
-Received: from e06smtp05.uk.ibm.com (e06smtp05.uk.ibm.com [195.75.94.101])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 2y1tn4rb1c-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-kselftest@vger.kernel.org>; Wed, 12 Feb 2020 03:51:06 -0500
-Received: from localhost
-        by e06smtp05.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-kselftest@vger.kernel.org> from <sandipan@linux.ibm.com>;
-        Wed, 12 Feb 2020 08:50:49 -0000
-Received: from b06avi18626390.portsmouth.uk.ibm.com (9.149.26.192)
-        by e06smtp05.uk.ibm.com (192.168.101.135) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Wed, 12 Feb 2020 08:50:45 -0000
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 01C8noiP50463198
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 12 Feb 2020 08:49:50 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 380DFAE057;
-        Wed, 12 Feb 2020 08:50:44 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 60A42AE045;
-        Wed, 12 Feb 2020 08:50:42 +0000 (GMT)
-Received: from [9.124.35.38] (unknown [9.124.35.38])
-        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Wed, 12 Feb 2020 08:50:42 +0000 (GMT)
-Subject: Re: [PATCH v12 8/9] hugetlb_cgroup: Add hugetlb_cgroup reservation
- tests
-To:     Mina Almasry <almasrymina@google.com>, mike.kravetz@oracle.com
-Cc:     shuah@kernel.org, rientjes@google.com, shakeelb@google.com,
-        gthelen@google.com, akpm@linux-foundation.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org, cgroups@vger.kernel.org
-References: <20200211213128.73302-1-almasrymina@google.com>
- <20200211213128.73302-8-almasrymina@google.com>
-From:   Sandipan Das <sandipan@linux.ibm.com>
-Date:   Wed, 12 Feb 2020 14:20:41 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.1
+        id S1728808AbgBLJRt (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 12 Feb 2020 04:17:49 -0500
+Received: from mx2.suse.de ([195.135.220.15]:47802 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728150AbgBLJRs (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 12 Feb 2020 04:17:48 -0500
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx2.suse.de (Postfix) with ESMTP id 5A7EDAC16;
+        Wed, 12 Feb 2020 09:17:44 +0000 (UTC)
+Received: by quack2.suse.cz (Postfix, from userid 1000)
+        id 132C61E0E01; Wed, 12 Feb 2020 10:17:43 +0100 (CET)
+Date:   Wed, 12 Feb 2020 10:17:43 +0100
+From:   Jan Kara <jack@suse.cz>
+To:     John Hubbard <jhubbard@nvidia.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Christoph Hellwig <hch@infradead.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Dave Chinner <david@fromorbit.com>,
+        Ira Weiny <ira.weiny@intel.com>, Jan Kara <jack@suse.cz>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Jonathan Corbet <corbet@lwn.net>,
+        =?iso-8859-1?B?Suly9G1l?= Glisse <jglisse@redhat.com>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        Michal Hocko <mhocko@suse.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Matthew Wilcox <willy@infradead.org>,
+        linux-doc@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-rdma@vger.kernel.org,
+        linux-mm@kvack.org, LKML <linux-kernel@vger.kernel.org>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
+Subject: Re: [PATCH v6 08/12] mm/gup: /proc/vmstat: pin_user_pages (FOLL_PIN)
+ reporting
+Message-ID: <20200212091743.GC25573@quack2.suse.cz>
+References: <20200211001536.1027652-1-jhubbard@nvidia.com>
+ <20200211001536.1027652-9-jhubbard@nvidia.com>
 MIME-Version: 1.0
-In-Reply-To: <20200211213128.73302-8-almasrymina@google.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-x-cbid: 20021208-0020-0000-0000-000003A965B0
-X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 20021208-0021-0000-0000-000022014956
-Message-Id: <37a49c35-567f-1663-33cd-3dac150020a0@linux.ibm.com>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.572
- definitions=2020-02-12_03:2020-02-11,2020-02-12 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 adultscore=0
- malwarescore=0 mlxscore=0 impostorscore=0 phishscore=0 priorityscore=1501
- suspectscore=0 lowpriorityscore=0 mlxlogscore=999 spamscore=0
- clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2001150001 definitions=main-2002120071
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200211001536.1027652-9-jhubbard@nvidia.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+On Mon 10-02-20 16:15:32, John Hubbard wrote:
+> Now that pages are "DMA-pinned" via pin_user_page*(), and unpinned via
+> unpin_user_pages*(), we need some visibility into whether all of this is
+> working correctly.
+> 
+> Add two new fields to /proc/vmstat:
+> 
+>     nr_foll_pin_acquired
+>     nr_foll_pin_released
+> 
+> These are documented in Documentation/core-api/pin_user_pages.rst.
+> They represent the number of pages (since boot time) that have been
+> pinned ("nr_foll_pin_acquired") and unpinned ("nr_foll_pin_released"),
+> via pin_user_pages*() and unpin_user_pages*().
+> 
+> In the absence of long-running DMA or RDMA operations that hold pages
+> pinned, the above two fields will normally be equal to each other.
+> 
+> Also: update Documentation/core-api/pin_user_pages.rst, to remove an
+> earlier (now confirmed untrue) claim about a performance problem with
+> /proc/vmstat.
+> 
+> Also: updated Documentation/core-api/pin_user_pages.rst to rename the
+> new /proc/vmstat entries, to the names listed here.
+> 
+> Acked-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+> Signed-off-by: John Hubbard <jhubbard@nvidia.com>
 
+The patch looks good to me now. You can add:
 
-On 12/02/20 3:01 am, Mina Almasry wrote:
-> The tests use both shared and private mapped hugetlb memory, and
-> monitors the hugetlb usage counter as well as the hugetlb reservation
-> counter. They test different configurations such as hugetlb memory usage
-> via hugetlbfs, or MAP_HUGETLB, or shmget/shmat, and with and without
-> MAP_POPULATE.
-> 
-> Also add test for hugetlb reservation reparenting, since this is
-> a subtle issue.
-> 
-> Signed-off-by: Mina Almasry <almasrymina@google.com>
-> Cc: sandipan@linux.ibm.com
-> 
-> 
+Reviewed-by: Jan Kara <jack@suse.cz>
+
+								Honza
+
 > ---
+>  Documentation/core-api/pin_user_pages.rst | 33 +++++++++++++++++++----
+>  include/linux/mmzone.h                    |  2 ++
+>  mm/gup.c                                  | 13 +++++++++
+>  mm/vmstat.c                               |  2 ++
+>  4 files changed, 45 insertions(+), 5 deletions(-)
 > 
-> Changes in v12:
-> - Fixed tests on machines with non-2MB default hugepage size.
-> Changes in v11:
-> - Modify test to not assume 2MB hugepage size.
-> - Updated resv.* to rsvd.*
-> Changes in v10:
-> - Updated tests to resv.* name changes.
-> Changes in v9:
-> - Added tests for hugetlb reparenting.
-> - Make tests explicitly support cgroup v1 and v2 via script argument.
-> Changes in v6:
-> - Updates tests for cgroups-v2 and NORESERVE allocations.
+> diff --git a/Documentation/core-api/pin_user_pages.rst b/Documentation/core-api/pin_user_pages.rst
+> index 7e5dd8b1b3f2..5c8a5f89756b 100644
+> --- a/Documentation/core-api/pin_user_pages.rst
+> +++ b/Documentation/core-api/pin_user_pages.rst
+> @@ -208,12 +208,35 @@ has the following new calls to exercise the new pin*() wrapper functions:
+>  You can monitor how many total dma-pinned pages have been acquired and released
+>  since the system was booted, via two new /proc/vmstat entries: ::
+>  
+> -    /proc/vmstat/nr_foll_pin_requested
+> -    /proc/vmstat/nr_foll_pin_requested
+> +    /proc/vmstat/nr_foll_pin_acquired
+> +    /proc/vmstat/nr_foll_pin_released
+>  
+> -Those are both going to show zero, unless CONFIG_DEBUG_VM is set. This is
+> -because there is a noticeable performance drop in unpin_user_page(), when they
+> -are activated.
+> +Under normal conditions, these two values will be equal unless there are any
+> +long-term [R]DMA pins in place, or during pin/unpin transitions.
+> +
+> +* nr_foll_pin_acquired: This is the number of logical pins that have been
+> +  acquired since the system was powered on. For huge pages, the head page is
+> +  pinned once for each page (head page and each tail page) within the huge page.
+> +  This follows the same sort of behavior that get_user_pages() uses for huge
+> +  pages: the head page is refcounted once for each tail or head page in the huge
+> +  page, when get_user_pages() is applied to a huge page.
+> +
+> +* nr_foll_pin_released: The number of logical pins that have been released since
+> +  the system was powered on. Note that pages are released (unpinned) on a
+> +  PAGE_SIZE granularity, even if the original pin was applied to a huge page.
+> +  Becaused of the pin count behavior described above in "nr_foll_pin_acquired",
+> +  the accounting balances out, so that after doing this::
+> +
+> +    pin_user_pages(huge_page);
+> +    for (each page in huge_page)
+> +        unpin_user_page(page);
+> +
+> +...the following is expected::
+> +
+> +    nr_foll_pin_released == nr_foll_pin_acquired
+> +
+> +(...unless it was already out of balance due to a long-term RDMA pin being in
+> +place.)
+>  
+>  References
+>  ==========
+> diff --git a/include/linux/mmzone.h b/include/linux/mmzone.h
+> index 462f6873905a..4bca42eeb439 100644
+> --- a/include/linux/mmzone.h
+> +++ b/include/linux/mmzone.h
+> @@ -243,6 +243,8 @@ enum node_stat_item {
+>  	NR_DIRTIED,		/* page dirtyings since bootup */
+>  	NR_WRITTEN,		/* page writings since bootup */
+>  	NR_KERNEL_MISC_RECLAIMABLE,	/* reclaimable non-slab kernel pages */
+> +	NR_FOLL_PIN_ACQUIRED,	/* via: pin_user_page(), gup flag: FOLL_PIN */
+> +	NR_FOLL_PIN_RELEASED,	/* pages returned via unpin_user_page() */
+>  	NR_VM_NODE_STAT_ITEMS
+>  };
+>  
+> diff --git a/mm/gup.c b/mm/gup.c
+> index 4d0d94405639..441f7a48f370 100644
+> --- a/mm/gup.c
+> +++ b/mm/gup.c
+> @@ -86,6 +86,8 @@ static __maybe_unused struct page *try_grab_compound_head(struct page *page,
+>  	if (flags & FOLL_GET)
+>  		return try_get_compound_head(page, refs);
+>  	else if (flags & FOLL_PIN) {
+> +		int orig_refs = refs;
+> +
+>  		/*
+>  		 * When pinning a compound page of order > 1 (which is what
+>  		 * hpage_pincount_available() checks for), use an exact count to
+> @@ -104,6 +106,9 @@ static __maybe_unused struct page *try_grab_compound_head(struct page *page,
+>  		if (hpage_pincount_available(page))
+>  			hpage_pincount_add(page, refs);
+>  
+> +		mod_node_page_state(page_pgdat(page), NR_FOLL_PIN_ACQUIRED,
+> +				    orig_refs);
+> +
+>  		return page;
+>  	}
+>  
+> @@ -158,6 +163,8 @@ bool __must_check try_grab_page(struct page *page, unsigned int flags)
+>  		 * once, so that the page really is pinned.
+>  		 */
+>  		page_ref_add(page, refs);
+> +
+> +		mod_node_page_state(page_pgdat(page), NR_FOLL_PIN_ACQUIRED, 1);
+>  	}
+>  
+>  	return true;
+> @@ -178,6 +185,7 @@ static bool __unpin_devmap_managed_user_page(struct page *page)
+>  
+>  	count = page_ref_sub_return(page, refs);
+>  
+> +	mod_node_page_state(page_pgdat(page), NR_FOLL_PIN_RELEASED, 1);
+>  	/*
+>  	 * devmap page refcounts are 1-based, rather than 0-based: if
+>  	 * refcount is 1, then the page is free and the refcount is
+> @@ -228,6 +236,8 @@ void unpin_user_page(struct page *page)
+>  
+>  	if (page_ref_sub_and_test(page, refs))
+>  		__put_page(page);
+> +
+> +	mod_node_page_state(page_pgdat(page), NR_FOLL_PIN_RELEASED, 1);
+>  }
+>  EXPORT_SYMBOL(unpin_user_page);
+>  
+> @@ -2259,6 +2269,9 @@ static int record_subpages(struct page *page, unsigned long addr,
+>  static void put_compound_head(struct page *page, int refs, unsigned int flags)
+>  {
+>  	if (flags & FOLL_PIN) {
+> +		mod_node_page_state(page_pgdat(page), NR_FOLL_PIN_RELEASED,
+> +				    refs);
+> +
+>  		if (hpage_pincount_available(page))
+>  			hpage_pincount_sub(page, refs);
+>  		else
+> diff --git a/mm/vmstat.c b/mm/vmstat.c
+> index 78d53378db99..c9c0d71f917f 100644
+> --- a/mm/vmstat.c
+> +++ b/mm/vmstat.c
+> @@ -1168,6 +1168,8 @@ const char * const vmstat_text[] = {
+>  	"nr_dirtied",
+>  	"nr_written",
+>  	"nr_kernel_misc_reclaimable",
+> +	"nr_foll_pin_acquired",
+> +	"nr_foll_pin_released",
+>  
+>  	/* enum writeback_stat_item counters */
+>  	"nr_dirty_threshold",
+> -- 
+> 2.25.0
 > 
-
-For powerpc64,
-
-Tested-by: Sandipan Das <sandipan@linux.ibm.com>
-
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
