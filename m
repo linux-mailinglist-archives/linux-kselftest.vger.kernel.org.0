@@ -2,287 +2,285 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CADA15B434
-	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Feb 2020 00:00:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C56E515B4FA
+	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Feb 2020 00:43:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729152AbgBLXAv (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 12 Feb 2020 18:00:51 -0500
-Received: from mail-pf1-f202.google.com ([209.85.210.202]:55822 "EHLO
-        mail-pf1-f202.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728185AbgBLXAv (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 12 Feb 2020 18:00:51 -0500
-Received: by mail-pf1-f202.google.com with SMTP id 63so2352024pfw.22
-        for <linux-kselftest@vger.kernel.org>; Wed, 12 Feb 2020 15:00:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=i8kdIQ19n7cR//fVVzBsd2FkDhAXpoYMbJAVQKSi+g0=;
-        b=CHCmyVHDuAq7mnNJOL5H9cU4OZGtv51FwhU5obEtvlelqnRxf3ZQpIAFsNOs65gfDQ
-         JEWUE7pcM8Y25OrPTLzNGUCb7ZlFjsyxS1Vd32mfSOu3xUDmYFqgv3zcg4UAhoEimS3E
-         eH99Zy947B6Iez74fDgU+EUQRPDaMC/YmwhVpeMpCYiErOtTIr3B3f1qU5cJZxyDLhdf
-         Cx3A9vWdfiGNT3TsER+f4od4yFBljnuSqnUpj/wqglWZQsu9jQlB8Tr0VXfOnyYt+e/y
-         kh5RgO3rytiOzis34hkDwGrH1ugFV1X9c4p3c/fyyA2+0qAjEy1UnHGANQxahJ6AoGpN
-         VmSQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=i8kdIQ19n7cR//fVVzBsd2FkDhAXpoYMbJAVQKSi+g0=;
-        b=MIAsYCNUVPFOXcExAHU5GaDBx+Q9LZmkNOqHpek4sZzg4snU9SsuFghaWe/UdYF56g
-         dHsIlvWKFp4YMrJ0VSnh6408j/dPOGvgXR1cbG02R2fJ8dUOytKomLLB1QkRDhbb3MXr
-         Dx5yFpD80kMufXQ2PaLoZyVVCXTpNby/a+MPHCIe383W4CuoLEXsaGbzfkd64pZwJsVO
-         yvKEg39eS+R62aeqmNZlyC9vVDQBgPa1PiSbO/rRcM5u6zlegzvp8PT1S6b36L5WJurU
-         HwwogvL7h/n+koyjWjeTmU/2bdNK5US/wP/hmRcvB4FmsHQkomMrAn2KVBa6XSK9OIDd
-         M3aA==
-X-Gm-Message-State: APjAAAWU/12Qudr4iorQv6uT7BJF2vO/oyyi4Uq1p7v9KkIQ1mi5uxO3
-        Zz+8LuLgkNFUCKEt4yyfUE6ArztIfyvrmQ==
-X-Google-Smtp-Source: APXvYqyzehGGOphcxkzWdnGWBg95lH9F+buV+dVhs9LSfNjwJTSK+bCgtimmnuiOsaqSyBs+uybypZro/4rhgg==
-X-Received: by 2002:a63:8f49:: with SMTP id r9mr14992531pgn.190.1581548449972;
- Wed, 12 Feb 2020 15:00:49 -0800 (PST)
-Date:   Wed, 12 Feb 2020 15:00:46 -0800
-Message-Id: <20200212230046.84007-1-davidgow@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.25.0.265.gbab2e86ba0-goog
-Subject: [PATCH v2] Documentation: kunit: Make the KUnit documentation less UML-specific
-From:   David Gow <davidgow@google.com>
-To:     brendanhiggins@google.com, skhan@linuxfoundation.org,
-        corbet@lwn.net
-Cc:     kunit-dev@googlegroups.com, linux-doc@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        frowand.list@gmail.com, Tim.Bird@sony.com,
-        David Gow <davidgow@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        id S1729190AbgBLXmf (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 12 Feb 2020 18:42:35 -0500
+Received: from mail-dm6nam11on2134.outbound.protection.outlook.com ([40.107.223.134]:6497
+        "EHLO NAM11-DM6-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1727117AbgBLXme (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 12 Feb 2020 18:42:34 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Gt9EC6bDvLWe+E+q4nwqBjbt7ETIOkPZd7jX96K4/vyqlInm3a4P4rVvpCioxnVz8WCsUdyR1hYO0+k0a+8MGyLm7ik7bZGW4cJW2MWgmZsqArZPFiduzDX7KAeBesCl8AE6QecO2G2Y2qMBk4SAg3o3yC3PUGrtSi/KAaJz/sCUCpu7vBfn6p/vRXqPgXfnZFv3rW0ug1jX+W1vnznyRh/DBjRrXZlKC39h8IuUZeMYmHpyZDkW8F4714aqW6po27W4otlLrCs+550rJx+Isfrd2A0t42V42l97dKy2vqyswuq/UV+fwqPhWP89P4Ns4ucuZ4MsAq0iyCciPWTL0g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=KUKtgwkqe+ZkqF4eL3nz++OCYKmFbira9kWqFMgzffU=;
+ b=OM1ODS2pRWVos+EX19bf98ZTO35dEbSorAV10MQpZlJrvDCFpqeLpa0/S+gWvbcYCIUXSaa/vcc+cLslj4Zaiss2PKmkrkjDO0/GKrJ/gzHbrYVcVxo4tvjgRFJZJ5SG0z2jshSRwiVTe8plIteKfHIdQY5ANdzZnD+oQZsdc4MmQtcvVdy05CruOSUgP/BgJwYcsa8pewV3euAVDirnrUyBTIs/x/kssHMNW7VfnfGmBDKDQfZe2Sy8h+BBwEsS7w7U8GI5mfaMXKbs95xWW3GCF4I4/2mcAcPm57390a+KdbVRQy6dgZ+/yIAv9JVluNvbQ8lCpmEnP9RTqK+79w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=sony.com; dmarc=pass action=none header.from=sony.com;
+ dkim=pass header.d=sony.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Sony.onmicrosoft.com;
+ s=selector2-Sony-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=KUKtgwkqe+ZkqF4eL3nz++OCYKmFbira9kWqFMgzffU=;
+ b=v3QepfF0l/taqZ+KF9zqYI9RKPvyxSoGR1kOe5M0vvcXFu9IHmLcda7dkUuCIAGeL/Aoac4rPMLaQI8i0Fh821UH1GzMdcqzw8ATx3pdRbGLui1wgyh5H4+T5BJ2Ykmm7uHDdXKR4ipMU383cGWgTJpH2bghSIalg7crPJsY/Do=
+Received: from MWHPR13MB0895.namprd13.prod.outlook.com (10.169.172.155) by
+ MWHPR13MB1407.namprd13.prod.outlook.com (10.175.137.135) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2729.13; Wed, 12 Feb 2020 23:42:29 +0000
+Received: from MWHPR13MB0895.namprd13.prod.outlook.com
+ ([fe80::7544:fc2:b078:5dcd]) by MWHPR13MB0895.namprd13.prod.outlook.com
+ ([fe80::7544:fc2:b078:5dcd%3]) with mapi id 15.20.2729.021; Wed, 12 Feb 2020
+ 23:42:29 +0000
+From:   "Bird, Tim" <Tim.Bird@sony.com>
+To:     David Gow <davidgow@google.com>,
+        "brendanhiggins@google.com" <brendanhiggins@google.com>,
+        "skhan@linuxfoundation.org" <skhan@linuxfoundation.org>,
+        "corbet@lwn.net" <corbet@lwn.net>
+CC:     "kunit-dev@googlegroups.com" <kunit-dev@googlegroups.com>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "frowand.list@gmail.com" <frowand.list@gmail.com>
+Subject: RE: [PATCH v2] Documentation: kunit: Make the KUnit documentation
+ less UML-specific
+Thread-Topic: [PATCH v2] Documentation: kunit: Make the KUnit documentation
+ less UML-specific
+Thread-Index: AQHV4fhnSG9catZZ1kCojUJTgPHUGagYN6Vg
+Date:   Wed, 12 Feb 2020 23:42:29 +0000
+Message-ID: <MWHPR13MB089588A995AEC7372BF8C694FD1B0@MWHPR13MB0895.namprd13.prod.outlook.com>
+References: <20200212230046.84007-1-davidgow@google.com>
+In-Reply-To: <20200212230046.84007-1-davidgow@google.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=Tim.Bird@sony.com; 
+x-originating-ip: [160.33.195.20]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: 198ef061-2d80-48df-fda9-08d7b015395d
+x-ms-traffictypediagnostic: MWHPR13MB1407:
+x-microsoft-antispam-prvs: <MWHPR13MB1407A48E83C13B01E12F1F3CFD1B0@MWHPR13MB1407.namprd13.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:8273;
+x-forefront-prvs: 0311124FA9
+x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(4636009)(136003)(346002)(396003)(376002)(366004)(39860400002)(199004)(189003)(966005)(26005)(81156014)(4326008)(81166006)(8676002)(76116006)(478600001)(66476007)(64756008)(8936002)(66556008)(6506007)(66446008)(33656002)(66946007)(55016002)(186003)(30864003)(2906002)(86362001)(9686003)(71200400001)(52536014)(110136005)(316002)(54906003)(7696005)(5660300002);DIR:OUT;SFP:1102;SCL:1;SRVR:MWHPR13MB1407;H:MWHPR13MB0895.namprd13.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+received-spf: None (protection.outlook.com: sony.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: jXeSVTaGC0Boyk7TgFcCMpMN+cc57bAU87KAuLv9RV8UqeY79O0Sd1bWMm88tzWl/R2xj7/IppeX5yoI0+MTlOkkILKpX3PZXqql0Vg6avUKD7RA+WwWb8SnzU6Em9PQ7QaZ6+TyI8jasf14FJ4kfluCt4p8/OHeuqSXBrFs/aABmmaUA+4j2cAd00qWIcX8R0lEG48MQHSzMbuqj+EzYI37tvGlAdtsLtxpJUjugUaNm+m1X3O0WPXsjEzLMTYufLVd7jGMJLJ36CO/8AI4/sQdL93nJOjn0bJF5BtHY0gUvqp7cUzQyD6qlRRpsz9o2OEyUdDfVh4bY2puk7Hi7sWMzbfOGsn9282IkEMEEZTK/4wjxU2Dj9edNb68INpvD5OboTZ4DRu22xXSWTA2slC8576UM1dXowXLQ4WG2KGgvvncbdgVVD4SCNpWnFrHld5zNbhl8yMXHL0AoWulMomBZT8WQKJ95ltk8GfqQa8Of//NMNWFHD1tp7QDdVBjFcJkWqu6+6P0DsADv1ALcg==
+x-ms-exchange-antispam-messagedata: DBENsDJXM1u9LKe84Z+cQ3XGft89RgXxiglDRSmgP6ollaFn3oAXDi5YI79XOwSFhtKegtSH4YUPizYqubhLIbXHpviMcjVUBo2iQIPwXNWcpmVHQ42W690LkotUO4bRxMZsRNgQXYZNJ7OAeGE1+w==
+x-ms-exchange-transport-forked: True
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-OriginatorOrg: sony.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 198ef061-2d80-48df-fda9-08d7b015395d
+X-MS-Exchange-CrossTenant-originalarrivaltime: 12 Feb 2020 23:42:29.8388
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 66c65d8a-9158-4521-a2d8-664963db48e4
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: zJj94q5HbOZwYXftywY0noac9tMzhCpT0BiApFk8Q0BoF50j603+sWl6QIFkojqqNPwkwWfrX9cbk7dAsPdI5A==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR13MB1407
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Remove some of the outmoded "Why KUnit" rationale, and move some
-UML-specific information to the kunit_tool page. Also update the Getting
-Started guide to mention running tests without the kunit_tool wrapper.
-
-Signed-off-by: David Gow <davidgow@google.com>
----
-Thanks for your comments. I've reinstated the "Why KUnit" section with
-some minor changes.
-
-Changes since v1[1]:
-- Reinstated the "Why Kunit?" section, minus the comparison with other
-  testing frameworks (covered in the FAQ), and the description of UML.
-- Moved the description of UML into to kunit_tool page.
-- Tidied up the wording around how KUnit is built and run to make it work
-  without the UML description.
-
-
-[1]:
-https://lore.kernel.org/linux-kselftest/9c703dea-a9e1-94e2-c12d-3cb0a09e75ac@gmail.com/T/
-
-
-
- Documentation/dev-tools/kunit/index.rst      | 33 ++++----
- Documentation/dev-tools/kunit/kunit-tool.rst |  7 ++
- Documentation/dev-tools/kunit/start.rst      | 80 ++++++++++++++++----
- 3 files changed, 92 insertions(+), 28 deletions(-)
-
-diff --git a/Documentation/dev-tools/kunit/index.rst b/Documentation/dev-tools/kunit/index.rst
-index d16a4d2c3a41..ca6cd6dd6ab7 100644
---- a/Documentation/dev-tools/kunit/index.rst
-+++ b/Documentation/dev-tools/kunit/index.rst
-@@ -17,14 +17,23 @@ What is KUnit?
- ==============
- 
- KUnit is a lightweight unit testing and mocking framework for the Linux kernel.
--These tests are able to be run locally on a developer's workstation without a VM
--or special hardware.
- 
- KUnit is heavily inspired by JUnit, Python's unittest.mock, and
- Googletest/Googlemock for C++. KUnit provides facilities for defining unit test
- cases, grouping related test cases into test suites, providing common
- infrastructure for running tests, and much more.
- 
-+KUnit consists of a kernel component, which provides a set of macros for easily
-+writing unit tests. Tests written against KUnit will run on kernel boot if
-+built-in, or when loaded if built as a module. These tests write out results to
-+the kernel log in `TAP <https://testanything.org/>`_ format.
-+
-+To make running these tests (and reading the results) easier, KUnit offsers
-+:doc:`kunit_tool <kunit-tool>`, which builds a `User Mode Linux
-+<http://user-mode-linux.sourceforge.net>`_ kernel, runs it, and parses the test
-+results. This provides a quick way of running KUnit tests during development,
-+without requiring a virtual machine or separate hardware.
-+
- Get started now: :doc:`start`
- 
- Why KUnit?
-@@ -36,20 +45,11 @@ allow all possible code paths to be tested in the code under test; this is only
- possible if the code under test is very small and does not have any external
- dependencies outside of the test's control like hardware.
- 
--Outside of KUnit, there are no testing frameworks currently
--available for the kernel that do not require installing the kernel on a test
--machine or in a VM and all require tests to be written in userspace running on
--the kernel; this is true for Autotest, and kselftest, disqualifying
--any of them from being considered unit testing frameworks.
-+KUnit provides a common framework for unit tests within the kernel.
- 
--KUnit addresses the problem of being able to run tests without needing a virtual
--machine or actual hardware with User Mode Linux. User Mode Linux is a Linux
--architecture, like ARM or x86; however, unlike other architectures it compiles
--to a standalone program that can be run like any other program directly inside
--of a host operating system; to be clear, it does not require any virtualization
--support; it is just a regular program.
--
--Alternatively, kunit and kunit tests can be built as modules and tests will
-+KUnit tests can be run on most kernel configurations, and most tests are
-+architecture independent. All built-in KUnit tests run on kernel startup.
-+Alternatively, KUnit and KUnit tests can be built as modules and tests will
- run when the test module is loaded.
- 
- KUnit is fast. Excluding build time, from invocation to completion KUnit can run
-@@ -75,9 +75,12 @@ someone sends you some code. Why trust that someone ran all their tests
- correctly on every change when you can just run them yourself in less time than
- it takes to read their test log?
- 
-+
- How do I use it?
- ================
- 
- *   :doc:`start` - for new users of KUnit
- *   :doc:`usage` - for a more detailed explanation of KUnit features
- *   :doc:`api/index` - for the list of KUnit APIs used for testing
-+*   :doc:`kunit-tool` - for more information on the kunit_tool helper script
-+*   :doc:`faq` - for answers to some common questions about KUnit
-diff --git a/Documentation/dev-tools/kunit/kunit-tool.rst b/Documentation/dev-tools/kunit/kunit-tool.rst
-index 50d46394e97e..949af2da81e5 100644
---- a/Documentation/dev-tools/kunit/kunit-tool.rst
-+++ b/Documentation/dev-tools/kunit/kunit-tool.rst
-@@ -12,6 +12,13 @@ the Linux kernel as UML (`User Mode Linux
- <http://user-mode-linux.sourceforge.net/>`_), running KUnit tests, parsing
- the test results and displaying them in a user friendly manner.
- 
-+kunit_tool addresses the problem of being able to run tests without needing a
-+virtual machine or actual hardware with User Mode Linux. User Mode Linux is a
-+Linux architecture, like ARM or x86; however, unlike other architectures it
-+compiles the kernel as a standalone Linux executable that can be run like any
-+other program directly inside of a host operating system. To be clear, it does
-+not require any virtualization support: it is just a regular program.
-+
- What is a kunitconfig?
- ======================
- 
-diff --git a/Documentation/dev-tools/kunit/start.rst b/Documentation/dev-tools/kunit/start.rst
-index 4e1d24db6b13..e1c5ce80ce12 100644
---- a/Documentation/dev-tools/kunit/start.rst
-+++ b/Documentation/dev-tools/kunit/start.rst
-@@ -9,11 +9,10 @@ Installing dependencies
- KUnit has the same dependencies as the Linux kernel. As long as you can build
- the kernel, you can run KUnit.
- 
--KUnit Wrapper
--=============
--Included with KUnit is a simple Python wrapper that helps format the output to
--easily use and read KUnit output. It handles building and running the kernel, as
--well as formatting the output.
-+Running tests with the KUnit Wrapper
-+====================================
-+Included with KUnit is a simple Python wrapper which runs tests under User Mode
-+Linux, and formats the test results.
- 
- The wrapper can be run with:
- 
-@@ -21,22 +20,42 @@ The wrapper can be run with:
- 
- 	./tools/testing/kunit/kunit.py run --defconfig
- 
--For more information on this wrapper (also called kunit_tool) checkout the
-+For more information on this wrapper (also called kunit_tool) check out the
- :doc:`kunit-tool` page.
- 
- Creating a .kunitconfig
--=======================
--The Python script is a thin wrapper around Kbuild. As such, it needs to be
--configured with a ``.kunitconfig`` file. This file essentially contains the
--regular Kernel config, with the specific test targets as well.
--
-+-----------------------
-+If you want to run a specific set of tests (rather than those listed in the
-+KUnit defconfig), you can provide Kconfig options in the ``.kunitconfig`` file.
-+This file essentially contains the regular Kernel config, with the specific
-+test targets as well. The ``.kunitconfig`` should also contain any other config
-+options required by the tests.
-+
-+A good starting point for a ``.kunitconfig`` is the KUnit defconfig:
- .. code-block:: bash
- 
- 	cd $PATH_TO_LINUX_REPO
- 	cp arch/um/configs/kunit_defconfig .kunitconfig
- 
--Verifying KUnit Works
-----------------------
-+You can then add any other Kconfig options you wish, e.g.:
-+.. code-block:: none
-+
-+        CONFIG_LIST_KUNIT_TEST=y
-+
-+:doc:`kunit_tool <kunit-tool>` will ensure that all config options set in
-+``.kunitconfig`` are set in the kernel ``.config`` before running the tests.
-+It'll warn you if you haven't included the dependencies of the options you're
-+using.
-+
-+.. note::
-+   Note that removing something from the ``.kunitconfig`` will not trigger a
-+   rebuild of the ``.config`` file: the configuration is only updated if the
-+   ``.kunitconfig`` is not a subset of ``.config``. This means that you can use
-+   other tools (such as make menuconfig) to adjust other config options.
-+
-+
-+Running the tests
-+-----------------
- 
- To make sure that everything is set up correctly, simply invoke the Python
- wrapper from your kernel repo:
-@@ -62,6 +81,41 @@ followed by a list of tests that are run. All of them should be passing.
- 	Because it is building a lot of sources for the first time, the
- 	``Building KUnit kernel`` step may take a while.
- 
-+Running tests without the KUnit Wrapper
-+=======================================
-+
-+If you'd rather not use the KUnit Wrapper (if, for example, you need to
-+integrate with other systems, or use an architecture other than UML), KUnit can
-+be included in any kernel, and the results read out and parsed manually.
-+
-+.. note::
-+   KUnit is not designed for use in a production system, and it's possible that
-+   tests may reduce the stability or security of the system.
-+
-+
-+
-+Configuring the kernel
-+----------------------
-+
-+In order to enable KUnit itself, you simply need to enable the ``CONFIG_KUNIT``
-+Kconfig option (it's under Kernel Hacking/Kernel Testing and Coverage in
-+menuconfig). From there, you can enable any KUnit tests you want: they usually
-+have config options ending in ``_KUNIT_TEST``.
-+
-+KUnit and KUnit tests can be compiled as modules: in this case the tests in a
-+module will be run when the module is loaded.
-+
-+Running the tests
-+-----------------
-+
-+Build and run your kernel as usual. Test output will be written to the kernel
-+log in `TAP <https://testanything.org/>`_ format.
-+
-+.. note::
-+   It's possible that there will be other lines and/or data interspersed in the
-+   TAP output.
-+
-+
- Writing your first test
- =======================
- 
--- 
-2.25.0.265.gbab2e86ba0-goog
-
+PiAtLS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0KPiBGcm9tOiBEYXZpZCBHb3cgPGRhdmlkZ293
+QGdvb2dsZS5jb20+DQo+IA0KPiBSZW1vdmUgc29tZSBvZiB0aGUgb3V0bW9kZWQgIldoeSBLVW5p
+dCIgcmF0aW9uYWxlLCBhbmQgbW92ZSBzb21lDQo+IFVNTC1zcGVjaWZpYyBpbmZvcm1hdGlvbiB0
+byB0aGUga3VuaXRfdG9vbCBwYWdlLiBBbHNvIHVwZGF0ZSB0aGUgR2V0dGluZw0KPiBTdGFydGVk
+IGd1aWRlIHRvIG1lbnRpb24gcnVubmluZyB0ZXN0cyB3aXRob3V0IHRoZSBrdW5pdF90b29sIHdy
+YXBwZXIuDQo+IA0KPiBTaWduZWQtb2ZmLWJ5OiBEYXZpZCBHb3cgPGRhdmlkZ293QGdvb2dsZS5j
+b20+DQo+IC0tLQ0KPiBUaGFua3MgZm9yIHlvdXIgY29tbWVudHMuIEkndmUgcmVpbnN0YXRlZCB0
+aGUgIldoeSBLVW5pdCIgc2VjdGlvbiB3aXRoDQo+IHNvbWUgbWlub3IgY2hhbmdlcy4NCj4gDQo+
+IENoYW5nZXMgc2luY2UgdjFbMV06DQo+IC0gUmVpbnN0YXRlZCB0aGUgIldoeSBLdW5pdD8iIHNl
+Y3Rpb24sIG1pbnVzIHRoZSBjb21wYXJpc29uIHdpdGggb3RoZXINCj4gICB0ZXN0aW5nIGZyYW1l
+d29ya3MgKGNvdmVyZWQgaW4gdGhlIEZBUSksIGFuZCB0aGUgZGVzY3JpcHRpb24gb2YgVU1MLg0K
+PiAtIE1vdmVkIHRoZSBkZXNjcmlwdGlvbiBvZiBVTUwgaW50byB0byBrdW5pdF90b29sIHBhZ2Uu
+DQo+IC0gVGlkaWVkIHVwIHRoZSB3b3JkaW5nIGFyb3VuZCBob3cgS1VuaXQgaXMgYnVpbHQgYW5k
+IHJ1biB0byBtYWtlIGl0IHdvcmsNCj4gICB3aXRob3V0IHRoZSBVTUwgZGVzY3JpcHRpb24uDQo+
+IA0KPiANCj4gWzFdOg0KPiBodHRwczovL2xvcmUua2VybmVsLm9yZy9saW51eC1rc2VsZnRlc3Qv
+OWM3MDNkZWEtYTllMS05NGUyLWMxMmQtM2NiMGEwOWU3NWFjQGdtYWlsLmNvbS9ULw0KPiANCj4g
+DQo+IA0KPiAgRG9jdW1lbnRhdGlvbi9kZXYtdG9vbHMva3VuaXQvaW5kZXgucnN0ICAgICAgfCAz
+MyArKysrLS0tLQ0KPiAgRG9jdW1lbnRhdGlvbi9kZXYtdG9vbHMva3VuaXQva3VuaXQtdG9vbC5y
+c3QgfCAgNyArKw0KPiAgRG9jdW1lbnRhdGlvbi9kZXYtdG9vbHMva3VuaXQvc3RhcnQucnN0ICAg
+ICAgfCA4MCArKysrKysrKysrKysrKysrLS0tLQ0KPiAgMyBmaWxlcyBjaGFuZ2VkLCA5MiBpbnNl
+cnRpb25zKCspLCAyOCBkZWxldGlvbnMoLSkNCj4gDQo+IGRpZmYgLS1naXQgYS9Eb2N1bWVudGF0
+aW9uL2Rldi10b29scy9rdW5pdC9pbmRleC5yc3QgYi9Eb2N1bWVudGF0aW9uL2Rldi10b29scy9r
+dW5pdC9pbmRleC5yc3QNCj4gaW5kZXggZDE2YTRkMmMzYTQxLi5jYTZjZDZkZDZhYjcgMTAwNjQ0
+DQo+IC0tLSBhL0RvY3VtZW50YXRpb24vZGV2LXRvb2xzL2t1bml0L2luZGV4LnJzdA0KPiArKysg
+Yi9Eb2N1bWVudGF0aW9uL2Rldi10b29scy9rdW5pdC9pbmRleC5yc3QNCj4gQEAgLTE3LDE0ICsx
+NywyMyBAQCBXaGF0IGlzIEtVbml0Pw0KPiAgPT09PT09PT09PT09PT0NCj4gDQo+ICBLVW5pdCBp
+cyBhIGxpZ2h0d2VpZ2h0IHVuaXQgdGVzdGluZyBhbmQgbW9ja2luZyBmcmFtZXdvcmsgZm9yIHRo
+ZSBMaW51eCBrZXJuZWwuDQo+IC1UaGVzZSB0ZXN0cyBhcmUgYWJsZSB0byBiZSBydW4gbG9jYWxs
+eSBvbiBhIGRldmVsb3BlcidzIHdvcmtzdGF0aW9uIHdpdGhvdXQgYSBWTQ0KPiAtb3Igc3BlY2lh
+bCBoYXJkd2FyZS4NCj4gDQo+ICBLVW5pdCBpcyBoZWF2aWx5IGluc3BpcmVkIGJ5IEpVbml0LCBQ
+eXRob24ncyB1bml0dGVzdC5tb2NrLCBhbmQNCj4gIEdvb2dsZXRlc3QvR29vZ2xlbW9jayBmb3Ig
+QysrLiBLVW5pdCBwcm92aWRlcyBmYWNpbGl0aWVzIGZvciBkZWZpbmluZyB1bml0IHRlc3QNCj4g
+IGNhc2VzLCBncm91cGluZyByZWxhdGVkIHRlc3QgY2FzZXMgaW50byB0ZXN0IHN1aXRlcywgcHJv
+dmlkaW5nIGNvbW1vbg0KPiAgaW5mcmFzdHJ1Y3R1cmUgZm9yIHJ1bm5pbmcgdGVzdHMsIGFuZCBt
+dWNoIG1vcmUuDQo+IA0KPiArS1VuaXQgY29uc2lzdHMgb2YgYSBrZXJuZWwgY29tcG9uZW50LCB3
+aGljaCBwcm92aWRlcyBhIHNldCBvZiBtYWNyb3MgZm9yIGVhc2lseQ0KPiArd3JpdGluZyB1bml0
+IHRlc3RzLiBUZXN0cyB3cml0dGVuIGFnYWluc3QgS1VuaXQgd2lsbCBydW4gb24ga2VybmVsIGJv
+b3QgaWYNCj4gK2J1aWx0LWluLCBvciB3aGVuIGxvYWRlZCBpZiBidWlsdCBhcyBhIG1vZHVsZS4g
+VGhlc2UgdGVzdHMgd3JpdGUgb3V0IHJlc3VsdHMgdG8NCj4gK3RoZSBrZXJuZWwgbG9nIGluIGBU
+QVAgPGh0dHBzOi8vdGVzdGFueXRoaW5nLm9yZy8+YF8gZm9ybWF0Lg0KPiArDQo+ICtUbyBtYWtl
+IHJ1bm5pbmcgdGhlc2UgdGVzdHMgKGFuZCByZWFkaW5nIHRoZSByZXN1bHRzKSBlYXNpZXIsIEtV
+bml0IG9mZnNlcnMNCj4gKzpkb2M6YGt1bml0X3Rvb2wgPGt1bml0LXRvb2w+YCwgd2hpY2ggYnVp
+bGRzIGEgYFVzZXIgTW9kZSBMaW51eA0KPiArPGh0dHA6Ly91c2VyLW1vZGUtbGludXguc291cmNl
+Zm9yZ2UubmV0PmBfIGtlcm5lbCwgcnVucyBpdCwgYW5kIHBhcnNlcyB0aGUgdGVzdA0KPiArcmVz
+dWx0cy4gVGhpcyBwcm92aWRlcyBhIHF1aWNrIHdheSBvZiBydW5uaW5nIEtVbml0IHRlc3RzIGR1
+cmluZyBkZXZlbG9wbWVudCwNCj4gK3dpdGhvdXQgcmVxdWlyaW5nIGEgdmlydHVhbCBtYWNoaW5l
+IG9yIHNlcGFyYXRlIGhhcmR3YXJlLg0KPiArDQo+ICBHZXQgc3RhcnRlZCBub3c6IDpkb2M6YHN0
+YXJ0YA0KPiANCj4gIFdoeSBLVW5pdD8NCj4gQEAgLTM2LDIwICs0NSwxMSBAQCBhbGxvdyBhbGwg
+cG9zc2libGUgY29kZSBwYXRocyB0byBiZSB0ZXN0ZWQgaW4gdGhlIGNvZGUgdW5kZXIgdGVzdDsg
+dGhpcyBpcyBvbmx5DQo+ICBwb3NzaWJsZSBpZiB0aGUgY29kZSB1bmRlciB0ZXN0IGlzIHZlcnkg
+c21hbGwgYW5kIGRvZXMgbm90IGhhdmUgYW55IGV4dGVybmFsDQo+ICBkZXBlbmRlbmNpZXMgb3V0
+c2lkZSBvZiB0aGUgdGVzdCdzIGNvbnRyb2wgbGlrZSBoYXJkd2FyZS4NCj4gDQo+IC1PdXRzaWRl
+IG9mIEtVbml0LCB0aGVyZSBhcmUgbm8gdGVzdGluZyBmcmFtZXdvcmtzIGN1cnJlbnRseQ0KPiAt
+YXZhaWxhYmxlIGZvciB0aGUga2VybmVsIHRoYXQgZG8gbm90IHJlcXVpcmUgaW5zdGFsbGluZyB0
+aGUga2VybmVsIG9uIGEgdGVzdA0KPiAtbWFjaGluZSBvciBpbiBhIFZNIGFuZCBhbGwgcmVxdWly
+ZSB0ZXN0cyB0byBiZSB3cml0dGVuIGluIHVzZXJzcGFjZSBydW5uaW5nIG9uDQo+IC10aGUga2Vy
+bmVsOyB0aGlzIGlzIHRydWUgZm9yIEF1dG90ZXN0LCBhbmQga3NlbGZ0ZXN0LCBkaXNxdWFsaWZ5
+aW5nDQo+IC1hbnkgb2YgdGhlbSBmcm9tIGJlaW5nIGNvbnNpZGVyZWQgdW5pdCB0ZXN0aW5nIGZy
+YW1ld29ya3MuDQo+ICtLVW5pdCBwcm92aWRlcyBhIGNvbW1vbiBmcmFtZXdvcmsgZm9yIHVuaXQg
+dGVzdHMgd2l0aGluIHRoZSBrZXJuZWwuDQo+IA0KPiAtS1VuaXQgYWRkcmVzc2VzIHRoZSBwcm9i
+bGVtIG9mIGJlaW5nIGFibGUgdG8gcnVuIHRlc3RzIHdpdGhvdXQgbmVlZGluZyBhIHZpcnR1YWwN
+Cj4gLW1hY2hpbmUgb3IgYWN0dWFsIGhhcmR3YXJlIHdpdGggVXNlciBNb2RlIExpbnV4LiBVc2Vy
+IE1vZGUgTGludXggaXMgYSBMaW51eA0KPiAtYXJjaGl0ZWN0dXJlLCBsaWtlIEFSTSBvciB4ODY7
+IGhvd2V2ZXIsIHVubGlrZSBvdGhlciBhcmNoaXRlY3R1cmVzIGl0IGNvbXBpbGVzDQo+IC10byBh
+IHN0YW5kYWxvbmUgcHJvZ3JhbSB0aGF0IGNhbiBiZSBydW4gbGlrZSBhbnkgb3RoZXIgcHJvZ3Jh
+bSBkaXJlY3RseSBpbnNpZGUNCj4gLW9mIGEgaG9zdCBvcGVyYXRpbmcgc3lzdGVtOyB0byBiZSBj
+bGVhciwgaXQgZG9lcyBub3QgcmVxdWlyZSBhbnkgdmlydHVhbGl6YXRpb24NCj4gLXN1cHBvcnQ7
+IGl0IGlzIGp1c3QgYSByZWd1bGFyIHByb2dyYW0uDQo+IC0NCj4gLUFsdGVybmF0aXZlbHksIGt1
+bml0IGFuZCBrdW5pdCB0ZXN0cyBjYW4gYmUgYnVpbHQgYXMgbW9kdWxlcyBhbmQgdGVzdHMgd2ls
+bA0KPiArS1VuaXQgdGVzdHMgY2FuIGJlIHJ1biBvbiBtb3N0IGtlcm5lbCBjb25maWd1cmF0aW9u
+cywgYW5kIG1vc3QgdGVzdHMgYXJlDQo+ICthcmNoaXRlY3R1cmUgaW5kZXBlbmRlbnQuIEFsbCBi
+dWlsdC1pbiBLVW5pdCB0ZXN0cyBydW4gb24ga2VybmVsIHN0YXJ0dXAuDQo+ICtBbHRlcm5hdGl2
+ZWx5LCBLVW5pdCBhbmQgS1VuaXQgdGVzdHMgY2FuIGJlIGJ1aWx0IGFzIG1vZHVsZXMgYW5kIHRl
+c3RzIHdpbGwNCj4gIHJ1biB3aGVuIHRoZSB0ZXN0IG1vZHVsZSBpcyBsb2FkZWQuDQo+IA0KPiAg
+S1VuaXQgaXMgZmFzdC4gRXhjbHVkaW5nIGJ1aWxkIHRpbWUsIGZyb20gaW52b2NhdGlvbiB0byBj
+b21wbGV0aW9uIEtVbml0IGNhbiBydW4NCj4gQEAgLTc1LDkgKzc1LDEyIEBAIHNvbWVvbmUgc2Vu
+ZHMgeW91IHNvbWUgY29kZS4gV2h5IHRydXN0IHRoYXQgc29tZW9uZSByYW4gYWxsIHRoZWlyIHRl
+c3RzDQo+ICBjb3JyZWN0bHkgb24gZXZlcnkgY2hhbmdlIHdoZW4geW91IGNhbiBqdXN0IHJ1biB0
+aGVtIHlvdXJzZWxmIGluIGxlc3MgdGltZSB0aGFuDQo+ICBpdCB0YWtlcyB0byByZWFkIHRoZWly
+IHRlc3QgbG9nPw0KPiANCj4gKw0KPiAgSG93IGRvIEkgdXNlIGl0Pw0KPiAgPT09PT09PT09PT09
+PT09PQ0KPiANCj4gICogICA6ZG9jOmBzdGFydGAgLSBmb3IgbmV3IHVzZXJzIG9mIEtVbml0DQo+
+ICAqICAgOmRvYzpgdXNhZ2VgIC0gZm9yIGEgbW9yZSBkZXRhaWxlZCBleHBsYW5hdGlvbiBvZiBL
+VW5pdCBmZWF0dXJlcw0KPiAgKiAgIDpkb2M6YGFwaS9pbmRleGAgLSBmb3IgdGhlIGxpc3Qgb2Yg
+S1VuaXQgQVBJcyB1c2VkIGZvciB0ZXN0aW5nDQo+ICsqICAgOmRvYzpga3VuaXQtdG9vbGAgLSBm
+b3IgbW9yZSBpbmZvcm1hdGlvbiBvbiB0aGUga3VuaXRfdG9vbCBoZWxwZXIgc2NyaXB0DQo+ICsq
+ICAgOmRvYzpgZmFxYCAtIGZvciBhbnN3ZXJzIHRvIHNvbWUgY29tbW9uIHF1ZXN0aW9ucyBhYm91
+dCBLVW5pdA0KPiBkaWZmIC0tZ2l0IGEvRG9jdW1lbnRhdGlvbi9kZXYtdG9vbHMva3VuaXQva3Vu
+aXQtdG9vbC5yc3QgYi9Eb2N1bWVudGF0aW9uL2Rldi10b29scy9rdW5pdC9rdW5pdC10b29sLnJz
+dA0KPiBpbmRleCA1MGQ0NjM5NGU5N2UuLjk0OWFmMmRhODFlNSAxMDA2NDQNCj4gLS0tIGEvRG9j
+dW1lbnRhdGlvbi9kZXYtdG9vbHMva3VuaXQva3VuaXQtdG9vbC5yc3QNCj4gKysrIGIvRG9jdW1l
+bnRhdGlvbi9kZXYtdG9vbHMva3VuaXQva3VuaXQtdG9vbC5yc3QNCj4gQEAgLTEyLDYgKzEyLDEz
+IEBAIHRoZSBMaW51eCBrZXJuZWwgYXMgVU1MIChgVXNlciBNb2RlIExpbnV4DQo+ICA8aHR0cDov
+L3VzZXItbW9kZS1saW51eC5zb3VyY2Vmb3JnZS5uZXQvPmBfKSwgcnVubmluZyBLVW5pdCB0ZXN0
+cywgcGFyc2luZw0KPiAgdGhlIHRlc3QgcmVzdWx0cyBhbmQgZGlzcGxheWluZyB0aGVtIGluIGEg
+dXNlciBmcmllbmRseSBtYW5uZXIuDQo+IA0KPiAra3VuaXRfdG9vbCBhZGRyZXNzZXMgdGhlIHBy
+b2JsZW0gb2YgYmVpbmcgYWJsZSB0byBydW4gdGVzdHMgd2l0aG91dCBuZWVkaW5nIGENCj4gK3Zp
+cnR1YWwgbWFjaGluZSBvciBhY3R1YWwgaGFyZHdhcmUgd2l0aCBVc2VyIE1vZGUgTGludXguIFVz
+ZXIgTW9kZSBMaW51eCBpcyBhDQo+ICtMaW51eCBhcmNoaXRlY3R1cmUsIGxpa2UgQVJNIG9yIHg4
+NjsgaG93ZXZlciwgdW5saWtlIG90aGVyIGFyY2hpdGVjdHVyZXMgaXQNCj4gK2NvbXBpbGVzIHRo
+ZSBrZXJuZWwgYXMgYSBzdGFuZGFsb25lIExpbnV4IGV4ZWN1dGFibGUgdGhhdCBjYW4gYmUgcnVu
+IGxpa2UgYW55DQo+ICtvdGhlciBwcm9ncmFtIGRpcmVjdGx5IGluc2lkZSBvZiBhIGhvc3Qgb3Bl
+cmF0aW5nIHN5c3RlbS4gVG8gYmUgY2xlYXIsIGl0IGRvZXMNCj4gK25vdCByZXF1aXJlIGFueSB2
+aXJ0dWFsaXphdGlvbiBzdXBwb3J0OiBpdCBpcyBqdXN0IGEgcmVndWxhciBwcm9ncmFtLg0KPiAr
+DQo+ICBXaGF0IGlzIGEga3VuaXRjb25maWc/DQo+ICA9PT09PT09PT09PT09PT09PT09PT09DQo+
+IA0KPiBkaWZmIC0tZ2l0IGEvRG9jdW1lbnRhdGlvbi9kZXYtdG9vbHMva3VuaXQvc3RhcnQucnN0
+IGIvRG9jdW1lbnRhdGlvbi9kZXYtdG9vbHMva3VuaXQvc3RhcnQucnN0DQo+IGluZGV4IDRlMWQy
+NGRiNmIxMy4uZTFjNWNlODBjZTEyIDEwMDY0NA0KPiAtLS0gYS9Eb2N1bWVudGF0aW9uL2Rldi10
+b29scy9rdW5pdC9zdGFydC5yc3QNCj4gKysrIGIvRG9jdW1lbnRhdGlvbi9kZXYtdG9vbHMva3Vu
+aXQvc3RhcnQucnN0DQo+IEBAIC05LDExICs5LDEwIEBAIEluc3RhbGxpbmcgZGVwZW5kZW5jaWVz
+DQo+ICBLVW5pdCBoYXMgdGhlIHNhbWUgZGVwZW5kZW5jaWVzIGFzIHRoZSBMaW51eCBrZXJuZWwu
+IEFzIGxvbmcgYXMgeW91IGNhbiBidWlsZA0KPiAgdGhlIGtlcm5lbCwgeW91IGNhbiBydW4gS1Vu
+aXQuDQo+IA0KPiAtS1VuaXQgV3JhcHBlcg0KPiAtPT09PT09PT09PT09PQ0KPiAtSW5jbHVkZWQg
+d2l0aCBLVW5pdCBpcyBhIHNpbXBsZSBQeXRob24gd3JhcHBlciB0aGF0IGhlbHBzIGZvcm1hdCB0
+aGUgb3V0cHV0IHRvDQo+IC1lYXNpbHkgdXNlIGFuZCByZWFkIEtVbml0IG91dHB1dC4gSXQgaGFu
+ZGxlcyBidWlsZGluZyBhbmQgcnVubmluZyB0aGUga2VybmVsLCBhcw0KPiAtd2VsbCBhcyBmb3Jt
+YXR0aW5nIHRoZSBvdXRwdXQuDQo+ICtSdW5uaW5nIHRlc3RzIHdpdGggdGhlIEtVbml0IFdyYXBw
+ZXINCj4gKz09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PQ0KPiArSW5jbHVkZWQg
+d2l0aCBLVW5pdCBpcyBhIHNpbXBsZSBQeXRob24gd3JhcHBlciB3aGljaCBydW5zIHRlc3RzIHVu
+ZGVyIFVzZXIgTW9kZQ0KPiArTGludXgsIGFuZCBmb3JtYXRzIHRoZSB0ZXN0IHJlc3VsdHMuDQo+
+IA0KPiAgVGhlIHdyYXBwZXIgY2FuIGJlIHJ1biB3aXRoOg0KPiANCj4gQEAgLTIxLDIyICsyMCw0
+MiBAQCBUaGUgd3JhcHBlciBjYW4gYmUgcnVuIHdpdGg6DQo+IA0KPiAgCS4vdG9vbHMvdGVzdGlu
+Zy9rdW5pdC9rdW5pdC5weSBydW4gLS1kZWZjb25maWcNCj4gDQo+IC1Gb3IgbW9yZSBpbmZvcm1h
+dGlvbiBvbiB0aGlzIHdyYXBwZXIgKGFsc28gY2FsbGVkIGt1bml0X3Rvb2wpIGNoZWNrb3V0IHRo
+ZQ0KPiArRm9yIG1vcmUgaW5mb3JtYXRpb24gb24gdGhpcyB3cmFwcGVyIChhbHNvIGNhbGxlZCBr
+dW5pdF90b29sKSBjaGVjayBvdXQgdGhlDQo+ICA6ZG9jOmBrdW5pdC10b29sYCBwYWdlLg0KPiAN
+Cj4gIENyZWF0aW5nIGEgLmt1bml0Y29uZmlnDQo+IC09PT09PT09PT09PT09PT09PT09PT09PQ0K
+PiAtVGhlIFB5dGhvbiBzY3JpcHQgaXMgYSB0aGluIHdyYXBwZXIgYXJvdW5kIEtidWlsZC4gQXMg
+c3VjaCwgaXQgbmVlZHMgdG8gYmUNCj4gLWNvbmZpZ3VyZWQgd2l0aCBhIGBgLmt1bml0Y29uZmln
+YGAgZmlsZS4gVGhpcyBmaWxlIGVzc2VudGlhbGx5IGNvbnRhaW5zIHRoZQ0KPiAtcmVndWxhciBL
+ZXJuZWwgY29uZmlnLCB3aXRoIHRoZSBzcGVjaWZpYyB0ZXN0IHRhcmdldHMgYXMgd2VsbC4NCj4g
+LQ0KPiArLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0NCj4gK0lmIHlvdSB3YW50IHRvIHJ1biBhIHNw
+ZWNpZmljIHNldCBvZiB0ZXN0cyAocmF0aGVyIHRoYW4gdGhvc2UgbGlzdGVkIGluIHRoZQ0KPiAr
+S1VuaXQgZGVmY29uZmlnKSwgeW91IGNhbiBwcm92aWRlIEtjb25maWcgb3B0aW9ucyBpbiB0aGUg
+YGAua3VuaXRjb25maWdgYCBmaWxlLg0KPiArVGhpcyBmaWxlIGVzc2VudGlhbGx5IGNvbnRhaW5z
+IHRoZSByZWd1bGFyIEtlcm5lbCBjb25maWcsIHdpdGggdGhlIHNwZWNpZmljDQo+ICt0ZXN0IHRh
+cmdldHMgYXMgd2VsbC4gVGhlIGBgLmt1bml0Y29uZmlnYGAgc2hvdWxkIGFsc28gY29udGFpbiBh
+bnkgb3RoZXIgY29uZmlnDQo+ICtvcHRpb25zIHJlcXVpcmVkIGJ5IHRoZSB0ZXN0cy4NCj4gKw0K
+PiArQSBnb29kIHN0YXJ0aW5nIHBvaW50IGZvciBhIGBgLmt1bml0Y29uZmlnYGAgaXMgdGhlIEtV
+bml0IGRlZmNvbmZpZzoNCj4gIC4uIGNvZGUtYmxvY2s6OiBiYXNoDQo+IA0KPiAgCWNkICRQQVRI
+X1RPX0xJTlVYX1JFUE8NCj4gIAljcCBhcmNoL3VtL2NvbmZpZ3Mva3VuaXRfZGVmY29uZmlnIC5r
+dW5pdGNvbmZpZw0KPiANCj4gLVZlcmlmeWluZyBLVW5pdCBXb3Jrcw0KPiAtLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tDQo+ICtZb3UgY2FuIHRoZW4gYWRkIGFueSBvdGhlciBLY29uZmlnIG9wdGlvbnMg
+eW91IHdpc2gsIGUuZy46DQo+ICsuLiBjb2RlLWJsb2NrOjogbm9uZQ0KPiArDQo+ICsgICAgICAg
+IENPTkZJR19MSVNUX0tVTklUX1RFU1Q9eQ0KPiArDQo+ICs6ZG9jOmBrdW5pdF90b29sIDxrdW5p
+dC10b29sPmAgd2lsbCBlbnN1cmUgdGhhdCBhbGwgY29uZmlnIG9wdGlvbnMgc2V0IGluDQo+ICtg
+YC5rdW5pdGNvbmZpZ2BgIGFyZSBzZXQgaW4gdGhlIGtlcm5lbCBgYC5jb25maWdgYCBiZWZvcmUg
+cnVubmluZyB0aGUgdGVzdHMuDQo+ICtJdCdsbCB3YXJuIHlvdSBpZiB5b3UgaGF2ZW4ndCBpbmNs
+dWRlZCB0aGUgZGVwZW5kZW5jaWVzIG9mIHRoZSBvcHRpb25zIHlvdSdyZQ0KPiArdXNpbmcuDQo+
+ICsNCj4gKy4uIG5vdGU6Og0KPiArICAgTm90ZSB0aGF0IHJlbW92aW5nIHNvbWV0aGluZyBmcm9t
+IHRoZSBgYC5rdW5pdGNvbmZpZ2BgIHdpbGwgbm90IHRyaWdnZXIgYQ0KPiArICAgcmVidWlsZCBv
+ZiB0aGUgYGAuY29uZmlnYGAgZmlsZTogdGhlIGNvbmZpZ3VyYXRpb24gaXMgb25seSB1cGRhdGVk
+IGlmIHRoZQ0KPiArICAgYGAua3VuaXRjb25maWdgYCBpcyBub3QgYSBzdWJzZXQgb2YgYGAuY29u
+ZmlnYGAuIFRoaXMgbWVhbnMgdGhhdCB5b3UgY2FuIHVzZQ0KPiArICAgb3RoZXIgdG9vbHMgKHN1
+Y2ggYXMgbWFrZSBtZW51Y29uZmlnKSB0byBhZGp1c3Qgb3RoZXIgY29uZmlnIG9wdGlvbnMuDQo+
+ICsNCj4gKw0KPiArUnVubmluZyB0aGUgdGVzdHMNCj4gKy0tLS0tLS0tLS0tLS0tLS0tDQo+IA0K
+PiAgVG8gbWFrZSBzdXJlIHRoYXQgZXZlcnl0aGluZyBpcyBzZXQgdXAgY29ycmVjdGx5LCBzaW1w
+bHkgaW52b2tlIHRoZSBQeXRob24NCj4gIHdyYXBwZXIgZnJvbSB5b3VyIGtlcm5lbCByZXBvOg0K
+PiBAQCAtNjIsNiArODEsNDEgQEAgZm9sbG93ZWQgYnkgYSBsaXN0IG9mIHRlc3RzIHRoYXQgYXJl
+IHJ1bi4gQWxsIG9mIHRoZW0gc2hvdWxkIGJlIHBhc3NpbmcuDQo+ICAJQmVjYXVzZSBpdCBpcyBi
+dWlsZGluZyBhIGxvdCBvZiBzb3VyY2VzIGZvciB0aGUgZmlyc3QgdGltZSwgdGhlDQo+ICAJYGBC
+dWlsZGluZyBLVW5pdCBrZXJuZWxgYCBzdGVwIG1heSB0YWtlIGEgd2hpbGUuDQo+IA0KPiArUnVu
+bmluZyB0ZXN0cyB3aXRob3V0IHRoZSBLVW5pdCBXcmFwcGVyDQo+ICs9PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT09PT09PT0NCj4gKw0KPiArSWYgeW91J2QgcmF0aGVyIG5vdCB1c2Ug
+dGhlIEtVbml0IFdyYXBwZXIgKGlmLCBmb3IgZXhhbXBsZSwgeW91IG5lZWQgdG8NCj4gK2ludGVn
+cmF0ZSB3aXRoIG90aGVyIHN5c3RlbXMsIG9yIHVzZSBhbiBhcmNoaXRlY3R1cmUgb3RoZXIgdGhh
+biBVTUwpLCBLVW5pdCBjYW4NCj4gK2JlIGluY2x1ZGVkIGluIGFueSBrZXJuZWwsIGFuZCB0aGUg
+cmVzdWx0cyByZWFkIG91dCBhbmQgcGFyc2VkIG1hbnVhbGx5Lg0KPiArDQo+ICsuLiBub3RlOjoN
+Cj4gKyAgIEtVbml0IGlzIG5vdCBkZXNpZ25lZCBmb3IgdXNlIGluIGEgcHJvZHVjdGlvbiBzeXN0
+ZW0sIGFuZCBpdCdzIHBvc3NpYmxlIHRoYXQNCj4gKyAgIHRlc3RzIG1heSByZWR1Y2UgdGhlIHN0
+YWJpbGl0eSBvciBzZWN1cml0eSBvZiB0aGUgc3lzdGVtLg0KPiArDQo+ICsNCj4gKw0KPiArQ29u
+ZmlndXJpbmcgdGhlIGtlcm5lbA0KPiArLS0tLS0tLS0tLS0tLS0tLS0tLS0tLQ0KPiArDQo+ICtJ
+biBvcmRlciB0byBlbmFibGUgS1VuaXQgaXRzZWxmLCB5b3Ugc2ltcGx5IG5lZWQgdG8gZW5hYmxl
+IHRoZSBgYENPTkZJR19LVU5JVGBgDQo+ICtLY29uZmlnIG9wdGlvbiAoaXQncyB1bmRlciBLZXJu
+ZWwgSGFja2luZy9LZXJuZWwgVGVzdGluZyBhbmQgQ292ZXJhZ2UgaW4NCj4gK21lbnVjb25maWcp
+LiBGcm9tIHRoZXJlLCB5b3UgY2FuIGVuYWJsZSBhbnkgS1VuaXQgdGVzdHMgeW91IHdhbnQ6IHRo
+ZXkgdXN1YWxseQ0KPiAraGF2ZSBjb25maWcgb3B0aW9ucyBlbmRpbmcgaW4gYGBfS1VOSVRfVEVT
+VGBgLg0KPiArDQo+ICtLVW5pdCBhbmQgS1VuaXQgdGVzdHMgY2FuIGJlIGNvbXBpbGVkIGFzIG1v
+ZHVsZXM6IGluIHRoaXMgY2FzZSB0aGUgdGVzdHMgaW4gYQ0KPiArbW9kdWxlIHdpbGwgYmUgcnVu
+IHdoZW4gdGhlIG1vZHVsZSBpcyBsb2FkZWQuDQo+ICsNCj4gK1J1bm5pbmcgdGhlIHRlc3RzDQo+
+ICstLS0tLS0tLS0tLS0tLS0tLQ0KPiArDQo+ICtCdWlsZCBhbmQgcnVuIHlvdXIga2VybmVsIGFz
+IHVzdWFsLiBUZXN0IG91dHB1dCB3aWxsIGJlIHdyaXR0ZW4gdG8gdGhlIGtlcm5lbA0KPiArbG9n
+IGluIGBUQVAgPGh0dHBzOi8vdGVzdGFueXRoaW5nLm9yZy8+YF8gZm9ybWF0Lg0KPiArDQo+ICsu
+LiBub3RlOjoNCj4gKyAgIEl0J3MgcG9zc2libGUgdGhhdCB0aGVyZSB3aWxsIGJlIG90aGVyIGxp
+bmVzIGFuZC9vciBkYXRhIGludGVyc3BlcnNlZCBpbiB0aGUNCj4gKyAgIFRBUCBvdXRwdXQuDQo+
+ICsNCj4gKw0KPiAgV3JpdGluZyB5b3VyIGZpcnN0IHRlc3QNCj4gID09PT09PT09PT09PT09PT09
+PT09PT09DQo+IA0KPiAtLQ0KPiAyLjI1LjAuMjY1LmdiYWIyZTg2YmEwLWdvb2cNCg0KVGhhbmtz
+IGZvciByZXNwb25kaW5nIHRvIHRoZSBmZWVkYmFjay4gIFRoaXMgbG9va3MgZ29vZCB0byBtZS4N
+CkknZCBnaXZlIGl0IGEgInJldmlld2VkLWJ5IiBmcm9tIG1lLCBidXQgaXQgd291bGQgaGF2ZSB0
+byBiZSBhIHdlYWsNCm9uZSBzaW5jZSBteSBmb2N1cyB3YXMgb24gdGhlIHJhdGlvbmFsZSBwYXJ0
+cywgYW5kIEkgaGF2ZW4ndA0KdGVzdGVkIHRoZSBkZXRhaWxlZCBpbnN0cnVjdGlvbnMgZm9yIGV4
+ZWN1dGluZyB0aGUgdGVzdHMuDQoNCiAtLSBUaW0NCg0K
