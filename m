@@ -2,79 +2,97 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 19E4C15AF8D
-	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Feb 2020 19:16:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D279515B34F
+	for <lists+linux-kselftest@lfdr.de>; Wed, 12 Feb 2020 23:03:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727279AbgBLSQu (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 12 Feb 2020 13:16:50 -0500
-Received: from mail.kernel.org ([198.145.29.99]:49522 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727264AbgBLSQu (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 12 Feb 2020 13:16:50 -0500
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net [24.9.64.241])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 819FA2073C;
-        Wed, 12 Feb 2020 18:16:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1581531409;
-        bh=IyIY0/EgyNmjqsAdVgjLfhCJXVillaTCbgTouXKUUyw=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=RSLjw6EVs/cpmR+j9KFYo8fm5nyedNY3nM6ynL6qh3S0lGFEOLpsxgIdFyrFEplxd
-         Fz/0LsynMpkoiF+vyV8++XR5YZ0hhP1nzazwbnmI9GMYwGzmWjAwnqmSMMzSkOwnAc
-         t0kHPNHG5Ly5F2HS6GScuySGDcze4dRpJuFtHWww=
-Subject: Re: Linux 5.6-rc1 kselftest build failures
-To:     Dmitry Safonov <dima@arista.com>, linux-kselftest@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Cc:     Aleksa Sarai <cyphar@cyphar.com>, Andrei Vagin <avagin@gmail.com>,
-        shuah <shuah@kernel.org>
-References: <ff16537e-febc-1b98-0cf8-1aa23e0c29b0@kernel.org>
- <c31e468a-3afe-f9b6-b006-c3bc3f35f1cc@arista.com>
-From:   shuah <shuah@kernel.org>
-Message-ID: <c191597b-c12e-9d06-01a3-7a7dda4f124f@kernel.org>
-Date:   Wed, 12 Feb 2020 11:16:49 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.1
+        id S1727791AbgBLWDJ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 12 Feb 2020 17:03:09 -0500
+Received: from mail-qk1-f196.google.com ([209.85.222.196]:37489 "EHLO
+        mail-qk1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727564AbgBLWDJ (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 12 Feb 2020 17:03:09 -0500
+Received: by mail-qk1-f196.google.com with SMTP id c188so3706752qkg.4;
+        Wed, 12 Feb 2020 14:03:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=vktZgdwHT9wecNxCGbvMxpCvSL0TwzAxN3Sq+MPR+iE=;
+        b=nfgfpDftMtMJpWLxiSSs1X2OYcR9WlCI1amDpodmsLKxPgHkq8bnF4qf1qtxMLl199
+         uWMc6cYmIs/jgWcwFKkmA1JHNWG82eW/IKsMlZpt3mUHo1pedk+LHU2F5vGJTvd7qkuE
+         fNGTvtRWPXIit3HMzALvF1UOg3gvWURxXh51WA1HcgiQsiQD6P2hroKRk0XCvfHR6Dzc
+         dUViLRXSEg/GOVAWO3L349vTzL+TvRhuWrvH/RL4CyOMUBipTQvLtVcjhMg5rGBxSPCP
+         gHaie3hPJkpPL/U0oSQ8fkXX54m7zGqVd3HOJjXK3WbYxhlGgnFofw7ctLXn1muu7S9S
+         mjSg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition
+         :content-transfer-encoding:in-reply-to;
+        bh=vktZgdwHT9wecNxCGbvMxpCvSL0TwzAxN3Sq+MPR+iE=;
+        b=Bevf1WQsvTnT9/37wzkjtf0pNzjoFW4Znr7v5VeCL7c6a/m0kH7FLso+bdxYX2HqKD
+         4QrwokQ/DtRVnMtVr+CVrKbJcmNkO4ZzOL6yKFVzXrvMSOPswB57mQCYa4LexuDWs2xB
+         +Fchd5KLybze9yhSPTuZNqKWmfaHWvF2uweyeuGkxuYnesc50J+6CchQFnbVJLUYxZC0
+         k4ufVtJnICxFEsM2ztAUFD5k4HHKIMQVTdLyQ9QsYRLJgAG3tARITIli4N0JSOdiIeOo
+         ACf1zAh9N8K5nb965xXWqy/A9u2A84XSOJlfkLXhgyv+/jcMh0NyIahAbD5TVfOmsMQu
+         XDsA==
+X-Gm-Message-State: APjAAAXDjNs5hH+THHuoLM41+meE0MBhuD13ofkvjG6d927/kv9pKUHf
+        Ukhpjye9N7redyVp30NzUbU=
+X-Google-Smtp-Source: APXvYqzT+6mBAxj1e5FLwLyZnqWru8muuUku/e/rxOQlawFETlZgZCjz3d0Bvp6LGi4KM4HKO8a+DA==
+X-Received: by 2002:a37:7a83:: with SMTP id v125mr13061546qkc.22.1581544987943;
+        Wed, 12 Feb 2020 14:03:07 -0800 (PST)
+Received: from localhost ([2620:10d:c091:500::1:985a])
+        by smtp.gmail.com with ESMTPSA id z5sm335513qta.7.2020.02.12.14.03.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 12 Feb 2020 14:03:07 -0800 (PST)
+Date:   Wed, 12 Feb 2020 17:03:06 -0500
+From:   Tejun Heo <tj@kernel.org>
+To:     Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
+Cc:     cgroups@vger.kernel.org, alex.shi@linux.alibaba.com, guro@fb.com,
+        hannes@cmpxchg.org, kernel-team@android.com,
+        linger.lee@mediatek.com, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, lizefan@huawei.com,
+        matthias.bgg@gmail.com, shuah@kernel.org, surenb@google.com,
+        tomcherry@google.com
+Subject: Re: [PATCH v2 1/3] cgroup: Iterate tasks that did not finish
+ do_exit()
+Message-ID: <20200212220306.GH80993@mtj.thefacebook.com>
+References: <20200120145635.GA30904@blackbody.suse.cz>
+ <20200124114017.8363-1-mkoutny@suse.com>
+ <20200124114017.8363-2-mkoutny@suse.com>
 MIME-Version: 1.0
-In-Reply-To: <c31e468a-3afe-f9b6-b006-c3bc3f35f1cc@arista.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200124114017.8363-2-mkoutny@suse.com>
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 2/12/20 7:09 AM, Dmitry Safonov wrote:
-> Hi Shuah,
+On Fri, Jan 24, 2020 at 12:40:15PM +0100, Michal Koutný wrote:
+> PF_EXITING is set earlier than actual removal from css_set when a task
+> is exitting. This can confuse cgroup.procs readers who see no PF_EXITING
+> tasks, however, rmdir is checking against css_set membership so it can
+> transitionally fail with EBUSY.
 > 
-> On 2/12/20 12:35 AM, shuah wrote:
->> The following tests fail to build on x86_64
-> [..]
->> timerns:
->>
->> tools/testing/selftests/timens'
->> gcc -Wall -Werror -pthreadÂ  -lrt -ldlÂ  timens.cÂ  -o
->> tools/testing/selftests/timens/timens
->> /usr/bin/ld: /tmp/ccGy5CST.o: in function `check_config_posix_timers':
->> timens.c:(.text+0x65a): undefined reference to `timer_create'
->> collect2: error: ld returned 1 exit status
+> Fix this by listing tasks that weren't unlinked from css_set active
+> lists.
+> It may happen that other users of the task iterator (without
+> CSS_TASK_ITER_PROCS) spot a PF_EXITING task before cgroup_exit(). This
+> is equal to the state before commit c03cd7738a83 ("cgroup: Include dying
+> leaders with live threads in PROCS iterations") but it may be reviewed
+> later.
 > 
-> I've just send a patch to fix it:
-> https://lkml.kernel.org/r/20200212140040.126747-1-dima@arista.com
-> 
-> Could you try it?
+> Reported-by: Suren Baghdasaryan <surenb@google.com>
+> Fixes: c03cd7738a83 ("cgroup: Include dying leaders with live threads in PROCS iterations")
+> Signed-off-by: Michal Koutný <mkoutny@suse.com>
 
-Yup. Works, responsed to the patch thread.
+Applied to cgroup/for-5.6-fixes.
 
-> 
-> Also, it seems that the same thing affects futex/rtc/tcp_mmap/tcp_inq tests?
-> 
-> While looking into this, I see there are new auto-generated lkmdtm &&
-> pidfd tests, is it worth to add them to .gitignore?
-> 
+Thanks.
 
-Thanks for finding. Yes please send a patch for this.
-
-thanks,
--- Shuah
+-- 
+tejun
