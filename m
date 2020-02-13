@@ -2,99 +2,88 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C3A215BA0D
-	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Feb 2020 08:28:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B25315CBB6
+	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Feb 2020 21:10:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729831AbgBMH2R (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 13 Feb 2020 02:28:17 -0500
-Received: from mout-p-101.mailbox.org ([80.241.56.151]:40788 "EHLO
-        mout-p-101.mailbox.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729748AbgBMH2R (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 13 Feb 2020 02:28:17 -0500
-Received: from smtp2.mailbox.org (smtp2.mailbox.org [IPv6:2001:67c:2050:105:465:1:2:0])
-        (using TLSv1.2 with cipher ECDHE-RSA-CHACHA20-POLY1305 (256/256 bits))
+        id S1727595AbgBMUKb (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 13 Feb 2020 15:10:31 -0500
+Received: from mail.kernel.org ([198.145.29.99]:51426 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726780AbgBMUKb (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 13 Feb 2020 15:10:31 -0500
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net [24.9.64.241])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mout-p-101.mailbox.org (Postfix) with ESMTPS id 48J7Ql1frkzKmT5;
-        Thu, 13 Feb 2020 08:28:15 +0100 (CET)
-X-Virus-Scanned: amavisd-new at heinlein-support.de
-Received: from smtp2.mailbox.org ([80.241.60.241])
-        by spamfilter05.heinlein-hosting.de (spamfilter05.heinlein-hosting.de [80.241.56.123]) (amavisd-new, port 10030)
-        with ESMTP id rJTc2o0rhn-7; Thu, 13 Feb 2020 08:28:11 +0100 (CET)
-Date:   Thu, 13 Feb 2020 18:27:58 +1100
-From:   Aleksa Sarai <cyphar@cyphar.com>
-To:     shuah <shuah@kernel.org>
-Cc:     linux-kselftest@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Dmitry Safonov <dima@arista.com>
-Subject: Re: Linux 5.6-rc1 kselftest build failures
-Message-ID: <20200213072758.e2bngq2z6yypvsim@yavin>
-References: <ff16537e-febc-1b98-0cf8-1aa23e0c29b0@kernel.org>
- <20200212081414.7bwkndf6qxg2p35a@yavin>
- <5311f218-9bb0-4792-c469-019c7c2db7ee@kernel.org>
+        by mail.kernel.org (Postfix) with ESMTPSA id DB6E424673;
+        Thu, 13 Feb 2020 20:10:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1581624631;
+        bh=wCa5vRNZGSPGzqcXpTyE+mHqN/Ye42Xpuhgjo/0QB/s=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=nviCRg1g4MZAo0jKL456uD4cVnAykwAnapNmSYMDXqWZJw1ziRRyAUYClXejO8gEk
+         qljLS/l1HBJwOPpefFXMCgNASTZ7WCRkVRpjiFV36MpTyl1JRIS+9HbQTeAZWD+uOU
+         9V8/fJLMmUxaNNLCaix5dKc1eZtd9CCuONPTjs+Q=
+Subject: Re: [PATCH] selftests: openat2: fix build error on newer glibc
+To:     Aleksa Sarai <cyphar@cyphar.com>
+Cc:     linux-kselftest@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, shuah <shuah@kernel.org>
+References: <20200213072656.15611-1-cyphar@cyphar.com>
+From:   shuah <shuah@kernel.org>
+Message-ID: <0126e205-e11e-f107-24b8-3673b1c749e3@kernel.org>
+Date:   Thu, 13 Feb 2020 13:10:04 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="qh5d5kw7pebtctms"
-Content-Disposition: inline
-In-Reply-To: <5311f218-9bb0-4792-c469-019c7c2db7ee@kernel.org>
+In-Reply-To: <20200213072656.15611-1-cyphar@cyphar.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+On 2/13/20 12:26 AM, Aleksa Sarai wrote:
+> It appears that newer glibcs check that openat(O_CREAT) was provided a
+> fourth argument (rather than passing garbage), resulting in the
+> following build error:
+> 
+>> In file included from /usr/include/fcntl.h:301,
+>>                   from helpers.c:9:
+>> In function 'openat',
+>>      inlined from 'touchat' at helpers.c:49:11:
+>> /usr/include/x86_64-linux-gnu/bits/fcntl2.h:126:4: error: call to
+>> '__openat_missing_mode' declared with attribute error: openat with O_CREAT
+>> or O_TMPFILE in third argument needs 4 arguments
+>>    126 |    __openat_missing_mode ();
+>>        |    ^~~~~~~~~~~~~~~~~~~~~~~~
+> 
+> Reported-by: Shuah Khan <shuah@kernel.org>
+> Signed-off-by: Aleksa Sarai <cyphar@cyphar.com>
+> ---
+>   tools/testing/selftests/openat2/helpers.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/tools/testing/selftests/openat2/helpers.c b/tools/testing/selftests/openat2/helpers.c
+> index e9a6557ab16f..5074681ffdc9 100644
+> --- a/tools/testing/selftests/openat2/helpers.c
+> +++ b/tools/testing/selftests/openat2/helpers.c
+> @@ -46,7 +46,7 @@ int sys_renameat2(int olddirfd, const char *oldpath,
+>   
+>   int touchat(int dfd, const char *path)
+>   {
+> -	int fd = openat(dfd, path, O_CREAT);
+> +	int fd = openat(dfd, path, O_CREAT, 0700);
+>   	if (fd >= 0)
+>   		close(fd);
+>   	return fd;
+> 
 
---qh5d5kw7pebtctms
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Thanks for a quick patch. It compiles now.
 
-On 2020-02-12, shuah <shuah@kernel.org> wrote:
-> On 2/12/20 1:14 AM, Aleksa Sarai wrote:
-> > On 2020-02-11, shuah <shuah@kernel.org> wrote:
-> > > openat2:
-> > >=20
-> > > tools/testing/selftests/openat2'
-> > > gcc -Wall -O2 -g -fsanitize=3Daddress -fsanitize=3Dundefined openat2_=
-test.c
-> > > helpers.c  -o tools/testing/selftests/openat2/openat2_test
-> > > In file included from /usr/include/fcntl.h:301,
-> > >                   from helpers.c:9:
-> > > In function =E2=80=98openat=E2=80=99,
-> > >      inlined from =E2=80=98touchat=E2=80=99 at helpers.c:49:11:
-> > > /usr/include/x86_64-linux-gnu/bits/fcntl2.h:126:4: error: call to
-> > > =E2=80=98__openat_missing_mode=E2=80=99 declared with attribute error=
-: openat with O_CREAT
-> > > or O_TMPFILE in third argument needs 4 arguments
-> > >    126 |    __openat_missing_mode ();
-> > >        |    ^~~~~~~~~~~~~~~~~~~~~~~~
-> >=20
-> > Yeah, that's a brain-o -- it looks like you have a newer glibc than
-> > me which gives you a warning when you don't set the mode. The fix should
-> > be just the following:
-> >=20
->=20
-> Nice. Do you mind sending a proper patch, I can pull in.
+I will take this through kselftest tree.
 
-Done[1].
+thanks,
+-- Shuah
 
-[1]: https://lore.kernel.org/linux-kselftest/20200213072656.15611-1-cyphar@=
-cyphar.com/
 
---=20
-Aleksa Sarai
-Senior Software Engineer (Containers)
-SUSE Linux GmbH
-<https://www.cyphar.com/>
-
---qh5d5kw7pebtctms
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQSxZm6dtfE8gxLLfYqdlLljIbnQEgUCXkT6ewAKCRCdlLljIbnQ
-EnCtAQCzI05OXMgl0JIuGJ5egu8Kczl6d3+PRHVJNjo+G6ctzAD8DeeaDhBBGG4S
-DRST3Y5gOLhDnlxv5gvFKh6UVQqbxg4=
-=toGw
------END PGP SIGNATURE-----
-
---qh5d5kw7pebtctms--
