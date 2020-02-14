@@ -2,39 +2,41 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 77D7C15DDBC
-	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Feb 2020 17:01:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 34C6C15E024
+	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Feb 2020 17:12:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389079AbgBNQAK (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 14 Feb 2020 11:00:10 -0500
-Received: from mail.kernel.org ([198.145.29.99]:45376 "EHLO mail.kernel.org"
+        id S2392004AbgBNQMc (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 14 Feb 2020 11:12:32 -0500
+Received: from mail.kernel.org ([198.145.29.99]:40118 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2389072AbgBNQAK (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 14 Feb 2020 11:00:10 -0500
+        id S2391481AbgBNQMc (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 14 Feb 2020 11:12:32 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 6844024676;
-        Fri, 14 Feb 2020 16:00:08 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 3AD76246AA;
+        Fri, 14 Feb 2020 16:12:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1581696009;
-        bh=RrihWs1bIyYOToiy0ScEICNCuQs5FEPMAr1Amv+Q22g=;
+        s=default; t=1581696751;
+        bh=HSfHtUdMFWc6CS5XaUONf1lMrkLQkHO5y1TvGHsvi9A=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=UebtiiKDbsMrYnxnfE6C2zsZRmOHGsMq1q4O4UkyKbHsWeqIT8ytCYB7Dq6MTHL7a
-         ZeozXZ6AGogSSQSH+qSDITP67xse5qvg63EHcQ43iDzyd9hssq0HTEFBEkr+ewHwMd
-         P0XLfBtX3K1Z9Q7C5LVeuiwVG/HyTiF460UlZxFA=
+        b=ieCvGgAc9XTvTiEsp2NvIVpGATU0QbeAaKcOLRoIQEL7EAwF41PhuAp+T7gdFKY10
+         r+ckJdjdxfzglRPa/eSpZLtiDBT598jh6slx7cr5V18SfUXKnF9NIphK2iX6YxltvX
+         52SrNJPkMSWZhuM7VoI5U9hnG0t6KZVGsPwypLzE=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Davide Caratti <dcaratti@redhat.com>,
-        "David S . Miller" <davem@davemloft.net>,
+Cc:     Siddhesh Poyarekar <siddhesh@gotplt.org>,
+        Masami Hiramatsu <masami.hiramatsu@linaro.org>,
+        Tim Bird <tim.bird@sony.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
         Sasha Levin <sashal@kernel.org>,
         linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.5 526/542] tc-testing: add missing 'nsPlugin' to basic.json
-Date:   Fri, 14 Feb 2020 10:48:38 -0500
-Message-Id: <20200214154854.6746-526-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 033/252] kselftest: Minimise dependency of get_size on C library interfaces
+Date:   Fri, 14 Feb 2020 11:08:08 -0500
+Message-Id: <20200214161147.15842-33-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200214154854.6746-1-sashal@kernel.org>
-References: <20200214154854.6746-1-sashal@kernel.org>
+In-Reply-To: <20200214161147.15842-1-sashal@kernel.org>
+References: <20200214161147.15842-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -44,197 +46,111 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Davide Caratti <dcaratti@redhat.com>
+From: Siddhesh Poyarekar <siddhesh@gotplt.org>
 
-[ Upstream commit e9ed4fa7b4400d7b2cf03108842a30e6c9bd0eb2 ]
+[ Upstream commit 6b64a650f0b2ae3940698f401732988699eecf7a ]
 
-since tdc tests for cls_basic need $DEV1, use 'nsPlugin' so that the
-following command can be run without errors:
+It was observed[1] on arm64 that __builtin_strlen led to an infinite
+loop in the get_size selftest.  This is because __builtin_strlen (and
+other builtins) may sometimes result in a call to the C library
+function.  The C library implementation of strlen uses an IFUNC
+resolver to load the most efficient strlen implementation for the
+underlying machine and hence has a PLT indirection even for static
+binaries.  Because this binary avoids the C library startup routines,
+the PLT initialization never happens and hence the program gets stuck
+in an infinite loop.
 
- [root@f31 tc-testing]# ./tdc.py -c basic
+On x86_64 the __builtin_strlen just happens to expand inline and avoid
+the call but that is not always guaranteed.
 
-Fixes: 4717b05328ba ("tc-testing: Introduced tdc tests for basic filter")
-Signed-off-by: Davide Caratti <dcaratti@redhat.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Further, while testing on x86_64 (Fedora 31), it was observed that the
+test also failed with a segfault inside write() because the generated
+code for the write function in glibc seems to access TLS before the
+syscall (probably due to the cancellation point check) and fails
+because TLS is not initialised.
+
+To mitigate these problems, this patch reduces the interface with the
+C library to just the syscall function.  The syscall function still
+sets errno on failure, which is undesirable but for now it only
+affects cases where syscalls fail.
+
+[1] https://bugs.linaro.org/show_bug.cgi?id=5479
+
+Signed-off-by: Siddhesh Poyarekar <siddhesh@gotplt.org>
+Reported-by: Masami Hiramatsu <masami.hiramatsu@linaro.org>
+Tested-by: Masami Hiramatsu <masami.hiramatsu@linaro.org>
+Reviewed-by: Tim Bird <tim.bird@sony.com>
+Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- .../tc-testing/tc-tests/filters/basic.json    | 51 +++++++++++++++++++
- 1 file changed, 51 insertions(+)
+ tools/testing/selftests/size/get_size.c | 24 ++++++++++++++++++------
+ 1 file changed, 18 insertions(+), 6 deletions(-)
 
-diff --git a/tools/testing/selftests/tc-testing/tc-tests/filters/basic.json b/tools/testing/selftests/tc-testing/tc-tests/filters/basic.json
-index 2e361cea63bcd..98a20faf31986 100644
---- a/tools/testing/selftests/tc-testing/tc-tests/filters/basic.json
-+++ b/tools/testing/selftests/tc-testing/tc-tests/filters/basic.json
-@@ -6,6 +6,9 @@
-             "filter",
-             "basic"
-         ],
-+        "plugins": {
-+            "requires": "nsPlugin"
-+        },
-         "setup": [
-             "$TC qdisc add dev $DEV1 ingress"
-         ],
-@@ -25,6 +28,9 @@
-             "filter",
-             "basic"
-         ],
-+        "plugins": {
-+            "requires": "nsPlugin"
-+        },
-         "setup": [
-             "$TC qdisc add dev $DEV1 ingress"
-         ],
-@@ -44,6 +50,9 @@
-             "filter",
-             "basic"
-         ],
-+        "plugins": {
-+            "requires": "nsPlugin"
-+        },
-         "setup": [
-             "$TC qdisc add dev $DEV1 ingress"
-         ],
-@@ -63,6 +72,9 @@
-             "filter",
-             "basic"
-         ],
-+        "plugins": {
-+            "requires": "nsPlugin"
-+        },
-         "setup": [
-             "$TC qdisc add dev $DEV1 ingress"
-         ],
-@@ -82,6 +94,9 @@
-             "filter",
-             "basic"
-         ],
-+        "plugins": {
-+            "requires": "nsPlugin"
-+        },
-         "setup": [
-             "$TC qdisc add dev $DEV1 ingress"
-         ],
-@@ -101,6 +116,9 @@
-             "filter",
-             "basic"
-         ],
-+        "plugins": {
-+            "requires": "nsPlugin"
-+        },
-         "setup": [
-             "$TC qdisc add dev $DEV1 ingress"
-         ],
-@@ -120,6 +138,9 @@
-             "filter",
-             "basic"
-         ],
-+        "plugins": {
-+            "requires": "nsPlugin"
-+        },
-         "setup": [
-             "$TC qdisc add dev $DEV1 ingress"
-         ],
-@@ -139,6 +160,9 @@
-             "filter",
-             "basic"
-         ],
-+        "plugins": {
-+            "requires": "nsPlugin"
-+        },
-         "setup": [
-             "$TC qdisc add dev $DEV1 ingress"
-         ],
-@@ -158,6 +182,9 @@
-             "filter",
-             "basic"
-         ],
-+        "plugins": {
-+            "requires": "nsPlugin"
-+        },
-         "setup": [
-             "$TC qdisc add dev $DEV1 ingress"
-         ],
-@@ -177,6 +204,9 @@
-             "filter",
-             "basic"
-         ],
-+        "plugins": {
-+            "requires": "nsPlugin"
-+        },
-         "setup": [
-             "$TC qdisc add dev $DEV1 ingress"
-         ],
-@@ -196,6 +226,9 @@
-             "filter",
-             "basic"
-         ],
-+        "plugins": {
-+            "requires": "nsPlugin"
-+        },
-         "setup": [
-             "$TC qdisc add dev $DEV1 ingress"
-         ],
-@@ -215,6 +248,9 @@
-             "filter",
-             "basic"
-         ],
-+        "plugins": {
-+            "requires": "nsPlugin"
-+        },
-         "setup": [
-             "$TC qdisc add dev $DEV1 ingress"
-         ],
-@@ -234,6 +270,9 @@
-             "filter",
-             "basic"
-         ],
-+        "plugins": {
-+            "requires": "nsPlugin"
-+        },
-         "setup": [
-             "$TC qdisc add dev $DEV1 ingress"
-         ],
-@@ -253,6 +292,9 @@
-             "filter",
-             "basic"
-         ],
-+        "plugins": {
-+            "requires": "nsPlugin"
-+        },
-         "setup": [
-             "$TC qdisc add dev $DEV1 ingress"
-         ],
-@@ -272,6 +314,9 @@
-             "filter",
-             "basic"
-         ],
-+        "plugins": {
-+            "requires": "nsPlugin"
-+        },
-         "setup": [
-             "$TC qdisc add dev $DEV1 ingress"
-         ],
-@@ -291,6 +336,9 @@
-             "filter",
-             "basic"
-         ],
-+        "plugins": {
-+            "requires": "nsPlugin"
-+        },
-         "setup": [
-             "$TC qdisc add dev $DEV1 ingress"
-         ],
-@@ -310,6 +358,9 @@
-             "filter",
-             "basic"
-         ],
-+        "plugins": {
-+            "requires": "nsPlugin"
-+        },
-         "setup": [
-             "$TC qdisc add dev $DEV1 ingress"
-         ],
+diff --git a/tools/testing/selftests/size/get_size.c b/tools/testing/selftests/size/get_size.c
+index d4b59ab979a09..f55943b6d1e2a 100644
+--- a/tools/testing/selftests/size/get_size.c
++++ b/tools/testing/selftests/size/get_size.c
+@@ -12,23 +12,35 @@
+  * own execution.  It also attempts to have as few dependencies
+  * on kernel features as possible.
+  *
+- * It should be statically linked, with startup libs avoided.
+- * It uses no library calls, and only the following 3 syscalls:
++ * It should be statically linked, with startup libs avoided.  It uses
++ * no library calls except the syscall() function for the following 3
++ * syscalls:
+  *   sysinfo(), write(), and _exit()
+  *
+  * For output, it avoids printf (which in some C libraries
+  * has large external dependencies) by  implementing it's own
+  * number output and print routines, and using __builtin_strlen()
++ *
++ * The test may crash if any of the above syscalls fails because in some
++ * libc implementations (e.g. the GNU C Library) errno is saved in
++ * thread-local storage, which does not get initialized due to avoiding
++ * startup libs.
+  */
+ 
+ #include <sys/sysinfo.h>
+ #include <unistd.h>
++#include <sys/syscall.h>
+ 
+ #define STDOUT_FILENO 1
+ 
+ static int print(const char *s)
+ {
+-	return write(STDOUT_FILENO, s, __builtin_strlen(s));
++	size_t len = 0;
++
++	while (s[len] != '\0')
++		len++;
++
++	return syscall(SYS_write, STDOUT_FILENO, s, len);
+ }
+ 
+ static inline char *num_to_str(unsigned long num, char *buf, int len)
+@@ -80,12 +92,12 @@ void _start(void)
+ 	print("TAP version 13\n");
+ 	print("# Testing system size.\n");
+ 
+-	ccode = sysinfo(&info);
++	ccode = syscall(SYS_sysinfo, &info);
+ 	if (ccode < 0) {
+ 		print("not ok 1");
+ 		print(test_name);
+ 		print(" ---\n reason: \"could not get sysinfo\"\n ...\n");
+-		_exit(ccode);
++		syscall(SYS_exit, ccode);
+ 	}
+ 	print("ok 1");
+ 	print(test_name);
+@@ -101,5 +113,5 @@ void _start(void)
+ 	print(" ...\n");
+ 	print("1..1\n");
+ 
+-	_exit(0);
++	syscall(SYS_exit, 0);
+ }
 -- 
 2.20.1
 
