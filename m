@@ -2,273 +2,267 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AC3A615CD84
-	for <lists+linux-kselftest@lfdr.de>; Thu, 13 Feb 2020 22:48:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4566B15DC77
+	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Feb 2020 16:53:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728796AbgBMVs2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 13 Feb 2020 16:48:28 -0500
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:37558 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728168AbgBMVs1 (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 13 Feb 2020 16:48:27 -0500
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: tonyk)
-        with ESMTPSA id 8BB3229581D
-From:   =?UTF-8?q?Andr=C3=A9=20Almeida?= <andrealmeid@collabora.com>
-To:     linux-kernel@vger.kernel.org, tglx@linutronix.de
-Cc:     kernel@collabora.com, krisman@collabora.com, shuah@kernel.org,
-        linux-kselftest@vger.kernel.org, rostedt@goodmis.org,
-        ryao@gentoo.org, peterz@infradead.org, dvhart@infradead.org,
-        mingo@redhat.com, z.figura12@gmail.com, steven@valvesoftware.com,
-        pgriffais@valvesoftware.com, steven@liquorix.net,
-        =?UTF-8?q?Andr=C3=A9=20Almeida?= <andrealmeid@collabora.com>
-Subject: [PATCH v3 4/4] selftests: futex: Add FUTEX_WAIT_MULTIPLE wake up test
-Date:   Thu, 13 Feb 2020 18:45:25 -0300
-Message-Id: <20200213214525.183689-5-andrealmeid@collabora.com>
-X-Mailer: git-send-email 2.25.0
-In-Reply-To: <20200213214525.183689-1-andrealmeid@collabora.com>
-References: <20200213214525.183689-1-andrealmeid@collabora.com>
+        id S1731254AbgBNPx1 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 14 Feb 2020 10:53:27 -0500
+Received: from mail.kernel.org ([198.145.29.99]:60890 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1731249AbgBNPx0 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 14 Feb 2020 10:53:26 -0500
+Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id F2B7E222C4;
+        Fri, 14 Feb 2020 15:53:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1581695606;
+        bh=88HK1gOY1FHSYpLNTI+/uJaGR/7f7jW7TlUIoj3OmtE=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=dTURer+h8ob4eqNOd/VvBayk6eU5N6jpy5O/17nGzcksspeuLv5wJ8+25k8BDsIhS
+         XOeOnTnuvCU3mQoV7yYvKbLUMOhIsxf7moJlEGsejjLPK0VmHx0P/NU8g1GVFODeAF
+         1czbKSNha4t65F++JkrIIZlzzkfcUK2fia8WYosk=
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Willem de Bruijn <willemb@google.com>,
+        Naresh Kamboju <naresh.kamboju@linaro.org>,
+        Jakub Kicinski <jakub.kicinski@netronome.com>,
+        Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.5 209/542] selftests/net: make so_txtime more robust to timer variance
+Date:   Fri, 14 Feb 2020 10:43:21 -0500
+Message-Id: <20200214154854.6746-209-sashal@kernel.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20200214154854.6746-1-sashal@kernel.org>
+References: <20200214154854.6746-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+X-stable: review
+X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Gabriel Krisman Bertazi <krisman@collabora.com>
+From: Willem de Bruijn <willemb@google.com>
 
-Add test for wait at multiple futexes mechanism. Skip the test if it's a
-x32 application and the kernel returned the approtiaded error, since this
-ABI is not supported for this operation.
+[ Upstream commit ea6a547669b37453f2b1a5d85188d75b3613dfaa ]
 
-Signed-off-by: Gabriel Krisman Bertazi <krisman@collabora.com>
-Co-developed-by: André Almeida <andrealmeid@collabora.com>
-Signed-off-by: André Almeida <andrealmeid@collabora.com>
+The SO_TXTIME test depends on accurate timers. In some virtualized
+environments the test has been reported to be flaky. This is easily
+reproduced by disabling kvm acceleration in Qemu.
+
+Allow greater variance in a run and retry to further reduce flakiness.
+
+Observed errors are one of two kinds: either the packet arrives too
+early or late at recv(), or it was dropped in the qdisc itself and the
+recv() call times out.
+
+In the latter case, the qdisc queues a notification to the error
+queue of the send socket. Also explicitly report this cause.
+
+Link: https://lore.kernel.org/netdev/CA+FuTSdYOnJCsGuj43xwV1jxvYsaoa_LzHQF9qMyhrkLrivxKw@mail.gmail.com
+Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
+Signed-off-by: Willem de Bruijn <willemb@google.com>
+Signed-off-by: Jakub Kicinski <jakub.kicinski@netronome.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
-Changes since v2: none
----
- .../selftests/futex/functional/.gitignore     |   1 +
- .../selftests/futex/functional/Makefile       |   3 +-
- .../futex/functional/futex_wait_multiple.c    | 173 ++++++++++++++++++
- .../testing/selftests/futex/functional/run.sh |   3 +
- 4 files changed, 179 insertions(+), 1 deletion(-)
- create mode 100644 tools/testing/selftests/futex/functional/futex_wait_multiple.c
+ tools/testing/selftests/net/so_txtime.c  | 84 +++++++++++++++++++++++-
+ tools/testing/selftests/net/so_txtime.sh |  9 ++-
+ 2 files changed, 88 insertions(+), 5 deletions(-)
 
-diff --git a/tools/testing/selftests/futex/functional/.gitignore b/tools/testing/selftests/futex/functional/.gitignore
-index a09f57061902..4660128a545e 100644
---- a/tools/testing/selftests/futex/functional/.gitignore
-+++ b/tools/testing/selftests/futex/functional/.gitignore
-@@ -5,3 +5,4 @@ futex_wait_private_mapped_file
- futex_wait_timeout
- futex_wait_uninitialized_heap
- futex_wait_wouldblock
-+futex_wait_multiple
-diff --git a/tools/testing/selftests/futex/functional/Makefile b/tools/testing/selftests/futex/functional/Makefile
-index 30996306cabc..75f9fface11f 100644
---- a/tools/testing/selftests/futex/functional/Makefile
-+++ b/tools/testing/selftests/futex/functional/Makefile
-@@ -14,7 +14,8 @@ TEST_GEN_FILES := \
- 	futex_requeue_pi_signal_restart \
- 	futex_requeue_pi_mismatched_ops \
- 	futex_wait_uninitialized_heap \
--	futex_wait_private_mapped_file
-+	futex_wait_private_mapped_file \
-+	futex_wait_multiple
+diff --git a/tools/testing/selftests/net/so_txtime.c b/tools/testing/selftests/net/so_txtime.c
+index 34df4c8882afb..383bac05ac324 100644
+--- a/tools/testing/selftests/net/so_txtime.c
++++ b/tools/testing/selftests/net/so_txtime.c
+@@ -12,7 +12,11 @@
+ #include <arpa/inet.h>
+ #include <error.h>
+ #include <errno.h>
++#include <inttypes.h>
+ #include <linux/net_tstamp.h>
++#include <linux/errqueue.h>
++#include <linux/ipv6.h>
++#include <linux/tcp.h>
+ #include <stdbool.h>
+ #include <stdlib.h>
+ #include <stdio.h>
+@@ -28,7 +32,7 @@ static int	cfg_clockid	= CLOCK_TAI;
+ static bool	cfg_do_ipv4;
+ static bool	cfg_do_ipv6;
+ static uint16_t	cfg_port	= 8000;
+-static int	cfg_variance_us	= 2000;
++static int	cfg_variance_us	= 4000;
  
- TEST_PROGS := run.sh
+ static uint64_t glob_tstart;
  
-diff --git a/tools/testing/selftests/futex/functional/futex_wait_multiple.c b/tools/testing/selftests/futex/functional/futex_wait_multiple.c
-new file mode 100644
-index 000000000000..b48422e79f42
---- /dev/null
-+++ b/tools/testing/selftests/futex/functional/futex_wait_multiple.c
-@@ -0,0 +1,173 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+/******************************************************************************
-+ *
-+ *   Copyright © Collabora, Ltd., 2019
-+ *
-+ * DESCRIPTION
-+ *      Test basic semantics of FUTEX_WAIT_MULTIPLE
-+ *
-+ * AUTHOR
-+ *      Gabriel Krisman Bertazi <krisman@collabora.com>
-+ *
-+ * HISTORY
-+ *      2019-Dec-13: Initial version by Krisman <krisman@collabora.com>
-+ *
-+ *****************************************************************************/
+@@ -43,6 +47,9 @@ static struct timed_send cfg_in[MAX_NUM_PKT];
+ static struct timed_send cfg_out[MAX_NUM_PKT];
+ static int cfg_num_pkt;
+ 
++static int cfg_errq_level;
++static int cfg_errq_type;
 +
-+#include <errno.h>
-+#include <getopt.h>
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <string.h>
-+#include <time.h>
-+#include <pthread.h>
-+#include "futextest.h"
-+#include "logging.h"
+ static uint64_t gettime_ns(void)
+ {
+ 	struct timespec ts;
+@@ -90,13 +97,15 @@ static void do_send_one(int fdt, struct timed_send *ts)
+ 
+ }
+ 
+-static void do_recv_one(int fdr, struct timed_send *ts)
++static bool do_recv_one(int fdr, struct timed_send *ts)
+ {
+ 	int64_t tstop, texpect;
+ 	char rbuf[2];
+ 	int ret;
+ 
+ 	ret = recv(fdr, rbuf, sizeof(rbuf), 0);
++	if (ret == -1 && errno == EAGAIN)
++		return true;
+ 	if (ret == -1)
+ 		error(1, errno, "read");
+ 	if (ret != 1)
+@@ -113,6 +122,8 @@ static void do_recv_one(int fdr, struct timed_send *ts)
+ 
+ 	if (labs(tstop - texpect) > cfg_variance_us)
+ 		error(1, 0, "exceeds variance (%d us)", cfg_variance_us);
 +
-+#define TEST_NAME "futex-wait-multiple"
-+#define timeout_ns 100000
-+#define MAX_COUNT 128
-+#define WAKE_WAIT_US 3000000
-+
-+int ret = RET_PASS;
-+char *progname;
-+futex_t f[MAX_COUNT] = {0};
-+struct futex_wait_block fwb[MAX_COUNT];
-+
-+void usage(char *prog)
++	return false;
+ }
+ 
+ static void do_recv_verify_empty(int fdr)
+@@ -125,12 +136,70 @@ static void do_recv_verify_empty(int fdr)
+ 		error(1, 0, "recv: not empty as expected (%d, %d)", ret, errno);
+ }
+ 
++static void do_recv_errqueue_timeout(int fdt)
 +{
-+	printf("Usage: %s\n", prog);
-+	printf("  -c	Use color\n");
-+	printf("  -h	Display this help message\n");
-+	printf("  -v L	Verbosity level: %d=QUIET %d=CRITICAL %d=INFO\n",
-+	       VQUIET, VCRITICAL, VINFO);
-+}
++	char control[CMSG_SPACE(sizeof(struct sock_extended_err)) +
++		     CMSG_SPACE(sizeof(struct sockaddr_in6))] = {0};
++	char data[sizeof(struct ipv6hdr) +
++		  sizeof(struct tcphdr) + 1];
++	struct sock_extended_err *err;
++	struct msghdr msg = {0};
++	struct iovec iov = {0};
++	struct cmsghdr *cm;
++	int64_t tstamp = 0;
++	int ret;
 +
-+void test_count_overflow(void)
-+{
-+	futex_t f = FUTEX_INITIALIZER;
-+	struct futex_wait_block fwb[MAX_COUNT+1];
-+	int res, i;
++	iov.iov_base = data;
++	iov.iov_len = sizeof(data);
 +
-+	ksft_print_msg("%s: Test a too big number of futexes\n", progname);
++	msg.msg_iov = &iov;
++	msg.msg_iovlen = 1;
 +
-+	for (i = 0; i < MAX_COUNT+1; i++) {
-+		fwb[i].uaddr = &f;
-+		fwb[i].val = f;
-+		fwb[i].bitset = 0;
-+	}
++	msg.msg_control = control;
++	msg.msg_controllen = sizeof(control);
 +
-+	res = futex_wait_multiple(fwb, MAX_COUNT+1, NULL, FUTEX_PRIVATE_FLAG);
-+
-+#ifdef __ILP32__
-+	if (res != -1 || errno != ENOSYS) {
-+		ksft_test_result_fail("futex_wait_multiple returned %d\n",
-+				      res < 0 ? errno : res);
-+		ret = RET_FAIL;
-+	} else {
-+		ksft_test_result_skip("futex_wait_multiple not supported at x32\n");
-+	}
-+#else
-+	if (res != -1 || errno != EINVAL) {
-+		ksft_test_result_fail("futex_wait_multiple returned %d\n",
-+				      res < 0 ? errno : res);
-+		ret = RET_FAIL;
-+	} else {
-+		ksft_test_result_pass("futex_wait_multiple count overflow succeed\n");
-+	}
-+
-+#endif /* __ILP32__ */
-+}
-+
-+void *waiterfn(void *arg)
-+{
-+	int res;
-+
-+	res = futex_wait_multiple(fwb, MAX_COUNT, NULL, FUTEX_PRIVATE_FLAG);
-+
-+#ifdef __ILP32__
-+	if (res != -1 || errno != ENOSYS) {
-+		ksft_test_result_fail("futex_wait_multiple returned %d\n",
-+				      res < 0 ? errno : res);
-+		ret = RET_FAIL;
-+	} else {
-+		ksft_test_result_skip("futex_wait_multiple not supported at x32\n");
-+	}
-+#else
-+	if (res < 0)
-+		ksft_print_msg("waiter failed %d\n", res);
-+
-+	info("futex_wait_multiple: Got hint futex %d was freed\n", res);
-+#endif /* __ILP32__ */
-+
-+	return NULL;
-+}
-+
-+void test_fwb_wakeup(void)
-+{
-+	int res, i;
-+	pthread_t waiter;
-+
-+	ksft_print_msg("%s: Test wake up in a list of futex\n", progname);
-+
-+	for (i = 0; i < MAX_COUNT; i++) {
-+		fwb[i].uaddr = &f[i];
-+		fwb[i].val = f[i];
-+		fwb[i].bitset = 0xffffffff;
-+	}
-+
-+	res = pthread_create(&waiter, NULL, waiterfn, NULL);
-+	if (res) {
-+		ksft_test_result_fail("Creating waiting thread failed");
-+		ksft_exit_fail();
-+	}
-+
-+	usleep(WAKE_WAIT_US);
-+	res = futex_wake(&(f[MAX_COUNT-1]), 1, FUTEX_PRIVATE_FLAG);
-+	if (res != 1) {
-+		ksft_test_result_fail("Failed to wake thread res=%d\n", res);
-+		ksft_exit_fail();
-+	}
-+
-+	pthread_join(waiter, NULL);
-+	ksft_test_result_pass("%s succeed\n", __func__);
-+}
-+
-+int main(int argc, char *argv[])
-+{
-+	int c;
-+
-+	while ((c = getopt(argc, argv, "cht:v:")) != -1) {
-+		switch (c) {
-+		case 'c':
-+			log_color(1);
++	while (1) {
++		ret = recvmsg(fdt, &msg, MSG_ERRQUEUE);
++		if (ret == -1 && errno == EAGAIN)
 +			break;
-+		case 'h':
-+			usage(basename(argv[0]));
-+			exit(0);
-+		case 'v':
-+			log_verbosity(atoi(optarg));
-+			break;
-+		default:
-+			usage(basename(argv[0]));
-+			exit(1);
-+		}
++		if (ret == -1)
++			error(1, errno, "errqueue");
++		if (msg.msg_flags != MSG_ERRQUEUE)
++			error(1, 0, "errqueue: flags 0x%x\n", msg.msg_flags);
++
++		cm = CMSG_FIRSTHDR(&msg);
++		if (cm->cmsg_level != cfg_errq_level ||
++		    cm->cmsg_type != cfg_errq_type)
++			error(1, 0, "errqueue: type 0x%x.0x%x\n",
++				    cm->cmsg_level, cm->cmsg_type);
++
++		err = (struct sock_extended_err *)CMSG_DATA(cm);
++		if (err->ee_origin != SO_EE_ORIGIN_TXTIME)
++			error(1, 0, "errqueue: origin 0x%x\n", err->ee_origin);
++		if (err->ee_code != ECANCELED)
++			error(1, 0, "errqueue: code 0x%x\n", err->ee_code);
++
++		tstamp = ((int64_t) err->ee_data) << 32 | err->ee_info;
++		tstamp -= (int64_t) glob_tstart;
++		tstamp /= 1000 * 1000;
++		fprintf(stderr, "send: pkt %c at %" PRId64 "ms dropped\n",
++				data[ret - 1], tstamp);
++
++		msg.msg_flags = 0;
++		msg.msg_controllen = sizeof(control);
 +	}
 +
-+	progname = basename(argv[0]);
-+
-+	ksft_print_header();
-+	ksft_set_plan(2);
-+
-+	test_count_overflow();
-+
-+#ifdef __ILP32__
-+	// if it's a 32x binary, there's no futex to wakeup
-+	ksft_test_result_skip("futex_wait_multiple not supported at x32\n");
-+#else
-+	test_fwb_wakeup();
-+#endif /* __ILP32__ */
-+
-+	ksft_print_cnts();
-+	return ret;
++	error(1, 0, "recv: timeout");
 +}
-diff --git a/tools/testing/selftests/futex/functional/run.sh b/tools/testing/selftests/futex/functional/run.sh
-index 1acb6ace1680..a8be94f28ff7 100755
---- a/tools/testing/selftests/futex/functional/run.sh
-+++ b/tools/testing/selftests/futex/functional/run.sh
-@@ -73,3 +73,6 @@ echo
- echo
- ./futex_wait_uninitialized_heap $COLOR
- ./futex_wait_private_mapped_file $COLOR
 +
-+echo
-+./futex_wait_multiple $COLOR
+ static void setsockopt_txtime(int fd)
+ {
+ 	struct sock_txtime so_txtime_val = { .clockid = cfg_clockid };
+ 	struct sock_txtime so_txtime_val_read = { 0 };
+ 	socklen_t vallen = sizeof(so_txtime_val);
+ 
++	so_txtime_val.flags = SOF_TXTIME_REPORT_ERRORS;
++
+ 	if (setsockopt(fd, SOL_SOCKET, SO_TXTIME,
+ 		       &so_txtime_val, sizeof(so_txtime_val)))
+ 		error(1, errno, "setsockopt txtime");
+@@ -194,7 +263,8 @@ static void do_test(struct sockaddr *addr, socklen_t alen)
+ 	for (i = 0; i < cfg_num_pkt; i++)
+ 		do_send_one(fdt, &cfg_in[i]);
+ 	for (i = 0; i < cfg_num_pkt; i++)
+-		do_recv_one(fdr, &cfg_out[i]);
++		if (do_recv_one(fdr, &cfg_out[i]))
++			do_recv_errqueue_timeout(fdt);
+ 
+ 	do_recv_verify_empty(fdr);
+ 
+@@ -280,6 +350,10 @@ int main(int argc, char **argv)
+ 		addr6.sin6_family = AF_INET6;
+ 		addr6.sin6_port = htons(cfg_port);
+ 		addr6.sin6_addr = in6addr_loopback;
++
++		cfg_errq_level = SOL_IPV6;
++		cfg_errq_type = IPV6_RECVERR;
++
+ 		do_test((void *)&addr6, sizeof(addr6));
+ 	}
+ 
+@@ -289,6 +363,10 @@ int main(int argc, char **argv)
+ 		addr4.sin_family = AF_INET;
+ 		addr4.sin_port = htons(cfg_port);
+ 		addr4.sin_addr.s_addr = htonl(INADDR_LOOPBACK);
++
++		cfg_errq_level = SOL_IP;
++		cfg_errq_type = IP_RECVERR;
++
+ 		do_test((void *)&addr4, sizeof(addr4));
+ 	}
+ 
+diff --git a/tools/testing/selftests/net/so_txtime.sh b/tools/testing/selftests/net/so_txtime.sh
+index 5aa519328a5b5..3f7800eaecb1e 100755
+--- a/tools/testing/selftests/net/so_txtime.sh
++++ b/tools/testing/selftests/net/so_txtime.sh
+@@ -5,7 +5,12 @@
+ 
+ # Run in network namespace
+ if [[ $# -eq 0 ]]; then
+-	./in_netns.sh $0 __subprocess
++	if ! ./in_netns.sh $0 __subprocess; then
++		# test is time sensitive, can be flaky
++		echo "test failed: retry once"
++		./in_netns.sh $0 __subprocess
++	fi
++
+ 	exit $?
+ fi
+ 
+@@ -18,7 +23,7 @@ tc qdisc add dev lo root fq
+ ./so_txtime -4 -6 -c mono a,10,b,20 a,10,b,20
+ ./so_txtime -4 -6 -c mono a,20,b,10 b,20,a,20
+ 
+-if tc qdisc replace dev lo root etf clockid CLOCK_TAI delta 200000; then
++if tc qdisc replace dev lo root etf clockid CLOCK_TAI delta 400000; then
+ 	! ./so_txtime -4 -6 -c tai a,-1 a,-1
+ 	! ./so_txtime -4 -6 -c tai a,0 a,0
+ 	./so_txtime -4 -6 -c tai a,10 a,10
 -- 
-2.25.0
+2.20.1
 
