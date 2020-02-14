@@ -2,38 +2,37 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 41ABA15F2C1
-	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Feb 2020 19:20:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EAD415F2E4
+	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Feb 2020 19:20:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730560AbgBNPul (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 14 Feb 2020 10:50:41 -0500
-Received: from mail.kernel.org ([198.145.29.99]:54966 "EHLO mail.kernel.org"
+        id S1729912AbgBNPv0 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 14 Feb 2020 10:51:26 -0500
+Received: from mail.kernel.org ([198.145.29.99]:56320 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730555AbgBNPul (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 14 Feb 2020 10:50:41 -0500
+        id S1730331AbgBNPvY (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 14 Feb 2020 10:51:24 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 58C0D2467E;
-        Fri, 14 Feb 2020 15:50:39 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 9369C24649;
+        Fri, 14 Feb 2020 15:51:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1581695440;
-        bh=ERfQ3eAbohrmh759MhxBh8l+4EKx0sFujaFwkM2jL3g=;
+        s=default; t=1581695484;
+        bh=kwYS4IJqe/CCzOFwvS5e6qcl5rOhH6tgd+nA24huEr8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=J8jEdBgmBZeh3KNLNaX/BSAFHJuISr9VUNgeqjgzw6DznjKp/0U6CXgemgPt5KOJK
-         zcx70d/bOGs57ipvq0glbEeceZMm9djERoR8IyhL953FXbakRNt9i9BAjBy3Q3IcX/
-         Lm6ZnSMcAYUWgcTXtuJ+b2mMD/hc7tel0oC6x2xw=
+        b=AmzozrmzJsqODW4SIRTaNJshsrlu1rpA4S+sdvhnp1qBLdIpel/AR13S4JilZRNZv
+         QpRfvL5wqEg2ZAh1e97F0cYOzrkp6fE+2hbh0ODW90Dki1vPdwz4IClzWoxLyEEetX
+         JBT67Z98SHHWb3Ovcy83WBxSwRLSaJPIUnvOlHn0=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Siddhesh Poyarekar <siddhesh@gotplt.org>,
-        Masami Hiramatsu <masami.hiramatsu@linaro.org>,
-        Tim Bird <tim.bird@sony.com>,
+Cc:     Matthieu Baerts <matthieu.baerts@tessares.net>,
+        Kees Cook <keescook@chromium.org>,
         Shuah Khan <skhan@linuxfoundation.org>,
         Sasha Levin <sashal@kernel.org>,
         linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.5 081/542] kselftest: Minimise dependency of get_size on C library interfaces
-Date:   Fri, 14 Feb 2020 10:41:13 -0500
-Message-Id: <20200214154854.6746-81-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.5 115/542] selftests: settings: tests can be in subsubdirs
+Date:   Fri, 14 Feb 2020 10:41:47 -0500
+Message-Id: <20200214154854.6746-115-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20200214154854.6746-1-sashal@kernel.org>
 References: <20200214154854.6746-1-sashal@kernel.org>
@@ -46,111 +45,58 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Siddhesh Poyarekar <siddhesh@gotplt.org>
+From: Matthieu Baerts <matthieu.baerts@tessares.net>
 
-[ Upstream commit 6b64a650f0b2ae3940698f401732988699eecf7a ]
+[ Upstream commit ac87813d4372f4c005264acbe3b7f00c1dee37c4 ]
 
-It was observed[1] on arm64 that __builtin_strlen led to an infinite
-loop in the get_size selftest.  This is because __builtin_strlen (and
-other builtins) may sometimes result in a call to the C library
-function.  The C library implementation of strlen uses an IFUNC
-resolver to load the most efficient strlen implementation for the
-underlying machine and hence has a PLT indirection even for static
-binaries.  Because this binary avoids the C library startup routines,
-the PLT initialization never happens and hence the program gets stuck
-in an infinite loop.
+Commit 852c8cbf34d3 ("selftests/kselftest/runner.sh: Add 45 second
+timeout per test") adds support for a new per-test-directory "settings"
+file. But this only works for tests not in a sub-subdirectories, e.g.
 
-On x86_64 the __builtin_strlen just happens to expand inline and avoid
-the call but that is not always guaranteed.
+ - tools/testing/selftests/rtc (rtc) is OK,
+ - tools/testing/selftests/net/mptcp (net/mptcp) is not.
 
-Further, while testing on x86_64 (Fedora 31), it was observed that the
-test also failed with a segfault inside write() because the generated
-code for the write function in glibc seems to access TLS before the
-syscall (probably due to the cancellation point check) and fails
-because TLS is not initialised.
+We have to increase the timeout for net/mptcp tests which are not
+upstreamed yet but this fix is valid for other tests if they need to add
+a "settings" file, see the full list with:
 
-To mitigate these problems, this patch reduces the interface with the
-C library to just the syscall function.  The syscall function still
-sets errno on failure, which is undesirable but for now it only
-affects cases where syscalls fail.
+  tools/testing/selftests/*/*/**/Makefile
 
-[1] https://bugs.linaro.org/show_bug.cgi?id=5479
+Note that this patch changes the text header message printed at the end
+of the execution but this text is modified only for the tests that are
+in sub-subdirectories, e.g.
 
-Signed-off-by: Siddhesh Poyarekar <siddhesh@gotplt.org>
-Reported-by: Masami Hiramatsu <masami.hiramatsu@linaro.org>
-Tested-by: Masami Hiramatsu <masami.hiramatsu@linaro.org>
-Reviewed-by: Tim Bird <tim.bird@sony.com>
+  ok 1 selftests: net/mptcp: mptcp_connect.sh
+
+Before we had:
+
+  ok 1 selftests: mptcp: mptcp_connect.sh
+
+But showing the full target name is probably better, just in case a
+subsubdir has the same name as another one in another subdirectory.
+
+Fixes: 852c8cbf34d3 (selftests/kselftest/runner.sh: Add 45 second timeout per test)
+Signed-off-by: Matthieu Baerts <matthieu.baerts@tessares.net>
+Reviewed-by: Kees Cook <keescook@chromium.org>
 Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/testing/selftests/size/get_size.c | 24 ++++++++++++++++++------
- 1 file changed, 18 insertions(+), 6 deletions(-)
+ tools/testing/selftests/kselftest/runner.sh | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/size/get_size.c b/tools/testing/selftests/size/get_size.c
-index 2ad45b9443550..2980b1a63366b 100644
---- a/tools/testing/selftests/size/get_size.c
-+++ b/tools/testing/selftests/size/get_size.c
-@@ -11,23 +11,35 @@
-  * own execution.  It also attempts to have as few dependencies
-  * on kernel features as possible.
-  *
-- * It should be statically linked, with startup libs avoided.
-- * It uses no library calls, and only the following 3 syscalls:
-+ * It should be statically linked, with startup libs avoided.  It uses
-+ * no library calls except the syscall() function for the following 3
-+ * syscalls:
-  *   sysinfo(), write(), and _exit()
-  *
-  * For output, it avoids printf (which in some C libraries
-  * has large external dependencies) by  implementing it's own
-  * number output and print routines, and using __builtin_strlen()
-+ *
-+ * The test may crash if any of the above syscalls fails because in some
-+ * libc implementations (e.g. the GNU C Library) errno is saved in
-+ * thread-local storage, which does not get initialized due to avoiding
-+ * startup libs.
-  */
- 
- #include <sys/sysinfo.h>
- #include <unistd.h>
-+#include <sys/syscall.h>
- 
- #define STDOUT_FILENO 1
- 
- static int print(const char *s)
+diff --git a/tools/testing/selftests/kselftest/runner.sh b/tools/testing/selftests/kselftest/runner.sh
+index a8d20cbb711cf..e84d901f85672 100644
+--- a/tools/testing/selftests/kselftest/runner.sh
++++ b/tools/testing/selftests/kselftest/runner.sh
+@@ -91,7 +91,7 @@ run_one()
+ run_many()
  {
--	return write(STDOUT_FILENO, s, __builtin_strlen(s));
-+	size_t len = 0;
-+
-+	while (s[len] != '\0')
-+		len++;
-+
-+	return syscall(SYS_write, STDOUT_FILENO, s, len);
- }
- 
- static inline char *num_to_str(unsigned long num, char *buf, int len)
-@@ -79,12 +91,12 @@ void _start(void)
- 	print("TAP version 13\n");
- 	print("# Testing system size.\n");
- 
--	ccode = sysinfo(&info);
-+	ccode = syscall(SYS_sysinfo, &info);
- 	if (ccode < 0) {
- 		print("not ok 1");
- 		print(test_name);
- 		print(" ---\n reason: \"could not get sysinfo\"\n ...\n");
--		_exit(ccode);
-+		syscall(SYS_exit, ccode);
- 	}
- 	print("ok 1");
- 	print(test_name);
-@@ -100,5 +112,5 @@ void _start(void)
- 	print(" ...\n");
- 	print("1..1\n");
- 
--	_exit(0);
-+	syscall(SYS_exit, 0);
- }
+ 	echo "TAP version 13"
+-	DIR=$(basename "$PWD")
++	DIR="${PWD#${BASE_DIR}/}"
+ 	test_num=0
+ 	total=$(echo "$@" | wc -w)
+ 	echo "1..$total"
 -- 
 2.20.1
 
