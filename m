@@ -2,27 +2,27 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 34C6C15E024
-	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Feb 2020 17:12:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 048E815E7DB
+	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Feb 2020 17:57:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2392004AbgBNQMc (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 14 Feb 2020 11:12:32 -0500
-Received: from mail.kernel.org ([198.145.29.99]:40118 "EHLO mail.kernel.org"
+        id S2389636AbgBNQ42 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 14 Feb 2020 11:56:28 -0500
+Received: from mail.kernel.org ([198.145.29.99]:49648 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2391481AbgBNQMc (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 14 Feb 2020 11:12:32 -0500
+        id S2404615AbgBNQR6 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 14 Feb 2020 11:17:58 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 3AD76246AA;
-        Fri, 14 Feb 2020 16:12:30 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id E5E0324694;
+        Fri, 14 Feb 2020 16:17:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1581696751;
+        s=default; t=1581697077;
         bh=HSfHtUdMFWc6CS5XaUONf1lMrkLQkHO5y1TvGHsvi9A=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ieCvGgAc9XTvTiEsp2NvIVpGATU0QbeAaKcOLRoIQEL7EAwF41PhuAp+T7gdFKY10
-         r+ckJdjdxfzglRPa/eSpZLtiDBT598jh6slx7cr5V18SfUXKnF9NIphK2iX6YxltvX
-         52SrNJPkMSWZhuM7VoI5U9hnG0t6KZVGsPwypLzE=
+        b=tHfisUWvlh9+4YalNGAXWbu8AAIdGthz/2wEsFz7OyqeAGCByWCXXW+VqyqoeZjM9
+         +8qcx7Sw9pwTnIkWMkvyjg3H8gcGdXiDOo5xT9f8Gd88PWaczdC/LRV0/LpeC4AS4W
+         +fm3Au4pO1GuRfFjwNCa5CABesumzWHhFjBLOXWc=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Siddhesh Poyarekar <siddhesh@gotplt.org>,
@@ -31,12 +31,12 @@ Cc:     Siddhesh Poyarekar <siddhesh@gotplt.org>,
         Shuah Khan <skhan@linuxfoundation.org>,
         Sasha Levin <sashal@kernel.org>,
         linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 033/252] kselftest: Minimise dependency of get_size on C library interfaces
-Date:   Fri, 14 Feb 2020 11:08:08 -0500
-Message-Id: <20200214161147.15842-33-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.14 032/186] kselftest: Minimise dependency of get_size on C library interfaces
+Date:   Fri, 14 Feb 2020 11:14:41 -0500
+Message-Id: <20200214161715.18113-32-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200214161147.15842-1-sashal@kernel.org>
-References: <20200214161147.15842-1-sashal@kernel.org>
+In-Reply-To: <20200214161715.18113-1-sashal@kernel.org>
+References: <20200214161715.18113-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
