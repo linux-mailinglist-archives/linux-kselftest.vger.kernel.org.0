@@ -2,155 +2,170 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 048E815E7DB
-	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Feb 2020 17:57:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CF0E515E799
+	for <lists+linux-kselftest@lfdr.de>; Fri, 14 Feb 2020 17:55:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389636AbgBNQ42 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 14 Feb 2020 11:56:28 -0500
-Received: from mail.kernel.org ([198.145.29.99]:49648 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2404615AbgBNQR6 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 14 Feb 2020 11:17:58 -0500
-Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id E5E0324694;
-        Fri, 14 Feb 2020 16:17:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1581697077;
-        bh=HSfHtUdMFWc6CS5XaUONf1lMrkLQkHO5y1TvGHsvi9A=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=tHfisUWvlh9+4YalNGAXWbu8AAIdGthz/2wEsFz7OyqeAGCByWCXXW+VqyqoeZjM9
-         +8qcx7Sw9pwTnIkWMkvyjg3H8gcGdXiDOo5xT9f8Gd88PWaczdC/LRV0/LpeC4AS4W
-         +fm3Au4pO1GuRfFjwNCa5CABesumzWHhFjBLOXWc=
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Siddhesh Poyarekar <siddhesh@gotplt.org>,
-        Masami Hiramatsu <masami.hiramatsu@linaro.org>,
-        Tim Bird <tim.bird@sony.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Sasha Levin <sashal@kernel.org>,
-        linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 032/186] kselftest: Minimise dependency of get_size on C library interfaces
-Date:   Fri, 14 Feb 2020 11:14:41 -0500
-Message-Id: <20200214161715.18113-32-sashal@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20200214161715.18113-1-sashal@kernel.org>
-References: <20200214161715.18113-1-sashal@kernel.org>
+        id S1729772AbgBNQyy (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 14 Feb 2020 11:54:54 -0500
+Received: from mail.efficios.com ([167.114.26.124]:59858 "EHLO
+        mail.efficios.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2404925AbgBNQyx (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Fri, 14 Feb 2020 11:54:53 -0500
+Received: from localhost (localhost [127.0.0.1])
+        by mail.efficios.com (Postfix) with ESMTP id B00CE23ACB5;
+        Fri, 14 Feb 2020 11:54:50 -0500 (EST)
+Received: from mail.efficios.com ([127.0.0.1])
+        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id b0oj3fE8KmnK; Fri, 14 Feb 2020 11:54:50 -0500 (EST)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.efficios.com (Postfix) with ESMTP id 3FDA723A8FB;
+        Fri, 14 Feb 2020 11:54:50 -0500 (EST)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com 3FDA723A8FB
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
+        s=default; t=1581699290;
+        bh=NiKdD4GMaJ2MLkmF5uW6TCLm7+mQJ4RNezaFecTBBrc=;
+        h=Date:From:To:Message-ID:MIME-Version;
+        b=lmZfsuR8mMqnn/jkQx05Bu1jbK8vDIOmqGJaHkWup/0MlxAA/1gicJaDAkdKhB944
+         GhMWtw7u4HFvMPw+aOfPYDhGY8fYj94hJSqomzcvUQBEeMBMUqkjAspJwK+hPPzp0v
+         Yh3RwAaRgapqzNq2bhTAaE0Db8eNkjVBhTOlh7UHB8u3yN1mKoay4Ml35xHH1SAGRi
+         vFcltsNIlMjLtOyiKmpk1D6uXX1lq+u61akr0QrigKoV9FgAuzxw+kC6GOFwsAtBFd
+         5iW9l5E9ypdtJkwRrprv6leD3FA/K+deK8lIBVdDd1NFl5tzr+2MrrxQAZQUO15PkR
+         TYhq6aPXyutGQ==
+X-Virus-Scanned: amavisd-new at efficios.com
+Received: from mail.efficios.com ([127.0.0.1])
+        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id a7LVwWYzJImk; Fri, 14 Feb 2020 11:54:50 -0500 (EST)
+Received: from mail03.efficios.com (mail03.efficios.com [167.114.26.124])
+        by mail.efficios.com (Postfix) with ESMTP id 2291D23AF8E;
+        Fri, 14 Feb 2020 11:54:50 -0500 (EST)
+Date:   Fri, 14 Feb 2020 11:54:50 -0500 (EST)
+From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+To:     Florian Weimer <fweimer@redhat.com>
+Cc:     "H. Peter Anvin" <hpa@zytor.com>, Chris Lameter <cl@linux.com>,
+        Jann Horn <jannh@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Joel Fernandes <joelaf@google.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Dave Watson <davejwatson@fb.com>,
+        Will Deacon <will.deacon@arm.com>, shuah <shuah@kernel.org>,
+        Andi Kleen <andi@firstfloor.org>,
+        linux-kselftest <linux-kselftest@vger.kernel.org>,
+        Russell King <linux@arm.linux.org.uk>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Paul <paulmck@linux.vnet.ibm.com>, Paul Turner <pjt@google.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Josh Triplett <josh@joshtriplett.org>,
+        rostedt <rostedt@goodmis.org>, Ben Maurer <bmaurer@fb.com>,
+        linux-api <linux-api@vger.kernel.org>,
+        Andy Lutomirski <luto@amacapital.net>
+Message-ID: <1713146428.2610.1581699290029.JavaMail.zimbra@efficios.com>
+In-Reply-To: <87blql5hfb.fsf@oldenburg2.str.redhat.com>
+References: <20200121160312.26545-1-mathieu.desnoyers@efficios.com> <2049164886.596497.1579641536619.JavaMail.zimbra@efficios.com> <alpine.DEB.2.21.2001212141590.1231@www.lameter.com> <1648013936.596672.1579655468604.JavaMail.zimbra@efficios.com> <ead7a565-9a23-a7d7-904d-c4860f63952a@zytor.com> <87a76efuux.fsf@oldenburg2.str.redhat.com> <134428560.600911.1580153955842.JavaMail.zimbra@efficios.com> <87blql5hfb.fsf@oldenburg2.str.redhat.com>
+Subject: Re: [RFC PATCH v1] pin_on_cpu: Introduce thread CPU pinning system
+ call
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [167.114.26.124]
+X-Mailer: Zimbra 8.8.15_GA_3899 (ZimbraWebClient - FF72 (Linux)/8.8.15_GA_3895)
+Thread-Topic: pin_on_cpu: Introduce thread CPU pinning system call
+Thread-Index: cTvqdrvCQudYKnfodFshnn5ecRABXA==
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Siddhesh Poyarekar <siddhesh@gotplt.org>
+----- On Jan 30, 2020, at 6:10 AM, Florian Weimer fweimer@redhat.com wrote:
 
-[ Upstream commit 6b64a650f0b2ae3940698f401732988699eecf7a ]
+> * Mathieu Desnoyers:
+> 
+>> It brings an interesting idea to the table though. Let's assume for now that
+>> the only intended use of pin_on_cpu(2) would be to allow rseq(2) critical
+>> sections to update per-cpu data on specific cpu number targets. In fact,
+>> considering that userspace can be preempted at any point, we still need a
+>> mechanism to guarantee atomicity with respect to other threads running on
+>> the same runqueue, which rseq(2) provides. Therefore, that assumption does
+>> not appear too far-fetched.
+>>
+>> There are 2 scenarios we need to consider here:
+>>
+>> A) pin_on_cpu(2) targets a CPU which is not part of the affinity mask.
+>>
+>> This case is easy: pin_on_cpu can return an error, and the caller needs to act
+>> accordingly (e.g. figure out that this is a design error and report it, or
+>> decide that it really did not want to touch that per-cpu data that badly and
+>> make the entire process fall-back to a mechanism which does not use per-cpu
+>> data at all from that point onwards)
+> 
+> Affinity masks currently are not like process memory: there is an
+> expectation that they can be altered from outside the process.
 
-It was observed[1] on arm64 that __builtin_strlen led to an infinite
-loop in the get_size selftest.  This is because __builtin_strlen (and
-other builtins) may sometimes result in a call to the C library
-function.  The C library implementation of strlen uses an IFUNC
-resolver to load the most efficient strlen implementation for the
-underlying machine and hence has a PLT indirection even for static
-binaries.  Because this binary avoids the C library startup routines,
-the PLT initialization never happens and hence the program gets stuck
-in an infinite loop.
+Yes, that's my main issue.
 
-On x86_64 the __builtin_strlen just happens to expand inline and avoid
-the call but that is not always guaranteed.
+> Given that the caller may not have any ways to recover from the
+> suggested pin_on_cpu behavior, that seems problematic.
 
-Further, while testing on x86_64 (Fedora 31), it was observed that the
-test also failed with a segfault inside write() because the generated
-code for the write function in glibc seems to access TLS before the
-syscall (probably due to the cancellation point check) and fails
-because TLS is not initialised.
+Indeed.
 
-To mitigate these problems, this patch reduces the interface with the
-C library to just the syscall function.  The syscall function still
-sets errno on failure, which is undesirable but for now it only
-affects cases where syscalls fail.
+> 
+> What I would expect is that if pin_on_cpu cannot achieve implied
+> exclusion by running on the associated CPU, it acquires a lock that
+> prevents others pin_on_cpu calls from entering the critical section, and
+> tasks in the same task group from running on that CPU (if the CPU
+> becomes available to the task group).  The second part should maintain
+> exclusion of rseq sequences even if their fast path is not changed.
 
-[1] https://bugs.linaro.org/show_bug.cgi?id=5479
+I try to avoid mutual exclusion over shared memory as rseq fallback whenever
+I can, so we can use rseq from lock-free algorithms without losing lock-freedom.
 
-Signed-off-by: Siddhesh Poyarekar <siddhesh@gotplt.org>
-Reported-by: Masami Hiramatsu <masami.hiramatsu@linaro.org>
-Tested-by: Masami Hiramatsu <masami.hiramatsu@linaro.org>
-Reviewed-by: Tim Bird <tim.bird@sony.com>
-Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- tools/testing/selftests/size/get_size.c | 24 ++++++++++++++++++------
- 1 file changed, 18 insertions(+), 6 deletions(-)
+> (On the other hand, I'm worried that per-CPU data structures are a dead
+> end for user space unless we get containerized affinity masks, so that
+> contains only see resources that are actually available to them.)
 
-diff --git a/tools/testing/selftests/size/get_size.c b/tools/testing/selftests/size/get_size.c
-index d4b59ab979a09..f55943b6d1e2a 100644
---- a/tools/testing/selftests/size/get_size.c
-+++ b/tools/testing/selftests/size/get_size.c
-@@ -12,23 +12,35 @@
-  * own execution.  It also attempts to have as few dependencies
-  * on kernel features as possible.
-  *
-- * It should be statically linked, with startup libs avoided.
-- * It uses no library calls, and only the following 3 syscalls:
-+ * It should be statically linked, with startup libs avoided.  It uses
-+ * no library calls except the syscall() function for the following 3
-+ * syscalls:
-  *   sysinfo(), write(), and _exit()
-  *
-  * For output, it avoids printf (which in some C libraries
-  * has large external dependencies) by  implementing it's own
-  * number output and print routines, and using __builtin_strlen()
-+ *
-+ * The test may crash if any of the above syscalls fails because in some
-+ * libc implementations (e.g. the GNU C Library) errno is saved in
-+ * thread-local storage, which does not get initialized due to avoiding
-+ * startup libs.
-  */
- 
- #include <sys/sysinfo.h>
- #include <unistd.h>
-+#include <sys/syscall.h>
- 
- #define STDOUT_FILENO 1
- 
- static int print(const char *s)
- {
--	return write(STDOUT_FILENO, s, __builtin_strlen(s));
-+	size_t len = 0;
-+
-+	while (s[len] != '\0')
-+		len++;
-+
-+	return syscall(SYS_write, STDOUT_FILENO, s, len);
- }
- 
- static inline char *num_to_str(unsigned long num, char *buf, int len)
-@@ -80,12 +92,12 @@ void _start(void)
- 	print("TAP version 13\n");
- 	print("# Testing system size.\n");
- 
--	ccode = sysinfo(&info);
-+	ccode = syscall(SYS_sysinfo, &info);
- 	if (ccode < 0) {
- 		print("not ok 1");
- 		print(test_name);
- 		print(" ---\n reason: \"could not get sysinfo\"\n ...\n");
--		_exit(ccode);
-+		syscall(SYS_exit, ccode);
- 	}
- 	print("ok 1");
- 	print(test_name);
-@@ -101,5 +113,5 @@ void _start(void)
- 	print(" ...\n");
- 	print("1..1\n");
- 
--	_exit(0);
-+	syscall(SYS_exit, 0);
- }
+I'm currently implementing a prototype of the following ideas, and I'm curious to
+read your thoughts on those:
+
+I'm adding a "affinity_pinned" flag to the task struct of each thread. It can
+be set and cleared only by the owner thread through pin_on_cpu syscall commands.
+When the affinity is pinned by a thread, trying to change its affinity (from an
+external thread, or possibly from itself) will fail.
+
+Whenever a thread would (temporarily) pin itself on a specific CPU, it would
+also pin its affinity mask as a side-effect. When a thread unpins from a CPU,
+the affinity mask stays pinned. The purpose of keeping this affinity pinned
+state per-thread is to ensure we don't end up with tiny race windows where
+changing the thread's affinity mask "typically" works, but fails once in a
+while because it's done concurrently with a 1ms long cpu pinning. This would
+lead to flaky code, and I try hard to avoid that.
+
+How changing this affinity should fail (from sched_setaffinity and cpusets) is a
+big unanswered question. I see two major alternatives so far:
+
+1) We deliver a signal to the target thread (SIGKILL ? SIGSEGV ?), considering
+   that failure to be able to change its affinity mask means we need to send a
+   signal. How exactly would the killed application recover (or if it should)
+   is still unclear.
+
+2) Return an error to the sched_setaffinity or cpusets caller, and let it deal
+   with the error as it sees fit: ignore it, log it, or send a signal.
+
+I think option (2) provides the most flexiblity, and moves policy outside of
+the kernel, which is a good thing. However, looking at how cpusets seems to
+simply ignore errors when setting a task's cpumask, I wonder if asking from
+cpusets to handle any kind of error is asking too much. :-/
+
+Thanks,
+
+Mathieu
+
+
+
+
 -- 
-2.20.1
-
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com
