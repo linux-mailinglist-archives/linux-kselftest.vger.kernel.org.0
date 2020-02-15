@@ -2,170 +2,110 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 16EA615FD27
-	for <lists+linux-kselftest@lfdr.de>; Sat, 15 Feb 2020 07:50:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D957C15FE22
+	for <lists+linux-kselftest@lfdr.de>; Sat, 15 Feb 2020 12:32:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725822AbgBOGuB (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 15 Feb 2020 01:50:01 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:40600 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725799AbgBOGuB (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 15 Feb 2020 01:50:01 -0500
-Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 01F6mtq3041788;
-        Sat, 15 Feb 2020 01:49:48 -0500
-Received: from ppma04dal.us.ibm.com (7a.29.35a9.ip4.static.sl-reverse.com [169.53.41.122])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 2y4qyuxrt8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sat, 15 Feb 2020 01:49:48 -0500
-Received: from pps.filterd (ppma04dal.us.ibm.com [127.0.0.1])
-        by ppma04dal.us.ibm.com (8.16.0.27/8.16.0.27) with SMTP id 01F6j3HL001799;
-        Sat, 15 Feb 2020 06:49:47 GMT
-Received: from b01cxnp22036.gho.pok.ibm.com (b01cxnp22036.gho.pok.ibm.com [9.57.198.26])
-        by ppma04dal.us.ibm.com with ESMTP id 2y6895hc4n-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sat, 15 Feb 2020 06:49:47 +0000
-Received: from b01ledav004.gho.pok.ibm.com (b01ledav004.gho.pok.ibm.com [9.57.199.109])
-        by b01cxnp22036.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 01F6nkbk13632184
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sat, 15 Feb 2020 06:49:47 GMT
-Received: from b01ledav004.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id E1C0F112063;
-        Sat, 15 Feb 2020 06:49:46 +0000 (GMT)
-Received: from b01ledav004.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id F3FD4112062;
-        Sat, 15 Feb 2020 06:49:44 +0000 (GMT)
-Received: from LeoBras (unknown [9.85.178.59])
-        by b01ledav004.gho.pok.ibm.com (Postfix) with ESMTP;
-        Sat, 15 Feb 2020 06:49:44 +0000 (GMT)
-Message-ID: <59cdcd821f794a9cbd8ab315b441a7ee2e43e431.camel@linux.ibm.com>
-Subject: Re: [PATCH] selftests/vm: Fix map_hugetlb length used for testing
- read and write
-From:   Leonardo Bras <leonardo@linux.ibm.com>
-To:     Christophe Leroy <christophe.leroy@c-s.fr>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Shuah Khan <shuah@kernel.org>
-Cc:     linux-mm@kvack.org, linuxppc-dev@lists.ozlabs.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Date:   Sat, 15 Feb 2020 03:49:38 -0300
-In-Reply-To: <9a404a13c871c4bd0ba9ede68f69a1225180dd7e.1580978385.git.christophe.leroy@c-s.fr>
-References: <9a404a13c871c4bd0ba9ede68f69a1225180dd7e.1580978385.git.christophe.leroy@c-s.fr>
-Content-Type: multipart/signed; micalg="pgp-sha256";
-        protocol="application/pgp-signature"; boundary="=-ZEi+P+decY37pq44DvhU"
-User-Agent: Evolution 3.34.3 (3.34.3-1.fc31) 
+        id S1726111AbgBOLco (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 15 Feb 2020 06:32:44 -0500
+Received: from mout.gmx.net ([212.227.15.19]:39455 "EHLO mout.gmx.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725965AbgBOLcn (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Sat, 15 Feb 2020 06:32:43 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1581766354;
+        bh=pOPA4vdkKum60vU2Sw008KD8mzmXUtj1ve/fnDeNt4o=;
+        h=X-UI-Sender-Class:Date:From:To:Cc:Subject:References:In-Reply-To;
+        b=Qf0utu9Er9uCdJjAwIzlzWlVbbgyK77QXdz28zP1NE6MmoSGyV4BTiZDEAUycMdKC
+         ChVzDBXeqTF3HN0gASznRlZucFRzgNYRHRFa/nHVwUQU1UUixmYr11MGwpE5pFWC4n
+         5sKGsOezwDtIFumElWLBjjs4JNIjnGKo7MAag2eM=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from longitude ([146.60.76.54]) by mail.gmx.com (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MFsUv-1jGQM11c2p-00HKFQ; Sat, 15
+ Feb 2020 12:32:34 +0100
+Date:   Sat, 15 Feb 2020 12:32:31 +0100
+From:   Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
+To:     David Gow <davidgow@google.com>
+Cc:     brendanhiggins@google.com, skhan@linuxfoundation.org,
+        corbet@lwn.net, kunit-dev@googlegroups.com,
+        linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, frowand.list@gmail.com,
+        Tim.Bird@sony.com
+Subject: Re: [PATCH v3] Documentation: kunit: Make the KUnit documentation
+ less UML-specific
+Message-ID: <20200215113231.GB2031@latitude>
+References: <20200214235723.254228-1-davidgow@google.com>
 MIME-Version: 1.0
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.572
- definitions=2020-02-15_01:2020-02-14,2020-02-15 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 phishscore=0
- priorityscore=1501 suspectscore=0 mlxlogscore=999 lowpriorityscore=0
- impostorscore=0 spamscore=0 bulkscore=0 adultscore=0 mlxscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2001150001 definitions=main-2002150056
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="VrqPEDrXMn8OVzN4"
+Content-Disposition: inline
+In-Reply-To: <20200214235723.254228-1-davidgow@google.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Provags-ID: V03:K1:rGamt5ZN+2JamTtxWa+949Bwc4ai74Nlldylw7ATa7hNww9D7BE
+ /bziJu0IK7eIOEiblDQYdQvIiKXW/z+dRk/GH/2ESakG545IBuzDzYU1R9YY3ttXbj9r2P7
+ IYOjeUjc2quFYT6rlom6QWid4LXtrAm8OSawzbeqiKK46W2hYLkL3Lu/UzlqENMmcY/rN7S
+ DPjN9jGvI6ZMj+Hdd62OA==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:l56jit/555c=:OJcEhGVVIC44B/SxTchbcX
+ Fr8/OnlUjSULPzJDoaXWtq33lqaLjHW3/2u8N7nVjjkVNOZoyw4ryZtXv7ezG8lbiDk1F5e2b
+ mNExcqwEkFKiGjtnTyHU1icDXMbf/D2OSsTi20uBf0zNGBW3/p/gX+vwzeZZ/+rBbd+XG3XbN
+ btjhXaZPCqQQSKSpz4+kAR52llMT7pw3jkYlBaKSo391QF+qDQdX6qLFJip+Ss1OtuF2bHzAz
+ 7Uylg6+/4Y+mDNl6HpwHnQyYtbqvAe4BJD9Dfof2CQNL3pGrhMZxw9A0CdY6i0VQ/vigo4w5j
+ 2qZIIQCeSZBvvmFmTwHeSCZHErUSGFWFKoRAFEebxz1sW6aYS9Q9boOakVKf3OP2Y/o7wSJrA
+ gvjPQW/4Ptz3LmkfnzqNDyuVzPBw1XoJrmKcBbE3ZAFgndf0IGPU46SykodQ9nSNuL0X9BMlh
+ PeRDhtWBRu1VKOyh3E4wmMjoExvS8nsykk07VmioJpZIJBVou+IW0KEfhf+fZWBh+vd/ajGuR
+ N8tyx7flL1sSZKhc6YBzUnyY1FZzpEzo1O3x9ws6zI/dxLL3JpesUZ6tMyyhUMaUuI3ghPBgc
+ /qiBS5Zaj392Vot3z0oyKGLFQTAogoxKGVz2d0SakOSIy8tS8VV+2wV89sjFmkl2VrLHERI14
+ 3123MROhEXUYAlnl794FwZWXMmRJD5uRI3TqaCtghfhjtC8ByYR5pRBTseUdD0EGP1AJxRk1P
+ mmvrF/ldCS1zzWQ97X7t8hjeBV3cCHzg7ODv/U3YWCtfxKmMi0YfFXuOCFm8pahxg9wy121Eq
+ wXL1iG3dlT/im9vzNj3zLMjA3AbhkPM3xrXjD9WllZBd2WxG//uNI3FdX4MgEDzYkI/Dg0rP2
+ jxeM800TA1zyISpGmKTtUo30Sup1bzhYAnYTRDcp/j/Hqdqx6cAcya4mD/7EPhXAg4Bkr3m60
+ sHx4MeYL3LRg+nNNWfJRuCNKVqOJjTEbcB3zDvMYWcsbDfr9xLsCKrJZVIrn5lMM59zGOGVDY
+ FJmbACqTT3wdV7mDfuSGCDnRZJOGQMv6dQMZF1NnEmRMghHEWKOnDAzulZhIbMbIv5M6EN/9s
+ mocio8OP8kgpsfFziQOu35hb3rLIJy60Bwr9yLJqCykRsgCPjEKyswx/2PwVDiMolJ146pf/T
+ bFxILHzLeHppk5AVvPys5F1rs21pULO/v0ZQCuseO9SehJf/MxXRW2npjTp8d67Yigt589/ry
+ 2XUOug4X8C71RUIpp
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
 
---=-ZEi+P+decY37pq44DvhU
-Content-Type: text/plain; charset="UTF-8"
+--VrqPEDrXMn8OVzN4
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-Hello Christophe, thank you for the patch.
+Hi,
 
-On Thu, 2020-02-06 at 08:42 +0000, Christophe Leroy wrote:
-> Commit fa7b9a805c79 ("tools/selftest/vm: allow choosing mem size and
-> page size in map_hugetlb") added the possibility to change the size
-> of memory mapped for the test, but left the read and write test using
-> the default value. This is unnoticed when mapping a length greater
-> than the default one, but segfaults otherwise.
->=20
-> Fix read_bytes() and write_bytes() by giving them the real length.
->=20
-> Also fix the call to munmap().
->=20
-> Fixes: fa7b9a805c79 ("tools/selftest/vm: allow choosing mem size and page=
- size in map_hugetlb")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Christophe Leroy <christophe.leroy@c-s.fr>
-> ---
->  tools/testing/selftests/vm/map_hugetlb.c | 14 +++++++-------
->  1 file changed, 7 insertions(+), 7 deletions(-)
->=20
-> diff --git a/tools/testing/selftests/vm/map_hugetlb.c b/tools/testing/sel=
-ftests/vm/map_hugetlb.c
-> index 5a2d7b8efc40..6af951900aa3 100644
-> --- a/tools/testing/selftests/vm/map_hugetlb.c
-> +++ b/tools/testing/selftests/vm/map_hugetlb.c
-> @@ -45,20 +45,20 @@ static void check_bytes(char *addr)
->  	printf("First hex is %x\n", *((unsigned int *)addr));
->  }
-> =20
-> -static void write_bytes(char *addr)
-> +static void write_bytes(char *addr, size_t length)
->  {
->  	unsigned long i;
-> =20
-> -	for (i =3D 0; i < LENGTH; i++)
-> +	for (i =3D 0; i < length; i++)
->  		*(addr + i) =3D (char)i;
->  }
-> =20
-> -static int read_bytes(char *addr)
-> +static int read_bytes(char *addr, size_t length)
->  {
->  	unsigned long i;
-> =20
->  	check_bytes(addr);
-> -	for (i =3D 0; i < LENGTH; i++)
-> +	for (i =3D 0; i < length; i++)
->  		if (*(addr + i) !=3D (char)i) {
->  			printf("Mismatch at %lu\n", i);
->  			return 1;
-> @@ -96,11 +96,11 @@ int main(int argc, char **argv)
-> =20
->  	printf("Returned address is %p\n", addr);
->  	check_bytes(addr);
-> -	write_bytes(addr);
-> -	ret =3D read_bytes(addr);
-> +	write_bytes(addr, length);
-> +	ret =3D read_bytes(addr, length);
-> =20
->  	/* munmap() length of MAP_HUGETLB memory must be hugepage aligned */
-> -	if (munmap(addr, LENGTH)) {
-> +	if (munmap(addr, length)) {
->  		perror("munmap");
->  		exit(1);
->  	}
+On Fri, Feb 14, 2020 at 03:57:23PM -0800, David Gow wrote:
+[...]
+> +To make running these tests (and reading the results) easier, KUnit offs=
+ers
 
-I agree with you, it's a needed fix.
+There's a typo here: s/offsers/offers/
 
-FWIW:
-Reviwed-by: Leonardo Bras <leonardo@linux.ibm.com>
 
---=-ZEi+P+decY37pq44DvhU
+Thanks,
+Jonathan Neusch=C3=A4fer
+
+--VrqPEDrXMn8OVzN4
 Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: This is a digitally signed message part
-Content-Transfer-Encoding: 7bit
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCAAdFiEEMdeUgIzgjf6YmUyOlQYWtz9SttQFAl5HlIIACgkQlQYWtz9S
-ttS7OxAAwH0NauZuTxADtbg3X+UGv2GluaVEy2mQL3aZfSNO6caYZ7vkFMh2x7Ot
-JahcPBeMG0b9nw/lz3CNjVy9ZELdcFT/740aYibRRM2jyXRu3SCu3SKZj7FS/fg2
-JGRTibi5yRoGnhyHIlukySLnUtPD8AE2uIqiwsmlBPqma8Ny7jZ5ngXeVf70vTG1
-ofchi7BFHFmv2ujuMvj7PlKMoZVA+AzOu+bpK84kF8fb2GLPy5VdvIh1tVoIx0KW
-VpNJSvhJTYcBYRdh8z1/FnfMWgR9wRHl7l4GC+ArAtQQJhzcaxPR5kko2VrLn29D
-oxUU0CmuKGazbiJkLjD5IzLXdRs3ZD2VjZpRoTqUdZO+6rozDnt2ku4RzzTaQDQW
-kOiPrF3ozMPvrNXLae85q7/XZCQUpIfzib9A2D8Tbyu86XcDkigrdeD5/IuJMkR8
-9VzSYuE+RYISRmwygFHWms1CXWFrmPkurMdmNuakpbKh8wDsq5uOMR24f3gAY3EK
-BJwaDMeMZgGMfZpjf4H/i2gpXxt+GQxDu8IXI8j7lpF1qMnRmszC4KZcC/4mzi4y
-3qSnuDCbj9O3gwUqBXJJ/tghN/g376Q6DTe+J7pMEMJ4h+T9BaTflRBENV9USsLd
-S2S0dh0mWWiXGc0JD0cTd2haFR1OubCmhpNCJduE3ORRzvTT1xI=
-=oY9v
+iQIzBAABCgAdFiEEvHAHGBBjQPVy+qvDCDBEmo7zX9sFAl5H1sgACgkQCDBEmo7z
+X9vbGA//YSsL2+AzYJ+tyrjnjNWwnhgSigy7m6uufz/KqC0eU8Sfs6UXO+GwwnvD
+SoqCqelP5QF7zyeGZT3mCFfl7XbfcIzK1xTfyxEEr9MBvCQRKDvXjxQbNS0rahAm
+2V0YppxFHu05UNrc/FNpEsCvHoYQwd/91N8iJkIIknAPn/lcMdrJQIjqXuuuyCQd
+QmawN8LZOh7dZwAxjIGCXFlP5ip7gHcLKzi+my0gtCs2z7yYrUm9jBNZfyut2Lfd
+VUVOP7sYqXzMc0P0WpAd/5f5ivwKortWo6J2wK++trbpEIXjMvqx2dR1DA9n6SKb
+eGYhCDzEdxhlw7bU9DPdT75yo36zk8HlWmFxvC7Cg5TSoqbJEHHSQDRUd2VSoNVb
+ACRLtvGtpOhd4s0aaR9uPt1Q6Fs2c6vqAh3hPSEM8684rB+71A8R3U+KcSj3Zjus
+b8KnOsIGIV8Vwt1/q99AXXMrGrQ2ggya9i692yD8VvCBWygA96CZ42bdUwMKSbjn
+dcWIe3bL16ZXDRrf3CeNDNOQ3znkixw1J4aaRJ31PxuvKZGX+q9RerhwVf2ICtut
+5Aop/DS1pULN6D5Mcm3FPDk3Ank6c4h/pTtgsVXj3PjB74WNr5Iyt45VqBd0UqqG
+FqmVBpkZb6MKSepIXWBc7kz9RwPmW4hVngIwt9a/KRXBZCmwshQ=
+=awkR
 -----END PGP SIGNATURE-----
 
---=-ZEi+P+decY37pq44DvhU--
-
+--VrqPEDrXMn8OVzN4--
