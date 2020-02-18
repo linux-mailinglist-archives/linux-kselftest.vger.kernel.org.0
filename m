@@ -2,199 +2,188 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AB47F16353E
-	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Feb 2020 22:41:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 896761635BC
+	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Feb 2020 23:04:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726481AbgBRVlZ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 18 Feb 2020 16:41:25 -0500
-Received: from aserp2120.oracle.com ([141.146.126.78]:44824 "EHLO
-        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727918AbgBRVlW (ORCPT
+        id S1726444AbgBRWEH (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 18 Feb 2020 17:04:07 -0500
+Received: from mail-pj1-f66.google.com ([209.85.216.66]:38153 "EHLO
+        mail-pj1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726383AbgBRWEH (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 18 Feb 2020 16:41:22 -0500
-Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
-        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 01ILVIOI077875;
-        Tue, 18 Feb 2020 21:41:15 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=subject : to : cc :
- references : from : message-id : date : mime-version : in-reply-to :
- content-type : content-transfer-encoding; s=corp-2020-01-29;
- bh=Z6ygooUUXhz1hWqQYcQAJibC6Prp+WjFAbn5QtklRpQ=;
- b=a/6pOGctOeiz0VWq1GZU7ZfLtgCuJcMaDVZaLjz+RqXCYbfveMvQeSyaMINDAT0EHEaU
- qhrR4bD4f7fE98UGs8SMdYP+36Yl+GhQzcVLZF+2iztpbFQi9U1+VRfYcIkRM3SZlEQq
- A5EuTuKmO/+DbUB+MntQ6fkD/YzkGkZ/jotVM4qmIQnfBxkUMWb31KVAcvsWC4x2eSeV
- LFLMkV2t6YRMBivdQxuvhLFEcboKbCR2EhQ+KWjCVm5WmC3PXgdZq+U8Q9+UwYL6bCjo
- gde8v2a4reLHvUF9WkMOwpJpnZhhR12QJBPp4ZJXa98UEuPJn6RZxK3w0WIaKjRDUqB7 Jg== 
-Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
-        by aserp2120.oracle.com with ESMTP id 2y8e1hmk1k-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 18 Feb 2020 21:41:15 +0000
-Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
-        by userp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 01ILbbnv078918;
-        Tue, 18 Feb 2020 21:41:14 GMT
-Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
-        by userp3020.oracle.com with ESMTP id 2y6tc34s2g-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 18 Feb 2020 21:41:14 +0000
-Received: from abhmp0015.oracle.com (abhmp0015.oracle.com [141.146.116.21])
-        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 01ILfD76013208;
-        Tue, 18 Feb 2020 21:41:13 GMT
-Received: from [192.168.1.206] (/71.63.128.209)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Tue, 18 Feb 2020 13:41:12 -0800
-Subject: Re: [PATCH v12 1/9] hugetlb_cgroup: Add hugetlb_cgroup reservation
- counter
-To:     Mina Almasry <almasrymina@google.com>
-Cc:     Qian Cai <cai@lca.pw>, Andrew Morton <akpm@linux-foundation.org>,
-        shuah <shuah@kernel.org>, David Rientjes <rientjes@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Greg Thelen <gthelen@google.com>,
-        open list <linux-kernel@vger.kernel.org>, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org, cgroups@vger.kernel.org
-References: <20200211213128.73302-1-almasrymina@google.com>
- <20200211151906.637d1703e4756066583b89da@linux-foundation.org>
- <1582035660.7365.90.camel@lca.pw>
- <CAHS8izO5=vKs-v9v=Di3hQXBD41+_YpYarXn1yZu9YE6SR-i6Q@mail.gmail.com>
- <d498012a-ec87-ca48-ed78-5fcdaf372888@oracle.com>
- <CAHS8izPbMizJMNB-y9y2OViXYLStA6VT-HkWRd2hCS-5JSMwSA@mail.gmail.com>
- <CAHS8izODfKaLqWAehhR_XuN=FRgmWBE7+eCJMD2HGig8s+zvwg@mail.gmail.com>
-From:   Mike Kravetz <mike.kravetz@oracle.com>
-Message-ID: <9d6690e9-0dd4-f779-89b2-e02ff9a517e4@oracle.com>
-Date:   Tue, 18 Feb 2020 13:41:11 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.1
+        Tue, 18 Feb 2020 17:04:07 -0500
+Received: by mail-pj1-f66.google.com with SMTP id j17so1597798pjz.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 18 Feb 2020 14:04:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=KjiEVUVH3LhEUahEgPDeCz6/w7FXRv21B6oRozWFPDw=;
+        b=VVKcd0AsCnqbiOA75vkfYLI8PR3c9gYothwuJHKWcW2POCaYfkrnile0l9cvw1DZso
+         e34atdHIm1vZM6nQdkGZPjLyU5oKCoSyHDWlxq6zFeJRogIz5MXD4Pegzg0tLVa45NdM
+         6fHMsvuRHjhL4q6xbb0r5JrMPyc6Sk6/CWzl6mG5jRwKT4c3uRa7pyahek4pdPf0DDg7
+         p1a+SqSJDDpnFGPegCZYbyrKOZW/7nDyA5Si/GXPSfUaY3jNo9JZY3U2M1bWGANEPHIR
+         F44OupWSSIp/AfgNBRZ8zzQkz2qRSOq2iKh4+BA0mjADleLHYS33X+NtAg0VGI6LIIze
+         a6eA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=KjiEVUVH3LhEUahEgPDeCz6/w7FXRv21B6oRozWFPDw=;
+        b=ItnlwE2v2v9cFwlX3KGyCPsVQwg4uEmPCEJD//CkY/7eveGH8bq30v9PUFahbGkq6m
+         iq2NHyVHxnmdwklsiT5Y/p+BmGOgb/mrU8HEIVvJAHuZHNb2B5xY9EMhJwFNZJ+KDGG1
+         RGgAz7MA2Erk4wkQwDJ7GZzDmgkT6cGp4PW21/rIqqHxB0sNqpDlmzlnThR1CLoKY1Rz
+         v0evBSwMSAI+hBTVlsrIj6mvdzNoS9W7QuGmkVooWOM/rxrHmOYRBhtbyMGr3oTeaUzV
+         R5kELbJkx0yhD1S5P0qwcfjiz1eyCJM9Hq+e2xu5b8KZqG1sGS64nPL9bvKR4puXElAg
+         QeoA==
+X-Gm-Message-State: APjAAAUn3j88bFbQcqXP9EYPO4nybPpeo/cE6Zou3CLkLIAQDeSFSzrW
+        QaLQ+rMI3AyIQCoHp4ujJYB1WD2zYR/3EOXL2VHi3Q==
+X-Google-Smtp-Source: APXvYqzOs3hVD9imOllueUR+A3F1a+++GIZjcCfIXygMhJX1S7V5sZjKG9PFURgXzJqEh/OPsKcQAciddf1QhLTeH9g=
+X-Received: by 2002:a17:902:9a4c:: with SMTP id x12mr21844315plv.297.1582063446576;
+ Tue, 18 Feb 2020 14:04:06 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <CAHS8izODfKaLqWAehhR_XuN=FRgmWBE7+eCJMD2HGig8s+zvwg@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9535 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 phishscore=0
- suspectscore=27 mlxscore=0 malwarescore=0 bulkscore=0 adultscore=0
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2001150001 definitions=main-2002180144
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9535 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=27 phishscore=0
- mlxlogscore=999 mlxscore=0 malwarescore=0 clxscore=1015 adultscore=0
- lowpriorityscore=0 spamscore=0 bulkscore=0 priorityscore=1501
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2001150001 definitions=main-2002180140
+References: <1581094694-6513-1-git-send-email-alan.maguire@oracle.com>
+ <1581094694-6513-2-git-send-email-alan.maguire@oracle.com>
+ <c42ac237-476a-526f-b445-61e7a63bc101@gmail.com> <CAFd5g47p9wnbz=HrNh0U2bbc=0ZaJ7n0U+_=E8yp8yPMrqwzaA@mail.gmail.com>
+ <MWHPR13MB0895A9AC64475539ECF99987FD110@MWHPR13MB0895.namprd13.prod.outlook.com>
+In-Reply-To: <MWHPR13MB0895A9AC64475539ECF99987FD110@MWHPR13MB0895.namprd13.prod.outlook.com>
+From:   Brendan Higgins <brendanhiggins@google.com>
+Date:   Tue, 18 Feb 2020 14:03:55 -0800
+Message-ID: <CAFd5g44BmpxS7RgxoNBywBOs3NjWdFp+A_aU5Ym0MrSn=O_RbA@mail.gmail.com>
+Subject: Re: [PATCH v3 kunit-next 1/2] kunit: add debugfs /sys/kernel/debug/kunit/<suite>/results
+ display
+To:     "Bird, Tim" <Tim.Bird@sony.com>
+Cc:     Frank Rowand <frowand.list@gmail.com>,
+        Alan Maguire <alan.maguire@oracle.com>,
+        Greg KH <gregkh@linuxfoundation.org>, shuah <shuah@kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        David Gow <davidgow@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 2/18/20 1:36 PM, Mina Almasry wrote:
-> On Tue, Feb 18, 2020 at 11:25 AM Mina Almasry <almasrymina@google.com> wrote:
->>
->> On Tue, Feb 18, 2020 at 11:14 AM Mike Kravetz <mike.kravetz@oracle.com> wrote:
->>>
->>> On 2/18/20 10:35 AM, Mina Almasry wrote:
->>>> On Tue, Feb 18, 2020 at 6:21 AM Qian Cai <cai@lca.pw> wrote:
->>>>>
->>>>> On Tue, 2020-02-11 at 15:19 -0800, Andrew Morton wrote:
->>>>>> On Tue, 11 Feb 2020 13:31:20 -0800 Mina Almasry <almasrymina@google.com> wrote:
->>>>>>
->>>>> [ 7933.806377][T14355] ------------[ cut here ]------------
->>>>> [ 7933.806541][T14355] kernel BUG at mm/hugetlb.c:490!
->>>>> VM_BUG_ON(t - f <= 1);
->>>>> [ 7933.806562][T14355] Oops: Exception in kernel mode, sig: 5 [#1]
->>> <snip>
->>>> Hi Qian,
->>>>
->>>> Yes this VM_BUG_ON was added by a patch in the series ("hugetlb:
->>>> disable region_add file_region coalescing") so it's definitely related
->>>> to the series. I'm taking a look at why this VM_BUG_ON fires. Can you
->>>> confirm you reproduce this by running hugemmap06 from the ltp on a
->>>> powerpc machine? Can I maybe have your config?
->>>>
->>>> Thanks!
->>>
->>> Hi Mina,
->>>
->>> Looking at the region_chg code again, we do a
->>>
->>>         resv->adds_in_progress += *out_regions_needed;
->>>
->>> and then potentially drop the lock to allocate the needed entries.  Could
->>> anopther thread (only adding reservation for a single page) then come in
->>> and notice that there are not enough entries in the cache and hit the
->>> VM_BUG_ON()?
->>
->> Maybe. Also I'm thinking the code thinks actual_regions_needed >=
->> in_regions_needed, but that doesn't seem like a guarantee. I think
->> this call sequence with the same t->f range would violate that:
->>
->> region_chg (regions_needed=1)
->> region_chg (regions_needed=1)
->> region_add (fills in the range)
->> region_add (in_regions_needed = 1, actual_regions_needed = 0, so
->> assumptions in the code break).
->>
->> Luckily it seems the ltp readily reproduces this, so I'm working on
->> reproducing it. I should have a fix soon, at least if I can reproduce
->> it as well.
-> 
-> I had a bit of trouble reproducing this but I got it just now.
-> 
-> Makes sense I've never run into this even though others can readily
-> reproduce it. I happen to run my kernels on a pretty beefy 36 core
-> machine and in that setup things seem to execute fast and there is
-> never a queue of pending file_region inserts into the resv_map. Once I
-> limited qemu to only use 2 cores I ran into the issue right away.
-> Looking into a fix now.
+On Tue, Feb 18, 2020 at 12:49 PM Bird, Tim <Tim.Bird@sony.com> wrote:
+>
+>
+>
+> > -----Original Message-----
+> > From:  Brendan Higgins
+> >
+> > On Wed, Feb 12, 2020 at 7:25 PM Frank Rowand <frowand.list@gmail.com> wrote:
+> > >
+> > > On 2/7/20 10:58 AM, Alan Maguire wrote:
+>
+> ...
+>
+> > > > diff --git a/lib/kunit/test.c b/lib/kunit/test.c
+> > > > index 9242f93..aec607f 100644
+> > > > --- a/lib/kunit/test.c
+> > > > +++ b/lib/kunit/test.c
+> > > > @@ -10,6 +10,7 @@
+> > > >  #include <linux/kernel.h>
+> > > >  #include <linux/sched/debug.h>
+> > > >
+> > > > +#include "debugfs.h"
+> > > >  #include "string-stream.h"
+> > > >  #include "try-catch-impl.h"
+> > > >
+> > > > @@ -28,73 +29,91 @@ static void kunit_print_tap_version(void)
+> > > >       }
+> > > >  }
+> > > >
+> > > > -static size_t kunit_test_cases_len(struct kunit_case *test_cases)
+> > > > +size_t kunit_suite_num_test_cases(struct kunit_suite *suite)
+> > > >  {
+> > > >       struct kunit_case *test_case;
+> > > >       size_t len = 0;
+> > > >
+> > > > -     for (test_case = test_cases; test_case->run_case; test_case++)
+> > > > +     kunit_suite_for_each_test_case(suite, test_case)
+> > > >               len++;
+> > > >
+> > > >       return len;
+> > > >  }
+> > > > +EXPORT_SYMBOL_GPL(kunit_suite_num_test_cases);
+> > > >
+> > > >  static void kunit_print_subtest_start(struct kunit_suite *suite)
+> > > >  {
+> > > >       kunit_print_tap_version();
+> > > > -     pr_info("\t# Subtest: %s\n", suite->name);
+> > > > -     pr_info("\t1..%zd\n", kunit_test_cases_len(suite->test_cases));
+> > > > +     kunit_log(KERN_INFO, suite, "# Subtest: %s", suite->name);
+> > > > +     kunit_log(KERN_INFO, suite, "1..%zd",
+> > > > +               kunit_suite_num_test_cases(suite));
+> > >
+> > > The subtest 'is a TAP stream indented 4 spaces'.  (So the old code was
+> > > also incorrect since it indented with a tab.)
+> >
+> > Whoops.
+> >
+> > I agree that fixing tabs to spaces is probably the easiest thing to do
+> > here; nevertheless, I think this might be a good time to talk about
+> > other deviations from the spec and what to do about it. This might
+> > also be a good time to bring up Tim's comment at LPC last year about
+> > forking TAP. Arguably I already have given that TAP14 is still under
+> > review and is consequently subject to change.
+> >
+> > Additionally, the way I report expectation/assertion failures are my
+> > own extension to the TAP spec. I did this because at the time I wasn't
+> > ready to open the can of worms that was adding a YAML serializer to
+> > the Linux kernel; I mentioned adding a YAML serializer at LPC and
+> > people didn't seem super thrilled with the idea.
+>
+> I'm not sure I follow.  Are you talking about writing YAML or interpreting
+> YAML.  You don't need a serializer to write YAML.  It can be done
+> with straight text output.  I guess it depends on the scope of what you
+> envision.  Even if you want to do more than trivial structured output,
+> I don't think you'll need a full serializer.  (IOW, I think you could sneak
+> something in and just call it a test output formatter.  Just don't call it YAML
+> and most people won't notice. :-)
 
-This may not be optimal, but it resolves the issue for me.  I just put it
-together to test the theory that the region_chg code was at fault.
--- 
-Mike Kravetz
+Yeah, for the first one or two things just printing things out
+directly is probably fine, and yes, I could have just snuck it in, but
+at the time it wasn't a hindrance for me to ask what people wanted: I
+had already worked around it.
 
-diff --git a/mm/hugetlb.c b/mm/hugetlb.c
-index 45219cb58ac7..f750f95ed37a 100644
---- a/mm/hugetlb.c
-+++ b/mm/hugetlb.c
-@@ -549,6 +549,7 @@ static long region_chg(struct resv_map *resv, long f, long t,
- 	struct file_region *trg = NULL, *rg = NULL;
- 	long chg = 0, i = 0, to_allocate = 0;
- 	struct list_head allocated_regions;
-+	long calc_adds_in_progress = 0;
- 
- 	INIT_LIST_HEAD(&allocated_regions);
- 
-@@ -561,14 +562,14 @@ static long region_chg(struct resv_map *resv, long f, long t,
- 	if (*out_regions_needed == 0)
- 		*out_regions_needed = 1;
- 
--	resv->adds_in_progress += *out_regions_needed;
-+	calc_adds_in_progress = resv->adds_in_progress + *out_regions_needed;
- 
- 	/*
- 	 * Check for sufficient descriptors in the cache to accommodate
- 	 * the number of in progress add operations.
- 	 */
--	while (resv->region_cache_count < resv->adds_in_progress) {
--		to_allocate = resv->adds_in_progress - resv->region_cache_count;
-+	while (resv->region_cache_count < calc_adds_in_progress) {
-+		to_allocate = calc_adds_in_progress - resv->region_cache_count;
- 
- 		/* Must drop lock to allocate a new descriptor. Note that even
- 		 * though we drop the lock here, we do not make another call to
-@@ -593,8 +594,20 @@ static long region_chg(struct resv_map *resv, long f, long t,
- 			list_add(&rg->link, &resv->region_cache);
- 			resv->region_cache_count++;
- 		}
-+
-+		chg = add_reservation_in_range(resv, f, t, NULL, NULL,
-+				       out_regions_needed, true);
-+
-+		if (*out_regions_needed == 0)
-+			*out_regions_needed = 1;
-+
-+		calc_adds_in_progress = resv->adds_in_progress +
-+					*out_regions_needed;
-+
- 	}
- 
-+	resv->adds_in_progress += *out_regions_needed;
-+
- 	spin_unlock(&resv->lock);
- 	return chg;
+In any case, I was just explaining part of why I did expectations and
+assertion failures the way that I did.
+
+> >
+> > Further both the TAP implementation here as well as what is in
+> > kselftest have arbitrary kernel output mixed in with TAP output, which
+> > seems to be a further deviation from the spec.
+> Well that's a different kettle of worms, and really argues for staying
+> with something that is strictly line-based.
+>
+> >
+> > In an effort to do this, and so that at the very least I could
+> > document what I have done here, I have been looking into getting a
+> > copy of TAP into the kernel. Unfortunately, TAP appears to have some
+> > licensing issues. TAP says that it can be used/modified "under the
+> > same terms as Perl itself" and then provides a dead link. I filed a
+> > pull request to update the licence to the Perl Artistic Licence 1.0
+> > since I believe that is what they are referencing; however, I have not
+> > heard back from them yet.
+>
+> When you say "getting a copy of TAP into the kernel", I presume you mean
+> an existing implementation to produce TAP output?  Or are you talking about
+> a TAP interpreter?  I'm not sure the former needs to use an existing implementation.
+
+Sorry, that wasn't clear. I meant: get a copy of the TAP spec itself
+into the kernel documentation. KUnit already has an implementation.
+
+> I previously volunteered (in Lisbon) to write up the TAP deviations,
+> and never got around to it.   Sorry about that. I can try to work on it now if
+> people are still interested.
+
+I think that would be useful. I would do it, but, as I mentioned,
+there are licensing issues with the TAP spec. I am trying to resolve
+those issues, and am currently waiting to hear back from somebody from
+TAP.
