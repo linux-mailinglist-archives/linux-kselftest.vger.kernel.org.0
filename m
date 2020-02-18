@@ -2,125 +2,145 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 60400162FDC
-	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Feb 2020 20:27:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7447B162FEE
+	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Feb 2020 20:28:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726528AbgBRT04 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 18 Feb 2020 14:26:56 -0500
-Received: from mail-pf1-f196.google.com ([209.85.210.196]:36588 "EHLO
-        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726380AbgBRT0z (ORCPT
+        id S1726352AbgBRT2P (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 18 Feb 2020 14:28:15 -0500
+Received: from mail-pf1-f172.google.com ([209.85.210.172]:33876 "EHLO
+        mail-pf1-f172.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726296AbgBRT2P (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 18 Feb 2020 14:26:55 -0500
-Received: by mail-pf1-f196.google.com with SMTP id 185so11152328pfv.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 18 Feb 2020 11:26:54 -0800 (PST)
+        Tue, 18 Feb 2020 14:28:15 -0500
+Received: by mail-pf1-f172.google.com with SMTP id i6so11161235pfc.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 18 Feb 2020 11:28:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=PG1inGCjkR8mbsV9FBAGsiFoMPIEZyx6SU/E1O5JF7M=;
-        b=LKslbmH0dvmcG60Ck8sK/dmQiiexpGxXSgYtk3lY8upWmpuvOz/oM+fPI6ZbcDhDsa
-         RpPSJd2RUqGFX/QQYtGVauBVeZypL2oKXrEObFBe12YylfCiFeSoI80UMMRdjEsdg7n3
-         POgU5qp0Tgi8hPVyOf17vRI1G2fQe7rF6uWKLJxDaereKr+1W2qiRv0L6RwRmoOfryLx
-         h96KAO8dbjtrrnazYDf6UwT1vUQ+L70DL0X/CZlKWXMQT7OYN3/dnpovh7DVQASJ7rMX
-         IguDxDfOK8XUGiszApK+IDSIuUQMX1PFq8XSomi7opasBfzniD9phH9yq00SVfztmKO3
-         xZKQ==
+        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
+         :content-transfer-encoding;
+        bh=zhYJCkJXlPxXtgjObEVr42uyGuLn0+lKW2wKfP/UpCE=;
+        b=DvmqpHrnM5O330XZo1r4oQuSvPgecXnkvWf1HePsqxhXDtfRmjIjyRMJC5NXDcCYn+
+         OwvGhCTbVAvqmsw7DHX6CX7ayI8MRX80ZKZFm3l7gtOi8e7I+QXoV2LNG3hx3pvtvgiV
+         LSIt91cMdVZ0sjN19WquhWlHxwMKtoi8sHzngiTeNW13UUBuZJ+eKQMx92fEmu2wm/iA
+         Zt5J/EId0BdKG8K0owTwcXRs3abR2p6cDm6V/Hc1tImyyILCj1yMKM1SnD10oedygFij
+         qIgZMDYYyaPAr0O+2Mq3cmqiX39FLOwWYivab+YigA6JwRjURv6j+9wGEC6ZR3iOJu+H
+         mZDg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=PG1inGCjkR8mbsV9FBAGsiFoMPIEZyx6SU/E1O5JF7M=;
-        b=JUvqx+Cd0Y/sYb+SWpRF9NAxUKt11TZ/U8qiVFMm2GhI8NrIYxhRsyq4MM4EPUReep
-         5um/Selq3vngIatDTB3xzNUsI6vHcqrHaGdAI9A3Xxu/xdF3ncaz1m7Qf0OUa55t/Okk
-         Q1vQK+Ap4QCROOtd6aaz30UeYtw7WKk8krn+qoYD3fsSj5YYe8kYWsY6QKbewtjwWXWt
-         dgUdThb++fEMfOYxroED/G+cHRab8c6m3wfBjW9HzWQwe/NYfsaNZvEwDF21Osjqdn/j
-         SVrtC53oH41b6yDuoN/OHQuzXpWWj9hwk61tOjr3/RGXS4tZlRKor/c63ESErA4TyOZK
-         hkUw==
-X-Gm-Message-State: APjAAAWWUSq4BpcNQ5J1dk8fV1Ej/fZubB2hcNGKSMlAMUxKwFt7UntQ
-        ziYZkSptaxdZjKuJvBsa00tiqIw6nqFcvormnfAM/w==
-X-Google-Smtp-Source: APXvYqz4+UZUuuR5h/fNaE5Tzptkbuq8wJ2Z/GQxsLTn9qb7rpgmkUShMVAz14BtnZOgirr4od0cln9sN1EnrYiTfSs=
-X-Received: by 2002:a62:6842:: with SMTP id d63mr23106087pfc.113.1582054013382;
- Tue, 18 Feb 2020 11:26:53 -0800 (PST)
-MIME-Version: 1.0
-References: <1581949660-20113-1-git-send-email-alan.maguire@oracle.com> <1581949660-20113-3-git-send-email-alan.maguire@oracle.com>
-In-Reply-To: <1581949660-20113-3-git-send-email-alan.maguire@oracle.com>
-From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Tue, 18 Feb 2020 11:26:42 -0800
-Message-ID: <CAFd5g47bU+5dEb2FxbT1X0oXgcD0jOkqW7a4WfCxVttRhDSYoA@mail.gmail.com>
-Subject: Re: [PATCH v4 kunit-next 2/3] kunit: add log test
-To:     Alan Maguire <alan.maguire@oracle.com>
-Cc:     Shuah Khan <skhan@linuxfoundation.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
+         :mime-version:content-transfer-encoding;
+        bh=zhYJCkJXlPxXtgjObEVr42uyGuLn0+lKW2wKfP/UpCE=;
+        b=imfMH4IoimZBhPm6061UQfHlGMnwJ0nesXD2S9FMpDNKywroIp8+rT0vYXEiWlzH+N
+         W4lfhsbtrFt/SP9k2JPpZZVR/N1r53wEw6Itm+aQmTzC0a65dL3NLThN74A2wQZri5Iv
+         WrZ6hcfQB/v6YkB8Lk9UGb/TAKOEyJ2d2OYxCD0b5SJDoGuqbHfIlqSOHx+EwNmu8u+p
+         QEnguA3ssRprV7xTMdBnEZZRP+d5Zld6bSUVT+YVZIdWVLnYfaxpYIfMr40usd2KH466
+         luCwNq1JBqwBfivcCozmO/b84LB2XWPLvpWUpmXVAHks4t1DzlQRZg3wb/g9URk3QkIB
+         LZcQ==
+X-Gm-Message-State: APjAAAUwopv5kur3maaIfQqqEGusYsSVmZ3s8BgUd03yDGTof6NLFMbQ
+        pHDyMnRXFYkfLom3aKmUUkmGeQ==
+X-Google-Smtp-Source: APXvYqxvBhs/kNz46f0NM7yQK9O+VsDMro0hxwtL6uWXHEPpf1QvsgH3bBRF8NOa1+svFTWNKSApFA==
+X-Received: by 2002:a62:cfc1:: with SMTP id b184mr22611022pfg.55.1582054093924;
+        Tue, 18 Feb 2020 11:28:13 -0800 (PST)
+Received: from localhost ([2620:0:1000:2514:23a5:d584:6a92:3e3c])
+        by smtp.gmail.com with ESMTPSA id q12sm4931028pfh.158.2020.02.18.11.28.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 18 Feb 2020 11:28:13 -0800 (PST)
+Date:   Tue, 18 Feb 2020 11:28:13 -0800 (PST)
+X-Google-Original-Date: Tue, 18 Feb 2020 11:28:02 PST (-0800)
+Subject:     Re: arm64: bpf: Elide some moves to a0 after calls
+In-Reply-To: <5e39d509c9edc_63882ad0d49345c08@john-XPS-13-9370.notmuch>
+CC:     Bjorn Topel <bjorn.topel@gmail.com>, daniel@iogearbox.net,
+        ast@kernel.org, zlim.lnx@gmail.com, catalin.marinas@arm.com,
+        will@kernel.org, kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
+        andriin@fb.com, shuah@kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        clang-built-linux@googlegroups.com, kernel-team@android.com
+From:   Palmer Dabbelt <palmerdabbelt@google.com>
+To:     john.fastabend@gmail.com
+Message-ID: <mhng-eae623ac-3032-4327-9b23-af9838e3e979@palmerdabbelt-glaptop1>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Feb 17, 2020 at 6:28 AM Alan Maguire <alan.maguire@oracle.com> wrote:
+On Tue, 04 Feb 2020 12:33:13 PST (-0800), john.fastabend@gmail.com wrote:
+> Björn Töpel wrote:
+>> On Tue, 28 Jan 2020 at 03:14, Palmer Dabbelt <palmerdabbelt@google.com> wrote:
+>> >
+>> > There's four patches here, but only one of them actually does anything.  The
+>> > first patch fixes a BPF selftests build failure on my machine and has already
+>> > been sent to the list separately.  The next three are just staged such that
+>> > there are some patches that avoid changing any functionality pulled out from
+>> > the whole point of those refactorings, with two cleanups and then the idea.
+>> >
+>> > Maybe this is an odd thing to say in a cover letter, but I'm not actually sure
+>> > this patch set is a good idea.  The issue of extra moves after calls came up as
+>> > I was reviewing some unrelated performance optimizations to the RISC-V BPF JIT.
+>> > I figured I'd take a whack at performing the optimization in the context of the
+>> > arm64 port just to get a breath of fresh air, and I'm not convinced I like the
+>> > results.
+>> >
+>> > That said, I think I would accept something like this for the RISC-V port
+>> > because we're already doing a multi-pass optimization for shrinking function
+>> > addresses so it's not as much extra complexity over there.  If we do that we
+>> > should probably start puling some of this code into the shared BPF compiler,
+>> > but we're also opening the doors to more complicated BPF JIT optimizations.
+>> > Given that the BPF JIT appears to have been designed explicitly to be
+>> > simple/fast as opposed to perform complex optimization, I'm not sure this is a
+>> > sane way to move forward.
+>> >
+>> 
+>> Obviously I can only speak for myself and the RISC-V JIT, but given
+>> that we already have opened the door for more advanced translations
+>> (branch relaxation e.g.), I think that this makes sense. At the same
+>> time we don't want to go all JVM on the JITs. :-P
 >
-> the logging test ensures multiple strings logged appear in the
-> log string associated with the test when CONFIG_KUNIT_DEBUGFS is
-> enabled.
+> I'm not against it although if we start to go this route I would want some
+> way to quantify how we are increasing/descreasing load times.
 >
-> Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
-
-Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
-
-One minor comment below.
-
-> ---
->  lib/kunit/kunit-test.c | 27 ++++++++++++++++++++++++++-
->  1 file changed, 26 insertions(+), 1 deletion(-)
+>> 
+>> > I figured I'd send the patch set out as more of a question than anything else.
+>> > Specifically:
+>> >
+>> > * How should I go about measuring the performance of these sort of
+>> >   optimizations?  I'd like to balance the time it takes to run the JIT with the
+>> >   time spent executing the program, but I don't have any feel for what real BPF
+>> >   programs look like or have any benchmark suite to run.  Is there something
+>> >   out there this should be benchmarked against?  (I'd also like to know that to
+>> >   run those benchmarks on the RISC-V port.)
+>> 
+>> If you run the selftests 'test_progs' with -v it'll measure/print the
+>> execution time of the programs. I'd say *most* BPF program invokes a
+>> helper (via call). It would be interesting to see, for say the
+>> selftests, how often the optimization can be performed.
+>> 
+>> > * Is this the sort of thing that makes sense in a BPF JIT?  I guess I've just
+>> >   realized I turned "review this patch" into a way bigger rabbit hole than I
+>> >   really want to go down...
+>> >
+>> 
+>> I'd say 'yes'. My hunch, and the workloads I've seen, BPF programs are
+>> usually loaded, and then resident for a long time. So, the JIT time is
+>> not super critical. The FB/Cilium folks can definitely provide a
+>> better sample point, than my hunch. ;-)
 >
-> diff --git a/lib/kunit/kunit-test.c b/lib/kunit/kunit-test.c
-> index aceb5bf..0789060 100644
-> --- a/lib/kunit/kunit-test.c
-> +++ b/lib/kunit/kunit-test.c
-> @@ -329,6 +329,31 @@ static void kunit_resource_test_exit(struct kunit *test)
->         .exit = kunit_resource_test_exit,
->         .test_cases = kunit_resource_test_cases,
->  };
-> -kunit_test_suites(&kunit_try_catch_test_suite, &kunit_resource_test_suite);
-> +
-> +static void kunit_log_test(struct kunit *test)
-> +{
-> +       kunit_log(KERN_INFO, test, "put this in log.");
-> +       kunit_log(KERN_INFO, test, "this too.");
-> +
-> +#ifdef CONFIG_KUNIT_DEBUGFS
-> +       KUNIT_EXPECT_NOT_ERR_OR_NULL(test,
-> +                                    strstr(test->log, "put this in log."));
-> +       KUNIT_EXPECT_NOT_ERR_OR_NULL(test,
-> +                                    strstr(test->log, "this too."));
-> +#endif
-> +}
-
-Would you mind adding some expectations against the suite log? It
-might be good for the sake of completeness.
-
-> +
-> +static struct kunit_case kunit_log_test_cases[] = {
-> +       KUNIT_CASE(kunit_log_test),
-> +       {}
-> +};
-> +
-> +static struct kunit_suite kunit_log_test_suite = {
-> +       .name = "kunit-log-test",
-> +       .test_cases = kunit_log_test_cases,
-> +};
-> +
-> +kunit_test_suites(&kunit_try_catch_test_suite, &kunit_resource_test_suite,
-> +                 &kunit_log_test_suite);
+> In our case the JIT time can be relevant because we are effectively holding
+> up a kubernetes pod load waiting for programs to load. However, we can
+> probably work-around it by doing more aggressive dynamic linking now that
+> this is starting to land.
 >
->  MODULE_LICENSE("GPL v2");
-> --
-> 1.8.3.1
+> It would be interesting to have a test to measure load time in selftests
+> or selftests/benchmark/ perhaps. We have some of these out of tree we
+> could push in I think if there is interest.
+
+I'd be interested in some sort of benchmark suite for BPF.  Something like
+selftests/bpf/benchmarks/ seems like a reasonable place to me.
+
 >
+>> 
+>> 
+>> Björn
