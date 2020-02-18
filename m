@@ -2,402 +2,115 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3123E162F51
-	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Feb 2020 20:03:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E61B162F90
+	for <lists+linux-kselftest@lfdr.de>; Tue, 18 Feb 2020 20:14:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726438AbgBRTCr (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 18 Feb 2020 14:02:47 -0500
-Received: from mx2.suse.de ([195.135.220.15]:35786 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726700AbgBRTCp (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 18 Feb 2020 14:02:45 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx2.suse.de (Postfix) with ESMTP id 59328ADAB;
-        Tue, 18 Feb 2020 19:02:42 +0000 (UTC)
-From:   Michal Rostecki <mrostecki@opensuse.org>
-To:     bpf@vger.kernel.org
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        Andrii Nakryiko <andriin@fb.com>,
-        Quentin Monnet <quentin.monnet@netronome.com>,
-        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf-next 6/6] selftests/bpf: Add test for "bpftool feature" command
-Date:   Tue, 18 Feb 2020 20:02:23 +0100
-Message-Id: <20200218190224.22508-7-mrostecki@opensuse.org>
-X-Mailer: git-send-email 2.25.0
-In-Reply-To: <20200218190224.22508-1-mrostecki@opensuse.org>
-References: <20200218190224.22508-1-mrostecki@opensuse.org>
+        id S1726383AbgBRTOe (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 18 Feb 2020 14:14:34 -0500
+Received: from userp2120.oracle.com ([156.151.31.85]:50842 "EHLO
+        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726296AbgBRTOe (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Tue, 18 Feb 2020 14:14:34 -0500
+Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
+        by userp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 01IJDwQt186783;
+        Tue, 18 Feb 2020 19:14:25 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=subject : to : cc :
+ references : from : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=corp-2020-01-29;
+ bh=klYs7sANTDBUGahPUju9sGWKYr/tKylftyYSkWKVd7M=;
+ b=evNMlimVu3xmXlI/jjEVBPaZZEWMkPu5+xRAILOSZ2HHqMNX69dd4vUwzjS8x59DrKdd
+ 5nxBXGA3OxMdQin9eVnqgx0UqW+1nEMf8x/kDSi86SYett7WmGvjQZ3xU2lv8WtntjVE
+ tPrSIL2BuuBGNJmoTMORRAExFtSh/hQyPT9m1wMTtokQ4/aR5VKRxcCbDqmEOcRMPnXu
+ D6rahYOQtdo0znPDwFlsWuDUii+txSF/XOSXmCiu9lHDxNqfPTnOMaN78+EcuVzTeHaS
+ 2/rVylv79hPpyksaAUnl6ZKWAAQuolmrGuWMalYnfocc3uXd3cNr1f8QnOOGdNhGAkqN Sw== 
+Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
+        by userp2120.oracle.com with ESMTP id 2y699rr9v1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 18 Feb 2020 19:14:24 +0000
+Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
+        by userp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 01IJDkEC050650;
+        Tue, 18 Feb 2020 19:14:24 GMT
+Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
+        by userp3020.oracle.com with ESMTP id 2y6tc2wunw-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 18 Feb 2020 19:14:24 +0000
+Received: from abhmp0007.oracle.com (abhmp0007.oracle.com [141.146.116.13])
+        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 01IJEM8r000976;
+        Tue, 18 Feb 2020 19:14:23 GMT
+Received: from [192.168.1.206] (/71.63.128.209)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Tue, 18 Feb 2020 11:14:22 -0800
+Subject: Re: [PATCH v12 1/9] hugetlb_cgroup: Add hugetlb_cgroup reservation
+ counter
+To:     Mina Almasry <almasrymina@google.com>, Qian Cai <cai@lca.pw>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        shuah <shuah@kernel.org>, David Rientjes <rientjes@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Greg Thelen <gthelen@google.com>,
+        open list <linux-kernel@vger.kernel.org>, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org, cgroups@vger.kernel.org
+References: <20200211213128.73302-1-almasrymina@google.com>
+ <20200211151906.637d1703e4756066583b89da@linux-foundation.org>
+ <1582035660.7365.90.camel@lca.pw>
+ <CAHS8izO5=vKs-v9v=Di3hQXBD41+_YpYarXn1yZu9YE6SR-i6Q@mail.gmail.com>
+From:   Mike Kravetz <mike.kravetz@oracle.com>
+Message-ID: <d498012a-ec87-ca48-ed78-5fcdaf372888@oracle.com>
+Date:   Tue, 18 Feb 2020 11:14:21 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAHS8izO5=vKs-v9v=Di3hQXBD41+_YpYarXn1yZu9YE6SR-i6Q@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9535 signatures=668685
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 phishscore=0
+ suspectscore=27 mlxscore=0 malwarescore=0 bulkscore=0 adultscore=0
+ mlxlogscore=986 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2001150001 definitions=main-2002180129
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9535 signatures=668685
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 suspectscore=27
+ malwarescore=0 priorityscore=1501 adultscore=0 mlxscore=0 impostorscore=0
+ mlxlogscore=999 lowpriorityscore=0 spamscore=0 clxscore=1011 bulkscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2001150001
+ definitions=main-2002180129
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add Python module with tests for "bpftool feature" command which check
-whether:
+On 2/18/20 10:35 AM, Mina Almasry wrote:
+> On Tue, Feb 18, 2020 at 6:21 AM Qian Cai <cai@lca.pw> wrote:
+>>
+>> On Tue, 2020-02-11 at 15:19 -0800, Andrew Morton wrote:
+>>> On Tue, 11 Feb 2020 13:31:20 -0800 Mina Almasry <almasrymina@google.com> wrote:
+>>>
+>> [ 7933.806377][T14355] ------------[ cut here ]------------
+>> [ 7933.806541][T14355] kernel BUG at mm/hugetlb.c:490!
+>> VM_BUG_ON(t - f <= 1);
+>> [ 7933.806562][T14355] Oops: Exception in kernel mode, sig: 5 [#1]
+<snip>
+> Hi Qian,
+> 
+> Yes this VM_BUG_ON was added by a patch in the series ("hugetlb:
+> disable region_add file_region coalescing") so it's definitely related
+> to the series. I'm taking a look at why this VM_BUG_ON fires. Can you
+> confirm you reproduce this by running hugemmap06 from the ltp on a
+> powerpc machine? Can I maybe have your config?
+> 
+> Thanks!
 
-- probing kernel and network devices works
-- "section" option selects sections properly
-- "filter_in" and "filter_out" options filter results properly
-- "macro" option generates C macros properly
+Hi Mina,
 
-Signed-off-by: Michal Rostecki <mrostecki@opensuse.org>
----
- tools/testing/selftests/.gitignore          |   5 +-
- tools/testing/selftests/bpf/Makefile        |   3 +-
- tools/testing/selftests/bpf/test_bpftool.py | 294 ++++++++++++++++++++
- tools/testing/selftests/bpf/test_bpftool.sh |   5 +
- 4 files changed, 305 insertions(+), 2 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/test_bpftool.py
- create mode 100755 tools/testing/selftests/bpf/test_bpftool.sh
+Looking at the region_chg code again, we do a
 
-diff --git a/tools/testing/selftests/.gitignore b/tools/testing/selftests/.gitignore
-index 61df01cdf0b2..304fdf1a21dc 100644
---- a/tools/testing/selftests/.gitignore
-+++ b/tools/testing/selftests/.gitignore
-@@ -3,4 +3,7 @@ gpiogpio-hammer
- gpioinclude/
- gpiolsgpio
- tpm2/SpaceTest.log
--tpm2/*.pyc
-+
-+# Python bytecode and cache
-+__pycache__/
-+*.py[cod]
-diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-index 257a1aaaa37d..e7d822259c50 100644
---- a/tools/testing/selftests/bpf/Makefile
-+++ b/tools/testing/selftests/bpf/Makefile
-@@ -62,7 +62,8 @@ TEST_PROGS := test_kmod.sh \
- 	test_tc_tunnel.sh \
- 	test_tc_edt.sh \
- 	test_xdping.sh \
--	test_bpftool_build.sh
-+	test_bpftool_build.sh \
-+	test_bpftool.sh
- 
- TEST_PROGS_EXTENDED := with_addr.sh \
- 	with_tunnels.sh \
-diff --git a/tools/testing/selftests/bpf/test_bpftool.py b/tools/testing/selftests/bpf/test_bpftool.py
-new file mode 100644
-index 000000000000..e298dca5fdcf
---- /dev/null
-+++ b/tools/testing/selftests/bpf/test_bpftool.py
-@@ -0,0 +1,294 @@
-+# Copyright (c) 2020 SUSE LLC.
-+#
-+# This software is licensed under the GNU General License Version 2,
-+# June 1991 as shown in the file COPYING in the top-level directory of this
-+# source tree.
-+#
-+# THE COPYRIGHT HOLDERS AND/OR OTHER PARTIES PROVIDE THE PROGRAM "AS IS"
-+# WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
-+# BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
-+# FOR A PARTICULAR PURPOSE. THE ENTIRE RISK AS TO THE QUALITY AND PERFORMANCE
-+# OF THE PROGRAM IS WITH YOU. SHOULD THE PROGRAM PROVE DEFECTIVE, YOU ASSUME
-+# THE COST OF ALL NECESSARY SERVICING, REPAIR OR CORRECTION.
-+
-+import collections
-+import functools
-+import json
-+import os
-+import socket
-+import subprocess
-+import unittest
-+
-+
-+# Add the source tree of bpftool and /usr/local/sbin to PATH
-+cur_dir = os.path.dirname(os.path.realpath(__file__))
-+bpftool_dir = os.path.abspath(os.path.join(cur_dir, "..", "..", "..", "..",
-+                                           "tools", "bpf", "bpftool"))
-+os.environ["PATH"] = bpftool_dir + ":/usr/local/sbin:" + os.environ["PATH"]
-+
-+# Probe sections
-+SECTION_SYSTEM_CONFIG_NAME = "system_config"
-+SECTION_SYSCALL_CONFIG_NAME = "syscall_config"
-+SECTION_PROGRAM_TYPES_NAME = "program_types"
-+SECTION_MAP_TYPES_NAME = "map_types"
-+SECTION_HELPERS_NAME = "helpers"
-+SECTION_MISC_NAME = "misc"
-+SECTION_SYSTEM_CONFIG_PATTERN = b"Scanning system configuration..."
-+SECTION_SYSCALL_CONFIG_PATTERN = b"Scanning system call availability..."
-+SECTION_PROGRAM_TYPES_PATTERN = b"Scanning eBPF program types..."
-+SECTION_MAP_TYPES_PATTERN = b"Scanning eBPF map types..."
-+SECTION_HELPERS_PATTERN = b"Scanning eBPF helper functions..."
-+SECTION_MISC_PATTERN = b"Scanning miscellaneous eBPF features..."
-+
-+
-+class IfaceNotFoundError(Exception):
-+    pass
-+
-+
-+class UnprivilegedUserError(Exception):
-+    pass
-+
-+
-+def _bpftool(args, json=True):
-+    _args = ["bpftool"]
-+    if json:
-+        _args.append("-j")
-+    _args.extend(args)
-+
-+    res = subprocess.run(_args, capture_output=True)
-+    return res.stdout
-+
-+
-+def bpftool(args):
-+    return _bpftool(args, json=False)
-+
-+
-+def bpftool_json(args):
-+    res = _bpftool(args)
-+    return json.loads(res)
-+
-+
-+def get_default_iface():
-+    for iface in socket.if_nameindex():
-+        if iface[1] != "lo":
-+            return iface[1]
-+    raise IfaceNotFoundError("Could not find any network interface to probe")
-+
-+
-+def default_iface(f):
-+    @functools.wraps(f)
-+    def wrapper(*args, **kwargs):
-+        iface = get_default_iface()
-+        return f(*args, iface, **kwargs)
-+    return wrapper
-+
-+
-+class TestBpftool(unittest.TestCase):
-+    @classmethod
-+    def setUpClass(cls):
-+        if os.getuid() != 0:
-+            raise UnprivilegedUserError("This test suite eeeds root privileges")
-+
-+    @default_iface
-+    def test_feature_dev(self, iface):
-+        expected_lines = [
-+            SECTION_SYSCALL_CONFIG_PATTERN,
-+            SECTION_PROGRAM_TYPES_PATTERN,
-+            SECTION_MAP_TYPES_PATTERN,
-+            SECTION_HELPERS_PATTERN,
-+            SECTION_MISC_PATTERN,
-+        ]
-+
-+        res = bpftool(["feature", "probe", "dev", iface])
-+        for expected_line in expected_lines:
-+            self.assertIn(expected_line, res)
-+
-+    @default_iface
-+    def test_feature_dev_json(self, iface):
-+        expected_keys = [
-+            "syscall_config",
-+            "program_types",
-+            "map_types",
-+            "helpers",
-+            "misc",
-+        ]
-+
-+        res = bpftool_json(["feature", "probe", "dev", iface])
-+        self.assertCountEqual(res.keys(), expected_keys)
-+
-+    def test_feature_kernel(self):
-+        expected_lines = [
-+            SECTION_SYSTEM_CONFIG_PATTERN,
-+            SECTION_SYSCALL_CONFIG_PATTERN,
-+            SECTION_PROGRAM_TYPES_PATTERN,
-+            SECTION_MAP_TYPES_PATTERN,
-+            SECTION_HELPERS_PATTERN,
-+            SECTION_MISC_PATTERN,
-+        ]
-+
-+        res_default1 = bpftool(["feature"])
-+        res_default2 = bpftool(["feature", "probe"])
-+        res = bpftool(["feature", "probe", "kernel"])
-+
-+        for expected_line in expected_lines:
-+            self.assertIn(expected_line, res_default1)
-+            self.assertIn(expected_line, res_default2)
-+            self.assertIn(expected_line, res)
-+
-+    def test_feature_kernel_json(self):
-+        expected_keys = [
-+            "system_config",
-+            "syscall_config",
-+            "program_types",
-+            "map_types",
-+            "helpers",
-+            "misc",
-+        ]
-+
-+        res_default1 = bpftool_json(["feature"])
-+        self.assertCountEqual(res_default1.keys(), expected_keys)
-+
-+        res_default2 = bpftool_json(["feature", "probe"])
-+        self.assertCountEqual(res_default2.keys(), expected_keys)
-+
-+        res = bpftool_json(["feature", "probe", "kernel"])
-+        self.assertCountEqual(res.keys(), expected_keys)
-+
-+    def test_feature_section(self):
-+        SectionTestCase = collections.namedtuple(
-+            "SectionTestCase",
-+            ["section_name", "expected_pattern", "unexpected_patterns"])
-+        test_cases = [
-+            SectionTestCase(
-+                section_name=SECTION_SYSTEM_CONFIG_NAME,
-+                expected_pattern=SECTION_SYSTEM_CONFIG_PATTERN,
-+                unexpected_patterns=[SECTION_SYSCALL_CONFIG_PATTERN,
-+                                     SECTION_PROGRAM_TYPES_PATTERN,
-+                                     SECTION_MAP_TYPES_PATTERN,
-+                                     SECTION_HELPERS_PATTERN,
-+                                     SECTION_MISC_PATTERN]),
-+            SectionTestCase(
-+                section_name=SECTION_SYSCALL_CONFIG_NAME,
-+                expected_pattern=SECTION_SYSCALL_CONFIG_PATTERN,
-+                unexpected_patterns=[SECTION_SYSTEM_CONFIG_PATTERN,
-+                                     SECTION_PROGRAM_TYPES_PATTERN,
-+                                     SECTION_MAP_TYPES_PATTERN,
-+                                     SECTION_HELPERS_PATTERN,
-+                                     SECTION_MISC_PATTERN]),
-+            SectionTestCase(
-+                section_name=SECTION_PROGRAM_TYPES_NAME,
-+                expected_pattern=SECTION_PROGRAM_TYPES_PATTERN,
-+                unexpected_patterns=[SECTION_SYSTEM_CONFIG_PATTERN,
-+                                     SECTION_SYSCALL_CONFIG_PATTERN,
-+                                     SECTION_MAP_TYPES_PATTERN,
-+                                     SECTION_HELPERS_PATTERN,
-+                                     SECTION_MISC_PATTERN]),
-+            SectionTestCase(
-+                section_name=SECTION_MAP_TYPES_NAME,
-+                expected_pattern=SECTION_MAP_TYPES_PATTERN,
-+                unexpected_patterns=[SECTION_SYSTEM_CONFIG_PATTERN,
-+                                     SECTION_SYSCALL_CONFIG_PATTERN,
-+                                     SECTION_PROGRAM_TYPES_PATTERN,
-+                                     SECTION_HELPERS_PATTERN,
-+                                     SECTION_MISC_PATTERN]),
-+            SectionTestCase(
-+                section_name=SECTION_HELPERS_NAME,
-+                expected_pattern=SECTION_HELPERS_PATTERN,
-+                unexpected_patterns=[SECTION_SYSTEM_CONFIG_PATTERN,
-+                                     SECTION_SYSCALL_CONFIG_PATTERN,
-+                                     SECTION_PROGRAM_TYPES_PATTERN,
-+                                     SECTION_MAP_TYPES_PATTERN,
-+                                     SECTION_MISC_PATTERN]),
-+            SectionTestCase(
-+                section_name=SECTION_MISC_NAME,
-+                expected_pattern=SECTION_MISC_PATTERN,
-+                unexpected_patterns=[SECTION_SYSTEM_CONFIG_PATTERN,
-+                                     SECTION_SYSCALL_CONFIG_PATTERN,
-+                                     SECTION_PROGRAM_TYPES_PATTERN,
-+                                     SECTION_MAP_TYPES_PATTERN,
-+                                     SECTION_HELPERS_PATTERN]),
-+        ]
-+
-+        for tc in test_cases:
-+            res = bpftool(["feature", "probe", "kernel",
-+                           "section", tc.section_name])
-+            self.assertIn(tc.expected_pattern, res)
-+            for pattern in tc.unexpected_patterns:
-+                self.assertNotIn(pattern, res)
-+
-+    def test_feature_section_json(self):
-+        res_syscall_config = bpftool_json(["feature", "probe", "kernel",
-+                                           "section", "syscall_config"])
-+        self.assertCountEqual(res_syscall_config.keys(), ["syscall_config"])
-+
-+        res_system_config = bpftool_json(["feature", "probe", "kernel",
-+                                          "section", "system_config"])
-+        self.assertCountEqual(res_system_config.keys(), ["system_config"])
-+
-+        res_program_types = bpftool_json(["feature", "probe", "kernel",
-+                                          "section", "program_types"])
-+        self.assertCountEqual(res_program_types.keys(), ["program_types"])
-+
-+        res_map_types = bpftool_json(["feature", "probe", "kernel",
-+                                      "section", "map_types"])
-+        self.assertCountEqual(res_map_types.keys(), ["map_types"])
-+
-+        res_helpers = bpftool_json(["feature", "probe", "kernel",
-+                                    "section", "helpers"])
-+        self.assertCountEqual(res_helpers.keys(), ["helpers"])
-+
-+        res_misc = bpftool_json(["feature", "probe", "kernel",
-+                                 "section", "misc"])
-+        self.assertCountEqual(res_misc.keys(), ["misc"])
-+
-+    def _assert_pattern_in_dict(self, dct, pattern, check_keys=False):
-+        """Check if all string values inside dictionary contain the given
-+        pattern.
-+        """
-+        for key, value in dct.items():
-+            if check_keys:
-+                self.assertIn(pattern, key)
-+            if isinstance(value, dict):
-+                self._assert_pattern_in_dict(value, pattern, check_keys=True)
-+            elif isinstance(value, str):
-+                self.assertIn(pattern, value)
-+
-+    def _assert_pattern_not_in_dict(self, dct, pattern, check_keys=False):
-+        """Check if all string values inside dictionary do not containe the
-+        given pattern.
-+        """
-+        for key, value in dct.items():
-+            if check_keys:
-+                self.assertNotIn(pattern, key)
-+            if isinstance(value, dict):
-+                self._assert_pattern_not_in_dict(value, pattern,
-+                                                 check_keys=True)
-+            elif isinstance(value, str):
-+                self.assertNotIn(pattern, value)
-+
-+    def test_feature_filter_in_json(self):
-+        res = bpftool_json(["feature", "probe", "kernel",
-+                            "filter_in", "trace"])
-+        self._assert_pattern_in_dict(res, "trace")
-+
-+    def test_feature_filter_out_json(self):
-+        res = bpftool_json(["feature", "probe", "kernel",
-+                            "filter_out", "trace"])
-+        self._assert_pattern_not_in_dict(res, "trace")
-+
-+    def test_feature_macros(self):
-+        expected_patterns = [
-+            b"/\*\*\* System call availability \*\*\*/",
-+            b"#define HAVE_BPF_SYSCALL",
-+            b"/\*\*\* eBPF program types \*\*\*/",
-+            b"#define HAVE.*PROG_TYPE",
-+            b"/\*\*\* eBPF map types \*\*\*/",
-+            b"#define HAVE.*MAP_TYPE",
-+            b"/\*\*\* eBPF helper functions \*\*\*/",
-+            b"#define HAVE.*HELPER",
-+            b"/\*\*\* eBPF misc features \*\*\*/",
-+        ]
-+
-+        res = bpftool(["feature", "probe", "macros"])
-+        for pattern in expected_patterns:
-+            self.assertRegex(res, pattern)
-diff --git a/tools/testing/selftests/bpf/test_bpftool.sh b/tools/testing/selftests/bpf/test_bpftool.sh
-new file mode 100755
-index 000000000000..66690778e36d
---- /dev/null
-+++ b/tools/testing/selftests/bpf/test_bpftool.sh
-@@ -0,0 +1,5 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
-+# Copyright (c) 2020 SUSE LLC.
-+
-+python3 -m unittest -v test_bpftool.TestBpftool
+	resv->adds_in_progress += *out_regions_needed;
+
+and then potentially drop the lock to allocate the needed entries.  Could
+anopther thread (only adding reservation for a single page) then come in
+and notice that there are not enough entries in the cache and hit the
+VM_BUG_ON()?
+
 -- 
-2.25.0
-
+Mike Kravetz
