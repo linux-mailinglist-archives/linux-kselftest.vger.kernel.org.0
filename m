@@ -2,116 +2,104 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 314A9164387
-	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Feb 2020 12:39:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9185D164451
+	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Feb 2020 13:33:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726484AbgBSLjp (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 19 Feb 2020 06:39:45 -0500
-Received: from mail.kernel.org ([198.145.29.99]:36680 "EHLO mail.kernel.org"
+        id S1726530AbgBSMdF (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 19 Feb 2020 07:33:05 -0500
+Received: from mx2.suse.de ([195.135.220.15]:47544 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726270AbgBSLjp (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 19 Feb 2020 06:39:45 -0500
-Received: from devnote2 (NE2965lan1.rev.em-net.ne.jp [210.141.244.193])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 7746224654;
-        Wed, 19 Feb 2020 11:39:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1582112384;
-        bh=YYR+RKtVZyrkxF6aGx2mWko7HJEfdWnL5yLEcKFK3CM=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=bggx/HrbYQdZhNF5nN0aSeWqSteZEh67+L59/TGkkRNDOnT4iDucfkbIAHmCR+Nd2
-         5oTRdRkcp/WLJpGSkrfz9CSgY6Uw01sssjnPNJINbMGlXRMfAdKmq6xdCrhf0IINea
-         DFwftWSyuvhU/YIv7/xFEYU2H5+O4tPYZkJOxX/o=
-Date:   Wed, 19 Feb 2020 20:39:41 +0900
-From:   Masami Hiramatsu <mhiramat@kernel.org>
-To:     Alan Maguire <alan.maguire@oracle.com>
-Cc:     rostedt@goodmis.org, mingo@redhat.com, shuah@kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/2] ftrace/selftest: make unresolved cases cause
- failure if --fail-unresolved set
-Message-Id: <20200219203941.eb0fb66aee13f6d7a47513ac@kernel.org>
-In-Reply-To: <1582104810-12983-3-git-send-email-alan.maguire@oracle.com>
-References: <1582104810-12983-1-git-send-email-alan.maguire@oracle.com>
-        <1582104810-12983-3-git-send-email-alan.maguire@oracle.com>
-X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+        id S1726491AbgBSMdF (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 19 Feb 2020 07:33:05 -0500
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx2.suse.de (Postfix) with ESMTP id 347DFC08C;
+        Wed, 19 Feb 2020 12:33:02 +0000 (UTC)
+Subject: Re: [PATCH bpf-next 0/6] bpftool: Allow to select sections and filter
+ probes
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        Andrii Nakryiko <andriin@fb.com>,
+        Quentin Monnet <quentin.monnet@netronome.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Shuah Khan <shuah@kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>
+References: <20200218190224.22508-1-mrostecki@opensuse.org>
+ <CAADnVQJm_tvMGjhHyVn66feA3rHLSXTdzqCCABu+9tKer89LVA@mail.gmail.com>
+From:   Michal Rostecki <mrostecki@opensuse.org>
+Autocrypt: addr=mrostecki@opensuse.org; keydata=
+ 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
+ ZURUUA==
+Message-ID: <06ae3070-0d35-df49-9310-d1fb7bfb3e67@opensuse.org>
+Date:   Wed, 19 Feb 2020 13:33:01 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.2
+MIME-Version: 1.0
+In-Reply-To: <CAADnVQJm_tvMGjhHyVn66feA3rHLSXTdzqCCABu+9tKer89LVA@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, 19 Feb 2020 09:33:30 +0000
-Alan Maguire <alan.maguire@oracle.com> wrote:
+On 2/19/20 4:02 AM, Alexei Starovoitov wrote:
+> The motivation is clear, but I think the users shouldn't be made
+> aware of such implementation details. I think instead of filter_in/out
+> it's better to do 'full or safe' mode of probing.
+> By default it can do all the probing that doesn't cause
+> extra dmesgs and in 'full' mode it can probe everything.
 
-> Currently, ftracetest will return 1 (failure) if any unresolved cases
-> are encountered.  The unresolved status results from modules and
-> programs not being available, and as such does not indicate any
-> issues with ftrace itself.  As such, change the behaviour of
-> ftracetest in line with unsupported cases; if unsupported cases
-> happen, ftracetest still returns 0 unless --fail-unsupported.  Here
-> --fail-unresolved is added and the default is to return 0 if
-> unresolved results occur.
-> 
-
-OK, this looks good to me. One note, with this change, ftracetest doesn't
-fail even if your test environment is not well prepared anymore.
-
-Acked-by: Masami Hiramatsu <mhiramat@kernel.org>
-
-Thank you,
-
-> Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
-> ---
->  tools/testing/selftests/ftrace/ftracetest | 8 +++++++-
->  1 file changed, 7 insertions(+), 1 deletion(-)
-> 
-> diff --git a/tools/testing/selftests/ftrace/ftracetest b/tools/testing/selftests/ftrace/ftracetest
-> index 144308a..19e9236 100755
-> --- a/tools/testing/selftests/ftrace/ftracetest
-> +++ b/tools/testing/selftests/ftrace/ftracetest
-> @@ -17,6 +17,7 @@ echo "		-v|--verbose Increase verbosity of test messages"
->  echo "		-vv        Alias of -v -v (Show all results in stdout)"
->  echo "		-vvv       Alias of -v -v -v (Show all commands immediately)"
->  echo "		--fail-unsupported Treat UNSUPPORTED as a failure"
-> +echo "		--fail-unresolved Treat UNRESOLVED as a failure"
->  echo "		-d|--debug Debug mode (trace all shell commands)"
->  echo "		-l|--logdir <dir> Save logs on the <dir>"
->  echo "		            If <dir> is -, all logs output in console only"
-> @@ -112,6 +113,10 @@ parse_opts() { # opts
->        UNSUPPORTED_RESULT=1
->        shift 1
->      ;;
-> +    --fail-unresolved)
-> +      UNRESOLVED_RESULT=1
-> +      shift 1
-> +    ;;
->      --logdir|-l)
->        LOG_DIR=$2
->        shift 2
-> @@ -176,6 +181,7 @@ KEEP_LOG=0
->  DEBUG=0
->  VERBOSE=0
->  UNSUPPORTED_RESULT=0
-> +UNRESOLVED_RESULT=0
->  STOP_FAILURE=0
->  # Parse command-line options
->  parse_opts $*
-> @@ -280,7 +286,7 @@ eval_result() { # sigval
->      $UNRESOLVED)
->        prlog "	[${color_blue}UNRESOLVED${color_reset}]"
->        UNRESOLVED_CASES="$UNRESOLVED_CASES $CASENO"
-> -      return 1 # this is a kind of bug.. something happened.
-> +      return $UNRESOLVED_RESULT # depends on use case
->      ;;
->      $UNTESTED)
->        prlog "	[${color_blue}UNTESTED${color_reset}]"
-> -- 
-> 1.8.3.1
-> 
-
-
--- 
-Masami Hiramatsu <mhiramat@kernel.org>
+Alright, then I will send later v2 where the "internal" implementation
+(filtering out based on regex) stays similar (filter_out will stay in
+the code without being exposed to users, filter_in will be removed). And
+the exposed option of "safe" probing will just apply the
+"(trace|write_user)" filter_out pattern. Does it sound good?
