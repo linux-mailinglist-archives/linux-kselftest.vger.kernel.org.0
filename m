@@ -2,82 +2,82 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 74995164B05
-	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Feb 2020 17:52:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EEAEC164E6B
+	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Feb 2020 20:05:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726768AbgBSQw2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 19 Feb 2020 11:52:28 -0500
-Received: from www62.your-server.de ([213.133.104.62]:40848 "EHLO
-        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726450AbgBSQw2 (ORCPT
+        id S1726613AbgBSTFy (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 19 Feb 2020 14:05:54 -0500
+Received: from mail-oi1-f194.google.com ([209.85.167.194]:36348 "EHLO
+        mail-oi1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726756AbgBSTFy (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 19 Feb 2020 11:52:28 -0500
-Received: from sslproxy06.your-server.de ([78.46.172.3])
-        by www62.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
-        (Exim 4.89_1)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1j4SaG-0005EC-ES; Wed, 19 Feb 2020 17:52:24 +0100
-Received: from [2001:1620:665:0:5795:5b0a:e5d5:5944] (helo=linux-3.fritz.box)
-        by sslproxy06.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1j4SaF-000Jq9-VN; Wed, 19 Feb 2020 17:52:24 +0100
-Subject: Re: [PATCH bpf-next 0/6] bpftool: Allow to select sections and filter
- probes
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Michal Rostecki <mrostecki@opensuse.org>
-Cc:     bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        Andrii Nakryiko <andriin@fb.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Shuah Khan <shuah@kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>
-References: <20200218190224.22508-1-mrostecki@opensuse.org>
- <CAADnVQJm_tvMGjhHyVn66feA3rHLSXTdzqCCABu+9tKer89LVA@mail.gmail.com>
- <06ae3070-0d35-df49-9310-d1fb7bfb3e67@opensuse.org>
- <CAADnVQLhEaV=dWMZC83g5QHit7Qvu4H84Dh--K3aOTiUNeEd4g@mail.gmail.com>
-From:   Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <498282f3-7e75-c24d-513d-be97b165b01f@iogearbox.net>
-Date:   Wed, 19 Feb 2020 17:52:23 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+        Wed, 19 Feb 2020 14:05:54 -0500
+Received: by mail-oi1-f194.google.com with SMTP id c16so24921002oic.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 19 Feb 2020 11:05:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=x3W3v+68ig6DpCsCj7cxqvrURO7RlrIPZ7rtuczBdEw=;
+        b=MRO7yMzk7yDrFx6YlaBjQipExwOAAl5oZs4Uw3k4YEf0IGCO46qz9pNv7mKfRtdLmz
+         PEMy+4mqqmhwK9gt+RfIID4sYXypy6kmfz1f3/bMfc/HE8wlsqQQGiSvYEAjvEeIOtHa
+         S6UhvT56lMx/7KvHuGwTFmdLS+x63NJs9cvcUK6OyY4jAYlq0NtF8+Y90oLe3sYVYbZG
+         Z4C1gt9hZGvCpniRgDi27fhm9UHQPo3FBAsRTSTIXvJ0SCAfmlCJZJvUqjqxhIhm85Eo
+         FcWe5DtoCsHrj7vx/oU+0Nb9bnw/5FAhoH0jlTXQwKcUoHzNp9GTA2nYG/bf1Wm2UWLP
+         W65w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=x3W3v+68ig6DpCsCj7cxqvrURO7RlrIPZ7rtuczBdEw=;
+        b=huw4Ne9NrSMrITiH7UubUWNBTJMfxyNzaw41/IUBNfTVM9dfm20CB6U8Nz1WfaCCob
+         KBl1CPPeWJFjBvmPxW0MmgpH3ecnmT7IwybP38+JaBCHt75T9u4/n3fYYzlbmMauMXPC
+         mbMhmok8rEhd55dPt2s08Acxq1op/1C7Eha5xutN0fa71OjV6X2Yh8TUsJafcXY+1KvE
+         AstA88mjGATkrgD06uQDMeBfRHEK+L5X1vZS+4bxwN8/TVxLB2S1fIkxqrWoE+uv9cPO
+         p8d4OdYCQTMdzHitBDwBycH2Eo5NiTiuwSN6vVjvvz+YmsXnKqsfS3Gvwa6K/BhOUFAI
+         UzcA==
+X-Gm-Message-State: APjAAAWx4ekC4EXDAH6+O8Ye87YiuFFYu4V1VxlkaLFtaKiTuIcje8gI
+        eYRlrE0GPSc6roDUMHjjdLzC2ebdxF9qHIaOufkzyg==
+X-Google-Smtp-Source: APXvYqwEay32tZ67d1pnpiUQv4wvXQaJmUw10KBTCy/isaFzhTkheZJm6RN/SlMhPx5MtBPryEnlPcoCjQaeEkl+B1s=
+X-Received: by 2002:aca:1012:: with SMTP id 18mr5372313oiq.151.1582139152379;
+ Wed, 19 Feb 2020 11:05:52 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <CAADnVQLhEaV=dWMZC83g5QHit7Qvu4H84Dh--K3aOTiUNeEd4g@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.102.1/25728/Wed Feb 19 15:06:20 2020)
+References: <20200211213128.73302-1-almasrymina@google.com> <20200211151906.637d1703e4756066583b89da@linux-foundation.org>
+In-Reply-To: <20200211151906.637d1703e4756066583b89da@linux-foundation.org>
+From:   Mina Almasry <almasrymina@google.com>
+Date:   Wed, 19 Feb 2020 11:05:41 -0800
+Message-ID: <CAHS8izPUFQWq3PzhhRzp7u11173_-cmRkNuQWEswS51Xz6ZM0Q@mail.gmail.com>
+Subject: Re: [PATCH v12 1/9] hugetlb_cgroup: Add hugetlb_cgroup reservation counter
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Mike Kravetz <mike.kravetz@oracle.com>, shuah <shuah@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Greg Thelen <gthelen@google.com>,
+        open list <linux-kernel@vger.kernel.org>, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org, cgroups@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 2/19/20 5:37 PM, Alexei Starovoitov wrote:
-> On Wed, Feb 19, 2020 at 4:33 AM Michal Rostecki <mrostecki@opensuse.org> wrote:
->>
->> On 2/19/20 4:02 AM, Alexei Starovoitov wrote:
->>> The motivation is clear, but I think the users shouldn't be made
->>> aware of such implementation details. I think instead of filter_in/out
->>> it's better to do 'full or safe' mode of probing.
->>> By default it can do all the probing that doesn't cause
->>> extra dmesgs and in 'full' mode it can probe everything.
->>
->> Alright, then I will send later v2 where the "internal" implementation
->> (filtering out based on regex) stays similar (filter_out will stay in
->> the code without being exposed to users, filter_in will be removed). And
->> the exposed option of "safe" probing will just apply the
->> "(trace|write_user)" filter_out pattern. Does it sound good?
-> 
-> yes. If implementation is doing filter_in and applying 'trace_printk|write_user'
-> strings hidden within bpftool than I think it should be good.
-> What do you think the default should be?
-> It feels to me that the default should not be causing dmesg prints.
-> So only addition flag for bpftool command line will be 'bpftool
-> feature probe full'
+On Tue, Feb 11, 2020 at 3:19 PM Andrew Morton <akpm@linux-foundation.org> wrote:
+>
+> On Tue, 11 Feb 2020 13:31:20 -0800 Mina Almasry <almasrymina@google.com> wrote:
+>
+> > These counters will track hugetlb reservations rather than hugetlb
+> > memory faulted in. This patch only adds the counter, following patches
+> > add the charging and uncharging of the counter.
+>
+> We're still pretty thin on review here, but as it's v12 and Mike
+> appears to be signed up to look at this work, I'll add them to -next to
+> help move things forward.
+>
 
-Agree, that makes sense to me.
+Hi Andrew,
+
+Since the patches were merged into -next there have been build fixes
+and test fixes and some review comments. Would you like me to submit
+*new* patches to address these, or would you like me to squash the
+fixes into my existing patch series and submit another iteration of
+the patch series?
