@@ -2,101 +2,178 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 577481649CA
-	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Feb 2020 17:18:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B717E164A44
+	for <lists+linux-kselftest@lfdr.de>; Wed, 19 Feb 2020 17:27:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727448AbgBSQR4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 19 Feb 2020 11:17:56 -0500
-Received: from aserp2120.oracle.com ([141.146.126.78]:51108 "EHLO
-        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727393AbgBSQRz (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 19 Feb 2020 11:17:55 -0500
-Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
-        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 01JGDIsN099955;
-        Wed, 19 Feb 2020 16:17:50 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references; s=corp-2020-01-29;
- bh=u2YudfCjophCAi0AkyAQI1qJi/amj5QgFGm8gBc1bTU=;
- b=lWkKU+n8Ed1SosMEWyPQkF8DUAZz4nGKmvonA7RNl+xNdOKk8PueqAyGx4N/r8rPp60N
- e4k0YKJesFTF7zPeQYt4XJlX2/Wuu59FHGa3ncdQeO22FsvtUoJcUf5gN4eXgqrpB01q
- PBhE+dsP0doBBqWqSxgk2zMaf/j84dsS8cFosMPme2x+yyVSBlbaUa4WvvyTsngP1L+N
- BjnGrzJCeS+0tOyhU7LY7JBmV9Utanc3csw5XnepAuhEErWC0YHn/iVLAdbN29kbVybM
- ogooaOfm6ISj68NVfSRCX/zanm1FHWJcxNwQkF1r1K8gl2CkZXTGU5hVFG1Ksf4zMmuv ig== 
-Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by aserp2120.oracle.com with ESMTP id 2y8udkc6hg-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 19 Feb 2020 16:17:50 +0000
-Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 01JGHnP2005034;
-        Wed, 19 Feb 2020 16:17:49 GMT
-Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
-        by aserp3020.oracle.com with ESMTP id 2y8ud665k4-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 19 Feb 2020 16:17:49 +0000
-Received: from abhmp0003.oracle.com (abhmp0003.oracle.com [141.146.116.9])
-        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 01JGHmTp009583;
-        Wed, 19 Feb 2020 16:17:48 GMT
-Received: from dhcp-10-175-189-86.vpn.oracle.com (/10.175.189.86)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Wed, 19 Feb 2020 08:17:48 -0800
-From:   Alan Maguire <alan.maguire@oracle.com>
-To:     brendanhiggins@google.com, frowand.list@gmail.com,
-        gregkh@linuxfoundation.org, shuah@kernel.org
-Cc:     corbet@lwn.net, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-doc@vger.kernel.org, Alan Maguire <alan.maguire@oracle.com>
-Subject: [PATCH v5 kunit-next 4/4] kunit: update documentation to describe debugfs representation
-Date:   Wed, 19 Feb 2020 16:17:10 +0000
-Message-Id: <1582129030-22282-5-git-send-email-alan.maguire@oracle.com>
-X-Mailer: git-send-email 1.8.3.1
-In-Reply-To: <1582129030-22282-1-git-send-email-alan.maguire@oracle.com>
-References: <1582129030-22282-1-git-send-email-alan.maguire@oracle.com>
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9536 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 mlxlogscore=999
- phishscore=0 suspectscore=3 mlxscore=0 malwarescore=0 adultscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2001150001 definitions=main-2002190123
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9536 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 lowpriorityscore=0 suspectscore=3
- spamscore=0 priorityscore=1501 adultscore=0 mlxscore=0 clxscore=1015
- malwarescore=0 mlxlogscore=999 phishscore=0 impostorscore=0 bulkscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2001150001
- definitions=main-2002190122
+        id S1726750AbgBSQ1Z (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 19 Feb 2020 11:27:25 -0500
+Received: from mail.kernel.org ([198.145.29.99]:56644 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726736AbgBSQ1Y (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Wed, 19 Feb 2020 11:27:24 -0500
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net [24.9.64.241])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 546402465D;
+        Wed, 19 Feb 2020 16:27:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1582129644;
+        bh=xbu9KCqi5HQvIrjHdqTnqNKT56lgpIgY3LJP0AlEXoE=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=i6IQMuz+3M02Wha4KwaeamIq8y1VU0FUCBGJtlVUvijeaPRxPGRFk3bHSI06QSDQG
+         qDJa8F18PXNn4PxAgzPIGeyoFCx/U3QclfaqSWcfGcaGshCdeqQvo7Nklw0UihdKQ0
+         aeRQWIIMg4FzLCtfvDjwJefTZl9xTTVh2Q1syYZQ=
+Subject: Re: [PATCH v3 0/4] Implement FUTEX_WAIT_MULTIPLE operation
+To:     =?UTF-8?Q?Andr=c3=a9_Almeida?= <andrealmeid@collabora.com>,
+        linux-kernel@vger.kernel.org, tglx@linutronix.de
+Cc:     kernel@collabora.com, krisman@collabora.com,
+        linux-kselftest@vger.kernel.org, rostedt@goodmis.org,
+        ryao@gentoo.org, peterz@infradead.org, dvhart@infradead.org,
+        mingo@redhat.com, z.figura12@gmail.com, steven@valvesoftware.com,
+        pgriffais@valvesoftware.com, steven@liquorix.net,
+        shuah <shuah@kernel.org>
+References: <20200213214525.183689-1-andrealmeid@collabora.com>
+From:   shuah <shuah@kernel.org>
+Message-ID: <f91c0259-e9b3-3209-ee46-f6a066113b2a@kernel.org>
+Date:   Wed, 19 Feb 2020 09:27:22 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
+MIME-Version: 1.0
+In-Reply-To: <20200213214525.183689-1-andrealmeid@collabora.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Documentation should describe debugfs layout and semantics.
+On 2/13/20 2:45 PM, André Almeida wrote:
+> Hello,
+> 
+> This patchset implements a new futex operation, called FUTEX_WAIT_MULTIPLE,
+> which allows a thread to wait on several futexes at the same time, and be
+> awoken by any of them.
+> 
+> The use case lies in the Wine implementation of the Windows NT interface
+> WaitMultipleObjects. This Windows API function allows a thread to sleep
+> waiting on the first of a set of event sources (mutexes, timers, signal,
+> console input, etc) to signal.  Considering this is a primitive
+> synchronization operation for Windows applications, being able to quickly
+> signal events on the producer side, and quickly go to sleep on the
+> consumer side is essential for good performance of those running over Wine.
+> 
+> Since this API exposes a mechanism to wait on multiple objects, and
+> we might have multiple waiters for each of these events, a M->N
+> relationship, the current Linux interfaces fell short on performance
+> evaluation of large M,N scenarios.  We experimented, for instance, with
+> eventfd, which has performance problems discussed below, but we also
+> experimented with userspace solutions, like making each consumer wait on
+> a condition variable guarding the entire list of objects, and then
+> waking up multiple variables on the producer side, but this is
+> prohibitively expensive since we either need to signal many condition
+> variables or share that condition variable among multiple waiters, and
+> then verify for the event being signaled in userspace, which means
+> dealing with often false positive wakes ups.
+> 
+> The natural interface to implement the behavior we want, also
+> considering that one of the waitable objects is a mutex itself, would be
+> the futex interface.  Therefore, this patchset proposes a mechanism for
+> a thread to wait on multiple futexes at once, and wake up on the first
+> futex that was awaken.
+> 
+> In particular, using futexes in our Wine use case reduced the CPU
+> utilization by 4% for the game Beat Saber and by 1.5% for the game
+> Shadow of Tomb Raider, both running over Proton (a Wine based solution
+> for Windows emulation), when compared to the eventfd interface. This
+> implementation also doesn't rely of file descriptors, so it doesn't risk
+> overflowing the resource.
+> 
+> In time, we are also proposing modifications to glibc and libpthread to
+> make this feature available for Linux native multithreaded applications
+> using libpthread, which can benefit from the behavior of waiting on any
+> of a group of futexes.
+> 
+> Technically, the existing FUTEX_WAIT implementation can be easily
+> reworked by using futex_wait_multiple() with a count of one, and I
+> have a patch showing how it works.  I'm not proposing it, since
+> futex is such a tricky code, that I'd be more comfortable to have
+> FUTEX_WAIT_MULTIPLE running upstream for a couple development cycles,
+> before considering modifying FUTEX_WAIT.
+> 
+> The patch series includes an extensive set of kselftests validating
+> the behavior of the interface.  We also implemented support[1] on
+> Syzkaller and survived the fuzzy testing.
+> 
+> Finally, if you'd rather pull directly a branch with this set you can
+> find it here:
+> 
+> https://gitlab.collabora.com/tonyk/linux/commits/futex-dev-v3
+> 
+> The RFC for this patch can be found here:
+> 
+> https://lkml.org/lkml/2019/7/30/1399
+> 
+> === Performance of eventfd ===
+> 
+> Polling on several eventfd contexts with semaphore semantics would
+> provide us with the exact semantics we are looking for.  However, as
+> shown below, in a scenario with sufficient producers and consumers, the
+> eventfd interface itself becomes a bottleneck, in particular because
+> each thread will compete to acquire a sequence of waitqueue locks for
+> each eventfd context in the poll list. In addition, in the uncontended
+> case, where the producer is ready for consumption, eventfd still
+> requires going into the kernel on the consumer side.
+> 
+> When a write or a read operation in an eventfd file succeeds, it will try
+> to wake up all threads that are waiting to perform some operation to
+> the file. The lock (ctx->wqh.lock) that hold the access to the file value
+> (ctx->count) is the same lock used to control access the waitqueue. When
+> all those those thread woke, they will compete to get this lock. Along
+> with that, the poll() also manipulates the waitqueue and need to hold
+> this same lock. This lock is specially hard to acquire when poll() calls
+> poll_freewait(), where it tries to free all waitqueues associated with
+> this poll. While doing that, it will compete with a lot of read and
+> write operations that have been waken.
+> 
+> In our use case, with a huge number of parallel reads, writes and polls,
+> this lock is a bottleneck and hurts the performance of applications. Our
+> implementation of futex, however, decrease the calls of spin lock by more
+> than 80% in some user applications.
+> 
+> Finally, eventfd operates on file descriptors, which is a limited
+> resource that has shown its limitation in our use cases.  Despite the
+> Windows interface not waiting on more than 64 objects at once, we still
+> have multiple waiters at the same time, and we were easily able to
+> exhaust the FD limits on applications like games.
+> 
+> Thanks,
+>      André
+> 
+> [1] https://github.com/andrealmeid/syzkaller/tree/futex-wait-multiple
+> 
+> Gabriel Krisman Bertazi (4):
+>    futex: Implement mechanism to wait on any of several futexes
+>    selftests: futex: Add FUTEX_WAIT_MULTIPLE timeout test
+>    selftests: futex: Add FUTEX_WAIT_MULTIPLE wouldblock test
+>    selftests: futex: Add FUTEX_WAIT_MULTIPLE wake up test
+> 
+>   include/uapi/linux/futex.h                    |  20 +
+>   kernel/futex.c                                | 358 +++++++++++++++++-
+>   .../selftests/futex/functional/.gitignore     |   1 +
+>   .../selftests/futex/functional/Makefile       |   3 +-
+>   .../futex/functional/futex_wait_multiple.c    | 173 +++++++++
+>   .../futex/functional/futex_wait_timeout.c     |  38 +-
+>   .../futex/functional/futex_wait_wouldblock.c  |  28 +-
+>   .../testing/selftests/futex/functional/run.sh |   3 +
+>   .../selftests/futex/include/futextest.h       |  22 ++
+>   9 files changed, 639 insertions(+), 7 deletions(-)
+>   create mode 100644 tools/testing/selftests/futex/functional/futex_wait_multiple.c
+> 
 
-Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
-Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
----
- Documentation/dev-tools/kunit/usage.rst | 13 +++++++++++++
- 1 file changed, 13 insertions(+)
+For selftests:
 
-diff --git a/Documentation/dev-tools/kunit/usage.rst b/Documentation/dev-tools/kunit/usage.rst
-index 607758a..14b0236 100644
---- a/Documentation/dev-tools/kunit/usage.rst
-+++ b/Documentation/dev-tools/kunit/usage.rst
-@@ -591,3 +591,16 @@ able to run one test case per invocation.
- 
- .. TODO(brendanhiggins@google.com): Add an actual example of an architecture
-    dependent KUnit test.
-+
-+KUnit debugfs representation
-+============================
-+When kunit test suites are initialized, they create an associated directory
-+in /sys/kernel/debug/kunit/<test-suite>.  The directory contains one file
-+
-+- results: "cat results" displays results of each test case and the results
-+  of the entire suite for the last test run.
-+
-+The debugfs representation is primarily of use when kunit test suites are
-+run in a native environment, either as modules or builtin.  Having a way
-+to display results like this is valuable as otherwise results can be
-+intermixed with other events in dmesg output.
--- 
-1.8.3.1
+Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
 
+thanks,
+-- Shuah
