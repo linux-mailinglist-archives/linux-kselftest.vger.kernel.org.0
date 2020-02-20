@@ -2,119 +2,112 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 07035166703
-	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Feb 2020 20:18:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 58F79166710
+	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Feb 2020 20:23:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728413AbgBTTSw (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 20 Feb 2020 14:18:52 -0500
-Received: from mail-pj1-f66.google.com ([209.85.216.66]:54564 "EHLO
-        mail-pj1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728111AbgBTTSw (ORCPT
+        id S1728368AbgBTTXL (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 20 Feb 2020 14:23:11 -0500
+Received: from mail-ot1-f66.google.com ([209.85.210.66]:44458 "EHLO
+        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728334AbgBTTXK (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 20 Feb 2020 14:18:52 -0500
-Received: by mail-pj1-f66.google.com with SMTP id dw13so1272049pjb.4;
-        Thu, 20 Feb 2020 11:18:50 -0800 (PST)
+        Thu, 20 Feb 2020 14:23:10 -0500
+Received: by mail-ot1-f66.google.com with SMTP id h9so4731242otj.11
+        for <linux-kselftest@vger.kernel.org>; Thu, 20 Feb 2020 11:23:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=rMhIIEZUgKeNZVyeBrXf1C0vRvoNcRcDaKcwizMaibs=;
-        b=Uf0O8u+TCDQjNTfqxcb7pdKzT0RQtcRKal2XfSILe8ZNYBq4r1ipuFOgPMy8NaF6F5
-         1ZdM34p4WSfuysS42LplXeiN5JNnzjtnNokeh5Q+sauL9gato/bBSuuxc7tfFQ4kYCRz
-         2CA+YhU+hIVmI1RTr3O5nf1iThf4FPGqM+5BQdGF/PfGHk6CfrIomkH0JjFlLJNUXMys
-         /HpHbvgMynqUhUbgxiWF3cE9mFDyIE3n2IZYAabaWvkDFl1NM4qLAW4NpigJ0NYgYnEq
-         FQPHACl4BJcJ5APXU7bhuYLA/GZMALl90Nz96X2m574RP4t1vXleQlj+V/5Onnr8GFgI
-         k/Uw==
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Bk1eIitMT2MS22kRJrkHf2a6nr5vMQhVA+AkCVP3xms=;
+        b=aTmzlFn5tqMffO4aaSdqSmOjwnlwPlhLBMDWmHM5hEgVohGoR95LIESWPin+FgU3m5
+         6SBKmIyXfz3mR7ZJGUztrCkEqttjywHypYPY01n74LbVdLtnW3lI3mGg/tCdRKylIrWc
+         Jq7asmZQKCD4pm93CxVIrFT9tn3nfGJqSSm8Vsd6HIo/Kcxe7LRKiOXtJ1R+KmDSgYri
+         yOJUHQv1/vVwu32bZ3WZIRFgjHFVUSuwrRUtJOBVFSUsAgNS/5PGnC2AW02w3iZZp4zg
+         Ia0U7nlOur/8FVS0Sgvy3hruRsr6xz+P5Rcb6cHozsula5vu8Q6sy6WkorjtHYEKafsR
+         OD5Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=rMhIIEZUgKeNZVyeBrXf1C0vRvoNcRcDaKcwizMaibs=;
-        b=JD3jEt9+XzIZLFp3AUkjDehLp7gIBmuXzdFBpTP1Kq5qoceWKjEEqM7C60UEjaVsF5
-         ifz48qbOn7gGXDvFJ5uzAGJUMS4q4Fufa9tqS1eWRw1tMJCxtYWjZQNwGsSm9sHlZCsY
-         RUReeQHEtKJl61xuLhnLIVoa5FlaUmO59dTSRRTl0gMADrtTa16jQsf6K4zy4mfBkSei
-         O8san3EJAysZmvRLgrYJzacuP20V02vvQE/eQcTGwpAYyzRyJB46Ws9Rpl0enL+3ZJRb
-         VBedFUu6B+fnV574gq9/I054LJpKBViPMT7RxOTWw6+77Bi5A/xZGjcIyaRCSAwdf999
-         Oh2g==
-X-Gm-Message-State: APjAAAVHUaojVGt0HUpKzt+X8wdLsMu3VE4F/rEhTckUpIziZEVjChQt
-        Iss8Uvjc0vvuLDPJdeq08PI=
-X-Google-Smtp-Source: APXvYqw5JxeeJ/AWAadkS9nmdRGpCmWdRi47H8MKfTkbp2DWpc/mINUruptzlSs4Bv/cMOf01GMjHA==
-X-Received: by 2002:a17:902:348:: with SMTP id 66mr32468100pld.137.1582226329710;
-        Thu, 20 Feb 2020 11:18:49 -0800 (PST)
-Received: from ast-mbp ([2620:10d:c090:500::5:f03d])
-        by smtp.gmail.com with ESMTPSA id j21sm213384pji.13.2020.02.20.11.18.47
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 20 Feb 2020 11:18:48 -0800 (PST)
-Date:   Thu, 20 Feb 2020 11:18:46 -0800
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-To:     "Bird, Tim" <Tim.Bird@sony.com>
-Cc:     Jesper Dangaard Brouer <brouer@redhat.com>,
-        shuah <shuah@kernel.org>,
-        Daniel =?utf-8?B?RMOtYXo=?= <daniel.diaz@linaro.org>,
-        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        Andrii Nakryiko <andriin@fb.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        BPF-dev-list <bpf@vger.kernel.org>,
-        Daniel Borkmann <borkmann@iogearbox.net>,
-        David Miller <davem@davemloft.net>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Anders Roxell <anders.roxell@linaro.org>,
-        Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>
-Subject: Re: Kernel 5.5.4 build fail for BPF-selftests with latest LLVM
-Message-ID: <20200220191845.u62nhohgzngbrpib@ast-mbp>
-References: <20200219192854.6b05b807@carbon>
- <CAEf4BzaRAK6-7aCCVOA6hjTevKuxgvZZnHeVgdj_ZWNn8wibYQ@mail.gmail.com>
- <20200219210609.20a097fb@carbon>
- <CAEUSe79Vn8wr=BOh0RzccYij_snZDY=2XGmHmR494wsQBBoo5Q@mail.gmail.com>
- <20200220002748.kpwvlz5xfmjm5fd5@ast-mbp>
- <4a26e6c6-500e-7b92-1e26-16e1e0233889@kernel.org>
- <20200220173740.7a3f9ad7@carbon>
- <MWHPR13MB0895649219625C5F7380314FFD130@MWHPR13MB0895.namprd13.prod.outlook.com>
- <20200220172612.7aqmiwrnizgsukvm@ast-mbp>
- <MWHPR13MB0895B185BC36759121D6F26AFD130@MWHPR13MB0895.namprd13.prod.outlook.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Bk1eIitMT2MS22kRJrkHf2a6nr5vMQhVA+AkCVP3xms=;
+        b=FuJUYULLpaWbCjECUFBFc9wANDOKfzYcWwI37YZW4X6LskKCUB6cIP1VZnFoDFTFTY
+         fR+A9j+Jlxoxk9J4VjoT168/GEHKRQJssp25ghi3owYWPYGOPS74/1SfL1/c8XU7+148
+         YWIgAPLvggOcY1pl4Z5bAnM8bOTolVCn3vXyyc4DzESOKMiR/Kg+bDERUYNpnvL5mOqs
+         36JDPsZpATwa5jg0cJvCnkqcTA1PG0PMANA5sPb2ENxwnwupI5AbL+McHrc8cf0UA+uu
+         g4gX2euh7/fYkH4Whs56QCfv06CJs0I6Q8WWkdXWDclznajkb4zRCyYJpFX4+Nm3AeIx
+         HpmQ==
+X-Gm-Message-State: APjAAAUBbrrHXgBMUS7ldgpOk9IXMepMb9zqTeVa0QGGIq0YZDAk3kNV
+        KSmFzws/RIzReRbzZWnLoFcWa7zzNm7cC16tyOmUhQ==
+X-Google-Smtp-Source: APXvYqzc0r7mnwBlUc3tSqHO71Kmj09WeY278uUEiCztDiRqODK1P9Hy8XAqcMq8l4Nh1mPh3JVbkAAfzAHEF3HNj0E=
+X-Received: by 2002:a9d:7b4e:: with SMTP id f14mr24990667oto.355.1582226589659;
+ Thu, 20 Feb 2020 11:23:09 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <MWHPR13MB0895B185BC36759121D6F26AFD130@MWHPR13MB0895.namprd13.prod.outlook.com>
-User-Agent: NeoMutt/20180223
+References: <20200211213128.73302-1-almasrymina@google.com>
+ <20200211151906.637d1703e4756066583b89da@linux-foundation.org>
+ <CAHS8izPUFQWq3PzhhRzp7u11173_-cmRkNuQWEswS51Xz6ZM0Q@mail.gmail.com> <20200219130648.83e6810848774c6fd649c445@linux-foundation.org>
+In-Reply-To: <20200219130648.83e6810848774c6fd649c445@linux-foundation.org>
+From:   Mina Almasry <almasrymina@google.com>
+Date:   Thu, 20 Feb 2020 11:22:58 -0800
+Message-ID: <CAHS8izN_FJektipBwiLsCO8ysMTM7k=CR_k3OV7+_y0ZbrGw+A@mail.gmail.com>
+Subject: Re: [PATCH v12 1/9] hugetlb_cgroup: Add hugetlb_cgroup reservation counter
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Mike Kravetz <mike.kravetz@oracle.com>, shuah <shuah@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Greg Thelen <gthelen@google.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>, linux-kselftest@vger.kernel.org,
+        cgroups@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Feb 20, 2020 at 05:41:51PM +0000, Bird, Tim wrote:
-> 
-> So - do the BPF developers add new instructions to the virtual machine, that then
-> have to be added to both the compiler and the executor (VM implementation)?
+On Wed, Feb 19, 2020 at 1:06 PM Andrew Morton <akpm@linux-foundation.org> wrote:
+>
+> On Wed, 19 Feb 2020 11:05:41 -0800 Mina Almasry <almasrymina@google.com> wrote:
+>
+> > On Tue, Feb 11, 2020 at 3:19 PM Andrew Morton <akpm@linux-foundation.org> wrote:
+> > >
+> > > On Tue, 11 Feb 2020 13:31:20 -0800 Mina Almasry <almasrymina@google.com> wrote:
+> > >
+> > > > These counters will track hugetlb reservations rather than hugetlb
+> > > > memory faulted in. This patch only adds the counter, following patches
+> > > > add the charging and uncharging of the counter.
+> > >
+> > > We're still pretty thin on review here, but as it's v12 and Mike
+> > > appears to be signed up to look at this work, I'll add them to -next to
+> > > help move things forward.
+> > >
+> >
+> > Hi Andrew,
+> >
+> > Since the patches were merged into -next there have been build fixes
+> > and test fixes and some review comments. Would you like me to submit
+> > *new* patches to address these, or would you like me to squash the
+> > fixes into my existing patch series and submit another iteration of
+> > the patch series?
+>
+> What you did worked OK ;)
+>
+> Please check the end result next time I release a kernel.
 
-Right. New instructions are added to the kernel and llvm at the same time. The
-kernel and llvm release cadence and process are different which complicates it
-for us.
+Thanks Andrew! Things definitely moved along after the patchseries got
+into -next :D
 
-> It sounds like the compiler support and executor support is done in concert, and
-> that patches are at least accepted upstream (but possibly are not yet available in
-> a compiler release) for the compiler side.  What about the Linux kernel side?  Is the
-> support for a new instruction only in non-released kernels (say, in the BPF development
-> tree), or could it potentially be included in a released kernel, before the compiler
-> with matching support is released?  What would happen if a bug was found, and
-> compiler support for the instruction was delayed?  
+By my count I think all my patches outside of the tests patch have
+been acked or reviewed. When you have a chance I have a couple of
+questions:
 
-As with all chicken-and-egg problems the feature has to land in one of the
-repos first. That was one of the reasons llvm community switched to mono repo
-to avoid clang vs llvm conflicts. The kernel and llvm are not going to be in a
-single repo, so we have to orchestrate the landing. Most of the time it's easy,
-because we maintain both kernel and llvm components. But in some cases it's
-very difficult. For example we've delayed landing kernel and libbpf patches by
-about six month, since we couldn't get an agreement on how the feature has to
-be implemented in clang.
+1. For the non-tests patch, anything pending on those preventing
+eventual submission to linus's tree?
+2. For the tests patch, I only have a Tested-by from Sandipan. Is that
+good enough? If the worst comes to worst and I don't get a review on
+that patch I would rather (if possible) that 'tests' patch can be
+dropped while I nag folks for a review, rather than block submission
+of the entire patch series. I ask because it's been out for review for
+some time and it's the one I got least discussion on so I'm not sure
+I'll have a review by the time it's needed.
 
-> I suppose that this would only
-> mean that the executor supported an instruction that never appeared in a compiled
-> BPF program? Is that right?
-
-The answer is yes. It is the case that the kernel supports certain bpf
-instructions, but llvm doesn't know how to emit them. But it has nothing to do
-with landing of features and release cadence.
+Thanks again!
