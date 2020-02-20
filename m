@@ -2,89 +2,84 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EEC6A165898
-	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Feb 2020 08:38:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 252A11658AB
+	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Feb 2020 08:47:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726669AbgBTHix (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 20 Feb 2020 02:38:53 -0500
-Received: from smtp-fw-33001.amazon.com ([207.171.190.10]:21909 "EHLO
-        smtp-fw-33001.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726562AbgBTHix (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 20 Feb 2020 02:38:53 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1582184333; x=1613720333;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   mime-version;
-  bh=oTbUz7ad+lxKA3pu5K3OeA9Qrfs1WDg7rWJbe6s8SN8=;
-  b=nN5J0iDjN42HNmj0aa1xR/FKNfZUiilZIxHwzJXPJ3m3W3SEZ7jzj6LI
-   Iaf9a3HdI+RepUlWTmd6SI6cKfKv2yukdxC4w6OPPCS20ZuLJT6eFScVF
-   KaaWTn5JTAkRf/vlgfFu7IzUkDQLZu7xFQF+yqXLDJJrrYNxa8fLqHWwg
-   U=;
-IronPort-SDR: 7oia2wUGTnZSKhBsUHoyFHSu4XYOms7J8LTwX6c8QbdH3mOgpX/FUSxZkCcb291HIO2wy49XeQ
- +TIudoxoYDrg==
-X-IronPort-AV: E=Sophos;i="5.70,463,1574121600"; 
-   d="scan'208";a="27647351"
-Received: from sea32-co-svc-lb4-vlan3.sea.corp.amazon.com (HELO email-inbound-relay-1e-303d0b0e.us-east-1.amazon.com) ([10.47.23.38])
-  by smtp-border-fw-out-33001.sea14.amazon.com with ESMTP; 20 Feb 2020 07:38:50 +0000
-Received: from EX13MTAUEA002.ant.amazon.com (iad55-ws-svc-p15-lb9-vlan3.iad.amazon.com [10.40.159.166])
-        by email-inbound-relay-1e-303d0b0e.us-east-1.amazon.com (Postfix) with ESMTPS id D2639A3168;
-        Thu, 20 Feb 2020 07:38:48 +0000 (UTC)
-Received: from EX13D31EUA001.ant.amazon.com (10.43.165.15) by
- EX13MTAUEA002.ant.amazon.com (10.43.61.77) with Microsoft SMTP Server (TLS)
- id 15.0.1236.3; Thu, 20 Feb 2020 07:38:48 +0000
-Received: from u886c93fd17d25d.ant.amazon.com (10.43.161.235) by
- EX13D31EUA001.ant.amazon.com (10.43.165.15) with Microsoft SMTP Server (TLS)
- id 15.0.1367.3; Thu, 20 Feb 2020 07:38:44 +0000
-From:   SeongJae Park <sjpark@amazon.com>
-To:     Brendan Higgins <brendanhiggins@google.com>
-CC:     SeongJae Park <sjpark@amazon.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        SeongJae Park <sjpark@amazon.de>
-Subject: Re: Re: [PATCH] docs/kunit/start: Use '_KUNIT_TEST' config name suffix
-Date:   Thu, 20 Feb 2020 08:38:29 +0100
-Message-ID: <20200220073829.18382-1-sjpark@amazon.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <CAFd5g444shArgbdwaCdM3VBb9c7M1s7BJ5Dho7KEBU_fCsaJOw@mail.gmail.com> (raw)
+        id S1726766AbgBTHrO (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 20 Feb 2020 02:47:14 -0500
+Received: from mail.kernel.org ([198.145.29.99]:59230 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726248AbgBTHrO (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 20 Feb 2020 02:47:14 -0500
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id E6532208C4;
+        Thu, 20 Feb 2020 07:47:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1582184833;
+        bh=gPFYPlPnP/EO0JNRRO6YxcBxUsp8SOzVZcqRWL9kXvg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=USNKR+BT0TGhAlcJQyt5OOIbt6HU5RZS60UVLaL2YxTd4Bgkx5WIfj0yUxLkdbNvU
+         4JSWh9j1JqzPu708h6CS8Ibfz0EqV6kyXNomJDv2xlfDrcK2b260E89Rmr+nNsAvP6
+         sQSd82XThSBAEqjFkpi1wMEWdk9jvIB9+QaRtKtA=
+Date:   Thu, 20 Feb 2020 08:47:11 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Scott Branden <scott.branden@broadcom.com>
+Cc:     Luis Chamberlain <mcgrof@kernel.org>,
+        David Brown <david.brown@linaro.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Shuah Khan <shuah@kernel.org>, bjorn.andersson@linaro.org,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org,
+        BCM Kernel Feedback <bcm-kernel-feedback-list@broadcom.com>,
+        Olof Johansson <olof@lixom.net>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Colin Ian King <colin.king@canonical.com>,
+        Kees Cook <keescook@chromium.org>,
+        Takashi Iwai <tiwai@suse.de>, linux-kselftest@vger.kernel.org,
+        Andy Gross <agross@kernel.org>,
+        Desmond Yan <desmond.yan@broadcom.com>,
+        James Hu <james.hu@broadcom.com>
+Subject: Re: [PATCH v2 6/7] misc: bcm-vk: add Broadcom VK driver
+Message-ID: <20200220074711.GA3261162@kroah.com>
+References: <20200220004825.23372-1-scott.branden@broadcom.com>
+ <20200220004825.23372-7-scott.branden@broadcom.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.43.161.235]
-X-ClientProxiedBy: EX13D24UWB003.ant.amazon.com (10.43.161.222) To
- EX13D31EUA001.ant.amazon.com (10.43.165.15)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200220004825.23372-7-scott.branden@broadcom.com>
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, 19 Feb 2020 14:16:03 -0800 Brendan Higgins <brendanhiggins@google.com> wrote:
+On Wed, Feb 19, 2020 at 04:48:24PM -0800, Scott Branden wrote:
+> Add Broadcom VK driver offload engine.
+> This driver interfaces to the VK PCIe offload engine to perform
+> should offload functions as video transcoding on multiple streams
+> in parallel.  VK device is booted from files loaded using
+> request_firmware_into_buf mechanism.  After booted card status is updated
+> and messages can then be sent to the card.
+> Such messages contain scatter gather list of addresses
+> to pull data from the host to perform operations on.
 
-> Sorry, I didn't see this until now.
+Why is this a tty driver?
 
-Even I also almost forgot this.
+Have you worked with the V4L developers to tie this into the proper
+in-kernel apis for this type of functionality?
 
-> 
-> On Mon, Jan 27, 2020 at 7:32 AM <sjpark@amazon.com> wrote:
-> >
-> > From: SeongJae Park <sjpark@amazon.de>
-> >
-> > It is recommended to use '_KUNIT_TEST' config name suffix for kunit
-> > tests but the example is using only '_TEST' suffix.  This commit fixes
-> > it to also use '_KUNIT_TEST' suffix.
-> >
-> > Signed-off-by: SeongJae Park <sjpark@amazon.de>
-> 
-> Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
+Using a tty driver seems like the totally incorrect way to do this, what
+am I missing?
 
-Thanks for finding this! :D
+Also, do not make up random error values, you return "-1" a lot here,
+that is not ok.  Please fix up to return the correct -Ewhatever values
+instead.
 
+thanks,
 
-Thanks,
-SeongJae Park
-
-> 
-> Thanks!
-> 
+greg k-h
