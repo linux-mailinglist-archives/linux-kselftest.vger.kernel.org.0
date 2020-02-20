@@ -2,81 +2,122 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BCF1165B30
-	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Feb 2020 11:11:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A9F5165CDB
+	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Feb 2020 12:37:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726882AbgBTKLe (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 20 Feb 2020 05:11:34 -0500
-Received: from mail-pg1-f196.google.com ([209.85.215.196]:36407 "EHLO
-        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726813AbgBTKLd (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 20 Feb 2020 05:11:33 -0500
-Received: by mail-pg1-f196.google.com with SMTP id d9so1708453pgu.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 20 Feb 2020 02:11:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=xsUbPWAhYtsZRE8nHbpZ90/dMr+6ACJOvf/o3gzcGwM=;
-        b=PJCKAi8I41I+5Tb4Mnflsd2jQsw3U4EsBKdHiq4ekjydb9zjbl/xBpYM6a8vjGrE+W
-         bq9MwZiaMiUj0KV0zpatU51OPnhvMCCSqw888gpP5zovCU/409yjTgfOgUg5PB8q2K3E
-         AHTdthzn31VEJcGx7Z1tBUpIJcKiH12kEnHjHYt7G/oqoP++Fptu78jpxqkic0773bQd
-         ZayVUruIfEjkelzoyKRCI3KHlz6Z/Dnw7ydFm76qzLLquytCz1iwfwxFLraFMHZVSvsv
-         yQuWTO5xdfcNjv2B3P6bJDVCP8BJhXXiQQ9Tuh0WlvdeGaPVI6+IBe1h84RdzkS9fKDa
-         U9fg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=xsUbPWAhYtsZRE8nHbpZ90/dMr+6ACJOvf/o3gzcGwM=;
-        b=p40I7jsaXyZoIrLX8tzreg2kz6dErarjK0TwIeed8CYrk+MFfvMZRUpJ5jqNc+ZxXE
-         +kD65DBffCSkiNf/YQbnHKyg1cj6DYaa6AgEPlk45J4nqpN3oEJ+k7o0FUKrKVmvX1wp
-         xsDk1L+mn6nwbJpegHuIX8qIqRqc4b6YoN/5VvmCB6rkQWxSi+J5YStUiLMZxHAjaSp0
-         bOgpHkcBOBzqcXXOq+JZ/OZqtqVAflRKYydRPqNw4BVZ++uklL7PwJeZJDXWlbn3w67g
-         quxNPlRm/RlPd5KPXwWjZKh+hfxTd9IWpuIArhrsZH/RlFRp2BdWFzQ8fky9MjoRxMWF
-         58EA==
-X-Gm-Message-State: APjAAAWlaz30mSzuRZFmqT6j0l7rnque02uE6CpV2kIKdzJb/LD0Sjxn
-        QcRcabmlnf1sHaaDsl7V/3hT6r9ev2ataJ/x/O4=
-X-Google-Smtp-Source: APXvYqxHE+Jpv7TnlDVGcX3UL6Uyz2XLxptGN1jGFOlv4qxAJR9PZ93vxohGaYe++PJvLL2K5NjMeaR+jKpZPkDFcUI=
-X-Received: by 2002:a63:5220:: with SMTP id g32mr31926103pgb.116.1582193493229;
- Thu, 20 Feb 2020 02:11:33 -0800 (PST)
+        id S1726885AbgBTLh6 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 20 Feb 2020 06:37:58 -0500
+Received: from ozlabs.org ([203.11.71.1]:40943 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726825AbgBTLh6 (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 20 Feb 2020 06:37:58 -0500
+Received: by ozlabs.org (Postfix, from userid 1034)
+        id 48NXdb56Bbz9sRN; Thu, 20 Feb 2020 22:37:55 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ellerman.id.au;
+        s=201909; t=1582198675;
+        bh=0PSWQnV4dwtbFWEhb/W8Y1bno6l3vVQsEFwu7tdFrEU=;
+        h=From:To:Cc:Subject:Date:From;
+        b=eD/dz/6oFavYPAFlm4RSrV0jozd5zuxmigkXpeXi7lsb/bfHkMH+MSNpwBSDjqVXt
+         7rvmLoUquCNkrqXPlRV+X7yJTpGB5FC58WBnFcAWQ6lMY42PEUBAXmKx9N0ufOIUqu
+         FDxom2OxM99owVe0UtHlp/EYUjT1w4D1Kh19RTLJvS7QMGvNzbkL8jTX+aQo+Em4c8
+         RDiYr8/Ds3zrVkYPHAR/0IkzBnO+QdN0GqoDEBKC29mznQrB1ltOFI4qH1QEakKOgV
+         z0jdw5BOJDJnlOji+t9dJk8d1j6M9aHa7i+Q2+DXCFFIOxyaiXemC6FwYKpfBdgALm
+         bHH2f+dy8Rm2g==
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     linux-kselftest@vger.kernel.org
+Cc:     skhan@linuxfoundation.org, linux-kernel@vger.kernel.org,
+        mathieu.desnoyers@efficios.com, peterz@infradead.org,
+        paulmck@kernel.org, boqun.feng@gmail.com
+Subject: [PATCH] selftests/rseq: Fix out-of-tree compilation
+Date:   Thu, 20 Feb 2020 22:37:48 +1100
+Message-Id: <20200220113748.15990-1-mpe@ellerman.id.au>
+X-Mailer: git-send-email 2.21.1
 MIME-Version: 1.0
-Received: by 2002:a17:90a:90f:0:0:0:0 with HTTP; Thu, 20 Feb 2020 02:11:32
- -0800 (PST)
-Reply-To: cagesusan199@gmail.com
-From:   "Mrs. Susan S. Cage" <drgoodluckebelejonathan061@gmail.com>
-Date:   Thu, 20 Feb 2020 02:11:32 -0800
-Message-ID: <CALjo5=877S8-Ry+A=9FH6dxjXo5H81+Sa3p18iiZLBS7eO_8bA@mail.gmail.com>
-Subject: Attention:Beneficiary
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+Currently if you build with O=... the rseq tests don't build:
+
+  $ make O=$PWD/output -C tools/testing/selftests/ TARGETS=rseq
+  make: Entering directory '/linux/tools/testing/selftests'
+  ...
+  make[1]: Entering directory '/linux/tools/testing/selftests/rseq'
+  gcc -O2 -Wall -g -I./ -I../../../../usr/include/ -L./ -Wl,-rpath=./  -shared -fPIC rseq.c -lpthread -o /linux/output/rseq/librseq.so
+  gcc -O2 -Wall -g -I./ -I../../../../usr/include/ -L./ -Wl,-rpath=./  basic_test.c -lpthread -lrseq -o /linux/output/rseq/basic_test
+  /usr/bin/ld: cannot find -lrseq
+  collect2: error: ld returned 1 exit status
+
+This is because the library search path points to the source
+directory, not the output.
+
+We can fix it by changing the library search path to $(OUTPUT).
+
+Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
+---
+
+This works in all cases.
+
+With O= set:
+
+  $ make O=$PWD/output -C tools/testing/selftests/ TARGETS=rseq
+  ...
+  make[1]: Entering directory '/linux/tools/testing/selftests/rseq'
+  gcc -O2 -Wall -g -I./ -I../../../../usr/include/ -L/linux/output/rseq -Wl,-rpath=./  basic_test.c -lpthread -lrseq -o /linux/output/rseq/basic_test
+  gcc -O2 -Wall -g -I./ -I../../../../usr/include/ -L/linux/output/rseq -Wl,-rpath=./  basic_percpu_ops_test.c -lpthread -lrseq -o /linux/output/rseq/basic_percpu_ops_test
+  gcc -O2 -Wall -g -I./ -I../../../../usr/include/ -L/linux/output/rseq -Wl,-rpath=./  param_test.c -lpthread -lrseq -o /linux/output/rseq/param_test
+  gcc -O2 -Wall -g -I./ -I../../../../usr/include/ -L/linux/output/rseq -Wl,-rpath=./  -DBENCHMARK param_test.c -lpthread -lrseq -o /linux/output/rseq/param_test_benchmark
+  gcc -O2 -Wall -g -I./ -I../../../../usr/include/ -L/linux/output/rseq -Wl,-rpath=./  -DRSEQ_COMPARE_TWICE param_test.c -lpthread -lrseq -o /linux/output/rseq/param_test_compare_twice
+  make[1]: Leaving directory '/linux/tools/testing/selftests/rseq'
+  make: Leaving directory '/linux/tools/testing/selftests'
+
+And also without, in which case the selftest makefiles set OUTPUT to
+the full path of the source directory:
+
+  $ make -C tools/testing/selftests/ TARGETS=rseq
+  ...
+  make[1]: Entering directory '/linux/tools/testing/selftests/rseq'
+  gcc -O2 -Wall -g -I./ -I../../../../usr/include/ -L/linux/tools/testing/selftests/rseq -Wl,-rpath=./  -shared -fPIC rseq.c -lpthread -o /linux/tools/testing/selftests/rseq/librseq.so
+  gcc -O2 -Wall -g -I./ -I../../../../usr/include/ -L/linux/tools/testing/selftests/rseq -Wl,-rpath=./  basic_test.c -lpthread -lrseq -o /linux/tools/testing/selftests/rseq/basic_test
+  gcc -O2 -Wall -g -I./ -I../../../../usr/include/ -L/linux/tools/testing/selftests/rseq -Wl,-rpath=./  basic_percpu_ops_test.c -lpthread -lrseq -o /linux/tools/testing/selftests/rseq/basic_percpu_ops_test
+  gcc -O2 -Wall -g -I./ -I../../../../usr/include/ -L/linux/tools/testing/selftests/rseq -Wl,-rpath=./  param_test.c -lpthread -lrseq -o /linux/tools/testing/selftests/rseq/param_test
+  gcc -O2 -Wall -g -I./ -I../../../../usr/include/ -L/linux/tools/testing/selftests/rseq -Wl,-rpath=./  -DBENCHMARK param_test.c -lpthread -lrseq -o /linux/tools/testing/selftests/rseq/param_test_benchmark
+  gcc -O2 -Wall -g -I./ -I../../../../usr/include/ -L/linux/tools/testing/selftests/rseq -Wl,-rpath=./  -DRSEQ_COMPARE_TWICE param_test.c -lpthread -lrseq -o /linux/tools/testing/selftests/rseq/param_test_compare_twice
+  make[1]: Leaving directory '/linux/tools/testing/selftests/rseq'
+  make: Leaving directory '/linux/tools/testing/selftests'
+
+And finally, it also works if you build directly in the rseq
+directory, eg:
+
+  $ cd tools/testing/selftests/rseq
+  $ make
+  gcc -O2 -Wall -g -I./ -I../../../../usr/include/ -L/linux/tools/testing/selftests/rseq -Wl,-rpath=./  -shared -fPIC rseq.c -lpthread -o /linux/tools/testing/selftests/rseq/librseq.so
+  gcc -O2 -Wall -g -I./ -I../../../../usr/include/ -L/linux/tools/testing/selftests/rseq -Wl,-rpath=./  basic_test.c -lpthread -lrseq -o /linux/tools/testing/selftests/rseq/basic_test
+  gcc -O2 -Wall -g -I./ -I../../../../usr/include/ -L/linux/tools/testing/selftests/rseq -Wl,-rpath=./  basic_percpu_ops_test.c -lpthread -lrseq -o /linux/tools/testing/selftests/rseq/basic_percpu_ops_test
+  gcc -O2 -Wall -g -I./ -I../../../../usr/include/ -L/linux/tools/testing/selftests/rseq -Wl,-rpath=./  param_test.c -lpthread -lrseq -o /linux/tools/testing/selftests/rseq/param_test
+  gcc -O2 -Wall -g -I./ -I../../../../usr/include/ -L/linux/tools/testing/selftests/rseq -Wl,-rpath=./  -DBENCHMARK param_test.c -lpthread -lrseq -o /linux/tools/testing/selftests/rseq/param_test_benchmark
+  gcc -O2 -Wall -g -I./ -I../../../../usr/include/ -L/linux/tools/testing/selftests/rseq -Wl,-rpath=./  -DRSEQ_COMPARE_TWICE param_test.c -lpthread -lrseq -o /linux/tools/testing/selftests/rseq/param_test_compare_twice
+---
+ tools/testing/selftests/rseq/Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/tools/testing/selftests/rseq/Makefile b/tools/testing/selftests/rseq/Makefile
+index d6469535630a..708c1b345245 100644
+--- a/tools/testing/selftests/rseq/Makefile
++++ b/tools/testing/selftests/rseq/Makefile
+@@ -4,7 +4,7 @@ ifneq ($(shell $(CC) --version 2>&1 | head -n 1 | grep clang),)
+ CLANG_FLAGS += -no-integrated-as
+ endif
+ 
+-CFLAGS += -O2 -Wall -g -I./ -I../../../../usr/include/ -L./ -Wl,-rpath=./ \
++CFLAGS += -O2 -Wall -g -I./ -I../../../../usr/include/ -L$(OUTPUT) -Wl,-rpath=./ \
+ 	  $(CLANG_FLAGS)
+ LDLIBS += -lpthread
+ 
+
+base-commit: 11a48a5a18c63fd7621bb050228cebf13566e4d8
 -- 
-Dearest Friend,
+2.21.1
 
-Sorry for invading your privacy, my name is Susan S. Cage I am 81
-years, citizen of United States and presently in hospital undergoing
-chromatography for bronchogenic carcinomas (Lung cancer) which
-affected both Lungs. The doctors said I have few days to live because
-the cancer has now affected my brain.
-
-My late husband left Fifteen Million, Five Hundred British Pounds
-Sterling in my account, I want to transfer the money to you and I want
-you to use it as a donate for charitable and help the needy,
-motherless, less privileged and widows within your location.
-
-I need your assurance that you will use the fund for charity, once I a
-favorable reply from you, will inform my Bank through my lawyer to
-transfer the fund to you as my Next of Kin and Sole Beneficiary. Once
-I receive your response, I will inform my bank in writing through my
-lawyer.
-
-
-
-Thank you and God bless you.
-
-Mrs. Susan S. Cage
