@@ -2,31 +2,50 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 014071658C7
-	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Feb 2020 08:50:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 94FAB165977
+	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Feb 2020 09:43:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726562AbgBTHut (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 20 Feb 2020 02:50:49 -0500
-Received: from mail.kernel.org ([198.145.29.99]:60392 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726248AbgBTHut (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 20 Feb 2020 02:50:49 -0500
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 97CDA208C4;
-        Thu, 20 Feb 2020 07:50:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1582185048;
-        bh=v4lODHdZcWtKOq6QBrb3F9koDQfFnRGgdQb407AOT3o=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ftUM9+xRUbFzf2UyGuR0/dLsTHYKcURtDGz787L0nfDOAaDHXb98zOde5kRu0f/bX
-         u0TUcYfqcNDlhGo+zynEISCFOynB9qIfWwm4XHEUuhR47QUt7sOHnzyZppmV7abzXu
-         yPaz6fN6orZthXEgwkza7hrppfFQBjU0EqvEObuA=
-Date:   Thu, 20 Feb 2020 08:50:45 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+        id S1726799AbgBTIn3 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 20 Feb 2020 03:43:29 -0500
+Received: from userp2130.oracle.com ([156.151.31.86]:36242 "EHLO
+        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726764AbgBTIn3 (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 20 Feb 2020 03:43:29 -0500
+Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
+        by userp2130.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 01K8cv00119896;
+        Thu, 20 Feb 2020 08:43:13 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=corp-2020-01-29;
+ bh=3DBcmRHN7uJqFWQQFJU2jUM8me9GZcXg5MtIEEBW19g=;
+ b=j4caedeSclA+wC5JW86i2YTtdgvD6z7Q21bpuXdgyugzbfmGJ6PlhDKHkjWMPTezuUyA
+ 4lUF0IJ01FpBja8+blyiBMv0tip0G6/yebcmWvfF8/qlY9sP4wQT5Op/tDr7ZnNR3BRH
+ aKDOHjlNRAqOpdu+XN+PRUTZ3wrMr6M/aBqWq9dRfpbyLkeGRCwOeMDd7p1aH6eaIpbJ
+ ytoIF6njfY/t9ju3kSgineXtxaJ0GoniyjbWzBPLiwPlx0gs7LGE0OgL5Hdem3uBeZwr
+ 4i+VeWEmWcVvdn8/X3/NnD0/JhjFZuaZhRCq9yqv2IcQFt4B2MhDAgWCKpTaQ+zghH1p MA== 
+Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
+        by userp2130.oracle.com with ESMTP id 2y8udd881t-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 20 Feb 2020 08:43:13 +0000
+Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
+        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 01K8bnNp079829;
+        Thu, 20 Feb 2020 08:43:12 GMT
+Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
+        by aserp3020.oracle.com with ESMTP id 2y8udbd8vm-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 20 Feb 2020 08:43:12 +0000
+Received: from abhmp0002.oracle.com (abhmp0002.oracle.com [141.146.116.8])
+        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 01K8h8m4010277;
+        Thu, 20 Feb 2020 08:43:08 GMT
+Received: from kadam (/129.205.23.165)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Thu, 20 Feb 2020 00:43:07 -0800
+Date:   Thu, 20 Feb 2020 11:42:55 +0300
+From:   Dan Carpenter <dan.carpenter@oracle.com>
 To:     Scott Branden <scott.branden@broadcom.com>
 Cc:     Luis Chamberlain <mcgrof@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         David Brown <david.brown@linaro.org>,
         Alexander Viro <viro@zeniv.linux.org.uk>,
         Shuah Khan <shuah@kernel.org>, bjorn.andersson@linaro.org,
@@ -38,185 +57,83 @@ Cc:     Luis Chamberlain <mcgrof@kernel.org>,
         BCM Kernel Feedback <bcm-kernel-feedback-list@broadcom.com>,
         Olof Johansson <olof@lixom.net>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
         Colin Ian King <colin.king@canonical.com>,
         Kees Cook <keescook@chromium.org>,
         Takashi Iwai <tiwai@suse.de>, linux-kselftest@vger.kernel.org,
         Andy Gross <agross@kernel.org>
-Subject: Re: [PATCH v2 5/7] bcm-vk: add bcm_vk UAPI
-Message-ID: <20200220075045.GB3261162@kroah.com>
+Subject: Re: [PATCH v2 3/7] test_firmware: add partial read support for
+ request_firmware_into_buf
+Message-ID: <20200220084255.GW7838@kadam>
 References: <20200220004825.23372-1-scott.branden@broadcom.com>
- <20200220004825.23372-6-scott.branden@broadcom.com>
+ <20200220004825.23372-4-scott.branden@broadcom.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200220004825.23372-6-scott.branden@broadcom.com>
+In-Reply-To: <20200220004825.23372-4-scott.branden@broadcom.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9536 signatures=668685
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 mlxlogscore=999
+ phishscore=0 suspectscore=0 mlxscore=0 malwarescore=0 adultscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2001150001 definitions=main-2002200064
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9536 signatures=668685
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 impostorscore=0
+ mlxlogscore=999 malwarescore=0 mlxscore=0 suspectscore=0
+ priorityscore=1501 bulkscore=0 adultscore=0 spamscore=0 lowpriorityscore=0
+ clxscore=1011 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2001150001 definitions=main-2002200064
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Feb 19, 2020 at 04:48:23PM -0800, Scott Branden wrote:
-> Add user space api for bcm-vk driver.
-> 
-> Signed-off-by: Scott Branden <scott.branden@broadcom.com>
-> ---
->  include/uapi/linux/misc/bcm_vk.h | 117 +++++++++++++++++++++++++++++++
->  1 file changed, 117 insertions(+)
->  create mode 100644 include/uapi/linux/misc/bcm_vk.h
-> 
-> diff --git a/include/uapi/linux/misc/bcm_vk.h b/include/uapi/linux/misc/bcm_vk.h
-> new file mode 100644
-> index 000000000000..56a2178e06f5
-> --- /dev/null
-> +++ b/include/uapi/linux/misc/bcm_vk.h
-> @@ -0,0 +1,117 @@
-> +/* SPDX-License-Identifier: ((GPL-2.0 WITH Linux-syscall-note) OR BSD-2-Clause) */
-> +/*
-> + * Copyright 2018-2020 Broadcom.
-> + */
+On Wed, Feb 19, 2020 at 04:48:21PM -0800, Scott Branden wrote:
+> +static int test_dev_config_update_size_t(const char *buf,
+> +					 size_t size,
+> +					 size_t *cfg)
+> +{
+> +	int ret;
+> +	long new;
 > +
-> +#ifndef __UAPI_LINUX_MISC_BCM_VK_H
-> +#define __UAPI_LINUX_MISC_BCM_VK_H
+> +	ret = kstrtol(buf, 10, &new);
+> +	if (ret)
+> +		return ret;
 > +
-> +#include <linux/ioctl.h>
-> +#include <linux/types.h>
-> +
-> +struct vk_image {
-> +	__u32 type;     /* Type of image */
-> +#define VK_IMAGE_TYPE_BOOT1 1 /* 1st stage (load to SRAM) */
-> +#define VK_IMAGE_TYPE_BOOT2 2 /* 2nd stage (load to DDR) */
-> +	char filename[64]; /* Filename of image */
+> +	if (new > SIZE_MAX)
 
-__u8?
+This "new" variable is long and SIZE_MAX is ULONG_MAX so the condition
+can't be true.
 
-> +};
+> +		return -EINVAL;
 > +
-> +/* default firmware images names */
-> +#define VK_BOOT1_DEF_VALKYRIE_FILENAME	"vk-boot1.bin"
-> +#define VK_BOOT2_DEF_VALKYRIE_FILENAME	"vk-boot2.bin"
+> +	mutex_lock(&test_fw_mutex);
+> +	*(size_t *)cfg = new;
+> +	mutex_unlock(&test_fw_mutex);
 > +
-> +#define VK_BOOT1_DEF_VIPER_FILENAME	"vp-boot1.bin"
-> +#define VK_BOOT2_DEF_VIPER_FILENAME	"vp-boot2.bin"
+> +	/* Always return full write size even if we didn't consume all */
+> +	return size;
+> +}
+> +
+> +static ssize_t test_dev_config_show_size_t(char *buf, int cfg)
+> +{
+> +	size_t val;
+> +
+> +	mutex_lock(&test_fw_mutex);
+> +	val = cfg;
+> +	mutex_unlock(&test_fw_mutex);
 
-Why do these need to be in a uapi .h file?  Shouldn't they just be part
-of the normal MODULE_FIRMWARE() macro in the driver itself?
+Both val and cfg are stack variables so there is no need for locking.
+Probably you meant to pass a pointer to cfg?
 
 > +
-> +struct vk_access {
-> +	__u8 barno;     /* BAR number to use */
-> +	__u8 type;      /* Type of access */
-> +#define VK_ACCESS_READ 0
-> +#define VK_ACCESS_WRITE 1
-> +	__u32 len;      /* length of data */
-
-Horrible padding issues, are you sure this all works properly?
-
-> +	__u64 offset;   /* offset in BAR */
-> +	__u32 *data;    /* where to read/write data to */
-
-Are you _SURE_ you want a pointer here?  How do you handle the compat
-issues with 32/64 user/kernel space?
-
-> +};
-
-And isn't this just a normal PCI write thing?  Can't you do it from
-userspace using the existing userspace PCI accesses?  Why do you need a
-special ioctl for it?
-
+> +	return snprintf(buf, PAGE_SIZE, "%zu\n", val);
+> +}
 > +
-> +struct vk_reset {
-> +	__u32 arg1;
-> +	__u32 arg2;
-> +};
-> +
-> +#define VK_MAGIC              0x5E
-> +
-> +/* Load image to Valkyrie */
-> +#define VK_IOCTL_LOAD_IMAGE   _IOW(VK_MAGIC, 0x2, struct vk_image)
-> +
-> +/* Read data from Valkyrie */
-> +#define VK_IOCTL_ACCESS_BAR   _IOWR(VK_MAGIC, 0x3, struct vk_access)
-> +
-> +/* Send Reset to Valkyrie */
-> +#define VK_IOCTL_RESET        _IOW(VK_MAGIC, 0x4, struct vk_reset)
-> +
-> +/*
-> + * message block - basic unit in the message where a message's size is always
-> + *		   N x sizeof(basic_block)
-> + */
-> +struct vk_msg_blk {
-> +	__u8 function_id;
-> +#define VK_FID_TRANS_BUF 5
-> +#define VK_FID_SHUTDOWN  8
-> +	__u8 size;
-> +	__u16 queue_id:4;
-> +	__u16 msg_id:12;
+>  static ssize_t test_dev_config_show_int(char *buf, int cfg)
+>  {
+>  	int val;
 
-Do not use bitfields in ioctls, they will not work properly on all
-systems.  Use masks and shifts instead.
+regards,
+dan carpenter
 
-> +	__u32 context_id;
-> +	__u32 args[2];
-> +#define VK_CMD_PLANES_MASK 0x000F /* number of planes to up/download */
-> +#define VK_CMD_UPLOAD      0x0400 /* memory transfer to vk */
-> +#define VK_CMD_DOWNLOAD    0x0500 /* memory transfer from vk */
-> +#define VK_CMD_MASK        0x0F00 /* command mask */
-> +};
-> +
-> +#define VK_BAR_FWSTS			0x41C
-> +/* VK_FWSTS definitions */
-> +#define VK_FWSTS_RELOCATION_ENTRY	BIT(0)
-> +#define VK_FWSTS_RELOCATION_EXIT	BIT(1)
-> +#define VK_FWSTS_INIT_START		BIT(2)
-> +#define VK_FWSTS_ARCH_INIT_DONE		BIT(3)
-> +#define VK_FWSTS_PRE_KNL1_INIT_DONE	BIT(4)
-> +#define VK_FWSTS_PRE_KNL2_INIT_DONE	BIT(5)
-> +#define VK_FWSTS_POST_KNL_INIT_DONE	BIT(6)
-> +#define VK_FWSTS_INIT_DONE		BIT(7)
-> +#define VK_FWSTS_APP_INIT_START		BIT(8)
-> +#define VK_FWSTS_APP_INIT_DONE		BIT(9)
 
-I do not think that BIT() is exported to userspace properly, is it
-really ok here?
-
-> +#define VK_FWSTS_MASK			0xFFFFFFFF
-> +#define VK_FWSTS_READY			(VK_FWSTS_INIT_START | \
-> +					 VK_FWSTS_ARCH_INIT_DONE | \
-> +					 VK_FWSTS_PRE_KNL1_INIT_DONE | \
-> +					 VK_FWSTS_PRE_KNL2_INIT_DONE | \
-> +					 VK_FWSTS_POST_KNL_INIT_DONE | \
-> +					 VK_FWSTS_INIT_DONE | \
-> +					 VK_FWSTS_APP_INIT_START | \
-> +					 VK_FWSTS_APP_INIT_DONE)
-> +/* Deinit */
-> +#define VK_FWSTS_APP_DEINIT_START	BIT(23)
-> +#define VK_FWSTS_APP_DEINIT_DONE	BIT(24)
-> +#define VK_FWSTS_DRV_DEINIT_START	BIT(25)
-> +#define VK_FWSTS_DRV_DEINIT_DONE	BIT(26)
-> +#define VK_FWSTS_RESET_DONE		BIT(27)
-> +#define VK_FWSTS_DEINIT_TRIGGERED	(VK_FWSTS_APP_DEINIT_START | \
-> +					 VK_FWSTS_APP_DEINIT_DONE  | \
-> +					 VK_FWSTS_DRV_DEINIT_START | \
-> +					 VK_FWSTS_DRV_DEINIT_DONE)
-> +/* Last nibble for reboot reason */
-> +#define VK_FWSTS_RESET_REASON_SHIFT	28
-> +#define VK_FWSTS_RESET_REASON_MASK	(0xF << VK_FWSTS_RESET_REASON_SHIFT)
-> +#define VK_FWSTS_RESET_SYS_PWRUP	(0x0 << VK_FWSTS_RESET_REASON_SHIFT)
-> +#define VK_FWSTS_RESET_MBOX_DB		(0x1 << VK_FWSTS_RESET_REASON_SHIFT)
-> +#define VK_FWSTS_RESET_M7_WDOG		(0x2 << VK_FWSTS_RESET_REASON_SHIFT)
-> +#define VK_FWSTS_RESET_TEMP		(0x3 << VK_FWSTS_RESET_REASON_SHIFT)
-> +#define VK_FWSTS_RESET_PCI_FLR		(0x4 << VK_FWSTS_RESET_REASON_SHIFT)
-> +#define VK_FWSTS_RESET_PCI_HOT		(0x5 << VK_FWSTS_RESET_REASON_SHIFT)
-> +#define VK_FWSTS_RESET_PCI_WARM		(0x6 << VK_FWSTS_RESET_REASON_SHIFT)
-> +#define VK_FWSTS_RESET_PCI_COLD		(0x7 << VK_FWSTS_RESET_REASON_SHIFT)
-> +#define VK_FWSTS_RESET_L1		(0x8 << VK_FWSTS_RESET_REASON_SHIFT)
-> +#define VK_FWSTS_RESET_L0		(0x9 << VK_FWSTS_RESET_REASON_SHIFT)
-> +#define VK_FWSTS_RESET_UNKNOWN		(0xF << VK_FWSTS_RESET_REASON_SHIFT)
-
-What are all of these #defines doing in an uapi file?  How is userspace
-going to use them?
-
-thanks,
-
-greg k-h
