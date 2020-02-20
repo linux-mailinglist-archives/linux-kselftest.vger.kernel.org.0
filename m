@@ -2,45 +2,57 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 656431663C5
-	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Feb 2020 18:03:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CDD391664B8
+	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Feb 2020 18:26:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728769AbgBTRCh (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 20 Feb 2020 12:02:37 -0500
-Received: from mail-bn8nam11on2114.outbound.protection.outlook.com ([40.107.236.114]:61129
-        "EHLO NAM11-BN8-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727709AbgBTRCg (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 20 Feb 2020 12:02:36 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=E7wN43SHSs5azEyNpTx8Fs9x1Wxd5thOO6eAgpTbeNF0Ppgo22dD/6jj5H6Sl32xxHIJu3F3EpUe3zM8xGlyhgIaeWonxceizrfLYRPDlpy6j13j3VZ85o9ivYqkPJoaFXvsizJyvOrY3l9+g76ulhrPpq4E8sva6r1Cqb4svNFHtBJ6V2+VXJrUikbhA9df4007bDTxIJSMXmhRjOgEa/0lyOOCOt76OjE++v1KxsxusdX27Lz55USd7OR37V3Uo3qmmRzfXysXBDiMUiYqlmHr2RTUfGk1hc+NKaHqqnaq5n05cYCQUbKPJoa2gmQQKN4hgoDwzGxfg+i4oOlrnw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=lI1oFQeDoRAsSAixSNRIht23WkEDoyxbjzo3NJnzHqI=;
- b=jG7WK8jRZgygMvk8jlj636tGpYaEBx+nczXweQ64wV0gKezpQgmCSjIIo4XM2XFLZMeTVq4/xO5nsUz/3e7HBnqbLzziaeqxhXJ2Hy9AGGl+6VFL8toB0eUp6MSeSilkelYmxiAJYApHVNtXWBRNNfdGa5IzeoRDHBnA+OY+d5OAwgAZK2wVSHaBV02OX5M9h5Sd15gxPRB+RHwRmyF+3HGE4QGzA8cDezJviUc6Z7oog59/dVwRRaa68oCnZzZdmIBQtCz+YtgMTTUEgiN9nbSq8ijxZgREbiPId03fjaFf61VAb1CEHAhkZde3BKrEy0eZEjfRW5Uu5gjy8yVGtw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=sony.com; dmarc=pass action=none header.from=sony.com;
- dkim=pass header.d=sony.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Sony.onmicrosoft.com;
- s=selector2-Sony-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=lI1oFQeDoRAsSAixSNRIht23WkEDoyxbjzo3NJnzHqI=;
- b=RQtwR0EyHO7IChARG4s5aTHMVcADGauFZz/Lil/5IasYBb5MtKokZP7snb7MncmEQ1os2qKNWYhwr6NgmL29hq+LREEIZxiC/cSjFePDsVg6Ujvep1pqZ6XDGxlv8+Acf7RLP5Eo18pTfSSA7XxjnkEmh46z+DBqHLHGP0c+q08=
-Received: from MWHPR13MB0895.namprd13.prod.outlook.com (2603:10b6:300:2::27)
- by MWHPR13MB1168.namprd13.prod.outlook.com (2603:10b6:300:a::23) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2772.6; Thu, 20 Feb
- 2020 17:02:26 +0000
-Received: from MWHPR13MB0895.namprd13.prod.outlook.com
- ([fe80::7544:fc2:b078:5dcd]) by MWHPR13MB0895.namprd13.prod.outlook.com
- ([fe80::7544:fc2:b078:5dcd%3]) with mapi id 15.20.2750.016; Thu, 20 Feb 2020
- 17:02:25 +0000
-From:   "Bird, Tim" <Tim.Bird@sony.com>
-To:     Jesper Dangaard Brouer <brouer@redhat.com>,
-        shuah <shuah@kernel.org>
-CC:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        =?utf-8?B?RGFuaWVsIETDrWF6?= <daniel.diaz@linaro.org>,
+        id S1728856AbgBTR0S (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 20 Feb 2020 12:26:18 -0500
+Received: from mail-pl1-f196.google.com ([209.85.214.196]:46991 "EHLO
+        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728386AbgBTR0R (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 20 Feb 2020 12:26:17 -0500
+Received: by mail-pl1-f196.google.com with SMTP id y8so1789999pll.13;
+        Thu, 20 Feb 2020 09:26:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to
+         :user-agent;
+        bh=rd9V9UVot8QU4dxlhd2hiItv4T8JnKu0tmvJU9d76Mc=;
+        b=DVJVOjF/NpMyaCti9AT2IcWEgTOh97ItS+8v/GkN/axFHO6cpdKDcNjVaIYzNsuW4d
+         pWVzXr8VWbeXYsSazvJEpGEylMBOahWyJ4WkjtDLIB2j7HIy6OgrIKmpVWyWmhsWa/y1
+         6UCKir+Oze+XMJ6f94yZ3zOWO86YlzTcvXmwK5CyBXMR4Pt2nNef7jVpLkvk/xLN5FRO
+         EiHyf9bVz8GkJ7LlFTTAUxMHwqGZMPls8OY2nXQ9iWn4OUMD145nBXumjibd4qk3sJGK
+         UgPkVby+Eqk8+08do88I0FqUrgGwFmu047iGhPxL4qKsTQxYoVkh3PfaTwgGuq3TA/sN
+         4Y1g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to:user-agent;
+        bh=rd9V9UVot8QU4dxlhd2hiItv4T8JnKu0tmvJU9d76Mc=;
+        b=qC9plWDVAz+9o5T2Usn6Bv+YB4TEdvT16ihDnZp3QTTZGTBfy22JBDzWm5DwSO5xmF
+         BV2qnhmJxPdFMZW/ZjGavHEBcPMFok07FJ5obn209XJ7MglBFl0UyN2/7kuiMEGXyMu6
+         uPkHqOKaXisS37ZqWwtpegUVkJ6RyFbiWDaa4sN96djKFU7jOCKL4jNNXYWJZ9wcTeut
+         ZeET4qtoH5GYvs3lMa+brrmQR22hQ5zsMyqgCaMCG2fDkB65uel0W5jJrS+6c78Ugnvd
+         Tr2tS+St6eZ9pkDqQ2BU92i042XKqdikYsmQAlTc6+VshdYGVLJWO48zxXafgDsLCpFA
+         axGQ==
+X-Gm-Message-State: APjAAAVf2+ND9h3krY5n2rdzqZs9QkeWQqlgt5OR4d3oPvHQjCho0lze
+        0J4h6f+xkJZ8Uiipl1cwJSM=
+X-Google-Smtp-Source: APXvYqzzYrRNU74LyvTtgsiXF8m+qglQOpoFbG3DJDW9Hmj/MkCj/EzGIFcOmbG/UgoZKBG8o9QuvQ==
+X-Received: by 2002:a17:902:fe13:: with SMTP id g19mr32897315plj.216.1582219576802;
+        Thu, 20 Feb 2020 09:26:16 -0800 (PST)
+Received: from ast-mbp ([2620:10d:c090:500::5:f03d])
+        by smtp.gmail.com with ESMTPSA id c3sm177528pfj.159.2020.02.20.09.26.14
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 20 Feb 2020 09:26:15 -0800 (PST)
+Date:   Thu, 20 Feb 2020 09:26:13 -0800
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To:     "Bird, Tim" <Tim.Bird@sony.com>
+Cc:     Jesper Dangaard Brouer <brouer@redhat.com>,
+        shuah <shuah@kernel.org>,
+        Daniel =?utf-8?B?RMOtYXo=?= <daniel.diaz@linaro.org>,
         Andrii Nakryiko <andrii.nakryiko@gmail.com>,
         Andrii Nakryiko <andriin@fb.com>,
         "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
@@ -50,197 +62,84 @@ CC:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
         LKML <linux-kernel@vger.kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Anders Roxell <anders.roxell@linaro.org>,
-        =?utf-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>,
+        Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
         "open list:KERNEL SELFTEST FRAMEWORK" 
         <linux-kselftest@vger.kernel.org>
-Subject: RE: Kernel 5.5.4 build fail for BPF-selftests with latest LLVM
-Thread-Topic: Kernel 5.5.4 build fail for BPF-selftests with latest LLVM
-Thread-Index: AQHV54eZmWZeYpO93EedYy5TfrJieagkSRIAgAAEQ8A=
-Date:   Thu, 20 Feb 2020 17:02:25 +0000
-Message-ID: <MWHPR13MB0895649219625C5F7380314FFD130@MWHPR13MB0895.namprd13.prod.outlook.com>
-References: <20200219133012.7cb6ac9e@carbon>
-        <CAADnVQKQRKtDz0Boy=-cudc4eKGXB-yParGZv6qvYcQR4uMUQQ@mail.gmail.com>
-        <20200219180348.40393e28@carbon>
-        <CAEf4Bza9imKymHfv_LpSFE=kNB5=ZapTS3SCdeZsDdtrUrUGcg@mail.gmail.com>
-        <20200219192854.6b05b807@carbon>
-        <CAEf4BzaRAK6-7aCCVOA6hjTevKuxgvZZnHeVgdj_ZWNn8wibYQ@mail.gmail.com>
-        <20200219210609.20a097fb@carbon>
-        <CAEUSe79Vn8wr=BOh0RzccYij_snZDY=2XGmHmR494wsQBBoo5Q@mail.gmail.com>
-        <20200220002748.kpwvlz5xfmjm5fd5@ast-mbp>
-        <4a26e6c6-500e-7b92-1e26-16e1e0233889@kernel.org>
+Subject: Re: Kernel 5.5.4 build fail for BPF-selftests with latest LLVM
+Message-ID: <20200220172612.7aqmiwrnizgsukvm@ast-mbp>
+References: <20200219180348.40393e28@carbon>
+ <CAEf4Bza9imKymHfv_LpSFE=kNB5=ZapTS3SCdeZsDdtrUrUGcg@mail.gmail.com>
+ <20200219192854.6b05b807@carbon>
+ <CAEf4BzaRAK6-7aCCVOA6hjTevKuxgvZZnHeVgdj_ZWNn8wibYQ@mail.gmail.com>
+ <20200219210609.20a097fb@carbon>
+ <CAEUSe79Vn8wr=BOh0RzccYij_snZDY=2XGmHmR494wsQBBoo5Q@mail.gmail.com>
+ <20200220002748.kpwvlz5xfmjm5fd5@ast-mbp>
+ <4a26e6c6-500e-7b92-1e26-16e1e0233889@kernel.org>
  <20200220173740.7a3f9ad7@carbon>
-In-Reply-To: <20200220173740.7a3f9ad7@carbon>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=Tim.Bird@sony.com; 
-x-originating-ip: [160.33.195.21]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: b702893a-354e-41a4-6485-08d7b626a930
-x-ms-traffictypediagnostic: MWHPR13MB1168:
-x-microsoft-antispam-prvs: <MWHPR13MB11683AC6FFCE757BC6536E60FD130@MWHPR13MB1168.namprd13.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:10000;
-x-forefront-prvs: 031996B7EF
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(4636009)(396003)(39860400002)(366004)(376002)(136003)(346002)(199004)(189003)(7696005)(4326008)(9686003)(966005)(66574012)(8936002)(478600001)(7416002)(45080400002)(71200400001)(81156014)(81166006)(86362001)(8676002)(5660300002)(26005)(66446008)(64756008)(6506007)(33656002)(53546011)(316002)(110136005)(54906003)(55016002)(66946007)(2906002)(186003)(52536014)(66556008)(76116006)(66476007);DIR:OUT;SFP:1102;SCL:1;SRVR:MWHPR13MB1168;H:MWHPR13MB0895.namprd13.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
-received-spf: None (protection.outlook.com: sony.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: nqYyVYo0xZPfeFozNP7qB1yctbIfVdo/KvfWDaSkL9hGDiBHbTIq5o72ZC1Y384nvmpnkqjsSq80AISxhPQjULZqn43YtzR6xAZGvQ/GfyyLUrBlvAnYOAxz48CrTdeBjALM8bjMFKLHN8YDOY0HSGpQuDe5MeVK3IYJ9rsrFtKzKsWXNJQP0y44dlo+qMzO6NRw0aQZu05YGb2c3ntZSxFrJdRYVVVwUvVa98ZO+Nrd4dCVxfOojzwUbnrkLfHDWCpbX3dujYj6QTWj2cu30Qra7JmEJFbaNdd9vHdobEX6BOMx0BJAXCOh/i/nDP2hTTZluT22D92pxlvQGG2Bh6B5BhWCEV0mOv5XMLd+rt5ZlEq6v5Qa8EzBzvnJaZb06fK3acJ4o7AIyN+TinbgaMNHN3Gx9/zuIuVuHzobdi+LCkiILxTrugDsTDa2+vJ/nx79pTs97v6e/2E8AYyy+D6xnP68Sv9fy3BFVbN5ooq8dU80y09pc66XWJbOfe9inbmHxaSpB/+sYYM4BsIemA==
-x-ms-exchange-antispam-messagedata: xEM+axrVskg9py9BlmGoztiHCHEl1AxIttSpYWnwgE9VAzLugENf0A8mGmyok+ekm5lFKiavPSra5pVv1p0qh4yKctAn/HcaDXqNli8RrxzFQGBWQ1c6tVC9KI5+A+tfu5TUqyZONxCj+n305Ctp7w==
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+ <MWHPR13MB0895649219625C5F7380314FFD130@MWHPR13MB0895.namprd13.prod.outlook.com>
 MIME-Version: 1.0
-X-OriginatorOrg: sony.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b702893a-354e-41a4-6485-08d7b626a930
-X-MS-Exchange-CrossTenant-originalarrivaltime: 20 Feb 2020 17:02:25.8868
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 66c65d8a-9158-4521-a2d8-664963db48e4
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: O3S2w0gn8XST1vXwPPDiQhxv+HrOkHLE8qGaM8/9/5w1nh7QapgpotjBCDrnNIn4QlmCgGsTCn3U6oXTMlhTbA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR13MB1168
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <MWHPR13MB0895649219625C5F7380314FFD130@MWHPR13MB0895.namprd13.prod.outlook.com>
+User-Agent: NeoMutt/20180223
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-DQoNCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gRnJvbTogIEplc3BlciBEYW5nYWFy
-ZCBCcm91ZXINCj4gDQo+IE9uIFdlZCwgMTkgRmViIDIwMjAgMTc6NDc6MjMgLTA3MDANCj4gc2h1
-YWggPHNodWFoQGtlcm5lbC5vcmc+IHdyb3RlOg0KPiANCj4gPiBPbiAyLzE5LzIwIDU6MjcgUE0s
-IEFsZXhlaSBTdGFyb3ZvaXRvdiB3cm90ZToNCj4gPiA+IE9uIFdlZCwgRmViIDE5LCAyMDIwIGF0
-IDAzOjU5OjQxUE0gLTA2MDAsIERhbmllbCBEw61heiB3cm90ZToNCj4gPiA+Pj4NCj4gPiA+Pj4g
-V2hlbiBJIGRvd25sb2FkIGEgc3BlY2lmaWMga2VybmVsIHJlbGVhc2UsIGhvdyBjYW4gSSBrbm93
-IHdoYXQgTExWTQ0KPiA+ID4+PiBnaXQtaGFzaCBvciB2ZXJzaW9uIEkgbmVlZCAodG8gdXNlIEJQ
-Ri1zZWxmdGVzdHMpPw0KPiA+ID4NCj4gPiA+IGFzIGRpc2N1c3NlZCB3ZSdyZSBnb2luZyB0byBh
-ZGQgZG9jdW1lbnRhdGlvbi1saWtlIGZpbGUgdGhhdCB3aWxsDQo+ID4gPiBsaXN0IHJlcXVpcmVk
-IGNvbW1pdHMgaW4gdG9vbHMuDQo+ID4gPiBUaGlzIHdpbGwgYmUgZW5mb3JjZWQgZm9yIGZ1dHVy
-ZSBsbHZtL3BhaG9sZSBjb21taXRzLg0KPiA+ID4NCj4gPiA+Pj4gRG8geW91IHRoaW5rIGl0IGlz
-IHJlYXNvbmFibGUgdG8gcmVxdWlyZSBlbmQtdXNlcnMgdG8gY29tcGlsZSB0aGVpciBvd24NCj4g
-PiA+Pj4gYmxlZWRpbmcgZWRnZSB2ZXJzaW9uIG9mIExMVk0sIHRvIHVzZSBCUEYtc2VsZnRlc3Rz
-Pw0KPiA+ID4NCj4gPiA+IGFic29sdXRlbHkuDQoNCklzIGl0IGp1c3QgdGhlIEJQRi1zZWxmdGVz
-dHMgdGhhdCByZXF1aXJlIHRoZSBibGVlZGluZyBlZGdlIHZlcnNpb24gb2YgTExWTSwNCm9yIGRv
-IEJQRiBmZWF0dXJlcyB0aGVtc2VsdmVzIG5lZWQgdGhlIGxhdGVzdCBMTFZNLiAgSWYgdGhlIGxh
-dHRlciwgdGhlbiB0aGlzDQppcyBxdWl0ZSB3b3JyaXNvbWUsIGFuZCBJIGZlYXIgdGhlIEJQRiBk
-ZXZlbG9wZXJzIGFyZSBnZXR0aW5nIGFoZWFkIG9mIHRoZW1zZWx2ZXMuDQpXZSBkb24ndCB1c3Vh
-bGx5IGhhdmUgYSBrZXJuZWwgZGVwZW5kZW5jeSBvbiB0aGUgbGF0ZXN0IGNvbXBpbGVyIHZlcnNp
-b24gKHNvbWUNCnJlY2VudCBzZWN1cml0eSBmaXhlcyBhcmUgYW4gYW5vbWFseSkuICBJbiBmYWN0
-IGRlcHJlY2F0aW5nIHN1cHBvcnQgZm9yIG9sZGVyIGNvbXBpbGVyDQp2ZXJzaW9ucyBoYXMgYmVl
-biBxdWl0ZSBzbG93IGFuZCBtZXRob2RpY2FsIG92ZXIgdGhlIHllYXJzLg0KDQpJdCdzIHF1aXRl
-IGRhbmdlcm91cyB0byBiZSBiYWtpbmcgc3R1ZmYgaW50byB0aGUga2VybmVsIHRoYXQgZGVwZW5k
-cyBvbiBmZWF0dXJlcw0KZnJvbSBjb21waWxlcnMgdGhhdCBoYXZlbid0IGV2ZW4gbWFkZSBpdCB0
-byByZWxlYXNlIHlldC4NCg0KSSdtIHNvcnJ5LCBidXQgSSdtIGNvbWluZyBpbnRvIHRoZSBtaWRk
-bGUgb2YgdGhpcyB0aHJlYWQuICBDYW4geW91IHBsZWFzZSBleHBsYWluDQp3aGF0IHRoZSBmZWF0
-dXJlcyBhcmUgaW4gdGhlIGxhdGVzdCBMTFZNIHRoYXQgYXJlIHJlcXVpcmVkIGZvciBCUEYtc2Vs
-ZnRlc3RzPw0KIC0tIFRpbQ0KDQo+ID4gKyBsaW51eC1rc2VsZnRlc3RAdmdlci5rZXJuZWwub3Jn
-DQo+ID4NCj4gPiBFbmQtdXNlcnMgaW4gdGhpcyBjb250ZXh0IGFyZSB1c2VycyBhbmQgbm90IG5l
-Y2Vzc2FyaWx5IGRldmVsb3BlcnMuDQo+IA0KPiBJIGFncmVlLiAgQW5kIEkgd29ycnkgdGhhdCB3
-ZSBhcmUgbWFraW5nIGl0IGluY3JlYXNpbmdseSBoYXJkIGZvcg0KPiBub24tZGV2ZWxvcGVyIHVz
-ZXJzLg0KPiANCj4gDQo+ID4gPiBJZiBhIGRldmVsb3BlciB3YW50cyB0byBzZW5kIGEgcGF0Y2gg
-dGhleSBtdXN0IHJ1biBhbGwgc2VsZnRlc3RzIGFuZA0KPiA+ID4gYWxsIG9mIHRoZW0gbXVzdCBw
-YXNzIGluIHRoZWlyIGVudmlyb25tZW50Lg0KPiA+ID4gImJ1dCBJJ20gYWRkaW5nIGEgdHJhY2lu
-ZyBmZWF0dXJlIGFuZCBkb24ndCBjYXJlIGFib3V0IG5ldHdvcmtpbmcgdGVzdHMNCj4gPiA+IGZh
-aWxpbmciLi4uIGlzIG5vdCBhY2NlcHRhYmxlLg0KPiA+DQo+ID4gVGhpcyBpcyBhIHJlYXNvbmFi
-bGUgZXhwZWN0YXRpb24gd2hlbiBhIGRldmVsb3BlcnMgc2VuZHMgYnBmIHBhdGNoZXMuDQo+IA0K
-PiBTdXJlLiBJIGhhdmUgc2V2ZXJhbCB2ZXJzaW9ucyBvbiBMTFZNIHRoYXQgSSd2ZSBjb21waWxl
-ZCBtYW51YWxseS4NCj4gDQo+ID4gPg0KPiA+ID4+PiBJIGRvIGhvcGUgdGhhdCBzb21lIGVuZC11
-c2VycyBvZiBCUEYtc2VsZnRlc3RzIHdpbGwgYmUgQ0ktc3lzdGVtcy4NCj4gPiA+Pj4gVGhhdCBh
-bHNvIGltcGxpZXMgdGhhdCBDSS1zeXN0ZW0gbWFpbnRhaW5lcnMgbmVlZCB0byBjb25zdGFudGx5
-IGRvDQo+ID4gPj4+ICJsYXRlc3QgYnVpbHQgZnJvbSBzb3VyY2VzIiBvZiBMTFZNIGdpdC10cmVl
-IHRvIGtlZXAgdXAuICBJcyB0aGF0IGENCj4gPiA+Pj4gcmVhc29uYWJsZSByZXF1aXJlbWVudCB3
-aGVuIGJ1eWluZyBhIENJLXN5c3RlbSBpbiB0aGUgY2xvdWQ/DQo+ID4gPg0KPiA+ID4gImJ1eWlu
-ZyBDSS1zeXN0ZW0gaW4gdGhlIGNsb3VkIiA/DQo+ID4gPiBJZiBJIGNvdWxkIGJ1eSBzdWNoIHN5
-c3RlbSBJIHdvdWxkIHBheSBmb3IgaXQgb3V0IG9mIG15IG93biBwb2NrZXQgdG8gc2F2ZQ0KPiA+
-ID4gbWFpbnRhaW5lcidzIGFuZCBkZXZlbG9wZXIncyB0aW1lLg0KPiANCj4gQW5kIERhbmllbCBE
-w61heiB3YW50IHRvIHByb3ZpZGUgaGlzIGhlbHAgYmVsb3cgKHRvIHRlc3RzIGl0IG9uIGFyY2gN
-Cj4gdGhhdCB5b3UgbGlrZWx5IGRvbid0IGV2ZW4gaGF2ZSBhY2Nlc3MgdG8pLiBUaGF0IHNvdW5k
-cyBsaWtlIGEgZ29vZA0KPiBvZmZlciwgYW5kIHlvdSBkb24ndCBldmVuIGhhdmUgdG8gcGF5Lg0K
-PiANCj4gPiA+DQo+ID4gPj4gV2UgWzFdIGFyZSBlbmQgdXNlcnMgb2Yga3NlbGZ0ZXN0cyBhbmQg
-bWFueSBvdGhlciB0ZXN0IHN1aXRlcyBbMl0uIFdlDQo+ID4gPj4gcnVuIGFsbCBvZiBvdXIgdGVz
-dGluZyBvbiBldmVyeSBnaXQtcHVzaCBvbiBsaW51eC1zdGFibGUtcmMsIG1haW5saW5lLA0KPiA+
-ID4+IGFuZCBsaW51eC1uZXh0IC0tIGFwcHJveGltYXRlbHkgMSBtaWxsaW9uIHRlc3RzIHBlciB3
-ZWVrLiBXZSBoYXZlIGENCj4gPiA+PiBkZWRpY2F0ZWQgZW5naW5lZXJpbmcgdGVhbSBsb29raW5n
-IGFmdGVyIHRoaXMgQ0kgaW5mcmFzdHJ1Y3R1cmUgYW5kDQo+ID4gPj4gdGVzdCByZXN1bHRzLCBh
-bmQgYXMgc3VjaCwgSSBjYW4gd2hvbGVoZWFydGVkbHkgZWNobyBKZXNwZXIncw0KPiA+ID4+IHNl
-bnRpbWVudCBoZXJlOiBXZSB3b3VsZCByZWFsbHkgbGlrZSB0byBoZWxwIGtlcm5lbCBtYWludGFp
-bmVycyBhbmQNCj4gPiA+PiBkZXZlbG9wZXJzIGJ5IGF1dG9tYXRpY2FsbHkgdGVzdGluZyB0aGVp
-ciBjb2RlIGluIHJlYWwgaGFyZHdhcmUsIGJ1dA0KPiA+ID4+IHRoZSBCUEYga3NlbGZ0ZXN0cyBh
-cmUgZGlmZmljdWx0IHRvIHdvcmsgd2l0aCBmcm9tIGEgQ0kgcGVyc3BlY3RpdmUuDQo+ID4gPj4g
-V2UgaGF2ZSBjYXVnaHQgYW5kIHJlcG9ydGVkIFszXSBtYW55IFs0XSBidWlsZCBbNV0gZmFpbHVy
-ZXMgWzZdIGluIHRoZQ0KPiA+ID4+IHBhc3QgZm9yIGxpYmJwZi9QZXJmLCBidXQgYnVpbGRpbmcg
-aXMganVzdCBvbmUgb2YgdGhlIHBpZWNlcy4gV2UgYXJlDQo+ID4gPj4gdW5hYmxlIHRvIHJ1biB0
-aGUgZW50aXJlIEJQRiBrc2VsZnRlc3RzIGJlY2F1c2Ugb25seSBhIHBhcnQgb2YgdGhlDQo+ID4g
-Pj4gY29kZSBidWlsZHMsIHNvIG91ciB0ZXN0aW5nIGlzIHZlcnkgbGltaXRlZCB0aGVyZS4NCj4g
-PiA+Pg0KPiA+ID4+IFdlIGhvcGUgdGhhdCB0aGlzIHNpdHVhdGlvbiBjYW4gYmUgaW1wcm92ZWQg
-YW5kIHRoYXQgb3VyIGFuZCBldmVyeW9uZQ0KPiA+ID4+IGVsc2UncyBhdXRvbWF0ZWQgdGVzdGlu
-ZyBjYW4gaGVscCB5b3UgZ3V5cyB0b28uIEZvciB0aGlzIHRvIHdvcmsgb3V0LA0KPiA+ID4+IHdl
-IG5lZWQgc29tZSBoZWxwLg0KPiA+ID4NCj4gPg0KPiA+IEl0IHdvdWxkIGJlIGhlbHBmdWwgdW5k
-ZXJzdGFuZCB3aGF0ICJoZWxwIiBpcyBpbiB0aGlzIGNvbnRleHQuDQo+ID4NCj4gPiA+IEkgZG9u
-J3QgdW5kZXJzdGFuZCB3aGF0IGtpbmQgb2YgaGVscCB5b3UgbmVlZC4gSnVzdCBpbnN0YWxsIHRo
-ZQ0KPiA+ID4gbGF0ZXN0IHRvb2xzLg0KPiANCj4gSSBhZG1pcmUgdGhhdCB5b3Ugd2FudCB0byBw
-dXNoICpldmVyeWJvZHkqIGZvcndhcmQgdG8gdXNlIHRoZSBsYXRlc3QNCj4gTExWTSwgYnV0IHNh
-eWluZyBsYXRlc3QgaXMgTExWTSBkZXZlbCBnaXQgdHJlZSBIRUFEIGlzIHRvbyBleHRyZW1lLg0K
-PiBJIGNhbiBzdXBwb3J0IHNheWluZyBsYXRlc3QgTExWTSByZWxlYXNlIGlzIHJlcXVpcmVkLg0K
-PiANCj4gQXMgc29vbiBhcyB5b3VyIExMVk0gcGF0Y2hlcyBhcmUgYWNjZXB0ZWQgaW50byBsbHZt
-LWdpdC10cmVlLCB5b3Ugd2lsbA0KPiBhZGQgc29tZSBCUEYgc2VsZnRlc3RzIHRoYXQgdXRpbCB0
-aGlzLiBUaGVuIENJLXN5c3RlbXMgcHVsbCBsYXRlc3QNCj4gYnBmLW5leHQgdGhleSB3aWxsIHN0
-YXJ0IHRvIGZhaWwgdG8gY29tcGlsZSBCUEYtc2VsZnRlc3RzLCBhbmQgQ0kNCj4gc3RvcHMuICBO
-b3cgeW91IHdhbnQgdG8gZm9yY2UgQ0ktc3lzdGVtIG1haW50YWluZXIgdG8gcmVjb21waWxlIExM
-Vk0NCj4gZnJvbSBnaXQuICBUaGlzIHdpbGwgbGlrZWx5IHRha2Ugc29tZSB0aW1lLiAgVW50aWwg
-dGhhdCBoYXBwZW5zDQo+IENJLXN5c3RlbSBkb2Vzbid0IGNhdGNoIHN0dWZmLiBFLmcuIEkgcmVh
-bGx5IHdhbnQgdGhlIEFSTSB0ZXN0cyB0aGF0DQo+IExpbmFybyBjYW4gcnVuIGZvciB1cyAod2hp
-Y2ggaXNuJ3QgcnVuIGJlZm9yZSB5b3UgYXBwbHkgcGF0Y2hlcy4uLikuDQo+IA0KPiANCj4gPiBX
-aGF0IHdvdWxkIGJlIGhlbHBmdWwgaXMgdG8gd3JpdGUgYnBmIHRlc3RzIHN1Y2ggdGhhdCBvbGRl
-ciB0ZXN0cyB0aGF0DQo+ID4gd29ya2VkIG9uIG9sZGVyIGxsdm0gdmVyc2lvbnMgY29udGludWUg
-dG8gd29yayBhbmQgd2l0aCBzb21lIGluZGljYXRpb24NCj4gPiBvbiB3aGljaCB0ZXN0cyByZXF1
-aXJlIG5ldyBibGVlZGluZyBlZGdlIHRvb2xzLg0KPiA+DQo+ID4gPiBCb3RoIHRoZSBsYXRlc3Qg
-bGx2bSBhbmQgdGhlIGxhdGVzdCBwYWhvbGUgYXJlIHJlcXVpcmVkLg0KPiA+DQo+ID4gSXQgd291
-bGQgYmUgaGVscGZ1bCBpZiB5b3UgY2FuIGVsYWJvcmF0ZSB3aHkgbGF0ZXN0IHRvb2xzIGFyZSBh
-DQo+ID4gcmVxdWlyZW1lbnQuDQo+ID4NCj4gPiA+IElmIGJ5ICdoZWxwJyB5b3UgbWVhbiB0byB0
-d2VhayBzZWxmdGVzdHMgdG8gc2tpcCB0ZXN0cyB0aGVuIGl0J3MgYSBuYWNrLg0KPiA+ID4gV2Ug
-aGF2ZSBodW1hbiBkcml2ZW4gQ0kuIEV2ZXJ5IGRldmVsb3BlciBtdXN0IHJ1biBzZWxmdGVzdHMv
-YnBmIGJlZm9yZQ0KPiA+ID4gZW1haWxpbmcgdGhlIHBhdGNoZXMuIE15c2VsZiBhbmQgRGFuaWVs
-IHJ1biB0aGVtIGFzIHdlbGwgYmVmb3JlIGFwcGx5aW5nLg0KPiA+ID4gVGhlc2UgbWFudWFsIHJ1
-bnMgaXMgdGhlIG9ubHkgdGhpbmcgdGhhdCBrZWVwcyBicGYgdHJlZSBnb2luZy4NCj4gPiA+IElm
-IHNlbGZ0ZXN0cyBnZXQgdG8gc2tpcCB0ZXN0cyBodW1hbnMgd2lsbCBtaXNzIHRob3NlIGVycm9y
-cy4NCj4gPiA+IFdoZW4gSSBkb24ndCBzZWUgJzAgU0tJUFBFRCwgMCBGQUlMRUQnIEkgZ28gYW5k
-IGludmVzdGlnYXRlLg0KPiA+ID4gQW55dGhpbmcgYnV0IHplcm8gaXMgYSBwYXRoIHRvIGJyb2tl
-biBrZXJuZWxzLg0KPiA+ID4NCj4gPiA+IEltYWdpbmUgdGhlIHRlc3RzIHdvdWxkIGdldCBza2lw
-cGVkIHdoZW4gcGFob2xlIGlzIHRvbyBvbGQuDQo+ID4gPiBUaGF0IHdvdWxkIG1lYW4gYWxsIG9m
-IHRoZSBrZXJuZWwgZmVhdHVyZXMgZnJvbSB5ZWFyIDIwMTkNCj4gPiA+IHdvdWxkIGdldCBza2lw
-cGVkLiBJcyB0aGVyZSBhIHBvaW50IG9mIHJ1bm5pbmcgc3VjaCBzZWxmdGVzdHM/DQo+ID4gPiBJ
-IHRoaW5rIHRoZSB2YWx1ZSBpcyBub3QganVzdCB6ZXJvLiBUaGUgdmFsdWUgaXMgbmVnYXRpdmUu
-DQo+ID4gPiBTdWNoIHNlbGZ0ZXN0cyB0aGF0IHJ1biBvbGQgc3R1ZmYgd291bGQgZ2l2ZSBmYWxz
-ZSBiZWxpZXZlDQo+ID4gPiB0aGF0IHRoZXkgZG8gc29tZXRoaW5nIG1lYW5pbmdmdWwuDQo+ID4g
-PiAiYnV0IENJIGNhbiBkbyBidWlsZCBvbmx5IHRlc3RzIi4uLiBJZiAnaGVscGluZycgc3VjaCBD
-SSBtZWFucyBodXJ0aW5nIHRoZQ0KPiA+ID4ga2V5IGRldmVsb3Blci9tYWludGFpbmVyIHdvcmtm
-bG93IHN1Y2ggQ0kgaXMgb24gaXRzIG93bi4NCj4gPiA+DQo+ID4NCj4gPiBTa2lwcGluZyB0ZXN0
-cyB3aWxsIGJlIHVzZWxlc3MuIEkgYW0gd2l0aCB5b3Ugb24gdGhhdC4gSG93ZXZlciwNCj4gPiBm
-aWd1cmluZyBvdXQgaG93IHRvIG1haW50YWluIHNvbWUgbGV2ZWwgb2YgYmFja3dhcmQgY29tcGF0
-aWJpbGl0eQ0KPiA+IHRvIHJ1biBhdCBsZWFzdCBvbGRlciB0ZXN0cyBhbmQgd2FybiB1c2VycyB0
-byB1cGdyYWRlIHdvdWxkIGJlDQo+ID4gaGVscGZ1bC4NCj4gDQo+IFdoYXQgSSBwcm9wb3NlIGlz
-IHRoYXQgYSBCUEYtc2VsZnRlc3QgdGhhdCB1c2UgYSBuZXcgTExWTSBmZWF0dXJlLA0KPiBzaG91
-bGQgcmV0dXJuIEZBSUwgKG9yIHBlcmhhcHMgU0tJUCksIHdoZW4gaXQgaXMgY29tcGlsZWQgd2l0
-aCBzYXkgb25lDQo+IHJlbGVhc2Ugb2xkIExMVk0uIFRoaXMgd2lsbCBhbGxvdyBuZXctdGVzdHMg
-dG8gc2hvdyB1cCBpbiBDSS1zeXN0ZW1zDQo+IHJlcG9ydHMgYXMgRkFJTCwgYW5kIGdpdmUgZXZl
-cnlib2R5IGJyZWF0aGluZyByb29tIHRvIHVwZ3JhZGUgdGhlaXIgTExWTQ0KPiBjb21waWxlci4N
-Cj4gDQo+ID4gSSBzdXNwZWN0IGN1cnJlbnRseSB1c2VycyBhcmUgaWdub3JpbmcgYnBmIGZhaWx1
-cmVzIGJlY2F1c2UgdGhleQ0KPiA+IGFyZSB1bmFibGUgdG8ga2VlcCB1cCB3aXRoIHRoZSByZXF1
-aXJlbWVudCB0byBpbnN0YWxsIG5ld2VyIHRvb2xzDQo+ID4gdG8gcnVuIHRoZSB0ZXN0cy4gVGhp
-cyBpc24ndCBncmVhdCBlaXRoZXIuDQo+IA0KPiBZZXMsIG15IHdvcnJ5IGlzIGFsc28gdGhhdCB3
-ZSBhcmUgc2ltcGx5IG1ha2luZyBpdCB0b28gZGlmZmljdWx0IGZvcg0KPiBub24tZGV2ZWxvcGVy
-IHVzZXJzIHRvIHJ1biB0aGVzZSB0ZXN0cy4gIEFuZCBJIHNwZWNpZmljYWxseSB3YW50IHRvDQo+
-IGF0dHJhY3QgQ0ktc3lzdGVtcyB0byBydW4gdGhlc2UuICBBbmQgZXNwZWNpYWxseSBMaW5hcm8s
-IHdobyBoYXZlDQo+IGRlZGljYXRlZCBlbmdpbmVlcmluZyB0ZWFtIGxvb2tpbmcgYWZ0ZXIgdGhl
-aXIgQ0kgaW5mcmFzdHJ1Y3R1cmUsIGFuZA0KPiB0aGV5IGV4cGxpY2l0bHkgaW4gdGhpcyBlbWFp
-bCBjb25maXJtIG15IHdvcnJ5Lg0KPiANCj4gDQo+ID4gVXNlcnMgdGhhdCBjYXJlIGFyZSBzaGFy
-aW5nIHRoZWlyIHBhaW4gdG8gc2VlIGlmIHRoZXkgY2FuIGdldCBzb21lDQo+ID4gaGVscCBvciBl
-eHBsYW5hdGlvbiBvbiB3aHkgbmV3IHRvb2xzIGFyZSByZXF1aXJlZCBldmVyeSBzbyBvZnRlbi4N
-Cj4gPiBJIGRvbid0IHRoaW5rIGV2ZXJ5Ym9keSB1bmRlcnN0YW5kcyB3aHkuIDopDQo+IA0KPiAt
-LQ0KPiBCZXN0IHJlZ2FyZHMsDQo+ICAgSmVzcGVyIERhbmdhYXJkIEJyb3Vlcg0KPiAgIE1TYy5D
-UywgUHJpbmNpcGFsIEtlcm5lbCBFbmdpbmVlciBhdCBSZWQgSGF0DQo+ICAgTGlua2VkSW46IGh0
-dHA6Ly93d3cubGlua2VkaW4uY29tL2luL2Jyb3Vlcg0KDQo=
+On Thu, Feb 20, 2020 at 05:02:25PM +0000, Bird, Tim wrote:
+> 
+> 
+> > -----Original Message-----
+> > From:  Jesper Dangaard Brouer
+> > 
+> > On Wed, 19 Feb 2020 17:47:23 -0700
+> > shuah <shuah@kernel.org> wrote:
+> > 
+> > > On 2/19/20 5:27 PM, Alexei Starovoitov wrote:
+> > > > On Wed, Feb 19, 2020 at 03:59:41PM -0600, Daniel Díaz wrote:
+> > > >>>
+> > > >>> When I download a specific kernel release, how can I know what LLVM
+> > > >>> git-hash or version I need (to use BPF-selftests)?
+> > > >
+> > > > as discussed we're going to add documentation-like file that will
+> > > > list required commits in tools.
+> > > > This will be enforced for future llvm/pahole commits.
+> > > >
+> > > >>> Do you think it is reasonable to require end-users to compile their own
+> > > >>> bleeding edge version of LLVM, to use BPF-selftests?
+> > > >
+> > > > absolutely.
+> 
+> Is it just the BPF-selftests that require the bleeding edge version of LLVM,
+> or do BPF features themselves need the latest LLVM.  If the latter, then this
+> is quite worrisome, and I fear the BPF developers are getting ahead of themselves.
+> We don't usually have a kernel dependency on the latest compiler version (some
+> recent security fixes are an anomaly).  In fact deprecating support for older compiler
+> versions has been quite slow and methodical over the years.
+> 
+> It's quite dangerous to be baking stuff into the kernel that depends on features
+> from compilers that haven't even made it to release yet.
+> 
+> I'm sorry, but I'm coming into the middle of this thread.  Can you please explain
+> what the features are in the latest LLVM that are required for BPF-selftests?
+
+Above is correct. bpf kernel features do depend on the latest pahole and llvm
+features that did not make it into a release. That was the case for many years
+now and still the case. The first commit 8 years ago relied on something that
+can generate those instructions. For many years llvm was the only compiler that
+could generate them. Right now there is GCC backend as well. New features (like
+new instructions) depend on the compiler.
+
+selftests/bpf are not testing kernel's bpf features. They are testing the whole
+bpf ecosystem. They test llvm, pahole, libbpf, bpftool, and kernel together.
+Hence it's a requirement to install the latest pahole and llvm.
+
+When I'm talking about selftests/bpf I'm talking about all the tests in that
+directory combined. There are several unit tests scattered across repos. The
+unit tests for llvm bpf backend are inside llvm repo.
+selftests/bpf/test_verifier and test_maps are unit tests for the verifier and
+for maps. They are llvm independent. They test a combination of kernel and
+libbpf only. But majority of the selftests/bpf are done via test_progs which
+are the whole ecosystem tests.
