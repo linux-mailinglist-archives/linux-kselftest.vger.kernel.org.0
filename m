@@ -2,131 +2,89 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8182E16565D
-	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Feb 2020 05:42:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EEC6A165898
+	for <lists+linux-kselftest@lfdr.de>; Thu, 20 Feb 2020 08:38:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727973AbgBTEmt (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 19 Feb 2020 23:42:49 -0500
-Received: from bilbo.ozlabs.org ([203.11.71.1]:39729 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727469AbgBTEmt (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 19 Feb 2020 23:42:49 -0500
-Received: by ozlabs.org (Postfix, from userid 1034)
-        id 48NMQb1JZMz9sRt; Thu, 20 Feb 2020 15:42:46 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ellerman.id.au;
-        s=201909; t=1582173767;
-        bh=DYCVUaJqREzhND+/ZTURlnZqhJ6ZboY/OqZaFazcPb8=;
-        h=From:To:Cc:Subject:Date:From;
-        b=AwE8pWycjubfvwD9jO89f6JQoUD0PilynV9mjD6EgLGfXn2d3qYuW5f621z4s0AuO
-         n0oljC15XWSLEOAYfJmx/kakMY9RHpZN8fD/lv8P3NAzgL/ExBzcE+VEF4r7yWKi3v
-         xdV9P5X1BTcXOlyh2fTwR3uBE/XK73IFWlxNilq0Wb/p6nsPcTIBX04UHmvahaIfkH
-         b3foH8VpvuUaEr7AAbde6NxMoTICRM7SXfPThMErfpcCkAGXpSfAXA73mRkkrdra0a
-         Sqf0DMVb0U5pubfX0hp3p/9JUMXzn82TJqmUFUKJVnsu9hkjKm3z3SeoY0HffLgRVK
-         Y/PQ2FWnOJgew==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     linux-kselftest@vger.kernel.org
-Cc:     skhan@linuxfoundation.org, keescook@chromium.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] selftests: Install settings files to fix TIMEOUT failures
-Date:   Thu, 20 Feb 2020 15:42:41 +1100
-Message-Id: <20200220044241.2878-1-mpe@ellerman.id.au>
-X-Mailer: git-send-email 2.21.1
+        id S1726669AbgBTHix (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 20 Feb 2020 02:38:53 -0500
+Received: from smtp-fw-33001.amazon.com ([207.171.190.10]:21909 "EHLO
+        smtp-fw-33001.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726562AbgBTHix (ORCPT
+        <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 20 Feb 2020 02:38:53 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1582184333; x=1613720333;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   mime-version;
+  bh=oTbUz7ad+lxKA3pu5K3OeA9Qrfs1WDg7rWJbe6s8SN8=;
+  b=nN5J0iDjN42HNmj0aa1xR/FKNfZUiilZIxHwzJXPJ3m3W3SEZ7jzj6LI
+   Iaf9a3HdI+RepUlWTmd6SI6cKfKv2yukdxC4w6OPPCS20ZuLJT6eFScVF
+   KaaWTn5JTAkRf/vlgfFu7IzUkDQLZu7xFQF+yqXLDJJrrYNxa8fLqHWwg
+   U=;
+IronPort-SDR: 7oia2wUGTnZSKhBsUHoyFHSu4XYOms7J8LTwX6c8QbdH3mOgpX/FUSxZkCcb291HIO2wy49XeQ
+ +TIudoxoYDrg==
+X-IronPort-AV: E=Sophos;i="5.70,463,1574121600"; 
+   d="scan'208";a="27647351"
+Received: from sea32-co-svc-lb4-vlan3.sea.corp.amazon.com (HELO email-inbound-relay-1e-303d0b0e.us-east-1.amazon.com) ([10.47.23.38])
+  by smtp-border-fw-out-33001.sea14.amazon.com with ESMTP; 20 Feb 2020 07:38:50 +0000
+Received: from EX13MTAUEA002.ant.amazon.com (iad55-ws-svc-p15-lb9-vlan3.iad.amazon.com [10.40.159.166])
+        by email-inbound-relay-1e-303d0b0e.us-east-1.amazon.com (Postfix) with ESMTPS id D2639A3168;
+        Thu, 20 Feb 2020 07:38:48 +0000 (UTC)
+Received: from EX13D31EUA001.ant.amazon.com (10.43.165.15) by
+ EX13MTAUEA002.ant.amazon.com (10.43.61.77) with Microsoft SMTP Server (TLS)
+ id 15.0.1236.3; Thu, 20 Feb 2020 07:38:48 +0000
+Received: from u886c93fd17d25d.ant.amazon.com (10.43.161.235) by
+ EX13D31EUA001.ant.amazon.com (10.43.165.15) with Microsoft SMTP Server (TLS)
+ id 15.0.1367.3; Thu, 20 Feb 2020 07:38:44 +0000
+From:   SeongJae Park <sjpark@amazon.com>
+To:     Brendan Higgins <brendanhiggins@google.com>
+CC:     SeongJae Park <sjpark@amazon.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        SeongJae Park <sjpark@amazon.de>
+Subject: Re: Re: [PATCH] docs/kunit/start: Use '_KUNIT_TEST' config name suffix
+Date:   Thu, 20 Feb 2020 08:38:29 +0100
+Message-ID: <20200220073829.18382-1-sjpark@amazon.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <CAFd5g444shArgbdwaCdM3VBb9c7M1s7BJ5Dho7KEBU_fCsaJOw@mail.gmail.com> (raw)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.43.161.235]
+X-ClientProxiedBy: EX13D24UWB003.ant.amazon.com (10.43.161.222) To
+ EX13D31EUA001.ant.amazon.com (10.43.165.15)
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Commit 852c8cbf34d3 ("selftests/kselftest/runner.sh: Add 45 second
-timeout per test") added a 45 second timeout for tests, and also added
-a way for tests to customise the timeout via a settings file.
+On Wed, 19 Feb 2020 14:16:03 -0800 Brendan Higgins <brendanhiggins@google.com> wrote:
 
-For example the ftrace tests take multiple minutes to run, so they
-were given longer in commit b43e78f65b1d ("tracing/selftests: Turn off
-timeout setting").
+> Sorry, I didn't see this until now.
 
-This works when the tests are run from the source tree. However if the
-tests are installed with "make -C tools/testing/selftests install",
-the settings files are not copied into the install directory. When the
-tests are then run from the install directory the longer timeouts are
-not applied and the tests timeout incorrectly.
+Even I also almost forgot this.
 
-So add the settings files to TEST_FILES of the appropriate Makefiles
-to cause the settings files to be installed using the existing install
-logic.
+> 
+> On Mon, Jan 27, 2020 at 7:32 AM <sjpark@amazon.com> wrote:
+> >
+> > From: SeongJae Park <sjpark@amazon.de>
+> >
+> > It is recommended to use '_KUNIT_TEST' config name suffix for kunit
+> > tests but the example is using only '_TEST' suffix.  This commit fixes
+> > it to also use '_KUNIT_TEST' suffix.
+> >
+> > Signed-off-by: SeongJae Park <sjpark@amazon.de>
+> 
+> Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
 
-Fixes: 852c8cbf34d3 ("selftests/kselftest/runner.sh: Add 45 second timeout per test")
-Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
----
- tools/testing/selftests/ftrace/Makefile    | 2 +-
- tools/testing/selftests/livepatch/Makefile | 2 ++
- tools/testing/selftests/net/mptcp/Makefile | 2 ++
- tools/testing/selftests/rseq/Makefile      | 2 ++
- tools/testing/selftests/rtc/Makefile       | 2 ++
- 5 files changed, 9 insertions(+), 1 deletion(-)
+Thanks for finding this! :D
 
-diff --git a/tools/testing/selftests/ftrace/Makefile b/tools/testing/selftests/ftrace/Makefile
-index cd1f5b3a7774..d6e106fbce11 100644
---- a/tools/testing/selftests/ftrace/Makefile
-+++ b/tools/testing/selftests/ftrace/Makefile
-@@ -2,7 +2,7 @@
- all:
- 
- TEST_PROGS := ftracetest
--TEST_FILES := test.d
-+TEST_FILES := test.d settings
- EXTRA_CLEAN := $(OUTPUT)/logs/*
- 
- include ../lib.mk
-diff --git a/tools/testing/selftests/livepatch/Makefile b/tools/testing/selftests/livepatch/Makefile
-index 3876d8d62494..1acc9e1fa3fb 100644
---- a/tools/testing/selftests/livepatch/Makefile
-+++ b/tools/testing/selftests/livepatch/Makefile
-@@ -8,4 +8,6 @@ TEST_PROGS := \
- 	test-state.sh \
- 	test-ftrace.sh
- 
-+TEST_FILES := settings
-+
- include ../lib.mk
-diff --git a/tools/testing/selftests/net/mptcp/Makefile b/tools/testing/selftests/net/mptcp/Makefile
-index 93de52016dde..ba450e62dc5b 100644
---- a/tools/testing/selftests/net/mptcp/Makefile
-+++ b/tools/testing/selftests/net/mptcp/Makefile
-@@ -8,6 +8,8 @@ TEST_PROGS := mptcp_connect.sh
- 
- TEST_GEN_FILES = mptcp_connect
- 
-+TEST_FILES := settings
-+
- EXTRA_CLEAN := *.pcap
- 
- include ../../lib.mk
-diff --git a/tools/testing/selftests/rseq/Makefile b/tools/testing/selftests/rseq/Makefile
-index d6469535630a..f1053630bb6f 100644
---- a/tools/testing/selftests/rseq/Makefile
-+++ b/tools/testing/selftests/rseq/Makefile
-@@ -19,6 +19,8 @@ TEST_GEN_PROGS_EXTENDED = librseq.so
- 
- TEST_PROGS = run_param_test.sh
- 
-+TEST_FILES := settings
-+
- include ../lib.mk
- 
- $(OUTPUT)/librseq.so: rseq.c rseq.h rseq-*.h
-diff --git a/tools/testing/selftests/rtc/Makefile b/tools/testing/selftests/rtc/Makefile
-index de9c8566672a..90fa1a346908 100644
---- a/tools/testing/selftests/rtc/Makefile
-+++ b/tools/testing/selftests/rtc/Makefile
-@@ -6,4 +6,6 @@ TEST_GEN_PROGS = rtctest
- 
- TEST_GEN_PROGS_EXTENDED = setdate
- 
-+TEST_FILES := settings
-+
- include ../lib.mk
--- 
-2.21.1
 
+Thanks,
+SeongJae Park
+
+> 
+> Thanks!
+> 
