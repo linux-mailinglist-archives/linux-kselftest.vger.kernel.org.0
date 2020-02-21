@@ -2,51 +2,51 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DB907167C02
-	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Feb 2020 12:28:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BF0C167C10
+	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Feb 2020 12:29:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726940AbgBUL2Z (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 21 Feb 2020 06:28:25 -0500
-Received: from mail-wr1-f65.google.com ([209.85.221.65]:33717 "EHLO
-        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727513AbgBUL2Z (ORCPT
+        id S1728086AbgBUL2w (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 21 Feb 2020 06:28:52 -0500
+Received: from mail-wm1-f67.google.com ([209.85.128.67]:36951 "EHLO
+        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728003AbgBUL2v (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 21 Feb 2020 06:28:25 -0500
-Received: by mail-wr1-f65.google.com with SMTP id u6so1652968wrt.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 21 Feb 2020 03:28:23 -0800 (PST)
+        Fri, 21 Feb 2020 06:28:51 -0500
+Received: by mail-wm1-f67.google.com with SMTP id a6so1400455wme.2
+        for <linux-kselftest@vger.kernel.org>; Fri, 21 Feb 2020 03:28:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=isovalent-com.20150623.gappssmtp.com; s=20150623;
         h=subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=MmlIuWAhG574pRgwa2zTd9boc50vLeKyqoHfRi2itEU=;
-        b=YKUQdaBbggWW6llIQTJxlrtrnqsyXplrQDdDUNJHbpsAcIB2ml073JtDPuknhQ25To
-         X0b0jh80UPZ/YXbi4B9Z6xzv5bBYVs7tD7nmc21q7a3Qx4I7xvpCaImxvIJTVXVRUpAq
-         MVS+AHVq75/Ph0hOQn/jL6c1nIqYtCerq5Vsa+etZY0Dz5ALh1MjY4u90FvIyG95n4xv
-         uPD+hTWmiMAdgIOgGxjRP7fLYcHQ5IbxY+zYZkYRrAm1+4cYzHKA9ZPodJthRM5Am/H2
-         T8HXJVqxfhVAU4kPyU1/hCmw5fFW2vHAG5vhUoG1QNoHN6meJjBBPC8c0DJXPQNDzwrj
-         uiNg==
+        bh=nIJB+5DpBUi88nWZ4SVTkykQyY+2jcMAkIig0VNlc6s=;
+        b=qTwp+puXQqiQC54kHUq1ahH6bfGourCCayrCIrqHRMv7jdsHXMmnrwnACDjwACGKR7
+         M7YK9kbzwhDVODTLHKPLBKeDcwCayYPWkAFX5F4SQAUeyGP2GmCRL5wxyHm5t/pcKlNv
+         tBRAfbE1166baDd8iM/yGQM7yiZwGX52A3diiF7R8y2HCbk2olaMg4QTrYUw14FWQ/Dn
+         kBq/bpvJRdFesm2sMd2va3fdgWG8Uu3uEgafha3XfWeOw1pAxrj7T5lgCBFpmCtnba8m
+         tlY3qF48lTvUdIWxYflGK1ULzpmYJF1dLyscM/y4nc4ExmKz5FBWwUmqzQtVoXPrLJK9
+         NsVA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=MmlIuWAhG574pRgwa2zTd9boc50vLeKyqoHfRi2itEU=;
-        b=ughQfVULh89JMbstZzbtWlAEh+Db6CVS4NQkjv/rczUTIyptQN7FphCMMrN/J8jgHw
-         Z099oNoM2T4BdzZDhF8X21rYusOA2a24fxUWkfggnJkapfreAiirpwgKvJnpb87dSzFJ
-         dyrC/soDpClmwPWT8rPyXvWT2oGT3JGkttI5J4jI2mcRhXr0rmR0NUHrJxNcmR9Zlf5B
-         R29ZjRJMfz0c3OufGg00OX9ujh3omX0AajYjf0wqzfMEGq40qHbJqCHMKTQa9zmDlDQM
-         SbxJW+hLdP4h/3oyeFqyPvTpWYcKL8DVsVt/8bD26b1X1pMAOaDFeIow+zy2l7nnKSOr
-         c40w==
-X-Gm-Message-State: APjAAAUb0bSqO/0DJChjlSTv3WdD0GcFeWdW7aJbIGXi964/Q0EYxanm
-        BF8MiexkV9iye9SiBjigjrF35y1cJcCqdg==
-X-Google-Smtp-Source: APXvYqxlRq13BDDwBEWuDJjB0z/6G0z+UyZMu7ABeU3PZHVzjkvsXbK8jMbIsdAUZkjltC03HpdAbw==
-X-Received: by 2002:a05:6000:1206:: with SMTP id e6mr21158926wrx.410.1582284502523;
-        Fri, 21 Feb 2020 03:28:22 -0800 (PST)
+        bh=nIJB+5DpBUi88nWZ4SVTkykQyY+2jcMAkIig0VNlc6s=;
+        b=FCVFp/4opEUI3CtkAPxveEiJ2d3gnj7hd5urpB5gKNp/7oXHO8MzcC12XGrI9a7173
+         tw5N0A8+rQki58tpYMh7sRfPRvovZi3FriYaKDIHhrOTrD87EFdy0Uoef7Vjr3rKmWa5
+         3B6rn30dthPjC4+rSIUj5Riw6pQYVfPRgokBwkjfSiN30U4a2OlQ8WLSqfxBLH1jHceI
+         iYC6uJOunSSRFALseQHs9geEq+n8bpZqdvaWP4/2LMBx8tRyHA3RouVKh+u4HVcHgK7M
+         2OYycXqVbZgbgbVxkXgJkSFC+zTyTSgrdqwAaTTnGpPTHZwaiCKWea2bBWea2GaPL6Gl
+         F5xA==
+X-Gm-Message-State: APjAAAWfnXJAbXt852OUyfXIRcufL9napSCO1ksTVVWDnfA5YWzrA0mm
+        8uDzoKTrPs9JskD87rMiVPODHuB5KvEAxw==
+X-Google-Smtp-Source: APXvYqwfUTqCjr/7H7whH56UlENRZJMz5zurvouE7WaITAABdxQphGipuCaJFyXJ6P/EyPMUbVtsew==
+X-Received: by 2002:a7b:c216:: with SMTP id x22mr3343710wmi.51.1582284529590;
+        Fri, 21 Feb 2020 03:28:49 -0800 (PST)
 Received: from [192.168.1.23] ([91.143.66.155])
-        by smtp.gmail.com with ESMTPSA id a13sm3591825wrp.93.2020.02.21.03.28.21
+        by smtp.gmail.com with ESMTPSA id g15sm3646544wro.65.2020.02.21.03.28.48
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 21 Feb 2020 03:28:22 -0800 (PST)
-Subject: Re: [PATCH bpf-next v2 3/5] bpftool: Update documentation of "bpftool
+        Fri, 21 Feb 2020 03:28:48 -0800 (PST)
+Subject: Re: [PATCH bpf-next v2 5/5] selftests/bpf: Add test for "bpftool
  feature" command
 To:     Michal Rostecki <mrostecki@opensuse.org>, bpf@vger.kernel.org
 Cc:     Alexei Starovoitov <ast@kernel.org>,
@@ -54,19 +54,23 @@ Cc:     Alexei Starovoitov <ast@kernel.org>,
         Martin KaFai Lau <kafai@fb.com>,
         Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
         Andrii Nakryiko <andriin@fb.com>,
+        Quentin Monnet <quentin.monnet@netronome.com>,
         Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
         linux-kernel@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
         "open list:KERNEL SELFTEST FRAMEWORK" 
         <linux-kselftest@vger.kernel.org>
 References: <20200221031702.25292-1-mrostecki@opensuse.org>
- <20200221031702.25292-4-mrostecki@opensuse.org>
+ <20200221031702.25292-6-mrostecki@opensuse.org>
 From:   Quentin Monnet <quentin@isovalent.com>
-Message-ID: <85e7fcf3-0ad3-28e3-ef6f-a19669fd6c7f@isovalent.com>
-Date:   Fri, 21 Feb 2020 11:28:21 +0000
+Message-ID: <d178dc6c-7696-8e58-9df9-887152104a1c@isovalent.com>
+Date:   Fri, 21 Feb 2020 11:28:47 +0000
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.5.0
 MIME-Version: 1.0
-In-Reply-To: <20200221031702.25292-4-mrostecki@opensuse.org>
+In-Reply-To: <20200221031702.25292-6-mrostecki@opensuse.org>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-GB
 Content-Transfer-Encoding: 7bit
@@ -75,72 +79,318 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-2020-02-21 04:16 UTC+0100 ~ Michal Rostecki <mrostecki@opensuse.org>
-> Update documentation of "bpftool feature" command with information about
-> new arguments: "full".
+2020-02-21 04:17 UTC+0100 ~ Michal Rostecki <mrostecki@opensuse.org>
+> Add Python module with tests for "bpftool feature" command, which mainly
+> wheck whether the "full" option is working properly.
 > 
 > Signed-off-by: Michal Rostecki <mrostecki@opensuse.org>
 > ---
->   .../bpf/bpftool/Documentation/bpftool-feature.rst | 15 ++++++++++-----
->   1 file changed, 10 insertions(+), 5 deletions(-)
+>   tools/testing/selftests/.gitignore          |   5 +-
+>   tools/testing/selftests/bpf/Makefile        |   3 +-
+>   tools/testing/selftests/bpf/test_bpftool.py | 228 ++++++++++++++++++++
+>   tools/testing/selftests/bpf/test_bpftool.sh |   5 +
+>   4 files changed, 239 insertions(+), 2 deletions(-)
+>   create mode 100644 tools/testing/selftests/bpf/test_bpftool.py
+>   create mode 100755 tools/testing/selftests/bpf/test_bpftool.sh
 > 
-> diff --git a/tools/bpf/bpftool/Documentation/bpftool-feature.rst b/tools/bpf/bpftool/Documentation/bpftool-feature.rst
-> index 4d08f35034a2..2e8f66ee1e77 100644
-> --- a/tools/bpf/bpftool/Documentation/bpftool-feature.rst
-> +++ b/tools/bpf/bpftool/Documentation/bpftool-feature.rst
-> @@ -19,19 +19,24 @@ SYNOPSIS
->   FEATURE COMMANDS
->   ================
->   
-> -|	**bpftool** **feature probe** [*COMPONENT*] [**macros** [**prefix** *PREFIX*]]
-> +|	**bpftool** **feature probe** [*COMPONENT*] [**full**] [**macros** [**prefix** *PREFIX*]]
->   |	**bpftool** **feature help**
->   |
->   |	*COMPONENT* := { **kernel** | **dev** *NAME* }
->   
->   DESCRIPTION
->   ===========
-> -	**bpftool feature probe** [**kernel**] [**macros** [**prefix** *PREFIX*]]
-> +	**bpftool feature probe** [**kernel**] [**full**] [**macros** [**prefix** *PREFIX*]]
->   		  Probe the running kernel and dump a number of eBPF-related
->   		  parameters, such as availability of the **bpf()** system call,
->   		  JIT status, eBPF program types availability, eBPF helper
->   		  functions availability, and more.
->   
-> +		  By default, bpftool does not run probes for
-> +		  bpf_probe_write_user and bpf_trace_printk helpers which emit
-
-Please use formatting on helper function names, for readability and 
-consistency.
-
-I would even be tempted to highlight part or all of the sentence, with 
-caps or bold, as some users may be surprised not to see those helpers in 
-the list of available helpers on their system.
-
-> +		  dmesg warnings. To enable them and run all probes, the
-> +		  **full** keyword should be used.
+> diff --git a/tools/testing/selftests/.gitignore b/tools/testing/selftests/.gitignore
+> index 61df01cdf0b2..304fdf1a21dc 100644
+> --- a/tools/testing/selftests/.gitignore
+> +++ b/tools/testing/selftests/.gitignore
+> @@ -3,4 +3,7 @@ gpiogpio-hammer
+>   gpioinclude/
+>   gpiolsgpio
+>   tpm2/SpaceTest.log
+> -tpm2/*.pyc
 > +
->   		  If the **macros** keyword (but not the **-j** option) is
->   		  passed, a subset of the output is dumped as a list of
->   		  **#define** macros that are ready to be included in a C
-> @@ -48,12 +53,12 @@ DESCRIPTION
->   		  **bpf_trace_printk**\ () or **bpf_probe_write_user**\ ()) may
->   		  print warnings to kernel logs.
+> +# Python bytecode and cache
+> +__pycache__/
+> +*.py[cod]
+> diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+> index 257a1aaaa37d..e7d822259c50 100644
+> --- a/tools/testing/selftests/bpf/Makefile
+> +++ b/tools/testing/selftests/bpf/Makefile
+> @@ -62,7 +62,8 @@ TEST_PROGS := test_kmod.sh \
+>   	test_tc_tunnel.sh \
+>   	test_tc_edt.sh \
+>   	test_xdping.sh \
+> -	test_bpftool_build.sh
+> +	test_bpftool_build.sh \
+> +	test_bpftool.sh
+>   
+>   TEST_PROGS_EXTENDED := with_addr.sh \
+>   	with_tunnels.sh \
+> diff --git a/tools/testing/selftests/bpf/test_bpftool.py b/tools/testing/selftests/bpf/test_bpftool.py
+> new file mode 100644
+> index 000000000000..7f545feaec98
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/test_bpftool.py
+> @@ -0,0 +1,228 @@
+> +# Copyright (c) 2020 SUSE LLC.
+> +#
+> +# This software is licensed under the GNU General License Version 2,
+> +# June 1991 as shown in the file COPYING in the top-level directory of this
+> +# source tree.
+> +#
+> +# THE COPYRIGHT HOLDERS AND/OR OTHER PARTIES PROVIDE THE PROGRAM "AS IS"
+> +# WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+> +# BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
+> +# FOR A PARTICULAR PURPOSE. THE ENTIRE RISK AS TO THE QUALITY AND PERFORMANCE
+> +# OF THE PROGRAM IS WITH YOU. SHOULD THE PROGRAM PROVE DEFECTIVE, YOU ASSUME
+> +# THE COST OF ALL NECESSARY SERVICING, REPAIR OR CORRECTION.
 
-This should maybe be moved upwards and combined with your new paragraph?
+SPDX tag instead of boilerplate?
 
->   
-> -	**bpftool feature probe dev** *NAME* [**macros** [**prefix** *PREFIX*]]
-> +	**bpftool feature probe dev** *NAME* [**full**] [**macros** [**prefix** *PREFIX*]]
->   		  Probe network device for supported eBPF features and dump
->   		  results to the console.
->   
-> -		  The two keywords **macros** and **prefix** have the same
-> -		  role as when probing the kernel.
-> +		  The keywords **full**, **macros** and **prefix** have the
-> +		  same role as when probing the kernel.
->   
->   	**bpftool feature help**
->   		  Print short help message.
+> +
+> +import collections
+> +import functools
+> +import json
+> +import os
+> +import socket
+> +import subprocess
+> +import unittest
+> +
+> +
+> +# Add the source tree of bpftool and /usr/local/sbin to PATH
+> +cur_dir = os.path.dirname(os.path.realpath(__file__))
+> +bpftool_dir = os.path.abspath(os.path.join(cur_dir, "..", "..", "..", "..",
+> +                                           "tools", "bpf", "bpftool"))
+> +os.environ["PATH"] = bpftool_dir + ":/usr/local/sbin:" + os.environ["PATH"]
+> +
+> +# Probe sections
+> +SECTION_SYSTEM_CONFIG_PATTERN = b"Scanning system configuration..."
+> +SECTION_SYSCALL_CONFIG_PATTERN = b"Scanning system call availability..."
+> +SECTION_PROGRAM_TYPES_PATTERN = b"Scanning eBPF program types..."
+> +SECTION_MAP_TYPES_PATTERN = b"Scanning eBPF map types..."
+> +SECTION_HELPERS_PATTERN = b"Scanning eBPF helper functions..."
+> +SECTION_MISC_PATTERN = b"Scanning miscellaneous eBPF features..."
+> +
+> +
+> +class IfaceNotFoundError(Exception):
+> +    pass
+> +
+> +
+> +class UnprivilegedUserError(Exception):
+> +    pass
+> +
+> +
+> +def _bpftool(args, json=True):
+> +    _args = ["bpftool"]
+> +    if json:
+> +        _args.append("-j")
+> +    _args.extend(args)
+> +
+> +    res = subprocess.run(_args, capture_output=True)
+> +    return res.stdout
+> +
+> +
+> +def bpftool(args):
+> +    return _bpftool(args, json=False)
+> +
+> +
+> +def bpftool_json(args):
+> +    res = _bpftool(args)
+> +    return json.loads(res)
+> +
+> +
+> +def get_default_iface():
+> +    for iface in socket.if_nameindex():
+> +        if iface[1] != "lo":
+> +            return iface[1]
+> +    raise IfaceNotFoundError("Could not find any network interface to probe")
+> +
+> +
+> +def default_iface(f):
+> +    @functools.wraps(f)
+> +    def wrapper(*args, **kwargs):
+> +        iface = get_default_iface()
+> +        return f(*args, iface, **kwargs)
+> +    return wrapper
+> +
+> +
+> +class TestBpftool(unittest.TestCase):
+> +    @classmethod
+> +    def setUpClass(cls):
+> +        if os.getuid() != 0:
+> +            raise UnprivilegedUserError("This test suite eeeds root privileges")
+
+Typo: eeeds
+
+> +
+> +    def _assert_pattern_not_in_dict(self, dct, pattern, check_keys=False):
+> +        """Check if all string values inside dictionary do not containe the
+
+Typo: containe
+
+> +        given pattern.
+> +        """
+> +        for key, value in dct.items():
+> +            if check_keys:
+> +                self.assertNotIn(pattern, key)
+> +            if isinstance(value, dict):
+> +                self._assert_pattern_not_in_dict(value, pattern,
+> +                                                 check_keys=True)
+> +            elif isinstance(value, str):
+> +                self.assertNotIn(pattern, value)
+> +
+> +    @default_iface
+> +    def test_feature_dev(self, iface):
+> +        expected_patterns = [
+> +            SECTION_SYSCALL_CONFIG_PATTERN,
+> +            SECTION_PROGRAM_TYPES_PATTERN,
+> +            SECTION_MAP_TYPES_PATTERN,
+> +            SECTION_HELPERS_PATTERN,
+> +            SECTION_MISC_PATTERN,
+> +        ]
+
+Mixed feeling on the tests with plain output, as we keep telling people 
+that plain output should not be parsed (not reliable, may change). But 
+if you want to run one or two tests with it, why not, I guess.
+
+> +        unexpected_patterns = [
+> +            b"bpf_trace_printk",
+> +            b"bpf_probe_write_user",
+> +        ]
+> +
+> +        res = bpftool(["feature", "probe", "dev", iface])
+> +        for pattern in expected_patterns:
+> +            self.assertIn(pattern, res)
+> +        for pattern in unexpected_patterns:
+> +            self.assertNotIn(pattern, res)
+> +
+> +    @default_iface
+> +    def test_feature_dev_json(self, iface):
+> +        expected_keys = [
+> +            "syscall_config",
+> +            "program_types",
+> +            "map_types",
+> +            "helpers",
+> +            "misc",
+> +        ]
+> +        unexpected_values = [
+> +            "bpf_trace_printk",
+> +            "bpf_probe_write_user",
+> +        ]
+> +
+> +        res = bpftool_json(["feature", "probe", "dev", iface])
+> +        self.assertCountEqual(res.keys(), expected_keys)
+> +        for value in unexpected_values:
+> +            self._assert_pattern_not_in_dict(res, value)
+> +
+> +    def test_feature_kernel(self):
+> +        expected_patterns = [
+> +            SECTION_SYSTEM_CONFIG_PATTERN,
+> +            SECTION_SYSCALL_CONFIG_PATTERN,
+> +            SECTION_PROGRAM_TYPES_PATTERN,
+> +            SECTION_MAP_TYPES_PATTERN,
+> +            SECTION_HELPERS_PATTERN,
+> +            SECTION_MISC_PATTERN,
+> +        ]
+> +        unexpected_patterns = [
+> +            b"bpf_trace_printk",
+> +            b"bpf_probe_write_user",
+> +        ]
+> +
+> +        res_default1 = bpftool(["feature"])
+> +        res_default2 = bpftool(["feature", "probe"])
+> +        res = bpftool(["feature", "probe", "kernel"])
+> +
+> +        for pattern in expected_patterns:
+> +            self.assertIn(pattern, res_default1)
+> +            self.assertIn(pattern, res_default2)
+> +            self.assertIn(pattern, res)
+> +        for pattern in unexpected_patterns:
+> +            self.assertNotIn(pattern, res_default1)
+> +            self.assertNotIn(pattern, res_default2)
+> +            self.assertNotIn(pattern, res)
+> +
+> +    def test_feature_kernel_full(self):
+> +        expected_patterns = [
+> +            SECTION_SYSTEM_CONFIG_PATTERN,
+> +            SECTION_SYSCALL_CONFIG_PATTERN,
+> +            SECTION_PROGRAM_TYPES_PATTERN,
+> +            SECTION_MAP_TYPES_PATTERN,
+> +            SECTION_HELPERS_PATTERN,
+> +            SECTION_MISC_PATTERN,
+> +            b"bpf_trace_printk",
+> +            b"bpf_probe_write_user",
+> +        ]
+
+However, if you do just one test for "kernel full", please favour JSON 
+over plain output.
+
+> +
+> +        res_default = bpftool(["feature", "probe", "full"])
+> +        res = bpftool(["feature", "probe", "kernel", "full"])
+> +
+> +        for pattern in expected_patterns:
+> +            self.assertIn(pattern, res_default)
+> +            self.assertIn(pattern, res)
+> +
+> +    def test_feature_kernel_json(self):
+> +        expected_keys = [
+> +            "system_config",
+> +            "syscall_config",
+> +            "program_types",
+> +            "map_types",
+> +            "helpers",
+> +            "misc",
+> +        ]
+> +        unexpected_values = [
+> +            "bpf_trace_printk",
+> +            "bpf_probe_write_user",
+> +        ]
+> +
+> +        res_default1 = bpftool_json(["feature"])
+> +        self.assertCountEqual(res_default1.keys(), expected_keys)
+> +        for value in unexpected_values:
+> +            self._assert_pattern_not_in_dict(res_default1, value)
+> +
+> +        res_default2 = bpftool_json(["feature", "probe"])
+> +        self.assertCountEqual(res_default2.keys(), expected_keys)
+> +        for value in unexpected_values:
+> +            self._assert_pattern_not_in_dict(res_default2, value)
+> +
+> +        res = bpftool_json(["feature", "probe", "kernel"])
+> +        self.assertCountEqual(res.keys(), expected_keys)
+> +        for value in unexpected_values:
+> +            self._assert_pattern_not_in_dict(res, value)
+> +
+> +    def test_feature_macros(self):
+> +        expected_patterns = [
+> +            b"/\*\*\* System call availability \*\*\*/",
+> +            b"#define HAVE_BPF_SYSCALL",
+> +            b"/\*\*\* eBPF program types \*\*\*/",
+> +            b"#define HAVE.*PROG_TYPE",
+> +            b"/\*\*\* eBPF map types \*\*\*/",
+> +            b"#define HAVE.*MAP_TYPE",
+> +            b"/\*\*\* eBPF helper functions \*\*\*/",
+> +            b"#define HAVE.*HELPER",
+> +            b"/\*\*\* eBPF misc features \*\*\*/",
+> +        ]
+> +
+> +        res = bpftool(["feature", "probe", "macros"])
+> +        for pattern in expected_patterns:
+> +            self.assertRegex(res, pattern)
+
+Could we have (or did I miss it?) a test that compares the output of 
+probes _with_ "full" and _without_ it, to make sure that the only lines 
+that differ are about "bpf_trace_prink" or "bpf_probe_write_user"? Could 
+help determine if we filter out too many elements by mistake.
+
+Thanks,
+Quentin
+
+> diff --git a/tools/testing/selftests/bpf/test_bpftool.sh b/tools/testing/selftests/bpf/test_bpftool.sh
+> new file mode 100755
+> index 000000000000..66690778e36d
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/test_bpftool.sh
+> @@ -0,0 +1,5 @@
+> +#!/bin/bash
+> +# SPDX-License-Identifier: GPL-2.0
+> +# Copyright (c) 2020 SUSE LLC.
+> +
+> +python3 -m unittest -v test_bpftool.TestBpftool
 > 
 
