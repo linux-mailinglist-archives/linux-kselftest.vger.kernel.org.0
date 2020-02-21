@@ -2,53 +2,51 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5181B168661
-	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Feb 2020 19:23:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F01D1686A3
+	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Feb 2020 19:28:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729305AbgBUSXf (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 21 Feb 2020 13:23:35 -0500
-Received: from mail-wm1-f68.google.com ([209.85.128.68]:53000 "EHLO
-        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726150AbgBUSXd (ORCPT
+        id S1729355AbgBUS2G (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 21 Feb 2020 13:28:06 -0500
+Received: from mail-wm1-f67.google.com ([209.85.128.67]:38992 "EHLO
+        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726408AbgBUS2G (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 21 Feb 2020 13:23:33 -0500
-Received: by mail-wm1-f68.google.com with SMTP id p9so2761696wmc.2
-        for <linux-kselftest@vger.kernel.org>; Fri, 21 Feb 2020 10:23:32 -0800 (PST)
+        Fri, 21 Feb 2020 13:28:06 -0500
+Received: by mail-wm1-f67.google.com with SMTP id c84so2917947wme.4
+        for <linux-kselftest@vger.kernel.org>; Fri, 21 Feb 2020 10:28:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=broadcom.com; s=google;
         h=subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-transfer-encoding:content-language;
-        bh=el0ksJbOaCzUgbQQlOdxCAczDgGJZ08IsAkqI71psIE=;
-        b=JJd2icL1qjAUrXOYho8MTDEJu+K4IobYWsBZeg0w/qRU4Rs1SfWnWRv0Vo09VjqD8X
-         UUdtVwRy2eNM7ZZ5gGp5d4+KME3tnAciw2KQZWZ+H1lGcdWYIXyOYQR/ziz5xaGCD19L
-         gwVfS8Z2Eij1tCyGwa+maXTsvzgfh9scgHCfk=
+        bh=+l+qFonj7f23vQK1lgbHd1m+mxJ9Bc4ZwbsX0TJ5N0A=;
+        b=CaS40LxDMt/ExdrwPwyWY3fN1LS8vl8hcd5kz/nwtaebYodzStTnGMe0zFCahsWxOn
+         Um10s9pqVHZXW8yMsepx4FWtH05k5Ak6u7RP4eS6oEwSrKt3a2ZVWQ3T4h7jJypjmdL7
+         4qlT6Q0Df5pKVD1NMnB4+HRM0RyeUZ6TQkf5A=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-transfer-encoding
          :content-language;
-        bh=el0ksJbOaCzUgbQQlOdxCAczDgGJZ08IsAkqI71psIE=;
-        b=Wczkg6Fq5uEEQ58rEwid348d4CtTa6ovPaWDLOTwrqzRVjfws6VC4VZ/KXelnHUHv0
-         LeEbe1NrgCdWk+/t+U7ZDqY3fP94IWQDe6N1D+UQmRwe+ZgTilfnLz+aIMK/P4uaYE9V
-         FiqZ+Vk6rKqnm7mJZzsta+zXt3hS7t6QyHc6l6GYx+rhMaV7Be8i6la5nA3gSm+9SIeI
-         KLbcRv/M14F/E7loOXwvRhI/7hjBMgbOLU3KKM3nWYt45RrqMXYEDotyAkyclUe9TTT+
-         RLB6ohyef/pFowaRMg+n0O1fjqy7in46Msqp1d6wxvtPh48EBH1sK5X4F3PNgwiOuUhP
-         xlsw==
-X-Gm-Message-State: APjAAAUVlvGXV1wz0cxuv0ck5vHkzR2RQLHWdsVeQq+TiBkaOMWGklUQ
-        zqJQSjslaRtGJdsMYOxhJjD9UJuJQe9gVl3DUCL6Xp93kq1nwJi7pQT7pH+uj//ypRjH/wKLcvU
-        N3gw+2MaNoeRGoovbK30X4pEw8sU7CzT/pSmPJIsk+BXsgDzHgeupambKY7A9ByHt0QzBwdfu8t
-        wtWpT4bsAtTgRxE1g=
-X-Google-Smtp-Source: APXvYqx4zkQNTAzHsaS1HJ4Q9vOk7i7H0fXR5nL1AHhodIvw7c+ts75n1DYhqiJupD1CUbSs1LvWGQ==
-X-Received: by 2002:a1c:f713:: with SMTP id v19mr4959041wmh.113.1582309410725;
-        Fri, 21 Feb 2020 10:23:30 -0800 (PST)
+        bh=+l+qFonj7f23vQK1lgbHd1m+mxJ9Bc4ZwbsX0TJ5N0A=;
+        b=lmnXTBlscy6IiEwOf1len37qopS6F45tiRdLUAu02WPoVa+CMjRubGyKG9DMA7W9SV
+         JjigihmllvUT807XX5P8gKNIGmAIdvGXu31RdAobYCJnBNhy31S9N4dTvvoCMbxTvo6c
+         S0KYGUEdXylFI71RNv4UEzAj8JOe6RRKmAteLi8shm8H7NKgRlr7/VKHHhx2TJYgFR0W
+         14bboCzZDcn+RJvNdIM2YXm7kxPZc5rj6eJANE1+4SjND4cMedALeRYLXhXKdNBZu/fx
+         1oJ+jnE3gB8Uh/Qyitg2NWQH3CAiW8yAAvd0KY+dO+mmkMOHFzCIf8TV2XrP790xKlHS
+         RHeA==
+X-Gm-Message-State: APjAAAUC/NdfOYCPdlgX6mw5DX4KM4MHA9bt6hnzpEwGn8O5P8rg+ta5
+        75FQ2yrlQYu0URy1pX86SYbBmQ==
+X-Google-Smtp-Source: APXvYqzTYqf6p2n3M1EPoZeZQmQ0OhQ2/tZGFDSlGLsM8NFmoMrT5Q0l+CXBdKbPHTsEaq54HF6FWQ==
+X-Received: by 2002:a7b:c216:: with SMTP id x22mr5287800wmi.51.1582309684109;
+        Fri, 21 Feb 2020 10:28:04 -0800 (PST)
 Received: from [10.136.13.65] ([192.19.228.250])
-        by smtp.gmail.com with ESMTPSA id f8sm4696963wru.12.2020.02.21.10.23.22
+        by smtp.gmail.com with ESMTPSA id 18sm4953110wmf.1.2020.02.21.10.27.57
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 21 Feb 2020 10:23:27 -0800 (PST)
-Subject: Re: [PATCH 2/7] firmware: add offset to request_firmware_into_buf
+        Fri, 21 Feb 2020 10:28:02 -0800 (PST)
+Subject: Re: [PATCH v2 5/7] bcm-vk: add bcm_vk UAPI
 To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Luis Chamberlain <mcgrof@kernel.org>, Takashi Iwai <tiwai@suse.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Luis Chamberlain <mcgrof@kernel.org>,
         David Brown <david.brown@linaro.org>,
         Alexander Viro <viro@zeniv.linux.org.uk>,
         Shuah Khan <shuah@kernel.org>,
@@ -64,26 +62,21 @@ Cc:     Luis Chamberlain <mcgrof@kernel.org>, Takashi Iwai <tiwai@suse.de>,
         Dan Carpenter <dan.carpenter@oracle.com>,
         Colin Ian King <colin.king@canonical.com>,
         Kees Cook <keescook@chromium.org>,
+        Takashi Iwai <tiwai@suse.de>,
         "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>
-References: <20190822192451.5983-1-scott.branden@broadcom.com>
- <20190822192451.5983-3-scott.branden@broadcom.com>
- <s5hef1crybq.wl-tiwai@suse.de>
- <10461fcf-9eca-32b6-0f9d-23c63b3f3442@broadcom.com>
- <s5hr258j6ln.wl-tiwai@suse.de>
- <93b8285a-e5eb-d4a4-545d-426bbbeb8008@broadcom.com>
- <s5ho90byhnv.wl-tiwai@suse.de>
- <b440f372-45be-c06c-94a1-44ae6b1e7eb8@broadcom.com>
- <s5hwoeyj3i5.wl-tiwai@suse.de> <20191011133120.GP16384@42.do-not-panic.com>
- <e65a3ba1-d064-96fe-077e-59bf8ffff377@broadcom.com>
- <CAK8P3a2NJurg_hxVbWYZwJVhYM5-xjWt12Kh0DdyfTGqQPrPAQ@mail.gmail.com>
+        <linux-kselftest@vger.kernel.org>, Andy Gross <agross@kernel.org>
+References: <20200220004825.23372-1-scott.branden@broadcom.com>
+ <20200220004825.23372-6-scott.branden@broadcom.com>
+ <20200220075045.GB3261162@kroah.com>
+ <030219dc-539a-a2db-5ab2-1de7336a811c@broadcom.com>
+ <CAK8P3a1v7S4Ma67vRyfSY=v9z9bt9ZrftOYhgYvsECWXykGTJg@mail.gmail.com>
 From:   Scott Branden <scott.branden@broadcom.com>
-Message-ID: <c3bf2985-78d3-ae98-a19d-a596f42a22ce@broadcom.com>
-Date:   Fri, 21 Feb 2020 10:23:21 -0800
+Message-ID: <ae33411a-23cb-6562-d57b-f40cba7f6503@broadcom.com>
+Date:   Fri, 21 Feb 2020 10:27:56 -0800
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.4.1
 MIME-Version: 1.0
-In-Reply-To: <CAK8P3a2NJurg_hxVbWYZwJVhYM5-xjWt12Kh0DdyfTGqQPrPAQ@mail.gmail.com>
+In-Reply-To: <CAK8P3a1v7S4Ma67vRyfSY=v9z9bt9ZrftOYhgYvsECWXykGTJg@mail.gmail.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
 Content-Language: en-US
@@ -94,40 +87,41 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 
 
-On 2020-02-21 12:44 a.m., Arnd Bergmann wrote:
-> On Fri, Feb 21, 2020 at 1:11 AM Scott Branden
+On 2020-02-21 12:34 a.m., Arnd Bergmann wrote:
+> On Fri, Feb 21, 2020 at 2:16 AM Scott Branden
 > <scott.branden@broadcom.com> wrote:
->> On 2019-10-11 6:31 a.m., Luis Chamberlain wrote:
->>> On Tue, Aug 27, 2019 at 12:40:02PM +0200, Takashi Iwai wrote:
->>>> On Mon, 26 Aug 2019 19:24:22 +0200,
->>>> Scott Branden wrote:
->>>>> I will admit I am not familiar with every subtlety of PCI
->>>>> accesses. Any comments to the Valkyrie driver in this patch series are
->>>>> appreciated.
->>>>> But not all drivers need to work on all architectures. I can add a
->>>>> depends on x86 64bit architectures to the driver to limit it to such.
->>>> But it's an individual board on PCIe, and should work no matter which
->>>> architecture is?  Or is this really exclusive to x86?
->>> Poke Scott.
->> Yes, this is exclusive to x86.
->> In particular, 64-bit x86 server class machines with PCIe gen3 support.
->> There is no reason for these PCIe boards to run in other lower end
->> machines or architectures.
-> It doesn't really matter that much what you expect your customers to
-> do with your product, or what works a particular machine today, drivers
-> should generally be written in a portable manner anyway and use
-> the documented APIs. memcpy() into an __iomem pointer is not
-> portable and while it probably works on any x86 machine today, please
-> just don't do it. If you use 'sparse' to check your code, that would normally
-> result in an address space warning, unless you add __force and a
-> long comment explaining why you cannot just use memcpy_to_io()
-> instead. At that point, you are already better off usingn memcpy_to_io() ;-)
-We don't want to allocate to intermediate memory and do another memcpy 
-just to write to pcie.
-I will have to look into the linux request_firmware_info_buf code and 
-detect whether the buf being request to is
-in kernel or io memory and perform the operation there.  Hopefully such 
-is possible.
+>
+>
+>>>> +struct vk_access {
+>>>> +    __u8 barno;     /* BAR number to use */
+>>>> +    __u8 type;      /* Type of access */
+>>>> +#define VK_ACCESS_READ 0
+>>>> +#define VK_ACCESS_WRITE 1
+>>>> +    __u32 len;      /* length of data */
+>>> Horrible padding issues, are you sure this all works properly?
+>> Haven't had any issues.
+>>>> +    __u64 offset;   /* offset in BAR */
+>>>> +    __u32 *data;    /* where to read/write data to */
+>>> Are you _SURE_ you want a pointer here?  How do you handle the compat
+>>> issues with 32/64 user/kernel space?
+>> Don't care about 32-bit user space for this driver.
+>> I don't think there isn't even enough memory in such systems for the
+>> number of streams of video buffers needed for transcoding.
+>> This driver is only used in high end 64-bit x86 servers.
+> Please see Documentation/core-api/ioctl.rst
+>
+> All ioctl interfaces should be written in a portable way that works with
+> compat user space and avoids all padding in order to not leak kernel
+> data into user space.
+>
+> If the driver is passing video buffers for transcoding, shouldn't the driver
+> use the existing drivers/media interfaces for that? If it needs features
+> that are not present there, they can probably be added.
+It doesn't utilize any media interfaces.  It is just an offload engine.  
+Really, it could be offloading anything.
+There is no infrastructure for other drivers in place that perform such 
+transcoding operations.
+Perhaps I shouldn't mention it is doing video in this driver.
 >
 >          Arnd
 
