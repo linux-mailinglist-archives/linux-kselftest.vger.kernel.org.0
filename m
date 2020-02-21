@@ -2,102 +2,120 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D94EF166B5F
-	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Feb 2020 01:14:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 19DFC166B67
+	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Feb 2020 01:16:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729441AbgBUAOW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 20 Feb 2020 19:14:22 -0500
-Received: from mail-pl1-f196.google.com ([209.85.214.196]:34909 "EHLO
-        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729436AbgBUAOW (ORCPT
+        id S1729439AbgBUAQE (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 20 Feb 2020 19:16:04 -0500
+Received: from mail-pj1-f65.google.com ([209.85.216.65]:33169 "EHLO
+        mail-pj1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729424AbgBUAQE (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 20 Feb 2020 19:14:22 -0500
-Received: by mail-pl1-f196.google.com with SMTP id g6so104976plt.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 20 Feb 2020 16:14:21 -0800 (PST)
+        Thu, 20 Feb 2020 19:16:04 -0500
+Received: by mail-pj1-f65.google.com with SMTP id m7so1625168pjs.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 20 Feb 2020 16:16:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-transfer-encoding:content-language;
-        bh=j9NfYN7oFcDu+7se145xCzZu7AyP4VVa9xyrU8e8kGg=;
-        b=XWxniDG1LOh43SJp7z2UJovq9YWn0rOeMwHcyEGODF0mipdAE2OM29lnoAol7jNm2k
-         GxF8H2F583pmx5hr+jvzunS+dWiBD7ZKqR0kswOHWmaIKeJ1zv2SoF3BHniIwkFFazT3
-         aHPsj7/ErkiG7rXIa1poz4II56IxQtU96xc+k=
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=bSOXy59NaxNEGkVUjyIUAzgGlKx0xSBMnajwRhUlBTg=;
+        b=oZBFAmZGwNpWsKFxlgvf0mX4lmV48p5sBFBFmkb2qY6JOGXSZchINliLWhfrC0TSPH
+         iXbmiJf/r0fGxptXI0Y1O+CIU1KGPjXLE+pqPw3xWLyGNqbzxhQ8vR5Bm1+ZWRNYo4xx
+         FjnYi/0OovC17X8MrsPBCFUf3oa4HURWyd09w=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=j9NfYN7oFcDu+7se145xCzZu7AyP4VVa9xyrU8e8kGg=;
-        b=NZSZac+9ABCH9X3iSC6jZJy0vnaaox/Dd1RxPVf4ECv8/+sGNS3SDbh5zDkVB9k5Wk
-         9GLCpJsE+zAHBS2zRhKGQe5LpPU+qHZl1nXDgHJhJ71U1dTJdrI0p2DXZJC0HJ5uba6B
-         NK2g9zHMH5RQZ2bZ3ATlegz5MSWo6ZTUK+KStdNBmndXqlVDcMublpYo5Wai+agQYDBe
-         2d98s4dGsOMXFhwpYpm/NzGSq4TJPCcWddyvYaKzNgH0uke35QI8U0ijCPygPuKYZBqN
-         /web2YQNBZohV0h4fHySaKyDWLq80UnzzvjUoJmDE+NFhSHZYHqJwi+5zQfSDI2IPAI4
-         i5ew==
-X-Gm-Message-State: APjAAAVNHuiMBmk2DZIzYoxkAMjB7/6x4fRFy8s+eQuM6EHzaQWKtQ3Q
-        gH4nHUBaogdfcaunmhz2ol0XuA==
-X-Google-Smtp-Source: APXvYqx25cvFDEfSsVWYxxtiPJ4i/HB4cCqI6AWGUOOODbhBmUcXo4ZQNzLPzimdl5BHFsOLWIwruQ==
-X-Received: by 2002:a17:90a:191a:: with SMTP id 26mr6400987pjg.111.1582244061214;
-        Thu, 20 Feb 2020 16:14:21 -0800 (PST)
-Received: from [10.136.13.65] ([192.19.228.250])
-        by smtp.gmail.com with ESMTPSA id x8sm701336pfr.104.2020.02.20.16.14.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 20 Feb 2020 16:14:20 -0800 (PST)
-Subject: Re: [PATCH v2 2/7] firmware: add offset to request_firmware_into_buf
-To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        David Brown <david.brown@linaro.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Shuah Khan <shuah@kernel.org>, bjorn.andersson@linaro.org,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org,
-        BCM Kernel Feedback <bcm-kernel-feedback-list@broadcom.com>,
-        Olof Johansson <olof@lixom.net>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Colin Ian King <colin.king@canonical.com>,
-        Kees Cook <keescook@chromium.org>,
-        Takashi Iwai <tiwai@suse.de>, linux-kselftest@vger.kernel.org,
-        Andy Gross <agross@kernel.org>
-References: <20200220004825.23372-1-scott.branden@broadcom.com>
- <20200220004825.23372-3-scott.branden@broadcom.com>
- <20200220012235.GU11244@42.do-not-panic.com>
-From:   Scott Branden <scott.branden@broadcom.com>
-Message-ID: <6a810f3c-3e17-fba6-b00d-4333ffa2ecca@broadcom.com>
-Date:   Thu, 20 Feb 2020 16:14:17 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.1
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=bSOXy59NaxNEGkVUjyIUAzgGlKx0xSBMnajwRhUlBTg=;
+        b=aI4UZAuAG86Q3vJPN4SvlWr29LIajJmC38cOLZgCz3tMgnM62uXqcc+pOT3JiEUJ/y
+         n89I/NvWol2+3wWGIDvOBGxT/HtT7mF2mMiA9t43horWkd469J7NTd+4FNO/kvQLk/9q
+         lFNPYGaMrTYdDTpRS6Y8b6fk4HJ8PaXQrFm0VBgbWmLXawoMhGS3er66UquiLMfZ1y0U
+         zEmnIfMmK+c4crWzPlJlB4LvX0iWRGXLgUGuq07ILGzeX6StfDe9RVILlGyKncNZdSRp
+         f8Z5ONjudAoWQkjIXWXQ/bYQl1IvpJXYvfue4UfQjxA+kcDN8ziTvnpF7AmjwXX/q36v
+         H3kw==
+X-Gm-Message-State: APjAAAXnUU0IR5BwFEvvba5lytbhQqyV8Gcz1LpdA9ouoHfhUUEkkVWu
+        RPvDHv2C1Ia3e/pxH2Oe/vb/hg==
+X-Google-Smtp-Source: APXvYqyF2qNqnrPkSbjfbjdMr5QKa3bRBq5Ixq8bcwoCyGhS3AdmZJfxbkBEwtliGl9osRgA4SNgIw==
+X-Received: by 2002:a17:902:ab8f:: with SMTP id f15mr33566822plr.280.1582244163881;
+        Thu, 20 Feb 2020 16:16:03 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id fz21sm523554pjb.15.2020.02.20.16.16.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 20 Feb 2020 16:16:03 -0800 (PST)
+Date:   Thu, 20 Feb 2020 16:16:01 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     shuah <shuah@kernel.org>
+Cc:     Cristian Marussi <cristian.marussi@arm.com>,
+        Naresh Kamboju <naresh.kamboju@linaro.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Anders Roxell <anders.roxell@linaro.org>,
+        lkft-triage@lists.linaro.org,
+        open list <linux-kernel@vger.kernel.org>, ankita@in.ibm.com,
+        Will Deacon <will@kernel.org>, ardb@kernel.org,
+        "Guohanjun (Hanjun Guo)" <guohanjun@huawei.com>
+Subject: Re: selftests: Linux Kernel Dump Test Module output
+Message-ID: <202002201610.2B149A6D@keescook>
+References: <CA+G9fYu3682XJ2Kw2ZvQdUT80epKc9DWWXgDT1-D_65ajSXNTw@mail.gmail.com>
+ <fcb799d4-f316-60d6-9fd0-0bc1c174e63c@arm.com>
+ <31b066c2-d1c9-1592-48cd-bccb4b3a624a@kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <20200220012235.GU11244@42.do-not-panic.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <31b066c2-d1c9-1592-48cd-bccb4b3a624a@kernel.org>
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Luis,
+On Wed, Feb 19, 2020 at 09:16:03AM -0700, shuah wrote:
+> On 2/17/20 8:36 AM, Cristian Marussi wrote:
+> > Hi
+> > 
+> > n 17/02/2020 11:09, Naresh Kamboju wrote:
+> > > The selftest lkdtm test failed on x86_64 and arm64.
+> > > am I missing any pre-requisite?
+> > > 
+> > > Boot log:
+> > > [    3.297812] lkdtm: No crash points registered, enable through debugfs
+> > > 
+> > 
+> > from your logs I cannot deduce anything useful, but in our CI I've got similar issues
+> > since the 10/12th of Feb...
+> > 
+> > TAP version 13
+> > 1..71
+> > # selftests: lkdtm: PANIC.sh
+> > # Cannot find /sys/kernel/debug/provoke-crash/DIRECT (missing CONFIG_LKDTM?)
+> > not ok 1 selftests: lkdtm: PANIC.sh # SKIP
+> > # selftests: lkdtm: BUG.sh
+> > # Cannot find /sys/kernel/debug/provoke-crash/DIRECT (missing CONFIG_LKDTM?)
+> > 
+> > so I suppose this and a bunch of other (probably new) tests are simply
+> > missing a bit of CONFIGs... (but I have still to look into this properly)
+> > (not sure if this also is your case either...)
+> > 
+> > Regards
+> > 
+> > Cristian
+> > 
+> 
+> Hi Kees,
+> 
+> Any ideas on what this is about? Missing config or something else?
 
-On 2020-02-19 5:22 p.m., Luis Chamberlain wrote:
-> On Wed, Feb 19, 2020 at 04:48:20PM -0800, Scott Branden wrote:
->> Add offset to request_firmware_into_buf to allow for portions
->> of firmware file to be read into a buffer.  Necessary where firmware
->> needs to be loaded in portions from file in memory constrained systems.
->>
->> Signed-off-by: Scott Branden <scott.branden@broadcom.com>
-> Thanks for following up Scott! However you failed to address the
-> feedback last time by Takashi, so until then, this remains a blocker for
-> this.
->
-> http://lkml.kernel.org/r/s5hwoeyj3i5.wl-tiwai@suse.de
->
->    Luis
-I responded to the email query.  Hopefully this addresses your concern.
+In the first case, I'm not sure what's happening -- the logs don't seem
+to show anything, but the lkdtm should be available (from the boot log).
 
-Regards,
-  Scott
+In the second case, yes, it looks like missing CONFIG_LKDTM (the test
+even has a "config" file). Either CONFIG_LKDTM=y or CONFIG_LKDTM=m will
+work (the test running will attempt to load the lkdtm module if it's
+missing).
 
+A final option is that either the debug filesystem isn't mounted, or is
+mounted somewhere "non-standard"? (I'd expect a lot of things to fail...)
+
+-Kees
+
+-- 
+Kees Cook
