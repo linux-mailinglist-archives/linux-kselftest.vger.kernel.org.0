@@ -2,95 +2,160 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A972168A15
-	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Feb 2020 23:44:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B9FDF168A74
+	for <lists+linux-kselftest@lfdr.de>; Sat, 22 Feb 2020 00:37:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729187AbgBUWoe (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 21 Feb 2020 17:44:34 -0500
-Received: from mail-pf1-f193.google.com ([209.85.210.193]:36630 "EHLO
-        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726802AbgBUWoe (ORCPT
+        id S1729100AbgBUXhy (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 21 Feb 2020 18:37:54 -0500
+Received: from mail-pf1-f195.google.com ([209.85.210.195]:37603 "EHLO
+        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729187AbgBUXhx (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 21 Feb 2020 17:44:34 -0500
-Received: by mail-pf1-f193.google.com with SMTP id 185so2035099pfv.3;
-        Fri, 21 Feb 2020 14:44:33 -0800 (PST)
+        Fri, 21 Feb 2020 18:37:53 -0500
+Received: by mail-pf1-f195.google.com with SMTP id p14so2090866pfn.4
+        for <linux-kselftest@vger.kernel.org>; Fri, 21 Feb 2020 15:37:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=cceSZ0xIZFt7SCWYZAxl6HnAJNJskJe6R45L26XdHHI=;
-        b=DGdclY8PMu9ZY48vwOeL9Ml2QxiHkti6cZiLDRtZM/wfub/2HtAMzIQtAoR2GSgiLv
-         rKjMNChLWqTh/sChQgR1n4wis8lVKY7FJt2gxrc9pREV9qYD7axGSoD36F8wH7hqNDPs
-         zNIDmVrFwwBiQB5PRevrRve1l50OtDwl8mQpZpy4yFPpTL5JeTn3hBkfSNnBPsJyTUtl
-         f8EZI05Apr62Q4k5dO0g9Ldfn/c+LkpwXgcXzgepYI1SxrM6uorSffXOHnZkE+dZAHbj
-         karztfLtXOzh87cAFT8ZIXU33RBAAOv4j95AyFw848T6FposDdrpXR0BdItWJ34NsXqg
-         GlNg==
+        d=broadcom.com; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-transfer-encoding:content-language;
+        bh=U8GTXDQYqxVMWeiE3CeM22iOXjrDkwUgtcNqh51keqY=;
+        b=BTbJ9DV5UnhS6c59epTpH7XTEnU2oooXg+g6bAhjUyVbujp1zj/9TaRU8cj0TPZwd3
+         CG8U0vdI5gFnoJTHTJLwe669yrJzuJv13qa3AVL8dmiMh5v19I5goaubVFzUpLjj3wTs
+         7lQz+6WG62x4T5Z+CFsJPY2Ds6kbuZLZW2JXM=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=cceSZ0xIZFt7SCWYZAxl6HnAJNJskJe6R45L26XdHHI=;
-        b=hUdK8Vy4/sZkziY7Y0rIB8gcOV1lb4HP+3iRz4wsWQBK2bHMLJ9YkNKFq25cJ3e4LG
-         i9Gcc3614RUpuTVVQJPXZHX/Fowvx7kH40yZ3ne7T5Sad+G30J26H3sB0VLYn0d0fMgr
-         FWPQLrkYSISjKv73ZsG2CRC5Bzs3KAFi8Fb59VDFBXGBkJvlpHFWSsgr+plIFyb09l3v
-         9aPlT2vbtOsO5e08xNO6g4VJazYP9Xqou9VISTPjJ8ChHwvUpL1GcF5py/EK4hPR5aYT
-         MLO0d8Vb8hytnydqu/GOdhPKh6+dRBcdgr+bONQQhJNIcYPtPovgT5O3Uyo2Ht3D7Zjb
-         T7Sw==
-X-Gm-Message-State: APjAAAV1ZC/1koNxoJlsIiXLv0MilgflJeRhtCDV9Z5MUyJ60h9o0qYx
-        yIoIfzpObIFkvebhSG4OSXxy7tXS
-X-Google-Smtp-Source: APXvYqywhe5FhZO4n/XaE0Tp4SIYAomGQLeICnq7qU6/uFXNx/HGcprxcWeNj5d3FYmq405bVP3F1w==
-X-Received: by 2002:a63:3c1b:: with SMTP id j27mr40324813pga.152.1582325073170;
-        Fri, 21 Feb 2020 14:44:33 -0800 (PST)
-Received: from ast-mbp ([2620:10d:c090:500::4:d448])
-        by smtp.gmail.com with ESMTPSA id t28sm3931342pfq.122.2020.02.21.14.44.31
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 21 Feb 2020 14:44:32 -0800 (PST)
-Date:   Fri, 21 Feb 2020 14:44:29 -0800
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-To:     Quentin Monnet <quentin@isovalent.com>
-Cc:     Michal Rostecki <mrostecki@opensuse.org>, bpf@vger.kernel.org,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        Andrii Nakryiko <andriin@fb.com>,
-        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=U8GTXDQYqxVMWeiE3CeM22iOXjrDkwUgtcNqh51keqY=;
+        b=FriVHZgMhuxvl3sV5Uu1MKs0NXZmjf7qww7NGVIkQ9XMg/fffTMma57E/Gk0H7bnPl
+         aKzEP+29qxLCkIld9r4Vpq5QSRTH9tETf9R/ngB+y/wPvpf342o2dyEWQGE0OY4drkx2
+         jGrCsi/1h4SbvNHim/2ur8uMOcjnkC9Ny0DXJzg7UMGonQ+Z/yhxavBVjzXSqEUvBGDq
+         ePeLEirStObsAEuD1MBNMIiHCcID+Jqm9h1xS8aVBxdZo5oicu/IQ6HgMxzZ/dTnAl+A
+         jQg/n9MCnNXRw7VRQ7xm/T3Swc6zS86prt3CmNw6rPynBViv9ORge0ToTJ+yooRaUvCj
+         6dNA==
+X-Gm-Message-State: APjAAAXNKko2QCPXQlu8T7fGcA0rOW9fsJJASpgnut6J8kkLo2nf9dKn
+        XvBXcxmOb/43Q46RM6LiQgs7AkOvM2FiThhwYoOHG0NzKIqP6MzSgh1WUvNU7L/7ouo58GUQykZ
+        omrmwIJDBvppAL58kZI1cgcHqxuCUKg8/Ww+E/tiQMUXU6BvSD1AP2JHkSJnVRT92Jzc3hHw2pG
+        TqVyLVQQDIWuckNpg=
+X-Google-Smtp-Source: APXvYqzSKwENjp8Zc5/+UeGf1chfHFs+nHCsMZqHL9BYW/wJmsDWoBM6WNV9QMdjdezOfrljgme5xQ==
+X-Received: by 2002:a63:3c08:: with SMTP id j8mr40832260pga.223.1582328272147;
+        Fri, 21 Feb 2020 15:37:52 -0800 (PST)
+Received: from [10.136.13.65] ([192.19.228.250])
+        by smtp.gmail.com with ESMTPSA id u23sm3891110pfm.29.2020.02.21.15.37.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 21 Feb 2020 15:37:51 -0800 (PST)
+Subject: Re: [PATCH 2/7] firmware: add offset to request_firmware_into_buf
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Luis Chamberlain <mcgrof@kernel.org>, Takashi Iwai <tiwai@suse.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        David Brown <david.brown@linaro.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Shuah Khan <shuah@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        Linux FS-devel Mailing List <linux-fsdevel@vger.kernel.org>,
+        BCM Kernel Feedback <bcm-kernel-feedback-list@broadcom.com>,
+        Olof Johansson <olof@lixom.net>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Colin Ian King <colin.king@canonical.com>,
+        Kees Cook <keescook@chromium.org>,
         "open list:KERNEL SELFTEST FRAMEWORK" 
         <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH bpf-next v2 2/5] bpftool: Make probes which emit dmesg
- warnings optional
-Message-ID: <20200221224428.plbxav3scv6og6kv@ast-mbp>
-References: <20200221031702.25292-1-mrostecki@opensuse.org>
- <20200221031702.25292-3-mrostecki@opensuse.org>
- <7ab56bb6-0ddb-2c3c-d116-fc01feddba5e@isovalent.com>
+References: <20190822192451.5983-1-scott.branden@broadcom.com>
+ <20190822192451.5983-3-scott.branden@broadcom.com>
+ <s5hef1crybq.wl-tiwai@suse.de>
+ <10461fcf-9eca-32b6-0f9d-23c63b3f3442@broadcom.com>
+ <s5hr258j6ln.wl-tiwai@suse.de>
+ <93b8285a-e5eb-d4a4-545d-426bbbeb8008@broadcom.com>
+ <s5ho90byhnv.wl-tiwai@suse.de>
+ <b440f372-45be-c06c-94a1-44ae6b1e7eb8@broadcom.com>
+ <s5hwoeyj3i5.wl-tiwai@suse.de> <20191011133120.GP16384@42.do-not-panic.com>
+ <e65a3ba1-d064-96fe-077e-59bf8ffff377@broadcom.com>
+ <CAK8P3a2NJurg_hxVbWYZwJVhYM5-xjWt12Kh0DdyfTGqQPrPAQ@mail.gmail.com>
+From:   Scott Branden <scott.branden@broadcom.com>
+Message-ID: <3731a882-8784-b957-7628-49edfa9683e7@broadcom.com>
+Date:   Fri, 21 Feb 2020 15:37:47 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <7ab56bb6-0ddb-2c3c-d116-fc01feddba5e@isovalent.com>
-User-Agent: NeoMutt/20180223
+In-Reply-To: <CAK8P3a2NJurg_hxVbWYZwJVhYM5-xjWt12Kh0DdyfTGqQPrPAQ@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Feb 21, 2020 at 11:28:05AM +0000, Quentin Monnet wrote:
-> 
-> "trace" sounds too generic. If filters are applied again to prog and map
-> types in the future (as you had in v1), this would catch tracepoint and
-> raw_tracepoint program types and stack_trace map type. Or if new helpers
-> with "trace" in their name are added, we skip them too. Can we use something
-> more specific, probably "trace_printk"?
+Hi Arnd,
 
-+1
+On 2020-02-21 12:44 a.m., Arnd Bergmann wrote:
+> On Fri, Feb 21, 2020 at 1:11 AM Scott Branden
+> <scott.branden@broadcom.com> wrote:
+>> On 2019-10-11 6:31 a.m., Luis Chamberlain wrote:
+>>> On Tue, Aug 27, 2019 at 12:40:02PM +0200, Takashi Iwai wrote:
+>>>> On Mon, 26 Aug 2019 19:24:22 +0200,
+>>>> Scott Branden wrote:
+>>>>> I will admit I am not familiar with every subtlety of PCI
+>>>>> accesses. Any comments to the Valkyrie driver in this patch series are
+>>>>> appreciated.
+>>>>> But not all drivers need to work on all architectures. I can add a
+>>>>> depends on x86 64bit architectures to the driver to limit it to such.
+>>>> But it's an individual board on PCIe, and should work no matter which
+>>>> architecture is?  Or is this really exclusive to x86?
+>>> Poke Scott.
+>> Yes, this is exclusive to x86.
+>> In particular, 64-bit x86 server class machines with PCIe gen3 support.
+>> There is no reason for these PCIe boards to run in other lower end
+>> machines or architectures.
+> It doesn't really matter that much what you expect your customers to
+> do with your product, or what works a particular machine today, drivers
+> should generally be written in a portable manner anyway and use
+> the documented APIs. memcpy() into an __iomem pointer is not
+> portable and while it probably works on any x86 machine today, please
+> just don't do it. If you use 'sparse' to check your code, that would normally
+> result in an address space warning, unless you add __force and a
+> long comment explaining why you cannot just use memcpy_to_io()
+> instead. At that point, you are already better off usingn memcpy_to_io() ;-)
+>
+>          Arnd
+I am a not performing a memcpy at all right now.
+I am calling a request_firmware_into_buf call and do not need to make a 
+copy.
+This function eventually calls kernel_read_file, which then makes at 
+indirect call in __vfs_read to perform the read to memory.
+ From there I am lost as to what operation happens to achieve this.
+The read function would need to detect the buf is in io space and 
+perform the necessary operation.
+Anyone with any knowledge on how to make this read to io space would be 
+appreciated?
 
-> Thanks for the patch! While I understand you want to keep the changes you
-> have done to use regex, I do not really think they bring much in this
-> version of the patch. As we only want to filter out two specific helpers, it
-> seems to me that it would be much simpler to just compare helper names
-> instead of introducing regular expressions that are not used otherwise. What
-> do you think?
+ssize_t __vfs_read(struct file *file, char __user *buf, size_t count,
+            loff_t *pos)
+{
+     if (file->f_op->read)
+         return file->f_op->read(file, buf, count, pos);
+     else if (file->f_op->read_iter)
+         return new_sync_read(file, buf, count, pos);
+     else
+         return -EINVAL;
+}
 
-+1
-I was thinking the same.
-Or filter by specific integer id of the helper.
+ssize_t kernel_read(struct file *file, void *buf, size_t count, loff_t *pos)
+{
+     mm_segment_t old_fs;
+     ssize_t result;
+
+     old_fs = get_fs();
+     set_fs(KERNEL_DS);
+     /* The cast to a user pointer is valid due to the set_fs() */
+     result = vfs_read(file, (void __user *)buf, count, pos);
+     set_fs(old_fs);
+     return result;
+}
+
