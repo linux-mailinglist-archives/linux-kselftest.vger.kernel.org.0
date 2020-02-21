@@ -2,101 +2,95 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E330168832
-	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Feb 2020 21:19:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A972168A15
+	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Feb 2020 23:44:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726683AbgBUUTe (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 21 Feb 2020 15:19:34 -0500
-Received: from mail-ot1-f68.google.com ([209.85.210.68]:36489 "EHLO
-        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726483AbgBUUTe (ORCPT
+        id S1729187AbgBUWoe (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 21 Feb 2020 17:44:34 -0500
+Received: from mail-pf1-f193.google.com ([209.85.210.193]:36630 "EHLO
+        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726802AbgBUWoe (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 21 Feb 2020 15:19:34 -0500
-Received: by mail-ot1-f68.google.com with SMTP id j20so3195224otq.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 21 Feb 2020 12:19:33 -0800 (PST)
+        Fri, 21 Feb 2020 17:44:34 -0500
+Received: by mail-pf1-f193.google.com with SMTP id 185so2035099pfv.3;
+        Fri, 21 Feb 2020 14:44:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=OfpZw+eQB6iSYwMvRBzJaMRaqdbsGid5gEGpxbg9sSM=;
-        b=uEcpgNIxyzARyyktOQSbbTIs3P/w6TgKfs9rTrYnQfUyOtw+Y/jWrbLk7GkpTw92F7
-         YHwCKs5T5uF+WI5VOd8W3VJSXefpdWblnH2gBQoZnI+NHI3YMXR7Z3urY25D/8f0kt+5
-         ettm551MbN+59D/LxW/SLaMiPedHQ9kOlXA3X8v3r5noGfJwngzmXCWszw3mqnCjIzvo
-         r7Z6FaMc9KsSbykj/UPyzOLNB2wYbJqvXWsCv08JWsILT0TMm+92HS6wbrXIHvqew/Kd
-         4mh4l1iYel1wAbHtHlNBjxSVzH58UCi+aOlqSAai7VkXTKw6DzwAqSLjD83fek6LJzR4
-         Swfw==
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=cceSZ0xIZFt7SCWYZAxl6HnAJNJskJe6R45L26XdHHI=;
+        b=DGdclY8PMu9ZY48vwOeL9Ml2QxiHkti6cZiLDRtZM/wfub/2HtAMzIQtAoR2GSgiLv
+         rKjMNChLWqTh/sChQgR1n4wis8lVKY7FJt2gxrc9pREV9qYD7axGSoD36F8wH7hqNDPs
+         zNIDmVrFwwBiQB5PRevrRve1l50OtDwl8mQpZpy4yFPpTL5JeTn3hBkfSNnBPsJyTUtl
+         f8EZI05Apr62Q4k5dO0g9Ldfn/c+LkpwXgcXzgepYI1SxrM6uorSffXOHnZkE+dZAHbj
+         karztfLtXOzh87cAFT8ZIXU33RBAAOv4j95AyFw848T6FposDdrpXR0BdItWJ34NsXqg
+         GlNg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=OfpZw+eQB6iSYwMvRBzJaMRaqdbsGid5gEGpxbg9sSM=;
-        b=SYBn9YTDf5VgS6dTXr/VnHh4EySPiofBiN1hziQYjRPXDU2X2ZLksnn0MtKar5hH5L
-         7d+F3JGq52tCiHAhcOKdEsVGafDR0vr6VrYTB3hN8raNLLde2M9Xs4IxswDtmAuEAa4Z
-         NJ+Ubt+73OAtpx1AVSxZOCVm0RdFGDch+XyR+0EdryqEFgl2XlnLUhVm67TH0HT8LCFe
-         0Mfu/hl/dEHhr4lMdOd6qzEnQ7M+UTw6IRMkfwWIm7qm8rBy+OvgsEfVhb9QaPCkxLNu
-         I0uXBtrI3JpyJiWWJYy9b4JW7hYQTgYDnydTidoTeG4Do7UmCx5mB+HMwMN/QWyy3/7w
-         U93w==
-X-Gm-Message-State: APjAAAWZXtcI8AnkSVCUarsXqLCp2CKy5dBeJMC6DuZNGP9DcAevZGYR
-        Jv4mihPQ2AlT4i7hwOndjiCnVU3EssXXpJVRDu/+6Q==
-X-Google-Smtp-Source: APXvYqyx/RGSX2qyoU/QNIJeZF7dI+U24Dxth1TtmWp8pOZPVerHNA8pMkzSW7LFvniRoOIoJ5G9d1IhZP3X8SA4R3Y=
-X-Received: by 2002:a9d:518b:: with SMTP id y11mr28357211otg.349.1582316373221;
- Fri, 21 Feb 2020 12:19:33 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=cceSZ0xIZFt7SCWYZAxl6HnAJNJskJe6R45L26XdHHI=;
+        b=hUdK8Vy4/sZkziY7Y0rIB8gcOV1lb4HP+3iRz4wsWQBK2bHMLJ9YkNKFq25cJ3e4LG
+         i9Gcc3614RUpuTVVQJPXZHX/Fowvx7kH40yZ3ne7T5Sad+G30J26H3sB0VLYn0d0fMgr
+         FWPQLrkYSISjKv73ZsG2CRC5Bzs3KAFi8Fb59VDFBXGBkJvlpHFWSsgr+plIFyb09l3v
+         9aPlT2vbtOsO5e08xNO6g4VJazYP9Xqou9VISTPjJ8ChHwvUpL1GcF5py/EK4hPR5aYT
+         MLO0d8Vb8hytnydqu/GOdhPKh6+dRBcdgr+bONQQhJNIcYPtPovgT5O3Uyo2Ht3D7Zjb
+         T7Sw==
+X-Gm-Message-State: APjAAAV1ZC/1koNxoJlsIiXLv0MilgflJeRhtCDV9Z5MUyJ60h9o0qYx
+        yIoIfzpObIFkvebhSG4OSXxy7tXS
+X-Google-Smtp-Source: APXvYqywhe5FhZO4n/XaE0Tp4SIYAomGQLeICnq7qU6/uFXNx/HGcprxcWeNj5d3FYmq405bVP3F1w==
+X-Received: by 2002:a63:3c1b:: with SMTP id j27mr40324813pga.152.1582325073170;
+        Fri, 21 Feb 2020 14:44:33 -0800 (PST)
+Received: from ast-mbp ([2620:10d:c090:500::4:d448])
+        by smtp.gmail.com with ESMTPSA id t28sm3931342pfq.122.2020.02.21.14.44.31
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 21 Feb 2020 14:44:32 -0800 (PST)
+Date:   Fri, 21 Feb 2020 14:44:29 -0800
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To:     Quentin Monnet <quentin@isovalent.com>
+Cc:     Michal Rostecki <mrostecki@opensuse.org>, bpf@vger.kernel.org,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        Andrii Nakryiko <andriin@fb.com>,
+        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>
+Subject: Re: [PATCH bpf-next v2 2/5] bpftool: Make probes which emit dmesg
+ warnings optional
+Message-ID: <20200221224428.plbxav3scv6og6kv@ast-mbp>
+References: <20200221031702.25292-1-mrostecki@opensuse.org>
+ <20200221031702.25292-3-mrostecki@opensuse.org>
+ <7ab56bb6-0ddb-2c3c-d116-fc01feddba5e@isovalent.com>
 MIME-Version: 1.0
-References: <20200211213128.73302-1-almasrymina@google.com>
- <20200211151906.637d1703e4756066583b89da@linux-foundation.org>
- <CAHS8izPUFQWq3PzhhRzp7u11173_-cmRkNuQWEswS51Xz6ZM0Q@mail.gmail.com> <20200219130648.83e6810848774c6fd649c445@linux-foundation.org>
-In-Reply-To: <20200219130648.83e6810848774c6fd649c445@linux-foundation.org>
-From:   Mina Almasry <almasrymina@google.com>
-Date:   Fri, 21 Feb 2020 12:19:22 -0800
-Message-ID: <CAHS8izPB1vwuZVFha+5_ca9gKC7UceDdJFJZe9eb-T43a6GF8A@mail.gmail.com>
-Subject: Re: [PATCH v12 1/9] hugetlb_cgroup: Add hugetlb_cgroup reservation counter
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Mike Kravetz <mike.kravetz@oracle.com>, shuah <shuah@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Greg Thelen <gthelen@google.com>,
-        open list <linux-kernel@vger.kernel.org>, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org, cgroups@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <7ab56bb6-0ddb-2c3c-d116-fc01feddba5e@isovalent.com>
+User-Agent: NeoMutt/20180223
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Feb 19, 2020 at 1:06 PM Andrew Morton <akpm@linux-foundation.org> wrote:
->
-> On Wed, 19 Feb 2020 11:05:41 -0800 Mina Almasry <almasrymina@google.com> wrote:
->
-> > On Tue, Feb 11, 2020 at 3:19 PM Andrew Morton <akpm@linux-foundation.org> wrote:
-> > >
-> > > On Tue, 11 Feb 2020 13:31:20 -0800 Mina Almasry <almasrymina@google.com> wrote:
-> > >
-> > > > These counters will track hugetlb reservations rather than hugetlb
-> > > > memory faulted in. This patch only adds the counter, following patches
-> > > > add the charging and uncharging of the counter.
-> > >
-> > > We're still pretty thin on review here, but as it's v12 and Mike
-> > > appears to be signed up to look at this work, I'll add them to -next to
-> > > help move things forward.
-> > >
-> >
-> > Hi Andrew,
-> >
-> > Since the patches were merged into -next there have been build fixes
-> > and test fixes and some review comments. Would you like me to submit
-> > *new* patches to address these, or would you like me to squash the
-> > fixes into my existing patch series and submit another iteration of
-> > the patch series?
->
-> What you did worked OK ;)
->
-> Please check the end result next time I release a kernel.
+On Fri, Feb 21, 2020 at 11:28:05AM +0000, Quentin Monnet wrote:
+> 
+> "trace" sounds too generic. If filters are applied again to prog and map
+> types in the future (as you had in v1), this would catch tracepoint and
+> raw_tracepoint program types and stack_trace map type. Or if new helpers
+> with "trace" in their name are added, we skip them too. Can we use something
+> more specific, probably "trace_printk"?
 
-Hey Andrew,
++1
 
-Thanks for taking in the patset and fixes. Only pending change in the
-latest -next tree is this one:
-https://lore.kernel.org/linux-mm/20200219233610.13808-1-almasrymina@google.com/
+> Thanks for the patch! While I understand you want to keep the changes you
+> have done to use regex, I do not really think they bring much in this
+> version of the patch. As we only want to filter out two specific helpers, it
+> seems to me that it would be much simpler to just compare helper names
+> instead of introducing regular expressions that are not used otherwise. What
+> do you think?
 
-It's reviewed by Mike here:
-https://lore.kernel.org/linux-mm/a0d7b8e1-cb43-3b43-68c3-55631f2ce199@oracle.com/
++1
+I was thinking the same.
+Or filter by specific integer id of the helper.
