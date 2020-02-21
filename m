@@ -2,57 +2,58 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A3769166B49
-	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Feb 2020 01:06:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A5A73166B5D
+	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Feb 2020 01:11:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729429AbgBUAGu (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 20 Feb 2020 19:06:50 -0500
-Received: from mail-pj1-f67.google.com ([209.85.216.67]:36283 "EHLO
-        mail-pj1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729410AbgBUAGu (ORCPT
+        id S1729451AbgBUALP (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 20 Feb 2020 19:11:15 -0500
+Received: from mail-wr1-f68.google.com ([209.85.221.68]:43310 "EHLO
+        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729439AbgBUALP (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 20 Feb 2020 19:06:50 -0500
-Received: by mail-pj1-f67.google.com with SMTP id gv17so216000pjb.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 20 Feb 2020 16:06:49 -0800 (PST)
+        Thu, 20 Feb 2020 19:11:15 -0500
+Received: by mail-wr1-f68.google.com with SMTP id r11so30875wrq.10
+        for <linux-kselftest@vger.kernel.org>; Thu, 20 Feb 2020 16:11:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=broadcom.com; s=google;
         h=subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-transfer-encoding:content-language;
-        bh=2SZEgD5g5TBz11BF0RQOXvwvVsuErja6hQBhQx9iqtI=;
-        b=YaGJ1WcJmrZ9+UccHzdSAh0ocSCrEkLtIKG+wxpLLF5UCP4a9dn/4qDx6NEQEadWCH
-         K6NzCNrgRJZaIu8hAHddRJAPGjbZSsZTwPOdqZtEpnYEay7Gouyomz3ZPxoyE78CDS+Y
-         0/yJ9nzBOwSj/1cvAmJByGdfRF82SHRVeKCiQ=
+        bh=wXSbqjr+PXHQhEGWLVIbHnU0mAYhDxXp177C2dXLvkw=;
+        b=OR4qbGMZ3kSLXHwlfMWDnVjvxT0c/b5fmtDsqdt6bhn6yadSOJmNHGjqCWZm2yVRAO
+         ed/pScZ8+lYgnYH+P/9lFgMRmFo+EmDPQWLLyTUT3CJO+a8D2eeHF7rdlZaG1BnbIa9D
+         tNOFC7Kt+sV47VYFwmPjmlJ/tZzxGLf0wgzqQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-transfer-encoding
          :content-language;
-        bh=2SZEgD5g5TBz11BF0RQOXvwvVsuErja6hQBhQx9iqtI=;
-        b=sJYuRTOVTrNLB0ECDTb+/EWB3jfKoMlI/LRsAvJROWlg7HZ+fm4JGF5oQa/KuDZm1T
-         n0aFaj7yi7RYJaKpkg9F3Lp6xLwM3n3j7bGYufFKzG8n3LTahAKYfXU7iO+EbyckJ8iV
-         aOXSILods8gCbgBufiRj2VDVb3KFgzxp3L5O91Opb3mth4S5Rub0ObtWhvqAuB8f/TtX
-         uYVgFP2nTubj5EcEZshsCL0NrX80cDRFffn07nsl7GY1DBOIv21LIlmnvYPSsbUOW86b
-         +a6PNCSPfCeBau8rrzBrdTwy73PFnZnRGbUaI+OC1O4Cj1OI0QNQxNOutMGBtuhqhidE
-         i8eQ==
-X-Gm-Message-State: APjAAAXdlg/ta39pOZSJrPyhAQxTYp4RV083mgcC1szbZLm4AQ7PWY8q
-        KQlB1wnH+96Nmi/Vd193wNVkJw==
-X-Google-Smtp-Source: APXvYqw9fUeVqImRN3Q03UIMQbkuQySGlRq4FWfWYNUs3nc8AjQHb2oXb636cz8lJotP6M35Bxu35Q==
-X-Received: by 2002:a17:90a:8545:: with SMTP id a5mr6523527pjw.43.1582243609242;
-        Thu, 20 Feb 2020 16:06:49 -0800 (PST)
+        bh=wXSbqjr+PXHQhEGWLVIbHnU0mAYhDxXp177C2dXLvkw=;
+        b=jFWsBlugjk/6QeuTnrWhx43vpqxu5AJbhYB1Hb0xZodm7Uf5/l9Ny0XHal+fZknYCc
+         otFIr7urf/ECy/3IlcMbiPqWFat2hK+u5vvYM6Ou0r/wXE6DUvNu6DP/uQEJPQiHmmAw
+         uJ8oWeSyNhbUnVVxEWKFDa0uZLZ/9VtVSTELTvt32YglG4EriVHT4khhA+uRnMjJZHak
+         jmkSyvhVFb+cQvGrmY5td+8TAAziqRY63NBQfkl9i1W8ECdBDiJYN7NxPPgD1skZUg9a
+         9YJGIxUZutGXTx6IG2gSHerFTMVCaLtHbIvxnwRCVyqPmA9gG0erm26/YhqqxW1qJU+h
+         f9kQ==
+X-Gm-Message-State: APjAAAWr6Z3+VRC5VeY/5iZKAqsaLqeGf0/CA3q6jyCjQWb9mcw+2vnY
+        DnmUwgy0MnXK4SIxqmvruWVKaacfPl0Qx3Nj8RLUl0VUv5qJJVk5PGnHlmwwUe8YVkRwVIe1g6Q
+        KmD2XXKCFqDo/7rOgSkYqbIQv2T3xuFK8BmHoOi/Y9RyiWlIg2948vGJvVrjmht+jZ4UxIGdyfo
+        4io4mJ/g05MximH9U=
+X-Google-Smtp-Source: APXvYqyZNpXUITw974Gj1d7jmXjJf2j4kz6bDP4xvQnH/etFM/nRGojeEXJirHn2sJxv9V2yWs/+Pw==
+X-Received: by 2002:a5d:510f:: with SMTP id s15mr44375580wrt.408.1582243873022;
+        Thu, 20 Feb 2020 16:11:13 -0800 (PST)
 Received: from [10.136.13.65] ([192.19.228.250])
-        by smtp.gmail.com with ESMTPSA id x10sm706267pfi.180.2020.02.20.16.06.46
+        by smtp.gmail.com with ESMTPSA id q9sm1553085wrx.18.2020.02.20.16.11.08
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 20 Feb 2020 16:06:48 -0800 (PST)
-Subject: Re: [PATCH v2 6/7] misc: bcm-vk: add Broadcom VK driver
-To:     Randy Dunlap <rdunlap@infradead.org>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thu, 20 Feb 2020 16:11:12 -0800 (PST)
+Subject: Re: [PATCH 2/7] firmware: add offset to request_firmware_into_buf
+To:     Luis Chamberlain <mcgrof@kernel.org>, Takashi Iwai <tiwai@suse.de>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         David Brown <david.brown@linaro.org>,
         Alexander Viro <viro@zeniv.linux.org.uk>,
         Shuah Khan <shuah@kernel.org>, bjorn.andersson@linaro.org,
         Shuah Khan <skhan@linuxfoundation.org>,
-        Arnd Bergmann <arnd@arndb.de>
-Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
         linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
         linux-fsdevel@vger.kernel.org,
         BCM Kernel Feedback <bcm-kernel-feedback-list@broadcom.com>,
@@ -61,92 +62,49 @@ Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
         Dan Carpenter <dan.carpenter@oracle.com>,
         Colin Ian King <colin.king@canonical.com>,
         Kees Cook <keescook@chromium.org>,
-        Takashi Iwai <tiwai@suse.de>, linux-kselftest@vger.kernel.org,
-        Andy Gross <agross@kernel.org>,
-        Desmond Yan <desmond.yan@broadcom.com>,
-        James Hu <james.hu@broadcom.com>
-References: <20200220004825.23372-1-scott.branden@broadcom.com>
- <20200220004825.23372-7-scott.branden@broadcom.com>
- <827a4520-95ce-5264-90d9-ed730e5918e6@infradead.org>
+        linux-kselftest@vger.kernel.org
+References: <20190822192451.5983-1-scott.branden@broadcom.com>
+ <20190822192451.5983-3-scott.branden@broadcom.com>
+ <s5hef1crybq.wl-tiwai@suse.de>
+ <10461fcf-9eca-32b6-0f9d-23c63b3f3442@broadcom.com>
+ <s5hr258j6ln.wl-tiwai@suse.de>
+ <93b8285a-e5eb-d4a4-545d-426bbbeb8008@broadcom.com>
+ <s5ho90byhnv.wl-tiwai@suse.de>
+ <b440f372-45be-c06c-94a1-44ae6b1e7eb8@broadcom.com>
+ <s5hwoeyj3i5.wl-tiwai@suse.de> <20191011133120.GP16384@42.do-not-panic.com>
 From:   Scott Branden <scott.branden@broadcom.com>
-Message-ID: <22c48aaf-21e2-56ab-3f40-e497a69cd936@broadcom.com>
-Date:   Thu, 20 Feb 2020 16:06:44 -0800
+Message-ID: <e65a3ba1-d064-96fe-077e-59bf8ffff377@broadcom.com>
+Date:   Thu, 20 Feb 2020 16:11:06 -0800
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.4.1
 MIME-Version: 1.0
-In-Reply-To: <827a4520-95ce-5264-90d9-ed730e5918e6@infradead.org>
+In-Reply-To: <20191011133120.GP16384@42.do-not-panic.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Content-Language: en-US
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Randy,
 
-On 2020-02-19 5:04 p.m., Randy Dunlap wrote:
-> Hi,
+
+On 2019-10-11 6:31 a.m., Luis Chamberlain wrote:
+> On Tue, Aug 27, 2019 at 12:40:02PM +0200, Takashi Iwai wrote:
+>> On Mon, 26 Aug 2019 19:24:22 +0200,
+>> Scott Branden wrote:
+>>> I will admit I am not familiar with every subtlety of PCI
+>>> accesses. Any comments to the Valkyrie driver in this patch series are
+>>> appreciated.
+>>> But not all drivers need to work on all architectures. I can add a
+>>> depends on x86 64bit architectures to the driver to limit it to such.
+>> But it's an individual board on PCIe, and should work no matter which
+>> architecture is?  Or is this really exclusive to x86?
+> Poke Scott.
 >
-> On 2/19/20 4:48 PM, Scott Branden wrote:
->> diff --git a/drivers/misc/bcm-vk/Kconfig b/drivers/misc/bcm-vk/Kconfig
->> new file mode 100644
->> index 000000000000..c75dfb89a38d
->> --- /dev/null
->> +++ b/drivers/misc/bcm-vk/Kconfig
->> @@ -0,0 +1,42 @@
->> +# SPDX-License-Identifier: GPL-2.0-only
->> +#
->> +# Broadcom VK device
->> +#
->> +config BCM_VK
->> +	tristate "Support for Broadcom VK Accelerators"
->> +	depends on PCI_MSI
->> +	default m
-> Need to justify default m. Normally we don't add drivers as enabled unless
-> they are required for basic (boot) operation.
-Will remove default m as not needed to boot.  Interesting other offload 
-engines misc/ocxl/Kconfig and misc/cxl/Kconfig have default m.
->
->> +	help
->> +	  Select this option to enable support for Broadcom
->> +	  VK Accelerators.  VK is used for performing
->> +	  specific video offload processing.  This driver enables
->> +	  userspace programs to access these accelerators via /dev/bcm-vk.N
->> +	  devices.
->> +
->> +	  If unsure, say N.
->> +
->> +if BCM_VK
->> +
->> +config BCM_VK_H2VK_VERIFY_AND_RETRY
->> +	bool "Host To VK Verifiy Data and Retry"
-> 	                 Verify
->
->> +	help
->> +	  Turn on to verify the data passed down to VK is good,
->> +	  and if not, do a retry until it succeeds.
-> No timeout on that retry?
-This is only enabled for debug purposes or fpga workarounds - no need 
-for a timeout.
->
->> +	  This is a debug/workaround on FPGA PCIe timing issues
->> +	  but may be found useful for debugging other PCIe hardware issues.
->> +	  Small performance loss by enabling this debug config.
->> +	  For properly operating PCIe hardware no need to enable this.
->> +
->> +	  If unsure, say N.
->> +
->> +config BCM_VK_QSTATS
->> +	bool "VK Queue Statistics"
->> +	help
->> +	  Turn on to enable Queue Statistics.
->> +	  These are useful for debugging purposes.
->> +	  Some performance loss by enabling this debug config.
->> +	  For properly operating PCIe hardware no need to enable this.
->> +
->> +	  If unsure, say N.
->> +
->> +endif
-> cheers.
+>    Luis
+Yes, this is exclusive to x86.
+In particular, 64-bit x86 server class machines with PCIe gen3 support.
+There is no reason for these PCIe boards to run in other lower end 
+machines or architectures.
 
