@@ -2,109 +2,109 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 842DC166B80
-	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Feb 2020 01:21:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA9F1166B9A
+	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Feb 2020 01:28:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729524AbgBUAVX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 20 Feb 2020 19:21:23 -0500
-Received: from bombadil.infradead.org ([198.137.202.133]:33250 "EHLO
-        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729392AbgBUAVX (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 20 Feb 2020 19:21:23 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:
-        Subject:Sender:Reply-To:Content-ID:Content-Description;
-        bh=tMJ8YKxTeBtxTcT9+8gwag/FsvtT3wSn7stN9kvfG0Q=; b=I6fAixvGMEOmvfzzpJEepAfJtm
-        PXVdq7yCLQEEvy3t4ujzGyV7hIW+tgNWOV8C5gsgeQYhP6ptOwGo++BOf6tv10ZObHBITktO81YPa
-        4jTb5lEt5DXYFa/oiYiSp7rLSDtYv9RCg2hyZx+zX+bQ/SrQKlYio37lgRDJw1YECZxMGJfkoLMwR
-        CN/nFFlNnR7HtjwlPFeDw5VT4YPCJkAPkoD9d4K90iqtIkPIfypmhBbxTdEdhNu3K0GaPha8Nmgqp
-        yuh3hYYGgfpmN2VKO1HvdUWu2GBjyqBPghv3XIiekadWeA8GpLbHW3OafvDVigtMmp/mfiK4hAPQO
-        vAbEVGdQ==;
-Received: from [2601:1c0:6280:3f0::19c2]
-        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1j4w4H-0003FS-Sz; Fri, 21 Feb 2020 00:21:21 +0000
-Subject: Re: [PATCH v2 6/7] misc: bcm-vk: add Broadcom VK driver
-To:     Scott Branden <scott.branden@broadcom.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        David Brown <david.brown@linaro.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Shuah Khan <shuah@kernel.org>, bjorn.andersson@linaro.org,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Arnd Bergmann <arnd@arndb.de>
-Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org,
-        BCM Kernel Feedback <bcm-kernel-feedback-list@broadcom.com>,
-        Olof Johansson <olof@lixom.net>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Colin Ian King <colin.king@canonical.com>,
-        Kees Cook <keescook@chromium.org>,
-        Takashi Iwai <tiwai@suse.de>, linux-kselftest@vger.kernel.org,
-        Andy Gross <agross@kernel.org>,
-        Desmond Yan <desmond.yan@broadcom.com>,
-        James Hu <james.hu@broadcom.com>
-References: <20200220004825.23372-1-scott.branden@broadcom.com>
- <20200220004825.23372-7-scott.branden@broadcom.com>
- <827a4520-95ce-5264-90d9-ed730e5918e6@infradead.org>
- <22c48aaf-21e2-56ab-3f40-e497a69cd936@broadcom.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-Message-ID: <bfbb883b-f222-922e-bdf0-3491af14e446@infradead.org>
-Date:   Thu, 20 Feb 2020 16:21:20 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.1
-MIME-Version: 1.0
-In-Reply-To: <22c48aaf-21e2-56ab-3f40-e497a69cd936@broadcom.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+        id S1729420AbgBUA2P (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 20 Feb 2020 19:28:15 -0500
+Received: from mail.kernel.org ([198.145.29.99]:43458 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729413AbgBUA2P (ORCPT <rfc822;linux-kselftest@vger.kernel.org>);
+        Thu, 20 Feb 2020 19:28:15 -0500
+Received: from X1 (nat-ab2241.sltdut.senawave.net [162.218.216.4])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 2E0E0206DB;
+        Fri, 21 Feb 2020 00:28:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1582244894;
+        bh=iy0LlJf0YHN6ZiB0CWT2PCAoHpieaL2qiC0LKqJ6REI=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=qXQ/8DH62yQvvP+ax4QYdXSpzMD5FkJ2DlWZDkJKgFg8dybzdwDhQwZsD9md/tPjD
+         17v/H6SMbm/TbAi6jT0/0YUTYrsQ/O8vp5l8HO5qA7JxT2e5ID4FhAYVuQonqCfxC3
+         t5P3D5LiwKfs4u2qShYXa40c00d9UCQ4ULRHbxyA=
+Date:   Thu, 20 Feb 2020 16:28:13 -0800
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Mina Almasry <almasrymina@google.com>
+Cc:     Mike Kravetz <mike.kravetz@oracle.com>, shuah <shuah@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Greg Thelen <gthelen@google.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>, linux-kselftest@vger.kernel.org,
+        cgroups@vger.kernel.org
+Subject: Re: [PATCH v12 1/9] hugetlb_cgroup: Add hugetlb_cgroup reservation
+ counter
+Message-Id: <20200220162813.aea8a14fe050473b73440323@linux-foundation.org>
+In-Reply-To: <CAHS8izN_FJektipBwiLsCO8ysMTM7k=CR_k3OV7+_y0ZbrGw+A@mail.gmail.com>
+References: <20200211213128.73302-1-almasrymina@google.com>
+        <20200211151906.637d1703e4756066583b89da@linux-foundation.org>
+        <CAHS8izPUFQWq3PzhhRzp7u11173_-cmRkNuQWEswS51Xz6ZM0Q@mail.gmail.com>
+        <20200219130648.83e6810848774c6fd649c445@linux-foundation.org>
+        <CAHS8izN_FJektipBwiLsCO8ysMTM7k=CR_k3OV7+_y0ZbrGw+A@mail.gmail.com>
+X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: linux-kselftest-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 2/20/20 4:06 PM, Scott Branden wrote:
-> Hi Randy,
+On Thu, 20 Feb 2020 11:22:58 -0800 Mina Almasry <almasrymina@google.com> wrote:
+
+> On Wed, Feb 19, 2020 at 1:06 PM Andrew Morton <akpm@linux-foundation.org> wrote:
+> >
+> > On Wed, 19 Feb 2020 11:05:41 -0800 Mina Almasry <almasrymina@google.com> wrote:
+> >
+> > > On Tue, Feb 11, 2020 at 3:19 PM Andrew Morton <akpm@linux-foundation.org> wrote:
+> > > >
+> > > > On Tue, 11 Feb 2020 13:31:20 -0800 Mina Almasry <almasrymina@google.com> wrote:
+> > > >
+> > > > > These counters will track hugetlb reservations rather than hugetlb
+> > > > > memory faulted in. This patch only adds the counter, following patches
+> > > > > add the charging and uncharging of the counter.
+> > > >
+> > > > We're still pretty thin on review here, but as it's v12 and Mike
+> > > > appears to be signed up to look at this work, I'll add them to -next to
+> > > > help move things forward.
+> > > >
+> > >
+> > > Hi Andrew,
+> > >
+> > > Since the patches were merged into -next there have been build fixes
+> > > and test fixes and some review comments. Would you like me to submit
+> > > *new* patches to address these, or would you like me to squash the
+> > > fixes into my existing patch series and submit another iteration of
+> > > the patch series?
+> >
+> > What you did worked OK ;)
+> >
+> > Please check the end result next time I release a kernel.
 > 
-> On 2020-02-19 5:04 p.m., Randy Dunlap wrote:
->> Hi,
->>
->> On 2/19/20 4:48 PM, Scott Branden wrote:
->>> diff --git a/drivers/misc/bcm-vk/Kconfig b/drivers/misc/bcm-vk/Kconfig
->>> new file mode 100644
->>> index 000000000000..c75dfb89a38d
->>> --- /dev/null
->>> +++ b/drivers/misc/bcm-vk/Kconfig
->>> @@ -0,0 +1,42 @@
->>> +# SPDX-License-Identifier: GPL-2.0-only
->>> +#
->>> +# Broadcom VK device
->>> +#
->>> +config BCM_VK
->>> +    tristate "Support for Broadcom VK Accelerators"
->>> +    depends on PCI_MSI
->>> +    default m
->> Need to justify default m. Normally we don't add drivers as enabled unless
->> they are required for basic (boot) operation.
-> Will remove default m as not needed to boot.  Interesting other offload engines misc/ocxl/Kconfig and misc/cxl/Kconfig have default m.
+> Thanks Andrew! Things definitely moved along after the patchseries got
+> into -next :D
+> 
+> By my count I think all my patches outside of the tests patch have
+> been acked or reviewed. When you have a chance I have a couple of
+> questions:
+> 
+> 1. For the non-tests patch, anything pending on those preventing
+> eventual submission to linus's tree?
+> 2. For the tests patch, I only have a Tested-by from Sandipan. Is that
+> good enough? If the worst comes to worst and I don't get a review on
+> that patch I would rather (if possible) that 'tests' patch can be
+> dropped while I nag folks for a review, rather than block submission
+> of the entire patch series. I ask because it's been out for review for
+> some time and it's the one I got least discussion on so I'm not sure
+> I'll have a review by the time it's needed.
+> 
 
-Thanks.
+It all looks pretty good and I expect we can get everything into
+5.7-rc1, unless some issues pop up.
 
-Uh, yes, that is interesting.  They both depend on PPC_POWERNV,
-which I know nothing about.
+It's unclear to me whether
+http://lkml.kernel.org/r/CAHS8izOTipknnYaKz=FdzL-7yW-Z61ck1yPnYWixyMSJuTUYLQ@mail.gmail.com
+was going to result in an update?
 
->>> +    help
->>> +      Select this option to enable support for Broadcom
->>> +      VK Accelerators.  VK is used for performing
->>> +      specific video offload processing.  This driver enables
->>> +      userspace programs to access these accelerators via /dev/bcm-vk.N
->>> +      devices.
->>> +
->>> +      If unsure, say N.
-
--- 
-~Randy
 
