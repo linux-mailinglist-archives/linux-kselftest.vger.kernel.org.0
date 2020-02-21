@@ -2,52 +2,52 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 22677167BFF
-	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Feb 2020 12:28:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB907167C02
+	for <lists+linux-kselftest@lfdr.de>; Fri, 21 Feb 2020 12:28:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726100AbgBUL2K (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 21 Feb 2020 06:28:10 -0500
-Received: from mail-wm1-f66.google.com ([209.85.128.66]:51373 "EHLO
-        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726976AbgBUL2K (ORCPT
+        id S1726940AbgBUL2Z (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 21 Feb 2020 06:28:25 -0500
+Received: from mail-wr1-f65.google.com ([209.85.221.65]:33717 "EHLO
+        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727513AbgBUL2Z (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 21 Feb 2020 06:28:10 -0500
-Received: by mail-wm1-f66.google.com with SMTP id t23so1381305wmi.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 21 Feb 2020 03:28:07 -0800 (PST)
+        Fri, 21 Feb 2020 06:28:25 -0500
+Received: by mail-wr1-f65.google.com with SMTP id u6so1652968wrt.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 21 Feb 2020 03:28:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=isovalent-com.20150623.gappssmtp.com; s=20150623;
         h=subject:to:cc:references:from:message-id:date:user-agent
          :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=XfJAkw0oKSRIfu+CzP7ADRPQK+3Hycv3Z524tdVT02I=;
-        b=sA4eFuwdRasTPPOjjTh5Nea+GJ93zj95dsLaobA43VzJnKjvtrDnHwEzCGu3taiFGX
-         jrPWRN5ZFzqg6KhWyCwQfN97vID3Mqjwt5/H8ub/6qBFykUp5DpSjTJsG5IBwcQzGBSI
-         wBwqWjq1WabePKuDQS/FMyyfFubKK2O2XlSlYm8H6cWPuSO4lxIXH6jegWrzKJG/RHUn
-         pZPriThbpDrb3tXg8u7X9180HsYO9gxVk2u6vRQheaFLOCUhvyXgGbUo9lJ0WSd2ETyw
-         hLzcnvxr6vuiRik+nLfZFcCuR85tyun08tWSN6k8QNCmyevV1X/F8cYPFFOmke2ZBVTG
-         9Cjg==
+        bh=MmlIuWAhG574pRgwa2zTd9boc50vLeKyqoHfRi2itEU=;
+        b=YKUQdaBbggWW6llIQTJxlrtrnqsyXplrQDdDUNJHbpsAcIB2ml073JtDPuknhQ25To
+         X0b0jh80UPZ/YXbi4B9Z6xzv5bBYVs7tD7nmc21q7a3Qx4I7xvpCaImxvIJTVXVRUpAq
+         MVS+AHVq75/Ph0hOQn/jL6c1nIqYtCerq5Vsa+etZY0Dz5ALh1MjY4u90FvIyG95n4xv
+         uPD+hTWmiMAdgIOgGxjRP7fLYcHQ5IbxY+zYZkYRrAm1+4cYzHKA9ZPodJthRM5Am/H2
+         T8HXJVqxfhVAU4kPyU1/hCmw5fFW2vHAG5vhUoG1QNoHN6meJjBBPC8c0DJXPQNDzwrj
+         uiNg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:message-id:date
          :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=XfJAkw0oKSRIfu+CzP7ADRPQK+3Hycv3Z524tdVT02I=;
-        b=fBZA9kYy9q+WwfbPetr2/eU0XhYa5Rgkxnw+dcYnLH4DE/R31bDLOQE0UQUXx8ckzv
-         hvlreBFBK7Otl+y5c1XQI5iMoI4pmc3/ypx+EYbw54p1+77xMKEE50f1MH0se0lT97DX
-         +MC8Ci/nA6yW49agxOUBj4qNTCHpSSoolTxb8XX2Aust4n9wDc86nO+LjZqljv9CXcI1
-         JjrsKnhizP5R1o5J1SQL5caUjOzy3UHW32Dmg0QHuZW6Xjy6haqZMThIX2OoBCvHgdbV
-         xF+ydyIZscToXWffQF7ptOqLqWbe+TxnV+2q/PeG9hnlqcQquGQZJl9w3GHgoiP8fSPL
-         WHZg==
-X-Gm-Message-State: APjAAAX0bpV7Mea4pUgPLbT72MVE0lovRRn40MXqB6OH0ld3UGupXnmm
-        nAiX2xrQcX11P+nGnjZ9Hnjm5En0Y1coDA==
-X-Google-Smtp-Source: APXvYqxt7KQwWZYBGLDAAAOpntcSKgwBxQmYrfFYrpTbwf50CqUQqRrQQBHZ11kHaQe0YllhJKklvQ==
-X-Received: by 2002:a05:600c:4105:: with SMTP id j5mr3386773wmi.28.1582284486438;
-        Fri, 21 Feb 2020 03:28:06 -0800 (PST)
+        bh=MmlIuWAhG574pRgwa2zTd9boc50vLeKyqoHfRi2itEU=;
+        b=ughQfVULh89JMbstZzbtWlAEh+Db6CVS4NQkjv/rczUTIyptQN7FphCMMrN/J8jgHw
+         Z099oNoM2T4BdzZDhF8X21rYusOA2a24fxUWkfggnJkapfreAiirpwgKvJnpb87dSzFJ
+         dyrC/soDpClmwPWT8rPyXvWT2oGT3JGkttI5J4jI2mcRhXr0rmR0NUHrJxNcmR9Zlf5B
+         R29ZjRJMfz0c3OufGg00OX9ujh3omX0AajYjf0wqzfMEGq40qHbJqCHMKTQa9zmDlDQM
+         SbxJW+hLdP4h/3oyeFqyPvTpWYcKL8DVsVt/8bD26b1X1pMAOaDFeIow+zy2l7nnKSOr
+         c40w==
+X-Gm-Message-State: APjAAAUb0bSqO/0DJChjlSTv3WdD0GcFeWdW7aJbIGXi964/Q0EYxanm
+        BF8MiexkV9iye9SiBjigjrF35y1cJcCqdg==
+X-Google-Smtp-Source: APXvYqxlRq13BDDwBEWuDJjB0z/6G0z+UyZMu7ABeU3PZHVzjkvsXbK8jMbIsdAUZkjltC03HpdAbw==
+X-Received: by 2002:a05:6000:1206:: with SMTP id e6mr21158926wrx.410.1582284502523;
+        Fri, 21 Feb 2020 03:28:22 -0800 (PST)
 Received: from [192.168.1.23] ([91.143.66.155])
-        by smtp.gmail.com with ESMTPSA id a13sm3591025wrp.93.2020.02.21.03.28.05
+        by smtp.gmail.com with ESMTPSA id a13sm3591825wrp.93.2020.02.21.03.28.21
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 21 Feb 2020 03:28:05 -0800 (PST)
-Subject: Re: [PATCH bpf-next v2 2/5] bpftool: Make probes which emit dmesg
- warnings optional
+        Fri, 21 Feb 2020 03:28:22 -0800 (PST)
+Subject: Re: [PATCH bpf-next v2 3/5] bpftool: Update documentation of "bpftool
+ feature" command
 To:     Michal Rostecki <mrostecki@opensuse.org>, bpf@vger.kernel.org
 Cc:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
@@ -59,14 +59,14 @@ Cc:     Alexei Starovoitov <ast@kernel.org>,
         "open list:KERNEL SELFTEST FRAMEWORK" 
         <linux-kselftest@vger.kernel.org>
 References: <20200221031702.25292-1-mrostecki@opensuse.org>
- <20200221031702.25292-3-mrostecki@opensuse.org>
+ <20200221031702.25292-4-mrostecki@opensuse.org>
 From:   Quentin Monnet <quentin@isovalent.com>
-Message-ID: <7ab56bb6-0ddb-2c3c-d116-fc01feddba5e@isovalent.com>
-Date:   Fri, 21 Feb 2020 11:28:05 +0000
+Message-ID: <85e7fcf3-0ad3-28e3-ef6f-a19669fd6c7f@isovalent.com>
+Date:   Fri, 21 Feb 2020 11:28:21 +0000
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.5.0
 MIME-Version: 1.0
-In-Reply-To: <20200221031702.25292-3-mrostecki@opensuse.org>
+In-Reply-To: <20200221031702.25292-4-mrostecki@opensuse.org>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-GB
 Content-Transfer-Encoding: 7bit
@@ -76,226 +76,71 @@ List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
 2020-02-21 04:16 UTC+0100 ~ Michal Rostecki <mrostecki@opensuse.org>
-> Probes related to bpf_probe_write_user and bpf_trace_printk helpers emit
-> dmesg warnings which might be confusing for people running bpftool on
-> production environments. This change filters them out by default and
-> introduces the new positional argument "full" which enables all
-> available probes.
+> Update documentation of "bpftool feature" command with information about
+> new arguments: "full".
 > 
 > Signed-off-by: Michal Rostecki <mrostecki@opensuse.org>
 > ---
->   tools/bpf/bpftool/feature.c | 80 +++++++++++++++++++++++++++++++++----
->   1 file changed, 73 insertions(+), 7 deletions(-)
+>   .../bpf/bpftool/Documentation/bpftool-feature.rst | 15 ++++++++++-----
+>   1 file changed, 10 insertions(+), 5 deletions(-)
 > 
-> diff --git a/tools/bpf/bpftool/feature.c b/tools/bpf/bpftool/feature.c
-> index 345e4a2b4f53..0731804b8160 100644
-> --- a/tools/bpf/bpftool/feature.c
-> +++ b/tools/bpf/bpftool/feature.c
-> @@ -3,6 +3,7 @@
+> diff --git a/tools/bpf/bpftool/Documentation/bpftool-feature.rst b/tools/bpf/bpftool/Documentation/bpftool-feature.rst
+> index 4d08f35034a2..2e8f66ee1e77 100644
+> --- a/tools/bpf/bpftool/Documentation/bpftool-feature.rst
+> +++ b/tools/bpf/bpftool/Documentation/bpftool-feature.rst
+> @@ -19,19 +19,24 @@ SYNOPSIS
+>   FEATURE COMMANDS
+>   ================
 >   
->   #include <ctype.h>
->   #include <errno.h>
-> +#include <regex.h>
->   #include <string.h>
->   #include <unistd.h>
->   #include <net/if.h>
-> @@ -22,6 +23,9 @@
->   # define PROC_SUPER_MAGIC	0x9fa0
->   #endif
+> -|	**bpftool** **feature probe** [*COMPONENT*] [**macros** [**prefix** *PREFIX*]]
+> +|	**bpftool** **feature probe** [*COMPONENT*] [**full**] [**macros** [**prefix** *PREFIX*]]
+>   |	**bpftool** **feature help**
+>   |
+>   |	*COMPONENT* := { **kernel** | **dev** *NAME* }
 >   
-> +/* Regex pattern for filtering out probes which emit dmesg warnings */
-> +#define FILTER_OUT_PATTERN "(trace|write_user)"
+>   DESCRIPTION
+>   ===========
+> -	**bpftool feature probe** [**kernel**] [**macros** [**prefix** *PREFIX*]]
+> +	**bpftool feature probe** [**kernel**] [**full**] [**macros** [**prefix** *PREFIX*]]
+>   		  Probe the running kernel and dump a number of eBPF-related
+>   		  parameters, such as availability of the **bpf()** system call,
+>   		  JIT status, eBPF program types availability, eBPF helper
+>   		  functions availability, and more.
+>   
+> +		  By default, bpftool does not run probes for
+> +		  bpf_probe_write_user and bpf_trace_printk helpers which emit
 
-"trace" sounds too generic. If filters are applied again to prog and map 
-types in the future (as you had in v1), this would catch tracepoint and 
-raw_tracepoint program types and stack_trace map type. Or if new helpers 
-with "trace" in their name are added, we skip them too. Can we use 
-something more specific, probably "trace_printk"?
+Please use formatting on helper function names, for readability and 
+consistency.
 
-> +
->   enum probe_component {
->   	COMPONENT_UNSPEC,
->   	COMPONENT_KERNEL,
-> @@ -57,6 +61,35 @@ static void uppercase(char *str, size_t len)
->   		str[i] = toupper(str[i]);
->   }
->   
-> +/* Filtering utility functions */
-> +
-> +static bool
-> +check_filters(const char *name, regex_t *filter_out)
-> +{
-> +	char err_buf[100];
-> +	int ret;
-> +
-> +	/* Do not probe if filter_out was defined and string matches against the
-> +	 * pattern.
-> +	 */
-> +	if (filter_out) {
-> +		ret = regexec(filter_out, name, 0, NULL, 0);
-> +		switch (ret) {
-> +		case 0:
-> +			return false;
-> +		case REG_NOMATCH:
-> +			break;
-> +		default:
-> +			regerror(ret, filter_out, err_buf, ARRAY_SIZE(err_buf));
-> +			p_err("could not match regex: %s", err_buf);
-> +			free(filter_out);
-> +			exit(1);
-> +		}
-> +	}
-> +
-> +	return true;
-> +}
-> +
->   /* Printing utility functions */
->   
->   static void
-> @@ -515,7 +548,8 @@ probe_map_type(enum bpf_map_type map_type, const char *define_prefix,
->   
->   static void
->   probe_helpers_for_progtype(enum bpf_prog_type prog_type, bool supported_type,
-> -			   const char *define_prefix, __u32 ifindex)
-> +			   const char *define_prefix, regex_t *filter_out,
-> +			   __u32 ifindex)
->   {
->   	const char *ptype_name = prog_type_name[prog_type];
->   	char feat_name[128];
-> @@ -542,6 +576,9 @@ probe_helpers_for_progtype(enum bpf_prog_type prog_type, bool supported_type,
->   	}
->   
->   	for (id = 1; id < ARRAY_SIZE(helper_name); id++) {
-> +		if (!check_filters(helper_name[id], filter_out))
-> +			continue;
-> +
->   		if (!supported_type)
->   			res = false;
->   		else
-> @@ -634,7 +671,8 @@ section_program_types(bool *supported_types, const char *define_prefix,
->   			    define_prefix);
->   
->   	for (i = BPF_PROG_TYPE_UNSPEC + 1; i < ARRAY_SIZE(prog_type_name); i++)
-> -		probe_prog_type(i, supported_types, define_prefix, ifindex);
-> +		probe_prog_type(i, supported_types, define_prefix,
-> +				ifindex);
+I would even be tempted to highlight part or all of the sentence, with 
+caps or bold, as some users may be surprised not to see those helpers in 
+the list of available helpers on their system.
 
-Splitting the line here is not desirable, probably some leftover after 
-rolling back on changes?
+> +		  dmesg warnings. To enable them and run all probes, the
+> +		  **full** keyword should be used.
+> +
+>   		  If the **macros** keyword (but not the **-j** option) is
+>   		  passed, a subset of the output is dumped as a list of
+>   		  **#define** macros that are ready to be included in a C
+> @@ -48,12 +53,12 @@ DESCRIPTION
+>   		  **bpf_trace_printk**\ () or **bpf_probe_write_user**\ ()) may
+>   		  print warnings to kernel logs.
+
+This should maybe be moved upwards and combined with your new paragraph?
 
 >   
->   	print_end_section();
->   }
-> @@ -655,7 +693,8 @@ static void section_map_types(const char *define_prefix, __u32 ifindex)
->   }
+> -	**bpftool feature probe dev** *NAME* [**macros** [**prefix** *PREFIX*]]
+> +	**bpftool feature probe dev** *NAME* [**full**] [**macros** [**prefix** *PREFIX*]]
+>   		  Probe network device for supported eBPF features and dump
+>   		  results to the console.
 >   
->   static void
-> -section_helpers(bool *supported_types, const char *define_prefix, __u32 ifindex)
-> +section_helpers(bool *supported_types, const char *define_prefix,
-> +		regex_t *filter_out, __u32 ifindex)
->   {
->   	unsigned int i;
+> -		  The two keywords **macros** and **prefix** have the same
+> -		  role as when probing the kernel.
+> +		  The keywords **full**, **macros** and **prefix** have the
+> +		  same role as when probing the kernel.
 >   
-> @@ -681,7 +720,7 @@ section_helpers(bool *supported_types, const char *define_prefix, __u32 ifindex)
->   		       define_prefix);
->   	for (i = BPF_PROG_TYPE_UNSPEC + 1; i < ARRAY_SIZE(prog_type_name); i++)
->   		probe_helpers_for_progtype(i, supported_types[i],
-> -					   define_prefix, ifindex);
-> +					   define_prefix, filter_out, ifindex);
->   
->   	print_end_section();
->   }
-> @@ -701,8 +740,13 @@ static int do_probe(int argc, char **argv)
->   	enum probe_component target = COMPONENT_UNSPEC;
->   	const char *define_prefix = NULL;
->   	bool supported_types[128] = {};
-> +	regex_t *filter_out = NULL;
-> +	bool full_mode = false;
-> +	char regerror_buf[100];
->   	__u32 ifindex = 0;
->   	char *ifname;
-> +	int reg_ret;
-> +	int ret = 0;
->   
->   	/* Detection assumes user has sufficient privileges (CAP_SYS_ADMIN).
->   	 * Let's approximate, and restrict usage to root user only.
-> @@ -740,6 +784,9 @@ static int do_probe(int argc, char **argv)
->   				      strerror(errno));
->   				return -1;
->   			}
-> +		} else if (is_prefix(*argv, "full")) {
-> +			full_mode = true;
-> +			NEXT_ARG();
->   		} else if (is_prefix(*argv, "macros") && !define_prefix) {
->   			define_prefix = "";
->   			NEXT_ARG();
-> @@ -764,6 +811,22 @@ static int do_probe(int argc, char **argv)
->   		}
->   	}
->   
-> +	/* If full mode is not acivated, filter out probes which emit dmesg
-
-Typo: acivated
-
-> +	 * messages.
-> +	 */
-> +	if (!full_mode) {
-> +		filter_out = malloc(sizeof(regex_t));
-
-filter_out is not free()-d on the different error paths in the function. 
-You would probably have to `goto cleanup` from several other locations.
-
-> +		reg_ret = regcomp(filter_out, FILTER_OUT_PATTERN, REG_EXTENDED);
-> +		if (reg_ret) {
-> +			regerror(reg_ret, filter_out, regerror_buf,
-> +				 ARRAY_SIZE(regerror_buf));
-> +			p_err("could not compile regex: %s",
-> +			      regerror_buf);
-> +			ret = -1;
-> +			goto cleanup;
-> +		}
-> +	}
-> +
->   	if (json_output) {
->   		define_prefix = NULL;
->   		jsonw_start_object(json_wtr);
-> @@ -775,7 +838,7 @@ static int do_probe(int argc, char **argv)
->   		goto exit_close_json;
->   	section_program_types(supported_types, define_prefix, ifindex);
->   	section_map_types(define_prefix, ifindex);
-> -	section_helpers(supported_types, define_prefix, ifindex);
-> +	section_helpers(supported_types, define_prefix, filter_out, ifindex);
->   	section_misc(define_prefix, ifindex);
->   
->   exit_close_json:
-> @@ -783,7 +846,10 @@ static int do_probe(int argc, char **argv)
->   		/* End root object */
->   		jsonw_end_object(json_wtr);
->   
-> -	return 0;
-> +cleanup:
-> +	free(filter_out);
-> +
-> +	return ret;
->   }
->   
->   static int do_help(int argc, char **argv)
-> @@ -794,7 +860,7 @@ static int do_help(int argc, char **argv)
->   	}
->   
->   	fprintf(stderr,
-> -		"Usage: %s %s probe [COMPONENT] [macros [prefix PREFIX]]\n"
-> +		"Usage: %s %s probe [COMPONENT] [full] [macros [prefix PREFIX]]\n"
->   		"       %s %s help\n"
->   		"\n"
->   		"       COMPONENT := { kernel | dev NAME }\n"
+>   	**bpftool feature help**
+>   		  Print short help message.
 > 
 
-Thanks for the patch! While I understand you want to keep the changes 
-you have done to use regex, I do not really think they bring much in 
-this version of the patch. As we only want to filter out two specific 
-helpers, it seems to me that it would be much simpler to just compare 
-helper names instead of introducing regular expressions that are not 
-used otherwise. What do you think?
-
-Quentin
