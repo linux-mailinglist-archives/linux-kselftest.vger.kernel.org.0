@@ -2,88 +2,78 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B9FDF168A74
-	for <lists+linux-kselftest@lfdr.de>; Sat, 22 Feb 2020 00:37:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CE41C168B80
+	for <lists+linux-kselftest@lfdr.de>; Sat, 22 Feb 2020 02:13:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729100AbgBUXhy (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 21 Feb 2020 18:37:54 -0500
-Received: from mail-pf1-f195.google.com ([209.85.210.195]:37603 "EHLO
-        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729187AbgBUXhx (ORCPT
+        id S1727755AbgBVBNT (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 21 Feb 2020 20:13:19 -0500
+Received: from mail-wr1-f67.google.com ([209.85.221.67]:39035 "EHLO
+        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727743AbgBVBNR (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 21 Feb 2020 18:37:53 -0500
-Received: by mail-pf1-f195.google.com with SMTP id p14so2090866pfn.4
-        for <linux-kselftest@vger.kernel.org>; Fri, 21 Feb 2020 15:37:53 -0800 (PST)
+        Fri, 21 Feb 2020 20:13:17 -0500
+Received: by mail-wr1-f67.google.com with SMTP id y11so3984315wrt.6
+        for <linux-kselftest@vger.kernel.org>; Fri, 21 Feb 2020 17:13:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=broadcom.com; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
+        h=subject:from:to:cc:references:message-id:date:user-agent
          :mime-version:in-reply-to:content-transfer-encoding:content-language;
-        bh=U8GTXDQYqxVMWeiE3CeM22iOXjrDkwUgtcNqh51keqY=;
-        b=BTbJ9DV5UnhS6c59epTpH7XTEnU2oooXg+g6bAhjUyVbujp1zj/9TaRU8cj0TPZwd3
-         CG8U0vdI5gFnoJTHTJLwe669yrJzuJv13qa3AVL8dmiMh5v19I5goaubVFzUpLjj3wTs
-         7lQz+6WG62x4T5Z+CFsJPY2Ds6kbuZLZW2JXM=
+        bh=3OKaYIHAkscSICnojjLFVcfWriWY1zhvs1Wig+8n2u0=;
+        b=YuZBob4gmx9BoVF20MxUMC4n/O2CRqr7f4PfEbgIjSUOmHRoUON6ioN3lQAp+XaXsc
+         YnYlGLs9XUL5tqmnh9TRTJpQR9PkRpU7GY0fmQqqqDpcTwhwfmm1AeAHh63DYxj94wDt
+         /6xbAUPlaRkR7P/ddUn1r3McPYwTMEWRdXBmk=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+        h=x-gm-message-state:subject:from:to:cc:references:message-id:date
          :user-agent:mime-version:in-reply-to:content-transfer-encoding
          :content-language;
-        bh=U8GTXDQYqxVMWeiE3CeM22iOXjrDkwUgtcNqh51keqY=;
-        b=FriVHZgMhuxvl3sV5Uu1MKs0NXZmjf7qww7NGVIkQ9XMg/fffTMma57E/Gk0H7bnPl
-         aKzEP+29qxLCkIld9r4Vpq5QSRTH9tETf9R/ngB+y/wPvpf342o2dyEWQGE0OY4drkx2
-         jGrCsi/1h4SbvNHim/2ur8uMOcjnkC9Ny0DXJzg7UMGonQ+Z/yhxavBVjzXSqEUvBGDq
-         ePeLEirStObsAEuD1MBNMIiHCcID+Jqm9h1xS8aVBxdZo5oicu/IQ6HgMxzZ/dTnAl+A
-         jQg/n9MCnNXRw7VRQ7xm/T3Swc6zS86prt3CmNw6rPynBViv9ORge0ToTJ+yooRaUvCj
-         6dNA==
-X-Gm-Message-State: APjAAAXNKko2QCPXQlu8T7fGcA0rOW9fsJJASpgnut6J8kkLo2nf9dKn
-        XvBXcxmOb/43Q46RM6LiQgs7AkOvM2FiThhwYoOHG0NzKIqP6MzSgh1WUvNU7L/7ouo58GUQykZ
-        omrmwIJDBvppAL58kZI1cgcHqxuCUKg8/Ww+E/tiQMUXU6BvSD1AP2JHkSJnVRT92Jzc3hHw2pG
-        TqVyLVQQDIWuckNpg=
-X-Google-Smtp-Source: APXvYqzSKwENjp8Zc5/+UeGf1chfHFs+nHCsMZqHL9BYW/wJmsDWoBM6WNV9QMdjdezOfrljgme5xQ==
-X-Received: by 2002:a63:3c08:: with SMTP id j8mr40832260pga.223.1582328272147;
-        Fri, 21 Feb 2020 15:37:52 -0800 (PST)
+        bh=3OKaYIHAkscSICnojjLFVcfWriWY1zhvs1Wig+8n2u0=;
+        b=UQSbxj1bBK1L3npol8w9CuJgqxl6jvrdDUCAf+WcoGvs3CQSgey9TdJDRcfUsela1B
+         T71R+Yk3/+g913e7UETjkH1lcMo9Cao/Cn1u7dtIjxvix4erS2G/Xv2YwUf1yJiIPYUA
+         rwbF8I4vK85z5gifCt+W8PZycj53I0skB0bhyGQ7n+qgdjheTN8/BIsU15rT3I5iun3n
+         CHUpCKuKxQyflI6CD0cwM2j2Q/YLzfIDZ4qoh96CB9x0I4LCS5qLlMvdQHcxkfmkjR4t
+         NJU0Cogi8xbD4AW8atnNL+d+GobEQj66SmIukPPBLEuZwt6RUEE+o9xIH3UNDbauUvTq
+         9MDQ==
+X-Gm-Message-State: APjAAAVM/LPNJZkld8pKZ70WbtykbNelPPVs31UA6fFz6dykq20PyJov
+        uEbuXt813WFUgbX7TDenyQuFEQ==
+X-Google-Smtp-Source: APXvYqz8IRZ8DqHhpRydE7w0DX5vQbJ06y2qjkNLAGTp9MyxwoZhTc6cNxB8geMHSuyuUmtCGGdTAQ==
+X-Received: by 2002:adf:e683:: with SMTP id r3mr54339138wrm.38.1582333995403;
+        Fri, 21 Feb 2020 17:13:15 -0800 (PST)
 Received: from [10.136.13.65] ([192.19.228.250])
-        by smtp.gmail.com with ESMTPSA id u23sm3891110pfm.29.2020.02.21.15.37.48
+        by smtp.gmail.com with ESMTPSA id d4sm6275870wra.14.2020.02.21.17.13.09
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 21 Feb 2020 15:37:51 -0800 (PST)
-Subject: Re: [PATCH 2/7] firmware: add offset to request_firmware_into_buf
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Luis Chamberlain <mcgrof@kernel.org>, Takashi Iwai <tiwai@suse.de>,
+        Fri, 21 Feb 2020 17:13:14 -0800 (PST)
+Subject: Re: [PATCH v2 3/7] test_firmware: add partial read support for
+ request_firmware_into_buf
+From:   Scott Branden <scott.branden@broadcom.com>
+To:     Dan Carpenter <dan.carpenter@oracle.com>
+Cc:     Luis Chamberlain <mcgrof@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         David Brown <david.brown@linaro.org>,
         Alexander Viro <viro@zeniv.linux.org.uk>,
-        Shuah Khan <shuah@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Shuah Khan <shuah@kernel.org>, bjorn.andersson@linaro.org,
         Shuah Khan <skhan@linuxfoundation.org>,
+        Arnd Bergmann <arnd@arndb.de>,
         "Rafael J . Wysocki" <rafael@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        Linux FS-devel Mailing List <linux-fsdevel@vger.kernel.org>,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org,
         BCM Kernel Feedback <bcm-kernel-feedback-list@broadcom.com>,
         Olof Johansson <olof@lixom.net>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
         Colin Ian King <colin.king@canonical.com>,
         Kees Cook <keescook@chromium.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>
-References: <20190822192451.5983-1-scott.branden@broadcom.com>
- <20190822192451.5983-3-scott.branden@broadcom.com>
- <s5hef1crybq.wl-tiwai@suse.de>
- <10461fcf-9eca-32b6-0f9d-23c63b3f3442@broadcom.com>
- <s5hr258j6ln.wl-tiwai@suse.de>
- <93b8285a-e5eb-d4a4-545d-426bbbeb8008@broadcom.com>
- <s5ho90byhnv.wl-tiwai@suse.de>
- <b440f372-45be-c06c-94a1-44ae6b1e7eb8@broadcom.com>
- <s5hwoeyj3i5.wl-tiwai@suse.de> <20191011133120.GP16384@42.do-not-panic.com>
- <e65a3ba1-d064-96fe-077e-59bf8ffff377@broadcom.com>
- <CAK8P3a2NJurg_hxVbWYZwJVhYM5-xjWt12Kh0DdyfTGqQPrPAQ@mail.gmail.com>
-From:   Scott Branden <scott.branden@broadcom.com>
-Message-ID: <3731a882-8784-b957-7628-49edfa9683e7@broadcom.com>
-Date:   Fri, 21 Feb 2020 15:37:47 -0800
+        Takashi Iwai <tiwai@suse.de>, linux-kselftest@vger.kernel.org,
+        Andy Gross <agross@kernel.org>
+References: <20200220004825.23372-1-scott.branden@broadcom.com>
+ <20200220004825.23372-4-scott.branden@broadcom.com>
+ <20200220084255.GW7838@kadam>
+ <9afab7f8-1b5f-a7bb-6b76-f7b19efb2979@broadcom.com>
+Message-ID: <4a666590-461d-17f9-5580-31a41869383f@broadcom.com>
+Date:   Fri, 21 Feb 2020 17:13:08 -0800
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.4.1
 MIME-Version: 1.0
-In-Reply-To: <CAK8P3a2NJurg_hxVbWYZwJVhYM5-xjWt12Kh0DdyfTGqQPrPAQ@mail.gmail.com>
+In-Reply-To: <9afab7f8-1b5f-a7bb-6b76-f7b19efb2979@broadcom.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
 Content-Language: en-US
@@ -92,70 +82,73 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Arnd,
+Reponses inline.
 
-On 2020-02-21 12:44 a.m., Arnd Bergmann wrote:
-> On Fri, Feb 21, 2020 at 1:11 AM Scott Branden
-> <scott.branden@broadcom.com> wrote:
->> On 2019-10-11 6:31 a.m., Luis Chamberlain wrote:
->>> On Tue, Aug 27, 2019 at 12:40:02PM +0200, Takashi Iwai wrote:
->>>> On Mon, 26 Aug 2019 19:24:22 +0200,
->>>> Scott Branden wrote:
->>>>> I will admit I am not familiar with every subtlety of PCI
->>>>> accesses. Any comments to the Valkyrie driver in this patch series are
->>>>> appreciated.
->>>>> But not all drivers need to work on all architectures. I can add a
->>>>> depends on x86 64bit architectures to the driver to limit it to such.
->>>> But it's an individual board on PCIe, and should work no matter which
->>>> architecture is?  Or is this really exclusive to x86?
->>> Poke Scott.
->> Yes, this is exclusive to x86.
->> In particular, 64-bit x86 server class machines with PCIe gen3 support.
->> There is no reason for these PCIe boards to run in other lower end
->> machines or architectures.
-> It doesn't really matter that much what you expect your customers to
-> do with your product, or what works a particular machine today, drivers
-> should generally be written in a portable manner anyway and use
-> the documented APIs. memcpy() into an __iomem pointer is not
-> portable and while it probably works on any x86 machine today, please
-> just don't do it. If you use 'sparse' to check your code, that would normally
-> result in an address space warning, unless you add __force and a
-> long comment explaining why you cannot just use memcpy_to_io()
-> instead. At that point, you are already better off usingn memcpy_to_io() ;-)
+Luis - please have a look as well.
+
+On 2020-02-21 10:30 a.m., Scott Branden wrote:
+> Hi Dan,
 >
->          Arnd
-I am a not performing a memcpy at all right now.
-I am calling a request_firmware_into_buf call and do not need to make a 
-copy.
-This function eventually calls kernel_read_file, which then makes at 
-indirect call in __vfs_read to perform the read to memory.
- From there I am lost as to what operation happens to achieve this.
-The read function would need to detect the buf is in io space and 
-perform the necessary operation.
-Anyone with any knowledge on how to make this read to io space would be 
-appreciated?
+> Thanks for your review and valuable comments.
+> Will have to investigate fully and correct anything wrong.
+>
+> On 2020-02-20 12:42 a.m., Dan Carpenter wrote:
+>> On Wed, Feb 19, 2020 at 04:48:21PM -0800, Scott Branden wrote:
+>>> +static int test_dev_config_update_size_t(const char *buf,
+>>> +                     size_t size,
+>>> +                     size_t *cfg)
+>>> +{
+>>> +    int ret;
+>>> +    long new;
+>>> +
+>>> +    ret = kstrtol(buf, 10, &new);
+>>> +    if (ret)
+>>> +        return ret;
+>>> +
+>>> +    if (new > SIZE_MAX)
+>> This "new" variable is long and SIZE_MAX is ULONG_MAX so the condition
+>> can't be true.
+Removed the check.
+>>
+>>> +        return -EINVAL;
+>>> +
+>>> +    mutex_lock(&test_fw_mutex);
+>>> +    *(size_t *)cfg = new;
+>>> +    mutex_unlock(&test_fw_mutex);
+>>> +
+>>> +    /* Always return full write size even if we didn't consume all */
+>>> +    return size;
+>>> +}
+>>> +
+>>> +static ssize_t test_dev_config_show_size_t(char *buf, int cfg)
+>>> +{
+>>> +    size_t val;
+>>> +
+>>> +    mutex_lock(&test_fw_mutex);
+>>> +    val = cfg;
+>>> +    mutex_unlock(&test_fw_mutex);
+>> Both val and cfg are stack variables so there is no need for locking.
+>> Probably you meant to pass a pointer to cfg?
+I am following the existing code as was done for
+test_dev_config_show_bool(),
+test_dev_config_show_int(),
+test_dev_config_show_u8()
 
-ssize_t __vfs_read(struct file *file, char __user *buf, size_t count,
-            loff_t *pos)
-{
-     if (file->f_op->read)
-         return file->f_op->read(file, buf, count, pos);
-     else if (file->f_op->read_iter)
-         return new_sync_read(file, buf, count, pos);
-     else
-         return -EINVAL;
-}
+Mutex probably not needed but I don't think I need to deviate from the 
+rest of the test code.
 
-ssize_t kernel_read(struct file *file, void *buf, size_t count, loff_t *pos)
-{
-     mm_segment_t old_fs;
-     ssize_t result;
-
-     old_fs = get_fs();
-     set_fs(KERNEL_DS);
-     /* The cast to a user pointer is valid due to the set_fs() */
-     result = vfs_read(file, (void __user *)buf, count, pos);
-     set_fs(old_fs);
-     return result;
-}
+Luis, could you please explain what the rest of your code is doing?
+>>
+>>> +
+>>> +    return snprintf(buf, PAGE_SIZE, "%zu\n", val);
+>>> +}
+>>> +
+>>>   static ssize_t test_dev_config_show_int(char *buf, int cfg)
+>>>   {
+>>>       int val;
+>> regards,
+>> dan carpenter
+>>
+>>
+>
 
